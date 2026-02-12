@@ -1,0 +1,160 @@
+# aikorea24 백업 (2026-02-12)
+# 파일: 4개
+==================================================
+
+## 파일
+- api_test/requirements.txt
+- src/config.yaml
+- .gitignore
+- api_test/env_template.sh
+
+
+==================================================
+# api_test/requirements.txt
+==================================================
+requests>=2.31.0
+pytrends>=4.9.0
+openai>=1.30.0
+beautifulsoup4>=4.12.0
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+
+==================================================
+# src/config.yaml
+==================================================
+site:
+  name: AstroWind
+  site: 'https://astrowind.vercel.app'
+  base: '/'
+  trailingSlash: false
+
+  googleSiteVerificationId: orcPxI47GSa-cRvY11tUe6iGg2IO_RPvnA1q95iEM3M
+
+# Default SEO metadata
+metadata:
+  title:
+    default: AstroWind
+    template: '%s — AstroWind'
+  description: "\U0001F680 Suitable for Startups, Small Business, Sass Websites, Professional Portfolios, Marketing Websites, Landing Pages & Blogs."
+  robots:
+    index: true
+    follow: true
+  openGraph:
+    site_name: AstroWind
+    images:
+      - url: '~/assets/images/default.png'
+        width: 1200
+        height: 628
+    type: website
+  twitter:
+    handle: '@arthelokyo'
+    site: '@arthelokyo'
+    cardType: summary_large_image
+
+i18n:
+  language: en
+  textDirection: ltr
+
+apps:
+  blog:
+    isEnabled: true
+    postsPerPage: 6
+
+    post:
+      isEnabled: true
+      permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
+      robots:
+        index: true
+
+    list:
+      isEnabled: true
+      pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
+      robots:
+        index: true
+
+    category:
+      isEnabled: true
+      pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
+      robots:
+        index: true
+
+    tag:
+      isEnabled: true
+      pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
+      robots:
+        index: false
+
+    isRelatedPostsEnabled: true
+    relatedPostsCount: 4
+
+analytics:
+  vendors:
+    googleAnalytics:
+      id: null # or "G-XXXXXXXXXX"
+
+ui:
+  theme: 'system' # Values: "system" | "light" | "dark" | "light:only" | "dark:only"
+
+==================================================
+# .gitignore
+==================================================
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+
+==================================================
+# api_test/env_template.sh
+==================================================
+#!/bin/bash
+# ============================================
+# aikorea24.kr API 키 설정 템플릿
+# 이 파일을 .env.sh로 복사 후 실제 키 입력
+# cp env_template.sh .env.sh
+# ============================================
+
+# [1] 네이버 개발자센터 (https://developers.naver.com/apps/)
+# - 사용 API: 검색(뉴스,블로그), 데이터랩(검색어트렌드)
+export NAVER_CLIENT_ID=***
+export NAVER_CLIENT_SECRET=***
+
+# [2] 네이버 검색광고 API (https://manage.searchad.naver.com/)
+# - 사용 API: 키워드도구 (월간검색량)
+export NAVER_AD_API_KEY=***
+export NAVER_AD_SECRET=***
+export NAVER_AD_CUSTOMER_ID="YOUR_CUSTOMER_ID"
+
+# [3] OpenAI API (https://platform.openai.com/api-keys)
+# - 사용 모델: gpt-4o-mini (뉴스 요약)
+export OPENAI_API_KEY=***
+
+# [4] 공공데이터포털 (https://www.data.go.kr/)
+# - 사용 API: 보조금통합포털, 공공서비스(혜택)
+export DATA_GO_KR_KEY="YOUR_DATA_GO_KR_KEY"
+
+# [5] Instagram Graph API (https://developers.facebook.com/)
+# - 사용: 카드뉴스 자동 게시
+export INSTAGRAM_ACCESS_TOKEN=***
+export INSTAGRAM_BUSINESS_ID="YOUR_IG_BUSINESS_ID"
+
+==================================================
+# 완료: 4개, 스킵: 0개
