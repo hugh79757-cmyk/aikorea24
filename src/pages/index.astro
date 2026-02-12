@@ -27,8 +27,9 @@ function getCategoryEmoji(category: string): string {
     </div>
 
     <!-- 히어로 섹션 -->
-    <section class="relative z-10 pt-20 pb-24 px-4">
-      <div class="max-w-5xl mx-auto text-center">
+    <section class="relative z-10 min-h-[560px] flex items-center px-4">
+      <div id="particles-js" class="absolute inset-0 z-0"></div>
+      <div class="relative z-10 max-w-5xl mx-auto text-center">
         <div class="inline-flex items-center gap-2 bg-white/[0.07] backdrop-blur-md border border-white/[0.1] rounded-full px-5 py-2 mb-8">
           <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           <span class="text-sm text-gray-300">AI 큐레이션 플랫폼</span>
@@ -50,16 +51,7 @@ function getCategoryEmoji(category: string): string {
         </div>
       </div>
 
-      <!-- 인터랙티브 파티클 (작은 창) -->
-      <div class="max-w-3xl mx-auto mt-16">
-        <div id="particles-js" class="relative h-[200px] rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.03] backdrop-blur-sm">
-          <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-            <div class="text-center">
-              <p class="text-xs text-gray-500 tracking-widest uppercase">Neural Network Visualization</p>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </section>
 
     <!-- AI 도구 픽 -->
