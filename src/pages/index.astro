@@ -3,156 +3,222 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
 const recentPosts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 3);
 
 function getCategoryEmoji(category: string): string {
   const map: Record<string, string> = {
     'AI 도구': '🛠️', 'AI 강좌': '📚', 'AI 뉴스': '📰',
-    'AI 지원사업': '💰', 'AI 체험': '🧪',
+    'AI 지원사업': '💰', 'AI 체험': '🧪', '재테크': '💎',
   };
   return map[category] || '✍️';
 }
 ---
-<Layout title="홈">
-  <section class="bg-gradient-to-r from-primary to-secondary py-16 px-4">
-    <div class="max-w-5xl mx-auto text-center text-white">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">AI, 누구나 쓸 수 있습니다</h1>
-      <p class="text-lg md:text-xl opacity-90 mb-8">도구 추천부터 바이브코딩 강좌까지, AI 활용의 모든 것</p>
-      <div class="flex justify-center gap-4">
-        <a href="/courses" class="bg-white text-primary font-semibold px-6 py-3 rounded-lg hover:bg-gray-100">무료 강좌 시작</a>
-        <a href="/tools" class="border-2 border-white text-white font-semibold px-6 py-3 rounded-lg hover:bg-white/10">AI 도구 보기</a>
-      </div>
-    </div>
-  </section>
+<Layout title="AI코리아24" description="AI 도구 추천, 무료 강좌, 정부 지원사업 정보, AI 뉴스를 한국어로 큐레이션합니다. AI, 누구나 쓸 수 있습니다.">
 
-  <section class="max-w-5xl mx-auto px-4 py-12">
-    <h2 class="text-2xl font-bold mb-6">🔥 이번 주 AI 도구 픽</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition">
-        <div class="text-3xl mb-2">💬</div>
-        <h3 class="font-bold text-sm">ChatGPT</h3>
-        <p class="text-xs text-gray-500 mt-1">대화형 AI 어시스턴트</p>
-        <span class="inline-block mt-2 text-xs bg-blue-100 text-primary px-2 py-1 rounded">무료+유료</span>
+  <!-- 히어로: 파티클 배경 -->
+  <section class="relative overflow-hidden bg-[#0F172A] min-h-[520px] flex items-center">
+    <div id="particles-js" class="absolute inset-0 z-0"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0F172A]/80 z-[1]"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-4 py-20 text-center">
+      <div class="inline-block bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 mb-6">
+        <span class="text-sm text-blue-300 font-medium">AI 큐레이션 플랫폼</span>
       </div>
-      <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition">
-        <div class="text-3xl mb-2">🎨</div>
-        <h3 class="font-bold text-sm">Midjourney</h3>
-        <p class="text-xs text-gray-500 mt-1">AI 이미지 생성</p>
-        <span class="inline-block mt-2 text-xs bg-purple-100 text-secondary px-2 py-1 rounded">유료</span>
-      </div>
-      <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition">
-        <div class="text-3xl mb-2">📝</div>
-        <h3 class="font-bold text-sm">Notion AI</h3>
-        <p class="text-xs text-gray-500 mt-1">문서 작성 보조</p>
-        <span class="inline-block mt-2 text-xs bg-blue-100 text-primary px-2 py-1 rounded">무료+유료</span>
-      </div>
-      <div class="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg transition">
-        <div class="text-3xl mb-2">🎵</div>
-        <h3 class="font-bold text-sm">Suno AI</h3>
-        <p class="text-xs text-gray-500 mt-1">AI 음악 생성</p>
-        <span class="inline-block mt-2 text-xs bg-green-100 text-accent px-2 py-1 rounded">무료</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="bg-gray-50 py-12">
-    <div class="max-w-5xl mx-auto px-4">
-      <h2 class="text-2xl font-bold mb-6">💰 AI 지원사업</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <a href="/grants" class="bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition block">
-          <div class="flex justify-between items-start">
-            <span class="text-xs bg-blue-100 text-primary px-2 py-1 rounded">보조금</span>
-            <span class="text-xs text-red-500 font-bold">D-30</span>
-          </div>
-          <h3 class="font-bold mt-3">AI 바우처 지원사업</h3>
-          <p class="text-sm text-gray-500 mt-1">정보통신산업진흥원</p>
-          <p class="text-xs text-gray-400 mt-2">최대 3억원 지원</p>
+      <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+        AI, 누구나<br class="md:hidden" />
+        <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent"> 쓸 수 있습니다</span>
+      </h1>
+      <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+        도구 추천부터 바이브코딩 강좌까지,<br/>AI 활용의 모든 것을 한국어로 큐레이션합니다
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="/blog" class="group relative bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-8 py-4 rounded-xl hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300 hover:-translate-y-0.5">
+          블로그 보기
+          <span class="ml-2 inline-block group-hover:translate-x-1 transition-transform">→</span>
         </a>
-        <a href="/grants" class="bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition block">
-          <div class="flex justify-between items-start">
-            <span class="text-xs bg-purple-100 text-secondary px-2 py-1 rounded">R&D</span>
-            <span class="text-xs text-red-500 font-bold">D-15</span>
-          </div>
-          <h3 class="font-bold mt-3">AI 융합 혁신인재 양성</h3>
-          <p class="text-sm text-gray-500 mt-1">과학기술정보통신부</p>
-          <p class="text-xs text-gray-400 mt-2">교육비 전액 지원</p>
-        </a>
-        <a href="/grants" class="bg-white rounded-xl p-5 border border-gray-200 hover:shadow-lg transition block">
-          <div class="flex justify-between items-start">
-            <span class="text-xs bg-green-100 text-accent px-2 py-1 rounded">데이터</span>
-            <span class="text-xs text-orange-500 font-bold">D-45</span>
-          </div>
-          <h3 class="font-bold mt-3">데이터바우처 지원사업</h3>
-          <p class="text-sm text-gray-500 mt-1">한국데이터산업진흥원</p>
-          <p class="text-xs text-gray-400 mt-2">최대 7천만원 지원</p>
+        <a href="/about" class="bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300 hover:-translate-y-0.5">
+          더 알아보기
         </a>
       </div>
     </div>
   </section>
 
-  <section class="max-w-5xl mx-auto px-4 py-12">
-    <h2 class="text-2xl font-bold mb-6">📚 인기 AI 강좌</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <a href="/courses" class="group block">
-        <div class="bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl p-6 text-white group-hover:shadow-lg transition">
-          <span class="text-xs bg-white/20 px-2 py-1 rounded">입문</span>
-          <h3 class="font-bold mt-3 text-lg">바이브코딩이란?</h3>
-          <p class="text-sm opacity-80 mt-2">AI에게 말로 설명하면 코드가 완성되는 새로운 개발 방식</p>
+  <!-- AI 도구 픽 -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl">🔥</div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900">이번 주 AI 도구 픽</h2>
+        <p class="text-sm text-gray-500">매주 엄선한 AI 도구를 소개합니다</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+      {[
+        { emoji: '💬', name: 'ChatGPT', desc: '대화형 AI 어시스턴트', tag: '무료+유료', tagColor: 'bg-blue-50 text-blue-600' },
+        { emoji: '🎨', name: 'Midjourney', desc: 'AI 이미지 생성', tag: '유료', tagColor: 'bg-purple-50 text-purple-600' },
+        { emoji: '📝', name: 'Notion AI', desc: '문서 작성 보조', tag: '무료+유료', tagColor: 'bg-blue-50 text-blue-600' },
+        { emoji: '🎵', name: 'Suno AI', desc: 'AI 음악 생성', tag: '무료', tagColor: 'bg-green-50 text-green-600' },
+      ].map(tool => (
+        <div class="group bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
+          <div class="text-4xl mb-3 group-hover:scale-110 transition-transform duration-300">{tool.emoji}</div>
+          <h3 class="font-bold text-gray-900">{tool.name}</h3>
+          <p class="text-xs text-gray-500 mt-1">{tool.desc}</p>
+          <span class={`inline-block mt-3 text-xs font-medium px-2.5 py-1 rounded-full ${tool.tagColor}`}>{tool.tag}</span>
         </div>
-      </a>
-      <a href="/courses" class="group block">
-        <div class="bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl p-6 text-white group-hover:shadow-lg transition">
-          <span class="text-xs bg-white/20 px-2 py-1 rounded">실습</span>
-          <h3 class="font-bold mt-3 text-lg">ChatGPT로 웹사이트 만들기</h3>
-          <p class="text-sm opacity-80 mt-2">0원으로 내 웹사이트를 만들고 배포하는 전 과정</p>
-        </div>
-      </a>
-      <a href="/courses" class="group block">
-        <div class="bg-gradient-to-br from-teal-500 to-teal-700 rounded-xl p-6 text-white group-hover:shadow-lg transition">
-          <span class="text-xs bg-white/20 px-2 py-1 rounded">활용</span>
-          <h3 class="font-bold mt-3 text-lg">프롬프트 엔지니어링 입문</h3>
-          <p class="text-sm opacity-80 mt-2">AI에게 정확히 원하는 결과를 얻는 질문법</p>
-        </div>
-      </a>
+      ))}
     </div>
   </section>
 
-  <section class="bg-gray-50 py-12">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold">📝 최신 블로그</h2>
-        <a href="/blog" class="text-primary text-sm font-semibold hover:underline">전체 보기 →</a>
+  <!-- AI 지원사업 -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">💰</div>
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900">AI 지원사업</h2>
+          <p class="text-sm text-gray-500">놓치면 아쉬운 AI 관련 정부 지원사업</p>
+        </div>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {recentPosts.map(post => (
-          <a href={`/blog/${post.id}`} class="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
-            {post.data.image ? (
-              <div class="h-48 overflow-hidden">
-                <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy" />
-              </div>
-            ) : (
-              <div class="bg-gradient-to-br from-primary/10 to-secondary/10 h-48 flex items-center justify-center">
-                <span class="text-5xl">{getCategoryEmoji(post.data.category)}</span>
-              </div>
-            )}
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-xs bg-blue-100 text-primary px-2 py-1 rounded">{post.data.category}</span>
-                <span class="text-xs text-gray-400">{post.data.date.toLocaleDateString('ko-KR')}</span>
-              </div>
-              <h2 class="font-bold text-lg group-hover:text-primary transition line-clamp-2">{post.data.title}</h2>
-              <p class="text-sm text-gray-500 mt-2 line-clamp-2">{post.data.description}</p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {[
+          { tag: '보조금', tagColor: 'bg-blue-500', dday: 'D-30', ddayColor: 'text-red-500', title: 'AI 바우처 지원사업', org: '정보통신산업진흥원', amount: '최대 3억원 지원' },
+          { tag: 'R&D', tagColor: 'bg-purple-500', dday: 'D-15', ddayColor: 'text-red-500', title: 'AI 융합 혁신인재 양성', org: '과학기술정보통신부', amount: '교육비 전액 지원' },
+          { tag: '데이터', tagColor: 'bg-emerald-500', dday: 'D-45', ddayColor: 'text-orange-500', title: '데이터바우처 지원사업', org: '한국데이터산업진흥원', amount: '최대 7천만원 지원' },
+        ].map(grant => (
+          <div class="group bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer">
+            <div class="flex justify-between items-start mb-4">
+              <span class={`text-xs text-white font-semibold px-3 py-1 rounded-full ${grant.tagColor}`}>{grant.tag}</span>
+              <span class={`text-sm font-bold ${grant.ddayColor}`}>{grant.dday}</span>
             </div>
-          </a>
+            <h3 class="font-bold text-lg text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">{grant.title}</h3>
+            <p class="text-sm text-gray-500">{grant.org}</p>
+            <p class="text-sm text-gray-400 mt-3 pt-3 border-t border-gray-100">{grant.amount}</p>
+          </div>
         ))}
       </div>
     </div>
   </section>
 
-  <section class="max-w-5xl mx-auto px-4 py-12 text-center">
-    <h2 class="text-2xl font-bold mb-4">🚀 AI 활용, 지금 시작하세요</h2>
-    <p class="text-gray-500 mb-6">매일 업데이트되는 AI 도구, 강좌, 지원사업 정보를 받아보세요</p>
-    <a href="/blog" class="bg-primary text-white font-semibold px-8 py-3 rounded-lg hover:bg-blue-700 inline-block">블로그 보기</a>
+  <!-- 인기 AI 강좌 -->
+  <section class="max-w-6xl mx-auto px-4 py-16">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-xl">📚</div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900">인기 AI 강좌</h2>
+        <p class="text-sm text-gray-500">누구나 따라할 수 있는 AI 활용 강좌</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {[
+        { from: 'from-blue-500', to: 'to-blue-700', level: '입문', title: '바이브코딩이란?', desc: 'AI에게 말로 설명하면 코드가 완성되는 새로운 개발 방식' },
+        { from: 'from-purple-500', to: 'to-purple-700', level: '실습', title: 'ChatGPT로 웹사이트 만들기', desc: '0원으로 내 웹사이트를 만들고 배포하는 전 과정' },
+        { from: 'from-teal-500', to: 'to-teal-700', level: '활용', title: '프롬프트 엔지니어링 입문', desc: 'AI에게 정확히 원하는 결과를 얻는 질문법' },
+      ].map(course => (
+        <div class={`group relative bg-gradient-to-br ${course.from} ${course.to} rounded-2xl p-7 text-white overflow-hidden hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer`}>
+          <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+          <span class="relative text-xs bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full font-medium">{course.level}</span>
+          <h3 class="relative font-bold mt-4 text-xl">{course.title}</h3>
+          <p class="relative text-sm opacity-80 mt-2 leading-relaxed">{course.desc}</p>
+          <div class="relative mt-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            자세히 보기 →
+          </div>
+        </div>
+      ))}
+    </div>
   </section>
+
+  <!-- 최신 블로그 -->
+  <section class="bg-gradient-to-b from-gray-50 to-white py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex justify-between items-end mb-8">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center text-xl">📝</div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900">최신 블로그</h2>
+            <p class="text-sm text-gray-500">AI 관련 최신 정보와 활용 팁</p>
+          </div>
+        </div>
+        <a href="/blog" class="text-blue-600 text-sm font-semibold hover:text-blue-800 transition-colors hidden md:block">전체 보기 →</a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {recentPosts.map(post => {
+          const dateFormatted = post.data.date instanceof Date
+            ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
+            : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+          return (
+            <a href={`/blog/${post.id}`} class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-gray-100">
+              {post.data.image ? (
+                <div class="aspect-video overflow-hidden">
+                  <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width="400" height="225" />
+                </div>
+              ) : (
+                <div class="aspect-video bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center">
+                  <span class="text-5xl">{getCategoryEmoji(post.data.category)}</span>
+                </div>
+              )}
+              <div class="p-5">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-xs font-semibold text-blue-600">{post.data.category}</span>
+                  <span class="text-xs text-gray-400">{dateFormatted}</span>
+                </div>
+                <h2 class="font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 text-lg">{post.data.title}</h2>
+                <p class="text-sm text-gray-500 mt-2 line-clamp-2">{post.data.description}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+      <div class="text-center mt-8 md:hidden">
+        <a href="/blog" class="text-blue-600 text-sm font-semibold">전체 보기 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="relative overflow-hidden bg-[#0F172A] py-20">
+    <div class="absolute inset-0 opacity-30">
+      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500 rounded-full blur-[150px]"></div>
+      <div class="absolute top-1/4 left-1/4 w-[300px] h-[300px] bg-purple-500 rounded-full blur-[120px]"></div>
+    </div>
+    <div class="relative z-10 max-w-3xl mx-auto px-4 text-center">
+      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">AI 활용, 지금 시작하세요</h2>
+      <p class="text-gray-400 mb-8 text-lg">매일 업데이트되는 AI 도구, 강좌, 지원사업 정보를 받아보세요</p>
+      <a href="/blog" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-10 py-4 rounded-xl hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all duration-300 hover:-translate-y-0.5">
+        블로그 보기 →
+      </a>
+    </div>
+  </section>
+
+  <!-- particles.js CDN -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof particlesJS !== 'undefined' && document.getElementById('particles-js')) {
+        particlesJS('particles-js', {
+          particles: {
+            number: { value: 60, density: { enable: true, value_area: 900 } },
+            color: { value: ['#3B82F6', '#8B5CF6', '#06B6D4', '#60A5FA'] },
+            shape: { type: 'circle' },
+            opacity: { value: 0.4, random: true, anim: { enable: true, speed: 0.8, opacity_min: 0.1, sync: false } },
+            size: { value: 3, random: true, anim: { enable: true, speed: 2, size_min: 0.5, sync: false } },
+            line_linked: { enable: true, distance: 150, color: '#3B82F6', opacity: 0.15, width: 1 },
+            move: { enable: true, speed: 1.2, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
+          },
+          interactivity: {
+            detect_on: 'canvas',
+            events: {
+              onhover: { enable: true, mode: 'grab' },
+              onclick: { enable: true, mode: 'push' },
+              resize: true
+            },
+            modes: {
+              grab: { distance: 140, line_linked: { opacity: 0.4 } },
+              push: { particles_nb: 3 }
+            }
+          },
+          retina_detect: true
+        });
+      }
+    });
+  </script>
 </Layout>

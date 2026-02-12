@@ -1,78 +1,135 @@
 ---
+import SEOHead from '../components/SEOHead.astro';
+
 interface Props {
   title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedDate?: string;
+  modifiedDate?: string;
+  tags?: string[];
+  category?: string;
+  noindex?: boolean;
 }
-const { title } = Astro.props;
+
+const {
+  title,
+  description = 'AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다. AI, 누구나 쓸 수 있습니다.',
+  image,
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  tags = [],
+  category = '',
+  noindex = false,
+} = Astro.props;
+
+const navItems = [
+  { label: '홈', href: '/' },
+  { label: '블로그', href: '/blog' },
+  { label: '회사소개', href: '/about' },
+  { label: '문의', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
 ---
-<!doctype html>
-<html lang="ko">
+
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="AI, 누구나 쓸 수 있습니다 - AI 도구 추천, 강좌, 지원사업, 뉴스" />
-  <link rel="sitemap" href="/sitemap-index.xml" />
-  <title>{title} | AI코리아24</title>
+  <SEOHead
+    title={title}
+    description={description}
+    image={image}
+    type={type}
+    publishedDate={publishedDate}
+    modifiedDate={modifiedDate}
+    tags={tags}
+    category={category}
+    noindex={noindex}
+  />
+  <style is:global>
+    :root { --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    body { font-family: var(--font-sans); }
+  </style>
 </head>
-<body class="bg-white text-gray-900 min-h-screen flex flex-col">
-  <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
-    <nav class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-primary">AI코리아24</a>
-      <div class="hidden md:flex items-center gap-6 text-sm">
-        <a href="/blog" class="hover:text-primary">블로그</a>
-        <a href="/tools" class="hover:text-primary">AI 도구</a>
-        <a href="/courses" class="hover:text-primary">AI 강좌</a>
-        <a href="/grants" class="hover:text-primary">지원사업</a>
-        <a href="/news" class="hover:text-primary">AI 뉴스</a>
-        <a href="/community" class="hover:text-primary">커뮤니티</a>
+<body class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200">
+    <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        AI코리아24
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm font-medium transition-colors hover:text-blue-600',
+              currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+                ? 'text-blue-600' : 'text-gray-600'
+            ]}
+          >
+            {item.label}
+          </a>
+        ))}
       </div>
-      <a href="/login" class="bg-primary text-white text-sm px-4 py-2 rounded-lg hover:bg-blue-700">로그인</a>
+      <button id="mobile-menu-btn" class="md:hidden p-2" aria-label="메뉴 열기">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
     </nav>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+      {navItems.map(item => (
+        <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 border-b border-gray-100">
+          {item.label}
+        </a>
+      ))}
+    </div>
   </header>
 
-  <main class="flex-1 pb-16 md:pb-0">
+  <main class="flex-1">
     <slot />
   </main>
 
-  <footer class="hidden md:block bg-gray-50 border-t border-gray-200 py-8">
-    <div class="max-w-5xl mx-auto px-4">
-      <div class="mb-4">
-        <p class="font-bold text-sm">AI코리아24 | AI, 누구나 쓸 수 있습니다</p>
-        <p class="text-xs text-gray-500 mt-2">AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션하는 서비스입니다. 본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다. 오류, 누락에 대하여 당사는 책임지지 않으며 그 결과에 대해 법적인 책임을 지지 않습니다.</p>
+  <footer class="bg-gray-900 text-gray-400 mt-auto">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h3 class="text-white font-bold text-lg mb-3">AI코리아24</h3>
+          <p class="text-sm leading-relaxed">AI, 누구나 쓸 수 있습니다.<br/>AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다.</p>
+        </div>
+        <div>
+          <h3 class="text-white font-semibold mb-3">바로가기</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/blog" class="hover:text-white transition-colors">블로그</a></li>
+            <li><a href="/about" class="hover:text-white transition-colors">회사소개</a></li>
+            <li><a href="/contact" class="hover:text-white transition-colors">문의</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-white font-semibold mb-3">법적 고지</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/privacy" class="hover:text-white transition-colors">개인정보처리방침</a></li>
+            <li><a href="/terms" class="hover:text-white transition-colors">이용약관</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="text-xs text-gray-400 mb-4">
-        스타일 팩토리9 | 대표: 조진연 | 사업자등록번호: 672-43-00632 | 경기도 의정부시 호암로 256, 107-1804 (우 11638)<br />
-        jinyeon_cho@hotmail.com
-      </div>
-      <div class="flex gap-4 text-xs text-gray-500">
-        <a href="/about" class="hover:text-primary">회사소개</a>
-        <a href="/privacy" class="hover:text-primary font-bold">개인정보처리방침</a>
-        <a href="/terms" class="hover:text-primary">이용약관</a>
-        <a href="/contact" class="hover:text-primary">문의</a>
+      <div class="border-t border-gray-800 pt-8 text-xs leading-relaxed">
+        <p>스타일 팩토리9 | 대표: 조진연 | 사업자등록번호: 672-43-00632</p>
+        <p>경기도 의정부시 호암로 256, 107-1804 (우 11638) | jinyeon_cho@hotmail.com</p>
+        <p class="mt-2">본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다.</p>
+        <p class="mt-1">&copy; 2026 AI코리아24. All rights reserved.</p>
       </div>
     </div>
   </footer>
 
-  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
-    <div class="flex justify-around py-2">
-      <a href="/" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
-        <span class="text-lg">🏠</span>홈
-      </a>
-      <a href="/tools" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
-        <span class="text-lg">🛠️</span>도구
-      </a>
-      <a href="/blog" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
-        <span class="text-lg">📝</span>블로그
-      </a>
-      <a href="/community" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
-        <span class="text-lg">💬</span>커뮤니티
-      </a>
-      <a href="/about" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
-        <span class="text-lg">ℹ️</span>더보기
-      </a>
-    </div>
-  </nav>
+  <script>
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+  </script>
 </body>
 </html>
-<style is:global>
-  @import '../styles/global.css';
-</style>
