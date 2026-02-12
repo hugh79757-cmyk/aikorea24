@@ -1,0 +1,71 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI, 누구나 쓸 수 있습니다 - AI코리아24" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <title>{title} | AI코리아24</title>
+  <style>
+    @import '../styles/global.css';
+  </style>
+</head>
+<body class="bg-white text-gray-900 min-h-screen flex flex-col">
+  <header class="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-primary">AI코리아24</a>
+      <nav class="hidden md:flex gap-6 text-sm font-medium text-gray-600">
+        <a href="/blog" class="hover:text-primary">블로그</a>
+        <a href="/tools" class="hover:text-primary">AI 도구</a>
+        <a href="/courses" class="hover:text-primary">AI 강좌</a>
+        <a href="/grants" class="hover:text-primary">지원사업</a>
+        <a href="/news" class="hover:text-primary">AI 뉴스</a>
+        <a href="/community" class="hover:text-primary">커뮤니티</a>
+      </nav>
+      <a href="/my" class="text-sm bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700">로그인</a>
+    </div>
+  </header>
+
+  <main class="flex-1 pb-16 md:pb-0">
+    <slot />
+  </main>
+
+  <footer class="hidden md:block bg-gray-50 border-t border-gray-200 py-8">
+    <div class="max-w-5xl mx-auto px-4 text-center text-sm text-gray-500">
+      <p>AI코리아24 | AI, 누구나 쓸 수 있습니다</p>
+      <div class="mt-2 flex justify-center gap-4">
+        <a href="/about" class="hover:text-gray-700">소개</a>
+        <a href="/privacy" class="hover:text-gray-700">개인정보처리방침</a>
+        <a href="/terms" class="hover:text-gray-700">이용약관</a>
+        <a href="/contact" class="hover:text-gray-700">문의</a>
+      </div>
+    </div>
+  </footer>
+
+  <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+    <div class="flex justify-around py-2">
+      <a href="/" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
+        <span class="text-lg">🏠</span><span>홈</span>
+      </a>
+      <a href="/tools" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
+        <span class="text-lg">🤖</span><span>AI도구</span>
+      </a>
+      <a href="/blog" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
+        <span class="text-lg">📝</span><span>블로그</span>
+      </a>
+      <a href="/community" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
+        <span class="text-lg">💬</span><span>커뮤니티</span>
+      </a>
+      <a href="/my" class="flex flex-col items-center text-xs text-gray-500 hover:text-primary">
+        <span class="text-lg">👤</span><span>더보기</span>
+      </a>
+    </div>
+  </nav>
+</body>
+</html>

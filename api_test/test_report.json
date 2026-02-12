@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-02-12T14:27:58.877794",
+  "summary": {
+    "ok": 2,
+    "fail": 1,
+    "warn": 1,
+    "skip": 6
+  },
+  "results": [
+    {
+      "api": "네이버 뉴스 검색",
+      "status": "SKIP",
+      "detail": "NAVER_CLIENT_ID 미설정"
+    },
+    {
+      "api": "네이버 블로그 검색",
+      "status": "SKIP",
+      "detail": "NAVER_CLIENT_ID 미설정"
+    },
+    {
+      "api": "네이버 데이터랩 트렌드",
+      "status": "SKIP",
+      "detail": "NAVER_CLIENT_ID 미설정"
+    },
+    {
+      "api": "Google Trends (pytrends)",
+      "status": "FAIL",
+      "detail": "The request failed: Google returned a response with code 404"
+    },
+    {
+      "api": "signal.bz 크롤링",
+      "status": "WARN",
+      "detail": "셀렉터 조정 필요. 페이지 로드 확인: 3232bytes"
+    },
+    {
+      "api": "OpenAI API",
+      "status": "SKIP",
+      "detail": "OPENAI_API_KEY 미설정"
+    },
+    {
+      "api": "보조금통합포털",
+      "status": "SKIP",
+      "detail": "DATA_GO_KR_KEY 미설정"
+    },
+    {
+      "api": "공공서비스(혜택)",
+      "status": "SKIP",
+      "detail": "DATA_GO_KR_KEY 미설정"
+    },
+    {
+      "api": "NIPA 공고 크롤링",
+      "status": "OK",
+      "detail": "AI 관련 공고 4건: 국가·산업 전반의 인공지능 확산"
+    },
+    {
+      "api": "Pillow 카드뉴스",
+      "status": "OK",
+      "detail": "이미지 생성: /Users/twinssn/Projects/aikorea24/api_test/test_card.png (34,230bytes)"
+    }
+  ]
+}

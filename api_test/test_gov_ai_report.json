@@ -1,0 +1,40 @@
+{
+  "timestamp": "2026-02-12T14:11:15.466680",
+  "results": [
+    {
+      "api": "과기정통부 RSS",
+      "status": "OK",
+      "detail": "전체 50건, AI관련 10건"
+    },
+    {
+      "api": "정책뉴스 RSS",
+      "status": "OK",
+      "detail": "전체 50건, AI관련 9건"
+    },
+    {
+      "api": "보조금 공모사업",
+      "status": "SKIP",
+      "detail": "DATA_GO_KR_KEY 미설정"
+    },
+    {
+      "api": "NIPA 사업공고",
+      "status": "OK",
+      "detail": "AI 관련 11건"
+    },
+    {
+      "api": "IRIS 사업공고",
+      "status": "OK",
+      "detail": "페이지 로드 성공 (99,951bytes), AI키워드 1종 발견"
+    },
+    {
+      "api": "AI허브 데이터셋",
+      "status": "OK",
+      "detail": "페이지 로드 성공 (85,605bytes)"
+    },
+    {
+      "api": "AI허브 API키",
+      "status": "SKIP",
+      "detail": "AIHUB_API_KEY 미설정 (https://aihub.or.kr 가입 후 발급)"
+    }
+  ]
+}
