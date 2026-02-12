@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  return paginate(posts, { pageSize: 9 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const posts = page.data;
+const allPosts = (await getCollection('blog', ({ data }) => !data.draft));
+const categories = [...new Set(allPosts.map(p => p.data.category))];
+
+function getCategoryEmoji(category: string): string {
+  const map: Record<string, string> = {
+    'AI 도구': '🛠️',
+    'AI 강좌': '📚',
+    'AI 뉴스': '📰',
+    'AI 지원사업': '💰',
+    'AI 체험': '🧪',
+  };
+  return map[category] || '✍️';
+}
+---
+<Layout title={page.currentPage === 1 ? '블로그' : `블로그 - ${page.currentPage}페이지`}>
+  <section class="bg-gradient-to-r from-primary to-secondary py-12 px-4">
+    <div class="max-w-5xl mx-auto text-center text-white">
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">블로그</h1>
+      <p class="opacity-90">AI 활용 팁, 바이브코딩 가이드, 최신 트렌드</p>
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto px-4 py-8">
+    <div class="flex gap-2 mb-8 flex-wrap">
+      <a href="/blog" class="px-4 py-2 bg-primary text-white text-sm rounded-full">전체</a>
+      {categories.map(cat => (
+        <a href={`/blog/category/${cat}`} class="px-4 py-2 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-gray-200">{cat}</a>
+      ))}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {posts.map(post => (
+        <a href={`/blog/${post.id}`} class="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+          {post.data.image ? (
+            <div class="h-48 overflow-hidden">
+              <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy" />
+            </div>
+          ) : (
+            <div class="bg-gradient-to-br from-primary/10 to-secondary/10 h-48 flex items-center justify-center">
+              <span class="text-5xl">{getCategoryEmoji(post.data.category)}</span>
+            </div>
+          )}
+          <div class="p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="text-xs bg-blue-100 text-primary px-2 py-1 rounded">{post.data.category}</span>
+              <span class="text-xs text-gray-400">{post.data.date.toLocaleDateString('ko-KR')}</span>
+            </div>
+            <h2 class="font-bold text-lg group-hover:text-primary transition line-clamp-2">{post.data.title}</h2>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-2">{post.data.description}</p>
+            <div class="flex gap-1 mt-3 flex-wrap">
+              {post.data.tags.map(tag => (
+                <span class="text-xs text-gray-400">#{tag}</span>
+              ))}
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    {page.lastPage > 1 && (
+      <nav class="flex justify-center items-center gap-2 mt-12">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">← 이전</a>
+        ) : (
+          <span class="px-4 py-2 bg-gray-50 text-gray-300 rounded-lg">← 이전</span>
+        )}
+        
+        {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(num => (
+          <a
+            href={num === 1 ? '/blog' : `/blog/${num}`}
+            class={num === page.currentPage
+              ? 'px-4 py-2 bg-primary text-white rounded-lg'
+              : 'px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200'}
+          >
+            {num}
+          </a>
+        ))}
+        
+        {page.url.next ? (
+          <a href={page.url.next} class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">다음 →</a>
+        ) : (
+          <span class="px-4 py-2 bg-gray-50 text-gray-300 rounded-lg">다음 →</span>
+        )}
+      </nav>
+    )}
+
+    <p class="text-center text-sm text-gray-400 mt-4">
+      총 {page.total}개 글 · {page.currentPage} / {page.lastPage} 페이지
+    </p>
+  </section>
+</Layout>
