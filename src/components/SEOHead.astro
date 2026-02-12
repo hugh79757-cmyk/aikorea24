@@ -1,0 +1,137 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedDate?: string;
+  modifiedDate?: string;
+  tags?: string[];
+  category?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description,
+  image = '/og-default.png',
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  tags = [],
+  category = '',
+  noindex = false,
+} = Astro.props;
+
+const siteName = 'AI코리아24';
+const siteUrl = 'https://aikorea24.kr';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).href;
+const ogImageURL = image.startsWith('http') ? image : new URL(image, siteUrl).href;
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+
+const jsonLdWebsite = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": siteName,
+  "url": siteUrl,
+  "description": "AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다",
+  "inLanguage": "ko-KR",
+  "publisher": {
+    "@type": "Organization",
+    "name": "스타일 팩토리9",
+    "url": siteUrl
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": { "@type": "EntryPoint", "urlTemplate": siteUrl + "/blog?q={search_term_string}" },
+    "query-input": "required name=search_term_string"
+  }
+});
+
+const jsonLdOrg = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "스타일 팩토리9",
+  "url": siteUrl,
+  "email": "jinyeon_cho@hotmail.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "호암로 256, 107-1804",
+    "addressLocality": "의정부시",
+    "addressRegion": "경기도",
+    "postalCode": "11638",
+    "addressCountry": "KR"
+  }
+});
+
+const jsonLdArticle = type === 'article' ? JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": ogImageURL,
+  "url": canonicalURL,
+  "datePublished": publishedDate,
+  "dateModified": modifiedDate || publishedDate,
+  "author": { "@type": "Person", "name": "조진연", "url": siteUrl },
+  "publisher": { "@type": "Organization", "name": "스타일 팩토리9" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalURL },
+  "keywords": tags.join(', '),
+  "articleSection": category,
+  "inLanguage": "ko-KR"
+}) : null;
+
+const pathParts = Astro.url.pathname.split('/').filter(Boolean);
+const breadcrumbs = [{ name: '홈', url: siteUrl + '/' }];
+let accumulated = '';
+for (const part of pathParts) {
+  accumulated += '/' + part;
+  const nameMap: Record<string, string> = { 'blog': '블로그', 'about': '회사소개', 'privacy': '개인정보처리방침', 'terms': '이용약관', 'contact': '문의' };
+  breadcrumbs.push({ name: nameMap[part] || decodeURIComponent(part), url: siteUrl + accumulated });
+}
+const jsonLdBreadcrumb = breadcrumbs.length > 1 ? JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": breadcrumbs.map((item, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": item.name,
+    "item": item.url
+  }))
+}) : null;
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+{noindex ? <meta name="robots" content="noindex, nofollow" /> : <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />}
+<meta property="og:locale" content="ko_KR" />
+<link rel="alternate" hreflang="ko" href={canonicalURL} />
+<link rel="alternate" hreflang="x-default" href={canonicalURL} />
+<meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:site_name" content={siteName} />
+{type === 'article' && publishedDate && <meta property="article:published_time" content={publishedDate} />}
+{type === 'article' && modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
+{type === 'article' && category && <meta property="article:section" content={category} />}
+{type === 'article' && tags.map(tag => <meta property="article:tag" content={tag} />)}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<script type="application/ld+json" set:html={jsonLdWebsite} />
+<script type="application/ld+json" set:html={jsonLdOrg} />
+{jsonLdArticle && <script type="application/ld+json" set:html={jsonLdArticle} />}
+{jsonLdBreadcrumb && <script type="application/ld+json" set:html={jsonLdBreadcrumb} />}
