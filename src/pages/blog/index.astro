@@ -32,7 +32,7 @@ const categories = [...new Set(posts.map(p => p.data.category))];
     ) : (
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {posts.map(post => (
-          <a href={`/blog/${post.slug}`} class="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
+          <a href={`/blog/${post.id}`} class="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition">
             <div class="bg-gradient-to-br from-primary/10 to-secondary/10 h-40 flex items-center justify-center">
               <span class="text-5xl">{
                 post.data.category === 'AI 도구' ? '🛠️' :
