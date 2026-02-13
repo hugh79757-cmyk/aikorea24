@@ -1,0 +1,7 @@
+name = "aikorea24"
+compatibility_date = "2024-12-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aikorea24-db"
+database_id = "bec650ce-f732-46bc-87c0-bd76ed17e42a"

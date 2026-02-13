@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const db = Astro.locals.runtime?.env?.DB;
+let newsList = [];
+if (db) {
+  const result = await db.prepare(`
+    SELECT * FROM news ORDER BY created_at DESC LIMIT 30
+  `).all();
+  newsList = result.results || [];
+}
+---
+<Layout title="AI 뉴스 - AI코리아24" description="AI 관련 최신 뉴스와 지원사업 소식">
+  <div class="bg-[#0A0E1A] text-white min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+      <h1 class="text-3xl font-bold mb-8">AI 뉴스</h1>
+      {newsList.length === 0 ? (
+        <p class="text-gray-500">아직 수집된 뉴스가 없습니다.</p>
+      ) : (
+        <div class="space-y-4">
+          {newsList.map((n: any) => (
+            <a href={n.link} target="_blank" rel="noopener" class="block bg-white/[0.05] border border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{n.source}</span>
+                <span class="text-xs text-gray-600">{n.pub_date || n.created_at?.slice(0, 10)}</span>
+              </div>
+              <h2 class="font-medium text-white mb-1">{n.title}</h2>
+              <p class="text-sm text-gray-500 line-clamp-2">{n.description}</p>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
