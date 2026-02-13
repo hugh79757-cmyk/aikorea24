@@ -57,6 +57,13 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     return new Response(JSON.stringify({ error: '유효하지 않은 세션입니다.' }), { status: 401 });
   }
 
+  // users 테이블에서 user_id 조회
+  let userId = 0;
+  try {
+    const userRow = await db.prepare('SELECT id FROM users WHERE email = ?').bind(user.email).first();
+    if (userRow) userId = userRow.id;
+  } catch {}
+
   try {
     const body = await request.json();
     const { title, content, category, access_level, price, preview_content } = body;
@@ -74,7 +81,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     const pc = al !== 'free' ? (preview_content?.trim()?.slice(0, 500) || '') : '';
 
     const result = await db.prepare(
-      'INSERT INTO posts (title, content, author_email, author_name, category, access_level, price, preview_content) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO posts (title, content, author_email, author_name, category, access_level, price, preview_content, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
     ).bind(
       title.trim().slice(0, 200),
       content.trim().slice(0, 10000),
@@ -83,7 +90,8 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       cat,
       al,
       p,
-      pc
+      pc,
+      userId
     ).run();
 
     return new Response(JSON.stringify({
