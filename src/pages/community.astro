@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+let currentUser = null;
+try {
+  const session = Astro.cookies.get('session')?.value;
+  if (session) currentUser = JSON.parse(atob(session));
+} catch {}
+
+const db = Astro.locals.runtime?.env?.DB;
+let posts = [];
+if (db) {
+  const result = await db.prepare(`
+    SELECT p.id, p.title, p.category, p.views, p.created_at, u.name as author
+    FROM posts p JOIN users u ON p.user_id = u.id
+    ORDER BY p.created_at DESC LIMIT 20
+  `).all();
+  posts = result.results || [];
+}
+---
+<Layout title="커뮤니티 - AI코리아24" description="AI 관련 질문, 정보 공유, 자유 토론 게시판">
+  <div class="bg-[#0A0E1A] text-white min-h-screen">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold">커뮤니티</h1>
+        {currentUser && (
+          <a href="/community/write" class="bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium px-5 py-2.5 rounded-lg hover:shadow-lg transition-all">글쓰기</a>
+        )}
+      </div>
+
+      {!currentUser && (
+        <div class="bg-white/[0.05] border border-white/[0.1] rounded-xl p-6 mb-8 text-center">
+          <p class="text-gray-400 mb-3">글을 작성하려면 로그인이 필요합니다</p>
+          <a href="/api/auth/login" class="inline-block bg-white/[0.1] border border-white/[0.15] px-5 py-2 rounded-lg hover:bg-white/[0.2] transition-all">Google로 로그인</a>
+        </div>
+      )}
+
+      <div class="bg-white/[0.05] border border-white/[0.08] rounded-2xl overflow-hidden">
+        {posts.length === 0 ? (
+          <div class="p-12 text-center text-gray-500">아직 게시글이 없습니다. 첫 글을 작성해보세요!</div>
+        ) : (
+          posts.map((post: any) => (
+            <a href={`/community/${post.id}`} class="block px-6 py-4 border-b border-white/[0.06] hover:bg-white/[0.05] transition-colors">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] bg-white/[0.1] text-gray-300 px-2 py-0.5 rounded-full">{post.category}</span>
+                <span class="text-xs text-gray-600">{post.author}</span>
+                <span class="text-xs text-gray-600">{post.created_at?.slice(0, 10)}</span>
+                <span class="text-xs text-gray-600 ml-auto">조회 {post.views}</span>
+              </div>
+              <h2 class="font-medium text-white">{post.title}</h2>
+            </a>
+          ))
+        )}
+      </div>
+    </div>
+  </div>
+</Layout>

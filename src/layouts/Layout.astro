@@ -25,10 +25,18 @@ const {
   noindex = false,
 } = Astro.props;
 
+let currentUser = null;
+try {
+  const session = Astro.cookies.get('session')?.value;
+  if (session) currentUser = JSON.parse(atob(session));
+} catch {}
+
 const navItems = [
   { label: '홈', href: '/' },
   { label: '블로그', href: '/blog' },
   { label: '회사소개', href: '/about' },
+  { label: '뉴스', href: '/news' },
+  { label: '커뮤니티', href: '/community' },
   { label: '문의', href: '/contact' },
 ];
 
@@ -74,6 +82,17 @@ const currentPath = Astro.url.pathname;
             {item.label}
           </a>
         ))}
+      </div>
+      <div class="hidden md:flex items-center ml-4">
+        {currentUser ? (
+          <div class="flex items-center gap-3">
+            <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+            <span class="text-sm text-gray-300">{currentUser.name}</span>
+            <a href="/api/auth/logout" class="text-xs text-gray-500 hover:text-red-400">로그아웃</a>
+          </div>
+        ) : (
+          <a href="/api/auth/login" class="text-sm font-medium bg-white/[0.1] border border-white/[0.15] px-4 py-2 rounded-lg hover:bg-white/[0.2] transition-all">로그인</a>
+        )}
       </div>
       <button id="mobile-menu-btn" class="md:hidden p-2" aria-label="메뉴 열기">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

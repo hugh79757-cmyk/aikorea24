@@ -1,0 +1,88 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+let currentUser = null;
+try {
+  const session = Astro.cookies.get('session')?.value;
+  if (session) currentUser = JSON.parse(atob(session));
+} catch {}
+
+const { id } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+let post = null;
+let comments = [];
+
+if (db && id) {
+  await db.prepare(`UPDATE posts SET views = views + 1 WHERE id = ?`).bind(id).run();
+  post = await db.prepare(`
+    SELECT p.*, u.name as author, u.avatar FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?
+  `).bind(id).first();
+  const commentResult = await db.prepare(`
+    SELECT c.*, u.name, u.avatar FROM comments c JOIN users u ON c.user_id = u.id WHERE c.post_id = ? ORDER BY c.created_at
+  `).bind(id).all();
+  comments = commentResult.results || [];
+}
+
+if (Astro.request.method === 'POST' && currentUser && db) {
+  const form = await Astro.request.formData();
+  const content = form.get('content') as string;
+  if (content) {
+    await db.prepare(
+      `INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)`
+    ).bind(id, currentUser.id, content).run();
+    return Astro.redirect(`/community/${id}`);
+  }
+}
+---
+<Layout title={post?.title || '게시글'}>
+  <div class="bg-[#0A0E1A] text-white min-h-screen">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      {!post ? (
+        <p class="text-gray-500">게시글을 찾을 수 없습니다.</p>
+      ) : (
+        <>
+          <div class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="text-[10px] bg-white/[0.1] text-gray-300 px-2 py-0.5 rounded-full">{post.category}</span>
+              <span class="text-sm text-gray-500">조회 {post.views}</span>
+            </div>
+            <h1 class="text-2xl font-bold mb-4">{post.title}</h1>
+            <div class="flex items-center gap-3 mb-6">
+              {post.avatar && <img src={post.avatar} alt="" class="w-8 h-8 rounded-full" />}
+              <span class="text-sm text-gray-400">{post.author}</span>
+              <span class="text-sm text-gray-600">{post.created_at?.slice(0, 10)}</span>
+            </div>
+            <div class="bg-white/[0.05] border border-white/[0.08] rounded-xl p-6 whitespace-pre-wrap text-gray-300 leading-relaxed">{post.content}</div>
+          </div>
+
+          <div class="mb-8">
+            <h3 class="font-semibold mb-4">댓글 {comments.length}개</h3>
+            {comments.map((c: any) => (
+              <div class="flex gap-3 py-3 border-b border-white/[0.06]">
+                {c.avatar && <img src={c.avatar} alt="" class="w-7 h-7 rounded-full mt-0.5" />}
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <span class="text-sm font-medium">{c.name}</span>
+                    <span class="text-xs text-gray-600">{c.created_at?.slice(0, 10)}</span>
+                  </div>
+                  <p class="text-sm text-gray-400">{c.content}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {currentUser ? (
+            <form method="POST" class="flex gap-3">
+              <input type="text" name="content" placeholder="댓글을 입력하세요" required
+                class="flex-1 bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+              <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm hover:bg-blue-500 transition-colors">등록</button>
+            </form>
+          ) : (
+            <p class="text-sm text-gray-500">댓글을 작성하려면 <a href="/api/auth/login" class="text-blue-400">로그인</a>하세요.</p>
+          )}
+        </>
+      )}
+      <a href="/community" class="inline-block mt-8 text-sm text-gray-500 hover:text-gray-300">← 목록으로</a>
+    </div>
+  </div>
+</Layout>
