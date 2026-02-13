@@ -1,10 +1,13 @@
 # aikorea24.kr 프로젝트 SOP
 
+**버전: 2.0**
+**최종 업데이트: 2026-02-13**
+
 ## 프로젝트 개요
 - 사이트: https://aikorea24.kr
 - 목적: AI 도구 추천, 무료 강좌, 정부 지원사업 정보, AI 뉴스 한국어 큐레이션
 - 핵심 가치: AI가 어떻게 내 호주머니를 불려줄 수 있을까?
-- 스택: Astro (SSR) + Cloudflare Pages + D1 + Tailwind CSS
+- 스택: Astro 5 (SSR) + Cloudflare Pages + D1 + Tailwind CSS 3 + MDX
 - 레포: https://github.com/hugh79757-cmyk/aikorea24
 
 ---
@@ -16,127 +19,220 @@
 - Cloudflare Pages 배포 (커스텀 도메인 aikorea24.kr)
 - wrangler.toml 설정 (D1 바인딩, pages_build_output_dir)
 - D1 데이터베이스 생성 (aikorea24-db, ID: bec650ce-f732-46bc-87c0-bd76ed17e42a)
-- D1 테이블: users, posts, comments, news
+- D1 테이블: users, posts, comments, news, payments
 
 ### 2. 인증 (Google OAuth)
 - Google Cloud Console OAuth 2.0 클라이언트 설정
 - 리다이렉트 URI: https://aikorea24.kr/api/auth/callback/google
 - Cloudflare 환경변수: GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, AUTH_SECRET
 - wrangler pages secret으로 시크릿 등록
-- runtime.env로 환경변수 읽기 (import.meta.env → locals.runtime.env 수정)
+- runtime.env로 환경변수 읽기
 - /api/auth/login.ts, /api/auth/callback/google.ts 구현
-- /api/debug 엔드포인트 (환경변수 디버깅용)
 
-### 3. 뉴스 수집기
-- 수집 스크립트: api_test/news_collector.py
-- 수집 소스 (5개):
-  - 과기부 사업공고 API (apis.data.go.kr/1721000/msitannouncementinfo)
-  - 과기부 보도자료 API (apis.data.go.kr/1721000/msitpressreleaseinfo)
-  - 행안부 공공서비스(혜택) API
-  - 네이버 뉴스 검색 API (키워드: AI 지원사업, 인공지능 정책, AI 바우처 2026)
-  - AI타임스 RSS 피드
-- D1 news 테이블 저장 (47건)
-- 카테고리 분류: news, AI, policy, benefit
-- 공공데이터 API User-Agent 이슈 해결 (-A Mozilla/5.0)
+### 3. 뉴스 수집기 (v2.1)
+- api_test/news_collector.py: 네이버 뉴스, AI타임스 RSS, 과기부 보도자료/사업공고
+- AI 필터 강화: 강한 키워드(AI, GPT, 인공지능 등) + 약한 키워드 2개 이상 조합
+- 제외 키워드: 귀촌, 귀어, 교복, 부동산, 스포츠 등
+- 중복 방지: 제목 해시 기반, 특수문자 안전 처리
+- D1 저장: wrangler d1 execute로 개별 INSERT
+- 현재 뉴스 102건 (네이버 83, AI타임스 10, 과기부 4, 정부공문서 1, 기타 4)
 
-### 4. 홈페이지 (index.astro)
-- 히어로 섹션 (particles.js 배경)
-- AI 도구 픽 (하드코딩 4개)
-- AI 정책 브리핑 — D1 policy 카테고리에서 동적 로드 (3건)
-- AI 지원사업 — D1 benefit 카테고리에서 동적 로드 (3건)
-- 최신 AI 뉴스 — D1 news/AI 카테고리에서 동적 로드 (5건)
-- 인기 AI 강좌 (하드코딩 3개)
-- 최신 블로그 (astro:content에서 동적 로드)
-- CTA 섹션
-- 다크 테마 + 글래스모피즘 디자인
+### 4. 정부 공문서 AI 학습데이터 API 연동
+- api_test/gov_doc_collector.py: 행정안전부 API 연동
+- Base URL: http://apis.data.go.kr/1741000/publicDoc
+- 엔드포인트: getDocPress(보도자료), getDocReport(정책보고서), getDocSpeech(연설문)
+- 필수 파라미터: serviceKey, title (검색 키워드)
+- API 키: .env의 DATA_GO_KR_KEY 사용
+- news_collector.py에 fetch_gov_docs() 함수로 통합
+- 공공데이터포털 활용신청 완료 (개발계정, 일 10,000건)
 
-### 5. API 엔드포인트
-- /api/auth/login — Google OAuth 로그인 시작
-- /api/auth/callback/google — OAuth 콜백 처리
-- /api/news/latest — 최신 뉴스 (news, AI 카테고리)
-- /api/news/policy — 정책 브리핑 (policy 카테고리)
-- /api/news/benefits — 지원사업 (benefit 카테고리)
-- /api/debug — 환경변수 디버깅
+### 5. 커뮤니티 게시판
+- 목록: /community (페이지네이션, 카테고리 필터)
+- 글쓰기: /community/write (로그인 필수)
+- 상세: /community/[id] (조회수, 댓글)
+- 수정/삭제: 본인 글만 가능
+- API: /api/posts (CRUD), /api/posts/[id]/comments (댓글)
+- D1 스키마: posts (user_id, title, content, category, views, access_level, price, preview_content)
+- D1 스키마: comments (post_id, user_id, content)
 
-### 6. 시크릿/보안
-- .gitignore에 .env, .env.production, api_test/.env.sh 등록
-- git filter-repo로 시크릿 히스토리 완전 삭제
-- GitHub secret scanning으로 push 차단 확인 (시크릿 미노출)
+### 6. 유료/무료 콘텐츠 구분
+- posts.access_level: free, basic, premium
+- users.membership: free, basic, premium (+ membership_expires, purchased_posts)
+- 접근 제어: free=전체공개, basic=로그인필요, premium=유료결제
+- 상세 페이지에서 등급 체크 후 미리보기 + 잠금 오버레이
+- 목록에서 Basic(노란)/Premium(빨간) 배지 표시
 
----
+### 7. 결제 시스템
+- 토스페이먼츠 연동 코드 완료 (키 미등록 - 테스트 대기)
+- API: /api/payments/request.ts, confirm.ts, membership.ts
+- 결과 페이지: /payments/success.astro, fail.astro
+- 카카오페이 송금 링크 연동 완료: https://qr.kakaopay.com/FFhsfSTOm
+- /pricing 페이지 + 홈페이지 후원 배너에 적용
+- 토스 비용: 초기 22만원 + 연 11만원 + 거래 3.4% (현 단계에서는 카카오페이로 시작)
 
-## 보류/미완료 작업
+### 8. 요금제 페이지
+- /pricing: Free, Basic(4,900원/월), Premium(9,900원/월) 카드
+- 월간/연간 토글, 카카오페이 후원 버튼 포함
 
-### 우선순위 높음
-- Cloudflare 재배포 후 로그인 테스트
-- 뉴스 수집기 개선: 과기부 사업공고 AI 키워드 필터 확대
-- GitHub Actions 크론 스케줄 (하루 2회 자동 수집)
-- /news 페이지 (전체 뉴스 목록)
+### 9. 다크/라이트 모드
+- Tailwind darkMode: class 설정 (tailwind.config.mjs)
+- Layout.astro: 테마 토글 버튼 (해/달 아이콘), localStorage 저장
+- FOUC 방지: html 인라인 스크립트로 깜빡임 제거
+- 적용 완료: Layout.astro, index.astro, news.astro, community.astro, pricing.astro
+- 적용 진행 중: community/index.astro, community/write.astro, blog 세부 색상 조정
 
-### 우선순위 중간
-- 디자인 구현: 다크/라이트 모드 토글
-- 타이포그래피 업그레이드 (Pretendard, Inter 등)
-- 카드뉴스 이미지 자동 생성 (Python Pillow)
-- 커뮤니티 게시판 (/community)
+### 10. 블로그
+- src/content/blog/: 마크다운 포스트 8개+
+- src/content/config.ts: 컬렉션 스키마 (Zod)
+- blog/[...page].astro: 목록 + 페이지네이션 (prerender = true)
+- blog/[...id].astro: 개별 포스트 (prerender = true)
+- 카테고리 필터, 이모지 매핑
 
-### 우선순위 낮음
-- Instagram/Threads 자동 발행 (Meta API 승인 필요)
-- 국고보조금 공모사업 API 연동 (현재 Forbidden)
-- 뉴스레터 구독 기능
+### 11. 모바일 대응
+- 헤더 햄버거 메뉴 + 모바일 로그인 버튼 추가
+- 반응형 레이아웃 (md: 브레이크포인트)
 
----
-
-## 환경 변수 목록
-
-| 변수명 | 용도 | 발급처 |
-|--------|------|--------|
-| GOOGLE_CLIENT_ID | OAuth 로그인 | Google Cloud Console |
-| GOOGLE_CLIENT_SECRET | OAuth 로그인 | Google Cloud Console |
-| AUTH_SECRET | 세션 암호화 | openssl rand -base64 32 |
-| NAVER_CLIENT_ID | 뉴스 검색 API | developers.naver.com |
-| NAVER_CLIENT_SECRET | 뉴스 검색 API | developers.naver.com |
-| OPENAI_API_KEY | 뉴스 요약 | platform.openai.com |
-| DATA_GO_KR_KEY | 공공데이터 API | data.go.kr |
+### 12. 기타 페이지
+- /about, /contact, /privacy, /terms
+- sitemap.xml 자동 생성 (@astrojs/sitemap)
 
 ---
 
-## 주요 파일 경로
+## 주요 파일 목록
 
-- src/pages/index.astro — 홈페이지 (D1 동적 섹션)
-- src/pages/api/auth/login.ts — OAuth 로그인
-- src/pages/api/auth/callback/google.ts — OAuth 콜백
-- src/pages/api/news/latest.ts — 최신 뉴스 API
-- src/pages/api/news/policy.ts — 정책 API
-- src/pages/api/news/benefits.ts — 지원사업 API
-- src/pages/api/debug.ts — 디버그 API
-- api_test/.env.sh — 로컬 환경변수 (git 제외)
-- api_test/news_collector.py — 뉴스 수집 스크립트
-- wrangler.toml — Cloudflare 설정
-- astro.config.mjs — Astro 설정
-
----
-
-## 배포 절차
-
-1. cd /Users/twinssn/Projects/aikorea24
-2. npm run build
-3. git add -A
-4. git commit -m "설명"
-5. git push origin main
-6. Cloudflare Pages 자동 빌드/배포
-
----
-
-## 트러블슈팅 기록
-
-| 문제 | 원인 | 해결 |
-|------|------|------|
-| client_id=undefined | Cloudflare에서 import.meta.env로 시크릿 접근 불가 | locals.runtime.env로 변경 |
-| GOOGLE_CLIENT_ID 공백 | 환경변수명 끝에 스페이스 포함 | 삭제 후 재등록 |
-| git push 거부 | api_test/.env.sh가 히스토리에 포함 | git filter-repo로 제거 |
-| 공공데이터 API 400 | curl 기본 User-Agent 차단 | -A Mozilla/5.0 추가 |
-| .env.sh 덮어쓰기 실패 | 기존 파일 잔존 | rm 후 cat 재생성 |
+- wrangler.toml: Cloudflare 설정
+- package.json: 의존성 (Astro 5, Tailwind 3, MDX)
+- tailwind.config.mjs: darkMode class
+- SOP.md: 이 문서
+- api_test/news_collector.py: 뉴스 수집기 v2.1
+- api_test/gov_doc_collector.py: 정부 공문서 수집기
+- api_test/.env: API 키들
+- src/content/config.ts: 컬렉션 스키마
+- src/content/blog/: 마크다운 포스트 8개+
+- src/layouts/Layout.astro: 공통 레이아웃 (다크/라이트 토글)
+- src/lib/auth.ts: 인증 유틸 (getSessionUser, canAccess)
+- src/styles/global.css: Tailwind + 테마 변수
+- src/pages/index.astro: 홈
+- src/pages/news.astro: 뉴스
+- src/pages/pricing.astro: 요금제
+- src/pages/blog/[...page].astro: 블로그 목록
+- src/pages/blog/[...id].astro: 블로그 상세
+- src/pages/community/index.astro: 게시판 목록
+- src/pages/community/write.astro: 글쓰기
+- src/pages/community/[id].astro: 글 상세/댓글
+- src/pages/api/posts/index.ts: 글 목록/작성 API
+- src/pages/api/posts/[id].ts: 글 상세/수정/삭제 API
+- src/pages/api/posts/[id]/comments.ts: 댓글 API
+- src/pages/api/payments/: 결제 API (request, confirm, membership)
 
 ---
 
-마지막 업데이트: 2026-02-13
+## 환경변수 및 시크릿
+
+### Cloudflare Pages 시크릿 (wrangler pages secret)
+- GOOGLE_CLIENT_ID
+- GOOGLE_CLIENT_SECRET
+- AUTH_SECRET
+- TOSS_CLIENT_KEY (미등록)
+- TOSS_SECRET_KEY (미등록)
+
+### 로컬 .env
+- DATA_GO_KR_KEY: 공공데이터포털 API 키
+- NAVER_CLIENT_ID: 네이버 검색 API
+- NAVER_CLIENT_SECRET: 네이버 검색 API
+
+---
+
+## D1 데이터베이스 스키마
+
+### users
+- id INTEGER PRIMARY KEY
+- google_id TEXT NOT NULL
+- email TEXT NOT NULL
+- name TEXT NOT NULL
+- avatar TEXT
+- created_at TEXT DEFAULT datetime('now')
+- membership TEXT DEFAULT 'free'
+- membership_expires TEXT
+- purchased_posts TEXT DEFAULT '[]'
+
+### posts
+- id INTEGER PRIMARY KEY
+- user_id INTEGER NOT NULL
+- title TEXT NOT NULL
+- content TEXT NOT NULL
+- category TEXT DEFAULT 'general'
+- views INTEGER DEFAULT 0
+- created_at TEXT DEFAULT datetime('now')
+- updated_at TEXT DEFAULT datetime('now')
+- access_level TEXT DEFAULT 'free'
+- price INTEGER DEFAULT 0
+- preview_content TEXT
+- author_email TEXT DEFAULT ''
+- author_name TEXT DEFAULT '익명'
+
+### comments
+- id INTEGER PRIMARY KEY
+- post_id INTEGER NOT NULL
+- user_id INTEGER NOT NULL
+- content TEXT NOT NULL
+- created_at TEXT DEFAULT datetime('now')
+- author_email TEXT DEFAULT ''
+- author_name TEXT DEFAULT '익명'
+
+### news
+- id INTEGER PRIMARY KEY
+- title TEXT
+- link TEXT
+- description TEXT
+- source TEXT
+- category TEXT
+- pub_date TEXT
+
+### payments
+- id INTEGER PRIMARY KEY
+- user_email TEXT NOT NULL
+- type TEXT NOT NULL
+- amount INTEGER NOT NULL
+- post_id INTEGER
+- plan TEXT
+- status TEXT DEFAULT 'pending'
+- payment_key TEXT
+- order_id TEXT UNIQUE
+- created_at TEXT DEFAULT datetime('now')
+- expires_at TEXT
+
+---
+
+## 다음 단계 (TODO)
+
+### Phase 1 - 안정화 (우선)
+- [ ] 라이트 모드 세부 페이지 마무리 (community/index, write, blog 색상)
+- [ ] 커뮤니티 글 수정 페이지 (/community/edit/[id]) 완성
+- [ ] 빌드 경고 해결 (blog prerender Astro.request.headers)
+
+### Phase 2 - 자동화
+- [ ] GitHub Actions 또는 Cloudflare Workers로 뉴스 수집 크론 (매일)
+- [ ] OpenAI 요약 파이프라인
+
+### Phase 3 - 수익화
+- [ ] 토스페이먼츠 테스트 키 등록 및 결제 플로우 검증
+- [ ] 유료 콘텐츠 제작 및 판매 시작
+- [ ] 구독 모델 활성화
+
+### Phase 4 - 확장
+- [ ] 뉴스 카테고리 필터 (전체/뉴스/정책/AI타임스)
+- [ ] R2 이미지 저장소
+- [ ] Workers AI 챗봇
+- [ ] 다국어 지원 (영어)
+- [ ] PWA 전환
+- [ ] 뉴스레터 발송
+
+---
+
+## 변경 이력
+
+| 날짜 | 버전 | 변경 내용 |
+|------|------|-----------|
+| 2026-02-12 | 1.0 | 초기 SOP 작성 (인프라, 인증, 뉴스, 블로그) |
+| 2026-02-13 | 2.0 | 커뮤니티 게시판, 유료콘텐츠, 결제(토스+카카오페이), 다크/라이트 모드, 정부 공문서 API 연동, 뉴스 수집기 v2.1 AI 필터 강화, 모바일 메뉴 개선 |
