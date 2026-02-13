@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""aikorea24 뉴스 수집기 v2 - 5개 소스, D1 저장"""
+"""
+aikorea24.kr 뉴스 수집기 v2.1
+- AI 관련 뉴스만 3단계 정밀 필터링
+- 중복 방지 (제목 해시)
+- 수집 후 D1 저장
+"""
 
-import os, json, subprocess, urllib.request, urllib.parse
+import os, json, subprocess, urllib.request, urllib.parse, hashlib, re
 from datetime import datetime
 from xml.etree import ElementTree as ET
 from html import unescape
-import re
 
-# === 환경변수 로드 ===
 def load_env(path):
     with open(path) as f:
         for line in f:
@@ -29,35 +32,79 @@ def clean(text):
     text = unescape(text or '')
     return re.sub(r'<[^>]+>', '', text).strip()
 
-# === 1. 과기부 사업공고 (AI 키워드 필터) ===
-def fetch_msit_announcements(limit=20):
+# ===== AI 3단계 필터 =====
+STRONG = ['AI', 'A.I', '인공지능', 'GPT', 'ChatGPT', '챗GPT', 'LLM',
+    '생성형', '딥러닝', '머신러닝', '딥페이크', '자연어처리',
+    '앤트로픽', 'Anthropic', '오픈AI', 'OpenAI', '클로드', 'Claude',
+    'Gemini', '제미나이', 'Copilot', '코파일럿', '코덱스',
+    'Midjourney', '미드저니', 'Stable Diffusion', 'DALL-E', 'Sora',
+    'AI 바우처', 'AI바우처', 'AI 스타트업', '휴머노이드',
+    '피지컬 AI', 'AI 서비스', 'AI 기반', 'AI 모드']
+
+WEAK = ['데이터센터', '클라우드', '반도체', '엔비디아', 'GPU',
+    '자율주행', '로봇', '알고리즘', '빅데이터', '테크', '4차 산업',
+    '디지털 전환', '소프트웨어', '스타트업']
+
+EXCLUDE = ['귀촌', '귀어', '귀농', '축산', '양식', '어업',
+    '교복', '생리대', '시승', '전시장 이벤트', '부동산', '아파트',
+    '야구', '축구', '농구', '올림픽', '날씨', '태풍', '폭설',
+    '결혼', '출산', '장례', '과학관', '과학특강', '마약',
+    '행정통합', '통합특별', '도서관', '연휴 이벤트', '르노',
+    '교육청', '임대', '재건축']
+
+def is_ai(title, desc=''):
+    text = (title + ' ' + desc).upper()
+    for kw in EXCLUDE:
+        if kw.upper() in text: return False
+    for kw in STRONG:
+        if kw.upper() in text: return True
+    weak_count = sum(1 for kw in WEAK if kw.upper() in text)
+    return weak_count >= 2
+
+# ===== 중복 체크 =====
+def title_hash(title):
+    normalized = re.sub(r'[^가-힣a-zA-Z0-9]', '', title)
+    return hashlib.md5(normalized.encode()).hexdigest()
+
+def get_existing():
+    try:
+        r = subprocess.run(
+            ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote',
+             '--command', 'SELECT title FROM news'],
+            capture_output=True, text=True, cwd=PROJECT_DIR)
+        hashes = set()
+        for line in r.stdout.split('\n'):
+            if '│' in line:
+                parts = line.split('│')
+                if len(parts) >= 2:
+                    t = parts[1].strip()
+                    if t and t != 'title': hashes.add(title_hash(t))
+        return hashes
+    except: return set()
+
+# ===== 1. 과기부 사업공고 =====
+def fetch_msit_announce(limit=30):
     url = f"http://apis.data.go.kr/1721000/msitannouncementinfo/businessAnnouncMentList?ServiceKey={DATA_KEY}&pageNo=1&numOfRows={limit}&returnType=json"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         data = json.loads(urllib.request.urlopen(req, timeout=10).read())
         items = data['response'][1]['body']['items']
         results = []
-        keywords = ['AI', '인공지능', '디지털', '데이터', '클라우드', '소프트웨어', '바우처']
         for entry in items:
             item = entry['item']
             title = clean(item.get('subject', ''))
-            if any(k in title for k in keywords):
-                results.append({
-                    'title': title,
-                    'link': item.get('viewUrl', ''),
-                    'description': f"담당: {item.get('deptName','')} | {item.get('managerName','')} {item.get('managerTel','')}",
-                    'source': '과기부 사업공고',
-                    'category': 'grant',
-                    'pub_date': item.get('pressDt', '')
-                })
-        print(f"  과기부 사업공고: {len(results)}건 (AI 관련)")
+            desc = f"담당: {item.get('deptName','')}"
+            if is_ai(title, desc):
+                results.append({'title': title, 'link': item.get('viewUrl', ''),
+                    'description': desc, 'source': '과기부 사업공고',
+                    'category': 'grant', 'pub_date': item.get('pressDt', '')})
+        print(f"  과기부 사업공고: {len(results)}건")
         return results
     except Exception as e:
-        print(f"  과기부 사업공고 실패: {e}")
-        return []
+        print(f"  과기부 사업공고 실패: {e}"); return []
 
-# === 2. 과기부 보도자료 ===
-def fetch_msit_press(limit=10):
+# ===== 2. 과기부 보도자료 =====
+def fetch_msit_press(limit=20):
     url = f"http://apis.data.go.kr/1721000/msitpressreleaseinfo/pressReleaseList?ServiceKey={DATA_KEY}&pageNo=1&numOfRows={limit}&returnType=json"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
@@ -66,153 +113,138 @@ def fetch_msit_press(limit=10):
         results = []
         for entry in items:
             item = entry['item']
-            results.append({
-                'title': clean(item.get('subject', '')),
-                'link': item.get('viewUrl', ''),
-                'description': f"담당: {item.get('deptName','')}",
-                'source': '과기부 보도자료',
-                'category': 'policy',
-                'pub_date': item.get('pressDt', '')
-            })
+            title = clean(item.get('subject', ''))
+            desc = f"담당: {item.get('deptName','')}"
+            if is_ai(title, desc):
+                results.append({'title': title, 'link': item.get('viewUrl', ''),
+                    'description': desc, 'source': '과기부 보도자료',
+                    'category': 'policy', 'pub_date': item.get('pressDt', '')})
         print(f"  과기부 보도자료: {len(results)}건")
         return results
     except Exception as e:
-        print(f"  과기부 보도자료 실패: {e}")
-        return []
+        print(f"  과기부 보도자료 실패: {e}"); return []
 
-# === 3. 행정안전부 공공서비스(혜택) ===
-def fetch_gov_benefits(limit=10):
+# ===== 3. 정부24 혜택 =====
+def fetch_gov_benefits(limit=50):
     url = f"https://api.odcloud.kr/api/gov24/v3/serviceList?page=1&perPage={limit}&serviceKey={DATA_KEY}"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         data = json.loads(urllib.request.urlopen(req, timeout=10).read())
         results = []
-        keywords = ['AI', '인공지능', '디지털', '창업', '소상공인', '중소기업', '기술', '혁신']
         for item in data.get('data', []):
             name = item.get('서비스명', '')
-            if any(k in name or k in item.get('서비스목적요약', '') for k in keywords):
-                results.append({
-                    'title': name,
+            summary = item.get('서비스목적요약', '')
+            if is_ai(name, summary):
+                results.append({'title': name,
                     'link': f"https://www.gov.kr/portal/rcvfvrSvc/dtlEx/{item.get('서비스ID','')}",
-                    'description': item.get('서비스목적요약', '')[:200],
-                    'source': '정부24 혜택',
-                    'category': 'benefit',
-                    'pub_date': datetime.now().strftime('%Y-%m-%d')
-                })
-        print(f"  정부24 혜택: {len(results)}건 (관련 키워드)")
+                    'description': summary[:200], 'source': '정부24 혜택',
+                    'category': 'benefit', 'pub_date': datetime.now().strftime('%Y-%m-%d')})
+        print(f"  정부24 혜택: {len(results)}건")
         return results
     except Exception as e:
-        print(f"  정부24 혜택 실패: {e}")
-        return []
+        print(f"  정부24 혜택 실패: {e}"); return []
 
-# === 4. 네이버 뉴스 검색 ===
-def fetch_naver_news(query, display=5):
+# ===== 4. 네이버 뉴스 =====
+QUERIES = ['인공지능 AI 서비스', 'ChatGPT 활용법', '생성형AI 스타트업',
+    'AI 바우처 지원사업', '딥러닝 기술 트렌드', 'AI 정책 규제']
+
+def fetch_naver(query, display=10):
     encoded = urllib.parse.quote(query)
     url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display={display}&sort=date"
     req = urllib.request.Request(url, headers={
-        'X-Naver-Client-Id': NAVER_ID,
-        'X-Naver-Client-Secret': NAVER_SECRET
-    })
+        'X-Naver-Client-Id': NAVER_ID, 'X-Naver-Client-Secret': NAVER_SECRET})
     try:
         data = json.loads(urllib.request.urlopen(req, timeout=10).read())
         results = []
         for item in data.get('items', []):
-            results.append({
-                'title': clean(item['title']),
-                'link': item['link'],
-                'description': clean(item['description'])[:200],
-                'source': '네이버뉴스',
-                'category': 'news',
-                'pub_date': datetime.now().strftime('%Y-%m-%d')
-            })
+            title = clean(item['title'])
+            desc = clean(item['description'])
+            if is_ai(title, desc):
+                results.append({'title': title, 'link': item['link'],
+                    'description': desc[:200], 'source': '네이버뉴스',
+                    'category': 'news', 'pub_date': datetime.now().strftime('%Y-%m-%d')})
         return results
     except Exception as e:
-        print(f"  네이버 '{query}' 실패: {e}")
-        return []
+        print(f"  네이버 '{query}' 실패: {e}"); return []
 
-# === 5. RSS 수집 ===
-def fetch_rss(url, source_name, limit=5):
+# ===== 5. RSS =====
+RSS_FEEDS = [
+    ('https://www.aitimes.com/rss/allArticle.xml', 'AI타임스'),
+]
+
+def fetch_rss(url, source_name, limit=15):
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     try:
         xml = urllib.request.urlopen(req, timeout=10).read()
         tree = ET.fromstring(xml)
         results = []
         for item in tree.findall('.//item')[:limit]:
-            results.append({
-                'title': clean(item.findtext('title', '')),
-                'link': item.findtext('link', ''),
-                'description': clean(item.findtext('description', ''))[:200],
-                'source': source_name,
-                'category': 'news',
-                'pub_date': datetime.now().strftime('%Y-%m-%d')
-            })
+            title = clean(item.findtext('title', ''))
+            desc = clean(item.findtext('description', ''))
+            if is_ai(title, desc):
+                results.append({'title': title, 'link': item.findtext('link', ''),
+                    'description': desc[:200], 'source': source_name,
+                    'category': 'news', 'pub_date': datetime.now().strftime('%Y-%m-%d')})
         return results
     except Exception as e:
-        print(f"  RSS {source_name} 실패: {e}")
-        return []
+        print(f"  RSS {source_name} 실패: {e}"); return []
 
-# === D1 저장 ===
-def insert_to_d1(news_list):
-    success = 0
-    for item in news_list:
-        title = item['title'].replace("'", "''")
-        desc = item['description'].replace("'", "''")
-        link = item['link'].replace("'", "''")
-        sql = f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date) VALUES ('{title}', '{link}', '{desc}', '{item['source']}', '{item['category']}', '{item['pub_date']}')"
+# ===== D1 저장 =====
+def save_to_d1(articles):
+    existing = get_existing()
+    saved, skipped = 0, 0
+    for a in articles:
+        h = title_hash(a['title'])
+        if h in existing: skipped += 1; continue
+        t = a['title'].replace("'", "''")[:200]
+        l = a['link'].replace("'", "''")[:500]
+        d = a['description'].replace("'", "''")[:500]
+        s = a['source'].replace("'", "''")
+        c = a['category']
+        p = a.get('pub_date', datetime.now().strftime('%Y-%m-%d'))
+        sql = f"INSERT INTO news (title, link, description, source, category, pub_date) VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}');"
         try:
-            subprocess.run(
+            r = subprocess.run(
                 ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql],
-                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=30
-            )
-            success += 1
-        except:
-            pass
-    return success
+                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=15)
+            if r.returncode == 0: saved += 1; existing.add(h)
+            else: print(f"    실패: {a['title'][:40]}")
+        except Exception as e: print(f"    에러: {e}")
+    return saved, skipped
 
-# === 메인 실행 ===
+# ===== 메인 =====
+def main():
+    print('=' * 60)
+    print(f"aikorea24 뉴스 수집 v2.1 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print('=' * 60)
+    all_items = []
+
+    print('\n[1] 과기부 사업공고')
+    all_items.extend(fetch_msit_announce())
+
+    print('\n[2] 과기부 보도자료')
+    all_items.extend(fetch_msit_press())
+
+    print('\n[3] 정부24 혜택')
+    all_items.extend(fetch_gov_benefits())
+
+    print('\n[4] 네이버 뉴스')
+    for q in QUERIES:
+        r = fetch_naver(q)
+        all_items.extend(r)
+        print(f"  '{q}': {len(r)}건")
+
+    print('\n[5] RSS')
+    for url, name in RSS_FEEDS:
+        r = fetch_rss(url, name)
+        all_items.extend(r)
+        print(f"  {name}: {len(r)}건")
+
+    print(f"\n총 수집: {len(all_items)}건")
+    print('\nD1 저장 중...')
+    saved, skipped = save_to_d1(all_items)
+    print(f"  신규: {saved}건, 중복 스킵: {skipped}건")
+    print('=' * 60)
+
 if __name__ == '__main__':
-    print(f"\n{'='*50}")
-    print(f"aikorea24 뉴스 수집 시작: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-    print(f"{'='*50}\n")
-
-    all_news = []
-
-    # 1. 과기부 사업공고 (AI 관련만)
-    print("[1/5] 과기부 사업공고...")
-    all_news.extend(fetch_msit_announcements(50))
-
-    # 2. 과기부 보도자료
-    print("[2/5] 과기부 보도자료...")
-    all_news.extend(fetch_msit_press(10))
-
-    # 3. 정부24 혜택
-    print("[3/5] 정부24 혜택...")
-    all_news.extend(fetch_gov_benefits(50))
-
-    # 4. 네이버 뉴스
-    print("[4/5] 네이버 뉴스...")
-    for q in ['AI 지원사업', '인공지능 정책', 'AI 바우처 2026']:
-        results = fetch_naver_news(q, 5)
-        all_news.extend(results)
-        print(f"  네이버 '{q}': {len(results)}건")
-
-    # 5. RSS
-    print("[5/5] RSS 피드...")
-    rss_sources = [
-        ('https://www.aitimes.com/rss/allArticle.xml', 'AI타임스'),
-    ]
-    for url, name in rss_sources:
-        results = fetch_rss(url, name, 5)
-        all_news.extend(results)
-        print(f"  {name}: {len(results)}건")
-
-    print(f"\n총 수집: {len(all_news)}건")
-
-    # D1 저장
-    print("\nD1 저장 중...")
-    inserted = insert_to_d1(all_news)
-    print(f"D1 저장 완료: {inserted}건")
-
-    print(f"\n{'='*50}")
-    print("수집 완료!")
-    print(f"{'='*50}\n")
+    main()
