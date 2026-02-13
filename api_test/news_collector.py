@@ -248,3 +248,71 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+# ============================================
+# 정부 공문서 AI 학습데이터 API 연동
+# ============================================
+GOV_DOC_BASE = 'http://apis.data.go.kr/1741000/publicDoc'
+GOV_DOC_ENDPOINTS = {
+    'getDocPress': '보도자료',
+    'getDocReport': '정책보고서',
+    'getDocSpeech': '연설문',
+}
+GOV_DOC_KEYWORDS = ['AI', '인공지능', '디지털', '데이터', '클라우드', '스마트', '자율주행', '로봇', '반도체', '소프트웨어']
+
+def fetch_gov_docs():
+    """정부 공문서 AI 학습데이터에서 AI 관련 문서 수집"""
+    import requests
+    api_key = os.environ.get('DATA_GO_KR_KEY', '')
+    if not api_key:
+        print('  DATA_GO_KR_KEY 없음 - 건너뜀')
+        return []
+
+    items = []
+    for endpoint, doc_type in GOV_DOC_ENDPOINTS.items():
+        for kw in GOV_DOC_KEYWORDS:
+            try:
+                resp = requests.get(
+                    f'{GOV_DOC_BASE}/{endpoint}',
+                    params={'serviceKey': api_key, 'format': 'json', 'numOfRows': 10, 'pageNo': 1, 'title': kw},
+                    timeout=15
+                )
+                data = resp.json()
+                body = data.get('response', {}).get('body', {})
+                results = body.get('resultList', [])
+                if isinstance(results, dict):
+                    results = [results]
+                for item in results:
+                    meta = item.get('meta', item) if isinstance(item, dict) else {}
+                    text_data = ''
+                    if isinstance(item, dict) and 'data' in item:
+                        text_data = item['data'].get('text', '')
+                    title = meta.get('title', '')
+                    if not title:
+                        continue
+                    combined = title.upper()
+                    strong = any(w.upper() in combined for w in ['AI', '인공지능', 'GPT', '딥러닝', '머신러닝', 'LLM', '생성형', '챗봇'])
+                    weak_cnt = sum(1 for w in ['디지털', '데이터', '클라우드', '스마트', '로봇', '반도체', '소프트웨어'] if w.upper() in combined)
+                    if not strong and weak_cnt < 2:
+                        continue
+                    preview = text_data[:300] if text_data else f'{doc_type} - {meta.get("ministry", "")} ({meta.get("date", "")})'
+                    items.append({
+                        'title': title,
+                        'link': 'https://www.data.go.kr/data/15125451/openapi.do',
+                        'description': preview,
+                        'source': f'정부공문서({doc_type})',
+                        'category': 'policy',
+                        'pub_date': meta.get('date', '')
+                    })
+            except Exception as e:
+                pass
+    # 제목 기준 중복 제거
+    seen = set()
+    unique = []
+    for item in items:
+        if item['title'] not in seen:
+            seen.add(item['title'])
+            unique.append(item)
+    print(f'  정부공문서 AI관련: {len(unique)}건')
+    return unique
