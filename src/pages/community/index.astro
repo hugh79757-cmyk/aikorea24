@@ -1,0 +1,199 @@
+---
+const runtime = (Astro.locals as any).runtime;
+const db = runtime?.env?.DB;
+
+const url = new URL(Astro.request.url);
+const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
+const category = url.searchParams.get('category') || '';
+const limit = 20;
+const offset = (page - 1) * limit;
+
+let posts: any[] = [];
+let total = 0;
+
+if (db) {
+  try {
+    let whereClause = '';
+    const params: any[] = [];
+    if (category) {
+      whereClause = 'WHERE category = ?';
+      params.push(category);
+    }
+
+    const countResult = await db.prepare(
+      `SELECT COUNT(*) as total FROM posts ${whereClause}`
+    ).bind(...params).first();
+    total = countResult?.total || 0;
+
+    const result = await db.prepare(`
+      SELECT p.*,
+        (SELECT COUNT(*) FROM comments c WHERE c.post_id = p.id) as comment_count
+      FROM posts p
+      ${whereClause}
+      ORDER BY p.created_at DESC
+      LIMIT ? OFFSET ?
+    `).bind(...params, limit, offset).all();
+    posts = result.results || [];
+  } catch (e) {
+    console.error('DB error:', e);
+  }
+}
+
+const totalPages = Math.ceil(total / limit);
+
+const categoryMap: Record<string, string> = {
+  free: '자유게시판',
+  qna: '질문답변',
+  news: 'AI 뉴스',
+  tip: '꿀팁공유',
+  project: '프로젝트',
+};
+
+const categoryColors: Record<string, string> = {
+  free: 'bg-blue-500/20 text-blue-300',
+  qna: 'bg-green-500/20 text-green-300',
+  news: 'bg-purple-500/20 text-purple-300',
+  tip: 'bg-yellow-500/20 text-yellow-300',
+  project: 'bg-pink-500/20 text-pink-300',
+};
+
+// 세션 확인
+const session = Astro.cookies.get('session')?.value;
+let loggedIn = false;
+if (session) {
+  try {
+    JSON.parse(atob(session.split('.')[1] || session));
+    loggedIn = true;
+  } catch {}
+}
+---
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>커뮤니티 - aikorea24.kr</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Pretendard', -apple-system, sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.1); }
+    .row-hover:hover { background: rgba(51, 65, 85, 0.5); }
+    a { color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <!-- 헤더 -->
+  <header class="glass sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">🤖 aikorea24</a>
+      <nav class="flex items-center gap-4 text-sm">
+        <a href="/" class="text-gray-300 hover:text-white">홈</a>
+        <a href="/community" class="text-white font-semibold">커뮤니티</a>
+        {loggedIn ? (
+          <a href="/community/write" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">글쓰기</a>
+        ) : (
+          <a href="/api/auth/login" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition">로그인</a>
+        )}
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+
+    <!-- 타이틀 -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-white mb-2">커뮤니티</h1>
+      <p class="text-gray-400">AI 관련 질문, 정보 공유, 프로젝트 자랑 등 자유롭게 이야기하세요.</p>
+    </div>
+
+    <!-- 카테고리 필터 -->
+    <div class="flex flex-wrap gap-2 mb-6">
+      <a href="/community"
+         class:list={["px-4 py-2 rounded-full text-sm font-medium transition", !category ? 'bg-blue-600 text-white' : 'glass text-gray-300 hover:text-white']}>
+        전체
+      </a>
+      {Object.entries(categoryMap).map(([key, label]) => (
+        <a href={`/community?category=${key}`}
+           class:list={["px-4 py-2 rounded-full text-sm font-medium transition", category === key ? 'bg-blue-600 text-white' : 'glass text-gray-300 hover:text-white']}>
+          {label}
+        </a>
+      ))}
+    </div>
+
+    <!-- 게시글 목록 -->
+    <div class="glass rounded-xl overflow-hidden">
+      <!-- 테이블 헤더 -->
+      <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-3 text-xs text-gray-400 uppercase tracking-wider border-b border-gray-700">
+        <div class="col-span-1 text-center">번호</div>
+        <div class="col-span-2">카테고리</div>
+        <div class="col-span-5">제목</div>
+        <div class="col-span-2">작성자</div>
+        <div class="col-span-1 text-center">조회</div>
+        <div class="col-span-1 text-center">날짜</div>
+      </div>
+
+      {posts.length === 0 ? (
+        <div class="px-6 py-16 text-center text-gray-500">
+          <p class="text-lg mb-2">아직 게시글이 없습니다.</p>
+          {loggedIn && <a href="/community/write" class="text-blue-400 hover:underline">첫 글을 작성해보세요!</a>}
+        </div>
+      ) : (
+        posts.map((post: any) => (
+          <a href={`/community/${post.id}`} class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover border-b border-gray-800 transition cursor-pointer">
+            <div class="hidden md:block col-span-1 text-center text-gray-500 text-sm">{post.id}</div>
+            <div class="col-span-2">
+              <span class={`inline-block px-2 py-1 rounded text-xs font-medium ${categoryColors[post.category] || 'bg-gray-500/20 text-gray-300'}`}>
+                {categoryMap[post.category] || post.category}
+              </span>
+            </div>
+            <div class="col-span-5">
+              <span class="text-white font-medium hover:text-blue-400 transition">{post.title}</span>
+              {post.comment_count > 0 && (
+                <span class="ml-2 text-blue-400 text-sm">[{post.comment_count}]</span>
+              )}
+            </div>
+            <div class="col-span-2 text-gray-400 text-sm">{post.author_name}</div>
+            <div class="hidden md:block col-span-1 text-center text-gray-500 text-sm">{post.views}</div>
+            <div class="hidden md:block col-span-1 text-center text-gray-500 text-sm">{post.created_at?.slice(5, 10)}</div>
+          </a>
+        ))
+      )}
+    </div>
+
+    <!-- 페이지네이션 -->
+    {totalPages > 1 && (
+      <div class="flex justify-center gap-2 mt-8">
+        {page > 1 && (
+          <a href={`/community?page=${page - 1}${category ? `&category=${category}` : ''}`}
+             class="glass px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white transition">
+            ← 이전
+          </a>
+        )}
+        {Array.from({ length: totalPages }, (_, i) => i + 1)
+          .filter(p => Math.abs(p - page) <= 2)
+          .map(p => (
+            <a href={`/community?page=${p}${category ? `&category=${category}` : ''}`}
+               class:list={["px-4 py-2 rounded-lg text-sm transition", p === page ? 'bg-blue-600 text-white' : 'glass text-gray-300 hover:text-white']}>
+              {p}
+            </a>
+          ))
+        }
+        {page < totalPages && (
+          <a href={`/community?page=${page + 1}${category ? `&category=${category}` : ''}`}
+             class="glass px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white transition">
+            다음 →
+          </a>
+        )}
+      </div>
+    )}
+
+    <!-- 총 게시글 수 -->
+    <div class="text-center mt-4 text-gray-500 text-sm">
+      총 {total}개의 게시글
+    </div>
+
+  </main>
+
+</body>
+</html>
