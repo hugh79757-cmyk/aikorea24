@@ -107,7 +107,7 @@ function getSourceColor(source: string): string {
           ].map(tool => (
             <div class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer">
               <div class="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">{tool.emoji}</div>
-              <h3 class="font-semibold text-white text-sm">{tool.name}</h3>
+              <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{tool.name}</h3>
               <p class="text-xs text-gray-500 mt-1">{tool.desc}</p>
               <span class="inline-block mt-3 text-[10px] font-medium bg-white/[0.1] text-gray-300 px-2.5 py-1 rounded-full border border-white/[0.08]">{tool.tag}</span>
             </div>
@@ -132,7 +132,7 @@ function getSourceColor(source: string): string {
                   <span class="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">과기부</span>
                   <span class="text-xs text-gray-500">{item.pub_date}</span>
                 </div>
-                <h3 class="font-bold text-white mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">{item.title}</h3>
+                <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-purple-400 dark:group-hover:text-purple-300 transition-colors line-clamp-2">{item.title}</h3>
                 <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
               </a>
             ))}
@@ -161,7 +161,7 @@ function getSourceColor(source: string): string {
                   <span class="text-[10px] font-semibold bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20">지원사업</span>
                   <span class="text-xs text-gray-500">{item.pub_date}</span>
                 </div>
-                <h3 class="font-bold text-white mb-2 group-hover:text-amber-300 transition-colors line-clamp-2">{item.title}</h3>
+                <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-amber-500 dark:group-hover:text-amber-300 transition-colors line-clamp-2">{item.title}</h3>
                 <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
               </a>
             ))}
@@ -190,7 +190,7 @@ function getSourceColor(source: string): string {
             {latestNews.map((item: any) => (
               <a href={item.link} target="_blank" rel="noopener" class="group flex items-start gap-4 bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-xl p-4 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-300">
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-white group-hover:text-blue-300 transition-colors line-clamp-1 text-sm">{item.title}</h3>
+                  <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-1 text-sm">{item.title}</h3>
                   <p class="text-xs text-gray-500 mt-1 line-clamp-1">{item.description}</p>
                 </div>
                 <div class="flex-shrink-0 text-right">
@@ -229,7 +229,7 @@ function getSourceColor(source: string): string {
               <div class={`absolute inset-0 bg-gradient-to-br ${course.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
               <div class="relative">
                 <span class="text-[10px] font-semibold bg-white/[0.1] text-gray-300 px-3 py-1 rounded-full border border-white/[0.1]">{course.level}</span>
-                <h3 class="font-bold text-lg mt-4 text-white group-hover:text-blue-300 transition-colors">{course.title}</h3>
+                <h3 class="font-bold text-lg mt-4 text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors">{course.title}</h3>
                 <p class="text-sm text-gray-500 mt-2 leading-relaxed">{course.desc}</p>
                 <div class="mt-4 text-sm text-blue-400 font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">자세히 보기 →</div>
               </div>
@@ -271,7 +271,7 @@ function getSourceColor(source: string): string {
                     <span class="text-[10px] font-semibold text-blue-400">{post.data.category}</span>
                     <span class="text-[10px] text-gray-600">{dateFormatted}</span>
                   </div>
-                  <h2 class="font-bold text-white group-hover:text-blue-300 transition-colors line-clamp-2">{post.data.title}</h2>
+                  <h2 class="font-bold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-2">{post.data.title}</h2>
                   <p class="text-sm text-gray-500 mt-2 line-clamp-2">{post.data.description}</p>
                 </div>
               </a>

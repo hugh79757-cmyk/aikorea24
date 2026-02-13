@@ -11,7 +11,7 @@ if (db) {
 }
 ---
 <Layout title="AI 뉴스 - AI코리아24" description="AI 관련 최신 뉴스와 지원사업 소식">
-  <div class="bg-[#0A0E1A] text-white min-h-screen">
+  <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen transition-colors">
     <div class="max-w-4xl mx-auto px-4 py-12">
       <h1 class="text-3xl font-bold mb-8">AI 뉴스</h1>
       {newsList.length === 0 ? (
@@ -24,7 +24,7 @@ if (db) {
                 <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{n.source}</span>
                 <span class="text-xs text-gray-600">{n.pub_date || n.created_at?.slice(0, 10)}</span>
               </div>
-              <h2 class="font-medium text-white mb-1">{n.title}</h2>
+              <h2 class="font-medium text-gray-900 dark:text-white mb-1">{n.title}</h2>
               <p class="text-sm text-gray-500 line-clamp-2">{n.description}</p>
             </a>
           ))}

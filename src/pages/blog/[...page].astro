@@ -93,7 +93,7 @@ const pageDesc = pageNum === 1
             href={num === 1 ? '/blog' : `/blog/${num}`}
             class:list={[
               'w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
-              num === page.currentPage ? 'bg-blue-600 text-white' : 'text-gray-700 hover:bg-gray-100'
+              num === page.currentPage ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
             ]}
           >{num}</a>
         ))}
