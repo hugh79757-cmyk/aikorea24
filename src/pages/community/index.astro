@@ -149,6 +149,12 @@ if (session) {
             </div>
             <div class="col-span-5">
               <span class="text-white font-medium hover:text-blue-400 transition">{post.title}</span>
+              {post.access_level === 'basic' && (
+                <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-yellow-500/20 text-yellow-300">Basic</span>
+              )}
+              {post.access_level === 'premium' && (
+                <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-red-500/20 text-red-300">Premium</span>
+              )}
               {post.comment_count > 0 && (
                 <span class="ml-2 text-blue-400 text-sm">[{post.comment_count}]</span>
               )}

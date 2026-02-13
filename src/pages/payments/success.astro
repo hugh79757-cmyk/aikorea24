@@ -1,0 +1,67 @@
+---
+const url = new URL(Astro.request.url);
+const paymentKey = url.searchParams.get('paymentKey') || '';
+const orderId = url.searchParams.get('orderId') || '';
+const amount = parseInt(url.searchParams.get('amount') || '0');
+
+let result: any = null;
+let error = '';
+
+if (paymentKey && orderId && amount) {
+  try {
+    const res = await fetch(new URL('/api/payments/confirm', url.origin), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': Astro.request.headers.get('cookie') || '',
+      },
+      body: JSON.stringify({ paymentKey, orderId, amount }),
+    });
+    result = await res.json();
+    if (!res.ok) error = result.error || '결제 승인에 실패했습니다.';
+  } catch (e: any) {
+    error = e.message;
+  }
+} else {
+  error = '결제 정보가 올바르지 않습니다.';
+}
+---
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>결제 완료 - aikorea24.kr</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Pretendard', -apple-system, sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.1); }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center">
+  <div class="glass rounded-2xl p-10 text-center max-w-md">
+    {error ? (
+      <div>
+        <div class="text-5xl mb-4">❌</div>
+        <h1 class="text-2xl font-bold text-red-400 mb-4">결제 실패</h1>
+        <p class="text-gray-400 mb-6">{error}</p>
+        <a href="/community" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition">
+          돌아가기
+        </a>
+      </div>
+    ) : (
+      <div>
+        <div class="text-5xl mb-4">✅</div>
+        <h1 class="text-2xl font-bold text-green-400 mb-4">결제 완료!</h1>
+        <p class="text-gray-400 mb-2">
+          {result?.type === 'subscription' ? '멤버십이 활성화되었습니다.' : '콘텐츠를 이용할 수 있습니다.'}
+        </p>
+        <p class="text-gray-500 text-sm mb-6">주문번호: {orderId}</p>
+        <a href="/community" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition">
+          커뮤니티로 가기
+        </a>
+      </div>
+    )}
+  </div>
+</body>
+</html>

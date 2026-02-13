@@ -76,6 +76,28 @@ const categoryMap: Record<string, string> = {
         </div>
       </div>
 
+      <div class="flex gap-4">
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">공개 범위</label>
+          <select id="access_level" class="rounded-lg px-4 py-3 w-40">
+            <option value="free">무료 (전체공개)</option>
+            <option value="basic">Basic (구독자)</option>
+            <option value="premium">Premium (프리미엄)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-400 mb-2">건별 가격 (원)</label>
+          <input type="number" id="price" min="0" step="100" value="0" placeholder="0이면 건별구매 불가"
+                 class="rounded-lg px-4 py-3 w-40" />
+        </div>
+      </div>
+
+      <div id="preview-section" class="hidden">
+        <label class="block text-sm text-gray-400 mb-2">미리보기 내용 (비회원에게 보이는 부분)</label>
+        <textarea id="preview_content" rows="4" maxlength="500" placeholder="유료 글의 맛보기 내용을 입력하세요"
+                  class="rounded-lg px-4 py-3 w-full resize-y"></textarea>
+      </div>
+
       <div>
         <label class="block text-sm text-gray-400 mb-2">내용</label>
         <textarea id="content" rows="15" maxlength="10000" placeholder="내용을 입력하세요"
@@ -129,10 +151,14 @@ const categoryMap: Record<string, string> = {
       }
 
       try {
+        const access_level = document.getElementById('access_level').value;
+        const price = parseInt(document.getElementById('price').value) || 0;
+        const preview_content = document.getElementById('preview_content')?.value?.trim() || '';
+
         const res = await fetch('/api/posts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, content, category })
+          body: JSON.stringify({ title, content, category, access_level, price, preview_content })
         });
 
         const data = await res.json();
@@ -150,6 +176,19 @@ const categoryMap: Record<string, string> = {
 
       submitBtn.disabled = false;
       submitBtn.textContent = '등록하기';
+    });
+  
+    // access_level 변경 시 미리보기/가격 섹션 표시
+    const accessSelect = document.getElementById('access_level');
+    const previewSection = document.getElementById('preview-section');
+    const priceInput = document.getElementById('price');
+    accessSelect.addEventListener('change', () => {
+      if (accessSelect.value !== 'free') {
+        previewSection.classList.remove('hidden');
+      } else {
+        previewSection.classList.add('hidden');
+        priceInput.value = '0';
+      }
     });
   </script>
 
