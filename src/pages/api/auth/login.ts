@@ -1,7 +1,9 @@
 import type { APIRoute } from 'astro';
 
-export const GET: APIRoute = async ({ redirect }) => {
-  const clientId = import.meta.env.GOOGLE_CLIENT_ID;
+export const GET: APIRoute = async ({ redirect, locals }) => {
+  const runtime = (locals as any).runtime;
+  const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+  
   const redirectUri = import.meta.env.PROD
     ? 'https://aikorea24.kr/api/auth/callback/google'
     : 'http://localhost:4321/api/auth/callback/google';

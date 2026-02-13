@@ -5,8 +5,10 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   const code = url.searchParams.get('code');
   if (!code) return redirect('/?error=no_code');
 
-  const clientId = import.meta.env.GOOGLE_CLIENT_ID;
-  const clientSecret = import.meta.env.GOOGLE_CLIENT_SECRET;
+  const runtime = (locals as any).runtime;
+  const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+  const clientSecret = runtime?.env?.GOOGLE_CLIENT_SECRET || import.meta.env.GOOGLE_CLIENT_SECRET;
+
   const redirectUri = import.meta.env.PROD
     ? 'https://aikorea24.kr/api/auth/callback/google'
     : 'http://localhost:4321/api/auth/callback/google';
@@ -27,7 +29,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   });
   const user = await userRes.json();
 
-  const db = locals.runtime?.env?.DB;
+  const db = runtime?.env?.DB;
   if (db) {
     await db.prepare(
       `INSERT OR IGNORE INTO users (google_id, email, name, avatar) VALUES (?, ?, ?, ?)`
