@@ -77,14 +77,14 @@ if (session) {
   <style>
     body { background: #0f172a; color: #e2e8f0; font-family: 'Pretendard', -apple-system, sans-serif; }
     .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.1); }
-    .row-hover:hover { background: rgba(51, 65, 85, 0.5); }
+    .hover:bg-gray-50 dark:hover:bg-white/5:hover { background: rgba(51, 65, 85, 0.5); }
     a { color: inherit; text-decoration: none; }
   </style>
 </head>
 <body class="min-h-screen">
 
   <!-- 헤더 -->
-  <header class="glass sticky top-0 z-50">
+  <header class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 backdrop-blur sticky top-0 z-50">
     <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
       <a href="/" class="text-xl font-bold text-white">🤖 aikorea24</a>
       <nav class="flex items-center gap-4 text-sm">
@@ -122,9 +122,9 @@ if (session) {
     </div>
 
     <!-- 게시글 목록 -->
-    <div class="glass rounded-xl overflow-hidden">
+    <div class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 backdrop-blur rounded-xl overflow-hidden">
       <!-- 테이블 헤더 -->
-      <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-3 text-xs text-gray-400 uppercase tracking-wider border-b border-gray-700">
+      <div class="hidden md:grid grid-cols-12 gap-4 px-6 py-3 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider border-b border-gray-700">
         <div class="col-span-1 text-center">번호</div>
         <div class="col-span-2">카테고리</div>
         <div class="col-span-5">제목</div>
@@ -140,8 +140,8 @@ if (session) {
         </div>
       ) : (
         posts.map((post: any) => (
-          <a href={`/community/${post.id}`} class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 row-hover border-b border-gray-800 transition cursor-pointer">
-            <div class="hidden md:block col-span-1 text-center text-gray-500 text-sm">{post.id}</div>
+          <a href={`/community/${post.id}`} class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-white/5 border-b border-gray-800 transition cursor-pointer">
+            <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.id}</div>
             <div class="col-span-2">
               <span class={`inline-block px-2 py-1 rounded text-xs font-medium ${categoryColors[post.category] || 'bg-gray-500/20 text-gray-300'}`}>
                 {categoryMap[post.category] || post.category}
@@ -160,8 +160,8 @@ if (session) {
               )}
             </div>
             <div class="col-span-2 text-gray-400 text-sm">{post.author_name}</div>
-            <div class="hidden md:block col-span-1 text-center text-gray-500 text-sm">{post.views}</div>
-            <div class="hidden md:block col-span-1 text-center text-gray-500 text-sm">{post.created_at?.slice(5, 10)}</div>
+            <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.views}</div>
+            <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.created_at?.slice(5, 10)}</div>
           </a>
         ))
       )}
@@ -172,7 +172,7 @@ if (session) {
       <div class="flex justify-center gap-2 mt-8">
         {page > 1 && (
           <a href={`/community?page=${page - 1}${category ? `&category=${category}` : ''}`}
-             class="glass px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white transition">
+             class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 backdrop-blur px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white transition">
             ← 이전
           </a>
         )}
@@ -187,7 +187,7 @@ if (session) {
         }
         {page < totalPages && (
           <a href={`/community?page=${page + 1}${category ? `&category=${category}` : ''}`}
-             class="glass px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white transition">
+             class="bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 backdrop-blur px-4 py-2 rounded-lg text-sm text-gray-300 hover:text-white transition">
             다음 →
           </a>
         )}
@@ -195,7 +195,7 @@ if (session) {
     )}
 
     <!-- 총 게시글 수 -->
-    <div class="text-center mt-4 text-gray-500 text-sm">
+    <div class="text-center mt-4 text-gray-400 dark:text-gray-500 text-sm">
       총 {total}개의 게시글
     </div>
 

@@ -45,8 +45,8 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
   <main class="max-w-5xl mx-auto px-4 py-16">
 
     <div class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-white mb-4">요금제</h1>
-      <p class="text-gray-400 text-lg">AI 콘텐츠를 더 깊이 있게 만나보세요.</p>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">요금제</h1>
+      <p class="text-gray-500 dark:text-gray-400 text-lg">AI 콘텐츠를 더 깊이 있게 만나보세요.</p>
       {currentLevel !== 'free' && (
         <p class="mt-3 text-blue-400 text-sm">현재 플랜: {currentLevel.toUpperCase()}</p>
       )}
@@ -56,7 +56,7 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
     <div class="flex justify-center mb-10">
       <div class="glass rounded-full p-1 flex">
         <button id="tab-monthly" class="px-6 py-2 rounded-full text-sm font-medium bg-blue-600 text-white transition">월간</button>
-        <button id="tab-yearly" class="px-6 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition">연간 (33% 할인)</button>
+        <button id="tab-yearly" class="px-6 py-2 rounded-full text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-white transition">연간 (33% 할인)</button>
       </div>
     </div>
 
@@ -64,7 +64,7 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
 
       <!-- Free -->
       <div class="glass plan-card rounded-2xl p-8">
-        <h3 class="text-lg font-bold text-gray-400 mb-2">Free</h3>
+        <h3 class="text-lg font-bold text-gray-500 dark:text-gray-400 mb-2">Free</h3>
         <div class="text-4xl font-bold text-white mb-1">₩0</div>
         <p class="text-gray-500 text-sm mb-8">영원히 무료</p>
         <ul class="space-y-3 text-sm text-gray-300 mb-8">
@@ -75,9 +75,9 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
           <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
         </ul>
         {currentLevel === 'free' ? (
-          <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-400 text-center font-medium">현재 플랜</div>
+          <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-500 dark:text-gray-400 text-center font-medium">현재 플랜</div>
         ) : (
-          <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-400 text-center font-medium">기본 플랜</div>
+          <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-500 dark:text-gray-400 text-center font-medium">기본 플랜</div>
         )}
       </div>
 
@@ -85,8 +85,8 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
       <div class="glass plan-card rounded-2xl p-8">
         <h3 class="text-lg font-bold text-blue-400 mb-2">Basic</h3>
         <div class="price-display">
-          <div class="monthly-price text-4xl font-bold text-white mb-1">₩4,900<span class="text-lg text-gray-400">/월</span></div>
-          <div class="yearly-price text-4xl font-bold text-white mb-1 hidden">₩39,000<span class="text-lg text-gray-400">/년</span></div>
+          <div class="monthly-price text-4xl font-bold text-white mb-1">₩4,900<span class="text-lg text-gray-500 dark:text-gray-400">/월</span></div>
+          <div class="yearly-price text-4xl font-bold text-white mb-1 hidden">₩39,000<span class="text-lg text-gray-500 dark:text-gray-400">/년</span></div>
         </div>
         <p class="text-gray-500 text-sm mb-8">AI 활용 실전 콘텐츠</p>
         <ul class="space-y-3 text-sm text-gray-300 mb-8">
@@ -111,8 +111,8 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
         <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-4 py-1 rounded-full">BEST</div>
         <h3 class="text-lg font-bold text-purple-400 mb-2">Premium</h3>
         <div class="price-display">
-          <div class="monthly-price text-4xl font-bold text-white mb-1">₩9,900<span class="text-lg text-gray-400">/월</span></div>
-          <div class="yearly-price text-4xl font-bold text-white mb-1 hidden">₩79,000<span class="text-lg text-gray-400">/년</span></div>
+          <div class="monthly-price text-4xl font-bold text-white mb-1">₩9,900<span class="text-lg text-gray-500 dark:text-gray-400">/월</span></div>
+          <div class="yearly-price text-4xl font-bold text-white mb-1 hidden">₩79,000<span class="text-lg text-gray-500 dark:text-gray-400">/년</span></div>
         </div>
         <p class="text-gray-500 text-sm mb-8">전체 콘텐츠 무제한</p>
         <ul class="space-y-3 text-sm text-gray-300 mb-8">
@@ -137,7 +137,7 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
     <!-- 건별 구매 안내 -->
     <div class="glass rounded-2xl p-8 mt-12 text-center">
       <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">구독 없이 개별 구매도 가능합니다</h3>
-      <p class="text-gray-400">관심 있는 콘텐츠만 골라서 건별로 구매할 수 있습니다. 각 콘텐츠 페이지에서 가격을 확인하세요.</p>
+      <p class="text-gray-500 dark:text-gray-400">관심 있는 콘텐츠만 골라서 건별로 구매할 수 있습니다. 각 콘텐츠 페이지에서 가격을 확인하세요.</p>
     </div>
 
   </main>
@@ -154,16 +154,16 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
 
     tabMonthly.addEventListener('click', () => {
       billingCycle = 'monthly';
-      tabMonthly.classList.add('bg-blue-600', 'text-white'); tabMonthly.classList.remove('text-gray-400');
-      tabYearly.classList.remove('bg-blue-600', 'text-white'); tabYearly.classList.add('text-gray-400');
+      tabMonthly.classList.add('bg-blue-600', 'text-white'); tabMonthly.classList.remove('text-gray-500 dark:text-gray-400');
+      tabYearly.classList.remove('bg-blue-600', 'text-white'); tabYearly.classList.add('text-gray-500 dark:text-gray-400');
       monthlyPrices.forEach(el => el.classList.remove('hidden'));
       yearlyPrices.forEach(el => el.classList.add('hidden'));
     });
 
     tabYearly.addEventListener('click', () => {
       billingCycle = 'yearly';
-      tabYearly.classList.add('bg-blue-600', 'text-white'); tabYearly.classList.remove('text-gray-400');
-      tabMonthly.classList.remove('bg-blue-600', 'text-white'); tabMonthly.classList.add('text-gray-400');
+      tabYearly.classList.add('bg-blue-600', 'text-white'); tabYearly.classList.remove('text-gray-500 dark:text-gray-400');
+      tabMonthly.classList.remove('bg-blue-600', 'text-white'); tabMonthly.classList.add('text-gray-500 dark:text-gray-400');
       yearlyPrices.forEach(el => el.classList.remove('hidden'));
       monthlyPrices.forEach(el => el.classList.add('hidden'));
     });

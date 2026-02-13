@@ -68,7 +68,7 @@ function getSourceColor(source: string): string {
     <section class="relative z-10 min-h-[560px] flex items-center px-4">
       <div id="particles-js" class="absolute inset-0 z-0"></div>
       <div class="relative z-10 max-w-5xl mx-auto text-center">
-        <div class="inline-flex items-center gap-2 bg-white/[0.07] backdrop-blur-md border border-white/[0.1] rounded-full px-5 py-2 mb-8">
+        <div class="inline-flex items-center gap-2 bg-white/[0.07] backdrop-blur-md border border-gray-200 dark:border-white/[0.1] rounded-full px-5 py-2 mb-8">
           <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
           <span class="text-sm text-gray-300">AI 큐레이션 플랫폼</span>
         </div>
@@ -105,11 +105,11 @@ function getSourceColor(source: string): string {
             { emoji: '📝', name: 'Notion AI', desc: '문서 작성 보조', tag: '무료+유료' },
             { emoji: '🎵', name: 'Suno AI', desc: 'AI 음악 생성', tag: '무료' },
           ].map(tool => (
-            <div class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer">
+            <div class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer">
               <div class="text-3xl mb-3 group-hover:scale-110 transition-transform duration-300">{tool.emoji}</div>
               <h3 class="font-semibold text-gray-900 dark:text-white text-sm">{tool.name}</h3>
               <p class="text-xs text-gray-500 mt-1">{tool.desc}</p>
-              <span class="inline-block mt-3 text-[10px] font-medium bg-white/[0.1] text-gray-300 px-2.5 py-1 rounded-full border border-white/[0.08]">{tool.tag}</span>
+              <span class="inline-block mt-3 text-[10px] font-medium bg-white/[0.1] text-gray-300 px-2.5 py-1 rounded-full border border-gray-200 dark:border-white/[0.08]">{tool.tag}</span>
             </div>
           ))}
         </div>
@@ -127,7 +127,7 @@ function getSourceColor(source: string): string {
         {policyNews.length > 0 ? (
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             {policyNews.map((item: any) => (
-              <a href={item.link} target="_blank" rel="noopener" class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+              <a href={item.link} target="_blank" rel="noopener" class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
                 <div class="flex justify-between items-center mb-4">
                   <span class="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">과기부</span>
                   <span class="text-xs text-gray-500">{item.pub_date}</span>
@@ -138,7 +138,7 @@ function getSourceColor(source: string): string {
             ))}
           </div>
         ) : (
-          <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+          <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
             <p class="text-gray-500">정책 데이터를 불러오는 중입니다...</p>
           </div>
         )}
@@ -156,7 +156,7 @@ function getSourceColor(source: string): string {
         {benefitNews.length > 0 ? (
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             {benefitNews.map((item: any) => (
-              <a href={item.link} target="_blank" rel="noopener" class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+              <a href={item.link} target="_blank" rel="noopener" class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
                 <div class="flex justify-between items-center mb-4">
                   <span class="text-[10px] font-semibold bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20">지원사업</span>
                   <span class="text-xs text-gray-500">{item.pub_date}</span>
@@ -167,7 +167,7 @@ function getSourceColor(source: string): string {
             ))}
           </div>
         ) : (
-          <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+          <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
             <p class="text-gray-500">지원사업 데이터를 준비 중입니다...</p>
           </div>
         )}
@@ -188,7 +188,7 @@ function getSourceColor(source: string): string {
         {latestNews.length > 0 ? (
           <div class="space-y-3">
             {latestNews.map((item: any) => (
-              <a href={item.link} target="_blank" rel="noopener" class="group flex items-start gap-4 bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-xl p-4 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-300">
+              <a href={item.link} target="_blank" rel="noopener" class="group flex items-start gap-4 bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-xl p-4 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-300">
                 <div class="flex-1 min-w-0">
                   <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-1 text-sm">{item.title}</h3>
                   <p class="text-xs text-gray-500 mt-1 line-clamp-1">{item.description}</p>
@@ -201,7 +201,7 @@ function getSourceColor(source: string): string {
             ))}
           </div>
         ) : (
-          <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+          <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
             <p class="text-gray-500">뉴스를 불러오는 중입니다...</p>
           </div>
         )}
@@ -225,10 +225,10 @@ function getSourceColor(source: string): string {
             { level: '실습', title: 'ChatGPT로 웹사이트 만들기', desc: '0원으로 내 웹사이트를 만들고 배포하는 전 과정', glow: 'from-purple-500/20' },
             { level: '활용', title: '프롬프트 엔지니어링 입문', desc: 'AI에게 정확히 원하는 결과를 얻는 질문법', glow: 'from-cyan-500/20' },
           ].map(course => (
-            <div class="group relative bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer">
+            <div class="group relative bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer">
               <div class={`absolute inset-0 bg-gradient-to-br ${course.glow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
               <div class="relative">
-                <span class="text-[10px] font-semibold bg-white/[0.1] text-gray-300 px-3 py-1 rounded-full border border-white/[0.1]">{course.level}</span>
+                <span class="text-[10px] font-semibold bg-white/[0.1] text-gray-300 px-3 py-1 rounded-full border border-gray-200 dark:border-white/[0.1]">{course.level}</span>
                 <h3 class="font-bold text-lg mt-4 text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors">{course.title}</h3>
                 <p class="text-sm text-gray-500 mt-2 leading-relaxed">{course.desc}</p>
                 <div class="mt-4 text-sm text-blue-400 font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">자세히 보기 →</div>
@@ -256,7 +256,7 @@ function getSourceColor(source: string): string {
               ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
               : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
             return (
-              <a href={`/blog/${post.id}`} class="group block bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+              <a href={`/blog/${post.id}`} class="group block bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
                 {post.data.image ? (
                   <div class="aspect-square overflow-hidden">
                     <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" loading="lazy" width="400" height="225" />
@@ -287,7 +287,7 @@ function getSourceColor(source: string): string {
     <!-- CTA -->
     <section class="relative z-10 px-4 pb-24 pt-8">
       <div class="max-w-3xl mx-auto text-center">
-        <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.1] rounded-3xl p-12">
+        <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.1] rounded-3xl p-12">
           <h2 class="text-3xl md:text-4xl font-bold mb-4">AI 활용, 지금 시작하세요</h2>
           <p class="text-gray-400 mb-8">매일 업데이트되는 AI 도구, 강좌, 지원사업 정보를 받아보세요</p>
           <a href="/blog" class="inline-block bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold px-10 py-4 rounded-xl hover:shadow-[0_0_40px_rgba(99,102,241,0.4)] transition-all duration-500 hover:-translate-y-1">
