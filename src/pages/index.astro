@@ -13,13 +13,51 @@ function getCategoryEmoji(category: string): string {
   };
   return map[category] || '✍️';
 }
+
+// D1에서 뉴스 데이터 가져오기
+let latestNews: any[] = [];
+let policyNews: any[] = [];
+let benefitNews: any[] = [];
+
+try {
+  const runtime = (Astro.locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (db) {
+    const latest = await db.prepare(
+      `SELECT id, title, link, description, source, category, pub_date FROM news WHERE category IN ('news', 'AI') ORDER BY created_at DESC LIMIT 5`
+    ).all();
+    latestNews = latest.results || [];
+
+    const policy = await db.prepare(
+      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'policy' ORDER BY created_at DESC LIMIT 3`
+    ).all();
+    policyNews = policy.results || [];
+
+    const benefit = await db.prepare(
+      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' ORDER BY created_at DESC LIMIT 3`
+    ).all();
+    benefitNews = benefit.results || [];
+  }
+} catch (e) {
+  console.error('D1 fetch error:', e);
+}
+
+function getSourceColor(source: string): string {
+  const map: Record<string, string> = {
+    '네이버뉴스': 'text-green-400',
+    'naver': 'text-green-400',
+    'AI타임스': 'text-blue-400',
+    '과기부 보도자료': 'text-purple-400',
+    '정부24 혜택': 'text-amber-400',
+  };
+  return map[source] || 'text-gray-400';
+}
 ---
 <Layout title="AI코리아24" description="AI 도구 추천, 무료 강좌, 정부 지원사업 정보, AI 뉴스를 한국어로 큐레이션합니다. AI, 누구나 쓸 수 있습니다.">
 
-  <!-- 전체 다크 래퍼 -->
   <div class="bg-[#0A0E1A] text-white min-h-screen relative overflow-hidden">
 
-    <!-- 앰비언트 글로우 배경 (전체 페이지에 깔림) -->
+    <!-- 앰비언트 글로우 배경 -->
     <div class="fixed inset-0 pointer-events-none z-0">
       <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[150px] animate-pulse-slow"></div>
       <div class="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[150px] animate-pulse-slow2"></div>
@@ -50,8 +88,6 @@ function getCategoryEmoji(category: string): string {
           </a>
         </div>
       </div>
-
-
     </section>
 
     <!-- AI 도구 픽 -->
@@ -80,7 +116,36 @@ function getCategoryEmoji(category: string): string {
       </div>
     </section>
 
-    <!-- AI 지원사업 -->
+    <!-- 🔴 AI 정책 브리핑 (D1 policy) -->
+    <section class="relative z-10 px-4 pb-20">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-sm">📋</div>
+          <h2 class="text-xl font-bold">AI 정책 브리핑</h2>
+          <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+        </div>
+        {policyNews.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {policyNews.map((item: any) => (
+              <a href={item.link} target="_blank" rel="noopener" class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">과기부</span>
+                  <span class="text-xs text-gray-500">{item.pub_date}</span>
+                </div>
+                <h3 class="font-bold text-white mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">{item.title}</h3>
+                <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+            <p class="text-gray-500">정책 데이터를 불러오는 중입니다...</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- 🔴 AI 지원사업 / 혜택 (D1 benefit) -->
     <section class="relative z-10 px-4 pb-20">
       <div class="max-w-6xl mx-auto">
         <div class="flex items-center gap-3 mb-8">
@@ -88,22 +153,60 @@ function getCategoryEmoji(category: string): string {
           <h2 class="text-xl font-bold">AI 지원사업</h2>
           <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[
-            { tag: '보조금', dday: 'D-30', ddayColor: 'text-rose-400', title: 'AI 바우처 지원사업', org: '정보통신산업진흥원', amount: '최대 3억원 지원' },
-            { tag: 'R&D', dday: 'D-15', ddayColor: 'text-rose-400', title: 'AI 융합 혁신인재 양성', org: '과학기술정보통신부', amount: '교육비 전액 지원' },
-            { tag: '데이터', dday: 'D-45', ddayColor: 'text-amber-400', title: '데이터바우처 지원사업', org: '한국데이터산업진흥원', amount: '최대 7천만원 지원' },
-          ].map(grant => (
-            <div class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 cursor-pointer">
-              <div class="flex justify-between items-center mb-4">
-                <span class="text-[10px] font-semibold bg-white/[0.1] text-gray-300 px-3 py-1 rounded-full border border-white/[0.1]">{grant.tag}</span>
-                <span class={`text-sm font-bold ${grant.ddayColor}`}>{grant.dday}</span>
-              </div>
-              <h3 class="font-bold text-white mb-1 group-hover:text-blue-300 transition-colors">{grant.title}</h3>
-              <p class="text-sm text-gray-500">{grant.org}</p>
-              <p class="text-xs text-gray-600 mt-3 pt-3 border-t border-white/[0.06]">{grant.amount}</p>
-            </div>
-          ))}
+        {benefitNews.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {benefitNews.map((item: any) => (
+              <a href={item.link} target="_blank" rel="noopener" class="group bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="text-[10px] font-semibold bg-amber-500/20 text-amber-300 px-3 py-1 rounded-full border border-amber-500/20">지원사업</span>
+                  <span class="text-xs text-gray-500">{item.pub_date}</span>
+                </div>
+                <h3 class="font-bold text-white mb-2 group-hover:text-amber-300 transition-colors line-clamp-2">{item.title}</h3>
+                <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+            <p class="text-gray-500">지원사업 데이터를 준비 중입니다...</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- 🔴 최신 AI 뉴스 (D1 latest) -->
+    <section class="relative z-10 px-4 pb-20">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center text-sm">📰</div>
+            <h2 class="text-xl font-bold">최신 AI 뉴스</h2>
+            <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4 hidden md:block"></div>
+          </div>
+          <a href="/news" class="text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors hidden md:block">전체 보기 →</a>
+        </div>
+        {latestNews.length > 0 ? (
+          <div class="space-y-3">
+            {latestNews.map((item: any) => (
+              <a href={item.link} target="_blank" rel="noopener" class="group flex items-start gap-4 bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-xl p-4 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-300">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-white group-hover:text-blue-300 transition-colors line-clamp-1 text-sm">{item.title}</h3>
+                  <p class="text-xs text-gray-500 mt-1 line-clamp-1">{item.description}</p>
+                </div>
+                <div class="flex-shrink-0 text-right">
+                  <span class={`text-[10px] font-medium ${getSourceColor(item.source)}`}>{item.source}</span>
+                  <p class="text-[10px] text-gray-600 mt-0.5">{item.pub_date}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl p-8 text-center">
+            <p class="text-gray-500">뉴스를 불러오는 중입니다...</p>
+          </div>
+        )}
+        <div class="text-center mt-4 md:hidden">
+          <a href="/news" class="text-sm text-blue-400 font-medium">전체 보기 →</a>
         </div>
       </div>
     </section>
@@ -155,11 +258,11 @@ function getCategoryEmoji(category: string): string {
             return (
               <a href={`/blog/${post.id}`} class="group block bg-white/[0.05] backdrop-blur-md border border-white/[0.08] rounded-2xl overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
                 {post.data.image ? (
-                  <div class="aspect-square overflow-hidden">
+                  <div class="aspect-video overflow-hidden">
                     <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" loading="lazy" width="400" height="225" />
                   </div>
                 ) : (
-                  <div class="aspect-square bg-gradient-to-br from-white/[0.03] to-white/[0.01] flex items-center justify-center">
+                  <div class="aspect-video bg-gradient-to-br from-white/[0.03] to-white/[0.01] flex items-center justify-center">
                     <span class="text-4xl opacity-50 group-hover:opacity-80 group-hover:scale-110 transition-all duration-300">{getCategoryEmoji(post.data.category)}</span>
                   </div>
                 )}
@@ -222,7 +325,6 @@ function getCategoryEmoji(category: string): string {
     });
   </script>
 
-  <!-- 애니메이션 키프레임 -->
   <style is:global>
     @keyframes pulse-slow { 0%, 100% { opacity: 0.2; transform: scale(1); } 50% { opacity: 0.35; transform: scale(1.1); } }
     @keyframes pulse-slow2 { 0%, 100% { opacity: 0.15; transform: scale(1); } 50% { opacity: 0.25; transform: scale(1.15); } }
