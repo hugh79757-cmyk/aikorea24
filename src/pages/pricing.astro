@@ -1,0 +1,206 @@
+---
+import { getSessionUser, getUserMembership, PLANS } from '../lib/auth';
+
+const runtime = (Astro.locals as any).runtime;
+const db = runtime?.env?.DB;
+const user = getSessionUser(Astro.cookies);
+
+let currentLevel = 'free';
+if (user && db) {
+  try {
+    const m = await getUserMembership(db, user.email);
+    currentLevel = m.level;
+  } catch {}
+}
+
+const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
+---
+
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>요금제 - aikorea24.kr</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <style>
+    body { background: #0f172a; color: #e2e8f0; font-family: 'Pretendard', -apple-system, sans-serif; }
+    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.1); }
+    .plan-card { transition: transform 0.3s, box-shadow 0.3s; }
+    .plan-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .popular { border: 2px solid #3b82f6; }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <header class="glass sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-white">🤖 aikorea24</a>
+      <nav class="flex items-center gap-4 text-sm">
+        <a href="/" class="text-gray-300 hover:text-white">홈</a>
+        <a href="/community" class="text-gray-300 hover:text-white">커뮤니티</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-16">
+
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">요금제</h1>
+      <p class="text-gray-400 text-lg">AI 콘텐츠를 더 깊이 있게 만나보세요.</p>
+      {currentLevel !== 'free' && (
+        <p class="mt-3 text-blue-400 text-sm">현재 플랜: {currentLevel.toUpperCase()}</p>
+      )}
+    </div>
+
+    <!-- 요금제 토글 -->
+    <div class="flex justify-center mb-10">
+      <div class="glass rounded-full p-1 flex">
+        <button id="tab-monthly" class="px-6 py-2 rounded-full text-sm font-medium bg-blue-600 text-white transition">월간</button>
+        <button id="tab-yearly" class="px-6 py-2 rounded-full text-sm font-medium text-gray-400 hover:text-white transition">연간 (33% 할인)</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8" id="plans-grid">
+
+      <!-- Free -->
+      <div class="glass plan-card rounded-2xl p-8">
+        <h3 class="text-lg font-bold text-gray-400 mb-2">Free</h3>
+        <div class="text-4xl font-bold text-white mb-1">₩0</div>
+        <p class="text-gray-500 text-sm mb-8">영원히 무료</p>
+        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 무료 게시글 열람</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 커뮤니티 참여</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> AI 뉴스 브리핑</li>
+          <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Basic 콘텐츠</span></li>
+          <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
+        </ul>
+        {currentLevel === 'free' ? (
+          <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-400 text-center font-medium">현재 플랜</div>
+        ) : (
+          <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-400 text-center font-medium">기본 플랜</div>
+        )}
+      </div>
+
+      <!-- Basic -->
+      <div class="glass plan-card rounded-2xl p-8">
+        <h3 class="text-lg font-bold text-blue-400 mb-2">Basic</h3>
+        <div class="price-display">
+          <div class="monthly-price text-4xl font-bold text-white mb-1">₩4,900<span class="text-lg text-gray-400">/월</span></div>
+          <div class="yearly-price text-4xl font-bold text-white mb-1 hidden">₩39,000<span class="text-lg text-gray-400">/년</span></div>
+        </div>
+        <p class="text-gray-500 text-sm mb-8">AI 활용 실전 콘텐츠</p>
+        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Free의 모든 기능</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Basic 전용 콘텐츠</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> AI 도구 심층 리뷰</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 지원사업 상세 가이드</li>
+          <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
+        </ul>
+        {currentLevel === 'basic' ? (
+          <div class="w-full py-3 rounded-lg bg-blue-600/30 text-blue-300 text-center font-medium">현재 플랜</div>
+        ) : (
+          <button class="subscribe-btn w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition"
+                  data-plan-monthly="basic_monthly" data-plan-yearly="basic_yearly">
+            구독하기
+          </button>
+        )}
+      </div>
+
+      <!-- Premium -->
+      <div class="glass plan-card rounded-2xl p-8 popular relative">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs font-bold px-4 py-1 rounded-full">BEST</div>
+        <h3 class="text-lg font-bold text-purple-400 mb-2">Premium</h3>
+        <div class="price-display">
+          <div class="monthly-price text-4xl font-bold text-white mb-1">₩9,900<span class="text-lg text-gray-400">/월</span></div>
+          <div class="yearly-price text-4xl font-bold text-white mb-1 hidden">₩79,000<span class="text-lg text-gray-400">/년</span></div>
+        </div>
+        <p class="text-gray-500 text-sm mb-8">전체 콘텐츠 무제한</p>
+        <ul class="space-y-3 text-sm text-gray-300 mb-8">
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Basic의 모든 기능</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Premium 전용 콘텐츠</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 1:1 AI 활용 상담</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 지원사업 신청서 템플릿</li>
+          <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 신규 콘텐츠 우선 공개</li>
+        </ul>
+        {currentLevel === 'premium' ? (
+          <div class="w-full py-3 rounded-lg bg-purple-600/30 text-purple-300 text-center font-medium">현재 플랜</div>
+        ) : (
+          <button class="subscribe-btn w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-medium transition"
+                  data-plan-monthly="premium_monthly" data-plan-yearly="premium_yearly">
+            구독하기
+          </button>
+        )}
+      </div>
+
+    </div>
+
+    <!-- 건별 구매 안내 -->
+    <div class="glass rounded-2xl p-8 mt-12 text-center">
+      <h3 class="text-xl font-bold text-white mb-3">구독 없이 개별 구매도 가능합니다</h3>
+      <p class="text-gray-400">관심 있는 콘텐츠만 골라서 건별로 구매할 수 있습니다. 각 콘텐츠 페이지에서 가격을 확인하세요.</p>
+    </div>
+
+  </main>
+
+  <script src="https://js.tosspayments.com/v1/payment"></script>
+
+  <script define:vars={{ tossClientKey: TOSS_CLIENT_KEY, isLoggedIn: !!user }}>
+    let billingCycle = 'monthly';
+
+    const tabMonthly = document.getElementById('tab-monthly');
+    const tabYearly = document.getElementById('tab-yearly');
+    const monthlyPrices = document.querySelectorAll('.monthly-price');
+    const yearlyPrices = document.querySelectorAll('.yearly-price');
+
+    tabMonthly.addEventListener('click', () => {
+      billingCycle = 'monthly';
+      tabMonthly.classList.add('bg-blue-600', 'text-white'); tabMonthly.classList.remove('text-gray-400');
+      tabYearly.classList.remove('bg-blue-600', 'text-white'); tabYearly.classList.add('text-gray-400');
+      monthlyPrices.forEach(el => el.classList.remove('hidden'));
+      yearlyPrices.forEach(el => el.classList.add('hidden'));
+    });
+
+    tabYearly.addEventListener('click', () => {
+      billingCycle = 'yearly';
+      tabYearly.classList.add('bg-blue-600', 'text-white'); tabYearly.classList.remove('text-gray-400');
+      tabMonthly.classList.remove('bg-blue-600', 'text-white'); tabMonthly.classList.add('text-gray-400');
+      yearlyPrices.forEach(el => el.classList.remove('hidden'));
+      monthlyPrices.forEach(el => el.classList.add('hidden'));
+    });
+
+    document.querySelectorAll('.subscribe-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!isLoggedIn) { window.location.href = '/api/auth/login'; return; }
+        if (!tossClientKey) { alert('결제 시스템 준비 중입니다.'); return; }
+
+        const planKey = billingCycle === 'monthly'
+          ? btn.getAttribute('data-plan-monthly')
+          : btn.getAttribute('data-plan-yearly');
+
+        btn.disabled = true; btn.textContent = '처리 중...';
+
+        try {
+          const res = await fetch('/api/payments/request', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'subscription', planKey })
+          });
+          const data = await res.json();
+          if (!res.ok) { alert(data.error); btn.disabled = false; btn.textContent = '구독하기'; return; }
+
+          const tossPayments = TossPayments(tossClientKey);
+          await tossPayments.requestPayment('카드', {
+            amount: data.amount, orderId: data.orderId, orderName: data.orderName,
+            customerEmail: data.customerEmail, customerName: data.customerName,
+            successUrl: window.location.origin + '/payments/success',
+            failUrl: window.location.origin + '/payments/fail',
+          });
+        } catch (e) {
+          console.error(e);
+          btn.disabled = false; btn.textContent = '구독하기';
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>

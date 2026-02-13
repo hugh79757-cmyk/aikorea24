@@ -59,7 +59,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   try {
     const body = await request.json();
-    const { title, content, category } = body;
+    const { title, content, category, access_level, price, preview_content } = body;
 
     if (!title?.trim() || !content?.trim()) {
       return new Response(JSON.stringify({ error: '제목과 내용을 입력하세요.' }), { status: 400 });
@@ -68,14 +68,22 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     const allowedCategories = ['free', 'qna', 'news', 'tip', 'project'];
     const cat = allowedCategories.includes(category) ? category : 'free';
 
+    const accessLevels = ['free', 'basic', 'premium'];
+    const al = accessLevels.includes(access_level) ? access_level : 'free';
+    const p = al !== 'free' ? (parseInt(price) || 0) : 0;
+    const pc = al !== 'free' ? (preview_content?.trim()?.slice(0, 500) || '') : '';
+
     const result = await db.prepare(
-      'INSERT INTO posts (title, content, author_email, author_name, category) VALUES (?, ?, ?, ?, ?)'
+      'INSERT INTO posts (title, content, author_email, author_name, category, access_level, price, preview_content) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
     ).bind(
       title.trim().slice(0, 200),
       content.trim().slice(0, 10000),
       user.email,
       user.name || '익명',
-      cat
+      cat,
+      al,
+      p,
+      pc
     ).run();
 
     return new Response(JSON.stringify({
