@@ -19,7 +19,7 @@ if (db) {
 }
 ---
 <Layout title="커뮤니티 - AI코리아24" description="AI 관련 질문, 정보 공유, 자유 토론 게시판">
-  <div class="bg-[#0A0E1A] text-white min-h-screen">
+  <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen transition-colors">
     <div class="max-w-4xl mx-auto px-4 py-12">
       <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold">커뮤니티</h1>
@@ -47,7 +47,7 @@ if (db) {
                 <span class="text-xs text-gray-600">{post.created_at?.slice(0, 10)}</span>
                 <span class="text-xs text-gray-600 ml-auto">조회 {post.views}</span>
               </div>
-              <h2 class="font-medium text-white">{post.title}</h2>
+              <h2 class="font-medium text-gray-900 dark:text-white">{post.title}</h2>
             </a>
           ))
         )}
