@@ -1,0 +1,32 @@
+---
+interface Props { items: any[] }
+const { items } = Astro.props;
+---
+<section class="relative z-10 px-4 pb-20">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-sm">📋</div>
+      <h2 class="text-xl font-bold">AI 정책 브리핑</h2>
+      <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+    </div>
+    {items.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {items.map((item: any) => (
+          <a href={item.link} target="_blank" rel="noopener" class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+            <div class="flex justify-between items-center mb-4">
+              <span class="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">{item.source || '정책'}</span>
+              <span class="text-xs text-gray-500">{item.pub_date}</span>
+            </div>
+            <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-purple-400 dark:group-hover:text-purple-300 transition-colors line-clamp-2">{item.title}</h3>
+            <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
+        <div class="text-4xl mb-4">📋</div>
+        <p class="text-gray-400 font-medium mb-2">정책 데이터를 불러오는 중입니다</p>
+      </div>
+    )}
+  </div>
+</section>
