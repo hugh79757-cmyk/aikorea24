@@ -1,34 +1,145 @@
 ---
 import Layout from '../layouts/Layout.astro';
 ---
-<Layout title="회사소개">
-  <article class="max-w-3xl mx-auto px-4 py-12">
-    <h1 class="text-3xl font-bold mb-8">회사소개</h1>
-    
-    <div class="prose prose-lg max-w-none">
-      <h2>AI코리아24 (aikorea24.kr)</h2>
-      <p><strong>"AI, 누구나 쓸 수 있습니다"</strong></p>
-      
-      <p>AI코리아24는 대한민국 국민 누구나 쉽게 AI를 활용할 수 있도록 도구 추천, 강좌, 지원사업 정보, 뉴스를 한국어로 큐레이션하는 서비스입니다.</p>
-      
-      <p>매일 쏟아지는 AI 관련 정보를 쉽고 빠르게 전달하며, 바이브코딩 강좌를 통해 누구나 AI로 웹사이트를 만들 수 있는 방법을 안내합니다.</p>
-      
-      <h2>제공 서비스</h2>
-      <p>AI 도구 리뷰 및 추천, AI 활용 강좌(바이브코딩 등), 정부 AI 지원사업 정보, AI 관련 최신 뉴스, 커뮤니티 Q&A를 제공합니다.</p>
-      
-      <h2>면책 조항</h2>
-      <p>본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다. 제공되는 정보는 신뢰할 만한 자료 및 정보로부터 얻어졌으나, 그 정확성이나 완전성을 보장할 수 없으며 시간이 경과함에 따라 변경될 수 있습니다. 오류, 누락에 대하여 당사는 책임지지 않으며 그 결과에 대해 법적인 책임을 지지 않습니다.</p>
-      
-      <h2>사업자 정보</h2>
-      <table>
-        <tbody>
-          <tr><td><strong>상호</strong></td><td>스타일 팩토리9</td></tr>
-          <tr><td><strong>대표자</strong></td><td>조진연</td></tr>
-          <tr><td><strong>사업자등록번호</strong></td><td>672-43-00632</td></tr>
-          <tr><td><strong>주소</strong></td><td>경기도 의정부시 호암로 256, 107-1804 (우 11638)</td></tr>
-          <tr><td><strong>이메일</strong></td><td>jinyeon_cho@hotmail.com</td></tr>
-        </tbody>
-      </table>
+
+<Layout title="소개 - AI코리아24" description="AI코리아24 운영자 소개, 개발 환경, 서비스 안내">
+
+<div class="max-w-4xl mx-auto px-4 py-16">
+
+  <!-- 헤더 -->
+  <div class="text-center mb-16">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+      AI코리아24
+    </h1>
+    <p class="text-xl text-blue-600 dark:text-blue-400 font-medium italic">
+      "AI, 누구나 쓸 수 있습니다"
+    </p>
+  </div>
+
+  <!-- 서비스 소개 -->
+  <section class="mb-16">
+    <div class="space-y-5 text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+      <p>
+        AI코리아24는 대한민국 국민 누구나 쉽게 AI를 활용할 수 있도록
+        도구 추천, 강좌, 지원사업 정보, 뉴스를 큐레이션하는 서비스입니다.
+      </p>
+      <p>
+        ChatGPT가 뭔지는 알겠는데 어디서부터 시작해야 할지 모르겠다면, 여기가 출발점입니다.
+        AI 전문가가 아니어도 괜찮습니다.
+        직장인, 자영업자, 취준생, 시니어 —
+        누구든 스마트폰이나 노트북 하나면 AI를 바로 쓸 수 있도록 차근차근 안내합니다.
+      </p>
+      <p>
+        정부도 "모두를 위한 AI" 시대를 열고 있습니다.
+        AI코리아24는 그 흐름에 맞춰 AI 도구 사용법부터 정부 지원사업 정보까지 정리해 드립니다.
+      </p>
     </div>
-  </article>
+  </section>
+
+  <!-- 운영자 소개 -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 border-b border-gray-200 dark:border-gray-700 pb-3">
+      운영자 소개
+    </h2>
+    <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+      <div class="flex-shrink-0">
+        <img
+          src="/images/namtravel.ico"
+          alt="AI코리아24 운영자"
+          class="w-32 h-32 rounded-2xl shadow-lg"
+        />
+      </div>
+      <div class="space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+        <p class="text-xl font-semibold text-gray-900 dark:text-white">
+          AI코리아24 운영자 · 1인 크리에이터
+        </p>
+        <p>
+          2026년 1월 1일, 태국 우돈타니 농센에서 바이브코딩을 시작했습니다.
+          코딩을 모르는 상태에서 AI에게 말로 설명하는 것만으로 이 사이트를 직접 구축했습니다.
+          비개발자가 AI를 실전에 쓰는 방법을 직접 해보고, 써보고, 정리해서 나누고 있습니다.
+        </p>
+        <p>
+          현재 태국에서 디지털 노마드로 활동 중입니다.
+          DTV(Digital Nomad) 비자를 발급받아 장기 체류하면서 콘텐츠를 제작하고 있습니다.
+          장소에 구애받지 않고 맥북 한 대로 일하는 것이 가능하다는 걸, 이 사이트가 증명합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 개발 환경 -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 border-b border-gray-200 dark:border-gray-700 pb-3">
+      개발 환경
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-5 border border-gray-200 dark:border-white/10">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">장비</p>
+        <p class="text-gray-900 dark:text-white font-medium">MacBook Air M4, 16GB RAM</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-5 border border-gray-200 dark:border-white/10">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">AI 도구</p>
+        <p class="text-gray-900 dark:text-white font-medium">ChatGPT, Claude</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-5 border border-gray-200 dark:border-white/10">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">생산성 도구</p>
+        <p class="text-gray-900 dark:text-white font-medium">Obsidian, Notion</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-5 border border-gray-200 dark:border-white/10">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">기술 스택</p>
+        <p class="text-gray-900 dark:text-white font-medium">Astro 5 (SSR) + Cloudflare Pages + D1</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-5 border border-gray-200 dark:border-white/10 md:col-span-2">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">작업 방식</p>
+        <p class="text-gray-900 dark:text-white font-medium">바이브코딩 — AI에게 원하는 기능을 설명하면 코드가 만들어집니다</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 제공 서비스 -->
+  <section class="mb-16">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8 border-b border-gray-200 dark:border-gray-700 pb-3">
+      제공 서비스
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-6 border border-gray-200 dark:border-white/10 text-center">
+        <span class="text-3xl mb-3 block">🛠️</span>
+        <p class="text-gray-900 dark:text-white font-medium">AI 도구 리뷰 및 추천</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-6 border border-gray-200 dark:border-white/10 text-center">
+        <span class="text-3xl mb-3 block">📚</span>
+        <p class="text-gray-900 dark:text-white font-medium">AI 활용 강좌</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-6 border border-gray-200 dark:border-white/10 text-center">
+        <span class="text-3xl mb-3 block">🏛️</span>
+        <p class="text-gray-900 dark:text-white font-medium">정부 AI 지원사업 정보</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-6 border border-gray-200 dark:border-white/10 text-center">
+        <span class="text-3xl mb-3 block">📰</span>
+        <p class="text-gray-900 dark:text-white font-medium">AI 관련 최신 뉴스</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-6 border border-gray-200 dark:border-white/10 text-center">
+        <span class="text-3xl mb-3 block">💬</span>
+        <p class="text-gray-900 dark:text-white font-medium">커뮤니티 Q&A</p>
+      </div>
+      <div class="bg-gray-50 dark:bg-white/5 rounded-xl p-6 border border-gray-200 dark:border-white/10 text-center">
+        <span class="text-3xl mb-3 block">📧</span>
+        <p class="text-gray-900 dark:text-white font-medium">뉴스레터 (준비 중)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 안내 -->
+  <section class="mb-8">
+    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800/30">
+      <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+        💡 이 사이트의 콘텐츠는 직접 사용해보고 조사한 내용을 바탕으로 작성하지만,
+        정부 지원사업이나 정책 정보는 수시로 변경될 수 있습니다.
+        중요한 사항은 해당 기관의 공식 사이트에서 한 번 더 확인해 주세요.
+      </p>
+    </div>
+  </section>
+
+</div>
+
 </Layout>
