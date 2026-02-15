@@ -29,3 +29,54 @@
     --card-border: rgba(148, 163, 184, 0.1);
   }
 }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 라이트 모드 기본 */
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+  }
+
+  /* 다크 모드 */
+  .dark {
+    --bg-primary: #0A0E1A;
+    --bg-secondary: #111827;
+    --bg-header: rgba(10, 14, 26, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: rgba(255, 255, 255, 0.06);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(148, 163, 184, 0.1);
+  }
+
+  /* prose 다크 모드 기본 텍스트 색상 */
+  .dark .prose {
+    --tw-prose-body: #d1d5db;
+    --tw-prose-headings: #f9fafb;
+    --tw-prose-lead: #9ca3af;
+    --tw-prose-links: #60a5fa;
+    --tw-prose-bold: #f9fafb;
+    --tw-prose-counters: #9ca3af;
+    --tw-prose-bullets: #6b7280;
+    --tw-prose-hr: #374151;
+    --tw-prose-quotes: #d1d5db;
+    --tw-prose-quote-borders: #4b5563;
+    --tw-prose-captions: #9ca3af;
+    --tw-prose-code: #f472b6;
+    --tw-prose-pre-code: #d1d5db;
+    --tw-prose-pre-bg: rgba(31, 41, 55, 0.5);
+    --tw-prose-th-borders: #4b5563;
+    --tw-prose-td-borders: #374151;
+  }
+}
