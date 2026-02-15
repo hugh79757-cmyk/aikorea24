@@ -326,56 +326,6 @@ def save_to_d1(articles):
         except Exception as e: print(f"    에러: {e}")
     return saved, skipped
 
-# ===== 메인 =====
-def main():
-    print('=' * 60)
-    print(f"aikorea24 뉴스 수집 v3.0 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
-    print('=' * 60)
-    all_items = []
-
-    print('\n[1] 과기부 사업공고')
-    all_items.extend(fetch_msit_announce())
-
-    print('\n[2] 과기부 보도자료')
-    all_items.extend(fetch_msit_press())
-
-    print('\n[3] 정부24 혜택')
-    all_items.extend(fetch_gov_benefits())
-
-    print('\n[4] 네이버 뉴스')
-    for q in QUERIES:
-        r = fetch_naver(q)
-        all_items.extend(r)
-        print(f"  '{q}': {len(r)}건")
-
-    print('\n[5] RSS')
-    for url, name in RSS_FEEDS:
-        r = fetch_rss(url, name)
-        all_items.extend(r)
-        print(f"  {name}: {len(r)}건")
-
-    print('\n[6] 정부 AI 정책 뉴스')
-    all_items.extend(fetch_naver_policy())
-
-    print('\n[7] 행안부 보도자료')
-    all_items.extend(fetch_mois_press())
-
-    print('\n[8] AI 복지/접근성 뉴스')
-    all_items.extend(fetch_welfare_news())
-
-    print('\n[9] 정부 공문서')
-    all_items.extend(fetch_gov_docs())
-
-    print(f"\n총 수집: {len(all_items)}건")
-    print('\nD1 저장 중...')
-    saved, skipped = save_to_d1(all_items)
-    print(f"  신규: {saved}건, 중복 스킵: {skipped}건")
-    print('=' * 60)
-
-if __name__ == '__main__':
-    main()
-
-
 # ============================================
 # 정부 공문서 AI 학습데이터 API 연동
 # ============================================
@@ -442,3 +392,52 @@ def fetch_gov_docs():
             unique.append(item)
     print(f'  정부공문서 AI관련: {len(unique)}건')
     return unique
+
+# ===== 메인 =====
+def main():
+    print('=' * 60)
+    print(f"aikorea24 뉴스 수집 v3.0 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print('=' * 60)
+    all_items = []
+
+    print('\n[1] 과기부 사업공고')
+    all_items.extend(fetch_msit_announce())
+
+    print('\n[2] 과기부 보도자료')
+    all_items.extend(fetch_msit_press())
+
+    print('\n[3] 정부24 혜택')
+    all_items.extend(fetch_gov_benefits())
+
+    print('\n[4] 네이버 뉴스')
+    for q in QUERIES:
+        r = fetch_naver(q)
+        all_items.extend(r)
+        print(f"  '{q}': {len(r)}건")
+
+    print('\n[5] RSS')
+    for url, name in RSS_FEEDS:
+        r = fetch_rss(url, name)
+        all_items.extend(r)
+        print(f"  {name}: {len(r)}건")
+
+    print('\n[6] 정부 AI 정책 뉴스')
+    all_items.extend(fetch_naver_policy())
+
+    print('\n[7] 행안부 보도자료')
+    all_items.extend(fetch_mois_press())
+
+    print('\n[8] AI 복지/접근성 뉴스')
+    all_items.extend(fetch_welfare_news())
+
+    print('\n[9] 정부 공문서')
+    all_items.extend(fetch_gov_docs())
+
+    print(f"\n총 수집: {len(all_items)}건")
+    print('\nD1 저장 중...')
+    saved, skipped = save_to_d1(all_items)
+    print(f"  신규: {saved}건, 중복 스킵: {skipped}건")
+    print('=' * 60)
+
+if __name__ == '__main__':
+    main()

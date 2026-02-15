@@ -1,0 +1,50 @@
+---
+interface Props { posts: any[] }
+const { posts } = Astro.props;
+
+const glowColors = ['from-blue-500/20', 'from-purple-500/20', 'from-cyan-500/20'];
+
+function getCourseLevel(tags: string[]): string {
+  if (!tags) return '강좌';
+  const step = tags.find(t => t.startsWith('강좌'));
+  if (step) return step.replace('강좌', 'Step ');
+  if (tags.includes('입문')) return '입문';
+  if (tags.includes('실습')) return '실습';
+  if (tags.includes('활용')) return '활용';
+  return '강좌';
+}
+---
+<section class="relative z-10 px-4 pb-20">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-sm">📚</div>
+        <h2 class="text-xl font-bold">AI 강좌</h2>
+        <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4 hidden md:block"></div>
+      </div>
+      <a href="/blog" class="text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors hidden md:block">전체 강좌 →</a>
+    </div>
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {posts.map((post: any, idx: number) => (
+          <a href={`/blog/${post.id}`} class="group relative block bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+            <div class={`absolute inset-0 bg-gradient-to-br ${glowColors[idx % 3]} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+            <div class="relative">
+              <span class="text-[10px] font-semibold bg-white/[0.1] text-gray-500 dark:text-gray-300 px-3 py-1 rounded-full border border-gray-200 dark:border-white/[0.1]">
+                {getCourseLevel(post.data.tags || [])}
+              </span>
+              <h3 class="font-bold text-lg mt-4 text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-2">{post.data.title}</h3>
+              <p class="text-sm text-gray-500 mt-2 leading-relaxed line-clamp-2">{post.data.description}</p>
+              <div class="mt-4 text-sm text-blue-400 font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">자세히 보기 →</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
+        <div class="text-4xl mb-4">📚</div>
+        <p class="text-gray-400 font-medium">AI 강좌를 준비 중입니다</p>
+      </div>
+    )}
+  </div>
+</section>
