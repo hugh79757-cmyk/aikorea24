@@ -18,6 +18,7 @@ function getCategoryEmoji(category: string): string {
 let latestNews: any[] = [];
 let policyNews: any[] = [];
 let benefitNews: any[] = [];
+let welfareNews: any[] = [];
 
 try {
   const runtime = (Astro.locals as any).runtime;
@@ -37,6 +38,11 @@ try {
       `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' ORDER BY created_at DESC LIMIT 3`
     ).all();
     benefitNews = benefit.results || [];
+
+    const welfare = await db.prepare(
+      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' AND (title LIKE '%복지%' OR title LIKE '%돌봄%' OR title LIKE '%접근성%' OR title LIKE '%격차%' OR title LIKE '%시니어%' OR title LIKE '%장애%' OR title LIKE '%어르신%') ORDER BY created_at DESC LIMIT 3`
+    ).all();
+    welfareNews = welfare.results || [];
   }
 } catch (e) {
   console.error('D1 fetch error:', e);
@@ -48,6 +54,7 @@ function getSourceColor(source: string): string {
     'naver': 'text-green-400',
     'AI타임스': 'text-blue-400',
     '과기부 보도자료': 'text-purple-400',
+    '행안부 보도자료': 'text-indigo-400',
     '정부24 혜택': 'text-amber-400',
   };
   return map[source] || 'text-gray-400';
@@ -116,7 +123,7 @@ function getSourceColor(source: string): string {
       </div>
     </section>
 
-    <!-- 🔴 AI 정책 브리핑 (D1 policy) -->
+    <!-- AI 정책 브리핑 (D1 policy) -->
     <section class="relative z-10 px-4 pb-20">
       <div class="max-w-6xl mx-auto">
         <div class="flex items-center gap-3 mb-8">
@@ -129,7 +136,7 @@ function getSourceColor(source: string): string {
             {policyNews.map((item: any) => (
               <a href={item.link} target="_blank" rel="noopener" class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
                 <div class="flex justify-between items-center mb-4">
-                  <span class="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">과기부</span>
+                  <span class="text-[10px] font-semibold bg-purple-500/20 text-purple-300 px-3 py-1 rounded-full border border-purple-500/20">{item.source || '정책'}</span>
                   <span class="text-xs text-gray-500">{item.pub_date}</span>
                 </div>
                 <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-purple-400 dark:group-hover:text-purple-300 transition-colors line-clamp-2">{item.title}</h3>
@@ -145,7 +152,7 @@ function getSourceColor(source: string): string {
       </div>
     </section>
 
-    <!-- 🔴 AI 지원사업 / 혜택 (D1 benefit) -->
+    <!-- AI 지원사업 / 혜택 (D1 benefit) -->
     <section class="relative z-10 px-4 pb-20">
       <div class="max-w-6xl mx-auto">
         <div class="flex items-center gap-3 mb-8">
@@ -174,7 +181,39 @@ function getSourceColor(source: string): string {
       </div>
     </section>
 
-    <!-- 🔴 최신 AI 뉴스 (D1 latest) -->
+    <!-- 🆕 AI 복지 & 접근성 (신규 섹션) -->
+    <section class="relative z-10 px-4 pb-20">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-sm">🤝</div>
+          <h2 class="text-xl font-bold">AI 복지 & 접근성</h2>
+          <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20">모두를 위한 AI</span>
+          <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
+        </div>
+        {welfareNews.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {welfareNews.map((item: any) => (
+              <a href={item.link} target="_blank" rel="noopener" class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+                <div class="flex justify-between items-center mb-4">
+                  <span class="text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/20">복지·접근성</span>
+                  <span class="text-xs text-gray-500">{item.pub_date}</span>
+                </div>
+                <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-500 dark:group-hover:text-emerald-300 transition-colors line-clamp-2">{item.title}</h3>
+                <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
+            <div class="text-4xl mb-4">🤝</div>
+            <p class="text-gray-400 font-medium mb-2">AI 복지·접근성 뉴스를 준비 중입니다</p>
+            <p class="text-gray-500 text-sm">디지털 격차 해소, AI 돌봄, 시니어 AI 활용 등<br/>모두를 위한 AI 소식을 곧 전해드립니다</p>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- 최신 AI 뉴스 (D1 latest) -->
     <section class="relative z-10 px-4 pb-20">
       <div class="max-w-6xl mx-auto">
         <div class="flex justify-between items-center mb-8">
@@ -297,7 +336,6 @@ function getSourceColor(source: string): string {
       </div>
     </section>
 
-  
     <!-- 후원 배너 -->
     <section class="py-12 px-4">
       <div class="max-w-2xl mx-auto text-center">
@@ -307,7 +345,7 @@ function getSourceColor(source: string): string {
         </a>
       </div>
     </section>
-</div>
+  </div>
 
   <!-- particles.js -->
   <script is:inline src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>

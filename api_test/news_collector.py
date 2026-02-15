@@ -188,6 +188,120 @@ def fetch_rss(url, source_name, limit=15):
         return results
     except Exception as e:
         print(f"  RSS {source_name} 실패: {e}"); return []
+        
+# ===== 6. 국가AI전략위원회 / 대통령실 브리핑 (네이버 뉴스 검색) =====
+AI_POLICY_QUERIES = [
+    'AI 기본사회 정책',
+    '국가AI전략위원회',
+    'AI 행동전략 정부',
+    'AI 복지 지원 정부',
+    'AI 접근성 디지털 격차',
+    'AI 인재양성 교육부',
+    'AI 바우처 중소기업',
+    'AI 윤리 기본법',
+]
+
+def fetch_naver_policy():
+    """정부 AI 정책 전용 네이버 뉴스 수집 (category='policy')"""
+    results = []
+    for q in AI_POLICY_QUERIES:
+        encoded = urllib.parse.quote(q)
+        url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display=5&sort=date"
+        req = urllib.request.Request(url, headers={
+            'X-Naver-Client-Id': NAVER_ID,
+            'X-Naver-Client-Secret': NAVER_SECRET
+        })
+        try:
+            data = json.loads(urllib.request.urlopen(req, timeout=10).read())
+            for item in data.get('items', []):
+                title = clean(item['title'])
+                desc = clean(item['description'])
+                if is_ai(title, desc):
+                    results.append({
+                        'title': title,
+                        'link': item['link'],
+                        'description': desc[:200],
+                        'source': '네이버뉴스',
+                        'category': 'policy',   # ← 'news'가 아니라 'policy'
+                        'pub_date': datetime.now().strftime('%Y-%m-%d')
+                    })
+        except Exception as e:
+            print(f"  정책뉴스 '{q}' 실패: {e}")
+    print(f"  정책 뉴스(네이버): {len(results)}건")
+    return results
+
+
+# ===== 7. 행안부 보도자료 (AI/디지털 관련) =====
+def fetch_mois_press(limit=20):
+    """행정안전부 보도자료에서 AI/디지털 관련 수집"""
+    url = f"http://apis.data.go.kr/1741000/newPressRelease/getNewPressReleaseList?serviceKey={DATA_KEY}&pageNo=1&numOfRows={limit}&returnType=json"
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    try:
+        data = json.loads(urllib.request.urlopen(req, timeout=10).read())
+        items = data.get('response', [{}])
+        if len(items) > 1:
+            items = items[1].get('body', {}).get('items', [])
+        else:
+            items = []
+        results = []
+        for entry in items:
+            item = entry.get('item', entry)
+            title = clean(item.get('subject', item.get('title', '')))
+            desc = clean(item.get('contents', item.get('description', '')))[:200]
+            if is_ai(title, desc):
+                results.append({
+                    'title': title,
+                    'link': item.get('viewUrl', item.get('link', '')),
+                    'description': desc,
+                    'source': '행안부 보도자료',
+                    'category': 'policy',
+                    'pub_date': item.get('pressDt', item.get('pubDate', ''))
+                })
+        print(f"  행안부 보도자료: {len(results)}건")
+        return results
+    except Exception as e:
+        print(f"  행안부 보도자료 실패: {e}")
+        return []
+
+
+# ===== 8. 복지 관련 뉴스 수집 =====
+WELFARE_QUERIES = [
+    'AI 복지 사각지대',
+    'AI 돌봄 서비스',
+    'AI 장애인 접근성',
+    '디지털 격차 해소 정부',
+    'AI 시니어 어르신',
+    'AI 기본소득 일자리',
+]
+
+def fetch_welfare_news():
+    """AI+복지 관련 뉴스 수집 (category='benefit')"""
+    results = []
+    for q in WELFARE_QUERIES:
+        encoded = urllib.parse.quote(q)
+        url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display=5&sort=date"
+        req = urllib.request.Request(url, headers={
+            'X-Naver-Client-Id': NAVER_ID,
+            'X-Naver-Client-Secret': NAVER_SECRET
+        })
+        try:
+            data = json.loads(urllib.request.urlopen(req, timeout=10).read())
+            for item in data.get('items', []):
+                title = clean(item['title'])
+                desc = clean(item['description'])
+                results.append({
+                    'title': title,
+                    'link': item['link'],
+                    'description': desc[:200],
+                    'source': '네이버뉴스',
+                    'category': 'benefit',   # ← 지원사업/복지 카테고리
+                    'pub_date': datetime.now().strftime('%Y-%m-%d')
+                })
+        except Exception as e:
+            print(f"  복지뉴스 '{q}' 실패: {e}")
+    print(f"  복지/접근성 뉴스: {len(results)}건")
+    return results
+        
 
 # ===== D1 저장 =====
 def save_to_d1(articles):
@@ -215,7 +329,7 @@ def save_to_d1(articles):
 # ===== 메인 =====
 def main():
     print('=' * 60)
-    print(f"aikorea24 뉴스 수집 v2.1 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"aikorea24 뉴스 수집 v3.0 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print('=' * 60)
     all_items = []
 
@@ -239,6 +353,18 @@ def main():
         r = fetch_rss(url, name)
         all_items.extend(r)
         print(f"  {name}: {len(r)}건")
+
+    print('\n[6] 정부 AI 정책 뉴스')
+    all_items.extend(fetch_naver_policy())
+
+    print('\n[7] 행안부 보도자료')
+    all_items.extend(fetch_mois_press())
+
+    print('\n[8] AI 복지/접근성 뉴스')
+    all_items.extend(fetch_welfare_news())
+
+    print('\n[9] 정부 공문서')
+    all_items.extend(fetch_gov_docs())
 
     print(f"\n총 수집: {len(all_items)}건")
     print('\nD1 저장 중...')
