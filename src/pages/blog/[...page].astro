@@ -38,22 +38,42 @@ const pageDesc = pageNum === 1
     <h1 class="text-3xl font-bold text-gray-900 mb-2">블로그</h1>
     <p class="text-gray-600 mb-8">AI 관련 최신 정보와 활용 팁을 확인하세요.</p>
 
-    <div class="flex flex-wrap gap-2 mb-8">
-      <span class="bg-blue-600 text-white text-sm font-medium px-4 py-1.5 rounded-full">전체</span>
+    <div class="flex flex-wrap gap-2 mb-8" id="category-filter">
+      <button type="button" class="bg-blue-600 text-white text-sm font-medium px-4 py-1.5 rounded-full" data-category="all">전체</button>
       {categories.map(cat => (
-        <span class="bg-gray-100 text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-200 cursor-pointer transition-colors">
+        <button type="button" class="bg-gray-100 text-gray-700 text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-200 cursor-pointer transition-colors" data-category={cat}>
           {emojiMap[cat] || '📌'} {cat}
-        </span>
+        </button>
       ))}
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <script is:inline>
+      document.querySelectorAll('#category-filter button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = btn.dataset.category;
+          // 버튼 스타일 리셋
+          document.querySelectorAll('#category-filter button').forEach(b => {
+            b.classList.remove('bg-blue-600', 'text-white');
+            b.classList.add('bg-gray-100', 'text-gray-700');
+          });
+          btn.classList.remove('bg-gray-100', 'text-gray-700');
+          btn.classList.add('bg-blue-600', 'text-white');
+          // 카드 필터링
+          document.querySelectorAll('#blog-grid > a').forEach(card => {
+            if (cat === 'all') { card.style.display = ''; }
+            else { card.style.display = (card.dataset.category === cat) ? '' : 'none'; }
+          });
+        });
+      });
+    </script>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-grid">
       {page.data.map(post => {
         const dateFormatted = post.data.date instanceof Date
           ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
           : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
         return (
-          <a href={`/blog/${post.id}`} class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-gray-100">
+          <a href={`/blog/${post.id}`} data-category={post.data.category || ''} class="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-gray-100">
             {post.data.image ? (
               <div class="aspect-video overflow-hidden">
                 <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width="400" height="225" loading="lazy" />

@@ -1,13 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
-const db = Astro.locals.runtime?.env?.DB;
-let newsList = [];
-if (db) {
-  const result = await db.prepare(`
-    SELECT * FROM news ORDER BY created_at DESC LIMIT 30
-  `).all();
-  newsList = result.results || [];
+let newsList: any[] = [];
+try {
+  const runtime = (Astro.locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (db) {
+    const result = await db.prepare(
+      `SELECT * FROM news ORDER BY created_at DESC LIMIT 50`
+    ).all();
+    newsList = result.results || [];
+  }
+} catch (e) {
+  console.error('News fetch error:', e);
 }
 ---
 <Layout title="AI 뉴스 - AI코리아24" description="AI 관련 최신 뉴스와 지원사업 소식">
