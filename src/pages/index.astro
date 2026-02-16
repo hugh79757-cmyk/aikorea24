@@ -41,7 +41,7 @@ try {
     ).all()).results || [];
 
     welfareNews = (await db.prepare(
-      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' AND (title LIKE '%복지%' OR title LIKE '%돌봄%' OR title LIKE '%접근성%' OR title LIKE '%격차%' OR title LIKE '%시니어%' OR title LIKE '%장애%' OR title LIKE '%어르신%') ORDER BY created_at DESC LIMIT 3`
+      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' ORDER BY created_at DESC LIMIT 3`
     ).all()).results || [];
   }
 } catch (e) {
