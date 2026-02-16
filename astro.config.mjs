@@ -10,5 +10,6 @@ export default defineConfig({
   adapter: cloudflare({
     platformProxy: { enabled: true },
   }),
+  trailingSlash: 'always',
   integrations: [tailwind(), mdx(), sitemap()],
 });
