@@ -1,0 +1,249 @@
+# aikorea24 백업 (2026-02-16)
+# 파일: 6개
+==================================================
+
+## 파일
+- api_test/requirements.txt
+- .gitignore
+- api_test/env_template.sh
+- api_test/gov_doc_collector.py
+- api_test/card_news_generator.py
+- api_test/news_collector.py
+
+
+==================================================
+# api_test/requirements.txt
+==================================================
+requests>=2.31.0
+pytrends>=4.9.0
+openai>=1.30.0
+beautifulsoup4>=4.12.0
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+
+==================================================
+# .gitignore
+==================================================
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+api_test/.env.sh
+
+==================================================
+# api_test/env_template.sh
+==================================================
+#!/bin/bash
+# ============================================
+# aikorea24.kr API 키 설정 템플릿
+# 이 파일을 .env.sh로 복사 후 실제 키 입력
+# cp env_template.sh .env.sh
+# ============================================
+
+# [1] 네이버 개발자센터 (https://developers.naver.com/apps/)
+# - 사용 API: 검색(뉴스,블로그), 데이터랩(검색어트렌드)
+export NAVER_CLIENT_ID=***
+export NAVER_CLIENT_SECRET=***
+
+# [2] 네이버 검색광고 API (https://manage.searchad.naver.com/)
+# - 사용 API: 키워드도구 (월간검색량)
+export NAVER_AD_API_KEY=***
+export NAVER_AD_SECRET=***
+export NAVER_AD_CUSTOMER_ID="YOUR_CUSTOMER_ID"
+
+# [3] OpenAI API (https://platform.openai.com/api-keys)
+# - 사용 모델: gpt-4o-mini (뉴스 요약)
+export OPENAI_API_KEY=***
+
+# [4] 공공데이터포털 (https://www.data.go.kr/)
+# - 사용 API: 보조금통합포털, 공공서비스(혜택)
+export DATA_GO_KR_KEY="YOUR_DATA_GO_KR_KEY"
+
+# [5] Instagram Graph API (https://developers.facebook.com/)
+# - 사용: 카드뉴스 자동 게시
+export INSTAGRAM_ACCESS_TOKEN=***
+export INSTAGRAM_BUSINESS_ID="YOUR_IG_BUSINESS_ID"
+
+==================================================
+# api_test/gov_doc_collector.py
+==================================================
+#!/usr/bin/env python3
+
+import os
+import sys
+import json
+import requests
+import subprocess
+import hashlib
+from datetime import datetime
+
+# 프로젝트 루트
+PROJECT_ROOT = '/Users/twinssn/Projects/aikorea24'
+
+# .env에서 키 로드
+env_path = os.path.join(PROJECT_ROOT, '.env')
+if os.path.exists(env_path):
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if '=' in line and not line.startswith('#'):
+                k, v = line.split('=', 1)
+                os.environ[k.strip()] = v.strip()
+
+API_KEY =***
+if not API_KEY: ***
+    print('ERROR: DATA_GO_KR_KEY not found in .env')
+    sys.exit(1)
+
+BASE_URL = 'http://apis.data.go.kr/1741000/publicDoc'
+
+# AI 관련 검색 키워드
+SEARCH_KEYWORDS = [
+    'AI', '인공지능', '디지털', '데이터', '클라우드',
+    '소프트웨어', '사이버', '스마트', '자율주행', '로봇',
+    '반도체', 'GPT', '딥러닝', '빅데이터', '메타버스'
+]
+
+# 엔드포인트별 문서 유형
+ENDPOINTS = {
+    'getDocPress': '보도자료',
+    'getDocReport': '정책보고서',
+    'getDocSpeech': '연설문',
+}
+
+# AI 관련 필터
+STRONG_AI_WORDS = ['AI', '인공지능', 'GPT', '딥러닝', '머신러닝', 'LLM', '생성형', '챗봇', 'ChatGPT', '클로드', '앤트로픽', 'OpenAI']
+WEAK_AI_WORDS = ['디지털', '데이터', '클라우드', '스마트', '자율주행', '로봇', '반도체', '소프트웨어', '사이버', '빅데이터', '메타버스', '플랫폼']
+EXCLUDE_WORDS = ['귀농', '귀촌', '귀어', '교복', '부동산', '아파트', '축구', '야구', '결혼', '이혼', '장례']
+
+def is_ai_related(title, text_preview=''):
+    combined = (title + ' ' + text_preview[:200]).upper()
+    for w in EXCLUDE_WORDS:
+        if w in combined:
+            return False
+    for w in STRONG_AI_WORDS:
+        if w.upper() in combined:
+            return True
+    weak_count = sum(1 for w in WEAK_AI_WORDS if w.upper() in combined)
+    return weak_count >= 2
+
+def fetch_docs(endpoint, keyword, num=10, page=1):
+    url = f'{BASE_URL}/{endpoint}'
+    params = {
+        'serviceKey': ***
+        'format': 'json',
+        'numOfRows': num,
+        'pageNo': page,
+        'title': keyword
+    }
+    try:
+        resp = requests.get(url, params=params, timeout=15)
+        data = resp.json()
+        body = data.get('response', {}).get('body', {})
+        total = body.get('totalCount', 0)
+        results = body.get('resultList', [])
+        if isinstance(results, dict):
+            results = [results]
+        return results, total
+    except Exception as e:
+        print(f'  Error fetching {endpoint}/{keyword}: {e}')
+        return [], 0
+
+def safe_sql(text, maxlen=500):
+    if not text:
+        return ''
+    t = text.replace("'", "''").replace('\\', '').replace('\n', ' ').replace('\r', '')
+    return t[:maxlen]
+
+def title_hash(title):
+    return hashlib.md5(title.strip().lower().encode()).hexdigest()
+
+def get_existing_hashes():
+    cmd = f'npx wrangler d1 execute aikorea24-db --remote --command "SELECT title FROM news;"'
+    try:
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=PROJECT_ROOT, timeout=30)
+        hashes = set()
+        for line in result.stdout.split('\n'):
+            line = line.strip()
+            if line and not line.startswith(('⛅', '─', '🌀', '✘', 'Resource', '┌', '│', '├', '└', 'Getting')):
+                hashes.add(title_hash(line))
+        return hashes
+    except:
+        return set()
+
+def insert_to_d1(item):
+    title = safe_sql(item['title'], 200)
+    link = safe_sql(item.get('link', ''), 500)
+    desc = safe_sql(item.get('description', ''), 1000)
+    source = safe_sql(item.get('source', ''), 50)
+    category = safe_sql(item.get('category', 'policy'), 20)
+    pub_date = safe_sql(item.get('pub_date', ''), 30)
+
+    sql = f"INSERT INTO news (title, link, description, source, category, pub_date) VALUES ('{title}', '{link}', '{desc}', '{source}', '{category}', '{pub_date}');"
+    cmd = f'npx wrangler d1 execute aikorea24-db --remote --command "{sql}"'
+    try:
+        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=PROJECT_ROOT, timeout=15)
+        return result.returncode == 0 and 'ERROR' not in result.stderr
+    except:
+        return False
+
+def main():
+    print('=' * 60)
+    print(f'정부 공문서 AI 학습데이터 수집기')
+    print(f'실행 시각: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+    print('=' * 60)
+
+    # 기존 뉴스 해시
+    print('\n기존 뉴스 해시 로딩...')
+    existing = get_existing_hashes()
+    print(f'기존 뉴스: {len(existing)}건')
+
+    collected = []
+    for endpoint, doc_type in ENDPOINTS.items():
+        print(f'\n--- {doc_type} ({endpoint}) ---')
+        ep_count = 0
+        for kw in SEARCH_KEYWORDS:
+            results, total = fetch_docs(endpoint, kw, num=10, page=1)
+            if not results:
+                continue
+            for item in results:
+                if isinstance(item, dict) and 'meta' in item:
+                    meta = item['meta']
+                    text_data = item.get('data', {}).get('text', '')
+                else:
+                    meta = item
+                    text_data = ''
+
+                title = meta.get('title', '')
+                if not title:
+                    continue
+
+# ... (42줄 생략)
+
+==================================================
+# api_test/card_news_generator.py [스킵: 17,526B]
+
+==================================================
+# api_test/news_collector.py [스킵: 20,777B]
+
+==================================================
+# 완료: 4개, 스킵: 2개
