@@ -5,7 +5,7 @@ category: "이미지 생성"
 price: "ChatGPT Plus 포함"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://chat.openai.com"
+url: "https://openai.com/index/dall-e-3/"
 relatedPost: "/blog/chatgpt-free-vs-paid/"
 useCases: ["대화형 이미지 생성", "로고 시안", "카드뉴스 이미지", "프로필 사진"]
 tags: ["이미지생성", "ChatGPT", "로고", "간편"]
