@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "무료 / 월 $20"
 koreanSupport: true
 difficulty: "중급"
-url: "https://cursor.sh"
+url: "https://cursor.com"
 relatedPost: "/blog/ai-koding-dogu-bigyo/"
 useCases: ["바이브코딩", "코드 자동 생성", "버그 수정", "프로젝트 개발"]
 tags: ["코딩", "바이브코딩", "에디터", "개발"]
