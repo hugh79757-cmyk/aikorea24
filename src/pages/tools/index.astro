@@ -1,0 +1,136 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allTools = (await getCollection('tools'))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+const categories = [
+  { id: 'all', label: '전체', emoji: '🔥' },
+  { id: '글쓰기·챗봇', label: '글쓰기·챗봇', emoji: '✍️' },
+  { id: '이미지 생성', label: '이미지 생성', emoji: '🎨' },
+  { id: '영상·음성', label: '영상·음성', emoji: '🎬' },
+  { id: '업무·생산성', label: '업무·생산성', emoji: '📊' },
+  { id: '코딩·개발', label: '코딩·개발', emoji: '💻' },
+  { id: '디자인', label: '디자인', emoji: '🖼️' },
+  { id: '번역·학습', label: '번역·학습', emoji: '🌐' },
+];
+
+const difficultyColor = (d: string) => {
+  if (d.includes('초보')) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
+  if (d.includes('중급')) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+  return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+};
+---
+
+<Layout title="AI 도구 디렉토리" description="일반인도 바로 쓸 수 있는 AI 도구를 카테고리별로 추천합니다. 무료·유료, 한국어 지원 여부, 난이도까지 한눈에 비교하세요.">
+  <div class="max-w-6xl mx-auto px-4 py-12">
+
+    <!-- 헤더 -->
+    <div class="text-center mb-10">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-3">
+        🛠️ AI 도구 디렉토리
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        일반인도 바로 쓸 수 있는 AI 도구를 모았습니다.<br class="hidden md:block" />
+        카테고리·가격·한국어 지원·난이도까지 한눈에 비교하세요.
+      </p>
+    </div>
+
+    <!-- 카테고리 필터 -->
+    <div class="flex flex-wrap justify-center gap-2 mb-10" id="category-filter">
+      {categories.map(cat => (
+        <button
+          data-category={cat.id}
+          class:list={[
+            'filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all border',
+            cat.id === 'all'
+              ? 'bg-blue-600 text-white border-blue-600'
+              : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-blue-400'
+          ]}
+        >
+          {cat.emoji} {cat.label}
+        </button>
+      ))}
+    </div>
+
+    <!-- 도구 카드 그리드 -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
+      {allTools.map(tool => (
+        <a
+          href={`/tools/${tool.id}/`}
+          data-cat={tool.data.category}
+          class="tool-card group block bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg hover:border-blue-400 dark:hover:border-blue-500 transition-all"
+        >
+          <div class="flex items-start justify-between mb-3">
+            <h2 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              {tool.data.name}
+            </h2>
+            {tool.data.featured && (
+              <span class="text-xs bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-2 py-0.5 rounded-full">추천</span>
+            )}
+          </div>
+
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+            {tool.data.description}
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-1 rounded-md">
+              {tool.data.category}
+            </span>
+            <span class:list={['text-xs px-2 py-1 rounded-md', difficultyColor(tool.data.difficulty)]}>
+              {tool.data.difficulty}
+            </span>
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+            <span>{tool.data.price}</span>
+            <span>
+              한국어 {tool.data.koreanSupport ? '⭕' : '❌'}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <!-- 도구 수 표시 -->
+    <div class="text-center mt-8 text-sm text-gray-500 dark:text-gray-400">
+      총 <strong id="tool-count">{allTools.length}</strong>개 도구
+    </div>
+
+  </div>
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.tool-card');
+  const countEl = document.getElementById('tool-count');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-category');
+
+      // 버튼 스타일
+      buttons.forEach(b => {
+        b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
+        b.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300', 'border-gray-200', 'dark:border-gray-700');
+      });
+      btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
+      btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300', 'border-gray-200', 'dark:border-gray-700');
+
+      // 카드 필터
+      let visible = 0;
+      cards.forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          (card as HTMLElement).style.display = '';
+          visible++;
+        } else {
+          (card as HTMLElement).style.display = 'none';
+        }
+      });
+      if (countEl) countEl.textContent = String(visible);
+    });
+  });
+</script>

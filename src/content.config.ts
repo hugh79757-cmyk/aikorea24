@@ -14,4 +14,23 @@ const blog = defineCollection({
   }),
 });
 
-export const collections = { blog };
+const tools = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/tools' }),
+  schema: z.object({
+    name: z.string(),
+    description: z.string(),
+    category: z.string(),
+    price: z.string(),
+    koreanSupport: z.boolean(),
+    difficulty: z.enum(['초보자 OK', '중급', '고급']),
+    url: z.string().url(),
+    image: z.string().optional(),
+    relatedPost: z.string().optional(),
+    useCases: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    featured: z.boolean().default(false),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { blog, tools };
