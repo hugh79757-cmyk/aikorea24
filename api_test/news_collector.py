@@ -264,7 +264,42 @@ def fetch_mois_press(limit=20):
         return []
 
 
-# ===== 8. 복지 관련 뉴스 수집 =====
+# ===== 8. 모두의 창업 프로젝트 뉴스 수집 =====
+STARTUP_QUERIES = [
+    '모두의 창업 프로젝트',
+    '모두의 창업 지원',
+    '중소벤처기업부 창업 오디션',
+    '모두의창업 2026',
+]
+
+def fetch_startup_news():
+    results = []
+    for q in STARTUP_QUERIES:
+        encoded = urllib.parse.quote(q)
+        url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display=10&sort=date"
+        req = urllib.request.Request(url, headers={
+            'X-Naver-Client-Id': NAVER_ID,
+            'X-Naver-Client-Secret': NAVER_SECRET
+        })
+        try:
+            data = json.loads(urllib.request.urlopen(req, timeout=10).read())
+            for item in data.get('items', []):
+                title = clean(item['title'])
+                desc = clean(item['description'])
+                results.append({
+                    'title': title,
+                    'link': item['link'],
+                    'description': desc[:200],
+                    'source': '네이버뉴스',
+                    'category': 'startup',
+                    'pub_date': datetime.now().strftime('%Y-%m-%d')
+                })
+        except Exception as e:
+            print(f"  모두의창업 '{q}' 실패: {e}")
+    print(f"  모두의 창업 뉴스: {len(results)}건")
+    return results
+
+# ===== 9. 복지 관련 뉴스 수집 =====
 WELFARE_QUERIES = [
     'AI 복지 사각지대',
     'AI 돌봄 서비스',
@@ -303,10 +338,11 @@ def fetch_welfare_news():
     return results
         
 
-# ===== D1 저장 =====
+# ===== D1 저장 (배치) =====
 def save_to_d1(articles):
     existing = get_existing()
-    saved, skipped = 0, 0
+    sql_lines = []
+    skipped = 0
     for a in articles:
         h = title_hash(a['title'])
         if h in existing: skipped += 1; continue
@@ -316,14 +352,33 @@ def save_to_d1(articles):
         s = a['source'].replace("'", "''")
         c = a['category']
         p = a.get('pub_date', datetime.now().strftime('%Y-%m-%d'))
-        sql = f"INSERT INTO news (title, link, description, source, category, pub_date) VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}');"
+        sql_lines.append(f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date) VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}');")
+    if not sql_lines:
+        print("  저장할 신규 항목 없음")
+        return 0, skipped
+    # SQL 파일로 저장 후 한번에 실행
+    sql_path = os.path.join(PROJECT_DIR, 'api_test', '_batch_insert.sql')
+    # 50개씩 나눠서 실행 (D1 제한 대응)
+    saved = 0
+    batch_size = 50
+    for i in range(0, len(sql_lines), batch_size):
+        batch = sql_lines[i:i+batch_size]
+        with open(sql_path, 'w') as f:
+            f.write('\n'.join(batch))
         try:
             r = subprocess.run(
-                ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql],
-                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=15)
-            if r.returncode == 0: saved += 1; existing.add(h)
-            else: print(f"    실패: {a['title'][:40]}")
-        except Exception as e: print(f"    에러: {e}")
+                ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--file', sql_path],
+                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=60)
+            if r.returncode == 0:
+                saved += len(batch)
+                print(f"  배치 {i//batch_size+1}: {len(batch)}건 저장")
+            else:
+                print(f"  배치 {i//batch_size+1} 실패: {r.stderr[:200]}")
+        except Exception as e:
+            print(f"  배치 에러: {e}")
+    # 정리
+    try: os.remove(sql_path)
+    except: pass
     return saved, skipped
 
 # ============================================
@@ -339,7 +394,6 @@ GOV_DOC_KEYWORDS = ['AI', '인공지능', '디지털', '데이터', '클라우�
 
 def fetch_gov_docs():
     """정부 공문서 AI 학습데이터에서 AI 관련 문서 수집"""
-    import requests
     api_key = os.environ.get('DATA_GO_KR_KEY', '')
     if not api_key:
         print('  DATA_GO_KR_KEY 없음 - 건너뜀')
@@ -349,12 +403,9 @@ def fetch_gov_docs():
     for endpoint, doc_type in GOV_DOC_ENDPOINTS.items():
         for kw in GOV_DOC_KEYWORDS:
             try:
-                resp = requests.get(
-                    f'{GOV_DOC_BASE}/{endpoint}',
-                    params={'serviceKey': api_key, 'format': 'json', 'numOfRows': 10, 'pageNo': 1, 'title': kw},
-                    timeout=15
-                )
-                data = resp.json()
+                params = urllib.parse.urlencode({'serviceKey': api_key, 'format': 'json', 'numOfRows': 10, 'pageNo': 1, 'title': kw})
+                req = urllib.request.Request(f'{GOV_DOC_BASE}/{endpoint}?{params}', headers={'User-Agent': 'Mozilla/5.0'})
+                data = json.loads(urllib.request.urlopen(req, timeout=15).read())
                 body = data.get('response', {}).get('body', {})
                 results = body.get('resultList', [])
                 if isinstance(results, dict):
@@ -427,10 +478,13 @@ def main():
     print('\n[7] 행안부 보도자료')
     all_items.extend(fetch_mois_press())
 
-    print('\n[8] AI 복지/접근성 뉴스')
+    print('\n[8] 모두의 창업 프로젝트 뉴스')
+    all_items.extend(fetch_startup_news())
+
+    print('\n[9] AI 복지/접근성 뉴스')
     all_items.extend(fetch_welfare_news())
 
-    print('\n[9] 정부 공문서')
+    print('\n[10] 정부 공문서')
     all_items.extend(fetch_gov_docs())
 
     print(f"\n총 수집: {len(all_items)}건")

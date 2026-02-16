@@ -3,7 +3,6 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import HeroSection from '../components/home/HeroSection.astro';
 import PolicyBriefing from '../components/home/PolicyBriefing.astro';
-import GrantSection from '../components/home/GrantSection.astro';
 import WelfareSection from '../components/home/WelfareSection.astro';
 import LatestNews from '../components/home/LatestNews.astro';
 import CourseSection from '../components/home/CourseSection.astro';
@@ -21,7 +20,6 @@ const coursePosts = allPosts.filter(p => p.data.category === 'AI 강좌').slice(
 // --- D1 데이터 ---
 let latestNews: any[] = [];
 let policyNews: any[] = [];
-let benefitNews: any[] = [];
 let welfareNews: any[] = [];
 
 try {
@@ -34,10 +32,6 @@ try {
 
     policyNews = (await db.prepare(
       `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'policy' ORDER BY created_at DESC LIMIT 3`
-    ).all()).results || [];
-
-    benefitNews = (await db.prepare(
-      `SELECT id, title, link, description, source, pub_date FROM news WHERE category IN ('benefit', 'grant') ORDER BY created_at DESC LIMIT 3`
     ).all()).results || [];
 
     welfareNews = (await db.prepare(
@@ -61,7 +55,6 @@ try {
     <!-- ★ 섹션 순서: 여기서 줄을 바꾸면 첫화면 순서가 바뀜 -->
     <HeroSection />
     <PolicyBriefing items={policyNews} />
-    <GrantSection items={benefitNews} />
     <WelfareSection items={welfareNews} />
     <LatestNews items={latestNews} />
     <CourseSection posts={coursePosts} />
