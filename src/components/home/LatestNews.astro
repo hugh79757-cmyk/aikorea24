@@ -4,11 +4,11 @@ const { items } = Astro.props;
 
 function getSourceColor(source: string): string {
   const map: Record<string, string> = {
-    '네이버뉴스': 'text-green-400', 'naver': 'text-green-400',
-    'AI타임스': 'text-blue-400', '과기부 보도자료': 'text-purple-400',
-    '행안부 보도자료': 'text-indigo-400', '정부24 혜택': 'text-amber-400',
+    '네이버뉴스': 'text-green-700 dark:text-green-400', 'naver': 'text-green-700 dark:text-green-400',
+    'AI타임스': 'text-blue-700 dark:text-blue-400', '과기부 보도자료': 'text-purple-700 dark:text-purple-400',
+    '행안부 보도자료': 'text-indigo-700 dark:text-indigo-400', '정부24 혜택': 'text-amber-700 dark:text-amber-400',
   };
-  return map[source] || 'text-gray-400';
+  return map[source] || 'text-gray-600 dark:text-gray-400';
 }
 ---
 <section class="relative z-10 px-4 pb-20">

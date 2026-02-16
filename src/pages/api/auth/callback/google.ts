@@ -41,7 +41,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
 
     const sessionData = btoa(JSON.stringify(dbUser));
     cookies.set('session', sessionData, {
-      path: '/', httpOnly: true, secure: import.meta.env.PROD,
+      path: '/', httpOnly: true, secure: import.meta.env.PROD, domain: import.meta.env.PROD ? '.aikorea24.kr' : undefined,
       sameSite: 'lax', maxAge: 60 * 60 * 24 * 7,
     });
   }

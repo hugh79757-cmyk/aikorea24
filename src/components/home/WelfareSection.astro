@@ -7,7 +7,7 @@ const { items } = Astro.props;
     <div class="flex items-center gap-3 mb-8">
       <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-sm">🤝</div>
       <h2 class="text-xl font-bold">AI 복지 & 접근성</h2>
-      <span class="text-xs bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20">모두를 위한 AI</span>
+      <span class="text-xs bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-500/20">모두를 위한 AI</span>
       <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
     </div>
     {items.length > 0 ? (
@@ -15,10 +15,10 @@ const { items } = Astro.props;
         {items.map((item: any) => (
           <a href={item.link} target="_blank" rel="noopener" class="group bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-6 hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
             <div class="flex justify-between items-center mb-4">
-              <span class="text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/20">복지·접근성</span>
+              <span class="text-[10px] font-semibold bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 px-3 py-1 rounded-full border border-emerald-500/20">복지·접근성</span>
               <span class="text-xs text-gray-500">{item.pub_date}</span>
             </div>
-            <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-500 dark:group-hover:text-emerald-300 transition-colors line-clamp-2">{item.title}</h3>
+            <h3 class="font-bold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors line-clamp-2">{item.title}</h3>
             <p class="text-sm text-gray-500 line-clamp-2">{item.description}</p>
           </a>
         ))}
