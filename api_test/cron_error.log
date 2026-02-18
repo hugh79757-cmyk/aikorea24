@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 579, in <module>
+    main()
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 574, in main
+    saved, skipped = save_to_d1(all_items)
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 427, in save_to_d1
+    if h in existing: skipped += 1; continue
+NameError: name 'existing' is not defined
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 579, in <module>
+    main()
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 574, in main
+    saved, skipped = save_to_d1(all_items)
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 427, in save_to_d1
+    if h in existing: skipped += 1; continue
+NameError: name 'existing' is not defined
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 579, in <module>
+    main()
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 574, in main
+    saved, skipped = save_to_d1(all_items)
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 427, in save_to_d1
+    if h in existing: skipped += 1; continue
+NameError: name 'existing' is not defined
