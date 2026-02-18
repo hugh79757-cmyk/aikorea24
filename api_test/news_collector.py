@@ -420,6 +420,7 @@ def fetch_bizinfo_grants():
 
 
 def save_to_d1(articles):
+    existing = get_existing()
     sql_lines = []
     skipped = 0
     for a in articles:
