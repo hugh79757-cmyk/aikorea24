@@ -4,7 +4,6 @@ import { getCollection } from 'astro:content';
 import HeroSection from '../components/home/HeroSection.astro';
 import PolicyBriefing from '../components/home/PolicyBriefing.astro';
 import WelfareSection from '../components/home/WelfareSection.astro';
-import SeniorSection from '../components/home/SeniorSection.astro';
 import LatestNews from '../components/home/LatestNews.astro';
 import CourseSection from '../components/home/CourseSection.astro';
 import LatestBlog from '../components/home/LatestBlog.astro';
@@ -22,7 +21,6 @@ const coursePosts = allPosts.filter(p => p.data.category === 'AI 강좌').slice(
 let latestNews: any[] = [];
 let policyNews: any[] = [];
 let welfareNews: any[] = [];
-let seniorNews: any[] = [];
 
 try {
   const runtime = (Astro.locals as any).runtime;
@@ -38,10 +36,6 @@ try {
 
     welfareNews = (await db.prepare(
       `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' ORDER BY created_at DESC LIMIT 3`
-    ).all()).results || [];
-
-    seniorNews = (await db.prepare(
-      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'senior' ORDER BY created_at DESC LIMIT 3`
     ).all()).results || [];
   }
 } catch (e) {
@@ -62,7 +56,6 @@ try {
     <HeroSection />
     <PolicyBriefing items={policyNews} />
     <WelfareSection items={welfareNews} />
-    <SeniorSection items={seniorNews} />
     <LatestNews items={latestNews} />
     <CourseSection posts={coursePosts} />
     <LatestBlog posts={recentPosts} />
