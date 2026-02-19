@@ -342,7 +342,17 @@ SENIOR_QUERIES = [
     'AI 치매 예방 기술',
     'AI 고령자 복지 정책',
     'AI 요양 로봇 서비스',
-    '노인 디지털 격차 해소 AI',
+    '노인 디지털 격차 해소',
+    '독거노인 돌봄 정책',
+    '기초연금 인상 변경',
+    '노인 일자리 지원사업',
+    '요양보호사 처우 개선',
+    '치매 요양 서비스',
+    '노인복지관 프로그램',
+    '시니어 건강관리 서비스',
+    '고령자 주거 지원',
+    '노인 학대 예방',
+    '경로당 운영 지원',
 ]
 
 def fetch_welfare_news():
@@ -377,11 +387,15 @@ def fetch_welfare_news():
         
 
 def fetch_senior_news():
-    """[12] AI+노인복지 관련 뉴스 수집 (category='senior')"""
+    """[12] 노인복지 뉴스 수집 (category='senior') - AI 필터 없이 폭넓게"""
     results = []
+    senior_kw = ['노인', '시니어', '고령', '돌봄', '치매', '요양',
+                 '실버', '어르신', '경로', '독거', '노후', '간병',
+                 '기초연금', '요양보호사', '복지관', '경로당', '노인복지',
+                 '장기요양', '노인학대', '치매안심', '노인일자리']
     for q in SENIOR_QUERIES:
         encoded = urllib.parse.quote(q)
-        url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display=5&sort=date"
+        url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display=10&sort=date"
         req = urllib.request.Request(url, headers={
             'X-Naver-Client-Id': NAVER_ID,
             'X-Naver-Client-Secret': NAVER_SECRET
@@ -391,11 +405,12 @@ def fetch_senior_news():
             for item in data.get('items', []):
                 title = clean(item['title'])
                 desc = clean(item['description'])
-                if not is_ai(title, desc):
-                    continue
                 full = (title + ' ' + desc).lower()
-                senior_kw = ['노인', '시니어', '고령', '돌봄', '치매', '요양',
-                             '실버', '어르신', '경로', '독거', '노후', '간병']
+                # 제외 키워드
+                skip = ['부동산', '아파트', '분양', '주식', '증권', '코인']
+                if any(s in full for s in skip):
+                    continue
+                # 노인복지 키워드 1개 이상 필수
                 if not any(kw in full for kw in senior_kw):
                     continue
                 results.append({
@@ -655,6 +670,19 @@ def main():
     saved, skipped = save_to_d1(all_items)
     print(f"  신규: {saved}건, 중복 스킵: {skipped}건")
     print('=' * 60)
+
+    # [13] 노인복지 브리핑 자동 생성
+    try:
+        import subprocess as _sp
+        print('\n[13] 노인복지 브리핑 생성...')
+        _r = _sp.run(['python3', os.path.join(PROJECT_DIR, 'api_test', 'senior_briefing.py')],
+                     capture_output=True, text=True, timeout=120)
+        if _r.returncode == 0:
+            print('  브리핑 생성 완료')
+        else:
+            print(f'  브리핑 생성 실패: {_r.stderr[:200]}')
+    except Exception as _e:
+        print(f'  브리핑 생성 에러: {_e}')
 
 if __name__ == '__main__':
     main()
