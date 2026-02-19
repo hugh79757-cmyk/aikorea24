@@ -336,6 +336,15 @@ WELFARE_QUERIES = [
     'AI 일자리 지원 정책',
 ]
 
+SENIOR_QUERIES = [
+    'AI 노인 돌봄 서비스',
+    'AI 시니어 디지털 교육',
+    'AI 치매 예방 기술',
+    'AI 고령자 복지 정책',
+    'AI 요양 로봇 서비스',
+    '노인 디지털 격차 해소 AI',
+]
+
 def fetch_welfare_news():
     """AI+복지 관련 뉴스 수집 (category='benefit')"""
     results = []
@@ -366,6 +375,48 @@ def fetch_welfare_news():
     print(f"  복지/접근성 뉴스: {len(results)}건")
     return results
         
+
+def fetch_senior_news():
+    """[12] AI+노인복지 관련 뉴스 수집 (category='senior')"""
+    results = []
+    for q in SENIOR_QUERIES:
+        encoded = urllib.parse.quote(q)
+        url = f"https://openapi.naver.com/v1/search/news.json?query={encoded}&display=5&sort=date"
+        req = urllib.request.Request(url, headers={
+            'X-Naver-Client-Id': NAVER_ID,
+            'X-Naver-Client-Secret': NAVER_SECRET
+        })
+        try:
+            data = json.loads(urllib.request.urlopen(req, timeout=10).read())
+            for item in data.get('items', []):
+                title = clean(item['title'])
+                desc = clean(item['description'])
+                if not is_ai(title, desc):
+                    continue
+                full = (title + ' ' + desc).lower()
+                senior_kw = ['노인', '시니어', '고령', '돌봄', '치매', '요양',
+                             '실버', '어르신', '경로', '독거', '노후', '간병']
+                if not any(kw in full for kw in senior_kw):
+                    continue
+                results.append({
+                    'title': title,
+                    'link': item['link'],
+                    'description': desc[:200],
+                    'source': '네이버뉴스',
+                    'category': 'senior',
+                    'pub_date': datetime.now().strftime('%Y-%m-%d')
+                })
+        except Exception as e:
+            print(f"  노인복지 '{q}' 실패: {e}")
+    seen = set()
+    unique = []
+    for r in results:
+        if r['title'] not in seen:
+            seen.add(r['title'])
+            unique.append(r)
+    print(f"  노인복지 뉴스: {len(unique)}건")
+    return unique
+
 
 # ===== D1 저장 (배치) =====
 
@@ -595,6 +646,9 @@ def main():
 
     print("\n[11] 기업마당 소상공인 AI 지원사업")
     all_items.extend(fetch_bizinfo_grants())
+
+    print('\n[12] AI 노인복지 뉴스')
+    all_items.extend(fetch_senior_news())
 
     print(f"\n총 수집: {len(all_items)}건")
     print('\nD1 저장 중...')
