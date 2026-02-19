@@ -53,13 +53,32 @@ EXCLUDE = ['귀촌', '귀어', '귀농', '축산', '양식', '어업',
     '교육청', '임대', '재건축']
 
 def is_ai(title, desc=''):
-    text = (title + ' ' + desc).upper()
+    title_up = title.upper()
+    desc_up = desc.upper()
+    text = title_up + ' ' + desc_up
+    # 1. 제외 키워드 체크
     for kw in EXCLUDE:
         if kw.upper() in text: return False
-    for kw in STRONG:
-        if kw.upper() in text: return True
-    weak_count = sum(1 for kw in WEAK if kw.upper() in text)
-    return weak_count >= 2
+    # 2. STRONG 키워드 매칭 (단어 경계 체크)
+    def has_strong(s):
+        for kw in STRONG:
+            ku = kw.upper()
+            # 2글자 이하 키워드(AI, A.I)는 단어 경계 체크
+            if len(ku) <= 3:
+                if re.search(r'(?<![A-Z])' + re.escape(ku) + r'(?![A-Z])', s):
+                    return True
+            else:
+                if ku in s:
+                    return True
+        return False
+    # 3. STRONG이 제목에 있으면 → 바로 통과
+    if has_strong(title_up): return True
+    # 4. STRONG이 설명에만 있으면 → WEAK 1개 이상 필요
+    if has_strong(desc_up):
+        weak_count = sum(1 for kw in WEAK if kw.upper() in text)
+        if weak_count >= 1: return True
+    # 5. STRONG 없이 WEAK만 → 통과 불가
+    return False
 
 # ===== 중복 체크 =====
 def title_hash(title):
@@ -70,17 +89,24 @@ def get_existing():
     try:
         r = subprocess.run(
             ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote',
-             '--command', 'SELECT title FROM news'],
-            capture_output=True, text=True, cwd=PROJECT_DIR)
+             '--command', 'SELECT title FROM news', '--json'],
+            capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
         hashes = set()
-        for line in r.stdout.split('\n'):
-            if '│' in line:
-                parts = line.split('│')
-                if len(parts) >= 2:
-                    t = parts[1].strip()
-                    if t and t != 'title': hashes.add(title_hash(t))
+        if r.returncode == 0 and r.stdout.strip():
+            import json as _json
+            data = _json.loads(r.stdout)
+            # wrangler --json 출력: [{"results": [{"title": "..."}, ...]}]
+            if isinstance(data, list) and data:
+                results = data[0].get('results', [])
+                for row in results:
+                    t = row.get('title', '')
+                    if t:
+                        hashes.add(title_hash(t))
+        print(f"  기존 D1 항목: {len(hashes)}개")
         return hashes
-    except: return set()
+    except Exception as e:
+        print(f"  get_existing 실패: {e}")
+        return set()
 
 # ===== 1. 과기부 사업공고 =====
 def fetch_msit_announce(limit=30):
