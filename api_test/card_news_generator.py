@@ -399,12 +399,12 @@ def render_numbers(data):
     draw = ImageDraw.Draw(img)
     y = draw_header(draw)
 
-    draw.text((ML, y), '오늘의 AI 숫자', fill=SUB, font=ft(20))
-    y += 40
+    draw.text((ML, y), '오늘의 AI 숫자', fill=SUB, font=ft(32))
+    y += 30
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
-    y += 40
+    y += 30
 
-    item_h = 155
+    item_h = 185
     for i, item in enumerate(data['items'][:5]):
         num_text = str(item['number'])
         unit = item.get('unit', '')
@@ -412,16 +412,16 @@ def render_numbers(data):
 
         # 숫자 (크고 노랗게 / 파랗게)
         color = YELLOW if i < 2 else ACCENT
-        draw.text((ML, y), num_text, fill=color, font=ft(56,5))
+        draw.text((ML, y), num_text, fill=color, font=ft(100,5))
 
         # 단위
-        nb = draw.textbbox((0,0), num_text, font=ft(56,5))
+        nb = draw.textbbox((0,0), num_text, font=ft(100,5))
         nw = nb[2] - nb[0]
         if unit:
-            draw.text((ML + nw + 10, y + 20), unit, fill=SUB, font=ft(28,3))
+            draw.text((ML + nw + 12, y + 38), unit, fill=SUB, font=ft(48,3))
 
         # 맥락
-        draw.text((ML, y + 70), context, fill=LIGHT_GRAY, font=ft(26))
+        draw.text((ML, y + 110), context, fill=LIGHT_GRAY, font=ft(42))
 
         if i < 4:
             draw.line([(ML, y+item_h-10),(W-ML, y+item_h-10)], fill=LINE, width=1)
@@ -451,7 +451,7 @@ def render_list5(data):
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
     y += 45
 
-    item_h = 155
+    item_h = 185
     for i, item in enumerate(data['items'][:5]):
         rank_color = ACCENT if i < 2 else DIM
         draw.text((ML, y), f'{i+1}', fill=rank_color, font=ft(44,5))
