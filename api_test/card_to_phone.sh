@@ -1,4 +1,5 @@
 #!/bin/bash
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
 cd /Users/twinssn/Projects/aikorea24
 source api_test/venv/bin/activate
 
