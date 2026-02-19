@@ -78,7 +78,7 @@ def draw_footer(draw):
     draw.text((cx(draw, s, ft(18)), fy+65), s, fill=SUB, font=ft(18))
 
 def draw_cta(draw, y, color=ACCENT):
-    cta = '▶  aikorea24.kr/news'
+    cta = '▶  aikorea24.kr'
     x = cx(draw, cta, ft(30,3))
     bb = draw.textbbox((0,0), cta, font=ft(30,3))
     cw, ch = bb[2]-bb[0], bb[3]-bb[1]
@@ -144,15 +144,16 @@ JSON으로 응답:
   "hint": "힌트 한 줄 (20자 이내)"
 }}""",
 
-        'carousel_cover': f"""아래 AI 뉴스 5개를 선정하세요.
-각 뉴스마다: 제목(12자 이내), 한줄코멘트(25자 이내, "이게 왜 중요하냐면..." 스타일)
+        'carousel_cover': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 뉴스 5개를 골라주세요.
+숫자가 없으면 핵심 키워드를 대신 사용하세요.
+각 뉴스마다 제목(12자 이내)과 상세코멘트(40~50자, 존댓말로 핵심 내용 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
 
 {news_text}
 
 JSON으로 응답:
 {{
   "items": [
-    {{"title": "12자 이내", "comment": "왜 중요한지 25자"}},
+    {{"number": "152억", "unit": "원", "context": "다이퀘스트 IPO 투자유치 규모", "title": "12자 이내 제목", "comment": "존댓말로 핵심 설명 40~50자"}},
     ...5개
   ]
 }}""",
@@ -307,84 +308,149 @@ def render_carousel(data):
     now = datetime.now()
     ts = now.strftime("%Y%m%d_%H%M")
 
-    # 표지
+    # 표지: 숫자 강조 스타일 (5개 뉴스 한눈에)
     img = make_bg()
     draw = ImageDraw.Draw(img)
     draw_header(draw)
 
-    num = '5'
-    draw.text((cx(draw, num, ft(280,5)), 250), num, fill=ACCENT, font=ft(280,5))
-    t1 = '오늘의'
-    t2 = 'AI 뉴스'
-    draw.text((cx(draw, t1, ft(48,3)), 580), t1, fill=SUB, font=ft(48,3))
-    draw.text((cx(draw, t2, ft(64,5)), 640), t2, fill=WHITE, font=ft(64,5))
+    subtitle = '오늘의 AI 숫자'
+    draw.text((80, 80), subtitle, fill=SUB, font=ft(26))
 
-    swipe = '← 밀어서 보기'
-    draw.text((cx(draw, swipe, ft(24)), 750), swipe, fill=SUB, font=ft(24))
+    items = data['items'][:5]
+    y = 120
+    item_h = 185
+    for i, item in enumerate(items):
+        num_val = str(item.get('number', str(i+1)))
+        unit_val = item.get('unit', '')
+        ctx = item.get('context', item.get('comment', ''))
+
+        # 숫자 (1번 2번만 노란색, 나머지 기존 ACCENT)
+        num_color = (255, 200, 50) if i < 2 else ACCENT
+        draw.text((80, y), num_val, fill=num_color, font=ft(78, 5))
+        if unit_val:
+            nb = draw.textbbox((0, 0), num_val, font=ft(78, 5))
+            draw.text((80 + nb[2] - nb[0] + 10, y + 30), unit_val, fill=SUB, font=ft(38))
+
+        # 설명
+        draw.text((80, y + 95), ctx, fill=LIGHT_GRAY, font=ft(34))
+
+        # 구분선
+        if i < 4:
+            line_y = y + item_h - 15
+            draw.line([(80, line_y), (W - 80, line_y)], fill=(255, 255, 255, 40), width=1)
+
+        y += item_h
+
+    draw_cta(draw, y + 10)
     draw_footer(draw)
 
     fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_0cover.png')
     img.save(fp, 'PNG', quality=95)
     files.append(fp)
 
-    # 개별 뉴스 5장
-    for i, item in enumerate(data['items'][:5]):
-        img = make_bg()
-        draw = ImageDraw.Draw(img)
-        draw_header(draw)
+    # 요약 페이지 (5개 뉴스를 1장에 모두)
+    items = data['items'][:5]
+    img = make_bg()
+    draw = ImageDraw.Draw(img)
+    draw_header(draw)
 
-        # 큰 번호
-        y = 200
-        num = f'{i+1}'
-        draw.text((cx(draw, num, ft(200,5)), y), num, fill=ACCENT, font=ft(200,5))
+    y = 90
+    item_h = 220
 
-        # 제목
-        y += 260
-        title = item['title']
-        draw.text((cx(draw, title, ft(52,5)), y), title, fill=WHITE, font=ft(52,5))
+    for i, item in enumerate(items):
+        title = item.get('title', '')
+        comment = item.get('comment', '')
 
-        # 코멘트
-        y += 80
-        comment = item['comment']
-        # 긴 코멘트 줄바꿈
-        if len(comment) > 20:
-            mid = len(comment) // 2
-            sp = comment.find(' ', mid-3)
-            if sp == -1 or sp > mid+5: sp = mid
+        # 번호 (노란색, 크게)
+        num_text = f'{i+1}'
+        draw.text((60, y), num_text, fill=(255, 200, 50), font=ft(68, 5))
+
+        # 제목 (번호 오른쪽, 크게)
+        title_x = 145
+        max_title = 13
+        if len(title) > max_title:
+            title = title[:max_title] + '…'
+        draw.text((title_x, y + 8), title, fill=WHITE, font=ft(48, 5))
+
+        # 코멘트 2줄
+        y += 78
+        comment_font = ft(28)
+        max_per_line = 28
+        if len(comment) <= max_per_line:
+            draw.text((90, y), comment, fill=LIGHT_GRAY, font=comment_font)
+            y += 38
+        else:
+            sp = comment.rfind(' ', 0, max_per_line + 1)
+            if sp <= 0:
+                sp = max_per_line
             l1 = comment[:sp].strip()
             l2 = comment[sp:].strip()
-            draw.text((cx(draw, l1, ft(28)), y), l1, fill=LIGHT_GRAY, font=ft(28))
-            draw.text((cx(draw, l2, ft(28)), y+38), l2, fill=LIGHT_GRAY, font=ft(28))
-        else:
-            draw.text((cx(draw, comment, ft(28)), y), comment, fill=LIGHT_GRAY, font=ft(28))
+            if len(l2) > max_per_line:
+                l2 = l2[:max_per_line - 1] + '…'
+            draw.text((90, y), l1, fill=LIGHT_GRAY, font=comment_font)
+            draw.text((90, y + 36), l2, fill=LIGHT_GRAY, font=comment_font)
+            y += 74
 
-        draw_footer(draw)
-        fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_{i+1}.png')
-        img.save(fp, 'PNG', quality=95)
-        files.append(fp)
+        # 구분선
+        if i < len(items) - 1:
+            y += 12
+            draw.line([(60, y), (W - 60, y)], fill=(255, 255, 255, 40), width=1)
+            y += 18
+
+    draw_footer(draw)
+    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_1.png')
+    img.save(fp, 'PNG', quality=95)
+    files.append(fp)
 
     # CTA 장
     img = make_bg()
     draw = ImageDraw.Draw(img)
     draw_header(draw)
 
-    y = 300
-    t1 = '매일 오전·오후 7시'
-    t2 = 'AI 뉴스 업데이트'
-    draw.text((cx(draw, t1, ft(36)), y), t1, fill=SUB, font=ft(36))
-    draw.text((cx(draw, t2, ft(48,5)), y+55), t2, fill=WHITE, font=ft(48,5))
+    # 챗봇 이미지 삽입 (중앙, 아래로 내림)
+    try:
+        from PIL import Image as PILImage
+        chatbot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'aikorea24.jpg')
+        chatbot = PILImage.open(chatbot_path).convert('RGBA')
+        img_size = 420
+        chatbot = chatbot.resize((img_size, img_size), PILImage.LANCZOS)
+        paste_x = (W - img_size) // 2
+        img.paste(chatbot, (paste_x, 200), chatbot if chatbot.mode == 'RGBA' else None)
+        draw = ImageDraw.Draw(img)
+    except Exception as e:
+        print(f'  이미지 삽입 스킵: {e}')
 
-    y += 160
-    t3 = '팔로우하면'
-    t4 = 'AI 뉴스가 매일 옵니다'
+    y = 660
+    t1 = '이 카드뉴스,'
+    t1b = 'AI에게 말만 했습니다'
+    draw.text((cx(draw, t1, ft(52)), y), t1, fill=(255, 200, 50), font=ft(52))
+    y += 65
+    draw.text((cx(draw, t1b, ft(52, 5)), y), t1b, fill=(255, 200, 50), font=ft(52, 5))
+
+    y += 80
+    t2 = '코딩 도구 없이'
+    t2b = '대화만으로 모두 가능합니다'
+    draw.text((cx(draw, t2, ft(52, 5)), y), t2, fill=WHITE, font=ft(52, 5))
+    y += 65
+    draw.text((cx(draw, t2b, ft(52, 5)), y), t2b, fill=WHITE, font=ft(52, 5))
+
+    y += 75
+    t3 = '뉴스 수집 · 블로그 자동 발행 · 관광지 소개'
     draw.text((cx(draw, t3, ft(30)), y), t3, fill=SUB, font=ft(30))
-    draw.text((cx(draw, t4, ft(36,3)), y+45), t4, fill=WHITE, font=ft(36,3))
 
-    y += 130
+    y += 45
+    t4 = '자격증 · 문화유산 · 키워드 분석 · 메모 동기화'
+    draw.text((cx(draw, t4, ft(28)), y), t4, fill=LIGHT_GRAY, font=ft(28))
+
+    y += 70
+    t5 = '바이브코딩 무료로 배워보세요'
+    draw.text((cx(draw, t5, ft(52, 5)), y), t5, fill=WHITE, font=ft(52, 5))
+
+    y += 80
     draw_cta(draw, y)
     draw_footer(draw)
 
-    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_6cta.png')
+    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_2cta.png')
     img.save(fp, 'PNG', quality=95)
     files.append(fp)
 
