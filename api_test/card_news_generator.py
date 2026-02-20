@@ -39,7 +39,7 @@ LINE = (40, 42, 58)
 YELLOW = (255, 214, 70)
 LIGHT_GRAY = (180, 183, 195)
 
-W, H = 1080, 1350
+W, H = 1080, 1080
 ML = 80
 
 def make_bg():
@@ -318,7 +318,7 @@ def render_carousel(data):
 
     items = data['items'][:5]
     y = 120
-    item_h = 185
+    item_h = 150
     for i, item in enumerate(items):
         num_val = str(item.get('number', str(i+1)))
         unit_val = item.get('unit', '')
@@ -326,13 +326,13 @@ def render_carousel(data):
 
         # 숫자 (1번 2번만 노란색, 나머지 기존 ACCENT)
         num_color = (255, 200, 50) if i < 2 else ACCENT
-        draw.text((80, y), num_val, fill=num_color, font=ft(78, 5))
+        draw.text((80, y), num_val, fill=num_color, font=ft(54, 5))
         if unit_val:
-            nb = draw.textbbox((0, 0), num_val, font=ft(78, 5))
-            draw.text((80 + nb[2] - nb[0] + 10, y + 30), unit_val, fill=SUB, font=ft(38))
+            nb = draw.textbbox((0, 0), num_val, font=ft(54, 5))
+            draw.text((80 + nb[2] - nb[0] + 10, y + 18), unit_val, fill=SUB, font=ft(27))
 
         # 설명
-        draw.text((80, y + 95), ctx, fill=LIGHT_GRAY, font=ft(34))
+        draw.text((80, y + 68), ctx, fill=LIGHT_GRAY, font=ft(24))
 
         # 구분선
         if i < 4:
@@ -412,15 +412,15 @@ def render_carousel(data):
         from PIL import Image as PILImage
         chatbot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'aikorea24.jpg')
         chatbot = PILImage.open(chatbot_path).convert('RGBA')
-        img_size = 420
+        img_size = 300
         chatbot = chatbot.resize((img_size, img_size), PILImage.LANCZOS)
         paste_x = (W - img_size) // 2
-        img.paste(chatbot, (paste_x, 200), chatbot if chatbot.mode == 'RGBA' else None)
+        img.paste(chatbot, (paste_x, 120), chatbot if chatbot.mode == 'RGBA' else None)
         draw = ImageDraw.Draw(img)
     except Exception as e:
         print(f'  이미지 삽입 스킵: {e}')
 
-    y = 660
+    y = 460
     t1 = '이 카드뉴스,'
     t1b = 'AI에게 말만 했습니다'
     draw.text((cx(draw, t1, ft(52)), y), t1, fill=(255, 200, 50), font=ft(52))
@@ -447,7 +447,6 @@ def render_carousel(data):
     draw.text((cx(draw, t5, ft(52, 5)), y), t5, fill=WHITE, font=ft(52, 5))
 
     y += 80
-    draw_cta(draw, y)
     draw_footer(draw)
 
     fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_2cta.png')
