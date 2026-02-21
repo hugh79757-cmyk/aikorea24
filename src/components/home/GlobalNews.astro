@@ -1,0 +1,54 @@
+---
+interface Props { items: any[] }
+const { items } = Astro.props;
+
+function getSourceColor(source: string): string {
+  const map: Record<string, string> = {
+    'TechCrunch AI': 'text-green-700 dark:text-green-400',
+    'MIT Tech Review': 'text-purple-700 dark:text-purple-400',
+    'SCMP China Tech': 'text-red-700 dark:text-red-400',
+    'Hacker News': 'text-orange-700 dark:text-orange-400',
+  };
+  return map[source] || 'text-gray-600 dark:text-gray-400';
+}
+
+function getFlag(country: string): string {
+  const map: Record<string, string> = { 'us': '🇺🇸', 'cn': '🇨🇳' };
+  return map[country] || '🌐';
+}
+---
+<section class="relative z-10 px-4 pb-20">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex justify-between items-center mb-8">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center text-sm">🌍</div>
+        <h2 class="text-xl font-bold">글로벌 AI 뉴스</h2>
+        <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4 hidden md:block"></div>
+      </div>
+      <a href="/global" class="text-sm text-blue-400 hover:text-blue-300 font-medium transition-colors hidden md:block">전체 보기 →</a>
+    </div>
+    {items.length > 0 ? (
+      <div class="space-y-3">
+        {items.map((item: any) => (
+          <a href={item.link} target="_blank" rel="noopener" class="group flex items-start gap-4 bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-xl p-4 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all duration-300">
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-1 text-sm">{item.title}</h3>
+              <p class="text-xs text-gray-500 mt-1 line-clamp-1">{item.original_title}</p>
+            </div>
+            <div class="flex-shrink-0 text-right">
+              <span class={`text-[10px] font-medium ${getSourceColor(item.source)}`}>{getFlag(item.country)} {item.source}</span>
+              <p class="text-[10px] text-gray-600 mt-0.5">{item.pub_date}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
+        <p class="text-gray-500">글로벌 뉴스를 불러오는 중입니다...</p>
+      </div>
+    )}
+    <div class="text-center mt-4 md:hidden">
+      <a href="/global" class="text-sm text-blue-400 font-medium">전체 보기 →</a>
+    </div>
+  </div>
+</section>
