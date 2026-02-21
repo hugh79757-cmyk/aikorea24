@@ -1,0 +1,1037 @@
+# aikorea24  (2026-02-21)
+# 모드: compact | 예산: 100KB | 전체: 387 | 대상: 33
+============================================================
+
+## 프로젝트 구조
+```
+.gitignore  (281B)
+api_test/
+  card_news_generator.py  (19.6KB)
+  card_to_phone.sh  (1.1KB)
+  env_template.sh  (1.2KB)
+  gov_doc_collector.py  (6.8KB)
+  news_collector.py  (28.2KB)
+  requirements.txt  (107B)
+  send_pending.sh  (597B)
+  senior_briefing.py  (7.3KB)
+  view_senior.sh  (979B)
+astro.config.mjs  (435B)
+package.json  (455B)
+patch_existing.py  (518B)
+patch_footer.py  (970B)
+schema.sql  (1.2KB)
+src/
+  content.config.ts  (1.0KB)
+  env.d.ts  (208B)
+  lib/
+    auth.ts  (2.4KB)
+  navigation.ts  (4.7KB)
+  pages/
+    api/
+      auth/
+        callback/
+          google.ts  (1.9KB)
+        login.ts  (685B)
+        logout.ts  (175B)
+      news/
+        benefits.ts  (577B)
+        latest.ts  (593B)
+        policy.ts  (576B)
+        senior.ts  (576B)
+      posts/
+        index.ts  (3.5KB)
+  styles/
+    global.css  (2.0KB)
+  types.d.ts  (5.4KB)
+tailwind.config.js  (341B)
+tailwind.config.mjs  (399B)
+tsconfig.json  (109B)
+wrangler.toml  (204B)
+```
+
+
+============================================================
+# .gitignore  [설정]
+============================================================
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# jetbrains setting folder
+.idea/
+api_test/.env.sh
+
+
+============================================================
+# package.json  [설정]
+============================================================
+{
+  "name": "lonely-limit",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "^12.6.12",
+    "@astrojs/mdx": "^4.3.13",
+    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/tailwind": "^6.0.2",
+    "@tailwindcss/typography": "^0.5.19",
+    "astro": "^5.17.1",
+    "tailwindcss": "^3.4.19"
+  }
+}
+
+
+============================================================
+# schema.sql  [설정]
+============================================================
+-- 사용자
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  google_id TEXT UNIQUE NOT NULL,
+  email TEXT NOT NULL,
+  name TEXT NOT NULL,
+  avatar TEXT,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
+-- 게시판 글
+CREATE TABLE IF NOT EXISTS posts (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  category TEXT DEFAULT 'general',
+  views INTEGER DEFAULT 0,
+  created_at TEXT DEFAULT (datetime('now')),
+  updated_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 댓글
+CREATE TABLE IF NOT EXISTS comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  post_id INTEGER NOT NULL,
+  user_id INTEGER NOT NULL,
+  content TEXT NOT NULL,
+  created_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (post_id) REFERENCES posts(id),
+  FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- 뉴스
+CREATE TABLE IF NOT EXISTS news (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  link TEXT UNIQUE NOT NULL,
+  description TEXT,
+  source TEXT NOT NULL,
+  category TEXT DEFAULT 'AI',
+  pub_date TEXT,
+  created_at TEXT DEFAULT (datetime('now'))
+);
+
+
+============================================================
+# tsconfig.json  [설정]
+============================================================
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [".astro/types.d.ts", "**/*"],
+  "exclude": ["dist"]
+}
+
+
+============================================================
+# wrangler.toml  [설정]
+============================================================
+name = "aikorea24"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "aikorea24-db"
+database_id = ***
+
+
+============================================================
+# api_test/requirements.txt  [설정]
+============================================================
+requests>=2.31.0
+pytrends>=4.9.0
+openai>=1.30.0
+beautifulsoup4>=4.12.0
+Pillow>=10.0.0
+python-dotenv>=1.0.0
+
+
+============================================================
+# src/pages/api/posts/index.ts  [요약]
+============================================================
+// [시그니처 모드] 원본 108줄 → 시그니처 3줄
+import type { APIRoute } from 'astro';
+export const GET: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request, locals, cookies }) => {
+
+============================================================
+# astro.config.mjs
+============================================================
+import { defineConfig } from 'astro/config';
+import tailwind from '@astrojs/tailwind';
+import mdx from '@astrojs/mdx';
+import sitemap from '@astrojs/sitemap';
+import cloudflare from '@astrojs/cloudflare';
+
+export default defineConfig({
+  site: 'https://aikorea24.kr',
+  output: 'server',
+  adapter: cloudflare({
+    platformProxy: { enabled: true },
+  }),
+  trailingSlash: 'always',
+  integrations: [tailwind(), mdx(), sitemap()],
+});
+
+
+============================================================
+# patch_existing.py
+============================================================
+path = "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py"
+with open(path, "r", encoding="utf-8") as f:
+    code = f.read()
+
+old = """def save_to_d1(articles):
+    sql_lines = []
+    skipped = 0"""
+
+new = """def save_to_d1(articles):
+    existing = get_existing()
+    sql_lines = []
+    skipped = 0"""
+
+if old in code:
+    code = code.replace(old, new, 1)
+    print("✅ existing = get_existing() 추가")
+else:
+    print("⚠️ 못 찾음")
+
+with open(path, "w", encoding="utf-8") as f:
+    f.write(code)
+
+
+============================================================
+# patch_footer.py
+============================================================
+"""aikorea24 푸터에 뉴스 키워드 인사이트 Pro 추가"""
+
+filepath = "/Users/twinssn/Projects/aikorea24/src/layouts/Layout.astro"
+
+with open(filepath, "r", encoding="utf-8") as f:
+    code = f.read()
+
+old = '            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 자격증</a></li>'
+
+new = '''            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 자격증</a></li>
+            <li><a href="https://8.informationhot.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">뉴스 키워드 인사이트 Pro</a></li>'''
+
+if old in code:
+    code = code.replace(old, new, 1)
+    print("✅ 푸터에 뉴스 키워드 인사이트 Pro 추가")
+else:
+    print("⚠️ 삽입 위치 못 찾음")
+
+with open(filepath, "w", encoding="utf-8") as f:
+    f.write(code)
+
+
+============================================================
+# tailwind.config.js
+============================================================
+import typographyPlugin from '@tailwindcss/typography';
+
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,ts,tsx,vue}'],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#2563EB',
+        secondary: '#7C3AED',
+        accent: '#14B8A6',
+      },
+    },
+  },
+  plugins: [typographyPlugin],
+  darkMode: 'class',
+};
+
+
+============================================================
+# tailwind.config.mjs
+============================================================
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Pretendard Variable', 'Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+  ],
+}
+
+
+============================================================
+# api_test/card_news_generator.py  [요약]
+============================================================
+# [시그니처 모드] 원본 585줄 → 시그니처 55줄
+import os, json, subprocess, random
+from datetime import datetime
+from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
+from openai import OpenAI
+def load_env(path):
+
+PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+OUTPUT_DIR = os.path.join(PROJECT_DIR, 'api_test', 'card_output')
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+client = OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
+FONT = '/System/Library/Fonts/AppleSDGothicNeo.ttc'
+def ft(size, idx=0):
+
+BG = (17, 17, 28)
+WHITE = (235, 235, 242)
+ACCENT = (90, 140, 255)
+DIM = (55, 60, 80)
+SUB = (100, 106, 125)
+LINE = (40, 42, 58)
+YELLOW = (255, 214, 70)
+LIGHT_GRAY = (180, 183, 195)
+W, H = 1080, 1080
+ML = 80
+def make_bg():
+
+def cx(draw, text, font):
+
+def right_x(draw, text, font):
+
+def draw_header(draw):
+
+def draw_footer(draw):
+
+def draw_cta(draw, y, color=ACCENT):
+
+def fetch_news(limit=30):
+
+def curate(news_items, template_type):
+
+def render_deep(data):
+
+def render_quiz(data):
+
+def render_carousel(data):
+
+        from PIL import Image as PILImage
+def render_numbers(data):
+
+def render_list5(data):
+
+TEMPLATES = ['deep', 'quiz', 'carousel_cover', 'number', 'list5']
+def generate_card_news(template_type=None):
+
+if __name__ == '__main__':
+    import sys
+
+============================================================
+# api_test/card_to_phone.sh
+============================================================
+#!/bin/bash
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH"
+cd /Users/twinssn/Projects/aikorea24
+source api_test/venv/bin/activate
+
+KDE_CLI="/Applications/KDE Connect.app/Contents/MacOS/kdeconnect-cli"
+DEVICE_ID="95ba25f5ac1b44ab9453bf2d15773be1"
+OUTPUT_DIR="api_test/card_output"
+PENDING_DIR="api_test/card_pending"
+LOG="/tmp/card_to_phone.log"
+
+mkdir -p "$PENDING_DIR"
+echo "$(date): 카드뉴스 생성 시작" >> "$LOG"
+
+touch /tmp/.card_last_run
+python3 api_test/card_news_generator.py carousel_cover >> "$LOG" 2>&1
+
+NEW_FILES=$(find "$OUTPUT_DIR" -name "*.png" -newer /tmp/.card_last_run)
+if [ -z "$NEW_FILES" ]; then
+    echo "$(date): 새 카드뉴스 없음" >> "$LOG"
+    exit 0
+fi
+
+if "$KDE_CLI" -l 2>/dev/null | grep "$DEVICE_ID" | grep -q "reachable"; then
+    for f in $NEW_FILES; do
+        echo "$(date): 전송: $(basename $f)" >> "$LOG"
+        "$KDE_CLI" --device "$DEVICE_ID" --share "$f" >> "$LOG" 2>&1
+    done
+else
+    echo "$(date): KDE 미연결, pending 저장" >> "$LOG"
+    for f in $NEW_FILES; do
+        cp "$f" "$PENDING_DIR/"
+    done
+fi
+echo "$(date): 완료" >> "$LOG"
+
+
+============================================================
+# api_test/env_template.sh
+============================================================
+#!/bin/bash
+# aikorea24.kr API 키 설정 템플릿
+# 이 파일을 .env.sh로 복사 후 실제 키 입력
+# cp env_template.sh .env.sh
+
+# [1] 네이버 개발자센터 (https://developers.naver.com/apps/)
+# - 사용 API: 검색(뉴스,블로그), 데이터랩(검색어트렌드)
+export NAVER_CLIENT_ID="YOUR_NAVER_CLIENT_ID"
+export NAVER_CLIENT_SECRET="YOUR_NAVER_CLIENT_SECRET"
+
+# [2] 네이버 검색광고 API (https://manage.searchad.naver.com/)
+# - 사용 API: 키워드도구 (월간검색량)
+export NAVER_AD_API_KEY="YOUR_AD_API_KEY"
+export NAVER_AD_SECRET="YOUR_AD_SECRET"
+export NAVER_AD_CUSTOMER_ID="YOUR_CUSTOMER_ID"
+
+# [3] OpenAI API (https://platform.openai.com/api-keys)
+# - 사용 모델: gpt-4o-mini (뉴스 요약)
+export OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+
+# [4] 공공데이터포털 (https://www.data.go.kr/)
+# - 사용 API: 보조금통합포털, 공공서비스(혜택)
+export DATA_GO_KR_KEY="YOUR_DATA_GO_KR_KEY"
+
+# [5] Instagram Graph API (https://developers.facebook.com/)
+# - 사용: 카드뉴스 자동 게시
+export INSTAGRAM_ACCESS_TOKEN="YOUR_IG_TOKEN"
+export INSTAGRAM_BUSINESS_ID="YOUR_IG_BUSINESS_ID"
+
+
+============================================================
+# api_test/gov_doc_collector.py  [요약]
+============================================================
+# [시그니처 모드] 원본 194줄 → 시그니처 31줄
+import os
+import sys
+import json
+import requests
+import subprocess
+import hashlib
+from datetime import datetime
+PROJECT_ROOT = '/Users/twinssn/Projects/aikorea24'
+env_path = os.path.join(PROJECT_ROOT, '.env')
+API_KEY = os.environ.get('DATA_GO_KR_KEY', '')
+BASE_URL = 'http://apis.data.go.kr/1741000/publicDoc'
+SEARCH_KEYWORDS = [
+ENDPOINTS = {
+STRONG_AI_WORDS = ['AI', '인공지능', 'GPT', '딥러닝', '머신러닝', 'LLM', '생성형', '챗봇', 'ChatGPT', '클로드', '앤트로픽', 'OpenAI']
+WEAK_AI_WORDS = ['디지털', '데이터', '클라우드', '스마트', '자율주행', '로봇', '반도체', '소프트웨어', '사이버', '빅데이터', '메타버스', '플랫폼']
+EXCLUDE_WORDS = ['귀농', '귀촌', '귀어', '교복', '부동산', '아파트', '축구', '야구', '결혼', '이혼', '장례']
+def is_ai_related(title, text_preview=''):
+
+def fetch_docs(endpoint, keyword, num=10, page=1):
+
+def safe_sql(text, maxlen=500):
+
+def title_hash(title):
+
+def get_existing_hashes():
+
+def insert_to_d1(item):
+
+def main():
+
+if __name__ == '__main__':
+
+============================================================
+# api_test/news_collector.py  [시그니처만 — 원본 28KB]
+============================================================
+import os, json, subprocess, urllib.request, urllib.parse, hashlib, re
+from datetime import datetime
+from xml.etree import ElementTree as ET
+from html import unescape
+def load_env(path):
+
+PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+NAVER_ID = os.environ.get('NAVER_CLIENT_ID', '')
+NAVER_SECRET = os.environ.get('NAVER_CLIENT_SECRET', '')
+DATA_KEY = os.environ.get('DATA_GO_KR_KEY', '')
+def clean(text):
+
+STRONG = ['AI', 'A.I', '인공지능', 'GPT', 'ChatGPT', '챗GPT', 'LLM',
+WEAK = ['데이터센터', '클라우드', '반도체', '엔비디아', 'GPU',
+EXCLUDE = ['귀촌', '귀어', '귀농', '축산', '양식', '어업',
+def is_ai(title, desc=''):
+
+    def has_strong(s):
+
+def title_hash(title):
+
+def get_existing():
+
+            import json as _json
+def fetch_msit_announce(limit=30):
+
+def fetch_msit_press(limit=20):
+
+def fetch_gov_benefits(limit=50):
+
+QUERIES = ['인공지능 AI 서비스', 'ChatGPT 활용법', '생성형AI 스타트업',
+def fetch_naver(query, display=10):
+
+RSS_FEEDS = [
+def fetch_rss(url, source_name, limit=15):
+
+AI_POLICY_QUERIES = [
+def fetch_naver_policy():
+    """정부 AI 정책 전용 네이버 뉴스 수집 (category='policy')"""
+
+def fetch_mois_press(limit=20):
+    """행정안전부 보도자료에서 AI/디지털 관련 수집"""
+
+STARTUP_QUERIES = [
+def fetch_startup_news():
+
+WELFARE_QUERIES = [
+SENIOR_QUERIES = [
+def fetch_welfare_news():
+    """AI+복지 관련 뉴스 수집 (category='benefit')"""
+
+def fetch_senior_news():
+    """[12] 노인복지 뉴스 수집 (category='senior') - AI 필터 없이 폭넓게"""
+
+def fetch_bizinfo_grants():
+    """[11] 기업마당 소상공인 AI 지원사업 공고"""
+
+        import traceback
+def save_to_d1(articles):
+
+GOV_DOC_BASE = 'http://apis.data.go.kr/1741000/publicDoc'
+GOV_DOC_ENDPOINTS = {
+GOV_DOC_KEYWORDS = ['AI', '인공지능', '디지털', '데이터', '클라우드', '스마트', '자율주행', '로봇', '반도체', '소프트웨어']
+def fetch_gov_docs():
+    """정부 공문서 AI 학습데이터에서 AI 관련 문서 수집"""
+
+def main():
+
+        import subprocess as _sp
+if __name__ == '__main__':
+
+============================================================
+# api_test/send_pending.sh
+============================================================
+#!/bin/bash
+KDE_CLI="/Applications/KDE Connect.app/Contents/MacOS/kdeconnect-cli"
+DEVICE_ID="95ba25f5ac1b44ab9453bf2d15773be1"
+PENDING_DIR="/Users/twinssn/Projects/aikorea24/api_test/card_pending"
+LOG="/tmp/card_to_phone.log"
+
+ls "$PENDING_DIR"/*.png >/dev/null 2>&1 || exit 0
+
+if ! "$KDE_CLI" -l 2>/dev/null | grep "$DEVICE_ID" | grep -q "reachable"; then
+    exit 0
+fi
+
+for f in "$PENDING_DIR"/*.png; do
+    "$KDE_CLI" --device "$DEVICE_ID" --share "$f" >> "$LOG" 2>&1
+    if [ $? -eq 0 ]; then
+        rm "$f"
+        echo "$(date): pending 전송 성공: $(basename $f)" >> "$LOG"
+    fi
+done
+
+
+============================================================
+# api_test/senior_briefing.py  [요약]
+============================================================
+# [시그니처 모드] 원본 201줄 → 시그니처 28줄
+import os, sys, json, subprocess, re, time
+import httpx
+from datetime import datetime
+from html import unescape
+PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+OUTPUT_DIR = os.path.join(PROJECT_DIR, 'api_test', 'senior_briefing')
+def get_senior_news():
+
+def clean_html(text):
+
+def fetch_article(url, timeout=10):
+    """원문 크롤링 → 본문 텍스트 추출"""
+
+def generate_html(items, today):
+
+<html lang="ko">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="container">
+def update_index():
+
+<html lang="ko">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="container">
+def main():
+
+if __name__ == '__main__':
+
+============================================================
+# api_test/view_senior.sh
+============================================================
+#!/bin/bash
+# AI 노인복지 뉴스 개인 조회 스크립트
+cd /Users/twinssn/Projects/aikorea24
+
+echo "========================================"
+echo "  AI 노인복지 뉴스 (최근 20건)"
+echo "  $(date '+%Y-%m-%d %H:%M')"
+echo "========================================"
+
+npx wrangler d1 execute aikorea24-db --remote --json \
+  --command "SELECT title, link, source, pub_date FROM news WHERE category='senior' ORDER BY created_at DESC LIMIT 20" 2>/dev/null | python3 -c "
+import sys, json
+data = json.load(sys.stdin)
+items = data[0].get('results', [])
+if not items:
+    print('\n  아직 수집된 노인복지 뉴스가 없습니다.')
+    print('  수집 실행: python3 api_test/news_collector.py')
+else:
+    for i, r in enumerate(items, 1):
+        print(f'\n  {i}. {r[\"title\"]}')
+        print(f'     {r[\"source\"]} | {r[\"pub_date\"]}')
+        print(f'     {r[\"link\"]}')
+print(f'\n  총 {len(items)}건')
+print('========================================')
+"
+
+
+============================================================
+# src/content.config.ts
+============================================================
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    date: z.coerce.date(),
+    category: z.string(),
+    tags: z.array(z.string()).default([]),
+    image: z.string().optional(),
+    draft: z.boolean().default(false),
+  }),
+});
+
+const tools = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/tools' }),
+  schema: z.object({
+    name: z.string(),
+    description: z.string(),
+    category: z.string(),
+    price: z.string(),
+    koreanSupport: z.boolean(),
+    difficulty: z.string(),
+    url: z.string(),
+    image: z.string().optional(),
+    relatedPost: z.string().optional(),
+    useCases: z.array(z.string()).default([]),
+    tags: z.array(z.string()).default([]),
+    featured: z.boolean().default(false),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { blog, tools };
+
+
+============================================================
+# src/env.d.ts
+============================================================
+/// <reference path="../.astro/types.d.ts" />
+
+interface Env {
+  DB: D1Database;
+}
+
+type Runtime = import('@astrojs/cloudflare').Runtime<Env>;
+
+declare namespace App {
+  interface Locals extends Runtime {}
+}
+
+
+============================================================
+# src/navigation.ts  [요약]
+============================================================
+// [시그니처 모드] 원본 183줄 → 시그니처 3줄
+import { getPermalink, getBlogPermalink, getAsset } from './utils/permalinks';
+export const headerData = {
+export const footerData = {
+
+============================================================
+# src/types.d.ts  [요약]
+============================================================
+// [시그니처 모드] 원본 282줄 → 시그니처 52줄
+import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
+import type { HTMLAttributes, ImageMetadata } from 'astro/types';
+export interface Post {
+  /** A unique ID number that identifies a post. */
+  /** A post’s unique slug – part of the post’s URL based on its name, i.e. a post called “My Sample Page” has a slug “my-sample-page”. */
+  /**  */
+  /**  */
+  /**  */
+  /**  */
+  /** Optional summary of post content. */
+  /**  */
+  /**  */
+  /**  */
+  /**  */
+  /**  */
+  /**  */
+  /**  */
+  /**  */
+export interface Taxonomy {
+export interface MetaData {
+export interface MetaDataRobots {
+export interface MetaDataImage {
+export interface MetaDataOpenGraph {
+export interface MetaDataTwitter {
+export interface Image {
+export interface Video {
+export interface Widget {
+export interface Headline {
+interface TeamMember {
+interface Social {
+export interface Stat {
+export interface Item {
+export interface Price {
+export interface Testimonial {
+export interface Input {
+export interface Textarea {
+export interface Disclaimer {
+export interface CallToAction extends Omit<HTMLAttributes<'a'>, 'slot'> {
+export interface ItemGrid {
+export interface Collapse {
+export interface Form {
+export interface Hero extends Omit<Headline, 'classes'>, Omit<Widget, 'isDark' | 'classes'> {
+export interface Team extends Omit<Headline, 'classes'>, Widget {
+export interface Stats extends Omit<Headline, 'classes'>, Widget {
+export interface Pricing extends Omit<Headline, 'classes'>, Widget {
+export interface Testimonials extends Omit<Headline, 'classes'>, Widget {
+export interface Brands extends Omit<Headline, 'classes'>, Widget {
+export interface Features extends Omit<Headline, 'classes'>, Widget {
+export interface Faqs extends Omit<Headline, 'classes'>, Widget {
+export interface Steps extends Omit<Headline, 'classes'>, Widget {
+export interface Content extends Omit<Headline, 'classes'>, Widget {
+export interface Contact extends Omit<Headline, 'classes'>, Form, Widget {}
+
+============================================================
+# src/lib/auth.ts  [요약]
+============================================================
+// [시그니처 모드] 원본 95줄 → 시그니처 4줄
+export function getSessionUser(cookies: any): { email: string; name: string } | null {
+export async function getUserMembership(db: any, email: string) {
+export function canAccess(
+export const PLANS = {
+
+============================================================
+# src/styles/global.css  [요약]
+============================================================
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 라이트 모드 기본 */
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+  }
+
+  /* 다크 모드 */
+  .dark {
+    --bg-primary: #0A0E1A;
+    --bg-secondary: #111827;
+    --bg-header: rgba(10, 14, 26, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: rgba(255, 255, 255, 0.06);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(148, 163, 184, 0.1);
+  }
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* 라이트 모드 기본 */
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
+  }
+
+  /* 다크 모드 */
+  .dark {
+    --bg-primary: #0A0E1A;
+    --bg-secondary: #111827;
+    --bg-header: rgba(10, 14, 26, 0.85);
+    --text-primary: #e2e8f0;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --border-color: rgba(255, 255, 255, 0.06);
+    --card-bg: rgba(30, 41, 59, 0.7);
+    --card-border: rgba(148, 163, 184, 0.1);
+  }
+
+  /* prose 다크 모드 기본 텍스트 색상 */
+  .dark .prose {
+    --tw-prose-body: #d1d5db;
+    --tw-prose-headings: #f9fafb;
+    --tw-prose-lead: #9ca3af;
+    --tw-prose-links: #60a5fa;
+    --tw-prose-bold: #f9fafb;
+    --tw-prose-counters: #9ca3af;
+    --tw-prose-bullets: #6b7280;
+    --tw-prose-hr: #374151;
+    --tw-prose-quotes: #d1d5db;
+    --tw-prose-quote-borders: #4b5563;
+    --tw-prose-captions: #9ca3af;
+    --tw-prose-code: #f472b6;
+    --tw-prose-pre-code: #d1d5db;
+    --tw-prose-pre-bg: rgba(31, 41, 55, 0.5);
+    --tw-prose-th-borders: #4b5563;
+    --tw-prose-td-borders: #374151;
+
+# ... (3줄 생략)
+
+============================================================
+# src/pages/api/auth/login.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ redirect, locals }) => {
+  const runtime = (locals as any).runtime;
+  const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+  
+  const redirectUri = import.meta.env.PROD
+    ? 'https://aikorea24.kr/api/auth/callback/google'
+    : 'http://localhost:4321/api/auth/callback/google';
+
+  const params = new URLSearchParams({
+    client_id: clientId,
+    redirect_uri: redirectUri,
+    response_type: 'code',
+    scope: 'openid email profile',
+    access_type: 'offline',
+    prompt: 'consent',
+  });
+
+  return redirect(`https://accounts.google.com/o/oauth2/v2/auth?${params}`);
+};
+
+
+============================================================
+# src/pages/api/auth/logout.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ cookies, redirect }) => {
+  cookies.delete('session', { path: '/' });
+  return redirect('/');
+};
+
+
+============================================================
+# src/pages/api/news/benefits.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ locals }) => {
+  const runtime = (locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (!db) return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
+
+  const { results } = await db.prepare(
+    `SELECT id, title, link, description, source, pub_date 
+     FROM news 
+     WHERE category = 'benefit' 
+     ORDER BY created_at DESC LIMIT 3`
+  ).all();
+
+  return new Response(JSON.stringify(results), { headers: { 'Content-Type': 'application/json' } });
+};
+
+
+============================================================
+# src/pages/api/news/latest.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ locals }) => {
+  const runtime = (locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (!db) return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
+
+  const { results } = await db.prepare(
+    `SELECT id, title, link, description, source, category, pub_date 
+     FROM news 
+     WHERE category IN ('news', 'AI') 
+     ORDER BY created_at DESC LIMIT 5`
+  ).all();
+
+  return new Response(JSON.stringify(results), { headers: { 'Content-Type': 'application/json' } });
+};
+
+
+============================================================
+# src/pages/api/news/policy.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ locals }) => {
+  const runtime = (locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (!db) return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
+
+  const { results } = await db.prepare(
+    `SELECT id, title, link, description, source, pub_date 
+     FROM news 
+     WHERE category = 'policy' 
+     ORDER BY created_at DESC LIMIT 3`
+  ).all();
+
+  return new Response(JSON.stringify(results), { headers: { 'Content-Type': 'application/json' } });
+};
+
+
+============================================================
+# src/pages/api/news/senior.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ locals }) => {
+  const runtime = (locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (!db) return new Response(JSON.stringify([]), { headers: { 'Content-Type': 'application/json' } });
+
+  const { results } = await db.prepare(
+    `SELECT id, title, link, description, source, pub_date 
+     FROM news 
+     WHERE category = 'senior' 
+     ORDER BY created_at DESC LIMIT 6`
+  ).all();
+
+  return new Response(JSON.stringify(results), { headers: { 'Content-Type': 'application/json' } });
+};
+
+
+============================================================
+# src/pages/api/auth/callback/google.ts
+============================================================
+import type { APIRoute } from 'astro';
+
+export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
+  const url = new URL(request.url);
+  const code = url.searchParams.get('code');
+  if (!code) return redirect('/?error=no_code');
+
+  const runtime = (locals as any).runtime;
+  const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+  const clientSecret = runtime?.env?.GOOGLE_CLIENT_SECRET || import.meta.env.GOOGLE_CLIENT_SECRET;
+
+  const redirectUri = import.meta.env.PROD
+    ? 'https://aikorea24.kr/api/auth/callback/google'
+    : 'http://localhost:4321/api/auth/callback/google';
+
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      code, client_id: clientId, client_secret: clientSecret,
+      redirect_uri: redirectUri, grant_type: 'authorization_code',
+    }),
+  });
+  const tokenData = await tokenRes.json();
+  if (!tokenData.access_token) return redirect('/?error=token_failed');
+
+  const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+    headers: { Authorization: `Bearer ${tokenData.access_token}` },
+  });
+  const user = await userRes.json();
+
+  const db = runtime?.env?.DB;
+  if (db) {
+    await db.prepare(
+      `INSERT OR IGNORE INTO users (google_id, email, name, avatar) VALUES (?, ?, ?, ?)`
+    ).bind(user.id, user.email, user.name, user.picture).run();
+
+    const dbUser = await db.prepare(
+      `SELECT id, name, email, avatar FROM users WHERE google_id = ?`
+    ).bind(user.id).first();
+
+    const sessionData = btoa(JSON.stringify(dbUser));
+    cookies.set('session', sessionData, {
+      path: '/', httpOnly: true, secure: import.meta.env.PROD, domain: import.meta.env.PROD ? '.aikorea24.kr' : undefined,
+      sameSite: 'lax', maxAge: 60 * 60 * 24 * 7,
+    });
+  }
+
+  return redirect('/');
+};
+
+
+============================================================
+# 요약
+# 내보냄: 33 | 건너뜀: 0 | 크기: 25,385B
+============================================================

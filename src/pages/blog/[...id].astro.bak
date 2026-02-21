@@ -1,0 +1,117 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const dateStr = post.data.date instanceof Date
+  ? post.data.date.toISOString()
+  : new Date(post.data.date).toISOString();
+
+const formattedDate = post.data.date instanceof Date
+  ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+  : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image || '/og-default.png'}
+  type="article"
+  publishedDate={dateStr}
+  tags={post.data.tags || []}
+  category={post.data.category || ''}
+>
+  <article class="max-w-3xl mx-auto px-4 py-12">
+    <!-- 브레드크럼 -->
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="breadcrumb">
+      <ol class="flex items-center gap-1">
+        <li><a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">홈</a></li>
+        <li class="before:content-['/'] before:mx-1">
+          <a href="/blog" class="hover:text-blue-600 dark:hover:text-blue-400">블로그</a>
+        </li>
+        <li class="before:content-['/'] before:mx-1 text-gray-900 dark:text-gray-100 font-medium truncate max-w-[200px]">
+          {post.data.title}
+        </li>
+      </ol>
+    </nav>
+
+    <!-- 헤더 -->
+    <header class="mb-8">
+      {post.data.category && (
+        <span class="inline-block bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+          {post.data.category}
+        </span>
+      )}
+
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
+        {post.data.title}
+      </h1>
+
+      <p class="text-gray-600 dark:text-gray-300 text-lg mb-4">
+        {post.data.description}
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime={dateStr}>{formattedDate}</time>
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex gap-2 flex-wrap">
+            {post.data.tags.map((tag: string) => (
+              <span class="bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded text-xs">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <!-- 커버 이미지 -->
+    {post.data.image && (
+      <img
+        src={post.data.image}
+        alt={post.data.title}
+        class="w-full rounded-xl mb-8 aspect-square object-cover"
+        width="768"
+        height="432"
+        loading="eager"
+      />
+    )}
+
+    <!-- 본문 (prose 다크 모드 적용) -->
+    <div class="prose prose-lg max-w-none
+      prose-headings:text-gray-900 dark:prose-headings:text-white
+      prose-p:text-gray-700 dark:prose-p:text-gray-300
+      prose-strong:text-gray-900 dark:prose-strong:text-white
+      prose-a:text-blue-600 dark:prose-a:text-blue-400
+      prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
+      prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600
+      prose-code:text-pink-600 dark:prose-code:text-pink-400
+      prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800/50
+      prose-li:text-gray-700 dark:prose-li:text-gray-300
+      prose-img:rounded-xl
+      prose-hr:border-gray-200 dark:prose-hr:border-gray-700
+      prose-th:text-gray-900 dark:prose-th:text-gray-100
+      prose-td:text-gray-700 dark:prose-td:text-gray-300
+    ">
+      <Content />
+    </div>
+
+    <!-- 하단 네비게이션 -->
+    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <a href="/blog" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+        ← 블로그 목록으로
+      </a>
+    </div>
+  </article>
+</Layout>

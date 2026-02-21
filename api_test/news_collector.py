@@ -52,13 +52,33 @@ EXCLUDE = ['귀촌', '귀어', '귀농', '축산', '양식', '어업',
     '행정통합', '통합특별', '도서관', '연휴 이벤트', '르노',
     '교육청', '임대', '재건축']
 
+# SOFT_EXCLUDE: 제목에 STRONG 키워드가 있으면 통과 허용, 없으면 차단
+SOFT_EXCLUDE = ['배터리', '전기차', '완성차', '희망퇴직', '위로금',
+    '구조조정', '파업', '노조', '주가', '시가총액', '배당',
+    '공모주', '상장폐지', '부채', '적자', '감원']
+
 def is_ai(title, desc=''):
     title_up = title.upper()
     desc_up = desc.upper()
     text = title_up + ' ' + desc_up
-    # 1. 제외 키워드 체크
+    # 1. 제외 키워드 체크 (무조건 차단)
     for kw in EXCLUDE:
         if kw.upper() in text: return False
+    # 1.5. SOFT_EXCLUDE: 제목에 STRONG 없으면 차단
+    for kw in SOFT_EXCLUDE:
+        if kw.upper() in text:
+            # 제목에 STRONG이 있으면 통과 허용
+            title_has_strong = False
+            for sk in STRONG:
+                sku = sk.upper()
+                if len(sku) <= 3:
+                    if re.search(r'(?<![A-Z])' + re.escape(sku) + r'(?![A-Z])', title_up):
+                        title_has_strong = True; break
+                else:
+                    if sku in title_up:
+                        title_has_strong = True; break
+            if not title_has_strong:
+                return False
     # 2. STRONG 키워드 매칭 (단어 경계 체크)
     def has_strong(s):
         for kw in STRONG:
@@ -73,10 +93,10 @@ def is_ai(title, desc=''):
         return False
     # 3. STRONG이 제목에 있으면 → 바로 통과
     if has_strong(title_up): return True
-    # 4. STRONG이 설명에만 있으면 → WEAK 1개 이상 필요
+    # 4. STRONG이 설명에만 있으면 → WEAK 2개 이상 + 제목에도 관련 단서 필요
     if has_strong(desc_up):
         weak_count = sum(1 for kw in WEAK if kw.upper() in text)
-        if weak_count >= 1: return True
+        if weak_count >= 2: return True
     # 5. STRONG 없이 WEAK만 → 통과 불가
     return False
 
@@ -511,6 +531,331 @@ def fetch_bizinfo_grants():
     return results
 
 
+
+# ============================================
+# GPT-4o-mini 번역 함수
+# ============================================
+def translate_to_korean(title, description=''):
+    """영문 제목+설명을 한국어로 번역 (GPT-4o-mini)"""
+    try:
+        import openai
+        client = openai.OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
+        text = f"Title: {title}"
+        if description:
+            text += f"\nDescription: {description[:300]}"
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a Korean tech news translator. Translate the following English AI/tech news into natural Korean. Return ONLY a JSON object with keys \"title\" and \"description\". No markdown, no explanation."},
+                {"role": "user", "content": text}
+            ],
+            temperature=0.3,
+            max_tokens=500
+        )
+        import json
+        result = json.loads(resp.choices[0].message.content.strip())
+        return result.get('title', title), result.get('description', description)
+    except Exception as e:
+        print(f"  번역 실패: {e}")
+        return title, description
+
+
+# ============================================
+# 해외 AI 뉴스 RSS 수집
+# ============================================
+def fetch_rss_global(url, source_name, category='global', country='us', limit=10):
+    """해외 RSS 피드 수집 + 번역"""
+    items = []
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/2.0'})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            raw = resp.read()
+        root = ET.fromstring(raw)
+        for item in root.iter('item'):
+            title_el = item.find('title')
+            link_el = item.find('link')
+            desc_el = item.find('description')
+            pub_el = item.find('pubDate')
+            if title_el is None or link_el is None:
+                continue
+            orig_title = (title_el.text or '').strip()
+            orig_desc = clean(desc_el.text or '') if desc_el is not None else ''
+            link = (link_el.text or '').strip()
+            pub = (pub_el.text or '')[:25] if pub_el is not None else ''
+            # AI 관련성 체크 (해외 소스는 AI 전문 피드이므로 가벼운 필터)
+            ai_terms = ['AI', 'ARTIFICIAL INTELLIGENCE', 'MACHINE LEARNING', 'LLM', 'GPT',
+                        'NEURAL', 'DEEPSEEK', 'OPENAI', 'ANTHROPIC', 'GEMINI', 'CLAUDE',
+                        'ROBOT', 'AUTONOMOUS', 'DEEP LEARNING', 'GENERATIVE']
+            text_upper = (orig_title + ' ' + orig_desc).upper()
+            if not any(t in text_upper for t in ai_terms):
+                continue
+            # 영어 원문 그대로 저장 (번역은 --source translate에서 별도 수행)
+            items.append({
+                'title': orig_title,
+                'link': link,
+                'description': orig_desc,
+                'source': source_name,
+                'category': category,
+                'pub_date': pub,
+                'source_url': url,
+                'original_title': orig_title,
+                'country': country,
+            })
+            if len(items) >= limit:
+                break
+        print(f"  {source_name}: {len(items)}건 수집")
+    except Exception as e:
+        print(f"  {source_name} 수집 실패: {e}")
+    return items
+
+
+def fetch_hackernews_ai(limit=10):
+    """Hacker News Algolia API로 AI 관련 스토리 수집 + 번역"""
+    items = []
+    try:
+        url = 'https://hn.algolia.com/api/v1/search?query=AI&tags=story&hitsPerPage=20'
+        req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/2.0'})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            raw = resp.read()
+        data = json.loads(raw)
+        for hit in data.get('hits', []):
+            orig_title = hit.get('title', '').strip()
+            link = hit.get('url') or f"https://news.ycombinator.com/item?id={hit.get('objectID', '')}"
+            if not orig_title:
+                continue
+            items.append({
+                'title': orig_title,
+                'link': link,
+                'description': '',
+                'source': 'Hacker News',
+                'category': 'global',
+                'pub_date': hit.get('created_at', '')[:10],
+                'source_url': 'https://hn.algolia.com',
+                'original_title': orig_title,
+                'country': 'us',
+            })
+            if len(items) >= limit:
+                break
+        print(f"  Hacker News: {len(items)}건 수집")
+    except Exception as e:
+        print(f"  Hacker News 수집 실패: {e}")
+    return items
+
+
+# 해외 소스 목록
+GLOBAL_RSS_FEEDS = [
+    ('https://techcrunch.com/category/artificial-intelligence/feed/', 'TechCrunch AI', 'us'),
+    ('https://www.technologyreview.com/topic/artificial-intelligence/feed', 'MIT Tech Review', 'us'),
+    ('https://www.scmp.com/rss/320663/feed', 'SCMP China Tech', 'cn'),
+]
+
+
+def fetch_global_news():
+    """해외 AI 뉴스 전체 수집"""
+    all_items = []
+    for url, name, country in GLOBAL_RSS_FEEDS:
+        items = fetch_rss_global(url, name, category='global', country=country, limit=7)
+        all_items.extend(items)
+    # Hacker News
+    all_items.extend(fetch_hackernews_ai(limit=7))
+    return all_items
+
+
+# ============================================
+# 공식 AI 기업 블로그 수집
+# ============================================
+def fetch_official_news():
+    """공식 AI 기업 블로그 수집 (HTML 스크래핑)"""
+    all_items = []
+    # ByteDance Seed 블로그
+    all_items.extend(fetch_bytedance_seed(limit=5))
+    return all_items
+
+
+def fetch_bytedance_seed(limit=5):
+    """ByteDance Seed 블로그 스크래핑"""
+    items = []
+    try:
+        url = 'https://seed.bytedance.com/en/blog'
+        req = urllib.request.Request(url, headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
+        })
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            html = resp.read().decode('utf-8', errors='ignore')
+        # 블로그 항목 파싱: 제목과 날짜 추출
+        # 패턴: 제목\n날짜\n카테고리
+        import re
+        # 날짜 패턴으로 블로그 항목 찾기
+        pattern = r'([A-Z][a-z]+ \d{1,2}, \d{4})'
+        dates = re.findall(pattern, html)
+        # 제목 추출 - 날짜 앞에 오는 텍스트 블록
+        blocks = re.split(r'(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2}, \d{4}', html)
+        titles_found = []
+        for i, block in enumerate(blocks[:-1]):
+            lines = [l.strip() for l in block.strip().split('\n') if l.strip() and len(l.strip()) > 10]
+            if lines:
+                title = lines[-1]
+                if i < len(dates):
+                    titles_found.append((title, dates[i]))
+        for title, date_str in titles_found[:limit]:
+            items.append({
+                'title': title,
+                'link': 'https://seed.bytedance.com/en/blog',
+                'description': f'ByteDance Seed blog post: {title}',
+                'source': 'ByteDance Seed',
+                'category': 'official',
+                'pub_date': date_str,
+                'source_url': url,
+                'original_title': title,
+                'country': 'cn',
+            })
+        print(f"  ByteDance Seed: {len(items)}건 수집")
+    except Exception as e:
+        print(f"  ByteDance Seed 수집 실패: {e}")
+    return items
+
+
+
+# ============================================
+# GPT 큐레이팅 + 번역 배치
+# ============================================
+def curate_and_translate(max_pick=10):
+    """미번역 해외 뉴스를 GPT로 큐레이팅 후 번역"""
+    import openai
+    client = openai.OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
+
+    # 1. 미번역 항목 조회 (title == original_title이고 country != kr)
+    print("  미번역 항목 조회 중...")
+    try:
+        sql = "SELECT id, title, description, original_title FROM news WHERE country != 'kr' AND title = original_title ORDER BY created_at DESC LIMIT 50"
+        r = subprocess.run(
+            ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--json', '--command', sql],
+            capture_output=True, text=True, cwd=PROJECT_DIR, timeout=30)
+        if r.returncode != 0:
+            print(f"  DB 조회 실패: {r.stderr[:200]}")
+            return
+        data = json.loads(r.stdout)
+        rows = data[0]['results'] if data and data[0].get('results') else []
+    except Exception as e:
+        print(f"  DB 조회 에러: {e}")
+        return
+
+    if not rows:
+        print("  번역할 항목 없음")
+        return
+
+    print(f"  미번역 항목: {len(rows)}건")
+
+    # 2. GPT 큐레이팅 - 제목 목록 보내서 상위 N건 선택
+    title_list = ""
+    for i, row in enumerate(rows):
+        title_list += f"{i+1}. [ID:{row['id']}] {row['title']}\n"
+
+    print(f"  GPT 큐레이팅 중 (상위 {max_pick}건 선별)...")
+    try:
+        resp = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": f"""You are a Korean AI news curator for aikorea24.kr.
+From the following list of AI news titles, select the top {max_pick} most valuable items for Korean AI news readers.
+
+Criteria for HIGH value:
+- New AI model launches (GPT, Gemini, Claude, Qwen, DeepSeek etc.)
+- Major investment/acquisition/partnership
+- AI regulation/policy changes
+- Security incidents or controversies
+- Open-source releases
+- Korea-related AI news
+- Breakthrough research
+
+Criteria for LOW value (exclude):
+- Event/conference promotions
+- Gaming/entertainment gossip
+- Country-specific local news with no global impact
+- Duplicate topics
+
+Return ONLY a JSON array of the selected ID numbers. Example: [42, 15, 78, 3]
+No explanation, no markdown."""},
+                {"role": "user", "content": title_list}
+            ],
+            temperature=0.2,
+            max_tokens=200
+        )
+        selected_ids = json.loads(resp.choices[0].message.content.strip())
+        print(f"  선별된 항목: {len(selected_ids)}건 - IDs: {selected_ids}")
+    except Exception as e:
+        print(f"  큐레이팅 실패: {e}")
+        return
+
+    # 3. 선별된 항목만 번역
+    selected_rows = [r for r in rows if r['id'] in selected_ids]
+    translated = 0
+    sql_updates = []
+
+    for row in selected_rows:
+        try:
+            resp = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a Korean tech news translator. Translate the following English AI/tech news into natural Korean. Return ONLY a JSON object with keys \"title\" and \"description\". No markdown, no explanation."},
+                    {"role": "user", "content": f"Title: {row['title']}\nDescription: {row['description'][:300]}"}
+                ],
+                temperature=0.3,
+                max_tokens=500
+            )
+            result = json.loads(resp.choices[0].message.content.strip())
+            kr_title = result.get('title', row['title']).replace("'", "''")
+            kr_desc = result.get('description', row['description']).replace("'", "''")
+            sql_updates.append(f"UPDATE news SET title='{kr_title}', description='{kr_desc}' WHERE id={row['id']};")
+            translated += 1
+            print(f"  번역 {translated}/{len(selected_rows)}: {kr_title[:40]}...")
+        except Exception as e:
+            print(f"  번역 실패 (ID:{row['id']}): {e}")
+
+    # 4. DB 업데이트
+    if sql_updates:
+        sql_path = os.path.join(PROJECT_DIR, 'api_test', '_translate_update.sql')
+        with open(sql_path, 'w') as f:
+            f.write('\n'.join(sql_updates))
+        try:
+            r = subprocess.run(
+                ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--file', sql_path],
+                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=60)
+            os.remove(sql_path)
+            if r.returncode == 0:
+                print(f"  DB 업데이트 완료: {translated}건 번역 저장")
+            else:
+                print(f"  DB 업데이트 실패: {r.stderr[:200]}")
+        except Exception as e:
+            print(f"  DB 업데이트 에러: {e}")
+    else:
+        print("  번역된 항목 없음")
+
+
+def dedup_similar(articles):
+    """동일 주제 다른 언론사 기사 제거"""
+    seen = []
+    result = []
+    for a in articles:
+        normalized = re.sub(r'[^가-힣a-zA-Z0-9]', '', a['title'])
+        is_dup = False
+        for s in seen:
+            shorter = min(len(normalized), len(s))
+            if shorter == 0:
+                continue
+            check_len = max(int(shorter * 0.7), 5)
+            if normalized[:check_len] == s[:check_len]:
+                is_dup = True
+                break
+        if not is_dup:
+            seen.append(normalized)
+            result.append(a)
+    removed = len(articles) - len(result)
+    if removed > 0:
+        print(f"  유사 중복 제거: {removed}건")
+    return result
+
+
 def save_to_d1(articles):
     existing = get_existing()
     sql_lines = []
@@ -524,7 +869,10 @@ def save_to_d1(articles):
         s = a['source'].replace("'", "''")
         c = a['category']
         p = a.get('pub_date', datetime.now().strftime('%Y-%m-%d'))
-        sql_lines.append(f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date) VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}');")
+        su = a.get('source_url', '').replace("'", "''")[:500]
+        ot = a.get('original_title', '').replace("'", "''")[:200]
+        co = a.get('country', 'kr').replace("'", "''")
+        sql_lines.append(f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date, source_url, original_title, country) VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}', '{su}', '{ot}', '{co}');")
     if not sql_lines:
         print("  저장할 신규 항목 없음")
         return 0, skipped
@@ -618,52 +966,70 @@ def fetch_gov_docs():
 
 # ===== 메인 =====
 def main():
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--source', choices=['kr', 'global', 'translate', 'all'], default='all')
+    args = parser.parse_args()
+
     print('=' * 60)
-    print(f"aikorea24 뉴스 수집 v3.0 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"aikorea24 뉴스 수집 v2.0 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"소스: {args.source}")
     print('=' * 60)
     all_items = []
 
-    print('\n[1] 과기부 사업공고')
-    all_items.extend(fetch_msit_announce())
+    if args.source in ('global', 'all'):
+        print('\n[G1] 해외 AI 뉴스 (TechCrunch, MIT, SCMP)')
+        all_items.extend(fetch_global_news())
 
-    print('\n[2] 과기부 보도자료')
-    all_items.extend(fetch_msit_press())
+    if args.source not in ('global', 'translate'):
+        # 기존 국내 수집 (kr 또는 all)
+        print('\n[1] 과기부 사업공고')
+        all_items.extend(fetch_msit_announce())
 
-    print('\n[3] 정부24 혜택')
-    all_items.extend(fetch_gov_benefits())
+        print('\n[2] 과기부 보도자료')
+        all_items.extend(fetch_msit_press())
 
-    print('\n[4] 네이버 뉴스')
-    for q in QUERIES:
-        r = fetch_naver(q)
-        all_items.extend(r)
-        print(f"  '{q}': {len(r)}건")
+        print('\n[3] 정부24 혜택')
+        all_items.extend(fetch_gov_benefits())
 
-    print('\n[5] RSS')
-    for url, name in RSS_FEEDS:
-        r = fetch_rss(url, name)
-        all_items.extend(r)
-        print(f"  {name}: {len(r)}건")
+        print('\n[4] 네이버 뉴스')
+        for q in QUERIES:
+            r = fetch_naver(q)
+            all_items.extend(r)
+            print(f"  '{q}': {len(r)}건")
 
-    print('\n[6] 정부 AI 정책 뉴스')
-    all_items.extend(fetch_naver_policy())
+        print('\n[5] RSS')
+        for url, name in RSS_FEEDS:
+            r = fetch_rss(url, name)
+            all_items.extend(r)
+            print(f"  {name}: {len(r)}건")
 
-    print('\n[7] 행안부 보도자료')
-    all_items.extend(fetch_mois_press())
+        print('\n[6] 정부 AI 정책 뉴스')
+        all_items.extend(fetch_naver_policy())
 
-    print('\n[8] 모두의 창업 프로젝트 뉴스')
-    all_items.extend(fetch_startup_news())
+        print('\n[7] 행안부 보도자료')
+        all_items.extend(fetch_mois_press())
 
-    print('\n[9] AI 복지/접근성 뉴스')
-    all_items.extend(fetch_welfare_news())
+        print('\n[8] 모두의 창업 프로젝트 뉴스')
+        all_items.extend(fetch_startup_news())
 
-    print('\n[10] 정부 공문서')
-    all_items.extend(fetch_gov_docs())
+        print('\n[9] AI 복지/접근성 뉴스')
+        all_items.extend(fetch_welfare_news())
 
-    print("\n[11] 기업마당 소상공인 AI 지원사업")
-    all_items.extend(fetch_bizinfo_grants())
+        print('\n[10] 정부 공문서')
+        all_items.extend(fetch_gov_docs())
 
-    print('\n[12] AI 노인복지 뉴스')
-    all_items.extend(fetch_senior_news())
+        print("\n[11] 기업마당 소상공인 AI 지원사업")
+        all_items.extend(fetch_bizinfo_grants())
+
+        print('\n[12] AI 노인복지 뉴스')
+        all_items.extend(fetch_senior_news())
+
+    if args.source == 'translate':
+        print('\n[T1] GPT 큐레이팅 + 번역')
+        curate_and_translate(max_pick=10)
+        print('=' * 60)
+        return
 
     print(f"\n총 수집: {len(all_items)}건")
     print('\nD1 저장 중...')
@@ -671,8 +1037,9 @@ def main():
     print(f"  신규: {saved}건, 중복 스킵: {skipped}건")
     print('=' * 60)
 
-    # [13] 노인복지 브리핑 자동 생성
-    try:
+    # [13] 노인복지 브리핑 자동 생성 (kr일 때만)
+    if args.source in ('kr', 'all'):
+      try:
         import subprocess as _sp
         print('\n[13] 노인복지 브리핑 생성...')
         _r = _sp.run(['python3', os.path.join(PROJECT_DIR, 'api_test', 'senior_briefing.py')],
@@ -681,7 +1048,7 @@ def main():
             print('  브리핑 생성 완료')
         else:
             print(f'  브리핑 생성 실패: {_r.stderr[:200]}')
-    except Exception as _e:
+      except Exception as _e:
         print(f'  브리핑 생성 에러: {_e}')
 
 if __name__ == '__main__':

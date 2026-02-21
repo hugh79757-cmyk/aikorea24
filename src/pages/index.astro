@@ -5,6 +5,7 @@ import HeroSection from '../components/home/HeroSection.astro';
 import PolicyBriefing from '../components/home/PolicyBriefing.astro';
 import WelfareSection from '../components/home/WelfareSection.astro';
 import LatestNews from '../components/home/LatestNews.astro';
+import GlobalNews from '../components/home/GlobalNews.astro';
 import CourseSection from '../components/home/CourseSection.astro';
 import LatestBlog from '../components/home/LatestBlog.astro';
 import CtaSection from '../components/home/CtaSection.astro';
@@ -21,6 +22,7 @@ const coursePosts = allPosts.filter(p => p.data.category === 'AI 강좌').slice(
 let latestNews: any[] = [];
 let policyNews: any[] = [];
 let welfareNews: any[] = [];
+let globalNews: any[] = [];
 
 try {
   const runtime = (Astro.locals as any).runtime;
@@ -36,6 +38,10 @@ try {
 
     welfareNews = (await db.prepare(
       `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' ORDER BY created_at DESC LIMIT 3`
+    ).all()).results || [];
+
+    globalNews = (await db.prepare(
+      `SELECT id, title, link, description, source, pub_date, original_title, country FROM news WHERE category = 'global' AND title != original_title ORDER BY created_at DESC LIMIT 3`
     ).all()).results || [];
   }
 } catch (e) {
@@ -57,6 +63,7 @@ try {
     <PolicyBriefing items={policyNews} />
     <WelfareSection items={welfareNews} />
     <LatestNews items={latestNews} />
+    <GlobalNews items={globalNews} />
     <CourseSection posts={coursePosts} />
     <LatestBlog posts={recentPosts} />
     <CtaSection />

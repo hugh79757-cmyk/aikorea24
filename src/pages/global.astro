@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+let globalList: any[] = [];
+try {
+  const runtime = (Astro.locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (db) {
+    const result = await db.prepare(
+      `SELECT id, title, link, description, source, category, pub_date, original_title, country
+       FROM news WHERE category = 'global' AND title != original_title
+       ORDER BY created_at DESC LIMIT 50`
+    ).all();
+    globalList = result.results || [];
+  }
+} catch (e) {
+  console.error('Global news fetch error:', e);
+}
+
+function getSourceColor(source: string): string {
+  const map: Record<string, string> = {
+    'TechCrunch AI': 'text-green-700 dark:text-green-400',
+    'MIT Tech Review': 'text-purple-700 dark:text-purple-400',
+    'SCMP China Tech': 'text-red-700 dark:text-red-400',
+    'Hacker News': 'text-orange-700 dark:text-orange-400',
+  };
+  return map[source] || 'text-gray-600 dark:text-gray-400';
+}
+
+function getFlag(country: string): string {
+  const map: Record<string, string> = { 'us': '🇺🇸', 'cn': '🇨🇳' };
+  return map[country] || '🌐';
+}
+---
+<Layout title="글로벌 AI 뉴스 - AI코리아24" description="미국, 중국 등 해외 AI 뉴스를 한국어로 번역하여 제공합니다.">
+  <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen transition-colors">
+    <div class="max-w-4xl mx-auto px-4 py-12">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-3xl">🌍</span>
+        <h1 class="text-3xl font-bold">글로벌 AI 뉴스</h1>
+      </div>
+      <p class="text-gray-500 mb-8">TechCrunch, MIT Technology Review, SCMP, Hacker News 등 해외 주요 AI 매체의 뉴스를 한국어로 번역하여 제공합니다.</p>
+      {globalList.length === 0 ? (
+        <p class="text-gray-500">아직 수집된 글로벌 뉴스가 없습니다.</p>
+      ) : (
+        <div class="space-y-4">
+          {globalList.map((n: any) => (
+            <a href={n.link} target="_blank" rel="noopener" class="block bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all">
+              <div class="flex items-center gap-2 mb-2">
+                <span class={`text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/10 ${getSourceColor(n.source)}`}>{getFlag(n.country)} {n.source}</span>
+                <span class="text-xs text-gray-600">{n.pub_date}</span>
+              </div>
+              <h2 class="font-medium text-gray-900 dark:text-white mb-1">{n.title}</h2>
+              <p class="text-xs text-gray-400 mb-1">{n.original_title}</p>
+              <p class="text-sm text-gray-500 line-clamp-2">{n.description}</p>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</Layout>
