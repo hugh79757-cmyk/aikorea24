@@ -209,13 +209,13 @@ def translate_to_korean(title, description=""):
         return title, description
 
 def batch_translate(articles):
-    """해외 기사 배치 번역 (10건씩 묶어서 1회 API 호출)"""
+    """해외 기사 병렬 배치 번역 (10건/배치, 5스레드 동시)"""
     if not OPENAI_KEY:
         print("  OPENAI_API_KEY 없음 - 번역 건너뜀")
         return articles
+    from concurrent.futures import ThreadPoolExecutor, as_completed
     import openai
     client = openai.OpenAI(api_key=OPENAI_KEY)
-    # 번역 대상 추출
     targets = []
     for i, a in enumerate(articles):
         if a.get("country", "kr") == "kr":
@@ -226,11 +226,10 @@ def batch_translate(articles):
     if not targets:
         print("  번역할 항목 없음")
         return articles
-    print(f"  번역 대상: {len(targets)}건 (10건씩 배치)")
     BATCH = 10
-    translated = 0
-    for b in range(0, len(targets), BATCH):
-        batch_idx = targets[b:b+BATCH]
+    batches = [targets[b:b+BATCH] for b in range(0, len(targets), BATCH)]
+    print(f"  번역 대상: {len(targets)}건 → {len(batches)}배치 (5스레드 병렬)")
+    def translate_batch(batch_idx, batch_num):
         titles = [articles[i]["title"] for i in batch_idx]
         numbered = chr(10).join(f"{j+1}. {t}" for j, t in enumerate(titles))
         try:
@@ -250,20 +249,24 @@ def batch_translate(articles):
                 cleaned = line.lstrip("0123456789").lstrip(".").lstrip(")").strip()
                 if cleaned:
                     kr_titles.append(cleaned)
+            return batch_num, batch_idx, kr_titles
+        except Exception as e:
+            print(f"    배치 {batch_num} 실패: {e}")
+            return batch_num, batch_idx, []
+    translated = 0
+    with ThreadPoolExecutor(max_workers=5) as pool:
+        futures = [pool.submit(translate_batch, b, i+1) for i, b in enumerate(batches)]
+        for future in as_completed(futures):
+            batch_num, batch_idx, kr_titles = future.result()
             for k, idx in enumerate(batch_idx):
                 articles[idx]["original_title"] = articles[idx]["title"]
                 if k < len(kr_titles):
                     articles[idx]["title"] = kr_titles[k]
                 translated += 1
-            print(f"    배치 {b//BATCH+1}: {len(batch_idx)}건 번역")
-        except Exception as e:
-            print(f"    배치 {b//BATCH+1} 실패: {e}")
-            for idx in batch_idx:
-                articles[idx]["original_title"] = articles[idx]["title"]
-    print(f"  번역 완료: {translated}건 ({(len(targets)-1)//BATCH+1}회 API 호출)")
+            print(f"    배치 {batch_num}: {len(batch_idx)}건 완료")
+    print(f"  번역 완료: {translated}건 ({len(batches)}배치 병렬처리)")
     return articles
 
-# 해외 뉴스 수집 (목표: 전체의 50%)
 # ============================================
 GLOBAL_RSS_FEEDS = [
     # 미국 주요
