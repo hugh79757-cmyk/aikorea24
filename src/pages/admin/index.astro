@@ -1,110 +1,73 @@
 ---
-const runtime = (Astro.locals as any).runtime;
-const ADMIN_PASS = runtime?.env?.ADMIN_PASS || 'aikorea24admin';
+export const prerender = false;
+import Layout from '../../layouts/Layout.astro';
+
 const url = new URL(Astro.request.url);
-const inputPass = url.searchParams.get('key');
-if (inputPass !== ADMIN_PASS) {
+const key = url.searchParams.get('key');
+if (key !== 'aikorea24admin') {
   return new Response('Unauthorized', { status: 401 });
 }
 ---
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>AI코리아24 관리자</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,'Pretendard',sans-serif; background:#0f172a; color:#e2e8f0; }
-.wrap { max-width:880px; margin:0 auto; padding:20px 16px 120px; }
-h1 { font-size:1.3rem; }
-.sub { color:#94a3b8; font-size:.88rem; margin-bottom:20px; }
-.intro-label { color:#60a5fa; font-weight:600; font-size:.9rem; margin-bottom:6px; }
-#introText {
-  width:100%; height:80px; padding:12px; border-radius:8px; margin-bottom:20px;
-  background:#1e293b; border:1px solid #334155; color:#e2e8f0; font-size:.95rem;
-  resize:vertical; line-height:1.6;
-}
-.fbar { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
-.fbtn { padding:6px 14px; border-radius:6px; border:1px solid #334155; background:#1e293b; color:#94a3b8; cursor:pointer; font-size:.85rem; }
-.fbtn.on { background:#2563eb; color:#fff; border-color:#2563eb; }
-
-.card {
-  border:2px solid #334155; border-radius:10px; background:#1e293b;
-  margin-bottom:10px; overflow:hidden; transition:border-color .15s;
-}
-.card.sel { border-color:#3b82f6; }
-.card-head {
-  display:flex; gap:12px; padding:14px 16px; cursor:pointer; align-items:flex-start;
-}
-.ck {
-  width:22px; height:22px; border:2px solid #475569; border-radius:5px;
-  display:flex; align-items:center; justify-content:center; flex-shrink:0;
-  font-size:14px; color:transparent; transition:all .15s; margin-top:1px;
-}
-.card.sel .ck { background:#3b82f6; border-color:#3b82f6; color:#fff; }
-.card-info { flex:1; min-width:0; }
-.card-title { font-size:1rem; font-weight:600; line-height:1.4; margin-bottom:3px; }
-.card-meta { font-size:.78rem; color:#64748b; }
-.card-desc { font-size:.84rem; color:#94a3b8; line-height:1.5; margin-top:4px; }
-.badge { display:inline-block; padding:1px 7px; border-radius:4px; font-size:.72rem; margin-left:6px; vertical-align:middle; }
-.b-kr { background:#166534; color:#86efac; }
-.b-gl { background:#1e40af; color:#93c5fd; }
-.b-po { background:#7c2d12; color:#fdba74; }
-.b-be { background:#581c87; color:#d8b4fe; }
-
-.cmt-box { padding:0 16px 14px 16px; display:none; }
-.card.sel .cmt-box { display:block; }
-.cmt-box label { font-size:.8rem; color:#60a5fa; display:block; margin-bottom:4px; }
-.cmt-box textarea {
-  width:100%; height:200px; padding:10px; border-radius:8px; resize:both;
-  background:#0f172a; border:1px solid #334155; color:#e2e8f0;
-  font-size:.9rem; line-height:1.5;
-}
-.cmt-box textarea::placeholder { color:#475569; }
-
-.bot {
-  position:fixed; bottom:0; left:0; right:0; z-index:50;
-  background:rgba(15,23,42,.95); backdrop-filter:blur(10px);
-  border-top:1px solid #334155; padding:14px 20px;
-  display:flex; justify-content:space-between; align-items:center;
-}
-.bot .cnt { color:#60a5fa; font-weight:600; }
-.bot .pub {
-  padding:10px 28px; border-radius:8px; border:none;
-  background:#2563eb; color:#fff; font-weight:600; font-size:.95rem; cursor:pointer;
-}
-.bot .pub:disabled { background:#334155; color:#64748b; cursor:not-allowed; }
-.bot .pub:hover:not(:disabled) { background:#1d4ed8; }
-#msg { padding:12px; border-radius:8px; margin-bottom:14px; display:none; }
-#msg.ok { display:block; background:#166534; color:#86efac; }
-#msg.err { display:block; background:#7f1d1d; color:#fca5a5; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.date{color:#94a3b8;font-size:.85rem;margin-bottom:12px}
+.status{font-size:.85rem;margin-bottom:12px;color:#94a3b8}
+.intro-label{color:#3b82f6;font-size:.9rem;font-weight:600;margin-bottom:6px}
+textarea.intro{width:100%;height:80px;background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;resize:vertical;margin-bottom:14px}
+.fbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fbtn{background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem}
+.fbtn.on{background:#3b82f6;color:#fff;border-color:#3b82f6}
+.card{background:#1e293b;border:2px solid #334155;border-radius:8px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.card.sel{border-color:#3b82f6}
+.card h3{font-size:.95rem;margin-bottom:4px}
+.card .meta{font-size:.75rem;color:#64748b;margin-bottom:6px}
+.card .desc{font-size:.82rem;color:#94a3b8;line-height:1.4}
+.card .ck{display:inline-block;width:20px;height:20px;border:2px solid #475569;border-radius:4px;text-align:center;line-height:18px;margin-right:8px;font-size:14px;vertical-align:middle}
+.card.sel .ck{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.card .cmt{margin-top:8px;display:none}
+.card.sel .cmt{display:block}
+.card .cmt textarea{width:100%;height:40px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;padding:6px;font-size:.8rem}
+.bot{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100}
+.bot .cnt{color:#3b82f6;font-weight:600}
+.bot .pub{background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600}
+.bot .pub:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+.bot .del{background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem;display:none}
+.msg{margin:0 16px;font-size:.85rem}
+.msg.ok{color:#4ade80}
+.msg.err{color:#f87171}
+#list{padding-bottom:80px}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>AI코리아24 브리핑 작성</h1>
-  <div class="sub" id="dinfo"></div>
-  <div id="msg"></div>
-    <div id="curStatus" style="margin-top:8px;font-size:.85rem;color:#94a3b8"></div>
-  <div class="intro-label">오늘의 인사이트 (브리핑 서두)</div>
-  <textarea id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로..."></textarea>
-  <div class="fbar" id="fbar"></div>
-  <div class="fbar" id="dbar">
-    <button class="fbtn" data-d="1">오늘</button>
-    <button class="fbtn on" data-d="3">3일</button>
-    <button class="fbtn" data-d="7">7일</button>
-    <button class="fbtn" data-d="14">14일</button>
-  </div>
-  <div id="list"></div>
+<h1>AI코리아24 브리핑 작성</h1>
+<div class="date" id="dinfo"></div>
+<div class="status" id="curStatus">확인 중...</div>
+<div class="intro-label">오늘의 인사이트 (브리핑 서두)</div>
+<textarea class="intro" id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로..."></textarea>
+<div class="fbar" id="fbar"></div>
+<div class="fbar" id="dbar">
+  <button class="fbtn" data-d="1">오늘</button>
+  <button class="fbtn on" data-d="3">3일</button>
+  <button class="fbtn" data-d="7">7일</button>
+  <button class="fbtn" data-d="14">14일</button>
 </div>
+<div id="list"></div>
 <div class="bot">
   <span class="cnt" id="cnt">0건 선택</span>
-  <button class="del" id="delbtn" style="display:none;background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">삭제</button>
+  <button class="del" id="delbtn">삭제</button>
+  <span class="msg" id="msg"></span>
   <button class="pub" id="pub" disabled>브리핑 발행</button>
 </div>
 
 <script is:inline>
-document.addEventListener("DOMContentLoaded",function(){
+document.addEventListener("DOMContentLoaded", function(){
   var today = new Date().toISOString().split('T')[0];
   document.getElementById('dinfo').textContent = today + ' 브리핑';
 
@@ -113,183 +76,204 @@ document.addEventListener("DOMContentLoaded",function(){
   var cmts = {};
   var days = 3;
 
-  document.getElementById('dbar').addEventListener('click', function(e){
-    var b = e.target.closest('.fbtn');
-    if(!b) return;
-    document.getElementById('dbar').querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
-    days = parseInt(b.getAttribute('data-d'));
-    var curFilter = document.querySelector('#fbar .fbtn.on');
-    load(curFilter ? curFilter.getAttribute('data-f') : 'all');
-  });
-
+  // === 필터 바 ===
   var ftrs = [
     {k:'all',l:'전체'},{k:'kr',l:'국내'},{k:'global',l:'해외'},
     {k:'policy',l:'정책'},{k:'benefit',l:'혜택'},
     {k:'senior',l:'시니어'},{k:'startup',l:'스타트업'},{k:'grant',l:'지원사업'}
   ];
   var fbar = document.getElementById('fbar');
-  ftrs.forEach(function(f,i){
-    var b = document.createElement('button');
-    b.className = 'fbtn' + (i===0?' on':'');
-    b.textContent = f.l;
-    b.setAttribute('data-f', f.k);
-    fbar.appendChild(b);
-  });
-  fbar.addEventListener('click', function(e){
-    var b = e.target.closest('.fbtn');
-    if(!b) return;
-    fbar.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
-    load(b.getAttribute('data-f'));
-  });
-
-  function badge(n){
-    if(n.country && n.country!=='kr') return '<span class="badge b-gl">해외</span>';
-    if(n.category==='policy') return '<span class="badge b-po">정책</span>';
-    if(n.category==='benefit') return '<span class="badge b-be">혜택</span>';
-    if(n.category==='senior') return '<span class="badge" style="background:#854d0e;color:#fde68a">시니어</span>';
-    if(n.category==='startup') return '<span class="badge" style="background:#065f46;color:#6ee7b7">스타트업</span>';
-    if(n.category==='grant') return '<span class="badge" style="background:#1e3a5f;color:#7dd3fc">지원사업</span>';
-    return '<span class="badge b-kr">국내</span>';
+  if(fbar){
+    ftrs.forEach(function(f,i){
+      var b = document.createElement('button');
+      b.className = 'fbtn' + (i===0?' on':'');
+      b.textContent = f.l;
+      b.setAttribute('data-f', f.k);
+      fbar.appendChild(b);
+    });
+    fbar.addEventListener('click', function(e){
+      var b = e.target.closest('.fbtn');
+      if(!b) return;
+      fbar.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      load(b.getAttribute('data-f'));
+    });
   }
 
+  // === 날짜 바 ===
+  var dbar = document.getElementById('dbar');
+  if(dbar){
+    dbar.addEventListener('click', function(e){
+      var b = e.target.closest('.fbtn');
+      if(!b) return;
+      dbar.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
+      b.classList.add('on');
+      days = parseInt(b.getAttribute('data-d'));
+      var curFilter = document.querySelector('#fbar .fbtn.on');
+      load(curFilter ? curFilter.getAttribute('data-f') : 'all');
+    });
+  }
+
+  // === 그리기 ===
   function draw(){
-    var el = document.getElementById('list');
-    if(!allNews.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#64748b">뉴스 없음</div>';return;}
-    var h = '';
+    var list = document.getElementById('list');
+    if(!list) return;
+    var html = '';
     for(var i=0;i<allNews.length;i++){
       var n = allNews[i];
       var s = sel[n.id] ? ' sel' : '';
-      var c = cmts[n.id] || '';
-      var d = n.description ? n.description.substring(0,150) : '';
-      var cardBorder = sel[n.id] ? 'border-color:#3b82f6' : '';
-      h += '<div class="card'+s+'" data-nid="'+n.id+'" style="'+cardBorder+'">';
-      h += '<div class="card-head">';
-      var ckStyle = sel[n.id] ? 'background:#3b82f6;border-color:#3b82f6;color:#fff' : 'color:transparent';
-      h += '<div class="ck" style="'+ckStyle+'">&#10003;</div>';
-      h += '<div class="card-info">';
-      h += '<div class="card-title">'+n.title+' '+badge(n)+'</div>';
-      h += '<div class="card-meta">'+(n.source||'')+' &middot; '+(n.pub_date||'')+'</div>';
-      h += '<div class="card-desc">'+d+'</div>';
-      h += '</div></div>';
-      var cmtVis = sel[n.id] ? 'display:block' : 'display:none';
-      h += '<div class="cmt-box" style="'+cmtVis+'"><label>나의 코멘트</label>';
-      h += '<textarea data-cid="'+n.id+'" placeholder="이 뉴스가 왜 중요한지...">'+c+'</textarea>';
-      h += '</div></div>';
+      var badge = (n.country && n.country !== 'kr') ? '해외' : '국내';
+      var cat = n.category ? ' ' + n.category : '';
+      html += '<div class="card'+s+'" data-nid="'+n.id+'">';
+      html += '<div><span class="ck">'+(sel[n.id]?'✓':'')+'</span><h3 style="display:inline">'+n.title+'</h3> <small>'+badge+cat+'</small></div>';
+      html += '<div class="meta">'+(n.source||'')+' · '+(n.pub_date||n.created_at||'').substring(0,10)+'</div>';
+      html += '<div class="desc">'+(n.description||'').substring(0,120)+'...</div>';
+      html += '<div class="cmt"><input type="text" placeholder="이 뉴스가 왜 중요한지..." data-cid="'+n.id+'" value="'+(cmts[n.id]||'')+'" style="width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;padding:6px;font-size:.8rem"/>';
+      html += '<div style="font-size:.75rem;color:#64748b;margin-top:2px">나의 코멘트</div></div>';
+      html += '</div>';
     }
-    el.innerHTML = h;
+    list.innerHTML = html;
   }
-
-  document.getElementById('list').addEventListener('click', function(e){
-    var head = e.target.closest('.card-head');
-    if(!head) return;
-    var card = head.closest('.card');
-    if(!card) return;
-    var nid = parseInt(card.getAttribute('data-nid'));
-    if(sel[nid]) delete sel[nid];
-    else sel[nid] = true;
-    draw();
-    upd();
-  });
-
-  document.getElementById('list').addEventListener('input', function(e){
-    if(e.target.tagName==='TEXTAREA' && e.target.getAttribute('data-cid')){
-      cmts[parseInt(e.target.getAttribute('data-cid'))] = e.target.value;
-    }
-  });
 
   function upd(){
-    var n = Object.keys(sel).length;
-    document.getElementById('cnt').textContent = n+'건 선택';
-    document.getElementById('pub').disabled = n===0;
+    var n = 0;
+    for(var k in sel) if(sel[k]) n++;
+    var cnt = document.getElementById('cnt');
+    var pub = document.getElementById('pub');
+    if(cnt) cnt.textContent = n + '건 선택';
+    if(pub) pub.disabled = (n === 0);
   }
 
+  // === 카드 클릭 (선택/해제) ===
+  var list = document.getElementById('list');
+  if(list){
+    list.addEventListener('click', function(e){
+      var card = e.target.closest('.card');
+      if(!card) return;
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+      var nid = parseInt(card.getAttribute('data-nid'));
+      if(sel[nid]) delete sel[nid];
+      else sel[nid] = true;
+      draw();
+      upd();
+    });
+    list.addEventListener('input', function(e){
+      if(e.target.getAttribute('data-cid')){
+        cmts[parseInt(e.target.getAttribute('data-cid'))] = e.target.value;
+      }
+    });
+  }
+
+  // === 뉴스 로드 ===
   function load(filter){
     fetch('/api/briefing/news/?filter='+filter+'&days='+days+'&limit=100')
       .then(function(r){return r.json()})
-      .then(function(d){allNews=d;draw();});
+      .then(function(data){
+        allNews = Array.isArray(data) ? data : (data.results || []);
+        draw();
+        upd();
+      })
+      .catch(function(e){
+        console.log('load error:', e);
+      });
   }
 
-  
-  // === 현재 브리핑 상태 확인 ===
+  // === 브리핑 상태 확인 ===
   function checkStatus(){
     fetch('/api/briefing/latest/')
       .then(function(r){return r.json()})
       .then(function(d){
         var st = document.getElementById('curStatus');
-        var db = document.getElementById('delbtn'); if(!st || !db) return;
+        var db = document.getElementById('delbtn');
+        if(!st) return;
         if(d && d.date === today){
-          st.innerHTML = '오늘 브리핑 발행됨: <b>' + (d.items ? d.items.length : 0) + '건</b> (상태: ' + d.status + ')';
+          st.innerHTML = '오늘 브리핑 발행됨: <b>' + (d.items ? d.items.length : 0) + '건</b>';
           st.style.color = '#4ade80';
-          db.style.display = 'inline-block';
+          if(db) db.style.display = 'inline-block';
         } else {
           st.textContent = '오늘 발행된 브리핑 없음';
           st.style.color = '#94a3b8';
-          db.style.display = 'none';
+          if(db) db.style.display = 'none';
         }
       })
-      .catch(function(e){ console.log("checkStatus error:", e); });
+      .catch(function(e){
+        console.log('checkStatus error:', e);
+      });
   }
   checkStatus();
 
-  // === 전체 선택 ===
-  document.getElementById('selall').addEventListener('click', function(){
-    for(var i=0;i<allNews.length;i++) sel[allNews[i].id] = true;
-    draw(); upd();
-  });
+  // === 삭제 버튼 ===
+  var delbtn = document.getElementById('delbtn');
+  if(delbtn){
+    delbtn.addEventListener('click', function(){
+      if(!confirm('오늘 발행된 브리핑을 삭제하시겠습니까?')) return;
+      fetch('/api/briefing/publish/', {
+        method:'DELETE',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({date:today})
+      })
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var msg = document.getElementById('msg');
+        if(msg){
+          if(d.ok){
+            msg.className='msg ok'; msg.textContent='삭제 완료';
+          } else {
+            msg.className='msg err'; msg.textContent='삭제 실패: '+(d.error||'');
+          }
+        }
+        checkStatus();
+      })
+      .catch(function(e){
+        var msg = document.getElementById('msg');
+        if(msg){msg.className='msg err'; msg.textContent='삭제 에러: '+e;}
+      });
+    });
+  }
 
-  // === 선택 해제 ===
-  document.getElementById('desel').addEventListener('click', function(){
-    sel = {};
-    draw(); upd();
-  });
-
-  // === 브리핑 삭제 ===
-  document.getElementById('delbtn').addEventListener('click', function(){
-    if(!confirm('오늘 발행된 브리핑을 삭제하시겠습니까?')) return;
-    fetch('/api/briefing/publish/', {
-      method: 'DELETE',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({date: today})
-    })
-    .then(function(r){return r.json()})
-    .then(function(d){
-      var msg = document.getElementById('msg');
-      if(d.ok){
-        msg.textContent = '브리핑 삭제 완료';
-        msg.style.color = '#4ade80';
-      } else {
-        msg.textContent = '삭제 실패: ' + (d.error||'');
-        msg.style.color = '#f87171';
+  // === 발행 버튼 ===
+  var pub = document.getElementById('pub');
+  if(pub){
+    pub.addEventListener('click', function(){
+      var intro = document.getElementById('introText');
+      var introVal = intro ? intro.value : '';
+      var items = [];
+      for(var i=0;i<allNews.length;i++){
+        var n = allNews[i];
+        if(sel[n.id]) items.push({news_id:n.id, comment:cmts[n.id]||''});
       }
-      checkStatus();
-    })
-    .catch(function(e){
-      document.getElementById('msg').textContent = '삭제 에러: ' + e;
-    });
-  });
+      if(items.length === 0){alert('뉴스를 선택해주세요'); return;}
 
-  document.getElementById('pub').addEventListener('click', function(){
-    var intro = document.getElementById('introText').value;
-    var items = [];
-    for(var i=0;i<allNews.length;i++){
-      var n = allNews[i];
-      if(sel[n.id]) items.push({news_id:n.id, comment:cmts[n.id]||''});
-    }
-    var msg = document.getElementById('msg');
-    fetch('/api/briefing/publish/',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({date:today,intro:intro,items:items})
-    }).then(function(r){return r.json()}).then(function(d){
-      if(d.ok){msg.className='ok';msg.textContent='발행 완료! '+d.items_count+'건';msg.style.display='block';}
-      else{msg.className='err';msg.textContent='실패: '+(d.error||'');msg.style.display='block';}
-    }).catch(function(e){
-      msg.className='err';msg.textContent='에러: '+e.message;msg.style.display='block';
-    });
-  });
+      pub.disabled = true;
+      pub.textContent = '발행 중...';
 
+      var msg = document.getElementById('msg');
+      fetch('/api/briefing/publish/', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({date:today, intro:introVal, items:items})
+      })
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d.ok){
+          if(msg){msg.className='msg ok'; msg.textContent='발행 완료! '+d.items_count+'건';}
+          pub.textContent = '발행 완료!';
+          checkStatus();
+        } else {
+          if(msg){msg.className='msg err'; msg.textContent='실패: '+(d.error||'');}
+          pub.disabled = false;
+          pub.textContent = '브리핑 발행';
+        }
+      })
+      .catch(function(e){
+        if(msg){msg.className='msg err'; msg.textContent='에러: '+e.message;}
+        pub.disabled = false;
+        pub.textContent = '브리핑 발행';
+      });
+    });
+  }
+
+  // === 초기 로드 ===
   load('all');
 });
 </script>
