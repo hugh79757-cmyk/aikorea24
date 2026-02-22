@@ -8,14 +8,15 @@ export const GET: APIRoute = async ({ url, locals }) => {
   const filter = url.searchParams.get('filter') || 'all';
   const limit = Math.min(parseInt(url.searchParams.get('limit') || '100'), 200);
 
-  let where = '1=1';
-  if (filter === 'kr') where = "country = 'kr'";
-  else if (filter === 'global') where = "country != 'kr' AND title != original_title";
-  else if (filter === 'policy') where = "category = 'policy'";
-  else if (filter === 'benefit') where = "category = 'benefit'";
-  else if (filter === 'senior') where = "category = 'senior'";
-  else if (filter === 'startup') where = "category = 'startup'";
-  else if (filter === 'grant') where = "category = 'grant'";
+  const days = Math.min(parseInt(url.searchParams.get('days') || '3'), 30);
+  let where = \`created_at >= datetime('now', '-\${days} days')\`;
+  if (filter === 'kr') where += " AND country = 'kr'";
+  else if (filter === 'global') where += " AND country != 'kr' AND title != original_title";
+  else if (filter === 'policy') where += " AND category = 'policy'";
+  else if (filter === 'benefit') where += " AND category = 'benefit'";
+  else if (filter === 'senior') where += " AND category = 'senior'";
+  else if (filter === 'startup') where += " AND category = 'startup'";
+  else if (filter === 'grant') where += " AND category = 'grant'";
 
   const { results } = await db.prepare(
     `SELECT id, title, link, description, source, category, country, pub_date, original_title, created_at
