@@ -107,7 +107,8 @@ h1 { font-size:1.3rem; }
 
   var ftrs = [
     {k:'all',l:'전체'},{k:'kr',l:'국내'},{k:'global',l:'해외'},
-    {k:'policy',l:'정책'},{k:'benefit',l:'혜택'}
+    {k:'policy',l:'정책'},{k:'benefit',l:'혜택'},
+    {k:'senior',l:'시니어'},{k:'startup',l:'스타트업'},{k:'grant',l:'지원사업'}
   ];
   var fbar = document.getElementById('fbar');
   ftrs.forEach(function(f,i){
@@ -129,6 +130,9 @@ h1 { font-size:1.3rem; }
     if(n.country && n.country!=='kr') return '<span class="badge b-gl">해외</span>';
     if(n.category==='policy') return '<span class="badge b-po">정책</span>';
     if(n.category==='benefit') return '<span class="badge b-be">혜택</span>';
+    if(n.category==='senior') return '<span class="badge" style="background:#854d0e;color:#fde68a">시니어</span>';
+    if(n.category==='startup') return '<span class="badge" style="background:#065f46;color:#6ee7b7">스타트업</span>';
+    if(n.category==='grant') return '<span class="badge" style="background:#1e3a5f;color:#7dd3fc">지원사업</span>';
     return '<span class="badge b-kr">국내</span>';
   }
 

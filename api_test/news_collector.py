@@ -191,8 +191,7 @@ def fetch_gov_benefits(limit=50):
         print(f"  정부24 혜택 실패: {e}"); return []
 
 # ===== 4. 네이버 뉴스 =====
-QUERIES = ['인공지능 AI 서비스', 'ChatGPT 활용법', '생성형AI 스타트업',
-    'AI 바우처 지원사업', '딥러닝 기술 트렌드', 'AI 정책 규제']
+QUERIES = ['인공지능 AI 최신', '생성형AI 서비스', 'AI 스타트업 투자']
 
 def fetch_naver(query, display=10):
     encoded = urllib.parse.quote(query)
@@ -644,9 +643,22 @@ def fetch_hackernews_ai(limit=10):
 
 # 해외 소스 목록
 GLOBAL_RSS_FEEDS = [
+    # 미국 주요 매체
     ('https://techcrunch.com/category/artificial-intelligence/feed/', 'TechCrunch AI', 'us'),
     ('https://www.technologyreview.com/topic/artificial-intelligence/feed', 'MIT Tech Review', 'us'),
+    ('https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', 'The Verge AI', 'us'),
+    ('https://arstechnica.com/tag/ai/feed/', 'Ars Technica AI', 'us'),
+    ('https://venturebeat.com/category/ai/feed/', 'VentureBeat AI', 'us'),
+    ('https://feeds.feedburner.com/TheHackersNews', 'The Hacker News', 'us'),
+    # 유럽
+    ('https://www.artificialintelligence-news.com/feed/', 'AI News EU', 'eu'),
+    ('https://www.euronews.com/rss?level=theme&name=ai', 'Euronews AI', 'eu'),
+    # 중국/아시아
     ('https://www.scmp.com/rss/320663/feed', 'SCMP China Tech', 'cn'),
+    ('https://asia.nikkei.com/rss/feed/nar', 'Nikkei Asia', 'jp'),
+    # AI 전문
+    ('https://the-decoder.com/feed/', 'The Decoder', 'us'),
+    ('https://www.marktechpost.com/feed/', 'MarkTechPost', 'us'),
 ]
 
 
@@ -654,10 +666,10 @@ def fetch_global_news():
     """해외 AI 뉴스 전체 수집"""
     all_items = []
     for url, name, country in GLOBAL_RSS_FEEDS:
-        items = fetch_rss_global(url, name, category='global', country=country, limit=7)
+        items = fetch_rss_global(url, name, category='global', country=country, limit=12)
         all_items.extend(items)
     # Hacker News
-    all_items.extend(fetch_hackernews_ai(limit=7))
+    all_items.extend(fetch_hackernews_ai(limit=15))
     return all_items
 
 
@@ -792,22 +804,31 @@ def curate_and_translate(max_pick=50):
 
 
 def dedup_similar(articles):
-    """동일 주제 다른 언론사 기사 제거"""
+    """동일 주제 다른 언론사 기사 제거 (v3.1 강화)"""
     seen = []
     result = []
     for a in articles:
         normalized = re.sub(r'[^가-힣a-zA-Z0-9]', '', a['title'])
+        # 핵심 키워드 추출 (조사/접속사 제거 후 주요 단어)
+        keywords = set(re.findall(r'[가-힣]{2,}|[a-zA-Z]{3,}', a['title']))
         is_dup = False
-        for s in seen:
-            shorter = min(len(normalized), len(s))
+        for s_norm, s_kw in seen:
+            shorter = min(len(normalized), len(s_norm))
             if shorter == 0:
                 continue
-            check_len = max(int(shorter * 0.7), 5)
-            if normalized[:check_len] == s[:check_len]:
+            # 방법1: 앞부분 일치 (기존)
+            check_len = max(int(shorter * 0.6), 5)
+            if normalized[:check_len] == s_norm[:check_len]:
                 is_dup = True
                 break
+            # 방법2: 키워드 겹침률 (신규)
+            if keywords and s_kw:
+                overlap = len(keywords & s_kw) / min(len(keywords), len(s_kw))
+                if overlap >= 0.7:
+                    is_dup = True
+                    break
         if not is_dup:
-            seen.append(normalized)
+            seen.append((normalized, keywords))
             result.append(a)
     removed = len(articles) - len(result)
     if removed > 0:
@@ -931,7 +952,7 @@ def main():
     args = parser.parse_args()
 
     print('=' * 60)
-    print(f"aikorea24 뉴스 수집 v2.0 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"aikorea24 뉴스 수집 v3.1 - {datetime.now().strftime('%Y-%m-%d %H:%M')}")
     print(f"소스: {args.source}")
     print('=' * 60)
     all_items = []
@@ -991,6 +1012,9 @@ def main():
         return
 
     print(f"\n총 수집: {len(all_items)}건")
+    print('\n중복 제거 중...')
+    all_items = dedup_similar(all_items)
+    print(f"중복 제거 후: {len(all_items)}건")
     print('\nD1 저장 중...')
     saved, skipped = save_to_d1(all_items)
     print(f"  신규: {saved}건, 중복 스킵: {skipped}건")
