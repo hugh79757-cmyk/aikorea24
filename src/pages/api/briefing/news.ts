@@ -7,8 +7,8 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
   const filter = url.searchParams.get('filter') || 'all';
   const limit = Math.min(parseInt(url.searchParams.get('limit') || '100'), 200);
-
   const days = Math.min(parseInt(url.searchParams.get('days') || '3'), 30);
+
   let where = `created_at >= datetime('now', '-${days} days')`;
   if (filter === 'kr') where += " AND country = 'kr'";
   else if (filter === 'global') where += " AND country != 'kr' AND title != original_title";
