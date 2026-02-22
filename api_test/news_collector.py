@@ -190,27 +190,23 @@ def dedup_similar(articles):
 # ============================================
 # 번역
 # ============================================
-def translate_to_korean(title, description=''):
-    """영문 → 한국어 번역 (GPT-4o-mini)"""
+def translate_to_korean(title, description=""):
+    """영문 → 한국어 번역 (타이틀만, GPT-4o-mini)"""
     try:
         import openai
         client = openai.OpenAI(api_key=OPENAI_KEY)
-        text = f"Title: {title}"
-        if description:
-            text += f"\nDescription: {description[:300]}"
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "You are a Korean tech news translator. Translate the following English AI/tech news into natural Korean. Return ONLY a JSON object with keys \"title\" and \"description\". No markdown, no explanation."},
-                {"role": "user", "content": text}
+                {"role": "system", "content": "Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation."},
+                {"role": "user", "content": title}
             ],
-            temperature=0.3, max_tokens=500)
-        result = json.loads(resp.choices[0].message.content.strip())
-        return result.get('title', title), result.get('description', description)
+            temperature=0.3, max_tokens=100)
+        kr_title = resp.choices[0].message.content.strip().strip(chr(34)).strip(chr(39))
+        return kr_title, description
     except Exception as e:
         print(f"    번역 실패: {e}")
         return title, description
-
 
 def batch_translate(articles):
     """해외 기사 일괄 번역 (수집 직후 실행)"""
