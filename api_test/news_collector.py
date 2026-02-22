@@ -209,30 +209,60 @@ def translate_to_korean(title, description=""):
         return title, description
 
 def batch_translate(articles):
-    """해외 기사 일괄 번역 (수집 직후 실행)"""
+    """해외 기사 배치 번역 (10건씩 묶어서 1회 API 호출)"""
     if not OPENAI_KEY:
         print("  OPENAI_API_KEY 없음 - 번역 건너뜀")
         return articles
-    translated = 0
-    for a in articles:
-        if a.get('country', 'kr') == 'kr':
+    import openai
+    client = openai.OpenAI(api_key=OPENAI_KEY)
+    # 번역 대상 추출
+    targets = []
+    for i, a in enumerate(articles):
+        if a.get("country", "kr") == "kr":
             continue
-        if a.get('original_title') and a['title'] != a['original_title']:
-            continue  # 이미 번역됨
-        orig_title = a['title']
-        kr_title, kr_desc = translate_to_korean(a['title'], a.get('description', ''))
-        a['original_title'] = orig_title
-        a['title'] = kr_title
-        a['description'] = kr_desc
-        translated += 1
-        if translated % 10 == 0:
-            print(f"    번역 진행: {translated}건...")
-    if translated > 0:
-        print(f"  번역 완료: {translated}건")
+        if a.get("original_title") and a["title"] != a["original_title"]:
+            continue
+        targets.append(i)
+    if not targets:
+        print("  번역할 항목 없음")
+        return articles
+    print(f"  번역 대상: {len(targets)}건 (10건씩 배치)")
+    BATCH = 10
+    translated = 0
+    for b in range(0, len(targets), BATCH):
+        batch_idx = targets[b:b+BATCH]
+        titles = [articles[i]["title"] for i in batch_idx]
+        numbered = chr(10).join(f"{j+1}. {t}" for j, t in enumerate(titles))
+        try:
+            resp = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "Translate each numbered English AI/tech news title into natural Korean. Return ONLY the numbered list with Korean translations. Keep the same numbering. No explanation."},
+                    {"role": "user", "content": numbered}
+                ],
+                temperature=0.3, max_tokens=len(batch_idx) * 80)
+            lines = resp.choices[0].message.content.strip().split(chr(10))
+            kr_titles = []
+            for line in lines:
+                line = line.strip()
+                if not line:
+                    continue
+                cleaned = line.lstrip("0123456789").lstrip(".").lstrip(")").strip()
+                if cleaned:
+                    kr_titles.append(cleaned)
+            for k, idx in enumerate(batch_idx):
+                articles[idx]["original_title"] = articles[idx]["title"]
+                if k < len(kr_titles):
+                    articles[idx]["title"] = kr_titles[k]
+                translated += 1
+            print(f"    배치 {b//BATCH+1}: {len(batch_idx)}건 번역")
+        except Exception as e:
+            print(f"    배치 {b//BATCH+1} 실패: {e}")
+            for idx in batch_idx:
+                articles[idx]["original_title"] = articles[idx]["title"]
+    print(f"  번역 완료: {translated}건 ({(len(targets)-1)//BATCH+1}회 API 호출)")
     return articles
 
-
-# ============================================
 # 해외 뉴스 수집 (목표: 전체의 50%)
 # ============================================
 GLOBAL_RSS_FEEDS = [
