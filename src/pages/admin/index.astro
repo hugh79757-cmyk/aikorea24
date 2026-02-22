@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded",function(){
           db.style.display = 'none';
         }
       })
-      .catchdocument.addEventListener("DOMContentLoaded",function(){});
+      .catch(function(e){ console.log("checkStatus error:", e); });
   }
   checkStatus();
 
