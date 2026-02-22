@@ -162,21 +162,21 @@ JSON으로 응답:
   "hint": "힌트 한 줄 (20자 이내)"
 }}""",
 
-        'carousel_cover': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 뉴스 5개를 골라주세요.
+        'carousel_cover': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 ...5개를 골라주세요.
 숫자가 없으면 핵심 키워드를 대신 사용하세요.
-각 뉴스마다 제목(12자 이내)과 상세코멘트(40~50자, 존댓말로 핵심 내용 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
+각 뉴스마다 제목(12자 이내)과 상세코멘트(80~100자, 존댓말로 구체적인 내용과 배경까지 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
 
 {news_text}
 
 JSON으로 응답:
 {{
   "items": [
-    {{"number": "152억", "unit": "원", "context": "다이퀘스트 IPO 투자유치 규모", "title": "12자 이내 제목", "comment": "존댓말로 핵심 설명 40~50자"}},
+    {{"number": "152억", "unit": "원", "context": "다이퀘스트 IPO 투자유치 규모", "title": "12자 이내 제목", "comment": "존댓말로 구체적 설명 80~100자"}},
     ...5개
   ]
 }}""",
 
-        'number': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 뉴스 5개를 골라주세요.
+        'number': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 ...5개를 골라주세요.
 숫자가 없으면 핵심 키워드를 대신 사용하세요.
 
 {news_text}
@@ -189,7 +189,7 @@ JSON으로 응답:
   ]
 }}""",
 
-        'list5': f"""아래 AI 뉴스에서 5개를 선정하세요.
+        'list5': f"""아래 AI 뉴스...5개를 선정하세요.
 각 뉴스: 제목(12자 이내), 부연(20자 이내, 말줄임표로 끝나서 궁금증 유발)
 
 {news_text}
@@ -482,32 +482,60 @@ def render_numbers(data):
     draw = ImageDraw.Draw(img)
     y = draw_header(draw)
 
+    items = data['items']
+    count = len(items)
+
+    # 동적 크기 계산 - 아이템 수에 따라 카드 꽉 채우기
+    available_h = 1700 - y - 120  # 헤더/푸터 제외 가용 높이
+    title_area = 70  # 제목 + 구분선
+
+    if count <= 3:
+        num_size = 130
+        unit_size = 56
+        ctx_size = 48
+        num_weight = 5
+        unit_offset_y = 45
+        ctx_offset_y = 140
+        item_h = (available_h - title_area) // count
+    elif count <= 5:
+        num_size = 100
+        unit_size = 48
+        ctx_size = 42
+        num_weight = 5
+        unit_offset_y = 38
+        ctx_offset_y = 110
+        item_h = (available_h - title_area) // count
+    else:
+        num_size = 80
+        unit_size = 40
+        ctx_size = 36
+        num_weight = 4
+        unit_offset_y = 30
+        ctx_offset_y = 90
+        item_h = (available_h - title_area) // count
+
     draw.text((ML, y), '오늘의 AI 숫자', fill=SUB, font=ft(32))
     y += 30
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
-    y += 30
+    y += 40
 
-    item_h = 185
-    for i, item in enumerate(data['items'][:5]):
+    for i, item in enumerate(items):
         num_text = str(item['number'])
         unit = item.get('unit', '')
         context = item.get('context', '')
 
-        # 숫자 (크고 노랗게 / 파랗게)
         color = YELLOW if i < 2 else ACCENT
-        draw.text((ML, y), num_text, fill=color, font=ft(100,5))
+        draw.text((ML, y), num_text, fill=color, font=ft(num_size, num_weight))
 
-        # 단위
-        nb = draw.textbbox((0,0), num_text, font=ft(100,5))
+        nb = draw.textbbox((0,0), num_text, font=ft(num_size, num_weight))
         nw = nb[2] - nb[0]
         if unit:
-            draw.text((ML + nw + 12, y + 38), unit, fill=SUB, font=ft(48,3))
+            draw.text((ML + nw + 12, y + unit_offset_y), unit, fill=SUB, font=ft(unit_size, 3))
 
-        # 맥락
-        draw.text((ML, y + 110), context, fill=LIGHT_GRAY, font=ft(42))
+        draw.text((ML, y + ctx_offset_y), context, fill=LIGHT_GRAY, font=ft(ctx_size))
 
-        if i < 4:
-            draw.line([(ML, y+item_h-10),(W-ML, y+item_h-10)], fill=LINE, width=1)
+        if i < count - 1:
+            draw.line([(ML, y + item_h - 15),(W-ML, y + item_h - 15)], fill=LINE, width=1)
 
         y += item_h
 
@@ -567,7 +595,7 @@ def generate_card_news(template_type=None):
     period = '오전' if now.hour < 12 else '오후'
 
     if template_type is None:
-        template_type = random.choice(TEMPLATES)
+        template_type = 'carousel_cover'
 
     print('\n' + '=' * 50)
     print(f'카드뉴스 v4 — {now.strftime("%Y-%m-%d %H:%M")} {period}')
