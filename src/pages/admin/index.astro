@@ -99,6 +99,7 @@ h1 { font-size:1.3rem; }
 </div>
 <div class="bot">
   <span class="cnt" id="cnt">0건 선택</span>
+  <button class="del" id="delbtn" style="display:none;background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">삭제</button>
   <button class="pub" id="pub" disabled>브리핑 발행</button>
 </div>
 
@@ -217,7 +218,7 @@ document.addEventListener("DOMContentLoaded",function(){
       .then(function(r){return r.json()})
       .then(function(d){
         var st = document.getElementById('curStatus');
-        var db = document.getElementById('delbtn');
+        var db = document.getElementById('delbtn'); if(!st || !db) return;
         if(d && d.date === today){
           st.innerHTML = '오늘 브리핑 발행됨: <b>' + (d.items ? d.items.length : 0) + '건</b> (상태: ' + d.status + ')';
           st.style.color = '#4ade80';
