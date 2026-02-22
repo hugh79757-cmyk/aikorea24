@@ -11,12 +11,16 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
-const allPosts = (await getCollection('blog', ({ data }) => !data.draft));
-const categories = [...new Set(allPosts.map(p => p.data.category))].filter(Boolean);
+
+const categories = [
+  { key: '소상공인AI', label: '소상공인 AI 활용', icon: '🏪' },
+  { key: 'AI입문', label: 'AI 왕초보 가이드', icon: '🎓' },
+  { key: '바이브코딩', label: '바이브코딩 시작', icon: '🎵' },
+  { key: '개발배포', label: '무료 웹사이트 만들기', icon: '🚀' },
+];
 
 const emojiMap: Record<string, string> = {
-  'AI 도구': '🛠️', 'AI 강좌': '📚', 'AI 지원사업': '💰',
-  'AI 뉴스': '📰', 'AI 체험': '🎮', '재테크': '💎',
+  '소상공인AI': '🏪', 'AI입문': '🎓', '바이브코딩': '🎵', '개발배포': '🚀',
 };
 
 const pageNum = page.currentPage;
@@ -28,21 +32,34 @@ const pageDesc = pageNum === 1
 
 <Layout title={pageTitle} description={pageDesc}>
   <div class="max-w-6xl mx-auto px-4 py-12">
-    <nav class="text-sm text-gray-500 mb-6" aria-label="breadcrumb">
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="breadcrumb">
       <ol class="flex items-center gap-1">
-        <li><a href="/" class="hover:text-blue-600">홈</a></li>
-        <li class="before:content-['/'] before:mx-1 text-gray-900 font-medium">블로그</li>
+        <li><a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">홈</a></li>
+        <li class="before:content-['/'] before:mx-1 text-gray-900 dark:text-white font-medium">블로그</li>
       </ol>
     </nav>
 
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">블로그</h1>
     <p class="text-gray-600 dark:text-gray-400 mb-8">AI 관련 최신 정보와 활용 팁을 확인하세요.</p>
 
+    <!-- 카테고리 메뉴 -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-10">
+      {categories.map(cat => (
+        <button type="button" data-filter={cat.key}
+          class="cat-btn group flex items-center gap-2.5 bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:border-blue-300 dark:hover:border-blue-500/30 transition-all duration-200 cursor-pointer text-left">
+          <span class="text-xl flex-shrink-0">{cat.icon}</span>
+          <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{cat.label}</span>
+        </button>
+      ))}
+    </div>
+
+    <!-- 글 목록 -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-grid">
       {page.data.map(post => {
         const dateFormatted = post.data.date instanceof Date
           ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
           : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+
         return (
           <a href={`/blog/${post.id}/`} data-category={post.data.category || ''} class="group block bg-white dark:bg-white/[0.05] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-white/[0.08]">
             {post.data.image ? (
@@ -74,6 +91,7 @@ const pageDesc = pageNum === 1
       })}
     </div>
 
+    <!-- 페이지네이션 -->
     {page.lastPage > 1 && (
       <nav class="flex justify-center items-center gap-2 mt-12" aria-label="페이지 네비게이션">
         {page.url.prev && (
@@ -94,32 +112,24 @@ const pageDesc = pageNum === 1
       </nav>
     )}
 
-    <!-- 카테고리 필터: 하단 배치, 최대 5개 -->
-    <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">카테고리</h3>
-      <div class="flex flex-wrap gap-2" id="category-filter">
-        <button type="button" class="bg-blue-600 text-white text-sm font-medium px-4 py-1.5 rounded-full cursor-pointer transition-colors" data-category="all">전체</button>
-        {categories.slice(0, 5).map(cat => (
-          <button type="button" class="bg-gray-100 dark:bg-white/10 text-gray-700 dark:text-gray-300 text-sm font-medium px-4 py-1.5 rounded-full hover:bg-gray-200 dark:hover:bg-white/20 cursor-pointer transition-colors" data-category={cat}>
-            {emojiMap[cat] || '📌'} {cat}
-          </button>
-        ))}
-      </div>
-    </div>
-
     <script is:inline>
-      document.querySelectorAll('#category-filter button').forEach(btn => {
+      let activeFilter = null;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const cat = btn.dataset.category;
-          document.querySelectorAll('#category-filter button').forEach(b => {
-            b.classList.remove('bg-blue-600', 'text-white');
-            b.classList.add('bg-gray-100', 'dark:bg-white/10', 'text-gray-700', 'dark:text-gray-300');
-          });
-          btn.classList.remove('bg-gray-100', 'dark:bg-white/10', 'text-gray-700', 'dark:text-gray-300');
-          btn.classList.add('bg-blue-600', 'text-white');
+          const cat = btn.dataset.filter;
+          if (activeFilter === cat) {
+            activeFilter = null;
+            btn.classList.remove('!bg-blue-100', 'dark:!bg-blue-500/20', '!border-blue-400', 'dark:!border-blue-500/50');
+          } else {
+            document.querySelectorAll('.cat-btn').forEach(b => {
+              b.classList.remove('!bg-blue-100', 'dark:!bg-blue-500/20', '!border-blue-400', 'dark:!border-blue-500/50');
+            });
+            btn.classList.add('!bg-blue-100', 'dark:!bg-blue-500/20', '!border-blue-400', 'dark:!border-blue-500/50');
+            activeFilter = cat;
+          }
           document.querySelectorAll('#blog-grid > a').forEach(card => {
-            if (cat === 'all') { card.style.display = ''; }
-            else { card.style.display = (card.dataset.category === cat) ? '' : 'none'; }
+            if (!activeFilter) { card.style.display = ''; }
+            else { card.style.display = (card.dataset.category === activeFilter) ? '' : 'none'; }
           });
         });
       });

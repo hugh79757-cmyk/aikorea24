@@ -2,7 +2,7 @@
 title: "Cloudflare 무료의 한계 빌드 제한과 하루 1회 배포 전략"
 description: "Cloudflare Pages 무료 플랜의 빌드 제한을 효율적으로 활용하는 방법을 안내합니다. 월 500회 빌드 제한 안에서 현명하게 배포하는 전략을 소개합니다."
 date: 2026-02-12T22:52:44+09:00
-category: "바이브코딩심화"
+category: "바이브코딩"
 tags:
   - "CloudflarePages"
   - "빌드제한"

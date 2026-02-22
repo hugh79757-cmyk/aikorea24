@@ -2,7 +2,7 @@
 title: "GitHub 무료의 비밀 Actions 2000분이면 충분한 이유"
 description: "GitHub Actions 무료 플랜의 월 2,000분 사용량을 분석합니다. 개인 프로젝트에 충분한 이유와 효율적인 활용 방법을 안내합니다."
 date: 2026-02-12T23:02:53+09:00
-category: "바이브코딩심화"
+category: "바이브코딩"
 tags:
   - "GitHubActions"
   - "CICD"

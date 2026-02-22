@@ -2,7 +2,7 @@
 title: "AI 코딩 도구 비교 ChatGPT vs Claude vs Cursor vs Copilot"
 description: "바이브코딩에 사용되는 대표적인 AI 도구들을 비교 분석합니다. ChatGPT, Claude, Cursor, GitHub Copilot의 특징과 장단점, 요금제를 정리했습니다."
 date: 2026-02-12T22:02:26+09:00
-category: "바이브코딩입문"
+category: "바이브코딩"
 tags:
   - "AI코딩도구"
   - "ChatGPT"

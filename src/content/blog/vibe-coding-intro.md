@@ -2,7 +2,7 @@
 title: "바이브코딩이란? AI에게 말로 설명하면 코드가 완성된다"
 description: "코딩을 몰라도 AI에게 자연어로 설명하면 웹사이트가 만들어지는 바이브코딩의 개념과 시작 방법을 알려드립니다."
 date: 2026-02-11
-category: "AI 강좌"
+category: "AI입문"
 tags: ["바이브코딩", "Vibe Coding", "AI 코딩", "입문"]
 ---
 

@@ -2,7 +2,7 @@
 title: "ChatGPT 무료 vs 유료, 뭐가 다를까? 완벽 비교"
 description: "ChatGPT 무료 플랜과 Plus 유료 플랜의 차이점을 기능, 속도, 모델별로 상세 비교합니다."
 date: 2026-02-12
-category: "AI 도구"
+category: "AI입문"
 tags: ["ChatGPT", "GPT-4", "무료", "유료", "비교"]
 ---
 

@@ -2,7 +2,7 @@
 title: "바이브 코딩 시작하기 ChatGPT와 VS Code만 있으면 당신도 개발자"
 description: "바이브 코딩의 개념부터 ChatGPT와 VS Code를 활용한 실전 셋업 방법까지 비개발자도 쉽게 따라할 수 있는 완벽 가이드를 제공합니다."
 date: 2026-02-18T22:05:10+09:00
-category: "강좌"
+category: "AI입문"
 tags:
   - "바이브코딩"
   - "ChatGPT"
