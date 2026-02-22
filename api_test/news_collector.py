@@ -272,15 +272,12 @@ GLOBAL_RSS_FEEDS = [
     # 미국 주요
     ('https://techcrunch.com/category/artificial-intelligence/feed/', 'TechCrunch AI', 'us'),
     ('https://www.technologyreview.com/topic/artificial-intelligence/feed', 'MIT Tech Review', 'us'),
-    ('https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', 'The Verge AI', 'us'),
     ('https://arstechnica.com/tag/ai/feed/', 'Ars Technica AI', 'us'),
     ('https://venturebeat.com/category/ai/feed/', 'VentureBeat AI', 'us'),
     # 유럽
     ('https://www.artificialintelligence-news.com/feed/', 'AI News EU', 'eu'),
-    ('https://www.euronews.com/rss?level=theme&name=ai', 'Euronews AI', 'eu'),
     # 아시아
     ('https://www.scmp.com/rss/320663/feed', 'SCMP China Tech', 'cn'),
-    ('https://asia.nikkei.com/rss/feed/nar', 'Nikkei Asia', 'jp'),
     # AI 전문
     ('https://the-decoder.com/feed/', 'The Decoder', 'us'),
     ('https://www.marktechpost.com/feed/', 'MarkTechPost', 'us'),
