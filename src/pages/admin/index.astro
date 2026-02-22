@@ -103,7 +103,7 @@ h1 { font-size:1.3rem; }
 </div>
 
 <script is:inline>
-(function(){
+document.addEventListener("DOMContentLoaded",function(){
   var today = new Date().toISOString().split('T')[0];
   document.getElementById('dinfo').textContent = today + ' 브리핑';
 
@@ -228,7 +228,7 @@ h1 { font-size:1.3rem; }
           db.style.display = 'none';
         }
       })
-      .catch(function(){});
+      .catchdocument.addEventListener("DOMContentLoaded",function(){});
   }
   checkStatus();
 
