@@ -43,3 +43,25 @@ CREATE TABLE IF NOT EXISTS news (
   pub_date TEXT,
   created_at TEXT DEFAULT (datetime('now'))
 );
+
+-- 브리핑 (날짜별 큐레이팅)
+CREATE TABLE IF NOT EXISTS briefings (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  date TEXT UNIQUE NOT NULL,
+  intro TEXT DEFAULT '',
+  status TEXT DEFAULT 'draft',
+  created_at TEXT DEFAULT (datetime('now')),
+  published_at TEXT
+);
+
+-- 브리핑 아이템 (뉴스 + 코멘트)
+CREATE TABLE IF NOT EXISTS briefing_items (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  briefing_id INTEGER NOT NULL,
+  news_id INTEGER NOT NULL,
+  sort_order INTEGER DEFAULT 0,
+  comment TEXT DEFAULT '',
+  created_at TEXT DEFAULT (datetime('now')),
+  FOREIGN KEY (briefing_id) REFERENCES briefings(id),
+  FOREIGN KEY (news_id) REFERENCES news(id)
+);
