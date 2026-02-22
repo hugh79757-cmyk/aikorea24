@@ -719,8 +719,8 @@ def fetch_bytedance_seed(limit=5):
 # ============================================
 # GPT 큐레이팅 + 번역 배치
 # ============================================
-def curate_and_translate(max_pick=10):
-    """미번역 해외 뉴스를 GPT로 큐레이팅 후 번역"""
+def curate_and_translate(max_pick=50):
+    """미번역 해외 뉴스를 전부 번역 (큐레이팅 제거 - v3.0)"""
     import openai
     client = openai.OpenAI(api_key=os.environ.get('OPENAI_API_KEY', ''))
 
@@ -744,75 +744,33 @@ def curate_and_translate(max_pick=10):
         print("  번역할 항목 없음")
         return
 
-    print(f"  미번역 항목: {len(rows)}건")
+    print(f"  미번역 항목: {len(rows)}건 — 전부 번역합니다")
 
-    # 2. GPT 큐레이팅 - 제목 목록 보내서 상위 N건 선택
-    title_list = ""
-    for i, row in enumerate(rows):
-        title_list += f"{i+1}. [ID:{row['id']}] {row['title']}\n"
-
-    print(f"  GPT 큐레이팅 중 (상위 {max_pick}건 선별)...")
-    try:
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": f"""You are a Korean AI news curator for aikorea24.kr.
-From the following list of AI news titles, select the top {max_pick} most valuable items for Korean AI news readers.
-
-Criteria for HIGH value:
-- New AI model launches (GPT, Gemini, Claude, Qwen, DeepSeek etc.)
-- Major investment/acquisition/partnership
-- AI regulation/policy changes
-- Security incidents or controversies
-- Open-source releases
-- Korea-related AI news
-- Breakthrough research
-
-Criteria for LOW value (exclude):
-- Event/conference promotions
-- Gaming/entertainment gossip
-- Country-specific local news with no global impact
-- Duplicate topics
-
-Return ONLY a JSON array of the selected ID numbers. Example: [42, 15, 78, 3]
-No explanation, no markdown."""},
-                {"role": "user", "content": title_list}
-            ],
-            temperature=0.2,
-            max_tokens=200
-        )
-        selected_ids = json.loads(resp.choices[0].message.content.strip())
-        print(f"  선별된 항목: {len(selected_ids)}건 - IDs: {selected_ids}")
-    except Exception as e:
-        print(f"  큐레이팅 실패: {e}")
-        return
-
-    # 3. 선별된 항목만 번역
-    selected_rows = [r for r in rows if r['id'] in selected_ids]
+    # 2. 전부 번역 (큐레이팅 단계 제거)
     translated = 0
     sql_updates = []
 
-    for row in selected_rows:
+    for row in rows:
         try:
             resp = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": "You are a Korean tech news translator. Translate the following English AI/tech news into natural Korean. Return ONLY a JSON object with keys \"title\" and \"description\". No markdown, no explanation."},
-                    {"role": "user", "content": f"Title: {row['title']}\nDescription: {row['description'][:300]}"}
+                    {"role": "user", "content": f"Title: {row['title']}\nDescription: {row['description'][:300] if row.get('description') else ''}"}
                 ],
                 temperature=0.3,
                 max_tokens=500
             )
             result = json.loads(resp.choices[0].message.content.strip())
             kr_title = result.get('title', row['title']).replace("'", "''")
-            kr_desc = result.get('description', row['description']).replace("'", "''")
+            kr_desc = result.get('description', row.get('description', '')).replace("'", "''")
             sql_updates.append(f"UPDATE news SET title='{kr_title}', description='{kr_desc}' WHERE id={row['id']};")
             translated += 1
-            print(f"  번역 {translated}/{len(selected_rows)}: {kr_title[:40]}...")
+            print(f"  번역 {translated}/{len(rows)}: {kr_title[:50]}...")
         except Exception as e:
             print(f"  번역 실패 (ID:{row['id']}): {e}")
 
-    # 4. DB 업데이트
+    # 3. DB 업데이트
     if sql_updates:
         sql_path = os.path.join(PROJECT_DIR, 'api_test', '_translate_update.sql')
         with open(sql_path, 'w') as f:
@@ -820,7 +778,7 @@ No explanation, no markdown."""},
         try:
             r = subprocess.run(
                 ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--file', sql_path],
-                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=60)
+                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
             os.remove(sql_path)
             if r.returncode == 0:
                 print(f"  DB 업데이트 완료: {translated}건 번역 저장")
@@ -830,6 +788,7 @@ No explanation, no markdown."""},
             print(f"  DB 업데이트 에러: {e}")
     else:
         print("  번역된 항목 없음")
+
 
 
 def dedup_similar(articles):
