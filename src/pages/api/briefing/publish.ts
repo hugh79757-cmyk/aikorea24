@@ -39,3 +39,28 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return new Response(JSON.stringify({ error: e.message }), { status: 500 });
   }
 };
+
+
+export const DELETE: APIRoute = async ({ request, locals }) => {
+  const runtime = (locals as any).runtime;
+  const db = runtime?.env?.DB;
+  if (!db) return new Response(JSON.stringify({ ok: false, error: 'no db' }), { headers: { 'Content-Type': 'application/json' } });
+
+  try {
+    const body = await request.json() as { date: string };
+    const date = body.date;
+    if (!date) return new Response(JSON.stringify({ ok: false, error: 'no date' }), { headers: { 'Content-Type': 'application/json' } });
+
+    const existing = await db.prepare('SELECT id FROM briefings WHERE date = ?').bind(date).first();
+    if (!existing) {
+      return new Response(JSON.stringify({ ok: false, error: 'no briefing found' }), { headers: { 'Content-Type': 'application/json' } });
+    }
+
+    await db.prepare('DELETE FROM briefing_items WHERE briefing_id = ?').bind(existing.id).run();
+    await db.prepare('DELETE FROM briefings WHERE id = ?').bind(existing.id).run();
+
+    return new Response(JSON.stringify({ ok: true }), { headers: { 'Content-Type': 'application/json' } });
+  } catch (e: any) {
+    return new Response(JSON.stringify({ ok: false, error: e.message }), { headers: { 'Content-Type': 'application/json' } });
+  }
+};

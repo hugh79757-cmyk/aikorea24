@@ -1,0 +1,97 @@
+---
+const { briefing, items } = Astro.props;
+const hasData = briefing && items && items.length > 0;
+
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr);
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  const weekday = weekdays[d.getDay()];
+  return `${month}월 ${day}일 (${weekday})`;
+}
+---
+
+<section class="relative z-10 px-4 py-16">
+  <div class="max-w-3xl mx-auto">
+
+    {hasData ? (
+      <div>
+        <div class="text-center mb-10">
+          <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-4">
+            <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
+            <span class="text-sm text-blue-400">오늘의 AI 브리핑</span>
+          </div>
+          <h2 class="text-3xl md:text-4xl font-bold mb-3">
+            {formatDate(briefing.date)}
+          </h2>
+        </div>
+
+        {briefing.intro && (
+          <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-6 mb-10">
+            <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-200 italic">
+              "{briefing.intro}"
+            </p>
+          </div>
+        )}
+
+        <div class="space-y-6">
+          {items.map((item: any, idx: number) => (
+            <article class="group bg-white/5 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300">
+              <div class="flex items-start gap-4">
+                <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                  {idx + 1}
+                </span>
+                <div class="flex-1 min-w-0">
+                  <a href={item.link} target="_blank" rel="noopener" class="block">
+                    <h3 class="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
+                      {item.title}
+                    </h3>
+                  </a>
+                  {item.comment && (
+                    <p class="text-base text-blue-300 mb-2 leading-relaxed">
+                      {item.comment}
+                    </p>
+                  )}
+                  {item.description && (
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 leading-relaxed line-clamp-2">
+                      {item.description}
+                    </p>
+                  )}
+                  <div class="flex items-center gap-3 text-xs text-gray-400">
+                    <span>{item.source}</span>
+                    {item.country && item.country !== 'kr' && (
+                      <span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">해외</span>
+                    )}
+                    {item.category === 'policy' && (
+                      <span class="bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded">정책</span>
+                    )}
+                    {item.category === 'benefit' && (
+                      <span class="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded">혜택</span>
+                    )}
+                    <a href={item.link} target="_blank" rel="noopener" class="ml-auto text-gray-500 hover:text-blue-400 transition-colors">
+                      원문 보기 &rarr;
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div class="text-center mt-10">
+          <a href="/briefing/" class="text-sm text-gray-500 hover:text-blue-400 transition-colors">
+            이전 브리핑 보기 &rarr;
+          </a>
+        </div>
+      </div>
+    ) : (
+      <div class="text-center py-20">
+        <div class="text-6xl mb-4">📡</div>
+        <h2 class="text-2xl font-bold mb-2">오늘의 브리핑 준비 중</h2>
+        <p class="text-gray-500">매일 아침 AI 뉴스를 직접 선별하여 발행합니다</p>
+      </div>
+    )}
+
+  </div>
+</section>

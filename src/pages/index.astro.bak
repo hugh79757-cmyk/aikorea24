@@ -2,10 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import HeroSection from '../components/home/HeroSection.astro';
-import BriefingSection from '../components/home/BriefingSection.astro';
+import PolicyBriefing from '../components/home/PolicyBriefing.astro';
+import WelfareSection from '../components/home/WelfareSection.astro';
+import LatestNews from '../components/home/LatestNews.astro';
+import GlobalNews from '../components/home/GlobalNews.astro';
 import CourseSection from '../components/home/CourseSection.astro';
 import LatestBlog from '../components/home/LatestBlog.astro';
 import CtaSection from '../components/home/CtaSection.astro';
+import DonationBanner from '../components/home/DonationBanner.astro';
 
 // --- 블로그 데이터 ---
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -14,35 +18,37 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
 const recentPosts = allPosts.filter(p => p.data.category !== 'AI 강좌').slice(0, 3);
 const coursePosts = allPosts.filter(p => p.data.category === 'AI 강좌').slice(0, 3);
 
-// --- 브리핑 데이터 ---
-let briefing: any = null;
-let briefingItems: any[] = [];
+// --- D1 데이터 ---
+let latestNews: any[] = [];
+let policyNews: any[] = [];
+let welfareNews: any[] = [];
+let globalNews: any[] = [];
 
 try {
   const runtime = (Astro.locals as any).runtime;
   const db = runtime?.env?.DB;
   if (db) {
-    briefing = await db.prepare(
-      "SELECT * FROM briefings WHERE status = 'published' ORDER BY date DESC LIMIT 1"
-    ).first();
+    latestNews = (await db.prepare(
+      `SELECT id, title, link, description, source, category, pub_date FROM news WHERE category IN ('news', 'AI') ORDER BY created_at DESC LIMIT 3`
+    ).all()).results || [];
 
-    if (briefing) {
-      const { results } = await db.prepare(
-        `SELECT bi.sort_order, bi.comment,
-                n.id as news_id, n.title, n.link, n.description, n.source, n.category, n.country, n.pub_date
-         FROM briefing_items bi
-         JOIN news n ON bi.news_id = n.id
-         WHERE bi.briefing_id = ?
-         ORDER BY bi.sort_order`
-      ).bind(briefing.id).all();
-      briefingItems = results || [];
-    }
+    policyNews = (await db.prepare(
+      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'policy' ORDER BY created_at DESC LIMIT 3`
+    ).all()).results || [];
+
+    welfareNews = (await db.prepare(
+      `SELECT id, title, link, description, source, pub_date FROM news WHERE category = 'benefit' ORDER BY created_at DESC LIMIT 3`
+    ).all()).results || [];
+
+    globalNews = (await db.prepare(
+      `SELECT id, title, link, description, source, pub_date, original_title, country FROM news WHERE category = 'global' AND title != original_title ORDER BY created_at DESC LIMIT 3`
+    ).all()).results || [];
   }
 } catch (e) {
-  console.error('Briefing fetch error:', e);
+  console.error('D1 fetch error:', e);
 }
 ---
-<Layout title="AI코리아24" description="매일 아침 직접 선별한 AI 뉴스 브리핑과 실전 강좌. AI, 누구나 쓸 수 있습니다.">
+<Layout title="AI코리아24" description="AI 도구 추천, 무료 강좌, 정부 지원사업 정보, AI 뉴스를 한국어로 큐레이션합니다. AI, 누구나 쓸 수 있습니다.">
   <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen relative overflow-hidden transition-colors">
 
     <!-- 앰비언트 글로우 배경 -->
@@ -52,11 +58,16 @@ try {
       <div class="absolute bottom-[-10%] left-[30%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-slow3"></div>
     </div>
 
+    <!-- ★ 섹션 순서: 여기서 줄을 바꾸면 첫화면 순서가 바뀜 -->
     <HeroSection />
-    <BriefingSection briefing={briefing} items={briefingItems} />
+    <PolicyBriefing items={policyNews} />
+    <WelfareSection items={welfareNews} />
+    <LatestNews items={latestNews} />
+    <GlobalNews items={globalNews} />
     <CourseSection posts={coursePosts} />
     <LatestBlog posts={recentPosts} />
     <CtaSection />
+    <DonationBanner />
 
   </div>
 

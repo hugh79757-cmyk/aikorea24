@@ -1,8 +1,6 @@
 ---
-// 관리자 페이지 - 브리핑 큐레이팅
 const runtime = (Astro.locals as any).runtime;
 const ADMIN_PASS = runtime?.env?.ADMIN_PASS || 'aikorea24admin';
-
 const url = new URL(Astro.request.url);
 const inputPass = url.searchParams.get('key');
 if (inputPass !== ADMIN_PASS) {
@@ -11,231 +9,267 @@ if (inputPass !== ADMIN_PASS) {
 ---
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI코리아24 관리자 - 브리핑 작성</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Pretendard', -apple-system, sans-serif; background: #0f172a; color: #e2e8f0; }
-    .container { max-width: 960px; margin: 0 auto; padding: 20px; }
-    h1 { font-size: 1.4rem; margin-bottom: 8px; }
-    .date-info { color: #94a3b8; margin-bottom: 20px; font-size: 0.9rem; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI코리아24 관리자</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,'Pretendard',sans-serif; background:#0f172a; color:#e2e8f0; }
+.wrap { max-width:880px; margin:0 auto; padding:20px 16px 120px; }
+h1 { font-size:1.3rem; }
+.sub { color:#94a3b8; font-size:.88rem; margin-bottom:20px; }
+.intro-label { color:#60a5fa; font-weight:600; font-size:.9rem; margin-bottom:6px; }
+#introText {
+  width:100%; height:80px; padding:12px; border-radius:8px; margin-bottom:20px;
+  background:#1e293b; border:1px solid #334155; color:#e2e8f0; font-size:.95rem;
+  resize:vertical; line-height:1.6;
+}
+.fbar { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+.fbtn { padding:6px 14px; border-radius:6px; border:1px solid #334155; background:#1e293b; color:#94a3b8; cursor:pointer; font-size:.85rem; }
+.fbtn.on { background:#2563eb; color:#fff; border-color:#2563eb; }
 
-    .intro-section { margin-bottom: 24px; }
-    .intro-section label { display: block; font-weight: 600; margin-bottom: 6px; color: #60a5fa; }
-    .intro-section textarea {
-      width: 100%; height: 70px; padding: 10px; border-radius: 8px;
-      background: #1e293b; border: 1px solid #334155; color: #e2e8f0;
-      font-size: 0.95rem; resize: vertical;
-    }
+.card {
+  border:2px solid #334155; border-radius:10px; background:#1e293b;
+  margin-bottom:10px; overflow:hidden; transition:border-color .15s;
+}
+.card.sel { border-color:#3b82f6; }
+.card-head {
+  display:flex; gap:12px; padding:14px 16px; cursor:pointer; align-items:flex-start;
+}
+.ck {
+  width:22px; height:22px; border:2px solid #475569; border-radius:5px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  font-size:14px; color:transparent; transition:all .15s; margin-top:1px;
+}
+.card.sel .ck { background:#3b82f6; border-color:#3b82f6; color:#fff; }
+.card-info { flex:1; min-width:0; }
+.card-title { font-size:1rem; font-weight:600; line-height:1.4; margin-bottom:3px; }
+.card-meta { font-size:.78rem; color:#64748b; }
+.card-desc { font-size:.84rem; color:#94a3b8; line-height:1.5; margin-top:4px; }
+.badge { display:inline-block; padding:1px 7px; border-radius:4px; font-size:.72rem; margin-left:6px; vertical-align:middle; }
+.b-kr { background:#166534; color:#86efac; }
+.b-gl { background:#1e40af; color:#93c5fd; }
+.b-po { background:#7c2d12; color:#fdba74; }
+.b-be { background:#581c87; color:#d8b4fe; }
 
-    .filters { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-    .filters button {
-      padding: 6px 14px; border-radius: 6px; border: 1px solid #334155;
-      background: #1e293b; color: #94a3b8; cursor: pointer; font-size: 0.85rem;
-    }
-    .filters button.active { background: #2563eb; color: white; border-color: #2563eb; }
+.cmt-box { padding:0 16px 14px 16px; display:none; }
+.card.sel .cmt-box { display:block; }
+.cmt-box label { font-size:.8rem; color:#60a5fa; display:block; margin-bottom:4px; }
+.cmt-box textarea {
+  width:100%; height:100px; padding:10px; border-radius:8px; resize:vertical;
+  background:#0f172a; border:1px solid #334155; color:#e2e8f0;
+  font-size:.9rem; line-height:1.5;
+}
+.cmt-box textarea::placeholder { color:#475569; }
 
-    .news-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
-    .news-item {
-      padding: 16px; border-radius: 10px; background: #1e293b; border: 1px solid #334155;
-      cursor: pointer; transition: all 0.15s;
-    }
-    .news-item:hover { border-color: #475569; }
-    .news-item.selected { border-color: #2563eb; background: #1e293b; }
-    .news-item .top-row { display: flex; align-items: center; gap: 10px; }
-    .news-item .checkbox {
-      width: 20px; height: 20px; border-radius: 4px; border: 2px solid #475569;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-    }
-    .news-item.selected .checkbox { background: #2563eb; border-color: #2563eb; }
-    .news-item.selected .checkbox::after { content: '\2713'; color: white; font-size: 14px; }
-    .news-item .title { font-size: 1.05rem; font-weight: 600; flex: 1; line-height: 1.4; }
-    .news-item .meta { font-size: 0.8rem; color: #64748b; margin-top: 4px; margin-left: 30px; }
-    .news-item .desc { font-size: 0.88rem; color: #94a3b8; margin-top: 6px; margin-left: 30px; line-height: 1.5; }
-    .news-item .comment-box {
-      margin-top: 10px; margin-left: 30px; display: none;
-    }
-    .news-item .comment-box label {
-      display: block; font-size: 0.8rem; color: #60a5fa; margin-bottom: 4px; font-weight: 500;
-    }
-    .news-item.selected .comment-box { display: block; }
-    .news-item .comment-box textarea {
-      width: 100%; padding: 10px; border-radius: 6px; height: 56px;
-      background: #0f172a; border: 1px solid #334155; color: #e2e8f0; font-size: 0.9rem;
-      resize: vertical; line-height: 1.5;
-    }
-    .news-item .comment-box textarea::placeholder { color: #475569; }
-
-    .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 6px; }
-    .tag-kr { background: #166534; color: #86efac; }
-    .tag-global { background: #1e40af; color: #93c5fd; }
-    .tag-policy { background: #7c2d12; color: #fdba74; }
-    .tag-benefit { background: #581c87; color: #d8b4fe; }
-
-    .bottom-bar {
-      position: sticky; bottom: 0; background: #0f172a; border-top: 1px solid #334155;
-      padding: 16px 0; display: flex; justify-content: space-between; align-items: center;
-    }
-    .selected-count { color: #60a5fa; font-weight: 600; }
-    .btn-publish {
-      padding: 10px 28px; border-radius: 8px; border: none;
-      background: #2563eb; color: white; font-size: 1rem; font-weight: 600;
-      cursor: pointer; transition: background 0.15s;
-    }
-    .btn-publish:hover { background: #1d4ed8; }
-    .btn-publish:disabled { background: #334155; color: #64748b; cursor: not-allowed; }
-    .btn-preview {
-      padding: 10px 20px; border-radius: 8px; border: 1px solid #334155;
-      background: transparent; color: #94a3b8; cursor: pointer; margin-right: 10px;
-    }
-
-    .status-msg { padding: 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
-    .status-msg.success { display: block; background: #166534; color: #86efac; }
-    .status-msg.error { display: block; background: #7f1d1d; color: #fca5a5; }
-    .loading { text-align: center; padding: 40px; color: #64748b; }
-  </style>
+.bot {
+  position:fixed; bottom:0; left:0; right:0; z-index:50;
+  background:rgba(15,23,42,.95); backdrop-filter:blur(10px);
+  border-top:1px solid #334155; padding:14px 20px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.bot .cnt { color:#60a5fa; font-weight:600; }
+.bot .pub {
+  padding:10px 28px; border-radius:8px; border:none;
+  background:#2563eb; color:#fff; font-weight:600; font-size:.95rem; cursor:pointer;
+}
+.bot .pub:disabled { background:#334155; color:#64748b; cursor:not-allowed; }
+.bot .pub:hover:not(:disabled) { background:#1d4ed8; }
+#msg { padding:12px; border-radius:8px; margin-bottom:14px; display:none; }
+#msg.ok { display:block; background:#166534; color:#86efac; }
+#msg.err { display:block; background:#7f1d1d; color:#fca5a5; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>AI코리아24 브리핑 작성</h1>
-    <div class="date-info" id="dateInfo"></div>
+<div class="wrap">
+  <h1>AI코리아24 브리핑 작성</h1>
+  <div class="sub" id="dinfo"></div>
+  <div id="msg"></div>
+    <div id="curStatus" style="margin-top:8px;font-size:.85rem;color:#94a3b8"></div>
+  <div class="intro-label">오늘의 인사이트 (브리핑 서두)</div>
+  <textarea id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로..."></textarea>
+  <div class="fbar" id="fbar"></div>
+  <div id="list"></div>
+</div>
+<div class="bot">
+  <span class="cnt" id="cnt">0건 선택</span>
+  <button class="pub" id="pub" disabled>브리핑 발행</button>
+</div>
 
-    <div id="statusMsg" class="status-msg"></div>
+<script is:inline>
+(function(){
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('dinfo').textContent = today + ' 브리핑';
 
-    <div class="intro-section">
-      <label>오늘의 인사이트 (브리핑 서두)</label>
-      <textarea id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로 요약하세요..."></textarea>
-    </div>
+  var allNews = [];
+  var sel = {};
+  var cmts = {};
 
-    <div class="filters">
-      <button class="active" data-filter="all">전체</button>
-      <button data-filter="kr">국내</button>
-      <button data-filter="global">해외</button>
-      <button data-filter="policy">정책</button>
-      <button data-filter="benefit">혜택</button>
-    </div>
+  var ftrs = [
+    {k:'all',l:'전체'},{k:'kr',l:'국내'},{k:'global',l:'해외'},
+    {k:'policy',l:'정책'},{k:'benefit',l:'혜택'}
+  ];
+  var fbar = document.getElementById('fbar');
+  ftrs.forEach(function(f,i){
+    var b = document.createElement('button');
+    b.className = 'fbtn' + (i===0?' on':'');
+    b.textContent = f.l;
+    b.setAttribute('data-f', f.k);
+    fbar.appendChild(b);
+  });
+  fbar.addEventListener('click', function(e){
+    var b = e.target.closest('.fbtn');
+    if(!b) return;
+    fbar.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    load(b.getAttribute('data-f'));
+  });
 
-    <div id="newsList" class="news-list">
-      <div class="loading">뉴스를 불러오는 중...</div>
-    </div>
+  function badge(n){
+    if(n.country && n.country!=='kr') return '<span class="badge b-gl">해외</span>';
+    if(n.category==='policy') return '<span class="badge b-po">정책</span>';
+    if(n.category==='benefit') return '<span class="badge b-be">혜택</span>';
+    return '<span class="badge b-kr">국내</span>';
+  }
 
-    <div class="bottom-bar">
-      <span class="selected-count" id="selectedCount">0건 선택</span>
-      <div>
-        <button class="btn-preview" id="btnPreview">미리보기</button>
-        <button class="btn-publish" id="btnPublish" disabled>브리핑 발행</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('dateInfo').textContent = today + ' 브리핑';
-
-    let allNews = [];
-    let selectedIds = new Set();
-    let comments = {};
-
-    async function loadNews(filter = 'all') {
-      const res = await fetch('/api/briefing/news/?filter=' + filter + '&limit=100');
-      allNews = await res.json();
-      renderNews();
+  function draw(){
+    var el = document.getElementById('list');
+    if(!allNews.length){el.innerHTML='<div style="text-align:center;padding:40px;color:#64748b">뉴스 없음</div>';return;}
+    var h = '';
+    for(var i=0;i<allNews.length;i++){
+      var n = allNews[i];
+      var s = sel[n.id] ? ' sel' : '';
+      var c = cmts[n.id] || '';
+      var d = n.description ? n.description.substring(0,150) : '';
+      var cardBorder = sel[n.id] ? 'border-color:#3b82f6' : '';
+      h += '<div class="card'+s+'" data-nid="'+n.id+'" style="'+cardBorder+'">';
+      h += '<div class="card-head">';
+      var ckStyle = sel[n.id] ? 'background:#3b82f6;border-color:#3b82f6;color:#fff' : 'color:transparent';
+      h += '<div class="ck" style="'+ckStyle+'">&#10003;</div>';
+      h += '<div class="card-info">';
+      h += '<div class="card-title">'+n.title+' '+badge(n)+'</div>';
+      h += '<div class="card-meta">'+(n.source||'')+' &middot; '+(n.pub_date||'')+'</div>';
+      h += '<div class="card-desc">'+d+'</div>';
+      h += '</div></div>';
+      var cmtVis = sel[n.id] ? 'display:block' : 'display:none';
+      h += '<div class="cmt-box" style="'+cmtVis+'"><label>나의 코멘트</label>';
+      h += '<textarea data-cid="'+n.id+'" placeholder="이 뉴스가 왜 중요한지...">'+c+'</textarea>';
+      h += '</div></div>';
     }
+    el.innerHTML = h;
+  }
 
-    function getTag(item) {
-      if (item.country && item.country !== 'kr') return '<span class="tag tag-global">해외</span>';
-      if (item.category === 'policy') return '<span class="tag tag-policy">정책</span>';
-      if (item.category === 'benefit') return '<span class="tag tag-benefit">혜택</span>';
-      return '<span class="tag tag-kr">국내</span>';
+  document.getElementById('list').addEventListener('click', function(e){
+    var head = e.target.closest('.card-head');
+    if(!head) return;
+    var card = head.closest('.card');
+    if(!card) return;
+    var nid = parseInt(card.getAttribute('data-nid'));
+    if(sel[nid]) delete sel[nid];
+    else sel[nid] = true;
+    draw();
+    upd();
+  });
+
+  document.getElementById('list').addEventListener('input', function(e){
+    if(e.target.tagName==='TEXTAREA' && e.target.getAttribute('data-cid')){
+      cmts[parseInt(e.target.getAttribute('data-cid'))] = e.target.value;
     }
+  });
 
-    function renderNews() {
-      const container = document.getElementById('newsList');
-      if (allNews.length === 0) {
-        container.innerHTML = '<div class="loading">수집된 뉴스가 없습니다</div>';
-        return;
-      }
-      container.innerHTML = allNews.map(item => {
-        const sel = selectedIds.has(item.id) ? 'selected' : '';
-        const cmt = comments[item.id] || '';
-        const desc = item.description ? item.description.substring(0, 200) + '...' : '';
-        return `
-          <div class="news-item ${sel}" data-id="${item.id}" onclick="toggleSelect(${item.id})">
-            <div class="top-row">
-              <div class="checkbox"></div>
-              <div class="title">${item.title} ${getTag(item)}</div>
-            </div>
-            <div class="meta">${item.source || ''} &middot; ${item.pub_date || ''}</div>
-            <div class="desc">${desc}</div>
-            <div class="comment-box" onclick="event.stopPropagation()">
-              <label>나의 코멘트</label>
-              <textarea placeholder="이 뉴스가 한국 독자에게 왜 중요한지 한두 문장으로..." 
-                     onchange="updateComment(${item.id}, this.value)"
-                     onfocus="event.stopPropagation()">${cmt}</textarea>
-            </div>
-          </div>`;
-      }).join('');
-    }
+  function upd(){
+    var n = Object.keys(sel).length;
+    document.getElementById('cnt').textContent = n+'건 선택';
+    document.getElementById('pub').disabled = n===0;
+  }
 
-    function toggleSelect(id) {
-      if (selectedIds.has(id)) {
-        selectedIds.delete(id);
-      } else {
-        selectedIds.add(id);
-      }
-      renderNews();
-      updateCount();
-    }
+  function load(filter){
+    fetch('/api/briefing/news/?filter='+filter+'&limit=100')
+      .then(function(r){return r.json()})
+      .then(function(d){allNews=d;draw();});
+  }
 
-    function updateComment(id, value) {
-      comments[id] = value;
-    }
-
-    function updateCount() {
-      const count = selectedIds.size;
-      document.getElementById('selectedCount').textContent = count + '건 선택';
-      document.getElementById('btnPublish').disabled = count === 0;
-    }
-
-    document.querySelectorAll('.filters button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.filters button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        loadNews(btn.dataset.filter);
-      });
-    });
-
-    document.getElementById('btnPublish').addEventListener('click', async () => {
-      const intro = document.getElementById('introText').value;
-      const items = [];
-      const newsOrder = allNews.filter(n => selectedIds.has(n.id));
-      newsOrder.forEach(n => {
-        items.push({ news_id: n.id, comment: comments[n.id] || '' });
-      });
-
-      const statusEl = document.getElementById('statusMsg');
-      try {
-        const res = await fetch('/api/briefing/publish/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ date: today, intro, items })
-        });
-        const data = await res.json();
-        if (data.ok) {
-          statusEl.className = 'status-msg success';
-          statusEl.textContent = '브리핑 발행 완료! ' + data.items_count + '건';
+  
+  // === 현재 브리핑 상태 확인 ===
+  function checkStatus(){
+    fetch('/api/briefing/latest/')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var st = document.getElementById('curStatus');
+        var db = document.getElementById('delbtn');
+        if(d && d.date === today){
+          st.innerHTML = '오늘 브리핑 발행됨: <b>' + (d.items ? d.items.length : 0) + '건</b> (상태: ' + d.status + ')';
+          st.style.color = '#4ade80';
+          db.style.display = 'inline-block';
         } else {
-          statusEl.className = 'status-msg error';
-          statusEl.textContent = '발행 실패: ' + (data.error || 'unknown');
+          st.textContent = '오늘 발행된 브리핑 없음';
+          st.style.color = '#94a3b8';
+          db.style.display = 'none';
         }
-      } catch (e) {
-        statusEl.className = 'status-msg error';
-        statusEl.textContent = '네트워크 에러: ' + e.message;
-      }
-    });
+      })
+      .catch(function(){});
+  }
+  checkStatus();
 
-    loadNews();
-  </script>
+  // === 전체 선택 ===
+  document.getElementById('selall').addEventListener('click', function(){
+    for(var i=0;i<allNews.length;i++) sel[allNews[i].id] = true;
+    draw(); upd();
+  });
+
+  // === 선택 해제 ===
+  document.getElementById('desel').addEventListener('click', function(){
+    sel = {};
+    draw(); upd();
+  });
+
+  // === 브리핑 삭제 ===
+  document.getElementById('delbtn').addEventListener('click', function(){
+    if(!confirm('오늘 발행된 브리핑을 삭제하시겠습니까?')) return;
+    fetch('/api/briefing/publish/', {
+      method: 'DELETE',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({date: today})
+    })
+    .then(function(r){return r.json()})
+    .then(function(d){
+      var msg = document.getElementById('msg');
+      if(d.ok){
+        msg.textContent = '브리핑 삭제 완료';
+        msg.style.color = '#4ade80';
+      } else {
+        msg.textContent = '삭제 실패: ' + (d.error||'');
+        msg.style.color = '#f87171';
+      }
+      checkStatus();
+    })
+    .catch(function(e){
+      document.getElementById('msg').textContent = '삭제 에러: ' + e;
+    });
+  });
+
+  document.getElementById('pub').addEventListener('click', function(){
+    var intro = document.getElementById('introText').value;
+    var items = [];
+    for(var i=0;i<allNews.length;i++){
+      var n = allNews[i];
+      if(sel[n.id]) items.push({news_id:n.id, comment:cmts[n.id]||''});
+    }
+    var msg = document.getElementById('msg');
+    fetch('/api/briefing/publish/',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({date:today,intro:intro,items:items})
+    }).then(function(r){return r.json()}).then(function(d){
+      if(d.ok){msg.className='ok';msg.textContent='발행 완료! '+d.items_count+'건';msg.style.display='block';}
+      else{msg.className='err';msg.textContent='실패: '+(d.error||'');msg.style.display='block';}
+    }).catch(function(e){
+      msg.className='err';msg.textContent='에러: '+e.message;msg.style.display='block';
+    });
+  });
+
+  load('all');
+})();
+</script>
 </body>
 </html>
