@@ -160,26 +160,37 @@ def get_existing():
 
 
 def dedup_similar(articles):
-    """통합 중복 제거 - category 무관, 제목 기준"""
+    """통합 중복 제거 - prefix + 키워드 + 고유명사 3단계"""
     seen = []
     result = []
     for a in articles:
         normalized = re.sub(r'[^가-힣a-zA-Z0-9]', '', a['title'])
         keywords = set(re.findall(r'[가-힣]{2,}|[a-zA-Z]{3,}', a['title']))
+        # 고유명사 추출 (영문 대문자 시작 단어 + 한글 2-4자 연속)
+        proper_nouns = set(re.findall(r'[A-Z][a-zA-Z]{2,}', a['title']))
+        proper_nouns |= set(re.findall(r'[가-힣]{2,4}(?=\s|,|$|\.|·)', a['title']))
         is_dup = False
-        for s_norm, s_kw in seen:
+        for s_norm, s_kw, s_pn in seen:
             shorter = min(len(normalized), len(s_norm))
             if shorter == 0:
                 continue
-            check_len = max(int(shorter * 0.5), 5)
+            # 1단계: prefix 40% 일치
+            check_len = max(int(shorter * 0.4), 5)
             if normalized[:check_len] == s_norm[:check_len]:
                 is_dup = True; break
+            # 2단계: 키워드 60% 이상 겹침
             if keywords and s_kw:
                 overlap = len(keywords & s_kw) / max(min(len(keywords), len(s_kw)), 1)
-                if overlap >= 0.65:
+                if overlap >= 0.6:
+                    is_dup = True; break
+            # 3단계: 고유명사 2개 이상 + 키워드 40% 겹침 (같은 이슈 다른 매체)
+            if proper_nouns and s_pn:
+                pn_match = len(proper_nouns & s_pn)
+                kw_overlap = len(keywords & s_kw) / max(min(len(keywords), len(s_kw)), 1) if keywords and s_kw else 0
+                if pn_match >= 2 and kw_overlap >= 0.4:
                     is_dup = True; break
         if not is_dup:
-            seen.append((normalized, keywords))
+            seen.append((normalized, keywords, proper_nouns))
             result.append(a)
     removed = len(articles) - len(result)
     if removed > 0:
