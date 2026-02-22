@@ -89,6 +89,12 @@ h1 { font-size:1.3rem; }
   <div class="intro-label">오늘의 인사이트 (브리핑 서두)</div>
   <textarea id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로..."></textarea>
   <div class="fbar" id="fbar"></div>
+  <div class="fbar" id="dbar">
+    <button class="fbtn" data-d="1">오늘</button>
+    <button class="fbtn on" data-d="3">3일</button>
+    <button class="fbtn" data-d="7">7일</button>
+    <button class="fbtn" data-d="14">14일</button>
+  </div>
   <div id="list"></div>
 </div>
 <div class="bot">
@@ -104,6 +110,17 @@ h1 { font-size:1.3rem; }
   var allNews = [];
   var sel = {};
   var cmts = {};
+  var days = 3;
+
+  document.getElementById('dbar').addEventListener('click', function(e){
+    var b = e.target.closest('.fbtn');
+    if(!b) return;
+    document.getElementById('dbar').querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    days = parseInt(b.getAttribute('data-d'));
+    var curFilter = document.querySelector('#fbar .fbtn.on');
+    load(curFilter ? curFilter.getAttribute('data-f') : 'all');
+  });
 
   var ftrs = [
     {k:'all',l:'전체'},{k:'kr',l:'국내'},{k:'global',l:'해외'},
@@ -188,7 +205,7 @@ h1 { font-size:1.3rem; }
   }
 
   function load(filter){
-    fetch('/api/briefing/news/?filter='+filter+'&limit=100')
+    fetch('/api/briefing/news/?filter='+filter+'&days='+days+'&limit=100')
       .then(function(r){return r.json()})
       .then(function(d){allNews=d;draw();});
   }
