@@ -2,7 +2,7 @@
 title: "깃 레포 VSCode 바이브코딩 준비 끝"
 description: "GitHub 레포지토리와 VSCode를 연결하는 방법을 안내합니다. 클론부터 커밋, 푸시까지 바이브코딩을 위한 워크플로우를 완성합니다."
 date: 2026-02-12T22:36:56+09:00
-category: "바이브코딩환경설정"
+category: "개발배포"
 tags:
   - "GitHub"
   - "VSCode"

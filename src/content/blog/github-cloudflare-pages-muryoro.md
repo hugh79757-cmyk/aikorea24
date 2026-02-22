@@ -2,7 +2,7 @@
 title: "GitHub Cloudflare Pages 무료로 세상에 공개하는 최고의 조합"
 description: "GitHub과 Cloudflare Pages를 연동해서 웹사이트를 무료로 배포하는 방법을 안내합니다. 호스팅 비용 없이 전문적인 웹사이트를 운영할 수 있습니다."
 date: 2026-02-12T22:39:55+09:00
-category: "바이브코딩환경설정"
+category: "개발배포"
 tags:
   - "CloudflarePages"
   - "GitHub"

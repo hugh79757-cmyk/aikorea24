@@ -2,7 +2,7 @@
 title: "웹사이트를 0원에 배포하는 방법: Cloudflare Pages 가이드"
 description: "GitHub와 Cloudflare Pages를 사용해서 내 웹사이트를 완전 무료로 전 세계에 배포하는 방법을 단계별로 안내합니다."
 date: 2026-02-10
-category: "AI 강좌"
+category: "AI입문"
 tags: ["Cloudflare", "배포", "무료", "GitHub", "웹사이트"]
 ---
 

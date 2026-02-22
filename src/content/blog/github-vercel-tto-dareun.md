@@ -2,7 +2,7 @@
 title: "GitHub Vercel 또 다른 선택지 뭐가 다를까"
 description: "Vercel과 Cloudflare Pages의 차이점을 비교합니다. Next.js 프로젝트에 최적화된 Vercel의 특징과 무료 플랜 제한, 선택 기준을 안내합니다."
 date: 2026-02-12T22:44:27+09:00
-category: "바이브코딩심화"
+category: "바이브코딩"
 tags:
   - "Vercel"
   - "GitHub"

@@ -2,7 +2,7 @@
 title: "GitHub Pages 무료지만 제약이 있어다"
 description: "GitHub Pages의 특징과 제한 사항을 정리합니다. 가장 간단한 무료 호스팅이지만 알아야 할 제약들이 있습니다."
 date: 2026-02-12T22:46:32+09:00
-category: "바이브코딩심화"
+category: "바이브코딩"
 tags:
   - "GitHubPages"
   - "무료호스팅"

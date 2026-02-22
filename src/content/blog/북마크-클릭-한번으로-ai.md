@@ -2,7 +2,7 @@
 title: "북마크 클릭 한번으로 AI 대화 내용을 마크다운파일로 저장하는 법"
 description: "ChatGPT, Gemini, Claude 등 AI 채팅 기록을 마크다운으로 저장해 백업하는 북마클릿 활용법을 안내합니다."
 date: 2026-02-20T08:52:16+09:00
-category: "강좌"
+category: "바이브코딩"
 tags:
   - "북마클릿"
   - "마크다운"
