@@ -65,3 +65,8 @@ CREATE TABLE IF NOT EXISTS briefing_items (
   FOREIGN KEY (briefing_id) REFERENCES briefings(id),
   FOREIGN KEY (news_id) REFERENCES news(id)
 );
+
+-- 성능 인덱스
+CREATE INDEX IF NOT EXISTS idx_news_created_at ON news(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_news_country ON news(country);
+CREATE INDEX IF NOT EXISTS idx_news_category ON news(category);
