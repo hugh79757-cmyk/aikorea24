@@ -64,3 +64,50 @@ D1 저장 중...
 
 [13] 노인복지 브리핑 생성...
   브리핑 생성 완료
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-02-22 15:44
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  MIT Tech Review 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  Ars Technica AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  VentureBeat AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  AI News EU 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  SCMP China Tech 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  The Decoder 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  MarkTechPost 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  Hacker News 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  해외 중복제거 후: 0건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  전자신문 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  IT조선 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+  [KR-2] 네이버 뉴스 (보조)
+  네이버 '인공지능 AI 최신' 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+    '인공지능 AI 최신': 0건
+  네이버 'AI 스타트업' 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+    'AI 스타트업': 0건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  국내 중복제거 후: 0건
+
+[최종] 통합 중복제거 후: 0건
+
+[저장] D1 저장 중...
+  기존 D1 항목: 1388개
+  저장할 신규 항목 없음
+  신규: 0건 | 중복 스킵: 0건
+
+============================================================
+완료! 총 0건 저장
+============================================================
