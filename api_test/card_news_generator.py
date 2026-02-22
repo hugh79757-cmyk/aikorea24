@@ -88,16 +88,34 @@ def draw_cta(draw, y, color=ACCENT):
 
 # ── DB 뉴스 ──
 def fetch_news(limit=30):
-    cmd = ['npx','wrangler','d1','execute','aikorea24-db','--remote','--json','--command',
+    """브리핑 발행된 뉴스 우선, 없으면 최신 뉴스 폴백"""
+    # 1) 오늘 발행된 브리핑 뉴스
+    today = datetime.now().strftime('%Y-%m-%d')
+    cmd_briefing = ['npx','wrangler','d1','execute','aikorea24-db','--remote','--json','--command',
+        f"""SELECT n.title, n.description, n.source, n.category
+            FROM briefing_items bi
+            JOIN briefings b ON b.id = bi.briefing_id
+            JOIN news n ON n.id = bi.news_id
+            WHERE b.date = '{today}'
+            ORDER BY bi.sort_order ASC"""]
+    try:
+        r = subprocess.run(cmd_briefing, capture_output=True, text=True, cwd=PROJECT_DIR, timeout=30)
+        data = json.loads(r.stdout)
+        if isinstance(data, list) and len(data) > 0 and 'results' in data[0]:
+            results = data[0]['results']
+            if len(results) >= 3:
+                print(f'  브리핑 뉴스 {len(results)}건 사용')
+                return results
+    except: pass
+
+    # 2) 폴백: 최신 뉴스
+    print('  브리핑 없음 → 최신 뉴스 폴백')
+    cmd_latest = ['npx','wrangler','d1','execute','aikorea24-db','--remote','--json','--command',
         f"""SELECT title, description, source, category FROM news
-            WHERE category IN ('news','AI','policy','startup','benefit')
-            AND (title LIKE '%AI%' OR title LIKE '%인공지능%' OR title LIKE '%GPT%'
-                 OR title LIKE '%생성형%' OR title LIKE '%딥러닝%' OR title LIKE '%로봇%'
-                 OR title LIKE '%LLM%' OR title LIKE '%챗봇%' OR title LIKE '%머신러닝%'
-                 OR title LIKE '%자율주행%' OR title LIKE '%스마트%' OR title LIKE '%데이터%')
+            WHERE created_at >= datetime('now', '-1 days')
             ORDER BY created_at DESC LIMIT {limit}"""]
     try:
-        r = subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_DIR, timeout=30)
+        r = subprocess.run(cmd_latest, capture_output=True, text=True, cwd=PROJECT_DIR, timeout=30)
         data = json.loads(r.stdout)
         if isinstance(data, list) and len(data) > 0 and 'results' in data[0]:
             return data[0]['results']
