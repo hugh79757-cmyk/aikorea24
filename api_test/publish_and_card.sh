@@ -2,6 +2,7 @@
 # 브리핑 발행 후 카드 생성 + 모바일 전송
 cd /Users/twinssn/Projects/aikorea24
 source api_test/.env.sh 2>/dev/null
+source .venv/bin/activate
 
 echo "=== $(date): 카드뉴스 생성 시작 ==="
 python3 api_test/card_news_generator.py
@@ -28,6 +29,7 @@ fi
 
 for f in "$PENDING_DIR"/*.png; do
     "$KDE_CLI" --device "$DEVICE_ID" --share "$f"
+    sleep 3
     if [ $? -eq 0 ]; then
         rm "$f"
         echo "전송 완료: $(basename $f)"
