@@ -5,18 +5,28 @@ const runtime = (Astro.locals as any).runtime;
 const db = runtime?.env?.DB;
 
 let briefings: any[] = [];
+let news: any[] = [];
 
 if (db) {
   try {
-    const { results } = await db.prepare(
+    const bResult = await db.prepare(
       `SELECT b.id, b.date, b.status, b.intro,
               (SELECT COUNT(*) FROM briefing_items WHERE briefing_id = b.id) as item_count
        FROM briefings b
        WHERE b.status = 'published'
        ORDER BY b.date DESC
-       LIMIT 30`
+       LIMIT 10`
     ).all();
-    briefings = results || [];
+    briefings = bResult.results || [];
+
+    const nResult = await db.prepare(
+      `SELECT id, title, link, description, source, category, country, pub_date, created_at
+       FROM news
+       WHERE created_at >= datetime('now', '-3 days')
+       ORDER BY created_at DESC
+       LIMIT 100`
+    ).all();
+    news = nResult.results || [];
   } catch (e) {
     console.error(e);
   }
@@ -26,48 +36,178 @@ if (db) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>브리핑 아카이브 - AI코리아24</title>
+  <title>브리핑 & 뉴스 - AI코리아24</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
     .container{max-width:720px;margin:0 auto;padding:20px 16px}
-    .back{display:inline-block;color:#60a5fa;text-decoration:none;font-size:14px;margin-bottom:20px}
-    h1{font-size:24px;font-weight:700;margin-bottom:8px}
-    .subtitle{font-size:14px;color:#94a3b8;margin-bottom:24px}
-    .list{display:flex;flex-direction:column;gap:12px}
-    .item{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px;text-decoration:none;color:#e2e8f0;transition:border-color 0.2s}
-    .item:hover{border-color:#60a5fa}
-    .item-date{font-size:18px;font-weight:700;color:#f8fafc}
-    .badge{display:inline-block;background:#1e3a5f;color:#60a5fa;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:8px}
-    .item-meta{font-size:13px;color:#94a3b8;margin-top:4px}
-    .item-intro{font-size:13px;color:#cbd5e1;margin-top:8px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .empty{text-align:center;color:#64748b;padding:60px 0;font-size:15px}
+    .back{display:inline-block;color:#60a5fa;text-decoration:none;font-size:14px;margin-bottom:16px}
+    .back:hover{text-decoration:underline}
+
+    /* 브리핑 섹션 */
+    .section-title{font-size:20px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .section-title .icon{font-size:22px}
+    .briefing-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+    .briefing-scroll::-webkit-scrollbar{height:4px}
+    .briefing-scroll::-webkit-scrollbar-thumb{background:#30363d;border-radius:2px}
+    .b-card{min-width:200px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px;text-decoration:none;color:#e2e8f0;flex-shrink:0;transition:border-color 0.2s}
+    .b-card:hover{border-color:#60a5fa}
+    .b-date{font-size:15px;font-weight:700;color:#f8fafc}
+    .b-badge{display:inline-block;background:#1e3a5f;color:#60a5fa;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:6px}
+    .b-intro{font-size:12px;color:#94a3b8;margin-top:6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+    /* 구분선 */
+    .divider{border:none;border-top:1px solid #21262d;margin:20px 0}
+
+    /* 탭 */
+    .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px;-webkit-overflow-scrolling:touch}
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{padding:6px 14px;border-radius:20px;border:1px solid #30363d;background:transparent;color:#94a3b8;font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+    .tab.active{background:#1f6feb;color:#fff;border-color:#1f6feb}
+    .tab:hover:not(.active){border-color:#58a6ff;color:#e2e8f0}
+
+    /* 뉴스 카드 */
+    .news-list{display:flex;flex-direction:column;gap:10px}
+    .n-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px;text-decoration:none;color:#e2e8f0;display:block;transition:border-color 0.2s}
+    .n-card:hover{border-color:#60a5fa}
+    .n-title{font-size:15px;font-weight:600;color:#f8fafc;line-height:1.4}
+    .n-desc{font-size:13px;color:#94a3b8;margin-top:6px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .n-meta{font-size:11px;color:#64748b;margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+    .n-tag{background:#1e293b;padding:2px 6px;border-radius:4px}
+    .n-tag.kr{background:#1e3a2f;color:#4ade80}
+    .n-tag.global{background:#1e293b;color:#60a5fa}
+
+    /* 더보기 */
+    .load-more{display:block;width:100%;padding:12px;margin-top:16px;background:#161b22;border:1px solid #30363d;border-radius:10px;color:#60a5fa;font-size:14px;text-align:center;cursor:pointer;transition:border-color 0.2s}
+    .load-more:hover{border-color:#60a5fa}
+
+    .empty{text-align:center;color:#64748b;padding:40px 0;font-size:14px}
+    .count-info{font-size:12px;color:#64748b;margin-bottom:12px}
   </style>
 </head>
 <body>
   <div class="container">
     <a href="/" class="back">← 메인으로</a>
-    <h1>브리핑 아카이브</h1>
-    <p class="subtitle">AI코리아24 일일 브리핑 모아보기</p>
+
+    <!-- 브리핑 아카이브 -->
+    <div class="section-title"><span class="icon">📋</span> 브리핑 아카이브</div>
     {briefings.length === 0 ? (
       <div class="empty">발행된 브리핑이 없습니다.</div>
     ) : (
-      <div class="list">
+      <div class="briefing-scroll">
         {briefings.map((b: any) => {
           const d = new Date(b.date + 'T00:00:00');
           const weekday = ['일','월','화','수','목','금','토'][d.getDay()];
-          const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${weekday})`;
+          const display = `${d.getMonth()+1}/${d.getDate()} (${weekday})`;
           return (
-            <a href={`/briefing/${b.date}/`} class="item">
-              <span class="item-date">{display}</span>
-              <span class="badge">{b.item_count}건</span>
-              <div class="item-meta">{b.status === 'published' ? '발행완료' : b.status}</div>
-              {b.intro && <div class="item-intro">{b.intro}</div>}
+            <a href={`/briefing/${b.date}/`} class="b-card">
+              <span class="b-date">{display}</span>
+              <span class="b-badge">{b.item_count}건</span>
+              {b.intro && <div class="b-intro">{b.intro}</div>}
             </a>
           );
         })}
       </div>
     )}
+
+    <hr class="divider" />
+
+    <!-- 뉴스 피드 -->
+    <div class="section-title"><span class="icon">📰</span> AI 뉴스</div>
+
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-filter="all">전체</button>
+      <button class="tab" data-filter="kr">국내</button>
+      <button class="tab" data-filter="global">해외</button>
+      <button class="tab" data-filter="policy">정책</button>
+      <button class="tab" data-filter="startup">스타트업</button>
+      <button class="tab" data-filter="benefit">혜택</button>
+      <button class="tab" data-filter="senior">시니어</button>
+    </div>
+
+    <div class="count-info" id="countInfo"></div>
+    <div class="news-list" id="newsList"></div>
+    <button class="load-more" id="loadMore" style="display:none">더 보기</button>
+
+    <script is:inline define:vars={{ news }}>
+      var allNews = news || [];
+      var currentFilter = 'all';
+      var showCount = 15;
+
+      document.getElementById('tabs').addEventListener('click', function(e) {
+        var btn = e.target.closest('.tab');
+        if (!btn) return;
+        document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+        btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-filter');
+        showCount = 15;
+        render();
+      });
+
+      document.getElementById('loadMore').addEventListener('click', function() {
+        showCount += 15;
+        render();
+      });
+
+      function getFiltered() {
+        if (currentFilter === 'all') return allNews;
+        if (currentFilter === 'kr') return allNews.filter(function(n){ return n.country === 'kr'; });
+        if (currentFilter === 'global') return allNews.filter(function(n){ return n.country !== 'kr'; });
+        return allNews.filter(function(n){ return n.category === currentFilter; });
+      }
+
+      function timeAgo(dateStr) {
+        if (!dateStr) return '';
+        var now = new Date();
+        var d = new Date(dateStr);
+        var diff = Math.floor((now - d) / 60000);
+        if (diff < 60) return diff + '분 전';
+        if (diff < 1440) return Math.floor(diff/60) + '시간 전';
+        return Math.floor(diff/1440) + '일 전';
+      }
+
+      function render() {
+        var filtered = getFiltered();
+        var showing = filtered.slice(0, showCount);
+        var list = document.getElementById('newsList');
+        var info = document.getElementById('countInfo');
+        var more = document.getElementById('loadMore');
+
+        info.textContent = filtered.length + '건 중 ' + Math.min(showCount, filtered.length) + '건 표시';
+
+        list.innerHTML = '';
+        if (showing.length === 0) {
+          list.innerHTML = '<div style="text-align:center;color:#64748b;padding:40px 0">해당 뉴스가 없습니다.</div>';
+          more.style.display = 'none';
+          return;
+        }
+
+        showing.forEach(function(n) {
+          var countryTag = n.country === 'kr'
+            ? '<span class="n-tag kr">국내</span>'
+            : '<span class="n-tag global">해외</span>';
+          var sourceTag = n.source ? '<span class="n-tag">' + n.source + '</span>' : '';
+          var catTag = n.category ? '<span class="n-tag">' + n.category + '</span>' : '';
+          var time = timeAgo(n.created_at || n.pub_date);
+          var timeTag = time ? '<span>' + time + '</span>' : '';
+
+          var card = document.createElement('a');
+          card.className = 'n-card';
+          card.href = n.link || '#';
+          card.target = '_blank';
+          card.rel = 'noopener';
+          card.innerHTML =
+            '<div class="n-title">' + (n.title || '') + '</div>' +
+            (n.description ? '<div class="n-desc">' + n.description + '</div>' : '') +
+            '<div class="n-meta">' + countryTag + sourceTag + catTag + timeTag + '</div>';
+          list.appendChild(card);
+        });
+
+        more.style.display = filtered.length > showCount ? 'block' : 'none';
+      }
+
+      render();
+    </script>
   </div>
 </body>
 </html>
