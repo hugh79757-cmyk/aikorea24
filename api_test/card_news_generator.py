@@ -128,8 +128,8 @@ def curate(news_items, template_type):
     news_text = '\n'.join([f"- [{n.get('source','')}] {n['title']}: {n.get('description','')[:80]}" for n in news_items])
 
     prompts = {
-        'deep': f"""아래 AI 뉴스 중 가장 임팩트 있는 1개를 골라 깊게 분석하세요.
-나머지 4개도 제목만 짧게.
+        'deep': f"""아래 AI 뉴스 전부를 사용하세요. 가장 임팩트 있는 1개를 골라 깊게 분석하고,
+나머지는 제목만 짧게. 제공된 뉴스 외에 다른 내용을 추가하지 마세요.
 
 {news_text}
 
@@ -162,8 +162,8 @@ JSON으로 응답:
   "hint": "힌트 한 줄 (20자 이내)"
 }}""",
 
-        'carousel_cover': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 ...5개를 골라주세요.
-숫자가 없으면 핵심 키워드를 대신 사용하세요.
+        'carousel_cover': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
+각 뉴스에서 인상적인 숫자를 뽑고, 숫자가 없으면 핵심 키워드를 대신 사용하세요.
 각 뉴스마다 제목(12자 이내)과 상세코멘트(80~100자, 존댓말로 구체적인 내용과 배경까지 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
 
 {news_text}
@@ -176,8 +176,8 @@ JSON으로 응답:
   ]
 }}""",
 
-        'number': f"""아래 AI 뉴스에서 인상적인 숫자가 포함된 ...5개를 골라주세요.
-숫자가 없으면 핵심 키워드를 대신 사용하세요.
+        'number': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
+각 뉴스에서 인상적인 숫자를 뽑고, 숫자가 없으면 핵심 키워드를 대신 사용하세요.
 
 {news_text}
 
@@ -189,7 +189,7 @@ JSON으로 응답:
   ]
 }}""",
 
-        'list5': f"""아래 AI 뉴스...5개를 선정하세요.
+        'list5': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 제공된 뉴스 외에 다른 내용을 추가하지 마세요.
 각 뉴스: 제목(12자 이내), 부연(20자 이내, 말줄임표로 끝나서 궁금증 유발)
 
 {news_text}
@@ -344,13 +344,16 @@ def render_carousel(data):
 
         # 숫자 (1번 2번만 노란색, 나머지 기존 ACCENT)
         num_color = (255, 200, 50) if i < 2 else ACCENT
-        draw.text((80, y), num_val, fill=num_color, font=ft(54, 5))
+        num_str = num_val + (' ' + unit_val if unit_val else '')
+        nx = cx(draw, num_str, ft(54, 5))
+        draw.text((nx, y), num_val, fill=num_color, font=ft(54, 5))
         if unit_val:
             nb = draw.textbbox((0, 0), num_val, font=ft(54, 5))
-            draw.text((80 + nb[2] - nb[0] + 10, y + 18), unit_val, fill=SUB, font=ft(27))
+            draw.text((nx + nb[2] - nb[0] + 10, y + 18), unit_val, fill=SUB, font=ft(27))
 
         # 설명
-        draw.text((80, y + 68), ctx, fill=LIGHT_GRAY, font=ft(24))
+        ctx_short = ctx[:25]
+        draw.text((cx(draw, ctx_short, ft(28)), y + 68), ctx_short, fill=LIGHT_GRAY, font=ft(28))
 
         # 구분선
         if i < 4:
@@ -372,31 +375,31 @@ def render_carousel(data):
     draw = ImageDraw.Draw(img)
     draw_header(draw)
 
-    y = 90
-    item_h = 220
+    y = 75
+    item_h = 185
 
     for i, item in enumerate(items):
         title = item.get('title', '')
         comment = item.get('comment', '')
 
-        # 번호 (노란색, 크게)
+        # 번호 + 제목 (가운데 정렬)
         num_text = f'{i+1}'
-        draw.text((60, y), num_text, fill=(255, 200, 50), font=ft(68, 5))
-
-        # 제목 (번호 오른쪽, 크게)
-        title_x = 145
         max_title = 13
         if len(title) > max_title:
             title = title[:max_title] + '…'
-        draw.text((title_x, y + 8), title, fill=WHITE, font=ft(48, 5))
+        header_text = f'{num_text}   {title}'
+        hx = cx(draw, header_text, ft(44, 5))
+        draw.text((hx, y), num_text, fill=(255, 200, 50), font=ft(44, 5))
+        nb = draw.textbbox((0, 0), num_text + '   ', font=ft(44, 5))
+        draw.text((hx + nb[2] - nb[0], y), title, fill=WHITE, font=ft(44, 5))
 
-        # 코멘트 2줄
-        y += 78
-        comment_font = ft(28)
-        max_per_line = 28
+        # 코멘트 2줄 (가운데 정렬)
+        y += 58
+        comment_font = ft(26)
+        max_per_line = 26
         if len(comment) <= max_per_line:
-            draw.text((90, y), comment, fill=LIGHT_GRAY, font=comment_font)
-            y += 38
+            draw.text((cx(draw, comment, comment_font), y), comment, fill=LIGHT_GRAY, font=comment_font)
+            y += 34
         else:
             sp = comment.rfind(' ', 0, max_per_line + 1)
             if sp <= 0:
@@ -405,9 +408,11 @@ def render_carousel(data):
             l2 = comment[sp:].strip()
             if len(l2) > max_per_line:
                 l2 = l2[:max_per_line - 1] + '…'
-            draw.text((90, y), l1, fill=LIGHT_GRAY, font=comment_font)
-            draw.text((90, y + 36), l2, fill=LIGHT_GRAY, font=comment_font)
-            y += 74
+            draw.text((cx(draw, l1, comment_font), y), l1, fill=LIGHT_GRAY, font=comment_font)
+            draw.text((cx(draw, l2, comment_font), y + 34), l2, fill=LIGHT_GRAY, font=comment_font)
+            y += 68
+        if False:
+            pass
 
         # 구분선
         if i < len(items) - 1:
