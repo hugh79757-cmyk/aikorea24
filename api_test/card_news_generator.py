@@ -362,7 +362,6 @@ def render_carousel(data):
 
         y += item_h
 
-    draw_cta(draw, y + 10)
     draw_footer(draw)
 
     fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_0cover.png')
