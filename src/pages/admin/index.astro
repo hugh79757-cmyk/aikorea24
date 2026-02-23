@@ -1,8 +1,18 @@
 ---
 export const prerender = false;
-const url = new URL(Astro.request.url);
-const key = url.searchParams.get('key');
-if (key !== 'aikorea24admin') {
+
+const ADMIN_EMAILS = ['twinssn@gmail.com'];
+
+let isAuth = false;
+const session = Astro.cookies.get('session')?.value;
+if (session) {
+  try {
+    const user = JSON.parse(atob(session));
+    isAuth = ADMIN_EMAILS.includes(user.email);
+  } catch {}
+}
+
+if (!isAuth) {
   return new Response('Unauthorized', { status: 401 });
 }
 ---
@@ -262,5 +272,6 @@ document.addEventListener("DOMContentLoaded", function(){
   load('all');
 });
 </script>
+
 </body>
 </html>
