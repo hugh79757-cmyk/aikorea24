@@ -2,7 +2,7 @@
 title: "프롬프트 TAG 공식 가장 심플하고 빠른 프레임워크"
 description: "프롬프트 TAG 공식을 상세히 알아봅니다. Task, Action, Goal 3가지 요소만으로 빠르게 원하는 답을 얻는 방법과 실전 예시를 정리했습니다."
 date: 2026-02-24T10:37:30+09:00
-category: "강좌"
+category: "AI 강좌"
 tags:
   - "프롬프트"
   - "TAG"

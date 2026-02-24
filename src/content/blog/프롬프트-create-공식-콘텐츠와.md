@@ -2,7 +2,7 @@
 title: "프롬프트 CREATE 공식 콘텐츠와 창작 작업에 강한 프레임워크"
 description: "프롬프트 CREATE 공식을 상세히 알아봅니다. Character, Request, Examples, Adjustments, Type, Extras 6가지 요소로 광고 문구부터 영상 스크립트까지 만드는 방법을 정리했습니다."
 date: 2026-02-24T10:32:54+09:00
-category: "강좌"
+category: "AI 강좌"
 tags:
   - "프롬프트"
   - "CREATE"
