@@ -42,7 +42,8 @@ textarea.intro{width:100%;height:80px;background:#1e293b;color:#e2e8f0;border:1p
 .card.sel .ck{background:#3b82f6;border-color:#3b82f6;color:#fff}
 .card .cmt{margin-top:8px;display:none}
 .card.sel .cmt{display:block}
-.card .cmt input{width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;padding:6px;font-size:.8rem}
+.card .cmt textarea{width:100%;min-height:52px;background:#ffffff;color:#111827;border:1px solid #94a3b8;border-radius:6px;padding:8px 10px;font-size:.85rem;resize:vertical;font-family:inherit;line-height:1.4}
+.card .cmt textarea::placeholder{color:#9ca3af}
 .bot{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100}
 .bot .cnt{color:#3b82f6;font-weight:600}
 .bot .pub{background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600}
@@ -143,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function(){
         '<div><span class="ck">'+(isSel?'✓':'')+'</span><h3>'+n.title+'</h3> <small>'+badge+cat+'</small></div>'+
         '<div class="meta">'+src+' · '+date+'</div>'+
         '<div class="desc">'+desc+'...</div>'+
-        '<div class="cmt"><input type="text" placeholder="이 뉴스가 왜 중요한지..." data-cid="'+n.id+'" value="'+(cmts[n.id]||'')+'"/>'+
+        '<div class="cmt"><textarea placeholder="이 뉴스가 왜 중요한지..." data-cid="'+n.id+'">'+(cmts[n.id]||'')+'</textarea>'+
         '<div style="font-size:.75rem;color:#64748b;margin-top:2px">나의 코멘트</div></div>';
 
       frag.appendChild(card);
@@ -161,7 +162,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   // === 카드 클릭 ===
   document.getElementById('list').addEventListener('click', function(e){
-    if(e.target.tagName === 'INPUT') return;
+    if(e.target.tagName === 'TEXTAREA') return;
     var card = e.target.closest('.card');
     if(!card) return;
     var nid = parseInt(card.getAttribute('data-nid'));
