@@ -170,7 +170,7 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
 
     document.querySelectorAll('.subscribe-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
-        if (!isLoggedIn) { window.location.href = '/api/auth/login'; return; }
+        if (!isLoggedIn) { window.location.href = '/auth/consent'; return; }
         if (!tossClientKey) { alert('결제 시스템 준비 중입니다.'); return; }
 
         const planKey = billingCycle === 'monthly'
