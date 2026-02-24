@@ -2,7 +2,7 @@
 title: "ChatGPT 프롬프트 5가지 공식 원하는 답을 얻는 핵심 프레임워크"
 description: "AI에게 원하는 답을 얻는 프롬프트 공식 5가지를 소개합니다. RISE, CREATE, TAG, RISEN, CO-STAR 프레임워크의 핵심과 실전 예시를 정리했습니다."
 date: 2026-02-24T10:26:00+09:00
-category: "강좌"
+category: "AI 강좌"
 tags:
   - "프롬프트"
   - "ChatGPT"

@@ -2,7 +2,7 @@
 title: "프롬프트 RISE 공식 분석과 보고서 작업에 강한 프레임워크"
 description: "프롬프트 RISE 공식을 상세히 알아봅니다. Role, Input, Steps, Expectation 4가지 요소의 의미와 실전 예시를 통해 AI에게 체계적인 결과물을 얻는 방법을 정리했습니다."
 date: 2026-02-24T10:29:11+09:00
-category: "강좌"
+category: "AI 강좌"
 tags:
   - "프롬프트"
   - "RISE"

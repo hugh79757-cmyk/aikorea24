@@ -2,7 +2,7 @@
 title: "프롬프트 RISEN 공식 RISE보다 정교한 결과가 필요할 때"
 description: "프롬프트 RISEN 공식을 상세히 알아봅니다. Role, Instructions, Steps, End Goal, Narrowing 5가지 요소로 제약 조건이 있는 작업에서 정확한 결과를 얻는 방법을 정리했습니다."
 date: 2026-02-24T10:38:53+09:00
-category: "강좌"
+category: "AI 강좌"
 tags:
   - "프롬프트"
   - "RISEN"

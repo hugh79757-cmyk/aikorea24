@@ -2,7 +2,7 @@
 title: "프롬프트 CO-STAR 공식 마케팅과 고객 대상 글에 강한 프레임워크"
 description: "프롬프트 CO-STAR 공식을 상세히 알아봅니다. Context, Objective, Style, Tone, Audience, Response 6가지 요소로 타깃 맞춤형 콘텐츠를 만드는 방법을 정리했습니다."
 date: 2026-02-24T10:40:25+09:00
-category: "강좌"
+category: "AI 강좌"
 tags:
   - "프롬프트"
   - "CO-STAR"
