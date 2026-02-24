@@ -13,8 +13,7 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const recentPosts = allPosts.filter(p => p.data.category !== 'AI 강좌').slice(0, 3);
-const courseCategories = ['AI 강좌', '바이브코딩', 'AI입문', '개발배포'];
-const coursePosts = allPosts.filter(p => courseCategories.includes(p.data.category)).slice(0, 3);
+const coursePosts = allPosts.filter(p => p.data.category === 'AI 강좌').slice(0, 3);
 
 // --- 브리핑 데이터 ---
 let briefing: any = null;
