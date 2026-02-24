@@ -23,17 +23,17 @@ if (!isAuth) {
 <title>AI코리아24 관리자</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+body{background:#0f172a !important;color:#e2e8f0 !important;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
 h1{font-size:1.4rem;margin-bottom:4px}
 .date{color:#94a3b8;font-size:.85rem;margin-bottom:12px}
 .status{font-size:.85rem;margin-bottom:12px;color:#94a3b8}
 .intro-label{color:#3b82f6;font-size:.9rem;font-weight:600;margin-bottom:6px}
-textarea.intro{width:100%;height:80px;background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;resize:vertical;margin-bottom:14px}
+textarea.intro{width:100% !important;height:80px;background:#1e293b !important;color:#e2e8f0 !important;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;resize:vertical;margin-bottom:14px}
 .fbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.fbtn{background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;transition:all .1s}
-.fbtn.on{background:#3b82f6;color:#fff;border-color:#3b82f6}
+.fbtn{background:#1e293b !important;color:#94a3b8 !important;border:1px solid #334155;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;transition:all .1s}
+.fbtn.on{background:#3b82f6 !important;color:#fff !important;border-color:#3b82f6}
 .fbtn:active{transform:scale(.95)}
-.card{background:#1e293b;border:2px solid #334155;border-radius:8px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .1s}
+.card{background:#1e293b !important;border:2px solid #334155;border-radius:8px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .1s}
 .card.sel{border-color:#3b82f6}
 .card h3{font-size:.95rem;margin-bottom:4px;display:inline}
 .card .meta{font-size:.75rem;color:#64748b;margin-bottom:6px}
@@ -42,9 +42,9 @@ textarea.intro{width:100%;height:80px;background:#1e293b;color:#e2e8f0;border:1p
 .card.sel .ck{background:#3b82f6;border-color:#3b82f6;color:#fff}
 .card .cmt{margin-top:8px;display:none}
 .card.sel .cmt{display:block}
-.card .cmt textarea{width:100%;min-height:52px;background:#ffffff;color:#111827;border:1px solid #94a3b8;border-radius:6px;padding:8px 10px;font-size:.85rem;resize:vertical;font-family:inherit;line-height:1.4}
-.card .cmt textarea::placeholder{color:#9ca3af}
-.bot{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100}
+.card .cmt textarea{width:100% !important;min-height:52px;background:#0f172a !important;color:#f8fafc !important;border:1px solid #475569 !important;border-radius:6px;padding:8px 10px;font-size:.85rem;resize:vertical;font-family:inherit;line-height:1.4}
+.card .cmt textarea::placeholder{color:#64748b !important}
+.bot{position:fixed;bottom:0;left:0;right:0;background:#1e293b !important;border-top:1px solid #334155;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100}
 .bot .cnt{color:#3b82f6;font-weight:600}
 .bot .pub{background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600}
 .bot .pub:disabled{background:#334155;color:#64748b;cursor:not-allowed}
