@@ -241,38 +241,50 @@ def batch_translate(articles):
     batches = [targets[b:b+BATCH] for b in range(0, len(targets), BATCH)]
     print(f"  번역 대상: {len(targets)}건 → {len(batches)}배치 (5스레드 병렬)")
     def translate_batch(batch_idx, batch_num):
-        titles = [articles[i]["title"] for i in batch_idx]
-        numbered = chr(10).join(f"{j+1}. {t}" for j, t in enumerate(titles))
+        items = []
+        for j, i in enumerate(batch_idx):
+            t = articles[i]["title"]
+            d = articles[i].get("description", "")[:300]
+            items.append(f"{j+1}. TITLE: {t}")
+            items.append(f"   DESC: {d}")
+        numbered = chr(10).join(items)
         try:
             resp = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "Translate each numbered English AI/tech news title into natural Korean. Return ONLY the numbered list with Korean translations. Keep the same numbering. No explanation."},
+                    {"role": "system", "content": "Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation."},
                     {"role": "user", "content": numbered}
                 ],
-                temperature=0.3, max_tokens=len(batch_idx) * 80)
-            lines = resp.choices[0].message.content.strip().split(chr(10))
+                temperature=0.3, max_tokens=len(batch_idx) * 200)
+            text = resp.choices[0].message.content.strip()
             kr_titles = []
-            for line in lines:
+            kr_descs = []
+            for line in text.split(chr(10)):
                 line = line.strip()
                 if not line:
                     continue
-                cleaned = line.lstrip("0123456789").lstrip(".").lstrip(")").strip()
-                if cleaned:
+                if "TITLE:" in line:
+                    cleaned = line.split("TITLE:", 1)[1].strip()
+                    cleaned = cleaned.lstrip("0123456789").lstrip(".").lstrip(")").strip()
                     kr_titles.append(cleaned)
-            return batch_num, batch_idx, kr_titles
+                elif "DESC:" in line:
+                    cleaned = line.split("DESC:", 1)[1].strip()
+                    kr_descs.append(cleaned)
+            return batch_num, batch_idx, kr_titles, kr_descs
         except Exception as e:
             print(f"    배치 {batch_num} 실패: {e}")
-            return batch_num, batch_idx, []
+            return batch_num, batch_idx, [], []
     translated = 0
     with ThreadPoolExecutor(max_workers=5) as pool:
         futures = [pool.submit(translate_batch, b, i+1) for i, b in enumerate(batches)]
         for future in as_completed(futures):
-            batch_num, batch_idx, kr_titles = future.result()
+            batch_num, batch_idx, kr_titles, kr_descs = future.result()
             for k, idx in enumerate(batch_idx):
                 articles[idx]["original_title"] = articles[idx]["title"]
                 if k < len(kr_titles):
                     articles[idx]["title"] = kr_titles[k]
+                if k < len(kr_descs) and kr_descs[k]:
+                    articles[idx]["description"] = kr_descs[k]
                 translated += 1
             print(f"    배치 {batch_num}: {len(batch_idx)}건 완료")
     print(f"  번역 완료: {translated}건 ({len(batches)}배치 병렬처리)")
