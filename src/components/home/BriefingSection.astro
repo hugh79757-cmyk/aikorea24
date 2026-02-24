@@ -69,8 +69,8 @@ function formatDate(dateStr: string) {
                     {item.category === 'benefit' && (
                       <span class="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded">혜택</span>
                     )}
-                    <a href={item.link} target="_blank" rel="noopener" class="ml-auto text-gray-500 hover:text-blue-400 transition-colors">
-                      원문 보기 &rarr;
+                    <a href={`/briefing/${briefing.date}/#item-${idx+1}`} class="ml-auto text-gray-500 hover:text-blue-400 transition-colors">
+                      자세히 보기 &rarr;
                     </a>
                   </div>
                 </div>
