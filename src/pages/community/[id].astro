@@ -78,7 +78,7 @@ if (Astro.request.method === 'POST' && currentUser && db) {
               <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm hover:bg-blue-500 transition-colors">등록</button>
             </form>
           ) : (
-            <p class="text-sm text-gray-500">댓글을 작성하려면 <a href="/api/auth/login" class="text-blue-400">로그인</a>하세요.</p>
+            <p class="text-sm text-gray-500">댓글을 작성하려면 <a href="/auth/consent" class="text-blue-400">로그인</a>하세요.</p>
           )}
         </>
       )}

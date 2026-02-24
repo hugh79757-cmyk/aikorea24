@@ -8,7 +8,7 @@ if (session) {
 }
 
 if (!user) {
-  return Astro.redirect('/api/auth/login');
+  return Astro.redirect('/auth/consent');
 }
 
 const categoryMap: Record<string, string> = {
