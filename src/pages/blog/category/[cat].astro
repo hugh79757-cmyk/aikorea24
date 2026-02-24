@@ -12,8 +12,15 @@ const categoryMeta: Record<string, { label: string; icon: string; desc: string }
   '개발배포': { label: '무료 웹사이트 만들기', icon: '🚀', desc: 'GitHub, Cloudflare로 무료 웹사이트를 만들고 배포하세요.' },
 };
 
-export const getStaticPaths = (async () => {
-  return Object.keys(categoryMeta).map(cat => ({
+export const getStaticPaths = (() => {
+  const cats: Record<string, { label: string; icon: string; desc: string }> = {
+    'AI 강좌': { label: 'AI 강좌', icon: '📚', desc: 'AI 프롬프트 공식과 활용법을 배워보세요.' },
+    '소상공인AI': { label: '소상공인 AI 활용', icon: '🏪', desc: '소상공인을 위한 AI 지원금, 바우처, 활용 가이드.' },
+    'AI입문': { label: 'AI 왕초보 가이드', icon: '🎓', desc: 'AI가 처음이어도 괜찮아요. 하나씩 알려드립니다.' },
+    '바이브코딩': { label: '바이브코딩 시작', icon: '🎵', desc: '코딩 없이 AI에게 말로 개발하는 바이브코딩.' },
+    '개발배포': { label: '무료 웹사이트 만들기', icon: '🚀', desc: 'GitHub, Cloudflare로 무료 웹사이트를 만들고 배포하세요.' },
+  };
+  return Object.keys(cats).map(cat => ({
     params: { cat },
   }));
 }) satisfies GetStaticPaths;
