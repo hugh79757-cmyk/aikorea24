@@ -43,7 +43,7 @@ function formatDate(dateStr: string) {
                   {idx + 1}
                 </span>
                 <div class="flex-1 min-w-0">
-                  <a href={item.link} target="_blank" rel="noopener" class="block">
+                  <a href={`/briefing/${briefing.date}/#item-${idx+1}`} class="block">
                     <h3 class="text-lg font-semibold mb-2 group-hover:text-blue-400 transition-colors leading-snug">
                       {item.title}
                     </h3>
