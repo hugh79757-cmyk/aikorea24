@@ -1,0 +1,266 @@
+---
+export const prerender = false;
+const url = new URL(Astro.request.url);
+const key = url.searchParams.get('key');
+if (key !== 'aikorea24admin') {
+  return new Response('Unauthorized', { status: 401 });
+}
+---
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>AI코리아24 관리자</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+h1{font-size:1.4rem;margin-bottom:4px}
+.date{color:#94a3b8;font-size:.85rem;margin-bottom:12px}
+.status{font-size:.85rem;margin-bottom:12px;color:#94a3b8}
+.intro-label{color:#3b82f6;font-size:.9rem;font-weight:600;margin-bottom:6px}
+textarea.intro{width:100%;height:80px;background:#1e293b;color:#e2e8f0;border:1px solid #334155;border-radius:8px;padding:10px;font-size:.9rem;resize:vertical;margin-bottom:14px}
+.fbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fbtn{background:#1e293b;color:#94a3b8;border:1px solid #334155;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.8rem;transition:all .1s}
+.fbtn.on{background:#3b82f6;color:#fff;border-color:#3b82f6}
+.fbtn:active{transform:scale(.95)}
+.card{background:#1e293b;border:2px solid #334155;border-radius:8px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color .1s}
+.card.sel{border-color:#3b82f6}
+.card h3{font-size:.95rem;margin-bottom:4px;display:inline}
+.card .meta{font-size:.75rem;color:#64748b;margin-bottom:6px}
+.card .desc{font-size:.82rem;color:#94a3b8;line-height:1.4}
+.card .ck{display:inline-block;width:20px;height:20px;border:2px solid #475569;border-radius:4px;text-align:center;line-height:18px;margin-right:8px;font-size:14px;vertical-align:middle}
+.card.sel .ck{background:#3b82f6;border-color:#3b82f6;color:#fff}
+.card .cmt{margin-top:8px;display:none}
+.card.sel .cmt{display:block}
+.card .cmt input{width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:4px;padding:6px;font-size:.8rem}
+.bot{position:fixed;bottom:0;left:0;right:0;background:#1e293b;border-top:1px solid #334155;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100}
+.bot .cnt{color:#3b82f6;font-weight:600}
+.bot .pub{background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600}
+.bot .pub:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+.bot .del{background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem;display:none}
+.msg{margin:0 16px;font-size:.85rem}
+.msg.ok{color:#4ade80}
+.msg.err{color:#f87171}
+.loading{text-align:center;padding:40px;color:#64748b}
+#list{padding-bottom:80px}
+</style>
+</head>
+<body>
+<h1>AI코리아24 브리핑 작성</h1>
+<div class="date" id="dinfo"></div>
+<div class="status" id="curStatus">확인 중...</div>
+<div class="intro-label">오늘의 인사이트 (브리핑 서두)</div>
+<textarea class="intro" id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로..."></textarea>
+<div class="fbar" id="fbar"></div>
+<div class="fbar" id="dbar">
+  <button class="fbtn" data-d="1">오늘</button>
+  <button class="fbtn on" data-d="3">3일</button>
+  <button class="fbtn" data-d="7">7일</button>
+  <button class="fbtn" data-d="14">14일</button>
+</div>
+<div id="list"></div>
+<div class="bot">
+  <span class="cnt" id="cnt">0건 선택</span>
+  <button class="del" id="delbtn">삭제</button>
+  <span class="msg" id="msg"></span>
+  <button class="pub" id="pub" disabled>브리핑 발행</button>
+</div>
+
+<script is:inline>
+document.addEventListener("DOMContentLoaded", function(){
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('dinfo').textContent = today + ' 브리핑';
+
+  var allNews = [];
+  var sel = {};
+  var cmts = {};
+  var days = 3;
+  var currentFilter = 'all';
+  var loadId = 0;
+  var abortCtrl = null;
+
+  // === 필터 바 ===
+  var ftrs = [
+    {k:'all',l:'전체'},{k:'kr',l:'국내'},{k:'global',l:'해외'},
+    {k:'policy',l:'정책'},{k:'benefit',l:'혜택'},
+    {k:'senior',l:'시니어'},{k:'startup',l:'스타트업'},{k:'grant',l:'지원사업'}
+  ];
+  var fbar = document.getElementById('fbar');
+  ftrs.forEach(function(f,i){
+    var b = document.createElement('button');
+    b.className = 'fbtn' + (i===0?' on':'');
+    b.textContent = f.l;
+    b.setAttribute('data-f', f.k);
+    fbar.appendChild(b);
+  });
+  fbar.addEventListener('click', function(e){
+    var b = e.target.closest('.fbtn');
+    if(!b) return;
+    fbar.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    currentFilter = b.getAttribute('data-f');
+    load(currentFilter);
+  });
+
+  // === 날짜 바 ===
+  document.getElementById('dbar').addEventListener('click', function(e){
+    var b = e.target.closest('.fbtn');
+    if(!b) return;
+    e.currentTarget.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    days = parseInt(b.getAttribute('data-d'));
+    load(currentFilter);
+  });
+
+  // === 그리기 (DocumentFragment 사용) ===
+  function draw(){
+    var list = document.getElementById('list');
+    var frag = document.createDocumentFragment();
+    for(var i=0;i<allNews.length;i++){
+      var n = allNews[i];
+      var isSel = !!sel[n.id];
+      var card = document.createElement('div');
+      card.className = 'card' + (isSel ? ' sel' : '');
+      card.setAttribute('data-nid', n.id);
+
+      var badge = (n.country && n.country !== 'kr') ? '해외' : '국내';
+      var cat = n.category ? ' ' + n.category : '';
+      var desc = (n.description || '').substring(0, 120);
+      var src = n.source || '';
+      var date = (n.pub_date || n.created_at || '').substring(0, 10);
+
+      card.innerHTML =
+        '<div><span class="ck">'+(isSel?'✓':'')+'</span><h3>'+n.title+'</h3> <small>'+badge+cat+'</small></div>'+
+        '<div class="meta">'+src+' · '+date+'</div>'+
+        '<div class="desc">'+desc+'...</div>'+
+        '<div class="cmt"><input type="text" placeholder="이 뉴스가 왜 중요한지..." data-cid="'+n.id+'" value="'+(cmts[n.id]||'')+'"/>'+
+        '<div style="font-size:.75rem;color:#64748b;margin-top:2px">나의 코멘트</div></div>';
+
+      frag.appendChild(card);
+    }
+    list.innerHTML = '';
+    list.appendChild(frag);
+  }
+
+  function upd(){
+    var n = 0;
+    for(var k in sel) if(sel[k]) n++;
+    document.getElementById('cnt').textContent = n + '건 선택';
+    document.getElementById('pub').disabled = (n === 0);
+  }
+
+  // === 카드 클릭 ===
+  document.getElementById('list').addEventListener('click', function(e){
+    if(e.target.tagName === 'INPUT') return;
+    var card = e.target.closest('.card');
+    if(!card) return;
+    var nid = parseInt(card.getAttribute('data-nid'));
+    if(sel[nid]){ delete sel[nid]; card.classList.remove('sel'); }
+    else { sel[nid] = true; card.classList.add('sel'); }
+    // 체크마크만 업데이트 (전체 리드로 안함)
+    var ck = card.querySelector('.ck');
+    if(ck) ck.textContent = sel[nid] ? '✓' : '';
+    upd();
+  });
+
+  document.getElementById('list').addEventListener('input', function(e){
+    var cid = e.target.getAttribute('data-cid');
+    if(cid) cmts[parseInt(cid)] = e.target.value;
+  });
+
+  // === 뉴스 로드 (AbortController로 이전 요청 취소) ===
+  function load(filter){
+    if(abortCtrl) abortCtrl.abort();
+    abortCtrl = new AbortController();
+    var thisId = ++loadId;
+
+    document.getElementById('list').innerHTML = '<div class="loading">로딩 중...</div>';
+
+    fetch('/api/briefing/news/?filter='+filter+'&days='+days+'&limit=100', {signal: abortCtrl.signal})
+      .then(function(r){return r.json()})
+      .then(function(data){
+        if(thisId !== loadId) return;
+        allNews = Array.isArray(data) ? data : (data.results || []);
+        draw();
+        upd();
+      })
+      .catch(function(e){
+        if(e.name === 'AbortError') return;
+        document.getElementById('list').innerHTML = '<div class="loading">로드 실패: '+e.message+'</div>';
+      });
+  }
+
+  // === 브리핑 상태 확인 ===
+  function checkStatus(){
+    fetch('/api/briefing/latest/')
+      .then(function(r){return r.json()})
+      .then(function(d){
+        var st = document.getElementById('curStatus');
+        var db = document.getElementById('delbtn');
+        if(!st) return;
+        if(d && d.date === today){
+          st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b>';
+          st.style.color = '#4ade80';
+          if(db) db.style.display = 'inline-block';
+        } else {
+          st.textContent = '오늘 발행된 브리핑 없음';
+          st.style.color = '#94a3b8';
+          if(db) db.style.display = 'none';
+        }
+      })
+      .catch(function(e){ console.log('checkStatus:', e); });
+  }
+  checkStatus();
+
+  // === 삭제 ===
+  document.getElementById('delbtn').addEventListener('click', function(){
+    if(!confirm('오늘 브리핑을 삭제하시겠습니까?')) return;
+    var msg = document.getElementById('msg');
+    fetch('/api/briefing/publish/',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:today})})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        msg.className = d.ok ? 'msg ok' : 'msg err';
+        msg.textContent = d.ok ? '삭제 완료' : '실패: '+(d.error||'');
+        checkStatus();
+      })
+      .catch(function(e){ msg.className='msg err'; msg.textContent='에러: '+e; });
+  });
+
+  // === 발행 ===
+  document.getElementById('pub').addEventListener('click', function(){
+    var pub = this;
+    var intro = document.getElementById('introText').value;
+    var items = [];
+    for(var i=0;i<allNews.length;i++){
+      if(sel[allNews[i].id]) items.push({news_id:allNews[i].id, comment:cmts[allNews[i].id]||''});
+    }
+    if(items.length===0){alert('뉴스를 선택해주세요');return;}
+
+    pub.disabled = true;
+    pub.textContent = '발행 중...';
+    var msg = document.getElementById('msg');
+
+    fetch('/api/briefing/publish/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:today,intro:intro,items:items})})
+      .then(function(r){return r.json()})
+      .then(function(d){
+        if(d.ok){
+          msg.className='msg ok'; msg.textContent='발행 완료! '+d.items_count+'건';
+          pub.textContent='발행 완료!';
+          checkStatus();
+          setTimeout(function(){ pub.textContent='브리핑 발행'; pub.disabled=false; msg.textContent=''; }, 3000);
+        } else {
+          msg.className='msg err'; msg.textContent='실패: '+(d.error||'');
+          pub.disabled=false; pub.textContent='브리핑 발행';
+        }
+      })
+      .catch(function(e){
+        msg.className='msg err'; msg.textContent='에러: '+e.message;
+        pub.disabled=false; pub.textContent='브리핑 발행';
+      });
+  });
+
+  load('all');
+});
+</script>
+</body>
+</html>

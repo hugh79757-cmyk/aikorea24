@@ -7,6 +7,7 @@ const db = runtime?.env?.DB;
 
 let briefing: any = null;
 let items: any[] = [];
+let relatedNews: any[] = [];
 
 if (db && date) {
   try {
@@ -15,13 +16,26 @@ if (db && date) {
     ).bind(date).first();
     if (briefing) {
       const { results } = await db.prepare(
-        `SELECT bi.*, n.title, n.description, n.link, n.source, n.category, n.country
+        `SELECT bi.*, n.title, n.description, n.link, n.source, n.category, n.country, n.pub_date
          FROM briefing_items bi
          LEFT JOIN news n ON bi.news_id = n.id
          WHERE bi.briefing_id = ?
          ORDER BY bi.sort_order`
       ).bind(briefing.id).all();
       items = results || [];
+
+      const itemIds = items.map((i: any) => i.news_id).filter(Boolean);
+      const placeholders = itemIds.map(() => '?').join(',');
+      if (itemIds.length > 0) {
+        const { results: related } = await db.prepare(
+          `SELECT id, title, link, description, source, category, country, pub_date
+           FROM news
+           WHERE id NOT IN (${placeholders})
+             AND created_at >= datetime('now', '-3 days')
+           ORDER BY created_at DESC LIMIT 8`
+        ).bind(...itemIds).all();
+        relatedNews = related || [];
+      }
     }
   } catch (e) {
     console.error(e);
@@ -38,49 +52,109 @@ const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ($
 ---
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{display} 브리핑 - AI코리아24</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
-    .container{max-width:720px;margin:0 auto;padding:20px 16px}
-    .back{display:inline-block;color:#60a5fa;text-decoration:none;font-size:14px;margin-bottom:20px}
-    h1{font-size:22px;font-weight:700;margin-bottom:4px}
-    .date-sub{font-size:14px;color:#94a3b8;margin-bottom:20px}
-    .intro{font-size:14px;color:#cbd5e1;line-height:1.6;margin-bottom:24px;padding:12px;background:#161b22;border-radius:8px;border-left:3px solid #60a5fa}
-    .news-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px;margin-bottom:10px}
-    .news-title{font-size:15px;font-weight:600;color:#f8fafc;line-height:1.4}
-    .news-title a{color:#f8fafc;text-decoration:none}
-    .news-title a:hover{color:#60a5fa;text-decoration:underline}
-    .news-meta{font-size:12px;color:#64748b;margin-top:6px;display:flex;gap:8px;flex-wrap:wrap}
-    .news-meta span{background:#1e293b;padding:2px 6px;border-radius:4px}
-    .news-desc{font-size:13px;color:#94a3b8;margin-top:8px;line-height:1.5}
-    .news-comment{font-size:13px;color:#cbd5e1;margin-top:8px;padding:8px;background:#1e293b;border-radius:6px;line-height:1.5}
-    .count{font-size:13px;color:#64748b;margin-bottom:16px}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{display} AI 브리핑 - AI코리아24</title>
+<meta name="description" content={`${display} AI 뉴스 브리핑 - ${items.length}건의 주요 AI 뉴스를 큐레이션했습니다.`} />
+<style is:global>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
+.container{max-width:720px;margin:0 auto;padding:20px 16px 80px}
+.back{display:inline-block;color:#60a5fa;text-decoration:none;font-size:14px;margin-bottom:20px}
+.back:hover{text-decoration:underline}
+.header{text-align:center;margin-bottom:28px}
+.header h1{font-size:28px;font-weight:800;margin-bottom:4px}
+.header .sub{font-size:14px;color:#94a3b8}
+.intro{font-size:15px;color:#cbd5e1;line-height:1.7;margin-bottom:28px;padding:16px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(139,92,246,0.08));border-radius:12px;border-left:3px solid #60a5fa}
+.count{font-size:13px;color:#64748b;margin-bottom:16px}
+
+/* 기사 카드 */
+.article{background:#161b22;border:1px solid #30363d;border-radius:14px;padding:20px;margin-bottom:16px;scroll-margin-top:20px;transition:border-color .2s}
+.article:hover{border-color:rgba(96,165,250,0.3)}
+.article-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:8px;color:#fff;font-size:13px;font-weight:700;margin-right:10px;flex-shrink:0}
+.article-top{display:flex;align-items:flex-start;margin-bottom:10px}
+.article-title{font-size:18px;font-weight:700;color:#f0f6fc;line-height:1.5}
+.article-comment{font-size:14px;color:#93c5fd;line-height:1.6;margin-bottom:10px;padding:10px 14px;background:rgba(59,130,246,0.08);border-radius:8px}
+.article-desc{font-size:13px;color:#9ca3b0;line-height:1.6;margin-bottom:12px}
+.article-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.article-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px}
+.tag{padding:3px 8px;border-radius:4px;background:#1e293b;color:#64748b}
+.tag.kr{background:#1e3a2f;color:#4ade80}
+.tag.global{background:#1e293b;color:#60a5fa}
+.tag.policy{background:#3b2e1a;color:#fb923c}
+.tag.benefit{background:#2e1a3b;color:#c084fc}
+.source-link{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;background:#1e293b;color:#60a5fa;border:1px solid #30363d;border-radius:6px;font-size:12px;text-decoration:none;transition:all .2s}
+.source-link:hover{background:#263548;border-color:#60a5fa}
+
+/* 구분선 */
+.divider{border:none;border-top:1px solid #21262d;margin:32px 0}
+
+/* 관련 뉴스 */
+.related-title{font-size:18px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.related-title .icon{font-size:20px}
+.r-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px;margin-bottom:10px;text-decoration:none;color:#e2e8f0;display:block;transition:border-color .2s}
+.r-card:hover{border-color:#60a5fa}
+.r-title{font-size:14px;font-weight:600;color:#c9d1d9;line-height:1.4;margin-bottom:4px}
+.r-desc{font-size:12px;color:#8b949e;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.r-meta{font-size:11px;color:#64748b;margin-top:6px}
+
+/* 네비게이션 */
+.nav-bar{display:flex;justify-content:center;gap:12px;margin-top:28px}
+.nav-btn{padding:10px 20px;background:#161b22;border:1px solid #30363d;border-radius:8px;color:#60a5fa;text-decoration:none;font-size:13px;transition:all .2s}
+.nav-btn:hover{border-color:#60a5fa;background:#1a2332}
+</style>
 </head>
 <body>
-  <div class="container">
-    <a href="/briefing/" class="back">← 브리핑 목록</a>
-    <h1>AI코리아24 브리핑</h1>
-    <div class="date-sub">{display}</div>
-    {briefing.intro && <div class="intro">{briefing.intro}</div>}
-    <div class="count">총 {items.length}건</div>
-    {items.map((item: any) => (
-      <div class="news-card">
-        <div class="news-title">
-          {item.link ? <a href={item.link} target="_blank" rel="noopener">{item.title}</a> : item.title}
-        </div>
-        <div class="news-meta">
-          {item.source && <span>{item.source}</span>}
-          {item.category && <span>{item.category}</span>}
-          {item.country && <span>{item.country === 'kr' ? '국내' : '해외'}</span>}
-        </div>
-        {item.description && <div class="news-desc">{item.description}</div>}
-        {item.comment && <div class="news-comment">{item.comment}</div>}
-      </div>
-    ))}
+<div class="container">
+  <a href="/briefing/" class="back">&larr; 브리핑 목록</a>
+
+  <div class="header">
+    <h1>{display}</h1>
+    <div class="sub">AI코리아24 데일리 브리핑 &middot; {items.length}건</div>
   </div>
+
+  {briefing.intro && <div class="intro">{briefing.intro}</div>}
+
+  {items.map((item: any, idx: number) => (
+    <article class="article" id={`item-${idx+1}`}>
+      <div class="article-top">
+        <span class="article-num">{idx + 1}</span>
+        <div class="article-title">{item.title}</div>
+      </div>
+      {item.comment && <div class="article-comment">{item.comment}</div>}
+      {item.description && <div class="article-desc">{item.description}</div>}
+      <div class="article-footer">
+        <div class="article-meta">
+          {item.source && <span class="tag">{item.source}</span>}
+          {item.country && item.country !== 'kr'
+            ? <span class="tag global">해외</span>
+            : <span class="tag kr">국내</span>}
+          {item.category === 'policy' && <span class="tag policy">정책</span>}
+          {item.category === 'benefit' && <span class="tag benefit">혜택</span>}
+        </div>
+        {item.link && <a href={item.link} target="_blank" rel="noopener" class="source-link">원문 보기 &rarr;</a>}
+      </div>
+    </article>
+  ))}
+
+  {relatedNews.length > 0 && (
+    <div>
+      <hr class="divider" />
+      <div class="related-title"><span class="icon">📰</span> 오늘의 다른 AI 뉴스</div>
+      {relatedNews.map((n: any) => (
+        <a href={n.link} target="_blank" rel="noopener" class="r-card">
+          <div class="r-title">{n.title}</div>
+          {n.description && <div class="r-desc">{n.description}</div>}
+          <div class="r-meta">{n.source} {n.country !== 'kr' ? '· 해외' : ''}</div>
+        </a>
+      ))}
+    </div>
+  )}
+
+  <div class="nav-bar">
+    <a href="/briefing/" class="nav-btn">&larr; 브리핑 목록</a>
+    <a href="/" class="nav-btn">메인으로 &rarr;</a>
+  </div>
+</div>
 </body>
 </html>

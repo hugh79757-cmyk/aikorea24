@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 637, in <module>
+    main()
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 624, in main
+    all_items = batch_translate(all_items)
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 228, in batch_translate
+    import openai
+ModuleNotFoundError: No module named 'openai'
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 637, in <module>
+    main()
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 624, in main
+    all_items = batch_translate(all_items)
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 228, in batch_translate
+    import openai
+ModuleNotFoundError: No module named 'openai'
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 637, in <module>
+    main()
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 624, in main
+    all_items = batch_translate(all_items)
+  File "/Users/twinssn/Projects/aikorea24/api_test/news_collector.py", line 228, in batch_translate
+    import openai
+ModuleNotFoundError: No module named 'openai'
