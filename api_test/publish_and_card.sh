@@ -28,11 +28,25 @@ if ! "$KDE_CLI" -l 2>/dev/null | grep "$DEVICE_ID" | grep -q "reachable"; then
 fi
 
 for f in "$PENDING_DIR"/*.png; do
+    echo "전송 시도: $(basename $f)"
     "$KDE_CLI" --device "$DEVICE_ID" --share "$f"
-    sleep 3
-    if [ $? -eq 0 ]; then
+    RESULT=$?
+    sleep 5
+    if [ $RESULT -eq 0 ]; then
         rm "$f"
         echo "전송 완료: $(basename $f)"
+    else
+        echo "1차 실패, 재시도: $(basename $f)"
+        sleep 3
+        "$KDE_CLI" --device "$DEVICE_ID" --share "$f"
+        RESULT=$?
+        sleep 5
+        if [ $RESULT -eq 0 ]; then
+            rm "$f"
+            echo "재시도 성공: $(basename $f)"
+        else
+            echo "전송 실패: $(basename $f)"
+        fi
     fi
 done
 echo "=== 완료 ==="

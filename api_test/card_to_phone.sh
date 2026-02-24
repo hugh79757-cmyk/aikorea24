@@ -25,6 +25,7 @@ if "$KDE_CLI" -l 2>/dev/null | grep "$DEVICE_ID" | grep -q "reachable"; then
     for f in $NEW_FILES; do
         echo "$(date): 전송: $(basename $f)" >> "$LOG"
         "$KDE_CLI" --device "$DEVICE_ID" --share "$f" >> "$LOG" 2>&1
+        sleep 5
     done
 else
     echo "$(date): KDE 미연결, pending 저장" >> "$LOG"
