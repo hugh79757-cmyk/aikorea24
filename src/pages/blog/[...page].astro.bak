@@ -1,0 +1,118 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft))
+    .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+  return paginate(posts, { pageSize: 9 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+const categories = [
+  { key: 'AI 강좌', label: 'AI 강좌', icon: '📚' },
+  { key: '소상공인AI', label: '소상공인 AI 활용', icon: '🏪' },
+  { key: 'AI입문', label: 'AI 왕초보 가이드', icon: '🎓' },
+  { key: '바이브코딩', label: '바이브코딩 시작', icon: '🎵' },
+  { key: '개발배포', label: '무료 웹사이트 만들기', icon: '🚀' },
+];
+
+const emojiMap: Record<string, string> = {
+  '소상공인AI': '🏪', 'AI입문': '🎓', '바이브코딩': '🎵', '개발배포': '🚀',
+};
+
+const pageNum = page.currentPage;
+const pageTitle = pageNum === 1 ? '블로그' : `블로그 - ${pageNum}페이지`;
+const pageDesc = pageNum === 1
+  ? 'AI 도구 리뷰, 강좌, 지원사업 정보, 뉴스를 한국어로 전달합니다.'
+  : `AI코리아24 블로그 ${pageNum}페이지 - AI 관련 최신 정보를 확인하세요.`;
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="breadcrumb">
+      <ol class="flex items-center gap-1">
+        <li><a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">홈</a></li>
+        <li class="before:content-['/'] before:mx-1 text-gray-900 dark:text-white font-medium">블로그</li>
+      </ol>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">블로그</h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">AI 관련 최신 정보와 활용 팁을 확인하세요.</p>
+
+    <!-- 카테고리 메뉴 -->
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-10">
+      {categories.map(cat => (
+        <a href={`/blog/category/${cat.key}/`}
+          class="group flex items-center gap-2.5 bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:border-blue-300 dark:hover:border-blue-500/30 transition-all duration-200 text-left">
+          <span class="text-xl flex-shrink-0">{cat.icon}</span>
+          <span class="text-sm font-semibold text-gray-800 dark:text-gray-200 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{cat.label}</span>
+        </a>
+      ))}
+    </div>
+
+    <!-- 글 목록 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="blog-grid">
+      {page.data.map(post => {
+        const dateFormatted = post.data.date instanceof Date
+          ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
+          : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+
+        return (
+          <a href={`/blog/${post.id}/`} data-category={post.data.category || ''} class="group block bg-white dark:bg-white/[0.05] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-white/[0.08]">
+            {post.data.image ? (
+              <div class="aspect-square overflow-hidden">
+                <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width="400" height="300" loading="lazy" />
+              </div>
+            ) : (
+              <div class="aspect-square bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+                <span class="text-5xl">{emojiMap[post.data.category] || '📌'}</span>
+              </div>
+            )}
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-2">
+                {post.data.category && <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">{post.data.category}</span>}
+                <span class="text-xs text-gray-400">{dateFormatted}</span>
+              </div>
+              <h2 class="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{post.data.title}</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{post.data.description}</p>
+              {post.data.tags && post.data.tags.length > 0 && (
+                <div class="flex gap-1 mt-3 flex-wrap">
+                  {post.data.tags.slice(0, 3).map((tag: string) => (
+                    <span class="text-xs bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded">#{tag}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </a>
+        );
+      })}
+    </div>
+
+    <!-- 페이지네이션 -->
+    {page.lastPage > 1 && (
+      <nav class="flex justify-center items-center gap-2 mt-12" aria-label="페이지 네비게이션">
+        {page.url.prev && (
+          <a href={page.url.prev} class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← 이전</a>
+        )}
+        {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(num => (
+          <a
+            href={num === 1 ? '/blog/' : `/blog/${num}/`}
+            class:list={[
+              'w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
+              num === page.currentPage ? 'bg-blue-600 text-white' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+            ]}
+          >{num}</a>
+        ))}
+        {page.url.next && (
+          <a href={page.url.next} class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">다음 →</a>
+        )}
+      </nav>
+    )}
+
+
+  </div>
+</Layout>
