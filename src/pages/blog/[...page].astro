@@ -18,10 +18,11 @@ const categories = [
   { key: 'AI입문', label: 'AI 왕초보 가이드', icon: '🎓' },
   { key: '바이브코딩', label: '바이브코딩 시작', icon: '🎵' },
   { key: '개발배포', label: '무료 웹사이트 만들기', icon: '🚀' },
+  { key: '뉴스', label: '뉴스 브리핑', icon: '📰' },
 ];
 
 const emojiMap: Record<string, string> = {
-  '소상공인AI': '🏪', 'AI입문': '🎓', '바이브코딩': '🎵', '개발배포': '🚀',
+  '소상공인AI': '🏪', 'AI입문': '🎓', '바이브코딩': '🎵', '개발배포': '🚀', '뉴스': '📰',
 };
 
 const pageNum = page.currentPage;
@@ -44,7 +45,7 @@ const pageDesc = pageNum === 1
     <p class="text-gray-600 dark:text-gray-400 mb-8">AI 관련 최신 정보와 활용 팁을 확인하세요.</p>
 
     <!-- 카테고리 메뉴 -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 mb-10">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 mb-10">
       {categories.map(cat => (
         <a href={`/blog/category/${cat.key}/`}
           class="group flex items-center gap-2.5 bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.08] rounded-xl px-4 py-3 hover:bg-blue-50 dark:hover:bg-blue-500/10 hover:border-blue-300 dark:hover:border-blue-500/30 transition-all duration-200 text-left">
