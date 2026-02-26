@@ -5,7 +5,7 @@ source api_test/.env.sh 2>/dev/null
 source .venv/bin/activate
 
 echo "=== $(date): 카드뉴스 생성 시작 ==="
-python3 api_test/card_news_generator.py < /dev/null
+python3 api_test/card_news_generator.py
 
 # 생성된 카드를 pending으로 이동
 CARD_DIR="api_test/card_output"
