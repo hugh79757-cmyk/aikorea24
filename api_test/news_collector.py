@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+import sys
+import os
+# stdout/stderr 안전 처리 (대시보드 원격 실행 시 fd 없을 수 있음)
+try:
+    sys.stdout.fileno()
+except (OSError, AttributeError):
+    import io as _io
+    _fallback_log = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fallback.log")
+    _fh = open(_fallback_log, "a", encoding="utf-8")
+    sys.stdout = _fh
+    sys.stderr = _fh
+
+
 """
 aikorea24 뉴스 수집기 v4.0
 - 해외 50% : 국내 50% 비율
