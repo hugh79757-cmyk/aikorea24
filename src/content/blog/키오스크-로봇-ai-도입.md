@@ -12,7 +12,7 @@ tags:
   - "디지털전환"
   - "기술보급사업"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/키오스크-로봇-ai-도입/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/키오스크-로봇-ai-도입/thumbnail.webp"
 ---
 
 [소상공인 스마트상점 공식 홈페이지](https://www.sbiz.or.kr/smst/index.do)
@@ -37,7 +37,7 @@ image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/키오스크-
 
 **지원 내용**
 
-![L5rhWadL.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/키오스크-로봇-ai-도입/6f5cb5e7b9c7003ba14047199f8eaf4cb5d835d1.webp)
+![L5rhWadL.webp](https://img.aikorea24.kr/images/키오스크-로봇-ai-도입/6f5cb5e7b9c7003ba14047199f8eaf4cb5d835d1.webp)
 
 스마트기술 도입 비용의 **70%에서 80%** 를 정부가 부담합니다. 소상공인은 나머지 20%에서 30%만 자부담하면 됩니다. 지원 한도는 **최대 500만원** 입니다. 취약계층 소상공인은 80%까지 지원받을 수 있습니다.
 

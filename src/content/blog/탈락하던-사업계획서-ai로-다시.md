@@ -12,7 +12,7 @@ tags:
   - "ChatGPT활용"
   - "지원사업선정"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/탈락하던-사업계획서-ai로-다시/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/탈락하던-사업계획서-ai로-다시/thumbnail.webp"
 ---
 
 [기업마당 정부지원사업 통합공고](https://www.bizinfo.go.kr/)
@@ -39,7 +39,7 @@ image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/탈락하던-
 
 **추상적인 표현**
 
-![wn0xqHz8.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/탈락하던-사업계획서-ai로-다시/8fa90a80ee9ffcc9e0d08304a6f203ca10d6742b.webp)
+![wn0xqHz8.webp](https://img.aikorea24.kr/images/탈락하던-사업계획서-ai로-다시/8fa90a80ee9ffcc9e0d08304a6f203ca10d6742b.webp)
 
 "열심히 하겠습니다", "최선을 다하겠습니다", "혁신적인 서비스입니다" 같은 표현은 점수를 받지 못합니다. 심사위원은 하루에 수십 개 계획서를 읽습니다. 모든 지원자가 열심히 한다고 씁니다. 차별점이 없습니다.
 

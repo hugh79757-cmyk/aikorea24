@@ -11,7 +11,7 @@ tags:
   - "AI활용"
   - "마케팅"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-co-star-공식/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/프롬프트-co-star-공식/thumbnail.webp"
 ---
 
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)

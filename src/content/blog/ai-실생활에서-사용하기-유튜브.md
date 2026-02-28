@@ -12,7 +12,7 @@ tags:
   - "시간절약"
   - "AI사용법"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-실생활에서-사용하기-유튜브/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/ai-실생활에서-사용하기-유튜브/thumbnail.webp"
 ---
 
 [YouTube Summary with ChatGPT 확장프로그램 설치하기](https://chromewebstore.google.com/detail/youtube-summary-with-chat/nmmicjeknamkfloonkhhcjmomieiodli?pli=1)
@@ -23,7 +23,7 @@ AI가 좋다는 건 알겠는데, 대체 어디에 어떻게 쓰라는 걸까요
 
 바로 긴 유튜브 영상을 AI로 요약하는 방법입니다. 예를 들어, 유발 하라리와 이재명 대표의 AI 대담 영상이 있습니다. 무려 1시간 30분짜리 영상인데요. 바쁜 일상 속에서 이 긴 영상을 처음부터 끝까지 보기란 쉽지 않습니다. 하지만 AI를 활용하면 **30초 만에 핵심 내용을 파악** 할 수 있습니다.
 
-![20260216120523.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-실생활에서-사용하기-유튜브/8bd9b843fbdf39d33167ec9ab91dacaab59fb8d4.webp)
+![20260216120523.webp](https://img.aikorea24.kr/images/ai-실생활에서-사용하기-유튜브/8bd9b843fbdf39d33167ec9ab91dacaab59fb8d4.webp)
 
 ## 왜 영상 요약에 AI를 쓸까
 
@@ -35,7 +35,7 @@ AI가 좋다는 건 알겠는데, 대체 어디에 어떻게 쓰라는 걸까요
 
 ## 준비물은 딱 두 가지
 
-![V8j7ocC02.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-실생활에서-사용하기-유튜브/06fa2e0c3ce5e7d08f6e71d71517528792d22351.webp)
+![V8j7ocC02.webp](https://img.aikorea24.kr/images/ai-실생활에서-사용하기-유튜브/06fa2e0c3ce5e7d08f6e71d71517528792d22351.webp)
 
 이 방법을 따라하기 위해 필요한 것은 딱 두 가지입니다.
 
@@ -62,7 +62,7 @@ AI가 좋다는 건 알겠는데, 대체 어디에 어떻게 쓰라는 걸까요
 
 라고요. 막히는 부분이 있으면 언제든지 물어보면 됩니다. 그렇게 에이아이를 활용하는 지식이 늘어나고 점점 더 익숙해질 거예요.
 
-![20260216120445.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-실생활에서-사용하기-유튜브/6e04ddde2c2444942e12cb47efcdfdde0cb55e97.webp)
+![20260216120445.webp](https://img.aikorea24.kr/images/ai-실생활에서-사용하기-유튜브/6e04ddde2c2444942e12cb47efcdfdde0cb55e97.webp)
 
 ## 이 방법의 장점과 활용 팁
 

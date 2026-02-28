@@ -12,7 +12,7 @@ tags:
   - "데이터 인프라"
   - "경제는민주당"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-네이티브-정부를-어떻게/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/ai-네이티브-정부를-어떻게/thumbnail.webp"
 ---
 
 대한민국은 세계가 인정하는 IT 강국입니다. 전자정부 평가에서 수차례 1위를 기록했고, 스마트폰 보급률도 세계 최고 수준에 달합니다. 그런데 과연 우리 정부의 행정 시스템은 AI 시대에 걸맞은 수준일까요. 2026년 2월 24일 국회의원회관에서 열린 **경제는민주당** 제41회 강연에서 박태웅 녹서포럼 의장은 이 질문에 정면으로 답했습니다.
@@ -45,7 +45,7 @@ FAIR는 Findable(검색 가능성), Accessible(접근 가능성), Interoperable(
 
 ## AI 네이티브 정부의 구체적 모습
 
-![EUpUbnWf.jpeg](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-네이티브-정부를-어떻게/914a252a96c225407ef4d4b83727949e4ee2e8b5.jpeg)
+![EUpUbnWf.jpeg](https://img.aikorea24.kr/images/ai-네이티브-정부를-어떻게/914a252a96c225407ef4d4b83727949e4ee2e8b5.jpeg)
 
 박태웅 의장이 제시한 AI 네이티브 정부의 비전은 **일을 할수록 데이터가 쌓이고 일을 할수록 더 똑똑해지는 정부** 입니다. 오늘의 업무가 내일의 데이터가 되어 시스템이 자동으로 최적화되는 구조를 의미합니다.
 

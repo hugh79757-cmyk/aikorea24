@@ -11,7 +11,7 @@ tags:
   - "AI활용"
   - "보고서작성"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-rise-공식-분석과/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/프롬프트-rise-공식-분석과/thumbnail.webp"
 ---
 
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)
@@ -52,7 +52,7 @@ Expectation 부분입니다. "각 항목에 대한 평가를 포함한 구조화
 
 ## 실전 예시 2 경쟁사 분석
 
-![1mNxAERI.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-rise-공식-분석과/ef1bccf236d5e3b732c623843b4fb064bd982df4.webp)
+![1mNxAERI.webp](https://img.aikorea24.kr/images/프롬프트-rise-공식-분석과/ef1bccf236d5e3b732c623843b4fb064bd982df4.webp)
 
 마케팅팀에서 경쟁사 분석 보고서를 만들어야 하는 상황입니다.
 

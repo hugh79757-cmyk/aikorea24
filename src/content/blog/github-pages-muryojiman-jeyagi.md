@@ -11,7 +11,7 @@ tags:
   - "GitHub"
   - "바이브코딩"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-pages-muryojiman-jeyagi/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/github-pages-muryojiman-jeyagi/thumbnail.webp"
 ---
 
 - [GitHub Pages 공식 문서](https://docs.github.com/ko/pages)
@@ -52,7 +52,7 @@ GitHub Pages는 모든 용도로 사용할 수 있는 것이 아닙니다. 온�
 
 ## Cloudflare Pages와 비교
 
-![hi7KPDso.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-pages-muryojiman-jeyagi/cead18088f5868feb22c9d7d73ec36b9aeb69ef2.webp)
+![hi7KPDso.webp](https://img.aikorea24.kr/images/github-pages-muryojiman-jeyagi/cead18088f5868feb22c9d7d73ec36b9aeb69ef2.webp)
 
 Cloudflare Pages와 비교하면 GitHub Pages는 설정이 더 간단하지만 기능이 제한적입니다. Cloudflare Pages는 빌드 과정을 자동으로 처리해 주지만, GitHub Pages는 Jekyll 외의 빌드 도구를 사용하려면 GitHub Actions를 직접 설정해야 합니다.
 
