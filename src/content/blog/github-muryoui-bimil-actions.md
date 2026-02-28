@@ -12,7 +12,7 @@ tags:
   - "GitHub"
   - "바이브코딩"
 draft: false
-image: "/images/github-muryoui-bimil-actions/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-muryoui-bimil-actions/thumbnail.webp"
 ---
 
 - [GitHub Actions 문서](https://docs.github.com/ko/actions)
@@ -39,7 +39,7 @@ Next.js 같은 복잡한 프로젝트도 빌드에 3~5분 정도 걸립니다. �
 
 가장 중요한 점은 공개 레포지토리에서 GitHub Actions가 무제한 무료라는 것입니다. 블로그, 포트폴리오, 오픈소스 프로젝트처럼 공개해도 되는 코드라면 제한 없이 자동화를 사용할 수 있습니다.
 
-![5ZkBd73F.webp](/images/github-muryoui-bimil-actions/fd2deb244dd01101c9cdf1852483a08c2293ce9f.webp)
+![5ZkBd73F.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-muryoui-bimil-actions/fd2deb244dd01101c9cdf1852483a08c2293ce9f.webp)
 
 
 
@@ -57,7 +57,7 @@ Next.js 같은 복잡한 프로젝트도 빌드에 3~5분 정도 걸립니다. �
 
 ## Actions 사용량 확인하기
 
-![20260212105951.webp](/images/github-muryoui-bimil-actions/8cc045fee14a1bdf20cac4884279fa87099c9ce9.webp)
+![20260212105951.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-muryoui-bimil-actions/8cc045fee14a1bdf20cac4884279fa87099c9ce9.webp)
 
 현재 사용량은 GitHub에서 확인할 수 있습니다. 프로필 아이콘 클릭 → Settings → Billing and plans → Usage this month에서 Actions 사용 시간을 볼 수 있습니다. 월별로 리셋되니 정기적으로 확인하면서 페이스를 조절하세요.
 

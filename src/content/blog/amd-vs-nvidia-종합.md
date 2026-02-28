@@ -14,7 +14,7 @@ tags:
   - "CUDA"
   - "ROCm"
 draft: false
-image: "/images/amd-vs-nvidia-종합/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/amd-vs-nvidia-종합/thumbnail.webp"
 ---
 
 [AMD 관련 기사 원문 보기 (The Decoder)](https://the-decoder.com/amd-basically-copy-pasted-its-openai-deal-for-meta-six-gigawatts-and-ten-percent-equity-included/)
@@ -47,7 +47,7 @@ Nvidia의 2025 회계연도 연간 매출은 **1,305억 달러** 를 기록했�
 
 AMD의 2025년 4분기 매출은 **103억 달러** 입니다. 전년 대비 34% 성장했습니다. 성장률 자체는 양호하지만, 절대 규모에서 차이가 큽니다.
 
-![7IcG72MM.webp](/images/amd-vs-nvidia-종합/a7f1ddd6678af34218fc99c071fc1915e9d1a156.webp)
+![7IcG72MM.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/amd-vs-nvidia-종합/a7f1ddd6678af34218fc99c071fc1915e9d1a156.webp)
 
 단순 비교하면 Nvidia의 한 분기 매출이 AMD 연간 매출의 약 1.5배에 달합니다.
 

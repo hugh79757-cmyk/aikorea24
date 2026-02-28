@@ -12,7 +12,7 @@ tags:
   - "개발도구"
   - "초보자"
 draft: false
-image: "/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/thumbnail.webp"
 ---
 
 - [VSCode 공식 다운로드](https://code.visualstudio.com/)
@@ -35,7 +35,7 @@ image: "/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/thumbnail.webp"
 
 ---
 
-![ghwOM2EV.webp](/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/981552f8de681121edc8a3955a7a5e92a9d96f3a.webp)
+![ghwOM2EV.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/981552f8de681121edc8a3955a7a5e92a9d96f3a.webp)
 
 ## 한글 언어팩 설치하기
 

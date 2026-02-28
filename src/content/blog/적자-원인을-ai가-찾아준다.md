@@ -12,7 +12,7 @@ tags:
   - "비용절감"
   - "경영개선"
 draft: false
-image: "/images/적자-원인을-ai가-찾아준다/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/적자-원인을-ai가-찾아준다/thumbnail.webp"
 ---
 
 [Microsoft 365 Copilot](https://www.microsoft.com/ko-kr/microsoft-365/copilot)
@@ -53,7 +53,7 @@ image: "/images/적자-원인을-ai가-찾아준다/thumbnail.webp"
 
 ## AI로 적자 원인 분석하는 방법
 
-![rM2rMqIF1.webp](/images/적자-원인을-ai가-찾아준다/153b03b126a3dbbb0213e7de6e50c98ae196d0e7.webp)
+![rM2rMqIF1.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/적자-원인을-ai가-찾아준다/153b03b126a3dbbb0213e7de6e50c98ae196d0e7.webp)
 
 이제 실제로 AI를 활용해 적자 원인을 찾는 과정을 살펴보겠습니다.
 

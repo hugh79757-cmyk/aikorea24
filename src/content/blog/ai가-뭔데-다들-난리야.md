@@ -12,7 +12,7 @@ tags:
   - "기술트렌드"
   - "디지털리터러시"
 draft: false
-image: "/images/ai가-뭔데-다들-난리야/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai가-뭔데-다들-난리야/thumbnail.webp"
 ---
 
 [네이버 AI 트렌드 살펴보기](https://search.naver.com/search.naver?query=AI+%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5)
@@ -35,7 +35,7 @@ AI도 마찬가지입니다. 다만 일반 계산기가 숫자만 다룬다면, 
 
 "나는 AI 같은 거 안 써"라고 생각하시나요? 사실 여러분은 이미 하루에도 수십 번 AI를 사용하고 계십니다.
 
-![yG0CjQA04.webp](/images/ai가-뭔데-다들-난리야/923210c615e8bcdb97579cded103da7f9a5db5f7.webp)
+![yG0CjQA04.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai가-뭔데-다들-난리야/923210c615e8bcdb97579cded103da7f9a5db5f7.webp)
 
 **스마트폰 얼굴 인식** 이 대표적입니다. 아침에 눈을 비비며 폰을 들면 잠금이 해제되죠? 이게 바로 AI입니다. AI가 여러분의 얼굴 특징을 기억해두었다가 "아, 주인이구나" 하고 문을 열어주는 겁니다.
 

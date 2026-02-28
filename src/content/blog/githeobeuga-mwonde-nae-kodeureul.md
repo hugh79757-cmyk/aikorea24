@@ -12,7 +12,7 @@ tags:
   - "코드저장소"
   - "바이브코딩"
 draft: false
-image: "/images/githeobeuga-mwonde-nae-kodeureul/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/githeobeuga-mwonde-nae-kodeureul/thumbnail.webp"
 ---
 
 - [GitHub 공식 사이트](https://github.com/)
@@ -47,7 +47,7 @@ GitHub을 사용하려면 먼저 계정을 만들어야 합니다. github.com에
 
 ## 레포지토리 만들기
 
-![hDHbNmTP.webp](/images/githeobeuga-mwonde-nae-kodeureul/f2bd0c1c22662fc557d13ba6565d77fd9918e401.webp)
+![hDHbNmTP.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/githeobeuga-mwonde-nae-kodeureul/f2bd0c1c22662fc557d13ba6565d77fd9918e401.webp)
 
 레포지토리(Repository)는 하나의 프로젝트를 담는 폴더라고 생각하시면 됩니다. 줄여서 "레포"라고 부릅니다. GitHub에 로그인한 후 오른쪽 상단의 + 버튼을 클릭하고 New repository를 선택합니다.
 
