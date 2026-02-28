@@ -11,7 +11,7 @@ tags:
   - "AI활용"
   - "생산성"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-tag-공식-가장/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/프롬프트-tag-공식-가장/thumbnail.webp"
 ---
 
 [ChatGPT 프롬프트 5가지 공식 원하는 답을 얻는 핵심 프레임워크 | AI코리아24](https://aikorea24.kr/blog/chatgpt-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-5%EA%B0%80%EC%A7%80-%EA%B3%B5%EC%8B%9D/)

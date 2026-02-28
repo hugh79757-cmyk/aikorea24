@@ -12,7 +12,7 @@ tags:
   - "바이브코딩"
   - "무료웹사이트"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-cloudflare-pages-muryoro/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/github-cloudflare-pages-muryoro/thumbnail.webp"
 ---
 
 - [Cloudflare Pages 공식 사이트](https://pages.cloudflare.com/)
@@ -61,7 +61,7 @@ GitHub 연결을 처음 하면 권한 승인 화면이 나타납니다. Cloudfla
 
 "Save and Deploy" 버튼을 클릭하면 배포가 시작됩니다. 처음에는 1~2분 정도 소요될 수 있습니다. 배포가 완료되면 "Visit site" 버튼이 나타나고, 클릭하면 여러분의 웹사이트가 브라우저에 열립니다. 축하합니다. 여러분의 웹사이트가 전 세계에 공개되었습니다.
 
-![qbxglzXA.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-cloudflare-pages-muryoro/987ddf9287e291453ab5fb11b5a7e845366dad5f.webp)
+![qbxglzXA.webp](https://img.aikorea24.kr/images/github-cloudflare-pages-muryoro/987ddf9287e291453ab5fb11b5a7e845366dad5f.webp)
 
 ---
 

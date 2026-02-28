@@ -12,7 +12,7 @@ tags:
   - "AI일상화"
   - "생성형AI"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai가-일상이-되면-생략되는/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/ai가-일상이-되면-생략되는/thumbnail.webp"
 ---
 
 [오픈서베이 AI 검색 트렌드 리포트 2026](https://blog.opensurvey.co.kr/article/ai-search-2026-2/)
@@ -33,7 +33,7 @@ image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai가-일상�
 
 ## 왜 모든 포털이 AI를 최상단에 올리는가
 
-![USQ8wLNy.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai가-일상이-되면-생략되는/31942f961781af658826ee2c1526a96103fb3231.webp)
+![USQ8wLNy.webp](https://img.aikorea24.kr/images/ai가-일상이-되면-생략되는/31942f961781af658826ee2c1526a96103fb3231.webp)
 
 구글을 열면 **AI Overview** 가 검색 결과 최상단에 자리 잡고 있습니다. 네이버를 열면 **AI 브리핑** 이 가장 먼저 눈에 들어옵니다. Bing은 **Copilot** 을 검색 화면 정중앙에 배치했습니다. 이것은 우연이 아닙니다.
 

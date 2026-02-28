@@ -58,7 +58,7 @@ Hugo는 Go 언어로 만들어져 빌드 속도가 매우 빠릅니다. 수천 �
 
 ## 바이브코딩에 정적 사이트가 좋은 이유
 
-![zjvPZWDz.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/wepsaiteureul-eodie-mandeulji-tiseutori/5bdec7e4fe6b9e7c846b208c185df902ffbd55c0.webp)
+![zjvPZWDz.webp](https://img.aikorea24.kr/images/wepsaiteureul-eodie-mandeulji-tiseutori/5bdec7e4fe6b9e7c846b208c185df902ffbd55c0.webp)
 
 바이브코딩을 배우시는 분들에게 Hugo나 Astro를 추천하는 이유가 있습니다. 첫째, 코드를 직접 다루기 때문에 학습 효과가 큽니다. AI에게 "이 테마의 헤더를 수정해줘"라고 요청하면서 실제 코드가 어떻게 작동하는지 배울 수 있습니다.
 

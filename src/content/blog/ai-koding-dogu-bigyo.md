@@ -12,7 +12,7 @@ tags:
   - "바이브코딩"
   - "AI비교"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-koding-dogu-bigyo/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/ai-koding-dogu-bigyo/thumbnail.webp"
 ---
 
 - [ChatGPT 공식 사이트](https://chat.openai.com/)
@@ -46,7 +46,7 @@ Claude는 Anthropic이 개발한 AI로, 긴 문맥을 처리하는 능력이 뛰
 
 ## Cursor 개발자를 위한 전용 AI 에디터
 
-![jvBRAX2W.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai-koding-dogu-bigyo/f333bf6c68f914e59c4cd9984f945beacad864a2.webp)
+![jvBRAX2W.webp](https://img.aikorea24.kr/images/ai-koding-dogu-bigyo/f333bf6c68f914e59c4cd9984f945beacad864a2.webp)
 
 Cursor는 VS Code를 기반으로 만들어진 AI 전용 코드 에디터입니다. 에디터 안에서 바로 AI에게 질문하고, 코드를 생성하고, 수정할 수 있어 개발 워크플로우가 끊기지 않습니다. "이 함수 설명해줘", "여기 버그 수정해줘"처럼 코드를 선택하고 바로 AI와 대화할 수 있습니다.
 

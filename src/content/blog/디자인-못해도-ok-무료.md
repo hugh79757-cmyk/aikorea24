@@ -12,7 +12,7 @@ tags:
   - "인스타그램마케팅"
   - "디자인초보"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/디자인-못해도-ok-무료/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/디자인-못해도-ok-무료/thumbnail.webp"
 ---
 
 [Canva 무료 시작하기](https://www.canva.com/ko_kr/)
@@ -37,7 +37,7 @@ image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/디자인-못
 
 ## 5분 만에 인스타그램 피드 만들기
 
-![9o9fnoBa.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/디자인-못해도-ok-무료/3c63a76e4663094cee4fac31aef3a013002ee2fe.webp)
+![9o9fnoBa.webp](https://img.aikorea24.kr/images/디자인-못해도-ok-무료/3c63a76e4663094cee4fac31aef3a013002ee2fe.webp)
 
 실제로 인스타그램 피드 이미지를 만드는 과정을 따라해 보겠습니다.
 

@@ -11,7 +11,7 @@ tags:
   - "AI활용"
   - "콘텐츠제작"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-create-공식-콘텐츠와/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/프롬프트-create-공식-콘텐츠와/thumbnail.webp"
 ---
 
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)
@@ -36,7 +36,7 @@ CREATE는 Character, Request, Examples, Adjustments, Type of Output, Extras의 �
 
 ## 언제 CREATE를 쓰나요
 
-![gvVmPMjA.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-create-공식-콘텐츠와/620811b795f9451590f6a02da41e110f8a571ef7.webp)
+![gvVmPMjA.webp](https://img.aikorea24.kr/images/프롬프트-create-공식-콘텐츠와/620811b795f9451590f6a02da41e110f8a571ef7.webp)
 
 CREATE는 창의적인 결과물이 필요한 모든 작업에 적합합니다. 광고 카피, 브랜드 영상 스크립트, 블로그 글, SNS 콘텐츠, 이메일 뉴스레터, 제품 소개서 같은 작업이요. 분석이나 평가처럼 정해진 기준이 있는 작업에는 RISE가 낫습니다.
 

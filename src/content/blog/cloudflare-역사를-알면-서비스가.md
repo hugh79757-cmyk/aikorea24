@@ -13,7 +13,7 @@ tags:
   - "서버리스"
   - "클라우드"
 draft: false
-image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/cloudflare-역사를-알면-서비스가/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/cloudflare-역사를-알면-서비스가/thumbnail.webp"
 ---
 
 [Cloudflare 15주년 타임라인](https://timeline.www.cloudflare.com/) | [Cloudflare 공식 블로그](https://blog.cloudflare.com/)
@@ -54,7 +54,7 @@ Cloudflare는 현명한 선택을 했습니다. 모든 것을 직접 개발하�
 
 대표적인 예가 **R2** 입니다. Cloudflare가 오브젝트 스토리지를 만들 때, 완전히 새로운 API를 설계하지 않았습니다. 대신 **AWS S3 API와 100% 호환** 되도록 만들었습니다. 덕분에 기존에 S3를 쓰던 개발자들은 코드 한 줄만 바꿔도 R2로 마이그레이션할 수 있습니다. S3용으로 만들어진 수천 개의 도구와 라이브러리가 그대로 작동합니다.
 
-![XSblFBXl.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/cloudflare-역사를-알면-서비스가/0ce2a6f3a2473181e63789a3277fab875b1b3499.webp)
+![XSblFBXl.webp](https://img.aikorea24.kr/images/cloudflare-역사를-알면-서비스가/0ce2a6f3a2473181e63789a3277fab875b1b3499.webp)
 
 데이터베이스도 마찬가지입니다. Cloudflare는 자체 데이터베이스 D1을 만들면서도, 외부 데이터베이스와의 연동을 적극 지원합니다. **Neon, PlanetScale, Supabase, Turso** 같은 인기 있는 서버리스 데이터베이스를 Workers에서 클릭 몇 번으로 연결할 수 있습니다. 2023년에는 **Hyperdrive** 라는 서비스를 출시해서, 기존에 쓰던 PostgreSQL이나 MySQL 데이터베이스를 Workers에서 빠르게 접근할 수 있게 했습니다.
 
@@ -96,7 +96,7 @@ CDN과 보안이 본업이었는데, 개발자들이 코드도 돌리고 싶어�
 
 이런 맥락을 알면 서비스 선택이 훨씬 쉬워집니다. 정적 웹사이트만 올릴 거면 Pages(또는 Workers)면 충분합니다. 서버 로직이 필요하면 Workers를 씁니다. 데이터를 저장하려면 용도에 따라 KV(간단한 값), D1(관계형 데이터), R2(파일)를 고르면 됩니다. 클라우드플레어의 터널 서비스를 이용하면 내 노트북을 서버로 이용하고 제어를 모바일에서 할 수있는 툴을 쉽게 만들 수 있습니다. 
 
-<img src="https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/cloudflare-역사를-알면-서비스가/079fb065a4182c82eab4a007578b84218a2048f2.webp" title="" alt="Screenshot_20260222_164101_Chrome.webp" data-align="center">
+<img src="https://img.aikorea24.kr/images/cloudflare-역사를-알면-서비스가/079fb065a4182c82eab4a007578b84218a2048f2.webp" title="" alt="Screenshot_20260222_164101_Chrome.webp" data-align="center">
 
 ## 결론
 
