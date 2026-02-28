@@ -13,7 +13,7 @@ tags:
   - "프롬프트엔지니어링"
   - "노코드"
 draft: false
-image: "/images/바이브-코딩-시작하기-chatgpt와/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/바이브-코딩-시작하기-chatgpt와/thumbnail.webp"
 ---
 
 [Visual Studio Code 다운로드](https://code.visualstudio.com/)
@@ -46,7 +46,7 @@ VS Code에서 코딩하면서 **ChatGPT를 별도 창에 띄워두고 대화** �
 
 효과적인 프롬프트 작성이 바이브 코딩의 핵심입니다. 단순히 "로그인 기능 만들어줘"보다는 **구체적인 요구사항** 을 포함해야 합니다. 예를 들어 "Python Flask를 사용하여 이메일과 비밀번호로 로그인하는 기능을 만들어줘. 비밀번호는 bcrypt로 해시 처리하고, 로그인 실패 시 에러 메시지를 반환해줘"처럼 기술 스택, 기능 세부사항, 예외 처리까지 명시하면 훨씬 정확한 코드를 얻을 수 있습니다. ChatGPT가 생성한 코드에 문제가 있다면 에러 메시지를 그대로 복사하여 다시 질문하면 수정된 코드를 받을 수 있습니다.
 
-![2026021894906.webp](/images/바이브-코딩-시작하기-chatgpt와/108155356708ed82b0be0f39277e694b961c2e97.webp)
+![2026021894906.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/바이브-코딩-시작하기-chatgpt와/108155356708ed82b0be0f39277e694b961c2e97.webp)
 
 위의 사진에서처럼 왼편에는 대화형 LLM에게 코드를 물어보고 오른쪽에는 VSCode를 띄워놓고 그 터미널 창에 블러준 코드를 입력하는 식으로 작업을 합니다. 
 
@@ -66,7 +66,7 @@ ChatGPT가 생성한 HTML, CSS, JavaScript 코드를 각각 파일로 저장합�
 
 ChatGPT와 VS Code 조합으로 바이브 코딩의 기본을 익혔다면, 더 강력한 도구로 확장할 수 있습니다. **GitHub Copilot** 은 VS Code 내에서 실시간으로 코드를 제안해 주어 별도 창 전환 없이 빠른 개발이 가능합니다. **Cursor** 는 VS Code를 기반으로 AI 기능을 대폭 강화한 에디터로, 프로젝트 전체를 이해하고 맥락에 맞는 코드를 생성하는 데 탁월합니다.
 
-![C8kc6zNO.webp](/images/바이브-코딩-시작하기-chatgpt와/d10f4c9ab2eae9a70dfe1673db42a42a8847e358.webp)
+![C8kc6zNO.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/바이브-코딩-시작하기-chatgpt와/d10f4c9ab2eae9a70dfe1673db42a42a8847e358.webp)
 
 웹 개발을 넘어 모바일 앱이나 백엔드 서버를 만들고 싶다면 **Replit** 이나 **Lovable** 같은 플랫폼도 고려해 볼 만합니다. 이 도구들은 클라우드 환경에서 즉시 실행 가능한 결과물을 만들어 주어 환경 설정의 부담을 줄여줍니다. 어떤 도구를 선택하든 핵심은 동일합니다. 명확한 의도를 자연어로 표현하고, AI가 생성한 결과를 검토하며, 반복적인 대화를 통해 원하는 프로그램을 완성해 나가는 것입니다.
 

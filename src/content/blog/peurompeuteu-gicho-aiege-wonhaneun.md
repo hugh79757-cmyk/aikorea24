@@ -11,7 +11,7 @@ tags:
   - "ChatGPT활용"
   - "코딩입문"
 draft: false
-image: "/images/peurompeuteu-gicho-aiege-wonhaneun/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/peurompeuteu-gicho-aiege-wonhaneun/thumbnail.webp"
 ---
 
 - [Google Cloud 프롬프트 엔지니어링 가이드](https://cloud.google.com/discover/what-is-prompt-engineering?hl=ko)
@@ -34,7 +34,7 @@ image: "/images/peurompeuteu-gicho-aiege-wonhaneun/thumbnail.webp"
 
 ---
 
-![KwWYJnbF.webp](/images/peurompeuteu-gicho-aiege-wonhaneun/04c1519e828c022d5a24b5fb175cb444ec5764c6.webp)
+![KwWYJnbF.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/peurompeuteu-gicho-aiege-wonhaneun/04c1519e828c022d5a24b5fb175cb444ec5764c6.webp)
 
 ## 명확하고 구체적으로 말하기
 
@@ -42,7 +42,7 @@ AI는 모호한 지시에 모호한 결과를 내놓습니다. "좋은 웹사이
 
 기술 스택도 명시하면 좋습니다. "HTML/CSS로 만들어줘", "React와 Tailwind CSS를 사용해줘"처럼 사용할 기술을 지정하면 일관된 코드를 얻을 수 있습니다. 참고할 디자인이나 사이트가 있다면 "애플 홈페이지처럼 미니멀한 디자인으로"라고 예시를 들어도 좋습니다.
 
-![x7OZneP2.webp](/images/peurompeuteu-gicho-aiege-wonhaneun/9787925563203ff7f8b71c7122208261c5b526be.webp)
+![x7OZneP2.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/peurompeuteu-gicho-aiege-wonhaneun/9787925563203ff7f8b71c7122208261c5b526be.webp)
 
 ---
 

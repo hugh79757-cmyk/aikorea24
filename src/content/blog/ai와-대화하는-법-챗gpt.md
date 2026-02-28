@@ -12,7 +12,7 @@ tags:
   - "파일업로드"
   - "대화형AI"
 draft: false
-image: "/images/ai와-대화하는-법-챗gpt/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai와-대화하는-법-챗gpt/thumbnail.webp"
 ---
 
 대화형 AI에게 텍스트만 입력하던 시대는 이미 지났습니다. 2026년 현재 ChatGPT, Claude, Gemini, Grok은 사진, PDF, 엑셀, 프레젠테이션, 심지어 영상과 음성까지 이해할 수 있습니다. 문제는 어떤 AI가 어떤 형태를 받아들이는지, 무료 사용자와 유료 사용자 사이에 어떤 차이가 있는지 정확히 아는 사람이 많지 않다는 점입니다. 각 플랫폼이 지원하는 파일 형식, 용량 제한, 무료와 유료의 차이, 그리고 실전에서 바로 쓸 수 있는 팁까지 담았습니다. 글을 끝까지 읽으시면 어떤 파일을 어떤 AI에게 보내야 가장 좋은 답변을 받을 수 있는지 감이 잡히실 것입니다.
@@ -23,7 +23,7 @@ image: "/images/ai와-대화하는-법-챗gpt/thumbnail.webp"
 
 음성 입력은 마이크를 통해 말로 질문하는 방식인데, ChatGPT의 고급 음성 모드(Advanced Voice Mode)가 대표적입니다. Gemini 역시 모바일 앱과 웹에서 음성 대화를 지원합니다. 마지막으로 영상 및 오디오 파일은 Gemini가 가장 앞서 있는 영역으로, 유료 사용자는 최대 1시간 분량의 영상과 3시간 분량의 오디오를 업로드할 수 있습니다.
 
-<img src="/images/ai와-대화하는-법-챗gpt/652fb16b8b2046febfec2789690feb54f5cf15a5.webp" title="" alt="Screenshot_20260228_132111.webp" data-align="center">
+<img src="https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai와-대화하는-법-챗gpt/652fb16b8b2046febfec2789690feb54f5cf15a5.webp" title="" alt="Screenshot_20260228_132111.webp" data-align="center">
 
 ## 문서 파일, 어디까지 읽히나
 
@@ -58,7 +58,7 @@ Claude는 JPEG, PNG, GIF, WebP 네 가지 이미지 형식을 지원합니다. �
 
 "이 화면에서 토큰은 어디에 저장할 수 있지?"
 
-![FmAyOzM1.webp](/images/ai와-대화하는-법-챗gpt/5d56b79492d2a3c0bd39d86aa9a69a527bc3a000.webp)
+![FmAyOzM1.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/ai와-대화하는-법-챗gpt/5d56b79492d2a3c0bd39d86aa9a69a527bc3a000.webp)
 
 ## 음성 대화와 실시간 입력
 

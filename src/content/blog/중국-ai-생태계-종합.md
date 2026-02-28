@@ -13,7 +13,7 @@ tags:
   - "홍바오"
   - "Qwen"
 draft: false
-image: "/images/중국-ai-생태계-종합/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/중국-ai-생태계-종합/thumbnail.webp"
 ---
 
 중국은 미국과는 독립적인 병렬 AI 생태계를 구축했습니다. 2025년 12월 기준 중국의 생성형 AI 사용자 수는 약 6억 200만 명으로 전년 대비 141.7% 급증했으며, 정부에 등록된 생성형 AI 서비스만 700개 이상에 달합니다.
@@ -54,7 +54,7 @@ image: "/images/중국-ai-생태계-종합/thumbnail.webp"
 
 ## 반도체 제약과 역설적 혁신
 
-![VVQKg9Iq.jpeg](/images/중국-ai-생태계-종합/7e71ecfe066f6751a23d20a6d4ff61e2e6ed0775.jpeg)
+![VVQKg9Iq.jpeg](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/중국-ai-생태계-종합/7e71ecfe066f6751a23d20a6d4ff61e2e6ed0775.jpeg)
 
 미국의 대중국 반도체 수출 규제로 인해 중국 기업들은 Nvidia의 최신 데이터센터 GPU에 접근할 수 없습니다. 중국이 보유한 최고의 자체 AI 칩인 화웨이 Ascend 910C의 성능은 Nvidia H100의 약 60% 수준에 불과하며, 2027년까지 Nvidia와의 성능 격차는 17배로 벌어질 것이라는 분석도 있습니다.
 

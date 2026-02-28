@@ -11,7 +11,7 @@ tags:
   - "바이브코딩"
   - "효율적배포"
 draft: false
-image: "/images/cloudflare-muryoui-hangye-bildeu/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/cloudflare-muryoui-hangye-bildeu/thumbnail.webp"
 ---
 
 - [Cloudflare Pages 제한 사항](https://developers.cloudflare.com/pages/platform/limits/)
@@ -28,7 +28,7 @@ Cloudflare Pages는 무료로 사용할 수 있는 최고의 호스팅 서비스
 
 ## 월 500회 빌드 현실적인 계산
 
-![gXV00UQy.webp](/images/cloudflare-muryoui-hangye-bildeu/7b096c716d18a6c2b34ad43bd02da505b321dca4.webp)
+![gXV00UQy.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/cloudflare-muryoui-hangye-bildeu/7b096c716d18a6c2b34ad43bd02da505b321dca4.webp)
 
 월 500회를 30일로 나누면 하루 약 16회입니다. 하루 16번이면 넉넉해 보이지만, 실제로 개발 중에는 쉽게 넘길 수 있는 숫자입니다. 특히 바이브코딩 초반에는 AI에게 이것저것 요청하고 결과를 확인하느라 배포 횟수가 많아집니다.
 
@@ -58,7 +58,7 @@ Cloudflare Pages 설정에서 Production branch를 main으로 지정하고, Prev
 
 월초에 빌드를 많이 소진했다면 월말에는 배포를 자제해야 합니다. 반대로 월말인데 빌드가 많이 남았다면 평소에 미뤄뒀던 수정 사항들을 한꺼번에 배포해도 됩니다. 매달 1일에 빌드 횟수가 리셋되니 월말에 남은 빌드는 아껴둘 필요가 없습니다. 클라우드 플래어에서 제공하는 api를 사용해서 빌드횟수가 얼마나 되는지 첵크할 수 있습니다. 아래는 바이브 코딩을 통해 만든 블로그 관리기. 상단에 빌드 현황이 나오게 만들었습니다.
 
-![20260212105042.webp](/images/cloudflare-muryoui-hangye-bildeu/780dfe38a631a1a24b089685066ab87e2e114b88.webp)
+![20260212105042.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/cloudflare-muryoui-hangye-bildeu/780dfe38a631a1a24b089685066ab87e2e114b88.webp)
 
 ---
 

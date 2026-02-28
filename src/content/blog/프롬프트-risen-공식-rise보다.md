@@ -11,7 +11,7 @@ tags:
   - "AI활용"
   - "문서작성"
 draft: false
-image: "/images/프롬프트-risen-공식-rise보다/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/프롬프트-risen-공식-rise보다/thumbnail.webp"
 ---
 
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)

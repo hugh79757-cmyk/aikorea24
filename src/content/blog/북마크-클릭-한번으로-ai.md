@@ -12,14 +12,14 @@ tags:
   - "Claude"
   - "크롬"
 draft: false
-image: "/images/북마크-클릭-한번으로-ai/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/북마크-클릭-한번으로-ai/thumbnail.webp"
 ---
 
 얼마 전 스레드 안타까운 글을 봤습니다. 제미나이 채팅 항목이 갑자기 사라져서 고객센터에 문의했다는 내용이었습니다. AI 서비스는 언제든 대화 기록이 유실되거나 접근이 불가능해질 수 있습니다. 클라우드에만 의존하면 중요한 대화 내용을 영영 잃어버릴 수도 있는 것입니다.
 
 저는 20만 토큰이 다 차서 세션이 끝난 대화창을 통째로 마크다운 형식으로 저장해서 개인 데이터베이스에 넣고 검색합니다. 이렇게 하면 과거 대화를 찾을 때 AI 서비스에 다시 로그인해서 스크롤할 필요 없이 검색 한 번으로 원하는 내용을 찾을 수 있습니다.
 
-<img src="/images/북마크-클릭-한번으로-ai/577a885ac4041435de524f50ec4f0ff59bfe9d85.webp" title="" alt="2026022083436.webp" data-align="center">
+<img src="https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/북마크-클릭-한번으로-ai/577a885ac4041435de524f50ec4f0ff59bfe9d85.webp" title="" alt="2026022083436.webp" data-align="center">
 
 오늘은 크롬 브라우저에서 북마클릿을 이용해 AI 대화 내용을 마크다운으로 저장하는 방법을 소개합니다. ChatGPT, Gemini, Claude 등 어떤 AI 채팅이든 적용할 수 있는 방법을 설명해 드리겠습니다.
 
@@ -33,7 +33,7 @@ AI 서비스의 대화 기록은 영구적이지 않습니다. 서비스 정책 
 
 ## 북마클릿이란 무엇인가요
 
-<img src="/images/북마크-클릭-한번으로-ai/5eda7dd01ae7ec9a6c480abf3cb6045c7fb8fc9e.webp" title="" alt="2026022083501.webp" data-align="center">
+<img src="https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/북마크-클릭-한번으로-ai/5eda7dd01ae7ec9a6c480abf3cb6045c7fb8fc9e.webp" title="" alt="2026022083501.webp" data-align="center">
 
 북마클릿은 브라우저 북마크에 저장하는 작은 자바스크립트 코드입니다. 일반 북마크는 URL을 저장하지만, 북마클릿은 **javascript:** 로 시작하는 코드를 저장합니다. 위의 이미지에서 확인할 수 있듯이 url이 들어가는 자리에 코드를 넣는 겁니다. 북마크를 클릭하면 현재 보고 있는 웹페이지에서 해당 코드가 실행됩니다.
 
@@ -72,7 +72,7 @@ AI가 해당 사이트의 HTML 구조를 분석해서 맞춤형 코드를 만들
 
 ## 크롬에서 북마클릿 등록하는 방법
 
-![img_20260220_085137.webp](/images/북마크-클릭-한번으로-ai/e223835e17c000e558c3db5afee43e0ace0002a7.webp)
+![img_20260220_085137.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/북마크-클릭-한번으로-ai/e223835e17c000e558c3db5afee43e0ace0002a7.webp)
 
 AI에게 받은 코드를 크롬 북마크에 등록하는 방법을 안내합니다.
 
@@ -88,7 +88,7 @@ AI에게 받은 코드를 크롬 북마크에 등록하는 방법을 안내합�
 
 이제 AI 채팅 페이지에서 해당 북마크를 클릭하면 대화 내용이 마크다운 파일로 다운로드됩니다.
 
-<img src="/images/북마크-클릭-한번으로-ai/b97281684c0309798d94b2d53b5524068d8b407e.webp" title="" alt="Screenshot20260220082239Threads-1.webp" data-align="center">
+<img src="https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/북마크-클릭-한번으로-ai/b97281684c0309798d94b2d53b5524068d8b407e.webp" title="" alt="Screenshot20260220082239Threads-1.webp" data-align="center">
 
 ## 저장한 마크다운 활용하기
 

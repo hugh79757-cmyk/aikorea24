@@ -12,7 +12,7 @@ tags:
   - "개발입문"
   - "코딩교육"
 draft: false
-image: "/images/baibeukodingiran-koding-eopsi-aiege/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/baibeukodingiran-koding-eopsi-aiege/thumbnail.webp"
 ---
 
 - [Google Cloud 바이브코딩 가이드](https://cloud.google.com/discover/what-is-vibe-coding?hl=ko)
@@ -33,7 +33,7 @@ image: "/images/baibeukodingiran-koding-eopsi-aiege/thumbnail.webp"
 
 핵심은 프롬프트입니다. 프롬프트란 AI에게 주는 지시사항으로, "게시판 만들어줘"처럼 단순한 요청부터 "React로 댓글 기능이 있는 게시판을 만들어줘, 페이지네이션도 추가해줘"처럼 상세한 요청까지 다양합니다. 프롬프트를 얼마나 잘 작성하느냐에 따라 AI가 생성하는 코드의 품질이 달라집니다.
 
-![iPwc7G82.webp](/images/baibeukodingiran-koding-eopsi-aiege/2b28a3e37dd82f2d984129e6ac1e75d9c7bd3fe7.webp)
+![iPwc7G82.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/baibeukodingiran-koding-eopsi-aiege/2b28a3e37dd82f2d984129e6ac1e75d9c7bd3fe7.webp)
 
 ---
 

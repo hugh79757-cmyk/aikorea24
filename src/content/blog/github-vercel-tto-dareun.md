@@ -12,7 +12,7 @@ tags:
   - "CloudflarePages"
   - "바이브코딩"
 draft: false
-image: "/images/github-vercel-tto-dareun/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-vercel-tto-dareun/thumbnail.webp"
 ---
 
 - [Vercel 공식 사이트](https://vercel.com/)
@@ -33,7 +33,7 @@ Vercel은 Next.js를 만든 회사에서 운영하는 프론트엔드 배포 플
 
 가장 큰 장점은 Next.js와의 궁합입니다. Next.js의 모든 기능(SSR, ISR, API Routes 등)을 추가 설정 없이 바로 사용할 수 있습니다. 배포 과정도 매우 간단해서 Git 푸시만 하면 몇 분 안에 전 세계 CDN에 배포됩니다. 미리보기 배포(Preview Deployment) 기능으로 브랜치별로 별도 URL을 제공해 테스트하기도 편리합니다.
 
-![4HFZUY07.webp](/images/github-vercel-tto-dareun/66e47b6d75a4042b7b4e223c282890d1a2e3f376.webp)
+![4HFZUY07.webp](https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-vercel-tto-dareun/66e47b6d75a4042b7b4e223c282890d1a2e3f376.webp)
 
 ---
 

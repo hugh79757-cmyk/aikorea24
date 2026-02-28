@@ -12,7 +12,7 @@ tags:
   - "개발입문"
   - "협업도구"
 draft: false
-image: "/images/github-cheoeumirado-gwaenchanayo-aiege/thumbnail.webp"
+image: "https://pub-bc48937f7a09402fbd548e79d043ffa0.r2.dev/images/github-cheoeumirado-gwaenchanayo-aiege/thumbnail.webp"
 ---
 
 [GitHub 공식 사이트](https://github.com)
