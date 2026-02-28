@@ -43,8 +43,8 @@ const dateStr = post.data.date instanceof Date
   ? post.data.date.toISOString()
   : new Date(post.data.date).toISOString();
 
-const inlinePost = relatedPosts.length > 0 ? relatedPosts[0] : null;
-const bottomPosts = relatedPosts.slice(1);
+const inlinePosts = relatedPosts.slice(0, 3);
+const bottomPosts = relatedPosts.slice(3);
 
 const formattedDate = post.data.date instanceof Date
   ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -135,23 +135,27 @@ const formattedDate = post.data.date instanceof Date
       <Content />
     </div>
 
-    <!-- 인라인 관련글 배너 (2번째 h2 앞에 삽입) -->
-    {inlinePost && (
-      <div id="inline-related-data" class="hidden"
-        data-url={`/blog/${inlinePost.id}/`}
-        data-title={inlinePost.data.title}
-        data-category={inlinePost.data.category || ''}
-      ></div>
+    <!-- 인라인 관련글 배너 (본문 h2 사이에 최대 3개 삽입) -->
+    {inlinePosts.length > 0 && (
+      <div id="inline-related-data" class="hidden">
+        {inlinePosts.map((ip, idx) => (
+          <div
+            data-idx={idx}
+            data-url={`/blog/${ip.id}/`}
+            data-title={ip.data.title}
+            data-category={ip.data.category || ''}
+          ></div>
+        ))}
+      </div>
     )}
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const data = document.getElementById('inline-related-data');
-        if (!data) return;
+        const container = document.getElementById('inline-related-data');
+        if (!container) return;
 
-        const url = data.dataset.url;
-        const title = data.dataset.title;
-        const category = data.dataset.category;
+        const items = container.querySelectorAll('[data-idx]');
+        if (items.length === 0) return;
 
         const prose = document.querySelector('.prose');
         if (!prose) return;
@@ -159,19 +163,41 @@ const formattedDate = post.data.date instanceof Date
         const h2s = prose.querySelectorAll('h2');
         if (h2s.length < 2) return;
 
-        const banner = document.createElement('div');
-        banner.className = 'not-prose my-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl';
-        banner.innerHTML = `
-          <a href="${url}" class="flex items-start gap-3 no-underline group">
-            <span class="text-blue-500 text-lg mt-0.5">📎</span>
-            <span>
-              ${category ? `<span class="text-xs font-semibold text-blue-600 dark:text-blue-400">${category}</span><br/>` : ''}
-              <span class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${title}</span>
-            </span>
-          </a>
-        `;
+        const total = h2s.length;
+        let positions;
+        if (total <= 3) {
+          positions = [1];
+        } else if (total <= 5) {
+          positions = [1, 3];
+        } else {
+          positions = [1, 3, 5];
+        }
 
-        h2s[1].parentNode.insertBefore(banner, h2s[1]);
+        const count = Math.min(positions.length, items.length);
+
+        for (let i = 0; i < count; i++) {
+          const pos = positions[i];
+          if (pos >= h2s.length) break;
+
+          const item = items[i];
+          const url = item.dataset.url;
+          const title = item.dataset.title;
+          const category = item.dataset.category;
+
+          const banner = document.createElement('div');
+          banner.className = 'not-prose my-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl';
+          banner.innerHTML = `
+            <a href="${url}" class="flex items-start gap-3 no-underline group">
+              <span class="text-blue-500 text-lg mt-0.5">📎</span>
+              <span>
+                ${category ? `<span class="text-xs font-semibold text-blue-600 dark:text-blue-400">${category}</span><br/>` : ''}
+                <span class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${title}</span>
+              </span>
+            </a>
+          `;
+
+          h2s[pos].parentNode.insertBefore(banner, h2s[pos]);
+        }
       });
     </script>
 
