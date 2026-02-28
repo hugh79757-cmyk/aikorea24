@@ -1,0 +1,206 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { id: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+// 관련 글 찾기: 같은 카테고리 or 태그 겹침
+const allPosts = await getCollection('blog');
+const currentTags = new Set((post.data.tags || []).map((t: string) => t.toLowerCase()));
+const currentCategory = (post.data.category || '').toLowerCase();
+
+const relatedPosts = allPosts
+  .filter(p => p.id !== post.id && !p.data.draft)
+  .map(p => {
+    let score = 0;
+    const pCategory = (p.data.category || '').toLowerCase();
+    const pTags = (p.data.tags || []).map((t: string) => t.toLowerCase());
+    
+    // 같은 카테고리면 +3
+    if (pCategory && pCategory === currentCategory) score += 3;
+    // 태그 겹칠 때마다 +1
+    for (const t of pTags) {
+      if (currentTags.has(t)) score += 1;
+    }
+    return { post: p, score };
+  })
+  .filter(r => r.score > 0)
+  .sort((a, b) => b.score - a.score || new Date(b.post.data.date).getTime() - new Date(a.post.data.date).getTime())
+  .slice(0, 5)
+  .map(r => r.post);
+
+const dateStr = post.data.date instanceof Date
+  ? post.data.date.toISOString()
+  : new Date(post.data.date).toISOString();
+
+const inlinePost = relatedPosts.length > 0 ? relatedPosts[0] : null;
+const bottomPosts = relatedPosts.slice(1);
+
+const formattedDate = post.data.date instanceof Date
+  ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })
+  : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image || '/og-default.png'}
+  type="article"
+  publishedDate={dateStr}
+  tags={post.data.tags || []}
+  category={post.data.category || ''}
+>
+  <article class="max-w-3xl mx-auto px-4 py-12">
+    <!-- 브레드크럼 -->
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="breadcrumb">
+      <ol class="flex items-center gap-1">
+        <li><a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">홈</a></li>
+        <li class="before:content-['/'] before:mx-1">
+          <a href="/blog" class="hover:text-blue-600 dark:hover:text-blue-400">블로그</a>
+        </li>
+        <li class="before:content-['/'] before:mx-1 text-gray-900 dark:text-gray-100 font-medium truncate max-w-[200px]">
+          {post.data.title}
+        </li>
+      </ol>
+    </nav>
+
+    <!-- 헤더 -->
+    <header class="mb-8">
+      {post.data.category && (
+        <span class="inline-block bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+          {post.data.category}
+        </span>
+      )}
+
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
+        {post.data.title}
+      </h1>
+
+      <p class="text-gray-600 dark:text-gray-300 text-lg mb-4">
+        {post.data.description}
+      </p>
+
+      <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+        <time datetime={dateStr}>{formattedDate}</time>
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="flex gap-2 flex-wrap">
+            {post.data.tags.map((tag: string) => (
+              <span class="bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded text-xs">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </header>
+
+    <!-- 커버 이미지 -->
+    {post.data.image && (
+      <img
+        src={post.data.image}
+        alt={post.data.title}
+        class="w-full rounded-xl mb-8 aspect-square object-cover"
+        width="768"
+        height="432"
+        loading="eager"
+      />
+    )}
+
+    <!-- 본문 (prose 다크 모드 적용) -->
+    <div class="prose prose-lg max-w-none
+      prose-headings:text-gray-900 dark:prose-headings:text-white
+      prose-p:text-gray-700 dark:prose-p:text-gray-300
+      prose-strong:text-gray-900 dark:prose-strong:text-white
+      prose-a:text-blue-600 dark:prose-a:text-blue-400
+      prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
+      prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600
+      prose-code:text-pink-600 dark:prose-code:text-pink-400
+      prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800/50
+      prose-li:text-gray-700 dark:prose-li:text-gray-300
+      prose-img:rounded-xl
+      prose-hr:border-gray-200 dark:prose-hr:border-gray-700
+      prose-th:text-gray-900 dark:prose-th:text-gray-100
+      prose-td:text-gray-700 dark:prose-td:text-gray-300
+    ">
+      <Content />
+    </div>
+
+    <!-- 인라인 관련글 배너 (2번째 h2 앞에 삽입) -->
+    {inlinePost && (
+      <div id="inline-related-data" class="hidden"
+        data-url={`/blog/${inlinePost.id}/`}
+        data-title={inlinePost.data.title}
+        data-category={inlinePost.data.category || ''}
+      ></div>
+    )}
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const data = document.getElementById('inline-related-data');
+        if (!data) return;
+
+        const url = data.dataset.url;
+        const title = data.dataset.title;
+        const category = data.dataset.category;
+
+        const prose = document.querySelector('.prose');
+        if (!prose) return;
+
+        const h2s = prose.querySelectorAll('h2');
+        if (h2s.length < 2) return;
+
+        const banner = document.createElement('div');
+        banner.className = 'not-prose my-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl';
+        banner.innerHTML = `
+          <a href="${url}" class="flex items-start gap-3 no-underline group">
+            <span class="text-blue-500 text-lg mt-0.5">📎</span>
+            <span>
+              ${category ? `<span class="text-xs font-semibold text-blue-600 dark:text-blue-400">${category}</span><br/>` : ''}
+              <span class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${title}</span>
+            </span>
+          </a>
+        `;
+
+        h2s[1].parentNode.insertBefore(banner, h2s[1]);
+      });
+    </script>
+
+    <!-- 관련 글 -->
+    {bottomPosts.length > 0 && (
+      <section class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">함께 읽으면 좋은 글</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {bottomPosts.map(rp => (
+            <a href={`/blog/${rp.id}/`}
+               class="block p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+              {rp.data.category && (
+                <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">{rp.data.category}</span>
+              )}
+              <h3 class="text-sm font-semibold text-gray-900 dark:text-white mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-2">
+                {rp.data.title}
+              </h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">{rp.data.description}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 하단 네비게이션 -->
+    <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+      <a href="/blog" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+        ← 블로그 목록으로
+      </a>
+    </div>
+  </article>
+</Layout>

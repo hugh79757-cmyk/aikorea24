@@ -23,7 +23,7 @@ image: "/images/ai와-대화하는-법-챗gpt/thumbnail.webp"
 
 음성 입력은 마이크를 통해 말로 질문하는 방식인데, ChatGPT의 고급 음성 모드(Advanced Voice Mode)가 대표적입니다. Gemini 역시 모바일 앱과 웹에서 음성 대화를 지원합니다. 마지막으로 영상 및 오디오 파일은 Gemini가 가장 앞서 있는 영역으로, 유료 사용자는 최대 1시간 분량의 영상과 3시간 분량의 오디오를 업로드할 수 있습니다.
 
-<img src="assets/652fb16b8b2046febfec2789690feb54f5cf15a5.webp" title="" alt="Screenshot_20260228_132111.webp" data-align="center">
+<img src="/images/ai와-대화하는-법-챗gpt/652fb16b8b2046febfec2789690feb54f5cf15a5.webp" title="" alt="Screenshot_20260228_132111.webp" data-align="center">
 
 ## 문서 파일, 어디까지 읽히나
 
