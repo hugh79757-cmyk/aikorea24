@@ -25,7 +25,7 @@ R2_KEY="events/${EVENT}/${FILENAME}"
 echo "=== R2 업로드 ==="
 echo "파일: $FILE"
 echo "R2 키: $R2_KEY"
-npx wrangler r2 object put "aikorea24-files/${R2_KEY}" --file="$FILE"
+npx wrangler r2 object put "aikorea24-files/${R2_KEY}" --file="$FILE" --remote
 
 if [ $? -ne 0 ]; then
     echo "R2 업로드 실패"
