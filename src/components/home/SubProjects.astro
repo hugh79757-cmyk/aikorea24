@@ -7,6 +7,7 @@ const projects = [
     url: 'https://heritage.aikorea24.kr',
     color: 'from-amber-500/20 to-orange-500/20',
     border: 'hover:border-amber-500/30',
+    image: '',
   },
   {
     icon: '📋',
@@ -15,6 +16,7 @@ const projects = [
     url: 'https://cert.aikorea24.kr',
     color: 'from-emerald-500/20 to-teal-500/20',
     border: 'hover:border-emerald-500/30',
+    image: '/images/cert-og.png',
   },
   {
     icon: '📊',
@@ -23,6 +25,7 @@ const projects = [
     url: 'https://8.informationhot.kr',
     color: 'from-blue-500/20 to-indigo-500/20',
     border: 'hover:border-blue-500/30',
+    image: '/images/news-keyword-og.webp',
   },
 ];
 ---
@@ -37,7 +40,11 @@ const projects = [
       {projects.map((p) => (
         <a href={p.url} target="_blank" rel="noopener"
            class={`group block bg-gradient-to-br ${p.color} backdrop-blur-sm border border-white/[0.06] rounded-2xl p-6 transition-all duration-300 ${p.border} hover:scale-[1.02]`}>
-          <div class="text-4xl mb-4">{p.icon}</div>
+          {p.image ? (
+            <img src={p.image} alt={p.title} class="w-full h-32 object-cover rounded-lg mb-4" />
+          ) : (
+            <div class="text-4xl mb-4">{p.icon}</div>
+          )}
           <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{p.title}</h3>
           <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">{p.desc}</p>
           <span class="text-sm text-blue-500 dark:text-blue-400 group-hover:translate-x-1 inline-block transition-transform">
