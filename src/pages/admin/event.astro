@@ -1,0 +1,216 @@
+---
+export const prerender = false;
+
+const ADMIN_EMAILS = ['twinssn@gmail.com'];
+
+let isAuth = false;
+const session = Astro.cookies.get('session')?.value;
+if (session) {
+  try {
+    const user = JSON.parse(atob(session));
+    isAuth = ADMIN_EMAILS.includes(user.email);
+  } catch {}
+}
+
+if (!isAuth) {
+  return new Response('Unauthorized', { status: 401 });
+}
+---
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+<link rel="icon" href="/favicon.png" />
+<title>이벤트 권한 관리 - 관리자</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+h1{font-size:1.4rem;margin-bottom:16px}
+.nav{margin-bottom:20px;display:flex;gap:8px}
+.nav a{color:#94a3b8;text-decoration:none;padding:6px 14px;border-radius:6px;font-size:.85rem;background:#1e293b;border:1px solid #334155}
+.nav a:hover,.nav a.on{background:#3b82f6;color:#fff;border-color:#3b82f6}
+.section{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px;margin-bottom:20px}
+.section h2{font-size:1.1rem;margin-bottom:12px;color:#93c5fd}
+label{display:block;font-size:.85rem;color:#94a3b8;margin-bottom:4px}
+input,select{width:100%;background:#0f172a;color:#e2e8f0;border:1px solid #475569;border-radius:6px;padding:8px 12px;font-size:.9rem;margin-bottom:12px}
+input:focus,select:focus{outline:none;border-color:#3b82f6}
+.btn{background:#2563eb;color:#fff;border:none;padding:8px 20px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn:hover{background:#3b82f6}
+.btn.red{background:#dc2626}
+.btn.red:hover{background:#ef4444}
+.btn:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+.msg{font-size:.85rem;margin:8px 0}
+.msg.ok{color:#4ade80}
+.msg.err{color:#f87171}
+table{width:100%;border-collapse:collapse;font-size:.85rem;margin-top:12px}
+th{text-align:left;color:#64748b;padding:8px 6px;border-bottom:1px solid #334155;font-weight:500}
+td{padding:8px 6px;border-bottom:1px solid #1e293b;color:#cbd5e1}
+td.email{color:#93c5fd;font-weight:500}
+td.dl{color:#4ade80}
+td.nodl{color:#64748b}
+.del-btn{background:none;border:1px solid #64748b;color:#f87171;padding:3px 10px;border-radius:4px;cursor:pointer;font-size:.75rem}
+.del-btn:hover{background:#dc2626;color:#fff;border-color:#dc2626}
+.stats{display:flex;gap:16px;margin-bottom:16px}
+.stat-box{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px 16px;flex:1;text-align:center}
+.stat-num{font-size:1.4rem;font-weight:700;color:#3b82f6}
+.stat-label{font-size:.75rem;color:#64748b;margin-top:2px}
+</style>
+</head>
+<body>
+
+<h1>이벤트 권한 관리</h1>
+<div class="nav">
+  <a href="/admin/">브리핑</a>
+  <a href="/admin/event/" class="on">이벤트</a>
+</div>
+
+<!-- 통계 -->
+<div class="stats" id="stats">
+  <div class="stat-box"><div class="stat-num" id="s-total">-</div><div class="stat-label">총 권한</div></div>
+  <div class="stat-box"><div class="stat-num" id="s-downloaded">-</div><div class="stat-label">다운로드 완료</div></div>
+  <div class="stat-box"><div class="stat-num" id="s-pending">-</div><div class="stat-label">미다운로드</div></div>
+</div>
+
+<!-- 권한 부여 -->
+<div class="section">
+  <h2>권한 부여</h2>
+  <label>이메일 (Google 계정)</label>
+  <input type="email" id="grantEmail" placeholder="user@gmail.com" />
+  <label>리소스</label>
+  <select id="grantResource"><option value="">로딩 중...</option></select>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="btn" id="grantBtn">권한 부여</button>
+    <span class="msg" id="grantMsg"></span>
+  </div>
+</div>
+
+<!-- 권한 목록 -->
+<div class="section">
+  <h2>권한 목록</h2>
+  <table>
+    <thead><tr><th>이메일</th><th>리소스</th><th>부여일</th><th>다운로드</th><th></th></tr></thead>
+    <tbody id="grantList"></tbody>
+  </table>
+</div>
+
+<script is:inline>
+document.addEventListener('DOMContentLoaded', function() {
+
+  function loadResources() {
+    fetch('/api/resources/')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var sel = document.getElementById('grantResource');
+        sel.innerHTML = '';
+        var list = data.resources || [];
+        if (list.length === 0) {
+          sel.innerHTML = '<option value="">등록된 리소스 없음</option>';
+          return;
+        }
+        list.forEach(function(r) {
+          var opt = document.createElement('option');
+          opt.value = r.id;
+          opt.textContent = r.title + ' (' + r.filename + ')';
+          sel.appendChild(opt);
+        });
+      })
+      .catch(function() {
+        document.getElementById('grantResource').innerHTML = '<option value="">로드 실패</option>';
+      });
+  }
+
+  function loadGrants() {
+    fetch('/api/admin/grant/')
+      .then(function(r) { return r.json(); })
+      .then(function(list) {
+        var tbody = document.getElementById('grantList');
+        tbody.innerHTML = '';
+
+        var total = list.length;
+        var downloaded = 0;
+        list.forEach(function(g) { if (g.downloaded_at) downloaded++; });
+
+        document.getElementById('s-total').textContent = total;
+        document.getElementById('s-downloaded').textContent = downloaded;
+        document.getElementById('s-pending').textContent = total - downloaded;
+
+        if (list.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;padding:20px;">아직 부여된 권한이 없습니다</td></tr>';
+          return;
+        }
+
+        list.forEach(function(g) {
+          var dlText = g.downloaded_at
+            ? '<td class="dl">' + g.downloaded_at.slice(0, 16) + '</td>'
+            : '<td class="nodl">미다운로드</td>';
+
+          tbody.innerHTML += '<tr>'
+            + '<td class="email">' + g.email + '</td>'
+            + '<td>' + g.title + '</td>'
+            + '<td>' + (g.granted_at || '').slice(0, 10) + '</td>'
+            + dlText
+            + '<td><button class="del-btn" data-id="' + g.id + '">삭제</button></td>'
+            + '</tr>';
+        });
+
+        tbody.querySelectorAll('.del-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            if (!confirm('권한을 삭제하시겠습니까?')) return;
+            var grantId = this.getAttribute('data-id');
+            fetch('/api/admin/grant/', {
+              method: 'DELETE',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ grant_id: parseInt(grantId) })
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(d) {
+              if (d.ok) loadGrants();
+            });
+          });
+        });
+      });
+  }
+
+  document.getElementById('grantBtn').addEventListener('click', function() {
+    var email = document.getElementById('grantEmail').value.trim();
+    var resourceId = document.getElementById('grantResource').value;
+    var msg = document.getElementById('grantMsg');
+
+    if (!email) { msg.className = 'msg err'; msg.textContent = '이메일을 입력하세요'; return; }
+    if (!resourceId) { msg.className = 'msg err'; msg.textContent = '리소스를 선택하세요'; return; }
+
+    this.disabled = true;
+    fetch('/api/admin/grant/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, resource_id: parseInt(resourceId) })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        msg.className = 'msg ok';
+        msg.textContent = email + ' 권한 부여 완료';
+        document.getElementById('grantEmail').value = '';
+        loadGrants();
+      } else {
+        msg.className = 'msg err';
+        msg.textContent = '실패: ' + (d.error || '');
+      }
+      document.getElementById('grantBtn').disabled = false;
+    })
+    .catch(function(e) {
+      msg.className = 'msg err';
+      msg.textContent = '에러: ' + e;
+      document.getElementById('grantBtn').disabled = false;
+    });
+  });
+
+  loadResources();
+  loadGrants();
+});
+</script>
+
+</body>
+</html>

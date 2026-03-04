@@ -2,6 +2,7 @@
 
 interface Env {
   DB: D1Database;
+  R2: R2Bucket;
 }
 
 type Runtime = import('@astrojs/cloudflare').Runtime<Env>;
