@@ -12,7 +12,7 @@ tags:
   - "AI복지"
   - "GPU"
 draft: false
-image: "/images/https://img.aikorea24.kr/images/소버린-ai란-무엇인가-그리고/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/소버린-ai란-무엇인가-그리고/thumbnail.webp"
 ---
 
 오늘(3월 4일) 구글 딥마인드가 제미나이 3.1 플래시라이트(Gemini 3.1 Flash Lite) 미리보기를 공개했습니다. 이전 모델보다 훨씬 똑똑해졌지만, 출력 토큰 비용은 세 배 이상 올랐습니다. 백만 토큰당 입력 0.25달러, 출력 1.50달러. 숫자만 보면 여전히 저렴해 보이지만, 방향이 문제입니다. AI 모델은 점점 더 강력해지고, 가격은 점점 더 올라가고 있습니다.
