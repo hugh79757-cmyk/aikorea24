@@ -26,8 +26,7 @@ const {
 const siteName = 'AI코리아24';
 const siteUrl = 'https://aikorea24.kr';
 const canonicalURL = new URL(Astro.url.pathname, siteUrl).href;
-const ogImageRaw = image.startsWith('http') ? image : new URL(image, siteUrl).href;
-const ogImageURL = ogImageRaw.replace(/[^\x20-\x7E]/g, (ch) => encodeURIComponent(ch));
+const ogImageURL = image.startsWith('http') ? image : new URL(image, siteUrl).href;
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 
 const jsonLdWebsite = JSON.stringify({
