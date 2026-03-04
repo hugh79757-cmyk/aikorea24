@@ -15,7 +15,7 @@ tags:
   - "텍스트투비디오"
   - "앤트로픽"
 draft: false
-image: "/images/https://img.aikorea24.kr/images/미니맥스minimax-센스타임-출신-36세/thumbnail.webp"
+image: "https://img.aikorea24.kr/images/미니맥스minimax-센스타임-출신-36세/thumbnail.webp"
 ---
 
 미니맥스(MiniMax)는 중국 상하이에 본사를 둔 AI 기업으로, 2021년 12월에 설립되었습니다. 중국의 'AI 타이거'로 불리는 신흥 AI 기업군 중 하나이며, 2026년 1월 홍콩 증시에 상장한 뒤 주가가 4배 이상 올라 시가총액 300억 달러를 넘어선 상태입니다.
