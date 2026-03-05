@@ -216,9 +216,14 @@ JSON으로 응답:
             {'role': 'system', 'content': system},
             {'role': 'user', 'content': prompts[template_type]}
         ],
-        max_completion_tokens=1000
+        max_completion_tokens=4000,
+        reasoning_effort="minimal",
+        response_format={"type": "json_object"}
     )
-    content = response.choices[0].message.content.strip()
+    content = response.choices[0].message.content
+    if not content or not content.strip():
+        raise ValueError(f"GPT 빈 응답. finish_reason={response.choices[0].finish_reason}, tokens={response.usage.completion_tokens}")
+    content = content.strip()
     if '```' in content:
         content = content.split('```')[1]
         if content.startswith('json'): content = content[4:]

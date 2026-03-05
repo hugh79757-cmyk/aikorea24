@@ -220,7 +220,7 @@ def translate_to_korean(title, description=""):
         import openai
         client = openai.OpenAI(api_key=OPENAI_KEY)
         resp = client.chat.completions.create(
-            model="gpt-5-nano",
+            model="gpt-5-nano", reasoning_effort="minimal",
             messages=[
                 {"role": "system", "content": "Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation."},
                 {"role": "user", "content": title}
@@ -263,7 +263,7 @@ def batch_translate(articles):
         numbered = chr(10).join(items)
         try:
             resp = client.chat.completions.create(
-                model="gpt-5-nano",
+                model="gpt-5-nano", reasoning_effort="minimal",
                 messages=[
                     {"role": "system", "content": "Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation."},
                     {"role": "user", "content": numbered}
