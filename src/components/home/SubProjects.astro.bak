@@ -1,0 +1,50 @@
+---
+const projects = [
+  {
+    icon: '🏛️',
+    title: 'AI 문화유산 가이드',
+    desc: 'AI로 만나는 한국 문화유산 여행 가이드',
+    url: 'https://heritage.aikorea24.kr',
+    color: 'from-amber-500/20 to-orange-500/20',
+    border: 'hover:border-amber-500/30',
+  },
+  {
+    icon: '📋',
+    title: '자격증 소개',
+    desc: '국가자격증 시험일정을 한눈에 확인',
+    url: 'https://cert.aikorea24.kr',
+    color: 'from-emerald-500/20 to-teal-500/20',
+    border: 'hover:border-emerald-500/30',
+  },
+  {
+    icon: '📊',
+    title: '뉴스 키워드 인사이트 Pro',
+    desc: '뉴스 키워드를 데이터로 분석하고 시각화',
+    url: 'https://8.informationhot.kr',
+    color: 'from-blue-500/20 to-indigo-500/20',
+    border: 'hover:border-blue-500/30',
+  },
+];
+---
+
+<section class="relative z-10 px-4 py-16">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl md:text-3xl font-bold mb-2">서브 프로젝트</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm">AI코리아24에서 운영하는 프로젝트들</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {projects.map((p) => (
+        <a href={p.url} target="_blank" rel="noopener"
+           class={`group block bg-gradient-to-br ${p.color} backdrop-blur-sm border border-white/[0.06] rounded-2xl p-6 transition-all duration-300 ${p.border} hover:scale-[1.02]`}>
+          <div class="text-4xl mb-4">{p.icon}</div>
+          <h3 class="text-lg font-bold mb-2 text-gray-900 dark:text-white">{p.title}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">{p.desc}</p>
+          <span class="text-sm text-blue-500 dark:text-blue-400 group-hover:translate-x-1 inline-block transition-transform">
+            바로가기 &rarr;
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

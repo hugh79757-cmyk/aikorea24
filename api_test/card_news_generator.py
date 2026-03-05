@@ -211,12 +211,12 @@ JSON으로 응답:
               '암호화폐·부동산·정치·스포츠 절대 제외. JSON만 응답.')
 
     response = client.chat.completions.create(
-        model='gpt-4o-mini',
+        model='gpt-5-nano',
         messages=[
             {'role': 'system', 'content': system},
             {'role': 'user', 'content': prompts[template_type]}
         ],
-        temperature=0.4, max_tokens=1000
+        temperature=0.4, max_completion_tokens=1000
     )
     content = response.choices[0].message.content.strip()
     if '```' in content:

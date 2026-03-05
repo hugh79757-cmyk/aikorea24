@@ -156,12 +156,12 @@ try:
         from openai import OpenAI
         client = OpenAI(api_key=api_key)
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5-nano",
             messages=[
                 {"role": "system", "content": "당신은 AI 뉴스 요약 전문가입니다."},
                 {"role": "user", "content": "다음 제목을 한 줄로 요약하세요: 'OpenAI, GPT-5 출시 임박... 멀티모달 기능 대폭 강화'"}
             ],
-            max_tokens=100
+            max_completion_tokens=100
         )
         summary = response.choices[0].message.content.strip()
         log("OpenAI API", "OK", f"요약 결과: {summary[:60]}")
