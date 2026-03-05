@@ -216,7 +216,7 @@ JSON으로 응답:
             {'role': 'system', 'content': system},
             {'role': 'user', 'content': prompts[template_type]}
         ],
-        temperature=0.4, max_completion_tokens=1000
+        max_completion_tokens=1000
     )
     content = response.choices[0].message.content.strip()
     if '```' in content:

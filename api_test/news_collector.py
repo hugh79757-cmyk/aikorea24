@@ -225,7 +225,7 @@ def translate_to_korean(title, description=""):
                 {"role": "system", "content": "Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation."},
                 {"role": "user", "content": title}
             ],
-            temperature=0.3, max_completion_tokens=100)
+            max_completion_tokens=100)
         kr_title = resp.choices[0].message.content.strip().strip(chr(34)).strip(chr(39))
         return kr_title, description
     except Exception as e:
@@ -268,7 +268,7 @@ def batch_translate(articles):
                     {"role": "system", "content": "Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation."},
                     {"role": "user", "content": numbered}
                 ],
-                temperature=0.3, max_completion_tokens=len(batch_idx) * 200)
+                max_completion_tokens=len(batch_idx) * 200)
             text = resp.choices[0].message.content.strip()
             kr_titles = []
             kr_descs = []
