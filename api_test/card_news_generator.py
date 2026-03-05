@@ -92,7 +92,7 @@ def fetch_news(limit=30):
     # 1) 오늘 발행된 브리핑 뉴스
     today = datetime.now().strftime('%Y-%m-%d')
     cmd_briefing = ['npx','wrangler','d1','execute','aikorea24-db','--remote','--json','--command',
-        f"""SELECT n.title, n.description, n.source, n.category
+        f"""SELECT n.title, n.description, n.source, n.category, bi.comment
             FROM briefing_items bi
             JOIN briefings b ON b.id = bi.briefing_id
             JOIN news n ON n.id = bi.news_id
@@ -125,7 +125,11 @@ def fetch_news(limit=30):
 
 # ── AI 큐레이션 (템플릿별 프롬프트) ──
 def curate(news_items, template_type):
-    news_text = '\n'.join([f"- [{n.get('source','')}] {n['title']}: {n.get('description','')[:80]}" for n in news_items])
+    news_text = '\n'.join([
+        f"- [{n.get('source','')}] {n['title']}: {n.get('description','')[:200]}"
+        + (f"\n  [에디터 코멘트] {n['comment']}" if n.get('comment') else '')
+        for n in news_items
+    ])
 
     prompts = {
         'deep': f"""아래 AI 뉴스 전부를 사용하세요. 가장 임팩트 있는 1개를 골라 깊게 분석하고,
@@ -164,7 +168,8 @@ JSON으로 응답:
 
         'carousel_cover': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
 각 뉴스에서 인상적인 숫자를 뽑으세요. 숫자가 없으면 핵심 키워드(예: "GPT-5", "오픈소스", "국방부")를 number에 넣으세요.
-절대 N/A를 사용하지 마세요. 반드시 숫자 또는 키워드를 넣어야 합니다.
+절대 N/A, '용어미정', 'TBD' 등 placeholder를 사용하지 마세요. 반드시 숫자 또는 키워드(기업명, 기술명, 기관명 등)를 넣어야 합니다.
+[에디터 코멘트]가 있으면 해당 관점을 comment 작성 시 반영하세요.
 각 뉴스마다 제목(12자 이내)과 상세코멘트(80~100자, 존댓말로 구체적인 내용과 배경까지 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
 
 {news_text}
@@ -180,7 +185,8 @@ JSON으로 응답:
 
         'number': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
 각 뉴스에서 인상적인 숫자를 뽑으세요. 숫자가 없으면 핵심 키워드(예: "GPT-5", "오픈소스", "국방부")를 number에 넣으세요.
-절대 N/A를 사용하지 마세요. 반드시 숫자 또는 키워드를 넣어야 합니다.
+절대 N/A, '용어미정', 'TBD' 등 placeholder를 사용하지 마세요. 반드시 숫자 또는 키워드(기업명, 기술명, 기관명 등)를 넣어야 합니다.
+[에디터 코멘트]가 있으면 해당 관점을 comment 작성 시 반영하세요.
 
 {news_text}
 
