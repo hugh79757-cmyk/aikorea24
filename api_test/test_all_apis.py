@@ -156,7 +156,7 @@ try:
         from openai import OpenAI
         client = OpenAI(api_key=api_key)
         response = client.chat.completions.create(
-            model="gpt-5-nano",
+            model="gpt-5-nano", reasoning_effort="minimal",
             messages=[
                 {"role": "system", "content": "당신은 AI 뉴스 요약 전문가입니다."},
                 {"role": "user", "content": "다음 제목을 한 줄로 요약하세요: 'OpenAI, GPT-5 출시 임박... 멀티모달 기능 대폭 강화'"}
