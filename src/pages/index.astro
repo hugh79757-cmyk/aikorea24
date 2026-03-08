@@ -7,6 +7,7 @@ import CourseSection from '../components/home/CourseSection.astro';
 import LatestBlog from '../components/home/LatestBlog.astro';
 import CtaSection from '../components/home/CtaSection.astro';
 import SubProjects from '../components/home/SubProjects.astro';
+import ContentHub from '../components/home/ContentHub.astro';
 
 // --- 블로그 데이터 ---
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -58,6 +59,7 @@ try {
     <CourseSection posts={coursePosts} />
     <LatestBlog posts={recentPosts} />
     <CtaSection />
+    <ContentHub />
     <SubProjects />
 
   </div>

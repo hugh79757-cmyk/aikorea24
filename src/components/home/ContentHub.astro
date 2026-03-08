@@ -1,0 +1,63 @@
+---
+const sections = [
+  {
+    icon: '🔤',
+    title: 'AI 용어사전',
+    desc: '55개 핵심 AI 용어를 초보자도 이해할 수 있게 설명. 카테고리별 분류와 난이도 표시.',
+    url: '/glossary/',
+    count: '55개 용어',
+    color: 'from-violet-500/20 to-purple-500/20',
+    border: 'hover:border-violet-500/30',
+  },
+  {
+    icon: '📅',
+    title: 'AI 타임라인',
+    desc: '2024년부터 현재까지 주요 AI 이벤트를 시간순으로 정리한 연대기.',
+    url: '/chronicle/',
+    count: '37개 이벤트',
+    color: 'from-cyan-500/20 to-blue-500/20',
+    border: 'hover:border-cyan-500/30',
+  },
+  {
+    icon: '🎯',
+    title: 'AI 도구 추천 퀴즈',
+    desc: '4가지 질문에 답하면 45개 도구 중 나에게 맞는 AI 도구 3개를 추천.',
+    url: '/tools/finder/',
+    count: '45개 도구 분석',
+    color: 'from-rose-500/20 to-pink-500/20',
+    border: 'hover:border-rose-500/30',
+  },
+  {
+    icon: '🛠️',
+    title: 'AI 도구 디렉토리',
+    desc: '45개 AI 도구의 가격, 한국어 지원, 난이도, 사용법을 한눈에 비교.',
+    url: '/tools/',
+    count: '45개 도구',
+    color: 'from-emerald-500/20 to-green-500/20',
+    border: 'hover:border-emerald-500/30',
+  },
+];
+---
+
+<section class="relative z-10 px-4 py-16">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-10">
+      <h2 class="text-2xl md:text-3xl font-bold mb-2">AI 학습 허브</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm">AI를 체계적으로 배우고 활용하기 위한 콘텐츠</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      {sections.map((s) => (
+        <a href={s.url}
+           class={`group block bg-gradient-to-br ${s.color} backdrop-blur-sm border border-white/[0.06] rounded-2xl p-6 transition-all duration-300 ${s.border} hover:scale-[1.02]`}>
+          <div class="text-4xl mb-3">{s.icon}</div>
+          <h3 class="text-lg font-bold mb-1 text-gray-900 dark:text-white">{s.title}</h3>
+          <p class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-2">{s.count}</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{s.desc}</p>
+          <span class="mt-3 text-sm text-blue-500 dark:text-blue-400 group-hover:translate-x-1 inline-block transition-transform">
+            바로가기 &rarr;
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
