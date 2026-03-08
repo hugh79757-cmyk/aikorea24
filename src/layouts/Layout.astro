@@ -35,9 +35,9 @@ const navItems = [
   { label: '홈', href: '/' },
   { label: '블로그', href: '/blog' },
   { label: 'AI 도구', href: '/tools' },
-  { label: '회사소개', href: '/about' },
+  { label: '용어사전', href: '/glossary' },
+  { label: '타임라인', href: '/chronicle' },
   { label: '뉴스', href: '/news' },
-  { label: '커뮤니티', href: '/community' },
   { label: '문의', href: '/contact' },
 ];
 
@@ -159,7 +159,10 @@ const currentPath = Astro.url.pathname;
           <h3 class="text-gray-900 dark:text-white font-semibold mb-3">바로가기</h3>
           <ul class="space-y-2 text-sm">
             <li><a href="/blog" class="hover:text-gray-900 dark:hover:text-white transition-colors">블로그</a></li>
-            <li><a href="/about" class="hover:text-gray-900 dark:hover:text-white transition-colors">회사소개</a></li>
+            <li><a href="/tools" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 도구</a></li>
+            <li><a href="/glossary" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 용어사전</a></li>
+            <li><a href="/chronicle" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 타임라인</a></li>
+            <li><a href="/tools/finder/" class="hover:text-gray-900 dark:hover:text-white transition-colors">도구 추천 퀴즈</a></li>
             <li><a href="/contact" class="hover:text-gray-900 dark:hover:text-white transition-colors">문의</a></li>
           </ul>
         </div>
