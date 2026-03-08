@@ -28,6 +28,15 @@ const sections = [
     border: 'hover:border-rose-500/30',
   },
   {
+    icon: '⚖️',
+    title: 'AI 도구 비교',
+    desc: 'ChatGPT vs Claude 등 두 가지 AI 도구를 나란히 비교. 가격, 한국어, 난이도 한눈에 확인.',
+    url: '/compare/',
+    count: '8개 인기 조합',
+    color: 'from-amber-500/20 to-orange-500/20',
+    border: 'hover:border-amber-500/30',
+  },
+  {
     icon: '🛠️',
     title: 'AI 도구 디렉토리',
     desc: '45개 AI 도구의 가격, 한국어 지원, 난이도, 사용법을 한눈에 비교.',
@@ -45,7 +54,7 @@ const sections = [
       <h2 class="text-2xl md:text-3xl font-bold mb-2">AI 학습 허브</h2>
       <p class="text-gray-500 dark:text-gray-400 text-sm">AI를 체계적으로 배우고 활용하기 위한 콘텐츠</p>
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
       {sections.map((s) => (
         <a href={s.url}
            class={`group block bg-gradient-to-br ${s.color} backdrop-blur-sm border border-white/[0.06] rounded-2xl p-6 transition-all duration-300 ${s.border} hover:scale-[1.02]`}>
