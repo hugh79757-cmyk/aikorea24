@@ -33,4 +33,44 @@ const tools = defineCollection({
   }),
 });
 
-export const collections = { blog, tools };
+
+const keywords = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/keywords' }),
+  schema: z.object({
+    keyword: z.string(),
+    category: z.string(),
+    categoryName: z.string(),
+    monthlySearch: z.number(),
+    blogCount: z.number(),
+    saturation: z.number(),
+    grade: z.string(),
+    summary: z.string(),
+    analysis: z.string(),
+    writingGuide: z.string(),
+    titles: z.array(z.string()).default([]),
+    relatedKeywords: z.array(z.object({
+      keyword: z.string(),
+      monthlySearch: z.number(),
+      saturation: z.number(),
+      slug: z.string().optional(),
+    })).default([]),
+    date: z.coerce.date().default(new Date()),
+  }),
+});
+
+
+const chronicle = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/chronicle' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.string(),
+    year: z.number(),
+    month: z.number(),
+    category: z.string(),
+    summary: z.string(),
+    tags: z.array(z.string()).default([]),
+    order: z.number().default(0),
+  }),
+});
+
+export const collections = { blog, tools, keywords, chronicle };

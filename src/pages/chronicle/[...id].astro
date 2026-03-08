@@ -1,0 +1,127 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const events = await getCollection('chronicle');
+  return events.map(ev => ({
+    params: { id: ev.id },
+    props: { event: ev },
+  }));
+}
+
+const { event } = Astro.props;
+const { Content } = await render(event);
+
+const allEvents = await getCollection('chronicle');
+const sorted = allEvents.sort((a, b) => {
+  if (a.data.date > b.data.date) return -1;
+  if (a.data.date < b.data.date) return 1;
+  return a.data.order - b.data.order;
+});
+const currentIdx = sorted.findIndex(e => e.id === event.id);
+const prevEvent = currentIdx < sorted.length - 1 ? sorted[currentIdx + 1] : null;
+const nextEvent = currentIdx > 0 ? sorted[currentIdx - 1] : null;
+const relatedEvents = sorted
+  .filter(e => e.id !== event.id && e.data.category === event.data.category)
+  .slice(0, 4);
+
+const catColorClass = (cat: string) => {
+  const map: Record<string, string> = {
+    "모델 출시": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    "기업·투자": "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    "정책·규제": "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+    "한국": "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    "사건·이슈": "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
+  };
+  return map[cat] || "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200";
+};
+
+const emojiMap: Record<string, string> = {
+  "모델 출시": "🤖",
+  "기업·투자": "🏢",
+  "정책·규제": "📜",
+  "한국": "🇰🇷",
+  "사건·이슈": "💥",
+};
+const emoji = emojiMap[event.data.category] || "📌";
+---
+
+<Layout
+  title={`${event.data.title} — AI 타임라인`}
+  description={event.data.summary}
+  type="article"
+  publishedDate={event.data.date}
+  tags={event.data.tags}
+  category={event.data.category}
+>
+  <div class="max-w-3xl mx-auto px-4 py-12">
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <a href="/" class="hover:text-blue-600">홈</a>
+      <span class="mx-1">/</span>
+      <a href="/chronicle/" class="hover:text-blue-600">AI 타임라인</a>
+      <span class="mx-1">/</span>
+      <span class="text-gray-900 dark:text-white">{event.data.title}</span>
+    </nav>
+
+    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-sm font-mono text-gray-500 dark:text-gray-400">{event.data.date}</span>
+        <span class:list={["text-xs px-2.5 py-1 rounded-full font-medium", catColorClass(event.data.category)]}>
+          {emoji} {event.data.category}
+        </span>
+      </div>
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        {event.data.title}
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
+        {event.data.summary}
+      </p>
+      <div class="flex flex-wrap gap-2 mt-4">
+        {event.data.tags.map((tag: string) => (
+          <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-3 py-1 rounded-lg">#{tag}</span>
+        ))}
+      </div>
+    </div>
+
+    <article class="prose prose-lg dark:prose-invert max-w-none mb-8">
+      <Content />
+    </article>
+
+    <!-- 같은 카테고리 다른 사건 -->
+    {relatedEvents.length > 0 && (
+      <div class="mb-8">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+          {emoji} 같은 카테고리의 다른 사건
+        </h2>
+        <div class="grid gap-3">
+          {relatedEvents.map(re => (
+            <a href={`/chronicle/${re.id}/`} class="block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4 hover:border-blue-400 dark:hover:border-blue-500 transition-all">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-xs font-mono text-gray-500 dark:text-gray-400">{re.data.date}</span>
+                <span class:list={["text-xs px-2 py-0.5 rounded-full", catColorClass(re.data.category)]}>{re.data.category}</span>
+              </div>
+              <h3 class="font-semibold text-gray-900 dark:text-white">{re.data.title}</h3>
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- 이전/다음 네비게이션 -->
+    <div class="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
+      {prevEvent ? (
+        <a href={`/chronicle/${prevEvent.id}/`} class="text-blue-600 dark:text-blue-400 hover:underline text-sm">
+          ← {prevEvent.data.title}
+        </a>
+      ) : <span />}
+      <a href="/chronicle/" class="text-gray-500 dark:text-gray-400 hover:text-blue-600 text-sm">전체 타임라인</a>
+      {nextEvent ? (
+        <a href={`/chronicle/${nextEvent.id}/`} class="text-blue-600 dark:text-blue-400 hover:underline text-sm text-right">
+          {nextEvent.data.title} →
+        </a>
+      ) : <span />}
+    </div>
+  </div>
+</Layout>

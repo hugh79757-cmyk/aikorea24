@@ -1,0 +1,133 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allEvents = await getCollection('chronicle');
+const events = allEvents.sort((a, b) => {
+  if (a.data.date > b.data.date) return -1;
+  if (a.data.date < b.data.date) return 1;
+  return a.data.order - b.data.order;
+});
+
+const years = [...new Set(events.map(e => e.data.year))].sort((a, b) => b - a);
+
+const categoryConfig: Record<string, { emoji: string; color: string }> = {
+  "모델 출시": { emoji: "🤖", color: "blue" },
+  "기업·투자": { emoji: "🏢", color: "green" },
+  "정책·규제": { emoji: "📜", color: "red" },
+  "한국": { emoji: "🇰🇷", color: "purple" },
+  "사건·이슈": { emoji: "💥", color: "amber" },
+};
+
+const catColorClass = (cat: string) => {
+  const map: Record<string, string> = {
+    "모델 출시": "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+    "기업·투자": "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
+    "정책·규제": "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200",
+    "한국": "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    "사건·이슈": "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200",
+  };
+  return map[cat] || "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200";
+};
+
+const borderColorClass = (cat: string) => {
+  const map: Record<string, string> = {
+    "모델 출시": "border-l-blue-500",
+    "기업·투자": "border-l-green-500",
+    "정책·규제": "border-l-red-500",
+    "한국": "border-l-purple-500",
+    "사건·이슈": "border-l-amber-500",
+  };
+  return map[cat] || "border-l-gray-500";
+};
+
+const categories = Object.entries(categoryConfig);
+const totalEvents = events.length;
+---
+
+<Layout
+  title="AI 주요 사건 타임라인 — 2024~2026 AI 연대기"
+  description="2024년부터 현재까지 AI 업계의 핵심 사건을 타임라인으로 정리합니다. 모델 출시, 기업 투자, 정책 규제, 한국 AI 동향까지 한눈에."
+>
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <a href="/" class="hover:text-blue-600">홈</a>
+      <span class="mx-1">/</span>
+      <span class="text-gray-900 dark:text-white">AI 타임라인</span>
+    </nav>
+
+    <div class="mb-10">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        🤖 AI 주요 사건 타임라인
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+        2024년부터 현재까지 AI 업계의 핵심 사건을 시간순으로 정리합니다.
+        모델 출시, 기업 투자, 정책 규제, 한국 AI 동향, 주요 사건·이슈를 한눈에 확인하세요.
+        총 {totalEvents}개의 이정표를 추적하고 있습니다.
+      </p>
+    </div>
+
+    <!-- 카테고리 범례 -->
+    <div class="flex flex-wrap gap-2 mb-10">
+      {categories.map(([name, config]) => (
+        <span class:list={["text-sm px-3 py-1.5 rounded-full font-medium", catColorClass(name)]}>
+          {config.emoji} {name}
+        </span>
+      ))}
+    </div>
+
+    <!-- 연도별 타임라인 -->
+    {years.map(year => {
+      const yearEvents = events.filter(e => e.data.year === year);
+      return (
+        <section class="mb-16">
+          <div class="sticky top-16 z-10 bg-white/90 dark:bg-[#0A0E1A]/90 backdrop-blur-sm py-3 mb-6">
+            <h2 class="inline-block text-2xl font-bold text-white bg-blue-600 px-5 py-2 rounded-full">
+              {year}
+            </h2>
+            <span class="ml-3 text-sm text-gray-500 dark:text-gray-400">{yearEvents.length}개 사건</span>
+          </div>
+          <div class="space-y-4 relative before:absolute before:left-[19px] before:top-0 before:bottom-0 before:w-0.5 before:bg-gray-200 dark:before:bg-gray-700 pl-12">
+            {yearEvents.map(ev => {
+              const cfg = categoryConfig[ev.data.category] || { emoji: "📌" };
+              const monthDay = `${ev.data.month}.${ev.data.date.split('-')[2]}`;
+              return (
+                <a href={`/chronicle/${ev.id}/`} class:list={[
+                  "block relative bg-white dark:bg-gray-800 border-l-4 rounded-xl p-5 hover:shadow-md transition-all",
+                  "border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500",
+                  borderColorClass(ev.data.category)
+                ]}>
+                  <div class="absolute -left-[42px] top-5 w-4 h-4 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-600"></div>
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-sm text-gray-500 dark:text-gray-400 font-mono">{monthDay}</span>
+                    <span class:list={["text-xs px-2 py-0.5 rounded-full font-medium", catColorClass(ev.data.category)]}>
+                      {cfg.emoji} {ev.data.category}
+                    </span>
+                  </div>
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">{ev.data.title}</h3>
+                  <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">{ev.data.summary}</p>
+                  <div class="flex flex-wrap gap-1.5 mt-3">
+                    {ev.data.tags.map((tag: string) => (
+                      <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 px-2 py-0.5 rounded">#{tag}</span>
+                    ))}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      );
+    })}
+
+    <!-- SEO 텍스트 -->
+    <section class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-8 mt-12">
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">📊 AI 타임라인이란?</h2>
+      <div class="text-gray-700 dark:text-gray-300 leading-relaxed space-y-3">
+        <p>AI 타임라인은 2024년부터 현재까지 인공지능 업계에서 발생한 주요 사건을 시간순으로 정리한 연대기입니다. OpenAI의 GPT 시리즈, Anthropic의 Claude 시리즈, 구글의 Gemini, Meta의 Llama 등 주요 AI 모델의 출시 이력을 추적합니다.</p>
+        <p>모델 출시뿐 아니라 기업 투자(소프트뱅크의 대규모 투자 등), 정책·규제(EU AI Act, 미중 칩 규제 등), 한국 관련 이슈(AI 기본법, 정부 R&D 계획 등), 그리고 DeepSeek 충격 같은 주요 사건·이슈도 포함합니다.</p>
+        <p>AI 업계는 하루가 다르게 변화하고 있습니다. 이 타임라인은 AI코리아24가 매일 수집하는 뉴스와 업계 동향을 바탕으로 지속적으로 업데이트됩니다. 각 사건을 클릭하면 상세한 배경과 의미를 확인할 수 있습니다.</p>
+      </div>
+    </section>
+  </div>
+</Layout>
