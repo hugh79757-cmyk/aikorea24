@@ -11,5 +11,14 @@ export default defineConfig({
     platformProxy: { enabled: true },
   }),
   trailingSlash: 'always',
-  integrations: [tailwind(), mdx(), sitemap()],
+  integrations: [
+    tailwind(),
+    mdx(),
+    sitemap({
+      serialize(item) {
+        item.lastmod = new Date().toISOString();
+        return item;
+      },
+    }),
+  ],
 });
