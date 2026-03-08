@@ -1,0 +1,218 @@
+---
+export const prerender = true;
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allTools = await getCollection('tools');
+const toolsJson = JSON.stringify(allTools.map(t => ({
+  id: t.id,
+  name: t.data.name,
+  category: t.data.category,
+  price: t.data.price,
+  koreanSupport: t.data.koreanSupport,
+  difficulty: t.data.difficulty,
+  description: t.data.description,
+  tags: t.data.tags || [],
+  useCases: t.data.useCases || [],
+})));
+---
+<Layout
+  title="AI 도구 추천 퀴즈 — 나에게 맞는 AI 도구 찾기 | AI코리아24"
+  description="4가지 질문에 답하면 45개 AI 도구 중 나에게 딱 맞는 3개를 추천합니다. 용도, 예산, 한국어 지원, 경험 수준에 따라 맞춤 추천."
+>
+  <main class="max-w-3xl mx-auto px-4 py-10">
+    <h1 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+      🎯 나에게 맞는 AI 도구 찾기
+    </h1>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+      4가지 간단한 질문에 답하면, {allTools.length}개 AI 도구 중에서 당신에게 딱 맞는 도구 3개를 추천합니다.
+    </p>
+
+    <!-- 퀴즈 영역 -->
+    <div id="quiz-area">
+      <!-- Q1 -->
+      <div class="quiz-step" data-step="0">
+        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 1/4</div>
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">주로 어떤 작업을 하고 싶으세요?</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+          <button class="quiz-btn" data-q="0" data-v="writing">📝 글쓰기·문서</button>
+          <button class="quiz-btn" data-q="0" data-v="image">🎨 이미지·디자인</button>
+          <button class="quiz-btn" data-q="0" data-v="coding">⌨️ 코딩·앱 개발</button>
+          <button class="quiz-btn" data-q="0" data-v="video">🎬 영상·음성</button>
+          <button class="quiz-btn" data-q="0" data-v="search">🔍 검색·리서치</button>
+          <button class="quiz-btn" data-q="0" data-v="data">📊 데이터·발표</button>
+        </div>
+      </div>
+      <!-- Q2 -->
+      <div class="quiz-step hidden" data-step="1">
+        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 2/4</div>
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">예산은 어느 정도 생각하세요?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <button class="quiz-btn" data-q="1" data-v="free">🆓 무료만 쓸래요</button>
+          <button class="quiz-btn" data-q="1" data-v="budget">💰 월 2만원 이하</button>
+          <button class="quiz-btn" data-q="1" data-v="any">💎 비용 상관없어요</button>
+        </div>
+      </div>
+      <!-- Q3 -->
+      <div class="quiz-step hidden" data-step="2">
+        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 3/4</div>
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">한국어 지원이 중요한가요?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <button class="quiz-btn" data-q="2" data-v="must">🇰🇷 필수! 한국어로 써야 해요</button>
+          <button class="quiz-btn" data-q="2" data-v="prefer">🤷 있으면 좋지만 영어도 OK</button>
+          <button class="quiz-btn" data-q="2" data-v="any">🌍 영어 전혀 상관없어요</button>
+        </div>
+      </div>
+      <!-- Q4 -->
+      <div class="quiz-step hidden" data-step="3">
+        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 4/4</div>
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">AI 사용 경험이 있으세요?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <button class="quiz-btn" data-q="3" data-v="beginner">🌱 처음이에요</button>
+          <button class="quiz-btn" data-q="3" data-v="intermediate">🌿 ChatGPT 정도는 써봤어요</button>
+          <button class="quiz-btn" data-q="3" data-v="advanced">🌳 여러 AI를 쓰고 있어요</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 결과 영역 -->
+    <div id="result-area" class="hidden mt-8">
+      <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">🎉 추천 결과</h2>
+      <div id="result-cards" class="space-y-4"></div>
+      <button id="retry-btn" class="mt-8 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
+        다시 해보기
+      </button>
+    </div>
+
+    <!-- SEO 텍스트 -->
+    <section class="mt-16 prose dark:prose-invert max-w-none">
+      <h2>AI 도구 선택이 중요한 이유</h2>
+      <p>
+        2026년 현재 수백 개의 AI 도구가 존재합니다. 하지만 모든 도구가 모든 사람에게 적합한 것은 아닙니다.
+        글쓰기에는 ChatGPT나 Claude가, 이미지 생성에는 Midjourney나 DALL-E가, 코딩에는 Cursor나 GitHub Copilot이
+        각각 강점을 가지고 있습니다. 자신의 용도, 예산, 한국어 필요 여부, 기술 수준에 맞는 도구를 선택해야
+        AI를 최대한 효율적으로 활용할 수 있습니다.
+      </p>
+      <p>
+        이 퀴즈는 AI코리아24에서 분석한 {allTools.length}개 AI 도구의 특성을 바탕으로,
+        4가지 기준(용도, 예산, 한국어 지원, 경험 수준)에 따라 가장 적합한 도구 3개를 추천합니다.
+        각 도구의 상세 리뷰는 <a href="/tools/">AI 도구 디렉토리</a>에서 확인할 수 있습니다.
+      </p>
+    </section>
+
+    <nav class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-4">
+      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline">🛠️ 전체 도구 목록</a>
+      <a href="/glossary/" class="text-blue-600 dark:text-blue-400 hover:underline">🔤 AI 용어사전</a>
+      <a href="/chronicle/" class="text-blue-600 dark:text-blue-400 hover:underline">📅 AI 타임라인</a>
+    </nav>
+  </main>
+
+  <style>
+    .quiz-btn {
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: 2px solid #e5e7eb;
+      background: white;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+    .quiz-btn:hover {
+      border-color: #3b82f6;
+      background: #eff6ff;
+    }
+    :global(.dark) .quiz-btn {
+      background: #1f2937;
+      border-color: #374151;
+      color: #f3f4f6;
+    }
+    :global(.dark) .quiz-btn:hover {
+      border-color: #3b82f6;
+      background: #1e3a5f;
+    }
+  </style>
+
+  <script define:vars={{ toolsJson }}>
+    const tools = JSON.parse(toolsJson);
+    const answers = [];
+
+    const catMap = {
+      writing: ['글쓰기·챗봇', '글쓰기·생산성'],
+      image: ['이미지', '디자인', '이미지·유틸'],
+      coding: ['코딩'],
+      video: ['영상', '음성', '음악'],
+      search: ['검색', '데이터·리서치'],
+      data: ['데이터·리서치', '프레젠테이션', '생산성'],
+    };
+
+    function score(tool, ans) {
+      let s = 0;
+      const mc = catMap[ans[0]] || [];
+      if (mc.includes(tool.category)) s += 10;
+      if (ans[1] === 'free') { if (tool.price && tool.price.includes('무료')) s += 5; }
+      else if (ans[1] === 'budget') s += 3;
+      else s += 1;
+      if (ans[2] === 'must') { if (tool.koreanSupport) s += 5; }
+      else if (ans[2] === 'prefer') { s += tool.koreanSupport ? 3 : 1; }
+      else s += 1;
+      if (ans[3] === 'beginner') { if (tool.difficulty && tool.difficulty.includes('초보')) s += 5; }
+      else if (ans[3] === 'intermediate') s += 2;
+      else { if (tool.difficulty && (tool.difficulty.includes('중급') || tool.difficulty.includes('고급'))) s += 4; }
+      return s;
+    }
+
+    document.querySelectorAll('.quiz-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = parseInt(btn.dataset.q);
+        answers[q] = btn.dataset.v;
+        const currentStep = document.querySelector(`.quiz-step[data-step="${q}"]`);
+        currentStep.classList.add('hidden');
+        if (q < 3) {
+          document.querySelector(`.quiz-step[data-step="${q + 1}"]`).classList.remove('hidden');
+        } else {
+          showResults();
+        }
+      });
+    });
+
+    function showResults() {
+      document.getElementById('quiz-area').classList.add('hidden');
+      const resultArea = document.getElementById('result-area');
+      resultArea.classList.remove('hidden');
+      const scored = tools.map(t => ({ tool: t, score: score(t, answers) }));
+      scored.sort((a, b) => b.score - a.score);
+      const top3 = scored.slice(0, 3);
+      const container = document.getElementById('result-cards');
+      container.innerHTML = top3.map((item, i) => {
+        const t = item.tool;
+        const medal = ['🥇', '🥈', '🥉'][i];
+        return `<a href="/tools/${t.id}/" class="block p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-400 transition-all">
+          <div class="flex items-start gap-4">
+            <span class="text-3xl">${medal}</span>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">${t.name}</h3>
+              <p class="text-sm text-blue-600 dark:text-blue-400 mb-1">${t.category}</p>
+              <p class="text-gray-600 dark:text-gray-300">${t.description}</p>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <span class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">${t.price}</span>
+                <span class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">${t.koreanSupport ? '🇰🇷 한국어 O' : '영어'}</span>
+                <span class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">${t.difficulty}</span>
+              </div>
+            </div>
+          </div>
+        </a>`;
+      }).join('');
+    }
+
+    document.getElementById('retry-btn').addEventListener('click', () => {
+      answers.length = 0;
+      document.getElementById('result-area').classList.add('hidden');
+      document.getElementById('quiz-area').classList.remove('hidden');
+      document.querySelectorAll('.quiz-step').forEach((el, i) => {
+        el.classList.toggle('hidden', i !== 0);
+      });
+    });
+  </script>
+</Layout>
