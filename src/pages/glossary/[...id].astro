@@ -1,0 +1,122 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const terms = await getCollection('glossary');
+  return terms.map(t => ({ params: { id: t.id }, props: { term: t } }));
+}
+
+const { term } = Astro.props;
+const { Content } = await render(term);
+const d = term.data;
+
+const allTerms = await getCollection('glossary');
+const sameCategory = allTerms
+  .filter(t => t.data.category === d.category && t.id !== term.id)
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 6);
+
+const relatedSlugs = d.related.map((r: string) => r.toLowerCase());
+const relatedTerms = allTerms.filter(t =>
+  relatedSlugs.some((rs: string) =>
+    t.data.term.toLowerCase().includes(rs) ||
+    t.data.en.toLowerCase().includes(rs) ||
+    rs.includes(t.data.term.toLowerCase())
+  )
+).slice(0, 5);
+
+const levelLabel: Record<number, string> = { 1: '입문', 2: '중급', 3: '심화' };
+const levelColor: Record<number, string> = {
+  1: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  2: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+  3: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+};
+const catEmoji: Record<string, string> = {
+  '기초': '📘', '모델': '🤖', '프롬프트': '💬',
+  '개발': '⚙️', '비즈니스': '💼', '하드웨어': '🖥️'
+};
+---
+<Layout
+  title={`${d.term} (${d.en}) — AI 용어 뜻과 예시 | AI코리아24`}
+  description={`${d.term}(${d.en})의 의미, 상세 설명, 사용 예시를 쉽게 알아봅니다. ${d.short}`}
+>
+  <main class="max-w-4xl mx-auto px-4 py-10">
+    <!-- 브레드크럼 -->
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">
+      <a href="/" class="hover:text-blue-600">홈</a> &gt;
+      <a href="/glossary/" class="hover:text-blue-600">AI 용어사전</a> &gt;
+      <span class="text-gray-900 dark:text-white">{d.term}</span>
+    </nav>
+
+    <!-- 헤더 -->
+    <header class="mb-8">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-2xl">{catEmoji[d.category] || '📂'}</span>
+        <span class="text-sm px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">{d.category}</span>
+        <span class={`text-sm px-3 py-1 rounded-full ${levelColor[d.level]}`}>{levelLabel[d.level]}</span>
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        {d.term}
+        <span class="text-xl font-normal text-gray-500 dark:text-gray-400 ml-2">({d.en})</span>
+      </h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300">{d.short}</p>
+    </header>
+
+    <!-- 본문 -->
+    <article class="prose dark:prose-invert max-w-none mb-10">
+      <Content />
+    </article>
+
+    <!-- 관련 용어 (데이터 기반) -->
+    {relatedTerms.length > 0 && (
+      <section class="mb-10">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🔗 관련 용어</h2>
+        <div class="flex flex-wrap gap-2">
+          {relatedTerms.map(rt => (
+            <a href={`/glossary/${rt.id}/`}
+               class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors">
+              {rt.data.term}
+              <span class="text-xs text-gray-500 ml-1">({rt.data.en})</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 같은 카테고리 -->
+    {sameCategory.length > 0 && (
+      <section class="mb-10">
+        <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">
+          {catEmoji[d.category] || '📂'} {d.category} 카테고리 다른 용어
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {sameCategory.map(st => (
+            <a href={`/glossary/${st.id}/`}
+               class="block p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-md hover:border-blue-300 transition-all">
+              <div class="flex items-center justify-between mb-1">
+                <span class="font-bold text-gray-900 dark:text-white">{st.data.term}</span>
+                <span class={`text-xs px-2 py-0.5 rounded-full ${levelColor[st.data.level]}`}>
+                  {levelLabel[st.data.level]}
+                </span>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">{st.data.short}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- 하단 네비게이션 -->
+    <nav class="pt-8 border-t border-gray-200 dark:border-gray-700">
+      <div class="flex flex-wrap gap-4">
+        <a href="/glossary/" class="text-blue-600 dark:text-blue-400 hover:underline">← 용어사전 목록</a>
+        <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline">🛠️ AI 도구</a>
+        <a href="/chronicle/" class="text-blue-600 dark:text-blue-400 hover:underline">📅 AI 타임라인</a>
+        <a href="/blog/" class="text-blue-600 dark:text-blue-400 hover:underline">📝 블로그</a>
+      </div>
+    </nav>
+  </main>
+</Layout>
