@@ -12,6 +12,8 @@ export const GET: APIRoute = async () => {
     { loc: base + '/sitemap-tools.xml', lastmod: now },
     { loc: base + '/sitemap-briefing.xml', lastmod: now },
     { loc: base + '/sitemap-pages.xml', lastmod: now },
+    { loc: base + '/sitemap-glossary.xml', lastmod: now },
+    { loc: base + '/sitemap-chronicle.xml', lastmod: now },
   ]);
 
   return new Response(xml, {
