@@ -1,0 +1,176 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allTools = await getCollection('tools');
+const sorted = allTools.sort((a, b) => (a.data.order || 99) - (b.data.order || 99));
+const toolsJson = JSON.stringify(sorted.map(t => ({
+  id: t.id,
+  name: t.data.name,
+  category: t.data.category,
+  description: t.data.description,
+  price: t.data.price,
+  koreanSupport: t.data.koreanSupport,
+  difficulty: t.data.difficulty,
+  url: t.data.url,
+  useCases: t.data.useCases || [],
+  tags: t.data.tags || [],
+})));
+---
+<Layout
+  title="AI 도구 비교 — 두 가지 AI 도구를 나란히 비교하기 | AI코리아24"
+  description="ChatGPT vs Claude, Midjourney vs DALL-E 등 45개 AI 도구를 나란히 비교합니다. 가격, 한국어 지원, 난이도, 용도를 한눈에 확인하세요."
+>
+  <main class="max-w-5xl mx-auto px-4 py-10">
+    <h1 class="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
+      ⚖️ AI 도구 비교
+    </h1>
+    <p class="text-lg text-gray-600 dark:text-gray-300 mb-8">
+      두 가지 AI 도구를 선택하면 가격, 한국어 지원, 난이도, 용도를 나란히 비교할 수 있습니다.
+    </p>
+
+    <!-- 선택 영역 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">도구 A 선택</label>
+        <select id="select-a" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm">
+          <option value="">-- 선택하세요 --</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">도구 B 선택</label>
+        <select id="select-b" class="w-full p-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm">
+          <option value="">-- 선택하세요 --</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 인기 비교 조합 -->
+    <div class="mb-10">
+      <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">인기 비교 조합</h2>
+      <div class="flex flex-wrap gap-2">
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="chatgpt" data-b="claude">ChatGPT vs Claude</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="midjourney" data-b="dalle">Midjourney vs DALL-E</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="cursor" data-b="github-copilot">Cursor vs Copilot</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="deepl" data-b="papago">DeepL vs 파파고</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="lovable" data-b="bolt">Lovable vs Bolt</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="capcut" data-b="vrew">CapCut vs Vrew</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="suno" data-b="udio">Suno vs Udio</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="perplexity" data-b="genspark">Perplexity vs Genspark</button>
+      </div>
+    </div>
+
+    <!-- 비교 결과 테이블 -->
+    <div id="compare-result" class="hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="p-4 text-left text-sm font-medium text-gray-500 dark:text-gray-400 w-1/4">항목</th>
+              <th id="th-a" class="p-4 text-center text-lg font-bold text-gray-900 dark:text-white w-[37.5%]">도구 A</th>
+              <th id="th-b" class="p-4 text-center text-lg font-bold text-gray-900 dark:text-white w-[37.5%]">도구 B</th>
+            </tr>
+          </thead>
+          <tbody id="compare-body"></tbody>
+        </table>
+      </div>
+      <div class="mt-6 flex gap-4">
+        <a id="link-a" href="#" class="flex-1 text-center py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">도구 A 상세보기</a>
+        <a id="link-b" href="#" class="flex-1 text-center py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium">도구 B 상세보기</a>
+      </div>
+    </div>
+
+    <!-- SEO 텍스트 -->
+    <section class="mt-16 prose dark:prose-invert max-w-none">
+      <h2>AI 도구 비교가 필요한 이유</h2>
+      <p>
+        비슷한 기능을 가진 AI 도구가 많아 어떤 것을 선택해야 할지 고민되는 경우가 많습니다.
+        ChatGPT와 Claude는 둘 다 대화형 AI이지만 긴 문서 처리, 코딩 지원, 안전성 등에서 차이가 있습니다.
+        Midjourney와 DALL-E는 이미지 생성 도구이지만 품질, 가격, 사용 편의성이 다릅니다.
+        이 비교 도구를 사용하면 가격, 한국어 지원 여부, 난이도, 주요 용도를 한눈에 비교하여
+        자신에게 맞는 도구를 빠르게 선택할 수 있습니다.
+      </p>
+      <h2>인기 AI 도구 비교 조합</h2>
+      <p>
+        가장 많이 비교되는 조합은 ChatGPT vs Claude(글쓰기·챗봇), Midjourney vs DALL-E(이미지),
+        Cursor vs GitHub Copilot(코딩), DeepL vs 파파고(번역)입니다.
+        각 도구의 강점과 약점을 비교한 후, 상세 리뷰 페이지에서 더 깊은 정보를 확인하세요.
+        도구 선택이 어렵다면 <a href="/tools/finder/">AI 도구 추천 퀴즈</a>도 활용해 보세요.
+      </p>
+    </section>
+
+    <nav class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-4">
+      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline">🛠️ 전체 도구 목록</a>
+      <a href="/tools/finder/" class="text-blue-600 dark:text-blue-400 hover:underline">🎯 도구 추천 퀴즈</a>
+      <a href="/glossary/" class="text-blue-600 dark:text-blue-400 hover:underline">🔤 AI 용어사전</a>
+      <a href="/chronicle/" class="text-blue-600 dark:text-blue-400 hover:underline">📅 AI 타임라인</a>
+    </nav>
+  </main>
+
+  <script define:vars={{ toolsJson }}>
+    const tools = JSON.parse(toolsJson);
+    const selA = document.getElementById('select-a');
+    const selB = document.getElementById('select-b');
+
+    tools.forEach(t => {
+      const optA = document.createElement('option');
+      optA.value = t.id;
+      optA.textContent = t.name + ' (' + t.category + ')';
+      selA.appendChild(optA);
+      const optB = document.createElement('option');
+      optB.value = t.id;
+      optB.textContent = t.name + ' (' + t.category + ')';
+      selB.appendChild(optB);
+    });
+
+    function findTool(id) { return tools.find(t => t.id === id); }
+
+    function render() {
+      const a = findTool(selA.value);
+      const b = findTool(selB.value);
+      if (!a || !b) {
+        document.getElementById('compare-result').classList.add('hidden');
+        return;
+      }
+      document.getElementById('compare-result').classList.remove('hidden');
+      document.getElementById('th-a').textContent = a.name;
+      document.getElementById('th-b').textContent = b.name;
+      document.getElementById('link-a').textContent = a.name + ' 상세보기';
+      document.getElementById('link-a').href = '/tools/' + a.id + '/';
+      document.getElementById('link-b').textContent = b.name + ' 상세보기';
+      document.getElementById('link-b').href = '/tools/' + b.id + '/';
+
+      const rows = [
+        ['카테고리', a.category, b.category],
+        ['가격', a.price, b.price],
+        ['한국어 지원', a.koreanSupport ? '✅ 지원' : '❌ 미지원', b.koreanSupport ? '✅ 지원' : '❌ 미지원'],
+        ['난이도', a.difficulty, b.difficulty],
+        ['설명', a.description, b.description],
+        ['주요 용도', (a.useCases || []).join(', '), (b.useCases || []).join(', ')],
+      ];
+
+      const body = document.getElementById('compare-body');
+      body.innerHTML = rows.map((r, i) => {
+        const bg = i % 2 === 0 ? 'bg-gray-50 dark:bg-gray-800/50' : '';
+        return '<tr class="' + bg + ' border-t border-gray-200 dark:border-gray-700">' +
+          '<td class="p-4 text-sm font-medium text-gray-700 dark:text-gray-300">' + r[0] + '</td>' +
+          '<td class="p-4 text-sm text-center text-gray-900 dark:text-white">' + r[1] + '</td>' +
+          '<td class="p-4 text-sm text-center text-gray-900 dark:text-white">' + r[2] + '</td>' +
+          '</tr>';
+      }).join('');
+    }
+
+    selA.addEventListener('change', render);
+    selB.addEventListener('change', render);
+
+    document.querySelectorAll('.pop-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selA.value = btn.dataset.a;
+        selB.value = btn.dataset.b;
+        render();
+        document.getElementById('compare-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</Layout>
