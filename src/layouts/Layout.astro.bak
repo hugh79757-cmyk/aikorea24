@@ -1,0 +1,226 @@
+---
+import SEOHead from '../components/SEOHead.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedDate?: string;
+  modifiedDate?: string;
+  tags?: string[];
+  category?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = 'AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다. AI, 누구나 쓸 수 있습니다.',
+  image,
+  type = 'website',
+  publishedDate,
+  modifiedDate,
+  tags = [],
+  category = '',
+  noindex = false,
+} = Astro.props;
+
+let currentUser = null;
+try {
+  const session = Astro.cookies.get('session')?.value;
+  if (session) currentUser = JSON.parse(atob(session));
+} catch {}
+
+const navItems = [
+  { label: '홈', href: '/' },
+  { label: '블로그', href: '/blog' },
+  { label: 'AI 도구', href: '/tools' },
+  { label: '회사소개', href: '/about' },
+  { label: '뉴스', href: '/news' },
+  { label: '커뮤니티', href: '/community' },
+  { label: '문의', href: '/contact' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth dark">
+<script is:inline>
+  const t = localStorage.getItem('theme');
+  if (t === 'light') document.documentElement.classList.remove('dark');
+  else document.documentElement.classList.add('dark');
+</script>
+<head>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185"
+     crossorigin="anonymous"></script>
+
+
+
+  <SEOHead
+    title={title}
+    description={description}
+    image={image}
+    type={type}
+    publishedDate={publishedDate}
+    modifiedDate={modifiedDate}
+    tags={tags}
+    category={category}
+    noindex={noindex}
+  />
+  <style is:global>
+    :root { --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    body { font-family: var(--font-sans); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+  <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06] transition-colors">
+    <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        AI코리아24
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400',
+              currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+                ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+            ]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+      <div class="hidden md:flex items-center ml-4">
+        {currentUser ? (
+          <div class="flex items-center gap-3">
+            <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+            <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
+            <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
+          </div>
+        ) : (
+          <a href="/api/auth/login" class="text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
+        )}
+      </div>
+      <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="테마 전환">
+        <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg id="theme-icon-dark" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+      <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 dark:text-gray-200" aria-label="메뉴 열기">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-white/[0.06] bg-white/95 dark:bg-[#0A0E1A]/95 backdrop-blur-md">
+      {navItems.map(item => (
+        <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.05] border-b border-gray-100 dark:border-white/[0.06]">
+          {item.label}
+        </a>
+      ))}
+      <div class="px-4 py-3 border-t border-gray-200 dark:border-white/[0.06]">
+        {currentUser ? (
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+              <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
+            </div>
+            <a href="/api/auth/logout" class="text-xs text-red-400 hover:text-red-300">로그아웃</a>
+          </div>
+        ) : (
+          <a href="/api/auth/login" class="block text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-all">
+            Google로 로그인
+          </a>
+        )}
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <slot />
+  </main>
+
+  <footer class="bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-400 mt-auto transition-colors">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-bold text-lg mb-3">AI코리아24</h3>
+          <p class="text-sm leading-relaxed">AI, 누구나 쓸 수 있습니다.<br/>AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다.</p>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">바로가기</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/blog" class="hover:text-gray-900 dark:hover:text-white transition-colors">블로그</a></li>
+            <li><a href="/about" class="hover:text-gray-900 dark:hover:text-white transition-colors">회사소개</a></li>
+            <li><a href="/contact" class="hover:text-gray-900 dark:hover:text-white transition-colors">문의</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">법적 고지</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/privacy" class="hover:text-gray-900 dark:hover:text-white transition-colors">개인정보처리방침</a></li>
+            <li><a href="/terms" class="hover:text-gray-900 dark:hover:text-white transition-colors">이용약관</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">서브 프로젝트</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://heritage.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 문화유산 가이드 프로젝트</a></li>
+            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">자격증 소개 프로젝트</a></li>
+            <li><a href="https://8.informationhot.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">뉴스 키워드 인사이트 Pro</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-300 dark:border-gray-800 pt-8 text-xs leading-relaxed">
+        <p>스타일 팩토리9 | 대표: 조진연 | 사업자등록번호: 672-43-00632</p>
+        <p>경기도 의정부시 호암로 256, 107-1804 (우 11638) | info@aikorea24.kr</p>
+        <p class="mt-2">본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다.</p>
+        <p class="mt-1">&copy; 2026 AI코리아24. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 모바일 메뉴
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+
+    // 테마 토글
+    function updateThemeIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const lightIcon = document.getElementById('theme-icon-light');
+      const darkIcon = document.getElementById('theme-icon-dark');
+      if (lightIcon && darkIcon) {
+        // 다크 모드일 때: 해(light) 아이콘 표시 (누르면 라이트로)
+        // 라이트 모드일 때: 달(dark) 아이콘 표시 (누르면 다크로)
+        lightIcon.classList.toggle('hidden', !isDark);
+        darkIcon.classList.toggle('hidden', isDark);
+      }
+    }
+
+    updateThemeIcon();
+
+    document.getElementById('theme-toggle')?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+      if (isDark) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      updateThemeIcon();
+    });
+  </script>
+</body>
+</html>
