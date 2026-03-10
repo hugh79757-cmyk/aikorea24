@@ -106,6 +106,12 @@ const currentPath = Astro.url.pathname;
           <a href="/api/auth/login" class="text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
         )}
       </div>
+
+            <button id="search-btn" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="검색">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </button>
+ 
+
       <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="테마 전환">
         <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
@@ -143,6 +149,21 @@ const currentPath = Astro.url.pathname;
       </div>
     </div>
   </header>
+
+    <!-- 검색 모달 -->
+  <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
+    <div class="max-w-xl mx-auto mt-20 mx-4 bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
+        <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input id="search-input" type="text" placeholder="블로그 검색... (제목, 설명, 태그)" class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none text-base" autocomplete="off" />
+        <kbd class="hidden sm:inline text-xs text-gray-400 border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5">ESC</kbd>
+      </div>
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
+        <p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>
+      </div>
+    </div>
+  </div>
+
 
   <main class="flex-1">
     <slot />
@@ -224,6 +245,86 @@ const currentPath = Astro.url.pathname;
       }
       updateThemeIcon();
     });
+
+        // 검색 기능
+    let searchData = null;
+
+    async function loadSearchData() {
+      if (searchData) return searchData;
+      const res = await fetch('/api/search/');
+      searchData = await res.json();
+      return searchData;
+    }
+
+    function openSearch() {
+      document.getElementById('search-modal')?.classList.remove('hidden');
+      document.getElementById('search-input')?.focus();
+      document.body.style.overflow = 'hidden';
+      loadSearchData();
+    }
+
+    function closeSearch() {
+      document.getElementById('search-modal')?.classList.add('hidden');
+      document.body.style.overflow = '';
+      const input = document.getElementById('search-input');
+      if (input) input.value = '';
+      const results = document.getElementById('search-results');
+      if (results) results.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>';
+    }
+
+    document.getElementById('search-btn')?.addEventListener('click', openSearch);
+
+    document.getElementById('search-modal')?.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeSearch();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSearch();
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const modal = document.getElementById('search-modal');
+        if (modal?.classList.contains('hidden')) openSearch();
+        else closeSearch();
+      }
+    });
+
+    document.getElementById('search-input')?.addEventListener('input', async (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      const results = document.getElementById('search-results');
+      if (!results) return;
+
+      if (!query) {
+        results.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>';
+        return;
+      }
+
+      const data = await loadSearchData();
+      const filtered = data.filter(post =>
+        post.title.toLowerCase().includes(query) ||
+        post.description.toLowerCase().includes(query) ||
+        post.tags.some(t => t.toLowerCase().includes(query)) ||
+        post.category.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        results.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">검색 결과가 없습니다</p>';
+        return;
+      }
+
+      results.innerHTML = filtered.slice(0, 10).map(post => `
+        <a href="/blog/${post.slug}/" class="block px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">${post.category}</span>
+          </div>
+          <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${post.title}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">${post.description}</p>
+        </a>
+      `).join('');
+    });
+
   </script>
+
+
+
 </body>
 </html>
