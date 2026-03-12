@@ -252,8 +252,8 @@ document.addEventListener("DOMContentLoaded", function(){
     var pub = this;
     var intro = document.getElementById('introText').value;
     var items = [];
-    for(var i=0;i<allNews.length;i++){
-      if(sel[allNews[i].id]) items.push({news_id:allNews[i].id, comment:cmts[allNews[i].id]||''});
+    for(var k in sel){
+      if(sel[k]) items.push({news_id:parseInt(k), comment:cmts[parseInt(k)]||''});
     }
     if(items.length===0){alert('뉴스를 선택해주세요');return;}
 
