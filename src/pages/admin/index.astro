@@ -59,6 +59,22 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 .msg.err{color:#f87171}
 .loading{text-align:center;padding:40px;color:#64748b}
 #list{padding-bottom:80px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;justify-content:center;align-items:center}
+.overlay.show{display:flex}
+.popup{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;width:90%;max-width:480px;max-height:80vh;overflow-y:auto}
+.popup h2{font-size:1.1rem;margin-bottom:12px;color:#e2e8f0}
+.popup .hint{font-size:.78rem;color:#64748b;margin-bottom:12px}
+.ord-item{display:flex;align-items:center;gap:10px;background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:grab;user-select:none}
+.ord-item:active{cursor:grabbing;border-color:#3b82f6}
+.ord-item .num{color:#3b82f6;font-weight:700;font-size:1.1rem;min-width:24px}
+.ord-item .ttl{flex:1;font-size:.88rem;color:#e2e8f0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ord-item .arrows{display:flex;flex-direction:column;gap:2px}
+.ord-item .arr{background:none;border:1px solid #475569;color:#94a3b8;width:26px;height:22px;border-radius:4px;cursor:pointer;font-size:.7rem;display:flex;align-items:center;justify-content:center}
+.ord-item .arr:hover{background:#334155;color:#fff}
+.popup .actions{display:flex;gap:10px;margin-top:14px;justify-content:flex-end}
+.popup .btn-cancel{background:#334155;color:#94a3b8;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:.85rem}
+.popup .btn-publish{background:#2563eb;color:#fff;border:none;padding:8px 24px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600}
+.popup .btn-publish:disabled{background:#334155;color:#64748b;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -79,6 +95,17 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
   <button class="fbtn" data-d="14">14일</button>
 </div>
 <div id="list"></div>
+<div class="overlay" id="orderOverlay">
+<div class="popup">
+<h2>발행 순서 정하기</h2>
+<div class="hint">드래그 또는 화살표로 순서를 조정하세요. 1번이 카드뉴스 헤드라인이 됩니다.</div>
+<div id="orderList"></div>
+<div class="actions">
+<button class="btn-cancel" id="orderCancel">취소</button>
+<button class="btn-publish" id="orderConfirm">이 순서로 발행</button>
+</div>
+</div>
+</div>
 <div class="bot">
   <span class="cnt" id="cnt">0건 선택</span>
   <button class="del" id="delbtn">삭제</button>
@@ -248,22 +275,91 @@ document.addEventListener("DOMContentLoaded", function(){
   });
 
   // === 발행 ===
-  document.getElementById('pub').addEventListener('click', function(){
-    var pub = this;
-    var intro = document.getElementById('introText').value;
+  var orderedItems = [];
+
+  function getSelectedItems(){
     var items = [];
     for(var k in sel){
-      if(sel[k]) items.push({news_id:parseInt(k), comment:cmts[parseInt(k)]||''});
+      if(sel[k]){
+        var nid = parseInt(k);
+        var title = '';
+        for(var i=0;i<allNews.length;i++){
+          if(allNews[i].id===nid){title=allNews[i].title;break;}
+        }
+        if(!title){title='뉴스 #'+nid;}
+        items.push({news_id:nid, comment:cmts[nid]||'', title:title});
+      }
     }
-    if(items.length===0){alert('뉴스를 선택해주세요');return;}
+    return items;
+  }
 
-    pub.disabled = true;
-    pub.textContent = '발행 중...';
+  function renderOrderList(){
+    var ol = document.getElementById('orderList');
+    ol.innerHTML = '';
+    for(var i=0;i<orderedItems.length;i++){
+      var item = orderedItems[i];
+      var div = document.createElement('div');
+      div.className = 'ord-item';
+      div.setAttribute('data-idx', i);
+      div.innerHTML = '<span class="num">'+(i+1)+'</span><span class="ttl">'+item.title+'</span><span class="arrows"><button class="arr" data-dir="up">▲</button><button class="arr" data-dir="down">▼</button></span>';
+      ol.appendChild(div);
+    }
+  }
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.arr');
+    if(!btn) return;
+    var dir = btn.getAttribute('data-dir');
+    var item = btn.closest('.ord-item');
+    var idx = parseInt(item.getAttribute('data-idx'));
+    if(dir==='up' && idx>0){
+      var tmp = orderedItems[idx-1];
+      orderedItems[idx-1] = orderedItems[idx];
+      orderedItems[idx] = tmp;
+      renderOrderList();
+    } else if(dir==='down' && idx<orderedItems.length-1){
+      var tmp2 = orderedItems[idx+1];
+      orderedItems[idx+1] = orderedItems[idx];
+      orderedItems[idx] = tmp2;
+      renderOrderList();
+    }
+  });
+
+  document.getElementById('pub').addEventListener('click', function(){
+    var items = getSelectedItems();
+    if(items.length===0){alert('뉴스를 선택해주세요');return;}
+    orderedItems = items;
+    renderOrderList();
+    document.getElementById('orderOverlay').classList.add('show');
+  });
+
+  document.getElementById('orderCancel').addEventListener('click', function(){
+    document.getElementById('orderOverlay').classList.remove('show');
+  });
+
+  document.getElementById('orderOverlay').addEventListener('click', function(e){
+    if(e.target === this) this.classList.remove('show');
+  });
+
+  document.getElementById('orderConfirm').addEventListener('click', function(){
+    var confirmBtn = this;
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = '발행 중...';
+    var intro = document.getElementById('introText').value;
+    var pub = document.getElementById('pub');
     var msg = document.getElementById('msg');
 
-    fetch('/api/briefing/publish/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:today,intro:intro,items:items})})
+    var submitItems = [];
+    for(var i=0;i<orderedItems.length;i++){
+      submitItems.push({news_id:orderedItems[i].news_id, comment:orderedItems[i].comment});
+    }
+
+    fetch('/api/briefing/publish/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:today,intro:intro,items:submitItems})})
       .then(function(r){return r.json()})
       .then(function(d){
+        document.getElementById('orderOverlay').classList.remove('show');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = '이 순서로 발행';
         if(d.ok){
           msg.className='msg ok'; msg.textContent='발행 완료! '+d.items_count+'건';
           pub.textContent='발행 완료!';
@@ -271,12 +367,13 @@ document.addEventListener("DOMContentLoaded", function(){
           setTimeout(function(){ pub.textContent='브리핑 발행'; pub.disabled=false; msg.textContent=''; }, 3000);
         } else {
           msg.className='msg err'; msg.textContent='실패: '+(d.error||'');
-          pub.disabled=false; pub.textContent='브리핑 발행';
         }
       })
       .catch(function(e){
+        document.getElementById('orderOverlay').classList.remove('show');
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = '이 순서로 발행';
         msg.className='msg err'; msg.textContent='에러: '+e.message;
-        pub.disabled=false; pub.textContent='브리핑 발행';
       });
   });
 
