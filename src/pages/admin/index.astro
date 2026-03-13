@@ -121,6 +121,7 @@ document.addEventListener("DOMContentLoaded", function(){
   var allNews = [];
   var sel = {};
   var cmts = {};
+  var newsCache = {};
   var days = 3;
   var currentFilter = 'all';
   var loadId = 0;
@@ -229,6 +230,7 @@ document.addEventListener("DOMContentLoaded", function(){
       .then(function(data){
         if(thisId !== loadId) return;
         allNews = Array.isArray(data) ? data : (data.results || []);
+        for(var j=0;j<allNews.length;j++) newsCache[allNews[j].id] = allNews[j];
         draw();
         upd();
       })
@@ -282,11 +284,8 @@ document.addEventListener("DOMContentLoaded", function(){
     for(var k in sel){
       if(sel[k]){
         var nid = parseInt(k);
-        var title = '';
-        for(var i=0;i<allNews.length;i++){
-          if(allNews[i].id===nid){title=allNews[i].title;break;}
-        }
-        if(!title){title='뉴스 #'+nid;}
+        var cached = newsCache[nid];
+        var title = cached ? cached.title : '뉴스 #'+nid;
         items.push({news_id:nid, comment:cmts[nid]||'', title:title});
       }
     }
