@@ -3324,3 +3324,177 @@ aikorea24 뉴스 수집 v4.0 - 2026-03-17 06:30
 ============================================================
 완료! 총 88건 저장
 ============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-03-17 10:47
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  MIT Tech Review 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  Ars Technica AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  VentureBeat AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  AI News EU 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  SCMP China Tech 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  The Decoder 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  MarkTechPost 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  Hacker News 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  해외 중복제거 후: 0건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  전자신문 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  IT조선 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+  [KR-2] 네이버 뉴스 (보조)
+  네이버 '인공지능 AI 최신' 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+    '인공지능 AI 최신': 0건
+  네이버 'AI 스타트업' 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+    'AI 스타트업': 0건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  국내 중복제거 후: 0건
+
+[최종] 통합 중복제거 후: 0건
+
+[저장] D1 저장 중...
+  기존 D1 항목: 0개
+  저장할 신규 항목 없음
+  신규: 0건 | 중복 스킵: 0건
+
+============================================================
+완료! 총 0건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-03-17 19:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 8건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 11건
+  SCMP China Tech: 12건
+  The Decoder: 10건
+  MarkTechPost: 9건
+  Hacker News: 15건
+  유사 중복 제거: 5건
+  해외 중복제거 후: 85건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 10건
+  IT조선: 14건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 5건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 2건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 3건
+  유사 중복 제거: 5건
+  국내 중복제거 후: 47건
+
+[비율] 해외: 85건(64%) | 국내: 47건(36%)
+
+[최종] 통합 중복제거 후: 132건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 85건 → 9배치 (5스레드 병렬)
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 4: 10건 완료
+    배치 9: 5건 완료
+    배치 8: 10건 완료
+    배치 6: 10건 완료
+    배치 7: 10건 완료
+  번역 완료: 85건 (9배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 3677개
+  배치 1: 50건 저장
+  배치 2: 50건 저장
+  배치 3: 24건 저장
+  신규: 124건 | 중복 스킵: 8건
+
+============================================================
+완료! 총 124건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-03-18 06:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 11건
+  SCMP China Tech: 12건
+  The Decoder: 9건
+  MarkTechPost: 9건
+  Hacker News: 15건
+  유사 중복 제거: 4건
+  해외 중복제거 후: 89건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 9건
+  IT조선: 15건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 2건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 2건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 4건
+  유사 중복 제거: 3건
+  국내 중복제거 후: 47건
+
+[비율] 해외: 89건(65%) | 국내: 47건(35%)
+
+[최종] 통합 중복제거 후: 136건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 89건 → 9배치 (5스레드 병렬)
+    배치 1: 10건 완료
+    배치 3: 10건 완료
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 4: 10건 완료
+    배치 9: 9건 완료
+    배치 6: 10건 완료
+    배치 8: 10건 완료
+    배치 7: 10건 완료
+  번역 완료: 89건 (9배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 3780개
+  배치 1: 50건 저장
+  배치 2: 44건 저장
+  신규: 94건 | 중복 스킵: 42건
+
+============================================================
+완료! 총 94건 저장
+============================================================
