@@ -14,7 +14,7 @@ const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 
 const recentPosts = allPosts.filter(p => p.data.category !== 'AI 강좌').slice(0, 3);
-const coursePosts = allPosts.filter(p => p.data.category === 'AI 강좌').slice(0, 3);
+const coursePosts = allPosts.filter(p => (p.data.tags || []).includes('바이브코딩')).slice(0, 3);
 
 // --- 브리핑 데이터 ---
 let briefing: any = null;
@@ -54,13 +54,11 @@ try {
       <div class="absolute bottom-[-10%] left-[30%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse-slow3"></div>
     </div>
 
-    <HeroSection />
     <BriefingSection briefing={briefing} items={briefingItems} />
+    <HeroSection />
     <CourseSection posts={coursePosts} />
-    <LatestBlog posts={recentPosts} />
-    <CtaSection />
-    <ContentHub />
     <SubProjects />
+    <CtaSection />
 
   </div>
 
