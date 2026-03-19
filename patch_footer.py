@@ -8,7 +8,7 @@ with open(filepath, "r", encoding="utf-8") as f:
 old = '            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 자격증</a></li>'
 
 new = '''            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 자격증</a></li>
-            <li><a href="https://8.informationhot.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">뉴스 키워드 인사이트 Pro</a></li>'''
+            <li><a href="https://keyword.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">뉴스 키워드 인사이트 Pro</a></li>'''
 
 if old in code:
     code = code.replace(old, new, 1)
