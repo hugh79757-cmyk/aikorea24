@@ -26,3 +26,4 @@ api_test/.env.sh
 src/env.d.ts.bak
 wrangler.toml.bak
 backup_*.txt
+*.bak

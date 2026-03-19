@@ -40,6 +40,7 @@ if (db) {
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="icon" href="/favicon.png" />
   <title>브리핑 & 뉴스 - AI코리아24</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
   <style is:global>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
@@ -181,7 +182,7 @@ if (db) {
           return;
         }
 
-        showing.forEach(function(n) {
+        showing.forEach(function(n, nIdx) {
           var countryTag = n.country === 'kr'
             ? '<span class="n-tag kr">국내</span>'
             : '<span class="n-tag global">해외</span>';
@@ -200,6 +201,14 @@ if (db) {
             (n.description ? '<div class="n-desc">' + n.description + '</div>' : '') +
             '<div class="n-meta">' + countryTag + sourceTag + catTag + timeTag + '</div>';
           list.appendChild(card);
+          // 6번째 카드 뒤에 광고 삽입
+          if (nIdx === 5) {
+            var adCard = document.createElement('div');
+            adCard.style.cssText = 'margin:8px 0';
+            adCard.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+            list.appendChild(adCard);
+            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+          }
         });
 
         more.style.display = filtered.length > showCount ? 'block' : 'none';
