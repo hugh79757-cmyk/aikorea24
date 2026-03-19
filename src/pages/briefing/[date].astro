@@ -58,6 +58,7 @@ const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ($
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 <link rel="icon" href="/favicon.png" />
 <title>{display} AI 브리핑 - AI코리아24</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
 <meta name="description" content={`${display} AI 뉴스 브리핑 - ${items.length}건의 주요 AI 뉴스를 큐레이션했습니다.`} />
 <style is:global>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -159,5 +160,27 @@ body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0
     <a href="/" class="nav-btn">메인으로 &rarr;</a>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var articles = document.querySelectorAll('.article');
+    // 기사 3개 이상이면 3번째 뒤에 광고 삽입
+    if (articles.length >= 3) {
+      var adDiv = document.createElement('div');
+      adDiv.style.cssText = 'margin-bottom:16px';
+      adDiv.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+      articles[2].insertAdjacentElement('afterend', adDiv);
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    }
+    // 관련 뉴스 섹션 앞에 광고 삽입
+    var divider = document.querySelector('.divider');
+    if (divider) {
+      var adDiv2 = document.createElement('div');
+      adDiv2.style.cssText = 'margin:24px 0';
+      adDiv2.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+      divider.insertAdjacentElement('beforebegin', adDiv2);
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+    }
+  });
+</script>
 </body>
 </html>

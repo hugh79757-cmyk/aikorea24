@@ -131,6 +131,44 @@ const difficultyColor = (d: string) => {
         }
       });
       if (countEl) countEl.textContent = String(visible);
+
+      // 기존 광고 제거 후 재삽입
+      document.querySelectorAll('.tools-ad-unit').forEach(function(el) { el.remove(); });
+      var grid = document.getElementById('tools-grid');
+      if (!grid) return;
+      var visibleCards = Array.from(grid.querySelectorAll('.tool-card')).filter(function(c) {
+        return (c as HTMLElement).style.display !== 'none';
+      });
+      // 9번째 카드마다 (3행 끝) 광고 삽입, 최대 2개
+      var adCount = 0;
+      [8, 17].forEach(function(pos) {
+        if (pos >= visibleCards.length || adCount >= 2) return;
+        var adWrapper = document.createElement('div');
+        adWrapper.className = 'tools-ad-unit col-span-1 sm:col-span-2 lg:col-span-3';
+        adWrapper.style.cssText = 'grid-column: 1 / -1; padding: 8px 0;';
+        adWrapper.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+        visibleCards[pos].insertAdjacentElement('afterend', adWrapper);
+        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+        adCount++;
+      });
+    });
+  });
+
+  // 초기 로드 시에도 광고 삽입
+  document.addEventListener('DOMContentLoaded', function() {
+    var grid = document.getElementById('tools-grid');
+    if (!grid) return;
+    var cards = grid.querySelectorAll('.tool-card');
+    var adCount = 0;
+    [8, 17].forEach(function(pos) {
+      if (pos >= cards.length || adCount >= 2) return;
+      var adWrapper = document.createElement('div');
+      adWrapper.className = 'tools-ad-unit';
+      adWrapper.style.cssText = 'grid-column: 1 / -1; padding: 8px 0;';
+      adWrapper.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+      cards[pos].insertAdjacentElement('afterend', adWrapper);
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+      adCount++;
     });
   });
 </script>
