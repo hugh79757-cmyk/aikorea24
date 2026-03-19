@@ -73,8 +73,36 @@ const currentPath = Astro.url.pathname;
     :root { --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
     body { font-family: var(--font-sans); }
   </style>
+
+  <!-- Google Translate 배너 숨기기 -->
+  <style>
+    .goog-te-banner-frame{display:none!important;}
+    body{top:0!important;position:static!important;}
+    .skiptranslate{display:none!important;}
+    body>div.skiptranslate{display:none!important;}
+    .translate-flags{display:flex;justify-content:center;gap:8px;padding:6px 0;background:white;dark:bg-gray-900;border-b:1px solid #e5e7eb;z-index:10001;position:relative;}
+    .dark .translate-flags{background:#0A0E1A;border-color:rgba(255,255,255,0.06);}
+    .flag-btn{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid #ddd;cursor:pointer;background:white;display:inline-block;transition:transform 0.2s;}
+    .flag-btn:hover{transform:scale(1.15);border-color:#3b82f6;}
+    .flag-btn img{width:100%;height:100%;object-fit:cover;}
+  </style>
+
 </head>
 <body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+  
+  <!-- 🌍 국기 번역 버튼 -->
+  <div class="translate-flags">
+    <a href="javascript:void(0)" onclick="triggerTranslate('ko')" class="flag-btn"><img src="https://flagcdn.com/w80/kr.png" alt="한국어"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('en')" class="flag-btn"><img src="https://flagcdn.com/w80/us.png" alt="English"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('zh-CN')" class="flag-btn"><img src="https://flagcdn.com/w80/cn.png" alt="中文"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('ja')" class="flag-btn"><img src="https://flagcdn.com/w80/jp.png" alt="日本語"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('vi')" class="flag-btn"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('th')" class="flag-btn"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('es')" class="flag-btn"><img src="https://flagcdn.com/w80/es.png" alt="Español"></a>
+    <a href="javascript:void(0)" onclick="triggerTranslate('fr')" class="flag-btn"><img src="https://flagcdn.com/w80/fr.png" alt="Français"></a>
+  </div>
+  <div id="google_translate_element" style="display:none;"></div>
 
   <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06] transition-colors">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -325,6 +353,48 @@ const currentPath = Astro.url.pathname;
   </script>
 
 
+
+
+  <!-- Google Translate -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ko',
+        includedLanguages: 'ko,en,zh-CN,ja,th,vi,id,es,fr',
+        autoDisplay: false
+      }, 'google_translate_element');
+
+      setTimeout(function() {
+        var savedLang = localStorage.getItem('selectedLang');
+        if (savedLang && savedLang !== 'ko') {
+          triggerTranslate(savedLang);
+        }
+      }, 500);
+
+      setInterval(function() {
+        if (document.body.style.top !== '0px') document.body.style.top = '0px';
+        var banner = document.querySelector('.goog-te-banner-frame');
+        if (banner) banner.style.display = 'none';
+      }, 1000);
+    }
+
+    function triggerTranslate(langCode) {
+      var select = document.querySelector('.goog-te-combo');
+      if (select) {
+        select.value = langCode;
+        select.dispatchEvent(new Event('change'));
+        localStorage.setItem('selectedLang', langCode);
+      }
+    }
+
+    (function() {
+      var gtScript = document.createElement('script');
+      gtScript.type = 'text/javascript';
+      gtScript.async = true;
+      gtScript.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      document.body.appendChild(gtScript);
+    })();
+  </script>
 
 </body>
 </html>
