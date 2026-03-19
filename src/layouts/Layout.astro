@@ -74,9 +74,14 @@ const currentPath = Astro.url.pathname;
     body { font-family: var(--font-sans); }
   </style>
 
-  <!-- 번역 국기 바 스타일 -->
+  <!-- 번역 국기 바 + Google Translate 배너 숨기기 -->
   <style>
-    .translate-flags{display:flex;justify-content:center;gap:8px;padding:6px 0;background:white;border-b:1px solid #e5e7eb;z-index:10001;position:relative;}
+    .goog-te-banner-frame{display:none!important;}
+    body{top:0!important;position:static!important;}
+    .skiptranslate{display:none!important;}
+    body>div.skiptranslate{display:none!important;}
+    .VIpgJd-ZVi9od-ORHb-OEVmcd{display:none!important;}
+    .translate-flags{display:flex;justify-content:center;gap:8px;padding:6px 0;background:white;border-bottom:1px solid #e5e7eb;z-index:10001;position:relative;}
     .dark .translate-flags{background:#0A0E1A;border-color:rgba(255,255,255,0.06);}
     .flag-btn{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid #ddd;cursor:pointer;background:white;display:inline-block;transition:transform 0.2s;text-decoration:none;}
     .flag-btn:hover{transform:scale(1.15);border-color:#3b82f6;}
@@ -88,17 +93,18 @@ const currentPath = Astro.url.pathname;
 <body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
   
-  <!-- 🌍 국기 번역 버튼 (Google Translate URL 방식) -->
-  <div class="translate-flags" id="translate-bar">
-    <a href="javascript:void(0)" data-lang="ko" class="flag-btn active" title="한국어 (원문)"><img src="https://flagcdn.com/w80/kr.png" alt="한국어"></a>
-    <a href="javascript:void(0)" data-lang="en" class="flag-btn" title="English"><img src="https://flagcdn.com/w80/us.png" alt="English"></a>
-    <a href="javascript:void(0)" data-lang="zh-CN" class="flag-btn" title="中文"><img src="https://flagcdn.com/w80/cn.png" alt="中文"></a>
-    <a href="javascript:void(0)" data-lang="ja" class="flag-btn" title="日本語"><img src="https://flagcdn.com/w80/jp.png" alt="日本語"></a>
-    <a href="javascript:void(0)" data-lang="vi" class="flag-btn" title="Tiếng Việt"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt"></a>
-    <a href="javascript:void(0)" data-lang="th" class="flag-btn" title="ภาษาไทย"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย"></a>
-    <a href="javascript:void(0)" data-lang="es" class="flag-btn" title="Español"><img src="https://flagcdn.com/w80/es.png" alt="Español"></a>
-    <a href="javascript:void(0)" data-lang="fr" class="flag-btn" title="Français"><img src="https://flagcdn.com/w80/fr.png" alt="Français"></a>
+  <!-- 🌍 국기 번역 버튼 (Google Translate 위젯 방식) -->
+  <div class="translate-flags">
+    <a href="javascript:void(0)" onclick="doTranslate('ko')" class="flag-btn" title="한국어"><img src="https://flagcdn.com/w80/kr.png" alt="한국어"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('en')" class="flag-btn" title="English"><img src="https://flagcdn.com/w80/us.png" alt="English"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" class="flag-btn" title="中文"><img src="https://flagcdn.com/w80/cn.png" alt="中文"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('ja')" class="flag-btn" title="日本語"><img src="https://flagcdn.com/w80/jp.png" alt="日本語"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('vi')" class="flag-btn" title="Tiếng Việt"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('th')" class="flag-btn" title="ภาษาไทย"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('es')" class="flag-btn" title="Español"><img src="https://flagcdn.com/w80/es.png" alt="Español"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('fr')" class="flag-btn" title="Français"><img src="https://flagcdn.com/w80/fr.png" alt="Français"></a>
   </div>
+  <div id="google_translate_element" style="display:none;"></div>
 
   <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06] transition-colors">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -351,46 +357,39 @@ const currentPath = Astro.url.pathname;
 
 
 
-  <!-- 번역 국기 스크립트 (Google Translate URL 방식) -->
+  <!-- Google Translate 위젯 (zodiac 방식) -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var bar = document.getElementById('translate-bar');
-      if (!bar) return;
-
-      bar.addEventListener('click', function(e) {
-        var btn = e.target.closest('.flag-btn');
-        if (!btn) return;
-        e.preventDefault();
-
-        var lang = btn.getAttribute('data-lang');
-        if (!lang) return;
-
-        if (lang === 'ko') {
-          // 원문으로 돌아가기: 번역 프록시에서 벗어나기
-          if (window.location.hostname.includes('translate.goog')) {
-            window.location.href = 'https://aikorea24.kr' + window.location.pathname;
-          }
-          return;
-        }
-
-        // Google Translate URL 방식
-        var currentUrl = window.location.href;
-        // 이미 번역 프록시 안에 있으면 원래 URL 추출
-        if (currentUrl.includes('translate.goog')) {
-          currentUrl = 'https://aikorea24.kr' + window.location.pathname;
-        }
-        window.location.href = 'https://translate.google.com/translate?sl=ko&tl=' + lang + '&u=' + encodeURIComponent(currentUrl);
-      });
-
-      // active 상태 표시
-      bar.querySelectorAll('.flag-btn').forEach(function(b) {
-        b.addEventListener('click', function() {
-          bar.querySelectorAll('.flag-btn').forEach(function(x) { x.classList.remove('active'); });
-          b.classList.add('active');
-        });
-      });
-    });
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ko',
+        includedLanguages: 'ko,en,zh-CN,ja,th,vi,id,es,fr',
+        autoDisplay: false
+      }, 'google_translate_element');
+      setTimeout(function() {
+        var saved = localStorage.getItem('selectedLang');
+        if (saved && saved !== 'ko') doTranslate(saved);
+      }, 500);
+      setInterval(function() {
+        if (document.body.style.top !== '0px') document.body.style.top = '0px';
+        var b = document.querySelector('.goog-te-banner-frame');
+        if (b) b.style.display = 'none';
+        var s = document.querySelector('.skiptranslate');
+        if (s) s.style.display = 'none';
+      }, 500);
+    }
+    function doTranslate(lang) {
+      var s = document.querySelector('.goog-te-combo');
+      if (s) {
+        s.value = lang;
+        s.dispatchEvent(new Event('change'));
+        localStorage.setItem('selectedLang', lang);
+      } else {
+        localStorage.setItem('selectedLang', lang);
+        setTimeout(function() { doTranslate(lang); }, 1000);
+      }
+    }
   </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
