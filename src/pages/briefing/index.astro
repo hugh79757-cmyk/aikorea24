@@ -41,6 +41,15 @@ if (db) {
   <link rel="icon" href="/favicon.png" />
   <title>브리핑 & 뉴스 - AI코리아24</title>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
+<meta name="google-site-verification" content="kpr0gRmGKIFUW5dNLsfxba1aKpbV7wolSFk6cSOJZXA" />
+<meta name="naver-site-verification" content="fa2baf09d65dfb84a55787b8740941430187b234" />
+<style>
+.skiptranslate{display:none!important}body{top:0!important}
+.flag-bar{position:fixed;top:0;right:0;z-index:9999;display:flex;gap:4px;padding:6px 10px;background:rgba(10,10,15,0.85);backdrop-filter:blur(8px);border-radius:0 0 0 10px}
+.flag-bar a{display:block;width:24px;height:18px;border-radius:3px;overflow:hidden;opacity:0.7;transition:opacity .2s}
+.flag-bar a:hover{opacity:1}
+.flag-bar a img{width:100%;height:100%;object-fit:cover}
+</style>
   <style is:global>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
@@ -217,5 +226,23 @@ if (db) {
       render();
     </script>
   </div>
+<script>
+function googleTranslateElementInit(){
+  new google.translate.TranslateElement({pageLanguage:'ko',includedLanguages:'en,ja,zh-CN,vi,th,es,fr',autoDisplay:false},'google_translate_element');
+}
+function doTranslate(lang){
+  var s=document.querySelector('.goog-te-combo');
+  if(s){s.value=lang;s.dispatchEvent(new Event('change'));}
+  else{
+    var url=encodeURIComponent(location.href);
+    window.open('https://translate.google.com/translate?sl=ko&tl='+lang+'&u='+url,'_blank');
+  }
+}
+setInterval(function(){
+  var f=document.querySelector('.skiptranslate');if(f)f.style.display='none';
+  document.body.style.top='0';
+},300);
+</script>
+<script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
