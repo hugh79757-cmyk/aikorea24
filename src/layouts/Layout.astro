@@ -46,22 +46,350 @@ const currentPath = Astro.url.pathname;
 
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth dark">
+<script is:inline>
+  const t = localStorage.getItem('theme');
+  if (t === 'light') document.documentElement.classList.remove('dark');
+  else document.documentElement.classList.add('dark');
+</script>
+<head>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185"
+     crossorigin="anonymous"></script>
+
+
+
+  <SEOHead
+    title={title}
+    description={description}
+    image={image}
+    type={type}
+    publishedDate={publishedDate}
+    modifiedDate={modifiedDate}
+    tags={tags}
+    category={category}
+    noindex={noindex}
+  />
+  <style is:global>
+    :root { --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
+    body { font-family: var(--font-sans); }
+  </style>
+
+  <!-- 번역 국기 바 + Google Translate 배너 숨기기 -->
+  <style>
+    .goog-te-banner-frame{display:none!important;}
+    body{top:0!important;position:static!important;}
+    .skiptranslate{display:none!important;}
+    body>div.skiptranslate{display:none!important;}
+    .VIpgJd-ZVi9od-ORHb-OEVmcd{display:none!important;}
+    .translate-flags{display:flex;justify-content:center;gap:8px;padding:6px 0;background:white;border-bottom:1px solid #e5e7eb;z-index:10001;position:relative;}
+    .dark .translate-flags{background:#0A0E1A;border-color:rgba(255,255,255,0.06);}
+    .flag-btn{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid #ddd;cursor:pointer;background:white;display:inline-block;transition:transform 0.2s;text-decoration:none;}
+    .flag-btn:hover{transform:scale(1.15);border-color:#3b82f6;}
+    .flag-btn.active{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,0.3);}
+    .flag-btn img{width:100%;height:100%;object-fit:cover;}
+  </style>
+
+</head>
+<body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
   
+  <!-- 🌍 국기 번역 버튼 (Google Translate 위젯 방식) -->
+  <div class="translate-flags">
+    <a href="javascript:void(0)" onclick="doTranslate('ko')" class="flag-btn" title="한국어"><img src="https://flagcdn.com/w80/kr.png" alt="한국어"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('en')" class="flag-btn" title="English"><img src="https://flagcdn.com/w80/us.png" alt="English"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" class="flag-btn" title="中文"><img src="https://flagcdn.com/w80/cn.png" alt="中文"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('ja')" class="flag-btn" title="日本語"><img src="https://flagcdn.com/w80/jp.png" alt="日本語"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('vi')" class="flag-btn" title="Tiếng Việt"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('th')" class="flag-btn" title="ภาษาไทย"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('es')" class="flag-btn" title="Español"><img src="https://flagcdn.com/w80/es.png" alt="Español"></a>
+    <a href="javascript:void(0)" onclick="doTranslate('fr')" class="flag-btn" title="Français"><img src="https://flagcdn.com/w80/fr.png" alt="Français"></a>
+  </div>
+  <div id="google_translate_element" style="display:none;"></div>
 
-<script is:inline>
-function doTranslate(lang) {
-  if (lang === 'ko') {
-    if (window.location.hostname.includes('translate.goog')) {
-      var orig = window.location.href.replace(/^https?:\/\/[^/]*translate\.goog/, 'https://aikorea24.kr');
-      orig = orig.replace(/[?&]_x_tr_[^&]*/g, '');
-      window.location.href = orig || 'https://aikorea24.kr';
+  <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06] transition-colors">
+    <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        AI코리아24
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class:list={[
+              'text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400',
+              currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
+                ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+            ]}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+      <div class="hidden md:flex items-center ml-4">
+        {currentUser ? (
+          <div class="flex items-center gap-3">
+            <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+            <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
+            <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
+          </div>
+        ) : (
+          <a href="/api/auth/login" class="text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
+        )}
+      </div>
+
+            <button id="search-btn" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="검색">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      </button>
+ 
+
+      <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="테마 전환">
+        <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg id="theme-icon-dark" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+      <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 dark:text-gray-200" aria-label="메뉴 열기">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </nav>
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-white/[0.06] bg-white/95 dark:bg-[#0A0E1A]/95 backdrop-blur-md">
+      {navItems.map(item => (
+        <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.05] border-b border-gray-100 dark:border-white/[0.06]">
+          {item.label}
+        </a>
+      ))}
+      <div class="px-4 py-3 border-t border-gray-200 dark:border-white/[0.06]">
+        {currentUser ? (
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+              <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
+            </div>
+            <a href="/api/auth/logout" class="text-xs text-red-400 hover:text-red-300">로그아웃</a>
+          </div>
+        ) : (
+          <a href="/api/auth/login" class="block text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-all">
+            Google로 로그인
+          </a>
+        )}
+      </div>
+    </div>
+  </header>
+
+    <!-- 검색 모달 -->
+  <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
+    <div class="max-w-xl mx-auto mt-20 mx-4 bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
+      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
+        <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input id="search-input" type="text" placeholder="블로그 검색... (제목, 설명, 태그)" class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none text-base" autocomplete="off" />
+        <kbd class="hidden sm:inline text-xs text-gray-400 border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5">ESC</kbd>
+      </div>
+      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
+        <p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>
+      </div>
+    </div>
+  </div>
+
+
+  <main class="flex-1">
+    <slot />
+  </main>
+
+  <footer class="bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-400 mt-auto transition-colors">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-bold text-lg mb-3">AI코리아24</h3>
+          <p class="text-sm leading-relaxed">AI, 누구나 쓸 수 있습니다.<br/>AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다.</p>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">바로가기</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/blog" class="hover:text-gray-900 dark:hover:text-white transition-colors">블로그</a></li>
+            <li><a href="/tools" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 도구</a></li>
+            <li><a href="/glossary" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 용어사전</a></li>
+            <li><a href="/chronicle" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 타임라인</a></li>
+            <li><a href="/tools/finder/" class="hover:text-gray-900 dark:hover:text-white transition-colors">도구 추천 퀴즈</a></li>
+            <li><a href="/contact" class="hover:text-gray-900 dark:hover:text-white transition-colors">문의</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">법적 고지</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/privacy" class="hover:text-gray-900 dark:hover:text-white transition-colors">개인정보처리방침</a></li>
+            <li><a href="/terms" class="hover:text-gray-900 dark:hover:text-white transition-colors">이용약관</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">서브 프로젝트</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="https://heritage.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 문화유산 가이드 프로젝트</a></li>
+            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">자격증 소개 프로젝트</a></li>
+            <li><a href="https://keyword.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">뉴스 키워드 인사이트 Pro</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-300 dark:border-gray-800 pt-8 text-xs leading-relaxed">
+        <p>스타일 팩토리9 | 대표: 조진연 | 사업자등록번호: 672-43-00632</p>
+        <p>경기도 의정부시 호암로 256, 107-1804 (우 11638) | info@aikorea24.kr</p>
+        <p class="mt-2">본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다.</p>
+        <p class="mt-1">&copy; 2026 AI코리아24. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 모바일 메뉴
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+
+    // 테마 토글
+    function updateThemeIcon() {
+      const isDark = document.documentElement.classList.contains('dark');
+      const lightIcon = document.getElementById('theme-icon-light');
+      const darkIcon = document.getElementById('theme-icon-dark');
+      if (lightIcon && darkIcon) {
+        // 다크 모드일 때: 해(light) 아이콘 표시 (누르면 라이트로)
+        // 라이트 모드일 때: 달(dark) 아이콘 표시 (누르면 다크로)
+        lightIcon.classList.toggle('hidden', !isDark);
+        darkIcon.classList.toggle('hidden', isDark);
+      }
     }
-    return;
-  }
-  var url = 'https://translate.google.com/translate?sl=ko&tl=' + lang + '&u=' + encodeURIComponent(window.location.href);
-  window.location.href = url;
-}
-</script>
+
+    updateThemeIcon();
+
+    document.getElementById('theme-toggle')?.addEventListener('click', () => {
+      const html = document.documentElement;
+      const isDark = html.classList.contains('dark');
+      if (isDark) {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+      updateThemeIcon();
+    });
+
+        // 검색 기능
+    let searchData = null;
+
+    async function loadSearchData() {
+      if (searchData) return searchData;
+      const res = await fetch('/api/search/');
+      searchData = await res.json();
+      return searchData;
+    }
+
+    function openSearch() {
+      document.getElementById('search-modal')?.classList.remove('hidden');
+      document.getElementById('search-input')?.focus();
+      document.body.style.overflow = 'hidden';
+      loadSearchData();
+    }
+
+    function closeSearch() {
+      document.getElementById('search-modal')?.classList.add('hidden');
+      document.body.style.overflow = '';
+      const input = document.getElementById('search-input');
+      if (input) input.value = '';
+      const results = document.getElementById('search-results');
+      if (results) results.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>';
+    }
+
+    document.getElementById('search-btn')?.addEventListener('click', openSearch);
+
+    document.getElementById('search-modal')?.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeSearch();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSearch();
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const modal = document.getElementById('search-modal');
+        if (modal?.classList.contains('hidden')) openSearch();
+        else closeSearch();
+      }
+    });
+
+    document.getElementById('search-input')?.addEventListener('input', async (e) => {
+      const query = e.target.value.trim().toLowerCase();
+      const results = document.getElementById('search-results');
+      if (!results) return;
+
+      if (!query) {
+        results.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>';
+        return;
+      }
+
+      const data = await loadSearchData();
+      const filtered = data.filter(post =>
+        post.title.toLowerCase().includes(query) ||
+        post.description.toLowerCase().includes(query) ||
+        post.tags.some(t => t.toLowerCase().includes(query)) ||
+        post.category.toLowerCase().includes(query)
+      );
+
+      if (filtered.length === 0) {
+        results.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">검색 결과가 없습니다</p>';
+        return;
+      }
+
+      results.innerHTML = filtered.slice(0, 10).map(post => `
+        <a href="/blog/${post.slug}/" class="block px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">${post.category}</span>
+          </div>
+          <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${post.title}</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">${post.description}</p>
+        </a>
+      `).join('');
+    });
+
+  </script>
+
+
+
+
+  <!-- Google Translate 위젯 (zodiac 방식) -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'ko',
+        includedLanguages: 'ko,en,zh-CN,ja,th,vi,id,es,fr',
+        autoDisplay: false
+      }, 'google_translate_element');
+      setTimeout(function() {
+        var saved = localStorage.getItem('selectedLang');
+        if (saved && saved !== 'ko') doTranslate(saved);
+      }, 500);
+      setInterval(function() {
+        if (document.body.style.top !== '0px') document.body.style.top = '0px';
+        var b = document.querySelector('.goog-te-banner-frame');
+        if (b) b.style.display = 'none';
+        var s = document.querySelector('.skiptranslate');
+        if (s) s.style.display = 'none';
+      }, 500);
+    }
+    function doTranslate(lang) {
+      var s = document.querySelector('.goog-te-combo');
+      if (s) {
+        s.value = lang;
+        s.dispatchEvent(new Event('change'));
+        localStorage.setItem('selectedLang', lang);
+      } else {
+        localStorage.setItem('selectedLang', lang);
+        setTimeout(function() { doTranslate(lang); }, 1000);
+      }
+    }
+  </script>
+  <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
 </body>
 </html>
