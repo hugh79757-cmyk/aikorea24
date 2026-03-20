@@ -58,20 +58,7 @@ const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ($
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 <link rel="icon" href="/favicon.png" />
 <title>{display} AI 브리핑 - AI코리아24</title>
-<script is:inline>
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'ko',autoDisplay:false},'google_translate_element');
-}
-function doTranslate(lang){
-  var s=document.querySelector('.goog-te-combo');
-  if(s){s.value=lang;s.dispatchEvent(new Event('change'));return;}
-  var i=setInterval(function(){
-    var s2=document.querySelector('.goog-te-combo');
-    if(s2){clearInterval(i);s2.value=lang;s2.dispatchEvent(new Event('change'));}
-  },500);
-  setTimeout(function(){clearInterval(i);},10000);
-}
-</script>
-<script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+
 </body>
 </html>
