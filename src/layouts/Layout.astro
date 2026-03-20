@@ -74,129 +74,18 @@ const currentPath = Astro.url.pathname;
     body { font-family: var(--font-sans); }
   </style>
 
-  <!-- 번역 국기 바 + Google Translate 배너 숨기기 -->
-  <style>
-    .goog-te-banner-frame{display:none!important;}
-    body{top:0!important;position:static!important;}
-    .skiptranslate{display:none!important;}
-    body>div.skiptranslate{display:none!important;}
-    .VIpgJd-ZVi9od-ORHb-OEVmcd{display:none!important;}
-    .translate-flags{display:flex;justify-content:center;gap:8px;padding:6px 0;background:white;border-bottom:1px solid #e5e7eb;z-index:10001;position:relative;}
-    .dark .translate-flags{background:#0A0E1A;border-color:rgba(255,255,255,0.06);}
-    .flag-btn{width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid #ddd;cursor:pointer;background:white;display:inline-block;transition:transform 0.2s;text-decoration:none;}
-    .flag-btn:hover{transform:scale(1.15);border-color:#3b82f6;}
-    .flag-btn.active{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,0.3);}
-    .flag-btn img{width:100%;height:100%;object-fit:cover;}
-  </style>
-
-</head>
-<body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
-
-  
-  <!-- 🌍 국기 번역 버튼 (Google Translate 위젯 방식) -->
-  <div class="translate-flags">
-    <a href="javascript:void(0)" onclick="doTranslate('ko')" class="flag-btn" title="한국어"><img src="https://flagcdn.com/w80/kr.png" alt="한국어"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('en')" class="flag-btn" title="English"><img src="https://flagcdn.com/w80/us.png" alt="English"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" class="flag-btn" title="中文"><img src="https://flagcdn.com/w80/cn.png" alt="中文"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('ja')" class="flag-btn" title="日本語"><img src="https://flagcdn.com/w80/jp.png" alt="日本語"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('vi')" class="flag-btn" title="Tiếng Việt"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('th')" class="flag-btn" title="ภาษาไทย"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('es')" class="flag-btn" title="Español"><img src="https://flagcdn.com/w80/es.png" alt="Español"></a>
-    <a href="javascript:void(0)" onclick="doTranslate('fr')" class="flag-btn" title="Français"><img src="https://flagcdn.com/w80/fr.png" alt="Français"></a>
-  </div>
-  <div id="google_translate_element" style="display:none;"></div>
-
-  <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06] transition-colors">
-    <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-        AI코리아24
-      </a>
-      <div class="hidden md:flex items-center gap-8">
-        {navItems.map(item => (
-          <a
-            href={item.href}
-            class:list={[
-              'text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400',
-              currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
-                ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
-            ]}
-          >
-            {item.label}
-          </a>
-        ))}
-      </div>
-      <div class="hidden md:flex items-center ml-4">
-        {currentUser ? (
-          <div class="flex items-center gap-3">
-            <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
-            <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
-            <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
-          </div>
-        ) : (
-          <a href="/api/auth/login" class="text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
-        )}
-      </div>
-
-            <button id="search-btn" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="검색">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-      </button>
- 
-
-      <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="테마 전환">
-        <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-        </svg>
-        <svg id="theme-icon-dark" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-        </svg>
-      </button>
-      <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 dark:text-gray-200" aria-label="메뉴 열기">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-      </button>
-    </nav>
-    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-white/[0.06] bg-white/95 dark:bg-[#0A0E1A]/95 backdrop-blur-md">
-      {navItems.map(item => (
-        <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.05] border-b border-gray-100 dark:border-white/[0.06]">
-          {item.label}
-        </a>
-      ))}
-      <div class="px-4 py-3 border-t border-gray-200 dark:border-white/[0.06]">
-        {currentUser ? (
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
-              <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
-            </div>
-            <a href="/api/auth/logout" class="text-xs text-red-400 hover:text-red-300">로그아웃</a>
-          </div>
-        ) : (
-          <a href="/api/auth/login" class="block text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-all">
-            Google로 로그인
-          </a>
-        )}
-      </div>
     </div>
-  </header>
-
-    <!-- 검색 모달 -->
-  <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
-    <div class="max-w-xl mx-auto mt-20 mx-4 bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
-      <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
-        <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input id="search-input" type="text" placeholder="블로그 검색... (제목, 설명, 태그)" class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none text-base" autocomplete="off" />
-        <kbd class="hidden sm:inline text-xs text-gray-400 border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5">ESC</kbd>
-      </div>
-      <div id="search-results" class="max-h-[60vh] overflow-y-auto p-2">
-        <p class="text-sm text-gray-400 text-center py-8">검색어를 입력하세요</p>
-      </div>
-    </div>
-  </div>
-
-
-  <main class="flex-1">
     <slot />
+    <!-- 콘텐츠 하단 광고 -->
+    <div style="text-align:center;margin:16px auto;max-width:728px;">
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-5938862195544185"
+           data-ad-slot="3350911709"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
   </main>
 
   <footer class="bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-400 mt-auto transition-colors">
@@ -357,39 +246,6 @@ const currentPath = Astro.url.pathname;
 
 
 
-  <!-- Google Translate 위젯 (zodiac 방식) -->
-  <script>
-    function googleTranslateElementInit() {
-      new google.translate.TranslateElement({
-        pageLanguage: 'ko',
-        includedLanguages: 'ko,en,zh-CN,ja,th,vi,id,es,fr',
-        autoDisplay: false
-      }, 'google_translate_element');
-      setTimeout(function() {
-        var saved = localStorage.getItem('selectedLang');
-        if (saved && saved !== 'ko') doTranslate(saved);
-      }, 500);
-      setInterval(function() {
-        if (document.body.style.top !== '0px') document.body.style.top = '0px';
-        var b = document.querySelector('.goog-te-banner-frame');
-        if (b) b.style.display = 'none';
-        var s = document.querySelector('.skiptranslate');
-        if (s) s.style.display = 'none';
-      }, 500);
-    }
-    function doTranslate(lang) {
-      var s = document.querySelector('.goog-te-combo');
-      if (s) {
-        s.value = lang;
-        s.dispatchEvent(new Event('change'));
-        localStorage.setItem('selectedLang', lang);
-      } else {
-        localStorage.setItem('selectedLang', lang);
-        setTimeout(function() { doTranslate(lang); }, 1000);
-      }
-    }
-  </script>
-  <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>
