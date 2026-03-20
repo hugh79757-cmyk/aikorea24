@@ -3689,3 +3689,113 @@ aikorea24 뉴스 수집 v4.0 - 2026-03-19 19:30
 ============================================================
 완료! 총 113건 저장
 ============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-03-20 06:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 10건
+  SCMP China Tech: 12건
+  The Decoder: 10건
+  MarkTechPost: 6건
+  Hacker News: 11건
+  유사 중복 제거: 3건
+  해외 중복제거 후: 83건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 4건
+  IT조선: 12건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 4건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고 실패: HTTP Error 502: Bad Gateway
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 3건
+  유사 중복 제거: 2건
+  국내 중복제거 후: 39건
+
+[비율] 해외: 83건(68%) | 국내: 39건(32%)
+
+[최종] 통합 중복제거 후: 122건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 83건 → 9배치 (5스레드 병렬)
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 4: 10건 완료
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 9: 3건 완료
+    배치 8: 10건 완료
+    배치 6: 10건 완료
+    배치 7: 10건 완료
+  번역 완료: 83건 (9배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 4040개
+  배치 1: 50건 저장
+  배치 2: 43건 저장
+  신규: 93건 | 중복 스킵: 29건
+
+============================================================
+완료! 총 93건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-03-20 07:55
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  MIT Tech Review 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  Ars Technica AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  VentureBeat AI 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  AI News EU 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  SCMP China Tech 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  The Decoder 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  MarkTechPost 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  Hacker News 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  해외 중복제거 후: 0건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  전자신문 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  IT조선 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+  [KR-2] 네이버 뉴스 (보조)
+  네이버 '인공지능 AI 최신' 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+    '인공지능 AI 최신': 0건
+  네이버 'AI 스타트업' 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+    'AI 스타트업': 0건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  국내 중복제거 후: 0건
+
+[최종] 통합 중복제거 후: 0건
+
+[저장] D1 저장 중...
+  기존 D1 항목: 0개
+  저장할 신규 항목 없음
+  신규: 0건 | 중복 스킵: 0건
+
+============================================================
+완료! 총 0건 저장
+============================================================
