@@ -50,21 +50,7 @@ const categoryMap: Record<string, string> = {
 </style>
 </head>
 <body class="min-h-screen">
-<div class="translate-flags" style="position:fixed;top:8px;right:8px;z-index:9999;display:flex;gap:6px;padding:6px 10px;background:rgba(10,10,15,0.85);backdrop-filter:blur(8px);border-radius:8px;">
-  <a href="javascript:void(0)" onclick="doTranslate('ko')" title="한국어" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;"><img src="https://flagcdn.com/w80/kr.png" alt="KR" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('en')" title="English" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;"><img src="https://flagcdn.com/w80/us.png" alt="EN" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" title="中文" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;"><img src="https://flagcdn.com/w80/cn.png" alt="CN" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('ja')" title="日本語" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;"><img src="https://flagcdn.com/w80/jp.png" alt="JP" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('vi')" title="Tiếng Việt" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;"><img src="https://flagcdn.com/w80/vn.png" alt="VN" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('th')" title="ภาษาไทย" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;"><img src="https://flagcdn.com/w80/th.png" alt="TH" style="width:100%;height:100%;object-fit:cover;"></a>
 </div>
-<div class="translate-flags" style="display:flex;justify-content:center;gap:8px;padding:6px 0;background:transparent;position:fixed;top:8px;right:8px;z-index:9999;">
-  <a href="javascript:void(0)" onclick="doTranslate('ko')" class="flag-btn" title="한국어" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/kr.png" alt="한국어" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('en')" class="flag-btn" title="English" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/us.png" alt="English" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" class="flag-btn" title="中文" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/cn.png" alt="中文" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('ja')" class="flag-btn" title="日本語" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/jp.png" alt="日本語" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('vi')" class="flag-btn" title="Tiếng Việt" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt" style="width:100%;height:100%;object-fit:cover;"></a>
-  <a href="javascript:void(0)" onclick="doTranslate('th')" class="flag-btn" title="ภาษาไทย" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย" style="width:100%;height:100%;object-fit:cover;"></a>
 </div>
 <div id="google_translate_element" style="display:none;"></div>
 
@@ -150,30 +136,7 @@ const categoryMap: Record<string, string> = {
 function googleTranslateElementInit(){
   new google.translate.TranslateElement({pageLanguage:'ko',autoDisplay:false},'google_translate_element');
 }
-function doTranslate(lang){
-  var s=document.querySelector('.goog-te-combo');
-  if(s){s.value=lang;s.dispatchEvent(new Event('change'));return;}
-  var i=setInterval(function(){
-    var s2=document.querySelector('.goog-te-combo');
-    if(s2){clearInterval(i);s2.value=lang;s2.dispatchEvent(new Event('change'));}
-  },500);
-  setTimeout(function(){clearInterval(i);},10000);
-}
-</script>
 <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 <script is:inline>
-function doTranslate(lang) {
-  if (lang === 'ko') {
-    if (window.location.hostname.includes('translate.goog')) {
-      var orig = window.location.href.replace(/^https?:\/\/[^/]*translate\.goog/, 'https://aikorea24.kr');
-      orig = orig.replace(/[?&]_x_tr_[^&]*/g, '');
-      window.location.href = orig || 'https://aikorea24.kr';
-    }
-    return;
-  }
-  var url = 'https://translate.google.com/translate?sl=ko&tl=' + lang + '&u=' + encodeURIComponent(window.location.href);
-  window.location.href = url;
-}
-</script>
 </body>
 </html>
