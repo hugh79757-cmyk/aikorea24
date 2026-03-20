@@ -47,13 +47,18 @@ const categoryMap: Record<string, string> = {
 <meta name="naver-site-verification" content="fa2baf09d65dfb84a55787b8740941430187b234" />
 <style>
 .skiptranslate{display:none!important}body{top:0!important}
-.flag-bar{position:fixed;top:0;right:0;z-index:9999;display:flex;gap:4px;padding:6px 10px;background:rgba(10,10,15,0.85);backdrop-filter:blur(8px);border-radius:0 0 0 10px}
-.flag-bar a{display:block;width:24px;height:18px;border-radius:3px;overflow:hidden;opacity:0.7;transition:opacity .2s}
-.flag-bar a:hover{opacity:1}
-.flag-bar a img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body class="min-h-screen">
+<div class="translate-flags" style="display:flex;justify-content:center;gap:8px;padding:6px 0;background:transparent;position:fixed;top:8px;right:8px;z-index:9999;">
+  <a href="javascript:void(0)" onclick="doTranslate('ko')" class="flag-btn" title="한국어" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/kr.png" alt="한국어" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('en')" class="flag-btn" title="English" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/us.png" alt="English" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" class="flag-btn" title="中文" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/cn.png" alt="中文" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('ja')" class="flag-btn" title="日本語" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/jp.png" alt="日本語" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('vi')" class="flag-btn" title="Tiếng Việt" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('th')" class="flag-btn" title="ภาษาไทย" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย" style="width:100%;height:100%;object-fit:cover;"></a>
+</div>
+<div id="google_translate_element" style="display:none;"></div>
 
   <header class="glass sticky top-0 z-50">
     <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -133,93 +138,19 @@ const categoryMap: Record<string, string> = {
     </form>
   </main>
 
-  <script>
-    const form = document.getElementById('write-form') as HTMLFormElement;
-    const contentEl = document.getElementById('content') as HTMLTextAreaElement;
-    const charCount = document.getElementById('char-count') as HTMLSpanElement;
-    const errorMsg = document.getElementById('error-msg') as HTMLDivElement;
-    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-
-    contentEl.addEventListener('input', () => {
-      charCount.textContent = String(contentEl.value.length);
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorMsg.classList.add('hidden');
-      submitBtn.disabled = true;
-      submitBtn.textContent = '등록 중...';
-
-      const title = (document.getElementById('title') as HTMLInputElement).value.trim();
-      const content = contentEl.value.trim();
-      const category = (document.getElementById('category') as HTMLSelectElement).value;
-
-      if (!title || !content) {
-        errorMsg.textContent = '제목과 내용을 모두 입력하세요.';
-        errorMsg.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.textContent = '등록하기';
-        return;
-      }
-
-      try {
-        const access_level = document.getElementById('access_level').value;
-        const price = parseInt(document.getElementById('price').value) || 0;
-        const preview_content = document.getElementById('preview_content')?.value?.trim() || '';
-
-        const res = await fetch('/api/posts', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, content, category, access_level, price, preview_content })
-        });
-
-        const data = await res.json();
-
-        if (res.ok && data.success) {
-          window.location.href = '/community/' + data.id;
-        } else {
-          errorMsg.textContent = data.error || '등록에 실패했습니다.';
-          errorMsg.classList.remove('hidden');
-        }
-      } catch (err) {
-        errorMsg.textContent = '네트워크 오류가 발생했습니다.';
-        errorMsg.classList.remove('hidden');
-      }
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = '등록하기';
-    });
-  
-    // access_level 변경 시 미리보기/가격 섹션 표시
-    const accessSelect = document.getElementById('access_level');
-    const previewSection = document.getElementById('preview-section');
-    const priceInput = document.getElementById('price');
-    accessSelect.addEventListener('change', () => {
-      if (accessSelect.value !== 'free') {
-        previewSection.classList.remove('hidden');
-      } else {
-        previewSection.classList.add('hidden');
-        priceInput.value = '0';
-      }
-    });
-  </script>
-
-<script is:inline>
+  <script is:inline>
 function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'ko',includedLanguages:'en,ja,zh-CN,vi,th,es,fr',autoDisplay:false},'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage:'ko',autoDisplay:false},'google_translate_element');
 }
 function doTranslate(lang){
   var s=document.querySelector('.goog-te-combo');
-  if(s){s.value=lang;s.dispatchEvent(new Event('change'));}
-  else{
-    var url=encodeURIComponent(location.href);
-    window.open('https://translate.google.com/translate?sl=ko&tl='+lang+'&u='+url,'_blank');
-  }
+  if(s){s.value=lang;s.dispatchEvent(new Event('change'));return;}
+  var i=setInterval(function(){
+    var s2=document.querySelector('.goog-te-combo');
+    if(s2){clearInterval(i);s2.value=lang;s2.dispatchEvent(new Event('change'));}
+  },500);
+  setTimeout(function(){clearInterval(i);},10000);
 }
-setInterval(function(){
-  var f=document.querySelector('.skiptranslate');if(f)f.style.display='none';
-  document.body.style.top='0';
-},300);
 </script>
 <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>

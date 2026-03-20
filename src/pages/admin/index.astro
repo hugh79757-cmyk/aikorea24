@@ -80,13 +80,18 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 <meta name="naver-site-verification" content="fa2baf09d65dfb84a55787b8740941430187b234" />
 <style>
 .skiptranslate{display:none!important}body{top:0!important}
-.flag-bar{position:fixed;top:0;right:0;z-index:9999;display:flex;gap:4px;padding:6px 10px;background:rgba(10,10,15,0.85);backdrop-filter:blur(8px);border-radius:0 0 0 10px}
-.flag-bar a{display:block;width:24px;height:18px;border-radius:3px;overflow:hidden;opacity:0.7;transition:opacity .2s}
-.flag-bar a:hover{opacity:1}
-.flag-bar a img{width:100%;height:100%;object-fit:cover}
 </style>
 </head>
 <body>
+<div class="translate-flags" style="display:flex;justify-content:center;gap:8px;padding:6px 0;background:transparent;position:fixed;top:8px;right:8px;z-index:9999;">
+  <a href="javascript:void(0)" onclick="doTranslate('ko')" class="flag-btn" title="한국어" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/kr.png" alt="한국어" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('en')" class="flag-btn" title="English" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/us.png" alt="English" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('zh-CN')" class="flag-btn" title="中文" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/cn.png" alt="中文" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('ja')" class="flag-btn" title="日本語" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/jp.png" alt="日本語" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('vi')" class="flag-btn" title="Tiếng Việt" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/vn.png" alt="Tiếng Việt" style="width:100%;height:100%;object-fit:cover;"></a>
+  <a href="javascript:void(0)" onclick="doTranslate('th')" class="flag-btn" title="ภาษาไทย" style="width:24px;height:18px;border-radius:3px;overflow:hidden;display:inline-block;opacity:0.7;cursor:pointer;border:none;background:none;"><img src="https://flagcdn.com/w80/th.png" alt="ภาษาไทย" style="width:100%;height:100%;object-fit:cover;"></a>
+</div>
+<div id="google_translate_element" style="display:none;"></div>
 <div style="display:flex;gap:8px;margin-bottom:16px">
 <a href="/admin/" style="color:#fff;text-decoration:none;padding:6px 14px;border-radius:6px;font-size:.85rem;background:#3b82f6;border:1px solid #3b82f6">브리핑</a>
 <a href="/admin/event/" style="color:#94a3b8;text-decoration:none;padding:6px 14px;border-radius:6px;font-size:.85rem;background:#1e293b;border:1px solid #334155">이벤트</a>
@@ -123,288 +128,18 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 </div>
 
 <script is:inline>
-document.addEventListener("DOMContentLoaded", function(){
-  var today = new Date().toISOString().split('T')[0];
-  document.getElementById('dinfo').textContent = today + ' 브리핑';
-
-  var allNews = [];
-  var sel = {};
-  var cmts = {};
-  var newsCache = {};
-  var days = 3;
-  var currentFilter = 'all';
-  var loadId = 0;
-  var abortCtrl = null;
-
-  // === 필터 바 ===
-  var ftrs = [
-    {k:'all',l:'전체'},{k:'kr',l:'국내'},{k:'global',l:'해외'},
-    {k:'policy',l:'정책'},{k:'benefit',l:'혜택'},
-    {k:'senior',l:'시니어'},{k:'startup',l:'스타트업'},{k:'grant',l:'지원사업'}
-  ];
-  var fbar = document.getElementById('fbar');
-  ftrs.forEach(function(f,i){
-    var b = document.createElement('button');
-    b.className = 'fbtn' + (i===0?' on':'');
-    b.textContent = f.l;
-    b.setAttribute('data-f', f.k);
-    fbar.appendChild(b);
-  });
-  fbar.addEventListener('click', function(e){
-    var b = e.target.closest('.fbtn');
-    if(!b) return;
-    fbar.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
-    currentFilter = b.getAttribute('data-f');
-    load(currentFilter);
-  });
-
-  // === 날짜 바 ===
-  document.getElementById('dbar').addEventListener('click', function(e){
-    var b = e.target.closest('.fbtn');
-    if(!b) return;
-    e.currentTarget.querySelectorAll('.fbtn').forEach(function(x){x.classList.remove('on')});
-    b.classList.add('on');
-    days = parseInt(b.getAttribute('data-d'));
-    load(currentFilter);
-  });
-
-  // === 그리기 (DocumentFragment 사용) ===
-  function draw(){
-    var list = document.getElementById('list');
-    var frag = document.createDocumentFragment();
-    for(var i=0;i<allNews.length;i++){
-      var n = allNews[i];
-      var isSel = !!sel[n.id];
-      var card = document.createElement('div');
-      card.className = 'card' + (isSel ? ' sel' : '');
-      card.setAttribute('data-nid', n.id);
-
-      var badge = (n.country && n.country !== 'kr') ? '해외' : '국내';
-      var cat = n.category ? ' ' + n.category : '';
-      var desc = (n.description || '').substring(0, 120);
-      var src = n.source || '';
-      var date = (n.pub_date || n.created_at || '').substring(0, 10);
-
-      card.innerHTML =
-        '<div><span class="ck">'+(isSel?'✓':'')+'</span><h3>'+n.title+'</h3> <small>'+badge+cat+'</small></div>'+
-        '<div class="meta">'+src+' · '+date+'</div>'+
-        '<div class="desc">'+desc+'...</div>'+
-        '<a class="link-btn" href="'+n.link+'" target="_blank" rel="noopener">원문 보기 ↗</a>'+
-        '<div class="cmt"><textarea placeholder="이 뉴스가 왜 중요한지..." data-cid="'+n.id+'">'+(cmts[n.id]||'')+'</textarea>'+
-        '<div style="font-size:.75rem;color:#64748b;margin-top:2px">나의 코멘트</div></div>';
-
-      frag.appendChild(card);
-    }
-    list.innerHTML = '';
-    list.appendChild(frag);
-  }
-
-  function upd(){
-    var n = 0;
-    for(var k in sel) if(sel[k]) n++;
-    document.getElementById('cnt').textContent = n + '건 선택';
-    document.getElementById('pub').disabled = (n === 0);
-  }
-
-  // === 카드 클릭 ===
-  document.getElementById('list').addEventListener('click', function(e){
-    if(e.target.tagName === 'TEXTAREA' || e.target.tagName === 'A') return;
-    var card = e.target.closest('.card');
-    if(!card) return;
-    var nid = parseInt(card.getAttribute('data-nid'));
-    if(sel[nid]){ delete sel[nid]; card.classList.remove('sel'); }
-    else { sel[nid] = true; card.classList.add('sel'); }
-    // 체크마크만 업데이트 (전체 리드로 안함)
-    var ck = card.querySelector('.ck');
-    if(ck) ck.textContent = sel[nid] ? '✓' : '';
-    upd();
-  });
-
-  document.getElementById('list').addEventListener('input', function(e){
-    var cid = e.target.getAttribute('data-cid');
-    if(cid) cmts[parseInt(cid)] = e.target.value;
-  });
-
-  // === 뉴스 로드 (AbortController로 이전 요청 취소) ===
-  function load(filter){
-    if(abortCtrl) abortCtrl.abort();
-    abortCtrl = new AbortController();
-    var thisId = ++loadId;
-
-    document.getElementById('list').innerHTML = '<div class="loading">로딩 중...</div>';
-
-    fetch('/api/briefing/news/?filter='+filter+'&days='+days+'&limit=100', {signal: abortCtrl.signal})
-      .then(function(r){return r.json()})
-      .then(function(data){
-        if(thisId !== loadId) return;
-        allNews = Array.isArray(data) ? data : (data.results || []);
-        for(var j=0;j<allNews.length;j++) newsCache[allNews[j].id] = allNews[j];
-        draw();
-        upd();
-      })
-      .catch(function(e){
-        if(e.name === 'AbortError') return;
-        document.getElementById('list').innerHTML = '<div class="loading">로드 실패: '+e.message+'</div>';
-      });
-  }
-
-  // === 브리핑 상태 확인 ===
-  function checkStatus(){
-    fetch('/api/briefing/latest/')
-      .then(function(r){return r.json()})
-      .then(function(d){
-        var st = document.getElementById('curStatus');
-        var db = document.getElementById('delbtn');
-        if(!st) return;
-        if(d && d.date === today){
-          st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b>';
-          st.style.color = '#4ade80';
-          if(db) db.style.display = 'inline-block';
-        } else {
-          st.textContent = '오늘 발행된 브리핑 없음';
-          st.style.color = '#94a3b8';
-          if(db) db.style.display = 'none';
-        }
-      })
-      .catch(function(e){ console.log('checkStatus:', e); });
-  }
-  checkStatus();
-
-  // === 삭제 ===
-  document.getElementById('delbtn').addEventListener('click', function(){
-    if(!confirm('오늘 브리핑을 삭제하시겠습니까?')) return;
-    var msg = document.getElementById('msg');
-    fetch('/api/briefing/publish/',{method:'DELETE',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:today})})
-      .then(function(r){return r.json()})
-      .then(function(d){
-        msg.className = d.ok ? 'msg ok' : 'msg err';
-        msg.textContent = d.ok ? '삭제 완료' : '실패: '+(d.error||'');
-        checkStatus();
-      })
-      .catch(function(e){ msg.className='msg err'; msg.textContent='에러: '+e; });
-  });
-
-  // === 발행 ===
-  var orderedItems = [];
-
-  function getSelectedItems(){
-    var items = [];
-    for(var k in sel){
-      if(sel[k]){
-        var nid = parseInt(k);
-        var cached = newsCache[nid];
-        var title = cached ? cached.title : '뉴스 #'+nid;
-        items.push({news_id:nid, comment:cmts[nid]||'', title:title});
-      }
-    }
-    return items;
-  }
-
-  function renderOrderList(){
-    var ol = document.getElementById('orderList');
-    ol.innerHTML = '';
-    for(var i=0;i<orderedItems.length;i++){
-      var item = orderedItems[i];
-      var div = document.createElement('div');
-      div.className = 'ord-item';
-      div.setAttribute('data-idx', i);
-      div.innerHTML = '<span class="num">'+(i+1)+'</span><span class="ttl">'+item.title+'</span><span class="arrows"><button class="arr" data-dir="up">▲</button><button class="arr" data-dir="down">▼</button></span>';
-      ol.appendChild(div);
-    }
-  }
-
-  document.addEventListener('click', function(e){
-    var btn = e.target.closest('.arr');
-    if(!btn) return;
-    var dir = btn.getAttribute('data-dir');
-    var item = btn.closest('.ord-item');
-    var idx = parseInt(item.getAttribute('data-idx'));
-    if(dir==='up' && idx>0){
-      var tmp = orderedItems[idx-1];
-      orderedItems[idx-1] = orderedItems[idx];
-      orderedItems[idx] = tmp;
-      renderOrderList();
-    } else if(dir==='down' && idx<orderedItems.length-1){
-      var tmp2 = orderedItems[idx+1];
-      orderedItems[idx+1] = orderedItems[idx];
-      orderedItems[idx] = tmp2;
-      renderOrderList();
-    }
-  });
-
-  document.getElementById('pub').addEventListener('click', function(){
-    var items = getSelectedItems();
-    if(items.length===0){alert('뉴스를 선택해주세요');return;}
-    orderedItems = items;
-    renderOrderList();
-    document.getElementById('orderOverlay').classList.add('show');
-  });
-
-  document.getElementById('orderCancel').addEventListener('click', function(){
-    document.getElementById('orderOverlay').classList.remove('show');
-  });
-
-  document.getElementById('orderOverlay').addEventListener('click', function(e){
-    if(e.target === this) this.classList.remove('show');
-  });
-
-  document.getElementById('orderConfirm').addEventListener('click', function(){
-    var confirmBtn = this;
-    confirmBtn.disabled = true;
-    confirmBtn.textContent = '발행 중...';
-    var intro = document.getElementById('introText').value;
-    var pub = document.getElementById('pub');
-    var msg = document.getElementById('msg');
-
-    var submitItems = [];
-    for(var i=0;i<orderedItems.length;i++){
-      submitItems.push({news_id:orderedItems[i].news_id, comment:orderedItems[i].comment});
-    }
-
-    fetch('/api/briefing/publish/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:today,intro:intro,items:submitItems})})
-      .then(function(r){return r.json()})
-      .then(function(d){
-        document.getElementById('orderOverlay').classList.remove('show');
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = '이 순서로 발행';
-        if(d.ok){
-          msg.className='msg ok'; msg.textContent='발행 완료! '+d.items_count+'건';
-          pub.textContent='발행 완료!';
-          checkStatus();
-          setTimeout(function(){ pub.textContent='브리핑 발행'; pub.disabled=false; msg.textContent=''; }, 3000);
-        } else {
-          msg.className='msg err'; msg.textContent='실패: '+(d.error||'');
-        }
-      })
-      .catch(function(e){
-        document.getElementById('orderOverlay').classList.remove('show');
-        confirmBtn.disabled = false;
-        confirmBtn.textContent = '이 순서로 발행';
-        msg.className='msg err'; msg.textContent='에러: '+e.message;
-      });
-  });
-
-  load('all');
-});
-</script>
-
-<script is:inline>
 function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'ko',includedLanguages:'en,ja,zh-CN,vi,th,es,fr',autoDisplay:false},'google_translate_element');
+  new google.translate.TranslateElement({pageLanguage:'ko',autoDisplay:false},'google_translate_element');
 }
 function doTranslate(lang){
   var s=document.querySelector('.goog-te-combo');
-  if(s){s.value=lang;s.dispatchEvent(new Event('change'));}
-  else{
-    var url=encodeURIComponent(location.href);
-    window.open('https://translate.google.com/translate?sl=ko&tl='+lang+'&u='+url,'_blank');
-  }
+  if(s){s.value=lang;s.dispatchEvent(new Event('change'));return;}
+  var i=setInterval(function(){
+    var s2=document.querySelector('.goog-te-combo');
+    if(s2){clearInterval(i);s2.value=lang;s2.dispatchEvent(new Event('change'));}
+  },500);
+  setTimeout(function(){clearInterval(i);},10000);
 }
-setInterval(function(){
-  var f=document.querySelector('.skiptranslate');if(f)f.style.display='none';
-  document.body.style.top='0';
-},300);
 </script>
 <script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
