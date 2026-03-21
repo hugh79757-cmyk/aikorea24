@@ -43,16 +43,8 @@ const categoryMap: Record<string, string> = {
       box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
     }
   </style>
-<meta name="google-site-verification" content="kpr0gRmGKIFUW5dNLsfxba1aKpbV7wolSFk6cSOJZXA" />
-<meta name="naver-site-verification" content="fa2baf09d65dfb84a55787b8740941430187b234" />
-<style>
-.skiptranslate{display:none!important}body{top:0!important}
-</style>
 </head>
 <body class="min-h-screen">
-</div>
-</div>
-<div id="google_translate_element" style="display:none;"></div>
 
   <header class="glass sticky top-0 z-50">
     <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
@@ -132,11 +124,76 @@ const categoryMap: Record<string, string> = {
     </form>
   </main>
 
-  <script is:inline>
-function googleTranslateElementInit(){
-  new google.translate.TranslateElement({pageLanguage:'ko',autoDisplay:false},'google_translate_element');
-}
-<script is:inline src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script is:inline>
+  <script>
+    const form = document.getElementById('write-form') as HTMLFormElement;
+    const contentEl = document.getElementById('content') as HTMLTextAreaElement;
+    const charCount = document.getElementById('char-count') as HTMLSpanElement;
+    const errorMsg = document.getElementById('error-msg') as HTMLDivElement;
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
+
+    contentEl.addEventListener('input', () => {
+      charCount.textContent = String(contentEl.value.length);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.textContent = '등록 중...';
+
+      const title = (document.getElementById('title') as HTMLInputElement).value.trim();
+      const content = contentEl.value.trim();
+      const category = (document.getElementById('category') as HTMLSelectElement).value;
+
+      if (!title || !content) {
+        errorMsg.textContent = '제목과 내용을 모두 입력하세요.';
+        errorMsg.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = '등록하기';
+        return;
+      }
+
+      try {
+        const access_level = document.getElementById('access_level').value;
+        const price = parseInt(document.getElementById('price').value) || 0;
+        const preview_content = document.getElementById('preview_content')?.value?.trim() || '';
+
+        const res = await fetch('/api/posts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, content, category, access_level, price, preview_content })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          window.location.href = '/community/' + data.id;
+        } else {
+          errorMsg.textContent = data.error || '등록에 실패했습니다.';
+          errorMsg.classList.remove('hidden');
+        }
+      } catch (err) {
+        errorMsg.textContent = '네트워크 오류가 발생했습니다.';
+        errorMsg.classList.remove('hidden');
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = '등록하기';
+    });
+  
+    // access_level 변경 시 미리보기/가격 섹션 표시
+    const accessSelect = document.getElementById('access_level');
+    const previewSection = document.getElementById('preview-section');
+    const priceInput = document.getElementById('price');
+    accessSelect.addEventListener('change', () => {
+      if (accessSelect.value !== 'free') {
+        previewSection.classList.remove('hidden');
+      } else {
+        previewSection.classList.add('hidden');
+        priceInput.value = '0';
+      }
+    });
+  </script>
+
 </body>
 </html>
