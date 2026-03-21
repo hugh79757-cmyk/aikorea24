@@ -38,12 +38,17 @@ if (db && date) {
       }
     }
   } catch (e) {
-    console.error(e);
+    console.error('BRIEFING_ERROR:', e);
+    briefing = { id: 0, date: date, status: 'error', intro: 'ERROR: ' + String(e), title: '' } as any;
+    items = [];
   }
 }
 
 if (!briefing) {
-  return Astro.redirect('/briefing/');
+  return new Response('<html><body><h1>DEBUG: No briefing found</h1><p>date param: ' + date + '</p><p>runtime: ' + typeof runtime + '</p><p>db: ' + typeof db + '</p></body></html>', {
+    status: 200,
+    headers: { 'Content-Type': 'text/html' }
+  });
 }
 
 const d = new Date(date + 'T00:00:00');
