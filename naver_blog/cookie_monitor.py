@@ -11,8 +11,8 @@ import requests
 COOKIE_FILE = os.path.join(os.path.dirname(__file__), "cookies.json")
 BLOG_ID = "oksoon5705-"
 
-TELEGRAM_BOT_TOKEN = "8511728557:AAGGDeNxyGFhjI5Y5fEGyzeZcxiG5yv05PE"
-TELEGRAM_CHAT_ID = "8539779870"
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
 
