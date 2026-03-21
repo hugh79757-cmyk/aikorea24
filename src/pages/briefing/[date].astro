@@ -1,31 +1,63 @@
 ---
 export const prerender = false;
 const { date } = Astro.params;
-let debugMsg = "OK";
-let runtime_type = "unknown";
-let db_type = "unknown";
-try {
-  const runtime = (Astro.locals as any).runtime;
-  runtime_type = typeof runtime;
-  const db = runtime?.env?.DB;
-  db_type = typeof db;
-  if (db) {
-    const result = await db.prepare("SELECT COUNT(*) as cnt FROM briefings").first();
-    debugMsg = "DB query OK, count=" + JSON.stringify(result);
-  } else {
-    debugMsg = "DB is null/undefined";
+const runtime = (Astro.locals as any).runtime;
+const db = runtime?.env?.DB;
+
+let briefing: any = null;
+let items: any[] = [];
+let relatedNews: any[] = [];
+
+if (db && date) {
+  try {
+    briefing = await db.prepare(
+      "SELECT * FROM briefings WHERE date = ? AND status = 'published' LIMIT 1"
+    ).bind(date).first();
+    if (briefing) {
+      const { results } = await db.prepare(
+        `SELECT bi.*, n.title, n.description, n.link, n.source, n.category, n.country, n.pub_date
+         FROM briefing_items bi
+         LEFT JOIN news n ON bi.news_id = n.id
+         WHERE bi.briefing_id = ?
+         ORDER BY bi.sort_order`
+      ).bind(briefing.id).all();
+      items = results || [];
+    }
+  } catch (e: any) {
+    briefing = null;
   }
-} catch(e: any) {
-  debugMsg = "ERROR: " + e.message;
 }
+
+if (!briefing) {
+  return new Response('<html><body><p>No briefing for ' + date + '</p></body></html>', {
+    status: 404, headers: { 'Content-Type': 'text/html' }
+  });
+}
+const d = new Date(date + 'T00:00:00');
+const weekday = ['일','월','화','수','목','금','토'][d.getDay()];
+const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${weekday})`;
 ---
 <html lang="ko">
-<head><meta charset="UTF-8"><title>Debug</title></head>
+<head>
+<meta charset="UTF-8">
+<title>{display} AI 브리핑 - AI코리아24</title>
+<style is:global>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,system-ui,sans-serif;background:#0a0a0f;color:#e2e8f0}
+.container{max-width:720px;margin:0 auto;padding:20px 16px 80px}
+</style>
+</head>
 <body>
-<h1>Briefing Debug</h1>
-<p>Date: {date}</p>
-<p>Runtime: {runtime_type}</p>
-<p>DB: {db_type}</p>
-<p>Result: {debugMsg}</p>
+<div class="container">
+<h1>{display} AI 브리핑</h1>
+<p>{items.length}건의 뉴스</p>
+{items.map((item: any, i: number) => (
+<div style="margin:20px 0;padding:16px;background:#1a1a2e;border-radius:8px;">
+<h2 style="font-size:18px;margin-bottom:8px;">{item.title || '제목 없음'}</h2>
+<p style="font-size:14px;color:#94a3b8;">{item.description || ''}</p>
+<p style="font-size:12px;color:#64748b;margin-top:8px;">{item.source} · {item.country}</p>
+</div>
+))}
+</div>
 </body>
 </html>
