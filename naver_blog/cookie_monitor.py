@@ -11,8 +11,22 @@ import requests
 COOKIE_FILE = os.path.join(os.path.dirname(__file__), "cookies.json")
 BLOG_ID = "oksoon5705-"
 
-TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")
+# .env 파일에서 텔레그램 설정 로드
+def _load_env():
+    env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+    result = {}
+    if os.path.exists(env_path):
+        with open(env_path) as ef:
+            for line in ef:
+                line = line.strip()
+                if line and not line.startswith("#") and "=" in line:
+                    k, v = line.split("=", 1)
+                    result[k.strip()] = v.strip()
+    return result
+
+_env = _load_env()
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN") or _env.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID") or _env.get("TELEGRAM_CHAT_ID", "")
 
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
 
