@@ -365,3 +365,85 @@ python publish_blog.py --slug nae-keompyuteoe-gaebalhwangyeong-mandeulgi</code>
 ==================================================
 완료: 오늘 0건 발행 (누적 0/3)
 ==================================================
+
+==================================================
+네이버 자동 발행: 2026-03-25 19:30
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+쿠키 정상: 토큰 획득 성공
+
+--- 브리핑 ---
+브리핑 페이지 확인: https://aikorea24.kr/briefing/2026-03-25/
+
+==================================================
+발행 시작: [AI 브리핑] 3월 25일 주요 AI 뉴스 5건
+==================================================
+
+발행 실패: {
+  "isSuccess": false,
+  "result": {
+    "errorCode": "no privilege",
+    "errorMessage": "권한이 없습니다."
+  }
+}
+텔레그램 발송: ❌ <b>[AI코리아24] 브리핑 발행 실패</b>
+
+날짜: 2026-03-25
+제목: [AI 브리핑] 3월 25일 주요 AI 뉴스 5건
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_briefing.py</code>
+
+--- 블로그 글 (1/3) ---
+[블로그] 선택: [개발배포] AI 실생활에서 사용하기 유튜브 1시간 30분 영상을 30초 만에 요약하...
+이미지 변형 중: https://img.aikorea24.kr/images/ai-실생활에서-사용하기-유튜브/thumbnail.webp
+Playwright 발행 에러: Locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator(".se-documentTitle .se-text-paragraph")
+
+텔레그램 발송: ❌ <b>[AI코리아24] 블로그 글 발행 실패</b>
+
+슬러그: ai-실생활에서-사용하기-유튜브
+제목: AI 실생활에서 사용하기 유튜브 1시간 30분 영상을 30초 만에 요약하
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_blog.py --slug ai-실생활에서-사용하기-유튜브</code>
+
+--- 블로그 글 (2/3) ---
+[블로그] 선택: [AI] AI가 일상이 되면 생략되는 것들 검색의 종말이 아닌 진화...
+이미지 변형 중: https://img.aikorea24.kr/images/ai가-일상이-되면-생략되는/thumbnail.webp
+Playwright 발행 에러: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://blog.naver.com/PostWriteForm.naver?blogId=oksoon5705-&Redirect=Write&categoryNo=9&redirect=Write&widgetTypeCall=true&directAccess=false", waiting until "networkidle"
+
+텔레그램 발송: ❌ <b>[AI코리아24] 블로그 글 발행 실패</b>
+
+슬러그: ai가-일상이-되면-생략되는
+제목: AI가 일상이 되면 생략되는 것들 검색의 종말이 아닌 진화
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_blog.py --slug ai가-일상이-되면-생략되는</code>
+
+--- 블로그 글 (3/3) ---
+[블로그] 선택: [AI] AI가 일상이 되면 생략되는 것들 검색의 종말이 아닌 진화...
+이미지 변형 중: https://img.aikorea24.kr/images/ai가-일상이-되면-생략되는/thumbnail.webp
+Playwright 발행 에러: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://blog.naver.com/PostWriteForm.naver?blogId=oksoon5705-&Redirect=Write&categoryNo=9&redirect=Write&widgetTypeCall=true&directAccess=false", waiting until "networkidle"
+
+텔레그램 발송: ❌ <b>[AI코리아24] 블로그 글 발행 실패</b>
+
+슬러그: ai가-일상이-되면-생략되는
+제목: AI가 일상이 되면 생략되는 것들 검색의 종말이 아닌 진화
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_blog.py --slug ai가-일상이-되면-생략되는</code>
+
+==================================================
+완료: 오늘 0건 발행 (누적 0/3)
+==================================================

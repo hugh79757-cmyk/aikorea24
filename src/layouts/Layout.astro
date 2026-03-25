@@ -351,5 +351,18 @@ const currentPath = Astro.url.pathname;
 
 
 
+
+
+
+
+
+
+<div id="share-copy-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;">
+  <button id="copy-link-btn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){var t=document.getElementById('copy-toast');t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},2000);})" style="display:flex;align-items:center;gap:6px;padding:12px 20px;background:#1f2937;color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    공유하기
+  </button>
+</div>
+<div id="copy-toast" style="position:fixed;bottom:80px;right:24px;z-index:10000;padding:10px 20px;background:#10b981;color:#fff;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;">링크가 복사되었습니다!</div>
 </body>
 </html>
