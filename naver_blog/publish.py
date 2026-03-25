@@ -186,11 +186,8 @@ def publish_with_playwright(title, paragraphs, image_path=None, link_url=None, t
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=False)
-        if os.path.exists(state_file):
-            context = browser.new_context(user_agent=UA, storage_state=state_file)
-        else:
-            context = browser.new_context(user_agent=UA)
-            context.add_cookies(pw_cookies)
+        context = browser.new_context(user_agent=UA)
+        context.add_cookies(pw_cookies)
         page = context.new_page()
 
         def _on_response(response):
@@ -209,7 +206,7 @@ def publish_with_playwright(title, paragraphs, image_path=None, link_url=None, t
                 f"blogId={BLOG_ID}&Redirect=Write&categoryNo={category_no}"
                 f"&redirect=Write&widgetTypeCall=true&directAccess=false"
             )
-            page.goto(editor_url, wait_until="networkidle", timeout=30000)
+            page.goto(editor_url, wait_until="networkidle", timeout=120000)
             time.sleep(2)
 
             # 팝업 닫기
@@ -232,7 +229,7 @@ def publish_with_playwright(title, paragraphs, image_path=None, link_url=None, t
             # 이미지 삽입
             if image_path and os.path.exists(image_path):
                 try:
-                    with page.expect_file_chooser(timeout=5000) as fc:
+                    with page.expect_file_chooser(timeout=30000) as fc:
                         page.locator('.se-toolbar-item-image button').first.click()
                     fc.value.set_files(image_path)
                     time.sleep(3)
