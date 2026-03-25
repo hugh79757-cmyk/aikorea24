@@ -286,3 +286,82 @@ python login.py</code>
 <code>cd ~/Projects/aikorea24/naver_blog
 python login.py</code>
 쿠키 만료! 발행 중단.
+
+==================================================
+네이버 자동 발행: 2026-03-25 14:00
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+쿠키 정상: 토큰 획득 성공
+
+--- 브리핑 ---
+브리핑 페이지 확인: https://aikorea24.kr/briefing/2026-03-25/
+
+==================================================
+발행 시작: [AI 브리핑] 3월 25일 주요 AI 뉴스 5건
+==================================================
+
+발행 실패: {
+  "isSuccess": false,
+  "result": {
+    "errorCode": "no privilege",
+    "errorMessage": "권한이 없습니다."
+  }
+}
+텔레그램 발송: ❌ <b>[AI코리아24] 브리핑 발행 실패</b>
+
+날짜: 2026-03-25
+제목: [AI 브리핑] 3월 25일 주요 AI 뉴스 5건
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_briefing.py</code>
+
+--- 블로그 글 (1/3) ---
+[블로그] 선택: [AI산업분석] 스마트폰 회사가 Claude에 도전장을 내밀었다...
+이미지 변형 중: https://img.aikorea24.kr/images/스마트폰-회사가-claude에-도전장을/thumbnail.webp
+Playwright 발행 에러: Locator.click: Target page, context or browser has been closed
+Call log:
+  - waiting for locator(".se-documentTitle .se-text-paragraph")
+
+텔레그램 발송: ❌ <b>[AI코리아24] 블로그 글 발행 실패</b>
+
+슬러그: 스마트폰-회사가-claude에-도전장을
+제목: 스마트폰 회사가 Claude에 도전장을 내밀었다
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_blog.py --slug 스마트폰-회사가-claude에-도전장을</code>
+
+--- 블로그 글 (2/3) ---
+[블로그] 선택: [바이브코딩] 돈쓰지 말고 바이브 코딩 이렇게 시작하세요...
+이미지 변형 중: https://img.aikorea24.kr/images/돈쓰지-말고-바이브-코딩/thumbnail.webp
+Playwright 발행 에러: Locator.click: Target page, context or browser has been closed
+텔레그램 발송: ❌ <b>[AI코리아24] 블로그 글 발행 실패</b>
+
+슬러그: 돈쓰지-말고-바이브-코딩
+제목: 돈쓰지 말고 바이브 코딩 이렇게 시작하세요
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_blog.py --slug 돈쓰지-말고-바이브-코딩</code>
+
+--- 블로그 글 (3/3) ---
+[블로그] 선택: [개발배포] 내 컴퓨터에 개발환경 만들기 맥이든 윈도우든 VSCode 하나면 된다...
+이미지 변형 중: https://img.aikorea24.kr/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/thumbnail.webp
+Playwright 발행 에러: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://blog.naver.com/PostWriteForm.naver?blogId=oksoon5705-&Redirect=Write&categoryNo=7&redirect=Write&widgetTypeCall=true&directAccess=false", waiting until "networkidle"
+
+텔레그램 발송: ❌ <b>[AI코리아24] 블로그 글 발행 실패</b>
+
+슬러그: nae-keompyuteoe-gaebalhwangyeong-mandeulgi
+제목: 내 컴퓨터에 개발환경 만들기 맥이든 윈도우든 VSCode 하나면 된다
+
+수동 발행:
+<code>cd ~/Projects/aikorea24/naver_blog
+python publish_blog.py --slug nae-keompyuteoe-gaebalhwangyeong-mandeulgi</code>
+
+==================================================
+완료: 오늘 0건 발행 (누적 0/3)
+==================================================
