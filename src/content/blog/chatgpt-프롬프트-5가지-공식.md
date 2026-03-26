@@ -17,7 +17,7 @@ image: "https://img.aikorea24.kr/images/chatgpt-프롬프트-5가지-공식/thum
 
 [OpenAI 프롬프트 엔지니어링 가이드](https://platform.openai.com/docs/guides/prompt-engineering)
 
-ChatGPT한테 질문했는데 엉뚱한 답이 나온 적 있으시죠? 문제는 AI가 아닙니다. 프롬프트입니다. 프롬프트는 AI에게 주는 설계도예요. 설계도가 명확할수록 결과물이 좋아집니다.
+ChatGPT한테 질문했는데 엉뚱한 답이 나온 적 있으죠? 문제는 AI가 아닙니다. 프롬프트입니다. 프롬프트는 AI에게 주는 설계도예요. 설계도가 명확할수록 결과물이 좋아집니다.
 
 프롬프트를 잘 쓰는 공식이 있습니다. RISE, CREATE, TAG, RISEN, CO-STAR 이렇게 5가지가 대표적이에요. 오늘은 이 5가지 프레임워크의 핵심과 언제 어떤 걸 써야 하는지 정리해 드리겠습니다.
 
