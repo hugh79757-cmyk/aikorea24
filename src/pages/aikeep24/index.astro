@@ -1,0 +1,253 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+---
+
+<Layout title="AIKeep24 — AI 대화 자동 저장 크롬 확장 | AI코리아24" description="로컬 LLM이 AI 대화를 자동으로 요약·태깅·저장하는 오픈소스 크롬 확장 프로그램. EXAONE 3.5로 프라이버시를 지키면서 대화 맥락을 영구 보존합니다.">
+  <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen relative overflow-hidden transition-colors">
+
+    <!-- 앰비언트 배경 -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+      <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[150px] animate-pulse"></div>
+      <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[150px]"></div>
+    </div>
+
+    <article class="relative z-10 px-4 py-16 max-w-4xl mx-auto">
+
+      <!-- 히어로 -->
+      <div class="text-center mb-16">
+        <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-6">
+          <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+          <span class="text-xs text-emerald-400 font-medium">Open Source · AGPL-3.0</span>
+        </div>
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">
+          <span class="bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">AIKeep24</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+          로컬 LLM이 AI 대화를 자동으로<br class="md:hidden" /> 요약·태깅·저장하는 크롬 확장
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed mb-4">
+          50턴마다 EXAONE 3.5가 로컬에서 요약하고, 프로젝트명·기술스택·핵심결정을 자동 태깅합니다.
+          Cloudflare Vectorize로 의미 기반 검색. API 비용 없이, 데이터가 내 컴퓨터를 떠나지 않습니다.
+        </p>
+        <p class="text-xs text-gray-400 dark:text-gray-500 max-w-2xl mx-auto leading-relaxed mb-8 italic">
+          A Chrome extension that uses a local LLM to automatically summarize, tag, and store AI conversation context.
+          EXAONE 3.5 summarizes every 20 turns locally, auto-tagging project names, tech stack, and key decisions.
+          Semantic vector search via Cloudflare Vectorize + bge-m3. Zero API cost, your data never leaves your machine.
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="https://github.com/aikorea24/aikeep24" target="_blank" rel="noopener"
+             class="inline-flex items-center gap-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-3 rounded-xl font-medium text-sm hover:scale-105 transition-transform">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub에서 보기
+          </a>
+          <a href="#features"
+             class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-xl font-medium text-sm hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
+            주요 기능 보기 ↓
+          </a>
+        </div>
+      </div>
+
+      <!-- 문제 정의 -->
+      <section class="mb-16">
+        <div class="bg-gradient-to-br from-red-500/10 to-orange-500/10 border border-red-500/20 rounded-2xl p-8">
+          <h2 class="text-xl font-bold mb-4">❌ 이런 문제를 겪고 있다면</h2>
+          <div class="space-y-3 text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
+            <p>· AI와 대화하면서 개발하는데, 대화가 쌓이면 <strong>"그때 그 결정이 어디 있었지?"</strong> 찾기가 불가능해집니다.</p>
+            <p>· 새 세션을 열면 이전 맥락이 사라져서, 매번 처음부터 설명해야 합니다.</p>
+            <p>· 기존 도구들(Pactify, Chat Memo, SaveAIChats)은 원문을 그대로 저장할 뿐, 구조화된 검색이 안 됩니다.</p>
+          </div>
+          <div class="mt-4 pt-4 border-t border-red-500/10 space-y-2 text-gray-500 dark:text-gray-400 text-xs leading-relaxed italic">
+            <p>· Conversations pile up and finding "which session had that architecture decision?" becomes impossible.</p>
+            <p>· Opening a new session loses all previous context — you have to explain everything from scratch.</p>
+            <p>· Existing tools store raw transcripts without structure, making search and context reuse impractical.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 주요 기능 -->
+      <section id="features" class="mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">주요 기능</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div class="bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/20 rounded-2xl p-6">
+            <div class="text-2xl mb-3">🧠</div>
+            <h3 class="font-bold mb-2">자동 요약 + 태깅</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">20턴마다 로컬 LLM이 자동으로 요약하고, 프로젝트명·기술스택·핵심결정을 태깅합니다. D1에 즉시 저장.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2 italic leading-relaxed">Auto-summarize every 20 turns with local LLM. Tags project names, tech stack, and key decisions. Saved to D1 instantly.</p>
+          </div>
+          <div class="bg-gradient-to-br from-purple-500/10 to-violet-500/10 border border-purple-500/20 rounded-2xl p-6">
+            <div class="text-2xl mb-3">🔍</div>
+            <h3 class="font-bold mb-2">시맨틱 벡터 검색</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Cloudflare Vectorize + bge-m3(1024차원, 100+언어) 기반. 의미로 검색하고, 프로젝트·날짜 필터 결합.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2 italic leading-relaxed">Powered by Cloudflare Vectorize + bge-m3 (1024 dims, 100+ languages). Search by meaning with project and date filters.</p>
+          </div>
+          <div class="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-500/20 rounded-2xl p-6">
+            <div class="text-2xl mb-3">💉</div>
+            <h3 class="font-bold mb-2">컨텍스트 자동 주입</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">INJ 버튼으로 이전 세션의 맥락을 자동 주입. Light 모드(핵심만)와 Full 모드(전체 요약) 선택 가능.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2 italic leading-relaxed">Press INJ to auto-inject previous session context. Choose Light mode (key decisions) or Full mode (all summaries).</p>
+          </div>
+          <div class="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl p-6">
+            <div class="text-2xl mb-3">🔒</div>
+            <h3 class="font-bold mb-2">완전한 프라이버시</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">Ollama + EXAONE 3.5 7.8B가 로컬에서 처리. 클라우드 API 비용 없음. 대화 데이터가 내 컴퓨터를 떠나지 않음.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2 italic leading-relaxed">Processed locally with Ollama + EXAONE 3.5 7.8B. Zero cloud API cost. Your conversation data never leaves your machine.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 기술 스택 -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">기술 스택</h2>
+        <div class="flex flex-wrap justify-center gap-3">
+          {['Chrome MV3', 'Ollama', 'EXAONE 3.5 7.8B', 'Cloudflare Workers', 'Cloudflare D1', 'Cloudflare Vectorize', 'bge-m3 (1024d)', 'JavaScript', 'Python'].map(tag => (
+            <span class="bg-gray-100 dark:bg-white/[0.06] border border-gray-200 dark:border-white/[0.1] text-gray-700 dark:text-gray-300 px-4 py-2 rounded-xl text-sm font-medium">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      <!-- 현재 상태 -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">현재 상태</h2>
+        <div class="bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20 rounded-2xl p-8">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div class="text-3xl font-bold text-blue-400">120</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">세션</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-purple-400">793</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">청크</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-cyan-400">12,525</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">턴</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-emerald-400">90</div>
+              <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">프로젝트</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 시스템 요구사항 -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">시스템 요구사항</h2>
+        <div class="bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] rounded-2xl p-8">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div class="flex justify-between py-2 border-b border-gray-200 dark:border-white/[0.06]">
+              <span class="text-gray-500 dark:text-gray-400">OS</span>
+              <span class="font-medium">macOS (Apple Silicon M2/M4) / Linux</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-200 dark:border-white/[0.06]">
+              <span class="text-gray-500 dark:text-gray-400">RAM</span>
+              <span class="font-medium">16GB+</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-200 dark:border-white/[0.06]">
+              <span class="text-gray-500 dark:text-gray-400">Browser</span>
+              <span class="font-medium">Chrome</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-200 dark:border-white/[0.06]">
+              <span class="text-gray-500 dark:text-gray-400">LLM</span>
+              <span class="font-medium">Ollama + EXAONE 3.5 7.8B (4.7GB)</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-200 dark:border-white/[0.06]">
+              <span class="text-gray-500 dark:text-gray-400">Cloud</span>
+              <span class="font-medium">Cloudflare (무료 플랜 가능)</span>
+            </div>
+            <div class="flex justify-between py-2 border-b border-gray-200 dark:border-white/[0.06]">
+              <span class="text-gray-500 dark:text-gray-400">Runtime</span>
+              <span class="font-medium">Node.js 18+</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Start -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">Quick Start</h2>
+        <div class="bg-gray-900 dark:bg-black/50 rounded-2xl p-6 overflow-x-auto">
+          <pre class="text-sm text-green-400 leading-relaxed"><code>git clone https://github.com/aikorea24/aikeep24.git && cd aikeep24
+OLLAMA_ORIGINS='*' ollama serve &amp; ollama pull exaone3.5:7.8b
+cd backend/web && npx wrangler secret put API_KEY && npx wrangler deploy</code></pre>
+        </div>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
+          그 다음: chrome://extensions → 개발자 모드 → "압축해제된 확장 프로그램을 로드합니다" → extension/ 폴더 선택
+        </p>
+      </section>
+
+      <!-- 로드맵 -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-bold mb-8 text-center">로드맵</h2>
+        <div class="space-y-3">
+          {[
+            { status: 'done', text: '벡터 검색 + 서버사이드 필터링' },
+            { status: 'done', text: '원문 보존 + 환각 방지 프롬프트' },
+            { status: 'done', text: 'BRW 패널 내 벡터 검색' },
+            { status: 'done', text: '멀티 모델 지원 (exaone, llama3, gemma2, kanana)' },
+            { status: 'progress', text: 'Claude.ai, ChatGPT, Gemini DOM 셀렉터 추가' },
+            { status: 'progress', text: 'Markdown/JSON 내보내기 (Obsidian, Notion 연동)' },
+            { status: 'todo', text: 'Chrome Web Store 출시' },
+            { status: 'todo', text: 'UI 다국어 지원' },
+          ].map(item => (
+            <div class="flex items-center gap-3">
+              <span class={`w-6 h-6 rounded-full flex items-center justify-center text-xs flex-shrink-0 ${
+                item.status === 'done' ? 'bg-emerald-500/20 text-emerald-400' :
+                item.status === 'progress' ? 'bg-amber-500/20 text-amber-400' :
+                'bg-gray-500/20 text-gray-400'
+              }`}>
+                {item.status === 'done' ? '✓' : item.status === 'progress' ? '◐' : '○'}
+              </span>
+              <span class={`text-sm ${item.status === 'done' ? 'text-gray-500 dark:text-gray-400' : 'text-gray-700 dark:text-gray-300'}`}>
+                {item.text}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- GitHub 카드 -->
+      <section class="mb-16">
+        <a href="https://github.com/aikorea24/aikeep24" target="_blank" rel="noopener"
+           class="group block relative overflow-hidden rounded-2xl border border-purple-500/20 bg-gradient-to-r from-[#0d1117] via-[#161b22] to-[#0d1117] transition-all duration-500 hover:border-purple-500/40 hover:shadow-xl hover:shadow-purple-500/10 p-8">
+          <div class="absolute top-0 right-0 w-72 h-72 bg-purple-600/20 rounded-full blur-[100px] group-hover:bg-purple-600/30 transition-all"></div>
+          <div class="flex flex-col md:flex-row items-center gap-6 relative">
+            <div class="flex-shrink-0">
+              <div class="w-20 h-20 bg-white/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+              </div>
+            </div>
+            <div class="flex-1 text-center md:text-left">
+              <div class="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-2">
+                <span class="text-xl font-bold text-white">aikorea24/aikeep24</span>
+                <span class="text-xs bg-purple-500/20 text-purple-300 px-2 py-0.5 rounded-full border border-purple-500/30">AGPL-3.0</span>
+                <img src="https://img.shields.io/github/stars/aikorea24/aikeep24?style=social" alt="GitHub Stars" class="h-5" />
+              </div>
+              <p class="text-gray-400 text-sm mb-4">소스 코드 확인, 이슈 등록, PR 기여 모두 환영합니다.</p>
+              <span class="inline-flex items-center gap-2 text-purple-400 font-medium text-sm group-hover:translate-x-2 transition-transform">
+                GitHub에서 보기
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+              </span>
+            </div>
+          </div>
+        </a>
+      </section>
+
+      <!-- CTA -->
+      <div class="text-center">
+        <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl px-8 py-8">
+          <p class="text-lg font-bold mb-2">AI 대화, 더 이상 잃어버리지 마세요</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">개인 사용 무료 · 상업 라이선스 문의: info@aikorea24.kr</p>
+          <a href="/"
+             class="inline-flex items-center gap-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-xl font-medium text-sm hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
+            AI코리아24 메인으로 &rarr;
+          </a>
+        </div>
+      </div>
+
+    </article>
+  </div>
+</Layout>
