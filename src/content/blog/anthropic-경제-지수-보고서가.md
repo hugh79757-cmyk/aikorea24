@@ -12,7 +12,7 @@ tags:
   - "한국 AI 앱 설치율"
   - "AI 생산성"
 draft: false
-
+image: "https://img.aikorea24.kr/images/anthropic-경제-지수-보고서가/thumbnail.webp"
 ---
 
 ## AI를 검색 엔진으로만 쓰는 사람과 업무 전체를 맡기는 사람, 그 차이가 데이터로 드러났다
