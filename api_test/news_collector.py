@@ -220,7 +220,7 @@ def translate_to_korean(title, description=""):
         import openai
         client = openai.OpenAI(api_key=OPENAI_KEY)
         resp = client.chat.completions.create(
-            model="gpt-5-nano", reasoning_effort="minimal",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation."},
                 {"role": "user", "content": title}
@@ -263,7 +263,7 @@ def batch_translate(articles):
         numbered = chr(10).join(items)
         try:
             resp = client.chat.completions.create(
-                model="gpt-5-nano", reasoning_effort="minimal",
+                model="gpt-4o-mini",
                 messages=[
                     {"role": "system", "content": "Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation."},
                     {"role": "user", "content": numbered}
@@ -317,6 +317,24 @@ GLOBAL_RSS_FEEDS = [
     # AI 전문
     ('https://the-decoder.com/feed/', 'The Decoder', 'us'),
     ('https://www.marktechpost.com/feed/', 'MarkTechPost', 'us'),
+    # 빅테크 블로그 + 뉴스레터
+    ('https://www.theverge.com/rss/ai-artificial-intelligence/index.xml', 'The Verge AI', 'us'),
+    ('https://www.wired.com/feed/tag/ai/latest/rss', 'Wired AI', 'us'),
+    ('https://www.zdnet.com/topic/artificial-intelligence/rss.xml', 'ZDNET AI', 'us'),
+    ('https://openai.com/blog/rss.xml', 'OpenAI Blog', 'us'),
+    ('https://blog.google/technology/ai/rss/', 'Google AI Blog', 'us'),
+    ('https://bensbites.beehiiv.com/feed', "Ben's Bites", 'us'),
+    ('https://www.theneurondaily.com/feed', 'The Neuron', 'us'),
+    # 바이브코딩 / AI 개발
+    ('https://www.anthropic.com/blog/rss.xml', 'Anthropic Blog', 'us'),
+    ('https://www.cursor.com/blog/rss.xml', 'Cursor Blog', 'us'),
+    ('https://github.blog/feed/', 'GitHub Blog', 'us'),
+    ('https://simonwillison.net/atom/everything/', 'Simon Willison', 'us'),
+    ('https://dev.to/feed/tag/ai', 'Dev.to AI', 'us'),
+    # AI 이미지/비디오
+    ('https://stability.ai/blog/feed', 'Stability AI', 'us'),
+    ('https://petapixel.com/category/ai/feed/', 'PetaPixel AI', 'us'),
+    ('https://runwayml.com/blog/rss.xml', 'Runway ML', 'us'),
 ]
 
 
@@ -412,6 +430,11 @@ KR_RSS_FEEDS = [
     ('https://www.aitimes.com/rss/allArticle.xml', 'AI타임스'),
     ('http://rss.etnews.com/Section901.xml', '전자신문'),
     ('https://it.chosun.com/rss/allArticle.xml', 'IT조선'),
+    ('https://www.aitimes.kr/rss/allArticle.xml', '인공지능신문'),
+    ('https://www.digitaltoday.co.kr/rss/allArticle.xml', '디지털투데이'),
+    ('https://www.bloter.net/feed', '블로터'),
+    ('https://zdnet.co.kr/rss/allArticle.xml', 'ZDNet Korea'),
+    ('https://news.hada.io/rss/news', 'GeekNews'),
 ]
 
 # 네이버 검색 (보조 역할, 최소화)
