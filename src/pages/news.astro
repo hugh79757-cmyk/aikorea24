@@ -7,7 +7,10 @@ try {
   const db = runtime?.env?.DB;
   if (db) {
     const result = await db.prepare(
-      `SELECT * FROM news WHERE category NOT IN ('senior', 'benefit') ORDER BY created_at DESC LIMIT 50`
+      `SELECT * FROM (
+        SELECT *, ROW_NUMBER() OVER (PARTITION BY source ORDER BY created_at DESC) as rn
+        FROM news WHERE category NOT IN ('senior', 'benefit')
+      ) WHERE rn <= 5 ORDER BY created_at DESC LIMIT 50`
     ).all();
     newsList = result.results || [];
   }
