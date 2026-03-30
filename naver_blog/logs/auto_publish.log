@@ -698,3 +698,79 @@ python login.py</code>
 <code>cd ~/Projects/aikorea24/naver_blog
 python login.py</code>
 쿠키 만료! 발행 중단.
+
+==================================================
+네이버 자동 발행: 2026-03-28 14:00
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+텔레그램 발송: 🚨 <b>[AI코리아24] 네이버 블로그 쿠키 만료</b>
+
+네이버 ID: oksoonkim5705
+블로그 ID: oksoon5705-
+
+브리핑 자동 발행이 중단됩니다.
+아래 명령으로 쿠키를 갱신하세요:
+
+<code>cd ~/Projects/aikorea24/naver_blog
+python login.py</code>
+쿠키 만료! 발행 중단.
+
+==================================================
+네이버 자동 발행: 2026-03-28 19:30
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+텔레그램 발송 실패: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8511728557:AAHbhwBVV55g38IrMVkJA22rst0SE9yJqfg/sendMessage (Caused by NameResolutionError("HTTPSConnection(host='api.telegram.org', port=443): Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+쿠키 만료! 발행 중단.
+
+==================================================
+네이버 자동 발행: 2026-03-29 09:30
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+텔레그램 발송: 🚨 <b>[AI코리아24] 네이버 블로그 쿠키 만료</b>
+
+네이버 ID: oksoonkim5705
+블로그 ID: oksoon5705-
+
+브리핑 자동 발행이 중단됩니다.
+아래 명령으로 쿠키를 갱신하세요:
+
+<code>cd ~/Projects/aikorea24/naver_blog
+python login.py</code>
+쿠키 만료! 발행 중단.
+
+==================================================
+네이버 자동 발행: 2026-03-29 14:00
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+텔레그램 발송: 🚨 <b>[AI코리아24] 네이버 블로그 쿠키 만료</b>
+
+네이버 ID: oksoonkim5705
+블로그 ID: oksoon5705-
+
+브리핑 자동 발행이 중단됩니다.
+아래 명령으로 쿠키를 갱신하세요:
+
+<code>cd ~/Projects/aikorea24/naver_blog
+python login.py</code>
+쿠키 만료! 발행 중단.
+
+==================================================
+네이버 자동 발행: 2026-03-29 19:30
+==================================================
+
+오늘 발행: 0/3건, 남은 횟수: 3건
+텔레그램 발송: 🚨 <b>[AI코리아24] 네이버 블로그 쿠키 만료</b>
+
+네이버 ID: oksoonkim5705
+블로그 ID: oksoon5705-
+
+브리핑 자동 발행이 중단됩니다.
+아래 명령으로 쿠키를 갱신하세요:
+
+<code>cd ~/Projects/aikorea24/naver_blog
+python login.py</code>
+쿠키 만료! 발행 중단.

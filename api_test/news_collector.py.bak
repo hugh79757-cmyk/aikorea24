@@ -1,4 +1,17 @@
 #!/usr/bin/env python3
+import sys
+import os
+# stdout/stderr 안전 처리 (대시보드 원격 실행 시 fd 없을 수 있음)
+try:
+    sys.stdout.fileno()
+except (OSError, AttributeError):
+    import io as _io
+    _fallback_log = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fallback.log")
+    _fh = open(_fallback_log, "a", encoding="utf-8")
+    sys.stdout = _fh
+    sys.stderr = _fh
+
+
 """
 aikorea24 뉴스 수집기 v4.0
 - 해외 50% : 국내 50% 비율
@@ -207,12 +220,12 @@ def translate_to_korean(title, description=""):
         import openai
         client = openai.OpenAI(api_key=OPENAI_KEY)
         resp = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model="gpt-5-nano", reasoning_effort="minimal",
             messages=[
                 {"role": "system", "content": "Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation."},
                 {"role": "user", "content": title}
             ],
-            temperature=0.3, max_tokens=100)
+            max_completion_tokens=100)
         kr_title = resp.choices[0].message.content.strip().strip(chr(34)).strip(chr(39))
         return kr_title, description
     except Exception as e:
@@ -250,12 +263,12 @@ def batch_translate(articles):
         numbered = chr(10).join(items)
         try:
             resp = client.chat.completions.create(
-                model="gpt-4o-mini",
+                model="gpt-5-nano", reasoning_effort="minimal",
                 messages=[
                     {"role": "system", "content": "Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation."},
                     {"role": "user", "content": numbered}
                 ],
-                temperature=0.3, max_tokens=len(batch_idx) * 200)
+                max_completion_tokens=len(batch_idx) * 200)
             text = resp.choices[0].message.content.strip()
             kr_titles = []
             kr_descs = []
