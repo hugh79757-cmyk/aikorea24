@@ -5514,3 +5514,446 @@ aikorea24 뉴스 수집 v4.0 - 2026-04-01 06:30
 ============================================================
 완료! 총 84건 저장
 ============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-04-01 19:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 11건
+  SCMP China Tech: 12건
+  The Decoder: 8건
+  MarkTechPost: 8건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 2건
+  OpenAI Blog: 12건
+  Google AI Blog: 12건
+  Ben's Bites 실패: HTTP Error 404: Not Found
+  The Neuron 실패: not well-formed (invalid token): line 113, column 66
+  Anthropic Blog 실패: HTTP Error 404: Not Found
+  Cursor Blog 실패: HTTP Error 404: Not Found
+  GitHub Blog: 6건
+  Simon Willison: 0건
+  Dev.to AI: 8건
+  Stability AI 실패: HTTP Error 404: Not Found
+  PetaPixel AI 실패: HTTP Error 404: Not Found
+  Runway ML 실패: HTTP Error 404: Not Found
+  Hacker News: 7건
+  유사 중복 제거: 10건
+  해외 중복제거 후: 120건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 5건
+  IT조선: 9건
+  인공지능신문: 15건
+  디지털투데이: 4건
+  블로터 실패: HTTP Error 404: Not Found
+  ZDNet Korea 실패: HTTP Error 404: Not Found
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 3건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 4건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 4건
+  유사 중복 제거: 8건
+  국내 중복제거 후: 54건
+
+[비율] 해외: 120건(69%) | 국내: 54건(31%)
+
+[최종] 통합 중복제거 후: 174건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 120건 → 12배치 (5스레드 병렬)
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 2: 10건 완료
+    배치 4: 10건 완료
+    배치 5: 10건 완료
+    배치 6: 10건 완료
+    배치 9: 10건 완료
+    배치 10: 10건 완료
+    배치 7: 10건 완료
+    배치 8: 10건 완료
+    배치 11: 10건 완료
+    배치 12: 10건 완료
+  번역 완료: 120건 (12배치 병렬처리)
+
+[저장] D1 저장 중...
+  get_existing 실패: [Errno 35] Resource temporarily unavailable
+  배치 에러: [Errno 35] Resource temporarily unavailable
+  배치 에러: [Errno 35] Resource temporarily unavailable
+  배치 에러: [Errno 35] Resource temporarily unavailable
+  배치 에러: [Errno 35] Resource temporarily unavailable
+  신규: 0건 | 중복 스킵: 0건
+
+============================================================
+완료! 총 0건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-04-01 20:04
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 11건
+  SCMP China Tech: 12건
+  The Decoder: 8건
+  MarkTechPost: 8건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 2건
+  OpenAI Blog: 12건
+  Google AI Blog: 12건
+  Ben's Bites 실패: HTTP Error 404: Not Found
+  The Neuron 실패: not well-formed (invalid token): line 113, column 66
+  Anthropic Blog 실패: HTTP Error 404: Not Found
+  Cursor Blog 실패: HTTP Error 404: Not Found
+  GitHub Blog: 6건
+  Simon Willison: 0건
+  Dev.to AI: 8건
+  Stability AI 실패: HTTP Error 404: Not Found
+  PetaPixel AI 실패: HTTP Error 404: Not Found
+  Runway ML 실패: HTTP Error 404: Not Found
+  Hacker News: 8건
+  유사 중복 제거: 10건
+  해외 중복제거 후: 121건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 5건
+  IT조선: 9건
+  인공지능신문: 15건
+  디지털투데이: 1건
+  블로터 실패: HTTP Error 404: Not Found
+  ZDNet Korea 실패: HTTP Error 404: Not Found
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 3건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 4건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 4건
+  유사 중복 제거: 6건
+  국내 중복제거 후: 53건
+
+[비율] 해외: 121건(70%) | 국내: 53건(30%)
+
+[최종] 통합 중복제거 후: 174건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 121건 → 13배치 (5스레드 병렬)
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 4: 10건 완료
+    배치 6: 10건 완료
+    배치 10: 10건 완료
+    배치 9: 10건 완료
+    배치 8: 10건 완료
+    배치 13: 1건 완료
+    배치 7: 10건 완료
+    배치 11: 10건 완료
+    배치 12: 10건 완료
+  번역 완료: 121건 (13배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 0개
+  배치 1: 50건 저장
+  배치 2: 50건 저장
+  배치 3: 50건 저장
+  배치 4: 24건 저장
+  신규: 174건 | 중복 스킵: 0건
+
+============================================================
+완료! 총 174건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-04-02 06:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 11건
+  SCMP China Tech: 12건
+  The Decoder: 8건
+  MarkTechPost: 8건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 2건
+  OpenAI Blog: 12건
+  Google AI Blog: 12건
+  Ben's Bites 실패: HTTP Error 404: Not Found
+  The Neuron 실패: not well-formed (invalid token): line 113, column 66
+  Anthropic Blog 실패: HTTP Error 404: Not Found
+  Cursor Blog 실패: HTTP Error 404: Not Found
+  GitHub Blog: 6건
+  Simon Willison: 0건
+  Dev.to AI: 9건
+  Stability AI 실패: HTTP Error 404: Not Found
+  PetaPixel AI 실패: HTTP Error 404: Not Found
+  Runway ML 실패: HTTP Error 404: Not Found
+  Hacker News: 8건
+  유사 중복 제거: 5건
+  해외 중복제거 후: 127건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 4건
+  IT조선: 10건
+  인공지능신문: 15건
+  디지털투데이: 2건
+  블로터 실패: HTTP Error 404: Not Found
+  ZDNet Korea 실패: HTTP Error 404: Not Found
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 1건
+    'AI 스타트업': 1건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 4건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 4건
+  유사 중복 제거: 4건
+  국내 중복제거 후: 52건
+
+[비율] 해외: 127건(71%) | 국내: 52건(29%)
+
+[최종] 통합 중복제거 후: 179건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 127건 → 13배치 (5스레드 병렬)
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 2: 10건 완료
+    배치 4: 10건 완료
+    배치 5: 10건 완료
+    배치 6: 10건 완료
+    배치 9: 10건 완료
+    배치 10: 10건 완료
+    배치 7: 10건 완료
+    배치 8: 10건 완료
+    배치 13: 7건 완료
+    배치 11: 10건 완료
+    배치 12: 10건 완료
+  번역 완료: 127건 (13배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 5644개
+  배치 1: 50건 저장
+  배치 2: 50건 저장
+  배치 3: 32건 저장
+  신규: 132건 | 중복 스킵: 47건
+
+============================================================
+완료! 총 132건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-04-02 19:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 11건
+  SCMP China Tech: 12건
+  The Decoder: 9건
+  MarkTechPost: 6건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 2건
+  OpenAI Blog: 12건
+  Google AI Blog: 12건
+  Ben's Bites 실패: HTTP Error 404: Not Found
+  The Neuron 실패: not well-formed (invalid token): line 113, column 66
+  Anthropic Blog 실패: HTTP Error 404: Not Found
+  Cursor Blog 실패: HTTP Error 404: Not Found
+  GitHub Blog: 6건
+  Simon Willison: 0건
+  Dev.to AI: 9건
+  Stability AI 실패: HTTP Error 404: Not Found
+  PetaPixel AI 실패: HTTP Error 404: Not Found
+  Runway ML 실패: HTTP Error 404: Not Found
+  Hacker News: 8건
+  유사 중복 제거: 5건
+  해외 중복제거 후: 126건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 5건
+  IT조선: 13건
+  인공지능신문: 15건
+  디지털투데이: 1건
+  블로터 실패: HTTP Error 404: Not Found
+  ZDNet Korea 실패: <urlopen error timed out>
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 4건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고 실패: timed out
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료 실패: timed out
+  유사 중복 제거: 4건
+  국내 중복제거 후: 52건
+
+[비율] 해외: 126건(71%) | 국내: 52건(29%)
+
+[최종] 통합 중복제거 후: 178건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 126건 → 13배치 (5스레드 병렬)
+    배치 5 실패: Error code: 400 - {'error': {'message': "We could not parse the JSON body of your request. (HINT: This likely means you aren't using your HTTP library correctly. The OpenAI API expects a JSON payload, but what was sent was not valid JSON. If you have trouble figuring out how to fix this, please contact us through our help center at help.openai.com.)", 'type': 'invalid_request_error', 'param': None, 'code': None}}
+    배치 5: 10건 완료
+    배치 1: 10건 완료
+    배치 3: 10건 완료
+    배치 2: 10건 완료
+    배치 4: 10건 완료
+    배치 6: 10건 완료
+    배치 7: 10건 완료
+    배치 9: 10건 완료
+    배치 8: 10건 완료
+    배치 10: 10건 완료
+    배치 13: 6건 완료
+    배치 12: 10건 완료
+    배치 11: 10건 완료
+  번역 완료: 126건 (13배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 5684개
+  배치 1: 50건 저장
+  배치 2: 50건 저장
+  배치 3: 50건 저장
+  배치 4: 20건 저장
+  신규: 170건 | 중복 스킵: 8건
+
+============================================================
+완료! 총 170건 저장
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-04-03 06:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 12건
+  MIT Tech Review: 8건
+  Ars Technica AI: 12건
+  VentureBeat AI: 5건
+  AI News EU: 12건
+  SCMP China Tech: 12건
+  The Decoder: 7건
+  MarkTechPost: 6건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 4건
+  OpenAI Blog: 12건
+  Google AI Blog: 11건
+  Ben's Bites 실패: HTTP Error 404: Not Found
+  The Neuron 실패: not well-formed (invalid token): line 113, column 66
+  Anthropic Blog 실패: HTTP Error 404: Not Found
+  Cursor Blog 실패: HTTP Error 404: Not Found
+  GitHub Blog: 6건
+  Simon Willison: 0건
+  Dev.to AI: 10건
+  Stability AI 실패: HTTP Error 404: Not Found
+  PetaPixel AI 실패: HTTP Error 404: Not Found
+  Runway ML 실패: HTTP Error 404: Not Found
+  Hacker News: 8건
+  유사 중복 제거: 6건
+  해외 중복제거 후: 126건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 6건
+  IT조선: 12건
+  인공지능신문: 15건
+  디지털투데이: 12건
+  블로터 실패: HTTP Error 404: Not Found
+  ZDNet Korea 실패: HTTP Error 404: Not Found
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 3건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고 실패: timed out
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료 실패: timed out
+  유사 중복 제거: 2건
+  국내 중복제거 후: 64건
+
+[비율] 해외: 126건(66%) | 국내: 64건(34%)
+
+[최종] 통합 중복제거 후: 190건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 126건 → 13배치 (5스레드 병렬)
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 4: 10건 완료
+    배치 8: 10건 완료
+    배치 10: 10건 완료
+    배치 6: 10건 완료
+    배치 7: 10건 완료
+    배치 9: 10건 완료
+    배치 13: 6건 완료
+    배치 11: 10건 완료
+    배치 12: 10건 완료
+  번역 완료: 126건 (13배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 5792개
+  배치 1: 50건 저장
+  배치 2: 50건 저장
+  배치 3: 46건 저장
+  신규: 146건 | 중복 스킵: 44건
+
+============================================================
+완료! 총 146건 저장
+============================================================
