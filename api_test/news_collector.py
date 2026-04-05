@@ -330,7 +330,6 @@ GLOBAL_RSS_FEEDS = [
     ('https://www.cursor.com/blog/rss.xml', 'Cursor Blog', 'us'),
     ('https://github.blog/feed/', 'GitHub Blog', 'us'),
     ('https://simonwillison.net/atom/everything/', 'Simon Willison', 'us'),
-    ('https://dev.to/feed/tag/ai', 'Dev.to AI', 'us'),
     # AI 이미지/비디오
     ('https://stability.ai/blog/feed', 'Stability AI', 'us'),
     ('https://petapixel.com/category/ai/feed/', 'PetaPixel AI', 'us'),
