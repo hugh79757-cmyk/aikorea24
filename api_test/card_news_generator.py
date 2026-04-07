@@ -37,14 +37,14 @@ def ft_semi(size): return ft(size, 4)
 def ft_bold(size): return ft(size, 6)
 
 # ── 색상 (연갈색 골드) ──
-BG = (28, 22, 18)
-WHITE = (245, 238, 225)
-ACCENT = (215, 175, 100)
-DIM = (80, 68, 55)
-SUB = (140, 125, 105)
-LINE = (55, 48, 38)
-YELLOW = (245, 210, 110)
-LIGHT_GRAY = (195, 182, 165)
+BG = (12, 10, 28)
+WHITE = (230, 235, 255)
+ACCENT = (100, 160, 255)
+DIM = (40, 35, 80)
+SUB = (130, 125, 180)
+LINE = (45, 40, 80)
+YELLOW = (255, 210, 60)
+LIGHT_GRAY = (190, 195, 230)
 
 W, H = 1080, 1080
 ML = 80
@@ -52,10 +52,10 @@ ML = 80
 def make_bg():
     img = Image.new('RGB', (W, H), BG)
     g1 = Image.new('RGB', (W, H), (0,0,0))
-    ImageDraw.Draw(g1).ellipse([-200,-300,600,500], fill=(60,40,15))
+    ImageDraw.Draw(g1).ellipse([-200,-300,600,500], fill=(20, 30, 110))
     g1 = g1.filter(ImageFilter.GaussianBlur(140))
     g2 = Image.new('RGB', (W, H), (0,0,0))
-    ImageDraw.Draw(g2).ellipse([W-400,H-400,W+300,H+200], fill=(50,30,10))
+    ImageDraw.Draw(g2).ellipse([W-400,H-400,W+300,H+200], fill=(80, 20, 120))
     g2 = g2.filter(ImageFilter.GaussianBlur(150))
     return ImageChops.add(ImageChops.add(img, g1), g2)
 
@@ -71,7 +71,7 @@ def draw_header(draw):
     now = datetime.now()
     wd = ['월','화','수','목','금','토','일']
     y = 55
-    draw.text((ML, y), 'AI코리아24', fill=ACCENT, font=ft_bold(28))
+    draw.text((ML, y), 'AI코리아24', fill=YELLOW, font=ft_bold(28))
     ds = f"{now.strftime('%Y.%m.%d')} {wd[now.weekday()]}"
     draw.text((right_x(draw, ds, ft_reg(22)), y+2), ds, fill=SUB, font=ft_reg(22))
     return y + 50
@@ -173,20 +173,21 @@ JSON으로 응답:
   "hint": "힌트 한 줄 (20자 이내)"
 }}""",
 
-        'carousel_cover': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
-각 뉴스에서 인상적인 숫자를 뽑으세요. 숫자가 없으면 핵심 키워드(예: "GPT-5", "오픈소스", "국방부")를 number에 넣으세요.
-절대 N/A, '용어미정', 'TBD' 등 placeholder를 사용하지 마세요. 반드시 숫자 또는 키워드(기업명, 기술명, 기관명 등)를 넣어야 합니다.
-각 뉴스마다 제목(12자 이내)과 상세코멘트(80~100자, 존댓말로 구체적인 내용과 배경까지 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
-comment에 "에디터 코멘트 반영" 같은 메타 문구를 절대 포함하지 마세요. 뉴스 내용만 설명하세요.
+        'carousel_cover': f"""아래 AI 뉴스 5건을 모두 사용하세요. 추가하거나 빼지 마세요.
+
+규칙:
+- number: 뉴스 속 숫자. 없으면 핵심 키워드(기업명·기술명·기관명). N/A 금지.
+- unit: 숫자 단위(억원, %, 명 등). 키워드면 빈 문자열.
+- context: 15자 이내 핵심 맥락.
+- title: 12자 이내 제목.
 
 {news_text}
 
-JSON으로 응답:
+JSON:
 {{
   "items": [
-    {{"number": "152억", "unit": "원", "context": "다이퀘스트 IPO 투자유치 규모", "title": "12자 이내 제목", "comment": "존댓말로 구체적 설명 80~100자"}},
-    {{"number": "GPT-5", "unit": "", "context": "오픈AI 차세대 모델 공개", "title": "12자 이내 제목", "comment": "존댓말로 구체적 설명 80~100자"}},
-    ...5개
+    {{"number": "바이브", "unit": "", "context": "오픈AI 안전팀 이탈", "title": "안전팀 이탈 원인"}},
+    {{"number": "숫자또는키워드", "unit": "단위", "context": "15자맥락", "title": "12자제목"}}
   ]
 }}""",
 
@@ -221,7 +222,11 @@ JSON으로 응답:
     }
 
     system = ('AI 전문 뉴스 에디터. AI/인공지능 관련 뉴스만 선별. '
-              '암호화폐·부동산·정치·스포츠 절대 제외. JSON만 응답.')
+              '암호화폐·부동산·정치·스포츠 절대 제외. JSON만 응답. '
+              'comment는 반드시 ~합니다/~됩니다 체 2문장으로. '
+              '첫문장은 핵심 사실, 둘째문장은 배경·의미. '
+              '구어체·자연스러운 뉴스 해설체 사용. '
+              '절대 메타 문구("에디터 코멘트" 등) 금지.')
 
     response = client.chat.completions.create(
         model='gpt-5-nano',
@@ -260,9 +265,9 @@ def render_deep(data):
 
     y += 145
     m = data['main']
-    draw.text((ML, y), m['title_line1'], fill=WHITE, font=ft_bold(62))
+    draw.text((ML, y), m['title_line1'], fill=YELLOW, font=ft_bold(62))
     y += 78
-    draw.text((ML, y), m['title_line2'], fill=WHITE, font=ft_bold(62))
+    draw.text((ML, y), m['title_line2'], fill=YELLOW, font=ft_bold(62))
 
     y += 95
     for line in m['summary_lines']:
@@ -358,9 +363,10 @@ def render_carousel(data):
     draw.text((ML, y), '01', fill=ACCENT, font=ft_bold(160))
     y += 190
 
-    title = main.get('title', '')
+    # 1장: context를 크게 (더 구체적·후킹)
+    title = main.get('context', main.get('title', ''))
     if len(title) <= 8:
-        draw.text((ML, y), title, fill=WHITE, font=ft_bold(88))
+        draw.text((ML, y), title, fill=YELLOW, font=ft_bold(88))
         y += 110
     elif len(title) <= 16:
         mid = len(title) // 2
@@ -369,32 +375,30 @@ def render_carousel(data):
             sp = mid
         l1 = title[:sp].strip()
         l2 = title[sp:].strip()
-        draw.text((ML, y), l1, fill=WHITE, font=ft_bold(78))
+        draw.text((ML, y), l1, fill=YELLOW, font=ft_bold(78))
         y += 95
-        draw.text((ML, y), l2, fill=WHITE, font=ft_bold(78))
+        draw.text((ML, y), l2, fill=YELLOW, font=ft_bold(78))
         y += 110
     else:
         t1 = title[:12].strip()
         t2 = title[12:24].strip()
-        draw.text((ML, y), t1, fill=WHITE, font=ft_bold(70))
+        draw.text((ML, y), t1, fill=YELLOW, font=ft_bold(70))
         y += 88
-        draw.text((ML, y), t2, fill=WHITE, font=ft_bold(70))
+        draw.text((ML, y), t2, fill=YELLOW, font=ft_bold(70))
         y += 100
 
-    comment = main.get('comment', '')
-    if comment:
-        y += 15
-        c1 = comment[:32]
-        draw.text((ML, y), c1, fill=LIGHT_GRAY, font=ft_reg(34))
-        y += 48
-        if len(comment) > 32:
-            c2 = comment[32:64]
-            if len(comment) > 64:
-                c2 = c2[:29] + '...'
-            draw.text((ML, y), c2, fill=LIGHT_GRAY, font=ft_reg(34))
-            y += 48
+    # 1장: number + context 강조 (GPT 생성, 브리핑 comment 아님)
+    number = main.get('number', '')
+    unit = main.get('unit', '')
+    context = main.get('context', '')
+    if number:
+        y += 30
+        num_str = f'{number}{unit}' if unit else number
+        draw.text((cx(draw, num_str, ft_bold(96)), y), num_str, fill=ACCENT, font=ft_bold(96))
+        y += 115
+    # context는 제목으로 이미 표시됨
 
-    y += 25
+    y += 20
     swipe = '→  밀어서 자세히 보기'
     sx = cx(draw, swipe, ft_semi(30))
     bb = draw.textbbox((0, 0), swipe, font=ft_semi(30))
@@ -419,7 +423,7 @@ def render_carousel(data):
 
     title = main.get('title', '')
     if len(title) <= 14:
-        draw.text((ML, y), title, fill=WHITE, font=ft_bold(68))
+        draw.text((ML, y), title, fill=YELLOW, font=ft_bold(68))
         y += 85
     else:
         mid = len(title) // 2
@@ -428,9 +432,9 @@ def render_carousel(data):
             sp = mid
         l1 = title[:sp].strip()
         l2 = title[sp:].strip()
-        draw.text((ML, y), l1, fill=WHITE, font=ft_bold(62))
+        draw.text((ML, y), l1, fill=YELLOW, font=ft_bold(62))
         y += 78
-        draw.text((ML, y), l2, fill=WHITE, font=ft_bold(62))
+        draw.text((ML, y), l2, fill=YELLOW, font=ft_bold(62))
         y += 85
 
     y += 10
@@ -453,7 +457,7 @@ def render_carousel(data):
         text = text[sp:].strip()
 
     for line in lines[:12]:
-        draw.text((ML, y), line, fill=LIGHT_GRAY, font=ft_reg(38))
+        draw.text((cx(draw, line, ft_reg(38)), y), line, fill=LIGHT_GRAY, font=ft_reg(38))
         y += 54
 
     y += 15
@@ -491,16 +495,27 @@ def render_carousel(data):
         tx = ML + 85
         if len(title) > 14:
             title = title[:13] + '…'
-        draw.text((tx, y + 2), title, fill=WHITE, font=ft_semi(42))
+        draw.text((cx(draw, title, ft_semi(42)), y + 2), title, fill=YELLOW, font=ft_semi(42))
 
         if comment:
-            cmt1 = comment[:30]
-            draw.text((tx, y + 55), cmt1, fill=SUB, font=ft_reg(26))
-            if len(comment) > 30:
-                cmt2 = comment[30:60]
-                if len(comment) > 60:
-                    cmt2 = cmt2[:27] + '...'
-                draw.text((tx, y + 85), cmt2, fill=SUB, font=ft_reg(26))
+            font_s = ft_reg(26)
+            max_w = W - ML * 2
+            cmt_text = comment
+            cmt_lines = []
+            while cmt_text:
+                for end in range(len(cmt_text), 0, -1):
+                    bb = ImageDraw.Draw(img).textbbox((0,0), cmt_text[:end], font=font_s)
+                    if bb[2]-bb[0] <= max_w:
+                        cmt_lines.append(cmt_text[:end])
+                        cmt_text = cmt_text[end:].strip()
+                        break
+                else:
+                    cmt_lines.append(cmt_text)
+                    break
+            cy_offset = 50
+            for cl in cmt_lines[:2]:
+                draw.text((cx(draw, cl, font_s), y + cy_offset), cl, fill=SUB, font=font_s)
+                cy_offset += 32
 
         if i < len(rest) - 1:
             draw.line([(tx, y + item_h - 20), (W - ML, y + item_h - 20)], fill=LINE, width=1)
@@ -519,7 +534,7 @@ def render_carousel(data):
 
     try:
         from PIL import Image as PILImage
-        cta_img_path = '/Users/twinssn/Projects/aikorea24/public/A0dOS6Jf.jpeg'
+        cta_img_path = '/Users/twinssn/Projects/aikorea24/api_test/card_output/oPjOb8bp.jpeg'
         cta_img = PILImage.open(cta_img_path).convert('RGB')
         iw, ih = cta_img.size
         target_w = W - ML * 2
@@ -538,16 +553,16 @@ def render_carousel(data):
         print(f'  CTA 이미지 스킵: {e}')
         y += 100
 
-    t1 = 'AI 뉴스, 매일 새롭게'
-    draw.text((cx(draw, t1, ft_bold(56)), y), t1, fill=WHITE, font=ft_bold(56))
+    t1 = 'AI로 즐기는 한국 문화유산'
+    draw.text((cx(draw, t1, ft_bold(52)), y), t1, fill=WHITE, font=ft_bold(52))
     y += 75
 
-    t2 = 'aikorea24.kr'
-    draw.text((cx(draw, t2, ft_bold(64)), y), t2, fill=ACCENT, font=ft_bold(64))
+    t2 = 'heritage.aikorea24.kr'
+    draw.text((cx(draw, t2, ft_bold(54)), y), t2, fill=ACCENT, font=ft_bold(54))
     y += 90
 
-    t3 = '브리핑 · 도구 · 용어 · 연대기'
-    draw.text((cx(draw, t3, ft_reg(30)), y), t3, fill=SUB, font=ft_reg(30))
+    t3 = '역사 · 유산 · 탐방 · AI 큐레이션'
+    draw.text((cx(draw, t3, ft_reg(28)), y), t3, fill=SUB, font=ft_reg(28))
 
     draw_footer(draw)
     fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_4cta.png')
@@ -653,7 +668,7 @@ def render_list5(data):
         draw.text((ML, y), f'{i+1}', fill=rank_color, font=ft_bold(48))
 
         tx = ML + 65
-        draw.text((tx, y+2), item['title'], fill=WHITE, font=ft_semi(44))
+        draw.text((tx, y+2), item['title'], fill=YELLOW, font=ft_semi(44))
         draw.text((tx, y+55), item['teaser'], fill=SUB, font=ft_reg(28))
 
         if i < 4:
@@ -696,6 +711,12 @@ def generate_card_news(template_type=None):
 
     print(f'\n[2] AI 큐레이션 ({template_type})...')
     data = curate(news, template_type)
+    # carousel: DB 원본 comment 주입 (GPT 재생성 없이 브리핑 문장 사용)
+    if template_type == 'carousel_cover' and 'items' in data:
+        for i, item in enumerate(data['items']):
+            if i < len(news):
+                raw_comment = news[i].get('comment', '') or ''
+                item['comment'] = raw_comment.strip()
     print(f'  완료')
     print(json.dumps(data, ensure_ascii=False, indent=2)[:500])
 
