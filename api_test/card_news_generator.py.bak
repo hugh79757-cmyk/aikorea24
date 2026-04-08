@@ -29,15 +29,22 @@ def ft(size, idx=0):
     try: return ImageFont.truetype(FONT, size, index=idx)
     except: return ImageFont.truetype(FONT, size, index=0)
 
-# ── 색상 ──
-BG = (17, 17, 28)
-WHITE = (235, 235, 242)
-ACCENT = (90, 140, 255)
-DIM = (55, 60, 80)
-SUB = (100, 106, 125)
-LINE = (40, 42, 58)
-YELLOW = (255, 214, 70)
-LIGHT_GRAY = (180, 183, 195)
+def ft_thin(size): return ft(size, 10)
+def ft_light(size): return ft(size, 8)
+def ft_reg(size): return ft(size, 0)
+def ft_med(size): return ft(size, 2)
+def ft_semi(size): return ft(size, 4)
+def ft_bold(size): return ft(size, 6)
+
+# ── 색상 (연갈색 골드) ──
+BG = (28, 22, 18)
+WHITE = (245, 238, 225)
+ACCENT = (215, 175, 100)
+DIM = (80, 68, 55)
+SUB = (140, 125, 105)
+LINE = (55, 48, 38)
+YELLOW = (245, 210, 110)
+LIGHT_GRAY = (195, 182, 165)
 
 W, H = 1080, 1080
 ML = 80
@@ -45,11 +52,11 @@ ML = 80
 def make_bg():
     img = Image.new('RGB', (W, H), BG)
     g1 = Image.new('RGB', (W, H), (0,0,0))
-    ImageDraw.Draw(g1).ellipse([-200,-300,500,400], fill=(30,50,120))
-    g1 = g1.filter(ImageFilter.GaussianBlur(180))
+    ImageDraw.Draw(g1).ellipse([-200,-300,600,500], fill=(60,40,15))
+    g1 = g1.filter(ImageFilter.GaussianBlur(140))
     g2 = Image.new('RGB', (W, H), (0,0,0))
-    ImageDraw.Draw(g2).ellipse([W-500,H-500,W+200,H+100], fill=(50,20,80))
-    g2 = g2.filter(ImageFilter.GaussianBlur(200))
+    ImageDraw.Draw(g2).ellipse([W-400,H-400,W+300,H+200], fill=(50,30,10))
+    g2 = g2.filter(ImageFilter.GaussianBlur(150))
     return ImageChops.add(ImageChops.add(img, g1), g2)
 
 def cx(draw, text, font):
@@ -64,26 +71,26 @@ def draw_header(draw):
     now = datetime.now()
     wd = ['월','화','수','목','금','토','일']
     y = 55
-    draw.text((ML, y), 'AI코리아24', fill=ACCENT, font=ft(24,3))
+    draw.text((ML, y), 'AI코리아24', fill=ACCENT, font=ft_bold(28))
     ds = f"{now.strftime('%Y.%m.%d')} {wd[now.weekday()]}"
-    draw.text((right_x(draw, ds, ft(20)), y+2), ds, fill=SUB, font=ft(20))
+    draw.text((right_x(draw, ds, ft_reg(22)), y+2), ds, fill=SUB, font=ft_reg(22))
     return y + 50
 
 def draw_footer(draw):
-    fy = H - 100
+    fy = H - 95
     draw.line([(ML, fy), (W-ML, fy)], fill=LINE, width=1)
     b = 'aikorea24.kr'
-    draw.text((cx(draw, b, ft(36,5)), fy+25), b, fill=ACCENT, font=ft(36,5))
+    draw.text((cx(draw, b, ft_bold(38)), fy+18), b, fill=ACCENT, font=ft_bold(38))
     s = 'AI, 누구나 쓸 수 있습니다'
-    draw.text((cx(draw, s, ft(18)), fy+65), s, fill=SUB, font=ft(18))
+    draw.text((cx(draw, s, ft_light(19)), fy+60), s, fill=SUB, font=ft_light(19))
 
 def draw_cta(draw, y, color=ACCENT):
     cta = '▶  aikorea24.kr'
-    x = cx(draw, cta, ft(30,3))
-    bb = draw.textbbox((0,0), cta, font=ft(30,3))
+    x = cx(draw, cta, ft_semi(34))
+    bb = draw.textbbox((0,0), cta, font=ft_semi(34))
     cw, ch = bb[2]-bb[0], bb[3]-bb[1]
-    draw.rounded_rectangle([x-25, y-12, x+cw+25, y+ch+18], radius=12, outline=color, width=2)
-    draw.text((x, y), cta, fill=color, font=ft(30,3))
+    draw.rounded_rectangle([x-30, y-14, x+cw+30, y+ch+20], radius=14, outline=color, width=2)
+    draw.text((x, y), cta, fill=color, font=ft_semi(34))
 
 
 # ── DB 뉴스 ──
@@ -127,7 +134,7 @@ def fetch_news(limit=30):
 def curate(news_items, template_type):
     news_text = '\n'.join([
         f"- [{n.get('source','')}] {n['title']}: {n.get('description','')[:200]}"
-        + (f"\n  [에디터 코멘트] {n['comment']}" if n.get('comment') else '')
+        + (f"\n  [참고] {n['comment']}" if n.get('comment') else '')
         for n in news_items
     ])
 
@@ -169,8 +176,8 @@ JSON으로 응답:
         'carousel_cover': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
 각 뉴스에서 인상적인 숫자를 뽑으세요. 숫자가 없으면 핵심 키워드(예: "GPT-5", "오픈소스", "국방부")를 number에 넣으세요.
 절대 N/A, '용어미정', 'TBD' 등 placeholder를 사용하지 마세요. 반드시 숫자 또는 키워드(기업명, 기술명, 기관명 등)를 넣어야 합니다.
-[에디터 코멘트]가 있으면 해당 관점을 comment 작성 시 반영하세요.
 각 뉴스마다 제목(12자 이내)과 상세코멘트(80~100자, 존댓말로 구체적인 내용과 배경까지 설명, 예: "~합니다", "~됩니다")를 함께 작성하세요.
+comment에 "에디터 코멘트 반영" 같은 메타 문구를 절대 포함하지 마세요. 뉴스 내용만 설명하세요.
 
 {news_text}
 
@@ -186,7 +193,7 @@ JSON으로 응답:
         'number': f"""아래 AI 뉴스 전부를 빠짐없이 사용하세요. 절대 다른 뉴스를 추가하지 마세요.
 각 뉴스에서 인상적인 숫자를 뽑으세요. 숫자가 없으면 핵심 키워드(예: "GPT-5", "오픈소스", "국방부")를 number에 넣으세요.
 절대 N/A, '용어미정', 'TBD' 등 placeholder를 사용하지 마세요. 반드시 숫자 또는 키워드(기업명, 기술명, 기관명 등)를 넣어야 합니다.
-[에디터 코멘트]가 있으면 해당 관점을 comment 작성 시 반영하세요.
+comment에 "에디터 코멘트 반영" 같은 메타 문구를 절대 포함하지 마세요. 뉴스 내용만 설명하세요.
 
 {news_text}
 
@@ -244,39 +251,33 @@ def render_deep(data):
     draw = ImageDraw.Draw(img)
     y = draw_header(draw)
 
-    draw.text((ML, y), '오늘의 PICK', fill=SUB, font=ft(20))
+    draw.text((ML, y), '오늘의 PICK', fill=YELLOW, font=ft_semi(24))
+    y += 42
+    draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
+
     y += 40
-    draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
+    draw.text((ML, y), '01', fill=ACCENT, font=ft_bold(120))
 
-    # 큰 번호
-    y += 50
-    draw.text((ML, y), '01', fill=ACCENT, font=ft(100,5))
-
-    # 제목
-    y += 130
+    y += 145
     m = data['main']
-    draw.text((ML, y), m['title_line1'], fill=WHITE, font=ft(52,5))
-    draw.text((ML, y+62), m['title_line2'], fill=WHITE, font=ft(52,5))
+    draw.text((ML, y), m['title_line1'], fill=WHITE, font=ft_bold(62))
+    y += 78
+    draw.text((ML, y), m['title_line2'], fill=WHITE, font=ft_bold(62))
 
-    # 요약
-    y += 170
+    y += 95
     for line in m['summary_lines']:
-        draw.text((ML, y), line, fill=LIGHT_GRAY, font=ft(28))
-        y += 42
+        draw.text((ML, y), line, fill=LIGHT_GRAY, font=ft_reg(32))
+        y += 48
 
-    # 나머지 4개
-    y += 45
+    y += 35
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
-    y += 30
-    draw.text((ML, y), '오늘의 AI 뉴스 4개 더', fill=SUB, font=ft(22))
-    y += 35
+    y += 28
+    draw.text((ML, y), '오늘의 AI 뉴스 4개 더', fill=SUB, font=ft_med(24))
+    y += 40
     for ot in data['others']:
-        draw.text((ML+10, y), f'·  {ot}', fill=DIM, font=ft(22))
-        y += 32
+        draw.text((ML+10, y), f'·  {ot}', fill=LIGHT_GRAY, font=ft_reg(26))
+        y += 38
 
-    # CTA
-    y += 35
-    draw_cta(draw, y)
     draw_footer(draw)
 
     fp = os.path.join(OUTPUT_DIR, f'card_deep_{datetime.now().strftime("%Y%m%d_%H%M")}.png')
@@ -292,20 +293,20 @@ def render_quiz(data):
     draw = ImageDraw.Draw(img)
     y = draw_header(draw)
 
-    draw.text((ML, y), 'AI 뉴스 퀴즈', fill=SUB, font=ft(20))
+    draw.text((ML, y), 'AI 뉴스 퀴즈', fill=YELLOW, font=ft_semi(24))
     y += 40
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
 
     # 물음표
     y += 50
-    draw.text((cx(draw, '?', ft(160,5)), y), '?', fill=YELLOW, font=ft(160,5))
+    draw.text((cx(draw, '?', ft_bold(180)), y), '?', fill=YELLOW, font=ft_bold(180))
 
     # 질문
     y += 210
     q1 = data['question_line1']
     q2 = data['question_line2']
-    draw.text((cx(draw, q1, ft(42,3)), y), q1, fill=WHITE, font=ft(42,3))
-    draw.text((cx(draw, q2, ft(50,5)), y+58), q2, fill=WHITE, font=ft(50,5))
+    draw.text((cx(draw, q1, ft_semi(48)), y), q1, fill=WHITE, font=ft_semi(48))
+    draw.text((cx(draw, q2, ft_bold(56)), y+66), q2, fill=WHITE, font=ft_bold(56))
 
     # 보기
     y += 160
@@ -340,159 +341,224 @@ def render_carousel(data):
     files = []
     now = datetime.now()
     ts = now.strftime("%Y%m%d_%H%M")
+    items = data['items'][:5]
+    main = items[0]
+    rest = items[1:5]
 
-    # 표지: 숫자 강조 스타일 (5개 뉴스 한눈에)
+    # ── 1장: 헤드라인 후킹 (1개 뉴스만 크게) ──
     img = make_bg()
     draw = ImageDraw.Draw(img)
-    draw_header(draw)
+    y = draw_header(draw)
 
-    subtitle = '오늘의 AI 숫자'
-    draw.text((80, 80), subtitle, fill=SUB, font=ft(26))
+    draw.text((ML, y), 'TODAY', fill=YELLOW, font=ft_bold(34))
+    y += 48
+    draw.line([(ML, y), (W - ML, y)], fill=LINE, width=1)
 
-    items = data['items'][:5]
-    y = 120
-    item_h = 150
-    for i, item in enumerate(items):
-        num_val = str(item.get('number', str(i+1)))
-        unit_val = item.get('unit', '')
-        ctx = item.get('context', item.get('comment', ''))
+    y += 70
+    draw.text((ML, y), '01', fill=ACCENT, font=ft_bold(160))
+    y += 190
 
-        # 숫자 (1번 2번만 노란색, 나머지 기존 ACCENT)
-        num_color = (255, 200, 50) if i < 2 else ACCENT
-        num_str = num_val + (' ' + unit_val if unit_val else '')
-        nx = cx(draw, num_str, ft(54, 5))
-        draw.text((nx, y), num_val, fill=num_color, font=ft(54, 5))
-        if unit_val:
-            nb = draw.textbbox((0, 0), num_val, font=ft(54, 5))
-            draw.text((nx + nb[2] - nb[0] + 10, y + 18), unit_val, fill=SUB, font=ft(27))
+    title = main.get('title', '')
+    if len(title) <= 8:
+        draw.text((ML, y), title, fill=WHITE, font=ft_bold(88))
+        y += 110
+    elif len(title) <= 16:
+        mid = len(title) // 2
+        sp = title.rfind(' ', 0, mid + 2)
+        if sp <= 0:
+            sp = mid
+        l1 = title[:sp].strip()
+        l2 = title[sp:].strip()
+        draw.text((ML, y), l1, fill=WHITE, font=ft_bold(78))
+        y += 95
+        draw.text((ML, y), l2, fill=WHITE, font=ft_bold(78))
+        y += 110
+    else:
+        t1 = title[:12].strip()
+        t2 = title[12:24].strip()
+        draw.text((ML, y), t1, fill=WHITE, font=ft_bold(70))
+        y += 88
+        draw.text((ML, y), t2, fill=WHITE, font=ft_bold(70))
+        y += 100
 
-        # 설명
-        ctx_short = ctx[:25]
-        draw.text((cx(draw, ctx_short, ft(28)), y + 68), ctx_short, fill=LIGHT_GRAY, font=ft(28))
+    comment = main.get('comment', '')
+    if comment:
+        y += 15
+        c1 = comment[:32]
+        draw.text((ML, y), c1, fill=LIGHT_GRAY, font=ft_reg(34))
+        y += 48
+        if len(comment) > 32:
+            c2 = comment[32:64]
+            if len(comment) > 64:
+                c2 = c2[:29] + '...'
+            draw.text((ML, y), c2, fill=LIGHT_GRAY, font=ft_reg(34))
+            y += 48
 
-        # 구분선
-        if i < 4:
-            line_y = y + item_h - 15
-            draw.line([(80, line_y), (W - 80, line_y)], fill=(255, 255, 255, 40), width=1)
+    y += 25
+    swipe = '→  밀어서 자세히 보기'
+    sx = cx(draw, swipe, ft_semi(30))
+    bb = draw.textbbox((0, 0), swipe, font=ft_semi(30))
+    sw, sh = bb[2] - bb[0], bb[3] - bb[1]
+    draw.rounded_rectangle([sx - 20, y - 10, sx + sw + 20, y + sh + 14], radius=10, outline=ACCENT, width=2)
+    draw.text((sx, y), swipe, fill=ACCENT, font=ft_semi(30))
+
+    draw_footer(draw)
+    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_1hook.png')
+    img.save(fp, 'PNG', quality=95)
+    files.append(fp)
+
+    # ── 2장: 1번 뉴스 브리핑 상세 ──
+    img = make_bg()
+    draw = ImageDraw.Draw(img)
+    y = draw_header(draw)
+
+    draw.text((ML, y), 'BRIEFING', fill=YELLOW, font=ft_bold(30))
+    y += 42
+    draw.line([(ML, y), (W - ML, y)], fill=LINE, width=1)
+    y += 55
+
+    title = main.get('title', '')
+    if len(title) <= 14:
+        draw.text((ML, y), title, fill=WHITE, font=ft_bold(68))
+        y += 85
+    else:
+        mid = len(title) // 2
+        sp = title.rfind(' ', 0, mid + 2)
+        if sp <= 0:
+            sp = mid
+        l1 = title[:sp].strip()
+        l2 = title[sp:].strip()
+        draw.text((ML, y), l1, fill=WHITE, font=ft_bold(62))
+        y += 78
+        draw.text((ML, y), l2, fill=WHITE, font=ft_bold(62))
+        y += 85
+
+    y += 10
+    draw.line([(ML, y), (ML + 80, y)], fill=ACCENT, width=3)
+    y += 22
+
+    comment = main.get('comment', '')
+    context = main.get('context', comment)
+    text = context if len(context) > len(comment) else comment
+    lines = []
+    max_ch = 22
+    while text:
+        if len(text) <= max_ch:
+            lines.append(text)
+            break
+        sp = text.rfind(' ', 0, max_ch + 1)
+        if sp <= 0:
+            sp = max_ch
+        lines.append(text[:sp].strip())
+        text = text[sp:].strip()
+
+    for line in lines[:12]:
+        draw.text((ML, y), line, fill=LIGHT_GRAY, font=ft_reg(38))
+        y += 54
+
+    y += 15
+    more = f'+ 나머지 {len(rest)}개 뉴스 →'
+    mx = cx(draw, more, ft_semi(30))
+    bb = draw.textbbox((0, 0), more, font=ft_semi(30))
+    mw, mh = bb[2] - bb[0], bb[3] - bb[1]
+    draw.rounded_rectangle([mx - 20, y - 10, mx + mw + 20, y + mh + 14], radius=10, outline=ACCENT, width=2)
+    draw.text((mx, y), more, fill=ACCENT, font=ft_semi(30))
+
+    draw_footer(draw)
+    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_2brief.png')
+    img.save(fp, 'PNG', quality=95)
+    files.append(fp)
+
+    # ── 3장: 나머지 4개 리스트 ──
+    img = make_bg()
+    draw = ImageDraw.Draw(img)
+    y = draw_header(draw)
+
+    draw.text((ML, y), 'MORE NEWS', fill=YELLOW, font=ft_bold(28))
+    y += 45
+    draw.line([(ML, y), (W - ML, y)], fill=LINE, width=1)
+    y += 40
+
+    item_h = 190
+    for i, item in enumerate(rest):
+        rank = f'0{i+2}'
+        title = item.get('title', '')
+        comment = item.get('comment', '')
+
+        rank_color = ACCENT if i < 2 else SUB
+        draw.text((ML, y), rank, fill=rank_color, font=ft_bold(50))
+
+        tx = ML + 85
+        if len(title) > 14:
+            title = title[:13] + '…'
+        draw.text((tx, y + 2), title, fill=WHITE, font=ft_semi(42))
+
+        if comment:
+            cmt1 = comment[:30]
+            draw.text((tx, y + 55), cmt1, fill=SUB, font=ft_reg(26))
+            if len(comment) > 30:
+                cmt2 = comment[30:60]
+                if len(comment) > 60:
+                    cmt2 = cmt2[:27] + '...'
+                draw.text((tx, y + 85), cmt2, fill=SUB, font=ft_reg(26))
+
+        if i < len(rest) - 1:
+            draw.line([(tx, y + item_h - 20), (W - ML, y + item_h - 20)], fill=LINE, width=1)
 
         y += item_h
 
     draw_footer(draw)
-
-    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_0cover.png')
+    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_3list.png')
     img.save(fp, 'PNG', quality=95)
     files.append(fp)
 
-    # 요약 페이지 (5개 뉴스를 1장에 모두)
-    items = data['items'][:5]
+    # ── 4장: CTA ──
     img = make_bg()
     draw = ImageDraw.Draw(img)
-    draw_header(draw)
+    y = draw_header(draw)
 
-    y = 75
-    item_h = 185
-
-    for i, item in enumerate(items):
-        title = item.get('title', '')
-        comment = item.get('comment', '')
-
-        # 번호 + 제목 (가운데 정렬)
-        num_text = f'{i+1}'
-        max_title = 13
-        if len(title) > max_title:
-            title = title[:max_title] + '…'
-        header_text = f'{num_text}   {title}'
-        hx = cx(draw, header_text, ft(44, 5))
-        draw.text((hx, y), num_text, fill=(255, 200, 50), font=ft(44, 5))
-        nb = draw.textbbox((0, 0), num_text + '   ', font=ft(44, 5))
-        draw.text((hx + nb[2] - nb[0], y), title, fill=WHITE, font=ft(44, 5))
-
-        # 코멘트 2줄 (가운데 정렬)
-        y += 58
-        comment_font = ft(26)
-        max_per_line = 26
-        if len(comment) <= max_per_line:
-            draw.text((cx(draw, comment, comment_font), y), comment, fill=LIGHT_GRAY, font=comment_font)
-            y += 34
-        else:
-            sp = comment.rfind(' ', 0, max_per_line + 1)
-            if sp <= 0:
-                sp = max_per_line
-            l1 = comment[:sp].strip()
-            l2 = comment[sp:].strip()
-            if len(l2) > max_per_line:
-                l2 = l2[:max_per_line - 1] + '…'
-            draw.text((cx(draw, l1, comment_font), y), l1, fill=LIGHT_GRAY, font=comment_font)
-            draw.text((cx(draw, l2, comment_font), y + 34), l2, fill=LIGHT_GRAY, font=comment_font)
-            y += 68
-        if False:
-            pass
-
-        # 구분선
-        if i < len(items) - 1:
-            y += 12
-            draw.line([(60, y), (W - 60, y)], fill=(255, 255, 255, 40), width=1)
-            y += 18
-
-    draw_footer(draw)
-    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_1.png')
-    img.save(fp, 'PNG', quality=95)
-    files.append(fp)
-
-    # CTA 장
-    img = make_bg()
-    draw = ImageDraw.Draw(img)
-    draw_header(draw)
-
-    # 챗봇 이미지 삽입 (중앙, 아래로 내림)
     try:
         from PIL import Image as PILImage
-        chatbot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'aikorea24.jpg')
-        chatbot = PILImage.open(chatbot_path).convert('RGBA')
-        img_size = 300
-        chatbot = chatbot.resize((img_size, img_size), PILImage.LANCZOS)
-        paste_x = (W - img_size) // 2
-        img.paste(chatbot, (paste_x, 120), chatbot if chatbot.mode == 'RGBA' else None)
+        cta_img_path = '/Users/twinssn/Projects/aikorea24/public/A0dOS6Jf.jpeg'
+        cta_img = PILImage.open(cta_img_path).convert('RGB')
+        iw, ih = cta_img.size
+        target_w = W - ML * 2
+        ratio = target_w / iw
+        target_h = int(ih * ratio)
+        if target_h > 400:
+            target_h = 400
+            ratio = target_h / ih
+            target_w = int(iw * ratio)
+        cta_img = cta_img.resize((target_w, target_h), PILImage.LANCZOS)
+        paste_x = (W - target_w) // 2
+        img.paste(cta_img, (paste_x, y + 20))
         draw = ImageDraw.Draw(img)
+        y += target_h + 50
     except Exception as e:
-        print(f'  이미지 삽입 스킵: {e}')
+        print(f'  CTA 이미지 스킵: {e}')
+        y += 100
 
-    y = 460
-    t1 = '이 카드뉴스,'
-    t1b = 'AI에게 말만 했습니다'
-    draw.text((cx(draw, t1, ft(52)), y), t1, fill=(255, 200, 50), font=ft(52))
-    y += 65
-    draw.text((cx(draw, t1b, ft(52, 5)), y), t1b, fill=(255, 200, 50), font=ft(52, 5))
-
-    y += 80
-    t2 = '코딩 도구 없이'
-    t2b = '대화만으로 모두 가능합니다'
-    draw.text((cx(draw, t2, ft(52, 5)), y), t2, fill=WHITE, font=ft(52, 5))
-    y += 65
-    draw.text((cx(draw, t2b, ft(52, 5)), y), t2b, fill=WHITE, font=ft(52, 5))
-
+    t1 = 'AI 뉴스, 매일 새롭게'
+    draw.text((cx(draw, t1, ft_bold(56)), y), t1, fill=WHITE, font=ft_bold(56))
     y += 75
-    t3 = '뉴스 수집 · 블로그 자동 발행 · 관광지 소개'
-    draw.text((cx(draw, t3, ft(30)), y), t3, fill=SUB, font=ft(30))
 
-    y += 45
-    t4 = '자격증 · 문화유산 · 키워드 분석 · 메모 동기화'
-    draw.text((cx(draw, t4, ft(28)), y), t4, fill=LIGHT_GRAY, font=ft(28))
+    t2 = 'aikorea24.kr'
+    draw.text((cx(draw, t2, ft_bold(64)), y), t2, fill=ACCENT, font=ft_bold(64))
+    y += 90
 
-    y += 70
-    t5 = '바이브코딩 무료로 배워보세요'
-    draw.text((cx(draw, t5, ft(52, 5)), y), t5, fill=WHITE, font=ft(52, 5))
+    t3 = '브리핑 · 도구 · 용어 · 연대기'
+    draw.text((cx(draw, t3, ft_reg(30)), y), t3, fill=SUB, font=ft_reg(30))
 
-    y += 80
     draw_footer(draw)
-
-    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_2cta.png')
+    fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_4cta.png')
     img.save(fp, 'PNG', quality=95)
     files.append(fp)
 
     return files
 
 
+# ══════════════════════════════════════
+# 템플릿 4: 숫자 강조
 # ══════════════════════════════════════
 # 템플릿 4: 숫자 강조
 # ══════════════════════════════════════
@@ -533,7 +599,7 @@ def render_numbers(data):
         ctx_offset_y = 90
         item_h = (available_h - title_area) // count
 
-    draw.text((ML, y), '오늘의 AI 숫자', fill=SUB, font=ft(32))
+    draw.text((ML, y), '오늘의 AI 숫자', fill=YELLOW, font=ft_semi(34))
     y += 30
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
     y += 40
@@ -576,7 +642,7 @@ def render_list5(data):
     y = draw_header(draw)
 
     period = '오전' if datetime.now().hour < 12 else '오후'
-    draw.text((ML, y), f'{period} AI 뉴스', fill=SUB, font=ft(20))
+    draw.text((ML, y), f'{period} AI 뉴스', fill=YELLOW, font=ft_semi(24))
     y += 40
     draw.line([(ML,y),(W-ML,y)], fill=LINE, width=1)
     y += 45
@@ -584,11 +650,11 @@ def render_list5(data):
     item_h = 185
     for i, item in enumerate(data['items'][:5]):
         rank_color = ACCENT if i < 2 else DIM
-        draw.text((ML, y), f'{i+1}', fill=rank_color, font=ft(44,5))
+        draw.text((ML, y), f'{i+1}', fill=rank_color, font=ft_bold(48))
 
         tx = ML + 65
-        draw.text((tx, y+2), item['title'], fill=WHITE, font=ft(40,3))
-        draw.text((tx, y+52), item['teaser'], fill=SUB, font=ft(24))
+        draw.text((tx, y+2), item['title'], fill=WHITE, font=ft_semi(44))
+        draw.text((tx, y+55), item['teaser'], fill=SUB, font=ft_reg(28))
 
         if i < 4:
             draw.line([(tx, y+item_h-20),(W-ML, y+item_h-20)], fill=LINE, width=1)
