@@ -444,21 +444,28 @@ def render_carousel(data):
     comment = main.get('comment', '')
     context = main.get('context', comment)
     text = context if len(context) > len(comment) else comment
+    # 픽셀 기준 줄바꿈 (단어 경계), 좌우 여백 100px
+    PAD = 100
+    font_b = ft_reg(34)
+    max_w = W - PAD * 2
     lines = []
-    max_ch = 22
-    while text:
-        if len(text) <= max_ch:
-            lines.append(text)
-            break
-        sp = text.rfind(' ', 0, max_ch + 1)
-        if sp <= 0:
-            sp = max_ch
-        lines.append(text[:sp].strip())
-        text = text[sp:].strip()
+    words = text.split()
+    current = ''
+    for word in words:
+        test = (current + ' ' + word).strip()
+        bb = draw.textbbox((0, 0), test, font=font_b)
+        if bb[2] - bb[0] <= max_w:
+            current = test
+        else:
+            if current:
+                lines.append(current)
+            current = word
+    if current:
+        lines.append(current)
 
-    for line in lines[:12]:
-        draw.text((cx(draw, line, ft_reg(38)), y), line, fill=LIGHT_GRAY, font=ft_reg(38))
-        y += 54
+    for line in lines:
+        draw.text((cx(draw, line, font_b), y), line, fill=LIGHT_GRAY, font=font_b)
+        y += 58
 
     y += 15
     more = f'+ 나머지 {len(rest)}개 뉴스 →'
