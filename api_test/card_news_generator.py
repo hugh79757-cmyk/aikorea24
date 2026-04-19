@@ -437,14 +437,9 @@ def render_carousel(data):
         draw.text((ML, y), l2, fill=YELLOW, font=ft_bold(62))
         y += 85
 
-    y += 10
-    draw.line([(ML, y), (ML + 80, y)], fill=ACCENT, width=3)
-    y += 22
-
     comment = main.get('comment', '')
     context = main.get('context', comment)
     text = context if len(context) > len(comment) else comment
-    # 픽셀 기준 줄바꿈 (단어 경계), 좌우 여백 100px
     PAD = 100
     font_b = ft_reg(34)
     max_w = W - PAD * 2
@@ -463,17 +458,28 @@ def render_carousel(data):
     if current:
         lines.append(current)
 
-    for line in lines:
-        draw.text((cx(draw, line, font_b), y), line, fill=LIGHT_GRAY, font=font_b)
-        y += 58
+    LINE_H = 58
+    BTN_H = 50
+    BLOCK_GAP = 30
+    FOOTER_H = 80
+    total_block_h = 25 + BLOCK_GAP + (len(lines) * LINE_H) + BLOCK_GAP + BTN_H
+    available = H - FOOTER_H - y
+    start_y = y + max(0, (available - total_block_h) // 2)
 
-    y += 15
+    draw.line([(ML, start_y), (ML + 80, start_y)], fill=ACCENT, width=3)
+    start_y += 25 + BLOCK_GAP
+
+    for line in lines:
+        draw.text((cx(draw, line, font_b), start_y), line, fill=LIGHT_GRAY, font=font_b)
+        start_y += LINE_H
+
+    start_y += BLOCK_GAP
     more = f'+ 나머지 {len(rest)}개 뉴스 →'
     mx = cx(draw, more, ft_semi(30))
     bb = draw.textbbox((0, 0), more, font=ft_semi(30))
     mw, mh = bb[2] - bb[0], bb[3] - bb[1]
-    draw.rounded_rectangle([mx - 20, y - 10, mx + mw + 20, y + mh + 14], radius=10, outline=ACCENT, width=2)
-    draw.text((mx, y), more, fill=ACCENT, font=ft_semi(30))
+    draw.rounded_rectangle([mx - 20, start_y - 10, mx + mw + 20, start_y + mh + 14], radius=10, outline=ACCENT, width=2)
+    draw.text((mx, start_y), more, fill=ACCENT, font=ft_semi(30))
 
     draw_footer(draw)
     fp = os.path.join(OUTPUT_DIR, f'card_carousel_{ts}_2brief.png')
