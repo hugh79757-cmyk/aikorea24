@@ -22,9 +22,11 @@ function getCategoryEmoji(category: string): string {
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
       {posts.map((post: any) => {
-        const dateFormatted = post.data.date instanceof Date
-          ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
-          : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+        const rawDate = post.data.date instanceof Date
+          ? post.data.date.toISOString()
+          : String(post.data.date);
+        const [y, m, d] = rawDate.substring(0, 10).split('-').map(Number);
+        const dateFormatted = `${y}년 ${m}월 ${d}일`;
         return (
           <a href={`/blog/${post.id}/`} class="group block bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
             {post.data.image ? (
