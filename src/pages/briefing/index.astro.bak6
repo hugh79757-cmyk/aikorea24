@@ -15,7 +15,7 @@ if (db) {
        FROM briefings b
        WHERE b.status = 'published'
        ORDER BY b.date DESC
-       LIMIT 100`
+       LIMIT 10`
     ).all();
     briefings = bResult.results || [];
 
@@ -51,21 +51,14 @@ if (db) {
     /* 브리핑 섹션 */
     .section-title{font-size:20px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
     .section-title .icon{font-size:22px}
-    .b-accordion{margin-bottom:8px;border:1px solid #30363d;border-radius:12px;overflow:hidden}
-    .b-month-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;background:#161b22;transition:background .15s;user-select:none}
-    .b-month-header:hover{background:#1e293b}
-    .b-month-label{font-size:14px;font-weight:700;color:#e2e8f0}
-    .b-month-meta{display:flex;align-items:center;gap:8px}
-    .b-month-count{font-size:12px;color:#60a5fa;background:#1e3a5f;padding:2px 8px;border-radius:10px}
-    .b-month-arrow{color:#64748b;font-size:12px;transition:transform .2s}
-    .b-month-arrow.open{transform:rotate(180deg)}
-    .b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:12px;background:#0d1117;display:none}
-    .b-grid.open{display:grid}
-    .b-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px;text-decoration:none;color:#e2e8f0;transition:border-color .2s;display:block}
+    .briefing-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;-webkit-overflow-scrolling:touch}
+    .briefing-scroll::-webkit-scrollbar{height:4px}
+    .briefing-scroll::-webkit-scrollbar-thumb{background:#30363d;border-radius:2px}
+    .b-card{min-width:200px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px;text-decoration:none;color:#e2e8f0;flex-shrink:0;transition:border-color 0.2s}
     .b-card:hover{border-color:#60a5fa}
-    .b-date{font-size:14px;font-weight:700;color:#f8fafc}
-    .b-badge{display:inline-block;background:#1e3a5f;color:#60a5fa;font-size:11px;padding:2px 6px;border-radius:8px;margin-left:4px}
-    .b-intro{font-size:11px;color:#94a3b8;margin-top:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .b-date{font-size:15px;font-weight:700;color:#f8fafc}
+    .b-badge{display:inline-block;background:#1e3a5f;color:#60a5fa;font-size:11px;padding:2px 8px;border-radius:10px;margin-left:6px}
+    .b-intro{font-size:12px;color:#94a3b8;margin-top:6px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
     /* 구분선 */
     .divider{border:none;border-top:1px solid #21262d;margin:20px 0}
@@ -122,75 +115,20 @@ if (db) {
     {briefings.length === 0 ? (
       <div class="empty">발행된 브리핑이 없습니다.</div>
     ) : (
-      <div id="briefingArchive"></div>
-      <script is:inline define:vars={{ briefings }}>
-        (function(){
-          var data = briefings || [];
-          var archive = document.getElementById('briefingArchive');
-          if(!archive) return;
-
-          // 월별 그룹핑
-          var months = {};
-          var monthOrder = [];
-          var wd = ['일','월','화','수','목','금','토'];
-          data.forEach(function(b){
-            var d = new Date(b.date + 'T00:00:00');
-            var mk = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월';
-            if(!months[mk]){ months[mk] = []; monthOrder.push(mk); }
-            months[mk].push(b);
-          });
-
-          monthOrder.forEach(function(mk, mi){
-            var items = months[mk];
-            var acc = document.createElement('div');
-            acc.className = 'b-accordion';
-
-            // 헤더
-            var header = document.createElement('div');
-            header.className = 'b-month-header';
-            header.innerHTML =
-              '<span class="b-month-label">' + mk + '</span>' +
-              '<span class="b-month-meta">' +
-                '<span class="b-month-count">' + items.length + '일</span>' +
-                '<span class="b-month-arrow' + (mi===0?' open':'') + '">▼</span>' +
-              '</span>';
-
-            // 그리드
-            var grid = document.createElement('div');
-            grid.className = 'b-grid' + (mi===0?' open':'');
-
-            items.forEach(function(b){
-              var d = new Date(b.date + 'T00:00:00');
-              var display = (d.getMonth()+1) + '/' + d.getDate() + ' (' + wd[d.getDay()] + ')';
-              var card = document.createElement('a');
-              card.className = 'b-card';
-              card.href = '/briefing/' + b.date + '/';
-              card.innerHTML =
-                '<span class="b-date">' + display + '</span>' +
-                '<span class="b-badge">' + b.item_count + '건</span>' +
-                (b.intro ? '<div class="b-intro">' + b.intro + '</div>' : '');
-              grid.appendChild(card);
-            });
-
-            // 토글
-            header.addEventListener('click', function(){
-              var arrow = header.querySelector('.b-month-arrow');
-              var isOpen = grid.classList.contains('open');
-              if(isOpen){
-                grid.classList.remove('open');
-                arrow.classList.remove('open');
-              } else {
-                grid.classList.add('open');
-                arrow.classList.add('open');
-              }
-            });
-
-            acc.appendChild(header);
-            acc.appendChild(grid);
-            archive.appendChild(acc);
-          });
-        })();
-      </script>
+      <div class="briefing-scroll">
+        {briefings.map((b: any) => {
+          const d = new Date(b.date + 'T00:00:00');
+          const weekday = ['일','월','화','수','목','금','토'][d.getDay()];
+          const display = `${d.getMonth()+1}/${d.getDate()} (${weekday})`;
+          return (
+            <a href={`/briefing/${b.date}/`} class="b-card">
+              <span class="b-date">{display}</span>
+              <span class="b-badge">{b.item_count}건</span>
+              {b.intro && <div class="b-intro">{b.intro}</div>}
+            </a>
+          );
+        })}
+      </div>
     )}
 
     <hr class="divider" />
