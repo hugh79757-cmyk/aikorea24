@@ -75,17 +75,6 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 .popup .btn-cancel{background:#334155;color:#94a3b8;border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:.85rem}
 .popup .btn-publish{background:#2563eb;color:#fff;border:none;padding:8px 24px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600}
 .popup .btn-publish:disabled{background:#334155;color:#64748b;cursor:not-allowed}
-.dd-item{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:12px;margin-bottom:10px}
-.dd-item .dd-num{color:#3b82f6;font-weight:700;font-size:.85rem;margin-bottom:4px}
-.dd-item .dd-ttl{font-size:.88rem;color:#e2e8f0;margin-bottom:8px;line-height:1.4}
-.dd-item .dd-input{width:100%;background:#1e293b;color:#e2e8f0;border:1px solid #475569;border-radius:6px;padding:7px 10px;font-size:.82rem;outline:none;transition:border-color .15s}
-.dd-item .dd-input:focus{border-color:#3b82f6}
-.dd-item .dd-input.linked{border-color:#4ade80;background:#0f2a1a}
-.dd-item .dd-status{font-size:.72rem;margin-top:4px;height:14px}
-.dd-item .dd-status.ok{color:#4ade80}
-.dd-item .dd-status.err{color:#f87171}
-.dd-link-btn{background:#7c3aed;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem;font-weight:600;margin-left:8px}
-.dd-link-btn:hover{background:#6d28d9}
 </style>
 </head>
 <body>
@@ -117,26 +106,11 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 </div>
 </div>
 </div>
-
-<!-- Deep Dive 연결 팝업 -->
-<div class="overlay" id="ddOverlay">
-<div class="popup" style="max-width:560px">
-<h2>📖 심층글 연결</h2>
-<div class="hint">각 브리핑 아이템에 블로그 심층글 URL을 입력하세요. 비워두면 연결이 해제됩니다.</div>
-<div id="ddList"></div>
-<div class="actions">
-<button class="btn-cancel" id="ddCancel">닫기</button>
-<button class="btn-publish" id="ddSaveAll">전체 저장</button>
-</div>
-</div>
-</div>
-
 <div class="bot">
   <span class="cnt" id="cnt">0건 선택</span>
   <button class="del" id="delbtn">삭제</button>
   <span class="msg" id="msg"></span>
   <button class="pub" id="pub" disabled>브리핑 발행</button>
-    <button class="dd-link-btn" id="ddBtn" style="display:none">📖 심층글 연결</button>
 </div>
 
 <script is:inline>
@@ -274,17 +248,14 @@ document.addEventListener("DOMContentLoaded", function(){
         var st = document.getElementById('curStatus');
         var db = document.getElementById('delbtn');
         if(!st) return;
-            if(d && d.briefing && d.briefing.date === today){
-              st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b>';
-              st.style.color = '#4ade80';
-              if(db) db.style.display = 'inline-block';
-            } else {
-              st.textContent = '오늘 발행된 브리핑 없음';
-              st.style.color = '#94a3b8';
-              if(db) db.style.display = 'none';
-            }
-            var ddBtnEl = document.getElementById('ddBtn');
-            if(ddBtnEl) ddBtnEl.style.display = 'inline-block';
+        if(d && d.date === today){
+          st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b>';
+          st.style.color = '#4ade80';
+          if(db) db.style.display = 'inline-block';
+        } else {
+          st.textContent = '오늘 발행된 브리핑 없음';
+          st.style.color = '#94a3b8';
+          if(db) db.style.display = 'none';
         }
       })
       .catch(function(e){ console.log('checkStatus:', e); });
@@ -404,172 +375,6 @@ document.addEventListener("DOMContentLoaded", function(){
         msg.className='msg err'; msg.textContent='에러: '+e.message;
       });
   });
-
-
-    // === Deep Dive 연결 (날짜 선택 방식) ===
-    function loadDdItems(briefingId){
-      var ddList = document.getElementById('ddList');
-      ddList.innerHTML = '<div class="loading">로딩 중...</div>';
-
-      fetch('/api/briefing/deepdive/?briefing_id='+briefingId)
-        .then(function(r){return r.json()})
-        .then(function(items){
-          if(!Array.isArray(items)||items.length===0){
-            ddList.innerHTML = '<div style="color:#64748b;font-size:.85rem;padding:12px">해당 날짜의 브리핑 아이템이 없습니다.</div>';
-            return;
-          }
-          ddList.innerHTML = '';
-          for(var i=0;i<items.length;i++){
-            var it = items[i];
-            var div = document.createElement('div');
-            div.className = 'dd-item';
-            var hasUrl = it.deep_dive_url && it.deep_dive_url !== '';
-            div.innerHTML =
-              '<div class="dd-num">'+(i+1)+'번 아이템</div>'+
-              '<div class="dd-ttl">'+(it.title||'제목 없음')+'</div>'+
-              '<input class="dd-input'+(hasUrl?' linked':'')+'" type="url" '+
-                'placeholder="https://aikorea24.kr/blog/..." '+
-                'data-item-id="'+it.id+'" '+
-                'value="'+(it.deep_dive_url||'')+'">'+
-              '<div class="dd-status" id="dds-'+it.id+'">'+(hasUrl?'<span style="color:#4ade80">&#10003; 연결됨</span>':'')+'</div>';
-            ddList.appendChild(div);
-          }
-        })
-        .catch(function(e){
-          ddList.innerHTML = '<div style="color:#f87171">로드 실패: '+e.message+'</div>';
-        });
-    }
-
-    function openDdOverlay(){
-      // 날짜 선택 UI를 ddList 상단에 먼저 렌더링
-      var ddList = document.getElementById('ddList');
-      var defaultDate = today;
-      ddList.innerHTML =
-        '<div style="margin-bottom:14px">'+
-          '<label style="font-size:.8rem;color:#94a3b8;display:block;margin-bottom:6px">브리핑 날짜 선택</label>'+
-          '<div style="display:flex;gap:8px;align-items:center">'+
-            '<input type="date" id="ddDatePicker" value="'+defaultDate+'" '+
-              'style="background:#0f172a;color:#e2e8f0;border:1px solid #475569;border-radius:6px;padding:6px 10px;font-size:.85rem;outline:none">'+
-            '<button id="ddDateLoad" style="background:#3b82f6;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600">불러오기</button>'+
-          '</div>'+
-        '</div>'+
-        '<div id="ddItemsWrap"></div>';
-
-      document.getElementById('ddOverlay').classList.add('show');
-
-      // 날짜 변경 시 아이템 로드
-      function loadByDate(dateVal){
-        var wrap = document.getElementById('ddItemsWrap');
-        if(!wrap) return;
-        wrap.innerHTML = '<div class="loading">로딩 중...</div>';
-        // 날짜로 briefing_id 조회
-        fetch('/api/briefing/latest/?date='+dateVal)
-          .then(function(r){return r.json()})
-          .then(function(d){
-            if(!d || !d.briefing){
-              wrap.innerHTML = '<div style="color:#64748b;font-size:.85rem;padding:8px">해당 날짜의 브리핑이 없습니다.</div>';
-              return;
-            }
-            var briefingId = d.briefing.id;
-            fetch('/api/briefing/deepdive/?briefing_id='+briefingId)
-              .then(function(r){return r.json()})
-              .then(function(items){
-                if(!Array.isArray(items)||items.length===0){
-                  wrap.innerHTML = '<div style="color:#64748b;font-size:.85rem;padding:8px">아이템이 없습니다.</div>';
-                  return;
-                }
-                wrap.innerHTML = '';
-                for(var i=0;i<items.length;i++){
-                  var it = items[i];
-                  var div = document.createElement('div');
-                  div.className = 'dd-item';
-                  var hasUrl = it.deep_dive_url && it.deep_dive_url !== '';
-                  div.innerHTML =
-                    '<div class="dd-num">'+(i+1)+'번 아이템</div>'+
-                    '<div class="dd-ttl">'+(it.title||'제목 없음')+'</div>'+
-                    '<input class="dd-input'+(hasUrl?' linked':'')+'" type="url" '+
-                      'placeholder="https://aikorea24.kr/blog/..." '+
-                      'data-item-id="'+it.id+'" '+
-                      'value="'+(it.deep_dive_url||'')+'">'+
-                    '<div class="dd-status" id="dds-'+it.id+'">'+(hasUrl?'<span style="color:#4ade80">&#10003; 연결됨</span>':'')+'</div>';
-                  wrap.appendChild(div);
-                }
-              })
-              .catch(function(e){
-                wrap.innerHTML = '<div style="color:#f87171">아이템 로드 실패: '+e.message+'</div>';
-              });
-          })
-          .catch(function(e){
-            wrap.innerHTML = '<div style="color:#f87171">브리핑 조회 실패: '+e.message+'</div>';
-          });
-      }
-
-      // 초기 로드 (오늘 날짜)
-      loadByDate(defaultDate);
-
-      // 불러오기 버튼
-      var loadBtn = document.getElementById('ddDateLoad');
-      if(loadBtn){
-        loadBtn.addEventListener('click', function(){
-          var dp = document.getElementById('ddDatePicker');
-          if(dp && dp.value) loadByDate(dp.value);
-        });
-      }
-    }
-
-
-    var ddBtnMain = document.getElementById('ddBtn');
-    if(ddBtnMain) ddBtnMain.addEventListener('click', openDdOverlay);
-
-    var ddCancelBtn = document.getElementById('ddCancel');
-    if(ddCancelBtn) ddCancelBtn.addEventListener('click', function(){
-      document.getElementById('ddOverlay').classList.remove('show');
-    });
-
-    var ddOverlayEl = document.getElementById('ddOverlay');
-    if(ddOverlayEl) ddOverlayEl.addEventListener('click', function(e){
-      if(e.target===this) this.classList.remove('show');
-    });
-
-    var ddSaveBtn = document.getElementById('ddSaveAll');
-    if(ddSaveBtn) ddSaveBtn.addEventListener('click', function(){
-      var saveBtn = this;
-      saveBtn.disabled = true;
-      saveBtn.textContent = '저장 중...';
-      var inputs = document.querySelectorAll('#ddItemsWrap .dd-input, #ddList .dd-input');
-      var total = inputs.length;
-      var done = 0;
-      if(total===0){saveBtn.disabled=false;saveBtn.textContent='전체 저장';return;}
-      for(var i=0;i<inputs.length;i++){
-        (function(inp){
-          var itemId = parseInt(inp.getAttribute('data-item-id'));
-          var urlVal = inp.value.trim();
-          fetch('/api/briefing/deepdive/',{
-            method:'PATCH',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({item_id:itemId, deep_dive_url:urlVal||null})
-          })
-          .then(function(r){return r.json()})
-          .then(function(d){
-            var st = document.getElementById('dds-'+itemId);
-            if(d.ok){
-              if(urlVal){inp.classList.add('linked');if(st)st.innerHTML='<span style="color:#4ade80">&#10003; 저장됨</span>';}
-              else{inp.classList.remove('linked');if(st)st.innerHTML='';}
-            } else {
-              if(st)st.innerHTML='<span style="color:#f87171">오류: '+(d.error||'')+'</span>';
-            }
-          })
-          .catch(function(){
-            var st = document.getElementById('dds-'+itemId);
-            if(st)st.innerHTML='<span style="color:#f87171">실패</span>';
-          })
-          .finally(function(){
-            done++;
-            if(done>=total){saveBtn.disabled=false;saveBtn.textContent='전체 저장';}
-          });
-        })(inputs[i]);
-      }
-    });
 
   load('all');
 });
