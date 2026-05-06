@@ -4,42 +4,40 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  // ✅ 딱 1번만 전체 로드
   const posts = await getCollection('blog');
-  const publishedPosts = posts.filter(p => !p.data.draft);
-
-  return publishedPosts.map(post => {
-    const currentTags = new Set((post.data.tags || []).map((t: string) => t.toLowerCase()));
-    const currentCategory = (post.data.category || '').toLowerCase();
-
-    // ✅ 관련글 계산도 여기서 한 번에
-    const relatedPosts = publishedPosts
-      .filter(p => p.id !== post.id)
-      .map(p => {
-        let score = 0;
-        const pCategory = (p.data.category || '').toLowerCase();
-        const pTags = (p.data.tags || []).map((t: string) => t.toLowerCase());
-        if (pCategory && pCategory === currentCategory) score += 3;
-        for (const t of pTags) {
-          if (currentTags.has(t)) score += 1;
-        }
-        return { post: p, score };
-      })
-      .filter(r => r.score > 0)
-      .sort((a, b) => b.score - a.score || new Date(b.post.data.date).getTime() - new Date(a.post.data.date).getTime())
-      .slice(0, 5)
-      .map(r => r.post);
-
-    return {
-      params: { id: post.id },
-      props: { post, relatedPosts },  // ✅ 계산된 관련글 props로 전달
-    };
-  });
+  return posts.map(post => ({
+    params: { id: post.id },
+    props: { post },
+  }));
 }
 
-// ✅ getCollection 두 번째 호출 완전 제거
-const { post, relatedPosts } = Astro.props;
+const { post } = Astro.props;
 const { Content } = await render(post);
+
+// 관련 글 찾기: 같은 카테고리 or 태그 겹침
+const allPosts = await getCollection('blog');
+const currentTags = new Set((post.data.tags || []).map((t: string) => t.toLowerCase()));
+const currentCategory = (post.data.category || '').toLowerCase();
+
+const relatedPosts = allPosts
+  .filter(p => p.id !== post.id && !p.data.draft)
+  .map(p => {
+    let score = 0;
+    const pCategory = (p.data.category || '').toLowerCase();
+    const pTags = (p.data.tags || []).map((t: string) => t.toLowerCase());
+    
+    // 같은 카테고리면 +3
+    if (pCategory && pCategory === currentCategory) score += 3;
+    // 태그 겹칠 때마다 +1
+    for (const t of pTags) {
+      if (currentTags.has(t)) score += 1;
+    }
+    return { post: p, score };
+  })
+  .filter(r => r.score > 0)
+  .sort((a, b) => b.score - a.score || new Date(b.post.data.date).getTime() - new Date(a.post.data.date).getTime())
+  .slice(0, 5)
+  .map(r => r.post);
 
 const dateStr = post.data.date instanceof Date
   ? post.data.date.toISOString()
