@@ -80,3 +80,23 @@
     --tw-prose-td-borders: #374151;
   }
 }
+
+/* 모바일 overflow 방지 */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 모바일 overflow 방지 */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}

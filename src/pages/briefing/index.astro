@@ -40,15 +40,13 @@ if (db) {
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="icon" href="/favicon.png" />
   <title>브리핑 & 뉴스 - AI코리아24</title>
-<script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
+  <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
   <style is:global>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
+    body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0;max-width:100%;overflow-x:hidden}
     .container{max-width:720px;margin:0 auto;padding:20px 16px}
     .back{display:inline-block;color:#60a5fa;text-decoration:none;font-size:14px;margin-bottom:16px}
     .back:hover{text-decoration:underline}
-
-    /* 브리핑 섹션 */
     .section-title{font-size:20px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
     .section-title .icon{font-size:22px}
     .b-accordion{margin-bottom:8px;border:1px solid #30363d;border-radius:12px;overflow:hidden}
@@ -59,25 +57,19 @@ if (db) {
     .b-month-count{font-size:12px;color:#60a5fa;background:#1e3a5f;padding:2px 8px;border-radius:10px}
     .b-month-arrow{color:#64748b;font-size:12px;transition:transform .2s}
     .b-month-arrow.open{transform:rotate(180deg)}
-    .b-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:12px;background:#0d1117;display:none}
+    .b-grid{display:none;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:12px;background:#0d1117}
     .b-grid.open{display:grid}
     .b-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px;text-decoration:none;color:#e2e8f0;transition:border-color .2s;display:block}
     .b-card:hover{border-color:#60a5fa}
     .b-date{font-size:14px;font-weight:700;color:#f8fafc}
     .b-badge{display:inline-block;background:#1e3a5f;color:#60a5fa;font-size:11px;padding:2px 6px;border-radius:8px;margin-left:4px}
     .b-intro{font-size:11px;color:#94a3b8;margin-top:4px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-
-    /* 구분선 */
     .divider{border:none;border-top:1px solid #21262d;margin:20px 0}
-
-    /* 탭 */
     .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:16px;-webkit-overflow-scrolling:touch}
     .tabs::-webkit-scrollbar{display:none}
     .tab{padding:6px 14px;border-radius:20px;border:1px solid #30363d;background:transparent;color:#94a3b8;font-size:13px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
     .tab.active{background:#1f6feb;color:#fff;border-color:#1f6feb}
     .tab:hover:not(.active){border-color:#58a6ff;color:#e2e8f0}
-
-    /* 뉴스 카드 */
     .news-list{display:flex;flex-direction:column;gap:14px}
     .n-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:18px;text-decoration:none;color:#e2e8f0;display:block;transition:border-color 0.2s}
     .n-card:hover{border-color:#60a5fa}
@@ -87,13 +79,11 @@ if (db) {
     .n-tag{background:#1e293b;padding:2px 6px;border-radius:4px}
     .n-tag.kr{background:#1e3a2f;color:#4ade80}
     .n-tag.global{background:#1e293b;color:#60a5fa}
-
-    /* 더보기 */
     .load-more{display:block;width:100%;padding:12px;margin-top:16px;background:#161b22;border:1px solid #30363d;border-radius:10px;color:#60a5fa;font-size:14px;text-align:center;cursor:pointer;transition:border-color 0.2s}
     .load-more:hover{border-color:#60a5fa}
-
     .empty{text-align:center;color:#64748b;padding:40px 0;font-size:14px}
     .count-info{font-size:12px;color:#64748b;margin-bottom:12px}
+    .ad-wrap{text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden}
   </style>
 </head>
 <body>
@@ -109,197 +99,188 @@ if (db) {
     </div>
   </div>
 </nav>
-<div style="text-align:center;margin:16px auto;max-width:728px;">
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
+
+<!-- 상단 광고 -->
+<div class="ad-wrap">
+  <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
-</div>
-  <div class="container">
-    <a href="/" class="back">← 메인으로</a>
 
-    <!-- 브리핑 아카이브 -->
-    <div class="section-title"><span class="icon">📋</span> 브리핑 아카이브</div>
-    {briefings.length === 0 ? (
-      <div class="empty">발행된 브리핑이 없습니다.</div>
-    ) : (
-      <div id="briefingArchive"></div>
-      <script is:inline define:vars={{ briefings }}>
-        (function(){
-          var data = briefings || [];
-          var archive = document.getElementById('briefingArchive');
-          if(!archive) return;
+<div class="container">
+  <a href="/" class="back">← 메인으로</a>
 
-          // 월별 그룹핑
-          var months = {};
-          var monthOrder = [];
-          var wd = ['일','월','화','수','목','금','토'];
-          data.forEach(function(b){
-            var d = new Date(b.date + 'T00:00:00');
-            var mk = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월';
-            if(!months[mk]){ months[mk] = []; monthOrder.push(mk); }
-            months[mk].push(b);
-          });
-
-          monthOrder.forEach(function(mk, mi){
-            var items = months[mk];
-            var acc = document.createElement('div');
-            acc.className = 'b-accordion';
-
-            // 헤더
-            var header = document.createElement('div');
-            header.className = 'b-month-header';
-            header.innerHTML =
-              '<span class="b-month-label">' + mk + '</span>' +
-              '<span class="b-month-meta">' +
-                '<span class="b-month-count">' + items.length + '일</span>' +
-                '<span class="b-month-arrow' + (mi===0?' open':'') + '">▼</span>' +
-              '</span>';
-
-            // 그리드
-            var grid = document.createElement('div');
-            grid.className = 'b-grid' + (mi===0?' open':'');
-
-            items.forEach(function(b){
-              var d = new Date(b.date + 'T00:00:00');
-              var display = (d.getMonth()+1) + '/' + d.getDate() + ' (' + wd[d.getDay()] + ')';
-              var card = document.createElement('a');
-              card.className = 'b-card';
-              card.href = '/briefing/' + b.date + '/';
-              card.innerHTML =
-                '<span class="b-date">' + display + '</span>' +
-                '<span class="b-badge">' + b.item_count + '건</span>' +
-                (b.intro ? '<div class="b-intro">' + b.intro + '</div>' : '');
-              grid.appendChild(card);
-            });
-
-            // 토글
-            header.addEventListener('click', function(){
-              var arrow = header.querySelector('.b-month-arrow');
-              var isOpen = grid.classList.contains('open');
-              if(isOpen){
-                grid.classList.remove('open');
-                arrow.classList.remove('open');
-              } else {
-                grid.classList.add('open');
-                arrow.classList.add('open');
-              }
-            });
-
-            acc.appendChild(header);
-            acc.appendChild(grid);
-            archive.appendChild(acc);
-          });
-        })();
-      </script>
-    )}
-
-    <hr class="divider" />
-
-    <!-- 뉴스 피드 -->
-    <div class="section-title"><span class="icon">📰</span> AI 뉴스</div>
-
-    <div class="tabs" id="tabs">
-      <button class="tab active" data-filter="all">전체</button>
-      <button class="tab" data-filter="kr">국내</button>
-      <button class="tab" data-filter="global">해외</button>
-    </div>
-
-    <div class="count-info" id="countInfo"></div>
-    <div class="news-list" id="newsList"></div>
-    <button class="load-more" id="loadMore" style="display:none">더 보기</button>
-
-    <script is:inline define:vars={{ news }}>
-      var allNews = news || [];
-      var currentFilter = 'all';
-      var showCount = 15;
-
-      document.getElementById('tabs').addEventListener('click', function(e) {
-        var btn = e.target.closest('.tab');
-        if (!btn) return;
-        document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
-        btn.classList.add('active');
-        currentFilter = btn.getAttribute('data-filter');
-        showCount = 15;
-        render();
-      });
-
-      document.getElementById('loadMore').addEventListener('click', function() {
-        showCount += 15;
-        render();
-      });
-
-      function getFiltered() {
-        if (currentFilter === 'all') return allNews;
-        if (currentFilter === 'kr') return allNews.filter(function(n){ return n.country === 'kr'; });
-        if (currentFilter === 'global') return allNews.filter(function(n){ return n.country !== 'kr'; });
-        return allNews.filter(function(n){ return n.category === currentFilter; });
-      }
-
-      function timeAgo(dateStr) {
-        if (!dateStr) return '';
-        var now = new Date();
-        var d = new Date(dateStr);
-        var diff = Math.floor((now - d) / 60000);
-        if (diff < 60) return diff + '분 전';
-        if (diff < 1440) return Math.floor(diff/60) + '시간 전';
-        return Math.floor(diff/1440) + '일 전';
-      }
-
-      function render() {
-        var filtered = getFiltered();
-        var showing = filtered.slice(0, showCount);
-        var list = document.getElementById('newsList');
-        var info = document.getElementById('countInfo');
-        var more = document.getElementById('loadMore');
-
-        info.textContent = filtered.length + '건 중 ' + Math.min(showCount, filtered.length) + '건 표시';
-
-        list.innerHTML = '';
-        if (showing.length === 0) {
-          list.innerHTML = '<div style="text-align:center;color:#64748b;padding:40px 0">해당 뉴스가 없습니다.</div>';
-          more.style.display = 'none';
-          return;
-        }
-
-        showing.forEach(function(n, nIdx) {
-          var countryTag = n.country === 'kr'
-            ? '<span class="n-tag kr">국내</span>'
-            : '<span class="n-tag global">해외</span>';
-          var sourceTag = n.source ? '<span class="n-tag">' + n.source + '</span>' : '';
-          var catTag = n.category ? '<span class="n-tag">' + n.category + '</span>' : '';
-          var time = timeAgo(n.created_at || n.pub_date);
-          var timeTag = time ? '<span>' + time + '</span>' : '';
-
-          var card = document.createElement('a');
-          card.className = 'n-card';
-          card.href = n.link || '#';
-          card.target = '_blank';
-          card.rel = 'noopener';
-          card.innerHTML =
-            '<div class="n-title">' + (n.title || '') + '</div>' +
-            (n.description ? '<div class="n-desc">' + n.description + '</div>' : '') +
-            '<div class="n-meta">' + countryTag + sourceTag + catTag + timeTag + '</div>';
-          list.appendChild(card);
-          // 6번째 카드 뒤에 광고 삽입
-          if (nIdx === 5) {
-            var adCard = document.createElement('div');
-            adCard.style.cssText = 'margin:8px 0';
-            adCard.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
-            list.appendChild(adCard);
-            try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-          }
+  <!-- 브리핑 아카이브 -->
+  <div class="section-title"><span class="icon">📋</span> 브리핑 아카이브</div>
+  {briefings.length === 0 ? (
+    <div class="empty">발행된 브리핑이 없습니다.</div>
+  ) : (
+    <div id="briefingArchive"></div>
+    <script is:inline define:vars={{ briefings }}>
+      (function(){
+        var data = briefings || [];
+        var archive = document.getElementById('briefingArchive');
+        if(!archive) return;
+        var months = {};
+        var monthOrder = [];
+        var wd = ['일','월','화','수','목','금','토'];
+        data.forEach(function(b){
+          var d = new Date(b.date + 'T00:00:00');
+          var mk = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월';
+          if(!months[mk]){ months[mk] = []; monthOrder.push(mk); }
+          months[mk].push(b);
         });
+        monthOrder.forEach(function(mk, mi){
+          var items = months[mk];
+          var acc = document.createElement('div');
+          acc.className = 'b-accordion';
+          var header = document.createElement('div');
+          header.className = 'b-month-header';
+          header.innerHTML =
+            '<span class="b-month-label">' + mk + '</span>' +
+            '<span class="b-month-meta">' +
+              '<span class="b-month-count">' + items.length + '일</span>' +
+              '<span class="b-month-arrow' + (mi===0?' open':'') + '">▼</span>' +
+            '</span>';
+          var grid = document.createElement('div');
+          grid.className = 'b-grid' + (mi===0?' open':'');
+          items.forEach(function(b){
+            var d = new Date(b.date + 'T00:00:00');
+            var display = (d.getMonth()+1) + '/' + d.getDate() + ' (' + wd[d.getDay()] + ')';
+            var card = document.createElement('a');
+            card.className = 'b-card';
+            card.href = '/briefing/' + b.date + '/';
+            card.innerHTML =
+              '<span class="b-date">' + display + '</span>' +
+              '<span class="b-badge">' + b.item_count + '건</span>' +
+              (b.intro ? '<div class="b-intro">' + b.intro + '</div>' : '');
+            grid.appendChild(card);
+          });
+          header.addEventListener('click', function(){
+            var arrow = header.querySelector('.b-month-arrow');
+            var isOpen = grid.classList.contains('open');
+            if(isOpen){
+              grid.classList.remove('open');
+              arrow.classList.remove('open');
+            } else {
+              grid.classList.add('open');
+              arrow.classList.add('open');
+            }
+          });
+          acc.appendChild(header);
+          acc.appendChild(grid);
+          archive.appendChild(acc);
+        });
+      })();
+    </script>
+  )}
 
-        more.style.display = filtered.length > showCount ? 'block' : 'none';
+  <hr class="divider" />
+
+  <!-- 뉴스 피드 -->
+  <div class="section-title"><span class="icon">📰</span> AI 뉴스</div>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-filter="all">전체</button>
+    <button class="tab" data-filter="kr">국내</button>
+    <button class="tab" data-filter="global">해외</button>
+  </div>
+  <div class="count-info" id="countInfo"></div>
+  <div class="news-list" id="newsList"></div>
+  <button class="load-more" id="loadMore" style="display:none">더 보기</button>
+
+  <script is:inline define:vars={{ news }}>
+    var allNews = news || [];
+    var currentFilter = 'all';
+    var showCount = 15;
+
+    document.getElementById('tabs').addEventListener('click', function(e) {
+      var btn = e.target.closest('.tab');
+      if (!btn) return;
+      document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
+      btn.classList.add('active');
+      currentFilter = btn.getAttribute('data-filter');
+      showCount = 15;
+      render();
+    });
+
+    document.getElementById('loadMore').addEventListener('click', function() {
+      showCount += 15;
+      render();
+    });
+
+    function getFiltered() {
+      if (currentFilter === 'all') return allNews;
+      if (currentFilter === 'kr') return allNews.filter(function(n){ return n.country === 'kr'; });
+      if (currentFilter === 'global') return allNews.filter(function(n){ return n.country !== 'kr'; });
+      return allNews.filter(function(n){ return n.category === currentFilter; });
+    }
+
+    function timeAgo(dateStr) {
+      if (!dateStr) return '';
+      var now = new Date();
+      var d = new Date(dateStr);
+      var diff = Math.floor((now - d) / 60000);
+      if (diff < 60) return diff + '분 전';
+      if (diff < 1440) return Math.floor(diff/60) + '시간 전';
+      return Math.floor(diff/1440) + '일 전';
+    }
+
+    function render() {
+      var filtered = getFiltered();
+      var showing = filtered.slice(0, showCount);
+      var list = document.getElementById('newsList');
+      var info = document.getElementById('countInfo');
+      var more = document.getElementById('loadMore');
+
+      info.textContent = filtered.length + '건 중 ' + Math.min(showCount, filtered.length) + '건 표시';
+      list.innerHTML = '';
+
+      if (showing.length === 0) {
+        list.innerHTML = '<div style="text-align:center;color:#64748b;padding:40px 0">해당 뉴스가 없습니다.</div>';
+        more.style.display = 'none';
+        return;
       }
 
-      render();
-    </script>
-  </div>
-<script is:inline>
-<div style="text-align:center;margin:16px auto;max-width:728px;">
-  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
+      showing.forEach(function(n, nIdx) {
+        var countryTag = n.country === 'kr'
+          ? '<span class="n-tag kr">국내</span>'
+          : '<span class="n-tag global">해외</span>';
+        var sourceTag = n.source ? '<span class="n-tag">' + n.source + '</span>' : '';
+        var catTag = n.category ? '<span class="n-tag">' + n.category + '</span>' : '';
+        var time = timeAgo(n.created_at || n.pub_date);
+        var timeTag = time ? '<span>' + time + '</span>' : '';
+
+        var card = document.createElement('a');
+        card.className = 'n-card';
+        card.href = n.link || '#';
+        card.target = '_blank';
+        card.rel = 'noopener';
+        card.innerHTML =
+          '<div class="n-title">' + (n.title || '') + '</div>' +
+          (n.description ? '<div class="n-desc">' + n.description + '</div>' : '') +
+          '<div class="n-meta">' + countryTag + sourceTag + catTag + timeTag + '</div>';
+        list.appendChild(card);
+
+        if (nIdx === 5) {
+          var adCard = document.createElement('div');
+          adCard.style.cssText = 'margin:8px 0;width:100%;overflow:hidden';
+          adCard.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+          list.appendChild(adCard);
+          try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+        }
+      });
+
+      more.style.display = filtered.length > showCount ? 'block' : 'none';
+    }
+
+    render();
+  </script>
+</div>
+
+<!-- 하단 광고 -->
+<div class="ad-wrap">
+  <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
   <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
+
 </body>
 </html>

@@ -58,8 +58,6 @@ const currentPath = Astro.url.pathname;
 
   <meta name="p:domain_verify" content="a2f1f9d5f2c18d423c1d99f6c2d0247b"/>
 
-
-
   <SEOHead
     title={title}
     description={description}
@@ -78,9 +76,6 @@ const currentPath = Astro.url.pathname;
 
 </head>
 <body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
-
-  
-  </div>
 
   <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06] transition-colors">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
@@ -113,10 +108,9 @@ const currentPath = Astro.url.pathname;
         )}
       </div>
 
-            <button id="search-btn" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="검색">
+      <button id="search-btn" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="검색">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </button>
- 
 
       <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="테마 전환">
         <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +150,7 @@ const currentPath = Astro.url.pathname;
     </div>
   </header>
 
-    <!-- 검색 모달 -->
+  <!-- 검색 모달 -->
   <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
     <div class="max-w-xl mx-auto mt-20 px-4 bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
       <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
@@ -170,12 +164,11 @@ const currentPath = Astro.url.pathname;
     </div>
   </div>
 
-
   <main class="flex-1">
     <!-- 콘텐츠 상단 광고 -->
-    <div style="text-align:center;margin:16px auto;max-width:728px;">
+    <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
       <ins class="adsbygoogle"
-           style="display:block"
+           style="display:block;width:100%;"
            data-ad-client="ca-pub-5938862195544185"
            data-ad-slot="3350911709"
            data-ad-format="auto"
@@ -184,9 +177,9 @@ const currentPath = Astro.url.pathname;
     </div>
     <slot />
     <!-- 콘텐츠 하단 광고 -->
-    <div style="text-align:center;margin:16px auto;max-width:728px;">
+    <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
       <ins class="adsbygoogle"
-           style="display:block"
+           style="display:block;width:100%;"
            data-ad-client="ca-pub-5938862195544185"
            data-ad-slot="3350911709"
            data-ad-format="auto"
@@ -250,8 +243,6 @@ const currentPath = Astro.url.pathname;
       const lightIcon = document.getElementById('theme-icon-light');
       const darkIcon = document.getElementById('theme-icon-dark');
       if (lightIcon && darkIcon) {
-        // 다크 모드일 때: 해(light) 아이콘 표시 (누르면 라이트로)
-        // 라이트 모드일 때: 달(dark) 아이콘 표시 (누르면 다크로)
         lightIcon.classList.toggle('hidden', !isDark);
         darkIcon.classList.toggle('hidden', isDark);
       }
@@ -272,7 +263,7 @@ const currentPath = Astro.url.pathname;
       updateThemeIcon();
     });
 
-        // 검색 기능
+    // 검색 기능
     let searchData = null;
 
     async function loadSearchData() {
@@ -315,7 +306,7 @@ const currentPath = Astro.url.pathname;
     });
 
     document.getElementById('search-input')?.addEventListener('input', async (e) => {
-      const query = e.target.value.trim().toLowerCase();
+      const query = (e.target as HTMLInputElement).value.trim().toLowerCase();
       const results = document.getElementById('search-results');
       if (!results) return;
 
@@ -325,10 +316,10 @@ const currentPath = Astro.url.pathname;
       }
 
       const data = await loadSearchData();
-      const filtered = data.filter(post =>
+      const filtered = data.filter((post: any) =>
         post.title.toLowerCase().includes(query) ||
         post.description.toLowerCase().includes(query) ||
-        post.tags.some(t => t.toLowerCase().includes(query)) ||
+        post.tags.some((t: string) => t.toLowerCase().includes(query)) ||
         post.category.toLowerCase().includes(query)
       );
 
@@ -337,7 +328,7 @@ const currentPath = Astro.url.pathname;
         return;
       }
 
-      results.innerHTML = filtered.slice(0, 10).map(post => `
+      results.innerHTML = filtered.slice(0, 10).map((post: any) => `
         <a href="/blog/${post.slug}/" class="block px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
           <div class="flex items-center gap-2 mb-1">
             <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">${post.category}</span>
@@ -347,24 +338,15 @@ const currentPath = Astro.url.pathname;
         </a>
       `).join('');
     });
-
   </script>
 
+  <div id="share-copy-wrap" style="position:fixed;bottom:24px;right:16px;z-index:9999;max-width:calc(100vw - 32px);">
+    <button id="copy-link-btn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){var t=document.getElementById('copy-toast');t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},2000);})" style="display:flex;align-items:center;gap:6px;padding:12px 20px;background:#1f2937;color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      공유하기
+    </button>
+  </div>
+  <div id="copy-toast" style="position:fixed;bottom:80px;right:16px;z-index:10000;padding:10px 20px;background:#10b981;color:#fff;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;">링크가 복사되었습니다!</div>
 
-
-
-
-
-
-
-
-
-<div id="share-copy-wrap" style="position:fixed;bottom:24px;right:24px;z-index:9999;">
-  <button id="copy-link-btn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){var t=document.getElementById('copy-toast');t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},2000);})" style="display:flex;align-items:center;gap:6px;padding:12px 20px;background:#1f2937;color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-    공유하기
-  </button>
-</div>
-<div id="copy-toast" style="position:fixed;bottom:80px;right:24px;z-index:10000;padding:10px 20px;background:#10b981;color:#fff;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;">링크가 복사되었습니다!</div>
 </body>
 </html>

@@ -4,7 +4,6 @@ import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  // ✅ 딱 1번만 전체 로드
   const posts = await getCollection('blog');
   const publishedPosts = posts.filter(p => !p.data.draft);
 
@@ -12,7 +11,6 @@ export async function getStaticPaths() {
     const currentTags = new Set((post.data.tags || []).map((t: string) => t.toLowerCase()));
     const currentCategory = (post.data.category || '').toLowerCase();
 
-    // ✅ 관련글 계산도 여기서 한 번에
     const relatedPosts = publishedPosts
       .filter(p => p.id !== post.id)
       .map(p => {
@@ -32,12 +30,11 @@ export async function getStaticPaths() {
 
     return {
       params: { id: post.id },
-      props: { post, relatedPosts },  // ✅ 계산된 관련글 props로 전달
+      props: { post, relatedPosts },
     };
   });
 }
 
-// ✅ getCollection 두 번째 호출 완전 제거
 const { post, relatedPosts } = Astro.props;
 const { Content } = await render(post);
 
@@ -83,15 +80,12 @@ const formattedDate = post.data.date instanceof Date
           {post.data.category}
         </span>
       )}
-
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
         {post.data.title}
       </h1>
-
       <p class="text-gray-600 dark:text-gray-300 text-lg mb-4">
         {post.data.description}
       </p>
-
       <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
         <time datetime={dateStr}>{formattedDate}</time>
         {post.data.tags && post.data.tags.length > 0 && (
@@ -111,15 +105,26 @@ const formattedDate = post.data.date instanceof Date
       <img
         src={post.data.image}
         alt={post.data.title}
-        class="w-full rounded-xl mb-8 aspect-square object-cover"
+        class="w-full rounded-xl mb-8 aspect-video object-cover"
         width="768"
         height="432"
         loading="eager"
       />
     )}
 
-    <!-- 본문 (prose 다크 모드 적용) -->
-    <div class="prose prose-lg max-w-none
+    <!-- 본문 상단 광고 (정적 삽입 - 가장 안정적) -->
+    <div class="not-prose my-8" style="width:100%;overflow:hidden;">
+      <ins class="adsbygoogle"
+           style="display:block;text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-5938862195544185"
+           data-ad-slot="3350911709"></ins>
+      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- 본문 -->
+    <div id="prose-body" class="prose prose-lg max-w-none
       prose-headings:text-gray-900 dark:prose-headings:text-white
       prose-p:text-gray-700 dark:prose-p:text-gray-300
       prose-strong:text-gray-900 dark:prose-strong:text-white
@@ -137,7 +142,18 @@ const formattedDate = post.data.date instanceof Date
       <Content />
     </div>
 
-    <!-- 인라인 관련글 배너 (본문 h2 사이에 최대 3개 삽입) -->
+    <!-- 본문 중간 광고 (정적 삽입) -->
+    <div class="not-prose my-8" style="width:100%;overflow:hidden;">
+      <ins class="adsbygoogle"
+           style="display:block;text-align:center;"
+           data-ad-layout="in-article"
+           data-ad-format="fluid"
+           data-ad-client="ca-pub-5938862195544185"
+           data-ad-slot="3350911709"></ins>
+      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- 인라인 관련글 데이터 -->
     {inlinePosts.length > 0 && (
       <div id="inline-related-data" class="hidden">
         {inlinePosts.map((ip, idx) => (
@@ -153,17 +169,17 @@ const formattedDate = post.data.date instanceof Date
 
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const prose = document.querySelector('.prose');
+        const prose = document.getElementById('prose-body');
         if (!prose) return;
         const h2s = prose.querySelectorAll('h2');
 
-        // ── 관련글 배너 삽입 ──
+        // 관련글 배너 삽입
         const container = document.getElementById('inline-related-data');
-        if (container) {
+        if (container && h2s.length >= 2) {
           const items = container.querySelectorAll('[data-idx]');
-          if (items.length > 0 && h2s.length >= 2) {
+          if (items.length > 0) {
             const total = h2s.length;
-            let positions;
+            let positions: number[];
             if (total <= 3) positions = [1];
             else if (total <= 5) positions = [1, 3];
             else positions = [1, 3, 5];
@@ -172,7 +188,7 @@ const formattedDate = post.data.date instanceof Date
             for (let i = 0; i < count; i++) {
               const pos = positions[i];
               if (pos >= h2s.length) break;
-              const item = items[i];
+              const item = items[i] as HTMLElement;
               const url = item.dataset.url;
               const title = item.dataset.title;
               const category = item.dataset.category;
@@ -187,35 +203,7 @@ const formattedDate = post.data.date instanceof Date
                   </span>
                 </a>
               `;
-              h2s[pos].parentNode.insertBefore(banner, h2s[pos]);
-            }
-          }
-        }
-
-        // ── 본문 내 수동 애드센스 광고 삽입 ──
-        const paragraphs = prose.querySelectorAll(':scope > p');
-        if (paragraphs.length >= 2) {
-          // 상단 고정: 첫 번째 p태그 뒤 (항상)
-          var adTop = document.createElement('div');
-          adTop.className = 'not-prose my-8';
-          adTop.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
-          paragraphs[0].insertAdjacentElement('afterend', adTop);
-          try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-
-          // 중간·하단: 8단락 이상일 때 1/3, 2/3 지점
-          if (paragraphs.length >= 8) {
-            var oneThird = Math.floor(paragraphs.length / 3);
-            var twoThirds = Math.floor(paragraphs.length * 2 / 3);
-            // 상단 광고(인덱스 0 뒤)와 겹치지 않도록 최소 인덱스 2부터
-            var midTargets = [oneThird, twoThirds].filter(function(i) { return i >= 2; });
-            for (var mi = 0; mi < midTargets.length; mi++) {
-              var idx = midTargets[mi];
-              if (idx >= paragraphs.length) continue;
-              var adMid = document.createElement('div');
-              adMid.className = 'not-prose my-8';
-              adMid.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
-              paragraphs[idx].insertAdjacentElement('afterend', adMid);
-              try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+              h2s[pos].parentNode?.insertBefore(banner, h2s[pos]);
             }
           }
         }
@@ -254,11 +242,6 @@ const formattedDate = post.data.date instanceof Date
         자격증 시험일정 확인하기 →
       </a>
     </div>
-
-
-    <!-- SNS 공유 버튼 -->
-    <div class="mt-10 pt-8 border-t border-gray-200 dark:border-gray-700">
-      
 
     <!-- 하단 네비게이션 -->
     <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
