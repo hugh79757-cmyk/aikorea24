@@ -1,5 +1,16 @@
 User-agent: *
 Allow: /
-Disallow: /api_test/
+Disallow: /api/
+Disallow: /admin/
+
+# AI 학습 데이터 수집은 차단
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+# AI 검색/인용은 허용 (ChatGPT, Claude, Google AI Overview)
+# GPTBot, ClaudeBot, Google-Extended → 허용 (별도 규칙 없음 = 허용)
 
 Sitemap: https://aikorea24.kr/sitemap-index.xml

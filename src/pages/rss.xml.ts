@@ -1,3 +1,4 @@
+export const prerender = true;
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 import type { APIContext } from 'astro';
@@ -11,7 +12,7 @@ export async function GET(context: APIContext) {
     site: context.site ?? 'https://aikorea24.kr',
     items: posts
       .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-      .slice(0, 20)
+      
       .map((post) => ({
         title: post.data.title,
         pubDate: post.data.date,
