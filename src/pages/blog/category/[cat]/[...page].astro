@@ -1,0 +1,167 @@
+---
+export const prerender = true;
+import Layout from '../../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const categoryMeta: Record<string, { label: string; icon: string; desc: string }> = {
+    'AI 강좌':    { label: 'AI 강좌',            icon: '📚', desc: 'AI 프롬프트 공식과 활용법을 배워보세요.' },
+    '소상공인AI': { label: '소상공인 AI 활용',   icon: '🏪', desc: '소상공인을 위한 AI 지원금, 바우처, 활용 가이드.' },
+    'AI입문':     { label: 'AI 왕초보 가이드',   icon: '🎓', desc: 'AI가 처음이어도 괜찮아요. 하나씩 알려드립니다.' },
+    '바이브코딩': { label: '바이브코딩 시작',    icon: '🎵', desc: '코딩 없이 AI에게 말로 개발하는 바이브코딩.' },
+    '개발배포':   { label: '무료 웹사이트 만들기', icon: '🚀', desc: 'GitHub, Cloudflare로 무료 웹사이트를 만들고 배포하세요.' },
+    '뉴스':       { label: '뉴스 브리핑',         icon: '📰', desc: '매일 큐레이팅된 AI 뉴스를 깊이 있게 다룹니다.' },
+  };
+
+  const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return Object.entries(categoryMeta).flatMap(([cat, meta]) => {
+    const posts = allPosts
+      .filter(p => p.data.category === cat)
+      .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
+    return paginate(posts, {
+      params: { cat },
+      props: { meta },
+      pageSize: 9,
+    });
+  });
+}) satisfies GetStaticPaths;
+
+const { cat } = Astro.params;
+const { page, meta } = Astro.props;
+
+const pageNum = page.currentPage;
+const pageTitle = pageNum === 1
+  ? `${meta.label} - 블로그`
+  : `${meta.label} - ${pageNum}페이지`;
+
+function getPageNums(current: number, last: number): (number | '...')[] {
+  if (last <= 7) return Array.from({ length: last }, (_, i) => i + 1);
+  const pages: (number | '...')[] = [];
+  pages.push(1);
+  if (current > 3) pages.push('...');
+  for (let i = Math.max(2, current - 1); i <= Math.min(last - 1, current + 1); i++) {
+    pages.push(i);
+  }
+  if (current < last - 2) pages.push('...');
+  pages.push(last);
+  return pages;
+}
+
+const pageNums = getPageNums(pageNum, page.lastPage);
+---
+
+<Layout title={pageTitle} description={meta.desc}>
+  <div class="max-w-6xl mx-auto px-4 py-12">
+    <!-- 브레드크럼 -->
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="breadcrumb">
+      <ol class="flex items-center gap-1">
+        <li><a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">홈</a></li>
+        <li class="before:content-['/'] before:mx-1">
+          <a href="/blog/" class="hover:text-blue-600 dark:hover:text-blue-400">블로그</a>
+        </li>
+        <li class="before:content-['/'] before:mx-1 text-gray-900 dark:text-white font-medium">{meta.label}</li>
+      </ol>
+    </nav>
+
+    <!-- 헤더 -->
+    <div class="flex items-center gap-3 mb-2">
+      <span class="text-3xl">{meta.icon}</span>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{meta.label}</h1>
+    </div>
+    <p class="text-gray-600 dark:text-gray-400 mb-3">{meta.desc}</p>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-8">
+      총 <strong class="text-gray-900 dark:text-white">{page.total}</strong>개의 글
+      {page.lastPage > 1 && (
+        <span class="ml-2 text-gray-400">({pageNum} / {page.lastPage} 페이지)</span>
+      )}
+    </p>
+
+    <!-- 글 목록 -->
+    {page.data.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {page.data.map(post => {
+          const dateFormatted = post.data.date instanceof Date
+            ? post.data.date.toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' })
+            : new Date(post.data.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'short', day: 'numeric' });
+          return (
+            <a
+              href={`/blog/${post.id}/`}
+              class="group block bg-white dark:bg-white/[0.05] rounded-2xl overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-gray-100 dark:border-white/[0.08]"
+            >
+              {post.data.image ? (
+                <div class="w-full aspect-video overflow-hidden">
+                  <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" width="400" height="225" loading="lazy" />
+                </div>
+              ) : (
+                <div class="w-full aspect-video bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 flex items-center justify-center">
+                  <span class="text-5xl">{meta.icon}</span>
+                </div>
+              )}
+              <div class="p-5">
+                <div class="flex items-center gap-2 mb-2">
+                  <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">{post.data.category}</span>
+                  <span class="text-xs text-gray-400">{dateFormatted}</span>
+                </div>
+                <h2 class="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {post.data.title}
+                </h2>
+                <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{post.data.description}</p>
+                {post.data.tags && post.data.tags.length > 0 && (
+                  <div class="flex gap-1 mt-3 flex-wrap">
+                    {post.data.tags.slice(0, 3).map((tag: string) => (
+                      <span class="text-xs bg-gray-100 dark:bg-white/10 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded">#{tag}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    ) : (
+      <div class="bg-gray-100 dark:bg-white/[0.05] rounded-2xl p-8 text-center">
+        <p class="text-gray-400">아직 등록된 글이 없습니다.</p>
+      </div>
+    )}
+
+    <!-- 페이지네이션 -->
+    {page.lastPage > 1 && (
+      <nav class="flex justify-center items-center gap-2 mt-12" aria-label="페이지 네비게이션">
+        {page.url.prev ? (
+          <a href={page.url.prev} class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">← 이전</a>
+        ) : (
+          <span class="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed">← 이전</span>
+        )}
+
+        {pageNums.map(n =>
+          n === '...'
+            ? <span class="w-10 h-10 flex items-center justify-center text-gray-400 text-sm select-none">…</span>
+            : <a
+                href={n === 1 ? `/blog/category/${cat}/` : `/blog/category/${cat}/${n}/`}
+                class:list={[
+                  'w-10 h-10 flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
+                  n === pageNum
+                    ? 'bg-blue-600 text-white'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                ]}
+              >{n}</a>
+        )}
+
+        {page.url.next ? (
+          <a href={page.url.next} class="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">다음 →</a>
+        ) : (
+          <span class="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed">다음 →</span>
+        )}
+      </nav>
+    )}
+
+    <!-- 목록으로 -->
+    <div class="mt-10 text-center">
+      <a href="/blog/" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+        ← 전체 블로그로 돌아가기
+      </a>
+    </div>
+  </div>
+</Layout>
