@@ -245,9 +245,18 @@ const formattedDate = post.data.date instanceof Date
 
     <!-- 하단 네비게이션 -->
     <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <a href="/blog" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+      <a id="back-to-list" href="/blog/" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
         ← 블로그 목록으로
       </a>
+      <script is:inline>
+        (function() {
+          var url = sessionStorage.getItem('blog_back_url');
+          if (url) {
+            var el = document.getElementById('back-to-list');
+            if (el) el.setAttribute('href', url);
+          }
+        })();
+      </script>
     </div>
   </article>
 </Layout>

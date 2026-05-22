@@ -137,4 +137,36 @@ const pageDesc = pageNum === 1
       </nav>
     )}
   </div>
+
+  <!-- 스크롤 위치 저장/복원 -->
+  <script is:inline>
+    (function() {
+      var key = 'blog_scroll';
+      var pageKey = 'blog_last_page';
+      var stored = sessionStorage.getItem(key);
+      var storedPage = sessionStorage.getItem(pageKey);
+      var currentPage = document.location.pathname;
+
+      // 복원: 같은 페이지로 돌아온 경우
+      if (stored && storedPage === currentPage) {
+        window.addEventListener('load', function() {
+          setTimeout(function() {
+            window.scrollTo(0, parseInt(stored, 10));
+          }, 100);
+        });
+      }
+      sessionStorage.removeItem(key);
+      sessionStorage.removeItem(pageKey);
+
+      // 저장: 카드 클릭 시
+      var grid = document.getElementById('blog-grid');
+      if (grid) {
+        grid.addEventListener('click', function() {
+          sessionStorage.setItem(key, window.scrollY.toString());
+          sessionStorage.setItem(pageKey, currentPage);
+          sessionStorage.setItem('blog_back_url', currentPage);
+        });
+      }
+    })();
+  </script>
 </Layout>
