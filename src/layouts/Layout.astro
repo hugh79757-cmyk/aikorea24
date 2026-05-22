@@ -43,21 +43,14 @@ const navItems = [
 
 const currentPath = Astro.url.pathname;
 ---
-
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth dark">
-<script is:inline>
-  const t = localStorage.getItem('theme');
-  if (t === 'light') document.documentElement.classList.remove('dark');
-  else document.documentElement.classList.add('dark');
-</script>
 <head>
-
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185"
-     crossorigin="anonymous"></script>
-
-  <meta name="p:domain_verify" content="a2f1f9d5f2c18d423c1d99f6c2d0247b"/>
-
+  <script is:inline>
+    const t = localStorage.getItem('theme');
+    if (t === 'light') document.documentElement.classList.remove('dark');
+    else document.documentElement.classList.add('dark');
+  </script>
   <SEOHead
     title={title}
     description={description}
@@ -69,11 +62,13 @@ const currentPath = Astro.url.pathname;
     category={category}
     noindex={noindex}
   />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185"
+     crossorigin="anonymous"></script>
+  <meta name="p:domain_verify" content="a2f1f9d5f2c18d423c1d99f6c2d0247b"/>
   <style is:global>
     :root { --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif; }
     body { font-family: var(--font-sans); }
   </style>
-
 </head>
 <body class="min-h-screen flex flex-col bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
