@@ -153,7 +153,7 @@ def title_hash(title):
 def get_existing():
     try:
         r = subprocess.run(
-            ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote',
+            ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
              '--command', 'SELECT title FROM news', '--json'],
             capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
         hashes = set()
@@ -323,17 +323,14 @@ GLOBAL_RSS_FEEDS = [
     ('https://www.zdnet.com/topic/artificial-intelligence/rss.xml', 'ZDNET AI', 'us'),
     ('https://openai.com/blog/rss.xml', 'OpenAI Blog', 'us'),
     ('https://blog.google/technology/ai/rss/', 'Google AI Blog', 'us'),
-    ('https://bensbites.beehiiv.com/feed', "Ben's Bites", 'us'),
-    ('https://www.theneurondaily.com/feed', 'The Neuron', 'us'),
+    ('https://www.bensbites.com/feed', "Ben's Bites", 'us'),        # beehiiv -> 자체도메인
     # 바이브코딩 / AI 개발
-    ('https://www.anthropic.com/blog/rss.xml', 'Anthropic Blog', 'us'),
-    ('https://www.cursor.com/blog/rss.xml', 'Cursor Blog', 'us'),
     ('https://github.blog/feed/', 'GitHub Blog', 'us'),
     ('https://simonwillison.net/atom/everything/', 'Simon Willison', 'us'),
-    # AI 이미지/비디오
-    ('https://stability.ai/blog/feed', 'Stability AI', 'us'),
-    ('https://petapixel.com/category/ai/feed/', 'PetaPixel AI', 'us'),
-    ('https://runwayml.com/blog/rss.xml', 'Runway ML', 'us'),
+    # 추가 양질 피드 (기존 dead 피드 대체)
+    ('https://huggingface.co/blog/feed.xml', 'HuggingFace Blog', 'us'),
+    ('https://aisnakeoil.substack.com/feed', 'AI Snake Oil', 'us'),
+    ('https://www.interconnects.ai/feed', 'Interconnects AI', 'us'),
 ]
 
 
@@ -606,7 +603,7 @@ def save_to_d1(articles):
             f.write('\n'.join(batch))
         try:
             r = subprocess.run(
-                ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--file', sql_path],
+                ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes', '--file', sql_path],
                 capture_output=True, text=True, cwd=PROJECT_DIR, timeout=60)
             if r.returncode == 0:
                 saved += len(batch)
