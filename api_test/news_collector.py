@@ -62,6 +62,47 @@ def clean(text):
 
 
 # ============================================
+# 날짜 필터 (최근 3일 이내만 수집)
+# ============================================
+def parse_pub_date(pub_str):
+    """RSS pub_date 문자열 → datetime 변환"""
+    if not pub_str:
+        return None
+    formats = [
+        '%a, %d %b %Y %H:%M:%S %z',   # RSS 표준: Wed, 29 Apr 2026 10:00:00 +0000
+        '%a, %d %b %Y %H:%M:%S GMT',   # Wed, 29 Apr 2026 10:00:00 GMT
+        '%a, %d %b %Y %H:%M:%S +0000', # Wed, 29 Apr 2026 10:00:00 +0000
+        '%Y-%m-%dT%H:%M:%S%z',         # ISO 8601
+        '%Y-%m-%dT%H:%M:%SZ',          # ISO 8601 UTC
+        '%Y-%m-%d %H:%M:%S',           # 단순 datetime
+        '%Y-%m-%d',                    # 날짜만
+        '%Y%m%d',                      # 숫자형
+    ]
+    for fmt in formats:
+        try:
+            pub_clean = pub_str.strip()[:31].replace(' GMT', ' +0000')
+            return datetime.strptime(pub_clean, fmt)
+        except Exception:
+            continue
+    return None
+
+
+def is_recent(pub_str, days=3):
+    """최근 N일 이내 기사인지 확인. 날짜 파싱 실패 시 True(허용)"""
+    dt = parse_pub_date(pub_str)
+    if dt is None:
+        return True  # 날짜 불명 → 일단 수집
+    # timezone-aware 비교
+    try:
+        now = datetime.now(dt.tzinfo) if dt.tzinfo else datetime.now()
+        return (now - dt).days <= days
+    except Exception:
+        return True
+
+
+
+
+# ============================================
 # AI 필터 (국내 + 해외 공용)
 # ============================================
 STRONG = ['AI', 'A.I', '인공지능', 'GPT', 'ChatGPT', '챗GPT', 'LLM',
@@ -329,7 +370,6 @@ GLOBAL_RSS_FEEDS = [
     ('https://simonwillison.net/atom/everything/', 'Simon Willison', 'us'),
     # 추가 양질 피드 (기존 dead 피드 대체)
     ('https://huggingface.co/blog/feed.xml', 'HuggingFace Blog', 'us'),
-    ('https://aisnakeoil.substack.com/feed', 'AI Snake Oil', 'us'),
     ('https://www.interconnects.ai/feed', 'Interconnects AI', 'us'),
 ]
 
@@ -354,6 +394,8 @@ def fetch_rss_global(url, source_name, country='us', limit=12):
             link = (link_el.text or '').strip()
             pub = (pub_el.text or '')[:25] if pub_el is not None else ''
             if not is_ai(orig_title, orig_desc):
+                continue
+            if not is_recent(pub, days=3):
                 continue
             items.append({
                 'title': orig_title,
@@ -447,6 +489,9 @@ def fetch_rss_kr(url, source_name, limit=15):
         for item in tree.findall('.//item')[:50]:  # 많이 읽고 필터링
             title = clean(item.findtext('title', ''))
             desc = clean(item.findtext('description', ''))
+            pub_date_raw = item.findtext('pubDate', '')
+            if not is_recent(pub_date_raw, days=3):
+                continue
             if not is_ai(title, desc):
                 continue
             results.append({
@@ -455,7 +500,7 @@ def fetch_rss_kr(url, source_name, limit=15):
                 'description': desc[:200],
                 'source': source_name,
                 'category': 'news',
-                'pub_date': datetime.now().strftime('%Y-%m-%d'),
+                'pub_date': pub_date_raw or datetime.now().strftime('%Y-%m-%d'),
                 'country': 'kr',
             })
             if len(results) >= limit:
@@ -594,28 +639,32 @@ def save_to_d1(articles):
     if not sql_lines:
         print("  저장할 신규 항목 없음")
         return 0, skipped
-    sql_path = os.path.join(PROJECT_DIR, 'api_test', '_batch_insert.sql')
     saved = 0
     batch_size = 50
     for i in range(0, len(sql_lines), batch_size):
         batch = sql_lines[i:i+batch_size]
-        with open(sql_path, 'w') as f:
-            f.write('\n'.join(batch))
+        batch_num = i // batch_size + 1
+        sql_path = os.path.join(PROJECT_DIR, 'api_test', f'_batch_{batch_num}.sql')
         try:
+            with open(sql_path, 'w', encoding='utf-8') as f:
+                f.write('\n'.join(batch))
+                f.flush()
+                os.fsync(f.fileno())
             r = subprocess.run(
                 ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes', '--file', sql_path],
-                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=60)
+                capture_output=True, text=True, cwd=PROJECT_DIR, timeout=90)
             if r.returncode == 0:
                 saved += len(batch)
-                print(f"  배치 {i//batch_size+1}: {len(batch)}건 저장")
+                print(f"  배치 {batch_num}: {len(batch)}건 저장")
             else:
-                print(f"  배치 {i//batch_size+1} 실패: {r.stderr[:200]}")
+                print(f"  배치 {batch_num} 실패: {r.stderr[:200]}")
         except Exception as e:
-            print(f"  배치 에러: {e}")
-    try:
-        os.remove(sql_path)
-    except:
-        pass
+            print(f"  배치 {batch_num} 에러: {e}")
+        finally:
+            try:
+                os.remove(sql_path)
+            except:
+                pass
     return saved, skipped
 
 
