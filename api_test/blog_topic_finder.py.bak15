@@ -163,16 +163,13 @@ def expand_keywords_via_api(seeds):
             resp = requests.get(url, headers=headers, timeout=10)
             if resp.status_code == 200:
                 for item in resp.json().get("keywordList", []):
-                    kw   = item.get("relKeyword", "")
-                    pc   = item.get("monthlyPcQcCnt", 0)
-                    mo   = item.get("monthlyMobileQcCnt", 0)
-                    comp = item.get("compIdx", "")
-                    pc   = 5 if pc == "< 10" else int(pc or 0)
-                    mo   = 5 if mo == "< 10" else int(mo or 0)
-                    vol  = pc + mo
-                    if kw and vol >= 100:
-                        # (검색량, 경쟁도) 튜플로 저장
-                        result[kw] = (vol, comp)
+                    kw  = item.get("relKeyword", "")
+                    pc  = item.get("monthlyPcQcCnt", 0)
+                    mo  = item.get("monthlyMobileQcCnt", 0)
+                    pc  = 5 if pc == "< 10" else int(pc or 0)
+                    mo  = 5 if mo == "< 10" else int(mo or 0)
+                    if kw and (pc + mo) >= 100:
+                        result[kw] = pc + mo
             time.sleep(0.15)
         except Exception as e:
             print(f"    API 에러: {e}")
@@ -195,27 +192,12 @@ def expand_keywords_via_api(seeds):
             batch_result = query_api(top30[i:i+5])
             hop2.update(batch_result)
         # 병합 (검색량 높은 것 유지)
-        for kw, data in hop2.items():
-            vol = data[0] if isinstance(data, tuple) else data
-            cur = all_keywords.get(kw)
-            cur_vol = cur[0] if isinstance(cur, tuple) else (cur or 0)
-            if cur is None or cur_vol < vol:
-                all_keywords[kw] = data
+        for kw, vol in hop2.items():
+            if kw not in all_keywords or all_keywords[kw] < vol:
+                all_keywords[kw] = vol
         print(f"    → 총 {len(all_keywords)}개 (2홉 후)")
 
-    # volumes: {kw: 검색량}, comp_map: {kw: 경쟁도}
-    volumes  = {}
-    comp_map = {}
-    for kw, data in all_keywords.items():
-        if isinstance(data, tuple):
-            volumes[kw]  = data[0]
-            comp_map[kw] = data[1]
-        else:
-            volumes[kw]  = data
-            comp_map[kw] = ""
-    # comp_map을 모듈 속성으로 저장
-    expand_keywords_via_api._comp_map = comp_map
-    return list(volumes.keys()), volumes
+    return list(all_keywords.keys()), all_keywords
 
 
 def extract_longtail_keywords(articles):
@@ -355,59 +337,47 @@ def is_ai_related(keyword):
     return False
 
 def select_topics(keywords, search_volumes, blog_counts, articles, top_n=20):
-    print(f"\n[5단계] compIdx + KGR 기반 황금 주제 선별...")
-    comp_map = getattr(expand_keywords_via_api, '_comp_map', {})
+    print(f"\n[5단계] 경쟁 공백 기준 황금 주제 선별...")
     topics = []
 
     for kw in keywords:
-        if not is_ai_related(kw):
-            continue
-        vol  = search_volumes.get(kw, 0)
-        comp = comp_map.get(kw, "")
-        blog = blog_counts.get(kw, 0)
+        vol   = search_volumes.get(kw, 0)
+        blog  = blog_counts.get(kw, 0)
 
-        if vol < 200:
-            continue
+        if blog == 0:
+            continue  # API 오류 가능성
 
-        # compIdx 낮음 → 황금
-        if comp == "낮음":
-            grade    = "🥇 황금(광고경쟁낮음)"
+        # 경쟁 공백 등급 (블로그 수 기준)
+        if blog <= 500:
+            grade = "🏆 독점가능"
             priority = 1
-        elif comp == "중간":
-            grade    = "🥈 유망(광고경쟁중간)"
+        elif blog <= 2000:
+            grade = "🟢 경쟁낮음"
             priority = 2
-        elif blog > 0:
-            kgr = blog / max(vol, 1)
-            if kgr < 0.5:
-                grade    = "🥈 유망(KGR)"
-                priority = 2
-            elif kgr < 2.0:
-                grade    = "🟡 도전(KGR)"
-                priority = 3
-            else:
-                continue
+        elif blog <= 5000:
+            grade = "🟡 경쟁보통"
+            priority = 3
+        elif blog <= 15000:
+            grade = "🟠 경쟁높음"
+            priority = 4
         else:
-            continue
+            continue  # 경쟁 과다 제외
 
-        if vol >= 100000:
-            vol_score = 6
-        elif vol >= 10000:
-            vol_score = 5
-        elif vol >= 3000:
-            vol_score = 4
-        elif vol >= 1000:
+        # 검색량 보너스 점수
+        vol_score = 0
+        if vol >= 10000:
             vol_score = 3
-        elif vol >= 500:
+        elif vol >= 3000:
             vol_score = 2
-        else:
+        elif vol >= 500:
             vol_score = 1
 
         related = find_related_news(kw, articles)
+
         topics.append({
             "keyword": kw,
             "monthly_search": vol,
             "blog_count": blog,
-            "comp_idx": comp,
             "grade": grade,
             "priority": priority,
             "vol_score": vol_score,
@@ -415,10 +385,19 @@ def select_topics(keywords, search_volumes, blog_counts, articles, top_n=20):
             "has_news": len(related) > 0,
         })
 
-    topics.sort(key=lambda x: (x["priority"], -x["vol_score"], -x["monthly_search"]))
+    # 정렬: 경쟁낮음 우선, 같은 등급 내에서 검색량 높은 것 우선, 관련뉴스 있는 것 우선
+    topics.sort(key=lambda x: (
+        x['priority'],
+        -x['vol_score'],
+        -int(x['has_news'])
+    ))
+
     return topics[:top_n]
 
 
+# ============================================
+# 7. 블로그 글 제목 후보 생성 (GPT)
+# ============================================
 def generate_titles(topic, articles):
     if not OPENAI_KEY:
         return []
@@ -492,17 +471,7 @@ def main():
 
     # 4. 블로그 경쟁 수 조회
     print("\n[4단계] 블로그 경쟁 수 조회...")
-    # AI 관련 키워드만 먼저 필터링 후 검색량 상위 300개 조회
-    ai_keywords = [kw for kw in keywords if is_ai_related(kw)]
-    # 검색량 기준 정렬 (search_volumes에 있는 것 우선)
-    ai_keywords_sorted = sorted(
-        ai_keywords,
-        key=lambda k: search_volumes.get(k, 0),
-        reverse=True
-    )
-    sample = ai_keywords_sorted[:300]
-    print(f"  AI 관련 키워드: {len(ai_keywords)}개 → 상위 {len(sample)}개 블로그 경쟁 조회")
-    blog_counts = get_blog_counts_batch(sample)
+    blog_counts = get_blog_counts_batch(keywords[:120])
 
     # 5. 황금 주제 선별
     topics = select_topics(keywords, search_volumes, blog_counts, articles, top_n=args.top)

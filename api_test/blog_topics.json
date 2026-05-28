@@ -1,14 +1,173 @@
 {
-  "generated_at": "2026-05-26T09:48:35.298475",
+  "generated_at": "2026-05-26T22:58:49.159052",
+  "hours": 24,
+  "total_articles": 96,
+  "total_keywords": 1952,
   "topics": [
+    {
+      "keyword": "클로드",
+      "monthly_search": 762200,
+      "blog_count": 249904,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "CLAUDE",
+      "monthly_search": 146700,
+      "blog_count": 166174,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "DEEPSEEK",
+      "monthly_search": 2680,
+      "blog_count": 33540,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 3,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "챗GPT강사",
+      "monthly_search": 1230,
+      "blog_count": 0,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 3,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "GEMMA",
+      "monthly_search": 1040,
+      "blog_count": 0,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 3,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "LLAMA",
+      "monthly_search": 1030,
+      "blog_count": 0,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 3,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "자연어처리",
+      "monthly_search": 540,
+      "blog_count": 137545,
+      "comp_idx": "낮음",
+      "grade": "🥇 황금(광고경쟁낮음)",
+      "priority": 1,
+      "vol_score": 2,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "제미나이",
+      "monthly_search": 8390700,
+      "blog_count": 263222,
+      "comp_idx": "중간",
+      "grade": "🥈 유망(광고경쟁중간)",
+      "priority": 2,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "챗GPT",
+      "monthly_search": 4403200,
+      "blog_count": 697096,
+      "comp_idx": "높음",
+      "grade": "🥈 유망(KGR)",
+      "priority": 2,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "CHATGPT",
+      "monthly_search": 2099500,
+      "blog_count": 591851,
+      "comp_idx": "높음",
+      "grade": "🥈 유망(KGR)",
+      "priority": 2,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "쳇GPT",
+      "monthly_search": 551000,
+      "blog_count": 43472,
+      "comp_idx": "높음",
+      "grade": "🥈 유망(KGR)",
+      "priority": 2,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
     {
       "keyword": "퍼플렉시티",
       "monthly_search": 127600,
-      "blog_count": 34244,
-      "saturation": 0.27,
-      "grade": "🟢 최우선",
-      "related_count": 0,
-      "related_titles": []
+      "blog_count": 34274,
+      "comp_idx": "중간",
+      "grade": "🥈 유망(광고경쟁중간)",
+      "priority": 2,
+      "vol_score": 6,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "로판AI",
+      "monthly_search": 48990,
+      "blog_count": 2347,
+      "comp_idx": "중간",
+      "grade": "🥈 유망(광고경쟁중간)",
+      "priority": 2,
+      "vol_score": 5,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "앤트로픽",
+      "monthly_search": 43600,
+      "blog_count": 35165,
+      "comp_idx": "중간",
+      "grade": "🥈 유망(광고경쟁중간)",
+      "priority": 2,
+      "vol_score": 5,
+      "related_news": [],
+      "has_news": false
+    },
+    {
+      "keyword": "딥시크",
+      "monthly_search": 15400,
+      "blog_count": 0,
+      "comp_idx": "중간",
+      "grade": "🥈 유망(광고경쟁중간)",
+      "priority": 2,
+      "vol_score": 5,
+      "related_news": [],
+      "has_news": false
     }
   ]
 }
