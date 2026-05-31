@@ -27,10 +27,19 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 ### 뉴스 수집 (api_test/)
 
 - **국내 뉴스**: 네이버 검색 API, 과기정통부/행안부 보도자료, 정부 공문서
-- **해외 뉴스**: TechCrunch AI, MIT Tech Review, Hacker News (v2.0+)
-- **AI 기업 공식**: OpenAI, Anthropic, Google DeepMind 블로그 (v2.0+)
-- **필터링**: 강화된 AI 관련성 판별 (strong/weak 키워드 + 제외어)
-- **중복 제거**: 제목 해시 기반 중복 방지
+- **해외 뉴스** (28개 RSS 소스):
+  - **AI 전문**: TechCrunch AI, MIT Tech Review, Ars Technica AI, VentureBeat AI, The Verge AI, Wired AI, ZDNET AI, AI News EU
+  - **빅테크 공식**: OpenAI Blog, Google AI Blog, HuggingFace Blog, GitHub Blog
+  - **주요 언론**: CNN Technology, Reuters Technology, Business Insider AI, NYT Technology, Washington Post Technology, BBC Technology, SCMP China Tech
+  - **AI 전용 피드**: NYT AI Spotlight, The Guardian AI, Financial Times AI, Fast Company AI
+  - **뉴스레터/블로그**: The Decoder, MarkTechPost, Ben's Bites, Simon Willison, Interconnects AI
+  - **커뮤니티**: Hacker News (Algolia API)
+- **AI 필터링**:
+  - **기존 `is_ai()`**: STRONG/WEAK/EXCLUDE 키워드 — 국내 + 기존 해외 소스 통합 필터
+  - **신규 `is_ai_related()`**: 강화 필터 — 1차 키워드 10개 그룹 (AI, LLM, ChatGPT, OpenAI, Claude, Gemini, neural network 등) + 2차 키워드 (robot, automation, transformer 등 2개 이상) + REJECT 조건 (자동차/주가 단독 기사 제외)
+  - **`is_ai_related_relaxed()`**: AI 전용 피드용 — 1차 키워드만 체크, REJECT 동일
+- **중복 제거**: 제목 해시 + prefix/키워드/고유명사 3단계 유사도 기반 중복 방지
+- **Reuters fallback**: RSS 실패 시 Google News 검색 우회 URL 자동 재시도
 
 ### 웹사이트 (src/)
 
@@ -62,7 +71,7 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 | 경로 | 설명 |
 |------|------|
 | api_test/ | 뉴스 수집 Python 스크립트 |
-| api_test/news_collector.py | 메인 수집기 |
+| api_test/news_collector.py | 메인 수집기 (28개 RSS + Hacker News, 강화 AI 필터) |
 | api_test/card_news_generator.py | 카드뉴스 생성 |
 | api_test/senior_briefing.py | 노인복지 브리핑 |
 | api_test/gov_doc_collector.py | 정부 문서 수집 |
@@ -92,7 +101,7 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 
 | 버전 | 날짜 | 주요 변경 |
 |------|------|-----------|
-| v2.0.0 | 2026-02-21 | 해외 뉴스 수집, AI 기업 공식 블로그, 필터링 강화 |
+| v2.1.0 | 2026-05 | 해외 RSS 10개 소스 추가 (CNN, Reuters, NYT, BBC, WSJ, BI, Guardian, FT, Fast Company), AI 키워드 강화 필터 is_ai_related() 도입, Reuters fallback 처리 |
 | v1.4.0 | 2026-02-16 | 블로그 UI 개선 (썸네일 4:3, 카테고리 필터 하단 이동) |
 | v1.3.0 | 2026-02 | Google AdSense, Pinterest 연동 |
 | v1.2.1 | 2026-02 | 버그 수정 |
