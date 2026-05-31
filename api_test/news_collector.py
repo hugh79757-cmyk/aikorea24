@@ -184,6 +184,112 @@ def is_ai(title, desc=''):
 
 
 # ============================================
+# 강화된 AI 필터 (신규 해외 소스 전용)
+# ============================================
+# 1차 키워드 (고신뢰, 단독으로 통과)
+_PRIMARY_AI = [
+    'AI', 'A.I.',
+    'ARTIFICIAL INTELLIGENCE',
+    'MACHINE LEARNING', 'DEEP LEARNING',
+    'LARGE LANGUAGE MODEL', 'LLM', 'LLMS',
+    'CHATGPT', 'GPT-4', 'GPT-5', 'CLAUDE', 'GEMINI', 'GROK', 'LLAMA', 'MISTRAL',
+    'OPENAI', 'ANTHROPIC', 'DEEPMIND', 'HUGGING FACE',
+    'GENERATIVE AI', 'GEN AI', 'GENAI',
+    'NEURAL NETWORK', 'NEURAL NETWORKS',
+    'NATURAL LANGUAGE PROCESSING', 'NLP',
+    'COMPUTER VISION',
+    'AUTONOMOUS', 'SELF-DRIVING',
+]
+
+# 2차 키워드 (복합 조건 — 2개 이상 포함 시 통과)
+_SECONDARY_AI = [
+    'ROBOT', 'ROBOTICS',
+    'AUTOMATION',
+    'ALGORITHM', 'ALGORITHMS',
+    'DATA MODEL', 'FOUNDATION MODEL', 'FOUNDATION MODELS',
+    'TRANSFORMER', 'DIFFUSION MODEL', 'DIFFUSION MODELS',
+    'PROMPT', 'INFERENCE', 'FINE-TUNING', 'FINETUNING',
+]
+
+# REJECT: 순수 주가/실적 키워드 (AI 결합 없는 경우 제외)
+_STOCK_KEYWORDS = ['STOCK', 'EARNINGS', 'REVENUE', 'PROFIT']
+
+
+def _has_primary(text_up):
+    """1차 키워드 매칭 (경계 조건 처리)"""
+    for kw in _PRIMARY_AI:
+        if kw == 'AI':
+            if re.search(r'\bAI\b', text_up) or 'A.I.' in text_up:
+                return True
+        elif kw == 'A.I.':
+            if 'A.I.' in text_up:
+                return True
+        elif kw == 'GPT-4' or kw == 'GPT-5' or kw == 'LLM' or kw == 'LLMS' or kw == 'NLP':
+            if re.search(r'\b' + re.escape(kw) + r'\b', text_up):
+                return True
+        else:
+            if kw in text_up:
+                return True
+    return False
+
+
+def is_ai_related(title: str, summary: str = "") -> bool:
+    """강화된 AI 필터 — 신규 'AI 키워드 필터링 필수' 해외 소스용"""
+    title_up = title.upper().strip()
+    summary_up = summary.upper().strip()
+    text_up = title_up + ' ' + summary_up
+
+    # === REJECT: self-driving car / autonomous vehicle 단독 (AI 언급 없음) ===
+    if re.search(r'\bSELF-DRIVING CARS?\b', title_up) and not re.search(r'\bAI\b', title_up) and 'A.I.' not in title_up and 'ARTIFICIAL' not in title_up:
+        return False
+    if re.search(r'\bAUTONOMOUS VEHICLES?\b', title_up) and not re.search(r'\bAI\b', title_up) and 'A.I.' not in title_up and 'ARTIFICIAL' not in title_up:
+        return False
+
+    # === REJECT: 순수 주가/실적 (AI 결합 없는 경우) ===
+    stock_count = sum(1 for kw in _STOCK_KEYWORDS if kw in text_up)
+    if stock_count >= 2:
+        has_ai_ref = any(kw in text_up for kw in
+            ['AI ', ' A.I.', 'ARTIFICIAL INTELLIGENCE', 'CHATGPT', 'OPENAI',
+             'ANTHROPIC', 'LLM', 'GPT-4', 'GPT-5', 'CLAUDE', 'GEMINI'])
+        if not has_ai_ref:
+            return False
+
+    # === 1차 키워드 체크 (title 또는 summary에 하나라도 있으면 통과) ===
+    if _has_primary(title_up) or _has_primary(summary_up):
+        return True
+
+    # === 2차 키워드 체크 (2개 이상 포함 시 통과) ===
+    secondary_count = sum(1 for kw in _SECONDARY_AI if kw in text_up)
+    if secondary_count >= 2:
+        return True
+
+    return False
+
+
+def is_ai_related_relaxed(title: str, summary: str = "") -> bool:
+    """완화된 AI 필터 — AI 전용 피드용 (1차 키워드만 체크 + REJECT 동일)"""
+    title_up = title.upper().strip()
+    summary_up = summary.upper().strip()
+    text_up = title_up + ' ' + summary_up
+
+    # REJECT 조건 (is_ai_related와 동일)
+    if re.search(r'\bSELF-DRIVING CARS?\b', title_up) and not re.search(r'\bAI\b', title_up) and 'A.I.' not in title_up and 'ARTIFICIAL' not in title_up:
+        return False
+    if re.search(r'\bAUTONOMOUS VEHICLES?\b', title_up) and not re.search(r'\bAI\b', title_up) and 'A.I.' not in title_up and 'ARTIFICIAL' not in title_up:
+        return False
+    stock_count = sum(1 for kw in _STOCK_KEYWORDS if kw in text_up)
+    if stock_count >= 2:
+        has_ai_ref = any(kw in text_up for kw in
+            ['AI ', ' A.I.', 'ARTIFICIAL INTELLIGENCE', 'CHATGPT', 'OPENAI',
+             'ANTHROPIC', 'LLM', 'GPT-4', 'GPT-5', 'CLAUDE', 'GEMINI'])
+        if not has_ai_ref:
+            return False
+
+    # 1차 키워드만 체크 (2차 키워드는 미적용)
+    return _has_primary(title_up) or _has_primary(summary_up)
+
+
+# ============================================
 # 중복 체크
 # ============================================
 def title_hash(title):
@@ -345,6 +451,35 @@ def batch_translate(articles):
     return articles
 
 # ============================================
+# 신규 해외 소스 분류 상수
+# ============================================
+REUTERS_URL = 'https://feeds.reuters.com/reuters/technologyNews'
+REUTERS_FALLBACK_URL = 'https://news.google.com/rss/search?q=site:reuters.com+artificial+intelligence&hl=en&gl=US&ceid=US:en'
+
+# AI 전용 피드 URL 목록 (1차 키워드만 필터링, REJECT 조건 동일)
+AI_FEED_URLS = {
+    'https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/spotlight/artificial-intelligence/rss.xml',
+    'https://www.theguardian.com/technology/artificialintelligenceai/rss',
+    'https://www.ft.com/artificial-intelligence?format=rss',
+    'https://www.fastcompany.com/section/artificial-intelligence/rss',
+}
+
+# 신규 강화 필터 적용 소스 전체 URL 목록 (AI_FEED_URLS 포함)
+ENHANCED_FILTER_URLS = {
+    'http://rss.cnn.com/rss/cnn_tech.rss',
+    'https://feeds.reuters.com/reuters/technologyNews',
+    'https://feeds.businessinsider.com/custom/all',
+    'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml',
+    'https://feeds.washingtonpost.com/rss/business/technology',
+    'https://feeds.bbci.co.uk/news/technology/rss.xml',
+    'https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/spotlight/artificial-intelligence/rss.xml',
+    'https://www.theguardian.com/technology/artificialintelligenceai/rss',
+    'https://www.ft.com/artificial-intelligence?format=rss',
+    'https://www.fastcompany.com/section/artificial-intelligence/rss',
+}
+
+
+# ============================================
 GLOBAL_RSS_FEEDS = [
     # 미국 주요
     ('https://techcrunch.com/category/artificial-intelligence/feed/', 'TechCrunch AI', 'us'),
@@ -371,11 +506,26 @@ GLOBAL_RSS_FEEDS = [
     # 추가 양질 피드 (기존 dead 피드 대체)
     ('https://huggingface.co/blog/feed.xml', 'HuggingFace Blog', 'us'),
     ('https://www.interconnects.ai/feed', 'Interconnects AI', 'us'),
+    # === 신규 해외 RSS 소스 (2026-05 추가) ===
+    # AI 키워드 필터링 필수 (is_ai_related 적용)
+    ('http://rss.cnn.com/rss/cnn_tech.rss', 'CNN Technology', 'us'),
+    (REUTERS_URL, 'Reuters Technology', 'us'),
+    ('https://feeds.businessinsider.com/custom/all', 'Business Insider AI', 'us'),
+    ('https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', 'NYT Technology', 'us'),
+    ('https://feeds.washingtonpost.com/rss/business/technology', 'Washington Post Technology', 'us'),
+    ('https://feeds.bbci.co.uk/news/technology/rss.xml', 'BBC Technology', 'us'),
+    # AI 전용 피드 (is_ai_related_relaxed 적용 — 1차 키워드만)
+    ('https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/spotlight/artificial-intelligence/rss.xml', 'NYT AI Spotlight', 'us'),
+    ('https://www.theguardian.com/technology/artificialintelligenceai/rss', 'The Guardian AI', 'us'),
+    ('https://www.ft.com/artificial-intelligence?format=rss', 'Financial Times AI', 'us'),
+    ('https://www.fastcompany.com/section/artificial-intelligence/rss', 'Fast Company AI', 'us'),
 ]
 
 
-def fetch_rss_global(url, source_name, country='us', limit=12):
-    """해외 RSS 수집 + AI 필터"""
+def fetch_rss_global(url, source_name, country='us', limit=12, filter_fn=None):
+    """해외 RSS 수집 + AI 필터 (filter_fn 지정 시 해당 필터 사용, 기본 is_ai)"""
+    if filter_fn is None:
+        filter_fn = is_ai
     items = []
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/4.0'})
@@ -393,7 +543,7 @@ def fetch_rss_global(url, source_name, country='us', limit=12):
             orig_desc = clean(desc_el.text or '') if desc_el is not None else ''
             link = (link_el.text or '').strip()
             pub = (pub_el.text or '')[:25] if pub_el is not None else ''
-            if not is_ai(orig_title, orig_desc):
+            if not filter_fn(orig_title, orig_desc):
                 continue
             if not is_recent(pub, days=3):
                 continue
@@ -413,6 +563,45 @@ def fetch_rss_global(url, source_name, country='us', limit=12):
         print(f"  {source_name}: {len(items)}건")
     except Exception as e:
         print(f"  {source_name} 실패: {e}")
+        # Reuters fallback: 실패 시 Google News 우회 URL 재시도
+        if url == REUTERS_URL:
+            print(f"  → Reuters fallback 시도 중...")
+            try:
+                fallback_req = urllib.request.Request(REUTERS_FALLBACK_URL, headers={'User-Agent': 'aikorea24-bot/4.0'})
+                with urllib.request.urlopen(fallback_req, timeout=15) as resp:
+                    raw = resp.read()
+                root = ET.fromstring(raw)
+                for item in root.iter('item'):
+                    title_el = item.find('title')
+                    link_el = item.find('link')
+                    desc_el = item.find('description')
+                    pub_el = item.find('pubDate')
+                    if title_el is None or link_el is None:
+                        continue
+                    orig_title = (title_el.text or '').strip()
+                    orig_desc = clean(desc_el.text or '') if desc_el is not None else ''
+                    link = (link_el.text or '').strip()
+                    pub = (pub_el.text or '')[:25] if pub_el is not None else ''
+                    if not filter_fn(orig_title, orig_desc):
+                        continue
+                    if not is_recent(pub, days=3):
+                        continue
+                    items.append({
+                        'title': orig_title,
+                        'link': link,
+                        'description': orig_desc[:300],
+                        'source': 'Reuters Technology (via Google News)',
+                        'category': 'global',
+                        'pub_date': pub,
+                        'source_url': REUTERS_FALLBACK_URL,
+                        'original_title': orig_title,
+                        'country': country,
+                    })
+                    if len(items) >= limit:
+                        break
+                print(f"  Reuters (Google News fallback): {len(items)}건")
+            except Exception as e2:
+                print(f"  Reuters fallback도 실패: {e2}")
     return items
 
 
@@ -451,10 +640,19 @@ def fetch_hackernews_ai(limit=15):
 
 
 def collect_global():
-    """해외 뉴스 전체 수집"""
+    """해외 뉴스 전체 수집 (소스별 필터 자동 분기)"""
     all_items = []
     for url, name, country in GLOBAL_RSS_FEEDS:
-        all_items.extend(fetch_rss_global(url, name, country, limit=12))
+        if url in ENHANCED_FILTER_URLS:
+            if url in AI_FEED_URLS:
+                # AI 전용 피드: 1차 키워드만 + REJECT
+                all_items.extend(fetch_rss_global(url, name, country, limit=12, filter_fn=is_ai_related_relaxed))
+            else:
+                # 일반 테크 뉴스: 강화 필터 적용
+                all_items.extend(fetch_rss_global(url, name, country, limit=12, filter_fn=is_ai_related))
+        else:
+            # 기존 소스: 기존 is_ai 필터 유지
+            all_items.extend(fetch_rss_global(url, name, country, limit=12))
     all_items.extend(fetch_hackernews_ai(limit=15))
     return all_items
 
