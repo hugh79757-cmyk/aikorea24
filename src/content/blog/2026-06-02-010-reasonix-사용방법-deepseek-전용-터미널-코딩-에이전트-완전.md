@@ -2,7 +2,7 @@
 title: "Reasonix 사용방법 DeepSeek 전용 터미널 코딩 에이전트 완전 정복"
 description: "Reasonix는 DeepSeek API만 사용하는 터미널 코딩 에이전트로 AI 코딩 비용을 최대 50배 줄일 수 있습니다. 설치부터 슬래시 명령어, 비용 절감 전략까지 2026년 최신 기준으로 완전 정리했습니다."
 date: 2026-06-02T16:24:52+09:00
-category: "개발도구"
+category: "AI 강좌"
 tags:
   - "Reasonix"
   - "DeepSeek"
@@ -15,14 +15,7 @@ draft: false
 image: "/images/2026-06-02-010-reasonix-사용방법-deepseek-전용-터미널-코딩-에이전트-완전/thumbnail.webp"
 ---
 
-title: "Reasonix 사용방법 DeepSeek 전용 터미널 코딩 에이전트 완전 정복"
-description: "Reasonix는 DeepSeek API만 사용하는 터미널 코딩 에이전트로 AI 코딩 비용을 최대 50배 줄일 수 있습니다. 설치부터 슬래시 명령어, 비용 절감 전략까지 2026년 최신 기준으로 완전 정리했습니다."
-draft: true
-tags: ["Reasonix", "DeepSeek", "AI코딩에이전트", "터미널코딩", "DeepSeekAPI", "코딩자동화", "개발자툴"]
-categories: ["개발도구", "AI 강좌"]
----
 
----
 
 Claude Code 쓰고 싶은데 요금 청구서 보고 멈칫하셨나요?
 
