@@ -1,0 +1,170 @@
+$ npm --prefix /Users/twinssn/Projects/aikorea24 run build
+[exit 0]
+
+> lonely-limit@2.0.0 build
+> astro build && node -e "const fs=require('fs');const j=JSON.parse(fs.readFileSync('dist/_routes.json','utf8'));j.exclude=j.exclude.filter(e=>!e.startsWith('/blog/')&&!e.startsWith('/chronicle/'));fs.writeFileSync('dist/_routes.json',JSON.stringify(j,null,1));console.log('Patched _routes.json: blog/chronicle routes included in Worker');"
+
+16:46:47 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+16:46:47 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+16:46:47 [WARN] [adapter] Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+16:46:47 [content] Syncing content
+16:46:47 [WARN] [glob-loader] No files found matching "**/*.md" in directory "src/content/keywords"
+16:46:47 [WARN] [glob-loader] Duplicate id "2026-06-02-010-reasonix-사용방법-deepseek-전용-터미널-코딩-에이전트-완전" found in /Users/twinssn/Projects/aikorea24/src/content/blog/2026-06-02-010-reasonix-사용방법-deepseek-전용-터미널-코딩-에이전트-완전.md. Later items with the same id will overwrite earlier ones.
+16:46:47 [content] Synced content
+16:46:47 [types] Generated 410ms
+16:46:47 [build] output: "server"
+16:46:47 [build] mode: "server"
+16:46:47 [build] directory: /Users/twinssn/Projects/aikorea24/dist/
+16:46:47 [build] adapter: @astrojs/cloudflare
+16:46:47 [build] Collecting build info...
+16:46:47 [build] ✓ Completed in 445ms.
+16:46:47 [build] Building server entrypoints...
+16:46:49 [WARN] [vite] [esbuild css minify]
+▲ [WARNING] Unexpected "/" [css-syntax-error]
+
+    <stdin>:1:253:
+      1 │ ...r:bg-gray-50 dark:hover:bg-white/5:hover{background:rgba(51,65,8...
+        ╵                                    ^
+
+
+16:46:49 [vite] ✓ built in 1.71s
+16:46:49 [build] ✓ Completed in 1.72s.
+
+ building client (vite) 
+16:46:49 [vite] transforming...
+16:46:49 [vite] ✓ 5 modules transformed.
+16:46:50 [vite] rendering chunks...
+16:46:50 [vite] computing gzip size...
+16:46:50 [vite] dist/_astro/pricing.astro_astro_type_script_index_0_lang.DVwuw9bk.js  0.05 kB │ gzip: 0.06 kB
+16:46:50 [vite] ✓ built in 307ms
+
+ prerendering static routes 
+16:46:50 ▶ src/pages/blog/category/[cat]/[...page].astro
+16:46:50   ├─ /blog/category/AI 강좌/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+6ms) 
+16:46:50   ├─ /blog/category/소상공인AI/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/소상공인AI/2/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/AI입문/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/AI입문/2/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/바이브코딩/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/바이브코딩/2/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/개발배포/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/개발배포/2/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/2/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/3/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/4/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/5/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/6/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/7/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/8/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/9/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/10/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/11/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/12/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/13/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/14/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/15/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/16/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/17/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/18/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/19/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/20/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/21/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/22/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/23/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/24/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/25/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/26/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/27/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/28/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/29/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/30/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/31/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/32/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/33/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/34/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/35/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/category/뉴스/36/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   └─ /blog/category/뉴스/37/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/category/[cat]/[...page].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50 ▶ src/pages/blog/[...id].astro
+16:46:50   ├─ /blog/10개-ai-챗봇-중/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/2026-04-15-001-스탠포드-ai-인덱스-2026-미국-ai-인재-89/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/2026-04-15-002-클로드는-새로운-종교-휴먼x-컨퍼런스가-보여준-실리콘밸리-ai/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+1ms) 
+16:46:50   ├─ /blog/2026-04-15-003-샘-알트먼-화염병-공격-사건-반ai-선언문이-드러낸/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-15-004-클로드-코드-루틴-ai가-밤새-버그-고치고-코드/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-15-012-영국-ai-법정-기록-자동화-추진-피해자-사법/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-16-003-소버린-ai-반도체-시장-두-번째-호황-엔비디아/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-16-001-스탠퍼드-ai-인덱스-2026-미중-ai-격차-27/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-16-002-메타-뉴럴-컴퓨터-공개-앱도-os도-없는-신경망/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-16-004-업스테이지-유니콘-등극-국내-생성형-ai-최초-1800억/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-16-005-엔비디아-양자-ai-모델-아이싱-오픈소스-공개-양자/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-17-002-ai-챗봇-대화-기록-법정-증거-채택-클로드/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-17-003-ai-트래픽-미국-리테일-393-급증-전환율-42/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-18-001-버니-샌더스-ai-노동자-위협-데이터센터-모라토리엄-법안/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-18-002-openai-알트만-ipo-리더십-의구심-이해충돌-논란과-850조/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-17-001-ai-사용-10분이면-인지-능력-저하-보일링-프로그/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is not available on prerendered pages. If you need access to request headers, make sure that the page is server-rendered using `export const prerender = false;` or by setting `output` to `"server"` in your Astro config to make all your pages server-rendered by default.
+ (+0ms) 
+16:46:50   ├─ /blog/2026-04-17-005-젠슨-황-중국은-이미-클로드-미토스급-ai-훈련/index.html16:46:50 [WARN] `Astro.request.headers` was used when rendering the route `src/pages/blog/[...id].astro'`. `Astro.request.headers` is
+
+[… truncated 210994 chars …]
