@@ -472,6 +472,12 @@ ENHANCED_FILTER_URLS = {
     'https://www.theguardian.com/technology/artificialintelligenceai/rss',
     'https://www.ft.com/artificial-intelligence?format=rss',
     'https://www.fastcompany.com/section/artificial-intelligence/rss',
+    # 2026-06 추가 소스
+    'https://thenextweb.com/feed',
+    'https://www.cityam.com/feed/',
+    'https://www.cnbc.com/id/19854910/device/rss/rss.html',
+    'https://www.thenationalnews.com/arc/outboundfeeds/rss/?outputType=xml',
+    'https://nltimes.nl/rssfeed2',
 }
 
 
