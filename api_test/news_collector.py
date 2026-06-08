@@ -515,6 +515,13 @@ GLOBAL_RSS_FEEDS = [
     ('https://www.theguardian.com/technology/artificialintelligenceai/rss', 'The Guardian AI', 'us'),
     ('https://www.ft.com/artificial-intelligence?format=rss', 'Financial Times AI', 'us'),
     ('https://www.fastcompany.com/section/artificial-intelligence/rss', 'Fast Company AI', 'us'),
+    # === 신규 해외 RSS 소스 (2026-06 추가) ===
+    # AI 키워드 필터링 필수 (is_ai_related 적용)
+    ('https://thenextweb.com/feed', 'The Next Web', 'eu'),
+    ('https://www.cityam.com/feed/', 'City AM', 'eu'),
+    ('https://www.cnbc.com/id/19854910/device/rss/rss.html', 'CNBC Tech', 'us'),
+    ('https://www.thenationalnews.com/arc/outboundfeeds/rss/?outputType=xml', 'The National News', 'eu'),
+    ('https://nltimes.nl/rssfeed2', 'NL Times', 'eu'),
 ]
 
 
