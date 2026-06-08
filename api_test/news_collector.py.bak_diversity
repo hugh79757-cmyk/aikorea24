@@ -301,7 +301,7 @@ def get_existing():
     try:
         r = subprocess.run(
             ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
-             '--command', "SELECT title FROM news WHERE created_at >= datetime('now', '-7 days')", '--json'],
+             '--command', 'SELECT title FROM news', '--json'],
             capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
         hashes = set()
         if r.returncode == 0 and r.stdout.strip():
@@ -466,8 +466,12 @@ AI_FEED_URLS = {
 
 # 신규 강화 필터 적용 소스 전체 URL 목록 (AI_FEED_URLS 포함)
 ENHANCED_FILTER_URLS = {
-    # 일반 테크 소스는 is_ai(기존 필터)로 처리 → 여기서 제거
-    # AI 전용 피드만 강화 필터 적용
+    'http://rss.cnn.com/rss/cnn_tech.rss',
+    'https://feeds.reuters.com/reuters/technologyNews',
+    'https://feeds.businessinsider.com/custom/all',
+    'https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml',
+    'https://feeds.washingtonpost.com/rss/business/technology',
+    'https://feeds.bbci.co.uk/news/technology/rss.xml',
     'https://www.nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/spotlight/artificial-intelligence/rss.xml',
     'https://www.theguardian.com/technology/artificialintelligenceai/rss',
     'https://www.ft.com/artificial-intelligence?format=rss',
@@ -505,7 +509,7 @@ GLOBAL_RSS_FEEDS = [
     # === 신규 해외 RSS 소스 (2026-05 추가) ===
     # AI 키워드 필터링 필수 (is_ai_related 적용)
     ('http://rss.cnn.com/rss/cnn_tech.rss', 'CNN Technology', 'us'),
-    (REUTERS_FALLBACK_URL, 'Reuters Technology (via Google News)', 'us'),
+    (REUTERS_URL, 'Reuters Technology', 'us'),
     ('https://feeds.businessinsider.com/custom/all', 'Business Insider AI', 'us'),
     ('https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', 'NYT Technology', 'us'),
     ('https://feeds.washingtonpost.com/rss/business/technology', 'Washington Post Technology', 'us'),
@@ -642,13 +646,13 @@ def collect_global():
         if url in ENHANCED_FILTER_URLS:
             if url in AI_FEED_URLS:
                 # AI 전용 피드: 1차 키워드만 + REJECT
-                all_items.extend(fetch_rss_global(url, name, country, limit=7, filter_fn=is_ai_related_relaxed))
+                all_items.extend(fetch_rss_global(url, name, country, limit=12, filter_fn=is_ai_related_relaxed))
             else:
                 # 일반 테크 뉴스: 강화 필터 적용
-                all_items.extend(fetch_rss_global(url, name, country, limit=7, filter_fn=is_ai_related))
+                all_items.extend(fetch_rss_global(url, name, country, limit=12, filter_fn=is_ai_related))
         else:
             # 기존 소스: 기존 is_ai 필터 유지
-            all_items.extend(fetch_rss_global(url, name, country, limit=7))
+            all_items.extend(fetch_rss_global(url, name, country, limit=12))
     all_items.extend(fetch_hackernews_ai(limit=15))
     return all_items
 
@@ -664,9 +668,8 @@ KR_RSS_FEEDS = [
     ('https://it.chosun.com/rss/allArticle.xml', 'IT조선'),
     ('https://www.aitimes.kr/rss/allArticle.xml', '인공지능신문'),
     ('https://www.digitaltoday.co.kr/rss/allArticle.xml', '디지털투데이'),
-    # ('https://www.bloter.net/feed', '블로터'),  # 404 dead
-    # ('https://zdnet.co.kr/rss/allArticle.xml', 'ZDNet Korea'),  # 404 dead
-    ('https://www.itchosun.com/rss/allArticle.xml', 'IT조선 RSS'),
+    ('https://www.bloter.net/feed', '블로터'),
+    ('https://zdnet.co.kr/rss/allArticle.xml', 'ZDNet Korea'),
     ('https://news.hada.io/rss/news', 'GeekNews'),
 ]
 
@@ -866,50 +869,6 @@ def save_to_d1(articles):
 # ============================================
 # 메인
 # ============================================
-
-# ============================================
-# Cloudflare Cache Purge (수집 완료 후 즉시 반영)
-# ============================================
-def purge_cloudflare_cache():
-    """수집 완료 후 뉴스 관련 Cloudflare 엣지 캐시 즉시 무효화"""
-    import urllib.request, json
-    token   = os.environ.get('CLOUDFLARE_API_TOKEN', '')
-    zone_id = os.environ.get('CLOUDFLARE_ZONE_ID', '')
-
-    if not token or not zone_id:
-        print("  ⚠ CLOUDFLARE_API_TOKEN 또는 ZONE_ID 미설정 — purge 스킵")
-        return
-
-    urls = [
-        'https://aikorea24.kr/api/news/latest',
-        'https://aikorea24.kr/api/news/global',
-        'https://aikorea24.kr/api/news/senior',
-        'https://aikorea24.kr/api/news/policy',
-        'https://aikorea24.kr/',
-        'https://aikorea24.kr/news',
-        'https://aikorea24.kr/global',
-    ]
-
-    payload = json.dumps({'files': urls}).encode()
-    req = urllib.request.Request(
-        f'https://api.cloudflare.com/client/v4/zones/{zone_id}/purge_cache',
-        data=payload,
-        headers={
-            'Authorization': f'Bearer {token}',
-            'Content-Type': 'application/json',
-        },
-        method='POST'
-    )
-    try:
-        resp = urllib.request.urlopen(req, timeout=10)
-        result = json.loads(resp.read())
-        if result.get('success'):
-            print(f"  ✅ Cloudflare 캐시 purge 완료 ({len(urls)}개 URL)")
-        else:
-            print(f"  ❌ purge 실패: {result.get('errors')}")
-    except Exception as e:
-        print(f"  ❌ purge 요청 실패: {e}")
-
 def main():
     import argparse
     parser = argparse.ArgumentParser()
@@ -962,7 +921,6 @@ def main():
 
     print('\n' + '=' * 60)
     print(f"완료! 총 {saved}건 저장")
-    purge_cloudflare_cache()
     print('=' * 60)
 
 
