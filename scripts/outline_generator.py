@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """
-aikorea24 블로그 아웃라인(재료) 추출기
-- D1 DB에서 오늘 수집된 뉴스 중 고단가 키워드 포함 기사 조회
-- 기사별로 아웃라인 추출 (OpenAI)
-- scripts/outlines/YYYY-MM-DD-슬러그.md 로 저장
+aikorea24 블로그 아웃라인(재료) 생성기 v2.0
+- scripts/keywords.json 기반 키워드 테이블 로딩
+- 각 키워드의 db_query 항목으로 D1 뉴스 DB 검색 (오늘 + 어제)
+- 매칭 기사 있으면 → 키워드 intent + 기사 내용으로 아웃라인 생성
+- 매칭 기사 없으면 → 키워드 intent 만으로 아웃라인 생성 (뉴스 없음 표기)
+- scripts/outlines/YYYY-MM-DD-키워드슬러그.md 저장
 - 텔레그램 알림
 """
 import os, re, json, glob, sys
@@ -12,21 +14,11 @@ from datetime import datetime, date, timezone, timedelta
 KST = timezone(timedelta(hours=9))
 
 # ============================================
-# 고단가 키워드 테이블 (blog_draft_generator와 동일)
-# ============================================
-KEYWORDS = {
-    "A": ["챗GPT", "ChatGPT", "OpenAI", "클로드", "Anthropic", "AI에이전트", "AI 에이전트"],
-    "B": ["엔비디아", "NVIDIA", "제미나이", "Gemini", "생성형AI", "생성형 AI", "GPT", "딥시크"],
-    "C": ["인공지능", "LLM", "AI자동화", "AI 자동화", "AI반도체", "AI 반도체", "코파일럿"],
-}
-GRADE_SCORE = {"A": 100, "B": 60, "C": 30}
-GRADE_ORDER = {"A": 0, "B": 1, "C": 2}  # 낮을수록 우선
-
-# ============================================
 # 경로 / 설정
 # ============================================
 PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
+KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "keywords.json")
 OUTLINES_DIR = os.path.join(PROJECT_DIR, "scripts", "outlines")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 
@@ -52,6 +44,18 @@ def load_env():
                 os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
 # ============================================
+# keywords.json 로딩
+# ============================================
+def load_keywords():
+    """keywords.json 로드 → {keyword_slug: keyword_info, ...}"""
+    if not os.path.exists(KEYWORDS_PATH):
+        raise FileNotFoundError(f"keywords.json 없음: {KEYWORDS_PATH}")
+    with open(KEYWORDS_PATH, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    log(f"키워드 테이블 로드: {len(data)}개 키워드")
+    return data
+
+# ============================================
 # D1 쿼리 (REST API)
 # ============================================
 def query_d1(sql):
@@ -71,78 +75,86 @@ def query_d1(sql):
     return data["result"][0]["results"]
 
 # ============================================
-# 오늘 뉴스 조회
+# 키워드별 D1 검색 (오늘 + 어제)
 # ============================================
-def get_today_articles():
-    """오늘 수집된 글로벌/국내 AI 뉴스 조회 (title + description + original_title)"""
-    today = date.today().strftime("%Y-%m-%d")
+def search_articles_for_keyword(db_query_terms):
+    """
+    db_query 리스트의 각 항목으로 D1 LIKE 검색 (오늘 + 어제)
+    중복 제거된 기사 리스트 반환
+    """
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    today_str = today.strftime("%Y-%m-%d")
+    yesterday_str = yesterday.strftime("%Y-%m-%d")
+
+    # LIKE 조건 생성 (title 또는 description에 매칭)
+    like_clauses = []
+    for term in db_query_terms:
+        escaped = term.replace("'", "''")
+        like_clauses.append(f"(title LIKE '%{escaped}%' OR description LIKE '%{escaped}%')")
+
+    if not like_clauses:
+        return []
+
+    where_terms = " OR ".join(like_clauses)
+    date_filter = f"DATE(created_at) IN ('{today_str}', '{yesterday_str}')"
+
     sql = f"""
-        SELECT title, description, source, category, link, pub_date, original_title
+        SELECT title, description, source, category, link, pub_date
         FROM news
-        WHERE DATE(created_at) = '{today}'
+        WHERE ({where_terms})
+          AND {date_filter}
           AND category IN ('global', 'news')
-        ORDER BY
-          CASE category WHEN 'global' THEN 0 ELSE 1 END,
-          created_at DESC
+        ORDER BY created_at DESC
+        LIMIT 20
     """
-    rows = query_d1(sql)
-    log(f"오늘 수집 기사: {len(rows)}건")
-    return rows
+
+    try:
+        rows = query_d1(sql)
+    except Exception as e:
+        log(f"  D1 쿼리 실패: {e}")
+        return []
+
+    # link 기준 중복 제거
+    seen_links = set()
+    unique = []
+    for r in rows:
+        link = r.get("link", "")
+        if link and link in seen_links:
+            continue
+        if link:
+            seen_links.add(link)
+        unique.append(r)
+
+    return unique
 
 # ============================================
-# 키워드 매칭 (기사당 최고 등급 1개만)
+# 아웃라인 생성 (OpenAI) — 기사 있음 버전
 # ============================================
-def match_articles_to_keywords(articles):
-    """
-    각 기사에 대해 매칭되는 키워드 중 최고 등급 1개 선택.
-    returns: [(article, best_keyword, best_grade), ...]
-    """
-    result = []
-    for a in articles:
-        text = (a["title"] + " " + (a.get("description") or "")).upper()
-        best_kw = None
-        best_grade = None
-        for grade in ["A", "B", "C"]:
-            for kw in KEYWORDS[grade]:
-                if kw.upper() in text:
-                    if best_grade is None or GRADE_ORDER.get(grade, 99) < GRADE_ORDER.get(best_grade, 99):
-                        best_kw = kw
-                        best_grade = grade
-        if best_kw:
-            result.append((a, best_kw, best_grade))
-    log(f"키워드 매칭 기사: {len(result)}건")
-    # 등급순 정렬
-    result.sort(key=lambda x: GRADE_ORDER.get(x[2], 99))
-    return result
-
-# ============================================
-# 아웃라인 추출 (OpenAI)
-# ============================================
-def extract_outline(article, keyword, grade):
+def generate_outline_with_articles(keyword_name, intent, articles):
+    """매칭된 기사들을 바탕으로 아웃라인 생성"""
     from openai import OpenAI
     client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    title = article["title"]
-    description = article.get("description") or ""
-    source = article["source"]
-    link = article.get("link", "")
-    original_title = article.get("original_title") or ""
-
-    # 원문 조립: title + original_title(해외기사) + description
-    raw_parts = [f"제목: {title}"]
-    if original_title and original_title != title:
-        raw_parts.append(f"원제목: {original_title}")
-    raw_parts.append(f"출처: {source}")
-    if link:
-        raw_parts.append(f"URL: {link}")
-    if description:
-        raw_parts.append(f"\n본문:\n{description}")
-
-    raw_text = "\n".join(raw_parts)
+    # 기사 텍스트 조립
+    article_lines = []
+    for i, a in enumerate(articles, 1):
+        desc = (a.get("description") or "")[:500]
+        article_lines.append(
+            f"[기사 {i}]\n"
+            f"제목: {a['title']}\n"
+            f"출처: {a['source']}\n"
+            f"내용: {desc}"
+        )
+    articles_str = "\n\n".join(article_lines)
 
     system_prompt = "당신은 콘텐츠 분석 전문가입니다. 아래 [원문]을 읽고 핵심 정보만 추출하여 아웃라인을 작성합니다."
 
-    user_prompt = f"""# 절대 규칙
+    user_prompt = f"""# 키워드 정보
+- 키워드: {keyword_name}
+- 검색의도: {intent}
+
+# 절대 규칙
 - 원문 문장을 그대로 옮기지 않는다. 정보(수치·날짜·URL)만 추출한다.
 - [OUTLINE] 섹션 제목은 반드시 원문 H2 제목과 달라야 한다.
 - [FAQ] 질문은 반드시 원문 FAQ 질문과 달라야 한다.
@@ -152,7 +164,7 @@ def extract_outline(article, keyword, grade):
 # 출력 형식
 
 ## [TOPIC]
-원문의 핵심 주제를 한 줄로 요약한다.
+핵심 주제를 한 줄로 요약한다. (검색의도를 반영할 것)
 
 ## [FACTS]
 원문에 등장하는 수치·날짜·고유명사·URL만 추출한다.
@@ -165,26 +177,26 @@ def extract_outline(article, keyword, grade):
 원문 독자층과 완전히 다른 새로운 독자층을 한 줄로 제안한다.
 
 ## [NEW_ANGLE]
-원문의 공감 포인트와 다른 새로운 접근 각도를 한 줄로 제안한다.
+'{intent}' 검색의도를 고려한 새로운 접근 각도를 한 줄로 제안한다.
 
 ## [OUTLINE]
 새 글의 H2 섹션 제목 3~5개를 제안한다.
-주의: 원문 H2 제목을 그대로 쓰거나 유사하게 쓰는 것은 금지한다.
+'{intent}' 검색의도를 반영한 소제목을 포함할 것.
 원문에 없는 새로운 관점의 소제목을 최소 2개 포함한다.
 (형식: 1. 제목 / 2. 제목 / ...)
 
 ## [FAQ]
 [NEW_TARGET] 독자에게 맞는 새로운 질문 3~5개를 제안한다.
-주의: 원문 FAQ 질문을 그대로 쓰거나 유사하게 쓰는 것은 금지한다.
+'{intent}' 검색의도를 고려한 질문을 포함할 것.
 (형식: Q1. 질문 / Q2. 질문 / ...)
 
 ## [KEYWORDS]
 새 글 SEO 태그 후보 5~8개를 나열한다.
-원문 tags를 그대로 복사하지 않는다.
+'{keyword_name}'를 첫 번째 태그로 포함할 것.
 (형식: 태그1, 태그2, 태그3, ...)
 
 [원문]
-{raw_text}"""
+{articles_str}"""
 
     resp = client.chat.completions.create(
         model="gpt-4o",
@@ -196,74 +208,106 @@ def extract_outline(article, keyword, grade):
         temperature=0.5,
     )
     content = resp.choices[0].message.content.strip()
-    log(f"  추출 완료: {len(content)}자")
+    log(f"  생성 완료: {len(content)}자")
     return content
 
+
 # ============================================
-# 슬러그 생성 (기사 title에서 핵심 키워드 3~4개)
+# 아웃라인 생성 (OpenAI) — 기사 없음 버전
 # ============================================
-def make_slug(title, keyword):
-    # keyword를 기준으로 삼고 title에서 추가 키워드 보강
-    # 불용어 제거 후 명사 위주 추출
-    stop_words = {"the", "a", "an", "of", "in", "on", "at", "to", "for", "with",
-                  "and", "or", "is", "are", "was", "were", "be", "been", "has", "have",
-                  "had", "do", "does", "did", "will", "would", "could", "should",
-                  "may", "might", "this", "that", "these", "those", "it", "its",
-                  "수", "위", "중", "내", "간", "등", "및", "향", "약", "최대",
-                  "대한", "통한", "위한", "기반", "통해", "통한", "관련", "이용",
-                  "차지", "기록", "선정", "달성", "발표", "공개", "출시", "확보",
-                  "구축", "도입", "시작", "추진", "개발", "제공", "공개", "발표"}
+def generate_outline_no_articles(keyword_name, intent):
+    """매칭 기사 없음 → 검색의도만으로 아웃라인 생성"""
+    from openai import OpenAI
+    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
-    # keyword는 무조건 포함
-    slug_parts = [keyword]
+    system_prompt = "당신은 콘텐츠 전략 전문가입니다. 주어진 키워드와 검색의도를 바탕으로 블로그 아웃라인을 기획합니다."
 
-    # title에서 추가 토큰 추출
-    # 한글/영단어 분리
-    tokens = re.findall(r'[가-힣]{2,}|[A-Za-z][a-z]*', title)
+    user_prompt = f"""# 키워드 정보
+- 키워드: {keyword_name}
+- 검색의도: {intent}
 
-    # 불용어 제거, keyword 중복 제거, 너무 짧은 토큰 제거
-    for t in tokens:
-        t_lower = t.lower()
-        if t_lower in stop_words:
-            continue
-        if len(t) <= 1:
-            continue
-        if t.lower() == keyword.lower():
-            continue
-        if t.lower() in keyword.lower():
-            continue
-        if len(slug_parts) >= 4:
-            break
-        # 중복 체크
-        if not any(t.lower() in p.lower() or p.lower() in t.lower() for p in slug_parts):
-            slug_parts.append(t)
+※ 현재 이 키워드와 직접 매칭되는 최신 뉴스는 없습니다.
+따라서 검색의도에 기반하여 독자에게 가치 있는 콘텐츠를 기획해주세요.
 
-    slug = "-".join(slug_parts)
-    slug = re.sub(r'[^\w\s가-힣-]', '', slug)
-    slug = re.sub(r'\s+', '-', slug)
-    slug = slug[:80].rstrip("-")
+# 출력 형식
+
+## [TOPIC]
+이 키워드로 검색하는 독자가 궁금해할 핵심 주제를 한 줄로 요약한다.
+
+## [FACTS]
+이 주제와 관련된 상식적인 배경 정보나 일반적인 수치를 제시한다.
+(형식: - 항목: 설명)
+
+## [TARGET]
+'{intent}' 검색의도를 가진 독자층을 분석한다.
+
+## [NEW_TARGET]
+이 키워드에 관심을 가질 또 다른 예상 독자층을 제안한다.
+
+## [NEW_ANGLE]
+'{intent}' 검색의도와 다른 새로운 접근 각도를 제안한다.
+
+## [OUTLINE]
+'{keyword_name}' 키워드에 관한 블로그 글의 H2 섹션 제목 3~5개를 제안한다.
+'{intent}' 검색의도를 충족시키는 구성으로 작성한다.
+(형식: 1. 제목 / 2. 제목 / ...)
+
+## [FAQ]
+독자가 궁금해할 만한 질문 3~5개를 제안한다.
+(형식: Q1. 질문 / Q2. 질문 / ...)
+
+## [KEYWORDS]
+SEO 태그 후보 5~8개를 나열한다.
+'{keyword_name}'를 첫 번째 태그로 포함할 것.
+(형식: 태그1, 태그2, 태그3, ...)"""
+
+    resp = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_completion_tokens=1200,
+        temperature=0.7,
+    )
+    content = resp.choices[0].message.content.strip()
+    log(f"  생성 완료 (뉴스없음): {len(content)}자")
+    return content
+
+
+# ============================================
+# 슬러그 생성 (키워드 기준)
+# ============================================
+def make_slug(keyword_name):
+    """키워드명 → 파일명용 슬러그"""
+    slug = keyword_name.strip()
+    # 특수문자 제거 (공백과 한글/영문/숫자만)
+    slug = re.sub(r"[^\w\s가-힣]", "", slug)
+    slug = re.sub(r"\s+", "-", slug)
+    slug = slug[:60].rstrip("-")
     return slug
+
 
 # ============================================
 # 아웃라인 파일 저장
 # ============================================
-def save_outline(article, outline_text, keyword, grade, today_str):
+def save_outline(keyword_name, search_volume, grade, intent, outline_text, articles, today_str):
     os.makedirs(OUTLINES_DIR, exist_ok=True)
 
-    title = article["title"]
-    source = article["source"]
-    pub_date = article.get("pub_date", "")
-    link = article.get("link", "")
     now_kst = datetime.now(KST)
-
-    slug = make_slug(title, keyword)
-    filename = f"{today_str}-{slug}.md"
+    slug = make_slug(keyword_name)
+    filename = f"{today_str}-{slug}_outline.md"
     filepath = os.path.join(OUTLINES_DIR, filename)
 
-    md = f"""# {title}
+    article_count = len(articles)
 
-> 원문 출처: {source} | {pub_date} | {link}
-> 매칭 키워드: {keyword} ({grade}등급)
+    md = f"""---
+키워드: {keyword_name}
+검색량: {search_volume:,}
+등급: {grade}
+매칭기사: {article_count}건
+검색의도: {intent}
+---
 
 {outline_text}
 
@@ -273,7 +317,8 @@ def save_outline(article, outline_text, keyword, grade, today_str):
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(md)
     log(f"  저장: {filename}")
-    return filepath, title
+    return filepath, keyword_name
+
 
 # ============================================
 # 텔레그램 알림
@@ -303,72 +348,132 @@ def send_telegram(message):
 def main():
     load_env()
     today_str = date.today().strftime("%Y-%m-%d")
-    log(f"아웃라인 추출 시작 ({today_str})")
+    log(f"아웃라인 생성 시작 ({today_str})")
     print()
 
-    # 1. 오늘 뉴스 조회
-    log("[1/4] 뉴스 조회 중...")
+    # 1. keywords.json 로드
+    log("[1/5] keywords.json 로드 중...")
     try:
-        articles = get_today_articles()
+        keywords = load_keywords()
     except Exception as e:
-        log(f"  뉴스 조회 실패: {e}")
-        send_telegram(f"❌ [{today_str}] 아웃라인 추출 실패: 뉴스 조회 오류")
+        log(f"  keywords.json 로드 실패: {e}")
+        send_telegram(f"❌ [{today_str}] 아웃라인 생성 실패: keywords.json 로드 오류")
         sys.exit(1)
 
-    if not articles:
-        log("  오늘 수집된 기사 없음, 종료")
-        send_telegram(f"📭 [{today_str}] 아웃라인 추출 스킵: 수집된 기사 없음")
+    if not keywords:
+        log("  키워드 테이블이 비어 있음, 종료")
         return
     print()
 
-    # 2. 키워드 매칭 (기사당 최고 등급 1개)
-    log("[2/4] 키워드 매칭 중...")
-    matched = match_articles_to_keywords(articles)
-    if not matched:
-        log("  매칭된 고단가 키워드 없음, 종료")
-        send_telegram(f"📭 [{today_str}] 아웃라인 추출 스킵: 매칭 키워드 없음")
-        return
+    # 2. 각 키워드별 D1 검색
+    log("[2/5] 키워드별 D1 검색 중...")
+    keyword_results = []  # (keyword_name, search_volume, grade, intent, articles)
+    no_match_keywords = []  # (keyword_name, search_volume, grade, intent)
+    total_with_articles = 0
 
-    # 등급별 통계
-    grade_counts = {"A": 0, "B": 0, "C": 0}
-    for _, _, g in matched:
-        grade_counts[g] = grade_counts.get(g, 0) + 1
-    for g in ["A", "B", "C"]:
-        if grade_counts[g]:
-            log(f"  [{g}] {grade_counts[g]}건")
+    for kw_name, kw_info in keywords.items():
+        db_query_terms = kw_info.get("db_query", [])
+        if not db_query_terms:
+            log(f"  ⏭ '{kw_name}': db_query 없음, 스킵")
+            continue
+
+        log(f"  → '{kw_name}' 검색 중... (쿼리: {db_query_terms[0]}{' 외 N개' if len(db_query_terms) > 1 else ''})")
+        articles = search_articles_for_keyword(db_query_terms)
+
+        if articles:
+            keyword_results.append((
+                kw_name,
+                kw_info.get("search_volume", 0),
+                kw_info.get("grade", "C"),
+                kw_info.get("intent", ""),
+                articles
+            ))
+            total_with_articles += 1
+            log(f"    ✓ {len(articles)}건 매칭")
+        else:
+            no_match_keywords.append((
+                kw_name,
+                kw_info.get("search_volume", 0),
+                kw_info.get("grade", "C"),
+                kw_info.get("intent", ""),
+            ))
+            log(f"    ✗ 매칭 없음")
+
+    log(f"\n  검색 결과: 매칭 {total_with_articles}개 / 미매칭 {len(no_match_keywords)}개")
     print()
 
-    # 3. 아웃라인 추출
-    log("[3/4] 아웃라인 추출 중...")
+    # 3. 등급순 정렬 (S > A > B > ...)
+    grade_order = {"S": 0, "A": 1, "B": 2, "C": 3, "D": 4}
+    def sort_key(item):
+        kw_name, sv, grade, intent, articles = item
+        return (grade_order.get(grade, 99), -sv)
+    keyword_results.sort(key=sort_key)
+
+    def sort_key_no_match(item):
+        kw_name, sv, grade, intent = item
+        return (grade_order.get(grade, 99), -sv)
+    no_match_keywords.sort(key=sort_key_no_match)
+
+    # 4. 아웃라인 생성
+    log("[3/5] 아웃라인 생성 중...")
     created = []
-    for article, keyword, grade in matched:
-        title_short = article["title"][:50]
-        log(f"  → [{grade}] '{title_short}...'")
+
+    # 4a. 기사 있음 → intent + 기사로 생성
+    for kw_name, sv, grade, intent, articles in keyword_results:
+        log(f"  → [{grade}] '{kw_name}' (매칭 {len(articles)}건, 검색량 {sv:,})")
         try:
-            outline = extract_outline(article, keyword, grade)
-            filepath, orig_title = save_outline(article, outline, keyword, grade, today_str)
-            created.append((filepath, orig_title, keyword, grade))
+            outline = generate_outline_with_articles(kw_name, intent, articles)
+            filepath, name = save_outline(kw_name, sv, grade, intent, outline, articles, today_str)
+            created.append((filepath, name, len(articles), grade))
         except Exception as e:
-            log(f"  ❌ '{title_short}' 추출 실패: {e}")
+            log(f"  ❌ '{kw_name}' 생성 실패: {e}")
+
+    # 4b. 기사 없음 → intent만으로 생성
+    for kw_name, sv, grade, intent in no_match_keywords:
+        log(f"  → [{grade}] '{kw_name}' (뉴스 없음, 검색량 {sv:,})")
+        try:
+            outline = generate_outline_no_articles(kw_name, intent)
+            filepath, name = save_outline(kw_name, sv, grade, intent, outline, [], today_str)
+            created.append((filepath, name, 0, grade))
+        except Exception as e:
+            log(f"  ❌ '{kw_name}' 생성 실패: {e}")
     print()
 
-    # 4. 텔레그램 알림
-    log("[4/4] 텔레그램 알림...")
+    # 5. 텔레그램 알림
+    log("[4/5] 텔레그램 알림...")
     if created:
-        msg_lines = [f"📝 <b>[{today_str}] 아웃라인 추출 완료 ({len(created)}건)</b>"]
-        for fp, title, kw, grade in created:
-            fname = os.path.basename(fp)
-            title_short = title[:40] + ("…" if len(title) > 40 else "")
-            msg_lines.append(f"\n📄 [{grade}] <b>{kw}</b> — {title_short}")
+        with_articles = [c for c in created if c[2] > 0]
+        without_articles = [c for c in created if c[2] == 0]
+
+        msg_lines = [f"📝 <b>[{today_str}] 아웃라인 생성 완료 ({len(created)}건)</b>"]
+        if with_articles:
+            msg_lines.append(f"\n📰 기사 기반 ({len(with_articles)}건):")
+            for fp, name, cnt, grade in with_articles:
+                fname = os.path.basename(fp)
+                msg_lines.append(f"  [{grade}] <b>{name}</b> ({cnt}건)")
+        if without_articles:
+            msg_lines.append(f"\n📌 뉴스 없음·의도 기반 ({len(without_articles)}건):")
+            for fp, name, cnt, grade in without_articles:
+                fname = os.path.basename(fp)
+                msg_lines.append(f"  [{grade}] <b>{name}</b>")
         send_telegram("\n".join(msg_lines))
     else:
-        send_telegram(f"❌ [{today_str}] 아웃라인 추출 실패 (모든 기사 실패)")
+        send_telegram(f"❌ [{today_str}] 아웃라인 생성 실패 (모든 키워드 실패)")
     print()
 
     # 완료
-    log(f"완료! {len(created)}건 생성")
-    for fp, title, kw, grade in created:
-        log(f"  ✅ {os.path.basename(fp)}")
+    log("[5/5] 완료!")
+    log(f"  총 생성: {len(created)}건")
+    with_articles = [c for c in created if c[2] > 0]
+    without_articles = [c for c in created if c[2] == 0]
+    if with_articles:
+        log(f"  기사 기반: {len(with_articles)}건")
+        for fp, name, cnt, grade in with_articles:
+            log(f"    ✅ [{grade}] {os.path.basename(fp)} ({cnt}건)")
+    if without_articles:
+        log(f"  의도 기반(뉴스 없음): {len(without_articles)}건")
+        for fp, name, cnt, grade in without_articles:
+            log(f"    📌 [{grade}] {os.path.basename(fp)} (뉴스 없음)")
 
 
 if __name__ == "__main__":

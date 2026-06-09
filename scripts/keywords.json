@@ -1,0 +1,58 @@
+{
+  "AI그림": {
+    "search_volume": 595000,
+    "competition": "높음",
+    "grade": "S",
+    "db_query": ["AI그림", "AI 그림", "이미지생성", "이미지 생성", "AI이미지"],
+    "intent": "AI로 그림 그리는 방법, 무료 툴 추천"
+  },
+  "무료AI이미지생성": {
+    "search_volume": 107900,
+    "competition": "중간",
+    "grade": "A",
+    "db_query": ["이미지 생성", "AI 그림", "무료", "Midjourney", "DALL-E", "Stable Diffusion"],
+    "intent": "무료로 AI 이미지 생성하는 사이트/앱 추천"
+  },
+  "챗GPT무료": {
+    "search_volume": 192300,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": ["ChatGPT", "챗GPT", "OpenAI", "무료", "GPT-4"],
+    "intent": "챗GPT 무료로 사용하는 방법, 무료 한도"
+  },
+  "챗GPT프롬프트": {
+    "search_volume": 85830,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": ["ChatGPT", "챗GPT", "프롬프트", "prompt"],
+    "intent": "챗GPT 잘 쓰는 프롬프트 모음, 활용법"
+  },
+  "챗GPT사용법": {
+    "search_volume": 39100,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": ["ChatGPT", "챗GPT", "사용법", "OpenAI"],
+    "intent": "챗GPT 처음 쓰는 방법, 기초 가이드"
+  },
+  "코파일럿": {
+    "search_volume": 86800,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": ["Copilot", "코파일럿", "Microsoft", "GitHub Copilot"],
+    "intent": "MS 코파일럿 사용법, 기능 소개"
+  },
+  "AI그림생성무료": {
+    "search_volume": 29540,
+    "competition": "높음",
+    "grade": "B",
+    "db_query": ["AI그림", "AI 그림", "무료", "이미지 생성"],
+    "intent": "무료 AI 그림 생성 사이트/앱 추천"
+  },
+  "AI그림생성추천": {
+    "search_volume": 32230,
+    "competition": "높음",
+    "grade": "B",
+    "db_query": ["AI그림", "AI 그림", "이미지 생성", "추천"],
+    "intent": "AI 그림 생성 툴 비교 및 추천"
+  }
+}

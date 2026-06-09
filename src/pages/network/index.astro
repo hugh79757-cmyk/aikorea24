@@ -24,9 +24,11 @@ const categoryMeta: Record<string, { icon: string; color: string; gradient: stri
   '노인복지': { icon: '🤝', color: 'border-pink-500/30', gradient: 'from-pink-500/20 to-rose-500/20' },
   '맛집·레시피': { icon: '🍽️', color: 'border-yellow-500/30', gradient: 'from-yellow-500/20 to-orange-500/20' },
   '시사·이슈': { icon: '🔥', color: 'border-purple-500/30', gradient: 'from-purple-500/20 to-violet-500/20' },
+  'AI·테크': { icon: '🤖', color: 'border-blue-500/30', gradient: 'from-blue-500/20 to-indigo-500/20' },
+  '쿠팡': { icon: '🛒', color: 'border-orange-500/30', gradient: 'from-orange-500/20 to-red-500/20' },
 };
 
-const categoryOrder = ['스포츠', '여행', '자동차', '금융·투자', '부동산', '생활정보', '노인복지', '맛집·레시피', '시사·이슈'];
+const categoryOrder = ['AI·테크', '스포츠', '여행', '자동차', '금융·투자', '부동산', '생활정보', '노인복지', '맛집·레시피', '쿠팡', '시사·이슈'];
 
 let categories: Record<string, { feeds: Record<string, { label: string; items: { title: string; link: string; pub_date: string }[] }> }> = {};
 let lastUpdated = '';
