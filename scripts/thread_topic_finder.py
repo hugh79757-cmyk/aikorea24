@@ -388,7 +388,7 @@ def save_thread_md(
     교차 = "✅ 해외+국내 교차" if (has_foreign and has_domestic) else "해외 또는 국내 단독"
 
     slug = make_slug(topic)
-    filename = f"{slug}_thread.md"
+    filename = f"{date_str}-{slug}_thread.md"
     filepath = os.path.join(thread_date_dir, filename)
 
     md = f"""---

@@ -298,7 +298,7 @@ def save_outline(keyword_name, search_volume, grade, intent, outline_text, artic
 
     now_kst = datetime.now(KST)
     slug = make_slug(keyword_name)
-    filename = f"{slug}_outline.md"
+    filename = f"{today_str}-{slug}_outline.md"
     filepath = os.path.join(outline_date_dir, filename)
 
     article_count = len(articles)
