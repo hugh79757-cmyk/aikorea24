@@ -1,5 +1,34 @@
 # Changelog
 
+## [v2.2.0] - 2026-06-10
+
+### 동적 키워드 파이프라인 (신규)
+- `scripts/keyword_updater.py`: D1 오늘 뉴스 기반 키워드 동적 추출 (gpt-4o-mini)
+  - 네이버 검색광고 API 검색량/경쟁도 조회 (HMAC-SHA256 인증)
+  - grade 자동 계산 (S: 10만+, A: 3만+ or 경쟁높음, B)
+  - intent + db_query 자동 생성 (gpt-4o-mini 배치)
+  - seeds.json 고정 키워드 + 뉴스 신규 키워드 병합, `source` 필드 구분
+  - keywords.json 자동 갱신 (백업 `keywords.json.bak` 포함)
+  - 실행: 매일 06:00 (launchd)
+
+### 스레드 글감 생성기 (신규)
+- `scripts/thread_topic_finder.py`: D1 뉴스 클러스터링 → 스레드 아웃라인
+  - 1차: title 기반 클러스터링 (gpt-4o-mini)
+  - 스코어링: 해외+국내 교차(+3), data_points 3개+(+2), contrast_possible(+2), 기사 3개+(+1)
+  - Top 5 소재 → gpt-4o 아웃라인 생성 (훅/반전/스레드 7단계 구조)
+  - 저장: `scripts/threads/YYYYMMDD/소재슬러그_thread.md`
+  - 실행: 매일 06:10 (launchd)
+
+### 저장 경로 변경
+- `outline_generator.py`: `outlines/YYYY-MM-DD-*_outline.md` → `outlines/YYYYMMDD/*_outline.md`
+- `thread_topic_finder.py`: `threads/YYYY-MM-DD-*_thread.md` → `threads/YYYYMMDD/*_thread.md`
+- 날짜 prefix를 파일명에서 제거하고 날짜 폴더로 분리
+
+### 기타
+- `scripts/seeds.json` 신규 (베이스 씨드 키워드 관리)
+- `AGENTS.md`: 아웃라인 저장 경로 정보 업데이트
+- `README.md`: 파이프라인 구조, 프로젝트 구조 테이블 업데이트
+
 ## [v2.0.0] - 2026-02-21
 
 ### 해외 AI 뉴스 수집 (신규)

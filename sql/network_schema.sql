@@ -23,11 +23,12 @@ CREATE TABLE IF NOT EXISTS network_cache (
 CREATE INDEX IF NOT EXISTS idx_network_cache_domain ON network_cache(domain);
 CREATE INDEX IF NOT EXISTS idx_network_cache_fetched ON network_cache(fetched_at DESC);
 
--- 피드 등록 (33개)
+-- 피드 등록 (34개)
 INSERT OR IGNORE INTO network_feeds (domain, category, label, rss_url, platform) VALUES
 -- 스포츠
 ('sports.rotcha.kr', '스포츠', '스포츠롯차', 'https://sports.rotcha.kr/feeds/posts/default?alt=rss', 'blogger'),
 ('kbo.rotcha.kr', '스포츠', 'KBO롯차', 'https://kbo.rotcha.kr/feeds/posts/default?alt=rss', 'blogger'),
+('protoking.informationhot.kr', '스포츠', '프로토킹', 'https://protoking.informationhot.kr/index.xml', 'hugo'),
 -- 여행
 ('travel.rotcha.kr', '여행', '여행롯차', 'https://travel.rotcha.kr/feeds/posts/default?alt=rss', 'blogger'),
 ('travel1.rotcha.kr', '여행', '여행가이드1', 'https://travel1.rotcha.kr/index.xml', 'hugo'),

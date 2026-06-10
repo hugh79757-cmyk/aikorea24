@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 import sys
 import os
 # stdout/stderr 안전 처리 (대시보드 원격 실행 시 fd 없을 수 있음)

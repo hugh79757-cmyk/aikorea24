@@ -35,7 +35,20 @@
 - 제외 키워드: 귀촌, 귀어, 교복, 부동산, 스포츠 등
 - 중복 방지: 제목 해시 기반, 특수문자 안전 처리
 - D1 저장: wrangler d1 execute로 개별 INSERT
-- 현재 뉴스 102건 (네이버 83, AI타임스 10, 과기부 4, 정부공문서 1, 기타 4)
+
+### 13. 동적 키워드 파이프라인 (v2.2, 2026-06-10)
+- `scripts/keyword_updater.py`: 매일 06:00 실행
+  - seeds.json(10개) + D1 오늘 뉴스 기반 OpenAI 키워드 추출 (gpt-4o-mini)
+  - 네이버 검색광고 API로 검색량/경쟁도 조회 (HMAC-SHA256, 5개 배치)
+  - grade 자동 계산 (S/A/B) + intent/db_query 자동 생성
+  - keywords.json 갱신 (source 필드: seed/news, 백업 포함)
+- `scripts/thread_topic_finder.py`: 매일 06:10 실행
+  - 2단계 LLM: 1차 title 클러스터링(gpt-4o-mini) → 2차 아웃라인(gpt-4o)
+  - 스코어링: 해외+국내 교차, 수치, 대비구조, 기사수
+  - 저장: `scripts/threads/YYYYMMDD/소재슬러그_thread.md` (Top 5)
+- `scripts/outline_generator.py`: 매일 06:30 실행
+  - 저장 경로 변경: `outlines/YYYYMMDD/키워드슬러그_outline.md`
+- 전체 파이프라인: 05:30 뉴스수집 → 06:00 키워드갱신 → 06:10 스레드글감 → 06:30 아웃라인
 
 ### 4. 정부 공문서 AI 학습데이터 API 연동
 - api_test/gov_doc_collector.py: 행정안전부 API 연동
@@ -107,6 +120,11 @@
 - api_test/news_collector.py: 뉴스 수집기 v2.1
 - api_test/gov_doc_collector.py: 정부 공문서 수집기
 - api_test/.env: API 키들
+- scripts/keyword_updater.py: 키워드 자동 갱신기 v1.0
+- scripts/thread_topic_finder.py: 스레드 글감 파인더 v1.0
+- scripts/outline_generator.py: 블로그 아웃라인 생성기 v2.0
+- scripts/seeds.json: 베이스 씨드 키워드
+- scripts/keywords.json: 동적 키워드 테이블 (검색량/경쟁도/grade/intent/source)
 - src/content/config.ts: 컬렉션 스키마
 - src/content/blog/: 마크다운 포스트 8개+
 - src/layouts/Layout.astro: 공통 레이아웃 (다크/라이트 토글)
@@ -212,8 +230,11 @@
 - [ ] 빌드 경고 해결 (blog prerender Astro.request.headers)
 
 ### Phase 2 - 자동화
-- [ ] GitHub Actions 또는 Cloudflare Workers로 뉴스 수집 크론 (매일)
-- [ ] OpenAI 요약 파이프라인
+- [x] 뉴스 수집 크론: macOS launchd 05:30
+- [x] 동적 키워드 갱신: keyword_updater.py 06:00
+- [x] 스레드 글감 생성: thread_topic_finder.py 06:10
+- [x] 블로그 아웃라인 생성: outline_generator.py 06:30
+- [ ] GitHub Actions 또는 Cloudflare Workers로 전체 마이그레이션
 
 ### Phase 3 - 수익화
 - [ ] 토스페이먼츠 테스트 키 등록 및 결제 플로우 검증
@@ -236,3 +257,4 @@
 |------|------|-----------|
 | 2026-02-12 | 1.0 | 초기 SOP 작성 (인프라, 인증, 뉴스, 블로그) |
 | 2026-02-13 | 2.0 | 커뮤니티 게시판, 유료콘텐츠, 결제(토스+카카오페이), 다크/라이트 모드, 정부 공문서 API 연동, 뉴스 수집기 v2.1 AI 필터 강화, 모바일 메뉴 개선 |
+| 2026-06-10 | 2.2 | 동적 키워드 파이프라인: keyword_updater.py (seeds+뉴스→네이버 검색량→grade), thread_topic_finder.py (클러스터링→스레드 아웃라인), outline_generator.py 경로 변경, seeds.json 신규 |

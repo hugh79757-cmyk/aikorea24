@@ -49,9 +49,18 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 - Google 로그인 + 게시판
 - 다크모드 지원
 
-### 자동화
+### 자동화 (매일 아침 파이프라인)
 
-- macOS launchd 스케줄러로 뉴스 수집 자동 실행
+macOS launchd 스케줄러로 전 단계 자동 실행:
+
+| 시각 | 스크립트 | 작업 |
+|------|----------|------|
+| 05:30 | `news_collector.py` | D1 news 테이블 뉴스 수집 (28개 RSS + 해외/국내) |
+| 06:00 | `keyword_updater.py` | `keywords.json` 동적 갱신 (씨드 + 뉴스 키워드 → 검색량 → grade) |
+| 06:10 | `thread_topic_finder.py` | `threads/YYYYMMDD/` 스레드 글감 생성 (클러스터링 → 아웃라인) |
+| 06:30 | `outline_generator.py` | `outlines/YYYYMMDD/` 블로그 아웃라인 생성 (키워드 → D1 검색 → GPT) |
+
+- 저장 구조: `scripts/outlines/YYYYMMDD/키워드슬러그_outline.md`, `scripts/threads/YYYYMMDD/소재슬러그_thread.md`
 - 카드뉴스 자동 생성 후 안드로이드 폰 전송 (KDE Connect)
 - 노인복지 브리핑 HTML 자동 생성
 
@@ -75,6 +84,12 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 | api_test/card_news_generator.py | 카드뉴스 생성 |
 | api_test/senior_briefing.py | 노인복지 브리핑 |
 | api_test/gov_doc_collector.py | 정부 문서 수집 |
+| scripts/ | 동적 키워드 및 콘텐츠 파이프라인 |
+| scripts/keyword_updater.py | 키워드 자동 갱신 (seeds + 뉴스 키워드 → 검색량 → grade → keywords.json) |
+| scripts/thread_topic_finder.py | 스레드 글감 생성 (뉴스 클러스터링 → 스코어링 → 아웃라인) |
+| scripts/outline_generator.py | 블로그 아웃라인 생성 (keywords.json → D1 검색 → GPT 아웃라인) |
+| scripts/seeds.json | 베이스 씨드 키워드 |
+| scripts/keywords.json | 동적 키워드 테이블 (검색량/경쟁도/grade/intent/source) |
 | src/pages/api/news/ | 뉴스 API 엔드포인트 |
 | src/content/ | 블로그, 도구 콘텐츠 |
 | src/lib/auth.ts | 인증 |
@@ -101,6 +116,7 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 
 | 버전 | 날짜 | 주요 변경 |
 |------|------|-----------|
+| v2.2.0 | 2026-06-10 | **동적 키워드 파이프라인**: `keyword_updater.py` (seeds+뉴스→네이버 검색량→grade), `thread_topic_finder.py` (뉴스 클러스터링→스레드 아웃라인), `outline_generator.py` 경로 변경 (`YYYYMMDD/`), `seeds.json` 신규 |
 | v2.1.0 | 2026-05 | 해외 RSS 10개 소스 추가 (CNN, Reuters, NYT, BBC, WSJ, BI, Guardian, FT, Fast Company), AI 키워드 강화 필터 is_ai_related() 도입, Reuters fallback 처리 |
 | v1.4.0 | 2026-02-16 | 블로그 UI 개선 (썸네일 4:3, 카테고리 필터 하단 이동) |
 | v1.3.0 | 2026-02 | Google AdSense, Pinterest 연동 |

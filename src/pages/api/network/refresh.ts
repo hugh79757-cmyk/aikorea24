@@ -14,6 +14,15 @@ interface ParsedItem {
   pub_date: string;
 }
 
+function normalizeLink(link: string, domain: string): string {
+  if (link.startsWith('http://') || link.startsWith('https://')) {
+    return link;
+  }
+  const base = `https://${domain}`;
+  const path = link.startsWith('/') ? link : `/${link}`;
+  return base + path;
+}
+
 function extractItems(xml: string, platform: string): ParsedItem[] {
   const items: ParsedItem[] = [];
   const itemRegex = /<item[\s>]([\s\S]*?)<\/item>/gi;
@@ -98,6 +107,11 @@ export async function GET({ locals, request }: { locals: any; request: Request }
 
         const xml = await res.text();
         const items = extractItems(xml, feed.platform);
+
+        // 상대경로 링크를 절대경로로 정규화
+        for (const item of items) {
+          item.link = normalizeLink(item.link, feed.domain);
+        }
 
         if (items.length === 0) {
           errors.push(`${feed.domain}: no items parsed`);
