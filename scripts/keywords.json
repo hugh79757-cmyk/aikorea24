@@ -1,58 +1,362 @@
 {
-  "AI그림": {
-    "search_volume": 595000,
+  "AI": {
+    "search_volume": 153100,
     "competition": "높음",
     "grade": "S",
-    "db_query": ["AI그림", "AI 그림", "이미지생성", "이미지 생성", "AI이미지"],
-    "intent": "AI로 그림 그리는 방법, 무료 툴 추천"
+    "db_query": [
+      "AI",
+      "인공지능",
+      "Artificial Intelligence"
+    ],
+    "intent": "인공지능 관련 정보",
+    "source": "seed"
   },
-  "무료AI이미지생성": {
-    "search_volume": 107900,
-    "competition": "중간",
-    "grade": "A",
-    "db_query": ["이미지 생성", "AI 그림", "무료", "Midjourney", "DALL-E", "Stable Diffusion"],
-    "intent": "무료로 AI 이미지 생성하는 사이트/앱 추천"
+  "챗GPT": {
+    "search_volume": 4575300,
+    "competition": "높음",
+    "grade": "S",
+    "db_query": [
+      "챗GPT",
+      "ChatGPT",
+      "OpenAI"
+    ],
+    "intent": "챗GPT 사용법 및 정보",
+    "source": "seed"
   },
-  "챗GPT무료": {
-    "search_volume": 192300,
+  "인공지능": {
+    "search_volume": 14380,
     "competition": "높음",
     "grade": "A",
-    "db_query": ["ChatGPT", "챗GPT", "OpenAI", "무료", "GPT-4"],
-    "intent": "챗GPT 무료로 사용하는 방법, 무료 한도"
+    "db_query": [
+      "인공지능",
+      "AI",
+      "Artificial Intelligence"
+    ],
+    "intent": "인공지능 기술 탐색",
+    "source": "seed"
   },
-  "챗GPT프롬프트": {
-    "search_volume": 85830,
+  "AI이미지": {
+    "search_volume": 2430,
     "competition": "높음",
     "grade": "A",
-    "db_query": ["ChatGPT", "챗GPT", "프롬프트", "prompt"],
-    "intent": "챗GPT 잘 쓰는 프롬프트 모음, 활용법"
+    "db_query": [
+      "AI이미지",
+      "AI 이미지",
+      "이미지 생성"
+    ],
+    "intent": "AI 이미지 생성 도구",
+    "source": "seed"
   },
-  "챗GPT사용법": {
-    "search_volume": 39100,
+  "AI동영상": {
+    "search_volume": 2080,
     "competition": "높음",
     "grade": "A",
-    "db_query": ["ChatGPT", "챗GPT", "사용법", "OpenAI"],
-    "intent": "챗GPT 처음 쓰는 방법, 기초 가이드"
+    "db_query": [
+      "AI동영상",
+      "AI 비디오",
+      "비디오 생성"
+    ],
+    "intent": "AI 동영상 제작 정보",
+    "source": "seed"
+  },
+  "AI음악": {
+    "search_volume": 1100,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "AI음악",
+      "AI 음악",
+      "음악 생성"
+    ],
+    "intent": "AI 음악 생성 도구",
+    "source": "seed"
+  },
+  "AI글쓰기": {
+    "search_volume": 580,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "AI글쓰기",
+      "AI writing",
+      "글쓰기 도구"
+    ],
+    "intent": "AI 글쓰기 도구",
+    "source": "seed"
+  },
+  "AI번역": {
+    "search_volume": 830,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "AI번역",
+      "AI translation",
+      "번역 서비스"
+    ],
+    "intent": "AI 번역 서비스",
+    "source": "seed"
+  },
+  "AI요약": {
+    "search_volume": 300,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "AI요약",
+      "AI summary",
+      "요약 도구"
+    ],
+    "intent": "AI 요약 도구",
+    "source": "seed"
   },
   "코파일럿": {
-    "search_volume": 86800,
+    "search_volume": 26100,
     "competition": "높음",
     "grade": "A",
-    "db_query": ["Copilot", "코파일럿", "Microsoft", "GitHub Copilot"],
-    "intent": "MS 코파일럿 사용법, 기능 소개"
+    "db_query": [
+      "코파일럿",
+      "Copilot",
+      "GitHub Copilot"
+    ],
+    "intent": "코파일럿 정보 및 사용법",
+    "source": "seed"
   },
-  "AI그림생성무료": {
-    "search_volume": 29540,
-    "competition": "높음",
+  "에임인텔리전스": {
+    "search_volume": 810,
+    "competition": "낮음",
     "grade": "B",
-    "db_query": ["AI그림", "AI 그림", "무료", "이미지 생성"],
-    "intent": "무료 AI 그림 생성 사이트/앱 추천"
+    "db_query": [
+      "에임인텔리전스",
+      "AIM Intelligence",
+      "AI 기업"
+    ],
+    "intent": "에임인텔리전스 정보",
+    "source": "news"
   },
-  "AI그림생성추천": {
-    "search_volume": 32230,
-    "competition": "높음",
+  "AIM Intelligence": {
+    "search_volume": 0,
+    "competition": "낮음",
     "grade": "B",
-    "db_query": ["AI그림", "AI 그림", "이미지 생성", "추천"],
-    "intent": "AI 그림 생성 툴 비교 및 추천"
+    "db_query": [
+      "AIM Intelligence",
+      "에임인텔리전스",
+      "AI 기업"
+    ],
+    "intent": "AIM Intelligence 정보",
+    "source": "news"
+  },
+  "KAIST": {
+    "search_volume": 7820,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "KAIST",
+      "한국과학기술원",
+      "KAIST 연구"
+    ],
+    "intent": "KAIST 관련 정보",
+    "source": "news"
+  },
+  "클로드 페이블 5": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "클로드 페이블 5",
+      "Claude Fable 5",
+      "AI 모델"
+    ],
+    "intent": "클로드 페이블 5 정보",
+    "source": "news"
+  },
+  "클로드 미토스 5": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "클로드 미토스 5",
+      "Claude Mythos 5",
+      "AI 모델"
+    ],
+    "intent": "클로드 미토스 5 정보",
+    "source": "news"
+  },
+  "클로드 엔터프라이즈": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "클로드 엔터프라이즈",
+      "Claude Enterprise",
+      "AI 솔루션"
+    ],
+    "intent": "클로드 엔터프라이즈 정보",
+    "source": "news"
+  },
+  "소버린 AI": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "소버린 AI",
+      "Sovereign AI",
+      "AI 기업"
+    ],
+    "intent": "소버린 AI 정보",
+    "source": "news"
+  },
+  "토크노믹스 재단": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "토크노믹스 재단",
+      "Talknomics Foundation",
+      "블록체인"
+    ],
+    "intent": "토크노믹스 재단 정보",
+    "source": "news"
+  },
+  "어센드 950DT": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "어센드 950DT",
+      "Ascend 950DT",
+      "AI 하드웨어"
+    ],
+    "intent": "어센드 950DT 정보",
+    "source": "news"
+  },
+  "스노우피크": {
+    "search_volume": 172700,
+    "competition": "높음",
+    "grade": "S",
+    "db_query": [
+      "스노우피크",
+      "Snow Peak",
+      "아웃도어"
+    ],
+    "intent": "스노우피크 제품 정보",
+    "source": "news"
+  },
+  "플란넬": {
+    "search_volume": 1030,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "플란넬",
+      "Flannel",
+      "의류"
+    ],
+    "intent": "플란넬 제품 정보",
+    "source": "news"
+  },
+  "KSTEC": {
+    "search_volume": 150,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "KSTEC",
+      "KSTEC 기술",
+      "AI 기업"
+    ],
+    "intent": "KSTEC 관련 정보",
+    "source": "news"
+  },
+  "스마트 IDP": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "스마트 IDP",
+      "Smart IDP",
+      "AI 솔루션"
+    ],
+    "intent": "스마트 IDP 정보",
+    "source": "news"
+  },
+  "AI1": {
+    "search_volume": 30,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "AI1",
+      "AI One",
+      "AI 플랫폼"
+    ],
+    "intent": "AI1 관련 정보",
+    "source": "news"
+  },
+  "adobaRo": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "adobaRo",
+      "아도바로",
+      "AI 기업"
+    ],
+    "intent": "adobaRo 정보",
+    "source": "news"
+  },
+  "도우인": {
+    "search_volume": 10200,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "도우인",
+      "Douyin",
+      "중국 소셜미디어"
+    ],
+    "intent": "도우인 관련 정보",
+    "source": "news"
+  },
+  "비리비리": {
+    "search_volume": 2390,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "비리비리",
+      "Bilibili",
+      "중국 동영상 플랫폼"
+    ],
+    "intent": "비리비리 정보",
+    "source": "news"
+  },
+  "콰이쇼우": {
+    "search_volume": 420,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "콰이쇼우",
+      "Kuaishou",
+      "중국 소셜미디어"
+    ],
+    "intent": "콰이쇼우 정보",
+    "source": "news"
+  },
+  "샤오홍슈": {
+    "search_volume": 48200,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "샤오홍슈",
+      "Xiaohongshu",
+      "중국 소셜미디어"
+    ],
+    "intent": "샤오홍슈 정보",
+    "source": "news"
+  },
+  "아이치이": {
+    "search_volume": 8220,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "아이치이",
+      "iQIYI",
+      "중국 동영상 플랫폼"
+    ],
+    "intent": "아이치이 정보",
+    "source": "news"
   }
 }

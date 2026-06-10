@@ -292,12 +292,14 @@ def make_slug(keyword_name):
 # 아웃라인 파일 저장
 # ============================================
 def save_outline(keyword_name, search_volume, grade, intent, outline_text, articles, today_str):
-    os.makedirs(OUTLINES_DIR, exist_ok=True)
+    date_dir = today_str.replace("-", "")  # 2026-06-10 → 20260610
+    outline_date_dir = os.path.join(OUTLINES_DIR, date_dir)
+    os.makedirs(outline_date_dir, exist_ok=True)
 
     now_kst = datetime.now(KST)
     slug = make_slug(keyword_name)
-    filename = f"{today_str}-{slug}_outline.md"
-    filepath = os.path.join(OUTLINES_DIR, filename)
+    filename = f"{slug}_outline.md"
+    filepath = os.path.join(outline_date_dir, filename)
 
     article_count = len(articles)
 
