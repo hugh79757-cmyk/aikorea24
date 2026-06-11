@@ -93,30 +93,30 @@ def classify_source(source: str) -> str:
 # STEP 1: D1에서 오늘 뉴스 로드
 # ============================================
 def load_today_news() -> tuple[list[dict], str]:
-    """오늘 날짜 기사 조회, 없으면 어제로 fallback (최대 200건)"""
+    """오늘+어제 날짜 기사 동시 조회 (UTC 시차 대응)"""
     today = date.today()
     yesterday = today - timedelta(days=1)
+    today_str = today.strftime("%Y-%m-%d")
+    yesterday_str = yesterday.strftime("%Y-%m-%d")
 
-    for target_date in [today, yesterday]:
-        date_str = target_date.strftime("%Y-%m-%d")
-        sql = f"""
-            SELECT id, title, description, source, link, pub_date
-            FROM news
-            WHERE DATE(created_at) = '{date_str}'
-              AND category IN ('global', 'news')
-              AND title IS NOT NULL
-            ORDER BY created_at DESC
-            LIMIT 200
-        """
-        try:
-            rows = query_d1(sql)
-        except Exception as e:
-            log(f"  D1 쿼리 실패: {e}")
-            continue
+    sql = f"""
+        SELECT id, title, description, source, link, pub_date
+        FROM news
+        WHERE DATE(created_at) IN ('{today_str}', '{yesterday_str}')
+          AND category IN ('global', 'news')
+          AND title IS NOT NULL
+        ORDER BY created_at DESC
+        LIMIT 200
+    """
+    try:
+        rows = query_d1(sql)
+    except Exception as e:
+        log(f"  D1 쿼리 실패: {e}")
+        return [], ""
 
-        if rows:
-            log(f"D1 조회: {date_str} ({len(rows)}건)")
-            return rows, date_str
+    if rows:
+        log(f"D1 조회: {today_str} / {yesterday_str} ({len(rows)}건)")
+        return rows, today_str
 
     log("  오늘/어제 기사 없음")
     return [], ""

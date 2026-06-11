@@ -1,62 +1,52 @@
 {
   "AI": {
-    "search_volume": 153100,
+    "search_volume": 153800,
     "competition": "높음",
     "grade": "S",
     "db_query": [
-      "AI",
-      "인공지능",
-      "Artificial Intelligence"
+      "AI"
     ],
-    "intent": "인공지능 관련 정보",
+    "intent": "",
     "source": "seed"
   },
   "챗GPT": {
-    "search_volume": 4575300,
+    "search_volume": 4586800,
     "competition": "높음",
     "grade": "S",
     "db_query": [
-      "챗GPT",
-      "ChatGPT",
-      "OpenAI"
+      "챗GPT"
     ],
-    "intent": "챗GPT 사용법 및 정보",
+    "intent": "",
     "source": "seed"
   },
   "인공지능": {
-    "search_volume": 14380,
+    "search_volume": 14220,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "인공지능",
-      "AI",
-      "Artificial Intelligence"
+      "인공지능"
     ],
-    "intent": "인공지능 기술 탐색",
+    "intent": "",
     "source": "seed"
   },
   "AI이미지": {
-    "search_volume": 2430,
+    "search_volume": 2420,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI이미지",
-      "AI 이미지",
-      "이미지 생성"
+      "AI이미지"
     ],
-    "intent": "AI 이미지 생성 도구",
+    "intent": "",
     "source": "seed"
   },
   "AI동영상": {
-    "search_volume": 2080,
+    "search_volume": 2070,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI동영상",
-      "AI 비디오",
-      "비디오 생성"
+      "AI동영상"
     ],
-    "intent": "AI 동영상 제작 정보",
+    "intent": "",
     "source": "seed"
   },
   "AI음악": {
@@ -64,11 +54,9 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI음악",
-      "AI 음악",
-      "음악 생성"
+      "AI음악"
     ],
-    "intent": "AI 음악 생성 도구",
+    "intent": "",
     "source": "seed"
   },
   "AI글쓰기": {
@@ -76,35 +64,29 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI글쓰기",
-      "AI writing",
-      "글쓰기 도구"
+      "AI글쓰기"
     ],
-    "intent": "AI 글쓰기 도구",
+    "intent": "",
     "source": "seed"
   },
   "AI번역": {
-    "search_volume": 830,
+    "search_volume": 810,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI번역",
-      "AI translation",
-      "번역 서비스"
+      "AI번역"
     ],
-    "intent": "AI 번역 서비스",
+    "intent": "",
     "source": "seed"
   },
   "AI요약": {
-    "search_volume": 300,
+    "search_volume": 310,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI요약",
-      "AI summary",
-      "요약 도구"
+      "AI요약"
     ],
-    "intent": "AI 요약 도구",
+    "intent": "",
     "source": "seed"
   },
   "코파일럿": {
@@ -112,251 +94,219 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "코파일럿",
-      "Copilot",
-      "GitHub Copilot"
+      "코파일럿"
     ],
-    "intent": "코파일럿 정보 및 사용법",
+    "intent": "",
     "source": "seed"
   },
-  "에임인텔리전스": {
-    "search_volume": 810,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "에임인텔리전스",
-      "AIM Intelligence",
-      "AI 기업"
-    ],
-    "intent": "에임인텔리전스 정보",
-    "source": "news"
-  },
-  "AIM Intelligence": {
+  "에이전틱 AI": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AIM Intelligence",
-      "에임인텔리전스",
-      "AI 기업"
+      "에이전틱 AI"
     ],
-    "intent": "AIM Intelligence 정보",
+    "intent": "",
     "source": "news"
   },
-  "KAIST": {
-    "search_volume": 7820,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "KAIST",
-      "한국과학기술원",
-      "KAIST 연구"
-    ],
-    "intent": "KAIST 관련 정보",
-    "source": "news"
-  },
-  "클로드 페이블 5": {
+  "Rack-Scale 컴퓨팅": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "클로드 페이블 5",
-      "Claude Fable 5",
-      "AI 모델"
+      "Rack-Scale 컴퓨팅"
     ],
-    "intent": "클로드 페이블 5 정보",
+    "intent": "",
     "source": "news"
   },
-  "클로드 미토스 5": {
+  "아이온(IOWN)": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "아이온(IOWN)"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "델 테크놀로지스": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "클로드 미토스 5",
-      "Claude Mythos 5",
-      "AI 모델"
+      "델 테크놀로지스"
     ],
-    "intent": "클로드 미토스 5 정보",
+    "intent": "",
     "source": "news"
   },
-  "클로드 엔터프라이즈": {
+  "ams 오스람": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "클로드 엔터프라이즈",
-      "Claude Enterprise",
-      "AI 솔루션"
+      "ams 오스람"
     ],
-    "intent": "클로드 엔터프라이즈 정보",
+    "intent": "",
     "source": "news"
   },
-  "소버린 AI": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "소버린 AI",
-      "Sovereign AI",
-      "AI 기업"
-    ],
-    "intent": "소버린 AI 정보",
-    "source": "news"
-  },
-  "토크노믹스 재단": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "토크노믹스 재단",
-      "Talknomics Foundation",
-      "블록체인"
-    ],
-    "intent": "토크노믹스 재단 정보",
-    "source": "news"
-  },
-  "어센드 950DT": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "어센드 950DT",
-      "Ascend 950DT",
-      "AI 하드웨어"
-    ],
-    "intent": "어센드 950DT 정보",
-    "source": "news"
-  },
-  "스노우피크": {
-    "search_volume": 172700,
-    "competition": "높음",
-    "grade": "S",
-    "db_query": [
-      "스노우피크",
-      "Snow Peak",
-      "아웃도어"
-    ],
-    "intent": "스노우피크 제품 정보",
-    "source": "news"
-  },
-  "플란넬": {
-    "search_volume": 1030,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "플란넬",
-      "Flannel",
-      "의류"
-    ],
-    "intent": "플란넬 제품 정보",
-    "source": "news"
-  },
-  "KSTEC": {
-    "search_volume": 150,
+  "광인터커넥트": {
+    "search_volume": 190,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "KSTEC",
-      "KSTEC 기술",
-      "AI 기업"
+      "광인터커넥트"
     ],
-    "intent": "KSTEC 관련 정보",
+    "intent": "",
     "source": "news"
   },
-  "스마트 IDP": {
+  "IMEC": {
+    "search_volume": 750,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "IMEC"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "AI 플러스": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "스마트 IDP",
-      "Smart IDP",
-      "AI 솔루션"
+      "AI 플러스"
     ],
-    "intent": "스마트 IDP 정보",
+    "intent": "",
     "source": "news"
   },
-  "AI1": {
-    "search_volume": 30,
+  "옴니 플래시": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "옴니 플래시"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "구글 플로": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "구글 플로"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "S2W": {
+    "search_volume": 4110,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "AI1",
-      "AI One",
-      "AI 플랫폼"
+      "S2W"
     ],
-    "intent": "AI1 관련 정보",
+    "intent": "",
     "source": "news"
   },
-  "adobaRo": {
+  "SAIP": {
+    "search_volume": 50,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "SAIP"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "자비스(XARVIS)": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "자비스(XARVIS)"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "퀘이사(QUAXAR)": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "퀘이사(QUAXAR)"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "타쿠(tacu)": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "adobaRo",
-      "아도바로",
-      "AI 기업"
+      "타쿠(tacu)"
     ],
-    "intent": "adobaRo 정보",
+    "intent": "",
     "source": "news"
   },
-  "도우인": {
-    "search_volume": 10200,
+  "제로(ZERO)": {
+    "search_volume": 20,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "도우인",
-      "Douyin",
-      "중국 소셜미디어"
+      "제로(ZERO)"
     ],
-    "intent": "도우인 관련 정보",
+    "intent": "",
     "source": "news"
   },
-  "비리비리": {
-    "search_volume": 2390,
+  "넷츠프레소": {
+    "search_volume": 130,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "비리비리",
-      "Bilibili",
-      "중국 동영상 플랫폼"
+      "넷츠프레소"
     ],
-    "intent": "비리비리 정보",
+    "intent": "",
     "source": "news"
   },
-  "콰이쇼우": {
-    "search_volume": 420,
+  "K-AI 프로젝트": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "K-AI 프로젝트"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "VOTP": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "VOTP"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "인터젯(INTERJET)": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "인터젯(INTERJET)"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "미토스": {
+    "search_volume": 19520,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "콰이쇼우",
-      "Kuaishou",
-      "중국 소셜미디어"
+      "미토스"
     ],
-    "intent": "콰이쇼우 정보",
-    "source": "news"
-  },
-  "샤오홍슈": {
-    "search_volume": 48200,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "샤오홍슈",
-      "Xiaohongshu",
-      "중국 소셜미디어"
-    ],
-    "intent": "샤오홍슈 정보",
-    "source": "news"
-  },
-  "아이치이": {
-    "search_volume": 8220,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "아이치이",
-      "iQIYI",
-      "중국 동영상 플랫폼"
-    ],
-    "intent": "아이치이 정보",
+    "intent": "",
     "source": "news"
   }
 }
