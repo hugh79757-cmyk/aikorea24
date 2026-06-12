@@ -1,6 +1,6 @@
 {
   "AI": {
-    "search_volume": 153800,
+    "search_volume": 153400,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -10,7 +10,7 @@
     "source": "seed"
   },
   "챗GPT": {
-    "search_volume": 4586800,
+    "search_volume": 4586100,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -20,7 +20,7 @@
     "source": "seed"
   },
   "인공지능": {
-    "search_volume": 14220,
+    "search_volume": 14040,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -30,7 +30,7 @@
     "source": "seed"
   },
   "AI이미지": {
-    "search_volume": 2420,
+    "search_volume": 2410,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -50,7 +50,7 @@
     "source": "seed"
   },
   "AI음악": {
-    "search_volume": 1100,
+    "search_volume": 1070,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -60,7 +60,7 @@
     "source": "seed"
   },
   "AI글쓰기": {
-    "search_volume": 580,
+    "search_volume": 550,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -70,7 +70,7 @@
     "source": "seed"
   },
   "AI번역": {
-    "search_volume": 810,
+    "search_volume": 790,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -80,7 +80,7 @@
     "source": "seed"
   },
   "AI요약": {
-    "search_volume": 310,
+    "search_volume": 320,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -90,7 +90,7 @@
     "source": "seed"
   },
   "코파일럿": {
-    "search_volume": 26100,
+    "search_volume": 26000,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -99,212 +99,202 @@
     "intent": "",
     "source": "seed"
   },
-  "에이전틱 AI": {
+  "AI 스마트글래스": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "에이전틱 AI"
+      "AI 스마트글래스"
     ],
     "intent": "",
     "source": "news"
   },
-  "Rack-Scale 컴퓨팅": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "Rack-Scale 컴퓨팅"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "아이온(IOWN)": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "아이온(IOWN)"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "델 테크놀로지스": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "델 테크놀로지스"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "ams 오스람": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "ams 오스람"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "광인터커넥트": {
-    "search_volume": 190,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "광인터커넥트"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "IMEC": {
-    "search_volume": 750,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "IMEC"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "AI 플러스": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "AI 플러스"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "옴니 플래시": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "옴니 플래시"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "구글 플로": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "구글 플로"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "S2W": {
-    "search_volume": 4110,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "S2W"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "SAIP": {
-    "search_volume": 50,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "SAIP"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "자비스(XARVIS)": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "자비스(XARVIS)"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "퀘이사(QUAXAR)": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "퀘이사(QUAXAR)"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "타쿠(tacu)": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "타쿠(tacu)"
-    ],
-    "intent": "",
-    "source": "news"
-  },
-  "제로(ZERO)": {
-    "search_volume": 20,
+  "오픈AI": {
+    "search_volume": 58200,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "제로(ZERO)"
+      "오픈AI"
     ],
     "intent": "",
     "source": "news"
   },
-  "넷츠프레소": {
-    "search_volume": 130,
+  "오나": {
+    "search_volume": 570,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "넷츠프레소"
+      "오나"
     ],
     "intent": "",
     "source": "news"
   },
-  "K-AI 프로젝트": {
+  "코덱스": {
+    "search_volume": 40100,
+    "competition": "낮음",
+    "grade": "A",
+    "db_query": [
+      "코덱스"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "애스크 도어대시": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "K-AI 프로젝트"
+      "애스크 도어대시"
     ],
     "intent": "",
     "source": "news"
   },
-  "VOTP": {
+  "AXIS 2026": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AXIS 2026"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "코인베이스": {
     "search_volume": 20,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "VOTP"
+      "코인베이스"
     ],
     "intent": "",
     "source": "news"
   },
-  "인터젯(INTERJET)": {
-    "search_volume": 20,
+  "XRPL AI 스타터 키트": {
+    "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "인터젯(INTERJET)"
+      "XRPL AI 스타터 키트"
     ],
     "intent": "",
     "source": "news"
   },
-  "미토스": {
-    "search_volume": 19520,
+  "데이터브릭스": {
+    "search_volume": 2020,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "미토스"
+      "데이터브릭스"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "피지컬 AI": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "피지컬 AI"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "프로메테우스": {
+    "search_volume": 12980,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "프로메테우스"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "리얼월드": {
+    "search_volume": 6240,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "리얼월드"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "클로드 페이블 5": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "클로드 페이블 5"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "퀘타아이": {
+    "search_volume": 170,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "퀘타아이"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "MILA": {
+    "search_volume": 250,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "MILA"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "AI 에이전트": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 에이전트"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "AI 국부펀드": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 국부펀드"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "AI 트레이드 킷": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 트레이드 킷"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "AI 건설로봇 혁신센터": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 건설로봇 혁신센터"
+    ],
+    "intent": "",
+    "source": "news"
+  },
+  "매쉬": {
+    "search_volume": 3260,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "매쉬"
     ],
     "intent": "",
     "source": "news"
