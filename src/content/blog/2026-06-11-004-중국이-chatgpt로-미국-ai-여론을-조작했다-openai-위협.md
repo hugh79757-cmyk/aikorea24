@@ -3,7 +3,7 @@ title: "중국이 ChatGPT로 미국 AI 여론을 조작했다 OpenAI 위협 보�
 description: "오픈AI가 중국 연계 ChatGPT 계정 두 클러스터를 차단했습니다. 데이터센터 전기요금 조작 캠페인과 미국 관세 비판 캠페인의 구체적 수법과 목적을 14페이지 보고서 전문을 바탕으로 분석합니다."
 date: 2026-06-11T12:22:31+09:00
 category: "뉴스"
-tags:
+tags: []
 
 draft: false
 image: "/images/2026-06-11-004-중국이-chatgpt로-미국-ai-여론을-조작했다-openai-위협/thumbnail.webp"
