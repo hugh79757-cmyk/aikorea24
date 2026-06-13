@@ -236,3 +236,121 @@
 [08:00:57]   텔레그램 알림 전송 완료
 
 [08:00:57] ✅ 키워드 갱신 완료!
+[08:00:05] 키워드 갱신 시작 (2026-06-13)
+
+[08:00:05] =======================================================
+[08:00:05] STEP 1/9: seeds.json 로드
+[08:00:05] =======================================================
+[08:00:05]   베이스 키워드: 10개
+
+[08:00:05] =======================================================
+[08:00:05] STEP 2/9: D1 뉴스 조회
+[08:00:05] =======================================================
+[08:00:06] D1 조회: 2026-06-12 (100건)
+
+[08:00:06] =======================================================
+[08:00:06] STEP 3/9: OpenAI 신규 키워드 추출
+[08:00:06] =======================================================
+[08:00:10] OpenAI 키워드 추출: 21개
+[08:00:10]   추출된 신규 키워드: ['AI 국가시범도시', '삼성전자 반도체 패키징', '서울 AI 허브', '인공지능&빅데이터쇼 2026', '안두릴', '팔란티어 AI 플랫폼', '클로드 코드', '코덱스', '코파일럿', '스킬옵트', '핸드사인버스', '모빌테크', '렉스젠', '슈어소프트테크', '퓨처메인 ExRBM', 'VUNO Med-DeepCARS', '아고라 AI 에이전트', '구글 AI 플러스', '클로드 페이블 5', 'U월드 U1 시리즈', 'AI 협업툴 플로우']
+
+[08:00:10] =======================================================
+[08:00:10] STEP 4/9: 키워드 병합 (중복 제거)
+[08:00:10] =======================================================
+[08:00:10]   병합 완료: 30개 (seed 10개 + 신규 21개)
+
+[08:00:10] =======================================================
+[08:00:10] STEP 5/9: 네이버 검색광고 API 조회
+[08:00:10] =======================================================
+[08:00:10]   네이버 API 조회: 1~5/30: AI, 챗GPT, 인공지능, AI이미지, AI동영상
+[08:00:12]     ✓ AI: 검색량=153000, 경쟁도=높음
+[08:00:12]     ✓ 챗GPT: 검색량=4576400, 경쟁도=높음
+[08:00:12]     ✓ 인공지능: 검색량=13880, 경쟁도=높음
+[08:00:12]     ✓ AI이미지: 검색량=2370, 경쟁도=높음
+[08:00:12]     ✓ AI동영상: 검색량=2020, 경쟁도=높음
+[08:00:12]   네이버 API 조회: 6~10/30: AI음악, AI글쓰기, AI번역, AI요약, 코파일럿
+[08:00:13]     ✓ AI음악: 검색량=1060, 경쟁도=높음
+[08:00:13]     ✓ AI글쓰기: 검색량=550, 경쟁도=높음
+[08:00:13]     ✓ AI번역: 검색량=760, 경쟁도=높음
+[08:00:13]     ✓ AI요약: 검색량=310, 경쟁도=높음
+[08:00:13]     ✓ 코파일럿: 검색량=25700, 경쟁도=높음
+[08:00:14]   네이버 API 조회: 11~15/30: AI 국가시범도시, 삼성전자 반도체 패키징, 서울 AI 허브, 인공지능&빅데이터쇼 2026, 안두릴
+[08:00:14]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B5%AD%EA%B0%80%EC%8B%9C%EB%B2%94%EB%8F%84%EC%8B%9C%2C%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90%20%EB%B0%98%EB%8F%84%EC%B2%B4%20%ED%8C%A8%ED%82%A4%EC%A7%95%2C%EC%84%9C%EC%9A%B8%20AI%20%ED%97%88%EB%B8%8C%2C%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%26%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%87%BC%202026%2C%EC%95%88%EB%91%90%EB%A6%B4&showDetail=1
+[08:00:15]     ✗ AI 국가시범도시: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B5%AD%EA%B0%80%EC%8B%9C%EB%B2%94%EB%8F%84%EC%8B%9C&showDetail=1
+[08:00:16]     ✗ 삼성전자 반도체 패키징: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%82%BC%EC%84%B1%EC%A0%84%EC%9E%90%20%EB%B0%98%EB%8F%84%EC%B2%B4%20%ED%8C%A8%ED%82%A4%EC%A7%95&showDetail=1
+[08:00:17]     ✗ 서울 AI 허브: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%84%9C%EC%9A%B8%20AI%20%ED%97%88%EB%B8%8C&showDetail=1
+[08:00:17]     ✗ 인공지능&빅데이터쇼 2026: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5%26%EB%B9%85%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%87%BC%202026&showDetail=1
+[08:00:18]     ✓ 안두릴: 검색량=5430, 경쟁도=중간 (개별 재시도 성공)
+[08:00:19]   네이버 API 조회: 16~20/30: 팔란티어 AI 플랫폼, 클로드 코드, 코덱스, 스킬옵트, 핸드사인버스
+[08:00:19]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%8C%94%EB%9E%80%ED%8B%B0%EC%96%B4%20AI%20%ED%94%8C%EB%9E%AB%ED%8F%BC%2C%ED%81%B4%EB%A1%9C%EB%93%9C%20%EC%BD%94%EB%93%9C%2C%EC%BD%94%EB%8D%B1%EC%8A%A4%2C%EC%8A%A4%ED%82%AC%EC%98%B5%ED%8A%B8%2C%ED%95%B8%EB%93%9C%EC%82%AC%EC%9D%B8%EB%B2%84%EC%8A%A4&showDetail=1
+[08:00:20]     ✗ 팔란티어 AI 플랫폼: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%8C%94%EB%9E%80%ED%8B%B0%EC%96%B4%20AI%20%ED%94%8C%EB%9E%AB%ED%8F%BC&showDetail=1
+[08:00:21]     ✗ 클로드 코드: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%81%B4%EB%A1%9C%EB%93%9C%20%EC%BD%94%EB%93%9C&showDetail=1
+[08:00:22]     ✓ 코덱스: 검색량=39500, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:23]     ✓ 스킬옵트: 검색량=20, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:23]     ✓ 핸드사인버스: 검색량=20, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:24]   네이버 API 조회: 21~25/30: 모빌테크, 렉스젠, 슈어소프트테크, 퓨처메인 ExRBM, VUNO Med-DeepCARS
+[08:00:24]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%AA%A8%EB%B9%8C%ED%85%8C%ED%81%AC%2C%EB%A0%89%EC%8A%A4%EC%A0%A0%2C%EC%8A%88%EC%96%B4%EC%86%8C%ED%94%84%ED%8A%B8%ED%85%8C%ED%81%AC%2C%ED%93%A8%EC%B2%98%EB%A9%94%EC%9D%B8%20ExRBM%2CVUNO%20Med-DeepCARS&showDetail=1
+[08:00:25]     ✓ 모빌테크: 검색량=1190, 경쟁도=중간 (개별 재시도 성공)
+[08:00:26]     ✓ 렉스젠: 검색량=610, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:27]     ✓ 슈어소프트테크: 검색량=34560, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:28]     ✗ 퓨처메인 ExRBM: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%93%A8%EC%B2%98%EB%A9%94%EC%9D%B8%20ExRBM&showDetail=1
+[08:00:29]     ✗ VUNO Med-DeepCARS: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=VUNO%20Med-DeepCARS&showDetail=1
+[08:00:29]   네이버 API 조회: 26~30/30: 아고라 AI 에이전트, 구글 AI 플러스, 클로드 페이블 5, U월드 U1 시리즈, AI 협업툴 플로우
+[08:00:30]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%95%84%EA%B3%A0%EB%9D%BC%20AI%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%2C%EA%B5%AC%EA%B8%80%20AI%20%ED%94%8C%EB%9F%AC%EC%8A%A4%2C%ED%81%B4%EB%A1%9C%EB%93%9C%20%ED%8E%98%EC%9D%B4%EB%B8%94%205%2CU%EC%9B%94%EB%93%9C%20U1%20%EC%8B%9C%EB%A6%AC%EC%A6%88%2CAI%20%ED%98%91%EC%97%85%ED%88%B4%20%ED%94%8C%EB%A1%9C%EC%9A%B0&showDetail=1
+[08:00:30]     ✗ 아고라 AI 에이전트: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%95%84%EA%B3%A0%EB%9D%BC%20AI%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8&showDetail=1
+[08:00:31]     ✗ 구글 AI 플러스: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EA%B5%AC%EA%B8%80%20AI%20%ED%94%8C%EB%9F%AC%EC%8A%A4&showDetail=1
+[08:00:32]     ✗ 클로드 페이블 5: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%81%B4%EB%A1%9C%EB%93%9C%20%ED%8E%98%EC%9D%B4%EB%B8%94%205&showDetail=1
+[08:00:33]     ✗ U월드 U1 시리즈: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=U%EC%9B%94%EB%93%9C%20U1%20%EC%8B%9C%EB%A6%AC%EC%A6%88&showDetail=1
+[08:00:34]     ✗ AI 협업툴 플로우: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%ED%98%91%EC%97%85%ED%88%B4%20%ED%94%8C%EB%A1%9C%EC%9A%B0&showDetail=1
+
+[08:00:34] =======================================================
+[08:00:34] STEP 6/9: grade 계산
+[08:00:34] =======================================================
+[08:00:34]   [S] AI: 검색량=153,000, 경쟁도=높음, 출처=seed
+[08:00:34]   [S] 챗GPT: 검색량=4,576,400, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] 인공지능: 검색량=13,880, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] AI이미지: 검색량=2,370, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] AI동영상: 검색량=2,020, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] AI음악: 검색량=1,060, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] AI글쓰기: 검색량=550, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] AI번역: 검색량=760, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] AI요약: 검색량=310, 경쟁도=높음, 출처=seed
+[08:00:34]   [A] 코파일럿: 검색량=25,700, 경쟁도=높음, 출처=news
+[08:00:34]   [B] AI 국가시범도시: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 삼성전자 반도체 패키징: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 서울 AI 허브: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 인공지능&빅데이터쇼 2026: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 안두릴: 검색량=5,430, 경쟁도=중간, 출처=news
+[08:00:34]   [B] 팔란티어 AI 플랫폼: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 클로드 코드: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [A] 코덱스: 검색량=39,500, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 스킬옵트: 검색량=20, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 핸드사인버스: 검색량=20, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 모빌테크: 검색량=1,190, 경쟁도=중간, 출처=news
+[08:00:34]   [B] 렉스젠: 검색량=610, 경쟁도=낮음, 출처=news
+[08:00:34]   [A] 슈어소프트테크: 검색량=34,560, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 퓨처메인 ExRBM: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] VUNO Med-DeepCARS: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 아고라 AI 에이전트: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 구글 AI 플러스: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] 클로드 페이블 5: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] U월드 U1 시리즈: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:34]   [B] AI 협업툴 플로우: 검색량=0, 경쟁도=낮음, 출처=news
+
+[08:00:34] =======================================================
+[08:00:34] STEP 7/9: OpenAI intent + db_query 생성
+[08:00:34] =======================================================
+[08:00:47] OpenAI intent/db_query 생성: 30개 키워드
+
+[08:00:47] =======================================================
+[08:00:47] STEP 8/9: keywords.json 저장
+[08:00:47] =======================================================
+[08:00:47] 백업 완료: /Users/twinssn/Projects/aikorea24/scripts/keywords.json.bak
+[08:00:47] keywords.json 저장 완료: 30개 키워드
+
+[08:00:47] =======================================================
+[08:00:47] STEP 9/9: 텔레그램 알림
+[08:00:47] =======================================================
+[08:00:48]   텔레그램 알림 전송 완료
+
+[08:00:48] ✅ 키워드 갱신 완료!
