@@ -478,6 +478,17 @@ ENHANCED_FILTER_URLS = {
     'https://www.cnbc.com/id/19854910/device/rss/rss.html',
     'https://www.thenationalnews.com/arc/outboundfeeds/rss/?outputType=xml',
     'https://nltimes.nl/rssfeed2',
+    # 2026-06 추가 소스 (AI 필터 필수)
+    'https://www.heraldscotland.com/news/rss/',
+    'https://www.theguardian.com/us-news/rss',
+    'https://www.axios.com/feeds/feed.rss',
+    'https://www.politico.eu/section/technology/feed/rss/',
+    'https://nvidianews.nvidia.com/rss',
+    'https://www.sec.gov/news/pressreleases.rss',
+    'https://www.nature.com/subjects/machine-learning.rss',
+    'https://news.google.com/rss/search?q=site:aljazeera.com+artificial+intelligence&hl=en&gl=US&ceid=US:en',
+    'https://news.google.com/rss/search?q=site:anthropic.com+news&hl=en&gl=US&ceid=US:en',
+    'https://www.memphisflyer.com/feed',
 }
 
 
@@ -528,6 +539,18 @@ GLOBAL_RSS_FEEDS = [
     ('https://www.cnbc.com/id/19854910/device/rss/rss.html', 'CNBC Tech', 'us'),
     ('https://www.thenationalnews.com/arc/outboundfeeds/rss/?outputType=xml', 'The National News', 'eu'),
     ('https://nltimes.nl/rssfeed2', 'NL Times', 'eu'),
+    # === 신규 해외 RSS 소스 (2026-06-14 추가) ===
+    # AI 키워드 필터링 필수 (is_ai_related 적용)
+    ('https://www.heraldscotland.com/news/rss/', 'Herald Scotland', 'eu'),
+    ('https://www.theguardian.com/us-news/rss', 'Guardian US News', 'us'),
+    ('https://www.axios.com/feeds/feed.rss', 'Axios', 'us'),
+    ('https://www.politico.eu/section/technology/feed/rss/', 'Politico EU Tech', 'eu'),
+    ('https://nvidianews.nvidia.com/rss', 'NVIDIA Newsroom', 'us'),
+    ('https://www.sec.gov/news/pressreleases.rss', 'SEC Press Releases', 'us'),
+    ('https://www.nature.com/subjects/machine-learning.rss', 'Nature ML', 'us'),
+    ('https://news.google.com/rss/search?q=site:aljazeera.com+artificial+intelligence&hl=en&gl=US&ceid=US:en', 'Al Jazeera AI (via Google News)', 'us'),
+    ('https://news.google.com/rss/search?q=site:anthropic.com+news&hl=en&gl=US&ceid=US:en', 'Anthropic News (via Google News)', 'us'),
+    ('https://www.memphisflyer.com/feed', 'Memphis Flyer', 'us'),
 ]
 
 
