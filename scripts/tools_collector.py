@@ -563,12 +563,14 @@ def slugify(name: str) -> str:
     return s
 
 
-def build_frontmatter(name: str, meta: dict, order: int) -> str:
+def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> str:
     """MD frontmatter 생성"""
     tasks_str = json.dumps(meta.get('tasks', []), ensure_ascii=False)
     tags_str = json.dumps(meta.get('tags', []), ensure_ascii=False)
     use_cases_str = json.dumps(meta.get('useCases', []), ensure_ascii=False)
     today = datetime.now().strftime('%Y-%m-%d')
+    # url: tool_info에서 전달받은 원본 URL 우선, 없으면 meta에서
+    url = tool_url or meta.get('url', '')
 
     return f"""---
 name: "{name}"
@@ -577,7 +579,7 @@ category: "{meta.get('category', '')}"
 price: "{meta.get('price_kr', '')}"
 koreanSupport: {str(meta.get('koreanSupport', False)).lower()}
 difficulty: "{meta.get('difficulty', '')}"
-url: "{meta.get('url', '')}"
+url: "{url}"
 useCases: {use_cases_str}
 tags: {tags_str}
 featured: false
@@ -649,14 +651,14 @@ def build_body(meta: dict) -> str:
     return '\n'.join(lines)
 
 
-def save_tool_md(name: str, meta: dict, order: int) -> str:
+def save_tool_md(name: str, meta: dict, order: int, tool_url: str = '') -> str:
     """MD 파일 저장 → 파일명 반환"""
     slug = slugify(name)
     tools_dir = os.path.join(PROJECT_DIR, 'src/content/tools')
     os.makedirs(tools_dir, exist_ok=True)
     filepath = os.path.join(tools_dir, f'{slug}.md')
 
-    frontmatter = build_frontmatter(name, meta, order)
+    frontmatter = build_frontmatter(name, meta, order, tool_url=tool_url)
 
     # --- im-not-ai 2단계: 본문 humanize ---
     body_raw = build_body(meta)
@@ -820,7 +822,7 @@ def process_batch(tools: list, batch_size=5, max_workers=3, translate=False) -> 
                 
                 # MD 저장
                 order_base = 100 + idx
-                slug = save_tool_md(tool.get('name', ''), meta, order_base)
+                slug = save_tool_md(tool.get('name', ''), meta, order_base, tool_url=tool.get('url', ''))
                 created.append(slug)
                 print(f"  ✅ {tool.get('name', '')} → {slug}.md")
         
