@@ -11,6 +11,8 @@ useCases: ["코드 자동완성", "반복 코드 제거", "함수 자동 생성"
 tags: ["코딩", "자동완성", "GitHub", "개발"]
 featured: false
 order: 41
+tasks: ["코딩", "코드-리뷰"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약

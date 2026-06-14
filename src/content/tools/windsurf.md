@@ -10,6 +10,8 @@ useCases: ["전체 프로젝트 리팩토링", "버그 자동 수정", "새 기�
 tags: ["코딩", "IDE", "AI에이전트", "자동화"]
 featured: false
 order: 22
+tasks: ["코드-리뷰", "코딩"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약

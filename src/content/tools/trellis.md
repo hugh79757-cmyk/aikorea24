@@ -10,6 +10,8 @@ useCases: ["제품 3D 모델링", "게임 에셋 제작", "3D 프린팅 파일 �
 tags: ["3D생성", "이미지to3D", "오픈소스", "게임개발"]
 featured: false
 order: 18
+tasks: ["이미지-생성"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약

@@ -10,6 +10,8 @@ useCases: ["AI 음악 만들기", "영상 배경음악", "취미 작곡", "한�
 tags: ["음악", "작곡", "AI음악", "창작"]
 featured: false
 order: 22
+tasks: ["음악-생성"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약

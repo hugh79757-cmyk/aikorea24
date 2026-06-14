@@ -10,6 +10,8 @@ useCases: ["Gemini API 프로토타입 제작", "이미지·영상 분석", "긴
 tags: ["개발", "Gemini", "API", "무료", "멀티모달"]
 featured: false
 order: 20
+tasks: ["코딩", "코드-리뷰", "음성-변환"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약

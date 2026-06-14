@@ -10,6 +10,8 @@ useCases: ["광고 영상 제작", "SNS 콘텐츠 생성", "배경음악 포함 
 tags: ["영상생성", "Google", "AI영상", "오디오"]
 featured: true
 order: 8
+tasks: ["영상-편집", "영상-제작", "음악-생성"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약

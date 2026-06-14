@@ -10,6 +10,8 @@ useCases: ["전체 기능 자율 구현", "버그 탐지 및 수정", "코드베
 tags: ["코딩", "CLI", "Anthropic", "AI에이전트", "터미널"]
 featured: false
 order: 23
+tasks: ["코딩", "코드-리뷰"]
+updated: "2026-06-14"
 ---
 
 ## 한줄 요약
