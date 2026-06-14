@@ -1,10 +1,10 @@
 #!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 """
-aikorea24 AI 툴 대량 확충기 v2.0
-- Product Hunt RSS / Hacker News API → 실시간 수집
+aikorea24 AI 툴 대량 확충기 v2.1
+- Product Hunt RSS / GitHub awesome-ai-tools → 실시간 수집
 - GPT-4o-mini 한국어 메타데이터 생성
 - im-not-ai 3단계 한국어 품질 보강
-- MD 파일 생성 → git commit → 텔레그램 알림
+- MD 파일 생성 → git commit → 텔레그램 알림 → Cloudflare 배포
 
 재사용: news_collector.py의 fetch_rss_global 패턴, batch_translate, load_env, send_telegram
 """
@@ -185,68 +185,125 @@ def fetch_product_hunt(limit=15) -> list:
 # ============================================
 # 수집 함수: Hacker News (Show HN)
 # ============================================
-HN_API_URL = 'https://hn.algolia.com/api/v1/search'
+# ============================================
+# 수집 함수: GitHub awesome-ai-tools
+# ============================================
+GITHUB_AWESOME_URL = 'https://raw.githubusercontent.com/mahseema/awesome-ai-tools/main/README.md'
 
-HN_AI_KEYWORDS = [
-    'ai', 'llm', 'gpt', 'chatgpt', 'claude', 'gemini', 'llama', 'mistral',
-    'machine learning', 'deep learning', 'neural network', 'copilot',
-    'openai', 'anthropic', 'generative', 'rag', 'agent',
-    'vector database', 'embedding', 'transformer', 'diffusion',
+# 수집하지 않을 섹션 (모델/프레임워크/학습자료 등 실제 툴 아님)
+SKIP_SECTIONS = [
+    'models', 'learning resources', 'contents', 'contributors',
+    'license', 'editor',
+]
+
+# 이미 우리 디렉토리에 있거나 툴이 아닌 URL 패턴
+GITHUB_REJECT_URLS = [
+    'github.com/', 'github.com/mahseema', 'altern.ai', 'theresanai.com',
+]
+
+# 이미 있는 툴명 (대소문자 무시) — README엔 있지만 우리 기준에 안 맞는 항목
+GITHUB_REJECT_NAMES = [
+    'openai api', 'gopher', 'opt', 'bloom', 'llama', 'vicuna',
+    'stable beluga', 'chatgpt', 'gemini', 'perplexity ai', 'phind',
+    'notion ai', 'otter.ai', 'elicit', 'notebooklm',
+    'claude 3', 'bard',
 ]
 
 
-def fetch_hacker_news_tools(limit=15) -> list:
-    """Hacker News Show HN → AI 툴 목록"""
+def fetch_github_awesome(limit=50) -> list:
+    """GitHub awesome-ai-tools README.md → AI 툴 목록"""
     items = []
     try:
-        # 최근 30일 이내 Show HN + AI tool 검색어
-        cutoff = int((datetime.now() - timedelta(days=30)).timestamp())
-        params = urllib.parse.urlencode({
-            'tags': 'show_hn',
-            'query': 'AI tool',
-            'hitsPerPage': 50,
-            'numericFilters': f'created_at_i>{cutoff}',
-        })
-        url = f'{HN_API_URL}?{params}'
-        req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/2.0'})
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            raw = resp.read()
-        data = json.loads(raw)
-        for hit in data.get('hits', []):
-            if len(items) >= limit:
-                break
-            title = hit.get('title', '').strip()
-            # Show HN prefix 제거
-            title = re.sub(r'^Show\s+HN:\s*', '', title, flags=re.IGNORECASE)
-            # AI 관련 필터
-            text_to_check = title.lower()
-            if not any(kw in text_to_check for kw in HN_AI_KEYWORDS):
+        req = urllib.request.Request(
+            GITHUB_AWESOME_URL,
+            headers={'User-Agent': 'aikorea24-bot/2.0'}
+        )
+        with urllib.request.urlopen(req, timeout=20) as resp:
+            raw = resp.read().decode('utf-8')
+
+        lines = raw.split('\n')
+        current_section = ''
+
+        for line in lines:
+            # 섹션 감지 (## 제목)
+            section_match = re.match(r'^##+\s+(.+)', line)
+            if section_match:
+                current_section = section_match.group(1).lower().strip()
+                # 건너뛸 섹션 체크
+                if any(skip in current_section for skip in SKIP_SECTIONS):
+                    continue
+
+            # Markdown 링크 패턴: [텍스트](URL) - 설명
+            # 앞에 - 또는 * 가 있을 수 있음
+            link_match = re.match(r'\s*[-*]\s*\[([^\]]+)\]\(([^)]+)\)\s*(?:[-–—]\s*(.*))?', line)
+            if not link_match:
+                # 들여쓰기 없는 형태도 체크
+                link_match = re.match(r'\s*\[([^\]]+)\]\(([^)]+)\)\s*(?:[-–—]\s*(.*))?', line)
+
+            if not link_match:
                 continue
-            # REJECT: AI 툴이 아닌 항목 제외
-            combined = text_to_check + ' ' + (hit.get('story_text', '') or '').lower()
-            if any(kw.lower() in combined for kw in PH_REJECT_KEYWORDS):
+
+            name = link_match.group(1).strip()
+            url = link_match.group(2).strip()
+            desc = (link_match.group(3) or '').strip()
+
+            # 섹션 필터
+            if any(skip in current_section for skip in SKIP_SECTIONS):
                 continue
-            # URL
-            url = hit.get('url') or f"https://news.ycombinator.com/item?id={hit.get('objectID', '')}"
-            # 포인트 (인기도)
-            points = hit.get('points', 0)
-            # 설명 (HN은 description이 없고 title에 모든 정보)
-            desc = hit.get('story_text', '') or ''
-            desc = re.sub(r'<[^>]+>', ' ', desc)
-            desc = re.sub(r'\s+', ' ', desc).strip()[:300]
+
+            # 이름 필터
+            name_lower = name.lower()
+            if any(reject in name_lower for reject in GITHUB_REJECT_NAMES):
+                continue
+
+            # URL 필터 (reviews, affiliate 링크 제외)
+            if '*reviews*' in desc.lower() or '[reviews]' in desc.lower():
+                continue
+            if any(reject in url for reject in GITHUB_REJECT_URLS):
+                continue
+            if 'affiliate.' in url or 'referral=' in url:
+                continue
+
+            # 설명 클리닝
+            desc = re.sub(r'\*.*?\*', '', desc)  # *italic* 제거
+            desc = re.sub(r'\[.*?\]\(.*?\)', '', desc)  # 인라인 링크 제거
+            desc = re.sub(r'\s+', ' ', desc).strip()
+            desc = desc[:300]
+
+            # 가격 정보 (README에는 없으므로 빈 값)
+            price = ''
+
+            # 너무 짧거나 광고성 항목 제외
+            if len(name) < 2:
+                continue
+
+            # 이미 수집한 항목과 중복 체크 (목록 내)
+            dup = False
+            for existing in items:
+                if existing['name'].lower() == name_lower:
+                    dup = True
+                    break
+                # 같은 URL
+                if existing.get('url', '').rstrip('/') == url.rstrip('/'):
+                    dup = True
+                    break
+            if dup:
+                continue
 
             items.append({
-                'name': title,
-                'description': desc if desc else f"Show HN: {title}",
-                'price': '',
+                'name': name,
+                'description': desc,
+                'price': price,
                 'url': url,
-                'source': 'Hacker News',
-                'points': points,
-                'pub_date': datetime.fromtimestamp(hit.get('created_at_i', 0)).strftime('%Y-%m-%d') if hit.get('created_at_i') else '',
+                'source': 'GitHub Awesome AI Tools',
             })
-        print(f"  Hacker News: {len(items)}개 수집")
+
+            if len(items) >= limit:
+                break
+
+        print(f"  GitHub Awesome AI Tools: {len(items)}개 수집")
     except Exception as e:
-        print(f"  Hacker News 수집 실패: {e}")
+        print(f"  GitHub Awesome AI Tools 수집 실패: {e}")
     return items
 
 
@@ -257,7 +314,7 @@ def collect_tools(limit_per_source=15) -> list:
     """모든 소스에서 툴 수집 → 중복 제거된 리스트"""
     all_tools = []
     all_tools.extend(fetch_product_hunt(limit=limit_per_source))
-    all_tools.extend(fetch_hacker_news_tools(limit=limit_per_source))
+    all_tools.extend(fetch_github_awesome(limit=limit_per_source))
 
     # 중복 제거 (URL 기준)
     seen_urls = set()
@@ -888,7 +945,7 @@ def main():
     # 툴 목록 로드
     tools = []
     if args.collect:
-        print(f"[수집 모드] Product Hunt + Hacker News (소스당 {args.limit}개)")
+        print(f"[수집 모드] Product Hunt + GitHub Awesome AI Tools (소스당 {args.limit}개)")
         tools = collect_tools(limit_per_source=args.limit)
         if not tools:
             print("수집된 툴 없음")
@@ -903,8 +960,8 @@ def main():
         print(f"[JSON 모드] {len(tools)}개 툴 로드")
     else:
         print("사용법:")
-        print("  python3 tools_collector.py --collect --batch 5        # 실시간 수집 + 처리")
-        print("  python3 tools_collector.py --collect --dry-run       # 수집만, 저장 안 함")
+        print("  python3 tools_collector.py --collect --batch 5        # PH + GitHub 수집 + 처리")
+        print("  python3 tools_collector.py --collect --dry-run       # 수집만 미리보기")
         print("  python3 tools_collector.py --collect --translate     # 수집 + 번역 + 처리")
         print("  python3 tools_collector.py --sample                  # 샘플 테스트")
         print("  python3 tools_collector.py --json tools.json --batch 50  # JSON 배치")
