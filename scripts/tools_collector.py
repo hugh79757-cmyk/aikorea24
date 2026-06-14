@@ -63,6 +63,14 @@ PH_AI_KEYWORDS = [
     'no-code LLM', 'AI agent', 'AI tool', 'AI-powered',
 ]
 
+# REJECT 키워드 — AI 툴이 아닌 항목 제외 (news_collector.py EXCLUDE 패턴 참고)
+PH_REJECT_KEYWORDS = [
+    'directory', 'list', 'curated', 'handpicked', 'collection of',
+    'launcher', 'prompt launcher', 'ssh', 'server management',
+    'product hunt analytics', 'radar for product hunt',
+    'analytics beyond', 'leaderboard',
+]
+
 # Product Hunt 설명에서 가격 정보 추출
 PH_PRICE_PATTERNS = [
     (r'\$(0|)\s*free', 'Free'),
@@ -92,14 +100,22 @@ def extract_price(description: str) -> str:
 
 
 def is_ai_tool(title: str, description: str = '') -> bool:
-    """Product Hunt 아이템이 AI 툴인지 판별 (제목 기준)"""
+    """Product Hunt/HN 아이템이 AI 툴인지 판별 (제목 기준)"""
     title_lower = title.lower()
+    desc_lower = description.lower()
+    combined = title_lower + ' ' + desc_lower
+
+    # === REJECT: AI 툴이 아닌 항목 먼저 차단 ===
+    for kw in PH_REJECT_KEYWORDS:
+        if kw.lower() in combined:
+            return False
+
+    # === AI 키워드 매칭 ===
     for kw in PH_AI_KEYWORDS:
         if kw.lower() in title_lower:
             return True
     # description에도 ai 키워드가 포함된 경우 + 제목에도 'tool'이 있는 경우 완화
-    desc_lower = description.lower()
-    if 'tool' in title_lower:
+    if 'tool' in title_lower or 'app' in title_lower:
         for kw in ['ai', 'intelligence', 'neural', 'deep learning', 'machine learning']:
             if kw in desc_lower:
                 return True
@@ -204,6 +220,10 @@ def fetch_hacker_news_tools(limit=15) -> list:
             text_to_check = title.lower()
             if not any(kw in text_to_check for kw in HN_AI_KEYWORDS):
                 continue
+            # REJECT: AI 툴이 아닌 항목 제외
+            combined = text_to_check + ' ' + (hit.get('story_text', '') or '').lower()
+            if any(kw.lower() in combined for kw in PH_REJECT_KEYWORDS):
+                continue
             # URL
             url = hit.get('url') or f"https://news.ycombinator.com/item?id={hit.get('objectID', '')}"
             # 포인트 (인기도)
@@ -290,6 +310,21 @@ HUMANIZE_RULES = """
 • "~ㄴ다/~었다/~는다/~기 마련이다" 등 종결어미 다양화
 • "매우/정말/많은" 대신 구체 수치·사례로
 • 문장 길이 다양화 (짧은 문장 1~2개 섞기)
+
+❌ 금지 약한 서술 (반드시 제거):
+• "~할 수 있다"  → "~한다", "~입니다" (가능성이 아닌 서술은 단언)
+• "~수 있다" (받침 없는 동사) → "~ㄴ다" ("제공할 수 있다" ❌ → "제공한다" ✅)
+• "~도와준다" → "~에 도움이 된다" 또는 생략
+• "~돕는다" → 구체적 효능으로 ("업무 효율을 높인다")
+• "사용자가 ~할 수 있도록 돕는다" → "~할 수 있다" 자체가 불필요
+
+✅ FAQ 작성 기준 (반드시 준수):
+• 질문 3개 이상, 각 질문은 실제 사용자가 검색할 법한 구체적인 질문
+• 각 답변은 2~3문장, 최소 50자 이상
+• 단답형("네/아니요") 금지 — 이유와 예외를 함께 설명
+• 단차 비교("A가 낫다")보다 사용자 상황별 조언("예산/목적에 따라 다릅니다")
+• 좋은 FAQ 예: "무료로 쓸 수 있나요?" → 설명 + 무료 범위 + 유료 필요 시점
+• 나쁜 FAQ 예: "이 도구가 좋은가요?" → 너무 추상적
 """
 
 # ============================================
@@ -324,6 +359,17 @@ def humanize_md(text: str) -> str:
         (r'을 지원할 수 있습니다', r'을 지원합니다'),
         (r'을 사용할 수 있습니다', r'을 사용합니다'),
         (r'을 활용할 수 있습니다', r'을 활용합니다'),
+        (r'을 찾아볼 수 있다', r'을 찾을 수 있다'),
+        (r'를 찾아볼 수 있다', r'를 찾을 수 있다'),
+        (r'할 수 있도록 돕', r'하는 데 도움이 되'),
+        (r'도와준다', r'도움이 된다'),
+        (r'돕는다', r'도움이 된다'),
+        (r'수행할 수 있다', r'수행한다'),
+        (r'처리할 수 있다', r'처리한다'),
+        (r'제공할 수 있는', r'제공하는'),
+        (r'지원할 수 있는', r'지원하는'),
+        (r'활용할 수 있는', r'활용하는'),
+        (r'사용할 수 있는', r'사용하는'),
         # A-11: ~을 위해 → ~려고
         (r'([가-힣]+)을 위해 ', r'\1하려고 '),
         (r'([가-힣]+)를 위해 ', r'\1하려고 '),
