@@ -69,6 +69,8 @@ PH_REJECT_KEYWORDS = [
     'launcher', 'prompt launcher', 'ssh', 'server management',
     'product hunt analytics', 'radar for product hunt',
     'analytics beyond', 'leaderboard',
+    # HN 개인 프로젝트 발표 (실제 툴 아님)
+    'i built', 'i made', 'i created', 'i wrote',
 ]
 
 # Product Hunt 설명에서 가격 정보 추출
