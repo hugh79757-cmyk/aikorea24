@@ -510,7 +510,11 @@ def slugify(name: str) -> str:
     s = name.lower().strip()
     s = re.sub(r'[^a-z0-9가-힣]', '-', s)
     s = re.sub(r'-+', '-', s)
-    return s.strip('-')
+    s = s.strip('-')
+    # 50자 제한 + trailing - 제거
+    if len(s) > 50:
+        s = s[:50].rstrip('-')
+    return s
 
 
 def build_frontmatter(name: str, meta: dict, order: int) -> str:
