@@ -32,3 +32,6 @@ backup_*.txt
 # Local backups
 *.bak
 backups/
+
+# Reasonix internal artifacts
+.reasonix/
