@@ -950,6 +950,19 @@ def main():
             f"소요: {elapsed:.0f}초"
         )
 
+        # 배포 (launchd 자동 실행 시)
+        print("\n[배포] Cloudflare Pages 배포 중...")
+        deploy_script = os.path.join(PROJECT_DIR, 'scripts/deploy.sh')
+        try:
+            r = subprocess.run(['bash', deploy_script],
+                             capture_output=True, text=True, timeout=300)
+            if r.returncode == 0:
+                print("  배포 완료 ✅")
+            else:
+                print(f"  배포 실패: {r.stderr[:300]}")
+        except Exception as e:
+            print(f"  배포 오류: {e}")
+
 
 if __name__ == '__main__':
     main()
