@@ -2,6 +2,9 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
+import { TASKS as ALL_TASKS } from '../../config/tasks';
+
+const TASK_BASE = '/tools/task/';
 
 export async function getStaticPaths() {
   const tools = await getCollection('tools');
@@ -19,11 +22,16 @@ const difficultyColor = (d: string) => {
   if (d.includes('중급')) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
   return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
 };
+
+const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).map((s: string) => ({
+  slug: s,
+  title: ALL_TASKS[s].title,
+}));
 ---
 
 <Layout
-  title={`${tool.data.name} – AI 도구 리뷰`}
-  description={tool.data.description}
+  title={`${tool.data.name} 사용법·가격·추천 | AI코리아24`}
+  description={`${tool.data.description} — 가격, 한국어 지원 여부, 추천 대상까지 한눈에 확인하세요.`}
   type="article"
 >
   <div class="max-w-3xl mx-auto px-4 py-12">
@@ -38,18 +46,17 @@ const difficultyColor = (d: string) => {
     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
       <div class="flex items-start justify-between mb-4">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          {tool.data.name}
+          {tool.data.name} — {tool.data.description}
         </h1>
         {tool.data.featured && (
-          <span class="text-sm bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-3 py-1 rounded-full">⭐ 추천</span>
+          <span class="text-sm bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-3 py-1 rounded-full whitespace-nowrap">⭐ 추천</span>
         )}
       </div>
-      <p class="text-gray-600 dark:text-gray-400 mb-6">{tool.data.description}</p>
       <div class="flex flex-wrap gap-3 mb-6">
-        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg">📂 {tool.data.category}</span>
-        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg">💰 {tool.data.price}</span>
-        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg">🇰🇷 한국어 {tool.data.koreanSupport ? '지원' : '미지원'}</span>
-        <span class:list={['text-sm px-3 py-1.5 rounded-lg', difficultyColor(tool.data.difficulty)]}>📊 {tool.data.difficulty}</span>
+        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg" title="카테고리">📂 {tool.data.category}</span>
+        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg" title="가격">💰 {tool.data.price}</span>
+        <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg" title="한국어 지원">🇰🇷 한국어 {tool.data.koreanSupport ? '지원' : '미지원'}</span>
+        <span class:list={['text-sm px-3 py-1.5 rounded-lg', difficultyColor(tool.data.difficulty)]} title="난이도">📊 {tool.data.difficulty}</span>
       </div>
       {tool.data.useCases && tool.data.useCases.length > 0 && (
         <div class="mb-6">
@@ -71,6 +78,19 @@ const difficultyColor = (d: string) => {
       <Content />
     </article>
 
+    {taskLinks.length > 0 && (
+      <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-8">
+        <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">🔗 이 툴이 사용되는 태스크</h3>
+        <div class="flex flex-wrap gap-2">
+          {taskLinks.map((tl: { slug: string; title: string }) => (
+            <a href={TASK_BASE + tl.slug + '/'} class="text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded-full transition-colors">
+              {tl.title} →
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
+
     {tool.data.relatedPost && (
       <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-8">
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">📖 관련 블로그 글</p>
@@ -79,7 +99,12 @@ const difficultyColor = (d: string) => {
     )}
 
     <div class="flex justify-between items-center pt-6 border-t border-gray-200 dark:border-gray-700">
-      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline">← 전체 도구 목록</a>
+      <div>
+        {tool.data.updated && (
+          <p class="text-xs text-gray-400 dark:text-gray-500">최종 업데이트: {tool.data.updated}</p>
+        )}
+      </div>
+      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">← 전체 도구 목록</a>
     </div>
   </div>
 </Layout>
