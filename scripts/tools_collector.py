@@ -1,15 +1,17 @@
 #!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 """
-aikorea24 AI 툴 대량 확충기 v1.0
-- TAAFT/Toolify/Product Hunt 수집
+aikorea24 AI 툴 대량 확충기 v2.0
+- Product Hunt RSS / Hacker News API → 실시간 수집
 - GPT-4o-mini 한국어 메타데이터 생성
 - im-not-ai 3단계 한국어 품질 보강
 - MD 파일 생성 → git commit → 텔레그램 알림
 
-재사용: news_collector.py의 batch_translate 패턴, load_env, send_telegram
+재사용: news_collector.py의 fetch_rss_global 패턴, batch_translate, load_env, send_telegram
 """
-import os, sys, json, re, hashlib, subprocess
-from datetime import datetime
+import os, sys, json, re, hashlib, subprocess, urllib.request, urllib.parse
+from datetime import datetime, timedelta
+from xml.etree import ElementTree as ET
+from html import unescape
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
@@ -35,6 +37,220 @@ load_env(os.path.join(PROJECT_DIR, '.env'))
 load_env(os.path.join(PROJECT_DIR, 'api_test', '.env.sh'))
 
 OPENAI_KEY = os.environ.get('OPENAI_API_KEY', '')
+
+# ============================================
+# news_collector.py에서 batch_translate import
+# ============================================
+try:
+    # api_test 디렉토리에서 import
+    sys.path.insert(0, os.path.join(PROJECT_DIR, 'api_test'))
+    from news_collector import batch_translate, load_env as nc_load_env
+except ImportError:
+    batch_translate = None
+    nc_load_env = None
+
+# ============================================
+# 수집 함수: Product Hunt RSS
+# ============================================
+PRODUCT_HUNT_FEED = 'https://www.producthunt.com/feed'
+
+# AI 툴로 분류할 키워드 (Product Hunt: 제목 기준으로만 매칭)
+PH_AI_KEYWORDS = [
+    'AI', 'GPT', 'LLM', 'LLaMA', 'Mistral', 'Claude',
+    'Gemini', 'Copilot', 'OpenAI', 'Anthropic', 'ChatGPT',
+    'machine learning', 'deep learning', 'neural network',
+    'artificial intelligence', 'generative',
+    'no-code LLM', 'AI agent', 'AI tool', 'AI-powered',
+]
+
+# Product Hunt 설명에서 가격 정보 추출
+PH_PRICE_PATTERNS = [
+    (r'\$(0|)\s*free', 'Free'),
+    (r'free', 'Free'),
+    (r'\$(\d+)/month', r'$\1/month'),
+    (r'\$(\d+)/mo', r'$\1/month'),
+    (r'\$(\d+)\.?\d*\s*(one-time|one time|lifetime)', r'$\1 one-time'),
+    (r'from\s*\$(\d+)', r'from $\1'),
+]
+
+
+def extract_price(description: str) -> str:
+    """Product Hunt 설명에서 가격 정보 추출"""
+    desc_lower = description.lower()
+    for pattern, replacement in PH_PRICE_PATTERNS:
+        m = re.search(pattern, desc_lower)
+        if m:
+            # replacement이 lambda가 아닌 문자열이면
+            if isinstance(replacement, str):
+                result = replacement
+                for i, group in enumerate(m.groups()):
+                    placeholder = f'\\{i+1}'
+                    # 간단 치환
+                return result
+            return m.group(0)
+    return ''
+
+
+def is_ai_tool(title: str, description: str = '') -> bool:
+    """Product Hunt 아이템이 AI 툴인지 판별 (제목 기준)"""
+    title_lower = title.lower()
+    for kw in PH_AI_KEYWORDS:
+        if kw.lower() in title_lower:
+            return True
+    # description에도 ai 키워드가 포함된 경우 + 제목에도 'tool'이 있는 경우 완화
+    desc_lower = description.lower()
+    if 'tool' in title_lower:
+        for kw in ['ai', 'intelligence', 'neural', 'deep learning', 'machine learning']:
+            if kw in desc_lower:
+                return True
+    return False
+
+
+NS_ATOM = '{http://www.w3.org/2005/Atom}'
+
+def fetch_product_hunt(limit=15) -> list:
+    """Product Hunt Atom 피드 → AI 툴 목록"""
+    items = []
+    try:
+        req = urllib.request.Request(
+            PRODUCT_HUNT_FEED,
+            headers={'User-Agent': 'aikorea24-bot/2.0 (RSS collector)'}
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            raw = resp.read()
+        root = ET.fromstring(raw)
+        for entry in root.iter(f'{NS_ATOM}entry'):
+            if len(items) >= limit:
+                break
+            title_el = entry.find(f'{NS_ATOM}title')
+            link_el = entry.find(f'{NS_ATOM}link')
+            content_el = entry.find(f'{NS_ATOM}content')
+            pub_el = entry.find(f'{NS_ATOM}published')
+            if title_el is None or link_el is None:
+                continue
+            title = (title_el.text or '').strip()
+            # Atom link: <link rel="alternate" href="...">
+            href = link_el.get('href', '')
+            if not href:
+                continue
+            # content/description
+            desc_raw = (content_el.text or '') if content_el is not None else ''
+            desc = re.sub(r'<[^>]+>', ' ', desc_raw)
+            desc = re.sub(r'\s+', ' ', desc).strip()
+            # Product Hunt boilerplate 제거
+            desc = re.sub(r'\s*Discussion\s*\|\s*Link\s*', '', desc)
+            desc = desc[:500]
+
+            # AI 툴 필터
+            if not is_ai_tool(title, desc):
+                continue
+
+            # 가격 추출
+            price = extract_price(desc)
+            if not price:
+                price = ''
+
+            items.append({
+                'name': title,
+                'description': desc,
+                'price': price,
+                'url': href,
+                'source': 'Product Hunt',
+                'pub_date': (pub_el.text or '')[:10] if pub_el is not None else '',
+            })
+        print(f"  Product Hunt: {len(items)}개 수집 (AI 필터 후)")
+    except Exception as e:
+        print(f"  Product Hunt 수집 실패: {e}")
+    return items
+
+
+# ============================================
+# 수집 함수: Hacker News (Show HN)
+# ============================================
+HN_API_URL = 'https://hn.algolia.com/api/v1/search'
+
+HN_AI_KEYWORDS = [
+    'ai', 'llm', 'gpt', 'chatgpt', 'claude', 'gemini', 'llama', 'mistral',
+    'machine learning', 'deep learning', 'neural network', 'copilot',
+    'openai', 'anthropic', 'generative', 'rag', 'agent',
+    'vector database', 'embedding', 'transformer', 'diffusion',
+]
+
+
+def fetch_hacker_news_tools(limit=15) -> list:
+    """Hacker News Show HN → AI 툴 목록"""
+    items = []
+    try:
+        # 최근 30일 이내 Show HN + AI tool 검색어
+        cutoff = int((datetime.now() - timedelta(days=30)).timestamp())
+        params = urllib.parse.urlencode({
+            'tags': 'show_hn',
+            'query': 'AI tool',
+            'hitsPerPage': 50,
+            'numericFilters': f'created_at_i>{cutoff}',
+        })
+        url = f'{HN_API_URL}?{params}'
+        req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/2.0'})
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            raw = resp.read()
+        data = json.loads(raw)
+        for hit in data.get('hits', []):
+            if len(items) >= limit:
+                break
+            title = hit.get('title', '').strip()
+            # Show HN prefix 제거
+            title = re.sub(r'^Show\s+HN:\s*', '', title, flags=re.IGNORECASE)
+            # AI 관련 필터
+            text_to_check = title.lower()
+            if not any(kw in text_to_check for kw in HN_AI_KEYWORDS):
+                continue
+            # URL
+            url = hit.get('url') or f"https://news.ycombinator.com/item?id={hit.get('objectID', '')}"
+            # 포인트 (인기도)
+            points = hit.get('points', 0)
+            # 설명 (HN은 description이 없고 title에 모든 정보)
+            desc = hit.get('story_text', '') or ''
+            desc = re.sub(r'<[^>]+>', ' ', desc)
+            desc = re.sub(r'\s+', ' ', desc).strip()[:300]
+
+            items.append({
+                'name': title,
+                'description': desc if desc else f"Show HN: {title}",
+                'price': '',
+                'url': url,
+                'source': 'Hacker News',
+                'points': points,
+                'pub_date': datetime.fromtimestamp(hit.get('created_at_i', 0)).strftime('%Y-%m-%d') if hit.get('created_at_i') else '',
+            })
+        print(f"  Hacker News: {len(items)}개 수집")
+    except Exception as e:
+        print(f"  Hacker News 수집 실패: {e}")
+    return items
+
+
+# ============================================
+# 통합 수집
+# ============================================
+def collect_tools(limit_per_source=15) -> list:
+    """모든 소스에서 툴 수집 → 중복 제거된 리스트"""
+    all_tools = []
+    all_tools.extend(fetch_product_hunt(limit=limit_per_source))
+    all_tools.extend(fetch_hacker_news_tools(limit=limit_per_source))
+
+    # 중복 제거 (URL 기준)
+    seen_urls = set()
+    unique_tools = []
+    for t in all_tools:
+        url = t.get('url', '').strip()
+        if url and url in seen_urls:
+            continue
+        if url:
+            seen_urls.add(url)
+        unique_tools.append(t)
+
+    print(f"  총 {len(unique_tools)}개 (중복 제거 후)")
+    return unique_tools
+
 
 # ============================================
 # im-not-ai 1단계: GPT 프롬프트 금지 패턴 (예방)
@@ -458,7 +674,41 @@ def git_commit(message: str) -> bool:
 # ============================================
 # 배치 처리
 # ============================================
-def process_batch(tools: list, batch_size=5, max_workers=3) -> list:
+def translate_tools(tools: list) -> list:
+    """batch_translate()를 재사용해 툴명/설명 한국어 번역"""
+    if batch_translate is None:
+        print("  batch_translate import 실패, 번역 스킵")
+        return tools
+    if not OPENAI_KEY:
+        print("  OPENAI_API_KEY 없음, 번역 스킵")
+        return tools
+    # tools → articles 포맷 변환
+    articles = []
+    for t in tools:
+        articles.append({
+            'title': t.get('name', ''),
+            'description': t.get('description', ''),
+            'country': 'us',  # 번역 대상으로 표시
+            'link': t.get('url', ''),
+            'source': t.get('source', ''),
+            'category': 'global',
+            'pub_date': t.get('pub_date', ''),
+            'source_url': '',
+            'original_title': t.get('name', ''),
+        })
+    print(f"  번역 시작: {len(articles)}건 (batch_translate 재사용)...")
+    translated = batch_translate(articles)
+    # articles → tools 포맷 복원
+    for i, a in enumerate(translated):
+        if i < len(tools):
+            tools[i]['name'] = a.get('title', tools[i]['name'])
+            tools[i]['description'] = a.get('description', tools[i]['description'])
+            tools[i]['original_name'] = a.get('original_title', tools[i].get('original_name', ''))
+    print(f"  번역 완료")
+    return tools
+
+
+def process_batch(tools: list, batch_size=5, max_workers=3, translate=False) -> list:
     """툴 목록을 배치로 처리 → 생성된 slug 목록 반환"""
     existing_slugs, existing_names = get_existing_tool_names()
     print(f"기존 툴: {len(existing_slugs)}개 (슬러그), {len(existing_names)}개 (이름)")
@@ -473,6 +723,15 @@ def process_batch(tools: list, batch_size=5, max_workers=3) -> list:
             print(f"  중복 스킵: {name}")
             continue
         new_tools.append(t)
+    
+    if not new_tools:
+        print("새로운 툴 없음")
+        return []
+    
+    # 번역 (옵션)
+    if translate:
+        print("\n[번역] batch_translate()로 한국어 번역...")
+        new_tools = translate_tools(new_tools)
     
     if not new_tools:
         print("새로운 툴 없음")
@@ -562,11 +821,26 @@ def main():
                        help='샘플 데이터로 테스트 실행')
     parser.add_argument('--json', type=str,
                        help='JSON 파일 경로 (툴 목록)')
+    parser.add_argument('--collect', action='store_true',
+                       help='Product Hunt + HN 실시간 수집 후 처리')
+    parser.add_argument('--dry-run', action='store_true',
+                       help='실제 저장 없이 수집 결과만 출력')
+    parser.add_argument('--translate', action='store_true',
+                       help='batch_translate()로 영문→한국어 번역')
+    parser.add_argument('--limit', type=int, default=10,
+                       help='소스당 수집 제한 개수')
     args = parser.parse_args()
 
     # 툴 목록 로드
     tools = []
-    if args.sample:
+    if args.collect:
+        print(f"[수집 모드] Product Hunt + Hacker News (소스당 {args.limit}개)")
+        tools = collect_tools(limit_per_source=args.limit)
+        if not tools:
+            print("수집된 툴 없음")
+            sys.exit(0)
+        print(f"수집 완료: {len(tools)}개")
+    elif args.sample:
         tools = SAMPLE_TOOLS
         print(f"[샘플 모드] {len(tools)}개 툴 처리")
     elif args.json:
@@ -574,13 +848,38 @@ def main():
             tools = json.load(f)
         print(f"[JSON 모드] {len(tools)}개 툴 로드")
     else:
-        print("사용법: python3 tools_collector.py --sample (테스트)")
-        print("       python3 tools_collector.py --json tools.json (배치)")
-        print("       python3 tools_collector.py --batch 50 (초기 대량)")
+        print("사용법:")
+        print("  python3 tools_collector.py --collect --batch 5        # 실시간 수집 + 처리")
+        print("  python3 tools_collector.py --collect --dry-run       # 수집만, 저장 안 함")
+        print("  python3 tools_collector.py --collect --translate     # 수집 + 번역 + 처리")
+        print("  python3 tools_collector.py --sample                  # 샘플 테스트")
+        print("  python3 tools_collector.py --json tools.json --batch 50  # JSON 배치")
+        sys.exit(0)
+
+    # DRY RUN: 수집 결과만 출력
+    if args.dry_run:
+        print(f"\n{'='*55}")
+        print(f"[DRY RUN] 수집된 툴 목록 ({len(tools)}개)")
+        print(f"{'='*55}")
+        for i, t in enumerate(tools, 1):
+            name = t.get('name', '')
+            desc = t.get('description', '')[:80]
+            url = t.get('url', '')
+            price = t.get('price', '')
+            source = t.get('source', '')
+            print(f"\n  {i:2d}. {name}")
+            print(f"      설명: {desc}{'…' if len(t.get('description',''))>80 else ''}")
+            print(f"      URL:   {url}")
+            print(f"      가격:  {price or '없음'}")
+            print(f"      출처:  {source}")
+        existing_slugs, existing_names = get_existing_tool_names()
+        dup_count = sum(1 for t in tools if title_to_slug(t.get('name','')) in existing_slugs or t.get('name','').lower() in existing_names)
+        print(f"\n  → 총 {len(tools)}개 중 중복 예상: {dup_count}개")
+        print(f"  → 신규 예상: {len(tools) - dup_count}개")
         sys.exit(0)
 
     start = datetime.now()
-    created = process_batch(tools, batch_size=args.batch, max_workers=args.workers)
+    created = process_batch(tools, batch_size=args.batch, max_workers=args.workers, translate=args.translate)
     elapsed = (datetime.now() - start).total_seconds()
 
     # 요약
@@ -593,10 +892,11 @@ def main():
         git_commit(msg)
         
         # Telegram
+        existing_slugs, _ = get_existing_tool_names()
         send_telegram(
             f"🤖 <b>AI 툴 수집 완료</b>\n"
             f"신규: {len(created)}개\n"
-            f"총: {len(get_existing_tool_slugs())}개\n"
+            f"총: {len(existing_slugs)}개\n"
             f"소요: {elapsed:.0f}초"
         )
 
