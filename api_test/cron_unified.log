@@ -13418,3 +13418,117 @@ aikorea24 뉴스 수집 v4.0 - 2026-06-13 05:30
 완료! 총 204건 저장
   ✅ Cloudflare 캐시 purge 완료 (7개 URL)
 ============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-06-15 05:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 7건
+  MIT Tech Review: 7건
+  Ars Technica AI: 7건
+  VentureBeat AI: 6건
+  SCMP China Tech: 7건
+  The Decoder: 7건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 3건
+  OpenAI Blog: 7건
+  Google AI Blog: 7건
+  Ben's Bites: 5건
+  GitHub Blog: 5건
+  Simon Willison: 0건
+  HuggingFace Blog: 7건
+  Interconnects AI: 7건
+  CNN Technology: 0건
+  Reuters Technology (via Google News): 7건
+  Business Insider AI: 0건
+  NYT Technology: 7건
+  Washington Post Technology: 0건
+  BBC Technology: 5건
+  NYT AI Spotlight: 7건
+  The Guardian AI: 7건
+  Financial Times AI: 7건
+  Fast Company AI: 7건
+  The Next Web: 6건
+  City AM: 2건
+  CNBC Tech: 7건
+  The National News: 1건
+  NL Times: 0건
+  Herald Scotland: 0건
+  Guardian US News: 1건
+  Axios: 7건
+  Politico EU Tech: 7건
+  NVIDIA Newsroom 실패: syntax error: line 5, column 0
+  SEC Press Releases: 0건
+  Nature ML: 7건
+  Al Jazeera AI (via Google News): 7건
+  Anthropic News (via Google News): 7건
+  Memphis Flyer: 0건
+  Hacker News: 14건
+  유사 중복 제거: 20건
+  해외 중복제거 후: 182건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 9건
+  IT조선: 15건
+  인공지능신문: 15건
+  디지털투데이: 9건
+  IT조선 RSS 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 2건
+    'AI 스타트업': 4건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 1건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 1건
+  유사 중복 제거: 3건
+  국내 중복제거 후: 68건
+
+[비율] 해외: 182건(73%) | 국내: 68건(27%)
+
+[최종] 통합 중복제거 후: 250건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 182건 → 19배치 (5스레드 병렬)
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 3: 10건 완료
+    배치 1: 10건 완료
+    배치 7: 10건 완료
+    배치 6: 10건 완료
+    배치 9: 10건 완료
+    배치 8: 10건 완료
+    배치 4: 10건 완료
+    배치 12: 10건 완료
+    배치 10: 10건 완료
+    배치 11: 10건 완료
+    배치 13: 10건 완료
+    배치 14: 10건 완료
+    배치 19: 2건 완료
+    배치 15: 10건 완료
+    배치 17: 10건 완료
+    배치 18: 10건 완료
+    배치 16: 10건 완료
+  번역 완료: 182건 (19배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 770개
+  배치 1: 50건 저장
+  배치 2: 50건 저장
+  배치 3: 50건 저장
+  배치 4: 50건 저장
+  배치 5: 18건 저장
+  신규: 218건 | 중복 스킵: 32건
+
+============================================================
+완료! 총 218건 저장
+  ✅ Cloudflare 캐시 purge 완료 (7개 URL)
+============================================================
