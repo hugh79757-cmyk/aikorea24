@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 1.5만원~"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://try.sanebox.com/yzkpe5s68xk2"
+url: "https://www.sanebox.com"
 useCases: ["이메일 정리를 통해 업무 효율을 높이고 싶은 직장인", "학습 자료를 정리하고 관리하고 싶은 학생", "고객 이메일 관리를 효율적으로 하고 싶은 소상공인"]
 tags: ["이메일 관리", "업무 효율", "자동화"]
 featured: false

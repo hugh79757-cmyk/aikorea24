@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료/월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://get.murf.ai/v8i9to5ad4oq"
+url: "https://www.murf.ai"
 useCases: ["프레젠테이션 음성 해설 제작", "온라인 강의 음성 추가", "광고 음성 제작"]
 tags: ["음성 생성", "AI 음성", "프레젠테이션"]
 featured: false

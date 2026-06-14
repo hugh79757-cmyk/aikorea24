@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://get.meetgeek.ai/zmrnb5xlyfs9"
+url: "https://www.meetgeek.ai"
 useCases: ["회의 내용을 쉽게 기록하고 요약하고 싶은 직장인", "수업 내용을 정리하고 싶은 학생", "회의록 작성을 간편하게 하고 싶은 소상공인"]
 tags: ["회의 비서", "자동 요약", "회의 기록"]
 featured: false

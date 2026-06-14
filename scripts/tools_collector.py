@@ -209,6 +209,8 @@ ALLOW_SECTIONS = [
 # 이미 우리 디렉토리에 있거나 툴이 아닌 URL 패턴
 GITHUB_REJECT_URLS = [
     'github.com/', 'github.com/mahseema', 'altern.ai', 'theresanai.com',
+    # 어필리에이트/트래킹 URL 패턴
+    '://try.', '://get.', 'affiliate.', 'ref=', 'utm_',
 ]
 
 # 이미 있는 툴명 (대소문자 무시) — README엔 있지만 우리 기준에 안 맞는 항목
