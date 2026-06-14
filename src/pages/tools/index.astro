@@ -57,10 +57,11 @@ const difficultyColor = (d: string) => {
 
     <!-- 도구 카드 그리드 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
-      {allTools.map(tool => (
+      {allTools.map((tool, i) => (
         <a
           href={`/tools/${tool.id}/`}
           data-cat={tool.data.category}
+          data-index={i}
           class="tool-card group block bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg hover:border-blue-400 dark:hover:border-blue-500 transition-all"
         >
           <div class="flex items-start justify-between mb-3">
@@ -95,8 +96,18 @@ const difficultyColor = (d: string) => {
       ))}
     </div>
 
+    <!-- 더 보기 버튼 -->
+    <div class="text-center mt-8" id="load-more-container">
+      <button
+        id="load-more-btn"
+        class="inline-flex items-center gap-2 px-8 py-3 bg-white dark:bg-gray-800 border-2 border-blue-500 text-blue-600 dark:text-blue-400 font-medium rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+      >
+        더 보기 (<span id="load-more-count">24</span>개 남음)
+      </button>
+    </div>
+
     <!-- 도구 수 표시 -->
-    <div class="text-center mt-8 text-sm text-gray-500 dark:text-gray-400">
+    <div class="text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
       총 <strong id="tool-count">{allTools.length}</strong>개 도구
     </div>
 
@@ -104,13 +115,90 @@ const difficultyColor = (d: string) => {
 </Layout>
 
 <script>
+  const PAGE_SIZE = 24;
   const buttons = document.querySelectorAll('.filter-btn');
   const cards = document.querySelectorAll('.tool-card');
   const countEl = document.getElementById('tool-count');
+  const loadMoreBtn = document.getElementById('load-more-btn');
+  const loadMoreCount = document.getElementById('load-more-count');
+  const loadMoreContainer = document.getElementById('load-more-container');
 
+  // 현재 상태
+  let activeCategory = 'all';
+  // 각 카테고리별로 현재 몇 개까지 보여줄지
+  const shownCount: Record<string, number> = {};
+
+  function getVisibleCards() {
+    return Array.from(cards).filter(c => {
+      const cat = c.getAttribute('data-cat');
+      return activeCategory === 'all' || cat === activeCategory;
+    });
+  }
+
+  function applyVisibility() {
+    const visible = getVisibleCards();
+    const currentShown = shownCount[activeCategory] ?? PAGE_SIZE;
+    let shown = 0;
+
+    visible.forEach((card, i) => {
+      if (i < currentShown) {
+        (card as HTMLElement).style.display = '';
+        shown++;
+      } else {
+        (card as HTMLElement).style.display = 'none';
+      }
+    });
+
+    // 안 보이는 카드 (다른 카테고리)도 숨김
+    cards.forEach(c => {
+      const cat = c.getAttribute('data-cat');
+      if (activeCategory !== 'all' && cat !== activeCategory) {
+        (c as HTMLElement).style.display = 'none';
+      }
+    });
+
+    // 카운트 업데이트
+    if (countEl) countEl.textContent = String(visible.length);
+
+    // 더 보기 버튼 상태
+    const remaining = visible.length - currentShown;
+    if (loadMoreContainer && loadMoreCount) {
+      if (remaining > 0) {
+        loadMoreContainer.style.display = '';
+        loadMoreCount.textContent = String(Math.min(remaining, PAGE_SIZE));
+      } else {
+        loadMoreContainer.style.display = 'none';
+      }
+    }
+
+    // 광고 재삽입
+    insertAds();
+  }
+
+  function insertAds() {
+    document.querySelectorAll('.tools-ad-unit').forEach(function(el) { el.remove(); });
+    const grid = document.getElementById('tools-grid');
+    if (!grid) return;
+    const visibleCards = getVisibleCards().filter(c => (c as HTMLElement).style.display !== 'none');
+    let adCount = 0;
+    [8, 17].forEach(function(pos) {
+      if (pos >= visibleCards.length || adCount >= 2) return;
+      var adWrapper = document.createElement('div');
+      adWrapper.className = 'tools-ad-unit';
+      adWrapper.style.cssText = 'grid-column: 1 / -1; padding: 8px 0;';
+      adWrapper.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
+      visibleCards[pos].insertAdjacentElement('afterend', adWrapper);
+      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
+      adCount++;
+    });
+  }
+
+  // 카테고리 필터
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const cat = btn.getAttribute('data-category');
+      if (!cat) return;
+      activeCategory = cat;
 
       // 버튼 스타일
       buttons.forEach(b => {
@@ -120,55 +208,32 @@ const difficultyColor = (d: string) => {
       btn.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
       btn.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300', 'border-gray-200', 'dark:border-gray-700');
 
-      // 카드 필터
-      let visible = 0;
-      cards.forEach(card => {
-        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
-          (card as HTMLElement).style.display = '';
-          visible++;
-        } else {
-          (card as HTMLElement).style.display = 'none';
-        }
-      });
-      if (countEl) countEl.textContent = String(visible);
+      // 해당 카테고리의 shownCount 초기화 (없으면 PAGE_SIZE)
+      if (!(cat in shownCount)) {
+        shownCount[cat] = PAGE_SIZE;
+      }
 
-      // 기존 광고 제거 후 재삽입
-      document.querySelectorAll('.tools-ad-unit').forEach(function(el) { el.remove(); });
-      var grid = document.getElementById('tools-grid');
-      if (!grid) return;
-      var visibleCards = Array.from(grid.querySelectorAll('.tool-card')).filter(function(c) {
-        return (c as HTMLElement).style.display !== 'none';
-      });
-      // 9번째 카드마다 (3행 끝) 광고 삽입, 최대 2개
-      var adCount = 0;
-      [8, 17].forEach(function(pos) {
-        if (pos >= visibleCards.length || adCount >= 2) return;
-        var adWrapper = document.createElement('div');
-        adWrapper.className = 'tools-ad-unit col-span-1 sm:col-span-2 lg:col-span-3';
-        adWrapper.style.cssText = 'grid-column: 1 / -1; padding: 8px 0;';
-        adWrapper.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
-        visibleCards[pos].insertAdjacentElement('afterend', adWrapper);
-        try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-        adCount++;
-      });
+      applyVisibility();
     });
   });
 
-  // 초기 로드 시에도 광고 삽입
-  document.addEventListener('DOMContentLoaded', function() {
-    var grid = document.getElementById('tools-grid');
-    if (!grid) return;
-    var cards = grid.querySelectorAll('.tool-card');
-    var adCount = 0;
-    [8, 17].forEach(function(pos) {
-      if (pos >= cards.length || adCount >= 2) return;
-      var adWrapper = document.createElement('div');
-      adWrapper.className = 'tools-ad-unit';
-      adWrapper.style.cssText = 'grid-column: 1 / -1; padding: 8px 0;';
-      adWrapper.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
-      cards[pos].insertAdjacentElement('afterend', adWrapper);
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-      adCount++;
+  // 더 보기 버튼
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      const current = shownCount[activeCategory] ?? PAGE_SIZE;
+      shownCount[activeCategory] = current + PAGE_SIZE;
+      applyVisibility();
     });
+  }
+
+  // 초기 로드
+  document.addEventListener('DOMContentLoaded', function() {
+    // 모든 카테고리의 shownCount 초기화
+    buttons.forEach(btn => {
+      const cat = btn.getAttribute('data-category');
+      if (cat) shownCount[cat] = PAGE_SIZE;
+    });
+    activeCategory = 'all';
+    applyVisibility();
   });
 </script>
