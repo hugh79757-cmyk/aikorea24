@@ -190,10 +190,20 @@ def fetch_product_hunt(limit=15) -> list:
 # ============================================
 GITHUB_AWESOME_URL = 'https://raw.githubusercontent.com/mahseema/awesome-ai-tools/main/README.md'
 
-# 수집하지 않을 섹션 (모델/프레임워크/학습자료 등 실제 툴 아님)
-SKIP_SECTIONS = [
-    'models', 'learning resources', 'contents', 'contributors',
-    'license', 'editor',
+# 수집할 섹션만 명시적 지정 (allow-list)
+# README 구조: ## 상위섹션 → ### 하위섹션
+ALLOW_SECTIONS = [
+    'writing assistants',
+    'productivity',
+    'meeting assistants',
+    'customer support',
+    'generative ai images', 'image', 'graphic design',
+    'generative ai video', 'video',
+    'generative ai audio', 'audio', 'voice cloning', 'music generation',
+    'ai tools for marketing', 'marketing',
+    'phone call', 'phone calls',
+    'editor\'s choice',
+    'other ai tools', 'other',
 ]
 
 # 이미 우리 디렉토리에 있거나 툴이 아닌 URL 패턴
@@ -229,9 +239,10 @@ def fetch_github_awesome(limit=50) -> list:
             section_match = re.match(r'^##+\s+(.+)', line)
             if section_match:
                 current_section = section_match.group(1).lower().strip()
-                # 건너뛸 섹션 체크
-                if any(skip in current_section for skip in SKIP_SECTIONS):
-                    continue
+
+            # 섹션이 설정되기 전(## 상단)은 Editor's Choice로 간주
+            if not current_section:
+                continue
 
             # Markdown 링크 패턴: [텍스트](URL) - 설명
             # 앞에 - 또는 * 가 있을 수 있음
@@ -247,8 +258,8 @@ def fetch_github_awesome(limit=50) -> list:
             url = link_match.group(2).strip()
             desc = (link_match.group(3) or '').strip()
 
-            # 섹션 필터
-            if any(skip in current_section for skip in SKIP_SECTIONS):
+            # 섹션 allow-list 필터 (수집할 섹션만 통과)
+            if not any(allowed in current_section for allowed in ALLOW_SECTIONS):
                 continue
 
             # 이름 필터
