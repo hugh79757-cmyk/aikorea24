@@ -1,0 +1,40 @@
+[수집 모드] Product Hunt + GitHub Awesome AI Tools (소스당 10개)
+  Product Hunt: 4개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  총 14개 (중복 제거 후)
+수집 완료: 14개
+기존 툴: 69개 (슬러그), 68개 (이름)
+  중복 스킵: CakewordAI
+  중복 스킵: LocIn AI
+  중복 스킵: Asmi AI
+  중복 스킵: Airbrush Studio
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+신규 툴: 3개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (3건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/moonbeam.md
+  ✅ Moonbeam → moonbeam.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/anyword.md
+  ✅ Anyword → anyword.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/copy-ai.md
+  ✅ copy.ai → copy-ai.md
+
+==================================================
+처리 완료: 3/14개 생성 (13.0초)
+  git commit: [main 5b1c761] feat: AI 툴 3개 추가 (2026-06-15)
+ 7 files changed, 334 insertions(+)
+ create mode 100644 scripts/tools_collector.log
+ create mode 100644 scripts/tools_collector_error.log
+ create mode 1006
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 실패: /Users/twinssn/Projects/aikorea24/scripts/deploy.sh: line 13: npm: command not found
+

@@ -1,6 +1,6 @@
 {
   "AI": {
-    "search_volume": 153000,
+    "search_volume": 151000,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -12,7 +12,7 @@
     "source": "seed"
   },
   "챗GPT": {
-    "search_volume": 4576400,
+    "search_volume": 4453400,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -20,11 +20,11 @@
       "ChatGPT",
       "OpenAI"
     ],
-    "intent": "챗GPT 사용법 및 정보",
+    "intent": "챗GPT 정보 및 사용법",
     "source": "seed"
   },
   "인공지능": {
-    "search_volume": 13880,
+    "search_volume": 13410,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -32,11 +32,11 @@
       "AI",
       "Artificial Intelligence"
     ],
-    "intent": "인공지능 기술 탐색",
+    "intent": "인공지능 기술 및 응용",
     "source": "seed"
   },
   "AI이미지": {
-    "search_volume": 2370,
+    "search_volume": 2290,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -44,23 +44,23 @@
       "AI 이미지",
       "이미지 생성"
     ],
-    "intent": "AI 이미지 생성 방법",
+    "intent": "AI 이미지 생성 기술",
     "source": "seed"
   },
   "AI동영상": {
-    "search_volume": 2020,
+    "search_volume": 1930,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI동영상",
-      "AI 비디오",
+      "AI 동영상",
       "비디오 생성"
     ],
-    "intent": "AI 동영상 제작 정보",
+    "intent": "AI 동영상 생성 기술",
     "source": "seed"
   },
   "AI음악": {
-    "search_volume": 1060,
+    "search_volume": 1040,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -68,47 +68,47 @@
       "AI 음악",
       "음악 생성"
     ],
-    "intent": "AI 음악 생성 방법",
+    "intent": "AI 음악 생성 기술",
     "source": "seed"
   },
   "AI글쓰기": {
-    "search_volume": 550,
+    "search_volume": 540,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI글쓰기",
-      "AI writing",
-      "글쓰기 도구"
+      "AI 글쓰기",
+      "글 작성 도구"
     ],
-    "intent": "AI 글쓰기 도구 소개",
+    "intent": "AI 글쓰기 도구",
     "source": "seed"
   },
   "AI번역": {
-    "search_volume": 760,
+    "search_volume": 730,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI번역",
-      "AI translation",
+      "AI 번역",
       "번역 서비스"
     ],
-    "intent": "AI 번역 서비스 정보",
+    "intent": "AI 번역 서비스",
     "source": "seed"
   },
   "AI요약": {
-    "search_volume": 310,
+    "search_volume": 320,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI요약",
-      "AI summary",
-      "요약 도구"
+      "AI 요약",
+      "내용 요약"
     ],
-    "intent": "AI 요약 도구 탐색",
+    "intent": "AI 요약 기술",
     "source": "seed"
   },
   "코파일럿": {
-    "search_volume": 25700,
+    "search_volume": 24500,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -117,246 +117,246 @@
       "GitHub Copilot"
     ],
     "intent": "코파일럿 기능 및 사용법",
-    "source": "news"
+    "source": "seed"
   },
-  "AI 국가시범도시": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
+  "오픈AI": {
+    "search_volume": 60500,
+    "competition": "높음",
+    "grade": "A",
     "db_query": [
-      "AI 국가시범도시",
-      "AI city",
-      "스마트 시티"
-    ],
-    "intent": "AI 국가시범도시 정보",
-    "source": "news"
-  },
-  "삼성전자 반도체 패키징": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "삼성전자 반도체 패키징",
-      "Samsung semiconductor",
-      "반도체 기술"
-    ],
-    "intent": "삼성 반도체 기술 정보",
-    "source": "news"
-  },
-  "서울 AI 허브": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "서울 AI 허브",
-      "Seoul AI Hub",
+      "오픈AI",
+      "OpenAI",
       "AI 연구소"
     ],
-    "intent": "서울 AI 허브 정보",
+    "intent": "오픈AI 관련 정보",
     "source": "news"
   },
-  "인공지능&빅데이터쇼 2026": {
+  "앤트로픽": {
+    "search_volume": 76700,
+    "competition": "중간",
+    "grade": "A",
+    "db_query": [
+      "앤트로픽",
+      "Anthropic",
+      "AI 연구"
+    ],
+    "intent": "앤트로픽 기술 및 제품",
+    "source": "news"
+  },
+  "클로드 페이블5": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "인공지능&빅데이터쇼 2026",
-      "AI Big Data Show",
-      "전시회"
+      "클로드 페이블5",
+      "Claude 5",
+      "앤트로픽"
     ],
-    "intent": "AI 빅데이터 쇼 정보",
+    "intent": "클로드 페이블5 정보",
     "source": "news"
   },
-  "안두릴": {
-    "search_volume": 5430,
+  "미토스5": {
+    "search_volume": 310,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "안두릴",
-      "Anduril",
-      "국방 기술"
-    ],
-    "intent": "안두릴 제품 정보",
-    "source": "news"
-  },
-  "팔란티어 AI 플랫폼": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "팔란티어 AI 플랫폼",
-      "Palantir AI",
-      "데이터 분석"
-    ],
-    "intent": "팔란티어 플랫폼 소개",
-    "source": "news"
-  },
-  "클로드 코드": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "클로드 코드",
-      "Claude code",
-      "AI 개발"
-    ],
-    "intent": "클로드 코드 정보",
-    "source": "news"
-  },
-  "코덱스": {
-    "search_volume": 39500,
-    "competition": "낮음",
-    "grade": "A",
-    "db_query": [
-      "코덱스",
-      "Codex",
-      "AI 개발 도구"
-    ],
-    "intent": "코덱스 플랫폼 정보",
-    "source": "news"
-  },
-  "스킬옵트": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "스킬옵트",
-      "SkillOpt",
-      "AI 솔루션"
-    ],
-    "intent": "스킬옵트 서비스 정보",
-    "source": "news"
-  },
-  "핸드사인버스": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "핸드사인버스",
-      "HandSignVerse",
-      "AI 기술"
-    ],
-    "intent": "핸드사인버스 기술 정보",
-    "source": "news"
-  },
-  "모빌테크": {
-    "search_volume": 1190,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "모빌테크",
-      "MobilTech",
-      "모빌리티 기술"
-    ],
-    "intent": "모빌테크 제품 정보",
-    "source": "news"
-  },
-  "렉스젠": {
-    "search_volume": 610,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "렉스젠",
-      "RexGen",
-      "AI 솔루션"
-    ],
-    "intent": "렉스젠 기술 탐색",
-    "source": "news"
-  },
-  "슈어소프트테크": {
-    "search_volume": 34560,
-    "competition": "낮음",
-    "grade": "A",
-    "db_query": [
-      "슈어소프트테크",
-      "SureSoftTech",
-      "소프트웨어 솔루션"
-    ],
-    "intent": "슈어소프트테크 정보",
-    "source": "news"
-  },
-  "퓨처메인 ExRBM": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "퓨처메인 ExRBM",
-      "FutureMain",
-      "AI 기술"
-    ],
-    "intent": "퓨처메인 기술 정보",
-    "source": "news"
-  },
-  "VUNO Med-DeepCARS": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "VUNO Med-DeepCARS",
-      "VUNO",
-      "의료 AI"
-    ],
-    "intent": "VUNO 의료 AI 정보",
-    "source": "news"
-  },
-  "아고라 AI 에이전트": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "아고라 AI 에이전트",
-      "Agora AI Agent",
-      "AI 서비스"
-    ],
-    "intent": "아고라 AI 에이전트 정보",
-    "source": "news"
-  },
-  "구글 AI 플러스": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "구글 AI 플러스",
-      "Google AI Plus",
-      "AI 서비스"
-    ],
-    "intent": "구글 AI 플러스 정보",
-    "source": "news"
-  },
-  "클로드 페이블 5": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "클로드 페이블 5",
-      "Claude Fable 5",
+      "미토스5",
+      "Mitosis 5",
       "AI 모델"
     ],
-    "intent": "클로드 페이블 5 정보",
+    "intent": "미토스5 기술 정보",
     "source": "news"
   },
-  "U월드 U1 시리즈": {
+  "실리콘 캐패시터": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "U월드 U1 시리즈",
-      "UWorld U1 Series",
-      "AI 제품"
+      "실리콘 캐패시터",
+      "Silicon Capacitor",
+      "전자 부품"
     ],
-    "intent": "U월드 U1 시리즈 정보",
+    "intent": "실리콘 캐패시터 기술",
     "source": "news"
   },
-  "AI 협업툴 플로우": {
+  "AI 전환": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AI 협업툴 플로우",
-      "AI collaboration tool Flow",
-      "협업 도구"
+      "AI 전환",
+      "AI Transformation",
+      "디지털 전환"
     ],
-    "intent": "AI 협업툴 플로우 정보",
+    "intent": "AI 전환 기술 및 사례",
+    "source": "news"
+  },
+  "AI 에이전트": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 에이전트",
+      "AI Agent",
+      "자동화 도구"
+    ],
+    "intent": "AI 에이전트 기술",
+    "source": "news"
+  },
+  "RB-Y1": {
+    "search_volume": 60,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "RB-Y1",
+      "AI 로봇",
+      "로봇 기술"
+    ],
+    "intent": "RB-Y1 제품 정보",
+    "source": "news"
+  },
+  "패브릭스": {
+    "search_volume": 170,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "패브릭스",
+      "Fabrics",
+      "AI 솔루션"
+    ],
+    "intent": "패브릭스 기술 및 제품",
+    "source": "news"
+  },
+  "브리티웍스": {
+    "search_volume": 470,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "브리티웍스",
+      "Britworks",
+      "AI 스타트업"
+    ],
+    "intent": "브리티웍스 정보",
+    "source": "news"
+  },
+  "제피": {
+    "search_volume": 6900,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "제피",
+      "Zephy",
+      "AI 플랫폼"
+    ],
+    "intent": "제피 기술 및 서비스",
+    "source": "news"
+  },
+  "하이브리드 AI": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "하이브리드 AI",
+      "Hybrid AI",
+      "AI 통합"
+    ],
+    "intent": "하이브리드 AI 기술",
+    "source": "news"
+  },
+  "에이전틱 AI": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "에이전틱 AI",
+      "Agentic AI",
+      "AI 시스템"
+    ],
+    "intent": "에이전틱 AI 정보",
+    "source": "news"
+  },
+  "피지컬 AI": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "피지컬 AI",
+      "Physical AI",
+      "물리적 AI"
+    ],
+    "intent": "피지컬 AI 기술",
+    "source": "news"
+  },
+  "NIA": {
+    "search_volume": 9050,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "NIA",
+      "AI 연구소",
+      "AI 기술"
+    ],
+    "intent": "NIA 관련 정보",
+    "source": "news"
+  },
+  "휴니버스글로벌": {
+    "search_volume": 310,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "휴니버스글로벌",
+      "HUniverse Global",
+      "AI 기업"
+    ],
+    "intent": "휴니버스글로벌 정보",
+    "source": "news"
+  },
+  "AI 기반 응급의료": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 기반 응급의료",
+      "AI Emergency Medical",
+      "의료 기술"
+    ],
+    "intent": "AI 응급의료 기술",
+    "source": "news"
+  },
+  "AI 클라우드": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 클라우드",
+      "AI Cloud",
+      "클라우드 서비스"
+    ],
+    "intent": "AI 클라우드 서비스",
+    "source": "news"
+  },
+  "AI 스타트업": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 스타트업",
+      "AI Startup",
+      "스타트업 기업"
+    ],
+    "intent": "AI 스타트업 정보",
+    "source": "news"
+  },
+  "AI 모델": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 모델",
+      "AI Model",
+      "머신러닝 모델"
+    ],
+    "intent": "AI 모델 기술",
     "source": "news"
   }
 }
