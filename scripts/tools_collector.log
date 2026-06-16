@@ -38,3 +38,43 @@
 [배포] Cloudflare Pages 배포 중...
   배포 실패: /Users/twinssn/Projects/aikorea24/scripts/deploy.sh: line 13: npm: command not found
 
+[수집 모드] Product Hunt + GitHub Awesome AI Tools (소스당 10개)
+  Product Hunt: 5개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  총 15개 (중복 제거 후)
+수집 완료: 15개
+기존 툴: 72개 (슬러그), 71개 (이름)
+  중복 스킵: CakewordAI
+  중복 스킵: LocIn AI
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+  중복 스킵: Moonbeam
+  중복 스킵: copy.ai
+  중복 스킵: Anyword
+신규 툴: 3개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (3건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/kickbacks-ai.md
+  ✅ Kickbacks.ai → kickbacks-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/colibotai.md
+  ✅ ColibotAI → colibotai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/emailflow-ai.md
+  ✅ EmailFlow.AI → emailflow-ai.md
+
+==================================================
+처리 완료: 3/15개 생성 (12.4초)
+  git commit: [main 93d6c72] feat: AI 툴 3개 추가 (2026-06-16)
+ 5 files changed, 351 insertions(+)
+ create mode 100644 src/content/tools/colibotai.md
+ create mode 100644 src/content/tools/emailflow-ai.md
+ create mode 1
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

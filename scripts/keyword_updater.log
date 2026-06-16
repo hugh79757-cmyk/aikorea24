@@ -472,3 +472,119 @@
 [08:00:49]   텔레그램 알림 전송 완료
 
 [08:00:49] ✅ 키워드 갱신 완료!
+[08:00:04] 키워드 갱신 시작 (2026-06-16)
+
+[08:00:04] =======================================================
+[08:00:04] STEP 1/9: seeds.json 로드
+[08:00:04] =======================================================
+[08:00:04]   베이스 키워드: 10개
+
+[08:00:04] =======================================================
+[08:00:04] STEP 2/9: D1 뉴스 조회
+[08:00:04] =======================================================
+[08:00:05] D1 조회: 2026-06-15 (100건)
+
+[08:00:05] =======================================================
+[08:00:05] STEP 3/9: OpenAI 신규 키워드 추출
+[08:00:05] =======================================================
+[08:00:12] OpenAI 키워드 추출: 19개
+[08:00:12]   추출된 신규 키워드: ['에이전틱 AI', '바이트댄스', '일루바타', '앤트로픽', '미토스 5', '넥슨 개발자 콘퍼런스', 'KT 다국어 AI 상담사', '실드 AI', '데스티누스', '한전KDN', '유로사토리', 'SBVA', 'UP 2026', '닥시', '클라썸 부스트', '링고엑스', '리슨 AI', 'MSI Claw 8 EX AI+', 'Sigma AI']
+
+[08:00:12] =======================================================
+[08:00:12] STEP 4/9: 키워드 병합 (중복 제거)
+[08:00:12] =======================================================
+[08:00:12]   병합 완료: 29개 (seed 10개 + 신규 19개)
+
+[08:00:12] =======================================================
+[08:00:12] STEP 5/9: 네이버 검색광고 API 조회
+[08:00:12] =======================================================
+[08:00:12]   네이버 API 조회: 1~5/29: AI, 챗GPT, 인공지능, AI이미지, AI동영상
+[08:00:14]     ✓ AI: 검색량=153200, 경쟁도=높음
+[08:00:14]     ✓ 챗GPT: 검색량=4537100, 경쟁도=높음
+[08:00:14]     ✓ 인공지능: 검색량=13570, 경쟁도=높음
+[08:00:14]     ✓ AI이미지: 검색량=2330, 경쟁도=높음
+[08:00:14]     ✓ AI동영상: 검색량=1940, 경쟁도=높음
+[08:00:14]   네이버 API 조회: 6~10/29: AI음악, AI글쓰기, AI번역, AI요약, 코파일럿
+[08:00:16]     ✓ AI음악: 검색량=1070, 경쟁도=높음
+[08:00:16]     ✓ AI글쓰기: 검색량=560, 경쟁도=높음
+[08:00:16]     ✓ AI번역: 검색량=740, 경쟁도=높음
+[08:00:16]     ✓ AI요약: 검색량=330, 경쟁도=높음
+[08:00:16]     ✓ 코파일럿: 검색량=24900, 경쟁도=높음
+[08:00:16]   네이버 API 조회: 11~15/29: 에이전틱 AI, 바이트댄스, 일루바타, 앤트로픽, 미토스 5
+[08:00:16]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%97%90%EC%9D%B4%EC%A0%84%ED%8B%B1%20AI%2C%EB%B0%94%EC%9D%B4%ED%8A%B8%EB%8C%84%EC%8A%A4%2C%EC%9D%BC%EB%A3%A8%EB%B0%94%ED%83%80%2C%EC%95%A4%ED%8A%B8%EB%A1%9C%ED%94%BD%2C%EB%AF%B8%ED%86%A0%EC%8A%A4%205&showDetail=1
+[08:00:17]     ✗ 에이전틱 AI: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%97%90%EC%9D%B4%EC%A0%84%ED%8B%B1%20AI&showDetail=1
+[08:00:18]     ✓ 바이트댄스: 검색량=2060, 경쟁도=중간 (개별 재시도 성공)
+[08:00:19]     ✓ 일루바타: 검색량=20, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:20]     ✓ 앤트로픽: 검색량=79500, 경쟁도=중간 (개별 재시도 성공)
+[08:00:21]     ✗ 미토스 5: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%AF%B8%ED%86%A0%EC%8A%A4%205&showDetail=1
+[08:00:21]   네이버 API 조회: 16~20/29: 넥슨 개발자 콘퍼런스, KT 다국어 AI 상담사, 실드 AI, 데스티누스, 한전KDN
+[08:00:22]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%84%A5%EC%8A%A8%20%EA%B0%9C%EB%B0%9C%EC%9E%90%20%EC%BD%98%ED%8D%BC%EB%9F%B0%EC%8A%A4%2CKT%20%EB%8B%A4%EA%B5%AD%EC%96%B4%20AI%20%EC%83%81%EB%8B%B4%EC%82%AC%2C%EC%8B%A4%EB%93%9C%20AI%2C%EB%8D%B0%EC%8A%A4%ED%8B%B0%EB%88%84%EC%8A%A4%2C%ED%95%9C%EC%A0%84KDN&showDetail=1
+[08:00:23]     ✗ 넥슨 개발자 콘퍼런스: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%84%A5%EC%8A%A8%20%EA%B0%9C%EB%B0%9C%EC%9E%90%20%EC%BD%98%ED%8D%BC%EB%9F%B0%EC%8A%A4&showDetail=1
+[08:00:24]     ✗ KT 다국어 AI 상담사: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=KT%20%EB%8B%A4%EA%B5%AD%EC%96%B4%20AI%20%EC%83%81%EB%8B%B4%EC%82%AC&showDetail=1
+[08:00:24]     ✗ 실드 AI: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%8B%A4%EB%93%9C%20AI&showDetail=1
+[08:00:25]     ✓ 데스티누스: 검색량=20, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:26]     ✓ 한전KDN: 검색량=11540, 경쟁도=중간 (개별 재시도 성공)
+[08:00:27]   네이버 API 조회: 21~25/29: 유로사토리, SBVA, UP 2026, 닥시, 클라썸 부스트
+[08:00:27]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%9C%A0%EB%A1%9C%EC%82%AC%ED%86%A0%EB%A6%AC%2CSBVA%2CUP%202026%2C%EB%8B%A5%EC%8B%9C%2C%ED%81%B4%EB%9D%BC%EC%8D%B8%20%EB%B6%80%EC%8A%A4%ED%8A%B8&showDetail=1
+[08:00:28]     ✓ 유로사토리: 검색량=1450, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:29]     ✓ SBVA: 검색량=840, 경쟁도=중간 (개별 재시도 성공)
+[08:00:30]     ✗ UP 2026: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=UP%202026&showDetail=1
+[08:00:31]     ✓ 닥시: 검색량=20, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:33]     ✗ 클라썸 부스트: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%81%B4%EB%9D%BC%EC%8D%B8%20%EB%B6%80%EC%8A%A4%ED%8A%B8&showDetail=1
+[08:00:33]   네이버 API 조회: 26~29/29: 링고엑스, 리슨 AI, MSI Claw 8 EX AI+, Sigma AI
+[08:00:34]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%A7%81%EA%B3%A0%EC%97%91%EC%8A%A4%2C%EB%A6%AC%EC%8A%A8%20AI%2CMSI%20Claw%208%20EX%20AI%2B%2CSigma%20AI&showDetail=1
+[08:00:35]     ✓ 링고엑스: 검색량=20, 경쟁도=중간 (개별 재시도 성공)
+[08:00:36]     ✗ 리슨 AI: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%A6%AC%EC%8A%A8%20AI&showDetail=1
+[08:00:37]     ✗ MSI Claw 8 EX AI+: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=MSI%20Claw%208%20EX%20AI%2B&showDetail=1
+[08:00:38]     ✗ Sigma AI: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=Sigma%20AI&showDetail=1
+
+[08:00:38] =======================================================
+[08:00:38] STEP 6/9: grade 계산
+[08:00:38] =======================================================
+[08:00:38]   [S] AI: 검색량=153,200, 경쟁도=높음, 출처=seed
+[08:00:38]   [S] 챗GPT: 검색량=4,537,100, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] 인공지능: 검색량=13,570, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] AI이미지: 검색량=2,330, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] AI동영상: 검색량=1,940, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] AI음악: 검색량=1,070, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] AI글쓰기: 검색량=560, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] AI번역: 검색량=740, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] AI요약: 검색량=330, 경쟁도=높음, 출처=seed
+[08:00:38]   [A] 코파일럿: 검색량=24,900, 경쟁도=높음, 출처=seed
+[08:00:38]   [B] 에이전틱 AI: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 바이트댄스: 검색량=2,060, 경쟁도=중간, 출처=news
+[08:00:38]   [B] 일루바타: 검색량=20, 경쟁도=낮음, 출처=news
+[08:00:38]   [A] 앤트로픽: 검색량=79,500, 경쟁도=중간, 출처=news
+[08:00:38]   [B] 미토스 5: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 넥슨 개발자 콘퍼런스: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] KT 다국어 AI 상담사: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 실드 AI: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 데스티누스: 검색량=20, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 한전KDN: 검색량=11,540, 경쟁도=중간, 출처=news
+[08:00:38]   [B] 유로사토리: 검색량=1,450, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] SBVA: 검색량=840, 경쟁도=중간, 출처=news
+[08:00:38]   [B] UP 2026: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 닥시: 검색량=20, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 클라썸 부스트: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] 링고엑스: 검색량=20, 경쟁도=중간, 출처=news
+[08:00:38]   [B] 리슨 AI: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] MSI Claw 8 EX AI+: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:38]   [B] Sigma AI: 검색량=0, 경쟁도=낮음, 출처=news
+
+[08:00:38] =======================================================
+[08:00:38] STEP 7/9: OpenAI intent + db_query 생성
+[08:00:38] =======================================================
+[08:01:01] OpenAI intent/db_query 생성: 29개 키워드
+
+[08:01:01] =======================================================
+[08:01:01] STEP 8/9: keywords.json 저장
+[08:01:01] =======================================================
+[08:01:01] 백업 완료: /Users/twinssn/Projects/aikorea24/scripts/keywords.json.bak
+[08:01:01] keywords.json 저장 완료: 29개 키워드
+
+[08:01:01] =======================================================
+[08:01:01] STEP 9/9: 텔레그램 알림
+[08:01:01] =======================================================
+[08:01:02]   텔레그램 알림 전송 완료
+
+[08:01:02] ✅ 키워드 갱신 완료!
