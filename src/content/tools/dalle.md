@@ -12,7 +12,7 @@ tags: ["이미지생성", "ChatGPT", "로고", "간편"]
 featured: false
 order: 11
 tasks: ["이미지-생성", "이미지-생성-무료", "로고-디자인"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

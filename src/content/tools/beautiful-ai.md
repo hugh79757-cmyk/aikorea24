@@ -12,7 +12,7 @@ tags: ["프레젠테이션", "PPT", "자동 레이아웃", "디자인", "비즈�
 featured: false
 order: 58
 tasks: ["ppt-발표"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

@@ -11,7 +11,7 @@ tags: ["노코드", "웹앱", "브라우저", "풀스택"]
 featured: false
 order: 43
 tasks: ["코딩", "노코드"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

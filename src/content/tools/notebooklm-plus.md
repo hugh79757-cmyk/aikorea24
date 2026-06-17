@@ -1,6 +1,6 @@
 ---
 name: "NotebookLM Plus"
-description: "구글의 AI 기반 연구 노트 도구. 내가 올린 문서·PDF·유튜브 영상을 AI가 완전히 이해하고, 팟캐스트 형식의 오디오 요약까지 자동 생성합니다."
+description: "구글의 AI 기반 연구 노트 도구. 내가 올린 문서·PDF·유튜브 영상을 AI가 완전히 이해하고 팟캐스트 형식의 오디오 요약까지 자동 생성합니다."
 category: "생산성·업무"
 price: "무료 / Google One AI Premium 포함"
 koreanSupport: true
@@ -11,12 +11,12 @@ tags: ["생산성", "문서분석", "Google", "요약", "연구"]
 featured: true
 order: 9
 tasks: ["논문-요약", "pdf-요약", "회의-요약"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약
 
-내가 제공한 자료만을 기반으로 답변하는 AI 연구 도우미입니다. 환각(hallucination) 없이 정확한 정보를 제공하며, 자료를 팟캐스트 형식으로 자동 변환하는 기능이 독보적입니다.
+내가 제공한 자료만을 기반으로 답변하는 AI 연구 도우미입니다. 환각(hallucination) 없이 정확한 정보를 제공하며 자료를 팟캐스트 형식으로 자동 변환하는 기능이 독보적입니다.
 
 ## 핵심 기능: Audio Overview
 

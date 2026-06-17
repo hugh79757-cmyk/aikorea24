@@ -1,6 +1,6 @@
 ---
 name: "Windsurf"
-description: "AI 에이전트가 코드베이스 전체를 이해하고 자율적으로 작업하는 차세대 AI 코딩 IDE. Cursor의 강력한 경쟁자로 주목받고 있습니다."
+description: "AI 에이전트가 코드베이스 전체를 이해하고 자율적으로 작업하는 차세대 AI 코딩 IDE. Cursor의 경쟁자로 주목받고 있습니다."
 category: "개발·코딩"
 price: "무료 / 월 $15~"
 koreanSupport: false
@@ -11,7 +11,7 @@ tags: ["코딩", "IDE", "AI에이전트", "자동화"]
 featured: false
 order: 22
 tasks: ["코드-리뷰", "코딩"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

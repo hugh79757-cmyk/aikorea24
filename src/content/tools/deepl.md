@@ -11,7 +11,7 @@ tags: ["번역", "문서번역", "영어", "다국어"]
 featured: true
 order: 60
 tasks: ["번역"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

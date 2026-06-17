@@ -11,7 +11,7 @@ tags: ["PPT", "발표", "자동생성", "업무"]
 featured: true
 order: 31
 tasks: ["ppt-발표"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

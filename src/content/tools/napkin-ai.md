@@ -11,7 +11,7 @@ tags: ["인포그래픽", "시각화", "다이어그램", "무료"]
 featured: false
 order: 33
 tasks: ["인포그래픽"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

@@ -12,7 +12,7 @@ tags: ["음악 생성", "AI 작곡", "장르", "리믹스", "크리에이티브"
 featured: false
 order: 56
 tasks: ["음악-생성"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

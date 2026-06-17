@@ -6,7 +6,7 @@ price: "무료/월 10만원"
 koreanSupport: false
 difficulty: "중급"
 url: "https://www.producthunt.com/products/agirails"
-useCases: ["업무 자동화를 통해 효율성을 높이고자 하는 직장인", "AI 기술에 관심이 많은 학생", "비용 절감과 효율성을 중시하는 소상공인"]
+useCases: ["업무 자동화로 효율성을 높이고자 하는 직장인", "AI 기술에 관심이 많은 학생", "비용 절감과 효율성을 중시하는 소상공인"]
 tags: ["AI", "자동화", "결제"]
 featured: false
 order: 103

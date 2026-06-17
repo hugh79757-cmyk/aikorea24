@@ -12,7 +12,7 @@ tags: ["코딩", "자동완성", "GitHub", "개발"]
 featured: false
 order: 41
 tasks: ["코딩", "코드-리뷰"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

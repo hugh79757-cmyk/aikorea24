@@ -11,7 +11,7 @@ tags: ["사진 편집", "AI", "자동화"]
 featured: false
 order: 104
 tasks: ["이미지-생성"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

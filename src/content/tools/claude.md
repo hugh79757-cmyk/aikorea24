@@ -12,7 +12,7 @@ tags: ["챗봇", "문서분석", "코딩", "요약"]
 featured: true
 order: 2
 tasks: ["요약", "pdf-요약", "논문-요약"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약

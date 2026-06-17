@@ -11,7 +11,7 @@ tags: ["3D생성", "이미지to3D", "오픈소스", "게임개발"]
 featured: false
 order: 18
 tasks: ["이미지-생성"]
-updated: "2026-06-14"
+updated: "2026-06-17"
 ---
 
 ## 한줄 요약
