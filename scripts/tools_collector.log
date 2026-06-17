@@ -78,3 +78,50 @@
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + GitHub Awesome AI Tools (소스당 10개)
+  Product Hunt: 8개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  총 18개 (중복 제거 후)
+수집 완료: 18개
+기존 툴: 75개 (슬러그), 74개 (이름)
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+  중복 스킵: Moonbeam
+  중복 스킵: copy.ai
+  중복 스킵: Anyword
+신규 툴: 8개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (8건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/yousaidthat-org.md
+  ✅ yousaidthat.org → yousaidthat-org.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/fluxmail.md
+  ✅ Fluxmail → fluxmail.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/kraina.md
+  ✅ Kraina → kraina.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/agirails.md
+  ✅ AGIRAILS → agirails.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/zoona-ai.md
+  ✅ Zoona AI → zoona-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/keyboard-copilot.md
+  ✅ Keyboard Copilot → keyboard-copilot.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/dualcam-ai.md
+  ✅ DualCam AI → dualcam-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/tychi-ai.md
+  ✅ Tychi AI → tychi-ai.md
+
+==================================================
+처리 완료: 8/18개 생성 (24.7초)
+  git commit: [main d553abc] feat: AI 툴 8개 추가 (2026-06-17)
+ 12 files changed, 1222 insertions(+), 3 deletions(-)
+ create mode 100644 scripts/dynamic_seed_generator.py
+ create mode 100644 src/content/tools/agirails.
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
