@@ -466,6 +466,14 @@ def humanize_md(text: str) -> str:
         # E-2: ~고 있다 → ~합니다
         (r'([가-힣]+)고 있다\b', lambda m: m.group(1) + '니다'),
 
+        # 평서체(~다) → 정중체(~니다) 변환 (문장 끝에서만)
+        (r'([가-힣]+)니다\.', lambda m: m.group(0)),  # 이미 정중체면 유지
+        (r'([가-힣]+)합니다\.', lambda m: m.group(0)),  # 이미 정중체면 유지
+        (r'([가-힣]+)습니다\.', lambda m: m.group(0)),  # 이미 정중체면 유지
+        (r'([가-힣]+)이다\.', lambda m: m.group(1) + '입니다.'),
+        (r'([가-힣]+)한다\.', lambda m: m.group(1) + '합니다.'),
+        (r'툴이다\.', '툴입니다.'),
+        (r'도구다\.', '도구입니다.'),
     ]
 
     for pattern, replacement in replacements:
@@ -644,7 +652,8 @@ def slugify(name: str) -> str:
 
 
 def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> str:
-    """MD frontmatter 생성"""
+    """MD frontmatter 생성 (description은 humanize 적용)"""
+    desc = humanize_md(meta.get('description_kr', ''))
     tasks_str = json.dumps(meta.get('tasks', []), ensure_ascii=False)
     tags_str = json.dumps(meta.get('tags', []), ensure_ascii=False)
     use_cases_str = json.dumps(meta.get('useCases', []), ensure_ascii=False)
@@ -654,7 +663,7 @@ def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> 
 
     return f"""---
 name: "{name}"
-description: "{meta.get('description_kr', '')}"
+description: "{desc}"
 category: "{meta.get('category', '')}"
 price: "{meta.get('price_kr', '')}"
 koreanSupport: {str(meta.get('koreanSupport', False)).lower()}

@@ -30,8 +30,8 @@ const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).ma
 ---
 
 <Layout
-  title={`${tool.data.name} 사용법·가격·추천 | AI코리아24`}
-  description={`${tool.data.description} — 가격, 한국어 지원 여부, 추천 대상까지 한눈에 확인하세요.`}
+  title={`${tool.data.name} 사용법과 가격, 한국어 지원 여부 총정리 | AI코리아24`}
+  description={`${tool.data.description} 가격과 한국어 지원 여부, 난이도를 한눈에 비교하고 추천 대상을 확인하세요.`}
   type="article"
 >
   <div class="max-w-3xl mx-auto px-4 py-12">
@@ -46,12 +46,13 @@ const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).ma
     <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-8 mb-8">
       <div class="flex items-start justify-between mb-4">
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-          {tool.data.name} — {tool.data.description}
+          {tool.data.name} 사용법과 가격, 추천 이유
         </h1>
         {tool.data.featured && (
           <span class="text-sm bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300 px-3 py-1 rounded-full whitespace-nowrap">⭐ 추천</span>
         )}
       </div>
+      <p class="text-gray-600 dark:text-gray-400 mb-6">{tool.data.description}</p>
       <div class="flex flex-wrap gap-3 mb-6">
         <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg" title="카테고리">📂 {tool.data.category}</span>
         <span class="text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-1.5 rounded-lg" title="가격">💰 {tool.data.price}</span>
