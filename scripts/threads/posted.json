@@ -1,0 +1,36 @@
+{
+  "posted_ids": [
+    32152,
+    32130
+  ],
+  "posted_links": [
+    "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
+    "https://www.fastcompany.com/91561045/g7-wraps-openai-anthropic-meet-world-leaders-discuss-future-ai"
+  ],
+  "history": [
+    {
+      "id": 32152,
+      "title": "스페이스X, 시장 가치에서 아마존을 초월하다",
+      "posted_at": "2026-06-18T17:53:00"
+    }
+  ],
+  "last_reset": "2026-06-18",
+  "pitch_history": [
+    {
+      "hook": "AI가 내 일자리 뺏는 게 아니다",
+      "article_ids": [
+        32184,
+        13285
+      ],
+      "date": "2026-06-18"
+    },
+    {
+      "hook": "최신 AI일수록 거짓말을 잘한다",
+      "article_ids": [
+        21629,
+        21678
+      ],
+      "date": "2026-06-18"
+    }
+  ]
+}

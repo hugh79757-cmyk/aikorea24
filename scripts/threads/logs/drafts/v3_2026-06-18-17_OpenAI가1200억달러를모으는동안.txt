@@ -1,0 +1,32 @@
+OpenAI가 1,200억 달러를 모으는 동안, 디즈니는 단 몇 달 만에 손을 끊었습니다.
+OpenAI는 사상 최대 규모인 1,200억 달러, 약 160조 원의 투자를 유치했습니다.
+이 금액은 기존 목표에 100억 달러를 더 추가해 달성한 수치입니다.
+현재 OpenAI는 올해 안에 기업공개(IPO) 가능성을 모색하고 있습니다.
+반면 디즈니는 지난 12월 체결한 수십억 달러 규모의 계약에서 물러났습니다.
+두 거대 기업의 행보가 이렇게 극명하게 갈린 이유는?
+---
+디즈니와 OpenAI는 AI 영상 모델 Sora 프로젝트를 위해 협력했습니다.
+Sora 앱과 API는 출시된 지 몇 달 만에 전격 종료되었습니다.
+디즈니는 수십억 달러를 투입하려 했으나 계획을 중단했습니다.
+OpenAI는 160조 원의 자본력을 바탕으로 기술 고도화에 박차하고 있습니다.
+디즈니는 자사의 핵심 자산인 IP를 보호하기 위해 결단을 내립니다.
+디즈니가 기술보다 안전을 선택한 진짜 이유는 무엇일까요?
+---
+근데 진짜 이유는 기술력 부족이 아니었습니다.
+디즈니의 IP 보호 시스템이 AI의 무분별한 생성 속도를 감당하지 못했습니다.
+초초 만에 만들어내는 영상들이 디즈니 캐릭터의 저작권을 침해할 위험이 존재했습니다.
+디즈니는 수십 년간 쌓아온 브랜드 자산이 훼손되는 것을 경계했습니다.
+AI 기술의 발전 속도와 전통적인의 저작권 검수 속도가 충돌한 결과입니다.
+앞으로 AI 영상 산업에서 기술과 IP의 관계는 어떻게 변할까요?
+---
+출처
+https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-months-after-launch/
+https://the-decoder.com/openai-expands-its-record-funding-round-to-over-120-billion-as-it-eyes-a-potential-ipo-later-this-year/
+
+출처: https://the-decoder.com/openai-expands-its-record-funding-round-over-120-billion-as-eyes-a-potential-ipo-later-year/ / https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-after-launch/
+---
+5/5
+
+매일 아침 AI 브리핑, 이메일로 받아보세요.
+프로필 링크에서 무료 구독 가능합니다.
+aikorea24.kr

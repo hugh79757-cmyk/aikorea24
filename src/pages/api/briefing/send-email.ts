@@ -28,9 +28,12 @@ export const POST: APIRoute = async ({ locals }) => {
        ORDER BY bi.sort_order ASC`
     ).bind(briefing.id).all();
 
-    // 3. HTML 이메일 본문 생성
+    // 3. HTML 이메일 본문 생성 (3개만 표시 + 더보기)
+    const displayItems = (items.results || []).slice(0, 3);
+    const totalCount = items.results?.length || 0;
     let itemsHtml = '';
-    for (const item of items.results || []) {
+    for (const item of displayItems) {
+      const briefingUrl = `https://aikorea24.kr/news/${today}${item.sort_order ? `#item-${item.sort_order}` : ''}`;
       itemsHtml += `
         <tr>
           <td style="padding:16px 0;border-bottom:1px solid #e5e7eb;">
@@ -42,10 +45,91 @@ export const POST: APIRoute = async ({ locals }) => {
               </tr>
               ${item.comment ? `<tr><td style="font-size:13px;color:#4b5563;padding:4px 0 8px 0;line-height:1.5;">💡 ${item.comment}</td></tr>` : ''}
               ${item.news_desc ? `<tr><td style="font-size:13px;color:#6b7280;line-height:1.5;">${item.news_desc.substring(0, 200)}</td></tr>` : ''}
-              ${item.news_link ? `<tr><td style="padding-top:8px;"><a href="${item.news_link}" style="font-size:12px;color:#2563eb;text-decoration:underline;">원문 읽기 →</a></td></tr>` : ''}
+              <tr><td style="padding-top:8px;">
+                <a href="${briefingUrl}" style="font-size:12px;color:#2563eb;text-decoration:underline;">
+                  AI코리아24에서 자세히 보기 →
+                </a>
+              </td></tr>
             </table>
           </td>
         </tr>`;
+    }
+    if (totalCount > 3) {
+      itemsHtml += `
+        <tr>
+          <td style="padding:16px 0;text-align:center;">
+            <a href="https://aikorea24.kr/news/"
+               style="display:inline-block;padding:10px 24px;background:#2563eb;color:#ffffff;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
+              👉 오늘의 브리핑 ${totalCount}개 전체 보기 →
+            </a>
+          </td>
+        </tr>`;
+    }
+
+    // 4. 신규 AI 툴 섹션
+    let toolsHtml = '';
+    try {
+      const tools = await db.prepare(
+        `SELECT name, slug, tagline, category, price, korean_support, difficulty
+         FROM tools
+         WHERE featured = 1 OR updated_at > datetime('now', '-7 days')
+         ORDER BY updated_at DESC
+         LIMIT 6`
+      ).all();
+
+      if (tools.results && tools.results.length > 0) {
+        toolsHtml = `
+          <tr>
+            <td style="padding:24px 0 8px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-top:2px solid #e5e7eb;padding-top:24px;">
+                <tr>
+                  <td style="font-size:16px;font-weight:700;color:#1f2937;padding-bottom:16px;">
+                    🛠️ 오늘의 신규 AI 도구
+                  </td>
+                </tr>
+                ${tools.results.map(t => `
+                  <tr>
+                    <td style="padding:8px 0;border-bottom:1px solid #f3f4f6;">
+                      <table width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td style="font-size:14px;font-weight:600;color:#111827;">
+                            ${t.korean_support ? '🇰🇷 ' : ''}${t.name}
+                          </td>
+                          <td style="text-align:right;font-size:11px;color:#6b7280;">
+                            ${t.price || ''} ${t.category ? '· ' + t.category : ''}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2" style="font-size:13px;color:#6b7280;padding-top:4px;line-height:1.4;">
+                            ${t.tagline || ''}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="2" style="padding-top:6px;">
+                            <a href="https://aikorea24.kr/tools/${t.slug}/"
+                               style="font-size:12px;color:#2563eb;text-decoration:underline;">
+                              AI코리아24에서 자세히 보기 →
+                            </a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                `).join('')}
+                <tr>
+                  <td style="padding:12px 0;text-align:center;">
+                    <a href="https://aikorea24.kr/tools/"
+                       style="font-size:13px;color:#2563eb;text-decoration:underline;">
+                      🔎 모든 AI 도구 보기 →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>`;
+      }
+    } catch (e) {
+      console.error('툴 조회 오류:', e);
     }
 
     const htmlContent = `
@@ -70,12 +154,16 @@ export const POST: APIRoute = async ({ locals }) => {
             <td style="padding:0 24px;background:#fff;">
               <table width="100%" cellpadding="0" cellspacing="0">
                 ${itemsHtml}
+                ${toolsHtml}
               </table>
             </td>
           </tr>
           <tr>
             <td style="padding:24px;text-align:center;color:#9ca3af;font-size:12px;">
               <p style="margin:0;">AI코리아24 · 매일 아침 AI 소식을 전해드립니다</p>
+              <p style="margin:4px 0 0 0;">
+                <a href="https://aikorea24.kr/community/" style="color:#3b82f6;text-decoration:underline;">💬 커뮤니티</a>에서 오늘의 브리핑에 대한 의견을 나눠보세요
+              </p>
               <p style="margin:4px 0 0 0;">
                 <a href="https://aikorea24.kr/unsubscribe" style="color:#9ca3af;text-decoration:underline;">구독 해지</a>
               </p>

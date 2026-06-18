@@ -1,6 +1,17 @@
 import type { APIRoute } from 'astro';
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
+  const runtime = (locals as any).runtime;
+  const BREVO_API_KEY = runtime?.env?.BREVO_API_KEY;
+  const BREVO_LIST_ID = runtime?.env?.BREVO_LIST_ID;
+
+  if (!BREVO_API_KEY) {
+    return new Response(JSON.stringify({ error: 'BREVO_API_KEY not set' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
+  }
+
   try {
     const { email } = await request.json();
 
@@ -15,11 +26,11 @@ export const POST: APIRoute = async ({ request }) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': import.meta.env.BREVO_API_KEY
+        'api-key': BREVO_API_KEY
       },
       body: JSON.stringify({
         email: email,
-        listIds: [Number(import.meta.env.BREVO_LIST_ID) || 2],
+        listIds: [Number(BREVO_LIST_ID) || 2],
         updateEnabled: true
       })
     });

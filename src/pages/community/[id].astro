@@ -17,6 +17,24 @@ if (db && id) {
   post = await db.prepare(`
     SELECT p.*, u.name as author, u.avatar FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?
   `).bind(id).first();
+
+  // SEO variables
+  const categoryNames: Record<string, string> = {
+    free: '자유게시판',
+    qna: '질문답변',
+    news: 'AI 뉴스',
+    tip: '꿀팁공유',
+    project: '프로젝트'
+  };
+  const catName = categoryNames[post?.category] || post?.category || '';
+  const cleanContent = post?.content?.replace(/<[^>]*>/g, '').substring(0, 150) || '';
+  const pageTitle = post ? `${post.title} | AI코리아24 커뮤니티` : '게시글을 찾을 수 없습니다';
+  const pageDesc = post ? `[${catName}] ${cleanContent}` : '게시글을 찾을 수 없습니다.';
+
+  if (!post) {
+    return { notFound: true };
+  }
+
   const commentResult = await db.prepare(`
     SELECT c.*, u.name, u.avatar FROM comments c JOIN users u ON c.user_id = u.id WHERE c.post_id = ? ORDER BY c.created_at
   `).bind(id).all();
@@ -34,7 +52,7 @@ if (Astro.request.method === 'POST' && currentUser && db) {
   }
 }
 ---
-<Layout title={post?.title || '게시글'}>
+<Layout title={pageTitle} description={pageDesc}>
   <div class="bg-[#0A0E1A] text-white min-h-screen">
     <div class="max-w-3xl mx-auto px-4 py-12">
       {!post ? (

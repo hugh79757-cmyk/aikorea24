@@ -66,13 +66,13 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   try {
     const body = await request.json();
-    const { title, content, category, access_level, price, preview_content } = body;
+    const { title, content, category, access_level, price, preview_content, tool_id, rating } = body;
 
     if (!title?.trim() || !content?.trim()) {
       return new Response(JSON.stringify({ error: '제목과 내용을 입력하세요.' }), { status: 400 });
     }
 
-    const allowedCategories = ['free', 'qna', 'news', 'tip', 'project'];
+    const allowedCategories = ['free', 'qna', 'news', 'tip', 'project', 'review'];
     const cat = allowedCategories.includes(category) ? category : 'free';
 
     const accessLevels = ['free', 'basic', 'premium'];
@@ -81,7 +81,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     const pc = al !== 'free' ? (preview_content?.trim()?.slice(0, 500) || '') : '';
 
     const result = await db.prepare(
-      'INSERT INTO posts (title, content, author_email, author_name, category, access_level, price, preview_content, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+      'INSERT INTO posts (title, content, author_email, author_name, category, access_level, price, preview_content, user_id, tool_id, rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
     ).bind(
       title.trim().slice(0, 200),
       content.trim().slice(0, 10000),
@@ -91,7 +91,9 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       al,
       p,
       pc,
-      userId
+      userId,
+      tool_id || null,
+      rating || 5
     ).run();
 
     return new Response(JSON.stringify({

@@ -8,7 +8,8 @@ aikorea24 AI 툴 대량 확충기 v2.1
 
 재사용: news_collector.py의 fetch_rss_global 패턴, batch_translate, load_env, send_telegram
 """
-import os, sys, json, re, hashlib, subprocess, urllib.request, urllib.parse
+import os, sys, json, re, hashlib, subprocess, urllib.request, urllib.parse, random
+from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
 from html import unescape
@@ -53,6 +54,10 @@ except ImportError:
 # 수집 함수: Product Hunt RSS
 # ============================================
 PRODUCT_HUNT_FEED = 'https://www.producthunt.com/feed'
+
+# === 신규 소스 URL ===
+FUTUREPEDIA_SITEMAP = "https://www.futurepedia.io/sitemap.xml"
+HUGGINGFACE_PAPERS_RSS = "https://huggingface.co/papers"
 
 # AI 툴로 분류할 키워드 (Product Hunt: 제목 기준으로만 매칭)
 PH_AI_KEYWORDS = [
@@ -321,13 +326,151 @@ def fetch_github_awesome(limit=50) -> list:
 
 
 # ============================================
+# 수집 함수: Futurepedia
+# ============================================
+def extract_futurepedia_price(card):
+    """Futurepedia 카드에서 가격 정보 추출"""
+    text = card.get_text()
+    if 'Free' in text or '무료' in text:
+        return '무료'
+    elif 'Freemium' in text:
+        return '무료/유료'
+    elif '$' in text:
+        import re as re_m
+        prices = re_m.findall(r'\$\d+', text)
+        return prices[0] + '/월' if prices else '유료'
+    return '유료'
+
+
+def _fetch_html(url, timeout=15):
+    """urllib를 사용한 HTML fetch 헬퍼"""
+    try:
+        req = urllib.request.Request(
+            url,
+            headers={'User-Agent': 'aikorea24-bot/2.0 (Tool collector)'}
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.read().decode('utf-8', errors='replace')
+    except Exception as e:
+        print(f"  ⚠️ fetch 실패 ({url[:50]}): {e}")
+        return None
+
+
+def collect_futurepedia(limit=10):
+    """Futurepedia sitemap → 카테고리 페이지 → 툴 정보 추출"""
+    tools = []
+
+    html = _fetch_html(FUTUREPEDIA_SITEMAP)
+    if not html:
+        return tools
+
+    try:
+        root = ET.fromstring(html.encode())
+    except Exception as e:
+        print(f"  ⚠️ Futurepedia sitemap 파싱 오류: {e}")
+        return tools
+
+    ns = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+    tool_urls = []
+    for loc in root.findall('.//ns:loc', ns):
+        url = loc.text
+        if url and '/ai-tools/' in url and url.count('/') <= 6:
+            tool_urls.append(url)
+
+    random.shuffle(tool_urls)
+    for cat_url in tool_urls[:limit]:
+        try:
+            html_page = _fetch_html(cat_url)
+            if not html_page:
+                continue
+            soup = BeautifulSoup(html_page, 'html.parser')
+            for card in soup.select('[class*="tool"], [class*="card"], article')[:5]:
+                name_el = card.select_one('h2, h3, [class*="title"]')
+                desc_el = card.select_one('p, [class*="desc"]')
+                link_el = card.select_one('a[href*="/tool/"]')
+                if not name_el or not link_el:
+                    continue
+                href = link_el['href']
+                tools.append({
+                    'name': name_el.get_text(strip=True),
+                    'description': desc_el.get_text(strip=True) if desc_el else '',
+                    'url': href if href.startswith('http') else 'https://www.futurepedia.io' + href,
+                    'price': extract_futurepedia_price(card),
+                    'source': 'futurepedia',
+                    'pub_date': datetime.now().strftime('%Y-%m-%d')
+                })
+        except Exception as e:
+            print(f"  ⚠️ Futurepedia 오류: {e}")
+            continue
+
+    return tools[:limit]
+
+
+# ============================================
+# 수집 함수: Hugging Face Daily Papers
+# ============================================
+def collect_huggingface_papers(limit=5):
+    """Hugging Face Daily Papers → AI 연구/도구 정보 추출"""
+    tools = []
+
+    html = _fetch_html(HUGGINGFACE_PAPERS_RSS)
+    if not html:
+        return tools
+
+    soup = BeautifulSoup(html, 'html.parser')
+    articles = soup.select('article, [class*="paper"], .paper-card')[:limit]
+
+    for article in articles:
+        title_el = article.select_one('h2, h3, [class*="title"]')
+        link_el = article.select_one('a[href*="arxiv"]') or article.select_one('a[href*="hf.co"]') or article.select_one('a[href*="huggingface"]')
+        desc_el = article.select_one('p, [class*="desc"], [class*="abstract"]')
+
+        if not title_el:
+            continue
+
+        title = title_el.get_text(strip=True)
+        if not any(kw in title.lower() for kw in ['tool', 'agent', 'model', 'framework', 'llm', 'gpt', 'diffusion', 'transformer']):
+            continue
+
+        tools.append({
+            'name': title[:50],
+            'description': desc_el.get_text(strip=True)[:200] if desc_el else title,
+            'url': link_el['href'] if link_el else 'https://huggingface.co/papers',
+            'price': '무료' if 'open source' in title.lower() else '유료',
+            'source': 'huggingface',
+            'pub_date': datetime.now().strftime('%Y-%m-%d')
+        })
+
+    return tools
+
+
+# ============================================
 # 통합 수집
 # ============================================
+def should_run_github_today():
+    """GitHub Awesome AI Tools는 주 1회(월요일)만 실행"""
+    return datetime.now().weekday() == 0
+
+
 def collect_tools(limit_per_source=15) -> list:
     """모든 소스에서 툴 수집 → 중복 제거된 리스트"""
     all_tools = []
     all_tools.extend(fetch_product_hunt(limit=limit_per_source))
-    all_tools.extend(fetch_github_awesome(limit=limit_per_source))
+
+    if should_run_github_today():
+        gh_tools = fetch_github_awesome(limit=limit_per_source)
+        all_tools.extend(gh_tools)
+        print(f"  GitHub Awesome AI Tools: {len(gh_tools)}개 (주간 업데이트)")
+    else:
+        print(f"  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)")
+
+    fp_tools = collect_futurepedia(limit_per_source)
+    all_tools.extend(fp_tools)
+    print(f"  Futurepedia: {len(fp_tools)}개")
+
+    hf_tools = collect_huggingface_papers(5)
+    all_tools.extend(hf_tools)
+    print(f"  Hugging Face Papers: {len(hf_tools)}개")
 
     # 중복 제거 (URL 기준)
     seen_urls = set()
@@ -975,7 +1118,7 @@ def main():
     # 툴 목록 로드
     tools = []
     if args.collect:
-        print(f"[수집 모드] Product Hunt + GitHub Awesome AI Tools (소스당 {args.limit}개)")
+        print(f"[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 {args.limit}개)")
         tools = collect_tools(limit_per_source=args.limit)
         if not tools:
             print("수집된 툴 없음")
@@ -990,7 +1133,7 @@ def main():
         print(f"[JSON 모드] {len(tools)}개 툴 로드")
     else:
         print("사용법:")
-        print("  python3 tools_collector.py --collect --batch 5        # PH + GitHub 수집 + 처리")
+        print("  python3 tools_collector.py --collect --batch 5        # PH + Futurepedia + HuggingFace 수집 + 처리")
         print("  python3 tools_collector.py --collect --dry-run       # 수집만 미리보기")
         print("  python3 tools_collector.py --collect --translate     # 수집 + 번역 + 처리")
         print("  python3 tools_collector.py --sample                  # 샘플 테스트")

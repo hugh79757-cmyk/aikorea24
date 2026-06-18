@@ -1,15 +1,18 @@
 ---
-const session = Astro.cookies.get('session')?.value;
-let user: any = null;
-if (session) {
-  try {
-    user = JSON.parse(atob(session.split('.')[1] || session));
-  } catch {}
-}
+import Layout from '../../layouts/Layout.astro';
 
-if (!user) {
+let currentUser = null;
+try {
+  const session = Astro.cookies.get('session')?.value;
+  if (session) currentUser = JSON.parse(atob(session));
+} catch {}
+
+if (!currentUser) {
   return Astro.redirect('/auth/consent');
 }
+
+const toolId = Astro.url.searchParams.get('tool_id');
+const toolName = Astro.url.searchParams.get('tool_name');
 
 const categoryMap: Record<string, string> = {
   free: '자유게시판',
@@ -17,43 +20,10 @@ const categoryMap: Record<string, string> = {
   news: 'AI 뉴스',
   tip: '꿀팁공유',
   project: '프로젝트',
+  review: '🔧 툴 리뷰',
 };
 ---
-
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-  <link rel="icon" href="/favicon.png" />
-  <title>글쓰기 - 커뮤니티 - aikorea24.kr</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <style>
-    body { background: #0f172a; color: #e2e8f0; font-family: 'Pretendard', -apple-system, sans-serif; }
-    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.1); }
-    textarea, input, select {
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.2);
-      color: #e2e8f0;
-    }
-    textarea:focus, input:focus, select:focus {
-      outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-    }
-  </style>
-</head>
-<body class="min-h-screen">
-
-  <header class="glass sticky top-0 z-50">
-    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-white">🤖 aikorea24</a>
-      <nav class="flex items-center gap-4 text-sm">
-        <a href="/community" class="text-gray-600 dark:text-gray-300 hover:text-white">← 목록으로</a>
-      </nav>
-    </div>
-  </header>
+<Layout title="글쓰기 | AI코리아24" description="AI 관련 글을 자유롭게 작성하세요.">
 
   <main class="max-w-4xl mx-auto px-4 py-8">
 
@@ -68,9 +38,13 @@ const categoryMap: Record<string, string> = {
           <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">카테고리</label>
           <select id="category" class="rounded-lg px-4 py-3 w-40">
             {Object.entries(categoryMap).map(([key, label]) => (
-              <option value={key}>{label}</option>
+              <option value={key} selected={key === 'review' && toolId}>{label}</option>
             ))}
           </select>
+          <input type="hidden" id="tool_id" value={toolId || ''} />
+          {toolName && (
+            <p class="text-sm text-blue-400 mt-1">📌 리뷰 대상: {toolName}</p>
+          )}
         </div>
         <div class="flex-1">
           <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">제목</label>
@@ -95,6 +69,17 @@ const categoryMap: Record<string, string> = {
         </div>
       </div>
 
+      <!-- 평점 (툴 리뷰용) -->
+      <div id="rating-section" class="hidden">
+        <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">⭐ 평점</label>
+        <div class="flex gap-2 text-2xl" id="star-rating">
+          {[1,2,3,4,5].map(i => (
+            <span class="star cursor-pointer text-gray-500 hover:text-yellow-400" data-value={i}>★</span>
+          ))}
+        </div>
+        <input type="hidden" id="rating" value="5" />
+      </div>
+
       <div id="preview-section" class="hidden">
         <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">미리보기 내용 (비회원에게 보이는 부분)</label>
         <textarea id="preview_content" rows="4" maxlength="500" placeholder="유료 글의 맛보기 내용을 입력하세요"
@@ -111,7 +96,7 @@ const categoryMap: Record<string, string> = {
       </div>
 
       <div class="flex justify-between items-center">
-        <span class="text-sm text-gray-500 dark:text-gray-400">작성자: {user.name || user.email}</span>
+        <span class="text-sm text-gray-500 dark:text-gray-400">작성자: {currentUser.name || currentUser.email}</span>
         <div class="flex gap-3">
           <a href="/community" class="px-6 py-3 rounded-lg glass text-gray-600 dark:text-gray-300 hover:text-white transition">취소</a>
           <button type="submit" id="submit-btn"
@@ -161,7 +146,11 @@ const categoryMap: Record<string, string> = {
         const res = await fetch('/api/posts', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ title, content, category, access_level, price, preview_content })
+          body: JSON.stringify({
+            title, content, category, access_level, price, preview_content,
+            tool_id: document.getElementById('tool_id')?.value || null,
+            rating: parseInt(document.getElementById('rating')?.value) || 5
+          })
         });
 
         const data = await res.json();
@@ -181,6 +170,33 @@ const categoryMap: Record<string, string> = {
       submitBtn.textContent = '등록하기';
     });
   
+    // 카테고리가 review면 평점 섹션 표시
+    const categorySelect = document.getElementById('category');
+    const ratingSection = document.getElementById('rating-section');
+    categorySelect.addEventListener('change', () => {
+      if (categorySelect.value === 'review') {
+        ratingSection.classList.remove('hidden');
+      } else {
+        ratingSection.classList.add('hidden');
+      }
+    });
+    // 페이지 로드 시 이미 review면 표시
+    if (categorySelect.value === 'review') {
+      ratingSection.classList.remove('hidden');
+    }
+
+    // 별점 클릭 처리
+    document.querySelectorAll('.star').forEach(star => {
+      star.addEventListener('click', () => {
+        const val = parseInt(star.dataset.value);
+        document.getElementById('rating').value = val;
+        document.querySelectorAll('.star').forEach((s, i) => {
+          s.classList.toggle('text-yellow-400', i < val);
+          s.classList.toggle('text-gray-500', i >= val);
+        });
+      });
+    });
+
     // access_level 변경 시 미리보기/가격 섹션 표시
     const accessSelect = document.getElementById('access_level');
     const previewSection = document.getElementById('preview-section');
@@ -194,6 +210,4 @@ const categoryMap: Record<string, string> = {
       }
     });
   </script>
-
-</body>
-</html>
+</Layout>
