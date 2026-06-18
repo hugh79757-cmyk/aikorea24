@@ -10,3 +10,7 @@ database_id = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "aikorea24-files"
+
+[vars]
+# BREVO_API_KEY = "대시보드에서 설정"
+# BREVO_LIST_ID = "2"

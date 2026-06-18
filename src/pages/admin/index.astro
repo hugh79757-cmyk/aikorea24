@@ -136,6 +136,7 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
   <button class="del" id="delbtn">삭제</button>
   <span class="msg" id="msg"></span>
   <button class="pub" id="pub" disabled>브리핑 발행</button>
+    <button class="email-btn" id="emailBtn" style="display:none;background:#7c3aed;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;margin-left:8px;">📧 이메일 발송</button>
     <button class="dd-link-btn" id="ddBtn" style="display:none">📖 심층글 연결</button>
 </div>
 
@@ -273,15 +274,18 @@ document.addEventListener("DOMContentLoaded", function(){
       .then(function(d){
         var st = document.getElementById('curStatus');
         var db = document.getElementById('delbtn');
+        var eb = document.getElementById('emailBtn');
         if(!st) return;
             if(d && d.briefing && d.briefing.date === today){
               st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b>';
               st.style.color = '#4ade80';
               if(db) db.style.display = 'inline-block';
+              if(eb) eb.style.display = 'inline-block';
             } else {
               st.textContent = '오늘 발행된 브리핑 없음';
               st.style.color = '#94a3b8';
               if(db) db.style.display = 'none';
+              if(eb) eb.style.display = 'none';
             }
             var ddBtnEl = document.getElementById('ddBtn');
             if(ddBtnEl) ddBtnEl.style.display = 'inline-block';
@@ -516,6 +520,35 @@ document.addEventListener("DOMContentLoaded", function(){
       }
     }
 
+    // === 이메일 발송 ===
+    document.getElementById('emailBtn')?.addEventListener('click', function(){
+      var btn = this;
+      var msg = document.getElementById('msg');
+      btn.disabled = true;
+      btn.textContent = '발송 중...';
+      msg.className = 'msg';
+      msg.textContent = '이메일 발송 중입니다...';
+
+      fetch('/api/briefing/send-email/', { method: 'POST' })
+        .then(function(r){ return r.json(); })
+        .then(function(d){
+          btn.disabled = false;
+          btn.textContent = '📧 이메일 발송';
+          if(d.ok){
+            msg.className = 'msg ok';
+            msg.textContent = '✅ ' + d.message;
+          } else {
+            msg.className = 'msg err';
+            msg.textContent = '❌ ' + (d.error || '발송 실패');
+          }
+        })
+        .catch(function(e){
+          btn.disabled = false;
+          btn.textContent = '📧 이메일 발송';
+          msg.className = 'msg err';
+          msg.textContent = '❌ 에러: ' + e.message;
+        });
+    });
 
     var ddBtnMain = document.getElementById('ddBtn');
     if(ddBtnMain) ddBtnMain.addEventListener('click', openDdOverlay);

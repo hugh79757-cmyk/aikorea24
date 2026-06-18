@@ -125,3 +125,44 @@
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + GitHub Awesome AI Tools (소스당 10개)
+  Product Hunt: 5개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  총 15개 (중복 제거 후)
+수집 완료: 15개
+기존 툴: 83개 (슬러그), 82개 (이름)
+  중복 스킵: Fluxmail
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+  중복 스킵: Moonbeam
+  중복 스킵: copy.ai
+  중복 스킵: Anyword
+신규 툴: 4개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (4건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/brainflow.md
+  ✅ BrainFlow → brainflow.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/parano-ai.md
+  ✅ Parano.ai → parano-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/tyto-by-ai-coustics.md
+  ✅ Tyto by ai-coustics → tyto-by-ai-coustics.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/lyqn-ai.md
+  ✅ LYQN AI → lyqn-ai.md
+
+==================================================
+처리 완료: 4/15개 생성 (27.7초)
+  git commit: [main 5f73c9f] feat: AI 툴 4개 추가 (2026-06-18)
+ 6 files changed, 395 insertions(+)
+ create mode 100644 src/content/tools/brainflow.md
+ create mode 100644 src/content/tools/lyqn-ai.md
+ create mode 100644
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

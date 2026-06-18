@@ -55,6 +55,31 @@ const difficultyColor = (d: string) => {
       ))}
     </div>
 
+    <!-- 검색창 -->
+    <div class="max-w-xl mx-auto mb-6">
+      <div class="relative">
+        <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <input type="text" id="tool-search" placeholder="툴 이름, 태그로 검색..." class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition" />
+      </div>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3 mb-6" id="advanced-filters">
+      <label class="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 cursor-pointer hover:border-blue-400 transition text-sm">
+        <input type="checkbox" id="filter-free" class="rounded text-blue-600 focus:ring-blue-500" />
+        <span>💰 무료만</span>
+      </label>
+      <label class="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 cursor-pointer hover:border-blue-400 transition text-sm">
+        <input type="checkbox" id="filter-korean" class="rounded text-blue-600 focus:ring-blue-500" />
+        <span>🇰🇷 한국어 지원</span>
+      </label>
+      <select id="sort-order" class="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm outline-none">
+        <option value="order">추천순</option>
+        <option value="name">이름순</option>
+      </select>
+    </div>
+
     <!-- 도구 카드 그리드 -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" id="tools-grid">
       {allTools.map((tool, i) => (
@@ -62,6 +87,14 @@ const difficultyColor = (d: string) => {
           href={`/tools/${tool.id}/`}
           data-cat={tool.data.category}
           data-index={i}
+          data-name={tool.data.name}
+          data-tags={tool.data.tags.join(' ')}
+          data-desc={tool.data.description}
+          data-price={tool.data.price}
+          data-korean={tool.data.koreanSupport}
+          data-difficulty={tool.data.difficulty}
+          data-order={tool.data.order}
+          data-updated={tool.data.updated || ''}
           class="tool-card group block bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg hover:border-blue-400 dark:hover:border-blue-500 transition-all"
         >
           <div class="flex items-start justify-between mb-3">
@@ -109,6 +142,34 @@ const difficultyColor = (d: string) => {
     <!-- 도구 수 표시 -->
     <div class="text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
       총 <strong id="tool-count">{allTools.length}</strong>개 도구
+    </div>
+
+    <!-- 뉴스레터 구독 CTA -->
+    <div class="mt-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-750 rounded-2xl p-8 border border-blue-100 dark:border-gray-700">
+      <div class="text-center max-w-xl mx-auto">
+        <div class="text-3xl mb-3">🚀</div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">AI 트렌드, 매일 아침 요약해드려요</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
+          매일 아침 7시, 국내외 AI 소식을 큐레이션해서 보내드립니다. 무료입니다.
+        </p>
+        <form id="brevo-subscribe" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <input
+            type="email"
+            id="subscribe-email"
+            placeholder="이메일 주소를 입력하세요"
+            required
+            class="flex-1 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+          />
+          <button
+            type="submit"
+            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm whitespace-nowrap"
+          >
+            무료 구독하기
+          </button>
+        </form>
+        <p id="subscribe-message" class="mt-3 text-sm hidden"></p>
+        <p class="text-xs text-gray-400 mt-2">· 언제든 구독 해지 가능</p>
+      </div>
     </div>
 
   </div>
@@ -236,4 +297,113 @@ const difficultyColor = (d: string) => {
     activeCategory = 'all';
     applyVisibility();
   });
+
+  // === 검색/필터 기능 ===
+(function() {
+  const searchInput = document.getElementById('tool-search');
+  const filterFree = document.getElementById('filter-free');
+  const filterKorean = document.getElementById('filter-korean');
+  const sortOrder = document.getElementById('sort-order');
+  const cards = document.querySelectorAll('.tool-card');
+  const countEl = document.getElementById('tool-count');
+  const loadMoreContainer = document.getElementById('load-more-container');
+
+  function filterAndSortCards() {
+    const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const freeOnly = filterFree ? filterFree.checked : false;
+    const koreanOnly = filterKorean ? filterKorean.checked : false;
+    const sort = sortOrder ? sortOrder.value : 'order';
+
+    // 필터링
+    let visible = Array.from(cards).filter(card => {
+      const cat = window.activeCategory === 'all' || card.getAttribute('data-cat') === window.activeCategory;
+      const name = (card.getAttribute('data-name') || '').toLowerCase();
+      const tags = (card.getAttribute('data-tags') || '').toLowerCase();
+      const desc = (card.getAttribute('data-desc') || '').toLowerCase();
+      const matchSearch = !query || name.includes(query) || tags.includes(query) || desc.includes(query);
+      const matchFree = !freeOnly || (card.getAttribute('data-price') || '').includes('무료');
+      const matchKorean = !koreanOnly || card.getAttribute('data-korean') === 'true';
+      return cat && matchSearch && matchFree && matchKorean;
+    });
+
+    // 정렬
+    visible.sort((a, b) => {
+      if (sort === 'name') return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
+      return (parseInt(a.getAttribute('data-order')) || 99) - (parseInt(b.getAttribute('data-order')) || 99);
+    });
+
+    // DOM 재배열
+    const grid = document.getElementById('tools-grid');
+    if (!grid) return;
+    visible.forEach(card => grid.appendChild(card));
+    cards.forEach(card => {
+      if (!visible.includes(card)) card.style.display = 'none';
+      else card.style.display = '';
+    });
+
+    // 개수 업데이트
+    if (countEl) countEl.textContent = String(visible.length);
+    if (loadMoreContainer) {
+      loadMoreContainer.style.display = visible.length > 24 ? '' : 'none';
+    }
+  }
+
+  // 이벤트 연결
+  if (searchInput) searchInput.addEventListener('input', filterAndSortCards);
+  if (filterFree) filterFree.addEventListener('change', filterAndSortCards);
+  if (filterKorean) filterKorean.addEventListener('change', filterAndSortCards);
+  if (sortOrder) sortOrder.addEventListener('change', filterAndSortCards);
+
+  // 기존 applyVisibility 함수를 확장
+  const origApply = window.applyVisibility;
+  if (typeof origApply === 'function') {
+    const wrapped = function() { origApply(); filterAndSortCards(); };
+    window.applyVisibility = wrapped;
+  }
+
+  // 카테고리 버튼 클릭 시에도 필터 재적용
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      setTimeout(filterAndSortCards, 50);
+    });
+  });
+})();
+</script>
+
+<script>
+document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('subscribe-email').value.trim();
+  const btn = e.target.querySelector('button');
+  const msg = document.getElementById('subscribe-message');
+
+  btn.disabled = true;
+  btn.textContent = '처리 중...';
+  msg.classList.add('hidden');
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      msg.className = 'mt-3 text-sm text-green-600 dark:text-green-400';
+      msg.textContent = '✅ 구독 완료! 매일 아침 AI 브리핑을 보내드립니다.';
+      e.target.querySelector('input').value = '';
+    } else {
+      msg.className = 'mt-3 text-sm text-red-600 dark:text-red-400';
+      msg.textContent = data.error || '오류가 발생했습니다. 다시 시도해주세요.';
+    }
+  } catch (err) {
+    msg.className = 'mt-3 text-sm text-red-600 dark:text-red-400';
+    msg.textContent = '네트워크 오류입니다. 다시 시도해주세요.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '무료 구독하기';
+    msg.classList.remove('hidden');
+  }
+});
 </script>
