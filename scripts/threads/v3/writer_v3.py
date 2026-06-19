@@ -113,14 +113,12 @@ def write_thread(pitch, all_articles):
 
     related_parts = []
     all_fallback = True
-    total_body_len = 0
     for a in related:
         body = fetch_article_body(a.get('link', ''))
         if not body:
             body = (a.get('description', '') or '')[:500]
         else:
             all_fallback = False
-        total_body_len += len(body)
         related_parts.append(f"""기사 {a['id']}:
 제목: {a.get('title','')}
 본문: {body}
@@ -128,15 +126,10 @@ def write_thread(pitch, all_articles):
 링크: {a.get('link','')}""")
     related_text = '\n\n'.join(related_parts)
 
-    # 모든 기사 크롤링 실패 + 설명 부족 → 스킵 (hallucination 방지)
-    if all_fallback and total_body_len < 1000:
-        log(f'  ⚠️ 모든 기사 크롤링 실패, 설명 부족 ({total_body_len}자) → 스킵 (hallucination 방지)')
-        return []
-
-    # 크롤링 전부 실패 시 경고 주입 (설명만으로 충분한 경우에만 진행)
-    crawl_warning = ''
+    # 모든 기사 크롤링 실패 → 무조건 스킵 (RSS description만으로 품질 보장 불가)
     if all_fallback:
-        crawl_warning = '\n\n⚠️ 모든 기사 원문을 읽을 수 없습니다. 기사 제목과 짧은 요약만 제공됩니다.\n숫자, 인용문, 날짜를 절대 만들어내지 마라. 없는 내용을 "~했음", "~라고 함" 식으로 확정해 쓰지 마라.\n정보가 부족하면 카드를 간결하게 유지하고, 억지로 10줄을 채우려 하지 마라.\n100% 확실한 정보만 써라. 추측 금지.'
+        log(f'  ⚠️ 모든 기사 원문 크롤링 실패 → 스킵 (hallucination 방지)')
+        return []
 
     user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
 
@@ -156,7 +149,7 @@ def write_thread(pitch, all_articles):
 3. 각 카드는 --- 로 구분. 1번 카드 5~6줄. 2~5번 카드 최소 10줄.
 4. 5개 카드로 작성할 것.
 5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
-6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라.{crawl_warning} """
+6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라. """
 
     max_attempts = 5
     for attempt in range(max_attempts):
