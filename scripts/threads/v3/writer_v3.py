@@ -44,6 +44,7 @@ def build_system_prompt():
 - 형용사 금지. 감탄사 금지. 사실과 숫자만.
 - 마지막 카드의 마지막 줄 바로 앞은 반드시 여운을 남긴다. 선언이나 반전으로 끝낸다.
 - 이모지 금지. 볼드 금지. 이탤릭 금지.
+- 카드 안에서도 주제가 바뀌거나 시점/장소/인물이 바뀌면 빈 줄로 나눠라. 같은 주제의 문장은 붙이고, 화제 전환 시에만 띄운다.
 
 [숫자 원칙]
 - 기사 본문에 있는 숫자는 전부 꺼내서 써라.
@@ -51,14 +52,16 @@ def build_system_prompt():
 - 기사에 숫자가 없으면 "수십억", "대규모", "많은" 같은 뭉뚱그린 표현 금지.
 - 숫자 없는 사실은 쓰지 마라.
 
-[카드 구조 — 3개, --- 로 구분]
-1번 카드: 사건의 출발점. 날짜/장소/인물로 시작. 핵심 충돌을 설정한다. 독자가 "어?" 하고 멈추게 만든다.
-2번 카드: 충돌의 구체적 사실들. 숫자, 날짜, 인물, 금액. 반전이 있으면 여기서 터뜨린다.
-3번 카드: 이 사건이 왜 중요한지. 더 큰 맥락 또는 독자와의 연결. 마지막 줄 바로 앞은 여운.
-마지막 줄: "기사 원문은 프로필 링크 참고."
+[카드 구조 — 5개, --- 로 구분]
+1번 카드 (5~6줄): 사건의 출발점. 날짜/장소/인물로 시작. 핵심 충돌을 설정한다. 독자가 "어?" 하고 멈추게 만든다.
+2번 카드 (10~12줄): 충돌의 A면. 구체적 사실, 숫자, 인용, 연구 결과를 빽빽하게 채운다.
+3번 카드 (10~12줄): 반전. 예상 못 한 제3의 사실. 방향 전환. 숫자와 사례로 가득 채운다.
+4번 카드 (10~12줄): 확장. 더 큰 맥락 또는 연결점. 한국/독자와의 접점이 있으면 여기서, 없으면 자유롭게 확장.
+5번 카드 (10~12줄): 여운. 지금까지 나온 숫자/사실을 한 번 더 반전시킨다. 마지막 줄은 선언형으로.
 
 [밀도 기준]
-각 카드는 최소 6줄. 억지로 늘이지 말고, 사실을 촘촘하게 채운다.
+1번 카드: 5~6줄. 독자를 빠르게 사건 안으로.
+2~5번 카드: 최소 10줄. 원문의 숫자, 인물, 인용문, 날짜를 모두 꺼내서 채운다.
 정보가 부족하면 기사 본문에서 더 파낸다. 없는 내용은 절대 만들지 않는다.
 
 [참고 문체 예시 — 아래 스타일로 작성할 것]
@@ -97,13 +100,8 @@ def fetch_article_body(url, max_chars=3000):
         return ''
 
 def write_thread(pitch, all_articles):
-    """피치 + 관련 기사 → 쓰레드 조각 리스트 (GPT-4o 직접 호출)"""
-    from openai import OpenAI
-    api_key = os.environ.get('OPENAI_API_KEY', '')
-    if not api_key:
-        log('  ❌ OPENAI_API_KEY 없음')
-        return []
-    gpt_client = OpenAI(api_key=api_key)
+    """피치 + 관련 기사 → 쓰레드 조각 리스트 (DiffusionGemma → GPT-4o-mini fallback)"""
+    from v3.model_router import chat_completion
 
     # 관련 기사만 필터링
     article_ids = pitch.get('article_ids', [])
@@ -140,24 +138,22 @@ def write_thread(pitch, all_articles):
 === 요구사항 ===
 1. 첫 문장은 반드시 "{pitch['hook']}" 그대로 사용할 것
 2. 반말체(~임, ~했음, ~있음). ~합니다 금지.
-3. 각 카드는 --- 로 구분. 각 카드 최소 6줄.
-4. 3개 카드로 작성할 것.
-5. 마지막 줄: "기사 원문은 프로필 링크 참고."
-6. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지. """
+3. 각 카드는 --- 로 구분. 1번 카드 5~6줄. 2~5번 카드 최소 10줄.
+4. 5개 카드로 작성할 것.
+5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
+6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라. """
 
     for attempt in range(3):
         try:
-            log(f'  [GPT-4o] 쓰레드 생성 중...')
-            resp = gpt_client.chat.completions.create(
-                model='gpt-4o',
-                messages=[
-                    {'role': 'system', 'content': build_system_prompt()},
-                    {'role': 'user', 'content': user_prompt},
-                ],
+            log(f'  쓰레드 생성 중...')
+            content = chat_completion(
+                system_prompt=build_system_prompt(),
+                messages=[{'role': 'user', 'content': user_prompt}],
                 temperature=0.7,
-                max_tokens=3000,
+                max_tokens=5000,
             )
-            content = resp.choices[0].message.content
+            if not content:
+                raise Exception('모델 응답 없음')
             cards = parse_cards(content)
 
             if validate_cards(cards, pitch):
@@ -179,7 +175,7 @@ def parse_cards(text):
 
 def validate_cards(cards, pitch):
     """기본 검증"""
-    if not cards or len(cards) < 3:
+    if not cards or len(cards) < 5:
         return False
     # 첫 문장에 hook 포함 확인
     first = cards[0].strip()
@@ -189,7 +185,9 @@ def validate_cards(cards, pitch):
     return True
 
 def assemble_final(cards, sources):
-    """출처 보강 없음. GPT가 생성한 그대로 반환"""
+    """대표 URL 1개를 마지막 카드로 추가"""
+    if sources:
+        cards.append(f'🔗 {sources[0]}')
     return cards
 
 def save_draft(cards, pitch):

@@ -182,8 +182,8 @@ def is_duplicate_pitch(pitch, history):
         if narrative and h.get('narrative', '')[:30] == narrative:
             return True
         # 같은 article_ids 조합
-        old_ids = set(h.get('article_ids', []))
-        new_ids = set(pitch.get('article_ids', []))
+        old_ids = set(str(x) for x in h.get('article_ids', []))
+        new_ids = set(str(x) for x in pitch.get('article_ids', []))
         if old_ids and new_ids and old_ids == new_ids:
             return True
     return False
