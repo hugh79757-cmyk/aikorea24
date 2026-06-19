@@ -35,7 +35,7 @@ NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 NVIDIA_MODEL = "google/diffusiongemma-26b-a4b-it"
 
 # === Fallback: OpenAI ===
-OPENAI_MODEL_FALLBACK = "gpt-4o"
+OPENAI_MODEL_FALLBACK = "gpt-4o-mini"
 
 def get_nvidia_client():
     api_key = os.environ.get('NVIDIA_API_KEY', '')

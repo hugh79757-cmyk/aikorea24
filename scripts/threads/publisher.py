@@ -151,10 +151,7 @@ def publish_thread_chain(cards, article):
         log(f'  카드 {i+1}/{len(cards)} 발행: {post_id}')
         time.sleep(3)
 
-    # OG 카드 생성을 위해 20초 대기
-    log(f'  OG 카드 생성을 위해 20초 대기...')
-    time.sleep(20)
-    log(f'  OG 카드 생성 완료 (URL 텍스트는 유지, Threads가 자동으로 OG 표시)')
+
 
     # posted.json 저장
     posted = load_posted()

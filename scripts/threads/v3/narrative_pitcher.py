@@ -41,10 +41,8 @@ SYSTEM_PROMPT = """당신은 100개 기사에서 '상식과 실제의 충돌'을
 "상식적으로 A였어야 하는데 실제로는 B인 상황"을 찾아라.
 그리고 왜 A가 아니고 B인지를 설명하는 기사들을 연결해라.
 
-[hook 필수 규칙]
-- hook은 반드시 18자 이내. 18자가 넘으면 실패.
-- 좋은 예(18자 이내): "젠슨황이 새만금에 간 이유가 있었음." "세계 최고 로스쿨이 AI사용을 금지했다."
-- 나쁜 예(15자 초과): "AI가 일자리를 뺏는 것이라 믿었는데, 실제로는 능력 격차만 벌리고 있다"
+[hook]
+hook: 이야기의 핵심 긴장을 한 줄로. 날짜/인물/숫자로 시작해도 됨. 길이 제한 없음.
 
 [금지]
 - 너무 많이 논의된 상식("AI가 일자리를 뺏는다", "AI가 미래다", "기술 발전이 중요하다")은 피할 것.
@@ -68,22 +66,79 @@ SYSTEM_PROMPT = """당신은 100개 기사에서 '상식과 실제의 충돌'을
 → 연결된 기사들: "구글 펜타곤 계약" + "구글 AI 원칙 삭제" + "9년차 엔지니어 사임"
 
 [출력 형식 — JSON만]
-{"hook": "18자 이내, 숫자O, 선언형", "narrative": "상식(A) vs 실제(B) — 한 줄", "twist": "A가 아니고 B인 진짜 이유", "emotion": "충격/불안/자부심/분노/놀라움", "article_ids": [2개이상 반드시], "sources": ["URL들"], "comparison_unit": "체감단위"}
+{"hook": "이야기의 핵심 긴장을 한 줄로. 길이 제한 없음.", "narrative": "상식(A) vs 실제(B) — 한 줄", "twist": "A가 아니고 B인 진짜 이유", "emotion": "충격/불안/자부심/분노/놀라움", "article_ids": [2개이상 반드시], "sources": ["URL들"], "comparison_unit": "체감단위"}
 
 중요: 
-- hook은 반드시 18자 이내. 그 이상이면 실패 처리됨.
 - 반드시 2개 이상의 다른 기사를 연결할 것.
 - '상식'은 기사에 없어도 됨. 네가 '이게 상식적으로는 A인데...' 하고 발견하면 됨."""
 
-def parse_pitches_from_text(text):
-    """GPT 출력에서 PITCH JSON 블록 추출"""
+def fill_article_ids(pitch, articles_text):
+    """피치의 hook/narrative로 관련 기사 ID 자동 매칭"""
+    hook = pitch.get('hook', '')
+    narrative = pitch.get('narrative', '')
+    search_text = (hook + ' ' + narrative).lower()
+    # 의미 있는 단어만 추출
+    words = [w for w in search_text.split() if len(w) >= 2]
+    if not words:
+        return pitch
+
+    scored = []
+    for entry in articles_text:
+        aid = ''
+        text = ''
+        for line in entry.split('\n'):
+            if line.startswith('기사 #'):
+                aid = line.replace('기사 #', '').split(':')[0].strip()
+            else:
+                text += line + ' '
+        text_lower = text.lower()
+        score = sum(1 for w in words if w in text_lower)
+        if score > 0:
+            scored.append((score, aid))
+
+    scored.sort(key=lambda x: -x[0])
+    pitch['article_ids'] = [aid for _, aid in scored[:3]]
+    if pitch['article_ids']:
+        print(f'  [매칭] {len(pitch["article_ids"])}개 기사 연결')
+    return pitch
+
+def parse_pitches_from_text(text, articles_text=None):
+    """GPT 출력에서 PITCH JSON 블록 추출 (멀티 스키마 지원)"""
     pitches = []
-    # JSON 객체 찾기
     for m in re.finditer(r'\{(?:[^{}]|(?:\{[^{}]*\}))*\}', text, re.DOTALL):
         try:
             p = json.loads(m.group(0))
+
+            # 스키마 1: 우리 형식 (hook/narrative/article_ids)
             if 'hook' in p and 'narrative' in p and 'article_ids' in p:
                 pitches.append(p)
+                continue
+
+            # 스키마 2: DiffusionGemma 형식 (title/summary/tags)
+            if 'title' in p and 'summary' in p:
+                pitches.append({
+                    'hook': (p.get('title', '') or '')[:18],
+                    'narrative': p.get('summary', '')[:100],
+                    'twist': '',
+                    'emotion': '놀라움',
+                    'article_ids': [],
+                    'sources': [],
+                    'comparison_unit': '',
+                })
+                continue
+
+            # 스키마 3: pitch_id 기반
+            if 'pitch_id' in p and 'title' in p:
+                pitches.append({
+                    'hook': (p.get('title', '') or '')[:18],
+                    'narrative': p.get('summary', '')[:100] if 'summary' in p else '',
+                    'twist': '',
+                    'emotion': '놀라움',
+                    'article_ids': [],
+                    'sources': [],
+                    'comparison_unit': '',
+                })
+                continue
         except:
             continue
     return pitches
@@ -116,14 +171,20 @@ def load_pitch_history():
     return []
 
 def is_duplicate_pitch(pitch, history):
-    """비슷한 피치가 이미 history에 있는지 확인"""
-    hook = pitch.get('hook', '')[:10]
+    """비슷한 피치가 이미 history에 있는지 확인 (내용 기반)"""
+    hook = pitch.get('hook', '')[:8]
+    narrative = pitch.get('narrative', '')[:30]
     for h in history:
-        if h.get('hook', '')[:10] == hook:
+        # hook 앞 8자 일치 → 중복
+        if h.get('hook', '')[:8] == hook:
             return True
+        # narrative 앞 30자 일치 → 중복
+        if narrative and h.get('narrative', '')[:30] == narrative:
+            return True
+        # 같은 article_ids 조합
         old_ids = set(h.get('article_ids', []))
         new_ids = set(pitch.get('article_ids', []))
-        if old_ids and old_ids == new_ids:
+        if old_ids and new_ids and old_ids == new_ids:
             return True
     return False
 
@@ -187,8 +248,24 @@ def get_pitches(articles, max_articles=100):
             temperature=0.9,
             max_tokens=3000,
         )
-        pitches = parse_pitches_from_text(resp)
-        log(f'  → {len(pitches)}개 피치 발견')
+        pitches = parse_pitches_from_text(resp, articles_text)
+        log(f'  → {len(pitches)}개 피치 발견 (DiffusionGemma)')
+
+        # DiffusionGemma 실패 시 GPT-4o-mini fallback
+        if not pitches:
+            log('  ⚠️ DiffusionGemma JSON 파싱 실패 → GPT-4o-mini fallback')
+            from v3.model_router import chat_completion as _cc
+            resp2 = _cc(
+                system_prompt=SYSTEM_PROMPT,
+                messages=[{'role': 'user', 'content': f"""아래 100개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
+
+{all_articles_joined}"""}],
+                temperature=0.9,
+                max_tokens=3000,
+                model_override='openai',
+            )
+            pitches = parse_pitches_from_text(resp2, articles_text)
+            log(f'  → {len(pitches)}개 피치 발견 (GPT-4o-mini)')
     except Exception as e:
         log(f'  ⚠️ 오류: {e}')
         return []
@@ -197,14 +274,14 @@ def get_pitches(articles, max_articles=100):
         log('  ❌ 피치 없음')
         return []
 
-    # hook 길이 검증 (15자 제한)
+    # hook 길이 검증 (최소 5자, 상한 없음)
     valid = []
     for p in pitches:
         hook = p.get('hook', '')
-        if len(hook) <= 18 and len(hook) >= 5:
+        if len(hook) >= 5:
             valid.append(p)
         else:
-            log(f'  ⚠️ hook {len(hook)}자 초과/미달 제외: "{hook[:20]}"')
+            log(f'  ⚠️ hook {len(hook)}자 미달 제외: "{hook[:20]}"')
 
     if not valid:
         log('  ❌ 모든 피치 hook 길이 조건 불만족')
