@@ -143,7 +143,8 @@ def write_thread(pitch, all_articles):
 5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
 6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라. """
 
-    for attempt in range(3):
+    max_attempts = 5
+    for attempt in range(max_attempts):
         try:
             log(f'  쓰레드 생성 중...')
             content = chat_completion(
@@ -161,11 +162,31 @@ def write_thread(pitch, all_articles):
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
             else:
-                log(f'  ⚠️ 검증 실패: {len(cards)}개 조각 (시도 {attempt+1}/3)')
+                log(f'  ⚠️ 검증 실패: {len(cards)}개 조각 (시도 {attempt+1}/{max_attempts})')
         except Exception as e:
-            log(f'  ⚠️ 오류: {e} (시도 {attempt+1}/3)')
+            log(f'  ⚠️ 오류: {e} (시도 {attempt+1}/{max_attempts})')
 
-    log('  ❌ 3회 재시도 실패')
+    log(f'  ❌ {max_attempts}회 재시도 실패 → GPT-4o-mini fallback 1회')
+    try:
+        log(f'  쓰레드 생성 중... (GPT-4o-mini fallback)')
+        content = chat_completion(
+            system_prompt=build_system_prompt(),
+            messages=[{'role': 'user', 'content': user_prompt}],
+            temperature=0.7,
+            max_tokens=5000,
+            model_override='openai',
+        )
+        if not content:
+            raise Exception('모델 응답 없음')
+        cards = parse_cards(content)
+        if validate_cards(cards, pitch):
+            cards = assemble_final(cards, pitch.get('sources', []))
+            log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
+            return cards
+    except Exception as e:
+        log(f'  ⚠️ GPT-4o-mini fallback 오류: {e}')
+
+    log('  ❌ 전체 재시도 실패')
     return []
 
 def parse_cards(text):
@@ -176,11 +197,13 @@ def parse_cards(text):
 def validate_cards(cards, pitch):
     """기본 검증"""
     if not cards or len(cards) < 5:
+        log(f'    → 카드 수 부족: {len(cards)}개 (필요: 5개)')
         return False
     # 첫 문장에 hook 포함 확인
     first = cards[0].strip()
     hook = pitch.get('hook', '')
     if hook and hook[:8] not in first:
+        log(f'    → hook 불일치: 첫 줄 시작="{first[:30]}..." 예상 hook[:8]="{hook[:8]}"')
         return False
     return True
 
