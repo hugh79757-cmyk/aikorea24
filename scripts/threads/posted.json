@@ -1,17 +1,61 @@
 {
   "posted_ids": [
     32152,
-    32130
+    32130,
+    28075,
+    "5141",
+    "27817",
+    "26412",
+    "13140",
+    "21678",
+    "21685",
+    "26408",
+    "26357",
+    27818,
+    "26429",
+    "26430",
+    27819
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
-    "https://www.fastcompany.com/91561045/g7-wraps-openai-anthropic-meet-world-leaders-discuss-future-ai"
+    "https://www.fastcompany.com/91561045/g7-wraps-openai-anthropic-meet-world-leaders-discuss-future-ai",
+    "https://www.etnews.com/20260603000201",
+    "https://techcrunch.com/2026/02/25/the-public-opposition-to-ai-infrastructure-is-heating-up/",
+    "https://www.etnews.com/20260603000005",
+    "https://the-decoder.com/sam-altman-and-dario-amodei-walk-back-their-ai-job-apocalypse-predictions/",
+    "https://the-decoder.com/openai-expands-its-record-funding-round-to-over-120-billion-as-it-eyes-a-potential-ipo-later-this-year/",
+    "https://the-decoder.com/mistrals-le-chat-spreads-iran-war-disinformation-in-60-percent-of-leading-prompts/",
+    "https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods/",
+    "https://the-decoder.com/ai-coding-agent-devin-maker-cognition-more-than-doubles-its-valuation-to-26-billion-in-under-nine-months/",
+    "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation/",
+    "https://www.etnews.com/20260601000331",
+    "https://www.zdnet.com/article/this-ai-free-search-engine-is-getting-more-popular-heres-why-you-should-try-it/",
+    "https://www.zdnet.com/article/easy-way-to-exclude-ai-from-search-results-in-every-browser/",
+    "https://www.etnews.com/20260602000268"
   ],
   "history": [
     {
       "id": 32152,
       "title": "스페이스X, 시장 가치에서 아마존을 초월하다",
       "posted_at": "2026-06-18T17:53:00"
+    },
+    {
+      "id": 28075,
+      "link": "https://www.etnews.com/20260603000201",
+      "title": "[컴퓨텍스 2026]MS \"엔비디아 슈퍼칩 탑재 AI노트북 올 가을 출시\"",
+      "posted_at": "2026-06-19T10:20:09.960286"
+    },
+    {
+      "id": 27818,
+      "link": "https://www.etnews.com/20260601000331",
+      "title": "네이버, AI 안전성 거버넌스 개편…CRO 산하 'AI 세이프티 센터' 신설",
+      "posted_at": "2026-06-19T23:21:43.654061"
+    },
+    {
+      "id": 27819,
+      "link": "https://www.etnews.com/20260602000268",
+      "title": "[스노우플레이크 서밋 26]“모델 바뀌어도 데이터 남는다”…기업 AI 실행 기반 강화",
+      "posted_at": "2026-06-19T23:27:44.975197"
     }
   ],
   "last_reset": "2026-06-18",
@@ -31,6 +75,155 @@
         21678
       ],
       "date": "2026-06-18"
+    },
+    {
+      "hook": "디즈니가 오픈AI와 손잡지 이유",
+      "article_ids": [
+        13139,
+        23139
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "AI가 일자리 뺏는 게 아니었다",
+      "article_ids": [
+        13285,
+        26412
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "AI가 일자리 대신 격차만 키운다",
+      "article_ids": [
+        "13285",
+        "13285",
+        "26412"
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "수십억 달러 계약을 맺은 디즈니가 단 몇 달 만에 Op",
+      "article_ids": [
+        "13139",
+        "21629"
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "AI가 일자리를 뺏을 것이라는 공포보다 'AI를 쓰는 ",
+      "article_ids": [
+        13285,
+        13286,
+        26412
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "AI가 인간의 일자리를 대체할 것이라는 공포보다, 'A",
+      "article_ids": [
+        13285,
+        13286
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "미국의 대중국 기술 제재로 칩 수급이 막히자, 중국 A",
+      "article_ids": [
+        "21693",
+        "21686"
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "2026년 6월, 뉴욕 증시는 사상 최고치를 경신했지만",
+      "article_ids": [
+        27817,
+        13285,
+        26412
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "수십억 달러의 계약을 맺었던 디즈니가 OpenAI의 S",
+      "article_ids": [
+        13139,
+        21629
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "수십억 달러 규모의 디즈니와 OpenAI 동맹이 'So",
+      "article_ids": [
+        "13139",
+        "216229"
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "AI 데이터센터는 무한히 확장될 것 같았지만, 실제로는",
+      "article_ids": [
+        5141,
+        27817
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "1,200억 달러 가치의 OpenAI가 '일자리 종말'",
+      "article_ids": [
+        26412,
+        13140
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "완벽한 중립을 지향할 줄 알았던 AI, 특정 악의적 질",
+      "article_ids": [
+        21678,
+        21685
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "9개월 만에 가치 26조 원, AI 코딩 에이전트 'D",
+      "article_ids": [
+        26408,
+        26357
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "디즈니는 수십억 달러짜리 OpenAI와의 파트너십을 단",
+      "article_ids": [
+        13139,
+        13092
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "엔비디아의 독점에 맞선 대만의 반격, 1500억 달러를",
+      "article_ids": [
+        21410,
+        26410,
+        13328
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "AI가 똑똑해질수록 역설적으로 사용자들은 'AI 없는 ",
+      "article_ids": [
+        26429,
+        26430
+      ],
+      "date": "2026-06-19"
+    },
+    {
+      "hook": "2026년 AI 전쟁의 중심은 이제 '똑똑한 모델'이 ",
+      "article_ids": [
+        21658,
+        26409,
+        13091
+      ],
+      "date": "2026-06-19"
     }
   ]
 }

@@ -66,7 +66,7 @@ def evaluate_pitch(pitch):
     # fallback: 기본 통과
     ids = pitch.get('article_ids', [])
     hook = pitch.get('hook', '')
-    if len(ids) >= 2 and len(hook) <= 18:
+    if len(ids) >= 2 and len(hook) <= 20:
         return True, 3, 'fallback 통과'
     return False, 0, 'fallback 실패'
 

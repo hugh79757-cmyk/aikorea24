@@ -166,3 +166,35 @@
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 4개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 2개
+  총 5개 (중복 제거 후)
+수집 완료: 5개
+기존 툴: 87개 (슬러그), 86개 (이름)
+  중복 스킵: Tyto by ai-coustics
+신규 툴: 4개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (4건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/labs-ai.md
+  ✅ Labs AI → labs-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/ploy-ai.md
+  ✅ Ploy.ai → ploy-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/ai-native-ecommerce-infrastructure.md
+  ✅ AI‑Native eCommerce Infrastructure → ai-native-ecommerce-infrastructure.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/beyond-the-current-observation-evaluating-multimo.md
+  ✅ Beyond the Current Observation: Evaluating Multimo → beyond-the-current-observation-evaluating-multimo.md
+
+==================================================
+처리 완료: 4/5개 생성 (27.5초)
+  git commit: [main 2324e86] feat: AI 툴 4개 추가 (2026-06-19)
+ 84 files changed, 6798 insertions(+), 171 deletions(-)
+ create mode 100644 publish_post.py
+ create mode 100644 scripts/__pycache__/tools_collector.cpython
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
