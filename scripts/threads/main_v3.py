@@ -140,6 +140,6 @@ if __name__ == '__main__':
         schedule.every().day.at('00:00').do(reset_posted_daily)
         while True:
             schedule.run_pending()
-            _time.sleep(60)
+            time.sleep(60)
     else:
         run_v3(dry_run=args.dry_run)
