@@ -6,15 +6,14 @@ import { TASKS as ALL_TASKS } from '../../config/tasks';
 
 const TASK_BASE = '/tools/task/';
 
-export async function getStaticPaths() {
-  const tools = await getCollection('tools');
-  return tools.map(tool => ({
-    params: { id: tool.id },
-    props: { tool },
-  }));
+const allToolsList = await getCollection('tools');
+const toolId = Astro.params.id;
+const tool = allToolsList.find(t => t.id === toolId);
+
+if (!tool) {
+  return Astro.redirect('/tools/', 302);
 }
 
-const { tool } = Astro.props;
 const { Content } = await render(tool);
 
 const difficultyColor = (d: string) => {
@@ -34,7 +33,6 @@ const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).ma
   title: ALL_TASKS[s].title,
 }));
 
-const allToolsList = await getCollection('tools');
 const relatedTools = allToolsList.filter(t => t.id !== tool.id && t.data.category === tool.data.category).sort(() => Math.random() - 0.5).slice(0, 4);
 const similarTools = relatedTools;
 
