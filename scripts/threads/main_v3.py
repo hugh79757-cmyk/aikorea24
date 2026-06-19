@@ -142,4 +142,4 @@ if __name__ == '__main__':
             schedule.run_pending()
             _time.sleep(60)
     else:
-        run_v3(dry_run=args.dry_run or args.once)
+        run_v3(dry_run=args.dry_run)
