@@ -113,12 +113,14 @@ def write_thread(pitch, all_articles):
 
     related_parts = []
     all_fallback = True
+    total_body_len = 0
     for a in related:
         body = fetch_article_body(a.get('link', ''))
         if not body:
             body = (a.get('description', '') or '')[:500]
         else:
             all_fallback = False
+        total_body_len += len(body)
         related_parts.append(f"""기사 {a['id']}:
 제목: {a.get('title','')}
 본문: {body}
@@ -126,7 +128,12 @@ def write_thread(pitch, all_articles):
 링크: {a.get('link','')}""")
     related_text = '\n\n'.join(related_parts)
 
-    # 크롤링 전부 실패 시 경고 주입 (hallucination 방지)
+    # 모든 기사 크롤링 실패 + 설명 부족 → 스킵 (hallucination 방지)
+    if all_fallback and total_body_len < 1000:
+        log(f'  ⚠️ 모든 기사 크롤링 실패, 설명 부족 ({total_body_len}자) → 스킵 (hallucination 방지)')
+        return []
+
+    # 크롤링 전부 실패 시 경고 주입 (설명만으로 충분한 경우에만 진행)
     crawl_warning = ''
     if all_fallback:
         crawl_warning = '\n\n⚠️ 모든 기사 원문을 읽을 수 없습니다. 기사 제목과 짧은 요약만 제공됩니다.\n숫자, 인용문, 날짜를 절대 만들어내지 마라. 없는 내용을 "~했음", "~라고 함" 식으로 확정해 쓰지 마라.\n정보가 부족하면 카드를 간결하게 유지하고, 억지로 10줄을 채우려 하지 마라.\n100% 확실한 정보만 써라. 추측 금지.'
