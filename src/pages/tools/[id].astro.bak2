@@ -36,31 +36,6 @@ const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).ma
 const relatedTools = allToolsList.filter(t => t.id !== tool.id && t.data.category === tool.data.category).sort(() => Math.random() - 0.5).slice(0, 4);
 const similarTools = relatedTools;
 
-// ---- FAQ 구조화 데이터 생성 ----
-const toolBody: string = (tool as any).body || '';
-const faqSection = toolBody.split('## 자주 묻는 질문')[1] || '';
-const faqLines = faqSection.split('\n');
-const faqEntities: any[] = [];
-let currentQ = '';
-let currentA: string[] = [];
-for (const line of faqLines) {
-  if (line.startsWith('**') && line.endsWith('**')) {
-    if (currentQ && currentA.length) {
-      faqEntities.push({ "@type": "Question", "name": currentQ, "acceptedAnswer": { "@type": "Answer", "text": currentA.join(' ').trim() } });
-    }
-    currentQ = line.replace(/\*\*/g, '').trim();
-    currentA = [];
-  } else if (currentQ && line.trim()) {
-    currentA.push(line.trim());
-  }
-}
-if (currentQ && currentA.length) {
-  faqEntities.push({ "@type": "Question", "name": currentQ, "acceptedAnswer": { "@type": "Answer", "text": currentA.join(' ').trim() } });
-}
-const faqSchema: string | null = faqEntities.length > 0
-  ? JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqEntities.slice(0, 5) })
-  : null;
-
 // ---- 리뷰 데이터 조회 ----
 const runtime = (Astro.locals as any).runtime;
 const db = runtime?.env?.DB;
@@ -331,8 +306,25 @@ document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e)
   }
 });
 </script>
+
   <!-- FAQPage 구조화 데이터 -->
-  {faqSchema && (
-    <script type="application/ld+json" set:html={faqSchema} />
-  )}
+  <script type="application/ld+json" set:html={JSON.stringify((() => {
+    const content = tool.body || '';
+    const faqSection = content.split('## 자주 묻는 질문')[1] || '';
+    const qaMatches = [...faqSection.matchAll(/\*\*(.+?)\*\*
++([^*]+?)(?=
+\*\*|
+##|$)/gs)];
+    const entities = qaMatches.slice(0, 5).map(m => ({
+      "@type": "Question",
+      "name": m[1].trim(),
+      "acceptedAnswer": { "@type": "Answer", "text": m[2].trim() }
+    }));
+    if (entities.length === 0) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": entities
+    };
+  })())} />
 </Layout>
