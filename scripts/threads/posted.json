@@ -33,7 +33,9 @@
     "13139",
     "13138",
     "26411",
-    "21630"
+    "21630",
+    "26431",
+    "26398"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -66,7 +68,9 @@
     "https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-months-after-launch/",
     "https://the-decoder.com/openai-ceo-sam-altman-reportedly-teases-a-very-strong-model-internally-that-can-really-accelerate-the-economy/",
     "https://the-decoder.com/china-turns-its-aging-camera-network-into-an-ai-powered-mass-surveillance-apparatus/",
-    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality/"
+    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality/",
+    "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips/",
+    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts?utm_source=rss_feed"
   ],
   "history": [
     {
@@ -149,22 +153,6 @@
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "2026년 5월, AI가 범죄 예방 대신 범죄 증가의 ",
-      "article_ids": [
-        27284,
-        26360
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "일론 머스크의 xAI는 과연 구원투수가 될 것인가, 얀",
-      "article_ids": [
-        32477,
-        21855
-      ],
-      "date": "2026-06-20"
-    },
     {
       "hook": "AI가 모든 업무를 대체할 것이라는 믿음, 정작 '기업",
       "article_ids": [
@@ -389,6 +377,22 @@
       "article_ids": [
         "26411",
         "21630"
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "2026년 미국-이란 갈등, 인간의 지휘가 아닌 AI가",
+      "article_ids": [
+        32698,
+        21633
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "미국 정부는 AI 칩 경쟁에서 뒤처졌다는 위기감에 엔비",
+      "article_ids": [
+        "26431",
+        "26398"
       ],
       "date": "2026-06-20"
     }
