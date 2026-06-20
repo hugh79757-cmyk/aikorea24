@@ -135,7 +135,7 @@ def write_thread(pitch, all_articles):
 발행일: {pub_date_str}
 본문: {body}
 출처: {a.get('source','')}
-링크: {final_url}""")
+링크: {a.get('link','')}""")
     related_text = '\n\n'.join(related_parts)
 
     # 모든 기사 크롤링 실패 → 무조건 스킵 (RSS description만으로 품질 보장 불가)
