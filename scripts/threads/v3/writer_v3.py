@@ -278,34 +278,39 @@ def validate_cards(cards, pitch):
     return True
 
 def validate_year(cards, article_body_text):
-    """연도 검증: 쓰레드에 포함된 연도가 실제 기사 본문에 있는 연도인지 확인
-    - 기사 본문에 없는 연도를 쓰레드가 표시하면 할루시네이션 → 실패
-    - 기사 본문에 연도가 없고 쓰레드에도 연도가 없으면 → 통과
-    - 기사 본문에 연도가 있고 쓰레드가 그 연도를 사용하면 → 통과
+    """연도 검증: 쓰레드 본문(1번 카드 첫 줄 제외)의 연도가 기사 본문에 있는 연도인지 확인
+    - pitcer가 생성한 hook(1번 카드 첫 줄)은 검증에서 제외 (변경 불가이므로)
+    - 기사 본문에 없는 연도를 쓰레드 본문이 표시하면 할루시네이션 → 실패
     """
     body_text = article_body_text or ''
-    cards_text = ' '.join(cards)
 
-    card_years = set()
-    for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', cards_text):
-        card_years.add(int(m.group()))
+    # hook(1번 카드 첫 줄)은 pitcer 생성 → 검증 제외
+    first_card = cards[0] if cards else ''
+    hook_line = first_card.split('\n')[0] if first_card else ''
+    rest_text = ' '.join(cards)
+    # rest_text에서 hook_line 제거
+    rest_text = rest_text.replace(hook_line, '', 1)
+
+    rest_years = set()
+    for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', rest_text):
+        rest_years.add(int(m.group()))
 
     body_years = set()
     for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', body_text):
         body_years.add(int(m.group()))
 
-    # 쓰레드에 연도가 없음 → 통과 (본문에도 없거나, 있어도 자연스럽게 미표기)
-    if not card_years:
-        log(f'    → 연도 검증 통과: 쓰레드에 연도 미표기')
+    # 본문(hook 제외)에 연도가 없음 → 통과
+    if not rest_years:
+        log(f'    → 연도 검증 통과: 본문(hook 제외)에 연도 미표기')
         return True
 
-    # 쓰레드에 있는 연도가 본문에도 있는지 확인
-    invented = card_years - body_years
+    # 본문(hook 제외)의 연도가 기사 본문에도 있는지 확인
+    invented = rest_years - body_years
     if invented:
         log(f'    → 연도 검증 실패: 본문에 없는 연도 {invented}를 쓰레드가 표시함 (본문 연도={body_years})')
         return False
 
-    log(f'    → 연도 검증 통과: 쓰레드 연도 {card_years} ⊆ 본문 연도 {body_years}')
+    log(f'    → 연도 검증 통과: 쓰레드 연도 {rest_years} ⊆ 본문 연도 {body_years}')
     return True
 
 def assemble_final(cards, sources):
