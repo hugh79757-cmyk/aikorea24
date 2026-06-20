@@ -75,7 +75,7 @@ def run_v3(dry_run=False):
         # 2. 피치 생성
         from v3.narrative_pitcher import get_pitches
         log('  피치 생성...')
-        pitches = get_pitches(articles, max_articles=200)
+        pitches = get_pitches(articles, max_articles=500)
 
         if not pitches:
             log(f'  ❌ 흥미로운 이야기 발견 실패 (시도 {attempt}/{max_retries})')

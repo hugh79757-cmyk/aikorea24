@@ -38,7 +38,8 @@
     "26398",
     "26410",
     32698,
-    21686
+    21686,
+    21693
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -76,7 +77,8 @@
     "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts?utm_source=rss_feed",
     "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion/",
     "https://www.gokorea.kr/news/articleView.html?idxno=869774",
-    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/"
+    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/",
+    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/"
   ],
   "history": [
     {
@@ -167,6 +169,12 @@
       "link": "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/",
       "title": "Qwen 팀, NVIDIA 호퍼 GPU에서 최대 3배 속도를 달성하는 고성능 선형 주의 커널 라이브러리 FlashQLA 출시",
       "posted_at": "2026-06-20T22:31:58.851876"
+    },
+    {
+      "id": 21693,
+      "link": "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/",
+      "title": "제재를 받은 중국 AI 기업 SenseTime, 속도를 위해 제작된 이미지 모델 출시",
+      "posted_at": "2026-06-21T06:19:24.250654"
     }
   ],
   "last_reset": "2026-06-18",
@@ -218,6 +226,15 @@
         21686
       ],
       "date": "2026-06-20"
+    },
+    {
+      "hook": "2026년 6월, G7 정상들은 미국산 AI를 갈망하면",
+      "article_ids": [
+        32009,
+        32002,
+        1125
+      ],
+      "date": "2026-06-21"
     }
   ]
 }
