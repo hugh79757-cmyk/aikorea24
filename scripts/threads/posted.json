@@ -36,7 +36,9 @@
     "21630",
     "26431",
     "26398",
-    "26410"
+    "26410",
+    32698,
+    21686
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -72,7 +74,9 @@
     "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality/",
     "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips/",
     "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts?utm_source=rss_feed",
-    "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion/"
+    "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion/",
+    "https://www.gokorea.kr/news/articleView.html?idxno=869774",
+    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/"
   ],
   "history": [
     {
@@ -151,51 +155,22 @@
       "link": "https://www.aitimes.kr/news/articleView.html?idxno=40581",
       "title": "AI 환각 줄이고 정확도 78% 높였다...KAIST, 차세대 데이터베이스 기술 개발",
       "posted_at": "2026-06-20T18:28:16.494891"
+    },
+    {
+      "id": 32698,
+      "link": "https://www.gokorea.kr/news/articleView.html?idxno=869774",
+      "title": "인공지능으로 변모한 전쟁…미국-이란 갈등에 AI 전면 등장",
+      "posted_at": "2026-06-20T20:29:59.558164"
+    },
+    {
+      "id": 21686,
+      "link": "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/",
+      "title": "Qwen 팀, NVIDIA 호퍼 GPU에서 최대 3배 속도를 달성하는 고성능 선형 주의 커널 라이브러리 FlashQLA 출시",
+      "posted_at": "2026-06-20T22:31:58.851876"
     }
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "엔비디아의 대만 지출이 150억 달러에서 1,500억 ",
-      "article_ids": [
-        "26410",
-        "26431"
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "미국의 기술 제재가 막힌 중국 AI 기업들이 오히려 중",
-      "article_ids": [
-        221693,
-        21686
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "미국 정부의 '방위생산법' 발동 앞에 AI 안전 원칙을",
-      "article_ids": [
-        5009,
-        1339
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "2026년 4월 29일, 오픈AI와 마이크로소프트의 독",
-      "article_ids": [
-        21681,
-        21355
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "미국의 기술 규재가 중국의 AI 발전을 멈출 것이라는 ",
-      "article_ids": [
-        21686,
-        21693,
-        23398
-      ],
-      "date": "2026-06-20"
-    },
     {
       "hook": "OpenAI와 마이크로소프트의 '독점적 동맹'은 단 하",
       "article_ids": [
@@ -396,6 +371,43 @@
         26410
       ],
       "date": "2026-06-20"
+    },
+    {
+      "hook": "OpenAI가 Microsoft와의 독점 계약 해지 단",
+      "article_ids": [
+        21681
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "AI가 커질수록 똑똑해진다는 상식은 이제 깨지고 있다,",
+      "article_ids": [
+        5018,
+        21686
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "유튜브 제작자가 AI 사용 여부를 직접 밝히지 않아도,",
+      "article_ids": [
+        "26359"
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "모델이 커질수록 더 똑똑해질 것이라 믿었지만, 이제는 ",
+      "article_ids": [
+        5018,
+        5019
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 범죄를 막아줄 줄 알았는데, 오히려 AI 때문에",
+      "article_ids": [
+        27284
+      ],
+      "date": "2026-06-21"
     }
   ]
 }

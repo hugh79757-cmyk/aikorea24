@@ -1,0 +1,37 @@
+OpenAI가 Microsoft와의 독점 계약 해지 단 하루 만에 AWS로 발길을 돌린 이유
+
+2026년 4월 29일.
+Microsoft와 OpenAI가 독점 계약을 종료했음.
+그 바로 다음 날.
+AWS가 Bedrock 플랫폼에서 OpenAI 서비스 3개를 출시함.
+인프라 의존성을 깨려는 즉각적인 움직임임.
+---
+2026년 2월.
+Amazon과 OpenAI가 전략적 파트너십을 맺었음.
+투자 규모는 최대 500억 달러.
+AWS 컴퓨팅 사용은 1000억 달러에 달함.
+당시 Microsoft와 OpenAI는 파트너십에 변화가 없을 것이라고 공동 발표함. 3월, The Information에 따르면 Microsoft 경영진은 계획된 AWS 제품이 독점 계약을 위반한다고 우려함. Financial Times에 따르면 Microsoft는 Amazon과 OpenAI를 상대로 법적 대응까지 검토했음. 이번 계약 재구성으로 이 모든 갈등은 일단락됨.
+---
+2026년 4월 29일.
+AWS는 Bedrock 플랫폼에서 OpenAI 모델 3개를 공개함.
+현재 한정 프리뷰 버전으로 제공됨.
+포함된 서비스는 GPT-5.4, Codex, 그리고 Managed Agents임.
+Managed Agents는 OpenAI의 모델과 AWS 인프라를 결합함.
+각 에이전트는 고유 식별성을 가지며 모든 행동을 기록함.
+고객 환경 내에서 실행됨. AWS CEO Matt Garman은 GPT-5.5가 몇 주 내로 출시될 것이라고 말함. OpenAI CEO Sam Altman은 비디오로만 참석함.
+---
+OpenAI는 이제 Azure에만 갇혀 있지 않음.
+500억 달러의 투자와 1000억 달러의 컴퓨팅 약속은 여전히 유효함.
+하지만 Microsoft의 독점 권한은 사라졌음.
+OpenAI는 자체적인 인프라 다변화를 통해 선택지를 넓힘.
+AWS Bedrock 위에서 새로운 에이전트 서비스 생태계가 구축됨.
+의사결정 속도가 24시간 만에 증명된 사례임.
+AI 업계의 판도는 이제 독점이 아닌 확장성으로 넘어감.
+---
+2026년 4월 29일.
+Microsoft의 법적 대응 위협은 계약 수정으로 무력화됨.
+OpenAI는 하루 만에 AWS라는 새로운 카드를 잡음.
+500억 달러의 자금과 1000억 달러의 인프라 사이에서 OpenAI는 가장 빠른 길을 선택함.
+독점은 끝났고 전쟁은 시작됨.
+---
+🔗 https://the-decoder.com/openai-lands-on-aws-one-day-after-microsoft-restructuring/
