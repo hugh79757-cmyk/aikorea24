@@ -20,7 +20,8 @@
     32396,
     21855,
     21629,
-    32522
+    32522,
+    32671
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -43,7 +44,8 @@
     "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
     "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/",
     "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models/",
-    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills/"
+    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills/",
+    "https://www.aitimes.com/news/articleView.html?idxno=211910"
   ],
   "history": [
     {
@@ -104,18 +106,16 @@
       "link": "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills/",
       "title": "노르웨이, 아이들의 기본 학습 능력 보호를 위해 초등학교에서 생성적 AI 도구 금지",
       "posted_at": "2026-06-20T11:42:13.834540"
+    },
+    {
+      "id": 32671,
+      "link": "https://www.aitimes.com/news/articleView.html?idxno=211910",
+      "title": "국내 챗GPT 무료·Go 요금제에 ‘광고’ 도입",
+      "posted_at": "2026-06-20T13:43:51.421833"
     }
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "수십억 달러 계약을 맺은 디즈니가 단 몇 달 만에 Op",
-      "article_ids": [
-        "13139",
-        "21629"
-      ],
-      "date": "2026-06-19"
-    },
     {
       "hook": "AI가 일자리를 뺏을 것이라는 공포보다 'AI를 쓰는 ",
       "article_ids": [
@@ -351,6 +351,14 @@
       "article_ids": [
         "32522",
         "27234"
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "전 세계 10%가 AI 챗봇으로 뉴스를 보지만, 원본 ",
+      "article_ids": [
+        "32525",
+        "32694"
       ],
       "date": "2026-06-20"
     }
