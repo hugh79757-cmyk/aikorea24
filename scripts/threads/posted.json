@@ -35,7 +35,8 @@
     "26411",
     "21630",
     "26431",
-    "26398"
+    "26398",
+    "26410"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -70,7 +71,8 @@
     "https://the-decoder.com/china-turns-its-aging-camera-network-into-an-ai-powered-mass-surveillance-apparatus/",
     "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality/",
     "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips/",
-    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts?utm_source=rss_feed"
+    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts?utm_source=rss_feed",
+    "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion/"
   ],
   "history": [
     {
@@ -153,14 +155,6 @@
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "AI가 모든 업무를 대체할 것이라는 믿음, 정작 '기업",
-      "article_ids": [
-        26457,
-        21658
-      ],
-      "date": "2026-06-20"
-    },
     {
       "hook": "엔비디아의 대만 지출이 150억 달러에서 1,500억 ",
       "article_ids": [
@@ -393,6 +387,13 @@
       "article_ids": [
         "26431",
         "26398"
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "엔비디아(Nvidia)의 독주 시대? 대만의 지출이 1",
+      "article_ids": [
+        26410
       ],
       "date": "2026-06-20"
     }
