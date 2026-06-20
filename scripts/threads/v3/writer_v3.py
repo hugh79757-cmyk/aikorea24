@@ -138,10 +138,10 @@ def write_thread(pitch, all_articles):
             if str(db_id) in article_id_set:
                 related.append(a)
 
-    # 그래도 없으면 첫 2개 사용
+    # 매칭 실패 → 스킵 (다음 주제로)
     if not related:
-        log(f'  ⚠️ 피치 article_ids 타입/매칭 실패: {article_ids} → all_articles[:2] fallback')
-        related = all_articles[:2]
+        log(f'  ⚠️ 피치 article_ids({article_ids})를 DB 풀에서 찾을 수 없음 → 스킵')
+        return []
 
     related_parts = []
     article_bodies = []
