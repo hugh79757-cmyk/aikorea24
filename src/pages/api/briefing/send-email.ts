@@ -31,22 +31,55 @@ export const POST: APIRoute = async ({ locals }) => {
     // 3. HTML 이메일 본문 생성 (3개만 표시 + 더보기)
     const displayItems = (items.results || []).slice(0, 3);
     const totalCount = items.results?.length || 0;
+
+    // TOC HTML
+    const allItems = items.results || [];
+    let tocHtml = '';
+    if (totalCount > 0) {
+      tocHtml = `
+        <tr>
+          <td style="padding:16px 24px;background:#eff6ff;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="font-size:13px;font-weight:700;color:#1e40af;padding-bottom:8px;">
+                  📋 오늘의 브리핑
+                </td>
+              </tr>
+              ${allItems.map((item, idx) => `
+              <tr>
+                <td style="font-size:13px;color:#1f2937;line-height:1.8;">
+                  ${idx + 1}. ${item.news_title || ''}
+                </td>
+              </tr>`).join('')}
+              ${totalCount > 3 ? `
+              <tr>
+                <td style="font-size:13px;color:#6b7280;line-height:1.8;padding-top:4px;">
+                  ...외 ${totalCount - 3}개
+                </td>
+              </tr>` : ''}
+            </table>
+          </td>
+        </tr>`;
+    }
+
     let itemsHtml = '';
     for (const item of displayItems) {
       const briefingUrl = `https://aikorea24.kr/briefing/${today}${item.sort_order ? `#item-${item.sort_order}` : ''}`;
+      const desc = item.news_desc ? item.news_desc.substring(0, 150) : '';
       itemsHtml += `
         <tr>
           <td style="padding:16px 0;border-bottom:1px solid #e5e7eb;">
             <table width="100%" cellpadding="0" cellspacing="0">
               <tr>
-                <td style="font-size:14px;color:#2563eb;font-weight:600;padding-bottom:4px;">
-                  ${item.news_title || ''}
+                <td style="padding-bottom:8px;">
+                  <span style="display:inline-block;width:20px;height:20px;background:#2563eb;color:#fff;border-radius:50%;font-size:11px;text-align:center;line-height:20px;margin-right:6px;vertical-align:middle;">${item.sort_order || ''}</span>
+                  <span style="font-size:15px;color:#111827;font-weight:700;vertical-align:middle;">${item.news_title || ''}</span>
                 </td>
               </tr>
-              ${item.comment ? `<tr><td style="font-size:13px;color:#4b5563;padding:4px 0 8px 0;line-height:1.5;">💡 ${item.comment}</td></tr>` : ''}
-              ${item.news_desc ? `<tr><td style="font-size:13px;color:#6b7280;line-height:1.5;">${item.news_desc.substring(0, 200)}</td></tr>` : ''}
+              ${item.comment ? `<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">${item.comment}</td></tr>` : ''}
+              ${desc ? `<tr><td style="font-size:13px;color:#6b7280;line-height:1.5;padding-top:6px;">${desc}</td></tr>` : ''}
               <tr><td style="padding-top:8px;">
-                <a href="${briefingUrl}" style="font-size:12px;color:#2563eb;text-decoration:underline;">
+                <a href="${briefingUrl}" style="font-size:12px;color:#2563eb;text-decoration:underline;font-weight:600;">
                   AI코리아24에서 자세히 보기 →
                 </a>
               </td></tr>
@@ -95,8 +128,9 @@ export const POST: APIRoute = async ({ locals }) => {
                           <td style="font-size:14px;font-weight:600;color:#111827;">
                             ${t.korean_support ? '🇰🇷 ' : ''}${t.name}
                           </td>
-                          <td style="text-align:right;font-size:11px;color:#6b7280;">
-                            ${t.price || ''} ${t.category ? '· ' + t.category : ''}
+                          <td style="text-align:right;font-size:11px;">
+                            ${t.category ? `<span style="display:inline-block;background:#f3f4f6;color:#374151;font-size:11px;padding:2px 8px;border-radius:12px;margin-right:4px;">${t.category}</span>` : ''}
+                            <span style="color:${t.price && (t.price.includes('무료') || t.price.includes('Free')) ? '#059669' : '#6b7280'};">${t.price || ''}</span>
                           </td>
                         </tr>
                         <tr>
@@ -104,6 +138,12 @@ export const POST: APIRoute = async ({ locals }) => {
                             ${t.tagline || ''}
                           </td>
                         </tr>
+                        ${t.difficulty ? `
+                        <tr>
+                          <td colspan="2" style="font-size:12px;color:#9ca3af;padding-top:2px;line-height:1.4;">
+                            ⭐ 난이도: ${t.difficulty}
+                          </td>
+                        </tr>` : ''}
                         <tr>
                           <td colspan="2" style="padding-top:6px;">
                             <a href="https://aikorea24.kr/tools/${t.slug}/"
@@ -140,10 +180,16 @@ export const POST: APIRoute = async ({ locals }) => {
         <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;">
           <tr>
             <td style="padding:32px 24px 16px 24px;background:#1e3a5f;text-align:center;">
-              <h1 style="color:#fff;font-size:20px;margin:0;">AI코리아24</h1>
+              <div style="font-size:40px;line-height:1;margin-bottom:8px;">🤖</div>
+              <h1 style="color:#fff;font-size:26px;margin:0;letter-spacing:2px;">AI코리아24</h1>
               <p style="color:#94a3b8;font-size:13px;margin:4px 0 0 0;">오늘의 AI 브리핑 — ${today}</p>
+              <p style="color:#64748b;font-size:12px;margin:6px 0 0 0;">매일 아침 7시, 국내외 AI 소식 큐레이션</p>
             </td>
           </tr>
+          <tr>
+            <td style="height:3px;background:linear-gradient(90deg,#3b82f6,#8b5cf6);padding:0;font-size:1px;line-height:3px;">&nbsp;</td>
+          </tr>
+          ${tocHtml}
           ${briefing.intro ? `
           <tr>
             <td style="padding:20px 24px;background:#fff;border-bottom:1px solid #e5e7eb;">
