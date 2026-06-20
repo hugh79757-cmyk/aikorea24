@@ -198,3 +198,49 @@
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 6개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  총 7개 (중복 제거 후)
+수집 완료: 7개
+기존 툴: 91개 (슬러그), 90개 (이름)
+  중복 스킵: Labs AI
+  중복 스킵: Ploy.ai
+신규 툴: 5개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (5건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/claude-code-artifacts.md
+  ✅ Claude Code Artifacts → claude-code-artifacts.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/mutter-ai-dictation.md
+  ✅ Mutter AI Dictation → mutter-ai-dictation.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/zernio-whatsapp-api.md
+  ✅ Zernio WhatsApp API → zernio-whatsapp-api.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/moebius-0-2b-lightweight-image-inpainting-framewo.md
+  ✅ Moebius: 0.2B Lightweight Image Inpainting Framewo → moebius-0-2b-lightweight-image-inpainting-framewo.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/upsolve-ai.md
+  ✅ Upsolve AI → upsolve-ai.md
+
+==================================================
+처리 완료: 5/7개 생성 (18.8초)
+  git commit: [main afdf55c] feat: AI 툴 5개 추가 (2026-06-20)
+ 17 files changed, 899 insertions(+), 192 deletions(-)
+ delete mode 100644 scripts/insert_tools.sql
+ delete mode 100644 scripts/insert_tools_no_txn.sql
+ cr
+  git push: remote: error: GH013: Repository rule violations found for refs/heads/main.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 실패: remote: error: GH013: Repository rule violations found for refs/heads/main.        
+remote: 
+remote: - GITHUB PUSH PROTECTION        
+remote:   —————————————————————————————————————————        
+remote:     Resolve the following violations before pushing again        
+remote: 
+remote:     - Push cann

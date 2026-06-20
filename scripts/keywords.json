@@ -1,6 +1,6 @@
 {
   "쳇지티피": {
-    "search_volume": 141600,
+    "search_volume": 154600,
     "competition": "낮음",
     "grade": "S",
     "db_query": [
@@ -12,19 +12,19 @@
     "source": "seed"
   },
   "챗지피티무료": {
-    "search_volume": 86500,
+    "search_volume": 85700,
     "competition": "중간",
     "grade": "A",
     "db_query": [
       "챗지피티무료",
       "ChatGPT free",
-      "무료 AI 챗봇"
+      "무료 AI"
     ],
-    "intent": "무료 챗GPT 찾기",
+    "intent": "챗GPT 무료 사용법",
     "source": "seed"
   },
   "마음AI": {
-    "search_volume": 61270,
+    "search_volume": 61430,
     "competition": "낮음",
     "grade": "A",
     "db_query": [
@@ -36,19 +36,19 @@
     "source": "seed"
   },
   "로판AI": {
-    "search_volume": 48940,
+    "search_volume": 49150,
     "competition": "중간",
     "grade": "A",
     "db_query": [
       "로판AI",
       "로맨스 판타지 AI",
-      "AI 소설 생성"
+      "AI 소설"
     ],
-    "intent": "로판AI 활용 방법",
+    "intent": "로판AI 활용법",
     "source": "seed"
   },
   "영어해석기": {
-    "search_volume": 52860,
+    "search_volume": 52340,
     "competition": "중간",
     "grade": "A",
     "db_query": [
@@ -60,51 +60,51 @@
     "source": "seed"
   },
   "누끼따기사이트": {
-    "search_volume": 40700,
+    "search_volume": 40200,
     "competition": "중간",
     "grade": "A",
     "db_query": [
       "누끼따기사이트",
-      "배경 제거 사이트",
-      "cutout site"
+      "background remover",
+      "이미지 편집"
     ],
     "intent": "누끼 따기 사이트 검색",
     "source": "seed"
   },
   "표절검사기": {
-    "search_volume": 6640,
+    "search_volume": 6630,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "표절검사기",
       "plagiarism checker",
-      "표절 검사 도구"
+      "검사 도구"
     ],
-    "intent": "표절 검사기 사용",
+    "intent": "표절 검사기 사용법",
     "source": "seed"
   },
   "웍스AI": {
-    "search_volume": 7090,
+    "search_volume": 6920,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "웍스AI",
       "Works AI",
-      "AI 업무 도구"
+      "AI 솔루션"
     ],
     "intent": "웍스AI 정보 탐색",
     "source": "seed"
   },
   "지티피": {
-    "search_volume": 4950,
+    "search_volume": 4890,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "지티피",
       "GPT",
-      "Generative Pre-trained Transformer"
+      "AI 모델"
     ],
-    "intent": "GPT 관련 정보",
+    "intent": "GPT 정보 검색",
     "source": "seed"
   },
   "CHATGPT유료": {
@@ -114,25 +114,25 @@
     "db_query": [
       "CHATGPT유료",
       "ChatGPT paid",
-      "유료 AI 서비스"
+      "프리미엄 AI"
     ],
     "intent": "유료 챗GPT 정보",
     "source": "seed"
   },
   "윈도우11다운로드": {
-    "search_volume": 9760,
+    "search_volume": 9720,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "윈도우11다운로드",
       "Windows 11 download",
-      "윈도우 11 설치"
+      "OS 다운로드"
     ],
-    "intent": "윈도우 11 다운로드",
+    "intent": "윈도우 11 다운로드 방법",
     "source": "seed"
   },
   "윈도우11정품": {
-    "search_volume": 4510,
+    "search_volume": 4520,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -140,23 +140,23 @@
       "Windows 11 genuine",
       "정품 소프트웨어"
     ],
-    "intent": "정품 윈도우 11 구매",
+    "intent": "윈도우 11 정품 구매",
     "source": "seed"
   },
   "전자사전": {
-    "search_volume": 4750,
+    "search_volume": 4760,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "전자사전",
       "electronic dictionary",
-      "디지털 사전"
+      "사전 앱"
     ],
-    "intent": "전자사전 정보 검색",
+    "intent": "전자사전 추천",
     "source": "seed"
   },
   "이미지검색": {
-    "search_volume": 10200,
+    "search_volume": 10180,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -168,31 +168,31 @@
     "source": "seed"
   },
   "마이크로소프트스토어": {
-    "search_volume": 5000,
+    "search_volume": 4990,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "마이크로소프트스토어",
       "Microsoft Store",
-      "MS 앱 스토어"
+      "앱 다운로드"
     ],
-    "intent": "MS 스토어 탐색",
+    "intent": "MS 스토어 정보",
     "source": "seed"
   },
   "투닝": {
-    "search_volume": 19730,
+    "search_volume": 19690,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "투닝",
       "tuning",
-      "AI 모델 최적화"
+      "모델 최적화"
     ],
     "intent": "AI 모델 투닝",
     "source": "seed"
   },
   "GITHUB": {
-    "search_volume": 21130,
+    "search_volume": 20910,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -200,7 +200,7 @@
       "GitHub",
       "코드 저장소"
     ],
-    "intent": "GITHUB 정보 탐색",
+    "intent": "GITHUB 활용법",
     "source": "seed"
   },
   "MS365": {
@@ -212,23 +212,23 @@
       "Microsoft 365",
       "오피스 365"
     ],
-    "intent": "MS365 정보 검색",
+    "intent": "MS 365 정보 검색",
     "source": "seed"
   },
   "윈도우11시디키": {
-    "search_volume": 5150,
+    "search_volume": 5100,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "윈도우11시디키",
       "Windows 11 CD key",
-      "정품 키 구매"
+      "정품 키"
     ],
     "intent": "윈도우 11 시디키 구매",
     "source": "seed"
   },
   "ONEDRIVE": {
-    "search_volume": 14150,
+    "search_volume": 14030,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -236,23 +236,23 @@
       "OneDrive",
       "클라우드 저장소"
     ],
-    "intent": "OneDrive 정보 검색",
+    "intent": "OneDrive 사용법",
     "source": "seed"
   },
   "엑셀구매": {
-    "search_volume": 6580,
+    "search_volume": 6480,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "엑셀구매",
       "Excel purchase",
-      "MS Excel 구매"
+      "오피스 구매"
     ],
     "intent": "엑셀 구매 방법",
     "source": "seed"
   },
   "AI": {
-    "search_volume": 156200,
+    "search_volume": 156000,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -260,11 +260,11 @@
       "인공지능",
       "Artificial Intelligence"
     ],
-    "intent": "AI 관련 정보 탐색",
+    "intent": "AI 관련 정보",
     "source": "seed"
   },
   "챗GPT": {
-    "search_volume": 4605100,
+    "search_volume": 4582100,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -276,7 +276,7 @@
     "source": "seed"
   },
   "인공지능": {
-    "search_volume": 13400,
+    "search_volume": 13180,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -288,43 +288,43 @@
     "source": "seed"
   },
   "AI이미지": {
-    "search_volume": 2280,
+    "search_volume": 2250,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI이미지",
       "AI image",
-      "이미지 생성 AI"
+      "이미지 생성"
     ],
     "intent": "AI 이미지 생성",
     "source": "seed"
   },
   "AI동영상": {
-    "search_volume": 1950,
+    "search_volume": 1910,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI동영상",
       "AI video",
-      "동영상 생성 AI"
+      "비디오 생성"
     ],
-    "intent": "AI 동영상 생성",
+    "intent": "AI 동영상 제작",
     "source": "seed"
   },
   "AI음악": {
-    "search_volume": 1070,
+    "search_volume": 1040,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI음악",
       "AI music",
-      "음악 생성 AI"
+      "음악 생성"
     ],
     "intent": "AI 음악 생성",
     "source": "seed"
   },
   "AI글쓰기": {
-    "search_volume": 570,
+    "search_volume": 560,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -336,7 +336,7 @@
     "source": "seed"
   },
   "AI번역": {
-    "search_volume": 750,
+    "search_volume": 740,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -348,7 +348,7 @@
     "source": "seed"
   },
   "AI요약": {
-    "search_volume": 340,
+    "search_volume": 320,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -356,307 +356,247 @@
       "AI summarization",
       "요약 도구"
     ],
-    "intent": "AI 요약 도구",
+    "intent": "AI 요약 기능",
     "source": "seed"
   },
-  "2026 공공 AI 박람회": {
+  "서울 AI 허브": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "2026 공공 AI 박람회",
-      "2026 AI expo",
-      "AI 행사"
+      "서울 AI 허브",
+      "Seoul AI Hub",
+      "AI 연구소"
     ],
-    "intent": "AI 박람회 정보",
+    "intent": "서울 AI 허브 정보",
     "source": "news"
   },
-  "AX": {
-    "search_volume": 14790,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "AX",
-      "AX platform",
-      "AX 솔루션"
-    ],
-    "intent": "AX 관련 정보 검색",
-    "source": "news"
-  },
-  "금융 AI": {
+  "Cursor": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "금융 AI",
-      "Financial AI",
-      "AI 금융 서비스"
+      "Cursor",
+      "커서",
+      "AI 도구"
     ],
-    "intent": "금융 AI 탐색",
+    "intent": "Cursor 관련 정보",
     "source": "news"
   },
-  "AI 전환": {
+  "Team Human": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AI 전환",
-      "AI transformation",
-      "디지털 전환 AI"
+      "Team Human",
+      "팀 휴먼",
+      "AI 윤리"
     ],
-    "intent": "AI 전환 방법",
+    "intent": "Team Human 정보",
     "source": "news"
   },
-  "Z.ai": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "Z.ai",
-      "Z.ai platform",
-      "AI 서비스"
-    ],
-    "intent": "Z.ai 정보 검색",
-    "source": "news"
-  },
-  "7530억 파라미터": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "7530억 파라미터",
-      "753 billion parameters",
-      "AI 모델 파라미터"
-    ],
-    "intent": "모델 파라미터 정보",
-    "source": "news"
-  },
-  "오픈웨이트 모델": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "오픈웨이트 모델",
-      "open weight model",
-      "AI 모델"
-    ],
-    "intent": "오픈웨이트 모델 정보",
-    "source": "news"
-  },
-  "에버퓨어": {
-    "search_volume": 2270,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "에버퓨어",
-      "Everpure",
-      "정수기 브랜드"
-    ],
-    "intent": "에버퓨어 정보 탐색",
-    "source": "news"
-  },
-  "엔터프라이즈 데이터 클라우드": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "엔터프라이즈 데이터 클라우드",
-      "Enterprise Data Cloud",
-      "클라우드 서비스"
-    ],
-    "intent": "데이터 클라우드 정보",
-    "source": "news"
-  },
-  "KACI": {
-    "search_volume": 240,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "KACI",
-      "Korea AI Conference",
-      "AI 컨퍼런스"
-    ],
-    "intent": "KACI 관련 정보",
-    "source": "news"
-  },
-  "AI-Cloud포럼": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "AI-Cloud포럼",
-      "AI-Cloud Forum",
-      "AI 클라우드 포럼"
-    ],
-    "intent": "AI-Cloud 포럼 정보",
-    "source": "news"
-  },
-  "토모": {
-    "search_volume": 3940,
+  "코오롱베니트": {
+    "search_volume": 1880,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "토모",
-      "Tomo",
-      "AI 서비스"
+      "코오롱베니트",
+      "Kolon Benit",
+      "AI 기업"
     ],
-    "intent": "토모 정보 검색",
+    "intent": "코오롱베니트 정보",
     "source": "news"
   },
-  "S800": {
-    "search_volume": 260,
+  "SAS": {
+    "search_volume": 3350,
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "S800",
-      "S800 model",
-      "AI 기술"
+      "SAS",
+      "SAS Institute",
+      "데이터 분석"
     ],
-    "intent": "S800 모델 정보",
+    "intent": "SAS 관련 정보",
     "source": "news"
   },
-  "AI 추천곡": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "AI 추천곡",
-      "AI song recommendation",
-      "음악 추천 AI"
-    ],
-    "intent": "AI 추천 음악",
-    "source": "news"
-  },
-  "AI 금융혁신": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "AI 금융혁신",
-      "AI financial innovation",
-      "금융 AI"
-    ],
-    "intent": "AI 금융 혁신 탐색",
-    "source": "news"
-  },
-  "호웅기 영림원": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "호웅기 영림원",
-      "Ho Woong Ki",
-      "영림원 정보"
-    ],
-    "intent": "호웅기 영림원 정보",
-    "source": "news"
-  },
-  "AX 레시피": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "AX 레시피",
-      "AX recipe",
-      "AI 요리법"
-    ],
-    "intent": "AX 레시피 정보",
-    "source": "news"
-  },
-  "HBM4E": {
-    "search_volume": 8580,
+  "롯데이노베이트": {
+    "search_volume": 27860,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "HBM4E",
-      "HBM4E model",
-      "AI 기술"
+      "롯데이노베이트",
+      "Lotte Innovate",
+      "AI 스타트업"
     ],
-    "intent": "HBM4E 정보 검색",
+    "intent": "롯데이노베이트 정보",
     "source": "news"
   },
-  "엣지 AI": {
-    "search_volume": 0,
-    "competition": "낮음",
+  "딥브레인AI": {
+    "search_volume": 880,
+    "competition": "중간",
     "grade": "B",
     "db_query": [
-      "엣지 AI",
-      "Edge AI",
+      "딥브레인AI",
+      "DeepBrain AI",
       "AI 기술"
     ],
-    "intent": "엣지 AI 탐색",
+    "intent": "딥브레인AI 정보",
     "source": "news"
   },
-  "PAI 2.0": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
+  "아이온": {
+    "search_volume": 47500,
+    "competition": "높음",
+    "grade": "A",
     "db_query": [
-      "PAI 2.0",
-      "PAI version 2.0",
+      "아이온",
+      "ION",
       "AI 플랫폼"
     ],
-    "intent": "PAI 2.0 정보",
+    "intent": "아이온 관련 정보",
     "source": "news"
   },
-  "XPS": {
-    "search_volume": 1010,
-    "competition": "높음",
-    "grade": "A",
+  "CVPR 2026": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
     "db_query": [
-      "XPS",
-      "XPS model",
-      "AI 기술"
+      "CVPR 2026",
+      "CVPR",
+      "AI 컨퍼런스"
     ],
-    "intent": "XPS 정보 검색",
+    "intent": "CVPR 2026 정보",
     "source": "news"
   },
-  "제미나이": {
-    "search_volume": 8285000,
-    "competition": "높음",
-    "grade": "S",
+  "슈퍼브에이아이": {
+    "search_volume": 1140,
+    "competition": "낮음",
+    "grade": "B",
     "db_query": [
-      "제미나이",
-      "Gemini",
-      "AI 모델"
+      "슈퍼브에이아이",
+      "Superb AI",
+      "AI 솔루션"
     ],
-    "intent": "제미나이 정보 탐색",
+    "intent": "슈퍼브에이아이 정보",
     "source": "news"
   },
-  "트레이니움": {
+  "KAIST": {
+    "search_volume": 7730,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "KAIST",
+      "한국과학기술원",
+      "AI 연구"
+    ],
+    "intent": "KAIST 정보 검색",
+    "source": "news"
+  },
+  "ACDC-K팀": {
     "search_volume": 20,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "트레이니움",
-      "Trainium",
-      "AI 하드웨어"
+      "ACDC-K팀",
+      "ACDC-K",
+      "AI 팀"
     ],
-    "intent": "트레이니움 정보",
+    "intent": "ACDC-K팀 정보",
     "source": "news"
   },
-  "클로드 디자인": {
+  "Curaytor팀": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "클로드 디자인",
-      "Claude design",
-      "AI 디자인"
+      "Curaytor팀",
+      "Curaytor",
+      "AI 팀"
     ],
-    "intent": "클로드 디자인 정보",
+    "intent": "Curaytor팀 정보",
     "source": "news"
   },
-  "제노스 2.0": {
+  "뉴엔AI": {
+    "search_volume": 14640,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "뉴엔AI",
+      "NewN AI",
+      "AI 스타트업"
+    ],
+    "intent": "뉴엔AI 정보",
+    "source": "news"
+  },
+  "차AI헬스케어": {
+    "search_volume": 2580,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "차AI헬스케어",
+      "Car AI healthcare",
+      "AI 헬스케어"
+    ],
+    "intent": "차AI 헬스케어 정보",
+    "source": "news"
+  },
+  "앤트로픽": {
+    "search_volume": 89200,
+    "competition": "중간",
+    "grade": "A",
+    "db_query": [
+      "앤트로픽",
+      "Anthropic",
+      "AI 기업"
+    ],
+    "intent": "앤트로픽 정보",
+    "source": "news"
+  },
+  "클로드 코드": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "제노스 2.0",
-      "Genos 2.0",
+      "클로드 코드",
+      "Claude Code",
       "AI 모델"
     ],
-    "intent": "제노스 2.0 정보",
+    "intent": "클로드 코드 정보",
+    "source": "news"
+  },
+  "AI 화학자": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 화학자",
+      "AI chemist",
+      "화학 AI"
+    ],
+    "intent": "AI 화학자 관련 정보",
+    "source": "news"
+  },
+  "AI+소비": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI+소비",
+      "AI consumption",
+      "소비 트렌드"
+    ],
+    "intent": "AI와 소비 트렌드",
+    "source": "news"
+  },
+  "피지컬 AI 얼라이언스": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "피지컬 AI 얼라이언스",
+      "Physical AI Alliance",
+      "AI 협력"
+    ],
+    "intent": "피지컬 AI 얼라이언스 정보",
     "source": "news"
   }
 }

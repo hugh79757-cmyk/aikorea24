@@ -145,7 +145,7 @@ if (session) {
               🔗 툴 바로가기
             </a>
             {isAuth && (
-              <a href={`/community/write?category=review&tool_id=${tool.data.index || 0}&tool_name=${encodeURIComponent(tool.data.name)}`}
+              <a href={`/community/review?tool_id=${tool.data.index || 0}&tool_name=${encodeURIComponent(tool.data.name)}`}
                  class="px-5 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white font-medium rounded-lg transition-colors text-sm">
                 ✍️ 리뷰 쓰기
               </a>
