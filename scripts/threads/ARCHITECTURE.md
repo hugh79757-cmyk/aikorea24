@@ -3,7 +3,7 @@
 ## 개요
 
 AI 뉴스 기사 100개를 분석하여 5개 카드 Threads 쓰레드로 자동 생성·발행한다.
-2시간 간격 데몬으로 동작하며, 중복 주제를 방지하고 발행 이력을 관리한다.
+2시간 간격 스케줄러로 동작하며, 중복 주제를 방지하고 발행 이력을 관리한다.
 
 ---
 
@@ -11,8 +11,8 @@ AI 뉴스 기사 100개를 분석하여 5개 카드 Threads 쓰레드로 자동 
 
 ```
 scripts/threads/
-├── main_v3.py              # 진입점 — 데몬/dry-run/1회 실행
-├── db_reader.py             # D1 데이터베이스 → 기사 풀 로드
+├── main_v3.py              # 진입점 — 스케줄러/dry-run/1회 실행
+├── db_reader.py             # D1 데이터베이스 → 기사 풀 로드 + URL 검증 함수
 ├── publisher.py             # Threads API 연동 발행
 ├── posted.json              # 발행 이력 저장소
 ├── logs/                    # 실행 로그 + 초안 보관
@@ -49,11 +49,16 @@ D1 Database
     │
     ▼
 [3] writer_v3.write_thread()
-    │   피치 연결 기사 URL → fetch_article_body() 원문 크롤링 (전문, 글자 수 제한 없음)
+    │   피치 연결 기사 URL → fetch_article_body() 원문 크롤링
+    │   ├─ URL 유효성 검사: validate_link() HEAD 요청 (TechCrunch 등 불안정 소스)
+    │   ├─ 실패 시: find_fallback_url(title) → Google News 검색 → 대체 URL
+    │   ├─ fallback도 실패: 크롤링 스킵 (description fallback)
+    │   ├─ 성공 시: (body_text, actual_url) 반환 → actual_url이 최종 링크로 사용
+    │   ├─ 크롤링 (전문, 글자 수 제한 없음)
     │   build_system_prompt() + user_prompt → 모델 추론
     │   ↑ DiffusionGemma 5회 시도 → 실패 시 GPT-4o-mini 1회
     │   ↓ validate_cards() 검증 (5카드 + hook 일치 + twist 키워드 커버리지 40% + 마지막 키워드)
-    │   ↓ assemble_final() URL 1개 추가
+    │   ↓ assemble_final(actual_urls) URL 1개 추가 (재검증 후 추가)
     │   ↓ save_draft() 로그/초안 저장
     │
     ▼
@@ -82,6 +87,23 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 
 - `posted.json`의 `posted_ids` / `posted_links`와 대조하여 중복 제외
 - wrangler D1 execute remote로 SQL 실행
+
+**URL 검증 공유 함수 (writer_v3.py에서 import):**
+
+```python
+_VALIDATE_SOURCES = {'TechCrunch', 'TechCrunch AI', 'CNBC Tech', 'BBC Technology', 'BBC', 'Business Insider AI'}
+
+def validate_link(url, timeout=8) -> bool
+    """HEAD 요청으로 URL 유효성 확인 (2xx/3xx → True)"""
+
+def find_fallback_url(title, max_title_chars=80) -> str | None
+    """Google News RSS로 동일 기사 검색 → 첫 번째 유효 URL 반환"""
+```
+
+- `_VALIDATE_SOURCES`: RSS 수집 시 링크가 자주 깨지는 소스 목록
+- `validate_link()`: `urllib.request` HEAD 요청, 404/500 등 실패 시 False
+- `find_fallback_url()`: 기사 제목으로 Google News RSS 검색 → 정상 URL 획득
+- `news_collector.py`의 동일 함수와 동일한 로직으로 일관성 유지
 
 ### 2. narrative_pitcher.py
 
@@ -153,7 +175,7 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 
 피치와 원문 크롤링 데이터를 바탕으로 5개 카드 쓰레드를 생성한다.
 
-**원문 크롤링 (`fetch_article_body()`):**
+**원문 크롤링 (`fetch_article_body(url, title='')` → `(body_text, actual_url)`):**
 - `requests` + `BeautifulSoup(lxml)`
 - User-Agent 설정, timeout 15초
 - 노이즈 태그 제거: script, style, nav, header, footer, aside, iframe
@@ -161,6 +183,15 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 - 실패 시 description fallback
 - **글자 수 제한 없음** — 선정된 2~3개 기사만 크롤링하므로 전문(全文) 전달
   (2026-06-20 변경: 기존 `max_chars=3000` 제거. 방향 정보가 뒷부분에서 잘리는 사고 방지)
+
+**URL 유효성 검사 (2026-06-20 추가):**
+- 크롤링 전 `db_reader.validate_link()` 호출 (techcrunch/cnbc/bbc 등 불안정 소스)
+- HEAD 요청 실패(404 등) 시 `db_reader.find_fallback_url(title)`로 Google News 검색
+- fallback URL 발견 시 해당 URL로 크롤링 + `actual_url` 반환
+- fallback 실패 시 크롤링 스킵 (빈 문자열 반환)
+- `actual_url`이 `write_thread()`의 `actual_urls[]`에 수집되어 `assemble_final()`에 전달
+- 최종 `🔗` URL은 `assemble_final()`에서 `validate_link()`로 재검증 후 추가
+- 깨진 URL이 Threads에 발행되는 것을 방지
 
 **프롬프트 구조:**
 
@@ -192,7 +223,9 @@ user_prompt
 - `---` 로 카드 구분
 - 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄
 - 마지막 카드는 선언형 마무리 (여운)
-- `assemble_final()`: 대표 URL 1개를 `🔗 url` 형식으로 마지막에 추가
+- `assemble_final(actual_urls)`: 대표 URL 1개를 `🔗 url` 형식으로 마지막에 추가
+  - `actual_urls` 우선 → 없으면 `pitch.get('sources', [])` fallback
+  - URL 추가 전 `validate_link()` 재검증 → 실패 시 링크 생략
 
 ### 6. publisher.py
 
@@ -327,3 +360,4 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-20 | **쓰레드 작성 단계 전문 크롤링** — fetch_article_body() max_chars=3000 제한 제거 |
 | 2026-06-20 | **방향 정확성 평가 추가** — pitch_evaluator 4번째 기준(direction_ok) + GPT-4o-mini 전환 |
 | 2026-06-20 | **twist 키워드 검증** — validate_cards()에 서술어 포함 + 커버리지 40% 체크 |
+| 2026-06-20 | **URL 검증 시스템 추가** — db_reader에 validate_link()/find_fallback_url() 공유 함수, writer_v3 fetch_article_body()에서 크롤링 전 HEAD 검증 + fallback, assemble_final()에서 최종 URL 재검증, actual_urls[]로 fallback URL 전파 |
