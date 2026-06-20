@@ -114,7 +114,7 @@ def get_articles():
     sql2 = f"""SELECT id, title, link, description, source, pub_date, '' as comment
                FROM news
                WHERE pub_date >= date('now', '-7 days')
-               ORDER BY pub_date DESC LIMIT 200"""
+               ORDER BY pub_date DESC LIMIT 400"""
     rows2 = d1_query(sql2)
     for r in rows2:
         if r['id'] not in existing_ids and r['id'] not in posted_ids and r['link'] not in posted_links:

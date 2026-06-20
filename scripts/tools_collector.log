@@ -244,3 +244,35 @@ remote:   ———————————————————————�
 remote:     Resolve the following violations before pushing again        
 remote: 
 remote:     - Push cann
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 7개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  총 8개 (중복 제거 후)
+수집 완료: 8개
+기존 툴: 96개 (슬러그), 95개 (이름)
+  중복 스킵: Zernio WhatsApp API
+  중복 스킵: Claude Code Artifacts
+  중복 스킵: Mutter AI Dictation
+  중복 스킵: Upsolve AI
+  중복 스킵: Ploy.ai
+  중복 스킵: Labs AI
+  중복 스킵: Moebius: 0.2B Lightweight Image Inpainting Framewo
+신규 툴: 1개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (1건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/mellum-by-jetbrains.md
+  ✅ Mellum by JetBrains → mellum-by-jetbrains.md
+
+==================================================
+처리 완료: 1/8개 생성 (9.4초)
+  git commit: [main ef9b727] feat: AI 툴 1개 추가 (2026-06-21)
+ 4 files changed, 142 insertions(+), 8 deletions(-)
+ create mode 100644 src/content/tools/mellum-by-jetbrains.md
+
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
