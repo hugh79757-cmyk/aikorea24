@@ -46,6 +46,7 @@ def build_system_prompt():
 - 마지막 카드의 마지막 줄 바로 앞은 반드시 여운을 남긴다. 선언이나 반전으로 끝낸다.
 - 이모지 금지. 볼드 금지. 이탤릭 금지.
 - 카드 안에서도 주제가 바뀌거나 시점/장소/인물이 바뀌면 빈 줄로 나눠라. 같은 주제의 문장은 붙이고, 화제 전환 시에만 띄운다.
+- 고유명사(기업명, 인물명, 제품명)는 영어 원문을 그대로 사용하라. 예: 화웨이(X) → Huawei(O), 앤트로픽(X) → Anthropic(O), 오픈AI(X) → OpenAI(O)
 
 [연도 원칙 — 중요]
 - 기사 본문에 명시된 날짜/연도만 사용하라.
@@ -115,10 +116,31 @@ def write_thread(pitch, all_articles):
 
     # 관련 기사만 필터링
     article_ids = pitch.get('article_ids', [])
-    related = [a for a in all_articles if a.get('id') in article_ids]
+    # 타입 안전: str/int/#접두사 혼용 대비
+    article_id_set = set()
+    for aid in article_ids:
+        raw = str(aid).lstrip('#').strip()
+        try:
+            article_id_set.add(int(raw))
+        except (ValueError, TypeError):
+            article_id_set.add(str(aid).strip())
+    related = []
+    for a in all_articles:
+        db_id = a.get('id')
+        if db_id in article_id_set:
+            related.append(a)
+            continue
+        # str로 한 번 더 시도 (DB 타입 불확실 대응)
+        try:
+            if str(int(db_id)) in article_id_set or str(db_id) in article_id_set:
+                related.append(a)
+        except (ValueError, TypeError):
+            if str(db_id) in article_id_set:
+                related.append(a)
 
     # 그래도 없으면 첫 2개 사용
     if not related:
+        log(f'  ⚠️ 피치 article_ids 타입/매칭 실패: {article_ids} → all_articles[:2] fallback')
         related = all_articles[:2]
 
     related_parts = []
