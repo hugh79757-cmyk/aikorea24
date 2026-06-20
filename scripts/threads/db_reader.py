@@ -22,12 +22,14 @@ os.makedirs(LOGS_DIR, exist_ok=True)
 _VALIDATE_SOURCES = {'TechCrunch', 'TechCrunch AI', 'CNBC Tech', 'BBC Technology', 'BBC', 'Business Insider AI'}
 
 def validate_link(url, timeout=8):
-    """HEAD 요청으로 URL이 유효한지 확인 (2xx/3xx면 True)"""
+    """GET 요청으로 URL이 유효한지 확인 (2xx/3xx면 True)
+    HEAD 대신 GET 사용 (한국 뉴스 사이트가 HEAD를 차단하는 경우 대응)
+    """
     if not url or not url.startswith('http'):
         return False
     try:
-        req = urllib.request.Request(url, method='HEAD',
-            headers={'User-Agent': 'aikorea24-bot/4.0'})
+        req = urllib.request.Request(url, method='GET',
+            headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'})
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             return resp.status < 400
     except Exception:
