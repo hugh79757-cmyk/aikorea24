@@ -259,6 +259,7 @@ def validate_cards(cards, pitch):
         raw_keywords = [w.strip() for w in re.split(r'[\s→,/-]+', twist) if len(w.strip()) >= 3]
         keywords = []
         for w in raw_keywords[:5]:
+            w = w.strip("'\"")  # 따옴표 제거 (GPT 출력에 자주 포함됨)
             stem = re.sub(r'(?:은|는|이|가|을|를|과|와|의|에|에게|에서|부터|까지|도|만)$', '', w)
             if len(stem) >= 2:
                 keywords.append(stem)
