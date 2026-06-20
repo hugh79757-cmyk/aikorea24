@@ -33,38 +33,8 @@ const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).ma
   title: ALL_TASKS[s].title,
 }));
 
-// 비슷한 툴: 같은 카테고리 + tags 겹치는 수로 정렬
-const toolTags = new Set(tool.data.tags ?? []);
-const relatedTools = allToolsList
-  .filter(t => t.id !== tool.id && t.data.category === tool.data.category)
-  .map(t => ({
-    tool: t,
-    score: (t.data.tags ?? []).filter((tag: string) => toolTags.has(tag)).length
-  }))
-  .sort((a, b) => b.score - a.score)
-  .slice(0, 4)
-  .map(item => item.tool);
+const relatedTools = allToolsList.filter(t => t.id !== tool.id && t.data.category === tool.data.category).sort(() => Math.random() - 0.5).slice(0, 4);
 const similarTools = relatedTools;
-
-// ---- 투표 수 조회 ----
-let voteCount = 0;
-let userVoted = false;
-if (db) {
-  try {
-    const voteResult = await db.prepare(
-      'SELECT COUNT(*) as cnt FROM tool_votes WHERE tool_id = ?'
-    ).bind(tool.id).first();
-    voteCount = voteResult?.cnt || 0;
-    if (isAuth) {
-      const session2 = Astro.cookies.get('session')?.value;
-      const u2 = JSON.parse(atob(session2!.split('.')[1] || session2!));
-      const votedRow = await db.prepare(
-        'SELECT id FROM tool_votes WHERE tool_id = ? AND user_email = ?'
-      ).bind(tool.id, u2.email).first();
-      userVoted = !!votedRow;
-    }
-  } catch {}
-}
 
 // ---- FAQ 구조화 데이터 생성 ----
 const toolBody: string = (tool as any).body || '';
@@ -155,20 +125,7 @@ if (session) {
           <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-2">
             {tool.data.name} — {tool.data.description}
           </h1>
-          <p class="text-gray-600 dark:text-gray-400 mb-3">{tool.data.description}</p>
-          <!-- 출시일 + priceModel 뱃지 -->
-          <div class="flex flex-wrap gap-2 mb-3">
-            {tool.data.updated && (
-              <span class="text-xs px-2 py-0.5 bg-gray-700 text-gray-400 rounded-full">
-                🗓 업데이트: {tool.data.updated}
-              </span>
-            )}
-            {tool.data.priceModel && (
-              <span class="text-xs px-2 py-0.5 bg-blue-900/40 text-blue-300 rounded-full">
-                {tool.data.priceModel}
-              </span>
-            )}
-          </div>
+          <p class="text-gray-600 dark:text-gray-400 mb-4">{tool.data.description}</p>
 
           <div class="flex flex-wrap gap-2 mb-4">
             <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
@@ -182,23 +139,11 @@ if (session) {
             </span>
           </div>
 
-          <div class="flex gap-3 flex-wrap">
+          <div class="flex gap-3">
             <a href={tool.data.url} target="_blank" rel="noopener"
                class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors text-sm">
               🔗 툴 바로가기
             </a>
-            <button id="vote-btn"
-              data-tool-id={tool.id}
-              data-voted={userVoted ? "true" : "false"}
-              class={`px-5 py-2.5 font-medium rounded-lg transition-colors text-sm border ${
-                userVoted
-                  ? "bg-yellow-500/20 border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/30"
-                  : "bg-white/5 border-white/20 text-gray-300 hover:bg-white/10"
-              }`}>
-              <span id="vote-icon">👍</span>
-              <span id="vote-label">{userVoted ? " 추천함" : " 추천"}</span>
-              <span id="vote-count" class="ml-1 text-xs opacity-70">{voteCount}</span>
-            </button>
             {isAuth && (
               <a href={`/community/review?tool_id=${tool.data.index || 0}&tool_name=${encodeURIComponent(tool.data.name)}`}
                  class="px-5 py-2.5 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-white font-medium rounded-lg transition-colors text-sm">
@@ -350,33 +295,6 @@ if (session) {
   )}
 
 <script>
-// 투표 버튼 처리
-const voteBtn = document.getElementById('vote-btn') as HTMLButtonElement | null;
-if (voteBtn) {
-  voteBtn.addEventListener('click', async () => {
-    const toolId = voteBtn.dataset.toolId;
-    const isLoggedIn = document.cookie.includes('session=');
-    if (!isLoggedIn) { window.location.href = '/api/auth/login'; return; }
-    try {
-      const res = await fetch('/api/tools/vote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool_id: toolId })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        const voted = data.voted;
-        voteBtn.dataset.voted = voted ? 'true' : 'false';
-        document.getElementById('vote-label')!.textContent = voted ? ' 추천함' : ' 추천';
-        document.getElementById('vote-count')!.textContent = String(data.count);
-        voteBtn.className = voted
-          ? 'px-5 py-2.5 font-medium rounded-lg transition-colors text-sm border bg-yellow-500/20 border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/30'
-          : 'px-5 py-2.5 font-medium rounded-lg transition-colors text-sm border bg-white/5 border-white/20 text-gray-300 hover:bg-white/10';
-      }
-    } catch (e) { console.error(e); }
-  });
-}
-
 document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('subscribe-email').value.trim();

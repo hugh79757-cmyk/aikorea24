@@ -37,6 +37,12 @@ def load_env(path):
 load_env(os.path.join(PROJECT_DIR, '.env'))
 load_env(os.path.join(PROJECT_DIR, 'api_test', '.env.sh'))
 
+# ~/.env.common fallback (프로젝트 .env에 없는 값만 채움)
+import sys
+sys.path.insert(0, '/Users/twinssn/Projects')
+from common_env_loader import load_env_with_fallback
+load_env_with_fallback(os.path.join(PROJECT_DIR, '.env'))
+
 OPENAI_KEY = os.environ.get('OPENAI_API_KEY', '')
 
 # ============================================

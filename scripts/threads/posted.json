@@ -17,7 +17,8 @@
     27819,
     32487,
     32477,
-    32396
+    32396,
+    21855
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -37,7 +38,8 @@
     "https://www.etnews.com/20260602000268",
     "https://www.msit.go.kr/bbs/view.do?sCode=user&mId=307&mPid=208&bbsSeqNo=94&nttSeqNo=3187446",
     "https://www.digitaltoday.co.kr/news/articleView.html?idxno=676424",
-    "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication"
+    "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/"
   ],
   "history": [
     {
@@ -80,6 +82,12 @@
       "link": "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
       "title": "AI 시대에 유럽에서 신뢰 구축하기",
       "posted_at": "2026-06-20T05:33:02.360326"
+    },
+    {
+      "id": 21855,
+      "link": "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/",
+      "title": "일론 머스크가 OpenAI를 어떻게 압박했는가: \"그들은 나를 죽이고 싶어 할 것\"",
+      "posted_at": "2026-06-20T07:34:45.280859"
     }
   ],
   "last_reset": "2026-06-18",
@@ -278,6 +286,14 @@
       "article_ids": [
         "26410",
         "26431"
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "미국의 기술 제재가 막힌 중국 AI 기업들이 오히려 중",
+      "article_ids": [
+        221693,
+        21686
       ],
       "date": "2026-06-20"
     }
