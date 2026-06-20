@@ -1430,3 +1430,79 @@ narrative_pitcher.py의 get_pitches() 함수에서
 - 청크 분할 시 기사 간 연결고리 발견률이 떨어짐
 - 단일 호출이 더 빠르고 간단함
 이 작업 완료하고 드라이런 한 후 결과를 보여줘.
+
+---
+
+# v3 Threads Writer — 2026-06-20 업데이트 내역
+
+## 수정 1: validate_year() 재설계
+
+### 문제
+`validate_year()`가 기사 `pub_date`(발행일)의 연도를 쓰레드에 강제했다.
+→ GPT-4o가 기사 본문에 없는 "2026년 6월 20일"을 사건 발생일로 지어냄
+
+### 변경
+**기존:** `expected_year`(pub_date 추출)가 쓰레드에 없거나 최다 언급이 아니면 실패
+**변경:** 쓰레드의 20XX 연도가 기사 본문에도 있는지 확인 (없으면 할루시네이션 → 실패)
+
+```python
+# writer_v3.py
+def validate_year(cards, article_body_text):
+    card_years = set(...)  # 쓰레드에서 20XX 추출
+    body_years = set(...)  # 기사 본문에서 20XX 추출
+    if not card_years:
+        return True        # 연도 미표기 → 통과
+    invented = card_years - body_years
+    if invented:
+        return False       # 본문에 없는 연도 → 실패
+    return True
+```
+
+### 시스템 프롬프트 연도 원칙
+**기존:** "기사에 언급된 연도가 없으면 기사 발행일(YYYY-MM-DD)의 연도를 사용하세요"
+**변경:** "기사 본문에 명시된 날짜/연도만 사용하라. 본문에 연도가 없으면 쓰레드에도 연도를 표시하지 마라"
+
+---
+
+## 수정 2: article_ids 타입 안전 처리
+
+### 문제
+피치의 `article_ids`가 `['#32698']`(str + #접두사) 형식으로 오면 DB int id(32698)와 매칭 실패
+→ `related`가 항상 비어서 → `all_articles[:2]` fallback → 엉뚱한 기사로 내용 오염
+
+### 변경
+```python
+# writer_v3.py - write_thread()
+for aid in article_ids:
+    raw = str(aid).lstrip('#').strip()     # '#32698' → '32698'
+    article_id_set.add(int(raw))           # int로 변환
+    # int 실패 시 str로 fallback
+related = [a for a in all_articles if a.get('id') in article_id_set]
+```
+
+### fallback 제거 (P1)
+**기존:** `if not related: related = all_articles[:2]`
+**변경:** `if not related: return []` → 스킵. 다음 주제로 넘어감
+
+---
+
+## 수정 3: 고유명사 영어 원문 표기
+
+### 문제
+- GPT가 `Huawei`를 `화웨웨이`로 잘못 음역
+- hook은 pitcer 생성 → writer가 변경 불가 → 첫 줄에 `엔비디아` 잔류
+
+### 변경
+**pitcher(narrative_pitcher.py) 시스템 프롬프트:**
+```
+hook: ...
+- 고유명사(기업명, 인물명, 제품명)는 영어 원문을 사용하라.
+  예: 엔비디아(X) → Nvidia(O), 오픈AI(X) → OpenAI(O)
+```
+
+**writer(writer_v3.py) 문체 원칙:**
+```
+- 고유명사(기업명, 인물명, 제품명)는 영어 원문을 그대로 사용하라.
+  예: 화웨이(X) → Huawei(O), 앤트로픽(X) → Anthropic(O), 오픈AI(X) → OpenAI(O)
+```
+
