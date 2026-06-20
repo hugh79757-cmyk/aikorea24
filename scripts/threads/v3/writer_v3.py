@@ -190,7 +190,7 @@ def write_thread(pitch, all_articles):
 5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
 6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라. """
 
-    max_attempts = 5
+    max_attempts = 2
     for attempt in range(max_attempts):
         try:
             log(f'  쓰레드 생성 중...')
