@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/scripts/threads/main_v3.py", line 145, in <module>
+    run_v3(dry_run=args.dry_run)
+    ~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/twinssn/Projects/aikorea24/scripts/threads/main_v3.py", line 81, in run_v3
+    cards = write_thread(pitch, articles)
+  File "/Users/twinssn/Projects/aikorea24/scripts/threads/v3/writer_v3.py", line 138, in write_thread
+    링크: {final_url}""")
+           ^^^^^^^^^
+NameError: name 'final_url' is not defined

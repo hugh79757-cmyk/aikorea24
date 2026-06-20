@@ -21,7 +21,11 @@
     21855,
     21629,
     32522,
-    32671
+    32671,
+    "13285",
+    "13288",
+    32525,
+    32694
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -45,7 +49,11 @@
     "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/",
     "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models/",
     "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills/",
-    "https://www.aitimes.com/news/articleView.html?idxno=211910"
+    "https://www.aitimes.com/news/articleView.html?idxno=211910",
+    "https://techcrunch.com/2026/03/25/the-ai-skills-gap-is-here-says-ai-company-and-power-users-are-pulling-ahead/",
+    "https://techcrunch.com/2026/03/25/granola-raises-125m-hits-1-5b-valuation-as-it-expands-from-meeting-notetaker-to-enterprise-ai-app/",
+    "https://the-decoder.com/more-people-get-news-from-ai-chatbots-but-trust-remains-low/",
+    "https://www.aitimes.kr/news/articleView.html?idxno=40581"
   ],
   "history": [
     {
@@ -112,44 +120,22 @@
       "link": "https://www.aitimes.com/news/articleView.html?idxno=211910",
       "title": "국내 챗GPT 무료·Go 요금제에 ‘광고’ 도입",
       "posted_at": "2026-06-20T13:43:51.421833"
+    },
+    {
+      "id": 32525,
+      "link": "https://the-decoder.com/more-people-get-news-from-ai-chatbots-but-trust-remains-low/",
+      "title": "AI 챗봇으로 뉴스를 얻는 사람이 늘어났지만 신뢰도는 낮은 상태",
+      "posted_at": "2026-06-20T16:26:20.838780"
+    },
+    {
+      "id": 32694,
+      "link": "https://www.aitimes.kr/news/articleView.html?idxno=40581",
+      "title": "AI 환각 줄이고 정확도 78% 높였다...KAIST, 차세대 데이터베이스 기술 개발",
+      "posted_at": "2026-06-20T18:28:16.494891"
     }
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "AI가 일자리를 뺏을 것이라는 공포보다 'AI를 쓰는 ",
-      "article_ids": [
-        13285,
-        13286,
-        26412
-      ],
-      "date": "2026-06-19"
-    },
-    {
-      "hook": "AI가 인간의 일자리를 대체할 것이라는 공포보다, 'A",
-      "article_ids": [
-        13285,
-        13286
-      ],
-      "date": "2026-06-19"
-    },
-    {
-      "hook": "미국의 대중국 기술 제재로 칩 수급이 막히자, 중국 A",
-      "article_ids": [
-        "21693",
-        "21686"
-      ],
-      "date": "2026-06-19"
-    },
-    {
-      "hook": "2026년 6월, 뉴욕 증시는 사상 최고치를 경신했지만",
-      "article_ids": [
-        27817,
-        13285,
-        26412
-      ],
-      "date": "2026-06-19"
-    },
     {
       "hook": "수십억 달러의 계약을 맺었던 디즈니가 OpenAI의 S",
       "article_ids": [
@@ -359,6 +345,38 @@
       "article_ids": [
         "32525",
         "32694"
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "효율성을 극대화하기 위해 도입된 AI 기술이 오히려 역",
+      "article_ids": [
+        27284,
+        26411
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "AI가 일자리를 대체할 것이라는 공포보다, AI를 쓰는",
+      "article_ids": [
+        13285,
+        13288
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "전쟁은 인간의 전략과 판단의 영역이었으나, 미국-이란 ",
+      "article_ids": [
+        32698,
+        32633
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "유튜브는 이제 제작자가 AI 사용 여부를 사실직 밝히지",
+      "article_ids": [
+        "26359",
+        "26411"
       ],
       "date": "2026-06-20"
     }

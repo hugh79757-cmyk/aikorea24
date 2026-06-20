@@ -48,11 +48,12 @@ def build_system_prompt():
 - 카드 안에서도 주제가 바뀌거나 시점/장소/인물이 바뀌면 빈 줄로 나눠라. 같은 주제의 문장은 붙이고, 화제 전환 시에만 띄운다.
 
 [연도 원칙 — 중요]
-- 기사 본문과 기사 발행일을 기준으로 연도를 판단하세요.
-- "2026년 5월 27일 수요일"처럼 연도/월/일을 모두 명시하세요.
-- "5월 28일"처럼 연도 없이 날짜만 쓰지 마세요. 반드시 연도를 포함하세요.
-- 기사에 언급된 연도가 없으면 기사 발행일(YYYY-MM-DD)의 연도를 사용하세요.
-- 기사 URL 경로(techcrunch.com/YYYY/MM/DD/...)에도 연도가 포함되어 있으니 참고하세요.
+- 기사 본문에 명시된 날짜/연도만 사용하라.
+- 본문에 연도가 없으면 쓰레드에도 연도를 표시하지 마라.
+- 예: 본문에 "2026년 5월 30일" → "2026년 5월 30일" 사용
+- 예: 본문에 "5월 30일" (연도 없음) → "5월 30일"만 사용, 연도 추가 금지
+- 예: 본문에 날짜 언급 자체가 없음 → 날짜/연도 아예 표시 금지
+- 기사의 발행일(입력일)을 사건 발생일로 사용하지 마라.
 
 [숫자 원칙]
 - 기사 본문에 있는 숫자는 전부 꺼내서 써라.
@@ -121,6 +122,7 @@ def write_thread(pitch, all_articles):
         related = all_articles[:2]
 
     related_parts = []
+    article_bodies = []
     all_fallback = True
     for a in related:
         body = fetch_article_body(a.get('link', ''))
@@ -128,7 +130,7 @@ def write_thread(pitch, all_articles):
             body = (a.get('description', '') or '')[:500]
         else:
             all_fallback = False
-        # pub_date에서 연도 추출 (프롬프트에 발행일 정보 포함)
+        article_bodies.append(body)
         pub_date_str = str(a.get('pub_date', ''))
         related_parts.append(f"""기사 {a['id']}:
 제목: {a.get('title','')}
@@ -143,15 +145,8 @@ def write_thread(pitch, all_articles):
         log(f'  ⚠️ 모든 기사 원문 크롤링 실패 → 스킵 (hallucination 방지)')
         return []
 
-    # 연도 검증용: 관련 기사 pub_date에서 예상 연도 추출
-    expected_year = None
-    for a in related:
-        pd = str(a.get('pub_date', ''))
-        for y in re.findall(r'20\d{2}', pd):
-            expected_year = int(y)
-            break
-        if expected_year:
-            break
+    # 연도 검증용: 기사 본문 텍스트 (메타데이터 제외)
+    article_body_text = ' '.join(article_bodies)
 
     user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
 
@@ -187,7 +182,7 @@ def write_thread(pitch, all_articles):
                 raise Exception('모델 응답 없음')
             cards = parse_cards(content)
 
-            if validate_cards(cards, pitch) and validate_year(cards, expected_year):
+            if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
                 cards = assemble_final(cards, pitch.get('sources', []))
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
@@ -209,7 +204,7 @@ def write_thread(pitch, all_articles):
         if not content:
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
-        if validate_cards(cards, pitch) and validate_year(cards, expected_year):
+        if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
             cards = assemble_final(cards, pitch.get('sources', []))
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
@@ -260,31 +255,35 @@ def validate_cards(cards, pitch):
                 return False
     return True
 
-def validate_year(cards, expected_year):
-    """연도 검증: 생성된 카드의 주요 연도가 기사 발행일과 일치하는지 확인
-    - expected_year가 None이면 검증 생략 (pub_date 없음)
-    - expected_year가 카드에 1회 이상 등장하는지 확인
-    - 가장 많이 언급된 연도가 expected_year인지 확인
-    - 다른 연도(역사적 맥락)는 허용
+def validate_year(cards, article_body_text):
+    """연도 검증: 쓰레드에 포함된 연도가 실제 기사 본문에 있는 연도인지 확인
+    - 기사 본문에 없는 연도를 쓰레드가 표시하면 할루시네이션 → 실패
+    - 기사 본문에 연도가 없고 쓰레드에도 연도가 없으면 → 통과
+    - 기사 본문에 연도가 있고 쓰레드가 그 연도를 사용하면 → 통과
     """
-    if expected_year is None:
+    body_text = article_body_text or ''
+    cards_text = ' '.join(cards)
+
+    card_years = set()
+    for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', cards_text):
+        card_years.add(int(m.group()))
+
+    body_years = set()
+    for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', body_text):
+        body_years.add(int(m.group()))
+
+    # 쓰레드에 연도가 없음 → 통과 (본문에도 없거나, 있어도 자연스럽게 미표기)
+    if not card_years:
+        log(f'    → 연도 검증 통과: 쓰레드에 연도 미표기')
         return True
-    all_text = ' '.join(cards)
-    mentioned = {}
-    for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', all_text):
-        y = int(m.group())
-        mentioned[y] = mentioned.get(y, 0) + 1
-    if not mentioned:
-        log(f'    → 연도 검증 실패: 카드에 20XX 연도 언급이 전혀 없음')
+
+    # 쓰레드에 있는 연도가 본문에도 있는지 확인
+    invented = card_years - body_years
+    if invented:
+        log(f'    → 연도 검증 실패: 본문에 없는 연도 {invented}를 쓰레드가 표시함 (본문 연도={body_years})')
         return False
-    if expected_year not in mentioned:
-        log(f'    → 연도 검증 실패: 기사 발행연도 {expected_year}년이 쓰레드에 없음 (언급={set(mentioned.keys())})')
-        return False
-    most_common = max(mentioned, key=mentioned.get)
-    if most_common != expected_year:
-        log(f'    → 연도 검증 실패: 최다 언급 연도={most_common} (기대={expected_year}), 전체={dict(mentioned)}')
-        return False
-    log(f'    → 연도 검증 통과: 주요={expected_year}, 전체={dict(mentioned)}')
+
+    log(f'    → 연도 검증 통과: 쓰레드 연도 {card_years} ⊆ 본문 연도 {body_years}')
     return True
 
 def assemble_final(cards, sources):
