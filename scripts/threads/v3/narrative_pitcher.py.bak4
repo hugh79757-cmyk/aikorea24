@@ -6,6 +6,8 @@ narrative_pitcher.py — 100개 기사 → 가장 강력한 이야기 발견
 """
 import os, sys, json, re
 from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
@@ -34,6 +36,54 @@ def load_env():
                         os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
 load_env()
+
+# ── 피치용 크롤링 (가벼움) ──────────────────────────────
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+def fetch_pitch_article_body(url, max_chars=1500):
+    if not url:
+        return ""
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        resp = requests.get(url, headers=headers, timeout=8)
+        resp.raise_for_status()
+        resp.encoding = "utf-8"
+        soup = BeautifulSoup(resp.text, "lxml")
+        for tag in soup(["script", "style", "nav", "header", "footer", "aside", "noscript", "iframe"]):
+            tag.decompose()
+        body = None
+        for selector in ["article", "main", "[role=\"main\"]", ".article-body", ".post-content", ".entry-content", ".story-body"]:
+            candidate = soup.select_one(selector)
+            if candidate:
+                body = candidate.get_text(separator="\n", strip=True)
+                break
+        if not body:
+            body = soup.get_text(separator="\n", strip=True)
+        lines = [l.strip() for l in body.split("\n") if l.strip()]
+        text = "\n".join(lines)
+        if len(text) > max_chars:
+            text = text[:max_chars] + "..."
+        log(f"  [피치크롤링] {url[:50]}... ({len(text)}자)")
+        return text
+    except Exception as e:
+        log(f"  [피치크롤링 실패] {url[:50]}... ({type(e).__name__})")
+        return ""
+
+def bulk_crawl(items, max_workers=10):
+    """(aid, url) 리스트 → {url: body} 병렬 크롤링"""
+    results = {}
+    urls = [(aid, url) for aid, url in items if url]
+    with ThreadPoolExecutor(max_workers=max_workers) as ex:
+        future_to_url = {ex.submit(fetch_pitch_article_body, url): (aid, url) for aid, url in urls}
+        for future in as_completed(future_to_url):
+            aid, url = future_to_url[future]
+            try:
+                results[url] = future.result()
+            except:
+                results[url] = ""
+    return results
 
 SYSTEM_PROMPT = """당신은 100개 기사에서 '상식과 실제의 충돌'을 찾아내는 스토리 파인더입니다.
 
@@ -231,11 +281,22 @@ def get_pitches(articles, max_articles=100):
         title = a.get('title', '')
         source = a.get('source', '')
         link = a.get('link', '')
-        desc = (a.get('description', '') or '')
+
+        # 크롤링 우선 시도 — link 있으면 전체 시도 (화이트리스트 없음)
+        crawled_text = ''
+        if link:
+            crawled_text = fetch_pitch_article_body(link)
+
+        if crawled_text:
+            tag = '[1차]'
+            body_text = crawled_text
+        else:
+            tag = '[요약]'
+            body_text = (a.get('description', '') or '')[:500]
 
         articles_text.append(f"""기사 #{aid}:
-제목: {title}
-본문: {desc}
+제목: {tag} {title}
+본문: {body_text}
 출처: {source}
 링크: {link}""")
 

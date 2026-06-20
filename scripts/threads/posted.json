@@ -18,7 +18,9 @@
     32487,
     32477,
     32396,
-    21855
+    21855,
+    21629,
+    32522
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -39,7 +41,9 @@
     "https://www.msit.go.kr/bbs/view.do?sCode=user&mId=307&mPid=208&bbsSeqNo=94&nttSeqNo=3187446",
     "https://www.digitaltoday.co.kr/news/articleView.html?idxno=676424",
     "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/"
+    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/",
+    "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models/",
+    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills/"
   ],
   "history": [
     {
@@ -88,51 +92,22 @@
       "link": "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman/",
       "title": "일론 머스크가 OpenAI를 어떻게 압박했는가: \"그들은 나를 죽이고 싶어 할 것\"",
       "posted_at": "2026-06-20T07:34:45.280859"
+    },
+    {
+      "id": 21629,
+      "link": "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models/",
+      "title": "AI 비디오, 단순한 프리퀄일까? Runway CEO는 세계 모델들이 다음이라고 믿고 있다",
+      "posted_at": "2026-06-20T09:40:00.331059"
+    },
+    {
+      "id": 32522,
+      "link": "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills/",
+      "title": "노르웨이, 아이들의 기본 학습 능력 보호를 위해 초등학교에서 생성적 AI 도구 금지",
+      "posted_at": "2026-06-20T11:42:13.834540"
     }
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "AI가 내 일자리 뺏는 게 아니다",
-      "article_ids": [
-        32184,
-        13285
-      ],
-      "date": "2026-06-18"
-    },
-    {
-      "hook": "최신 AI일수록 거짓말을 잘한다",
-      "article_ids": [
-        21629,
-        21678
-      ],
-      "date": "2026-06-18"
-    },
-    {
-      "hook": "디즈니가 오픈AI와 손잡지 이유",
-      "article_ids": [
-        13139,
-        23139
-      ],
-      "date": "2026-06-19"
-    },
-    {
-      "hook": "AI가 일자리 뺏는 게 아니었다",
-      "article_ids": [
-        13285,
-        26412
-      ],
-      "date": "2026-06-19"
-    },
-    {
-      "hook": "AI가 일자리 대신 격차만 키운다",
-      "article_ids": [
-        "13285",
-        "13285",
-        "26412"
-      ],
-      "date": "2026-06-19"
-    },
     {
       "hook": "수십억 달러 계약을 맺은 디즈니가 단 몇 달 만에 Op",
       "article_ids": [
@@ -294,6 +269,88 @@
       "article_ids": [
         221693,
         21686
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "미국 정부의 '방위생산법' 발동 앞에 AI 안전 원칙을",
+      "article_ids": [
+        5009,
+        1339
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "2026년 4월 29일, 오픈AI와 마이크로소프트의 독",
+      "article_ids": [
+        21681,
+        21355
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "미국의 기술 규재가 중국의 AI 발전을 멈출 것이라는 ",
+      "article_ids": [
+        21686,
+        21693,
+        23398
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "OpenAI와 마이크로소프트의 '독점적 동맹'은 단 하",
+      "article_ids": [
+        21681,
+        26355
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "AI가 더 똑똑해질수록 인간의 일자리는 사라질 것 같지",
+      "article_ids": [
+        13285,
+        13286,
+        2321685
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "42년 된 수학 난제를 인간은 400시간 걸려 실패했지",
+      "article_ids": [
+        21680,
+        21422
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "AI 열풍으로 엔비디아 GPU가 부족해 터질 줄 알았는",
+      "article_ids": [
+        26355,
+        26432
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "엔비디아 칩이 막힌 중국 AI 기업들, 오히려 '자국산",
+      "article_ids": [
+        "21693",
+        "23398"
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "오픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하",
+      "article_ids": [
+        21681,
+        21635
+      ],
+      "date": "2026-06-20"
+    },
+    {
+      "hook": "노르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등",
+      "article_ids": [
+        "32522",
+        "27234"
       ],
       "date": "2026-06-20"
     }

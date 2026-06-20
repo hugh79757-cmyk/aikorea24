@@ -46,6 +46,18 @@ const relatedTools = allToolsList
   .map(item => item.tool);
 const similarTools = relatedTools;
 
+// ---- DB / Auth 초기화 ----
+const runtime = (Astro.locals as any).runtime;
+const db = runtime?.env?.DB;
+const session = Astro.cookies.get('session')?.value;
+let isAuth = false;
+if (session) {
+  try {
+    const user = JSON.parse(atob(session.split('.')[1] || session));
+    isAuth = !!user.email;
+  } catch {}
+}
+
 // ---- 투표 수 조회 ----
 let voteCount = 0;
 let userVoted = false;
@@ -92,8 +104,6 @@ const faqSchema: string | null = faqEntities.length > 0
   : null;
 
 // ---- 리뷰 데이터 조회 ----
-const runtime = (Astro.locals as any).runtime;
-const db = runtime?.env?.DB;
 let reviews: any[] = [];
 let avgRating = 0;
 if (db) {
@@ -117,15 +127,6 @@ if (db) {
   }
 }
 
-// 로그인 확인
-const session = Astro.cookies.get('session')?.value;
-let isAuth = false;
-if (session) {
-  try {
-    const user = JSON.parse(atob(session.split('.')[1] || session));
-    isAuth = !!user.email;
-  } catch {}
-}
 ---
 
 <Layout

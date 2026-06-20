@@ -40,17 +40,19 @@ D1 Database
     │
     ▼
 [2] narrative_pitcher.get_pitches()
-    │   100개 기사 → DiffusionGemma → 3개 피치 JSON
+    │   100개 기사 → description 원문 (크롤링 없음, 500자 제한 없음)
+    │   → DiffusionGemma → 3개 피치 JSON
     │   ↓ hook[:8]+article_ids 중복 검사 (pitch_history 대조)
-    │   ↓ pitch_evaluator.filter_pitches() 0~5점 평가 (3점↑ 통과)
+    │   ↓ pitch_evaluator.filter_pitches() 0~6점 평가 (4개 기준)
+    │     (방향 정확성 0점이면 강제 불통과)
     │   ↓ posted.json pitch_history 저장
     │
     ▼
 [3] writer_v3.write_thread()
-    │   피치 연결 기사 URL → fetch_article_body() 원문 크롤링 (최대 3000자)
+    │   피치 연결 기사 URL → fetch_article_body() 원문 크롤링 (전문, 글자 수 제한 없음)
     │   build_system_prompt() + user_prompt → 모델 추론
     │   ↑ DiffusionGemma 5회 시도 → 실패 시 GPT-4o-mini 1회
-    │   ↓ validate_cards() 검증 (5카드 + hook 일치)
+    │   ↓ validate_cards() 검증 (5카드 + hook 일치 + twist 키워드 커버리지 40% + 마지막 키워드)
     │   ↓ assemble_final() URL 1개 추가
     │   ↓ save_draft() 로그/초안 저장
     │
@@ -89,6 +91,13 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 - "상식적으로 A였어야 하는데 실제로는 B인 상황" 찾기
 - hook: 핵심 긴장 한 줄 (길이 제한 없음)
 - 2개 이상의 서로 다른 기사 연결 강제
+- `[소스 신뢰도]` 섹션: 주어-동사 방향 보존 지시
+
+**크롤링 정책 (변경 — 2026-06-20):**
+- 피치 선별 단계에서는 **크롤링하지 않음**
+- DB의 `description` 컬럼을 **500자 제한 없이 전문(全文)** 사용
+- 100개 기사를 가볍게 스캔하여 어떤 이야기로 글을 쓸지 선별하는 단계이므로 description으로 충분
+- 실제 원문 크롤링은 writer_v3.py에서 선정된 2~3개 기사에 대해서만 수행
 
 **모델:** DiffusionGemma 1순위 → GPT-4o-mini fallback (model_router 경유)
 
@@ -111,16 +120,19 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 
 ### 3. pitch_evaluator.py
 
-피치 품질을 3가지 기준으로 0~5점 평가한다.
+피치 품질을 **4가지 기준**으로 0~6점 평가한다.
 
 | 기준 | 배점 | 평가 내용 |
 |------|------|---------|
 | 상식충돌 | 0~2점 | "어? 몰랐다" 할 충돌 구조 |
 | 구체성 | 0~2점 | 숫자/인물/기업명 포함 |
 | 연결성 | 0~1점 | 2개 이상 서로 다른 출처 |
+| 방향 정확성 | 0~1점 | twist의 주어-동사 방향이 narrative와 일치? |
 
 - **3점 이상**만 통과
-- 평가 모델: DiffusionGemma (model_router 경유)
+- **방향 정확성이 0점이면 총점과 무관하게 강제 불통과** (`direction_ok=false`)
+- 평가 모델: **GPT-4o-mini** (DiffusionGemma는 방향 판별에 취약하여 2026-06-20 변경)
+- 출력 형식에 `"direction_ok": true/false` 필드 포함
 - JSON 파싱 실패 시 fallback: article_ids 2개 이상 + hook 존재 → 통과
 
 ### 4. model_router.py
@@ -146,8 +158,9 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 - User-Agent 설정, timeout 15초
 - 노이즈 태그 제거: script, style, nav, header, footer, aside, iframe
 - 7개 CSS selector로 본문 영역 탐색: article, main, [role=main], .article-body, .post-content, .entry-content, .story-body
-- 실패 시 description[:500] fallback
-- 최대 3000자
+- 실패 시 description fallback
+- **글자 수 제한 없음** — 선정된 2~3개 기사만 크롤링하므로 전문(全文) 전달
+  (2026-06-20 변경: 기존 `max_chars=3000` 제거. 방향 정보가 뒷부분에서 잘리는 사고 방지)
 
 **프롬프트 구조:**
 
@@ -168,9 +181,11 @@ user_prompt
 **추론 실패 처리:**
 - DiffusionGemma 5회 시도
 - 전부 실패 시 GPT-4o-mini 1회 fallback
-- 각 시도마다 `validate_cards()` 검증:
+- 각 시도마다 `validate_cards()` 검증 (3단계):
   - 카드 수 5개 이상
   - 첫 번째 카드가 pitch hook[:8] 포함
+  - twist 키워드 커버리지 40% 이상 + 마지막 키워드(서술어) 카드 포함
+    (2026-06-20 추가: 주어-동사 방향 역전 카드 검출, 한국어 조사 제거 후 어간 매칭)
   - 실패 시 상세 로그 출력
 
 **출력 포맷팅:**
@@ -308,3 +323,7 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-19 | 중복 방지 강화 (dry-run posted_ids 저장, 타입 버그 수정) |
 | 2026-06-19 | 5회 시도 + GPT-4o-mini fallback, 디버그 로그 |
 | 2026-06-19 | 2시간 데몬 모드 활성화 |
+| 2026-06-20 | **피치 선별 단계 크롤링 제거** — description 원문(500자 제한 없음)으로 충분 |
+| 2026-06-20 | **쓰레드 작성 단계 전문 크롤링** — fetch_article_body() max_chars=3000 제한 제거 |
+| 2026-06-20 | **방향 정확성 평가 추가** — pitch_evaluator 4번째 기준(direction_ok) + GPT-4o-mini 전환 |
+| 2026-06-20 | **twist 키워드 검증** — validate_cards()에 서술어 포함 + 커버리지 40% 체크 |

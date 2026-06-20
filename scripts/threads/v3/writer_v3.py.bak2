@@ -6,7 +6,6 @@ writer_v3.py — 피치 → 쓰레드 작성
 - 출력: ["조각1", "조각2", ...]
 """
 import os, sys, json, re
-import urllib.request, urllib.parse
 from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
@@ -68,29 +67,10 @@ def build_system_prompt():
 [참고 문체 예시 — 아래 스타일로 작성할 것]
 {examples}"""
 
-def fetch_article_body(url, title=''):
-    """원문 기사 본문을 크롤링해서 텍스트 반환. 실패 시 빈 문자열.
-    URL 유효성 검사 + fallback 포함.
-    반환: (body_text, actual_url) — actual_url은 fallback 시 교체된 URL
-    """
+def fetch_article_body(url, max_chars=3000):
+    """원문 기사 본문을 크롤링해서 텍스트 반환. 실패 시 빈 문자열."""
     if not url:
-        return '', ''
-
-    original_url = url
-
-    # URL 유효성 검사 (TechCrunch 등 불안정한 소스만)
-    from db_reader import validate_link, find_fallback_url, _VALIDATE_SOURCES
-    if any(s in str(url) for s in ['techcrunch', 'cnbc', 'bbc', 'businessinsider']):
-        if not validate_link(url):
-            log(f'  ⚠️ URL 유효성 실패: {url[:50]}... → fallback 시도')
-            fallback = find_fallback_url(title) if title else None
-            if fallback:
-                log(f'  ✅ fallback URL: {fallback[:50]}...')
-                url = fallback
-            else:
-                log(f'  ❌ fallback 실패 — 크롤링 스킵')
-                return '', original_url
-
+        return ''
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
@@ -111,11 +91,13 @@ def fetch_article_body(url, title=''):
             body = soup.get_text(separator='\n', strip=True)
         lines = [l.strip() for l in body.split('\n') if l.strip()]
         text = '\n'.join(lines)
+        if len(text) > max_chars:
+            text = text[:max_chars] + '...'
         log(f'  📰 크롤링: {url[:50]}... ({len(text)}자)')
-        return text, url
+        return text
     except Exception as e:
         log(f'  ⚠️ 크롤링 실패: {url[:50]}... ({type(e).__name__})')
-        return '', url
+        return ''
 
 def write_thread(pitch, all_articles):
     """피치 + 관련 기사 → 쓰레드 조각 리스트 (DiffusionGemma → GPT-4o-mini fallback)"""
@@ -131,21 +113,17 @@ def write_thread(pitch, all_articles):
 
     related_parts = []
     all_fallback = True
-    actual_urls = []  # fallback으로 교체된 URL 수집
     for a in related:
-        body, actual_url = fetch_article_body(a.get('link', ''), title=a.get('title', ''))
+        body = fetch_article_body(a.get('link', ''))
         if not body:
             body = (a.get('description', '') or '')[:500]
         else:
             all_fallback = False
-        # 실제 크롤링/fallback에 사용된 URL 저장 (broken URL 대체)
-        final_url = actual_url if actual_url and actual_url.startswith('http') else a.get('link', '')
-        actual_urls.append(final_url)
         related_parts.append(f"""기사 {a['id']}:
 제목: {a.get('title','')}
 본문: {body}
 출처: {a.get('source','')}
-링크: {final_url}""")
+링크: {a.get('link','')}""")
     related_text = '\n\n'.join(related_parts)
 
     # 모든 기사 크롤링 실패 → 무조건 스킵 (RSS description만으로 품질 보장 불가)
@@ -188,7 +166,7 @@ def write_thread(pitch, all_articles):
             cards = parse_cards(content)
 
             if validate_cards(cards, pitch):
-                cards = assemble_final(cards, actual_urls or pitch.get('sources', []))
+                cards = assemble_final(cards, pitch.get('sources', []))
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
             else:
@@ -210,7 +188,7 @@ def write_thread(pitch, all_articles):
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
         if validate_cards(cards, pitch):
-            cards = assemble_final(cards, actual_urls or pitch.get('sources', []))
+            cards = assemble_final(cards, pitch.get('sources', []))
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
     except Exception as e:
@@ -261,16 +239,9 @@ def validate_cards(cards, pitch):
     return True
 
 def assemble_final(cards, sources):
-    """대표 URL 1개를 마지막 카드로 추가 (URL 검증 포함)
-    sources: 우선순위로 actual_urls → pitch.get('sources', []) 순
-    """
+    """대표 URL 1개를 마지막 카드로 추가"""
     if sources:
-        url = sources[0]
-        from db_reader import validate_link
-        if not validate_link(url, timeout=5):
-            log(f'  ⚠️ 최종 URL 유효성 실패 — 링크 생략: {url[:50]}...')
-        else:
-            cards.append(f'🔗 {url}')
+        cards.append(f'🔗 {sources[0]}')
     return cards
 
 def save_draft(cards, pitch):

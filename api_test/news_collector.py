@@ -290,6 +290,45 @@ def is_ai_related_relaxed(title: str, summary: str = "") -> bool:
 
 
 # ============================================
+# 링크 유효성 검사 + Fallback
+# ============================================
+# HEAD 요청으로 링크 유효성 검사가 필요한 소스 (성능 이슈로 특정 소스만)
+_VALIDATE_SOURCES = {'TechCrunch AI', 'CNBC Tech', 'BBC Technology', 'Business Insider AI'}
+
+def validate_link(url, timeout=8):
+    """HEAD 요청으로 URL이 유효한지 확인 (2xx/3xx면 True)"""
+    if not url.startswith('http'):
+        return False
+    try:
+        req = urllib.request.Request(url, method='HEAD',
+            headers={'User-Agent': 'aikorea24-bot/4.0'})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status < 400
+    except Exception:
+        return False
+
+def find_fallback_url(title, max_title_chars=80):
+    """Google News RSS로 동일 기사 검색 → 첫 번째 결과 URL 반환"""
+    import urllib.parse
+    query = urllib.parse.quote(title[:max_title_chars])
+    url = f'https://news.google.com/rss/search?q={query}&hl=en&gl=US&ceid=US:en'
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/4.0'})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            raw = resp.read()
+        root = ET.fromstring(raw)
+        for item in root.iter('item'):
+            link_el = item.find('link')
+            if link_el is not None and link_el.text:
+                found = link_el.text.strip()
+                if found.startswith('http'):
+                    return found
+    except Exception:
+        pass
+    return None
+
+
+# ============================================
 # 중복 체크
 # ============================================
 def title_hash(title):
@@ -579,6 +618,19 @@ def fetch_rss_global(url, source, country='us', limit=12, filter_fn=None):
                 continue
             if not is_recent(pub, days=3):
                 continue
+
+            # 링크 유효성 검사 (지정된 소스만, 성능 보호)
+            if source in _VALIDATE_SOURCES:
+                if not validate_link(link):
+                    print(f"    ⚠ 링크 유효성 실패: {link[:60]}... → fallback 시도")
+                    fallback = find_fallback_url(orig_title)
+                    if fallback:
+                        print(f"    ✅ fallback URL 발견: {fallback[:60]}...")
+                        link = fallback
+                    else:
+                        print(f"    ❌ fallback 실패 — 해당 기사 skip")
+                        continue
+
             items.append({
                 'title': orig_title,
                 'link': link,

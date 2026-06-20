@@ -7,6 +7,7 @@ aikorea24 D1 DB → 기사 풀 로드 (3단계 우선순위)
 - posted.json 중복 제외
 """
 import os, sys, json, re, subprocess
+import urllib.request
 from datetime import datetime, timedelta
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
@@ -14,6 +15,43 @@ THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 POSTED_FILE = os.path.join(THREADS_DIR, 'posted.json')
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
+
+# ============================================
+# URL 유효성 검사 + Fallback (소스 공용)
+# ============================================
+_VALIDATE_SOURCES = {'TechCrunch', 'TechCrunch AI', 'CNBC Tech', 'BBC Technology', 'BBC', 'Business Insider AI'}
+
+def validate_link(url, timeout=8):
+    """HEAD 요청으로 URL이 유효한지 확인 (2xx/3xx면 True)"""
+    if not url or not url.startswith('http'):
+        return False
+    try:
+        req = urllib.request.Request(url, method='HEAD',
+            headers={'User-Agent': 'aikorea24-bot/4.0'})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status < 400
+    except Exception:
+        return False
+
+def find_fallback_url(title, max_title_chars=80):
+    """Google News RSS로 동일 기사 검색 → 첫 번째 결과 URL 반환"""
+    import urllib.parse
+    query = urllib.parse.quote(title[:max_title_chars])
+    url = f'https://news.google.com/rss/search?q={query}&hl=en&gl=US&ceid=US:en'
+    try:
+        req = urllib.request.Request(url, headers={'User-Agent': 'aikorea24-bot/4.0'})
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            raw = resp.read()
+        root = ET.fromstring(raw)
+        for item in root.iter('item'):
+            link_el = item.find('link')
+            if link_el is not None and link_el.text:
+                found = link_el.text.strip()
+                if found.startswith('http'):
+                    return found
+    except Exception:
+        pass
+    return None
 
 def log(msg):
     ts = datetime.now().strftime('%H:%M:%S')

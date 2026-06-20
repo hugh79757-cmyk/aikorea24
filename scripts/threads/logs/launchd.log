@@ -149,3 +149,196 @@
 [07:34:45]   posted.json 업데이트 완료
 [2026-06-20 07:34:45]   ✅ 발행 완료: 루트 ID 18120468640741548
 [2026-06-20 07:34:45]   다음 실행: 2026-06-20 09:34:45
+[2026-06-20 09:34:45] 🚀 v3 실행 시작
+[09:35:15]   1순위 브리핑: 3개 → 신규 0개
+[09:35:18]   2순위 최근7일: 200개 중 신규 186개
+[09:35:18]   총 기사 풀: 186개
+[2026-06-20 09:35:18]   기사: 186개 로드
+[2026-06-20 09:35:18]   피치 생성...
+[09:35:19]   피치 이력: 30개 존재
+[09:35:19]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:35:20]   [피치크롤링] https://www.marktechpost.com/2026/04/29/qwen-team-... (1503자)
+[09:35:22]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:35:24]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:35:24]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:35:25]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:35:27]   [피치크롤링] https://www.marktechpost.com/2026/04/29/step-by-st... (1503자)
+[09:35:30]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:35:32]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/i... (HTTPError)
+[09:35:34]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:35:34]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:35:36]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:35:36]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:35:40]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:35:40]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:35:41]   [피치크롤링] https://www.marktechpost.com/2026/04/29/meta-fair-... (1503자)
+[09:35:43]   [피치크롤링] https://www.marktechpost.com/2026/04/29/a-coding-i... (1503자)
+[09:35:45]   [피치크롤링] https://www.marktechpost.com/2026/04/28/poolside-a... (1503자)
+[09:35:46]   [피치크롤링] https://www.marktechpost.com/2026/04/28/how-to-bui... (1503자)
+[09:35:46]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:35:47]   [피치크롤링] https://news.google.com/rss/articles/CBMiwgFBVV95c... (11자)
+[09:35:48]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:35:50]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:35:50]   [피치크롤링 실패] https://www.fastcompany.com/91546363/tech-can-radi... (HTTPError)
+[09:35:50]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:35:52]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:35:53]   [피치크롤링] https://huggingface.co/blog/ibm-research/itbench-a... (1503자)
+[09:35:55]   [피치크롤링] https://www.marktechpost.com/2026/05/27/nvidia-rel... (1503자)
+[09:35:57]   [피치크롤링] https://www.etnews.com/20260527000365... (1454자)
+[09:35:58]   [피치크롤링 실패] https://www.fastcompany.com/91549214/fbi-2025-inte... (HTTPError)
+[09:36:03]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:36:05]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:36:08]   [피치크롤링] https://www.etnews.com/20260527000352... (1503자)
+[09:36:10]   [피치크롤링] https://news.google.com/rss/articles/CBMiugFBVV95c... (11자)
+[09:36:11]   [피치크롤링] https://www.etnews.com/20260527000324... (1503자)
+[09:36:11]   [피치크롤링] https://www.etnews.com/20260527000256... (910자)
+[09:36:15]   [피치크롤링] https://www.etnews.com/20260527000254... (1503자)
+[09:36:15]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:36:16]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:36:17]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:36:18]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:36:20]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:36:22]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:36:24]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:36:25]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:36:25]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:36:28]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:36:30]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/e... (HTTPError)
+[09:36:32]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:36:32]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:36:33]   [피치크롤링 실패] https://www.fastcompany.com/91546658/girls-who-cod... (HTTPError)
+[09:36:35]   [피치크롤링] https://openai.com/index/cisco... (1503자)
+[09:36:37]   [피치크롤링] https://www.marktechpost.com/2026/05/27/meet-eagle... (1503자)
+[09:36:38]   [피치크롤링] https://www.marktechpost.com/2026/05/26/memo-a-mod... (1503자)
+[09:36:39]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:36:39]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:36:41]   [피치크롤링] https://openai.com/index/warp... (1503자)
+[09:36:42]   [피치크롤링] https://www.marktechpost.com/2026/03/25/how-to-bui... (1503자)
+[09:36:42]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:36:43]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:36:45]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:36:45]   [피치크롤링] https://github.blog/news-insights/company-news/upd... (631자)
+[09:36:46]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:36:50]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:36:50]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:37:00]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:37:01]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/o... (HTTPError)
+[09:37:04]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:37:04]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:37:05]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:37:05]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:37:07]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:37:08]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:37:10]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:37:15]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/a... (HTTPError)
+[09:37:22]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:37:27]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:37:29]   [피치크롤링] https://www.marktechpost.com/2026/03/25/nvidia-ai-... (1503자)
+[09:37:31]   [피치크롤링] https://www.marktechpost.com/2026/03/25/google-int... (1503자)
+[09:37:34]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:37:36]   [피치크롤링] https://openai.com/index/safety-bug-bounty... (1503자)
+[09:37:38]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:37:38]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:37:40]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:37:41]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:37:43]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:37:44]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:37:45]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:37:46]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:37:52]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:37:54]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:37:59]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:38:00]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:38:04]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:38:06]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:38:07]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/n... (HTTPError)
+[09:38:08]   [피치크롤링] https://www.marktechpost.com/2026/02/25/liquid-ais... (1503자)
+[09:38:09]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:38:10]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:38:10]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:38:10]   100개 기사 단일 호출...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[09:38:20]   → 3개 피치 발견 (DiffusionGemma)
+  [모델] OpenAI gpt-4o-mini
+[09:38:22]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 기업명과 숫자가 포함되어 있으며, 두 개의 서로 다른 출처 기사가 연결되어 있고, 방향도 일치함.) direction_ok=True
+[09:38:22]   ✅ 피치 통과: 5점
+[09:38:22]   ✅ TOP 1: "AI 열풍으로 엔비디아 GPU가 부족해 터질 줄 알았는데, 이제 기업들의 돈은은 'CPU'로 급격히 이동하고 있다." (충격)
+[09:38:22]      기사: [26355, 26432]
+[2026-06-20 09:38:22]   ✅ 피치: "AI 열풍으로 엔비디아 GPU가 부족해 터질 줄 알았는데, 이제 기업들의" (충격)
+[2026-06-20 09:38:22]      기사: [26355, 26432]
+[2026-06-20 09:38:22]   쓰레드 작성...
+[09:38:22]   📰 크롤링: https://techcrunch.com/2026/05/27/in-more-good-new... (3003자)
+[09:38:24]   📰 크롤링: https://www.zdnet.com/article/dell-tech-world-2026... (3003자)
+[09:38:24]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[09:38:27]     → twist 키워드 커버리지: 4/5 (80%) 어간=['모델', '학습시키', "'훈련'", '단계에서', '고성능']
+[09:38:27]   ✅ 쓰레드: 6개 조각 (시도 1)
+[09:38:27]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-20-09_AI열풍으로엔비디아GPU가부족해터질줄.txt
+[2026-06-20 09:38:27]   ✅ 6개 조각 작성 완료
+[2026-06-20 09:38:27]   발행 시작...
+[09:38:35]   카드 1/6 발행: 18443084629138882
+[09:38:51]   카드 2/6 발행: 17950575171179130
+[09:39:07]   카드 3/6 발행: 18087981986571964
+[09:39:23]   카드 4/6 발행: 18081135308206720
+[09:39:39]   카드 5/6 발행: 18084894797409220
+[09:39:57]   카드 6/6 발행: 18095395066970925
+[09:40:00]   posted.json 업데이트 완료
+[2026-06-20 09:40:00]   ✅ 발행 완료: 루트 ID 18443084629138882
+[2026-06-20 09:40:00]   다음 실행: 2026-06-20 11:40:00
+[2026-06-20 11:40:00] 🚀 v3 실행 시작
+[11:40:03]   1순위 브리핑: 5개 → 신규 5개
+[11:40:04]   2순위 최근7일: 200개 중 신규 185개
+[11:40:04]   총 기사 풀: 190개
+[2026-06-20 11:40:04]   기사: 190개 로드
+[2026-06-20 11:40:04]   피치 생성...
+[11:40:05]   피치 이력: 30개 존재
+[11:40:05]   100개 기사 단일 호출...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[11:40:09]   → 3개 피치 발견 (DiffusionGemma)
+  [모델] OpenAI gpt-4o-mini
+[11:40:11]   평가: 5점/통과 (상식과 실제의 충돌이 명확하고, 구체적인 출처와 숫자가 포함되어 있으며, 방향이 일치함.) direction_ok=True
+[11:40:11]   ✅ 피치 통과: 5점
+[11:40:11]   ✅ TOP 1: "노르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학교에서 AI 손을 뺐다" (불안)
+[11:40:11]      기사: ['32522', '27234']
+[2026-06-20 11:40:11]   ✅ 피치: "노르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학교에서 AI 손을" (불안)
+[2026-06-20 11:40:11]      기사: ['32522', '27234']
+[2026-06-20 11:40:12]   쓰레드 작성...
+[11:40:14]   📰 크롤링: https://the-decoder.com/norway-bans-generative-ai-... (2591자)
+[11:40:15]   📰 크롤링: https://www.aitimes.com/news/articleView.html?idxn... (29자)
+[11:40:15]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[11:40:17]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:17]   ⚠️ 검증 실패: 5개 조각 (시도 1/5)
+[11:40:17]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[11:40:19]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:19]   ⚠️ 검증 실패: 5개 조각 (시도 2/5)
+[11:40:19]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[11:40:22]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:22]   ⚠️ 검증 실패: 5개 조각 (시도 3/5)
+[11:40:22]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[11:40:24]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:24]   ⚠️ 검증 실패: 5개 조각 (시도 4/5)
+[11:40:24]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[11:40:27]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:27]   ⚠️ 검증 실패: 5개 조각 (시도 5/5)
+[11:40:27]   ❌ 5회 재시도 실패 → GPT-4o-mini fallback 1회
+[11:40:27]   쓰레드 생성 중... (GPT-4o-mini fallback)
+  [모델] OpenAI gpt-4o-mini
+[11:40:36]     → twist 키워드 커버리지: 5/5 (100%) 어간=['AI', '의존할', '아이들', '스스로', '수학적']
+[11:40:36]   ✅ 쓰레드: 6개 조각 (GPT-4o-mini fallback 성공)
+[11:40:36]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-20-11_노르웨이아이들의생각하는힘을지키기위해초.txt
+[2026-06-20 11:40:36]   ✅ 6개 조각 작성 완료
+[2026-06-20 11:40:36]   발행 시작...
+[11:40:45]   카드 1/6 발행: 18118327868494289
+[11:41:00]   카드 2/6 발행: 17920513476379984
+[11:41:18]   카드 3/6 발행: 18140687689536230
+[11:41:38]   카드 4/6 발행: 17973306729112792
+[11:41:54]   카드 5/6 발행: 18063099956708046
+[11:42:10]   카드 6/6 발행: 17977189547877818
+[11:42:13]   posted.json 업데이트 완료
+[2026-06-20 11:42:13]   ✅ 발행 완료: 루트 ID 18118327868494289
+[2026-06-20 11:42:13]   다음 실행: 2026-06-20 13:42:13

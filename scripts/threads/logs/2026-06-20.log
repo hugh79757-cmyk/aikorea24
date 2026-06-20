@@ -156,3 +156,841 @@
 [07:34:45]   posted.json 업데이트 완료
 [2026-06-20 07:34:45] [v3]   ✅ 발행 완료: 루트 ID 18120468640741548
 [2026-06-20 07:34:45] [v3]   다음 실행: 2026-06-20 09:34:45
+[08:55:46]   1순위 브리핑: 3개 → 신규 0개
+[08:55:46]   2순위 최근7일: 200개 중 신규 186개
+[08:55:46]   총 기사 풀: 186개
+[08:55:47] [v3]   피치 이력: 25개 존재
+[08:56:47] [v3]   100개 기사 단일 호출...
+[08:56:58] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[08:56:59] [eval]   평가: 6점/통과 (상식과의 충돌이 명확하고 구체적인 기업명과 법안명이 포함되었으며, 두 기사의 연결 및 twist의 방향성이 완벽합니다.) direction_ok=True
+[08:56:59] [eval]   ✅ 피치 통과: 6점
+[08:56:59] [v3]   ✅ TOP 1: "미국 정부의 '방위생산법' 발동 앞에 AI 안전 원칙을 고수하던 앤트로픽이 벼랑 끝에 몰렸다" (불안)
+[08:56:59] [v3]      기사: [5009, 1339]
+[08:59:41]   1순위 브리핑: 3개 → 신규 0개
+[08:59:42]   2순위 최근7일: 200개 중 신규 186개
+[08:59:42]   총 기사 풀: 186개
+[08:59:46]   1순위 브리핑: 3개 → 신규 0개
+[08:59:47]   2순위 최근7일: 200개 중 신규 186개
+[08:59:47]   총 기사 풀: 186개
+[08:59:47] [v3]   피치 이력: 26개 존재
+[09:00:47] [v3]   100개 기사 단일 호출...
+[09:00:57] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:00:58] [eval]   평가: 6점/통과 (상식적 충돌이 명확하며, 구체적인 숫자와 기업명이 포함되었고, 두 기사의 연결 및 twist의 방향성이 정확합니다.) direction_ok=True
+[09:00:58] [eval]   ✅ 피치 통과: 6점
+[09:00:58] [v3]   ✅ TOP 1: "2026년 4월 29일, 오픈AI와 마이크로소프트의 독점 관계가 단 하루 만에 파이 나며 AWS의 문이 열렸다." (충격)
+[09:00:58] [v3]      기사: [21681, 21355]
+[09:05:48]   1순위 브리핑: 3개 → 신규 0개
+[09:05:49]   2순위 최근7일: 200개 중 신규 186개
+[09:05:49]   총 기사 풀: 186개
+[09:05:49] [v3]   피치 이력: 27개 존재
+[09:05:49] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:05:50] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:05:52] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:05:52] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:05:52] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:05:54] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:05:56] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:05:56] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:05:57] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:05:58] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:05:58] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:05:58] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:05:59] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:05:59] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:05:59] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:06:01] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:06:03] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:06:04] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:06:05] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:06:06] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:06:06] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:06:08] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:06:10] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:06:12] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:06:12] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:06:13] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:06:15] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:06:15] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:06:15] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:06:16] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:06:16] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:06:16] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:06:16] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:06:18] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:06:18] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:06:20] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:06:20] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:06:22] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:06:22] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:06:22] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:06:22] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:06:23] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:06:24] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:06:25] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:06:26] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:06:29] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:06:29] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:06:29] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:06:29] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:06:30] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:06:32] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:06:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:06:34] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:06:34] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:06:34] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:06:34] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:06:35] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:06:35] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:06:35] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:06:35] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:06:37] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:06:39] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:06:39] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:06:39] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:06:40] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:06:40] [v3]   100개 기사 단일 호출...
+[09:06:40] [v3]   ⚠️ 오류: name 'SYSTEM_PROMPT' is not defined
+[09:06:45]   1순위 브리핑: 3개 → 신규 0개
+[09:06:45]   2순위 최근7일: 200개 중 신규 186개
+[09:06:45]   총 기사 풀: 186개
+[09:06:46] [v3]   피치 이력: 27개 존재
+[09:06:46] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:06:46] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:06:48] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:06:48] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:06:49] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:06:50] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:06:52] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:06:52] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:06:54] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:06:54] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:06:55] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:06:55] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:06:56] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:06:56] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:06:57] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:06:58] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:07:00] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:07:02] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:07:03] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:07:04] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:07:04] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:07:06] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:07:07] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:07:09] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:07:09] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:07:10] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:07:12] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:07:12] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:07:12] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:07:12] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:07:13] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:07:13] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:07:13] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:07:15] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:07:15] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:07:17] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:07:17] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:07:19] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:07:19] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:07:19] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:07:20] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:07:20] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:07:23] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:07:23] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:07:25] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:07:27] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:07:27] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:07:27] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:07:27] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:07:28] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:07:29] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:07:29] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:07:31] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:07:31] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:07:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:07:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:07:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:07:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:07:33] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:07:33] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:07:34] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:07:36] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:07:36] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:07:36] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:07:37] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:07:37] [v3]   100개 기사 단일 호출...
+[09:07:37] [v3]   ⚠️ 오류: name 'SYSTEM_PROMPT' is not defined
+[09:07:42]   1순위 브리핑: 3개 → 신규 0개
+[09:07:43]   2순위 최근7일: 200개 중 신규 186개
+[09:07:43]   총 기사 풀: 186개
+[09:07:43] [v3]   피치 이력: 27개 존재
+[09:07:43] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:07:44] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:07:45] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:07:46] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:07:46] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:07:47] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:07:49] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:07:49] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:07:51] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:07:51] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:07:52] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:07:53] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:07:54] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:07:55] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:07:55] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:07:57] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:07:58] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:07:59] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:08:00] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:08:01] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:08:02] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:08:03] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:08:05] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:08:06] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:08:06] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:08:08] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:08:10] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:08:10] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:08:11] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:08:11] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:08:11] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:08:12] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:08:12] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:08:14] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:08:14] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:08:16] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:08:16] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:08:17] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:08:18] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:08:18] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:08:18] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:08:18] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:08:20] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:08:21] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:08:23] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:08:24] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:08:25] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:08:25] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:08:25] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:08:25] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:08:29] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:08:29] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:08:31] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:08:31] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:08:31] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:08:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:08:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:08:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:08:32] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:08:33] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:08:34] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:08:36] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:08:36] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:08:36] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:08:37] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:08:37] [v3]   100개 기사 단일 호출...
+[09:08:37] [v3]   ⚠️ 오류: name 'SYSTEM_PROMPT' is not defined
+[09:09:16]   1순위 브리핑: 3개 → 신규 0개
+[09:09:17]   2순위 최근7일: 200개 중 신규 186개
+[09:09:17]   총 기사 풀: 186개
+[09:09:17] [v3]   피치 이력: 27개 존재
+[09:09:18] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:09:18] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:09:20] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:09:20] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:09:20] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:09:22] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:09:23] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:09:24] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:09:25] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:09:26] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:09:26] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:09:26] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:09:27] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:09:28] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:09:28] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:09:30] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:09:31] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:09:32] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:09:33] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:09:33] [v3]   [피치크롤링 실패] https://www.nytimes.com/2026/05/27/magazine/spence... (HTTPError)
+[09:09:33] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:09:34] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:09:38] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:09:39] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:09:39] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:09:41] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:09:42] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:09:43] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:09:43] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:09:43] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:09:43] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:09:43] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:09:44] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:09:45] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:09:46] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:09:48] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:09:48] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:09:49] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:09:50] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:09:50] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:09:50] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:09:50] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:09:55] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:09:56] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:09:58] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:09:59] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:09:59] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:10:00] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:10:00] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:10:00] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:10:02] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:10:02] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:10:04] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:10:04] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:10:05] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:10:05] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:10:05] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:10:05] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:10:05] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:10:06] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:10:07] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:10:09] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:10:10] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:10:11] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:10:11] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:10:11] [v3]   100개 기사 단일 호출...
+[09:10:19] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:10:20] [eval]   평가: 6점/통과 (상식과의 충돌이 명확하고 구체적인 기업명과 수자가 포함되었으며, 여러 기사가 잘 연결되어 twist의 방향이 정확합니다.) direction_ok=True
+[09:10:20] [eval]   ✅ 피치 통과: 6점
+[09:10:20] [v3]   ✅ TOP 1: "미국의 기술 규재가 중국의 AI 발전을 멈출 것이라는 예상과 달리, 중국 기업들은 자국산 칩으로 미국 모델보다 빠른 속도를 내는 데 성공하기 시작했다." (놀라움)
+[09:10:20] [v3]      기사: [21686, 21693, 23398]
+[09:10:28] [v3]     → twist 키워드 커버리지: 2/5 (40%)
+[09:11:15] [v3]     → twist 키워드 커버리지: 4/5 (80%) 원본=['xAI가', '구글과', '앤트로픽에게', '인프라를', '빌려준다'] 어간=['xAI', '구글', '앤트로픽', '인프라', '빌려준다']
+[09:11:40] [v3]     → twist 키워드 커버리지: 4/5 (80%) 어간=['xAI', '구글', '앤트로픽', '인프라', '빌려준다']
+[09:11:40] [v3]     → twist 마지막 키워드 "빌려준다" 카드 미포함 → 방향 역전 의심
+[09:11:48] [eval]   평가: 5점/통과 (상식의 반전이 명확하며 구체적인 기업명이 포함되었고 기사 연결성도 적절합니다.) direction_ok=True
+[09:12:13] [eval]   평가: 1점/불통과 (twist가 narrative와 방향이 반대이며, 주어가 불명확하여 방향 정확성이 0점이다.) direction_ok=False
+[09:12:13] [eval]   ❌ 방향 불일치 강제 불통과
+[09:12:20]   1순위 브리핑: 3개 → 신규 0개
+[09:12:21]   2순위 최근7일: 200개 중 신규 186개
+[09:12:21]   총 기사 풀: 186개
+[09:12:21] [v3]   피치 이력: 28개 존재
+[09:12:22] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:12:22] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:12:24] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:12:24] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:12:24] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:12:26] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:12:28] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:12:29] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:12:30] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:12:30] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:12:31] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:12:31] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:12:32] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:12:32] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:12:33] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:12:34] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:12:36] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:12:37] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:12:38] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:12:40] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:12:40] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:12:41] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:12:43] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:12:44] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:12:45] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:12:45] [v3]   [피치크롤링 실패] https://www.nytimes.com/2026/05/27/technology/ai-s... (HTTPError)
+[09:12:47] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:12:47] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:12:47] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:12:47] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:12:48] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:12:48] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:12:48] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:12:50] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:12:50] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:12:52] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:12:52] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:12:54] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:12:54] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:12:54] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:12:55] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:12:55] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:12:56] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:12:57] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:12:59] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:13:00] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:13:01] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:13:01] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:13:01] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:13:01] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:13:03] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:13:03] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:13:05] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:13:05] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:13:06] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:13:06] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:13:06] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:13:06] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:13:07] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:13:07] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:13:08] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:13:10] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:13:10] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:13:10] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:13:11] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:13:11] [v3]   100개 기사 단일 호출...
+[09:13:18] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:13:20] [eval]   평가: 5점/통과 (상식충돌과 구체성이 잘 드러나며, 방향도 일치하여 통과.) direction_ok=True
+[09:13:20] [eval]   ✅ 피치 통과: 5점
+[09:13:20] [v3]   ✅ TOP 1: "OpenAI와 마이크로소프트의 '독점적 동맹'은 단 하루 만에 아마존(AWS)의 침투로 무너졌다." (충격)
+[09:13:20] [v3]      기사: [21681, 26355]
+[09:21:08]   1순위 브리핑: 3개 → 신규 0개
+[09:21:09]   2순위 최근7일: 200개 중 신규 186개
+[09:21:09]   총 기사 풀: 186개
+[09:21:13]   1순위 브리핑: 3개 → 신규 0개
+[09:21:14]   2순위 최근7일: 200개 중 신규 186개
+[09:21:14]   총 기사 풀: 186개
+[09:21:14] [v3]   피치 이력: 29개 존재
+[09:21:14] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:21:15] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/qwen-team-... (1503자)
+[09:21:15] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:21:17] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:21:17] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:21:17] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:21:20] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/step-by-st... (1503자)
+[09:21:22] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:21:23] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/i... (HTTPError)
+[09:21:25] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:21:25] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:21:27] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:21:27] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:21:29] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:21:29] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:21:32] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/meta-fair-... (1503자)
+[09:21:35] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/a-coding-i... (1503자)
+[09:21:39] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/28/poolside-a... (1503자)
+[09:21:41] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/28/how-to-bui... (1503자)
+[09:21:41] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:21:42] [v3]   [피치크롤링] https://news.google.com/rss/articles/CBMiwgFBVV95c... (11자)
+[09:21:42] [v3]   [피치크롤링 실패] https://www.nytimes.com/2026/05/27/technology/ai-s... (HTTPError)
+[09:21:42] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:21:42] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91546363/tech-can-radi... (HTTPError)
+[09:21:43] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:21:44] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:21:45] [v3]   [피치크롤링] https://huggingface.co/blog/ibm-research/itbench-a... (1503자)
+[09:21:48] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/27/nvidia-rel... (1503자)
+[09:21:49] [v3]   [피치크롤링] https://www.etnews.com/20260527000365... (1454자)
+[09:21:49] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91549214/fbi-2025-inte... (HTTPError)
+[09:21:51] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:21:52] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:21:53] [v3]   [피치크롤링] https://www.etnews.com/20260527000352... (1503자)
+[09:21:53] [v3]   [피치크롤링] https://news.google.com/rss/articles/CBMiugFBVV95c... (11자)
+[09:21:53] [v3]   [피치크롤링] https://www.etnews.com/20260527000324... (1503자)
+[09:21:54] [v3]   [피치크롤링] https://www.etnews.com/20260527000256... (910자)
+[09:21:55] [v3]   [피치크롤링] https://www.etnews.com/20260527000254... (1503자)
+[09:21:55] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:21:56] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:21:56] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:21:58] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:21:59] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:22:01] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:22:03] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:22:03] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:22:03] [v3]   [피치크롤링 실패] https://www.nytimes.com/2026/05/27/technology/ai-s... (HTTPError)
+[09:22:05] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:22:06] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/e... (HTTPError)
+[09:22:06] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:22:07] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:22:07] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91546658/girls-who-cod... (HTTPError)
+[09:22:08] [v3]   [피치크롤링] https://openai.com/index/cisco... (1503자)
+[09:22:11] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/27/meet-eagle... (1503자)
+[09:22:15] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/26/memo-a-mod... (1503자)
+[09:22:15] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:22:15] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:22:16] [v3]   [피치크롤링] https://openai.com/index/warp... (1503자)
+[09:22:19] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/how-to-bui... (1503자)
+[09:22:19] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:22:19] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:22:21] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:22:21] [v3]   [피치크롤링] https://github.blog/news-insights/company-news/upd... (631자)
+[09:22:22] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:22:23] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:22:23] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:22:25] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:22:26] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/o... (HTTPError)
+[09:22:27] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:22:27] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:22:27] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:22:27] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:22:30] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:22:30] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:22:32] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:22:33] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/a... (HTTPError)
+[09:22:35] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:22:35] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:22:37] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/nvidia-ai-... (1503자)
+[09:22:39] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/google-int... (1503자)
+[09:22:39] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:22:41] [v3]   [피치크롤링] https://openai.com/index/safety-bug-bounty... (1503자)
+[09:22:41] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:22:41] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:22:43] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:22:43] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:22:45] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:22:45] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:22:45] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:22:45] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:22:46] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:22:46] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:22:46] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:22:46] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:22:48] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:22:50] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:22:51] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/n... (HTTPError)
+[09:22:53] [v3]   [피치크롤링] https://www.marktechpost.com/2026/02/25/liquid-ais... (1503자)
+[09:22:54] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:22:54] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:22:54] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:22:54] [v3]   100개 기사 단일 호출...
+[09:23:04] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:23:07] [eval]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 숫자와 인물/기업명이 포함되어 있으며, 두 개 이상의 서로 다른 기사가 연결되어 있고, 방향도 일치한다.) direction_ok=True
+[09:23:07] [eval]   ✅ 피치 통과: 5점
+[09:23:07] [v3]   ✅ TOP 1: "AI가 더 똑똑해질수록 인간의 일자리는 사라질 것 같지만, 실제로는 'AI 활용 능력'에 따라 격차가 벌리고 있다." (불안)
+[09:23:07] [v3]      기사: [13285, 13286, 2321685]
+[09:24:33]   1순위 브리핑: 3개 → 신규 0개
+[09:24:33]   2순위 최근7일: 200개 중 신규 186개
+[09:24:33]   총 기사 풀: 186개
+[09:24:34] [v3]   피치 이력: 30개 존재
+[09:24:34] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:24:35] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/qwen-team-... (1503자)
+[09:24:35] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:24:37] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:24:37] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:24:37] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:24:37] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/step-by-st... (1503자)
+[09:24:39] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:24:41] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/i... (HTTPError)
+[09:24:42] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:24:42] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:24:44] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:24:44] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:24:46] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:24:46] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:24:47] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/meta-fair-... (1503자)
+[09:24:48] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/a-coding-i... (1503자)
+[09:24:49] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/28/poolside-a... (1503자)
+[09:24:50] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/28/how-to-bui... (1503자)
+[09:24:51] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:24:51] [v3]   [피치크롤링] https://news.google.com/rss/articles/CBMiwgFBVV95c... (11자)
+[09:24:51] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:24:52] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:24:52] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91546363/tech-can-radi... (HTTPError)
+[09:24:52] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:24:54] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:24:54] [v3]   [피치크롤링] https://huggingface.co/blog/ibm-research/itbench-a... (1503자)
+[09:24:55] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/27/nvidia-rel... (1503자)
+[09:24:55] [v3]   [피치크롤링] https://www.etnews.com/20260527000365... (1454자)
+[09:24:56] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91549214/fbi-2025-inte... (HTTPError)
+[09:24:57] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:24:58] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:24:59] [v3]   [피치크롤링] https://www.etnews.com/20260527000352... (1503자)
+[09:24:59] [v3]   [피치크롤링] https://news.google.com/rss/articles/CBMiugFBVV95c... (11자)
+[09:25:00] [v3]   [피치크롤링] https://www.etnews.com/20260527000324... (1503자)
+[09:25:01] [v3]   [피치크롤링] https://www.etnews.com/20260527000256... (910자)
+[09:25:01] [v3]   [피치크롤링] https://www.etnews.com/20260527000254... (1503자)
+[09:25:02] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:25:03] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:25:04] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:25:05] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:25:06] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:25:08] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:25:10] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:25:10] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:25:12] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:25:13] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:25:15] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/e... (HTTPError)
+[09:25:15] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:25:15] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:25:16] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91546658/girls-who-cod... (HTTPError)
+[09:25:17] [v3]   [피치크롤링] https://openai.com/index/cisco... (1503자)
+[09:25:18] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/27/meet-eagle... (1503자)
+[09:25:18] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/26/memo-a-mod... (1503자)
+[09:25:19] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:25:19] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:25:21] [v3]   [피치크롤링] https://openai.com/index/warp... (1503자)
+[09:25:22] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/how-to-bui... (1503자)
+[09:25:22] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:25:22] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:25:24] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:25:25] [v3]   [피치크롤링] https://github.blog/news-insights/company-news/upd... (631자)
+[09:25:25] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:25:26] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:25:28] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:25:30] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:25:32] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/o... (HTTPError)
+[09:25:32] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:25:32] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:25:32] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:25:33] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:25:34] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:25:34] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:25:36] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:25:38] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/a... (HTTPError)
+[09:25:39] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:25:39] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:25:41] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/nvidia-ai-... (1503자)
+[09:25:41] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/google-int... (1503자)
+[09:25:41] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:25:43] [v3]   [피치크롤링] https://openai.com/index/safety-bug-bounty... (1503자)
+[09:25:43] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:25:43] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:25:45] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:25:45] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:25:47] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:25:48] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:25:48] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:25:48] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:25:49] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:25:49] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:25:49] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:25:49] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:25:51] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:25:53] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:25:55] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/n... (HTTPError)
+[09:25:56] [v3]   [피치크롤링] https://www.marktechpost.com/2026/02/25/liquid-ais... (1503자)
+[09:25:56] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:25:56] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:25:57] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:25:57] [v3]   100개 기사 단일 호출...
+[09:26:06] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:26:07] [eval]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 숫자와 출처가 포함되어 있으며, twist가 narrative와 방향이 일치한다.) direction_ok=True
+[09:26:07] [eval]   ✅ 피치 통과: 5점
+[09:26:07] [v3]   ✅ TOP 1: "42년 된 수학 난제를 인간은 400시간 걸려 실패했지만 AI는 12시간 만에 풀었다." (놀라움)
+[09:26:07] [v3]      기사: [21680, 21422]
+[2026-06-20 09:34:45] [v3] 🚀 v3 실행 시작
+[09:35:15]   1순위 브리핑: 3개 → 신규 0개
+[09:35:18]   2순위 최근7일: 200개 중 신규 186개
+[09:35:18]   총 기사 풀: 186개
+[2026-06-20 09:35:18] [v3]   기사: 186개 로드
+[2026-06-20 09:35:18] [v3]   피치 생성...
+[09:35:19] [v3]   피치 이력: 30개 존재
+[09:35:19] [v3]   [피치크롤링] https://techcrunch.com/podcast/equity-podcast-runw... (1503자)
+[09:35:20] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/qwen-team-... (1503자)
+[09:35:22] [v3]   [피치크롤링] https://www.wired.com/story/chinese-ai-giant-sense... (1503자)
+[09:35:24] [v3]   [피치크롤링] https://the-decoder.com/google-gemini-now-generate... (1089자)
+[09:35:24] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/google-photos-us... (1503자)
+[09:35:25] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/more-gemini-feat... (1503자)
+[09:35:27] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/step-by-st... (1503자)
+[09:35:30] [v3]   [피치크롤링] https://the-decoder.com/openai-researchers-explain... (1503자)
+[09:35:32] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/i... (HTTPError)
+[09:35:34] [v3]   [피치크롤링] https://the-decoder.com/openai-lands-on-aws-one-da... (1503자)
+[09:35:34] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/meet-shapes-the-... (1503자)
+[09:35:36] [v3]   [피치크롤링] https://the-decoder.com/google-rolls-out-gemini-me... (1353자)
+[09:35:36] [v3]   [피치크롤링] https://techcrunch.com/2026/04/29/coby-adcocks-sco... (1503자)
+[09:35:40] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:35:40] [v3]   [피치크롤링] https://www.wired.com/story/wired-health-2026-tack... (1503자)
+[09:35:41] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/meta-fair-... (1503자)
+[09:35:43] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/29/a-coding-i... (1503자)
+[09:35:45] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/28/poolside-a... (1503자)
+[09:35:46] [v3]   [피치크롤링] https://www.marktechpost.com/2026/04/28/how-to-bui... (1503자)
+[09:35:46] [v3]   [피치크롤링] https://techcrunch.com/2026/04/28/at-his-openai-tr... (1503자)
+[09:35:47] [v3]   [피치크롤링] https://news.google.com/rss/articles/CBMiwgFBVV95c... (11자)
+[09:35:48] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:35:50] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/in-more-good-new... (1503자)
+[09:35:50] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91546363/tech-can-radi... (HTTPError)
+[09:35:50] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/meta-officially-... (1503자)
+[09:35:52] [v3]   [피치크롤링] https://the-decoder.com/robinhood-lets-ai-agents-t... (1503자)
+[09:35:53] [v3]   [피치크롤링] https://huggingface.co/blog/ibm-research/itbench-a... (1503자)
+[09:35:55] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/27/nvidia-rel... (1503자)
+[09:35:57] [v3]   [피치크롤링] https://www.etnews.com/20260527000365... (1454자)
+[09:35:58] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91549214/fbi-2025-inte... (HTTPError)
+[09:36:03] [v3]   [피치크롤링] https://www.zdnet.com/article/heres-why-the-govern... (1503자)
+[09:36:05] [v3]   [피치크롤링] https://www.zdnet.com/article/dell-tech-world-2026... (1503자)
+[09:36:08] [v3]   [피치크롤링] https://www.etnews.com/20260527000352... (1503자)
+[09:36:10] [v3]   [피치크롤링] https://news.google.com/rss/articles/CBMiugFBVV95c... (11자)
+[09:36:11] [v3]   [피치크롤링] https://www.etnews.com/20260527000324... (1503자)
+[09:36:11] [v3]   [피치크롤링] https://www.etnews.com/20260527000256... (910자)
+[09:36:15] [v3]   [피치크롤링] https://www.etnews.com/20260527000254... (1503자)
+[09:36:15] [v3]   [피치크롤링] https://www.wired.com/story/ex-google-apple-ai-res... (1503자)
+[09:36:16] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/magazine/spence... (1503자)
+[09:36:17] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/china-is-increas... (1503자)
+[09:36:18] [v3]   [피치크롤링] https://www.zdnet.com/article/rust-will-save-linux... (1503자)
+[09:36:20] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/g... (HTTPError)
+[09:36:22] [v3]   [피치크롤링] https://the-decoder.com/the-ai-boom-drove-nvidias-... (1395자)
+[09:36:24] [v3]   [피치크롤링] https://the-decoder.com/china-turns-its-aging-came... (1503자)
+[09:36:25] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/youtube-will-now... (1503자)
+[09:36:25] [v3]   [피치크롤링] https://www.nytimes.com/2026/05/27/technology/ai-s... (1503자)
+[09:36:28] [v3]   [피치크롤링] https://www.zdnet.com/article/eye-doctor-ai-prescr... (1503자)
+[09:36:30] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/e... (HTTPError)
+[09:36:32] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/robinhood-now-le... (1503자)
+[09:36:32] [v3]   [피치크롤링] https://techcrunch.com/2026/05/27/tech-ceos-are-ap... (1503자)
+[09:36:33] [v3]   [피치크롤링 실패] https://www.fastcompany.com/91546658/girls-who-cod... (HTTPError)
+[09:36:35] [v3]   [피치크롤링] https://openai.com/index/cisco... (1503자)
+[09:36:37] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/27/meet-eagle... (1503자)
+[09:36:38] [v3]   [피치크롤링] https://www.marktechpost.com/2026/05/26/memo-a-mod... (1503자)
+[09:36:39] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3354938... (1503자)
+[09:36:39] [v3]   [피치크롤링] https://www.bbc.com/news/articles/c3r2zjpryzro?at_... (1503자)
+[09:36:41] [v3]   [피치크롤링] https://openai.com/index/warp... (1503자)
+[09:36:42] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/how-to-bui... (1503자)
+[09:36:42] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/the-ai-skills-ga... (1503자)
+[09:36:43] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/google-turboquan... (1503자)
+[09:36:45] [v3]   [피치크롤링] https://the-decoder.com/google-launches-ai-music-g... (1503자)
+[09:36:45] [v3]   [피치크롤링] https://github.blog/news-insights/company-news/upd... (631자)
+[09:36:46] [v3]   [피치크롤링] https://www.wired.com/story/theres-something-very-... (1503자)
+[09:36:50] [v3]   [피치크롤링] https://the-decoder.com/ai2s-fully-open-web-agent-... (1503자)
+[09:36:50] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/harvey-confirms-... (1503자)
+[09:37:00] [v3]   [피치크롤링] https://the-decoder.com/arm-breaks-from-its-licens... (1311자)
+[09:37:01] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/o... (HTTPError)
+[09:37:04] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/granola-raises-1... (1503자)
+[09:37:04] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-launches-ne... (1503자)
+[09:37:05] [v3]   [피치크롤링] https://techcrunch.com/2026/03/25/meta-turns-to-ai... (1503자)
+[09:37:05] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3347902... (1503자)
+[09:37:07] [v3]   [피치크롤링] https://the-decoder.com/openai-ceo-sam-altman-repo... (1441자)
+[09:37:08] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113451... (1503자)
+[09:37:10] [v3]   [피치크롤링] https://the-decoder.com/disney-pulls-out-of-openai... (1503자)
+[09:37:15] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/a... (HTTPError)
+[09:37:22] [v3]   [피치크롤링] https://the-decoder.com/claude-codes-new-auto-mode... (1503자)
+[09:37:27] [v3]   [피치크롤링] https://www.technologyreview.com/2026/03/25/113457... (1503자)
+[09:37:29] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/nvidia-ai-... (1503자)
+[09:37:31] [v3]   [피치크롤링] https://www.marktechpost.com/2026/03/25/google-int... (1503자)
+[09:37:34] [v3]   [피치크롤링] https://techcrunch.com/2026/03/24/with-3-5b-in-fre... (1503자)
+[09:37:36] [v3]   [피치크롤링] https://openai.com/index/safety-bug-bounty... (1503자)
+[09:37:38] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/anthropic-acquir... (1503자)
+[09:37:38] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/the-white-house-... (1503자)
+[09:37:40] [v3]   [피치크롤링] https://the-decoder.com/perplexity-computer-bundle... (1503자)
+[09:37:41] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/wearable-startup... (1503자)
+[09:37:43] [v3]   [피치크롤링] https://the-decoder.com/google-relaunches-its-ai-c... (1503자)
+[09:37:44] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/gemini-can-now-a... (1503자)
+[09:37:45] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openai-coo-says-... (1503자)
+[09:37:46] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/openclaw-creator... (1503자)
+[09:37:52] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/about-12-of-u-s-... (1503자)
+[09:37:54] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/jiras-latest-upd... (1503자)
+[09:37:59] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/amazons-ai-power... (1503자)
+[09:38:00] [v3]   [피치크롤링] https://techcrunch.com/2026/02/25/khoslas-keith-ra... (1503자)
+[09:38:04] [v3]   [피치크롤링] https://the-decoder.com/anthropic-refuses-pentagon... (1503자)
+[09:38:06] [v3]   [피치크롤링] https://the-decoder.com/claude-code-sessions-now-a... (1503자)
+[09:38:07] [v3]   [피치크롤링 실패] https://www.artificialintelligence-news.com/news/n... (HTTPError)
+[09:38:08] [v3]   [피치크롤링] https://www.marktechpost.com/2026/02/25/liquid-ais... (1503자)
+[09:38:09] [v3]   [피치크롤링] https://www.scmp.com/tech/big-tech/article/3344572... (1503자)
+[09:38:10] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/india-ai-boom-pu... (1503자)
+[09:38:10] [v3]   [피치크롤링] https://techcrunch.com/2026/02/24/nvidia-challenge... (1503자)
+[09:38:10] [v3]   100개 기사 단일 호출...
+[09:38:20] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:38:22] [eval]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 기업명과 숫자가 포함되어 있으며, 두 개의 서로 다른 출처 기사가 연결되어 있고, 방향도 일치함.) direction_ok=True
+[09:38:22] [eval]   ✅ 피치 통과: 5점
+[09:38:22] [v3]   ✅ TOP 1: "AI 열풍으로 엔비디아 GPU가 부족해 터질 줄 알았는데, 이제 기업들의 돈은은 'CPU'로 급격히 이동하고 있다." (충격)
+[09:38:22] [v3]      기사: [26355, 26432]
+[2026-06-20 09:38:22] [v3]   ✅ 피치: "AI 열풍으로 엔비디아 GPU가 부족해 터질 줄 알았는데, 이제 기업들의" (충격)
+[2026-06-20 09:38:22] [v3]      기사: [26355, 26432]
+[2026-06-20 09:38:22] [v3]   쓰레드 작성...
+[09:38:22] [v3]   📰 크롤링: https://techcrunch.com/2026/05/27/in-more-good-new... (3003자)
+[09:38:24] [v3]   📰 크롤링: https://www.zdnet.com/article/dell-tech-world-2026... (3003자)
+[09:38:24] [v3]   쓰레드 생성 중...
+[09:38:27] [v3]     → twist 키워드 커버리지: 4/5 (80%) 어간=['모델', '학습시키', "'훈련'", '단계에서', '고성능']
+[09:38:27] [v3]   ✅ 쓰레드: 6개 조각 (시도 1)
+[09:38:27] [v3]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-20-09_AI열풍으로엔비디아GPU가부족해터질줄.txt
+[2026-06-20 09:38:27] [v3]   ✅ 6개 조각 작성 완료
+[2026-06-20 09:38:27] [v3]   발행 시작...
+[09:38:35]   카드 1/6 발행: 18443084629138882
+[09:38:51]   카드 2/6 발행: 17950575171179130
+[09:39:07]   카드 3/6 발행: 18087981986571964
+[09:39:23]   카드 4/6 발행: 18081135308206720
+[09:39:39]   카드 5/6 발행: 18084894797409220
+[09:39:57]   카드 6/6 발행: 18095395066970925
+[09:40:00]   posted.json 업데이트 완료
+[2026-06-20 09:40:00] [v3]   ✅ 발행 완료: 루트 ID 18443084629138882
+[2026-06-20 09:40:00] [v3]   다음 실행: 2026-06-20 11:40:00
+[09:41:00]   1순위 브리핑: 3개 → 신규 0개
+[09:41:01]   2순위 최근7일: 200개 중 신규 185개
+[09:41:01]   총 기사 풀: 185개
+[09:41:01] [v3]   피치 이력: 30개 존재
+[09:41:01] [v3]   100개 기사 단일 호출...
+[09:41:06] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:41:09] [eval]   평가: 6점/통과 (상식충돌이 명확하고, 구체적인 정보와 여러 출처가 연결되어 있으며, twist가 narrative와 방향이 일치하여 높은 점수를 받았다.) direction_ok=True
+[09:41:09] [eval]   ✅ 피치 통과: 6점
+[09:41:09] [v3]   ✅ TOP 1: "엔비디아 칩이 막힌 중국 AI 기업들, 오히려 '자국산 칩 최적화'로 속도 경쟁에서 역전 반격에 나섰다" (놀라움)
+[09:41:09] [v3]      기사: ['21693', '23398']
+[09:41:15]   1순위 브리핑: 3개 → 신규 0개
+[09:41:15]   2순위 최근7일: 200개 중 신규 185개
+[09:41:15]   총 기사 풀: 185개
+[09:41:16] [v3]   피치 이력: 30개 존재
+[09:41:16] [v3]   100개 기사 단일 호출...
+[09:41:20] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[09:41:22] [eval]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 정보와 여러 출처가 연결되어 있으며, 방향도 일치함.) direction_ok=True
+[09:41:22] [eval]   ✅ 피치 통과: 5점
+[09:41:22] [v3]   ✅ TOP 1: "오픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하루 만에, AWS가 오픈AI의 기능을 선점하기 시작했다." (불안)
+[09:41:22] [v3]      기사: [21681, 21635]
+[09:41:23] [v3]   📰 크롤링: https://the-decoder.com/openai-lands-on-aws-one-da... (2922자)
+[09:41:23] [v3]   쓰레드 생성 중...
+[09:41:26] [v3]     → hook 불일치: 첫 줄 시작="픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하루..." 예상 hook[:8]="오픈AI와 마이"
+[09:41:26] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 1/5)
+[09:41:26] [v3]   쓰레드 생성 중...
+[09:41:28] [v3]     → hook 불일치: 첫 줄 시작="픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하루..." 예상 hook[:8]="오픈AI와 마이"
+[09:41:28] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 2/5)
+[09:41:28] [v3]   쓰레드 생성 중...
+[09:41:30] [v3]     → hook 불일치: 첫 줄 시작="픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하루..." 예상 hook[:8]="오픈AI와 마이"
+[09:41:30] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 3/5)
+[09:41:30] [v3]   쓰레드 생성 중...
+[09:41:32] [v3]     → hook 불일치: 첫 줄 시작="픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하루..." 예상 hook[:8]="오픈AI와 마이"
+[09:41:32] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 4/5)
+[09:41:32] [v3]   쓰레드 생성 중...
+[09:41:34] [v3]     → hook 불일치: 첫 줄 시작="픈AI와 마이크로소프트의 독점 계약이 깨진 지 단 하루..." 예상 hook[:8]="오픈AI와 마이"
+[09:41:34] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 5/5)
+[09:41:34] [v3]   ❌ 5회 재시도 실패 → GPT-4o-mini fallback 1회
+[09:41:34] [v3]   쓰레드 생성 중... (GPT-4o-mini fallback)
+[09:41:42] [v3]     → twist 키워드 커버리지: 5/5 (100%) 어간=['빅테크', '기업들', '오픈AI', '모델', '클라우드']
+[09:41:42] [v3]   ✅ 쓰레드: 6개 조각 (GPT-4o-mini fallback 성공)
+[2026-06-20 11:40:00] [v3] 🚀 v3 실행 시작
+[11:40:03]   1순위 브리핑: 5개 → 신규 5개
+[11:40:04]   2순위 최근7일: 200개 중 신규 185개
+[11:40:04]   총 기사 풀: 190개
+[2026-06-20 11:40:04] [v3]   기사: 190개 로드
+[2026-06-20 11:40:04] [v3]   피치 생성...
+[11:40:05] [v3]   피치 이력: 30개 존재
+[11:40:05] [v3]   100개 기사 단일 호출...
+[11:40:09] [v3]   → 3개 피치 발견 (DiffusionGemma)
+[11:40:11] [eval]   평가: 5점/통과 (상식과 실제의 충돌이 명확하고, 구체적인 출처와 숫자가 포함되어 있으며, 방향이 일치함.) direction_ok=True
+[11:40:11] [eval]   ✅ 피치 통과: 5점
+[11:40:11] [v3]   ✅ TOP 1: "노르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학교에서 AI 손을 뺐다" (불안)
+[11:40:11] [v3]      기사: ['32522', '27234']
+[2026-06-20 11:40:11] [v3]   ✅ 피치: "노르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학교에서 AI 손을" (불안)
+[2026-06-20 11:40:11] [v3]      기사: ['32522', '27234']
+[2026-06-20 11:40:12] [v3]   쓰레드 작성...
+[11:40:14] [v3]   📰 크롤링: https://the-decoder.com/norway-bans-generative-ai-... (2591자)
+[11:40:15] [v3]   📰 크롤링: https://www.aitimes.com/news/articleView.html?idxn... (29자)
+[11:40:15] [v3]   쓰레드 생성 중...
+[11:40:17] [v3]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:17] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 1/5)
+[11:40:17] [v3]   쓰레드 생성 중...
+[11:40:19] [v3]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:19] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 2/5)
+[11:40:19] [v3]   쓰레드 생성 중...
+[11:40:22] [v3]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:22] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 3/5)
+[11:40:22] [v3]   쓰레드 생성 중...
+[11:40:24] [v3]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:24] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 4/5)
+[11:40:24] [v3]   쓰레드 생성 중...
+[11:40:27] [v3]     → hook 불일치: 첫 줄 시작="르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등학..." 예상 hook[:8]="노르웨이, 아이"
+[11:40:27] [v3]   ⚠️ 검증 실패: 5개 조각 (시도 5/5)
+[11:40:27] [v3]   ❌ 5회 재시도 실패 → GPT-4o-mini fallback 1회
+[11:40:27] [v3]   쓰레드 생성 중... (GPT-4o-mini fallback)
+[11:40:36] [v3]     → twist 키워드 커버리지: 5/5 (100%) 어간=['AI', '의존할', '아이들', '스스로', '수학적']
+[11:40:36] [v3]   ✅ 쓰레드: 6개 조각 (GPT-4o-mini fallback 성공)
+[11:40:36] [v3]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-20-11_노르웨이아이들의생각하는힘을지키기위해초.txt
+[2026-06-20 11:40:36] [v3]   ✅ 6개 조각 작성 완료
+[2026-06-20 11:40:36] [v3]   발행 시작...
+[11:40:45]   카드 1/6 발행: 18118327868494289
+[11:41:00]   카드 2/6 발행: 17920513476379984
+[11:41:18]   카드 3/6 발행: 18140687689536230
+[11:41:38]   카드 4/6 발행: 17973306729112792
+[11:41:54]   카드 5/6 발행: 18063099956708046
+[11:42:10]   카드 6/6 발행: 17977189547877818
+[11:42:13]   posted.json 업데이트 완료
+[2026-06-20 11:42:13] [v3]   ✅ 발행 완료: 루트 ID 18118327868494289
+[2026-06-20 11:42:13] [v3]   다음 실행: 2026-06-20 13:42:13

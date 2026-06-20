@@ -19,7 +19,8 @@ def log(msg):
 
 EVAL_SYSTEM_PROMPT = """당신은 피치 품질 평가자입니다.
 
-아래 기준으로 0~5점을 매기고, 3점 이상만 통과시킵니다.
+아래 기준으로 0~6점을 매기고, 3점 이상만 통과시킵니다.
+단, 항목 4가 0점이면 총점과 무관하게 불통과입니다.
 
 [평가 기준]
 1. 상식충돌: "상식적으로 A였어야 하는데 실제로는 B" 구조가 명확한가? (0~2점)
@@ -36,8 +37,13 @@ EVAL_SYSTEM_PROMPT = """당신은 피치 품질 평가자입니다.
    - 1점: 2개 이상 다른 출처 기사
    - 0점: 단일 기사 또는 같은 출처
 
+4. 방향 정확성: twist 필드의 주어-동사 방향이 narrative와 일치하는가? (0~1점 — 단, 이 항목이 0점이면 전체 불통과)
+   - 1점: twist가 narrative의 B(실제)를 명확히 설명하며 방향 일치
+   - 0점: twist가 없거나, narrative와 방향이 반대이거나, 주어가 불명확
+   - 예시: narrative="A가 B에게 인프라를 빌려준다" → twist="A가 인프라를 빌려쓴다"는 방향 불일치 (0점)
+
 [출력 형식]
-{"score": 0~5, "passed": true/false, "reason": "평가 이유 한 줄"}"""
+{"score": 0~6, "passed": true/false, "direction_ok": true/false, "reason": "평가 이유 한 줄"}"""
 
 def evaluate_pitch(pitch):
     """피치 품질 평가 → 통과 여부"""
@@ -45,11 +51,13 @@ def evaluate_pitch(pitch):
 
     pitch_json = json.dumps(pitch, ensure_ascii=False)
     try:
+        # 방향 정확성 평가는 GPT-4o-mini 사용 (DiffusionGemma는 방향 판별에 취약)
         resp = chat_completion(
             system_prompt=EVAL_SYSTEM_PROMPT,
             messages=[{'role': 'user', 'content': f'평가할 피치:\n{pitch_json}'}],
-            temperature=0.3,
+            temperature=0.1,
             max_tokens=300,
+            model_override='openai',
         )
         # JSON 파싱
         m = re.search(r'\{[^}]+\}', resp)
@@ -58,7 +66,12 @@ def evaluate_pitch(pitch):
             score = result.get('score', 0)
             passed = result.get('passed', False)
             reason = result.get('reason', '')
-            log(f'  평가: {score}점/{"" if passed else "불"}통과 ({reason})')
+            direction_ok = result.get('direction_ok', True)
+            log(f'  평가: {score}점/{"" if passed else "불"}통과 ({reason}) direction_ok={direction_ok}')
+            # direction_ok=false면 강제 불통과
+            if not direction_ok:
+                log(f'  ❌ 방향 불일치 강제 불통과')
+                return False, 0, '방향 불일치'
             return passed, score, reason
     except Exception as e:
         log(f'  ⚠️ 평가 오류: {e}')
