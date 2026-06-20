@@ -308,16 +308,17 @@ def validate_year(cards, expected_year):
     return True
 
 def assemble_final(cards, sources):
-    """대표 URL 1개를 마지막 카드로 추가 (URL 검증 포함)
+    """대표 URL 1개를 마지막 카드로 추가 (URL 검증 포함, fallback 순회)
     sources: 우선순위로 actual_urls → pitch.get('sources', []) 순
     """
+    from db_reader import validate_link
     if sources:
-        url = sources[0]
-        from db_reader import validate_link
-        if not validate_link(url, timeout=5):
-            log(f'  ⚠️ 최종 URL 유효성 실패 — 링크 생략: {url[:50]}...')
-        else:
-            cards.append(f'🔗 {url}')
+        for url in sources:
+            if validate_link(url, timeout=5):
+                cards.append(f'🔗 {url}')
+                return cards
+            log(f'  ⚠️ URL 유효성 실패 — 다음 URL 시도: {url[:50]}...')
+        log(f'  ❌ 모든 {len(sources)}개 URL 유효성 실패 — 링크 생략')
     return cards
 
 def save_draft(cards, pitch):
