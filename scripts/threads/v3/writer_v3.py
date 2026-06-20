@@ -282,8 +282,10 @@ def validate_year(cards, article_body_text):
     """연도 검증: 쓰레드 본문(1번 카드 첫 줄 제외)의 연도가 기사 본문에 있는 연도인지 확인
     - pitcer가 생성한 hook(1번 카드 첫 줄)은 검증에서 제외 (변경 불가이므로)
     - 기사 본문에 없는 연도를 쓰레드 본문이 표시하면 할루시네이션 → 실패
+    - 단, 현재 연도(current_year)는 본문에 없어도 허용 (문맥상 자연스러운 사용)
     """
     body_text = article_body_text or ''
+    current_year = datetime.now().year
 
     # hook(1번 카드 첫 줄)은 pitcer 생성 → 검증 제외
     first_card = cards[0] if cards else ''
@@ -305,13 +307,16 @@ def validate_year(cards, article_body_text):
         log(f'    → 연도 검증 통과: 본문(hook 제외)에 연도 미표기')
         return True
 
-    # 본문(hook 제외)의 연도가 기사 본문에도 있는지 확인
-    invented = rest_years - body_years
+    # 현재 연도는 본문에 없어도 허용 (문맥상 자연스러움)
+    allowed = body_years | {current_year}
+
+    # 본문(hook 제외)의 연도가 허용된 연도 안에 있는지 확인
+    invented = rest_years - allowed
     if invented:
-        log(f'    → 연도 검증 실패: 본문에 없는 연도 {invented}를 쓰레드가 표시함 (본문 연도={body_years})')
+        log(f'    → 연도 검증 실패: 본문에 없는 연도 {invented}를 쓰레드가 표시함 (허용={allowed})')
         return False
 
-    log(f'    → 연도 검증 통과: 쓰레드 연도 {rest_years} ⊆ 본문 연도 {body_years}')
+    log(f'    → 연도 검증 통과: 쓰레드 연도 {rest_years} ⊆ 허용 {allowed}')
     return True
 
 def assemble_final(cards, sources):
