@@ -1535,13 +1535,5 @@ DiffusionGemma가 hook 첫 글자를 반복적으로 드랍:
 
 ---
 
-## 수정 6: dry-run posted_ids 오염 제거
 
-### 문제
-dry-run 실행 시 posted.json에 article_ids가 저장되어 유효 풀이 계속 줄어듦.
-테스트만 했을 뿐인데 실제 발행 기회를 소모함.
-
-### 변경
-**기존:** dry-run에서도 posted_ids/links 저장 (중복 방지 명목)
-**변경:** dry-run에서 posted.json 저장 제거. 오염 없이 무한 테스트 가능.
 

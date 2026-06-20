@@ -88,7 +88,21 @@ def run_v3(dry_run=False):
     log(f'  ✅ {len(cards)}개 조각 작성 완료')
 
     if dry_run:
-        log(f'[DRY RUN] 발행 생략 (posted_ids/links 미저장)')
+        # dry-run에서도 posted_ids/links 저장 (중복 방지)
+        from db_reader import load_posted, save_posted
+        posted = load_posted()
+        for aid in pitch.get('article_ids', []):
+            aid_str = str(aid)
+            if aid_str not in posted.get('posted_ids', []):
+                posted.setdefault('posted_ids', []).append(aid_str)
+            for a in articles:
+                if str(a.get('id', '')) == aid_str:
+                    link = a.get('link', '')
+                    if link and link not in posted.get('posted_links', []):
+                        posted.setdefault('posted_links', []).append(link)
+                    break
+        save_posted(posted)
+        log(f'[DRY RUN] 발행 생략 (posted_ids/links {len(posted["posted_ids"])}개)')
         print(f'\n{"="*60}')
         print(f'Hook: {pitch.get("hook")}')
         print(f'Narrative: {pitch.get("narrative")}')
