@@ -75,28 +75,12 @@ def build_system_prompt():
 [참고 문체 예시 — 아래 스타일로 작성할 것]
 {examples}"""
 
-def fetch_article_body(url, title=''):
+def fetch_article_body(url):
     """원문 기사 본문을 크롤링해서 텍스트 반환. 실패 시 빈 문자열.
-    URL 유효성 검사 + fallback 포함.
-    반환: (body_text, actual_url) — actual_url은 fallback 시 교체된 URL
+    URL은 D1 DB에서 이미 제공되므로, 본문 텍스트만 반환 (URL 변경 금지).
     """
     if not url:
-        return '', ''
-
-    original_url = url
-
-    # URL 유효성 검사 (TechCrunch 등 불안정한 소스만)
-    from db_reader import validate_link, find_fallback_url, _VALIDATE_SOURCES
-    if any(s in str(url) for s in ['techcrunch', 'cnbc', 'bbc', 'businessinsider']):
-        if not validate_link(url):
-            log(f'  ⚠️ URL 유효성 실패: {url[:50]}... → fallback 시도')
-            fallback = find_fallback_url(title) if title else None
-            if fallback:
-                log(f'  ✅ fallback URL: {fallback[:50]}...')
-                url = fallback
-            else:
-                log(f'  ❌ fallback 실패 — 크롤링 스킵')
-                return '', original_url
+        return ''
 
     try:
         headers = {
@@ -119,10 +103,10 @@ def fetch_article_body(url, title=''):
         lines = [l.strip() for l in body.split('\n') if l.strip()]
         text = '\n'.join(lines)
         log(f'  📰 크롤링: {url[:50]}... ({len(text)}자)')
-        return text, url
+        return text
     except Exception as e:
         log(f'  ⚠️ 크롤링 실패: {url[:50]}... ({type(e).__name__})')
-        return '', url
+        return ''
 
 def write_thread(pitch, all_articles):
     """피치 + 관련 기사 → 쓰레드 조각 리스트 (DiffusionGemma → GPT-4o-mini fallback)"""
@@ -138,16 +122,12 @@ def write_thread(pitch, all_articles):
 
     related_parts = []
     all_fallback = True
-    actual_urls = []  # fallback으로 교체된 URL 수집
     for a in related:
-        body, actual_url = fetch_article_body(a.get('link', ''), title=a.get('title', ''))
+        body = fetch_article_body(a.get('link', ''))
         if not body:
             body = (a.get('description', '') or '')[:500]
         else:
             all_fallback = False
-        # 실제 크롤링/fallback에 사용된 URL 저장 (broken URL 대체)
-        final_url = actual_url if actual_url and actual_url.startswith('http') else a.get('link', '')
-        actual_urls.append(final_url)
         # pub_date에서 연도 추출 (프롬프트에 발행일 정보 포함)
         pub_date_str = str(a.get('pub_date', ''))
         related_parts.append(f"""기사 {a['id']}:
@@ -208,7 +188,7 @@ def write_thread(pitch, all_articles):
             cards = parse_cards(content)
 
             if validate_cards(cards, pitch) and validate_year(cards, expected_year):
-                cards = assemble_final(cards, actual_urls or pitch.get('sources', []))
+                cards = assemble_final(cards, pitch.get('sources', []))
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
             else:
@@ -230,7 +210,7 @@ def write_thread(pitch, all_articles):
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
         if validate_cards(cards, pitch) and validate_year(cards, expected_year):
-            cards = assemble_final(cards, actual_urls or pitch.get('sources', []))
+            cards = assemble_final(cards, pitch.get('sources', []))
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
     except Exception as e:
@@ -309,7 +289,7 @@ def validate_year(cards, expected_year):
 
 def assemble_final(cards, sources):
     """대표 URL 1개를 마지막 카드로 추가 (URL 검증 포함, fallback 순회)
-    sources: 우선순위로 actual_urls → pitch.get('sources', []) 순
+    sources: D1 DB 원본 URL 리스트 (pitch.get('sources', []))
     """
     from db_reader import validate_link
     if sources:
