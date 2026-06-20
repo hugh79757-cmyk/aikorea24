@@ -47,6 +47,13 @@ def build_system_prompt():
 - 이모지 금지. 볼드 금지. 이탤릭 금지.
 - 카드 안에서도 주제가 바뀌거나 시점/장소/인물이 바뀌면 빈 줄로 나눠라. 같은 주제의 문장은 붙이고, 화제 전환 시에만 띄운다.
 
+[연도 원칙 — 중요]
+- 기사 본문과 기사 발행일을 기준으로 연도를 판단하세요.
+- "2026년 5월 27일 수요일"처럼 연도/월/일을 모두 명시하세요.
+- "5월 28일"처럼 연도 없이 날짜만 쓰지 마세요. 반드시 연도를 포함하세요.
+- 기사에 언급된 연도가 없으면 기사 발행일(YYYY-MM-DD)의 연도를 사용하세요.
+- 기사 URL 경로(techcrunch.com/YYYY/MM/DD/...)에도 연도가 포함되어 있으니 참고하세요.
+
 [숫자 원칙]
 - 기사 본문에 있는 숫자는 전부 꺼내서 써라.
 - 달러 금액, 퍼센트, 날짜, 사용자 수, 성장률 — 기사에 있으면 반드시 포함.
@@ -141,8 +148,11 @@ def write_thread(pitch, all_articles):
         # 실제 크롤링/fallback에 사용된 URL 저장 (broken URL 대체)
         final_url = actual_url if actual_url and actual_url.startswith('http') else a.get('link', '')
         actual_urls.append(final_url)
+        # pub_date에서 연도 추출 (프롬프트에 발행일 정보 포함)
+        pub_date_str = str(a.get('pub_date', ''))
         related_parts.append(f"""기사 {a['id']}:
 제목: {a.get('title','')}
+발행일: {pub_date_str}
 본문: {body}
 출처: {a.get('source','')}
 링크: {final_url}""")
@@ -152,6 +162,16 @@ def write_thread(pitch, all_articles):
     if all_fallback:
         log(f'  ⚠️ 모든 기사 원문 크롤링 실패 → 스킵 (hallucination 방지)')
         return []
+
+    # 연도 검증용: 관련 기사 pub_date에서 예상 연도 추출
+    expected_year = None
+    for a in related:
+        pd = str(a.get('pub_date', ''))
+        for y in re.findall(r'20\d{2}', pd):
+            expected_year = int(y)
+            break
+        if expected_year:
+            break
 
     user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
 
@@ -187,7 +207,7 @@ def write_thread(pitch, all_articles):
                 raise Exception('모델 응답 없음')
             cards = parse_cards(content)
 
-            if validate_cards(cards, pitch):
+            if validate_cards(cards, pitch) and validate_year(cards, expected_year):
                 cards = assemble_final(cards, actual_urls or pitch.get('sources', []))
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
@@ -209,7 +229,7 @@ def write_thread(pitch, all_articles):
         if not content:
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
-        if validate_cards(cards, pitch):
+        if validate_cards(cards, pitch) and validate_year(cards, expected_year):
             cards = assemble_final(cards, actual_urls or pitch.get('sources', []))
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
@@ -258,6 +278,33 @@ def validate_cards(cards, pitch):
             if len(keywords) >= 3 and last_kw not in all_text:
                 log(f'    → twist 마지막 키워드 "{last_kw}" 카드 미포함 → 방향 역전 의심')
                 return False
+    return True
+
+def validate_year(cards, expected_year):
+    """연도 검증: 생성된 카드의 주요 연도가 기사 발행일과 일치하는지 확인
+    - expected_year가 None이면 검증 생략 (pub_date 없음)
+    - expected_year가 카드에 1회 이상 등장하는지 확인
+    - 가장 많이 언급된 연도가 expected_year인지 확인
+    - 다른 연도(역사적 맥락)는 허용
+    """
+    if expected_year is None:
+        return True
+    all_text = ' '.join(cards)
+    mentioned = {}
+    for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', all_text):
+        y = int(m.group())
+        mentioned[y] = mentioned.get(y, 0) + 1
+    if not mentioned:
+        log(f'    → 연도 검증 실패: 카드에 20XX 연도 언급이 전혀 없음')
+        return False
+    if expected_year not in mentioned:
+        log(f'    → 연도 검증 실패: 기사 발행연도 {expected_year}년이 쓰레드에 없음 (언급={set(mentioned.keys())})')
+        return False
+    most_common = max(mentioned, key=mentioned.get)
+    if most_common != expected_year:
+        log(f'    → 연도 검증 실패: 최다 언급 연도={most_common} (기대={expected_year}), 전체={dict(mentioned)}')
+        return False
+    log(f'    → 연도 검증 통과: 주요={expected_year}, 전체={dict(mentioned)}')
     return True
 
 def assemble_final(cards, sources):
