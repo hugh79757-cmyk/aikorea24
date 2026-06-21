@@ -44,7 +44,11 @@
     21631,
     32903,
     32865,
-    32904
+    32904,
+    32823,
+    "9214",
+    "26457",
+    "32826"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -88,7 +92,10 @@
     "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/",
     "https://n.news.naver.com/mnews/article/001/0016149675?sid=105",
     "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long",
-    "https://n.news.naver.com/mnews/article/003/0014018079?sid=105"
+    "https://n.news.naver.com/mnews/article/003/0014018079?sid=105",
+    "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
+    "https://the-decoder.com/half-of-ai-written-code-that-passes-industry-test-would-get-rejected-by-real-developers-new-study-finds/",
+    "https://huggingface.co/blog/ibm-research/itbench-aa"
   ],
   "history": [
     {
@@ -215,6 +222,12 @@
       "link": "https://n.news.naver.com/mnews/article/003/0014018079?sid=105",
       "title": "외로움 달래는 AI에 지갑 열었다…'감성 AI' 돌풍",
       "posted_at": "2026-06-21T15:31:28.018237"
+    },
+    {
+      "id": 32823,
+      "link": "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
+      "title": "하버드 비즈니스 리뷰, AI ‘작업 노폐물’이 기업을 내부에서 부패시키고 있다고 경고하다",
+      "posted_at": "2026-06-21T15:45:47.709097"
     }
   ],
   "last_reset": "2026-06-18",
@@ -358,6 +371,24 @@
       "article_ids": [
         9,
         9009
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 일자리를 뺏을 것이라 걱정했지만, 정작 현장들은",
+      "article_ids": [
+        19586,
+        30636,
+        30613
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 완벽한 코드를 짤 줄 알았는데, 정작 개발자들은",
+      "article_ids": [
+        9214,
+        26457,
+        32826
       ],
       "date": "2026-06-21"
     }
