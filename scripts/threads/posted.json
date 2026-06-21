@@ -85,7 +85,16 @@
     30851,
     31069,
     31273,
-    31455
+    31455,
+    28024,
+    "28024",
+    "28021",
+    "28028",
+    27227,
+    "27227",
+    "31441",
+    "32046",
+    "32525"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -139,7 +148,12 @@
     "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
     "https://www.aitimes.kr/news/articleView.html?idxno=40492",
     "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi/",
-    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price/"
+    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price/",
+    "https://www.theguardian.com/uk-news/2026/jun/03/former-officer-hampshire-hiding-after-being-falsely-linked-henry-nowak-arrest",
+    "https://www.theguardian.com/technology/2026/jun/03/labour-mp-sues-elon-musks-ai-company-over-fake-sexualised-images",
+    "https://www.theguardian.com/technology/2026/jun/03/as-the-tech-mega-ipo-race-hots-up-has-openai-missed-its-moment",
+    "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNRHduSXhpVDRyZk1KaktVUHFlX3JqWmhPTUI1dldCVmpNMEU3dGhTVVpucmRHN3JCemdXazJPR3ZXVWNFRTN5SjFCT1VQTUZFNzN0WTF0S0ctMk9Wbjd0bW1HLVNKWVNieTd2WnVxaDF5WlZ1XzYtMHFZaWNmRlhxSXMtY3g3VHRkYzFIWDdpLXNtOVJ5dGd2YzNDT1ZpQzZUenUxX0hTSzVBNlNGMUFBQVZZN2gxbDZaQjNtMFBTaG1YUQ?oc=5",
+    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone/"
   ],
   "history": [
     {
@@ -290,6 +304,18 @@
       "link": "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price/",
       "title": "GPT-5.5, 오픈AI의 가장 능력 있는 에이전트 AI 모델 등장",
       "posted_at": "2026-06-21T21:38:31.411325"
+    },
+    {
+      "id": 28024,
+      "link": "https://www.theguardian.com/uk-news/2026/jun/03/former-officer-hampshire-hiding-after-being-falsely-linked-henry-nowak-arrest",
+      "title": "헨리 노왁 체포와 잘못 연결된 전 경찰관, 숨겨진 생활로",
+      "posted_at": "2026-06-22T01:48:59.757138"
+    },
+    {
+      "id": 27227,
+      "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNRHduSXhpVDRyZk1KaktVUHFlX3JqWmhPTUI1dldCVmpNMEU3dGhTVVpucmRHN3JCemdXazJPR3ZXVWNFRTN5SjFCT1VQTUZFNzN0WTF0S0ctMk9Wbjd0bW1HLVNKWVNieTd2WnVxaDF5WlZ1XzYtMHFZaWNmRlhxSXMtY3g3VHRkYzFIWDdpLXNtOVJ5dGd2YzNDT1ZpQzZUenUxX0hTSzVBNlNGMUFBQVZZN2gxbDZaQjNtMFBTaG1YUQ?oc=5",
+      "title": "AI 자본 지출 붐이 닷컴 광풍을 초월하며 투자자들은 차분함 유지",
+      "posted_at": "2026-06-22T04:03:14.553761"
     }
   ],
   "last_reset": "2026-06-18",
@@ -510,6 +536,34 @@
         27935
       ],
       "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 완벽할 것이라는 믿음이 무고한 경찰관 한 명을 ",
+      "article_ids": [
+        28024,
+        28021,
+        28028
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "AI가 보안을 완벽하게 지켜줄 줄 알았는데, 실제로는 ",
+      "article_ids": [
+        19219,
+        31544,
+        39192
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "AI가 비용을 획기적으로 줄여줄 줄 알았는데, 기업들은",
+      "article_ids": [
+        27227,
+        31441,
+        32046,
+        32525
+      ],
+      "date": "2026-06-22"
     }
   ]
 }
