@@ -41,7 +41,8 @@
     21686,
     21693,
     21679,
-    21631
+    21631,
+    32903
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -82,7 +83,8 @@
     "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/",
     "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/",
     "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat/",
-    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/"
+    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/",
+    "https://n.news.naver.com/mnews/article/001/0016149675?sid=105"
   ],
   "history": [
     {
@@ -191,6 +193,12 @@
       "link": "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/",
       "title": "구글 TV에 더 많은 제미니 기능이 추가됩니다",
       "posted_at": "2026-06-21T08:42:52.995251"
+    },
+    {
+      "id": 32903,
+      "link": "https://n.news.naver.com/mnews/article/001/0016149675?sid=105",
+      "title": "네이버 검색 80% 찍었다…AI탭 출시 후 점유율 '껑충'",
+      "posted_at": "2026-06-21T10:50:26.091989"
     }
   ],
   "last_reset": "2026-06-18",
@@ -275,6 +283,24 @@
         24695,
         24700,
         30535
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "보안을 위해 AI를 도입하는 줄 알았는데, 실제로는 A",
+      "article_ids": [
+        27284,
+        20652,
+        23814
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "전 세계가 AI 열풍에 열광하고 있지만, 정작 현장의 ",
+      "article_ids": [
+        30446,
+        30651,
+        30763
       ],
       "date": "2026-06-21"
     }
