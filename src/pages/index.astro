@@ -8,6 +8,7 @@ import LatestBlog from '../components/home/LatestBlog.astro';
 import CtaSection from '../components/home/CtaSection.astro';
 import SubProjects from '../components/home/SubProjects.astro';
 import OpenSourceBanner from '../components/home/OpenSourceBanner.astro';
+import SubscribeBanner from '../components/home/SubscribeBanner.astro';
 import ContentHub from '../components/home/ContentHub.astro';
 
 // --- 블로그 데이터 ---
@@ -57,6 +58,7 @@ try {
 
     <BriefingSection briefing={briefing} items={briefingItems} />
     <HeroSection />
+    <SubscribeBanner />
     <LatestBlog posts={recentPosts} />
     <CourseSection posts={coursePosts} />
     <OpenSourceBanner />

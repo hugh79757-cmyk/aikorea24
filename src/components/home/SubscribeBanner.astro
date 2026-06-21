@@ -1,0 +1,55 @@
+<section class="py-10 px-4">
+  <div class="max-w-2xl mx-auto text-center">
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 shadow-xl">
+      <p class="text-sm text-blue-100 mb-3">📧 매일 아침 AI 브리핑 받아보기</p>
+      <form id="top-subscribe" class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+        <input type="email" id="top-email" placeholder="이메일 주소" required
+          class="flex-1 px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder:text-blue-200 text-sm focus:ring-2 focus:ring-white/40 focus:border-transparent outline-none" />
+        <button type="submit"
+          class="px-5 py-2.5 bg-white text-blue-600 font-medium rounded-lg text-sm hover:bg-blue-50 transition-colors whitespace-nowrap">
+          구독
+        </button>
+      </form>
+      <p id="top-subscribe-msg" class="text-xs mt-2 text-blue-100 hidden"></p>
+    </div>
+  </div>
+</section>
+
+<script>
+document.getElementById('top-subscribe')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const input = document.getElementById('top-email');
+  const msg = document.getElementById('top-subscribe-msg');
+  const btn = e.target.querySelector('button');
+  const email = input.value.trim();
+
+  btn.disabled = true;
+  btn.textContent = '처리 중...';
+  msg.classList.add('hidden');
+
+  try {
+    const res = await fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    if (res.ok) {
+      msg.className = 'text-xs mt-2 text-green-300';
+      msg.textContent = '✅ 구독 완료! 매일 아침 AI 브리핑을 보내드립니다.';
+      input.value = '';
+    } else {
+      msg.className = 'text-xs mt-2 text-red-300';
+      msg.textContent = data.error || '오류가 발생했습니다.';
+    }
+  } catch (err) {
+    msg.className = 'text-xs mt-2 text-red-300';
+    msg.textContent = '네트워크 오류입니다.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '구독';
+    msg.classList.remove('hidden');
+  }
+});
+</script>
