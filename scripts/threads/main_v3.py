@@ -139,12 +139,19 @@ def run_v3(dry_run=False):
             # 피치의 모든 article_ids 저장 (보조 기사 중복 방지)
             from db_reader import load_posted, save_posted
             posted = load_posted()
-            for aid in pitch.get('article_ids', []):
-                aid_str = str(aid).lstrip('#').strip()
+            pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', [])]
+            for aid_str in pitch_ids:
                 if aid_str not in posted.get('posted_ids', []):
                     posted.setdefault('posted_ids', []).append(aid_str)
+                # 링크도 저장
+                for a in articles:
+                    if str(a.get('id', '')) == aid_str:
+                        link = a.get('link', '')
+                        if link and link not in posted.get('posted_links', []):
+                            posted.setdefault('posted_links', []).append(link)
+                        break
             save_posted(posted)
-            log(f'  ✅ posted_ids 업데이트: {len(pitch.get(\"article_ids\", []))}개 기사 등록')
+            log(f'  ✅ posted_ids 업데이트: {len(pitch_ids)}개 기사 등록')
             next_run = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
             log(f'  다음 실행: {next_run}')
             return
