@@ -118,12 +118,12 @@ def publish_thread_chain(cards, article):
                         continue
             except Exception as e:
                 log(f'  컨테이너 생성 시도 {attempt+1}/3 실패: {e}')
-            time.sleep(2)
+            time.sleep(10)
         else:
             log(f'  ❌ 카드 {i+1} 컨테이너 생성 실패')
             return None
 
-        time.sleep(3)
+        time.sleep(10)
 
         # 발행 (3회 재시도)
         post_id = None
@@ -149,7 +149,7 @@ def publish_thread_chain(cards, article):
             root_post_id = post_id
         previous_post_id = post_id
         log(f'  카드 {i+1}/{len(cards)} 발행: {post_id}')
-        time.sleep(3)
+        time.sleep(10)
 
 
 
