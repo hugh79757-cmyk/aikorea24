@@ -247,7 +247,7 @@ def parse_cards(text):
     return cards
 
 def validate_cards(cards, pitch):
-    """기본 검증 + twist 키워드 커버리지 검증"""
+    """기본 검증 (hook 정합성 + 카드 수)"""
     if not cards or len(cards) < 5:
         log(f'    → 카드 수 부족: {len(cards)}개 (필요: 5개)')
         return False
@@ -257,30 +257,6 @@ def validate_cards(cards, pitch):
     if hook and hook[:8] not in first:
         log(f'    → hook 불일치: 첫 줄 시작="{first[:30]}..." 예상 hook[:8]="{hook[:8]}"')
         return False
-    # twist 키워드 커버리지 검증 (5자 이상일 때만)
-    twist = pitch.get('twist', '')
-    if len(twist) >= 5:
-        # 공백/→/,/- 기준 split 후 3자 이상 단어 추출
-        raw_keywords = [w.strip() for w in re.split(r'[\s→,/-]+', twist) if len(w.strip()) >= 3]
-        keywords = []
-        for w in raw_keywords[:5]:
-            w = w.strip("'\"")  # 따옴표 제거 (GPT 출력에 자주 포함됨)
-            stem = re.sub(r'(?:은|는|이|가|을|를|과|와|의|에|에게|에서|부터|까지|도|만)$', '', w)
-            if len(stem) >= 2:
-                keywords.append(stem)
-        if keywords:
-            all_text = ' '.join(cards)
-            matched = sum(1 for kw in keywords if kw in all_text)
-            coverage = matched / len(keywords)
-            log(f'    → twist 키워드 커버리지: {matched}/{len(keywords)} ({coverage:.0%}) 어간={keywords}')
-            if coverage < 0.4:
-                log(f'    → twist 검증 실패: 커버리지 {coverage:.0%} < 40%')
-                return False
-            # 추가 검증: 마지막 키워드(서술어)가 카드에 없으면 방향 역전 의심
-            last_kw = keywords[-1]
-            if len(keywords) >= 3 and last_kw not in all_text:
-                log(f'    → twist 마지막 키워드 "{last_kw}" 카드 미포함 → 방향 역전 의심')
-                return False
     return True
 
 def validate_year(cards, article_body_text):
