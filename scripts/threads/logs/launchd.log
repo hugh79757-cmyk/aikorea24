@@ -983,3 +983,126 @@
 [15:16:31]   ❌ 전체 재시도 실패
 [2026-06-21 15:16:31]   ❌ 쓰레드 작성 실패 (시도 3/3)
 [2026-06-21 15:16:31]   ❌ 3회 모두 실패 — 2시간 후 재시도
+[2026-06-21 17:16:31] 🚀 v3 실행 시작 (시도 1/3)
+[17:17:31]   ⚠️ D1 오류: Command '['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', "SELECT n.id, n.title, n.link, n.description, n.source, n.pub_date,\n                      COALESCE(bi.comment, '') as comment\n               FROM news n\n               JOIN briefing_items bi ON bi.news_id = n.id\n               JOIN briefings b ON b.id = bi.briefing_id\n               WHERE b.date = '2026-06-21' AND b.status = 'published'\n               GROUP BY n.id ORDER BY bi.sort_order ASC"]' timed out after 60 seconds
+[17:17:31]   1순위 브리핑: 0개 → 신규 0개
+[17:18:31]   ⚠️ D1 오류: Command '['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', "SELECT id, title, link, description, source, pub_date, '' as comment\n               FROM news\n               WHERE pub_date >= date('now', '-7 days')\n               ORDER BY pub_date DESC LIMIT 1000"]' timed out after 60 seconds
+[17:18:31]   2순위 최근7일: 0개 중 신규 0개
+[17:19:31]   ⚠️ D1 오류: Command '['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', "SELECT id, title, link, description, source, pub_date, '' as comment\n                   FROM news\n                   WHERE pub_date < date('now', '-7 days')\n                   ORDER BY pub_date DESC LIMIT 70"]' timed out after 60 seconds
+[17:19:31]   3순위 이전: 신규 0개
+[17:19:31]   총 기사 풀: 0개
+[2026-06-21 17:19:31]   기사 없음 → 스킵
+[2026-06-21 17:19:31]   ⏳ 2번째 재시도 (5분 대기)...
+[2026-06-21 17:24:31] 🚀 v3 실행 시작 (시도 2/3)
+[17:25:31]   ⚠️ D1 오류: Command '['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', "SELECT n.id, n.title, n.link, n.description, n.source, n.pub_date,\n                      COALESCE(bi.comment, '') as comment\n               FROM news n\n               JOIN briefing_items bi ON bi.news_id = n.id\n               JOIN briefings b ON b.id = bi.briefing_id\n               WHERE b.date = '2026-06-21' AND b.status = 'published'\n               GROUP BY n.id ORDER BY bi.sort_order ASC"]' timed out after 60 seconds
+[17:25:31]   1순위 브리핑: 0개 → 신규 0개
+[17:26:31]   ⚠️ D1 오류: Command '['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', "SELECT id, title, link, description, source, pub_date, '' as comment\n               FROM news\n               WHERE pub_date >= date('now', '-7 days')\n               ORDER BY pub_date DESC LIMIT 1000"]' timed out after 60 seconds
+[17:26:31]   2순위 최근7일: 0개 중 신규 0개
+[17:26:34]   3순위 이전: 신규 70개
+[17:26:34]   총 기사 풀: 70개
+[2026-06-21 17:26:34]   기사: 70개 로드
+[2026-06-21 17:26:34]   피치 생성...
+[17:26:34]   피치 이력: 21개 존재
+[17:26:34]   70개 기사 단일 호출...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[17:26:38]   → 3개 피치 발견 (DiffusionGemma)
+  [모델] OpenAI gpt-4o-mini
+[17:26:41]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 AI 모델과 정부의 조치가 포함되어 있으며, 방향도 일치함.) direction_ok=True
+[17:26:41]   ✅ 피치 통과: 5점
+[17:26:41]   ✅ TOP 1: "미국 정부가 Anthropic의 최상위 AI 모델 'Fable 5' 등에 대해 사용 중단 명령을 내렸다." (충격)
+[17:26:41]      기사: ['31318']
+[2026-06-21 17:26:41]   ✅ 피치: "미국 정부가 Anthropic의 최상위 AI 모델 'Fable 5' 등에" (충격)
+[2026-06-21 17:26:41]      기사: ['31318']
+[2026-06-21 17:26:41]   쓰레드 작성...
+[17:26:47]   📰 크롤링: https://www.aitimes.kr/news/articleView.html?idxno... (4106자)
+[17:26:47]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[17:26:51]     → 연도 검증 통과: 쓰레드 연도 {2026} ⊆ 허용 {2026}
+[17:26:53]   ✅ 쓰레드: 6개 조각 (시도 1)
+[17:26:53]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-21-17_미국정부가Anthropic의최상위AI.txt
+[2026-06-21 17:26:53]   ✅ 6개 조각 작성 완료
+[2026-06-21 17:26:53]   발행 시작...
+[17:27:02]   카드 1/6 발행: 18162286234393277
+[17:27:17]   카드 2/6 발행: 18156487741483638
+[17:27:31]   카드 3/6 발행: 17891884797376730
+[17:27:48]   카드 4/6 발행: 18122516017677527
+[17:28:03]   카드 5/6 발행: 18597844879058351
+[17:28:18]   카드 6/6 발행: 18086653109112580
+[17:28:21]   posted.json 업데이트 완료
+[2026-06-21 17:28:21]   ✅ 발행 완료: 루트 ID 18162286234393277
+[2026-06-21 17:28:21]   다음 실행: 2026-06-21 19:28:21
+[2026-06-21 19:28:21] 🚀 v3 실행 시작 (시도 1/3)
+[19:28:24]   1순위 브리핑: 5개 → 신규 1개
+[19:28:25]   2순위 최근7일: 1000개 중 신규 963개
+[19:28:25]   총 기사 풀: 964개
+[2026-06-21 19:28:25]   기사: 964개 로드
+[2026-06-21 19:28:25]   피치 생성...
+[19:28:26]   피치 이력: 22개 존재
+[19:28:26]   500개 기사 단일 호출...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[19:28:41]   → 3개 피치 발견 (DiffusionGemma)
+  [모델] OpenAI gpt-4o-mini
+[19:28:42]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 날짜와 기업명이 포함되어 있으며, 방향도 일치하여 높은 점수를 받았습니다.) direction_ok=True
+[19:28:42]   ✅ 피치 통과: 5점
+[19:28:42]   ✅ TOP 1: "2026년 4월 29일, OpenAI가 MS 독점 계약을 해지한 단 하루 만에 AWS에 진출했다." (놀라움)
+[19:28:42]      기사: [21681]
+[2026-06-21 19:28:42]   ✅ 피치: "2026년 4월 29일, OpenAI가 MS 독점 계약을 해지한 단 하루" (놀라움)
+[2026-06-21 19:28:42]      기사: [21681]
+[2026-06-21 19:28:42]   쓰레드 작성...
+[19:28:45]   📰 크롤링: https://the-decoder.com/openai-lands-on-aws-one-da... (2922자)
+[19:28:45]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[19:28:48]     → 연도 검증 통과: 쓰레드 연도 {2026} ⊆ 허용 {2026}
+[19:28:50]   ✅ 쓰레드: 6개 조각 (시도 1)
+[19:28:50]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-21-19_2026년4월29일OpenAI가MS독.txt
+[2026-06-21 19:28:50]   ✅ 6개 조각 작성 완료
+[2026-06-21 19:28:50]   발행 시작...
+[19:28:59]   카드 1/6 발행: 18108025477829554
+[19:29:09]   ❌ 카드 2 컨테이너 생성 실패
+[2026-06-21 19:29:09]   ❌ 발행 실패 (시도 1/3)
+[2026-06-21 19:29:09]   ⏳ 2번째 재시도 (5분 대기)...
+[2026-06-21 19:34:09] 🚀 v3 실행 시작 (시도 2/3)
+[19:34:11]   1순위 브리핑: 5개 → 신규 1개
+[19:34:12]   2순위 최근7일: 1000개 중 신규 963개
+[19:34:12]   총 기사 풀: 964개
+[2026-06-21 19:34:12]   기사: 964개 로드
+[2026-06-21 19:34:12]   피치 생성...
+[19:34:12]   피치 이력: 23개 존재
+[19:34:12]   500개 기사 단일 호출...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[19:34:28]   → 3개 피치 발견 (DiffusionGemma)
+  [모델] OpenAI gpt-4o-mini
+[19:34:30]   평가: 5점/통과 (상식충돌이 명확하고, 구체적인 정보와 여러 출처가 연결되어 있으며, 방향도 일치함.) direction_ok=True
+[19:34:30]   ✅ 피치 통과: 5점
+[19:34:30]   ✅ TOP 1: "수학 문제는 AI의 한계로 여겨졌으나, 이제 수학은 AI가 인간 수준의 지능(AGI)으로 가는 마지막 열쇠가 되었다." (자부심)
+[19:34:30]      기사: [21680, 24714]
+[2026-06-21 19:34:30]   ✅ 피치: "수학 문제는 AI의 한계로 여겨졌으나, 이제 수학은 AI가 인간 수준의 " (자부심)
+[2026-06-21 19:34:30]      기사: [21680, 24714]
+[2026-06-21 19:34:30]   쓰레드 작성...
+[19:34:31]   📰 크롤링: https://the-decoder.com/openai-researchers-explain... (4971자)
+[19:34:32]   📰 크롤링: https://openai.com/index/model-disproves-discrete-... (13125자)
+[19:34:32]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[19:34:38]     → hook 불일치: 첫 줄 시작="학 문제는 AI의 한계로 여겨졌으나, 이제 수학은 AI..." 예상 hook[:8]="수학 문제는 A"
+[19:34:38]   ⚠️ 검증 실패: 5개 조각 (시도 1/2)
+[19:34:38]   쓰레드 생성 중...
+  [모델] NVIDIA google/diffusiongemma-26b-a4b-it
+[19:34:43]     → hook 불일치: 첫 줄 시작="학 문제는 AI의 한계로 여겨졌으나, 이제 수학은 AI..." 예상 hook[:8]="수학 문제는 A"
+[19:34:43]   ⚠️ 검증 실패: 5개 조각 (시도 2/2)
+[19:34:43]   ❌ 2회 재시도 실패 → GPT-4o-mini fallback 1회
+[19:34:43]   쓰레드 생성 중... (GPT-4o-mini fallback)
+  [모델] OpenAI gpt-4o-mini
+[19:34:52]     → 연도 검증 통과: 쓰레드 연도 {2026} ⊆ 허용 {2026, 2005}
+[19:34:54]   ✅ 쓰레드: 6개 조각 (GPT-4o-mini fallback 성공)
+[19:34:54]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-21-19_수학문제는AI의한계로여겨졌으나이제수학.txt
+[2026-06-21 19:34:54]   ✅ 6개 조각 작성 완료
+[2026-06-21 19:34:54]   발행 시작...
+[19:35:02]   카드 1/6 발행: 18108770212764276
+[19:35:16]   카드 2/6 발행: 18070909067361456
+[19:35:31]   카드 3/6 발행: 18102723346877573
+[19:35:46]   카드 4/6 발행: 18154389046489480
+[19:36:00]   카드 5/6 발행: 18061133444721091
+[19:36:19]   카드 6/6 발행: 18086620295426998
+[19:36:22]   posted.json 업데이트 완료
+[2026-06-21 19:36:22]   ✅ 발행 완료: 루트 ID 18108770212764276
+[2026-06-21 19:36:22]   다음 실행: 2026-06-21 21:36:22

@@ -53,7 +53,9 @@
     "20653",
     "22698",
     "39586",
-    "30636"
+    "30636",
+    31318,
+    21680
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -104,7 +106,9 @@
     "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums/",
     "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions/",
     "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums/",
-    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c"
+    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
+    "https://www.aitimes.kr/news/articleView.html?idxno=40492",
+    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi/"
   ],
   "history": [
     {
@@ -237,6 +241,18 @@
       "link": "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
       "title": "하버드 비즈니스 리뷰, AI ‘작업 노폐물’이 기업을 내부에서 부패시키고 있다고 경고하다",
       "posted_at": "2026-06-21T15:45:47.709097"
+    },
+    {
+      "id": 31318,
+      "link": "https://www.aitimes.kr/news/articleView.html?idxno=40492",
+      "title": "美 정부, 앤트로픽 최고 성능 AI 사용 전격 중단 명령…AI 수출통제 시대 본격 개막",
+      "posted_at": "2026-06-21T17:28:21.593551"
+    },
+    {
+      "id": 21680,
+      "link": "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi/",
+      "title": "오픈AI 연구원들, 수학이 AGI로 가는 길인 이유 설명",
+      "posted_at": "2026-06-21T19:36:22.382583"
     }
   ],
   "last_reset": "2026-06-18",
@@ -415,6 +431,28 @@
       "article_ids": [
         39586,
         30636
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "미국 정부가 Anthropic의 최상위 AI 모델 'F",
+      "article_ids": [
+        "31318"
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "2026년 4월 29일, OpenAI가 MS 독점 계약",
+      "article_ids": [
+        21681
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "수학 문제는 AI의 한계로 여겨졌으나, 이제 수학은 A",
+      "article_ids": [
+        21680,
+        24714
       ],
       "date": "2026-06-21"
     }
