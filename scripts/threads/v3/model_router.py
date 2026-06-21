@@ -34,8 +34,8 @@ load_env()
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 # 기사 선택용 (pitcher)
 NVIDIA_MODEL = "google/diffusiongemma-26b-a4b-it"
-# 쓰레드 작성용 (writer)
-WRITER_NVIDIA_MODEL = "google/gemma-3n-e4b-it"
+# 쓰레드 작성용 (writer) — DiffusionGemma 사용
+WRITER_NVIDIA_MODEL = "google/diffusiongemma-26b-a4b-it"
 
 # === Fallback: OpenAI ===
 OPENAI_MODEL_FALLBACK = "gpt-4o-mini"
