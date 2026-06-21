@@ -194,11 +194,13 @@ def write_thread(pitch, all_articles):
     for attempt in range(max_attempts):
         try:
             log(f'  쓰레드 생성 중...')
+            from v3.model_router import WRITER_NVIDIA_MODEL
             content = chat_completion(
                 system_prompt=build_system_prompt(),
                 messages=[{'role': 'user', 'content': user_prompt}],
                 temperature=0.7,
                 max_tokens=5000,
+                nvidia_model=WRITER_NVIDIA_MODEL,
             )
             if not content:
                 raise Exception('모델 응답 없음')

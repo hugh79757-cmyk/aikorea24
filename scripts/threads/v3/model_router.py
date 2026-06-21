@@ -32,7 +32,10 @@ load_env()
 
 # === NVIDIA DiffusionGemma 설정 ===
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
+# 기사 선택용 (pitcher)
 NVIDIA_MODEL = "google/diffusiongemma-26b-a4b-it"
+# 쓰레드 작성용 (writer)
+WRITER_NVIDIA_MODEL = "google/gemma-3n-e4b-it"
 
 # === Fallback: OpenAI ===
 OPENAI_MODEL_FALLBACK = "gpt-4o-mini"
@@ -49,12 +52,14 @@ def get_openai_client():
         return None
     return OpenAI(api_key=api_key)
 
-def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None):
+def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, nvidia_model=None):
     """
     통합 채팅 completions 함수
-    - 1순위: NVIDIA DiffusionGemma 26B
-    - 2순위: OpenAI GPT-4o (fallback)
+    - 1순위: NVIDIA 모델 (지정 가능, 기본=DiffusionGemma 26B)
+    - 2순위: OpenAI GPT-4o-mini (fallback)
     
+    nvidia_model: 사용할 NVIDIA 모델명 (기본=NVIDIA_MODEL)
+    model_override='openai': NVIDIA 스킵
     Returns: 응답 텍스트 (string), 실패 시 None
     """
     # system_prompt 처리
@@ -63,14 +68,15 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
     
-    # 1순위: NVIDIA DiffusionGemma
+    # 1순위: NVIDIA 모델
     if model_override != "openai":
         nv_client = get_nvidia_client()
         if nv_client:
+            active_model = nvidia_model or NVIDIA_MODEL
             try:
-                print(f'  [모델] NVIDIA {NVIDIA_MODEL}')
+                print(f'  [모델] NVIDIA {active_model}')
                 resp = nv_client.chat.completions.create(
-                    model=NVIDIA_MODEL,
+                    model=active_model,
                     messages=full_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,

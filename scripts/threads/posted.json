@@ -42,7 +42,8 @@
     21693,
     21679,
     21631,
-    32903
+    32903,
+    32865
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -84,7 +85,8 @@
     "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/",
     "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat/",
     "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/",
-    "https://n.news.naver.com/mnews/article/001/0016149675?sid=105"
+    "https://n.news.naver.com/mnews/article/001/0016149675?sid=105",
+    "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long"
   ],
   "history": [
     {
@@ -199,6 +201,12 @@
       "link": "https://n.news.naver.com/mnews/article/001/0016149675?sid=105",
       "title": "네이버 검색 80% 찍었다…AI탭 출시 후 점유율 '껑충'",
       "posted_at": "2026-06-21T10:50:26.091989"
+    },
+    {
+      "id": 32865,
+      "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long",
+      "title": "중국, 내년 이전에 Fable 5급 AI 모델 개발 예정",
+      "posted_at": "2026-06-21T13:20:13.605815"
     }
   ],
   "last_reset": "2026-06-18",
@@ -301,6 +309,13 @@
         30446,
         30651,
         30763
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 생산성을 높여줄 줄 알았는데, 실제로는 'AI ",
+      "article_ids": [
+        32823
       ],
       "date": "2026-06-21"
     }
