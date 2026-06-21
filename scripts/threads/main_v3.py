@@ -136,6 +136,15 @@ def run_v3(dry_run=False):
         result = publish_thread_chain(cards, publish_article)
         if result:
             log(f'  ✅ 발행 완료: 루트 ID {result}')
+            # 피치의 모든 article_ids 저장 (보조 기사 중복 방지)
+            from db_reader import load_posted, save_posted
+            posted = load_posted()
+            for aid in pitch.get('article_ids', []):
+                aid_str = str(aid).lstrip('#').strip()
+                if aid_str not in posted.get('posted_ids', []):
+                    posted.setdefault('posted_ids', []).append(aid_str)
+            save_posted(posted)
+            log(f'  ✅ posted_ids 업데이트: {len(pitch.get(\"article_ids\", []))}개 기사 등록')
             next_run = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
             log(f'  다음 실행: {next_run}')
             return
