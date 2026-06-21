@@ -8,7 +8,7 @@
       "ChatGPT",
       "OpenAI"
     ],
-    "intent": "쳇지티피 정보 검색",
+    "intent": "쳇GPT 정보 검색",
     "source": "seed"
   },
   "챗지피티무료": {
@@ -16,11 +16,11 @@
     "competition": "중간",
     "grade": "A",
     "db_query": [
-      "챗지피티 무료",
+      "챗지피티무료",
       "ChatGPT free",
       "무료 AI 챗봇"
     ],
-    "intent": "무료 챗지피티 사용법",
+    "intent": "무료 챗GPT 찾기",
     "source": "seed"
   },
   "마음AI": {
@@ -44,7 +44,7 @@
       "로맨스 판타지 AI",
       "AI 소설 생성"
     ],
-    "intent": "로판AI 활용법",
+    "intent": "로맨스 판타지 AI",
     "source": "seed"
   },
   "영어해석기": {
@@ -52,11 +52,11 @@
     "competition": "중간",
     "grade": "A",
     "db_query": [
-      "영어 해석기",
+      "영어해석기",
       "English translator",
-      "번역기 추천"
+      "번역기"
     ],
-    "intent": "영어 해석기 추천",
+    "intent": "영어 해석기 찾기",
     "source": "seed"
   },
   "누끼따기사이트": {
@@ -64,11 +64,11 @@
     "competition": "중간",
     "grade": "A",
     "db_query": [
-      "누끼 따기",
-      "background remover",
-      "이미지 배경 제거"
+      "누끼따기사이트",
+      "배경 제거 사이트",
+      "AI 배경 제거"
     ],
-    "intent": "누끼 따기 사이트 찾기",
+    "intent": "누끼 따기 사이트 검색",
     "source": "seed"
   },
   "표절검사기": {
@@ -76,11 +76,11 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "표절 검사기",
+      "표절검사기",
       "plagiarism checker",
-      "표절 확인 도구"
+      "표절 검사 도구"
     ],
-    "intent": "표절 검사기 비교",
+    "intent": "표절 검사기 찾기",
     "source": "seed"
   },
   "웍스AI": {
@@ -90,9 +90,9 @@
     "db_query": [
       "웍스AI",
       "Works AI",
-      "AI 비즈니스 솔루션"
+      "AI 업무 도구"
     ],
-    "intent": "웍스AI 정보 탐색",
+    "intent": "웍스AI 정보 검색",
     "source": "seed"
   },
   "지티피": {
@@ -104,7 +104,7 @@
       "GPT",
       "AI 모델"
     ],
-    "intent": "지티피 관련 정보",
+    "intent": "GPT 관련 정보",
     "source": "seed"
   },
   "CHATGPT유료": {
@@ -112,11 +112,11 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "CHATGPT 유료",
-      "ChatGPT subscription",
+      "CHATGPT유료",
+      "ChatGPT paid",
       "유료 AI 서비스"
     ],
-    "intent": "유료 CHATGPT 서비스",
+    "intent": "유료 챗GPT 정보",
     "source": "seed"
   },
   "윈도우11다운로드": {
@@ -124,11 +124,11 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "윈도우11 다운로드",
+      "윈도우11다운로드",
       "Windows 11 download",
-      "윈도우 11 설치"
+      "윈도우11 설치"
     ],
-    "intent": "윈도우 11 다운로드 방법",
+    "intent": "윈도우11 다운로드",
     "source": "seed"
   },
   "윈도우11정품": {
@@ -136,11 +136,11 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "윈도우11 정품",
+      "윈도우11정품",
       "Windows 11 genuine",
-      "정품 소프트웨어"
+      "정품 인증"
     ],
-    "intent": "윈도우 11 정품 구매",
+    "intent": "윈도우11 정품 확인",
     "source": "seed"
   },
   "전자사전": {
@@ -152,7 +152,7 @@
       "electronic dictionary",
       "사전 앱"
     ],
-    "intent": "전자사전 추천",
+    "intent": "전자사전 정보 검색",
     "source": "seed"
   },
   "이미지검색": {
@@ -160,7 +160,7 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "이미지 검색",
+      "이미지검색",
       "image search",
       "사진 검색"
     ],
@@ -172,9 +172,9 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "마이크로소프트 스토어",
+      "마이크로소프트스토어",
       "Microsoft Store",
-      "소프트웨어 구매"
+      "MS 앱"
     ],
     "intent": "MS 스토어 정보",
     "source": "seed"
@@ -200,7 +200,7 @@
       "깃허브",
       "코드 저장소"
     ],
-    "intent": "GITHUB 사용법",
+    "intent": "GITHUB 정보 검색",
     "source": "seed"
   },
   "MS365": {
@@ -212,7 +212,7 @@
       "Microsoft 365",
       "오피스 365"
     ],
-    "intent": "MS365 정보 검색",
+    "intent": "MS365 관련 정보",
     "source": "seed"
   },
   "윈도우11시디키": {
@@ -220,11 +220,11 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "윈도우11 시디키",
+      "윈도우11시디키",
       "Windows 11 CD key",
-      "정품 키 구매"
+      "정품 키"
     ],
-    "intent": "윈도우 11 시디키 구매",
+    "intent": "윈도우11 시디키 찾기",
     "source": "seed"
   },
   "ONEDRIVE": {
@@ -236,7 +236,7 @@
       "원드라이브",
       "클라우드 저장소"
     ],
-    "intent": "OneDrive 사용법",
+    "intent": "OneDrive 정보 검색",
     "source": "seed"
   },
   "엑셀구매": {
@@ -244,9 +244,9 @@
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "엑셀 구매",
+      "엑셀구매",
       "Excel purchase",
-      "MS Excel"
+      "MS Excel 구매"
     ],
     "intent": "엑셀 구매 방법",
     "source": "seed"
@@ -272,7 +272,7 @@
       "ChatGPT",
       "AI 챗봇"
     ],
-    "intent": "챗GPT 정보 탐색",
+    "intent": "챗GPT 정보 검색",
     "source": "seed"
   },
   "인공지능": {
@@ -284,7 +284,7 @@
       "Artificial Intelligence",
       "AI 기술"
     ],
-    "intent": "인공지능 기술 탐색",
+    "intent": "인공지능 정보 검색",
     "source": "seed"
   },
   "AI이미지": {
@@ -294,7 +294,7 @@
     "db_query": [
       "AI이미지",
       "AI image",
-      "이미지 생성 AI"
+      "이미지 생성"
     ],
     "intent": "AI 이미지 생성",
     "source": "seed"
@@ -304,9 +304,9 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI 동영상",
+      "AI동영상",
       "AI video",
-      "동영상 생성 AI"
+      "동영상 생성"
     ],
     "intent": "AI 동영상 생성",
     "source": "seed"
@@ -316,9 +316,9 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI 음악",
+      "AI음악",
       "AI music",
-      "음악 생성 AI"
+      "음악 생성"
     ],
     "intent": "AI 음악 생성",
     "source": "seed"
@@ -328,9 +328,9 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI 글쓰기",
+      "AI글쓰기",
       "AI writing",
-      "글쓰기 보조 AI"
+      "글쓰기 도구"
     ],
     "intent": "AI 글쓰기 도구",
     "source": "seed"
@@ -340,11 +340,11 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI 번역",
+      "AI번역",
       "AI translation",
-      "번역 AI"
+      "번역 도구"
     ],
-    "intent": "AI 번역 서비스",
+    "intent": "AI 번역기 찾기",
     "source": "seed"
   },
   "AI요약": {
@@ -352,251 +352,251 @@
     "competition": "높음",
     "grade": "A",
     "db_query": [
-      "AI 요약",
+      "AI요약",
       "AI summarization",
-      "요약 AI"
+      "요약 도구"
     ],
     "intent": "AI 요약 도구",
     "source": "seed"
   },
-  "제타": {
-    "search_volume": 504500,
-    "competition": "높음",
-    "grade": "S",
-    "db_query": [
-      "제타",
-      "Zeta",
-      "AI 플랫폼"
-    ],
-    "intent": "제타 AI 정보",
-    "source": "news"
-  },
-  "스캐터랩": {
-    "search_volume": 2260,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "스캐터랩",
-      "Scatter Lab",
-      "AI 챗봇 서비스"
-    ],
-    "intent": "스캐터랩 AI 서비스",
-    "source": "news"
-  },
-  "Fable 5급 AI": {
-    "search_volume": 0,
+  "허드슨에이아이": {
+    "search_volume": 100,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "Fable 5급 AI",
-      "Fable AI",
-      "AI 기술"
+      "허드슨에이아이",
+      "Hudson AI",
+      "AI 스타트업"
     ],
-    "intent": "Fable AI 정보",
+    "intent": "허드슨 AI 정보",
     "source": "news"
   },
-  "베슬AI": {
-    "search_volume": 1690,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "베슬AI",
-      "Vessel AI",
-      "AI 플랫폼"
-    ],
-    "intent": "베슬AI 정보 검색",
-    "source": "news"
-  },
-  "네오클라우드": {
-    "search_volume": 3360,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "네오클라우드",
-      "Neo Cloud",
-      "클라우드 서비스"
-    ],
-    "intent": "네오클라우드 서비스",
-    "source": "news"
-  },
-  "오픈AI": {
-    "search_volume": 62200,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "오픈AI",
-      "OpenAI",
-      "AI 연구소"
-    ],
-    "intent": "오픈AI 관련 정보",
-    "source": "news"
-  },
-  "트레이니엄": {
+  "크랭크GPT": {
     "search_volume": 20,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "트레이니엄",
-      "Trainium",
-      "AI 하드웨어"
-    ],
-    "intent": "트레이니엄 AI 정보",
-    "source": "news"
-  },
-  "퍼플렉시티": {
-    "search_volume": 112400,
-    "competition": "중간",
-    "grade": "S",
-    "db_query": [
-      "퍼플렉시티",
-      "Perplexity AI",
-      "AI 검색 엔진"
-    ],
-    "intent": "퍼플렉시티 AI 정보",
-    "source": "news"
-  },
-  "브레인": {
-    "search_volume": 4290,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "브레인",
-      "Brain AI",
-      "AI 기술"
-    ],
-    "intent": "브레인 AI 정보",
-    "source": "news"
-  },
-  "ARD": {
-    "search_volume": 650,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "ARD",
-      "AI 연구",
-      "AI 개발"
-    ],
-    "intent": "ARD AI 정보",
-    "source": "news"
-  },
-  "삼성 AI 모듈러 홈": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "삼성 AI 모듈러 홈",
-      "Samsung AI Modular Home",
-      "스마트 홈 AI"
-    ],
-    "intent": "삼성 AI 홈 정보",
-    "source": "news"
-  },
-  "옴니 RAG": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "옴니 RAG",
-      "Omni RAG",
-      "AI 정보 검색"
-    ],
-    "intent": "옴니 RAG 정보",
-    "source": "news"
-  },
-  "아카식DB": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "아카식DB",
-      "Akashic DB",
-      "데이터베이스 AI"
-    ],
-    "intent": "아카식DB 정보 검색",
-    "source": "news"
-  },
-  "마틸로AI": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "마틸로AI",
-      "Matilo AI",
-      "AI 플랫폼"
-    ],
-    "intent": "마틸로AI 정보",
-    "source": "news"
-  },
-  "AI 캠퍼스": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "AI 캠퍼스",
-      "AI Campus",
-      "AI 교육"
-    ],
-    "intent": "AI 캠퍼스 정보",
-    "source": "news"
-  },
-  "팬털라사": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "팬털라사",
-      "Pantelasa",
-      "AI 기술"
-    ],
-    "intent": "팬털라사 AI 정보",
-    "source": "news"
-  },
-  "에이전트카드": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "에이전트카드",
-      "Agent Card",
-      "AI 도구"
-    ],
-    "intent": "에이전트카드 정보",
-    "source": "news"
-  },
-  "클로드": {
-    "search_volume": 777100,
-    "competition": "낮음",
-    "grade": "S",
-    "db_query": [
-      "클로드",
-      "Claude",
+      "크랭크GPT",
+      "CrankGPT",
       "AI 모델"
     ],
-    "intent": "클로드 AI 정보",
+    "intent": "크랭크GPT 정보",
     "source": "news"
   },
-  "앤트로픽": {
-    "search_volume": 89000,
-    "competition": "중간",
-    "grade": "A",
-    "db_query": [
-      "앤트로픽",
-      "Anthropic",
-      "AI 연구소"
-    ],
-    "intent": "앤트로픽 정보 검색",
-    "source": "news"
-  },
-  "딥시크V4": {
-    "search_volume": 190,
+  "AI 하드웨어": {
+    "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "딥시크V4",
-      "DeepSeek V4",
-      "AI 검색 엔진"
+      "AI 하드웨어",
+      "AI hardware",
+      "AI 기기"
     ],
-    "intent": "딥시크V4 정보",
+    "intent": "AI 하드웨어 정보",
+    "source": "news"
+  },
+  "뉴로모픽": {
+    "search_volume": 840,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "뉴로모픽",
+      "neuromorphic",
+      "AI 기술"
+    ],
+    "intent": "뉴로모픽 기술 검색",
+    "source": "news"
+  },
+  "제미나이": {
+    "search_volume": 7994500,
+    "competition": "높음",
+    "grade": "S",
+    "db_query": [
+      "제미나이",
+      "Gemini",
+      "AI 모델"
+    ],
+    "intent": "제미나이 정보 검색",
+    "source": "news"
+  },
+  "GPT-5.6": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "GPT-5.6",
+      "GPT 5.6",
+      "AI 모델"
+    ],
+    "intent": "GPT-5.6 정보",
+    "source": "news"
+  },
+  "비욘드허니컴": {
+    "search_volume": 860,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "비욘드허니컴",
+      "Beyond Honeycomb",
+      "AI 기술"
+    ],
+    "intent": "비욘드허니컴 정보",
+    "source": "news"
+  },
+  "D2SF": {
+    "search_volume": 110,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "D2SF",
+      "D2SF AI",
+      "AI 스타트업"
+    ],
+    "intent": "D2SF 관련 정보",
+    "source": "news"
+  },
+  "SK텔레콤": {
+    "search_volume": 873300,
+    "competition": "중간",
+    "grade": "S",
+    "db_query": [
+      "SK텔레콤",
+      "SK Telecom",
+      "통신사"
+    ],
+    "intent": "SK텔레콤 정보 검색",
+    "source": "news"
+  },
+  "소상공인 AI 도우미": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "소상공인 AI 도우미",
+      "AI for small business",
+      "AI 지원"
+    ],
+    "intent": "소상공인 AI 도우미 정보",
+    "source": "news"
+  },
+  "지정권 세일포인트": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "지정권 세일포인트",
+      "Sales Point",
+      "세일즈 전략"
+    ],
+    "intent": "지정권 세일포인트 정보",
+    "source": "news"
+  },
+  "경상국립대학교병원": {
+    "search_volume": 4440,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "경상국립대학교병원",
+      "Gyeongsang National University Hospital",
+      "병원 정보"
+    ],
+    "intent": "경상국립대학교병원 정보",
+    "source": "news"
+  },
+  "ETA": {
+    "search_volume": 25530,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "ETA",
+      "Estimated Time of Arrival",
+      "시간 예측"
+    ],
+    "intent": "ETA 관련 정보",
+    "source": "news"
+  },
+  "E2E 퀀텀 시큐리티": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "E2E 퀀텀 시큐리티",
+      "E2E Quantum Security",
+      "보안 기술"
+    ],
+    "intent": "E2E 퀀텀 시큐리티 정보",
+    "source": "news"
+  },
+  "커넥티드 케어": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "커넥티드 케어",
+      "Connected Care",
+      "헬스케어 기술"
+    ],
+    "intent": "커넥티드 케어 정보",
+    "source": "news"
+  },
+  "LG 트롬 AI 오브제컬렉션": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "LG 트롬 AI 오브제컬렉션",
+      "LG Trom AI",
+      "가전제품"
+    ],
+    "intent": "LG 트롬 AI 정보",
+    "source": "news"
+  },
+  "메디트론FO": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "메디트론FO",
+      "Meditron FO",
+      "의료 기술"
+    ],
+    "intent": "메디트론FO 정보",
+    "source": "news"
+  },
+  "전자코": {
+    "search_volume": 390,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "전자코",
+      "Electronic Nose",
+      "센서 기술"
+    ],
+    "intent": "전자코 정보 검색",
+    "source": "news"
+  },
+  "AI OPC": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI OPC",
+      "AI Open Process Control",
+      "AI 기술"
+    ],
+    "intent": "AI OPC 정보",
+    "source": "news"
+  },
+  "AI 칩워": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "AI 칩워",
+      "AI Chip War",
+      "반도체 기술"
+    ],
+    "intent": "AI 칩워 정보",
     "source": "news"
   }
 }

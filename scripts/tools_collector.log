@@ -276,3 +276,49 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 8개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  GitHub Awesome AI Tools: 10개 (주간 업데이트)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  총 19개 (중복 제거 후)
+수집 완료: 19개
+기존 툴: 97개 (슬러그), 96개 (이름)
+  중복 스킵: Mellum by JetBrains
+  중복 스킵: Claude Code Artifacts
+  중복 스킵: Mutter AI Dictation
+  중복 스킵: Zernio WhatsApp API
+  중복 스킵: Upsolve AI
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+  중복 스킵: Moonbeam
+  중복 스킵: copy.ai
+  중복 스킵: Anyword
+  중복 스킵: Moebius: 0.2B Lightweight Image Inpainting Framewo
+신규 툴: 3개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (3건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/grok-by-spacexai-for-word.md
+  ✅ Grok by SpaceXAI for Word → grok-by-spacexai-for-word.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/atomic-mail-agentic.md
+  ✅ Atomic Mail Agentic → atomic-mail-agentic.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/plansera-ai.md
+  ✅ Plansera AI → plansera-ai.md
+
+==================================================
+처리 완료: 3/19개 생성 (8.6초)
+  git commit: [main ffc73d0] feat: AI 툴 3개 추가 (2026-06-22)
+ 10 files changed, 644 insertions(+), 2 deletions(-)
+ create mode 100644 scripts/threads/logs/2026-06-22.log
+ create mode 100644 "scripts/threads/logs/draf
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

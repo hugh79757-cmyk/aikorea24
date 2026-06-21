@@ -109,6 +109,7 @@ def publish_thread_chain(cards, article):
                 if 'id' in data:
                     container_id = data['id']
                     break
+                log(f'  컨테이너 응답 (id 없음): {str(data)[:200]}')
                 if data.get('error', {}).get('code') == 190:
                     log(f'  토큰 만료 → 갱신')
                     new_tok = refresh_token()
@@ -138,9 +139,10 @@ def publish_thread_chain(cards, article):
                 if 'id' in data2:
                     post_id = data2['id']
                     break
+                log(f'  발행 응답 (id 없음): {str(data2)[:200]}')
             except Exception as e:
                 log(f'  발행 시도 {attempt+1}/3 실패: {e}')
-            time.sleep(2)
+            time.sleep(10)
         else:
             log(f'  ❌ 카드 {i+1} 발행 실패')
             return None
