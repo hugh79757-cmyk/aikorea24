@@ -51,7 +51,9 @@
     "32826",
     "22766",
     "20653",
-    "22698"
+    "22698",
+    "39586",
+    "30636"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -101,7 +103,8 @@
     "https://huggingface.co/blog/ibm-research/itbench-aa",
     "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums/",
     "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions/",
-    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums/"
+    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums/",
+    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c"
   ],
   "history": [
     {
@@ -404,6 +407,14 @@
         22766,
         20653,
         22698
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "똑똑한 AI가 모든 문제를 해결해 줄 줄 알았지만, 실",
+      "article_ids": [
+        39586,
+        30636
       ],
       "date": "2026-06-21"
     }

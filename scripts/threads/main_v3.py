@@ -122,10 +122,18 @@ def run_v3(dry_run=False):
             print(f'\n{"="*60}')
             return
 
-        # 4. 발행
+        # 4. 발행 (실제 사용한 기사 ID로 posted.json 저장)
         from publisher import publish_thread_chain
         log('  발행 시작...')
-        result = publish_thread_chain(cards, articles[0])
+        # article_ids[0]의 실제 기사 찾기 (중복 발행 방지)
+        pitch_id = str(pitch.get('article_ids', [None])[0]).lstrip('#').strip() if pitch.get('article_ids') else None
+        publish_article = articles[0]  # fallback
+        if pitch_id:
+            for a in articles:
+                if str(a.get('id', '')) == pitch_id:
+                    publish_article = a
+                    break
+        result = publish_thread_chain(cards, publish_article)
         if result:
             log(f'  ✅ 발행 완료: 루트 ID {result}')
             next_run = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
