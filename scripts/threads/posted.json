@@ -39,7 +39,9 @@
     "26410",
     32698,
     21686,
-    21693
+    21693,
+    21679,
+    21631
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -78,7 +80,9 @@
     "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion/",
     "https://www.gokorea.kr/news/articleView.html?idxno=869774",
     "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus/",
-    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/"
+    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/",
+    "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat/",
+    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/"
   ],
   "history": [
     {
@@ -175,6 +179,18 @@
       "link": "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips/",
       "title": "제재를 받은 중국 AI 기업 SenseTime, 속도를 위해 제작된 이미지 모델 출시",
       "posted_at": "2026-06-21T06:19:24.250654"
+    },
+    {
+      "id": 21679,
+      "link": "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat/",
+      "title": "구글 제미니, 채팅 내에서 문서, 스프레드시트, 프레젠테이션 생성 가능",
+      "posted_at": "2026-06-21T06:40:47.829880"
+    },
+    {
+      "id": 21631,
+      "link": "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv/",
+      "title": "구글 TV에 더 많은 제미니 기능이 추가됩니다",
+      "posted_at": "2026-06-21T08:42:52.995251"
     }
   ],
   "last_reset": "2026-06-18",
@@ -233,6 +249,32 @@
         32009,
         32002,
         1125
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 인간의 업무를 줄여줄 줄 알았는데, 실제로는 직",
+      "article_ids": [
+        19586,
+        30636,
+        31453
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 업무 효율을 높여줄 줄 알았는데, 실제로는 직원",
+      "article_ids": [
+        19586,
+        30636
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI 모델이 똑똑해질수록 비용은 저렴해질 줄 알았는데,",
+      "article_ids": [
+        24695,
+        24700,
+        30535
       ],
       "date": "2026-06-21"
     }
