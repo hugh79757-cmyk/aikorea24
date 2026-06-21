@@ -82,7 +82,7 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 | 우선순위 | 조건 | 설명 |
 |---------|------|------|
 | 1순위 | 오늘 briefing_items 포함 news | AI 브리핑에 선정된 핵심 기사 |
-| 2순위 | 최근 7일 news (최대 200개) | 브리핑 제외, 발행 이력 제외 |
+| 2순위 | 최근 7일 news (최대 **1000**개) | 브리핑 제외, 발행 이력 제외 |
 | 3순위 | 그 이전 (최대 30일) | 풀이 50개 미만일 때만 보충 |
 
 - `posted.json`의 `posted_ids` / `posted_links`와 대조하여 중복 제외
@@ -112,8 +112,9 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 **SYSTEM_PROMPT 핵심 설계:**
 - "상식적으로 A였어야 하는데 실제로는 B인 상황" 찾기
 - hook: 핵심 긴장 한 줄 (길이 제한 없음)
-- 2개 이상의 서로 다른 기사 연결 강제
+- 2개 이상 연결 가능. 단, 억지로 연결하지 말 것. 기사 하나로도 가능
 - `[소스 신뢰도]` 섹션: 주어-동사 방향 보존 지시
+- 고유명사는 영어 원문 사용 (Nvidia, OpenAI 등)
 
 **크롤링 정책 (변경 — 2026-06-20):**
 - 피치 선별 단계에서는 **크롤링하지 않음**
@@ -122,6 +123,7 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 - 실제 원문 크롤링은 writer_v3.py에서 선정된 2~3개 기사에 대해서만 수행
 
 **모델:** DiffusionGemma 1순위 → GPT-4o-mini fallback (model_router 경유)
+**max_articles:** 500개 (2026-06-21: 100→500)
 
 **중복 방지:**
 - `is_duplicate_pitch()`: hook[:8] 또는 narrative[:30] 또는 article_ids 집합 일치 검사
@@ -210,14 +212,15 @@ user_prompt
 ```
 
 **추론 실패 처리:**
-- DiffusionGemma 5회 시도
+- DiffusionGemma **2회** 시도 (2026-06-21: 5→2, 첫 글자 드랍 빠른 fallback)
 - 전부 실패 시 GPT-4o-mini 1회 fallback
-- 각 시도마다 `validate_cards()` 검증 (3단계):
+- 각 시도마다 `validate_cards()` 검증 (2단계):
   - 카드 수 5개 이상
   - 첫 번째 카드가 pitch hook[:8] 포함
-  - twist 키워드 커버리지 40% 이상 + 마지막 키워드(서술어) 카드 포함
-    (2026-06-20 추가: 주어-동사 방향 역전 카드 검출, 한국어 조사 제거 후 어간 매칭)
-  - 실패 시 상세 로그 출력
+  - (2026-06-21: twist 키워드 검증 제거 — 발행률 저하 주범)
+- 쓰레드 생성 성공 후 **fix_cards() 2-pass**: DiffusionGemma로 글자 단위 오류 수정
+  - 첫 글자/숫자 생략 복구, 단어 중간 음절 생략 복구, 중복/특수문자 정리
+- 실패 시 상세 로그 출력
 
 **출력 포맷팅:**
 - `---` 로 카드 구분
@@ -241,7 +244,7 @@ Threads Graph API v1.0으로 연속 답글 체인을 발행한다.
 ```
 
 - 3회 재시도, 토큰 만료 시 자동 갱신
-- 각 단계 간 3초 대기
+- 각 단계 간 **10초** 대기 (2026-06-21: 3→10초, rate limit 대응)
 
 ### 7. main_v3.py — 진입점
 
@@ -287,8 +290,9 @@ Threads Graph API v1.0으로 연속 답글 체인을 발행한다.
 - **반말체**: "~임", "~했음", "~있음", "~아님". "~합니다" 절대 금지.
 - **숫자 우선**: 기사에 있는 모든 숫자 추출. "많은", "대규모", "수십억" 금지.
 - **사실만**: 형용사·감탄사·이모지·볼드·이탤릭 전면 금지.
-- **리듬**: 한 줄 하나의 정보. 짧게 끊는다.
+- **서술**: 각 문장 2~3줄로 충분히 서술. 한 줄짜리 축약 금지. 인과관계를 설명할 것.
 - **여운**: 마지막 카드 마지막 줄은 선언이나 반전.
+- **고유명사**: 영어 원문 사용 (Nvidia, OpenAI, Huawei 등)
 
 ---
 
@@ -356,8 +360,24 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-19 | 중복 방지 강화 (dry-run posted_ids 저장, 타입 버그 수정) |
 | 2026-06-19 | 5회 시도 + GPT-4o-mini fallback, 디버그 로그 |
 | 2026-06-19 | 2시간 데몬 모드 활성화 |
-| 2026-06-20 | **피치 선별 단계 크롤링 제거** — description 원문(500자 제한 없음)으로 충분 |
-| 2026-06-20 | **쓰레드 작성 단계 전문 크롤링** — fetch_article_body() max_chars=3000 제한 제거 |
-| 2026-06-20 | **방향 정확성 평가 추가** — pitch_evaluator 4번째 기준(direction_ok) + GPT-4o-mini 전환 |
-| 2026-06-20 | **twist 키워드 검증** — validate_cards()에 서술어 포함 + 커버리지 40% 체크 |
-| 2026-06-20 | **URL 검증 시스템 추가** — db_reader에 validate_link()/find_fallback_url() 공유 함수, writer_v3 fetch_article_body()에서 크롤링 전 HEAD 검증 + fallback, assemble_final()에서 최종 URL 재검증, actual_urls[]로 fallback URL 전파 |
+| 2026-06-20 | 피치 선별 단계 크롤링 제거 |
+| 2026-06-20 | 쓰레드 작성 단계 전문 크롤링 (max_chars 제거) |
+| 2026-06-20 | 방향 정확성 평가 추가 (pitch_evaluator direction_ok) |
+| 2026-06-20 | twist 키워드 검증 추가 (커버리지 40%) |
+| 2026-06-20 | URL 검증 시스템 추가 (validate_link + fallback) |
+| 2026-06-21 | **validate_year 재설계** — pub_date 강제→본문 연도 기반 검증, hook 제외, current_year 허용 |
+| 2026-06-21 | **article_ids 타입 안전** — str/int/#접두사 혼용 대응 |
+| 2026-06-21 | **fallback(all_articles[:2]) 제거** — 매칭 실패 시 스킵 |
+| 2026-06-21 | **고유명사 영어 원문 표기** — pitcher+writer 양쪽 규칙 추가 |
+| 2026-06-21 | **twist 키워드 검증 제거** — 발행률 저하 원인, hook+연도+카드 수만 유지 |
+| 2026-06-21 | **pitch_history 30→6 정리** — dry-run/failed 제거, 실발행만 유지 |
+| 2026-06-21 | **db_reader LIMIT 200→1000**, **max_articles 100→500** — 풀 확장 |
+| 2026-06-21 | **assemble_final DB 링크 사용** — pitcher sources 제거, validate_link 3xx 거부 |
+| 2026-06-21 | **primary_url 우선** — article_ids[0] 링크를 1순위로 |
+| 2026-06-21 | **DiffusionGemma 2-pass(fix_cards) 도입** — 생성→글자 오류 수정 |
+| 2026-06-21 | **실패 시 5분×3회 재시도** — 단, 쓰레드 생성 성공 시 재시도 중단 (부분 발행 방지) |
+| 2026-06-21 | **publish_thread_chain 실제 기사 저장** — articles[0]→article_ids[0], 모든 article_ids/links 저장 |
+| 2026-06-21 | **DiffusionGemma→Gemma-3n→DiffusionGemma 복귀** — 프롬프트 순응도 |
+| 2026-06-21 | **문장 축약 금지** — "2~3줄 서술, 인과관계 설명"으로 변경 |
+| 2026-06-21 | **publisher rate limit 대응** — 카드 간 대기 3→10초, 재시도 간격 2→10초 |
+| 2026-06-21 | **fix_cards 금지 규칙 개선** — '단어 교체 금지'→'틀린 글자는 올바른 글자로 교체, 의미 유지' |
