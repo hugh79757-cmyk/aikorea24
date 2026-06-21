@@ -93,10 +93,11 @@ def publish_thread_chain(cards, article):
     trimmed = 0
     for i, card_text in enumerate(cards):
         if len(card_text) > MAX_CHARS:
-            cards[i] = card_text[:MAX_CHARS].rsplit(' ', 1)[0] + '...'
+            cards[i] = card_text[:MAX_CHARS - 3] + '...'
             trimmed += 1
+            log(f'  ✂️ 카드 {i+1}: {len(card_text)}자 → 500자로 트림')
     if trimmed:
-        log(f'  ✂️ {trimmed}개 카드 500자로 트림됨')
+        log(f'  ✂️ 총 {trimmed}개 카드 트림 완료')
 
     for i, card_text in enumerate(cards):
         params = {
