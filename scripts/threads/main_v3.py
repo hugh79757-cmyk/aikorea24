@@ -143,7 +143,7 @@ def run_v3(dry_run=False):
             log(f'  ❌ 발행 실패 — 쓰레드는 생성됨, 2시간 후 재시도')
             return  # 쓰레드는 생성됨. 발행 API 실패는 재시도로 해결 불가
 
-    log('  ❌ {max_retries}회 모두 실패 — 2시간 후 재시도')
+    log(f'  ❌ {max_retries}회 모두 실패 — 2시간 후 재시도')
 
 
 if __name__ == '__main__':

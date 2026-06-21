@@ -117,6 +117,53 @@ def fetch_article_body(url):
         log(f'  ⚠️ 크롤링 실패: {url[:50]}... ({type(e).__name__})')
         return ''
 
+def fix_cards(cards):
+    """DiffusionGemma로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
+    내용/의미/구조는 변경하지 않음
+    """
+    from v3.model_router import chat_completion, WRITER_NVIDIA_MODEL
+    text = '\n---\n'.join(cards)
+    prompt = f"""다음 Threads 쓰레드에서 글자 단위 오류만 수정하라.
+
+[수정 대상]
+- 첫 글자가 잘린 경우 복구 (예: "국 청소년" → "미국 청소년")
+- 단어 중간이 잘렸거나 깨진 문자 복구
+- 특수문자가 잘못 삽입된 경우 제거
+
+[금지]
+- 문장의 내용/의미/구조를 절대 변경하지 말 것
+- 단어를 다른 단어로 교체하지 말 것
+- 문장을 추가하거나 삭제하지 말 것
+- 문체를 변경하지 말 것
+- 수정할 게 없으면 원본을 그대로 반환할 것
+
+[출력]
+수정된 쓰레드 전체를 --- 구분자와 함께 그대로 출력하라. 원본과 동일한 카드 수를 유지할 것.
+
+--- 쓰레드 시작 ---
+{text}
+--- 쓰레드 끝 ---"""
+    try:
+        result = chat_completion(
+            messages=[{'role': 'user', 'content': prompt}],
+            temperature=0.1,
+            max_tokens=8000,
+            nvidia_model=WRITER_NVIDIA_MODEL,
+        )
+        if result:
+            fixed = [c.strip() for c in result.split('---') if c.strip()]
+            if len(fixed) == len(cards):
+                changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
+                log(f'  🔧 오류 수정: {changed}/{len(cards)}개 카드 수정됨')
+                return fixed
+            log(f'  ⚠️ 수정 후 카드 수 불일치: {len(fixed)}≠{len(cards)} → 원본 유지')
+        else:
+            log(f'  ⚠️ 수정 실패 → 원본 유지')
+    except Exception as e:
+        log(f'  ⚠️ 수정 오류: {e} → 원본 유지')
+    return cards
+
+
 def write_thread(pitch, all_articles):
     """피치 + 관련 기사 → 쓰레드 조각 리스트 (DiffusionGemma → GPT-4o-mini fallback)"""
     from v3.model_router import chat_completion
@@ -213,6 +260,7 @@ def write_thread(pitch, all_articles):
             if not content:
                 raise Exception('모델 응답 없음')
             cards = parse_cards(content)
+            cards = fix_cards(cards)
 
             if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
                 # article_ids[0] 링크를 1순위로 사용
@@ -238,6 +286,7 @@ def write_thread(pitch, all_articles):
         if not content:
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
+        cards = fix_cards(cards)
         if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
             primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
             cards = assemble_final(cards, related, primary_url)

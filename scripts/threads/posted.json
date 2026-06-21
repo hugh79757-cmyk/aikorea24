@@ -55,7 +55,8 @@
     "39586",
     "30636",
     31318,
-    21680
+    21680,
+    21658
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -108,7 +109,8 @@
     "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums/",
     "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
     "https://www.aitimes.kr/news/articleView.html?idxno=40492",
-    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi/"
+    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi/",
+    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price/"
   ],
   "history": [
     {
@@ -253,6 +255,12 @@
       "link": "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi/",
       "title": "오픈AI 연구원들, 수학이 AGI로 가는 길인 이유 설명",
       "posted_at": "2026-06-21T19:36:22.382583"
+    },
+    {
+      "id": 21658,
+      "link": "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price/",
+      "title": "GPT-5.5, 오픈AI의 가장 능력 있는 에이전트 AI 모델 등장",
+      "posted_at": "2026-06-21T21:38:31.411325"
     }
   ],
   "last_reset": "2026-06-18",
@@ -453,6 +461,16 @@
       "article_ids": [
         21680,
         24714
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "AI가 똑똑해질수록 비용은 줄어들 것 같지만, 실제로는",
+      "article_ids": [
+        21658,
+        24700,
+        31495,
+        34693
       ],
       "date": "2026-06-21"
     }
