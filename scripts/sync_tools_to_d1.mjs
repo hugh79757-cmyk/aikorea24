@@ -71,9 +71,10 @@ for (const file of files) {
   const difficulty = fm.difficulty || '';
   const url = fm.url || '';
   const featured = fm.featured === true ? 1 : 0;
+  const updatedAt = fm.updated || null;
   
   inserts.push(
-    `INSERT OR REPLACE INTO tools (name, slug, tagline, category, price, korean_support, difficulty, url, featured) VALUES (${escapeSql(name)}, ${escapeSql(slug)}, ${escapeSql(tagline)}, ${escapeSql(category)}, ${escapeSql(price)}, ${koreanSupport}, ${escapeSql(difficulty)}, ${escapeSql(url)}, ${featured});`
+    `INSERT OR REPLACE INTO tools (name, slug, tagline, category, price, korean_support, difficulty, url, featured, updated_at) VALUES (${escapeSql(name)}, ${escapeSql(slug)}, ${escapeSql(tagline)}, ${escapeSql(category)}, ${escapeSql(price)}, ${koreanSupport}, ${escapeSql(difficulty)}, ${escapeSql(url)}, ${featured}, ${escapeSql(updatedAt)});`
   );
   insertCount++;
 }

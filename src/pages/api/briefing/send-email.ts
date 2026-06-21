@@ -105,8 +105,7 @@ export const POST: APIRoute = async ({ locals }) => {
       const tools = await db.prepare(
         `SELECT name, slug, tagline, category, price, korean_support, difficulty
          FROM tools
-         WHERE featured = 1
-         ORDER BY name ASC
+         ORDER BY updated_at DESC
          LIMIT 6`
       ).all();
 
