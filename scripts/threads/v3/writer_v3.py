@@ -205,7 +205,9 @@ def write_thread(pitch, all_articles):
             cards = parse_cards(content)
 
             if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
-                cards = assemble_final(cards, related)
+                # article_ids[0] 링크를 1순위로 사용
+                primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
+                cards = assemble_final(cards, related, primary_url)
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
             else:
@@ -227,7 +229,8 @@ def write_thread(pitch, all_articles):
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
         if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
-            cards = assemble_final(cards, related)
+            primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
+            cards = assemble_final(cards, related, primary_url)
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
     except Exception as e:
@@ -319,15 +322,26 @@ def validate_year(cards, article_body_text):
     log(f'    → 연도 검증 통과: 쓰레드 연도 {rest_years} ⊆ 허용 {allowed}')
     return True
 
-def assemble_final(cards, articles):
+def assemble_final(cards, articles, primary_url=None):
     """대표 URL 1개를 마지막 카드로 추가 (DB 저장된 실제 링크 사용)
     articles: D1 DB 기사 객체 리스트 (related)
-    pitcher가 생성한 sources는 URL이 망가질 수 있으므로 사용하지 않음
+    primary_url: article_ids[0]에 해당하는 기사의 링크 (가장 우선시)
     """
     from db_reader import validate_link
+
+    # 1순위: primary_url (pitcher가 가장 중요하게 판단한 기사)
+    if primary_url:
+        if validate_link(primary_url, timeout=5):
+            cards.append(f'🔗 {primary_url}')
+            return cards
+        log(f'  ⚠️ primary URL 유효성 실패: {primary_url[:50]}...')
+
+    # 2순위: 나머지 related 기사 링크
     if articles:
         for a in articles:
             url = a.get('link', '').strip()
+            if url == primary_url:
+                continue  # 이미 시도함
             if not url or not url.startswith('http'):
                 continue
             if validate_link(url, timeout=5):
