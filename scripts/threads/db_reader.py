@@ -22,8 +22,8 @@ os.makedirs(LOGS_DIR, exist_ok=True)
 _VALIDATE_SOURCES = {'TechCrunch', 'TechCrunch AI', 'CNBC Tech', 'BBC Technology', 'BBC', 'Business Insider AI'}
 
 def validate_link(url, timeout=8):
-    """GET 요청으로 URL이 유효한지 확인 (2xx/3xx면 True)
-    HEAD 대신 GET 사용 (한국 뉴스 사이트가 HEAD를 차단하는 경우 대응)
+    """GET 요청으로 URL이 유효한지 확인 (2xx만 True)
+    3xx redirect는 존재하지 않는 URL이 홈페이지로 리디렉션되는 경우가 많으므로 False
     """
     if not url or not url.startswith('http'):
         return False
@@ -31,7 +31,8 @@ def validate_link(url, timeout=8):
         req = urllib.request.Request(url, method='GET',
             headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'})
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            return resp.status < 400
+            # 2xx만 유효. 3xx redirect는 거부 (URL 오류 가능성)
+            return 200 <= resp.status < 300
     except Exception:
         return False
 

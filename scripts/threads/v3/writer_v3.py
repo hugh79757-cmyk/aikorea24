@@ -205,7 +205,7 @@ def write_thread(pitch, all_articles):
             cards = parse_cards(content)
 
             if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
-                cards = assemble_final(cards, pitch.get('sources', []))
+                cards = assemble_final(cards, related)
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
             else:
@@ -227,7 +227,7 @@ def write_thread(pitch, all_articles):
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
         if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
-            cards = assemble_final(cards, pitch.get('sources', []))
+            cards = assemble_final(cards, related)
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
     except Exception as e:
@@ -319,18 +319,22 @@ def validate_year(cards, article_body_text):
     log(f'    → 연도 검증 통과: 쓰레드 연도 {rest_years} ⊆ 허용 {allowed}')
     return True
 
-def assemble_final(cards, sources):
-    """대표 URL 1개를 마지막 카드로 추가 (URL 검증 포함, fallback 순회)
-    sources: D1 DB 원본 URL 리스트 (pitch.get('sources', []))
+def assemble_final(cards, articles):
+    """대표 URL 1개를 마지막 카드로 추가 (DB 저장된 실제 링크 사용)
+    articles: D1 DB 기사 객체 리스트 (related)
+    pitcher가 생성한 sources는 URL이 망가질 수 있으므로 사용하지 않음
     """
     from db_reader import validate_link
-    if sources:
-        for url in sources:
+    if articles:
+        for a in articles:
+            url = a.get('link', '').strip()
+            if not url or not url.startswith('http'):
+                continue
             if validate_link(url, timeout=5):
                 cards.append(f'🔗 {url}')
                 return cards
             log(f'  ⚠️ URL 유효성 실패 — 다음 URL 시도: {url[:50]}...')
-        log(f'  ❌ 모든 {len(sources)}개 URL 유효성 실패 — 링크 생략')
+        log(f'  ❌ 모든 {len(articles)}개 URL 유효성 실패 — 링크 생략')
     return cards
 
 def save_draft(cards, pitch):
