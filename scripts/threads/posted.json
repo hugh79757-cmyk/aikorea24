@@ -48,7 +48,10 @@
     32823,
     "9214",
     "26457",
-    "32826"
+    "32826",
+    "22766",
+    "20653",
+    "22698"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -95,7 +98,10 @@
     "https://n.news.naver.com/mnews/article/003/0014018079?sid=105",
     "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
     "https://the-decoder.com/half-of-ai-written-code-that-passes-industry-test-would-get-rejected-by-real-developers-new-study-finds/",
-    "https://huggingface.co/blog/ibm-research/itbench-aa"
+    "https://huggingface.co/blog/ibm-research/itbench-aa",
+    "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums/",
+    "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions/",
+    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums/"
   ],
   "history": [
     {
@@ -389,6 +395,15 @@
         9214,
         26457,
         32826
+      ],
+      "date": "2026-06-21"
+    },
+    {
+      "hook": "보안 AI가 공격을 완벽히 막아줄 줄 알았는데, 해커들",
+      "article_ids": [
+        22766,
+        20653,
+        22698
       ],
       "date": "2026-06-21"
     }
