@@ -1193,15 +1193,30 @@ def main():
         # 배포 (launchd 자동 실행 시)
         print("\n[배포] Cloudflare Pages 배포 중...")
         deploy_script = os.path.join(PROJECT_DIR, 'scripts/deploy.sh')
-        try:
-            r = subprocess.run(['bash', deploy_script],
-                             capture_output=True, text=True, timeout=300)
-            if r.returncode == 0:
-                print("  배포 완료 ✅")
-            else:
-                print(f"  배포 실패: {r.stderr[:300]}")
-        except Exception as e:
-            print(f"  배포 오류: {e}")
+        max_retries = 2
+        for attempt in range(1, max_retries + 1):
+            try:
+                r = subprocess.run(['bash', deploy_script],
+                                 capture_output=True, text=True, timeout=300)
+                if r.returncode == 0:
+                    print("  배포 완료 ✅")
+                    break
+                else:
+                    err_msg = (r.stderr[:300] or r.stdout[:300] or '알 수 없는 오류').strip()
+                    print(f"  배포 실패 (시도 {attempt}/{max_retries}): {err_msg}")
+                    if attempt < max_retries:
+                        print("  5초 후 재시도...")
+                        import time
+                        time.sleep(5)
+            except subprocess.TimeoutExpired:
+                print(f"  배포 타임아웃 (시도 {attempt}/{max_retries})")
+                if attempt < max_retries:
+                    print("  5초 후 재시도...")
+                    import time
+                    time.sleep(5)
+            except Exception as e:
+                print(f"  배포 오류 (시도 {attempt}/{max_retries}): {e}")
+                break
 
 
 if __name__ == '__main__':
