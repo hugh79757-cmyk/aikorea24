@@ -82,6 +82,12 @@ PH_REJECT_KEYWORDS = [
     'analytics beyond', 'leaderboard',
     # HN 개인 프로젝트 발표 (실제 툴 아님)
     'i built', 'i made', 'i created', 'i wrote',
+    # 플랫폼/서비스가 아닌 항목
+    'marketplace', 'community', 'forum', 'blog', 'newsletter',
+    'podcast', 'youtube channel', 'discord server',
+    # 너무 단순하거나 불완전한 프로젝트
+    'work in progress', 'coming soon', 'beta', 'prototype',
+    'demo', 'proof of concept', 'poc',
 ]
 
 # Product Hunt 설명에서 가격 정보 추출
@@ -113,25 +119,38 @@ def extract_price(description: str) -> str:
 
 
 def is_ai_tool(title: str, description: str = '') -> bool:
-    """Product Hunt/HN 아이템이 AI 툴인지 판별 (제목 기준)"""
+    """Product Hunt/HN 아이템이 AI 툴인지 판별 (제목 + 설명 기준)"""
     title_lower = title.lower()
     desc_lower = description.lower()
     combined = title_lower + ' ' + desc_lower
+
+    # === 최소 설명 길이 체크 (너무 짧으면 스킵) ===
+    if len(description.strip()) < 20:
+        return False
 
     # === REJECT: AI 툴이 아닌 항목 먼저 차단 ===
     for kw in PH_REJECT_KEYWORDS:
         if kw.lower() in combined:
             return False
 
-    # === AI 키워드 매칭 ===
+    # === AI 키워드 매칭 (제목에 있으면 바로 통과) ===
     for kw in PH_AI_KEYWORDS:
         if kw.lower() in title_lower:
             return True
-    # description에도 ai 키워드가 포함된 경우 + 제목에도 'tool'이 있는 경우 완화
+
+    # === 제목에 'tool'/'app' + 설명에 AI 키워드 ===
     if 'tool' in title_lower or 'app' in title_lower:
         for kw in ['ai', 'intelligence', 'neural', 'deep learning', 'machine learning']:
             if kw in desc_lower:
                 return True
+
+    # === 설명에 AI 키워드 2개 이상 포함 시 통과 ===
+    ai_desc_keywords = ['ai', 'artificial intelligence', 'machine learning', 'deep learning',
+                        'neural network', 'language model', 'llm', 'gpt', 'generative']
+    desc_ai_count = sum(1 for kw in ai_desc_keywords if kw in desc_lower)
+    if desc_ai_count >= 2:
+        return True
+
     return False
 
 
