@@ -5,7 +5,7 @@ category: "음성·영상"
 price: "무료 또는 월 10만원~"
 koreanSupport: true
 difficulty: "중급"
-url: "https://www.producthunt.com/products/tyto"
+url: "https://ai-coustics.com/"
 useCases: ["음성 AI 프로젝트에 참여하는 직장인", "AI 관련 연구를 하는 학생", "음성 기술을 활용하는 소상공인"]
 tags: ["음성 AI", "예측 분석", "오디오 인사이트"]
 featured: false

@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/claude-redesigned"
+url: "https://claude.com/blog/claude-code-desktop-redesign"
 useCases: ["코드 리뷰를 위한 팀 회의에서 활용", "개발 과제를 진행하는 학생", "소프트웨어 개발 프로젝트 협업"]
 tags: ["코딩", "실시간 공유", "협업"]
 featured: false

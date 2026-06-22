@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: false
 difficulty: "중급"
-url: "https://www.producthunt.com/products/parano-ai"
+url: "https://parano.ai/"
 useCases: ["경쟁사 분석을 통해 마케팅 전략을 세우는 한국 직장인", "업계 동향을 파악하여 연구 과제를 수행하는 학생", "경쟁사 정보를 활용해 상품 기획을 하는 소상공인"]
 tags: ["경쟁 분석", "업무 효율", "시장 조사"]
 featured: false

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "월 10만원~"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/atomic-mail-agentic"
+url: "https://atomicmail.io/agents"
 useCases: ["이메일 관리로 업무 효율을 높이는 직장인", "과제 제출을 위한 이메일 작성이 필요한 학생", "고객과의 이메일 소통을 자동화하고 싶은 소상공인"]
 tags: ["이메일 자동화", "업무 효율", "AI 도구"]
 featured: false

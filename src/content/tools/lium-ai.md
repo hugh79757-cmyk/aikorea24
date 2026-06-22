@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 10만원"
 koreanSupport: true
 difficulty: "중급"
-url: "https://www.producthunt.com/products/lium"
+url: "https://app.lium.ai/"
 useCases: ["데이터 분석 보고서 작성", "연구 과제 데이터 정리", "소상공인 매출 데이터 분석"]
 tags: ["데이터 분석", "AI", "비즈니스 인사이트"]
 featured: false

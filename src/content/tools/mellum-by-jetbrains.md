@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "중급"
-url: "https://www.producthunt.com/products/jetbrains"
+url: "https://www.jetbrains.com/"
 useCases: ["직장에서 빠른 데이터 분석과 보고서를 작성할 때 유용합니다.", "학생들이 과제를 빠르게 작성하고 피드백을 받을 수 있습니다.", "소상공인이 고객 응대 시 신속한 답변을 제공하는 데 도움을 줍니다."]
 tags: ["AI", "생산성", "업무 효율"]
 featured: false

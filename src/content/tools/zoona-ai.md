@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/sparrowdesk"
+url: "https://www.sparrowdesk.com/"
 useCases: ["고객 지원 업무를 하는 직장인", "과제 자료를 정리하는 학생", "상담 서비스를 제공하는 소상공인"]
 tags: ["AI 지원", "자동화", "고객 서비스"]
 featured: false

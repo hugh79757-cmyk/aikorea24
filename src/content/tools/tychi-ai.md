@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: false
 difficulty: "중급"
-url: "https://www.producthunt.com/products/tychi-ai"
+url: "https://ai.tychilabs.com/"
 useCases: ["직장인이 투자 결정을 내릴 때 데이터 분석에 활용합니다.", "학생이 경제 관련 프로젝트를 진행할 때 참고자료로 사용합니다.", "소상공인이 자본 운용 전략을 세울 때 유용합니다."]
 tags: ["자율 자본", "투자 분석", "경제 데이터"]
 featured: false

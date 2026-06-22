@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/labs-ai-text-to-speech"
+url: "https://apps.apple.com/be/app/labs-ai-text-to-speech/id6741198402"
 useCases: ["업무 프레젠테이션 음성 변환", "학생의 음성 과제 제작", "소상공인의 광고 음성 제작"]
 tags: ["AI 음성", "텍스트 변환", "아이폰"]
 featured: false

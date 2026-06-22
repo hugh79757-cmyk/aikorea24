@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "가격 정보 없음"
 koreanSupport: true
 difficulty: "중급"
-url: "https://www.producthunt.com/products/ai-native-ecommerce-infrastructure"
+url: "https://www.storeframe.io/"
 useCases: ["온라인 쇼핑몰을 운영하는 직장인이 효율적으로 관리할 수 있습니다.", "전자상거래 관련 수업을 듣는 학생이 실습에 활용할 수 있습니다.", "소상공인이 손쉽게 쇼핑몰을 구축하고 운영할 수 있습니다."]
 tags: ["eCommerce", "Magento", "온라인 쇼핑몰"]
 featured: false

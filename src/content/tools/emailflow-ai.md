@@ -5,7 +5,7 @@ category: "디자인"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/emailflow-ai-b2b-lead-generation"
+url: "https://emailflow.ai/"
 useCases: ["마케팅팀에서 뉴스레터 작성에 활용", "학생들이 프로젝트 발표용 이메일 작성", "소상공인이 고객 소통하려고 뉴스레터 제작"]
 tags: ["이메일", "뉴스레터", "디자인"]
 featured: false

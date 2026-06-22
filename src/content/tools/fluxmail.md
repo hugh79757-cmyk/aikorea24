@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/fluxmail"
+url: "https://www.fluxmail.ai/"
 useCases: ["이메일 정리로 업무 효율을 높이는 직장인", "과제 제출을 위한 메일 작성에 도움을 주는 학생", "고객 문의에 신속하게 대응하는 소상공인"]
 tags: ["이메일 관리", "AI 도구", "업무 효율"]
 featured: false

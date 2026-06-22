@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/mutter-ai-dictation"
+url: "https://muttervoice.com/"
 useCases: ["회의 내용을 음성으로 기록하는 직장인", "강의 내용을 빠르게 정리하는 학생", "고객 상담 내용을 기록하는 소상공인"]
 tags: ["음성 인식", "오프라인 사용", "생산성 도구"]
 featured: false

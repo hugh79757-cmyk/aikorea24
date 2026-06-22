@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/keyboard-copilot-ios-ai-keyboard"
+url: "https://apps.apple.com/us/app/ai-type-keyboard-copilot-tool/id6759135876"
 useCases: ["이메일 작성 시 문장 다듬기", "과제 제출 전 번역 및 수정", "고객과의 채팅에서 빠른 응답 작성"]
 tags: ["AI 키보드", "문장 재구성", "번역"]
 featured: false

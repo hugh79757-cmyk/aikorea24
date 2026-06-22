@@ -137,6 +137,28 @@ def is_ai_tool(title: str, description: str = '') -> bool:
 
 NS_ATOM = '{http://www.w3.org/2005/Atom}'
 
+def resolve_product_hunt_url(ph_url: str) -> str:
+    """Product Hunt 리다이렉트 URL → 실제 툴 URL 해석"""
+    try:
+        req = urllib.request.Request(
+            ph_url,
+            headers={'User-Agent': 'aikorea24-bot/2.0'}
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            return resp.url
+    except Exception:
+        return ph_url
+
+
+def extract_real_url_from_content(content: str) -> str:
+    """Product Hunt 콘텐츠에서 실제 툴 URL 추출"""
+    # <a href="...">Link</a> 패턴에서 리다이렉트 URL 추출
+    link_match = re.search(r'href="(https://www\.producthunt\.com/r/p/\d+\?app_id=\d+)"', content)
+    if link_match:
+        return link_match.group(1)
+    return ''
+
+
 def fetch_product_hunt(limit=15) -> list:
     """Product Hunt Atom 피드 → AI 툴 목록"""
     items = []
@@ -179,11 +201,18 @@ def fetch_product_hunt(limit=15) -> list:
             if not price:
                 price = ''
 
+            # 실제 툴 URL 추출 (리다이렉트 따라가기)
+            redirect_url = extract_real_url_from_content(desc_raw)
+            if redirect_url:
+                real_url = resolve_product_hunt_url(redirect_url)
+            else:
+                real_url = href
+
             items.append({
                 'name': title,
                 'description': desc,
                 'price': price,
-                'url': href,
+                'url': real_url,
                 'source': 'Product Hunt',
                 'pub_date': (pub_el.text or '')[:10] if pub_el is not None else '',
             })

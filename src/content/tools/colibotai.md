@@ -5,7 +5,7 @@ category: "번역·학습"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/colibotai"
+url: "https://edoardoguzzi.com/colibotai"
 useCases: ["업무 이메일 요약 및 번역에 활용", "학습 자료 요약 및 이해를 위한 도구", "소상공인 제품 설명 번역 및 요약"]
 tags: ["번역", "요약", "텍스트 설명"]
 featured: false

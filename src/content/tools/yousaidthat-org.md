@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/yousaidthat-org"
+url: "https://yousaidthat.org/"
 useCases: ["회의에서 발언한 내용을 증명하고 싶을 때", "온라인 토론에서 자신의 주장을 뒷받침할 때", "소셜 미디어에서의 발언을 기록하고 싶을 때"]
 tags: ["신뢰성", "기록", "증명"]
 featured: false

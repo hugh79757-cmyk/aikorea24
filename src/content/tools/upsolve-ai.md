@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "중급"
-url: "https://www.producthunt.com/products/upsolve-ai"
+url: "https://upsolve.ai/"
 useCases: ["데이터 분석 보고서를 작성하는 데 유용합니다.", "과제 제출을 위한 신뢰성 있는 데이터 수집에 활용할 수 있습니다.", "고객 데이터를 안전하게 관리하는 데 도움을 줍니다."]
 tags: ["데이터", "신뢰성", "에이전트"]
 featured: false

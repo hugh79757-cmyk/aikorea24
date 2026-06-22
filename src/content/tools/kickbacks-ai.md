@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/kickbacks-ai"
+url: "https://kickbacks.ai/"
 useCases: ["업무 대기 시간 동안 수익을 올리고 싶은 직장인", "대기 시간을 활용해 추가 수익을 원하는 학생", "소상공인이 업무 중 대기 시간을 활용해 수익을 창출하고 싶을 때"]
 tags: ["수익", "대기시간", "업무효율"]
 featured: false

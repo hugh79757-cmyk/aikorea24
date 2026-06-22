@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/kraina"
+url: "https://kraina.cc/"
 useCases: ["직장인들이 팀 빌딩하려고 야외 활동을 게임으로 즐길 수 있습니다.", "학생들이 친구들과 함께 야외에서 재미있게 경쟁하며 운동할 수 있습니다.", "소상공인들이 고객 참여를 유도하기 위해 이벤트를 게임 형식으로 진행할 수 있습니다."]
 tags: ["야외활동", "게임", "팀빌딩"]
 featured: false

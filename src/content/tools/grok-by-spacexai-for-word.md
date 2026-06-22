@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/grok-by-spacexai-for-word"
+url: "https://x.ai/grok/word"
 useCases: ["보고서 작성 시 문장 개선", "레포트 구성 시 문장 정리", "마케팅 자료 작성 시 문구 다듬기"]
 tags: ["글쓰기", "AI 도구", "생산성"]
 featured: false

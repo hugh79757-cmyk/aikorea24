@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 10만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/ploy-ai"
+url: "https://ploy.ai/"
 useCases: ["직장인이 웹사이트를 통해 고객을 유치하는 사례", "학생이 과제 발표를 위한 자료를 수집하는 사례", "소상공인이 온라인 마케팅을 효율적으로 진행하는 사례"]
 tags: ["웹사이트", "성장", "마케팅"]
 featured: false

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 0만원"
 koreanSupport: true
 difficulty: "중급"
-url: "https://www.producthunt.com/products/zernio"
+url: "https://zernio.com/"
 useCases: ["직장인이 고객과의 소통을 원활하게 할 수 있도록 지원", "학생이 그룹 프로젝트를 위해 팀원과 쉽게 연락할 수 있도록 도움", "소상공인이 고객 상담을 자동화하여 업무 효율을 높일 수 있도록 도움"]
 tags: ["WhatsApp", "API", "커뮤니케이션"]
 featured: false

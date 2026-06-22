@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/brainflow-2"
+url: "https://apps.apple.com/gb/app/brainflow-voice-notes/id6752835425"
 useCases: ["회의 내용을 정리하는 데 도움", "과제 아이디어를 정리하는 데 유용", "창업 아이디어를 체계적으로 정리"]
 tags: ["노트", "생산성", "아이디어 정리"]
 featured: false

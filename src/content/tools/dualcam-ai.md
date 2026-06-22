@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/dualcam-ai"
+url: "https://dualcam.pages.dev/"
 useCases: ["여행 중 다양한 각도의 영상 촬영", "학교 프로젝트 영상 제작", "소상공인 제품 홍보 영상 촬영"]
 tags: ["영상촬영", "카메라", "이중녹화"]
 featured: false

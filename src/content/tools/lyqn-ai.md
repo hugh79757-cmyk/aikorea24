@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/lyqn-ai"
+url: "https://lyqn.app/"
 useCases: ["업무 자동화를 통한 시간 절약", "프로젝트 관리 지원", "고객 응대 효율화"]
 tags: ["AI 지원", "업무 자동화", "비즈니스 관리"]
 featured: false

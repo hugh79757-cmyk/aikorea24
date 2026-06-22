@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/products/plansera-ai"
+url: "https://plansera.ai/"
 useCases: ["한국 직장인이 비자 신청을 위한 사업계획서를 작성할 때", "학생이 창업 아이디어를 구체화할 때", "소상공인이 투자 유치를 위해 사업계획서를 준비할 때"]
 tags: ["사업계획서", "E-2 비자", "AI 작성"]
 featured: false
