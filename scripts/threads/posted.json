@@ -94,7 +94,13 @@
     "27227",
     "31441",
     "32046",
-    "32525"
+    "32525",
+    "30657",
+    "30832",
+    "27000",
+    6981,
+    "6981",
+    "32227"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -153,7 +159,9 @@
     "https://www.theguardian.com/technology/2026/jun/03/labour-mp-sues-elon-musks-ai-company-over-fake-sexualised-images",
     "https://www.theguardian.com/technology/2026/jun/03/as-the-tech-mega-ipo-race-hots-up-has-openai-missed-its-moment",
     "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNRHduSXhpVDRyZk1KaktVUHFlX3JqWmhPTUI1dldCVmpNMEU3dGhTVVpucmRHN3JCemdXazJPR3ZXVWNFRTN5SjFCT1VQTUZFNzN0WTF0S0ctMk9Wbjd0bW1HLVNKWVNieTd2WnVxaDF5WlZ1XzYtMHFZaWNmRlhxSXMtY3g3VHRkYzFIWDdpLXNtOVJ5dGd2YzNDT1ZpQzZUenUxX0hTSzVBNlNGMUFBQVZZN2gxbDZaQjNtMFBTaG1YUQ?oc=5",
-    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone/"
+    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone/",
+    "https://www.cityam.com/ai-is-not-killing-all-these-jobs-linkedin-boss-on-uk-hiring-slump/",
+    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war/"
   ],
   "history": [
     {
@@ -316,34 +324,16 @@
       "link": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNRHduSXhpVDRyZk1KaktVUHFlX3JqWmhPTUI1dldCVmpNMEU3dGhTVVpucmRHN3JCemdXazJPR3ZXVWNFRTN5SjFCT1VQTUZFNzN0WTF0S0ctMk9Wbjd0bW1HLVNKWVNieTd2WnVxaDF5WlZ1XzYtMHFZaWNmRlhxSXMtY3g3VHRkYzFIWDdpLXNtOVJ5dGd2YzNDT1ZpQzZUenUxX0hTSzVBNlNGMUFBQVZZN2gxbDZaQjNtMFBTaG1YUQ?oc=5",
       "title": "AI 자본 지출 붐이 닷컴 광풍을 초월하며 투자자들은 차분함 유지",
       "posted_at": "2026-06-22T04:03:14.553761"
+    },
+    {
+      "id": 6981,
+      "link": "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war/",
+      "title": "미국 군, 이란 전쟁에서 AI 기반 타격 계획에 앤트로픽의 클로드 사용",
+      "posted_at": "2026-06-22T08:13:32.611641"
     }
   ],
   "last_reset": "2026-06-18",
   "pitch_history": [
-    {
-      "hook": "노르웨이, 아이들의 '생각하는 힘'을 지키기 위해 초등",
-      "article_ids": [
-        "32522",
-        "27234"
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "전 세계 10%가 AI 챗봇으로 뉴스를 보지만, 원본 ",
-      "article_ids": [
-        "32525",
-        "32694"
-      ],
-      "date": "2026-06-20"
-    },
-    {
-      "hook": "전쟁은 인간의 전략과 판단의 영역이었으나, 미국-이란 ",
-      "article_ids": [
-        32698,
-        32633
-      ],
-      "date": "2026-06-20"
-    },
     {
       "hook": "앤트로픽의 '미소스(Mythos)' 모델이 등장하자마자",
       "article_ids": [
@@ -570,6 +560,32 @@
       "article_ids": [
         12555,
         6981
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "AI가 개발자들의 자리를 뺏을 것이라는 공포와 달리, ",
+      "article_ids": [
+        28044,
+        28044,
+        28290
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "AI가 우리 일자리를 뺏을 것이라 걱정했지만, 정작 현",
+      "article_ids": [
+        30657,
+        30832,
+        27000
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "미국 정부는 AI 안전을 위해 엄격히 규제하려 하지만,",
+      "article_ids": [
+        6981,
+        32227
       ],
       "date": "2026-06-22"
     }

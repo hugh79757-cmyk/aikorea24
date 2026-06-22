@@ -113,6 +113,8 @@ def run_v3(dry_run=False):
                         break
             save_posted(posted)
             log(f'[DRY RUN] 발행 생략 (posted_ids/links {len(posted["posted_ids"])}개)')
+            from v3.narrative_pitcher import save_pitch_to_history
+            save_pitch_to_history(pitch)
             print(f'\n{"="*60}')
             print(f'Hook: {pitch.get("hook")}')
             print(f'Narrative: {pitch.get("narrative")}')
@@ -152,6 +154,8 @@ def run_v3(dry_run=False):
                         break
             save_posted(posted)
             log(f'  ✅ posted_ids 업데이트: {len(pitch_ids)}개 기사 등록')
+            from v3.narrative_pitcher import save_pitch_to_history
+            save_pitch_to_history(pitch)
             next_run = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
             log(f'  다음 실행: {next_run}')
             return

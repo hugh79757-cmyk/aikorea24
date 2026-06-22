@@ -179,11 +179,11 @@ def load_pitch_history():
 
 def is_duplicate_pitch(pitch, history):
     """비슷한 피치가 이미 history에 있는지 확인 (내용 기반)"""
-    hook = pitch.get('hook', '')[:8]
+    hook = pitch.get('hook', '')[:15]
     narrative = pitch.get('narrative', '')[:30]
     for h in history:
-        # hook 앞 8자 일치 → 중복
-        if h.get('hook', '')[:8] == hook:
+        # hook 앞 15자 일치 → 중복
+        if h.get('hook', '')[:15] == hook:
             return True
         # narrative 앞 30자 일치 → 중복
         if narrative and h.get('narrative', '')[:30] == narrative:
@@ -208,12 +208,10 @@ def save_pitch_to_history(pitch):
             data['pitch_history'] = []
         data['pitch_history'].append({
             'hook': pitch.get('hook', '')[:30],
+            'narrative': pitch.get('narrative', '')[:50],
             'article_ids': pitch.get('article_ids', []),
             'date': datetime.now().strftime('%Y-%m-%d')
         })
-        # 최대 30개 유지
-        if len(data['pitch_history']) > 30:
-            data['pitch_history'] = data['pitch_history'][-30:]
         with open(path, 'w') as f:
             _json.dump(data, f, ensure_ascii=False, indent=2)
     except:
@@ -312,7 +310,6 @@ def get_pitches(articles, max_articles=100):
     log(f'  ✅ TOP 1: "{top.get("hook", "")}" ({top.get("emotion", "")})')
     log(f'     기사: {top.get("article_ids", [])}')
 
-    save_pitch_to_history(top)
     return [top] if top else []
 
 
