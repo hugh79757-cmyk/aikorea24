@@ -93,14 +93,26 @@ def publish_thread_chain(cards, article):
     import re as _re
     for i, card_text in enumerate(cards):
         if len(card_text) > MAX_CHARS:
-            # 마지막 완결 문장(.!?) 단위로 자름
-            trimmed = card_text[:MAX_CHARS]
-            cut = max(trimmed.rfind(ch) for ch in ['.', '!', '?', '\n'])
-            if cut > MAX_CHARS // 2:
-                cards[i] = trimmed[:cut + 1]
+            # 문장 분할 (.!? 기준)
+            sentences = _re.split(r'(?<=[.!?])\s+', card_text)
+            if len(sentences) <= 2:
+                # 문장이 2개 이하면 강제 절단
+                cards[i] = card_text[:MAX_CHARS]
             else:
-                cards[i] = trimmed[:MAX_CHARS]
-            log(f'  ✂️ 카드 {i+1}: {len(card_text)}자 → {len(cards[i])}자 (완결문장)')
+                # 첫 문장 + 마지막 문장은 유지, 중간 문장 제거
+                first = sentences[0]
+                last = sentences[-1]
+                middle = sentences[1:-1]
+                # 중간 문장을 하나씩 제거하면서 500자 이하로
+                while middle and len(first + ' ' + ' '.join(middle) + ' ' + last) > MAX_CHARS:
+                    middle.pop()
+                if middle:
+                    cards[i] = first + ' ' + ' '.join(middle) + ' ' + last
+                else:
+                    cards[i] = first + ' ' + last
+                    if len(cards[i]) > MAX_CHARS:
+                        cards[i] = card_text[:MAX_CHARS]
+            log(f'  ✂️ 카드 {i+1}: {len(card_text)}자 → {len(cards[i])}자 (중간 문장 제거)')
 
     for i, card_text in enumerate(cards):
         params = {
