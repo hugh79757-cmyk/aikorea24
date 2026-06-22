@@ -146,6 +146,7 @@ export async function GET({ locals, request }: { locals: any; request: Request }
     });
 
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Network refresh error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { status: 500 });
   }
 }

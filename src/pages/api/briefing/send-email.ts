@@ -1,6 +1,26 @@
 import type { APIRoute } from 'astro';
+import { verifySession } from '../../../lib/auth';
 
-export const POST: APIRoute = async ({ locals }) => {
+const ADMIN_EMAILS = ['twinssn@gmail.com'];
+
+function escapeHtml(str: string | null | undefined): string {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export const POST: APIRoute = async ({ locals, cookies }) => {
+  const session = cookies.get('session')?.value;
+  if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  const user = await verifySession(session);
+  if (!user || !ADMIN_EMAILS.includes(user.email)) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+
   const runtime = (locals as any).runtime;
   const db = runtime?.env?.DB;
   const BREVO_API_KEY = runtime?.env?.BREVO_API_KEY;
@@ -48,7 +68,7 @@ export const POST: APIRoute = async ({ locals }) => {
               ${allItems.map((item, idx) => `
               <tr>
                 <td style="font-size:13px;color:#1f2937;line-height:1.8;">
-                  ${idx + 1}. ${item.news_title || ''}
+                  ${idx + 1}. ${escapeHtml(item.news_title)}
                 </td>
               </tr>`).join('')}
               ${totalCount > 3 ? `
@@ -65,7 +85,7 @@ export const POST: APIRoute = async ({ locals }) => {
     let itemsHtml = '';
     for (const item of displayItems) {
       const briefingUrl = `https://aikorea24.kr/briefing/${today}${item.sort_order ? `#item-${item.sort_order}` : ''}`;
-      const desc = item.news_desc ? item.news_desc.substring(0, 150) : '';
+      const desc = item.news_desc ? escapeHtml(item.news_desc.substring(0, 150)) : '';
       itemsHtml += `
         <tr>
           <td style="padding:16px 0;border-bottom:1px solid #e5e7eb;">
@@ -73,10 +93,10 @@ export const POST: APIRoute = async ({ locals }) => {
               <tr>
                 <td style="padding-bottom:8px;">
                   <span style="display:inline-block;width:20px;height:20px;background:#2563eb;color:#fff;border-radius:50%;font-size:11px;text-align:center;line-height:20px;margin-right:6px;vertical-align:middle;">${item.sort_order || ''}</span>
-                  <span style="font-size:15px;color:#111827;font-weight:700;vertical-align:middle;">${item.news_title || ''}</span>
+                  <span style="font-size:15px;color:#111827;font-weight:700;vertical-align:middle;">${escapeHtml(item.news_title)}</span>
                 </td>
               </tr>
-              ${item.comment ? `<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">${item.comment}</td></tr>` : ''}
+              ${item.comment ? `<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">${escapeHtml(item.comment)}</td></tr>` : ''}
               ${desc ? `<tr><td style="font-size:13px;color:#6b7280;line-height:1.5;padding-top:6px;">${desc}</td></tr>` : ''}
               <tr><td style="padding-top:8px;">
                 <a href="${briefingUrl}" style="font-size:12px;color:#2563eb;text-decoration:underline;font-weight:600;">
@@ -125,27 +145,27 @@ export const POST: APIRoute = async ({ locals }) => {
                       <table width="100%" cellpadding="0" cellspacing="0">
                         <tr>
                           <td style="font-size:14px;font-weight:600;color:#111827;">
-                            ${t.korean_support ? '🇰🇷 ' : ''}${t.name}
+                            ${t.korean_support ? '🇰🇷 ' : ''}${escapeHtml(t.name)}
                           </td>
                           <td style="text-align:right;font-size:11px;">
-                            ${t.category ? `<span style="display:inline-block;background:#f3f4f6;color:#374151;font-size:11px;padding:2px 8px;border-radius:12px;margin-right:4px;">${t.category}</span>` : ''}
-                            <span style="color:${t.price && (t.price.includes('무료') || t.price.includes('Free')) ? '#059669' : '#6b7280'};">${t.price || ''}</span>
+                            ${t.category ? `<span style="display:inline-block;background:#f3f4f6;color:#374151;font-size:11px;padding:2px 8px;border-radius:12px;margin-right:4px;">${escapeHtml(t.category)}</span>` : ''}
+                            <span style="color:${t.price && (t.price.includes('무료') || t.price.includes('Free')) ? '#059669' : '#6b7280'};">${escapeHtml(t.price)}</span>
                           </td>
                         </tr>
                         <tr>
                           <td colspan="2" style="font-size:13px;color:#6b7280;padding-top:4px;line-height:1.4;">
-                            ${t.tagline || ''}
+                            ${escapeHtml(t.tagline)}
                           </td>
                         </tr>
                         ${t.difficulty ? `
                         <tr>
                           <td colspan="2" style="font-size:12px;color:#9ca3af;padding-top:2px;line-height:1.4;">
-                            ⭐ 난이도: ${t.difficulty}
+                            ⭐ 난이도: ${escapeHtml(t.difficulty)}
                           </td>
                         </tr>` : ''}
                         <tr>
                           <td colspan="2" style="padding-top:6px;">
-                            <a href="https://aikorea24.kr/tools/${t.slug}/"
+                            <a href="https://aikorea24.kr/tools/${encodeURIComponent(t.slug)}/"
                                style="font-size:12px;color:#2563eb;text-decoration:underline;">
                               AI코리아24에서 자세히 보기 →
                             </a>
@@ -192,7 +212,7 @@ export const POST: APIRoute = async ({ locals }) => {
           ${briefing.intro ? `
           <tr>
             <td style="padding:20px 24px;background:#fff;border-bottom:1px solid #e5e7eb;">
-              <p style="font-size:14px;color:#374151;line-height:1.6;margin:0;">${briefing.intro}</p>
+              <p style="font-size:14px;color:#374151;line-height:1.6;margin:0;">${escapeHtml(briefing.intro)}</p>
             </td>
           </tr>` : ''}
           <tr>
@@ -278,7 +298,7 @@ export const POST: APIRoute = async ({ locals }) => {
     }), { headers: { 'Content-Type': 'application/json' } });
 
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), {
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), {
       status: 500, headers: { 'Content-Type': 'application/json' }
     });
   }

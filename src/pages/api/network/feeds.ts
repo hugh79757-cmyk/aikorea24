@@ -1,13 +1,18 @@
 export const prerender = false;
 
-export async function GET({ locals }: { locals: any }) {
+const ALLOWED_ORIGIN = 'https://aikorea24.kr';
+
+export async function GET({ locals, request }: { locals: any; request: Request }) {
   const runtime = (locals as any).runtime;
   const db = runtime?.env?.DB;
+
+  const origin = new URL(request.url).origin;
+  const allowedOrigin = origin === ALLOWED_ORIGIN ? ALLOWED_ORIGIN : ALLOWED_ORIGIN;
 
   if (!db) {
     return new Response(JSON.stringify({ error: 'DB not available' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin },
     });
   }
 
@@ -42,14 +47,15 @@ export async function GET({ locals }: { locals: any }) {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Cache-Control': 'public, max-age=3600',
       },
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), {
+    console.error('Feeds error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': allowedOrigin },
     });
   }
 }

@@ -3,6 +3,7 @@ export const prerender = false;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
+import { verifySession } from '../../lib/auth';
 
 const TASK_BASE = '/tools/task/';
 
@@ -51,11 +52,10 @@ const runtime = (Astro.locals as any).runtime;
 const db = runtime?.env?.DB;
 const session = Astro.cookies.get('session')?.value;
 let isAuth = false;
+let sessionUser: { email: string; name: string } | null = null;
 if (session) {
-  try {
-    const user = JSON.parse(atob(session.split('.')[1] || session));
-    isAuth = !!user.email;
-  } catch {}
+  sessionUser = await verifySession(session);
+  isAuth = !!sessionUser?.email;
 }
 
 // ---- 투표 수 조회 ----
@@ -67,12 +67,10 @@ if (db) {
       'SELECT COUNT(*) as cnt FROM tool_votes WHERE tool_id = ?'
     ).bind(tool.id).first();
     voteCount = voteResult?.cnt || 0;
-    if (isAuth) {
-      const session2 = Astro.cookies.get('session')?.value;
-      const u2 = JSON.parse(atob(session2!.split('.')[1] || session2!));
+    if (isAuth && sessionUser) {
       const votedRow = await db.prepare(
         'SELECT id FROM tool_votes WHERE tool_id = ? AND user_email = ?'
-      ).bind(tool.id, u2.email).first();
+      ).bind(tool.id, sessionUser.email).first();
       userVoted = !!votedRow;
     }
   } catch {}

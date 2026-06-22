@@ -1,4 +1,6 @@
 import type { APIRoute } from 'astro';
+import { signSession } from '../../../../lib/auth';
+
 export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
@@ -63,7 +65,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
       ).bind(kakaoId).first();
     }
 
-    const sessionData = btoa(JSON.stringify(dbUser));
+    const sessionData = await signSession(dbUser);
     cookies.set('session', sessionData, {
       path: '/',
       httpOnly: true,

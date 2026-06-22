@@ -1,5 +1,6 @@
 ---
 import SEOHead from '../components/SEOHead.astro';
+import { verifySession } from '../lib/auth';
 
 interface Props {
   title: string;
@@ -26,10 +27,8 @@ const {
 } = Astro.props;
 
 let currentUser = null;
-try {
-  const session = Astro.cookies.get('session')?.value;
-  if (session) currentUser = JSON.parse(atob(session));
-} catch {}
+const session = Astro.cookies.get('session')?.value;
+if (session) currentUser = await verifySession(session);
 
 const navItems = [
   { label: '홈', href: '/' },

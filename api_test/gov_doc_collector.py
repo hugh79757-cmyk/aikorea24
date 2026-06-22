@@ -91,9 +91,10 @@ def title_hash(title):
     return hashlib.md5(title.strip().lower().encode()).hexdigest()
 
 def get_existing_hashes():
-    cmd = f'npx wrangler d1 execute aikorea24-db --remote --command "SELECT title FROM news;"'
+    cmd = ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
+           '--command', 'SELECT title FROM news;']
     try:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=PROJECT_ROOT, timeout=30)
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_ROOT, timeout=30)
         hashes = set()
         for line in result.stdout.split('\n'):
             line = line.strip()
@@ -112,12 +113,20 @@ def insert_to_d1(item):
     pub_date = safe_sql(item.get('pub_date', ''), 30)
 
     sql = f"INSERT INTO news (title, link, description, source, category, pub_date) VALUES ('{title}', '{link}', '{desc}', '{source}', '{category}', '{pub_date}');"
-    cmd = f'npx wrangler d1 execute aikorea24-db --remote --command "{sql}"'
+    sql_path = os.path.join(PROJECT_ROOT, 'api_test', '_tmp_insert.sql')
     try:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True, cwd=PROJECT_ROOT, timeout=15)
+        with open(sql_path, 'w', encoding='utf-8') as f:
+            f.write(sql)
+        cmd = ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes', '--file', sql_path]
+        result = subprocess.run(cmd, capture_output=True, text=True, cwd=PROJECT_ROOT, timeout=15)
         return result.returncode == 0 and 'ERROR' not in result.stderr
     except:
         return False
+    finally:
+        try:
+            os.remove(sql_path)
+        except:
+            pass
 
 def main():
     print('=' * 60)

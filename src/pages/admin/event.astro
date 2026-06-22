@@ -1,15 +1,17 @@
 ---
 export const prerender = false;
 
+import { verifySession } from '../../lib/auth';
+
 const ADMIN_EMAILS = ['twinssn@gmail.com'];
 
 let isAuth = false;
 const session = Astro.cookies.get('session')?.value;
 if (session) {
-  try {
-    const user = JSON.parse(atob(session));
+  const user = await verifySession(session);
+  if (user) {
     isAuth = ADMIN_EMAILS.includes(user.email);
-  } catch {}
+  }
 }
 
 if (!isAuth) {

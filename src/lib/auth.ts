@@ -1,12 +1,50 @@
-// 세션에서 유저 정보 추출
-export function getSessionUser(cookies: any): { email: string; name: string } | null {
-  const session = cookies.get('session')?.value;
-  if (!session) return null;
+const ALGORITHM = { name: 'HMAC', hash: 'SHA-256' };
+const EXTRACTABLE = false;
+const KEY_USAGES: KeyUsage[] = ['sign', 'verify'];
+
+async function getSessionSecret(): Promise<CryptoKey> {
+  const secret = (globalThis as any).__SESSION_SECRET__ || '';
+  const encoder = new TextEncoder();
+  const keyData = encoder.encode(secret);
+  return crypto.subtle.importKey('raw', keyData, ALGORITHM, EXTRACTABLE, KEY_USAGES);
+}
+
+export async function signSession(data: Record<string, any>): Promise<string> {
+  const payload = btoa(JSON.stringify(data));
+  const key = await getSessionSecret();
+  const encoder = new TextEncoder();
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
+  const sigArray = Array.from(new Uint8Array(signature));
+  const sigB64 = btoa(String.fromCharCode(...sigArray));
+  return `${payload}.${sigB64}`;
+}
+
+export async function verifySession(signedSession: string): Promise<Record<string, any> | null> {
+  const dotIdx = signedSession.lastIndexOf('.');
+  if (dotIdx === -1) return null;
+
+  const payload = signedSession.slice(0, dotIdx);
+  const sigB64 = signedSession.slice(dotIdx + 1);
+
   try {
-    return JSON.parse(atob(session.split('.')[1] || session));
+    const key = await getSessionSecret();
+    const encoder = new TextEncoder();
+    const sigData = Uint8Array.from(atob(sigB64), c => c.charCodeAt(0));
+    const valid = await crypto.subtle.verify('HMAC', key, sigData, encoder.encode(payload));
+    if (!valid) return null;
+    return JSON.parse(atob(payload));
   } catch {
     return null;
   }
+}
+
+// 세션에서 유저 정보 추출 (HMAC 검증 포함)
+export async function getSessionUser(cookies: any): Promise<{ email: string; name: string } | null> {
+  const session = cookies.get('session')?.value;
+  if (!session) return null;
+  const data = await verifySession(session);
+  if (!data || !data.email || !data.name) return null;
+  return { email: data.email, name: data.name };
 }
 
 // DB에서 유저 멤버십 조회
@@ -17,12 +55,10 @@ export async function getUserMembership(db: any, email: string) {
 
   if (!user) return { level: 'free', purchased: [] };
 
-  // 구독 만료 체크
   let level = user.membership || 'free';
   if (level !== 'free' && user.membership_expires) {
     const expires = new Date(user.membership_expires);
     if (expires < new Date()) {
-      // 만료됨 → free로 다운그레이드
       await db.prepare(
         "UPDATE users SET membership = 'free' WHERE email = ?"
       ).bind(email).run();
@@ -45,19 +81,13 @@ export function canAccess(
   postAccessLevel: string,
   postId: number
 ): boolean {
-  // free 콘텐츠는 누구나
   if (postAccessLevel === 'free') return true;
-
-  // 건별 구매한 글
   if (purchasedPosts.includes(postId)) return true;
-
-  // 멤버십 등급 체크
   const hierarchy: Record<string, number> = {
     free: 0,
     basic: 1,
     premium: 2,
   };
-
   return (hierarchy[userLevel] || 0) >= (hierarchy[postAccessLevel] || 0);
 }
 

@@ -1,11 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { verifySession } from '../../lib/auth';
 
 let currentUser = null;
-try {
-  const session = Astro.cookies.get('session')?.value;
-  if (session) currentUser = JSON.parse(atob(session));
-} catch {}
+const session = Astro.cookies.get('session')?.value;
+if (session) currentUser = await verifySession(session);
 
 if (!currentUser) {
   return Astro.redirect('/api/auth/login/');

@@ -1,9 +1,23 @@
 import type { APIRoute } from 'astro';
+import { verifySession } from '../../../lib/auth';
 
-export const POST: APIRoute = async ({ request, locals }) => {
+const ADMIN_EMAILS = ['twinssn@gmail.com'];
+
+async function requireAdmin(cookies: any): Promise<boolean> {
+  const session = cookies.get('session')?.value;
+  if (!session) return false;
+  const user = await verifySession(session);
+  return !!user && ADMIN_EMAILS.includes(user.email);
+}
+
+export const POST: APIRoute = async ({ request, locals, cookies }) => {
+  if (!(await requireAdmin(cookies))) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+
   const runtime = (locals as any).runtime;
   const db = runtime?.env?.DB;
-  if (!db) return new Response(JSON.stringify({ error: 'DB not available' }), { status: 500 });
+  if (!db) return new Response(JSON.stringify({ error: 'DB not available' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
 
   try {
     const body = await request.json();
@@ -36,12 +50,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Briefing publish error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { status: 500 });
   }
 };
 
 
-export const DELETE: APIRoute = async ({ request, locals }) => {
+export const DELETE: APIRoute = async ({ request, locals, cookies }) => {
+  if (!(await requireAdmin(cookies))) {
+    return new Response(JSON.stringify({ ok: false, error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+  }
+
   const runtime = (locals as any).runtime;
   const db = runtime?.env?.DB;
   if (!db) return new Response(JSON.stringify({ ok: false, error: 'no db' }), { headers: { 'Content-Type': 'application/json' } });
@@ -61,6 +80,7 @@ export const DELETE: APIRoute = async ({ request, locals }) => {
 
     return new Response(JSON.stringify({ ok: true }), { headers: { 'Content-Type': 'application/json' } });
   } catch (e: any) {
-    return new Response(JSON.stringify({ ok: false, error: e.message }), { headers: { 'Content-Type': 'application/json' } });
+    console.error('Briefing DELETE error:', e);
+    return new Response(JSON.stringify({ ok: false, error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { headers: { 'Content-Type': 'application/json' } });
   }
 };

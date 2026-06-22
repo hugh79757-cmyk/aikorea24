@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import { verifySession } from '../../lib/auth';
 
 const runtime = (Astro.locals as any).runtime;
 const db = runtime?.env?.DB;
@@ -65,10 +66,8 @@ const categoryColors: Record<string, string> = {
 const session = Astro.cookies.get('session')?.value;
 let loggedIn = false;
 if (session) {
-  try {
-    JSON.parse(atob(session.split('.')[1] || session));
-    loggedIn = true;
-  } catch {}
+  const user = await verifySession(session);
+  loggedIn = !!user;
 }
 
 // SEO 변수

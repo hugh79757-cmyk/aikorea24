@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { verifySession } from '../../../lib/auth';
 
 // PATCH /api/briefing/deepdive
 // body: { item_id: number, deep_dive_url: string | null }
@@ -8,8 +9,8 @@ export const PATCH: APIRoute = async ({ request, locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   try {
-    const user = JSON.parse(atob(session));
-    if (!ADMIN_EMAILS.includes(user.email)) {
+    const user = await verifySession(session);
+    if (!user || !ADMIN_EMAILS.includes(user.email)) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }
   } catch {
@@ -47,7 +48,8 @@ export const PATCH: APIRoute = async ({ request, locals, cookies }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Deepdive PATCH error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { status: 500 });
   }
 };
 
@@ -57,8 +59,8 @@ export const GET: APIRoute = async ({ url, locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   try {
-    const user = JSON.parse(atob(session));
-    if (!ADMIN_EMAILS.includes(user.email)) {
+    const user = await verifySession(session);
+    if (!user || !ADMIN_EMAILS.includes(user.email)) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }
   } catch {

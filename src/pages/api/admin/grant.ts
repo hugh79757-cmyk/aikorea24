@@ -1,12 +1,14 @@
 import type { APIRoute } from 'astro';
+import { verifySession } from '../../../lib/auth';
 
 const ADMIN_EMAILS = ['twinssn@gmail.com'];
 
-function isAdmin(cookies: any): boolean {
+async function isAdmin(cookies: any): Promise<boolean> {
   const session = cookies.get('session')?.value;
   if (!session) return false;
   try {
-    const user = JSON.parse(atob(session.split('.')[1] || session));
+    const user = await verifySession(session);
+    if (!user) return false;
     return ADMIN_EMAILS.includes(user.email);
   } catch {
     return false;
@@ -50,7 +52,8 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), {
+    console.error('Grant POST error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -113,7 +116,8 @@ export const DELETE: APIRoute = async ({ request, cookies, locals }) => {
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), {
+    console.error('Grant DELETE error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

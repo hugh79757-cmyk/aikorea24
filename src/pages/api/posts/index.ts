@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { verifySession } from '../../../lib/auth';
 
 export const GET: APIRoute = async ({ request, locals }) => {
   const db = (locals as any).runtime.env.DB;
@@ -38,7 +39,8 @@ export const GET: APIRoute = async ({ request, locals }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Posts GET error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { status: 500 });
   }
 };
 
@@ -50,10 +52,14 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     return new Response(JSON.stringify({ error: '로그인이 필요합니다.' }), { status: 401 });
   }
 
-  let user: { email: string; name: string };
+  let user: { email: string; name: string } | null;
   try {
-    user = JSON.parse(atob(session.split('.')[1] || session));
+    user = await verifySession(session);
   } catch {
+    return new Response(JSON.stringify({ error: '유효하지 않은 세션입니다.' }), { status: 401 });
+  }
+
+  if (!user) {
     return new Response(JSON.stringify({ error: '유효하지 않은 세션입니다.' }), { status: 401 });
   }
 
@@ -104,6 +110,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Posts POST error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { status: 500 });
   }
 };

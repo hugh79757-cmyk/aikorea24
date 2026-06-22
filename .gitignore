@@ -12,7 +12,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-
+*.log
 
 # environment variables
 .env
@@ -24,15 +24,18 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 api_test/.env.sh
-src/env.d.ts.bak
-wrangler.toml.bak
+
+# backup files
 backup_*.txt
 *.bak
-
-# Local backups
-*.bak
 backups/
+backup2.py
+backup3.py
 
 # Reasonix internal artifacts
 .reasonix/
 *.plist
+
+# Log directories
+naver_blog/logs/
+scripts/threads/logs/

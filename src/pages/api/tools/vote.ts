@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { verifySession } from '../../../lib/auth';
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
   const db = (locals as any).runtime?.env?.DB;
@@ -9,7 +10,10 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   let userEmail = '';
   try {
-    const user = JSON.parse(atob(session.split('.')[1] || session));
+    const user = await verifySession(session);
+    if (!user) {
+      return new Response(JSON.stringify({ error: '세션 오류' }), { status: 401 });
+    }
     userEmail = user.email;
   } catch {
     return new Response(JSON.stringify({ error: '세션 오류' }), { status: 401 });
@@ -44,7 +48,8 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       return new Response(JSON.stringify({ voted: true, count: count?.cnt || 0 }), { status: 200 });
     }
   } catch (e: any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Vote error:', e);
+    return new Response(JSON.stringify({ error: import.meta.env.DEV ? e.message : 'Internal Server Error' }), { status: 500 });
   }
 };
 
@@ -64,11 +69,13 @@ export const GET: APIRoute = async ({ request, locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (session) {
     try {
-      const user = JSON.parse(atob(session.split('.')[1] || session));
-      const existing = await db.prepare(
-        'SELECT id FROM tool_votes WHERE tool_id = ? AND user_email = ?'
-      ).bind(tool_id, user.email).first();
-      voted = !!existing;
+      const user = await verifySession(session);
+      if (user) {
+        const existing = await db.prepare(
+          'SELECT id FROM tool_votes WHERE tool_id = ? AND user_email = ?'
+        ).bind(tool_id, user.email).first();
+        voted = !!existing;
+      }
     } catch {}
   }
 

@@ -5,6 +5,14 @@ const SHORT_SLUGS = new Set([
   'walkthrough-1-1', 'walkthrough-1-2',
 ]);
 
+const SECURITY_HEADERS: Record<string, string> = {
+  'Content-Security-Policy': "default-src 'self'",
+  'X-Frame-Options': 'DENY',
+  'X-Content-Type-Options': 'nosniff',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+};
+
 export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
   const path = url.pathname;
@@ -24,5 +32,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return new Response('Gone', { status: 410 });
   }
 
-  return next();
+  const response = await next();
+
+  for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+    response.headers.set(key, value);
+  }
+
+  return response;
 });
