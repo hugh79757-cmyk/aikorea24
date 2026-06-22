@@ -848,6 +848,22 @@ def slugify(name: str) -> str:
     return s
 
 
+def validate_tool_url(url: str) -> bool:
+    """툴 URL이 유효한지 검증 (Product Hunt, GitHub 등 아님)"""
+    if not url:
+        return False
+    # Product Hunt URL 제외
+    if 'producthunt.com/products/' in url:
+        return False
+    # GitHub 저장소 직접 링크 제외 (실제 툴이 아님)
+    if url.startswith('https://github.com/') and '/blob/' not in url:
+        return False
+    # 트래킹 URL 제외
+    if 'ref=producthunt' in url or 'utm_' in url:
+        return False
+    return True
+
+
 def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> str:
     """MD frontmatter 생성 (description은 humanize 적용)"""
     desc = humanize_md(meta.get('description_kr', ''))
@@ -857,6 +873,9 @@ def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> 
     today = datetime.now().strftime('%Y-%m-%d')
     # url: tool_info에서 전달받은 원본 URL 우선, 없으면 meta에서
     url = tool_url or meta.get('url', '')
+    # URL 검증
+    if not validate_tool_url(url):
+        url = meta.get('url', '')
 
     return f"""---
 name: "{name}"
