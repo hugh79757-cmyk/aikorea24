@@ -88,16 +88,19 @@ def publish_thread_chain(cards, article):
     root_post_id = None
     previous_post_id = None
 
-    # Threads API 500자 제한에 맞춰 각 카드 trim
+    # Threads API 500자 제한 (비상 안전장치, 프롬프트가 우선)
     MAX_CHARS = 500
-    trimmed = 0
+    import re as _re
     for i, card_text in enumerate(cards):
         if len(card_text) > MAX_CHARS:
-            cards[i] = card_text[:MAX_CHARS - 3] + '...'
-            trimmed += 1
-            log(f'  ✂️ 카드 {i+1}: {len(card_text)}자 → 500자로 트림')
-    if trimmed:
-        log(f'  ✂️ 총 {trimmed}개 카드 트림 완료')
+            # 마지막 완결 문장(.!?) 단위로 자름
+            trimmed = card_text[:MAX_CHARS]
+            cut = max(trimmed.rfind(ch) for ch in ['.', '!', '?', '\n'])
+            if cut > MAX_CHARS // 2:
+                cards[i] = trimmed[:cut + 1]
+            else:
+                cards[i] = trimmed[:MAX_CHARS]
+            log(f'  ✂️ 카드 {i+1}: {len(card_text)}자 → {len(cards[i])}자 (완결문장)')
 
     for i, card_text in enumerate(cards):
         params = {
