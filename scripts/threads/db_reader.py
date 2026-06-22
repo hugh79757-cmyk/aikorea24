@@ -10,6 +10,14 @@ import os, sys, json, re, subprocess
 import urllib.request
 from datetime import datetime, timedelta
 
+def normalize_url(url):
+    """URL 정규화: 쿼리 파라미터 제거, 트래일링 슬래시 제거, 소문자"""
+    if not url:
+        return ''
+    url = url.split('?')[0].split('#')[0]
+    url = url.rstrip('/')
+    return url.lower()
+
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 POSTED_FILE = os.path.join(THREADS_DIR, 'posted.json')
@@ -65,8 +73,26 @@ def log(msg):
 def load_posted():
     if os.path.exists(POSTED_FILE):
         with open(POSTED_FILE, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    return {"posted_links": [], "posted_ids": [], "history": [], "last_reset": ""}
+            data = json.load(f)
+        # posted_ids를 모두 str로 통일 (int/str 혼재 해결)
+        data['posted_ids'] = [str(x) for x in data.get('posted_ids', [])]
+        # 기존 posted_urls → posted_links로 병합 후 제거
+        if 'posted_urls' in data:
+            links = set(data.get('posted_links', []))
+            links.update(data.get('posted_urls', []))
+            data['posted_links'] = list(links)
+            del data['posted_urls']
+        # 새 필드 기본값
+        data.setdefault('posted_titles', [])
+        data.setdefault('posted_original_titles', [])
+        data.setdefault('posted_source_urls', [])
+        # 하위 호환: posted_links를 normalize하여 중복 정리
+        normalized_links = set()
+        for link in data.get('posted_links', []):
+            normalized_links.add(normalize_url(link) if link else '')
+        data['posted_links'] = list(normalized_links - {''})
+        return data
+    return {"posted_links": [], "posted_ids": [], "posted_titles": [], "posted_original_titles": [], "posted_source_urls": [], "history": [], "last_reset": ""}
 
 def save_posted(data):
     with open(POSTED_FILE, 'w', encoding='utf-8') as f:
@@ -86,59 +112,97 @@ def d1_query(sql):
         log(f'  ⚠️ D1 오류: {e}')
         return []
 
+def is_already_posted(article, posted):
+    """5조건 중 하나라도 매칭되면 발행된 기사로 판정"""
+    aid = str(article.get('id', ''))
+    link = normalize_url(article.get('link', ''))
+    title = (article.get('title', '') or '')[:30]
+    original_title = (article.get('original_title', '') or '')[:30]
+    source_url = normalize_url(article.get('source_url', '') or '')
+
+    # 1. id 매칭
+    if aid and aid in posted.get('posted_ids', []):
+        return True
+    # 2. link 매칭 (정규화)
+    if link and link in set(normalize_url(l) for l in posted.get('posted_links', [])):
+        return True
+    # 3. title[:30] 매칭
+    if title and title in set(t[:30] for t in posted.get('posted_titles', [])):
+        return True
+    # 4. original_title[:30] 매칭 (비어있으면 스킵)
+    if original_title and original_title in set(ot[:30] for ot in posted.get('posted_original_titles', [])):
+        return True
+    # 5. source_url 매칭 (비어있으면 스킵)
+    if source_url and source_url in set(normalize_url(su) for su in posted.get('posted_source_urls', [])):
+        return True
+    return False
+
 def get_articles():
     """3단계 우선순위 기사 풀 반환"""
     posted = load_posted()
-    posted_links = set(posted.get('posted_links', []))
-    posted_ids = set(posted.get('posted_ids', []))
     today = datetime.now().strftime('%Y-%m-%d')
 
     articles = []
 
     # 1순위: 오늘 브리핑
     sql1 = f"""SELECT n.id, n.title, n.link, n.description, n.source, n.pub_date,
-                      COALESCE(bi.comment, '') as comment
+                      COALESCE(bi.comment, '') as comment,
+                      COALESCE(n.original_title, '') as original_title,
+                      COALESCE(n.source_url, '') as source_url
                FROM news n
                JOIN briefing_items bi ON bi.news_id = n.id
                JOIN briefings b ON b.id = bi.briefing_id
                WHERE b.date = '{today}' AND b.status = 'published'
                GROUP BY n.id ORDER BY bi.sort_order ASC"""
     rows = d1_query(sql1)
+    excluded_1 = 0
     for r in rows:
-        if r['id'] not in posted_ids:
+        if is_already_posted(r, posted):
+            excluded_1 += 1
+        else:
             r['priority'] = 1
             articles.append(r)
-    log(f'  1순위 브리핑: {len(rows)}개 → 신규 {len([a for a in articles if a["priority"]==1])}개')
+    log(f'  1순위 브리핑: {len(rows)}개 → 신규 {len([a for a in articles if a["priority"]==1])}개 (제외 {excluded_1}개)')
 
     # 2순위: 최근 7일 news (브리핑 제외)
-    existing_ids = set(a['id'] for a in articles)
-    sql2 = f"""SELECT id, title, link, description, source, pub_date, '' as comment
+    existing_ids = set(str(a['id']) for a in articles)
+    sql2 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
+                      COALESCE(original_title, '') as original_title,
+                      COALESCE(source_url, '') as source_url
                FROM news
                WHERE pub_date >= date('now', '-7 days')
                ORDER BY pub_date DESC LIMIT 1000"""
     rows2 = d1_query(sql2)
+    excluded_2 = 0
     for r in rows2:
-        if r['id'] not in existing_ids and r['id'] not in posted_ids and r['link'] not in posted_links:
+        if str(r['id']) in existing_ids or is_already_posted(r, posted):
+            excluded_2 += 1
+        else:
             r['priority'] = 2
             articles.append(r)
-            existing_ids.add(r['id'])
-    log(f'  2순위 최근7일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개')
+            existing_ids.add(str(r['id']))
+    log(f'  2순위 최근7일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개 (제외 {excluded_2}개)')
 
     # 3순위: 이전 기사
     if len(articles) < 50:
         remaining = 50 - len(articles)
-        existing_ids = set(a['id'] for a in articles)
-        sql3 = f"""SELECT id, title, link, description, source, pub_date, '' as comment
+        existing_ids = set(str(a['id']) for a in articles)
+        sql3 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
+                          COALESCE(original_title, '') as original_title,
+                          COALESCE(source_url, '') as source_url
                    FROM news
                    WHERE pub_date < date('now', '-7 days')
                    ORDER BY pub_date DESC LIMIT {remaining + 20}"""
         rows3 = d1_query(sql3)
+        excluded_3 = 0
         for r in rows3:
-            if r['id'] not in existing_ids and r['id'] not in posted_ids and r['link'] not in posted_links:
+            if str(r['id']) in existing_ids or is_already_posted(r, posted):
+                excluded_3 += 1
+            else:
                 r['priority'] = 3
                 articles.append(r)
-                existing_ids.add(r['id'])
-        log(f'  3순위 이전: 신규 {len([a for a in articles if a["priority"]==3])}개')
+                existing_ids.add(str(r['id']))
+        log(f'  3순위 이전: 신규 {len([a for a in articles if a["priority"]==3])}개 (제외 {excluded_3}개)')
 
     log(f'  총 기사 풀: {len(articles)}개')
     return articles

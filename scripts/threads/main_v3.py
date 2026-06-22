@@ -93,21 +93,31 @@ def run_v3(dry_run=False):
         log(f'  ✅ {len(cards)}개 조각 작성 완료')
 
         if dry_run:
-            # dry-run에서도 posted_ids/links 저장 (중복 방지)
-            from db_reader import load_posted, save_posted
+            # dry-run에서도 posted_ids/links/titles 저장 (중복 방지)
+            from db_reader import load_posted, save_posted, normalize_url
             posted = load_posted()
-            for aid in pitch.get('article_ids', []):
-                aid_str = str(aid)
-                if aid_str not in posted.get('posted_ids', []):
+            pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
+            for aid_str in pitch_ids:
+                if aid_str and aid_str not in posted.get('posted_ids', []):
                     posted.setdefault('posted_ids', []).append(aid_str)
+                # 기사 필드에서 매핑
                 for a in articles:
-                    if str(a.get('id', '')) == aid_str:
-                        link = a.get('link', '')
+                    if str(a.get('id', '')).lstrip('#').strip() == aid_str:
+                        link = normalize_url(a.get('link', ''))
+                        title = (a.get('title', '') or '')[:30]
+                        orig_title = (a.get('original_title', '') or '')[:30]
+                        src_url = normalize_url(a.get('source_url', '') or '')
                         if link and link not in posted.get('posted_links', []):
                             posted.setdefault('posted_links', []).append(link)
+                        if title and title not in posted.get('posted_titles', []):
+                            posted.setdefault('posted_titles', []).append(title)
+                        if orig_title and orig_title not in posted.get('posted_original_titles', []):
+                            posted.setdefault('posted_original_titles', []).append(orig_title)
+                        if src_url and src_url not in posted.get('posted_source_urls', []):
+                            posted.setdefault('posted_source_urls', []).append(src_url)
                         break
             save_posted(posted)
-            log(f'[DRY RUN] 발행 생략 (posted_ids/links {len(posted["posted_ids"])}개)')
+            log(f'[DRY RUN] 발행 생략 (posted_ids {len(posted["posted_ids"])}개, posted_links {len(posted.get("posted_links", []))}개)')
             from v3.narrative_pitcher import save_pitch_to_history
             save_pitch_to_history(pitch)
             print(f'\n{"="*60}')
@@ -134,21 +144,30 @@ def run_v3(dry_run=False):
         if result:
             log(f'  ✅ 발행 완료: 루트 ID {result}')
             # 피치의 모든 article_ids 저장 (보조 기사 중복 방지)
-            from db_reader import load_posted, save_posted
+            from db_reader import load_posted, save_posted, normalize_url
             posted = load_posted()
-            pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', [])]
+            pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
             for aid_str in pitch_ids:
-                if aid_str not in posted.get('posted_ids', []):
+                if aid_str and aid_str not in posted.get('posted_ids', []):
                     posted.setdefault('posted_ids', []).append(aid_str)
-                # 링크도 저장
+                # 기사 필드에서 매핑
                 for a in articles:
-                    if str(a.get('id', '')) == aid_str:
-                        link = a.get('link', '')
+                    if str(a.get('id', '')).lstrip('#').strip() == aid_str:
+                        link = normalize_url(a.get('link', ''))
+                        title = (a.get('title', '') or '')[:30]
+                        orig_title = (a.get('original_title', '') or '')[:30]
+                        src_url = normalize_url(a.get('source_url', '') or '')
                         if link and link not in posted.get('posted_links', []):
                             posted.setdefault('posted_links', []).append(link)
+                        if title and title not in posted.get('posted_titles', []):
+                            posted.setdefault('posted_titles', []).append(title)
+                        if orig_title and orig_title not in posted.get('posted_original_titles', []):
+                            posted.setdefault('posted_original_titles', []).append(orig_title)
+                        if src_url and src_url not in posted.get('posted_source_urls', []):
+                            posted.setdefault('posted_source_urls', []).append(src_url)
                         break
             save_posted(posted)
-            log(f'  ✅ posted_ids 업데이트: {len(pitch_ids)}개 기사 등록')
+            log(f'  ✅ posted 업데이트: {len(pitch_ids)}개 기사')
             from v3.narrative_pitcher import save_pitch_to_history
             save_pitch_to_history(pitch)
             next_run = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')

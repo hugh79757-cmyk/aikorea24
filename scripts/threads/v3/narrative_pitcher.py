@@ -6,6 +6,7 @@ narrative_pitcher.py — 100개 기사 → 가장 강력한 이야기 발견
 """
 import os, sys, json, re
 from datetime import datetime
+from db_reader import normalize_url
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
@@ -177,10 +178,37 @@ def load_pitch_history():
             return []
     return []
 
-def is_duplicate_pitch(pitch, history):
-    """비슷한 피치가 이미 history에 있는지 확인 (내용 기반)"""
+def is_duplicate_pitch(pitch, history, posted=None):
+    """비슷한 피치가 이미 history에 있는지 확인 (5조건: link, title, original_title, source_url, id)"""
     hook = pitch.get('hook', '')[:15]
     narrative = pitch.get('narrative', '')[:30]
+    new_ids = set(str(x).lstrip('#').strip() for x in pitch.get('article_ids', []) if str(x).strip())
+    new_urls = set(pitch.get('article_urls', []))
+    new_titles = set(pitch.get('article_titles', []))
+    new_original_titles = set(pitch.get('article_original_titles', []))
+    new_source_urls = set(pitch.get('article_source_urls', []))
+
+    if posted:
+        # 새 pitch의 기사들 중 하나라도 posted와 매칭되면 중복
+        for i in range(len(pitch.get('article_ids', []))):
+            aid = str(pitch['article_ids'][i]).lstrip('#').strip()
+            link = list(new_urls)[i] if i < len(new_urls) else ''
+            title = list(new_titles)[i] if i < len(new_titles) else ''
+            orig_title = list(new_original_titles)[i] if i < len(new_original_titles) else ''
+            src_url = list(new_source_urls)[i] if i < len(new_source_urls) else ''
+
+            posted_links_norm = set(normalize_url(l) for l in posted.get('posted_links', []))
+            posted_titles_set = set(t[:30] for t in posted.get('posted_titles', []))
+            posted_orig_titles_set = set(ot[:30] for ot in posted.get('posted_original_titles', []))
+            posted_src_urls_norm = set(normalize_url(su) for su in posted.get('posted_source_urls', []))
+
+            if (aid and aid in posted.get('posted_ids', []) or
+                link and normalize_url(link) in posted_links_norm or
+                title and title[:30] in posted_titles_set or
+                orig_title and orig_title[:30] in posted_orig_titles_set or
+                src_url and normalize_url(src_url) in posted_src_urls_norm):
+                return True
+
     for h in history:
         # hook 앞 15자 일치 → 중복
         if h.get('hook', '')[:15] == hook:
@@ -188,11 +216,20 @@ def is_duplicate_pitch(pitch, history):
         # narrative 앞 30자 일치 → 중복
         if narrative and h.get('narrative', '')[:30] == narrative:
             return True
-        # 같은 article_ids 조합
-        old_ids = set(str(x) for x in h.get('article_ids', []))
-        new_ids = set(str(x) for x in pitch.get('article_ids', []))
-        if old_ids and new_ids and old_ids == new_ids:
-            return True
+        # article_ids 교집합이 새 pitch의 50% 이상이면 중복
+        if new_ids:
+            old_ids = set(str(x).lstrip('#').strip() for x in h.get('article_ids', []) if str(x).strip())
+            if old_ids:
+                overlap = len(old_ids & new_ids)
+                if overlap / len(new_ids) >= 0.5:
+                    return True
+        # article_urls 교집합이 새 pitch의 50% 이상이면 중복
+        if new_urls:
+            old_urls = set(h.get('article_urls', []))
+            if old_urls:
+                overlap = len(old_urls & new_urls)
+                if overlap / len(new_urls) >= 0.5:
+                    return True
     return False
 
 def save_pitch_to_history(pitch):
@@ -210,6 +247,10 @@ def save_pitch_to_history(pitch):
             'hook': pitch.get('hook', '')[:30],
             'narrative': pitch.get('narrative', '')[:50],
             'article_ids': pitch.get('article_ids', []),
+            'article_urls': pitch.get('article_urls', []),
+            'article_titles': pitch.get('article_titles', []),
+            'article_original_titles': pitch.get('article_original_titles', []),
+            'article_source_urls': pitch.get('article_source_urls', []),
             'date': datetime.now().strftime('%Y-%m-%d')
         })
         with open(path, 'w') as f:
@@ -220,9 +261,25 @@ def save_pitch_to_history(pitch):
 def get_pitches(articles, max_articles=100):
     """100개 기사 → TOP 1 피치 (단일 호출)"""
     from v3.model_router import chat_completion
+    from db_reader import load_posted
     pitch_history = load_pitch_history()
+    posted = load_posted()
+    posted_urls = set(posted.get('posted_urls', []))
     if pitch_history:
         log(f'  피치 이력: {len(pitch_history)}개 존재')
+
+    # 기사 ID→필드 매핑 딕셔너리
+    id_to_link = {}
+    id_to_title = {}
+    id_to_original_title = {}
+    id_to_source_url = {}
+    for a in articles[:max_articles]:
+        aid = str(a.get('id', ''))
+        if aid:
+            id_to_link[aid] = a.get('link', '')
+            id_to_title[aid] = a.get('title', '')
+            id_to_original_title[aid] = a.get('original_title', '')
+            id_to_source_url[aid] = a.get('source_url', '')
 
     # 기사 텍스트 변환
     articles_text = []
@@ -294,7 +351,29 @@ def get_pitches(articles, max_articles=100):
         return []
 
     # 중복 피치 제외
-    unique = [p for p in valid if not is_duplicate_pitch(p, pitch_history)]
+    unique = []
+    for p in valid:
+        # article_ids에서 각 필드 매핑
+        p_urls = []
+        p_titles = []
+        p_original_titles = []
+        p_source_urls = []
+        for aid in p.get('article_ids', []):
+            aid_str = str(aid).lstrip('#').strip()
+            if aid_str:
+                p_urls.append(id_to_link.get(aid_str, ''))
+                p_titles.append(id_to_title.get(aid_str, ''))
+                p_original_titles.append(id_to_original_title.get(aid_str, ''))
+                p_source_urls.append(id_to_source_url.get(aid_str, ''))
+        p['article_urls'] = p_urls
+        p['article_titles'] = p_titles
+        p['article_original_titles'] = p_original_titles
+        p['article_source_urls'] = p_source_urls
+
+        if is_duplicate_pitch(p, pitch_history, posted):
+            log(f'  ⚠️ 중복 피치 제외: "{p.get("hook", "")[:30]}" (기사: {len(p.get("article_ids", []))}개, URL: {len(p_urls)}개)')
+        else:
+            unique.append(p)
     if not unique:
         log('  ❌ 모든 피치가 이력과 중복')
         return []
