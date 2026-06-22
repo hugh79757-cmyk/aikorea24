@@ -118,15 +118,18 @@ def fetch_article_body(url):
         return ''
 
 def fix_cards(cards):
-    """DiffusionGemma로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
+    """GPT-4o-mini로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
     내용/의미/구조는 변경하지 않음
+    DiffusionGemma 대신 GPT-4o-mini 사용 — 자기 오류를 스스로 수정하는 구조적 문제 해결
     """
-    from v3.model_router import chat_completion, WRITER_NVIDIA_MODEL
+    from v3.model_router import chat_completion
     text = '\n---\n'.join(cards)
     prompt = f"""다음 Threads 쓰레드에서 글자 단위 오류만 수정하라.
 
 [수정 대상 — 반드시 아래 패턴을 찾아 복구할 것]
 - 첫 글자/숫자 생략: "국 청소년"→"미국 청소년",  "년 만에"→"1년 만에",  "비디아"→"엔비디아",  "트로픽"→"앤트로픽"
+- 한국어 음절 생략: "데팅"→"데이팅",  "앱스"→"앱스토어",  "인공지"→"인공지능",  "챗지"→"챗GPT"
+- 한글 자모 누락: "테크놀로지"→"테크놀로지",  "알고리즘"→"알고리즘",  "플랫폼"→"플랫폼"
 - 단어 중간 음절 생략: "운동하기 위한"→"운영하기 위한" (영→운),  "수학올림픽"→"수학올림피아드" (픽→피아드)
 - 중복 글자/단어: "모델 간 간"→"모델 간",  "있는 있는"→"있는"
 - 따옴표/특수문자 오류: "'신발"→"신발",  "제조'"→"제조"
@@ -146,16 +149,17 @@ def fix_cards(cards):
 --- 쓰레드 끝 ---"""
     try:
         result = chat_completion(
+            system_prompt="당신은 한국어 텍스트 교정 전문가입니다. 글자 단위 오류만 정확히 수정합니다.",
             messages=[{'role': 'user', 'content': prompt}],
             temperature=0.1,
             max_tokens=8000,
-            nvidia_model=WRITER_NVIDIA_MODEL,
+            model_override='openai',
         )
         if result:
             fixed = [c.strip() for c in result.split('---') if c.strip()]
             if len(fixed) == len(cards):
                 changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
-                log(f'  🔧 오류 수정: {changed}/{len(cards)}개 카드 수정됨')
+                log(f'  🔧 오류 수정(GPT-4o-mini): {changed}/{len(cards)}개 카드 수정됨')
                 return fixed
             log(f'  ⚠️ 수정 후 카드 수 불일치: {len(fixed)}≠{len(cards)} → 원본 유지')
         else:
@@ -263,7 +267,7 @@ def write_thread(pitch, all_articles):
             cards = parse_cards(content)
             cards = fix_cards(cards)
 
-            if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
+            if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
                 # article_ids[0] 링크를 1순위로 사용
                 primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
                 cards = assemble_final(cards, related, primary_url)
@@ -288,7 +292,7 @@ def write_thread(pitch, all_articles):
             raise Exception('모델 응답 없음')
         cards = parse_cards(content)
         cards = fix_cards(cards)
-        if validate_cards(cards, pitch) and validate_year(cards, article_body_text):
+        if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
             primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
             cards = assemble_final(cards, related, primary_url)
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
@@ -356,6 +360,60 @@ def validate_year(cards, article_body_text):
         return False
 
     log(f'    → 연도 검증 통과: 쓰레드 연도 {rest_years} ⊆ 허용 {allowed}')
+    return True
+
+def validate_keywords(cards, article_body_text):
+    """키워드 검증: 기사 본문에 있는 핵심 한글 단어가 쓰레드에서 누락/변형됐는지 확인
+    DiffusionGemma의 음절 잘림으로 인한 변형 탐지
+    """
+    body_text = article_body_text or ''
+    thread_text = ' '.join(cards)
+    if not body_text or not thread_text:
+        return True  # 검증 불가 → 통과
+
+    # 기사 본문에서 2~8자 한글 단어 추출 (2회 이상 등장하는 것만)
+    from collections import Counter
+    body_words = re.findall(r'[가-힣]{2,8}', body_text)
+    body_counter = Counter(body_words)
+    # 2회 이상 등장한 단어만 핵심 키워드로 간주
+    keywords = {w for w, cnt in body_counter.items() if cnt >= 2 and len(w) >= 3}
+
+    # 쓰레드에 등장하는 한글 단어 추출
+    thread_words = set(re.findall(r'[가-힣]{2,}', thread_text))
+
+    # 기사 핵심 키워드 중 쓰레드에 없는 것 탐지
+    missing = []
+    for kw in keywords:
+        if kw not in thread_words:
+            # 음절 잘림 패턴 탐지: 키워드 앞/뒤가 잘렸는지 확인
+            # 예: "데이팅" → "데팅" (이 누락), "인공지능" → "인공지" (능 누락)
+            truncated = False
+            for tw in thread_words:
+                # 키워드가 쓰레드 단어의 접두사 (앞이 잘린 경우)
+                if len(tw) >= 2 and kw.startswith(tw) and len(tw) < len(kw):
+                    truncated = True
+                    missing.append((kw, tw, '접두사 잘림'))
+                    break
+                # 키워드가 쓰레드 단어의 접미사 (뒤가 잘린 경우)
+                if len(tw) >= 2 and kw.endswith(tw) and len(tw) < len(kw):
+                    truncated = True
+                    missing.append((kw, tw, '접미사 잘림'))
+                    break
+            if not truncated and len(kw) >= 4:
+                # 4자 이상 키워드가 쓰레드에 전혀 없으면 누락 의심
+                missing.append((kw, '', '누락'))
+
+    if missing:
+        issues = [f'{kw}→{tw}({reason})' if tw else f'{kw}({reason})' for kw, tw, reason in missing]
+        log(f'    → 키워드 검증 경고: {len(issues)}개 의심 키워드: {", ".join(issues[:5])}')
+        # 치명적 누락(접두사 잘림)이 아니면 경고만 하고 통과
+        critical = [m for m in missing if '잘림' in m[2]]
+        if critical:
+            log(f'    → 키워드 검증 실패: 접두사/접미사 잘림 {len(critical)}개')
+            return False
+        return True  # 누락 의심만 있고 잘림 없으면 통과
+
+    log(f'    → 키워드 검증 통과: 핵심 단어 {len(keywords)}개 매칭')
     return True
 
 def assemble_final(cards, articles, primary_url=None):

@@ -56,8 +56,11 @@ D1 Database
     │   ├─ 성공 시: (body_text, actual_url) 반환 → actual_url이 최종 링크로 사용
     │   ├─ 크롤링 (전문, 글자 수 제한 없음)
     │   build_system_prompt() + user_prompt → 모델 추론
-    │   ↑ DiffusionGemma 5회 시도 → 실패 시 GPT-4o-mini 1회
-    │   ↓ validate_cards() 검증 (5카드 + hook 일치 + twist 키워드 커버리지 40% + 마지막 키워드)
+    │   ↑ DiffusionGemma 2회 시도 → 실패 시 GPT-4o-mini 1회
+    │   ↓ fix_cards() — GPT-4o-mini로 글자 단위 오류 수정 (한국어 음절 복구)
+    │   ↓ validate_cards() 검증 (5카드 + hook 일치)
+    │   ↓ validate_year() 검증 (연도 할루시네이션 방지)
+    │   ↓ validate_keywords() 검증 (기사 핵심 키워드 음절 잘림 탐지)
     │   ↓ assemble_final(actual_urls) URL 1개 추가 (재검증 후 추가)
     │   ↓ save_draft() 로그/초안 저장
     │
@@ -214,12 +217,14 @@ user_prompt
 **추론 실패 처리:**
 - DiffusionGemma **2회** 시도 (2026-06-21: 5→2, 첫 글자 드랍 빠른 fallback)
 - 전부 실패 시 GPT-4o-mini 1회 fallback
-- 각 시도마다 `validate_cards()` 검증 (2단계):
+- 각 시도마다 `validate_cards()` + `validate_year()` + `validate_keywords()` 검증 (3단계):
   - 카드 수 5개 이상
   - 첫 번째 카드가 pitch hook[:8] 포함
-  - (2026-06-21: twist 키워드 검증 제거 — 발행률 저하 주범)
-- 쓰레드 생성 성공 후 **fix_cards() 2-pass**: DiffusionGemma로 글자 단위 오류 수정
-  - 첫 글자/숫자 생략 복구, 단어 중간 음절 생략 복구, 중복/특수문자 정리
+  - 기사 본문 연도와 쓰레드 연도 일치 (할루시네이션 방지)
+  - 기사 핵심 키워드의 음절 잘림/누락 탐지 (2026-06-22 추가)
+- 쓰레드 생성 성공 후 **fix_cards() 1-pass**: GPT-4o-mini로 글자 단위 오류 수정
+  - DiffusionGemma 대신 GPT-4o-mini 사용 (자기 오류 자기 수정 구조적 문제 해결)
+  - 첫 글자/숫자 생략 복구, 한국어 음절 생략 복구 ("데팅→데이팅"), 중복/특수문자 정리
 - 실패 시 상세 로그 출력
 
 **출력 포맷팅:**
@@ -381,3 +386,5 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-21 | **문장 축약 금지** — "2~3줄 서술, 인과관계 설명"으로 변경 |
 | 2026-06-21 | **publisher rate limit 대응** — 카드 간 대기 3→10초, 재시도 간격 2→10초 |
 | 2026-06-21 | **fix_cards 금지 규칙 개선** — '단어 교체 금지'→'틀린 글자는 올바른 글자로 교체, 의미 유지' |
+| 2026-06-22 | **fix_cards GPT-4o-mini 전환** — DiffusionGemma 자기 오류 자기 수정 구조적 문제 해결, 한국어 음절 오류 패턴 추가 ("데팅→데이팅" 등) |
+| 2026-06-22 | **validate_keywords() 추가** — 기사 본문 핵심 키워드(2회 이상 등장 3자+ 한글 단어) vs 쓰레드 대조, 접두사/접미사 잘림 탐지 |
