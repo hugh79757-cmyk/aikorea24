@@ -1,7 +1,7 @@
 ---
 title: "AI 시대 PII 필터링이란 무엇인가 OpenAI NVIDIA가 직접 뛰어든 개인정보 보호 기술의 현재"
 description: "OpenAI Privacy Filter와 NVIDIA GLiNER-PII 등 빅테크가 AI 기반 개인정보 필터링 모델을 잇따라 공개하고 있다. PII 필터링이 왜 기업의 핵심 거버넌스 과제가 됐는지 분석한다."
-date: 2026-06-22T13:41:15+09:00
+date: 2026-06-22T14:36:15+09:00
 category: "뉴스"
 tags:
   - "PII필터링"
