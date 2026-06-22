@@ -6,6 +6,18 @@ import xml.etree.ElementTree as ET
 
 # .env 파일 직접 읽기
 def load_env(filepath):
+    # 공통 환경변수 먼저 로드 (~/.env.common)
+    common = os.path.expanduser('~/.env.common')
+    if os.path.exists(common):
+        with open(common) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') \
+                   and '=' in line and not line.startswith('source'):
+                    k, v = line.split('=', 1)
+                    os.environ.setdefault(k.strip(),
+                                         v.strip().strip('"').strip("'"))
+
     with open(filepath) as f:
         for line in f:
             line = line.strip()

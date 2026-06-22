@@ -21,6 +21,18 @@ def log(msg):
         f.write(f'[{ts}] [v3] {msg}\n')
 
 def load_env():
+    # 공통 환경변수 먼저 로드 (~/.env.common)
+    common = os.path.expanduser('~/.env.common')
+    if os.path.exists(common):
+        with open(common) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') \
+                   and '=' in line and not line.startswith('source'):
+                    k, v = line.split('=', 1)
+                    os.environ.setdefault(k.strip(),
+                                         v.strip().strip('"').strip("'"))
+
     env_path = os.path.join(PROJECT_DIR, '.env')
     env_sh = os.path.join(PROJECT_DIR, 'api_test', '.env.sh')
     for p in [env_path, env_sh]:

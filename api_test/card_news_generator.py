@@ -10,6 +10,18 @@ from openai import OpenAI
 
 # ── 환경 ──
 def load_env(path):
+    # 공통 환경변수 먼저 로드 (~/.env.common)
+    common = os.path.expanduser('~/.env.common')
+    if os.path.exists(common):
+        with open(common) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') \
+                   and '=' in line and not line.startswith('source'):
+                    k, v = line.split('=', 1)
+                    os.environ.setdefault(k.strip(),
+                                         v.strip().strip('"').strip("'"))
+
     with open(path) as f:
         for line in f:
             line = line.strip()

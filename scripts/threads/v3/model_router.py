@@ -13,6 +13,18 @@ ENV_FILE = os.path.join(PROJECT_DIR, '.env')
 
 def load_env():
     """.env에서 API 키 로드"""
+    # 공통 환경변수 먼저 로드 (~/.env.common)
+    common = os.path.expanduser('~/.env.common')
+    if os.path.exists(common):
+        with open(common) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') \
+                   and '=' in line and not line.startswith('source'):
+                    k, v = line.split('=', 1)
+                    os.environ.setdefault(k.strip(),
+                                         v.strip().strip('"').strip("'"))
+
     envs = {}
     if os.path.exists(ENV_FILE):
         with open(ENV_FILE) as f:

@@ -39,6 +39,18 @@ def log(msg):
 # 환경변수 로딩
 # ============================================
 def load_env():
+    # 공통 환경변수 먼저 로드 (~/.env.common)
+    common = os.path.expanduser('~/.env.common')
+    if os.path.exists(common):
+        with open(common) as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') \
+                   and '=' in line and not line.startswith('source'):
+                    k, v = line.split('=', 1)
+                    os.environ.setdefault(k.strip(),
+                                         v.strip().strip('"').strip("'"))
+
     if not os.path.exists(ENV_PATH):
         log(f"[WARN] .env 파일 없음: {ENV_PATH}")
         return
