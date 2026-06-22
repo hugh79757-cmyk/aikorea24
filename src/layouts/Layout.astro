@@ -28,7 +28,7 @@ const {
 
 let currentUser = null;
 const session = Astro.cookies.get('session')?.value;
-if (session) currentUser = await verifySession(session);
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
 
 const navItems = [
   { label: '홈', href: '/' },

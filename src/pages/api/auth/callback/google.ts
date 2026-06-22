@@ -40,7 +40,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
       `SELECT id, name, email, avatar FROM users WHERE google_id = ?`
     ).bind(user.id).first();
 
-    const sessionData = await signSession(dbUser);
+    const sessionData = await signSession(dbUser, (locals as any).sessionSecret);
     cookies.set('session', sessionData, {
       path: '/', httpOnly: true, secure: import.meta.env.PROD, domain: import.meta.env.PROD ? '.aikorea24.kr' : undefined,
       sameSite: 'lax', maxAge: 60 * 60 * 24 * 7,

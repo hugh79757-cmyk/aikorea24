@@ -3,15 +3,15 @@ import { verifySession } from '../../../lib/auth';
 
 const ADMIN_EMAILS = ['twinssn@gmail.com'];
 
-async function requireAdmin(cookies: any): Promise<boolean> {
+async function requireAdmin(cookies: any, secret: string): Promise<boolean> {
   const session = cookies.get('session')?.value;
   if (!session) return false;
-  const user = await verifySession(session);
+  const user = await verifySession(session, secret);
   return !!user && ADMIN_EMAILS.includes(user.email);
 }
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
-  if (!(await requireAdmin(cookies))) {
+  if (!(await requireAdmin(cookies, (locals as any).sessionSecret))) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
@@ -57,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
 
 export const DELETE: APIRoute = async ({ request, locals, cookies }) => {
-  if (!(await requireAdmin(cookies))) {
+  if (!(await requireAdmin(cookies, (locals as any).sessionSecret))) {
     return new Response(JSON.stringify({ ok: false, error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 

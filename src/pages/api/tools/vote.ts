@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   let userEmail = '';
   try {
-    const user = await verifySession(session);
+    const user = await verifySession(session, (locals as any).sessionSecret);
     if (!user) {
       return new Response(JSON.stringify({ error: '세션 오류' }), { status: 401 });
     }
@@ -69,7 +69,7 @@ export const GET: APIRoute = async ({ request, locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (session) {
     try {
-      const user = await verifySession(session);
+      const user = await verifySession(session, (locals as any).sessionSecret);
       if (user) {
         const existing = await db.prepare(
           'SELECT id FROM tool_votes WHERE tool_id = ? AND user_email = ?'

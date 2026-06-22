@@ -54,7 +54,7 @@ const session = Astro.cookies.get('session')?.value;
 let isAuth = false;
 let sessionUser: { email: string; name: string } | null = null;
 if (session) {
-  sessionUser = await verifySession(session);
+  sessionUser = await verifySession(session, Astro.locals.sessionSecret);
   isAuth = !!sessionUser?.email;
 }
 

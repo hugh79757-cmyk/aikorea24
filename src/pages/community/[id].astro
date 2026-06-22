@@ -4,7 +4,7 @@ import { verifySession } from '../../lib/auth';
 
 let currentUser = null;
 const session = Astro.cookies.get('session')?.value;
-if (session) currentUser = await verifySession(session);
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
 
 const { id } = Astro.params;
 const db = Astro.locals.runtime?.env?.DB;

@@ -66,7 +66,7 @@ const categoryColors: Record<string, string> = {
 const session = Astro.cookies.get('session')?.value;
 let loggedIn = false;
 if (session) {
-  const user = await verifySession(session);
+  const user = await verifySession(session, Astro.locals.sessionSecret);
   loggedIn = !!user;
 }
 

@@ -14,6 +14,12 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  const runtime = (context.locals as any).runtime;
+  context.locals.sessionSecret = runtime?.env?.SESSION_SECRET || '';
+  if (!context.locals.sessionSecret) {
+    console.warn('[auth] SESSION_SECRET is not configured');
+  }
+
   const url = new URL(context.request.url);
   const path = url.pathname;
   const noSlash = path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path;

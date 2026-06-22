@@ -9,7 +9,7 @@ export const PATCH: APIRoute = async ({ request, locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   try {
-    const user = await verifySession(session);
+    const user = await verifySession(session, (locals as any).sessionSecret);
     if (!user || !ADMIN_EMAILS.includes(user.email)) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }
@@ -59,7 +59,7 @@ export const GET: APIRoute = async ({ url, locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   try {
-    const user = await verifySession(session);
+    const user = await verifySession(session, (locals as any).sessionSecret);
     if (!user || !ADMIN_EMAILS.includes(user.email)) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), { status: 403 });
     }

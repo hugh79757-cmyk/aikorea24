@@ -16,7 +16,7 @@ function escapeHtml(str: string | null | undefined): string {
 export const POST: APIRoute = async ({ locals, cookies }) => {
   const session = cookies.get('session')?.value;
   if (!session) return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
-  const user = await verifySession(session);
+  const user = await verifySession(session, (locals as any).sessionSecret);
   if (!user || !ADMIN_EMAILS.includes(user.email)) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }

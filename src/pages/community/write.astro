@@ -4,7 +4,7 @@ import { verifySession } from '../../lib/auth';
 
 let currentUser = null;
 const session = Astro.cookies.get('session')?.value;
-if (session) currentUser = await verifySession(session);
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
 
 if (!currentUser) {
   return Astro.redirect('/auth/consent');

@@ -3,11 +3,11 @@ import { verifySession } from '../../../lib/auth';
 
 const ADMIN_EMAILS = ['twinssn@gmail.com'];
 
-async function isAdmin(cookies: any): Promise<boolean> {
+async function isAdmin(cookies: any, secret: string): Promise<boolean> {
   const session = cookies.get('session')?.value;
   if (!session) return false;
   try {
-    const user = await verifySession(session);
+    const user = await verifySession(session, secret);
     if (!user) return false;
     return ADMIN_EMAILS.includes(user.email);
   } catch {
@@ -17,7 +17,7 @@ async function isAdmin(cookies: any): Promise<boolean> {
 
 // 권한 부여
 export const POST: APIRoute = async ({ request, cookies, locals }) => {
-  if (!isAdmin(cookies)) {
+  if (!isAdmin(cookies, (locals as any).sessionSecret)) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },
@@ -62,7 +62,7 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
 
 // 권한 목록 조회
 export const GET: APIRoute = async ({ cookies, locals }) => {
-  if (!isAdmin(cookies)) {
+  if (!isAdmin(cookies, (locals as any).sessionSecret)) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },
@@ -92,7 +92,7 @@ export const GET: APIRoute = async ({ cookies, locals }) => {
 
 // 권한 삭제
 export const DELETE: APIRoute = async ({ request, cookies, locals }) => {
-  if (!isAdmin(cookies)) {
+  if (!isAdmin(cookies, (locals as any).sessionSecret)) {
     return new Response(JSON.stringify({ error: 'unauthorized' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },

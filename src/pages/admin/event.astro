@@ -8,7 +8,7 @@ const ADMIN_EMAILS = ['twinssn@gmail.com'];
 let isAuth = false;
 const session = Astro.cookies.get('session')?.value;
 if (session) {
-  const user = await verifySession(session);
+  const user = await verifySession(session, Astro.locals.sessionSecret);
   if (user) {
     isAuth = ADMIN_EMAILS.includes(user.email);
   }

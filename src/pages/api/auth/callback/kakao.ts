@@ -65,7 +65,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
       ).bind(kakaoId).first();
     }
 
-    const sessionData = await signSession(dbUser);
+    const sessionData = await signSession(dbUser, (locals as any).sessionSecret);
     cookies.set('session', sessionData, {
       path: '/',
       httpOnly: true,

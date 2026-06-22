@@ -2,16 +2,16 @@ const ALGORITHM = { name: 'HMAC', hash: 'SHA-256' };
 const EXTRACTABLE = false;
 const KEY_USAGES: KeyUsage[] = ['sign', 'verify'];
 
-async function getSessionSecret(): Promise<CryptoKey> {
-  const secret = (globalThis as any).__SESSION_SECRET__ || '';
+async function getSessionSecret(secret: string): Promise<CryptoKey> {
+  if (!secret) throw new Error('SESSION_SECRET is not configured');
   const encoder = new TextEncoder();
   const keyData = encoder.encode(secret);
   return crypto.subtle.importKey('raw', keyData, ALGORITHM, EXTRACTABLE, KEY_USAGES);
 }
 
-export async function signSession(data: Record<string, any>): Promise<string> {
+export async function signSession(data: Record<string, any>, secret: string): Promise<string> {
   const payload = btoa(JSON.stringify(data));
-  const key = await getSessionSecret();
+  const key = await getSessionSecret(secret);
   const encoder = new TextEncoder();
   const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
   const sigArray = Array.from(new Uint8Array(signature));
@@ -19,7 +19,7 @@ export async function signSession(data: Record<string, any>): Promise<string> {
   return `${payload}.${sigB64}`;
 }
 
-export async function verifySession(signedSession: string): Promise<Record<string, any> | null> {
+export async function verifySession(signedSession: string, secret: string): Promise<Record<string, any> | null> {
   const dotIdx = signedSession.lastIndexOf('.');
   if (dotIdx === -1) return null;
 
@@ -27,7 +27,7 @@ export async function verifySession(signedSession: string): Promise<Record<strin
   const sigB64 = signedSession.slice(dotIdx + 1);
 
   try {
-    const key = await getSessionSecret();
+    const key = await getSessionSecret(secret);
     const encoder = new TextEncoder();
     const sigData = Uint8Array.from(atob(sigB64), c => c.charCodeAt(0));
     const valid = await crypto.subtle.verify('HMAC', key, sigData, encoder.encode(payload));
@@ -39,10 +39,10 @@ export async function verifySession(signedSession: string): Promise<Record<strin
 }
 
 // 세션에서 유저 정보 추출 (HMAC 검증 포함)
-export async function getSessionUser(cookies: any): Promise<{ email: string; name: string } | null> {
+export async function getSessionUser(cookies: any, secret: string): Promise<{ email: string; name: string } | null> {
   const session = cookies.get('session')?.value;
   if (!session) return null;
-  const data = await verifySession(session);
+  const data = await verifySession(session, secret);
   if (!data || !data.email || !data.name) return null;
   return { email: data.email, name: data.name };
 }

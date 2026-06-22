@@ -46,6 +46,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
   const db = (locals as any).runtime.env.DB;
+  const sessionSecret = (locals as any).sessionSecret;
 
   const session = cookies.get('session')?.value;
   if (!session) {
@@ -54,7 +55,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   let user: { email: string; name: string } | null;
   try {
-    user = await verifySession(session);
+    user = await verifySession(session, sessionSecret);
   } catch {
     return new Response(JSON.stringify({ error: '유효하지 않은 세션입니다.' }), { status: 401 });
   }

@@ -4,7 +4,7 @@ import { verifySession } from '../../lib/auth';
 
 let currentUser = null;
 const session = Astro.cookies.get('session')?.value;
-if (session) currentUser = await verifySession(session);
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
 ---
 <Layout title="이벤트 - 2월 추천글감 키워드 무료 제공" description="뉴스 키워드 인사이트 Pro 피드백 이벤트. 2월 추천글감 엑기스 키워드를 무료로 받아가세요.">
   <div class="bg-[var(--bg-primary)] min-h-screen">
