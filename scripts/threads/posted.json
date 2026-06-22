@@ -121,85 +121,139 @@
     "33102",
     "33029",
     "33028",
-    "33021"
+    "33021",
+    "28290",
+    "14484",
+    "27200",
+    "30660",
+    "32906",
+    "33079",
+    "33083",
+    "30560",
+    "23811",
+    "30640",
+    "6927",
+    "9219",
+    "32148",
+    "15634",
+    "15688",
+    "19520",
+    "32136",
+    "32011",
+    "27858",
+    "20643",
+    "32044",
+    "6979",
+    "27921",
+    "22749",
+    "24636",
+    "30559",
+    "28029",
+    "27862"
   ],
   "posted_links": [
-    "https://the-decoder.com/sam-altman-and-dario-amodei-walk-back-their-ai-job-apocalypse-predictions",
-    "https://huggingface.co/blog/ibm-research/itbench-aa",
-    "https://www.gokorea.kr/news/articleview.html",
-    "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
-    "https://the-decoder.com/ai-coding-agent-devin-maker-cognition-more-than-doubles-its-valuation-to-26-billion-in-under-nine-months",
-    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi",
-    "https://www.etnews.com/20260609000235",
-    "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long",
-    "https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-months-after-launch",
-    "https://www.artificialintelligence-news.com/news/idc-how-emea-cios-can-jumpstart-ai-rollouts",
-    "https://www.etnews.com/20260609000086",
-    "https://www.zdnet.com/article/ai-is-causing-cognitive-fatigue-heres-how-to-work-with-more-haste-and-less-speed",
-    "https://www.etnews.com/20260601000331",
-    "https://the-decoder.com/more-people-get-news-from-ai-chatbots-but-trust-remains-low",
-    "https://thenextweb.com/news/tiktok-ai-slop-59-percent-new-users-kapwing-study",
-    "https://www.scmp.com/tech/tech-trends/article/3354876/alipay-launches-payment-tools-ai-agents-shop-you",
-    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman",
-    "https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai",
-    "https://www.msit.go.kr/bbs/view.do",
-    "https://www.lcnews.co.kr/news/articleview.html",
-    "https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods",
-    "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
-    "https://www.cityam.com/ai-is-not-killing-all-these-jobs-linkedin-boss-on-uk-hiring-slump",
-    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price",
-    "https://thenextweb.com/news/amazon-human-in-the-loop-ai-governance-normalization-deviance",
-    "https://www.fastcompany.com/91561045/g7-wraps-openai-anthropic-meet-world-leaders-discuss-future-ai",
-    "https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study",
-    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war",
-    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv",
-    "https://www.fastcompany.com/91562297/daters-say-ai-dependence-gives-them-the-ick",
-    "https://n.news.naver.com/mnews/article/001/0016149675",
-    "https://www.theguardian.com/technology/2026/jun/03/labour-mp-sues-elon-musks-ai-company-over-fake-sexualised-images",
-    "https://techcrunch.com/2026/02/25/the-public-opposition-to-ai-infrastructure-is-heating-up",
-    "https://www.scmp.com/tech/big-tech/article/3355651/tencent-shares-jump-expectations-ai-agent-within-wechat-super-app",
-    "https://www.wired.com/story/hasan-piker-user-behavior",
-    "https://www.etnews.com/20260602000268",
-    "https://www.zdnet.com/article/this-ai-free-search-engine-is-getting-more-popular-heres-why-you-should-try-it",
-    "https://www.digitaltoday.co.kr/news/articleview.html",
-    "https://www.theguardian.com/technology/2026/jun/03/as-the-tech-mega-ipo-race-hots-up-has-openai-missed-its-moment",
-    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips",
-    "https://the-decoder.com/china-turns-its-aging-camera-network-into-an-ai-powered-mass-surveillance-apparatus",
-    "https://n.news.naver.com/mnews/article/003/0014018079",
-    "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips",
-    "https://the-decoder.com/anthropic-refuses-pentagon-demand-to-loosen-military-ai-restrictions-faces-defense-production-act-threat",
-    "https://www.etnews.com/20260603000005",
-    "https://the-decoder.com/openai-ceo-sam-altman-reportedly-teases-a-very-strong-model-internally-that-can-really-accelerate-the-economy",
-    "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions",
-    "https://www.axios.com/2026/06/20/ai-tech-moguls-g7",
-    "https://www.etnews.com/20260603000201",
-    "https://www.aitimes.kr/news/articleview.html",
-    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone",
-    "https://www.zdnet.com/article/easy-way-to-exclude-ai-from-search-results-in-every-browser",
-    "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era",
-    "https://www.technologyreview.com/2026/03/04/1133642/bridging-the-operational-ai-gap",
-    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality",
-    "https://the-decoder.com/openai-expands-its-record-funding-round-to-over-120-billion-as-it-eyes-a-potential-ipo-later-this-year",
-    "https://the-decoder.com/google-is-hiring-hundreds-of-engineers-to-help-customers-adopt-its-ai",
-    "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat",
-    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
-    "https://techcrunch.com/2026/03/25/granola-raises-125m-hits-1-5b-valuation-as-it-expands-from-meeting-notetaker-to-enterprise-ai-app",
-    "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation",
-    "https://the-decoder.com/half-of-ai-written-code-that-passes-industry-test-would-get-rejected-by-real-developers-new-study-finds",
-    "https://techcrunch.com/2026/04/15/linkedin-data-shows-ai-isnt-to-blame-for-hiring-decline-yet",
-    "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models",
-    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts",
-    "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums",
-    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills",
-    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums",
+    "https://the-decoder.com/an-ai-agent-hacked-mckinseys-internal-ai-platform-in-two-hours-using-a-decades-old-technique",
+    "https://www.theguardian.com/uk-news/2026/jun/03/former-officer-hampshire-hiding-after-being-falsely-linked-henry-nowak-arrest",
     "https://www.ft.com/content/837cd1be-548d-4a64-8d78-a42d65a9afe5",
-    "https://the-decoder.com/mistrals-le-chat-spreads-iran-war-disinformation-in-60-percent-of-leading-prompts",
-    "https://www.aitimes.com/news/articleview.html",
-    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus",
-    "https://news.google.com/rss/articles/cbmiwgfbvv95cuxnrhdusxhpvdryzk1kaktvuhflx3jqwmhptui1dldcvmpnmeu3dghtvvpucmrhn3jcemdxazjpr3zxvwnfrtn5sjfct1vqtuzfnzn0wtf0s0ctmk9wbjd0bw1hlvnkwvnietd2wnvxadf5wlz1xzytmhfzawnmrlhxsxmty3g3vhrkyzfiwddplxntovj5dgd2yzndt1zpqzzuenuxx0htszvbnlngmufbqvzzn2gxbdzaqjntmfbtag1yuq",
+    "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat",
+    "https://www.digitaltoday.co.kr/news/articleview.html",
+    "https://the-decoder.com/ai-music-startup-suno-doubles-its-valuation-to-5-4-billion-while-fighting-major-record-labels-in-court",
+    "https://www.zdnet.com/article/ai-is-causing-cognitive-fatigue-heres-how-to-work-with-more-haste-and-less-speed",
+    "https://the-decoder.com/anthropic-refuses-pentagon-demand-to-loosen-military-ai-restrictions-faces-defense-production-act-threat",
+    "https://techcrunch.com/2026/04/15/linkedin-data-shows-ai-isnt-to-blame-for-hiring-decline-yet",
+    "https://the-decoder.com/openai-ceo-sam-altman-reportedly-teases-a-very-strong-model-internally-that-can-really-accelerate-the-economy",
+    "https://the-decoder.com/sam-altman-and-dario-amodei-walk-back-their-ai-job-apocalypse-predictions",
+    "https://techcrunch.com/2026/03/25/granola-raises-125m-hits-1-5b-valuation-as-it-expands-from-meeting-notetaker-to-enterprise-ai-app",
     "https://techcrunch.com/2026/03/25/the-ai-skills-gap-is-here-says-ai-company-and-power-users-are-pulling-ahead",
+    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war",
+    "https://the-decoder.com/anthropics-leaked-ai-coding-tool-has-been-cloned-over-8000-times-on-github-despite-mass-takedowns",
+    "https://www.fastcompany.com/91553364/we-replaced-a-role-with-ai-and-our-developers-love-it",
+    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv",
+    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips",
+    "https://www.zdnet.com/article/easy-way-to-exclude-ai-from-search-results-in-every-browser",
+    "https://www.theguardian.com/technology/2026/jun/03/as-the-tech-mega-ipo-race-hots-up-has-openai-missed-its-moment",
+    "https://techcrunch.com/2026/03/04/the-us-military-is-still-using-claude-but-defense-tech-clients-are-fleeing",
+    "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
+    "https://techcrunch.com/2026/06/03/alphabets-record-breaking-85b-raise-for-googles-ai-business-is-a-helluva-good-signal",
+    "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long",
+    "https://www.fastcompany.com/91556417/ai-bill-is-coming-due",
+    "https://the-decoder.com/anthropic-study-shows-ai-needs-hours-not-weeks-to-build-exploits-from-security-patches",
+    "https://the-decoder.com/google-unveils-8th-gen-tpus-agent-platform-and-workspace-ai-layer-at-cloud-next-26",
+    "https://www.fastcompany.com/91562297/daters-say-ai-dependence-gives-them-the-ick",
+    "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
+    "https://www.artificialintelligence-news.com/news/idc-how-emea-cios-can-jumpstart-ai-rollouts",
+    "https://www.zdnet.com/article/this-ai-free-search-engine-is-getting-more-popular-heres-why-you-should-try-it",
+    "https://techcrunch.com/2026/06/17/only-16-percent-of-americans-think-ai-will-have-a-positive-impact-on-society-a-new-study-shows",
+    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus",
+    "https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods",
+    "https://techcrunch.com/2026/04/01/anthropic-took-down-thousands-of-github-repos-trying-to-yank-its-leaked-source-code-a-move-the-company-says-was-an-accident",
+    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality",
+    "https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai",
+    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
+    "https://www.etnews.com/20260603000005",
+    "https://the-decoder.com/nvidia-research-shows-robots-that-train-themselves-through-ai-coding-agents",
+    "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era",
+    "https://www.etnews.com/20260603000201",
+    "https://www.etnews.com/20260609000086",
+    "https://the-decoder.com/openai-wants-its-biggest-data-center-yet-and-nvidia-would-back-the-bill",
+    "https://www.cnbc.com/2026/06/10/ai-youth-uneployment-automation-thoma-bravo.html",
+    "https://techcrunch.com/2026/05/13/anthropic-now-has-more-business-customers-than-openai-according-to-ramp-data",
+    "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits",
+    "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models",
+    "https://www.fastcompany.com/91561045/g7-wraps-openai-anthropic-meet-world-leaders-discuss-future-ai",
+    "https://www.scmp.com/tech/tech-trends/article/3354876/alipay-launches-payment-tools-ai-agents-shop-you",
+    "https://www.etnews.com/20260619000190",
+    "https://n.news.naver.com/mnews/article/001/0016149675",
+    "https://thenextweb.com/news/amazon-human-in-the-loop-ai-governance-normalization-deviance",
+    "https://www.aitimes.com/news/articleview.html",
+    "https://www.axios.com/2026/06/20/ai-tech-moguls-g7",
+    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price",
+    "https://the-decoder.com/more-people-get-news-from-ai-chatbots-but-trust-remains-low",
+    "https://the-decoder.com/half-of-ai-written-code-that-passes-industry-test-would-get-rejected-by-real-developers-new-study-finds",
+    "https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-months-after-launch",
+    "https://the-decoder.com/mistrals-le-chat-spreads-iran-war-disinformation-in-60-percent-of-leading-prompts",
+    "https://www.etnews.com/20260619000247",
+    "https://techcrunch.com/2026/02/25/the-public-opposition-to-ai-infrastructure-is-heating-up",
+    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills",
+    "https://www.lcnews.co.kr/news/articleview.html",
+    "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions",
+    "https://thenextweb.com/news/allbirds-smartbird-ai-infrastructure-pivot",
+    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts",
+    "https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study",
+    "https://the-decoder.com/google-is-hiring-hundreds-of-engineers-to-help-customers-adopt-its-ai",
+    "https://www.thenationalnews.com/news/europe/2026/06/17/g7-pitches-trusted-partnership-to-ai-chiefs-in-a-bid-for-frontier-model-sharing",
+    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman",
+    "https://the-decoder.com/ai-coding-agent-devin-maker-cognition-more-than-doubles-its-valuation-to-26-billion-in-under-nine-months",
+    "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute",
+    "https://news.google.com/rss/articles/cbmiwgfbvv95cuxnrhdusxhpvdryzk1kaktvuhflx3jqwmhptui1dldcvmpnmeu3dghtvvpucmrhn3jcemdxazjpr3zxvwnfrtn5sjfct1vqtuzfnzn0wtf0s0ctmk9wbjd0bw1hlvnkwvnietd2wnvxadf5wlz1xzytmhfzawnmrlhxsxmty3g3vhrkyzfiwddplxntovj5dgd2yzndt1zpqzzuenuxx0htszvbnlngmufbqvzzn2gxbdzaqjntmfbtag1yuq",
+    "https://www.theguardian.com/business/2026/jun/03/uk-media-groups-power-opt-out-google-ai-search-summaries",
+    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi",
+    "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips",
+    "https://n.news.naver.com/mnews/article/003/0014018079",
     "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion",
-    "https://www.theguardian.com/uk-news/2026/jun/03/former-officer-hampshire-hiding-after-being-falsely-linked-henry-nowak-arrest"
+    "https://www.cityam.com/ai-is-not-killing-all-these-jobs-linkedin-boss-on-uk-hiring-slump",
+    "https://the-decoder.com/openai-expands-its-record-funding-round-to-over-120-billion-as-it-eyes-a-potential-ipo-later-this-year",
+    "https://the-decoder.com/anthropic-taps-spacexs-colossus-1-data-center-for-220000-gpus-to-power-claude",
+    "https://the-decoder.com/gpt-5-4-reportedly-brings-a-million-token-context-window-and-an-extreme-reasoning-mode",
+    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone",
+    "https://www.theguardian.com/technology/2026/jun/03/labour-mp-sues-elon-musks-ai-company-over-fake-sexualised-images",
+    "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation",
+    "https://the-decoder.com/china-turns-its-aging-camera-network-into-an-ai-powered-mass-surveillance-apparatus",
+    "https://huggingface.co/blog/ibm-research/itbench-aa",
+    "https://www.scmp.com/tech/big-tech/article/3355651/tencent-shares-jump-expectations-ai-agent-within-wechat-super-app",
+    "https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai",
+    "https://www.etnews.com/20260602000268",
+    "https://www.etnews.com/20260601000331",
+    "https://www.gokorea.kr/news/articleview.html",
+    "https://thenextweb.com/news/tiktok-ai-slop-59-percent-new-users-kapwing-study",
+    "https://www.etnews.com/20260609000235",
+    "https://www.technologyreview.com/2026/03/04/1133642/bridging-the-operational-ai-gap",
+    "https://www.msit.go.kr/bbs/view.do",
+    "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums",
+    "https://www.aitimes.kr/news/articleview.html",
+    "https://www.wired.com/story/hasan-piker-user-behavior",
+    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums",
+    "https://techcrunch.com/2026/06/03/publishers-will-be-able-to-opt-out-of-ai-search-thanks-to-new-regulation"
   ],
   "history": [
     {
@@ -408,6 +462,48 @@
       "link": "https://www.fastcompany.com/91562297/daters-say-ai-dependence-gives-them-the-ick?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=1&partner=newsletter&campaign_date=06212026",
       "title": "데이팅 속 AI 의존도가 불편하다는 새로운 조사 결과",
       "posted_at": "2026-06-22T14:28:29.571088"
+    },
+    {
+      "id": 28290,
+      "link": "https://www.fastcompany.com/91553364/we-replaced-a-role-with-ai-and-our-developers-love-it?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=7&partner=newsletter&campaign_date=06042026",
+      "title": "우리는 AI로 역할을 대체했고, 개발자들은 이를 사랑합니다",
+      "posted_at": "2026-06-22T16:31:56.961173"
+    },
+    {
+      "id": 32906,
+      "link": "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits/",
+      "title": "트럼프 행정부가 앤트로픽을 단속할 때 누가 혜택을 볼까?",
+      "posted_at": "2026-06-22T18:35:56.691383"
+    },
+    {
+      "id": 19520,
+      "link": "https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai/",
+      "title": "신발 사업 매각 후, Allbirds가 AI로 방향 전환",
+      "posted_at": "2026-06-22T20:40:02.159293"
+    },
+    {
+      "id": 6979,
+      "link": "https://the-decoder.com/gpt-5-4-reportedly-brings-a-million-token-context-window-and-an-extreme-reasoning-mode/",
+      "title": "GPT-5.4, 백만 토큰의 컨텍스트 창과 극단적 추론 모드 도입",
+      "posted_at": "2026-06-22T22:44:25.093013"
+    },
+    {
+      "id": 24636,
+      "link": "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute/",
+      "title": "앤트로픽, xAI에 월 12억 5천만 달러 지급",
+      "posted_at": "2026-06-23T00:48:12.367050"
+    },
+    {
+      "id": 30559,
+      "link": "https://the-decoder.com/anthropic-study-shows-ai-needs-hours-not-weeks-to-build-exploits-from-security-patches/",
+      "title": "앤트로픽 연구, AI가 보안 패치를 이용해 익스플로잇을 구축하는 데 주가 아닌 시간이 필요함을 보여줘",
+      "posted_at": "2026-06-23T02:52:02.422855"
+    },
+    {
+      "id": 28029,
+      "link": "https://www.theguardian.com/business/2026/jun/03/uk-media-groups-power-opt-out-google-ai-search-summaries",
+      "title": "영국 미디어 웹사이트, 구글의 기사 사용을 차단할 권한 부여받아",
+      "posted_at": "2026-06-23T04:55:59.914120"
     }
   ],
   "last_reset": "2026-06-18",
@@ -906,6 +1002,287 @@
         "Daters say AI dependence gives them the ick"
       ],
       "date": "2026-06-22"
+    },
+    {
+      "hook": "AI가 개발자의 생산성을 높여줄 것이라 믿었지만, 실제",
+      "narrative": "상식(AI는 개발자의 효율을 돕는 도구다) vs 실제(AI가 주니어 개발자의 업무를 대신하",
+      "article_ids": [
+        28290,
+        14484,
+        27200,
+        30660
+      ],
+      "article_urls": [
+        "https://www.fastcompany.com/91553364/we-replaced-a-role-with-ai-and-our-developers-love-it?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=7&partner=newsletter&campaign_date=06042026",
+        "",
+        "",
+        "https://www.cnbc.com/2026/06/10/ai-youth-uneployment-automation-thoma-bravo.html"
+      ],
+      "article_titles": [
+        "우리는 AI로 역할을 대체했고, 개발자들은 이를 사랑합니다",
+        "",
+        "",
+        "\"AI가 루틴 작업을 자동화해 젊은 근로자들이 더 빨리 성숙할 것\" - 토마 브라보, 청년 실업 위기 속에서"
+      ],
+      "article_original_titles": [
+        "We replaced a role with AI, and our developers love it",
+        "",
+        "",
+        "AI will help young workers 'mature' faster by automating grunt work, Thoma Bravo says, amid youth job crisis"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "트럼프 행정부의 Anthropic 규제, AI 생태계의",
+      "narrative": "상식(정부의 AI 규제는 공공의 안전과 윤리를 위함) vs 실제(특정 경쟁자인 Anthro",
+      "article_ids": [
+        "32906"
+      ],
+      "article_urls": [
+        "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits/"
+      ],
+      "article_titles": [
+        "트럼프 행정부가 앤트로픽을 단속할 때 누가 혜택을 볼까?"
+      ],
+      "article_original_titles": [
+        "When the Trump administration cracks down on Anthropic, who benefits?"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2031년까지 한국 정부가 개발 중인 AI 네트워크 표",
+      "narrative": "소상공인 AI 도우미는 연 95만 건의 상담 데이터를 생성형 AI로 처리하며, 이 데이터는",
+      "article_ids": [
+        33079,
+        33083
+      ],
+      "article_urls": [
+        "https://www.etnews.com/20260619000247",
+        "https://www.etnews.com/20260619000190"
+      ],
+      "article_titles": [
+        "'소상공인 AI 도우미' 출시한다…연 95만건 상담 대응",
+        "韓 AI 네트워크 표준 개발 시동...“정부 투자 확대 필요”"
+      ],
+      "article_original_titles": [
+        "",
+        ""
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년, 앤트로픽은 오픈AI보다 더 많은 기업 고객",
+      "narrative": "램프(Ramp)의 비즈니스 고객 데이터에 따르면, 34.4%의 기업이 앤트로픽의 서비스에 ",
+      "article_ids": [
+        "30560",
+        "23811"
+      ],
+      "article_urls": [
+        "https://the-decoder.com/openai-wants-its-biggest-data-center-yet-and-nvidia-would-back-the-bill/",
+        "https://techcrunch.com/2026/05/13/anthropic-now-has-more-business-customers-than-openai-according-to-ramp-data/"
+      ],
+      "article_titles": [
+        "오픈AI, 최대 데이터 센터 원하며, 엔비디아가 비용을 지원할 것",
+        "앤트로픽, 램프 데이터에 따르면 OpenAI보다 더 많은 비즈니스 고객을 보유"
+      ],
+      "article_original_titles": [
+        "OpenAI wants its biggest data center yet, and Nvidia would back the bill",
+        "Anthropic now has more business customers than OpenAI, according to Ramp data"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년, 미국 정부는 AI 모델의 군사적 사용을 승",
+      "narrative": "미국 군대는 앤트로픽의 클로드 AI 모델을 공중 공격 타겟 선정에 활용하며 전략적 효율성을",
+      "article_ids": [
+        "30640",
+        "6927"
+      ],
+      "article_urls": [
+        "https://www.fastcompany.com/91556417/ai-bill-is-coming-due?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=1&partner=newsletter&campaign_date=06102026",
+        "https://techcrunch.com/2026/03/04/the-us-military-is-still-using-claude-but-defense-tech-clients-are-fleeing/"
+      ],
+      "article_titles": [
+        "AI 법안이 도래하고 있다. 기업들은 토큰이 공짜가 아님을 배우고 있다",
+        "미국 군대는 여전히 클로드를 사용하고 있지만 방산 기술 고객들은 떠나고 있다"
+      ],
+      "article_original_titles": [
+        "The AI bill is coming due. Businesses are learning tokens aren’t free",
+        "The US military is still using Claude — but defense-tech clients are fleeing"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년, 미국의 한 스타트업이 AI를 사용해 20년",
+      "narrative": "보안 기업 Codewall은 맥킨지의 내부 AI 플랫폼 Lilli에 공격형 AI 에이전트를",
+      "article_ids": [
+        "9219"
+      ],
+      "article_urls": [
+        "https://the-decoder.com/an-ai-agent-hacked-mckinseys-internal-ai-platform-in-two-hours-using-a-decades-old-technique/"
+      ],
+      "article_titles": [
+        "AI 에이전트가 수십년 된 기법으로 두 시간 만에 맥킨지의 내부 AI 플랫폼을 해킹"
+      ],
+      "article_original_titles": [
+        "An AI agent hacked McKinsey's internal AI platform in two hours using a decades-old technique"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년, Anthropic의 Claude Code ",
+      "narrative": "Anthropic는 Claude Code의 내부 소스 코드를 우연히 공개한 후, 즉각적으로",
+      "article_ids": [
+        "32148",
+        "15634",
+        "15688"
+      ],
+      "article_urls": [
+        "https://www.thenationalnews.com/news/europe/2026/06/17/g7-pitches-trusted-partnership-to-ai-chiefs-in-a-bid-for-frontier-model-sharing/",
+        "https://techcrunch.com/2026/04/01/anthropic-took-down-thousands-of-github-repos-trying-to-yank-its-leaked-source-code-a-move-the-company-says-was-an-accident/",
+        "https://the-decoder.com/anthropics-leaked-ai-coding-tool-has-been-cloned-over-8000-times-on-github-despite-mass-takedowns/"
+      ],
+      "article_titles": [
+        "G7, AI 책임자들에게 신뢰할 수 있는 파트너십 제안 및 선진 모델 공유를 위한 노력",
+        "앤스로픽, 유출된 소스 코드를 처리하기 위해 수천 개의 깃허브 리포를 삭제 — 회사는 이것이 실수라고 주장",
+        "앤소프릭의 유출된 AI 코딩 도구, 대규모 삭제에도 불구하고 깃허브에서 8,000회 이상 복제"
+      ],
+      "article_original_titles": [
+        "G7 pitches trusted partnership to AI chiefs in a bid for frontier model sharing",
+        "Anthropic took down thousands of GitHub repos trying to yank its leaked source code — a move the company says was an accident",
+        "Anthropic's leaked AI coding tool has been cloned over 8,000 times on GitHub despite mass takedowns"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "Allbirds가 410억 달러 가치의 지속 가능한 신",
+      "narrative": "Allbirds는 2021년에 지속 가능한 신발 사업으로 410억 달러의 평가를 받았지만,",
+      "article_ids": [
+        "19520",
+        "32136"
+      ],
+      "article_urls": [
+        "https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai/",
+        "https://thenextweb.com/news/allbirds-smartbird-ai-infrastructure-pivot"
+      ],
+      "article_titles": [
+        "신발 사업 매각 후, Allbirds가 AI로 방향 전환",
+        "올버즈, 신발 판매 후 스마터버드로 이름 변경, AI 인프라 회사로 전환 선언"
+      ],
+      "article_original_titles": [
+        "After sale of its shoe business, Allbirds pivots to AI",
+        "Allbirds sells its shoes, renames itself Smartbird, and says it is now an AI infrastructure company"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년 6월, 미국인의 84%는 AI가 사회에 긍정",
+      "narrative": "Pew Research의 연구에 따르면, 미국인 중 단 16%만이 AI가 사회에 긍정적인 ",
+      "article_ids": [
+        "32011",
+        "27858",
+        "20643",
+        "32044"
+      ],
+      "article_urls": [
+        "https://techcrunch.com/2026/06/17/only-16-percent-of-americans-think-ai-will-have-a-positive-impact-on-society-a-new-study-shows/",
+        "https://techcrunch.com/2026/06/03/alphabets-record-breaking-85b-raise-for-googles-ai-business-is-a-helluva-good-signal/",
+        "https://the-decoder.com/google-unveils-8th-gen-tpus-agent-platform-and-workspace-ai-layer-at-cloud-next-26/",
+        "https://the-decoder.com/nvidia-research-shows-robots-that-train-themselves-through-ai-coding-agents/"
+      ],
+      "article_titles": [
+        "%의 미국인만이 AI가 사회에 긍정적인 영향을 미칠 것이라고 생각하다는 새로운 연구 결과",
+        "알파벳의 기록적인 850억 달러 조달, 구글 AI 사업에 대한 훌륭한 신호",
+        "구글, Cloud Next '26에서 8세대 TPU, 에이전트 플랫폼 및 워크스페이스 AI 레이어 공개",
+        "엔비디아 연구, AI 코딩 에이전트를 통해 스스로 훈련하는 로봇"
+      ],
+      "article_original_titles": [
+        "Only 16 percent of Americans think AI will have a positive impact on society, a new study shows",
+        "Alphabet’s record-breaking $85B raise for Google’s AI business is a helluva good signal",
+        "Google unveils 8th-gen TPUs, agent platform, and Workspace AI layer at Cloud Next '26",
+        "Nvidia research shows robots that train themselves through AI coding agents"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년 6월, 앤트로픽은 스페이스X의 콜로서스-1 ",
+      "narrative": "앤트로픽은 AI 모델의 추론 속도와 확장성을 위해 거대한 컴퓨팅 인프라가 필요했고, 스페이",
+      "article_ids": [
+        "6979",
+        "27921",
+        "22749"
+      ],
+      "article_urls": [
+        "https://the-decoder.com/gpt-5-4-reportedly-brings-a-million-token-context-window-and-an-extreme-reasoning-mode/",
+        "https://the-decoder.com/ai-music-startup-suno-doubles-its-valuation-to-5-4-billion-while-fighting-major-record-labels-in-court/",
+        "https://the-decoder.com/anthropic-taps-spacexs-colossus-1-data-center-for-220000-gpus-to-power-claude/"
+      ],
+      "article_titles": [
+        "GPT-5.4, 백만 토큰의 컨텍스트 창과 극단적 추론 모드 도입",
+        "AI 음악 스타트업 수노, 주요 음반사와 법정 싸움 중 54억 달러의 가치로 평가받다",
+        "앤트로픽, 클로드를 지원하기 위해 스페이스X의 콜로서스-1 데이터 센터 활용"
+      ],
+      "article_original_titles": [
+        "GPT-5.4 reportedly brings a million-token context window and an extreme reasoning mode",
+        "AI music startup Suno doubles its valuation to $5.4 billion while fighting major record labels in court",
+        "Anthropic taps SpaceX's Colossus-1 data center for 220,000 GPUs to power Claude"
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "2026년 5월, Anthropic은 엘론 머스크의 x",
+      "narrative": "Anthropic은 자체 AI 모델(Clause)을 실행하기 위한 고성능 컴퓨팅 인프라를 ",
+      "article_ids": [
+        "24636"
+      ],
+      "article_urls": [
+        "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute/"
+      ],
+      "article_titles": [
+        "앤트로픽, xAI에 월 12억 5천만 달러 지급"
+      ],
+      "article_original_titles": [
+        "Anthropic will pay xAI $1.25B per month for compute"
+      ],
+      "date": "2026-06-23"
+    },
+    {
+      "hook": "2026년, 앤트로픽의 AI 모델이 보안 패치를 몇 시",
+      "narrative": "앤트로픽의 보안 팀은 Mythos Preview AI 모델이 파이어폭스와 윈도우 커널의 보",
+      "article_ids": [
+        "30559"
+      ],
+      "article_urls": [
+        "https://the-decoder.com/anthropic-study-shows-ai-needs-hours-not-weeks-to-build-exploits-from-security-patches/"
+      ],
+      "article_titles": [
+        "앤트로픽 연구, AI가 보안 패치를 이용해 익스플로잇을 구축하는 데 주가 아닌 시간이 필요함을 보여줘"
+      ],
+      "article_original_titles": [
+        "Anthropic study shows AI needs hours, not weeks, to build exploits from security patches"
+      ],
+      "date": "2026-06-23"
+    },
+    {
+      "hook": "2026년 6월, 영국 출판사들이 구글의 AI 요약에 ",
+      "narrative": "구글은 수년간 검색 결과에서 AI 요약을 통해 사용자에게 출판사 기사의 핵심 내용을 요약 ",
+      "article_ids": [
+        "28029",
+        "27862"
+      ],
+      "article_urls": [
+        "https://www.theguardian.com/business/2026/jun/03/uk-media-groups-power-opt-out-google-ai-search-summaries",
+        "https://techcrunch.com/2026/06/03/publishers-will-be-able-to-opt-out-of-ai-search-thanks-to-new-regulation/"
+      ],
+      "article_titles": [
+        "영국 미디어 웹사이트, 구글의 기사 사용을 차단할 권한 부여받아",
+        "출판사, 새로운 규정 덕분에 AI 검색 옵트 아웃 가능해져"
+      ],
+      "article_original_titles": [
+        "UK media websites given power to block Google using their articles in AI search",
+        "Publishers will be able to opt out of AI Search, thanks to new regulation"
+      ],
+      "date": "2026-06-23"
     }
   ],
   "posted_titles": [
@@ -925,7 +1302,33 @@
     "KB·신한·하나·농협 'AI 인재 확보'에 올인",
     "아마존, 인간 개입 AI 감독이 실패하고 있다고 주장하",
     "연구에 따르면 새로운 사용자에게 보여지는 TikTok ",
-    "데이팅 속 AI 의존도가 불편하다는 새로운 조사 결과"
+    "데이팅 속 AI 의존도가 불편하다는 새로운 조사 결과",
+    "우리는 AI로 역할을 대체했고, 개발자들은 이를 사랑합",
+    "\"AI가 루틴 작업을 자동화해 젊은 근로자들이 더 빨리",
+    "트럼프 행정부가 앤트로픽을 단속할 때 누가 혜택을 볼까",
+    "'소상공인 AI 도우미' 출시한다…연 95만건 상담 대",
+    "韓 AI 네트워크 표준 개발 시동...“정부 투자 확대",
+    "오픈AI, 최대 데이터 센터 원하며, 엔비디아가 비용을",
+    "앤트로픽, 램프 데이터에 따르면 OpenAI보다 더 많",
+    "AI 법안이 도래하고 있다. 기업들은 토큰이 공짜가 아",
+    "미국 군대는 여전히 클로드를 사용하고 있지만 방산 기술",
+    "AI 에이전트가 수십년 된 기법으로 두 시간 만에 맥킨",
+    "G7, AI 책임자들에게 신뢰할 수 있는 파트너십 제안",
+    "앤스로픽, 유출된 소스 코드를 처리하기 위해 수천 개의",
+    "앤소프릭의 유출된 AI 코딩 도구, 대규모 삭제에도 불",
+    "신발 사업 매각 후, Allbirds가 AI로 방향 전",
+    "올버즈, 신발 판매 후 스마터버드로 이름 변경, AI ",
+    "%의 미국인만이 AI가 사회에 긍정적인 영향을 미칠 것",
+    "알파벳의 기록적인 850억 달러 조달, 구글 AI 사업",
+    "구글, Cloud Next '26에서 8세대 TPU, ",
+    "엔비디아 연구, AI 코딩 에이전트를 통해 스스로 훈련",
+    "GPT-5.4, 백만 토큰의 컨텍스트 창과 극단적 추론",
+    "AI 음악 스타트업 수노, 주요 음반사와 법정 싸움 중",
+    "앤트로픽, 클로드를 지원하기 위해 스페이스X의 콜로서스",
+    "앤트로픽, xAI에 월 12억 5천만 달러 지급",
+    "앤트로픽 연구, AI가 보안 패치를 이용해 익스플로잇을",
+    "영국 미디어 웹사이트, 구글의 기사 사용을 차단할 권한",
+    "출판사, 새로운 규정 덕분에 AI 검색 옵트 아웃 가능"
   ],
   "posted_original_titles": [
     "LinkedIn data shows AI isn’t t",
@@ -941,7 +1344,31 @@
     "New global order: AI CEOs as h",
     "Amazon says human-in-the-loop ",
     "Nearly 60% of TikTok videos sh",
-    "Daters say AI dependence gives"
+    "Daters say AI dependence gives",
+    "We replaced a role with AI, an",
+    "AI will help young workers 'ma",
+    "When the Trump administration ",
+    "OpenAI wants its biggest data ",
+    "Anthropic now has more busines",
+    "The AI bill is coming due. Bus",
+    "The US military is still using",
+    "An AI agent hacked McKinsey's ",
+    "G7 pitches trusted partnership",
+    "Anthropic took down thousands ",
+    "Anthropic's leaked AI coding t",
+    "After sale of its shoe busines",
+    "Allbirds sells its shoes, rena",
+    "Only 16 percent of Americans t",
+    "Alphabet’s record-breaking $85",
+    "Google unveils 8th-gen TPUs, a",
+    "Nvidia research shows robots t",
+    "GPT-5.4 reportedly brings a mi",
+    "AI music startup Suno doubles ",
+    "Anthropic taps SpaceX's Coloss",
+    "Anthropic will pay xAI $1.25B ",
+    "Anthropic study shows AI needs",
+    "UK media websites given power ",
+    "Publishers will be able to opt"
   ],
   "posted_source_urls": [
     "https://techcrunch.com/category/artificial-intelligence/feed",
