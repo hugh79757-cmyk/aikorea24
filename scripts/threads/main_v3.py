@@ -41,14 +41,9 @@ def reset_posted_daily():
             data = _json.load(f)
         today = datetime.now().strftime('%Y-%m-%d')
         if data.get('last_reset') != today:
-            # 7일 이상 지난 피치 이력 정리
-            old_pitches = data.get('pitch_history', [])
-            cutoff = (datetime.now() - timedelta(days=7)).isoformat()
-            data['pitch_history'] = [p for p in old_pitches if p.get('date', '') >= cutoff[:10]]
             data['last_reset'] = today
             with open(posted_path, 'w') as f:
                 _json.dump(data, f, ensure_ascii=False, indent=2)
-            log(f'  자정 정리: 피치 이력 {len(old_pitches)}→{len(data["pitch_history"])}개')
 
 def run_v3(dry_run=False):
     load_env()
