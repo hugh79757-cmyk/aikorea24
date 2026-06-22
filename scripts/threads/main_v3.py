@@ -67,10 +67,26 @@ def run_v3(dry_run=False):
             return
         log(f'  기사: {len(articles)}개 로드')
 
-        # 2. 피치 생성
+        # 2. 피치 생성 (2단계: 브리핑 우선 → 전체 fallback)
         from v3.narrative_pitcher import get_pitches
-        log('  피치 생성...')
-        pitches = get_pitches(articles, max_articles=500)
+        briefing_articles = [a for a in articles if a.get('priority') == 1]
+        pitches = []
+
+        # 1단계: 브리핑 기사 우선 시도
+        if briefing_articles:
+            log(f'  [1단계] 브리핑 기사 {len(briefing_articles)}개 우선 피치 시도')
+            pitches = get_pitches(briefing_articles, max_articles=len(briefing_articles), batch_size=len(briefing_articles))
+            if pitches:
+                log(f'  [1단계] 브리핑 기사로 피치 선정 성공 → 발행 진행')
+            else:
+                log(f'  [1단계] 브리핑 기사 피치 실패 → 전체 풀 fallback')
+        else:
+            log(f'  [1단계] 브리핑 기사 없음 → 전체 풀로 진행')
+
+        # 2단계: 전체 풀 fallback
+        if not pitches:
+            log(f'  [2단계] 전체 기사 {len(articles)}개 → 배치 처리 시작')
+            pitches = get_pitches(articles, max_articles=600)
 
         if not pitches:
             log(f'  ❌ 흥미로운 이야기 발견 실패 (시도 {attempt}/{max_retries})')
@@ -96,6 +112,8 @@ def run_v3(dry_run=False):
             # dry-run에서도 posted_ids/links/titles 저장 (중복 방지)
             from db_reader import load_posted, save_posted, normalize_url
             posted = load_posted()
+            # 업데이트 전 스냅샷
+            before = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
             pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
             for aid_str in pitch_ids:
                 if aid_str and aid_str not in posted.get('posted_ids', []):
@@ -106,20 +124,24 @@ def run_v3(dry_run=False):
                         link = normalize_url(a.get('link', ''))
                         title = (a.get('title', '') or '')[:30]
                         orig_title = (a.get('original_title', '') or '')[:30]
-                        src_url = normalize_url(a.get('source_url', '') or '')
                         if link and link not in posted.get('posted_links', []):
                             posted.setdefault('posted_links', []).append(link)
                         if title and title not in posted.get('posted_titles', []):
                             posted.setdefault('posted_titles', []).append(title)
                         if orig_title and orig_title not in posted.get('posted_original_titles', []):
                             posted.setdefault('posted_original_titles', []).append(orig_title)
-                        if src_url and src_url not in posted.get('posted_source_urls', []):
-                            posted.setdefault('posted_source_urls', []).append(src_url)
                         break
             save_posted(posted)
-            log(f'[DRY RUN] 발행 생략 (posted_ids {len(posted["posted_ids"])}개, posted_links {len(posted.get("posted_links", []))}개)')
             from v3.narrative_pitcher import save_pitch_to_history
             save_pitch_to_history(pitch)
+            # 업데이트 후 상세 로그
+            after = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
+            log(f'[DRY RUN] posted.json 업데이트:')
+            log(f'  posted_ids: 기존 {before.get("posted_ids",0)}개 → 추가 {after.get("posted_ids",0)-before.get("posted_ids",0)}개 → 총 {after.get("posted_ids",0)}개')
+            log(f'  posted_links: 기존 {before.get("posted_links",0)}개 → 추가 {after.get("posted_links",0)-before.get("posted_links",0)}개 → 총 {after.get("posted_links",0)}개')
+            log(f'  posted_titles: 기존 {before.get("posted_titles",0)}개 → 추가 {after.get("posted_titles",0)-before.get("posted_titles",0)}개 → 총 {after.get("posted_titles",0)}개')
+            log(f'  posted_original_titles: 기존 {before.get("posted_original_titles",0)}개 → 추가 {after.get("posted_original_titles",0)-before.get("posted_original_titles",0)}개 → 총 {after.get("posted_original_titles",0)}개')
+            log(f'  pitch_history: 총 {after.get("pitch_history",0)}개')
             print(f'\n{"="*60}')
             print(f'Hook: {pitch.get("hook")}')
             print(f'Narrative: {pitch.get("narrative")}')
@@ -146,6 +168,8 @@ def run_v3(dry_run=False):
             # 피치의 모든 article_ids 저장 (보조 기사 중복 방지)
             from db_reader import load_posted, save_posted, normalize_url
             posted = load_posted()
+            # 업데이트 전 스냅샷
+            before = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
             pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
             for aid_str in pitch_ids:
                 if aid_str and aid_str not in posted.get('posted_ids', []):
@@ -156,20 +180,24 @@ def run_v3(dry_run=False):
                         link = normalize_url(a.get('link', ''))
                         title = (a.get('title', '') or '')[:30]
                         orig_title = (a.get('original_title', '') or '')[:30]
-                        src_url = normalize_url(a.get('source_url', '') or '')
                         if link and link not in posted.get('posted_links', []):
                             posted.setdefault('posted_links', []).append(link)
                         if title and title not in posted.get('posted_titles', []):
                             posted.setdefault('posted_titles', []).append(title)
                         if orig_title and orig_title not in posted.get('posted_original_titles', []):
                             posted.setdefault('posted_original_titles', []).append(orig_title)
-                        if src_url and src_url not in posted.get('posted_source_urls', []):
-                            posted.setdefault('posted_source_urls', []).append(src_url)
                         break
             save_posted(posted)
-            log(f'  ✅ posted 업데이트: {len(pitch_ids)}개 기사')
             from v3.narrative_pitcher import save_pitch_to_history
             save_pitch_to_history(pitch)
+            # 업데이트 후 상세 로그
+            after = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
+            log(f'[발행 완료] posted.json 업데이트:')
+            log(f'  posted_ids: 기존 {before.get("posted_ids",0)}개 → 추가 {after.get("posted_ids",0)-before.get("posted_ids",0)}개 → 총 {after.get("posted_ids",0)}개')
+            log(f'  posted_links: 기존 {before.get("posted_links",0)}개 → 추가 {after.get("posted_links",0)-before.get("posted_links",0)}개 → 총 {after.get("posted_links",0)}개')
+            log(f'  posted_titles: 기존 {before.get("posted_titles",0)}개 → 추가 {after.get("posted_titles",0)-before.get("posted_titles",0)}개 → 총 {after.get("posted_titles",0)}개')
+            log(f'  posted_original_titles: 기존 {before.get("posted_original_titles",0)}개 → 추가 {after.get("posted_original_titles",0)-before.get("posted_original_titles",0)}개 → 총 {after.get("posted_original_titles",0)}개')
+            log(f'  pitch_history: 총 {after.get("pitch_history",0)}개')
             next_run = (datetime.now() + timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')
             log(f'  다음 실행: {next_run}')
             return

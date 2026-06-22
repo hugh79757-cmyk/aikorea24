@@ -85,14 +85,13 @@ def load_posted():
         # 새 필드 기본값
         data.setdefault('posted_titles', [])
         data.setdefault('posted_original_titles', [])
-        data.setdefault('posted_source_urls', [])
         # 하위 호환: posted_links를 normalize하여 중복 정리
         normalized_links = set()
         for link in data.get('posted_links', []):
             normalized_links.add(normalize_url(link) if link else '')
         data['posted_links'] = list(normalized_links - {''})
         return data
-    return {"posted_links": [], "posted_ids": [], "posted_titles": [], "posted_original_titles": [], "posted_source_urls": [], "history": [], "last_reset": ""}
+    return {"posted_links": [], "posted_ids": [], "posted_titles": [], "posted_original_titles": [], "history": [], "last_reset": ""}
 
 def save_posted(data):
     with open(POSTED_FILE, 'w', encoding='utf-8') as f:
@@ -113,12 +112,11 @@ def d1_query(sql):
         return []
 
 def is_already_posted(article, posted):
-    """5조건 중 하나라도 매칭되면 발행된 기사로 판정"""
+    """4조건 중 하나라도 매칭되면 발행된 기사로 판정 (link, title, original_title, id)"""
     aid = str(article.get('id', ''))
     link = normalize_url(article.get('link', ''))
     title = (article.get('title', '') or '')[:30]
     original_title = (article.get('original_title', '') or '')[:30]
-    source_url = normalize_url(article.get('source_url', '') or '')
 
     # 1. id 매칭
     if aid and aid in posted.get('posted_ids', []):
@@ -132,10 +130,30 @@ def is_already_posted(article, posted):
     # 4. original_title[:30] 매칭 (비어있으면 스킵)
     if original_title and original_title in set(ot[:30] for ot in posted.get('posted_original_titles', [])):
         return True
-    # 5. source_url 매칭 (비어있으면 스킵)
-    if source_url and source_url in set(normalize_url(su) for su in posted.get('posted_source_urls', [])):
-        return True
     return False
+
+def get_exclusion_reasons(article, posted):
+    """기사가 어떤 필드로 제외되는지 reasons set 반환 (여러 필드 동시에 매칭 가능)"""
+    reasons = set()
+    aid = str(article.get('id', ''))
+    link = normalize_url(article.get('link', ''))
+    title = (article.get('title', '') or '')[:30]
+    original_title = (article.get('original_title', '') or '')[:30]
+
+    posted_ids = posted.get('posted_ids', [])
+    posted_links_norm = set(normalize_url(l) for l in posted.get('posted_links', []))
+    posted_titles_set = set(t[:30] for t in posted.get('posted_titles', []))
+    posted_orig_titles_set = set(ot[:30] for ot in posted.get('posted_original_titles', []))
+
+    if aid and aid in posted_ids:
+        reasons.add('posted_ids')
+    if link and link in posted_links_norm:
+        reasons.add('posted_links')
+    if title and title in posted_titles_set:
+        reasons.add('posted_titles')
+    if original_title and original_title in posted_orig_titles_set:
+        reasons.add('posted_original_titles')
+    return reasons
 
 def get_articles():
     """3단계 우선순위 기사 풀 반환"""
@@ -143,68 +161,87 @@ def get_articles():
     today = datetime.now().strftime('%Y-%m-%d')
 
     articles = []
+    total_queried = 0
+    total_excluded = 0
+    field_excludes = {'posted_ids': 0, 'posted_links': 0, 'posted_titles': 0, 'posted_original_titles': 0}
 
     # 1순위: 오늘 브리핑
     sql1 = f"""SELECT n.id, n.title, n.link, n.description, n.source, n.pub_date,
                       COALESCE(bi.comment, '') as comment,
-                      COALESCE(n.original_title, '') as original_title,
-                      COALESCE(n.source_url, '') as source_url
+                      COALESCE(n.original_title, '') as original_title
                FROM news n
                JOIN briefing_items bi ON bi.news_id = n.id
                JOIN briefings b ON b.id = bi.briefing_id
                WHERE b.date = '{today}' AND b.status = 'published'
                GROUP BY n.id ORDER BY bi.sort_order ASC"""
     rows = d1_query(sql1)
-    excluded_1 = 0
+    total_queried += len(rows)
     for r in rows:
-        if is_already_posted(r, posted):
-            excluded_1 += 1
+        reasons = get_exclusion_reasons(r, posted)
+        if reasons:
+            total_excluded += 1
+            for field in reasons:
+                field_excludes[field] += 1
         else:
             r['priority'] = 1
             articles.append(r)
-    log(f'  1순위 브리핑: {len(rows)}개 → 신규 {len([a for a in articles if a["priority"]==1])}개 (제외 {excluded_1}개)')
+    log(f'  1순위 브리핑: {len(rows)}개 → 신규 {len([a for a in articles if a["priority"]==1])}개')
 
     # 2순위: 최근 7일 news (브리핑 제외)
     existing_ids = set(str(a['id']) for a in articles)
     sql2 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
-                      COALESCE(original_title, '') as original_title,
-                      COALESCE(source_url, '') as source_url
+                      COALESCE(original_title, '') as original_title
                FROM news
                WHERE pub_date >= date('now', '-7 days')
-               ORDER BY pub_date DESC LIMIT 1000"""
+               ORDER BY pub_date DESC LIMIT 2000"""
     rows2 = d1_query(sql2)
-    excluded_2 = 0
+    total_queried += len(rows2)
     for r in rows2:
-        if str(r['id']) in existing_ids or is_already_posted(r, posted):
-            excluded_2 += 1
+        if str(r['id']) in existing_ids:
+            total_excluded += 1
+            field_excludes['posted_ids'] += 1
         else:
-            r['priority'] = 2
-            articles.append(r)
-            existing_ids.add(str(r['id']))
-    log(f'  2순위 최근7일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개 (제외 {excluded_2}개)')
+            reasons = get_exclusion_reasons(r, posted)
+            if reasons:
+                total_excluded += 1
+                for field in reasons:
+                    field_excludes[field] += 1
+            else:
+                r['priority'] = 2
+                articles.append(r)
+                existing_ids.add(str(r['id']))
+    log(f'  2순위 최근7일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개')
 
     # 3순위: 이전 기사
     if len(articles) < 50:
         remaining = 50 - len(articles)
         existing_ids = set(str(a['id']) for a in articles)
         sql3 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
-                          COALESCE(original_title, '') as original_title,
-                          COALESCE(source_url, '') as source_url
+                          COALESCE(original_title, '') as original_title
                    FROM news
                    WHERE pub_date < date('now', '-7 days')
                    ORDER BY pub_date DESC LIMIT {remaining + 20}"""
         rows3 = d1_query(sql3)
-        excluded_3 = 0
+        total_queried += len(rows3)
         for r in rows3:
-            if str(r['id']) in existing_ids or is_already_posted(r, posted):
-                excluded_3 += 1
+            if str(r['id']) in existing_ids:
+                total_excluded += 1
+                field_excludes['posted_ids'] += 1
             else:
-                r['priority'] = 3
-                articles.append(r)
-                existing_ids.add(str(r['id']))
-        log(f'  3순위 이전: 신규 {len([a for a in articles if a["priority"]==3])}개 (제외 {excluded_3}개)')
+                reasons = get_exclusion_reasons(r, posted)
+                if reasons:
+                    total_excluded += 1
+                    for field in reasons:
+                        field_excludes[field] += 1
+                else:
+                    r['priority'] = 3
+                    articles.append(r)
+                    existing_ids.add(str(r['id']))
+        log(f'  3순위 이전: 신규 {len([a for a in articles if a["priority"]==3])}개')
 
     log(f'  총 기사 풀: {len(articles)}개')
+    log(f'  [기사 풀 필터] 전체: {total_queried}개 → 제외: {total_excluded}개 → 최종: {len(articles)}개')
+    log(f'    posted_ids 제외: {field_excludes["posted_ids"]}개 | posted_links 제외: {field_excludes["posted_links"]}개 | posted_titles 제외: {field_excludes["posted_titles"]}개 | posted_original_titles 제외: {field_excludes["posted_original_titles"]}개')
     return articles
 
 

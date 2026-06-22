@@ -4,7 +4,7 @@ narrative_pitcher.py — 100개 기사 → 가장 강력한 이야기 발견
 - 모델: gpt-4o-mini (비용 절감)
 - 50개씩 2개 청크 → 각 2개 피치 → 총 4개 → TOP 1 선정
 """
-import os, sys, json, re
+import os, sys, json, re, random
 from datetime import datetime
 from db_reader import normalize_url
 
@@ -179,14 +179,13 @@ def load_pitch_history():
     return []
 
 def is_duplicate_pitch(pitch, history, posted=None):
-    """비슷한 피치가 이미 history에 있는지 확인 (5조건: link, title, original_title, source_url, id)"""
+    """비슷한 피치가 이미 history에 있는지 확인 (4조건: link, title, original_title, id)"""
     hook = pitch.get('hook', '')[:15]
     narrative = pitch.get('narrative', '')[:30]
     new_ids = set(str(x).lstrip('#').strip() for x in pitch.get('article_ids', []) if str(x).strip())
     new_urls = set(pitch.get('article_urls', []))
     new_titles = set(pitch.get('article_titles', []))
     new_original_titles = set(pitch.get('article_original_titles', []))
-    new_source_urls = set(pitch.get('article_source_urls', []))
 
     if posted:
         # 새 pitch의 기사들 중 하나라도 posted와 매칭되면 중복
@@ -195,18 +194,15 @@ def is_duplicate_pitch(pitch, history, posted=None):
             link = list(new_urls)[i] if i < len(new_urls) else ''
             title = list(new_titles)[i] if i < len(new_titles) else ''
             orig_title = list(new_original_titles)[i] if i < len(new_original_titles) else ''
-            src_url = list(new_source_urls)[i] if i < len(new_source_urls) else ''
 
             posted_links_norm = set(normalize_url(l) for l in posted.get('posted_links', []))
             posted_titles_set = set(t[:30] for t in posted.get('posted_titles', []))
             posted_orig_titles_set = set(ot[:30] for ot in posted.get('posted_original_titles', []))
-            posted_src_urls_norm = set(normalize_url(su) for su in posted.get('posted_source_urls', []))
 
             if (aid and aid in posted.get('posted_ids', []) or
                 link and normalize_url(link) in posted_links_norm or
                 title and title[:30] in posted_titles_set or
-                orig_title and orig_title[:30] in posted_orig_titles_set or
-                src_url and normalize_url(src_url) in posted_src_urls_norm):
+                orig_title and orig_title[:30] in posted_orig_titles_set):
                 return True
 
     for h in history:
@@ -250,7 +246,6 @@ def save_pitch_to_history(pitch):
             'article_urls': pitch.get('article_urls', []),
             'article_titles': pitch.get('article_titles', []),
             'article_original_titles': pitch.get('article_original_titles', []),
-            'article_source_urls': pitch.get('article_source_urls', []),
             'date': datetime.now().strftime('%Y-%m-%d')
         })
         with open(path, 'w') as f:
@@ -258,88 +253,96 @@ def save_pitch_to_history(pitch):
     except:
         pass
 
-def get_pitches(articles, max_articles=100):
-    """100개 기사 → TOP 1 피치 (단일 호출)"""
+def get_pitches(articles, max_articles=600, batch_size=200):
+    """배치 처리: articles를 batch_size개씩 배치로 나눠 각 배치에서 피치 생성 → TOP 1 반환"""
     from v3.model_router import chat_completion
     from db_reader import load_posted
     pitch_history = load_pitch_history()
     posted = load_posted()
-    posted_urls = set(posted.get('posted_urls', []))
     if pitch_history:
         log(f'  피치 이력: {len(pitch_history)}개 존재')
 
-    # 기사 ID→필드 매핑 딕셔너리
+    # 기사 셔플 후 배치 분할
+    selected = articles[:max_articles]
+    shuffled = selected.copy()
+    random.shuffle(shuffled)
+    batches = [shuffled[i:i+batch_size] for i in range(0, len(shuffled), batch_size)]
+    log(f'[배치 처리] 총 {len(shuffled)}개 → {batch_size}개 × {len(batches)}배치')
+
+    # 배치별 id→필드 매핑 (전체 기사 기준)
     id_to_link = {}
     id_to_title = {}
     id_to_original_title = {}
-    id_to_source_url = {}
-    for a in articles[:max_articles]:
+    for a in shuffled:
         aid = str(a.get('id', ''))
         if aid:
             id_to_link[aid] = a.get('link', '')
             id_to_title[aid] = a.get('title', '')
             id_to_original_title[aid] = a.get('original_title', '')
-            id_to_source_url[aid] = a.get('source_url', '')
 
-    # 기사 텍스트 변환
-    articles_text = []
-    for a in articles[:max_articles]:
-        aid = a.get('id', '')
-        title = a.get('title', '')
-        source = a.get('source', '')
-        link = a.get('link', '')
-        desc = (a.get('description', '') or '')
+    all_pitches = []
+    for idx, batch in enumerate(batches):
+        log(f'[배치 {idx+1}/{len(batches)}] {len(batch)}개 기사 처리 중...')
 
-        articles_text.append(f"""기사 #{aid}:
+        # 배치별 기사 텍스트 변환
+        articles_text = []
+        for a in batch:
+            aid = a.get('id', '')
+            title = a.get('title', '')
+            source = a.get('source', '')
+            link = a.get('link', '')
+            desc = (a.get('description', '') or '')
+            articles_text.append(f"""기사 #{aid}:
 제목: {title}
 본문: {desc}
 출처: {source}
 링크: {link}""")
 
-    if not articles_text:
-        return []
+        all_articles_joined = '\n---\n'.join(articles_text)
 
-    all_articles_joined = '\n---\n'.join(articles_text)
-    log(f'  {len(articles_text)}개 기사 단일 호출...')
-
-    try:
-        resp = chat_completion(
-            system_prompt=SYSTEM_PROMPT,
-            messages=[{'role': 'user', 'content': f"""아래 100개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
-
-{all_articles_joined}"""}],
-            temperature=0.9,
-            max_tokens=3000,
-        )
-        pitches = parse_pitches_from_text(resp, articles_text)
-        log(f'  → {len(pitches)}개 피치 발견 (DiffusionGemma)')
-
-        # DiffusionGemma 실패 시 GPT-4o-mini fallback
-        if not pitches:
-            log('  ⚠️ DiffusionGemma JSON 파싱 실패 → GPT-4o-mini fallback')
-            from v3.model_router import chat_completion as _cc
-            resp2 = _cc(
+        # DiffusionGemma 호출
+        try:
+            resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
-                messages=[{'role': 'user', 'content': f"""아래 100개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
+                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
 
 {all_articles_joined}"""}],
                 temperature=0.9,
                 max_tokens=3000,
-                model_override='openai',
             )
-            pitches = parse_pitches_from_text(resp2, articles_text)
-            log(f'  → {len(pitches)}개 피치 발견 (GPT-4o-mini)')
-    except Exception as e:
-        log(f'  ⚠️ 오류: {e}')
-        return []
+            pitches = parse_pitches_from_text(resp, articles_text)
+            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (DiffusionGemma)')
 
-    if not pitches:
+            # DiffusionGemma 실패 시 GPT-4o-mini fallback
+            if not pitches:
+                log(f'  ⚠️ DiffusionGemma JSON 파싱 실패 → GPT-4o-mini fallback')
+                from v3.model_router import chat_completion as _cc
+                resp2 = _cc(
+                    system_prompt=SYSTEM_PROMPT,
+                    messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
+
+{all_articles_joined}"""}],
+                    temperature=0.9,
+                    max_tokens=3000,
+                    model_override='openai',
+                )
+                pitches = parse_pitches_from_text(resp2, articles_text)
+                log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (GPT-4o-mini)')
+        except Exception as e:
+            log(f'  ⚠️ 배치 {idx+1} 오류: {e}')
+            continue
+
+        all_pitches.extend(pitches)
+
+    if not all_pitches:
         log('  ❌ 피치 없음')
         return []
 
-    # hook 길이 검증 (최소 5자, 상한 없음)
+    log(f'[전체] {len(all_pitches)}개 후보 발견')
+
+    # hook 길이 검증 (최소 5자)
     valid = []
-    for p in pitches:
+    for p in all_pitches:
         hook = p.get('hook', '')
         if len(hook) >= 5:
             valid.append(p)
@@ -357,23 +360,23 @@ def get_pitches(articles, max_articles=100):
         p_urls = []
         p_titles = []
         p_original_titles = []
-        p_source_urls = []
         for aid in p.get('article_ids', []):
             aid_str = str(aid).lstrip('#').strip()
             if aid_str:
                 p_urls.append(id_to_link.get(aid_str, ''))
                 p_titles.append(id_to_title.get(aid_str, ''))
                 p_original_titles.append(id_to_original_title.get(aid_str, ''))
-                p_source_urls.append(id_to_source_url.get(aid_str, ''))
         p['article_urls'] = p_urls
         p['article_titles'] = p_titles
         p['article_original_titles'] = p_original_titles
-        p['article_source_urls'] = p_source_urls
 
         if is_duplicate_pitch(p, pitch_history, posted):
-            log(f'  ⚠️ 중복 피치 제외: "{p.get("hook", "")[:30]}" (기사: {len(p.get("article_ids", []))}개, URL: {len(p_urls)}개)')
+            log(f'  ⚠️ 중복 피치 제외: "{p.get("hook", "")[:30]}" (기사: {len(p.get("article_ids", []))}개)')
         else:
             unique.append(p)
+
+    log(f'[전체] {len(valid)}개 후보 → 중복 제외 후 {len(unique)}개')
+
     if not unique:
         log('  ❌ 모든 피치가 이력과 중복')
         return []
