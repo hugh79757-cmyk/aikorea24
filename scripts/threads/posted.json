@@ -100,7 +100,10 @@
     "27000",
     6981,
     "6981",
-    "32227"
+    "32227",
+    27935,
+    "27935",
+    "27764"
   ],
   "posted_links": [
     "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
@@ -161,7 +164,8 @@
     "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNRHduSXhpVDRyZk1KaktVUHFlX3JqWmhPTUI1dldCVmpNMEU3dGhTVVpucmRHN3JCemdXazJPR3ZXVWNFRTN5SjFCT1VQTUZFNzN0WTF0S0ctMk9Wbjd0bW1HLVNKWVNieTd2WnVxaDF5WlZ1XzYtMHFZaWNmRlhxSXMtY3g3VHRkYzFIWDdpLXNtOVJ5dGd2YzNDT1ZpQzZUenUxX0hTSzVBNlNGMUFBQVZZN2gxbDZaQjNtMFBTaG1YUQ?oc=5",
     "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone/",
     "https://www.cityam.com/ai-is-not-killing-all-these-jobs-linkedin-boss-on-uk-hiring-slump/",
-    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war/"
+    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war/",
+    "https://www.zdnet.com/article/ai-is-causing-cognitive-fatigue-heres-how-to-work-with-more-haste-and-less-speed/"
   ],
   "history": [
     {
@@ -330,6 +334,12 @@
       "link": "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war/",
       "title": "미국 군, 이란 전쟁에서 AI 기반 타격 계획에 앤트로픽의 클로드 사용",
       "posted_at": "2026-06-22T08:13:32.611641"
+    },
+    {
+      "id": 27935,
+      "link": "https://www.zdnet.com/article/ai-is-causing-cognitive-fatigue-heres-how-to-work-with-more-haste-and-less-speed/",
+      "title": "AI가 인지 피로를 유발하고 있습니다. 더 빨리 일하는 방법은 다음과 같습니다.",
+      "posted_at": "2026-06-22T10:16:55.474470"
     }
   ],
   "last_reset": "2026-06-18",
@@ -586,6 +596,15 @@
       "article_ids": [
         6981,
         32227
+      ],
+      "date": "2026-06-22"
+    },
+    {
+      "hook": "AI가 인간의 업무 효율을 높여줄 줄 알았는데, 실제로",
+      "narrative": "상식(A): AI는 루틴 업무를 자동화해 생산성을 높여줄 것이다 — 실제(B): AI 사용",
+      "article_ids": [
+        27935,
+        27764
       ],
       "date": "2026-06-22"
     }
