@@ -13,4 +13,7 @@ Disallow: /
 # AI 검색/인용은 허용 (ChatGPT, Claude, Google AI Overview)
 # GPTBot, ClaudeBot, Google-Extended → 허용 (별도 규칙 없음 = 허용)
 
+# LLMs용 사이트 정보
+Allow: /llms.txt
+
 Sitemap: https://aikorea24.kr/sitemap-index.xml

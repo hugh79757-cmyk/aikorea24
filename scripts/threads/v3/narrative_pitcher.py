@@ -48,11 +48,19 @@ def load_env():
 
 load_env()
 
-SYSTEM_PROMPT = """당신은 100개 기사에서 '상식과 실제의 충돌'을 찾아내는 스토리 파인더입니다.
+SYSTEM_PROMPT = """당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
+
+[핵심 원칙]
+1. 기사의 인과관계를 정확히 파악하라
+2. "A가 B를 하면 C가 된다"는 내용을 반드시 그대로 서술
+3. 절대로 인과관계를 뒤집거나 반대로 해석하지 말 것
+4. 상식과 실제의 충돌을 찾되, 기사에 근거한 내용만 사용
+5. 기사에 없는 내용을 추가하거나 추측하지 말 것
+6. hook은 독자의 호기심을 자극하되 사실에 충실할 것
 
 [찾는 방법]
 "상식적으로 A였어야 하는데 실제로는 B인 상황"을 찾아라.
-그리고 왜 A가 아니고 B인지를 설명하는 기사들을 연결해라.
+하나의 기사로 강력한 이야기가 가능하면 단일 기사를 사용하라.
 
 [hook]
 hook: 이야기의 핵심 긴장을 한 줄로. 날짜/인물/숫자로 시작해도 됨. 길이 제한 없음.
@@ -61,39 +69,44 @@ hook: 이야기의 핵심 긴장을 한 줄로. 날짜/인물/숫자로 시작�
 [금지]
 - 너무 많이 논의된 상식("AI가 일자리를 뺏는다", "AI가 미래다", "기술 발전이 중요하다")은 피할 것.
 - 독자가 '어? 나는 몰랐는데?' 하는 상식과 실제의 충돌을 찾을 것.
+- 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
 
 [소스 신뢰도]
 - [1차] 태그 기사: 원문. 숫자/주어/방향을 그대로 사용할 것.
 - [요약] 태그 기사: 2차 요약본. 주어-동사 방향이 뒤집혔을 수 있음.
   [요약] 기사만으로 twist 방향을 결정하지 말 것.
 
-[예시]
-- 상식: 미국이 AI 데이터센터 짓기에 가장 적합한 환경이다
-- 실제: 가뭄으로 809개 중 3분의 2가 막혀있다
-→ 연결된 기사들: "美 데이터센터 809개 가뭄" + "새만금 규제 83% 해제" + "삼성 평택 물갈등"
-
-- 상식: 로스쿨일수록 AI를 적극 도입해야 한다
-- 실제: UC버클리가 AI 사용을 전면 금지했다
-→ 연결된 기사들: "UC버클리 AI 금지" + "AI 법률도구 6건 중 1건 오류"
-
-- 상식: 스코틀랜드는 전력이 부족해서 데이터센터를 유치하기 어렵다
-- 실제: 전력이 남아서 풍력발전기를 꺼달라고 돈을 주고 있다
-→ 연결된 기사들: "스코틀랜드 600MW 데이터센터" + "풍력 발전중단 보상금 6,140억"
-
-- 상식: 구글은 '해를 끼치지 않는다'는 AI 원칙을 가지고 있다
-- 실제: 펜타곤과 '어떤 합법적 목적에도 사용 가능' 계약을 체결했다
-→ 연결된 기사들: "구글 펜타곤 계약" + "구글 AI 원칙 삭제" + "9년차 엔지니어 사임"
-
 [출력 형식 — JSON만]
-{"hook": "이야기의 핵심 긴장을 한 줄로. 길이 제한 없음.", "narrative": "상식(A) vs 실제(B) — 한 줄", "twist": "A가 아니고 B인 진짜 이유", "emotion": "충격/불안/자부심/분노/놀라움", "article_ids": [1개 이상], "sources": ["URL들"], "comparison_unit": "체감단위"}
+{"hook": "독자가 몰랐던 사실을 담은 한 문장 (기사에 근거)", "narrative": "왜 이것이 중요한지 2-3문장 설명 (인과관계 정확히)", "twist": "상식과 다른 실제 결과 (기사 내용에만 근거)", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [관련 기사 ID 목록]}
 
-중요: 
-- 2개 이상의 기사를 연결하면 더 강력함. 단, 관련 없는 기사를 억지로 연결하지 말 것.
+주의사항:
+- 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
+- 기사에 없는 내용 추가 금지
+- hook에서 주어와 객체를 명확히 구분하여 혼동 방지
+- 기사 1개로 충분하면 1개만 사용할 것
 - 기사 하나로도 쓰레드 작성이 가능함. 강제로 여러 기사를 연결할 필요 없음.
-- '상식'은 기사에 없어도 됨. 네가 '이게 상식적으로는 A인데...' 하고 발견하면 됨."""
+- '상식'은 기사에 없어도 됨. 네가 '이게 상식적으로는 A인데...' 하고 발견하면 됨.
+
+## 기사 연결 규칙 (반드시 준수)
+- 2개 이상 연결은 다음 조건을 모두 충족할 때만 허용:
+  1. 같은 사건/현상을 다루는 기사
+  2. 인과관계가 직접적으로 연결되는 기사
+  3. 같은 조직/기관/인물이 등장하는 기사
+- 단순히 "AI"라는 키워드가 같다는 이유로 연결 금지
+- 서로 다른 부처/기관의 독립적인 정책은 연결 금지
+
+## article_ids 작성 규칙
+- 반드시 실제로 읽은 기사의 ID만 article_ids에 포함할 것
+- 해당 기사의 내용이 hook/narrative/twist에 직접 인용된 경우만 포함
+- 관련성이 불확실한 기사는 포함하지 말 것
+- 최소 1개, 최대 3개"""
 
 def fill_article_ids(pitch, articles_text):
-    """피치의 hook/narrative로 관련 기사 ID 자동 매칭"""
+    """피치의 hook/narrative로 관련 기사 ID 자동 매칭 (fallback: 기사 1개만 연결)"""
+    # 모델이 이미 article_ids를 포함하고 있으면 그대로 사용
+    if pitch.get('article_ids'):
+        return pitch
+    
     hook = pitch.get('hook', '')
     narrative = pitch.get('narrative', '')
     search_text = (hook + ' ' + narrative).lower()
@@ -117,9 +130,10 @@ def fill_article_ids(pitch, articles_text):
             scored.append((score, aid))
 
     scored.sort(key=lambda x: -x[0])
-    pitch['article_ids'] = [aid for _, aid in scored[:3]]
+    # fallback 시 최대 1개 기사만 연결 (관련 없는 기사 연결 방지)
+    pitch['article_ids'] = [aid for _, aid in scored[:1]]
     if pitch['article_ids']:
-        print(f'  [매칭] {len(pitch["article_ids"])}개 기사 연결')
+        print(f'  [매칭] {len(pitch["article_ids"])}개 기사 연결 (fallback)')
     return pitch
 
 def parse_pitches_from_text(text, articles_text=None):
@@ -312,7 +326,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 
         all_articles_joined = '\n---\n'.join(articles_text)
 
-        # DiffusionGemma 호출
+        # DeepSeek V4 Pro 호출
         try:
             resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
@@ -323,9 +337,9 @@ def get_pitches(articles, max_articles=600, batch_size=200):
                 max_tokens=3000,
             )
             pitches = parse_pitches_from_text(resp, articles_text)
-            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (DiffusionGemma)')
+            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (Qwen3 Next 80B)')
 
-            # DiffusionGemma 실패 시 GPT-4o-mini fallback
+            # Qwen3 Next 80B 실패 시 GPT-4o-mini fallback
             if not pitches:
                 log(f'  ⚠️ DiffusionGemma JSON 파싱 실패 → GPT-4o-mini fallback')
                 from v3.model_router import chat_completion as _cc

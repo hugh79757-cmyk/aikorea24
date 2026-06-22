@@ -70,6 +70,20 @@ def build_system_prompt():
 4번 카드 (500자 이내): 확장. 더 큰 맥락 또는 연결점.
 5번 카드 (500자 이내): 여운. 지금까지 나온 숫자/사실을 한 번 더 반전시킨다. 마지막 줄은 선언형으로.
 
+[어투 규칙 — 반드시 준수]
+- 모든 문장은 반말 종결형으로 작성한다.
+- 종결 어미 규칙:
+  * ~이다 → ~임.
+  * ~한다 → ~함.
+  * ~했다 / ~하였다 → ~했음.
+  * ~된다 → ~됨.
+  * ~있다 → ~있음.
+  * ~없다 → ~없음.
+  * ~이다/다 로 끝나는 모든 서술문 → ~임. 으로 변경
+- 인용 표현: "~라고 밝혔다" → "~라고 밝혔음."
+- 예외: 훅(첫 카드 첫 문장)은 어투 규칙 적용하지 않아도 됨
+- 절대 금지: ~이다. / ~한다. / ~됩니다. / ~합니다. 로 끝나는 문장
+
 [밀도 기준]
 1번 카드: 500자 이내.
 2~5번 카드: 500자 이내. 원문의 숫자, 인물, 인용문, 날짜를 모두 꺼내서 채운다.
@@ -82,7 +96,14 @@ def build_system_prompt():
 - 쓰레드는 기사 본문의 사실만으로 구성하고, 메타데이터는 참고용으로만 사용하라.
 
 [참고 문체 예시 — 아래 스타일로 작성할 것]
-{examples}"""
+{examples}
+
+[키워드 규칙]
+- 기사 원문에 등장하는 단어를 그대로 사용할 것
+- 단어를 임의로 줄이거나 변형하지 말 것
+  예: "표준으로" → "표준으로" 그대로 (절대 "표준"으로 자르지 말 것)
+  예: "예산을" → "예산을" 그대로 (절대 "예산"으로 자르지 말 것)
+- 기사에 없는 단어로 대체하지 말 것"""
 
 def fetch_article_body(url):
     """원문 기사 본문을 크롤링해서 텍스트 반환. 실패 시 빈 문자열.
@@ -245,10 +266,15 @@ def write_thread(pitch, all_articles):
 1. 첫 문장(hook)은 반드시 "{pitch['hook']}" 그대로 사용할 것. 단, hook이 1번 카드의 유일한 문장이 되어서는 안 됨. hook 뒤에 날짜/장소/숫자로 내용을 이어붙여 1번 카드를 5~6줄로 채워라.
 2. 반말체(~임, ~했음, ~있음). ~합니다 금지.
 3. 각 카드는 --- 로 구분. 각 카드는 반드시 500자 이내로 작성할 것. 500자 초과 시 API가 거부함.
-4. 5개 카드로 작성할 것.
+4. ## 카드 수 규칙 (절대 준수)
+   - 카드는 반드시 5개만 작성한다.
+   - 4개도 안 되고 6개도 안 된다. 오직 5개.
+   - 카드 구분은 반드시 "---" (하이픈 3개) 만 사용한다.
+   - "---" 는 카드와 카드 사이에만 사용한다. 카드 내부에는 사용하지 않는다.
 5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
 6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라.
-7. "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을 쓰레드에 절대 포함하지 마라. """
+7. "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을 쓰레드에 절대 포함하지 마라.
+8. 모든 문장은 ~임/~했음/~있음/~됨 으로 끝낼 것. ~이다/~한다/~됩니다 금지."""
 
     max_attempts = 2
     for attempt in range(max_attempts):
@@ -265,6 +291,9 @@ def write_thread(pitch, all_articles):
             if not content:
                 raise Exception('모델 응답 없음')
             cards = parse_cards(content)
+            if len(cards) > 5:
+                log(f'  카드 {len(cards)}개 → 5개로 조정')
+                cards = cards[:5]
             cards = fix_cards(cards)
 
             if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
@@ -310,8 +339,8 @@ def parse_cards(text):
 
 def validate_cards(cards, pitch):
     """기본 검증 (hook 정합성 + 카드 수)"""
-    if not cards or len(cards) < 5:
-        log(f'    → 카드 수 부족: {len(cards)}개 (필요: 5개)')
+    if not cards or len(cards) != 5:
+        log(f'    → 카드 수 불일치: {len(cards)}개 (필요: 정확히 5개)')
         return False
     # 첫 문장에 hook 포함 확인
     first = cards[0].strip()
@@ -324,7 +353,7 @@ def validate_cards(cards, pitch):
 def validate_year(cards, article_body_text):
     """연도 검증: 쓰레드 본문(1번 카드 첫 줄 제외)의 연도가 기사 본문에 있는 연도인지 확인
     - pitcer가 생성한 hook(1번 카드 첫 줄)은 검증에서 제외 (변경 불가이므로)
-    - 기사 본문에 없는 연도를 쓰레드 본문이 표시하면 할루시네이션 → 실패
+    - 기사 본문에 없는 연도를 쓰레드 본문이 표시하면 할루시네이션
     - 단, 현재 연도(current_year)는 본문에 없어도 허용 (문맥상 자연스러운 사용)
     """
     body_text = article_body_text or ''
@@ -406,12 +435,12 @@ def validate_keywords(cards, article_body_text):
     if missing:
         issues = [f'{kw}→{tw}({reason})' if tw else f'{kw}({reason})' for kw, tw, reason in missing]
         log(f'    → 키워드 검증 경고: {len(issues)}개 의심 키워드: {", ".join(issues[:5])}')
-        # 치명적 누락(접두사 잘림)이 아니면 경고만 하고 통과
+        # 치명적 누락(접두사/접미사 잘림)이 3개 이상이면 실패
         critical = [m for m in missing if '잘림' in m[2]]
-        if critical:
+        if len(critical) >= 3:
             log(f'    → 키워드 검증 실패: 접두사/접미사 잘림 {len(critical)}개')
             return False
-        return True  # 누락 의심만 있고 잘림 없으면 통과
+        return True  # 잘림 2개 이하면 통과
 
     log(f'    → 키워드 검증 통과: 핵심 단어 {len(keywords)}개 매칭')
     return True

@@ -1,7 +1,7 @@
 """
 model_router.py — AI 모델 호출 라우터
-- 1순위: NVIDIA DiffusionGemma 26B (build.nvidia.com)
-- 2순위: OpenAI GPT-4o (fallback)
+- 1순위: NVIDIA Qwen3 Next 80B (build.nvidia.com)
+- 2순위: OpenAI GPT-4o-mini (fallback)
 - .env에서 NVIDIA_API_KEY / OPENAI_API_KEY 자동 로드
 """
 import os, sys
@@ -42,12 +42,12 @@ def load_env():
 
 load_env()
 
-# === NVIDIA DiffusionGemma 설정 ===
+# === NVIDIA Qwen3 Next 80B 설정 ===
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 # 기사 선택용 (pitcher)
-NVIDIA_MODEL = "google/diffusiongemma-26b-a4b-it"
-# 쓰레드 작성용 (writer) — DiffusionGemma 사용
-WRITER_NVIDIA_MODEL = "google/diffusiongemma-26b-a4b-it"
+NVIDIA_MODEL = "qwen/qwen3-next-80b-a3b-instruct"
+# 쓰레드 작성용 (writer)
+WRITER_NVIDIA_MODEL = "deepseek-ai/deepseek-v4-flash"
 
 # === Fallback: OpenAI ===
 OPENAI_MODEL_FALLBACK = "gpt-4o-mini"
@@ -67,7 +67,7 @@ def get_openai_client():
 def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, nvidia_model=None):
     """
     통합 채팅 completions 함수
-    - 1순위: NVIDIA 모델 (지정 가능, 기본=DiffusionGemma 26B)
+    - 1순위: NVIDIA 모델 (지정 가능, 기본=DeepSeek V4 Pro)
     - 2순위: OpenAI GPT-4o-mini (fallback)
     
     nvidia_model: 사용할 NVIDIA 모델명 (기본=NVIDIA_MODEL)
