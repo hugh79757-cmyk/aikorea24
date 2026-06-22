@@ -895,7 +895,90 @@ def collect_kr():
     print('\n  [KR-4] 과기부 보도자료')
     all_items.extend(fetch_msit_press(limit=15))
 
+    print('\n  [KR-5] 기업마당 소상공인 AI 지원사업')
+    all_items.extend(fetch_bizinfo_grants())
+
     return all_items
+
+
+# ============================================
+# 기업마당 소상공인 AI 지원사업
+# ============================================
+def fetch_bizinfo_grants():
+    """[11] 기업마당 소상공인 AI 지원사업 공고"""
+    api_key = os.environ.get('BIZINFO_API_KEY', '')
+    if not api_key:
+        print("  BIZINFO_API_KEY 없음, 스킵")
+        return []
+
+    results = []
+    existing = get_existing()
+    ai_strong = ['AI', '인공지능', 'AI바우처', '데이터바우처', '스마트상점', '키오스크',
+                 '챗봇', '디지털커머스', '스마트공장']
+    ai_weak = ['디지털전환', '디지털', '스마트', '빅데이터', '클라우드', '자동화',
+               '로봇', 'DX', 'ICT', '온라인', '플랫폼']
+    biz_words = ['소상공인', '소기업', '소공인', '자영업', '영세', '골목상권', '전통시장']
+
+    try:
+        url = 'https://www.bizinfo.go.kr/uss/rss/bizinfoApi.do'
+        params = f'crtfcKey={api_key}&dataType=json&searchCnt=200&pageUnit=200&pageIndex=1'
+        full_url = f'{url}?{params}'
+
+        req = urllib.request.Request(full_url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = resp.read().decode('utf-8')
+            data = json.loads(raw)
+
+        items = data.get('jsonArray', [])
+        total = items[0].get('totCnt', '?') if items else 0
+        print(f"  기업마당 전체 공고: {total}건, 가져온 건: {len(items)}건")
+
+        count = 0
+        for item in items:
+            title = clean(item.get('pblancNm', ''))
+            desc = clean(item.get('bsnsSumryCn', ''))
+            target = item.get('trgetNm', '')
+            org = item.get('jrsdInsttNm', '')
+            exc_org = item.get('excInsttNm', '')
+            hashtags = item.get('hashtags', '')
+            period = item.get('reqstBeginEndDe', '')
+            purl = item.get('pblancUrl', '')
+            link = f'https://www.bizinfo.go.kr{purl}' if purl and not purl.startswith('http') else purl
+
+            full_text = f'{title} {desc} {target} {hashtags}'
+            has_strong = any(kw.lower() in full_text.lower() for kw in ai_strong)
+            has_weak = any(kw.lower() in full_text.lower() for kw in ai_weak)
+            has_biz = any(w in full_text for w in biz_words)
+
+            if (has_strong and has_biz) or (has_strong and '중소기업' in target) or (has_weak and has_biz):
+                if title and title_hash(title) not in existing:
+                    summary = desc[:300] if desc else ''
+                    info_parts = []
+                    if org: info_parts.append(f'소관: {org}')
+                    if exc_org: info_parts.append(f'수행: {exc_org}')
+                    if target: info_parts.append(f'대상: {target}')
+                    if period: info_parts.append(f'신청기간: {period}')
+                    info_line = ' | '.join(info_parts)
+                    final_desc = f'{info_line}\n{summary}' if summary else info_line
+
+                    results.append({
+                        'title': title[:200],
+                        'link': link,
+                        'description': final_desc[:500],
+                        'source': org or '기업마당',
+                        'category': 'grant',
+                        'pub_date': period.split('~')[0].strip() if '~' in period else datetime.now().strftime('%Y-%m-%d')
+                    })
+                    existing.add(title_hash(title))
+                    count += 1
+
+        print(f"  AI/디지털/소상공인 필터 통과: {count}건")
+    except Exception as e:
+        print(f"  기업마당 실패: {e}")
+        import traceback
+        traceback.print_exc()
+
+    return results
 
 
 # ============================================

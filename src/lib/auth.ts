@@ -74,23 +74,6 @@ export async function getUserMembership(db: any, email: string) {
   return { level, purchased };
 }
 
-// 콘텐츠 접근 가능 여부 체크
-export function canAccess(
-  userLevel: string,
-  purchasedPosts: number[],
-  postAccessLevel: string,
-  postId: number
-): boolean {
-  if (postAccessLevel === 'free') return true;
-  if (purchasedPosts.includes(postId)) return true;
-  const hierarchy: Record<string, number> = {
-    free: 0,
-    basic: 1,
-    premium: 2,
-  };
-  return (hierarchy[userLevel] || 0) >= (hierarchy[postAccessLevel] || 0);
-}
-
 // 구독 플랜 정보
 export const PLANS = {
   basic_monthly: {
