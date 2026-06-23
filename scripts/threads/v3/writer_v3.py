@@ -5,7 +5,7 @@ writer_v3.py — 피치 → 쓰레드 작성
 - 입력: pitcher의 내러티브 + 관련 기사
 - 출력: ["조각1", "조각2", ...]
 """
-import os, sys, json, re
+import os, sys, json, re, time
 import urllib.request, urllib.parse
 from datetime import datetime
 import requests
@@ -15,6 +15,7 @@ PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 DRAFTS_DIR = os.path.join(LOGS_DIR, 'drafts')
+FAILED_CRAWLS_FILE = os.path.join(LOGS_DIR, 'failed_crawls.json')
 os.makedirs(DRAFTS_DIR, exist_ok=True)
 os.makedirs(LOGS_DIR, exist_ok=True)
 
@@ -36,18 +37,38 @@ def load_style_examples():
 
 def build_system_prompt():
     examples = load_style_examples()
-    return f"""당신은 AI 뉴스를 Threads용 3개 카드 쓰레드로 만드는 작가다.
+    return f"""당신은 AI 뉴스를 Threads용 5개 카드 쓰레드로 만드는 작가다.
+
+[최우선 — 리듬 규칙, 반드시 지킬 것]
+- 각 카드 내부는 2~3개의 짧은 줄이 하나의 stanza(연)를 이룬다.
+- stanza와 stanza 사이는 반드시 한 줄 비운다. (빈 줄이 리듬을 만든다)
+- 한 줄은 15~25자 내외. 절대 30자 넘기지 말 것.
+- 줄바꿈 위치: 의미 단위(조사, 연결어미, 쉼표)가 끝나는 곳.
+
+stanza 예시 (반드시 이 구조를 따라라):
+  "머스크의 우주 회사 스페이스X가"         ← 1개 줄 (21자)
+  "AI 회사들한테 컴퓨터를 빌려주고"         ← 1개 줄 (22자)
+  "한 달에 3조 넘게 받기로 했음."           ← 1개 줄 (22자)
+                                              ← 빈 줄 (stanza 구분)
+  "이 돈을 1년치로 환산하면"                ← 새 stanza 시작
+  "작년 스페이스X 전체 매출을 넘음."        ← stanza 끝
 
 [문체 원칙]
 - 반말체. "~임", "~했음", "~있음", "~아님". "~합니다" "~입니다" 절대 금지.
-- 각 문장은 구체적인 사실(숫자, 인물, 날짜)을 포함해 최소 2~3줄로 서술하라. 한 줄짜리 축약 문장 금지.
 - 인과관계를 설명하라. "A → B"가 아니라 "A로 인해 B가 발생한 이유는..." 식으로 풀어써라.
 - 날짜, 장소, 인물명으로 시작해서 독자를 사건 안으로 끌어당긴다.
 - 형용사 금지. 감탄사 금지. 사실과 숫자만.
 - 마지막 카드의 마지막 줄 바로 앞은 반드시 여운을 남긴다. 선언이나 반전으로 끝낸다.
 - 이모지 금지. 볼드 금지. 이탤릭 금지.
-- 카드 안에서도 주제가 바뀌거나 시점/장소/인물이 바뀌면 빈 줄로 나눠라. 같은 주제의 문장은 붙이고, 화제 전환 시에만 띄운다.
 - 고유명사(기업명, 인물명, 제품명)는 영어 원문을 그대로 사용하라. 예: 화웨이(X) → Huawei(O), 앤트로픽(X) → Anthropic(O), 오픈AI(X) → OpenAI(O)
+
+[대비 구조 — 문장 리듬]
+- 두 개의 사실을 대비시켜라. 대비는 줄바꿈으로 분리.
+- 패턴 예시:
+  * "A였음. 그런데 B." / "A가 아니라 B." / "A는 X. B는 Y."
+  * "돈은 주되 결정권은 쥐겠다는 것." (X이지만 Y)
+  * "이기려고 지은 컴퓨터를. 자기는 못 쓰고. 경쟁자가 잘 쓰는 중." (A였는데 B가 됨)
+- 한 줄이 하나의 대비 항목. A와 B 사이는 반드시 개행.
 
 [연도 원칙 — 중요]
 - 기사 본문에 명시된 날짜/연도만 사용하라.
@@ -63,12 +84,56 @@ def build_system_prompt():
 - 기사에 숫자가 없으면 "수십억", "대규모", "많은" 같은 뭉뚱그린 표현 금지.
 - 숫자 없는 사실은 쓰지 마라.
 
+[숫자-설명 쌍 — 정보 전달 리듬]
+- 숫자를 무더기로 나열하지 마라. 숫자 하나 → 설명 하나가 한 쌍.
+- 패턴: 숫자를 먼저 던지고, 그 의미를 다음 줄에서 풀어써라.
+- 예:
+  "약 9,600조 원."
+  "여기서 매년 5%만 떼서 국민한테 나눠주는 구조."
+  → (한 쌍 끝, 빈 줄)
+  "한 명당 약 138만 원."
+  "남녀노소 전부, 매년."
+- 숫자-설명 쌍과 쌍 사이는 빈 줄로 구분.
+
 [카드 구조 — 5개, --- 로 구분]
 1번 카드 (500자 이내): 첫 줄은 hook 그대로. 그 뒤에 구체적 사실(날짜/장소/숫자)을 이어붙여라. hook만 단독으로 쓰지 말고 내용을 채워라.
 2번 카드 (500자 이내): 충돌의 A면. 구체적 사실, 숫자, 인용, 연구 결과를 빽빽하게 채운다.
 3번 카드 (500자 이내): 반전. 예상 못 한 제3의 사실. 방향 전환. 숫자와 사례로 가득 채운다.
 4번 카드 (500자 이내): 확장. 더 큰 맥락 또는 연결점.
 5번 카드 (500자 이내): 여운. 지금까지 나온 숫자/사실을 한 번 더 반전시킨다. 마지막 줄은 선언형으로.
+
+[전환 시그널 — 카드 시작 표현, 매번 다양하게 선택, 같은 표현 2회 연속 금지]
+3번 카드(반전) 시작 덩어리 예시:
+- "근데 여기서부터가 진짜임."
+- "여기서 반전이 있음."
+- "그런데 사실은 이렇지 않음."
+- "이걸 다른 시각으로 보면 이럼."
+- "이걸 다른 말로 표현하면."
+- "표면과 다른 진실이 있음."
+- "진짜 이야기는 여기서 시작됨."
+- "하지만 뒤집어 보면."
+- "이 주장의 반대편에는."
+- "이 구조의 함정은 여기에 있음."
+
+4번 카드(확장) 시작 덩어리 예시:
+- "이 현상을 더 큰 그림으로 보면."
+- "이걸 다른 맥락에 놓고 보면."
+- "왜 하필 지금이냐."
+- "여기서 질문을 던져볼 수 있음."
+- "이 흐름의 더 깊은 층위가 있음."
+- "이게 왜 중요한가."
+- "이 사건이 말하는 진짜 의미는."
+- "이걸 역사적 맥락에서 보면."
+
+5번 카드(마무리) 시작 덩어리 예시:
+- "정리하면 이럼."
+- "결론적으로 이렇게 볼 수 있음."
+- "한 문장으로 요약하면."
+- "이 모든 사실이 말하는 것은."
+- "결국 이 질문으로 돌아옴."
+- "핵심은 하나임."
+- "이 이야기가 주는 교훈은."
+- "결론은 명확함."
 
 [어투 규칙 — 반드시 준수]
 - 모든 문장은 반말 종결형으로 작성한다.
@@ -105,38 +170,64 @@ def build_system_prompt():
   예: "예산을" → "예산을" 그대로 (절대 "예산"으로 자르지 말 것)
 - 기사에 없는 단어로 대체하지 말 것"""
 
-def fetch_article_body(url):
+def log_failed_crawl(url, source, title, status):
+    """크롤링 실패한 URL을 failed_crawls.json에 기록"""
+    data = {"failed": [], "updated_at": ""}
+    if os.path.exists(FAILED_CRAWLS_FILE):
+        try:
+            with open(FAILED_CRAWLS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+        except Exception:
+            pass
+    now = datetime.now().isoformat()
+    entry = {"url": url, "source": source, "title": title, "status": status, "failed_at": now}
+    # 중복 제거 (같은 url이 있으면 갱신)
+    data['failed'] = [e for e in data['failed'] if e.get('url') != url]
+    data['failed'].append(entry)
+    data['updated_at'] = now
+    with open(FAILED_CRAWLS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+def fetch_article_body(url, source='', title=''):
     """원문 기사 본문을 크롤링해서 텍스트 반환. 실패 시 빈 문자열.
+    2회 재시도. 실패 시 failed_crawls.json에 기록.
     URL은 D1 DB에서 이미 제공되므로, 본문 텍스트만 반환 (URL 변경 금지).
     """
     if not url:
         return ''
 
-    try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        }
-        resp = requests.get(url, headers=headers, timeout=15)
-        resp.raise_for_status()
-        resp.encoding = 'utf-8'
-        soup = BeautifulSoup(resp.text, 'lxml')
-        for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript', 'iframe']):
-            tag.decompose()
-        body = None
-        for selector in ['article', 'main', '[role="main"]', '.article-body', '.post-content', '.entry-content', '.story-body']:
-            candidate = soup.select_one(selector)
-            if candidate:
-                body = candidate.get_text(separator='\n', strip=True)
-                break
-        if not body:
-            body = soup.get_text(separator='\n', strip=True)
-        lines = [l.strip() for l in body.split('\n') if l.strip()]
-        text = '\n'.join(lines)
-        log(f'  📰 크롤링: {url[:50]}... ({len(text)}자)')
-        return text
-    except Exception as e:
-        log(f'  ⚠️ 크롤링 실패: {url[:50]}... ({type(e).__name__})')
-        return ''
+    max_attempts = 2
+    for attempt in range(max_attempts):
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+            resp = requests.get(url, headers=headers, timeout=15)
+            resp.raise_for_status()
+            resp.encoding = 'utf-8'
+            soup = BeautifulSoup(resp.text, 'lxml')
+            for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript', 'iframe']):
+                tag.decompose()
+            body = None
+            for selector in ['article', 'main', '[role="main"]', '.article-body', '.post-content', '.entry-content', '.story-body']:
+                candidate = soup.select_one(selector)
+                if candidate:
+                    body = candidate.get_text(separator='\n', strip=True)
+                    break
+            if not body:
+                body = soup.get_text(separator='\n', strip=True)
+            lines = [l.strip() for l in body.split('\n') if l.strip()]
+            text = '\n'.join(lines)
+            log(f'  📰 크롤링: {url[:50]}... ({len(text)}자)')
+            return text
+        except Exception as e:
+            err_msg = f'{type(e).__name__}'
+            log(f'  ⚠️ 크롤링 실패 ({attempt+1}/{max_attempts}): {url[:50]}... ({err_msg})')
+            if attempt < max_attempts - 1:
+                time.sleep(3)
+            else:
+                log_failed_crawl(url, source, title, err_msg)
+                return ''
 
 def fix_cards(cards):
     """GPT-4o-mini로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
@@ -229,12 +320,18 @@ def write_thread(pitch, all_articles):
     crawled_urls = []  # 크롤링 성공한 URL 기록
     for a in related:
         url = a.get('link', '')
-        body = fetch_article_body(url)
+        # URL 검증 선행 — 403/404 차단 매체는 리소스 낭비 없이 스킵
+        from db_reader import validate_link
+        if not validate_link(url, timeout=5):
+            log(f'  ⚠️ URL 차단/실패 → 기사 제외: {url[:60]}...')
+            log_failed_crawl(url, a.get('source', ''), a.get('title', ''), 'validate_link_fail')
+            continue
+        body = fetch_article_body(url, source=a.get('source', ''), title=a.get('title', ''))
         if not body:
-            body = (a.get('description', '') or '')[:500]
-        else:
-            all_fallback = False
-            crawled_urls.append(url)  # 크롤링 성공한 URL만 기록
+            log(f'  ⚠️ 크롤링 실패 → 기사 제외 (URL: {url[:60]}...)')
+            continue
+        all_fallback = False
+        crawled_urls.append(url)
         article_bodies.append(body)
         pub_date_str = str(a.get('pub_date', ''))
         related_parts.append(f"""기사 {a['id']}:
@@ -243,12 +340,13 @@ def write_thread(pitch, all_articles):
 본문: {body}
 출처: {a.get('source','')}
 링크: {url}""")
-    related_text = '\n\n'.join(related_parts)
 
-    # 모든 기사 크롤링 실패 → 무조건 스킵 (RSS description만으로 품질 보장 불가)
-    if all_fallback:
-        log(f'  ⚠️ 모든 기사 원문 크롤링 실패 → 스킵 (hallucination 방지)')
+    # 모든 기사 URL이 차단/실패 → 스킵 (할루시네이션 방지)
+    if all_fallback or not related_parts:
+        log(f'  ⚠️ 모든 기사 크롤링 불가 → 스킵 (실패 목록: logs/failed_crawls.json)')
         return []
+
+    related_text = '\n\n'.join(related_parts)
 
     # 연도 검증용: 기사 본문 텍스트 (메타데이터 제외)
     article_body_text = ' '.join(article_bodies)
@@ -275,9 +373,11 @@ def write_thread(pitch, all_articles):
    - 카드 구분은 반드시 "---" (하이픈 3개) 만 사용한다.
    - "---" 는 카드와 카드 사이에만 사용한다. 카드 내부에는 사용하지 않는다.
 5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
-6. 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄로 나눠라.
-7. "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을 쓰레드에 절대 포함하지 마라.
-8. 모든 문장은 ~임/~했음/~있음/~됨 으로 끝낼 것. ~이다/~한다/~됩니다 금지."""
+6. [필수] 한 줄 15~25자. 30자 넘는 줄 금지.
+7. [필수] 2~3줄마다 반드시 빈 줄 하나. stanza 구조 절대 유지.
+8. [필수] 반말체(~임/~했음/~있음/~됨). ~이다/~한다/~됩니다 전면 금지.
+9. "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을
+   쓰레드에 절대 포함하지 마라."""
 
     max_attempts = 2
     for attempt in range(max_attempts):
@@ -409,6 +509,25 @@ def validate_keywords(cards, article_body_text):
     body_counter = Counter(body_words)
     # 2회 이상 등장한 단어만 핵심 키워드로 간주
     keywords = {w for w, cnt in body_counter.items() if cnt >= 2 and len(w) >= 3}
+
+    # 뉴스 사이트 boilerplate stoplist — 키워드 검증에서 제외
+    _STOPLIST = {
+        '무단전재', '수정하거나', '관련기사', '보도했다', '보도했음',
+        '기사제공', '저작권자', '기사보기', '바로가기', '메일로',
+        '카카오톡', '페이스북', '트위터', '구독하기', '네이버',
+        '데일리', '머니투데이', '조선일보', '동아일보', '한국경제',
+        '매일경제', '서울경제', '헤럴드경제', '아시아경제',
+        '입력', '수정', '기자', '사진', '제공', '문의', '저작권',
+        '구독', '뉴스', '대표', '대표번호', '이메일', '전화번호',
+        '블로그', '인스타그램', '유튜브', '채널', '팔로우',
+        'All', 'Rights', 'Reserved', 'Copyright',
+    }
+    keywords = keywords - _STOPLIST
+
+    # 전체 키워드 수가 너무 적으면 검증 불가 → 통과
+    if len(keywords) <= 5:
+        log(f'    → 키워드 검증 통과: 핵심 단어 {len(keywords)}개 (boilerplate 제외 후 소수 → 검증 불필요)')
+        return True
 
     # 쓰레드에 등장하는 한글 단어 추출
     thread_words = set(re.findall(r'[가-힣]{2,}', thread_text))

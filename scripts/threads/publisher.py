@@ -218,10 +218,11 @@ def parse_cards(text):
     return cards
 
 def add_line_spacing(text):
-    """각 문장 뒤에 한 줄 공백 추가 (문장 끝 기준 분리)"""
+    """AI가 이미 stanza 구조로 작성했다면 유지, 아니면 문장 단위로 공백 추가"""
     import re as _re
-    # 문장 끝 패턴: 마침표 뒤 공백 또는 줄바꿈
-    # 문장 분리 후 \n\n 으로 연결
+    # 이미 빈 줄로 구분된 구조면 그대로 반환 (AI가 의도한 리듬 유지)
+    if '\n\n' in text.strip():
+        return text
     sentences = _re.split(r'(?<=[.!?])\s+', text)
     result = '\n\n'.join(s.strip() for s in sentences if s.strip())
     return result
