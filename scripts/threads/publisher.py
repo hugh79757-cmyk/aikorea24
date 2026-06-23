@@ -218,15 +218,13 @@ def parse_cards(text):
     return cards
 
 def add_line_spacing(text):
-    """각 문장 뒤에 한 줄 공백 추가"""
-    lines = text.split('\n')
-    result = []
-    for i, line in enumerate(lines):
-        result.append(line)
-        # 현재 줄이 있고, 다음 줄이 없거나 빈 줄이 아닐 때만 공백 추가
-        if line.strip() and (i == len(lines) - 1 or lines[i+1].strip()):
-            result.append('')
-    return '\n'.join(result)
+    """각 문장 뒤에 한 줄 공백 추가 (문장 끝 기준 분리)"""
+    import re as _re
+    # 문장 끝 패턴: 마침표 뒤 공백 또는 줄바꿈
+    # 문장 분리 후 \n\n 으로 연결
+    sentences = _re.split(r'(?<=[.!?])\s+', text)
+    result = '\n\n'.join(s.strip() for s in sentences if s.strip())
+    return result
 
 
 if __name__ == '__main__':
