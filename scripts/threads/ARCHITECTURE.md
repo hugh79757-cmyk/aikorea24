@@ -35,12 +35,13 @@ D1 Database
     │
     ▼
 [1] db_reader.get_articles()
-    │   199개 기사 (posted.json 기준 중복 제외)
+    │   기사 풀 (posted.json 기준 중복 제외)
     │   1순위: 오늘 브리핑 → 2순위: 최근 7일 → 3순위: 이전
+    │   pub_date RFC 2822 / YYYY-MM-DD 변환 후 필터링
     │
     ▼
 [2] narrative_pitcher.get_pitches()
-    │   100개 기사 → description 원문 (크롤링 없음, 500자 제한 없음)
+    │   100개 기사 → description 원문 (크롤링 없음)
     │   → DiffusionGemma → 3개 피치 JSON
     │   ↓ hook[:8]+article_ids 중복 검사 (pitch_history 대조)
     │   ↓ pitch_evaluator.filter_pitches() 0~6점 평가 (4개 기준)
@@ -50,22 +51,19 @@ D1 Database
     ▼
 [3] writer_v3.write_thread()
     │   피치 연결 기사 URL → fetch_article_body() 원문 크롤링
-    │   ├─ URL 유효성 검사: validate_link() HEAD 요청 (TechCrunch 등 불안정 소스)
-    │   ├─ 실패 시: find_fallback_url(title) → Google News 검색 → 대체 URL
-    │   ├─ fallback도 실패: 크롤링 스킵 (description fallback)
-    │   ├─ 성공 시: (body_text, actual_url) 반환 → actual_url이 최종 링크로 사용
-    │   ├─ 크롤링 (전문, 글자 수 제한 없음)
+    │   ├─ 크롤링 성공 → crawled_urls에 URL 기록
+    │   ├─ 크롤링 실패 → description fallback
+    │   ├─ 모든 기사 크롤링 실패 → 스킵
     │   build_system_prompt() + user_prompt → 모델 추론
     │   ↑ DiffusionGemma 2회 시도 → 실패 시 GPT-4o-mini 1회
-    │   ↓ fix_cards() — GPT-4o-mini로 글자 단위 오류 수정 (한국어 음절 복구)
-    │   ↓ validate_cards() 검증 (5카드 + hook 일치)
-    │   ↓ validate_year() 검증 (연도 할루시네이션 방지)
-    │   ↓ validate_keywords() 검증 (기사 핵심 키워드 음절 잘림 탐지)
-    │   ↓ assemble_final(actual_urls) URL 1개 추가 (재검증 후 추가)
+    │   ↓ fix_cards() — GPT-4o-mini로 글자 단위 오류 수정
+    │   ↓ validate_cards() + validate_year() + validate_keywords()
+    │   ↓ assemble_final(crawled_urls) — 크롤링 성공 URL 중 선택
     │   ↓ save_draft() 로그/초안 저장
     │
     ▼
 [4] publisher.publish_thread_chain()
+    │   add_line_spacing() — 문장 사이 공백 추가
     │   각 카드 → Threads Graph API 컨테이너 생성
     │   reply_to_id 체인 → 연속 답글 발행
     │   posted.json posted_ids/links 갱신
@@ -85,11 +83,16 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 | 우선순위 | 조건 | 설명 |
 |---------|------|------|
 | 1순위 | 오늘 briefing_items 포함 news | AI 브리핑에 선정된 핵심 기사 |
-| 2순위 | 최근 7일 news (최대 **1000**개) | 브리핑 제외, 발행 이력 제외 |
+| 2순위 | 최근 7일 news (최대 **2000**개) | 브리핑 제외, 발행 이력 제외 |
 | 3순위 | 그 이전 (최대 30일) | 풀이 50개 미만일 때만 보충 |
 
 - `posted.json`의 `posted_ids` / `posted_links`와 대조하여 중복 제외
 - wrangler D1 execute remote로 SQL 실행
+
+**pub_date 형식 처리 (2026-06-23):**
+- DB에 RFC 2822 형식(`Wed, 10 Jun 2026 17:38:24`)과 YYYY-MM-DD 형식(`2026-06-01 18:03:36`)이 혼재
+- SQL CASE문으로 두 형식 모두 `YYYY-MM-DD`로 변환 후 `date('now', '-7 days')`와 비교
+- 변환 불가능한 형식은 NULL 반환 → 제외 처리
 
 **URL 검증 공유 함수 (writer_v3.py에서 import):**
 
@@ -231,9 +234,11 @@ user_prompt
 - `---` 로 카드 구분
 - 같은 주제 문장은 붙이고, 시점/장소/인물 전환 시 빈 줄
 - 마지막 카드는 선언형 마무리 (여운)
-- `assemble_final(actual_urls)`: 대표 URL 1개를 `🔗 url` 형식으로 마지막에 추가
-  - `actual_urls` 우선 → 없으면 `pitch.get('sources', [])` fallback
-  - URL 추가 전 `validate_link()` 재검증 → 실패 시 링크 생략
+- `assemble_final(cards, related, primary_url, crawled_urls)`: 대표 URL 1개를 `🔗 url` 형식으로 마지막에 추가
+  - `crawled_urls` 우선 — 크롤링 성공한 URL에서만 선택 (재검증 불필요)
+  - `primary_url`이 `crawled_urls`에 있으면 해당 URL 사용
+  - 없으면 `crawled_urls`의 첫 번째 URL 사용
+  - `crawled_urls` 없으면 기존 validate_link 로직 fallback
 
 ### 6. publisher.py
 
@@ -241,15 +246,21 @@ Threads Graph API v1.0으로 연속 답글 체인을 발행한다.
 
 **발행 프로세스:**
 ```
-1. 각 카드 → POST /{user_id}/threads (컨테이너 생성)
+1. 각 카드 → add_line_spacing()으로 문장 사이 공백 추가
+2. 각 카드 → POST /{user_id}/threads (컨테이너 생성)
    - 첫 카드: 일반 발행
    - 2번째 이후: reply_to_id = 이전 카드 post_id
-2. 각 컨테이너 → POST /{user_id}/threads_publish (실제 발행)
-3. posted.json 갱신 (posted_ids, posted_links, history)
+3. 각 컨테이너 → POST /{user_id}/threads_publish (실제 발행)
+4. posted.json 갱신 (posted_ids, posted_links, history)
 ```
 
 - 3회 재시도, 토큰 만료 시 자동 갱신
 - 각 단계 간 **10초** 대기 (2026-06-21: 3→10초, rate limit 대응)
+
+**add_line_spacing() (2026-06-23):**
+- 마침표/물음표/느낌표 뒤 공백 기준으로 문장 분리
+- 각 문장 사이 `\n\n` (빈 줄) 삽입
+- 카드 텍스트가 한 줄에 모든 문장이 이어져 있는 경우에도 정상 동작
 
 ### 7. main_v3.py — 진입점
 
@@ -388,3 +399,6 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-21 | **fix_cards 금지 규칙 개선** — '단어 교체 금지'→'틀린 글자는 올바른 글자로 교체, 의미 유지' |
 | 2026-06-22 | **fix_cards GPT-4o-mini 전환** — DiffusionGemma 자기 오류 자기 수정 구조적 문제 해결, 한국어 음절 오류 패턴 추가 ("데팅→데이팅" 등) |
 | 2026-06-22 | **validate_keywords() 추가** — 기사 본문 핵심 키워드(2회 이상 등장 3자+ 한글 단어) vs 쓰레드 대조, 접두사/접미사 잘림 탐지 |
+| 2026-06-23 | **pub_date 형식 변환** — RFC 2822와 YYYY-MM-DD 형식 모두 처리, 7일 이내 기사 필터 정확도 개선 |
+| 2026-06-23 | **문장 단위 공백 추가** — add_line_spacing()을 마침표 기준 분리 방식으로 변경, 발행 시 각 문장 사이 빈 줄 삽입 |
+| 2026-06-23 | **크롤링 성공 URL 발행** — crawled_urls 리스트 도입, assemble_final()에서 크롤링 성공한 URL만 사용하여 링크 미스매치 방지 |
