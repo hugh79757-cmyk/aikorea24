@@ -129,7 +129,7 @@ def publish_thread_chain(cards, article):
     for i, card_text in enumerate(cards):
         params = {
             'media_type': 'TEXT',
-            'text': card_text,
+            'text': add_line_spacing(card_text),
             'access_token': access_token
         }
         if previous_post_id:
@@ -216,6 +216,17 @@ def publish_thread_chain(cards, article):
 def parse_cards(text):
     cards = [c.strip() for c in text.split('---') if c.strip()]
     return cards
+
+def add_line_spacing(text):
+    """각 문장 뒤에 한 줄 공백 추가"""
+    lines = text.split('\n')
+    result = []
+    for i, line in enumerate(lines):
+        result.append(line)
+        # 현재 줄이 있고, 다음 줄이 없거나 빈 줄이 아닐 때만 공백 추가
+        if line.strip() and (i == len(lines) - 1 or lines[i+1].strip()):
+            result.append('')
+    return '\n'.join(result)
 
 
 if __name__ == '__main__':
