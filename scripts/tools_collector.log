@@ -322,3 +322,46 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 10개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 4개
+  총 11개 (중복 제거 후)
+수집 완료: 11개
+기존 툴: 94개 (슬러그), 93개 (이름)
+  중복 스킵: Atomic Mail Agentic
+  중복 스킵: Mellum by JetBrains
+신규 툴: 9개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (9건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/uwait.md
+  ✅ uwait → uwait.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/airjelly.md
+  ✅ AirJelly → airjelly.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/algofly-ai.md
+  ✅ AlgoFly AI → algofly-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/grok-by-spacexai-for-word.md
+  ✅ Grok by SpaceXAI for Word → grok-by-spacexai-for-word.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/alai-2-0.md
+  ✅ Alai 2.0 → alai-2-0.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/haqq-legal-ai-on-mobile.md
+  ✅ HAQQ Legal AI on Mobile → haqq-legal-ai-on-mobile.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/are-you-in-the-weights.md
+  ✅ Are you in the Weights? → are-you-in-the-weights.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/perceptiondlm-parallel-region-perception-with-mul.md
+  ✅ PerceptionDLM: Parallel Region Perception with Mul → perceptiondlm-parallel-region-perception-with-mul.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/plansera-ai.md
+  ✅ Plansera AI → plansera-ai.md
+
+==================================================
+처리 완료: 9/11개 생성 (33.7초)
+  git commit: [main 4397b65] feat: AI 툴 9개 추가 (2026-06-23)
+ 20 files changed, 2709 insertions(+), 66 deletions(-)
+ create mode 100644 scripts/threads/v3/test_model.py
+ create mode 100644 src/content/tools/airjelly.
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
