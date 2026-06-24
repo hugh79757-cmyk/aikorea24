@@ -1730,3 +1730,165 @@
 [08:01:10]   텔레그램 알림 전송 완료
 
 [08:01:10] ✅ 키워드 갱신 완료!
+[08:00:05] 키워드 갱신 시작 (2026-06-24)
+
+[08:00:05] =======================================================
+[08:00:05] STEP 1/9: seeds.json 로드
+[08:00:05] =======================================================
+[08:00:05]   베이스 키워드: 30개
+
+[08:00:05] =======================================================
+[08:00:05] STEP 2/9: D1 뉴스 조회
+[08:00:05] =======================================================
+[08:00:07] D1 조회: 2026-06-23 (100건)
+
+[08:00:07] =======================================================
+[08:00:07] STEP 3/9: OpenAI 신규 키워드 추출
+[08:00:07] =======================================================
+[08:00:13] OpenAI 키워드 추출: 20개
+[08:00:13]   추출된 신규 키워드: ['AI 박물관', '추론 투자', 'AI 자산', '카카오톡 선물하기', 'LG 경영', '젠슨 황', 'AI 데이터센터', 'AI 망분리', 'SDV 시대', 'LG화학 R&D', 'AI 기반 고부가 소재', 'AI 네이티브', '트랜스코스모스', 'CX 스퀘어 마곡', 'AI 인재 및 역량 매트릭스', '인터랙션 API', '구글 딥마인드', 'A24', '피카 잡스', '와이즈넛']
+
+[08:00:13] =======================================================
+[08:00:13] STEP 4/9: 키워드 병합 (중복 제거)
+[08:00:13] =======================================================
+[08:00:13]   병합 완료: 50개 (seed 30개 + 신규 20개)
+
+[08:00:13] =======================================================
+[08:00:13] STEP 5/9: 네이버 검색광고 API 조회
+[08:00:13] =======================================================
+[08:00:13]   네이버 API 조회: 1~5/50: 쳇지티피, 챗지피티무료, 마음AI, 로판AI, 영어해석기
+[08:00:14]     ✓ 쳇지티피: 검색량=201400, 경쟁도=낮음
+[08:00:14]     ✓ 챗지피티무료: 검색량=84700, 경쟁도=중간
+[08:00:14]     ✓ 마음AI: 검색량=61500, 경쟁도=낮음
+[08:00:14]     ✓ 로판AI: 검색량=49620, 경쟁도=중간
+[08:00:14]     ✓ 영어해석기: 검색량=52270, 경쟁도=중간
+[08:00:15]   네이버 API 조회: 6~10/50: 누끼따기사이트, 표절검사기, 웍스AI, 지티피, CHATGPT유료
+[08:00:16]     ✓ 누끼따기사이트: 검색량=40100, 경쟁도=중간
+[08:00:16]     ✓ 표절검사기: 검색량=6360, 경쟁도=중간
+[08:00:16]     ✓ 웍스AI: 검색량=6900, 경쟁도=중간
+[08:00:16]     ✓ 지티피: 검색량=4920, 경쟁도=중간
+[08:00:16]     ✓ CHATGPT유료: 검색량=4990, 경쟁도=중간
+[08:00:17]   네이버 API 조회: 11~15/50: 윈도우11다운로드, 윈도우11정품, 전자사전, 이미지검색, 마이크로소프트스토어
+[08:00:18]     ✓ 윈도우11다운로드: 검색량=9770, 경쟁도=중간
+[08:00:18]     ✓ 윈도우11정품: 검색량=4710, 경쟁도=중간
+[08:00:18]     ✓ 전자사전: 검색량=4970, 경쟁도=중간
+[08:00:18]     ✓ 이미지검색: 검색량=10170, 경쟁도=중간
+[08:00:18]     ✓ 마이크로소프트스토어: 검색량=4920, 경쟁도=중간
+[08:00:18]   네이버 API 조회: 16~20/50: 투닝, GITHUB, MS365, 윈도우11시디키, ONEDRIVE
+[08:00:20]     ✓ 투닝: 검색량=19300, 경쟁도=중간
+[08:00:20]     ✓ GITHUB: 검색량=21000, 경쟁도=중간
+[08:00:20]     ✓ MS365: 검색량=6040, 경쟁도=중간
+[08:00:20]     ✓ 윈도우11시디키: 검색량=5140, 경쟁도=중간
+[08:00:20]     ✓ ONEDRIVE: 검색량=13970, 경쟁도=중간
+[08:00:21]   네이버 API 조회: 21~25/50: 엑셀구매, AI, 챗GPT, 인공지능, AI이미지
+[08:00:22]     ✓ 엑셀구매: 검색량=6430, 경쟁도=중간
+[08:00:22]     ✓ AI: 검색량=156800, 경쟁도=높음
+[08:00:22]     ✓ 챗GPT: 검색량=4596100, 경쟁도=높음
+[08:00:22]     ✓ 인공지능: 검색량=12970, 경쟁도=높음
+[08:00:22]     ✓ AI이미지: 검색량=2210, 경쟁도=높음
+[08:00:22]   네이버 API 조회: 26~30/50: AI동영상, AI음악, AI글쓰기, AI번역, AI요약
+[08:00:23]     ✓ AI동영상: 검색량=1920, 경쟁도=높음
+[08:00:23]     ✓ AI음악: 검색량=1060, 경쟁도=높음
+[08:00:23]     ✓ AI글쓰기: 검색량=560, 경쟁도=높음
+[08:00:23]     ✓ AI번역: 검색량=720, 경쟁도=높음
+[08:00:23]     ✓ AI요약: 검색량=310, 경쟁도=높음
+[08:00:24]   네이버 API 조회: 31~35/50: AI 박물관, 추론 투자, AI 자산, 카카오톡 선물하기, LG 경영
+[08:00:24]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%B0%95%EB%AC%BC%EA%B4%80%2C%EC%B6%94%EB%A1%A0%20%ED%88%AC%EC%9E%90%2CAI%20%EC%9E%90%EC%82%B0%2C%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%84%A0%EB%AC%BC%ED%95%98%EA%B8%B0%2CLG%20%EA%B2%BD%EC%98%81&showDetail=1
+[08:00:25]     ✗ AI 박물관: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%B0%95%EB%AC%BC%EA%B4%80&showDetail=1
+[08:00:26]     ✗ 추론 투자: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%B6%94%EB%A1%A0%20%ED%88%AC%EC%9E%90&showDetail=1
+[08:00:27]     ✗ AI 자산: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EC%9E%90%EC%82%B0&showDetail=1
+[08:00:28]     ✗ 카카오톡 선물하기: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%B9%B4%EC%B9%B4%EC%98%A4%ED%86%A1%20%EC%84%A0%EB%AC%BC%ED%95%98%EA%B8%B0&showDetail=1
+[08:00:29]     ✗ LG 경영: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=LG%20%EA%B2%BD%EC%98%81&showDetail=1
+[08:00:29]   네이버 API 조회: 36~40/50: 젠슨 황, AI 데이터센터, AI 망분리, SDV 시대, LG화학 R&D
+[08:00:30]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%A0%A0%EC%8A%A8%20%ED%99%A9%2CAI%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%84%BC%ED%84%B0%2CAI%20%EB%A7%9D%EB%B6%84%EB%A6%AC%2CSDV%20%EC%8B%9C%EB%8C%80%2CLG%ED%99%94%ED%95%99%20R%26D&showDetail=1
+[08:00:31]     ✗ 젠슨 황: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%A0%A0%EC%8A%A8%20%ED%99%A9&showDetail=1
+[08:00:32]     ✗ AI 데이터센터: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%84%BC%ED%84%B0&showDetail=1
+[08:00:32]     ✗ AI 망분리: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%A7%9D%EB%B6%84%EB%A6%AC&showDetail=1
+[08:00:33]     ✗ SDV 시대: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=SDV%20%EC%8B%9C%EB%8C%80&showDetail=1
+[08:00:34]     ✗ LG화학 R&D: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=LG%ED%99%94%ED%95%99%20R%26D&showDetail=1
+[08:00:35]   네이버 API 조회: 41~45/50: AI 기반 고부가 소재, AI 네이티브, 트랜스코스모스, CX 스퀘어 마곡, AI 인재 및 역량 매트릭스
+[08:00:35]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B8%B0%EB%B0%98%20%EA%B3%A0%EB%B6%80%EA%B0%80%20%EC%86%8C%EC%9E%AC%2CAI%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C%2C%ED%8A%B8%EB%9E%9C%EC%8A%A4%EC%BD%94%EC%8A%A4%EB%AA%A8%EC%8A%A4%2CCX%20%EC%8A%A4%ED%80%98%EC%96%B4%20%EB%A7%88%EA%B3%A1%2CAI%20%EC%9D%B8%EC%9E%AC%20%EB%B0%8F%20%EC%97%AD%EB%9F%89%20%EB%A7%A4%ED%8A%B8%EB%A6%AD%EC%8A%A4&showDetail=1
+[08:00:36]     ✗ AI 기반 고부가 소재: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B8%B0%EB%B0%98%20%EA%B3%A0%EB%B6%80%EA%B0%80%20%EC%86%8C%EC%9E%AC&showDetail=1
+[08:00:37]     ✗ AI 네이티브: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%84%A4%EC%9D%B4%ED%8B%B0%EB%B8%8C&showDetail=1
+[08:00:38]     ✓ 트랜스코스모스: 검색량=1570, 경쟁도=중간 (개별 재시도 성공)
+[08:00:39]     ✗ CX 스퀘어 마곡: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=CX%20%EC%8A%A4%ED%80%98%EC%96%B4%20%EB%A7%88%EA%B3%A1&showDetail=1
+[08:00:40]     ✗ AI 인재 및 역량 매트릭스: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EC%9D%B8%EC%9E%AC%20%EB%B0%8F%20%EC%97%AD%EB%9F%89%20%EB%A7%A4%ED%8A%B8%EB%A6%AD%EC%8A%A4&showDetail=1
+[08:00:40]   네이버 API 조회: 46~50/50: 인터랙션 API, 구글 딥마인드, A24, 피카 잡스, 와이즈넛
+[08:00:41]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%9D%B8%ED%84%B0%EB%9E%99%EC%85%98%20API%2C%EA%B5%AC%EA%B8%80%20%EB%94%A5%EB%A7%88%EC%9D%B8%EB%93%9C%2CA24%2C%ED%94%BC%EC%B9%B4%20%EC%9E%A1%EC%8A%A4%2C%EC%99%80%EC%9D%B4%EC%A6%88%EB%84%9B&showDetail=1
+[08:00:41]     ✗ 인터랙션 API: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%9D%B8%ED%84%B0%EB%9E%99%EC%85%98%20API&showDetail=1
+[08:00:42]     ✗ 구글 딥마인드: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EA%B5%AC%EA%B8%80%20%EB%94%A5%EB%A7%88%EC%9D%B8%EB%93%9C&showDetail=1
+[08:00:44]     ✓ A24: 검색량=8350, 경쟁도=중간 (개별 재시도 성공)
+[08:00:45]     ✗ 피카 잡스: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%94%BC%EC%B9%B4%20%EC%9E%A1%EC%8A%A4&showDetail=1
+[08:00:46]     ✓ 와이즈넛: 검색량=22060, 경쟁도=낮음 (개별 재시도 성공)
+
+[08:00:46] =======================================================
+[08:00:46] STEP 6/9: grade 계산
+[08:00:46] =======================================================
+[08:00:46]   [S] 쳇지티피: 검색량=201,400, 경쟁도=낮음, 출처=seed
+[08:00:46]   [A] 챗지피티무료: 검색량=84,700, 경쟁도=중간, 출처=seed
+[08:00:46]   [A] 마음AI: 검색량=61,500, 경쟁도=낮음, 출처=seed
+[08:00:46]   [A] 로판AI: 검색량=49,620, 경쟁도=중간, 출처=seed
+[08:00:46]   [A] 영어해석기: 검색량=52,270, 경쟁도=중간, 출처=seed
+[08:00:46]   [A] 누끼따기사이트: 검색량=40,100, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 표절검사기: 검색량=6,360, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 웍스AI: 검색량=6,900, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 지티피: 검색량=4,920, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] CHATGPT유료: 검색량=4,990, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 윈도우11다운로드: 검색량=9,770, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 윈도우11정품: 검색량=4,710, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 전자사전: 검색량=4,970, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 이미지검색: 검색량=10,170, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 마이크로소프트스토어: 검색량=4,920, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 투닝: 검색량=19,300, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] GITHUB: 검색량=21,000, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] MS365: 검색량=6,040, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 윈도우11시디키: 검색량=5,140, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] ONEDRIVE: 검색량=13,970, 경쟁도=중간, 출처=seed
+[08:00:46]   [B] 엑셀구매: 검색량=6,430, 경쟁도=중간, 출처=seed
+[08:00:46]   [S] AI: 검색량=156,800, 경쟁도=높음, 출처=seed
+[08:00:46]   [S] 챗GPT: 검색량=4,596,100, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] 인공지능: 검색량=12,970, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] AI이미지: 검색량=2,210, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] AI동영상: 검색량=1,920, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] AI음악: 검색량=1,060, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] AI글쓰기: 검색량=560, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] AI번역: 검색량=720, 경쟁도=높음, 출처=seed
+[08:00:46]   [A] AI요약: 검색량=310, 경쟁도=높음, 출처=seed
+[08:00:46]   [B] AI 박물관: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 추론 투자: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] AI 자산: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 카카오톡 선물하기: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] LG 경영: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 젠슨 황: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] AI 데이터센터: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] AI 망분리: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] SDV 시대: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] LG화학 R&D: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] AI 기반 고부가 소재: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] AI 네이티브: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 트랜스코스모스: 검색량=1,570, 경쟁도=중간, 출처=news
+[08:00:46]   [B] CX 스퀘어 마곡: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] AI 인재 및 역량 매트릭스: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 인터랙션 API: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 구글 딥마인드: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] A24: 검색량=8,350, 경쟁도=중간, 출처=news
+[08:00:46]   [B] 피카 잡스: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:46]   [B] 와이즈넛: 검색량=22,060, 경쟁도=낮음, 출처=news
+
+[08:00:46] =======================================================
+[08:00:46] STEP 7/9: OpenAI intent + db_query 생성
+[08:00:46] =======================================================
+[08:01:18] OpenAI intent/db_query 생성: 50개 키워드
+
+[08:01:18] =======================================================
+[08:01:18] STEP 8/9: keywords.json 저장
+[08:01:18] =======================================================
+[08:01:18] 백업 완료: /Users/twinssn/Projects/aikorea24/scripts/keywords.json.bak
+[08:01:18] keywords.json 저장 완료: 50개 키워드
+
+[08:01:18] =======================================================
+[08:01:18] STEP 9/9: 텔레그램 알림
+[08:01:18] =======================================================
+[08:01:19]   텔레그램 알림 전송 완료
+
+[08:01:19] ✅ 키워드 갱신 완료!

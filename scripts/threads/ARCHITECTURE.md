@@ -118,15 +118,15 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 **SYSTEM_PROMPT 핵심 설계:**
 - "상식적으로 A였어야 하는데 실제로는 B인 상황" 찾기
 - hook: 핵심 긴장 한 줄 (길이 제한 없음)
-- 2개 이상 연결 가능. 단, 억지로 연결하지 말 것. 기사 하나로도 가능
+- **반드시 1개 기사만 사용. 2개 이상 절대 금지.**
 - `[소스 신뢰도]` 섹션: 주어-동사 방향 보존 지시
 - 고유명사는 영어 원문 사용 (Nvidia, OpenAI 등)
 
-**크롤링 정책 (변경 — 2026-06-20):**
+**크롤링 정책:**
 - 피치 선별 단계에서는 **크롤링하지 않음**
 - DB의 `description` 컬럼을 **500자 제한 없이 전문(全文)** 사용
 - 100개 기사를 가볍게 스캔하여 어떤 이야기로 글을 쓸지 선별하는 단계이므로 description으로 충분
-- 실제 원문 크롤링은 writer_v3.py에서 선정된 2~3개 기사에 대해서만 수행
+- 실제 원문 크롤링은 writer_v3.py에서 선정된 1개 기사에 대해서만 수행
 
 **모델:** DiffusionGemma 1순위 → GPT-4o-mini fallback (model_router 경유)
 **max_articles:** 500개 (2026-06-21: 100→500)
@@ -143,27 +143,25 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
   "narrative": "상식(A) vs 실제(B)",
   "twist": "A가 아니고 B인 진짜 이유",
   "emotion": "충격/불안/자부심/분노/놀라움",
-  "article_ids": [2개 이상],
-  "sources": ["URL"]
+  "article_ids": [1개만]
 }
 ```
 
 ### 3. pitch_evaluator.py
 
-피치 품질을 **4가지 기준**으로 0~6점 평가한다.
+피치 품질을 **3가지 기준**으로 0~5점 평가한다.
 
 | 기준 | 배점 | 평가 내용 |
 |------|------|---------|
 | 상식충돌 | 0~2점 | "어? 몰랐다" 할 충돌 구조 |
 | 구체성 | 0~2점 | 숫자/인물/기업명 포함 |
-| 연결성 | 0~1점 | 2개 이상 서로 다른 출처 |
 | 방향 정확성 | 0~1점 | twist의 주어-동사 방향이 narrative와 일치? |
 
 - **3점 이상**만 통과
 - **방향 정확성이 0점이면 총점과 무관하게 강제 불통과** (`direction_ok=false`)
 - 평가 모델: **GPT-4o-mini** (DiffusionGemma는 방향 판별에 취약하여 2026-06-20 변경)
 - 출력 형식에 `"direction_ok": true/false` 필드 포함
-- JSON 파싱 실패 시 fallback: article_ids 2개 이상 + hook 존재 → 통과
+- JSON 파싱 실패 시 fallback: hook 존재 시 통과
 
 ### 4. model_router.py
 
@@ -189,8 +187,7 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 - 노이즈 태그 제거: script, style, nav, header, footer, aside, iframe
 - 7개 CSS selector로 본문 영역 탐색: article, main, [role=main], .article-body, .post-content, .entry-content, .story-body
 - 실패 시 description fallback
-- **글자 수 제한 없음** — 선정된 2~3개 기사만 크롤링하므로 전문(全文) 전달
-  (2026-06-20 변경: 기존 `max_chars=3000` 제거. 방향 정보가 뒷부분에서 잘리는 사고 방지)
+- **글자 수 제한 없음** — 선정된 1개 기사만 크롤링하므로 전문(全文) 전달
 
 **URL 유효성 검사 (2026-06-20 추가):**
 - 크롤링 전 `db_reader.validate_link()` 호출 (techcrunch/cnbc/bbc 등 불안정 소스)
@@ -418,3 +415,4 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-23 | **크롤링 성공 URL 발행** — crawled_urls 리스트 도입, assemble_final()에서 크롤링 성공한 URL만 사용하여 링크 미스매치 방지 |
 | 2026-06-23 | **리듬감 시스템 도입** — 3가지 개선: (1) "2~3줄 서술"→"한 줄 하나의 사실"로 변경, (2) "같은 주제 붙임"→"stanza 구조(연+빈 줄)"로 변경, (3) [대비 구조]/[숫자-설명 쌍]/[전환 시그널 26개] 섹션 신설 |
 | 2026-06-23 | **add_line_spacing stanza 인식** — AI가 이미 빈 줄로 stanza를 만들었으면 그대로 통과, 한 덩어리일 때만 분할 |
+| 2026-06-24 | **단일 기사 전환** — narrative_pitcher 프롬프트에서 기사 연결 규칙 삭제, article_ids 1개 강제, pitch_evaluator 연결성 평가 항목 제거 (6→5점) |
