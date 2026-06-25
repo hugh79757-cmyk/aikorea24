@@ -6,11 +6,11 @@ narrative_pitcher.py — 100개 기사 → 가장 강력한 이야기 발견
 """
 import os, sys, json, re, random
 from datetime import datetime
-from db_reader import normalize_url
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 sys.path.insert(0, THREADS_DIR)
+from db_reader import normalize_url, jaccard_similarity, extract_title_entities
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
@@ -225,6 +225,11 @@ def is_duplicate_pitch(pitch, history, posted=None):
                 orig_title and orig_title[:30] in posted_orig_titles_set):
                 return True
 
+    # 새 pitch entity set (루프 밖에서 한 번만 계산)
+    new_entities = set()
+    for t in pitch.get('article_original_titles', []):
+        new_entities.update(extract_title_entities(t))
+
     for h in history:
         # hook 앞 15자 일치 → 중복
         if h.get('hook', '')[:15] == hook:
@@ -246,6 +251,12 @@ def is_duplicate_pitch(pitch, history, posted=None):
                 overlap = len(old_urls & new_urls)
                 if overlap / len(new_urls) >= 0.5:
                     return True
+        # entity overlap (다른 매체 같은 주제 탐지)
+        old_entities = set()
+        for t in h.get('article_original_titles', []):
+            old_entities.update(extract_title_entities(t))
+        if new_entities and old_entities and len(new_entities & old_entities) >= 2:
+            return True
     return False
 
 def save_pitch_to_history(pitch):
@@ -259,6 +270,9 @@ def save_pitch_to_history(pitch):
                 data = _json.load(f)
         if 'pitch_history' not in data:
             data['pitch_history'] = []
+        entities = set()
+        for t in pitch.get('article_original_titles', []):
+            entities.update(extract_title_entities(t))
         data['pitch_history'].append({
             'hook': pitch.get('hook', '')[:30],
             'narrative': pitch.get('narrative', '')[:50],
@@ -266,6 +280,7 @@ def save_pitch_to_history(pitch):
             'article_urls': pitch.get('article_urls', []),
             'article_titles': pitch.get('article_titles', []),
             'article_original_titles': pitch.get('article_original_titles', []),
+            'entities': list(entities),
             'date': datetime.now().strftime('%Y-%m-%d')
         })
         with open(path, 'w') as f:

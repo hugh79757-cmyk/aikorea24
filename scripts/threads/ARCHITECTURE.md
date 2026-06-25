@@ -43,7 +43,7 @@ D1 Database
 [2] narrative_pitcher.get_pitches()
     │   100개 기사 → description 원문 (크롤링 없음)
     │   → DiffusionGemma → 3개 피치 JSON
-    │   ↓ hook[:8]+article_ids 중복 검사 (pitch_history 대조)
+    │   ↓ hook[:8]+article_ids 중복 검사 + entity overlap (pitch_history 대조)
     │   ↓ pitch_evaluator.filter_pitches() 0~6점 평가 (4개 기준)
     │     (방향 정확성 0점이면 강제 불통과)
     │   ↓ posted.json pitch_history 저장
@@ -86,7 +86,8 @@ D1 database에서 기사를 3단계 우선순위로 로드한다.
 | 2순위 | 최근 7일 news (최대 **2000**개) | 브리핑 제외, 발행 이력 제외 |
 | 3순위 | 그 이전 (최대 30일) | 풀이 50개 미만일 때만 보충 |
 
-- `posted.json`의 `posted_ids` / `posted_links`와 대조하여 중복 제외
+- `posted.json`의 `posted_ids` / `posted_links` / `posted_titles` / `posted_original_titles`와 대조하여 중복 제외
+- **Semantic dedup (2026-06-25):** `original_title` 기준 Jaccard 유사도(≥0.30) + capitalized entity overlap(≥2)로 다른 매체 동일 주제 탐지
 - wrangler D1 execute remote로 SQL 실행
 
 **pub_date 형식 처리 (2026-06-23):**
@@ -131,10 +132,10 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 **모델:** DiffusionGemma 1순위 → GPT-4o-mini fallback (model_router 경유)
 **max_articles:** 500개 (2026-06-21: 100→500)
 
-**중복 방지:**
-- `is_duplicate_pitch()`: hook[:8] 또는 narrative[:30] 또는 article_ids 집합 일치 검사
-- `save_pitch_to_history()`: 선택된 피치를 `posted.json` `pitch_history`에 저장
-- `pitch_history` 최대 30개 유지, 7일 지난 항목 자동 정리
+**중복 방지 (2026-06-25: 3단계):**
+1. `db_reader.is_already_posted()` — 4조건(id, link, title, original_title) + original_title Jaccard(≥0.30) + entity overlap(≥2)
+2. `is_duplicate_pitch()` — hook[:15] / narrative[:30] / article_ids 50% 겹침 / entity overlap(≥2)
+3. `save_pitch_to_history()`: 선택된 피치를 `posted.json` `pitch_history` + `entities` 저장
 
 **출력 JSON 형식:**
 ```json
@@ -286,11 +287,40 @@ Threads Graph API v1.0으로 연속 답글 체인을 발행한다.
 
 | 레벨 | 저장 대상 | 저장 시점 | 검사 방식 |
 |------|---------|----------|---------|
-| 피치 이력 | hook, article_ids, date | 매 run (dry-run 포함) | hook[:8] 또는 narrative[:30] 또는 article_ids 집합 일치 |
+| 피치 이력 | hook, article_ids, article_original_titles, entities, date | 매 run (dry-run 포함) | hook[:15] / narrative[:30] / article_ids 50% 겹침 / **article_original_titles entity overlap(≥2)** |
+| 기사 semantic | posted_original_titles | 실제 발행 + dry-run | **original_title Jaccard 유사도(≥0.30) + capitalized entity overlap(≥2)** |
 | 기사 ID | posted_ids | 실제 발행 + dry-run | id 기준 필터링 |
 | 기사 링크 | posted_links | 실제 발행 + dry-run | link 기준 필터링 |
+| 기사 제목 | posted_titles, posted_original_titles | 실제 발행 + dry-run | title[:30] / original_title[:30] 정확 일치 |
 
-이중 필터링 구조로 동일한 기사/주제가 재발행되지 않는다.
+### Semantic Dedup 상세
+
+**목적:** 동일한 뉴스 이벤트를 다른 매체(Reuters vs Guardian, TNW vs BBC)가 보도했을 때 중복 탐지.
+
+**Phase 1 — 기사 로딩 단계 (`db_reader.py`):**
+```python
+jaccard_similarity(original_title_full, posted_ot) >= 0.30
+extract_title_entities(original_title_full) & extract_title_entities(posted_ot) >= 2
+```
+- `_tokenize()`: 영문 2글자+ 단어, stopword 30개 제외
+- `extract_title_entities()`: `\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b` 패턴의 capitalized 단어
+- `posted_semantic` 카운터로 로그 기록
+
+**Phase 2 — 피치 생성 단계 (`narrative_pitcher.py`):**
+- `is_duplicate_pitch()` 내 `history` 루프에서 `article_original_titles` entity overlap 검사
+- 새 pitch와 history pitch 간 공통 capitalized entity ≥ 2면 중복 판정
+
+**Phase 3 — 저장 (`save_pitch_to_history`):**
+- 선택된 피치의 `article_original_titles`에서 entities 추출 → `posted.json pitch_history[].entities`
+- 이후 Phase 2 검사에 활용
+
+**예시 — 가스 주유소 AI 가격 담합 소송:**
+| 매체 | 원제목 | Entities | Jaccard |
+|------|-------|----------|---------|
+| Guardian | "California drivers sue gas stations for allegedly using AI to inflate prices" | {California, AI} | 기준 |
+| Reuters | "BP, Marathon, 7-Eleven, Walmart sued for allegedly using AI to boost California gas prices - Reuters" | {California, AI, BP, Marathon, Eleven, Walmart, Reuters} | **0.35** ✅ |
+
+또한 [TECHNICAL.md](docs/TECHNICAL.md)에 전체 알고리즘 상세가 문서화되어 있다.
 
 ---
 
@@ -370,7 +400,7 @@ ls -lt scripts/threads/logs/drafts/ | head -3
   "posted_links": ["https://...", ...],
   "history": [{"id": 32152, "title": "...", "posted_at": "..."}],
   "last_reset": "2026-06-19",
-  "pitch_history": [{"hook": "...", "article_ids": [...], "date": "2026-06-19"}]
+  "pitch_history": [{"hook": "...", "article_ids": [...], "entities": ["California", "AI", ...], "date": "2026-06-19"}]
 }
 ```
 
@@ -416,3 +446,4 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-23 | **리듬감 시스템 도입** — 3가지 개선: (1) "2~3줄 서술"→"한 줄 하나의 사실"로 변경, (2) "같은 주제 붙임"→"stanza 구조(연+빈 줄)"로 변경, (3) [대비 구조]/[숫자-설명 쌍]/[전환 시그널 26개] 섹션 신설 |
 | 2026-06-23 | **add_line_spacing stanza 인식** — AI가 이미 빈 줄로 stanza를 만들었으면 그대로 통과, 한 덩어리일 때만 분할 |
 | 2026-06-24 | **단일 기사 전환** — narrative_pitcher 프롬프트에서 기사 연결 규칙 삭제, article_ids 1개 강제, pitch_evaluator 연결성 평가 항목 제거 (6→5점) |
+| 2026-06-25 | **Semantic dedup 도입** — db_reader에 original_title Jaccard(0.30) + entity overlap(≥2) 추가, narrative_pitcher에 entity overlap 검사 추가, save_pitch_to_history에 entities 저장 |

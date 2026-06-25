@@ -18,6 +18,29 @@ def normalize_url(url):
     url = url.rstrip('/')
     return url.lower()
 
+_STOPWORDS = {'the', 'a', 'an', 'is', 'was', 'are', 'were', 'been', 'be', 'to', 'of',
+              'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'and', 'or', 'but',
+              'not', 'no', 'its', 'it', 'this', 'that', 'all', 'each', 'has', 'had',
+              'have', 'do', 'did', 'does', 'will', 'would', 'can', 'may', 'said'}
+
+def _tokenize(text):
+    words = re.findall(r'[a-zA-Z][a-zA-Z0-9\']{1,}', text.lower())
+    return set(w for w in words if w not in _STOPWORDS)
+
+def jaccard_similarity(text1, text2):
+    """두 영문 텍스트의 Jaccard 유사도 (0.0~1.0)"""
+    if not text1 or not text2:
+        return 0.0
+    s1 = _tokenize(text1)
+    s2 = _tokenize(text2)
+    if not s1 or not s2:
+        return 0.0
+    return len(s1 & s2) / len(s1 | s2)
+
+def extract_title_entities(text):
+    """영문 제목에서 고유명사 추정 capitalized 단어 추출"""
+    return set(re.findall(r'\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b', text))
+
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 POSTED_FILE = os.path.join(THREADS_DIR, 'posted.json')
@@ -130,6 +153,20 @@ def is_already_posted(article, posted):
     # 4. original_title[:30] 매칭 (비어있으면 스킵)
     if original_title and original_title in set(ot[:30] for ot in posted.get('posted_original_titles', [])):
         return True
+
+    # 5. original_title Jaccard 유사도 + entity overlap (다른 매체 같은 주제 탐지)
+    original_title_full = (article.get('original_title', '') or '')
+    if original_title_full:
+        new_entities = extract_title_entities(original_title_full)
+        for posted_ot in posted.get('posted_original_titles', []):
+            if not posted_ot:
+                continue
+            if jaccard_similarity(original_title_full, posted_ot) >= 0.30:
+                return True
+            if new_entities:
+                old_entities = extract_title_entities(posted_ot)
+                if old_entities and len(new_entities & old_entities) >= 2:
+                    return True
     return False
 
 def get_exclusion_reasons(article, posted):
@@ -153,6 +190,20 @@ def get_exclusion_reasons(article, posted):
         reasons.add('posted_titles')
     if original_title and original_title in posted_orig_titles_set:
         reasons.add('posted_original_titles')
+    # 5. original_title Jaccard / entity overlap
+    if original_title:
+        new_entities = extract_title_entities(original_title)
+        for posted_ot in posted.get('posted_original_titles', []):
+            if not posted_ot:
+                continue
+            if jaccard_similarity(original_title, posted_ot) >= 0.30:
+                reasons.add('posted_semantic')
+                break
+            if new_entities:
+                old_entities = extract_title_entities(posted_ot)
+                if old_entities and len(new_entities & old_entities) >= 2:
+                    reasons.add('posted_semantic')
+                    break
     return reasons
 
 def get_articles():
@@ -163,7 +214,7 @@ def get_articles():
     articles = []
     total_queried = 0
     total_excluded = 0
-    field_excludes = {'posted_ids': 0, 'posted_links': 0, 'posted_titles': 0, 'posted_original_titles': 0}
+    field_excludes = {'posted_ids': 0, 'posted_links': 0, 'posted_titles': 0, 'posted_original_titles': 0, 'posted_semantic': 0}
 
     # 1순위: 오늘 브리핑
     sql1 = f"""SELECT n.id, n.title, n.link, n.description, n.source, n.pub_date,
@@ -267,7 +318,7 @@ def get_articles():
 
     log(f'  총 기사 풀: {len(articles)}개')
     log(f'  [기사 풀 필터] 전체: {total_queried}개 → 제외: {total_excluded}개 → 최종: {len(articles)}개')
-    log(f'    posted_ids 제외: {field_excludes["posted_ids"]}개 | posted_links 제외: {field_excludes["posted_links"]}개 | posted_titles 제외: {field_excludes["posted_titles"]}개 | posted_original_titles 제외: {field_excludes["posted_original_titles"]}개')
+    log(f'    posted_ids 제외: {field_excludes["posted_ids"]}개 | posted_links 제외: {field_excludes["posted_links"]}개 | posted_titles 제외: {field_excludes["posted_titles"]}개 | posted_original_titles 제외: {field_excludes["posted_original_titles"]}개 | posted_semantic 제외: {field_excludes["posted_semantic"]}개')
     return articles
 
 

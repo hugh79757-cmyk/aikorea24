@@ -21,3 +21,20 @@
 - 등급: {grade}
 - 매칭기사: {매칭된 기사 수}건
 - 검색의도: {intent}
+
+---
+
+## 중복 발행 방지 (threads 파이프라인)
+
+### 3단계 Semantic Dedup
+
+| 단계 | 파일 | 검사 방식 | threshold |
+|------|------|---------|----------|
+| Phase 1 | `db_reader.is_already_posted()` | original_title Jaccard + entity overlap | 0.30 / 2개 |
+| Phase 2 | `narrative_pitcher.is_duplicate_pitch()` | article_original_titles entity overlap | 2개 |
+| Phase 3 | `save_pitch_to_history().entities` | capitalized entity 저장 → 이후 Phase 2에 활용 | — |
+
+**목적:** 동일 뉴스 이벤트를 다른 매체(Reuters, Guardian, TNW, BBC)가 다르게 보도해도 중복 탐지.
+- English original_title 기준 word Jaccard (stopword 제외, 2글자+)
+- `extract_title_entities()`: `\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b` 패턴의 capitalized entity
+- phase 1이 가장 강력: 기사 로딩 단계에서 차단 → Phase 2는 2차 방어
