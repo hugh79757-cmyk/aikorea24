@@ -59,13 +59,14 @@ def reset_posted_daily():
 
 def run_v3(dry_run=False):
     load_env()
-    max_retries = 3
-    retry_delay = 300  # 5분
+    max_retries = 5
+    retry_delays = [60, 120, 300, 600]  # 1분 → 2분 → 5분 → 10분 (기하급수적 백오프)
 
     for attempt in range(1, max_retries + 1):
         if attempt > 1:
-            log(f'  ⏳ {attempt}번째 재시도 (5분 대기)...')
-            time.sleep(retry_delay)
+            delay = retry_delays[min(attempt - 2, len(retry_delays) - 1)]
+            log(f'  ⏳ {attempt}번째 재시도 ({delay//60}분 {delay%60}초 대기)...')
+            time.sleep(delay)
 
         log(f'🚀 v3 실행 시작 (시도 {attempt}/{max_retries})')
 
@@ -75,6 +76,7 @@ def run_v3(dry_run=False):
         if not articles:
             log('  기사 없음 → 스킵')
             if attempt < max_retries:
+                log('  네트워크/D1 일시적 장애 의심 → 백오프 후 재시도')
                 continue
             return
         log(f'  기사: {len(articles)}개 로드')
@@ -217,7 +219,7 @@ def run_v3(dry_run=False):
             log(f'  ❌ 발행 실패 — 쓰레드는 생성됨, 2시간 후 재시도')
             return
 
-    log(f'  ❌ {max_retries}회 모두 실패 — 2시간 후 재시도')
+    log(f'  ❌ {max_retries}회 모두 실패 (네트워크/D1 장애 의심) — 2시간 후 재시도')
 
 
 if __name__ == '__main__':

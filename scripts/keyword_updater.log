@@ -1892,3 +1892,165 @@
 [08:01:19]   텔레그램 알림 전송 완료
 
 [08:01:19] ✅ 키워드 갱신 완료!
+[08:00:01] 키워드 갱신 시작 (2026-06-25)
+
+[08:00:01] =======================================================
+[08:00:01] STEP 1/9: seeds.json 로드
+[08:00:01] =======================================================
+[08:00:01]   베이스 키워드: 30개
+
+[08:00:01] =======================================================
+[08:00:01] STEP 2/9: D1 뉴스 조회
+[08:00:01] =======================================================
+[08:00:04] D1 조회: 2026-06-24 (100건)
+
+[08:00:04] =======================================================
+[08:00:04] STEP 3/9: OpenAI 신규 키워드 추출
+[08:00:04] =======================================================
+[08:00:08] OpenAI 키워드 추출: 20개
+[08:00:08]   추출된 신규 키워드: ['클로드 태그', '할라피뇨', '바르코 3D', '젠스파크 AI 워크스페이스', 'AI-RAN', '모듈러', '뉴로티 엔진', 'AI-Native CEO 과정', '생추어리AI', 'AI Inference Acceleration', 'AI 데이터센터', 'AI 메모리', 'AI 에이전트', 'AI 기반 유지·보수·정비', 'AI 스마트폰', 'AI 패널', 'AI 해커톤', 'AI 전기요금', 'AI 기반 자동 주유 시스템', 'AI 기업']
+
+[08:00:08] =======================================================
+[08:00:08] STEP 4/9: 키워드 병합 (중복 제거)
+[08:00:08] =======================================================
+[08:00:08]   병합 완료: 50개 (seed 30개 + 신규 20개)
+
+[08:00:08] =======================================================
+[08:00:08] STEP 5/9: 네이버 검색광고 API 조회
+[08:00:08] =======================================================
+[08:00:08]   네이버 API 조회: 1~5/50: 쳇지티피, 챗지피티무료, 마음AI, 로판AI, 영어해석기
+[08:00:09]     ✓ 쳇지티피: 검색량=216400, 경쟁도=낮음
+[08:00:09]     ✓ 챗지피티무료: 검색량=84700, 경쟁도=중간
+[08:00:09]     ✓ 마음AI: 검색량=62500, 경쟁도=낮음
+[08:00:09]     ✓ 로판AI: 검색량=49670, 경쟁도=중간
+[08:00:09]     ✓ 영어해석기: 검색량=52500, 경쟁도=중간
+[08:00:09]   네이버 API 조회: 6~10/50: 누끼따기사이트, 표절검사기, 웍스AI, 지티피, CHATGPT유료
+[08:00:11]     ✓ 누끼따기사이트: 검색량=40500, 경쟁도=중간
+[08:00:11]     ✓ 표절검사기: 검색량=6190, 경쟁도=중간
+[08:00:11]     ✓ 웍스AI: 검색량=7100, 경쟁도=중간
+[08:00:11]     ✓ 지티피: 검색량=5000, 경쟁도=중간
+[08:00:11]     ✓ CHATGPT유료: 검색량=5060, 경쟁도=중간
+[08:00:11]   네이버 API 조회: 11~15/50: 윈도우11다운로드, 윈도우11정품, 전자사전, 이미지검색, 마이크로소프트스토어
+[08:00:12]     ✓ 윈도우11다운로드: 검색량=9820, 경쟁도=중간
+[08:00:12]     ✓ 윈도우11정품: 검색량=4810, 경쟁도=중간
+[08:00:12]     ✓ 전자사전: 검색량=5000, 경쟁도=중간
+[08:00:12]     ✓ 이미지검색: 검색량=10310, 경쟁도=중간
+[08:00:12]     ✓ 마이크로소프트스토어: 검색량=4950, 경쟁도=중간
+[08:00:13]   네이버 API 조회: 16~20/50: 투닝, GITHUB, MS365, 윈도우11시디키, ONEDRIVE
+[08:00:14]     ✓ 투닝: 검색량=19850, 경쟁도=중간
+[08:00:14]     ✓ GITHUB: 검색량=21250, 경쟁도=중간
+[08:00:14]     ✓ MS365: 검색량=6110, 경쟁도=중간
+[08:00:14]     ✓ 윈도우11시디키: 검색량=5210, 경쟁도=중간
+[08:00:14]     ✓ ONEDRIVE: 검색량=14070, 경쟁도=중간
+[08:00:14]   네이버 API 조회: 21~25/50: 엑셀구매, AI, 챗GPT, 인공지능, AI이미지
+[08:00:15]     ✓ 엑셀구매: 검색량=6440, 경쟁도=중간
+[08:00:15]     ✓ AI: 검색량=157900, 경쟁도=높음
+[08:00:15]     ✓ 챗GPT: 검색량=4648800, 경쟁도=높음
+[08:00:15]     ✓ 인공지능: 검색량=13000, 경쟁도=높음
+[08:00:15]     ✓ AI이미지: 검색량=2190, 경쟁도=높음
+[08:00:16]   네이버 API 조회: 26~30/50: AI동영상, AI음악, AI글쓰기, AI번역, AI요약
+[08:00:17]     ✓ AI동영상: 검색량=1910, 경쟁도=높음
+[08:00:17]     ✓ AI음악: 검색량=1100, 경쟁도=높음
+[08:00:17]     ✓ AI글쓰기: 검색량=560, 경쟁도=높음
+[08:00:17]     ✓ AI번역: 검색량=730, 경쟁도=높음
+[08:00:17]     ✓ AI요약: 검색량=320, 경쟁도=높음
+[08:00:17]   네이버 API 조회: 31~35/50: 클로드 태그, 할라피뇨, 바르코 3D, 젠스파크 AI 워크스페이스, AI-RAN
+[08:00:18]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%81%B4%EB%A1%9C%EB%93%9C%20%ED%83%9C%EA%B7%B8%2C%ED%95%A0%EB%9D%BC%ED%94%BC%EB%87%A8%2C%EB%B0%94%EB%A5%B4%EC%BD%94%203D%2C%EC%A0%A0%EC%8A%A4%ED%8C%8C%ED%81%AC%20AI%20%EC%9B%8C%ED%81%AC%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4%2CAI-RAN&showDetail=1
+[08:00:19]     ✗ 클로드 태그: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%ED%81%B4%EB%A1%9C%EB%93%9C%20%ED%83%9C%EA%B7%B8&showDetail=1
+[08:00:20]     ✓ 할라피뇨: 검색량=11770, 경쟁도=중간 (개별 재시도 성공)
+[08:00:21]     ✗ 바르코 3D: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%B0%94%EB%A5%B4%EC%BD%94%203D&showDetail=1
+[08:00:21]     ✗ 젠스파크 AI 워크스페이스: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EC%A0%A0%EC%8A%A4%ED%8C%8C%ED%81%AC%20AI%20%EC%9B%8C%ED%81%AC%EC%8A%A4%ED%8E%98%EC%9D%B4%EC%8A%A4&showDetail=1
+[08:00:22]     ✓ AI-RAN: 검색량=270, 경쟁도=중간 (개별 재시도 성공)
+[08:00:23]   네이버 API 조회: 36~40/50: 모듈러, 뉴로티 엔진, AI-Native CEO 과정, 생추어리AI, AI Inference Acceleration
+[08:00:23]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%AA%A8%EB%93%88%EB%9F%AC%2C%EB%89%B4%EB%A1%9C%ED%8B%B0%20%EC%97%94%EC%A7%84%2CAI-Native%20CEO%20%EA%B3%BC%EC%A0%95%2C%EC%83%9D%EC%B6%94%EC%96%B4%EB%A6%ACAI%2CAI%20Inference%20Acceleration&showDetail=1
+[08:00:25]     ✓ 모듈러: 검색량=3300, 경쟁도=높음 (개별 재시도 성공)
+[08:00:25]     ✗ 뉴로티 엔진: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=%EB%89%B4%EB%A1%9C%ED%8B%B0%20%EC%97%94%EC%A7%84&showDetail=1
+[08:00:26]     ✗ AI-Native CEO 과정: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI-Native%20CEO%20%EA%B3%BC%EC%A0%95&showDetail=1
+[08:00:27]     ✓ 생추어리AI: 검색량=20, 경쟁도=낮음 (개별 재시도 성공)
+[08:00:28]     ✗ AI Inference Acceleration: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20Inference%20Acceleration&showDetail=1
+[08:00:29]   네이버 API 조회: 41~45/50: AI 데이터센터, AI 메모리, AI 에이전트, AI 기반 유지·보수·정비, AI 스마트폰
+[08:00:29]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%84%BC%ED%84%B0%2CAI%20%EB%A9%94%EB%AA%A8%EB%A6%AC%2CAI%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8%2CAI%20%EA%B8%B0%EB%B0%98%20%EC%9C%A0%EC%A7%80%C2%B7%EB%B3%B4%EC%88%98%C2%B7%EC%A0%95%EB%B9%84%2CAI%20%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8F%B0&showDetail=1
+[08:00:30]     ✗ AI 데이터센터: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%84%BC%ED%84%B0&showDetail=1
+[08:00:31]     ✗ AI 메모리: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EB%A9%94%EB%AA%A8%EB%A6%AC&showDetail=1
+[08:00:32]     ✗ AI 에이전트: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8&showDetail=1
+[08:00:33]     ✗ AI 기반 유지·보수·정비: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B8%B0%EB%B0%98%20%EC%9C%A0%EC%A7%80%C2%B7%EB%B3%B4%EC%88%98%C2%B7%EC%A0%95%EB%B9%84&showDetail=1
+[08:00:34]     ✗ AI 스마트폰: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8F%B0&showDetail=1
+[08:00:34]   네이버 API 조회: 46~50/50: AI 패널, AI 해커톤, AI 전기요금, AI 기반 자동 주유 시스템, AI 기업
+[08:00:34]     ✗ 배치(5개) 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%ED%8C%A8%EB%84%90%2CAI%20%ED%95%B4%EC%BB%A4%ED%86%A4%2CAI%20%EC%A0%84%EA%B8%B0%EC%9A%94%EA%B8%88%2CAI%20%EA%B8%B0%EB%B0%98%20%EC%9E%90%EB%8F%99%20%EC%A3%BC%EC%9C%A0%20%EC%8B%9C%EC%8A%A4%ED%85%9C%2CAI%20%EA%B8%B0%EC%97%85&showDetail=1
+[08:00:35]     ✗ AI 패널: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%ED%8C%A8%EB%84%90&showDetail=1
+[08:00:36]     ✗ AI 해커톤: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%ED%95%B4%EC%BB%A4%ED%86%A4&showDetail=1
+[08:00:37]     ✗ AI 전기요금: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EC%A0%84%EA%B8%B0%EC%9A%94%EA%B8%88&showDetail=1
+[08:00:38]     ✗ AI 기반 자동 주유 시스템: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B8%B0%EB%B0%98%20%EC%9E%90%EB%8F%99%20%EC%A3%BC%EC%9C%A0%20%EC%8B%9C%EC%8A%A4%ED%85%9C&showDetail=1
+[08:00:39]     ✗ AI 기업: 개별 재시도 실패: 400 Client Error: Bad Request for url: https://api.searchad.naver.com/keywordstool?hintKeywords=AI%20%EA%B8%B0%EC%97%85&showDetail=1
+
+[08:00:39] =======================================================
+[08:00:39] STEP 6/9: grade 계산
+[08:00:39] =======================================================
+[08:00:39]   [S] 쳇지티피: 검색량=216,400, 경쟁도=낮음, 출처=seed
+[08:00:39]   [A] 챗지피티무료: 검색량=84,700, 경쟁도=중간, 출처=seed
+[08:00:39]   [A] 마음AI: 검색량=62,500, 경쟁도=낮음, 출처=seed
+[08:00:39]   [A] 로판AI: 검색량=49,670, 경쟁도=중간, 출처=seed
+[08:00:39]   [A] 영어해석기: 검색량=52,500, 경쟁도=중간, 출처=seed
+[08:00:39]   [A] 누끼따기사이트: 검색량=40,500, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 표절검사기: 검색량=6,190, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 웍스AI: 검색량=7,100, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 지티피: 검색량=5,000, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] CHATGPT유료: 검색량=5,060, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 윈도우11다운로드: 검색량=9,820, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 윈도우11정품: 검색량=4,810, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 전자사전: 검색량=5,000, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 이미지검색: 검색량=10,310, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 마이크로소프트스토어: 검색량=4,950, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 투닝: 검색량=19,850, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] GITHUB: 검색량=21,250, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] MS365: 검색량=6,110, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 윈도우11시디키: 검색량=5,210, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] ONEDRIVE: 검색량=14,070, 경쟁도=중간, 출처=seed
+[08:00:39]   [B] 엑셀구매: 검색량=6,440, 경쟁도=중간, 출처=seed
+[08:00:39]   [S] AI: 검색량=157,900, 경쟁도=높음, 출처=seed
+[08:00:39]   [S] 챗GPT: 검색량=4,648,800, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] 인공지능: 검색량=13,000, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] AI이미지: 검색량=2,190, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] AI동영상: 검색량=1,910, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] AI음악: 검색량=1,100, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] AI글쓰기: 검색량=560, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] AI번역: 검색량=730, 경쟁도=높음, 출처=seed
+[08:00:39]   [A] AI요약: 검색량=320, 경쟁도=높음, 출처=seed
+[08:00:39]   [B] 클로드 태그: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] 할라피뇨: 검색량=11,770, 경쟁도=중간, 출처=news
+[08:00:39]   [B] 바르코 3D: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] 젠스파크 AI 워크스페이스: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI-RAN: 검색량=270, 경쟁도=중간, 출처=news
+[08:00:39]   [A] 모듈러: 검색량=3,300, 경쟁도=높음, 출처=news
+[08:00:39]   [B] 뉴로티 엔진: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI-Native CEO 과정: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] 생추어리AI: 검색량=20, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI Inference Acceleration: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 데이터센터: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 메모리: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 에이전트: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 기반 유지·보수·정비: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 스마트폰: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 패널: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 해커톤: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 전기요금: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 기반 자동 주유 시스템: 검색량=0, 경쟁도=낮음, 출처=news
+[08:00:39]   [B] AI 기업: 검색량=0, 경쟁도=낮음, 출처=news
+
+[08:00:39] =======================================================
+[08:00:39] STEP 7/9: OpenAI intent + db_query 생성
+[08:00:39] =======================================================
+[08:01:03] OpenAI intent/db_query 생성: 50개 키워드
+
+[08:01:03] =======================================================
+[08:01:03] STEP 8/9: keywords.json 저장
+[08:01:03] =======================================================
+[08:01:03] 백업 완료: /Users/twinssn/Projects/aikorea24/scripts/keywords.json.bak
+[08:01:03] keywords.json 저장 완료: 50개 키워드
+
+[08:01:03] =======================================================
+[08:01:03] STEP 9/9: 텔레그램 알림
+[08:01:03] =======================================================
+[08:01:04]   텔레그램 알림 전송 완료
+
+[08:01:04] ✅ 키워드 갱신 완료!

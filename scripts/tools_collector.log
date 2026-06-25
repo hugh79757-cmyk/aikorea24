@@ -403,3 +403,36 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 7개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 5개
+  총 8개 (중복 제거 후)
+수집 완료: 8개
+기존 툴: 107개 (슬러그), 106개 (이름)
+  중복 스킵: Jotform AI App Builder
+  중복 스킵: Bluerails Discovery
+  중복 스킵: Buddy AI Note
+  중복 스킵: uwait
+  중복 스킵: Alai 2.0
+  중복 스킵: HAQQ Legal AI on Mobile
+신규 툴: 2개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (2건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/crewdle-ai.md
+  ✅ Crewdle AI → crewdle-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/qwen-agentworld-language-world-models-for-general.md
+  ✅ Qwen-AgentWorld: Language World Models for General → qwen-agentworld-language-world-models-for-general.md
+
+==================================================
+처리 완료: 2/8개 생성 (10.5초)
+  git commit: [main da529d0] feat: AI 툴 2개 추가 (2026-06-25)
+ 81 files changed, 5117 insertions(+), 336 deletions(-)
+ create mode 100755 quick_check.sh
+ create mode 100644 scripts/outlines/20260624/2026-06-24-A24_out
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

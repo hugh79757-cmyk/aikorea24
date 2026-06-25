@@ -6,7 +6,7 @@ aikorea24 D1 DB → 기사 풀 로드 (3단계 우선순위)
 - 3순위: 그 이전 news (최대 30일)
 - posted.json 중복 제외
 """
-import os, sys, json, re, subprocess
+import os, sys, json, re, subprocess, time
 import urllib.request
 from datetime import datetime, timedelta
 
@@ -120,19 +120,36 @@ def save_posted(data):
     with open(POSTED_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-def d1_query(sql):
+def d1_query(sql, retries=2):
     cmd = ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql]
-    try:
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=60, cwd=PROJECT_DIR)
-        if r.returncode != 0:
+    for attempt in range(retries):
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=PROJECT_DIR)
+            if r.returncode != 0:
+                if attempt < retries - 1:
+                    log(f'  ⚠️ D1 반환코드 {r.returncode}, 5초 후 재시도 ({attempt+1}/{retries})')
+                    time.sleep(5)
+                    continue
+                return []
+            m = re.search(r'"results"\s*:\s*(\[[\s\S]*?\])\s*,\s*"success"', r.stdout)
+            if m:
+                return json.loads(m.group(1))
             return []
-        m = re.search(r'"results"\s*:\s*(\[[\s\S]*?\])\s*,\s*"success"', r.stdout)
-        if m:
-            return json.loads(m.group(1))
-        return []
-    except Exception as e:
-        log(f'  ⚠️ D1 오류: {e}')
-        return []
+        except subprocess.TimeoutExpired:
+            if attempt < retries - 1:
+                log(f'  ⚠️ D1 타임아웃, 5초 후 재시도 ({attempt+1}/{retries})')
+                time.sleep(5)
+                continue
+            log(f'  ⚠️ D1 타임아웃: {retries}회 재시도 모두 실패')
+            return []
+        except Exception as e:
+            if attempt < retries - 1:
+                log(f'  ⚠️ D1 오류: {e}, 5초 후 재시도 ({attempt+1}/{retries})')
+                time.sleep(5)
+                continue
+            log(f'  ⚠️ D1 오류: {e}')
+            return []
+    return []
 
 def is_already_posted(article, posted):
     """4조건 중 하나라도 매칭되면 발행된 기사로 판정 (link, title, original_title, id)"""
