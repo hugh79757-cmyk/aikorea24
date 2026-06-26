@@ -121,14 +121,16 @@ def compute_similarity(title1, original_title1, desc1,
     w1 = 0.35 if en1 and en2 else 0.0
     w2 = 0.25 if ko1 and ko2 else 0.0
     w3 = 0.25 if kw1 and kw2 else 0.0
-    w4 = 0.15 if ent1 and ent2 else 0.0
+    has_ent = bool(ent1 and ent2)
+    w4 = 0.15 if has_ent else 0.0
     total_w = w1 + w2 + w3 + w4
     if total_w > 0:
+        ent_factor = min(1.0, result['entity_overlap'] / max(len(ent1), len(ent2)) * 3) if has_ent else 0.0
         score = (
             w1 * result['jaccard_en'] +
             w2 * result['jaccard_ko'] +
             w3 * result['jaccard_all'] +
-            w4 * min(1.0, result['entity_overlap'] / max(len(ent1), len(ent2)) * 3)
+            w4 * ent_factor
         ) / total_w
         result['score'] = round(score, 3)
     else:
