@@ -152,10 +152,39 @@ def generate_deep_article(title, content, url):
         return None
 
 
+def inject_frontmatter_image(markdown_content, image_path):
+    """프론트매터에 image: 필드가 없으면 주입"""
+    frontmatter_match = re.match(r'^---\s*\n(.*?)\n---', markdown_content, re.DOTALL)
+    if not frontmatter_match:
+        return markdown_content  # 프론트매터 없음 → 패스
+
+    fm = frontmatter_match.group(1)
+    if re.search(r'^image:', fm, re.MULTILINE):
+        return markdown_content  # 이미 image: 있음 → 패스
+
+    # draft: 뒤에 image: 삽입 (정렬 맞춤)
+    fm_updated = re.sub(
+        r'^draft:\s*(.*)$',
+        f'draft: \\1\nimage: "{image_path}"',
+        fm,
+        count=1,
+        flags=re.MULTILINE,
+    )
+    if fm_updated == fm:
+        # draft: 줄이 없으면 마지막 줄 앞에 삽입
+        fm_updated = fm.rstrip() + f'\nimage: "{image_path}"\n'
+
+    return markdown_content.replace(fm, fm_updated, 1)
+
+
 def save_article(markdown_content, title):
-    """마크다운 파일 저장"""
+    """마크다운 파일 저장 (프론트매터에 image: 자동 주입)"""
     slug = re.sub(r'[^a-z0-9가-힣]+', '-', title.lower())[:60]
     slug = slug.strip('-')
+    thumbnail_path = f"/images/{slug}/thumbnail.webp"
+
+    # 프론트매터에 image: 필드 자동 주입
+    markdown_content = inject_frontmatter_image(markdown_content, thumbnail_path)
 
     today = datetime.now().strftime("%Y-%m-%d")
     filename = f"{today}-{slug}.md"
