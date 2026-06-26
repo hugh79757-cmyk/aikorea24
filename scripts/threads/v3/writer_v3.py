@@ -96,7 +96,17 @@ stanza 예시 (반드시 이 구조를 따라라):
 - 숫자-설명 쌍과 쌍 사이는 빈 줄로 구분.
 
 [카드 구조 — 5개, --- 로 구분]
-1번 카드 (500자 이내): 첫 줄은 hook의 핵심을 15~25자로 압축한 punch line. 단, 첫 줄이 hook의 정확한 문장이 아니라도 좋음. 전달하려는 충돌/역설을 짧고 강렬하게 표현할 것. 첫 줄 뒤에는 빈 줄 → 날짜/장소/문서명으로 구체적 맥락을 2~3줄로 이어붙여라. 즉 1번 카드는 반드시 2개 stanza 구조.
+반드시 아래 예시의 카드-줄-빈줄 구조를 그대로 따라라.
+1번 카드 예시 (정확히 이 구조):
+  "Notion이 이메일 앱을 죽였음."         ← 첫 stanza: punch (15~25자)
+  "AI가 이미 대신 일하고 있어서."
+  "사용자가 직접 열 필요가 없었음."
+                                           ← 빈 줄 (stanza 구분)
+  "9월 22일. 18개월 만에 접는 결정."      ← 둘째 stanza: 숫자/날짜/금액 반드시 포함
+  "2024년 2월 Skiff 인수 → 2025년 4월 출시."
+  "1년 만에 종료. 기사 본문의 실제 숫자만."
+---                                        ← --- 는 반드시 두 stanza 뒤에만 위치
+2번 카드 (500자 이내): 충돌의 A면. 구체적 사실, 숫자, 인용, 연구 결과를 빽빽하게 채운다.
 2번 카드 (500자 이내): 충돌의 A면. 구체적 사실, 숫자, 인용, 연구 결과를 빽빽하게 채운다.
 3번 카드 (500자 이내): 반전. 예상 못 한 제3의 사실. 방향 전환. 숫자와 사례로 가득 채운다.
 4번 카드 (500자 이내): 확장. 더 큰 맥락 또는 연결점.
@@ -364,7 +374,7 @@ def write_thread(pitch, all_articles):
 {related_text}
 
 === 요구사항 ===
-1. 1번 카드 첫 줄은 hook의 정확한 문장이 아니라도 좋음. 대신 hook의 핵심 충돌/역설을 15~25자로 압축한 punch line으로 써라. 첫 줄 뒤 빈 줄 → 구체적 맥락(날짜/장소/문서명)을 2~3줄로 이어붙여 2-stanza 구조로 만들어라.
+1. 1번 카드: 반드시 예시 구조 그대로. 첫 stanza punch → 빈 줄 → 둘째 stanza 숫자/날짜 포함 → ---는 둘째 stanza 뒤. 절대 첫 stanza 뒤에 ---를 넣지 말 것.
 2. 반말체(~임, ~했음, ~있음). ~합니다 금지.
 3. 각 카드는 --- 로 구분. 각 카드는 반드시 500자 이내로 작성할 것. 500자 초과 시 API가 거부함.
 4. ## 카드 수 규칙 (절대 준수)
@@ -438,6 +448,19 @@ def write_thread(pitch, all_articles):
 def parse_cards(text):
     """---로 구분된 조각 파싱"""
     cards = [c.strip() for c in text.split('---') if c.strip()]
+    if not cards:
+        return cards
+    # 1번 카드가 3줄 이하(punch stanza만)면 2번 카드의 첫 stanza를 1번으로 병합
+    if len(cards) > 1:
+        c1_lines = [l for l in cards[0].split('\n') if l.strip()]
+        if len(c1_lines) <= 3:
+            c2_lines = [l for l in cards[1].split('\n') if l.strip()]
+            if c2_lines:
+                # punch stanza + 빈 줄 + context stanza (2~3줄만 가져옴)
+                merge = c2_lines[:min(3, len(c2_lines))]
+                cards[0] = cards[0] + '\n\n' + '\n'.join(merge)
+                cards[1] = '\n'.join(c2_lines[min(3, len(c2_lines)):])
+                cards = [c.strip() for c in cards if c.strip()]
     return cards
 
 def validate_cards(cards, pitch):
