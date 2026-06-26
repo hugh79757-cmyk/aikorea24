@@ -2581,6 +2581,991 @@
       "title": "AI가 생성한 구직 신청서가 NHS 셰틀랜드에서 문제를 일으켜",
       "original_title": "AI-generated job applications causing issues at NHS Shetland",
       "description": "NHS 셰틀랜드는 요건을 충족하지 않는 해외의 구직 신청서를大量으로 받고 있으며, 이는 인공지능(AI)으로 생성된 것으로 추정됩니다. 이로 인해 인사 처리에 어려움을 겪고 있습니다."
+    },
+    "13138": {
+      "title": "OpenAI CEO Sam Altman reportedly teases a \"very strong\" model internally that can \"really accelerate the economy\"",
+      "original_title": "OpenAI CEO Sam Altman reportedly teases a \"very strong\" model internally that can \"really accelerate the economy\"",
+      "description": "OpenAI가 차기 주요 AI 모델의 사전 학습을 끝낸 것으로 전해지며 코드네임은 \"Spud\"다. 샘 올트만 CEO는 이 모델이 \"경제를 실제로 가속화할 수 있다\"고 말한다. 이 기사는 The Decode에 처음 보도되었다."
+    },
+    "13139": {
+      "title": "Disney pulls out of OpenAI partnership after Sora app and API gets killed just months after launch",
+      "original_title": "Disney pulls out of OpenAI partnership after Sora app and API gets killed just months after launch",
+      "description": "OpenAI가 Sora 앱과 API를 종료하고 있다. 디즈니는 지난 12월 두 회사가 체결한 수십억 달러 규모의 계약에서 이젠 물러난다. 이 기사는 The Decoder에 처음 보도되었다."
+    },
+    "13140": {
+      "title": "OpenAI expands its record funding round to over $120 billion as it eyes a potential IPO later this year",
+      "original_title": "OpenAI expands its record funding round to over $120 billion as it eyes a potential IPO later this year",
+      "description": "OpenAI가 사상 최대 자금 조달 라운드에 추가로 100억 달러를 더해 총액을 1200억 달러 이상으로 끌어올리며, 올해 안에 IPO 가능성을 모색한다. 이 기사는 The Decoder에 처음 보도되었다."
+    },
+    "13285": {
+      "title": "AI 기술 격차가 도래했다, AI 기업들이 말하는 가운데 파워 유저가 앞서나간다",
+      "original_title": "The AI skills gap is here, says AI company, and power users are pulling ahead",
+      "description": "Anthropic은 AI가 아직 일자리를 대체하진 않지만, 초기 데이터에서 숙련된 사용자가 우위를 점하며 불평등이 커지는 모습을 보이고 있어 향후 실직과 노동시장 분열에 대한 우려를 불러일으키고 있다."
+    },
+    "13288": {
+      "title": "Granola, 1억 2500만 달러 조달… 평가액 15억 달러로 상승하며 미팅 노트테이커에서 엔터프라이즈 AI 애플리케이션으로 확장",
+      "original_title": "Granola raises $125M, hits $1.5B valuation as it expands from meeting notetaker to enterprise AI app",
+      "description": "Granola의 이번 라운드로 평가액이 2억 5천만 달러에서 15억 달러로 급등했고, 사용자의 이전 불만을 해소한 뒤 AI 에이전트에 대한 지원도 강화했다."
+    },
+    "15436": {
+      "title": "OpenAI, 메가 펀딩 라운드 및 ChatGPT 슈퍼 앱 공식 확인",
+      "original_title": "OpenAI officially confirms mega-funding round and ChatGPT super app",
+      "description": "OpenAI는 8520억 달러의 기업가치로 1,220억 달러의 펀딩 라운드를 마감하고 ChatGPT 슈퍼 앱을 공식적으로 공개했습니다. 이로써 기업 중심의 전략으로의 전환을 신호했습니다."
+    },
+    "15634": {
+      "title": "앤스로픽, 유출된 소스 코드를 처리하기 위해 수천 개의 깃허브 리포를 삭제 — 회사는 이것이 실수라고 주장",
+      "original_title": "Anthropic took down thousands of GitHub repos trying to yank its leaked source code — a move the company says was an accident",
+      "description": "앤스로픽 경영진은 이것이 실수라고 밝혔으며, 대부분의 삭제 통지를 철회했다고 전했습니다."
+    },
+    "15688": {
+      "title": "앤소프릭의 유출된 AI 코딩 도구, 대규모 삭제에도 불구하고 깃허브에서 8,000회 이상 복제",
+      "original_title": "Anthropic's leaked AI coding tool has been cloned over 8,000 times on GitHub despite mass takedowns",
+      "description": "앤소프릭은 클로드 코드의 소스 코드를 우연히 유출하게 되었습니다. 피해의 정도가 명확해지고 있으며, 이는 잠재적으로 상당한 영향을 미칠 수 있습니다."
+    },
+    "18287": {
+      "title": "누드봇, 딥페이크 및 자동화된 아카이브: AI가 텔레그램에서 수익화된 악용 생태계를 어떻게 구축하는가",
+      "original_title": "Nudifying bots, deepfakes, and automated archives: how AI powers a monetized abuse ecosystem on Telegram",
+      "description": "이탈리아와 스페인에서 280만 건의 텔레그램 메시지를 분석한 결과, AI 도구가 비동의적인 친밀한 이미지의 수익화된 생태계를 만들어가는 방식을 문서화했습니다."
+    },
+    "19515": {
+      "title": "LinkedIn 데이터, 채용 감소의 원인은 AI가 아니다… 아직은",
+      "original_title": "LinkedIn data shows AI isn’t to blame for hiring decline… yet",
+      "description": "LinkedIn은 2022년 이후 채용이 20% 감소했다고 밝혔지만, 그 원인을 AI가 아닌 높은 금리에 있다고 주장했습니다. 이는 AI의 영향을 배제하고 경제적 요인에 더 중점을 두고 있습니다."
+    },
+    "19520": {
+      "title": "신발 사업 매각 후, Allbirds가 AI로 방향 전환",
+      "original_title": "After sale of its shoe business, Allbirds pivots to AI",
+      "description": "Allbirds는 양모 스니커즈 대신 AI 서버로 전환하며 NewBird AI로 브랜드명을 변경했습니다. 이는 5000만 달러 규모의 전환사채 금융을 확보한 뒤 이루어진 변화입니다."
+    },
+    "19551": {
+      "title": "미중 AI 격차가 좁혀졌다. 책임 있는 AI 격차는 여전하다",
+      "original_title": "The US-China AI gap closed. The responsible AI gap didn’t",
+      "description": "미국이 AI 모델 성능에서 지속적인 우위를 점하고 있다는 가정은 데이터로 잘 뒷받침되지 않고 있으며, 이는 이번 주에 발표된 스탠포드 대학교의 2026 AI 지표 보고서의 불편한 발견 중 하나입니다. 이 보고서는 인류 중심의 인공지능 연구소에서 작성되었습니다."
+    },
+    "19586": {
+      "title": "현재 미국 직원의 절반이 직장에서 AI를 사용하며, 그로 인해 주당 거의 8시간을 낭비하고 있다",
+      "original_title": "Half of all US employees use AI at work now - and waste almost 8 hours a week doing it",
+      "description": "갤럽 조사에 따르면 AI 도입에서 선두에 있는 기업들이 그렇지 않은 기업들보다 평균적으로 직원들을 더 많이 채용하고 해고하고 있습니다."
+    },
+    "20643": {
+      "title": "구글, Cloud Next '26에서 8세대 TPU, 에이전트 플랫폼 및 워크스페이스 AI 레이어 공개",
+      "original_title": "Google unveils 8th-gen TPUs, agent platform, and Workspace AI layer at Cloud Next '26",
+      "description": "구글은 Cloud Next '26 컨퍼런스를 통해 8세대 TPU와 개편된 에이전트 플랫폼, 새로운 워크스페이스 AI 레이어를 공개했습니다. 이 모든 것을 \"Agentic Enterprise\"라는 슬로건 아래에 홍보하고 있습니다."
+    },
+    "20652": {
+      "title": "개의 AI 모델이 나를 속이려 했다. 그 중 일부는 무섭게 똑똑했다",
+      "original_title": "5 AI Models Tried to Scam Me. Some of Them Were Scary Good",
+      "description": "AI 모델의 사이버 능력은 전문가들을 놀라게 하고 있다. AI의 사회적 기술도 매우 위험할 수 있음을 보여준다."
+    },
+    "20653": {
+      "title": "AI 도구가 평균적인 북한 해커들이 수백만 달러를 훔치는 데 도움",
+      "original_title": "AI Tools Are Helping Mediocre North Korean Hackers Steal Millions",
+      "description": "한 해커 그룹이 악성코드를 만든 것부터 가짜 회사 웹사이트를 만드는 것까지 AI를 활용하여, 단 3개월 만에 1,200만 달러를 훔쳤다."
+    },
+    "21474": {
+      "title": "구글, 앤트로픽의 거부 후 펜타곤에 AI 접근 확대",
+      "original_title": "Google expands Pentagon’s access to its AI after Anthropic’s refusal",
+      "description": "앤트로픽이 국방부의 국내 대량 감시와 자율 무기에 AI 사용을 허락하지 않은 후, 구글은 해당 부서와 새로운 계약을 체결했습니다."
+    },
+    "21629": {
+      "title": "AI 비디오, 단순한 프리퀄일까? Runway CEO는 세계 모델들이 다음이라고 믿고 있다",
+      "original_title": "Is AI video just a prequel? Runway’s CEO thinks world models are next",
+      "description": "AI로 생성된 비디오는 거의 하룻밤 만에 혁신적인 도구로 발전했으며, Runway는 이 변화의 최前선에 서 있습니다. 뉴욕에 본사를 둔 이 회사는 53억 달러의 가치를 인정받아 8억 6천만 달러에 가까운 자금을 모금했으며, 그 모델은 세계에서 가장 자금이 좋은 연구소들과 경쟁하고 있습니다."
+    },
+    "21630": {
+      "title": "구글 포토, AI를 활용해 ‘클루리스’의 상징적인 옷장을 현실로 만든다",
+      "original_title": "Google Photos uses AI to make the iconic closet from ‘Clueless’ a reality",
+      "description": "구글은 새로운 기능이 AI 기술을 활용해 사용자 옷장의 복사본을 자동으로 생성할 것이라고 밝혔습니다. 이 복사본은 사용자의 구글 포토 라이브러리에 있는 의류 조각들을 기반으로 만들어집니다."
+    },
+    "21631": {
+      "title": "구글 TV에 더 많은 제미니 기능이 추가됩니다",
+      "original_title": "More Gemini features are coming to Google TV",
+      "description": "구글 TV는 사진과 비디오를 변환할 수 있는 나노 바나나와 베오 도구를 포함한 더 많은 제미니 기능을 추가했습니다."
+    },
+    "21633": {
+      "title": "콜비 애드콕의 스카우트 AI, 전투를 위한 모델 훈련에 1억 달러 모금: 우리는 훈련 캠프를 방문했습니다",
+      "original_title": "Colby Adcock’s Scout AI raises $100M to train its models for war: We visited its bootcamp",
+      "description": "우리는 스카우트 AI의 훈련장을 방문했으며, 이곳에서는 개별 병사들이 자율 차량의 대대를 제어하는 데 도움이 될 AI 에이전트를 개발하고 있습니다."
+    },
+    "21657": {
+      "title": "IDC: EMEA CIO들이 AI 배포를 재개하는 방법",
+      "original_title": "IDC: How EMEA CIOs can jumpstart AI rollouts",
+      "description": "EMEA 지역에서 지연된 기업 AI 배포를 다시 진행하기 위해 CIO들은 시스템을 적극적으로 점검해야 합니다. 지난 18개월 동안 유럽 전역의 AI 배치가 초기 테스트를 넘어 지속적으로 발전하였으며, 기업들은 대규모 언어 모델과 머신러닝에 자본을 쏟고 있습니다."
+    },
+    "21658": {
+      "title": "GPT-5.5, 오픈AI의 가장 능력 있는 에이전트 AI 모델 등장",
+      "original_title": "GPT-5.5 is OpenAI’s most capable agentic AI model yet",
+      "description": "오픈AI가 4월 23일에 실질적인 업무와 에이전트를 위한 \"새로운 지능 클래스\"로서 GPT-5.5를 출시했습니다. 오픈AI는 이 모델이 계획하고 도구를 사용하며 자체 출력물을 확인하고 작업을 수행할 수 있도록 처음부터 구축된 지금까지 가장 능력 있는 에이전트 AI 모델이라고 주장합니다."
+    },
+    "21678": {
+      "title": "미스트랄의 Le Chat, 이란 전쟁 허위 정보 60% 확산",
+      "original_title": "Mistral's Le Chat spreads Iran war disinformation in 60 percent of leading prompts",
+      "description": "뉴스가드 감사에 따르면, 미스트랄의 Le Chat는 이란 전쟁에 대한 국가 지원 허위 정보를 약 절반의 비율로 반복합니다. 오류율은 중립적인 질문에서는 10%, 악의적인 질문에서는 80%에 달했습니다."
+    },
+    "21679": {
+      "title": "구글 제미니, 채팅 내에서 문서, 스프레드시트, 프레젠테이션 생성 가능",
+      "original_title": "Google Gemini now generates full documents, spreadsheets, and presentations directly inside the chat",
+      "description": "구글 제미니는 이제 채팅 내에서 PDF 및 워드 파일부터 엑셀 스프레드시트까지 직접 문서를 생성할 수 있습니다. 이 기능은 사용자의 작업 효율성을 크게 높일 것으로 기대됩니다."
+    },
+    "21680": {
+      "title": "오픈AI 연구원들, 수학이 AGI로 가는 길인 이유 설명",
+      "original_title": "OpenAI researchers explain why math is the road to AGI",
+      "description": "AI 모델이 단순한 산수에서 올림픽 수준의 수학 및 연구 수학으로 단 2년 만에 발전했습니다. 오픈AI 팟캐스트에서 연구원들이 수학이 인공지능 일반화로 가는 핵심 시험이 된 이유를 설명했습니다."
+    },
+    "21681": {
+      "title": "오픈AI, 마이크로소프트 계약 재구성 하루 만에 AWS에 진입",
+      "original_title": "OpenAI lands on AWS one day after Microsoft deal restructuring",
+      "description": "마이크로소프트와 오픈AI의 독점 계약이 해지된 다음 날, AWS는 공동으로 구축한 에이전트 서비스를 포함한 3개의 새로운 오픈AI 제공 기능을 베드락 플랫폼에서 출시했습니다."
+    },
+    "21685": {
+      "title": "LLM 추론을 위한 상위 10개 KV 캐시 압축 기술: 제거, 양자화 및 저차원 방법 전반의 메모리 오버헤드 감소",
+      "original_title": "Top 10 KV Cache Compression Techniques for LLM Inference: Reducing Memory Overhead Across Eviction, Quantization, and Low-Rank Methods",
+      "description": "LLM 추론을 위한 상위 10개 KV 캐시 압축 기술: 제거, 양자화 및 저차원 방법 전반의 메모리 오버헤드 감소에 대한 정보입니다. 이 게시글은 'LLM 추론을 위한 상위 10개 KV 캐시 압축 기술: 제거, 양자화 및 저차원 방법 전반의 메모리 오버헤드 감소'에서 처음 소개되었습니다."
+    },
+    "21686": {
+      "title": "Qwen 팀, NVIDIA 호퍼 GPU에서 최대 3배 속도를 달성하는 고성능 선형 주의 커널 라이브러리 FlashQLA 출시",
+      "original_title": "Qwen Team Releases FlashQLA: a High-Performance Linear Attention Kernel Library That Achieves Up to 3× Speedup on NVIDIA Hopper GPUs",
+      "description": "QwenLM 팀은 Gated Delta Network (GDN) 청크 프리필의 전방 및 후방 패스를 획기적으로 가속화하는 새로운 커널 라이브러리인 FlashQLA를 출시했습니다. 이 라이브러리는 대규모 사전 훈련 및 엣지 사이드 에이전틱 추론 시나리오를 대상으로 합니다."
+    },
+    "21693": {
+      "title": "제재를 받은 중국 AI 기업 SenseTime, 속도를 위해 제작된 이미지 모델 출시",
+      "original_title": "Sanctioned Chinese AI Firm SenseTime Releases Image Model Built for Speed",
+      "description": "미국의 고급 기술 접근 제한으로 인해 SenseTime은 중국산 칩에서 최적화된 새로운 오픈 소스 모델에 집중하고 있습니다. 이 모델은 빠른 성능을 자랑합니다."
+    },
+    "21855": {
+      "title": "일론 머스크가 OpenAI를 어떻게 압박했는가: \"그들은 나를 죽이고 싶어 할 것\"",
+      "original_title": "How Elon Musk Squeezed OpenAI: They ‘Are Gonna Want to Kill Me’",
+      "description": "머스크 대 알트만 재판의 3일째에 긴장이 고조되었고, OpenAI의 변호사들이 머스크를 강하게 심문했습니다."
+    },
+    "22697": {
+      "title": "DeepSeek, 첫 투자 라운드에서 450억 달러 평가에 도달할 수 있다",
+      "original_title": "DeepSeek could hit $45B valuation from its first investment round",
+      "description": "이 중국 AI 연구소는 2025년 초에 미국의 OpenAI 및 Anthropic과 같은 대형 모델보다 적은 컴퓨팅 파워와 비용으로 훈련된 대형 언어 모델을 출시하며 주목을 받았습니다."
+    },
+    "22698": {
+      "title": "구글, 레디트 및 기타 소스의 인용을 포함하는 AI 검색 업데이트",
+      "original_title": "Google updates AI search to include quotes from Reddit and other sources",
+      "description": "웹 포럼과 토론 게시판을 인용하는 것은 사용자들이 더 구체적인 질문에 대한 답을 찾는 데 도움이 될 수 있지만, 이 설계 선택은 혼돈을 초래할 수도 있습니다."
+    },
+    "22749": {
+      "title": "앤트로픽, 클로드를 지원하기 위해 스페이스X의 콜로서스-1 데이터 센터 활용",
+      "original_title": "Anthropic taps SpaceX's Colossus-1 data center for 220,000 GPUs to power Claude",
+      "description": "앤트로픽은 스페이스X의 콜로서스 1 데이터 센터의 전체 계산 용량을 인수하여, 220,000개 이상의 NVIDIA GPU를 활용할 예정입니다. 이 데이터 센터는 한 달 이내에 가동될 것으로 예상되며, 클로드 코드의 속도 제한도 두 배로 늘릴 계획입니다."
+    },
+    "22764": {
+      "title": "AI를 단 10분만 사용해도 게을러지고 멍청해질 수 있다는 연구 결과",
+      "original_title": "Using AI for Just 10 Minutes Might Make You Lazy and Dumb, Study Shows",
+      "description": "새로운 연구에 따르면 AI 보조 도구에 의존하는 것이 사람들의 사고력과 문제 해결 능력에 부정적인 영향을 미칠 수 있다고 합니다."
+    },
+    "22766": {
+      "title": "해커들은 당신보다 AI 부실을 더 싫어한다",
+      "original_title": "Hackers Hate AI Slop Even More Than You Do",
+      "description": "당신만의 문제가 아닙니다. 사기꾼, 해커 및 기타 사이버 범죄자들은 사이버 공격과 다른 불법 활동에 대해 논의하는 플랫폼에서 'AI 쓰레기'가 넘쳐난다고 불만을 토하고 있습니다."
+    },
+    "22768": {
+      "title": "스스로를 ‘각성의 아야톨라’라고 칭하는 하산 파이커, AI의 죽음을 원하다",
+      "original_title": "Hasan Piker, Self-Described ‘Ayatollah of Woke,’ Wants AI to Die",
+      "description": "극좌 성향의 트위치 스트리머는 AI가 우리의 뇌를 썩게 만들고 있다고 주장합니다. 그는 또한 트위터에 중독되어 있으며 최소 여덟 개의 팟캐스트를 듣고 있습니다."
+    },
+    "23811": {
+      "title": "앤트로픽, 램프 데이터에 따르면 OpenAI보다 더 많은 비즈니스 고객을 보유",
+      "original_title": "Anthropic now has more business customers than OpenAI, according to Ramp data",
+      "description": "핀테크 기업 램프의 고객 데이터를 기반으로 한 조사에 따르면, 참여한 비즈니스의 34.4%가 앤트로픽 서비스를 위해 비용을 지불하고 있으며, 이는 다른 AI 연구소보다 더 많고, OpenAI에 지불하는 비율은 32.3%에 그쳤습니다."
+    },
+    "23814": {
+      "title": "메디케어의 새로운 지급 모델, AI를 위해 설계되었지만 대부분의 기술계는 이를 알지 못하다",
+      "original_title": "Medicare’s new payment model is built for AI, and most of the tech world has no idea",
+      "description": "환자의 방문 사이에 모니터링하고, 전화 체크인, 주택 추천 조정 및 약물 수령 보장을 위한 AI 에이전트에 대한 지급 메커니즘이 없습니다. ACCESS가 처음으로 이러한 메커니즘을 창출합니다."
+    },
+    "23818": {
+      "title": "AI 챗봇, 사람들의 실제 전화번호 유출",
+      "original_title": "AI chatbots are giving out people’s real phone numbers",
+      "description": "사람들은 구글 AI에 의해 개인 연락처 정보가 유출되었다고 보고하고 있으며, 이를 방지할 쉬운 방법이 없는 것으로 보입니다. 한 레딧 사용자는 도움을 간절히 요청하며, 한 달 동안 \"변호사를 찾는\" 낯선 사람들로부터 전화가 쏟아졌다고 말했습니다."
+    },
+    "23871": {
+      "title": "구글, 고객이 AI를 채택하는 데 도움 줄 수백 명의 엔지니어 채용",
+      "original_title": "Google is hiring hundreds of engineers to help customers adopt its AI",
+      "description": "구글은 고객이 AI를 도입하는 데 도움을 줄 수백 명의 엔지니어를 채용하고 있습니다. 이는 구현이 여전히 어려움을 겪고 있다는 신호입니다."
+    },
+    "24636": {
+      "title": "앤트로픽, xAI에 월 12억 5천만 달러 지급",
+      "original_title": "Anthropic will pay xAI $1.25B per month for compute",
+      "description": "엘론 머스크의 xAI는 앤트로픽에 컴퓨팅 서비스를 판매하는 계약을 체결하며 AI 업계를 놀라게 했습니다. 이제 우리는 이 계약의 가치를 알게 되었습니다."
+    },
+    "24695": {
+      "title": "구글, 젬니 3.5 플래시로 앤트로픽 및 OpenAI와 함께 최신 AI 모델을 상당히 비싸게 책정",
+      "original_title": "Google's Gemini 3.5 Flash follows Anthropic and OpenAI in making newer AI models significantly pricier",
+      "description": "구글의 젬니 3.5 플래시는 이전 모델보다 큰 개선을 이루었지만, 기준 테스트에서 운영 비용이 5.5배 증가했습니다. 에이전트 작업의 경우, 총 비용이 비싼 젬니 3.1 프로보다 75% 초과하였으며, 이는 모델이 경쟁 제품보다 더 많은 상호작용 단계를 필요로 하기 때문입니다. 구글만의 문제는 아닙니다."
+    },
+    "24700": {
+      "title": "구글, I/O 2026에서 Gemini 3.5 Flash 소개: AI 에이전트와 코딩을 위한 더 빠르고 저렴한 모델",
+      "original_title": "Google Introduces Gemini 3.5 Flash at I/O 2026: A Faster and Cheaper Model for AI Agents and Coding",
+      "description": "구글의 Gemini 3.5 Flash는 코딩과 에이전트 벤치마크에서 자사 플래그십 모델을 초과 달성하며, 4배 더 빠르고 절반의 비용으로 운영됩니다. 이는 AI 에이전트와 코딩을 위한 혁신적인 모델로 자리 잡을 것으로 기대됩니다."
+    },
+    "24714": {
+      "title": "OpenAI 모델, 이산 기하학의 중심 추측을 반증하다",
+      "original_title": "An OpenAI model has disproved a central conjecture in discrete geometry",
+      "description": "OpenAI 모델은 80년 된 단위 거리 문제를 해결하며 이산 기하학의 주요 추측을 반증하고 AI 기반 수학의 이정표를 세웠습니다."
+    },
+    "26198": {
+      "title": "에이전틱 AI 시대의 조직 설계를 재고하다",
+      "original_title": "Rethinking organizational design in the age of agentic AI",
+      "description": "엔터프라이즈 수준의 AI 에이전트 도입이 급속히 증가하면서 야망과 실행 간의 단절이 나타나고 있습니다. 85%의 조직이 향후 3년 내에 에이전틱해지고 싶어하지만, 76%는 현재 운영 및 인프라가 이 변화를 지원할 수 없다고 말합니다."
+    },
+    "26229": {
+      "title": "Alipay, 당신을 대신해 쇼핑하는 AI 에이전트를 위한 결제 도구 출시",
+      "original_title": "Alipay launches payment tools for AI agents that shop for you",
+      "description": "중국의 금융 기술 거대기업인 앤트 그룹은 스마트 안경이 카페에 들어서기 전에 스스로 커피를 주문하고 사용자 맞춤형으로 결제하는 세상을 꿈꾸고 있습니다. 이 회사는 화요일에 새로운 인공지능 결제 도구 모음을 출시하며, 이를 통해 목표를 설정하고 있습니다."
+    },
+    "26357": {
+      "title": "AI 코딩 스타트업 코그니션, 250억 달러의 기업 가치를 인정받아 10억 달러 투자 유치",
+      "original_title": "AI coding startup Cognition raises $1B at $25B pre-money valuation",
+      "description": "코그니션은 연간 4억 9천 2백만 달러의 수익 기준에 도달하며, 8개월 만에 기업 가치를 두 배로 늘렸다고 전했습니다."
+    },
+    "26398": {
+      "title": "또 다른 ‘딥시크 순간’? 화웨이의 이정표가 칩 경쟁에서 중국의 궤적을 변화",
+      "original_title": "Another ‘DeepSeek moment’? Huawei milestone alters China trajectory in chip race: analysts",
+      "description": "화웨이 테크놀로지가 미국 제재를 우회하기 위한 칩 아키텍처를 공개함으로써 중국의 반도체 자립을 향한 큰 걸음을 내디뎠다고 분석가들이 전했습니다. 이는 베이징이 워싱턴과의 기술 전쟁에서 강력한 새로운 지렛대를 제공하게 되는 것으로, 중국의 존재감이 세계적으로 주목받게 되었습니다."
+    },
+    "26408": {
+      "title": "AI 코딩 에이전트 Devin 제작사 Cognition, 9개월 만에 가치 260억 달러로 두 배 이상 증가",
+      "original_title": "AI coding agent Devin maker Cognition more than doubles its valuation to $26 billion in under nine months",
+      "description": "AI 소프트웨어 개발자 Devin의 제작사 Cognition은 10억 달러 이상을 모금하며 260억 달러 이상의 가치에 도달했습니다. 이 거대한 투자 라운드는 AI 코딩 에이전트에 대한 투자자들의 관심이 얼마나 높은지를 보여줍니다."
+    },
+    "26410": {
+      "title": "AI 붐으로 인해 엔비디아의 대만 연간 지출이 150억 달러에서 1500억 달러로 증가",
+      "original_title": "The AI boom drove Nvidia's yearly Taiwan spending from $15 billion to $150 billion",
+      "description": "엔비디아는 이제 대만의 TSMC와 같은 공급업체에 연간 최대 1500억 달러를 지출하고 있습니다. 이는 AI 붐이 엔비디아의 지출 패턴에 얼마나 큰 영향을 미치고 있는지를 보여줍니다."
+    },
+    "26411": {
+      "title": "중국, 노후 카메라 네트워크를 AI 기반 대량 감시 장치로 전환",
+      "original_title": "China turns its aging camera network into an AI-powered mass surveillance apparatus",
+      "description": "중국 경찰은 수백만 대의 오래된 감시 카메라를 AI로 업그레이드하고 있습니다. Hikvision과 Huawei와 같은 제조업체는 이제 군중, 의심스러운 행동 또는 무단 접근을 자동으로 감지하는 컴퓨터 비전 및 언어 모델이 내장된 카메라를 발송합니다. 수동으로 영상을 검토하는 대신,"
+    },
+    "26412": {
+      "title": "샘 올트먼과 다리오 아모데이, AI 일자리 종말 예측 수정",
+      "original_title": "Sam Altman and Dario Amodei walk back their AI job apocalypse predictions",
+      "description": "샘 올트먼과 다리오 아모데이는 10억 달러 규모의 IPO 직전에 AI 일자리 종말에 대한 예언을 수정하고 있습니다. 이 기사는 The Decoder에서 처음 게재되었습니다."
+    },
+    "26429": {
+      "title": "AI 없는 구글 대안이 인기를 끌고 있습니다 - 스스로 사용해 보려면 어떻게 해야 할까요",
+      "original_title": "This AI-free Google alternative is surging in popularity - how to try it for yourself",
+      "description": "DuckDuckGo는 구글의 AI 기반 개요에 대한 AI 없는 대안으로, 전통적인 검색 결과를 선호하는 더 많은 사람들을 끌어모으고 있습니다."
+    },
+    "26430": {
+      "title": "AI를 검색 결과에서 자동으로 제외하는 간편한 방법을 찾았다 - 거의 모든 브라우저에서 작동한다",
+      "original_title": "I found an easy way to automatically keep AI out of my search results - and it works in nearly every browser",
+      "description": "브라우저에 모든 AI 결과를 제외하는 사용자 정의 검색 엔진을 추가할 수 있습니다. 주요 브라우저에서 이 작업을 수행하는 방법을 보여드리겠습니다."
+    },
+    "26431": {
+      "title": "AI는 군비 경쟁이며, 미국은 Nvidia 슈퍼 칩에 90억 달러를 원한다",
+      "original_title": "AI is an arms race, and the US wants $9 billion in Nvidia superchips to keep up",
+      "description": "정부는 뒤처지고 있지만, Nvidia에는 구원의 손길이 있습니다."
+    },
+    "26457": {
+      "title": "ITBench-AA: 프론티어 모델, 에이전틱 기업 IT 작업을 위한 첫 벤치마크에서 50% 미만의 점수 기록",
+      "original_title": "ITBench-AA: Frontier Models Score Below 50% on the First Benchmark for Agentic Enterprise IT Tasks — by Artificial Analysis and IBM",
+      "description": ""
+    },
+    "27227": {
+      "title": "AI 자본 지출 붐이 닷컴 광풍을 초월하며 투자자들은 차분함 유지",
+      "original_title": "Investors stay calm as AI capex boom eclipses dotcom mania - Reuters",
+      "description": "AI 자본 지출의 급증이 닷컴 시대의 열풍을 능가하면서 투자자들은 침착함을 유지하고 있습니다. 이는 새로운 기술에 대한 긍정적인 신호로 해석되고 있습니다."
+    },
+    "27234": {
+      "title": "교사 노조, 학교에 A.I. 챗봇과 스크린 시간 제한을 촉구",
+      "original_title": "Teachers Union Urges Schools to Curb A.I. Chatbots and Screen Time",
+      "description": "미국 교사 연합은 2학년 이하 학생들에게는 화면 사용을 전면 금지하고, 초등학생에게는 A.I. 챗봇 사용을 금지할 것을 권장했습니다. 이는 학생들의 건강한 성장에 대한 우려를 반영합니다."
+    },
+    "27250": {
+      "title": "앤트로픽의 새로운 미소스 A.I. 모델이 전 세계 경고음을 울리다",
+      "original_title": "Anthropic’s New Mythos A.I. Model Sets Off Global Alarms",
+      "description": "미소스는 앤트로픽이 강력한 모델에 대한 접근 권한을 결정하면서 중앙은행과 정보기관의 긴급 대응을 촉발시켰습니다."
+    },
+    "27284": {
+      "title": "FBI가 2025년 인터넷 범죄 보고서를 공개했습니다. 여기서 6가지 주요 시사점이 있습니다",
+      "original_title": "The FBI just dropped its 2025 internet crime report. Here are 6 big takeaways",
+      "description": "지난해 온라인 범죄 신고가 처음으로 100만 건을 초과했으며, 이는 AI 기반의 사기, 암호화폐 scams, 피싱 공격의 급증에 의해 촉발되었습니다."
+    },
+    "27649": {
+      "title": "텐센트 주가 10% 급등, 위챗 슈퍼 앱 내 AI 에이전트 기대감으로",
+      "original_title": "Tencent shares jump 10% on expectations of AI agent within WeChat super app",
+      "description": "텐센트 홀딩스의 주가는 화요일 10% 급등했습니다. 이는 중국 기술 대기업이 자사의 슈퍼 앱인 위챗 내에 인공지능 에이전트를 곧 출시할 것이라는 보도에 대한 투자자들의 낙관론에 힘입은 결과입니다."
+    },
+    "27764": {
+      "title": "AI 경제가 영구적인 저소득 계층을 창출할 것인가?",
+      "original_title": "Will the AI economy create a permanent underclass?",
+      "description": "인도와 아프리카에서 유럽에 이르기까지 AI 공급망에 아직 포함되지 않은 국가들은 대규모 실업과 기술의 여파를 처리하는 데 필요한 세수 감소의 위험을 안고 있습니다. 샌프란시스코 베이 지역은 금광 열풍보다 더 큰 AI 광풍에 휘말리고 있습니다."
+    },
+    "27817": {
+      "title": "AI 낙관론 폭발…뉴욕증시 3대 지수 또 사상 최고치",
+      "original_title": "",
+      "description": "중동 정세를 둘러싼 불확실성이 이어지는 가운데서도 인공지능(AI) 관련 업종 강세가 지속되면서 뉴욕증시 3대 지수가 일제히 사상 최고치로 마감했다. 2일(현지시간) 뉴욕증시에서 다우존스30 산업평균지수는 전장보다 228.91포인트(0.45%) 오른 5만1307.79에 거래를 마쳤다. 스탠더드앤드푸어스(S&P)500 지수는 전장보다 9.82포인트(0.13%)"
+    },
+    "27818": {
+      "title": "네이버, AI 안전성 거버넌스 개편…CRO 산하 'AI 세이프티 센터' 신설",
+      "original_title": "",
+      "description": "네이버가 올해 초 신설한 최고 책임경영 책임자(CRO) 조직 산하에 인공지능(AI) 안전 전담조직을 새로 구성하며 AI 안전성 거버넌스를 개편했다. 모든 서비스에 AI를 녹여내는 '온서비스 AI' 전략 본격화를 위한 안전성 강화 차원으로 풀이된다. 1일 정보기술(IT) 업계에 따르면 네이버는 지난 3월 CRO 산하에 'AI 세이프티 센터' 조직을 신설했다."
+    },
+    "27819": {
+      "title": "[스노우플레이크 서밋 26]“모델 바뀌어도 데이터 남는다”…기업 AI 실행 기반 강화",
+      "original_title": "",
+      "description": "스노우플레이크가 기업 인공지능(AI) 활용의 무게중심을 모델 도입에서 데이터 기반 실행으로 옮기기 위한 신기술을 대거 공개했다. 기업들이 데이터 클라우드 기반 위에 자사 데이터를 AI와 연결하고, 다양한 시스템과 연동해 AI 서비스를 쉽게 개발·운영하도록 지원한다는 전략이다. 스노우플레이크는 2일(현지시간) 미국 샌프란시스코에서 열린 '스노우플레이크 서밋 "
+    },
+    "27858": {
+      "title": "알파벳의 기록적인 850억 달러 조달, 구글 AI 사업에 대한 훌륭한 신호",
+      "original_title": "Alphabet’s record-breaking $85B raise for Google’s AI business is a helluva good signal",
+      "description": "알파벳이 기록적인 850억 달러 규모의 주식 매각을 통해 AI 관련 상품에 대한 투자자의 관심을 나타낸다면, 투자자들이 준비가 되어 있다는 신호로 해석할 수 있습니다."
+    },
+    "27862": {
+      "title": "출판사, 새로운 규정 덕분에 AI 검색 옵트 아웃 가능해져",
+      "original_title": "Publishers will be able to opt out of AI Search, thanks to new regulation",
+      "description": "영국 규제당국은 구글이 웹사이트 출판사가 생성 AI 검색 기능에서 옵트 아웃할 수 있는 도구를 제공할 것을 요구하고 있습니다. 이 옵션은 영국에서 시험 후 전 세계로 확산될 예정입니다."
+    },
+    "27921": {
+      "title": "AI 음악 스타트업 수노, 주요 음반사와 법정 싸움 중 54억 달러의 가치로 평가받다",
+      "original_title": "AI music startup Suno doubles its valuation to $5.4 billion while fighting major record labels in court",
+      "description": "AI 음악 스타트업 수노는 4억 달러를 모금하여 54억 달러의 가치에 도달했습니다. 이 기업은 주요 음반사들과 법정에서 싸우는 중이지만 계속해서 자금을 확보하고 있습니다."
+    },
+    "27935": {
+      "title": "AI가 인지 피로를 유발하고 있습니다. 더 빨리 일하는 방법은 다음과 같습니다.",
+      "original_title": "AI is causing cognitive fatigue. Here's how to work with more haste and less speed",
+      "description": "연구에 따르면 사람들은 AI를 이용하면서 더 열심히 일하지만 똑똑하게 일하고 있지는 않다고 합니다. 그러나 새로운 기술을 소중한 도구로 활용하는 방법은 존재합니다."
+    },
+    "28021": {
+      "title": "노동당 의원, 엘론 머스크의 xAI 회사에 가짜 성적 이미지를 두고 고소",
+      "original_title": "Labour MP sues Elon Musk’s xAI company over fake sexualised images",
+      "description": "제스 아사토는 비동의 이미지를 비판한 후 그록(Grok)에서 생성된 이미지에서 비키니를 입은 모습으로 묘사되었습니다. 다수의 유사한 사례의 일환으로 노동당 의원이 엘론 머스크의 xAI 회사를 상대로 법적 조치를 취했습니다."
+    },
+    "28024": {
+      "title": "헨리 노왁 체포와 잘못 연결된 전 경찰관, 숨겨진 생활로",
+      "original_title": "Former police officer in hiding after being falsely linked to Henry Nowak arrest",
+      "description": "크리스티 힐과 남성 경찰관이 그록을 포함한 AI 플랫폼에서 비이상적으로 식별되었습니다. 헨리 노왁의 체포에 관련된 잘못된 비난을 받게 된 전 경찰관이 안전한 장소로 도피해야 했습니다."
+    },
+    "28028": {
+      "title": "기술 대기업의 IPO 경쟁이 치열해지면서, OpenAI는 기회를 놓쳤는가?",
+      "original_title": "As the tech mega-IPO race heats up, has OpenAI missed its moment?",
+      "description": "경쟁업체들이 '눈부신 금액'을 모으기 위해 시장에 달려가는 가운데, AI 분야의 한때 '포스터 아동'이었던 OpenAI에 스포트라이트가 비추어지고 있습니다. 1년이라는 시간은 AI에서 긴 시간입니다. 1년 전, 샘 올트먼은 자신의 회사 OpenAI가 초지능을 구축하고 사회를 근본적으로 재편할 것이라고 예측했습니다."
+    },
+    "28029": {
+      "title": "영국 미디어 웹사이트, 구글의 기사 사용을 차단할 권한 부여받아",
+      "original_title": "UK media websites given power to block Google using their articles in AI search",
+      "description": "출판사들이 클릭 수와 수익 감소를 불만으로 제기한 후 검색 요약에 대한 결정을 내렸습니다. 온라인 출판사와 뉴스 기관들은 이제 영국 검색 결과에서 구글의 AI 요약에 자사의 콘텐츠가 나타나는 것을 차단할 수 있게 되었습니다."
+    },
+    "28036": {
+      "title": "영국 정부, 기업들에게 AI가 노동력에 미치는 영향에 대한 데이터 공유를 촉구하다",
+      "original_title": "UK government urges companies to share data about AI effects on workforce",
+      "description": "이번 조치는 AI가 청년 실업 문제를 악화시킬 것이라는 우려 속에서 이루어졌다."
+    },
+    "28044": {
+      "title": "AI로 역할을 대체했더니 개발자들이 좋아합니다",
+      "original_title": "We replaced a role with AI, and our developers love it",
+      "description": "코드 리뷰에 있어 AI는 그 자리를 확고히 했습니다."
+    },
+    "28075": {
+      "title": "[컴퓨텍스 2026]MS \"엔비디아 슈퍼칩 탑재 AI노트북 올 가을 출시\"",
+      "original_title": "",
+      "description": "이르면 올해 가을 마이크로소프트(MS)가 엔비디아의 새로운 슈퍼칩 'RTX 스파크(Spark)'를 탑재한 인공지능(AI) 노트북을 선보일 전망이다. 3일 마크 린톤 MS 윈도&디바이스 세일즈 부문 부사장(VP)은 대만 타이베이에서 진행 중인 '컴퓨텍스 2026' 행사 포럼 기조연설에서 AI 에이전트 시대를 대비한 하드웨어-소프트웨어 통합 전략을 발표하며, "
+    },
+    "28290": {
+      "title": "우리는 AI로 역할을 대체했고, 개발자들은 이를 사랑합니다",
+      "original_title": "We replaced a role with AI, and our developers love it",
+      "description": "코드 리뷰를 위해 AI가 그 자리를 차지하게 되었습니다. 개발자들은 AI의 도움으로 효율성을 높이고 있습니다."
+    },
+    "28292": {
+      "title": "AI는 인도적일 수 있을까? 아자 라스킨은 개발 경쟁이 바뀌어야 가능하다고 말합니다",
+      "original_title": "Can AI be humane? Aza Raskin says only if we change the development race",
+      "description": "인도적 기술 센터의 공동 설립자는 사회적 미디어를 왜곡시킨 동일한 인센티브가 현재 AI를 형성하고 있다고 주장하며, 이로 인해 이해관계가 훨씬 커지고 있다고 강조합니다."
+    },
+    "30307": {
+      "title": "[GSS 2026] “완벽한 차단은 불가능…AI 시대 보안 재편 시급”",
+      "original_title": "",
+      "description": "인공지능(AI) 확산으로 기업 보안 전략이 차단 중심에서 레질리언스와 AI 기반 방어 체계로 이동하고 있다는 진단이 나왔다. 생성형 AI와 자동화 공격으로 침투·유출 속도가 빨라지면서 핵심 서비스 유지와 신속 대응 역량이 중요해졌다는 것이다. '글로벌 시큐리티 심포지엄(GSS) 2026'에서는 레질리언스 설계와 AI 기반 방어 체계 전환 방안이 논의됐다. "
+    },
+    "30309": {
+      "title": "[GSS 2026] 나병준 한국IBM 실장 “AI 보안 위협, 신뢰 가능한 자동화로 대응해야”",
+      "original_title": "",
+      "description": "나병준 한국IBM 시큐리티 실장은 9일 서울 삼성동 웨스틴 서울 파르나스 호텔에서 열린 '글로벌 시큐리티 심포지엄(GSS) 2026'에서 인공지능(AI) 시대에는 사람 중심의 수동 대응을 넘어 신뢰 가능한 자동화 체계를 구축해야 한다고 조언했다. 나 실장은 “AI 기반 탐색은 보안팀이 처리해야 하는 업무의 양과 속도, 복잡성을 근본적으로 변화시키고 있다”며"
+    },
+    "30559": {
+      "title": "앤트로픽 연구, AI가 보안 패치를 이용해 익스플로잇을 구축하는 데 주가 아닌 시간이 필요함을 보여줘",
+      "original_title": "Anthropic study shows AI needs hours, not weeks, to build exploits from security patches",
+      "description": "앤트로픽의 보안 팀은 Mythos Preview AI 모델이 파이어폭스와 윈도우 커널의 보안 패치를 몇 시간 만에 실제 익스플로잇으로 변환할 수 있음을 발견했습니다. 이는 수천 달러의 비용에 전문 지식 없이도 가능했습니다."
+    },
+    "30560": {
+      "title": "오픈AI, 최대 데이터 센터 원하며, 엔비디아가 비용을 지원할 것",
+      "original_title": "OpenAI wants its biggest data center yet, and Nvidia would back the bill",
+      "description": "오픈AI는 엔비디아의 재정 지원을 받을 수 있는 10기가와트 규모의 데이터 센터 임대를 협상 중이라고 합니다. 이는 오하이오에서 계획된 데이터 센터입니다."
+    },
+    "30613": {
+      "title": "트럼프, 정부가 A.I. 기업의 일부를 가져가야 한다고 언급",
+      "original_title": "Trump Muses About Government Taking a Piece of A.I. Companies",
+      "description": "트럼프 대통령은 워싱턴에서 점점 뜨거워지고 있는 주제에 대해 언급했습니다. 평균 미국인이 기술 산업의 A.I.로 인한 흑자를 어떻게 나눌 수 있을지를 고민하고 있습니다."
+    },
+    "30636": {
+      "title": "AI와 생산성의 역설",
+      "original_title": "AI and the productivity paradox",
+      "description": "일상적인 시간 절약이 조직의 기능을 자동으로 개선하지 않으며, 직원들은 많은 부수적인 작업을 정리해야 합니다."
+    },
+    "30640": {
+      "title": "AI 법안이 도래하고 있다. 기업들은 토큰이 공짜가 아님을 배우고 있다",
+      "original_title": "The AI bill is coming due. Businesses are learning tokens aren’t free",
+      "description": "기업들은 직원들에게 AI 도구를 신속하게 제공했습니다. 이제 예상치 못한 사용 비용이 발생하면서 그 모든 프롬프트의 실제 가치를 묻고 있습니다."
+    },
+    "30647": {
+      "title": "앤트로픽, 정부가 위험한 AI 배치 차단 권한을 가져야 한다고 주장",
+      "original_title": "Anthropic wants governments to have the power to block dangerous AI deployments",
+      "description": "앤트로픽은 위험한 AI 배치를 차단할 수 있는 법적 권한을 정부에게 요구하는 두 가지 정책 프레임워크를 발표했다. 이 프레임워크는 노동 시장을 변화시키는 AI에 대비한 경제적 안전망도 포함하고 있다."
+    },
+    "30651": {
+      "title": "아마존, AI 지출로 2250억 달러 이상으로 총 부채 증가, 175억 달러의 신규 부채 체결",
+      "original_title": "Amazon takes on $17.5 billion in new debt as AI spending pushes total borrowing past $225 billion",
+      "description": "아마존은 시티그룹이 주도하는 175억 달러 규모의 만기연기형 대출을 합의하였습니다. 이는 AI 인프라 구축을 위한 자금 조달을 위한 차입 행렬의 일환입니다. 이 자금은 9월 말까지 사용할 수 있으며, 각 인출은 3년의 상환 기간을 가집니다."
+    },
+    "30657": {
+      "title": "\"AI가 모든 직업을 없애고 있는 것은 아니다\": LinkedIn CEO, 영국 채용 감소에 대한 논의",
+      "original_title": "‘AI is not killing all these jobs’: LinkedIn boss on UK hiring slump",
+      "description": "런던의 채용은 2019년 1월 대비 32% 감소했으며, 이는 LinkedIn이 추적하는 다른 지역보다 더 큰 하락폭입니다. 금리가 높아지고 기업들이 비용 절감을 추진하면서 런던의 노동 시장을 지배하는 기업들에 부담이 되고 있습니다. 영국 전역에서 채용은 팬데믹 이전 수준보다 24% 느려졌습니다."
+    },
+    "30660": {
+      "title": "\"AI가 루틴 작업을 자동화해 젊은 근로자들이 더 빨리 성숙할 것\" - 토마 브라보, 청년 실업 위기 속에서",
+      "original_title": "AI will help young workers 'mature' faster by automating grunt work, Thoma Bravo says, amid youth job crisis",
+      "description": "\"우리의 동료들을 보면, 그들은 예전보다 모델이나 유사 비교를 수행하는 데 훨씬 적은 시간을 보내고 있습니다.\"라고 Thoma Bravo의 창립자 올랜도 브라보가 CNBC와의 인터뷰에서 밝혔습니다."
+    },
+    "30763": {
+      "title": "글로벌 AI 거래, 닷컴 붐 때를 떠올리게 하는 신호가 보인다고 분석가들이 경고",
+      "original_title": "Global AI trade flashing signals reminiscent of the dotcom bust, analysts warn",
+      "description": "글로벌 인공지능 거래는 과거 시장 정점과 유사한 신호를 보이고 있으며, 승자들은 더 넓은 시장을 크게 초과하고 있다. 또 여러 대형 기업 공개(IPO)가 준비 중인 상황이다. 고평가 된 주식과 저평가 주식 간의 격차가 극단에 이르렀다."
+    },
+    "30851": {
+      "title": "AI 법안이 시행될 준비가 되었다. 기업들은 토큰이 무료가 아님을 배우고 있다",
+      "original_title": "The AI bill is coming due. Businesses are learning tokens aren’t free",
+      "description": "기업들은 직원들에게 AI 도구를 제공하기 위해 급히 움직였습니다. 이제 예상치 못한 사용 비용이 그들이 모든 프롬프트의 실제 가치를 다시 생각하게 만들고 있습니다."
+    },
+    "31069": {
+      "title": "AI 비용 청구서가 도래하고 있다. 기업들은 토큰이 무료가 아님을 배우고 있다",
+      "original_title": "The AI bill is coming due. Businesses are learning tokens aren’t free",
+      "description": "기업들은 AI 도구를 직원들에게 신속히 배포했습니다. 이제 예기치 않은 사용 비용이 발생하면서 그들은 이러한 프롬프트가 실제로 얼마나 가치가 있는지를 질문하고 있습니다."
+    },
+    "31114": {
+      "title": "구글, 미국서 AI 구독료 38% 전격 인하…“B2C 가격 전쟁 신호탄”",
+      "original_title": "",
+      "description": "구글이 개인용 AI 구독 서비스 가격을 대폭 인하하며 미국 소비자 시장에서 본격적인 AI 가격 경쟁에 불을 지폈다. 구글은 8일(현지시간) 보급형 AI 구독 서비스인 ‘구글 AI 플러스’의 미국 월 이용료를 기존 7.99달러(약 1만2100원)에서 4.99달러(약 7600원)로 38% 인하한다고 발표했다. 타 지역 확대 여부는 언급하지 않았다.동시에 요금제"
+    },
+    "31273": {
+      "title": "AI 비용 청구서가 다가오고 있다. 기업들이 토큰이 공짜가 아님을 배우고 있다",
+      "original_title": "The AI bill is coming due. Businesses are learning tokens aren’t free",
+      "description": "기업들은 직원들에게 AI 도구를 빠르게 제공했습니다. 그러나 예상치 못한 사용 비용이 발생하면서 그들은 모든 프롬프트가 실제로 어떤 가치를 지니는지에 대해 물어보고 있습니다."
+    },
+    "31318": {
+      "title": "美 정부, 앤트로픽 최고 성능 AI 사용 전격 중단 명령…AI 수출통제 시대 본격 개막",
+      "original_title": "",
+      "description": "미국 정부가 앤트로픽(Anthropic)의 최상위 인공지능(AI) 모델인 '페이블 5(Fable 5)'와 '미토스 5(Mythos 5)'에 대해 사실상 사용 중단 명령을 내리면서 글로벌 AI 커뮤니티가 충격에 빠졌다.이번 조치는 반도체나 GPU 같은 하드웨어가 아니라 AI 모델 자체를 국가안보 자산으로 간주해 수출통제 대상으로 지정한 첫 사례라는 점에서 의"
+    },
+    "31453": {
+      "title": "AI 연구소가 AI 코딩에 크게 베팅하는 이유",
+      "original_title": "Why AI labs are betting big on AI coding",
+      "description": "OpenAI, Anthropic, Google과 같은 선도 기업들은 즉각적인 기업 소프트웨어 수익만 추구하는 것이 아니라, AI가 생성한 코드를 AGI 달성의 궁극적인 빠른 경로로 보고 있습니다."
+    },
+    "31455": {
+      "title": "AI 비용이 다가오고 있다. 기업들은 토큰이 공짜가 아니라는 것을 배워가고 있다",
+      "original_title": "The AI bill is coming due. Businesses are learning tokens aren’t free",
+      "description": "기업들은 직원들에게 AI 도구를 제공하기 위해 서두르다가, 뜻밖의 사용 비용이 발생하면서 이 모든 프롬프트의 실제 가치는 무엇인지 고민하게 하고 있습니다."
+    },
+    "31495": {
+      "title": "미국, 앤트로픽에 주요 AI 모델의 글로벌 접근 차단 요청: 그 의미는? - 알 자지라",
+      "original_title": "US asks Anthropic to block global access to top AI models: Why it matters - Al Jazeera",
+      "description": "미국 정부는 앤트로픽에게 주요 AI 모델의 글로벌 접근을 차단할 것을 요청했습니다. 이는 기술적 차단이 가져올 잠재적인 영향과 필요한 조치에 대한 논의를 촉발하고 있습니다."
+    },
+    "31544": {
+      "title": "전직 오픈AI CTO “생성형 AI로 일부 창작 일자리 사라질 수 있다”",
+      "original_title": "",
+      "description": "[디지털투데이 AI리포터] 전 오픈AI 최고기술책임자(CTO) 미라 무라티가 생성형 AI 확산으로 일부 창작 일자리가 사라질 수 있다고 말했다.13일(현지시간) IT매체 테크레이더에 따르면 무라티는 다트머스대 토론에서 생성형 AI 도구가 창작 분야의 진입장벽을 낮추고 노동시장에도 영향을 줄 수 있다고 밝혔다.무라티는 일부 창작 직무에 대해 애초에 없어도 됐"
+    },
+    "31780": {
+      "title": "로빈후드의 10% 해고 공지, AI 비난이 통하지 않음을 보여줘",
+      "original_title": "Robinhood’s note on 10% layoffs shows blaming AI isn’t cutting it",
+      "description": "많은 기술 산업 동료들이 AI의 필요성을 언급하며 수천 개의 일자리를 감축한 것과 달리, 로빈후드 CEO 블라드 테네프는 해고에 대한 공지에서 AI에 대한 언급을 하지 않아 눈길을 끌었습니다."
+    },
+    "31816": {
+      "title": "OpenAI는 지난해 340억 달러를 소진했다",
+      "original_title": "OpenAI burned through $34 billion last year",
+      "description": "OpenAI는 지난 한 해 동안 340억 달러를 지출했으며, 이는 이전 해보다 훨씬 많은 금액입니다. 이 기사는 'OpenAI는 지난해 340억 달러를 소진했다'는 제목으로 처음 게재되었습니다."
+    },
+    "31900": {
+      "title": "스페이스X, AI 코딩 스타트업 Cursor를 인수하며 가치가 아마존을 넘어",
+      "original_title": "SpaceX snaps up AI coding darling Cursor as valuation soars past Amazon",
+      "description": "일론 머스크의 스페이스X는 IPO 이후 급등하면서 아마존을 제치고 세계에서 다섯 번째로 큰 상장 기업이 되었습니다. 이 신생 기업은 AI 코딩 스타트업 Cursor를 600억 달러에 인수한다고 발표했습니다. 머스크의 로켓 및 AI 기업 주가는 프리 마켓 거래에서 8% 이상 상승했습니다."
+    },
+    "32002": {
+      "title": "크래프톤, '배그' AI 파트너 도입…'PUBG 엘라이' 베타 서비스 시작",
+      "original_title": "",
+      "description": "[디지털투데이 이호정 기자] 크래프톤이 인공지능(AI) 기술을 게임 플레이에 직접 융합하며 AI 파트너 시대를 본격적으로 연다.16일 업계에 따르면 크래프톤은 이달 17일부터 배틀그라운드에 AI 기술 '펍지 엘라이'를 적용한 신규 모드 '엘라이 듀오'를 베타 서비스로 공개한다.엘라이 듀오란 이용자가 AI 캐릭터인 '엘라(Ella)'와 2인 팀을 이뤄 사녹 "
+    },
+    "32004": {
+      "title": "스페이스X, 코딩 스타트업 커서 600억달러에 인수...앤트로픽·오픈AI 겨...",
+      "original_title": "",
+      "description": "스페이스X가 16일(현지시간) 인공지능(AI) 코딩 스타트업인 커서(Cursor)를 600억 달러에 인수한다고 발표했다 (자료사진, UPI=연합뉴스) 스페이스X가 인공지능(AI) 코딩 스타트업인 커서(Cursor)를 거액에 인수했다...."
+    },
+    "32005": {
+      "title": "이 대통령 \"AI 기술개발 결과물 공유하고 함께 성장해야\"",
+      "original_title": "",
+      "description": "주요 7개국(G7) 정상회의에 참석 중인 이재명 대통령은 17일 새벽(한국시간) \"인공지능(AI) 기술 발전에 따른... 그 사례로 한국국제협력단(KOICA·코이카)이 인도네시아에서 현지 스타트업을 지원하고, 100만 달러의 무상..."
+    },
+    "32009": {
+      "title": "세계 지도자들은 미국산 AI를 원하지만, 미국이 이를 끌어내릴 수 있는 상황은 원하지 않는다",
+      "original_title": "World leaders want American AI. They just don’t want America to be able to turn it off.",
+      "description": "프랑스 대통령 마크롱과 인도 총리 모디는 G7 정상회담에서 미국이 미국산 AI에 대한 접근을 갑자기 차단할 수 있다는 우려를 제기했습니다. 이 우려는 앤트로픽 블랙아웃 사건을 통해 더욱 현실로 다가왔습니다."
+    },
+    "32011": {
+      "title": "%의 미국인만이 AI가 사회에 긍정적인 영향을 미칠 것이라고 생각하다는 새로운 연구 결과",
+      "original_title": "Only 16 percent of Americans think AI will have a positive impact on society, a new study shows",
+      "description": "월스트리트에서는 AI를 좋아하지만, 일반 미국인들은 이 산업에 대해 훨씬 덜 낙관적이라는 새로운 Pew Research 보고서가 발표되었습니다."
+    },
+    "32044": {
+      "title": "엔비디아 연구, AI 코딩 에이전트를 통해 스스로 훈련하는 로봇",
+      "original_title": "Nvidia research shows robots that train themselves through AI coding agents",
+      "description": "엔비디아, 카네기 멜론 대학교, 캘리포니아 대학교 버클리 연구진이 AI 코딩 에이전트를 활용하여 로봇에게 현실 세계에서의 섬세한 그립을 가르치고 있습니다. 8대의 로봇이 어려운 작업에서 최대 99%의 성공률을 기록하고 있습니다."
+    },
+    "32046": {
+      "title": "하이퍼스케일러, 자금 흐름만으로 AI 구축 자금 조달 어려워질 수 있어",
+      "original_title": "Hyperscalers may soon be unable to fund their AI buildout from cash flow alone",
+      "description": "Epoch AI 분석에 따르면, 마이크로소프트, 아마존, 알파벳, 메타, 오라클은 AI 인프라 투자 지출을 연평균 70% 늘리고 있는 반면, 운영 현금 흐름은 23%만 증가하고 있습니다. 이러한 추세가 계속된다면, 2026년 3분기에는 지출이 현금 흐름을 초과할 수 있습니다."
+    },
+    "32130": {
+      "title": "G7 회의 종료 후, OpenAI와 Anthropic이 세계 정상들과 AI의 미래 논의",
+      "original_title": "As G7 wraps, OpenAI and Anthropic meet with world leaders to discuss the future of AI",
+      "description": "샘 알트만, 데미스 하사비스, 다리오 아모데이가 인공지능에 관한 논의에 트럼프 및 다른 지도자들과 참석하고 있습니다. 이 회의는 각국의 AI 정책에 중요한 영향을 미칠 것입니다."
+    },
+    "32136": {
+      "title": "올버즈, 신발 판매 후 스마터버드로 이름 변경, AI 인프라 회사로 전환 선언",
+      "original_title": "Allbirds sells its shoes, renames itself Smartbird, and says it is now an AI infrastructure company",
+      "description": "2021년 410억 달러 평가로 상장된 지속 가능한 신발 회사 올버즈가 공식적으로 스마터버드로 이름을 변경하고 AI 컴퓨팅으로의 전환을 이끌 새로운 CEO를 임명했습니다. 새로운 브랜드로의 전환은 50% 이상의 주가 상승을 이끌었습니다."
+    },
+    "32144": {
+      "title": "Allbirds, 이름 변경과 CEO 영입으로 AI 전환 지속, 주가 급등",
+      "original_title": "Allbirds continues AI pivot with name change and CEO hire, sending stock soaring",
+      "description": "Allbirds는 4월에 NewBird AI로 이름을 변경하며 AI 컴퓨팅 인프라를 위한 신발 교환을 선언했습니다."
+    },
+    "32145": {
+      "title": "Anthropic, 규제를 요청했지만 워싱턴은 훨씬 더 강하게 나섰다",
+      "original_title": "Anthropic asked for regulation. Washington went much further",
+      "description": "Anthropic은 오랫동안 AI 규제를 지지해 왔지만, 트럼프 행정부는 이 AI 기업에 대해 특히 강하게 행동하고 있습니다."
+    },
+    "32148": {
+      "title": "G7, AI 책임자들에게 신뢰할 수 있는 파트너십 제안 및 선진 모델 공유를 위한 노력",
+      "original_title": "G7 pitches trusted partnership to AI chiefs in a bid for frontier model sharing",
+      "description": "G7 회원국들은 인공지능 책임자들에게 신뢰할 수 있는 파트너십을 구축하자는 제안을 하였고, 이를 통해 선진 모델을 공유하려는 의도를 드러냈습니다."
+    },
+    "32152": {
+      "title": "스페이스X, 시장 가치에서 아마존을 초월하다",
+      "original_title": "SpaceX soars above Amazon in market cap",
+      "description": "데이터: 팩트셋 ; 차트: 매트 필립스/엑시오스. 스페이스X는 화요일에 4.8% 상승하며 일론 머스크의 우주 발사 및 위성 서비스/AI/소셜 미디어 복합 기업이 아마존의 시장 가치를 초과하게 되었습니다. 단 이틀 간의 거래로 약 5370억 달러가 추가되었습니다."
+    },
+    "32222": {
+      "title": "시마AI, 업계 최초 피지컬 AI용 에이전틱 개발 플랫폼 ‘Palette Neat’ 출시",
+      "original_title": "",
+      "description": "피지컬 인공지능(Physical AI) 선도 기업 시마AI(SiMa ai)는 피지컬 AI를 위한 업계 최초 에이전틱(Agentic) 개발 플랫폼 ‘팔레트 니트(Palette Neat)’를 17일 출시했다. 이는 복잡한 피지컬 AI 애플리케이션 개발 기간을 기존 수개월에서 수일 수준으로 단축한다.Palette Neat는 피지컬 AI 구현에 특화한 오픈소스 통"
+    },
+    "32227": {
+      "title": "“AI와 함께 만드는 더 나은 내일”…KT그룹 희망나눔재단, ‘K-AI 콘텐츠 공모전’ 개최",
+      "original_title": "",
+      "description": "KT그룹 희망나눔재단(이사장 임종택)이 과학기술정보통신부의 ‘전국민 인공지능(AI) 경진대회’와 연계해 ‘2026 K-AI 콘텐츠 공모전’을 개최한다고 17일 밝혔다.이번 공모전은 ‘모두를 위한 AI, 함께 만드는 더 나은 내일’을 슬로건으로, 올바른 AI 활용 문화를 조성하고 사회문제를 해결하는 AI 활용 아이디어를 발굴하기 위해 기획됐다. 특히 올해는 "
+    },
+    "32361": {
+      "title": "트럼프, 미국의 가장 유망한 AI 모델들을 계속 차단하고 있다",
+      "original_title": "Trump keeps kneecapping the U.S.’s most promising AI models",
+      "description": "지난주 트럼프 행정부의 갑작스러운 90분 ultimatum이 앤트로픽이 세계에서 가장 강력한 모델에 대한 접근을 차단하게 만들었습니다."
+    },
+    "32376": {
+      "title": "아마존, AI 데이터 센터 확장을 비판한 엔지니어 조사",
+      "original_title": "Amazon investigating engineers who criticized AI data center expansion",
+      "description": "아마존의 다섯 명의 직원은 시애틀 시의회 회의에서 데이터 센터 신규 건설 일시 중지에 대한 의견을 요청하는 자리에 증언했습니다. 이들은 AI 데이터 센터 확장에 대한 비판적 입장을 밝혔습니다."
+    },
+    "32383": {
+      "title": "골드만의 수석 이코노미스트, 이란 전쟁으로 세계 전망이 어두워진 가운데 AI의 성장 영향에 대한 긍정적인 전망",
+      "original_title": "Goldman's chief economist optimistic on AI impact on growth as Iran war dims global outlook",
+      "description": ""
+    },
+    "32384": {
+      "title": "Zayed 소개, 세계에 UAE의 메시지를 전파할 AI 생성 정부 대변인",
+      "original_title": "Meet Zayed, the AI-generated UAE government spokesman set to spread country's message around the world",
+      "description": ""
+    },
+    "32396": {
+      "title": "AI 시대에 유럽에서 신뢰 구축하기",
+      "original_title": "Building trust in Europe in the AI era",
+      "description": ""
+    },
+    "32477": {
+      "title": "얀 르쿤 “일론 머스크 xAI는 실패…오픈AI·앤트로픽과 경쟁 어렵다”",
+      "original_title": "",
+      "description": "[디지털투데이 AI리포터] 얀 르쿤 AMI 랩스 창업자가 일론 머스크의 xAI를 실패라고 평가하며, AI 업계 전반에 큰 거품 붕괴가 올 수 있다고 경고했다.18일(현지시간) 경제매체 CNBC에 따르면 르쿤은 xAI가 오픈AI와 앤트로픽이 벌이는 최전선 AI 경쟁에서 버티기 어렵다고 밝혔다.르쿤은 xAI의 핵심 문제로 창업팀 이탈을 꼽았다. 그는 창업팀이 "
+    },
+    "32487": {
+      "title": "과기정통부-앤트로픽, 글로벌 AI 안전‧보안 동맹 전면 추진",
+      "original_title": "",
+      "description": "담당: 인공지능전략팀, 인공지능안전신뢰정책과, 정보보호산업과"
+    },
+    "32489": {
+      "title": "미국이 앤트로픽의 파블 5 출시를 금지했지만, 숫자는 신경 쓰지 않는 듯",
+      "original_title": "The US banned Anthropic’s Fable 5 release, but the numbers don’t seem to care",
+      "description": "지난 주가 끝나갈 무렵, 미국 정부는 앤트로픽에게 두 개의 새로운 모델인 파블 5와 미토스 5를 철회하라고 지시했습니다. 이는 아마존 연구자들이 파블 5의 보호 장치를 우회할 수 있는 방법을 발견했다는 이유로 국가 안보 우려에서 비롯된 것입니다."
+    },
+    "32522": {
+      "title": "노르웨이, 아이들의 기본 학습 능력 보호를 위해 초등학교에서 생성적 AI 도구 금지",
+      "original_title": "Norway bans generative AI tools in elementary schools to protect kids' basic learning skills",
+      "description": "노르웨이는 8월 말부터 초등학교에서 생성적 AI 도구를 금지합니다. 1학년부터 7학년까지의 학생들은 AI를 사용하지 못하고, 중학교에서는 감독하에만 사용할 수 있습니다. 총리는 아이들이 먼저 읽고 쓰고 수학을 배워야 한다고 강조했습니다."
+    },
+    "32525": {
+      "title": "AI 챗봇으로 뉴스를 얻는 사람이 늘어났지만 신뢰도는 낮은 상태",
+      "original_title": "More people get news from AI chatbots, but trust remains low",
+      "description": "로이터 연구소의 디지털 뉴스 보고서 2026에 따르면, 전 세계의 10%가 매주 AI 챗봇을 통해 뉴스를 확인하고 있으며, 이는 작년의 7%에서 증가한 수치입니다. 하지만 원본 출처를 클릭하는 비율은 단 4%에 불과합니다."
+    },
+    "32528": {
+      "title": "구글, AI 생성 검색 개요 내용에 대한 직접적인 책임을 지게 한 판결에 항소",
+      "original_title": "Google appeals ruling that made it directly liable for AI-generated search overview content",
+      "description": "구글은 독일 뮌헨 지역 법원의 판결에 항소하고 있습니다. 이 판결에 따르면 구글은 부정확한 AI 검색 결과에 대해 직접적인 책임이 있다고 판단되었습니다. AI는 두 개의 뮌헨 기반 출판사와 사기 계획을 잘못 연결했지만, 구글은 이를 \"사소한 오류\"라고 주장하고 있습니다."
+    },
+    "32607": {
+      "title": "규제 당국이 트럼프의 AI 데이터 센터 전력망 연결 계획을 지지하다",
+      "original_title": "Regulators back Trump’s plan to power AI data centers faster with grid connections",
+      "description": "FERC 위원들은 6개의 지역 전력망 운영자에게 AI 데이터 센터와 기타 대규모 전력 소비자들과 협력하도록 지시하는 데 만장일치로 투표했다."
+    },
+    "32613": {
+      "title": "노르웨이가 초등학교에서 생성적 AI 사용을 금지하기 시작한다",
+      "original_title": "Norway is banning generative AI in elementary schools starting this autumn",
+      "description": "노르웨이는 오는 8월 말 새로운 학기부터 초등학생의 생성적 AI 도구 사용을 금지한다고 요나스 가르 스퇴르 총리가 금요일 발표했다. 이 금지는 1학년부터 7학년까지의 학생들에게 적용되며, 6세에서 13세까지 포함된다."
+    },
+    "32614": {
+      "title": "더 큰 모델에 대한 베팅: 에테르 AI가 인과관계 AI를 위해 2000만 달러를 유치하다",
+      "original_title": "The bet against bigger models: Aether AI lands $20mn for causal AI",
+      "description": "대부분의 AI 산업은 더 큰 모델이 더 스마트한 기계를 의미한다고 믿고 있다. 그러나 새로운 스타트업은 반대의 베팅을 하고 있다. 샌디에고에 본사를 둔 에테르 AI는 전혀 다른 아이디어를 쫓기 위해 2000만 달러의 초기 자금을 확보했다. 창립자는 다음 도약이 규모에서 오는 것이 아니라는 생각을 가지고 있다."
+    },
+    "32657": {
+      "title": "바렛 조프, 오픈AI에서 5개월 만에 다시 퇴사",
+      "original_title": "Barret Zoph is out at OpenAI again after just five months",
+      "description": "바렛 조프가 오픈AI에서 5개월 만에 퇴사했습니다. 이는 회사 내의 인사 변동과 관련된 또 다른 변화로 주목받고 있습니다."
+    },
+    "32671": {
+      "title": "국내 챗GPT 무료·Go 요금제에 ‘광고’ 도입",
+      "original_title": "",
+      "description": "오픈AI는 19일부터 '챗GPT 광고' 파일럿을 국내로 확대했다고 밝혔다.챗GPT 광고는 미국, 영국, 캐나다, 호주, 뉴질랜드에서 먼저 적용됐다. 이를 통해 초기 파일럿 시장부터 기업들의 높은 관심을 확인했다고 설명했다.광고는 챗GPT 무료와 고(Go) 요금제를 이용하는 성인 사용자를 대상으로 노출된다. 챗GPT 플러스, 프로, 비즈니스, 엔터프라이즈, "
+    },
+    "32694": {
+      "title": "AI 환각 줄이고 정확도 78% 높였다...KAIST, 차세대 데이터베이스 기술 개발",
+      "original_title": "",
+      "description": "기업의 방대한 데이터를 읽고 이해하는 인공지능(AI) 에이전트의 가장 큰 약점은 ‘환각(Hallucination)'이다. KAIST 연구진이 문서와 데이터, 개체 간 관계를 한 번에 이해할 수 있는 차세대 데이터베이스 기술을 개발해 AI 답변 정확도를 최대 78% 높이고 처리 속도는 최대 20배 향상시키며 기업용 AI 상용화의 핵심 난제 해결에 나섰다.KA"
+    },
+    "32698": {
+      "title": "인공지능으로 변모한 전쟁…미국-이란 갈등에 AI 전면 등장",
+      "original_title": "",
+      "description": "최근 몇 달간 이어진 미국과 이란 간의 무력 충돌에서는 인공지능(AI)이 교전의 전 과정을 주도하는 모습이 나타났다. 이는 AI가 전쟁의 양상을 크게 변화시키고 있는 현대 전장의 가장 최신 사례로 주목받고 있다. 미국과..."
+    },
+    "32699": {
+      "title": "[AI세계속으로]미국의 AI 통제에 국가 간 협력 움직임…\"비협력은 위험...",
+      "original_title": "",
+      "description": "미국 정부가 앤스로픽의 최신 인공지능(AI) 모델 미토스5·페이블5의 외국인 접근을 차단하는 수출 통제 조치를 내린 가운데, 글로벌 AI 기업 대표들이 국가 간 협력, 연대의 필요성을 강조했다. 20일 외신 보도를..."
+    },
+    "32808": {
+      "title": "앤드로픽, AI 수출 금지에 대해 이야기 속으로 들어갔나?",
+      "original_title": "Did Anthropic talk its way into an AI export ban?",
+      "description": "FT 분석에 따르면, 올해 앤드로픽은 경쟁사인 오픈AI보다 고급 AI의 위험성에 대해 경고한 내용이 훨씬 더 많았습니다."
+    },
+    "32818": {
+      "title": "트럼프가 미국의 가장 유망한 AI 모델을 계속적으로 제약하고 있다",
+      "original_title": "Trump keeps kneecapping the U.S.’s most promising AI models",
+      "description": "지난주 트럼프 행정부의 갑작스러운 90분짜리 최후통첩은 앤트로픽이 세계에서 가장 강력한 모델에 대한 접근을 차단하도록 이끌었습니다."
+    },
+    "32823": {
+      "title": "하버드 비즈니스 리뷰, AI ‘작업 노폐물’이 기업을 내부에서 부패시키고 있다고 경고하다",
+      "original_title": "Harvard Business Review warns AI ‘workslop’ is rotting companies from the inside",
+      "description": "생성 AI를 가장 강력하게 도입한 기업들이 기술이 예방할 것으로 예상했던 문제와 맞닥뜨리고 있습니다. 하버드 비즈니스 리뷰의 두 가지 기사에서는 AI가 생성한 저질 산출물이 정보의 질을 저하시킨다는 피드백 루프에 대해 설명합니다."
+    },
+    "32826": {
+      "title": "AI 구축 확장이 기술 투자자들에게 채권 시장을 주목할 새로운 이유를 제공하다",
+      "original_title": "AI buildout gives tech investors new reasons to watch bond market",
+      "description": "기술 대기업들이 야심찬 데이터 센터 구축을 위해 현금 보유고를 줄이고 부채를 늘리고 있습니다. 이러한 역동성은 투자자들이 금리에 주목하게 만들고 있습니다."
+    },
+    "32865": {
+      "title": "중국, 내년 이전에 Fable 5급 AI 모델 개발 예정",
+      "original_title": "China will have a Fable 5-class AI model before next year",
+      "description": "중국은 내년까지 Fable 5급 AI 모델을 개발할 계획입니다. 이 모델은 AI 기술의 발전에 중요한 이정표가 될 것으로 보입니다."
+    },
+    "32903": {
+      "title": "네이버 검색 80% 찍었다…AI탭 출시 후 점유율 '껑충'",
+      "original_title": "",
+      "description": "52%포인트 상승 베타 한달 만에 MAU 300만명…이달 말 정식 출시 예정 네이버 검색 점유율이 인공지능(AI)... 네이버 관계자는 \"검색의 본질인 최신성과 신뢰성을 강화하는 동시에 탐색에서 구매, 예약, 방문까지..."
+    },
+    "32904": {
+      "title": "외로움 달래는 AI에 지갑 열었다…'감성 AI' 돌풍",
+      "original_title": "",
+      "description": "챗GPT 더블 스코어로 제친 '제타'…일본 시장도 장악 이 시장의 중심에는 국내 스타트업 스캐터랩이 출시한 채팅 앱 '제타(Zeta)'가 있다. 제타는 이용자가 원하는 AI 캐릭터를 직접 만들어 대화하는 플랫폼이다. 마치..."
+    },
+    "32906": {
+      "title": "트럼프 행정부가 앤트로픽을 단속할 때 누가 혜택을 볼까?",
+      "original_title": "When the Trump administration cracks down on Anthropic, who benefits?",
+      "description": "새 에피소드인 Equity에서는 행정부의 최신 앤트로픽에 대한 조치를 촉발한 실제 원인과 이러한 조치가 AI 생태계에 미칠 수 있는 영향에 대해 논의했습니다."
+    },
+    "32938": {
+      "title": "AI가 학생 성적을 부풀리고 있으며, 그 효과는 더 나은 학습이 아닌 아웃소싱 작업을 시사하다",
+      "original_title": "AI is inflating student grades, and the effect points to outsourced work, not better learning",
+      "description": "UC 버클리의 50만개 이상의 성적에 대한 연구에 따르면, 작문 및 코딩 중심의 과목에서 성적이 상승한 것으로 나타났습니다. 이는 AI가 학생들의 작업을 대체하고 있다는 신호로, 학습 개선보다는 아웃소싱을 반영합니다."
+    },
+    "32985": {
+      "title": "노르웨이, 초등학교에서 AI 거의 금지 - 로이터",
+      "original_title": "Norway imposes near ban on AI in elementary school - Reuters",
+      "description": "노르웨이가 초등학교에서 AI 사용을 거의 금지하는 조치를 취했습니다. 이는 교육환경에 대한 안전을 고려한 결정입니다."
+    },
+    "33021": {
+      "title": "데이팅 속 AI 의존도가 불편하다는 새로운 조사 결과",
+      "original_title": "Daters say AI dependence gives them the ick",
+      "description": "최근 Hily의 조사에 따르면, Z세대와 밀레니얼 세대의 데이팅 이용자들은 개인적인 결정, 관계 조언 또는 결혼 서약을 위해 AI를 사용하는 사람들에게 경계심을 가지고 있는 것으로 나타났습니다."
+    },
+    "33025": {
+      "title": "트럼프가 미국의 가장 유망한 AI 모델들을 계속 제약하고 있다",
+      "original_title": "Trump keeps kneecapping the U.S.’s most promising AI models",
+      "description": "지난 주 트럼프 행정부의 갑작스러운 90분 최후 통첩으로 인해 앤트로픽은 세계에서 가장 강력한 모델에 대한 접근을 차단하게 되었습니다."
+    },
+    "33028": {
+      "title": "연구에 따르면 새로운 사용자에게 보여지는 TikTok 비디오의 거의 60%가 AI 생성 쓰레기이다",
+      "original_title": "Nearly 60% of TikTok videos shown to new users are AI slop, study finds",
+      "description": "TikTok이 새 계정에 제공하는 비디오 중 거의 6개 중 10개가 AI에 의해 생성된 쓰레기 콘텐츠라는 것이 비디오 편집 플랫폼인 카프윙의 보고서에 의해 밝혀졌습니다."
+    },
+    "33029": {
+      "title": "아마존, 인간 개입 AI 감독이 실패하고 있다고 주장하며 주의 부족을 지적하다",
+      "original_title": "Amazon says human-in-the-loop AI oversight is failing because humans stop paying attention",
+      "description": "아마존 보안팀은 AI 거버넌스에서 가장 널리 받아들여지는 원칙 중 하나에 반대하고 있습니다. 아마존 보안의 VP인 에릭 브랜드와인은 인간이 개입하는 감독이 기업들이 생각하는 것과 같은 금본위 표준이 아니라는 주장을 했습니다."
+    },
+    "33039": {
+      "title": "새로운 세계질서: AI CEO들이 국가 수장으로",
+      "original_title": "New global order: AI CEOs as heads of nation-states",
+      "description": "이는 한때 상상할 수 없던 지정학적 질서를 드러내는 역사적이고도 충격적인 장면이었습니다. 세계의 가장 강력한 국가 수장들이 이번 주 프랑스 알프스에서 열린 연례 G7 정상 회담에 모였으며, 미국의 주요 AI 기업의 CEO들이 국가 수장처럼 대우받았습니다."
+    },
+    "33076": {
+      "title": "비욘드허니컴, 산업용보다 20배 싼 액추에이터 내년 양산",
+      "original_title": "",
+      "description": "인공지능(AI) 조리 로봇 스타트업 비욘드허니컴이 산업용 로봇 액추에이터보다 20배 저렴한 10만원대 로봇 구동 모듈을 내년 상반기 양산한다. 센서, AI, 액추에이터를 내재화해 상업용 조리 로봇 원가를 낮추고 피지컬 AI 플랫폼 확산을 추진한다. 정현기 비욘드허니컴 대표는 21일 “내년 상반기 액추에이터 초도 생산을 계획하고 있다”며 “초기에는 수백대에서"
+    },
+    "33079": {
+      "title": "'소상공인 AI 도우미' 출시한다…연 95만건 상담 대응",
+      "original_title": "",
+      "description": "소상공인시장진흥공단이 '소상공인 인공지능(AI) 도우미' 구축에 나선다. 단순 상담을 넘어 소상공인 지원 정보를 통합 제공하는 디지털 창구 역할을 맡게 될 전망이다. '소상공인 AI 도우미'는 정책자금과 지원사업, 상권 정보, 법률·세무 정보 등을 한 번에 제공하는 생성형 AI 기반 서비스다. 그동안 소상공인이 지원사업은 소상공인24에서, 상권 분석은 소상"
+    },
+    "33083": {
+      "title": "韓 AI 네트워크 표준 개발 시동...“정부 투자 확대 필요”",
+      "original_title": "",
+      "description": "우리나라가 2031년 완료 목표로 인공지능(AI) 네트워크 표준 개발을 추진한다. 초기 단계 표준 시장에서 글로벌 주도권 확보는 물론 차세대 네트워크 시장 선점까지 노리겠다는 전략이다. 기술·시장 주도권을 확보할 자산이라는 점에서 정부의 적극적인 투자와 기업 참여가 시급하다는 목소리가 높다. 21일 과학기술정보통신부와 한국정보통신기술협회(TTA)는 AI 네"
+    },
+    "33100": {
+      "title": "[더벨][Sanction Radar] 앤트로픽, 한국 공략 개시 '수출통제 해소 낙관'",
+      "original_title": "",
+      "description": "문제는 미국 정부의 인공지능(AI) 수출통제다. 앤트로픽의 최신 AI 모델 '미토스5'와 '페이블5'가 타깃이다. 해당 사안 해결이 국내 시장 공략의 전제조건으로 꼽힌다. 앤트로픽은 17일 서울 여의도 콘래드 호텔에서 서울..."
+    },
+    "33102": {
+      "title": "KB·신한·하나·농협 'AI 인재 확보'에 올인",
+      "original_title": "",
+      "description": "라이센스뉴스 = 김상미 기자 | 국내 금융권이 인공지능(AI)을 중심으로 한 대전환기에 접어들고 있다.... 함께 'AI Connect 2026'을 개최했다. 이번 행사에는 KB금융그룹 임직원 약 200명이 참석해 최신 AI 기술 동향, AI..."
+    },
+    "33139": {
+      "title": "삼성, 한국 직원들에게 ChatGPT Enterprise 및 Codex 배포",
+      "original_title": "Samsung rolls out ChatGPT Enterprise and Codex to employees in South Korea",
+      "description": "삼성전자가 한국의 모든 직원과 전 세계 Device eXperience(DX) 부문 직원들에게 ChatGPT Enterprise와 Codex를 배포하고 있습니다. 이 기사 \"삼성, 한국 직원들에게 ChatGPT Enterprise 및 Codex 배포\"는 The Decoder에서 처음 보도되었습니다."
+    },
+    "33221": {
+      "title": "규제 당국, 트럼프의 AI 데이터 센터의 전력망 연결 가속화 계획을 지지하다",
+      "original_title": "Regulators back Trump’s plan to power AI data centers faster with grid connections",
+      "description": "FERC 위원들은 여섯 개 지역 전력망 운영자들에게 AI 데이터 센터 및 기타 대규모 전력 사용자를 지원하도록 지시하는 데 만장일치로 투표했습니다."
+    },
+    "33287": {
+      "title": "앤트로픽, 'AI 수출 금지' 호재되나…美 정부 신뢰 회복은 과제",
+      "original_title": "",
+      "description": "앤트로픽의 최신 인공지능(AI) 모델 '페이블5'와 '미토스5'에 대한 미국 정부의 외국인 사용 금지 명령이 열흘째 지속되고 있다. 앤트로픽은 백악관에 기술진을 파견해 본격적인 수습에 나선 상태다. 이번 조치로 당장 서비스 차질은 불가피해졌지만, 업계 일각에서는 이번 규제가 오히려 앤트로픽에 호재가 될 수 있다는 역설적 관측을 내놓고 있다. 22일 AI업계"
+    },
+    "33298": {
+      "title": "이재용 AX 선언 13일만…삼성전자 임직원, 챗GPT 전사 활용",
+      "original_title": "",
+      "description": "삼성전자가 오픈AI의 ‘챗GPT 엔터프라이즈’와 ‘코덱스’를 도입한다. 국내 전 임직원과 DX부문 글로벌 임직원이 활용할 수 있도록 해 AI 기반 업무 혁신에 속도를 낸다.삼성전자는 오픈AI와의 계약에 따라 국내 전 임직원과 DX부문 글로벌 임직원에게 챗GPT 엔터프라이즈와 코덱스를 제공한다. 이번 계약은 오픈AI의 자사 엔터프라이즈 고객 사례 가운데 최대"
+    },
+    "33383": {
+      "title": "파이브 아이즈 정보 동맹, 최첨단 AI 모델이 공격적인 사이버 작전을 재편할 수 있다고 경고",
+      "original_title": "Five Eyes intelligence alliance says frontier AI models could reshape offensive cyber ops in months",
+      "description": "파이브 아이즈 정보기관은 정부와 기업을 붕괴시킬 수 있는 AI 모델이 몇 개월 내에 등장할 수 있다고 경고합니다. 이는 가디언에 의해 보도되었습니다."
+    },
+    "33446": {
+      "title": "인사 컨설턴트, AI 변호사를 사용하여 영국 법원 사건에서 승소",
+      "original_title": "HR consultant wins English court case using AI lawyer in apparent legal first",
+      "description": "Garfield AI가 제공한 자료를 바탕으로 변호를 한 변호사는 재판에서의 변호가 본질적으로 사람의 몫임을 강조했습니다. 인공지능 법률 회사가 AI 변호사를 이용해 사건에서 승리한 것은 최초의 사례로 여겨집니다."
+    },
+    "33461": {
+      "title": "사실과 허구 구분하기: AI와 일의 미래",
+      "original_title": "Separate fact from fiction: AI and the future of work",
+      "description": "리더와 직원들은 업무 흐름에 AI를 통합하는 최선의 방법을 배워야 합니다. AI가 어떻게 효과적으로 활용될 수 있는지를 이해하는 것이 중요합니다."
+    },
+    "33465": {
+      "title": "파블 5가 세상이 준비되지 않은 선을 넘었다",
+      "original_title": "Fable 5 crossed a line the world was not ready for",
+      "description": "앤트로픽의 차세대 모델의 후퇴는 최전선 AI가 기술적 약속에서 정치적 및 운영적 현실로 이동한 순간을 나타냅니다. 이 변화는 AI와 법, 사회의 새로운 관계를 만들어 가고 있습니다."
+    },
+    "33470": {
+      "title": "AI 메모리 위기가 2003년 표준 DDR2에 도달하며 가격이 60% 급등",
+      "original_title": "The AI memory crisis just hit DDR2, a standard from 2003, with 60% price hikes",
+      "description": "AI로 인한 메모리 부족이 여전히 생산 중인 가장 오래된 DRAM 표준인 DDR2에 이르렀습니다. 대만 시장 정보 회사인 트렌드포스에 따르면, DDR2 계약 가격이 2023년 2분기에 55%에서 60% 상승했으며, 3분기에 추가로 35%에서 40% 증가할 것으로 예측되고 있습니다."
+    },
+    "33480": {
+      "title": "캘리포니아 운전자들, 가격 인상을 위해 AI를 이용한 주유소에 소송",
+      "original_title": "California drivers sue gas stations for allegedly using AI to inflate prices",
+      "description": "BP와 7-Eleven을 포함한 기업들이 소비자에게 더 많은 돈을 빼내기 위해 가격을 조정한 혐의를 받고 있습니다. 캘리포니아의 운전자들은 이러한 주유소 운영자들을 대상으로 소송을 제기했습니다."
+    },
+    "33512": {
+      "title": "앤트로픽의 Mythos AI, 레드팀 테스트에서 거의 모든 NSA 시스템을 침해하다",
+      "original_title": "Anthropic's Mythos AI breached almost all NSA systems in a red-team tests",
+      "description": "앤트로픽의 Mythos AI가 사실상 모든 NSA 시스템을 해킹할 수 있는 가능성을 보여준 레드팀 테스트 결과가 공개되었습니다. 이는 보안 업계에 큰 충격을 주고 있습니다."
+    },
+    "33635": {
+      "title": "A.I. 회사가 뉴욕 아파트를 무료로 청소한 이유",
+      "original_title": "Why an AI company cleaned my New York City apartment for free",
+      "description": "한 인공지능 회사가 로봇을 훈련시키기 위해 무료 청소 서비스를 제공하며 방문하는 캠페인을 진행하고 있습니다. 이 로봇들은 언젠가 자신들을 대체할 것으로 기대하고 있습니다."
+    },
+    "33733": {
+      "title": "“AI 이용해 고유가 담합”…캘리포니아 기름값 너무 비싼 이유 있었다",
+      "original_title": "",
+      "description": "미국 캘리포니아주의 운전자들이 주요 주유소 운영사들이 인공지능(AI)을 이용해 휘발유 가격을 담합했다며 집단 소송을 제기했다. 22일(현지시간) 영국 가디언에 따르면 BP, 서클K, 마라톤, 세븐일레븐, 월마트, 알버트슨 등 대형 주유소 운영업체들이 AI 기반 가격 책정 시스템을 활용해 연료 가격을 담합한 혐의로 캘리포니아 소비자들의 소송 대상이 됐다. 소"
+    },
+    "33734": {
+      "title": "의사는 '천식' 오진… AI는 의사가 놓친 '숨은 심장 질환' 찾아냈다",
+      "original_title": "",
+      "description": "인공지능(AI) 프로그램이 의사가 발견하지 못한 미세한 신호를 찾아내 치명적인 심장 질환을 찾아내 눈길을 끈다. 해당 AI 프로그램은 향후 전 세계 의료진에게 무료로 배포될 예정이기 때문에, 향후 의료 현장의 진단 정확도를 크게 높일 것으로 기대된다. 22일(현지시간) 미국 뉴욕타임스(NYT)에 따르면 최근 국제학술지 '네이처 메디신(Nature Medic"
+    },
+    "33774": {
+      "title": "새 밥그릇은 누가 채우는가",
+      "original_title": "",
+      "description": "미국 캘리포니아의 휴머노이드 로봇 스타트업 Figure AI는 6월, 회사가 집계한 로봇 대수가 처음으로 인간 인력 수를 넘어섰다고 밝혔다. 로봇 약 740대에 인간 인력 약 660명. 이 숫자 자체는 노동 대체의 실적이라기보다..."
+    },
+    "33816": {
+      "title": "미국 앤트로픽 금지가 중국 AI의 가장 좋은 광고",
+      "original_title": "US Anthropic ban is best advert for Chinese AI",
+      "description": "홍콩에서 JPMorgan Chase와 Goldman Sachs에서 근무하는 은행원들은 미국의 선구적인 AI 기업인 앤트로픽의 모델 사용이 중단되었을 때 불만을 가졌을 것입니다. 골드만삭스와 JP모건 체이스는 각각 4월과 지난주에 이 조치를 취했습니다."
+    },
+    "33881": {
+      "title": "메타, 프라이버시 우려로 AI 훈련을 위한 직원 추적 중단",
+      "original_title": "Meta halts worker tracking for AI training due to privacy fears",
+      "description": "이 회사는 AI 훈련 데이터를 위해 직원들의 컴퓨터 사용을 추적하기 시작한 지 두 달 만에 이를 중단했습니다."
+    },
+    "33911": {
+      "title": "가짜 AI 에이전트 스킬이 모든 보안 스캐너를 통과하고 26,000명의 에이전트에 도달했다는 보고",
+      "original_title": "A fake AI agent skill passed every security scanner and reportedly reached 26,000 agents",
+      "description": "보안 회사 AIR는 가짜 AI 에이전트 스킬을 만들어 인기 있는 스킬 마켓플레이스를 통해 배포하고 인스타그램 광고로 홍보하여 약 26,000명의 에이전트에 도달했다고 주장합니다. 테스트한 모든 스킬 보안 스캐너는 해당 스킬을 안전하다고 표시했습니다."
+    },
+    "33912": {
+      "title": "오라클, 올해 21,000개의 일자리를 감원하며 AI를 명시적으로 탓하다",
+      "original_title": "Oracle cut 21,000 jobs this year and its SEC filing explicitly blames AI",
+      "description": "오라클의 글로벌 인력은 2026년 5월 31일 기준으로 141,000명의 정규직 직원으로 줄어들었으며, 이는 1년 전 162,000명에서 약 21,000명이 감소한 수치입니다. 회사의 연례 규제 제출서에는 \"운영 전반에 걸친 AI 기술의 도입과 배포가 이러한 결과를 초래했습니다\"라고 명확히 언급되어 있습니다."
+    },
+    "33974": {
+      "title": "“메모리로 번 돈, 반도체 생태계 육성 마중물 돼야” [연중기획-더 나...",
+      "original_title": "",
+      "description": "데이터를 저장하는 칩과 연산을 담당하는 그래픽처리장치(GPU)와 인공지능(AI) 가속기가 첨단 패키징으로 결합돼 전체 성능을 좌우한다. 실제로 삼성전자는 지난달 29일 12단 고대역폭메모리 HBM4E 샘플을 출하하면서 최신..."
+    },
+    "34107": {
+      "title": "스위스 연구, AI가 진입직 작업을 재편하면서 신입 채용 공고 감소",
+      "original_title": "Swiss study finds fewer job ads for career starters as AI reshapes entry-level work",
+      "description": "730만 개의 채용 광고에 대한 분석 결과, 생성 AI 이전의 해에 비해 신입 직무 채용 공고가 급격히 감소한 것으로 나타났습니다. 2025년 스위스를 대상으로 한 신입 채용 광고 수는 기존보다 약 1/3가량 줄어들었습니다."
+    },
+    "34213": {
+      "title": "AI는 엔지니어 직업을 없앨 것이라고 예상되었지만, 새로운 데이터는 이들이 가장 강력한 생존력을 가진 직업임을 시사합니다",
+      "original_title": "AI was supposed to kill engineering jobs, but new data suggests they’re the most resilient",
+      "description": "AI가 해고와 관련된 이야기를 지배하고 있지만, 실제로 엔지니어들은 새로운 채용의 더 큰 비중을 차지하고 있다는 SignalFire 데이터가 이를 보여줍니다."
+    },
+    "34256": {
+      "title": "고객 서비스 AI 에이전트를 도입한 기업의 70%가 60일 내에 ROI를 확인합니다",
+      "original_title": "70% of companies deploying customer service AI agents see ROI in 60 days",
+      "description": "결과 기반의 해결 가격 체계 덕분에 기업은 AI 에이전트가 인간의 개입 없이 문제를 autonomously 해결할 때만 비용을 지불합니다. 이는 고객 서비스 효율성을 높이는 데 큰 도움이 됩니다."
+    },
+    "34257": {
+      "title": "OpenAI와 브로드컴, LLM 최적화 인퍼런스 칩 공개",
+      "original_title": "OpenAI and Broadcom unveil LLM-optimized inference chip",
+      "description": "OpenAI와 브로드컴은 LLM 인퍼런스를 위한 맞춤형 AI 칩인 Jalapeño를 소개하며 성능, 효율성 및 AI 시스템의 확장을 개선하고자 합니다. 이는 AI 개발에 큰 변화를 가져올 것으로 기대됩니다."
+    },
+    "34296": {
+      "title": "BP, 마라톤, 세븐일레븐, 월마트, AI를 사용해 캘리포니아 주유소 가격을 인상한 혐의로 고소당하다",
+      "original_title": "BP, Marathon, 7-Eleven, Walmart sued for allegedly using AI to boost California gas prices - Reuters",
+      "description": "BP, 마라톤, 세븐일레븐, 월마트가 AI를 활용해 캘리포니아의 주유소 가격을 인상한 혐의로 고소당했습니다."
+    },
+    "34315": {
+      "title": "AI, 베수비우스 화산 폭발로 타버린 파피루스 두루마리 읽는데 도움",
+      "original_title": "AI helps read papyrus scroll burnt to crisp during Vesuvius eruption",
+      "description": "약 2,000년 전 베수비우스 화산 폭발로 타버린 고대 두루마리의 생존 부분이 AI의 도움으로 원래 형태로 복원되어 읽혔습니다. 그 속에 숨겨진 텍스트는 윤리, 예술, 인간 행동에 대한 스토아 철학을 논의하고 있습니다."
+    },
+    "34335": {
+      "title": "마이크론, AI 메모리 수요 증가로 매출이 4배 증가하며 총 이익률 81% 초과",
+      "original_title": "Micron’s revenue quadrupled as AI memory demand pushes gross margins above 81 percent",
+      "description": "마이크론 테크놀로지는 회계 연도 3분기 매출이 약 420억 달러로, 지난해 90억 달러를 넘는 수치에서 4배 증가하며 월가 예상치를 크게 웃도는 성과를 발표했습니다. 이 결과는 AI 메모리 호황을 가장 강력하게 누리고 있는 기업임을 확인시켜줍니다."
+    },
+    "34619": {
+      "title": "구글 AI 두뇌 유출 비상…'제미나이' 개발 중추 2명도 빠진다",
+      "original_title": "",
+      "description": "구글의 핵심 인공지능(AI) 인재가 경쟁사로 잇따라 유출되고 있다. 24일(현지시간) 블룸버그에 따르면 구글 AI 제미나이 개발에 중추적인 역할을 했던 구글의 고위 연구자 '조나스 애들러'와 '알렉산더 프리첼'이 앤트로픽으로 이직할 예정이다. 애들러는 AI 코딩 분야에서 일했고 프리첼은 AI 시스템의 학습 영역을 맡아왔다. 구글의 AI 두뇌 유출은 최근 연"
+    },
+    "34693": {
+      "title": "Grok AI, 이제 성인 콘텐츠와 관련된 트래픽이 절반 이상인 포르노 플랫폼으로 알려져",
+      "original_title": "Grok AI is reportedly a porn platform now, with over half its traffic tied to adult content",
+      "description": "두 명의 전 xAI 직원은 Grok의 트래픽의 절반 이상이 성인 콘텐츠와 관련 있다고 추정합니다. xAI는 이를 적극 활용하고 있으며 OpenAI, 앤트로픽, 구글은 성인 콘텐츠에 손을 대지 않고 있습니다."
+    },
+    "5009": {
+      "title": "앤트로픽, Pentagon의 군사 AI 규제 완화 요구 거부, 방위 생산법 위협에 직면",
+      "original_title": "Anthropic refuses Pentagon demand to loosen military AI restrictions, faces Defense Production Act threat",
+      "description": "앤트로픽은 자사의 AI가 자율 무기 및 감시에 사용되는 것을 허용하지 않겠다고 고수하고 있습니다. 펜타곤의 반응은 금요일까지 준수하라는 것이며, 그렇지 않으면 강제로 시행하겠다고 경고했습니다."
+    },
+    "5018": {
+      "title": "Liquid AI의 새로운 LFM2-24B-A2B 하이브리드 아키텍처, 현대 LLM의 확장 병목 현상을 해결하기 위해 주의력과 합성을 결합하다",
+      "original_title": "Liquid AI’s New LFM2-24B-A2B Hybrid Architecture Blends Attention with Convolutions to Solve the Scaling Bottlenecks of Modern LLMs",
+      "description": "생성 AI 경쟁은 오랫동안 '더 크면 더 좋다'는 게임이었습니다. 하지만 산업이 전력 소비와 메모리 병목 현자의 한계에 도달하면서 대화는 원시 파라미터 수에서 아키텍처 효율성으로 바뀌고 있습니다. Liquid AI 팀은 LFM2-24B-A의 출시로 이 변화를 선도하고 있습니다."
+    },
+    "5141": {
+      "title": "AI 인프라에 대한 대중의 반대가 커지고 있다",
+      "original_title": "The public opposition to AI infrastructure is heating up",
+      "description": "데이터 센터의 급증에 대한 대중의 반발은 새로운 건설 금지를 포함한 다양한 강력한 정책으로 이어지고 있습니다."
+    },
+    "6552": {
+      "title": "코난테크놀로지, 대법원 '재판지원 AI 시스템' 시범 운영",
+      "original_title": "",
+      "description": "코난테크놀로지(대표 김영섬)는 대법원의 ‘재판지원 AI 시스템’이 1단계 시범 운영에 돌입했다고 3일 밝혔다.이번 사업은 사법 서비스의 디지털 전환(DX)을 목표로 재판 업무의 효율성을 높이기 위해 추진됐다. 이용자의 질의 의도를 분석해 유사 판례와 관련 법령 등을 탐색, 원문 출처와 함께 답변을 제공하는 방식이다.이를 통해 판례·법령·학술 자료 조사에 소"
+    },
+    "6927": {
+      "title": "미국 군대는 여전히 클로드를 사용하고 있지만 방산 기술 고객들은 떠나고 있다",
+      "original_title": "The US military is still using Claude — but defense-tech clients are fleeing",
+      "description": "미국이 이란에 대한 공중 공격을 계속하는 가운데, 앤트로픽 모델이 많은 타겟 결정에 사용되고 있습니다."
+    },
+    "6935": {
+      "title": "운영 AI 격차 해소하기",
+      "original_title": "Bridging the operational AI gap",
+      "description": "AI의 변혁적 잠재력은 이미 잘 알려져 있습니다. 기업들은 파일럿 프로젝트에서 생산 단계로 전환하고 있으며, AI에 대한 예산과 자원을 재배치하고 있습니다."
+    },
+    "6979": {
+      "title": "GPT-5.4, 백만 토큰의 컨텍스트 창과 극단적 추론 모드 도입",
+      "original_title": "GPT-5.4 reportedly brings a million-token context window and an extreme reasoning mode",
+      "description": "GPT-5.4가 곧 출시될 예정이며, GPT-5.2의 두 배에 해당하는 컨텍스트 창과 장기 작업에서의 더 신뢰할 수 있는 성능, 그리고 새로운 \"극단적\" 사고 모드를 제공합니다."
+    },
+    "6981": {
+      "title": "미국 군, 이란 전쟁에서 AI 기반 타격 계획에 앤트로픽의 클로드 사용",
+      "original_title": "US military uses Anthropic's Claude for AI-driven strike planning in Iran war",
+      "description": "이란과의 전쟁에서 미국 군은 처음으로 목표 선택 및 타격 계획을 위해 생성 AI를 대규모로 사용하고 있습니다. 모든 모델 중에서, 이는 워싱턴이 방금 금지한 회사의 모델입니다."
+    },
+    "9009": {
+      "title": "마이크로소프트와 경쟁 AI 연구진, 펜타곤의 소송전에서 Anthropic 지지에 합류",
+      "original_title": "Microsoft and rival AI researchers unite to back Anthropic in its escalating legal battle against the Pentagon",
+      "description": "미국 방군부와의 법적 분쟁에서 Anthropic을 지지하는 광범위한 연합이 형성되고 있다. 마이크로소프트를 비롯한 수십 명의 OpenAI 및 구글 직원, 전직 군 지도자, 시민권 단체들이 AI 기업을 지지하는 amicus curiae를 제출했다. 이 기사에서는 마이크로소프트와 경쟁 AI 연구진의 역할도 다룬다."
+    },
+    "9214": {
+      "title": "산업계 테스트를 통과하는 AI가 작성한 코드의 절반은 실제 개발자가 거부할 것이라는 새 연구 결과",
+      "original_title": "Half of AI-written code that passes industry test would get rejected by real developers, new study finds",
+      "description": "연구기관 METR의 새 연구에 따르면 유명 SWE-bench 벤치마크를 통과하는 AI 코드 솔루션의 절반가량이 실제 프로젝트 유지관리자에게는 거부될 수 있습니다. 기사 제목의 문구를 바탕으로 한 요약입니다."
+    },
+    "9219": {
+      "title": "AI 에이전트가 수십년 된 기법으로 두 시간 만에 맥킨지의 내부 AI 플랫폼을 해킹",
+      "original_title": "An AI agent hacked McKinsey's internal AI platform in two hours using a decades-old technique",
+      "description": "보안기업 Codewall이 공격형 AI 에이전트를 맥킨지의 내부 AI 플랫폼 Lilli에 투입했습니다. 이 시스템은 전략 작업, 고객 연구, 문서 분석 등에 43,000명 이상이 사용합니다. 자격 증거나 내부 지식, 인간의 도움 없이도 두 시간 만에 에이전트가 전체를 읽을 수 있었습니다."
     }
   }
 }
