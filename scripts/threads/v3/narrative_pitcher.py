@@ -10,7 +10,8 @@ from datetime import datetime
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 sys.path.insert(0, THREADS_DIR)
-from db_reader import normalize_url, jaccard_similarity, extract_title_entities
+from db_reader import normalize_url
+from dedup import is_same_topic, article_keywords, article_entities
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
@@ -199,21 +200,28 @@ def load_pitch_history():
     return []
 
 def is_duplicate_pitch(pitch, history, posted=None):
-    """비슷한 피치가 이미 history에 있는지 확인 (4조건: link, title, original_title, id)"""
+    """비슷한 피치가 이미 history에 있는지 확인
+
+    검사 순서:
+      1. article_id/link/title/original_title 정확 매칭 (posted 기준)
+      2. hook/narrative 접두사 일치 (history 기준)
+      3. article_ids/urls 교집합 (history 기준)
+      4. Semantic 유사도 (언어 통합, full text 기준)
+    """
     hook = pitch.get('hook', '')[:15]
     narrative = pitch.get('narrative', '')[:30]
     new_ids = set(str(x).lstrip('#').strip() for x in pitch.get('article_ids', []) if str(x).strip())
     new_urls = set(pitch.get('article_urls', []))
-    new_titles = set(pitch.get('article_titles', []))
-    new_original_titles = set(pitch.get('article_original_titles', []))
+    new_titles = list(pitch.get('article_titles', []))
+    new_original_titles = list(pitch.get('article_original_titles', []))
 
+    # Phase 1: posted 정확 매칭
     if posted:
-        # 새 pitch의 기사들 중 하나라도 posted와 매칭되면 중복
         for i in range(len(pitch.get('article_ids', []))):
             aid = str(pitch['article_ids'][i]).lstrip('#').strip()
             link = list(new_urls)[i] if i < len(new_urls) else ''
-            title = list(new_titles)[i] if i < len(new_titles) else ''
-            orig_title = list(new_original_titles)[i] if i < len(new_original_titles) else ''
+            title = new_titles[i] if i < len(new_titles) else ''
+            orig_title = new_original_titles[i] if i < len(new_original_titles) else ''
 
             posted_links_norm = set(normalize_url(l) for l in posted.get('posted_links', []))
             posted_titles_set = set(t[:30] for t in posted.get('posted_titles', []))
@@ -225,42 +233,44 @@ def is_duplicate_pitch(pitch, history, posted=None):
                 orig_title and orig_title[:30] in posted_orig_titles_set):
                 return True
 
-    # 새 pitch entity set (루프 밖에서 한 번만 계산)
-    new_entities = set()
-    for t in pitch.get('article_original_titles', []):
-        new_entities.update(extract_title_entities(t))
-
+    # Phase 2: history 기반 검사
     for h in history:
-        # hook 앞 15자 일치 → 중복
         if h.get('hook', '')[:15] == hook:
             return True
-        # narrative 앞 30자 일치 → 중복
         if narrative and h.get('narrative', '')[:30] == narrative:
             return True
-        # article_ids 교집합이 새 pitch의 50% 이상이면 중복
         if new_ids:
             old_ids = set(str(x).lstrip('#').strip() for x in h.get('article_ids', []) if str(x).strip())
             if old_ids:
                 overlap = len(old_ids & new_ids)
                 if overlap / len(new_ids) >= 0.5:
                     return True
-        # article_urls 교집합이 새 pitch의 50% 이상이면 중복
         if new_urls:
             old_urls = set(h.get('article_urls', []))
             if old_urls:
                 overlap = len(old_urls & new_urls)
                 if overlap / len(new_urls) >= 0.5:
                     return True
-        # entity overlap (다른 매체 같은 주제 탐지)
-        old_entities = set()
-        for t in h.get('article_original_titles', []):
-            old_entities.update(extract_title_entities(t))
-        if new_entities and old_entities and len(new_entities & old_entities) >= 2:
-            return True
+
+        # Semantic 유사도 (언어 통합)
+        pt = h.get('article_titles', [])
+        po = h.get('article_original_titles', [])
+        pd = h.get('article_descriptions', [])
+        for i in range(max(len(pt), len(po), len(pd))):
+            t1 = pt[i] if i < len(pt) else ''
+            o1 = po[i] if i < len(po) else ''
+            d1 = pd[i] if i < len(pd) else ''
+            for j in range(len(new_titles)):
+                t2 = new_titles[j]
+                o2 = new_original_titles[j]
+                d2 = ''  # pitch doesn't have descriptions
+                if is_same_topic(t1, o1, d1, t2, o2, d2):
+                    return True
+
     return False
 
 def save_pitch_to_history(pitch):
-    """선택된 피치를 posted.json 피치 이력에 저장"""
+    """선택된 피치를 posted.json 피치 이력 + posted_article_meta에 저장"""
     import json as _json
     path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'posted.json')
     try:
@@ -270,9 +280,14 @@ def save_pitch_to_history(pitch):
                 data = _json.load(f)
         if 'pitch_history' not in data:
             data['pitch_history'] = []
+        if 'posted_article_meta' not in data:
+            data['posted_article_meta'] = {}
+
         entities = set()
         for t in pitch.get('article_original_titles', []):
-            entities.update(extract_title_entities(t))
+            for w in re.findall(r'\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b', t):
+                entities.add(w)
+
         data['pitch_history'].append({
             'hook': pitch.get('hook', '')[:30],
             'narrative': pitch.get('narrative', '')[:50],
@@ -280,9 +295,25 @@ def save_pitch_to_history(pitch):
             'article_urls': pitch.get('article_urls', []),
             'article_titles': pitch.get('article_titles', []),
             'article_original_titles': pitch.get('article_original_titles', []),
+            'article_descriptions': pitch.get('article_descriptions', []),
             'entities': list(entities),
             'date': datetime.now().strftime('%Y-%m-%d')
         })
+
+        # posted_article_meta 갱신 (FULL text for semantic dedup)
+        aids = pitch.get('article_ids', [])
+        titles = pitch.get('article_titles', [])
+        origs = pitch.get('article_original_titles', [])
+        descs = pitch.get('article_descriptions', [])
+        for i, aid in enumerate(aids):
+            aid_str = str(aid).lstrip('#').strip()
+            if aid_str:
+                data['posted_article_meta'][aid_str] = {
+                    'title': titles[i] if i < len(titles) else '',
+                    'original_title': origs[i] if i < len(origs) else '',
+                    'description': descs[i] if i < len(descs) else '',
+                }
+
         with open(path, 'w') as f:
             _json.dump(data, f, ensure_ascii=False, indent=2)
     except:
@@ -308,12 +339,14 @@ def get_pitches(articles, max_articles=600, batch_size=200):
     id_to_link = {}
     id_to_title = {}
     id_to_original_title = {}
+    id_to_description = {}
     for a in shuffled:
         aid = str(a.get('id', ''))
         if aid:
             id_to_link[aid] = a.get('link', '')
             id_to_title[aid] = a.get('title', '')
             id_to_original_title[aid] = a.get('original_title', '')
+            id_to_description[aid] = a.get('description', '')
 
     all_pitches = []
     for idx, batch in enumerate(batches):
@@ -395,15 +428,18 @@ def get_pitches(articles, max_articles=600, batch_size=200):
         p_urls = []
         p_titles = []
         p_original_titles = []
+        p_descriptions = []
         for aid in p.get('article_ids', []):
             aid_str = str(aid).lstrip('#').strip()
             if aid_str:
                 p_urls.append(id_to_link.get(aid_str, ''))
                 p_titles.append(id_to_title.get(aid_str, ''))
                 p_original_titles.append(id_to_original_title.get(aid_str, ''))
+                p_descriptions.append(id_to_description.get(aid_str, ''))
         p['article_urls'] = p_urls
         p['article_titles'] = p_titles
         p['article_original_titles'] = p_original_titles
+        p['article_descriptions'] = p_descriptions
 
         if is_duplicate_pitch(p, pitch_history, posted):
             log(f'  ⚠️ 중복 피치 제외: "{p.get("hook", "")[:30]}" (기사: {len(p.get("article_ids", []))}개)')

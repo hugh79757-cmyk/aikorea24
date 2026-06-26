@@ -18,28 +18,7 @@ def normalize_url(url):
     url = url.rstrip('/')
     return url.lower()
 
-_STOPWORDS = {'the', 'a', 'an', 'is', 'was', 'are', 'were', 'been', 'be', 'to', 'of',
-              'in', 'for', 'on', 'with', 'at', 'by', 'from', 'as', 'and', 'or', 'but',
-              'not', 'no', 'its', 'it', 'this', 'that', 'all', 'each', 'has', 'had',
-              'have', 'do', 'did', 'does', 'will', 'would', 'can', 'may', 'said'}
-
-def _tokenize(text):
-    words = re.findall(r'[a-zA-Z][a-zA-Z0-9\']{1,}', text.lower())
-    return set(w for w in words if w not in _STOPWORDS)
-
-def jaccard_similarity(text1, text2):
-    """두 영문 텍스트의 Jaccard 유사도 (0.0~1.0)"""
-    if not text1 or not text2:
-        return 0.0
-    s1 = _tokenize(text1)
-    s2 = _tokenize(text2)
-    if not s1 or not s2:
-        return 0.0
-    return len(s1 & s2) / len(s1 | s2)
-
-def extract_title_entities(text):
-    """영문 제목에서 고유명사 추정 capitalized 단어 추출"""
-    return set(re.findall(r'\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b', text))
+from dedup import is_same_topic, article_keywords, article_entities
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
@@ -108,6 +87,7 @@ def load_posted():
         # 새 필드 기본값
         data.setdefault('posted_titles', [])
         data.setdefault('posted_original_titles', [])
+        data.setdefault('posted_article_meta', {})  # id → {title, original_title, description}
         # 하위 호환: posted_links를 normalize하여 중복 정리
         normalized_links = set()
         for link in data.get('posted_links', []):
@@ -152,47 +132,47 @@ def d1_query(sql, retries=2):
     return []
 
 def is_already_posted(article, posted):
-    """4조건 중 하나라도 매칭되면 발행된 기사로 판정 (link, title, original_title, id)"""
+    """5단계 중복 판정 (id, link, title, original_title 정확매칭 + semantic 유사도)"""
     aid = str(article.get('id', ''))
     link = normalize_url(article.get('link', ''))
-    title = (article.get('title', '') or '')[:30]
-    original_title = (article.get('original_title', '') or '')[:30]
+    title30 = (article.get('title', '') or '')[:30]
+    orig_title30 = (article.get('original_title', '') or '')[:30]
 
-    # 1. id 매칭
+    # 1-4. 정확 매칭 (빠른 패스, 기존 방식 유지)
     if aid and aid in posted.get('posted_ids', []):
         return True
-    # 2. link 매칭 (정규화)
     if link and link in set(normalize_url(l) for l in posted.get('posted_links', [])):
         return True
-    # 3. title[:30] 매칭
-    if title and title in set(t[:30] for t in posted.get('posted_titles', [])):
+    if title30 and title30 in set(t[:30] for t in posted.get('posted_titles', [])):
         return True
-    # 4. original_title[:30] 매칭 (비어있으면 스킵)
-    if original_title and original_title in set(ot[:30] for ot in posted.get('posted_original_titles', [])):
+    if orig_title30 and orig_title30 in set(ot[:30] for ot in posted.get('posted_original_titles', [])):
         return True
 
-    # 5. original_title Jaccard 유사도 + entity overlap (다른 매체 같은 주제 탐지)
-    original_title_full = (article.get('original_title', '') or '')
-    if original_title_full:
-        new_entities = extract_title_entities(original_title_full)
-        for posted_ot in posted.get('posted_original_titles', []):
-            if not posted_ot:
+    # 5. Semantic 유사도 (언어 통합, FULL text 기준)
+    meta = posted.get('posted_article_meta', {})
+    if meta:
+        a_title = article.get('title', '') or ''
+        a_orig = article.get('original_title', '') or ''
+        a_desc = article.get('description', '') or ''
+        for pid, pm in meta.items():
+            if pid == aid:
                 continue
-            if jaccard_similarity(original_title_full, posted_ot) >= 0.30:
+            if is_same_topic(
+                a_title, a_orig, a_desc,
+                pm.get('title', ''),
+                pm.get('original_title', ''),
+                pm.get('description', ''),
+            ):
                 return True
-            if new_entities:
-                old_entities = extract_title_entities(posted_ot)
-                if old_entities and len(new_entities & old_entities) >= 2:
-                    return True
     return False
 
 def get_exclusion_reasons(article, posted):
-    """기사가 어떤 필드로 제외되는지 reasons set 반환 (여러 필드 동시에 매칭 가능)"""
+    """기사가 어떤 필드로 제외되는지 reasons set 반환"""
     reasons = set()
     aid = str(article.get('id', ''))
     link = normalize_url(article.get('link', ''))
-    title = (article.get('title', '') or '')[:30]
-    original_title = (article.get('original_title', '') or '')[:30]
+    title30 = (article.get('title', '') or '')[:30]
+    orig_title30 = (article.get('original_title', '') or '')[:30]
 
     posted_ids = posted.get('posted_ids', [])
     posted_links_norm = set(normalize_url(l) for l in posted.get('posted_links', []))
@@ -203,24 +183,28 @@ def get_exclusion_reasons(article, posted):
         reasons.add('posted_ids')
     if link and link in posted_links_norm:
         reasons.add('posted_links')
-    if title and title in posted_titles_set:
+    if title30 and title30 in posted_titles_set:
         reasons.add('posted_titles')
-    if original_title and original_title in posted_orig_titles_set:
+    if orig_title30 and orig_title30 in posted_orig_titles_set:
         reasons.add('posted_original_titles')
-    # 5. original_title Jaccard / entity overlap
-    if original_title:
-        new_entities = extract_title_entities(original_title)
-        for posted_ot in posted.get('posted_original_titles', []):
-            if not posted_ot:
+
+    # 5. Semantic dedup
+    meta = posted.get('posted_article_meta', {})
+    if meta:
+        a_title = article.get('title', '') or ''
+        a_orig = article.get('original_title', '') or ''
+        a_desc = article.get('description', '') or ''
+        for pid, pm in meta.items():
+            if pid == aid:
                 continue
-            if jaccard_similarity(original_title, posted_ot) >= 0.30:
+            if is_same_topic(
+                a_title, a_orig, a_desc,
+                pm.get('title', ''),
+                pm.get('original_title', ''),
+                pm.get('description', ''),
+            ):
                 reasons.add('posted_semantic')
                 break
-            if new_entities:
-                old_entities = extract_title_entities(posted_ot)
-                if old_entities and len(new_entities & old_entities) >= 2:
-                    reasons.add('posted_semantic')
-                    break
     return reasons
 
 def get_articles():

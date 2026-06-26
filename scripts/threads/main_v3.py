@@ -128,6 +128,7 @@ def run_v3(dry_run=False):
             posted = load_posted()
             # 업데이트 전 스냅샷
             before = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
+            posted.setdefault('posted_article_meta', {})
             pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
             for aid_str in pitch_ids:
                 if aid_str and aid_str not in posted.get('posted_ids', []):
@@ -144,6 +145,12 @@ def run_v3(dry_run=False):
                             posted.setdefault('posted_titles', []).append(title)
                         if orig_title and orig_title not in posted.get('posted_original_titles', []):
                             posted.setdefault('posted_original_titles', []).append(orig_title)
+                        # posted_article_meta: FULL text for semantic dedup
+                        posted['posted_article_meta'][aid_str] = {
+                            'title': a.get('title', '') or '',
+                            'original_title': a.get('original_title', '') or '',
+                            'description': a.get('description', '') or '',
+                        }
                         break
             save_posted(posted)
             from v3.narrative_pitcher import save_pitch_to_history
@@ -184,6 +191,7 @@ def run_v3(dry_run=False):
             posted = load_posted()
             # 업데이트 전 스냅샷
             before = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
+            posted.setdefault('posted_article_meta', {})
             pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
             for aid_str in pitch_ids:
                 if aid_str and aid_str not in posted.get('posted_ids', []):
@@ -200,6 +208,12 @@ def run_v3(dry_run=False):
                             posted.setdefault('posted_titles', []).append(title)
                         if orig_title and orig_title not in posted.get('posted_original_titles', []):
                             posted.setdefault('posted_original_titles', []).append(orig_title)
+                        # posted_article_meta: FULL text for semantic dedup
+                        posted['posted_article_meta'][aid_str] = {
+                            'title': a.get('title', '') or '',
+                            'original_title': a.get('original_title', '') or '',
+                            'description': a.get('description', '') or '',
+                        }
                         break
             save_posted(posted)
             from v3.narrative_pitcher import save_pitch_to_history
