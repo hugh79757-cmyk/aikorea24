@@ -153,14 +153,19 @@ def generate_deep_article(title, content, url):
 
 
 def inject_frontmatter_image(markdown_content, image_path):
-    """프론트매터에 image: 필드가 없으면 주입"""
+    """프론트매터에 image: 필드가 없으면 주입 + draft: 오류 보정"""
     frontmatter_match = re.match(r'^---\s*\n(.*?)\n---', markdown_content, re.DOTALL)
     if not frontmatter_match:
         return markdown_content  # 프론트매터 없음 → 패스
 
     fm = frontmatter_match.group(1)
+
+    # draft: 값을 false로 보정 (AI가 \x01 같은 깨진 값 생성 시)
+    fm = re.sub(r'^draft:\s*\x01', 'draft: false', fm, flags=re.MULTILINE)
+    fm = re.sub(r'^draft:\s*[^\w].*$', 'draft: false', fm, flags=re.MULTILINE)
+
     if re.search(r'^image:', fm, re.MULTILINE):
-        return markdown_content  # 이미 image: 있음 → 패스
+        return markdown_content.replace(frontmatter_match.group(1), fm, 1)
 
     # draft: 뒤에 image: 삽입 (정렬 맞춤)
     fm_updated = re.sub(

@@ -10,6 +10,7 @@ tags:
   - "자동화"
   - "생성형AI"
 draft: false
+image: "/images/openai는-거의-모든-직원이-챗봇에서-codex-에이전트로-전환했다고-말하지만-모든-수치는-openai/thumbnail.webp"
 
 ---
 
