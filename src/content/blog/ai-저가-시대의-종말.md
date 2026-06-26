@@ -13,7 +13,7 @@ tags:
   - "테스트타임컴퓨트"
   - "AI인프라"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-저가-시대의-종말/thumbnail.webp"
+image: "/images/thumbnails/ai-저가-시대의-종말.jpg"
 ---
 
 [AI코리아24 오늘의 브리핑에서 관련 뉴스 확인하기](https://aikorea24.kr/briefing/2026-03-20/)

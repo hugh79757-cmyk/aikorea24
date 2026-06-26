@@ -12,7 +12,7 @@ tags:
   - "내부메모유출"
   - "엔터프라이즈AI"
 draft: false
-image: "https://img.aikorea24.kr/images/openai-내부-메모-유출/thumbnail.webp"
+image: "/images/thumbnails/openai-내부-메모-유출.jpg"
 ---
 
 ---

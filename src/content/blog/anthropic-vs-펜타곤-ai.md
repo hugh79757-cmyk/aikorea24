@@ -13,7 +13,7 @@ tags:
   - "AI윤리"
   - "AI군사화"
 draft: false
-image: "https://img.aikorea24.kr/images/anthropic-vs-펜타곤-ai/thumbnail.webp"
+image: "/images/thumbnails/anthropic-vs-펜타곤-ai.jpg"
 ---
 
 [Anthropic 공식 성명 원문 보기](https://www.anthropic.com/news/statement-department-of-war)

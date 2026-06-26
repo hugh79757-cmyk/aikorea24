@@ -13,7 +13,7 @@ tags:
   - "서버리스"
   - "클라우드"
 draft: false
-image: "https://img.aikorea24.kr/images/cloudflare-역사를-알면-서비스가/thumbnail.webp"
+image: "/images/thumbnails/cloudflare-역사를-알면-서비스가.jpg"
 ---
 
 [Cloudflare 15주년 타임라인](https://timeline.www.cloudflare.com/) | [Cloudflare 공식 블로그](https://blog.cloudflare.com/)

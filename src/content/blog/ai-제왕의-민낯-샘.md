@@ -14,7 +14,7 @@ tags:
   - "AI안전"
   - "소시오패스논란"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-제왕의-민낯-샘/thumbnail.webp"
+image: "/images/thumbnails/ai-제왕의-민낯-샘.jpg"
 ---
 
 AI 산업에서 가장 영향력 있는 두 CEO의 이야기가 동시에 펼쳐지고 있습니다. 한쪽에서는 OpenAI CEO 샘 알트먼이 뉴요커의 심층 프로파일을 통해 전례 없는 인성 논란에 휩싸였고, 다른 쪽에서는 Anthropic의 다리오 아모데이가 미국 국방부의 압박을 거부한 대가로 영국 정부의 러브콜을 받고 있습니다. 이 두 이야기는 사실 하나의 질문을 향합니다. **AI 시대에 윤리는 짐인가, 무기인가.**

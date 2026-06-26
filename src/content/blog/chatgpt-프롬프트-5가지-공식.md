@@ -12,7 +12,7 @@ tags:
   - "CO-STAR"
   - "AI활용"
 draft: false
-image: "https://img.aikorea24.kr/images/chatgpt-프롬프트-5가지-공식/thumbnail.webp"
+image: "/images/thumbnails/chatgpt-프롬프트-5가지-공식.jpg"
 ---
 
 [OpenAI 프롬프트 엔지니어링 가이드](https://platform.openai.com/docs/guides/prompt-engineering)

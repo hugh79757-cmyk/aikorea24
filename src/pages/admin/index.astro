@@ -55,6 +55,8 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 .bot .cnt{color:#3b82f6;font-weight:600}
 .bot .pub{background:#2563eb;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600}
 .bot .pub:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+.bot .save{background:#0891b2;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;display:none}
+.bot .save:disabled{background:#334155;color:#64748b;cursor:not-allowed}
 .bot .del{background:#dc2626;color:#fff;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.8rem;display:none}
 .msg{margin:0 16px;font-size:.85rem}
 .msg.ok{color:#4ade80}
@@ -97,7 +99,7 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
 </div>
 <h1>AI코리아24 브리핑 작성</h1>
 <div class="date" id="dinfo"></div>
-<div class="status" id="curStatus">확인 중...</div>
+<div class="status" id="curStatus">확인 중... <button class="fbtn" id="editBtn" style="display:none;margin-left:8px">✏️ 수정</button></div>
 <div class="intro-label">오늘의 인사이트 (브리핑 서두)</div>
 <textarea class="intro" id="introText" placeholder="오늘 AI 업계의 핵심 흐름을 한두 문장으로..."></textarea>
 <div class="fbar" id="fbar"></div>
@@ -140,6 +142,7 @@ textarea.intro{width:100% !important;height:80px;background:#1e293b !important;c
   <button class="pub" id="pub" disabled>브리핑 발행</button>
     <button class="email-btn" id="emailBtn" style="display:none;background:#7c3aed;color:#fff;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-size:.9rem;font-weight:600;margin-left:8px;">📧 이메일 발송</button>
     <button class="dd-link-btn" id="ddBtn" style="display:none">📖 심층글 연결</button>
+    <button class="save" id="saveBtn">✏️ 수정 저장</button>
 </div>
 
 <script is:inline>
@@ -157,6 +160,9 @@ document.addEventListener("DOMContentLoaded", function(){
   var currentFilter = 'all';
   var loadId = 0;
   var abortCtrl = null;
+  var isEditing = false;
+  var editingItems = [];
+  var currentBriefingData = null;
 
   // === 필터 바 ===
   var ftrs = [
@@ -279,24 +285,122 @@ document.addEventListener("DOMContentLoaded", function(){
         var st = document.getElementById('curStatus');
         var db = document.getElementById('delbtn');
         var eb = document.getElementById('emailBtn');
+        var editBtn = document.getElementById('editBtn');
         if(!st) return;
-            if(d && d.briefing && d.briefing.date === today){
-              st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b>';
-              st.style.color = '#4ade80';
-              if(db) db.style.display = 'inline-block';
-              if(eb) eb.style.display = 'inline-block';
-            } else {
-              st.textContent = '오늘 발행된 브리핑 없음';
-              st.style.color = '#94a3b8';
-              if(db) db.style.display = 'none';
-              if(eb) eb.style.display = 'none';
-            }
-            var ddBtnEl = document.getElementById('ddBtn');
-            if(ddBtnEl) ddBtnEl.style.display = 'inline-block';
+        if(d && d.briefing && d.briefing.date === today){
+          st.innerHTML = '오늘 브리핑 발행됨: <b>'+(d.items?d.items.length:0)+'건</b> ';
+          st.style.color = '#4ade80';
+          if(db) db.style.display = 'inline-block';
+          if(eb) eb.style.display = 'inline-block';
+          editBtn = document.createElement('button');
+          editBtn.className = 'fbtn';
+          editBtn.id = 'editBtn';
+          editBtn.style.cssText = 'margin-left:8px';
+          editBtn.textContent = '✏️ 수정';
+          editBtn.addEventListener('click', startEdit);
+          st.appendChild(editBtn);
+          currentBriefingData = d;
+        } else {
+          st.innerHTML = '오늘 발행된 브리핑 없음';
+          st.style.color = '#94a3b8';
+          if(db) db.style.display = 'none';
+          if(eb) eb.style.display = 'none';
+          editBtn = null;
+          currentBriefingData = null;
+        }
+        var ddBtnEl = document.getElementById('ddBtn');
+        if(ddBtnEl) ddBtnEl.style.display = 'inline-block';
       })
       .catch(function(e){ console.log('checkStatus:', e); });
   }
   checkStatus();
+
+  // === 수정 모드 ===
+  function startEdit(){
+    if(!currentBriefingData || !currentBriefingData.briefing) return;
+    var briefing = currentBriefingData.briefing;
+    var introTa = document.getElementById('introText');
+    introTa.value = briefing.intro || '';
+    introTa.style.borderColor = '#3b82f6';
+
+    var list = document.getElementById('list');
+    list.innerHTML = '';
+    editingItems = (currentBriefingData.items || []).slice();
+    for(var i=0;i<editingItems.length;i++){
+      var item = editingItems[i];
+      var card = document.createElement('div');
+      card.className = 'card sel';
+      card.innerHTML =
+        '<div><span class="ck">✓</span><h3>'+esc(item.title||'')+'</h3></div>'+
+        '<div class="meta">순서 '+(i+1)+'</div>'+
+        '<div class="cmt" style="display:block"><textarea data-ei="'+i+'">'+esc(item.comment||'')+'</textarea></div>';
+      list.appendChild(card);
+    }
+
+    document.getElementById('pub').style.display = 'none';
+    document.getElementById('delbtn').style.display = 'none';
+    document.getElementById('saveBtn').style.display = 'inline-block';
+    isEditing = true;
+  }
+
+  function saveEdit(){
+    if(!currentBriefingData || !currentBriefingData.briefing) return;
+    var briefingId = currentBriefingData.briefing.id;
+    var intro = document.getElementById('introText').value;
+    var textareas = document.querySelectorAll('#list .cmt textarea');
+    var items = [];
+    for(var i=0;i<textareas.length;i++){
+      var ei = parseInt(textareas[i].getAttribute('data-ei'));
+      var comment = textareas[i].value;
+      if(!isNaN(ei) && editingItems[ei]){
+        items.push({id:editingItems[ei].id, comment:comment});
+      }
+    }
+
+    var saveBtn = document.getElementById('saveBtn');
+    saveBtn.disabled = true;
+    saveBtn.textContent = '저장 중...';
+
+    fetch('/api/briefing/update/', {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({briefing_id:briefingId, intro:intro, items:items})
+    })
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.ok){
+        endEdit();
+        var msg = document.getElementById('msg');
+        msg.className = 'msg ok';
+        msg.textContent = '수정 완료';
+        checkStatus();
+      } else {
+        var msg = document.getElementById('msg');
+        msg.className = 'msg err';
+        msg.textContent = '수정 실패: '+(d.error||'');
+        saveBtn.disabled = false;
+        saveBtn.textContent = '✏️ 수정 저장';
+      }
+    })
+    .catch(function(e){
+      var msg = document.getElementById('msg');
+      msg.className = 'msg err';
+      msg.textContent = '에러: '+e.message;
+      saveBtn.disabled = false;
+      saveBtn.textContent = '✏️ 수정 저장';
+    });
+  }
+
+  function endEdit(){
+    document.getElementById('pub').style.display = '';
+    document.getElementById('saveBtn').style.display = 'none';
+    document.getElementById('introText').style.borderColor = '';
+    document.getElementById('delbtn').style.display = '';
+    isEditing = false;
+    load(currentFilter);
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', saveEdit);
 
   // === 삭제 ===
   document.getElementById('delbtn').addEventListener('click', function(){

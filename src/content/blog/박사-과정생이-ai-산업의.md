@@ -13,7 +13,7 @@ tags:
   - "OpenAI"
   - "Google"
 draft: false
-image: "https://img.aikorea24.kr/images/박사-과정생이-ai-산업의/thumbnail.webp"
+image: "/images/thumbnails/박사-과정생이-ai-산업의.jpg"
 ---
 
 > **AI코리아24 브리핑**: [https://aikorea24.kr/briefing/2026-03-19/#item-1](https://aikorea24.kr/briefing/2026-03-19/#item-1)

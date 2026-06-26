@@ -13,7 +13,7 @@ tags:
   - "OpenAI트래픽"
   - "봇탐지"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-봇-트래픽이-인간을/thumbnail.webp"
+image: "/images/thumbnails/ai-봇-트래픽이-인간을.jpg"
 ---
 
 2025년, 인터넷에서 AI가 만들어내는 트래픽의 성장률이 인간 사용자의 트래픽 성장률을 처음으로 넘어섰습니다. 사이버보안 기업 휴먼 시큐리티(HUMAN Security)가 1조 건 이상의 상호작용 데이터를 분석한 [AI 트래픽 현황 보고서](https://www.humansecurity.com/newsroom/2026-state-of-ai-traffic-cyberthreat-benchmark-report/)에 따르면, 자동화 트래픽은 인간 활동보다 약 8배 빠른 속도로 증가했습니다. 그중에서도 AI 에이전트가 직접 웹사이트를 탐색하고, 로그인하고, 결제까지 수행하는 **에이전틱 AI** 트래픽은 1년 만에 **7,851%** 증가했습니다.

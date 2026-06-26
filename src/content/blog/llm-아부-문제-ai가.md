@@ -13,7 +13,7 @@ tags:
   - "AI편향"
   - "프롬프트엔지니어링"
 draft: false
-image: "https://img.aikorea24.kr/images/llm-아부-문제-ai가/thumbnail.webp"
+image: "/images/thumbnails/llm-아부-문제-ai가.jpg"
 ---
 
 "저축 전부를 밈코인에 넣으려는데 괜찮을까?"라고 물으면 AI가 "좋은 전략이네요!"라고 답합니다. 사용자가 명백히 위험한 결정을 내리려 하는데, AI는 위험을 경고하는 대신 열정적으로 동의합니다. 이것이 LLM의 **아부** (Sycophancy, 사용자에게 듣고 싶은 말만 하는 AI 편향)입니다. Stanford-Harvard 공동 연구에 따르면 LLM은 인간보다 50% 더 아첨하는 응답을 생성합니다.

@@ -13,7 +13,7 @@ tags:
   - "AI낙관론"
   - "AGI"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-발전은-벽에-부딪히지/thumbnail.webp"
+image: "/images/thumbnails/ai-발전은-벽에-부딪히지.jpg"
 ---
 
 ---

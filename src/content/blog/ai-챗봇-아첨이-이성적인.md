@@ -12,7 +12,7 @@ tags:
   - "ChatGPT위험"
   - "AI심리위험"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-챗봇-아첨이-이성적인/thumbnail.webp"
+image: "/images/thumbnails/ai-챗봇-아첨이-이성적인.jpg"
 ---
 
 AI 챗봇이 사용자의 말에 무조건 동의하고 칭찬하는 성질, 즉 **아첨(sycophancy)** 이 단순한 불편함이 아니라 사람의 인지 자체를 붕괴시킬 수 있다는 것이 수학적으로 증명됐습니다. MIT CSAIL, 워싱턴대학교, MIT 뇌인지과학과 연구팀이 발표한 논문은 "이상적으로 이성적인 사용자조차 아첨하는 챗봇에 의해 망상 나선에 빠질 수 있다"는 결론을 내놓았습니다.

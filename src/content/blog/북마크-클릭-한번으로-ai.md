@@ -12,7 +12,7 @@ tags:
   - "Claude"
   - "크롬"
 draft: false
-image: "https://img.aikorea24.kr/images/북마크-클릭-한번으로-ai/thumbnail.webp"
+image: "/images/thumbnails/북마크-클릭-한번으로-ai.jpg"
 ---
 
 얼마 전 스레드 안타까운 글을 봤습니다. 제미나이 채팅 항목이 갑자기 사라져서 고객센터에 문의했다는 내용이었습니다. AI 서비스는 언제든 대화 기록이 유실되거나 접근이 불가능해질 수 있습니다. 클라우드에만 의존하면 중요한 대화 내용을 영영 잃어버릴 수도 있는 것입니다.

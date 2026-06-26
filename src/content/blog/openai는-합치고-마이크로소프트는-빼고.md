@@ -13,7 +13,7 @@ tags:
   - "Codex"
   - "AI전략"
 draft: false
-image: "https://img.aikorea24.kr/images/openai는-합치고-마이크로소프트는-빼고/thumbnail.webp"
+image: "/images/thumbnails/openai는-합치고-마이크로소프트는-빼고.jpg"
 ---
 
 [AI코리아24 오늘의 브리핑에서 관련 뉴스 확인하기](https://aikorea24.kr/briefing/2026-03-21/#item-1)

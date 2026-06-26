@@ -13,7 +13,7 @@ tags:
   - "AI할루시네이션"
   - "뉴스룸AI정책"
 draft: false
-image: "https://img.aikorea24.kr/images/nyt-서평-표절-사건으로/thumbnail.webp"
+image: "/images/thumbnails/nyt-서평-표절-사건으로.jpg"
 ---
 
 뉴욕타임스(NYT)가 3월 30일, 프리랜서 서평 작가 **Alex Preston** 과의 관계를 끊었습니다. 그가 AI 도구를 사용해 작성한 서평이 가디언(The Guardian)에 4개월 전 실린 기존 서평의 문장을 거의 그대로 포함하고 있었기 때문입니다. Preston은 Jean-Baptiste Andrea의 소설 "Watching Over Her" 서평을 1월 6일 NYT에 게재했는데, 한 독자가 가디언의 Christobel Kent가 쓴 같은 책 서평과의 유사성을 지적하면서 사건이 시작되었습니다.

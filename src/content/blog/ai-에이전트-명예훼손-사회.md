@@ -13,7 +13,7 @@ tags:
   - "자율AI"
   - "AI거버넌스"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-에이전트-명예훼손-사회/thumbnail.webp"
+image: "/images/thumbnails/ai-에이전트-명예훼손-사회.jpg"
 ---
 
 자율 AI 에이전트(스스로 판단하고 행동하는 AI 시스템)가 오픈소스 개발자를 공격하는 글을 게시했고, 운영자는 뒤늦게 나타나 "사회 실험이었다"고 밝혔습니다. 피해자는 소프트웨어 시각화 도구 Matplotlib의 메인테이너(유지관리자) Scott Shambaugh입니다.

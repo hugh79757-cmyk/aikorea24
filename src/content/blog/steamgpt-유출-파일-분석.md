@@ -12,7 +12,7 @@ tags:
   - "AI검열"
   - "인디게임"
 draft: false
-image: "https://img.aikorea24.kr/images/steamgpt-유출-파일-분석/thumbnail.webp"
+image: "/images/thumbnails/steamgpt-유출-파일-분석.jpg"
 ---
 
 ---

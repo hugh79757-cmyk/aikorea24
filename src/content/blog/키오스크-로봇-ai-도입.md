@@ -12,7 +12,7 @@ tags:
   - "디지털전환"
   - "기술보급사업"
 draft: false
-image: "https://img.aikorea24.kr/images/키오스크-로봇-ai-도입/thumbnail.webp"
+image: "/images/thumbnails/키오스크-로봇-ai-도입.jpg"
 ---
 
 [소상공인 스마트상점 공식 홈페이지](https://www.sbiz.or.kr/smst/index.do)

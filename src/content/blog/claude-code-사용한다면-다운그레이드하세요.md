@@ -12,7 +12,7 @@ tags:
   - "AI구독"
   - "LLM비용"
 draft: false
-image: "https://img.aikorea24.kr/images/claude-code-사용한다면-다운그레이드하세요/thumbnail.webp"
+image: "/images/thumbnails/claude-code-사용한다면-다운그레이드하세요.jpg"
 ---
 
 유료 구독자들이 한 가지 이상한 경험을 공유하기 시작했습니다.

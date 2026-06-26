@@ -12,7 +12,7 @@ tags:
   - "HunterAlpha"
   - "중국AI"
 draft: false
-image: "https://img.aikorea24.kr/images/스마트폰-회사가-claude에-도전장을/thumbnail.webp"
+image: "/images/thumbnails/스마트폰-회사가-claude에-도전장을.jpg"
 ---
 
 ---

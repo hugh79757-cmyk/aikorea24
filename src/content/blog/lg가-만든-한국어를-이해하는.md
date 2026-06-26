@@ -12,7 +12,7 @@ tags:
   - "한국어LLM"
   - "바이브코딩"
 draft: false
-image: "https://img.aikorea24.kr/images/lg가-만든-한국어를-이해하는/thumbnail.webp"
+image: "/images/thumbnails/lg가-만든-한국어를-이해하는.jpg"
 ---
 
 [LG AI연구원 공식 사이트](https://www.lgresearch.ai/)

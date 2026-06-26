@@ -12,7 +12,7 @@ tags:
   - "AI플랫폼"
   - "OpenAI"
 draft: false
-image: "https://img.aikorea24.kr/images/anthropic-openclaw-창시자-계정/thumbnail.webp"
+image: "/images/thumbnails/anthropic-openclaw-창시자-계정.jpg"
 ---
 
 ---

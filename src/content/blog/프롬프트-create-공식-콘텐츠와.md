@@ -11,7 +11,7 @@ tags:
   - "AI활용"
   - "콘텐츠제작"
 draft: false
-image: "https://img.aikorea24.kr/images/프롬프트-create-공식-콘텐츠와/thumbnail.webp"
+image: "/images/thumbnails/프롬프트-create-공식-콘텐츠와.jpg"
 ---
 
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)

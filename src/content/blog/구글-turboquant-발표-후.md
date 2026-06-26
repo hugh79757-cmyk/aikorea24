@@ -13,7 +13,7 @@ tags:
   - "AI추론효율"
   - "HBM"
 draft: false
-image: "https://img.aikorea24.kr/images/구글-turboquant-발표-후/thumbnail.webp"
+image: "/images/thumbnails/구글-turboquant-발표-후.jpg"
 ---
 
 구글 리서치가 3월 25일 발표한 AI 메모리 압축 알고리즘 **TurboQuant** 가 글로벌 반도체 시장을 흔들었습니다. AI 추론 시 작업 메모리(KV 캐시)를 **6배 압축** 한다는 발표 직후, 메모리 수요가 줄어들 것이라는 공포가 퍼지며 **삼성전자 -4.71%, SK하이닉스 -6.23%** 급락했습니다. 미국에서는 마이크론이 하락했고, 중국 GigaDevice -5.89%, Montage Technology -3.53%까지 충격이 확산됐습니다.

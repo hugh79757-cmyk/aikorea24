@@ -12,7 +12,7 @@ tags:
   - "바이브코딩"
   - "무료웹사이트"
 draft: false
-image: "https://img.aikorea24.kr/images/github-cloudflare-pages-muryoro/thumbnail.webp"
+image: "/images/thumbnails/github-cloudflare-pages-muryoro.jpg"
 ---
 
 - [Cloudflare Pages 공식 사이트](https://pages.cloudflare.com/)

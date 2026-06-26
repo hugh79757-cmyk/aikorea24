@@ -11,7 +11,7 @@ tags:
   - "ChatGPT활용"
   - "코딩입문"
 draft: false
-image: "https://img.aikorea24.kr/images/peurompeuteu-gicho-aiege-wonhaneun/thumbnail.webp"
+image: "/images/thumbnails/peurompeuteu-gicho-aiege-wonhaneun.jpg"
 ---
 
 - [Google Cloud 프롬프트 엔지니어링 가이드](https://cloud.google.com/discover/what-is-prompt-engineering?hl=ko)

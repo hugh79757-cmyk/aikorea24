@@ -12,7 +12,7 @@ tags:
   - "GitHub"
   - "바이브코딩"
 draft: false
-image: "https://img.aikorea24.kr/images/github-muryoui-bimil-actions/thumbnail.webp"
+image: "/images/thumbnails/github-muryoui-bimil-actions.jpg"
 ---
 
 - [GitHub Actions 문서](https://docs.github.com/ko/actions)

@@ -12,7 +12,7 @@ tags:
   - "개발도구"
   - "초보자"
 draft: false
-image: "https://img.aikorea24.kr/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/thumbnail.webp"
+image: "/images/thumbnails/nae-keompyuteoe-gaebalhwangyeong-mandeulgi.jpg"
 ---
 
 - [VSCode 공식 다운로드](https://code.visualstudio.com/)

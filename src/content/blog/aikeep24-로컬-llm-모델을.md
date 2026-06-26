@@ -13,7 +13,7 @@ tags:
   - "AI대화저장"
   - "Ollama"
 draft: false
-image: "https://img.aikorea24.kr/images/aikeep24-로컬-llm-모델을/thumbnail.webp"
+image: "/images/thumbnails/aikeep24-로컬-llm-모델을.jpg"
 ---
 
 ChatGPT와 대화하다가 "그때 그 결정이 뭐였지?" 싶을 때가 있습니다. Claude에서 코드 리뷰를 받았는데, 며칠 뒤 그 맥락이 통째로 사라져 있을 때도 있습니다. AI 대화는 쌓이는데, 정작 필요할 때 찾을 수가 없습니다. **[AIkeep24](https://aikorea24.kr/#aikeep24)** 는 이 문제를 해결하기 위해 만든 오픈소스 크롬 확장 프로그램입니다. 크롬에서 AI와 대화하면 확장이 실시간으로 감지하고, 로컬 LLM이 자동으로 요약·태깅하여 DB에 저장합니다.

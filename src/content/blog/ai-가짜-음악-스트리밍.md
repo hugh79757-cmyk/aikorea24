@@ -12,7 +12,7 @@ tags:
   - "AI 생성 음악"
   - "봇 스트리밍"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-가짜-음악-스트리밍/thumbnail.webp"
+image: "/images/thumbnails/ai-가짜-음악-스트리밍.jpg"
 ---
 
 ## AI가 만든 음악, 봇이 들은 음악, 사람이 훔친 돈

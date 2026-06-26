@@ -12,7 +12,7 @@ tags:
   - "AIKeep24"
   - "EXAONE"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-대화-검색의-한계/thumbnail.webp"
+image: "/images/thumbnails/ai-대화-검색의-한계.jpg"
 ---
 
 ## 도서관에서 책 찾기, 두 가지 방법

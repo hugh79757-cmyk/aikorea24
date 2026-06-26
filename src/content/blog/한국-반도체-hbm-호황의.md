@@ -12,7 +12,7 @@ tags:
   - "TurboQuant"
   - "AI반도체"
 draft: false
-image: "https://img.aikorea24.kr/images/한국-반도체-hbm-호황의/thumbnail.webp"
+image: "/images/thumbnails/한국-반도체-hbm-호황의.jpg"
 ---
 
 한국 메모리 반도체가 호황입니다. SK하이닉스는 HBM(고대역폭메모리, AI 연산에 필요한 초고속 메모리) 공급 확대로 실적 반등을 주도하고 있고, 삼성전자도 추격에 나서고 있습니다. 겉으로는 "초호황의 귀환"입니다.

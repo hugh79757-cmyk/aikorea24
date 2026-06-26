@@ -12,7 +12,7 @@ tags:
   - "블로그수익화"
   - "AI에이전트"
 draft: false
-image: "https://img.aikorea24.kr/images/cloudflare-emdash-워드프레스-대안/thumbnail.webp"
+image: "/images/thumbnails/cloudflare-emdash-워드프레스-대안.jpg"
 ---
 
 Cloudflare가 4월 1일, 워드프레스의 "정신적 후계자(spiritual successor)"를 자처하는 오픈소스 CMS **EmDash** 의 개발자 베타(v0.1.0)를 공개했습니다. 워드프레스 코드를 일절 사용하지 않고 TypeScript로 완전히 새로 작성했으며, MIT 라이선스로 GitHub에 공개되었습니다. 인터넷의 40% 이상을 지탱해온 워드프레스에 대한 첫 번째 구조적 도전이 시작된 것입니다. 기사 원문은 아래의 링크를 통해 확인할 수 있습니다.

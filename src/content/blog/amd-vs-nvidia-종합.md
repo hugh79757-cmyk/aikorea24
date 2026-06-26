@@ -14,7 +14,7 @@ tags:
   - "CUDA"
   - "ROCm"
 draft: false
-image: "https://img.aikorea24.kr/images/amd-vs-nvidia-종합/thumbnail.webp"
+image: "/images/thumbnails/amd-vs-nvidia-종합.jpg"
 ---
 
 [AMD 관련 기사 원문 보기 (The Decoder)](https://the-decoder.com/amd-basically-copy-pasted-its-openai-deal-for-meta-six-gigawatts-and-ten-percent-equity-included/)

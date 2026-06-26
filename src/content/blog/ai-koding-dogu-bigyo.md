@@ -12,7 +12,7 @@ tags:
   - "바이브코딩"
   - "AI비교"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-koding-dogu-bigyo/thumbnail.webp"
+image: "/images/thumbnails/ai-koding-dogu-bigyo.jpg"
 ---
 
 - [ChatGPT 공식 사이트](https://chat.openai.com/)

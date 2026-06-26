@@ -13,7 +13,7 @@ tags:
   - "AI워크플로우"
   - "CLAUDE.md"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-활용-숙련도-4단계/thumbnail.webp"
+image: "/images/thumbnails/ai-활용-숙련도-4단계.jpg"
 ---
 
 대부분의 사람들은 "AI를 잘 사용하는 것"이 더 나은 프롬프트를 작성하는 것이라고 생각합니다. 6개 자율 에이전트를 매일 아침 운용하는 한 개발자에 따르면, 그것은 4단계 중 첫 번째에 불과합니다. Trust(신뢰), Philosophy(철학), Context Engineering(맥락 설계), Harness Engineering(인프라 설계)으로 이어지는 이 프레임워크는 Anthropic 경제 지수 보고서가 데이터로 보여준 **AI 활용 숙련도** 격차의 실체를 구체적으로 드러냅니다.

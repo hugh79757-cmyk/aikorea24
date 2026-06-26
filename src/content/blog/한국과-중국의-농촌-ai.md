@@ -12,7 +12,7 @@ tags:
   - "한국농업"
   - "도농격차"
 draft: false
-image: "https://img.aikorea24.kr/images/한국과-중국의-농촌-ai/thumbnail.webp"
+image: "/images/thumbnails/한국과-중국의-농촌-ai.jpg"
 ---
 
 중국이 AI로 4억 5천만 농촌 인구의 삶을 바꾸겠다는 실험을 시작했습니다. 한국도 거의 같은 시기에 '농업 농촌 AI 대전환(AX) 전략'을 발표했습니다. 같은 목표를 향해 달리지만, 두 나라의 방식은 놀라울 만큼 다릅니다.

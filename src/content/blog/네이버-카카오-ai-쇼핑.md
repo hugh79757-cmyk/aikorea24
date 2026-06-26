@@ -12,7 +12,7 @@ tags:
   - "카나나"
   - "ChatGPT"
 draft: false
-image: "https://img.aikorea24.kr/images/네이버-카카오-ai-쇼핑/thumbnail.webp"
+image: "/images/thumbnails/네이버-카카오-ai-쇼핑.jpg"
 ---
 
 ## 검색에서 대화로, 쇼핑의 출발점이 바뀌고 있습니다

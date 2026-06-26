@@ -12,7 +12,7 @@ tags:
   - "마이크로소프트"
   - "DRACO벤치마크"
 draft: false
-image: "https://img.aikorea24.kr/images/ms-코파일럿-멀티모델-전략/thumbnail.webp"
+image: "/images/thumbnails/ms-코파일럿-멀티모델-전략.jpg"
 ---
 
 마이크로소프트가 MS 365 코파일럿의 심층 연구 에이전트 **리서처(Researcher)** 에 새로운 기능을 추가했습니다. **크리틱(Critique)** 이라는 이름입니다. OpenAI의 GPT 계열 모델이 답변 초안을 생성하면, Anthropic의 Claude가 이를 검토하고 보완합니다.

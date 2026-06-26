@@ -13,7 +13,7 @@ tags:
   - "Ollama"
   - "바이브코딩"
 draft: false
-image: "https://img.aikorea24.kr/images/로컬-llm-쓸-곳/thumbnail.webp"
+image: "/images/thumbnails/로컬-llm-쓸-곳.jpg"
 ---
 
 [북마크 클릭 한번으로 AI 대화 내용 저장하는 방법 (AI코리아24)](https://aikorea24.kr/blog/%EB%B6%81%EB%A7%88%ED%81%AC-%ED%81%B4%EB%A6%AD-%ED%95%9C%EB%B2%88%EC%9C%BC%EB%A1%9C-ai/)

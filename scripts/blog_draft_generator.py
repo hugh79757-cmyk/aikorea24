@@ -12,6 +12,13 @@ from datetime import datetime, date, timezone, timedelta
 KST = timezone(timedelta(hours=9))
 
 # ============================================
+# 중국어 문자 제거 (안전망)
+# ============================================
+def remove_chinese(text):
+    """CJK 통합 한자 블록(U+4E00–U+9FFF, U+3400–U+4DBF) 제거"""
+    return re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', text)
+
+# ============================================
 # 고단가 키워드 테이블
 # ============================================
 KEYWORDS = {
@@ -138,7 +145,8 @@ def generate_draft(keyword, articles, grade):
     if is_deep:
         system_prompt = (
             "당신은 AI/테크 뉴스를 분석하는 한국어 블로거입니다. "
-            "주어진 기사 하나를 깊이 분석하여 블로그 초안을 작성해주세요."
+            "주어진 기사 하나를 깊이 분석하여 블로그 초안을 작성해주세요. "
+            "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
         )
         user_prompt = (
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
@@ -147,7 +155,8 @@ def generate_draft(keyword, articles, grade):
             f"- 본문: 1500자 이상, 소제목(##) 3개 이상 포함\n"
             f"- 기사의 배경/의미/전망을 분석, 독자가 쉽게 이해할 수 있도록\n"
             f"- 마지막에 📌 **요약** 섹션 포함\n"
-            f"- 순한국어, 전문적이면서도 친근한 어조\n\n"
+            f"- 순한국어, 전문적이면서도 친근한 어조\n"
+            f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n\n"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
@@ -157,7 +166,8 @@ def generate_draft(keyword, articles, grade):
     else:
         system_prompt = (
             "당신은 AI/테크 뉴스를 분석하는 한국어 블로거입니다. "
-            "여러 기사를 종합하여 트렌드 분석 블로그 초안을 작성해주세요."
+            "여러 기사를 종합하여 트렌드 분석 블로그 초안을 작성해주세요. "
+            "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
         )
         user_prompt = (
             f"아래 '{keyword}' 관련 여러 기사를 종합한 블로그 초안을 작성해주세요.\n\n"
@@ -166,7 +176,8 @@ def generate_draft(keyword, articles, grade):
             f"- 본문: 2000자 이상, 소제목(##) 3개 이상 포함\n"
             f"- 각 기사의 핵심 내용을 비교/종합하여 트렌드 분석\n"
             f"- 마지막에 📌 **요약** 섹션 포함\n"
-            f"- 순한국어, 전문적이면서도 친근한 어조\n\n"
+            f"- 순한국어, 전문적이면서도 친근한 어조\n"
+            f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n\n"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
@@ -184,6 +195,12 @@ def generate_draft(keyword, articles, grade):
         temperature=0.7,
     )
     content = resp.choices[0].message.content.strip()
+    # 중국어 문자 제거 (안전망)
+    cleaned = remove_chinese(content)
+    if cleaned != content:
+        removed = len(content) - len(cleaned)
+        log(f"  ⚠️ 중국어 문자 {removed}개 제거됨")
+    content = cleaned
     log(f"  생성 완료: {len(content)}자")
     return content
 

@@ -12,7 +12,7 @@ tags:
   - "인스타그램마케팅"
   - "디자인초보"
 draft: false
-image: "https://img.aikorea24.kr/images/디자인-못해도-ok-무료/thumbnail.webp"
+image: "/images/thumbnails/디자인-못해도-ok-무료.jpg"
 ---
 
 [Canva 무료 시작하기](https://www.canva.com/ko_kr/)

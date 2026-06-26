@@ -11,7 +11,7 @@ tags:
   - "GitHub"
   - "바이브코딩"
 draft: false
-image: "https://img.aikorea24.kr/images/github-pages-muryojiman-jeyagi/thumbnail.webp"
+image: "/images/thumbnails/github-pages-muryojiman-jeyagi.jpg"
 ---
 
 - [GitHub Pages 공식 문서](https://docs.github.com/ko/pages)

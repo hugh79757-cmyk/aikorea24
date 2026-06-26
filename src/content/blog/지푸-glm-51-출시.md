@@ -13,7 +13,7 @@ tags:
   - "DeepSeek패턴"
   - "Z.ai"
 draft: false
-image: "https://img.aikorea24.kr/images/지푸-glm-51-출시/thumbnail.webp"
+image: "/images/thumbnails/지푸-glm-51-출시.jpg"
 ---
 
 중국 지푸 AI(Z.ai)가 코딩 특화 모델 **GLM-5.1** 을 출시했습니다. Claude Code 환경에서 45.3점을 기록해 Claude Opus 4.6의 47.9점 대비 94.6% 수준이며, 가격은 프로모션 기준 월 3달러, 정가 월 10달러입니다. 오픈소스입니다.

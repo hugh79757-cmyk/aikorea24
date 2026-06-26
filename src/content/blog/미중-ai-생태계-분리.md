@@ -13,7 +13,7 @@ tags:
   - "한국AI전략"
   - "AI지정학"
 draft: false
-image: "https://img.aikorea24.kr/images/미중-ai-생태계-분리/thumbnail.webp"
+image: "/images/thumbnails/미중-ai-생태계-분리.jpg"
 ---
 
 ---

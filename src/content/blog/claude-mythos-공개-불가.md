@@ -13,7 +13,7 @@ tags:
   - "AI위험성"
   - "오픈소스보안"
 draft: false
-image: "https://img.aikorea24.kr/images/claude-mythos-공개-불가/thumbnail.webp"
+image: "/images/thumbnails/claude-mythos-공개-불가.jpg"
 ---
 
 Anthropic이 새 프론티어 모델 **Claude Mythos Preview**를 일반에 공개하지 않기로 결정했습니다. 2019년 OpenAI가 GPT-2를 "너무 위험하다"며 공개를 미뤘을 때 업계는 비웃었습니다. 7년이 지난 지금 상황이 달라졌습니다. AI가 스스로 27년 된 보안 취약점을 발견하고, 그 취약점을 실제로 공격하는 코드까지 독자적으로 작성했기 때문입니다.

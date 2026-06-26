@@ -13,7 +13,7 @@ tags:
   - "Apple Intelligence"
   - "디스틸레이션"
 draft: false
-image: "https://img.aikorea24.kr/images/애플-구글-gemini-지식/thumbnail.webp"
+image: "/images/thumbnails/애플-구글-gemini-지식.jpg"
 ---
 
 애플이 구글 **Gemini** 모델에 대한 전면 접근권을 확보하고, **지식 증류(디스틸레이션, 큰 AI 모델의 지식을 작은 모델로 옮기는 기술)** 를 통해 아이폰에서 직접 구동되는 경량 AI 모델을 만들고 있습니다. The Information이 3월 25일 보도한 내용입니다. 연간 약 **10억 달러(약 1조 5,000억 원)** 를 구글에 지불하는 이 계약은, 총 규모가 **50억 달러** 에 달할 수 있다고 Financial Times가 보도했습니다.

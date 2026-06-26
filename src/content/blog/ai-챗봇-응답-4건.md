@@ -13,7 +13,7 @@ tags:
   - "미디어위기"
   - "AI검색"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-챗봇-응답-4건/thumbnail.webp"
+image: "/images/thumbnails/ai-챗봇-응답-4건.jpg"
 ---
 
 ---

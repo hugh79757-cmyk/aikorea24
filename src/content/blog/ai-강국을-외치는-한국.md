@@ -13,7 +13,7 @@ tags:
   - "EU AI Act"
   - "DEFIANCE Act"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-강국을-외치는-한국/thumbnail.webp"
+image: "/images/thumbnails/ai-강국을-외치는-한국.jpg"
 ---
 
 [중앙디지털성범죄피해자지원센터](https://d4u.stop.or.kr/)

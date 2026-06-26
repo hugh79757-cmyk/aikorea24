@@ -12,7 +12,7 @@ tags:
   - "AX프로젝트"
   - "AI기본법"
 draft: false
-image: "https://img.aikorea24.kr/images/과기정통부-ai-학습-데이터/thumbnail.webp"
+image: "/images/thumbnails/과기정통부-ai-학습-데이터.jpg"
 ---
 
 ---

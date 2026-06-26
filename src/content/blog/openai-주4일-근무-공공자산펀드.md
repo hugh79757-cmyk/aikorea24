@@ -12,7 +12,7 @@ tags:
   - "초지능"
   - "AI노동정책"
 draft: false
-image: "https://img.aikorea24.kr/images/openai-주4일-근무-공공자산펀드/thumbnail.webp"
+image: "/images/thumbnails/openai-주4일-근무-공공자산펀드.jpg"
 ---
 
 AI로 가장 많은 이익을 얻는 기업이 AI로 인한 일자리 소멸을 직접 인정하고 사회계약의 재설계를 제안했습니다. OpenAI가 공개한 12페이지 분량의 정책 문서 "지능의 시대를 위한 산업 정책(Industrial Policy for the Intelligence Age)"은 주 4일 근무제, 공공 자산 펀드, 자본이득세 인상 등을 담고 있습니다.

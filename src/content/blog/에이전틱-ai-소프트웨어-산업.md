@@ -13,7 +13,7 @@ tags:
   - "클로드코드"
   - "생산성"
 draft: false
-image: "https://img.aikorea24.kr/images/에이전틱-ai-소프트웨어-산업/thumbnail.webp"
+image: "/images/thumbnails/에이전틱-ai-소프트웨어-산업.jpg"
 ---
 
 3년 걸리던 소프트웨어 개발 프로젝트가 **40일** 만에 완료되는 사례가 나오고 있습니다. Y Combinator [CEO 개리 탄](https://aikorea24.kr/blog/ai-%EC%BD%94%EB%94%A9-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EB%B6%84%EC%97%85%EC%9C%BC%EB%A1%9C/)은 AI 코딩 도구로 혼자서 주당 **100개의 코드 수정** 을 처리했고, 이는 숙련된 개발자 **10명분** 의 업무량입니다. 생산성이 10배 뛰는 것은 좋은 일처럼 보이지만, 업계 전문가들은 다른 결론을 내리고 있습니다. **"생산성이 10배 뛰면 산업이 성장하는 게 아니라 가격이 무너진다."**

@@ -12,7 +12,7 @@ tags:
   - "업스테이지"
   - "AI 콘텐츠 생성"
 draft: false
-image: "https://img.aikorea24.kr/images/gpt-41-nano-vs/thumbnail.webp"
+image: "/images/thumbnails/gpt-41-nano-vs.jpg"
 ---
 
 GPT-4o mini를 API 기반 콘텐츠 자동화에 활용해 온 분들이라면 최근 마음이 급해지셨을 것입니다. OpenAI가 2026년 2월 13일부로 GPT-4o를 ChatGPT에서 퇴장시켰고, Azure 기준 GPT-4o mini 역시 2026년 3월 31일 Standard 배포 종료가 예정되어 있습니다. 후속 모델인 GPT-5 nano로의 전환은 단순히 모델명을 바꾸는 것으로 끝나지 않습니다. temperature 파라미터가 사라지고, max_tokens 대신 max_completion_tokens를 써야 하며, reasoning_effort를 설정하지 않으면 비용이 13배 뛰는 구조적 변화가 따릅니다.

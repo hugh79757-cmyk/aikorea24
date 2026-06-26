@@ -14,7 +14,7 @@ KST = timezone(timedelta(hours=9))
 PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 SEEDS_PATH = os.path.join(PROJECT_DIR, "scripts", "seeds.json")
-KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "keywords.json")
+KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 NAVER_BASE_URL = "https://api.searchad.naver.com"
 

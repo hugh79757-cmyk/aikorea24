@@ -15,7 +15,7 @@ tags:
   - "AI스타트업"
   - "중국AI대안"
 draft: false
-image: "https://img.aikorea24.kr/images/아르시-ai-trinity-large/thumbnail.webp"
+image: "/images/thumbnails/아르시-ai-trinity-large.jpg"
 ---
 
 AI 뉴스에서 잘 언급되지 않는 작은 회사가 큰 파장을 일으키고 있습니다. 직원 26명, 예산 2천만 달러. 그런데 이 회사가 만든 모델이 "비중국 기업이 출시한 가장 강력한 오픈웨이트 모델"이라는 주장이 나왔습니다. 회사 이름은 **Arcee AI**, 모델 이름은 **Trinity Large Thinking**입니다.

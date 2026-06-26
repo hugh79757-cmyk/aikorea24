@@ -12,7 +12,7 @@ tags:
   - "중국AI"
   - "ATH"
 draft: false
-image: "https://img.aikorea24.kr/images/알리바바-영상-ai-해피호스/thumbnail.webp"
+image: "/images/thumbnails/알리바바-영상-ai-해피호스.jpg"
 ---
 
 ---

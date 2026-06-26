@@ -12,7 +12,7 @@ tags:
   - "로컬LLM"
   - "RAG"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-맥락-관리의-정답은/thumbnail.webp"
+image: "/images/thumbnails/ai-맥락-관리의-정답은.jpg"
 ---
 
 [AI코리아24 오늘의 AI 브리핑 관련 기사](https://aikorea24.kr/briefing/2026-03-16/#item-2)

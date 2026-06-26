@@ -4,7 +4,7 @@ aikorea24 키워드 자동 갱신기 v1.0
 - scripts/seeds.json + 오늘 뉴스 키워드 추출
 - 네이버 검색광고 API 검색량 조회
 - grade/intent/db_query 자동 생성
-- scripts/keywords.json 갱신 + 텔레그램 알림
+- scripts/thread_topics/keywords.json 갱신 + 텔레그램 알림
 """
 import os, re, json, sys, time, hmac, hashlib, base64
 from datetime import datetime, date, timezone, timedelta
@@ -14,7 +14,7 @@ KST = timezone(timedelta(hours=9))
 PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 SEEDS_PATH = os.path.join(PROJECT_DIR, "scripts", "seeds.json")
-KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "keywords.json")
+KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 NAVER_BASE_URL = "https://api.searchad.naver.com"
 

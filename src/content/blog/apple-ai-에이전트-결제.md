@@ -12,7 +12,7 @@ tags:
   - "에이전트AI"
   - "AI결제보안"
 draft: false
-image: "https://img.aikorea24.kr/images/apple-ai-에이전트-결제/thumbnail.webp"
+image: "/images/thumbnails/apple-ai-에이전트-결제.jpg"
 ---
 
 ---

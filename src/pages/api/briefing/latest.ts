@@ -23,7 +23,7 @@ export const GET: APIRoute = async ({ url, locals }) => {
   }
 
   const { results: items } = await db.prepare(
-    `SELECT bi.sort_order, bi.comment,
+    `SELECT bi.id, bi.sort_order, bi.comment,
             n.id as news_id, n.title, n.link, n.description, n.source, n.category, n.country, n.pub_date
      FROM briefing_items bi
      JOIN news n ON bi.news_id = n.id

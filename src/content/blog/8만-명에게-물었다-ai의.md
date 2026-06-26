@@ -12,7 +12,7 @@ tags:
   - "AI신뢰성"
   - "정성적조사"
 draft: false
-image: "https://img.aikorea24.kr/images/8만-명에게-물었다-ai의/thumbnail.webp"
+image: "/images/thumbnails/8만-명에게-물었다-ai의.jpg"
 ---
 
 [AI코리아24 브리핑 바로가기](https://aikorea24.kr/briefing/2026-03-24/)

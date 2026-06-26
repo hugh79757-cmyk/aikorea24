@@ -12,7 +12,7 @@ tags:
   - "GGUF"
   - "맥북AI"
 draft: false
-image: "https://img.aikorea24.kr/images/nanbeige41-3b-설치부터-활용까지/thumbnail.webp"
+image: "/images/thumbnails/nanbeige41-3b-설치부터-활용까지.jpg"
 ---
 
 [Nanbeige4.1-3B Hugging Face 모델 페이지](https://huggingface.co/Nanbeige/Nanbeige4.1-3B)

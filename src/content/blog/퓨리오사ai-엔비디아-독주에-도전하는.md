@@ -13,7 +13,7 @@ tags:
   - "소버린AI"
   - "AI칩"
 draft: false
-image: "https://img.aikorea24.kr/images/퓨리오사ai-엔비디아-독주에-도전하는/thumbnail.webp"
+image: "/images/thumbnails/퓨리오사ai-엔비디아-독주에-도전하는.jpg"
 ---
 
 > 관련 브리핑: [LGU+, 퓨리오사AI와 기업용 AI 어플라이언스 개발 소식](https://aikorea24.kr/briefing/2026-03-09/#item-5)

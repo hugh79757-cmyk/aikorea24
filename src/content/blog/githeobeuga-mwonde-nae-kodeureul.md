@@ -12,7 +12,7 @@ tags:
   - "코드저장소"
   - "바이브코딩"
 draft: false
-image: "https://img.aikorea24.kr/images/githeobeuga-mwonde-nae-kodeureul/thumbnail.webp"
+image: "/images/thumbnails/githeobeuga-mwonde-nae-kodeureul.jpg"
 ---
 
 - [GitHub 공식 사이트](https://github.com/)

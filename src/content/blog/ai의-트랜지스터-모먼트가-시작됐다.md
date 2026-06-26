@@ -12,7 +12,7 @@ tags:
   - "잠재공간"
   - "AI효율"
 draft: false
-image: "https://img.aikorea24.kr/images/ai의-트랜지스터-모먼트가-시작됐다/thumbnail.webp"
+image: "/images/thumbnails/ai의-트랜지스터-모먼트가-시작됐다.jpg"
 ---
 
 [AI코리아24 브리핑 바로가기](https://aikorea24.kr/briefing/2026-03-24/)

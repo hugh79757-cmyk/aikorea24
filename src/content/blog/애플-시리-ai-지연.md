@@ -13,7 +13,7 @@ tags:
   - "AI소송"
   - "시리지연"
 draft: false
-image: "https://img.aikorea24.kr/images/애플-시리-ai-지연/thumbnail.webp"
+image: "/images/thumbnails/애플-시리-ai-지연.jpg"
 ---
 
 ---

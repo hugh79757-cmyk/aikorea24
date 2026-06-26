@@ -13,7 +13,7 @@ tags:
   - "Claude"
   - "딥시크"
 draft: false
-image: "https://img.aikorea24.kr/images/알리바바-qwen36-plus-출시와/thumbnail.webp"
+image: "/images/thumbnails/알리바바-qwen36-plus-출시와.jpg"
 ---
 
 알리바바가 4월 첫째 주, 불과 며칠 사이에 세 번째 독점(비공개) AI 모델 **Qwen3.6-Plus** 를 출시했습니다. 100만 토큰 컨텍스트 윈도우를 갖춘 코딩 특화 모델로, 자사 클라우드 플랫폼과 챗봇을 통해서만 이용할 수 있습니다. 허깅페이스(Hugging Face) 기준으로 구글과 메타를 합친 것보다 많은 파생 모델을 보유하며 오픈소스 생태계를 주도해온 알리바바가, 이제 플래그십 모델의 문을 닫기 시작한 것입니다.

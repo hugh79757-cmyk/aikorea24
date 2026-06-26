@@ -13,7 +13,7 @@ tags:
   - "AI 모델 경쟁"
   - "사이버보안 AI"
 draft: false
-image: "https://img.aikorea24.kr/images/claude-mythos-유출과-openai/thumbnail.webp"
+image: "/images/thumbnails/claude-mythos-유출과-openai.jpg"
 ---
 
 ## Anthropic의 보안 사고로 사상 최강 AI 모델의 존재가 드러났다

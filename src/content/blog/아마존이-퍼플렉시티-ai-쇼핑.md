@@ -12,7 +12,7 @@ tags:
   - "빅테크"
   - "반독점"
 draft: false
-image: "https://img.aikorea24.kr/images/아마존이-퍼플렉시티-ai-쇼핑/thumbnail.webp"
+image: "/images/thumbnails/아마존이-퍼플렉시티-ai-쇼핑.jpg"
 ---
 
 [뉴스원문보기 - AI 브리핑](https://aikorea24.kr/briefing/2026-03-11/#item-1)

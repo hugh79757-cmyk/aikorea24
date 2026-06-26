@@ -12,7 +12,7 @@ tags:
   - "CloudflarePages"
   - "바이브코딩"
 draft: false
-image: "https://img.aikorea24.kr/images/github-vercel-tto-dareun/thumbnail.webp"
+image: "/images/thumbnails/github-vercel-tto-dareun.jpg"
 ---
 
 - [Vercel 공식 사이트](https://vercel.com/)

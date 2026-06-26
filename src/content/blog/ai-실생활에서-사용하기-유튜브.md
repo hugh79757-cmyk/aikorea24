@@ -12,7 +12,7 @@ tags:
   - "시간절약"
   - "AI사용법"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-실생활에서-사용하기-유튜브/thumbnail.webp"
+image: "/images/thumbnails/ai-실생활에서-사용하기-유튜브.jpg"
 ---
 
 [YouTube Summary with ChatGPT 확장프로그램 설치하기](https://chromewebstore.google.com/detail/youtube-summary-with-chat/nmmicjeknamkfloonkhhcjmomieiodli?pli=1)

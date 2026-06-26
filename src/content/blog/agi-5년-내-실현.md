@@ -12,7 +12,7 @@ tags:
   - "인공지능혁명"
   - "20VC"
 draft: false
-image: "https://img.aikorea24.kr/images/agi-5년-내-실현/thumbnail.webp"
+image: "/images/thumbnails/agi-5년-내-실현.jpg"
 ---
 
 ---

@@ -1,28 +1,58 @@
 
+# AGENTS.md — aikorea24.kr
+
+> 프로젝트 루트: ~/Projects/aikorea24
+> 작업 로그: /Users/twinssn/Desktop/메모 Hugh/logs/YYYYMMDD.md
+> 전역 행동 규칙은 SOUL.md 참조
+
 ---
 
-## 키워드 테이블 (scripts/keywords.json)
+## 서브에이전트 위임 규칙
 
-검색 수요 기반 키워드 테이블. 수동 관리, 추후 확장 예정.
+- 파일 읽기, 코드 분석, 스크립트 실행은 반드시 **opencode**로 위임
+- terminal 직접 실행 금지 (cat / grep / find / python3 등)
+- opencode 실패 시 → **reasonix code**로 폴백
+- reasonix도 실패 시 → 즉시 중단, 사용자에게 보고
 
-### outline_generator.py 수정사항
-기존 고단가 키워드 하드코딩 방식 대신 scripts/keywords.json 을 로딩해서 사용할 것.
+---
+
+## 작업 로그 규칙
+
+- 모든 작업 결과를 세션 종료 전
+  `/Users/twinssn/Desktop/메모 Hugh/logs/YYYYMMDD.md` 에 append
+- 로그 형식:
+```
+
+## HH:MM — \[작업 요약]
+
+* 프로젝트: \[경로]
+* 결과: \[성공/실패/중단]
+* 산출물: \[생성된 파일 경로 등]
+* 비고: \[특이사항]
+dry-run 결과는 [DRY-RUN] 태그로 구분
+
+---
+
+## 키워드 파이프라인 (outline_generator.py)
+
+키워드 소스: `scripts/keywords.json` (수동 관리, 하드코딩 방식 사용 금지)
 
 ### 처리 흐름
-1. keywords.json 로드
-2. 각 키워드의 db_query 항목으로 D1 뉴스 DB 검색 (오늘 + 어제)
+1. `keywords.json` 로드
+2. 각 키워드의 `db_query` 항목으로 D1 뉴스 DB 검색 (오늘 + 어제)
 3. 매칭 기사 있으면 → 키워드 intent + 기사 내용으로 아웃라인 생성
 4. 매칭 기사 없으면 → 키워드 intent 만으로 아웃라인 생성 (뉴스 없음 표기)
-5. scripts/outlines/YYYYMMDD/키워드슬러그_outline.md 저장
+5. `scripts/outlines/YYYYMMDD/키워드슬러그_outline.md` 저장
 
-### 아웃라인 md 파일 상단에 추가할 메타정보
-- 키워드: {keyword}
-- 검색량: {search_volume}
-- 등급: {grade}
-- 매칭기사: {매칭된 기사 수}건
-- 검색의도: {intent}
+### 아웃라인 파일 상단 메타정보
+```
 
----
+* 키워드: {keyword}
+* 검색량: {search\_volume}
+* 등급: {grade}
+* 매칭기사: {매칭된 기사 수}건
+* 검색의도: {intent}
+
 
 ## 중복 발행 방지 (threads 파이프라인)
 
@@ -34,7 +64,7 @@
 | Phase 2 | `narrative_pitcher.is_duplicate_pitch()` | article_original_titles entity overlap | 2개 |
 | Phase 3 | `save_pitch_to_history().entities` | capitalized entity 저장 → 이후 Phase 2에 활용 | — |
 
-**목적:** 동일 뉴스 이벤트를 다른 매체(Reuters, Guardian, TNW, BBC)가 다르게 보도해도 중복 탐지.
-- English original_title 기준 word Jaccard (stopword 제외, 2글자+)
-- `extract_title_entities()`: `\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b` 패턴의 capitalized entity
-- phase 1이 가장 강력: 기사 로딩 단계에서 차단 → Phase 2는 2차 방어
+- English `original_title` 기준 word Jaccard (stopword 제외, 2글자+)
+- `extract_title_entities()`: `\b[A-Z][a-zA-Z0-9.&+#\-]{1,}\b` 패턴
+- Phase 1이 가장 강력 (기사 로딩 단계 차단) → Phase 2는 2차 방어
+```

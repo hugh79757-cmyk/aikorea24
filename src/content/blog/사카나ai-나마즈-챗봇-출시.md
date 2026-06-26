@@ -13,7 +13,7 @@ tags:
   - "중국AI검열"
   - "Sakana Chat"
 draft: false
-image: "https://img.aikorea24.kr/images/사카나ai-나마즈-챗봇-출시/thumbnail.webp"
+image: "/images/thumbnails/사카나ai-나마즈-챗봇-출시.jpg"
 ---
 
 ## 구글이 투자한 일본 AI 유니콘, 소비자 챗봇을 내놓다

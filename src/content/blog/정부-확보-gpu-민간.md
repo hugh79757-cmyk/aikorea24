@@ -12,7 +12,7 @@ tags:
   - "NIPA"
   - "AI정책"
 draft: false
-image: "https://img.aikorea24.kr/images/정부-확보-gpu-민간/thumbnail.webp"
+image: "/images/thumbnails/정부-확보-gpu-민간.jpg"
 ---
 
 ## 사업의 배경 — 왜 정부가 GPU를 사서 나눠주나

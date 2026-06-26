@@ -13,7 +13,7 @@ tags:
   - "법률AI"
   - "AI오류"
 draft: false
-image: "https://img.aikorea24.kr/images/법정-ai-할루시네이션-클로드/thumbnail.webp"
+image: "/images/thumbnails/법정-ai-할루시네이션-클로드.jpg"
 ---
 
 ---

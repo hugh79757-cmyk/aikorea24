@@ -1,0 +1,56 @@
+{
+  "crawlable": [
+    {"name": "Wired AI", "rss_url": "https://www.wired.com/feed/tag/ai/latest/rss", "avg_content_length": 14010},
+    {"name": "MarkTechPost", "rss_url": "https://marktechpost.com/feed/", "avg_content_length": 13877},
+    {"name": "AI News EU", "rss_url": "https://www.artificialintelligence-news.com/feed/", "avg_content_length": 12897},
+    {"name": "HuggingFace Blog", "rss_url": "https://huggingface.co/blog/feed.xml", "avg_content_length": 10486},
+    {"name": "GitHub Blog", "rss_url": "https://github.blog/feed/", "avg_content_length": 10284},
+    {"name": "The Decoder", "rss_url": "https://the-decoder.com/feed/", "avg_content_length": 4844},
+    {"name": "The Guardian AI", "rss_url": "https://www.theguardian.com/technology/rss", "avg_content_length": 4811},
+    {"name": "MIT Tech Review", "rss_url": "https://www.technologyreview.com/feed/", "avg_content_length": 4736},
+    {"name": "TechCrunch AI", "rss_url": "https://techcrunch.com/category/artificial-intelligence/feed/", "avg_content_length": 4712},
+    {"name": "Google AI Blog", "rss_url": "https://blog.google/technology/ai/rss/", "avg_content_length": 4335},
+    {"name": "Ars Technica AI", "rss_url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "avg_content_length": 4072},
+    {"name": "City AM", "rss_url": "https://www.cityam.com/feed/", "avg_content_length": 3773},
+    {"name": "Guardian US News", "rss_url": "https://www.theguardian.com/us-news/rss", "avg_content_length": 35712},
+    {"name": "BBC Technology", "rss_url": "http://feeds.bbci.co.uk/news/technology/rss.xml", "avg_content_length": 5692},
+    {"name": "The Next Web", "rss_url": "https://thenextweb.com/feed/", "avg_content_length": 5692},
+    {"name": "ZDNET AI", "rss_url": "https://www.zdnet.com/news/rss.xml", "avg_content_length": 7166},
+    {"name": "Politico EU Tech", "rss_url": "https://www.politico.eu/feed/", "avg_content_length": 2079},
+    {"name": "Memphis Flyer", "rss_url": "https://www.memphisflyer.com/feed", "avg_content_length": 4328},
+    {"name": "CNBC Tech", "rss_url": "https://www.cnbc.com/id/19854910/device/rss/rss.html", "avg_content_length": 3015},
+    {"name": "NYT AI Spotlight", "rss_url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "avg_content_length": 2584}
+  ],
+  "rss_only": [
+    {"name": "Hacker News", "rss_url": "https://hnrss.org/newest?q=AI", "reason": "본문 553자 (댓글 위주)"},
+    {"name": "Financial Times AI", "rss_url": "https://www.ft.com/rss/ai", "reason": "403 Forbidden"},
+    {"name": "VentureBeat AI", "rss_url": "https://venturebeat.com/feed/", "reason": "403 Forbidden"},
+    {"name": "Axios", "rss_url": "https://api.axios.com/feed/", "reason": "403 Forbidden"},
+    {"name": "NYT Technology", "rss_url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "reason": "403 Forbidden"},
+    {"name": "NL Times", "rss_url": "https://nltimes.nl/rss", "reason": "403 Forbidden"},
+    {"name": "SCMP China Tech", "rss_url": "https://www.scmp.com/rss/91/feed", "reason": "본문 643자 (제한)"}
+  ],
+  "no_rss": [
+    {"name": "AI타임스", "reason": "RSS 404"},
+    {"name": "전자신문", "reason": "XML 파싱 에러"},
+    {"name": "IT조선", "reason": "본문 38자 (제한)"},
+    {"name": "인공지능신문", "reason": "연결 타임아웃"},
+    {"name": "디지털투데이", "reason": "RSS 404"},
+    {"name": "CNN Technology", "reason": "RSS 404"},
+    {"name": "OpenAI Blog", "reason": "RSS 403"},
+    {"name": "Fast Company AI", "reason": "RSS 403"},
+    {"name": "Dev.to AI", "reason": "RSS 403"},
+    {"name": "Ben's Bites", "reason": "RSS 404"},
+    {"name": "Interconnects AI", "reason": "RSS 404"},
+    {"name": "Herald Scotland", "reason": "RSS 404"},
+    {"name": "The National News", "reason": "RSS 404"},
+    {"name": "Nature ML", "reason": "XML 파싱 에러"}
+  ],
+  "api_based": [
+    {"name": "네이버뉴스", "count": 4286, "reason": "API 기반"},
+    {"name": "과기부 보도자료", "count": 155, "reason": "공공데이터 API"},
+    {"name": "과기부 사업공고", "count": 50, "reason": "공공데이터 API"},
+    {"name": "중소벤처기업부", "count": 19, "reason": "공공데이터 API"},
+    {"name": "지자체 전체", "count": 100, "reason": "공공데이터 API"}
+  ]
+}

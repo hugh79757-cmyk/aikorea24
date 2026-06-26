@@ -12,7 +12,7 @@ tags:
   - "AI위험"
   - "다크패턴"
 draft: false
-image: "https://img.aikorea24.kr/images/버니-샌더스가-ai를-폭로하려다/thumbnail.webp"
+image: "/images/thumbnails/버니-샌더스가-ai를-폭로하려다.jpg"
 ---
 
 ---

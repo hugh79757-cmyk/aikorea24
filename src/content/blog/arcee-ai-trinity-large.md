@@ -13,7 +13,7 @@ tags:
   - "SMEBU"
   - "오픈웨이트"
 draft: false
-image: "https://img.aikorea24.kr/images/arcee-ai-trinity-large/thumbnail.webp"
+image: "/images/thumbnails/arcee-ai-trinity-large.jpg"
 ---
 
 미국 스타트업 Arcee AI가 약 2,000만 달러(한화 약 280억 원)를 투자해 오픈소스 추론 모델 **Trinity-Large-Thinking**을 공개했습니다. 이 금액은 회사 전체 벤처캐피털 조달액의 절반에 해당합니다. 사실상 회사의 존폐를 건 베팅입니다.

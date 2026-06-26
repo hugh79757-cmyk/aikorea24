@@ -13,7 +13,7 @@ tags:
   - "AI안전"
   - "기업보안"
 draft: false
-image: "https://img.aikorea24.kr/images/메타에서-ai-에이전트가-보안/thumbnail.webp"
+image: "/images/thumbnails/메타에서-ai-에이전트가-보안.jpg"
 ---
 
 [AI코리아24 오늘의 브리핑에서 관련 뉴스 확인하기](https://aikorea24.kr/briefing/2026-03-20/#item-1)

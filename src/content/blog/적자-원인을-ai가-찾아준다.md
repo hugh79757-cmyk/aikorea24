@@ -12,7 +12,7 @@ tags:
   - "비용절감"
   - "경영개선"
 draft: false
-image: "https://img.aikorea24.kr/images/적자-원인을-ai가-찾아준다/thumbnail.webp"
+image: "/images/thumbnails/적자-원인을-ai가-찾아준다.jpg"
 ---
 
 [Microsoft 365 Copilot](https://www.microsoft.com/ko-kr/microsoft-365/copilot)

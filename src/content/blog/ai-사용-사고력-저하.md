@@ -13,7 +13,7 @@ tags:
   - "AI의존성"
   - "Wired"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-사용-사고력-저하/thumbnail.webp"
+image: "/images/thumbnails/ai-사용-사고력-저하.jpg"
 ---
 
 ---

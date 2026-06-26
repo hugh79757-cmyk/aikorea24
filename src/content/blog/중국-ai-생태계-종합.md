@@ -13,7 +13,7 @@ tags:
   - "홍바오"
   - "Qwen"
 draft: false
-image: "https://img.aikorea24.kr/images/중국-ai-생태계-종합/thumbnail.webp"
+image: "/images/thumbnails/중국-ai-생태계-종합.jpg"
 ---
 
 중국은 미국과는 독립적인 병렬 AI 생태계를 구축했습니다. 2025년 12월 기준 중국의 생성형 AI 사용자 수는 약 6억 200만 명으로 전년 대비 141.7% 급증했으며, 정부에 등록된 생성형 AI 서비스만 700개 이상에 달합니다.

@@ -13,7 +13,7 @@ tags:
   - "유럽AI"
   - "초지능"
 draft: false
-image: "https://img.aikorea24.kr/images/llm-이후의-차세대-ai/thumbnail.webp"
+image: "/images/thumbnails/llm-이후의-차세대-ai.jpg"
 ---
 
 **참고 링크**

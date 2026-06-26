@@ -12,7 +12,7 @@ tags:
   - "기술트렌드"
   - "디지털리터러시"
 draft: false
-image: "https://img.aikorea24.kr/images/ai가-뭔데-다들-난리야/thumbnail.webp"
+image: "/images/thumbnails/ai가-뭔데-다들-난리야.jpg"
 ---
 
 [네이버 AI 트렌드 살펴보기](https://search.naver.com/search.naver?query=AI+%EC%9D%B8%EA%B3%B5%EC%A7%80%EB%8A%A5)

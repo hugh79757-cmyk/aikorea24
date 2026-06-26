@@ -13,7 +13,7 @@ tags:
   - "바이브코딩"
   - "개발환경"
 draft: false
-image: "https://img.aikorea24.kr/images/git-repo-vscode-baibeukoding/thumbnail.webp"
+image: "/images/thumbnails/git-repo-vscode-baibeukoding.jpg"
 ---
 
 ## 관련 링크

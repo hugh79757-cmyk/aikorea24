@@ -11,7 +11,7 @@ tags:
   - "바이브코딩"
   - "효율적배포"
 draft: false
-image: "https://img.aikorea24.kr/images/cloudflare-muryoui-hangye-bildeu/thumbnail.webp"
+image: "/images/thumbnails/cloudflare-muryoui-hangye-bildeu.jpg"
 ---
 
 - [Cloudflare Pages 제한 사항](https://developers.cloudflare.com/pages/platform/limits/)

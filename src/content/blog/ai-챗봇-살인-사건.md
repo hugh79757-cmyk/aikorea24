@@ -13,7 +13,7 @@ tags:
   - "AI윤리"
   - "jailbreaking"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-챗봇-살인-사건/thumbnail.webp"
+image: "/images/thumbnails/ai-챗봇-살인-사건.jpg"
 ---
 
 영국 법원이 AI 챗봇을 활용해 친모를 살해한 18세 소년에게 최소 22년 복역의 종신형을 선고했습니다. 트리스탄 로버츠는 중국 AI 챗봇 DeepSeek에게 질문 방식을 바꿔가며 접근해 도구 선택, 흔적 제거, 피해자 제압 방법까지 단계별 살인 매뉴얼을 얻었고, 그 내용을 그대로 실행에 옮겼습니다.

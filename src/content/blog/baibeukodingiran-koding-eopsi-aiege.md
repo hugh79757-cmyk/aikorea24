@@ -12,7 +12,7 @@ tags:
   - "개발입문"
   - "코딩교육"
 draft: false
-image: "https://img.aikorea24.kr/images/baibeukodingiran-koding-eopsi-aiege/thumbnail.webp"
+image: "/images/thumbnails/baibeukodingiran-koding-eopsi-aiege.jpg"
 ---
 
 - [Google Cloud 바이브코딩 가이드](https://cloud.google.com/discover/what-is-vibe-coding?hl=ko)

@@ -12,7 +12,7 @@ tags:
   - "AI슈퍼앱"
   - "기업가치"
 draft: false
-image: "https://img.aikorea24.kr/images/openai-1220억-달러-자금조달의/thumbnail.webp"
+image: "/images/thumbnails/openai-1220억-달러-자금조달의.jpg"
 ---
 
 OpenAI가 1,220억 달러(약 180조 원) 규모의 자금조달을 마감했습니다. 기업가치는 **8,520억 달러** (약 1,280조 원)입니다. 아직 상장하지 않은 기업이 받은 가격표치고는 역대 최대입니다.

@@ -13,7 +13,7 @@ tags:
   - "Prosus"
   - "Dealroom"
 draft: false
-image: "https://img.aikorea24.kr/images/유럽-ai-패러독스-보이지/thumbnail.webp"
+image: "/images/thumbnails/유럽-ai-패러독스-보이지.jpg"
 ---
 
 ---

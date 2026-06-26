@@ -13,7 +13,7 @@ tags:
   - "AI규제"
   - "비동의성착취"
 draft: false
-image: "https://img.aikorea24.kr/images/텔레그램-ai-딥페이크-성착취/thumbnail.webp"
+image: "/images/thumbnails/텔레그램-ai-딥페이크-성착취.jpg"
 ---
 
 ---

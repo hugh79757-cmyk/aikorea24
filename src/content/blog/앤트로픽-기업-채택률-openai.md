@@ -12,7 +12,7 @@ tags:
   - "ClaudeCode"
   - "엔터프라이즈AI"
 draft: false
-image: "https://img.aikorea24.kr/images/앤트로픽-기업-채택률-openai/thumbnail.webp"
+image: "/images/thumbnails/앤트로픽-기업-채택률-openai.jpg"
 ---
 
 ---

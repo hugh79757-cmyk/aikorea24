@@ -13,7 +13,7 @@ tags:
   - "프롬프트엔지니어링"
   - "노코드"
 draft: false
-image: "https://img.aikorea24.kr/images/바이브-코딩-시작하기-chatgpt와/thumbnail.webp"
+image: "/images/thumbnails/바이브-코딩-시작하기-chatgpt와.jpg"
 ---
 
 [Visual Studio Code 다운로드](https://code.visualstudio.com/)

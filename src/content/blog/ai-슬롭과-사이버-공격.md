@@ -13,7 +13,7 @@ tags:
   - "AI안전"
   - "코드리뷰"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-슬롭과-사이버-공격/thumbnail.webp"
+image: "/images/thumbnails/ai-슬롭과-사이버-공격.jpg"
 ---
 
 ---

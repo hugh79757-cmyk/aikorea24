@@ -13,7 +13,7 @@ tags:
   - "AI쇼핑"
   - "본인인증"
 draft: false
-image: "https://img.aikorea24.kr/images/ai가-대신-쇼핑하는-시대/thumbnail.webp"
+image: "/images/thumbnails/ai가-대신-쇼핑하는-시대.jpg"
 ---
 
 AI 에이전트가 사람 대신 쇼핑하는 시대, 그 에이전트 뒤에 진짜 사람이 있는지 증명하는 사업이 본격적으로 시작됐습니다. 샘 알트먼이 공동 창업한 World(구 월드코인)가 **AgentKit** 베타를 출시했습니다. AI 에이전트에 홍채 기반 본인인증을 연결해, 이 에이전트가 실제 사람의 승인을 받았음을 웹사이트에 증명하는 개발자 도구입니다.

@@ -11,7 +11,7 @@ tags:
   - "다자외교"
   - "소버린AI"
 draft: false
-image: "https://img.aikorea24.kr/images/유엔-ai-허브가-한국에/thumbnail.webp"
+image: "/images/thumbnails/유엔-ai-허브가-한국에.jpg"
 ---
 
 ---

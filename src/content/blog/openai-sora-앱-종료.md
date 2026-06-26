@@ -13,7 +13,7 @@ tags:
   - "AI소셜앱"
   - "컴퓨팅부족"
 draft: false
-image: "https://img.aikorea24.kr/images/openai-sora-앱-종료/thumbnail.webp"
+image: "/images/thumbnails/openai-sora-앱-종료.jpg"
 ---
 
 OpenAI가 3월 24일 AI 비디오 소셜 앱 **Sora** 의 종료를 발표했습니다. 출시 6개월 만입니다. 같은 날 디즈니는 지난 12월 체결한 **10억 달러 투자 및 캐릭터 라이선스 계약** 에서 철회했습니다. Reuters에 따르면 실제로 자금이 집행된 적은 없습니다.

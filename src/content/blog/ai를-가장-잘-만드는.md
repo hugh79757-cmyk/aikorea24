@@ -13,7 +13,7 @@ tags:
   - "과기정통부"
   - "스타트업"
 draft: false
-image: "https://img.aikorea24.kr/images/ai를-가장-잘-만드는/thumbnail.webp"
+image: "/images/thumbnails/ai를-가장-잘-만드는.jpg"
 ---
 
 [AI코리아24 오늘의 브리핑에서 관련 뉴스 확인하기](https://aikorea24.kr/briefing/2026-03-21/#item-1)

@@ -12,7 +12,7 @@ tags:
   - "ChatGPT프롬프트"
   - "창업지원사업"
 draft: false
-image: "https://img.aikorea24.kr/images/정부지원금-받는-사업계획서-ai/thumbnail.webp"
+image: "/images/thumbnails/정부지원금-받는-사업계획서-ai.jpg"
 ---
 
 [기업마당 지원사업 검색](https://www.bizinfo.go.kr/)

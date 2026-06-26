@@ -12,7 +12,7 @@ tags:
   - "AI일상화"
   - "생성형AI"
 draft: false
-image: "https://img.aikorea24.kr/images/ai가-일상이-되면-생략되는/thumbnail.webp"
+image: "/images/thumbnails/ai가-일상이-되면-생략되는.jpg"
 ---
 
 [오픈서베이 AI 검색 트렌드 리포트 2026](https://blog.opensurvey.co.kr/article/ai-search-2026-2/)

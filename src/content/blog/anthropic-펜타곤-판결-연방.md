@@ -13,7 +13,7 @@ tags:
   - "공급망 위험 지정"
   - "AI 군사 계약"
 draft: false
-image: "https://img.aikorea24.kr/images/anthropic-펜타곤-판결-연방/thumbnail.webp"
+image: "/images/thumbnails/anthropic-펜타곤-판결-연방.jpg"
 ---
 
 ## AI 기업의 윤리적 거부권을 처음으로 법적으로 보호한 날

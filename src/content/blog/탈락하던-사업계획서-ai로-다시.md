@@ -12,7 +12,7 @@ tags:
   - "ChatGPT활용"
   - "지원사업선정"
 draft: false
-image: "https://img.aikorea24.kr/images/탈락하던-사업계획서-ai로-다시/thumbnail.webp"
+image: "/images/thumbnails/탈락하던-사업계획서-ai로-다시.jpg"
 ---
 
 [기업마당 정부지원사업 통합공고](https://www.bizinfo.go.kr/)

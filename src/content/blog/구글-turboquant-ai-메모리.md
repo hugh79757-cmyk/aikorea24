@@ -13,7 +13,7 @@ tags:
   - "추론효율"
   - "ICLR2026"
 draft: false
-image: "https://img.aikorea24.kr/images/구글-turboquant-ai-메모리/thumbnail.webp"
+image: "/images/thumbnails/구글-turboquant-ai-메모리.jpg"
 ---
 
 구글 리서치가 3월 25일 **TurboQuant** 라는 새로운 AI 메모리 압축 알고리즘을 발표했습니다. AI가 대화하거나 문서를 처리할 때 사용하는 작업 메모리(KV 캐시)를 **최소 6배 압축** 하면서 **정확도 손실은 제로** , 속도는 **최대 8배 향상** 된다는 결과입니다. Cloudflare CEO 매튜 프린스는 이를 **"구글의 DeepSeek 모먼트"** 라고 평가했습니다.

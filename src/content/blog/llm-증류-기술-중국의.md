@@ -15,7 +15,7 @@ tags:
   - "애플인텔리전스"
   - "온디바이스AI"
 draft: false
-image: "https://img.aikorea24.kr/images/llm-증류-기술-중국의/thumbnail.webp"
+image: "/images/thumbnails/llm-증류-기술-중국의.jpg"
 ---
 
 ---

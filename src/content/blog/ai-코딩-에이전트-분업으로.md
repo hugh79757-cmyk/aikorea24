@@ -13,7 +13,7 @@ tags:
   - "그록"
   - "AGI"
 draft: false
-image: "https://img.aikorea24.kr/images/ai-코딩-에이전트-분업으로/thumbnail.webp"
+image: "/images/thumbnails/ai-코딩-에이전트-분업으로.jpg"
 ---
 
 AI 챗봇에 "너는 여행 전문가야"라고 말하면 더 좋은 답변이 나온다는 것은 이미 널리 알려진 프롬프트 기법입니다. 그런데 이 단순한 원리가 **AI 코딩 에이전트** 의 생산성을 10배로 끌어올리고 있습니다. Y Combinator CEO **개리 탄** 은 이 방식으로 혼자서 **주 100개의 풀 리퀘스트(PR, 코드 수정 제안)** 를 50일 연속 처리했다고 밝혔습니다.

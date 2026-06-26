@@ -12,7 +12,7 @@ tags:
   - "AI사회문제"
   - "디지털존엄"
 draft: false
-image: "https://img.aikorea24.kr/images/사망한-아들을-ai로-되살려/thumbnail.webp"
+image: "/images/thumbnails/사망한-아들을-ai로-되살려.jpg"
 ---
 
 ---
