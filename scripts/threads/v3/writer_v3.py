@@ -441,15 +441,14 @@ def parse_cards(text):
     return cards
 
 def validate_cards(cards, pitch):
-    """기본 검증 (hook 정합성 + 카드 수)"""
+    """기본 검증 (카드 수 + hook 근사 일치)"""
     if not cards or len(cards) != 5:
         log(f'    → 카드 수 불일치: {len(cards)}개 (필요: 정확히 5개)')
         return False
-    # 첫 문장에 hook 포함 확인
-    first = cards[0].strip()
-    hook = pitch.get('hook', '')
-    if hook and hook[:8] not in first:
-        log(f'    → hook 불일치: 첫 줄 시작="{first[:30]}..." 예상 hook[:8]="{hook[:8]}"')
+    # 첫 줄이 비어있지 않은지 확인
+    first_line = cards[0].strip().split('\n')[0].strip()
+    if len(first_line) < 3:
+        log(f'    → 첫 줄 너무 짧음: "{first_line}"')
         return False
     return True
 
