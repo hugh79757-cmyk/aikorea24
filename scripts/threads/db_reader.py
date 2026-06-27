@@ -9,6 +9,30 @@ aikorea24 D1 DB → 기사 풀 로드 (3단계 우선순위)
 import os, sys, json, re, subprocess, time
 import urllib.request
 from datetime import datetime, timedelta
+PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+CRAWLABLE_CONFIG = os.path.join(PROJECT_DIR, 'config', 'crawlable_sources.json')
+
+
+def load_crawlable_sources():
+    """crawlable_sources.json에서 크롤링 가능 매체 이름 목록 반환"""
+    try:
+        with open(CRAWLABLE_CONFIG) as f:
+            data = json.load(f)
+        names = [s['name'] for s in data.get('crawlable', [])]
+        return names
+    except Exception:
+        return []
+
+
+def get_source_filter():
+    """SQL WHERE 절용 소스 필터 문자열 반환 (예: "source IN ('BBC', 'TechCrunch')")"""
+    sources = load_crawlable_sources()
+    if not sources:
+        return ''
+    quoted = [f"'{s}'" for s in sources]
+    return f"AND source IN ({', '.join(quoted)})"
+
+
 
 def normalize_url(url):
     """URL 정규화: 쿼리 파라미터 제거, 트래일링 슬래시 제거, 소문자"""
@@ -210,6 +234,7 @@ def get_exclusion_reasons(article, posted):
 def get_articles():
     """3단계 우선순위 기사 풀 반환"""
     posted = load_posted()
+    source_filter = get_source_filter()
     today = datetime.now().strftime('%Y-%m-%d')
 
     articles = []
@@ -224,8 +249,9 @@ def get_articles():
                FROM news n
                JOIN briefing_items bi ON bi.news_id = n.id
                JOIN briefings b ON b.id = bi.briefing_id
-               WHERE b.date = '{today}' AND b.status = 'published'
-               GROUP BY n.id ORDER BY bi.sort_order ASC"""
+              WHERE b.date = '{today}' AND b.status = 'published'
+               {source_filter}
+              GROUP BY n.id ORDER BY bi.sort_order ASC"""
     rows = d1_query(sql1)
     total_queried += len(rows)
     for r in rows:
@@ -258,7 +284,8 @@ def get_articles():
                      CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                    ELSE NULL
                  END >= date('now', '-7 days')
-               ORDER BY pub_date DESC LIMIT 2000"""
+               {source_filter}
+              ORDER BY pub_date DESC LIMIT 2000"""
     rows2 = d1_query(sql2)
     total_queried += len(rows2)
     for r in rows2:
@@ -298,7 +325,8 @@ def get_articles():
                          CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                        ELSE NULL
                      END < date('now', '-7 days')
-                   ORDER BY pub_date DESC LIMIT {remaining + 20}"""
+                   {source_filter}
+              ORDER BY pub_date DESC LIMIT {remaining + 20}"""
         rows3 = d1_query(sql3)
         total_queried += len(rows3)
         for r in rows3:
