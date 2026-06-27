@@ -6,6 +6,7 @@ narrative_pitcher.py — 100개 기사 → 가장 강력한 이야기 발견
 """
 import os, sys, json, re, random
 from datetime import datetime
+from v3.writer_v3 import fetch_article_body
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
@@ -320,9 +321,10 @@ def save_pitch_to_history(pitch):
         pass
 
 def get_pitches(articles, max_articles=600, batch_size=200):
-    """배치 처리: articles를 batch_size개씩 배치로 나눠 각 배치에서 피치 생성 → TOP 1 반환"""
+    """배치 처리: description 스캔 → 후보 선별 → 단일 기사 크롤링 → 크롤링 본문 기반 피치 생성"""
     from v3.model_router import chat_completion
     from db_reader import load_posted
+    from v3.pitch_evaluator import filter_pitches
     pitch_history = load_pitch_history()
     posted = load_posted()
     if pitch_history:
@@ -452,8 +454,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
         log('  ❌ 모든 피치가 이력과 중복')
         return []
 
-    # 품질 평가 게이트
-    from v3.pitch_evaluator import filter_pitches
+    # 품질 평가 게이트 (description 기반 1차 선별)
     top = filter_pitches(unique)
 
     if not top:
@@ -463,7 +464,105 @@ def get_pitches(articles, max_articles=600, batch_size=200):
     log(f'  ✅ TOP 1: "{top.get("hook", "")}" ({top.get("emotion", "")})')
     log(f'     기사: {top.get("article_ids", [])}')
 
-    return [top] if top else []
+    # === 크롤링 기반 피치 재생성 ===
+    # description으로 선별한 기사의 원문을 크롤링하여 피치 재생성
+    article_id = top.get('article_ids', [''])[0] if top.get('article_ids') else ''
+    article_id_str = str(article_id).lstrip('#').strip()
+    article_url = id_to_link.get(article_id_str, '')
+    article_title = id_to_title.get(article_id_str, '')
+    article_desc = id_to_description.get(article_id_str, '')
+ 
+    if not article_url:
+        log(f'  ⚠️ 기사 {article_id_str}의 URL을 찾을 수 없음 → description 기반 피치 사용')
+        top['crawled_body'] = ''
+        return [top] if top else []
+ 
+    # 원문 크롤링
+    log(f'  📰 피치 기사 원문 크롤링: {article_url[:60]}...')
+    crawled_body = fetch_article_body(article_url, source='', title=article_title)
+ 
+    if not crawled_body:
+        log(f'  ⚠️ 크롤링 실패 → description 기반 피치 사용 (할루시네이션 위험)')
+        top['crawled_body'] = ''
+        return [top] if top else []
+ 
+    log(f'  📰 크롤링 완료: {len(crawled_body)}자')
+ 
+    # 크롤링 본문으로 피치 재생성 (단일 기사)
+    regenerated = _regenerate_pitch_from_crawl(
+        crawled_body, article_id_str, article_url, article_title, top
+    )
+ 
+    if regenerated:
+        regenerated['crawled_body'] = crawled_body
+        log(f'  ✅ 크롤링 기반 피치 재생성 완료: "{regenerated.get("hook", "")[:50]}"')
+        return [regenerated]
+    else:
+        log(f'  ⚠️ 피치 재생성 실패 → description 기반 피치 사용')
+        top['crawled_body'] = crawled_body
+        return [top] if top else []
+
+
+def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, original_pitch):
+    """크롤링된 원문 본문으로 피치를 재생성한다.
+    original_pitch의 hook/narrative/twist를 참고하되, 본문 기반으로 사실 정확성을 보장한다.
+    """
+    from v3.model_router import chat_completion
+ 
+    system = """당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
+아래 제공된 기사 원문(크롤링된 전체 본문)만을 근거로 피치를 작성합니다.
+
+[핵심 원칙]
+1. 반드시 아래 기사 원문에 나오는 내용만 사용할 것
+2. 기사에 없는 인물, 제품명, 사건을 절대 만들어내지 말 것
+3. 인과관계를 뒤집거나 반대로 해석하지 말 것
+4. hook은 기사의 핵심 긴장을 한 줄로 담되, 사실에 충실할 것
+5. 고유명사는 영어 원문 사용 (Nvidia, OpenAI, Anthropic 등)
+
+[출력 형식 — JSON만]
+{"hook": "독자가 몰랐던 사실을 담은 한 문장 (기사 원문에 근거)", "narrative": "왜 이것이 중요한지 2-3문장 (인과관계 정확히)", "twist": "상식과 다른 실제 결과 (기사 원문에만 근거)", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [""" + article_id + """]}
+
+주의사항:
+- 반드시 1개 기사만 사용. 2개 이상 절대 금지.
+- 기사 원문에 없는 내용 추가 금지
+- hook에서 주어와 객체를 명확히 구분"""
+ 
+    # original_pitch의 direction을 참고용으로 포함
+    ref_hook = original_pitch.get('hook', '')
+    ref_narrative = original_pitch.get('narrative', '')
+ 
+    user_msg = f"""아래 기사 원문을 읽고 피치를 작성해주세요.
+
+=== 기사 원문 (크롤링된 전체 본문) ===
+제목: {article_title}
+URL: {article_url}
+본문:
+{body[:8000]}
+
+=== 참고: description 기반 1차 선별 결과 ===
+hook: {ref_hook}
+narrative: {ref_narrative}
+→ 위 선별 결과는 참고용이며, 기사 원문과 다를 경우 원문을 우선할 것"""
+ 
+    try:
+        resp = chat_completion(
+            system_prompt=system,
+            messages=[{'role': 'user', 'content': user_msg}],
+            temperature=0.7,
+            max_tokens=1500,
+        )
+        if not resp:
+            return None
+        pitches = parse_pitches_from_text(resp)
+        if pitches:
+            p = pitches[0]
+            # article_ids 강제 설정
+            p['article_ids'] = [article_id]
+            p['crawled_url'] = article_url
+            return p
+    except Exception as e:
+        log(f'  ⚠️ 피치 재생성 오류: {e}')
+    return None
 
 
 if __name__ == '__main__':

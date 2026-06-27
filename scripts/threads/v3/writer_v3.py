@@ -239,11 +239,65 @@ def fetch_article_body(url, source='', title=''):
                 log_failed_crawl(url, source, title, err_msg)
                 return ''
 
+def humanize_cards(cards):
+    """AI 관용 표현을 사실 기반 표현으로 치환한다.
+    - 형용사/비교급 제거: "덜 아름다운" → "실제와 다르게"
+    - AI 추상 표현 치환: "이러한", "저러한", "그러한" → 구체적 표현
+    - 과장/감탄 제거: "놀랍게도", "충격적으로" → 삭제
+    - "~하는 중" → "~했음" (진행형→과거형)
+    """
+    # AI 관용 표현 치환 사전 (패턴 → 대체 표현)
+    _AI_PATTERNS = [
+        # 형용사/비교급 — 수식어만 제거 (본문은 유지)
+        (r'덜\s+(\S+)', lambda m: m.group(1)),
+        (r'더\s+(?:높은|낮은|빠른|큰|작은|많은|적은)(?:\s*)', ''),
+        (r'가장\s+중요한\s+', '핵심 '),
+        (r'핵심\s+것은', '핵심은'),
+        (r'핵심\s+변화는', '핵심은'),
+        (r'가장\s+큰\s+', '핵심 '),
+        (r'가장\s+주목할\s+만한\s+', ''),
+        # 추상 표현 — 구체적 연결어로
+        (r'이러한\s+', '이 '),
+        (r'저러한\s+', '그 '),
+        (r'그러한\s+', '이 '),
+        (r'이와\s+같은\s+', '이 '),
+        (r'이런\s+종류의\s+', '이 '),
+        # 과장/감탄 — 삭제
+        (r'놀랍게도[,.]?\s*', ''),
+        (r'충격적으로[,.]?\s*', ''),
+        (r'주목할\s+만한\s+', ''),
+        (r'눈에\s+띄는\s+', ''),
+        # 진행형 → 과거/현재 사실
+        (r'하는\s+중이다', '했음'),
+        (r'하는\s+중이었다', '했음'),
+        (r'되고\s+있다', '됐음'),
+        (r'되고\s+있었다', '됐음'),
+    ]
+
+    changed = 0
+    new_cards = []
+    for card in cards:
+        new_card = card
+        for pattern, repl in _AI_PATTERNS:
+            new_card_new = re.sub(pattern, repl, new_card)
+            if new_card_new != new_card:
+                changed += 1
+                new_card = new_card_new
+        new_cards.append(new_card)
+
+    if changed:
+        log(f'  🧹 humanize: {changed}개 AI 관용 표현 치환')
+    return new_cards
+
+
 def fix_cards(cards):
     """GPT-4o-mini로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
     내용/의미/구조는 변경하지 않음
     DiffusionGemma 대신 GPT-4o-mini 사용 — 자기 오류를 스스로 수정하는 구조적 문제 해결
     """
+    # humanize 먼저 적용
+    cards = humanize_cards(cards)
+
     from v3.model_router import chat_completion
     text = '\n---\n'.join(cards)
     prompt = f"""다음 Threads 쓰레드에서 글자 단위 오류만 수정하라.
@@ -295,6 +349,10 @@ def write_thread(pitch, all_articles):
     """피치 + 관련 기사 → 쓰레드 조각 리스트 (DiffusionGemma → GPT-4o-mini fallback)"""
     from v3.model_router import chat_completion
 
+    # pitcher가 이미 크롤링한 본문이 있는 경우 — 재크롤링 없이 사용
+    pre_crawled_body = pitch.get('crawled_body', '')
+    pre_crawled_url = pitch.get('crawled_url', '')
+
     # 관련 기사만 필터링
     article_ids = pitch.get('article_ids', [])
     # 타입 안전: str/int/#접두사 혼용 대비
@@ -328,23 +386,41 @@ def write_thread(pitch, all_articles):
     article_bodies = []
     all_fallback = True
     crawled_urls = []  # 크롤링 성공한 URL 기록
-    for a in related:
-        url = a.get('link', '')
-        # URL 검증 선행 — 403/404 차단 매체는 리소스 낭비 없이 스킵
-        from db_reader import validate_link
-        if not validate_link(url, timeout=5):
-            log(f'  ⚠️ URL 차단/실패 → 기사 제외: {url[:60]}...')
-            log_failed_crawl(url, a.get('source', ''), a.get('title', ''), 'validate_link_fail')
-            continue
-        body = fetch_article_body(url, source=a.get('source', ''), title=a.get('title', ''))
-        if not body:
-            log(f'  ⚠️ 크롤링 실패 → 기사 제외 (URL: {url[:60]}...)')
-            continue
-        all_fallback = False
+
+    # pitcher가 이미 크롤링한 본문이 있으면 해당 기사만 사용 (재크롤링 없이)
+    if pre_crawled_body and related:
+        a = related[0]  # 단일 기사
+        url = pre_crawled_url or a.get('link', '')
+        article_bodies.append(pre_crawled_body)
         crawled_urls.append(url)
-        article_bodies.append(body)
+        all_fallback = False
         pub_date_str = str(a.get('pub_date', ''))
         related_parts.append(f"""기사 {a['id']}:
+제목: {a.get('title','')}
+발행일: {pub_date_str}
+본문: {pre_crawled_body}
+출처: {a.get('source','')}
+링크: {url}""")
+        log(f'  📰 pitcher 크롤링 본문 사용: {len(pre_crawled_body)}자 (재크롤링 없음)')
+    else:
+        # 기존 로직: 기사 URL 크롤링
+        for a in related:
+            url = a.get('link', '')
+            # URL 검증 선행 — 403/404 차단 매체는 리소스 낭비 없이 스킵
+            from db_reader import validate_link
+            if not validate_link(url, timeout=5):
+                log(f'  ⚠️ URL 차단/실패 → 기사 제외: {url[:60]}...')
+                log_failed_crawl(url, a.get('source', ''), a.get('title', ''), 'validate_link_fail')
+                continue
+            body = fetch_article_body(url, source=a.get('source', ''), title=a.get('title', ''))
+            if not body:
+                log(f'  ⚠️ 크롤링 실패 → 기사 제외 (URL: {url[:60]}...)')
+                continue
+            all_fallback = False
+            crawled_urls.append(url)
+            article_bodies.append(body)
+            pub_date_str = str(a.get('pub_date', ''))
+            related_parts.append(f"""기사 {a['id']}:
 제목: {a.get('title','')}
 발행일: {pub_date_str}
 본문: {body}
@@ -410,8 +486,8 @@ def write_thread(pitch, all_articles):
             cards = fix_cards(cards)
 
             if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
-                # article_ids[0] 링크를 1순위로 사용
-                primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
+                # pitcher 크롤링 URL 우선, 없으면 article_ids[0] 링크 사용
+                primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
                 cards = assemble_final(cards, related, primary_url, crawled_urls)
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
@@ -435,7 +511,7 @@ def write_thread(pitch, all_articles):
         cards = parse_cards(content)
         cards = fix_cards(cards)
         if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
-            primary_url = next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
+            primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
             cards = assemble_final(cards, related, primary_url, crawled_urls)
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
             return cards
@@ -464,9 +540,9 @@ def parse_cards(text):
     return cards
 
 def validate_cards(cards, pitch):
-    """기본 검증 (카드 수 + hook 근사 일치)"""
-    if not cards or len(cards) != 5:
-        log(f'    → 카드 수 불일치: {len(cards)}개 (필요: 정확히 5개)')
+    """기본 검증 (카드 수 5~6개 허용 + hook 근사 일치)"""
+    if not cards or len(cards) < 5 or len(cards) > 6:
+        log(f'    → 카드 수 불일치: {len(cards)}개 (허용: 5~6개)')
         return False
     # 첫 줄이 비어있지 않은지 확인
     first_line = cards[0].strip().split('\n')[0].strip()
@@ -562,6 +638,9 @@ def validate_keywords(cards, article_body_text):
             # 예: "데이팅" → "데팅" (이 누락), "인공지능" → "인공지" (능 누락)
             truncated = False
             for tw in thread_words:
+                # 쓰레드 단어가 너무 짧으면 조사 탈락으로 간주 (잘림 아님)
+                if len(tw) < 3:
+                    continue
                 # 키워드가 쓰레드 단어의 접두사 (앞이 잘린 경우)
                 if len(tw) >= 2 and kw.startswith(tw) and len(tw) < len(kw):
                     truncated = True
@@ -590,29 +669,27 @@ def validate_keywords(cards, article_body_text):
     return True
 
 def assemble_final(cards, articles, primary_url=None, crawled_urls=None):
-    """대표 URL 1개를 마지막 카드로 추가
-    crawled_urls: 크롤링 성공한 URL 목록 (있으면 해당 목록에서만 선택, 재검증 불필요)
+    """대표 URL 1개를 마지막 카드 끝에 추가 (카드 수 변경 없음)
+    crawled_urls: 크롤링 성공한 URL 목록
     articles: D1 DB 기사 객체 리스트 (related) — fallback용
     primary_url: article_ids[0]에 해당하는 기사의 링크 (가장 우선시)
     """
     from db_reader import validate_link
 
-    # 크롤링 성공 URL이 있으면 해당 목록에서만 선택 (이미 크롤링 성공했으므로 재검증 불필요)
+    url_to_use = None
+
+    # 크롤링 성공 URL이 있으면 해당 목록에서만 선택
     if crawled_urls:
         if primary_url and primary_url in crawled_urls:
-            cards.append(f'🔗 {primary_url}')
-            return cards
-        cards.append(f'🔗 {crawled_urls[0]}')
-        return cards
-
-    # 기존 로직 (crawled_urls 없을 때 — 하위 호환)
-    if primary_url:
+            url_to_use = primary_url
+        else:
+            url_to_use = crawled_urls[0]
+    elif primary_url:
         if validate_link(primary_url, timeout=5):
-            cards.append(f'🔗 {primary_url}')
-            return cards
-        log(f'  ⚠️ primary URL 유효성 실패: {primary_url[:50]}...')
-
-    if articles:
+            url_to_use = primary_url
+        else:
+            log(f'  ⚠️ primary URL 유효성 실패: {primary_url[:50]}...')
+    if not url_to_use and articles:
         for a in articles:
             url = a.get('link', '').strip()
             if url == primary_url:
@@ -620,10 +697,15 @@ def assemble_final(cards, articles, primary_url=None, crawled_urls=None):
             if not url or not url.startswith('http'):
                 continue
             if validate_link(url, timeout=5):
-                cards.append(f'🔗 {url}')
-                return cards
+                url_to_use = url
+                break
             log(f'  ⚠️ URL 유효성 실패 — 다음 URL 시도: {url[:50]}...')
-        log(f'  ❌ 모든 {len(articles)}개 URL 유효성 실패 — 링크 생략')
+
+    if url_to_use:
+        cards.append(f'🔗 {url_to_use}')
+    else:
+        log(f'  ❌ 유효한 URL 없음 — 링크 생략')
+
     return cards
 
 def save_draft(cards, pitch):
