@@ -31,8 +31,10 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
   try {
     const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().split('T')[0];
 
-    // 1. 오늘 브리핑 조회
-    const briefing = await db.prepare('SELECT * FROM briefings WHERE date = ?').bind(today).first();
+    // 1. 오늘 브리핑 조회 (최신 시퀀스)
+    const briefing = await db.prepare(
+      "SELECT * FROM briefings WHERE date LIKE ? AND status = 'published' ORDER BY id DESC LIMIT 1"
+    ).bind(today + '%').first();
     if (!briefing) {
       return new Response(JSON.stringify({ ok: false, error: '오늘 발행된 브리핑이 없습니다.' }), {
         status: 404, headers: { 'Content-Type': 'application/json' }

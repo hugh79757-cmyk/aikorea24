@@ -1,7 +1,7 @@
 # aikorea24.kr 기술 문서
 
-**최종 업데이트: 2026-06-22**
-**버전: 2.2.0**
+**최종 업데이트: 2026-06-27**
+**버전: 2.4.0**
 
 ---
 
@@ -303,7 +303,157 @@ keywords.json 갱신 (source 필드: seed/news)
 - OpenAI로 텍스트 합성
 - KDE Connect로 안드로이드 폰 전송
 
+### 7.5 브리핑 파이프라인 (scripts/run_pipeline.py)
+
+데일리 브리핑 자동화 파이프라인 (06:00 / 20:00 launchd 실행):
+
+```
+Step 1: 뉴스 선정 (auto_news_selector)
+  → D1 최근 24h 뉴스 조회
+  → 키워드 클러스터링 → Round-robin 선정 (최대 6건)
+  → Phase 1 중복 제거 (briefing_dedup)
+  ↓
+Step 2: 브리핑 생성 (auto_briefing)
+  → Step 1의 기사로 브리핑 구성 (동일 news_id 사용)
+  → MiMo API로 각 기사 코멘트 생성
+  → Phase 2 중복 제거 (briefing_dedup)
+  → D1 briefings + briefing_items INSERT (status='published')
+  → Phase 3 기록 (record_briefing)
+  ↓
+Step 3: 심층글 생성 (auto_deep_article)
+  → 원문 크롤링 (BeautifulSoup)
+  → MiMo API로 심층분석 블로그 생성 (markdown + frontmatter)
+  → src/content/blog/ 저장
+  → briefing_items.deep_dive_url 자동 UPDATE (news_id 기준 매칭) ← [v2.3]
+  ↓
+Step 4: 썸네일 생성 (auto_thumbnail)
+  → 원문 OG 이미지 → slug별 thumbnail.webp
+  → blog frontmatter image: 필드와 연결
+  ↓
+Step 5: 이메일 발송 (auto_email_sender)
+  → Brevo API로 구독자에게 브리핑 이메일 전송
+  ↓
+Step 6: 빌드 + 배포 (deploy.sh)
+  → npm run build → wrangler pages deploy
+```
+
+#### 실행 옵션
+```bash
+python3 scripts/run_pipeline.py                    # 전체 실행
+python3 scripts/run_pipeline.py --skip-news        # 뉴스 선정 건너뜀
+python3 scripts/run_pipeline.py --skip-deep        # 심층글 건너뜀
+python3 scripts/run_pipeline.py --skip-deploy      # 배포 건너뜀
+python3 scripts/run_pipeline.py --dry-run          # 계획만 출력
+python3 scripts/run_pipeline.py --date YYYY-MM-DD  # 특정 날짜
+```
+
+#### 브리핑 시퀀스 접미사
+하루 여러 번 브리핑이 생성될 경우 덮어쓰지 않고 `-1`, `-2`, `-3` 접미사로 적재:
+
+| 실행 | date 값 | 비고 |
+|------|---------|------|
+| 06:00 (아침) | `2026-06-27` | 첫 브리핑 |
+| 20:00 (오후) | `2026-06-27-1` | 두 번째 |
+| 재실행 | `2026-06-27-2` | 세 번째 |
+
+**적용 대상**: `auto_briefing.py save_briefing()`, `publish.ts POST/DELETE`, `briefing/[date].astro`
+
+**핵심 로직** (`auto_briefing.py:109-152`):
+```python
+existing = d1_query(f"SELECT id, date FROM briefings WHERE date LIKE '{today_base}%' ORDER BY date DESC")
+if existing:
+    last_seq = int(last_date.split('-')[-1]) if '-' in last_date[10:] else 0
+    seq = last_seq + 1
+date_with_seq = f"{today_base}-{seq}"
+```
+
+#### 프론트엔드 파싱 (`src/pages/briefing/index.astro`, `[date].astro`)
+- `var d = new Date(b.date.substring(0,10) + 'T00:00:00')` — 접미사 제거 후 Date 객체 생성
+- `WHERE date LIKE ?` — LIKE 검색으로 모든 시퀀스 조회
+
+#### `step_briefing([])` 팬텀 방지 (`run_pipeline.py:53-56`)
+```python
+if articles:               # 정상 케이스
+    return auto_briefing.main(articles)
+elif articles is None:     # --skip-news 없이 외부에서 호출
+    return auto_briefing.main()
+else:                      # articles=[] (건너뛰기)
+    return None             # 팬텀 브리핑 생성 방지
+```
+
+#### launchd 스케줄 (06:00 / 20:00)
+```xml
+<key>StartCalendarInterval</key>
+<array>
+  <dict><key>Hour</key><integer>6</integer><key>Minute</key><integer>0</integer></dict>
+  <dict><key>Hour</key><integer>20</integer><key>Minute</key><integer>0</integer></dict>
+</array>
+```
+로그: `scripts/pipeline_runner.log` / `pipeline_runner_error.log`
+
+### 7.6 이메일 발송 시스템
+
+#### 발송 방식 (Brevo API v3)
+
+**파이프라인 발송** (`scripts/auto_email_sender.py`):
+1. `SUBSCRIBER_EMAIL` 환경변수가 설정되어 있으면 → 개별 발송
+2. 없으면 → Brevo `/v3/contacts` API로 등록된 모든 구독자 조회
+3. 100명씩 배치로 `POST /v3/smtp/email` 전송
+
+**관리자 수동 발송** (`/api/briefing/send-email`):
+- `/admin` 페이지 "📧 이메일 발송" 버튼
+- Brevo 연락처 조회 → 실제 이메일 주소로 개별 발송
+- ADMIN_EMAILS ('twinssn@gmail.com') 인증 필요
+
+**웹사이트 구독 등록** (`/api/subscribe`):
+- `POST /api/subscribe` { email: "..." }
+- Brevo `/v3/contacts`에 연락처 추가 (listId=2)
+
+#### 이메일 내용
+- 발신자: info@aikorea24.kr
+- 제목: "AI코리아24 뉴스레터 - YYYY-MM-DD"
+- HTML 템플릿: 브리핑 소개 + 아이템 3개 + 신규 AI 도구 6개
+- 수신자: Brevo 구독자 목록 (list ID 2)
+
+### 7.7 심층글 연결 (Deep Dive)
+
+블로그 → 브리핑 아이템 연결 시스템으로 "이 뉴스, 더 깊이 읽기" 카드 제공.
+
+#### 연결 방식
+
+| 방식 | 설명 | 담당 |
+|------|------|------|
+| 자동 (파이프라인) | step_deep_articles()에서 blog 저장 후 deep_dive_url UPDATE | `run_pipeline.py` |
+| 수동 (관리자) | "✏️ 수정" 버튼 → 심층글 연결 팝업에서 URL 입력 | `admin/index.astro` |
+
+#### 데이터 흐름
+```
+auto_deep_article.save_article()
+  → filepath.stem = "YYYY-MM-DD-{slug}"
+  → blog_url = "https://aikorea24.kr/blog/{filepath.stem}"
+  → UPDATE briefing_items SET deep_dive_url = '{blog_url}'
+    WHERE briefing_id = {today_briefing_id} AND news_id = {article.news_id}
+```
+
+#### UI 렌더링 (`[date].astro:222`)
+```astro
+{item.deep_dive_url && (
+  <a href={item.deep_dive_url} class="deep-dive">
+    <span>📖</span>
+    <span>이 뉴스, 더 깊이 읽기 →</span>
+  </a>
+)}
+```
+
+#### API
+| 엔드포인트 | 메서드 | 설명 |
+|-----------|--------|------|
+| `/api/briefing/deepdive/?briefing_id=X` | GET | 브리핑 아이템 + deep_dive_url 목록 |
+| `/api/briefing/deepdive/` | PATCH | deep_dive_url 저장/삭제 |
+
 ---
+
+
 
 ## 8. 웹사이트 구조
 
@@ -338,6 +488,14 @@ keywords.json 갱신 (source 필드: seed/news)
 | `/api/posts/[id]/comments` | GET/POST | 댓글 |
 | `/api/payments/request` | POST | 결제 요청 |
 | `/api/payments/confirm` | POST | 결제 확인 |
+| `/api/briefing/latest` | GET | 오늘 브리핑 + 아이템 조회 |
+| `/api/briefing/news` | GET | 브리핑용 뉴스 목록 (필터/기간) |
+| `/api/briefing/publish` | POST/DELETE | 브리핑 발행/삭제 |
+| `/api/briefing/update` | PUT | 브리핑 수정 |
+| `/api/briefing/send-email` | POST | 브리핑 이메일 발송 (관리자) |
+| `/api/briefing/deepdive` | GET/PATCH | 심층글 연결 관리 |
+| `/api/subscribe` | POST | 이메일 구독 등록 |
+| `/api/search` | GET | 통합 검색 |
 
 ### 8.3 인증 시스템
 - Google OAuth 2.0
@@ -376,11 +534,17 @@ bucket_name = "aikorea24-files"
 - `AUTH_SECRET`
 - `TOSS_CLIENT_KEY` (미등록)
 - `TOSS_SECRET_KEY` (미등록)
+- `BREVO_API_KEY`: Brevo 트랜잭셔널 이메일 API 키
+- `BREVO_LIST_ID`: 구독자 목록 ID (기본값: 2)
 
 #### 로컬 .env
 - `DATA_GO_KR_KEY`: 공공데이터포털 API 키
 - `NAVER_CLIENT_ID`: 네이버 검색 API
 - `NAVER_CLIENT_SECRET`: 네이버 검색 API
+- `MIMO_API_KEY`: MiMo AI (심층글/코멘트 생성) — ~/.env.common 파일
+- `SUBSCRIBER_EMAIL`: (선택) 개별 이메일 발송 테스트용
+- `BREVO_API_KEY`: (선택) 파이프라인 이메일 발송용
+- `BREVO_LIST_ID`: (선택) 기본값 2
 
 ### 9.3 빌드 명령어
 ```bash
@@ -401,6 +565,16 @@ aikorea24/
 │   ├── gov_doc_collector.py     # 정부 문서 수집
 │   └── .env.sh                  # 환경변수
 ├── scripts/                     # 동적 키워드 및 콘텐츠 파이프라인
+│   ├── run_pipeline.py          # 데일리 브리핑 파이프라인 (6단계)
+│   ├── run_pipeline_with_notify.py  # 파이프라인 + Slack 알림
+│   ├── auto_news_selector.py    # 뉴스 선정 (Step 1)
+│   ├── auto_briefing.py         # 브리핑 생성 (Step 2)
+│   ├── auto_deep_article.py     # 심층글 생성 (Step 3)
+│   ├── auto_thumbnail.py        # 썸네일 생성 (Step 4)
+│   ├── auto_email_sender.py     # 이메일 발송 (Step 5)
+│   ├── briefing_dedup.py        # 3단계 중복 방지
+│   ├── briefing_dedup.json      # 중복 방지 히스토리
+│   ├── deploy.sh                # 빌드/배포 (Step 6)
 │   ├── keyword_updater.py       # 키워드 자동 갱신
 │   ├── thread_topic_finder.py   # 스레드 글감 생성
 │   ├── outline_generator.py     # 블로그 아웃라인 생성
@@ -486,7 +660,8 @@ python3 news_collector.py
 
 | 버전 | 날짜 | 주요 변경 |
 |------|------|-----------|
-| v2.2.0 | 2026-06-10 | 동적 키워드 파이프라인 |
+| v2.4.0 | 2026-06-27 | 브리핑 시퀀스 접미사(-1, -2), 팬텀 브리핑 방지, NaN 날짜 버그 수정, 크롤러 고도화, H1→H2 일괄 교체 |
+| v2.3.0 | 2026-06-27 | 브리핑 파이프라인 v1 (뉴스선정→브리핑→심층글→썸네일→이메일→배포), 심층글-브리핑 자동 연결, Brevo 이메일 발송 |
 | v2.1.0 | 2026-05 | 해외 RSS 10개 추가, AI 필터 강화 |
 | v2.0.0 | 2026-02-21 | 해외 뉴스 수집, 기업 공식 발표 |
 | v1.4.0 | 2026-02-16 | 블로그 UI 개선 |

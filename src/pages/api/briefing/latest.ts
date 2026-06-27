@@ -10,11 +10,11 @@ export const GET: APIRoute = async ({ url, locals }) => {
   let briefing;
   if (date) {
     briefing = await db.prepare(
-      "SELECT * FROM briefings WHERE date = ? AND status = 'published'"
-    ).bind(date).first();
+      "SELECT * FROM briefings WHERE date LIKE ? AND status = 'published' ORDER BY id DESC LIMIT 1"
+    ).bind(date + '%').first();
   } else {
     briefing = await db.prepare(
-      "SELECT * FROM briefings WHERE status = 'published' ORDER BY date DESC LIMIT 1"
+      "SELECT * FROM briefings WHERE status = 'published' ORDER BY id DESC LIMIT 1"
     ).first();
   }
 

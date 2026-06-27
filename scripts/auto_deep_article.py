@@ -6,13 +6,14 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 import requests
 from bs4 import BeautifulSoup
 
 PROJECT_DIR = Path(__file__).parent.parent
 BLOG_DIR = PROJECT_DIR / "src" / "content" / "blog"
+KST = timezone(timedelta(hours=9))
 
 # Load API key from .env.common
 _env_path = os.path.expanduser("~/.env.common")
@@ -46,13 +47,14 @@ description: "글의 핵심 내용을 요약한 설명"
 date: {date}
 draft: false
 tags: ["태그1", "태그2"]
-categories: ["뉴스"]
+category: "뉴스"
 ---
 
-## 내용 구조
-1. 서론 (첫 200자가 가장 중요)
-2. 본론 (3~5개 대주제)
-3. 결론 (1~2문단)
+## 내용 구조 (소제목 형식)
+각 항목의 소제목은 레이블 없이 주제만 쓴다:
+- 서론 항목: 소제목만 (예: `## 완벽해 보이는 모델의 이면`)
+- 본론 항목: 소제목만 (예: `## 부정행위의 배경과 진짜 의미`)
+- 마무리 항목: 소제목 앞에 "마무리:" 접두사 (예: `## 마무리: 능력 너머, 통제 가능성의 시대`)
 4. 마무리 해시태그
 
 ## 규칙
@@ -74,24 +76,39 @@ def remove_chinese(text):
 def crawl_article(url):
     """원문 크롤링"""
     try:
-        headers = {"User-Agent": "Mozilla/5.0"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+        }
         resp = requests.get(url, headers=headers, timeout=15)
         if resp.status_code != 200:
             return None
 
         soup = BeautifulSoup(resp.text, "html.parser")
 
-        # 본문 추출 시도
+        # 본문 추출 시도 — 다양한 사이트 대응
         for selector in ["article", "main", ".post-content", ".article-content",
-                         ".entry-content", "#content", ".content"]:
+                         ".entry-content", "#content", ".content",
+                         ".ArticleBody-articleBody", ".article-body",
+                         ".story-body", ".story-text",
+                         '[class*="articleBody" i]']:
             elem = soup.select_one(selector)
             if elem:
-                # 불필요한 태그 제거
                 for tag in elem.select("script, style, nav, footer, .ad, .advertisement"):
                     tag.decompose()
                 text = elem.get_text(strip=True, separator="\n")
                 if len(text) > 500:
-                    return text[:5000]  # 최대 5000자
+                    return text[:5000]
+
+        # 최후의 fallback: body 전체
+        body = soup.select_one("body")
+        if body:
+            for tag in body.select("script, style, nav, footer, .ad, .advertisement, header"):
+                tag.decompose()
+            text = body.get_text(strip=True, separator="\n")
+            if len(text) > 500:
+                return text[:5000]
 
         return None
     except Exception as e:
@@ -101,7 +118,7 @@ def crawl_article(url):
 
 def generate_deep_article(title, content, url):
     """MiMo API로 심층분석 글 생성"""
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now(KST).strftime("%Y-%m-%d")
     prompt_template = DEEP_ANALYSIS_PROMPT.replace("{date}", today)
 
     prompt = (
@@ -191,7 +208,7 @@ def save_article(markdown_content, title):
     # 프론트매터에 image: 필드 자동 주입
     markdown_content = inject_frontmatter_image(markdown_content, thumbnail_path)
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    today = datetime.now(KST).strftime("%Y-%m-%d")
     filename = f"{today}-{slug}.md"
     filepath = BLOG_DIR / filename
 

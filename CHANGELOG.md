@@ -1,5 +1,45 @@
 # Changelog
 
+## [v2.4.0] - 2026-06-27
+
+### 브리핑 시퀀스 접미사 시스템
+- `auto_briefing.py`: `save_briefing()`가 `date LIKE '{today}%'`로 기존 브리핑을 찾아 `-1`, `-2` 접미사 자동 부여
+- `publish.ts POST`: 시퀀스 계산 후 `{date}-{seq}` 형식으로 INSERT (덮어쓰기 방지)
+- `publish.ts DELETE`: `WHERE date LIKE ? ORDER BY id DESC LIMIT 1`로 최신 시퀀스 삭제
+- `briefing/index.astro`, `[date].astro`: `b.date.substring(0,10)`으로 접미사 제거 후 Date 파싱
+- `BriefingSection.astro`: `formatDate()`에서 접미사 분리 처리
+- `sitemap-briefing.xml.ts`: LIKE 검색으로 모든 시퀀스 포함
+- `admin/index.astro`: 수정/발행 시 시퀀스 지원
+
+### 팬텀 브리핑 방지
+- `run_pipeline.py`: `step_briefing([])`이 `[]`(falsy)일 때 `None` 반환 (빈 `auto_briefing.main()` 호출 차단)
+- `step_briefing(articles)` → `articles`가 `[]`이면 로그만 남기고 건너<0xEB><0x9C><0x8D>
+
+### 크롤러 고도화 (`auto_deep_article.py`)
+- User-Agent 강화 (Chrome 125 full UA + Accept 헤더)
+- CSS 셀렉터 확장 (`.ArticleBody-articleBody`, `.article-body`, `.story-body`, `.story-text`, `[class*="articleBody" i]`)
+- `body` 폴백 추가 (기존 셀렉터가 모두 실패할 경우 body 전체 텍스트 추출)
+
+### 프롬프트 구조 개선
+- `auto_deep_article.py DEEP_ANALYSIS_PROMPT`: `## 서론: ...` → `## ...` (소제목만)
+- `## 결론: ...` → `## 마무리: ...` 로 변경
+
+### H1 중복 제거
+- 10개 블로그 파일에서 body 내 `# ` (h1) → `## ` (h2) 일괄 교체 (타이틀 중복 방지)
+
+### D1 정리
+- id=134 (0건 고아 브리핑), id=136 (팬텀 1건) 삭제
+
+## [v2.3.0] - 2026-06-27
+
+### 브리핑 파이프라인 v1
+- `scripts/run_pipeline.py`: 6단계 자동화 (뉴스선정→브리핑→심층글→썸네일→이메일→배포)
+- `scripts/auto_briefing.py`: MiMo API 뉴스 코멘트 생성, D1 저장
+- `scripts/auto_email_sender.py`: Brevo API 이메일 발송 (listIds=[2])
+- `scripts/auto_deep_article.py`: 심층글 생성 + `briefing_items.deep_dive_url` 자동 연결
+- `scripts/deploy.sh`: npm build → wrangler pages deploy (Cloudflare Pages)
+- `scripts/run_pipeline_with_notify.py`: launchd 래퍼 + 텔레그램 알림
+
 ## [v2.2.0] - 2026-06-10
 
 ### 동적 키워드 파이프라인 (신규)

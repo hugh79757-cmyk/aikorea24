@@ -37,13 +37,13 @@ GitHub Copilot CLI는 모든 Copilot 요금제에서 사용할 수 있으며, �
 설치는 세 가지 방법 중 자신의 환경에 맞는 것을 선택합니다.
 
 ```bash
-# 크로스플랫폼 (Node.js 22 이상 필요)
+## 크로스플랫폼 (Node.js 22 이상 필요)
 npm install -g @github/copilot
 
-# macOS / Linux (Homebrew)
+## macOS / Linux (Homebrew)
 brew install copilot-cli
 
-# Windows (WinGet)
+## Windows (WinGet)
 winget install GitHub.Copilot
 Copy
 ````

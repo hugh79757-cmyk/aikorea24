@@ -21,17 +21,24 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   try {
     const body = await request.json();
-    const { date, intro, items } = body;
+    const { date: dateBase, intro, items } = body;
 
-    if (!date || !items || !Array.isArray(items) || items.length < 1) {
+    if (!dateBase || !items || !Array.isArray(items) || items.length < 1) {
       return new Response(JSON.stringify({ error: 'date, intro, items required' }), { status: 400 });
     }
 
-    const existing = await db.prepare('SELECT id FROM briefings WHERE date = ?').bind(date).first();
+    // 시퀀스 번호 계산 (date가 '2026-06-27-1' 형태)
+    const existing = await db.prepare(
+      "SELECT date FROM briefings WHERE date LIKE ? ORDER BY date DESC LIMIT 1"
+    ).bind(dateBase + '%').first<any>();
+    let seq = 1;
     if (existing) {
-      await db.prepare('DELETE FROM briefing_items WHERE briefing_id = ?').bind(existing.id).run();
-      await db.prepare('DELETE FROM briefings WHERE id = ?').bind(existing.id).run();
+      const last = existing.date as string;
+      const suffix = last.substring(10);
+      const lastSeq = suffix.startsWith('-') ? parseInt(suffix.substring(1), 10) || 0 : 0;
+      seq = lastSeq + 1;
     }
+    const date = `${dateBase}-${seq}`;
 
     const result = await db.prepare(
       `INSERT INTO briefings (date, intro, status, published_at) VALUES (?, ?, 'published', datetime('now'))`
@@ -70,7 +77,9 @@ export const DELETE: APIRoute = async ({ request, locals, cookies }) => {
     const date = body.date;
     if (!date) return new Response(JSON.stringify({ ok: false, error: 'no date' }), { headers: { 'Content-Type': 'application/json' } });
 
-    const existing = await db.prepare('SELECT id FROM briefings WHERE date = ?').bind(date).first();
+    const existing = await db.prepare(
+      "SELECT id FROM briefings WHERE date LIKE ? ORDER BY id DESC LIMIT 1"
+    ).bind(date + '%').first();
     if (!existing) {
       return new Response(JSON.stringify({ ok: false, error: 'no briefing found' }), { headers: { 'Content-Type': 'application/json' } });
     }

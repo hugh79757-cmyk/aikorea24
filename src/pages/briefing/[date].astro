@@ -45,7 +45,7 @@ if (!briefing) {
   return Astro.redirect('/briefing/');
 }
 
-const d = new Date(date + 'T00:00:00');
+const d = new Date(date.substring(0,10) + 'T00:00:00');
 const weekday = ['일','월','화','수','목','금','토'][d.getDay()];
 const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${weekday})`;
 ---

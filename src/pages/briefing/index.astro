@@ -124,7 +124,7 @@ if (db) {
         var monthOrder = [];
         var wd = ['일','월','화','수','목','금','토'];
         data.forEach(function(b){
-          var d = new Date(b.date + 'T00:00:00');
+          var d = new Date(b.date.substring(0,10) + 'T00:00:00');
           var mk = d.getFullYear() + '년 ' + (d.getMonth()+1) + '월';
           if(!months[mk]){ months[mk] = []; monthOrder.push(mk); }
           months[mk].push(b);
@@ -144,7 +144,7 @@ if (db) {
           var grid = document.createElement('div');
           grid.className = 'b-grid' + (mi===0?' open':'');
           items.forEach(function(b){
-            var d = new Date(b.date + 'T00:00:00');
+            var d = new Date(b.date.substring(0,10) + 'T00:00:00');
             var display = (d.getMonth()+1) + '/' + d.getDate() + ' (' + wd[d.getDay()] + ')';
             var card = document.createElement('a');
             card.className = 'b-card';

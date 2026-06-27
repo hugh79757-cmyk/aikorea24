@@ -13,7 +13,7 @@ export const GET: APIRoute = async ({ locals }) => {
   if (db) {
     try {
       const { results } = await db.prepare(
-        "SELECT date FROM briefings WHERE status = 'published' ORDER BY date DESC"
+        "SELECT date FROM briefings WHERE status = 'published' ORDER BY id DESC"
       ).all();
 
       entries = (results || []).map((row: any) => ({
