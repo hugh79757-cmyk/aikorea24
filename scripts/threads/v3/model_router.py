@@ -1,8 +1,8 @@
 """
-model_router.py — AI 모델 호출 라우터
-- 1순위: NVIDIA Qwen3 Next 80B (build.nvidia.com)
-- 2순위: OpenAI GPT-4o-mini (fallback)
-- .env에서 NVIDIA_API_KEY / OPENAI_API_KEY 자동 로드
+model_router.py - AI 모델 호출 라우터
+- 1순위: NVIDIA Gemma 3n (build.nvidia.com)
+- 2순위: OpenRouter MiMo (fallback)
+- .env에서 NVIDIA_API_KEY / OPENROUTER_API_KEY 자동 로드
 """
 import os, sys
 from openai import OpenAI
@@ -45,12 +45,13 @@ load_env()
 # === NVIDIA Qwen3 Next 80B 설정 ===
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 # 기사 선택용 (pitcher)
-NVIDIA_MODEL = "qwen/qwen3-next-80b-a3b-instruct"
+NVIDIA_MODEL = "google/gemma-3n-e4b-it"
 # 쓰레드 작성용 (writer)
 WRITER_NVIDIA_MODEL = "deepseek-ai/deepseek-v4-flash"
 
-# === Fallback: OpenAI ===
-OPENAI_MODEL_FALLBACK = "gpt-4o-mini"
+# === Fallback: OpenRouter MiMo ===
+OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+OPENROUTER_MODEL = "xiaomi/mimo-v2-flash:free"  # 무료 MiMo v2 Flash
 
 def get_nvidia_client():
     api_key = os.environ.get('NVIDIA_API_KEY', '')
@@ -64,11 +65,17 @@ def get_openai_client():
         return None
     return OpenAI(api_key=api_key)
 
+def get_openrouter_client():
+    api_key = os.environ.get('OPENROUTER_API_KEY', '')
+    if not api_key:
+        return None
+    return OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
+
 def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, nvidia_model=None):
     """
     통합 채팅 completions 함수
-    - 1순위: NVIDIA 모델 (지정 가능, 기본=DeepSeek V4 Pro)
-    - 2순위: OpenAI GPT-4o-mini (fallback)
+    - 1순위: NVIDIA 모델 (지정 가능, 기본=Gemma 3n)
+    - 2순위: OpenRouter MiMo (fallback)
     
     nvidia_model: 사용할 NVIDIA 모델명 (기본=NVIDIA_MODEL)
     model_override='openai': NVIDIA 스킵
@@ -102,14 +109,14 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
         else:
             print(f'  [안내] NVIDIA_API_KEY 없음 → OpenAI 사용')
     
-    # 2순위: OpenAI GPT-4o (fallback)
+    # 2순위: OpenRouter MiMo (fallback)
     if model_override != "nvidia":
-        oa_client = get_openai_client()
-        if oa_client:
+        or_client = get_openrouter_client()
+        if or_client:
             try:
-                print(f'  [모델] OpenAI {OPENAI_MODEL_FALLBACK}')
-                resp = oa_client.chat.completions.create(
-                    model=OPENAI_MODEL_FALLBACK,
+                print(f'  [모델] OpenRouter {OPENROUTER_MODEL}')
+                resp = or_client.chat.completions.create(
+                    model=OPENROUTER_MODEL,
                     messages=full_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
@@ -118,9 +125,9 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                 if text and text.strip():
                     return text.strip()
             except Exception as e:
-                print(f'  [오류] OpenAI 실패: {type(e).__name__}')
+                print(f'  [오류] OpenRouter 실패: {type(e).__name__}')
         else:
-            print(f'  [오류] OPENAI_API_KEY도 없음')
+            print(f'  [오류] OPENROUTER_API_KEY 없음')
     
     return None
 

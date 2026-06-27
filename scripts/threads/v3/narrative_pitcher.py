@@ -1,7 +1,7 @@
 #!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 """
-narrative_pitcher.py — 100개 기사 → 가장 강력한 이야기 발견
-- 모델: gpt-4o-mini (비용 절감)
+narrative_pitcher.py - 100개 기사에서 이야기를 찾는 내러티브 피처
+모델: Gemma 3n (NVIDIA NIM), MiMo (OpenRouter fallback)
 - 50개씩 2개 청크 → 각 2개 피치 → 총 4개 → TOP 1 선정
 """
 import os, sys, json, re, random
@@ -385,7 +385,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 
             # Qwen3 Next 80B 실패 시 GPT-4o-mini fallback
             if not pitches:
-                log(f'  ⚠️ DiffusionGemma JSON 파싱 실패 → GPT-4o-mini fallback')
+                log(f'  ⚠️ Gemma 3n JSON 파싱 실패 → MiMo fallback')
                 from v3.model_router import chat_completion as _cc
                 resp2 = _cc(
                     system_prompt=SYSTEM_PROMPT,
@@ -397,7 +397,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
                     model_override='openai',
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
-                log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (GPT-4o-mini)')
+                log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (MiMo)')
         except Exception as e:
             log(f'  ⚠️ 배치 {idx+1} 오류: {e}')
             continue

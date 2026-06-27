@@ -334,7 +334,7 @@ def humanize_cards(cards):
             messages=[{'role': 'user', 'content': user_prompt}],
             temperature=0.3,
             max_tokens=5000,
-            model_override='openai',  # GPT-4o-mini (안정적)
+            model_override='openai',  # MiMo (NVIDIA 스킵, fallback 사용)
         )
         if not result:
             log(f'  ⚠️ humanize: 응답 없음 → 원본 유지')
@@ -362,9 +362,9 @@ def humanize_cards(cards):
 
 
 def fix_cards(cards):
-    """GPT-4o-mini로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
+    """MiMo로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
     내용/의미/구조는 변경하지 않음
-    DiffusionGemma 대신 GPT-4o-mini 사용 — 자기 오류를 스스로 수정하는 구조적 문제 해결
+    DiffusionGemma 대신 별도 모델 사용 — 자기 오류를 스스로 수정하는 구조적 문제 해결
     """
     # humanize 먼저 적용
     cards = humanize_cards(cards)
@@ -406,7 +406,7 @@ def fix_cards(cards):
             fixed = [c.strip() for c in result.split('---') if c.strip()]
             if len(fixed) == len(cards):
                 changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
-                log(f'  🔧 오류 수정(GPT-4o-mini): {changed}/{len(cards)}개 카드 수정됨')
+                log(f'  🔧 오류 수정(MiMo): {changed}/{len(cards)}개 카드 수정됨')
                 return fixed
             log(f'  ⚠️ 수정 후 카드 수 불일치: {len(fixed)}≠{len(cards)} → 원본 유지')
         else:
@@ -417,7 +417,7 @@ def fix_cards(cards):
 
 
 def write_thread(pitch, all_articles):
-    """피치 + 관련 기사 → 쓰레드 조각 리스트 (DiffusionGemma → GPT-4o-mini fallback)"""
+    """피치 + 관련 기사 → 쓰레드 조각 리스트 (DeepSeek → MiMo fallback)"""
     from v3.model_router import chat_completion
 
     # pitcher가 이미 크롤링한 본문이 있는 경우 — 재크롤링 없이 사용
@@ -567,9 +567,9 @@ def write_thread(pitch, all_articles):
         except Exception as e:
             log(f'  ⚠️ 오류: {e} (시도 {attempt+1}/{max_attempts})')
 
-    log(f'  ❌ {max_attempts}회 재시도 실패 → GPT-4o-mini fallback 1회')
+    log(f'  ❌ {max_attempts}회 재시도 실패 → MiMo fallback 1회')
     try:
-        log(f'  쓰레드 생성 중... (GPT-4o-mini fallback)')
+        log(f'  쓰레드 생성 중... (MiMo fallback)')
         content = chat_completion(
             system_prompt=build_system_prompt(),
             messages=[{'role': 'user', 'content': user_prompt}],
@@ -584,10 +584,10 @@ def write_thread(pitch, all_articles):
         if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
             primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
             cards = assemble_final(cards, related, primary_url, crawled_urls)
-            log(f'  ✅ 쓰레드: {len(cards)}개 조각 (GPT-4o-mini fallback 성공)')
+            log(f'  ✅ 쓰레드: {len(cards)}개 조각 (MiMo fallback 성공)')
             return cards
     except Exception as e:
-        log(f'  ⚠️ GPT-4o-mini fallback 오류: {e}')
+        log(f'  ⚠️ MiMo fallback 오류: {e}')
 
     log('  ❌ 전체 재시도 실패')
     return []

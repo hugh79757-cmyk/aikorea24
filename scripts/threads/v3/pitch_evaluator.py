@@ -1,7 +1,7 @@
 #!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 """
-pitch_evaluator.py — 피치 품질 평가 게이트
-- GPT-4o-mini가 피치의 품질을 0~5점 평가
+pitch_evaluator.py - 피치 품질 평가
+MiMo가 피치의 품질을 0~5점 평가
 - 3점 미만이면 폐기
 """
 import os, json, re
@@ -47,7 +47,7 @@ def evaluate_pitch(pitch):
 
     pitch_json = json.dumps(pitch, ensure_ascii=False)
     try:
-        # 방향 정확성 평가는 GPT-4o-mini 사용 (DiffusionGemma는 방향 판별에 취약)
+        # 방향 정확성 평가는 MiMo 사용
         resp = chat_completion(
             system_prompt=EVAL_SYSTEM_PROMPT,
             messages=[{'role': 'user', 'content': f'평가할 피치:\n{pitch_json}'}],
