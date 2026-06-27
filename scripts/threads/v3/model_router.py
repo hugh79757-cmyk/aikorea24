@@ -1,6 +1,6 @@
 """
 model_router.py - AI 모델 호출 라우터
-- 1순위: NVIDIA Gemma 3n (build.nvidia.com)
+- 1순위: NVIDIA DeepSeek V4 Flash (build.nvidia.com)
 - 2순위: OpenRouter MiMo (fallback)
 - .env에서 NVIDIA_API_KEY / OPENROUTER_API_KEY 자동 로드
 """
@@ -44,8 +44,8 @@ load_env()
 
 # === NVIDIA Qwen3 Next 80B 설정 ===
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-# 기사 선택용 (pitcher)
-NVIDIA_MODEL = "google/gemma-3n-e4b-it"
+# 기사 선택용 (pitcher) - DeepSeek V4 Flash
+NVIDIA_MODEL = "deepseek-ai/deepseek-v4-flash"
 # 쓰레드 작성용 (writer)
 WRITER_NVIDIA_MODEL = "deepseek-ai/deepseek-v4-flash"
 
