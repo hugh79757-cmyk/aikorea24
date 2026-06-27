@@ -240,55 +240,122 @@ def fetch_article_body(url, source='', title=''):
                 return ''
 
 def humanize_cards(cards):
-    """AI 관용 표현을 사실 기반 표현으로 치환한다.
-    - 형용사/비교급 제거: "덜 아름다운" → "실제와 다르게"
-    - AI 추상 표현 치환: "이러한", "저러한", "그러한" → 구체적 표현
-    - 과장/감탄 제거: "놀랍게도", "충격적으로" → 삭제
-    - "~하는 중" → "~했음" (진행형→과거형)
+    """LLM 기반 AI 티 교체 (im-not-ai 택소노미 기반)
+    - 번역투, AI 관용구, 과장, 형용사 등 10대 카테고리 패턴 교체
+    - 의미 불변: 사실·수치·고유명사 보존
+    - 국소 수정: AI 티 구간만 교체, 전체 재작성 금지
+    - 실패 시 원본 반환
     """
-    # AI 관용 표현 치환 사전 (패턴 → 대체 표현)
-    _AI_PATTERNS = [
-        # 형용사/비교급 — 수식어만 제거 (본문은 유지)
-        (r'덜\s+아름다운', '보기 좋은'),
-        (r'덜\s+(\S+)', lambda m: m.group(1)),
-        (r'더\s+(?:높은|낮은|빠른|큰|작은|많은|적은)(?:\s*)', ''),
-        (r'가장\s+중요한\s+', '핵심 '),
-        (r'핵심\s+것은', '핵심은'),
-        (r'핵심\s+변화는', '핵심은'),
-        (r'가장\s+큰\s+', '핵심 '),
-        (r'가장\s+주목할\s+만한\s+', ''),
-        # 추상 표현 — 구체적 연결어로
-        (r'이러한\s+', '이 '),
-        (r'저러한\s+', '그 '),
-        (r'그러한\s+', '이 '),
-        (r'이와\s+같은\s+', '이 '),
-        (r'이런\s+종류의\s+', '이 '),
-        # 과장/감탄 — 삭제
-        (r'놀랍게도[,.]?\s*', ''),
-        (r'충격적으로[,.]?\s*', ''),
-        (r'주목할\s+만한\s+', ''),
-        (r'눈에\s+띄는\s+', ''),
-        # 진행형 → 과거/현재 사실
-        (r'하는\s+중이다', '했음'),
-        (r'하는\s+중이었다', '했음'),
-        (r'되고\s+있다', '됐음'),
-        (r'되고\s+있었다', '됐음'),
-    ]
+    from v3.model_router import chat_completion
 
-    changed = 0
-    new_cards = []
-    for card in cards:
-        new_card = card
-        for pattern, repl in _AI_PATTERNS:
-            new_card_new = re.sub(pattern, repl, new_card)
-            if new_card_new != new_card:
-                changed += 1
-                new_card = new_card_new
-        new_cards.append(new_card)
+    if not cards:
+        return cards
 
-    if changed:
-        log(f'  🧹 humanize: {changed}개 AI 관용 표현 치환')
-    return new_cards
+    text = '\n---\n'.join(cards)
+    original_len = len(text)
+
+    # 빈 텍스트 방지
+    if original_len < 10:
+        return cards
+
+    system_prompt = """당신은 한국어 Threads 쓰레드 에디터입니다. AI가 생성한 글에서 'AI 티'가 나는 패턴을 자연스러운 한국어로 교체합니다.
+## 핵심 원칙
+1. **의미 불변**: 사실·수치·고유명사·링크는 절대 변경 금지
+2. **국소 수정**: 문장 전체를 재작성하지 말고 AI 티 구간만 교체
+3. **과윤문 금지**: 전체의 30% 이상 변경 금지
+4. **톤 유지**: 반말체(~임, ~했음, ~있음) 그대로 유지
+
+## 교체 대상 패턴
+
+### 번역투 (가장 결정적 AI 시그니처)
+- '~에 대해(서)' → '~를'
+- '~를 통해/통하여' → '~로', '~해서'
+- '~에 있어(서)' → '~에서'
+- '~와 관련하여' → '~에', '~의'
+- '~에 기반하여/바탕으로' → '~로', '~을 보고'
+- '가지고 있다' → 동사·형용사로 환원
+- '~되어진다' → '~된다' 또는 능동
+- '~에 의해' → 행위자 주어로 ('AI에 의해 생성' → 'AI가 만든')
+- '~할 수 있다' 남발 → 단언으로
+- '~을 위해' → '~려고', '~하도록'
+
+### AI 특유 관용구
+- '결론적으로/따라서/이를 통해/그러므로/요약하면' → 3회 초과 시 일부 삭제
+- '시사하는 바가 크다/주목할 만하다' → 삭제 또는 구체 결론
+- '본질적으로/핵심적으로/궁극적으로' → 삭제
+- 의인화 추상 주어 ('기술이 묻는다') → 사람·기관 주어
+- '매우/정말/대단히/상당히' → 90% 삭제
+- 동의어 이중 수식 ('중요하고 핵심적인') → 하나만
+
+### 과장/과장 표현
+- 과장 괄호 ('~등', '~외 다수') → 구체적 수치나 삭제
+- '~것이다/~할 것이다' 미래 확정 → 현재형·확정형
+- '~로 보인다/~인 듯하다' 추정 → 단언 가능하면 단언
+
+### 리듬
+- 단문만 반복 (복문·중문 부재) → 문장 길이 다양화
+- 연결어미 뒤 쉼표 (-고, -며, -지만 뒤) → 쉼표 제거
+
+## 절대 변경 금지
+- 수치·날짜·통계
+- 고유명사·제품명·브랜드명
+- 직접 인용문
+- 반말체 어미 (~임, ~했음, ~있음)
+
+## 출력 규칙
+- 수정된 쓰레드만 출력 (--- 구분자 포함)
+- 설명·요약·메타 텍스트 절대 금지
+- 원본과 동일한 카드 수 유지
+- 카드 사이 --- 구분자 정확히 유지"""
+
+    user_prompt = f"""다음 Threads 쓰레드의 AI 말투를 자연스러운 한국어로 다듬어라.
+[원본]
+{text}
+
+[출력 규칙]
+- 내용(사실, 수치, 고유명사)은 절대 변경하지 말 것
+- 반말체(~임, ~했음, ~있음) 그대로 유지
+- --- 구분자 정확히 유지
+- 수정된 쓰레드만 출력"""
+
+    try:
+        result = chat_completion(
+            system_prompt=system_prompt,
+            messages=[{'role': 'user', 'content': user_prompt}],
+            temperature=0.3,
+            max_tokens=5000,
+            model_override='openai',  # GPT-4o-mini (안정적)
+        )
+        if not result:
+            log(f'  ⚠️ humanize: 응답 없음 → 원본 유지')
+            return cards
+
+        fixed = [c.strip() for c in result.split('---') if c.strip()]
+
+        # 길이 검증: 50% 미만이면 원본 유지
+        if len(fixed) < len(cards) * 0.5:
+            log(f'  ⚠️ humanize: 결과 부족 ({len(fixed)}<{len(cards)}) → 원본 유지')
+            return cards
+
+        # 카드 수 검증: 5~6개 허용
+        if len(fixed) < 5 or len(fixed) > 6:
+            log(f'  ⚠️ humanize: 카드 수 불일치 ({len(fixed)}) → 원본 유지')
+            return cards
+
+        # 변경률 검증
+        fixed_text = '\n---\n'.join(fixed)
+        changed_ratio = 1 - (len(set(text) & set(fixed_text)) / max(len(text), 1))
+        if changed_ratio > 0.50:
+            log(f'  ⚠️ humanize: 변경률 {changed_ratio:.0%} 초과 → 원본 유지')
+            return cards
+
+        changed_cards = sum(1 for a, b in zip(cards, fixed) if a != b)
+        log(f'  🧹 humanize: {changed_cards}/{len(cards)}개 카드 수정')
+        return fixed
+
+    except Exception as e:
+        log(f'  ⚠️ humanize 오류: {e} → 원본 유지')
+        return cards
 
 
 def fix_cards(cards):
