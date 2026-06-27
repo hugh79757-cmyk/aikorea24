@@ -8,6 +8,7 @@ import os
 import sys
 import subprocess
 import json
+import urllib.request
 from datetime import datetime
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
@@ -113,18 +114,17 @@ def main():
         send_telegram(message)
         
     except subprocess.TimeoutExpired:
-        message = f"⏰ <b>aikorea24 파이프라인 타임아웃</b>
+        message = f"""⏰ <b>aikorea24 파이프라인 타임아웃</b>
 {now}
 
-10분 초과"
+10분 초과"""
         send_telegram(message)
     except Exception as e:
-        message = f"❌ <b>aikorea24 파이프라인 에러</b>
+        message = f"""❌ <b>aikorea24 파이프라인 에러</b>
 {now}
 
-{str(e)}"
+{str(e)}"""
         send_telegram(message)
 
 if __name__ == '__main__':
-    import urllib.request
     main()

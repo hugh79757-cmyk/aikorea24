@@ -471,3 +471,36 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 6개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  총 7개 (중복 제거 후)
+수집 완료: 7개
+기존 툴: 113개 (슬러그), 112개 (이름)
+  중복 스킵: Tough Tongue AI for Sales
+  중복 스킵: Brain² by ClickUp
+  중복 스킵: Oxlo.ai
+  중복 스킵: Crewdle AI
+신규 툴: 3개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (3건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/gemini-spark.md
+  ✅ Gemini Spark → gemini-spark.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/opid-on-policy-skill-distillation-for-agentic-rei.md
+  ✅ OPID: On-Policy Skill Distillation for Agentic Rei → opid-on-policy-skill-distillation-for-agentic-rei.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/ai-slide-editor-by-cubeone.md
+  ✅ AI Slide Editor by CubeOne → ai-slide-editor-by-cubeone.md
+
+==================================================
+처리 완료: 3/7개 생성 (19.0초)
+  git commit: [main 20c239d] feat: AI 툴 3개 추가 (2026-06-27)
+ 12 files changed, 835 insertions(+), 150 deletions(-)
+ create mode 100644 src/content/tools/ai-slide-editor-by-cubeone.md
+ create mode 100644 src/content/
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

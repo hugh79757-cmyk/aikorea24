@@ -53,9 +53,11 @@ def evaluate_pitch(pitch):
             messages=[{'role': 'user', 'content': f'평가할 피치:\n{pitch_json}'}],
             temperature=0.1,
             max_tokens=300,
-            model_override='openai',
+            model_override='mimo',
         )
         # JSON 파싱
+        if not resp:
+            raise ValueError('chat_completion returned None')
         m = re.search(r'\{[^}]+\}', resp)
         if m:
             result = json.loads(m.group(0))

@@ -143,6 +143,78 @@
           "date": "2026-06-27"
         }
       ]
+    },
+    {
+      "date": "2026-06-28",
+      "briefing_id": 138,
+      "articles": [
+        {
+          "id": "35597",
+          "title": "Trustpilot, Shopify와 파트너십을 맺어 AI 검색 엔진이 이미 보고 있는 곳",
+          "original_title": "",
+          "description": "Trustpilot은 Shopify와 파트너십을 체결하여 플랫폼의 상인들이 Trustpilot 리뷰를 온라인 상점 내에서 직접 표시하고 관리할 수 있게 합니다. 이 통합은 6월 29일에 시작되며, 덴마크 리뷰 회사의 주요 전자상거래 플랫폼과의 첫 네이티브 협력입니다.",
+          "link": "https://thenextweb.com/news/trustpilot-shopify-partnership-ai-search-reviews",
+          "entities": [
+            "Trustpilot",
+            "AI"
+          ],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35483",
+          "title": "애플 비전 프로 임원, 오픈AI로 이직할 것으로 알려져",
+          "original_title": "",
+          "description": "애플 비전 프로 헤드셋을 담당하는 부사장 폴 미드는 오픈AI의 하드웨어 팀에 합류하기 위해 회사를 떠날 것으로 보입니다.",
+          "link": "https://techcrunch.com/2026/06/27/apple-vision-pro-exec-is-reportedly-leaving-for-openai/",
+          "entities": [],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35514",
+          "title": "Anthropic의 Fable 5, 트럼프 행정부의 규제 해제로 며칠 내에 다시 제공될 수",
+          "original_title": "",
+          "description": "Anthropic의 AI 모델 Fable 5가 며칠 내에 다시 사용할 수 있을 것으로 보입니다. Axios에 따르면, 트럼프 행정부는 6월 12일에 부과된 안전 우려로 인한 규제를 해제할 준비를 하고 있습니다. 그러나 국방부와 NSA의 승인은 여전히 필요합니다.",
+          "link": "https://the-decoder.com/anthropics-fable-5-could-return-within-days-as-trump-administration-prepares-to-lift-restrictions/",
+          "entities": [
+            "Fable",
+            "AI"
+          ],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35604",
+          "title": "AI 거래가 냉각되고 유가는 하락하다. 월스트리트의 변동성이 큰 주를 살펴보자",
+          "original_title": "",
+          "description": "마이크론은 블록버스터 실적 발표에도 불구하고 한 주를 적자로 마감했습니다. 그러나 하락하는 유가는 인플레이션과의 싸움에 좋은 소식이 되었습니다.",
+          "link": "https://www.cnbc.com/2026/06/27/the-ai-trade-cooled-and-oil-sank-a-closer-look-at-wall-streets-volatile-week.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35596",
+          "title": "실리콘밸리는 트럼프가 AI 규제를 무시하도록 지원했지만, 이제 산업은 규제를 요청하고 있다",
+          "original_title": "",
+          "description": "도널드 트럼프를 선출하기 위해 많은 기부를 한 AI 산업이 이제는 정식 규제를 요청하고 있다는 보도가 나왔습니다. 최전선 AI 기업의 경영자들은 행정부의 즉흥적인 모델 감독 방식에 우려를 표하고 있습니다.",
+          "link": "https://thenextweb.com/news/silicon-valley-ai-regulation-trump-biden-irony-framework",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35580",
+          "title": "AI 버블은 위기 속에서도 계속 이어질 것",
+          "original_title": "",
+          "description": "기술 기업들이 엄청난 이익을 올리고 투자자들이 손해를 보는 것을 두려워하는 가운데, 두 그룹 모두 심판의 날을 미연에 방지하기 위해 최선을 다하고 있습니다. 오픈AI는 백악관의 요청에 따라 AI 모델 출시를 연기하고 있습니다. 매 몇십 년마다 투자자들은 주식 시장이 얼마나 더 오를 수 있을지 고민하게 됩니다.",
+          "link": "https://www.theguardian.com/business/2026/jun/27/ai-bubble-crash-tech-firms-stock-markets",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-28"
+        }
+      ]
     }
   ],
   "articles": [
@@ -271,6 +343,72 @@
         "AI"
       ],
       "date": "2026-06-27"
+    },
+    {
+      "id": "35597",
+      "title": "Trustpilot, Shopify와 파트너십을 맺어 AI 검색 엔진이 이미 보고 있는 곳",
+      "original_title": "",
+      "description": "Trustpilot은 Shopify와 파트너십을 체결하여 플랫폼의 상인들이 Trustpilot 리뷰를 온라인 상점 내에서 직접 표시하고 관리할 수 있게 합니다. 이 통합은 6월 29일에 시작되며, 덴마크 리뷰 회사의 주요 전자상거래 플랫폼과의 첫 네이티브 협력입니다.",
+      "link": "https://thenextweb.com/news/trustpilot-shopify-partnership-ai-search-reviews",
+      "entities": [
+        "Trustpilot",
+        "AI"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35483",
+      "title": "애플 비전 프로 임원, 오픈AI로 이직할 것으로 알려져",
+      "original_title": "",
+      "description": "애플 비전 프로 헤드셋을 담당하는 부사장 폴 미드는 오픈AI의 하드웨어 팀에 합류하기 위해 회사를 떠날 것으로 보입니다.",
+      "link": "https://techcrunch.com/2026/06/27/apple-vision-pro-exec-is-reportedly-leaving-for-openai/",
+      "entities": [],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35514",
+      "title": "Anthropic의 Fable 5, 트럼프 행정부의 규제 해제로 며칠 내에 다시 제공될 수",
+      "original_title": "",
+      "description": "Anthropic의 AI 모델 Fable 5가 며칠 내에 다시 사용할 수 있을 것으로 보입니다. Axios에 따르면, 트럼프 행정부는 6월 12일에 부과된 안전 우려로 인한 규제를 해제할 준비를 하고 있습니다. 그러나 국방부와 NSA의 승인은 여전히 필요합니다.",
+      "link": "https://the-decoder.com/anthropics-fable-5-could-return-within-days-as-trump-administration-prepares-to-lift-restrictions/",
+      "entities": [
+        "Fable",
+        "AI"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35604",
+      "title": "AI 거래가 냉각되고 유가는 하락하다. 월스트리트의 변동성이 큰 주를 살펴보자",
+      "original_title": "",
+      "description": "마이크론은 블록버스터 실적 발표에도 불구하고 한 주를 적자로 마감했습니다. 그러나 하락하는 유가는 인플레이션과의 싸움에 좋은 소식이 되었습니다.",
+      "link": "https://www.cnbc.com/2026/06/27/the-ai-trade-cooled-and-oil-sank-a-closer-look-at-wall-streets-volatile-week.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35596",
+      "title": "실리콘밸리는 트럼프가 AI 규제를 무시하도록 지원했지만, 이제 산업은 규제를 요청하고 있다",
+      "original_title": "",
+      "description": "도널드 트럼프를 선출하기 위해 많은 기부를 한 AI 산업이 이제는 정식 규제를 요청하고 있다는 보도가 나왔습니다. 최전선 AI 기업의 경영자들은 행정부의 즉흥적인 모델 감독 방식에 우려를 표하고 있습니다.",
+      "link": "https://thenextweb.com/news/silicon-valley-ai-regulation-trump-biden-irony-framework",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35580",
+      "title": "AI 버블은 위기 속에서도 계속 이어질 것",
+      "original_title": "",
+      "description": "기술 기업들이 엄청난 이익을 올리고 투자자들이 손해를 보는 것을 두려워하는 가운데, 두 그룹 모두 심판의 날을 미연에 방지하기 위해 최선을 다하고 있습니다. 오픈AI는 백악관의 요청에 따라 AI 모델 출시를 연기하고 있습니다. 매 몇십 년마다 투자자들은 주식 시장이 얼마나 더 오를 수 있을지 고민하게 됩니다.",
+      "link": "https://www.theguardian.com/business/2026/jun/27/ai-bubble-crash-tech-firms-stock-markets",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-28"
     }
   ]
 }

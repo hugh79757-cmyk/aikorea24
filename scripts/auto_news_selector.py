@@ -6,15 +6,16 @@ import os
 import re
 import subprocess
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
 CONFIG_PATH = os.path.join(PROJECT_DIR, "config", "crawlable_sources.json")
+KST = timezone(timedelta(hours=9))
 
 
 def log(msg):
-    ts = datetime.now().strftime("%H:%M:%S")
+    ts = datetime.now(KST).strftime("%H:%M:%S")
     print(f"[{ts}] {msg}")
 
 
@@ -47,7 +48,7 @@ def get_recent_news(hours=24):
     quoted = [f"'{s}'" for s in crawlable]
     sources_filter = ", ".join(quoted)
 
-    cutoff = (datetime.now() - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M:%S")
+    cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M:%S")
 
     sql = f"""
         SELECT id, title, link, description, source, category, pub_date
@@ -153,7 +154,7 @@ def print_report(articles, selected):
         log(f"  {s}: {c}건")
 
 
-def main():
+def main(dedup=True):
     log("=== aikorea24 자동 뉴스 선정 ===\n")
 
     articles = get_recent_news(hours=24)
@@ -168,6 +169,16 @@ def main():
 
     selected = select_top_articles(clusters, max_count=6)
     log(f"\n선정 완료: {len(selected)}개 기사")
+
+    if dedup:
+        from briefing_dedup import filter_duplicates
+        cutoff, removed = filter_duplicates(selected, d1_query)
+        if removed:
+            log(f"\n⚠️ 중복 제거: {len(removed)}건")
+            for art, reason in removed:
+                title = (art.get('title') or '')[:50]
+                log(f"  [{reason}] {title}")
+        selected = cutoff
 
     print_report(articles, selected)
 

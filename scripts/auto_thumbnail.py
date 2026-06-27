@@ -13,7 +13,7 @@ import argparse
 import os
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -31,8 +31,11 @@ USER_AGENT = (
 )
 
 
+KST = timezone(timedelta(hours=9))
+
+
 def log(msg):
-    ts = datetime.now().strftime("%H:%M:%S")
+    ts = datetime.now(KST).strftime("%H:%M:%S")
     print(f"[{ts}] {msg}")
 
 

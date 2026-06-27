@@ -99,14 +99,14 @@ stanza 예시 (반드시 이 구조를 따라라):
 [카드 구조 — 5개, --- 로 구분]
 반드시 아래 예시의 카드-줄-빈줄 구조를 그대로 따라라.
 1번 카드 예시 (정확히 이 구조):
-  Notion이 이메일 앱을 죽였음.             ← 첫 stanza: punch (15~25자)
+  Notion이 이메일 앱을 죽였음.
   AI가 이미 대신 일하고 있어서.
   사용자가 직접 열 필요가 없었음.
-                                           ← 빈 줄 (stanza 구분)
-  9월 22일. 18개월 만에 접는 결정.          ← 둘째 stanza: 숫자/날짜/금액 반드시 포함
+
+  9월 22일. 18개월 만에 접는 결정.
   2024년 2월 Skiff 인수 → 2025년 4월 출시.
   1년 만에 종료. 기사 본문의 실제 숫자만.
----                                        ← --- 는 반드시 두 stanza 뒤에만 위치
+---
 2번 카드 (500자 이내): 충돌의 A면. 구체적 사실, 숫자, 인용, 연구 결과를 빽빽하게 채운다.
 2번 카드 (500자 이내): 충돌의 A면. 구체적 사실, 숫자, 인용, 연구 결과를 빽빽하게 채운다.
 3번 카드 (500자 이내): 반전. 예상 못 한 제3의 사실. 방향 전환. 숫자와 사례로 가득 채운다.
@@ -334,7 +334,7 @@ def humanize_cards(cards):
             messages=[{'role': 'user', 'content': user_prompt}],
             temperature=0.3,
             max_tokens=5000,
-            model_override='openai',  # MiMo (NVIDIA 스킵, fallback 사용)
+            model_override='mimo',
         )
         if not result:
             log(f'  ⚠️ humanize: 응답 없음 → 원본 유지')
@@ -400,7 +400,7 @@ def fix_cards(cards):
             messages=[{'role': 'user', 'content': prompt}],
             temperature=0.1,
             max_tokens=8000,
-            model_override='openai',
+            model_override='mimo',
         )
         if result:
             fixed = [c.strip() for c in result.split('---') if c.strip()]
@@ -540,13 +540,13 @@ def write_thread(pitch, all_articles):
     for attempt in range(max_attempts):
         try:
             log(f'  쓰레드 생성 중...')
-            from v3.model_router import WRITER_NVIDIA_MODEL
+            from v3.model_router import WRITER_DEEPSEEK_MODEL
             content = chat_completion(
                 system_prompt=build_system_prompt(),
                 messages=[{'role': 'user', 'content': user_prompt}],
                 temperature=0.7,
                 max_tokens=5000,
-                nvidia_model=WRITER_NVIDIA_MODEL,
+                deepseek_model=WRITER_DEEPSEEK_MODEL,
             )
             if not content:
                 raise Exception('모델 응답 없음')
@@ -575,7 +575,7 @@ def write_thread(pitch, all_articles):
             messages=[{'role': 'user', 'content': user_prompt}],
             temperature=0.7,
             max_tokens=5000,
-            model_override='openai',
+                    model_override='mimo',
         )
         if not content:
             raise Exception('모델 응답 없음')

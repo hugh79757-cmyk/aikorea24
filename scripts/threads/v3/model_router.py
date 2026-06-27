@@ -1,8 +1,8 @@
 """
 model_router.py - AI 모델 호출 라우터
-- 1순위: NVIDIA DeepSeek V4 Flash (build.nvidia.com)
-- 2순위: OpenRouter MiMo (fallback)
-- .env에서 NVIDIA_API_KEY / OPENROUTER_API_KEY 자동 로드
+- 1순위: DeepSeek V4 Flash (직접 API)
+- 2순위: MiMo v2.5 (직접 API, fallback)
+- .env / ~/.env.common에서 DEEPSEEK_API_TOKEN / MIMO_API_KEY 자동 로드
 """
 import os, sys
 from openai import OpenAI
@@ -13,7 +13,6 @@ ENV_FILE = os.path.join(PROJECT_DIR, '.env')
 
 def load_env():
     """.env에서 API 키 로드"""
-    # 공통 환경변수 먼저 로드 (~/.env.common)
     common = os.path.expanduser('~/.env.common')
     if os.path.exists(common):
         with open(common) as f:
@@ -35,66 +34,55 @@ def load_env():
                         line = line[7:]
                     k, v = line.split('=', 1)
                     envs[k.strip()] = v.strip().strip('"').strip("'")
-    # 환경 변수에도 설정
     for k, v in envs.items():
         os.environ[k] = v
     return envs
 
 load_env()
 
-# === NVIDIA Qwen3 Next 80B 설정 ===
-NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
-# 기사 선택용 (pitcher) - DeepSeek V4 Flash
-NVIDIA_MODEL = "deepseek-ai/deepseek-v4-flash"
-# 쓰레드 작성용 (writer)
-WRITER_NVIDIA_MODEL = "deepseek-ai/deepseek-v4-flash"
+# === DeepSeek V4 Flash 직접 API ===
+DEEPSEEK_BASE_URL = os.environ.get('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1')
+DEEPSEEK_MODEL = 'deepseek-v4-flash'
+WRITER_DEEPSEEK_MODEL = 'deepseek-v4-flash'
 
-# === Fallback: OpenRouter MiMo ===
-OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-OPENROUTER_MODEL = "xiaomi/mimo-v2-flash:free"  # 무료 MiMo v2 Flash
+# === MiMo 직접 API (fallback) ===
+MIMO_BASE_URL = os.environ.get('MIMO_BASE_URL', 'https://api.xiaomimimo.com/v1')
+MIMO_MODEL = os.environ.get('MIMO_MODEL', 'mimo-v2.5')
 
-def get_nvidia_client():
-    api_key = os.environ.get('NVIDIA_API_KEY', '')
+def get_deepseek_client():
+    api_key = os.environ.get('DEEPSEEK_API_TOKEN', '')
     if not api_key:
         return None
-    return OpenAI(base_url=NVIDIA_BASE_URL, api_key=api_key)
+    return OpenAI(base_url=DEEPSEEK_BASE_URL, api_key=api_key)
 
-def get_openai_client():
-    api_key = os.environ.get('OPENAI_API_KEY', '')
+def get_mimo_client():
+    api_key = os.environ.get('MIMO_API_KEY', '')
     if not api_key:
         return None
-    return OpenAI(api_key=api_key)
+    return OpenAI(base_url=MIMO_BASE_URL, api_key=api_key)
 
-def get_openrouter_client():
-    api_key = os.environ.get('OPENROUTER_API_KEY', '')
-    if not api_key:
-        return None
-    return OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
-
-def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, nvidia_model=None):
+def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, deepseek_model=None):
     """
     통합 채팅 completions 함수
-    - 1순위: NVIDIA 모델 (지정 가능, 기본=Gemma 3n)
-    - 2순위: OpenRouter MiMo (fallback)
-    
-    nvidia_model: 사용할 NVIDIA 모델명 (기본=NVIDIA_MODEL)
-    model_override='openai': NVIDIA 스킵
+    - 1순위: DeepSeek V4 Flash (직접 API)
+    - 2순위: MiMo v2.5 (직접 API, fallback)
+
+    deepseek_model: 사용할 DeepSeek 모델명 (기본=DEEPSEEK_MODEL)
+    model_override='mimo': DeepSeek 스킵
     Returns: 응답 텍스트 (string), 실패 시 None
     """
-    # system_prompt 처리
     full_messages = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
-    
-    # 1순위: NVIDIA 모델
-    if model_override != "openai":
-        nv_client = get_nvidia_client()
-        if nv_client:
-            active_model = nvidia_model or NVIDIA_MODEL
+
+    if model_override != "mimo":
+        ds_client = get_deepseek_client()
+        if ds_client:
+            active_model = deepseek_model or DEEPSEEK_MODEL
             try:
-                print(f'  [모델] NVIDIA {active_model}')
-                resp = nv_client.chat.completions.create(
+                print(f'  [모델] DeepSeek {active_model}')
+                resp = ds_client.chat.completions.create(
                     model=active_model,
                     messages=full_messages,
                     temperature=temperature,
@@ -104,19 +92,18 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                 if text and text.strip():
                     return text.strip()
             except Exception as e:
-                print(f'  [경고] NVIDIA 실패: {type(e).__name__}')
-                print(f'  [폴백] → OpenAI')
+                print(f'  [경고] DeepSeek 실패: {type(e).__name__}')
+                print(f'  [폴백] → MiMo')
         else:
-            print(f'  [안내] NVIDIA_API_KEY 없음 → OpenAI 사용')
-    
-    # 2순위: OpenRouter MiMo (fallback)
-    if model_override != "nvidia":
-        or_client = get_openrouter_client()
-        if or_client:
+            print(f'  [안내] DEEPSEEK_API_TOKEN 없음 → MiMo 사용')
+
+    if model_override != "deepseek":
+        mimo_client = get_mimo_client()
+        if mimo_client:
             try:
-                print(f'  [모델] OpenRouter {OPENROUTER_MODEL}')
-                resp = or_client.chat.completions.create(
-                    model=OPENROUTER_MODEL,
+                print(f'  [모델] MiMo {MIMO_MODEL}')
+                resp = mimo_client.chat.completions.create(
+                    model=MIMO_MODEL,
                     messages=full_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
@@ -125,10 +112,10 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                 if text and text.strip():
                     return text.strip()
             except Exception as e:
-                print(f'  [오류] OpenRouter 실패: {type(e).__name__}')
+                print(f'  [오류] MiMo 실패: {type(e).__name__}')
         else:
-            print(f'  [오류] OPENROUTER_API_KEY 없음')
-    
+            print(f'  [오류] MIMO_API_KEY 없음')
+
     return None
 
 

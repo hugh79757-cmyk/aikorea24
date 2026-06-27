@@ -20,6 +20,24 @@ def log(msg):
     with open(os.path.join(LOGS_DIR, datetime.now().strftime('%Y-%m-%d') + '.log'), 'a', encoding='utf-8') as f:
         f.write(f'[{ts}] [v3] {msg}\n')
 
+def send_telegram(message):
+    import requests
+    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+    if not token or not chat_id:
+        log("  텔레그램 토큰/챗ID 없음, 알림 스킵")
+        return
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    try:
+        requests.post(url, json={
+            "chat_id": chat_id,
+            "text": message,
+            "parse_mode": "HTML",
+            "disable_web_page_preview": True,
+        })
+    except Exception as e:
+        log(f"  텔레그램 전송 실패: {e}")
+
 def load_env():
     # 공통 환경변수 먼저 로드 (~/.env.common)
     common = os.path.expanduser('~/.env.common')
@@ -231,12 +249,14 @@ def run_v3(dry_run=False):
             return
         else:
             log(f'  ❌ 발행 실패 — 쓰레드는 생성됨, 2시간 후 재시도')
+            send_telegram(f'❌ Threads 발행 실패: {pitch.get("hook","")[:60]}')
             return
 
     log(f'  ❌ {max_retries}회 모두 실패 (네트워크/D1 장애 의심) — 2시간 후 재시도')
+    send_telegram(f'❌ [{datetime.now().strftime("%m/%d %H:%M")}] Threads {max_retries}회 모두 실패')
 
 
-if __name__ == '__main__':
+def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true', help='발행 없이 글만 생성')
@@ -255,3 +275,12 @@ if __name__ == '__main__':
             time.sleep(60)
     else:
         run_v3(dry_run=args.dry_run)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as e:
+        log(f'  ❌ 예상치 못한 오류: {type(e).__name__}: {e}')
+        send_telegram(f'❌ [{datetime.now().strftime("%m/%d %H:%M")}] Threads 예외: {type(e).__name__}: {str(e)[:100]}')
+        raise

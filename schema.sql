@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS briefing_items (
   news_id INTEGER NOT NULL,
   sort_order INTEGER DEFAULT 0,
   comment TEXT DEFAULT '',
+  deep_dive_url TEXT DEFAULT '',
   created_at TEXT DEFAULT (datetime('now')),
   FOREIGN KEY (briefing_id) REFERENCES briefings(id),
   FOREIGN KEY (news_id) REFERENCES news(id)

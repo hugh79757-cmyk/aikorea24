@@ -27,7 +27,7 @@ try {
   const db = runtime?.env?.DB;
   if (db) {
     briefing = await db.prepare(
-      "SELECT * FROM briefings WHERE status = 'published' ORDER BY date DESC LIMIT 1"
+      "SELECT * FROM briefings WHERE status = 'published' ORDER BY id DESC LIMIT 1"
     ).first();
 
     if (briefing) {

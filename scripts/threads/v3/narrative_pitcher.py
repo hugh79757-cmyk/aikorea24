@@ -1,7 +1,7 @@
 #!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 """
 narrative_pitcher.py - 100개 기사에서 이야기를 찾는 내러티브 피처
-모델: Gemma 3n (NVIDIA NIM), MiMo (OpenRouter fallback)
+모델: DeepSeek V4 Flash (직접 API), MiMo (직접 API, fallback)
 - 50개씩 2개 청크 → 각 2개 피치 → 총 4개 → TOP 1 선정
 """
 import os, sys, json, re, random
@@ -381,11 +381,10 @@ def get_pitches(articles, max_articles=600, batch_size=200):
                 max_tokens=3000,
             )
             pitches = parse_pitches_from_text(resp, articles_text)
-            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (Qwen3 Next 80B)')
+            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (DeepSeek V4 Flash)')
 
-            # Qwen3 Next 80B 실패 시 GPT-4o-mini fallback
             if not pitches:
-                log(f'  ⚠️ Gemma 3n JSON 파싱 실패 → MiMo fallback')
+                log(f'  ⚠️ DeepSeek V4 Flash JSON 파싱 실패 → MiMo fallback')
                 from v3.model_router import chat_completion as _cc
                 resp2 = _cc(
                     system_prompt=SYSTEM_PROMPT,
@@ -394,7 +393,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 {all_articles_joined}"""}],
                     temperature=0.9,
                     max_tokens=3000,
-                    model_override='openai',
+                    model_override='mimo',
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
                 log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (MiMo)')

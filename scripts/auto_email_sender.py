@@ -33,7 +33,7 @@ def load_env():
 
 
 def get_today_briefing():
-    """D1에서 오늘 브리핑 조회"""
+    """D1에서 오늘 브리핑 조회 (최신 시퀀스)"""
     today = datetime.now().strftime("%Y-%m-%d")
 
     query = f"""
@@ -41,8 +41,10 @@ def get_today_briefing():
            GROUP_CONCAT(bi.news_id) as news_ids
     FROM briefings b
     LEFT JOIN briefing_items bi ON b.id = bi.briefing_id
-    WHERE b.date = '{today}' AND b.status = 'published'
+    WHERE b.date LIKE '{today}%' AND b.status = 'published'
     GROUP BY b.id
+    ORDER BY b.date DESC
+    LIMIT 1
     """
 
     result = subprocess.run(
