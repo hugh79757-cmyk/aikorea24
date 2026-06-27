@@ -342,13 +342,6 @@ def humanize_cards(cards):
             log(f'  ⚠️ humanize: 카드 수 불일치 ({len(fixed)}) → 원본 유지')
             return cards
 
-        # 변경률 검증
-        fixed_text = '\n---\n'.join(fixed)
-        changed_ratio = 1 - (len(set(text) & set(fixed_text)) / max(len(text), 1))
-        if changed_ratio > 0.50:
-            log(f'  ⚠️ humanize: 변경률 {changed_ratio:.0%} 초과 → 원본 유지')
-            return cards
-
         changed_cards = sum(1 for a, b in zip(cards, fixed) if a != b)
         log(f'  🧹 humanize: {changed_cards}/{len(cards)}개 카드 수정')
         return fixed
