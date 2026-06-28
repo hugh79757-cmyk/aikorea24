@@ -38,6 +38,48 @@ def send_telegram(message):
     except Exception as e:
         log(f"  텔레그램 전송 실패: {e}")
 
+def validate_final_cards(cards):
+    """발행 직전 최종 검증. 문제 있으면 (False, 이유_목록) 반환."""
+    from v3.writer_v3 import INSTRUCTION_PATTERNS
+
+    issues = []
+
+    for i, card in enumerate(cards):
+        for line in card.split('\n'):
+            stripped = line.strip()
+            if any(stripped.startswith(p) for p in INSTRUCTION_PATTERNS):
+                issues.append(f'카드 {i+1}: 프롬프트 명령어 포함 ("{stripped[:40]}")')
+
+        if not card.strip():
+            issues.append(f'카드 {i+1}: 빈 카드')
+
+        if len(card) > 500:
+            issues.append(f'카드 {i+1}: {len(card)}자 (500자 초과)')
+
+    last = cards[-1] if cards else ''
+    if 'http' not in last and '🔗' not in last:
+        issues.append('마지막 카드: 출처 링크 없음')
+
+    for i, card in enumerate(cards):
+        last_line = card.strip().split('\n')[-1].strip()
+        if last_line and last_line[-1] not in '.!?' and not last_line.startswith('🔗'):
+            issues.append(f'카드 {i+1}: 미완결 문장 (끝: "...{last_line[-20:]}")')
+
+    for i in range(1, len(cards)):
+        prev_words = set(cards[i-1].split())
+        curr_words = set(cards[i].split())
+        if len(prev_words) < 10 or len(curr_words) < 10:
+            continue
+        common = prev_words & curr_words
+        if len(common) >= len(prev_words) * 0.85 and len(common) >= len(curr_words) * 0.85:
+            issues.append(f'카드 {i}, {i+1}: 내용 유사 ({(len(common)/len(prev_words)*100):.0f}% 중복)')
+
+    if issues:
+        for issue in issues:
+            log(f'  ⚠️ [검증] {issue}')
+        return False, issues
+    return True, []
+
 def load_env():
     # 공통 환경변수 먼저 로드 (~/.env.common)
     common = os.path.expanduser('~/.env.common')
@@ -139,6 +181,14 @@ def run_v3(dry_run=False):
 
         save_draft(cards, pitch)
         log(f'  ✅ {len(cards)}개 조각 작성 완료')
+
+        # 발행 전 최종 검증
+        valid, issues = validate_final_cards(cards)
+        if not valid:
+            log(f'  ❌ 최종 검증 실패 — 발행 중단')
+            if not dry_run:
+                send_telegram(f'❌ Threads 검증 실패 ({len(issues)}개): {issues[0][:60]}')
+            continue
 
         if dry_run:
             # dry-run에서도 posted_ids/links/titles 저장 (중복 방지)

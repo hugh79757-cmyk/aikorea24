@@ -5,7 +5,7 @@ aikorea24 Threads API 발행기
 - requests 라이브러리 사용
 - 3회 재시도 + 토큰 자동 갱신
 """
-import os, sys, json, time, requests
+import os, sys, json, time, socket, requests
 from datetime import datetime
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
@@ -66,7 +66,7 @@ def refresh_token():
         r = requests.get('https://graph.threads.net/refresh_access_token', params={
             'grant_type': 'th_refresh_token',
             'access_token': token
-        }, timeout=15)
+        }, timeout=30)
         data = r.json()
         new_token = data.get('access_token', '')
         if new_token:
@@ -99,6 +99,13 @@ def publish_thread_chain(cards, article):
 
     root_post_id = None
     previous_post_id = None
+
+    # DNS 사전체크 — 실패 시 아예 발행 시작 안 함 (카드 1만 떠있는 현상 방지)
+    try:
+        socket.getaddrinfo('graph.threads.net', 443)
+    except socket.gaierror as e:
+        log(f'  ❌ DNS 조회 실패 (graph.threads.net): {e}')
+        return None
 
     # Threads API 500자 제한 (비상 안전장치, 프롬프트가 우선)
     MAX_CHARS = 500
@@ -141,7 +148,7 @@ def publish_thread_chain(cards, article):
             try:
                 r = requests.post(
                     f'https://graph.threads.net/v1.0/{user_id}/threads',
-                    params=params, timeout=15
+                    params=params, timeout=30
                 )
                 data = r.json()
                 if 'id' in data:
@@ -171,7 +178,7 @@ def publish_thread_chain(cards, article):
                 r2 = requests.post(
                     f'https://graph.threads.net/v1.0/{user_id}/threads_publish',
                     params={'creation_id': container_id, 'access_token': access_token},
-                    timeout=15
+                    timeout=30
                 )
                 data2 = r2.json()
                 if 'id' in data2:

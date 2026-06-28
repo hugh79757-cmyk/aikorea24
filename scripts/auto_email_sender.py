@@ -103,28 +103,25 @@ def send_email_via_brevo(briefing, items):
         "Content-Type": "application/json"
     }
 
-    # 수신자 설정: SUBSCRIBER_EMAIL > BREVO_LIST_ID > 기본 list ID 2
-    subscriber_email = os.environ.get("SUBSCRIBER_EMAIL")
-    list_id = os.environ.get("BREVO_LIST_ID", "2")
- 
+    # 수신자 설정: SUBSCRIBER_EMAIL > BREVO_LIST_ID > 기본 twinssn@gmail.com
+    # ※ Brevo listIds 발송 시 to=placeholder로 보내면 리스트 구독자에게 전달 안 됨
+    subscriber_email = os.environ.get("SUBSCRIBER_EMAIL", "twinssn@gmail.com")
+  
     payload = {
         "sender": {"name": "AI코리아24", "email": "info@aikorea24.kr"},
         "subject": f"AI코리아24 뉴스레터 - {briefing.get('date', '')}",
-        "htmlContent": html
+        "htmlContent": html,
+        "to": [{"email": subscriber_email}]
     }
- 
-    if subscriber_email:
-        # 개별 이메일 발송
-        payload["to"] = [{"email": subscriber_email}]
-        print(f"  → 개별 발송: {subscriber_email}")
-    else:
-        # 연락처 목록 발송 (Brevo contact list)
+  
+    list_id = os.environ.get("BREVO_LIST_ID")
+    if list_id:
+        # Brevo listIds + to 병행 — 구독자 + 개별 모두 전달
         list_ids = [int(x.strip()) for x in list_id.split(",")]
         payload["listIds"] = list_ids
-        # Brevo API requires 'to' field even for list-based sending
-        # Use a placeholder email that will be overridden by listIds
-        payload["to"] = [{"email": "placeholder@aikorea24.kr"}]
-        print(f"  → 목록 발송: listIds={list_ids}")
+        print(f"  → 개별 발송: {subscriber_email} + 목록 발송: listIds={list_ids}")
+    else:
+        print(f"  → 개별 발송: {subscriber_email}")
 
     resp = requests.post(url, json=payload, headers=headers)
  
