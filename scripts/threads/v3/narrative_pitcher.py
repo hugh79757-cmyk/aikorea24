@@ -1,7 +1,7 @@
 #!/Users/twinssn/Projects/aikorea24/.venv/bin/python3
 """
 narrative_pitcher.py - 100개 기사에서 이야기를 찾는 내러티브 피처
-모델: DeepSeek V4 Flash (직접 API), MiMo (직접 API, fallback)
+모델: GPT-4o-mini, DeepSeek V4 Flash (fallback), MiMo (fallback)
 - 50개씩 2개 청크 → 각 2개 피치 → 총 4개 → TOP 1 선정
 """
 import os, sys, json, re, random
@@ -370,7 +370,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 
         all_articles_joined = '\n---\n'.join(articles_text)
 
-        # DeepSeek V4 Pro 호출
+        # GPT 호출
         try:
             resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
@@ -381,10 +381,10 @@ def get_pitches(articles, max_articles=600, batch_size=200):
                 max_tokens=3000,
             )
             pitches = parse_pitches_from_text(resp, articles_text)
-            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (DeepSeek V4 Flash)')
+            log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
 
             if not pitches:
-                log(f'  ⚠️ DeepSeek V4 Flash JSON 파싱 실패 → MiMo fallback')
+                log(f'  ⚠️ JSON 파싱 실패 → fallback')
                 from v3.model_router import chat_completion as _cc
                 resp2 = _cc(
                     system_prompt=SYSTEM_PROMPT,
@@ -393,10 +393,9 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 {all_articles_joined}"""}],
                     temperature=0.9,
                     max_tokens=3000,
-                    model_override='mimo',
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
-                log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견 (MiMo)')
+                log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
         except Exception as e:
             log(f'  ⚠️ 배치 {idx+1} 오류: {e}')
             continue

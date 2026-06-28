@@ -215,6 +215,119 @@
           "date": "2026-06-28"
         }
       ]
+    },
+    {
+      "date": "2026-06-28",
+      "briefing_id": 139,
+      "articles": [
+        {
+          "id": "35863",
+          "title": "구글, 메타의 제미니 접근 권한을 제한하다",
+          "original_title": "",
+          "description": "구글은 메타가 원하는 만큼의 컴퓨팅 용량을 제공할 수 없어서 메타의 제미니 AI 모델 사용을 제한했다고 파이낸셜 타임스가 일요일 보도했습니다. 이 제한은 여러 구글 클라이언트에 영향을 미쳤으며, 특히 메타가 큰 타격을 입었습니다.",
+          "link": "https://thenextweb.com/news/google-caps-meta-gemini-compute-shortage",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35781",
+          "title": "중국 사이버 보안 기업, Mythos에 맞서는 AI 도구 개발 및 사이버 핵 억제력으로 경",
+          "original_title": "",
+          "description": "360의 창립자인 주홍이는 Anthropic의 Mythos와 경쟁하기 위해 설계된 두 개의 AI 보안 도구를 선보였습니다. 그 중 하나는 이미 3,432개의 취약점을 발견했습니다. 그는 중국 모델이 서구 모델보다 20~30% 뒤처져 있다고 인정하면서도 Mythos를 \"사이버 핵무기\"에 비유하며 중국의 자립적인 개발을 촉구했습니다.",
+          "link": "https://the-decoder.com/chinese-cybersecurity-firm-builds-ai-tools-to-rival-mythos-and-frames-the-race-as-cyber-nuclear-deterrence/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-28"
+        },
+        {
+          "id": "35779",
+          "title": "Coinbase, 서구 연구실들이 가격 스트레스 테스트를 받는 가운데 중국 AI 모델로 전",
+          "original_title": "",
+          "description": "Coinbase의 CEO 브라이언 암스트롱은 자사의 AI 모델을 GLM 5.2와 Kimi 2.7과 같은 중국 AI 모델로 전환하고 있습니다. 자동화된 라우팅 시스템은 각 요청에 대해 작업과 가격에 기반하여 최적의 모델을 선택하며, 캐싱 개선으로 성공률이 5%에서 60%로 상승했습니다.",
+          "link": "https://the-decoder.com/coinbase-joins-the-rush-to-chinese-ai-models-as-western-labs-face-a-pricing-stress-test/",
+          "entities": [
+            "GLM",
+            "CEO",
+            "Coinbase",
+            "AI",
+            "Kimi"
+          ],
+          "date": "2026-06-28"
+        }
+      ]
+    },
+    {
+      "date": "2026-06-29",
+      "briefing_id": 140,
+      "articles": [
+        {
+          "id": "36147",
+          "title": "엔비디아 지원의 Firmus, 인도네시아에 360MW AI 데이터 센터를 건설하고 300억",
+          "original_title": "",
+          "description": "호주 AI 인프라 회사인 Firmus Technologies가 엔비디아와의 8년 파트너십을 통해 인도네시아에 첫 데이터 센터를 건설할 계획입니다. 이 데이터 센터는 싱가포르 연안에 위치한 바탐 섬에 360메가와트 규모로 개발되고 있습니다.",
+          "link": "https://thenextweb.com/news/firmus-nvidia-indonesia-batam-data-center-30-billion",
+          "entities": [
+            "Firmus",
+            "AI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36146",
+          "title": "바이두의 칩 부문 쿤룬신, 500억 달러 홍콩 IPO 목표 및 반도체 구매 요청",
+          "original_title": "",
+          "description": "바이두의 AI 칩 부문 쿤룬신이 500억 달러의 가치를 목표로 홍콩 상장을 계획하고 있다고 더 정보지가 일요일에 보도했습니다. 흥미로운 점은 이 회사가 IPO 투자자들에게 반도체 구매도 약속해줄 것을 요청했다는 것입니다.",
+          "link": "https://thenextweb.com/news/baidu-kunlunxin-ipo-50-billion-investors-buy-chips",
+          "entities": [
+            "IPO",
+            "AI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36061",
+          "title": "AI는 대답하는 것을 멈추고 작업을 완료해야 진정한 동료가 될 수 있다",
+          "original_title": "",
+          "description": "텐센트와 여러 중국 대학의 조사 논문에 따르면 AI 시스템은 단순히 답변을 생성하는 것이 아니라 지속적인 업무 환경에서 전체 작업을 완료해야 신뢰할 수 있는 동료가 될 수 있다고 주장합니다. 이 연구는 챗봇에서 '디지털 동료'로 나아가는 경로를 추적하고 있습니다.",
+          "link": "https://the-decoder.com/ai-wont-become-a-real-coworker-until-it-stops-answering-and-starts-finishing-tasks/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36128",
+          "title": "A.I.가 인생의 큰 질문에 대한 답을 주장하지만, 때로는 모르는 것이 진실에 더 가까이 ",
+          "original_title": "",
+          "description": "ChatGPT는 나의 불편함을 덜어주지만, 그 과정에서 질문과 답 사이의 성스러운 사색을 빼앗깁니다. 이 칼럼은 영성과 그것이 일상생활을 탐색하는 데 어떻게 활용될 수 있는지를 다룹니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jun/29/ai-answers-to-lifes-big-questions-chatgp-contemplation",
+          "entities": [
+            "A.I."
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36030",
+          "title": "포드, AI의 실패 이후 다시 '그레이 비어드' 엔지니어를 고용하다",
+          "original_title": "",
+          "description": "\"우리는 단순히 인공지능을 도입하기만 하면 고품질의 제품이 탄생할 것이라고 잘못 생각했습니다.\"",
+          "link": "https://techcrunch.com/2026/06/28/ford-rehires-gray-beard-engineers-after-ai-falls-short/",
+          "entities": [],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "35877",
+          "title": "슈퍼 부유층에 대한 세금을 다시 설계할 필요는 없다",
+          "original_title": "",
+          "description": "부유층에 대한 새로운 세금이 효과를 보려면 많은 예외와 허점을 해결해야 합니다. 엘론 머스크의 새로운 조 단위 재산에 세금을 부과하는 것은 다소 만족스러운 일이지만, 미국인들이 걱정하는 것은 세금의 공정성입니다.",
+          "link": "https://www.theguardian.com/us-news/2026/jun/28/wealth-tax-super-rich",
+          "entities": [],
+          "date": "2026-06-29"
+        }
+      ]
     }
   ],
   "articles": [
@@ -409,6 +522,107 @@
         "AI"
       ],
       "date": "2026-06-28"
+    },
+    {
+      "id": "35863",
+      "title": "구글, 메타의 제미니 접근 권한을 제한하다",
+      "original_title": "",
+      "description": "구글은 메타가 원하는 만큼의 컴퓨팅 용량을 제공할 수 없어서 메타의 제미니 AI 모델 사용을 제한했다고 파이낸셜 타임스가 일요일 보도했습니다. 이 제한은 여러 구글 클라이언트에 영향을 미쳤으며, 특히 메타가 큰 타격을 입었습니다.",
+      "link": "https://thenextweb.com/news/google-caps-meta-gemini-compute-shortage",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35781",
+      "title": "중국 사이버 보안 기업, Mythos에 맞서는 AI 도구 개발 및 사이버 핵 억제력으로 경",
+      "original_title": "",
+      "description": "360의 창립자인 주홍이는 Anthropic의 Mythos와 경쟁하기 위해 설계된 두 개의 AI 보안 도구를 선보였습니다. 그 중 하나는 이미 3,432개의 취약점을 발견했습니다. 그는 중국 모델이 서구 모델보다 20~30% 뒤처져 있다고 인정하면서도 Mythos를 \"사이버 핵무기\"에 비유하며 중국의 자립적인 개발을 촉구했습니다.",
+      "link": "https://the-decoder.com/chinese-cybersecurity-firm-builds-ai-tools-to-rival-mythos-and-frames-the-race-as-cyber-nuclear-deterrence/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "35779",
+      "title": "Coinbase, 서구 연구실들이 가격 스트레스 테스트를 받는 가운데 중국 AI 모델로 전",
+      "original_title": "",
+      "description": "Coinbase의 CEO 브라이언 암스트롱은 자사의 AI 모델을 GLM 5.2와 Kimi 2.7과 같은 중국 AI 모델로 전환하고 있습니다. 자동화된 라우팅 시스템은 각 요청에 대해 작업과 가격에 기반하여 최적의 모델을 선택하며, 캐싱 개선으로 성공률이 5%에서 60%로 상승했습니다.",
+      "link": "https://the-decoder.com/coinbase-joins-the-rush-to-chinese-ai-models-as-western-labs-face-a-pricing-stress-test/",
+      "entities": [
+        "GLM",
+        "CEO",
+        "Coinbase",
+        "AI",
+        "Kimi"
+      ],
+      "date": "2026-06-28"
+    },
+    {
+      "id": "36147",
+      "title": "엔비디아 지원의 Firmus, 인도네시아에 360MW AI 데이터 센터를 건설하고 300억",
+      "original_title": "",
+      "description": "호주 AI 인프라 회사인 Firmus Technologies가 엔비디아와의 8년 파트너십을 통해 인도네시아에 첫 데이터 센터를 건설할 계획입니다. 이 데이터 센터는 싱가포르 연안에 위치한 바탐 섬에 360메가와트 규모로 개발되고 있습니다.",
+      "link": "https://thenextweb.com/news/firmus-nvidia-indonesia-batam-data-center-30-billion",
+      "entities": [
+        "Firmus",
+        "AI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36146",
+      "title": "바이두의 칩 부문 쿤룬신, 500억 달러 홍콩 IPO 목표 및 반도체 구매 요청",
+      "original_title": "",
+      "description": "바이두의 AI 칩 부문 쿤룬신이 500억 달러의 가치를 목표로 홍콩 상장을 계획하고 있다고 더 정보지가 일요일에 보도했습니다. 흥미로운 점은 이 회사가 IPO 투자자들에게 반도체 구매도 약속해줄 것을 요청했다는 것입니다.",
+      "link": "https://thenextweb.com/news/baidu-kunlunxin-ipo-50-billion-investors-buy-chips",
+      "entities": [
+        "IPO",
+        "AI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36061",
+      "title": "AI는 대답하는 것을 멈추고 작업을 완료해야 진정한 동료가 될 수 있다",
+      "original_title": "",
+      "description": "텐센트와 여러 중국 대학의 조사 논문에 따르면 AI 시스템은 단순히 답변을 생성하는 것이 아니라 지속적인 업무 환경에서 전체 작업을 완료해야 신뢰할 수 있는 동료가 될 수 있다고 주장합니다. 이 연구는 챗봇에서 '디지털 동료'로 나아가는 경로를 추적하고 있습니다.",
+      "link": "https://the-decoder.com/ai-wont-become-a-real-coworker-until-it-stops-answering-and-starts-finishing-tasks/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36128",
+      "title": "A.I.가 인생의 큰 질문에 대한 답을 주장하지만, 때로는 모르는 것이 진실에 더 가까이 ",
+      "original_title": "",
+      "description": "ChatGPT는 나의 불편함을 덜어주지만, 그 과정에서 질문과 답 사이의 성스러운 사색을 빼앗깁니다. 이 칼럼은 영성과 그것이 일상생활을 탐색하는 데 어떻게 활용될 수 있는지를 다룹니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jun/29/ai-answers-to-lifes-big-questions-chatgp-contemplation",
+      "entities": [
+        "A.I."
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36030",
+      "title": "포드, AI의 실패 이후 다시 '그레이 비어드' 엔지니어를 고용하다",
+      "original_title": "",
+      "description": "\"우리는 단순히 인공지능을 도입하기만 하면 고품질의 제품이 탄생할 것이라고 잘못 생각했습니다.\"",
+      "link": "https://techcrunch.com/2026/06/28/ford-rehires-gray-beard-engineers-after-ai-falls-short/",
+      "entities": [],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "35877",
+      "title": "슈퍼 부유층에 대한 세금을 다시 설계할 필요는 없다",
+      "original_title": "",
+      "description": "부유층에 대한 새로운 세금이 효과를 보려면 많은 예외와 허점을 해결해야 합니다. 엘론 머스크의 새로운 조 단위 재산에 세금을 부과하는 것은 다소 만족스러운 일이지만, 미국인들이 걱정하는 것은 세금의 공정성입니다.",
+      "link": "https://www.theguardian.com/us-news/2026/jun/28/wealth-tax-super-rich",
+      "entities": [],
+      "date": "2026-06-29"
     }
   ]
 }

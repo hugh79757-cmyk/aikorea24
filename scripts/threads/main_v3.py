@@ -5,7 +5,7 @@ aikorea24 Threads v3 — Narrative-First Design
 - GPT-4o가 쓰레드 작성
 - 기존 파일(v1/v2) 수정 금지, 병행 가능
 """
-import os, sys, json, time
+import os, sys, json, time, re
 from datetime import datetime, timedelta
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
@@ -62,7 +62,8 @@ def validate_final_cards(cards):
 
     for i, card in enumerate(cards):
         last_line = card.strip().split('\n')[-1].strip()
-        if last_line and last_line[-1] not in '.!?' and not last_line.startswith('🔗'):
+        trailing = last_line.rstrip('\'"」』)}')
+        if trailing and trailing[-1] not in '.!?' and not last_line.startswith('🔗'):
             issues.append(f'카드 {i+1}: 미완결 문장 (끝: "...{last_line[-20:]}")')
 
     for i in range(1, len(cards)):
@@ -73,6 +74,13 @@ def validate_final_cards(cards):
         common = prev_words & curr_words
         if len(common) >= len(prev_words) * 0.85 and len(common) >= len(curr_words) * 0.85:
             issues.append(f'카드 {i}, {i+1}: 내용 유사 ({(len(common)/len(prev_words)*100):.0f}% 중복)')
+
+    ENG_LEAK_RE = re.compile(r'[가-힣][A-Za-z]|[A-Za-z][가-힣]')
+    for i, card in enumerate(cards):
+        for line in card.split('\n'):
+            if ENG_LEAK_RE.search(line):
+                issues.append(f'카드 {i+1}: 한글+영어 붙어쓰기 ("{line.strip()[:50]}")')
+                break
 
     if issues:
         for issue in issues:

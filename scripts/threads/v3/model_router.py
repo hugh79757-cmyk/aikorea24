@@ -1,8 +1,9 @@
 """
 model_router.py - AI 모델 호출 라우터
-- 1순위: DeepSeek V4 Flash (직접 API)
-- 2순위: MiMo v2.5 (직접 API, fallback)
-- .env / ~/.env.common에서 DEEPSEEK_API_TOKEN / MIMO_API_KEY 자동 로드
+- 1순위: GPT-4o-mini (OpenAI)
+- 2순위: DeepSeek V4 Flash (fallback)
+- 3순위: MiMo v2.5 (fallback)
+- .env / ~/.env.common에서 OPENAI_API_KEY / DEEPSEEK_API_TOKEN / MIMO_API_KEY 자동 로드
 """
 import os, sys
 from openai import OpenAI
@@ -40,14 +41,22 @@ def load_env():
 
 load_env()
 
-# === DeepSeek V4 Flash 직접 API ===
+# === GPT-4o-mini (1순위) ===
+OPENAI_MODEL = 'gpt-4o-mini'
+
+# === DeepSeek V4 Flash (2순위 fallback) ===
 DEEPSEEK_BASE_URL = os.environ.get('DEEPSEEK_BASE_URL', 'https://api.deepseek.com/v1')
 DEEPSEEK_MODEL = 'deepseek-v4-flash'
-WRITER_DEEPSEEK_MODEL = 'deepseek-v4-flash'
 
-# === MiMo 직접 API (fallback) ===
+# === MiMo v2.5 (3순위 fallback) ===
 MIMO_BASE_URL = os.environ.get('MIMO_BASE_URL', 'https://api.xiaomimimo.com/v1')
 MIMO_MODEL = os.environ.get('MIMO_MODEL', 'mimo-v2.5')
+
+def get_openai_client():
+    api_key = os.environ.get('OPENAI_API_KEY', '')
+    if not api_key:
+        return None
+    return OpenAI(api_key=api_key)
 
 def get_deepseek_client():
     api_key = os.environ.get('DEEPSEEK_API_TOKEN', '')
@@ -64,17 +73,38 @@ def get_mimo_client():
 def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, deepseek_model=None):
     """
     통합 채팅 completions 함수
-    - 1순위: DeepSeek V4 Flash (직접 API)
-    - 2순위: MiMo v2.5 (직접 API, fallback)
+    - 1순위: GPT-4o-mini (OpenAI)
+    - 2순위: DeepSeek V4 Flash (fallback)
+    - 3순위: MiMo v2.5 (fallback)
 
-    deepseek_model: 사용할 DeepSeek 모델명 (기본=DEEPSEEK_MODEL)
-    model_override='mimo': DeepSeek 스킵
+    model_override='mimo': OpenAI+DeepSeek 건너뛰고 MiMo 사용
+    model_override='openai': OpenAI 건너뛰고 DeepSeek 사용
     Returns: 응답 텍스트 (string), 실패 시 None
     """
     full_messages = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
+
+    if model_override not in ("mimo", "openai"):
+        client = get_openai_client()
+        if client:
+            try:
+                print(f'  [모델] GPT-4o-mini')
+                resp = client.chat.completions.create(
+                    model=OPENAI_MODEL,
+                    messages=full_messages,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                )
+                text = resp.choices[0].message.content
+                if text and text.strip():
+                    return text.strip()
+            except Exception as e:
+                print(f'  [경고] GPT-4o-mini 실패: {type(e).__name__}')
+                print(f'  [폴백] → DeepSeek')
+        else:
+            print(f'  [안내] OPENAI_API_KEY 없음 → DeepSeek')
 
     if model_override != "mimo":
         ds_client = get_deepseek_client()
@@ -95,7 +125,7 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                 print(f'  [경고] DeepSeek 실패: {type(e).__name__}')
                 print(f'  [폴백] → MiMo')
         else:
-            print(f'  [안내] DEEPSEEK_API_TOKEN 없음 → MiMo 사용')
+            print(f'  [안내] DEEPSEEK_API_TOKEN 없음 → MiMo')
 
     if model_override != "deepseek":
         mimo_client = get_mimo_client()

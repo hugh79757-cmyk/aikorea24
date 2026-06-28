@@ -47,13 +47,11 @@ def evaluate_pitch(pitch):
 
     pitch_json = json.dumps(pitch, ensure_ascii=False)
     try:
-        # 방향 정확성 평가는 MiMo 사용
         resp = chat_completion(
             system_prompt=EVAL_SYSTEM_PROMPT,
             messages=[{'role': 'user', 'content': f'평가할 피치:\n{pitch_json}'}],
             temperature=0.1,
             max_tokens=300,
-            model_override='mimo',
         )
         # JSON 파싱
         if not resp:

@@ -337,6 +337,19 @@ def humanize_cards(cards):
 - 단문만 반복 (복문·중문 부재) → 문장 길이 다양화
 - 연결어미 뒤 쉼표 (-고, -며, -지만 뒤) → 쉼표 제거
 
+### 영어 혼용 패턴 (한국어 텍스트 내 영어 누출 — 반드시 교체)
+- 한글 문장 중간에 영어 단어가 공백 없이 붙어나오는 경우 → 해당 영어 제거 또는 자연스러운 한글로 교체
+  예: "위험에Expose toExposed to" → "위험에 노출"
+  예: "위험에Expose toExposed to비율임" → "위험에 노출된 비율임"
+- 고유명사·제품명·브랜드명(OpenAI, CEO, Threads 등)은 제외 — 공백으로 분리되어 있으면 유지
+- 영어 단어가 공백 없이 한글 앞뒤에 붙어 있으면 무조건 교체 대상
+
+### 비표준 한국어 합성어
+- '~시키다' 남용 → 자연스러운 능동형/피동형으로 교체
+- '부차시하다', '우선시하다' 등 한자어+하다/시다 비표준 동사 → 자연스러운 표현으로 교체
+  예: "부차시하고 있음" → "부차적으로 여기고 있음" 또는 "뒷전으로 미루고 있음"
+- 영어-한국어 혼성어(하이브리드 합성어) 제거
+
 ## 절대 변경 금지
 - 수치·날짜·통계
 - 고유명사·제품명·브랜드명
@@ -365,7 +378,6 @@ def humanize_cards(cards):
             messages=[{'role': 'user', 'content': user_prompt}],
             temperature=0.3,
             max_tokens=5000,
-            model_override='mimo',
         )
         if not result:
             log(f'  ⚠️ humanize: 응답 없음 → 원본 유지')
@@ -393,13 +405,37 @@ def humanize_cards(cards):
         return cards
 
 
-def fix_cards(cards):
-    """MiMo로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
-    내용/의미/구조는 변경하지 않음
-    DiffusionGemma 대신 별도 모델 사용 — 자기 오류를 스스로 수정하는 구조적 문제 해결
+def _clean_english_leakage(text):
+    """한국어 텍스트에 영어가 공백 없이 붙어있는 leakage 제거 (정규식)
+    DeepSeek V4 Flash가 한국어 생성 중간에 영어 단어를 누출하는 패턴 처리
+    개행(\n)은 stanza 구조 보존을 위해 제외하고 보존
     """
+    text = re.sub(r'([가-힣])([A-Za-z][A-Za-z ]{1,30}?)([가-힣])', r'\1\3', text)
+    text = re.sub(r'([가-힣])([A-Za-z][A-Za-z ]{1,30})$', r'\1', text)
+    text = re.sub(r'([가-힣])([A-Za-z][A-Za-z ]{1,30}?)\n', r'\1\n', text)
+    return text
+
+
+def _fix_korean_particle_spacing(text):
+    """영문 대문자 약어/단어 뒤에 조사 등 한글이 붙어있는 경우 공백 추가
+    예) UPI가 → UPI 가, Intel이 → Intel 이, AI가 → AI 가
+    """
+    text = re.sub(r'([A-Za-z][A-Za-z0-9.+#]*)([가-힣])', r'\1 \2', text)
+    return text
+
+def fix_cards(cards):
+    """GPT로 글자 단위 오류(첫 글자 드랍, 잘린 문자, 깨진 단어)만 수정
+    내용/의미/구조는 변경하지 않음
+    """
+    # 0단계: DeepSeek 영어 leakage 정규식 제거 (모델 의존 없는 1차 방어)
+    cards = [_clean_english_leakage(c) for c in cards]
+    # 0.5단계: 영문+한글 조사 붙어쓰기 교정 (예: UPI가 → UPI 가)
+    cards = [_fix_korean_particle_spacing(c) for c in cards]
     # humanize 먼저 적용
     cards = humanize_cards(cards)
+    # humanize 후 재유입된 leakage 재제거
+    cards = [_clean_english_leakage(c) for c in cards]
+    cards = [_fix_korean_particle_spacing(c) for c in cards]
 
     from v3.model_router import chat_completion
     text = '\n---\n'.join(cards)
@@ -432,7 +468,6 @@ def fix_cards(cards):
             messages=[{'role': 'user', 'content': prompt}],
             temperature=0.1,
             max_tokens=8000,
-            model_override='mimo',
         )
         if result:
             fixed = [c.strip() for c in result.split('---') if c.strip()]
@@ -449,7 +484,7 @@ def fix_cards(cards):
 
 
 def write_thread(pitch, all_articles):
-    """피치 + 관련 기사 → 쓰레드 조각 리스트 (DeepSeek → MiMo fallback)"""
+    """피치 + 관련 기사 → 쓰레드 조각 리스트"""
     from v3.model_router import chat_completion
 
     # pitcher가 이미 크롤링한 본문이 있는 경우 — 재크롤링 없이 사용
@@ -572,13 +607,11 @@ def write_thread(pitch, all_articles):
     for attempt in range(max_attempts):
         try:
             log(f'  쓰레드 생성 중...')
-            from v3.model_router import WRITER_DEEPSEEK_MODEL
             content = chat_completion(
                 system_prompt=build_system_prompt(),
                 messages=[{'role': 'user', 'content': user_prompt}],
                 temperature=0.7,
                 max_tokens=5000,
-                deepseek_model=WRITER_DEEPSEEK_MODEL,
             )
             if not content:
                 raise Exception('모델 응답 없음')
@@ -599,15 +632,14 @@ def write_thread(pitch, all_articles):
         except Exception as e:
             log(f'  ⚠️ 오류: {e} (시도 {attempt+1}/{max_attempts})')
 
-    log(f'  ❌ {max_attempts}회 재시도 실패 → MiMo fallback 1회')
+    log(f'  ❌ {max_attempts}회 재시도 실패 → fallback 1회')
     try:
-        log(f'  쓰레드 생성 중... (MiMo fallback)')
+        log(f'  쓰레드 생성 중... (fallback)')
         content = chat_completion(
             system_prompt=build_system_prompt(),
             messages=[{'role': 'user', 'content': user_prompt}],
             temperature=0.7,
             max_tokens=5000,
-                    model_override='mimo',
         )
         if not content:
             raise Exception('모델 응답 없음')
@@ -616,10 +648,10 @@ def write_thread(pitch, all_articles):
         if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
             primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
             cards = assemble_final(cards, related, primary_url, crawled_urls)
-            log(f'  ✅ 쓰레드: {len(cards)}개 조각 (MiMo fallback 성공)')
+            log(f'  ✅ 쓰레드: {len(cards)}개 조각 (fallback 성공)')
             return cards
     except Exception as e:
-        log(f'  ⚠️ MiMo fallback 오류: {e}')
+        log(f'  ⚠️ fallback 오류: {e}')
 
     log('  ❌ 전체 재시도 실패')
     return []
