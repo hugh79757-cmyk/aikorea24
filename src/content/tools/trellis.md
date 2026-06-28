@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://trellis3d.github.io"
-useCases: [{"title": "영어 이메일 작성", "prompt": "3D 모델을 활용한 프로젝트를 소개하는 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "3D 모델을 활용한 유튜브 썸네일 디자인 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "3D 모델을 포함한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["3D모델", "사진", "디자인"]
 featured: false
 order: 18

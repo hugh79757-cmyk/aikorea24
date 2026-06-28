@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: false
 difficulty: "초보자 OK"
 url: "https://www.airbrushstudio.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "전문적인 이미지로 이메일에 첨부할 사진을 보정해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 사용할 사진을 멋지게 보정해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서에 사용할 이미지들을 전문가처럼 보정해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["사진 보정", "AI 편집", "디자인 툴"]
 featured: false
 order: 104

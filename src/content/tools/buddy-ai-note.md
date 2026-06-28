@@ -6,7 +6,7 @@ price: "현재 유료 플랜은 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://ainote.tech/"
-useCases: [{"title": "회의록 작성", "prompt": "회의 중 중요한 내용을 기록하고 정리해 주세요."}, {"title": "일정 관리", "prompt": "내일 일정과 할 일을 정리해 주세요."}, {"title": "이메일 작성", "prompt": "고객에게 회의 일정을 전달하는 이메일을 작성해 주세요."}]
+useCases: ["회의록 작성", "일정 관리", "이메일 작성"]
 tags: ["메모", "회의록", "일정관리"]
 featured: false
 order: 100

@@ -6,7 +6,7 @@ price: "사용량 기반"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://zernio.com/"
-useCases: [{"title": "SNS 게시물 작성", "prompt": "여러 플랫폼에 동시에 게시할 SNS 글을 작성해 주세요."}, {"title": "메시지 자동 발송", "prompt": "특정 시간에 발송할 메시지를 설정해 주세요."}, {"title": "소셜 미디어 분석", "prompt": "내 SNS 계정의 성과를 분석해 주세요."}]
+useCases: ["SNS 게시물 작성", "메시지 자동 발송", "소셜 미디어 분석"]
 tags: ["API", "소셜미디어", "메신저"]
 featured: false
 order: 100

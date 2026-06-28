@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://ideogram.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "로고 디자인 요청을 위한 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "제목과 주제를 기반으로 썸네일 디자인을 해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어에 맞는 포스터 디자인을 요청합니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 디자인", "로고 제작", "포스터 디자인"]
 featured: false
 order: 13

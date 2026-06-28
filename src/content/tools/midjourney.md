@@ -6,7 +6,7 @@ price: "월 10달러"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://midjourney.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "프로젝트 관련 이미지를 생성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 영상 썸네일을 위한 이미지 제작해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어에 맞는 비주얼 자료를 만들어 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 이미지 생성", "예술", "디자인"]
 featured: false
 order: 10

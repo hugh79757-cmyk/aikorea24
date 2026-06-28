@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://app.lium.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "업무 관련 영어 이메일을 작성해 주세요."}, {"title": "회의록 작성", "prompt": "회의 내용을 정리한 회의록을 작성해 주세요."}, {"title": "프로젝트 관리", "prompt": "프로젝트 진행 상황을 정리해 주세요."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "프로젝트 관리"]
 tags: ["업무자동화", "효율성", "생산성"]
 featured: false
 order: 100

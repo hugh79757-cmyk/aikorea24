@@ -6,7 +6,7 @@ price: "유료 플랜 없음."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://aistudio.google.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 이메일을 작성하고 싶습니다."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 영상 썸네일을 디자인하고 싶습니다."}, {"title": "사업계획서 초안", "prompt": "내 사업 아이디어에 대한 계획서를 작성하고 싶습니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI", "개발", "생산성"]
 featured: false
 order: 20

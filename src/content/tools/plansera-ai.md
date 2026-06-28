@@ -6,7 +6,7 @@ price: "월 100달러"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://plansera.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "E-2 비자 신청 관련 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "E-2 비자 관련 정보를 담은 썸네일을 디자인해 주세요."}, {"title": "사업계획서 초안", "prompt": "E-2 비자 신청을 위한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["사업계획서", "E-2 비자", "AI 도구"]
 featured: false
 order: 106

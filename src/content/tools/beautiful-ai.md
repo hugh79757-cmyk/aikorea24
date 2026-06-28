@@ -6,7 +6,7 @@ price: "월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://beautiful.ai"
-useCases: [{"title": "프레젠테이션 작성", "prompt": "팀 회의에서 사용할 프레젠테이션을 쉽게 작성하고 싶습니다."}, {"title": "보고서 작성", "prompt": "분석 결과를 시각적으로 표현한 보고서를 만들고 싶습니다."}, {"title": "마케팅 발표 자료", "prompt": "신제품 출시를 위한 마케팅 발표 자료를 준비하고 싶습니다."}]
+useCases: ["프레젠테이션 작성", "보고서 작성", "마케팅 발표 자료"]
 tags: ["프레젠테이션", "팀워크", "브랜드"]
 featured: false
 order: 58

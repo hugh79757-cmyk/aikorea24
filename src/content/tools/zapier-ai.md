@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://zapier.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI를 활용해 업무 이메일을 쉽게 작성합니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일 디자인을 자동화하여 시간을 절약합니다."}, {"title": "사업계획서 초안", "prompt": "AI로 사업계획서 초안을 신속하게 작성합니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["자동화", "AI", "워크플로우"]
 featured: false
 order: 62

@@ -6,7 +6,7 @@ price: "무료/월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.wordtune.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 이메일을 작성할 때 문장을 자연스럽게 바꿔주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 사용할 문구를 매력적으로 재작성해주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서의 내용을 간결하게 요약해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["영어", "작문", "문법 교정"]
 featured: false
 order: 108

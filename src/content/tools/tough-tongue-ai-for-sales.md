@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.toughtongueai.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영업 관련 영어 이메일을 작성해 주세요."}, {"title": "회의록 작성", "prompt": "회의 내용을 바탕으로 회의록을 작성해 주세요."}, {"title": "이력서 작성", "prompt": "영업 직무에 맞는 이력서를 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "이력서 작성"]
 tags: ["영업", "AI", "음성"]
 featured: false
 order: 100

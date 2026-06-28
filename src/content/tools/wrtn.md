@@ -6,7 +6,7 @@ price: "현재 유료 플랜은 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://wrtn.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 미팅을 위한 영어 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 영상에 맞는 썸네일을 디자인해 주세요."}, {"title": "사업계획서 초안", "prompt": "새로운 사업 아이디어에 대한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI", "글쓰기", "이미지 생성"]
 featured: false
 order: 4

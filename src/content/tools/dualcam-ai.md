@@ -6,7 +6,7 @@ price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://dualcam.pages.dev/"
-useCases: [{"title": "영상 촬영", "prompt": "행사나 인터뷰를 촬영할 때 유용하게 사용할 수 있습니다."}, {"title": "튜토리얼 제작", "prompt": "강의나 설명 영상을 동시에 촬영할 때 유용합니다."}, {"title": "소셜 미디어 콘텐츠", "prompt": "SNS에 올릴 다양한 각도의 영상을 쉽게 만들 수 있습니다."}]
+useCases: ["영상 촬영", "튜토리얼 제작", "소셜 미디어 콘텐츠"]
 tags: ["영상촬영", "크리에이터", "iPhone"]
 featured: false
 order: 106

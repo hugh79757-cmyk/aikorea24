@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://mynexusai.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "상대방에게 회의 일정을 알려주는 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 채널의 주제에 맞는 썸네일 디자인을 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "새로운 사업 아이디어에 대한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 글쓰기", "음성 변환", "이미지 생성"]
 featured: false
 order: 110

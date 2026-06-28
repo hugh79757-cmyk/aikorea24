@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://napkin.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이메일 내용을 정리하여 시각적으로 표현해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "이 영상의 주제를 시각적으로 나타내는 썸네일을 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어를 시각적으로 정리해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["비즈니스", "시각화", "커뮤니케이션"]
 featured: false
 order: 33

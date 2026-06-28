@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.jasper.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "마케팅 관련 영어 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "주제에 맞는 유튜브 썸네일 디자인 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "스타트업 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["마케팅", "자동화", "효율성"]
 featured: false
 order: 105

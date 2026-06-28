@@ -6,7 +6,7 @@ price: "무료/월 10만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://deepmind.google/models/veo/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영상으로 영어 이메일 작성하는 방법을 보여주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일을 제작하는 과정을 영상으로 만들어주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서 내용을 영상으로 표현해주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["영상제작", "AI모델", "무료플랜"]
 featured: false
 order: 8

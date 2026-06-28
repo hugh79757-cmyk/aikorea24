@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://pocketweb.tools/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어 이메일을 작성할 때 단어 수를 체크하고 싶습니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일 제작 시 이미지 배경을 제거하고 싶습니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서에 포함될 내용을 정리하고 싶습니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 도구", "웹 도구", "무료"]
 featured: false
 order: 102

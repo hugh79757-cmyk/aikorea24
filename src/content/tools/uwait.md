@@ -6,7 +6,7 @@ price: "월 30,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.uwait.co/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI에게 영어 이메일 작성 요청하기."}, {"title": "사업계획서 초안", "prompt": "AI에게 사업계획서 초안 작성을 요청하기."}, {"title": "회의록", "prompt": "회의 내용을 AI에게 요약해 달라고 요청하기."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["수익", "AI", "생산성"]
 featured: false
 order: 101

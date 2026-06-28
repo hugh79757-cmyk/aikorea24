@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://parano.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "경쟁사의 최근 가격 변동에 대해 영어로 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "경쟁사의 제품 출시 정보를 바탕으로 사업계획서 초안을 작성해 주세요."}, {"title": "회의록", "prompt": "경쟁사 동향에 대한 회의록을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["경쟁 분석", "AI 도구", "시장 조사"]
 featured: false
 order: 100

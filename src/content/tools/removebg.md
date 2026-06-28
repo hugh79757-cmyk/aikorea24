@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.remove.bg"
-useCases: [{"title": "영어 이메일 작성", "prompt": "프로젝트 발표를 위한 이미지 배경을 제거해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 사용할 이미지를 배경 없이 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서에 사용할 제품 사진의 배경을 제거해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["이미지 편집", "배경 제거", "디자인 툴"]
 featured: false
 order: 52

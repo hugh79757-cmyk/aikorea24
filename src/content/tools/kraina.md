@@ -6,7 +6,7 @@ price: "현재 유료 플랜은 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://kraina.cc/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "GPS 데이터를 활용한 탐험 경험을 영어로 정리해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "새로운 탐험 지역을 소개하는 썸네일을 디자인해 주세요."}, {"title": "사업계획서 초안", "prompt": "GPS 기반 탐험 서비스를 활용한 사업계획서를 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["지도", "탐험", "GPS"]
 featured: false
 order: 101

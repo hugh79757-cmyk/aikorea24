@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://vrew.voyagerx.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영상으로 영어 이메일을 쉽게 작성하는 방법을 알려주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "Vrew로 유튜브 썸네일을 제작하는 방법을 설명해 주세요."}, {"title": "사업계획서 초안", "prompt": "영상으로 사업계획서를 발표하는 방법을 제안해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["영상편집", "AI툴", "콘텐츠제작"]
 featured: false
 order: 20

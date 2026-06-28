@@ -6,7 +6,7 @@ price: "월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://figma.com"
-useCases: [{"title": "프레젠테이션 제작", "prompt": "팀 회의에서 사용할 프레젠테이션을 디자인해 주세요."}, {"title": "UI 디자인", "prompt": "모바일 앱의 사용자 인터페이스를 디자인해 주세요."}, {"title": "웹디자인", "prompt": "온라인 쇼핑몰의 웹 페이지 레이아웃을 만들어 주세요."}]
+useCases: ["프레젠테이션 제작", "UI 디자인", "웹디자인"]
 tags: ["디자인", "협업", "프로토타입"]
 featured: false
 order: 61

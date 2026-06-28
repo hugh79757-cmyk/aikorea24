@@ -6,7 +6,7 @@ price: "월 3만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://grok.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 영어 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일 디자인 아이디어를 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 도구", "생산성", "코드 작성"]
 featured: false
 order: 4

@@ -1032,7 +1032,10 @@ def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> 
     desc = humanize_md(meta.get('description_kr', ''))
     tasks_str = json.dumps(meta.get('tasks', []), ensure_ascii=False)
     tags_str = json.dumps(meta.get('tags', []), ensure_ascii=False)
-    use_cases_str = json.dumps(meta.get('useCases', []), ensure_ascii=False)
+    use_cases_raw = meta.get('useCases', [])
+    if use_cases_raw and isinstance(use_cases_raw[0], dict):
+        use_cases_raw = [uc.get('title', '') for uc in use_cases_raw]
+    use_cases_str = json.dumps(use_cases_raw, ensure_ascii=False)
     today = datetime.now().strftime('%Y-%m-%d')
     # price: price_kr (구 구조) 또는 pricing.free/paid에서 생성
     price_str = meta.get('price_kr', '')

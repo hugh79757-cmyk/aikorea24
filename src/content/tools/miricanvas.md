@@ -6,7 +6,7 @@ price: "월 3만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.miricanvas.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이메일에 사용할 디자인을 미리캔버스로 쉽게 만들 수 있습니다."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일을 매력적으로 디자인하여 조회수를 높일 수 있습니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서를 시각적으로 표현할 수 있는 템플릿을 활용할 수 있습니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["디자인", "템플릿", "그래픽"]
 featured: false
 order: 51

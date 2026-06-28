@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://runwayml.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI를 이용해 영어 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일 디자인을 위한 아이디어를 제시해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI", "영상제작", "시뮬레이션"]
 featured: false
 order: 52

@@ -6,7 +6,7 @@ price: "월 50,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.deepl.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 비즈니스 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 들어갈 텍스트를 번역해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서를 영어로 번역해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["번역", "AI", "다국어"]
 featured: false
 order: 60

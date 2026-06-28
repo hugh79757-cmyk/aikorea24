@@ -6,7 +6,7 @@ price: "월 5,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
 url: "https://apps.apple.com/gb/app/brainflow-voice-notes/id6752835425"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어 이메일을 작성하기 위해 필요한 내용을 음성으로 기록합니다."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어를 음성으로 이야기하여 초안을 만듭니다."}, {"title": "회의록 작성", "prompt": "회의 내용을 음성으로 녹음해 회의록을 작성합니다."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["음성 메모", "생산성", "자동화"]
 featured: false
 order: 102

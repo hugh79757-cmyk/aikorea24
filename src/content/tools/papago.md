@@ -6,7 +6,7 @@ price: "무료/월 0원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://papago.naver.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 이메일을 작성하고 싶습니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 사용할 문구를 영어로 번역해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서를 영어로 번역해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["번역", "AI", "무료"]
 featured: false
 order: 61

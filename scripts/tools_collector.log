@@ -504,3 +504,35 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 7개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 4개
+  총 8개 (중복 제거 후)
+수집 완료: 8개
+기존 툴: 116개 (슬러그), 115개 (이름)
+  중복 스킵: Gemini Spark
+  중복 스킵: AI Slide Editor by CubeOne
+  중복 스킵: Tough Tongue AI for Sales
+  중복 스킵: Brain² by ClickUp
+  중복 스킵: Oxlo.ai
+  중복 스킵: Crewdle AI
+신규 툴: 2개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (2건) ---
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/in-context-world-modeling-for-robotic-control.md
+  ✅ In-Context World Modeling for Robotic Control → in-context-world-modeling-for-robotic-control.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/folio-ai.md
+  ✅ Folio AI → folio-ai.md
+
+==================================================
+처리 완료: 2/8개 생성 (12.6초)
+  git commit: [main 33a7f1a] feat: AI 툴 2개 추가 (2026-06-28)
+ 56 files changed, 2319 insertions(+), 423 deletions(-)
+ create mode 100644 "public/images/ai-\353\252\250\353\215\270-\353\213\250\354\235\274-mirrorcode-
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

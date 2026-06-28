@@ -6,7 +6,7 @@ price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://openai.com/index/dall-e-3/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이미지로 표현하고 싶은 내용을 설명해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 들어갈 이미지와 텍스트를 알려주세요."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어를 시각적으로 표현해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["이미지 생성", "AI 디자인", "창의력"]
 featured: false
 order: 11

@@ -6,7 +6,7 @@ price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://anyword.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 이메일을 영어로 작성해 주세요."}, {"title": "SNS 콘텐츠 작성", "prompt": "우리 브랜드에 맞는 SNS 포스트 내용을 작성해 주세요."}, {"title": "광고 카피 작성", "prompt": "신제품 광고를 위한 카피를 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "SNS 콘텐츠 작성", "광고 카피 작성"]
 tags: ["AI 콘텐츠", "마케팅 도구", "광고 작성"]
 featured: false
 order: 102

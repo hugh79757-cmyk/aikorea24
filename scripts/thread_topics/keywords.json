@@ -1,6 +1,6 @@
 {
   "쳇지티피": {
-    "search_volume": 242500,
+    "search_volume": 250600,
     "competition": "낮음",
     "grade": "S",
     "db_query": [
@@ -8,11 +8,11 @@
       "ChatGPT",
       "OpenAI"
     ],
-    "intent": "쳇GPT 정보 검색",
+    "intent": "쳇GPT 관련 정보 검색",
     "source": "seed"
   },
   "챗지피티무료": {
-    "search_volume": 82400,
+    "search_volume": 81600,
     "competition": "중간",
     "grade": "A",
     "db_query": [
@@ -20,23 +20,23 @@
       "ChatGPT free",
       "무료 AI 챗봇"
     ],
-    "intent": "무료 챗GPT 사용법",
+    "intent": "무료 챗GPT 사용법 찾기",
     "source": "seed"
   },
   "마음AI": {
-    "search_volume": 62200,
+    "search_volume": 61320,
     "competition": "낮음",
     "grade": "A",
     "db_query": [
       "마음AI",
       "Mind AI",
-      "AI 심리 상담"
+      "AI 감정 분석"
     ],
-    "intent": "마음AI 관련 정보",
+    "intent": "마음AI 기능 및 사용법",
     "source": "seed"
   },
   "로판AI": {
-    "search_volume": 49500,
+    "search_volume": 49360,
     "competition": "중간",
     "grade": "A",
     "db_query": [
@@ -44,11 +44,11 @@
       "로맨스 판타지 AI",
       "AI 소설 생성"
     ],
-    "intent": "로판AI 활용법",
+    "intent": "로판AI 관련 정보 탐색",
     "source": "seed"
   },
   "영어해석기": {
-    "search_volume": 51950,
+    "search_volume": 51320,
     "competition": "중간",
     "grade": "A",
     "db_query": [
@@ -56,35 +56,35 @@
       "English translator",
       "번역기 추천"
     ],
-    "intent": "영어 해석기 찾기",
+    "intent": "영어 해석기 사용법 찾기",
     "source": "seed"
   },
   "누끼따기사이트": {
-    "search_volume": 39800,
+    "search_volume": 38800,
     "competition": "중간",
     "grade": "A",
     "db_query": [
       "누끼따기사이트",
       "배경 제거 사이트",
-      "AI 배경 제거"
+      "AI 이미지 편집"
     ],
-    "intent": "누끼 따기 사이트 검색",
+    "intent": "누끼 따기 사이트 추천",
     "source": "seed"
   },
   "표절검사기": {
-    "search_volume": 5790,
+    "search_volume": 5560,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "표절검사기",
       "plagiarism checker",
-      "논문 표절 검사"
+      "표절 검사 도구"
     ],
-    "intent": "표절 검사기 사용법",
+    "intent": "표절 검사기 사용법 검색",
     "source": "seed"
   },
   "웍스AI": {
-    "search_volume": 7020,
+    "search_volume": 6750,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -92,11 +92,11 @@
       "Works AI",
       "AI 업무 자동화"
     ],
-    "intent": "웍스AI 정보 검색",
+    "intent": "웍스AI 기능 및 활용법",
     "source": "seed"
   },
   "지티피": {
-    "search_volume": 4960,
+    "search_volume": 4850,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -104,11 +104,11 @@
       "GPT",
       "AI 모델"
     ],
-    "intent": "GPT 관련 정보",
+    "intent": "지티피 관련 정보 검색",
     "source": "seed"
   },
   "CHATGPT유료": {
-    "search_volume": 5080,
+    "search_volume": 5040,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -116,47 +116,47 @@
       "ChatGPT subscription",
       "유료 AI 서비스"
     ],
-    "intent": "유료 챗GPT 정보",
+    "intent": "유료 챗GPT 정보 찾기",
     "source": "seed"
   },
   "윈도우11다운로드": {
-    "search_volume": 9780,
+    "search_volume": 9750,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "윈도우11다운로드",
       "Windows 11 download",
-      "윈도우 11 설치"
+      "윈도우 설치"
     ],
-    "intent": "윈도우 11 다운로드",
+    "intent": "윈도우 11 다운로드 방법",
     "source": "seed"
   },
   "윈도우11정품": {
-    "search_volume": 4910,
+    "search_volume": 4930,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "윈도우11정품",
       "Windows 11 genuine",
-      "윈도우 11 라이센스"
+      "정품 소프트웨어"
     ],
-    "intent": "윈도우 11 정품 구매",
+    "intent": "윈도우 11 정품 구매 정보",
     "source": "seed"
   },
   "전자사전": {
-    "search_volume": 4980,
+    "search_volume": 5030,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "전자사전",
       "electronic dictionary",
-      "AI 전자사전"
+      "사전 앱"
     ],
-    "intent": "전자사전 추천",
+    "intent": "전자사전 추천 및 정보",
     "source": "seed"
   },
   "이미지검색": {
-    "search_volume": 10210,
+    "search_volume": 10050,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -164,11 +164,11 @@
       "image search",
       "사진 검색"
     ],
-    "intent": "이미지 검색 방법",
+    "intent": "이미지 검색 방법 찾기",
     "source": "seed"
   },
   "마이크로소프트스토어": {
-    "search_volume": 4950,
+    "search_volume": 4910,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -176,35 +176,35 @@
       "Microsoft Store",
       "소프트웨어 구매"
     ],
-    "intent": "MS 스토어 정보",
+    "intent": "마이크로소프트 스토어 정보",
     "source": "seed"
   },
   "투닝": {
-    "search_volume": 19370,
+    "search_volume": 17920,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "투닝",
       "tuning",
-      "AI 모델 최적화"
+      "모델 최적화"
     ],
-    "intent": "AI 모델 투닝",
+    "intent": "AI 모델 투닝 정보 검색",
     "source": "seed"
   },
   "GITHUB": {
-    "search_volume": 20930,
+    "search_volume": 20450,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "GITHUB",
       "깃허브",
-      "소스코드 관리"
+      "소스 코드 관리"
     ],
-    "intent": "GITHUB 사용법",
+    "intent": "GITHUB 관련 정보 탐색",
     "source": "seed"
   },
   "MS365": {
-    "search_volume": 6010,
+    "search_volume": 5860,
     "competition": "중간",
     "grade": "B",
     "db_query": [
@@ -212,47 +212,47 @@
       "Microsoft 365",
       "오피스 365"
     ],
-    "intent": "MS 365 정보 검색",
+    "intent": "MS365 사용법 및 정보",
     "source": "seed"
   },
   "윈도우11시디키": {
-    "search_volume": 5260,
+    "search_volume": 5240,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "윈도우11시디키",
       "Windows 11 CD key",
-      "정품 키 구매"
+      "정품 인증"
     ],
-    "intent": "윈도우 11 시디키 구매",
+    "intent": "윈도우 11 시디키 구매 정보",
     "source": "seed"
   },
   "ONEDRIVE": {
-    "search_volume": 13930,
+    "search_volume": 13480,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "ONEDRIVE",
-      "원드라이브",
+      "OneDrive",
       "클라우드 저장소"
     ],
-    "intent": "OneDrive 사용법",
+    "intent": "OneDrive 사용법 및 정보",
     "source": "seed"
   },
   "엑셀구매": {
-    "search_volume": 6200,
+    "search_volume": 6060,
     "competition": "중간",
     "grade": "B",
     "db_query": [
       "엑셀구매",
       "Excel purchase",
-      "MS Excel 구매"
+      "MS Office 구매"
     ],
-    "intent": "엑셀 구매 방법",
+    "intent": "엑셀 구매 방법 찾기",
     "source": "seed"
   },
   "AI": {
-    "search_volume": 156200,
+    "search_volume": 154500,
     "competition": "높음",
     "grade": "S",
     "db_query": [
@@ -260,23 +260,23 @@
       "인공지능",
       "Artificial Intelligence"
     ],
-    "intent": "AI 관련 정보",
+    "intent": "AI 관련 정보 검색",
     "source": "seed"
   },
   "챗GPT": {
-    "search_volume": 4599000,
+    "search_volume": 4518300,
     "competition": "높음",
     "grade": "S",
     "db_query": [
       "챗GPT",
       "ChatGPT",
-      "AI 챗봇"
+      "AI 대화 모델"
     ],
-    "intent": "챗GPT 정보 검색",
+    "intent": "챗GPT 기능 및 사용법",
     "source": "seed"
   },
   "인공지능": {
-    "search_volume": 12400,
+    "search_volume": 12070,
     "competition": "높음",
     "grade": "A",
     "db_query": [
@@ -284,67 +284,67 @@
       "Artificial Intelligence",
       "AI 기술"
     ],
-    "intent": "인공지능 기술 탐색",
+    "intent": "인공지능 기술 정보 탐색",
     "source": "seed"
   },
   "AI이미지": {
-    "search_volume": 2200,
+    "search_volume": 2150,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI이미지",
       "AI image",
-      "이미지 생성"
+      "이미지 생성 AI"
     ],
-    "intent": "AI 이미지 생성",
+    "intent": "AI 이미지 생성 방법",
     "source": "seed"
   },
   "AI동영상": {
-    "search_volume": 1860,
+    "search_volume": 1850,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI동영상",
       "AI video",
-      "동영상 생성"
+      "동영상 생성 AI"
     ],
-    "intent": "AI 동영상 생성",
+    "intent": "AI 동영상 생성 정보",
     "source": "seed"
   },
   "AI음악": {
-    "search_volume": 1090,
+    "search_volume": 1080,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI음악",
       "AI music",
-      "음악 생성"
+      "음악 생성 AI"
     ],
-    "intent": "AI 음악 생성",
+    "intent": "AI 음악 생성 방법",
     "source": "seed"
   },
   "AI글쓰기": {
-    "search_volume": 540,
+    "search_volume": 520,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI글쓰기",
       "AI writing",
-      "글쓰기 보조"
+      "글쓰기 도구"
     ],
-    "intent": "AI 글쓰기 도구",
+    "intent": "AI 글쓰기 도구 정보",
     "source": "seed"
   },
   "AI번역": {
-    "search_volume": 710,
+    "search_volume": 700,
     "competition": "높음",
     "grade": "A",
     "db_query": [
       "AI번역",
       "AI translation",
-      "번역 도구"
+      "번역 AI"
     ],
-    "intent": "AI 번역 서비스",
+    "intent": "AI 번역기 사용법",
     "source": "seed"
   },
   "AI요약": {
@@ -354,249 +354,249 @@
     "db_query": [
       "AI요약",
       "AI summarization",
-      "요약 서비스"
+      "요약 AI"
     ],
-    "intent": "AI 요약 도구",
+    "intent": "AI 요약 도구 정보",
     "source": "seed"
   },
-  "마이크론": {
-    "search_volume": 1152500,
-    "competition": "중간",
-    "grade": "S",
-    "db_query": [
-      "마이크론",
-      "Micron",
-      "반도체 기업"
-    ],
-    "intent": "마이크론 정보 검색",
-    "source": "news"
-  },
-  "GPT-5.6": {
-    "search_volume": 50,
+  "MiCRo": {
+    "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "GPT-5.6",
-      "GPT 5.6",
-      "AI 모델"
-    ],
-    "intent": "GPT-5.6 정보",
-    "source": "news"
-  },
-  "오픈AI": {
-    "search_volume": 62700,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "오픈AI",
-      "OpenAI",
+      "MiCRo",
+      "MiCRo AI",
       "AI 연구소"
     ],
-    "intent": "오픈AI 정보 검색",
+    "intent": "MiCRo 관련 정보 탐색",
     "source": "news"
   },
-  "리얼보틱스": {
-    "search_volume": 60,
+  "EPFL": {
+    "search_volume": 170,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "리얼보틱스",
-      "Realbotics",
-      "로봇 기술"
+      "EPFL",
+      "École polytechnique fédérale de Lausanne",
+      "스위스 대학교"
     ],
-    "intent": "리얼보틱스 정보",
+    "intent": "EPFL 관련 정보 검색",
     "source": "news"
   },
-  "옵티오": {
-    "search_volume": 50,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "옵티오",
-      "Optio",
-      "AI 솔루션"
-    ],
-    "intent": "옵티오 정보 검색",
-    "source": "news"
-  },
-  "M시리즈": {
-    "search_volume": 150,
-    "competition": "높음",
-    "grade": "A",
-    "db_query": [
-      "M시리즈",
-      "M series",
-      "AI 하드웨어"
-    ],
-    "intent": "M 시리즈 정보",
-    "source": "news"
-  },
-  "기가와트": {
-    "search_volume": 450,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "기가와트",
-      "Gigawatt",
-      "전력 기술"
-    ],
-    "intent": "기가와트 관련 정보",
-    "source": "news"
-  },
-  "AI 데이터센터": {
+  "NLP Lab": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AI 데이터센터",
-      "AI data center",
-      "클라우드 데이터센터"
-    ],
-    "intent": "AI 데이터센터 탐색",
-    "source": "news"
-  },
-  "피지컬 AI": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "피지컬 AI",
-      "Physical AI",
-      "AI 로봇"
-    ],
-    "intent": "피지컬 AI 정보",
-    "source": "news"
-  },
-  "NIPA GPU 클러스터": {
-    "search_volume": 0,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "NIPA GPU 클러스터",
-      "NIPA GPU",
-      "AI 클러스터"
-    ],
-    "intent": "NIPA GPU 클러스터 정보",
-    "source": "news"
-  },
-  "정철": {
-    "search_volume": 8720,
-    "competition": "중간",
-    "grade": "B",
-    "db_query": [
-      "정철",
-      "Jeongcheol",
+      "NLP Lab",
+      "자연어 처리 연구소",
       "AI 연구"
     ],
-    "intent": "정철 정보 검색",
+    "intent": "NLP Lab 정보 탐색",
     "source": "news"
   },
-  "한국사이버안보학회": {
-    "search_volume": 70,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "한국사이버안보학회",
-      "Korea Cyber Security Society",
-      "사이버 보안"
-    ],
-    "intent": "사이버안보 학회 정보",
-    "source": "news"
-  },
-  "AI 자동거래": {
+  "NeuroAI Lab": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AI 자동거래",
-      "AI trading",
-      "자동 거래 시스템"
+      "NeuroAI Lab",
+      "신경망 AI 연구",
+      "AI 연구소"
     ],
-    "intent": "AI 자동 거래 시스템",
+    "intent": "NeuroAI Lab 관련 정보",
     "source": "news"
   },
-  "딥페이크": {
+  "Fable 5": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "Fable 5",
+      "AI 게임",
+      "AI 스토리 생성"
+    ],
+    "intent": "Fable 5 관련 정보 검색",
+    "source": "news"
+  },
+  "앤트로픽": {
+    "search_volume": 89900,
+    "competition": "중간",
+    "grade": "A",
+    "db_query": [
+      "앤트로픽",
+      "Anthropic",
+      "AI 연구 기업"
+    ],
+    "intent": "앤트로픽 관련 정보 탐색",
+    "source": "news"
+  },
+  "아크리테스": {
     "search_volume": 20,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "딥페이크",
-      "Deepfake",
-      "AI 영상 조작"
+      "아크리테스",
+      "Acritas",
+      "AI 데이터 분석"
     ],
-    "intent": "딥페이크 기술 탐색",
+    "intent": "아크리테스 정보 검색",
     "source": "news"
   },
-  "AI 안전성": {
+  "EC2 캐퍼시티 블록": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AI 안전성",
-      "AI safety",
-      "인공지능 안전"
+      "EC2 캐퍼시티 블록",
+      "AWS EC2",
+      "클라우드 컴퓨팅"
     ],
-    "intent": "AI 안전성 문제",
+    "intent": "EC2 캐퍼시티 블록 정보",
     "source": "news"
   },
-  "GENAI ME": {
+  "MLCC": {
+    "search_volume": 50800,
+    "competition": "중간",
+    "grade": "A",
+    "db_query": [
+      "MLCC",
+      "MLCC 기술",
+      "전자 부품"
+    ],
+    "intent": "MLCC 관련 정보 탐색",
+    "source": "news"
+  },
+  "Z.ai": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "GENAI ME",
-      "GenAI ME",
-      "AI 플랫폼"
+      "Z.ai",
+      "AI 플랫폼",
+      "AI 서비스"
     ],
-    "intent": "GENAI ME 정보",
+    "intent": "Z.ai 관련 정보 검색",
     "source": "news"
   },
-  "대동에이아이랩": {
-    "search_volume": 140,
+  "GLM-5.2": {
+    "search_volume": 240,
+    "competition": "높음",
+    "grade": "A",
+    "db_query": [
+      "GLM-5.2",
+      "AI 모델",
+      "자연어 처리"
+    ],
+    "intent": "GLM-5.2 정보 탐색",
+    "source": "news"
+  },
+  "LG 구광모": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "LG 구광모",
+      "LG 그룹",
+      "CEO 정보"
+    ],
+    "intent": "LG 구광모 관련 정보",
+    "source": "news"
+  },
+  "딥시크": {
+    "search_volume": 16390,
     "competition": "중간",
     "grade": "B",
     "db_query": [
-      "대동에이아이랩",
-      "Daedong AI Lab",
-      "AI 연구소"
+      "딥시크",
+      "DeepSeek",
+      "AI 검색 엔진"
     ],
-    "intent": "대동 AI 랩 정보",
+    "intent": "딥시크 관련 정보 검색",
     "source": "news"
   },
-  "무아홈": {
-    "search_volume": 90,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "무아홈",
-      "Mooahome",
-      "AI 홈 자동화"
-    ],
-    "intent": "무아홈 정보 검색",
-    "source": "news"
-  },
-  "신잽틱스": {
-    "search_volume": 20,
-    "competition": "낮음",
-    "grade": "B",
-    "db_query": [
-      "신잽틱스",
-      "ShinJaptics",
-      "AI 기술"
-    ],
-    "intent": "신잽틱스 정보",
-    "source": "news"
-  },
-  "AI 리더보드": {
+  "DeepSeek": {
     "search_volume": 0,
     "competition": "낮음",
     "grade": "B",
     "db_query": [
-      "AI 리더보드",
-      "AI leaderboard",
-      "AI 성능 비교"
+      "DeepSeek",
+      "AI 검색",
+      "딥러닝 검색"
     ],
-    "intent": "AI 리더보드 확인",
+    "intent": "DeepSeek 정보 탐색",
+    "source": "news"
+  },
+  "온세미": {
+    "search_volume": 3450,
+    "competition": "중간",
+    "grade": "B",
+    "db_query": [
+      "온세미",
+      "ON Semiconductor",
+      "반도체 기업"
+    ],
+    "intent": "온세미 관련 정보 검색",
+    "source": "news"
+  },
+  "시냅틱스": {
+    "search_volume": 550,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "시냅틱스",
+      "Synaptics",
+      "AI 하드웨어"
+    ],
+    "intent": "시냅틱스 정보 탐색",
+    "source": "news"
+  },
+  "K-동물백신": {
+    "search_volume": 20,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "K-동물백신",
+      "동물 백신",
+      "백신 개발"
+    ],
+    "intent": "K-동물백신 정보 검색",
+    "source": "news"
+  },
+  "해치텍": {
+    "search_volume": 1050,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "해치텍",
+      "HatchTech",
+      "AI 기술 기업"
+    ],
+    "intent": "해치텍 관련 정보 탐색",
+    "source": "news"
+  },
+  "Mythos": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "Mythos",
+      "AI 스토리텔링",
+      "AI 게임"
+    ],
+    "intent": "Mythos 관련 정보 검색",
+    "source": "news"
+  },
+  "Claude": {
+    "search_volume": 0,
+    "competition": "낮음",
+    "grade": "B",
+    "db_query": [
+      "Claude",
+      "AI 모델",
+      "인공지능"
+    ],
+    "intent": "Claude 관련 정보 탐색",
     "source": "news"
   }
 }

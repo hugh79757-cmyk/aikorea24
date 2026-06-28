@@ -6,7 +6,7 @@ price: "월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://muttervoice.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 이메일을 작성할 때 음성으로 내용을 입력합니다."}, {"title": "회의록 작성", "prompt": "회의 중에 음성으로 회의록을 기록합니다."}, {"title": "할 일 목록 작성", "prompt": "할 일을 음성으로 입력하여 목록을 작성합니다."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "할 일 목록 작성"]
 tags: ["음성 인식", "생산성", "업무 효율"]
 featured: false
 order: 101

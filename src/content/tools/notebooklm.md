@@ -6,7 +6,7 @@ price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://notebooklm.google.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 비즈니스 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 영상 썸네일을 위한 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서의 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["문서 분석", "AI", "구글"]
 featured: false
 order: 6

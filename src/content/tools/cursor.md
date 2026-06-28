@@ -6,7 +6,7 @@ price: "월 20,000원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://cursor.com"
-useCases: [{"title": "코드 리뷰", "prompt": "작성한 코드를 검토해 주세요."}, {"title": "API 개발", "prompt": "특정 기능을 위한 API를 만들어 주세요."}, {"title": "디버깅", "prompt": "이 코드의 오류를 찾아 수정해 주세요."}]
+useCases: ["코드 리뷰", "API 개발", "디버깅"]
 tags: ["코딩", "AI", "생산성"]
 featured: false
 order: 40

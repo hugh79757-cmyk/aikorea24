@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://locin.dev/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "해외 고객에게 보낼 영어 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "다국적 시장을 겨냥한 사업계획서 초안을 작성해 주세요."}, {"title": "회의록 작성", "prompt": "지난 회의 내용을 영어로 요약해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["번역", "다국어 지원", "AI 툴"]
 featured: false
 order: 102

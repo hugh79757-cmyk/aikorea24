@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://clickup.com/brain"
-useCases: [{"title": "영어 이메일 작성", "prompt": "프로젝트 관련 영어 이메일을 작성해 주세요."}, {"title": "회의록 작성", "prompt": "오늘 회의 내용을 정리한 회의록을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "새로운 사업 아이디어에 대한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "사업계획서 초안"]
 tags: ["AI", "업무관리", "지식관리"]
 featured: false
 order: 102

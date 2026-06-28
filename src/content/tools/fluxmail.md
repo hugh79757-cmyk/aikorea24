@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.fluxmail.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 관련 영어 이메일을 쉽게 작성하고 싶습니다."}, {"title": "회의록 작성", "prompt": "회의 내용을 정리하여 이메일로 공유하고 싶습니다."}, {"title": "이력서 작성", "prompt": "이력서를 작성하는 데 필요한 이메일을 보내고 싶습니다."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "이력서 작성"]
 tags: ["이메일", "AI", "생산성"]
 featured: false
 order: 100

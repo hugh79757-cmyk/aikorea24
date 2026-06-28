@@ -6,7 +6,7 @@ price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.gomoonbeam.com/"
-useCases: [{"title": "블로그 포스트 작성", "prompt": "내가 좋아하는 주제에 대해 블로그 포스트를 작성해 주세요."}, {"title": "기술 가이드 작성", "prompt": "소프트웨어 사용법에 대한 기술 가이드를 작성해 주세요."}, {"title": "제품 업데이트 공지", "prompt": "우리 제품의 새로운 기능에 대한 업데이트 공지를 작성해 주세요."}]
+useCases: ["블로그 포스트 작성", "기술 가이드 작성", "제품 업데이트 공지"]
 tags: ["글쓰기", "블로그", "AI 도구"]
 featured: false
 order: 100

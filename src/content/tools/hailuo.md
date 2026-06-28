@@ -6,7 +6,7 @@ price: "월 9,900원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://hailuoai.video"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 회의 후 이메일로 결과를 전달하고 싶습니다."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 채널의 새로운 영상을 위한 썸네일을 만들고 싶습니다."}, {"title": "사업계획서 초안", "prompt": "내 사업 아이디어를 정리한 계획서를 작성하고 싶습니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["영상제작", "이미지생성", "소셜미디어"]
 featured: false
 order: 15

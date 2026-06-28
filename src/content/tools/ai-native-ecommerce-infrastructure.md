@@ -6,7 +6,7 @@ price: "유료"
 koreanSupport: true
 difficulty: "중급"
 url: "https://www.storeframe.io/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "고객과의 거래 관련 이메일을 작성하고 싶습니다."}, {"title": "사업계획서 초안", "prompt": "새로운 제품 출시를 위한 사업계획서를 작성하고 싶습니다."}, {"title": "회의록", "prompt": "지난 회의 내용을 정리하여 회의록을 작성하고 싶습니다."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["전자상거래", "Magento", "AI 기반"]
 featured: false
 order: 102

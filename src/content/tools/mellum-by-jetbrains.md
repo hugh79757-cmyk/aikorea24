@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://www.jetbrains.com/"
-useCases: [{"title": "코드 리뷰", "prompt": "코드 리뷰를 통해 버그를 찾고 개선점을 제안해 주세요."}, {"title": "API 개발", "prompt": "새로운 API를 설계하고 문서화해 주세요."}, {"title": "디버깅", "prompt": "코드에서 발생하는 오류를 찾아 수정해 주세요."}]
+useCases: ["코드 리뷰", "API 개발", "디버깅"]
 tags: ["코딩", "개발", "소프트웨어"]
 featured: false
 order: 100

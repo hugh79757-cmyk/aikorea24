@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://x.ai/grok/word"
-useCases: [{"title": "영어 이메일 작성", "prompt": "Grok을 사용하여 영어 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "Grok을 활용해 사업계획서를 작성해 주세요."}, {"title": "회의록 작성", "prompt": "Grok으로 회의록을 구조화해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["문서작성", "생산성", "AI도구"]
 featured: false
 order: 105

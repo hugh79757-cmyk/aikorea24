@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://docs.anthropic.com/en/docs/claude-code"
-useCases: [{"title": "코드 리뷰", "prompt": "내 코드의 문제점을 분석해 주세요."}, {"title": "디버깅", "prompt": "이 코드를 실행했을 때 오류가 발생하는 이유를 설명해 주세요."}, {"title": "API 개발", "prompt": "새로운 API를 설계하는 방법을 알려 주세요."}]
+useCases: ["코드 리뷰", "디버깅", "API 개발"]
 tags: ["코딩", "디버깅", "개발 도구"]
 featured: false
 order: 44

@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://edoardoguzzi.com/colibotai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 이메일을 작성할 때 필요한 표현을 알려주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일에 적합한 문구를 추천해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서의 기본 틀을 만들어 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["번역", "요약", "크롬 확장"]
 featured: false
 order: 100

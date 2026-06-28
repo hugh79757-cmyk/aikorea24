@@ -6,7 +6,7 @@ price: "월 9,900원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://apps.apple.com/us/app/ai-type-keyboard-copilot-tool/id6759135876"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 이메일을 작성할 때 문장을 더 매끄럽게 다듬어 줍니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일 제목을 간결하고 눈에 띄게 수정해 줍니다."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어를 정리하여 초안을 작성하는 데 도움을 줍니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["글쓰기", "키보드", "AI"]
 featured: false
 order: 104

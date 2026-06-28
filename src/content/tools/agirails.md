@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: false
 difficulty: "중급"
 url: "https://www.agirails.io/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI 에이전트를 활용해 이메일을 자동으로 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "AI 에이전트에게 사업계획서 초안을 요청해 주세요."}, {"title": "회의록", "prompt": "AI 에이전트에게 회의록 작성을 부탁해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["AI", "거래", "프로토콜"]
 featured: false
 order: 103

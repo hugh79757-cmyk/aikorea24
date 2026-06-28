@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://chat.openai.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 이메일을 영어로 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일 디자인 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서의 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["챗봇", "AI", "업무도우미"]
 featured: false
 order: 1

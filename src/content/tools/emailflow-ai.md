@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://emailflow.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "고객에게 제품 출시 소식을 알리는 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "새로운 영상의 썸네일 디자인을 요청합니다."}, {"title": "사업계획서 초안", "prompt": "내 사업 아이디어에 대한 사업계획서 초안을 만들어 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["이메일 마케팅", "AI", "캠페인"]
 featured: false
 order: 101

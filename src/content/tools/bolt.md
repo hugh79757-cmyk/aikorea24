@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://bolt.new"
-useCases: [{"title": "영어 이메일 작성", "prompt": "고객에게 보낼 영어 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 영상에 사용할 썸네일 디자인을 요청합니다."}, {"title": "사업계획서 초안", "prompt": "내 사업 아이디어에 대한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["웹사이트", "앱", "AI"]
 featured: false
 order: 43

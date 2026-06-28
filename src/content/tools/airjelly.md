@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://airjelly.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "업무 관련 영어 이메일을 작성해 주세요."}, {"title": "회의록 작성", "prompt": "이번 회의의 주요 내용을 정리해 주세요."}, {"title": "프로젝트 관리", "prompt": "현재 진행 중인 프로젝트의 상태를 정리해 주세요."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "프로젝트 관리"]
 tags: ["업무 자동화", "생산성 도구", "AI 비서"]
 featured: false
 order: 102

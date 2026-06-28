@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.asmiai.com/"
-useCases: [{"title": "전화 예약하기", "prompt": "식당 예약을 위해 전화를 걸어주세요."}, {"title": "고객 응대하기", "prompt": "고객의 문의 사항에 대해 답변해주세요."}, {"title": "상담 예약하기", "prompt": "병원 상담을 위해 전화로 예약해주세요."}]
+useCases: ["전화 예약하기", "고객 응대하기", "상담 예약하기"]
 tags: ["전화", "AI", "업무 효율"]
 featured: false
 order: 103

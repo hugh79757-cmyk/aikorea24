@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://aitestkitchen.withgoogle.com/tools/image-fx"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이메일에 들어갈 이미지를 생성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 사용할 텍스트 이미지를 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서에 들어갈 비주얼 이미지를 생성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["이미지 생성", "창의력", "디자인"]
 featured: false
 order: 12

@@ -6,7 +6,7 @@ price: "월 13,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://klingai.com"
-useCases: [{"title": "유튜브 썸네일 제작", "prompt": "눈길을 끌 수 있는 유튜브 썸네일을 만들어 주세요."}, {"title": "로고 디자인", "prompt": "우리 회사의 로고 디자인 아이디어를 제시해 주세요."}, {"title": "인포그래픽 제작", "prompt": "주제에 맞는 인포그래픽을 생성해 주세요."}]
+useCases: ["유튜브 썸네일 제작", "로고 디자인", "인포그래픽 제작"]
 tags: ["AI", "영상제작", "이미지생성"]
 featured: false
 order: 16

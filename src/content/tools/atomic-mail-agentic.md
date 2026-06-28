@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://atomicmail.io/agents"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI 에이전트를 통해 영어 이메일을 자동으로 작성할 수 있습니다."}, {"title": "회의록 작성", "prompt": "회의 내용을 AI 에이전트가 자동으로 정리하여 회의록을 작성합니다."}, {"title": "프로젝트 관리", "prompt": "AI 에이전트가 프로젝트 진행 상황을 이메일로 업데이트합니다."}]
+useCases: ["영어 이메일 작성", "회의록 작성", "프로젝트 관리"]
 tags: ["AI", "이메일", "자동화"]
 featured: false
 order: 102

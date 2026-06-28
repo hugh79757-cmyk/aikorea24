@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://julius.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "업무 관련 영어 이메일을 작성해 주세요."}, {"title": "프레젠테이션 제작", "prompt": "주제에 맞는 슬라이드를 만들어 주세요."}, {"title": "데이터 분석", "prompt": "엑셀 데이터를 분석하여 요약해 주세요."}]
+useCases: ["영어 이메일 작성", "프레젠테이션 제작", "데이터 분석"]
 tags: ["업무 효율화", "AI 도구", "프레젠테이션"]
 featured: false
 order: 32

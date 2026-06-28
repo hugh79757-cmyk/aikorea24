@@ -6,7 +6,7 @@ price: "월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://grammarly.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 비즈니스 이메일을 작성할 때 오류를 교정해줍니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 들어갈 텍스트의 문법과 표현을 체크해줍니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서 작성 시 문법 오류를 수정하고 표현을 다듬어줍니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["문법 교정", "글쓰기 도구", "영어 학습"]
 featured: false
 order: 60

@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://ploy.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "웹사이트 성과를 보고하는 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "웹사이트 홍보를 위한 유튜브 썸네일을 디자인해 주세요."}, {"title": "사업계획서 초안", "prompt": "웹사이트를 활용한 사업계획서를 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["웹사이트 관리", "마케팅 자동화", "비즈니스 성장"]
 featured: false
 order: 100

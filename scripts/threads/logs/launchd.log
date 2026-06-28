@@ -6153,3 +6153,174 @@
 [2026-06-28 04:04:07]   posted_original_titles: 기존 102개 → 추가 1개 → 총 103개
 [2026-06-28 04:04:07]   pitch_history: 총 117개
 [2026-06-28 04:04:07]   다음 실행: 2026-06-28 06:04:07
+[2026-06-28 06:04:07] 🚀 v3 실행 시작 (시도 1/5)
+[06:04:08]   1순위 브리핑: 0개 → 신규 0개
+[06:04:10]   2순위 최근7일: 250개 중 신규 66개
+[06:04:10]   총 기사 풀: 66개
+[06:04:10]   [기사 풀 필터] 전체: 250개 → 제외: 184개 → 최종: 66개
+[06:04:10]     posted_ids 제외: 39개 | posted_links 제외: 38개 | posted_titles 제외: 37개 | posted_original_titles 제외: 38개 | posted_semantic 제외: 150개
+[2026-06-28 06:04:10]   기사: 66개 로드
+[2026-06-28 06:04:10]   [1단계] 브리핑 기사 없음 → 전체 풀로 진행
+[2026-06-28 06:04:10]   [2단계] 전체 기사 66개 → 배치 처리 시작
+[06:04:10]   피치 이력: 118개 존재
+[06:04:10] [배치 처리] 총 66개 → 200개 × 1배치
+[06:04:10] [배치 1/1] 66개 기사 처리 중...
+  [모델] DeepSeek deepseek-v4-flash
+[06:04:45] [배치 1/1] → 3개 피치 발견 (DeepSeek V4 Flash)
+[06:04:45] [전체] 3개 후보 발견
+[06:04:45] [전체] 3개 후보 → 중복 제외 후 3개
+  [모델] MiMo mimo-v2.5
+[06:04:48]   ⚠️ 평가 오류: chat_completion returned None
+[06:04:48]   ✅ 피치 통과: 3점
+[06:04:48]   ✅ TOP 1: "Wharton 연구진이 발견한 '인지적 항복' 현상: 사람들이 AI 챗봇에게 자신의 결정을 맡기고 있다." (불안)
+[06:04:48]      기사: [32824]
+[06:04:48]   📰 피치 기사 원문 크롤링: https://thenextweb.com/news/wharton-cognitive-surrender-ai-c...
+[06:04:49]   📰 크롤링: https://thenextweb.com/news/wharton-cognitive-surr... (5574자)
+[06:04:49]   📰 크롤링 완료: 5574자
+  [모델] DeepSeek deepseek-v4-flash
+[06:04:56]   ✅ 크롤링 기반 피치 재생성 완료: "Wharton 연구에 따르면, 사람들은 AI가 틀린 답변을 제시해도 80%의 확률로 그대로"
+[2026-06-28 06:04:56]   ✅ 피치: "Wharton 연구에 따르면, 사람들은 AI가 틀린 답변을 제시해도 80" (불안)
+[2026-06-28 06:04:56]      기사: ['32824']
+[2026-06-28 06:04:56]   쓰레드 작성...
+[06:04:56]   📰 pitcher 크롤링 본문 사용: 5574자 (재크롤링 없음)
+[06:04:56]   쓰레드 생성 중...
+  [모델] DeepSeek deepseek-v4-flash
+  [모델] MiMo mimo-v2.5
+[06:05:52]   🧹 humanize: 3/5개 카드 수정
+  [모델] MiMo mimo-v2.5
+[06:06:07]   ⚠️ 수정 후 카드 수 불일치: 7≠6 → 원본 유지
+[06:06:07]     → 연도 검증 통과: 쓰레드 연도 {2026} ⊆ 허용 {2026}
+[06:06:07]     → 키워드 검증 통과: 핵심 단어 0개 (boilerplate 제외 후 소수 → 검증 불필요)
+[06:06:07]   ✅ 쓰레드: 7개 조각 (시도 1)
+[06:06:07]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-28-06_Wharton연구에따르면사람들은AI가.txt
+[2026-06-28 06:06:07]   ✅ 7개 조각 작성 완료
+[2026-06-28 06:06:07]   발행 시작...
+[06:06:23]   카드 1/7 발행: 17977525196878061
+[06:06:53]   카드 2/7 발행: 18082853417190907
+[06:07:22]   카드 3/7 발행: 17954638038172738
+[06:07:52]   카드 4/7 발행: 18006690323927863
+[06:08:22]   카드 5/7 발행: 18325919377262832
+[06:08:52]   카드 6/7 발행: 17853787137696739
+[06:09:22]   카드 7/7 발행: 18062729066733551
+[06:09:32]   posted.json 업데이트 완료
+[2026-06-28 06:09:32]   ✅ 발행 완료: 루트 ID 17977525196878061
+[2026-06-28 06:09:32] [발행 완료] posted.json 업데이트:
+[2026-06-28 06:09:32]   posted_ids: 기존 238개 → 추가 0개 → 총 238개
+[2026-06-28 06:09:32]   posted_links: 기존 185개 → 추가 0개 → 총 185개
+[2026-06-28 06:09:32]   posted_titles: 기존 128개 → 추가 1개 → 총 129개
+[2026-06-28 06:09:32]   posted_original_titles: 기존 103개 → 추가 1개 → 총 104개
+[2026-06-28 06:09:32]   pitch_history: 총 118개
+[2026-06-28 06:09:32]   다음 실행: 2026-06-28 08:09:32
+[2026-06-28 08:09:32] 🚀 v3 실행 시작 (시도 1/5)
+[08:09:34]   1순위 브리핑: 0개 → 신규 0개
+[08:09:36]   2순위 최근7일: 227개 중 신규 55개
+[08:09:36]   총 기사 풀: 55개
+[08:09:36]   [기사 풀 필터] 전체: 227개 → 제외: 172개 → 최종: 55개
+[08:09:36]     posted_ids 제외: 34개 | posted_links 제외: 34개 | posted_titles 제외: 34개 | posted_original_titles 제외: 34개 | posted_semantic 제외: 142개
+[2026-06-28 08:09:36]   기사: 55개 로드
+[2026-06-28 08:09:36]   [1단계] 브리핑 기사 없음 → 전체 풀로 진행
+[2026-06-28 08:09:36]   [2단계] 전체 기사 55개 → 배치 처리 시작
+[08:09:36]   피치 이력: 119개 존재
+[08:09:36] [배치 처리] 총 55개 → 200개 × 1배치
+[08:09:36] [배치 1/1] 55개 기사 처리 중...
+  [모델] DeepSeek deepseek-v4-flash
+[08:10:10] [배치 1/1] → 3개 피치 발견 (DeepSeek V4 Flash)
+[08:10:10] [전체] 3개 후보 발견
+[08:10:10] [전체] 3개 후보 → 중복 제외 후 3개
+  [모델] MiMo mimo-v2.5
+[08:10:13]   평가: 4점/통과 (상식(AI 사용 권장)과 현실(비용 폭증으로 제한)의 충돌이 명확하고, 기업과 AI 도구(OpenAI ChatGPT)가 구체적으로 언급되어 구체성 1점, twist가 narrative의 실상을 정확히 설명하여 방향 일치) direction_ok=True
+[08:10:13]   ✅ 피치 통과: 4점
+[08:10:13]   ✅ TOP 1: "기업들이 직원들의 AI 사용을 장려해야 한다는 상식과 달리, OpenAI의 ChatGPT 같은 AI 도구의 토큰 비용이 너무 높아져 직원들이 작은 업무로 예산을 소진하는 것을 막기 위해 scrambling하고 있다." (놀람)
+[08:10:13]      기사: [34215]
+[08:10:13]   📰 피치 기사 원문 크롤링: https://techcrunch.com/2026/06/24/companies-are-scrambling-t...
+[08:10:14]   📰 크롤링: https://techcrunch.com/2026/06/24/companies-are-sc... (3284자)
+[08:10:14]   📰 크롤링 완료: 3284자
+  [모델] DeepSeek deepseek-v4-flash
+[08:10:20]   ✅ 크롤링 기반 피치 재생성 완료: "기업들이 AI 사용을 장려했지만, 이제 직원들이 PDF를 슬라이드로 변환하는 사소한 작업에"
+[2026-06-28 08:10:20]   ✅ 피치: "기업들이 AI 사용을 장려했지만, 이제 직원들이 PDF를 슬라이드로 변환" (불안)
+[2026-06-28 08:10:20]      기사: ['34215']
+[2026-06-28 08:10:20]   쓰레드 작성...
+[08:10:20]   📰 pitcher 크롤링 본문 사용: 3284자 (재크롤링 없음)
+[08:10:20]   쓰레드 생성 중...
+  [모델] DeepSeek deepseek-v4-flash
+  [모델] MiMo mimo-v2.5
+[08:11:53]   ⚠️ 오류: 모델 응답 없음 (시도 1/2)
+[08:11:53]   쓰레드 생성 중...
+  [모델] DeepSeek deepseek-v4-flash
+  [모델] MiMo mimo-v2.5
+[08:12:39]   🧹 humanize: 2/5개 카드 수정
+  [모델] MiMo mimo-v2.5
+[08:13:11]   ⚠️ 수정 후 카드 수 불일치: 8≠5 → 원본 유지
+[08:13:11]     → 연도 검증 통과: 본문(hook 제외)에 연도 미표기
+[08:13:11]     → 키워드 검증 통과: 핵심 단어 0개 (boilerplate 제외 후 소수 → 검증 불필요)
+[08:13:11]   ✅ 쓰레드: 6개 조각 (시도 2)
+[08:13:11]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-28-08_기업들이AI사용을장려했지만이제직원들이.txt
+[2026-06-28 08:13:11]   ✅ 6개 조각 작성 완료
+[2026-06-28 08:13:11]   발행 시작...
+[08:13:26]   카드 1/6 발행: 17856401586678561
+[08:14:06]   발행 시도 1/3 실패: HTTPSConnectionPool(host='graph.threads.net', port=443): Read timed out. (read timeout=15)
+[08:14:46]   발행 시도 2/3 실패: HTTPSConnectionPool(host='graph.threads.net', port=443): Max retries exceeded with url: /v1.0/27538818229088576/threads_publish?creation_id=17903897379449576&access_token=THAAd2FkSAUFxBYlpTd2g3R2xEX3pUVXg2WWhNTno2X1lwS0paMVoyUWo0bXItaHNwNDRUTF8zWnkwcy1rdTdIc0ROa3Bvb0dlOXRuLW1acUJqbWhDYmFCYlRwQ1VWLTctMHNJRjVSeEUwbEU4TC1qY0dUR3Qxd0h2dC1SSWZAFNXlnam9WV1NzVjY1LXlJM2cZD (Caused by ConnectTimeoutError(<HTTPSConnection(host='graph.threads.net', port=443) at 0x10815d950>, 'Connection to graph.threads.net timed out. (connect timeout=15)'))
+[08:15:26]   발행 시도 3/3 실패: HTTPSConnectionPool(host='graph.threads.net', port=443): Max retries exceeded with url: /v1.0/27538818229088576/threads_publish?creation_id=17903897379449576&access_token=THAAd2FkSAUFxBYlpTd2g3R2xEX3pUVXg2WWhNTno2X1lwS0paMVoyUWo0bXItaHNwNDRUTF8zWnkwcy1rdTdIc0ROa3Bvb0dlOXRuLW1acUJqbWhDYmFCYlRwQ1VWLTctMHNJRjVSeEUwbEU4TC1qY0dUR3Qxd0h2dC1SSWZAFNXlnam9WV1NzVjY1LXlJM2cZD (Caused by NameResolutionError("HTTPSConnection(host='graph.threads.net', port=443): Failed to resolve 'graph.threads.net' ([Errno 8] nodename nor servname provided, or not known)"))
+[08:15:36]   ❌ 카드 2 발행 실패
+[2026-06-28 08:15:36]   ❌ 발행 실패 — 쓰레드는 생성됨, 2시간 후 재시도
+[2026-06-28 08:16:00]   텔레그램 전송 실패: HTTPSConnectionPool(host='api.telegram.org', port=443): Max retries exceeded with url: /bot8511728557:AAG_ptk12qLweRTVRusZqif8JpZAhbZd9n8/sendMessage (Caused by NameResolutionError("HTTPSConnection(host='api.telegram.org', port=443): Failed to resolve 'api.telegram.org' ([Errno 8] nodename nor servname provided, or not known)"))
+[2026-06-28 10:16:01] 🚀 v3 실행 시작 (시도 1/5)
+[10:16:03]   1순위 브리핑: 0개 → 신규 0개
+[10:16:05]   2순위 최근7일: 227개 중 신규 55개
+[10:16:05]   총 기사 풀: 55개
+[10:16:05]   [기사 풀 필터] 전체: 227개 → 제외: 172개 → 최종: 55개
+[10:16:05]     posted_ids 제외: 34개 | posted_links 제외: 34개 | posted_titles 제외: 34개 | posted_original_titles 제외: 34개 | posted_semantic 제외: 142개
+[2026-06-28 10:16:05]   기사: 55개 로드
+[2026-06-28 10:16:05]   [1단계] 브리핑 기사 없음 → 전체 풀로 진행
+[2026-06-28 10:16:05]   [2단계] 전체 기사 55개 → 배치 처리 시작
+[10:16:05]   피치 이력: 119개 존재
+[10:16:05] [배치 처리] 총 55개 → 200개 × 1배치
+[10:16:05] [배치 1/1] 55개 기사 처리 중...
+  [모델] DeepSeek deepseek-v4-flash
+[10:16:31] [배치 1/1] → 0개 피치 발견 (DeepSeek V4 Flash)
+[10:16:31]   ⚠️ DeepSeek V4 Flash JSON 파싱 실패 → MiMo fallback
+  [모델] MiMo mimo-v2.5
+[10:16:54] [배치 1/1] → 2개 피치 발견 (MiMo)
+[10:16:54] [전체] 2개 후보 발견
+[10:16:54] [전체] 2개 후보 → 중복 제외 후 2개
+  [모델] MiMo mimo-v2.5
+[10:16:57]   ⚠️ 평가 오류: chat_completion returned None
+[10:16:57]   ✅ 피치 통과: 3점
+[10:16:57]   ✅ TOP 1: "Figma는 Config 2026에서 전체 작업 공간을 AI 에이전트가 포함된 캔버스로 전환했지만, 그 인텔리전스는 외부 API 제공업체로부터 임대되고 있습니다." (불안)
+[10:16:57]      기사: [34247]
+[10:16:57]   📰 피치 기사 원문 크롤링: https://the-decoder.com/figma-bets-on-human-judgment-at-conf...
+[10:16:59]   📰 크롤링: https://the-decoder.com/figma-bets-on-human-judgme... (9757자)
+[10:16:59]   📰 크롤링 완료: 9757자
+  [모델] DeepSeek deepseek-v4-flash
+[10:17:11]   ✅ 크롤링 기반 피치 재생성 완료: "Figma는 Config 2026에서 인간의 판단에 베팅했지만, 캔버스를 구동하는 AI는 "
+[2026-06-28 10:17:11]   ✅ 피치: "Figma는 Config 2026에서 인간의 판단에 베팅했지만, 캔버스를" (불안)
+[2026-06-28 10:17:11]      기사: ['34247']
+[2026-06-28 10:17:11]   쓰레드 작성...
+[10:17:11]   📰 pitcher 크롤링 본문 사용: 9757자 (재크롤링 없음)
+[10:17:11]   쓰레드 생성 중...
+  [모델] DeepSeek deepseek-v4-flash
+  [모델] MiMo mimo-v2.5
+[10:17:51]   🧹 humanize: 3/5개 카드 수정
+  [모델] MiMo mimo-v2.5
+[10:18:03]   ⚠️ 수정 후 카드 수 불일치: 7≠5 → 원본 유지
+[10:18:03]     → 연도 검증 통과: 쓰레드 연도 {2025} ⊆ 허용 {2025, 2026}
+[10:18:03]     → 키워드 검증 통과: 핵심 단어 0개 (boilerplate 제외 후 소수 → 검증 불필요)
+[10:18:03]   ✅ 쓰레드: 6개 조각 (시도 1)
+[10:18:03]   💾 초안 저장: /Users/twinssn/Projects/aikorea24/scripts/threads/logs/drafts/v3_2026-06-28-10_Figma는Config2026에서인간.txt
+[2026-06-28 10:18:03]   ✅ 6개 조각 작성 완료
+[2026-06-28 10:18:03]   발행 시작...
+[10:18:19]   카드 1/6 발행: 18110337913993994
+[10:18:48]   카드 2/6 발행: 17992134764809386
+[10:19:16]   카드 3/6 발행: 17879107569479444
+[10:19:48]   카드 4/6 발행: 18102421088328696
+[10:20:16]   카드 5/6 발행: 18117449545886319
+[10:20:48]   카드 6/6 발행: 17996318144975922
+[10:20:58]   posted.json 업데이트 완료
+[2026-06-28 10:20:58]   ✅ 발행 완료: 루트 ID 18110337913993994
+[2026-06-28 10:20:58] [발행 완료] posted.json 업데이트:
+[2026-06-28 10:20:58]   posted_ids: 기존 240개 → 추가 0개 → 총 240개
+[2026-06-28 10:20:58]   posted_links: 기존 186개 → 추가 0개 → 총 186개
+[2026-06-28 10:20:58]   posted_titles: 기존 130개 → 추가 1개 → 총 131개
+[2026-06-28 10:20:58]   posted_original_titles: 기존 104개 → 추가 1개 → 총 105개
+[2026-06-28 10:20:58]   pitch_history: 총 119개
+[2026-06-28 10:20:58]   다음 실행: 2026-06-28 12:20:58

@@ -6,7 +6,7 @@ price: "유료 플랜은 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://aifordevelopers.org"
-useCases: [{"title": "코드 작성 지원", "prompt": "AI를 활용해 특정 기능의 코드를 작성해 주세요."}, {"title": "디버깅 도움", "prompt": "주어진 코드에서 오류를 찾아 수정해 주세요."}, {"title": "코드 리뷰 요청", "prompt": "작성한 코드에 대한 리뷰를 요청합니다."}]
+useCases: ["코드 작성 지원", "디버깅 도움", "코드 리뷰 요청"]
 tags: ["AI", "코딩", "개발도구"]
 featured: false
 order: 101

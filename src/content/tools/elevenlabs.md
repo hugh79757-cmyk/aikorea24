@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://elevenlabs.io"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이메일 내용을 음성으로 읽어주는 기능이 필요합니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 맞는 음성을 생성하고 싶습니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서 내용을 음성으로 설명해주는 기능이 필요합니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["음성 생성", "AI 기술", "콘텐츠 제작"]
 featured: false
 order: 23

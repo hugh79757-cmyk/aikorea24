@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.genspark.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "간단한 비즈니스 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 영상에 맞는 썸네일 디자인을 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "스타트업을 위한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI", "업무효율", "생산성"]
 featured: false
 order: 20

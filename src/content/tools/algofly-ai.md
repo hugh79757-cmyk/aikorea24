@@ -6,7 +6,7 @@ price: "월 50,000원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://algofly.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI를 활용해 비즈니스 이메일을 영어로 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 영상에 맞는 썸네일 디자인 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "AI를 이용해 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI", "비즈니스", "솔루션"]
 featured: false
 order: 100

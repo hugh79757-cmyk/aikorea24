@@ -6,7 +6,7 @@ price: "현재 유료 플랜은 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.compose.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 비즈니스 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "우리 사업 아이디어에 대한 사업계획서 초안을 작성해 주세요."}, {"title": "보고서 작성", "prompt": "최근 프로젝트에 대한 보고서를 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "보고서 작성"]
 tags: ["글쓰기", "생산성", "AI 도구"]
 featured: false
 order: 106

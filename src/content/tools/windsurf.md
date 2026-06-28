@@ -6,7 +6,7 @@ price: "월 15만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://windsurf.com"
-useCases: [{"title": "업무 자동화", "prompt": "업무를 자동화하여 효율성을 높이려면 어떻게 해야 하나요?"}, {"title": "프로젝트 관리", "prompt": "팀 프로젝트를 효과적으로 관리하는 방법은 무엇인가요?"}, {"title": "회의록 작성", "prompt": "회의 내용을 정리하여 회의록을 작성하는 방법은 무엇인가요?"}]
+useCases: ["업무 자동화", "프로젝트 관리", "회의록 작성"]
 tags: ["업무관리", "프로젝트", "자동화"]
 featured: false
 order: 22

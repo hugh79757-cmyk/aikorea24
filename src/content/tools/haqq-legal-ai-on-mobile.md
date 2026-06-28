@@ -6,7 +6,7 @@ price: "월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://haqq.ai/mobile-app"
-useCases: [{"title": "법률 문서 검토", "prompt": "계약서를 검토해 주세요."}, {"title": "법률 Q&A", "prompt": "상속 관련 법률 질문이 있습니다."}, {"title": "소송 서류 작성", "prompt": "소송 제기 서류를 작성해 주세요."}]
+useCases: ["법률 문서 검토", "법률 Q&A", "소송 서류 작성"]
 tags: ["법률", "AI", "모바일"]
 featured: false
 order: 103

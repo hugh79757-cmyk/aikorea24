@@ -6,7 +6,7 @@ price: "월 10,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
 url: "https://apps.apple.com/be/app/labs-ai-text-to-speech/id6741198402"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어 이메일 내용을 음성으로 변환하고 싶습니다."}, {"title": "유튜브 썸네일 제작", "prompt": "영상의 대사를 음성으로 변환하여 더빙하고 싶습니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서 내용을 음성으로 읽어보고 싶습니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["음성변환", "텍스트음성", "AI기술"]
 featured: false
 order: 101

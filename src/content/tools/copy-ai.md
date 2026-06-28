@@ -6,7 +6,7 @@ price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.copy.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 파트너에게 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "새로운 사업 아이디어에 대한 계획서를 작성해 주세요."}, {"title": "회의록 작성", "prompt": "회의 내용을 정리하여 회의록을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["자동화", "생산성", "GTM AI"]
 featured: false
 order: 101

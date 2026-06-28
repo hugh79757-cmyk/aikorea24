@@ -6,7 +6,7 @@ price: "유료 플랜은 현재 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://gemini.google/overview/agent/spark/"
-useCases: [{"title": "일정 관리", "prompt": "매주 월요일 오전 9시에 내 이메일을 확인해 주세요."}, {"title": "업무 자동화", "prompt": "내가 지정한 작업을 자동으로 수행해 주세요."}, {"title": "정보 검색", "prompt": "뉴올리언스의 인테리어 디자인 인턴십을 찾아 주세요."}]
+useCases: ["일정 관리", "업무 자동화", "정보 검색"]
 tags: ["AI 에이전트", "업무 효율성", "생산성 도구"]
 featured: false
 order: 100

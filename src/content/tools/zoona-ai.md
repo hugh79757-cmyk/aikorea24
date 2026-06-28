@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.sparrowdesk.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "고객의 문의에 대한 답변 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "우리 회사의 사업 계획을 요약해 주세요."}, {"title": "회의록", "prompt": "이번 회의에서 논의된 내용을 정리해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["고객지원", "자동화", "AI"]
 featured: false
 order: 105

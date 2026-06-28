@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://ai-coustics.com/"
-useCases: [{"title": "회의록 작성", "prompt": "회의 중 발생하는 다양한 소음을 제거하여 정확한 회의록을 작성합니다."}, {"title": "음성 변환", "prompt": "실시간으로 음성을 텍스트로 변환하여 기록할 수 있습니다."}, {"title": "팟캐스트 제작", "prompt": "배경 소음을 줄여 청취하기 좋은 팟캐스트를 제작합니다."}]
+useCases: ["회의록 작성", "음성 변환", "팟캐스트 제작"]
 tags: ["음성 인식", "실시간 처리", "오디오 향상"]
 featured: false
 order: 101

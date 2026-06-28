@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.meetgeek.ai"
-useCases: [{"title": "회의록 작성", "prompt": "회의 내용을 자동으로 정리해 주세요."}, {"title": "업무 요약", "prompt": "이번 주 업무를 요약해 주세요."}, {"title": "회의 준비", "prompt": "다음 회의 안건을 정리해 주세요."}]
+useCases: ["회의록 작성", "업무 요약", "회의 준비"]
 tags: ["회의", "자동화", "요약"]
 featured: false
 order: 104

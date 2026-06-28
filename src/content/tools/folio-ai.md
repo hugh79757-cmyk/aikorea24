@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://get-folio.ai/"
-useCases: [{"title": "프레젠테이션 자료 작성", "prompt": "효과적인 발표를 위한 PPT 자료를 만들어줘."}, {"title": "슬라이드 디자인 개선", "prompt": "슬라이드 디자인을 더 매력적으로 바꿔줘."}, {"title": "보고서 요약", "prompt": "이 보고서를 간단하게 요약해줘."}]
+useCases: ["프레젠테이션 자료 작성", "슬라이드 디자인 개선", "보고서 요약"]
 tags: ["프레젠테이션", "AI 도구", "업무 효율"]
 featured: false
 order: 100

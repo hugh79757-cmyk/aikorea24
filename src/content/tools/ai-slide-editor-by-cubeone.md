@@ -6,7 +6,7 @@ price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://getcube.one/"
-useCases: [{"title": "프레젠테이션 제작", "prompt": "슬라이드에 포함할 내용을 입력하면 자동으로 디자인된 슬라이드를 생성합니다."}, {"title": "회의 자료 준비", "prompt": "기존의 PPT 파일을 업로드하여 쉽게 수정하고 디자인할 수 있습니다."}, {"title": "학교 발표 자료 만들기", "prompt": "주제를 입력하면 관련된 내용을 바탕으로 슬라이드를 생성합니다."}]
+useCases: ["프레젠테이션 제작", "회의 자료 준비", "학교 발표 자료 만들기"]
 tags: ["슬라이드", "프레젠테이션", "디자인"]
 featured: false
 order: 101

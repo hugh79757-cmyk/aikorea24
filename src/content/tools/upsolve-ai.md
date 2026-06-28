@@ -6,7 +6,7 @@ price: "유료"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://upsolve.ai/"
-useCases: [{"title": "데이터 분석 보고서 작성", "prompt": "회사의 매출 데이터를 분석하여 보고서를 작성해 주세요."}, {"title": "회의록 정리", "prompt": "지난 회의 내용을 요약하여 회의록을 정리해 주세요."}, {"title": "프로젝트 관리 계획", "prompt": "새로운 프로젝트의 관리 계획을 작성해 주세요."}]
+useCases: ["데이터 분석 보고서 작성", "회의록 정리", "프로젝트 관리 계획"]
 tags: ["데이터 분석", "신뢰성", "에이전트"]
 featured: false
 order: 103

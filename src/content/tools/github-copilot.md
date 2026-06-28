@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: ""
-useCases: [{"title": "코드 작성", "prompt": "특정 기능을 구현하는 코드를 작성해 주세요."}, {"title": "코드 리뷰", "prompt": "작성한 코드의 오류를 찾아 수정해 주세요."}, {"title": "디버깅", "prompt": "코드에서 발생하는 오류를 분석해 주세요."}]
+useCases: ["코드 작성", "코드 리뷰", "디버깅"]
 tags: ["코딩", "AI", "개발"]
 featured: false
 order: 41

@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.jotform.com/ai/apps/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 앱 개발을 위한 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "앱 소개를 위한 유튜브 썸네일 디자인을 요청합니다."}, {"title": "사업계획서 초안", "prompt": "앱 개발을 위한 사업계획서 초안을 만들어 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["앱 개발", "노코드", "AI"]
 featured: false
 order: 102

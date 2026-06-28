@@ -6,7 +6,7 @@ price: "월 2만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://otter.ai"
-useCases: [{"title": "회의록 작성", "prompt": "회의 중에 나눈 내용을 쉽게 기록하고 정리할 수 있습니다."}, {"title": "강의 노트 정리", "prompt": "강의 내용을 실시간으로 전사하여 나중에 복습할 수 있습니다."}, {"title": "인터뷰 기록", "prompt": "인터뷰 내용을 자동으로 기록하여 중요한 포인트를 놓치지 않을 수 있습니다."}]
+useCases: ["회의록 작성", "강의 노트 정리", "인터뷰 기록"]
 tags: ["회의록", "전사", "생산성"]
 featured: false
 order: 59

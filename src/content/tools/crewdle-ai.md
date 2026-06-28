@@ -6,7 +6,7 @@ price: "사용량 기반"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://crewdle.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어로 비즈니스 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 썸네일 디자인 요청합니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 플랫폼", "비즈니스 도구", "자동화"]
 featured: false
 order: 100

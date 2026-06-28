@@ -6,7 +6,7 @@ price: "월 1.5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.sanebox.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "SaneBox를 사용하여 영어 이메일을 간편하게 작성해 보세요."}, {"title": "회의록 정리", "prompt": "회의 후 SaneBox로 회의록을 정리해 보세요."}, {"title": "업무 일정 관리", "prompt": "SaneBox를 통해 업무 일정을 효율적으로 관리해 보세요."}]
+useCases: ["영어 이메일 작성", "회의록 정리", "업무 일정 관리"]
 tags: ["이메일", "생산성", "관리"]
 featured: false
 order: 103

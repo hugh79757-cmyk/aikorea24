@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://udio.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "음악 프로젝트에 대한 아이디어를 공유하는 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "새로 만든 음악의 홍보를 위한 썸네일 디자인 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "음악 관련 스타트업의 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["음악", "AI", "생성"]
 featured: false
 order: 56

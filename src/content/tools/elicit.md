@@ -6,7 +6,7 @@ price: "월 8만원"
 koreanSupport: true
 difficulty: "중급"
 url: "https://elicit.com"
-useCases: [{"title": "논문 요약 작성", "prompt": "특정 주제에 대한 최신 논문을 요약해 주세요."}, {"title": "리서치 자료 정리", "prompt": "주어진 주제에 대한 연구 자료를 정리해 주세요."}, {"title": "보고서 작성", "prompt": "연구 결과를 바탕으로 보고서를 작성해 주세요."}]
+useCases: ["논문 요약 작성", "리서치 자료 정리", "보고서 작성"]
 tags: ["연구", "논문", "AI"]
 featured: false
 order: 63

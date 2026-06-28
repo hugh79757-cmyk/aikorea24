@@ -6,7 +6,7 @@ price: "월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://stability.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 관련 이미지가 필요할 때 사용합니다."}, {"title": "유튜브 썸네일 제작", "prompt": "영상 주제에 맞는 매력적인 썸네일 이미지를 생성합니다."}, {"title": "사업계획서 초안", "prompt": "사업 아이디어를 시각적으로 표현할 이미지를 제작합니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["이미지 생성", "AI 도구", "창작 지원"]
 featured: false
 order: 50

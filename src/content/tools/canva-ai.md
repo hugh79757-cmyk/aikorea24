@@ -6,7 +6,7 @@ price: "월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.canva.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이메일에 사용할 멋진 배경 이미지를 디자인해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 영상 썸네일을 매력적으로 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서에 필요한 인포그래픽을 제작해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["디자인", "템플릿", "사용자친화적"]
 featured: false
 order: 14

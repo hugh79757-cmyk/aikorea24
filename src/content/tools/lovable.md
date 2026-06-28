@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://lovable.dev"
-useCases: [{"title": "영어 이메일 작성", "prompt": "AI에게 비즈니스 이메일을 작성해달라고 요청합니다."}, {"title": "유튜브 썸네일 제작", "prompt": "AI에게 유튜브 썸네일 디자인을 요청합니다."}, {"title": "사업계획서 초안", "prompt": "AI에게 사업계획서의 초안을 작성해달라고 요청합니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["앱 제작", "웹사이트 개발", "AI 도구"]
 featured: false
 order: 42

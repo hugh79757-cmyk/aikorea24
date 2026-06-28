@@ -6,7 +6,7 @@ price: "월 2.5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://replit.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "프로젝트 진행 상황을 영어로 이메일로 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 채널의 썸네일을 디자인해 주세요."}, {"title": "사업계획서 초안", "prompt": "내 사업 아이디어에 대한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["코딩", "협업", "AI"]
 featured: false
 order: 51

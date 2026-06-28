@@ -6,7 +6,7 @@ price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://suno.com"
-useCases: [{"title": "영어 이메일 작성", "prompt": "이 음악을 배경으로 한 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "이 음악을 주제로 한 유튜브 썸네일을 만들어 주세요."}, {"title": "사업계획서 초안", "prompt": "이 음악을 활용한 사업계획서 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["음악 생성", "AI", "크리에이티브"]
 featured: false
 order: 22

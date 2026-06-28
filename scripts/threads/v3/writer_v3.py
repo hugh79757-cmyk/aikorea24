@@ -240,6 +240,37 @@ def fetch_article_body(url, source='', title=''):
                 log_failed_crawl(url, source, title, err_msg)
                 return ''
 
+INSTRUCTION_PATTERNS = [
+    '다음 Threads 쓰레드의 AI 말투를',
+    '[원본]',
+    '[출력 규칙]',
+    '수정된 쓰레드만 출력',
+    '--- 구분자 정확히 유지',
+    '내용(사실, 수치, 고유명사)은 절대 변경',
+    '반말체(~임, ~했음, ~있음) 그대로 유지',
+    '구분자 정확히 유지',
+]
+
+def _strip_instruction_leak(text):
+    """LLM이 출력에 포함시킨 프롬프트 명령어를 제거"""
+    lines = text.split('\n')
+    cleaned = []
+    for line in lines:
+        stripped = line.strip()
+        if any(stripped.startswith(p) for p in INSTRUCTION_PATTERNS):
+            continue
+        if stripped.startswith('- 내용(') or stripped.startswith('- 반말체('):
+            continue
+        if stripped == '- --- 구분자 정확히 유지':
+            continue
+        if stripped == '- 수정된 쓰레드만 출력':
+            continue
+        # 하이픈만 있는 라인 제거 (지시문이 split된 잔재)
+        if stripped == '-':
+            continue
+        cleaned.append(line)
+    return '\n'.join(cleaned).strip()
+
 def humanize_cards(cards):
     """LLM 기반 AI 티 교체 (im-not-ai 택소노미 기반)
     - 번역투, AI 관용구, 과장, 형용사 등 10대 카테고리 패턴 교체
@@ -340,6 +371,7 @@ def humanize_cards(cards):
             log(f'  ⚠️ humanize: 응답 없음 → 원본 유지')
             return cards
 
+        result = _strip_instruction_leak(result)
         fixed = [c.strip() for c in result.split('---') if c.strip()]
 
         # 길이 검증: 50% 미만이면 원본 유지

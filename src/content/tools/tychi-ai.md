@@ -6,7 +6,7 @@ price: "무료/월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://ai.tychilabs.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "Tychi AI를 통해 자산 관리 관련 이메일을 작성할 수 있습니다."}, {"title": "사업계획서 초안", "prompt": "Tychi AI를 활용하여 자산 관리 관련 사업계획서를 초안할 수 있습니다."}, {"title": "회의록", "prompt": "Tychi AI를 통해 자산 관리 회의록을 정리할 수 있습니다."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["자산관리", "AI", "지갑"]
 featured: false
 order: 103

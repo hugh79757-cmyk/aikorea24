@@ -6,7 +6,7 @@ price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://getalai.com/"
-useCases: [{"title": "프레젠테이션 제작", "prompt": "AI를 활용해 주제에 맞는 프레젠테이션을 만들어 주세요."}, {"title": "인포그래픽 디자인", "prompt": "주제에 맞는 인포그래픽을 디자인해 주세요."}, {"title": "소셜 미디어 포스트", "prompt": "SNS에 올릴 수 있는 포스트 디자인을 요청합니다."}]
+useCases: ["프레젠테이션 제작", "인포그래픽 디자인", "소셜 미디어 포스트"]
 tags: ["프레젠테이션", "디자인", "AI"]
 featured: false
 order: 104

@@ -6,7 +6,7 @@ price: "월 0원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.capcut.com"
-useCases: [{"title": "유튜브 영상 편집", "prompt": "유튜브에 업로드할 영상을 쉽게 편집하고 싶습니다."}, {"title": "인스타그램 스토리 제작", "prompt": "인스타그램 스토리에 올릴 짧은 영상을 만들고 싶습니다."}, {"title": "브이로그 편집", "prompt": "여행 브이로그 영상을 멋지게 편집하고 싶습니다."}]
+useCases: ["유튜브 영상 편집", "인스타그램 스토리 제작", "브이로그 편집"]
 tags: ["영상편집", "AI툴", "소셜미디어"]
 featured: false
 order: 21

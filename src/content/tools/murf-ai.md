@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://www.murf.ai"
-useCases: [{"title": "영어 이메일 작성", "prompt": "영어 이메일을 음성으로 변환해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "유튜브 영상 내용을 음성으로 설명해 주세요."}, {"title": "사업계획서 초안", "prompt": "사업계획서 내용을 음성으로 읽어 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["음성 생성", "팟캐스트", "오디오북"]
 featured: false
 order: 102

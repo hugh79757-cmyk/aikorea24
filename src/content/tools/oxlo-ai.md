@@ -6,7 +6,7 @@ price: "월 10만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://oxlo.ai/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 미팅 일정 조정 이메일을 작성해 주세요."}, {"title": "유튜브 썸네일 제작", "prompt": "내 유튜브 채널에 맞는 썸네일 디자인 아이디어를 제안해 주세요."}, {"title": "사업계획서 초안", "prompt": "내 사업 아이디어에 대한 초안을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 모델", "업무 자동화", "데이터 보안"]
 featured: false
 order: 101

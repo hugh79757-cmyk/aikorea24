@@ -6,7 +6,7 @@ price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
 url: "https://hyperwriteai.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "비즈니스 이메일을 작성할 때 도움을 요청합니다."}, {"title": "유튜브 썸네일 제작", "prompt": "썸네일에 적합한 제목과 내용을 생성해달라고 요청합니다."}, {"title": "사업계획서 초안", "prompt": "사업계획서의 기본 틀을 만들어 달라고 요청합니다."}]
+useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 글쓰기", "콘텐츠 생성", "작업 효율"]
 featured: false
 order: 109

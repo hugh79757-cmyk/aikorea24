@@ -6,7 +6,7 @@ price: "유료 플랜 없음"
 koreanSupport: false
 difficulty: "초보자 OK"
 url: "https://discovery.bluerails.com/"
-useCases: [{"title": "영어 이메일 작성", "prompt": "내 회사의 AI 가시성 보고서를 요청하는 이메일을 작성해 주세요."}, {"title": "사업계획서 초안", "prompt": "내 사업의 AI 가시성을 분석한 내용을 포함한 사업계획서 초안을 작성해 주세요."}, {"title": "회의록", "prompt": "AI 가시성 관련 회의 내용을 정리한 회의록을 작성해 주세요."}]
+useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["AI", "가시성", "분석"]
 featured: false
 order: 101
