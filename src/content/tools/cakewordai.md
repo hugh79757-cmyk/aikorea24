@@ -5,7 +5,7 @@ category: "번역·학습"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://apps.apple.com/de/app/cakeword-snap-learn/id6775628982"
 useCases: ["직장에서 외국어 이름을 빠르게 확인하고 싶을 때", "학생들이 어휘를 쉽게 배우고 싶을 때", "소상공인이 제품 이름을 다양한 언어로 알리고 싶을 때"]
 tags: ["언어학습", "번역", "교육"]
 featured: false

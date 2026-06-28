@@ -44,6 +44,7 @@ from common_env_loader import load_env_with_fallback
 load_env_with_fallback(os.path.join(PROJECT_DIR, '.env'))
 
 OPENAI_KEY = os.environ.get('OPENAI_API_KEY', '')
+OPENROUTER_KEY = os.environ.get('OPENROUTER_API_KEY', '')
 
 # ============================================
 # news_collector.py에서 batch_translate import
@@ -64,6 +65,9 @@ PRODUCT_HUNT_FEED = 'https://www.producthunt.com/feed'
 # === 신규 소스 URL ===
 FUTUREPEDIA_SITEMAP = "https://www.futurepedia.io/sitemap.xml"
 HUGGINGFACE_PAPERS_RSS = "https://huggingface.co/papers"
+TOOLPILOT_API = "https://www.toolpilot.ai/api/tools"
+AIXPLORIA_SITEMAP = "https://aixploria.com/sitemap.xml"
+TOPAI_TOOLS_URL = "https://topai.tools"
 
 # AI 툴로 분류할 키워드 (Product Hunt: 제목 기준으로만 매칭)
 PH_AI_KEYWORDS = [
@@ -499,6 +503,43 @@ def collect_huggingface_papers(limit=5):
 
 
 # ============================================
+# 수집 함수: TopAI.tools
+# ============================================
+def collect_topai_tools(limit=20) -> list:
+    """TopAI.tools에서 AI 도구 목록 수집"""
+    tools = []
+    html = _fetch_html(TOPAI_TOOLS_URL)
+    if not html:
+        return tools
+    soup = BeautifulSoup(html, 'html.parser')
+    # 카드 형태의 도구 목록 파싱
+    for card in soup.select('[class*="tool-card"], [class*="tool-item"], article, .card')[:limit]:
+        name_el = card.select_one('h2, h3, h4, [class*="title"], [class*="name"]')
+        desc_el = card.select_one('p, [class*="desc"], [class*="description"]')
+        link_el = card.select_one('a[href]')
+        if not name_el or not link_el:
+            continue
+        name = name_el.get_text(strip=True)
+        desc = desc_el.get_text(strip=True)[:300] if desc_el else ''
+        url = link_el.get('href', '')
+        if url and not url.startswith('http'):
+            url = 'https://topai.tools' + url
+        # AI 툴 필터
+        if not is_ai_tool(name, desc):
+            continue
+        tools.append({
+            'name': name,
+            'description': desc,
+            'url': url,
+            'price': '',
+            'source': 'topai.tools',
+            'pub_date': datetime.now().strftime('%Y-%m-%d'),
+        })
+    print(f"  TopAI.tools: {len(tools)}개 수집")
+    return tools
+
+
+# ============================================
 # 통합 수집
 # ============================================
 def should_run_github_today():
@@ -525,6 +566,10 @@ def collect_tools(limit_per_source=15) -> list:
     hf_tools = collect_huggingface_papers(5)
     all_tools.extend(hf_tools)
     print(f"  Hugging Face Papers: {len(hf_tools)}개")
+
+    # 추가 소스
+    topai_tools = collect_topai_tools(limit_per_source)
+    all_tools.extend(topai_tools)
 
     # 중복 제거 (URL 기준)
     seen_urls = set()
@@ -749,73 +794,172 @@ def title_to_slug(name: str) -> str:
 # ============================================
 # GPT 한국어 메타데이터 생성 (with im-not-ai 1단계)
 # ============================================
-SYSTEM_PROMPT = f"""당신은 한국어 AI 툴 큐레이터입니다.
+SYSTEM_PROMPT = """당신은 한국어 AI 툴 큐레이터입니다.
 한국 일반 사용자(직장인·학생·소상공인) 관점에서 실용적으로 설명합니다.
 전문용어 대신 쉬운 표현, 한국 실생활 예시를 반드시 포함합니다.
 예시: "영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안 작성"
 
-📌 **문체 규칙**: 모든 설명은 "~합니다/~습니다/~입니다" 체의 정중한 비즈니스 한국어로 작성하세요.
-   "~다/~ㄴ다/~는다" 체(반말/평서체)는 절대 사용하지 마세요.
-   예: "도와준다" ❌ → "도와줍니다" ✅ / "제공한다" ❌ → "제공합니다" ✅
+문체 규칙:
+- 모든 설명은 "~합니다/~습니다/~입니다" 체의 정중한 비즈니스 한국어로 작성.
+- "~다/~ㄴ다/~는다" 체(반말/평서체)는 절대 사용 금지.
 
 JSON 외 다른 텍스트는 절대 출력하지 마세요.
 {HUMANIZE_RULES}"""
 
 USER_PROMPT_TEMPLATE = """다음 AI 툴 정보를 분석해 JSON으로 응답하세요.
 
-툴명: {name}
-영문설명: {description}
-가격: {price}
-URL: {url}
+툴명: __NAME__
+영문설명: __DESCRIPTION__
+가격: __PRICE__
+URL: __URL__
 
-반환 형식 (이 JSON 구조만 출력):
-{{
+[실제 웹사이트에서 크롤링한 정보]
+__CRAWLED_PRICING__
+
+반환 형식 (이 JSON 구조만 출력. 빈 배열/빈 문자열 절대 금지):
+{
   "description_kr": "한줄 설명 (80자 이내, 핵심 기능 + 한국 사용자 관점)",
   "category": "글쓰기·챗봇 또는 이미지 생성 또는 영상·음성 또는 업무·생산성 또는 코딩·개발 또는 디자인 또는 번역·학습",
   "koreanSupport": true 또는 false,
   "difficulty": "초보자 OK 또는 중급 또는 고급",
-  "price_kr": "무료 또는 무료/월 N만원 또는 월 N만원~",
-  "useCases": ["한국 직장인 맥락 활용사례", "학생 활용사례", "소상공인 활용사례"],
+  "useCases": [
+    {"title": "영어 이메일 작성", "prompt": "실제 한국어 프롬프트 예시 1문장"},
+    {"title": "유튜브 썸네일 제작", "prompt": "실제 한국어 프롬프트 예시 1문장"},
+    {"title": "사업계획서 초안", "prompt": "실제 한국어 프롬프트 예시 1문장"}
+  ],
   "tags": ["태그1", "태그2", "태그3"],
-  "tasks": ["pdf-요약", "글쓰기", "이미지-생성", "번역" 등 위 정의 태스크 슬러그 중 1~3개],
-  "tool_detail": {{
+  "tasks": ["태스크 슬러그 1~3개 — 아래 목록에서 선택"],
+  "tool_detail": {
     "summary": "2~3문장. 이 툴이 무엇인지, 어떤 문제를 해결하는지 한국 사용자 관점으로.",
-    "features": ["핵심 기능1 (50자)", "핵심 기능2 (50자)", "핵심 기능3 (50자)"],
-    "price_detail": "무료 플랜과 유료 플랜 차이점 2~3문장.",
+    "features": [
+      {"name": "기능명 (10자 이내)", "desc": "이 기능이 왜 유용한지 한국 사용자 관점 (40자 이내)"},
+      {"name": "기능명", "desc": "설명"},
+      {"name": "기능명", "desc": "설명"}
+    ],
+    "pricing": {
+      "free": "무료 플랜 내용 1문장",
+      "paid": "유료 플랜 이름 + 가격(원화 반드시 병기) + 주요 혜택 1~2문장",
+      "tip": "비용 절약 팁 1문장"
+    },
     "korean_detail": "한국어 지원 수준 상세 설명 1~2문장.",
     "recommend_for": "이런 분에게 추천합니다. 구체적인 페르소나 2~3개, 각 1문장.",
-    "real_examples": ["한국 맥락 실제 활용 예시1 (1문장)", "예시2", "예시3"],
-    "vs_similar": "유사 툴 대비 이 툴의 장점·단점 2~3문장.",
+    "real_examples": [
+      {"persona": "직장인", "example": "구체적 상황 + 어떻게 사용하는지 2문장"},
+      {"persona": "학생", "example": "구체적 상황 + 어떻게 사용하는지 2문장"},
+      {"persona": "소상공인", "example": "구체적 상황 + 어떻게 사용하는지 2문장"}
+    ],
+    "vs_similar": {
+      "pros": ["장점1 (구체적)", "장점2"],
+      "cons": ["단점1 (구체적)"],
+      "best_for": "이 툴이 가장 적합한 상황 1문장"
+    },
     "faq": [
-      {{"q": "자주 묻는 질문1", "a": "답변 (2~3문장)"}},
-      {{"q": "자주 묻는 질문2", "a": "답변 (2~3문장)"}},
-      {{"q": "자주 묻는 질문3", "a": "답변 (2~3문장)"}}
+      {"q": "실제 사용자가 검색할 법한 구체적 질문", "a": "답변 2~3문장. 단답형 금지."},
+      {"q": "질문2", "a": "답변"},
+      {"q": "질문3", "a": "답변"}
     ]
-  }}
-}}"""
+  }
+}
+
+태스크 슬러그 목록 (아래에서 툴 성격에 맞는 1~3개 선택):
+문서: pdf-요약, 유튜브-요약, 글쓰기, 이메일-작성, 번역, 요약, 맞춤법-교정, 보고서-작성, 이력서, 카피라이팅, 문서-번역, 자기소개서, 기획서, 회의록, 프레젠테이션
+이미지: 이미지-생성-무료, 이미지-생성, 배경-제거, 썸네일-제작, 로고-디자인, ppt-발표, 인포그래픽, 아이콘-디자인, 일러스트, UI-디자인, 웹디자인
+영상: 영상-제작, 영상-편집, 자막-생성, 음성-변환, 더빙, 음악-생성, 텍스트-음성, 음성-녹음, 팟캐스트, 배경음악
+업무: 회의-요약, 일정-관리, 데이터-분석, 엑셀-자동화, 업무-자동화, 챗봇-구축, 메모-정리, 프로젝트-관리, 자동화-워크플로우, CRM
+코딩: 코딩, 코드-리뷰, 노코드, 바이브코딩, API-개발, 디버깅, 테스트
+학습: 논문-요약, 영어-학습, 리서치, 자격증-학습, 면접-준비, 제2외국어
+마케팅: sns-콘텐츠, seo-최적화, 광고-카피, 블로그-작성, 유튜브-편집, 마케팅-자동화, 콘텐츠-기획, 브랜드-네이밍
+전문: 의료-상담, 법률-검토, 부동산-분석, 투자-분석, 회계-경리, 고객-상담
+
+"""
+
+def crawl_tool_page(url: str) -> dict:
+    """도구 웹사이트에서 실제 정보 크롤링"""
+    result = {
+        'title': '',
+        'description': '',
+        'pricing_text': '',
+        'features_text': '',
+        'korean_text': '',
+    }
+    if not url or not url.startswith('http'):
+        return result
+
+    try:
+        req = urllib.request.Request(url, headers={
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
+            'Accept-Language': 'en-US,en;q=0.9,ko;q=0.8',
+        })
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            html = resp.read().decode('utf-8', errors='replace')
+
+        soup = BeautifulSoup(html, 'html.parser')
+
+        # 타이틀
+        title_el = soup.find('title')
+        result['title'] = title_el.get_text(strip=True)[:200] if title_el else ''
+
+        # 메타 설명
+        meta_desc = soup.find('meta', attrs={'name': 'description'})
+        result['description'] = (meta_desc.get('content', '') or '')[:500] if meta_desc else ''
+
+        # OG 설명
+        if not result['description']:
+            og_desc = soup.find('meta', attrs={'property': 'og:description'})
+            result['description'] = (og_desc.get('content', '') or '')[:500] if og_desc else ''
+
+        # 본문 텍스트 (가격, 기능 정보 추출용)
+        body_text = soup.get_text(separator=' ', strip=True)[:3000]
+        result['pricing_text'] = body_text
+        result['features_text'] = body_text
+        result['korean_text'] = body_text
+
+        print(f"  크롤링 성공: {url[:50]}... (설명 {len(result['description'])}자)")
+    except Exception as e:
+        print(f"  크롤링 실패 ({url[:30]}): {e}")
+
+    return result
 
 
 def generate_metadata(tool_info: dict) -> dict:
-    """GPT-4o-mini 호출 → 한국어 메타데이터 (im-not-ai 규칙 적용)"""
-    if not OPENAI_KEY:
-        print("  OPENAI_API_KEY 없음")
+    """DeepSeek V4 Flash (OpenRouter) 호출 → 한국어 메타데이터"""
+    api_key = OPENROUTER_KEY or OPENAI_KEY
+    if not api_key:
+        print("  API 키 없음 (OPENROUTER_API_KEY 또는 OPENAI_API_KEY)")
         return None
-    import openai
-    client = openai.OpenAI(api_key=OPENAI_KEY)
-    prompt = USER_PROMPT_TEMPLATE.format(
-        name=tool_info.get('name', ''),
-        description=tool_info.get('description', '')[:500],
-        price=tool_info.get('price', ''),
-        url=tool_info.get('url', ''),
-    )
+
+    # OpenRouter 사용 시 base_url 변경
+    if OPENROUTER_KEY and not OPENAI_KEY:
+        import openai
+        client = openai.OpenAI(
+            api_key=OPENROUTER_KEY,
+            base_url="https://openrouter.ai/api/v1"
+        )
+        model = "deepseek/deepseek-v4-flash"
+    else:
+        import openai
+        client = openai.OpenAI(api_key=OPENAI_KEY)
+        model = "gpt-4o-mini"
+
+    # URL 크롤링
+    crawled = crawl_tool_page(tool_info.get('url', ''))
+    crawled_desc = crawled.get('description', '') or tool_info.get('description', '')[:500]
+    crawled_pricing = crawled.get('pricing_text', '')[:1000]
+
+    prompt = USER_PROMPT_TEMPLATE \
+        .replace('__NAME__', tool_info.get('name', '')) \
+        .replace('__DESCRIPTION__', crawled_desc) \
+        .replace('__PRICE__', tool_info.get('price', '')) \
+        .replace('__URL__', tool_info.get('url', '')) \
+        .replace('__CRAWLED_PRICING__', crawled_pricing)
     try:
         resp = client.chat.completions.create(
-            model="gpt-4o-mini",
+            model=model,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
                 {"role": "user", "content": prompt}
             ],
-            max_completion_tokens=2000,
+            max_completion_tokens=3000,
             temperature=0.5,
         )
         raw = resp.choices[0].message.content.strip()
@@ -864,6 +1008,25 @@ def validate_tool_url(url: str) -> bool:
     return True
 
 
+def _extract_price_label(text: str, has_free: bool) -> str:
+    """문장 형태의 가격에서 짧은 라벨 추출 (예: '프리미엄 플랜 5만원/월' → '무료/월 5만원')"""
+    if not text:
+        return '유료'
+    # 무료인 경우
+    if '없음' in text or '무료' in text:
+        return '무료'
+    # 사용량 기반
+    if '사용량' in text:
+        return '사용량 기반'
+    # 가격 숫자 + 단위 패턴 추출
+    m = re.search(r'(\d[\d,.]*\s*(?:만원|원|달러|€|\$))', text)
+    if m:
+        price_unit = m.group(1).strip()
+        prefix = '무료/월 ' if has_free else '월 '
+        return f'{prefix}{price_unit}'
+    return '유료'
+
+
 def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> str:
     """MD frontmatter 생성 (description은 humanize 적용)"""
     desc = humanize_md(meta.get('description_kr', ''))
@@ -871,6 +1034,17 @@ def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> 
     tags_str = json.dumps(meta.get('tags', []), ensure_ascii=False)
     use_cases_str = json.dumps(meta.get('useCases', []), ensure_ascii=False)
     today = datetime.now().strftime('%Y-%m-%d')
+    # price: price_kr (구 구조) 또는 pricing.free/paid에서 생성
+    price_str = meta.get('price_kr', '')
+    if not price_str:
+        pricing = meta.get('tool_detail', {}).get('pricing', {})
+        if isinstance(pricing, dict):
+            paid = pricing.get('paid', '')
+            free_text = pricing.get('free', '')
+            if paid:
+                price_str = _extract_price_label(paid, bool(free_text))
+            else:
+                price_str = pricing.get('free', '무료')
     # url: tool_info에서 전달받은 원본 URL 우선, 없으면 meta에서
     url = tool_url or meta.get('url', '')
     # URL 검증
@@ -881,7 +1055,7 @@ def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> 
 name: "{name}"
 description: "{desc}"
 category: "{meta.get('category', '')}"
-price: "{meta.get('price_kr', '')}"
+price: "{price_str}"
 koreanSupport: {str(meta.get('koreanSupport', False)).lower()}
 difficulty: "{meta.get('difficulty', '')}"
 url: "{url}"
@@ -896,62 +1070,109 @@ updated: "{today}"
 
 
 def build_body(meta: dict) -> str:
-    """MD 본문 생성 (tool_detail 구조)"""
+    """MD 본문 생성 (tool_detail 구조) — 새 JSON 구조 지원"""
     td = meta.get('tool_detail', {})
     lines = []
 
     # 한줄 요약
-    lines.append('## 한줄 요약')
-    lines.append('')
-    lines.append(td.get('summary', ''))
-    lines.append('')
+    summary = td.get('summary', '')
+    if summary:
+        lines.append('## 한줄 요약')
+        lines.append('')
+        lines.append(summary)
+        lines.append('')
 
-    # 핵심 기능
-    lines.append('## 핵심 기능')
-    lines.append('')
-    for feat in td.get('features', []):
-        lines.append(f'- {feat}')
-    lines.append('')
+    # 핵심 기능 (객체 배열 또는 문자열 배열 지원)
+    features = td.get('features', [])
+    if features:
+        lines.append('## 핵심 기능')
+        lines.append('')
+        for feat in features:
+            if isinstance(feat, dict):
+                lines.append(f'- **{feat.get("name", "")}**: {feat.get("desc", "")}')
+            else:
+                lines.append(f'- {feat}')
+        lines.append('')
 
-    # 가격 정책
-    lines.append('## 가격 정책')
-    lines.append('')
-    lines.append(td.get('price_detail', ''))
-    lines.append('')
+    # 가격 정책 (새 구조: pricing / 구 구조: price_detail)
+    pricing = td.get('pricing', td.get('price_detail', ''))
+    if pricing:
+        lines.append('## 가격 정책')
+        lines.append('')
+        if isinstance(pricing, dict):
+            if pricing.get('free'):
+                lines.append(f'- **무료 플랜**: {pricing["free"]}')
+            if pricing.get('paid'):
+                lines.append(f'- **유료 플랜**: {pricing["paid"]}')
+            if pricing.get('tip'):
+                lines.append(f'\n비용 절약 팁: {pricing["tip"]}')
+        elif isinstance(pricing, str):
+            lines.append(pricing)
+        lines.append('')
 
     # 한국어 지원
-    lines.append('## 한국어 지원')
-    lines.append('')
-    lines.append(td.get('korean_detail', ''))
-    lines.append('')
+    korean = td.get('korean_detail', '')
+    if korean:
+        lines.append('## 한국어 지원')
+        lines.append('')
+        lines.append(korean)
+        lines.append('')
 
     # 이런 분에게 추천
-    lines.append('## 이런 분에게 추천합니다')
-    lines.append('')
-    lines.append(td.get('recommend_for', ''))
-    lines.append('')
+    recommend = td.get('recommend_for', '')
+    if recommend:
+        lines.append('## 이런 분에게 추천합니다')
+        lines.append('')
+        lines.append(recommend)
+        lines.append('')
 
-    # 실제 활용 예시
-    lines.append('## 실제 활용 예시')
-    lines.append('')
-    for ex in td.get('real_examples', []):
-        lines.append(f'- {ex}')
-    lines.append('')
+    # 실제 활용 예시 (객체 배열 또는 문자열 배열 지원)
+    examples = td.get('real_examples', [])
+    if examples:
+        lines.append('## 실제 활용 예시')
+        lines.append('')
+        for ex in examples:
+            if isinstance(ex, dict):
+                lines.append(f'- **{ex.get("persona", "")}**: {ex.get("example", "")}')
+            else:
+                lines.append(f'- {ex}')
+        lines.append('')
 
-    # 유사 툴과 비교
-    lines.append('## 유사 툴과 비교')
-    lines.append('')
-    lines.append(td.get('vs_similar', ''))
-    lines.append('')
+    # 유사 툴과 비교 (새 구조: 객체 / 구 구조: 문자열)
+    vs = td.get('vs_similar', '')
+    if vs:
+        lines.append('## 유사 툴과 비교')
+        lines.append('')
+        if isinstance(vs, dict):
+            pros = vs.get('pros', [])
+            cons = vs.get('cons', [])
+            best = vs.get('best_for', '')
+            if pros:
+                lines.append('**장점:**')
+                for p in pros:
+                    lines.append(f'- {p}')
+                lines.append('')
+            if cons:
+                lines.append('**단점:**')
+                for c in cons:
+                    lines.append(f'- {c}')
+                lines.append('')
+            if best:
+                lines.append(f'**이런 분에게 가장 적합합니다:** {best}')
+        elif isinstance(vs, str):
+            lines.append(vs)
+        lines.append('')
 
     # 자주 묻는 질문
-    lines.append('## 자주 묻는 질문')
-    lines.append('')
-    for faq in td.get('faq', []):
-        lines.append(f'**{faq.get("q", "")}**')
+    faqs = td.get('faq', [])
+    if faqs:
+        lines.append('## 자주 묻는 질문')
         lines.append('')
-        lines.append(f'{faq.get("a", "")}')
-        lines.append('')
+        for faq in faqs:
+            lines.append(f'**{faq.get("q", "")}**')
+            lines.append('')
+            lines.append(f'{faq.get("a", "")}')
+            lines.append('')
 
     return '\n'.join(lines)
 

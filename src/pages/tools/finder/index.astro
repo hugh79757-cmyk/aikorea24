@@ -139,12 +139,12 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
     const answers = [];
 
     const catMap = {
-      writing: ['글쓰기·챗봇', '글쓰기·생산성'],
-      image: ['이미지', '디자인', '이미지·유틸'],
-      coding: ['코딩'],
-      video: ['영상', '음성', '음악'],
-      search: ['검색', '데이터·리서치'],
-      data: ['데이터·리서치', '프레젠테이션', '생산성'],
+      writing: ['글쓰기·챗봇', '업무·생산성'],
+      image: ['이미지 생성', '디자인'],
+      coding: ['코딩·개발'],
+      video: ['영상·음성'],
+      search: ['업무·생산성'],
+      data: ['업무·생산성'],
     };
 
     function score(tool, ans) {
