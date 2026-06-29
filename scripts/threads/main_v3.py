@@ -75,10 +75,13 @@ def validate_final_cards(cards):
         if len(common) >= len(prev_words) * 0.85 and len(common) >= len(curr_words) * 0.85:
             issues.append(f'카드 {i}, {i+1}: 내용 유사 ({(len(common)/len(prev_words)*100):.0f}% 중복)')
 
-    ENG_LEAK_RE = re.compile(r'[가-힣][A-Za-z]|[A-Za-z][가-힣]')
+    # 한글+영어 붙어쓰기 검증 (3글자 이상 영어가 한글에 붙은 경우만 — AI, CEO 등 2자 약어와 고유명사+조사는 허용)
+    ENG_LEAK_RE = re.compile(r'(?<![A-Z])[가-힣][A-Za-z]{3,}|[A-Za-z]{3,}[가-힣](?![가-힣])')
     for i, card in enumerate(cards):
         for line in card.split('\n'):
-            if ENG_LEAK_RE.search(line):
+            # 고유명사(대문자 시작) + 조사 패턴은 허용
+            clean = re.sub(r'\b[A-Z][a-z]+[의을를이가과는]', '', line)
+            if ENG_LEAK_RE.search(clean):
                 issues.append(f'카드 {i+1}: 한글+영어 붙어쓰기 ("{line.strip()[:50]}")')
                 break
 

@@ -536,3 +536,67 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 7개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  GitHub Awesome AI Tools: 10개 (주간 업데이트)
+  Futurepedia: 0개
+  Hugging Face Papers: 4개
+  TopAI.tools: 6개 수집
+  총 24개 (중복 제거 후)
+수집 완료: 24개
+기존 툴: 106개 (슬러그), 106개 (이름)
+  중복 스킵: Folio AI
+  중복 스킵: Gemini Spark
+  중복 스킵: AI Slide Editor by CubeOne
+  중복 스킵: Brain² by ClickUp
+  중복 스킵: Oxlo.ai
+  중복 스킵: Tough Tongue AI for Sales
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+  중복 스킵: Moonbeam
+  중복 스킵: copy.ai
+  중복 스킵: Anyword
+  중복 스킵: Gemini Spark
+신규 툴: 7개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (7건) ---
+  크롤링 성공: https://discode.ai/?ref=producthunt... (설명 100자)
+  크롤링 성공: https://topai.tools/t/meev-ai... (설명 149자)
+  크롤링 성공: https://huggingface.co/papers... (설명 38자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/meev-ai.md
+  ✅ Meev AI → meev-ai.md
+  크롤링 성공: https://topai.tools/t/cantina-com... (설명 147자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/discode-ai.md
+  ✅ discode.ai → discode-ai.md
+  크롤링 성공: https://topai.tools/t/lexidesk-ai... (설명 151자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/in-context-world-modeling-for-robotic-control.md
+  ✅ In-Context World Modeling for Robotic Control → in-context-world-modeling-for-robotic-control.md
+  크롤링 성공: https://topai.tools/t/cognee-ai... (설명 151자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/cantina-ai.md
+  ✅ Cantina AI → cantina-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/lexidesk-ai.md
+  ✅ LexiDesk AI → lexidesk-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/cognee-ai.md
+  ✅ Cognee AI → cognee-ai.md
+  크롤링 성공: https://topai.tools/t/arena42-ai... (설명 149자)
+  ⚠️ Arena42 AI — AI tell 점수 18 (임계 15 초과), 후처리 강화
+     후처리 후: 14
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/arena42-ai.md
+  ✅ Arena42 AI → arena42-ai.md
+
+==================================================
+처리 완료: 7/24개 생성 (36.3초)
+  git commit: [main 25741ee] feat: AI 툴 7개 추가 (2026-06-29)
+ 33 files changed, 2808 insertions(+), 415 deletions(-)
+ create mode 100644 "public/images/coinbase-\354\204\234\352\265\254-\354\227\260\352\265\254\354\2
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

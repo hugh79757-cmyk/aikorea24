@@ -35,23 +35,48 @@ def load_style_examples():
     except Exception:
         return ''
 
-def build_system_prompt():
+FORMAT_LABELS = {
+    'A': '실험형 (5개 카드 + 링크)',
+    'B': '구조 분석형 (8개 카드)',
+    'C': 'X 쓰레드형 (7개 트윗)',
+    'D': '펀치 브리핑형 (5개 카드)',
+}
+
+FORMAT_CARD_COUNTS = {
+    'A': 5,
+    'B': 8,
+    'C': 7,
+    'D': 5,
+}
+
+FORMAT_CARD_COUNT_TOLERANCE = {
+    'A': (4, 6),
+    'B': (7, 9),
+    'C': (6, 8),
+    'D': (4, 6),
+}
+
+def build_system_prompt_D():
+    """형식 D — 펀치 브리핑형 (5개 카드, 현행 유지)"""
     examples = load_style_examples()
     return f"""당신은 AI 뉴스를 Threads용 5개 카드 쓰레드로 만드는 작가다.
 
-[최우선 — 리듬 규칙, 반드시 지킬 것]
-- 각 카드 내부는 2~3개의 짧은 줄이 하나의 stanza(연)를 이룬다.
+[최우선 — 리듬 + 밀도 규칙, 반드시 지킬 것]
+- 각 카드 내부는 3~5개의 줄이 하나의 stanza(연)를 이룬다.
 - stanza와 stanza 사이는 반드시 한 줄 비운다. (빈 줄이 리듬을 만든다)
-- 한 줄은 15~25자 내외. 절대 30자 넘기지 말 것.
+- 한 줄은 25~40자 내외. 정보를 압축해서 담되 자연스럽게 읽혀야 함.
 - 줄바꿈 위치: 의미 단위(조사, 연결어미, 쉼표)가 끝나는 곳.
+- 각 카드는 반드시 450~500자로 채운다. 정보 밀도가 곧 품질이다. 절대 400자 아래로 내려가지 말 것.
 
 stanza 예시 (반드시 이 구조를 따라라):
-  머스크의 우주 회사 스페이스X가           ← 1개 줄 (21자)
-  AI 회사들한테 컴퓨터를 빌려주고           ← 1개 줄 (22자)
-  한 달에 3조 넘게 받기로 했음.             ← 1개 줄 (22자)
-                                              ← 빈 줄 (stanza 구분)
-  이 돈을 1년치로 환산하면                  ← 새 stanza 시작
-  작년 스페이스X 전체 매출을 넘음.          ← stanza 끝
+  머스크의 우주 회사 스페이스X가 AI 회사들한테       ← 1개 줄 (34자)
+  컴퓨터를 빌려주고 한 달에 3조 넘게 받기로 했음.     ← 1개 줄 (33자)
+  이 돈을 1년치로 환산하면 작년 스페이스X 전체        ← 1개 줄 (33자)
+  매출을 넘는 규모임.                                 ← 1개 줄 (20자)
+                                                        ← 빈 줄 (stanza 구분)
+  스페이스X가 상장한 지 4일 만에 맺은 계약.           ← 새 stanza 시작
+  상대는 로켓 회사가 아니라 MIT 출신 4명이 만든       ← stanza 내부
+  AI 코딩 스타트업 Cursor였음.                        ← stanza 끝
 
 [문체 원칙]
 - 반말체. "~임", "~했음", "~있음", "~아님". "~합니다" "~입니다" 절대 금지.
@@ -137,14 +162,14 @@ stanza 예시 (반드시 이 구조를 따라라):
 - "이걸 역사적 맥락에서 보면."
 
 5번 카드(마무리) 시작 덩어리 예시:
-- "정리하면 이럼."
-- "결론적으로 이렇게 볼 수 있음."
-- "한 문장으로 요약하면."
 - "이 모든 사실이 말하는 것은."
 - "결국 이 질문으로 돌아옴."
 - "핵심은 하나임."
-- "이 이야기가 주는 교훈은."
 - "결론은 명확함."
+- "결국 핵심은 이거였음."
+- "이 이야기의 끝은."
+- "되돌아보면 결국."
+- "이 모든 상황의 본질은."
 
 [어투 규칙 — 반드시 준수]
 - 모든 문장은 반말 종결형으로 작성한다.
@@ -161,10 +186,10 @@ stanza 예시 (반드시 이 구조를 따라라):
 - 절대 금지: ~이다. / ~한다. / ~됩니다. / ~합니다. 로 끝나는 문장
 
 [밀도 기준]
-1번 카드: 500자 이내.
-2~5번 카드: 500자 이내. 원문의 숫자, 인물, 인용문, 날짜를 모두 꺼내서 채운다.
+각 카드는 300~500자. Threads API 제한이 500자이므로 초과 금지.
+원문의 숫자, 인물, 인용문, 날짜, 통계를 모두 꺼내서 채운다.
 정보가 부족하면 기사 본문에서 더 파낸다. 없는 내용은 절대 만들지 않는다.
-- 각 카드는 반드시 500자를 초과하지 않도록 작성하라. Threads API 제한.
+- 300자 미만은 정보 부족으로 간주한다. 반드시 300자 이상 채울 것.
 
 [피치 메타데이터 — 출력 금지]
 - "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을
@@ -180,6 +205,143 @@ stanza 예시 (반드시 이 구조를 따라라):
   예: "표준으로" → "표준으로" 그대로 (절대 "표준"으로 자르지 말 것)
   예: "예산을" → "예산을" 그대로 (절대 "예산"으로 자르지 말 것)
 - 기사에 없는 단어로 대체하지 말 것"""
+
+def build_system_prompt_A():
+    """형식 A — 실험형 간소 프롬프트 (5개 카드 + 링크)"""
+    return f"""당신은 AI 뉴스를 Threads용 5개 카드 쓰레드로 만드는 작가다.
+
+[핵심]
+- 기사를 5개 카드로 요약할 것. 카드는 --- 로 구분.
+- 6번째 링크 카드는 직접 작성하지 말 것 (자동 추가됨).
+- 각 카드는 누가 읽어도 이해되도록 독립적으로 쓸 것.
+- 목표: 사람들이 공감하거나 오래 읽게 만드는 것.
+
+[카드 구조]
+각 카드는 3~7줄. 한 줄 15~35자. 줄바꿈이 곧 리듬.
+한 문장이 끝난 뒤에는 반드시 한 줄 여백을 넣을 것. 여백이 리듬을 만든다.
+
+[룰 — 4개만]
+1. 각 카드는 반드시 250자 이상. 정보 밀도를 높여라.
+2. 반말체만 쓸 것 (~임, ~했음, ~있음)
+3. 없는 사실 만들지 말 것
+4. 기사에 없는 연도를 쓰지 말 것
+
+형식이나 문체에 대한 다른 제한은 없음. 내용에 맞게 자유롭게 써라."""
+
+
+def build_system_prompt_B():
+    """형식 B — 구조 분석형 (8개 카드)"""
+    examples = load_style_examples()
+    return f"""당신은 AI 뉴스를 Threads용 8개 카드 쓰레드로 만드는 작가다. 형식은 구조 분석형.
+
+[핵심 구조 — 8개 카드, --- 로 구분, 번호 없음, 각 카드 450~500자]
+각 카드는 반드시 2~3개의 stanza(3~5줄 + 빈 줄)로 구성된다. 한 줄 25~40자. 각 카드가 450자를 넘지 않으면 정보 부족으로 간주된다.
+
+1번 카드 (훅): 반드시 충격적인 숫자 하나 또는 "왜?"라는 질문으로 시작. 첫 줄에서 독자의 시선을 잡을 것. 2~3 stanza로 구성, 다음 순서: (1) 충격적 사실/질문 (2) 배경/맥락 (3) 이 글을 읽어야 하는 이유.
+2번 카드 (데이터): 주장을 뒷받침하는 구체적인 숫자와 통계만 나열. 단위와 비교 기준을 반드시 포함. 2~3 stanza.
+3번 카드 (구조): 주제의 물리적·구조적 조건을 설명. "어떤 곳이냐"로 시작. 2~3 stanza.
+4번 카드 (비교): 비슷한 문제를 다른 플레이어들은 어떻게 겪었는지 대조. 갈등·비용·시간을 구체적으로 서술. 마지막 문장은 대조 결과를 자연스럽게 요약. 2~3 stanza.
+5번 카드 (글로벌 vs 한국): 같은 문제를 미국/해외와 한국이 정반대로 풀고 있음을 보여줌. 인상적인 마무리 한 문장. 2~3 stanza.
+6번 카드 (반전): 반전 문장으로 시작. 지금까지 긍정적으로 묘사한 대상의 약점이나 해결 과제를 솔직하게 제시. 해법이 나오는 중이라는 희망 뉘앙스로 마무리. 2~3 stanza.
+7번 카드 (압축): 앞서 나온 모든 핵심 숫자와 논리를 짧게 압축. 한 줄씩 끊어서 리듬감 있게.
+8번 카드 (결론): 1번 카드의 질문에 답하는 형식. 이유를 3~4개 항목으로 정리. 마지막 인상적인 문장으로 마무리.
+
+[절대 금지]
+- 각 카드 앞에 (훅), (데이터), (구조), (비교), (반전), (압축), (결론) 등 어떤 레이블도 출력하지 말 것.
+- 카드 번호(1/8, 2/8, N / 8 등)를 카드 앞에 절대 붙이지 말 것.
+
+""" + _FORMAT_COMMON_RULES(examples)
+
+
+def build_system_prompt_C():
+    """형식 C — X 쓰레드형 (7개 트윗)"""
+    examples = load_style_examples()
+    return f"""당신은 AI 뉴스를 Threads용 7개 트윗 쓰레드로 만드는 작가다. 형식은 X 쓰레드형.
+
+[핵심 구조 — 7개 트윗, --- 로 구분, 번호 없음, 각 트윗 450~500자]
+각 트윗은 반드시 2~3개의 stanza(3~5줄 + 빈 줄)로 구성된다.
+1 (훅): 반드시 한 줄로 시작. 15자 이내. 숫자, 반전, 역설 중 하나를 사용. 두 번째 줄에서 1~2문장으로 확장.
+2 (팩트): 핵심 수치나 스펙을 리스트로 정리. 최대 4개 항목. 마지막 줄에 "이게 왜 중요한가"를 한 문장으로 예고.
+3 (배경): "왜 지금 이게 나왔는가"를 2~3문장으로 설명. 마지막 문장은 브릿지 문장.
+4 (구조 분석): 걸모습과 실제의 차이를 드러내는 구조 활용. 마지막 문장은 브릿지 문장.
+5 (반전): 긍정이면 위험/한계를, 부정이면 의외의 기회를 다룸. 독자가 "그건 생각 못 했다"고 느끼게 만들 것. 마지막 문장은 브릿지 문장.
+6 (한국 연결): 한국 시장, 한국 기업, 한국 직장인 관점으로 구체화. 추상적 주장 금지. 반드시 구체적 상황이나 수치로.
+7 (마무리): 핵심 질문 한 문장. 답을 주지 않는다. 독자가 생각하게 만드는 것이 목표. 빈 줄 후 해시태그 5개 이내 (본문과 분리).
+
+[절대 금지]
+- 카드 번호(1/7, 2/7, N/7 등)를 카드 앞에 절대 붙이지 말 것.
+
+""" + _FORMAT_COMMON_RULES(examples)
+
+
+def _FORMAT_COMMON_RULES(examples):
+    """모든 형식에 공통으로 적용되는 문체/숫자/어투 규칙"""
+    return f"""
+[공통 문체 규칙 — 모든 형식 적용]
+- 문장은 간결하게. 단, 필요한 정보는 모두 포함.
+- 숫자는 반드시 포함. 비교 가능한 단위로 환산.
+- 전문 용어는 쓰되, 바로 다음 줄에 쉬운 말로 풀어줄 것.
+- 마지막 문장은 항상 선언형. "~임", "~했음", "~없음" 등 단정적 종결로 끝낼 것. 같은 표현을 반복하지 말 것.
+
+[톤 & 스타일]
+- 이모지 없이, 담담하고 냉정한 분석가 톤 유지.
+- "~로 분석됩니다", "~의미입니다" 같은 분석가 어휘 금지.
+- 직접 인용은 절대 다듬지 말고 날것으로.
+- 형용사 최소화. 사실 진술만.
+- 각 카드는 "정보 하나 + 인물의 행동/감정 하나"로 구성.
+
+[절대 금지]
+- "정리하면", "교훈은" 같은 프레임.
+- 감탄사, 과장 표현 ("놀랍게도", "충격적으로").
+- 볼드, 이탤릭 등 서식.
+- 중복 표현, 동어 반복.
+- 해시태그와 본문 혼용 (해시태그는 마지막 트윗 끝에 빈 줄 후 별도 배치).
+
+[연도 원칙 — 최우선]
+- 기사 본문에 명시된 날짜/연도만 사용하라.
+- 본문에 연도가 없으면 쓰레드에도 연도를 표시하지 마라.
+- 기사의 발행일(입력일)을 사건 발생일로 사용하지 마라.
+- **절대 금지: 기사 본문에 없는 연도(예: 2000, 2023 등)를 쓰레드 본문에 포함하지 마라. 이 규칙을 위반하면 쓰레드 전체가 폐기된다.**
+
+[숫자 원칙 — 최우선]
+- 기사 본문에 있는 숫자는 전부 꺼내서 써라.
+- 달러 금액, 퍼센트, 날짜, 사용자 수, 성장률 — 기사에 있으면 반드시 포함.
+- 기사에 숫자가 없으면 "수십억", "대규모", "많은" 같은 뭉뚱그린 표현 금지.
+- 숫자 없는 사실은 쓰지 마라.
+
+[어투 규칙 — 반드시 준수]
+- 모든 문장은 반말 종결형.
+  * ~이다 → ~임. / ~한다 → ~함. / ~했다 → ~했음.
+  * ~된다 → ~됨. / ~있다 → ~있음. / ~없다 → ~없음.
+- 인용 표현: "~라고 밝혔다" → "~라고 밝혔음."
+- 절대 금지: ~입니다. / ~합니다. / ~이다. / ~한다.
+- 예외: 훅(첫 카드 첫 문장)은 어투 규칙 적용하지 않아도 됨.
+
+[밀도 기준 — 중요]
+- 각 카드는 반드시 450~500자. 절대 400자 아래로 내려가지 말 것.
+- Threads API 제한(500자)에 최대한 가깝게 채워라. 정보가 부족하면 기사 본문에서 추가 숫자/인용/맥락을 더 파낼 것.
+- 400자 미만은 정보 부족이다. 기사 본문을 다시 읽고 추가 정보를 찾아서 채워라.
+
+[피치 메타데이터 — 출력 금지]
+- "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을 쓰레드 본문에 절대 포함하지 마라.
+- 쓰레드는 기사 본문의 사실만으로 구성하고, 메타데이터는 참고용으로만 사용하라.
+
+[참고 문체 예시 — 아래 스타일로 작성할 것]
+{examples}
+
+[키워드 규칙]
+- 기사 원문에 등장하는 단어를 그대로 사용할 것.
+- 단어를 임의로 줄이거나 변형하지 말 것.
+- 기사에 없는 단어로 대체하지 말 것."""
+
+
+FORMAT_BUILDERS = {
+    'A': build_system_prompt_A,
+    'B': build_system_prompt_B,
+    'C': build_system_prompt_C,
+    'D': build_system_prompt_D,
+}
+
 
 def log_failed_crawl(url, source, title, status):
     """크롤링 실패한 URL을 failed_crawls.json에 기록"""
@@ -391,8 +553,8 @@ def humanize_cards(cards):
             log(f'  ⚠️ humanize: 결과 부족 ({len(fixed)}<{len(cards)}) → 원본 유지')
             return cards
 
-        # 카드 수 검증: 5~6개 허용
-        if len(fixed) < 5 or len(fixed) > 6:
+        # 카드 수 검증: 5~9개 허용 (A/B/C/D 형식별 카드 수 대응)
+        if len(fixed) < 5 or len(fixed) > 9:
             log(f'  ⚠️ humanize: 카드 수 불일치 ({len(fixed)}) → 원본 유지')
             return cards
 
@@ -404,6 +566,29 @@ def humanize_cards(cards):
         log(f'  ⚠️ humanize 오류: {e} → 원본 유지')
         return cards
 
+
+def _cleanup_source_attribution(cards):
+    """카드 끝에 붙은 '출처: ...' 패턴 제거
+    LLM이 format B prompt에서 '출처 언급'을 지시받아 생성한 텍스트 정리
+    """
+    cleaned = []
+    for card in cards:
+        lines = card.split('\n')
+        # 출처 패턴 제거
+        clean_lines = [l for l in lines if not re.match(r'^\s*출처\s*[:：]', l)]
+        # 쓰레드 시작/끝 instruction leakage 제거
+        clean_lines = [l for l in clean_lines if '쓰레드 시작' not in l and '쓰레드 끝' not in l]
+        # --- 구분자 leakage 제거 (본문 내 ---)
+        clean_lines = [l for l in clean_lines if not re.match(r'^-{3,}\s*$', l)]
+        if clean_lines:
+            cleaned.append('\n'.join(clean_lines).strip())
+    # 명백한 연도 환각(2000) 제거
+    cleaned = [re.sub(r'(?<!\d)2000(?!\d)(?!년)', '', card) for card in cleaned]
+    # 남아있는 카드 번호(N / N, N/N) 제거 — 시스템 프롬프트 무시하고 LLM이 붙인 경우
+    cleaned = [re.sub(r'^\s*\d+\s*/\s*\d+\s*\n?', '', card) for card in cleaned]
+    # 빈 줄만 남은 경우 정리
+    cleaned = [re.sub(r'\n{3,}', '\n\n', card).strip() for card in cleaned]
+    return cleaned
 
 def _clean_english_leakage(text):
     """한국어 텍스트에 영어가 공백 없이 붙어있는 leakage 제거 (정규식)
@@ -475,7 +660,13 @@ def fix_cards(cards):
                 changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
                 log(f'  🔧 오류 수정(MiMo): {changed}/{len(cards)}개 카드 수정됨')
                 return fixed
-            log(f'  ⚠️ 수정 후 카드 수 불일치: {len(fixed)}≠{len(cards)} → 원본 유지')
+            if len(fixed) > len(cards):
+                log(f'  ⚠️ 수정 후 카드 수 초과: {len(fixed)}>{len(cards)} → {len(cards)}개로 자름')
+                fixed = fixed[:len(cards)]
+                changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
+                log(f'  🔧 오류 수정(자름): {changed}/{len(cards)}개 카드 수정됨')
+                return fixed
+            log(f'  ⚠️ 수정 후 카드 수 부족: {len(fixed)}<{len(cards)} → 원본 유지')
         else:
             log(f'  ⚠️ 수정 실패 → 원본 유지')
     except Exception as e:
@@ -483,9 +674,21 @@ def fix_cards(cards):
     return cards
 
 
-def write_thread(pitch, all_articles):
-    """피치 + 관련 기사 → 쓰레드 조각 리스트"""
+def write_thread(pitch, all_articles, format_choice=None):
+    """피치 + 관련 기사 → 쓰레드 조각 리스트
+    format_choice: 'A', 'B', 'C', 'D' 중 하나. None이면 format_selector로 결정.
+    """
     from v3.model_router import chat_completion
+    from v3.format_selector import select_format
+
+    if not format_choice or format_choice not in ('A', 'B', 'C', 'D'):
+        fmt, reason = select_format(pitch, all_articles)
+        format_choice = fmt
+        log(f'  🎯 형식 선택: {format_choice} — {FORMAT_LABELS[format_choice]} ({reason})')
+    else:
+        log(f'  🎯 형식 지정: {format_choice} — {FORMAT_LABELS[format_choice]}')
+
+    system_prompt = FORMAT_BUILDERS[format_choice]()
 
     # pitcher가 이미 크롤링한 본문이 있는 경우 — 재크롤링 없이 사용
     pre_crawled_body = pitch.get('crawled_body', '')
@@ -575,7 +778,11 @@ def write_thread(pitch, all_articles):
     # 연도 검증용: 기사 본문 텍스트 (메타데이터 제외)
     article_body_text = ' '.join(article_bodies)
 
-    user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
+    expected_count = FORMAT_CARD_COUNTS[format_choice]
+
+    # format별 user prompt 구성
+    if format_choice == 'A':
+        user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요 (5개 카드).
 
 === 피치 ===
 첫 문장 (변경 금지): {pitch['hook']}
@@ -584,47 +791,107 @@ def write_thread(pitch, all_articles):
 감정: {pitch.get('emotion','')}
 체감 단위: {pitch.get('comparison_unit','')}
 
+=== 형식 ===
+{FORMAT_LABELS[format_choice]}
+
 === 관련 기사 ===
 {related_text}
 
 === 요구사항 ===
-1. 1번 카드: 반드시 예시 구조 그대로. 첫 stanza punch → 빈 줄 → 둘째 stanza 숫자/날짜 포함 → ---는 둘째 stanza 뒤. 절대 첫 stanza 뒤에 ---를 넣지 말 것.
+1. 기사를 5개 카드로 요약. 카드는 --- 로 구분. 6번째 링크 카드는 쓰지 말 것.
+2. 각 카드는 3~7줄. 한 줄 15~35자. 줄바꿈이 리듬. 한 문장 끝나면 한 줄 여백. 각 카드 250자 이상.
+3. 각 카드는 독립적으로 읽혀도 이해되어야 함.
+4. 반말체(~임, ~했음, ~있음). ~합니다 금지.
+5. 기사 본문의 숫자는 전부 꺼내서 써라. 없는 사실 만들지 말 것.
+6. 기사에 없는 연도를 쓰지 말 것.
+7. 카드 번호 절대 금지. 번호 없이 바로 내용 시작.
+8. 목표: 사람들이 공감하거나 오래 읽게 만드는 것."""
+    elif format_choice == 'D':
+        user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
+
+=== 피치 ===
+첫 문장 (변경 금지): {pitch['hook']}
+핵심 이야기: {pitch.get('narrative','')}
+반전: {pitch.get('twist','')}
+감정: {pitch.get('emotion','')}
+체감 단위: {pitch.get('comparison_unit','')}
+
+=== 형식 ===
+{FORMAT_LABELS[format_choice]}
+
+=== 관련 기사 ===
+{related_text}
+
+=== 요구사항 ===
+1. 1번 카드: 첫 stanza punch → 빈 줄 → 둘째 stanza 숫자/날짜 포함 → ---는 둘째 stanza 뒤.
+2. 각 카드는 --- 로 구분. 각 카드는 반드시 450~500자로 채울 것. 400자 미만 금지. 정보가 부족하면 기사 본문에서 추가로 추출하라.
+3. 반말체(~임, ~했음, ~있음). ~합니다 금지.
+4. 기사 본문의 숫자는 전부 꺼내서 써라. "많은", "대규모" 금지.
+5. 한 줄 25~40자. 정보를 압축해서 담되 자연스럽게 읽혀야 함.
+6. 3~5줄마다 반드시 빈 줄 하나. stanza 구조 유지. 빈 줄이 리듬을 만든다.
+7. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블은 절대 포함하지 마라.
+8. ## 카드 수 (절대)
+   - 반드시 5개만 작성하라. 4개도 안 되고 6개도 안 된다. 오직 5개.
+   - 카드 번호는 붙이지 않는다."""
+    else:
+        card_num_rules = {
+            'B': '- 카드 번호 절대 금지. 카드 레이블(훅/데이터/구조)도 출력 금지.',
+            'C': '- 카드 번호 절대 금지. 번호 없이 바로 내용 시작.',
+        }
+        user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
+
+=== 피치 ===
+첫 문장 (변경 금지): {pitch['hook']}
+핵심 이야기: {pitch.get('narrative','')}
+반전: {pitch.get('twist','')}
+감정: {pitch.get('emotion','')}
+체감 단위: {pitch.get('comparison_unit','')}
+
+=== 형식 ===
+{FORMAT_LABELS[format_choice]}
+
+=== 관련 기사 ===
+{related_text}
+
+=== 요구사항 ===
+1. 각 카드는 --- 로 구분. 각 카드는 반드시 450~500자로 채울 것. 400자 미만 금지. 정보가 부족하면 기사 본문에서 추가로 추출하라.
 2. 반말체(~임, ~했음, ~있음). ~합니다 금지.
-3. 각 카드는 --- 로 구분. 각 카드는 반드시 500자 이내로 작성할 것. 500자 초과 시 API가 거부함.
-4. ## 카드 수 규칙 (절대 준수)
-   - 카드는 반드시 5개만 작성한다.
-   - 4개도 안 되고 6개도 안 된다. 오직 5개.
-   - 카드 구분은 반드시 "---" (하이픈 3개) 만 사용한다.
-   - "---" 는 카드와 카드 사이에만 사용한다. 카드 내부에는 사용하지 않는다.
-5. 기사 본문의 숫자(금액, 퍼센트, 날짜, 사용자 수)를 반드시 추출해서 써라. "많은", "대규모" 금지.
-6. [필수] 한 줄 15~25자. 30자 넘는 줄 금지.
-7. [필수] 2~3줄마다 반드시 빈 줄 하나. stanza 구조 절대 유지.
-8. [필수] 반말체(~임/~했음/~있음/~됨). ~이다/~한다/~됩니다 전면 금지.
-9. "핵심 이야기:", "반전:", "감정:", "체감 단위:" 등의 피치 메타데이터 레이블을
-   쓰레드에 절대 포함하지 마라."""
+3. 기사 본문의 숫자는 전부 꺼내서 써라. "많은", "대규모" 금지.
+4. 한 줄 25~40자. 정보를 압축해서 담되 자연스럽게 읽혀야 함.
+5. 3~5줄마다 반드시 빈 줄 하나. 빈 줄이 리듬을 만든다.
+6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블은 절대 포함하지 마라.
+7. ## 카드 수 (절대)
+   - 반드시 {expected_count}개만 작성하라.
+   {card_num_rules.get(format_choice, '')}
+   - 카드 구분은 반드시 "---" (하이픈 3개) 만 사용한다."""
 
     max_attempts = 2
     for attempt in range(max_attempts):
         try:
             log(f'  쓰레드 생성 중...')
             content = chat_completion(
-                system_prompt=build_system_prompt(),
+                system_prompt=system_prompt,
                 messages=[{'role': 'user', 'content': user_prompt}],
                 temperature=0.7,
                 max_tokens=5000,
             )
             if not content:
                 raise Exception('모델 응답 없음')
-            cards = parse_cards(content)
-            if len(cards) > 5:
-                log(f'  카드 {len(cards)}개 → 5개로 조정')
-                cards = cards[:5]
+            # raw 응답에서 instruction leakage 사전 제거 (parse 전)
+            content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
+            content = re.sub(r'^---+\s*\n', '', content)
+            content = re.sub(r'\n---+\s*$', '', content)
+            cards = parse_cards(content, format_choice)
+            if len(cards) > expected_count:
+                log(f'  카드 {len(cards)}개 → {expected_count}개로 조정')
+                cards = cards[:expected_count]
             cards = fix_cards(cards)
+            cards = _cleanup_source_attribution(cards)
 
-            if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
+            if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
                 # pitcher 크롤링 URL 우선, 없으면 article_ids[0] 링크 사용
                 primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
-                cards = assemble_final(cards, related, primary_url, crawled_urls)
+                cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
                 log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
                 return cards
             else:
@@ -636,33 +903,44 @@ def write_thread(pitch, all_articles):
     try:
         log(f'  쓰레드 생성 중... (fallback)')
         content = chat_completion(
-            system_prompt=build_system_prompt(),
+            system_prompt=system_prompt,
             messages=[{'role': 'user', 'content': user_prompt}],
             temperature=0.7,
             max_tokens=5000,
         )
         if not content:
             raise Exception('모델 응답 없음')
-        cards = parse_cards(content)
+        # raw 응답에서 instruction leakage 사전 제거 (parse 전)
+        content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
+        content = re.sub(r'^---+\s*\n', '', content)
+        content = re.sub(r'\n---+\s*$', '', content)
+        cards = parse_cards(content, format_choice)
+        if len(cards) > expected_count:
+            log(f'  카드 {len(cards)}개 → {expected_count}개로 조정 (fallback)')
+            cards = cards[:expected_count]
         cards = fix_cards(cards)
-        if validate_cards(cards, pitch) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
+        cards = _cleanup_source_attribution(cards)
+        if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
             primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
-            cards = assemble_final(cards, related, primary_url, crawled_urls)
+            cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
             log(f'  ✅ 쓰레드: {len(cards)}개 조각 (fallback 성공)')
             return cards
     except Exception as e:
         log(f'  ⚠️ fallback 오류: {e}')
 
     log('  ❌ 전체 재시도 실패')
+    if format_choice != 'D':
+        log('  🔄 형식 D로 대체 시도...')
+        return write_thread(pitch, all_articles, format_choice='D')
     return []
 
-def parse_cards(text):
+def parse_cards(text, format_choice='D'):
     """---로 구분된 조각 파싱"""
     cards = [c.strip() for c in text.split('---') if c.strip()]
     if not cards:
         return cards
-    # 1번 카드가 3줄 이하(punch stanza만)면 2번 카드의 첫 stanza를 1번으로 병합
-    if len(cards) > 1:
+    # D형식만 stanza merge 적용 (punch + context가 분리되는 패턴)
+    if format_choice == 'D' and len(cards) > 1:
         c1_lines = [l for l in cards[0].split('\n') if l.strip()]
         if len(c1_lines) <= 3:
             c2_lines = [l for l in cards[1].split('\n') if l.strip()]
@@ -674,10 +952,11 @@ def parse_cards(text):
                 cards = [c.strip() for c in cards if c.strip()]
     return cards
 
-def validate_cards(cards, pitch):
-    """기본 검증 (카드 수 5~6개 허용 + hook 근사 일치)"""
-    if not cards or len(cards) < 5 or len(cards) > 6:
-        log(f'    → 카드 수 불일치: {len(cards)}개 (허용: 5~6개)')
+def validate_cards(cards, pitch, format_choice='D'):
+    """기본 검증 (format별 카드 수 + hook 근사 일치)"""
+    lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 6))
+    if not cards or len(cards) < lo or len(cards) > hi:
+        log(f'    → 카드 수 불일치: {len(cards)}개 (허용: {lo}~{hi}개, 형식: {format_choice})')
         return False
     # 첫 줄이 비어있지 않은지 확인
     first_line = cards[0].strip().split('\n')[0].strip()
@@ -803,7 +1082,7 @@ def validate_keywords(cards, article_body_text):
     log(f'    → 키워드 검증 통과: 핵심 단어 {len(keywords)}개 매칭')
     return True
 
-def assemble_final(cards, articles, primary_url=None, crawled_urls=None):
+def assemble_final(cards, articles, primary_url=None, crawled_urls=None, format_choice='D'):
     """대표 URL 1개를 마지막 카드 끝에 추가 (카드 수 변경 없음)
     crawled_urls: 크롤링 성공한 URL 목록
     articles: D1 DB 기사 객체 리스트 (related) — fallback용

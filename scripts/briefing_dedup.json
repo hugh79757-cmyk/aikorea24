@@ -328,6 +328,158 @@
           "date": "2026-06-29"
         }
       ]
+    },
+    {
+      "date": "2026-06-29",
+      "briefing_id": 141,
+      "articles": [
+        {
+          "id": "36325",
+          "title": "한국, AI 시대 승리를 위해 8800억 달러에 배팅",
+          "original_title": "",
+          "description": "한국은 AI 시대에 대한 최대의 배팅을 했습니다. 이 계획은 향후 10년 동안 반도체, 데이터 센터 및 로봇에 최소 8800억 달러를 투자하도록 약속합니다. 이는 한국의 AI 투자 중 가장 대담한 결정이며, 정부는 이제 속도가 생존의 유일한 방법이라고 강조합니다.",
+          "link": "https://thenextweb.com/news/south-korea-ai-investment-880bn-chips-data-centres",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36326",
+          "title": "DeepSeek의 74억 달러 모금은 중국의 AI 자금 급증의 한 증상",
+          "original_title": "",
+          "description": "중국의 AI 부문은 자금이 부족하지 않습니다. 오히려 미국의 압박이 더 많은 자금을 유입시키고 있습니다. DeepSeek는 이 패턴을 가장 잘 보여줍니다. 항저우 실험실은 500억 달러 이상의 가치 평가를 받으며 중국 스타트업의 가장 큰 첫 자금 조달을 완료했습니다.",
+          "link": "https://thenextweb.com/news/china-ai-funding-surge-deepseek-unicorns",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36327",
+          "title": "OpenAI, 1조 달러를 위해 2027년까지 IPO 연기할 가능성",
+          "original_title": "",
+          "description": "인내에는 대가가 따르며, 누군가는 그 대가를 치르고 있습니다. OpenAI는 2027년까지 상장하지 않을 수 있습니다. 이 기다림은 더 큰 숫자를 확보하기 위한 것입니다.",
+          "link": "https://thenextweb.com/news/openai-ipo-delay-2027-altman-1-trillion",
+          "entities": [
+            "IPO",
+            "OpenAI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36330",
+          "title": "아부다비에서 이몰라까지: A2RL, 이탈리아 상징적인 트랙에서 역사적인 자율 레이싱 데뷔로",
+          "original_title": "",
+          "description": "A2RL의 첫 번째 국제 경주는 완전 자율 레이싱카를 위한 세계 최초의 국제 챔피언십이 되고자 하는 큰 발걸음을 내딛습니다. 2025 시즌부터 TUM, PoliMOVE, Unimore, Kinetiz, Constructor 등 5개 팀이 세계 최초의 자율 레이스에 참가할 예정입니다.",
+          "link": "https://www.cityam.com/from-abu-dhabi-to-imola-a2rl-expands-internationally-with-historic-autonomous-racing-debut-at-iconic-italian-track/",
+          "entities": [
+            "TUM",
+            "Constructor",
+            "Unimore",
+            "PoliMOVE",
+            "Kinetiz",
+            "A2RL"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36332",
+          "title": "AI 붐이 새로운 위협과 충돌하다: 심각한 기상 변화",
+          "original_title": "",
+          "description": "폭염과 심각한 기상 변화는 AI 데이터 센터에 대한 위험을 증가시키고 있습니다. 이는 전력망 부담부터 보험료 및 수리 비용 상승까지 다양한 영향을 미치고 있습니다.",
+          "link": "https://www.cnbc.com/2026/06/29/ai-data-centers-heatwave-climate-risk-weather.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-29"
+        },
+        {
+          "id": "36306",
+          "title": "한때 사이버 공격은 높은 기술력을 요구했다. 그러나 A.I.가 그것을 바꿔놓고 있다 | 브",
+          "original_title": "",
+          "description": "현대의 A.I. 시스템은 본질적으로 사람들에게 해로운 일을 하는 데 도움을 주는 보편적인 조언자입니다. 우리는 방어를 위해 A.I.를 활용해야 할 필요가 있습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jun/29/cyber-attacks-ai",
+          "entities": [
+            "A.I.",
+            "A.I"
+          ],
+          "date": "2026-06-29"
+        }
+      ]
+    },
+    {
+      "date": "2026-06-30",
+      "briefing_id": 142,
+      "articles": [
+        {
+          "id": "36564",
+          "title": "eClerx, 2026 Gartner® 디지털 선반 분석 시장 가이드에서 대표 공급업체로 ",
+          "original_title": "",
+          "description": "eClerx Services Ltd는 AI 기반 분석, 디지털 운영, 자동화 및 비즈니스 프로세스 관리의 글로벌 리더로서, eClerx Market360이 Gartner®의 디지털 선반 분석 시장 가이드에서 대표 공급업체로 인정받았다고 발표했습니다.",
+          "link": "https://www.cityam.com/eclerx-recognized-as-a-representative-vendor-in-2026-gartner-market-guide-for-digital-shelf-analytics/",
+          "entities": [
+            "AI",
+            "Gartner",
+            "Services"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36569",
+          "title": "알파벳 주식, 다우 데뷔에서 4% 상승하지만 기술 대기업은 주요 AI 질문에 직면",
+          "original_title": "",
+          "description": "알파벳의 주가는 월요일 다우에 합류하면서 상승했지만, 이 회사는 여전히 꾸준한 주가 압박에 직면해 있습니다. 블루칩 이정표를 맞이했지만 여러 의문들이 남아 있습니다.",
+          "link": "https://www.cnbc.com/2026/06/29/alphabet-googl-stock-dow-average.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36445",
+          "title": "제미니의 개인화된 AI 이미지 생성, 이제 미국 사용자에게 무료 제공",
+          "original_title": "",
+          "description": "구글은 제미니의 개인화된 AI 이미지 생성을 미국의 적격 무료 사용자에게 확대하며, 챗봇이 사용자의 관심사와 연결된 구글 앱의 데이터를 기반으로 이미지를 생성할 수 있게 합니다.",
+          "link": "https://techcrunch.com/2026/06/29/geminis-personalized-ai-image-generation-is-now-free-for-u-s-users/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36563",
+          "title": "독일, 헬싱에게 차세대 공중전의 두뇌를 구축하길 원한다",
+          "original_title": "",
+          "description": "독일은 미래의 공중전을 위해 자신만의 두뇌를 조용히 구축하고 있으며, 헬싱에게 소프트웨어 코드를 작성해달라고 요청하고 있습니다. 이 계약은 약 5억 8천만 유로 규모로, 전투기, 드론, 위성 및 센서를 연결하는 소프트웨어가 포함됩니다.",
+          "link": "https://thenextweb.com/news/helsing-germany-cfsn-combat-cloud-contract",
+          "entities": [],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36585",
+          "title": "유럽의 AI와 일자리에 대한 '모두에게 해당되는' 정답은 없다, OpenAI 수석 경제학자",
+          "original_title": "",
+          "description": "독일은 AI로 인해 위험에 처한 일자리가 가장 많고, 룩셈부르크는 AI와 함께 실제로 성장할 수 있는 직업의 비율이 가장 높다는 새로운 보고서가 발표되었다.",
+          "link": "https://www.politico.eu/article/no-one-size-fits-all-answer-ai-europe-openai-economist/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36482",
+          "title": "삼성과 SK 하이닉스, AI 수요 증가로 메모리 가격 폭등해 5900억 달러 칩 투자 계획",
+          "original_title": "",
+          "description": "삼성과 SK 하이닉스는 한국 정부의 지원을 받아 AI 데이터 센터 수요가 급증함에 따라 5900억 달러를 새로운 칩 공장과 패키징 센터에 투자할 계획입니다.",
+          "link": "https://the-decoder.com/samsung-and-sk-hynix-plan-590-billion-chip-investment-as-ai-demand-sends-memory-prices-soaring/",
+          "entities": [
+            "AI",
+            "SK"
+          ],
+          "date": "2026-06-30"
+        }
+      ]
     }
   ],
   "articles": [
@@ -623,6 +775,146 @@
       "link": "https://www.theguardian.com/us-news/2026/jun/28/wealth-tax-super-rich",
       "entities": [],
       "date": "2026-06-29"
+    },
+    {
+      "id": "36325",
+      "title": "한국, AI 시대 승리를 위해 8800억 달러에 배팅",
+      "original_title": "",
+      "description": "한국은 AI 시대에 대한 최대의 배팅을 했습니다. 이 계획은 향후 10년 동안 반도체, 데이터 센터 및 로봇에 최소 8800억 달러를 투자하도록 약속합니다. 이는 한국의 AI 투자 중 가장 대담한 결정이며, 정부는 이제 속도가 생존의 유일한 방법이라고 강조합니다.",
+      "link": "https://thenextweb.com/news/south-korea-ai-investment-880bn-chips-data-centres",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36326",
+      "title": "DeepSeek의 74억 달러 모금은 중국의 AI 자금 급증의 한 증상",
+      "original_title": "",
+      "description": "중국의 AI 부문은 자금이 부족하지 않습니다. 오히려 미국의 압박이 더 많은 자금을 유입시키고 있습니다. DeepSeek는 이 패턴을 가장 잘 보여줍니다. 항저우 실험실은 500억 달러 이상의 가치 평가를 받으며 중국 스타트업의 가장 큰 첫 자금 조달을 완료했습니다.",
+      "link": "https://thenextweb.com/news/china-ai-funding-surge-deepseek-unicorns",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36327",
+      "title": "OpenAI, 1조 달러를 위해 2027년까지 IPO 연기할 가능성",
+      "original_title": "",
+      "description": "인내에는 대가가 따르며, 누군가는 그 대가를 치르고 있습니다. OpenAI는 2027년까지 상장하지 않을 수 있습니다. 이 기다림은 더 큰 숫자를 확보하기 위한 것입니다.",
+      "link": "https://thenextweb.com/news/openai-ipo-delay-2027-altman-1-trillion",
+      "entities": [
+        "IPO",
+        "OpenAI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36330",
+      "title": "아부다비에서 이몰라까지: A2RL, 이탈리아 상징적인 트랙에서 역사적인 자율 레이싱 데뷔로",
+      "original_title": "",
+      "description": "A2RL의 첫 번째 국제 경주는 완전 자율 레이싱카를 위한 세계 최초의 국제 챔피언십이 되고자 하는 큰 발걸음을 내딛습니다. 2025 시즌부터 TUM, PoliMOVE, Unimore, Kinetiz, Constructor 등 5개 팀이 세계 최초의 자율 레이스에 참가할 예정입니다.",
+      "link": "https://www.cityam.com/from-abu-dhabi-to-imola-a2rl-expands-internationally-with-historic-autonomous-racing-debut-at-iconic-italian-track/",
+      "entities": [
+        "TUM",
+        "Constructor",
+        "Unimore",
+        "PoliMOVE",
+        "Kinetiz",
+        "A2RL"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36332",
+      "title": "AI 붐이 새로운 위협과 충돌하다: 심각한 기상 변화",
+      "original_title": "",
+      "description": "폭염과 심각한 기상 변화는 AI 데이터 센터에 대한 위험을 증가시키고 있습니다. 이는 전력망 부담부터 보험료 및 수리 비용 상승까지 다양한 영향을 미치고 있습니다.",
+      "link": "https://www.cnbc.com/2026/06/29/ai-data-centers-heatwave-climate-risk-weather.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36306",
+      "title": "한때 사이버 공격은 높은 기술력을 요구했다. 그러나 A.I.가 그것을 바꿔놓고 있다 | 브",
+      "original_title": "",
+      "description": "현대의 A.I. 시스템은 본질적으로 사람들에게 해로운 일을 하는 데 도움을 주는 보편적인 조언자입니다. 우리는 방어를 위해 A.I.를 활용해야 할 필요가 있습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jun/29/cyber-attacks-ai",
+      "entities": [
+        "A.I.",
+        "A.I"
+      ],
+      "date": "2026-06-29"
+    },
+    {
+      "id": "36564",
+      "title": "eClerx, 2026 Gartner® 디지털 선반 분석 시장 가이드에서 대표 공급업체로 ",
+      "original_title": "",
+      "description": "eClerx Services Ltd는 AI 기반 분석, 디지털 운영, 자동화 및 비즈니스 프로세스 관리의 글로벌 리더로서, eClerx Market360이 Gartner®의 디지털 선반 분석 시장 가이드에서 대표 공급업체로 인정받았다고 발표했습니다.",
+      "link": "https://www.cityam.com/eclerx-recognized-as-a-representative-vendor-in-2026-gartner-market-guide-for-digital-shelf-analytics/",
+      "entities": [
+        "AI",
+        "Gartner",
+        "Services"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36569",
+      "title": "알파벳 주식, 다우 데뷔에서 4% 상승하지만 기술 대기업은 주요 AI 질문에 직면",
+      "original_title": "",
+      "description": "알파벳의 주가는 월요일 다우에 합류하면서 상승했지만, 이 회사는 여전히 꾸준한 주가 압박에 직면해 있습니다. 블루칩 이정표를 맞이했지만 여러 의문들이 남아 있습니다.",
+      "link": "https://www.cnbc.com/2026/06/29/alphabet-googl-stock-dow-average.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36445",
+      "title": "제미니의 개인화된 AI 이미지 생성, 이제 미국 사용자에게 무료 제공",
+      "original_title": "",
+      "description": "구글은 제미니의 개인화된 AI 이미지 생성을 미국의 적격 무료 사용자에게 확대하며, 챗봇이 사용자의 관심사와 연결된 구글 앱의 데이터를 기반으로 이미지를 생성할 수 있게 합니다.",
+      "link": "https://techcrunch.com/2026/06/29/geminis-personalized-ai-image-generation-is-now-free-for-u-s-users/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36563",
+      "title": "독일, 헬싱에게 차세대 공중전의 두뇌를 구축하길 원한다",
+      "original_title": "",
+      "description": "독일은 미래의 공중전을 위해 자신만의 두뇌를 조용히 구축하고 있으며, 헬싱에게 소프트웨어 코드를 작성해달라고 요청하고 있습니다. 이 계약은 약 5억 8천만 유로 규모로, 전투기, 드론, 위성 및 센서를 연결하는 소프트웨어가 포함됩니다.",
+      "link": "https://thenextweb.com/news/helsing-germany-cfsn-combat-cloud-contract",
+      "entities": [],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36585",
+      "title": "유럽의 AI와 일자리에 대한 '모두에게 해당되는' 정답은 없다, OpenAI 수석 경제학자",
+      "original_title": "",
+      "description": "독일은 AI로 인해 위험에 처한 일자리가 가장 많고, 룩셈부르크는 AI와 함께 실제로 성장할 수 있는 직업의 비율이 가장 높다는 새로운 보고서가 발표되었다.",
+      "link": "https://www.politico.eu/article/no-one-size-fits-all-answer-ai-europe-openai-economist/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36482",
+      "title": "삼성과 SK 하이닉스, AI 수요 증가로 메모리 가격 폭등해 5900억 달러 칩 투자 계획",
+      "original_title": "",
+      "description": "삼성과 SK 하이닉스는 한국 정부의 지원을 받아 AI 데이터 센터 수요가 급증함에 따라 5900억 달러를 새로운 칩 공장과 패키징 센터에 투자할 계획입니다.",
+      "link": "https://the-decoder.com/samsung-and-sk-hynix-plan-590-billion-chip-investment-as-ai-demand-sends-memory-prices-soaring/",
+      "entities": [
+        "AI",
+        "SK"
+      ],
+      "date": "2026-06-30"
     }
   ]
 }

@@ -249,7 +249,7 @@ def get_articles():
                FROM news n
                JOIN briefing_items bi ON bi.news_id = n.id
                JOIN briefings b ON b.id = bi.briefing_id
-              WHERE b.date = '{today}' AND b.status = 'published'
+              WHERE b.date LIKE '{today}%' AND b.status = 'published'
                {source_filter}
               GROUP BY n.id ORDER BY bi.sort_order ASC"""
     rows = d1_query(sql1)

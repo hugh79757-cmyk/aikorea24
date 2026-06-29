@@ -2,7 +2,7 @@
 
 ## 개요
 
-AI 뉴스 기사 100개를 분석하여 5개 카드 Threads 쓰레드로 자동 생성·발행한다.
+AI 뉴스 기사 50~100개를 분석하여 기사 특성에 맞는 **4가지 형식(A/B/C/D)** 중 하나로 Threads 쓰레드를 자동 생성·발행한다.
 2시간 간격 스케줄러로 동작하며, 중복 주제를 방지하고 발행 이력을 관리한다.
 
 ---
@@ -15,14 +15,21 @@ scripts/threads/
 ├── db_reader.py             # D1 데이터베이스 → 기사 풀 로드 + URL 검증 함수
 ├── publisher.py             # Threads API 연동 발행
 ├── posted.json              # 발행 이력 저장소
+├── prompts/                 # 형식별 글쓰기 프롬프트 (참고 문서)
+│   ├── prompt_00_selector.md   # A/B/C/D 형식 선택 기준
+│   ├── prompt_A_storytelling.md
+│   ├── prompt_B_analysis.md
+│   ├── prompt_C_brief.md
+│   └── prompt_rules.md
 ├── logs/                    # 실행 로그 + 초안 보관
 │   ├── drafts/              # GPT 생성물 원본 저장
 │   └── YYYY-MM-DD.log      # 일별 실행 로그
 └── v3/
-    ├── model_router.py      # 모델 라우팅 (DiffusionGemma → GPT-4o-mini)
+    ├── model_router.py      # 모델 라우팅 (GPT-4o-mini 1순위 → DeepSeek → MiMo)
     ├── narrative_pitcher.py # 기사 → 피치 (이야기 발견)
+    ├── format_selector.py   # 피치 → A/B/C/D 형식 자동 선택
     ├── pitch_evaluator.py   # 피치 품질 평가 게이트
-    ├── writer_v3.py         # 피치 → 쓰레드 작성 (핵심)
+    ├── writer_v3.py         # 피치 → 쓰레드 작성 (핵심, ABCD 4형식)
     └── style_examples.md    # 문체 예시 (3개)
 ```
 
@@ -36,28 +43,35 @@ D1 Database
     ▼
 [1] db_reader.get_articles()
     │   기사 풀 (posted.json 기준 중복 제외)
-    │   1순위: 오늘 브리핑 → 2순위: 최근 7일 → 3순위: 이전
+    │   1순위: 오늘 브리핑 (b.date LIKE '{today}%') → 2순위: 최근 7일 → 3순위: 이전
     │   pub_date RFC 2822 / YYYY-MM-DD 변환 후 필터링
     │
     ▼
 [2] narrative_pitcher.get_pitches()
-    │   100개 기사 → description 원문 (크롤링 없음)
-    │   → DiffusionGemma → 3개 피치 JSON
-    │   ↓ hook[:8]+article_ids 중복 검사 + entity overlap (pitch_history 대조)
-    │   ↓ pitch_evaluator.filter_pitches() 0~6점 평가 (4개 기준)
+    │   50~100개 기사 → description 원문 (크롤링 없음)
+    │   → GPT-4o-mini → 3개 피치 JSON
+    │   ↓ hook+article_ids 중복 검사 + entity overlap (pitch_history 대조)
+    │   ↓ pitch_evaluator.filter_pitches() 0~5점 평가 (3개 기준)
     │     (방향 정확성 0점이면 강제 불통과)
-    │   ↓ posted.json pitch_history 저장
+    │   ↓ TOP 1 피치 → 원문 크롤링 → 피치 재생성 (crawled_body 저장)
     │
     ▼
-[3] writer_v3.write_thread()
+[2.5] format_selector.select_format()
+    │   피치 hook/narrative/twist/emotion + 기사 메타데이터 분석
+    │   → GPT-4o-mini 1회 호출 → A/B/C/D 중 최적 형식 판단
+    │   ↓ 실패 시 D(기본값) 반환
+    │   ↓ format_choice + reason을 writer에 전달
+    │
+    ▼
+[3] writer_v3.write_thread(format_choice)
+    │   FORMAT_BUILDERS[format_choice]() → 형식별 system prompt 로드
     │   피치 연결 기사 URL → fetch_article_body() 원문 크롤링
     │   ├─ 크롤링 성공 → crawled_urls에 URL 기록
     │   ├─ 크롤링 실패 → description fallback
     │   ├─ 모든 기사 크롤링 실패 → 스킵
-    │   build_system_prompt() + user_prompt → 모델 추론
-    │   ↑ DiffusionGemma 2회 시도 → 실패 시 GPT-4o-mini 1회
+    │   format별 user_prompt → GPT-4o-mini 추론
     │   ↓ fix_cards() — GPT-4o-mini로 글자 단위 오류 수정
-    │   ↓ validate_cards() + validate_year() + validate_keywords()
+    │   ↓ validate_cards(format_choice) + validate_year() + validate_keywords()
     │   ↓ assemble_final(crawled_urls) — 크롤링 성공 URL 중 선택
     │   ↓ save_draft() 로그/초안 저장
     │
@@ -129,7 +143,7 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 - 100개 기사를 가볍게 스캔하여 어떤 이야기로 글을 쓸지 선별하는 단계이므로 description으로 충분
 - 실제 원문 크롤링은 writer_v3.py에서 선정된 1개 기사에 대해서만 수행
 
-**모델:** DiffusionGemma 1순위 → GPT-4o-mini fallback (model_router 경유)
+**모델:** GPT-4o-mini (model_router 경유)
 **max_articles:** 500개 (2026-06-21: 100→500)
 
 **중복 방지 (2026-06-25: 3단계):**
@@ -160,7 +174,7 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 
 - **3점 이상**만 통과
 - **방향 정확성이 0점이면 총점과 무관하게 강제 불통과** (`direction_ok=false`)
-- 평가 모델: **GPT-4o-mini** (DiffusionGemma는 방향 판별에 취약하여 2026-06-20 변경)
+- 평가 모델: **GPT-4o-mini**
 - 출력 형식에 `"direction_ok": true/false` 필드 포함
 - JSON 파싱 실패 시 fallback: hook 존재 시 통과
 
@@ -169,18 +183,58 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 모델 호출을 중앙 라우팅한다.
 
 ```
-1순위: NVIDIA DiffusionGemma 26B (build.nvidia.com, google/diffusiongemma-26b-a4b-it)
-2순위: OpenAI GPT-4o-mini (fallback)
+1순위: GPT-4o-mini (OpenAI)
+2순위: DeepSeek V4 Flash (fallback)
+3순위: MiMo v2.5 (fallback)
 
 호출 함수: chat_completion(messages, system_prompt, temperature, max_tokens, model_override)
 ```
 
-- `model_override='openai'` → DiffusionGemma 스킵하고 바로 GPT-4o-mini
+- `model_override` 옵션: `'mimo'` → OpenAI+DeepSeek 건너뛰고 MiMo, `'openai'` → DeepSeek부터 시작
 - 각 API 키는 `.env`에서 로드
 
-### 5. writer_v3.py — 핵심
+### 5. format_selector.py — 형식 선택 (2026-06-29 신규)
 
-피치와 원문 크롤링 데이터를 바탕으로 5개 카드 쓰레드를 생성한다.
+피치와 기사 메타데이터를 분석하여 A/B/C/D 중 가장 적합한 형식을 GPT-4o-mini 1회 호출로 판단한다.
+
+**선택 기준:**
+
+| 형식 | 조건 | 카드 수 |
+|------|------|--------|
+| **A** 탐사형 스토리텔링 | 인물의 구체적 행동 + 감정 + 갈등 (모두 필요) | 8 |
+| **B** 구조 분석형 | 데이터/정책/산업 구조 분석 중심 | 8 |
+| **C** X 쓰레드형 | 짧은 브리핑/속보/단순 발표 | 7 |
+| **D** 펀치 브리핑형 | 위 셋 중 명확한 것이 없거나 혼합 (기본값) | 5 |
+
+**우선순위:** A > B > C > D
+**실패 시:** D 반환
+
+### 6. writer_v3.py — 핵심 (ABCD 4형식)
+
+피치와 원문 크롤링 데이터를 바탕으로 **선택된 형식(A/B/C/D)에 맞는 쓰레드**를 생성한다.
+
+**형식별 구조:**
+
+| 형식 | 카드 수 | 번호 체계 | 핵심 구조 |
+|------|--------|----------|---------|
+| **A** | 8 | `N / 8` | 장면→공개→타임라인(3장)→한국연결→압축→결론 |
+| **B** | 8 | `N / 8` | 훅→데이터→구조→비교→글로벌vs한국→반전→압축→결론 |
+| **C** | 7 | `N/7` | 훅(15자)→팩트→배경→구조분석→반전→한국연결→마무리 |
+| **D** | 5 | 없음 | punch stanza→빈 줄→숫자/날짜 stanza (3~5줄 구조) |
+
+**공통 system prompt (`_FORMAT_COMMON_RULES()`):**
+- 반말체 (~임/~했음/~있음/~됨), ~합니다 금지
+- 숫자 반드시 포함, 추상어 금지
+- 연도 원칙: 기사 본문 연도만 사용
+- 각 카드 300~500자 밀도 유지
+- 피치 메타데이터 레이블 출력 금지
+- 문체 예시: style_examples.md 동적 로드
+
+**형식 D system prompt 추가 규칙:**
+- 한 줄 25~40자. stanza(3~5줄) + 빈 줄 리듬
+- 대비 구조: "A였음. 그런데 B."
+- 전환 시그널: 카드별 시작 표현 풀 (26개)
+- 키워드 원문 그대로 사용
 
 **원문 크롤링 (`fetch_article_body(url, title='')` → `(body_text, actual_url)`):**
 - `requests` + `BeautifulSoup(lxml)`
@@ -199,47 +253,42 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 - 최종 `🔗` URL은 `assemble_final()`에서 `validate_link()`로 재검증 후 추가
 - 깨진 URL이 Threads에 발행되는 것을 방지
 
-**프롬프트 구조:**
+**프롬프트 구조 (형식별 분기):**
 
 ```
-build_system_prompt()
-├── [문체 원칙] — 반말체, 한 줄 하나의 정보, stanza 리듬, 형용사 금지
+build_system_prompt_A() / B() / C() / D() — format_choice에 따라 분기
+├── _FORMAT_COMMON_RULES() — 공통 문체/숫자/연도/어투/문체예시
+├── [카드 구조] — 형식별 카드 수, 역할, 번호 체계 (A:8 / B:8 / C:7 / D:5)
+├── [stanza 리듬] — 한 줄 25~40자, 3~5줄 stanza + 빈 줄 (D/B)
 ├── [대비 구조] — "A였음. 그런데 B." 대비 패턴, 개행 분리
-├── [연도 원칙] — 본문 연도만 사용, 발행일 금지
-├── [숫자 원칙] — 기사 숫자 전부 추출, 추상어 금지
-├── [숫자-설명 쌍] — 숫자 먼저→의미 풀어쓰기, 덤핑 금지
-├── [카드 구조] — 5개 카드 역할 정의
-├── [전환 시그널] — 카드별 시작 표현 26개, 같은 표현 연속 금지
-├── [어투 규칙] — ~임/~했음/~있음/~됨
-├── [밀도 기준] — 각 카드 500자 이내
-├── [참고 문체 예시] — style_examples.md 동적 로드
+├── [전환 시그널] — 카드별 시작 표현 풀, 연속 2회 금지
+├── [밀도 기준] — 각 카드 300~500자 (2026-06-29 강화)
 └── [키워드 규칙] — 원문 단어 그대로 사용, 변형 금지
 
-user_prompt
+user_prompt (형식별)
 ├── 피치 정보 (hook/narrative/twist 등)
 ├── 관련 기사 원문 (크롤링 결과)
-└── 요구사항 (hook 고정, 반말체, 5카드, 숫자 추출, stanza 구조)
+└── 형식별 요구사항 (카드 수 + 번호 체계 + stanza 규칙 + 밀도)
 ```
 
 **추론 실패 처리:**
-- DiffusionGemma **2회** 시도 (2026-06-21: 5→2, 첫 글자 드랍 빠른 fallback)
-- 전부 실패 시 GPT-4o-mini 1회 fallback
-- 각 시도마다 `validate_cards()` + `validate_year()` + `validate_keywords()` 검증 (3단계):
-  - 카드 수 5개 이상
+- GPT-4o-mini **2회** 시도
+- 전부 실패 시 DeepSeek/MiMo fallback
+- 각 시도마다 `validate_cards(format_choice)` + `validate_year()` + `validate_keywords()` 검증 (3단계):
+  - 카드 수가 해당 형식의 기대치와 일치 (tolerance ±1)
   - 첫 번째 카드가 pitch hook[:8] 포함
   - 기사 본문 연도와 쓰레드 연도 일치 (할루시네이션 방지)
-  - 기사 핵심 키워드의 음절 잘림/누락 탐지 (2026-06-22 추가)
+  - 기사 핵심 키워드의 음절 잘림/누락 탐지
 - 쓰레드 생성 성공 후 **fix_cards() 1-pass**: GPT-4o-mini로 글자 단위 오류 수정
-  - DiffusionGemma 대신 GPT-4o-mini 사용 (자기 오류 자기 수정 구조적 문제 해결)
   - 첫 글자/숫자 생략 복구, 한국어 음절 생략 복구 ("데팅→데이팅"), 중복/특수문자 정리
 - 실패 시 상세 로그 출력
 
-**출력 포맷팅:**
+**출력 포맷팅 (형식별):**
 - `---` 로 카드 구분
-- 각 문장은 독립 라인, 2~3개 문장이 하나의 stanza(연), 연 사이는 빈 줄
-- 대비 구조: "A였음. 그런데 B." — A와 B 사이 개행
-- 숫자-설명 쌍: 숫자 먼저→다음 줄에 의미 풀어씀, 쌍과 쌍 사이 빈 줄
-- 마지막 카드는 선언형 마무리 (여운)
+- **A/B:** 번호 체계 `N / 8`, stanza 구조, 마지막 카드 선언형 마무리
+- **C:** 번호 체계 `N/7` (공백 없음), 간결한 stanza
+- **D:** 번호 없음, punch stanza + 빈 줄 + 숫자/날짜 stanza (3~5줄)
+- 모든 형식: 300~500자 카드 밀도, stanza(3~5줄) + 빈 줄 리듬
 - `assemble_final(cards, related, primary_url, crawled_urls)`: 대표 URL 1개를 `🔗 url` 형식으로 마지막에 추가
   - `crawled_urls` 우선 — 크롤링 성공한 URL에서만 선택 (재검증 불필요)
   - `primary_url`이 `crawled_urls`에 있으면 해당 URL 사용
@@ -324,32 +373,70 @@ extract_title_entities(original_title_full) & extract_title_entities(posted_ot) 
 
 ---
 
-## 카드 구조 설계 (5카드)
+## 형식별 카드 구조 설계
 
-| 카드 | 역할 | 전환 시그널 예시 |
-|------|------|----------------|
-| 1 | **사건 충돌** — hook으로 시작, 날짜/장소/숫자로 구체화. "어?" | (hook 고정) |
-| 2 | **A면 사실** — 숫자, 인용, 연구 결과 | (내용 직접 전개) |
-| 3 | **반전** — 예상 못 한 제3의 사실, 방향 전환 | "근데 여기서부터가 진짜임." / "여기서 반전이 있음." / "표면과 다른 진실이 있음." |
-| 4 | **확장** — 큰 맥락, 질문 던지기 | "이 현상을 더 큰 그림으로 보면." / "왜 하필 지금이냐." / "이게 왜 중요한가." |
-| 5 | **여운** — 선언형 마무리, 반전 | "정리하면 이럼." / "핵심은 하나임." / "결국 이 질문으로 돌아옴." |
+### A — 탐사형 스토리텔링 (8카드)
 
-각 카드는 **500자 이내**. 각 문장은 **최대 2줄** (한 줄 하나의 사실). 2~3개 문장이 하나의 **stanza**를 이루고, stanza 사이는 빈 줄.
+| 카드 | 역할 |
+|------|------|
+| 1 | **장면** — hook 고정, 날짜/장소/인물 구체화 |
+| 2 | **공개** — 무엇이 일어났는지 밝힘 |
+| 3~5 | **타임라인** — 사건을 시간 순서로 전개, 예상 범했다가 깨기 |
+| 6 | **한국 연결** — 한국 독자에게 의미 연결 |
+| 7 | **압축** — 핵심을 한 줄 압축, 정리 |
+| 8 | **결론** — 여운, 반전, 질문으로 마무리 |
+
+### B — 구조 분석형 (8카드)
+
+| 카드 | 역할 |
+|------|------|
+| 1 | **훅** — hook 고정, 충격적인 숫자나 대비로 시작 |
+| 2 | **데이터** — 핵심 데이터/수치, 숫자-설명 쌍 |
+| 3 | **구조** — 시장/기술 구조 설명 |
+| 4 | **비교** — 예전 vs 지금, 기대 vs 실제 |
+| 5 | **글로벌 vs 한국** — 해외 상황과 한국의 차이 |
+| 6 | **반전** — 예상 밖의 결과, 함정 |
+| 7 | **압축** — 전체 흐름 요약 |
+| 8 | **결론** — 선언형 마무리 |
+
+### C — X 쓰레드형 (7트윗)
+
+| 카드 | 역할 |
+|------|------|
+| 1 | **훅** — 15자 내외, 호기심 유발, 번호 없음 |
+| 2 | **팩트** — 가장 중요한 사실 하나 |
+| 3 | **배경** — 왜 이 일이 발생했는가 |
+| 4 | **구조 분석** — 흐름/메커니즘 |
+| 5 | **반전** — 의외의 포인트 |
+| 6 | **한국 연결** — 이게 한국에 주는 의미 |
+| 7 | **마무리** — 한 줄 결론 |
+
+### D — 펀치 브리핑형 (5카드, 기본값)
+
+| 카드 | 역할 |
+|------|------|
+| 1 | **펀치** — hook으로 시작, 구체적 사실 펀치 |
+| 2 | **숫자/데이터 확장** — 기사 핵심 숫자를 stanza로 |
+| 3 | **반전 or 심화** — 예상 못 한 사실, 날짜 구체화 |
+| 4 | **연결/확장** — 더 큰 맥락, 한국 연결 |
+| 5 | **여운** — 선언형 마무리, 질문 던지기 |
+
+**밀도:** 각 카드 **300~500자**. **Stanza 구조:** 한 줄 25~40자, 3~5줄이 하나의 stanza, stanza 사이는 빈 줄.
 
 ---
 
 ## 문체 원칙
 
 - **반말체**: "~임", "~했음", "~있음", "~아님". "~합니다" 절대 금지.
-- **한 줄 하나의 사실**: 문장은 짧게, 최대 2줄. 길게 늘어쓰기 금지.
-- **Stanza 리듬**: 2~3개 문장이 하나의 의미 덩어리(연). 연 사이는 반드시 빈 줄.
+- **Stanza 리듬**: 3~5줄이 하나의 의미 덩어리(연). 연 사이는 반드시 빈 줄. 한 줄 25~40자.
 - **대비 구조**: "A였음. 그런데 B." 패턴. 대비 항목은 개행으로 분리.
 - **숫자-설명 쌍**: 숫자 먼저 던지고, 다음 줄에 의미를 풀어씀. 무더기 나열 금지.
-- **전환 시그널**: 카드 시작마다 26개 중 하나 선택. 같은 표현 2회 연속 금지.
-- **숫자 우선**: 기사에 있는 모든 숫자 추출. "많은", "대규모", "수십억" 금지.
+- **전환 시그널**: 카드 시작마다 표현 풀 중 하나 선택. 같은 표현 2회 연속 금지.
+- **밀도**: 각 카드 300~500자. 추상어 대신 구체적 숫자/사실.
 - **사실만**: 형용사·감탄사·이모지·볼드·이탤릭 전면 금지.
 - **여운**: 마지막 카드 마지막 줄은 선언이나 반전.
 - **고유명사**: 영어 원문 사용 (Nvidia, OpenAI, Huawei 등)
+- **"다시 처음으로 돌아가서" 금지**: A/B 형식 8번째 카드에서도 사용하지 않음.
 
 ---
 
@@ -447,3 +534,10 @@ ls -lt scripts/threads/logs/drafts/ | head -3
 | 2026-06-23 | **add_line_spacing stanza 인식** — AI가 이미 빈 줄로 stanza를 만들었으면 그대로 통과, 한 덩어리일 때만 분할 |
 | 2026-06-24 | **단일 기사 전환** — narrative_pitcher 프롬프트에서 기사 연결 규칙 삭제, article_ids 1개 강제, pitch_evaluator 연결성 평가 항목 제거 (6→5점) |
 | 2026-06-25 | **Semantic dedup 도입** — db_reader에 original_title Jaccard(0.30) + entity overlap(≥2) 추가, narrative_pitcher에 entity overlap 검사 추가, save_pitch_to_history에 entities 저장 |
+| 2026-06-29 | **format_selector.py 도입** — LLM 기반 A/B/C/D 4형식 자동 선택, prompt_00_selector.md, prompt_A/B/C.md 신설 |
+| 2026-06-29 | **writer_v3 ABCD 분기** — build_system_prompt_A/B/C/D(), FORMAT_BUILDERS, format별 card count tolerance, format-aware validate_cards |
+| 2026-06-29 | **stanza 리듬 완화** — 한 줄 25~40자, stanza 3~5줄, 카드당 300~500자 밀도 강화 |
+| 2026-06-29 | **"다시 처음으로 돌아가서" 제거** — A/B 형식 8th 카드 지시문에서 삭제 |
+| 2026-06-29 | **briefing 날짜 LIKE 매칭 수정** — b.date = '{today}' → b.date LIKE '{today}%' (date에 시퀀스 접미사 저장) |
+| 2026-06-29 | **모델 피라미드 교체** — DiffusionGemma 완전 제거, GPT-4o-mini 1순위 → DeepSeek → MiMo |
+| 2026-06-29 | **narrative_pitcher 피치 재생성** — TOP 1 피치 선정 후 원문 크롤링 → crawled_body 포함 재생성 |
