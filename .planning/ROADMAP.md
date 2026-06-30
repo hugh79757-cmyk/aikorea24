@@ -20,12 +20,15 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 **Depends on**: Nothing (first phase)
 **Requirements**: SEC-01, SEC-02, SEC-03, SEC-04, OBS-07, TST-05
 **Success Criteria** (what must be TRUE):
-  1. `threads-publisher.plist` contains zero API keys or secrets — all env vars delegated to `.env`
-  2. A comprehensive env var source-map document exists, covering all 5+ sources across the project
-  3. Single `env_loader.py` module exists; zero `load_env()` copies remain in any Python file
+   1. `threads-publisher.plist` contains zero API keys or secrets — all env vars delegated to `.env`
+   2. A comprehensive env var source-map document exists, covering all 5+ sources across the project
+   3. Single `env_loader.py` module exists (Strangler Fig — old `load_env()` copies remain for incremental wiring in Phase 2)
   4. Secrets in git history are flagged for remediation (key rotation or git filter-branch decision recorded)
   5. Log output is verified to redact API keys and sensitive values (no keys in logs)
-**Plans**: TBD
+**Plans**: 1 plan
+
+Plans:
+- [ ] 02-PLAN.md — Plist hardening, env consolidation (env_loader.py), log scrubbing, test mocks, git history cleanup
 
 ### Phase 2: Infrastructure & Portability
 **Goal**: All shared infrastructure modules exist in `pipeline/infra/` and are used by all old files — no more duplicated utility code, no more hardcoded project paths.
@@ -90,7 +93,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Hardening | 0/0 | Not started | - |
+| 1. Security Hardening | 0/1 | Planning done | - |
 | 2. Infrastructure & Portability | 0/0 | Not started | - |
 | 3. Landing Zone & Orchestrator | 0/0 | Not started | - |
 | 4. Monolith Splitting | 0/0 | Not started | - |
