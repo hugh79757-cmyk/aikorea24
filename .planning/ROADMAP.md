@@ -64,7 +64,7 @@ Plans:
 **Plans**: 5 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Orchestrator + D1 recording + CLI (core infrastructure)
+- [x] 03-01-PLAN.md — Orchestrator + D1 recording + CLI (core infrastructure)
 - [ ] 03-02-PLAN.md — Directory restructuring + Strangler Fig step wrappers
 - [ ] 03-03-PLAN.md — Plist templating + install_launchd.sh + deploy.sh portability
 - [ ] 03-04-PLAN.md — Threads dual-scheduling fix (remove --daemon)
@@ -106,6 +106,6 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
 | 2. Infrastructure & Portability | 0/2 | Not started | - |
-| 3. Landing Zone & Orchestrator | 0/5 | Not started | - |
+| 3. Landing Zone & Orchestrator | 1/5 | In Progress | - |
 | 4. Monolith Splitting | 0/0 | Not started | - |
 | 5. Dead Code Removal & Final Polish | 0/0 | Not started | - |
