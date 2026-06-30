@@ -8700,3 +8700,81 @@
 [2026-06-30 19:10:36]   posted_original_titles: 기존 138개 → 추가 1개 → 총 139개
 [2026-06-30 19:10:36]   pitch_history: 총 153개
 [2026-06-30 19:10:36]   다음 실행: 2026-06-30 21:10:36
+[2026-07-01 01:57:48] 🚀 v3 실행 시작 (시도 1/5)
+[01:57:48]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[01:57:53]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[01:57:53]   1순위 브리핑: 0개 → 신규 0개
+[01:57:53]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[01:57:58]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[01:57:58]   2순위 최근7일: 0개 중 신규 0개
+[01:57:58]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[01:58:03]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[01:58:03]   3순위 이전: 신규 0개
+[01:58:03]   총 기사 풀: 0개
+[01:58:03]   [기사 풀 필터] 전체: 0개 → 제외: 0개 → 최종: 0개
+[01:58:03]     posted_ids 제외: 0개 | posted_links 제외: 0개 | posted_titles 제외: 0개 | posted_original_titles 제외: 0개 | posted_semantic 제외: 0개
+[2026-07-01 01:58:03]   기사 없음 → 스킵
+[2026-07-01 01:58:03]   네트워크/D1 일시적 장애 의심 → 백오프 후 재시도
+[2026-07-01 01:58:03]   ⏳ 2번째 재시도 (1분 0초 대기)...
+[2026-07-01 01:59:03] 🚀 v3 실행 시작 (시도 2/5)
+[01:59:03]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[01:59:08]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[01:59:08]   1순위 브리핑: 0개 → 신규 0개
+[01:59:08]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[01:59:13]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[01:59:13]   2순위 최근7일: 0개 중 신규 0개
+[01:59:13]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[01:59:18]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[01:59:18]   3순위 이전: 신규 0개
+[01:59:18]   총 기사 풀: 0개
+[01:59:18]   [기사 풀 필터] 전체: 0개 → 제외: 0개 → 최종: 0개
+[01:59:18]     posted_ids 제외: 0개 | posted_links 제외: 0개 | posted_titles 제외: 0개 | posted_original_titles 제외: 0개 | posted_semantic 제외: 0개
+[2026-07-01 01:59:18]   기사 없음 → 스킵
+[2026-07-01 01:59:18]   네트워크/D1 일시적 장애 의심 → 백오프 후 재시도
+[2026-07-01 01:59:18]   ⏳ 3번째 재시도 (2분 0초 대기)...
+[2026-07-01 02:01:18] 🚀 v3 실행 시작 (시도 3/5)
+[02:01:18]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:01:23]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:01:23]   1순위 브리핑: 0개 → 신규 0개
+[02:01:23]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:01:28]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:01:28]   2순위 최근7일: 0개 중 신규 0개
+[02:01:28]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:01:33]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:01:33]   3순위 이전: 신규 0개
+[02:01:33]   총 기사 풀: 0개
+[02:01:33]   [기사 풀 필터] 전체: 0개 → 제외: 0개 → 최종: 0개
+[02:01:33]     posted_ids 제외: 0개 | posted_links 제외: 0개 | posted_titles 제외: 0개 | posted_original_titles 제외: 0개 | posted_semantic 제외: 0개
+[2026-07-01 02:01:33]   기사 없음 → 스킵
+[2026-07-01 02:01:33]   네트워크/D1 일시적 장애 의심 → 백오프 후 재시도
+[2026-07-01 02:01:33]   ⏳ 4번째 재시도 (5분 0초 대기)...
+[2026-07-01 02:06:34] 🚀 v3 실행 시작 (시도 4/5)
+[02:06:34]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:06:39]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:06:39]   1순위 브리핑: 0개 → 신규 0개
+[02:06:39]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:06:44]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:06:44]   2순위 최근7일: 0개 중 신규 0개
+[02:06:44]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:06:49]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:06:49]   3순위 이전: 신규 0개
+[02:06:49]   총 기사 풀: 0개
+[02:06:49]   [기사 풀 필터] 전체: 0개 → 제외: 0개 → 최종: 0개
+[02:06:49]     posted_ids 제외: 0개 | posted_links 제외: 0개 | posted_titles 제외: 0개 | posted_original_titles 제외: 0개 | posted_semantic 제외: 0개
+[2026-07-01 02:06:49]   기사 없음 → 스킵
+[2026-07-01 02:06:49]   네트워크/D1 일시적 장애 의심 → 백오프 후 재시도
+[2026-07-01 02:06:49]   ⏳ 5번째 재시도 (10분 0초 대기)...
+[2026-07-01 02:16:49] 🚀 v3 실행 시작 (시도 5/5)
+[02:16:49]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:16:54]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:16:54]   1순위 브리핑: 0개 → 신규 0개
+[02:16:54]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:16:59]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:16:59]   2순위 최근7일: 0개 중 신규 0개
+[02:16:59]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx', 5초 후 재시도 (1/2)
+[02:17:04]   ⚠️ D1 오류: [Errno 2] No such file or directory: 'npx'
+[02:17:04]   3순위 이전: 신규 0개
+[02:17:04]   총 기사 풀: 0개
+[02:17:04]   [기사 풀 필터] 전체: 0개 → 제외: 0개 → 최종: 0개
+[02:17:04]     posted_ids 제외: 0개 | posted_links 제외: 0개 | posted_titles 제외: 0개 | posted_original_titles 제외: 0개 | posted_semantic 제외: 0개
+[2026-07-01 02:17:04]   기사 없음 → 스킵

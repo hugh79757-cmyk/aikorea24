@@ -5,6 +5,30 @@
 
 ---
 
+## 2026-07-01 — Pexels+DeepSeek 썸네일 교체 + 파이프라인 검증
+
+### 기능 변경
+- `scripts/auto_thumbnail.py`: og:image 추출 → **Pexels API + DeepSeek 키워드 추출**로 전면 교체
+  - DeepSeek `deepseek-chat`으로 description 기반 Pexels 검색 키워드 생성
+  - Pexels 검색 결과 중 미사용 ID 선택 (JSON dedup, `config/pexels_used_ids.json`)
+  - 폴백 체인: DeepSeek → Pexels → `artificial intelligence` fallback
+- `scripts/run_pipeline.py`: `process_thumbnail()`에 `title`/`description` 인자 전달
+
+### 버그 수정
+- `src/content/blog/2026-07-01-vibe-코딩-플랫폼-base44-ai-스타트업-방어력을-위해-자체-모델-출시.md`: frontmatter `---` 누락 → 빌드 실패 원인 → 수정
+- 배포 실패(rc=127) 원인 파악: `set -e` + `.env` 내 `source ~/.env.common` 충돌
+
+### 배포
+- git push → Cloudflare Pages auto-build 작동 안 함 (대시보드 설정 필요)
+- wrangler CLI 수동 배포로 대체 (44f1c18a)
+- 기존 썸네일 332개 git 복구 완료, 46개 Pexels 생성 완료
+
+### 검증
+- 파이프라인 전체 실행 성공 (썸네일 제외): 6기사 → 브리핑(id=148) → 블로그 6개 → 이메일 발송
+- 371/388 블로그 썸네일 매칭 (17개 미해결: 5개 대소문자 + 9개 신규 + 3개 기타)
+
+---
+
 ## 2026-07-01 — 파이프라인 복구 + D 형식 6카드 변경 + 썸네일 이슈
 
 ### 버그 수정
