@@ -76,14 +76,10 @@ def cmd_run(dry_run: bool = False) -> None:
         dry_run: True면 단계를 실제로 실행하지 않고 모의 실행
     """
     from pipeline.orchestrator import PipelineOrchestrator
+    from pipeline.steps import StepRunThreads
 
     orchestrator = PipelineOrchestrator()
-    # Steps registered here — uncomment when pipeline/steps/ exists
-    # orchestrator.register(StepFetchArticles())
-    # orchestrator.register(StepGeneratePitches())
-    # orchestrator.register(StepWriteThread())
-    # orchestrator.register(StepValidate())
-    # orchestrator.register(StepPublish())
+    orchestrator.register(StepRunThreads())
 
     results = orchestrator.run(dry_run=dry_run)
     sys.exit(0 if all(r.success for r in results) else 1)

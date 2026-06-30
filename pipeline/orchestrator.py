@@ -105,19 +105,21 @@ class PipelineOrchestrator:
     def _record_to_d1(self, result: PipelineStepResult) -> None:
         """단계 결과를 D1 pipeline_runs 테이블에 기록 (best-effort).
 
-        SQL 인젝션 방지: error_message 내 작은따옴표는 두 배로 이스케이프.
+        SQL 인젝션 방지: 모든 문자열 필드의 작은따옴표를 두 배로 이스케이프.
         """
         from pipeline.infra.d1_client import d1_query
 
-        error_escaped = (result.error or "").replace("'", "''")
-        error_sql = f"'{error_escaped}'" if result.error else "NULL"
+        def esc(s: str) -> str:
+            return s.replace("'", "''")
+
+        error_sql = f"'{esc(result.error)}'" if result.error else "NULL"
         status = "success" if result.success else "failure"
 
         sql = (
             f"INSERT INTO pipeline_runs "
             f"(run_id, step_name, status, duration_seconds, error_message, started_at, completed_at) "
             f"VALUES ("
-            f"'{result.run_id}', '{result.step_name}', '{status}', "
+            f"'{esc(result.run_id)}', '{esc(result.step_name)}', '{status}', "
             f"{result.duration_seconds:.3f}, {error_sql}, "
             f"datetime('now'), datetime('now')"
             f")"
