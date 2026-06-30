@@ -54,7 +54,7 @@ def refresh_token():
             with open(ENV_FILE, 'w') as f:
                 f.writelines(lines)
             print(f'  ✅ 갱신 성공 (만료 {days_left}일)')
-            print(f'  🔑 {new_token[:40]}...')
+            print(f'  🔑 토큰 갱신 완료 ({len(new_token)}자)')
             return new_token
         else:
             print(f'  ❌ 응답 오류: {data}')
