@@ -8,12 +8,20 @@ aikorea24 Threads v3 — Narrative-First Design
 import os, sys, json, time, re
 from datetime import datetime, timedelta
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
+
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 sys.path.insert(0, THREADS_DIR)
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     print(f'[{ts}] {msg}')
@@ -318,24 +326,14 @@ def run_v3(dry_run=False):
 
 
 def main():
+    # 단일 스케줄러 (launchd) — --daemon 모드 제거됨 (THR-01)
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true', help='발행 없이 글만 생성')
-    parser.add_argument('--once', action='store_true', help='1회 실행')
-    parser.add_argument('--daemon', action='store_true', help='2시간 간격 자동 실행')
+    parser.add_argument('--once', action='store_true', help='1회 실행 (launchd 전용 — 단일 스케줄러)')
     args = parser.parse_args()
 
-    if args.daemon:
-        import schedule
-        log('🔄 데몬 모드 시작 (2시간 간격)')
-        run_v3()
-        schedule.every(2).hours.do(run_v3)
-        schedule.every().day.at('00:00').do(reset_posted_daily)
-        while True:
-            schedule.run_pending()
-            time.sleep(60)
-    else:
-        run_v3(dry_run=args.dry_run)
+    run_v3(dry_run=args.dry_run)
 
 
 if __name__ == '__main__':
