@@ -553,6 +553,228 @@
           "date": "2026-06-30"
         }
       ]
+    },
+    {
+      "date": "2026-07-01",
+      "briefing_id": 145,
+      "articles": [
+        {
+          "id": "36689",
+          "title": "AI 직업 논쟁이 더욱 복잡해졌다",
+          "original_title": "",
+          "description": "새로운 보고서에 따르면 \"고강도 AI 채택자\" 기업은 고용 인원이 10.2% 증가했다고 합니다. 이러한 기업 중에서는 초급 인력이 12% 증가했으며, AI가 초급 직업을 없앤다는 주장과 반대되는 결과를 보여주고 있습니다.",
+          "link": "https://techcrunch.com/2026/06/29/the-ai-jobs-debate-just-got-messier/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36812",
+          "title": "마크 안드리센, ChatGPT가 99%의 의사를 이긴다고 주장. 증거는 반박한다",
+          "original_title": "",
+          "description": "마크 안드리센은 건강에 대한 대담한 주장을 하고 있습니다. 이 억만장자 투자자는 \"닥터 ChatGPT\"가 이미 99%의 인간 의사보다 나은 의사라고 주장했습니다. 그러나 의사와 동료 검토된 증거는 강하게 반대하고 있습니다. 안드리센은 6월 초 조 로건의 팟캐스트에서 이 발언을 했습니다.",
+          "link": "https://thenextweb.com/news/andreessen-doctor-chatgpt-better-than-doctors",
+          "entities": [
+            "ChatGPT"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36742",
+          "title": "영국의 다음 생산성 시대 개막: AI 선도 국가 구축",
+          "original_title": "",
+          "description": "구글 UK는 최신 경제 영향 보고서를 공유하며, 더 많은 사람들이 AI 기반 기술의 혜택을 활용할 수 있도록 하는 방법을 설명합니다.",
+          "link": "https://blog.google/company-news/inside-google/around-the-globe/google-europe/united-kingdom/unlocking-britains-next-era-of-productivity-building-a-nation-of-ai-trailblazers/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36565",
+          "title": "WorkBoard, 새로운 AI 기반 전략 포트폴리오 관리 솔루션과 포트폴리오 분석 에이전",
+          "original_title": "",
+          "description": "AI와 에이전트 SPM 솔루션은 학습 곡선을 없애고 계획 주기를 단축시킵니다. 고객들은 AI 속도로 결과를 최적화할 수 있도록 완전히 자동화된 cadence와 이해관계자 보고를 제공받습니다.",
+          "link": "https://www.cityam.com/workboard-extends-its-strategy-execution-platform-with-new-ai-native-strategic-portfolio-management-solution-and-portfolio-analyst-agents/",
+          "entities": [
+            "SPM",
+            "WorkBoard",
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36479",
+          "title": "딜로이트, 자사 컨설턴트에게: AI가 청구 시간에 다가오고 있다",
+          "original_title": "",
+          "description": "딜로이트의 내부 발표에 따르면, 컨설팅 산업의 전통적인 시간 청구 모델은 2035년까지 전체 시장에서 미세한 부분으로 축소될 것이라고 합니다. 한 컨설턴트는 \"우리 모델은 끝났다\"라고 메시지를 요약했습니다.",
+          "link": "https://the-decoder.com/deloitte-tells-its-own-consultants-ai-is-coming-for-the-billable-hour/",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36490",
+          "title": "Chrome vs. Edge vs. Firefox: 각 브라우저의 AI를 테스트했지만 하나",
+          "original_title": "",
+          "description": "웹을 탐색하면서 AI를 사용하고 싶으신가요? 여기 Chrome, Edge, Firefox의 AI 도구를 비교하는 방법이 있습니다.",
+          "link": "https://www.zdnet.com/article/chrome-vs-edge-vs-firefox-ai-browsers/",
+          "entities": [
+            "Chrome",
+            "Firefox",
+            "Edge",
+            "AI"
+          ],
+          "date": "2026-07-01"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "briefing_id": 146,
+      "articles": [
+        {
+          "id": "36690",
+          "title": "Vibe 코딩 플랫폼 Base44, AI 스타트업 방어력을 위해 자체 모델 출시",
+          "original_title": "",
+          "description": "Wix 소속의 Vibe 코딩 플랫폼 Base44가 자신의 AI 모델을 론칭하기 시작했습니다. 이 모델이 궁극적으로 선두 모델을 능가할 수 있기를 희망하고 있습니다.",
+          "link": "https://techcrunch.com/2026/06/29/vibe-coding-platform-base44-launches-own-model-as-ai-startups-seek-defensibility/",
+          "entities": [
+            "Wix",
+            "AI",
+            "Vibe",
+            "Base44"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36814",
+          "title": "유럽 보험사들, AI 시대를 위한 BPO 재구성",
+          "original_title": "",
+          "description": "생명 보험과 퇴직 연금 보험사들은 규제 준수, 서비스 안정성 및 현대화 요구가 증가함에 따라 회복력 있고 AI 준비가 된 운영 방식을 모색하고 있다고 ISG Provider Lens® 보고서가 전하고 있습니다.",
+          "link": "https://www.cityam.com/european-insurers-rethink-bpo-for-ai-era/",
+          "entities": [
+            "AI",
+            "BPO",
+            "Provider",
+            "Lens",
+            "ISG"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36817",
+          "title": "AI 지출 불안 속에서 Mag 7 가치가 2.3조 달러 감소 — 그러나 투자자들은 여전히 ",
+          "original_title": "",
+          "description": "투자자들은 Mag 7의 거대한 AI 지출과 이들 기업이 그 투자에서 언제 수익을 낼 것인지에 대해 불안해하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/06/30/magnificent-7-stocks-sell-off-investors-grow-jittery-on-ai-spending.html",
+          "entities": [
+            "Mag",
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36813",
+          "title": "애플, AI가 해킹을 가속화함에 따라 보안 업데이트를 조기 배포한다고 발표",
+          "original_title": "",
+          "description": "수년간 애플은 보안 수정사항을 일반적으로 일정에 맞춰 배포해왔으며, 결함이 발견된 시점이 아니라 회사가 준비가 되었을 때 차기 대규모 iOS 버전과 함께 제공되었습니다. 그러나 이제 새로운 제약이 생기면서 애플은 더 이상 그렇게 할 수 없다고 결정했습니다.",
+          "link": "https://thenextweb.com/news/apple-early-security-updates-ai",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36826",
+          "title": "브리티시 아메리칸 토바코, AI로 전환하며 9,000개 일자리 축소",
+          "original_title": "",
+          "description": "던힐 제작사인 브리티시 아메리칸 토바코(BAT)는 47,000명의 인력 중 약 20%에 해당하는 9,000개의 일자리를 줄일 예정입니다. 이는 비용 절감과 더불어 기술 기반의 회사로 거듭나기 위한 노력의 일환입니다.",
+          "link": "https://www.theguardian.com/business/2026/jun/29/british-american-tobacco-bat-cut-jobs-ai",
+          "entities": [
+            "BAT"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36566",
+          "title": "AI 데이터 센터 경쟁, 시골 데본으로 확산 - Xlinks, 36억 파운드 AI 캠퍼스 ",
+          "original_title": "",
+          "description": "영국의 AI 기반 인프라 구축 경쟁이 전통적인 데이터 센터 지역을 넘어 시골 지역으로 확장되고 있습니다. Xlinks는 북부 데본에 36억 파운드 규모의 AI 캠퍼스를 계획하고 있습니다.",
+          "link": "https://www.cityam.com/ai-data-centre-race-reaches-rural-devon-as-xlinks-eyes-3-6bn-campus/",
+          "entities": [
+            "AI",
+            "Xlinks"
+          ],
+          "date": "2026-07-01"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "briefing_id": 147,
+      "articles": [
+        {
+          "id": "36446",
+          "title": "앤트로픽과 뉴스엄 주지사가 클로드를 반값에 사용할 수 있는 계약 체결",
+          "original_title": "",
+          "description": "앤트로픽이 캘리포니아 주 정부와 더 긴밀한 관계를 형성함에 따라, 연방 정부는 오픈AI의 경쟁자를 적으로 간주하게 되었습니다.",
+          "link": "https://techcrunch.com/2026/06/29/anthropic-and-gov-newsom-forge-deal-allowing-california-government-to-use-claude-at-half-price/",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36834",
+          "title": "유럽이 AI 분야에서 선두주자가 되려면 주권은 선택을 의미해야 한다",
+          "original_title": "",
+          "description": "유럽에서 AI의 주권 확보는 단순히 기술의 발전을 넘어서, 각국의 정책 결정과 선택을 존중해야 함을 의미합니다. 이를 통해 기술의 리더십을 강화할 수 있습니다.",
+          "link": "https://www.politico.eu/sponsored-content/for-europe-to-lead-in-ai-sovereignty-must-mean-choice/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36695",
+          "title": "농업이 AI를 수용할 준비가 되었지만 데이터는 준비되지 않았다",
+          "original_title": "",
+          "description": "인공지능이 농업에서 가능성을 변혁시키고 있지만, 업계 리더들은 AI에 투자하기 전에 기초 작업을 다지는 것이 중요하다고 경고하고 있습니다. 생산 사례는 유망하며, 특히 불안정한 비료 비용과 예측 불가능한 날씨, 그리고 수익률을 고려하고 있습니다.",
+          "link": "https://www.technologyreview.com/2026/06/30/1139513/agriculture-is-ready-for-ai-but-its-data-isnt/",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36574",
+          "title": "알파벳, AI 우위를 확보하기 위한 최고의 무기 중 하나를 강화하다",
+          "original_title": "",
+          "description": "구글의 자생 실리콘은 AI 컴퓨팅 경쟁에서 큰 장점이 된다.",
+          "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOamZ1dllXLXRXaUVWaVJpbzVxOVV2SXNUTWw0TGpRUXgwMlJxdEdDa2hINllMbjcxcnJXT0MwUGlaMHBGNmEwakpZTy02QktmWElHNG13alU4MzNkR3hkaXBSalduRW1BSTR3Yl83X2ZrckFLcENBLTk1ZEsxem5DWmZQVXNOcjA5M2lpWTh2QjdKSk9lWmp6dnE5alZXaUUzbjdlOHJZNzg0RERCMUFV?oc=5",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36498",
+          "title": "AI 전문가에게 물어보세요: 풀 스택이란 정확히 무엇인가요?",
+          "original_title": "",
+          "description": "구글의 전문가는 AI에 대한 풀 스택 접근 방식이 무엇을 의미하는지와 이것이 왜 오랫동안 우리의 AI 작업의 기초가 되었는지를 설명합니다.",
+          "link": "https://blog.google/innovation-and-ai/technology/ai/full-stack-ai-explainer/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36452",
+          "title": "AI 에이전트는 당신의 ‘동료’가 아니다",
+          "original_title": "",
+          "description": "이 이야기는 AI에 관한 주간 뉴스레터 '더 알고리즘'에 처음 실렸습니다. 새로운 직원이 당신에게 보고하게 될 것이라는 소식을 듣고 출근한다고 상상해 보세요. 그러나 그 일하는 이는 사람이 아니라 AI 도구입니다. 회사는 그 도구를 '알렉스'라고 부릅니다.",
+          "link": "https://www.technologyreview.com/2026/06/29/1139849/ai-agents-are-not-your-coworkers/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        }
+      ]
     }
   ],
   "articles": [
@@ -1055,6 +1277,210 @@
       "link": "https://www.cnbc.com/2026/06/29/waymo-uber-robotaxi-pilot-phoenix.html",
       "entities": [],
       "date": "2026-06-30"
+    },
+    {
+      "id": "36689",
+      "title": "AI 직업 논쟁이 더욱 복잡해졌다",
+      "original_title": "",
+      "description": "새로운 보고서에 따르면 \"고강도 AI 채택자\" 기업은 고용 인원이 10.2% 증가했다고 합니다. 이러한 기업 중에서는 초급 인력이 12% 증가했으며, AI가 초급 직업을 없앤다는 주장과 반대되는 결과를 보여주고 있습니다.",
+      "link": "https://techcrunch.com/2026/06/29/the-ai-jobs-debate-just-got-messier/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36812",
+      "title": "마크 안드리센, ChatGPT가 99%의 의사를 이긴다고 주장. 증거는 반박한다",
+      "original_title": "",
+      "description": "마크 안드리센은 건강에 대한 대담한 주장을 하고 있습니다. 이 억만장자 투자자는 \"닥터 ChatGPT\"가 이미 99%의 인간 의사보다 나은 의사라고 주장했습니다. 그러나 의사와 동료 검토된 증거는 강하게 반대하고 있습니다. 안드리센은 6월 초 조 로건의 팟캐스트에서 이 발언을 했습니다.",
+      "link": "https://thenextweb.com/news/andreessen-doctor-chatgpt-better-than-doctors",
+      "entities": [
+        "ChatGPT"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36742",
+      "title": "영국의 다음 생산성 시대 개막: AI 선도 국가 구축",
+      "original_title": "",
+      "description": "구글 UK는 최신 경제 영향 보고서를 공유하며, 더 많은 사람들이 AI 기반 기술의 혜택을 활용할 수 있도록 하는 방법을 설명합니다.",
+      "link": "https://blog.google/company-news/inside-google/around-the-globe/google-europe/united-kingdom/unlocking-britains-next-era-of-productivity-building-a-nation-of-ai-trailblazers/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36565",
+      "title": "WorkBoard, 새로운 AI 기반 전략 포트폴리오 관리 솔루션과 포트폴리오 분석 에이전",
+      "original_title": "",
+      "description": "AI와 에이전트 SPM 솔루션은 학습 곡선을 없애고 계획 주기를 단축시킵니다. 고객들은 AI 속도로 결과를 최적화할 수 있도록 완전히 자동화된 cadence와 이해관계자 보고를 제공받습니다.",
+      "link": "https://www.cityam.com/workboard-extends-its-strategy-execution-platform-with-new-ai-native-strategic-portfolio-management-solution-and-portfolio-analyst-agents/",
+      "entities": [
+        "SPM",
+        "WorkBoard",
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36479",
+      "title": "딜로이트, 자사 컨설턴트에게: AI가 청구 시간에 다가오고 있다",
+      "original_title": "",
+      "description": "딜로이트의 내부 발표에 따르면, 컨설팅 산업의 전통적인 시간 청구 모델은 2035년까지 전체 시장에서 미세한 부분으로 축소될 것이라고 합니다. 한 컨설턴트는 \"우리 모델은 끝났다\"라고 메시지를 요약했습니다.",
+      "link": "https://the-decoder.com/deloitte-tells-its-own-consultants-ai-is-coming-for-the-billable-hour/",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36490",
+      "title": "Chrome vs. Edge vs. Firefox: 각 브라우저의 AI를 테스트했지만 하나",
+      "original_title": "",
+      "description": "웹을 탐색하면서 AI를 사용하고 싶으신가요? 여기 Chrome, Edge, Firefox의 AI 도구를 비교하는 방법이 있습니다.",
+      "link": "https://www.zdnet.com/article/chrome-vs-edge-vs-firefox-ai-browsers/",
+      "entities": [
+        "Chrome",
+        "Firefox",
+        "Edge",
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36690",
+      "title": "Vibe 코딩 플랫폼 Base44, AI 스타트업 방어력을 위해 자체 모델 출시",
+      "original_title": "",
+      "description": "Wix 소속의 Vibe 코딩 플랫폼 Base44가 자신의 AI 모델을 론칭하기 시작했습니다. 이 모델이 궁극적으로 선두 모델을 능가할 수 있기를 희망하고 있습니다.",
+      "link": "https://techcrunch.com/2026/06/29/vibe-coding-platform-base44-launches-own-model-as-ai-startups-seek-defensibility/",
+      "entities": [
+        "Wix",
+        "AI",
+        "Vibe",
+        "Base44"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36814",
+      "title": "유럽 보험사들, AI 시대를 위한 BPO 재구성",
+      "original_title": "",
+      "description": "생명 보험과 퇴직 연금 보험사들은 규제 준수, 서비스 안정성 및 현대화 요구가 증가함에 따라 회복력 있고 AI 준비가 된 운영 방식을 모색하고 있다고 ISG Provider Lens® 보고서가 전하고 있습니다.",
+      "link": "https://www.cityam.com/european-insurers-rethink-bpo-for-ai-era/",
+      "entities": [
+        "AI",
+        "BPO",
+        "Provider",
+        "Lens",
+        "ISG"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36817",
+      "title": "AI 지출 불안 속에서 Mag 7 가치가 2.3조 달러 감소 — 그러나 투자자들은 여전히 ",
+      "original_title": "",
+      "description": "투자자들은 Mag 7의 거대한 AI 지출과 이들 기업이 그 투자에서 언제 수익을 낼 것인지에 대해 불안해하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/06/30/magnificent-7-stocks-sell-off-investors-grow-jittery-on-ai-spending.html",
+      "entities": [
+        "Mag",
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36813",
+      "title": "애플, AI가 해킹을 가속화함에 따라 보안 업데이트를 조기 배포한다고 발표",
+      "original_title": "",
+      "description": "수년간 애플은 보안 수정사항을 일반적으로 일정에 맞춰 배포해왔으며, 결함이 발견된 시점이 아니라 회사가 준비가 되었을 때 차기 대규모 iOS 버전과 함께 제공되었습니다. 그러나 이제 새로운 제약이 생기면서 애플은 더 이상 그렇게 할 수 없다고 결정했습니다.",
+      "link": "https://thenextweb.com/news/apple-early-security-updates-ai",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36826",
+      "title": "브리티시 아메리칸 토바코, AI로 전환하며 9,000개 일자리 축소",
+      "original_title": "",
+      "description": "던힐 제작사인 브리티시 아메리칸 토바코(BAT)는 47,000명의 인력 중 약 20%에 해당하는 9,000개의 일자리를 줄일 예정입니다. 이는 비용 절감과 더불어 기술 기반의 회사로 거듭나기 위한 노력의 일환입니다.",
+      "link": "https://www.theguardian.com/business/2026/jun/29/british-american-tobacco-bat-cut-jobs-ai",
+      "entities": [
+        "BAT"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36566",
+      "title": "AI 데이터 센터 경쟁, 시골 데본으로 확산 - Xlinks, 36억 파운드 AI 캠퍼스 ",
+      "original_title": "",
+      "description": "영국의 AI 기반 인프라 구축 경쟁이 전통적인 데이터 센터 지역을 넘어 시골 지역으로 확장되고 있습니다. Xlinks는 북부 데본에 36억 파운드 규모의 AI 캠퍼스를 계획하고 있습니다.",
+      "link": "https://www.cityam.com/ai-data-centre-race-reaches-rural-devon-as-xlinks-eyes-3-6bn-campus/",
+      "entities": [
+        "AI",
+        "Xlinks"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36446",
+      "title": "앤트로픽과 뉴스엄 주지사가 클로드를 반값에 사용할 수 있는 계약 체결",
+      "original_title": "",
+      "description": "앤트로픽이 캘리포니아 주 정부와 더 긴밀한 관계를 형성함에 따라, 연방 정부는 오픈AI의 경쟁자를 적으로 간주하게 되었습니다.",
+      "link": "https://techcrunch.com/2026/06/29/anthropic-and-gov-newsom-forge-deal-allowing-california-government-to-use-claude-at-half-price/",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36834",
+      "title": "유럽이 AI 분야에서 선두주자가 되려면 주권은 선택을 의미해야 한다",
+      "original_title": "",
+      "description": "유럽에서 AI의 주권 확보는 단순히 기술의 발전을 넘어서, 각국의 정책 결정과 선택을 존중해야 함을 의미합니다. 이를 통해 기술의 리더십을 강화할 수 있습니다.",
+      "link": "https://www.politico.eu/sponsored-content/for-europe-to-lead-in-ai-sovereignty-must-mean-choice/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36695",
+      "title": "농업이 AI를 수용할 준비가 되었지만 데이터는 준비되지 않았다",
+      "original_title": "",
+      "description": "인공지능이 농업에서 가능성을 변혁시키고 있지만, 업계 리더들은 AI에 투자하기 전에 기초 작업을 다지는 것이 중요하다고 경고하고 있습니다. 생산 사례는 유망하며, 특히 불안정한 비료 비용과 예측 불가능한 날씨, 그리고 수익률을 고려하고 있습니다.",
+      "link": "https://www.technologyreview.com/2026/06/30/1139513/agriculture-is-ready-for-ai-but-its-data-isnt/",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36574",
+      "title": "알파벳, AI 우위를 확보하기 위한 최고의 무기 중 하나를 강화하다",
+      "original_title": "",
+      "description": "구글의 자생 실리콘은 AI 컴퓨팅 경쟁에서 큰 장점이 된다.",
+      "link": "https://news.google.com/rss/articles/CBMirwFBVV95cUxOamZ1dllXLXRXaUVWaVJpbzVxOVV2SXNUTWw0TGpRUXgwMlJxdEdDa2hINllMbjcxcnJXT0MwUGlaMHBGNmEwakpZTy02QktmWElHNG13alU4MzNkR3hkaXBSalduRW1BSTR3Yl83X2ZrckFLcENBLTk1ZEsxem5DWmZQVXNOcjA5M2lpWTh2QjdKSk9lWmp6dnE5alZXaUUzbjdlOHJZNzg0RERCMUFV?oc=5",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36498",
+      "title": "AI 전문가에게 물어보세요: 풀 스택이란 정확히 무엇인가요?",
+      "original_title": "",
+      "description": "구글의 전문가는 AI에 대한 풀 스택 접근 방식이 무엇을 의미하는지와 이것이 왜 오랫동안 우리의 AI 작업의 기초가 되었는지를 설명합니다.",
+      "link": "https://blog.google/innovation-and-ai/technology/ai/full-stack-ai-explainer/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36452",
+      "title": "AI 에이전트는 당신의 ‘동료’가 아니다",
+      "original_title": "",
+      "description": "이 이야기는 AI에 관한 주간 뉴스레터 '더 알고리즘'에 처음 실렸습니다. 새로운 직원이 당신에게 보고하게 될 것이라는 소식을 듣고 출근한다고 상상해 보세요. 그러나 그 일하는 이는 사람이 아니라 AI 도구입니다. 회사는 그 도구를 '알렉스'라고 부릅니다.",
+      "link": "https://www.technologyreview.com/2026/06/29/1139849/ai-agents-are-not-your-coworkers/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
     }
   ]
 }

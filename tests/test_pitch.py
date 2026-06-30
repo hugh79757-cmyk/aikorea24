@@ -94,9 +94,9 @@ class TestFillArticleIds:
 class TestLoadPitchHistory:
     @pytest.mark.unit
     def test_returns_empty_when_no_file(self, tmp_path, monkeypatch):
-        from pipeline.threads import pitch
-        def mock_load():
+        import pipeline.threads.pitch as pitch_mod
+        def mock_load(*args, **kwargs):
             return []
-        monkeypatch.setattr(pitch, "load_pitch_history", mock_load)
-        result = load_pitch_history()
+        monkeypatch.setattr(pitch_mod, "load_pitch_history", mock_load)
+        result = pitch_mod.load_pitch_history()
         assert result == []

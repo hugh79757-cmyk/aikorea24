@@ -9,7 +9,6 @@
 	<array>
 		<string>${VENV_PYTHON}</string>
 		<string>${SCRIPT_PATH}</string>
-		<string>--once</string>
 	</array>
 	<key>WorkingDirectory</key>
 	<string>${PROJECT_DIR}</string>

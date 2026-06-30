@@ -16,6 +16,10 @@ import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+_project_root = str(Path(__file__).resolve().parent.parent)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
 from pipeline.infra.d1_client import d1_query as d1_query_new
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
 

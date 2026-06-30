@@ -1,0 +1,78 @@
+{
+  "pitch_history": [
+    {
+      "hook": "MoEngage는 Aampe를 인수하여 고객 맞춤형 마",
+      "narrative": "이 인수는 MoEngage가 Salesforce와 Adobe의 경쟁 플랫폼에서 고객을 유치",
+      "article_ids": [
+        "33983"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-06-30"
+    },
+    {
+      "hook": "AI가 농업의 혁신을 이끌 수 있지만, 데이터 준비가 ",
+      "narrative": "농업에서 AI의 사용은 수익성을 높이고 자원 사용을 줄이는 데 큰 잠재력을 지니지만, 그 ",
+      "article_ids": [
+        "36695"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "hook": "많은 호주 연금 포트폴리오가 일론 머스크의 스페이스X에",
+      "narrative": "호주에서 연금 저축을 가진 사람들은 자신도 모르게 스페이스X의 주식을 소유하고 있을 가능성",
+      "article_ids": [
+        "36127"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "hook": "테슬라는 완전 자율주행 사고와 관련된 소송을 합의했지만",
+      "narrative": "테슬라는 2023년 완전 자율주행 시스템과 관련된 치명적인 사고로 인해 소송을 합의하였으나",
+      "article_ids": [
+        "36329"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-01"
+    }
+  ],
+  "posted_article_meta": {
+    "33983": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36695": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36127": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36329": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    }
+  }
+}

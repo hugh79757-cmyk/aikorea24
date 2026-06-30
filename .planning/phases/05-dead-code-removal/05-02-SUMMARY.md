@@ -28,7 +28,7 @@
 |------|--------|
 | `scripts/threads/v3/format_selector.py` | Inlined in writer.py |
 | `scripts/threads/validator.py` | Standalone duplicate |
-| `scripts/run_pipeline_with_notify.py` | Replaced by orchestrator Telegram |
+| `scripts/run_pipeline_with_notify.py` | Removed — plist updated to call `run_pipeline.py` directly |
 
 ### Added Features
 | Feature | File | Details |

@@ -35,7 +35,7 @@ with open('$TEMPLATE', 'r') as f:
 result = Template(template_content).safe_substitute(
     VENV_PYTHON='$PROJECT_DIR/.venv/bin/python3',
     PROJECT_DIR='$PROJECT_DIR',
-    SCRIPT_PATH='$PROJECT_DIR/pipeline/__main__.py',
+    SCRIPT_PATH='$PROJECT_DIR/scripts/threads/main_v3.py',
     LOG_DIR='$PROJECT_DIR/scripts/threads/logs',
 )
 

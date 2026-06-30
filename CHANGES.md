@@ -5,6 +5,35 @@
 
 ---
 
+## 2026-07-01 — 파이프라인 복구 + D 형식 6카드 변경 + 썸네일 이슈
+
+### 버그 수정
+- `run_pipeline_with_notify.py` 제거로 인한 briefing pipeline 중단 → git에서 복원
+- `auto_news_selector.py`: `from pipeline.infra.d1_client` import 시 `ModuleNotFoundError` → `sys.path` 추가
+- `main_v3.py`: launchd 실행 시 동일 import 문제 → `sys.path` 추가
+- `pipeline-runner` launchd plist 업데이트 → `run_pipeline_with_notify.py` 호출로 복원
+- D1 `pipeline_runs` 테이블 migration 적용 (누락)
+- `tests/test_pitch.py`: monkeypatch 버그 수정
+
+### 기능 변경
+- D 형식 5카드(4내용+링크) → **6카드(5내용+1출처링크)** 로 변경
+  - `FORMAT_CARD_COUNTS: 5→6`, `FORMAT_CARD_COUNT_TOLERANCE: (4,6)→(5,7)`
+  - `assemble_final`: 6장이면 6번 교체, 5장이면 append
+  - 시스템 프롬프트, 유저 프롬프트 업데이트
+
+### 썸네일
+- `blog-draft` launchd job unload (키워드 블로그 중단)
+- og:image 기반 썸네일 저작권 문제 확인 (13개 깨짐)
+- `2026-06-26-패트로너스-ai` ~ `2026-06-30-eclerx` 사이 ~50개 og:image 기반 식별
+
+### 검증
+- Threads 발행: ✅ Tesla FSD 6카드 성공
+- 브리핑+블로그+이메일: ✅ id=147, 6아이템, 이메일 발송 성공
+- 배포: ⚠️ 수동으로 성공 (launchd 환경에서 정상)
+- Tests: 167/168 통과
+
+---
+
 ## 2026-06-30 — Phase 5: Dead Code Removal & Final Polish 실행 완료
 
 ### 변경 파일

@@ -3,8 +3,8 @@ import re
 from datetime import datetime
 from collections import Counter
 
-FORMAT_CARD_COUNTS = {'D': 5}
-FORMAT_CARD_COUNT_TOLERANCE = {'D': (4, 6)}
+FORMAT_CARD_COUNTS = {'D': 6}
+FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 7)}
 
 STOPLIST = {
     '무단전재', '수정하거나', '관련기사', '보도했다', '보도했음',

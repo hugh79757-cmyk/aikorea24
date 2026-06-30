@@ -6,7 +6,12 @@ aikorea24 Threads v3 — Narrative-First Design
 - 기존 파일(v1/v2) 수정 금지, 병행 가능
 """
 import os, sys, json, time, re
+from pathlib import Path
 from datetime import datetime, timedelta
+
+_project_root = str(Path(__file__).resolve().parent.parent.parent)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
 
 from pipeline.infra.env_loader import EnvConfig
 _config = EnvConfig()
