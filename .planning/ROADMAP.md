@@ -8,7 +8,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 
 - [x] **Phase 1: Security Hardening** — Eliminate active security issues (plaintext API keys, fragmented env loading) (completed 2026-06-30)
 - [ ] **Phase 2: Infrastructure & Portability** — Create shared infra modules, wire old files, remove hardcoded paths
-- [ ] **Phase 3: Landing Zone & Orchestrator** — Directory restructuring, pipeline orchestrator, Threads stabilization, portability
+- [x] **Phase 3: Landing Zone & Orchestrator** — Directory restructuring, pipeline orchestrator, Threads stabilization, portability (completed 2026-06-30)
 - [ ] **Phase 4: Monolith Splitting** — Split writer_v3.py (1,013 lines) and narrative_pitcher.py (581 lines) into focused modules
 - [ ] **Phase 5: Dead Code Removal & Final Polish** — Remove dead code, failure notifications, bulletin board verification
 
@@ -82,7 +82,13 @@ Plans:
   4. Format builders are extracted into `pipeline/threads/writer.py` with tests
   5. Pitch logic and pitch evaluation are extracted into `pipeline/threads/pitch.py` and `pipeline/threads/pitch_evaluator.py`
   6. Unit tests exist for all Threads pipeline modules (validator, crawler, writer, pitch) and the orchestrator
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — validator + crawler extraction + tests (validator.py, crawler.py, Wave 1)
+- [ ] 04-02-PLAN.md — pitch + pitch_evaluator extraction + tests (pitch.py, pitch_evaluator.py, Wave 2)
+- [ ] 04-03-PLAN.md — writer extraction + tests (writer.py, Wave 2)
+- [ ] 04-04-PLAN.md — orchestrator unit tests (test_orchestrator.py, Wave 1)
 
 ### Phase 5: Dead Code Removal & Final Polish
 **Goal**: Pipeline is fully clean — no dead code, no backup files, no abandoned scripts. Failure notifications work. Bulletin board verified reliable.
@@ -107,5 +113,5 @@ Plans:
 | 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
 | 2. Infrastructure & Portability | 0/2 | Not started | - |
 | 3. Landing Zone & Orchestrator | 5/5 | Complete   | 2026-06-30 |
-| 4. Monolith Splitting | 0/0 | Not started | - |
+| 4. Monolith Splitting | 0/4 | Planning complete | - |
 | 5. Dead Code Removal & Final Polish | 0/0 | Not started | - |
