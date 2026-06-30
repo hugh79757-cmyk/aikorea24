@@ -2,7 +2,7 @@
 set -e
 
 # ============================
-# nvm/node PATH fallback (launchd 환경 대응)
+# nvm/node PATH fallback (launchd 환경에서 실행 시 PATH 누락 대응)
 # ============================
 if ! command -v npm &>/dev/null; then
   # nvm
@@ -22,7 +22,9 @@ if ! command -v npm &>/dev/null; then
   fi
 fi
 
-# .env 로드 (프로젝트 로컬)
+# .env 로드 — deploy.sh 자체는 PROJECT_DIR/.env 만 참조
+# pipeline 스크립트(pipeline/infra/config.py)는 런타임에 ~/.env.common 도 fallback 으로 로드하지만
+# deploy.sh 내에서는 api_test/.env.sh 등의 cross-project 참조가 없음 (POR-04)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 if [ -f "$PROJECT_DIR/.env" ]; then
