@@ -61,7 +61,14 @@ Plans:
   6. `deploy.sh` resolves paths relative to its location and sources only project `.env` (no cross-project dependency)
   7. Threads publishing has no dual-scheduling race condition — single mechanism (launchd XOR internal `schedule`)
   8. Characterization tests exist for pure functions before any monolith refactoring begins
-**Plans**: TBD
+**Plans**: 5 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Orchestrator + D1 recording + CLI (core infrastructure)
+- [ ] 03-02-PLAN.md — Directory restructuring + Strangler Fig step wrappers
+- [ ] 03-03-PLAN.md — Plist templating + install_launchd.sh + deploy.sh portability
+- [ ] 03-04-PLAN.md — Threads dual-scheduling fix (remove --daemon)
+- [ ] 03-05-PLAN.md — Characterization tests for pure functions
 
 ### Phase 4: Monolith Splitting
 **Goal**: The two largest monoliths (`writer_v3.py` at 1,013 lines and `narrative_pitcher.py` at 581 lines) are split into focused, independently testable modules.
@@ -99,6 +106,6 @@ Plans:
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
 | 2. Infrastructure & Portability | 0/2 | Not started | - |
-| 3. Landing Zone & Orchestrator | 0/0 | Not started | - |
+| 3. Landing Zone & Orchestrator | 0/5 | Not started | - |
 | 4. Monolith Splitting | 0/0 | Not started | - |
 | 5. Dead Code Removal & Final Polish | 0/0 | Not started | - |
