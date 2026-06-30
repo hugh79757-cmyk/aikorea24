@@ -7,10 +7,10 @@
 
 ### Security
 
-- [ ] **SEC-01**: Audit all env var sources (`.env`, `~/.env.common`, `api_test/.env.sh`, plist `EnvironmentVariables`, `deploy.sh` cross-project source) and produce a comprehensive variable-source map
-- [ ] **SEC-02**: Remove plaintext API keys from committed launchd plist; delegate all secrets to `.env`
-- [ ] **SEC-03**: Consolidate all env loading into a single `env_loader.py` module — remove all 5+ duplicated `load_env()` implementations
-- [ ] **SEC-04**: Flag and document secrets in git history for remediation (git filter-branch or key rotation)
+- [x] **SEC-01**: Audit all env var sources (`.env`, `~/.env.common`, `api_test/.env.sh`, plist `EnvironmentVariables`, `deploy.sh` cross-project source) and produce a comprehensive variable-source map
+- [x] **SEC-02**: Remove plaintext API keys from committed launchd plist; delegate all secrets to `.env`
+- [x] **SEC-03**: Consolidate all env loading into a single `env_loader.py` module — remove all 5+ duplicated `load_env()` implementations
+- [x] **SEC-04**: Flag and document secrets in git history for remediation (git filter-branch or key rotation)
 
 ### Infrastructure
 
@@ -52,7 +52,7 @@
 - [ ] **TST-02**: Add unit tests for all extracted modules (news_selector, briefing, deep_article, etc.)
 - [ ] **TST-03**: Add unit tests for all Threads pipeline modules (validator, crawler, writer, pitch)
 - [ ] **TST-04**: Add unit tests for the orchestrator (per-step isolation, retry, skip behavior)
-- [ ] **TST-05**: Update `conftest.py` with abstracted mock targets
+- [x] **TST-05**: Update `conftest.py` with abstracted mock targets
 
 ### Dead Code Removal
 
@@ -69,7 +69,7 @@
 - [ ] **OBS-04**: CLI status command — `python -m pipeline status` shows last N runs, per-step health, failures at a glance
 - [ ] **OBS-05**: End-of-run status report (which steps succeeded/failed, with durations)
 - [ ] **OBS-06**: Fix existing Telegram alert — ensure notification fires when pipeline step fails or schedule is missed (infra exists but alerts aren't arriving)
-- [ ] **OBS-07**: Log secret scrubbing — redact API keys from log output
+- [x] **OBS-07**: Log secret scrubbing — redact API keys from log output
 
 ### Threads Auto-Publishing
 
@@ -105,12 +105,12 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SEC-01 | Phase 1 | Pending |
-| SEC-02 | Phase 1 | Pending |
-| SEC-03 | Phase 1 | Pending |
-| SEC-04 | Phase 1 | Pending |
-| TST-05 | Phase 1 | Pending |
-| OBS-07 | Phase 1 | Pending |
+| SEC-01 | Phase 1 | Complete |
+| SEC-02 | Phase 1 | Complete |
+| SEC-03 | Phase 1 | Complete |
+| SEC-04 | Phase 1 | Complete |
+| TST-05 | Phase 1 | Complete |
+| OBS-07 | Phase 1 | Complete |
 
 ### Phase 2 — Infrastructure & Portability
 

@@ -6,7 +6,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 
 ## Phases
 
-- [ ] **Phase 1: Security Hardening** — Eliminate active security issues (plaintext API keys, fragmented env loading)
+- [x] **Phase 1: Security Hardening** — Eliminate active security issues (plaintext API keys, fragmented env loading) (completed 2026-06-30)
 - [ ] **Phase 2: Infrastructure & Portability** — Create shared infra modules, wire old files, remove hardcoded paths
 - [ ] **Phase 3: Landing Zone & Orchestrator** — Directory restructuring, pipeline orchestrator, Threads stabilization, portability
 - [ ] **Phase 4: Monolith Splitting** — Split writer_v3.py (1,013 lines) and narrative_pitcher.py (581 lines) into focused modules
@@ -28,7 +28,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-PLAN.md — Plist hardening, env consolidation (env_loader.py), log scrubbing, test mocks, git history cleanup
+- [x] 02-PLAN.md — Plist hardening, env consolidation (env_loader.py), log scrubbing, test mocks, git history cleanup
 
 ### Phase 2: Infrastructure & Portability
 **Goal**: All shared infrastructure modules exist in `pipeline/infra/` and are used by all old files — no more duplicated utility code, no more hardcoded project paths.
@@ -93,7 +93,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Hardening | 0/1 | Planning done | - |
+| 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
 | 2. Infrastructure & Portability | 0/0 | Not started | - |
 | 3. Landing Zone & Orchestrator | 0/0 | Not started | - |
 | 4. Monolith Splitting | 0/0 | Not started | - |
