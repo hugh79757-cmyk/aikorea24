@@ -61,13 +61,15 @@
 - [ ] **DED-03**: Remove `format_selector.py` after confirming its functionality exists in new modules
 - [ ] **DED-04**: Remove old `threads/main_v3.py` after confirming new structure works in production
 
-### Monitoring
+### Observability
 
-- [ ] **MON-01**: Structured logging for all pipeline steps (timestamps, severity, run_id, step name, duration)
-- [ ] **MON-02**: Per-step timing and exit code propagation in orchestrator
-- [ ] **MON-03**: End-of-run status report (which steps succeeded/failed, with durations)
-- [ ] **MON-04**: Failure notification via Telegram (or existing alert channel)
-- [ ] **MON-05**: Log secret scrubbing — redact API keys from log output
+- [ ] **OBS-01**: Structured logging for all pipeline steps (timestamps, severity, run_id, step name, duration)
+- [ ] **OBS-02**: Per-step timing and exit code propagation in orchestrator
+- [ ] **OBS-03**: Run history stored in D1 (`pipeline_runs` table) — each step's status, duration, timestamp
+- [ ] **OBS-04**: CLI status command — `python -m pipeline status` shows last N runs, per-step health, failures at a glance
+- [ ] **OBS-05**: End-of-run status report (which steps succeeded/failed, with durations)
+- [ ] **OBS-06**: Fix existing Telegram alert — ensure notification fires when pipeline step fails or schedule is missed (infra exists but alerts aren't arriving)
+- [ ] **OBS-07**: Log secret scrubbing — redact API keys from log output
 
 ### Threads Auto-Publishing
 
@@ -90,6 +92,7 @@
 | Mobile app | Web-first, no mobile plans |
 | Multi-language support | Core audience is Korean |
 | New feature development | Focus is refactoring existing code |
+| Web dashboard UI | Deferred to separate dashboard project |
 | CI/CD server setup | Pipeline runs locally via cron |
 | Abstract base classes / DI frameworks | Research consensus — overkill for 6 sequential steps |
 | Async/await migration | No parallelism benefit for serial pipeline |
@@ -97,8 +100,6 @@
 | Orchestration framework (Airflow/Prefect) | Massive overkill for single-machine cron pipeline |
 
 ## Traceability
-
-> **Note on MON prefix collision:** REQUIREMENTS.md uses the `MON-` prefix for both **Monolith Splitting** (MON-01 through MON-07 under that section) and **Monitoring** (MON-01 through MON-05 under that section). These are distinct requirements with separate phase assignments. The table below disambiguates with parenthetical notes.
 
 ### Phase 1 — Security Hardening
 
@@ -109,7 +110,7 @@
 | SEC-03 | Phase 1 | Pending |
 | SEC-04 | Phase 1 | Pending |
 | TST-05 | Phase 1 | Pending |
-| MON-05 (monitoring) | Phase 1 | Pending |
+| OBS-07 | Phase 1 | Pending |
 
 ### Phase 2 — Infrastructure & Portability
 
@@ -122,7 +123,7 @@
 | INF-05 | Phase 2 | Pending |
 | INF-06 | Phase 2 | Pending |
 | POR-01 | Phase 2 | Pending |
-| MON-01 (monitoring) | Phase 2 | Pending |
+| OBS-01 | Phase 2 | Pending |
 
 ### Phase 3 — Landing Zone & Orchestrator
 
@@ -137,8 +138,10 @@
 | DIR-04 | Phase 3 | Pending |
 | DIR-05 | Phase 3 | Pending |
 | TST-01 | Phase 3 | Pending |
-| MON-02 (monitoring) | Phase 3 | Pending |
-| MON-03 (monitoring) | Phase 3 | Pending |
+| OBS-02 | Phase 3 | Pending |
+| OBS-03 | Phase 3 | Pending |
+| OBS-04 | Phase 3 | Pending |
+| OBS-05 | Phase 3 | Pending |
 | THR-01 | Phase 3 | Pending |
 | THR-02 | Phase 3 | Pending |
 
@@ -146,13 +149,13 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| MON-01 (monolith) | Phase 4 | Pending |
-| MON-02 (monolith) | Phase 4 | Pending |
-| MON-03 (monolith) | Phase 4 | Pending |
-| MON-04 (monolith) | Phase 4 | Pending |
-| MON-05 (monolith) | Phase 4 | Pending |
-| MON-06 (monolith) | Phase 4 | Pending |
-| MON-07 (monolith) | Phase 4 | Pending |
+| MON-01 | Phase 4 | Pending |
+| MON-02 | Phase 4 | Pending |
+| MON-03 | Phase 4 | Pending |
+| MON-04 | Phase 4 | Pending |
+| MON-05 | Phase 4 | Pending |
+| MON-06 | Phase 4 | Pending |
+| MON-07 | Phase 4 | Pending |
 | TST-02 | Phase 4 | Pending |
 | TST-03 | Phase 4 | Pending |
 | TST-04 | Phase 4 | Pending |
@@ -165,12 +168,12 @@
 | DED-02 | Phase 5 | Pending |
 | DED-03 | Phase 5 | Pending |
 | DED-04 | Phase 5 | Pending |
-| MON-04 (monitoring) | Phase 5 | Pending |
+| OBS-06 | Phase 5 | Pending |
 | BRD-01 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 43 total
-- Mapped to phases: 43
+- v1 requirements: 45 total
+- Mapped to phases: 45
 - Unmapped: 0 ✓
 
 ---

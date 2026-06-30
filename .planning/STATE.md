@@ -54,8 +54,8 @@ None yet.
 
 ### Blockers/Concerns
 
-- **MON prefix collision**: REQUIREMENTS.md uses `MON-` for both "Monolith Splitting" (MON-01–MON-07) and "Monitoring" (MON-01–MON-05). These are distinct requirements with different phase mappings. Monitor for confusion during plan-phase execution.
 - **Plist secrets in git history**: SEC-04 requires remediation decision (key rotation vs git filter-branch). Need to decide before Phase 1 completes.
+- **Telegram alerts not firing**: OBS-06 — existing Telegram infrastructure is in place but failure notifications aren't arriving. Root cause unknown, needs investigation during Phase 5.
 - **Parallel-run safety**: Pipeline runs every 2 hours via launchd with no staging environment. Every phase must keep the existing pipeline running during transition.
 
 ## Deferred Items

@@ -40,7 +40,9 @@ Reliable, automated Korean AI news publishing pipeline — from news collection 
 - [ ] **REF-02**: Consolidate duplicated `load_env()`, `d1_query()`, `load_posted()` into single modules
 - [ ] **REF-03**: Remove dead code and backup files
 - [ ] **REF-04**: Unify Python pipeline into modular structure with shared config
-- [ ] **MON-01**: Pipeline monitoring/logging — track success/failure at each stage with alerts
+- [ ] **OBS-01**: Pipeline observability — structured logging, per-step timing, run history stored in D1
+- [ ] **OBS-02**: CLI status command — `python -m pipeline status` for at-a-glance pipeline health
+- [ ] **OBS-03**: Telegram alert on pipeline failure or missed schedule
 - [ ] **THR-01**: Stabilize Threads auto-publishing pipeline
 - [ ] **BRD-01**: Bulletin board management stability
 - [ ] **INF-01**: Pipeline portability — allow clone-and-run on any machine
@@ -51,6 +53,7 @@ Reliable, automated Korean AI news publishing pipeline — from news collection 
 - Mobile app — web-first, no mobile plans
 - Multi-language support beyond Korean — core audience is Korean
 - New feature development beyond stabilization — focus is refactoring existing
+- Web dashboard UI — deferred to separate dashboard project
 - CI/CD server setup — pipeline runs locally via cron
 
 ## Context
@@ -72,7 +75,8 @@ Initial project built rapidly with significant technical debt. Python pipeline h
 | Security-first prioritization | User identified access control and key exposure as top concern | — Pending |
 | Full rebuild of Python pipeline | Existing code too fragmented for incremental cleanup | — Pending |
 | Preserve Astro/Cloudflare frontend | Relatively clean, lower priority for refactoring | — Pending |
+| CLI status + Telegram alert instead of web dashboard | Already have separate dashboard project; don't expand scope | — Pending |
 
 ---
 
-*Last updated: 2026-06-30 after initialization*
+*Last updated: 2026-06-30 after adding observability requirements*

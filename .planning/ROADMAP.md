@@ -18,7 +18,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 **Goal**: All active security issues are eliminated — no plaintext API keys in committed files, env loading consolidated into a single secure module, and secrets in git history documented for remediation.
 **Mode**: mvp
 **Depends on**: Nothing (first phase)
-**Requirements**: SEC-01, SEC-02, SEC-03, SEC-04, MON-05 (monitoring), TST-05
+**Requirements**: SEC-01, SEC-02, SEC-03, SEC-04, OBS-07, TST-05
 **Success Criteria** (what must be TRUE):
   1. `threads-publisher.plist` contains zero API keys or secrets — all env vars delegated to `.env`
   2. A comprehensive env var source-map document exists, covering all 5+ sources across the project
@@ -31,7 +31,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 **Goal**: All shared infrastructure modules exist in `pipeline/infra/` and are used by all old files — no more duplicated utility code, no more hardcoded project paths.
 **Mode**: mvp
 **Depends on**: Phase 1
-**Requirements**: INF-01, INF-02, INF-03, INF-04, INF-05, INF-06, POR-01, MON-01 (monitoring)
+**Requirements**: INF-01, INF-02, INF-03, INF-04, INF-05, INF-06, POR-01, OBS-01
 **Success Criteria** (what must be TRUE):
   1. `pipeline/infra/` contains all 6 modules (config, env_loader, d1_client, logger, models, retry) — all stdlib only
   2. All 11+ hardcoded `PROJECT_DIR` paths replaced with `project_root()` from `config.py`
@@ -44,21 +44,23 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 **Goal**: Pipeline has a proper directory structure, formal orchestrator with per-step monitoring, Threads dual-scheduling race condition resolved, and the pipeline can be cloned and run on any machine.
 **Mode**: mvp
 **Depends on**: Phase 2
-**Requirements**: POR-02, POR-03, POR-04, DIR-01, DIR-02, DIR-03, DIR-04, DIR-05, TST-01, MON-02 (monitoring), MON-03 (monitoring), THR-01, THR-02
+**Requirements**: POR-02, POR-03, POR-04, DIR-01, DIR-02, DIR-03, DIR-04, DIR-05, TST-01, OBS-02, OBS-03, OBS-04, OBS-05, THR-01, THR-02
 **Success Criteria** (what must be TRUE):
   1. `pipeline/steps/` and `pipeline/threads/` directories exist with all step scripts organized in place
   2. `pipeline/orchestrator.py` with `PipelineStep` protocol and `PipelineOrchestrator` class runs all steps with per-step timing and exit code propagation
-  3. Plist is generated from template via `install_launchd.sh` — zero hardcoded paths or secrets in plist
-  4. `deploy.sh` resolves paths relative to its location and sources only project `.env` (no cross-project dependency)
-  5. Threads publishing has no dual-scheduling race condition — single mechanism (launchd XOR internal `schedule`)
-  6. Characterization tests exist for pure functions before any monolith refactoring begins
+  3. Run history stored in D1 (`pipeline_runs` table) — every step's status, duration, timestamp recorded
+  4. CLI command `python -m pipeline status` shows last N runs and per-step health at a glance
+  5. Plist is generated from template via `install_launchd.sh` — zero hardcoded paths or secrets in plist
+  6. `deploy.sh` resolves paths relative to its location and sources only project `.env` (no cross-project dependency)
+  7. Threads publishing has no dual-scheduling race condition — single mechanism (launchd XOR internal `schedule`)
+  8. Characterization tests exist for pure functions before any monolith refactoring begins
 **Plans**: TBD
 
 ### Phase 4: Monolith Splitting
 **Goal**: The two largest monoliths (`writer_v3.py` at 1,013 lines and `narrative_pitcher.py` at 581 lines) are split into focused, independently testable modules.
 **Mode**: mvp
 **Depends on**: Phase 3
-**Requirements**: MON-01 (monolith), MON-02 (monolith), MON-03 (monolith), MON-04 (monolith), MON-05 (monolith), MON-06 (monolith), MON-07 (monolith), TST-02, TST-03, TST-04
+**Requirements**: MON-01, MON-02, MON-03, MON-04, MON-05, MON-06, MON-07, TST-02, TST-03, TST-04
 **Success Criteria** (what must be TRUE):
   1. Dependency graph of `writer_v3.py` internal function calls is documented before any splitting
   2. Card/year/keyword validation is extracted into `pipeline/threads/validator.py` with characterization tests
@@ -72,13 +74,13 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 **Goal**: Pipeline is fully clean — no dead code, no backup files, no abandoned scripts. Failure notifications work. Bulletin board verified reliable.
 **Mode**: mvp
 **Depends on**: Phase 4
-**Requirements**: DED-01, DED-02, DED-03, DED-04, MON-04 (monitoring), BRD-01
+**Requirements**: DED-01, DED-02, DED-03, DED-04, OBS-06, BRD-01
 **Success Criteria** (what must be TRUE):
   1. No backup files (`backup_*.txt`, `.bak` files) remain in the repository
   2. No abandoned scripts remain (`patch_*.py`, `test_*.py`, `spotlight_*.sh`, `quick_check.sh`)
   3. `format_selector.py` is removed after confirming its functionality exists in new modules
   4. Old `threads/main_v3.py` is removed after confirming new structure works in production (shadow-run validated)
-  5. Pipeline failure notification via Telegram (or existing alert channel) delivers alerts on step failure
+  5. Telegram alert fires correctly when a pipeline step fails or schedule is missed (fixed existing mechanism, not new setup)
   6. Community bulletin board (posts + comments) is verified working with refactored pipeline
 **Plans**: TBD
 
