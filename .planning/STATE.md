@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 Phase: 1 of 5 (Security Hardening)
 Plan: 0 of 0 in current phase
 Status: Ready to plan
-Last activity: 2026-06-30 — Roadmap initialized
+Last activity: 2026-06-30 — Phase 1 context gathered
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -47,6 +47,11 @@ Recent decisions affecting current work:
 - [Project Init]: Zero new external dependencies — Python 3.14 stdlib suffices for all infra modules
 - [Project Init]: No orchestration framework — simple `PipelineStep` protocol + `PipelineOrchestrator` class (50 lines)
 - [Project Init]: Coarse granularity (5 phases), YOLO mode, Vertical MVP structure
+- [Phase 1]: BFG cleanup for git history + key rotation
+- [Phase 1]: .env (priority) → ~/.env.common (fallback) — plist env vars removed
+- [Phase 1]: Logger-level comprehensive scrubbing with ScrubRegistry
+- [Phase 1]: Failure-only Telegram alerts with step name + error detail
+- [Phase 1]: Heartbeat monitor (30min check, 3h miss threshold)
 
 ### Pending Todos
 
@@ -54,8 +59,8 @@ None yet.
 
 ### Blockers/Concerns
 
-- **Plist secrets in git history**: SEC-04 requires remediation decision (key rotation vs git filter-branch). Need to decide before Phase 1 completes.
-- **Telegram alerts not firing**: OBS-06 — existing Telegram infrastructure is in place but failure notifications aren't arriving. Root cause unknown, needs investigation during Phase 5.
+- **BFG cleanup + key rotation**: SEC-04 — decided to use BFG then rotate keys. Execute at start of Phase 1.
+- **Telegram alerts not firing**: OBS-06 — existing Telegram infra works but `run_pipeline_with_notify.py` wraps the wrong entry point. Fix: make orchestrator fire failure-only alerts.
 - **Parallel-run safety**: Pipeline runs every 2 hours via launchd with no staging environment. Every phase must keep the existing pipeline running during transition.
 
 ## Deferred Items
@@ -66,6 +71,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-30 19:51
-Stopped at: Roadmap created — 5 phases defined, 43/43 v1 requirements mapped
-Resume file: None
+Last session: 2026-06-30 20:20
+Stopped at: Phase 1 context gathered — 4 gray areas discussed and decided
+Resume file: .planning/phases/01-security-hardening/01-CONTEXT.md
