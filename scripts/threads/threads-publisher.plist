@@ -18,13 +18,6 @@
 	<string>/Users/twinssn/Projects/aikorea24/scripts/threads/logs/launchd_error.log</string>
 	<key>StartInterval</key>
 	<integer>7200</integer>
-	<key>EnvironmentVariables</key>
-	<dict>
-		<key>PATH</key>
-		<string>/Users/twinssn/Projects/aikorea24/.venv/bin:/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
-		<key>OPENAI_API_KEY</key>
-		<string>REDACTED_OPENAI_KEY</string>
-	</dict>
 	<key>KeepAlive</key>
 	<false/>
 	<key>RunAtLoad</key>
