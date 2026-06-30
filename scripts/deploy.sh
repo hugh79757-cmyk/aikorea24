@@ -22,11 +22,13 @@ if ! command -v npm &>/dev/null; then
   fi
 fi
 
-# .env 로드
-if [ -f /Users/twinssn/Projects/5000/.env ]; then
-  export $(grep -E '^(CLOUDFLARE_API_TOKEN|CLOUDFLARE_ACCOUNT_ID)' /Users/twinssn/Projects/5000/.env | xargs)
+# .env 로드 (프로젝트 로컬)
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+if [ -f "$PROJECT_DIR/.env" ]; then
+  source "$PROJECT_DIR/.env"
 else
-  echo "[ERROR] .env 파일 없음: /Users/twinssn/Projects/5000/.env"
+  echo "[ERROR] .env 파일 없음: $PROJECT_DIR/.env"
   exit 1
 fi
 
