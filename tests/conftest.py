@@ -129,6 +129,7 @@ def monkeypatch_d1(monkeypatch):
     def mock_d1(sql, retries=2):
         return []
     monkeypatch.setattr("auto_news_selector.d1_query", mock_d1)
+    monkeypatch.setattr("pipeline.infra.d1_client.d1_query", mock_d1)
     return mock_d1
 
 

@@ -600,3 +600,51 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 8개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 2개
+  TopAI.tools: 4개 수집
+  총 13개 (중복 제거 후)
+수집 완료: 13개
+기존 툴: 113개 (슬러그), 113개 (이름)
+  중복 스킵: discode.ai
+  중복 스킵: Folio AI
+  중복 스킵: AI Slide Editor by CubeOne
+  중복 스킵: Gemini Spark
+  중복 스킵: Tough Tongue AI for Sales
+  중복 스킵: Meev AI
+  중복 스킵: Cantina AI
+신규 툴: 6개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (6건) ---
+  크롤링 성공: https://outpaint.com/ad-reframe?ref=producthunt... (설명 167자)
+  크롤링 성공: https://getvisibai.com/?ref=producthunt... (설명 161자)
+  크롤링 성공: https://receiptor.ai/?ref=producthunt... (설명 156자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/agent-mode-by-receiptor-ai.md
+  ✅ Agent Mode by Receiptor AI → agent-mode-by-receiptor-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/visibai.md
+  ✅ VisibAI → visibai.md
+  크롤링 성공: https://huggingface.co/papers... (설명 38자)
+  크롤링 성공: https://topai.tools/t/photoupscaler-ai... (설명 151자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/outpaint-ad-reframe.md
+  ✅ Outpaint - Ad Reframe → outpaint-ad-reframe.md
+  크롤링 성공: https://topai.tools/t/humanizeaitext-io... (설명 151자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/formalizing-latent-thoughts-four-axioms-of-though.md
+  ✅ Formalizing Latent Thoughts: Four Axioms of Though → formalizing-latent-thoughts-four-axioms-of-though.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/photoupscaler-ai.md
+  ✅ Photoupscaler AI → photoupscaler-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/humanizeaitext.md
+  ✅ HumanizeAIText → humanizeaitext.md
+
+==================================================
+처리 완료: 6/13개 생성 (27.8초)
+  git commit: [main 557ceeb] feat: AI 툴 6개 추가 (2026-06-30)
+ 51 files changed, 4345 insertions(+), 598 deletions(-)
+ create mode 100644 "public/images/a-i-\352\260\200-\354\235\270\354\203\235\354\235\230-\355\201\2
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅

@@ -10,8 +10,11 @@ import os, re, json, sys, time, hmac, hashlib, base64
 from datetime import datetime, date, timezone, timedelta
 import urllib.parse
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 KST = timezone(timedelta(hours=9))
-PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 SEEDS_PATH = os.path.join(PROJECT_DIR, "scripts", "seeds.json")
 KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")

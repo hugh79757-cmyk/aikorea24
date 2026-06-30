@@ -13,7 +13,7 @@
 import os, re, sys
 from datetime import datetime
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 TOOLS_DIR = os.path.join(PROJECT_DIR, 'src/content/tools')
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts'))
 

@@ -8,7 +8,10 @@ model_router.py - AI 모델 호출 라우터
 import os, sys
 from openai import OpenAI
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads'))
 ENV_FILE = os.path.join(PROJECT_DIR, '.env')
 

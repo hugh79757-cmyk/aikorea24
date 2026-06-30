@@ -11,7 +11,11 @@ scripts/task_config.py의 40개 태스크 vocabulary 기반 키워드 매칭
 import os, re, sys
 from datetime import datetime
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
+
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 TOOLS_DIR = os.path.join(PROJECT_DIR, 'src/content/tools')
 
 # ============================================

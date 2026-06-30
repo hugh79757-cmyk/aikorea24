@@ -5,9 +5,7 @@
 import os
 import re
 import urllib.request
-from pathlib import Path
-
-PROJECT_DIR = Path('/Users/twinssn/Projects/aikorea24')
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 TOOLS_DIR = PROJECT_DIR / 'src' / 'content' / 'tools'
 
 

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/scripts/threads/main_v3.py", line 11, in <module>
+    from pipeline.infra.env_loader import EnvConfig
+ModuleNotFoundError: No module named 'pipeline'
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/scripts/threads/main_v3.py", line 11, in <module>
+    from pipeline.infra.env_loader import EnvConfig
+ModuleNotFoundError: No module named 'pipeline'

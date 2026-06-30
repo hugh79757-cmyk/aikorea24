@@ -8,8 +8,11 @@ import os
 import requests
 from pathlib import Path
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 KST = timezone(timedelta(hours=9))
-PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
 # Load API key from .env.common
 _env_path = os.path.expanduser("~/.env.common")
@@ -25,8 +28,9 @@ MIMO_BASE_URL = "https://api.xiaomimimo.com/v1"
 MIMO_MODEL = "mimo-v2.5"
 
 sys.path.insert(0, str(Path(__file__).parent))
-from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
+from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query, _expand_misc_for_legacy
 
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
     print(f"[{ts}] {msg}")
@@ -101,6 +105,8 @@ def build_briefing(articles):
             "news_id": a.get("id"),
             "sort_order": i + 1,
             "comment": a.get("comment", ""),
+            "impact_score": a.get("impact_score"),
+            "score_breakdown": a.get("score_breakdown"),
         })
 
     return {"date": today, "intro": intro, "status": "published", "items": items}
@@ -108,6 +114,7 @@ def build_briefing(articles):
 
 def save_briefing(data):
     """D1 DB에 브리핑 저장. 성공 시 briefing_id, 실패 시 None 반환."""
+    import json as _json
     today_base = data["date"][:10]
     intro_escaped = data["intro"].replace("'", "''")
 
@@ -141,10 +148,23 @@ def save_briefing(data):
         comment_escaped = (item.get("comment") or "").replace("'", "''")
         news_id = item["news_id"]
         sort_order = item["sort_order"]
-        sql_item = (
-            f"INSERT INTO briefing_items (briefing_id, news_id, sort_order, comment) "
-            f"VALUES ({briefing_id}, {news_id}, {sort_order}, '{comment_escaped}')"
-        )
+        impact_score = item.get("impact_score")
+        score_breakdown = item.get("score_breakdown")
+        if score_breakdown is not None:
+            score_breakdown_json = _json.dumps(score_breakdown, ensure_ascii=False).replace("'", "''")
+        else:
+            score_breakdown_json = _json.dumps({"mode": "legacy"}, ensure_ascii=False)
+
+        if impact_score is not None:
+            sql_item = (
+                f"INSERT INTO briefing_items (briefing_id, news_id, sort_order, comment, impact_score, score_breakdown) "
+                f"VALUES ({briefing_id}, {news_id}, {sort_order}, '{comment_escaped}', {impact_score}, '{score_breakdown_json}')"
+            )
+        else:
+            sql_item = (
+                f"INSERT INTO briefing_items (briefing_id, news_id, sort_order, comment) "
+                f"VALUES ({briefing_id}, {news_id}, {sort_order}, '{comment_escaped}')"
+            )
         if not d1_execute(sql_item):
             log(f"  sort_order={sort_order} 아이템 저장 실패")
 
@@ -170,10 +190,8 @@ def main(selected_articles=None):
             return
 
         clusters = cluster_by_topic(articles)
-        for cluster_name, cluster_articles in clusters.items():
-            for art in cluster_articles:
-                art["cluster"] = cluster_name
-        selected = select_top_articles(clusters, max_count=6)
+        legacy_clusters = _expand_misc_for_legacy(clusters)
+        selected = select_top_articles(legacy_clusters, max_count=6)
         log(f"  선정: {len(selected)}개 기사")
 
         # Phase 2 중복 방어 (저장 전 재검증)
@@ -222,6 +240,29 @@ def main(selected_articles=None):
 
     log("=== 완료 ===")
     return briefing_id
+
+
+def to_scorer_recent_briefing(briefing_rows):
+    """D1 briefing row → briefing_scorer.score_article()의 recent_briefings 포맷 변환
+
+    입력: D1 query 결과 (id, title, original_title, description, link, date)
+    출력: [{cluster, entities, impact_amount, title, link}, ...]
+    """
+    result = []
+    for r in briefing_rows:
+        text = f"{r.get('title', '')} {r.get('description', '')} {r.get('original_title', '')}"
+        from briefing_scorer import _ENG_ENTITY_RE
+        entities = list(set(_ENG_ENTITY_RE.findall(text)))
+        from briefing_scorer import _parse_amounts
+        _, amounts = _parse_amounts(text)
+        result.append({
+            "cluster": "",
+            "entities": entities,
+            "impact_amount": max(amounts.get("usd_max", 0), amounts.get("krw_max", 0)),
+            "title": r.get("title", ""),
+            "link": r.get("link", ""),
+        })
+    return result
 
 
 if __name__ == "__main__":

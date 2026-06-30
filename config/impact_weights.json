@@ -1,0 +1,44 @@
+{
+  "financial_impact": {
+    "usd": { "10B_plus": 25, "1B_10B": 15, "100M_1B": 8, "lt_100M": 0 },
+    "krw": { "1조_plus": 25, "1000억_1조": 15, "100억_1000억": 8, "lt_100억": 0 },
+    "_comment_fx": "fx_assumption_usd_krw는 참고용 only. 실제 환산에는 사용하지 않음. KRW/USD 각각 자체 구간 맵 사용."
+  },
+  "entity_tier": { "weight": 20, "tier1": 20, "tier2": 10, "tier3": 0 },
+  "freshness": { "weight": 15, "lt_1h": 15, "lt_3h": 10, "lt_6h": 5, "gt_6h": 0 },
+  "source_authority": {
+    "weight": 10,
+    "tier1_sources": ["BBC","Reuters","Bloomberg","TechCrunch"],
+    "tier1_score": 10,
+    "tier2_score": 5
+  },
+  "topic_blast_radius": {
+    "weight": 15,
+    "high": ["ai-regulation","safety-incident","merger-acquisition","lawsuit"],
+    "high_score": 15,
+    "mid": ["product-launch","funding-round"],
+    "mid_score": 8,
+    "low_score": 3
+  },
+  "conflict_drama": {
+    "weight": 10,
+    "keywords": ["lawsuit","resign","fired","scandal","fraud","probe"],
+    "score": 10
+  },
+  "penalties": {
+    "low_tier_entity_solo": -10,
+    "duplicate_theme_7d": -15
+  },
+  "thresholds": {
+    "light_score_min_misc_slot": 20,
+    "impact_pass_min": 70,
+    "impact_pass_max_slots": 3,
+    "top_n_crawl": 20,
+    "total_max": 95
+  },
+  "crawl_concurrency": 1,
+  "fx_gbp_to_usd": 1.27,
+  "fx_eur_to_usd": 1.08,
+  "fx_assumption_usd_krw": 1350,
+  "_review_monthly": ["entity_tier 리스트", "financial_impact 구간", "fx_assumption_usd_krw 참고값"]
+}

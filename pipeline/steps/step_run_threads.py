@@ -19,15 +19,15 @@ OLD_SCRIPT = str(PROJECT_DIR / "scripts" / "threads" / "main_v3.py")
 
 
 class StepRunThreads:
-    """Threads 파이프라인 실행 스텝 — main_v3.py --once 을 subprocess로 호출"""
+    """Threads 파이프라인 실행 스텝 — main_v3.py 를 subprocess로 호출"""
 
     name: str = "run_threads"
 
     def run(self) -> int:
-        """main_v3.py --once 를 subprocess로 실행하고 종료 코드 반환"""
+        """main_v3.py 를 subprocess로 실행하고 종료 코드 반환"""
         try:
             result = subprocess.run(
-                [VENV_PYTHON, OLD_SCRIPT, "--once"],
+                [VENV_PYTHON, OLD_SCRIPT],
                 capture_output=True,
                 text=True,
                 timeout=600,

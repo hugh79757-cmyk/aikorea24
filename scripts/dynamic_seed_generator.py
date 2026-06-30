@@ -10,8 +10,14 @@ import os, re, json, sys, time, hmac, hashlib, base64
 from datetime import datetime, date, timezone, timedelta
 import urllib.parse
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 KST = timezone(timedelta(hours=9))
-PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 SEEDS_PATH = os.path.join(PROJECT_DIR, "scripts", "seeds.json")
 KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
@@ -26,6 +32,7 @@ MAX_SEEDS = 30
 NAVER_CALL_INTERVAL = 0.4  # 초당 3회 제한 → 0.4초 간격 (여유)
 
 
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
     print(f"[{ts}] {msg}")

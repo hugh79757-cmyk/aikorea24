@@ -13,6 +13,7 @@ Usage:
 
 import logging
 import re
+import time
 from typing import Optional
 
 
@@ -62,8 +63,8 @@ class ScrubRegistry:
             return
         cls._initialized = True
 
-        # API 키 패턴 (sk-... 형식)
-        cls.add_pattern("openai_key", r"sk-[A-Za-z0-9]{20,}")
+        # API 키 패턴 (sk-... 형식) — 하이픈 포함, 짧은 키도 캐치
+        cls.add_pattern("openai_key", r"sk-[A-Za-z0-9-]{4,}")
 
         # GitHub Personal Access Token
         cls.add_pattern("github_token", r"ghp_[A-Za-z0-9]{36,}")
@@ -123,7 +124,7 @@ class ScrubRegistry:
         cls.add_pattern("email", r"[\w.+-]+@[\w-]+\.[\w.-]+")
 
     @classmethod
-    def add_pattern(cls, name: str, pattern: str, replacement: str = "***") -> None:
+    def add_pattern(cls, name: str, pattern: str, replacement: str = "[REDACTED]") -> None:
         """스크럽 패턴을 등록합니다.
 
         Args:
@@ -173,7 +174,7 @@ class ScrubRegistry:
                 rf'({re.escape(env_name)})=\S+',
                 re.IGNORECASE,
             )
-            text = pattern.sub(r'\1=***', text)
+            text = pattern.sub(r'\1=[REDACTED]', text)
         return text
 
     @classmethod
@@ -270,3 +271,89 @@ def scrub_print(*args, **kwargs) -> None:
         for arg in args
     )
     print(*scrubbed_args, **kwargs)
+
+
+# ── PipelineLogger (structured context + duration) ──────────────
+
+from contextlib import contextmanager
+from typing import Generator, Optional
+
+
+class PipelineLogger(logging.LoggerAdapter):
+    """run_id, step_name, duration 컨텍스트를 로그 레코드에 첨부.
+
+    LoggerAdapter 패턴을 사용하여 extra dict를 통해 추가 컨텍스트를 전달.
+    ScrubLogFilter는 extra dict를 건드리지 않고 msg만 스크럽하므로
+    두 계층이 독립적으로 동작합니다.
+
+    Usage:
+        log = PipelineLogger(get_scrubbed_logger(__name__), run_id="run01", step_name="fetch")
+        log.info("기사 수집 시작")
+        # → "[run_id=run01] [step=fetch] 기사 수집 시작"
+    """
+
+    def __init__(
+        self,
+        logger: logging.Logger,
+        run_id: str = "",
+        step_name: str = "",
+        duration: Optional[float] = None,
+    ):
+        super().__init__(logger, {"run_id": run_id, "step_name": step_name, "duration": duration})
+
+    def process(self, msg: str, kwargs: dict) -> tuple[str, dict]:
+        """로그 메시지에 컨텍스트 프리픽스를 추가."""
+        parts = []
+        if self.extra["run_id"]:
+            parts.append(f"[run_id={self.extra['run_id']}]")
+        if self.extra["step_name"]:
+            parts.append(f"[step={self.extra['step_name']}]")
+        if self.extra.get("duration") is not None:
+            parts.append(f"[dur={self.extra['duration']:.1f}s]")
+        prefix = " ".join(parts)
+        if prefix:
+            msg = f"{prefix} {msg}"
+        return msg, kwargs
+
+
+def get_pipeline_logger(
+    name: str,
+    run_id: str = "",
+    step_name: str = "",
+    level: int = logging.INFO,
+) -> PipelineLogger:
+    """PipelineLogger 인스턴스를 생성.
+
+    Args:
+        name: 로거 이름 (보통 __name__)
+        run_id: 실행 식별자 (예: "run_20260630_120000")
+        step_name: 현재 단계 이름 (예: "news_crawl")
+        level: 로깅 레벨
+
+    Returns:
+        ScrubLogFilter + 컨텍스트가 적용된 PipelineLogger
+    """
+    logger = get_scrubbed_logger(name, level)
+    return PipelineLogger(logger, run_id=run_id, step_name=step_name)
+
+
+@contextmanager
+def log_step(logger: PipelineLogger, step_name: str) -> Generator[PipelineLogger, None, None]:
+    """단계 실행 시간을 측정하고 로깅하는 컨텍스트 매니저.
+
+    Usage:
+        with log_step(log, "fetch_news") as ctx:
+            news = fetch_news()
+        # → "[step=fetch_news] [dur=1.2s] fetch_news completed"
+    """
+    old_step = logger.extra.get("step_name", "")
+    logger.extra["step_name"] = step_name
+    logger.extra["duration"] = None
+    start = time.monotonic()
+    try:
+        yield logger
+    finally:
+        elapsed = time.monotonic() - start
+        logger.extra["duration"] = elapsed
+        logger.info(f"{step_name} completed in {elapsed:.1f}s")
+        logger.extra["step_name"] = old_step

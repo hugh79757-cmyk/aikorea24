@@ -11,12 +11,15 @@ aikorea24 블로그 아웃라인(재료) 생성기 v2.0
 import os, re, json, glob, sys
 from datetime import datetime, date, timezone, timedelta
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 KST = timezone(timedelta(hours=9))
 
 # ============================================
 # 경로 / 설정
 # ============================================
-PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
 OUTLINES_DIR = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "outlines")

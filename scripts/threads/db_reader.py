@@ -9,7 +9,12 @@ aikorea24 D1 DB → 기사 풀 로드 (3단계 우선순위)
 import os, sys, json, re, subprocess, time
 import urllib.request
 from datetime import datetime, timedelta
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra.d1_client import d1_query as d1_query_new
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
+
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 CRAWLABLE_CONFIG = os.path.join(PROJECT_DIR, 'config', 'crawlable_sources.json')
 
 
@@ -44,7 +49,7 @@ def normalize_url(url):
 
 from dedup import is_same_topic, article_keywords, article_entities
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+PROJECT_DIR = project_root()
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 POSTED_FILE = os.path.join(THREADS_DIR, 'posted.json')
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
@@ -90,6 +95,7 @@ def find_fallback_url(title, max_title_chars=80):
         pass
     return None
 
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now().strftime('%H:%M:%S')
     print(f'[{ts}] {msg}')

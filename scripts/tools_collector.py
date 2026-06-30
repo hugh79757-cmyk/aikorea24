@@ -13,9 +13,15 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
 from html import unescape
+
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 sys.path.insert(0, PROJECT_DIR)
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'api_test'))

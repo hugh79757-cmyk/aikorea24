@@ -1,0 +1,6 @@
+[
+  {"cluster": "nvidia", "entities": ["Nvidia"], "impact_amount": 500000000000, "title": "Nvidia GPU Shortage Continues", "link": "https://example.com/prev1"},
+  {"cluster": "anthropic", "entities": ["Anthropic", "Claude"], "impact_amount": 10000000000, "title": "Anthropic Launches Claude 4", "link": "https://example.com/prev2"},
+  {"cluster": "ai-regulation", "entities": ["EU"], "impact_amount": 0, "title": "EU AI Act Finalized", "link": "https://example.com/prev3"},
+  {"cluster": "investment", "entities": ["OpenAI"], "impact_amount": 20000000000, "title": "OpenAI Raises $20B", "link": "https://example.com/prev4"}
+]

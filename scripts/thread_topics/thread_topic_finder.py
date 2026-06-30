@@ -8,8 +8,11 @@ import os, re, json, sys, time
 from datetime import datetime, date, timezone, timedelta
 from typing import Any
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 KST = timezone(timedelta(hours=9))
-PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 THREADS_DIR = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "topics")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"

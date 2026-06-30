@@ -9,6 +9,9 @@ aikorea24 블로그 초안 자동 생성기
 import os, re, json, glob, sys
 from datetime import datetime, date, timezone, timedelta
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 KST = timezone(timedelta(hours=9))
 
 # ============================================
@@ -31,13 +34,14 @@ GRADE_SCORE = {"A": 100, "B": 60, "C": 30}
 # ============================================
 # 경로 / 설정
 # ============================================
-PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 
 # ============================================
 # 로깅
 # ============================================
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
     print(f"[{ts}] {msg}")

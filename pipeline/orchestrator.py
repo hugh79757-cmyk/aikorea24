@@ -18,7 +18,10 @@ Usage:
     results = orb.run()
 """
 
+import json
+import os
 import time
+import urllib.request
 from datetime import datetime
 from typing import Optional, Protocol, runtime_checkable
 
@@ -91,6 +94,7 @@ class PipelineOrchestrator:
                 result.duration_seconds = elapsed
                 result.error = f"{type(e).__name__}: {e}"
                 self._log.exception(f"Step '{step.name}' raised {type(e).__name__}")
+                self._send_telegram_failure(result)
 
             self.results.append(result)
             if not dry_run:
@@ -98,6 +102,7 @@ class PipelineOrchestrator:
 
             if not result.success:
                 all_success = False
+                self._send_telegram_failure(result)
 
         self._print_summary()
         return self.results
@@ -128,6 +133,33 @@ class PipelineOrchestrator:
             d1_query(sql)
         except Exception as e:
             self._log.warning(f"D1 기록 실패: {e}")
+
+    def _send_telegram_failure(self, result: PipelineStepResult) -> None:
+        bot_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+        chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
+        if not bot_token or not chat_id:
+            return
+
+        message = (
+            f"❌ <b>Pipeline step failed</b>\n"
+            f"Step: {result.step_name}\n"
+            f"Error: {result.error or 'exit code != 0'}\n"
+            f"Duration: {result.duration_seconds:.1f}s\n"
+            f"Run: {result.run_id}"
+        )
+
+        try:
+            url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+            data = json.dumps({
+                "chat_id": chat_id,
+                "text": message,
+                "parse_mode": "HTML"
+            }).encode()
+            req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
+            urllib.request.urlopen(req, timeout=10)
+            self._log.info(f"Telegram failure alert sent for step '{result.step_name}'")
+        except Exception as e:
+            self._log.warning(f"Telegram failure alert failed: {e}")
 
     def _print_summary(self) -> None:
         """파이프라인 실행 요약을 출력합니다."""

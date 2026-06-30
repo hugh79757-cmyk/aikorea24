@@ -8,12 +8,20 @@ aikorea24 Threads API 발행기
 import os, sys, json, time, socket, requests
 from datetime import datetime
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
+
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 POSTED_FILE = os.path.join(THREADS_DIR, 'posted.json')
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now().strftime('%H:%M:%S')
     print(f'[{ts}] {msg}')

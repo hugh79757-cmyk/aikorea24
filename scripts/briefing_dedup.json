@@ -480,6 +480,79 @@
           "date": "2026-06-30"
         }
       ]
+    },
+    {
+      "date": "2026-06-30",
+      "briefing_id": 143,
+      "articles": [
+        {
+          "id": "36688",
+          "title": "암호화폐 거래소 OKX는 AI 에이전트가 서로 고용하고 보수를 지급하기를 원한다",
+          "original_title": "",
+          "description": "OKX는 AI 에이전트를 위한 결제, 신원 및 평판을 하나의 시장으로 통합하고 있습니다. 이를 통해 AI 에이전트 간에 원활한 거래가 이루어질 것으로 기대하고 있습니다.",
+          "link": "https://techcrunch.com/2026/06/30/crypto-exchange-okx-wants-ai-agents-to-hire-and-pay-each-other/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36815",
+          "title": "Manago AI, 이전의 SALESmanago, 새로운 정체성과 강력한 AI 기능 공개",
+          "original_title": "",
+          "description": "Manago AI는 브랜드가 모든 고객을 이해하고 통찰력을 개인화된 참여로 빠르게 전환할 수 있도록 도와줍니다. 이로 인해 마케팅 복잡성이 극적으로 줄어듭니다.",
+          "link": "https://www.cityam.com/manago-ai-formerly-salesmanago-unveils-new-identity-and-agentic-ai-capabilities-to-help-brands-move-faster-and-make-powerful-marketing-feel-simple/",
+          "entities": [
+            "AI",
+            "SALESmanago",
+            "Manago"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36721",
+          "title": "Deepseek의 DSpark, AI 속도를 최대 85%까지 향상시키며 미국 수출 통제 강",
+          "original_title": "",
+          "description": "Deepseek의 새로운 DSpark 프레임워크는 사용자당 응답 속도를 60%에서 85%까지 향상시킵니다. 소형 모델이 더 큰 모델이 배치로 확인할 수 있는 토큰 후보를 제안함으로써, 적은 수의 칩으로 더 많은 성능을 끌어냅니다. 이는 중국의 미국 고급 하드웨어 의존도를 더욱 줄일 수 있습니다.",
+          "link": "https://the-decoder.com/deepseeks-dspark-boosts-ai-speed-by-up-to-85-percent-a-strategic-win-under-tightening-us-export-controls/",
+          "entities": [
+            "DSpark",
+            "AI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36810",
+          "title": "파나소닉, 미국 데이터 센터 배터리 생산 현지화 예정",
+          "original_title": "",
+          "description": "이 일본 그룹은 2028 회계연도까지 캔자스에서 데이터 센터 배터리 셀을 대량 생산할 계획이며, AI 인프라스트럭처 투자 중 대규모로 저장 쪽으로 전환하고 있습니다. 전기차용 배터리를 제조한 회사들이 새로운 고객인 데이터 센터를 발견하고 있습니다.",
+          "link": "https://thenextweb.com/news/panasonic-to-localise-us-data-centre-battery-production-ceo-says",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36811",
+          "title": "스탠다드 차타드 전 AI 책임자, 액센츄어 동남아시아 수장으로 합류",
+          "original_title": "",
+          "description": "1년도 채 안 돼 스탠다드 차타드를 떠난 데이비드 하르돈은 기업 채택에 크게 베팅하고 있는 상담사에서 해당 지역의 고급 AI를 이끌게 됩니다. 기업 AI 리더십 시장은 빠르게 변화하고 있으며, الآن 1년이 근무 기간으로 간주됩니다.",
+          "link": "https://thenextweb.com/news/stanchart-ai-chief-joins-accenture",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-06-30"
+        },
+        {
+          "id": "36818",
+          "title": "웨이모와 우버, 피닉스에서 로보택시 파일럿 종료",
+          "original_title": "",
+          "description": "피닉스에서 우버 파일럿을 위해 배치된 웨이모 자율주행차는 계속해서 사용되며 DoorDash와 함께 자율 배송을 진행할 예정입니다.",
+          "link": "https://www.cnbc.com/2026/06/29/waymo-uber-robotaxi-pilot-phoenix.html",
+          "entities": [],
+          "date": "2026-06-30"
+        }
+      ]
     }
   ],
   "articles": [
@@ -914,6 +987,73 @@
         "AI",
         "SK"
       ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36688",
+      "title": "암호화폐 거래소 OKX는 AI 에이전트가 서로 고용하고 보수를 지급하기를 원한다",
+      "original_title": "",
+      "description": "OKX는 AI 에이전트를 위한 결제, 신원 및 평판을 하나의 시장으로 통합하고 있습니다. 이를 통해 AI 에이전트 간에 원활한 거래가 이루어질 것으로 기대하고 있습니다.",
+      "link": "https://techcrunch.com/2026/06/30/crypto-exchange-okx-wants-ai-agents-to-hire-and-pay-each-other/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36815",
+      "title": "Manago AI, 이전의 SALESmanago, 새로운 정체성과 강력한 AI 기능 공개",
+      "original_title": "",
+      "description": "Manago AI는 브랜드가 모든 고객을 이해하고 통찰력을 개인화된 참여로 빠르게 전환할 수 있도록 도와줍니다. 이로 인해 마케팅 복잡성이 극적으로 줄어듭니다.",
+      "link": "https://www.cityam.com/manago-ai-formerly-salesmanago-unveils-new-identity-and-agentic-ai-capabilities-to-help-brands-move-faster-and-make-powerful-marketing-feel-simple/",
+      "entities": [
+        "AI",
+        "SALESmanago",
+        "Manago"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36721",
+      "title": "Deepseek의 DSpark, AI 속도를 최대 85%까지 향상시키며 미국 수출 통제 강",
+      "original_title": "",
+      "description": "Deepseek의 새로운 DSpark 프레임워크는 사용자당 응답 속도를 60%에서 85%까지 향상시킵니다. 소형 모델이 더 큰 모델이 배치로 확인할 수 있는 토큰 후보를 제안함으로써, 적은 수의 칩으로 더 많은 성능을 끌어냅니다. 이는 중국의 미국 고급 하드웨어 의존도를 더욱 줄일 수 있습니다.",
+      "link": "https://the-decoder.com/deepseeks-dspark-boosts-ai-speed-by-up-to-85-percent-a-strategic-win-under-tightening-us-export-controls/",
+      "entities": [
+        "DSpark",
+        "AI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36810",
+      "title": "파나소닉, 미국 데이터 센터 배터리 생산 현지화 예정",
+      "original_title": "",
+      "description": "이 일본 그룹은 2028 회계연도까지 캔자스에서 데이터 센터 배터리 셀을 대량 생산할 계획이며, AI 인프라스트럭처 투자 중 대규모로 저장 쪽으로 전환하고 있습니다. 전기차용 배터리를 제조한 회사들이 새로운 고객인 데이터 센터를 발견하고 있습니다.",
+      "link": "https://thenextweb.com/news/panasonic-to-localise-us-data-centre-battery-production-ceo-says",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36811",
+      "title": "스탠다드 차타드 전 AI 책임자, 액센츄어 동남아시아 수장으로 합류",
+      "original_title": "",
+      "description": "1년도 채 안 돼 스탠다드 차타드를 떠난 데이비드 하르돈은 기업 채택에 크게 베팅하고 있는 상담사에서 해당 지역의 고급 AI를 이끌게 됩니다. 기업 AI 리더십 시장은 빠르게 변화하고 있으며, الآن 1년이 근무 기간으로 간주됩니다.",
+      "link": "https://thenextweb.com/news/stanchart-ai-chief-joins-accenture",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-06-30"
+    },
+    {
+      "id": "36818",
+      "title": "웨이모와 우버, 피닉스에서 로보택시 파일럿 종료",
+      "original_title": "",
+      "description": "피닉스에서 우버 파일럿을 위해 배치된 웨이모 자율주행차는 계속해서 사용되며 DoorDash와 함께 자율 배송을 진행할 예정입니다.",
+      "link": "https://www.cnbc.com/2026/06/29/waymo-uber-robotaxi-pilot-phoenix.html",
+      "entities": [],
       "date": "2026-06-30"
     }
   ]

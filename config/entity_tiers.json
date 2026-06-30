@@ -1,0 +1,5 @@
+{
+  "tier1": ["OpenAI","Google","Anthropic","Nvidia","Meta","Microsoft","Apple","Amazon","DeepMind","xAI"],
+  "tier2": ["Mistral","Cohere","Stability AI","Hugging Face","Adobe","Samsung","Tesla","Oracle","IBM"],
+  "tier3_marker": "default"
+}

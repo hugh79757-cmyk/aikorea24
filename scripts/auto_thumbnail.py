@@ -21,6 +21,9 @@ import requests
 from bs4 import BeautifulSoup
 from PIL import Image
 
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 PUBLIC_IMAGES_DIR = PROJECT_DIR / "public" / "images"
 
@@ -34,6 +37,7 @@ USER_AGENT = (
 KST = timezone(timedelta(hours=9))
 
 
+# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
     print(f"[{ts}] {msg}")

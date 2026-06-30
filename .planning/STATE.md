@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: ready_to_execute
-stopped_at: Phase 04 planning complete (4 plans) — ready to execute
-last_updated: 2026-06-30T14:49:26.260Z
+status: completed
+stopped_at: Phase 05 execution complete — dead code removed, Telegram in orchestrator, all requirements satisfied
+last_updated: 2026-06-30T23:52:00.000Z
 last_activity: 2026-06-30
 progress:
   total_phases: 5
-  completed_phases: 3
-  total_plans: 12
-  completed_plans: 8
-  percent: 60
+  completed_phases: 5
+  total_plans: 19
+  completed_plans: 17
+  percent: 89.5
 ---
 
 # Project State
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 4 — monolith splitting
+**Current focus:** Phase 5 — dead code removal & final polish
 
 ## Current Position
 
-Phase: 4
-Plan: 4 plans created (04-01 to 04-04)
-Status: Ready to execute
+Phase: 5
+Plan: All 3 plans (05-01, 05-02, 05-03)
+Status: Complete
 Last activity: 2026-06-30
 
-Progress: [██████████] 100%
+Progress: [████████████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 5
+- Total plans completed: 14
 - Average duration: —
 - Total execution time: —
 
@@ -44,8 +44,9 @@ Progress: [██████████] 100%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| — | — | — | — |
+| 01 | 1 | - | - |
 | 03 | 5 | - | - |
+| 04 | 4 | - | - |
 
 **Recent Trend:**
 
@@ -57,6 +58,10 @@ Progress: [██████████] 100%
 | Phase 03-landing-zone-orchestrator P01 | 2min | 3 tasks | 4 files |
 | Phase 03-landing-zone-orchestrator P05 | 8min | 2 tasks | 2 files |
 | Phase 03-landing-zone-orchestrator P03 | 2min | 3 tasks | 3 files |
+| Phase 04-monolith-splitting 04-01 | 10min | 5 tasks | 6 files |
+| Phase 04-monolith-splitting 04-04 | 2min | 1 task | 1 file |
+| Phase 04-monolith-splitting 04-02 | 8min | 4 tasks | 6 files |
+| Phase 04-monolith-splitting 04-03 | 5min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -85,7 +90,7 @@ None yet.
 ### Blockers/Concerns
 
 - **BFG cleanup + key rotation**: SEC-04 — decided to use BFG then rotate keys. Execute at start of Phase 1.
-- **Telegram alerts not firing**: OBS-06 — existing Telegram infra works but `run_pipeline_with_notify.py` wraps the wrong entry point. Fix: make orchestrator fire failure-only alerts.
+- ~~**Telegram alerts not firing**: OBS-06 — existing Telegram infra works but `run_pipeline_with_notify.py` wraps the wrong entry point. Fix: make orchestrator fire failure-only alerts.~~ **RESOLVED in Phase 5** — `PipelineOrchestrator._send_telegram_failure()` added, `run_pipeline_with_notify.py` removed.
 - **Parallel-run safety**: Pipeline runs every 2 hours via launchd with no staging environment. Every phase must keep the existing pipeline running during transition.
 
 ## Deferred Items
@@ -96,6 +101,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-06-30T14:41:44.228Z
-Stopped at: Completed 03-03-PLAN.md — portable plist template and install script
+Last session: 2026-06-30T23:52:00.000Z
+Stopped at: Phase 5 completed — all 5 phases done, 167 tests passing
 Resume file: None
+Next: No remaining phases. Project milestone v1.0 complete.

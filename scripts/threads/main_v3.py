@@ -99,45 +99,7 @@ def validate_final_cards(cards):
         return False, issues
     return True, []
 
-def load_env():
-    # 공통 환경변수 먼저 로드 (~/.env.common)
-    common = os.path.expanduser('~/.env.common')
-    if os.path.exists(common):
-        with open(common) as f:
-            for line in f:
-                line = line.strip()
-                if line and not line.startswith('#') \
-                   and '=' in line and not line.startswith('source'):
-                    k, v = line.split('=', 1)
-                    os.environ.setdefault(k.strip(),
-                                         v.strip().strip('"').strip("'"))
-
-    for p in [os.path.join(PROJECT_DIR, '.env'), os.path.join(PROJECT_DIR, 'api_test', '.env.sh')]:
-        if os.path.exists(p):
-            with open(p) as f:
-                for line in f:
-                    line = line.strip()
-                    if line and not line.startswith('#') and '=' in line:
-                        if line.startswith('export '):
-                            line = line[7:]
-                        k, v = line.split('=', 1)
-                        os.environ[k.strip()] = v.strip().strip('"').strip("'")
-
-def reset_posted_daily():
-    """매일 자정 posted.json 정리"""
-    import json as _json
-    posted_path = os.path.join(THREADS_DIR, 'posted.json')
-    if os.path.exists(posted_path):
-        with open(posted_path) as f:
-            data = _json.load(f)
-        today = datetime.now().strftime('%Y-%m-%d')
-        if data.get('last_reset') != today:
-            data['last_reset'] = today
-            with open(posted_path, 'w') as f:
-                _json.dump(data, f, ensure_ascii=False, indent=2)
-
 def run_v3(dry_run=False):
-    load_env()
     max_retries = 5
     retry_delays = [60, 120, 300, 600]  # 1분 → 2분 → 5분 → 10분 (기하급수적 백오프)
 
@@ -330,7 +292,6 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true', help='발행 없이 글만 생성')
-    parser.add_argument('--once', action='store_true', help='1회 실행 (launchd 전용 — 단일 스케줄러)')
     args = parser.parse_args()
 
     run_v3(dry_run=args.dry_run)

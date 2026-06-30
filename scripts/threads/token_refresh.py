@@ -8,7 +8,14 @@ Threads API 토큰 갱신 (단독 실행 가능)
 import os, sys, json, requests
 from datetime import datetime
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
+
+from pipeline.infra.logger import get_scrubbed_logger
+logger = get_scrubbed_logger(__name__)
+
 ENV_FILE = os.path.join(PROJECT_DIR, '.env')
 
 def load_env():
