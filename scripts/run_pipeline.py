@@ -135,7 +135,7 @@ def step_thumbnails(articles):
             continue
 
         try:
-            rel_path = auto_thumbnail.process_thumbnail(url, slug)
+            rel_path = auto_thumbnail.process_thumbnail(url, slug, title=title, description=art.get("description", ""))
             if rel_path:
                 log(f"    ✅ {rel_path}")
                 results.append({"title": title, "thumbnail": rel_path})

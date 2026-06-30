@@ -775,6 +775,75 @@
           "date": "2026-07-01"
         }
       ]
+    },
+    {
+      "date": "2026-07-01",
+      "briefing_id": 148,
+      "articles": [
+        {
+          "id": "36447",
+          "title": "모든 사람이 사용하는 AI 리더보드 아레나, 이제 1억 달러 기업으로 성장",
+          "original_title": "",
+          "description": "인기 있는 무료 AI 리더보드를 운영하는 스타트업이 지난 9월 상업 서비스를 시작하며 1억 달러 규모의 기업으로 성장했습니다.",
+          "link": "https://techcrunch.com/2026/06/29/arena-the-ai-leaderboard-everyone-uses-is-now-a-100m-business/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36480",
+          "title": "미국 군, AI를 이용해 수천 개 타겟을 선택했지만 하나가 학교라는 메모를 놓쳤다",
+          "original_title": "",
+          "description": "이란 학교에 대한 미사일 공격 조사가 미국 군의 타겟팅 인프라에 심각한 결함을 노출했습니다. AI는 이를 해결해야 하는 역할을 맡고 있습니다.",
+          "link": "https://the-decoder.com/the-us-military-used-ai-to-pick-thousands-of-targets-but-missed-a-note-saying-one-was-a-school/",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36491",
+          "title": "대형 기술 일자리를 원하나요? 스타트업이 지금 최고의 기회가 될 수 있습니다 - 이유는 다",
+          "original_title": "",
+          "description": "AI는 기술 채용을 재편하고 있으며, 소규모 기업들이 오늘날 가장 좋은 기회를 제공할 수 있습니다.",
+          "link": "https://www.zdnet.com/article/want-big-tech-job-startups-may-be-best-shot-why/",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36476",
+          "title": "아마존 엔지니어들, 새로운 토큰 기반 가격이 시행되기 전에 Anthropic 모델을 소형화",
+          "original_title": "",
+          "description": "아마존 엔지니어들은 현재 Anthropic 모델을 내부 사용을 위해 더 작고 저렴한 버전으로 변환하고 있습니다. 내년부터 아마존은 컴퓨팅 시간 대신 처리된 토큰 수로 비용을 지불할 예정이라 비용이 급증할 수 있습니다.",
+          "link": "https://the-decoder.com/amazon-engineers-are-reportedly-distilling-anthropic-models-to-cut-costs-before-new-token-based-pricing-kicks-in/",
+          "entities": [
+            "Anthropic"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36477",
+          "title": "유럽연합, 오스트리아가 Anthropic을 유럽으로 유치하자 독립적인 AI를 추구하다",
+          "original_title": "",
+          "description": "오스트리아의 디지털화 담당 국무장관 알렉산더 프뢰르가 유럽연합에 Anthropic을 유치해 줄 것을 요청했습니다. 그는 미국이 외국 사용자에게 OpenAI와 Anthropic의 고급 AI 모델을 금지한 것에 반응하고 있습니다.",
+          "link": "https://the-decoder.com/eu-seeks-ai-independence-as-austria-proposes-luring-anthropic-to-europe/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36448",
+          "title": "TIDAL, AI 음악 수익화 차단으로 단속 강화",
+          "original_title": "",
+          "description": "TIDAL은 아티스트나 그룹을 모방하려는 AI 생성 음악을 제거하기 위해 자동화 도구를 사용할 것이라고 밝혔습니다.",
+          "link": "https://techcrunch.com/2026/06/29/tidal-cracks-down-on-ai-music-by-cutting-off-monetization/",
+          "entities": [
+            "TIDAL",
+            "AI"
+          ],
+          "date": "2026-07-01"
+        }
+      ]
     }
   ],
   "articles": [
@@ -1478,6 +1547,69 @@
       "description": "이 이야기는 AI에 관한 주간 뉴스레터 '더 알고리즘'에 처음 실렸습니다. 새로운 직원이 당신에게 보고하게 될 것이라는 소식을 듣고 출근한다고 상상해 보세요. 그러나 그 일하는 이는 사람이 아니라 AI 도구입니다. 회사는 그 도구를 '알렉스'라고 부릅니다.",
       "link": "https://www.technologyreview.com/2026/06/29/1139849/ai-agents-are-not-your-coworkers/",
       "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36447",
+      "title": "모든 사람이 사용하는 AI 리더보드 아레나, 이제 1억 달러 기업으로 성장",
+      "original_title": "",
+      "description": "인기 있는 무료 AI 리더보드를 운영하는 스타트업이 지난 9월 상업 서비스를 시작하며 1억 달러 규모의 기업으로 성장했습니다.",
+      "link": "https://techcrunch.com/2026/06/29/arena-the-ai-leaderboard-everyone-uses-is-now-a-100m-business/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36480",
+      "title": "미국 군, AI를 이용해 수천 개 타겟을 선택했지만 하나가 학교라는 메모를 놓쳤다",
+      "original_title": "",
+      "description": "이란 학교에 대한 미사일 공격 조사가 미국 군의 타겟팅 인프라에 심각한 결함을 노출했습니다. AI는 이를 해결해야 하는 역할을 맡고 있습니다.",
+      "link": "https://the-decoder.com/the-us-military-used-ai-to-pick-thousands-of-targets-but-missed-a-note-saying-one-was-a-school/",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36491",
+      "title": "대형 기술 일자리를 원하나요? 스타트업이 지금 최고의 기회가 될 수 있습니다 - 이유는 다",
+      "original_title": "",
+      "description": "AI는 기술 채용을 재편하고 있으며, 소규모 기업들이 오늘날 가장 좋은 기회를 제공할 수 있습니다.",
+      "link": "https://www.zdnet.com/article/want-big-tech-job-startups-may-be-best-shot-why/",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36476",
+      "title": "아마존 엔지니어들, 새로운 토큰 기반 가격이 시행되기 전에 Anthropic 모델을 소형화",
+      "original_title": "",
+      "description": "아마존 엔지니어들은 현재 Anthropic 모델을 내부 사용을 위해 더 작고 저렴한 버전으로 변환하고 있습니다. 내년부터 아마존은 컴퓨팅 시간 대신 처리된 토큰 수로 비용을 지불할 예정이라 비용이 급증할 수 있습니다.",
+      "link": "https://the-decoder.com/amazon-engineers-are-reportedly-distilling-anthropic-models-to-cut-costs-before-new-token-based-pricing-kicks-in/",
+      "entities": [
+        "Anthropic"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36477",
+      "title": "유럽연합, 오스트리아가 Anthropic을 유럽으로 유치하자 독립적인 AI를 추구하다",
+      "original_title": "",
+      "description": "오스트리아의 디지털화 담당 국무장관 알렉산더 프뢰르가 유럽연합에 Anthropic을 유치해 줄 것을 요청했습니다. 그는 미국이 외국 사용자에게 OpenAI와 Anthropic의 고급 AI 모델을 금지한 것에 반응하고 있습니다.",
+      "link": "https://the-decoder.com/eu-seeks-ai-independence-as-austria-proposes-luring-anthropic-to-europe/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36448",
+      "title": "TIDAL, AI 음악 수익화 차단으로 단속 강화",
+      "original_title": "",
+      "description": "TIDAL은 아티스트나 그룹을 모방하려는 AI 생성 음악을 제거하기 위해 자동화 도구를 사용할 것이라고 밝혔습니다.",
+      "link": "https://techcrunch.com/2026/06/29/tidal-cracks-down-on-ai-music-by-cutting-off-monetization/",
+      "entities": [
+        "TIDAL",
         "AI"
       ],
       "date": "2026-07-01"
