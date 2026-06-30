@@ -48,7 +48,7 @@
 
 ### Testing
 
-- [ ] **TST-01**: Write characterization tests for all functions before refactoring (per Strangler Fig)
+- [x] **TST-01**: Write characterization tests for all functions before refactoring (per Strangler Fig)
 - [ ] **TST-02**: Add unit tests for all extracted modules (news_selector, briefing, deep_article, etc.)
 - [ ] **TST-03**: Add unit tests for all Threads pipeline modules (validator, crawler, writer, pitch)
 - [ ] **TST-04**: Add unit tests for the orchestrator (per-step isolation, retry, skip behavior)
@@ -137,7 +137,7 @@
 | DIR-03 | Phase 3 | Pending |
 | DIR-04 | Phase 3 | Pending |
 | DIR-05 | Phase 3 | Pending |
-| TST-01 | Phase 3 | Pending |
+| TST-01 | Phase 3 | Complete |
 | OBS-02 | Phase 3 | Pending |
 | OBS-03 | Phase 3 | Pending |
 | OBS-04 | Phase 3 | Pending |
