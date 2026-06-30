@@ -41,7 +41,11 @@ Plans:
   3. All old files import from `pipeline.infra.*` instead of defining their own `load_env()`, `d1_query()`, `load_posted()` copies
   4. `conftest.py` has abstracted mock targets so tests don't hit real D1/API endpoints
   5. Pipeline runs successfully with zero regressions after infra wiring
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Infra Foundation: create config.py, models.py, retry.py, d1_client.py, extend logger with PipelineLogger
+- [ ] 02-02-PLAN.md — Batch Wiring: wire all 20+ scripts with project_root(), EnvConfig(), d1_client.d1_query(), PipelineLogger
 
 ### Phase 3: Landing Zone & Orchestrator
 **Goal**: Pipeline has a proper directory structure, formal orchestrator with per-step monitoring, Threads dual-scheduling race condition resolved, and the pipeline can be cloned and run on any machine.
@@ -94,7 +98,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
-| 2. Infrastructure & Portability | 0/0 | Not started | - |
+| 2. Infrastructure & Portability | 0/2 | Not started | - |
 | 3. Landing Zone & Orchestrator | 0/0 | Not started | - |
 | 4. Monolith Splitting | 0/0 | Not started | - |
 | 5. Dead Code Removal & Final Polish | 0/0 | Not started | - |
