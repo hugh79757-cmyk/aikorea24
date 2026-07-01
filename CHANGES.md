@@ -5,6 +5,43 @@
 
 ---
 
+## 2026-07-01 — auto_email_sender: template 2 → template 1 전환 (rich HTML)
+
+### 기능 변경
+- `scripts/auto_email_sender.py`: `generate_email_html` 전면 교체 — **템플릿 1(리치)로 복원**
+  - TOC 섹션 (오늘의 브리핑 목록)
+  - 각 아이템: 숫자 뱃지 + 제목 + 코멘트(파랑박스) + 설명 + 내부 링크(`aikorea24.kr/briefing/`)
+  - "전체 보기" 버튼
+  - AI 도구 섹션 (D1 tools 테이블, 최신 6개)
+  - 헤더: 🤖 + AI코리아24 + 오늘의 AI 브리핑 + 그래디언트 라인
+  - 푸터: 커뮤니티 링크 + 구독 해지
+- `get_tools()`, `_d1_query()`, `esc()` 함수 신규 추가
+
+### 분석
+- 6/26~6/28 사이 simple template이 커밋되었으나, 같은 시기 `send-email.ts`(수동)는 rich template 유지
+- working tree에만 rich template이 존재 (미커밋 상태)
+- 외부 링크(`news_link`) → 내부 링크(`aikorea24.kr/briefing/`)로 변경
+
+### 배포
+- `682ddb7` → `origin/main` push 전 (수동 push 필요)
+
+---
+
+### 기능 변경
+- `pipeline/threads/writer.py`: 프롬프트 전면 개선 (발행글 개념 명확화, 예시 형식 추가), temperature 0.7→0.3/0.1 2단계 하강, 카드 수 부족 시 재시도 로직 추가
+- `scripts/threads/v3/model_router.py`: 모델 우선순위 변경 — **DeepSeek V4 Flash 1순위**, GPT-4o-mini 2순위 (fallback)
+- `scripts/threads/v3/model_router.py`: `model_override='openai'` → DeepSeek 건너뛰고 OpenAI 사용
+
+### 알림 조건 분석
+- "Threads 5회 모두 실패"는 publish에 단 한 번도 도달하지 못하고 5회 전부 continue로 끝난 경우만 발송
+- publish 성공 시 line 285에서 return하므로 같은 프로세스 내에서는 발송 불가
+- **launchd 2개 중복 실행** 의심: `threads-publisher`(2시간) + `pipeline-runner`(06/20시) → 각각 main_v3.py 실행 가능
+
+### 배포
+- `d7dd104` → `origin/main` push 완료
+
+---
+
 ## 2026-07-01 — Pexels+DeepSeek 썸네일 교체 + 파이프라인 검증
 
 ### 기능 변경
