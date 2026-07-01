@@ -41,7 +41,7 @@ def load_style_examples():
 
 
 FORMAT_LABELS = {
-    'D': '펀치 브리핑형 (5개 내용 카드 + 1개 출처링크 카드)',
+    'D': '펀치 브리핑형 (5개 발행글 + 1개 출처링크)',
 }
 
 
@@ -339,12 +339,8 @@ def humanize_cards(cards):
         result = _strip_instruction_leak(result)
         fixed = [c.strip() for c in result.split('---') if c.strip()]
 
-        if len(fixed) < len(cards) * 0.5:
-            _log(f'  ⚠️ humanize: 결과 부족 ({len(fixed)}<{len(cards)}) → 원본 유지')
-            return cards
-
-        if len(fixed) < 5 or len(fixed) > 9:
-            _log(f'  ⚠️ humanize: 카드 수 불일치 ({len(fixed)}) → 원본 유지')
+        if len(fixed) != len(cards):
+            _log(f'  ⚠️ humanize: 카드 수 불일치 (입력 {len(cards)}개 → 출력 {len(fixed)}개) → 원본 유지')
             return cards
 
         changed_cards = sum(1 for a, b in zip(cards, fixed) if a != b)
@@ -446,6 +442,13 @@ def parse_cards(text, format_choice='D'):
     cards = [c.strip() for c in text.split('---') if c.strip()]
     if not cards:
         return cards
+    lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+    if len(cards) < lo:
+        alt = [c.strip() for c in text.split('\n\n') if c.strip()]
+        alt = [c for c in alt if len(c) > 20]
+        if len(alt) >= lo:
+            _log(f'  parse_cards: --- 없음, \\n\\n으로 {len(alt)}개 분할')
+            cards = alt
     if format_choice == 'D' and len(cards) > 1:
         c1_lines = [l for l in cards[0].split('\n') if l.strip()]
         if len(c1_lines) <= 3:
@@ -560,26 +563,44 @@ def write_thread(pitch, all_articles, format_choice=None):
 === 관련 기사 ===
 {related_text}
 
-=== 요구사항 ===
-1. 총 6개 카드. 1~5번은 내용 카드, 6번은 출처 링크만.
-2. 각 카드는 --- 로 구분. 1~5번 카드는 반드시 450~500자로 채울 것. 400자 미만 금지. 정보가 부족하면 기사 본문에서 추가로 추출하라.
-3. 반말체(~임, ~했음, ~있음). ~합니다 금지.
-4. 기사 본문의 숫자는 전부 꺼내서 써라. "많은", "대규모" 금지.
-5. 한 줄 25~40자. 정보를 압축해서 담되 자연스럽게 읽혀야 함.
-6. 3~5줄마다 반드시 빈 줄 하나. stanza 구조 유지. 빈 줄이 리듬을 만든다.
-7. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블은 절대 포함하지 마라.
-8. ## 카드 수 (절대)
-   - 반드시 5개만 작성하라. 4개도 안 되고 6개도 안 된다. 오직 5개.
-   - 카드 번호는 붙이지 않는다."""
+=== 작성 방법 ===
+Threads는 발행글 하나당 500자 제한이 있음.
+따라서 하나의 이야기를 여러 발행글로 나누어 연쇄 발행해야 함.
+각 발행글은 --- 로 구분하며, 마지막 발행글은 출처 링크만 넣음.
 
+아래 형식을 정확히 따라라:
+
+발행글 내용 450~500자
+---
+발행글 내용 450~500자
+---
+발행글 내용 450~500자
+---
+발행글 내용 450~500자
+---
+발행글 내용 450~500자
+---
+🔗 https://...
+
+=== 요구사항 ===
+1. 각 발행글 450~500자. 400자 미만 금지. 정보 부족 시 기사 본문에서 추가 추출.
+2. 반말체(~임, ~했음, ~있음). ~합니다 금지.
+3. 기사 본문 숫자는 전부 사용. "많은", "대규모" 금지.
+4. 한 줄 25~40자. 정보를 압축.
+5. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
+6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
+7. 발행글 번호는 붙이지 않음."""
+
+    TEMPS = [0.3, 0.1]
     max_attempts = 2
     for attempt in range(max_attempts):
         try:
-            _log(f'  쓰레드 생성 중...')
+            temp = TEMPS[attempt] if attempt < len(TEMPS) else 0.1
+            _log(f'  쓰레드 생성 중... (temperature={temp})')
             content = chat_completion(
                 system_prompt=system_prompt,
                 messages=[{'role': 'user', 'content': user_prompt}],
-                temperature=0.7,
+                temperature=temp,
                 max_tokens=5000,
             )
             if not content:
@@ -591,6 +612,10 @@ def write_thread(pitch, all_articles, format_choice=None):
             if len(cards) > expected_count:
                 _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정')
                 cards = cards[:expected_count]
+            lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+            if len(cards) < lo:
+                _log(f'  ⚠️ 카드 수 부족: {len(cards)}개 (최소 {lo}개 필요) → 재시도')
+                continue
             cards = fix_cards(cards)
             cards = _cleanup_source_attribution(cards)
 
@@ -606,11 +631,11 @@ def write_thread(pitch, all_articles, format_choice=None):
 
     _log(f'  ❌ {max_attempts}회 재시도 실패 → fallback 1회')
     try:
-        _log(f'  쓰레드 생성 중... (fallback)')
+        _log(f'  쓰레드 생성 중... (fallback, temperature=0.0)')
         content = chat_completion(
             system_prompt=system_prompt,
             messages=[{'role': 'user', 'content': user_prompt}],
-            temperature=0.7,
+            temperature=0.0,
             max_tokens=5000,
         )
         if not content:
@@ -622,6 +647,10 @@ def write_thread(pitch, all_articles, format_choice=None):
         if len(cards) > expected_count:
             _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정 (fallback)')
             cards = cards[:expected_count]
+        lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+        if len(cards) < lo:
+            _log(f'  ⚠️ 카드 수 부족: {len(cards)}개 (최소 {lo}개 필요) → fallback 실패')
+            raise Exception(f'fallback 카드 수 부족: {len(cards)}개')
         cards = fix_cards(cards)
         cards = _cleanup_source_attribution(cards)
         if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
