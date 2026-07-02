@@ -844,6 +844,291 @@
           "date": "2026-07-01"
         }
       ]
+    },
+    {
+      "date": "2026-07-01",
+      "briefing_id": 149,
+      "articles": [
+        {
+          "id": "37060",
+          "title": "AWS, 고객 사무실에 엔지니어를 직접 투입하기 위해 10억 달러 투자",
+          "original_title": "",
+          "description": "아마존 웹 서비스는 고객 회사 내에 자사 엔지니어를 배치하기 위해 10억 달러를 투자할 계획이다. 이는 팔란티어가 개발한 방식에서 착안한 첫 번째 클라우드 대기업의 시도로, 오픈AI와 앤트로픽도 이를 채택하고 있다.",
+          "link": "https://thenextweb.com/news/aws-1bn-forward-deployed-engineers-enterprise-ai",
+          "entities": [
+            "AWS"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37041",
+          "title": "'회색 수염'의 귀환: AI의 실패로 포드를 다시 고용해야 했습니다",
+          "original_title": "",
+          "description": "미국 자동차 회사는 디자인 및 제조 검사를 위해 사용 중인 수백 개의 AI 카메라가 문제에 취약하다는 사실을 발견했습니다. 이 회사를 '회색 수염'으로 불리게 한 배경에는 그들이 기술의 한계를 깨닫게 된 이유가 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/jun/30/ai-backfired-so-ford-had-to-rehire-humans-greybeard-engineers",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37064",
+          "title": "기록적인 반도체 상승, 2분기 동안 마이크론, 인텔, AMD에 2조 달러의 가치를 더하다",
+          "original_title": "",
+          "description": "월스트리트는 2분기에 NVIDIA가 아닌 반도체 제조사들에 쏠렸으며, 인공지능 붐이 더 많은 공급업체를 포함하게 되었다. 이는 반도체 산업의 큰 변화를 예고한다.",
+          "link": "https://www.cnbc.com/2026/06/30/ai-chip-rally-in-q2-adds-2-trillion-in-value-to-micron-intel-amd-.html",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37058",
+          "title": "슈나이더 일렉트릭, 31억 달러에 산업 AI 기업 Cognite 인수",
+          "original_title": "",
+          "description": "슈나이더 일렉트릭이 노르웨이에서 설립된 산업 AI 회사인 Cognite를 31억 달러 현금으로 인수하기로 했다. 이 프랑스 그룹은 공장과 전력망이 스스로 생각할 수 있는 소프트웨어를 원하고 있으며, 2026년 6월 30일에 인수 계약을 체결했다고 발표했다.",
+          "link": "https://thenextweb.com/news/schneider-electric-cognite-3-1bn-industrial-ai",
+          "entities": [
+            "Cognite",
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37065",
+          "title": "팔로 알토와 크라우드스트라이크, AI 위협으로 사이버 수요가 증가하며 최고의 분기를 기록하",
+          "original_title": "",
+          "description": "사이버 보안 리더들은 AI 에이전트가 인간을 초월함에 따라, 중요한 사이버 분야인 정체성 보안에 집중하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/06/30/palo-alto-crowdstrike-stock-ai-mythos.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36944",
+          "title": "Acti, AI 에이전트를 스마트폰 키보드에 직접 통합",
+          "original_title": "",
+          "description": "Acti는 스마트폰 키보드가 AI 어시스턴트의 다음 보금자리가 될 것이라고 예상하고 있습니다. 이 스타트업의 새로운 iOS 및 Android용 키보드는 앱 전반에서 작동하며, 사용자가 자연어로 AI 기반의 단축키를 생성할 수 있게 해줍니다.",
+          "link": "https://techcrunch.com/2026/06/30/acti-puts-ai-agents-directly-into-your-smartphone-keyboard/",
+          "entities": [
+            "Acti",
+            "AI"
+          ],
+          "date": "2026-07-01"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-01",
+      "briefing_id": 150,
+      "articles": [
+        {
+          "id": "37063",
+          "title": "MDOTM, AI 채택이 자산 및 자산 관리 산업에 확산됨에 따라 2700만 달러 성장 자",
+          "original_title": "",
+          "description": "이번 자금 조달은 AI 연구, 엔지니어링, 제품, 영업 및 클라이언트 솔루션 지점 전반에 걸쳐 국제적 확장과 채용을 가속화할 것이다. MDOTM의 AI 투자 플랫폼은 이제 60개 이상의 금융 기관에서 1천억 달러 이상의 자산을 지원하고 있다.",
+          "link": "https://www.cityam.com/mdotm-raises-27m-growth-equity-round-led-by-expedition-growth-capital-as-ai-adoption-permeates-the-asset-and-wealth-management-industry/",
+          "entities": [
+            "AI",
+            "MDOTM"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37042",
+          "title": "빈번한 AI 챗봇 사용자, 백신 거짓말을 믿을 가능성이 높다",
+          "original_title": "",
+          "description": "최근 여론 조사에 따르면, 건강 조언을 얻기 위해 AI 도구를 사용하는 성인이 백신과 관련된 신화를 더 많이 믿는 것으로 나타났습니다. 이러한 경향은 AI 챗봇을 자주 이용하는 사람들에게서 더 두드러지게 나타나고 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/jun/30/ai-chatbot-use-anti-vaccine-myths-poll",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36984",
+          "title": "애플, 해커를 에너지로 만드는 AI로 인해 29개의 버그를 신속하게 수정하다 - 가능한 빨",
+          "original_title": "",
+          "description": "아이폰, 아이패드, 맥용 소프트웨어 업데이트가 신속히 진행되고 있으며, 예상보다 빨리 도착한 수정 사항을 포함하고 있다. 그 이유를 다음과 같이 설명한다.",
+          "link": "https://www.zdnet.com/article/apple-rushed-software-fixes-over-ai-threats-update-iphone-asap/",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37043",
+          "title": "실리콘밸리 기부로 콜로라도 민주당 예비선거가 주에서 가장 비싼 선거로 떠올라",
+          "original_title": "",
+          "description": "맨니 루티넬의 하원 캠페인은 대규모 기술 기업들로부터 수백만 달러를 모금하며, 인공지능 관련 규제를 둘러싼 찬반 세력의 대립이 심화되고 있습니다. 이로 인해 콜로라도의 민주당 예비선거가 더욱 주목받고 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/jun/30/silicon-valley-donations-colorado-democratic-primary",
+          "entities": [],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "36942",
+          "title": "Nvidia 경쟁사 Etched, AI 칩으로 50억 달러 평가 및 10억 달러 매출 기록",
+          "original_title": "",
+          "description": "Nvidia의 AI 칩 경쟁자인 Etched는 자사 칩으로 구동되는 추론 시스템에 대해 이미 10억 달러의 계약을 확보했다고 밝혔습니다. 이는 AI 칩 시장에서의 강력한 경쟁력을 보여줍니다.",
+          "link": "https://techcrunch.com/2026/06/30/nvidia-competitor-etched-hits-5b-valuation-1b-in-sales-for-ai-chip/",
+          "entities": [
+            "AI",
+            "Nvidia",
+            "Etched"
+          ],
+          "date": "2026-07-01"
+        },
+        {
+          "id": "37059",
+          "title": "기업 AI의 누락된 기초: 콘텐츠 거버넌스가 다음 AI 혁신보다 더 중요할 수 있는 이유",
+          "original_title": "",
+          "description": "로브 하나는 많은 기업 AI 이니셔티브가 언어를 구조화된 데이터처럼 다루는 동안 지식을 신뢰할 수 있게 만드는 시스템을 간과하고 있어 탄력을 잃고 있다고 지적한다. 정밀 콘텐츠의 공동 창립자 겸 CEO는 이 문제의 심각성을 강조한다.",
+          "link": "https://thenextweb.com/news/enterprise-ai-content-governance-precision-content-rob-hanna",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-01"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "briefing_id": 151,
+      "articles": [
+        {
+          "id": "37328",
+          "title": "창작자들, 포콕의 500억 달러 데이터 센터 제안에 대해 저작권 문제를 우려하다",
+          "original_title": "",
+          "description": "AI 기업이 콘텐츠를 채굴할 수 있도록 허용하는 제안이 내각에 제출되었으며, 투자와 예술가를 보상하기 위한 3억 5천만 달러 기금을 교환으로 제공한다고 합니다. 창작자들은 추가적인 보장을 요구하고 있어 그 움직임이 주목받고 있습니다.",
+          "link": "https://www.theguardian.com/australia-news/2026/jul/01/australia-ai-copyright-laws-creatives-sound-alarm-albanese-government-datacentres",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37350",
+          "title": "웨이브, 8,500만 달러 주식 매각으로 런던의 개인 시장에 '대규모 부양책' 제공",
+          "original_title": "",
+          "description": "웨이브는 8,500만 달러(약 630억 원)의 직원 주식 매각을 발표하면서 런던의 초기 개인 시장 플랫폼에 큰 도움을 주었습니다. 이는 런던의 기술 기업을 자국에 유지하려는 노력에 있어 큰 진전을 이룬 것으로 평가받고 있습니다.",
+          "link": "https://www.cityam.com/wayve-hands-london-private-market-major-boost-with-85m-share-sale/",
+          "entities": [],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37347",
+          "title": "크래프톤, ChatGPT를 이용해 보너스를 회피한 CEO 퇴임 후 서브노티카 2 보너스 지",
+          "original_title": "",
+          "description": "크래프톤은 서브노티카 2의 개발사인 언노운 월드 엔터테인먼트의 전 직원들에게 보너스를 지급하기로 합의했습니다. 이는 회사를 이끌던 CEO 테드 길과의 법적 합의에 따른 것입니다. 길 CEO는 블룸버그에 이 합의의 일환으로 물러난다고 밝혔습니다.",
+          "link": "https://thenextweb.com/news/krafton-subnautica-2-bonus-settlement-ceo-resigns",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37325",
+          "title": "유엔 경고, AI의 급속한 확산이 세계 불평등을 악화시킬 수 있다",
+          "original_title": "",
+          "description": "새로운 유엔 보고서는 인공지능의 발전이 세계 불평등을 심화시킬 수 있다고 경고하며, 책임감 있는 AI 개발을 위한 공유 프레임워크를 제안합니다. 채택이 불균형적으로 이루어지는 상황에서 이러한 필요성이 더욱 부각되고 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/01/un-report-ai-inequality",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37225",
+          "title": "클라우드플레어, AI 기업에 출판사 콘텐츠에 대한 비용 지불 요구",
+          "original_title": "",
+          "description": "클라우드플레어는 AI 기업들에게 검색에 사용되는 웹 크롤러와 AI 학습 및 에이전트에 사용되는 웹 크롤러를 분리할 것을 9월 15일까지 요구하고 있다. 그렇지 않으면 많은 출판사 사이트에서 기본적으로 차단될 위험이 있다.",
+          "link": "https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37259",
+          "title": "Claude Code에 숨겨진 코드가 중국 사용자들을 비밀리에 표시하다",
+          "original_title": "",
+          "description": "앤트로픽은 프로그래밍 도구인 Claude Code에서 숨겨진 모니터링 기능을 제거하고 있습니다. 이 기능은 소셜 미디어에서 큰 논란을 일으켰습니다.",
+          "link": "https://the-decoder.com/hidden-code-in-claude-code-secretly-flagged-chinese-users/",
+          "entities": [
+            "Claude"
+          ],
+          "date": "2026-07-02"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-02",
+      "briefing_id": 152,
+      "articles": [
+        {
+          "id": "37545",
+          "title": "메타의 클라우드 컴퓨팅 진출은 월가에 낮은 수익률 대비 준비하라는 신호",
+          "original_title": "",
+          "description": "메타는 방대한 AI 인프라를 수익화하기 위해 클라우드 컴퓨팅 시장 진입을 예고하고 있습니다. 이로 인해 투자자들은 수익률 저하에 대비할 필요가 있습니다.",
+          "link": "https://www.cnbc.com/2026/07/02/metas-push-into-cloud-excites-wall-street-despite-lower-margins.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37537",
+          "title": "마이크로소프트, 인도-동남아시아 해저 케이블 구축을 위한 라이트스톰 주도 컨소시엄에 합류",
+          "original_title": "",
+          "description": "마이크로소프트는 인도와 싱가포르, 말레이시아를 연결하는 새로운 해저 케이블을 구축하기 위해 싱가포르 기반의 라이트스톰이 이끄는 컨소시엄에 합류했다고 밝혔습니다. I-2SEA 시스템은 3,600킬로미터에 달할 예정이며 AI, 클라우드, 하이퍼스케일 작업을 지원하는 것을 목표로 하고 있습니다.",
+          "link": "https://thenextweb.com/news/microsoft-lightstorm-india-southeast-asia-cable",
+          "entities": [
+            "I-2SEA",
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37543",
+          "title": "AI가 넷 중립성의 종말을 초래할까?",
+          "original_title": "",
+          "description": "인터넷이 시작된 이래로 그 기능은 기본적으로 넷 중립성에 기반하고 있습니다. 이는 인터넷 제공업체가 트래픽을 출처와 관계없이 동등하게 취급해야 한다는 원칙으로, 차별을 두어서는 안 됩니다. 이러한 생각은 의도적으로는 고귀하지만, 실제로는 복잡한 문제를 내포하고 있습니다.",
+          "link": "https://www.cityam.com/will-ai-trigger-the-end-of-net-neutrality/",
+          "entities": [],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37547",
+          "title": "아마존, 에코와 파이어 TV 및 미래 기기를 위한 자체 AI 칩 설계 중",
+          "original_title": "",
+          "description": "아마존 하드웨어 책임자인 파노스 파나이는 회사가 AI 기기를 실험하면서 주요 기기를 위한 맞춤형 칩을 설계하고 있다고 밝혔습니다. 이는 아마존의 혁신적인 하드웨어 경쟁력을 강화하는 데 기여할 것입니다.",
+          "link": "https://www.cnbc.com/2026/07/02/amazon-ai-chips-devices.html",
+          "entities": [
+            "TV",
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37519",
+          "title": "AI 기업들이 범죄에서 벗어나고 있는가? | 피오나 카타우스카스",
+          "original_title": "",
+          "description": "그들은 지적 재산권을 훔치는 예술을 만들어가고 있다. 피오나 카타우스카스의 만화를 더 보려면 여기를 클릭하세요.",
+          "link": "https://www.theguardian.com/commentisfree/picture/2026/jul/02/are-ai-companies-getting-away-with-crime",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-02"
+        },
+        {
+          "id": "37358",
+          "title": "팔란티어의 카프, OpenAI와 Anthropic 토큰 모델 비판: '완전히 잘못된 것이 ",
+          "original_title": "",
+          "description": "카프는 상승하는 토큰 비용이 기업들이 개방형 모델을 선택하고 효율성을 우선시하도록 강요하게 만들고 있다고 주장합니다. 이로 인해 '토큰 맥싱'의 개념이 무색해지고 있습니다.",
+          "link": "https://www.cnbc.com/2026/07/01/palantir-karp-open-ai-anthropic-tokens.html",
+          "entities": [
+            "Anthropic"
+          ],
+          "date": "2026-07-02"
+        }
+      ]
     }
   ],
   "articles": [
@@ -1613,6 +1898,267 @@
         "AI"
       ],
       "date": "2026-07-01"
+    },
+    {
+      "id": "37060",
+      "title": "AWS, 고객 사무실에 엔지니어를 직접 투입하기 위해 10억 달러 투자",
+      "original_title": "",
+      "description": "아마존 웹 서비스는 고객 회사 내에 자사 엔지니어를 배치하기 위해 10억 달러를 투자할 계획이다. 이는 팔란티어가 개발한 방식에서 착안한 첫 번째 클라우드 대기업의 시도로, 오픈AI와 앤트로픽도 이를 채택하고 있다.",
+      "link": "https://thenextweb.com/news/aws-1bn-forward-deployed-engineers-enterprise-ai",
+      "entities": [
+        "AWS"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37041",
+      "title": "'회색 수염'의 귀환: AI의 실패로 포드를 다시 고용해야 했습니다",
+      "original_title": "",
+      "description": "미국 자동차 회사는 디자인 및 제조 검사를 위해 사용 중인 수백 개의 AI 카메라가 문제에 취약하다는 사실을 발견했습니다. 이 회사를 '회색 수염'으로 불리게 한 배경에는 그들이 기술의 한계를 깨닫게 된 이유가 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/jun/30/ai-backfired-so-ford-had-to-rehire-humans-greybeard-engineers",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37064",
+      "title": "기록적인 반도체 상승, 2분기 동안 마이크론, 인텔, AMD에 2조 달러의 가치를 더하다",
+      "original_title": "",
+      "description": "월스트리트는 2분기에 NVIDIA가 아닌 반도체 제조사들에 쏠렸으며, 인공지능 붐이 더 많은 공급업체를 포함하게 되었다. 이는 반도체 산업의 큰 변화를 예고한다.",
+      "link": "https://www.cnbc.com/2026/06/30/ai-chip-rally-in-q2-adds-2-trillion-in-value-to-micron-intel-amd-.html",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37058",
+      "title": "슈나이더 일렉트릭, 31억 달러에 산업 AI 기업 Cognite 인수",
+      "original_title": "",
+      "description": "슈나이더 일렉트릭이 노르웨이에서 설립된 산업 AI 회사인 Cognite를 31억 달러 현금으로 인수하기로 했다. 이 프랑스 그룹은 공장과 전력망이 스스로 생각할 수 있는 소프트웨어를 원하고 있으며, 2026년 6월 30일에 인수 계약을 체결했다고 발표했다.",
+      "link": "https://thenextweb.com/news/schneider-electric-cognite-3-1bn-industrial-ai",
+      "entities": [
+        "Cognite",
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37065",
+      "title": "팔로 알토와 크라우드스트라이크, AI 위협으로 사이버 수요가 증가하며 최고의 분기를 기록하",
+      "original_title": "",
+      "description": "사이버 보안 리더들은 AI 에이전트가 인간을 초월함에 따라, 중요한 사이버 분야인 정체성 보안에 집중하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/06/30/palo-alto-crowdstrike-stock-ai-mythos.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36944",
+      "title": "Acti, AI 에이전트를 스마트폰 키보드에 직접 통합",
+      "original_title": "",
+      "description": "Acti는 스마트폰 키보드가 AI 어시스턴트의 다음 보금자리가 될 것이라고 예상하고 있습니다. 이 스타트업의 새로운 iOS 및 Android용 키보드는 앱 전반에서 작동하며, 사용자가 자연어로 AI 기반의 단축키를 생성할 수 있게 해줍니다.",
+      "link": "https://techcrunch.com/2026/06/30/acti-puts-ai-agents-directly-into-your-smartphone-keyboard/",
+      "entities": [
+        "Acti",
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37063",
+      "title": "MDOTM, AI 채택이 자산 및 자산 관리 산업에 확산됨에 따라 2700만 달러 성장 자",
+      "original_title": "",
+      "description": "이번 자금 조달은 AI 연구, 엔지니어링, 제품, 영업 및 클라이언트 솔루션 지점 전반에 걸쳐 국제적 확장과 채용을 가속화할 것이다. MDOTM의 AI 투자 플랫폼은 이제 60개 이상의 금융 기관에서 1천억 달러 이상의 자산을 지원하고 있다.",
+      "link": "https://www.cityam.com/mdotm-raises-27m-growth-equity-round-led-by-expedition-growth-capital-as-ai-adoption-permeates-the-asset-and-wealth-management-industry/",
+      "entities": [
+        "AI",
+        "MDOTM"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37042",
+      "title": "빈번한 AI 챗봇 사용자, 백신 거짓말을 믿을 가능성이 높다",
+      "original_title": "",
+      "description": "최근 여론 조사에 따르면, 건강 조언을 얻기 위해 AI 도구를 사용하는 성인이 백신과 관련된 신화를 더 많이 믿는 것으로 나타났습니다. 이러한 경향은 AI 챗봇을 자주 이용하는 사람들에게서 더 두드러지게 나타나고 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/jun/30/ai-chatbot-use-anti-vaccine-myths-poll",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36984",
+      "title": "애플, 해커를 에너지로 만드는 AI로 인해 29개의 버그를 신속하게 수정하다 - 가능한 빨",
+      "original_title": "",
+      "description": "아이폰, 아이패드, 맥용 소프트웨어 업데이트가 신속히 진행되고 있으며, 예상보다 빨리 도착한 수정 사항을 포함하고 있다. 그 이유를 다음과 같이 설명한다.",
+      "link": "https://www.zdnet.com/article/apple-rushed-software-fixes-over-ai-threats-update-iphone-asap/",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37043",
+      "title": "실리콘밸리 기부로 콜로라도 민주당 예비선거가 주에서 가장 비싼 선거로 떠올라",
+      "original_title": "",
+      "description": "맨니 루티넬의 하원 캠페인은 대규모 기술 기업들로부터 수백만 달러를 모금하며, 인공지능 관련 규제를 둘러싼 찬반 세력의 대립이 심화되고 있습니다. 이로 인해 콜로라도의 민주당 예비선거가 더욱 주목받고 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/jun/30/silicon-valley-donations-colorado-democratic-primary",
+      "entities": [],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "36942",
+      "title": "Nvidia 경쟁사 Etched, AI 칩으로 50억 달러 평가 및 10억 달러 매출 기록",
+      "original_title": "",
+      "description": "Nvidia의 AI 칩 경쟁자인 Etched는 자사 칩으로 구동되는 추론 시스템에 대해 이미 10억 달러의 계약을 확보했다고 밝혔습니다. 이는 AI 칩 시장에서의 강력한 경쟁력을 보여줍니다.",
+      "link": "https://techcrunch.com/2026/06/30/nvidia-competitor-etched-hits-5b-valuation-1b-in-sales-for-ai-chip/",
+      "entities": [
+        "AI",
+        "Nvidia",
+        "Etched"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37059",
+      "title": "기업 AI의 누락된 기초: 콘텐츠 거버넌스가 다음 AI 혁신보다 더 중요할 수 있는 이유",
+      "original_title": "",
+      "description": "로브 하나는 많은 기업 AI 이니셔티브가 언어를 구조화된 데이터처럼 다루는 동안 지식을 신뢰할 수 있게 만드는 시스템을 간과하고 있어 탄력을 잃고 있다고 지적한다. 정밀 콘텐츠의 공동 창립자 겸 CEO는 이 문제의 심각성을 강조한다.",
+      "link": "https://thenextweb.com/news/enterprise-ai-content-governance-precision-content-rob-hanna",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-01"
+    },
+    {
+      "id": "37328",
+      "title": "창작자들, 포콕의 500억 달러 데이터 센터 제안에 대해 저작권 문제를 우려하다",
+      "original_title": "",
+      "description": "AI 기업이 콘텐츠를 채굴할 수 있도록 허용하는 제안이 내각에 제출되었으며, 투자와 예술가를 보상하기 위한 3억 5천만 달러 기금을 교환으로 제공한다고 합니다. 창작자들은 추가적인 보장을 요구하고 있어 그 움직임이 주목받고 있습니다.",
+      "link": "https://www.theguardian.com/australia-news/2026/jul/01/australia-ai-copyright-laws-creatives-sound-alarm-albanese-government-datacentres",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37350",
+      "title": "웨이브, 8,500만 달러 주식 매각으로 런던의 개인 시장에 '대규모 부양책' 제공",
+      "original_title": "",
+      "description": "웨이브는 8,500만 달러(약 630억 원)의 직원 주식 매각을 발표하면서 런던의 초기 개인 시장 플랫폼에 큰 도움을 주었습니다. 이는 런던의 기술 기업을 자국에 유지하려는 노력에 있어 큰 진전을 이룬 것으로 평가받고 있습니다.",
+      "link": "https://www.cityam.com/wayve-hands-london-private-market-major-boost-with-85m-share-sale/",
+      "entities": [],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37347",
+      "title": "크래프톤, ChatGPT를 이용해 보너스를 회피한 CEO 퇴임 후 서브노티카 2 보너스 지",
+      "original_title": "",
+      "description": "크래프톤은 서브노티카 2의 개발사인 언노운 월드 엔터테인먼트의 전 직원들에게 보너스를 지급하기로 합의했습니다. 이는 회사를 이끌던 CEO 테드 길과의 법적 합의에 따른 것입니다. 길 CEO는 블룸버그에 이 합의의 일환으로 물러난다고 밝혔습니다.",
+      "link": "https://thenextweb.com/news/krafton-subnautica-2-bonus-settlement-ceo-resigns",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37325",
+      "title": "유엔 경고, AI의 급속한 확산이 세계 불평등을 악화시킬 수 있다",
+      "original_title": "",
+      "description": "새로운 유엔 보고서는 인공지능의 발전이 세계 불평등을 심화시킬 수 있다고 경고하며, 책임감 있는 AI 개발을 위한 공유 프레임워크를 제안합니다. 채택이 불균형적으로 이루어지는 상황에서 이러한 필요성이 더욱 부각되고 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/01/un-report-ai-inequality",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37225",
+      "title": "클라우드플레어, AI 기업에 출판사 콘텐츠에 대한 비용 지불 요구",
+      "original_title": "",
+      "description": "클라우드플레어는 AI 기업들에게 검색에 사용되는 웹 크롤러와 AI 학습 및 에이전트에 사용되는 웹 크롤러를 분리할 것을 9월 15일까지 요구하고 있다. 그렇지 않으면 많은 출판사 사이트에서 기본적으로 차단될 위험이 있다.",
+      "link": "https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37259",
+      "title": "Claude Code에 숨겨진 코드가 중국 사용자들을 비밀리에 표시하다",
+      "original_title": "",
+      "description": "앤트로픽은 프로그래밍 도구인 Claude Code에서 숨겨진 모니터링 기능을 제거하고 있습니다. 이 기능은 소셜 미디어에서 큰 논란을 일으켰습니다.",
+      "link": "https://the-decoder.com/hidden-code-in-claude-code-secretly-flagged-chinese-users/",
+      "entities": [
+        "Claude"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37545",
+      "title": "메타의 클라우드 컴퓨팅 진출은 월가에 낮은 수익률 대비 준비하라는 신호",
+      "original_title": "",
+      "description": "메타는 방대한 AI 인프라를 수익화하기 위해 클라우드 컴퓨팅 시장 진입을 예고하고 있습니다. 이로 인해 투자자들은 수익률 저하에 대비할 필요가 있습니다.",
+      "link": "https://www.cnbc.com/2026/07/02/metas-push-into-cloud-excites-wall-street-despite-lower-margins.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37537",
+      "title": "마이크로소프트, 인도-동남아시아 해저 케이블 구축을 위한 라이트스톰 주도 컨소시엄에 합류",
+      "original_title": "",
+      "description": "마이크로소프트는 인도와 싱가포르, 말레이시아를 연결하는 새로운 해저 케이블을 구축하기 위해 싱가포르 기반의 라이트스톰이 이끄는 컨소시엄에 합류했다고 밝혔습니다. I-2SEA 시스템은 3,600킬로미터에 달할 예정이며 AI, 클라우드, 하이퍼스케일 작업을 지원하는 것을 목표로 하고 있습니다.",
+      "link": "https://thenextweb.com/news/microsoft-lightstorm-india-southeast-asia-cable",
+      "entities": [
+        "I-2SEA",
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37543",
+      "title": "AI가 넷 중립성의 종말을 초래할까?",
+      "original_title": "",
+      "description": "인터넷이 시작된 이래로 그 기능은 기본적으로 넷 중립성에 기반하고 있습니다. 이는 인터넷 제공업체가 트래픽을 출처와 관계없이 동등하게 취급해야 한다는 원칙으로, 차별을 두어서는 안 됩니다. 이러한 생각은 의도적으로는 고귀하지만, 실제로는 복잡한 문제를 내포하고 있습니다.",
+      "link": "https://www.cityam.com/will-ai-trigger-the-end-of-net-neutrality/",
+      "entities": [],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37547",
+      "title": "아마존, 에코와 파이어 TV 및 미래 기기를 위한 자체 AI 칩 설계 중",
+      "original_title": "",
+      "description": "아마존 하드웨어 책임자인 파노스 파나이는 회사가 AI 기기를 실험하면서 주요 기기를 위한 맞춤형 칩을 설계하고 있다고 밝혔습니다. 이는 아마존의 혁신적인 하드웨어 경쟁력을 강화하는 데 기여할 것입니다.",
+      "link": "https://www.cnbc.com/2026/07/02/amazon-ai-chips-devices.html",
+      "entities": [
+        "TV",
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37519",
+      "title": "AI 기업들이 범죄에서 벗어나고 있는가? | 피오나 카타우스카스",
+      "original_title": "",
+      "description": "그들은 지적 재산권을 훔치는 예술을 만들어가고 있다. 피오나 카타우스카스의 만화를 더 보려면 여기를 클릭하세요.",
+      "link": "https://www.theguardian.com/commentisfree/picture/2026/jul/02/are-ai-companies-getting-away-with-crime",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "id": "37358",
+      "title": "팔란티어의 카프, OpenAI와 Anthropic 토큰 모델 비판: '완전히 잘못된 것이 ",
+      "original_title": "",
+      "description": "카프는 상승하는 토큰 비용이 기업들이 개방형 모델을 선택하고 효율성을 우선시하도록 강요하게 만들고 있다고 주장합니다. 이로 인해 '토큰 맥싱'의 개념이 무색해지고 있습니다.",
+      "link": "https://www.cnbc.com/2026/07/01/palantir-karp-open-ai-anthropic-tokens.html",
+      "entities": [
+        "Anthropic"
+      ],
+      "date": "2026-07-02"
     }
   ]
 }

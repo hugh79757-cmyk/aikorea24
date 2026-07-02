@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""aikorea24 데일리 파이프라인
+"""aikorea24 데일리 파이프라인 (Blog Pipeline)
 
-전체 뉴스 브리핑 워크플로우를 자동화합니다:
+뉴스 → 브리핑 → 블로그(자동생성) → 이메일 → 배포:
 1. 뉴스 선정 (auto_news_selector)
 2. 브리핑 생성 (auto_briefing)
-3. 심층글 생성 (auto_deep_article)
+3. 블로그 생성 (auto_deep_article)  ← "심층글"은 블로그 포스트
 4. 썸네일 생성 (auto_thumbnail)
 5. 이메일 발송 (auto_email_sender)
 6. 빌드 + 배포 (scripts/deploy.sh)
