@@ -296,6 +296,83 @@
       "article_descriptions": [],
       "entities": [],
       "date": "2026-07-02"
+    },
+    {
+      "hook": "A short story widely condemned",
+      "narrative": "The story 'Snake in the Forest' by Jamir Nazir fac",
+      "article_ids": [
+        37327
+      ],
+      "article_urls": [
+        "https://www.theguardian.com/books/2026/jul/01/judges-claims-ai-use-commonwealth-short-story-prize-jamir-nazir"
+      ],
+      "article_titles": [
+        "AI가 쓴 것으로 의심받는 단편소설, 종합 커먼웰스 상 수상"
+      ],
+      "article_original_titles": [
+        "Short story accused of being AI-written wins overall Commonwealth prize"
+      ],
+      "article_descriptions": [
+        "비평가들이 AI의 사용이 '명백한 신호'라고 주장하는 자미르 나지르의 '숲 속의 뱀'이 '독창적이고 시적이며 깊은 감동을 준다'고 심사위원장이 평가했습니다. 소셜 미디어에서 AI로 쓰인 것으로 널리 비난받던 이 이야기가 커먼웰스 단편소설 상을 수상하게 되었습니다."
+      ],
+      "entities": [
+        "AI-written",
+        "Short",
+        "Commonwealth"
+      ],
+      "date": "2026-07-02"
+    },
+    {
+      "hook": "AI가 생성한 트립어드바이저 호텔 리뷰 요약이 성희롱 ",
+      "narrative": "소비자는 AI 요약이 객관적인 피드백을 제공할 것이라 기대하지만, 실제로는 성희롱이나 식중",
+      "article_ids": [
+        "37520"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-02"
+    },
+    {
+      "hook": "진 와일더의 유족이 AI 음성 재현에 동의하고 기뻐했지",
+      "narrative": "넷플릭스가 2016년 사망한 배우 진 와일더의 목소리를 AI로 재현해 새 리얼리티 쇼에 사",
+      "article_ids": [
+        "37315"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03"
+    },
+    {
+      "hook": "사용자가 도움을 요청하기 전에 AI가 스마트워치와 이어",
+      "narrative": "기존 정신 건강 챗봇은 사용자가 먼저 연락해야 작동하지만, 오타와 대학교의 UbiMyThe",
+      "article_ids": [
+        "36148"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03"
+    },
+    {
+      "hook": "AI 에이전트가 프리랜서 작업 자동화 비율이 2.5%에",
+      "narrative": "이 변화는 AI가 전문 수준의 유급 프리랜서 프로젝트를 수행할 수 있는 능력이 급격히 향상",
+      "article_ids": [
+        "37682"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03"
     }
   ],
   "posted_article_meta": {
@@ -405,6 +482,31 @@
       "description": ""
     },
     "37361": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37327": {
+      "title": "AI가 쓴 것으로 의심받는 단편소설, 종합 커먼웰스 상 수상",
+      "original_title": "Short story accused of being AI-written wins overall Commonwealth prize",
+      "description": "비평가들이 AI의 사용이 '명백한 신호'라고 주장하는 자미르 나지르의 '숲 속의 뱀'이 '독창적이고 시적이며 깊은 감동을 준다'고 심사위원장이 평가했습니다. 소셜 미디어에서 AI로 쓰인 것으로 널리 비난받던 이 이야기가 커먼웰스 단편소설 상을 수상하게 되었습니다."
+    },
+    "37520": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37315": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36148": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37682": {
       "title": "",
       "original_title": "",
       "description": ""

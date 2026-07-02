@@ -1129,6 +1129,79 @@
           "date": "2026-07-02"
         }
       ]
+    },
+    {
+      "date": "2026-07-03",
+      "briefing_id": 153,
+      "articles": [
+        {
+          "id": "37766",
+          "title": "보잉 자율 공항 택시 자회사, 소프트웨어 테스트의 급속한 진행으로 내부 고발자 소송에 직면",
+          "original_title": "",
+          "description": "보잉의 자율 공항 택시 자회사인 Wisk Aero의 전 소프트웨어 관리자 브리안나 오닐이 내부 안전 문제를 제기한 후 해고당했다고 주장하며 소송을 제기했습니다. 시애틀 타임스가 처음 보도하였습니다.",
+          "link": "https://thenextweb.com/news/wisk-aero-boeing-whistleblower-safety-software-testing",
+          "entities": [
+            "Wisk"
+          ],
+          "date": "2026-07-03"
+        },
+        {
+          "id": "37767",
+          "title": "클링 AI, 화이쇼우가 가장 빠르게 성장하는 사업 부문을 분리하면서 20억 달러 조달",
+          "original_title": "",
+          "description": "중국 기술 회사 화이쇼우의 비디오 생성 유닛인 클링 AI가 초기 벤처 자본 조달에서 20억 달러를 모금했다고 목요일에 발표했습니다. 추가 투자자가 합류할 경우 총액은 약 30억 달러에 이를 수 있으며, 이로 인해 화이쇼우의 지분이 희석될 수 있습니다.",
+          "link": "https://thenextweb.com/news/kling-ai-2-billion-kuaishou-spinoff-video",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-03"
+        },
+        {
+          "id": "37680",
+          "title": "앤트로픽, Fable 5 모델이 \"더 작은 시스템 프롬프트를 원해\" 클로드 코드의 시스템 ",
+          "original_title": "",
+          "description": "앤트로픽은 클로드 코드의 시스템 프롬프트를 80% 줄였습니다. 직원인 타리크 시히파르에 따르면, 새로운 Fable 5 모델이 더 적은 지시사항과 예제를 필요로 한다고 합니다. 규정은 모델의 상상력을 제한할 수 있기 때문에, 앤트로픽은 엄격한 규칙 대신 유연한 접근 방식을 취하고 있습니다.",
+          "link": "https://the-decoder.com/anthropic-says-it-cut-80-percent-of-claude-codes-system-prompt-because-fable-5-models-want-a-smaller-system-prompt/",
+          "entities": [
+            "Fable"
+          ],
+          "date": "2026-07-03"
+        },
+        {
+          "id": "37770",
+          "title": "chan, Ofcom을 다시 조롱하며 52만 파운드의 미납 벌금 추적",
+          "original_title": "",
+          "description": "4chan은 Ofcom이 논란이 되는 이미지 생성기가 52만 파운드의 온라인 안전법 벌금을 지불하라는 요구를 재개한 후 다시 조롱했습니다. 4chan을 대표하는 미국 변호사 프레스톤 번이 목요일에 X에 게시했습니다.",
+          "link": "https://www.cityam.com/4chan-ridicules-ofcom-again-as-watchdog-chases-unpaid-520k-fine/",
+          "entities": [],
+          "date": "2026-07-03"
+        },
+        {
+          "id": "37773",
+          "title": "마이크로소프트, 새로운 AI 도입 부문에 25억 달러와 6,000명 직원 투입",
+          "original_title": "",
+          "description": "마이크로소프트는 고객들이 인공지능을 이해하고 적용할 수 있도록 돕는 비즈니스를 형성하는 최신 기술 기업이 되었습니다.",
+          "link": "https://www.cnbc.com/2026/07/02/microsoft-commits-2point5-billion-6000-employees-ai-implementation-unit.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-03"
+        },
+        {
+          "id": "37653",
+          "title": "AI로 운영 우수성 달성하기",
+          "original_title": "",
+          "description": "Lean Six Sigma 및 비즈니스 프로세스 관리(BPM) 같은 프레임워크는 혼란 속에서 명확성을 제공할 것이라고 약속하면서 주목받기 시작했습니다. Lean Six Sigma는 통계적 엄격성과 품질 관리를 강조했고, BPM은 작업 흐름의 끝에서 끝까지를 맵으로 작성했습니다.",
+          "link": "https://www.technologyreview.com/2026/07/02/1140045/achieving-operational-excellence-with-ai/",
+          "entities": [
+            "Sigma",
+            "BPM",
+            "Lean",
+            "Six"
+          ],
+          "date": "2026-07-03"
+        }
+      ]
     }
   ],
   "articles": [
@@ -2159,6 +2232,73 @@
         "Anthropic"
       ],
       "date": "2026-07-02"
+    },
+    {
+      "id": "37766",
+      "title": "보잉 자율 공항 택시 자회사, 소프트웨어 테스트의 급속한 진행으로 내부 고발자 소송에 직면",
+      "original_title": "",
+      "description": "보잉의 자율 공항 택시 자회사인 Wisk Aero의 전 소프트웨어 관리자 브리안나 오닐이 내부 안전 문제를 제기한 후 해고당했다고 주장하며 소송을 제기했습니다. 시애틀 타임스가 처음 보도하였습니다.",
+      "link": "https://thenextweb.com/news/wisk-aero-boeing-whistleblower-safety-software-testing",
+      "entities": [
+        "Wisk"
+      ],
+      "date": "2026-07-03"
+    },
+    {
+      "id": "37767",
+      "title": "클링 AI, 화이쇼우가 가장 빠르게 성장하는 사업 부문을 분리하면서 20억 달러 조달",
+      "original_title": "",
+      "description": "중국 기술 회사 화이쇼우의 비디오 생성 유닛인 클링 AI가 초기 벤처 자본 조달에서 20억 달러를 모금했다고 목요일에 발표했습니다. 추가 투자자가 합류할 경우 총액은 약 30억 달러에 이를 수 있으며, 이로 인해 화이쇼우의 지분이 희석될 수 있습니다.",
+      "link": "https://thenextweb.com/news/kling-ai-2-billion-kuaishou-spinoff-video",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-03"
+    },
+    {
+      "id": "37680",
+      "title": "앤트로픽, Fable 5 모델이 \"더 작은 시스템 프롬프트를 원해\" 클로드 코드의 시스템 ",
+      "original_title": "",
+      "description": "앤트로픽은 클로드 코드의 시스템 프롬프트를 80% 줄였습니다. 직원인 타리크 시히파르에 따르면, 새로운 Fable 5 모델이 더 적은 지시사항과 예제를 필요로 한다고 합니다. 규정은 모델의 상상력을 제한할 수 있기 때문에, 앤트로픽은 엄격한 규칙 대신 유연한 접근 방식을 취하고 있습니다.",
+      "link": "https://the-decoder.com/anthropic-says-it-cut-80-percent-of-claude-codes-system-prompt-because-fable-5-models-want-a-smaller-system-prompt/",
+      "entities": [
+        "Fable"
+      ],
+      "date": "2026-07-03"
+    },
+    {
+      "id": "37770",
+      "title": "chan, Ofcom을 다시 조롱하며 52만 파운드의 미납 벌금 추적",
+      "original_title": "",
+      "description": "4chan은 Ofcom이 논란이 되는 이미지 생성기가 52만 파운드의 온라인 안전법 벌금을 지불하라는 요구를 재개한 후 다시 조롱했습니다. 4chan을 대표하는 미국 변호사 프레스톤 번이 목요일에 X에 게시했습니다.",
+      "link": "https://www.cityam.com/4chan-ridicules-ofcom-again-as-watchdog-chases-unpaid-520k-fine/",
+      "entities": [],
+      "date": "2026-07-03"
+    },
+    {
+      "id": "37773",
+      "title": "마이크로소프트, 새로운 AI 도입 부문에 25억 달러와 6,000명 직원 투입",
+      "original_title": "",
+      "description": "마이크로소프트는 고객들이 인공지능을 이해하고 적용할 수 있도록 돕는 비즈니스를 형성하는 최신 기술 기업이 되었습니다.",
+      "link": "https://www.cnbc.com/2026/07/02/microsoft-commits-2point5-billion-6000-employees-ai-implementation-unit.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-03"
+    },
+    {
+      "id": "37653",
+      "title": "AI로 운영 우수성 달성하기",
+      "original_title": "",
+      "description": "Lean Six Sigma 및 비즈니스 프로세스 관리(BPM) 같은 프레임워크는 혼란 속에서 명확성을 제공할 것이라고 약속하면서 주목받기 시작했습니다. Lean Six Sigma는 통계적 엄격성과 품질 관리를 강조했고, BPM은 작업 흐름의 끝에서 끝까지를 맵으로 작성했습니다.",
+      "link": "https://www.technologyreview.com/2026/07/02/1140045/achieving-operational-excellence-with-ai/",
+      "entities": [
+        "Sigma",
+        "BPM",
+        "Lean",
+        "Six"
+      ],
+      "date": "2026-07-03"
     }
   ]
 }
