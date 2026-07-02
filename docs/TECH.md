@@ -26,6 +26,10 @@ keywords.json → D1 DB ← db_reader (기사 수집)
 - **1회 실행**: `python -m pipeline run` 또는 `python -m pipeline run --dry-run`
 - **실패 알림**: `PipelineOrchestrator._send_telegram_failure()`가 step 실패 시 Telegram 전송
 
+### 별도 파이프라인
+- **Tools 수집** (`scripts/tools_collector.py`): 매일 06:00 launchd 실행 — Section 10 참조
+- **Briefing/블로그** (`scripts/run_pipeline.py`): launchd 06/20시 — Section 9 참조
+
 ### 주요 진입점
 - `scripts/threads/main_v3.py` — 메인 파이프라인 (`run_v3()`)
 - `scripts/threads/v3/writer_v3.py` — 쓰레드 생성 (`write_thread()`)
@@ -144,13 +148,16 @@ python3 scripts/threads/main_v3.py
 # 1회 실행 (발행 없이 초안만)
 python3 scripts/threads/main_v3.py --dry-run
 
-# 데몬 모드 (2시간 간격 자동 실행)
-python3 scripts/threads/main_v3.py --daemon
-
 # Briefing pipeline (블로그 브리핑, Threads와 별개)
-BRIEFING_SCORER_MODE=dry_run python3 scripts/run_pipeline.py    # 점수 tagging만
-BRIEFING_SCORER_MODE=shadow python3 scripts/run_pipeline.py     # + 2-Pass diff 로깅
-# BRIEFING_SCORER_MODE=live  # Week 4 활성화 예정 — 실제 2-Pass 선택
+python3 scripts/run_pipeline.py                                    # 전체 실행
+python3 scripts/run_pipeline.py --skip-deploy                      # 배포 없이 실행
+python3 scripts/run_pipeline.py --dry-run                          # 계획만 출력
+BRIEFING_SCORER_MODE=dry_run python3 scripts/run_pipeline.py       # 점수 tagging만
+BRIEFING_SCORER_MODE=shadow python3 scripts/run_pipeline.py        # + 2-Pass diff 로깅
+# BRIEFING_SCORER_MODE=live  # Week 4 활성화 예정
+
+# 수동 배포
+bash scripts/deploy.sh
 ```
 
 ---
@@ -159,6 +166,61 @@ BRIEFING_SCORER_MODE=shadow python3 scripts/run_pipeline.py     # + 2-Pass diff 
 
 > Threads 쓰레드와 별개로, 블로그 브리핑 생성 시 뉴스를 선정하고 점수를 평가하는 파이프라인.  
 > `run_pipeline.py` → `auto_news_selector.py` → `auto_briefing.py`
+
+---
+
+## 9. Blog Pipeline (뉴스 → 브리핑 → 블로그 → 이메일 → 배포)
+
+> `run_pipeline.py`가 오케스트레이션하는 6단계 파이프라인.  
+> Threads와는 별개 — 블로그 콘텐츠 생성 및 배포 전용.
+
+### 9.1 처리 흐름
+
+```
+뉴스 선정 (auto_news_selector)
+    ↓
+브리핑 생성 (auto_briefing) → D1 briefings + briefing_items
+    ↓
+블로그 생성 (auto_deep_article) → src/content/blog/{date}-{slug}.md
+    ↓                          → briefing_items.deep_dive_url 자동 연결
+썸네일 생성 (auto_thumbnail) → public/images/{slug}/thumbnail.webp
+    ↓
+이메일 발송 (auto_email_sender) → Brevo API
+    ↓
+빌드 + 배포 (deploy.sh) → npm run build → wrangler pages deploy
+```
+
+### 9.2 단계별 설명
+
+| 단계 | 스크립트 | 하는 일 |
+|------|---------|---------|
+| 1. 뉴스 선정 | `auto_news_selector.py` | D1에서 최근 뉴스 조회, 중복 제거, 6개 선정 |
+| 2. 브리핑 생성 | `auto_briefing.py` | 각 뉴스에 comment 생성, D1 `briefings`/`briefing_items` 저장 |
+| 3. 블로그 생성 | `auto_deep_article.py` | 뉴스 원문 크롤링 → AI로 블로그 포스트 생성 → `src/content/blog/` 저장 → `briefing_items.deep_dive_url` 자동 UPDATE |
+| 4. 썸네일 | `auto_thumbnail.py` | Pexels API + DeepSeek 키워드로 썸네일 생성 |
+| 5. 이메일 | `auto_email_sender.py` | Brevo API로 뉴스레터 발송 |
+| 6. 배포 | `deploy.sh` | `npm run build` + `npx wrangler pages deploy` |
+
+### 9.3 deep_dive_url 연결
+
+블로그 포스트 생성 직후 `run_pipeline.py:step_deep_articles()`가 자동 실행:
+
+```python
+blog_url = f"https://aikorea24.kr/blog/{filepath.stem}"
+UPDATE briefing_items SET deep_dive_url = '{blog_url}'
+WHERE briefing_id = {id} AND news_id = {id}
+```
+
+이 URL은 `src/pages/briefing/[date].astro:222-230`에서 "이 뉴스, 더 깊이 읽기 →" 링크로 렌더링됨.
+
+**중요: 배포(Step 6)가 완료되어야 블로그 링크가 404가 나지 않음.** 블로그 포스트는 Astro 정적 사이트에 포함되어 pre-render되므로, 배포 전에는 접근 불가.
+
+### 9.4 용어
+
+| 문서상 표현 | 실제 의미 |
+|------------|---------|
+| 심층글 / deep article | **블로그 포스트** (`src/content/blog/`) |
+| `auto_deep_article.py` | 블로그 생성기 (이름은 legacy, 기능은 단순 블로그 생성) |
 
 ### 8.1 평가 아키텍처 (Cascade)
 
@@ -225,3 +287,102 @@ D1 뉴스 100건 → cluster_by_topic (키워드 클러스터링)
 |------|------|------|
 | _two_pass_selection 3개 반환 | misc light_score < 20 skip 후 deficit 처리 안됨 | fallback: misc full_score 순 인출 |
 | cluster_by_topic 회귀 | source → misc 통합으로 round-robin 결과 불일치 | _expand_misc_for_legacy() 추가 |
+
+---
+
+## 10. Tools Collection Pipeline (자동 도구 수집기)
+
+> AI 도구 디렉토리(`aikorea24.kr/tools/`)를 자동으로 채우는 독립 파이프라인.  
+> Threads/Briefing과 별개로 매일 06:00에 실행되어 신규 AI 툴을 수집·가공·배포까지 완료.
+
+### 10.1 처리 흐름
+
+```
+Product Hunt RSS ─┐
+GitHub Awesome AI ─┤  (주 1회)
+Futurepedia      ─┤→ collect_tools() → 중복 제거 → crawl_tool_page()
+HuggingFace      ─┤                                    ↓
+TopAI.tools      ─┘                         DeepSeek/GPT 한국어 메타데이터 생성
+                                                    ↓
+                                            im-not-ai 3단계 검증
+                                            (humanize_md + ai_tell_score)
+                                                    ↓
+                                            MD 파일 저장
+                                            src/content/tools/{slug}.md
+                                                    ↓
+                                            git commit + push
+                                                    ↓
+                                            Cloudflare Pages 배포
+                                            (scripts/deploy.sh)
+```
+
+### 10.2 실행 주기
+
+| 방식 | 실행 명령어 | 시각 |
+|------|-----------|------|
+| **launchd** (`kr.aikorea24.tools-collector`) | `.venv/bin/python3 scripts/tools_collector.py --collect --batch 10` | 매일 **06:00** |
+| 수동 (수집+처리) | `python3 scripts/tools_collector.py --collect --batch 5` | — |
+| dry-run | `python3 scripts/tools_collector.py --collect --dry-run` | — |
+| 샘플 테스트 | `python3 scripts/tools_collector.py --sample` | — |
+
+### 10.3 수집 소스
+
+| 소스 | 방식 | 주기 |
+|------|------|------|
+| Product Hunt | Atom 피드 (`https://www.producthunt.com/feed`) | 매일 |
+| GitHub Awesome AI Tools | `mahseema/awesome-ai-tools` README.md | **주 1회** (월요일) |
+| Futurepedia | sitemap → 카테고리 페이지 → 개별 툴 카드 | 매일 |
+| HuggingFace Papers | Daily Papers 페이지 (도구/모델 키워드 필터) | 매일 |
+| TopAI.tools | 메인 페이지 카드 목록 | 매일 |
+
+### 10.4 메타데이터 생성 (generate_metadata)
+
+- **모델**: `deepseek/deepseek-v4-flash` (OpenRouter) → fallback `gpt-4o-mini`
+- **온도**: `temperature=0.5`
+- **크롤링**: 수집된 URL에서 실제 웹사이트 HTML 파싱 (title, description, pricing)
+- **출력 JSON 구조**: description_kr, category, koreanSupport, difficulty, useCases, tags, tasks, tool_detail (summary, features, pricing, korean_detail, recommend_for, real_examples, vs_similar, faq)
+
+### 10.5 im-not-ai 3단계 검증
+
+| 단계 | 파일 내 위치 | 내용 |
+|------|------------|------|
+| 1단계 (예방) | `SYSTEM_PROMPT` 내 `HUMANIZE_RULES` | GPT 프롬프트에 금지 표현 사전 주입 |
+| 2단계 (교정) | `humanize_md()` | regex 기반 후처리 (번역투, 관용구, 접속사, 평서체→정중체) |
+| 3단계 (검증) | `ai_tell_score()` | AI스러움 점수 측정 (임계 15 초과 시 humanize 재실행) |
+
+### 10.6 plist 설정 (`~/Library/LaunchAgents/kr.aikorea24.tools-collector.plist`)
+
+```xml
+<key>StartCalendarInterval</key>
+<dict>
+  <key>Hour</key><integer>6</integer>
+  <key>Minute</key><integer>0</integer>
+</dict>
+<key>WorkingDirectory</key>
+<string>/Users/twinssn/Projects/aikorea24</string>
+```
+
+**주의**: plist에 `EnvironmentVariables`로 `PATH`가 명시되어 있음 (homebrew 경로 포함).  
+launchd 환경은 `~/.zshrc`를 읽지 않으므로 `sys.path`가 필요하며, `tools_collector.py` 상단에서 `__file__` 기반으로 `PROJECT_DIR`을 먼저 path에 추가한 후 `pipeline.infra`를 import함.
+
+### 10.7 중복 방지
+
+- **slug 중복**: `src/content/tools/{slug}.md` 파일 존재 여부 (filename)
+- **name 중복**: frontmatter `name:` 필드 대소문자 무시 비교
+- **URL 중복**: 수집 단계에서 `seen_urls` set으로 제거
+
+### 10.8 주요 함수 위치
+
+| 함수 | 라인 | 설명 |
+|------|------|------|
+| `main()` | 1403 | CLI 진입점 (argparse) |
+| `collect_tools()` | 556 | 5개 소스 통합 수집 + 중복 제거 |
+| `fetch_product_hunt()` | 191 | Product Hunt Atom 피드 파싱 |
+| `fetch_github_awesome()` | 294 | GitHub README.md 링크 파싱 |
+| `generate_metadata()` | 930 | DeepSeek/GPT 한국어 메타데이터 생성 |
+| `crawl_tool_page()` | 882 | 툴 웹사이트 실제 정보 HTML 크롤링 |
+| `humanize_md()` | 656 | im-not-ai 2단계 regex 후처리 |
+| `ai_tell_score()` | 738 | im-not-ai 3단계 AI 티 점수 측정 |
+| `save_tool_md()` | 1189 | frontmatter + body 조합해서 MD 저장 |
+| `git_commit()` | 1236 | git add → commit → push |
+| `process_batch()` | 1301 | 배치 처리 + ThreadPoolExecutor |

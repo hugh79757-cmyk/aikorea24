@@ -13,18 +13,21 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
 from html import unescape
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# 프로젝트 루트 먼저 path에 추가 (pipeline import 전에 필요)
+_PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_DIR)
+sys.path.insert(0, os.path.join(_PROJECT_DIR, 'scripts'))
+sys.path.insert(0, os.path.join(_PROJECT_DIR, 'api_test'))
 
 from pipeline.infra.logger import get_scrubbed_logger
 logger = get_scrubbed_logger(__name__)
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from pipeline.infra.env_loader import EnvConfig
 _config = EnvConfig()
 _config.load_to_environ()
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
-sys.path.insert(0, PROJECT_DIR)
-sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts'))
-sys.path.insert(0, os.path.join(PROJECT_DIR, 'api_test'))
 
 # ============================================
 # 환경 설정

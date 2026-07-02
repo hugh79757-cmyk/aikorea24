@@ -78,6 +78,18 @@ dry-run 결과는 [DRY-RUN] 태그로 구분
 * 검색의도: {intent}
 
 
+## Tools Collection Pipeline (자동 도구 수집기)
+
+> 기술 상세: `docs/TECH.md` Section 10 참조
+
+- **실행**: launchd `kr.aikorea24.tools-collector` → 매일 **06:00**
+- **소스**: Product Hunt / GitHub Awesome AI / Futurepedia / HuggingFace / TopAI.tools
+- **흐름**: 수집 → 중복 제거 → 웹 크롤링 → DeepSeek 한국어 메타 생성 → im-not-ai 3단계 검증 → MD 저장 → git push → 배포
+- **결과물**: `src/content/tools/{slug}.md` (Astro content collection)
+- **진입점**: `scripts/tools_collector.py`
+- **1회 수동**: `python3 scripts/tools_collector.py --collect --batch 5`
+- **주의**: `sys.path.insert`가 `pipeline` import보다 먼저 실행되어야 함 (launchd 환경)
+
 ## 중복 발행 방지 (threads 파이프라인)
 
 ### 3단계 Semantic Dedup

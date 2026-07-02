@@ -5,6 +5,24 @@
 
 ---
 
+## 2026-07-02 — Tools Collector 버그 수정 + 문서화
+
+### 버그 수정
+- `scripts/tools_collector.py`: import 순서 재배열 — `from pipeline.infra.logger`가 `sys.path.insert`보다 먼저 실행되어 ModuleNotFoundError 발생
+  - 수정: `_PROJECT_DIR = os.path.dirname(__file__)` 기반 path를 pipeline import 전에 먼저 삽입
+  - launchd `kr.aikorea24.tools-collector` (매일 06:00) 정상화, LastExitStatus=256 원인 제거
+
+### 문서화
+- `docs/TECH.md` Section 10 신규 — Tools Collection Pipeline: 흐름, 5개 소스, 메타데이터 생성, im-not-ai 3단계, plist 설정, 함수 위치
+- `AGENTS.md` — Tools Collection Pipeline 참조 블록 추가
+- `docs/TECH.md` Section 1 — 별도 파이프라인 표기
+
+### 검증
+- `python3 -m py_compile scripts/tools_collector.py` ✅
+- pipeline.infra 3개 모듈 import 테스트 통과 ✅
+
+---
+
 ## 2026-07-01 — auto_email_sender: template 2 → template 1 전환 (rich HTML)
 
 ### 기능 변경
