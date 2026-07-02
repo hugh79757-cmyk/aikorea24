@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/scripts/tools_collector.py", line 17, in <module>
+    from pipeline.infra.logger import get_scrubbed_logger
+ModuleNotFoundError: No module named 'pipeline'
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/scripts/tools_collector.py", line 17, in <module>
+    from pipeline.infra.logger import get_scrubbed_logger
+ModuleNotFoundError: No module named 'pipeline'

@@ -1,0 +1,23 @@
+# label=2  length=904  chars
+# ============================================================
+아마존 엔지니어들이 Anthropic 모델을 소형화하고 있는 이유는 비용 상승을 예방하기 위해서다.  
+새로운 토큰 기반 가격 체계가 시행되기 전에, 아마존은 내부 사용을 위해 더 작고 저렴한 버전으로 변환하고 있음.  
+이 과정에서 엔지니어들은 큰 모델의 출력을 작은 모델이 학습하도록 하는 distillation 기법을 사용하고 있음.  
+
+사람들에 따르면, 아마존은 Anthropic 모델을 사용할 권리가 있음.  
+이는 Apple이 Google Gemini와 협력하는 방식과 유사함.  
+아마존은 Bedrock 클라우드 플랫폼에서 distillation 서비스를 제공하고 있으나, Anthropic의 Claude 모델은 지원하지 않음.  
+
+내년부터 아마존은 Anthropic의 모델을 처리한 토큰 수에 따라 비용을 지불하게 됨.  
+이로 인해 비용이 급격히 상승할 수 있다는 우려가 존재함.  
+하지만 아마존 대변인은 이러한 파트너십 변화가 비용을 증가시키지 않을 것이라고 주장하고 있음.  
+
+아마존은 OpenAI와 자체 Nova 모델 같은 대안도 탐색 중임.  
+올해 Anthropic에 최대 250억 달러를 투자했음.  
+OpenAI에도 최대 500억 달러를 투자한 상황임.  
+
+결국 아마존의 cost-cutting 전략이 향후 어떻게 작용할지는 불확실함.  
+비용 상승을 피하기 위한 노력은 계속되겠지만, 실제로는 비용이 증가할 가능성이 있음.  
+이런 불안한 상황 속에서 아마존은 AI 생태계에서의 경쟁력을 유지하려는 노력을 계속하고 있음.  
+
+🔗 https://the-decoder.com/amazon-engineers-are-reportedly-distilling-anthropic-models-to-cut-costs-before-new-token-based-pricing-kicks-in/
