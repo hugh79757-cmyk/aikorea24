@@ -1262,6 +1262,57 @@ def git_commit(message: str) -> bool:
 
 
 # ============================================
+# D1 tools 테이블 동기화
+# ============================================
+def sync_tools_to_d1() -> bool:
+    """src/content/tools/*.md → D1 tools 테이블 동기화 (sync_tools_to_d1.mjs + wrangler d1 execute)"""
+    sync_script = os.path.join(PROJECT_DIR, 'scripts', 'sync_tools_to_d1.mjs')
+    if not os.path.exists(sync_script):
+        print("  sync_tools_to_d1.mjs 없음, D1 동기화 스킵")
+        return False
+
+    import tempfile
+    tmp = tempfile.NamedTemporaryFile(mode='w', suffix='.sql', delete=False, dir='/tmp')
+    try:
+        r = subprocess.run(['node', sync_script], capture_output=True, text=True, timeout=30)
+        if r.returncode != 0:
+            print(f"  SQL 생성 실패: {r.stderr[:200]}")
+            os.unlink(tmp.name)
+            return False
+        tmp.write(r.stdout)
+        tmp.close()
+        count_line = [l for l in r.stderr.split('\n') if 'INSERT' in l]
+        if count_line:
+            print(f"  SQL 생성: {count_line[0].strip()}")
+
+        # wrangler d1 execute does not support BEGIN TRANSACTION/COMMIT; strip wrappers
+        lines = r.stdout.splitlines()
+        clean_lines = [l for l in lines if l.strip() not in ('BEGIN TRANSACTION;', 'COMMIT;')]
+        with open(tmp.name, 'w') as f:
+            f.write('\n'.join(clean_lines))
+
+        r2 = subprocess.run(
+            ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--file', tmp.name],
+            capture_output=True, text=True, timeout=120
+        )
+        if r2.returncode == 0:
+            print("  D1 tools 테이블 동기화 완료 ✅")
+            return True
+        else:
+            print(f"  D1 execute 실패 ({r2.returncode}): {r2.stderr[:300]}")
+            return False
+    except subprocess.TimeoutExpired:
+        print("  D1 동기화 타임아웃")
+        return False
+    except Exception as e:
+        print(f"  D1 동기화 오류: {e}")
+        return False
+    finally:
+        if os.path.exists(tmp.name):
+            os.unlink(tmp.name)
+
+
+# ============================================
 # 배치 처리
 # ============================================
 def translate_tools(tools: list) -> list:
@@ -1517,6 +1568,10 @@ def main():
             except Exception as e:
                 print(f"  배포 오류 (시도 {attempt}/{max_retries}): {e}")
                 break
+
+        # D1 tools 테이블 동기화
+        print("\n[D1 동기화] tools 테이블 업데이트 중...")
+        sync_tools_to_d1()
 
 
 if __name__ == '__main__':

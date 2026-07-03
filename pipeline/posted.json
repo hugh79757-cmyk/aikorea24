@@ -399,6 +399,141 @@
       "article_descriptions": [],
       "entities": [],
       "date": "2026-07-03"
+    },
+    {
+      "hook": "화이쇼우가 가장 빠르게 성장하는 AI 비디오 부문을 분사하며 클링 AI, 20억 달러 조달",
+      "narrative": "클링 AI가 화이쇼우로부터 분사되며 20억 달러의 초기 벤처 투자를 유치했다. 추가 투자자가 합류하면 총 30억 달러까지 늘어날 수 있으며, 화이쇼우의 지분은 68%로 희석될 전망이다. 이번 라운드의 기업가치는 이전 협상에서 논의된 180~200억 달러보다 낮은 180억 달러(포스트머니)로 평가됐다.",
+      "article_ids": [
+        "37767"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "구글 검색 순위에 의존하던 마케팅이 AI 검색 최적화(GEO)로 전환되면서, Peec AI의 가치가 8개월 만에 두 배로 뛰었다.",
+      "narrative": "Peec AI는 사용자가 ChatGPT나 Perplexity 같은 AI 검색 엔진에 입력하는 프롬프트를 추적해 브랜드의 가시성을 측정하는 GEO 도구를 제공한다. 창립 16개월 만에 연간 반복 매출 1000만 달러를 돌파했으며, 현재 2억 달러의 평가액으로 추가 투자 유치를 협상 중이다.",
+      "article_ids": [
+        "36328"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "투자자들은 AI 지출에 불안해하지만, 반도체 기업은 여전히 지지받는다.",
+      "narrative": "Magnificent 7 기업들의 AI 인프라 투자에 대한 우려로 2.3조 달러의 시가총액이 증발했지만, 같은 AI 수요로 혜택을 받는 반도체 기업들의 주가는 오히려 상승하고 있다.",
+      "article_ids": [
+        "36817"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "게임기 가격이 오르는 이유가 AI 때문이라고?",
+      "narrative": "Apple과 Microsoft의 Xbox가 몇 년 된 기기와 콘솔 가격을 인상하고 있다. AI 데이터센터가 메모리칩 수요를 폭발시켜 'Ramageddon' 현상이 발생했기 때문이다. 소비자들은 AI 혁명의 혜택을 보기는커녕 오히려 더 비싼 가격을 부담하게 되었다.",
+      "article_ids": [
+        "35838"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "AI 기술로 자녀 사진이 성적 학대 영상으로 변환되는 위험에 경고",
+      "narrative": "AI 기반 성적 대상화 앱들이 부모가 SNS에 공유한 자녀 사진을 사용해 극단적인 포르노를 생성하고 있다. 영국의 아동 보호 기관들은 부모들에게 자녀 사진을 공개적으로 공유하지 말라는 새로운 지침을 발표했다.",
+      "article_ids": [
+        "37950"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "음성 AI 스타트업 ElevenLabs가 직원 주식 매각으로 18개월 만에 기업 가치를 6배나 끌어올리며 220억 달러 평가를 논의 중이다.",
+      "narrative": "ElevenLabs는 2월 시리즈D에서 110억 달러 평가를 받은 지 불과 5개월 만에 직원 주식 매각을 통해 220억 달러로 평가액을 두 배로 높이려 하고 있다. 이는 2025년 1월 33억 달러에서 시작해 18개월 만에 6배 이상 성장한 것이다.",
+      "article_ids": [
+        "37971"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "AI가 쓴 코드가 워드프레스 스팸 공격을 막는 대신 파괴할 뻔했다",
+      "narrative": "40분간 사이트를 분석한 Claude Cowork가 취약점을 찾아냈지만, 수정 코드를 작성하라는 프롬프트에서 처음에는 파괴적인 코드를 생성했다. 저자가 직접 검토 후 수정을 요청해 안전한 코드를 얻었고, Codex로 4,700줄의 방어 코드를 완성했다.",
+      "article_ids": [
+        "37272"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-04",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "AI는 영리하지 않다'는 선도적 연구자의 충격적 주장",
+      "narrative": "Yann LeCun은 현재의 대규모 언어 모델이 실제 세계를 이해하지 못한다고 비판하며, 새로운 AI 시스템 JEPA를 개발 중이다. 이 시스템은 추상화를 통해 불필요한 정보를 걸러내고 물리적 현실을 추론한다.",
+      "article_ids": [
+        "37939"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-04",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "AI 붐으로 억만장자는 급증했지만, 영국은 팬데믹 이후 선진국 중 최대 부 감소를 겪었다.",
+      "narrative": "UBS 연구에 따르면 AI 및 기술 붐이 억만장자 재산을 25% 급증시켰지만, 영국 가계는 같은 기간 실질 부의 5분의 1 이상을 잃었다. 특히 영국에서 부유층의 탈출과 부동산 자산의 정체가 주요 원인으로 지목됐다.",
+      "article_ids": [
+        "37355"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-04",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
     }
   ],
   "posted_article_meta": {
@@ -543,6 +678,51 @@
       "description": ""
     },
     "37766": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37767": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36328": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36817": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "35838": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37950": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37971": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37272": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37939": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37355": {
       "title": "",
       "original_title": "",
       "description": ""

@@ -648,3 +648,46 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 7개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 1개
+  TopAI.tools: 5개 수집
+  총 13개 (중복 제거 후)
+수집 완료: 13개
+기존 툴: 131개 (슬러그), 131개 (이름)
+  중복 스킵: Banger Mail
+  중복 스킵: Gemini Omni Flash
+  중복 스킵: Mark by Airtop
+  중복 스킵: MailAdept by mailwarm
+  중복 스킵: Claude Sonnet 5
+  중복 스킵: Claude Science
+  중복 스킵: Adam CAD Copilot
+  중복 스킵: MemSyco-Bench: Benchmarking Sycophancy in Agent Me
+  중복 스킵: Productshot AI
+  중복 스킵: GPTscribe AI
+신규 툴: 3개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (3건) ---
+  크롤링 성공: https://topai.tools/t/tempmail-bot... (설명 148자)
+  크롤링 성공: https://topai.tools/t/spira-ai... (설명 150자)
+  크롤링 성공: https://topai.tools/t/pdftoword-ai... (설명 139자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/spira-ai.md
+  ✅ Spira AI → spira-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/tempmail-bot.md
+  ✅ Tempmail.bot → tempmail-bot.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/pdftoword-ai.md
+  ✅ PDFtoword AI → pdftoword-ai.md
+
+==================================================
+처리 완료: 3/13개 생성 (14.2초)
+  git commit: [main 998c988] feat: AI 툴 3개 추가 (2026-07-03)
+ 9 files changed, 1190 insertions(+), 217 deletions(-)
+ create mode 100644 src/content/tools/pdftoword-ai.md
+ create mode 100644 src/content/tools/spira-ai
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
