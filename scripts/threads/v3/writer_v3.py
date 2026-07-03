@@ -26,7 +26,7 @@ if __name__ == '__main__':
     from pipeline.threads.pitch import get_pitches
     from db_reader import get_articles
     articles = get_articles()
-    pitches = get_pitches(articles)
+    pitches, _ = get_pitches(articles)
     if pitches:
         cards = write_thread(pitches[0], articles)
         if cards:

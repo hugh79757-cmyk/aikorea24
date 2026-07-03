@@ -28,7 +28,7 @@ load_env = lambda: None  # noqa: E731
 if __name__ == '__main__':
     from db_reader import get_articles
     articles = get_articles()
-    pitches = get_pitches(articles)
+    pitches, _ = get_pitches(articles)
     if pitches:
         p = pitches[0]
         print(f'\n=== TOP PITCH ===')

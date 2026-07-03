@@ -107,6 +107,7 @@ def validate_final_cards(cards):
 def run_v3(dry_run=False):
     max_retries = 5
     retry_delays = [60, 120, 300, 600]  # 1분 → 2분 → 5분 → 10분 (기하급수적 백오프)
+    failed_article_ids: set[str] = set()
 
     for attempt in range(1, max_retries + 1):
         if attempt > 1:
@@ -131,11 +132,19 @@ def run_v3(dry_run=False):
         from v3.narrative_pitcher import get_pitches
         briefing_articles = [a for a in articles if a.get('priority') == 1]
         pitches = []
+        failed_ids: set[str] = set()
 
         # 1단계: 브리핑 기사 우선 시도
         if briefing_articles:
             log(f'  [1단계] 브리핑 기사 {len(briefing_articles)}개 우선 피치 시도')
-            pitches = get_pitches(briefing_articles, max_articles=len(briefing_articles), batch_size=len(briefing_articles))
+            _pitches, _failed = get_pitches(
+                briefing_articles,
+                max_articles=len(briefing_articles),
+                batch_size=len(briefing_articles),
+                exclude_ids=failed_article_ids,
+            )
+            pitches = _pitches
+            failed_ids.update(_failed)
             if pitches:
                 log(f'  [1단계] 브리핑 기사로 피치 선정 성공 → 발행 진행')
             else:
@@ -146,10 +155,21 @@ def run_v3(dry_run=False):
         # 2단계: 전체 풀 fallback
         if not pitches:
             log(f'  [2단계] 전체 기사 {len(articles)}개 → 배치 처리 시작')
-            pitches = get_pitches(articles, max_articles=600)
+            _pitches, _failed = get_pitches(
+                articles,
+                max_articles=600,
+                exclude_ids=failed_article_ids,
+            )
+            pitches = _pitches
+            failed_ids.update(_failed)
+
+        failed_article_ids.update(failed_ids)
 
         if not pitches:
             log(f'  ❌ 흥미로운 이야기 발견 실패 (시도 {attempt}/{max_retries})')
+            if failed_ids:
+                log(f'     크롤링 실패 기사: {failed_ids}')
+                log(f'     누적 제외 기사: {failed_article_ids}')
             continue
 
         pitch = pitches[0]
