@@ -434,7 +434,7 @@ def save_pitch_to_history(pitch):
         pass
 
 
-def get_pitches(articles, max_articles=600, batch_size=200):
+def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
     """배치 처리: description 스캔 → 후보 선별 → 단일 기사 크롤링 → 크롤링 본문 기반 피치 생성"""
     from v3.model_router import chat_completion
     from db_reader import load_posted
@@ -448,6 +448,19 @@ def get_pitches(articles, max_articles=600, batch_size=200):
     selected = articles[:max_articles]
     shuffled = selected.copy()
     random.shuffle(shuffled)
+
+    exclude_ids = exclude_ids or set()
+    if exclude_ids:
+        before = len(shuffled)
+        shuffled = [a for a in shuffled if str(a.get('id', '')) not in exclude_ids]
+        excluded_count = before - len(shuffled)
+        if excluded_count:
+            _log(f'  🚫 제외: {excluded_count}개 기사 (크롤링 실패 이력)')
+
+    if not shuffled:
+        _log('  ❌ 모든 기사가 제외됨 (크롤링 실패 이력)')
+        return ([], set())
+
     batches = [shuffled[i:i+batch_size] for i in range(0, len(shuffled), batch_size)]
     _log(f'[배치 처리] 총 {len(shuffled)}개 → {batch_size}개 × {len(batches)}배치')
 
@@ -523,7 +536,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 
     if not all_pitches:
         _log('  ❌ 피치 없음')
-        return []
+        return ([], set())
 
     _log(f'[전체] {len(all_pitches)}개 후보 발견')
 
@@ -537,7 +550,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 
     if not valid:
         _log('  ❌ 모든 피치 hook 길이 조건 불만족')
-        return []
+        return ([], set())
 
     unique = []
     for p in valid:
@@ -566,13 +579,13 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 
     if not unique:
         _log('  ❌ 모든 피치가 이력과 중복')
-        return []
+        return ([], set())
 
     top = filter_pitches(unique)
 
     if not top:
         _log('  ❌ 모든 피치 품질 평가 불통')
-        return []
+        return ([], set())
 
     _log(f'  ✅ TOP 1: "{top.get("hook", "")}" ({top.get("emotion", "")})')
     _log(f'     기사: {top.get("article_ids", [])}')
@@ -590,17 +603,15 @@ def get_pitches(articles, max_articles=600, batch_size=200):
     article_desc = id_to_description.get(article_id_str, '')
 
     if not article_url:
-        _log(f'  ⚠️ 기사 {article_id_str}의 URL을 찾을 수 없음 → description 기반 피치 사용')
-        top['crawled_body'] = ''
-        return [top] if top else []
+        _log(f'  ⚠️ 기사 {article_id_str}의 URL을 찾을 수 없음 → 피치 폐기')
+        return ([], {article_id_str} if article_id_str else set())
 
     _log(f'  📰 피치 기사 원문 크롤링: {article_url[:60]}...')
     crawled_body = fetch_article_body(article_url, source='', title=article_title)
 
     if not crawled_body:
-        _log(f'  ⚠️ 크롤링 실패 → description 기반 피치 사용 (할루시네이션 위험)')
-        top['crawled_body'] = ''
-        return [top] if top else []
+        _log(f'  ⚠️ 크롤링 실패 → 피치 폐기')
+        return ([], {article_id_str} if article_id_str else set())
 
     _log(f'  📰 크롤링 완료: {len(crawled_body)}자')
 
@@ -611,11 +622,10 @@ def get_pitches(articles, max_articles=600, batch_size=200):
     if regenerated:
         regenerated['crawled_body'] = crawled_body
         _log(f'  ✅ 크롤링 기반 피치 재생성 완료: "{regenerated.get("hook", "")[:50]}"')
-        return [regenerated]
+        return ([regenerated], set())
     else:
-        _log(f'  ⚠️ 피치 재생성 실패 → description 기반 피치 사용')
-        top['crawled_body'] = crawled_body
-        return [top] if top else []
+        _log(f'  ⚠️ 피치 재생성 실패 → 피치 폐기')
+        return ([], {article_id_str} if article_id_str else set())
 
 
 def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, original_pitch):
