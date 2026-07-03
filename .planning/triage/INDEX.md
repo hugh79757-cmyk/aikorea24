@@ -1,0 +1,4 @@
+- 2026-07-03 | fix | crawl-fail-discard | get_pitches() 크롤링 실패 시 RSS fallback 제거, return []로 폐기
+- 2026-07-03 | fix | test-coverage-validation-gaps | 체계적 방지 프레임워크 — 테스트 커버리지 갭 발견: validate_korean_output, detect_prompt_leak, f
+- 2026-07-03 | fix | 5layer-korean-defense | 5-Layer Korean Language Defense Framework — Prompt Shield, Output Guard, Sanitizer, Publish Gate, JSON Hybrid
+- 2026-07-03 | fix | prompt-leakage-phase6 | Phase 6: Prompt Leakage & Truncation Fix — clean_leaked_prompt, JSON mode, validate_korean_output, _lang_valid 게이트

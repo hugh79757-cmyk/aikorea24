@@ -15,19 +15,35 @@
 | `CHANGES.md` | **세션 이력 — 변동** | **매 세션 시작 시 먼저 읽을 것** | 직전 세션까지의 변경 내역 요약 |
 | `AGENTS.md` | **작업 규칙 — 고정** | **매 세션 시작 시 먼저 읽을 것** | 작업 절차, 위임 규칙, 중복 방지 규칙 (지금 읽는 파일) |
 
-## 세션 시작 시 — 에이전트가 반드시 할 일
+## GSD 통합 — CHANGES.md ↔ .planning 연결
 
-1. `CHANGES.md`를 **Read** tool로 읽어서 직전 상황 파악
-2. 위 1번이 이미 완료되었다면 `docs/TECH.md`는 최초 1회만 읽으면 됨
-3. 사용자의 첫 요청을 받기 전에 위 파일들을 먼저 읽어야 함
+- `CHANGES.md`(프로젝트 루트)는 GSD 세션 간 변경 이력의 단일 진실 공급원
+- `.planning/CHANGES.md`는 GSD가 참조할 수 있도록 symbolic link (`ln -s ../CHANGES.md .planning/`)
+- resume-project workflow는 `.planning/CHANGES.md`를 읽도록 구성
 
-## 세션 종료 시 — 에이전트가 반드시 할 일
+## 세션 시작 시 — `/gsd-resume-work`
 
-사용자가 "세션 끝" 또는 "종료"라고 하면 아래를 수행:
+`/gsd-resume-work` 명령 또는 에이전트 기동 시 자동 실행:
 
-1. `CHANGES.md`에 금일 변경사항 append (파일/의사결정/미해결 이슈)
-2. `/Users/twinssn/Desktop/메모 Hugh/logs/YYYYMMDD.md`에 작업 로그 append (양식 아래 참조)
-3. 구조 변경이 있었다면 `docs/TECH.md`도 함께 업데이트
+1. `AGENTS.md`를 **Read** tool로 읽어서 프로젝트 규칙 로드
+2. `CHANGES.md`를 **Read** tool로 읽어서 직전 상황 파악
+3. `docs/TECH.md`는 최초 1회만 읽으면 됨 (이미 읽었으면 skip)
+4. `.planning/STATE.md` 읽어서 현재 phase/진행률 확인
+5. `.planning/ROADMAP.md` 읽어서 전체 마일스톤 현황 확인
+6. `.planning/triage/INDEX.md` 읽어서 최근 triage 항목 확인
+7. `git status`로 작업 트리 상태 확인
+8. 사용자에게 현재 상태 요약 제시
+
+## 세션 종료 시 — `/gsd-pause-work`
+
+사용자가 "세션 끝", "종료", `/gsd-pause-work` 명령 시 아래를 수행:
+
+1. `CHANGES.md`에 금일 변경사항 append (포맷 아래 참조)
+2. `.planning/STATE.md`의 `last_updated` / `last_activity` 타임스탬프 갱신
+3. `.planning/triage/INDEX.md`에 triage 항목이 있으면 함께 기록
+4. `/Users/twinssn/Desktop/메모 Hugh/logs/YYYYMMDD.md`에 작업 로그 append
+5. 구조 변경이 있었다면 `docs/TECH.md`도 함께 업데이트
+6. `.continue-here.md` handoff 파일 업데이트 (필요시)
 
 ---
 

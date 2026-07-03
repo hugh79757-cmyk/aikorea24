@@ -5,6 +5,51 @@
 
 ---
 
+## 2026-07-03 — 크롤링 실패 시 RSS fallback 폐기 (품질 개선)
+
+### 변경
+- `pipeline/threads/pitch.py` `get_pitches()` — 크롤링 실패/URL 부재/재생성 실패 시 RSS description 기반 저품질 피치를 발행하던 fallback 제거, `return []`로 폐기
+- `tests/test_pitch.py` — `TestGetPitchesCrawlFail` 클래스 신규 (4개 테스트: URL 없음/크롤링 실패/재생성 실패/성공)
+
+### 의사결정
+- RSS description만으로 생성된 피치는 품질이 낮아 발행하지 않음
+- 크롤링 성공 시에는 기존과 동일하게 재생성된 피치 사용
+
+### 영향
+- Threads 발행 빈도 하락 가능 (크롤링 실패 시 skip)
+- 글 품질 향상 (크롤링 기반 피치만 발행)
+
+### 검증
+- 34/34 `test_pitch.py` 통과
+- 196/197 전체 테스트 통과 (1 pre-existing freshness 실패)
+
+---
+
+## 2026-07-03 — Phase 7: 크롤링 실패 기사 제외 메커니즘
+
+### 변경
+- `pipeline/threads/pitch.py` — `get_pitches()`에 `exclude_ids` 파라미터 추가, 반환 타입 `list` → `tuple[list, set]` 변경, 셔플 후 제외 필터 삽입, 크롤링 실패 시 실패한 article_id 반환
+- `scripts/threads/main_v3.py` — `failed_article_ids: set[str]` 추가, 튜플 언패킹, `exclude_ids=failed_article_ids` 전달, 누적 로직
+- `tests/test_pitch.py` — `TestGetPitchesCrawlFail` 4개 테스트 튜플 어서션 업데이트
+- `pipeline/threads/crawler.py` — `log_failed_crawl()`에 `article_id` 파라미터 추가
+
+### GSD 통합
+- `AGENTS.md` — `/gsd-pause-work` / `/gsd-resume-work` 절차 정식 추가
+- `.planning/CHANGES.md` → `../CHANGES.md` 심볼릭 링크 생성
+- `.planning/ROADMAP.md` — Phase 7 항목 추가 (1/1 plan, Complete)
+- `.planning/phases/07-crawl-failure-exclusion/` — RESEARCH.md + PLAN.md + SUMMARY.md
+
+### 의사결정
+- Session-scoped exclusion: 크롤링 실패는 일시적이므로 프로세스 재시작 시 리셋
+- `failed_crawls.json`은 추후 cross-session exclusion용으로 확장 가능 (article_id 컬럼 추가 완료)
+
+### 검증
+- 34/34 `test_pitch.py` 통과
+- 196/197 전체 테스트 통과 (1 pre-existing freshness 실패)
+- Syntax check 5개 파일 전부 통과
+
+---
+
 ## 2026-07-03 — Phase 6: Prompt Leakage & Truncation Fix
 
 ### 문제 진단
