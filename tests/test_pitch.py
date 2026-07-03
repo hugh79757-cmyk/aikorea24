@@ -1,4 +1,4 @@
-"""Tests for pipeline.threads.pitch — parsing, dedup, history."""
+"""Tests for pipeline.threads.pitch — parsing, dedup, history, crawl-fail discard."""
 import pytest
 import json
 import os
@@ -17,6 +17,7 @@ from pipeline.threads.pitch import (
     load_pitch_history, fill_article_ids,
     clean_leaked_prompt, validate_korean_output,
     normalize_output, detect_prompt_leak,
+    get_pitches,
 )
 
 
@@ -240,3 +241,60 @@ class TestNormalizeOutput:
         result = normalize_output("English hook only", "English narrative")
         assert result["lang_valid"] is False
         assert result["lang_reason"] != "OK"
+
+
+class TestGetPitchesCrawlFail:
+    """get_pitches()가 크롤링 실패 시 빈 리스트 반환하는지 검증"""
+
+    @pytest.fixture
+    def mock_deps(self, monkeypatch):
+        def _mock_chat(**kw):
+            return json.dumps([{"hook": "Test: AI changes everything", "narrative": "한국어 설명입니다. AI가 세상을 바꾼다.", "twist": "예상 밖", "emotion": "놀람", "article_ids": [1]}])
+        monkeypatch.setattr("v3.model_router.chat_completion", _mock_chat)
+
+        monkeypatch.setattr("db_reader.load_posted", lambda: {})
+        monkeypatch.setattr("pipeline.threads.pitch_evaluator.filter_pitches", lambda p: p[0] if p else None)
+
+    def _make_article(self, aid=1, url="https://example.com/article"):
+        return {"id": aid, "title": "Test Title", "original_title": "Test Original", "description": "Test desc", "link": url, "source": "Test"}
+
+    @pytest.mark.unit
+    def test_discards_when_url_missing(self, mock_deps):
+        articles = [self._make_article(aid=1, url="")]
+
+        result = get_pitches(articles, max_articles=1, batch_size=1)
+
+        assert result == ([], {"1"})
+
+    @pytest.mark.unit
+    def test_discards_when_crawl_fails(self, mock_deps, monkeypatch):
+        monkeypatch.setattr("pipeline.threads.crawler.fetch_article_body", lambda *a, **kw: "")
+        articles = [self._make_article(aid=1)]
+
+        result = get_pitches(articles, max_articles=1, batch_size=1)
+
+        assert result == ([], {"1"})
+
+    @pytest.mark.unit
+    def test_discards_when_regeneration_fails(self, mock_deps, monkeypatch):
+        monkeypatch.setattr("pipeline.threads.crawler.fetch_article_body", lambda *a, **kw: "Crawled body text " * 100)
+        monkeypatch.setattr("pipeline.threads.pitch._regenerate_pitch_from_crawl", lambda *a, **kw: None)
+        articles = [self._make_article(aid=1)]
+
+        result = get_pitches(articles, max_articles=1, batch_size=1)
+
+        assert result == ([], {"1"})
+
+    @pytest.mark.unit
+    def test_keeps_when_crawl_succeeds(self, mock_deps, monkeypatch):
+        monkeypatch.setattr("pipeline.threads.crawler.fetch_article_body", lambda *a, **kw: "Crawled body text " * 100)
+        regenerated = {"hook": "한국어 hook 재생성 성공", "narrative": "한국어 narrative 재생성 성공", "article_ids": [1], "crawled_url": "https://example.com/article"}
+        monkeypatch.setattr("pipeline.threads.pitch._regenerate_pitch_from_crawl", lambda *a, **kw: regenerated)
+        articles = [self._make_article(aid=1)]
+
+        result = get_pitches(articles, max_articles=1, batch_size=1)
+        pitches, failed_ids = result
+
+        assert len(pitches) == 1
+        assert pitches[0]["hook"] == "한국어 hook 재생성 성공"
+        assert failed_ids == set()

@@ -23,7 +23,7 @@ def _log(msg):
         f.write(f'[{ts}] [v3] {msg}\n')
 
 
-def log_failed_crawl(url, source, title, status):
+def log_failed_crawl(url, source, title, status, article_id=""):
     """크롤링 실패한 URL을 failed_crawls.json에 기록"""
     data = {"failed": [], "updated_at": ""}
     if os.path.exists(FAILED_CRAWLS_FILE):
@@ -33,7 +33,7 @@ def log_failed_crawl(url, source, title, status):
         except Exception:
             pass
     now = datetime.now().isoformat()
-    entry = {"url": url, "source": source, "title": title, "status": status, "failed_at": now}
+    entry = {"url": url, "source": source, "title": title, "status": status, "article_id": article_id, "failed_at": now}
     data['failed'] = [e for e in data['failed'] if e.get('url') != url]
     data['failed'].append(entry)
     data['updated_at'] = now
