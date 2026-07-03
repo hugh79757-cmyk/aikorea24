@@ -15,7 +15,52 @@ if _scripts not in sys.path:
 from pipeline.threads.pitch import (
     parse_pitches_from_text, is_duplicate_pitch,
     load_pitch_history, fill_article_ids,
+    clean_leaked_prompt,
 )
+
+
+class TestCleanLeakedPrompt:
+    @pytest.mark.unit
+    def test_removes_leaked_상식A_label(self):
+        result = clean_leaked_prompt("상식(A): AI는 생산성을 높인다")
+        assert "상식(A):" not in result
+        assert "AI는 생산성을 높인다" in result
+
+    @pytest.mark.unit
+    def test_removes_leaked_실제B_label(self):
+        result = clean_leaked_prompt("실제(B): AI는 일자리를 줄인다")
+        assert "실제(B):" not in result
+
+    @pytest.mark.unit
+    def test_removes_vs_separator(self):
+        result = clean_leaked_prompt("상식(A): A\nvs\n실제(B): B")
+        assert "vs" not in result
+
+    @pytest.mark.unit
+    def test_handles_various_delimiters(self):
+        cases = [
+            "상식（A）：텍스트",
+            "상식 (A) : 텍스트",
+            "실제(B):텍스트",
+            "text\nVS\nmore",
+            "text\nversus\nmore",
+        ]
+        for c in cases:
+            result = clean_leaked_prompt(c)
+            assert result, f"빈 결과 반환: {c!r}"
+
+    @pytest.mark.unit
+    def test_clean_text_unchanged(self):
+        text = "Nvidia가 새로운 칩을 출시했다."
+        assert clean_leaked_prompt(text) == text
+
+    @pytest.mark.unit
+    def test_the_entire_narrative_with_leak(self):
+        text = "상식(A): AI는 생산성을 높일 것이다 — 실제(B): AI 사용 중 예상치 못한 문제가 발생"
+        result = clean_leaked_prompt(text)
+        assert "상식(A):" not in result
+        assert "실제(B):" not in result
+        assert "AI는 생산성을" in result or "AI 사용 중" in result
 
 
 class TestParsePitchesFromText:

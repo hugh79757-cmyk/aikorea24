@@ -25,6 +25,19 @@ def _log(msg):
         f.write(f'[{ts}] [v3] {msg}\n')
 
 
+LEAKED_PROMPT_PATTERNS = [
+    r'상식\s*[\(（]\s*A\s*[\)）]\s*[:：]\s*',
+    r'실제\s*[\(（]\s*B\s*[\)）]\s*[:：]\s*',
+    r'\n+\s*(vs|VS|versus)\s*\n+',
+]
+
+
+def clean_leaked_prompt(text):
+    for pattern in LEAKED_PROMPT_PATTERNS:
+        text = re.sub(pattern, '', text)
+    return text.strip()
+
+
 SYSTEM_PROMPT = """당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
 
 [핵심 원칙]
@@ -36,7 +49,8 @@ SYSTEM_PROMPT = """당신은 AI 뉴스 기사에서 독자가 몰랐던 사실�
 6. hook은 독자의 호기심을 자극하되 사실에 충실할 것
 
 [찾는 방법]
-"상식적으로 A였어야 하는데 실제로는 B인 상황"을 찾아라.
+상식과 반대되거나 예상 밖의 결과를 기사에서 찾아라.
+중요: 출력에 '상식(A):' 또는 '실제(B):' 같은 라벨을 절대 포함하지 말 것. 자연스러운 문장만 출력할 것.
 
 [핵심 — 반드시 단일 기사만 사용]
 - 하나의 기사에서 가장 강력한 이야기를 발견하라.
@@ -52,20 +66,34 @@ hook: 이야기의 핵심 긴장을 한 줄로. 날짜/인물/숫자로 시작�
 - 너무 많이 논의된 상식("AI가 일자리를 뺏는다", "AI가 미래다", "기술 발전이 중요하다")은 피할 것.
 - 독자가 '어? 나는 몰랐는데?' 하는 상식과 실제의 충돌을 찾을 것.
 - 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
+- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것. 자연스러운 문장만 출력.
 
 [소스 신뢰도]
 - [1차] 태그 기사: 원문. 숫자/주어/방향을 그대로 사용할 것.
 - [요약] 태그 기사: 2차 요약본. 주어-동사 방향이 뒤집혔을 수 있음.
   [요약] 기사만으로 twist 방향을 결정하지 말 것.
 
-[출력 형식 — JSON만]
-{"hook": "독자가 몰랐던 사실을 담은 한 문장 (기사에 근거)", "narrative": "왜 이것이 중요한지 2-3문장 설명 (인과관계 정확히)", "twist": "상식과 다른 실제 결과 (기사 내용에만 근거)", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [관련 기사 ID — 반드시 1개만]}
+[출력 형식]
+응답은 반드시 유효한 JSON 배열만 출력합니다. 설명이나 라벨(예: '상식(A):', '실제(B):')을 절대 포함하지 마세요.
+```json
+[
+  {
+    "hook": "사용자의 호기심을 자극하는 짧은 한 줄",
+    "narrative": "반전이나 통찰을 담은 2-3문장의 내러티브",
+    "twist": "예상 밖의 결과",
+    "emotion": "불안/놀람/분노/희망 중 하나",
+    "article_ids": [1]
+  }
+]
+```
+
+각 피치는 반드시 단일 기사(article_ids 1개)만 사용. 2개 이상 절대 금지.
 
 주의사항:
 - 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
 - 기사에 없는 내용 추가 금지
 - hook에서 주어와 객체를 명확히 구분하여 혼동 방지
-- 반드시 1개 기사만 사용할 것. 2개 이상 절대 금지.
+- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것. 자연스러운 문장만 출력.
 
 ## article_ids 작성 규칙
 - 반드시 실제로 읽은 기사의 ID만 article_ids에 포함할 것
@@ -107,7 +135,28 @@ def fill_article_ids(pitch, articles_text):
 
 
 def parse_pitches_from_text(text, articles_text=None):
-    """GPT 출력에서 PITCH JSON 블록 추출 (멀티 스키마 지원)"""
+    """GPT 출력에서 PITCH JSON 블록 추출. JSON 모드 → 직접 json.loads, fallback → regex"""
+    if not text or not text.strip():
+        return []
+    text = text.strip()
+    try:
+        data = json.loads(text)
+        if isinstance(data, list):
+            pitches = data
+        elif isinstance(data, dict):
+            pitches = data.get('pitches', [data])
+        else:
+            pitches = []
+        result = [p for p in pitches if 'hook' in p and 'narrative' in p]
+        if result:
+            return result
+    except (json.JSONDecodeError, Exception):
+        pass
+    return _parse_pitches_fallback(text, articles_text)
+
+
+def _parse_pitches_fallback(text, articles_text=None):
+    """regex 기반 fallback 파서 (JSON 모드 실패 시)"""
     pitches = []
     for m in re.finditer(r'\{(?:[^{}]|(?:\{[^{}]*\}))*\}', text, re.DOTALL):
         try:
@@ -119,8 +168,8 @@ def parse_pitches_from_text(text, articles_text=None):
 
             if 'title' in p and 'summary' in p:
                 pitches.append({
-                    'hook': (p.get('title', '') or '')[:18],
-                    'narrative': p.get('summary', '')[:100],
+                    'hook': (p.get('title', '') or '')[:30],
+                    'narrative': p.get('summary', '')[:200],
                     'twist': '',
                     'emotion': '놀라움',
                     'article_ids': [],
@@ -131,8 +180,8 @@ def parse_pitches_from_text(text, articles_text=None):
 
             if 'pitch_id' in p and 'title' in p:
                 pitches.append({
-                    'hook': (p.get('title', '') or '')[:18],
-                    'narrative': p.get('summary', '')[:100] if 'summary' in p else '',
+                    'hook': (p.get('title', '') or '')[:30],
+                    'narrative': p.get('summary', '')[:200] if 'summary' in p else '',
                     'twist': '',
                     'emotion': '놀라움',
                     'article_ids': [],
@@ -174,8 +223,8 @@ def load_pitch_history():
 
 def is_duplicate_pitch(pitch, history, posted=None):
     """비슷한 피치가 이미 history에 있는지 확인"""
-    hook = pitch.get('hook', '')[:15]
-    narrative = pitch.get('narrative', '')[:30]
+    hook = pitch.get('hook', '')[:80]
+    narrative = pitch.get('narrative', '')[:120]
     new_ids = set(str(x).lstrip('#').strip() for x in pitch.get('article_ids', []) if str(x).strip())
     new_urls = set(pitch.get('article_urls', []))
     new_titles = list(pitch.get('article_titles', []))
@@ -189,8 +238,8 @@ def is_duplicate_pitch(pitch, history, posted=None):
             orig_title = new_original_titles[i] if i < len(new_original_titles) else ''
 
             posted_links_norm = set(normalize_url(l) for l in posted.get('posted_links', []))
-            posted_titles_set = set(t[:30] for t in posted.get('posted_titles', []))
-            posted_orig_titles_set = set(ot[:30] for ot in posted.get('posted_original_titles', []))
+            posted_titles_set = set(t[:80] for t in posted.get('posted_titles', []))
+            posted_orig_titles_set = set(ot[:80] for ot in posted.get('posted_original_titles', []))
 
             if (aid and aid in posted.get('posted_ids', []) or
                 link and normalize_url(link) in posted_links_norm or
@@ -199,9 +248,9 @@ def is_duplicate_pitch(pitch, history, posted=None):
                 return True
 
     for h in history:
-        if h.get('hook', '')[:15] == hook:
+        if h.get('hook', '')[:80] == hook:
             return True
-        if narrative and h.get('narrative', '')[:30] == narrative:
+        if narrative and h.get('narrative', '')[:120] == narrative:
             return True
         if new_ids:
             old_ids = set(str(x).lstrip('#').strip() for x in h.get('article_ids', []) if str(x).strip())
@@ -252,8 +301,8 @@ def save_pitch_to_history(pitch):
                 entities.add(w)
 
         data['pitch_history'].append({
-            'hook': pitch.get('hook', '')[:30],
-            'narrative': pitch.get('narrative', '')[:50],
+            'hook': clean_leaked_prompt(pitch.get('hook', '')),
+            'narrative': clean_leaked_prompt(pitch.get('narrative', '')),
             'article_ids': pitch.get('article_ids', []),
             'article_urls': pitch.get('article_urls', []),
             'article_titles': pitch.get('article_titles', []),
@@ -338,6 +387,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 {all_articles_joined}"""}],
                 temperature=0.9,
                 max_tokens=3000,
+                response_format={'type': 'json_object'},
             )
             pitches = parse_pitches_from_text(resp, articles_text)
             _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -352,6 +402,7 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 {all_articles_joined}"""}],
                     temperature=0.9,
                     max_tokens=3000,
+                    response_format={'type': 'json_object'},
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
                 _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -466,13 +517,15 @@ def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, o
 4. hook은 기사의 핵심 긴장을 한 줄로 담되, 사실에 충실할 것
 5. 고유명사는 영어 원문 사용 (Nvidia, OpenAI, Anthropic 등)
 
-[출력 형식 — JSON만]
-{{"hook": "독자가 몰랐던 사실을 담은 한 문장 (기사 원문에 근거)", "narrative": "왜 이것이 중요한지 2-3문장 (인과관계 정확히)", "twist": "상식과 다른 실제 결과 (기사 원문에만 근거)", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [{article_id}]}}
+[출력 형식]
+응답은 반드시 유효한 JSON 객체만 출력합니다. 설명이나 라벨(예: '상식(A):', '실제(B):')을 절대 포함하지 마세요.
+{{"hook": "사용자의 호기심을 자극하는 짧은 한 줄", "narrative": "반전이나 통찰을 담은 2-3문장의 내러티브", "twist": "예상 밖의 결과", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [{article_id}]}}
 
 주의사항:
 - 반드시 1개 기사만 사용. 2개 이상 절대 금지.
 - 기사 원문에 없는 내용 추가 금지
-- hook에서 주어와 객체를 명확히 구분"""
+- hook에서 주어와 객체를 명확히 구분
+- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것"""
 
     ref_hook = original_pitch.get('hook', '')
     ref_narrative = original_pitch.get('narrative', '')
@@ -496,6 +549,7 @@ narrative: {ref_narrative}
             messages=[{'role': 'user', 'content': user_msg}],
             temperature=0.7,
             max_tokens=1500,
+            response_format={'type': 'json_object'},
         )
         if not resp:
             return None

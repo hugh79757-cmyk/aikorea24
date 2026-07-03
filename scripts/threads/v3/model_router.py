@@ -73,7 +73,7 @@ def get_mimo_client():
         return None
     return OpenAI(base_url=MIMO_BASE_URL, api_key=api_key)
 
-def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, deepseek_model=None):
+def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, deepseek_model=None, response_format=None):
     """
     통합 채팅 completions 함수
     - 1순위: DeepSeek V4 Flash (deepseek.com)
@@ -82,8 +82,13 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
 
     model_override='mimo': DeepSeek+OpenAI 건너뛰고 MiMo 사용
     model_override='openai': DeepSeek 건너뛰고 OpenAI 사용
+    response_format: OpenAI-compatible response format (e.g. {'type': 'json_object'})
     Returns: 응답 텍스트 (string), 실패 시 None
     """
+    kwargs = {}
+    if response_format:
+        kwargs['response_format'] = response_format
+
     full_messages = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
@@ -100,6 +105,7 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                     messages=full_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
+                    **kwargs,
                 )
                 text = resp.choices[0].message.content
                 if text and text.strip():
@@ -120,6 +126,7 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                     messages=full_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
+                    **kwargs,
                 )
                 text = resp.choices[0].message.content
                 if text and text.strip():
@@ -140,6 +147,7 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                     messages=full_messages,
                     temperature=temperature,
                     max_tokens=max_tokens,
+                    **kwargs,
                 )
                 text = resp.choices[0].message.content
                 if text and text.strip():

@@ -300,256 +300,258 @@
     "37520",
     "37315",
     "36148",
-    "37682"
+    "37682",
+    "37770"
   ],
   "posted_links": [
-    "https://thenextweb.com/news/indonesia-turns-to-ai-to-deliver-prabowos-biggest-promises",
-    "https://platum.kr/archives/289686",
-    "https://the-decoder.com/gpt-5-4-reportedly-brings-a-million-token-context-window-and-an-extreme-reasoning-mode",
-    "https://the-decoder.com/more-people-get-news-from-ai-chatbots-but-trust-remains-low",
-    "https://thenextweb.com/news/tiktok-ai-slop-59-percent-new-users-kapwing-study",
-    "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation",
-    "https://thenextweb.com/news/hsbc-survey-ai-human-wealth-managers",
-    "https://www.cityam.com/volex-takes-conservative-approach-to-data-centre-growth-forecast-amid-ai-capex-splurge",
-    "https://www.etnews.com/20260603000005",
-    "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion",
-    "https://www.theguardian.com/money/2026/jun/22/job-scams-employment-ai",
-    "https://the-decoder.com/an-ai-agent-hacked-mckinseys-internal-ai-platform-in-two-hours-using-a-decades-old-technique",
-    "https://thenextweb.com/news/notion-mail-shuts-down-ai-agents-email-productivity",
-    "https://the-decoder.com/openai-ceo-sam-altman-reportedly-teases-a-very-strong-model-internally-that-can-really-accelerate-the-economy",
-    "https://techcrunch.com/2026/03/25/the-ai-skills-gap-is-here-says-ai-company-and-power-users-are-pulling-ahead",
-    "https://www.etnews.com/20260603000201",
-    "https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai",
-    "https://thenextweb.com/news/apple-early-security-updates-ai",
-    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv",
-    "https://www.theguardian.com/business/2026/jul/02/ai-summaries-tripadvisor-hotel-reviews-downplay-serious-complaints",
-    "https://www.theguardian.com/technology/2026/jun/30/silicon-valley-donations-colorado-democratic-primary",
-    "https://techcrunch.com/2026/04/01/anthropic-took-down-thousands-of-github-repos-trying-to-yank-its-leaked-source-code-a-move-the-company-says-was-an-accident",
-    "https://techcrunch.com/2026/06/03/alphabets-record-breaking-85b-raise-for-googles-ai-business-is-a-helluva-good-signal",
-    "https://techcrunch.com/2026/06/23/indias-moengage-bets-marketings-future-on-millions-of-ai-agents",
-    "https://techcrunch.com/2026/06/25/general-intuitions-2-3b-bet-that-video-games-can-train-ai-agents-for-the-real-world",
-    "https://www.etnews.com/20260609000086",
-    "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits",
-    "https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content",
-    "https://www.cityam.com/wayve-hands-london-private-market-major-boost-with-85m-share-sale",
-    "https://the-decoder.com/samsung-rolls-out-chatgpt-enterprise-and-codex-to-employees-in-south-korea",
-    "https://thenextweb.com/news/norway-bans-generative-ai-elementary-school-children",
-    "https://thenextweb.com/news/india-upi-npci-ai-billion-daily-transactions",
-    "https://www.fastcompany.com/91562088/power-electricity-ai-plants-data-centers-grid",
-    "https://news.google.com/rss/articles/cbmiwgfbvv95cuxnrhdusxhpvdryzk1kaktvuhflx3jqwmhptui1dldcvmpnmeu3dghtvvpucmrhn3jcemdxazjpr3zxvwnfrtn5sjfct1vqtuzfnzn0wtf0s0ctmk9wbjd0bw1hlvnkwvnietd2wnvxadf5wlz1xzytmhfzawnmrlhxsxmty3g3vhrkyzfiwddplxntovj5dgd2yzndt1zpqzzuenuxx0htszvbnlngmufbqvzzn2gxbdzaqjntmfbtag1yuq",
-    "https://www.theverge.com/ai-artificial-intelligence/952837/barret-zoph-openai-thinking-machines-lab",
-    "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
-    "https://thenextweb.com/news/firmus-nvidia-indonesia-batam-data-center-30-billion",
-    "https://www.theguardian.com/us-news/2026/jun/22/california-gas-stations-ai-prices-lawsuit",
-    "https://thenextweb.com/news/runpod-100m-summit-partners-1bn-valuation",
-    "https://www.theguardian.com/uk-news/2026/jun/03/former-officer-hampshire-hiding-after-being-falsely-linked-henry-nowak-arrest",
-    "https://www.cnbc.com/2026/06/24/morgan-stanley-china-humanoid-robot-market-forecast.html",
-    "https://www.cnbc.com/2026/07/01/employers-who-laid-off-workers-for-ai-are-reversing-their-decisions.html",
     "https://www.etnews.com/20260622000385",
-    "https://the-decoder.com/sam-altman-and-dario-amodei-walk-back-their-ai-job-apocalypse-predictions",
-    "https://techcrunch.com/2026/05/13/anthropic-now-has-more-business-customers-than-openai-according-to-ramp-data",
-    "https://the-decoder.com/ai-is-inflating-student-grades-and-the-effect-points-to-outsourced-work-not-better-learning",
-    "https://www.zdnet.com/article/want-big-tech-job-startups-may-be-best-shot-why",
-    "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums",
+    "https://www.etnews.com/20260609000086",
     "https://the-decoder.com/bytedances-seedance-2-5-breaks-the-30-second-barrier-for-ai-video-generation",
-    "https://www.etnews.com/20260619000247",
-    "https://the-decoder.com/deloitte-tells-its-own-consultants-ai-is-coming-for-the-billable-hour",
-    "https://the-decoder.com/ai-agents-can-now-complete-16-percent-of-freelance-jobs-at-pro-quality-up-from-2-5-percent-eight-months-ago",
-    "https://the-decoder.com/amazon-engineers-are-reportedly-distilling-anthropic-models-to-cut-costs-before-new-token-based-pricing-kicks-in",
-    "https://techcrunch.com/2026/06/27/apple-vision-pro-exec-is-reportedly-leaving-for-openai",
-    "https://www.technologyreview.com/2026/06/29/1139849/ai-agents-are-not-your-coworkers",
-    "https://openai.com/index/gpt-5-immunology-mystery",
-    "https://www.heraldscotland.com/news/26228712.ai-generated-job-applications-causing-issues-nhs-shetland",
-    "https://thenextweb.com/news/son-dismisses-musk-space-data-centres",
-    "https://the-decoder.com/half-of-ai-written-code-that-passes-industry-test-would-get-rejected-by-real-developers-new-study-finds",
-    "https://www.thebell.co.kr/free/content/articleview.asp",
-    "https://www.digitaltoday.co.kr/news/articleview.html",
-    "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models",
-    "https://www.cityam.com/consulting-giants-face-up-to-ai-reckoning",
-    "https://www.bizinfo.go.kr/sii/siia/selectsiia200detail.do",
-    "https://n.news.naver.com/mnews/article/277/0005778989",
-    "https://www.theguardian.com/commentisfree/2026/jun/29/ai-answers-to-lifes-big-questions-chatgp-contemplation",
-    "https://the-decoder.com/j-p-morgan-sees-a-pile-of-red-flags-in-the-ai-market",
-    "https://www.fastcompany.com/91561181/trump-keeps-kneecapping-the-u-s-s-most-promising-ai-models",
-    "https://www.theguardian.com/technology/2026/jun/24/ai-read-papyrus-scroll-burnt-vesuvius-eruption",
-    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills",
-    "https://www.etnews.com/20260602000268",
-    "https://www.zdnet.com/article/agentic-ai-in-customer-service",
-    "https://thenextweb.com/news/oracle-21000-layoffs-ai-data-centres",
-    "https://www.technologyreview.com/2026/06/30/1139513/agriculture-is-ready-for-ai-but-its-data-isnt",
-    "https://techcrunch.com/2026/06/30/crypto-exchange-okx-wants-ai-agents-to-hire-and-pay-each-other",
-    "https://techcrunch.com/2026/03/04/the-us-military-is-still-using-claude-but-defense-tech-clients-are-fleeing",
-    "https://www.theguardian.com/technology/2026/jun/03/as-the-tech-mega-ipo-race-hots-up-has-openai-missed-its-moment",
-    "https://techcrunch.com/2026/06/24/companies-are-scrambling-to-stop-employees-from-maxing-out-ai-budgets-with-small-tasks",
-    "https://www.fastcompany.com/91553364/we-replaced-a-role-with-ai-and-our-developers-love-it",
-    "https://www.cnbc.com/2026/06/25/on-semi-synaptics-deal-physical-ai.html",
-    "https://www.scmp.com/tech/big-tech/article/3355651/tencent-shares-jump-expectations-ai-agent-within-wechat-super-app",
-    "https://www.theguardian.com/technology/2026/jun/03/labour-mp-sues-elon-musks-ai-company-over-fake-sexualised-images",
-    "https://techcrunch.com/2026/04/15/linkedin-data-shows-ai-isnt-to-blame-for-hiring-decline-yet",
-    "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era",
-    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts",
-    "https://www.theguardian.com/technology/2026/jun/22/artificial-intelligence-law-firm-wins-court-case-in-england-for-first-time",
-    "https://www.bbc.co.uk/news/articles/cq615g3z36po",
-    "https://the-decoder.com/openai-burned-through-34-billion-last-year",
-    "https://www.heraldscotland.com/news/26226445.impacted-communities-call-hyperscale-ai-data-centres-ban",
-    "https://www.thenationalnews.com/news/uae/2026/06/18/meet-zayed-the-ai-generated-uae-government-spokesman-spreading-countrys-message-around-the-world",
-    "https://techcrunch.com/2026/06/29/tidal-cracks-down-on-ai-music-by-cutting-off-monetization",
-    "https://techcrunch.com/2026/06/25/netris-raises-15m-series-a-from-a16z-to-help-ai-neoclouds-go-live-faster",
-    "https://www.fastcompany.com/91560035/fable-5-crossed-a-line-the-world-was-not-ready-for",
-    "https://www.ft.com/content/837cd1be-548d-4a64-8d78-a42d65a9afe5",
-    "https://the-decoder.com/figma-bets-on-human-judgment-at-config-2026-while-the-ai-powering-its-canvas-belongs-to-someone-else",
-    "https://www.thenationalnews.com/news/europe/2026/06/17/g7-pitches-trusted-partnership-to-ai-chiefs-in-a-bid-for-frontier-model-sharing",
-    "https://thenextweb.com/news/aws-1bn-forward-deployed-engineers-enterprise-ai",
-    "https://the-decoder.com/samsung-and-sk-hynix-plan-590-billion-chip-investment-as-ai-demand-sends-memory-prices-soaring",
-    "https://techcrunch.com/2026/04/28/google-expands-pentagons-access-to-its-ai-after-anthropics-refusal",
-    "https://www.cnbc.com/2026/06/17/allbirds-bird-ai-smartbird-ceo.html",
-    "https://www.gokorea.kr/news/articleview.html",
-    "https://the-decoder.com/openais-claude-mythos-competitor-gpt-5-6-sol-launches-under-government-controlled-access-it-calls-unsustainable",
-    "https://www.etnews.com/20260619000190",
-    "https://www.theguardian.com/business/2026/jun/03/uk-media-groups-power-opt-out-google-ai-search-summaries",
-    "https://n.news.naver.com/mnews/article/088/0001014904",
-    "https://www.theguardian.com/us-news/2026/jun/28/wealth-tax-super-rich",
-    "https://thenextweb.com/news/koreas-policy-chief-warns-chip-windfall-could-inflate-housing",
-    "https://techcrunch.com/2026/06/25/patronus-ai-lands-50m-to-build-digital-worlds-that-stress-test-ai-agents",
-    "https://the-decoder.com/hidden-code-in-claude-code-secretly-flagged-chinese-users",
-    "https://techcrunch.com/podcast/the-us-banned-anthropics-fable-5-release-but-the-numbers-dont-seem-to-care",
-    "https://thenextweb.com/news/tesla-fsd-fatal-crash-settlement-nhtsa",
-    "https://www.theguardian.com/us-news/2026/jun/26/mpox-congress-scrutiny-nih",
-    "https://www.ft.com/content/16ace46c-aeac-40c9-8598-3c01fa4481cb",
-    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone",
-    "https://n.news.naver.com/mnews/article/003/0014018079",
-    "https://www.lcnews.co.kr/news/articleview.html",
-    "https://the-decoder.com/anthropics-leaked-ai-coding-tool-has-been-cloned-over-8000-times-on-github-despite-mass-takedowns",
-    "https://www.wired.com/story/hasan-piker-user-behavior",
-    "https://thenextweb.com/news/baden-bower-ai-visibility-index-citations-publications",
-    "https://the-decoder.com/authors-guild-test-finds-some-ai-detectors-perfectly-identify-human-writing-while-others-fail-on-every-single-text",
-    "https://n.news.naver.com/mnews/article/014/0005537392",
-    "https://www.technologyreview.com/2026/03/04/1133642/bridging-the-operational-ai-gap",
-    "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
+    "https://thenextweb.com/news/trustpilot-shopify-partnership-ai-search-reviews",
+    "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips",
+    "https://techcrunch.com/2026/06/03/alphabets-record-breaking-85b-raise-for-googles-ai-business-is-a-helluva-good-signal",
+    "https://techcrunch.com/2026/07/01/cloudflares-new-policy-pushes-ai-companies-to-pay-for-publishers-content",
+    "https://thenextweb.com/news/allbirds-smartbird-ai-infrastructure-pivot",
+    "https://techcrunch.com/2026/06/29/omen-ais-plan-to-optimize-data-centers-is-all-wet",
+    "https://www.etnews.com/20260603000005",
     "https://techcrunch.com/2026/06/03/publishers-will-be-able-to-opt-out-of-ai-search-thanks-to-new-regulation",
-    "https://huggingface.co/blog/ibm-research/itbench-aa",
-    "https://thenextweb.com/news/helsing-germany-cfsn-combat-cloud-contract",
-    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi",
-    "https://www.theguardian.com/technology/2026/jul/01/un-report-ai-inequality",
-    "https://thenextweb.com/news/ford-rehired-350-engineers-ai-quality-jd-power",
-    "https://www.cityam.com/eclerx-recognized-as-a-representative-vendor-in-2026-gartner-market-guide-for-digital-shelf-analytics",
+    "https://techcrunch.com/2026/04/28/google-expands-pentagons-access-to-its-ai-after-anthropics-refusal",
+    "https://www.scmp.com/tech/big-tech/article/3354938/another-deepseek-moment-huawei-milestone-alters-china-trajectory-chip-race-analysts",
+    "https://the-decoder.com/openai-officially-confirms-mega-funding-round-and-chatgpt-super-app",
+    "https://www.theguardian.com/australia-news/2026/jun/27/ai-drone-rescue-kosciuszko-national-park-hikers-fire-rescue-nsw",
+    "https://www.theguardian.com/us-news/2026/jun/23/datacenters-climate-hazards-study",
+    "https://www.thenationalnews.com/news/uae/2026/06/18/meet-zayed-the-ai-generated-uae-government-spokesman-spreading-countrys-message-around-the-world",
+    "https://thenextweb.com/news/ddr2-memory-prices-surge-ai-shortage-legacy-dram",
+    "https://www.fastcompany.com/91552576/can-ai-be-humane-aza-raskin-says-only-if-we-change-the-race",
+    "https://www.fastcompany.com/91562088/power-electricity-ai-plants-data-centers-grid",
     "https://the-decoder.com/openai-wants-its-biggest-data-center-yet-and-nvidia-would-back-the-bill",
+    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips",
+    "https://www.fastcompany.com/91553364/we-replaced-a-role-with-ai-and-our-developers-love-it",
+    "https://thenextweb.com/news/aws-1bn-forward-deployed-engineers-enterprise-ai",
+    "https://www.cnbc.com/2026/06/25/on-semi-synaptics-deal-physical-ai.html",
+    "https://techcrunch.com/podcast/the-us-banned-anthropics-fable-5-release-but-the-numbers-dont-seem-to-care",
+    "https://www.theguardian.com/technology/2026/jun/03/as-the-tech-mega-ipo-race-hots-up-has-openai-missed-its-moment",
+    "https://techcrunch.com/2026/04/15/linkedin-data-shows-ai-isnt-to-blame-for-hiring-decline-yet",
+    "https://thenextweb.com/news/amazon-human-in-the-loop-ai-governance-normalization-deviance",
+    "https://www.cityam.com/from-abu-dhabi-to-imola-a2rl-expands-internationally-with-historic-autonomous-racing-debut-at-iconic-italian-track",
+    "https://www.axios.com/2026/06/16/spacex-amazon-market-cap",
+    "https://the-decoder.com/deloitte-tells-its-own-consultants-ai-is-coming-for-the-billable-hour",
+    "https://www.thebell.co.kr/free/content/articleview.asp",
+    "https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai",
+    "https://n.news.naver.com/mnews/article/001/0016149675",
+    "https://www.scmp.com/tech/tech-trends/article/3354876/alipay-launches-payment-tools-ai-agents-shop-you",
+    "https://www.ft.com/content/0f067265-2baf-4b6e-8fb2-ed56daef6f3c",
+    "https://www.theverge.com/ai-artificial-intelligence/952837/barret-zoph-openai-thinking-machines-lab",
+    "https://www.cnbc.com/2026/06/24/morgan-stanley-china-humanoid-robot-market-forecast.html",
+    "https://www.etnews.com/20260602000268",
+    "https://the-decoder.com/samsung-and-sk-hynix-plan-590-billion-chip-investment-as-ai-demand-sends-memory-prices-soaring",
+    "https://thenextweb.com/news/hsbc-survey-ai-human-wealth-managers",
+    "https://the-decoder.com/samsung-rolls-out-chatgpt-enterprise-and-codex-to-employees-in-south-korea",
+    "https://www.etnews.com/20260619000190",
+    "https://thenextweb.com/news/micron-q3-fy2026-earnings-revenue-hbm-ai-memory",
+    "https://www.scmp.com/tech/big-tech/article/3355651/tencent-shares-jump-expectations-ai-agent-within-wechat-super-app",
+    "https://techcrunch.com/2026/06/25/netris-raises-15m-series-a-from-a16z-to-help-ai-neoclouds-go-live-faster",
+    "https://platum.kr/archives/289686",
+    "https://www.politico.eu/sponsored-content/building-trust-in-europe-in-the-ai-era",
+    "https://www.bbc.co.uk/news/articles/cq615g3z36po",
+    "https://techcrunch.com/2026/06/27/apple-vision-pro-exec-is-reportedly-leaving-for-openai",
+    "https://www.zdnet.com/article/agentic-ai-in-customer-service",
+    "https://thenextweb.com/news/krafton-subnautica-2-bonus-settlement-ceo-resigns",
+    "https://news.google.com/rss/articles/cbmilgfbvv95cuxnvkxubenactjvown5txpeewzgbmpprfvuvmthnujhtlblb09mdvdyeu10bzhflxbicl92vlphu1uzqmv6wlhts1v5zhe1blnaoddqawf1wu84zm1anhhumkpevhhezvzsy0rmqjfjwtg5qmroeetcumtxtdnksexgmuxdzkr6azvrc1rpqmliszvuclbmt2c",
+    "https://the-decoder.com/an-ai-agent-hacked-mckinseys-internal-ai-platform-in-two-hours-using-a-decades-old-technique",
+    "https://www.theguardian.com/business/2026/jul/02/ai-summaries-tripadvisor-hotel-reviews-downplay-serious-complaints",
+    "https://www.etnews.com/20260622000407",
+    "https://techcrunch.com/2026/06/24/companies-are-scrambling-to-stop-employees-from-maxing-out-ai-budgets-with-small-tasks",
+    "https://www.theguardian.com/business/2026/jun/03/uk-media-groups-power-opt-out-google-ai-search-summaries",
+    "https://the-decoder.com/j-p-morgan-sees-a-pile-of-red-flags-in-the-ai-market",
+    "https://the-decoder.com/figma-bets-on-human-judgment-at-config-2026-while-the-ai-powering-its-canvas-belongs-to-someone-else",
+    "https://the-decoder.com/five-eyes-intelligence-alliance-says-frontier-ai-models-could-reshape-offensive-cyber-ops-in-months",
+    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus",
+    "https://www.theguardian.com/money/2026/jun/22/job-scams-employment-ai",
+    "https://www.wired.com/story/cybercriminals-are-complaining-about-ai-slop-flooding-their-forums",
+    "https://www.theguardian.com/culture/2026/jun/26/australian-musicians-aussie-music-ai-training-tool-nick-cave-kylie-minogue-paul-dempsey",
+    "https://www.cityam.com/ai-is-not-killing-all-these-jobs-linkedin-boss-on-uk-hiring-slump",
+    "https://n.news.naver.com/mnews/article/022/0004137772",
+    "https://www.theguardian.com/technology/2026/jul/01/un-report-ai-inequality",
+    "https://it.chosun.com/news/articleview.html",
+    "https://www.theguardian.com/technology/2026/jun/23/david-pocock-urges-albanese-to-stop-tech-companies-training-ai-models-using-australian-content",
+    "https://www.theguardian.com/books/2026/jul/01/judges-claims-ai-use-commonwealth-short-story-prize-jamir-nazir",
+    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums",
+    "https://the-decoder.com/openai-expands-its-record-funding-round-to-over-120-billion-as-it-eyes-a-potential-ipo-later-this-year",
+    "https://www.zdnet.com/article/this-ai-free-search-engine-is-getting-more-popular-heres-why-you-should-try-it",
+    "https://www.theguardian.com/technology/2026/jun/30/ai-chatbot-use-anti-vaccine-myths-poll",
+    "https://the-decoder.com/openai-burned-through-34-billion-last-year",
+    "https://www.theguardian.com/technology/2026/jun/24/ai-read-papyrus-scroll-burnt-vesuvius-eruption",
+    "https://www.cnbc.com/2026/06/30/ai-chip-rally-in-q2-adds-2-trillion-in-value-to-micron-intel-amd-.html",
+    "https://the-decoder.com/ai-music-startup-suno-doubles-its-valuation-to-5-4-billion-while-fighting-major-record-labels-in-court",
+    "https://the-decoder.com/sam-altman-and-dario-amodei-walk-back-their-ai-job-apocalypse-predictions",
+    "https://techcrunch.com/2026/04/15/after-sale-of-its-shoe-business-allbirds-pivots-to-ai",
+    "https://www.theguardian.com/technology/2026/jun/22/artificial-intelligence-law-firm-wins-court-case-in-england-for-first-time",
+    "https://the-decoder.com/nvidia-research-shows-robots-that-train-themselves-through-ai-coding-agents",
+    "https://www.theguardian.com/commentisfree/2026/jun/24/ai-errors-companies-responsibility",
+    "https://www.msit.go.kr/bbs/view.do",
+    "https://www.fastcompany.com/91561181/trump-keeps-kneecapping-the-u-s-s-most-promising-ai-models",
+    "https://techcrunch.com/2026/06/21/when-the-trump-administration-cracks-down-on-anthropic-who-benefits",
+    "https://thenextweb.com/news/ubimytherapist-ai-smartwatch-mental-health-proactive",
+    "https://news.google.com/rss/articles/cbmiwgfbvv95cuxnrhdusxhpvdryzk1kaktvuhflx3jqwmhptui1dldcvmpnmeu3dghtvvpucmrhn3jcemdxazjpr3zxvwnfrtn5sjfct1vqtuzfnzn0wtf0s0ctmk9wbjd0bw1hlvnkwvnietd2wnvxadf5wlz1xzytmhfzawnmrlhxsxmty3g3vhrkyzfiwddplxntovj5dgd2yzndt1zpqzzuenuxx0htszvbnlngmufbqvzzn2gxbdzaqjntmfbtag1yuq",
+    "https://www.theguardian.com/business/2026/jun/29/shares-in-chipmakers-underpinning-ai-boom-surge-in-first-half-of-2026",
+    "https://www.scmp.com/opinion/china-opinion/article/3357898/us-anthropic-ban-best-advert-chinese-ai",
+    "https://www.theguardian.com/us-news/2026/jun/28/wealth-tax-super-rich",
+    "https://www.cnbc.com/2026/06/10/ai-youth-uneployment-automation-thoma-bravo.html",
+    "https://www.thenationalnews.com/news/europe/2026/06/17/g7-pitches-trusted-partnership-to-ai-chiefs-in-a-bid-for-frontier-model-sharing",
+    "https://thenextweb.com/news/runpod-100m-summit-partners-1bn-valuation",
+    "https://www.wired.com/story/hasan-piker-user-behavior",
+    "https://the-decoder.com/ai-coding-agent-devin-maker-cognition-more-than-doubles-its-valuation-to-26-billion-in-under-nine-months",
+    "https://www.cityam.com/consulting-giants-face-up-to-ai-reckoning",
+    "https://www.cityam.com/wayve-hands-london-private-market-major-boost-with-85m-share-sale",
+    "https://thenextweb.com/news/koreas-policy-chief-warns-chip-windfall-could-inflate-housing",
+    "https://www.cityam.com/spacex-snaps-up-ai-coding-darling-cursor-as-valuation-soars-past-amazon",
+    "https://n.news.naver.com/mnews/article/277/0005778989",
+    "https://techcrunch.com/2026/04/01/anthropic-took-down-thousands-of-github-repos-trying-to-yank-its-leaked-source-code-a-move-the-company-says-was-an-accident",
+    "https://the-decoder.com/google-appeals-ruling-that-made-it-directly-liable-for-ai-generated-search-overview-content",
+    "https://www.zdnet.com/article/ai-is-causing-cognitive-fatigue-heres-how-to-work-with-more-haste-and-less-speed",
+    "https://www.theguardian.com/environment/2026/jun/25/datacentres-facing-increase-in-global-climate-related-legal-cases-report-finds",
+    "https://www.theguardian.com/us-news/2026/jun/22/california-gas-stations-ai-prices-lawsuit",
+    "https://www.theguardian.com/technology/2026/jun/03/labour-mp-sues-elon-musks-ai-company-over-fake-sexualised-images",
+    "https://thenextweb.com/news/apple-early-security-updates-ai",
+    "https://n.news.naver.com/mnews/article/088/0001014904",
+    "https://n.news.naver.com/mnews/article/014/0005537392",
+    "https://the-decoder.com/anthropics-leaked-ai-coding-tool-has-been-cloned-over-8000-times-on-github-despite-mass-takedowns",
+    "https://thenextweb.com/news/salesforce-employees-anthropic-claude-tag-slack-tension",
+    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
+    "https://techcrunch.com/2026/06/25/patronus-ai-lands-50m-to-build-digital-worlds-that-stress-test-ai-agents",
+    "https://www.cityam.com/4chan-ridicules-ofcom-again-as-watchdog-chases-unpaid-520k-fine",
+    "https://the-decoder.com/ai-agents-can-now-complete-16-percent-of-freelance-jobs-at-pro-quality-up-from-2-5-percent-eight-months-ago",
+    "https://www.technologyreview.com/2026/03/04/1133642/bridging-the-operational-ai-gap",
+    "https://the-decoder.com/hidden-code-in-claude-code-secretly-flagged-chinese-users",
+    "https://www.cnbc.com/2026/06/17/anthropic-ai-regulation-trump.html",
+    "https://thenextweb.com/news/nvidia-huang-national-security-smuggled-chips-dead-end",
+    "https://www.technologyreview.com/2026/06/30/1139513/agriculture-is-ready-for-ai-but-its-data-isnt",
+    "https://www.zdnet.com/article/easy-way-to-exclude-ai-from-search-results-in-every-browser",
+    "https://thenextweb.com/news/house-bill-ai-data-centre-energy-costs-big-tech",
+    "https://techcrunch.com/2026/06/29/tidal-cracks-down-on-ai-music-by-cutting-off-monetization",
+    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price",
+    "https://www.cnbc.com/2026/06/18/amazon-engineers-ai-data-center-opposition.html",
+    "https://the-decoder.com/anthropic-taps-spacexs-colossus-1-data-center-for-220000-gpus-to-power-claude",
+    "https://www.etnews.com/20260603000201",
+    "https://www.bizinfo.go.kr/sii/siia/selectsiia200detail.do",
+    "https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods",
+    "https://techcrunch.com/2026/04/29/more-gemini-features-are-coming-to-google-tv",
+    "https://techcrunch.com/2026/03/25/granola-raises-125m-hits-1-5b-valuation-as-it-expands-from-meeting-notetaker-to-enterprise-ai-app",
+    "https://thenextweb.com/news/son-dismisses-musk-space-data-centres",
+    "https://www.ft.com/content/16ace46c-aeac-40c9-8598-3c01fa4481cb",
+    "https://www.axios.com/2026/06/20/ai-tech-moguls-g7",
+    "https://techcrunch.com/2026/06/30/crypto-exchange-okx-wants-ai-agents-to-hire-and-pay-each-other",
+    "https://www.fastcompany.com/91562297/daters-say-ai-dependence-gives-them-the-ick",
+    "https://the-decoder.com/openais-codex-can-now-watch-you-work-once-and-repeat-the-task-forever",
+    "https://the-decoder.com/the-ai-boom-drove-nvidias-yearly-taiwan-spending-from-15-billion-to-150-billion",
+    "https://techcrunch.com/2026/03/25/the-ai-skills-gap-is-here-says-ai-company-and-power-users-are-pulling-ahead",
+    "https://the-decoder.com/google-unveils-8th-gen-tpus-agent-platform-and-workspace-ai-layer-at-cloud-next-26",
+    "https://techcrunch.com/2026/06/25/general-intuitions-2-3b-bet-that-video-games-can-train-ai-agents-for-the-real-world",
+    "https://thenextweb.com/news/swiss-study-ai-fewer-junior-job-offers",
+    "https://thenextweb.com/news/norway-bans-generative-ai-elementary-school-children",
+    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman",
+    "https://www.etnews.com/20260609000235",
+    "https://thenextweb.com/news/oracle-21000-layoffs-ai-data-centres",
+    "https://www.cnbc.com/2026/06/23/ai-memory-startup-focused-on-cutting-token-costs-raises-98-million.html",
+    "https://thenextweb.com/news/india-upi-npci-ai-billion-daily-transactions",
+    "https://www.etnews.com/20260619000144",
+    "https://www.etnews.com/20260623000435",
+    "https://thenextweb.com/news/anthropic-advanced-ai-framework-government-block-deployments",
+    "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute",
+    "https://the-decoder.com/gpt-5-4-reportedly-brings-a-million-token-context-window-and-an-extreme-reasoning-mode",
+    "https://thenextweb.com/news/notion-mail-shuts-down-ai-agents-email-productivity",
+    "https://thenextweb.com/news/baden-bower-ai-visibility-index-citations-publications",
+    "https://thenextweb.com/news/helsing-germany-cfsn-combat-cloud-contract",
+    "https://www.zdnet.com/article/want-big-tech-job-startups-may-be-best-shot-why",
+    "https://the-decoder.com/openai-researchers-explain-why-math-is-the-road-to-agi",
+    "https://www.gokorea.kr/news/articleview.html",
+    "https://the-decoder.com/china-turns-its-aging-camera-network-into-an-ai-powered-mass-surveillance-apparatus",
+    "https://the-decoder.com/openai-ceo-sam-altman-reportedly-teases-a-very-strong-model-internally-that-can-really-accelerate-the-economy",
+    "https://techcrunch.com/2026/03/04/the-us-military-is-still-using-claude-but-defense-tech-clients-are-fleeing",
+    "https://www.thenationalnews.com/business/economy/2026/06/18/goldmans-chief-economist-optimistic-on-ai-impact-on-growth-as-iran-war-dims-global-outlook",
+    "https://www.theguardian.com/australia-news/2026/jun/29/australian-with-retirement-savings-you-probably-own-spacex",
+    "https://techcrunch.com/2026/05/13/anthropic-now-has-more-business-customers-than-openai-according-to-ramp-data",
+    "https://huggingface.co/blog/ibm-research/itbench-aa",
+    "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long",
+    "https://the-decoder.com/openais-claude-mythos-competitor-gpt-5-6-sol-launches-under-government-controlled-access-it-calls-unsustainable",
+    "https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study",
+    "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions",
+    "https://www.theguardian.com/australia-news/2026/jul/01/australia-ai-copyright-laws-creatives-sound-alarm-albanese-government-datacentres",
+    "https://www.aitimes.com/news/articleview.html",
+    "https://www.artificialintelligence-news.com/news/idc-how-emea-cios-can-jumpstart-ai-rollouts",
+    "https://techcrunch.com/2026/05/27/ai-coding-startup-cognition-raises-1b-at-25b-pre-money-valuation",
+    "https://www.cnbc.com/2026/06/17/allbirds-bird-ai-smartbird-ceo.html",
     "https://openai.com/index/openai-broadcom-jalapeno-inference-chip",
     "https://thenextweb.com/news/aether-ai-causal-world-models-20m-seed-physical-ai",
-    "https://www.cnbc.com/2026/06/17/anthropic-ai-regulation-trump.html",
-    "https://techcrunch.com/2026/06/29/arena-the-ai-leaderboard-everyone-uses-is-now-a-100m-business",
-    "https://www.theguardian.com/australia-news/2026/jul/01/australia-ai-copyright-laws-creatives-sound-alarm-albanese-government-datacentres",
-    "https://www.etnews.com/20260625000298",
-    "https://www.wired.com/story/chinese-ai-giant-sensetime-is-running-its-new-model-on-chinese-chips",
-    "https://www.technologyreview.com/2026/05/26/1137584/rethinking-organizational-design-in-the-age-of-agentic-ai",
-    "https://www.etnews.com/20260622000407",
-    "https://techcrunch.com/2026/06/24/ai-was-supposed-to-kill-engineering-jobs-but-new-data-suggests-theyre-the-most-resilient",
-    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war",
-    "https://www.fastcompany.com/91556417/ai-bill-is-coming-due",
-    "https://techcrunch.com/2026/06/29/omen-ais-plan-to-optimize-data-centers-is-all-wet",
-    "https://www.cnbc.com/2026/06/26/ai-memory-chip-shortage-consumer-electronics-prices.html",
-    "https://thenextweb.com/news/krafton-subnautica-2-bonus-settlement-ceo-resigns",
-    "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat",
-    "https://thenextweb.com/news/trustpilot-shopify-partnership-ai-search-reviews",
-    "https://the-decoder.com/anthropic-taps-spacexs-colossus-1-data-center-for-220000-gpus-to-power-claude",
-    "https://techcrunch.com/2026/05/20/anthropic-will-pay-xai-1-25-billion-per-month-for-compute",
-    "https://www.wired.com/story/model-behavior-elon-musk-cross-examined-sam-altman",
-    "https://www.axios.com/2026/06/20/ai-tech-moguls-g7",
-    "https://the-decoder.com/five-eyes-intelligence-alliance-says-frontier-ai-models-could-reshape-offensive-cyber-ops-in-months",
-    "https://techcrunch.com/2026/06/16/robinhoods-note-on-10-layoffs-shows-blaming-ai-isnt-cutting-it",
-    "https://news.google.com/rss/articles/cbmilgfbvv95cuxnvkxubenactjvown5txpeewzgbmpprfvuvmthnujhtlblb09mdvdyeu10bzhflxbicl92vlphu1uzqmv6wlhts1v5zhe1blnaoddqawf1wu84zm1anhhumkpevhhezvzsy0rmqjfjwtg5qmroeetcumtxtdnksexgmuxdzkr6azvrc1rpqmliszvuclbmt2c",
-    "https://the-decoder.com/san-franciscos-ai-boom-is-pricing-out-six-figure-tech-workers-who-cant-find-rent-under-5000",
-    "https://thenextweb.com/news/tsuga-35-million-series-a-observability",
-    "https://the-decoder.com/ai-coding-agent-devin-maker-cognition-more-than-doubles-its-valuation-to-26-billion-in-under-nine-months",
-    "https://www.ft.com/content/b4b60d00-2e8c-4db0-b3ed-9988dc0eeb5c",
-    "https://www.bbc.co.uk/news/articles/cpwerjy20kyo",
-    "https://techcrunch.com/2026/02/25/the-public-opposition-to-ai-infrastructure-is-heating-up",
-    "https://thenextweb.com/news/nvidia-huang-national-security-smuggled-chips-dead-end",
-    "https://www.etnews.com/20260619000282",
-    "https://www.theguardian.com/australia-news/2026/jun/27/ai-drone-rescue-kosciuszko-national-park-hikers-fire-rescue-nsw",
-    "https://www.theguardian.com/environment/2026/jun/25/datacentres-facing-increase-in-global-climate-related-legal-cases-report-finds",
-    "https://www.aitimes.com/news/articleview.html",
-    "https://www.theguardian.com/commentisfree/2026/jun/24/ai-errors-companies-responsibility",
-    "https://www.cityam.com/spacex-snaps-up-ai-coding-darling-cursor-as-valuation-soars-past-amazon",
-    "https://www.msit.go.kr/bbs/view.do",
-    "https://www.wired.com/story/using-ai-negative-impact-thinking-problem-solving-study",
-    "https://www.theguardian.com/books/2026/jul/01/judges-claims-ai-use-commonwealth-short-story-prize-jamir-nazir",
-    "https://www.zdnet.com/article/heres-why-the-government-wants-to-spend-9-billion-on-ai-superchips",
-    "https://www.theguardian.com/culture/2026/jun/26/australian-musicians-aussie-music-ai-training-tool-nick-cave-kylie-minogue-paul-dempsey",
-    "https://www.marktechpost.com/2026/04/29/qwen-team-releases-flashqla-a-high-performance-linear-attention-kernel-library-that-achieves-up-to-3x-speedup-on-nvidia-hopper-gpus",
-    "https://thenextweb.com/news/apple-m7-chips-skips-m6",
-    "https://the-decoder.com/google-is-hiring-hundreds-of-engineers-to-help-customers-adopt-its-ai",
-    "https://it.chosun.com/news/articleview.html",
-    "https://thenextweb.com/news/house-bill-ai-data-centre-energy-costs-big-tech",
-    "https://n.news.naver.com/mnews/article/001/0016149675",
-    "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo",
-    "https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-months-after-launch",
-    "https://www.fastcompany.com/91562297/daters-say-ai-dependence-gives-them-the-ick",
-    "https://www.theguardian.com/technology/2026/jun/23/david-pocock-urges-albanese-to-stop-tech-companies-training-ai-models-using-australian-content",
-    "https://the-decoder.com/openai-officially-confirms-mega-funding-round-and-chatgpt-super-app",
-    "https://the-decoder.com/mistrals-le-chat-spreads-iran-war-disinformation-in-60-percent-of-leading-prompts",
-    "https://www.cityam.com/ai-is-not-killing-all-these-jobs-linkedin-boss-on-uk-hiring-slump",
-    "https://thenextweb.com/news/ubimytherapist-ai-smartwatch-mental-health-proactive",
-    "https://techcrunch.com/2026/05/06/google-updates-ai-search-to-include-expert-advice-from-reddit-and-other-web-forums",
-    "https://www.wired.com/story/ai-tools-are-helping-mediocre-north-korean-hackers-steal-millions",
-    "https://the-decoder.com/ai-wont-become-a-real-coworker-until-it-stops-answering-and-starts-finishing-tasks",
-    "https://www.etnews.com/20260623000315",
-    "https://www.marktechpost.com/2026/04/29/top-10-kv-cache-compression-techniques-for-llm-inference-reducing-memory-overhead-across-eviction-quantization-and-low-rank-methods",
-    "https://thenextweb.com/news/ddr2-memory-prices-surge-ai-shortage-legacy-dram",
-    "https://www.zdnet.com/article/ai-is-causing-cognitive-fatigue-heres-how-to-work-with-more-haste-and-less-speed",
-    "https://www.tomshardware.com/tech-industry/artificial-intelligence/elon-musk-says-that-china-will-have-a-fable-5-class-ai-model-probably-q1-next-year-ceo-of-chinese-anthropic-rival-says-it-wont-take-that-long",
-    "https://www.theguardian.com/us-news/2026/jun/23/datacenters-climate-hazards-study",
-    "https://www.fastcompany.com/91553288/separate-fact-from-fiction-ai-and-the-future-of-work",
-    "https://the-decoder.com/anthropic-refuses-pentagon-demand-to-loosen-military-ai-restrictions-faces-defense-production-act-threat",
-    "https://the-decoder.com/openais-codex-can-now-watch-you-work-once-and-repeat-the-task-forever",
-    "https://the-decoder.com/google-unveils-8th-gen-tpus-agent-platform-and-workspace-ai-layer-at-cloud-next-26",
-    "https://www.fastcompany.com/91552576/can-ai-be-humane-aza-raskin-says-only-if-we-change-the-race",
-    "https://www.artificialintelligence-news.com/news/gpt-5-5-is-openais-most-capable-agentic-ai-model-yet-at-twice-the-api-price",
-    "https://n.news.naver.com/mnews/article/022/0004137772",
-    "https://www.cityam.com/from-abu-dhabi-to-imola-a2rl-expands-internationally-with-historic-autonomous-racing-debut-at-iconic-italian-track",
     "https://thenextweb.com/news/wharton-cognitive-surrender-ai-chatbots-decisions-moot-app",
-    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality",
-    "https://www.etnews.com/20260623000289",
-    "https://the-decoder.com/anthropic-study-shows-ai-needs-hours-not-weeks-to-build-exploits-from-security-patches",
-    "https://www.cnbc.com/2026/06/30/ai-chip-rally-in-q2-adds-2-trillion-in-value-to-micron-intel-amd-.html",
     "https://thenextweb.com/news/fake-ai-agent-skill-security-scanners-bypassed-26000-agents",
-    "https://www.scmp.com/tech/tech-trends/article/3354876/alipay-launches-payment-tools-ai-agents-shop-you",
-    "https://the-decoder.com/china-turns-its-aging-camera-network-into-an-ai-powered-mass-surveillance-apparatus",
-    "https://www.ft.com/content/0f067265-2baf-4b6e-8fb2-ed56daef6f3c",
-    "https://www.theguardian.com/business/2026/jun/29/shares-in-chipmakers-underpinning-ai-boom-surge-in-first-half-of-2026",
-    "https://www.mediapen.com/news/view/1104789",
-    "https://www.etnews.com/20260619000144",
-    "https://www.scmp.com/opinion/china-opinion/article/3357898/us-anthropic-ban-best-advert-chinese-ai",
-    "https://thenextweb.com/news/swiss-study-ai-fewer-junior-job-offers",
-    "https://techcrunch.com/2026/03/25/granola-raises-125m-hits-1-5b-valuation-as-it-expands-from-meeting-notetaker-to-enterprise-ai-app",
-    "https://news.google.com/rss/articles/cbmiwwfbvv95cuxot0q1q0vwqxb6vw9zt2xtzelhmxv6d1pmzjdvzw14y0o4mnu1t1jrmhnfbg41dedywfzsrllyeglody1iauxnwgd2vnfjblj3rmfxwvnpodbrvhvnwe5nbf9idm5tmnltcufnnvrkmjvxnkf6evqwyzqzaddhdllbcmhuvlfdmwhcm2xltepra3vswjhaalrftnzfcgm3bfhuvdlqdzfmmjnrbkf1tk9sb0lmnthkr0tizneydkewutzomtg",
-    "https://www.zdnet.com/article/easy-way-to-exclude-ai-from-search-results-in-every-browser",
-    "https://www.theguardian.com/australia-news/2026/jun/29/australian-with-retirement-savings-you-probably-own-spacex",
-    "https://thenextweb.com/news/micron-q3-fy2026-earnings-revenue-hbm-ai-memory",
-    "https://www.etnews.com/20260609000235",
-    "https://www.etnews.com/20260623000435",
-    "https://the-decoder.com/openai-expands-its-record-funding-round-to-over-120-billion-as-it-eyes-a-potential-ipo-later-this-year",
+    "https://www.heraldscotland.com/news/26226445.impacted-communities-call-hyperscale-ai-data-centres-ban",
+    "https://www.lcnews.co.kr/news/articleview.html",
+    "https://thenextweb.com/news/tiktok-ai-slop-59-percent-new-users-kapwing-study",
+    "https://www.etnews.com/20260619000247",
+    "https://the-decoder.com/half-of-ai-written-code-that-passes-industry-test-would-get-rejected-by-real-developers-new-study-finds",
+    "https://www.technologyreview.com/2026/06/29/1139849/ai-agents-are-not-your-coworkers",
     "https://www.fastcompany.com/91561045/g7-wraps-openai-anthropic-meet-world-leaders-discuss-future-ai",
-    "https://www.thenationalnews.com/business/economy/2026/06/18/goldmans-chief-economist-optimistic-on-ai-impact-on-growth-as-iran-war-dims-global-outlook",
-    "https://thenextweb.com/news/allbirds-smartbird-ai-infrastructure-pivot",
-    "https://thenextweb.com/news/getty-images-openai-chatgpt-deal-shares-soar",
-    "https://the-decoder.com/ai-music-startup-suno-doubles-its-valuation-to-5-4-billion-while-fighting-major-record-labels-in-court",
-    "https://the-decoder.com/google-appeals-ruling-that-made-it-directly-liable-for-ai-generated-search-overview-content",
-    "https://www.zdnet.com/article/this-ai-free-search-engine-is-getting-more-popular-heres-why-you-should-try-it",
     "https://techcrunch.com/2026/06/17/only-16-percent-of-americans-think-ai-will-have-a-positive-impact-on-society-a-new-study-shows",
-    "https://the-decoder.com/nvidia-research-shows-robots-that-train-themselves-through-ai-coding-agents",
-    "https://www.cnbc.com/2026/06/10/ai-youth-uneployment-automation-thoma-bravo.html",
-    "https://thenextweb.com/news/anthropic-advanced-ai-framework-government-block-deployments",
-    "https://www.cnbc.com/2026/06/18/amazon-engineers-ai-data-center-opposition.html",
-    "https://thenextweb.com/news/amazon-human-in-the-loop-ai-governance-normalization-deviance",
-    "https://www.cnbc.com/2026/06/23/ai-memory-startup-focused-on-cutting-token-costs-raises-98-million.html",
-    "https://www.aitimes.kr/news/articleview.html",
-    "https://the-decoder.com/nyu-finance-professor-damodaran-warns-an-ai-crash-could-hit-harder-than-the-dot-com-bust",
-    "https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropics-powerful-mythos-ai-reportedly-breached-almost-all-nsa-classified-systems-within-a-few-hours-during-red-team-test-report-sheds-more-light-on-the-u-s-governments-sudden-ban-on-the-flagship-models",
-    "https://www.theguardian.com/technology/2026/jun/30/ai-chatbot-use-anti-vaccine-myths-poll",
-    "https://thenextweb.com/news/salesforce-employees-anthropic-claude-tag-slack-tension",
+    "https://www.mediapen.com/news/view/1104789",
+    "https://the-decoder.com/authors-guild-test-finds-some-ai-detectors-perfectly-identify-human-writing-while-others-fail-on-every-single-text",
+    "https://techcrunch.com/2026/06/23/indias-moengage-bets-marketings-future-on-millions-of-ai-agents",
+    "https://techcrunch.com/2026/06/16/robinhoods-note-on-10-layoffs-shows-blaming-ai-isnt-cutting-it",
+    "https://n.news.naver.com/mnews/article/003/0014018079",
+    "https://the-decoder.com/mistrals-le-chat-spreads-iran-war-disinformation-in-60-percent-of-leading-prompts",
+    "https://www.bbc.co.uk/news/articles/cdxdgpgn0zwo",
+    "https://techcrunch.com/2026/04/29/google-photos-uses-ai-to-make-the-iconic-closet-from-clueless-a-reality",
+    "https://thenextweb.com/news/tesla-fsd-fatal-crash-settlement-nhtsa",
     "https://www.etnews.com/20260601000331",
-    "https://www.artificialintelligence-news.com/news/idc-how-emea-cios-can-jumpstart-ai-rollouts"
+    "https://the-decoder.com/ai-wont-become-a-real-coworker-until-it-stops-answering-and-starts-finishing-tasks",
+    "https://the-decoder.com/hyperscalers-may-soon-be-unable-to-fund-their-ai-buildout-from-cash-flow-alone",
+    "https://thenextweb.com/news/getty-images-openai-chatgpt-deal-shares-soar",
+    "https://www.ft.com/content/837cd1be-548d-4a64-8d78-a42d65a9afe5",
+    "https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropics-powerful-mythos-ai-reportedly-breached-almost-all-nsa-classified-systems-within-a-few-hours-during-red-team-test-report-sheds-more-light-on-the-u-s-governments-sudden-ban-on-the-flagship-models",
+    "https://www.theguardian.com/technology/2026/jun/30/silicon-valley-donations-colorado-democratic-primary",
+    "https://openai.com/index/gpt-5-immunology-mystery",
+    "https://www.cityam.com/volex-takes-conservative-approach-to-data-centre-growth-forecast-amid-ai-capex-splurge",
+    "https://www.etnews.com/20260623000289",
+    "https://techcrunch.com/2026/02/25/the-public-opposition-to-ai-infrastructure-is-heating-up",
+    "https://www.fastcompany.com/91560035/fable-5-crossed-a-line-the-world-was-not-ready-for",
+    "https://thenextweb.com/news/firmus-nvidia-indonesia-batam-data-center-30-billion",
+    "https://the-decoder.com/norway-bans-generative-ai-tools-in-elementary-schools-to-protect-kids-basic-learning-skills",
+    "https://www.digitaltoday.co.kr/news/articleview.html",
+    "https://thenextweb.com/news/indonesia-turns-to-ai-to-deliver-prabowos-biggest-promises",
+    "https://the-decoder.com/disney-pulls-out-of-openai-partnership-after-sora-app-and-api-gets-killed-just-months-after-launch",
+    "https://techcrunch.com/podcast/equity-podcast-runway-ceo-cristobal-valenzuela-ai-video-world-models",
+    "https://the-decoder.com/amazon-engineers-are-reportedly-distilling-anthropic-models-to-cut-costs-before-new-token-based-pricing-kicks-in",
+    "https://techcrunch.com/2026/06/24/ai-was-supposed-to-kill-engineering-jobs-but-new-data-suggests-theyre-the-most-resilient",
+    "https://www.fastcompany.com/91556417/ai-bill-is-coming-due",
+    "https://www.theguardian.com/commentisfree/2026/jun/29/ai-answers-to-lifes-big-questions-chatgp-contemplation",
+    "https://the-decoder.com/anthropic-refuses-pentagon-demand-to-loosen-military-ai-restrictions-faces-defense-production-act-threat",
+    "https://www.heraldscotland.com/news/26228712.ai-generated-job-applications-causing-issues-nhs-shetland",
+    "https://the-decoder.com/anthropic-study-shows-ai-needs-hours-not-weeks-to-build-exploits-from-security-patches",
+    "https://www.theguardian.com/us-news/2026/jun/26/mpox-congress-scrutiny-nih",
+    "https://the-decoder.com/us-military-uses-anthropics-claude-for-ai-driven-strike-planning-in-iran-war",
+    "https://www.cnbc.com/2026/06/26/ai-memory-chip-shortage-consumer-electronics-prices.html",
+    "https://www.fastcompany.com/91553288/separate-fact-from-fiction-ai-and-the-future-of-work",
+    "https://www.cityam.com/eclerx-recognized-as-a-representative-vendor-in-2026-gartner-market-guide-for-digital-shelf-analytics",
+    "https://news.google.com/rss/articles/cbmiwwfbvv95cuxot0q1q0vwqxb6vw9zt2xtzelhmxv6d1pmzjdvzw14y0o4mnu1t1jrmhnfbg41dedywfzsrllyeglody1iauxnwgd2vnfjblj3rmfxwvnpodbrvhvnwe5nbf9idm5tmnltcufnnvrkmjvxnkf6evqwyzqzaddhdllbcmhuvlfdmwhcm2xltepra3vswjhaalrftnzfcgm3bfhuvdlqdzfmmjnrbkf1tk9sb0lmnthkr0tizneydkewutzomtg",
+    "https://the-decoder.com/san-franciscos-ai-boom-is-pricing-out-six-figure-tech-workers-who-cant-find-rent-under-5000",
+    "https://thenextweb.com/news/ford-rehired-350-engineers-ai-quality-jd-power",
+    "https://www.etnews.com/20260619000282",
+    "https://www.bbc.co.uk/news/articles/cpwerjy20kyo",
+    "https://www.etnews.com/20260625000298",
+    "https://www.etnews.com/20260623000315",
+    "https://the-decoder.com/nyu-finance-professor-damodaran-warns-an-ai-crash-could-hit-harder-than-the-dot-com-bust",
+    "https://thenextweb.com/news/tsuga-35-million-series-a-observability",
+    "https://the-decoder.com/google-is-hiring-hundreds-of-engineers-to-help-customers-adopt-its-ai",
+    "https://thenextweb.com/news/ai-workslop-knowledge-decay-harvard-business-review-productivity",
+    "https://the-decoder.com/ai-is-inflating-student-grades-and-the-effect-points-to-outsourced-work-not-better-learning",
+    "https://www.theguardian.com/uk-news/2026/jun/03/former-officer-hampshire-hiding-after-being-falsely-linked-henry-nowak-arrest",
+    "https://www.cnbc.com/2026/07/01/employers-who-laid-off-workers-for-ai-are-reversing-their-decisions.html",
+    "https://the-decoder.com/google-gemini-now-generates-full-documents-spreadsheets-and-presentations-directly-inside-the-chat",
+    "https://techcrunch.com/2026/06/29/arena-the-ai-leaderboard-everyone-uses-is-now-a-100m-business",
+    "https://www.aitimes.kr/news/articleview.html",
+    "https://the-decoder.com/more-people-get-news-from-ai-chatbots-but-trust-remains-low",
+    "https://thenextweb.com/news/apple-m7-chips-skips-m6"
   ],
   "history": [
     {
@@ -1448,6 +1450,12 @@
       "link": "https://the-decoder.com/ai-agents-can-now-complete-16-percent-of-freelance-jobs-at-pro-quality-up-from-2-5-percent-eight-months-ago/",
       "title": "AI 에이전트, 이제 프리랜서 작업의 16%를 전문가 수준으로 수행 가능",
       "posted_at": "2026-07-03T05:51:16.263494"
+    },
+    {
+      "id": 37770,
+      "link": "https://www.cityam.com/4chan-ridicules-ofcom-again-as-watchdog-chases-unpaid-520k-fine/",
+      "title": "chan, Ofcom을 다시 조롱하며 52만 파운드의 미납 벌금 추적",
+      "posted_at": "2026-07-03T07:56:46.849642"
     }
   ],
   "last_reset": "2026-06-18",
@@ -1521,20 +1529,22 @@
       "date": "2026-06-21"
     },
     {
-      "hook": "전 세계가 AI 열풍에 열광하고 있지만, 정작 현장의 ",
+      "hook": "전 세계가 AI 열풍에 열광하고 있지만, 정작 현장의",
       "article_ids": [
         30446,
         30651,
         30763
       ],
-      "date": "2026-06-21"
+      "date": "2026-06-21",
+      "narrative": ""
     },
     {
-      "hook": "AI가 생산성을 높여줄 줄 알았는데, 실제로는 'AI ",
+      "hook": "AI가 생산성을 높여줄 줄 알았는데, 실제로는 'AI",
       "article_ids": [
         32823
       ],
-      "date": "2026-06-21"
+      "date": "2026-06-21",
+      "narrative": ""
     },
     {
       "hook": "보안을 강화하기 위해 AI를 도입했지만, 실제로는 AI",
@@ -1638,30 +1648,33 @@
       "date": "2026-06-21"
     },
     {
-      "hook": "AI가 더 똑똑해질수록 인간의 사고 능력도 확장될 것 ",
+      "hook": "AI가 더 똑똑해질수록 인간의 사고 능력도 확장될 것",
       "article_ids": [
         22764,
         27935
       ],
-      "date": "2026-06-21"
+      "date": "2026-06-21",
+      "narrative": ""
     },
     {
-      "hook": "AI가 완벽할 것이라는 믿음이 무고한 경찰관 한 명을 ",
+      "hook": "AI가 완벽할 것이라는 믿음이 무고한 경찰관 한 명을",
       "article_ids": [
         28024,
         28021,
         28028
       ],
-      "date": "2026-06-22"
+      "date": "2026-06-22",
+      "narrative": ""
     },
     {
-      "hook": "AI가 보안을 완벽하게 지켜줄 줄 알았는데, 실제로는 ",
+      "hook": "AI가 보안을 완벽하게 지켜줄 줄 알았는데, 실제로는",
       "article_ids": [
         19219,
         31544,
         39192
       ],
-      "date": "2026-06-22"
+      "date": "2026-06-22",
+      "narrative": ""
     },
     {
       "hook": "AI가 비용을 획기적으로 줄여줄 줄 알았는데, 기업들은",
@@ -1682,13 +1695,14 @@
       "date": "2026-06-22"
     },
     {
-      "hook": "AI가 개발자들의 자리를 뺏을 것이라는 공포와 달리, ",
+      "hook": "AI가 개발자들의 자리를 뺏을 것이라는 공포와 달리,",
       "article_ids": [
         28044,
         28044,
         28290
       ],
-      "date": "2026-06-22"
+      "date": "2026-06-22",
+      "narrative": ""
     },
     {
       "hook": "AI가 우리 일자리를 뺏을 것이라 걱정했지만, 정작 현",
@@ -1709,7 +1723,7 @@
     },
     {
       "hook": "AI가 인간의 업무 효율을 높여줄 줄 알았는데, 실제로",
-      "narrative": "상식(A): AI는 루틴 업무를 자동화해 생산성을 높여줄 것이다 — 실제(B): AI 사용",
+      "narrative": "AI는 루틴 업무를 자동화해 생산성을 높여줄 것이다 — AI 사용",
       "article_ids": [
         27935,
         27764
@@ -1718,7 +1732,7 @@
     },
     {
       "hook": "AI가 일자리를 뺏을 줄 알았는데, 정작 기업들은 '금",
-      "narrative": "상식(A): AI 기술이 인간의 일자리를 대체하여 고용을 감소시킬 것이다 vs 실제(B):",
+      "narrative": "AI 기술이 인간의 일자리를 대체하여 고용을 감소시킬 것이다 vs",
       "article_ids": [
         19515,
         28036
@@ -1742,8 +1756,8 @@
       "date": "2026-06-22"
     },
     {
-      "hook": "85%의 기업이 AI 에이전트 시대를 꿈꾸지만, 실제 ",
-      "narrative": "상식(A): AI 에이전트 도입은 업무 효율성을 혁신적으로 높여줄 것이지만, 실제(B): ",
+      "hook": "85%의 기업이 AI 에이전트 시대를 꿈꾸지만, 실제",
+      "narrative": "AI 에이전트 도입은 업무 효율성을 혁신적으로 높여줄 것이지만,",
       "article_ids": [
         26198,
         6935
@@ -1768,7 +1782,7 @@
     },
     {
       "hook": "AI가 인간의 일자리를 뺏을 것이라는 공포와 달리, 현",
-      "narrative": "상식(A): AI가 인간의 일자리를 대체하여 대량 실업이 발생할 것이다 vs 실제(B): ",
+      "narrative": "AI가 인간의 일자리를 대체하여 대량 실업이 발생할 것이다 vs",
       "article_ids": [
         21657,
         23871
@@ -1793,7 +1807,7 @@
     },
     {
       "hook": "AI 보안이 완벽한 방패가 되어줄 줄 알았는데, 실제로",
-      "narrative": "상식(AI가 보안을 강화하고 공격을 막을 것이다) vs 실제(AI가 정교한 자동화 공격과 ",
+      "narrative": "상식(AI가 보안을 강화하고 공격을 막을 것이다) vs 실제(AI가 정교한 자동화 공격과",
       "article_ids": [
         30307,
         30309
@@ -1818,7 +1832,7 @@
     },
     {
       "hook": "AI가 똑똑해질수록 인간은 더 똑똑해질 것 같지만, 실",
-      "narrative": "상식(A): AI 기술은 인간의 인지 능력을 확장시킬 것이다 vs 실제(B): AI 과도한",
+      "narrative": "AI 기술은 인간의 인지 능력을 확장시킬 것이다 vs AI 과도한",
       "article_ids": [
         22764,
         22768,
@@ -1897,8 +1911,8 @@
       "date": "2026-06-22"
     },
     {
-      "hook": "인간의 검수(Human-in-the-loop)가 AI ",
-      "narrative": "상식적으로 AI 결과물은 인간이 최종 검토하면 안전하지만, 실제로는 인간의 개입이 오류에 ",
+      "hook": "인간의 검수(Human-in-the-loop)가 AI",
+      "narrative": "상식적으로 AI 결과물은 인간이 최종 검토하면 안전하지만, 실제로는 인간의 개입이 오류에",
       "article_ids": [
         33029
       ],
@@ -1914,8 +1928,8 @@
       "date": "2026-06-22"
     },
     {
-      "hook": "TikTok 신규 사용자가 처음 보는 영상 10개 중 ",
-      "narrative": "상식(A): AI 알고리즘은 사용자의 취향에 맞는 고품질 콘텐츠를 추천해야 하지만, 실제(",
+      "hook": "TikTok 신규 사용자가 처음 보는 영상 10개 중",
+      "narrative": "AI 알고리즘은 사용자의 취향에 맞는 고품질 콘텐츠를 추천해야 하지만, 실제(",
       "article_ids": [
         33028
       ],
@@ -2016,7 +2030,7 @@
     },
     {
       "hook": "2026년, 앤트로픽은 오픈AI보다 더 많은 기업 고객",
-      "narrative": "램프(Ramp)의 비즈니스 고객 데이터에 따르면, 34.4%의 기업이 앤트로픽의 서비스에 ",
+      "narrative": "램프(Ramp)의 비즈니스 고객 데이터에 따르면, 34.4%의 기업이 앤트로픽의 서비스에",
       "article_ids": [
         "30560",
         "23811"
@@ -2074,7 +2088,7 @@
       "date": "2026-06-22"
     },
     {
-      "hook": "2026년, Anthropic의 Claude Code ",
+      "hook": "2026년, Anthropic의 Claude Code",
       "narrative": "Anthropic는 Claude Code의 내부 소스 코드를 우연히 공개한 후, 즉각적으로",
       "article_ids": [
         "32148",
@@ -2121,7 +2135,7 @@
     },
     {
       "hook": "2026년 6월, 미국인의 84%는 AI가 사회에 긍정",
-      "narrative": "Pew Research의 연구에 따르면, 미국인 중 단 16%만이 AI가 사회에 긍정적인 ",
+      "narrative": "Pew Research의 연구에 따르면, 미국인 중 단 16%만이 AI가 사회에 긍정적인",
       "article_ids": [
         "32011",
         "27858",
@@ -2149,7 +2163,7 @@
       "date": "2026-06-22"
     },
     {
-      "hook": "2026년 6월, 앤트로픽은 스페이스X의 콜로서스-1 ",
+      "hook": "2026년 6월, 앤트로픽은 스페이스X의 콜로서스-1",
       "narrative": "앤트로픽은 AI 모델의 추론 속도와 확장성을 위해 거대한 컴퓨팅 인프라가 필요했고, 스페이",
       "article_ids": [
         "6979",
@@ -2175,7 +2189,7 @@
     },
     {
       "hook": "2026년 5월, Anthropic은 엘론 머스크의 x",
-      "narrative": "Anthropic은 자체 AI 모델(Clause)을 실행하기 위한 고성능 컴퓨팅 인프라를 ",
+      "narrative": "Anthropic은 자체 AI 모델(Clause)을 실행하기 위한 고성능 컴퓨팅 인프라를",
       "article_ids": [
         "24636"
       ],
@@ -2208,8 +2222,8 @@
       "date": "2026-06-23"
     },
     {
-      "hook": "2026년 6월, 영국 출판사들이 구글의 AI 요약에 ",
-      "narrative": "구글은 수년간 검색 결과에서 AI 요약을 통해 사용자에게 출판사 기사의 핵심 내용을 요약 ",
+      "hook": "2026년 6월, 영국 출판사들이 구글의 AI 요약에",
+      "narrative": "구글은 수년간 검색 결과에서 AI 요약을 통해 사용자에게 출판사 기사의 핵심 내용을 요약",
       "article_ids": [
         "28029",
         "27862"
@@ -2279,7 +2293,7 @@
       "date": "2026-06-23"
     },
     {
-      "hook": "2023년 DDR2 메모리 가격이 AI 수요로 60% ",
+      "hook": "2023년 DDR2 메모리 가격이 AI 수요로 60%",
       "narrative": "AI 모델의 급격한 확장으로 인해 최신 고성능 메모리가 부족해지자, 제조사들이 이미 단종된",
       "article_ids": [
         "33470"
@@ -2364,7 +2378,7 @@
       "date": "2026-06-23"
     },
     {
-      "hook": "2026년 6월, 미국 정부가 앤트로픽의 최첨단 AI ",
+      "hook": "2026년 6월, 미국 정부가 앤트로픽의 최첨단 AI",
       "narrative": "미국 정부는 앤트로픽의 파블 5가 사이버 무기 생성과 정보 조작 능력이 지나치게 강력하다며",
       "article_ids": [
         "#33465",
@@ -2390,7 +2404,7 @@
     },
     {
       "hook": "트럼프 행정부가 앤트로픽의 최고 성능 AI 모델 접근을",
-      "narrative": "트럼프 행정부는 앤트로픽의 Claude Fable 5와 Mythos 5 같은 최첨단 AI ",
+      "narrative": "트럼프 행정부는 앤트로픽의 Claude Fable 5와 Mythos 5 같은 최첨단 AI",
       "article_ids": [
         "33221",
         "32361",
@@ -2489,7 +2503,7 @@
     },
     {
       "hook": "로빈후드는 AI를 해고의 이유로 사용하지 않았지만, 오",
-      "narrative": "기술 산업에서는 AI를 일자리 감축의 정당화 수단으로 자주 사용해왔지만, 로빈후드 CEO ",
+      "narrative": "기술 산업에서는 AI를 일자리 감축의 정당화 수단으로 자주 사용해왔지만, 로빈후드 CEO",
       "article_ids": [
         "31780",
         "33383"
@@ -2509,8 +2523,8 @@
       "date": "2026-06-24"
     },
     {
-      "hook": "2026년 6월, 노르웨이가 초등학교에서 생성적 AI ",
-      "narrative": "노르웨이 정부는 어린이의 창의성과 사고력 훼손을 우려해 6세~13세 학생들의 생성적 AI ",
+      "hook": "2026년 6월, 노르웨이가 초등학교에서 생성적 AI",
+      "narrative": "노르웨이 정부는 어린이의 창의성과 사고력 훼손을 우려해 6세~13세 학생들의 생성적 AI",
       "article_ids": [
         "32613",
         "32657"
@@ -2547,7 +2561,7 @@
       "date": "2026-06-24"
     },
     {
-      "hook": "2026년, AI가 의사를 대신해 심장 질환을 진단한 ",
+      "hook": "2026년, AI가 의사를 대신해 심장 질환을 진단한",
       "narrative": "의사가 천식으로 오진한 환자에게 AI 프로그램이 미세한 심장 질환 신호를 탐지해 정확한 진",
       "article_ids": [
         "33734"
@@ -2564,7 +2578,7 @@
       "date": "2026-06-24"
     },
     {
-      "hook": "2026년, 노르웨이가 초등학교에서 AI 사용을 거의 ",
+      "hook": "2026년, 노르웨이가 초등학교에서 AI 사용을 거의",
       "narrative": "노르웨이 정부는 교육 환경의 안전성을 이유로 초등학생의 AI 사용을 제한했지만, 미국은 앤",
       "article_ids": [
         "32985",
@@ -2603,7 +2617,7 @@
     },
     {
       "hook": "2026년 6월, AI가 제작한 UAE 정부 대변인 '",
-      "narrative": "UAE 정부는 AI 생성 캐릭터 'Zayed'를 공식 정부 대변인으로 임명하여 전 세계에 ",
+      "narrative": "UAE 정부는 AI 생성 캐릭터 'Zayed'를 공식 정부 대변인으로 임명하여 전 세계에",
       "article_ids": [
         "32384"
       ],
@@ -2637,7 +2651,7 @@
     },
     {
       "hook": "Figure AI의 로봇 740대가 인간 직원 660명",
-      "narrative": "Figure AI는 인간과 유사한 움직임과 상호작용이 가능한 휴머노이드 로봇을 개발하여, ",
+      "narrative": "Figure AI는 인간과 유사한 움직임과 상호작용이 가능한 휴머노이드 로봇을 개발하여,",
       "article_ids": [
         "33774"
       ],
@@ -2653,8 +2667,8 @@
       "date": "2026-06-24"
     },
     {
-      "hook": "가짜 AI 에이전트 스킬이 인스타그램 광고로 홍보되며 ",
-      "narrative": "보안 회사 AIR가 제작한 가짜 AI 스킬은 스킬 마켓플레이스에 배포되며 실제 사용자에게 ",
+      "hook": "가짜 AI 에이전트 스킬이 인스타그램 광고로 홍보되며",
+      "narrative": "보안 회사 AIR가 제작한 가짜 AI 스킬은 스킬 마켓플레이스에 배포되며 실제 사용자에게",
       "article_ids": [
         "33911"
       ],
@@ -2776,7 +2790,7 @@
     },
     {
       "hook": "구글이 AI 검색 결과의 부정확성으로 인해 독일 법원에",
-      "narrative": "구글의 AI 생성 검색 개요 기능이 뮌헨의 두 출판사 사이에 가짜 연결을 만들어내며 사기 ",
+      "narrative": "구글의 AI 생성 검색 개요 기능이 뮌헨의 두 출판사 사이에 가짜 연결을 만들어내며 사기",
       "article_ids": [
         "32528"
       ],
@@ -2818,7 +2832,7 @@
     },
     {
       "hook": "70%의 기업이 고객 서비스 AI 에이전트를 도입한 지",
-      "narrative": "기업들이 AI 에이전트에 지불하는 비용은 단순한 시간이나 사용량이 아니라, AI가 실제로 ",
+      "narrative": "기업들이 AI 에이전트에 지불하는 비용은 단순한 시간이나 사용량이 아니라, AI가 실제로",
       "article_ids": [
         "34256"
       ],
@@ -2838,7 +2852,7 @@
       "date": "2026-06-25"
     },
     {
-      "hook": "2026년 스위스에서 신입 채용 공고가 기존 대비 약 ",
+      "hook": "2026년 스위스에서 신입 채용 공고가 기존 대비 약",
       "narrative": "AI가 단순한 반복 업무를 자동화하면서 기업은 신입을 채용해 교육할 필요가 없어졌고, 이는",
       "article_ids": [
         "34107"
@@ -2920,8 +2934,8 @@
       "date": "2026-06-26"
     },
     {
-      "hook": "2026년, 삼성전자는 한국 직원들에게 ChatGPT ",
-      "narrative": "삼성전자는 AI 도구를 직원들이 작업을 자동으로 완성하게 하기보다, 반복적 작업을 줄이고 ",
+      "hook": "2026년, 삼성전자는 한국 직원들에게 ChatGPT",
+      "narrative": "삼성전자는 AI 도구를 직원들이 작업을 자동으로 완성하게 하기보다, 반복적 작업을 줄이고",
       "article_ids": [
         "33139"
       ],
@@ -3088,7 +3102,7 @@
       "date": "2026-06-26"
     },
     {
-      "hook": "2026년 금융감독원은 보안 목적으로 AI를 사용하는 ",
+      "hook": "2026년 금융감독원은 보안 목적으로 AI를 사용하는",
       "narrative": "금융사들은 사이버 위협에 대응하기 위해 AI를 활용해 내부 네트워크와 외부 시스템 간의 격",
       "article_ids": [
         "33738"
@@ -3109,7 +3123,7 @@
       "date": "2026-06-26"
     },
     {
-      "hook": "2026년, 한국 정부가 반도체 호황으로 생긴 막대한 ",
+      "hook": "2026년, 한국 정부가 반도체 호황으로 생긴 막대한",
       "narrative": "한국의 최고 경제 정책 입안자인 김용범은 반도체 산업의 수익이 기업과 부유층의 자산으로 집",
       "article_ids": [
         "33229"
@@ -3153,7 +3167,7 @@
       "date": "2026-06-26"
     },
     {
-      "hook": "2026년 6월, 스코틀랜드의 지역사회가 AI 데이터 ",
+      "hook": "2026년 6월, 스코틀랜드의 지역사회가 AI 데이터",
       "narrative": "스코틀랜드의 램머뮤어즈, 라르베르트, 아우터툴 등 10개 이상의 지역사회는 대규모 AI 데",
       "article_ids": [
         "34556"
@@ -3302,7 +3316,7 @@
       "date": "2026-06-27"
     },
     {
-      "hook": "포드는 AI가 차량 품질을 잘못 판단한 후 350명의 ",
+      "hook": "포드는 AI가 차량 품질을 잘못 판단한 후 350명의",
       "narrative": "포드는 AI 시스템이 차량 품질을 자동으로 평가할 수 있다고 믿고 경력 있는 엔지니어 팀을",
       "article_ids": [
         "35222"
@@ -3326,8 +3340,8 @@
       "date": "2026-06-27"
     },
     {
-      "hook": "2026년, 미국 정부가 OpenAI의 GPT-5.6 ",
-      "narrative": "GPT-5.6 Sol은 코드 벤치마크에서 Claude Mythos 5를 초과하며, 정부의 ",
+      "hook": "2026년, 미국 정부가 OpenAI의 GPT-5.6",
+      "narrative": "GPT-5.6 Sol은 코드 벤치마크에서 Claude Mythos 5를 초과하며, 정부의",
       "article_ids": [
         "35140"
       ],
@@ -3404,8 +3418,8 @@
       "date": "2026-06-27"
     },
     {
-      "hook": "Apple은 M6 칩의 Pro 및 Max 버전을 아예 ",
-      "narrative": "이전까지 Apple은 M1부터 M5까지 매 세대마다 Pro와 Max 버전을 꾸준히 출시해 ",
+      "hook": "Apple은 M6 칩의 Pro 및 Max 버전을 아예",
+      "narrative": "이전까지 Apple은 M1부터 M5까지 매 세대마다 Pro와 Max 버전을 꾸준히 출시해",
       "article_ids": [
         "35224"
       ],
@@ -3418,7 +3432,7 @@
     },
     {
       "hook": "AI는 머리가 붙은 샴쌍둥이의 분리 수술에서 수술을 대",
-      "narrative": "머시와 굿니스 자매는 두개골과 뇌 조직을 공유한 희귀한 두개유합 쌍둥이로, 수술 성공률이 ",
+      "narrative": "머시와 굿니스 자매는 두개골과 뇌 조직을 공유한 희귀한 두개유합 쌍둥이로, 수술 성공률이",
       "article_ids": [
         "33518"
       ],
@@ -3457,7 +3471,7 @@
     },
     {
       "hook": "Apple은 AI와 무관하게 맥북과 아이패드 가격을 2",
-      "narrative": "기사에는 AI나 메모리 부족, 시장 자본 손실 같은 내용이 전혀 언급되지 않으며, 단순히 ",
+      "narrative": "기사에는 AI나 메모리 부족, 시장 자본 손실 같은 내용이 전혀 언급되지 않으며, 단순히",
       "article_ids": [
         "34766"
       ],
@@ -3469,7 +3483,7 @@
       "date": "2026-06-27"
     },
     {
-      "hook": "AI 수익 모델은 사용자가 늘어날수록 비용이 줄어드는 ",
+      "hook": "AI 수익 모델은 사용자가 늘어날수록 비용이 줄어드는",
       "narrative": "뉴욕대학교 금융 교수 아스와스 다모다란은 AI 산업이 닷컴 버블보다 더 심각한 붕괴를 겪을",
       "article_ids": [
         "32739"
@@ -3508,8 +3522,8 @@
       "date": "2026-06-27"
     },
     {
-      "hook": "미국 가정들은 자신도 모르게 빅테크의 AI 전기요금을 ",
-      "narrative": "데이터센터 전력 소비가 급증하면서 전기요금이 최대 267%까지 올랐고, 이 비용이 가정용 ",
+      "hook": "미국 가정들은 자신도 모르게 빅테크의 AI 전기요금을",
+      "narrative": "데이터센터 전력 소비가 급증하면서 전기요금이 최대 267%까지 올랐고, 이 비용이 가정용",
       "article_ids": [
         "34339"
       ],
@@ -3522,7 +3536,7 @@
     },
     {
       "hook": "저작권자 협회 테스트에서 일부 AI 탐지기는 인간의 글",
-      "narrative": "이 테스트는 AI 탐지기의 신뢰성에 의문을 제기한다. 사이드키커와 제로GPT는 모든 인간 ",
+      "narrative": "이 테스트는 AI 탐지기의 신뢰성에 의문을 제기한다. 사이드키커와 제로GPT는 모든 인간",
       "article_ids": [
         "34446"
       ],
@@ -3586,7 +3600,7 @@
       "date": "2026-06-28"
     },
     {
-      "hook": "OpenAI가 직접 컨설팅 회사를 인수하고 AI 배포 ",
+      "hook": "OpenAI가 직접 컨설팅 회사를 인수하고 AI 배포",
       "narrative": "기사에 따르면 OpenAI는 자체 AI 'Deployment Company'를 설립하고 컨",
       "article_ids": [
         "34547"
@@ -3612,7 +3626,7 @@
       "date": "2026-06-28"
     },
     {
-      "hook": "세일즈포스가 자사 소유의 슬랙에서 경쟁사인 앤트로픽의 ",
+      "hook": "세일즈포스가 자사 소유의 슬랙에서 경쟁사인 앤트로픽의",
       "narrative": "세일즈포스가 277억 달러에 인수한 슬랙에서 앤트로픽의 새로운 AI '클로드 태그'가 출시",
       "article_ids": [
         "35865"
@@ -3626,7 +3640,7 @@
     },
     {
       "hook": "단 42개의 AI 기업이 S&P 500 전체 이익의 6",
-      "narrative": "J.P. Morgan은 AI 시장에서 투자 과열 신호가 여러 포착됐다고 경고합니다. 소수 ",
+      "narrative": "J.P. Morgan은 AI 시장에서 투자 과열 신호가 여러 포착됐다고 경고합니다. 소수",
       "article_ids": [
         "35516"
       ],
@@ -3691,7 +3705,7 @@
     },
     {
       "hook": "호주 상원의원 David Pocock은 정부가 AI 모",
-      "narrative": "Pocock의 주장은 호주 콘텐츠가 AI 모델에 사용될 경우, 해당 국가의 문화와 창작물 ",
+      "narrative": "Pocock의 주장은 호주 콘텐츠가 AI 모델에 사용될 경우, 해당 국가의 문화와 창작물",
       "article_ids": [
         "33647"
       ],
@@ -3743,7 +3757,7 @@
     },
     {
       "hook": "호주 음악가들이 AI 훈련 도구에 자신의 음악이 무단으",
-      "narrative": "Paul Dempsey는 AI가 자신의 전체 음악 카탈로그를 포함해 수백만 곡을 수집하고 ",
+      "narrative": "Paul Dempsey는 AI가 자신의 전체 음악 카탈로그를 포함해 수백만 곡을 수집하고",
       "article_ids": [
         "34970"
       ],
@@ -3769,7 +3783,7 @@
     },
     {
       "hook": "Firmus는 인도네시아에서 360MW 규모의 AI 데",
-      "narrative": "이 프로젝트는 Firmus가 Nvidia와의 파트너십을 통해 글로벌 AI 인프라의 확장을 ",
+      "narrative": "이 프로젝트는 Firmus가 Nvidia와의 파트너십을 통해 글로벌 AI 인프라의 확장을",
       "article_ids": [
         "36147"
       ],
@@ -3782,7 +3796,7 @@
     },
     {
       "hook": "ChatGPT는 불편함을 덜어주지만, 그 과정에서 진정",
-      "narrative": "이 기사는 AI가 제공하는 즉각적인 답변이 사람들이 깊은 질문에 대한 고민을 소홀히 하게 ",
+      "narrative": "이 기사는 AI가 제공하는 즉각적인 답변이 사람들이 깊은 질문에 대한 고민을 소홀히 하게",
       "article_ids": [
         "36128"
       ],
@@ -3820,7 +3834,7 @@
       "date": "2026-06-29"
     },
     {
-      "hook": "Tsuga는 AI 시대의 데이터 폭증에 대응하기 위해 ",
+      "hook": "Tsuga는 AI 시대의 데이터 폭증에 대응하기 위해",
       "narrative": "기존의 per-byte 가격 모델은 AI 작업 부하의 증가에 따라 더 이상 적합하지 않으며",
       "article_ids": [
         "33667"
@@ -3833,7 +3847,7 @@
       "date": "2026-06-29"
     },
     {
-      "hook": "A2RL의 첫 국제 자율 레이싱이 이탈리아 이몰라에서 ",
+      "hook": "A2RL의 첫 국제 자율 레이싱이 이탈리아 이몰라에서",
       "narrative": "이 이벤트는 A2RL이 자율 레이싱의 글로벌 시장으로의 확장을 나타내며, UAE의 기술 혁",
       "article_ids": [
         "36330"
@@ -3872,7 +3886,7 @@
       "date": "2026-06-29"
     },
     {
-      "hook": "2026년 상반기, SK Hynix의 주가는 310% ",
+      "hook": "2026년 상반기, SK Hynix의 주가는 310%",
       "narrative": "AI 기술의 발전으로 반도체 수요가 크게 증가하면서 SK Hynix와 삼성의 주가가 급등했",
       "article_ids": [
         "36308"
@@ -3898,8 +3912,8 @@
       "date": "2026-06-30"
     },
     {
-      "hook": "Trustpilot의 AI 검색 클릭 수가 FY25에 ",
-      "narrative": "Trustpilot은 AI가 제품을 추천하는 방식이 변화함에 따라, 검증된 리뷰가 AI의 ",
+      "hook": "Trustpilot의 AI 검색 클릭 수가 FY25에",
+      "narrative": "Trustpilot은 AI가 제품을 추천하는 방식이 변화함에 따라, 검증된 리뷰가 AI의",
       "article_ids": [
         "35597"
       ],
@@ -3911,7 +3925,7 @@
       "date": "2026-06-30"
     },
     {
-      "hook": "삼성과 SK 하이닉스가 AI 데이터 센터 수요 증가로 ",
+      "hook": "삼성과 SK 하이닉스가 AI 데이터 센터 수요 증가로",
       "narrative": "이 투자 계획은 메모리 가격 폭등을 반영하며, AI 기술의 발전이 반도체 산업에 미치는 영",
       "article_ids": [
         "36482"
@@ -3938,7 +3952,7 @@
     },
     {
       "hook": "독일이 헬싱에게 5억 8천만 유로 규모의 소프트웨어 코",
-      "narrative": "이 요청은 독일이 차세대 전투 시스템의 통합을 위해 혁신적인 소프트웨어를 개발하고 있다는 ",
+      "narrative": "이 요청은 독일이 차세대 전투 시스템의 통합을 위해 혁신적인 소프트웨어를 개발하고 있다는",
       "article_ids": [
         "36563"
       ],
@@ -3963,7 +3977,7 @@
       "date": "2026-06-30"
     },
     {
-      "hook": "Deloitte의 내부 발표에 따르면, 2035년까지 ",
+      "hook": "Deloitte의 내부 발표에 따르면, 2035년까지",
       "narrative": "이는 델로이트와 같은 컨설팅 기업들이 AI의 도입으로 인해 기존의 비즈니스 모델을 재설계해",
       "article_ids": [
         "36479"
@@ -3976,8 +3990,8 @@
       "date": "2026-06-30"
     },
     {
-      "hook": "2026년, 많은 기술 졸업생들이 대형 기술 회사에서 ",
-      "narrative": "이는 대기업에서의 신규 채용이 65% 감소하는 반면, 스타트업에서는 엔지니어 채용이 7% ",
+      "hook": "2026년, 많은 기술 졸업생들이 대형 기술 회사에서",
+      "narrative": "이는 대기업에서의 신규 채용이 65% 감소하는 반면, 스타트업에서는 엔지니어 채용이 7%",
       "article_ids": [
         "36491"
       ],
@@ -4194,7 +4208,8 @@
     "AI 요약, Tripadvisor 호텔 리뷰에서 심각한",
     "원카 넷플릭스 쇼, AI로 생성된 진 와일더 목소리로 ",
     "연구자들이 스마트워치와 이어폰을 읽어 도움 요청 전에 ",
-    "AI 에이전트, 이제 프리랜서 작업의 16%를 전문가 "
+    "AI 에이전트, 이제 프리랜서 작업의 16%를 전문가 ",
+    "chan, Ofcom을 다시 조롱하며 52만 파운드의 "
   ],
   "posted_original_titles": [
     "LinkedIn data shows AI isn’t t",
@@ -4362,7 +4377,8 @@
     "AI summaries of Tripadvisor ho",
     "Wonka Netflix show faces backl",
     "Researchers built an AI therap",
-    "AI agents can now complete 16 "
+    "AI agents can now complete 16 ",
+    "4chan ridicules Ofcom again as"
   ],
   "posted_source_urls": [
     "https://techcrunch.com/category/artificial-intelligence/feed",
@@ -5814,6 +5830,11 @@
       "title": "AI 에이전트, 이제 프리랜서 작업의 16%를 전문가 수준으로 수행 가능",
       "original_title": "AI agents can now complete 16 percent of freelance jobs at pro quality, up from 2.5 percent eight months ago",
       "description": "리모트 노동 지수는 AI 에이전트가 전문 품질로 유급 프리랜서 프로젝트를 얼마나 자주 완수하는지를 측정합니다. 8개월 만에 자동화 비율이 네 배 이상 증가한 결과, 이제 16%까지 상승했습니다."
+    },
+    "37770": {
+      "title": "chan, Ofcom을 다시 조롱하며 52만 파운드의 미납 벌금 추적",
+      "original_title": "4chan ridicules Ofcom again as watchdog chases unpaid £520k fine",
+      "description": "4chan은 Ofcom이 논란이 되는 이미지 생성기가 52만 파운드의 온라인 안전법 벌금을 지불하라는 요구를 재개한 후 다시 조롱했습니다. 4chan을 대표하는 미국 변호사 프레스톤 번이 목요일에 X에 게시했습니다."
     }
   }
 }
