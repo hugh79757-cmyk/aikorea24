@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Phase 06 execution complete — prompt leakage fix, JSON structured output, truncation cleanup
-last_updated: 2026-07-03T12:00:00.000Z
+stopped_at: Phase 07 execution complete — crawl failure exclusion (exclude_ids + tuple return)
+last_updated: 2026-07-03T16:00:00.000Z
 last_activity: 2026-07-03
 progress:
-  total_phases: 6
-  completed_phases: 6
-  total_plans: 21
-  completed_plans: 21
+  total_phases: 7
+  completed_phases: 7
+  total_plans: 22
+  completed_plans: 22
   percent: 100.0
 ---
 
@@ -21,28 +21,28 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 5 — dead code removal & final polish
+**Current focus:** Phase 7 — crawl failure exclusion
 
 ## Current Position
 
-Phase: 6 (ad-hoc — Prompt Leakage & Truncation Fix)
-Plan: Single PLAN.md at project root, 5 steps
+Phase: 7 (crawl-failure-exclusion)
+Plan: 07-01-PLAN.md
 Status: Complete
 Last activity: 2026-07-03
 
 Progress: [████████████████] 100%
 
-### Phase 6 Details (Prompt Leakage & Truncation Fix)
-- **Problem A**: `save_pitch_to_history()` had `[:30]`/`[:50]` hard truncation on hook/narrative, losing context
-- **Problem B**: LLM was leaking prompt labels (`상식(A):`, `실제(B):`) into output, stored in `posted.json`
-- **Fix**: `clean_leaked_prompt()` filter + `LEAKED_PROMPT_PATTERNS` regex list on save; `response_format={'type': 'json_object'}` via model_router.py; truncation relaxed (`[:15]`→`[:80]`, `[:30]`→`[:120]`)
-- **Verification**: `posted.json` 72 leaked entries cleaned; all 192 tests pass (1 pre-existing fail)
+### Phase 7 Details (Crawl Failure Exclusion)
+- **Problem**: `get_pitches()` crawl failure returned `[]` with no exclusion mechanism — same article re-selected up to 5 times, wasting LLM API calls
+- **Fix**: `get_pitches()` now returns `(list, set)` tuple; `exclude_ids` parameter filters out previously failed articles; `main_v3.py` accumulates failed IDs across retries
+- **Key changes**: `pitch.py` — 7 return paths changed to tuples, exclusion filter after shuffle; `main_v3.py` — `failed_article_ids` tracking with accumulation pattern; `crawler.py` — `article_id` param in `log_failed_crawl()`
+- **Verification**: All 34 `test_pitch.py` tests pass (4 crawl-fail tests with tuple assertions); 196/197 full suite pass (1 pre-existing failure)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 14
+- Total plans completed: 22
 - Average duration: —
 - Total execution time: —
 
@@ -68,6 +68,7 @@ Progress: [████████████████] 100%
 | Phase 04-monolith-splitting 04-04 | 2min | 1 task | 1 file |
 | Phase 04-monolith-splitting 04-02 | 8min | 4 tasks | 6 files |
 | Phase 04-monolith-splitting 04-03 | 5min | 3 tasks | 3 files |
+| Phase 07-crawl-failure-exclusion 07-01 | 12min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -107,7 +108,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-03T12:00:00.000Z
-Stopped at: Phase 6 completed — prompt leakage fix deployed, 192 tests passing
+Last session: 2026-07-03T16:00:00.000Z
+Stopped at: Phase 7 completed — crawl failure exclusion (exclude_ids + tuple return)
 Resume file: None
-Next: Project milestone v1.0 complete with all 6 phases. Consider Phase 7 (monitoring dashboard, reader analytics) or operational maintenance.
+Next: Project milestone v1.0 complete with all 7 phases. Consider monitoring dashboard, reader analytics, or operational maintenance.

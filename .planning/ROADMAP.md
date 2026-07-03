@@ -11,8 +11,25 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 3: Landing Zone & Orchestrator** — Directory restructuring, pipeline orchestrator, Threads stabilization, portability (completed 2026-06-30)
 - [x] **Phase 4: Monolith Splitting** — Split writer_v3.py (1,013 lines) and narrative_pitcher.py (581 lines) into focused modules (completed 2026-06-30)
 - [x] **Phase 5: Dead Code Removal & Final Polish** — Remove dead code, failure notifications, bulletin board verification (completed 2026-07-01)
+- [x] **Phase 6: Prompt Leakage & Truncation Fix** — Eliminate prompt label leakage, fix aggressive truncation (completed 2026-07-03)
+- [x] **Phase 7: Crawl Failure Exclusion** — Exclude crawl-failed article IDs from retry selection (completed 2026-07-03)
 
 ## Phase Details
+
+### Phase 7: Crawl Failure Exclusion
+**Goal:** When `get_pitches()` crawl fails on an article, that article_id is excluded from retry selection — eliminating the 5× retry loop without wasting LLM calls.
+**Mode:** ad-hoc
+**Depends on**: Phase 6
+**Requirements**: RQMT-07-01, RQMT-07-02
+**Success Criteria** (what must be TRUE):
+  1. `get_pitches()` has `exclude_ids` parameter and returns `(list, set)` tuple — failed article_id surfaces to caller
+  2. `main_v3.py` accumulates failed IDs across retries and passes `exclude_ids` — same article never re-selected
+  3. When all articles excluded, returns `([], set())` with clear log message
+  4. All 197 tests pass with no regressions
+**Plans**: 1 plan
+
+Plans:
+- [x] 07-01-PLAN.md — Core API change (exclude_ids + tuple return), caller wiring, test updates, crawler enhancement
 
 ### Phase 1: Security Hardening
 **Goal**: All active security issues are eliminated — no plaintext API keys in committed files, env loading consolidated into a single secure module, and secrets in git history documented for remediation.
@@ -129,3 +146,5 @@ Plans:
 | 4. Monolith Splitting | 4/4 | Complete | 2026-06-30 |
 | 5. Dead Code Removal & Final Polish | 3/3 | Complete | 2026-07-01 |
 | 6. Prompt Leakage & Truncation Fix | 1/1 | Complete | 2026-07-03 |
+| 7. Crawl Failure Exclusion | 1/1 | Complete | 2026-07-03 |
+| **Total** | **22/22** | **Complete** | |
