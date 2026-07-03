@@ -5,6 +5,42 @@
 
 ---
 
+## 2026-07-03 — Phase 6: Prompt Leakage & Truncation Fix
+
+### 문제 진단
+- **문제 A**: `save_pitch_to_history()`가 hook/narrative를 `[:30]`/`[:50]`으로 강제 트렁케이션 → 의미 손실
+- **문제 B**: LLM이 출력에 프롬프트 라벨(`상식(A):`, `실제(B):`)을 누출 → `posted.json` 오염 (72건)
+
+### 변경 파일
+#### 수정
+- `pipeline/threads/pitch.py` — `clean_leaked_prompt()` + `LEAKED_PROMPT_PATTERNS` 리스트 추가; `save_pitch_to_history()`에 방어막 적용; 트렁케이션 `[:15]`→`[:80]`, `[:30]`→`[:120]` 완화; fallback 스키마 `[:18]`→`[:30]`, `[:100]`→`[:200]`
+- `scripts/threads/v3/model_router.py` — `response_format` 파라미터 + `**kwargs` 전달
+- `tests/test_pitch.py` — 97줄 신규 테스트 (JSON 모드, clean_leaked_prompt, 트렁케이션 완화)
+
+#### 변경
+- `pipeline/posted.json` — 오염 entry 18개 정리
+- `scripts/threads/posted.json` — 오염 entry 54개 정리
+
+#### 미추적 (파이프라인 산출물)
+- 블로그 포스트 5개 (`src/content/blog/2026-07-03-*.md`)
+- 썸네일 5개 (`public/images/2026-07-03-*/`)
+
+### 의사결정
+- `response_format={'type': 'json_object'}` 채택 — 프롬프트 누출 근본 차단
+- 정상 경로(JSON 모드)에서는 hook/narrative 트렁케이션 0%
+- `_parse_pitches_fallback()` regex 보존 (이전 데이터 호환성)
+- `clean_leaked_prompt()`는 `LEAKED_PROMPT_PATTERNS` 리스트로 확장 가능
+
+### 검증
+- 192/193 테스트 통과 (1 pre-existing `test_cascade_2pass` freshness 실패)
+- `posted.json` label leak 0건 확인
+
+### 미해결
+- `test_cascade_2pass.py` — fixture 날짜 동일로 freshness=0 (pre-existing)
+- ROADMAP.md Phase 2/5 상태 업데이트 필요
+
+---
+
 ## 2026-07-02 — Tools Collector 버그 수정 + 문서화
 
 ### 버그 수정

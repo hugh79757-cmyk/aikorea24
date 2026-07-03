@@ -15,7 +15,8 @@ if _scripts not in sys.path:
 from pipeline.threads.pitch import (
     parse_pitches_from_text, is_duplicate_pitch,
     load_pitch_history, fill_article_ids,
-    clean_leaked_prompt,
+    clean_leaked_prompt, validate_korean_output,
+    normalize_output, detect_prompt_leak,
 )
 
 
@@ -145,3 +146,97 @@ class TestLoadPitchHistory:
         monkeypatch.setattr(pitch_mod, "load_pitch_history", mock_load)
         result = pitch_mod.load_pitch_history()
         assert result == []
+
+
+class TestDetectPromptLeak:
+    @pytest.mark.unit
+    def test_clean_text_no_leak(self):
+        leaked, reason = detect_prompt_leak("Boeing의 Wisk Aero가 FAA 테스트를 축소했다.")
+        assert leaked is False
+        assert reason == "OK"
+
+    @pytest.mark.unit
+    def test_detects_system_prompt_fragment(self):
+        leaked, reason = detect_prompt_leak("스토리 파인더입니다. 인과관계를 정확히 파악하라")
+        assert leaked is True
+        assert "스토리 파인더" in reason
+
+    @pytest.mark.unit
+    def test_detects_multiple_fragments(self):
+        leaked, reason = detect_prompt_leak("당신은 스토리 파인더입니다. [핵심 원칙] 인과관계를 정확히 파악")
+        assert leaked is True
+
+    @pytest.mark.unit
+    def test_detects_output_format_label(self):
+        leaked, reason = detect_prompt_leak("[출력 형식] 응답은 유효한 JSON만")
+        assert leaked is True
+
+
+class TestValidateKoreanOutput:
+    @pytest.mark.unit
+    def test_korean_hook_with_proper_nouns_passes(self):
+        ok, reason = validate_korean_output(
+            "Boeing의 Wisk Aero가 FAA 테스트 축소 의혹으로 내부고발 소송에 직면했다.",
+            "한국어 설명입니다."
+        )
+        assert ok is True
+
+    @pytest.mark.unit
+    def test_english_hook_fails(self):
+        ok, reason = validate_korean_output(
+            "Boeing's Wisk Aero faces whistleblower lawsuit",
+            "over alleged cuts to FAA testing"
+        )
+        assert ok is False
+        assert "한글이 전혀 없음" in reason
+
+    @pytest.mark.unit
+    def test_prompt_leak_detected(self):
+        ok, reason = validate_korean_output(
+            "스토리 파인더입니다. 핵심 원칙을 따라",
+            "인과관계를 정확히 파악하라"
+        )
+        assert ok is False
+        assert "프롬프트 프래그먼트" in reason
+
+    @pytest.mark.unit
+    def test_mixed_korean_english_passes(self):
+        ok, reason = validate_korean_output(
+            "OpenAI의 ChatGPT가 GPT-5 출시와 함께 Enterprise 시장 공략",
+            "AI 기반 B2B SaaS 스타트업이 Series A 투자 유치에 성공했다."
+        )
+        assert ok is True
+
+    @pytest.mark.unit
+    def test_empty_hook_fails(self):
+        ok, reason = validate_korean_output("", "내러티브")
+        assert ok is False
+        assert "비어있음" in reason
+
+
+class TestNormalizeOutput:
+    @pytest.mark.unit
+    def test_truncates_long_hook(self):
+        hook = "A" * 150
+        narrative = "B" * 250
+        result = normalize_output(hook, narrative)
+        assert len(result["hook"]) == 100
+        assert len(result["narrative"]) == 200
+
+    @pytest.mark.unit
+    def test_applies_clean_leaked_prompt(self):
+        result = normalize_output("상식(A): 테스트 hook", "실제(B): 테스트 narrative")
+        assert "상식(A):" not in result["hook"]
+        assert "실제(B):" not in result["narrative"]
+
+    @pytest.mark.unit
+    def test_sets_lang_valid_for_korean(self):
+        result = normalize_output("한국어 hook입니다.", "한국어 narrative입니다.")
+        assert result["lang_valid"] is True
+        assert result["lang_reason"] == "OK"
+
+    @pytest.mark.unit
+    def test_sets_lang_valid_false_for_english(self):
+        result = normalize_output("English hook only", "English narrative")
+        assert result["lang_valid"] is False
+        assert result["lang_reason"] != "OK"

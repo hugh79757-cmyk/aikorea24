@@ -386,6 +386,19 @@
       "article_descriptions": [],
       "entities": [],
       "date": "2026-07-03"
+    },
+    {
+      "hook": "Boeing's Wisk Aero faces whistleblower lawsuit over alleged cuts to FAA software testing to meet 2025 deadline.",
+      "narrative": "A former software manager at Boeing's autonomous air taxi subsidiary filed a lawsuit claiming she was fired after reporting that executives pressured engineers to reduce FAA-required software testing to hit a 2025 test flight deadline. The allegations come as Wisk prepares for FAA certification of its fully autonomous aircraft.",
+      "article_ids": [
+        "37766"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-03"
     }
   ],
   "posted_article_meta": {
@@ -525,6 +538,11 @@
       "description": ""
     },
     "37770": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37766": {
       "title": "",
       "original_title": "",
       "description": ""

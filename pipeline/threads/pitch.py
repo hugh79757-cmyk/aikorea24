@@ -31,6 +31,28 @@ LEAKED_PROMPT_PATTERNS = [
     r'\n+\s*(vs|VS|versus)\s*\n+',
 ]
 
+_SYSTEM_PROMPT_FRAGMENTS = [
+    '스토리 파인더',
+    '핵심 원칙',
+    '인과관계를 정확히 파악',
+    '찾는 방법',
+    '소스 신뢰도',
+    'article_ids 작성 규칙',
+    '[출력 형식]',
+    '[1차] 태그',
+]
+
+
+def detect_prompt_leak(text: str) -> tuple[bool, str]:
+    short = text[:300].lower()
+    matches = []
+    for frag in _SYSTEM_PROMPT_FRAGMENTS:
+        if frag.lower() in short:
+            matches.append(frag)
+    if matches:
+        return True, f"프롬프트 프래그먼트 탐지: {matches}"
+    return False, "OK"
+
 
 def clean_leaked_prompt(text):
     for pattern in LEAKED_PROMPT_PATTERNS:
@@ -38,8 +60,61 @@ def clean_leaked_prompt(text):
     return text.strip()
 
 
-SYSTEM_PROMPT = """당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
+_KOREAN_PATTERN = re.compile(r'[가-힣]')
+_LATIN_SENTENCE_PATTERN = re.compile(r'^[A-Z][a-z\s\']+(ed|s|es|ing|ment|tion|al|ive)\b')
+_MIN_KOREAN_RATIO = 0.15
 
+
+def validate_korean_output(hook: str, narrative: str) -> tuple[bool, str]:
+    if not hook:
+        return False, "hook이 비어있음"
+    leaked, reason = detect_prompt_leak(hook + ' ' + narrative)
+    if leaked:
+        return False, reason
+    combined = hook + ' ' + narrative
+    cleaned = combined.replace("'", "").replace('"', '').replace('’', '')
+    korean_chars = len(_KOREAN_PATTERN.findall(cleaned))
+    total_chars = len(cleaned.strip())
+    no_korean = korean_chars == 0
+    low_ratio = total_chars > 10 and korean_chars < total_chars * _MIN_KOREAN_RATIO
+    latin_pattern = _LATIN_SENTENCE_PATTERN.search(hook)
+    if no_korean and total_chars >= 5:
+        return False, "한글이 전혀 없음 (완전 영문 문장)"
+    if low_ratio and (no_korean or latin_pattern):
+        return False, f"한글 비율 부족: {korean_chars}/{total_chars}, 영문 패턴 감지"
+    if no_korean and latin_pattern:
+        return False, "영문 문장 패턴 감지됨"
+    return True, "OK"
+
+
+def normalize_output(hook: str, narrative: str) -> dict:
+    cleaned_hook = clean_leaked_prompt(hook)[:100]
+    cleaned_narrative = clean_leaked_prompt(narrative)[:200]
+    valid, reason = validate_korean_output(cleaned_hook, cleaned_narrative)
+    return {
+        "hook": cleaned_hook,
+        "narrative": cleaned_narrative,
+        "lang_valid": valid,
+        "lang_reason": reason,
+    }
+
+
+_LANG_SECTION = """
+[언어 규칙 - 최우선]
+- 모든 문장은 반드시 한국어로 작성한다.
+- 고유명사(기업명, 인물명, 제품명, 기술명)만 영어 원문을 유지한다.
+- 고유명사가 문장 맨 앞에 와도 해당 문장은 한국어로 시작해야 한다.
+- 예시:
+  ✓ "Boeing의 Wisk Aero가 FAA 테스트 축소 의혹으로 내부고발 소송에 직면했다."
+  ✗ "Boeing's Wisk Aero faces whistleblower lawsuit..."
+"""
+
+_NOTE_ON_LABELS = """
+- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것. 자연스러운 문장만 출력.
+"""
+
+SYSTEM_PROMPT = f"""당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
+{_LANG_SECTION}
 [핵심 원칙]
 1. 기사의 인과관계를 정확히 파악하라
 2. "A가 B를 하면 C가 된다"는 내용을 반드시 그대로 서술
@@ -59,31 +134,29 @@ SYSTEM_PROMPT = """당신은 AI 뉴스 기사에서 독자가 몰랐던 사실�
 - 한 기사의 내용만으로 hook/narrative/twist를 구성하라.
 
 [hook]
-hook: 이야기의 핵심 긴장을 한 줄로. 날짜/인물/숫자로 시작해도 됨. 길이 제한 없음.
-- 고유명사(기업명, 인물명, 제품명)는 영어 원문을 사용하라. 예: 엔비디아(X) → Nvidia(O), 오픈AI(X) → OpenAI(O)
+hook: 이야기의 핵심 긴장을 한 줄로. 반드시 한국어로 작성. 날짜/인물/숫자로 시작해도 됨.
 
 [금지]
 - 너무 많이 논의된 상식("AI가 일자리를 뺏는다", "AI가 미래다", "기술 발전이 중요하다")은 피할 것.
 - 독자가 '어? 나는 몰랐는데?' 하는 상식과 실제의 충돌을 찾을 것.
 - 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
-- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것. 자연스러운 문장만 출력.
-
+{_NOTE_ON_LABELS}
 [소스 신뢰도]
 - [1차] 태그 기사: 원문. 숫자/주어/방향을 그대로 사용할 것.
 - [요약] 태그 기사: 2차 요약본. 주어-동사 방향이 뒤집혔을 수 있음.
   [요약] 기사만으로 twist 방향을 결정하지 말 것.
 
 [출력 형식]
-응답은 반드시 유효한 JSON 배열만 출력합니다. 설명이나 라벨(예: '상식(A):', '실제(B):')을 절대 포함하지 마세요.
+응답은 반드시 유효한 JSON 배열만 출력합니다. 설명이나 라벨을 절대 포함하지 마세요.
 ```json
 [
-  {
-    "hook": "사용자의 호기심을 자극하는 짧은 한 줄",
-    "narrative": "반전이나 통찰을 담은 2-3문장의 내러티브",
+  {{
+    "hook": "한국어로 작성된 호기심을 자극하는 한 줄 (고유명사만 영어)",
+    "narrative": "한국어로 작성된 2-3문장 내러티브 (고유명사만 영어)",
     "twist": "예상 밖의 결과",
     "emotion": "불안/놀람/분노/희망 중 하나",
     "article_ids": [1]
-  }
+  }}
 ]
 ```
 
@@ -93,8 +166,7 @@ hook: 이야기의 핵심 긴장을 한 줄로. 날짜/인물/숫자로 시작�
 - 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
 - 기사에 없는 내용 추가 금지
 - hook에서 주어와 객체를 명확히 구분하여 혼동 방지
-- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것. 자연스러운 문장만 출력.
-
+{_NOTE_ON_LABELS}
 ## article_ids 작성 규칙
 - 반드시 실제로 읽은 기사의 ID만 article_ids에 포함할 것
 - 해당 기사의 내용이 hook/narrative/twist에 직접 인용된 경우만 포함
@@ -147,7 +219,15 @@ def parse_pitches_from_text(text, articles_text=None):
             pitches = data.get('pitches', [data])
         else:
             pitches = []
-        result = [p for p in pitches if 'hook' in p and 'narrative' in p]
+        result = []
+        for p in pitches:
+            if 'hook' in p and 'narrative' in p:
+                norm = normalize_output(p.get('hook', ''), p.get('narrative', ''))
+                p['hook'] = norm['hook']
+                p['narrative'] = norm['narrative']
+                p['_lang_valid'] = norm['lang_valid']
+                p['_lang_reason'] = norm['lang_reason']
+                result.append(p)
         if result:
             return result
     except (json.JSONDecodeError, Exception):
@@ -163,30 +243,41 @@ def _parse_pitches_fallback(text, articles_text=None):
             p = json.loads(m.group(0))
 
             if 'hook' in p and 'narrative' in p and 'article_ids' in p:
+                norm = normalize_output(p.get('hook', ''), p.get('narrative', ''))
+                p['hook'] = norm['hook']
+                p['narrative'] = norm['narrative']
+                p['_lang_valid'] = norm['lang_valid']
+                p['_lang_reason'] = norm['lang_reason']
                 pitches.append(p)
                 continue
 
             if 'title' in p and 'summary' in p:
+                norm = normalize_output(p.get('title', '') or '', p.get('summary', '') or '')
                 pitches.append({
-                    'hook': (p.get('title', '') or '')[:30],
-                    'narrative': p.get('summary', '')[:200],
+                    'hook': norm['hook'],
+                    'narrative': norm['narrative'],
                     'twist': '',
                     'emotion': '놀라움',
                     'article_ids': [],
                     'sources': [],
                     'comparison_unit': '',
+                    '_lang_valid': norm['lang_valid'],
+                    '_lang_reason': norm['lang_reason'],
                 })
                 continue
 
             if 'pitch_id' in p and 'title' in p:
+                norm = normalize_output(p.get('title', '') or '', p.get('summary', '') or '')
                 pitches.append({
-                    'hook': (p.get('title', '') or '')[:30],
-                    'narrative': p.get('summary', '')[:200] if 'summary' in p else '',
+                    'hook': norm['hook'],
+                    'narrative': norm['narrative'],
                     'twist': '',
                     'emotion': '놀라움',
                     'article_ids': [],
                     'sources': [],
                     'comparison_unit': '',
+                    '_lang_valid': norm['lang_valid'],
+                    '_lang_reason': norm['lang_reason'],
                 })
                 continue
         except Exception:
@@ -285,6 +376,16 @@ def is_duplicate_pitch(pitch, history, posted=None):
 def save_pitch_to_history(pitch):
     """선택된 피치를 posted.json 피치 이력 + posted_article_meta에 저장"""
     path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'posted.json')
+
+    hook_raw = pitch.get('hook', '')
+    narrative_raw = pitch.get('narrative', '')
+    norm = normalize_output(hook_raw, narrative_raw)
+
+    if not norm['lang_valid']:
+        _log(f'  ⚠️ [발행 게이트] 한국어 검증 실패: {norm["lang_reason"]}')
+        _log(f'     hook: "{norm["hook"][:60]}"')
+        _log(f'     → 그래도 저장 진행 (추후 검토용)')
+
     try:
         data = {}
         if os.path.exists(path):
@@ -301,15 +402,17 @@ def save_pitch_to_history(pitch):
                 entities.add(w)
 
         data['pitch_history'].append({
-            'hook': clean_leaked_prompt(pitch.get('hook', '')),
-            'narrative': clean_leaked_prompt(pitch.get('narrative', '')),
+            'hook': norm['hook'],
+            'narrative': norm['narrative'],
             'article_ids': pitch.get('article_ids', []),
             'article_urls': pitch.get('article_urls', []),
             'article_titles': pitch.get('article_titles', []),
             'article_original_titles': pitch.get('article_original_titles', []),
             'article_descriptions': pitch.get('article_descriptions', []),
             'entities': list(entities),
-            'date': datetime.now().strftime('%Y-%m-%d')
+            'date': datetime.now().strftime('%Y-%m-%d'),
+            '_lang_valid': norm['lang_valid'],
+            '_lang_reason': norm['lang_reason'],
         })
 
         aids = pitch.get('article_ids', [])
@@ -392,8 +495,15 @@ def get_pitches(articles, max_articles=600, batch_size=200):
             pitches = parse_pitches_from_text(resp, articles_text)
             _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
 
+            if pitches:
+                korean_ok = sum(1 for p in pitches if p.get('_lang_valid', True))
+                _log(f'  한국어 검증: {korean_ok}/{len(pitches)} 통과')
+                if korean_ok == 0:
+                    _log(f'  ⚠️ 모든 피치가 한국어 검증 실패 → 일반 텍스트 fallback')
+                    pitches = []
+
             if not pitches:
-                _log(f'  ⚠️ JSON 파싱 실패 → fallback')
+                _log(f'  ⚠️ JSON 파싱 실패 또는 한국어 불량 → fallback')
                 from v3.model_router import chat_completion as _cc
                 resp2 = _cc(
                     system_prompt=SYSTEM_PROMPT,
@@ -402,7 +512,6 @@ def get_pitches(articles, max_articles=600, batch_size=200):
 {all_articles_joined}"""}],
                     temperature=0.9,
                     max_tokens=3000,
-                    response_format={'type': 'json_object'},
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
                 _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -468,6 +577,12 @@ def get_pitches(articles, max_articles=600, batch_size=200):
     _log(f'  ✅ TOP 1: "{top.get("hook", "")}" ({top.get("emotion", "")})')
     _log(f'     기사: {top.get("article_ids", [])}')
 
+    lang_valid = top.get('_lang_valid', True)
+    lang_reason = top.get('_lang_reason', '')
+    if not lang_valid:
+        _log(f'  ⚠️ [발행 게이트] 한국어 검증 실패: {lang_reason}')
+        _log(f'     -> 발행 차단되지 않음 (검증 로그만 기록)')
+
     article_id = top.get('article_ids', [''])[0] if top.get('article_ids') else ''
     article_id_str = str(article_id).lstrip('#').strip()
     article_url = id_to_link.get(article_id_str, '')
@@ -509,23 +624,22 @@ def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, o
 
     system = f"""당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
 아래 제공된 기사 원문(크롤링된 전체 본문)만을 근거로 피치를 작성합니다.
-
+{_LANG_SECTION}
 [핵심 원칙]
 1. 반드시 아래 기사 원문에 나오는 내용만 사용할 것
 2. 기사에 없는 인물, 제품명, 사건을 절대 만들어내지 말 것
 3. 인과관계를 뒤집거나 반대로 해석하지 말 것
 4. hook은 기사의 핵심 긴장을 한 줄로 담되, 사실에 충실할 것
-5. 고유명사는 영어 원문 사용 (Nvidia, OpenAI, Anthropic 등)
 
 [출력 형식]
-응답은 반드시 유효한 JSON 객체만 출력합니다. 설명이나 라벨(예: '상식(A):', '실제(B):')을 절대 포함하지 마세요.
-{{"hook": "사용자의 호기심을 자극하는 짧은 한 줄", "narrative": "반전이나 통찰을 담은 2-3문장의 내러티브", "twist": "예상 밖의 결과", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [{article_id}]}}
+응답은 반드시 유효한 JSON 객체만 출력합니다. 설명이나 라벨을 절대 포함하지 마세요.
+{{"hook": "한국어로 작성된 호기심을 자극하는 한 줄 (고유명사만 영어)", "narrative": "한국어로 작성된 2-3문장 내러티브 (고유명사만 영어)", "twist": "예상 밖의 결과", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [{article_id}]}}
 
 주의사항:
 - 반드시 1개 기사만 사용. 2개 이상 절대 금지.
 - 기사 원문에 없는 내용 추가 금지
 - hook에서 주어와 객체를 명확히 구분
-- 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것"""
+{_NOTE_ON_LABELS}"""
 
     ref_hook = original_pitch.get('hook', '')
     ref_narrative = original_pitch.get('narrative', '')
@@ -554,6 +668,18 @@ narrative: {ref_narrative}
         if not resp:
             return None
         pitches = parse_pitches_from_text(resp)
+        if pitches:
+            lang_ok = pitches[0].get('_lang_valid', True)
+            if not lang_ok:
+                _log(f'  ⚠️ 재생성 피치 한국어 불량 → 일반 텍스트 재시도')
+                resp = chat_completion(
+                    system_prompt=system,
+                    messages=[{'role': 'user', 'content': user_msg}],
+                    temperature=0.7,
+                    max_tokens=1500,
+                )
+                if resp:
+                    pitches = parse_pitches_from_text(resp)
         if pitches:
             p = pitches[0]
             p['article_ids'] = [article_id]

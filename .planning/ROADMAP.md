@@ -7,10 +7,10 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 ## Phases
 
 - [x] **Phase 1: Security Hardening** — Eliminate active security issues (plaintext API keys, fragmented env loading) (completed 2026-06-30)
-- [ ] **Phase 2: Infrastructure & Portability** — Create shared infra modules, wire old files, remove hardcoded paths
+- [x] **Phase 2: Infrastructure & Portability** — Create shared infra modules, wire old files, remove hardcoded paths (completed 2026-06-30)
 - [x] **Phase 3: Landing Zone & Orchestrator** — Directory restructuring, pipeline orchestrator, Threads stabilization, portability (completed 2026-06-30)
 - [x] **Phase 4: Monolith Splitting** — Split writer_v3.py (1,013 lines) and narrative_pitcher.py (581 lines) into focused modules (completed 2026-06-30)
-- [ ] **Phase 5: Dead Code Removal & Final Polish** — Remove dead code, failure notifications, bulletin board verification
+- [x] **Phase 5: Dead Code Removal & Final Polish** — Remove dead code, failure notifications, bulletin board verification (completed 2026-07-01)
 
 ## Phase Details
 
@@ -105,18 +105,27 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — File Cleanup: remove backup files, .bak files, abandoned scripts, standalone dead utilities
-- [ ] 05-02-PLAN.md — Dead Code in Pipeline + Telegram Fix: remove dead functions, inline format selection, orchestrator Telegram integration
-- [ ] 05-03-PLAN.md — Bulletin Board Verification + Final Sweep: D1 checks, API verification, full test suite, pipeline dry-run, plist verification
+- [x] 05-01-PLAN.md — File Cleanup: remove backup files, .bak files, abandoned scripts, standalone dead utilities
+- [x] 05-02-PLAN.md — Dead Code in Pipeline + Telegram Fix: remove dead functions, inline format selection, orchestrator Telegram integration
+- [x] 05-03-PLAN.md — Bulletin Board Verification + Final Sweep: D1 checks, API verification, full test suite, pipeline dry-run, plist verification
+
+### Phase 6: Prompt Leakage & Truncation Fix (ad-hoc)
+**Goal**: Eliminate prompt label leakage into `posted.json` history and remove aggressive title truncation that lost semantic context.
+**Mode**: ad-hoc
+**Depends on**: Phase 5
+**Plans**: 1 plan
+Plans:
+- [x] PLAN.md — clean_leaked_prompt(), JSON structured output, truncation relaxation, posted.json cleanup
 
 ## Progress
 
-**Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+**Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
-| 2. Infrastructure & Portability | 0/2 | Not started | - |
+| 2. Infrastructure & Portability | 2/2 | Complete   | 2026-06-30 |
 | 3. Landing Zone & Orchestrator | 5/5 | Complete   | 2026-06-30 |
 | 4. Monolith Splitting | 4/4 | Complete | 2026-06-30 |
-| 5. Dead Code Removal & Final Polish | 0/3 | Not started | - |
+| 5. Dead Code Removal & Final Polish | 3/3 | Complete | 2026-07-01 |
+| 6. Prompt Leakage & Truncation Fix | 1/1 | Complete | 2026-07-03 |
