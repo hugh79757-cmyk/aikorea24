@@ -386,3 +386,63 @@ launchd 환경은 `~/.zshrc`를 읽지 않으므로 `sys.path`가 필요하며, 
 | `save_tool_md()` | 1189 | frontmatter + body 조합해서 MD 저장 |
 | `git_commit()` | 1236 | git add → commit → push |
 | `process_batch()` | 1301 | 배치 처리 + ThreadPoolExecutor |
+
+---
+
+## 11. 검증 갭 분석 (Phase 8 대상)
+
+> **2026-07-04 발견**: 프롬프트 노출/외국어 검증이 피치에는 적용되지만, 최종 카드에는 미적용.
+> 동일한 오류 반복 방지를 위해 문서화.
+
+### 11.1 현재 검증 체인
+
+```
+피치 생성 (narrative_pitcher)
+  ├→ detect_prompt_leak()      ✅ (시스템 프래그먼트 8개만 탐지)
+  ├→ clean_leaked_prompt()     ✅ (LEAKED_PROMPT_PATTERNS 3패턴 제거)
+  └→ validate_korean_output()  ✅ (한글 비율 + 영문 패턴)
+
+쓰레드 작성 (writer)
+  ├→ humanize_cards()          ✅ (AI 말투 교정)
+  ├→ _strip_instruction_leak() ✅ (humanize 출력에만)
+  ├→ fix_cards()               ✅ (영어 누출, 조사 간격)
+  ├→ validate_cards()          ⚠️ (카드 수 only)
+  ├→ validate_year()           ⚠️ (연도 only)
+  ├→ validate_keywords()       ⚠️ (키워드 only)
+  ├→ validate_no_foreign_language() ✅ (2026-07-04 추가)
+  └→ ❌ validate_prompt_leakage()   없음
+```
+
+### 11.2 발견된 갭
+
+| # | 갭 | 영향 | 심각도 |
+|---|-----|------|--------|
+| G1 | 최종 카드에 프롬프트 노출 검증 없음 | `상식(A):`, `실제(B):` 라벨 발행 | 높음 |
+| G2 | `detect_prompt_leak()`가 시스템 프래그먼트만 검사 | `LEAKED_PROMPT_PATTERNS` 무시 | 중간 |
+| G3 | `response_format={'type': 'json_object'}` 미적용 | 쓰레드 작성 시 프롬프트 누출 가능 | 높음 |
+| G4 | `_strip_instruction_leak()`는 humanize에만 적용 | 원본 카드 프롬프트 노출 무시 | 중간 |
+
+### 11.3 반복 오류 패턴
+
+```
+Phase 6: 피치에만 검증 적용 → 최종 카드 무시 → 재발
+Phase 8: 전체 검증 체인 재설계 필요
+```
+
+**교훈**: 검증 로직 추가 시, 해당 단계의 "최종 출력"에만 적용하지 말고,
+다음 단계의 "입력"에도 적용되는지 스코프를 확인할 것.
+
+### 11.4 3중 방어 체계 설계 원칙
+
+> **"지금은 다됐다"는 결론을 신뢰하지 않는다 — 반드시 터진다.**
+
+| 방어 | 위치 | 검증 대상 | 실패 시 |
+|------|------|----------|--------|
+| **1차** | 피치 생성 | `validate_korean_output()` + `detect_prompt_leak()` | 피치 폐기, 재생성 |
+| **2차** | 쓰레드 작성 후 | `validate_final_output()` | 카드 재생성 |
+| **3차** | 발행 직전 | `validate_cards()` + `validate_final_output()` | 발행 차단 |
+
+**핵심 규칙**:
+1. 어떤 검증도 단 한 곳에서만 의존하지 않는다
+2. "해결됨"이라고 안심하지 않는다 — 반드시 회귀 테스트로 확인
+3. 검증은 "해당 단계 출력"이 아니라 "다음 단계 입력" 기준으로 설계

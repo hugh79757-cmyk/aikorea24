@@ -13,6 +13,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 5: Dead Code Removal & Final Polish** — Remove dead code, failure notifications, bulletin board verification (completed 2026-07-01)
 - [x] **Phase 6: Prompt Leakage & Truncation Fix** — Eliminate prompt label leakage, fix aggressive truncation (completed 2026-07-03)
 - [x] **Phase 7: Crawl Failure Exclusion** — Exclude crawl-failed article IDs from retry selection (completed 2026-07-03)
+- [ ] **Phase 8: Validation Gap Closure** — 3중 방어 체계: 프롬프트 노출 + 외국어 검증 통합 (in progress)
 
 ## Phase Details
 
@@ -30,6 +31,23 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 
 Plans:
 - [x] 07-01-PLAN.md — Core API change (exclude_ids + tuple return), caller wiring, test updates, crawler enhancement
+
+### Phase 8: Validation Gap Closure
+**Goal:** 최종 카드 발행 전 프롬프트 노출/외국어 검증을 **3중 방어 체계**로 방어.
+**Mode:** ad-hoc
+**Depends on**: Phase 7
+**Requirements**: REQ-08-01, REQ-08-02, REQ-08-03, REQ-08-04, REQ-08-05
+**Success Criteria** (what must be TRUE):
+  1. `validate_final_output()` 함수가 프롬프트 노출 + 외국어 + 한글 비율을 통합 검증
+  2. **1차 방어**: 피치 생성 시 (`validate_korean_output` + `detect_prompt_leak`)
+  3. **2차 방어**: 쓰레드 작성 후 (`validate_final_output` — 최종 카드 검증)
+  4. **3차 방어**: 발행 직전 (`validate_cards` + `validate_final_output` 체이닝)
+  5. `detect_prompt_leak()`가 `LEAKED_PROMPT_PATTERNS` + `_SYSTEM_PROMPT_FRAGMENTS` 모두 검사
+  6. 모든 테스트 통과, 197개 이상
+**Plans**: 1 plan
+
+Plans:
+- [ ] 08-01-PLAN.md — 3중 방어 체계 구축
 
 ### Phase 1: Security Hardening
 **Goal**: All active security issues are eliminated — no plaintext API keys in committed files, env loading consolidated into a single secure module, and secrets in git history documented for remediation.
@@ -147,4 +165,5 @@ Plans:
 | 5. Dead Code Removal & Final Polish | 3/3 | Complete | 2026-07-01 |
 | 6. Prompt Leakage & Truncation Fix | 1/1 | Complete | 2026-07-03 |
 | 7. Crawl Failure Exclusion | 1/1 | Complete | 2026-07-03 |
-| **Total** | **22/22** | **Complete** | |
+| 8. Validation Gap Closure | 0/1 | In Progress | |
+| **Total** | **22/23** | | |
