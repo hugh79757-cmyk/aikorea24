@@ -13,6 +13,7 @@ from pipeline.threads.writer import (
     _cleanup_source_attribution, _strip_instruction_leak,
     assemble_final, humanize_cards, fix_cards,
     load_style_examples, build_system_prompt_D,
+    _strip_model_explanatory, MODEL_MESSAGE_PATTERNS,
 )
 from pipeline.threads.writer import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE
 from pipeline.infra.config import project_root
@@ -244,3 +245,147 @@ class TestWriteThreadIntegration:
         cards = [f"card {i}" for i in range(4)]
         result = humanize_cards(cards)
         assert len(result) == 4
+
+
+class TestStripModelExplanatory:
+    """_strip_model_explanatory 테스트"""
+
+    @pytest.mark.unit
+    def test_message_with_separator(self):
+        """메시지 + --- + 카드 → 메시지 제거, 카드 유지"""
+        result = "수정할 글자 단위 오류가 발견되지 않았습니다.\n---\n카드1\n---\n카드2"
+        filtered = _strip_model_explanatory(result)
+        assert "수정할" not in filtered
+        assert "카드1" in filtered
+        assert "카드2" in filtered
+
+    @pytest.mark.unit
+    def test_message_without_separator(self):
+        """메시지만, 구분자 없음 → 빈 문자열"""
+        result = "원본을 그대로 반환합니다."
+        filtered = _strip_model_explanatory(result)
+        assert len(filtered) == 0
+
+    @pytest.mark.unit
+    def test_no_message(self):
+        """메시지 없음 → 변경 없음"""
+        result = "카드1\n---\n카드2"
+        filtered = _strip_model_explanatory(result)
+        assert filtered == result
+
+    @pytest.mark.unit
+    def test_multiple_messages(self):
+        """여러 메시지 → 모두 제거"""
+        result = "수정할 게 없습니다.\n---\n원본을 그대로 반환합니다.\n---\n카드1"
+        filtered = _strip_model_explanatory(result)
+        assert "수정할" not in filtered
+        assert "원본을" not in filtered
+        assert "카드1" in filtered
+
+    @pytest.mark.unit
+    def test_message_before_cards(self):
+        """메시지가 첫 번째 줄에, 카드 --- 구분"""
+        result = "AI 티가 나는 패턴이 발견되지 않았습니다.\n---\n실제 카드 내용\n---\n두 번째 카드"
+        filtered = _strip_model_explanatory(result)
+        assert "AI 티가" not in filtered
+        assert "실제 카드 내용" in filtered
+
+    @pytest.mark.unit
+    def test_correction_not_needed(self):
+        """교정 불필요 메시지"""
+        result = "교정할 부분이 없습니다.\n---\n카드내용"
+        filtered = _strip_model_explanatory(result)
+        assert "교정할" not in filtered
+        assert "카드내용" in filtered
+
+    @pytest.mark.unit
+    def test_no_changes_message(self):
+        """변경사항 없음 메시지"""
+        result = "변경 사항이 없습니다.\n---\n원본카드"
+        filtered = _strip_model_explanatory(result)
+        assert "변경" not in filtered
+        assert "원본카드" in filtered
+
+    @pytest.mark.unit
+    def test_fix_not_needed_message(self):
+        """수정 불필요 메시지"""
+        result = "수정 불필요합니다.\n---\n카드"
+        filtered = _strip_model_explanatory(result)
+        assert "수정 불필요" not in filtered
+        assert "카드" in filtered
+
+    @pytest.mark.unit
+    def test_error_not_found(self):
+        """오류 발견되지 않음 메시지"""
+        result = "오류가 발견되지 않았습니다.\n---\n카드내용"
+        filtered = _strip_model_explanatory(result)
+        assert "오류가" not in filtered
+        assert "카드내용" in filtered
+
+    @pytest.mark.unit
+    def test_legitimate_content_preserved(self):
+        """실제 콘텐츠에서 유사 패턴이 있어도 정상 동작"""
+        result = "변경 사항이 중요하다고 생각함.\n---\n카드2"
+        filtered = _strip_model_explanatory(result)
+        # '변경 사항이' 패턴은 끝부분 '없' 불일치 → 유지
+        assert "변경 사항이 중요하다고" in filtered
+
+
+class TestFixCardsModelMessage:
+    """fix_cards에서 모델 메시지 필터링 통합 테스트"""
+
+    @pytest.mark.unit
+    def test_model_message_filtered(self, monkeypatch):
+        """fix_cards 호출 시 모델 메시지가 포함된 결과에서도 필터링"""
+        import v3.model_router
+        call_count = [0]
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+            call_count[0] += 1
+            if call_count[0] == 1:
+                # humanize pass: 정상 카드
+                return "---\n".join([f"humanized card {i}" for i in range(6)])
+            # fix_cards pass: 모델 메시지 포함
+            return "수정할 게 없습니다.\n---\n" + "---\n".join([f"fixed card {i}" for i in range(6)])
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        cards = [f"card {i}" for i in range(6)]
+        result = fix_cards(cards)
+        for card in result:
+            assert "수정할 게 없습니다" not in card
+
+
+class TestHumanizeCardsModelMessage:
+    """humanize_cards에서 모델 메시지 필터링 통합 테스트"""
+
+    @pytest.mark.unit
+    def test_model_message_filtered(self, monkeypatch):
+        """humanize_cards 호출 시 모델 메시지가 포함된 결과에서도 필터링"""
+        import v3.model_router
+        model_response = "원본을 그대로 반환합니다.\n---\n" + "---\n".join([f"card {i}" for i in range(6)])
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+            return model_response
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        cards = [f"card {i}" for i in range(6)]
+        result = humanize_cards(cards)
+        for card in result:
+            assert "원본을 그대로" not in card
+
+
+class TestValidateFinalOutputModelMessage:
+    """validate_final_output에서 모델 메시지 탐지 테스트"""
+
+    @pytest.mark.unit
+    def test_detects_model_message(self):
+        """모델 메시지가 포함된 카드 탐지"""
+        from pipeline.threads.validator import validate_final_output
+        cards = ["수정할 게 없습니다.", "normal card", "another card"]
+        ok, reason = validate_final_output(cards)
+        assert not ok
+        assert "모델 메시지" in reason
+
+    @pytest.mark.unit
+    def test_normal_cards_pass(self):
+        """일반 카드는 통과"""
+        from pipeline.threads.validator import validate_final_output
+        cards = ["일반적인 카드 내용입니다. 충분한 길이의 텍스트.", "두 번째 카드 내용도 충분히 길게 작성됨."]
+        ok, reason = validate_final_output(cards)
+        assert ok
