@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-stopped_at: Phase 10-1 execution complete — card structure validation (+20 tests)
-last_updated: 2026-07-04T23:30:00.000Z
-last_activity: 2026-07-04
+status: complete
+stopped_at: Phase 11 execution complete — defense hardening (pattern consolidation + Unicode NFKC + E2E tests)
+last_updated: 2026-07-05T00:30:00.000Z
+last_activity: 2026-07-05
 progress:
-  total_phases: 11
-  completed_phases: 11
-  total_plans: 26
-  completed_plans: 26
+  total_phases: 12
+  completed_phases: 12
+  total_plans: 27
+  completed_plans: 27
   percent: 100.0
 ---
 
@@ -21,22 +21,35 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 10-1 — Card Structure Validation
+**Current focus:** Phase 11 — Defense Mechanism Hardening
 
 ## Current Position
 
-Phase: 10-1 (card-structure-validation)
-Plan: 10-1-card-structure-validation/PLAN.md
+Phase: 11 (defense-hardening)
+Plan: 11-defense-hardening/PLAN.md
 Status: Complete
-Last activity: 2026-07-04
+Last activity: 2026-07-05
 
 Progress: [████████████████] 100%
 
-### Phase 10 Details (Model Message Leakage Fix)
+### Phase 11 Details (Defense Mechanism Hardening)
 - **Problem**: AI models (MiMo, GPT-4o-mini, DeepSeek) occasionally return explanatory messages that get included as content cards in published Threads posts
 - **Fix**: Added `_strip_model_explanatory()` utility function to filter model messages before card splitting; applied to `fix_cards()` and `humanize_cards()`; added detection to `validate_final_output()`
 - **Key changes**: `writer.py` — `MODEL_MESSAGE_PATTERNS` list + `_strip_model_explanatory()` function + filters in `fix_cards()` and `humanize_cards()`; `validator.py` — model message detection in `validate_final_output()`
 - **Verification**: All 241 tests pass (227 existing + 14 new), 1 pre-existing failure unchanged
+
+### Phase 11 Details (Defense Mechanism Hardening)
+- **Goal**: Harden defense against prompt injection and foreign characters — improve maintainability, consistency, comprehensiveness
+- **Key changes**: 
+  - Pattern consolidation: `MODEL_MESSAGE_PATTERNS` → single source in validator (removed from writer)
+  - `validate_final_output()` now uses `ALL_MESSAGE_PATTERNS` (26 patterns, up from 8)
+  - Korean ratio threshold aligned to ≥30% across all validators (was 10% in final_output)
+  - Unicode NFKC normalization added before foreign language detection
+  - Foreign language patterns consolidated to validator.py (removed from pitch.py)
+  - LLM system prompt strengthened — explicit foreign language prohibition
+  - New E2E tests: `tests/test_write_thread_validation.py` (6 tests)
+  - Dead imports removed, link card .strip() check fixed
+- **Verification**: All 270 tests pass (262 existing + 8 new), 0 failures — pre-existing freshness test fixed
 
 ## Performance Metrics
 
@@ -70,6 +83,8 @@ Progress: [████████████████] 100%
 | Phase 04-monolith-splitting 04-03 | 5min | 3 tasks | 3 files |
 | Phase 07-crawl-failure-exclusion 07-01 | 12min | 3 tasks | 6 files |
 
+| Phase 11-defense-hardening 11-01 | 15min | 11 tasks | 10 files |
+
 ## Accumulated Context
 
 ### Decisions
@@ -77,28 +92,18 @@ Progress: [████████████████] 100%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [Project Init]: Security-first prioritization — fix plist API key exposure before any refactoring
-- [Project Init]: Strangler Fig migration strategy — not greenfield rewrite
-- [Project Init]: Zero new external dependencies — Python 3.14 stdlib suffices for all infra modules
-- [Project Init]: No orchestration framework — simple `PipelineStep` protocol + `PipelineOrchestrator` class (50 lines)
-- [Project Init]: Coarse granularity (5 phases), YOLO mode, Vertical MVP structure
-- [Phase 1]: BFG cleanup for git history + key rotation
-- [Phase 1]: .env (priority) → ~/.env.common (fallback) — plist env vars removed
-- [Phase 1]: Logger-level comprehensive scrubbing with ScrubRegistry
-- [Phase 1]: Failure-only Telegram alerts with step name + error detail
-- [Phase 1]: Heartbeat monitor (30min check, 3h miss threshold)
-- [Phase ?]: BFG not executed — Java runtime unavailable; git history already clean (no real keys ever committed)
-- [Phase ?]: ScrubRegistry uses [REDACTED] replacement (more visible than ***)
+- [Phase 11]: Unicode NFKC normalization for foreign language detection upstream of regex
+- [Phase 11]: Single source of truth for all patterns (MODEL_MESSAGE_PATTERNS, ADDITIONAL_MESSAGE_PATTERNS, CHINESE_PATTERN, JAPANESE_PATTERN) — validator.py
+- [Phase 11]: Korean ratio threshold 30% uniform across all 3 validation functions
+- [Phase 11]: E2E validation chain tests (test_write_thread_validation.py) cover LLM response → validation → retry flow
 
 ### Pending Todos
 
-None yet.
+None.
 
 ### Blockers/Concerns
 
-- **BFG cleanup + key rotation**: SEC-04 — decided to use BFG then rotate keys. Execute at start of Phase 1.
-- ~~**Telegram alerts not firing**: OBS-06 — existing Telegram infra works but `run_pipeline_with_notify.py` wraps the wrong entry point. Fix: make orchestrator fire failure-only alerts.~~ **RESOLVED in Phase 5** — `PipelineOrchestrator._send_telegram_failure()` added, `run_pipeline_with_notify.py` removed.
-- **Parallel-run safety**: Pipeline runs every 2 hours via launchd with no staging environment. Every phase must keep the existing pipeline running during transition.
+None. All phases complete. Pipeline running stable with launchd scheduler.
 
 ## Deferred Items
 
@@ -108,7 +113,7 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-07-03T16:00:00.000Z
-Stopped at: Phase 7 completed — crawl failure exclusion (exclude_ids + tuple return)
+Last session: 2026-07-05T00:30:00.000Z
+Stopped at: Phase 11 complete — defense hardening (11 tasks, 270 tests passing)
 Resume file: None
-Next: Project milestone v1.0 complete with all 7 phases. Consider monitoring dashboard, reader analytics, or operational maintenance.
+Next: Pipeline milestone v1.0 complete. All 12 phases done. Options: monitoring dashboard, reader analytics, operational monitoring, or new feature roadmap.

@@ -691,3 +691,79 @@ remote:     - Push cann
 
 [배포] Cloudflare Pages 배포 중...
   배포 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 6개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  TopAI.tools: 7개 수집
+  총 14개 (중복 제거 후)
+수집 완료: 14개
+기존 툴: 134개 (슬러그), 134개 (이름)
+  중복 스킵: Banger Mail
+  중복 스킵: Claude Sonnet 5
+  중복 스킵: Mark by Airtop
+  중복 스킵: Adam CAD Copilot
+  중복 스킵: Gemini Omni Flash
+  중복 스킵: MailAdept by mailwarm
+신규 툴: 8개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (8건) ---
+  크롤링 성공: https://topai.tools/t/piccreator-ai... (설명 151자)
+  크롤링 성공: https://topai.tools/t/architecturediagramai-com... (설명 152자)
+  크롤링 성공: https://huggingface.co/papers... (설명 38자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/agenticsts-a-bounded-memory-testbed-for-long-hori.md
+  ✅ AgenticSTS: A Bounded-Memory Testbed for Long-Hori → agenticsts-a-bounded-memory-testbed-for-long-hori.md
+  크롤링 성공: https://topai.tools/t/aidesignhouse-io... (설명 152자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/piccreator-ai.md
+  ✅ PicCreator AI → piccreator-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/archdiagramai.md
+  ✅ ArchDiagramAI → archdiagramai.md
+  크롤링 성공: https://topai.tools/t/ziptie-ai... (설명 150자)
+  크롤링 성공: https://topai.tools/t/floatboat-ai... (설명 147자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/ziptie-ai.md
+  ✅ ZipTie AI → ziptie-ai.md
+  크롤링 성공: https://topai.tools/t/musicaura-ai... (설명 142자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/floatboat-ai.md
+  ✅ FloatBoat AI → floatboat-ai.md
+  크롤링 성공: https://topai.tools/t/producerai-art... (설명 152자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/aidesignhouse.md
+  ✅ AIDesignHouse → aidesignhouse.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/producerai-art.md
+  ✅ Producerai.art → producerai-art.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/musicaura-ai.md
+  ✅ Musicaura AI → musicaura-ai.md
+
+==================================================
+처리 완료: 8/14개 생성 (42.1초)
+  git commit: [main aba2759] feat: AI 툴 8개 추가 (2026-07-04)
+ 40 files changed, 2820 insertions(+), 222 deletions(-)
+ create mode 100644 .planning/triage/20260703--tools-collector-d1-sync.md
+ create mode 100644 "publ
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 실패 (시도 1/2): [InvalidContentEntryDataError] blog → 2026-07-03-트럼프-비판자들의-정신병-증후군-치료-의사로-등장하는-ai-영상을-게시 data does not match collection schema.
+
+  title**: **title: Required
+  description**: **description: Required
+  date**: **date: Invalid date
+  category**: **category: Required
+
+  Hint:
+    See https://docs.astro
+  5초 후 재시도...
+  배포 실패 (시도 2/2): [InvalidContentEntryDataError] blog → 2026-07-03-트럼프-비판자들의-정신병-증후군-치료-의사로-등장하는-ai-영상을-게시 data does not match collection schema.
+
+  title**: **title: Required
+  description**: **description: Required
+  date**: **date: Invalid date
+  category**: **category: Required
+
+  Hint:
+    See https://docs.astro
+
+[D1 동기화] tools 테이블 업데이트 중...
+  SQL 생성: -- ✅ 총 142개 도구 INSERT SQL 생성 완료
+  D1 tools 테이블 동기화 완료 ✅

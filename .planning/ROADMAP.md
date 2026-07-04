@@ -192,6 +192,28 @@ Plans:
 Plans:
 - [x] PLAN.md — 구조 검증 함수 2개 + 향상된 패턴 20개 + 테스트 20개
 
+### Phase 11: Defense Mechanism Hardening
+**Goal:** 방어 메커니즘 강화: 패턴 통합, threshold 일관성, Unicode 정규화, 외국어 패턴 통합, E2E 테스트.
+**Mode:** ad-hoc
+**Depends on**: Phase 10-1
+**Requirements**: REQ-01–REQ-11
+**Success Criteria** (what must be TRUE):
+  1. Pattern definitions consolidated (single source: validator.py)
+  2. `validate_final_output()` uses `ALL_MESSAGE_PATTERNS` (26 patterns)
+  3. Korean ratio ≥30% uniform across all validators
+  4. Link card check uses `.strip()`
+  5. Dead imports removed
+  6. New E2E integration tests (test_write_thread_validation.py)
+  7. All 270 tests pass (0 failures)
+  8. Unicode NFKC normalization applied
+  9. Foreign language patterns consolidated to validator.py
+  10. LLM system prompt strengthened
+  11. Documentation (TECH.md) updated
+**Plans**: 1 plan
+
+Plans:
+- [x] PLAN.md — 11 tasks: pattern consolidation, threshold alignment, NFKC normalization, foreign language pattern consolidation, prompt strengthening, E2E tests, docs
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -209,4 +231,5 @@ Plans:
 | 9. Test Coverage Expansion | 1/1 | Complete | 2026-07-04 |
 | 10. Model Message Leakage Fix | 1/1 | Complete | 2026-07-04 |
 | 10-1. Card Structure Validation | 1/1 | Complete | 2026-07-04 |
-| **Total** | **25/25** | | |
+| 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
+| **Total** | **26/26** | | |

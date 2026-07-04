@@ -1344,6 +1344,143 @@
           "date": "2026-07-04"
         }
       ]
+    },
+    {
+      "date": "2026-07-04",
+      "briefing_id": 156,
+      "articles": [
+        {
+          "id": "38289",
+          "title": ",000명 학생 연구, AI의 숨겨진 학습 비용이 드러나기까지 2년 걸리다",
+          "original_title": "",
+          "description": "26,000명 이상의 중국 학생을 대상으로 한 연구 결과, AI 사용자가 숙제를 더 빨리 끝내고 점수도 더 높지만, 시험에서는 최대 24% 떨어지는 성과를 보였습니다. 대학 입시 결과에 미치는 전반적 영향은 약 2년이 걸리며, 단기 연구들은 손해를 체계적으로 과소평가한다는 것을 의미합니다.",
+          "link": "https://the-decoder.com/a-26000-student-study-shows-ais-hidden-learning-cost-takes-two-full-years-to-surface/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-04"
+        },
+        {
+          "id": "38356",
+          "title": "AI가 언어를 어떻게 변화시키고 있는가",
+          "original_title": "",
+          "description": "LLM 사용에 대한 비난이 문학 및 미디어 세계를 흔드는 가운데, 언어학자들은 인간 언어와 기계 언어를 구분하는 주요 요소를 설명하고 있다. 제니퍼 이건과 제넷 윈터슨을 포함한 소설가들은 ChatGPT 시대의 픽션의 미래에 대해 반성한다.",
+          "link": "https://www.theguardian.com/books/ng-interactive/2026/jul/04/future-of-fiction-next-great-novel-ai-language-chat-gpt",
+          "entities": [
+            "ChatGPT",
+            "LLM"
+          ],
+          "date": "2026-07-04"
+        },
+        {
+          "id": "38377",
+          "title": "독점: 최고 FTSE 임원 채용 전문 기업이 AI 플랫폼 출시 후 파산",
+          "original_title": "",
+          "description": "FTSE 기업들을 위해 임원급 인재를 채용해 온 런던 소재의 부티크 리크루트 회사가 AI 플랫폼에 투자한 뒤 파산에 직면했습니다. 사바나 그룹은 스타벅스와 같은 기업의 이사 및 임원을 채용해 왔습니다.",
+          "link": "https://www.cityam.com/exclusive-top-ftse-executive-recruiter-goes-bust-after-ai-platform-launch/",
+          "entities": [
+            "AI",
+            "FTSE"
+          ],
+          "date": "2026-07-04"
+        },
+        {
+          "id": "38191",
+          "title": "페가수스를 만든 남자는 이제 정부에 해독제를 판매하며, 라틴 아메리카가 구매하고 있다",
+          "original_title": "",
+          "description": "이스라엘의 AI 사이버 보안 스타트업 드림은 올해 평가액이 30억 달러로 세 배 증가하며 라틴 아메리카로 확장하고 있습니다. 이 회사는 사이버 공격이 연간 25% 증가하고 있는 지역에서 워싱턴과 연계된 정부를 표적으로 삼고 있습니다.",
+          "link": "https://thenextweb.com/news/the-man-who-built-pegasus-now-sells-governments-the-antidote-and-latin-america-is-buying",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-04"
+        },
+        {
+          "id": "38348",
+          "title": "'누구에게 투표해야 할까?' 투표자들이 투표를 하기 전 AI에 의존하다",
+          "original_title": "",
+          "description": "정보화된 시민이 되기 위해서는 노력이 필요합니다. 인공지능 도구들이 매력적인 지름길을 제공하지만, 위험이 없지는 않습니다.",
+          "link": "https://www.nytimes.com/2026/07/04/us/politics/voters-ai-chatbots-elections.html",
+          "entities": [],
+          "date": "2026-07-04"
+        },
+        {
+          "id": "38206",
+          "title": "테슬라 자율주행 모드 탓에 발생한 사고로 과실치사 혐의로 기소된 남성",
+          "original_title": "",
+          "description": "테슬라 측은 마이클 버틀러가 6월, 그의 차량 자율주행 모드를 비활성화 한 후 마르타 아빌라의 집에 충돌했다고 발표했습니다. 이 사고로 76세 여성이 사망한 결과, 버틀러는 과실치사로 기소되어 최근에 구속되었습니다.",
+          "link": "https://www.theguardian.com/us-news/2026/jul/03/tesla-texas-crash-manslaughter",
+          "entities": [],
+          "date": "2026-07-04"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-05",
+      "briefing_id": 157,
+      "articles": [
+        {
+          "id": "38567",
+          "title": "스타링 뱅크, AI에 베팅하며 130명 해고",
+          "original_title": "",
+          "description": "스타링 뱅크는 런던에 본사를 둔 네오뱅크로서 은행 및 기술 운영을 재편성하며 약 130명의 직원을 해고하고 있다. 이번 변화는 회사의 운영 방법을 단순화하고 중복을 줄이며 제품 개발을 가속화하기 위한 것이라고 직원들에게 전달되었다.",
+          "link": "https://thenextweb.com/news/starling-bank-130-job-cuts-ai-restructuring",
+          "entities": [],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38451",
+          "title": "구글의 새로운 광고가 AI의 도움을 받아 작성된 독립 선언서를 상상하다",
+          "original_title": "",
+          "description": "독립 선언서 서명 250년 후, 새로운 광고는 \"만약 건국 아버지들이 구글 워크스페이스에 접근할 수 있었다면?\"이라는 질문을 던집니다. 이 광고는 AI의 도움을 통해 역사적인 문서를 재구성하는 상상을 담고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/04/new-google-commercial-imagines-a-declaration-of-independence-written-with-help-from-ai/",
+          "entities": [],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38483",
+          "title": "앤트로픽 개발자, 페이블 5를 위한 프롬프트 팁 공유",
+          "original_title": "",
+          "description": "앤트로픽의 개발자 타리크 시히파르는 클로드의 새로운 모델인 페이블 5와 관련해 병목 현상이 더 이상 모델 자체가 아니라 사용자의 맹점이라고 주장합니다. 그는 프로그램 작성자들이 무의식적인 지식을 체계적으로 발견할 수 있도록 하는 기술을 설명합니다.",
+          "link": "https://the-decoder.com/anthropic-developer-shares-prompting-tips-for-fable-5-that-focus-on-finding-your-own-blind-spots-first/",
+          "entities": [],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38355",
+          "title": "OpenAI의 주요 사이트 방문 실패가 영국 투자에 대한 질문을 제기하다",
+          "original_title": "",
+          "description": "독점 보도: 영국 정부가 제안한 300억 파운드의 AI 투자 중 200억 파운드는 가상적이라는 지적이 제기되었다. 이는 OpenAI에게 가장 큰 프로젝트로 계획된 다수의 영국 데이터 센터 프로젝트와 관련이 있다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/04/openai-apparent-failure-visit-key-site-questions-stargate-uk-project",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38551",
+          "title": "의사들의 AI 필기 사용 급증, 호주 정부가 프라이버시 문제를 경고",
+          "original_title": "",
+          "description": "독점 보도에 따르면, GP 진료소에서 AI 기술의 사용이 빠르게 확산됨에 따라 규제 기관이 그 구현과 잠재적 문제를 감시하고 있습니다. 연방 보건부는 의사들이 AI 필기를 사용하는 것에 대한 우려를 제기했습니다.",
+          "link": "https://www.theguardian.com/australia-news/2026/jul/05/doctors-ai-scribes-australia-government-privacy-warning",
+          "entities": [
+            "GP",
+            "AI"
+          ],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38550",
+          "title": "NHS, AI를 활용해 환자를 적절한 서비스로 안내할 계획",
+          "original_title": "",
+          "description": "잉글랜드에서 NHS 시스템 개편의 일환으로 약 10억 파운드 규모의 패키지에 따라 향후 1년 동안 약 20만 명의 환자에게 도달할 것으로 예상됩니다. NHS는 앱에서 AI를 사용해 환자를 적절한 서비스로 안내할 것이라고 발표했습니다.",
+          "link": "https://www.theguardian.com/society/2026/jul/04/nhs-ai-app-patients-appropriate-services-health",
+          "entities": [
+            "NHS"
+          ],
+          "date": "2026-07-05"
+        }
+      ]
     }
   ],
   "articles": [
@@ -2571,6 +2708,131 @@
         "AIS"
       ],
       "date": "2026-07-04"
+    },
+    {
+      "id": "38289",
+      "title": ",000명 학생 연구, AI의 숨겨진 학습 비용이 드러나기까지 2년 걸리다",
+      "original_title": "",
+      "description": "26,000명 이상의 중국 학생을 대상으로 한 연구 결과, AI 사용자가 숙제를 더 빨리 끝내고 점수도 더 높지만, 시험에서는 최대 24% 떨어지는 성과를 보였습니다. 대학 입시 결과에 미치는 전반적 영향은 약 2년이 걸리며, 단기 연구들은 손해를 체계적으로 과소평가한다는 것을 의미합니다.",
+      "link": "https://the-decoder.com/a-26000-student-study-shows-ais-hidden-learning-cost-takes-two-full-years-to-surface/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-04"
+    },
+    {
+      "id": "38356",
+      "title": "AI가 언어를 어떻게 변화시키고 있는가",
+      "original_title": "",
+      "description": "LLM 사용에 대한 비난이 문학 및 미디어 세계를 흔드는 가운데, 언어학자들은 인간 언어와 기계 언어를 구분하는 주요 요소를 설명하고 있다. 제니퍼 이건과 제넷 윈터슨을 포함한 소설가들은 ChatGPT 시대의 픽션의 미래에 대해 반성한다.",
+      "link": "https://www.theguardian.com/books/ng-interactive/2026/jul/04/future-of-fiction-next-great-novel-ai-language-chat-gpt",
+      "entities": [
+        "ChatGPT",
+        "LLM"
+      ],
+      "date": "2026-07-04"
+    },
+    {
+      "id": "38377",
+      "title": "독점: 최고 FTSE 임원 채용 전문 기업이 AI 플랫폼 출시 후 파산",
+      "original_title": "",
+      "description": "FTSE 기업들을 위해 임원급 인재를 채용해 온 런던 소재의 부티크 리크루트 회사가 AI 플랫폼에 투자한 뒤 파산에 직면했습니다. 사바나 그룹은 스타벅스와 같은 기업의 이사 및 임원을 채용해 왔습니다.",
+      "link": "https://www.cityam.com/exclusive-top-ftse-executive-recruiter-goes-bust-after-ai-platform-launch/",
+      "entities": [
+        "AI",
+        "FTSE"
+      ],
+      "date": "2026-07-04"
+    },
+    {
+      "id": "38191",
+      "title": "페가수스를 만든 남자는 이제 정부에 해독제를 판매하며, 라틴 아메리카가 구매하고 있다",
+      "original_title": "",
+      "description": "이스라엘의 AI 사이버 보안 스타트업 드림은 올해 평가액이 30억 달러로 세 배 증가하며 라틴 아메리카로 확장하고 있습니다. 이 회사는 사이버 공격이 연간 25% 증가하고 있는 지역에서 워싱턴과 연계된 정부를 표적으로 삼고 있습니다.",
+      "link": "https://thenextweb.com/news/the-man-who-built-pegasus-now-sells-governments-the-antidote-and-latin-america-is-buying",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-04"
+    },
+    {
+      "id": "38348",
+      "title": "'누구에게 투표해야 할까?' 투표자들이 투표를 하기 전 AI에 의존하다",
+      "original_title": "",
+      "description": "정보화된 시민이 되기 위해서는 노력이 필요합니다. 인공지능 도구들이 매력적인 지름길을 제공하지만, 위험이 없지는 않습니다.",
+      "link": "https://www.nytimes.com/2026/07/04/us/politics/voters-ai-chatbots-elections.html",
+      "entities": [],
+      "date": "2026-07-04"
+    },
+    {
+      "id": "38206",
+      "title": "테슬라 자율주행 모드 탓에 발생한 사고로 과실치사 혐의로 기소된 남성",
+      "original_title": "",
+      "description": "테슬라 측은 마이클 버틀러가 6월, 그의 차량 자율주행 모드를 비활성화 한 후 마르타 아빌라의 집에 충돌했다고 발표했습니다. 이 사고로 76세 여성이 사망한 결과, 버틀러는 과실치사로 기소되어 최근에 구속되었습니다.",
+      "link": "https://www.theguardian.com/us-news/2026/jul/03/tesla-texas-crash-manslaughter",
+      "entities": [],
+      "date": "2026-07-04"
+    },
+    {
+      "id": "38567",
+      "title": "스타링 뱅크, AI에 베팅하며 130명 해고",
+      "original_title": "",
+      "description": "스타링 뱅크는 런던에 본사를 둔 네오뱅크로서 은행 및 기술 운영을 재편성하며 약 130명의 직원을 해고하고 있다. 이번 변화는 회사의 운영 방법을 단순화하고 중복을 줄이며 제품 개발을 가속화하기 위한 것이라고 직원들에게 전달되었다.",
+      "link": "https://thenextweb.com/news/starling-bank-130-job-cuts-ai-restructuring",
+      "entities": [],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38451",
+      "title": "구글의 새로운 광고가 AI의 도움을 받아 작성된 독립 선언서를 상상하다",
+      "original_title": "",
+      "description": "독립 선언서 서명 250년 후, 새로운 광고는 \"만약 건국 아버지들이 구글 워크스페이스에 접근할 수 있었다면?\"이라는 질문을 던집니다. 이 광고는 AI의 도움을 통해 역사적인 문서를 재구성하는 상상을 담고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/04/new-google-commercial-imagines-a-declaration-of-independence-written-with-help-from-ai/",
+      "entities": [],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38483",
+      "title": "앤트로픽 개발자, 페이블 5를 위한 프롬프트 팁 공유",
+      "original_title": "",
+      "description": "앤트로픽의 개발자 타리크 시히파르는 클로드의 새로운 모델인 페이블 5와 관련해 병목 현상이 더 이상 모델 자체가 아니라 사용자의 맹점이라고 주장합니다. 그는 프로그램 작성자들이 무의식적인 지식을 체계적으로 발견할 수 있도록 하는 기술을 설명합니다.",
+      "link": "https://the-decoder.com/anthropic-developer-shares-prompting-tips-for-fable-5-that-focus-on-finding-your-own-blind-spots-first/",
+      "entities": [],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38355",
+      "title": "OpenAI의 주요 사이트 방문 실패가 영국 투자에 대한 질문을 제기하다",
+      "original_title": "",
+      "description": "독점 보도: 영국 정부가 제안한 300억 파운드의 AI 투자 중 200억 파운드는 가상적이라는 지적이 제기되었다. 이는 OpenAI에게 가장 큰 프로젝트로 계획된 다수의 영국 데이터 센터 프로젝트와 관련이 있다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/04/openai-apparent-failure-visit-key-site-questions-stargate-uk-project",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38551",
+      "title": "의사들의 AI 필기 사용 급증, 호주 정부가 프라이버시 문제를 경고",
+      "original_title": "",
+      "description": "독점 보도에 따르면, GP 진료소에서 AI 기술의 사용이 빠르게 확산됨에 따라 규제 기관이 그 구현과 잠재적 문제를 감시하고 있습니다. 연방 보건부는 의사들이 AI 필기를 사용하는 것에 대한 우려를 제기했습니다.",
+      "link": "https://www.theguardian.com/australia-news/2026/jul/05/doctors-ai-scribes-australia-government-privacy-warning",
+      "entities": [
+        "GP",
+        "AI"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38550",
+      "title": "NHS, AI를 활용해 환자를 적절한 서비스로 안내할 계획",
+      "original_title": "",
+      "description": "잉글랜드에서 NHS 시스템 개편의 일환으로 약 10억 파운드 규모의 패키지에 따라 향후 1년 동안 약 20만 명의 환자에게 도달할 것으로 예상됩니다. NHS는 앱에서 AI를 사용해 환자를 적절한 서비스로 안내할 것이라고 발표했습니다.",
+      "link": "https://www.theguardian.com/society/2026/jul/04/nhs-ai-app-patients-appropriate-services-health",
+      "entities": [
+        "NHS"
+      ],
+      "date": "2026-07-05"
     }
   ]
 }
