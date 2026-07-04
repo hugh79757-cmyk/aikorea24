@@ -5,6 +5,17 @@ from collections import Counter
 
 from pipeline.threads.pitch import detect_prompt_leak
 
+MODEL_MESSAGE_PATTERNS = [
+    r'^수정할\s+글자\s+단위',
+    r'^원본을\s+그대로\s+반환',
+    r'^수정할\s+게\s+없',
+    r'^오류가\s+발견되지',
+    r'^변경\s+사항이?\s+없',
+    r'^수정\s+불필요',
+    r'^AI\s+티가?\s+나는',
+    r'^교정할\s+부분이?\s+없',
+]
+
 FORMAT_CARD_COUNTS = {'D': 6}
 FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 7)}
 
@@ -153,6 +164,11 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
             total = len(card.strip())
             if total > 10 and korean < total * 0.1:
                 return False, f"Card {i}: 한글 비율 부족 ({korean}/{total})"
+
+        # 5. 모델 설명 메시지 검사
+        for pattern in MODEL_MESSAGE_PATTERNS:
+            if re.match(pattern, card.strip()):
+                return False, f"Card {i}: 모델 메시지 탐지"
     
     return True, "OK"
 
