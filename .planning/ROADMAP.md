@@ -13,7 +13,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 5: Dead Code Removal & Final Polish** — Remove dead code, failure notifications, bulletin board verification (completed 2026-07-01)
 - [x] **Phase 6: Prompt Leakage & Truncation Fix** — Eliminate prompt label leakage, fix aggressive truncation (completed 2026-07-03)
 - [x] **Phase 7: Crawl Failure Exclusion** — Exclude crawl-failed article IDs from retry selection (completed 2026-07-03)
-- [ ] **Phase 8: Validation Gap Closure** — 3중 방어 체계: 프롬프트 노출 + 외국어 검증 통합 (in progress)
+- [x] **Phase 8: Validation Gap Closure** — 3중 방어 체계: 프롬프트 노출 + 외국어 검증 통합 (completed 2026-07-04)
 
 ## Phase Details
 
