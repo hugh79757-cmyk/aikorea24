@@ -13,7 +13,8 @@ class TestCascadeLightScore:
             "title": "Nvidia Unveils $500B AI Chip Deal with OpenAI",
             "description": "Major deal between two AI leaders",
             "source": "TechCrunch",
-            "pub_date": "Mon, 30 Jun 2026 10:00:00 +0000",
+            "pub_date": (__import__("datetime").datetime.now(__import__("datetime").timezone.utc) -
+                         __import__("datetime").timedelta(hours=1)).strftime("%a, %d %b %Y %H:%M:%S %z"),
             "cluster": "nvidia",
         }
         result = score_article(article, sample_weights, sample_tiers, mode="light")
