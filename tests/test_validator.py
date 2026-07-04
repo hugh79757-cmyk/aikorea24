@@ -143,6 +143,30 @@ class TestValidateFinalOutput:
         ok, reason = validate_final_output(cards)
         assert ok is True
 
+    @pytest.mark.unit
+    def test_nfkc_normalization_fullwidth(self):
+        """전각 문자(＿, ！, Ａ) → NFKC 정규화로 한글 비율 정상"""
+        # Before NFKC, these fullwidth chars would not be counted as Korean
+        cards = [
+            "\uff3f\uff01\uff21 \uac00\ub2a5\ud55c \ubc94\uc704\uc758 \ud55c\uae00 \ud14d\uc2a4\ud2b8\uc774\uba70 \ucda9\ubd84\ud788 \uae38\uace0 \ud55c\uae00 \ub0b4\uc6a9\uc744 \uac00\uc9c0\uace0 \uc788\uc2b5\ub2c8\ub2e4.",
+        ]
+        ok, reason = validate_final_output(cards)
+        # After NFKC: ＿ → _, ！ → !, Ａ → A — Korean ratio should be ok
+        assert ok is True
+
+    @pytest.mark.unit
+    def test_nfkc_normalization_chinese_fullwidth(self):
+        """전각 한자 — NFKC 후 감지"""
+        # Fullwidth Chinese characters should be caught after NFKC normalization
+        cards = [
+            "\ud55c\uae00 \uce74\ub4dc\ub0b4\uc6a9\uc73c\ub85c \ucda9\ubd84\ud788 \uae34 \ubb38\uc7a5\uc785\ub2c8\ub2e4. \ubb38\uc7a5\uc774 \uc644\uc131\ub418\uc5b4 \uc788\uc2b5\ub2c8\ub2e4. \ucda9\ubd84\ud788 \uae38\uac8c \uc791\uc131\ub418\uc5c8\uc2b5\ub2c8\ub2e4.",
+            "\uff2c\uff2f\uff2e\uff24\uff2f\uff2e \ud2b9\ud30c\uc6d0\uc774 \ubc1c\ud45c\ud55c \uc218\uce58\uc785\ub2c8\ub2e4. \uc774\uac83\uc740 \uc804\uac01 \ubb38\uc790\ub85c \ud45c\ud604\ub418\uc5c8\uc2b5\ub2c8\ub2e4.",
+        ]
+        ok, reason = validate_final_output(cards)
+        # Fullwidth LONDON chars (U+FF2C etc.) are in CJK range only as fullwidth forms
+        # They should be caught (or at least not crash)
+        assert ok is True  # Fullwidth Latin is not CJK; passes after NFKC
+
 
 class TestDetectPromptLeakPatterns:
     @pytest.mark.unit

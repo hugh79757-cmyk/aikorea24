@@ -1,5 +1,6 @@
 """pipeline/threads/validator.py — 카드, 연도, 키워드, 최종 출력 검증"""
 import re
+import unicodedata
 from datetime import datetime
 from collections import Counter
 
@@ -170,7 +171,7 @@ _KOREAN_PATTERN = re.compile(r'[가-힣]')
 
 def validate_final_output(cards: list[str]) -> tuple[bool, str]:
     """최종 카드 통합 검증 — 발행 전 3차 방어
-    검증 순서: 프롬프트 노출 → 외국어 → 한글 비율
+    검증 순서: 프롬프트 노출 → unicodedata NFKC 정규화 → 외국어 → 한글 비율 → 모델 메시지
     """
     for i, card in enumerate(cards, 1):
         # 1. 프롬프트 노출 검사
@@ -178,19 +179,22 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
         if leaked:
             return False, f"Card {i}: {reason}"
         
-        # 2. 외국어 검사 (한자)
-        chinese = _CHINESE_PATTERN.findall(card)
+        # NFKC 정규화: 전각/반각 문자 통합 (중국어·일본어 감지 정확도 향상)
+        card_normalized = unicodedata.normalize('NFKC', card)
+        
+        # 2. 외국어 검사 (한자) — 정규화된 카드 기준
+        chinese = _CHINESE_PATTERN.findall(card_normalized)
         if chinese:
             return False, f"Card {i}: 한자 감지 ({len(chinese)}개) — {''.join(chinese[:5])}"
         
-        # 3. 외국어 검사 (일본어)
-        japanese = _JAPANESE_PATTERN.findall(card)
+        # 3. 외국어 검사 (일본어) — 정규화된 카드 기준
+        japanese = _JAPANESE_PATTERN.findall(card_normalized)
         if japanese:
             return False, f"Card {i}: 일본어 감지 ({len(japanese)}개) — {''.join(japanese[:5])}"
         
         # 4. 한글 비율 검사 (출처 링크 카드 제외)
         if not card.strip().startswith('🔗'):
-            korean = len(_KOREAN_PATTERN.findall(card))
+            korean = len(_KOREAN_PATTERN.findall(card_normalized))
             total = len(card.strip())
             if total > 10 and korean < total * 0.3:
                 return False, f"Card {i}: 한글 비율 부족 ({korean}/{total})"
