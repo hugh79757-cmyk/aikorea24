@@ -104,4 +104,21 @@ def validate_keywords(cards, article_body_text):
     return True
 
 
+# === 외국어 감지 패턴 ===
+_CHINESE_PATTERN = re.compile(r'[\u4e00-\u9fff]')
+_JAPANESE_PATTERN = re.compile(r'[\u3040-\u309f\u30a0-\u30ff]')
+
+
+def validate_no_foreign_language(cards: list[str]) -> tuple[bool, str]:
+    """카드 전체에서 외국어(한자, 일본어) 사용 금지 검증"""
+    for i, card in enumerate(cards, 1):
+        chinese = _CHINESE_PATTERN.findall(card)
+        if chinese:
+            return False, f"Card {i}: 한자 감지 ({len(chinese)}개) — {''.join(chinese[:5])}"
+        japanese = _JAPANESE_PATTERN.findall(card)
+        if japanese:
+            return False, f"Card {i}: 일본어 감지 ({len(japanese)}개) — {''.join(japanese[:5])}"
+    return True, "OK"
+
+
 
