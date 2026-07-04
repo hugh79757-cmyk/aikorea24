@@ -238,9 +238,9 @@ class TestValidateCardStructure:
     @pytest.mark.unit
     def test_valid_cards(self):
         cards = [
-            "Mia Taylor는 투표 용지를 촬영해 Claude에게 물었음.",
-            "그녀는 AI에게 '이곳에서 누구에게 투표해야 할까?'라고 물었음.",
-            "Claude는 처음에 대답을 거부했음.",
+            "Mia Taylor는 투표 용지를 촬영해 Claude에게 물었음. AI가 어떤 대답을 했는지 확인해보겠음.",
+            "그녀는 AI에게 이곳에서 누구에게 투표해야 할지 물었음. Claude는 처음에 대답을 거부하는 반응을 보였음.",
+            "Claude는 처음에 대답을 거부했음. 그리고 나중에 다시 물었을 때에야 비로소 답을 줬음.",
         ]
         assert validate_card_structure(cards) == (True, "OK")
 
@@ -268,7 +268,7 @@ class TestValidateCardStructure:
     @pytest.mark.unit
     def test_link_card_exempt(self):
         cards = [
-            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
+            "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
             "🔗 https://example.com",
         ]
         assert validate_card_structure(cards) == (True, "OK")
@@ -282,8 +282,8 @@ class TestValidateCardStructure:
     @pytest.mark.unit
     def test_sentence_incomplete(self):
         cards = [
-            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
-            "두 번째 카드는 문장이 끝나지 않았음",
+            "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
+            "두 번째 카드는 문장이 끝나지 않았다 완전히 끝나지 않은 상태",
         ]
         ok, reason = validate_card_structure(cards)
         assert ok is False
@@ -292,16 +292,16 @@ class TestValidateCardStructure:
     @pytest.mark.unit
     def test_ellipsis_acceptable(self):
         cards = [
-            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
-            "두 번째 카드는 내용이 이어지는 중...",
+            "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
+            "두 번째 카드는 내용이 이어지는 중이고 내용이 충분히 길게 작성되어 있음...",
         ]
         assert validate_card_structure(cards) == (True, "OK")
 
     @pytest.mark.unit
     def test_hook_too_short(self):
         cards = [
-            "짧은 훅",
-            "두 번째 카드는 충분히 긴 내용을 담고 있는 카드임.",
+            "이 카드는 스물다섯 자 정도 되는 훅임.",
+            "두 번째 카드는 충분히 긴 내용을 담고 있는 카드라서BODY_MIN_LENGTH를 넘김.",
         ]
         ok, reason = validate_card_structure(cards)
         assert ok is False
@@ -310,9 +310,9 @@ class TestValidateCardStructure:
     @pytest.mark.unit
     def test_body_too_short(self):
         cards = [
-            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
+            "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
             "🔗 https://example.com",
-            "짧음",
+            "이 본문 카드는 이십자에서 오십자 사이의 길이를 가지고 있음.",
         ]
         ok, reason = validate_card_structure(cards)
         assert ok is False
