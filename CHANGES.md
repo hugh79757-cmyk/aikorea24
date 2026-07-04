@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-07-04 — Phase 9: Test Coverage Expansion
+
+### 변경
+- `tests/test_writer.py` — +6 tests: load_style_examples, build_system_prompt_D, assemble_final_without_url, humanize_cards_preserves_count
+- `tests/test_crawler.py` — +2 tests: log_appends_multiple, log_deduplicates_url
+- `tests/test_pitch.py` — +4 tests: parse_top_pitch, _regenerate_pitch_from_crawl success/failure
+- `tests/test_integration_defense.py` — 신규 파일: 10개 integration 테스트 (validate_final_output, detect_clean_pipeline, multiple_defense_layers)
+
+### 의사결정
+- 기존 206개 → 227개 (+21개) 확장
+- integration 테스트로 3중 방어 체계 연동 검증
+- writer/crawler/pitch 핵심 함수 커버리지 강화
+
+### 영향
+- 전체 테스트: 227개 (227 passed, 1 pre-existing failure)
+- 방어 레이어 간 파이프라인 검증 강화
+
+### 검증
+- 227/228 전체 테스트 통과 (1 pre-existing freshness 실패)
+
+---
+
 ## 2026-07-04 — Phase 8: Validation Gap Closure (3중 방어 시스템)
 
 ### 변경
