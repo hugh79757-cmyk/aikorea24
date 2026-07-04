@@ -66,7 +66,6 @@ def clean_leaked_prompt(text):
 
 
 _KOREAN_PATTERN = re.compile(r'[가-힣]')
-_CHINESE_PATTERN = re.compile(r'[\u4e00-\u9fff]')
 _LATIN_SENTENCE_PATTERN = re.compile(r'^[A-Z][a-z\s\']+(ed|s|es|ing|ment|tion|al|ive)\b')
 _MIN_KOREAN_RATIO = 0.15
 
@@ -79,7 +78,8 @@ def validate_korean_output(hook: str, narrative: str) -> tuple[bool, str]:
         return False, reason
     combined = hook + ' ' + narrative
     cleaned = combined.replace("'", "").replace('"', '').replace('\u2019', '')
-    chinese_chars = len(_CHINESE_PATTERN.findall(cleaned))
+    from pipeline.threads.validator import CHINESE_PATTERN  # lazy import to avoid circular dependency
+    chinese_chars = len(CHINESE_PATTERN.findall(cleaned))
     if chinese_chars > 0:
         return False, f"한자(중국어) 감지: {chinese_chars}개"
     korean_chars = len(_KOREAN_PATTERN.findall(cleaned))

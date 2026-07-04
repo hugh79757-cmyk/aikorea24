@@ -152,6 +152,10 @@ def validate_keywords(cards, article_body_text):
 _CHINESE_PATTERN = re.compile(r'[\u4e00-\u9fff]')
 _JAPANESE_PATTERN = re.compile(r'[\u3040-\u309f\u30a0-\u30ff]')
 
+# 공개 export — pitch.py에서 import하여 사용
+CHINESE_PATTERN = _CHINESE_PATTERN
+JAPANESE_PATTERN = _JAPANESE_PATTERN
+
 
 def validate_no_foreign_language(cards: list[str]) -> tuple[bool, str]:
     """카드 전체에서 외국어(한자, 일본어) 사용 금지 검증"""
