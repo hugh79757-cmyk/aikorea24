@@ -7,8 +7,8 @@ from collections import Counter
 from pipeline.infra import project_root
 from pipeline.infra.logger import get_scrubbed_logger
 
-from pipeline.threads.validator import validate_cards, validate_year, validate_keywords, validate_no_foreign_language, validate_final_output, validate_model_message, validate_card_structure
-from pipeline.threads.validator import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE
+from pipeline.threads.validator import validate_cards, validate_year, validate_keywords, validate_final_output, validate_model_message, validate_card_structure
+from pipeline.threads.validator import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE, MODEL_MESSAGE_PATTERNS
 from pipeline.threads.crawler import fetch_article_body, log_failed_crawl
 
 logger = get_scrubbed_logger(__name__)
@@ -213,16 +213,7 @@ INSTRUCTION_PATTERNS = [
 ]
 
 
-MODEL_MESSAGE_PATTERNS = [
-    r'^수정할\s+글자\s+단위',
-    r'^원본을\s+그대로\s+반환',
-    r'^수정할\s+게\s+없',
-    r'^오류가\s+발견되지',
-    r'^변경\s+사항이?\s+없',
-    r'^수정\s+불필요',
-    r'^AI\s+티가?\s+나는',
-    r'^교정할\s+부분이?\s+없',
-]
+
 
 
 def _strip_model_explanatory(result: str) -> str:

@@ -192,11 +192,11 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
         if not card.strip().startswith('🔗'):
             korean = len(_KOREAN_PATTERN.findall(card))
             total = len(card.strip())
-            if total > 10 and korean < total * 0.1:
+            if total > 10 and korean < total * 0.3:
                 return False, f"Card {i}: 한글 비율 부족 ({korean}/{total})"
 
         # 5. 모델 설명 메시지 검사
-        for pattern in MODEL_MESSAGE_PATTERNS:
+        for pattern in ALL_MESSAGE_PATTERNS:
             if re.match(pattern, card.strip()):
                 return False, f"Card {i}: 모델 메시지 탐지"
     return True, "OK"
@@ -207,7 +207,7 @@ def validate_model_message(card: str) -> bool:
     card = card.strip()
 
     # Skip link cards
-    if card.startswith('🔗'):
+    if card.strip().startswith('🔗'):
         return True
 
     # Check against all patterns

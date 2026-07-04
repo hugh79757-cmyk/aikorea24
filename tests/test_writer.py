@@ -13,8 +13,9 @@ from pipeline.threads.writer import (
     _cleanup_source_attribution, _strip_instruction_leak,
     assemble_final, humanize_cards, fix_cards,
     load_style_examples, build_system_prompt_D,
-    _strip_model_explanatory, MODEL_MESSAGE_PATTERNS,
+    _strip_model_explanatory,
 )
+from pipeline.threads.validator import MODEL_MESSAGE_PATTERNS
 from pipeline.threads.writer import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE
 from pipeline.infra.config import project_root
 
