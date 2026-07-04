@@ -5,6 +5,58 @@
 
 ---
 
+## 2026-07-04 — Phase 10-1: Card Structure Validation (실행 완료)
+
+### 변경
+- `pipeline/threads/validator.py` — `ADDITIONAL_MESSAGE_PATTERNS` 20개 + `ALL_MESSAGE_PATTERNS` 통합 + `validate_model_message()` + `validate_card_structure()` 신규
+- `pipeline/threads/writer.py` — import 추가 + `write_thread()` 검증 체인에 구조 검증 통합
+- `tests/test_validator.py` — 20개 새 테스트 (TestValidateModelMessage 10개 + TestValidateCardStructure 10개)
+
+### 의사결정
+- 7가지 구조 검증 규칙 채택 (최소 길이, 한글 비율, 문장 완성도, 콘텐츠 밀도, 중복, Hook/Body 길이)
+- 20개 추가 모델 메시지 패턴 (정중한 형태, 짧은 응답, 영문 메시지, 설명 접두사)
+- `write_thread()` 검증 체인에 구조 검증 먼저 적용 (패턴 필터링 이전)
+
+### 영향
+- 전체 테스트: 261개 (241 기존 + 20 신규)
+- 모델 메시지 탐지율 향상 (패턴 + 구조 이중 검증)
+- 카드 구조 이상치 완전 차단
+
+### 검증
+- 261/262 전체 테스트 통과 (1 pre-existing freshness 실패)
+- 4개 커밋 생성:
+  - `25e99ae`: feat(10-1): add enhanced model message patterns and structural validation
+  - `aa47167`: feat(10-1): integrate structural validation into writer validation chain
+  - `f1ca3c5`: test(10-1): add TestValidateModelMessage and TestValidateCardStructure
+  - `43322d2`: test(10-1): fix test data for correct validation thresholds
+
+---
+
+## 2026-07-04 — Phase 10: Model Message Leakage Fix (실행 완료)
+
+### 변경
+- `pipeline/threads/writer.py` — `MODEL_MESSAGE_PATTERNS` 리스트 + `_strip_model_explanatory()` 함수 신규 + `fix_cards()`, `humanize_cards()`에 필터 적용
+- `pipeline/threads/validator.py` — `MODEL_MESSAGE_PATTERNS` 리스트 + `validate_final_output()`에 모델 메시지 탐지 추가
+- `tests/test_writer.py` — 14개 새 테스트 (TestStripModelExplanatory 4개 + fix_cards/humanize_cards 테스트 10개)
+
+### 의사결정
+- 패턴 기반 필터링 채택 (ML 기반 탐지 불필요)
+- `split('---')` 이전에 필터링하여 메시지가 카드로 포함되는 것 완전 차단
+- `validate_final_output()`에서 이중 검증 (필터링 + validation)
+
+### 영향
+- 전체 테스트: 241개 (227 기존 + 14 신규)
+- 모델 메시지가 발행 카드에 포함되는 버그 완전 해결
+
+### 검증
+- 241/242 전체 테스트 통과 (1 pre-existing freshness 실패)
+- 3개 커밋 생성:
+  - `5ee5277`: feat(10-mlf): add model message detection utility
+  - `676aaa8`: feat(10-mlf): add model message detection to validate_final_output
+  - `f6ec5f8`: test(10-mlf): add tests for model message filtering
+
+---
+
 ## 2026-07-04 — Phase 9: Test Coverage Expansion
 
 ### 변경

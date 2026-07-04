@@ -1,3 +1,6 @@
+- 2026-07-04 | fix | model-message-leakage | Phase 10: Model Message Leakage Fix — _strip_model_explanatory() + fix_cards/humanize_cards 필터
+- 2026-07-04 | fix | card-structure-validation | Phase 10-1: Card Structure Validation — validate_model_message() + validate_card_structure() + 20개 추가 패턴
+- 2026-07-04 | fix | temp-model-mimo-v25-switch | Temperature & Model Priority Change — TEMPS [0.4] + MiMo v2.5 1순위
 - 2026-07-03 | fix | tools-collector-d1-sync | tools_collector가 D1 tools 테이블 갱신 안 함 → 이메일 발송에 최신 툴 누락
 - 2026-07-03 | fix | crawl-fail-discard | get_pitches() 크롤링 실패 시 RSS fallback 제거, return []로 폐기
 - 2026-07-03 | fix | test-coverage-validation-gaps | 체계적 방지 프레임워크 — 테스트 커버리지 갭 발견: validate_korean_output, detect_prompt_leak, f

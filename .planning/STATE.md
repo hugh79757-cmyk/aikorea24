@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 09 execution complete — test coverage expansion (+21 tests)
-last_updated: 2026-07-04T10:40:00.000Z
+status: in-progress
+stopped_at: Phase 10-1 execution complete — card structure validation (+20 tests)
+last_updated: 2026-07-04T23:30:00.000Z
 last_activity: 2026-07-04
 progress:
-  total_phases: 9
-  completed_phases: 9
-  total_plans: 24
-  completed_plans: 24
+  total_phases: 11
+  completed_phases: 11
+  total_plans: 26
+  completed_plans: 26
   percent: 100.0
 ---
 
@@ -21,22 +21,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 8 — Validation Gap Closure
+**Current focus:** Phase 10-1 — Card Structure Validation
 
 ## Current Position
 
-Phase: 8 (validation-gap-closure)
-Plan: 08-01-PLAN.md
+Phase: 10-1 (card-structure-validation)
+Plan: 10-1-card-structure-validation/PLAN.md
 Status: Complete
-Last activity: 2026-07-03
+Last activity: 2026-07-04
 
 Progress: [████████████████] 100%
 
-### Phase 7 Details (Crawl Failure Exclusion)
-- **Problem**: `get_pitches()` crawl failure returned `[]` with no exclusion mechanism — same article re-selected up to 5 times, wasting LLM API calls
-- **Fix**: `get_pitches()` now returns `(list, set)` tuple; `exclude_ids` parameter filters out previously failed articles; `main_v3.py` accumulates failed IDs across retries
-- **Key changes**: `pitch.py` — 7 return paths changed to tuples, exclusion filter after shuffle; `main_v3.py` — `failed_article_ids` tracking with accumulation pattern; `crawler.py` — `article_id` param in `log_failed_crawl()`
-- **Verification**: All 34 `test_pitch.py` tests pass (4 crawl-fail tests with tuple assertions); 196/197 full suite pass (1 pre-existing failure)
+### Phase 10 Details (Model Message Leakage Fix)
+- **Problem**: AI models (MiMo, GPT-4o-mini, DeepSeek) occasionally return explanatory messages that get included as content cards in published Threads posts
+- **Fix**: Added `_strip_model_explanatory()` utility function to filter model messages before card splitting; applied to `fix_cards()` and `humanize_cards()`; added detection to `validate_final_output()`
+- **Key changes**: `writer.py` — `MODEL_MESSAGE_PATTERNS` list + `_strip_model_explanatory()` function + filters in `fix_cards()` and `humanize_cards()`; `validator.py` — model message detection in `validate_final_output()`
+- **Verification**: All 241 tests pass (227 existing + 14 new), 1 pre-existing failure unchanged
 
 ## Performance Metrics
 

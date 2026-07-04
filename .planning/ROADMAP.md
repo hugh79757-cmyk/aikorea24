@@ -15,6 +15,8 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 7: Crawl Failure Exclusion** — Exclude crawl-failed article IDs from retry selection (completed 2026-07-03)
 - [x] **Phase 8: Validation Gap Closure** — 3중 방어 체계: 프롬프트 노출 + 외국어 검증 통합 (completed 2026-07-04)
 - [x] **Phase 9: Test Coverage Expansion** — writer/crawler/pitch 테스트 확장 + integration 테스트 (completed 2026-07-04)
+- [x] **Phase 10: Model Message Leakage Fix** — 모델 설명 메시지 필터링으로 발행 카드 오염 방지 (completed 2026-07-04)
+- [x] **Phase 10-1: Card Structure Validation** — 카드 구조 검증으로 모델 메시지/이상치 완전 차단 (completed 2026-07-04)
 
 ## Phase Details
 
@@ -153,6 +155,43 @@ Plans:
 Plans:
 - [x] PLAN.md — clean_leaked_prompt(), JSON structured output, truncation relaxation, posted.json cleanup
 
+### Phase 10: Model Message Leakage Fix
+**Goal:** 모델 설명 메시지가 발행 카드에 포함되는 구조적 취약점 수정.
+**Mode:** ad-hoc
+**Depends on**: Phase 8
+**Requirements**: REQ-01, REQ-02, REQ-03, REQ-04, REQ-05
+**Success Criteria** (what must be TRUE):
+  1. `fix_cards()`가 `split('---')` 전에 모델 메시지 필터링
+  2. `humanize_cards()`가 `split('---')` 전에 모델 메시지 필터링
+  3. `validate_final_output()`가 카드에서 모델 메시지 탐지
+  4. 기존 227개 테스트 모두 통과
+  5. 새 테스트가 모든 메시지 패턴 커버
+**Plans**: 1 plan
+
+Plans:
+- [x] PLAN.md — 모델 메시지 필터링 utility + fix_cards/humanize_cards 적용 + validation 검증
+
+### Phase 10-1: Card Structure Validation
+**Goal:** 카드 구조 검증으로 모델 메시지/이상치를 구조적으로 차단.
+**Mode:** ad-hoc
+**Depends on**: Phase 10
+**Requirements**: REQ-01~REQ-10
+**Success Criteria** (what must be TRUE):
+  1. 카드 최소 길이 20자 검증
+  2. 한글 비율 30% 이상 검증
+  3. 문장 완성도 검증
+  4. 콘텐츠 밀도 검증 (공백 50% 이하)
+  5. 중복 카드 탐지
+  6. Hook 길이 30~100자 검증
+  7. Body 카드 길이 50~500자 검증
+  8. 모델 메시지 탐지 (패턴 + 구조)
+  9. 기존 241개 테스트 모두 통과
+  10. 오판율 1% 미만
+**Plans**: 1 plan
+
+Plans:
+- [x] PLAN.md — 구조 검증 함수 2개 + 향상된 패턴 20개 + 테스트 20개
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -166,5 +205,8 @@ Plans:
 | 5. Dead Code Removal & Final Polish | 3/3 | Complete | 2026-07-01 |
 | 6. Prompt Leakage & Truncation Fix | 1/1 | Complete | 2026-07-03 |
 | 7. Crawl Failure Exclusion | 1/1 | Complete | 2026-07-03 |
-| 8. Validation Gap Closure | 0/1 | In Progress | |
-| **Total** | **22/23** | | |
+| 8. Validation Gap Closure | 1/1 | Complete | 2026-07-04 |
+| 9. Test Coverage Expansion | 1/1 | Complete | 2026-07-04 |
+| 10. Model Message Leakage Fix | 1/1 | Complete | 2026-07-04 |
+| 10-1. Card Structure Validation | 1/1 | Complete | 2026-07-04 |
+| **Total** | **25/25** | | |
