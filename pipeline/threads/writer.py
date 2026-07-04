@@ -213,6 +213,33 @@ INSTRUCTION_PATTERNS = [
 ]
 
 
+MODEL_MESSAGE_PATTERNS = [
+    r'^수정할\s+글자\s+단위',
+    r'^원본을\s+그대로\s+반환',
+    r'^수정할\s+게\s+없',
+    r'^오류가\s+발견되지',
+    r'^변경\s+사항이?\s+없',
+    r'^수정\s+불필요',
+    r'^AI\s+티가?\s+나는',
+    r'^교정할\s+부분이?\s+없',
+]
+
+
+def _strip_model_explanatory(result: str) -> str:
+    """Remove model explanatory messages from response."""
+    lines = result.split('\n')
+    filtered = []
+    for line in lines:
+        is_message = False
+        for pattern in MODEL_MESSAGE_PATTERNS:
+            if re.match(pattern, line.strip()):
+                is_message = True
+                break
+        if not is_message:
+            filtered.append(line)
+    return '\n'.join(filtered)
+
+
 def _strip_instruction_leak(text):
     lines = text.split('\n')
     cleaned = []
@@ -338,6 +365,7 @@ def humanize_cards(cards):
             return cards
 
         result = _strip_instruction_leak(result)
+        result = _strip_model_explanatory(result)
         fixed = [c.strip() for c in result.split('---') if c.strip()]
 
         if len(fixed) != len(cards):
@@ -420,6 +448,7 @@ def fix_cards(cards):
             max_tokens=8000,
         )
         if result:
+            result = _strip_model_explanatory(result)
             fixed = [c.strip() for c in result.split('---') if c.strip()]
             if len(fixed) == len(cards):
                 changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
