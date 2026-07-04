@@ -16,6 +16,36 @@ MODEL_MESSAGE_PATTERNS = [
     r'^교정할\s+부분이?\s+없',
 ]
 
+ADDITIONAL_MESSAGE_PATTERNS = [
+    # Polite forms
+    r'^수정이?\s+필요\s+없',
+    r'^변경\s+사항이?\s+없',
+    # Short responses
+    r'^네[,.]?\s*$',
+    r'^확인[됨했]*[,.]?\s*$',
+    r'^완료[됨했]*[,.]?\s*$',
+    r'^통과[됨했]*[,.]?\s*$',
+    # English messages
+    r'^No\s+changes',
+    r'^No\s+errors',
+    r'^Returning\s+original',
+    r'^Original\s+content',
+    # Question responses
+    r'^질문에\s+답변',
+    r'^답변[입니다]*\s*:',
+    # Explanation prefixes
+    r'^이\s+텍스트는',
+    r'^이\s+내용은',
+    r'^이\s+카드는',
+    r'^여기서는',
+    # Meta commentary
+    r'^참고[로事项]*:',
+    r'^주의[사항]*:',
+    r'^알림:',
+]
+
+ALL_MESSAGE_PATTERNS = MODEL_MESSAGE_PATTERNS + ADDITIONAL_MESSAGE_PATTERNS
+
 FORMAT_CARD_COUNTS = {'D': 6}
 FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 7)}
 
@@ -169,8 +199,93 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
         for pattern in MODEL_MESSAGE_PATTERNS:
             if re.match(pattern, card.strip()):
                 return False, f"Card {i}: 모델 메시지 탐지"
-    
     return True, "OK"
+
+
+def validate_model_message(card: str) -> bool:
+    """Check if card is a model message (returns False if message detected)."""
+    card = card.strip()
+
+    # Skip link cards
+    if card.startswith('🔗'):
+        return True
+
+    # Check against all patterns
+    for pattern in ALL_MESSAGE_PATTERNS:
+        if re.match(pattern, card):
+            return False
+
+    # Structural checks
+    # 1. Minimum length
+    if len(card) < 20:
+        return False
+
+    # 2. Korean content requirement
+    korean_chars = len(re.findall(r'[가-힣]', card))
+    if len(card) > 0 and korean_chars / len(card) < 0.3:
+        return False
+
+    return True
+
+
+def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
+    """Validate structural integrity of all cards."""
+    if not cards:
+        return False, "카드 없음"
+
+    # 1. Check for duplicates
+    seen = set()
+    for i, card in enumerate(cards, 1):
+        normalized = card.strip().lower()
+        if normalized in seen:
+            return False, f"Card {i}: 중복 카드"
+        seen.add(normalized)
+
+    # 2. Check each card
+    for i, card in enumerate(cards, 1):
+        card = card.strip()
+
+        # Skip link cards for most checks
+        if card.startswith('🔗'):
+            continue
+
+        # 3. Minimum length
+        if len(card) < 20:
+            return False, f"Card {i}: 너무 짧음 ({len(card)}자)"
+
+        # 4. Korean content
+        korean_chars = len(re.findall(r'[가-힣]', card))
+        if len(card) > 0 and korean_chars / len(card) < 0.3:
+            return False, f"Card {i}: 한글 비율 부족 ({korean_chars}/{len(card)})"
+
+        # 5. Content density
+        content_chars = len(re.findall(r'\S', card))
+        if len(card) > 0 and content_chars / len(card) < 0.5:
+            return False, f"Card {i}: 공백 과다"
+
+        # 6. Sentence completeness (body cards only)
+        if i > 1:  # Skip hook
+            sentence_enders = ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음']
+            if not any(card.endswith(ender) for ender in sentence_enders):
+                if not card.endswith('...') and not card.endswith('…'):
+                    return False, f"Card {i}: 문장 미완성"
+
+    # 7. Hook length (first card)
+    hook = cards[0].strip()
+    if not hook.startswith('🔗'):
+        if len(hook) < 30 or len(hook) > 100:
+            return False, f"Hook 길이 비정상 ({len(hook)}자)"
+
+    # 8. Body card length
+    for i, card in enumerate(cards[2:], 3):  # Skip hook and link
+        card = card.strip()
+        if card.startswith('🔗'):
+            continue
+        if len(card) < 50 or len(card) > 500:
+            return False, f"Card {i}: 길이 비정상 ({len(card)}자)"
+
+    return True, "OK"
+
 
 
 
