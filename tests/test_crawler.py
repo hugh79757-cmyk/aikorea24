@@ -58,3 +58,38 @@ class TestLogFailedCrawl:
             assert data['failed'][0]['url'] == "https://example.com/fail"
         finally:
             crawler.FAILED_CRAWLS_FILE = original_path
+
+    @pytest.mark.unit
+    def test_log_appends_multiple(self, tmp_path):
+        """여러 실패 기록 추가"""
+        from pipeline.threads import crawler
+        original_path = crawler.FAILED_CRAWLS_FILE
+        test_path = os.path.join(str(tmp_path), "failed_crawls.json")
+        crawler.FAILED_CRAWLS_FILE = test_path
+        try:
+            log_failed_crawl("https://example.com/fail1", "src1", "Title1", "404")
+            log_failed_crawl("https://example.com/fail2", "src2", "Title2", "500")
+            with open(test_path, 'r') as f:
+                data = json.load(f)
+            assert len(data['failed']) == 2
+            assert data['failed'][0]['url'] == "https://example.com/fail1"
+            assert data['failed'][1]['url'] == "https://example.com/fail2"
+        finally:
+            crawler.FAILED_CRAWLS_FILE = original_path
+
+    @pytest.mark.unit
+    def test_log_deduplicates_url(self, tmp_path):
+        """같은 URL 중복 기록 시 최신 것으로 교체"""
+        from pipeline.threads import crawler
+        original_path = crawler.FAILED_CRAWLS_FILE
+        test_path = os.path.join(str(tmp_path), "failed_crawls.json")
+        crawler.FAILED_CRAWLS_FILE = test_path
+        try:
+            log_failed_crawl("https://example.com/fail", "src1", "Title1", "404")
+            log_failed_crawl("https://example.com/fail", "src2", "Title2", "500")
+            with open(test_path, 'r') as f:
+                data = json.load(f)
+            assert len(data['failed']) == 1
+            assert data['failed'][0]['status'] == "500"
+        finally:
+            crawler.FAILED_CRAWLS_FILE = original_path

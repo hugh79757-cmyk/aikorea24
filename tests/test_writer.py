@@ -12,6 +12,7 @@ from pipeline.threads.writer import (
     _clean_english_leakage, _fix_korean_particle_spacing,
     _cleanup_source_attribution, _strip_instruction_leak,
     assemble_final, humanize_cards, fix_cards,
+    load_style_examples, build_system_prompt_D,
 )
 from pipeline.threads.writer import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE
 from pipeline.infra.config import project_root
@@ -186,3 +187,60 @@ class TestAssembleFinal:
         result = assemble_final(cards, [], primary_url="https://example.com")
         assert len(result) == 3
         assert "https://example.com" in result[-1]
+
+
+class TestLoadStyleExamples:
+    @pytest.mark.unit
+    def test_returns_string(self):
+        """load_style_examples는 문자열 반환"""
+        result = load_style_examples()
+        assert isinstance(result, str)
+
+    @pytest.mark.unit
+    def test_file_not_found_returns_empty(self, monkeypatch):
+        """파일 없을 때 빈 문자열 반환"""
+        import pipeline.threads.writer as writer_mod
+        monkeypatch.setattr(writer_mod, 'STYLE_EXAMPLES_PATH', '/nonexistent/path.md')
+        result = load_style_examples()
+        assert result == ''
+
+
+class TestBuildSystemPromptD:
+    @pytest.mark.unit
+    def test_contains_required_keywords(self):
+        """시스템 프롬프트에 필수 키워드 포함"""
+        prompt = build_system_prompt_D()
+        assert '반말체' in prompt
+        assert '카드' in prompt
+        assert '스스테이저' in prompt or 'stanza' in prompt
+
+    @pytest.mark.unit
+    def test_returns_string(self):
+        """build_system_prompt_D는 문자열 반환"""
+        result = build_system_prompt_D()
+        assert isinstance(result, str)
+        assert len(result) > 100
+
+
+class TestWriteThreadIntegration:
+    @pytest.mark.unit
+    def test_assemble_final_without_url(self, monkeypatch):
+        """URL 없을 때 원본 카드 그대로 반환 (출처 카드 추가 안 함)"""
+        import db_reader
+        def mock_validate(url, timeout=5):
+            return True
+        monkeypatch.setattr(db_reader, "validate_link", mock_validate)
+        cards = ["Card one", "Card two", "Card three"]
+        result = assemble_final(cards, [], primary_url="")
+        assert len(result) == 3  # 원본 그대로
+
+    @pytest.mark.unit
+    def test_humanize_cards_preserves_count(self, monkeypatch):
+        """humanize_cards는 원본 카드 수 유지"""
+        import v3.model_router
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+            return "---\n".join([f"humanized card {i}" for i in range(4)])
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        cards = [f"card {i}" for i in range(4)]
+        result = humanize_cards(cards)
+        assert len(result) == 4

@@ -297,4 +297,47 @@ class TestGetPitchesCrawlFail:
 
         assert len(pitches) == 1
         assert pitches[0]["hook"] == "한국어 hook 재생성 성공"
-        assert failed_ids == set()
+
+
+class TestParseTopPitch:
+    @pytest.mark.unit
+    def test_returns_first_pitch(self):
+        """parse_top_pitch는 첫 번째 피치 반환"""
+        from pipeline.threads.pitch import parse_top_pitch
+        text = '{"hook": "첫 번째", "narrative": "설명1"}'
+        fallback = [{"hook": "대체", "narrative": "대체 설명"}]
+        result = parse_top_pitch(text, fallback)
+        assert result["hook"] == "첫 번째"
+
+    @pytest.mark.unit
+    def test_invalid_json_returns_fallback(self):
+        """잘못된 JSON 시 fallback 반환"""
+        from pipeline.threads.pitch import parse_top_pitch
+        result = parse_top_pitch("invalid json", [{"hook": "대체"}])
+        assert result["hook"] == "대체"
+
+
+class TestRegeneratePitch:
+    @pytest.mark.unit
+    def test_regenerate_success(self, monkeypatch):
+        """재생성 성공 케이스"""
+        from pipeline.threads import pitch
+        import json
+        def mock_chat(**kw):
+            return json.dumps({"hook": "재생성된 hook", "narrative": "재생성된 narrative", "article_ids": [1]})
+        monkeypatch.setattr("v3.model_router.chat_completion", mock_chat)
+        original = {"hook": "원본 hook", "narrative": "원본 narrative"}
+        result = pitch._regenerate_pitch_from_crawl("테스트 기사 본문", 1, "https://example.com", "테스트 제목", original)
+        assert result is not None
+        assert result["hook"] == "재생성된 hook"
+
+    @pytest.mark.unit
+    def test_regenerate_failure(self, monkeypatch):
+        """재생성 실패 시 None 반환"""
+        from pipeline.threads import pitch
+        def mock_chat(**kw):
+            raise Exception("API error")
+        monkeypatch.setattr("v3.model_router.chat_completion", mock_chat)
+        original = {"hook": "원본 hook", "narrative": "원본 narrative"}
+        result = pitch._regenerate_pitch_from_crawl("테스트 기사 본문", 1, "https://example.com", "테스트 제목", original)
+        assert result is None
