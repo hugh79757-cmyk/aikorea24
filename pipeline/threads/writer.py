@@ -7,7 +7,7 @@ from collections import Counter
 from pipeline.infra import project_root
 from pipeline.infra.logger import get_scrubbed_logger
 
-from pipeline.threads.validator import validate_cards, validate_year, validate_keywords, validate_no_foreign_language, validate_final_output
+from pipeline.threads.validator import validate_cards, validate_year, validate_keywords, validate_no_foreign_language, validate_final_output, validate_model_message, validate_card_structure
 from pipeline.threads.validator import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE
 from pipeline.threads.crawler import fetch_article_body, log_failed_crawl
 
@@ -650,16 +650,29 @@ Threads는 발행글 하나당 500자 제한이 있음.
             cards = _cleanup_source_attribution(cards)
 
             if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
-                final_ok, final_reason = validate_final_output(cards)
-                if not final_ok:
-                    _log(f'  ⚠️ 최종 검증 실패: {final_reason} → 재시도')
+                # New structural validation
+                structure_ok, structure_reason = validate_card_structure(cards)
+                if not structure_ok:
+                    _log(f'⚠️ 카드 구조 검증 실패: {structure_reason} → 재시도')
                     continue
-                primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
-                cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
-                _log(f'  ✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
-                return cards
+
+                # Model message validation
+                for i, card in enumerate(cards, 1):
+                    if not validate_model_message(card):
+                        _log(f'⚠️ Card {i}: 모델 메시지 탐지 → 재시도')
+                        break
+                else:
+                    # No model message found — proceed to final validation
+                    final_ok, final_reason = validate_final_output(cards)
+                    if not final_ok:
+                        _log(f'⚠️ 최종 검증 실패: {final_reason} → 재시도')
+                        continue
+                    primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
+                    cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
+                    _log(f'✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
+                    return cards
             else:
-                _log(f'  ⚠️ 검증 실패: {len(cards)}개 조각 (시도 {attempt+1}/{max_attempts})')
+                _log(f'⚠️ 검증 실패: {len(cards)}개 조각 (시도 {attempt+1}/{max_attempts})')
         except Exception as e:
             _log(f'  ⚠️ 오류: {e} (시도 {attempt+1}/{max_attempts})')
 
@@ -688,9 +701,21 @@ Threads는 발행글 하나당 500자 제한이 있음.
         cards = fix_cards(cards)
         cards = _cleanup_source_attribution(cards)
         if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
+            # New structural validation
+            structure_ok, structure_reason = validate_card_structure(cards)
+            if not structure_ok:
+                _log(f'⚠️ 카드 구조 검증 실패 (fallback): {structure_reason}')
+                raise Exception(f'카드 구조 검증 실패: {structure_reason}')
+
+            # Model message validation
+            for i, card in enumerate(cards, 1):
+                if not validate_model_message(card):
+                    _log(f'⚠️ Card {i}: 모델 메시지 탐지 (fallback)')
+                    raise Exception(f'Card {i}: 모델 메시지 탐지')
+
             final_ok, final_reason = validate_final_output(cards)
             if not final_ok:
-                _log(f'  ⚠️ 최종 검증 실패 (fallback): {final_reason}')
+                _log(f'⚠️ 최종 검증 실패 (fallback): {final_reason}')
                 raise Exception(f'최종 검증 실패: {final_reason}')
             primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
             cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
