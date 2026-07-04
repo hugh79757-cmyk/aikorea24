@@ -394,33 +394,52 @@ launchd 환경은 `~/.zshrc`를 읽지 않으므로 `sys.path`가 필요하며, 
 > **2026-07-04 발견**: 프롬프트 노출/외국어 검증이 피치에는 적용되지만, 최종 카드에는 미적용.
 > 동일한 오류 반복 방지를 위해 문서화.
 
-### 11.1 현재 검증 체인
+### 11.1 현재 검증 체인 (Phase 11 이후)
 
 ```
 피치 생성 (narrative_pitcher)
-  ├→ detect_prompt_leak()      ✅ (시스템 프래그먼트 8개만 탐지)
+  ├→ detect_prompt_leak()      ✅ (시스템 프래그먼트 8개 + LEAKED_PROMPT_PATTERNS)
   ├→ clean_leaked_prompt()     ✅ (LEAKED_PROMPT_PATTERNS 3패턴 제거)
-  └→ validate_korean_output()  ✅ (한글 비율 + 영문 패턴)
+  ├→ validate_korean_output()  ✅ (CHINESE_PATTERN from validator, 한글 비율 ≥15%)
+  └→ FOREIGN LANGUAGE PATTERNS CONSOLIDATED → validator.py  (CHINESE_PATTERN, JAPANESE_PATTERN)
 
 쓰레드 작성 (writer)
   ├→ humanize_cards()          ✅ (AI 말투 교정)
-  ├→ _strip_instruction_leak() ✅ (humanize 출력에만)
-  ├→ fix_cards()               ✅ (영어 누출, 조사 간격)
-  ├→ validate_cards()          ⚠️ (카드 수 only)
-  ├→ validate_year()           ⚠️ (연도 only)
-  ├→ validate_keywords()       ⚠️ (키워드 only)
-  ├→ validate_no_foreign_language() ✅ (2026-07-04 추가)
-  └→ ❌ validate_prompt_leakage()   없음
+  ├→ _strip_model_explanatory() ✅ (MODEL_MESSAGE_PATTERNS from validator, lines filtered)
+  ├→ _strip_instruction_leak() ✅ (humanize + fix_cards output)
+  ├→ fix_cards()               ✅ (_strip_model_explanatory applied, 영어 누출, 조사 간격)
+  ├→ validate_cards()          ✅ (카드 수 + hook 길이)
+  ├→ validate_year()           ✅ (연도 hallucination 방지)
+  ├→ validate_keywords()       ✅ (키워드 변형 방지)
+  ├→ validate_model_message()  ✅ (ALL_MESSAGE_PATTERNS 26개 + structural checks)
+  ├→ validate_card_structure() ✅ (중복, 길이, 한글 비율, 문장 완성, hook/body 검증)
+  └→ validate_final_output()   ✅ (ALL_MESSAGE_PATTERNS + foreign lang + prompt leak + 한국어 ≥30% + unicodedata NFKC)
 ```
 
-### 11.2 발견된 갭
+### Phase 11 Defense Hardening Changes
 
-| # | 갭 | 영향 | 심각도 |
-|---|-----|------|--------|
-| G1 | 최종 카드에 프롬프트 노출 검증 없음 | `상식(A):`, `실제(B):` 라벨 발행 | 높음 |
-| G2 | `detect_prompt_leak()`가 시스템 프래그먼트만 검사 | `LEAKED_PROMPT_PATTERNS` 무시 | 중간 |
-| G3 | `response_format={'type': 'json_object'}` 미적용 | 쓰레드 작성 시 프롬프트 누출 가능 | 높음 |
-| G4 | `_strip_instruction_leak()`는 humanize에만 적용 | 원본 카드 프롬프트 노출 무시 | 중간 |
+| 변경 | 설명 |
+|------|------|
+| **Pattern Consolidation** | `MODEL_MESSAGE_PATTERNS`는 이제 validator.py에서 단일 진실 공급원. writer.py는 import만 사용. |
+| **Unified Pattern Set** | `validate_final_output()`가 `ALL_MESSAGE_PATTERNS` (26개) 사용 — 이전에는 8개만. |
+| **Threshold Harmonization** | 한국어 비율 ≥30%로 통일 (이전 final_output은 10%). |
+| **Link Card Strip Fix** | `validate_model_message()`에서 `card.strip().startswith('🔗')` 사용. |
+| **Dead Import Removal** | writer.py에서 `validate_no_foreign_language` import 제거 (validator에는 유지). |
+| **NFKC Normalization** | `validate_final_output()`에서 `unicodedata.normalize('NFKC', card)` 적용 — 전각/반각 문자 통합. |
+| **Foreign Language Pattern Consolidation** | `CHINESE_PATTERN`, `JAPANESE_PATTERN` → validator.py에서 export, pitch.py가 import. |
+| **Strengthened LLM Prompt** | `build_system_prompt_D()`에 일본어(히라가나·가타카나) 금지 + 한자 1글자라도 차단 경고 + 고유명사는 영어만. |
+| **Integration Tests** | `tests/test_write_thread_validation.py` — E2E retry chain 6 tests. |
+
+### 11.2 발견된 갭 (Phase 11 Status)
+
+| # | 갭 | 영향 | 심각도 | 상태 |
+|---|-----|------|--------|------|
+| G1 | 최종 카드에 프롬프트 노출 검증 없음 | `상식(A):`, `실제(B):` 라벨 발행 | 높음 | ✅ PHASE 11 해결 (ALL_MESSAGE_PATTERNS 26개) |
+| G2 | `detect_prompt_leak()`가 시스템 프래그먼트만 검사 | `LEAKED_PROMPT_PATTERNS` 무시 | 중간 | ✅ 해결됨 |
+| G3 | `response_format={'type': 'json_object'}` 미적용 | 쓰레드 작성 시 프롬프트 누출 가능 | 높음 | ✅ 해결됨 |
+| G4 | `_strip_instruction_leak()`는 humanize에만 적용 | 원본 카드 프롬프트 노출 무시 | 중간 | ✅ 해결됨 |
+| G5 | MODEL_MESSAGE_PATTERNS duplicated (validator + writer) | 유지보수 드리프트 위험 | 중간 | ✅ PHASE 11 해결 (validator 단일 소스) |
+| G6 | validate_final_output Korean ratio 10% vs others 30% | 불일치 | 낮음 | ✅ PHASE 11 해결 (≥30% 통일) |
 
 ### 11.3 반복 오류 패턴
 
