@@ -5,6 +5,29 @@
 
 ---
 
+## 2026-07-04 — Phase 8: Validation Gap Closure (3중 방어 시스템)
+
+### 변경
+- `pipeline/threads/pitch.py` — `detect_prompt_leak()` 확장: `LEAKED_PROMPT_PATTERNS` 통합 검사 + 전체 텍스트 검사 범위 확장
+- `pipeline/threads/validator.py` — `validate_final_output()` 신규: 프롬프트+외국어+한글 통합 검증 (3차 방어)
+- `pipeline/threads/writer.py` — `write_thread()` validation chain: `validate_no_foreign_language()` → `validate_final_output()` 교체 (3차 방어 적용)
+- `tests/test_validator.py` — `TestValidateFinalOutput` 5개 테스트 신규 + `TestDetectPromptLeakPatterns` 4개 테스트 신규
+
+### 의사결정
+- Phase 6가 피치에만 검증 적용 → 최종 카드 무시 → 재발한 사례를 교훈으로 기록
+- MiMo v2.5는 중국 모델이라 한국어 프롬프트에도 한자 생성 경향 → 프롬프트 + 후처리 양쪽 모두 방어
+- "Monetary Authority of Singapore"는 한국인이 모르는 고유명사가 아님 → 한자→한국어 번역으로 해결
+
+### 영향
+- 3중 방어 체계 완성: 1차(피치 생성) → 2차(쓰레드 작성 후) → 3차(발행 직전)
+- 프롬프트 노출 + 외국어(한자/일본어) 최종 카드에서 완전 차단
+
+### 검증
+- 21/21 `test_validator.py` 통과
+- 205/206 전체 테스트 통과 (1 pre-existing freshness 실패)
+
+---
+
 ## 2026-07-03 — 크롤링 실패 시 RSS fallback 폐기 (품질 개선)
 
 ### 변경

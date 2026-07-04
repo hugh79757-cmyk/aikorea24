@@ -1,7 +1,9 @@
-"""pipeline/threads/validator.py — 카드, 연도, 키워드 검증"""
+"""pipeline/threads/validator.py — 카드, 연도, 키워드, 최종 출력 검증"""
 import re
 from datetime import datetime
 from collections import Counter
+
+from pipeline.threads.pitch import detect_prompt_leak
 
 FORMAT_CARD_COUNTS = {'D': 6}
 FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 7)}
@@ -118,6 +120,40 @@ def validate_no_foreign_language(cards: list[str]) -> tuple[bool, str]:
         japanese = _JAPANESE_PATTERN.findall(card)
         if japanese:
             return False, f"Card {i}: 일본어 감지 ({len(japanese)}개) — {''.join(japanese[:5])}"
+    return True, "OK"
+
+
+# === 최종 출력 통합 검증 (3차 방어) ===
+_KOREAN_PATTERN = re.compile(r'[가-힣]')
+
+
+def validate_final_output(cards: list[str]) -> tuple[bool, str]:
+    """최종 카드 통합 검증 — 발행 전 3차 방어
+    검증 순서: 프롬프트 노출 → 외국어 → 한글 비율
+    """
+    for i, card in enumerate(cards, 1):
+        # 1. 프롬프트 노출 검사
+        leaked, reason = detect_prompt_leak(card)
+        if leaked:
+            return False, f"Card {i}: {reason}"
+        
+        # 2. 외국어 검사 (한자)
+        chinese = _CHINESE_PATTERN.findall(card)
+        if chinese:
+            return False, f"Card {i}: 한자 감지 ({len(chinese)}개) — {''.join(chinese[:5])}"
+        
+        # 3. 외국어 검사 (일본어)
+        japanese = _JAPANESE_PATTERN.findall(card)
+        if japanese:
+            return False, f"Card {i}: 일본어 감지 ({len(japanese)}개) — {''.join(japanese[:5])}"
+        
+        # 4. 한글 비율 검사 (출처 링크 카드 제외)
+        if not card.strip().startswith('🔗'):
+            korean = len(_KOREAN_PATTERN.findall(card))
+            total = len(card.strip())
+            if total > 10 and korean < total * 0.1:
+                return False, f"Card {i}: 한글 비율 부족 ({korean}/{total})"
+    
     return True, "OK"
 
 

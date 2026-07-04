@@ -44,13 +44,18 @@ _SYSTEM_PROMPT_FRAGMENTS = [
 
 
 def detect_prompt_leak(text: str) -> tuple[bool, str]:
+    """프롬프트 노출 검사 — 2중 검증 (시스템 프래그먼트 + 라벨 패턴)"""
+    # 1. 시스템 프래그먼트 검사 (처음 300자)
     short = text[:300].lower()
-    matches = []
     for frag in _SYSTEM_PROMPT_FRAGMENTS:
         if frag.lower() in short:
-            matches.append(frag)
-    if matches:
-        return True, f"프롬프트 프래그먼트 탐지: {matches}"
+            return True, f"프롬프트 프래그먼트 탐지: {frag}"
+    
+    # 2. 프롬프트 라벨 검사 (전체 텍스트)
+    for pattern in LEAKED_PROMPT_PATTERNS:
+        if re.search(pattern, text):
+            return True, f"프롬프트 라벨 탐지: {pattern}"
+    
     return False, "OK"
 
 
