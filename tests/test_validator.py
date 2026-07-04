@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 from pipeline.threads.validator import (
     validate_cards, validate_year, validate_keywords, validate_final_output,
+    validate_model_message, validate_card_structure,
 )
 
 
@@ -179,6 +180,143 @@ class TestDetectPromptLeakPatterns:
         leaked, reason = detect_prompt_leak(text)
         assert leaked is False
         assert reason == "OK"
+
+
+class TestValidateModelMessage:
+    @pytest.mark.unit
+    def test_known_message(self):
+        card = "수정할 글자 단위 오류가 발견되지 않았습니다."
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_polite_form(self):
+        card = "수정이 필요 없습니다."
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_short_response(self):
+        card = "네"
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_english_message(self):
+        card = "No changes needed."
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_valid_content(self):
+        card = "Mia Taylor는 투표 용지를 촬영해 Claude에게 물었음."
+        assert validate_model_message(card) is True
+
+    @pytest.mark.unit
+    def test_link_card(self):
+        card = "🔗 https://example.com"
+        assert validate_model_message(card) is True
+
+    @pytest.mark.unit
+    def test_confirmed_message(self):
+        card = "확인됨."
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_completed_message(self):
+        card = "완료했음."
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_no_errors_message(self):
+        card = "No errors found."
+        assert validate_model_message(card) is False
+
+    @pytest.mark.unit
+    def test_returning_original_message(self):
+        card = "Returning original content."
+        assert validate_model_message(card) is False
+
+
+class TestValidateCardStructure:
+    @pytest.mark.unit
+    def test_valid_cards(self):
+        cards = [
+            "Mia Taylor는 투표 용지를 촬영해 Claude에게 물었음.",
+            "그녀는 AI에게 '이곳에서 누구에게 투표해야 할까?'라고 물었음.",
+            "Claude는 처음에 대답을 거부했음.",
+        ]
+        assert validate_card_structure(cards) == (True, "OK")
+
+    @pytest.mark.unit
+    def test_duplicate_cards(self):
+        cards = ["동일한 카드 내용이 두 번 반복됨.", "동일한 카드 내용이 두 번 반복됨.", "세 번째 카드입니다."]
+        ok, reason = validate_card_structure(cards)
+        assert ok is False
+        assert "중복" in reason
+
+    @pytest.mark.unit
+    def test_short_card(self):
+        cards = ["짧음", "두 번째 카드는 충분히 긴 내용을 담고 있음."]
+        ok, reason = validate_card_structure(cards)
+        assert ok is False
+        assert "짧음" in reason
+
+    @pytest.mark.unit
+    def test_no_korean(self):
+        cards = ["No Korean content here at all.", "Second card with no Korean."]
+        ok, reason = validate_card_structure(cards)
+        assert ok is False
+        assert "한글" in reason
+
+    @pytest.mark.unit
+    def test_link_card_exempt(self):
+        cards = [
+            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
+            "🔗 https://example.com",
+        ]
+        assert validate_card_structure(cards) == (True, "OK")
+
+    @pytest.mark.unit
+    def test_empty_cards(self):
+        ok, reason = validate_card_structure([])
+        assert ok is False
+        assert "카드 없음" in reason
+
+    @pytest.mark.unit
+    def test_sentence_incomplete(self):
+        cards = [
+            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
+            "두 번째 카드는 문장이 끝나지 않았음",
+        ]
+        ok, reason = validate_card_structure(cards)
+        assert ok is False
+        assert "문장 미완성" in reason
+
+    @pytest.mark.unit
+    def test_ellipsis_acceptable(self):
+        cards = [
+            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
+            "두 번째 카드는 내용이 이어지는 중...",
+        ]
+        assert validate_card_structure(cards) == (True, "OK")
+
+    @pytest.mark.unit
+    def test_hook_too_short(self):
+        cards = [
+            "짧은 훅",
+            "두 번째 카드는 충분히 긴 내용을 담고 있는 카드임.",
+        ]
+        ok, reason = validate_card_structure(cards)
+        assert ok is False
+        assert "Hook" in reason
+
+    @pytest.mark.unit
+    def test_body_too_short(self):
+        cards = [
+            "첫 번째 카드는 충분히 긴 내용을 담고 있음.",
+            "🔗 https://example.com",
+            "짧음",
+        ]
+        ok, reason = validate_card_structure(cards)
+        assert ok is False
+        assert "길이 비정상" in reason
 
 
 
