@@ -258,12 +258,6 @@ def humanize_cards(cards):
     if not cards:
         return cards
 
-    text = '\n---\n'.join(cards)
-    original_len = len(text)
-
-    if original_len < 10:
-        return cards
-
     system_prompt = """당신은 한국어 Threads 쓰레드 에디터입니다. AI가 생성한 글에서 'AI 티'가 나는 패턴을 자연스러운 한국어로 교체합니다.
 ## 핵심 원칙
 1. **의미 불변**: 사실·수치·고유명사·링크는 절대 변경 금지
@@ -336,42 +330,45 @@ def humanize_cards(cards):
 - 원본과 동일한 카드 수 유지
 - 카드 사이 --- 구분자 정확히 유지"""
 
-    user_prompt = f"""다음 Threads 쓰레드의 AI 말투를 자연스러운 한국어로 다듬어라.
-[원본]
-{text}
+    fixed = []
+    for i, card in enumerate(cards):
+        if len(card) < 10:
+            fixed.append(card)
+            continue
+        prompt = f"""다음 카드의 AI 말투를 자연스러운 한국어로 다듬어라.
+
+[카드 내용]
+{card}
 
 [출력 규칙]
 - 내용(사실, 수치, 고유명사)은 절대 변경하지 말 것
 - 반말체(~임, ~했음, ~있음) 그대로 유지
-- --- 구분자 정확히 유지
-- 수정된 쓰레드만 출력"""
+- 수정된 카드 내용만 출력 (부가 설명 금지)
+- 수정할 게 없으면 원본을 그대로 반환"""
+        try:
+            result = chat_completion(
+                system_prompt=system_prompt,
+                messages=[{'role': 'user', 'content': prompt}],
+                temperature=0.3,
+                max_tokens=2000,
+            )
+            if result:
+                result = _strip_instruction_leak(result)
+                result = _strip_model_explanatory(result)
+                result = result.strip()
+                if result:
+                    fixed.append(result)
+                else:
+                    fixed.append(card)
+            else:
+                fixed.append(card)
+        except Exception as e:
+            _log(f'  ⚠️ humanize 카드 {i} 오류: {e} → 원본 유지')
+            fixed.append(card)
 
-    try:
-        result = chat_completion(
-            system_prompt=system_prompt,
-            messages=[{'role': 'user', 'content': user_prompt}],
-            temperature=0.3,
-            max_tokens=5000,
-        )
-        if not result:
-            _log(f'  ⚠️ humanize: 응답 없음 → 원본 유지')
-            return cards
-
-        result = _strip_instruction_leak(result)
-        result = _strip_model_explanatory(result)
-        fixed = [c.strip() for c in result.split('---') if c.strip()]
-
-        if len(fixed) != len(cards):
-            _log(f'  ⚠️ humanize: 카드 수 불일치 (입력 {len(cards)}개 → 출력 {len(fixed)}개) → 원본 유지')
-            return cards
-
-        changed_cards = sum(1 for a, b in zip(cards, fixed) if a != b)
-        _log(f'  🧹 humanize: {changed_cards}/{len(cards)}개 카드 수정')
-        return fixed
-
-    except Exception as e:
-        _log(f'  ⚠️ humanize 오류: {e} → 원본 유지')
-        return cards
+    changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
+    _log(f'  🧹 humanize: {changed}/{len(cards)}개 카드 수정')
+    return fixed
 
 
 def _cleanup_source_attribution(cards):

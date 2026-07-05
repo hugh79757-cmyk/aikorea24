@@ -115,25 +115,31 @@ class TestHumanizeCards:
     def test_preserves_on_count_match(self, monkeypatch):
         """humanize_cards는 카드 수가 일치하면 humanize 결과 반환"""
         import v3.model_router
+        call_count = [0]
         def mock_chat(*, system_prompt, messages, temperature, max_tokens):
-            return "---\n".join(["humanized card " + str(i) for i in range(6)])
+            idx = call_count[0]
+            call_count[0] += 1
+            return f"humanized card {idx}"  # per-card: 각 카드마다 개별 호출
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = [f"card {i}" for i in range(6)]
+        cards = [f"This is a longer test card number {i} that exceeds ten characters" for i in range(6)]
         result = humanize_cards(cards)
         assert len(result) == 6
         assert "humanized" in result[0]
+        assert call_count[0] == 6  # 6개 카드 각각 LLM 호출
 
     @pytest.mark.unit
-    def test_returns_original_on_count_mismatch(self, monkeypatch):
-        """humanize_cards는 count 불일치 시 원본 반환 + 로그"""
+    def test_returns_original_on_empty_response(self, monkeypatch):
+        """humanize_cards: LLM이 None 반환 시 원본 카드 유지"""
         import v3.model_router
+        call_count = [0]
         def mock_chat(*, system_prompt, messages, temperature, max_tokens):
-            return "only one card"  # 1 card for 6 input
+            call_count[0] += 1
+            return None  # Simulate LLM failure
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
         cards = [f"card {i}" for i in range(6)]
         result = humanize_cards(cards)
-        assert result is cards
-        assert len(result) == 6
+        assert len(result) == 6  # 카드 수 유지
+        assert result == cards  # 원본 그대로
 
     @pytest.mark.unit
     def test_empty_input(self, monkeypatch):
@@ -146,7 +152,8 @@ class TestHumanizeCards:
     def test_short_input(self):
         """humanize_cards는 10자 미만 입력 시 그대로 반환 (LLM 호출 없음)"""
         cards = ["short"]
-        assert humanize_cards(cards) is cards
+        result = humanize_cards(cards)
+        assert result == cards  # 내용 동일 (per-card는 새 리스트 반환)
 
 
 class TestFixCards:
