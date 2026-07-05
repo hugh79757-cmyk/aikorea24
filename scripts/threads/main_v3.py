@@ -183,6 +183,11 @@ def run_v3(dry_run=False):
 
         if not cards:
             log(f'  ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
+            pitch_ids = pitch.get('article_ids', [])
+            for aid in pitch_ids:
+                raw = str(aid).lstrip('#').strip()
+                if raw:
+                    failed_article_ids.add(raw)
             continue
 
         save_draft(cards, pitch)
