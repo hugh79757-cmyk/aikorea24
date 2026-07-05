@@ -113,13 +113,19 @@ keywords.json → D1 DB ← db_reader (기사 수집)
 | `run_v3()` | `main_v3.py:129` | 전체 파이프라인 실행 |
 | `validate_final_cards()` | `main_v3.py:41` | 발행 전 최종 검증 |
 | `select_format()` | `format_selector.py:19` | 형식 선택 (항상 D) |
-| `get_pitches()` | `narrative_pitcher.py` | 피치 생성 |
-| `write_thread()` | `writer_v3.py:596` | 쓰레드 작성 |
-| `assemble_final()` | `writer_v3.py:940` | 링크 카드 추가 |
-| `save_draft()` | `writer_v3.py:980` | 초안 저장 |
-| `publish_thread_chain()` | `publisher.py` | Threads 발행 |
-| `build_system_prompt_D()` | `writer_v3.py:59` | D 형식 프롬프트 |
-| `_FORMAT_COMMON_RULES()` | `writer_v3.py:158` | 공통 규칙 |
+| `get_pitches()` | `pipeline/threads/pitch.py` | 피치 생성 |
+| `write_thread()` | `pipeline/threads/writer.py:501` | 쓰레드 작성 |
+| `parse_cards()` | `pipeline/threads/writer.py:491` | LLM 출력 → 카드 분할 (--- 우선, \n\n fallback) |
+| `_repair_truncated_cards()` | `pipeline/threads/writer.py:463` | \n\n split 후 불완결 카드 병합 (forward + backward pass) |
+| `_remove_duplicate_links()` | `pipeline/threads/writer.py:` | 중복 🔗 카드 자동 제거 |
+| `build_system_prompt_D()` | `pipeline/threads/writer.py:59` | D 형식 프롬프트 |
+| `assemble_final()` | `pipeline/threads/writer.py` | 링크 카드 추가 |
+| `save_draft()` | `pipeline/threads/writer.py` | 초안 저장 |
+| `validate_card_structure()` | `pipeline/threads/validator.py:239` | 카드 구조 검증 (길이, 한글비율, 문장 완성, 중복) |
+| `validate_final_output()` | `pipeline/threads/validator.py:176` | 최종 출력 통합 검증 (3차 방어) |
+| `publish_thread_chain()` | `pipeline/threads/publisher.py` | Threads 발행 |
+| `load_failed_articles()` | `scripts/threads/failed_articles.py` | 영구 실패 기사 목록 로드 |
+| `save_failed_article()` | `scripts/threads/failed_articles.py` | 실패 기사 영구 저장 |
 
 ---
 

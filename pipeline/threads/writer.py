@@ -349,6 +349,7 @@ def humanize_cards(cards):
                 messages=[{'role': 'user', 'content': prompt}],
                 temperature=0.3,
                 max_tokens=2000,
+                model_override='openai',
             )
             if result:
                 result = _strip_instruction_leak(result)
@@ -434,6 +435,7 @@ def fix_cards(cards):
                 messages=[{'role': 'user', 'content': prompt}],
                 temperature=0.1,
                 max_tokens=2000,
+                model_override='openai',
             )
             if result:
                 result = _strip_model_explanatory(result)
@@ -461,16 +463,33 @@ def fix_cards(cards):
 
 
 def _repair_truncated_cards(cards):
-    """Merge cards where previous card ends mid-sentence (hook card excluded)."""
+    """Merge cards where card ends mid-sentence. Preserves minimum card count."""
     if not cards:
         return cards
+    
+    MIN_COUNT = 4  # format D tolerance lo
+    SENTENCE_ENDERS = ('.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다', '\u3002')
+    
+    # Forward pass: merge incomplete card with next card
     fixed = [cards[0]]
+    remaining = len(cards) - 1
     for card in cards[1:]:
         prev = fixed[-1].strip()
-        if prev and not any(prev.endswith(e) for e in ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다']):
+        if len(fixed) + remaining > MIN_COUNT and prev and not any(prev.endswith(e) for e in SENTENCE_ENDERS):
             fixed[-1] = fixed[-1] + '\n\n' + card
         else:
             fixed.append(card)
+        remaining -= 1
+    
+    # Backward pass: if last card is incomplete (and not a link card), merge into previous
+    if len(fixed) > 1 and len(fixed) > MIN_COUNT:
+        last = fixed[-1].strip()
+        if last.startswith('🔗'):
+            pass  # Don't merge link cards
+        elif last and not any(last.endswith(e) for e in SENTENCE_ENDERS):
+            fixed[-2] = fixed[-2] + '\n\n' + fixed[-1]
+            fixed.pop()
+    
     return fixed
 
 
@@ -480,12 +499,19 @@ def parse_cards(text, format_choice='D'):
         return cards
     lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
     if len(cards) < lo:
-        alt = [c.strip() for c in text.split('\n\n') if c.strip()]
+        alt = [c.strip() for c in text.split('\n\n\n') if c.strip()]
         alt = [c for c in alt if len(c) > 20]
         if len(alt) >= lo:
-            _log(f'  parse_cards: --- 없음, \\n\\n으로 {len(alt)}개 분할')
-            alt = _repair_truncated_cards(alt)
+            _log(f'  parse_cards: --- 없음, \\n\\n\\n으로 {len(alt)}개 분할')
             cards = alt
+        else:
+            # Fallback: \n\n (with repair)
+            alt = [c.strip() for c in text.split('\n\n') if c.strip()]
+            alt = [c for c in alt if len(c) > 20]
+            if len(alt) >= lo:
+                _log(f'  parse_cards: --- 없음, \\n\\n으로 {len(alt)}개 분할')
+                alt = _repair_truncated_cards(alt)
+                cards = alt
     if format_choice == 'D' and len(cards) > 1:
         c1_lines = [l for l in cards[0].split('\n') if l.strip()]
         if len(c1_lines) <= 3:
@@ -495,7 +521,26 @@ def parse_cards(text, format_choice='D'):
                 cards[0] = cards[0] + '\n\n' + '\n'.join(merge)
                 cards[1] = '\n'.join(c2_lines[min(3, len(c2_lines)):])
                 cards = [c.strip() for c in cards if c.strip()]
+    # Remove duplicate links
+    cards = _remove_duplicate_links(cards)
     return cards
+
+
+def _remove_duplicate_links(cards):
+    if len(cards) < 2:
+        return cards
+    seen_urls = set()
+    deduped = []
+    for c in cards:
+        if c.startswith('🔗') or c.startswith('http'):
+            url = c.split('\n')[0].strip()
+            if '🔗' in url:
+                url = url.replace('🔗', '').strip()
+            if url in seen_urls:
+                continue
+            seen_urls.add(url)
+        deduped.append(c)
+    return deduped
 
 
 def write_thread(pitch, all_articles, format_choice=None):
@@ -603,27 +648,33 @@ def write_thread(pitch, all_articles, format_choice=None):
 === 작성 방법 ===
 Threads는 발행글 하나당 500자 제한이 있음.
 따라서 하나의 이야기를 여러 발행글로 나누어 연쇄 발행해야 함.
-각 발행글은 --- 로 구분하며, 마지막 발행글은 출처 링크만 넣음.
+각 발행글은 빈 줄 2개(\n\n\n)로 구분하며, 마지막 발행글은 출처 링크만 넣음.
 
 아래 형식을 정확히 따라라:
 
+발행글 내용 450~500자 (stanza 사이는 빈 줄 1개, 문장 끝에 \n 하나만 사용)
+
+
 발행글 내용 450~500자
----
+
+
 발행글 내용 450~500자
----
+
+
 발행글 내용 450~500자
----
+
+
 발행글 내용 450~500자
----
-발행글 내용 450~500자
----
+
+
 🔗 https://...
 
 === 요구사항 ===
 1. 각 발행글 450~500자. 400자 미만 금지. 정보 부족 시 기사 본문에서 추가 추출.
-2. 반말체(~임, ~했음, ~있음). ~합니다 금지.
-3. 기사 본문 숫자는 전부 사용. "많은", "대규모" 금지.
-4. 한 줄 25~40자. 정보를 압축.
+2. 각 발행글 내부의 빈 줄(\n\n)은 stanza 구분용으로만 사용. 카드 사이만 \n\n\n으로 구분할 것.
+3. 반말체(~임, ~했음, ~있음). ~합니다 금지.
+4. 기사 본문 숫자는 전부 사용. "많은", "대규모" 금지.
+5. 한 줄 25~40자. 정보를 압축.
 5. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
 6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
 7. --- 카드 시작 ---, --- 카드 끝 --- 등 추가 레이블 절대 넣지 마라. ---만 구분자로 사용하라.
@@ -740,6 +791,35 @@ def assemble_final(cards, articles, primary_url=None, crawled_urls=None, format_
         if len(cards) == 6:
             cards.pop()
 
+    # Final safety dedup
+    cards = _remove_duplicate_links(cards)
+    
+    # Pad to 6 cards if needed (split longest card at sentence boundary)
+    if len(cards) < 6:
+        longest_idx = -1
+        longest_len = -1
+        for i, c in enumerate(cards):
+            if c.startswith('🔗'):
+                continue
+            if len(c) > longest_len:
+                longest_len = len(c)
+                longest_idx = i
+        
+        if longest_idx >= 0:
+            card = cards[longest_idx]
+            # Split at a sentence boundary near the middle
+            mid = len(card) // 2
+            split_pos = -1
+            for sep in ['. ', '.\n', '했음\n', '있음\n', '임\n']:
+                pos = card.find(sep, max(mid - 30, 0), min(mid + 30, len(card)))
+                if pos > 0:
+                    split_pos = pos + len(sep) - 1
+                    break
+            
+            if split_pos > 0:
+                cards[longest_idx] = card[:split_pos]
+                cards.insert(longest_idx + 1, card[split_pos:].strip())
+    
     return cards
 
 

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_13_in_progress
-stopped_at: Phase 13 — card separation fix mid-execution. _repair_truncated_cards added, fix_cards template artifact removed, humanize/fix parallelized. Remaining: persistent failed-article tracking (38290 infinite retry loop).
-last_updated: 2026-07-05T10:45:00.000Z
+status: phase_13_complete
+stopped_at: Phase 13 — Card Separation Fix & Validation Hardening complete. 3 plans executed: persistent article tracking (13-01), validation fixes/Chinese period (13-02), repair strengthening (13-03). All 287 tests passing.
+last_updated: 2026-07-05T12:10:00.000Z
 last_activity: 2026-07-05
 progress:
   total_phases: 13
-  completed_phases: 12
-  total_plans: 30
-  completed_plans: 29
-  percent: 97
+  completed_phases: 13
+  total_plans: 32
+  completed_plans: 32
+  percent: 100
 ---
 
 # Project State
@@ -21,22 +21,26 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 12 — Writer Instability Fix
+**Current focus:** Phase 13 — Card Separation Fix & Validation Hardening (Complete)
 
 ## Current Position
 
-Phase: 12 (writer-instability-fix) — Complete
-Plan: All 2 plans executed
-Status: 12-02 Complete — all Phase 12 plans finished
+Phase: 13 (card-separation-fix) — Complete
+Plan: All 3 plans executed (13-01, 13-02, 13-03)
+Status: 13-03 Complete — all Phase 13 plans finished
 Last activity: 2026-07-05
 
 Progress: [████████████████████████] 100%
 
-### Phase 11 Details (Defense Mechanism Hardening)
-- **Problem**: AI models (MiMo, GPT-4o-mini, DeepSeek) occasionally return explanatory messages that get included as content cards in published Threads posts
-- **Fix**: Added `_strip_model_explanatory()` utility function to filter model messages before card splitting; applied to `fix_cards()` and `humanize_cards()`; added detection to `validate_final_output()`
-- **Key changes**: `writer.py` — `MODEL_MESSAGE_PATTERNS` list + `_strip_model_explanatory()` function + filters in `fix_cards()` and `humanize_cards()`; `validator.py` — model message detection in `validate_final_output()`
-- **Verification**: All 241 tests pass (227 existing + 14 new), 1 pre-existing failure unchanged
+### Phase 13 Details (Card Separation Fix & Validation Hardening)
+- **Problem**: `\n\n` split produces inconsistent cards (mid-sentence truncation, duplicate links). MiMo v2.5 Chinese period `。` causes validation false positives. Article 38290 infinite retry loop.
+- **Fix**: 
+  1. `failed_articles.py` — persistent disk storage for failed article IDs across launchd cycles
+  2. `sentence_enders`에 `\u3002`(중국어 마침표) 추가 → `validate_card_structure()` + `_repair_truncated_cards()`
+  3. `_remove_duplicate_links()` — 중복 `🔗` 카드 파싱 단계에서 자동 제거
+  4. `_repair_truncated_cards()` backward pass — 마지막 카드 불완결 시 앞 카드에 병합
+- **Key changes**: `validator.py` — sentence_enders; `writer.py` — repair backward pass + dup link removal; `failed_articles.py` new module; `main_v3.py` integration
+- **Verification**: All 287 tests pass (268 existing + 13 + 6 new), 0 failures
 
 ### Phase 11 Details (Defense Mechanism Hardening)
 - **Goal**: Harden defense against prompt injection and foreign characters — improve maintainability, consistency, comprehensiveness
@@ -86,6 +90,9 @@ Progress: [███████████████████████
 | Phase 11-defense-hardening 11-01 | 15min | 11 tasks | 10 files |
 | Phase 12-writer-instability-fix 12-01 | 4min | 4 tasks | 3 files |
 | Phase 12-writer-instability-fix 12-02 | 3min | 4 tasks (1 no-op) | 2 files |
+| Phase 13-card-separation-fix 13-01 | — | 4 tasks | 3 files |
+| Phase 13-card-separation-fix 13-02 | 1min | 4 tasks | 3 files |
+| Phase 13-card-separation-fix 13-03 | 2min | 6 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -98,6 +105,10 @@ Recent decisions affecting current work:
 - [Phase 11]: Single source of truth for all patterns (MODEL_MESSAGE_PATTERNS, ADDITIONAL_MESSAGE_PATTERNS, CHINESE_PATTERN, JAPANESE_PATTERN) — validator.py
 - [Phase 11]: Korean ratio threshold 30% uniform across all 3 validation functions
 - [Phase 11]: E2E validation chain tests (test_write_thread_validation.py) cover LLM response → validation → retry flow
+- [Phase 13]: `\n\n` split 유지, `_repair_truncated_cards()` 강화로 보완 (return to `---` rejected: too many card count failures)
+- [Phase 13]: `sentence_enders`에 `\u3002`(중국어 마침표) 추가 — MiMo v2.5 특성 반영
+- [Phase 13]: `_remove_duplicate_links()` 추가 — `\n\n` split의 중복 링크 문제 해결
+- [Phase 13]: Persistent failed article tracking (failed_articles.py) — article 38290 infinite retry loop 해결
 
 ### Pending Todos
 
@@ -115,7 +126,9 @@ None. All phases complete. Pipeline running stable with launchd scheduler.
 
 ## Session Continuity
 
-Last session: 2026-07-05T12:00:00.000Z
-Stopped at: Phase 12 complete — all 2 plans executed. Writer instability fixed.
+Last session: 2026-07-05T12:10:00.000Z
+Stopped at: Phase 13 complete — all 3 plans executed. Card separation + validation fixes + persistent tracking.
 Resume file: None
-Next: All phases complete — awaiting next phase definition
+Next: All pipeline phases complete (13/13). Consider:
+  - Phase 14: Hook 문장 종결 과다 (구조적 문제, `\n\n` split 근본 한계)
+  - Phase 15: E2E 드라이런 조용한 실행 (시간 많이 소요, 별도 배치)

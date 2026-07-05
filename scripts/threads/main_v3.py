@@ -26,6 +26,8 @@ sys.path.insert(0, THREADS_DIR)
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
+import failed_articles
+
 # Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
     ts = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -92,8 +94,8 @@ def validate_final_cards(cards):
     ENG_LEAK_RE = re.compile(r'(?<![A-Z])[가-힣][A-Za-z]{3,}|[A-Za-z]{3,}[가-힣](?![가-힣])')
     for i, card in enumerate(cards):
         for line in card.split('\n'):
-            # 고유명사(대문자 시작) + 조사 패턴은 허용
-            clean = re.sub(r'\b[A-Z][a-z]+[의을를이가과는]', '', line)
+            # 고유명사(대문자 시작, MixCase 포함) + 조사 패턴은 허용
+            clean = re.sub(r'\b[A-Z][A-Za-z0-9.\-]+[의을를이가과는은]', '', line)
             if ENG_LEAK_RE.search(clean):
                 issues.append(f'카드 {i+1}: 한글+영어 붙어쓰기 ("{line.strip()[:50]}")')
                 break
@@ -106,8 +108,8 @@ def validate_final_cards(cards):
 
 def run_v3(dry_run=False):
     max_retries = 5
-    retry_delays = [60, 120, 300, 600]  # 1분 → 2분 → 5분 → 10분 (기하급수적 백오프)
-    failed_article_ids: set[str] = set()
+    retry_delays = [60, 120, 300, 600] # 1분 → 2분 → 5분 → 10분 (기하급수적 백오프)
+    failed_article_ids = failed_articles.load_failed_articles()
 
     for attempt in range(1, max_retries + 1):
         if attempt > 1:
@@ -182,16 +184,16 @@ def run_v3(dry_run=False):
         cards = write_thread(pitch, articles)
 
         if not cards:
-            log(f'  ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
+            log(f' ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
             pitch_ids = pitch.get('article_ids', [])
             for aid in pitch_ids:
-                raw = str(aid).lstrip('#').strip()
-                if raw:
-                    failed_article_ids.add(raw)
+                aid_str = str(aid).lstrip('#').strip()
+                if aid_str:
+                    failed_articles.save_failed_article(aid_str, reason="write_validation_failed", title=pitch.get('title', ''), url=pitch.get('link', ''))
             continue
 
         save_draft(cards, pitch)
-        log(f'  ✅ {len(cards)}개 조각 작성 완료')
+        log(f' ✅ {len(cards)}개 조각 작성 완료')
 
         # 발행 전 최종 검증
         valid, issues = validate_final_cards(cards)

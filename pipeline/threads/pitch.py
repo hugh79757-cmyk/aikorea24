@@ -513,6 +513,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
                 temperature=0.9,
                 max_tokens=3000,
                 response_format={'type': 'json_object'},
+                model_override='openai',
             )
             pitches = parse_pitches_from_text(resp, articles_text)
             _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -534,6 +535,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
 {all_articles_joined}"""}],
                     temperature=0.9,
                     max_tokens=3000,
+                    model_override='openai',
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
                 _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -682,23 +684,11 @@ narrative: {ref_narrative}
             messages=[{'role': 'user', 'content': user_msg}],
             temperature=0.7,
             max_tokens=1500,
-            response_format={'type': 'json_object'},
+            model_override='openai',
         )
         if not resp:
             return None
         pitches = parse_pitches_from_text(resp)
-        if pitches:
-            lang_ok = pitches[0].get('_lang_valid', True)
-            if not lang_ok:
-                _log(f'  ⚠️ 재생성 피치 한국어 불량 → 일반 텍스트 재시도')
-                resp = chat_completion(
-                    system_prompt=system,
-                    messages=[{'role': 'user', 'content': user_msg}],
-                    temperature=0.7,
-                    max_tokens=1500,
-                )
-                if resp:
-                    pitches = parse_pitches_from_text(resp)
         if pitches:
             p = pitches[0]
             p['article_ids'] = [article_id]

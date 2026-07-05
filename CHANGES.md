@@ -557,9 +557,37 @@
 
 ---
 
-## 2026-07-05 — Phase 13: Card Separation Fix (진행 중)
+## 2026-07-05 — Phase 13: Card Separation Fix & Validation Hardening (완료)
 
-### Done
+### 의사결정
+- `---` 구분자 강제 → `\n\n` 방식 유지 결정 (지난 세션에서 수많은 `---` 실패를 경험)
+- `\n\n` split의 근본적 한계(문장 중간 절단, 중복 링크)는 `_repair_truncated_cards()` 강화로 보완
+- 중국어 마침표 `。`(U+3002) 문제는 MiMo v2.5 중국어 모델 특성 → 검증/파싱 로직에 추가
+- Phase 13의 3개 Plan으로 분할: 13-01(영구 실패 추적) / 13-02(빠른 수정) / 13-03(구조 개선)
+
+### 13-01: Persistent Failed Article Tracking
+- `scripts/threads/failed_articles.py` 신규 모듈 (load/save/is_failed/clear)
+- `scripts/threads/main_v3.py` 에 통합 (indentation 버그 수정 포함)
+- 커밋: (미커밋, 워킹 디렉토리)
+- 영향: article 38290 영구 재시도 루프 차단
+- 검증: 268개 기존 + 13개 신규 테스트 통과 = 281개
+
+### 13-02: Validation Fixes (중국어 마침표 + 중복 링크)
+- `pipeline/threads/validator.py` — `sentence_enders`에 `\u3002`(중국어 마침표) 추가
+- `pipeline/threads/writer.py` — `_repair_truncated_cards()` enders에 `\u3002` 추가
+- `pipeline/threads/writer.py` — `_remove_duplicate_links()` 신규 함수, `parse_cards()`에 통합
+- 영향: MiMo v2.5 중국어 마침표 `。`로 인한 "문장 미완성" 검증 실패 해결
+- 검증: 287/287 테스트 통과
+
+### 13-03: Repair Logic Strengthening
+- `pipeline/threads/writer.py` — `_repair_truncated_cards()` backward pass 추가 (마지막 카드 불완결 시 앞 카드에 병합)
+- `tests/test_writer.py` — `TestRepairTruncatedCards` 클래스 신규 (6개 테스트)
+- 영향: 카드 절단으로 인한 "너무 짧음" / "문장 미완성" 실패율 감소
+- 검증: 287/287 전체 테스트 통과
+
+### 발견 — 미해결
+- **Hook 문장 종결 과다** (YouTube 기사 케이스): `\n\n` split이 너무 늦게 발생해 hook이 6개 문장 포함 → D 형식 구조적 한계, 별도 논의 필요
+- **중복 링크**: `_remove_duplicate_links()` 적용으로 해결 (13-02)
 - `writer.py`: `_repair_truncated_cards()` — `\n\n` fallback 후 문장 중간 split 병합
 - `writer.py`: fix_cards 프롬프트 `--- 카드 시작/끝 ---` 템플릿 제거 → artifact 근절
 - `writer.py`: 프롬프트 강화 — `---` 직전 완전한 문장 요구

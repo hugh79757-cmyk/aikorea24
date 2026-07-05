@@ -19,6 +19,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 10-1: Card Structure Validation** — 카드 구조 검증으로 모델 메시지/이상치 완전 차단 (completed 2026-07-04)
 - [x] **Phase 11: Defense Mechanism Hardening** — 방어 메커니즘 강화: 패턴 통합, threshold 일관성, Unicode 정규화, 외국어 패턴 통합, E2E 테스트 (completed 2026-07-05)
 - [x] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (completed 2026-07-05)
+- [x] **Phase 13: Card Separation Fix & Validation Hardening** — `\n\n` split 안정화, 중국어 마침표(`。`) 인식, 중복 링크 제거, 영구 실패 기사 추적 (completed 2026-07-05)
 
 ## Phase Details
 
@@ -233,6 +234,24 @@ Plans:
 - [x] 12-01-PLAN.md — Per-card fix_cards, graceful humanize failure, hook validation relax
 - [x] 12-02-PLAN.md — Parallel model race + single-attempt write_thread + article skip on write failure
 
+### Phase 13: Card Separation Fix & Validation Hardening
+**Goal:** `\n\n` split 안정화 → `_repair_truncated_cards()` 강화, 중국어 마침표(`。`) 인식, 중복 링크 제거, 영구 실패 기사 추적.
+**Mode:** ad-hoc
+**Depends on**: Phase 12
+**Requirements**: PH-13-01, PH-13-02, PH-13-03
+**Success Criteria** (what must be TRUE):
+   1. `failed_articles.py` 영구 저장 + main_v3 통합 → article 38290 영구 제외
+   2. `sentence_enders`에 `\u3002`(중국어 마침표) 추가 → MiMo `。` 검증 통과
+   3. `_remove_duplicate_links()` → 중복 `🔗` 카드 자동 제거
+   4. `_repair_truncated_cards()` backward pass → 마지막 카드 불완결 병합
+   5. All 287 existing tests pass
+**Plans**: 3 plans
+
+Plans:
+- [x] 13-01-PLAN.md — Persistent failed article tracking (failed_articles.py + main_v3)
+- [x] 13-02-PLAN.md — Validation fixes: `。` enders + duplicate link removal
+- [x] 13-03-PLAN.md — Repair logic strengthening + tests + E2E verification
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -252,4 +271,5 @@ Plans:
 | 10-1. Card Structure Validation | 1/1 | Complete | 2026-07-04 |
 | 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
 | 12. Writer Instability Fix | 2/2 | Complete | 2026-07-05 |
-| **Total** | **29/29** | | |
+| 13. Card Separation Fix & Validation Hardening | 3/3 | Complete | 2026-07-05 |
+| **Total** | **32/32** | | |

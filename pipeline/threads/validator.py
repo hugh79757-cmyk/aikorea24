@@ -48,7 +48,7 @@ ADDITIONAL_MESSAGE_PATTERNS = [
 ALL_MESSAGE_PATTERNS = MODEL_MESSAGE_PATTERNS + ADDITIONAL_MESSAGE_PATTERNS
 
 FORMAT_CARD_COUNTS = {'D': 6}
-FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 7)}
+FORMAT_CARD_COUNT_TOLERANCE = {'D': (4, 7)}
 
 STOPLIST = {
     '무단전재', '수정하거나', '관련기사', '보도했다', '보도했음',
@@ -273,7 +273,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
 
         # 6. Sentence completeness (body cards only)
         if i > 1:  # Skip hook
-            sentence_enders = ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다']
+            sentence_enders = ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다', '\u3002']
             if not any(card.endswith(ender) for ender in sentence_enders):
                 if not card.endswith('...') and not card.endswith('…'):
                     return False, f"Card {i}: 문장 미완성"
@@ -283,7 +283,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
     if not hook.startswith('🔗'):
         # Content boundary check: 문장 종결 과다 → 카드 경계 붙음 의심
         enders_count = len(re.findall(r'(?:~임\.|~했음\.|~있음\.|~됨\.|~함\.|[.!?])', hook))
-        if enders_count > 5:
+        if enders_count > 10:
             return False, f"Hook: 문장 종결 과다 ({enders_count}개) — 카드 경계 붙음 의심"
         if len(hook) < 30 or len(hook) > 350:
             return False, f"Hook 길이 비정상 ({len(hook)}자)"
