@@ -460,6 +460,20 @@ def fix_cards(cards):
     return fixed_cards
 
 
+def _repair_truncated_cards(cards):
+    """Merge cards where previous card ends mid-sentence (hook card excluded)."""
+    if not cards:
+        return cards
+    fixed = [cards[0]]
+    for card in cards[1:]:
+        prev = fixed[-1].strip()
+        if prev and not any(prev.endswith(e) for e in ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다']):
+            fixed[-1] = fixed[-1] + '\n\n' + card
+        else:
+            fixed.append(card)
+    return fixed
+
+
 def parse_cards(text, format_choice='D'):
     cards = [c.strip() for c in text.split('---') if c.strip()]
     if not cards:
@@ -470,6 +484,7 @@ def parse_cards(text, format_choice='D'):
         alt = [c for c in alt if len(c) > 20]
         if len(alt) >= lo:
             _log(f'  parse_cards: --- 없음, \\n\\n으로 {len(alt)}개 분할')
+            alt = _repair_truncated_cards(alt)
             cards = alt
     if format_choice == 'D' and len(cards) > 1:
         c1_lines = [l for l in cards[0].split('\n') if l.strip()]
@@ -590,8 +605,6 @@ Threads는 발행글 하나당 500자 제한이 있음.
 따라서 하나의 이야기를 여러 발행글로 나누어 연쇄 발행해야 함.
 각 발행글은 --- 로 구분하며, 마지막 발행글은 출처 링크만 넣음.
 
-중요: 각 발행글은 --- 직전에 반드시 문장을 완성할 것. 문장 중간에 ---를 넣지 마라.
-
 아래 형식을 정확히 따라라:
 
 발행글 내용 450~500자
@@ -614,7 +627,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
 5. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
 6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
 7. --- 카드 시작 ---, --- 카드 끝 --- 등 추가 레이블 절대 넣지 마라. ---만 구분자로 사용하라.
-7. 발행글 번호는 붙이지 않음."""
+8. 각 발행글은 --- 직전에 반드시 완전한 문장으로 끝내라. 문장 중간에 ---를 넣지 마라."""
 
     _log(f'  쓰레드 생성 중... (temperature=0.4)')
 

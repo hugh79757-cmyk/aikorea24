@@ -759,6 +759,21 @@
       "date": "2026-07-05",
       "_lang_valid": true,
       "_lang_reason": "OK"
+    },
+    {
+      "hook": "Wix에 8000만 달러에 팔린 지 1년 된 Base44가 자체 AI 모델을 출시한 진짜 이유는 경쟁력 확보가 아니라 비용 절감 때문이다.",
+      "narrative": "Base44는 1년 전 Wix에 8000만 달러에 인수된 바이브 코딩 플랫폼입니다. 이 회사는 이제 자사 모델 Base1을 출시하며, 자체 모델을 소유함으로써 지연 시간과 비용, 효율성을 최적화하고 기존 프론티어 모델보다 더 빠르고 저렴한 서비스를 제공하겠다고 밝혔습니다.",
+      "article_ids": [
+        "36690"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
     }
   ],
   "posted_article_meta": {
@@ -1023,6 +1038,11 @@
       "description": ""
     },
     "37348": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36690": {
       "title": "",
       "original_title": "",
       "description": ""
