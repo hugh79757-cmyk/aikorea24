@@ -330,11 +330,9 @@ def humanize_cards(cards):
 - 원본과 동일한 카드 수 유지
 - 카드 사이 --- 구분자 정확히 유지"""
 
-    fixed = []
-    for i, card in enumerate(cards):
+    def _humanize_one(i, card):
         if len(card) < 10:
-            fixed.append(card)
-            continue
+            return i, card
         prompt = f"""다음 카드의 AI 말투를 자연스러운 한국어로 다듬어라.
 
 [카드 내용]
@@ -357,15 +355,18 @@ def humanize_cards(cards):
                 result = _strip_model_explanatory(result)
                 result = result.strip()
                 if result:
-                    fixed.append(result)
-                else:
-                    fixed.append(card)
-            else:
-                fixed.append(card)
+                    return i, result
+            return i, card
         except Exception as e:
             _log(f'  ⚠️ humanize 카드 {i} 오류: {e} → 원본 유지')
-            fixed.append(card)
+            return i, card
 
+    fixed = [None] * len(cards)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(cards)) as ex:
+        fut_map = {ex.submit(_humanize_one, i, cards[i]): i for i in range(len(cards))}
+        for fut in concurrent.futures.as_completed(fut_map):
+            i, text = fut.result()
+            fixed[i] = text
     changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
     _log(f'  🧹 humanize: {changed}/{len(cards)}개 카드 수정')
     return fixed
@@ -406,9 +407,7 @@ def fix_cards(cards):
     cards = [_fix_korean_particle_spacing(c) for c in cards]
 
     from v3.model_router import chat_completion
-    fixed_cards = []
-    changed_count = 0
-    for card in cards:
+    def _fix_one(i, card):
         prompt = f"""다음 Threads 카드에서 글자 단위 오류만 수정하라.
 
 [수정 대상 — 반드시 아래 패턴을 찾아 복구할 것]
@@ -441,16 +440,21 @@ def fix_cards(cards):
                 result = _strip_instruction_leak(result)
                 result = result.strip()
                 if result:
-                    fixed_cards.append(result)
-                    if result != card:
-                        changed_count += 1
-                else:
-                    fixed_cards.append(card)
-            else:
-                fixed_cards.append(card)
+                    return i, result, result != card
+            return i, card, False
         except Exception as e:
             _log(f'  ⚠️ 수정 오류: {e} → 원본 유지')
-            fixed_cards.append(card)
+            return i, card, False
+
+    fixed_cards = [None] * len(cards)
+    changed_count = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(cards)) as ex:
+        fut_map = {ex.submit(_fix_one, i, cards[i]): i for i in range(len(cards))}
+        for fut in concurrent.futures.as_completed(fut_map):
+            i, text, changed = fut.result()
+            fixed_cards[i] = text
+            if changed:
+                changed_count += 1
 
     _log(f'  🔧 오류 수정(MiMo): {changed_count}/{len(cards)}개 카드 수정됨')
     return fixed_cards
