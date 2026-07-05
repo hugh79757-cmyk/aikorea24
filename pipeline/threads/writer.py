@@ -586,6 +586,8 @@ Threads는 발행글 하나당 500자 제한이 있음.
 따라서 하나의 이야기를 여러 발행글로 나누어 연쇄 발행해야 함.
 각 발행글은 --- 로 구분하며, 마지막 발행글은 출처 링크만 넣음.
 
+중요: 각 발행글은 --- 직전에 반드시 문장을 완성할 것. 문장 중간에 ---를 넣지 마라.
+
 아래 형식을 정확히 따라라:
 
 발행글 내용 450~500자
@@ -607,6 +609,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
 4. 한 줄 25~40자. 정보를 압축.
 5. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
 6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
+7. --- 카드 시작 ---, --- 카드 끝 --- 등 추가 레이블 절대 넣지 마라. ---만 구분자로 사용하라.
 7. 발행글 번호는 붙이지 않음."""
 
     _log(f'  쓰레드 생성 중... (temperature=0.4)')
@@ -640,7 +643,11 @@ Threads는 발행글 하나당 500자 제한이 있음.
     content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
     content = re.sub(r'^---+\s*\n', '', content)
     content = re.sub(r'\n---+\s*$', '', content)
+    content = re.sub(r'^---\s*카드\s*(시작|끝)\s*---\s*\n?', '', content, flags=re.MULTILINE)
+    content = re.sub(r'\n?\s*---\s*카드\s*(시작|끝)\s*---', '', content)
     cards = parse_cards(content, format_choice)
+    cards = [re.sub(r'^-{3,}\s*카드\s*(시작|끝)\s*-{3,}\s*', '', c).strip() for c in cards]
+    cards = [c for c in cards if c]
     if len(cards) > expected_count:
         _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정')
         cards = cards[:expected_count]
