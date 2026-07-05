@@ -31,8 +31,9 @@
 4. `.planning/STATE.md` 읽어서 현재 phase/진행률 확인
 5. `.planning/ROADMAP.md` 읽어서 전체 마일스톤 현황 확인
 6. `.planning/triage/INDEX.md` 읽어서 최근 triage 항목 확인
-7. `git status`로 작업 트리 상태 확인
-8. 사용자에게 현재 상태 요약 제시
+7. **`.continue-here.md` 읽어서 상세 handoff 맥락 복원**
+8. `git status`로 작업 트리 상태 확인
+9. 사용자에게 현재 상태 요약 제시
 
 ## 세션 종료 시 — `/gsd-pause-work`
 
