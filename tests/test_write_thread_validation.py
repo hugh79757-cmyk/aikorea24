@@ -1,5 +1,6 @@
 """Tests for pipeline.threads.writer — E2E validation chain (retry, pattern detection, link cards)."""
 import pytest
+import json
 import sys
 from pathlib import Path
 from unittest.mock import patch
@@ -96,7 +97,7 @@ def _make_mock(generate_cards=None):
         user_msg = messages[0]['content'] if messages else ''
 
         if '=== 피치 ===' in user_msg or '=== 관련 기사 ===' in user_msg:
-            return '\n---\n'.join(gen_cards)
+            return json.dumps({"cards": gen_cards})
 
         if '--- 카드 시작 ---' in user_msg:
             return _extract_card_between(user_msg, '--- 카드 시작 ---\n', ['\n--- 카드 끝 ---'])

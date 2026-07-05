@@ -34,8 +34,15 @@ else
   exit 1
 fi
 
+# Python 바이너리 결정 (launchd 환경에서 PATH 누락 대응)
+PYTHON_BIN=$(command -v python3 || echo "$PROJECT_DIR/.venv/bin/python3")
+if ! [ -x "$PYTHON_BIN" ]; then
+  echo "[ERROR] 실행 가능한 python3를 찾을 수 없습니다."
+  exit 1
+fi
+
 echo "=== [0/3] 블로그 포스트 검증 ==="
-python3 "$PROJECT_DIR/scripts/validate_blog_posts.py" || exit 1
+"$PYTHON_BIN" "$PROJECT_DIR/scripts/validate_blog_posts.py" || exit 1
 
 echo "=== [1/3] 빌드 ==="
 npm run build

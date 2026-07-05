@@ -55,30 +55,37 @@ def validate_file(fpath):
     return issues
 
 
-def main():
+def validate_all():
+    """전체 블로그 포스트를 검증. 문제 있으면 False, 정상이면 True."""
     blog_dir = BLOG_DIR
     if not os.path.isdir(blog_dir):
         print(f"블로그 디렉토리 없음: {blog_dir}")
-        sys.exit(1)
-    
-    all_failed = False
+        return False
+
+    failed_files = []
     for fname in sorted(os.listdir(blog_dir)):
         if not fname.endswith('.md'):
             continue
         fpath = os.path.join(blog_dir, fname)
         issues = validate_file(fpath)
         if issues:
-            all_failed = True
+            failed_files.append((fname, issues))
+
+    if failed_files:
+        print(f"\n⚠️ {len(failed_files)}개 파일에 문제 있음")
+        for fname, issues in failed_files:
             print(f"  ❌ {fname}")
             for issue in issues:
                 print(f"     - {issue}")
-    
-    if all_failed:
-        print(f"\n⚠️ {sum(1 for f in os.listdir(blog_dir) if f.endswith('.md') and validate_file(os.path.join(blog_dir, f)))}개 파일에 문제 있음")
-        sys.exit(1)
+        return False
     else:
         print(f"✅ 모든 블로그 포스트 정상")
-        sys.exit(0)
+        return True
+
+
+def main():
+    ok = validate_all()
+    sys.exit(0 if ok else 1)
 
 
 if __name__ == '__main__':

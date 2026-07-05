@@ -113,6 +113,13 @@ def step_deep_articles(articles, briefing_id=None):
         except Exception as e:
             log(f"    ❌ 에러: {e}")
 
+    # 심층글 저장 직후 frontmatter 게이트 → 배포/이메일 전에 불량 포스트 차단
+    if results:
+        import validate_blog_posts
+        log("  🛡️  블로그 frontmatter 최종 검증")
+        if not validate_blog_posts.validate_all():
+            raise RuntimeError("블로그 포스트 검증 실패: 더 이상 진행하지 않습니다.")
+
     return results
 
 
@@ -164,7 +171,7 @@ def step_deploy():
         return
 
     result = subprocess.run(
-        ["bash", deploy_script],
+        ["/bin/bash", deploy_script],
         capture_output=True, text=True, timeout=300, cwd=str(Path(__file__).resolve().parent.parent)
     )
     for line in result.stdout.splitlines():
@@ -174,6 +181,7 @@ def step_deploy():
         if result.stderr:
             for line in result.stderr.splitlines()[-5:]:
                 log(f"  ⚠ {line}")
+        raise RuntimeError(f"배포 실패 (rc={result.returncode})")
     else:
         log("  ✅ 배포 완료")
 

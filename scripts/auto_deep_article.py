@@ -170,6 +170,84 @@ def generate_deep_article(title, content, url):
         return None
 
 
+def normalize_frontmatter(markdown_content, title):
+    """AI가 생성한 마크다운의 frontmatter를 강제로 정규화.
+
+    - ``` 코드 펜스 제거
+    - 시작/종료 --- 보장
+    - title, description, date, draft, tags, category 필수 필드 보장
+    """
+    content = markdown_content.strip()
+
+    # 코드 펜스 제거
+    if content.startswith('```'):
+        content = re.sub(r'^```[\w]*\n?', '', content)
+        content = re.sub(r'\n?```\s*$', '', content)
+        content = content.strip()
+
+    today = datetime.now(KST).strftime('%Y-%m-%d')
+
+    # frontmatter 파싱 시도
+    fm = {}
+    body = content
+    if content.startswith('---'):
+        lines = content.split('\n')
+        closing = None
+        for i in range(1, min(len(lines), 50)):
+            if lines[i].strip() == '---':
+                closing = i
+                break
+
+        if closing is not None:
+            fm_lines = lines[1:closing]
+            body = '\n'.join(lines[closing + 1:]).lstrip('\n')
+            for line in fm_lines:
+                m = re.match(r'^([\w-]+):\s*(.*)$', line)
+                if m:
+                    fm[m.group(1)] = m.group(2).strip()
+        else:
+            # 닫는 --- 없음: 필드 라인 추론
+            body_lines = []
+            in_fm = True
+            for i, line in enumerate(content.split('\n')[1:], start=1):
+                if in_fm:
+                    if line.strip() == '':
+                        continue
+                    m = re.match(r'^(title|description|date|draft|tags|category|image):\s*(.*)$', line, re.IGNORECASE)
+                    if m:
+                        fm[m.group(1).lower()] = m.group(2).strip()
+                        continue
+                    # frontmatter 이외의 줄에서 본문 시작
+                    in_fm = False
+                body_lines.append(line)
+            body = '\n'.join(body_lines).lstrip('\n')
+
+    # 필수 필드 보장
+    defaults = {
+        'title': f'"{title}"',
+        'description': '""',
+        'date': today,
+        'draft': 'false',
+        'tags': '["AI", "뉴스"]',
+        'category': '뉴스',
+    }
+    for key, default in defaults.items():
+        if fm.get(key) in (None, '', 'None'):
+            fm[key] = default
+
+    # title/description 따옴표 보장
+    for key in ('title', 'description'):
+        val = fm[key]
+        if not (val.startswith('"') or val.startswith("'")):
+            fm[key] = f'"{val}"'
+
+    rebuilt = '---\n'
+    for key in ('title', 'description', 'date', 'draft', 'tags', 'category'):
+        rebuilt += f'{key}: {fm.get(key, defaults[key])}\n'
+    rebuilt += '---\n\n' + body.strip()
+    return rebuilt
+
+
 def inject_frontmatter_image(markdown_content, image_path):
     """프론트매터에 image: 필드가 없으면 주입 + draft: 오류 보정"""
     frontmatter_match = re.match(r'^---\s*\n(.*?)\n---', markdown_content, re.DOTALL)
@@ -201,7 +279,10 @@ def inject_frontmatter_image(markdown_content, image_path):
 
 
 def save_article(markdown_content, title):
-    """마크다운 파일 저장 (프론트매터에 image: 자동 주입)"""
+    """마크다운 파일 저장 (프론트매터 정규화 + image: 자동 주입)"""
+    # 1차 정규화: AI 출력이 frontmatter를 누락/망가뜨린 경우 보정
+    markdown_content = normalize_frontmatter(markdown_content, title)
+
     slug = re.sub(r'[^a-z0-9가-힣]+', '-', title.lower())[:60]
     slug = slug.strip('-')
     thumbnail_path = f"/images/{slug}/thumbnail.webp"
