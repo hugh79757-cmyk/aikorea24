@@ -774,6 +774,186 @@
       "date": "2026-07-05",
       "_lang_valid": true,
       "_lang_reason": "OK"
+    },
+    {
+      "hook": "SK 하이닉스는 AI 메모리 대란에 510억 달러를 투자하지만, 정작 핵심 생산은 3년 뒤인 2029년에 시작됩니다.",
+      "narrative": "SK 하이닉스는 청주에 80조 원 규모의 새로운 NAND 공장(M17)을 건설해 2029년 상반기 생산을 목표로 하고 있습니다. 이 투자는 AI 서버의 핵심인 HBM 외에도, 상대적으로 주목도가 낮았던 NAND 플래시 메모리의 중요성을 재확인하는 행보입니다. 메모리 공급 부족이 2027년까지 지속될 수 있다는 전망이 나오는 가운데, 두 대형 공장(M17과",
+      "article_ids": [
+        "37542"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "Waymo와 Uber의 피닉스 로보택시 파일럿이 끝났지만, 그 차량들은 택시가 아닌 배달원으로 전환됩니다.",
+      "narrative": "Waymo와 Uber는 피닉스에서 협력한 로보택시 파일럿을 종료했습니다. 하지만 그 자율주행차량들은 피닉스에 남아 DoorDash를 위한 자율 배송 서비스로 전환되어 계속 운행됩니다.",
+      "article_ids": [
+        "36818"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "프랑스 대통령은 SoftBank 창업자에게 문자 메시지를 보내 €750억 규모의 데이터 센터를 유치했고, 인도 총리는 Amazon CEO와의 단독 만남으로 $480억을 확보했습니다",
+      "narrative": "에마뉘엘 마크롱과 나렌드라 모디는 세계 최대 기업 CEO들에게 직접 연락해 AI 인프라 투자를 이끌어내고 있습니다. 마크롱은 일본에서 SoftBank 창업자 손정의와 문자로 협상했고, 모디는 뉴델리에서 Amazon CEO 앤디 재시를 만나 $480억 투자 확보에 성공했습니다.",
+      "article_ids": [
+        "38569"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "Nvidia도 주목한 중국 휴머노이드 로봇 회사 유니트리가 상하이 상장을 앞두고 미국의 제재 리스트에도 올랐다.",
+      "narrative": "유니트리는 상하이 STAR 시장 상장 승인을 받아 중국 최초의 대규모 휴머노이드 로봇 상장사가 될 태세입니다. 하지만 이 회사는 동시에 미국 국방부의 중국 기업 리스트에도 이름을 올려 논란의 중심에 서 있습니다.",
+      "article_ids": [
+        "37972"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "AI가 확산된다는데, 실제 금융사 중간 업무는 여전히 스프레드시트로 처리 중",
+      "narrative": "MDOTM이 2700만 달러를 유치하며 AI 플랫폼 Sphere를 확장한다. 이 플랫폼은 수수료 압박과 개인화 수요로 어려움을 겪는 자산운용사들이 수천 개 포트폴리오를 자동으로 관리할 수 있게 해준다.",
+      "article_ids": [
+        "37063"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "CrowdStrike와 Palo Alto Networks가 AI 위협 속에서 최고의 분기를 기록했다.",
+      "narrative": "CrowdStrike와 Palo Alto Networks는 AI 기술의 발전으로 사이버 보안 수요가 급증하며 사상 최고의 분기를 보냈습니다. 특히, Mythos 모델의 출현이 이들의 성장을 이끌었으며, 많은 기업들이 이들 사이버 보안 리더들에게 도움을 요청하고 있습니다.",
+      "article_ids": [
+        "37065"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "자율 드론 스타트업 퀀텀 시스템이 방위 부문 투자 열풍 속에서 12억 달러를 조달했다.",
+      "narrative": "퀀텀 시스템은 자율 방어 시스템을 개발 중인 스타트업으로, 최근 12억 달러의 시리즈 D 자금을 조달하며 80억 달러의 가치를 평가받았습니다. 이 자금은 생산 능력 확장과 소프트웨어, AI 투자에 사용될 예정입니다.",
+      "article_ids": [
+        "37772"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "애슈튼 커쳐가 사운드 벤처스를 떠나 새로운 VC 회사를 설립한다.",
+      "narrative": "애슈튼 커쳐는 11년 동안 함께해온 사운드 벤처스를 떠나 모건 벨러와 함께 AI 인프라, 에너지, 딥테크에 집중하는 새로운 벤처 캐피탈 회사를 설립할 계획이다. 이들은 초기 단계의 투자에 초점을 맞추고 있으며, 기존의 대형 펀드와의 경쟁이 불투명한 상황이다.",
+      "article_ids": [
+        "37346"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "구글이 10년 전부터 준비해온 풀 스택 AI 전략, 그 비용과 신뢰성의 이점은 무엇일까?",
+      "narrative": "구글 클라우드의 Richard Seroter는 풀 스택 AI 접근법이 하드웨어(TPU)부터 모델(Gemini), 플랫폼, 사용자 인터페이스까지 모든 계층을 통합한 시스템이라고 설명한다. 이를 통해 타사 의존도를 없애고, 높은 신뢰성과 경쟁력 있는 가격을 제공할 수 있다.",
+      "article_ids": [
+        "36498"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "문서 파싱 평가, 단일 정확도로는 절대 안 되는 이유가 밝혀졌다.",
+      "narrative": "많은 사람들이 문서 파싱 시스템의 성능을 단순한 정확도로 판단한다. 그러나 ParseBench 튜토리얼에서는 텍스트, 표, 차트, 레이아웃 등 여러 차원을 각각 측정해야만 시스템의 실제 능력을 알 수 있다고 강조한다.",
+      "article_ids": [
+        "21689"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "NATO 정상회담에서 미국이 AI 기술 접근을 통제하며 동맹국들을 불안하게 만들었다.",
+      "narrative": "Trump 행정부는 Anthropic의 Claude Mythos 모델과 OpenAI의 최신 AI에 대한 접근을 제한하고, 일부 동맹국만 테스트를 허용했다. 이에 유럽 동맹국들은 좌절감을 느꼈고, Five Eyes 동맹은 AI 기반 사이버 위협에 대응하기 위한 보안 강화를 촉구했다.",
+      "article_ids": [
+        "38773"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "OpenAI Privacy Filter로 API 키까지 보호할 수 있는 PII 파이프라인을 직접 만든다?",
+      "narrative": "이 튜토리얼은 OpenAI Privacy Filter 모델을 로드하여 이름, 이메일, 전화번호는 물론 API 키와 같은 비밀까지 탐지하고 마스킹하는 완전한 파이프라인을 구축한다. 신뢰도 임계값을 조정하고 배치 처리를 지원하여 실무에서 바로 활용할 수 있도록 설계되었다.",
+      "article_ids": [
+        "21687"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
     }
   ],
   "posted_article_meta": {
@@ -1043,6 +1223,66 @@
       "description": ""
     },
     "36690": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37542": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36818": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "38569": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37972": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37063": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37065": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37772": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37346": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "36498": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "21689": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "38773": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "21687": {
       "title": "",
       "original_title": "",
       "description": ""

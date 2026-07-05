@@ -27,3 +27,9 @@ Traceback (most recent call last):
   File "/Users/twinssn/Projects/aikorea24/scripts/keyword_updater.py", line 13, in <module>
     from pipeline.infra.logger import get_scrubbed_logger
 ModuleNotFoundError: No module named 'pipeline'
+/Users/twinssn/.env.common: line 146: redis-cli: command not found
+/Users/twinssn/.env.common: line 152: https://router.bynara.id/v1: No such file or directory
+Traceback (most recent call last):
+  File "/Users/twinssn/Projects/aikorea24/scripts/keyword_updater.py", line 13, in <module>
+    from pipeline.infra.logger import get_scrubbed_logger
+ModuleNotFoundError: No module named 'pipeline'

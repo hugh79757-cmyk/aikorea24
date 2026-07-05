@@ -1481,6 +1481,146 @@
           "date": "2026-07-05"
         }
       ]
+    },
+    {
+      "date": "2026-07-05",
+      "briefing_id": 158,
+      "articles": [
+        {
+          "id": "38666",
+          "title": "AI 사립학교, 부유한 미국 가정에 전통 교육 대신 맞춤형 학습을 판매하다",
+          "original_title": "",
+          "description": "부유한 미국 가족들이 AI 학교인 알파 스쿨에 아이들을 보낼 수밖에 없는 추세가 증가하고 있습니다. 이 학교는 연간 최대 75,000달러의 수업료로 AI 튜터링과 프로젝트 기반 워크숍을 결합합니다. 이는 전통적인 학교들이 AI 시대에 어려움을 겪고 있는 교육 격차를 보여줍니다.",
+          "link": "https://the-decoder.com/ai-private-schools-sell-wealthy-us-families-on-personalized-learning-over-traditional-education/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38568",
+          "title": "중국, 극장에서 단순한 티켓 판매 대신 노래방과 커피도 판매하고 싶다",
+          "original_title": "",
+          "description": "중국의 극장들은 단순히 티켓에만 의존하지 말라는 지침을 받고 있다. 국가영화관리국과 국가시장감독관리국의 새로운 지침에 따르면, 극장 로비에 AI 컨시어지 에이전트, 노래방 부스 및 커피숍을 추가하도록 권장하고 있다.",
+          "link": "https://thenextweb.com/news/china-cinemas-ai-karaoke-coffee-plan",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38452",
+          "title": "미드저니, 할리우드 스튜디오에 AI 사용 내역 공개 요구",
+          "original_title": "",
+          "description": "미드저니는 세 개의 할리우드 스튜디오와 진행 중인 법적 분쟁의 일환으로, 이들 스튜디오가 AI를 어떻게 사용하는지 공개하도록 강제하려고 하고 있습니다. 이는 AI 기술의 투명성을 높이기 위한 노력으로 해석됩니다.",
+          "link": "https://techcrunch.com/2026/07/04/midjourney-wants-hollywood-studios-to-reveal-the-details-of-their-ai-usage/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38773",
+          "title": "NATO 정상회담에 AI 보안 질문들 제기",
+          "original_title": "",
+          "description": "급속하게 발전하는 인공지능 기술의 배치가 글로벌 보안의 필수 요소로 빠르게 자리 잡고 있습니다.",
+          "link": "https://www.politico.com/news/2026/07/04/ai-security-nato-access-00984758?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "AI",
+            "NATO"
+          ],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38482",
+          "title": "오픈 소스 도구 pxpipe, PNG에 텍스트 숨겨 클로드 코드와 페이블 5의 토큰 비용 ",
+          "original_title": "",
+          "description": "오픈 소스 도구 pxpipe는 클로드 코드를 위한 긴 텍스트 프롬프트를 kompact PNG로 변환하여, Anthropic이 이미지를 픽셀 크기별로 요금 부과함을 활용합니다. 개발자인 스티븐 챙에 따르면 약 59~70%의 비용 절감 효과가 있다고 합니다.",
+          "link": "https://the-decoder.com/open-source-tool-pxpipe-hides-text-in-pngs-to-cut-claude-code-and-fable-5-token-costs-up-to-70/",
+          "entities": [],
+          "date": "2026-07-05"
+        },
+        {
+          "id": "38668",
+          "title": "AI 검색 에이전트, 검색에서 실패하지 않지만 모호한 쿼리에 대해 올바른 질문을 하지 못해",
+          "original_title": "",
+          "description": "AI 검색 에이전트는 검색의 다단계 과정에서 실패하지 않는 경우가 대부분입니다. 실질적인 문제는 사용자가 모호한 쿼리에 대해 명확한 질문을 요청하지 않는 것입니다. 새로운 기준인 DiscoBench는 후속 질문을 하지 않고 반복적으로 검색하는 모델이 실제로 성과가 좋지 않다는 것을 보여줍니다.",
+          "link": "https://the-decoder.com/ai-search-agents-dont-fail-at-searching-they-fail-at-asking-the-right-questions-when-queries-get-ambiguous/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-05"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-06",
+      "briefing_id": 159,
+      "articles": [
+        {
+          "id": "38946",
+          "title": "하버드 연구에 따르면 AI 기반 스타트업은 주니어 직원보다 엘리트 인력을 더 많이 고용한다",
+          "original_title": "",
+          "description": "하버드 비즈니스 스쿨과 INSEAD의 연구에 따르면, AI를 중심으로 구축된 스타트업은 동료들보다 입문 직원을 더 적게 고용한다고 합니다. 이들 기업은 더 날씬하고 평평하며 시니어 기술 인력의 비율이 높습니다.",
+          "link": "https://thenextweb.com/news/ai-native-startups-entry-level-hiring",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-06"
+        },
+        {
+          "id": "38927",
+          "title": "AI, 글로벌 규칙 없이는 인류에 '히로시마' 스타일의 위협을 가한다, 쿠퍼 경고",
+          "original_title": "",
+          "description": "외무부 장관은 AI와 기후 위기, 불법 이주, 외부 간섭의 복합적인 위험에 대해 경고했습니다. 정부가 AI 개발 축소에 합의하지 않으면 인류는 '히로시마' 스타일의 위협에 직면할 것이라고 Yvette Cooper는 강조했습니다.",
+          "link": "https://www.theguardian.com/politics/2026/jul/05/ai-hiroshima-style-threat-humanity-global-rules-yvette-cooper",
+          "entities": [
+            "Yvette",
+            "AI"
+          ],
+          "date": "2026-07-06"
+        },
+        {
+          "id": "38963",
+          "title": "피파의 충격적인 발로건 반전 이후 축구를 '지키겠다'고 다짐한 벨기에",
+          "original_title": "",
+          "description": "루디 가르시아는 이 결정을 4월 바보의 날 농담에 비유했습니다. 벨기에 축구협회는 모든 가능한 옵션을 조사할 것이라고 밝혔습니다. USMNT는 \"처음에는 AI라고 생각했다\" 라고 반응했습니다.",
+          "link": "https://www.theguardian.com/football/2026/jul/05/belgium-rudi-garcia-world-cup-usmnt-folarin-balogun",
+          "entities": [],
+          "date": "2026-07-06"
+        },
+        {
+          "id": "38859",
+          "title": "클로드 코드와 파블 5, 2003년 PC 게임 커맨드 앤 컨커를 \"몇 시간\" 만에 아이OS",
+          "original_title": "",
+          "description": "구글 디프마인드의 개발자가 앤트로픽의 클로드 코드를 사용해 2003년 실시간 전략 게임 \"커맨드 앤 컨커: 제너럴 제로 아워\"를 아이폰과 아이패드로 포팅했습니다. 첫 빌드는 40분이 걸렸으며, 전체 소스 코드는 GitHub에 공개되어 있습니다.",
+          "link": "https://the-decoder.com/claude-code-and-fable-5-ported-the-2003-pc-game-command-conquer-to-native-ios-in-a-few-hours/",
+          "entities": [
+            "PC"
+          ],
+          "date": "2026-07-06"
+        },
+        {
+          "id": "38949",
+          "title": "한국, AI 칩 세금 수익으로 ‘미래 대응 기금’ 계획",
+          "original_title": "",
+          "description": "한국은 반도체 호황으로 인한 세금 수익으로 ‘미래 대응 기금’을 조성할 계획이라고 연합뉴스가 보도했습니다. 이 자금은 AI, 첨단 제조 및 기타 장기 성장 엔진에 투입될 것입니다.",
+          "link": "https://thenextweb.com/news/south-korea-future-fund-chip-windfall",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-06"
+        },
+        {
+          "id": "38928",
+          "title": "카일리의 가장 좋아하는 마스킹 테이프는? 레나 던햄이 어떻게 pigs을 훈련시키나요? 모든",
+          "original_title": "",
+          "description": "연예인과 그들의 이상한 열정에 대해 배울수록 더욱 격려받고 있습니다. AI가 우리를 무미건조한 '맛의 쓰레기' 속으로 빠지게 할 것이라는 생각은 이제 그만입니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jul/05/whats-kylies-favourite-masking-tape-how-does-lena-dunham-train-pigs-its-all-out-there-and-im-loving-it",
+          "entities": [],
+          "date": "2026-07-06"
+        }
+      ]
     }
   ],
   "articles": [
@@ -2833,6 +2973,134 @@
         "NHS"
       ],
       "date": "2026-07-05"
+    },
+    {
+      "id": "38666",
+      "title": "AI 사립학교, 부유한 미국 가정에 전통 교육 대신 맞춤형 학습을 판매하다",
+      "original_title": "",
+      "description": "부유한 미국 가족들이 AI 학교인 알파 스쿨에 아이들을 보낼 수밖에 없는 추세가 증가하고 있습니다. 이 학교는 연간 최대 75,000달러의 수업료로 AI 튜터링과 프로젝트 기반 워크숍을 결합합니다. 이는 전통적인 학교들이 AI 시대에 어려움을 겪고 있는 교육 격차를 보여줍니다.",
+      "link": "https://the-decoder.com/ai-private-schools-sell-wealthy-us-families-on-personalized-learning-over-traditional-education/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38568",
+      "title": "중국, 극장에서 단순한 티켓 판매 대신 노래방과 커피도 판매하고 싶다",
+      "original_title": "",
+      "description": "중국의 극장들은 단순히 티켓에만 의존하지 말라는 지침을 받고 있다. 국가영화관리국과 국가시장감독관리국의 새로운 지침에 따르면, 극장 로비에 AI 컨시어지 에이전트, 노래방 부스 및 커피숍을 추가하도록 권장하고 있다.",
+      "link": "https://thenextweb.com/news/china-cinemas-ai-karaoke-coffee-plan",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38452",
+      "title": "미드저니, 할리우드 스튜디오에 AI 사용 내역 공개 요구",
+      "original_title": "",
+      "description": "미드저니는 세 개의 할리우드 스튜디오와 진행 중인 법적 분쟁의 일환으로, 이들 스튜디오가 AI를 어떻게 사용하는지 공개하도록 강제하려고 하고 있습니다. 이는 AI 기술의 투명성을 높이기 위한 노력으로 해석됩니다.",
+      "link": "https://techcrunch.com/2026/07/04/midjourney-wants-hollywood-studios-to-reveal-the-details-of-their-ai-usage/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38773",
+      "title": "NATO 정상회담에 AI 보안 질문들 제기",
+      "original_title": "",
+      "description": "급속하게 발전하는 인공지능 기술의 배치가 글로벌 보안의 필수 요소로 빠르게 자리 잡고 있습니다.",
+      "link": "https://www.politico.com/news/2026/07/04/ai-security-nato-access-00984758?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "AI",
+        "NATO"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38482",
+      "title": "오픈 소스 도구 pxpipe, PNG에 텍스트 숨겨 클로드 코드와 페이블 5의 토큰 비용 ",
+      "original_title": "",
+      "description": "오픈 소스 도구 pxpipe는 클로드 코드를 위한 긴 텍스트 프롬프트를 kompact PNG로 변환하여, Anthropic이 이미지를 픽셀 크기별로 요금 부과함을 활용합니다. 개발자인 스티븐 챙에 따르면 약 59~70%의 비용 절감 효과가 있다고 합니다.",
+      "link": "https://the-decoder.com/open-source-tool-pxpipe-hides-text-in-pngs-to-cut-claude-code-and-fable-5-token-costs-up-to-70/",
+      "entities": [],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38668",
+      "title": "AI 검색 에이전트, 검색에서 실패하지 않지만 모호한 쿼리에 대해 올바른 질문을 하지 못해",
+      "original_title": "",
+      "description": "AI 검색 에이전트는 검색의 다단계 과정에서 실패하지 않는 경우가 대부분입니다. 실질적인 문제는 사용자가 모호한 쿼리에 대해 명확한 질문을 요청하지 않는 것입니다. 새로운 기준인 DiscoBench는 후속 질문을 하지 않고 반복적으로 검색하는 모델이 실제로 성과가 좋지 않다는 것을 보여줍니다.",
+      "link": "https://the-decoder.com/ai-search-agents-dont-fail-at-searching-they-fail-at-asking-the-right-questions-when-queries-get-ambiguous/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-05"
+    },
+    {
+      "id": "38946",
+      "title": "하버드 연구에 따르면 AI 기반 스타트업은 주니어 직원보다 엘리트 인력을 더 많이 고용한다",
+      "original_title": "",
+      "description": "하버드 비즈니스 스쿨과 INSEAD의 연구에 따르면, AI를 중심으로 구축된 스타트업은 동료들보다 입문 직원을 더 적게 고용한다고 합니다. 이들 기업은 더 날씬하고 평평하며 시니어 기술 인력의 비율이 높습니다.",
+      "link": "https://thenextweb.com/news/ai-native-startups-entry-level-hiring",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-06"
+    },
+    {
+      "id": "38927",
+      "title": "AI, 글로벌 규칙 없이는 인류에 '히로시마' 스타일의 위협을 가한다, 쿠퍼 경고",
+      "original_title": "",
+      "description": "외무부 장관은 AI와 기후 위기, 불법 이주, 외부 간섭의 복합적인 위험에 대해 경고했습니다. 정부가 AI 개발 축소에 합의하지 않으면 인류는 '히로시마' 스타일의 위협에 직면할 것이라고 Yvette Cooper는 강조했습니다.",
+      "link": "https://www.theguardian.com/politics/2026/jul/05/ai-hiroshima-style-threat-humanity-global-rules-yvette-cooper",
+      "entities": [
+        "Yvette",
+        "AI"
+      ],
+      "date": "2026-07-06"
+    },
+    {
+      "id": "38963",
+      "title": "피파의 충격적인 발로건 반전 이후 축구를 '지키겠다'고 다짐한 벨기에",
+      "original_title": "",
+      "description": "루디 가르시아는 이 결정을 4월 바보의 날 농담에 비유했습니다. 벨기에 축구협회는 모든 가능한 옵션을 조사할 것이라고 밝혔습니다. USMNT는 \"처음에는 AI라고 생각했다\" 라고 반응했습니다.",
+      "link": "https://www.theguardian.com/football/2026/jul/05/belgium-rudi-garcia-world-cup-usmnt-folarin-balogun",
+      "entities": [],
+      "date": "2026-07-06"
+    },
+    {
+      "id": "38859",
+      "title": "클로드 코드와 파블 5, 2003년 PC 게임 커맨드 앤 컨커를 \"몇 시간\" 만에 아이OS",
+      "original_title": "",
+      "description": "구글 디프마인드의 개발자가 앤트로픽의 클로드 코드를 사용해 2003년 실시간 전략 게임 \"커맨드 앤 컨커: 제너럴 제로 아워\"를 아이폰과 아이패드로 포팅했습니다. 첫 빌드는 40분이 걸렸으며, 전체 소스 코드는 GitHub에 공개되어 있습니다.",
+      "link": "https://the-decoder.com/claude-code-and-fable-5-ported-the-2003-pc-game-command-conquer-to-native-ios-in-a-few-hours/",
+      "entities": [
+        "PC"
+      ],
+      "date": "2026-07-06"
+    },
+    {
+      "id": "38949",
+      "title": "한국, AI 칩 세금 수익으로 ‘미래 대응 기금’ 계획",
+      "original_title": "",
+      "description": "한국은 반도체 호황으로 인한 세금 수익으로 ‘미래 대응 기금’을 조성할 계획이라고 연합뉴스가 보도했습니다. 이 자금은 AI, 첨단 제조 및 기타 장기 성장 엔진에 투입될 것입니다.",
+      "link": "https://thenextweb.com/news/south-korea-future-fund-chip-windfall",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-06"
+    },
+    {
+      "id": "38928",
+      "title": "카일리의 가장 좋아하는 마스킹 테이프는? 레나 던햄이 어떻게 pigs을 훈련시키나요? 모든",
+      "original_title": "",
+      "description": "연예인과 그들의 이상한 열정에 대해 배울수록 더욱 격려받고 있습니다. AI가 우리를 무미건조한 '맛의 쓰레기' 속으로 빠지게 할 것이라는 생각은 이제 그만입니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jul/05/whats-kylies-favourite-masking-tape-how-does-lena-dunham-train-pigs-its-all-out-there-and-im-loving-it",
+      "entities": [],
+      "date": "2026-07-06"
     }
   ]
 }
