@@ -507,12 +507,11 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         try:
             resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
-                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
+                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아주세요.
 
 {all_articles_joined}"""}],
                 temperature=0.9,
                 max_tokens=3000,
-                response_format={'type': 'json_object'},
                 model_override='openai',
             )
             pitches = parse_pitches_from_text(resp, articles_text)

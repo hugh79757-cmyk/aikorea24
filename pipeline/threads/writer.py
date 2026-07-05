@@ -52,7 +52,7 @@ def build_system_prompt_D():
 [최우선 — 리듬 + 밀도 규칙, 반드시 지킬 것]
 - 각 카드 내부는 3~5개의 줄이 하나의 stanza(연)를 이룬다.
 - stanza와 stanza 사이는 반드시 한 줄 비운다. (빈 줄이 리듬을 만든다)
-- 한 줄은 25~40자 내외. 정보를 압축해서 담되 자연스럽게 읽혀야 함.
+- 한 줄은 40~60자 내외. 정보와 설명을 충분히 담아 자연스럽게 읽혀야 함. 25자 이하의 짧은 줄은 카드가 얇아지므로 금지.
 - 줄바꿈 위치: 의미 단위(조사, 연결어미, 쉼표)가 끝나는 곳.
 - 각 카드는 반드시 450~500자로 채운다. 정보 밀도가 곧 품질이다. 절대 400자 아래로 내려가지 말 것.
 
@@ -512,15 +512,6 @@ def parse_cards(text, format_choice='D'):
                 _log(f'  parse_cards: --- 없음, \\n\\n으로 {len(alt)}개 분할')
                 alt = _repair_truncated_cards(alt)
                 cards = alt
-    if format_choice == 'D' and len(cards) > 1:
-        c1_lines = [l for l in cards[0].split('\n') if l.strip()]
-        if len(c1_lines) <= 3:
-            c2_lines = [l for l in cards[1].split('\n') if l.strip()]
-            if c2_lines:
-                merge = c2_lines[:min(3, len(c2_lines))]
-                cards[0] = cards[0] + '\n\n' + '\n'.join(merge)
-                cards[1] = '\n'.join(c2_lines[min(3, len(c2_lines)):])
-                cards = [c.strip() for c in cards if c.strip()]
     # Remove duplicate links
     cards = _remove_duplicate_links(cards)
     return cards
@@ -674,11 +665,10 @@ Threads는 발행글 하나당 500자 제한이 있음.
 2. 각 발행글 내부의 빈 줄(\n\n)은 stanza 구분용으로만 사용. 카드 사이만 \n\n\n으로 구분할 것.
 3. 반말체(~임, ~했음, ~있음). ~합니다 금지.
 4. 기사 본문 숫자는 전부 사용. "많은", "대규모" 금지.
-5. 한 줄 25~40자. 정보를 압축.
-5. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
-6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
-7. --- 카드 시작 ---, --- 카드 끝 --- 등 추가 레이블 절대 넣지 마라. ---만 구분자로 사용하라.
-8. 각 발행글은 --- 직전에 반드시 완전한 문장으로 끝내라. 문장 중간에 ---를 넣지 마라."""
+5. 한 줄 40~60자. 정보와 설명을 충분히 담아라. 25자 이하 금지.
+6. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
+7. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
+8. 각 발행글은 반드시 완전한 문장으로 끝내라. 문장 중간에 \n\n\n를 넣지 마라."""
 
     _log(f'  쓰레드 생성 중... (temperature=0.4)')
 
@@ -691,7 +681,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
             model_override=model_name,
         )
 
-    models = ['mimo', 'deepseek', 'openai']
+    models = ['openai']
     content = None
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         futures = {executor.submit(_try_model, m): m for m in models}
@@ -725,6 +715,14 @@ Threads는 발행글 하나당 500자 제한이 있음.
         return []
     cards = fix_cards(cards)
     cards = _cleanup_source_attribution(cards)
+
+    # Card length validation: 각 카드는 100자 이상 (링크 제외)
+    for i, c in enumerate(cards, 1):
+        if c.startswith('🔗') or c.startswith('http'):
+            continue
+        if len(c) < 100:
+            _log(f'  ⚠️ 카드 {i} 너무 짧음 ({len(c)}자) — 재시도 필요')
+            return []
 
     if not (validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text)):
         _log(f'⚠️ 검증 실패: {len(cards)}개 조각')
