@@ -406,8 +406,10 @@ def fix_cards(cards):
     cards = [_fix_korean_particle_spacing(c) for c in cards]
 
     from v3.model_router import chat_completion
-    text = '\n---\n'.join(cards)
-    prompt = f"""다음 Threads 쓰레드에서 글자 단위 오류만 수정하라.
+    fixed_cards = []
+    changed_count = 0
+    for card in cards:
+        prompt = f"""다음 Threads 카드에서 글자 단위 오류만 수정하라.
 
 [수정 대상 — 반드시 아래 패턴을 찾아 복구할 것]
 - 첫 글자/숫자 생략: "국 청소년"→"미국 청소년",  "년 만에"→"1년 만에",  "비디아"→"엔비디아",  "트로픽"→"앤트로픽"
@@ -419,43 +421,39 @@ def fix_cards(cards):
 
 [금지 — 의미 변경 절대 금지]
 - 문장의 내용/의미/구조를 절대 변경하지 말 것
-- 틀린 글자는 올바른 글자로 교체하되, 원래 의도된 단어를 유지할 것
-- 문장을 추가하거나 삭제하지 말 것
-- 문체를 변경하지 말 것
 - 수정할 게 없으면 원본을 그대로 반환할 것
 
 [출력]
-수정된 쓰레드 전체를 --- 구분자와 함께 그대로 출력하라. 원본과 동일한 카드 수를 유지할 것.
+수정된 카드 내용만 출력하라. 부가 설명 금지.
 
---- 쓰레드 시작 ---
-{text}
---- 쓰레드 끝 ---"""
-    try:
-        result = chat_completion(
-            system_prompt="당신은 한국어 텍스트 교정 전문가입니다. 글자 단위 오류만 정확히 수정합니다.",
-            messages=[{'role': 'user', 'content': prompt}],
-            temperature=0.1,
-            max_tokens=8000,
-        )
-        if result:
-            result = _strip_model_explanatory(result)
-            fixed = [c.strip() for c in result.split('---') if c.strip()]
-            if len(fixed) == len(cards):
-                changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
-                _log(f'  🔧 오류 수정(MiMo): {changed}/{len(cards)}개 카드 수정됨')
-                return fixed
-            if len(fixed) > len(cards):
-                _log(f'  ⚠️ 수정 후 카드 수 초과: {len(fixed)}>{len(cards)} → {len(cards)}개로 자름')
-                fixed = fixed[:len(cards)]
-                changed = sum(1 for i in range(len(cards)) if fixed[i] != cards[i])
-                _log(f'  🔧 오류 수정(자름): {changed}/{len(cards)}개 카드 수정됨')
-                return fixed
-            _log(f'  ⚠️ 수정 후 카드 수 부족: {len(fixed)}<{len(cards)} → 원본 유지')
-        else:
-            _log(f'  ⚠️ 수정 실패 → 원본 유지')
-    except Exception as e:
-        _log(f'  ⚠️ 수정 오류: {e} → 원본 유지')
-    return cards
+--- 카드 시작 ---
+{card}
+--- 카드 끝 ---"""
+        try:
+            result = chat_completion(
+                system_prompt="당신은 한국어 텍스트 교정 전문가입니다. 글자 단위 오류만 정확히 수정합니다.",
+                messages=[{'role': 'user', 'content': prompt}],
+                temperature=0.1,
+                max_tokens=2000,
+            )
+            if result:
+                result = _strip_model_explanatory(result)
+                result = _strip_instruction_leak(result)
+                result = result.strip()
+                if result:
+                    fixed_cards.append(result)
+                    if result != card:
+                        changed_count += 1
+                else:
+                    fixed_cards.append(card)
+            else:
+                fixed_cards.append(card)
+        except Exception as e:
+            _log(f'  ⚠️ 수정 오류: {e} → 원본 유지')
+            fixed_cards.append(card)
+
+    _log(f'  🔧 오류 수정(MiMo): {changed_count}/{len(cards)}개 카드 수정됨')
+    return fixed_cards
 
 
 def parse_cards(text, format_choice='D'):
