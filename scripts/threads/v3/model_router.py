@@ -141,7 +141,7 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                 if text and text.strip():
                     return text.strip()
             except Exception as e:
-                print(f'  [경고] DeepSeek 실패: {type(e).__name__}')
+                print(f'  [경고] DeepSeek 실패: {type(e).__name__}: {e}')
                 if model_override == "deepseek":
                     print(f'  [오류] DeepSeek 강제 모드 실패')
                     return None

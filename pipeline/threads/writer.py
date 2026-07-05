@@ -195,7 +195,23 @@ stanza 예시 (반드시 이 구조를 따라라):
 - 단어를 임의로 줄이거나 변형하지 말 것
   예: "표준으로" → "표준으로" 그대로 (절대 "표준"으로 자르지 말 것)
   예: "예산을" → "예산을" 그대로 (절대 "예산"으로 자르지 말 것)
-- 기사에 없는 단어로 대체하지 말 것"""
+- 기사에 없는 단어로 대체하지 말 것
+
+[OUTPUT FORMAT]
+- 출력은 반드시 JSON 객체를 사용한다. 최상위 키는 "cards"이며, 값은 카드 문자열의 배열이다.
+- 카드 개수는 5~7개. 6번 카드(출처 링크) 포함.
+- 각 카드는 위의 스타일과 규칙을 준수하는 완전한 문자열이어야 한다.
+- 예:
+{{
+  "cards": [
+    "카드 1 내용 (450~500자)",
+    "카드 2 내용 (450~500자)",
+    "...",
+    "카드 5 내용 (450~500자)",
+    "🔗 https://example.com/news"
+  ]
+}}
+"""
 
 
 
@@ -517,6 +533,28 @@ def parse_cards(text, format_choice='D'):
     return cards
 
 
+def parse_cards_json_first(text: str, format_choice: str = 'D'):
+    """Try parsing LLM output as JSON with 'cards' array. Fallback to delimiter parser."""
+    try:
+        data = json.loads(text)
+        cards = data.get('cards', [])
+        if not isinstance(cards, list):
+            raise ValueError('cards is not a list')
+        lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+        if not (lo <= len(cards) <= hi):
+            raise ValueError(f'Card count {len(cards)} outside tolerance ({lo}, {hi})')
+        # Strip and ensure link card can be any position
+        cards = [c.strip() for c in cards if c and isinstance(c, str)]
+        return cards
+    except (json.JSONDecodeError, ValueError, TypeError, AttributeError, KeyError):
+        # Fallback to delimiter-based parsing
+        cards = parse_cards(text, format_choice)
+        lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+        if not (lo <= len(cards) <= hi):
+            return []
+        return cards
+
+
 def _remove_duplicate_links(cards):
     if len(cards) < 2:
         return cards
@@ -542,6 +580,7 @@ def write_thread(pitch, all_articles, format_choice=None):
     _log(f'  🎯 형식: {format_choice} — {FORMAT_LABELS[format_choice]}')
 
     system_prompt = FORMAT_BUILDERS[format_choice]()
+    json_schema = {"type": "json_object"}
 
     pre_crawled_body = pitch.get('crawled_body', '')
     pre_crawled_url = pitch.get('crawled_url', '')
@@ -636,39 +675,15 @@ def write_thread(pitch, all_articles, format_choice=None):
 === 관련 기사 ===
 {related_text}
 
-=== 작성 방법 ===
-Threads는 발행글 하나당 500자 제한이 있음.
-따라서 하나의 이야기를 여러 발행글로 나누어 연쇄 발행해야 함.
-각 발행글은 빈 줄 2개(\n\n\n)로 구분하며, 마지막 발행글은 출처 링크만 넣음.
-
-아래 형식을 정확히 따라라:
-
-발행글 내용 450~500자 (stanza 사이는 빈 줄 1개, 문장 끝에 \n 하나만 사용)
-
-
-발행글 내용 450~500자
-
-
-발행글 내용 450~500자
-
-
-발행글 내용 450~500자
-
-
-발행글 내용 450~500자
-
-
-🔗 https://...
-
 === 요구사항 ===
 1. 각 발행글 450~500자. 400자 미만 금지. 정보 부족 시 기사 본문에서 추가 추출.
-2. 각 발행글 내부의 빈 줄(\n\n)은 stanza 구분용으로만 사용. 카드 사이만 \n\n\n으로 구분할 것.
+2. 각 발행글 내부는 3~5줄의 stanza 구조. stanza 사이는 빈 줄 한 줄(\n\n)로 구분.
 3. 반말체(~임, ~했음, ~있음). ~합니다 금지.
 4. 기사 본문 숫자는 전부 사용. "많은", "대규모" 금지.
 5. 한 줄 40~60자. 정보와 설명을 충분히 담아라. 25자 이하 금지.
-6. 3~5줄마다 빈 줄 하나. stanza 구조 유지.
-7. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
-8. 각 발행글은 반드시 완전한 문장으로 끝내라. 문장 중간에 \n\n\n를 넣지 마라."""
+6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
+7. 각 발행글은 반드시 완전한 문장으로 끝내라.
+8. 최종 출력은 JSON 객체로 하며, 각 발행글은 "cards" 배열의 문자열이다."""
 
     _log(f'  쓰레드 생성 중... (temperature=0.4)')
 
@@ -679,6 +694,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
             temperature=0.4,
             max_tokens=5000,
             model_override=model_name,
+            response_format=json_schema,
         )
 
     models = ['deepseek']
@@ -703,7 +719,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
     content = re.sub(r'\n---+\s*$', '', content)
     content = re.sub(r'^\[/\s*카드\s*내용\s*\]$', '', content, flags=re.MULTILINE)
     content = re.sub(r'^\[카드\s*내용\s*\]$', '', content, flags=re.MULTILINE)
-    cards = parse_cards(content, format_choice)
+    cards = parse_cards_json_first(content, format_choice)
     cards = [re.sub(r'^\[/?\s*카드\s*내용\s*\]\s*', '', c).strip() for c in cards]
     cards = [c for c in cards if c]
     if len(cards) > expected_count:

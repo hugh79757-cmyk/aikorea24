@@ -5,6 +5,27 @@
 
 ---
 
+## 2026-07-05 — Phase 14: Delimiter Reconfiguration (실행 완료)
+
+### 변경
+- `pipeline/threads/writer.py` — `parse_cards_json_first()` 신규 (JSON → delimiter fallback), `response_format={"type": "json_object"}` 전달, `build_system_prompt_D()` JSON 출력 형식 명시
+- `scripts/threads/v3/model_router.py` — debug logging 정리
+- `scripts/threads/main_v3.py` — 한글+영어 붙어쓰기 검증 비활성화 (고유명사+조사 패턴 지속적 오탐 유발)
+- `tests/test_writer.py` — `TestParseCardsJSONFirst` (5개 테스트)
+- `tests/test_characterization_validate_final_cards.py` — 한글+영어 검증 테스트 업데이트
+
+### 의사결정
+- `response_format={"type": "json_object"}` 채택 (DeepSeek/MiMo 호환성)
+- `FORMAT_CARD_COUNT_TOLERANCE` D 포맷: `(4, 7)` (최소 4개 카드 허용)
+- 한글+영어 붙어쓰기 검증 비활성화 — 고유명사+조사 패턴이 지속적으로 오탐 유발
+
+### 영향
+- Phase 13 이후 지속되던 delimiter collision 문제 해결 (JSON-first 파싱)
+- 테스트 292개 통과, 분당 발행 안정성 확보
+- DeepSeek write_thread 직접 성공 (GPT 폴백 불필요)
+
+---
+
 ## 2026-07-04 — Phase 10-1: Card Structure Validation (실행 완료)
 
 ### 변경

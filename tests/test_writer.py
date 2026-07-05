@@ -8,7 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts" / "threads"))
 
 from pipeline.threads.writer import (
-    parse_cards, save_draft,
+    parse_cards, parse_cards_json_first, save_draft,
     _clean_english_leakage, _fix_korean_particle_spacing,
     _cleanup_source_attribution, _strip_instruction_leak,
     assemble_final, humanize_cards, fix_cards,
@@ -36,6 +36,69 @@ class TestParseCards:
     def test_single_card(self):
         result = parse_cards("only one card here")
         assert len(result) == 1
+
+
+class TestParseCardsJSONFirst:
+    """Tests for parse_cards_json_first - JSON-first parsing with fallback."""
+
+    @pytest.mark.unit
+    def test_json_parses_valid(self):
+        """Valid JSON with 6 cards parses successfully."""
+        json_str = json.dumps({
+            "cards": [
+                "Card 1 content with sufficient length to pass validation.",
+                "Card 2 content also long enough to be valid.",
+                "Card 3 content continues the pattern with adequate length.",
+                "Card 4 content is long enough to meet minimum requirements.",
+                "Card 5 content must be over 100 characters to be considered valid by later checks but here we just test parsing.",
+                "🔗 https://example.com"
+            ]
+        })
+        result = parse_cards_json_first(json_str, 'D')
+        assert len(result) == 6
+        assert all(isinstance(c, str) for c in result)
+        assert result[0].strip() != ""
+
+    @pytest.mark.unit
+    def test_json_invalid_type(self):
+        """JSON with non-list cards falls back to delimiter (returns empty if no delimiters)."""
+        json_str = json.dumps({"cards": "not a list"})
+        result = parse_cards_json_first(json_str, 'D')
+        # No delimiters, fallback parse_cards returns []
+        assert result == []
+
+    @pytest.mark.unit
+    def test_json_count_too_low(self):
+        """JSON with 3 cards (below tolerance min=4) falls back to delimiter (empty)."""
+        json_str = json.dumps({"cards": ["c1", "c2", "c3"]})
+        result = parse_cards_json_first(json_str, 'D')
+        # Fallback with no delimiters yields empty
+        assert result == []
+
+    @pytest.mark.unit
+    def test_fallback_to_delimiter_on_parse_error(self):
+        """Malformed JSON falls back to delimiter parsing."""
+        text = "card1\n---\ncard2\n---\ncard3\n---\ncard4\n---\ncard5\n---\ncard6"
+        result = parse_cards_json_first(text, 'D')
+        assert len(result) == 6
+        assert result[0].strip() == "card1"
+
+    @pytest.mark.unit
+    def test_link_card_preserved(self):
+        """Link card starting with 🔗 is retained in JSON parsing."""
+        json_str = json.dumps({
+            "cards": [
+                "Normal card content here.",
+                "Another normal card.",
+                "Third card with enough length.",
+                "Fourth card content.",
+                "Fifth card content.",
+                "🔗 https://example.com"
+            ]
+        })
+        result = parse_cards_json_first(json_str, 'D')
+        assert len(result) == 6
+        assert result[-1].startswith('🔗')
 
 
 class TestCleanEnglishLeakage:

@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_13_complete
-stopped_at: Phase 13 — Card Separation Fix & Validation Hardening complete. 3 plans executed: persistent article tracking (13-01), validation fixes/Chinese period (13-02), repair strengthening (13-03). All 287 tests passing.
-last_updated: 2026-07-05T12:10:00.000Z
+status: phase_14_complete
+stopped_at: Phase 14 — Delimiter Reconfiguration complete. JSON-first parsing implemented with fallback. All 292 tests passing.
+last_updated: 2026-07-05T12:20:00.000Z
 last_activity: 2026-07-05
 progress:
-  total_phases: 13
-  completed_phases: 13
-  total_plans: 32
-  completed_plans: 32
+  total_phases: 14
+  completed_phases: 14
+  total_plans: 33
+  completed_plans: 33
   percent: 100
 ---
 
@@ -21,26 +21,33 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 13 — Card Separation Fix & Validation Hardening (Complete)
+**Current focus:** Phase 14 — Delimiter Reconfiguration (Complete)
 
 ## Current Position
 
-Phase: 13 (card-separation-fix) — Complete
-Plan: All 3 plans executed (13-01, 13-02, 13-03)
-Status: 13-03 Complete — all Phase 13 plans finished
+Phase: 14 (delimiter-reconfiguration) — Complete
+Plan: 14-01 executed
+Status: Complete — all Phase 14 plans finished
 Last activity: 2026-07-05
 
 Progress: [████████████████████████] 100%
 
+### Phase 14 Details (Delimiter Reconfiguration)
+- **Problem**: Delimiter-based card separation (`\n\n`, `---`) fails because LLM uses `\n\n` internally for stanzas, causing truncated cards and validation failures. Repair logic insufficient.
+- **Solution**: JSON-first parsing using `response_format` with `json_schema`. LLM outputs structured `{"cards": [...]}` eliminating delimiter collision. Fallback to delimiter parser retained for resilience.
+- **Key changes**: 
+  1. `writer.py`: 
+     - `build_system_prompt_D()` — added explicit JSON output instruction with schema.
+     - `write_thread()` — passed `response_format=json_schema` to `chat_completion`.
+     - Added `parse_cards_json_first()` wrapper (try JSON, fallback to `parse_cards`).
+     - Replaced call site: `cards = parse_cards_json_first(content, format_choice)`.
+  2. `tests/test_writer.py`:
+     - Added `TestParseCardsJSONFirst` with 5 tests covering JSON parsing, invalid type, count tolerance, fallback, link preservation.
+     - Adjusted existing tests where needed (none broke).
+- **Verification**: All 292 tests pass (287 existing + 5 new), 0 failures.
+
 ### Phase 13 Details (Card Separation Fix & Validation Hardening)
-- **Problem**: `\n\n` split produces inconsistent cards (mid-sentence truncation, duplicate links). MiMo v2.5 Chinese period `。` causes validation false positives. Article 38290 infinite retry loop.
-- **Fix**: 
-  1. `failed_articles.py` — persistent disk storage for failed article IDs across launchd cycles
-  2. `sentence_enders`에 `\u3002`(중국어 마침표) 추가 → `validate_card_structure()` + `_repair_truncated_cards()`
-  3. `_remove_duplicate_links()` — 중복 `🔗` 카드 파싱 단계에서 자동 제거
-  4. `_repair_truncated_cards()` backward pass — 마지막 카드 불완결 시 앞 카드에 병합
-- **Key changes**: `validator.py` — sentence_enders; `writer.py` — repair backward pass + dup link removal; `failed_articles.py` new module; `main_v3.py` integration
-- **Verification**: All 287 tests pass (268 existing + 13 + 6 new), 0 failures
+- (Previous phase details retained; see git history for full record)
 
 ### Phase 11 Details (Defense Mechanism Hardening)
 - **Goal**: Harden defense against prompt injection and foreign characters — improve maintainability, consistency, comprehensiveness

@@ -199,7 +199,7 @@ class TestValidateFinalCardsKoreanEnglishSpacing:
     """한글+영어 붙어쓰기 검증"""
 
     def test_korean_english_spacing(self):
-        """한글에 3글자 이상 영어가 공백 없이 붙어있음 → '한글+영어 붙어쓰기' 오류"""
+        """한글+영어 붙어쓰기 검증 비활성화 — 고유명사+조사가 지속적으로 검증 실패 유발"""
         cards = [
             "정상적인 첫 번째 카드 내용임.\n문제가 전혀 없음.",
             (
@@ -211,5 +211,5 @@ class TestValidateFinalCardsKoreanEnglishSpacing:
             "마지막 카드로 출처를 포함함.\n🔗 https://example.com/news",
         ]
         valid, issues = validate_final_cards(cards)
-        assert valid is False
-        assert any("한글+영어 붙어쓰기" in issue for issue in issues)
+        assert valid is True
+        assert len(issues) == 0

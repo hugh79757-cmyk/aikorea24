@@ -20,6 +20,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 11: Defense Mechanism Hardening** — 방어 메커니즘 강화: 패턴 통합, threshold 일관성, Unicode 정규화, 외국어 패턴 통합, E2E 테스트 (completed 2026-07-05)
 - [x] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (completed 2026-07-05)
 - [x] **Phase 13: Card Separation Fix & Validation Hardening** — `\n\n` split 안정화, 중국어 마침표(`。`) 인식, 중복 링크 제거, 영구 실패 기사 추적 (completed 2026-07-05)
+- [x] **Phase 14: Delimiter Reconfiguration** — JSON-first parsing with `response_format`, fallback retained, delimiter collision eliminated (completed 2026-07-05)
 
 ## Phase Details
 
@@ -252,6 +253,24 @@ Plans:
 - [x] 13-02-PLAN.md — Validation fixes: `。` enders + duplicate link removal
 - [x] 13-03-PLAN.md — Repair logic strengthening + tests + E2E verification
 
+### Phase 14: Delimiter Reconfiguration
+**Goal:** Switch from delimiter-based to JSON-first parsing using structured output to eliminate delimiter collision and truncated cards.
+**Mode:** ad-hoc
+**Depends on**: Phase 13
+**Requirements**: REQ-14-1, REQ-14-2, REQ-14-3, REQ-14-4, REQ-14-5
+**Success Criteria** (what must be TRUE):
+   1. `build_system_prompt_D()` includes explicit JSON output instruction with cards schema
+   2. `write_thread()` passes `response_format` with `json_schema` to `chat_completion`
+   3. `parse_cards_json_first()` successfully parses JSON responses with 'cards' array
+   4. On JSON parse error or invalid structure, fallback to `parse_cards()` occurs
+   5. All validation (`validate_card_structure`, `validate_final_output`) applies identically
+   6. Fallback path `_repair_truncated_cards()` still used for `\n\n` splits
+   7. All 292 tests pass (≥5 new tests), 0 failures
+**Plans**: 1 plan
+
+Plans:
+- [x] 14-PLAN.md — JSON-first parsing integration and tests
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -272,4 +291,5 @@ Plans:
 | 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
 | 12. Writer Instability Fix | 2/2 | Complete | 2026-07-05 |
 | 13. Card Separation Fix & Validation Hardening | 3/3 | Complete | 2026-07-05 |
-| **Total** | **32/32** | | |
+| 14. Delimiter Reconfiguration | 1/1 | Complete | 2026-07-05 |
+| **Total** | **33/33** | | |
