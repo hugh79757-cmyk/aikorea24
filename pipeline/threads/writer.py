@@ -614,7 +614,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
 6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
 7. 발행글 번호는 붙이지 않음."""
 
-    TEMPS = [0.4]
+    TEMPS = [0.4, 0.4]
     max_attempts = 2
     for attempt in range(max_attempts):
         try:
@@ -671,11 +671,11 @@ Threads는 발행글 하나당 500자 제한이 있음.
 
     _log(f'  ❌ {max_attempts}회 재시도 실패 → fallback 1회')
     try:
-        _log(f'  쓰레드 생성 중... (fallback, temperature=0.0)')
+        _log(f'  쓰레드 생성 중... (fallback, temperature=0.3)')
         content = chat_completion(
             system_prompt=system_prompt,
             messages=[{'role': 'user', 'content': user_prompt}],
-            temperature=0.0,
+            temperature=0.3,
             max_tokens=5000,
         )
         if not content:

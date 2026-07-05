@@ -273,7 +273,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
 
         # 6. Sentence completeness (body cards only)
         if i > 1:  # Skip hook
-            sentence_enders = ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음']
+            sentence_enders = ['.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다']
             if not any(card.endswith(ender) for ender in sentence_enders):
                 if not card.endswith('...') and not card.endswith('…'):
                     return False, f"Card {i}: 문장 미완성"
