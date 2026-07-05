@@ -34,10 +34,13 @@ else
   exit 1
 fi
 
-echo "=== [1/2] 빌드 ==="
+echo "=== [0/3] 블로그 포스트 검증 ==="
+python3 "$PROJECT_DIR/scripts/validate_blog_posts.py" || exit 1
+
+echo "=== [1/3] 빌드 ==="
 npm run build
 
-echo "=== [2/2] Cloudflare Pages 배포 ==="
+echo "=== [2/3] Cloudflare Pages 배포 ==="
 npx wrangler pages deploy dist \
   --project-name aikorea24 \
   --branch main \
