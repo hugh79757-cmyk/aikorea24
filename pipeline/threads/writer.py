@@ -425,9 +425,9 @@ def fix_cards(cards):
 [출력]
 수정된 카드 내용만 출력하라. 부가 설명 금지.
 
---- 카드 시작 ---
+[카드 내용]
 {card}
---- 카드 끝 ---"""
+[/카드 내용]"""
         try:
             result = chat_completion(
                 system_prompt="당신은 한국어 텍스트 교정 전문가입니다. 글자 단위 오류만 정확히 수정합니다.",
@@ -647,10 +647,10 @@ Threads는 발행글 하나당 500자 제한이 있음.
     content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
     content = re.sub(r'^---+\s*\n', '', content)
     content = re.sub(r'\n---+\s*$', '', content)
-    content = re.sub(r'^---\s*카드\s*(시작|끝)\s*---\s*\n?', '', content, flags=re.MULTILINE)
-    content = re.sub(r'\n?\s*---\s*카드\s*(시작|끝)\s*---', '', content)
+    content = re.sub(r'^\[/\s*카드\s*내용\s*\]$', '', content, flags=re.MULTILINE)
+    content = re.sub(r'^\[카드\s*내용\s*\]$', '', content, flags=re.MULTILINE)
     cards = parse_cards(content, format_choice)
-    cards = [re.sub(r'^-{3,}\s*카드\s*(시작|끝)\s*-{3,}\s*', '', c).strip() for c in cards]
+    cards = [re.sub(r'^\[/?\s*카드\s*내용\s*\]\s*', '', c).strip() for c in cards]
     cards = [c for c in cards if c]
     if len(cards) > expected_count:
         _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정')

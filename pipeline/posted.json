@@ -744,6 +744,21 @@
       "date": "2026-07-05",
       "_lang_valid": true,
       "_lang_reason": "OK"
+    },
+    {
+      "hook": "세계 중앙은행 총재들이 인플레이션 대신 인공지능에 집중한 이유는 생산성 폭발이 인플레이션을 유발할 수 있기 때문이다.",
+      "narrative": "유럽중앙은행의 시NPRA 포럼에 모인 각국 중앙은행 총재들은 인공지능이 경제에 미칠 영향에 대해 논의했습니다. 주요 기업들의 대규모 투자가 단기적으로는 인플레이션을 유발할 수 있다는 점이 핵심 고민이었습니다.",
+      "article_ids": [
+        "37348"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
     }
   ],
   "posted_article_meta": {
@@ -1003,6 +1018,11 @@
       "description": ""
     },
     "38288": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "37348": {
       "title": "",
       "original_title": "",
       "description": ""
