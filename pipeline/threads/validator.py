@@ -281,7 +281,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
     # 7. Hook length (first card)
     hook = cards[0].strip()
     if not hook.startswith('🔗'):
-        if len(hook) < 30 or len(hook) > 100:
+        if len(hook) < 30 or len(hook) > 200:
             return False, f"Hook 길이 비정상 ({len(hook)}자)"
 
     # 8. Body card length
