@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_12_complete
-stopped_at: Phase 12 complete — all 2 plans executed. Writer instability fixed (per-card processing + parallel model race + article skip on write failure)
-last_updated: 2026-07-05T21:00:00.000Z
+status: phase_13_in_progress
+stopped_at: Phase 13 — card separation fix mid-execution. _repair_truncated_cards added, fix_cards template artifact removed, humanize/fix parallelized. Remaining: persistent failed-article tracking (38290 infinite retry loop).
+last_updated: 2026-07-05T10:45:00.000Z
 last_activity: 2026-07-05
 progress:
-  total_phases: 12
+  total_phases: 13
   completed_phases: 12
-  total_plans: 29
+  total_plans: 30
   completed_plans: 29
-  percent: 100
+  percent: 97
 ---
 
 # Project State

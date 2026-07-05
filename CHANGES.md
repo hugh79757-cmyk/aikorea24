@@ -556,3 +556,19 @@
   2. 3-model sequential fallback 누적 대기시간 (지연 원인) → parallel race
 
 ---
+
+## 2026-07-05 — Phase 13: Card Separation Fix (진행 중)
+
+### Done
+- `writer.py`: `_repair_truncated_cards()` — `\n\n` fallback 후 문장 중간 split 병합
+- `writer.py`: fix_cards 프롬프트 `--- 카드 시작/끝 ---` 템플릿 제거 → artifact 근절
+- `writer.py`: 프롬프트 강화 — `---` 직전 완전한 문장 요구
+- `writer.py`: humanize_cards/fix_cards 병렬화 (ThreadPoolExecutor, 144s→37s)
+- 커밋: `8b2203e` · `1677eee` · `6148ada`
+
+### 발견 — 미해결
+- **기사 38290 무한 재시도 루프**: write_thread()가 항상 validation 실패 → save_posted() 미호출 → 영원히 기사풀에 남음
+- `failed_article_ids`가 per-run 메모리 set이라 다음 launchd 실행 시 초기화
+- 영구 실패 기사 추적(persistent failed_article_ids) 필요 — failed_crawls.json 패턴 참조
+
+---
