@@ -9,6 +9,7 @@ import sys
 import subprocess
 import json
 import urllib.request
+import html
 from datetime import datetime
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
@@ -95,35 +96,40 @@ def main():
             print("=== 에러 ===")
             print(error)
         
-        # 결과 메시지 생성
+        # 결과 메시지 생성 (HTML 태그 파싱 오류 방지: 본문은 escape 후 <pre>로 감쌈)
         if result.returncode == 0:
-            # 성공 메시지
+            body = html.escape(output[-1000:] if len(output) > 1000 else output)
             message = f"""✅ <b>aikorea24 파이프라인 완료</b>
 ⏰ {now}
 
-{output[-1000:] if len(output) > 1000 else output}"""
+<pre>{body}</pre>"""
         else:
-            # 실패 메시지
+            err_body = html.escape(error[-500:] if len(error) > 500 else error)
+            out_body = html.escape(output[-500:] if len(output) > 500 else output)
             message = f"""❌ <b>aikorea24 파이프라인 실패</b>
 ⏰ {now}
 
 에러:
-{error[-500:] if len(error) > 500 else error}"""
-        
+<pre>{err_body}</pre>
+
+출력:
+<pre>{out_body}</pre>"""
+
         # 텔레그램 발송
         send_telegram(message)
-        
+
     except subprocess.TimeoutExpired:
         message = f"""⏰ <b>aikorea24 파이프라인 타임아웃</b>
-{now}
+⏰ {now}
 
 10분 초과"""
         send_telegram(message)
     except Exception as e:
+        err = html.escape(str(e))
         message = f"""❌ <b>aikorea24 파이프라인 에러</b>
-{now}
+⏰ {now}
 
-{str(e)}"""
+{err}"""
         send_telegram(message)
 
 if __name__ == '__main__':
