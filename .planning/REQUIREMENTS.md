@@ -171,9 +171,19 @@
 | OBS-06 | Phase 5 | Pending |
 | BRD-01 | Phase 5 | Pending |
 
+### Phase 12 — Writer Instability Fix
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| REQ-12-01 | Phase 12 | Complete |
+| REQ-12-02 | Phase 12 | Complete |
+| REQ-12-03 | Phase 12 | Complete |
+| REQ-12-04 | Phase 12 | Complete |
+| REQ-12-05 | Phase 12 | Complete |
+
 **Coverage:**
-- v1 requirements: 45 total
-- Mapped to phases: 45
+- v1 requirements: 50 total
+- Mapped to phases: 50
 - Unmapped: 0 ✓
 
 ---

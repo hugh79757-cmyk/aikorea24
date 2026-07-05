@@ -18,7 +18,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 10: Model Message Leakage Fix** — 모델 설명 메시지 필터링으로 발행 카드 오염 방지 (completed 2026-07-04)
 - [x] **Phase 10-1: Card Structure Validation** — 카드 구조 검증으로 모델 메시지/이상치 완전 차단 (completed 2026-07-04)
 - [x] **Phase 11: Defense Mechanism Hardening** — 방어 메커니즘 강화: 패턴 통합, threshold 일관성, Unicode 정규화, 외국어 패턴 통합, E2E 테스트 (completed 2026-07-05)
-- [ ] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (in progress)
+- [x] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (completed 2026-07-05)
 
 ## Phase Details
 
@@ -231,7 +231,7 @@ Plans:
 
 Plans:
 - [x] 12-01-PLAN.md — Per-card fix_cards, graceful humanize failure, hook validation relax
-- [ ] 12-02-PLAN.md — Article skip on write failure, test updates
+- [x] 12-02-PLAN.md — Parallel model race + single-attempt write_thread + article skip on write failure
 
 ## Progress
 
@@ -251,5 +251,5 @@ Plans:
 | 10. Model Message Leakage Fix | 1/1 | Complete | 2026-07-04 |
 | 10-1. Card Structure Validation | 1/1 | Complete | 2026-07-04 |
 | 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
-| 12. Writer Instability Fix | 1/2 | In Progress | 2026-07-05 |
-| **Total** | **27/29** | | |
+| 12. Writer Instability Fix | 2/2 | Complete | 2026-07-05 |
+| **Total** | **29/29** | | |
