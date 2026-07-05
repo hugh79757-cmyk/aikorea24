@@ -609,129 +609,73 @@ Threads는 발행글 하나당 500자 제한이 있음.
 6. 핵심 이야기/반전/감정/체감 단위 등의 피치 메타데이터 레이블 절대 포함 금지.
 7. 발행글 번호는 붙이지 않음."""
 
-    TEMPS = [0.4, 0.4]
-    max_attempts = 2
-    for attempt in range(max_attempts):
-        try:
-            temp = 0.4
-            _log(f'  쓰레드 생성 중... (temperature={temp})')
+    _log(f'  쓰레드 생성 중... (temperature=0.4)')
 
-            def _try_model(model_name):
-                return chat_completion(
-                    system_prompt=system_prompt,
-                    messages=[{'role': 'user', 'content': user_prompt}],
-                    temperature=temp,
-                    max_tokens=5000,
-                    model_override=model_name,
-                )
-
-            models = ['mimo-v2.5', 'deepseek-v4-flash', 'gpt-4o-mini']
-            content = None
-            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-                futures = {executor.submit(_try_model, m): m for m in models}
-                for future in concurrent.futures.as_completed(futures, timeout=60):
-                    result = future.result()
-                    if result:
-                        content = result
-                        break
-            if not content:
-                raise Exception('모델 응답 없음')
-            content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
-            content = re.sub(r'^---+\s*\n', '', content)
-            content = re.sub(r'\n---+\s*$', '', content)
-            cards = parse_cards(content, format_choice)
-            if len(cards) > expected_count:
-                _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정')
-                cards = cards[:expected_count]
-            lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
-            if len(cards) < lo:
-                _log(f'  ⚠️ 카드 수 부족: {len(cards)}개 (최소 {lo}개 필요) → 재시도')
-                continue
-            cards = fix_cards(cards)
-            cards = _cleanup_source_attribution(cards)
-
-            if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
-                # New structural validation
-                structure_ok, structure_reason = validate_card_structure(cards)
-                if not structure_ok:
-                    _log(f'⚠️ 카드 구조 검증 실패: {structure_reason} → 재시도')
-                    _log(f'  [RAW CARDS DUMP] {json.dumps(cards, ensure_ascii=False)}')
-                    continue
-
-                # Model message validation
-                for i, card in enumerate(cards, 1):
-                    if not validate_model_message(card):
-                        _log(f'⚠️ Card {i}: 모델 메시지 탐지 → 재시도')
-                        break
-                else:
-                    # No model message found — proceed to final validation
-                    final_ok, final_reason = validate_final_output(cards)
-                    if not final_ok:
-                        _log(f'⚠️ 최종 검증 실패: {final_reason} → 재시도')
-                        continue
-                    primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
-                    cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
-                    _log(f'✅ 쓰레드: {len(cards)}개 조각 (시도 {attempt+1})')
-                    return cards
-            else:
-                _log(f'⚠️ 검증 실패: {len(cards)}개 조각 (시도 {attempt+1}/{max_attempts})')
-        except Exception as e:
-            _log(f'  ⚠️ 오류: {e} (시도 {attempt+1}/{max_attempts})')
-
-    _log(f'  ❌ {max_attempts}회 재시도 실패 → fallback 1회')
-    try:
-        _log(f'  쓰레드 생성 중... (fallback, temperature=0.3)')
-        content = chat_completion(
+    def _try_model(model_name):
+        return chat_completion(
             system_prompt=system_prompt,
             messages=[{'role': 'user', 'content': user_prompt}],
-            temperature=0.3,
+            temperature=0.4,
             max_tokens=5000,
+            model_override=model_name,
         )
-        if not content:
-            raise Exception('모델 응답 없음')
-        content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
-        content = re.sub(r'^---+\s*\n', '', content)
-        content = re.sub(r'\n---+\s*$', '', content)
-        cards = parse_cards(content, format_choice)
-        if len(cards) > expected_count:
-            _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정 (fallback)')
-            cards = cards[:expected_count]
-        lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
-        if len(cards) < lo:
-            _log(f'  ⚠️ 카드 수 부족: {len(cards)}개 (최소 {lo}개 필요) → fallback 실패')
-            raise Exception(f'fallback 카드 수 부족: {len(cards)}개')
-        cards = fix_cards(cards)
-        cards = _cleanup_source_attribution(cards)
-        if validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text):
-            # New structural validation
-            structure_ok, structure_reason = validate_card_structure(cards)
-            if not structure_ok:
-                _log(f'⚠️ 카드 구조 검증 실패 (fallback): {structure_reason}')
-                _log(f'  [RAW CARDS DUMP] {json.dumps(cards, ensure_ascii=False)}')
-                raise Exception(f'카드 구조 검증 실패: {structure_reason}')
 
-            # Model message validation
-            for i, card in enumerate(cards, 1):
-                if not validate_model_message(card):
-                    _log(f'⚠️ Card {i}: 모델 메시지 탐지 (fallback)')
-                    raise Exception(f'Card {i}: 모델 메시지 탐지')
+    models = ['mimo-v2.5', 'deepseek-v4-flash', 'gpt-4o-mini']
+    content = None
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+        futures = {executor.submit(_try_model, m): m for m in models}
+        try:
+            for future in concurrent.futures.as_completed(futures, timeout=60):
+                result = future.result()
+                if result:
+                    content = result
+                    break
+        except concurrent.futures.TimeoutError:
+            _log('  ⚠️ 모델 레이스 타임아웃 (60s)')
 
-            final_ok, final_reason = validate_final_output(cards)
-            if not final_ok:
-                _log(f'⚠️ 최종 검증 실패 (fallback): {final_reason}')
-                raise Exception(f'최종 검증 실패: {final_reason}')
-            primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
-            cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
-            _log(f'  ✅ 쓰레드: {len(cards)}개 조각 (fallback 성공)')
-            return cards
-    except Exception as e:
-        _log(f'  ⚠️ fallback 오류: {e}')
+    if not content:
+        _log('  ❌ 모든 모델 응답 실패')
+        return []
 
-    _log('  ❌ 전체 재시도 실패')
-    if format_choice != 'D':
-        _log('  🔄 형식 D로 대체 시도...')
-        return write_thread(pitch, all_articles, format_choice='D')
-    return []
+    content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
+    content = re.sub(r'^---+\s*\n', '', content)
+    content = re.sub(r'\n---+\s*$', '', content)
+    cards = parse_cards(content, format_choice)
+    if len(cards) > expected_count:
+        _log(f'  카드 {len(cards)}개 → {expected_count}개로 조정')
+        cards = cards[:expected_count]
+    lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+    if len(cards) < lo:
+        _log(f'  ⚠️ 카드 수 부족: {len(cards)}개 (최소 {lo}개 필요)')
+        return []
+    cards = fix_cards(cards)
+    cards = _cleanup_source_attribution(cards)
+
+    if not (validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text)):
+        _log(f'⚠️ 검증 실패: {len(cards)}개 조각')
+        return []
+
+    structure_ok, structure_reason = validate_card_structure(cards)
+    if not structure_ok:
+        _log(f'⚠️ 카드 구조 검증 실패: {structure_reason}')
+        _log(f'  [RAW CARDS DUMP] {json.dumps(cards, ensure_ascii=False)}')
+        return []
+
+    # Model message validation
+    for i, card in enumerate(cards, 1):
+        if not validate_model_message(card):
+            _log(f'⚠️ Card {i}: 모델 메시지 탐지')
+            return []
+
+    final_ok, final_reason = validate_final_output(cards)
+    if not final_ok:
+        _log(f'⚠️ 최종 검증 실패: {final_reason}')
+        return []
+
+    primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
+    cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
+    _log(f'✅ 쓰레드: {len(cards)}개 조각')
+    return cards
 
 
 def assemble_final(cards, articles, primary_url=None, crawled_urls=None, format_choice='D'):
