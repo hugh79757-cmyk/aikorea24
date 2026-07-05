@@ -647,6 +647,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
                 structure_ok, structure_reason = validate_card_structure(cards)
                 if not structure_ok:
                     _log(f'⚠️ 카드 구조 검증 실패: {structure_reason} → 재시도')
+                    _log(f'  [RAW CARDS DUMP] {json.dumps(cards, ensure_ascii=False)}')
                     continue
 
                 # Model message validation
@@ -698,6 +699,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
             structure_ok, structure_reason = validate_card_structure(cards)
             if not structure_ok:
                 _log(f'⚠️ 카드 구조 검증 실패 (fallback): {structure_reason}')
+                _log(f'  [RAW CARDS DUMP] {json.dumps(cards, ensure_ascii=False)}')
                 raise Exception(f'카드 구조 검증 실패: {structure_reason}')
 
             # Model message validation
