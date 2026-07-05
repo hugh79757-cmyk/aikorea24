@@ -1,5 +1,5 @@
 """pipeline/threads/writer.py — Thread writing logic: format building, post-processing, assembly, orchestration."""
-import os, sys, json, re, time
+import os, sys, json, re, time, concurrent.futures
 from datetime import datetime
 from pathlib import Path
 from collections import Counter
@@ -613,14 +613,27 @@ Threads는 발행글 하나당 500자 제한이 있음.
     max_attempts = 2
     for attempt in range(max_attempts):
         try:
-            temp = TEMPS[attempt] if attempt < len(TEMPS) else 0.1
+            temp = 0.4
             _log(f'  쓰레드 생성 중... (temperature={temp})')
-            content = chat_completion(
-                system_prompt=system_prompt,
-                messages=[{'role': 'user', 'content': user_prompt}],
-                temperature=temp,
-                max_tokens=5000,
-            )
+
+            def _try_model(model_name):
+                return chat_completion(
+                    system_prompt=system_prompt,
+                    messages=[{'role': 'user', 'content': user_prompt}],
+                    temperature=temp,
+                    max_tokens=5000,
+                    model_override=model_name,
+                )
+
+            models = ['mimo-v2.5', 'deepseek-v4-flash', 'gpt-4o-mini']
+            content = None
+            with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+                futures = {executor.submit(_try_model, m): m for m in models}
+                for future in concurrent.futures.as_completed(futures, timeout=60):
+                    result = future.result()
+                    if result:
+                        content = result
+                        break
             if not content:
                 raise Exception('모델 응답 없음')
             content = re.sub(r'^.*?쓰레드\s*(시작|끝).*?\n', '', content, count=1)
