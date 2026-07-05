@@ -767,3 +767,74 @@ remote:     - Push cann
 [D1 동기화] tools 테이블 업데이트 중...
   SQL 생성: -- ✅ 총 142개 도구 INSERT SQL 생성 완료
   D1 tools 테이블 동기화 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 6개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  TopAI.tools: 9개 수집
+  총 16개 (중복 제거 후)
+수집 완료: 16개
+기존 툴: 142개 (슬러그), 142개 (이름)
+  중복 스킵: Banger Mail
+  중복 스킵: Claude Science
+  중복 스킵: Mark by Airtop
+  중복 스킵: Gemini Omni Flash
+  중복 스킵: Adam CAD Copilot
+  중복 스킵: AgenticSTS: A Bounded-Memory Testbed for Long-Hori
+  중복 스킵: ArchDiagramAI
+  중복 스킵: PicCreator AI
+  중복 스킵: AIDesignHouse
+  중복 스킵: ZipTie AI
+  중복 스킵: FloatBoat AI
+신규 툴: 5개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (5건) ---
+  크롤링 성공: https://centryai.app/?ref=producthunt... (설명 150자)
+  크롤링 성공: https://topai.tools/t/ugcfy-ai... (설명 144자)
+  크롤링 성공: https://topai.tools/t/aisha-ai... (설명 140자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/aisha-ai.md
+  ✅ AISHA AI → aisha-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/ugcfy-ai.md
+  ✅ UGCFY AI → ugcfy-ai.md
+  크롤링 성공: https://topai.tools/t/motion-control-ai-net... (설명 150자)
+  크롤링 성공: https://topai.tools/t/fotello-co... (설명 150자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/centryai.md
+  ✅ CentryAI → centryai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/motion-control-ai.md
+  ✅ Motion Control AI → motion-control-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/fotello-ai.md
+  ✅ Fotello AI → fotello-ai.md
+
+==================================================
+처리 완료: 5/16개 생성 (23.8초)
+  git commit: [main 34084ae] feat: AI 툴 5개 추가 (2026-07-05)
+ 68 files changed, 5511 insertions(+), 263 deletions(-)
+ create mode 100644 .planning/phases/10-1-card-structure-validation/10-1-card-structure-validation-
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 실패 (시도 1/2): [InvalidContentEntryDataError] blog → 2026-07-03-트럼프-비판자들의-정신병-증후군-치료-의사로-등장하는-ai-영상을-게시 data does not match collection schema.
+
+  title**: **title: Required
+  description**: **description: Required
+  date**: **date: Invalid date
+  category**: **category: Required
+
+  Hint:
+    See https://docs.astro
+  5초 후 재시도...
+  배포 실패 (시도 2/2): [InvalidContentEntryDataError] blog → 2026-07-03-트럼프-비판자들의-정신병-증후군-치료-의사로-등장하는-ai-영상을-게시 data does not match collection schema.
+
+  title**: **title: Required
+  description**: **description: Required
+  date**: **date: Invalid date
+  category**: **category: Required
+
+  Hint:
+    See https://docs.astro
+
+[D1 동기화] tools 테이블 업데이트 중...
+  SQL 생성: -- ✅ 총 147개 도구 INSERT SQL 생성 완료
+  D1 tools 테이블 동기화 완료 ✅

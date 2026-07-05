@@ -714,6 +714,36 @@
       "date": "2026-07-04",
       "_lang_valid": true,
       "_lang_reason": "OK"
+    },
+    {
+      "hook": "호주 GP의 40%가 사용하는 AI 필기 도구, 정부는 '감독이 거의 없다'고 경고했다",
+      "narrative": "호주 의사들의 AI 필기 도구 사용이 1년 반 만에 두 배 가까이 급증했지만, 연방 보건부는 이 도구들이 '감독이 거의 없다'며 환자 프라이버시와 데이터 보안에 심각한 우려를 표명했습니다. 일부 공급업체들은 클라우드 플랫폼을 통해 호주 외부로 데이터를 전송할 수 있어 환자 데이터 보안에 위험이 발생한다고 지적했습니다.",
+      "article_ids": [
+        "38551"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
+    },
+    {
+      "hook": "OpenAI 공동 창립자가 2023년에 출시한 ChatGPT 플러그인이 '모델이 준비되지 않아서' 완전히 실패했다고 인정했다.",
+      "narrative": "그렉 브록מן은 ChatGPT 플러그인을 2023년에 마케팅하며 큰 기대를 걸었지만, 결과적으로 AI 모델이 충분히 발전하지 못해 작동하지 않았다고 솔직히 밝혔습니다. 그는 이제 기능을 쌓은 앱 대신, 투명하고 맥락을 인식하는 AI 에이전트가 디지털 작업을 대신하는 '거의 인터페이스 없는' 미래를 구상하고 있습니다.",
+      "article_ids": [
+        "38288"
+      ],
+      "article_urls": [],
+      "article_titles": [],
+      "article_original_titles": [],
+      "article_descriptions": [],
+      "entities": [],
+      "date": "2026-07-05",
+      "_lang_valid": true,
+      "_lang_reason": "OK"
     }
   ],
   "posted_article_meta": {
@@ -963,6 +993,16 @@
       "description": ""
     },
     "38377": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "38551": {
+      "title": "",
+      "original_title": "",
+      "description": ""
+    },
+    "38288": {
       "title": "",
       "original_title": "",
       "description": ""

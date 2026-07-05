@@ -116,7 +116,7 @@ class TestHumanizeCards:
         """humanize_cards는 카드 수가 일치하면 humanize 결과 반환"""
         import v3.model_router
         call_count = [0]
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
             idx = call_count[0]
             call_count[0] += 1
             return f"humanized card {idx}"  # per-card: 각 카드마다 개별 호출
@@ -132,7 +132,7 @@ class TestHumanizeCards:
         """humanize_cards: LLM이 None 반환 시 원본 카드 유지"""
         import v3.model_router
         call_count = [0]
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
             call_count[0] += 1
             return None  # Simulate LLM failure
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
@@ -163,7 +163,7 @@ class TestFixCards:
         import v3.model_router
         call_count = [0]
         mock_cards = [f"This is a longer test card number {i} that exceeds the minimum length for LLM processing" for i in range(6)]
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
             idx = call_count[0]
             call_count[0] += 1
             if idx < 6:
@@ -252,7 +252,7 @@ class TestWriteThreadIntegration:
     def test_humanize_cards_preserves_count(self, monkeypatch):
         """humanize_cards는 원본 카드 수 유지"""
         import v3.model_router
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
             return "---\n".join([f"humanized card {i}" for i in range(4)])
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
         cards = [f"card {i}" for i in range(4)]
@@ -352,7 +352,7 @@ class TestFixCardsModelMessage:
         """모델 메시지가 fix_cards 출력에서 제거되는지 검증"""
         import v3.model_router
         call_count = [0]
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
             idx = call_count[0]
             call_count[0] += 1
             if idx < 6:
@@ -379,7 +379,7 @@ class TestHumanizeCardsModelMessage:
         """humanize_cards 호출 시 모델 메시지가 포함된 결과에서도 필터링"""
         import v3.model_router
         model_response = "원본을 그대로 반환합니다.\n---\n" + "---\n".join([f"card {i}" for i in range(6)])
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
             return model_response
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
         cards = [f"card {i}" for i in range(6)]
