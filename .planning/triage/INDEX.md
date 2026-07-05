@@ -1,3 +1,13 @@
+- 2026-07-05 | fix | persistent-failed-articles | Phase 13-01: failed_articles.py 영구 저장 → article 38290 무한 재시도 차단
+- 2026-07-05 | fix | chinese-period-validation | Phase 13-02: \u3002(중국어 마침표)를 sentence_enders에 추가 → MiMo `。` 검증 통과
+- 2026-07-05 | fix | duplicate-link-removal | Phase 13-02: _remove_duplicate_links() parse_cards + assemble_final 이중 방어
+- 2026-07-05 | fix | repair-truncated-cards-backward | Phase 13-03: _repair_truncated_cards() backward pass + MIN_COUNT 가드
+- 2026-07-05 | fix | model-switch-gpt-only | Phase 13-03: humanize/fix_cards/pitch → GPT-4o-mini 전용 (MiMo 제거, 44s→4s)
+- 2026-07-05 | fix | delimiter-triple-newline | Phase 13-03: 카드 구분자 `---` → `\n\n\n` (stanza용 `\n\n`과 구분 명확화)
+- 2026-07-05 | fix | hook-merge-removal | Phase 13-03: hook merge 레거시 코드 제거 (\n\n\n delimiter로 대체)
+- 2026-07-05 | fix | pitch-json-mode-removal | Phase 13-03: pitch JSON mode 제거 (일반 텍스트만, 1회 호출)
+- 2026-07-05 | fix | card-count-tolerance | Phase 13-03: FORMAT_CARD_COUNT_TOLERANCE D (5,7)→(4,7)
+- 2026-07-05 | fix | card-length-validation | Phase 13-03: 카드 최소 길이 100자 검증 추가 (링크 제외)
 - 2026-07-04 | fix | model-message-leakage | Phase 10: Model Message Leakage Fix — _strip_model_explanatory() + fix_cards/humanize_cards 필터
 - 2026-07-04 | fix | card-structure-validation | Phase 10-1: Card Structure Validation — validate_model_message() + validate_card_structure() + 20개 추가 패턴
 - 2026-07-04 | fix | temp-model-mimo-v25-switch | Temperature & Model Priority Change — TEMPS [0.4] + MiMo v2.5 1순위
