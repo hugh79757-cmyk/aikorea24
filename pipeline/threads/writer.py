@@ -620,7 +620,7 @@ Threads는 발행글 하나당 500자 제한이 있음.
             model_override=model_name,
         )
 
-    models = ['mimo-v2.5', 'deepseek-v4-flash', 'gpt-4o-mini']
+    models = ['mimo', 'deepseek', 'openai']
     content = None
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         futures = {executor.submit(_try_model, m): m for m in models}

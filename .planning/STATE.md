@@ -4,7 +4,7 @@ milestone: v1.0
 milestone_name: milestone
 status: phase_12_complete
 stopped_at: Phase 12 complete — all 2 plans executed. Writer instability fixed (per-card processing + parallel model race + article skip on write failure)
-last_updated: 2026-07-05T12:00:00.000Z
+last_updated: 2026-07-05T21:00:00.000Z
 last_activity: 2026-07-05
 progress:
   total_phases: 12

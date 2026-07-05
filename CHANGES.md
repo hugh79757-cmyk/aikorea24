@@ -533,3 +533,26 @@
 - Phase 4 Monolith Splitting 대기
 
 ---
+
+## 2026-07-05 — Phase 12: Writer Instability Fix (실행 완료)
+
+### Wave 1: Per-card processing (12-01-PLAN)
+- `humanize_cards()`: `--- join → LLM → --- split` → per-card loop (count 불변)
+- `fix_cards()`: 동일한 per-card 재작성 — card count explosion 제거
+- `validator.py`: Hook 250→350자 + content boundary safety check
+- 커밋: `f10b8a4` · `43b4707` · `a322d43` · `e030662`
+
+### Wave 2: Pipeline efficiency (12-02-PLAN)
+- `writer.py`: 3-model parallel race (`ThreadPoolExecutor`, ~15초 → ~2분 개선)
+- `writer.py`: write_thread single-pass (loop/fallback 제거)
+- `main_v3.py`: write 실패 시 `failed_article_ids.add()` — 다른 기사로 retry
+- `validator.py`: content boundary threshold 2→5 (format D merge 허용)
+- 커밋: `39f9f72` · `84c62f9` · `c3b7bbc` · `1019b89`
+
+### 검증
+- 268/268 전체 테스트 통과
+- 10시간 publish 장애 근본 원인 2중 교정:
+  1. `--- join/split` 자체 제거 (원인) → per-card processing
+  2. 3-model sequential fallback 누적 대기시간 (지연 원인) → parallel race
+
+---
