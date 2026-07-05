@@ -158,19 +158,24 @@ class TestHumanizeCards:
 
 class TestFixCards:
     @pytest.mark.unit
-    def test_returns_original_on_humanize_mismatch(self, monkeypatch):
-        """fix_cards는 humanize count 불일치 시에도 원본 반환"""
+    def test_fix_cards_preserves_card_count(self, monkeypatch):
+        """fix_cards: 6개 카드 입력 → 항상 6개 카드 출력 (per-card invariant)"""
         import v3.model_router
-        call_log = []
+        call_count = [0]
+        mock_cards = [f"This is a longer test card number {i} that exceeds the minimum length for LLM processing" for i in range(6)]
         def mock_chat(*, system_prompt, messages, temperature, max_tokens):
-            call_log.append(('chat', temperature))
-            if len(call_log) == 1:
-                return "only one card"
-            return "---\n".join([f"fixed card {i}" for i in range(3)])
+            idx = call_count[0]
+            call_count[0] += 1
+            if idx < 6:
+                # humanize per-card calls (idx 0-5)
+                return mock_cards[idx]
+            # MiMo per-card calls (idx 6-11)
+            return mock_cards[idx - 6]
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = [f"card {i}" for i in range(6)]
+        cards = [f"This is a longer test card number {i} that exceeds the minimum length for LLM processing" for i in range(6)]
         result = fix_cards(cards)
         assert len(result) == 6
+        assert call_count[0] == 12  # 6 humanize + 6 MiMo
 
 
 class TestWriteThreadEarlyRejection:
@@ -344,21 +349,26 @@ class TestFixCardsModelMessage:
 
     @pytest.mark.unit
     def test_model_message_filtered(self, monkeypatch):
-        """fix_cards 호출 시 모델 메시지가 포함된 결과에서도 필터링"""
+        """모델 메시지가 fix_cards 출력에서 제거되는지 검증"""
         import v3.model_router
         call_count = [0]
         def mock_chat(*, system_prompt, messages, temperature, max_tokens):
+            idx = call_count[0]
             call_count[0] += 1
-            if call_count[0] == 1:
-                # humanize pass: 정상 카드
-                return "---\n".join([f"humanized card {i}" for i in range(6)])
-            # fix_cards pass: 모델 메시지 포함
-            return "수정할 게 없습니다.\n---\n" + "---\n".join([f"fixed card {i}" for i in range(6)])
+            if idx < 6:
+                # humanize per-card: return original card
+                return f"This is a longer test card number {idx} that exceeds the minimum"
+            # MiMo per-card: model message for card 0, normal for rest
+            if idx == 6:
+                return "수정할 게 없습니다."
+            return f"fixed card {idx - 7}"
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = [f"card {i}" for i in range(6)]
+        cards = [f"This is a longer test card number {i} that exceeds the minimum" for i in range(6)]
         result = fix_cards(cards)
-        for card in result:
-            assert "수정할 게 없습니다" not in card
+        assert len(result) == 6
+        # Card 0: model message stripped → original kept
+        # Cards 1-5: fixed
+        assert "수정할 게 없습니다" not in result[0]
 
 
 class TestHumanizeCardsModelMessage:
