@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: complete
-stopped_at: Phase 11 execution complete — defense hardening (pattern consolidation + Unicode NFKC + E2E tests)
-last_updated: 2026-07-05T00:30:00.000Z
+status: phase_12_01_complete
+stopped_at: Phase 12 Plan 01 complete — per-card humanize/fix + validator relax. Next: 12-02 (article skip on write failure)
+last_updated: 2026-07-05T11:20:00.000Z
 last_activity: 2026-07-05
 progress:
   total_phases: 12
-  completed_phases: 12
-  total_plans: 27
-  completed_plans: 27
-  percent: 100.0
+  completed_phases: 11
+  total_plans: 29
+  completed_plans: 28
+  percent: 96.5
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 11 — Defense Mechanism Hardening
+**Current focus:** Phase 12 — Writer Instability Fix
 
 ## Current Position
 
-Phase: 11 (defense-hardening)
-Plan: 11-defense-hardening/PLAN.md
-Status: Complete
+Phase: 12 (writer-instability-fix)
+Plan: 12-02-PLAN.md (next)
+Status: 12-01 Complete — executing 12-02
 Last activity: 2026-07-05
 
-Progress: [████████████████] 100%
+Progress: [█████████████████████░░░] 96.5%
 
 ### Phase 11 Details (Defense Mechanism Hardening)
 - **Problem**: AI models (MiMo, GPT-4o-mini, DeepSeek) occasionally return explanatory messages that get included as content cards in published Threads posts
@@ -84,6 +84,7 @@ Progress: [████████████████] 100%
 | Phase 07-crawl-failure-exclusion 07-01 | 12min | 3 tasks | 6 files |
 
 | Phase 11-defense-hardening 11-01 | 15min | 11 tasks | 10 files |
+| Phase 12-writer-instability-fix 12-01 | 4min | 4 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -113,7 +114,7 @@ None. All phases complete. Pipeline running stable with launchd scheduler.
 
 ## Session Continuity
 
-Last session: 2026-07-05T00:30:00.000Z
-Stopped at: Phase 11 complete — defense hardening (11 tasks, 270 tests passing)
+Last session: 2026-07-05T11:20:00.000Z
+Stopped at: Phase 12 Plan 01 complete — per-card humanize/fix + validator relax. Next: 12-02 (article skip on write failure)
 Resume file: None
-Next: Pipeline milestone v1.0 complete. All 12 phases done. Options: monitoring dashboard, reader analytics, operational monitoring, or new feature roadmap.
+Next: Execute Phase 12 Plan 02: Article skip on write failure

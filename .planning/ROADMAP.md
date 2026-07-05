@@ -17,6 +17,8 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 9: Test Coverage Expansion** — writer/crawler/pitch 테스트 확장 + integration 테스트 (completed 2026-07-04)
 - [x] **Phase 10: Model Message Leakage Fix** — 모델 설명 메시지 필터링으로 발행 카드 오염 방지 (completed 2026-07-04)
 - [x] **Phase 10-1: Card Structure Validation** — 카드 구조 검증으로 모델 메시지/이상치 완전 차단 (completed 2026-07-04)
+- [x] **Phase 11: Defense Mechanism Hardening** — 방어 메커니즘 강화: 패턴 통합, threshold 일관성, Unicode 정규화, 외국어 패턴 통합, E2E 테스트 (completed 2026-07-05)
+- [ ] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (in progress)
 
 ## Phase Details
 
@@ -214,6 +216,23 @@ Plans:
 Plans:
 - [x] PLAN.md — 11 tasks: pattern consolidation, threshold alignment, NFKC normalization, foreign language pattern consolidation, prompt strengthening, E2E tests, docs
 
+### Phase 12: Writer Instability Fix
+**Goal:** fix_cards() 카드 구조 파괴 수정 — per-card MiMo 교정, humanize/fix_cards graceful 실패 처리, 기사 실패 시 skip.
+**Mode:** ad-hoc
+**Depends on**: Phase 11
+**Requirements**: REQ-12-01, REQ-12-02, REQ-12-03, REQ-12-04, REQ-12-05
+**Success Criteria** (what must be TRUE):
+  1. `fix_cards()` processes each card individually — never changes card count
+  2. `humanize_cards()` applies non-structural regex fixes on card count mismatch
+  3. Hook length validation accepts up to 350 chars + content boundary check
+  4. `main_v3.py` skips failed article on write failure (no 5x retry of same article)
+  5. All 270 existing tests pass
+**Plans**: 2 plans
+
+Plans:
+- [x] 12-01-PLAN.md — Per-card fix_cards, graceful humanize failure, hook validation relax
+- [ ] 12-02-PLAN.md — Article skip on write failure, test updates
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -232,4 +251,5 @@ Plans:
 | 10. Model Message Leakage Fix | 1/1 | Complete | 2026-07-04 |
 | 10-1. Card Structure Validation | 1/1 | Complete | 2026-07-04 |
 | 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
-| **Total** | **26/26** | | |
+| 12. Writer Instability Fix | 1/2 | In Progress | 2026-07-05 |
+| **Total** | **27/29** | | |
