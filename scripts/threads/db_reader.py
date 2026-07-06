@@ -49,6 +49,12 @@ def normalize_url(url):
 
 from dedup import is_same_topic, article_keywords, article_entities
 
+try:
+    from pipeline.infra.vectorize_client import is_duplicate_with_vectorize, embed_article
+    VECTORIZE_AVAILABLE = True
+except ImportError:
+    VECTORIZE_AVAILABLE = False
+
 PROJECT_DIR = project_root()
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 POSTED_FILE = os.path.join(THREADS_DIR, 'posted.json')
@@ -178,7 +184,15 @@ def is_already_posted(article, posted):
     if orig_title30 and orig_title30 in set(ot[:30] for ot in posted.get('posted_original_titles', [])):
         return True
 
-    # 5. Semantic 유사도 (언어 통합, FULL text 기준)
+    # 5. Vectorize semantic dedup (supplementary layer)
+    if VECTORIZE_AVAILABLE:
+        try:
+            if is_duplicate_with_vectorize(article, threshold=0.85):
+                return True
+        except Exception:
+            pass  # Vectorize failure should not block pipeline
+
+    # 6. Semantic 유사도 (언어 통합, FULL text 기준)
     meta = posted.get('posted_article_meta', {})
     if meta:
         a_title = article.get('title', '') or ''

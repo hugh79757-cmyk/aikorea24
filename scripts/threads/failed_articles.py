@@ -49,10 +49,31 @@ def _get_retention_days() -> int:
         return 7
 
 
+FAILED_ARTICLES_RETENTION_SECONDS = 24 * 3600  # 24 hours for failed_crawls
+
+
+def _is_crawl_expired(entry: dict) -> bool:
+    expired_at = entry.get("expired_at")
+    if not expired_at:
+        failed_at = entry.get("failed_at", "")
+        if failed_at:
+            try:
+                dt = datetime.fromisoformat(failed_at.replace("Z", "+00:00"))
+                expired_at = (dt + timedelta(seconds=FAILED_ARTICLES_RETENTION_SECONDS)).isoformat()
+            except (ValueError, TypeError):
+                return True
+        else:
+            return True
+    try:
+        return datetime.fromisoformat(expired_at.replace("Z", "+00:00")) < datetime.now()
+    except (ValueError, TypeError):
+        return True
+
+
 def load_failed_articles() -> Set[str]:
     """
     Load failed article IDs from failed_articles.json on disk.
-    Also merges article IDs from failed_crawls.json (if present).
+    Also merges URLs from failed_crawls.json (with 24h TTL).
     Returns the set of failed article IDs.
     """
     global _failed_article_ids, _failed_articles_meta
@@ -73,27 +94,37 @@ def load_failed_articles() -> Set[str]:
         except (json.JSONDecodeError, IOError) as e:
             print(f"[WARN] Failed to load {FAILED_ARTICLES_FILE}: {e}", file=sys.stderr)
 
-    # 2. Merge article IDs from failed_crawls.json (crawl failures)
+    # 2. Merge from failed_crawls.json (with 24h TTL)
     if os.path.exists(FAILED_CRAWLS_FILE):
         try:
             with open(FAILED_CRAWLS_FILE, 'r', encoding='utf-8') as f:
                 crawl_data = json.load(f)
+            valid_entries = []
+            purged_count = 0
             for entry in crawl_data.get('failed', []):
-                aid = entry.get('article_id')
+                if _is_crawl_expired(entry):
+                    purged_count += 1
+                    continue
+                valid_entries.append(entry)
+                aid = entry.get('article_id', '')
                 if aid:
                     aid_str = str(aid)
                     _failed_article_ids.add(aid_str)
-                    # Store minimal metadata if not already present
                     if aid_str not in _failed_articles_meta:
                         _failed_articles_meta[aid_str] = {
                             'failed_at': entry.get('failed_at', datetime.now().isoformat()),
                             'reason': entry.get('status', 'crawl_failed'),
-                            'source': 'failed_crawls.json'
+                            'source': 'failed_crawls.json',
                         }
+            if purged_count > 0:
+                crawl_data['failed'] = valid_entries
+                crawl_data['updated_at'] = datetime.now().isoformat()
+                with open(FAILED_CRAWLS_FILE, 'w', encoding='utf-8') as f:
+                    json.dump(crawl_data, f, ensure_ascii=False, indent=2)
         except (json.JSONDecodeError, IOError) as e:
             print(f"[WARN] Failed to load {FAILED_CRAWLS_FILE}: {e}", file=sys.stderr)
 
-    # 3. Clear old entries (retention policy)
+    # 3. Clear old entries (retention policy for failed_articles.json)
     clear_old_entries()
 
     return _failed_article_ids

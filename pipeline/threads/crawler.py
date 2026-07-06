@@ -1,6 +1,6 @@
 """pipeline/threads/crawler.py — 기사 크롤링 및 실패 기록"""
 import os, json, time
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 from bs4 import BeautifulSoup
 
@@ -33,7 +33,8 @@ def log_failed_crawl(url, source, title, status, article_id=""):
         except Exception:
             pass
     now = datetime.now().isoformat()
-    entry = {"url": url, "source": source, "title": title, "status": status, "article_id": article_id, "failed_at": now}
+    expired = (datetime.now() + timedelta(hours=24)).isoformat()
+    entry = {"url": url, "source": source, "title": title, "status": status, "article_id": article_id, "failed_at": now, "expired_at": expired}
     data['failed'] = [e for e in data['failed'] if e.get('url') != url]
     data['failed'].append(entry)
     data['updated_at'] = now

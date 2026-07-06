@@ -291,6 +291,21 @@ def run_v3(dry_run=False):
             save_posted(posted)
             from v3.narrative_pitcher import save_pitch_to_history
             save_pitch_to_history(pitch)
+            # Vectorize: index posted articles for semantic dedup
+            try:
+                from pipeline.infra.vectorize_client import embed_article, upsert_vectors
+                vectors = []
+                for aid_str in pitch_ids:
+                    for a in articles:
+                        if str(a.get('id', '')).lstrip('#').strip() == aid_str:
+                            vec = embed_article(a)
+                            if vec:
+                                vectors.append(vec)
+                            break
+                if vectors:
+                    upsert_vectors(vectors)
+            except Exception:
+                pass  # Vectorize failure should not block pipeline
             # 업데이트 후 상세 로그
             after = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
             log(f'[발행 완료] posted.json 업데이트:')

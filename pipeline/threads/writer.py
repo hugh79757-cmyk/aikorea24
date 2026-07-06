@@ -478,63 +478,9 @@ def fix_cards(cards):
     return fixed_cards
 
 
-def _repair_truncated_cards(cards):
-    """Merge cards where card ends mid-sentence. Preserves minimum card count."""
-    if not cards:
-        return cards
-    
-    MIN_COUNT = 4  # format D tolerance lo
-    SENTENCE_ENDERS = ('.', '!', '?', '음', '임', '됨', '했음', '있음', '없음', '다', '함', '란다', '한데', '었다', '았다', '\u3002')
-    
-    # Forward pass: merge incomplete card with next card
-    fixed = [cards[0]]
-    remaining = len(cards) - 1
-    for card in cards[1:]:
-        prev = fixed[-1].strip()
-        if len(fixed) + remaining > MIN_COUNT and prev and not any(prev.endswith(e) for e in SENTENCE_ENDERS):
-            fixed[-1] = fixed[-1] + '\n\n' + card
-        else:
-            fixed.append(card)
-        remaining -= 1
-    
-    # Backward pass: if last card is incomplete (and not a link card), merge into previous
-    if len(fixed) > 1 and len(fixed) > MIN_COUNT:
-        last = fixed[-1].strip()
-        if last.startswith('🔗'):
-            pass  # Don't merge link cards
-        elif last and not any(last.endswith(e) for e in SENTENCE_ENDERS):
-            fixed[-2] = fixed[-2] + '\n\n' + fixed[-1]
-            fixed.pop()
-    
-    return fixed
-
-
-def parse_cards(text, format_choice='D'):
-    cards = [c.strip() for c in text.split('---') if c.strip()]
-    if not cards:
-        return cards
-    lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
-    if len(cards) < lo:
-        alt = [c.strip() for c in text.split('\n\n\n') if c.strip()]
-        alt = [c for c in alt if len(c) > 20]
-        if len(alt) >= lo:
-            _log(f'  parse_cards: --- 없음, \\n\\n\\n으로 {len(alt)}개 분할')
-            cards = alt
-        else:
-            # Fallback: \n\n (with repair)
-            alt = [c.strip() for c in text.split('\n\n') if c.strip()]
-            alt = [c for c in alt if len(c) > 20]
-            if len(alt) >= lo:
-                _log(f'  parse_cards: --- 없음, \\n\\n으로 {len(alt)}개 분할')
-                alt = _repair_truncated_cards(alt)
-                cards = alt
-    # Remove duplicate links
-    cards = _remove_duplicate_links(cards)
-    return cards
-
-
 def parse_cards_json_first(text: str, format_choice: str = 'D'):
-    """Try parsing LLM output as JSON with 'cards' array. Fallback to delimiter parser."""
+    """Parse LLM output as JSON array: {"cards": ["...", "..."]}.
+    Delimiter-based fallback removed — JSON is the only accepted format."""
     try:
         data = json.loads(text)
         cards = data.get('cards', [])
@@ -543,15 +489,11 @@ def parse_cards_json_first(text: str, format_choice: str = 'D'):
         lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
         if not (lo <= len(cards) <= hi):
             raise ValueError(f'Card count {len(cards)} outside tolerance ({lo}, {hi})')
-        # Strip and ensure link card can be any position
         cards = [c.strip() for c in cards if c and isinstance(c, str)]
         return cards
     except (json.JSONDecodeError, ValueError, TypeError, AttributeError, KeyError):
-        # Fallback to delimiter-based parsing
-        cards = parse_cards(text, format_choice)
-        lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
-        if not (lo <= len(cards) <= hi):
-            return []
+        _log(f'  ⚠️ JSON 파싱 실패 — 카드 생성 불가')
+        return []
         return cards
 
 

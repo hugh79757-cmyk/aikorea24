@@ -21,6 +21,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (completed 2026-07-05)
 - [x] **Phase 13: Card Separation Fix & Validation Hardening** — `\n\n` split 안정화, 중국어 마침표(`。`) 인식, 중복 링크 제거, 영구 실패 기사 추적 (completed 2026-07-05)
 - [x] **Phase 14: Delimiter Reconfiguration** — JSON-first parsing with `response_format`, fallback retained, delimiter collision eliminated (completed 2026-07-05)
+- [ ] **Phase 15: Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환** — Vectorize 의미적 중복제거, failed_crawls TTL, 카드 JSON 배열 전환
 
 ## Phase Details
 

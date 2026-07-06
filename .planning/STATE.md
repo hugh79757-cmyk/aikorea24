@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_14_complete
-stopped_at: Phase 14 — Delimiter Reconfiguration complete. JSON-first parsing implemented with fallback. All 292 tests passing.
-last_updated: 2026-07-05T12:20:00.000Z
-last_activity: 2026-07-05
+status: phase_15_planning
+stopped_at: Phase 15 — Planning complete. Ready for execution.
+last_updated: 2026-07-06T04:00:00.000Z
+last_activity: 2026-07-06
 progress:
-  total_phases: 14
+  total_phases: 15
   completed_phases: 14
-  total_plans: 33
+  total_plans: 34
   completed_plans: 33
-  percent: 100
+  percent: 93
 ---
 
 # Project State
@@ -21,13 +21,13 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 14 — Delimiter Reconfiguration (Complete)
+**Current focus:** Phase 15 — Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환 (Planning Complete)
 
 ## Current Position
 
-Phase: 14 (delimiter-reconfiguration) — Complete
-Plan: 14-01 executed
-Status: Complete — all Phase 14 plans finished
+Phase: 15 (vectorize-crawlfix-json-cards) — Planning Complete
+Plan: 15-01 to 15-09 defined
+Status: Ready for execution
 Last activity: 2026-07-05
 
 Progress: [████████████████████████] 100%
@@ -116,6 +116,9 @@ Recent decisions affecting current work:
 - [Phase 13]: `sentence_enders`에 `\u3002`(중국어 마침표) 추가 — MiMo v2.5 특성 반영
 - [Phase 13]: `_remove_duplicate_links()` 추가 — `\n\n` split의 중복 링크 문제 해결
 - [Phase 13]: Persistent failed article tracking (failed_articles.py) — article 38290 infinite retry loop 해결
+- [Phase 15]: Vectorize REST API 도입 — Cloudflare Vectorize로 의미적 중복제거 추가 (보조 레이어)
+- [Phase 15]: failed_crawls.json TTL 24시간 적용 — 영구 제외로 인한 기사 풀 고갈 해결
+- [Phase 15]: 카드 분할 JSON 배열 전환 — delimiter 충돌 근본 해결, fallback 제거
 
 ### Pending Todos
 
@@ -123,19 +126,18 @@ None.
 
 ### Blockers/Concerns
 
-None. All phases complete. Pipeline running stable with launchd scheduler.
+Phase 15 실행 대기 중. 9개 태스크, 예상 ~3시간.
 
 ## Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| *(none)* | | | |
+| Architecture | ThreadForge 마이그레이션 검토 | 대기 | 2026-07-06 |
+| Cost | GPT-4o 사용 중단 → MiMo v2.5 전환 | 완료 | 2026-07-06 |
 
 ## Session Continuity
 
-Last session: 2026-07-05T12:10:00.000Z
-Stopped at: Phase 13 complete — all 3 plans executed. Card separation + validation fixes + persistent tracking.
-Resume file: None
-Next: All pipeline phases complete (13/13). Consider:
-  - Phase 14: Hook 문장 종결 과다 (구조적 문제, `\n\n` split 근본 한계)
-  - Phase 15: E2E 드라이런 조용한 실행 (시간 많이 소요, 별도 배치)
+Last session: 2026-07-06T04:00:00.000Z
+Stopped at: Phase 15 planning complete — 9 tasks defined
+Resume file: .planning/phase-15/PLAN.md
+Next: Phase 15 execution — Vectorize + 크롤링 실패 수정 + 카드 JSON 전환

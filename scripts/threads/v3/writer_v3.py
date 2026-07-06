@@ -14,7 +14,7 @@ from pipeline.threads.crawler import fetch_article_body, log_failed_crawl  # noq
 from pipeline.threads.validator import validate_cards, validate_year, validate_keywords  # noqa: F401, E402
 from pipeline.threads.validator import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE  # noqa: F401, E402
 from pipeline.threads.writer import (  # noqa: F401, E402
-    write_thread, save_draft, parse_cards, fix_cards, assemble_final,
+    write_thread, save_draft, fix_cards, assemble_final,
     humanize_cards, load_style_examples, build_system_prompt_D,
     FORMAT_LABELS, FORMAT_BUILDERS, INSTRUCTION_PATTERNS,
     STYLE_EXAMPLES_PATH,

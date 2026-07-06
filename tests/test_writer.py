@@ -8,38 +8,21 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts" / "threads"))
 
 from pipeline.threads.writer import (
-    parse_cards, parse_cards_json_first, save_draft,
+    parse_cards_json_first, save_draft,
     _clean_english_leakage, _fix_korean_particle_spacing,
     _cleanup_source_attribution, _strip_instruction_leak,
     assemble_final, humanize_cards, fix_cards,
     load_style_examples, build_system_prompt_D,
     _strip_model_explanatory,
-    _repair_truncated_cards,
 )
 from pipeline.threads.validator import MODEL_MESSAGE_PATTERNS
 from pipeline.threads.writer import FORMAT_CARD_COUNTS, FORMAT_CARD_COUNT_TOLERANCE
 from pipeline.infra.config import project_root
 
 
-class TestParseCards:
-    @pytest.mark.unit
-    def test_normal_parse(self):
-        result = parse_cards("card1\nline2\nline3\nline4\n---\ncard2\nline2")
-        assert len(result) == 2
-        assert "card1" in result[0]
-
-    @pytest.mark.unit
-    def test_empty_text(self):
-        assert parse_cards("") == []
-
-    @pytest.mark.unit
-    def test_single_card(self):
-        result = parse_cards("only one card here")
-        assert len(result) == 1
-
 
 class TestParseCardsJSONFirst:
-    """Tests for parse_cards_json_first - JSON-first parsing with fallback."""
+    """Tests for parse_cards_json_first - JSON-only parsing (no delimiter fallback)."""
 
     @pytest.mark.unit
     def test_json_parses_valid(self):
@@ -76,12 +59,11 @@ class TestParseCardsJSONFirst:
         assert result == []
 
     @pytest.mark.unit
-    def test_fallback_to_delimiter_on_parse_error(self):
-        """Malformed JSON falls back to delimiter parsing."""
+    def test_invalid_json_returns_empty(self):
+        """Malformed JSON returns empty (no delimiter fallback)."""
         text = "card1\n---\ncard2\n---\ncard3\n---\ncard4\n---\ncard5\n---\ncard6"
         result = parse_cards_json_first(text, 'D')
-        assert len(result) == 6
-        assert result[0].strip() == "card1"
+        assert result == []
 
     @pytest.mark.unit
     def test_link_card_preserved(self):
@@ -471,87 +453,3 @@ class TestValidateFinalOutputModelMessage:
         cards = ["일반적인 카드 내용입니다. 충분한 길이의 텍스트.", "두 번째 카드 내용도 충분히 길게 작성됨."]
         ok, reason = validate_final_output(cards)
         assert ok
-
-
-class TestRepairTruncatedCards:
-    """_repair_truncated_cards() — 카드 절단 수리 로직 테스트"""
-
-    @pytest.mark.unit
-    def test_all_complete(self):
-        """모든 카드가 완결된 문장이면 변화 없음"""
-        cards = [
-            "첫 번째 카드 내용입니다.",
-            "두 번째 카드 내용입니다.",
-            "세 번째 카드 내용입니다.",
-        ]
-        result = _repair_truncated_cards(cards)
-        assert result == cards
-
-    @pytest.mark.unit
-    def test_last_card_incomplete(self):
-        """마지막 카드가 불완결이면 앞 카드에 병합"""
-        cards = [
-            "첫 번째 카드 내용입니다.",
-            "두 번째 카드 내용입니다.",
-            "세 번째 카드 내용입니다.",
-            "네 번째 카드 내용입니다.",
-            "다섯 번째 카드 내용입니다.",
-            "이 문장은 완결되지 않았다고 생각",
-        ]
-        result = _repair_truncated_cards(cards)
-        assert len(result) == 5
-        assert "완결되지 않았다고 생각" in result[-1]
-        assert result[-1].endswith("생각")
-
-    @pytest.mark.unit
-    def test_first_card_incomplete(self):
-        """첫 번째 카드가 불완결이면 두 번째와 병합, 나머지 유지"""
-        cards = [
-            "이 문장은 아직 끝나지 않은",
-            "두 번째 카드 내용입니다.",
-            "세 번째 카드 내용입니다.",
-            "네 번째 카드 내용입니다.",
-            "다섯 번째 카드 내용입니다.",
-            "여섯 번째 카드 내용입니다.",
-        ]
-        result = _repair_truncated_cards(cards)
-        assert len(result) == 5
-        assert "아직 끝나지 않은" in result[0]
-        assert "두 번째 카드 내용입니다." in result[0]
-        assert "여섯 번째 카드" in result[-1]
-
-    @pytest.mark.unit
-    def test_multiple_incomplete_then_patch(self):
-        """6개 중 중간 불완결 → 4개로 병합 보존"""
-        cards = [
-            "첫 번째 카드 내용입니다.",
-            "문장이",
-            "아직",
-            "끝나지 않았다.",
-            "다섯 번째 카드 내용입니다.",
-            "🔗 https://example.com",
-        ]
-        result = _repair_truncated_cards(cards)
-        assert len(result) >= 4
-        assert "문장이" in result[1]
-        assert "아직" in result[1]
-
-    @pytest.mark.unit
-    def test_chinese_period_preserved(self):
-        """중국어 마침표(。)는 완결로 인식 → 병합하지 않음"""
-        cards = [
-            "첫 번째 카드입니다.",
-            "이 카드는 중국어 마침표로 끝난다。",
-            "세 번째 카드입니다.",
-        ]
-        result = _repair_truncated_cards(cards)
-        assert len(result) == 3
-        assert result[1].endswith('。')
-
-    @pytest.mark.unit
-    def test_single_card_incomplete(self):
-        """카드가 하나뿐이면 불완결도 그대로 반환"""
-        cards = ["아직 끝나지 않은 문장"]
-        result = _repair_truncated_cards(cards)
-        assert len(result) == 1
-        assert result[0] == cards[0]
