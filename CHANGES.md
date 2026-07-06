@@ -5,6 +5,34 @@
 
 ---
 
+## 2026-07-06 — Phase 15: Vectorize + TTL + JSON Cards (실행 완료)
+
+### 변경
+- `pipeline/infra/vectorize_client.py` — **신규**: OpenAI text-embedding-3-small (1536d) + Cloudflare Vectorize REST API 클라이언트 (`upsert_vectors`, `query_vectors`, `delete_vectors`, `embed_article`, `is_duplicate_with_vectorize`)
+- `pipeline/threads/writer.py` — delimiter fallback 제거, JSON-only 파싱 (`parse_cards_json_first`), `_repair_truncated_cards()` / `parse_cards()` 삭제
+- `pipeline/threads/crawler.py` — `log_failed_crawl()`에 `expired_at` 필드 추가 (24h TTL)
+- `scripts/threads/failed_articles.py` — failed_crawls 24h TTL 만료 로직 (`_is_crawl_expired`), URL 기반 키 매칭 (빈 article_id 문제 해결)
+- `scripts/threads/db_reader.py` — `is_already_posted()`에 Vectorize 5차 중복 판정 추가 (similarity threshold 0.85)
+- `scripts/threads/main_v3.py` — 발행 성공 시 Vectorize 인덱싱 자동 실행
+- `scripts/threads/migrate_to_vectorize.py` — **신규**: 기존 342개 기사 벡터 마이그레이션 스크립트
+- `scripts/threads/v3/writer_v3.py` — `parse_cards` import 제거
+- `tests/test_writer.py` — `TestParseCards` / `TestRepairTruncatedCards` 삭제, JSON 전용 테스트로 교체
+
+### 의사결정
+- Vectorize = 보조 레이어 (기존 `is_same_topic()` 유지, 2차 semantic dedup)
+- failed_crawls TTL = 24시간 (AI 뉴스는 시간 민감)
+- failed_crawls 키 = URL 기반 (기존 `article_id` 빈 값 문제 해결)
+- 카드 출력 = JSON 배열 전용 (delivr fallback 제거)
+- 카드 수 = 6개 유지 (ThreadForge 7+1과 달리 5幕 구조 최적화)
+
+### 영향
+- 기존 중복 기사 20+건이 failed_crawls에서 자동 만료 해제 → 기사 풀 회복
+- Vectorize 인덱싱: 새 발행 시 자동, 기존 342건은 수동 마이그레이션 필요 (`python3 scripts/threads/migrate_to_vectorize.py`)
+- 테스트 283개 통과
+- commit: `d844c09`
+
+---
+
 ## 2026-07-05 — Phase 14: Delimiter Reconfiguration (실행 완료)
 
 ### 변경
