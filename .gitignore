@@ -40,3 +40,11 @@ backup3.py
 # Log directories
 naver_blog/logs/
 scripts/threads/logs/
+
+# Runtime state (changes every pipeline run)
+pipeline/posted.json
+config/pexels_used_ids.json
+scripts/__pycache__/
+scripts/threads/posted.json
+scripts/threads/logs/
+scripts/tools_collector.log
