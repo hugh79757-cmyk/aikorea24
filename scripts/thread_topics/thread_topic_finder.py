@@ -13,6 +13,8 @@ logger = get_scrubbed_logger(__name__)
 
 KST = timezone(timedelta(hours=9))
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+from model_router import chat_completion
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 THREADS_DIR = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "topics")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
@@ -285,9 +287,7 @@ def generate_thread_outline(
     cluster: dict,
     articles_map: dict[int, dict],
 ) -> str:
-    """gpt-4o로 클러스터별 스레드 아웃라인 생성 (description 포함)"""
-    from openai import OpenAI
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    """MiMo v2.5로 클러스터별 스레드 아웃라인 생성 (description 포함)"""
 
     article_ids = cluster["article_ids"]
     data_points = cluster.get("data_points", [])
@@ -370,17 +370,16 @@ Q5.
 ## 🏷 추천 해시태그
 (5개 이내, 네이버/인스타 검색 기준)"""
 
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        max_completion_tokens=3000,
+    content = chat_completion(
+        messages=[{"role": "user", "content": user_prompt}],
+        system_prompt=system_prompt,
+        max_tokens=3000,
         temperature=0.6,
     )
+    if not content:
+        log("  ❌ 아웃라인 생성 실패")
+        return ""
 
-    content = resp.choices[0].message.content.strip()
     log(f"  아웃라인 생성 완료: {len(content)}자")
     return content
 

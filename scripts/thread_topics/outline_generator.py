@@ -20,6 +20,8 @@ KST = timezone(timedelta(hours=9))
 # 경로 / 설정
 # ============================================
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+from model_router import chat_completion
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
 OUTLINES_DIR = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "outlines")
@@ -148,8 +150,6 @@ def search_articles_for_keyword(db_query_terms):
 # ============================================
 def generate_outline_with_articles(keyword_name, intent, articles):
     """매칭된 기사들을 바탕으로 아웃라인 생성"""
-    from openai import OpenAI
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
     # 기사 텍스트 조립
     article_lines = []
@@ -213,16 +213,15 @@ def generate_outline_with_articles(keyword_name, intent, articles):
 [원문]
 {articles_str}"""
 
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        max_completion_tokens=1500,
+    content = chat_completion(
+        messages=[{"role": "user", "content": user_prompt}],
+        system_prompt=system_prompt,
+        max_tokens=1500,
         temperature=0.5,
     )
-    content = resp.choices[0].message.content.strip()
+    if not content:
+        log("  ❌ 아웃라인 생성 실패")
+        return ""
     log(f"  생성 완료: {len(content)}자")
     return content
 
@@ -232,8 +231,6 @@ def generate_outline_with_articles(keyword_name, intent, articles):
 # ============================================
 def generate_outline_no_articles(keyword_name, intent):
     """매칭 기사 없음 → 검색의도만으로 아웃라인 생성"""
-    from openai import OpenAI
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
     system_prompt = "당신은 콘텐츠 전략 전문가입니다. 주어진 키워드와 검색의도를 바탕으로 블로그 아웃라인을 기획합니다."
 
@@ -276,16 +273,15 @@ SEO 태그 후보 5~8개를 나열한다.
 '{keyword_name}'를 첫 번째 태그로 포함할 것.
 (형식: 태그1, 태그2, 태그3, ...)"""
 
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        max_completion_tokens=1200,
+    content = chat_completion(
+        messages=[{"role": "user", "content": user_prompt}],
+        system_prompt=system_prompt,
+        max_tokens=1200,
         temperature=0.7,
     )
-    content = resp.choices[0].message.content.strip()
+    if not content:
+        log("  ❌ 아웃라인 생성 실패 (뉴스없음)")
+        return ""
     log(f"  생성 완료 (뉴스없음): {len(content)}자")
     return content
 

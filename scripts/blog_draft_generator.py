@@ -35,6 +35,8 @@ GRADE_SCORE = {"A": 100, "B": 60, "C": 30}
 # 경로 / 설정
 # ============================================
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+from model_router import chat_completion
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 
@@ -128,11 +130,9 @@ def match_keywords(articles):
     return matches
 
 # ============================================
-# 블로그 초안 생성 (OpenAI)
+# 블로그 초안 생성 (MiMo v2.5 via model_router)
 # ============================================
 def generate_draft(keyword, articles, grade):
-    from openai import OpenAI
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
     is_deep = len(articles) == 1
 
     # 기사 텍스트 조립
@@ -191,16 +191,15 @@ def generate_draft(keyword, articles, grade):
             f"## 기사들\n{articles_str}"
         )
 
-    resp = client.chat.completions.create(
-        model="gpt-4o",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        max_completion_tokens=3000,
+    content = chat_completion(
+        messages=[{"role": "user", "content": user_prompt}],
+        system_prompt=system_prompt,
+        max_tokens=3000,
         temperature=0.7,
     )
-    content = resp.choices[0].message.content.strip()
+    if not content:
+        log("  ❌ 블로그 초안 생성 실패")
+        return ""
     # 중국어 문자 제거 (안전망)
     cleaned = remove_chinese(content)
     if cleaned != content:

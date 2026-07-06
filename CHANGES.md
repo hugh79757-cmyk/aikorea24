@@ -621,3 +621,33 @@
 - 영구 실패 기사 추적(persistent failed_article_ids) 필요 — failed_crawls.json 패턴 참조
 
 ---
+
+## 2026-07-06 — GPT-4o 사용 중단 + 런타임 아티팩트 정리
+
+### 변경
+- **GPT-4o → MiMo v2.5 교체** (월 ~$17.66 절감):
+  - `outline_generator.py`: 기사 있음/없음 아웃라인 생성 2곳 → `model_router.chat_completion()` 전환
+  - `thread_topic_finder.py`: 스레드 아웃라인 생성 1곳 → `model_router.chat_completion()` 전환
+  - `blog_draft_generator.py`: 블로그 초안 생성 1곳 → `model_router.chat_completion()` 전환
+  - `gpt-4o` 모델 문자열 executable code에서 완전 제거 확인
+  - `gpt-4o-mini`는 model_router 3순위 fallback으로 유지 ($0.15/$0.60/M, 저비용)
+- **런타임 아티팩트 git 추적 제거**:
+  - `.gitignore` 추가: `pipeline/posted.json`, `config/pexels_used_ids.json`, `scripts/__pycache__/`, `scripts/threads/posted.json`, `scripts/threads/logs/`, `scripts/tools_collector.log`
+  - `git rm --cached`로 추적 해제
+- **쓰레드 발행 비활성화**: `kr.aikorea24.threads-publisher` launchd 에이전트 언로드
+
+### 이전 세션 보강 (07:00~07:34 KST)
+- 7/5 06:00 빌드 실패 (rc=127): `~/.env.common` 내 실행문 (`redis-cli`, `https://router...`) 주석 처리
+- `run_pipeline.py`: frontmatter 검증 게이트 (step_deep_articles 후) + deploy 에러 메시지 정확화 + `/bin/bash` 경로
+- `auto_deep_article.py`: `normalize_frontmatter()` 안전장치 (없는/잘린 frontmatter 자동 복구)
+- `validate_blog_posts.py`: `validate_all()` 프로그래밍 사용 가능 노출
+- `deploy.sh`: `.env` 소스 `set +e` 보호 + Python 바이너리 폴백
+- `run_pipeline_with_notify.py`: Telegram 메시지 `html.escape()` + `<pre>` 태그
+
+### 커밋
+- `30666a6` fix(blog): frontmatter 정규화 + 검증 게이트 + 배포 안정화
+- `f5820c8` fix(notify): 텔레그램 HTML 파싱 오류 방지
+- `c3ec42f` fix(deploy): .env.common 내 실행문 무시
+- `b3fdef5` chore: 런타임 아티팩트 git 추적 제거
+
+---
