@@ -838,3 +838,55 @@ remote:     - Push cann
 [D1 동기화] tools 테이블 업데이트 중...
   SQL 생성: -- ✅ 총 147개 도구 INSERT SQL 생성 완료
   D1 tools 테이블 동기화 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 4개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 10개 수집
+  GitHub Awesome AI Tools: 10개 (주간 업데이트)
+  Futurepedia: 0개
+  Hugging Face Papers: 3개
+  TopAI.tools: 4개 수집
+  총 19개 (중복 제거 후)
+수집 완료: 19개
+기존 툴: 147개 (슬러그), 147개 (이름)
+  중복 스킵: CentryAI
+  중복 스킵: Banger Mail
+  중복 스킵: Claude Sonnet 5
+  중복 스킵: Gemini Omni Flash
+  중복 스킵: AI For Developers
+  중복 스킵: Jasper
+  중복 스킵: Compose AI
+  중복 스킵: Rytr
+  중복 스킵: wordtune
+  중복 스킵: HyperWrite
+  중복 스킵: Nexus AI
+  중복 스킵: Moonbeam
+  중복 스킵: copy.ai
+  중복 스킵: Anyword
+  중복 스킵: AgenticSTS: A Bounded-Memory Testbed for Long-Hori
+  중복 스킵: UGCFY AI
+  중복 스킵: AISHA AI
+  중복 스킵: Motion Control AI
+신규 툴: 1개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (1건) ---
+  크롤링 성공: https://topai.tools/t/meetily-ai... (설명 141자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/meetily-ai.md
+  ✅ Meetily AI → meetily-ai.md
+
+==================================================
+처리 완료: 1/19개 생성 (13.8초)
+  git commit: [main 67b21e1] feat: AI 툴 1개 추가 (2026-07-06)
+ 23 files changed, 2334 insertions(+), 251 deletions(-)
+ create mode 100644 scripts/__pycache__/validate_blog_posts.cpython-314.pyc
+ create mode 100644 scr
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 실패 (시도 1/2): 알 수 없는 오류
+  5초 후 재시도...
+  배포 실패 (시도 2/2): 알 수 없는 오류
+
+[D1 동기화] tools 테이블 업데이트 중...
+  SQL 생성: -- ✅ 총 148개 도구 INSERT SQL 생성 완료
+  D1 tools 테이블 동기화 완료 ✅
