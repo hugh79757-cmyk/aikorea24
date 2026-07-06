@@ -28,7 +28,10 @@ fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 if [ -f "$PROJECT_DIR/.env" ]; then
-  source "$PROJECT_DIR/.env"
+  # .env 내부(또는 .env.common)의 오류가 set -e로 인해 배포를 멈추지 않도록 일시적으로 끔
+  set +e
+  source "$PROJECT_DIR/.env" 2>/dev/null
+  set -e
 else
   echo "[ERROR] .env 파일 없음: $PROJECT_DIR/.env"
   exit 1
