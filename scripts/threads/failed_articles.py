@@ -41,12 +41,12 @@ def _ensure_logs_dir():
 
 
 def _get_retention_days() -> int:
-    """Get retention period from env or default 7 days."""
+    """Get retention period from env or default 1 day (24 hours)."""
     try:
-        days = int(os.environ.get('FAILED_ARTICLE_RETENTION_DAYS', '7'))
+        days = int(os.environ.get('FAILED_ARTICLE_RETENTION_DAYS', '1'))
         return max(1, days)
     except (ValueError, TypeError):
-        return 7
+        return 1
 
 
 FAILED_ARTICLES_RETENTION_SECONDS = 24 * 3600  # 24 hours for failed_crawls
@@ -144,8 +144,10 @@ def save_failed_article(article_id: str, reason: str = "unknown", title: str = "
     _failed_article_ids.add(aid_str)
 
     # Update metadata
+    now = datetime.now()
     meta = {
-        'failed_at': datetime.now().isoformat(),
+        'failed_at': now.isoformat(),
+        'expired_at': (now + timedelta(days=1)).isoformat(),
         'reason': reason,
         'title': title,
         'url': url

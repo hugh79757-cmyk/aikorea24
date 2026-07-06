@@ -11,8 +11,9 @@ import os, sys, json, time, argparse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 
-from pipeline.infra.vectorize_client import embed_article, upsert_vectors, get_index_stats
+from pipeline.infra.vectorize_client import embed_article, upsert_vectors
 from db_reader import load_posted
 
 def main():
@@ -41,8 +42,6 @@ def main():
 
     if args.dry_run:
         print(f'[DRY RUN] Would embed and upsert {len(articles)} articles in batches of {args.batch}')
-        stats = get_index_stats()
-        print(f'  Current Vectorize index: {stats}')
         return
 
     # Process in batches
@@ -73,8 +72,6 @@ def main():
             time.sleep(0.5)
 
     print(f'\n✅ Migration complete: {success} success, {failed} failed out of {total}')
-    stats = get_index_stats()
-    print(f'  Vectorize index stats: {stats}')
 
 if __name__ == '__main__':
     main()

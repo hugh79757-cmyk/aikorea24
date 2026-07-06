@@ -351,25 +351,29 @@ def title_hash(title):
 
 
 def get_existing():
+    title_hashes = set()
+    link_set = set()
     try:
         r = subprocess.run(
             ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
-             '--command', "SELECT title FROM news WHERE created_at >= datetime('now', '-7 days')", '--json'],
+             '--command', "SELECT title, link FROM news", '--json'],
             capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
-        hashes = set()
         if r.returncode == 0 and r.stdout.strip():
             data = json.loads(r.stdout)
             if isinstance(data, list) and data:
                 results = data[0].get('results', [])
                 for row in results:
                     t = row.get('title', '')
+                    l = row.get('link', '')
                     if t:
-                        hashes.add(title_hash(t))
-        print(f"  기존 D1 항목: {len(hashes)}개")
-        return hashes
+                        title_hashes.add(title_hash(t))
+                    if l:
+                        link_set.add(l)
+        print(f"  기존 D1 항목: 제목 {len(title_hashes)}개, 링크 {len(link_set)}개")
+        return title_hashes, link_set
     except Exception as e:
         print(f"  get_existing 실패: {e}")
-        return set()
+        return set(), set()
 
 
 def dedup_similar(articles):
@@ -924,7 +928,7 @@ def fetch_bizinfo_grants():
         return []
 
     results = []
-    existing = get_existing()
+    existing, _link_set = get_existing()
     ai_strong = ['AI', '인공지능', 'AI바우처', '데이터바우처', '스마트상점', '키오스크',
                  '챗봇', '디지털커머스', '스마트공장']
     ai_weak = ['디지털전환', '디지털', '스마트', '빅데이터', '클라우드', '자동화',
@@ -997,13 +1001,16 @@ def fetch_bizinfo_grants():
 # D1 저장
 # ============================================
 def save_to_d1(articles):
-    existing = get_existing()
+    title_hashes, link_set = get_existing()
     sql_lines = []
-    skipped = 0
+    skipped_title = 0
+    skipped_link = 0
     for a in articles:
         h = title_hash(a['title'])
-        if h in existing:
-            skipped += 1; continue
+        if h in title_hashes:
+            skipped_title += 1; continue
+        if a['link'] in link_set:
+            skipped_link += 1; continue
         t = a['title'].replace("'", "''")[:200]
         l = a['link'].replace("'", "''")[:500]
         d = a.get('description', '').replace("'", "''")[:500]
@@ -1016,6 +1023,9 @@ def save_to_d1(articles):
         sql_lines.append(
             f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date, source_url, original_title, country) "
             f"VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}', '{su}', '{ot}', '{co}');")
+    skipped = skipped_title + skipped_link
+    if skipped_link:
+        print(f"  제목 중복: {skipped_title}건, 링크 중복: {skipped_link}건")
     if not sql_lines:
         print("  저장할 신규 항목 없음")
         return 0, skipped
@@ -1033,9 +1043,26 @@ def save_to_d1(articles):
             r = subprocess.run(
                 ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes', '--file', sql_path],
                 capture_output=True, text=True, cwd=PROJECT_DIR, timeout=90)
-            if r.returncode == 0:
-                saved += len(batch)
-                print(f"  배치 {batch_num}: {len(batch)}건 저장")
+            if r.returncode == 0 and r.stdout.strip():
+                batch_saved = len(batch)
+                try:
+                    lines = r.stdout.strip().split('\n')
+                    json_start = None
+                    for idx, line in enumerate(lines):
+                        if line.strip().startswith('['):
+                            json_start = idx
+                            break
+                    if json_start is not None:
+                        data = json.loads('\n'.join(lines[json_start:]))
+                        if isinstance(data, list) and data:
+                            meta = data[0].get('meta', {})
+                            actual = meta.get('changes', len(batch))
+                            if actual != len(batch):
+                                print(f"  배치 {batch_num}: {len(batch)}건 시도 → {actual}건 실제 저장")
+                            batch_saved = actual
+                except (json.JSONDecodeError, KeyError, IndexError):
+                    pass
+                saved += batch_saved
             else:
                 print(f"  배치 {batch_num} 실패: {r.stderr[:200]}")
         except Exception as e:
@@ -1095,6 +1122,50 @@ def purge_cloudflare_cache():
     except Exception as e:
         print(f"  ❌ purge 요청 실패: {e}")
 
+# ============================================
+# Vectorize 인덱싱 (수집 완료 후 자동 실행)
+# ============================================
+def index_new_to_vectorize():
+    """오늘 저장된 기사를 Vectorize에 인덱싱"""
+    try:
+        from pipeline.infra.vectorize_client import embed_article, upsert_vectors
+    except ImportError:
+        print("  ⚠ Vectorize 클라이언트 미설치 — 스킵")
+        return
+
+    r = subprocess.run(
+        ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
+         '--command', "SELECT id, title, original_title, description FROM news WHERE created_at >= date('now')", '--json'],
+        capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
+    if r.returncode != 0 or not r.stdout.strip():
+        print("  ⚠ Vectorize: 오늘 신규 기사 없음")
+        return
+
+    data = json.loads(r.stdout)
+    results = data[0].get('results', [])
+    if not results:
+        print("  ⚠ Vectorize: 오늘 신규 기사 없음")
+        return
+
+    print(f"\n[Vectorize] 오늘 신규 기사 {len(results)}건 인덱싱...")
+    vectors = []
+    failed = 0
+    for row in results:
+        vec = embed_article(row)
+        if vec:
+            vectors.append(vec)
+        else:
+            failed += 1
+
+    if vectors:
+        ok = upsert_vectors(vectors)
+        if ok:
+            print(f"  ✅ Vectorize: {len(vectors)}건 인덱싱 완료 (실패: {failed}건)")
+        else:
+            print(f"  ❌ Vectorize: upsert 실패")
+    else:
+        print(f"  ⚠ Vectorize: 임베딩 생성 실패 (전체 {failed}건)")
+
 def main():
     import argparse
     parser = argparse.ArgumentParser()
@@ -1147,6 +1218,14 @@ def main():
 
     print('\n' + '=' * 60)
     print(f"완료! 총 {saved}건 저장")
+
+    # === Vectorize 인덱싱 ===
+    if saved > 0:
+        try:
+            index_new_to_vectorize()
+        except Exception as e:
+            print(f"  ⚠ Vectorize 인덱싱 실패: {e}")
+
     purge_cloudflare_cache()
     print('=' * 60)
 

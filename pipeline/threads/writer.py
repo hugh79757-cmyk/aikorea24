@@ -480,21 +480,89 @@ def fix_cards(cards):
 
 def parse_cards_json_first(text: str, format_choice: str = 'D'):
     """Parse LLM output as JSON array: {"cards": ["...", "..."]}.
-    Delimiter-based fallback removed — JSON is the only accepted format."""
+    Falls back to JSON extraction from surrounding text."""
+    # 1단계: 직접 JSON 파싱
+    cards = _try_parse_json(text, format_choice)
+    if cards:
+        return cards
+
+    # 2단계: JSON 코드 블록 추출
+    m = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
+    if m:
+        cards = _try_parse_json(m.group(1), format_choice)
+        if cards:
+            return cards
+
+    # 3단계: 중괄호로 둘러싸인 JSON 객체 추출
+    brace_stack = []
+    for i, ch in enumerate(text):
+        if ch == '{':
+            brace_stack.append(i)
+        elif ch == '}' and brace_stack:
+            start = brace_stack.pop()
+            if not brace_stack:
+                candidate = text[start:i+1]
+                cards = _try_parse_json(candidate, format_choice)
+                if cards:
+                    _log(f'  ⚠️ 본문에서 JSON 추출 성공')
+                    return cards
+
+    # 4단계: delimiter 기반 fallback (---카드 1--- 또는 "카드 1:" 형식)
+    delimiters = [
+        (r'^[-=]{3,}\s*(?:카드|card)\s*\d+', r'^[-=]{3,}\s*$'),
+        (r'^(?:카드|card)\s*\d+\s*[:.]', None),
+    ]
+    for start_pat, end_pat in delimiters:
+        result = _parse_by_delimiter(text, start_pat, end_pat, format_choice)
+        if result:
+            return result
+
+    _log(f'  ⚠️ JSON/델리미터 파싱 실패 — 카드 생성 불가')
+    return []
+
+
+def _parse_by_delimiter(text, start_pat, end_pat, format_choice):
+    lines = text.split('\n')
+    chunks = []
+    current = []
+    inside = False
+    for line in lines:
+        if re.match(start_pat, line, re.IGNORECASE):
+            if current:
+                chunks.append('\n'.join(current).strip())
+                current = []
+            inside = True
+            continue
+        if end_pat and re.match(end_pat, line) and inside:
+            if current:
+                chunks.append('\n'.join(current).strip())
+                current = []
+            inside = False
+            continue
+        if inside:
+            current.append(line)
+    if current:
+        chunks.append('\n'.join(current).strip())
+    if chunks:
+        lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
+        if lo <= len(chunks) <= hi:
+            _log(f'  ⚠️ delimiter fallback: {len(chunks)}개 카드')
+            return chunks
+    return []
+
+
+def _try_parse_json(text: str, format_choice: str) -> list:
     try:
         data = json.loads(text)
         cards = data.get('cards', [])
         if not isinstance(cards, list):
-            raise ValueError('cards is not a list')
+            return []
         lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 5))
         if not (lo <= len(cards) <= hi):
-            raise ValueError(f'Card count {len(cards)} outside tolerance ({lo}, {hi})')
-        cards = [c.strip() for c in cards if c and isinstance(c, str)]
-        return cards
+            return []
+        return [c.strip() for c in cards if c and isinstance(c, str)]
     except (json.JSONDecodeError, ValueError, TypeError, AttributeError, KeyError):
-        _log(f'  ⚠️ JSON 파싱 실패 — 카드 생성 불가')
         return []
-        return cards
 
 
 def _remove_duplicate_links(cards):
@@ -636,21 +704,12 @@ def write_thread(pitch, all_articles, format_choice=None):
             temperature=0.4,
             max_tokens=5000,
             model_override=model_name,
-            response_format=json_schema,
         )
 
-    models = ['deepseek']
-    content = None
-    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
-        futures = {executor.submit(_try_model, m): m for m in models}
-        try:
-            for future in concurrent.futures.as_completed(futures, timeout=60):
-                result = future.result()
-                if result:
-                    content = result
-                    break
-        except concurrent.futures.TimeoutError:
-            _log('  ⚠️ 모델 레이스 타임아웃 (60s)')
+    content = _try_model('deepseek')
+    if not content:
+        _log('  ⚠️ DeepSeek 응답 없음 → GPT-4o-mini fallback')
+        content = _try_model('openai')
 
     if not content:
         _log('  ❌ 모든 모델 응답 실패')
