@@ -1765,6 +1765,154 @@
           "date": "2026-07-07"
         }
       ]
+    },
+    {
+      "date": "2026-07-07",
+      "briefing_id": 162,
+      "articles": [
+        {
+          "id": "39537",
+          "title": "호주의 보조 기술 장관, AI 모델들이 창조자가 의도한 것과 다른 행동을 이미 하고 있다고",
+          "original_title": "",
+          "description": "앤드류 찰튼은 인공지능이 ‘속이고, 기만하며, 자신의 길을 가고 있다’고 말하며, 이를 미리 선제적으로 대응할 필요성이 시험 중에 있다고 경고합니다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/07/ai-models-doing-things-their-creators-never-intended",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-07"
+        },
+        {
+          "id": "39525",
+          "title": "사비의 앱, 납치범과 같은 현실적인 AI 사기로부터 소비자를 보호하는 것을 목표로 하다",
+          "original_title": "",
+          "description": "이 회사는 최근 700만 달러의 초기 자금을 모집했으며, 화요일에 iPhone과 Android용 앱을 출시할 예정이다.",
+          "link": "https://techcrunch.com/2026/07/07/savis-app-aims-to-protect-consumers-from-realistic-ai-scams-like-kidnappers-demanding-ransom/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-07"
+        },
+        {
+          "id": "39560",
+          "title": "해리 매과이어가 AI를 활용해 영국을 도와주고 있는 방법… 탁구에서",
+          "original_title": "",
+          "description": "해리 매과이어는 월드컵에 출전하지 못했지만, 축구의 문화적 영웅이자 맨체스터 유나이티드의 수비수인 그는 AI 기술을 통해 영국의 스포츠 성공에 기여할 예정입니다. 코치들을 도와주기 위해 설계된 스포츠 기술 플랫폼인 Feedz는 탁구에 채택되었습니다.",
+          "link": "https://www.cityam.com/how-harry-maguire-is-using-ai-to-help-england-at-table-tennis/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-07"
+        },
+        {
+          "id": "39528",
+          "title": "IT 리더가 규모 확대를 위해 필요한 AI 아키텍처의 기본 요소",
+          "original_title": "",
+          "description": "AI 기능의 빠른 발전과 에이전트 시스템으로의 이동에 따라 조직들은 기술이 계속해서 성장함에 따라 사용 사례를 확장하고 있다. 이러한 지속적인 진화는 또한 위험을 동반하며, IT 리더들은 향후 6개월 뒤에도 가치 있는 투자가 무엇일지를 고민하게 만든다.",
+          "link": "https://www.technologyreview.com/2026/07/07/1139413/the-foundational-elements-of-ai-architecture-that-it-leaders-need-to-scale/",
+          "entities": [
+            "IT",
+            "AI"
+          ],
+          "date": "2026-07-07"
+        },
+        {
+          "id": "39534",
+          "title": "아폴로 경제학자, AI 수익 증가가 기술 외 분야에서 월가의 기대를 '너무 초과'할 수 있",
+          "original_title": "",
+          "description": "아폴로의 수석 경제학자 토르스텐 슬록은 기술 외의 분야에서는 AI에 의해 마진이 개선될 것으로 보지 않고 있습니다. 의료, 은행, 제약과 같은 규제 산업에서는 생산성 향상이 지연될 수 있다고 경고했습니다.",
+          "link": "https://the-decoder.com/apollo-economist-warns-ai-profit-gains-outside-tech-could-take-well-beyond-what-wall-street-expects/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-07"
+        },
+        {
+          "id": "39551",
+          "title": "최고의 AI 요구 사항 관리 소프트웨어: 2026년 변화를 주도하는 8가지 도구",
+          "original_title": "",
+          "description": "AI 요구 사항 관리 소프트웨어는 엔지니어링 팀이 요구 사항을 작성하고 검토하고 검증하는 방식을 변화시키고 있습니다. 수십 년 동안 이 작업은 사양을 수동으로 작성하고 품질을 수동으로 체크하며 테스트 커버리지를 같은 방식으로 검증하는 것이었습니다.",
+          "link": "https://thenextweb.com/news/best-ai-requirements-management-software-2026",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-07"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-08",
+      "briefing_id": 163,
+      "articles": [
+        {
+          "id": "39635",
+          "title": "메타, 새로운 AI 이미지 생성기 뮤즈 출시",
+          "original_title": "",
+          "description": "새로운 이미지 생성 모델은 광고, 인테리어 및 크리에이터 기반 기회를 포함한 다양한 활용 사례를 가지고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/07/meta-rolls-out-muse-a-new-ai-image-generator/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39655",
+          "title": "카레, 베이글... 그리고 AI? 런던 주민들이 브릭 레인에 대규모 데이터 센터 계획에 반",
+          "original_title": "",
+          "description": "주민들과 시의회는 근처 금융 거래보다 저렴한 주택 확보가 더 시급하다고 주장하고 있습니다. 동부 런던의 캠페인자들은 브릭 레인에 위치한 데이터 센터가 주택 위기를 악화시키고 장기 거주자들을 떠나게 할 것이라고 반대하고 있습니다.",
+          "link": "https://www.theguardian.com/uk-news/2026/jul/07/london-campaign-planned-ai-datacentre-brick-lane",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39668",
+          "title": "런던 근로자, AI로 인한 일자리 감소에 가장 취약",
+          "original_title": "",
+          "description": "세계적인 경제 연구 기관에 따르면 런던의 근로자는 다른 주요 도시보다 AI로 인한 일자리 감소에 더 취약하다고 합니다. AI 인재 채용 증가 또한 EU, 캐나다, 미국에 비해 낮은 수준입니다.",
+          "link": "https://www.cityam.com/london-workers-most-exposed-to-ai-jobs-cull/",
+          "entities": [
+            "EU",
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39667",
+          "title": "Nscale, AI 데이터센터 확장을 위해 9억 달러 대출 확보",
+          "original_title": "",
+          "description": "영국의 데이터센터 건설업체인 Nscale이 월스트리트의 대형 은행들로부터 9억 달러 대출을 확보했습니다. 이는 세계적인 확장을 지원할 것으로 보이며, 투자자들이 이 부문의 지출을 면밀히 조사하고 있는 가운데 이루어졌습니다.",
+          "link": "https://www.cityam.com/nscale-taps-lenders-for-900m-to-fuel-ai-data-centre-splurge/",
+          "entities": [
+            "Nscale",
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39665",
+          "title": "스코틀랜드, 신규 데이터센터 동결 검토 – 영국의 AI 계획 위협",
+          "original_title": "",
+          "description": "스코틀랜드 집권당은 국가 내 모든 신규 데이터센터를 동결하려고 합니다. 만약 장관들이 동의하면 영국 AI 전략의 핵심 기둥인 데이터센터 건설이 지연될 수 있습니다.",
+          "link": "https://thenextweb.com/news/scotland-datacentre-moratorium-uk-ai-strategy",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39641",
+          "title": "중국, 최고 AI 모델에 대한 수출 규제를 고려하고 유럽이 사이에 있다",
+          "original_title": "",
+          "description": "로이터 통신에 따르면, 중국 당국은 자국의 강력한 AI 모델에 대한 외국의 접근을 제한하는 방안을 검토하고 있습니다. 알리바바, 바이두, Z.ai가 이에 영향을 받을 것으로 보이며, 이 조치는 양대 강국이 AI를 전략적 자산으로 보고 있음을 보여줍니다.",
+          "link": "https://the-decoder.com/china-eyes-export-curbs-on-its-top-ai-models-and-europe-is-caught-in-the-middle/",
+          "entities": [
+            "Z.",
+            "AI"
+          ],
+          "date": "2026-07-08"
+        }
+      ]
     }
   ],
   "articles": [
@@ -3377,6 +3525,142 @@
         "Reply"
       ],
       "date": "2026-07-07"
+    },
+    {
+      "id": "39537",
+      "title": "호주의 보조 기술 장관, AI 모델들이 창조자가 의도한 것과 다른 행동을 이미 하고 있다고",
+      "original_title": "",
+      "description": "앤드류 찰튼은 인공지능이 ‘속이고, 기만하며, 자신의 길을 가고 있다’고 말하며, 이를 미리 선제적으로 대응할 필요성이 시험 중에 있다고 경고합니다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/07/ai-models-doing-things-their-creators-never-intended",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-07"
+    },
+    {
+      "id": "39525",
+      "title": "사비의 앱, 납치범과 같은 현실적인 AI 사기로부터 소비자를 보호하는 것을 목표로 하다",
+      "original_title": "",
+      "description": "이 회사는 최근 700만 달러의 초기 자금을 모집했으며, 화요일에 iPhone과 Android용 앱을 출시할 예정이다.",
+      "link": "https://techcrunch.com/2026/07/07/savis-app-aims-to-protect-consumers-from-realistic-ai-scams-like-kidnappers-demanding-ransom/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-07"
+    },
+    {
+      "id": "39560",
+      "title": "해리 매과이어가 AI를 활용해 영국을 도와주고 있는 방법… 탁구에서",
+      "original_title": "",
+      "description": "해리 매과이어는 월드컵에 출전하지 못했지만, 축구의 문화적 영웅이자 맨체스터 유나이티드의 수비수인 그는 AI 기술을 통해 영국의 스포츠 성공에 기여할 예정입니다. 코치들을 도와주기 위해 설계된 스포츠 기술 플랫폼인 Feedz는 탁구에 채택되었습니다.",
+      "link": "https://www.cityam.com/how-harry-maguire-is-using-ai-to-help-england-at-table-tennis/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-07"
+    },
+    {
+      "id": "39528",
+      "title": "IT 리더가 규모 확대를 위해 필요한 AI 아키텍처의 기본 요소",
+      "original_title": "",
+      "description": "AI 기능의 빠른 발전과 에이전트 시스템으로의 이동에 따라 조직들은 기술이 계속해서 성장함에 따라 사용 사례를 확장하고 있다. 이러한 지속적인 진화는 또한 위험을 동반하며, IT 리더들은 향후 6개월 뒤에도 가치 있는 투자가 무엇일지를 고민하게 만든다.",
+      "link": "https://www.technologyreview.com/2026/07/07/1139413/the-foundational-elements-of-ai-architecture-that-it-leaders-need-to-scale/",
+      "entities": [
+        "IT",
+        "AI"
+      ],
+      "date": "2026-07-07"
+    },
+    {
+      "id": "39534",
+      "title": "아폴로 경제학자, AI 수익 증가가 기술 외 분야에서 월가의 기대를 '너무 초과'할 수 있",
+      "original_title": "",
+      "description": "아폴로의 수석 경제학자 토르스텐 슬록은 기술 외의 분야에서는 AI에 의해 마진이 개선될 것으로 보지 않고 있습니다. 의료, 은행, 제약과 같은 규제 산업에서는 생산성 향상이 지연될 수 있다고 경고했습니다.",
+      "link": "https://the-decoder.com/apollo-economist-warns-ai-profit-gains-outside-tech-could-take-well-beyond-what-wall-street-expects/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-07"
+    },
+    {
+      "id": "39551",
+      "title": "최고의 AI 요구 사항 관리 소프트웨어: 2026년 변화를 주도하는 8가지 도구",
+      "original_title": "",
+      "description": "AI 요구 사항 관리 소프트웨어는 엔지니어링 팀이 요구 사항을 작성하고 검토하고 검증하는 방식을 변화시키고 있습니다. 수십 년 동안 이 작업은 사양을 수동으로 작성하고 품질을 수동으로 체크하며 테스트 커버리지를 같은 방식으로 검증하는 것이었습니다.",
+      "link": "https://thenextweb.com/news/best-ai-requirements-management-software-2026",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-07"
+    },
+    {
+      "id": "39635",
+      "title": "메타, 새로운 AI 이미지 생성기 뮤즈 출시",
+      "original_title": "",
+      "description": "새로운 이미지 생성 모델은 광고, 인테리어 및 크리에이터 기반 기회를 포함한 다양한 활용 사례를 가지고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/07/meta-rolls-out-muse-a-new-ai-image-generator/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39655",
+      "title": "카레, 베이글... 그리고 AI? 런던 주민들이 브릭 레인에 대규모 데이터 센터 계획에 반",
+      "original_title": "",
+      "description": "주민들과 시의회는 근처 금융 거래보다 저렴한 주택 확보가 더 시급하다고 주장하고 있습니다. 동부 런던의 캠페인자들은 브릭 레인에 위치한 데이터 센터가 주택 위기를 악화시키고 장기 거주자들을 떠나게 할 것이라고 반대하고 있습니다.",
+      "link": "https://www.theguardian.com/uk-news/2026/jul/07/london-campaign-planned-ai-datacentre-brick-lane",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39668",
+      "title": "런던 근로자, AI로 인한 일자리 감소에 가장 취약",
+      "original_title": "",
+      "description": "세계적인 경제 연구 기관에 따르면 런던의 근로자는 다른 주요 도시보다 AI로 인한 일자리 감소에 더 취약하다고 합니다. AI 인재 채용 증가 또한 EU, 캐나다, 미국에 비해 낮은 수준입니다.",
+      "link": "https://www.cityam.com/london-workers-most-exposed-to-ai-jobs-cull/",
+      "entities": [
+        "EU",
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39667",
+      "title": "Nscale, AI 데이터센터 확장을 위해 9억 달러 대출 확보",
+      "original_title": "",
+      "description": "영국의 데이터센터 건설업체인 Nscale이 월스트리트의 대형 은행들로부터 9억 달러 대출을 확보했습니다. 이는 세계적인 확장을 지원할 것으로 보이며, 투자자들이 이 부문의 지출을 면밀히 조사하고 있는 가운데 이루어졌습니다.",
+      "link": "https://www.cityam.com/nscale-taps-lenders-for-900m-to-fuel-ai-data-centre-splurge/",
+      "entities": [
+        "Nscale",
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39665",
+      "title": "스코틀랜드, 신규 데이터센터 동결 검토 – 영국의 AI 계획 위협",
+      "original_title": "",
+      "description": "스코틀랜드 집권당은 국가 내 모든 신규 데이터센터를 동결하려고 합니다. 만약 장관들이 동의하면 영국 AI 전략의 핵심 기둥인 데이터센터 건설이 지연될 수 있습니다.",
+      "link": "https://thenextweb.com/news/scotland-datacentre-moratorium-uk-ai-strategy",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39641",
+      "title": "중국, 최고 AI 모델에 대한 수출 규제를 고려하고 유럽이 사이에 있다",
+      "original_title": "",
+      "description": "로이터 통신에 따르면, 중국 당국은 자국의 강력한 AI 모델에 대한 외국의 접근을 제한하는 방안을 검토하고 있습니다. 알리바바, 바이두, Z.ai가 이에 영향을 받을 것으로 보이며, 이 조치는 양대 강국이 AI를 전략적 자산으로 보고 있음을 보여줍니다.",
+      "link": "https://the-decoder.com/china-eyes-export-curbs-on-its-top-ai-models-and-europe-is-caught-in-the-middle/",
+      "entities": [
+        "Z.",
+        "AI"
+      ],
+      "date": "2026-07-08"
     }
   ]
 }
