@@ -890,3 +890,47 @@ remote:     - Push cann
 [D1 동기화] tools 테이블 업데이트 중...
   SQL 생성: -- ✅ 총 148개 도구 INSERT SQL 생성 완료
   D1 tools 테이블 동기화 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 5개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 4개
+  TopAI.tools: 2개 수집
+  총 8개 (중복 제거 후)
+수집 완료: 8개
+기존 툴: 148개 (슬러그), 148개 (이름)
+  중복 스킵: CentryAI
+  중복 스킵: Banger Mail
+  중복 스킵: Oxlo AI
+  중복 스킵: Meetily AI
+신규 툴: 4개 (배치=10, 스레드=3)
+
+--- 배치 1/1 (4건) ---
+  크롤링 성공: https://www.airkaren.com/?ref=producthunt... (설명 188자)
+  크롤링 성공: https://mozaik.jigjoy.ai/?ref=producthunt... (설명 164자)
+  크롤링 성공: https://www.edgee.ai/token-compression?ref=product... (설명 251자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/airkaren.md
+  ✅ AirKaren → airkaren.md
+  크롤링 성공: https://huggingface.co/papers... (설명 38자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/edgee-claude-code-compressor-v2.md
+  ✅ Edgee Claude Code Compressor V2 → edgee-claude-code-compressor-v2.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/mozaik.md
+  ✅ Mozaik → mozaik.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/the-mirage-of-optimizing-training-policies-monoto.md
+  ✅ The Mirage of Optimizing Training Policies: Monoto → the-mirage-of-optimizing-training-policies-monoto.md
+
+==================================================
+처리 완료: 4/8개 생성 (28.1초)
+  git commit: [main 439ac79] feat: AI 툴 4개 추가 (2026-07-07)
+ 34 files changed, 1686 insertions(+), 265 deletions(-)
+ create mode 100644 pipeline/infra/__pycache__/vectorize_client.cpython-314.pyc
+ create mode 100644
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
+
+[D1 동기화] tools 테이블 업데이트 중...
+  SQL 생성: -- ✅ 총 152개 도구 INSERT SQL 생성 완료
+  D1 tools 테이블 동기화 완료 ✅
