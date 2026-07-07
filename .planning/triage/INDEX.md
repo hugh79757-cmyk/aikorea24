@@ -1,3 +1,4 @@
+- 2026-07-07 | fix | hook-validation-first-line | validate_card_structure() hook 검증을 첫 카드 전체 → 첫 줄만으로 변경 (ThreadForge 정렬)
 - 2026-07-05 | fix | persistent-failed-articles | Phase 13-01: failed_articles.py 영구 저장 → article 38290 무한 재시도 차단
 - 2026-07-05 | fix | chinese-period-validation | Phase 13-02: \u3002(중국어 마침표)를 sentence_enders에 추가 → MiMo `。` 검증 통과
 - 2026-07-05 | fix | duplicate-link-removal | Phase 13-02: _remove_duplicate_links() parse_cards + assemble_final 이중 방어

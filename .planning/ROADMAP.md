@@ -21,7 +21,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 12: Writer Instability Fix** — fix_cards() 카드 구조 파괴 수정, humanize/retry graceful failure 처리 (completed 2026-07-05)
 - [x] **Phase 13: Card Separation Fix & Validation Hardening** — `\n\n` split 안정화, 중국어 마침표(`。`) 인식, 중복 링크 제거, 영구 실패 기사 추적 (completed 2026-07-05)
 - [x] **Phase 14: Delimiter Reconfiguration** — JSON-first parsing with `response_format`, fallback retained, delimiter collision eliminated (completed 2026-07-05)
-- [ ] **Phase 15: Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환** — Vectorize 의미적 중복제거, failed_crawls TTL, 카드 JSON 배열 전환
+- [x] **Phase 15: Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환** — Vectorize 의미적 중복제거, failed_crawls TTL, 카드 JSON 배열 전환 (completed 2026-07-07)
 
 ## Phase Details
 
@@ -272,6 +272,19 @@ Plans:
 Plans:
 - [x] 14-PLAN.md — JSON-first parsing integration and tests
 
+### Phase 15: Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환
+**Goal:** Vectorize 의미적 중복제거 도입, failed_crawls TTL 적용, 카드 JSON 배열 전환, D1 link dedup 버그 수정, Writer fallback 복구, hook 검증 버그 수정.
+**Mode:** ad-hoc
+**Depends on**: Phase 14
+**Plans**: Phase 15 was executed as ad-hoc tasks (not structured plans)
+
+Plans:
+- [x] Vectorize index `aikorea24-dedup` 생성 (1536d, cosine)
+- [x] D1 save loss fix (`get_existing()` link 전범위 조회)
+- [x] Writer fallback: DeepSeek → GPT-4o-mini sequential
+- [x] JSON 4단계 복구 파싱 (JSON → ```json → brace matching → delimiter)
+- [x] Hook 검증 버그 수정: `cards[0]` 전체 → 첫 줄만 검사
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -293,4 +306,5 @@ Plans:
 | 12. Writer Instability Fix | 2/2 | Complete | 2026-07-05 |
 | 13. Card Separation Fix & Validation Hardening | 3/3 | Complete | 2026-07-05 |
 | 14. Delimiter Reconfiguration | 1/1 | Complete | 2026-07-05 |
-| **Total** | **33/33** | | |
+| 15. Vectorize + Crawl Fix + JSON Cards | ad-hoc | Complete   | 2026-07-07 |
+| **Total** | **34/34** | | |

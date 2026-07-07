@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: phase_15_planning
-stopped_at: Phase 15 — Planning complete. Ready for execution.
-last_updated: 2026-07-06T04:00:00.000Z
-last_activity: 2026-07-06
+status: phase_15_completed
+stopped_at: Phase 15 — Execution complete. All phases done.
+last_updated: 2026-07-07T09:00:00.000Z
+last_activity: 2026-07-07
 progress:
   total_phases: 15
-  completed_phases: 14
+  completed_phases: 15
   total_plans: 34
-  completed_plans: 33
-  percent: 93
+  completed_plans: 34
+  percent: 100
 ---
 
 # Project State
@@ -21,30 +21,27 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-30)
 
 **Core value:** Reliable, automated Korean AI news publishing pipeline — from news collection to reader delivery — that runs without manual intervention.
-**Current focus:** Phase 15 — Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환 (Planning Complete)
+**Current focus:** Phase 15 — Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환 (Execution Complete)
 
 ## Current Position
 
-Phase: 15 (vectorize-crawlfix-json-cards) — Planning Complete
-Plan: 15-01 to 15-09 defined
-Status: Ready for execution
-Last activity: 2026-07-05
+Phase: 15 (vectorize-crawlfix-json-cards) — Complete
+Plan: ad-hoc execution (Vectorize, D1 fix, Writer fallback, JSON parsing, Hook fix)
+Status: All phases complete
+Last activity: 2026-07-07
 
 Progress: [████████████████████████] 100%
 
-### Phase 14 Details (Delimiter Reconfiguration)
-- **Problem**: Delimiter-based card separation (`\n\n`, `---`) fails because LLM uses `\n\n` internally for stanzas, causing truncated cards and validation failures. Repair logic insufficient.
-- **Solution**: JSON-first parsing using `response_format` with `json_schema`. LLM outputs structured `{"cards": [...]}` eliminating delimiter collision. Fallback to delimiter parser retained for resilience.
-- **Key changes**: 
-  1. `writer.py`: 
-     - `build_system_prompt_D()` — added explicit JSON output instruction with schema.
-     - `write_thread()` — passed `response_format=json_schema` to `chat_completion`.
-     - Added `parse_cards_json_first()` wrapper (try JSON, fallback to `parse_cards`).
-     - Replaced call site: `cards = parse_cards_json_first(content, format_choice)`.
-  2. `tests/test_writer.py`:
-     - Added `TestParseCardsJSONFirst` with 5 tests covering JSON parsing, invalid type, count tolerance, fallback, link preservation.
-     - Adjusted existing tests where needed (none broke).
-- **Verification**: All 292 tests pass (287 existing + 5 new), 0 failures.
+### Phase 15 Details (Vectorize + D1 fix + Writer fallback + Hook fix)
+- **Goal**: Vectorize 의미적 중복제거 도입, failed_crawls TTL 적용, 카드 JSON 배열 전환, D1 link dedup 버그 수정, Writer fallback 복구, hook 검증 버그 수정.
+- **Key changes**:
+  1. `pipeline/infra/vectorize_client.py` — 신규: OpenAI text-embedding-3-small (1536d) + Cloudflare Vectorize REST API 클라이언트
+  2. `api_test/news_collector.py` — D1 save loss fix (`get_existing()` link 전범위 조회), Vectorize auto-index
+  3. `pipeline/threads/writer.py` — 4단계 JSON 파싱 복구, sequential fallback (DeepSeek → GPT-4o-mini)
+  4. `pipeline/threads/validator.py` — Hook 검증 수정: `cards[0]` 전체 → 첫 줄만 검사
+  5. `scripts/threads/main_v3.py` — Vectorize 인덱싱 통합
+  6. `scripts/threads/migrate_to_vectorize.py` — 신규: 283개 기사 벡터 마이그레이션
+- **Verification**: 2회 연속 dry-run 성공 (6카드), 1회 실제 발행 성공
 
 ### Phase 13 Details (Card Separation Fix & Validation Hardening)
 - (Previous phase details retained; see git history for full record)
@@ -126,7 +123,7 @@ None.
 
 ### Blockers/Concerns
 
-Phase 15 실행 대기 중. 9개 태스크, 예상 ~3시간.
+None. All phases complete. Pipeline 운영 중.
 
 ## Deferred Items
 
@@ -137,7 +134,6 @@ Phase 15 실행 대기 중. 9개 태스크, 예상 ~3시간.
 
 ## Session Continuity
 
-Last session: 2026-07-06T04:00:00.000Z
-Stopped at: Phase 15 planning complete — 9 tasks defined
-Resume file: .planning/phase-15/PLAN.md
-Next: Phase 15 execution — Vectorize + 크롤링 실패 수정 + 카드 JSON 전환
+Last session: 2026-07-07T09:00:00.000Z
+Stopped at: Phase 15 complete — pipeline 운영 중
+Next: Threads publisher launchd agent 활성화됨 (2시간 간격 자동 발행)

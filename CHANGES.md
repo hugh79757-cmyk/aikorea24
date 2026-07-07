@@ -5,6 +5,25 @@
 
 ---
 
+## 2026-07-07 — Hook Validation Fix + Pipeline Verified (실행 완료)
+
+### 변경
+- `pipeline/threads/validator.py` — `validate_card_structure()` hook 검증: `cards[0]` 전체 → `cards[0].split('\n')[0]` 첫 줄만 검사 (ThreadForge `role: hook` 정렬)
+- `api_test/news_collector.py` — D1 link dedup 버그 수정 (`get_existing()` link 전범위 조회, `save_to_d1()` wrangler `changes` 파싱)
+- `pipeline/threads/writer.py` — 4단계 JSON 파싱 복구 + sequential fallback (DeepSeek → GPT-4o-mini)
+- `scripts/threads/main_v3.py` — Vectorize 인덱싱 자동 실행 연동
+
+### 의사결정
+- Hook 검증 threshold 10 유지하되 대상 범위 축소 (첫 줄만) — 첫 카드 내부 stanza 3개(11문장) 자연스러운 구조 허용
+- `response_format={"type": "json_object"}` 미전달 유지 — DeepSeek v4 flash 불안정 회피, 프롬프트 + 4단계 fallback으로 방어
+
+### 영향
+- 08:33 발행 성공 (6카드, Threads API 정상)
+- 08:59 검증 통과 후 DNS 장애로 발행 실패 (코드 무관, 네트워크 일시적)
+- launchd `kr.aikorea24.threads-publisher` 재활성화 → 2시간 간격 자동 발행 개시
+
+---
+
 ## 2026-07-06 — Phase 15: Vectorize + TTL + JSON Cards (실행 완료)
 
 ### 변경

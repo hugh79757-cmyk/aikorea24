@@ -278,15 +278,16 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
                 if not card.endswith('...') and not card.endswith('…'):
                     return False, f"Card {i}: 문장 미완성"
 
-    # 7. Hook length (first card) + content boundary check
+    # 7. Hook length (first card — first line only) + content boundary check
     hook = cards[0].strip()
     if not hook.startswith('🔗'):
+        hook_first_line = hook.split('\n')[0]
         # Content boundary check: 문장 종결 과다 → 카드 경계 붙음 의심
-        enders_count = len(re.findall(r'(?:~임\.|~했음\.|~있음\.|~됨\.|~함\.|[.!?])', hook))
+        enders_count = len(re.findall(r'(?:~임\.|~했음\.|~있음\.|~됨\.|~함\.|[.!?])', hook_first_line))
         if enders_count > 10:
             return False, f"Hook: 문장 종결 과다 ({enders_count}개) — 카드 경계 붙음 의심"
-        if len(hook) < 30 or len(hook) > 350:
-            return False, f"Hook 길이 비정상 ({len(hook)}자)"
+        if len(hook_first_line) < 30 or len(hook_first_line) > 350:
+            return False, f"Hook 길이 비정상 ({len(hook_first_line)}자)"
 
     # 8. Body card length
     for i, card in enumerate(cards[2:], 3):  # Skip hook and link
