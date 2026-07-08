@@ -1913,6 +1913,157 @@
           "date": "2026-07-08"
         }
       ]
+    },
+    {
+      "date": "2026-07-08",
+      "briefing_id": 164,
+      "articles": [
+        {
+          "id": "39706",
+          "title": "전 OpenAI 임원 Kevin Weil, Stoke Space 이사로 임명",
+          "original_title": "",
+          "description": "Kevin Weil의 Stoke Space에서의 새로운 역할은 재사용 가능한 로켓이 실리콘 밸리에서 다음으로 뜨거운 트렌드라는 것을 암시합니다.",
+          "link": "https://techcrunch.com/2026/07/08/former-openai-exec-kevin-weil-is-now-on-the-board-of-stoke-space/",
+          "entities": [
+            "Weil",
+            "Stoke",
+            "Space",
+            "OpenAI",
+            "Kevin"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39707",
+          "title": "핫한 프랑스 스타트업 ZML, 많은 AI 칩의 추론 속도를 높이기 위해 무료 제품 출시",
+          "original_title": "",
+          "description": "Turing 상 수상자인 Yann LeCun이 지지하는 프랑스의 핫한 AI 스타트업 ZML이 이제 AI 운영 비용을 줄일 수 있는 소프트웨어인 ZML/LLMD를 출시했습니다.",
+          "link": "https://techcrunch.com/2026/07/08/hot-french-startup-zml-releases-free-product-to-speed-inference-across-lots-of-ai-chips/",
+          "entities": [
+            "Turing",
+            "Yann",
+            "ZML",
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39734",
+          "title": "이번 해에도 영국 국채가 한때 막강했던 '매그니피센트 7'을 능가하는 이유",
+          "original_title": "",
+          "description": "고착된 인플레이션과 무분별한 정치인들로 인해 영국 정부의 채권은 수년간 사랑받지 못하는 자산 클래스로 남아 있었습니다. 그러나 2026년 6개월을 지나며, 이들은 현재까지 '매그니피센트 7'을 초과 성과를 내고 있습니다. Ali Lyon은 인공지능 열풍이 커지고 있음에도 불구하고 이러한 하이퍼스케일러들에게 어떤 일이 잘못되었는지를 분석합니다.",
+          "link": "https://www.cityam.com/why-even-gilts-are-outperforming-the-once-unstoppable-magnificent-7-this-year/",
+          "entities": [
+            "Ali"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39717",
+          "title": "호주에서 여성과 대학 졸업생들이 A.I.로 일자리를 잃을 위험이 가장 높다는 보고서",
+          "original_title": "",
+          "description": "정부 검토에 따르면, 직업 훈련 수준이 높은 고용인들은 A.I.에 의한 일자리 손실에 가장 덜 노출되어 있습니다. 인공지능이 아직 광범위한 일자리 손실을 발생시키지 않았으나, 연방 정부는 경고를 하고 있습니다.",
+          "link": "https://www.theguardian.com/australia-news/2026/jul/08/women-and-university-graduates-most-at-risk-ai-job-loss-australia-report",
+          "entities": [
+            "A.I."
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39728",
+          "title": "“정말로 당신의 회사를 죽일 수 있다”: n8n의 모델 비의존적 AI 주장",
+          "original_title": "",
+          "description": "n8n의 창립자 Jan Oberhauser는 AI 스택에서 자신의 기업이 어디에 위치하는지에 대해 이야기하며 자동차에 비유했습니다. 그는 모델이 엔진이라고 설명하며, 나머지는 차량, 도로, 규칙 등 엔진이 이동할 수 있게 도움을 주는 요소라고 강조했습니다.",
+          "link": "https://thenextweb.com/news/n8n-orchestration-layer-ai-model-sovereignty",
+          "entities": [
+            "Jan",
+            "AI"
+          ],
+          "date": "2026-07-08"
+        },
+        {
+          "id": "39710",
+          "title": "메타, 하루 종일 모든 순간을 기록하는 AI 안경 프로토타입 테스트 중",
+          "original_title": "",
+          "description": "메타는 \"슈퍼 센싱\" 기능이 있는 AI 기반 헤드셋 프로토타입을 테스트하고 있으며, 이 기기는 카메라와 마이크를 사용해 착용자의 모든 순간을 기록합니다. 이 안경은 일상 생활을 기록할 수 있는 흥미로운 가능성을 제공합니다.",
+          "link": "https://the-decoder.com/meta-tests-always-on-ai-glasses-that-capture-your-entire-day/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-08"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-09",
+      "briefing_id": 165,
+      "articles": [
+        {
+          "id": "39806",
+          "title": "이 스타트업은 로봇공학이 ChatGPT 순간을 맞이할 것이라고 믿고 있습니다.",
+          "original_title": "",
+          "description": "제너럴 인튜이션은 수백만 시간에 달하는 비디오 게임 데이터를 활용해 물리적 AI의 기초 모델을 훈련시킬 수 있다고 믿고 있습니다. 이를 통해 실제 데이터가 최소화된 상태에서도 더 스마트한 로봇을 쉽게 구축할 수 있을 것입니다.",
+          "link": "https://techcrunch.com/2026/07/08/this-startup-thinks-robotics-is-about-to-have-its-chatgpt-moment/",
+          "entities": [
+            "ChatGPT"
+          ],
+          "date": "2026-07-09"
+        },
+        {
+          "id": "39842",
+          "title": "아일랜드 드론 배송 스타트업 마나는 Zipline과 Wing을 상대로 1,000명의 미국 ",
+          "original_title": "",
+          "description": "아일랜드에 본사를 둔 자율 드론 배송 스타트업 마나 에어로는 오클라호마주 털사에 미국 운영 및 제조 센터를 설립하고 있으며, 향후 몇년간 약 1,000명의 직원을 고용할 계획입니다. 공사가 진행 중이며, 제조는 약 1년 후에 시작될 예정입니다.",
+          "link": "https://thenextweb.com/news/manna-drone-delivery-us-expansion-tulsa-factory",
+          "entities": [],
+          "date": "2026-07-09"
+        },
+        {
+          "id": "39832",
+          "title": "AI가 정치 광고의 불균형을 해소할 수 있을까 – 아니면 거짓말을 퍼뜨리는 도구로 남을까?",
+          "original_title": "",
+          "description": "정치 캠페인들은 메시지를 전파하기 위해 점점 더 많은 AI와 딥페이크를 활용하고 있으며, 이로 인해 전문가들은 걱정하고 있습니다. 뉴욕 퀸즈의 시의원 후보인 조나단 리날디는 침대에서 아이폰을 만지작거리며 인공지능에게 도움을 요청했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/08/ai-ads-political-campaigns",
+          "entities": [],
+          "date": "2026-07-09"
+        },
+        {
+          "id": "39810",
+          "title": "프라임 인텔렉트, 기업들이 자체 AI 에이전트를 구축할 수 있도록 1억 3천만 달러 시리즈",
+          "original_title": "",
+          "description": "2024년에 설립된 프라임 인텔렉트의 목표는 조직들이 국경 없는 AI 연구소에 의존하지 않고도 자신의 에이전트 시스템을 훈련할 수 있는 능력을 제공하는 것입니다.",
+          "link": "https://techcrunch.com/2026/07/08/prime-intellect-raises-130m-series-a-to-help-enterprises-build-their-own-ai-agents/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-09"
+        },
+        {
+          "id": "39807",
+          "title": "구글 포토, 새로운 AI '비디오 리믹스' 도구 추가",
+          "original_title": "",
+          "description": "이 기능은 어두운 클립을 밝게 만들기 위한 시네마틱 조명 적용, 단순한 배경을 재미있는 것으로 바꾸기, 비디오에 예술적 스타일 추가 등 다양한 작업을 수행할 수 있습니다.",
+          "link": "https://techcrunch.com/2026/07/08/google-photos-adds-a-new-ai-video-remix-tool/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-09"
+        },
+        {
+          "id": "39847",
+          "title": "Convertr, 그렉 조던을 최고 제품 책임자로 임명하여 기업 B2B 프로그램의 데이터 ",
+          "original_title": "",
+          "description": "이 임명은 AI 기반 GTM 스택 내에서 관리된 리드 및 연락처 데이터 수집에 대한 기업 수요가 증가함에 따라 제품 리더십을 발전시킵니다.",
+          "link": "https://www.cityam.com/convertr-appoints-greg-jordan-as-chief-product-officer-to-strengthen-data-governance-for-enterprise-b2b-programmes/",
+          "entities": [
+            "GTM",
+            "B2B",
+            "AI",
+            "Convertr"
+          ],
+          "date": "2026-07-09"
+        }
+      ]
     }
   ],
   "articles": [
@@ -3661,6 +3812,145 @@
         "AI"
       ],
       "date": "2026-07-08"
+    },
+    {
+      "id": "39706",
+      "title": "전 OpenAI 임원 Kevin Weil, Stoke Space 이사로 임명",
+      "original_title": "",
+      "description": "Kevin Weil의 Stoke Space에서의 새로운 역할은 재사용 가능한 로켓이 실리콘 밸리에서 다음으로 뜨거운 트렌드라는 것을 암시합니다.",
+      "link": "https://techcrunch.com/2026/07/08/former-openai-exec-kevin-weil-is-now-on-the-board-of-stoke-space/",
+      "entities": [
+        "Weil",
+        "Stoke",
+        "Space",
+        "OpenAI",
+        "Kevin"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39707",
+      "title": "핫한 프랑스 스타트업 ZML, 많은 AI 칩의 추론 속도를 높이기 위해 무료 제품 출시",
+      "original_title": "",
+      "description": "Turing 상 수상자인 Yann LeCun이 지지하는 프랑스의 핫한 AI 스타트업 ZML이 이제 AI 운영 비용을 줄일 수 있는 소프트웨어인 ZML/LLMD를 출시했습니다.",
+      "link": "https://techcrunch.com/2026/07/08/hot-french-startup-zml-releases-free-product-to-speed-inference-across-lots-of-ai-chips/",
+      "entities": [
+        "Turing",
+        "Yann",
+        "ZML",
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39734",
+      "title": "이번 해에도 영국 국채가 한때 막강했던 '매그니피센트 7'을 능가하는 이유",
+      "original_title": "",
+      "description": "고착된 인플레이션과 무분별한 정치인들로 인해 영국 정부의 채권은 수년간 사랑받지 못하는 자산 클래스로 남아 있었습니다. 그러나 2026년 6개월을 지나며, 이들은 현재까지 '매그니피센트 7'을 초과 성과를 내고 있습니다. Ali Lyon은 인공지능 열풍이 커지고 있음에도 불구하고 이러한 하이퍼스케일러들에게 어떤 일이 잘못되었는지를 분석합니다.",
+      "link": "https://www.cityam.com/why-even-gilts-are-outperforming-the-once-unstoppable-magnificent-7-this-year/",
+      "entities": [
+        "Ali"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39717",
+      "title": "호주에서 여성과 대학 졸업생들이 A.I.로 일자리를 잃을 위험이 가장 높다는 보고서",
+      "original_title": "",
+      "description": "정부 검토에 따르면, 직업 훈련 수준이 높은 고용인들은 A.I.에 의한 일자리 손실에 가장 덜 노출되어 있습니다. 인공지능이 아직 광범위한 일자리 손실을 발생시키지 않았으나, 연방 정부는 경고를 하고 있습니다.",
+      "link": "https://www.theguardian.com/australia-news/2026/jul/08/women-and-university-graduates-most-at-risk-ai-job-loss-australia-report",
+      "entities": [
+        "A.I."
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39728",
+      "title": "“정말로 당신의 회사를 죽일 수 있다”: n8n의 모델 비의존적 AI 주장",
+      "original_title": "",
+      "description": "n8n의 창립자 Jan Oberhauser는 AI 스택에서 자신의 기업이 어디에 위치하는지에 대해 이야기하며 자동차에 비유했습니다. 그는 모델이 엔진이라고 설명하며, 나머지는 차량, 도로, 규칙 등 엔진이 이동할 수 있게 도움을 주는 요소라고 강조했습니다.",
+      "link": "https://thenextweb.com/news/n8n-orchestration-layer-ai-model-sovereignty",
+      "entities": [
+        "Jan",
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39710",
+      "title": "메타, 하루 종일 모든 순간을 기록하는 AI 안경 프로토타입 테스트 중",
+      "original_title": "",
+      "description": "메타는 \"슈퍼 센싱\" 기능이 있는 AI 기반 헤드셋 프로토타입을 테스트하고 있으며, 이 기기는 카메라와 마이크를 사용해 착용자의 모든 순간을 기록합니다. 이 안경은 일상 생활을 기록할 수 있는 흥미로운 가능성을 제공합니다.",
+      "link": "https://the-decoder.com/meta-tests-always-on-ai-glasses-that-capture-your-entire-day/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-08"
+    },
+    {
+      "id": "39806",
+      "title": "이 스타트업은 로봇공학이 ChatGPT 순간을 맞이할 것이라고 믿고 있습니다.",
+      "original_title": "",
+      "description": "제너럴 인튜이션은 수백만 시간에 달하는 비디오 게임 데이터를 활용해 물리적 AI의 기초 모델을 훈련시킬 수 있다고 믿고 있습니다. 이를 통해 실제 데이터가 최소화된 상태에서도 더 스마트한 로봇을 쉽게 구축할 수 있을 것입니다.",
+      "link": "https://techcrunch.com/2026/07/08/this-startup-thinks-robotics-is-about-to-have-its-chatgpt-moment/",
+      "entities": [
+        "ChatGPT"
+      ],
+      "date": "2026-07-09"
+    },
+    {
+      "id": "39842",
+      "title": "아일랜드 드론 배송 스타트업 마나는 Zipline과 Wing을 상대로 1,000명의 미국 ",
+      "original_title": "",
+      "description": "아일랜드에 본사를 둔 자율 드론 배송 스타트업 마나 에어로는 오클라호마주 털사에 미국 운영 및 제조 센터를 설립하고 있으며, 향후 몇년간 약 1,000명의 직원을 고용할 계획입니다. 공사가 진행 중이며, 제조는 약 1년 후에 시작될 예정입니다.",
+      "link": "https://thenextweb.com/news/manna-drone-delivery-us-expansion-tulsa-factory",
+      "entities": [],
+      "date": "2026-07-09"
+    },
+    {
+      "id": "39832",
+      "title": "AI가 정치 광고의 불균형을 해소할 수 있을까 – 아니면 거짓말을 퍼뜨리는 도구로 남을까?",
+      "original_title": "",
+      "description": "정치 캠페인들은 메시지를 전파하기 위해 점점 더 많은 AI와 딥페이크를 활용하고 있으며, 이로 인해 전문가들은 걱정하고 있습니다. 뉴욕 퀸즈의 시의원 후보인 조나단 리날디는 침대에서 아이폰을 만지작거리며 인공지능에게 도움을 요청했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/08/ai-ads-political-campaigns",
+      "entities": [],
+      "date": "2026-07-09"
+    },
+    {
+      "id": "39810",
+      "title": "프라임 인텔렉트, 기업들이 자체 AI 에이전트를 구축할 수 있도록 1억 3천만 달러 시리즈",
+      "original_title": "",
+      "description": "2024년에 설립된 프라임 인텔렉트의 목표는 조직들이 국경 없는 AI 연구소에 의존하지 않고도 자신의 에이전트 시스템을 훈련할 수 있는 능력을 제공하는 것입니다.",
+      "link": "https://techcrunch.com/2026/07/08/prime-intellect-raises-130m-series-a-to-help-enterprises-build-their-own-ai-agents/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-09"
+    },
+    {
+      "id": "39807",
+      "title": "구글 포토, 새로운 AI '비디오 리믹스' 도구 추가",
+      "original_title": "",
+      "description": "이 기능은 어두운 클립을 밝게 만들기 위한 시네마틱 조명 적용, 단순한 배경을 재미있는 것으로 바꾸기, 비디오에 예술적 스타일 추가 등 다양한 작업을 수행할 수 있습니다.",
+      "link": "https://techcrunch.com/2026/07/08/google-photos-adds-a-new-ai-video-remix-tool/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-09"
+    },
+    {
+      "id": "39847",
+      "title": "Convertr, 그렉 조던을 최고 제품 책임자로 임명하여 기업 B2B 프로그램의 데이터 ",
+      "original_title": "",
+      "description": "이 임명은 AI 기반 GTM 스택 내에서 관리된 리드 및 연락처 데이터 수집에 대한 기업 수요가 증가함에 따라 제품 리더십을 발전시킵니다.",
+      "link": "https://www.cityam.com/convertr-appoints-greg-jordan-as-chief-product-officer-to-strengthen-data-governance-for-enterprise-b2b-programmes/",
+      "entities": [
+        "GTM",
+        "B2B",
+        "AI",
+        "Convertr"
+      ],
+      "date": "2026-07-09"
     }
   ]
 }
