@@ -181,8 +181,7 @@ class EnvConfig:
         """로드된 모든 변수를 os.environ 에 설정.
 
         명시적 호출이 필요함 — 모듈 임포트 시 자동 실행되지 않음.
-        기존 os.environ 값을 덮어쓰지 않음 (setdefault 의미).
+        프로젝트 .env 값을 os.environ에 반영 (기존값 덮어씀).
         """
         for key, value in self._vars.items():
-            if key not in os.environ:
-                os.environ[key] = value
+            os.environ[key] = value
