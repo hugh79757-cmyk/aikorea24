@@ -5,6 +5,29 @@
 
 ---
 
+## 2026-07-09 — DeepSeek Tuning + Validation Relaxation (5 commits, push 완료)
+
+### 변경
+- `model_router.py`: `thinking={"type":"disabled"}` 추가, DeepSeek timeout 60s→180s, MiMo 기본 라우팅 제거, finish_reason/refusal 상세 로깅
+- `writer.py`: humanize_cards 주석처리, max_tokens 8000→16000, DeepSeek 호출 시 `extra_body=thinking:disabled` 적용, 카드별 템플릿 간소화, 중복 길이 검증 제거
+- `validator.py`: Hook 첫 줄 최소 길이 30→8자, 한글 비율 30%→15%, body 카드 최소 길이 50→30자
+- `pitch_evaluator.py`: 평가 GPT-4o-mini 전용, 추론 금지 프롬프트 추가
+- `pitch.py`: 재생성 max_tokens 1500→3000, 첫 번째 프롬프트에 JSON 형식 명시
+- `main_v3.py`: retry delays [60,120,300,600] → [60,60,60,60]
+
+### 의사결정
+- DeepSeek CoT 출력 차단: `thinking=disabled`로 추론 출력 제거, 16000 max_tokens로 여유 확보
+- humanize 제거: DeepSeek raw 출력이 충분히 좋고, humanize가 Hook 첫 줄을 잘라내 검증 실패 유발
+- 평가 GPT 전용: DeepSeek가 항상 추론을 붙여서 토큰 초과, GPT가 JSON만 깔끔하게 출력
+- Hook 최소 8자: stanza 형식과 호환
+
+### 영향
+- DeepSeek 쓰레드 생성 → 검증 → 발행까지 최초로 한 번에 성공 (17:24:21)
+- 마지막 발행 후 5시간 이상 발행 중단 문제 해결
+- 5개 커밋 push: `5c1fe96`..`88cc015`
+
+---
+
 ## 2026-07-08 — Writer Prompt Style Update (커밋 완료)
 
 ### 변경
