@@ -122,7 +122,7 @@ _NOTE_ON_LABELS = """
 - 출력에 '상식(A):', '실제(B):', 'vs' 같은 라벨·태그·구분자를 절대 포함하지 말 것. 자연스러운 문장만 출력.
 """
 
-SYSTEM_PROMPT = f"""당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
+SYSTEM_PROMPT = f"""당신은 AI 뉴스 기사에서 통념-현실 간의 모순·역설·미해결 질문을 찾아내는 컨트라딕션 파인더입니다.
 {_LANG_SECTION}
 [핵심 원칙]
 1. 기사의 인과관계를 정확히 파악하라
@@ -130,40 +130,38 @@ SYSTEM_PROMPT = f"""당신은 AI 뉴스 기사에서 독자가 몰랐던 사실�
 3. 절대로 인과관계를 뒤집거나 반대로 해석하지 말 것
 4. 상식과 실제의 충돌을 찾되, 기사에 근거한 내용만 사용
 5. 기사에 없는 내용을 추가하거나 추측하지 말 것
-6. hook은 독자의 호기심을 자극하되 사실에 충실할 것
+6. **원문에 명시적 모순이 없더라도, 기사 속 사실들을 다른 맥락과 연결해 간극을 구성할 수 있다면 포함하라**
 
-[찾는 방법]
-상식과 반대되거나 예상 밖의 결과를 기사에서 찾아라.
-중요: 출력에 '상식(A):' 또는 '실제(B):' 같은 라벨을 절대 포함하지 말 것. 자연스러운 문장만 출력할 것.
+[찾는 대상]
+기사가 던지는 **"하지만..."** 을 찾아라:
+- 통념("당연히 A일 거야")과 현실("그런데 실제로는 B") 사이의 간극
+- 예상 밖의 인과관계, 시스템의 역설, 미해결 질문
+- AI 기술 자체가 아니라 AI가 만드는 **사회·제도·자본·지정학적 긴장**
 
-[핵심 — 반드시 단일 기사만 사용]
-- 하나의 기사에서 가장 강력한 이야기를 발견하라.
-- 절대 두 개 이상의 기사를 연결하지 말 것.
+[핵심 — 단일 기사 + 단일 질문]
+- 반드시 **하나의 기사**만 사용하라. 두 개 이상의 기사를 절대 연결하지 말 것.
+- **그 기사에서 단 1개의 핵심 질문/모순만 발췌하라.**
 - 서로 다른 기사의 내용을 섞어 새로운 이야기를 만들지 말 것.
-- 한 기사의 내용만으로 hook/narrative/twist를 구성하라.
-
-[hook]
-hook: 이야기의 핵심 긴장을 한 줄로. 반드시 한국어로 작성. 날짜/인물/숫자로 시작해도 됨.
 
 [금지]
 - 너무 많이 논의된 상식("AI가 일자리를 뺏는다", "AI가 미래다", "기술 발전이 중요하다")은 피할 것.
-- 독자가 '어? 나는 몰랐는데?' 하는 상식과 실제의 충돌을 찾을 것.
+- **단순 정보 전달·제품 발표·데모·펀딩 라운드 단순 보도는 제외.** 단, 그 정보가 사회·제도·자본 긴장을 시사한다면 포함.
 - 인과관계를 반대로 서술하는 것은 오보이므로 절대 금지
+- 출력에 '상식(A):' 또는 '실제(B):' 같은 라벨을 절대 포함하지 말 것.
 {_NOTE_ON_LABELS}
-[소스 신뢰도]
-- [1차] 태그 기사: 원문. 숫자/주어/방향을 그대로 사용할 것.
-- [요약] 태그 기사: 2차 요약본. 주어-동사 방향이 뒤집혔을 수 있음.
-  [요약] 기사만으로 twist 방향을 결정하지 말 것.
 
 [출력 형식]
 응답은 반드시 유효한 JSON 배열만 출력합니다. 설명이나 라벨을 절대 포함하지 마세요.
 ```json
 [
   {{
-    "hook": "한국어로 작성된 호기심을 자극하는 한 줄 (고유명사만 영어)",
-    "narrative": "한국어로 작성된 2-3문장 내러티브 (고유명사만 영어)",
-    "twist": "예상 밖의 결과",
+    "hook": "독자의 호기심을 자극하는 한 줄. 통념과 현실의 간극을 담을 것 (고유명사만 영어)",
+    "narrative": "2-3문장. 기사의 핵심 긴장과 인과관계를 서술 (고유명사만 영어)",
+    "twist": "예상 밖의 결과 또는 역설",
     "emotion": "불안/놀람/분노/희망 중 하나",
+    "but_line": "\"X인데, 사실은 Y\" 형식. 기사가 던지는 '하지만...'을 한 줄로 (고유명사만 영어)",
+    "question": "이 기사가 독자에게 남기는 단 하나의 질문 (고유명사만 영어)",
+    "gap_source": "\"explicit\" 또는 \"reconstructed\". 원문에 명시적 간극이 있으면 explicit, 원문 사실을 재연결해 간극을 구성했으면 reconstructed",
     "article_ids": [1]
   }}
 ]
@@ -321,10 +319,23 @@ def load_pitch_history():
     return []
 
 
+def _but_line_similarity(bl1: str, bl2: str) -> float:
+    """but_line 간 단어 Jaccard 유사도"""
+    if not bl1 or not bl2:
+        return 0.0
+    w1 = set(w.lower() for w in bl1.split() if len(w) >= 2)
+    w2 = set(w.lower() for w in bl2.split() if len(w) >= 2)
+    if not w1 or not w2:
+        return 0.0
+    return len(w1 & w2) / len(w1 | w2)
+
+
 def is_duplicate_pitch(pitch, history, posted=None):
     """비슷한 피치가 이미 history에 있는지 확인"""
     hook = pitch.get('hook', '')[:80]
     narrative = pitch.get('narrative', '')[:120]
+    new_but_line = pitch.get('but_line', '')
+    new_question = pitch.get('question', '')
     new_ids = set(str(x).lstrip('#').strip() for x in pitch.get('article_ids', []) if str(x).strip())
     new_urls = set(pitch.get('article_urls', []))
     new_titles = list(pitch.get('article_titles', []))
@@ -379,6 +390,16 @@ def is_duplicate_pitch(pitch, history, posted=None):
                 if is_same_topic(t1, o1, d1, t2, o2, d2):
                     return True
 
+        # but_line/question 보조 중복 체크: 동일 article_ids + 유사 but_line → 탈락
+        if new_ids and new_but_line:
+            old_ids = set(str(x).lstrip('#').strip() for x in h.get('article_ids', []) if str(x).strip())
+            if old_ids:
+                overlap = len(old_ids & new_ids)
+                if overlap / len(new_ids) >= 0.5:
+                    h_but_line = h.get('but_line', '')
+                    if h_but_line and _but_line_similarity(new_but_line, h_but_line) >= 0.5:
+                        return True
+
     return False
 
 
@@ -413,6 +434,9 @@ def save_pitch_to_history(pitch):
         data['pitch_history'].append({
             'hook': norm['hook'],
             'narrative': norm['narrative'],
+            'but_line': pitch.get('but_line', ''),
+            'question': pitch.get('question', ''),
+            'gap_source': pitch.get('gap_source', ''),
             'article_ids': pitch.get('article_ids', []),
             'article_urls': pitch.get('article_urls', []),
             'article_titles': pitch.get('article_titles', []),
@@ -507,7 +531,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         try:
             resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
-                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아주세요.
+                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 찾아주세요. 단순 정보 전달·제품 발표·데모는 제외.
 
 {all_articles_joined}"""}],
                 temperature=0.9,
@@ -529,7 +553,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
                 from v3.model_router import chat_completion as _cc
                 resp2 = _cc(
                     system_prompt=SYSTEM_PROMPT,
-                    messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강력한 이야기 3개를 찾아 PITCH JSON 형식으로 출력해주세요.
+                    messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 찾아 PITCH JSON 형식으로 출력해주세요. 단순 정보 전달·제품 발표·데모는 제외.
 
 {all_articles_joined}"""}],
                     temperature=0.9,
@@ -642,18 +666,28 @@ def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, o
     """크롤링된 원문 본문으로 피치를 재생성한다."""
     from v3.model_router import chat_completion
 
-    system = f"""당신은 AI 뉴스 기사에서 독자가 몰랐던 사실을 찾아내는 스토리 파인더입니다.
-아래 제공된 기사 원문(크롤링된 전체 본문)만을 근거로 피치를 작성합니다.
+    system = f"""당신은 AI 뉴스 기사에서 통념-현실 간의 모순·역설·미해결 질문을 찾아내는 컨트라딕션 파인더입니다.
+아래 제공된 기사 원문(크롤링된 전체 본문)을 근거로 피치를 작성합니다.
 {_LANG_SECTION}
 [핵심 원칙]
 1. 반드시 아래 기사 원문에 나오는 내용만 사용할 것
 2. 기사에 없는 인물, 제품명, 사건을 절대 만들어내지 말 것
 3. 인과관계를 뒤집거나 반대로 해석하지 말 것
-4. hook은 기사의 핵심 긴장을 한 줄로 담되, 사실에 충실할 것
+4. **원문에 명시적 모순이 없더라도, 기사 속 사실들을 연결해 통념-현실 간극을 구성할 수 있다면 포함하라**
+
+[찾는 대상]
+기사가 던지는 **"하지만..."** 을 찾아라:
+- 통념과 현실 사이의 간극
+- 예상 밖의 인과관계, 시스템의 역설, 미해결 질문
+- AI가 만드는 사회·제도·자본·지정학적 긴장
 
 [출력 형식]
 응답은 반드시 유효한 JSON 객체만 출력합니다. 설명이나 라벨을 절대 포함하지 마세요.
-{{"hook": "한국어로 작성된 호기심을 자극하는 한 줄 (고유명사만 영어)", "narrative": "한국어로 작성된 2-3문장 내러티브 (고유명사만 영어)", "twist": "예상 밖의 결과", "emotion": "불안/놀람/분노/희망 중 하나", "article_ids": [{article_id}]}}
+{{"hook": "한국어로 작성된 호기심을 자극하는 한 줄 (고유명사만 영어)", "narrative": "한국어로 작성된 2-3문장 내러티브 (고유명사만 영어)", "twist": "예상 밖의 결과", "emotion": "불안/놀람/분노/희망 중 하나", "but_line": ""X인데, 사실은 Y" 형식. 기사가 던지는 '하지만...'을 한 줄로", "question": "이 기사가 독자에게 남기는 단 하나의 질문", "gap_source": ""explicit" 또는 "reconstructed". 원문에 명시적 간극 -> explicit, 재구성 -> reconstructed", "article_ids": [{article_id}]}}
+
+[gap_source 규칙]
+- 원문에 명시적 모순/간극이 있으면 → gap_source: "explicit"
+- 원문에 명시적 간극이 없더라도, 원문의 핵심 사실을 다른 맥락(AI 노동 대체, 자본 긴장, 시스템 재귀, 지정학적 갈등 등)과 연결해 통념-현실 간극을 새로 구성할 수 있다면 → gap_source: "reconstructed", **반드시 재구성한 근거를 기사 원문에서 찾아낼 것**
 
 주의사항:
 - 반드시 1개 기사만 사용. 2개 이상 절대 금지.
@@ -663,6 +697,8 @@ def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, o
 
     ref_hook = original_pitch.get('hook', '')
     ref_narrative = original_pitch.get('narrative', '')
+    ref_but_line = original_pitch.get('but_line', '')
+    ref_question = original_pitch.get('question', '')
 
     user_msg = f"""아래 기사 원문을 읽고 피치를 작성해주세요.
 
@@ -675,7 +711,9 @@ URL: {article_url}
 === 참고: description 기반 1차 선별 결과 ===
 hook: {ref_hook}
 narrative: {ref_narrative}
-→ 위 선별 결과는 참고용이며, 기사 원문과 다를 경우 원문을 우선할 것"""
+but_line: {ref_but_line}
+question: {ref_question}
+→ 위 선별 결과는 참고용이며, 기사 원문과 다를 경우 원문을 우선할 것. but_line/question 각도는 보존할 것."""
 
     try:
         resp = chat_completion(

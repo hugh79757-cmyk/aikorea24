@@ -26,6 +26,10 @@ sys.path.insert(0, THREADS_DIR)
 LOGS_DIR = os.path.join(THREADS_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 
+# api_based 매체 한국어 처리 품질 모니터링 (첫 2주 관찰 후 go/no-go)
+API_BASED_SOURCES = {"네이버뉴스", "과기부 보도자료", "과기부 사업공고", "중소벤처기업부"}
+API_BASED_LOG = os.path.join(LOGS_DIR, "api_based_published.json")
+
 import failed_articles
 
 # Strangler Fig: replace with logger.info() in Phase 3
@@ -52,6 +56,33 @@ def send_telegram(message):
         })
     except Exception as e:
         log(f"  텔레그램 전송 실패: {e}")
+
+
+def _log_api_based_publish(pitch, published_article, root_post_id=None):
+    """api_based 매체 발행 건을 별도 로그에 기록 (한국어 처리 품질 모니터링)."""
+    source = published_article.get("source", "") if published_article else ""
+    if source not in API_BASED_SOURCES:
+        return
+    entry = {
+        "scraped_at": datetime.now().isoformat(),
+        "article_id": (pitch.get("article_ids") or [None])[0],
+        "source": source,
+        "but_line": pitch.get("but_line"),
+        "question": pitch.get("question"),
+        "gap_source": pitch.get("gap_source"),
+        "root_post_id": root_post_id,
+    }
+    data = []
+    if os.path.exists(API_BASED_LOG):
+        try:
+            with open(API_BASED_LOG, encoding="utf-8") as f:
+                data = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            data = []
+    data.append(entry)
+    with open(API_BASED_LOG, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
 
 def validate_final_cards(cards):
     """발행 직전 최종 검증. 문제 있으면 (False, 이유_목록) 반환."""
@@ -274,6 +305,7 @@ def run_v3(dry_run=False):
         result = publish_thread_chain(cards, publish_article)
         if result:
             log(f'  ✅ 발행 완료: 루트 ID {result}')
+            _log_api_based_publish(pitch, publish_article, root_post_id=result)
             # 피치의 모든 article_ids 저장 (보조 기사 중복 방지)
             from db_reader import load_posted, save_posted, normalize_url
             posted = load_posted()

@@ -2,8 +2,8 @@
 """
 aikorea24 D1 DB → 기사 풀 로드 (3단계 우선순위)
 - 1순위: 오늘 briefing_items 포함 news
-- 2순위: 최근 7일 news
-- 3순위: 그 이전 news (최대 30일)
+- 2순위: 최근 3일 news
+- 3순위: 그 이전 news (3일 초과, 최대 30일)
 - posted.json 중복 제외
 """
 import os, sys, json, re, subprocess, time
@@ -29,9 +29,21 @@ def load_crawlable_sources():
         return []
 
 
+def load_api_based_sources():
+    """api_based 소스 목록 반환 (네이버뉴스, 과기부 등)"""
+    try:
+        with open(CRAWLABLE_CONFIG) as f:
+            data = json.load(f)
+        names = [s['name'] for s in data.get('api_based', [])]
+        return names
+    except Exception:
+        return []
+
+
 def get_source_filter():
     """SQL WHERE 절용 소스 필터 문자열 반환 (예: "source IN ('BBC', 'TechCrunch')")"""
     sources = load_crawlable_sources()
+    sources.extend(load_api_based_sources())
     if not sources:
         return ''
     quoted = [f"'{s}'" for s in sources]
@@ -285,7 +297,7 @@ def get_articles():
             articles.append(r)
     log(f'  1순위 브리핑: {len(rows)}개 → 신규 {len([a for a in articles if a["priority"]==1])}개')
 
-    # 2순위: 최근 7일 news (브리핑 제외)
+    # 2순위: 최근 3일 news (브리핑 제외)
     existing_ids = set(str(a['id']) for a in articles)
     sql2 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
                       COALESCE(original_title, '') as original_title
@@ -303,7 +315,7 @@ def get_articles():
                      END || '-' || 
                      CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                    ELSE NULL
-                 END >= date('now', '-7 days')
+                 END >= date('now', '-3 days')
                {source_filter}
               ORDER BY pub_date DESC LIMIT 2000"""
     rows2 = d1_query(sql2)
@@ -322,7 +334,7 @@ def get_articles():
                 r['priority'] = 2
                 articles.append(r)
                 existing_ids.add(str(r['id']))
-    log(f'  2순위 최근7일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개')
+    log(f'  2순위 최근3일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개')
 
     # 3순위: 이전 기사
     if len(articles) < 50:
@@ -344,7 +356,7 @@ def get_articles():
                          END || '-' || 
                          CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                        ELSE NULL
-                     END < date('now', '-7 days')
+                     END < date('now', '-3 days')
                    {source_filter}
               ORDER BY pub_date DESC LIMIT {remaining + 20}"""
         rows3 = d1_query(sql3)
@@ -376,7 +388,7 @@ if __name__ == '__main__':
     p1 = sum(1 for a in articles if a['priority'] == 1)
     p2 = sum(1 for a in articles if a['priority'] == 2)
     p3 = sum(1 for a in articles if a['priority'] == 3)
-    print(f'\n기사 풀 현황: 브리핑 {p1}개 + 최근7일 {p2}개 + 이전 {p3}개 = 총 {len(articles)}개')
+    print(f'\n기사 풀 현황: 브리핑 {p1}개 + 최근3일 {p2}개 + 이전 {p3}개 = 총 {len(articles)}개')
     for a in articles[:5]:
         print(f'  [P{a["priority"]}] [{a["id"]}] {a["title"][:55]}')
     if len(articles) > 5:

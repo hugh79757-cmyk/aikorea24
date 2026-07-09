@@ -50,7 +50,6 @@
     {"name": "네이버뉴스", "count": 4286, "reason": "API 기반"},
     {"name": "과기부 보도자료", "count": 155, "reason": "공공데이터 API"},
     {"name": "과기부 사업공고", "count": 50, "reason": "공공데이터 API"},
-    {"name": "중소벤처기업부", "count": 19, "reason": "공공데이터 API"},
-    {"name": "지자체 전체", "count": 100, "reason": "공공데이터 API"}
+    {"name": "중소벤처기업부", "count": 29, "reason": "공공데이터 API"}
   ]
 }
