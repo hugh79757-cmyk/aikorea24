@@ -740,7 +740,11 @@ def write_thread(pitch, all_articles, format_choice=None):
 
     content = _try_model('deepseek')
     if not content:
-        _log('  ⚠️ DeepSeek 응답 없음 → GPT-4o-mini fallback')
+        _log('  ⚠️ DeepSeek 1차 실패 → 1회 재시도')
+        content = _try_model('deepseek')
+
+    if not content:
+        _log('  ⚠️ DeepSeek 2차 실패 → GPT-4o-mini fallback')
         content = _try_model('openai')
 
     if not content:
