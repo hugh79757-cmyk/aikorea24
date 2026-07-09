@@ -2064,6 +2064,77 @@
           "date": "2026-07-09"
         }
       ]
+    },
+    {
+      "date": "2026-07-10",
+      "briefing_id": 167,
+      "articles": [
+        {
+          "id": "40010",
+          "title": "구글, 광고주가 AI로 만든 광고를 인정할 경우 알림 기능 제공",
+          "original_title": "",
+          "description": "구글이 AI를 사용해 제작된 광고를 표시하는 기능을 론칭합니다. 이 라벨은 광고가 생성 도구로 만들어지거나 수정되었음을 나타냅니다. 이 정보는 광고의 세 점 메뉴나 정보 아이콘을 통해 접근할 수 있는 “내 광고 센터” 패널에 나타납니다.",
+          "link": "https://thenextweb.com/news/google-discloses-ai-made-ads-my-ad-center",
+          "entities": [],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "39972",
+          "title": "OpenAI, GPT-5.6 모델군 출시",
+          "original_title": "",
+          "description": "OpenAI의 최신 모델군은 사이버 보안을 포함한 다양한 분야에서 개선을 약속합니다. 이러한 발전은 다양한 산업에서 AI의 활용을 더욱 촉진할 것으로 기대됩니다.",
+          "link": "https://techcrunch.com/2026/07/09/openai-launches-its-new-family-of-models-with-gpt-5-6/",
+          "entities": [
+            "OpenAI",
+            "GPT-5.6"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "39973",
+          "title": "AI 에이전트 스타트업, $1억 펀드 조성을 에이전트에게 맡겨",
+          "original_title": "",
+          "description": "Lyzr는 기업을 위한 AI 에이전트를 구축하는 스타트업으로, 자사의 AI 에이전트를 사용하여 1억 달러의 펀드를 조성했습니다. 이는 제품이 실제로 작동한다는 확실한 증거입니다.",
+          "link": "https://techcrunch.com/2026/07/09/an-ai-agent-startup-just-let-its-agent-run-its-100-million-fundraise/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "39998",
+          "title": "우리는 가짜 동물의 AI 비디오가 필요하지 않습니다. 진짜 동물들이 존재하고 정말 귀엽습니",
+          "original_title": "",
+          "description": "생성 AI로 만들어진 것에 대해 기쁘게 생각할 수 없습니다. 복잡한 사람들에 의해 쓰여진 책, 순수한 사람들의 그림, 감정을 가진 이들이 부른 노래가 필요합니다. 생성 AI는 너무 지나쳤습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jul/10/ai-videos-fake-animals-real-ones-are-cute",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "40017",
+          "title": "오르카 보안 보고서: AI 도입 시 99.9%의 수정 가능한 취약점이 패치되지 않음",
+          "original_title": "",
+          "description": "1,200개 이상의 생산 클라우드 환경에 대한 분석은 조직들이 AI를 비즈니스 핵심 워크플로우에 통합하는 방식에 대한 직접적인 통찰력을 제공합니다. 이는 기존 보안 통제가 해결하지 못한 새로운 보안 위험을 노출시키고 있습니다.",
+          "link": "https://www.cityam.com/orca-security-report-99-9-of-fixable-ai-vulnerabilities-remain-unpatched-as-ai-moves-into-production/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "39975",
+          "title": "일론 머스크, Mythos/Fable을 칭찬하며 Anthropic을 ‘차단하지 않겠다’ 약",
+          "original_title": "",
+          "description": "Anthropic은 일론 머스크가 자신의 모델을 호스팅하는 것을 신뢰할 수 있을까요? 약 400억 달러의 수익이 걸려 있는 상황에서, 머스크는 해당 기업이 신뢰할 수 있다고 주장하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/09/elon-musk-praises-mythos-fable-promises-not-to-cut-off-anthropic/",
+          "entities": [
+            "Mythos"
+          ],
+          "date": "2026-07-10"
+        }
+      ]
     }
   ],
   "articles": [
@@ -3951,6 +4022,71 @@
         "Convertr"
       ],
       "date": "2026-07-09"
+    },
+    {
+      "id": "40010",
+      "title": "구글, 광고주가 AI로 만든 광고를 인정할 경우 알림 기능 제공",
+      "original_title": "",
+      "description": "구글이 AI를 사용해 제작된 광고를 표시하는 기능을 론칭합니다. 이 라벨은 광고가 생성 도구로 만들어지거나 수정되었음을 나타냅니다. 이 정보는 광고의 세 점 메뉴나 정보 아이콘을 통해 접근할 수 있는 “내 광고 센터” 패널에 나타납니다.",
+      "link": "https://thenextweb.com/news/google-discloses-ai-made-ads-my-ad-center",
+      "entities": [],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "39972",
+      "title": "OpenAI, GPT-5.6 모델군 출시",
+      "original_title": "",
+      "description": "OpenAI의 최신 모델군은 사이버 보안을 포함한 다양한 분야에서 개선을 약속합니다. 이러한 발전은 다양한 산업에서 AI의 활용을 더욱 촉진할 것으로 기대됩니다.",
+      "link": "https://techcrunch.com/2026/07/09/openai-launches-its-new-family-of-models-with-gpt-5-6/",
+      "entities": [
+        "OpenAI",
+        "GPT-5.6"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "39973",
+      "title": "AI 에이전트 스타트업, $1억 펀드 조성을 에이전트에게 맡겨",
+      "original_title": "",
+      "description": "Lyzr는 기업을 위한 AI 에이전트를 구축하는 스타트업으로, 자사의 AI 에이전트를 사용하여 1억 달러의 펀드를 조성했습니다. 이는 제품이 실제로 작동한다는 확실한 증거입니다.",
+      "link": "https://techcrunch.com/2026/07/09/an-ai-agent-startup-just-let-its-agent-run-its-100-million-fundraise/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "39998",
+      "title": "우리는 가짜 동물의 AI 비디오가 필요하지 않습니다. 진짜 동물들이 존재하고 정말 귀엽습니",
+      "original_title": "",
+      "description": "생성 AI로 만들어진 것에 대해 기쁘게 생각할 수 없습니다. 복잡한 사람들에 의해 쓰여진 책, 순수한 사람들의 그림, 감정을 가진 이들이 부른 노래가 필요합니다. 생성 AI는 너무 지나쳤습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jul/10/ai-videos-fake-animals-real-ones-are-cute",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40017",
+      "title": "오르카 보안 보고서: AI 도입 시 99.9%의 수정 가능한 취약점이 패치되지 않음",
+      "original_title": "",
+      "description": "1,200개 이상의 생산 클라우드 환경에 대한 분석은 조직들이 AI를 비즈니스 핵심 워크플로우에 통합하는 방식에 대한 직접적인 통찰력을 제공합니다. 이는 기존 보안 통제가 해결하지 못한 새로운 보안 위험을 노출시키고 있습니다.",
+      "link": "https://www.cityam.com/orca-security-report-99-9-of-fixable-ai-vulnerabilities-remain-unpatched-as-ai-moves-into-production/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "39975",
+      "title": "일론 머스크, Mythos/Fable을 칭찬하며 Anthropic을 ‘차단하지 않겠다’ 약",
+      "original_title": "",
+      "description": "Anthropic은 일론 머스크가 자신의 모델을 호스팅하는 것을 신뢰할 수 있을까요? 약 400억 달러의 수익이 걸려 있는 상황에서, 머스크는 해당 기업이 신뢰할 수 있다고 주장하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/09/elon-musk-praises-mythos-fable-promises-not-to-cut-off-anthropic/",
+      "entities": [
+        "Mythos"
+      ],
+      "date": "2026-07-10"
     }
   ]
 }
