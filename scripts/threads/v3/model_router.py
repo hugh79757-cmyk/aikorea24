@@ -140,6 +140,11 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                 text = resp.choices[0].message.content
                 if text and text.strip():
                     return text.strip()
+                # 빈 응답도 로그 남기고 fallback
+                if not text:
+                    print(f'  [경고] DeepSeek 빈 응답 (content=None)')
+                else:
+                    print(f'  [경고] DeepSeek 빈 응답 (strip 후 길이 0): {text[:50]}')
             except Exception as e:
                 print(f'  [경고] DeepSeek 실패: {type(e).__name__}: {e}')
                 if model_override == "deepseek":
