@@ -131,7 +131,7 @@ def validate_final_cards(cards):
 
 def run_v3(dry_run=False):
     max_retries = 5
-    retry_delays = [60, 120, 300, 600] # 1분 → 2분 → 5분 → 10분 (기하급수적 백오프)
+    retry_delays = [60, 60, 60, 60]  # 전부 1분
     failed_article_ids = failed_articles.load_failed_articles()
 
     for attempt in range(1, max_retries + 1):
