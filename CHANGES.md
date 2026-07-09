@@ -719,3 +719,21 @@
 - `b3fdef5` chore: 런타임 아티팩트 git 추적 제거
 
 ---
+
+## 2026-07-09 — Threads v2: Selection Logic + Writer Prompt (커밋 완료)
+
+### Phase 17 (Threads v2 Phase 1): 기사 선택 로직 개선 — `39fe67c`
+- `db_reader.py`: 시의성 7일→3일, `load_api_based_sources()`, `get_source_filter()`에 api_based 병합
+- `pipeline/threads/pitch.py`: 1차 선별 "모순/역설/미해결 질문"으로 개편. but_line/question/gap_source 출력. 단일질문 규칙, 유형2(재구성) 대응, 중복 방지 but_line 유사도, pitch_history 저장
+- `pipeline/threads/pitch_evaluator.py`: 6개 평가기준 0~9점/통과≥5, 역설 0점=불통과, 시의성 3일
+- `main_v3.py`: api_based 한국어 모니터링 로그 (옵션 A)
+- `crawlable_sources.json`: 지자체 전체 제거, count 수정
+- D1 쿼리 확인: 네이버뉴스(4,571), 과기부 보도자료(171), 과기부 사업공고(50), 중소벤처기업부(29) 매칭 확인
+
+### Phase 16 (Threads v2 Phase 2): Writer Prompt 개선 — `ef530e5`
+- `writer.py` `build_system_prompt_D()`: 카드 구조 재정의 (훅→충돌→반전→확장→여운 → 통념→전환→증거A→증거B→열린질문→링크)
+- `writer.py` `write_thread()`: 유저 프롬프트에 but_line/question/gap_source 전달, 카드별 규칙, gap_source 분기(explicit/reconstructed) 추가
+- `style_examples.md`: 새 카드 구조 예시 추가 (SpaceX/Cursor 기반 템플릿)
+- 5번 카드 닫힌 결론 금지 규칙 추가
+
+---
