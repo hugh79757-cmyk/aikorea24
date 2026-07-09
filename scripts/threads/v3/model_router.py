@@ -6,7 +6,9 @@ model_router.py - AI 모델 호출 라우터
 - .env / ~/.env.common에서 MIMO_API_KEY / DEEPSEEK_API_TOKEN / OPENAI_API_KEY 자동 로드
 """
 import os, sys
+from datetime import datetime
 from openai import OpenAI
+import httpx
 
 from pipeline.infra.env_loader import EnvConfig
 _config = EnvConfig()
@@ -14,6 +16,15 @@ _config.load_to_environ()
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads'))
 ENV_FILE = os.path.join(PROJECT_DIR, '.env')
+LOGS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads', 'logs')
+os.makedirs(LOGS_DIR, exist_ok=True)
+
+
+def _log_to_file(msg):
+    """일일 로그 파일에 기록 (print와 별개로 파일에만 씀)"""
+    ts = datetime.now().strftime('%H:%M:%S')
+    with open(os.path.join(LOGS_DIR, datetime.now().strftime('%Y-%m-%d') + '.log'), 'a', encoding='utf-8') as f:
+        f.write(f'[{ts}] [v3] [model_router] {msg}\n')
 
 def load_env():
     """.env에서 API 키 로드"""
@@ -65,7 +76,11 @@ def get_deepseek_client():
     api_key = os.environ.get('DEEPSEEK_API_TOKEN', '')
     if not api_key:
         return None
-    return OpenAI(base_url=DEEPSEEK_BASE_URL, api_key=api_key)
+    return OpenAI(
+        base_url=DEEPSEEK_BASE_URL,
+        api_key=api_key,
+        timeout=httpx.Timeout(180.0, connect=30.0),
+    )
 
 def get_mimo_client():
     api_key = os.environ.get('MIMO_API_KEY', '')
@@ -73,7 +88,7 @@ def get_mimo_client():
         return None
     return OpenAI(base_url=MIMO_BASE_URL, api_key=api_key)
 
-def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, deepseek_model=None, response_format=None):
+def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=2000, model_override=None, deepseek_model=None, response_format=None, extra_body=None):
     """
     통합 채팅 completions 함수
     - 1순위: MiMo v2.5 (xiaomimimo.com)
@@ -84,19 +99,22 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
     model_override='deepseek': DeepSeek 강제 사용
     model_override='openai': OpenAI 강제 사용
     response_format: OpenAI-compatible response format (e.g. {'type': 'json_object'})
+    extra_body: extra body parameters (e.g. {"thinking": {"type": "disabled"}})
     Returns: 응답 텍스트 (string), 실패 시 None
     """
     kwargs = {}
     if response_format:
         kwargs['response_format'] = response_format
+    if extra_body:
+        kwargs['extra_body'] = extra_body
 
     full_messages = []
     if system_prompt:
         full_messages.append({"role": "system", "content": system_prompt})
     full_messages.extend(messages)
 
-    # 1순위: MiMo v2.5
-    if model_override in ("mimo", None):
+    # 1순위: MiMo v2.5 (명시적 요청 시에만)
+    if model_override == "mimo":
         mimo_client = get_mimo_client()
         if mimo_client:
             try:
@@ -137,16 +155,33 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
                     max_tokens=max_tokens,
                     **kwargs,
                 )
-                text = resp.choices[0].message.content
-                if text and text.strip():
-                    return text.strip()
-                # 빈 응답도 로그 남기고 fallback
-                if not text:
-                    print(f'  [경고] DeepSeek 빈 응답 (content=None)')
+                choice = resp.choices[0] if resp.choices else None
+                if choice:
+                    text = choice.message.content
+                    finish_reason = choice.finish_reason
+                    refusal = getattr(choice.message, 'refusal', None)
+
+                    _log_to_file(f'DeepSeek finish_reason={finish_reason} content_len={len(text) if text else 0} refusal={str(refusal)[:100] if refusal else "none"}')
+
+                    if text and text.strip():
+                        return text.strip()
+
+                    if not text and finish_reason == 'content_filter':
+                        print(f'  [경고] DeepSeek 콘텐츠 필터 차단 (refusal={refusal})')
+                        _log_to_file(f'⚠️ content_filter 차단: {refusal[:200] if refusal else "없음"}')
+                    elif not text and finish_reason == 'length':
+                        print(f'  [경고] DeepSeek 토큰 제한 도달 (max_tokens={max_tokens})')
+                        _log_to_file(f'⚠️ max_tokens={max_tokens} 초과')
+                    else:
+                        print(f'  [경고] DeepSeek 빈 응답 (finish_reason={finish_reason})')
+                        _log_to_file(f'⚠️ 빈 응답 finish_reason={finish_reason}')
                 else:
-                    print(f'  [경고] DeepSeek 빈 응답 (strip 후 길이 0): {text[:50]}')
+                    print(f'  [경고] DeepSeek choices 배열 비어있음')
+                    _log_to_file(f'⚠️ choices=[] (빈 배열)')
             except Exception as e:
-                print(f'  [경고] DeepSeek 실패: {type(e).__name__}: {e}')
+                status = getattr(e, 'status_code', 'unknown') if hasattr(e, 'status_code') else 'unknown'
+                print(f'  [경고] DeepSeek 실패: HTTP {status} {type(e).__name__}: {e}')
+                _log_to_file(f'⚠️ 예외: HTTP {status} {type(e).__name__}: {str(e)[:200]}')
                 if model_override == "deepseek":
                     print(f'  [오류] DeepSeek 강제 모드 실패')
                     return None
