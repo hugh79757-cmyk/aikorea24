@@ -531,7 +531,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         try:
             resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
-                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 찾아주세요. 단순 정보 전달·제품 발표·데모는 제외.
+                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 PITCH JSON 형식으로 찾아주세요. 단순 정보 전달·제품 발표·데모는 제외.
 
 {all_articles_joined}"""}],
                 temperature=0.9,
@@ -720,7 +720,7 @@ question: {ref_question}
             system_prompt=system,
             messages=[{'role': 'user', 'content': user_msg}],
             temperature=0.7,
-            max_tokens=1500,
+            max_tokens=3000,
             model_override='deepseek',
         )
         if not resp:

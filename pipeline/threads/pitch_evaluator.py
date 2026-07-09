@@ -52,7 +52,9 @@ EVAL_SYSTEM_PROMPT = """당신은 피치 품질 평가자입니다.
    - 0점: 7일 초과 또는 상식 수준의 오래된 논의
 
 [출력 형식]
-{"score": 0~9, "passed": true/false, "direction_ok": true/false, "contradiction_ok": true/false, "reason": "평가 이유 한 줄"}"""
+{"score": 0~9, "passed": true/false, "direction_ok": true/false, "contradiction_ok": true/false, "reason": "평가 이유 한 줄"}
+
+※ 위 JSON만 출력하라. 추론 과정, 설명, 부가 문구를 절대 덧붙이지 마라. 평가 이유도 reason 필드에만 짧게 쓸 것."""
 
 
 def evaluate_pitch(pitch):
@@ -65,7 +67,8 @@ def evaluate_pitch(pitch):
             system_prompt=EVAL_SYSTEM_PROMPT,
             messages=[{'role': 'user', 'content': f'평가할 피치:\n{pitch_json}'}],
             temperature=0.1,
-            max_tokens=300,
+            max_tokens=1200,
+            model_override='openai',
         )
         if not resp:
             raise ValueError('chat_completion returned None')
