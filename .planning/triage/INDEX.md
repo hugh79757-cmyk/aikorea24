@@ -1,3 +1,6 @@
+- 2026-07-09 | fix | env-loader-setdefault | load_to_environ() setdefault로 인해 project .env 무시 — D1 인증 실패
+- 2026-07-09 | fix | deepseek-empty-response | DeepSeek 빈 응답 시 로그 없이 silent fallthrough + 재시도 부재
+- 2026-07-09 | fix | card-1-stanza-structure | Card 1/2/5 prompt refinements — 3-stanza 강제, 5번 꼬리 금지, 줄바꿈 규칙 강화
 - 2026-07-07 | fix | hook-validation-first-line | validate_card_structure() hook 검증을 첫 카드 전체 → 첫 줄만으로 변경 (ThreadForge 정렬)
 - 2026-07-05 | fix | persistent-failed-articles | Phase 13-01: failed_articles.py 영구 저장 → article 38290 무한 재시도 차단
 - 2026-07-05 | fix | chinese-period-validation | Phase 13-02: \u3002(중국어 마침표)를 sentence_enders에 추가 → MiMo `。` 검증 통과
