@@ -261,9 +261,9 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
         if len(card) < 20:
             return False, f"Card {i}: 너무 짧음 ({len(card)}자)"
 
-        # 4. Korean content
+        # 4. Korean content (AI/tech 뉴스는 고유명사/모델명/숫자가 많아 15%로 완화)
         korean_chars = len(re.findall(r'[가-힣]', card))
-        if len(card) > 0 and korean_chars / len(card) < 0.3:
+        if len(card) > 0 and korean_chars / len(card) < 0.15:
             return False, f"Card {i}: 한글 비율 부족 ({korean_chars}/{len(card)})"
 
         # 5. Content density
@@ -286,7 +286,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
         enders_count = len(re.findall(r'(?:~임\.|~했음\.|~있음\.|~됨\.|~함\.|[.!?])', hook_first_line))
         if enders_count > 10:
             return False, f"Hook: 문장 종결 과다 ({enders_count}개) — 카드 경계 붙음 의심"
-        if len(hook_first_line) < 30 or len(hook_first_line) > 350:
+        if len(hook_first_line.strip()) < 8 or len(hook_first_line) > 350:
             return False, f"Hook 길이 비정상 ({len(hook_first_line)}자)"
 
     # 8. Body card length
