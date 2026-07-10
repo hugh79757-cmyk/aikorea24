@@ -1,0 +1,139 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { verifySession, isOwner } from '../../../lib/auth';
+
+const { id } = Astro.params;
+const db = Astro.locals.runtime?.env?.DB;
+
+// Session check + owner verification
+const session = Astro.cookies.get('session')?.value;
+let currentUser = null;
+let isAdmin = false;
+if (session) {
+  currentUser = await verifySession(session, Astro.locals.sessionSecret);
+  isAdmin = isOwner(currentUser);
+}
+
+if (!isAdmin || !id) {
+  return Astro.redirect('/community');
+}
+
+// Load post
+let post = null;
+if (db && id) {
+  post = await db.prepare(
+    `SELECT * FROM posts WHERE id = ?`
+  ).bind(id).first();
+}
+
+if (!post) {
+  return Astro.redirect('/community');
+}
+
+const pageTitle = `글 편집 | AI코리아24`;
+const pageDesc = `"${post.title}" 편집하기`;
+---
+
+<Layout title={pageTitle} description={pageDesc}>
+  <div class="bg-[#0A0E1A] text-white min-h-screen">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+      <a href={`/community/${id}`} class="inline-block mb-6 text-sm text-gray-500 hover:text-gray-300">← 글 보기로 돌아가기</a>
+
+      <h1 class="text-2xl font-bold mb-8">글 편집</h1>
+
+      <form id="edit-form" class="space-y-6">
+        <input type="hidden" name="id" value={id} />
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">제목</label>
+          <input type="text" name="title" value={post.title} required
+            class="w-full bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-300 mb-2">내용 (마크다운)</label>
+          <textarea name="content" rows="20" required
+            class="w-full bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 font-mono"
+          >{post.content}</textarea>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">카테고리</label>
+            <select name="category"
+              class="bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              <option value="free" {post.category === 'free' ? 'selected' : ''}>자유게시판</option>
+              <option value="qna" {post.category === 'qna' ? 'selected' : ''}>질문답변</option>
+              <option value="news" {post.category === 'news' ? 'selected' : ''}>AI 뉴스</option>
+              <option value="tip" {post.category === 'tip' ? 'selected' : ''}>꿀팁공유</option>
+              <option value="project" {post.category === 'project' ? 'selected' : ''}>프로젝트</option>
+              <option value="review" {post.category === 'review' ? 'selected' : ''}>툴 리뷰</option>
+              <option value="강의" {post.category === '강의' ? 'selected' : ''}>📚 강의</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-300 mb-2">공개 설정</label>
+            <select name="visibility"
+              class="bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              <option value="public" {post.visibility === 'public' ? 'selected' : ''}>Public (전체 공개)</option>
+              <option value="members" {post.visibility === 'members' ? 'selected' : ''}>Members (회원 전용)</option>
+              <option value="premium" {post.visibility === 'premium' ? 'selected' : ''}>Premium (유료 회원)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 pt-4">
+          <button type="submit"
+            class="bg-blue-600 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-blue-500 transition-colors">
+            저장
+          </button>
+          <a href={`/community/${id}`}
+            class="text-sm text-gray-400 hover:text-gray-300 transition-colors">
+            취소
+          </a>
+        </div>
+
+        <div id="msg" class="text-sm hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('edit-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {
+        title: formData.get('title'),
+        content: formData.get('content'),
+        visibility: formData.get('visibility'),
+        category: formData.get('category'),
+      };
+      const id = formData.get('id');
+      const msgEl = document.getElementById('msg');
+
+      try {
+        const res = await fetch(`/api/community/${id}/update/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        if (res.ok && result.ok) {
+          msgEl.className = 'text-sm text-green-400';
+          msgEl.textContent = '저장되었습니다. 글 보기로 이동합니다...';
+          msgEl.classList.remove('hidden');
+          setTimeout(() => { window.location.href = `/community/${id}`; }, 1000);
+        } else {
+          msgEl.className = 'text-sm text-red-400';
+          msgEl.textContent = result.error || '저장 실패';
+          msgEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        msgEl.className = 'text-sm text-red-400';
+        msgEl.textContent = '네트워크 오류';
+        msgEl.classList.remove('hidden');
+      }
+    });
+  </script>
+</Layout>

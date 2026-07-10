@@ -1,0 +1,343 @@
+- generic [active] [ref=f2e1]:
+  - banner [ref=f2e2]:
+    - navigation [ref=f2e3]:
+      - link "AI코리아24" [ref=f2e4] [cursor=pointer]:
+        - /url: /
+      - generic [ref=f2e5]:
+        - link "홈" [ref=f2e6] [cursor=pointer]:
+          - /url: /
+        - link "블로그" [ref=f2e7] [cursor=pointer]:
+          - /url: /blog
+        - link "AI 도구" [ref=f2e8] [cursor=pointer]:
+          - /url: /tools
+        - link "용어사전" [ref=f2e9] [cursor=pointer]:
+          - /url: /glossary
+        - link "타임라인" [ref=f2e10] [cursor=pointer]:
+          - /url: /chronicle
+        - link "뉴스" [ref=f2e11] [cursor=pointer]:
+          - /url: /news
+        - link "구독" [ref=f2e12] [cursor=pointer]:
+          - /url: /subscribe
+        - link "문의" [ref=f2e13] [cursor=pointer]:
+          - /url: /contact
+      - link "로그인" [ref=f2e15] [cursor=pointer]:
+        - /url: /api/auth/login
+      - button "검색" [ref=f2e16] [cursor=pointer]
+      - button "테마 전환" [ref=f2e19] [cursor=pointer]
+  - main [ref=f2e22]:
+    - insertion [ref=f2e24]:
+      - iframe [ref=f2e26]:
+        
+    - generic [ref=f2e27]:
+      - generic [ref=f2e31]:
+        - generic [ref=f2e32]: AI 큐레이션 플랫폼
+        - heading "AI, 누구나 쓸 수 있습니다" [level=1] [ref=f2e35]
+        - paragraph [ref=f2e36]: 처음 시작하는 분은 7일 무료 강좌로,매일 AI 소식을 원하시면 브리핑으로
+        - generic [ref=f2e37]:
+          - link "7일 강좌 시작하기 →" [ref=f2e38] [cursor=pointer]:
+            - /url: /courses/7day-starter/
+            - text: 7일 강좌 시작하기
+            - generic [ref=f2e39]: →
+          - link "매일 AI 브리핑 받기 →" [ref=f2e40] [cursor=pointer]:
+            - /url: /subscribe/
+            - text: 매일 AI 브리핑 받기
+            - generic [ref=f2e41]: →
+          - link "더 알아보기" [ref=f2e42] [cursor=pointer]:
+            - /url: /about
+      - generic [ref=f2e45]:
+        - generic [ref=f2e46]:
+          - generic [ref=f2e47]: 오늘의 AI 브리핑
+          - heading "7월 10일 (금)" [level=2] [ref=f2e50]
+        - paragraph [ref=f2e52]: "\"오늘의 AI 뉴스 브리핑 (2026-07-10) 6건의 주요 AI 뉴스를 선정했습니다.\""
+        - generic [ref=f2e53]:
+          - article [ref=f2e54]:
+            - generic [ref=f2e55]:
+              - generic [ref=f2e56]: "1"
+              - generic [ref=f2e57]:
+                - link [ref=f2e58] [cursor=pointer]:
+                  - /url: /briefing/2026-07-10-1/#item-1
+                  - heading "구글, 광고주가 AI로 만든 광고를 인정할 경우 알림 기능 제공" [level=3] [ref=f2e59]
+                - paragraph [ref=f2e60]: 구글의 이번 조치는 소비자에게 AI 생성 광고에 대한 투명성을 제공하는 긍정적인 시작으로 보입니다. 광고의 제작 과정을 명확히 밝힘으로써 사용자 신뢰를 높이는 데 기여할 수 있을 것입니다.
+                - paragraph [ref=f2e61]: 구글이 AI를 사용해 제작된 광고를 표시하는 기능을 론칭합니다. 이 라벨은 광고가 생성 도구로 만들어지거나 수정되었음을 나타냅니다. 이 정보는 광고의 세 점 메뉴나 정보 아이콘을 통해 접근할 수 있는 “내 광고 센터” 패널에 나타납니다.
+                - generic [ref=f2e62]:
+                  - generic [ref=f2e63]: The Next Web
+                  - generic [ref=f2e64]: 해외
+                  - link "자세히 보기 →" [ref=f2e65] [cursor=pointer]:
+                    - /url: /briefing/2026-07-10-1/#item-1
+          - article [ref=f2e66]:
+            - generic [ref=f2e67]:
+              - generic [ref=f2e68]: "2"
+              - generic [ref=f2e69]:
+                - link [ref=f2e70] [cursor=pointer]:
+                  - /url: /briefing/2026-07-10-1/#item-2
+                  - heading "OpenAI, GPT-5.6 모델군 출시" [level=3] [ref=f2e71]
+                - paragraph [ref=f2e72]: OpenAI의 GPT-5.6 모델군은 사이버 보안 등 핵심 분야의 성능 향상을 강조하며, 실제 산업 적용과 AI 활용 범위 확대에 기여할 것으로 보입니다.
+                - paragraph [ref=f2e73]: OpenAI의 최신 모델군은 사이버 보안을 포함한 다양한 분야에서 개선을 약속합니다. 이러한 발전은 다양한 산업에서 AI의 활용을 더욱 촉진할 것으로 기대됩니다.
+                - generic [ref=f2e74]:
+                  - generic [ref=f2e75]: TechCrunch AI
+                  - generic [ref=f2e76]: 해외
+                  - link "자세히 보기 →" [ref=f2e77] [cursor=pointer]:
+                    - /url: /briefing/2026-07-10-1/#item-2
+          - article [ref=f2e78]:
+            - generic [ref=f2e79]:
+              - generic [ref=f2e80]: "3"
+              - generic [ref=f2e81]:
+                - link [ref=f2e82] [cursor=pointer]:
+                  - /url: /briefing/2026-07-10-1/#item-3
+                  - heading "AI 에이전트 스타트업, $1억 펀드 조성을 에이전트에게 맡겨" [level=3] [ref=f2e83]
+                - paragraph [ref=f2e84]: Lyzr가 자사 AI 에이전트로 펀드 조성에 성공한 점은, 해당 기술이 실제 비즈니스 문제를 해결할 수 있다는 강력한 실증 사례입니다. 기업 도입 시 신뢰성을 높이는 중요한 계기가 될 것으로 보입니다.
+                - paragraph [ref=f2e85]: Lyzr는 기업을 위한 AI 에이전트를 구축하는 스타트업으로, 자사의 AI 에이전트를 사용하여 1억 달러의 펀드를 조성했습니다. 이는 제품이 실제로 작동한다는 확실한 증거입니다.
+                - generic [ref=f2e86]:
+                  - generic [ref=f2e87]: TechCrunch AI
+                  - generic [ref=f2e88]: 해외
+                  - link "자세히 보기 →" [ref=f2e89] [cursor=pointer]:
+                    - /url: /briefing/2026-07-10-1/#item-3
+          - insertion [ref=f2e91]:
+            - iframe [ref=f2e93]:
+              
+          - article [ref=f2e94]:
+            - generic [ref=f2e95]:
+              - generic [ref=f2e96]: "4"
+              - generic [ref=f2e97]:
+                - link [ref=f2e98] [cursor=pointer]:
+                  - /url: /briefing/2026-07-10-1/#item-4
+                  - heading "우리는 가짜 동물의 AI 비디오가 필요하지 않습니다. 진짜 동물들이 존재하고 정말 귀엽습니다 | 레베카 쇼" [level=3] [ref=f2e99]
+                - paragraph [ref=f2e100]: 인공지능이 만든 가짜 동물보다 실제 동물의 자연스러운 매력을 중요시하는 관점이 공감됩니다. 실제 삶의 감정과 경험이 담긴 창작물을 소중히 여겨야 한다는 메시지가 인상적입니다.
+                - paragraph [ref=f2e101]: 생성 AI로 만들어진 것에 대해 기쁘게 생각할 수 없습니다. 복잡한 사람들에 의해 쓰여진 책, 순수한 사람들의 그림, 감정을 가진 이들이 부른 노래가 필요합니다. 생성 AI는 너무 지나쳤습니다.
+                - generic [ref=f2e102]:
+                  - generic [ref=f2e103]: The Guardian AI
+                  - generic [ref=f2e104]: 해외
+                  - link "자세히 보기 →" [ref=f2e105] [cursor=pointer]:
+                    - /url: /briefing/2026-07-10-1/#item-4
+          - article [ref=f2e106]:
+            - generic [ref=f2e107]:
+              - generic [ref=f2e108]: "5"
+              - generic [ref=f2e109]:
+                - link [ref=f2e110] [cursor=pointer]:
+                  - /url: /briefing/2026-07-10-1/#item-5
+                  - 'heading "오르카 보안 보고서: AI 도입 시 99.9%의 수정 가능한 취약점이 패치되지 않음" [level=3] [ref=f2e111]'
+                - paragraph [ref=f2e112]: AI 도입과 보안 관리의 괴리가 99.9%의 취약점 방치로 이어지는 상황은 기업들에게 심각한 경고입니다.
+                - paragraph [ref=f2e113]: 1,200개 이상의 생산 클라우드 환경에 대한 분석은 조직들이 AI를 비즈니스 핵심 워크플로우에 통합하는 방식에 대한 직접적인 통찰력을 제공합니다. 이는 기존 보안 통제가 해결하지 못한 새로운 보안 위험을 노출시키고 있습니다.
+                - generic [ref=f2e114]:
+                  - generic [ref=f2e115]: City AM
+                  - generic [ref=f2e116]: 해외
+                  - link "자세히 보기 →" [ref=f2e117] [cursor=pointer]:
+                    - /url: /briefing/2026-07-10-1/#item-5
+          - article [ref=f2e118]:
+            - generic [ref=f2e119]:
+              - generic [ref=f2e120]: "6"
+              - generic [ref=f2e121]:
+                - link [ref=f2e122] [cursor=pointer]:
+                  - /url: /briefing/2026-07-10-1/#item-6
+                  - heading "일론 머스크, Mythos/Fable을 칭찬하며 Anthropic을 ‘차단하지 않겠다’ 약속" [level=3] [ref=f2e123]
+                - paragraph [ref=f2e124]: 일론 머스크는 Anthropic의 모델인 Mythos/Fable을 높이 평가하며, 해당 기업이 신뢰할 수 있다고 주장해 약 400억 달러에 달하는 관련 사업을 차단하지 않겠다는 의지를 밝혔습니다. 이는 AI 업계 내 주요 기업 간의 신뢰와 협력 관계에 영향을 미칠 수 있는 주목할 만한 발언입니다.
+                - paragraph [ref=f2e125]: Anthropic은 일론 머스크가 자신의 모델을 호스팅하는 것을 신뢰할 수 있을까요? 약 400억 달러의 수익이 걸려 있는 상황에서, 머스크는 해당 기업이 신뢰할 수 있다고 주장하고 있습니다.
+                - generic [ref=f2e126]:
+                  - generic [ref=f2e127]: TechCrunch AI
+                  - generic [ref=f2e128]: 해외
+                  - link "자세히 보기 →" [ref=f2e129] [cursor=pointer]:
+                    - /url: /briefing/2026-07-10-1/#item-6
+        - link "이전 브리핑 보기 →" [ref=f2e131] [cursor=pointer]:
+          - /url: /briefing/
+      - generic [ref=f2e134]:
+        - paragraph [ref=f2e135]: 📧 매일 아침 AI 브리핑 받아보기
+        - generic [ref=f2e136]:
+          - textbox "이메일 주소" [ref=f2e137]
+          - button "구독" [ref=f2e138] [cursor=pointer]
+      - generic [ref=f2e140]:
+        - generic [ref=f2e141]:
+          - generic [ref=f2e142]:
+            - generic [ref=f2e143]: 📝
+            - heading "최신 블로그" [level=2] [ref=f2e144]
+          - link "전체 보기 →" [ref=f2e145] [cursor=pointer]:
+            - /url: /blog
+        - generic [ref=f2e146]:
+          - link "AI 에이전트 펀드레이징 완수, 자사 AI가 1억 달러 투자 유치 주도 뉴스 2026년 7월 10일 AI 에이전트 펀드레이징 완수, 자사 AI가 1억 달러 투자 유치 주도 AI 스타트업 Lyzr가 자사 AI 에이전트로 100만 달러 규모의 투자를 유치한 사례를 심층 분석합니다." [ref=f2e147] [cursor=pointer]:
+            - /url: /blog/2026-07-10-ai-에이전트-스타트업-1억-펀드-조성을-에이전트에게-맡겨/
+            - img "AI 에이전트 펀드레이징 완수, 자사 AI가 1억 달러 투자 유치 주도" [ref=f2e149]
+            - generic [ref=f2e150]:
+              - generic [ref=f2e151]:
+                - generic [ref=f2e152]: 뉴스
+                - generic [ref=f2e153]: 2026년 7월 10일
+              - heading "AI 에이전트 펀드레이징 완수, 자사 AI가 1억 달러 투자 유치 주도" [level=2] [ref=f2e154]
+              - paragraph [ref=f2e155]: AI 스타트업 Lyzr가 자사 AI 에이전트로 100만 달러 규모의 투자를 유치한 사례를 심층 분석합니다.
+          - link "GPT-5.6 모델군 출시, OpenAI의 코드 경쟁과 사이버보안 전략 심층분석 뉴스 2026년 7월 10일 GPT-5.6 모델군 출시, OpenAI의 코드 경쟁과 사이버보안 전략 심층분석 OpenAI가 GPT-5.6 모델군을 공개하며 Anthropic과의 코딩 벤치마록 경쟁, 사이버보안 전략, 한국 기업에 미치는 영향을 분석합니다" [ref=f2e156] [cursor=pointer]:
+            - /url: /blog/2026-07-10-openai-gpt-5-6-모델군-출시/
+            - img "GPT-5.6 모델군 출시, OpenAI의 코드 경쟁과 사이버보안 전략 심층분석" [ref=f2e158]
+            - generic [ref=f2e159]:
+              - generic [ref=f2e160]:
+                - generic [ref=f2e161]: 뉴스
+                - generic [ref=f2e162]: 2026년 7월 10일
+              - heading "GPT-5.6 모델군 출시, OpenAI의 코드 경쟁과 사이버보안 전략 심층분석" [level=2] [ref=f2e163]
+              - paragraph [ref=f2e164]: OpenAI가 GPT-5.6 모델군을 공개하며 Anthropic과의 코딩 벤치마록 경쟁, 사이버보안 전략, 한국 기업에 미치는 영향을 분석합니다
+          - link "구글 AI 광고 공개 기능, 자율 규제의 함정과 한국 시장 영향 분석 뉴스 2026년 7월 10일 구글 AI 광고 공개 기능, 자율 규제의 함정과 한국 시장 영향 분석 구글의 AI 광고 공개 기능은 투명성을 강화하지만, 자율 신고 체계의 한계와 EU 규제 대응으로서의 의미를 분석합니다." [ref=f2e165] [cursor=pointer]:
+            - /url: /blog/2026-07-10-구글-광고주가-ai로-만든-광고를-인정할-경우-알림-기능-제공/
+            - img "구글 AI 광고 공개 기능, 자율 규제의 함정과 한국 시장 영향 분석" [ref=f2e167]
+            - generic [ref=f2e168]:
+              - generic [ref=f2e169]:
+                - generic [ref=f2e170]: 뉴스
+                - generic [ref=f2e171]: 2026년 7월 10일
+              - heading "구글 AI 광고 공개 기능, 자율 규제의 함정과 한국 시장 영향 분석" [level=2] [ref=f2e172]
+              - paragraph [ref=f2e173]: 구글의 AI 광고 공개 기능은 투명성을 강화하지만, 자율 신고 체계의 한계와 EU 규제 대응으로서의 의미를 분석합니다.
+      - generic [ref=f2e175]:
+        - generic [ref=f2e176]:
+          - generic [ref=f2e177]:
+            - generic [ref=f2e178]: 📚
+            - heading "AI 강좌" [level=2] [ref=f2e179]
+          - link "전체 강좌 →" [ref=f2e180] [cursor=pointer]:
+            - /url: /blog
+        - generic [ref=f2e181]:
+          - link "자체 모델 출시하는 바이브 코딩 플랫폼, AI 스타트업 방어 전략의 새로운 기준 강좌 자체 모델 출시하는 바이브 코딩 플랫폼, AI 스타트업 방어 전략의 새로운 기준 Base44의 자체 AI 모델 개발이 의미하는 것. AI 스타트업의 생존 전략, 데이터 주권, 그리고 한국 개발자에게 주는 시사점을 심층 분석합니다. 자세히 보기 →" [ref=f2e182] [cursor=pointer]:
+            - /url: /blog/2026-07-01-vibe-코딩-플랫폼-base44-ai-스타트업-방어력을-위해-자체-모델-출시/
+            - img "자체 모델 출시하는 바이브 코딩 플랫폼, AI 스타트업 방어 전략의 새로운 기준" [ref=f2e185]
+            - generic [ref=f2e186]:
+              - text: 강좌
+              - heading "자체 모델 출시하는 바이브 코딩 플랫폼, AI 스타트업 방어 전략의 새로운 기준" [level=3] [ref=f2e187]
+              - paragraph [ref=f2e188]: Base44의 자체 AI 모델 개발이 의미하는 것. AI 스타트업의 생존 전략, 데이터 주권, 그리고 한국 개발자에게 주는 시사점을 심층 분석합니다.
+              - generic [ref=f2e189]: 자세히 보기 →
+          - link "비기술자도 쉽게 쓰는 GitHub Copilot 활용법 코딩 몰라도 되는 실전 가이드 강좌 비기술자도 쉽게 쓰는 GitHub Copilot 활용법 코딩 몰라도 되는 실전 가이드 코딩을 전혀 모르는 기획자 PM 마케터도 GitHub Copilot으로 문서 자동화, 요구사항 정리, 데이터 분석, 아이디어를 앱으로 만드는 바이브코딩까지 실전 활용법을 안내합니다 자세히 보기 →" [ref=f2e190] [cursor=pointer]:
+            - /url: /blog/2026-06-10-008-비기술자도-쉽게-쓰는-github-copilot-활용법-코딩-몰라도/
+            - img "비기술자도 쉽게 쓰는 GitHub Copilot 활용법 코딩 몰라도 되는 실전 가이드" [ref=f2e193]
+            - generic [ref=f2e194]:
+              - text: 강좌
+              - heading "비기술자도 쉽게 쓰는 GitHub Copilot 활용법 코딩 몰라도 되는 실전 가이드" [level=3] [ref=f2e195]
+              - paragraph [ref=f2e196]: 코딩을 전혀 모르는 기획자 PM 마케터도 GitHub Copilot으로 문서 자동화, 요구사항 정리, 데이터 분석, 아이디어를 앱으로 만드는 바이브코딩까지 실전 활용법을 안내합니다
+              - generic [ref=f2e197]: 자세히 보기 →
+          - link "클릭 온 인공지능 AI 시즌1 전 국민 AI 체험 축제 시작 참여 방법과 의미 강좌 클릭 온 인공지능 AI 시즌1 전 국민 AI 체험 축제 시작 참여 방법과 의미 과기정통부와 교육부가 5월 27일부터 6주간 전 국민 AI 체험 축제 클릭 온 인공지능 시즌1을 개최한다. 100만 명 이상 참여 목표의 배경과 AI 리터러시 정책의 의미를 분석한다. 자세히 보기 →" [ref=f2e198] [cursor=pointer]:
+            - /url: /blog/2026-05-28-008-클릭-온-인공지능-ai-시즌1-전-국민-ai/
+            - img "클릭 온 인공지능 AI 시즌1 전 국민 AI 체험 축제 시작 참여 방법과 의미" [ref=f2e201]
+            - generic [ref=f2e202]:
+              - text: 강좌
+              - heading "클릭 온 인공지능 AI 시즌1 전 국민 AI 체험 축제 시작 참여 방법과 의미" [level=3] [ref=f2e203]
+              - paragraph [ref=f2e204]: 과기정통부와 교육부가 5월 27일부터 6주간 전 국민 AI 체험 축제 클릭 온 인공지능 시즌1을 개최한다. 100만 명 이상 참여 목표의 배경과 AI 리터러시 정책의 의미를 분석한다.
+              - generic [ref=f2e205]: 자세히 보기 →
+      - link "AIKeep24 AIKeep24 AGPL-3.0 Open Source AI 대화를 자동 요약·태깅·저장하는 크롬 확장 프로그램. 로컬 LLM으로 프라이버시를 지키면서 대화 맥락을 영구 보존합니다. EXAONE 3.5 7.8B Cloudflare Vectorize Chrome Extension 벡터 시맨틱 검색 120+ 세션 793 청크 12,525 대화 턴 1,825 코드 라인 GitHub Stars" [ref=f2e208] [cursor=pointer]:
+        - /url: /aikeep24/
+        - generic [ref=f2e211]:
+          - img "AIKeep24" [ref=f2e213]
+          - generic [ref=f2e214]:
+            - generic [ref=f2e215]:
+              - heading "AIKeep24" [level=3] [ref=f2e216]
+              - generic [ref=f2e217]: AGPL-3.0
+            - generic [ref=f2e218]: Open Source
+            - paragraph [ref=f2e221]: AI 대화를 자동 요약·태깅·저장하는 크롬 확장 프로그램. 로컬 LLM으로 프라이버시를 지키면서 대화 맥락을 영구 보존합니다.
+            - generic [ref=f2e222]:
+              - generic [ref=f2e223]: EXAONE 3.5 7.8B
+              - generic [ref=f2e224]: Cloudflare Vectorize
+              - generic [ref=f2e225]: Chrome Extension
+              - generic [ref=f2e226]: 벡터 시맨틱 검색
+            - generic [ref=f2e227]:
+              - generic [ref=f2e228]:
+                - generic [ref=f2e229]: 120+
+                - generic [ref=f2e230]: 세션
+              - generic [ref=f2e231]:
+                - generic [ref=f2e232]: "793"
+                - generic [ref=f2e233]: 청크
+              - generic [ref=f2e234]:
+                - generic [ref=f2e235]: 12,525
+                - generic [ref=f2e236]: 대화 턴
+              - generic [ref=f2e237]:
+                - generic [ref=f2e238]: 1,825
+                - generic [ref=f2e239]: 코드 라인
+            - img "GitHub Stars" [ref=f2e241]
+      - generic [ref=f2e243]:
+        - generic [ref=f2e244]:
+          - heading "서브 프로젝트" [level=2] [ref=f2e245]
+          - paragraph [ref=f2e246]: AI코리아24에서 운영하는 프로젝트들
+        - generic [ref=f2e247]:
+          - link "AI 문화유산 가이드 AI 문화유산 가이드 AI로 만나는 한국 문화유산 여행 가이드 바로가기 →" [ref=f2e248] [cursor=pointer]:
+            - /url: https://heritage.aikorea24.kr
+            - img "AI 문화유산 가이드" [ref=f2e249]
+            - heading "AI 문화유산 가이드" [level=3] [ref=f2e250]
+            - paragraph [ref=f2e251]: AI로 만나는 한국 문화유산 여행 가이드
+            - generic [ref=f2e252]: 바로가기 →
+          - link "자격증 소개 자격증 소개 국가자격증 시험일정을 한눈에 확인 바로가기 →" [ref=f2e253] [cursor=pointer]:
+            - /url: https://cert.aikorea24.kr
+            - img "자격증 소개" [ref=f2e254]
+            - heading "자격증 소개" [level=3] [ref=f2e255]
+            - paragraph [ref=f2e256]: 국가자격증 시험일정을 한눈에 확인
+            - generic [ref=f2e257]: 바로가기 →
+          - link "뉴스 키워드 인사이트 Pro 뉴스 키워드 인사이트 Pro 뉴스 키워드를 데이터로 분석하고 시각화 바로가기 →" [ref=f2e258] [cursor=pointer]:
+            - /url: https://keyword.aikorea24.kr
+            - img "뉴스 키워드 인사이트 Pro" [ref=f2e259]
+            - heading "뉴스 키워드 인사이트 Pro" [level=3] [ref=f2e260]
+            - paragraph [ref=f2e261]: 뉴스 키워드를 데이터로 분석하고 시각화
+            - generic [ref=f2e262]: 바로가기 →
+          - link "한국인 AI 페르소나 한국인 AI 페르소나 나와 비슷한 한국인의 금융·보험·투자 패턴을 AI로 분석 바로가기 →" [ref=f2e263] [cursor=pointer]:
+            - /url: https://persona.aikorea24.kr
+            - img "한국인 AI 페르소나" [ref=f2e264]
+            - heading "한국인 AI 페르소나" [level=3] [ref=f2e265]
+            - paragraph [ref=f2e266]: 나와 비슷한 한국인의 금융·보험·투자 패턴을 AI로 분석
+            - generic [ref=f2e267]: 바로가기 →
+      - generic [ref=f2e270]:
+        - heading "AI, 지금 바로 시작하세요" [level=2] [ref=f2e271]
+        - paragraph [ref=f2e272]: 어렵지 않습니다. ChatGPT 하나부터 차근차근, AI코리아24가 안내합니다.
+        - generic [ref=f2e273]:
+          - link "블로그 보기" [ref=f2e274] [cursor=pointer]:
+            - /url: /blog
+          - link "커뮤니티 참여" [ref=f2e275] [cursor=pointer]:
+            - /url: /community
+        - generic [ref=f2e276]:
+          - paragraph [ref=f2e277]: 📧 매일 아침 AI 브리핑 받아보기
+          - generic [ref=f2e278]:
+            - textbox "이메일 주소" [ref=f2e279]
+            - button "구독" [ref=f2e280] [cursor=pointer]
+    - insertion [ref=f2e282]
+  - contentinfo [ref=f2e284]:
+    - generic [ref=f2e285]:
+      - generic [ref=f2e286]:
+        - generic [ref=f2e287]:
+          - heading "AI코리아24" [level=3] [ref=f2e288]
+          - paragraph [ref=f2e289]: AI, 누구나 쓸 수 있습니다.AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다.
+        - generic [ref=f2e290]:
+          - heading "바로가기" [level=3] [ref=f2e291]
+          - list [ref=f2e292]:
+            - listitem [ref=f2e293]:
+              - link "블로그" [ref=f2e294] [cursor=pointer]:
+                - /url: /blog
+            - listitem [ref=f2e295]:
+              - link "AI 도구" [ref=f2e296] [cursor=pointer]:
+                - /url: /tools
+            - listitem [ref=f2e297]:
+              - link "AI 용어사전" [ref=f2e298] [cursor=pointer]:
+                - /url: /glossary
+            - listitem [ref=f2e299]:
+              - link "AI 타임라인" [ref=f2e300] [cursor=pointer]:
+                - /url: /chronicle
+            - listitem [ref=f2e301]:
+              - link "도구 추천 퀴즈" [ref=f2e302] [cursor=pointer]:
+                - /url: /tools/finder/
+            - listitem [ref=f2e303]:
+              - link "문의" [ref=f2e304] [cursor=pointer]:
+                - /url: /contact
+        - generic [ref=f2e305]:
+          - heading "법적 고지" [level=3] [ref=f2e306]
+          - list [ref=f2e307]:
+            - listitem [ref=f2e308]:
+              - link "개인정보처리방침" [ref=f2e309] [cursor=pointer]:
+                - /url: /privacy
+            - listitem [ref=f2e310]:
+              - link "이용약관" [ref=f2e311] [cursor=pointer]:
+                - /url: /terms
+        - generic [ref=f2e312]:
+          - heading "서브 프로젝트" [level=3] [ref=f2e313]
+          - list [ref=f2e314]:
+            - listitem [ref=f2e315]:
+              - link "AI 문화유산 가이드 프로젝트" [ref=f2e316] [cursor=pointer]:
+                - /url: https://heritage.aikorea24.kr
+            - listitem [ref=f2e317]:
+              - link "자격증 소개 프로젝트" [ref=f2e318] [cursor=pointer]:
+                - /url: https://cert.aikorea24.kr
+            - listitem [ref=f2e319]:
+              - link "뉴스 키워드 인사이트 Pro" [ref=f2e320] [cursor=pointer]:
+                - /url: https://keyword.aikorea24.kr
+      - generic [ref=f2e321]:
+        - paragraph [ref=f2e322]: "스타일 팩토리9 | 대표: 조진연 | 사업자등록번호: 672-43-00632"
+        - paragraph [ref=f2e323]: 경기도 의정부시 호암로 256, 107-1804 (우 11638) | info@aikorea24.kr
+        - paragraph [ref=f2e324]: 본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다.
+        - paragraph [ref=f2e325]:
+          - text: © 2026 AI코리아24. All rights reserved.
+          - link "네트워크" [ref=f2e326] [cursor=pointer]:
+            - /url: /network/
+  - button "공유하기" [ref=f2e328] [cursor=pointer]
+  - generic: 링크가 복사되었습니다!

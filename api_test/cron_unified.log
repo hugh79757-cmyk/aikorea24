@@ -18581,3 +18581,238 @@ aikorea24 뉴스 수집 v4.0 - 2026-07-10 05:30
   ⚠ Vectorize 클라이언트 미설치 — 스킵
   ✅ Cloudflare 캐시 purge 완료 (7개 URL)
 ============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-07-10 19:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 7건
+  MIT Tech Review: 7건
+  Ars Technica AI: 7건
+  VentureBeat AI: 6건
+  SCMP China Tech: 7건
+  The Decoder: 7건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 4건
+  OpenAI Blog: 7건
+  Google AI Blog: 7건
+  Ben's Bites: 5건
+  GitHub Blog: 2건
+  Simon Willison: 0건
+  HuggingFace Blog: 7건
+  Interconnects AI: 7건
+  CNN Technology: 0건
+  Reuters Technology (via Google News): 7건
+  Business Insider AI: 0건
+  NYT Technology: 7건
+  Washington Post Technology: 1건
+  BBC Technology: 2건
+  NYT AI Spotlight: 7건
+  The Guardian AI: 7건
+  Financial Times AI: 7건
+  Fast Company AI: 7건
+  The Next Web: 3건
+  City AM: 4건
+  CNBC Tech: 7건
+  The National News: 2건
+  NL Times: 0건
+  Herald Scotland: 0건
+  Guardian US News: 3건
+  Axios: 7건
+  Politico EU Tech: 7건
+  NVIDIA Newsroom 실패: syntax error: line 5, column 0
+  SEC Press Releases: 0건
+  Nature ML: 7건
+  Al Jazeera AI (via Google News): 7건
+  Anthropic News (via Google News): 7건
+  Memphis Flyer: 0건
+  Hacker News: 15건
+  유사 중복 제거: 21건
+  해외 중복제거 후: 180건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 4건
+  IT조선: 15건
+  인공지능신문: 15건
+  디지털투데이: 2건
+  IT조선 RSS 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 5건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 0건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 4건
+
+  [KR-5] 기업마당 소상공인 AI 지원사업
+  기존 D1 항목: 제목 15676개, 링크 15767개
+  기업마당 전체 공고: 1589건, 가져온 건: 200건
+  AI/디지털/소상공인 필터 통과: 21건
+  유사 중복 제거: 16건
+  국내 중복제거 후: 68건
+
+[비율] 해외: 180건(73%) | 국내: 68건(27%)
+
+[최종] 통합 중복제거 후: 248건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 180건 → 18배치 (5스레드 병렬)
+    배치 2: 10건 완료
+    배치 1: 10건 완료
+    배치 5: 10건 완료
+    배치 4: 10건 완료
+    배치 3: 10건 완료
+    배치 6: 10건 완료
+    배치 7: 10건 완료
+    배치 9: 10건 완료
+    배치 8: 10건 완료
+    배치 10: 10건 완료
+    배치 12: 10건 완료
+    배치 11: 10건 완료
+    배치 14: 10건 완료
+    배치 13: 10건 완료
+    배치 15: 10건 완료
+    배치 17: 10건 완료
+    배치 16: 10건 완료
+    배치 18: 10건 완료
+  번역 완료: 180건 (18배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 제목 15676개, 링크 15767개
+  제목 중복: 13건, 링크 중복: 117건
+  배치 1: 50건 시도 → 49건 실제 저장
+  배치 2: 50건 시도 → 48건 실제 저장
+  배치 3: 18건 시도 → 19건 실제 저장
+  신규: 116건 | 중복 스킵: 130건
+
+============================================================
+완료! 총 116건 저장
+  ⚠ Vectorize 클라이언트 미설치 — 스킵
+  ✅ Cloudflare 캐시 purge 완료 (7개 URL)
+============================================================
+============================================================
+aikorea24 뉴스 수집 v4.0 - 2026-07-11 05:30
+소스: all | 목표: 해외50% 국내50% | 전체 AI필터
+============================================================
+
+[해외 뉴스 수집]
+  TechCrunch AI: 7건
+  MIT Tech Review: 7건
+  Ars Technica AI: 7건
+  VentureBeat AI: 6건
+  SCMP China Tech: 7건
+  The Decoder: 7건
+  The Verge AI: 0건
+  Wired AI: 7건
+  ZDNET AI: 3건
+  OpenAI Blog: 7건
+  Google AI Blog: 7건
+  Ben's Bites: 5건
+  GitHub Blog: 3건
+  Simon Willison: 0건
+  HuggingFace Blog: 7건
+  Interconnects AI: 7건
+  CNN Technology: 0건
+  Reuters Technology (via Google News): 7건
+  Business Insider AI: 0건
+  NYT Technology: 7건
+  Washington Post Technology: 1건
+  BBC Technology: 2건
+  NYT AI Spotlight: 7건
+  The Guardian AI: 7건
+  Financial Times AI: 7건
+  Fast Company AI: 7건
+  The Next Web: 4건
+  City AM: 2건
+  CNBC Tech: 7건
+  The National News: 4건
+  NL Times: 0건
+  Herald Scotland: 1건
+  Guardian US News: 1건
+  Axios: 7건
+  Politico EU Tech: 7건
+  NVIDIA Newsroom 실패: syntax error: line 5, column 0
+  SEC Press Releases 실패: HTTP Error 503: Service Unavailable
+  Nature ML: 7건
+  Al Jazeera AI (via Google News): 7건
+  Anthropic News (via Google News): 7건
+  Memphis Flyer: 0건
+  Hacker News: 15건
+  유사 중복 제거: 24건
+  해외 중복제거 후: 177건
+
+[국내 뉴스 수집]
+
+  [KR-1] 국내 AI 매체 RSS
+  AI타임스: 15건
+  전자신문: 1건
+  IT조선: 15건
+  인공지능신문: 15건
+  디지털투데이: 2건
+  IT조선 RSS 실패: <urlopen error [Errno 8] nodename nor servname provided, or not known>
+  GeekNews: 0건
+
+  [KR-2] 네이버 뉴스 (보조)
+    '인공지능 AI 최신': 3건
+    'AI 스타트업': 5건
+
+  [KR-3] 과기부 사업공고
+  과기부 사업공고: 0건
+
+  [KR-4] 과기부 보도자료
+  과기부 보도자료: 4건
+
+  [KR-5] 기업마당 소상공인 AI 지원사업
+  기존 D1 항목: 제목 15789개, 링크 15880개
+  기업마당 전체 공고: 1479건, 가져온 건: 200건
+  AI/디지털/소상공인 필터 통과: 10건
+  유사 중복 제거: 12건
+  국내 중복제거 후: 58건
+
+[비율] 해외: 177건(75%) | 국내: 58건(25%)
+
+[최종] 통합 중복제거 후: 235건
+
+[번역] 해외 뉴스 한국어 번역...
+  번역 대상: 177건 → 18배치 (5스레드 병렬)
+    배치 2: 10건 완료
+    배치 5: 10건 완료
+    배치 1: 10건 완료
+    배치 3: 10건 완료
+    배치 4: 10건 완료
+    배치 6: 10건 완료
+    배치 7: 10건 완료
+    배치 8: 10건 완료
+    배치 9: 10건 완료
+    배치 10: 10건 완료
+    배치 11: 10건 완료
+    배치 12: 10건 완료
+    배치 13: 10건 완료
+    배치 15: 10건 완료
+    배치 17: 10건 완료
+    배치 14: 10건 완료
+    배치 16: 10건 완료
+    배치 18: 7건 완료
+  번역 완료: 177건 (18배치 병렬처리)
+
+[저장] D1 저장 중...
+  기존 D1 항목: 제목 15789개, 링크 15880개
+  제목 중복: 45건, 링크 중복: 138건
+  배치 1: 50건 시도 → 47건 실제 저장
+  배치 2: 2건 시도 → 3건 실제 저장
+  신규: 50건 | 중복 스킵: 183건
+
+============================================================
+완료! 총 50건 저장
+  ⚠ Vectorize 클라이언트 미설치 — 스킵
+  ✅ Cloudflare 캐시 purge 완료 (7개 URL)
+============================================================

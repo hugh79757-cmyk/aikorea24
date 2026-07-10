@@ -312,6 +312,38 @@ Plans:
 6. 본인 계정으로 등록 테스트 통과
 7. Brevo에 태그 `course-enrolled-7day-starter` 정상 추가
 
+### Phase 20: 강좌 콘텐츠 완성 (Course Content Complete)
+**Goal**: 3개 강좌(제로·중간·히어로) 콘텐츠 전면 개편 및 전체 21일 분량 D1 시드 완료.
+**Mode**: ad-hoc
+**Depends on**: Phase 17, 18
+**Key outcomes**:
+1. **오케스트레이터 프레임 확정**: "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"
+2. **메타강의(day 0) 작성**: 로드맵 + 실제 사이트 링크 + 무료 철학 + 커뮤니티 약속
+3. **과목명 개편**: `7일 AI 입문` → `첫 AI, 7일 — AI에게 말로 일을 시키는 첫 7일`
+4. **중간 강좌(7day-infra) 설계·작성**: 0원 인프라, 7일 — 7개 레슨 (day 8~14)
+5. **시드 스크립트 개선**: `--update` UPSERT 모드 + courses UPDATE 지원
+6. **슬러그 확정**: `7day-starter` / `7day-infra` / `7day-agent`
+
+### Phase 21: 히어로 강좌 설계 (Pending)
+**Goal**: 무료 에이전트, 7일 — 7개 레슨 (day 15~21) 작성 및 D1 시드.
+**Mode**: ad-hoc
+**Depends on**: Phase 20
+**Status**: 설계 대기
+
+### Phase 22: 발송 시스템 활성화 (Deferred — 마지막)
+**Goal**: launchd plist 설치 + day 0 즉시 발송 hook + 3개 강좌 등록·발송·완강 사이클 운영.
+**Mode**: mvp
+**Depends on**: Phase 20, 21
+**Requirements**: CRS-07 ~ CRS-12
+**Status**: 코드 완료 (send-daily.ts, lesson-email.ts, track.ts) — 설치 대기
+**NOTE**: 모든 콘텐츠가 준비된 후 마지막에 활성화. 현재 launchd plist 미설치 상태.
+**남은 작업**:
+1. launchd plist 생성 및 설치 (`install_course_sender.sh` 실행)
+2. enroll.ts에 day 0 등록 즉시 발송 hook 추가
+3. 7day-infra 등록 오픈 (분기 로직 연동)
+4. 7day-agent 등록 오픈 (완성 후)
+5. 전체 사이클 E2E 테스트
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -335,5 +367,10 @@ Plans:
 | 14. Delimiter Reconfiguration | 1/1 | Complete   | 2026-07-05 |
 | 15. Vectorize + Crawl Fix + JSON Cards | ad-hoc | Complete   | 2026-07-07 |
 | 16. Writer prompt v2: jisang-aligned card structure | ad-hoc | Complete   | 2026-07-09 |
-| 17. 강좌 시스템 MVP-1: 등록 흐름 | pending | In Progress | 2026-07-10 |
-| **Total** | **36/36** | | |
+| 17. 강좌 시스템 MVP-1: 등록 흐름 | pending | Complete | 2026-07-10 |
+| 18. 체류 퍼널 재설계 | pending | Complete | 2026-07-10 |
+| 19. 강좌 시스템 MVP-3: 자동 발송 | 3/3 | Complete (코드, 미설치) | 2026-07-10 |
+| 20. 강좌 콘텐츠 완성 | ad-hoc | Complete | 2026-07-10 |
+| 21. 히어로 강좌 설계 | — | Pending | — |
+| 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
+| **Total** | **42/47** | | |

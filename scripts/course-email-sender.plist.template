@@ -1,0 +1,35 @@
+<!-- GENERATED from course-email-sender.plist.template. Do not edit directly. -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>kr.aikorea24.course-email-sender</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/bash</string>
+		<string>${SCRIPT_PATH}</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>${PROJECT_DIR}</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+		<key>CRON_SECRET</key>
+		<string>${CRON_SECRET}</string>
+		<key>SITE_URL</key>
+		<string>${SITE_URL}</string>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>${LOG_DIR}/launchd.log</string>
+	<key>StandardErrorPath</key>
+	<string>${LOG_DIR}/launchd_error.log</string>
+	<key>StartInterval</key>
+	<integer>3600</integer>
+	<key>KeepAlive</key>
+	<false/>
+	<key>RunAtLoad</key>
+	<false/>
+</dict>
+</plist>

@@ -40,7 +40,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
     ).bind(user.id, user.email, user.name, user.picture).run();
 
     const dbUser = await db.prepare(
-      `SELECT id, name, email, avatar FROM users WHERE google_id = ?`
+      `SELECT id, name, email, avatar, role FROM users WHERE google_id = ?`
     ).bind(user.id).first();
 
     const sessionData = await signSession(dbUser, (locals as any).sessionSecret);

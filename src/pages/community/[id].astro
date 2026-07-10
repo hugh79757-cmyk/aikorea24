@@ -1,10 +1,81 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { verifySession } from '../../lib/auth';
+import { verifySession, isOwner } from '../../lib/auth';
+import { marked } from 'marked';
+
+// HTML sanitizer: allows safe markdown-generated tags, strips script/event-handler
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/<object\b[^<]*(?:(?!<\/object>)<[^<]*)*<\/object>/gi, '')
+    .replace(/<embed\b[^<]*(?:(?!<\/embed>)<[^<]*)*<\/embed>/gi, '')
+    .replace(/\bon\w+\s*=\s*['"][^'"]*['"]/gi, '')
+    .replace(/\bon\w+\s*=\s*\S+/gi, '')
+    .replace(/javascript\s*:/gi, '');
+}
+
+function renderMarkdown(content: string | null | undefined): string {
+  if (!content) return '';
+  const raw = marked.parse(content, { async: false }) as string;
+  return sanitizeHtml(raw);
+}
+
+const AD_BLOCK = `<div style="text-align:center;margin:24px auto;max-width:728px;width:100%;overflow:hidden;">
+  <ins class="adsbygoogle"
+       style="display:block;width:100%;"
+       data-ad-client="ca-pub-5938862195544185"
+       data-ad-slot="3350911709"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>`;
+
+function insertInfeedAds(html: string): string {
+  if (!html) return '';
+  // Insert ad after first </p>
+  const firstP = html.indexOf('</p>');
+  let withTopAd = html;
+  if (firstP !== -1) {
+    const afterFirstP = firstP + 4;
+    withTopAd = html.slice(0, afterFirstP) + AD_BLOCK + html.slice(afterFirstP);
+  }
+  // Insert ad before last </p> (so it appears before the closing paragraph, after content)
+  const lastP = withTopAd.lastIndexOf('</p>');
+  if (lastP !== -1 && lastP > (firstP + 4)) {
+    withTopAd = withTopAd.slice(0, lastP) + AD_BLOCK + withTopAd.slice(lastP);
+  }
+  return withTopAd;
+}
+
+// category badge colors
+const categoryBadge: Record<string, string> = {
+  free: 'bg-blue-500/20 text-blue-300',
+  qna: 'bg-green-500/20 text-green-300',
+  news: 'bg-purple-500/20 text-purple-300',
+  tip: 'bg-yellow-500/20 text-yellow-300',
+  project: 'bg-pink-500/20 text-pink-300',
+  review: 'bg-orange-500/20 text-orange-300',
+  '강의': 'bg-violet-500/20 text-violet-300',
+};
+
+const categoryLabel: Record<string, string> = {
+  free: '자유게시판',
+  qna: '질문답변',
+  news: 'AI 뉴스',
+  tip: '꿀팁공유',
+  project: '프로젝트',
+  review: '툴 리뷰',
+  '강의': '📚 강의',
+};
 
 let currentUser = null;
+let isAdmin = false;
 const session = Astro.cookies.get('session')?.value;
-if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
+if (session) {
+  currentUser = await verifySession(session, Astro.locals.sessionSecret);
+  isAdmin = isOwner(currentUser);
+}
 
 const { id } = Astro.params;
 const db = Astro.locals.runtime?.env?.DB;
@@ -12,6 +83,9 @@ let post = null;
 let comments = [];
 let previewContent = '';
 let isGated = false;
+let notEnrolled = false; // true = logged in but not enrolled in this 강의 course
+let courseSlug = '';
+let courseDay = 0;
 let pageTitle = '게시글을 찾을 수 없습니다';
 let pageDesc = '게시글을 찾을 수 없습니다.';
 
@@ -54,10 +128,50 @@ if (db && id) {
     return { notFound: true };
   }
 
-  // MVP-2: visibility gate
-  if (post.visibility === 'members' && !currentUser) {
-    isGated = true;
-    previewContent = splitPreview(post.content || '');
+  // Visibility + enrollment gate (MVP-3)
+  if (post.visibility === 'members') {
+    if (post.category === '강의') {
+      // 방식 A: course_lessons에서 community_post_id로 course_slug 역조회
+      const lesson = await db.prepare(
+        `SELECT course_slug, day_number FROM course_lessons WHERE community_post_id = ?`
+      ).bind(id).first<any>();
+
+      if (lesson) {
+        courseSlug = lesson.course_slug;
+        courseDay = lesson.day_number;
+
+        if (!currentUser) {
+          // 비로그인 + 강의 글 → 미리보기 + 게이트 (강좌 신청 CTA + 로그인 링크)
+          isGated = true;
+          previewContent = splitPreview(post.content || '');
+        } else {
+          // 로그인 + 강의 글 → enrollment 검증 (옵션 X: 등록 즉시 전체 공개)
+          const enrollment = await db.prepare(
+            `SELECT id FROM enrollments WHERE user_id = ? AND course_slug = ?`
+          ).bind(currentUser.id, lesson.course_slug).first<any>();
+
+          if (!enrollment) {
+            // 로그인 + 미등록 → 미리보기 + 게이트 ("이 강의는 수강생 전용입니다")
+            isGated = true;
+            notEnrolled = true;
+            previewContent = splitPreview(post.content || '');
+          }
+          // 등록 완료 → isGated false, 전체 본문 표시
+        }
+      } else {
+        // course_lessons 매핑 없음 → 일반 members 게시글처럼 처리
+        if (!currentUser) {
+          isGated = true;
+          previewContent = splitPreview(post.content || '');
+        }
+      }
+    } else {
+      // 일반 members 글 (강의 아님) → 기존 로직 유지, enrollment 검증 안 함
+      if (!currentUser) {
+        isGated = true;
+        previewContent = splitPreview(post.content || '');
+      }
+    }
   }
 
   const commentResult = await db.prepare(`
@@ -86,7 +200,7 @@ if (Astro.request.method === 'POST' && currentUser && db) {
         <>
           <div class="mb-8">
             <div class="flex items-center gap-2 mb-3">
-              <span class="text-[10px] bg-white/[0.1] text-gray-300 px-2 py-0.5 rounded-full">{post.category}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full {categoryBadge[post.category] || 'bg-white/[0.1] text-gray-300'}">{categoryLabel[post.category] || post.category}</span>
               <span class="text-sm text-gray-500">조회 {post.views}</span>
             </div>
             <h1 class="text-2xl font-bold mb-4">{post.title}</h1>
@@ -95,26 +209,96 @@ if (Astro.request.method === 'POST' && currentUser && db) {
               <span class="text-sm text-gray-400">{post.author}</span>
               <span class="text-sm text-gray-600">{post.created_at?.slice(0, 10)}</span>
             </div>
-            <div class="bg-white/[0.05] border border-white/[0.08] rounded-xl p-6 whitespace-pre-wrap text-gray-300 leading-relaxed">{isGated ? previewContent : post.content}</div>
+            <div class="prose-container bg-white/[0.05] border border-white/[0.08] rounded-xl p-6 text-gray-300 leading-relaxed" set:html={isGated ? renderMarkdown(previewContent) : insertInfeedAds(renderMarkdown(post.content))}></div>
 
             {isGated && (
               <div class="mt-6 p-8 rounded-xl border border-blue-500/30 bg-gradient-to-b from-blue-900/20 to-purple-900/20 text-center">
                 <div class="text-3xl mb-3">🔒</div>
-                <h3 class="text-lg font-bold text-white mb-2">전체 내용을 보려면 로그인하세요</h3>
-                <p class="text-sm text-gray-400 mb-6">
-                  AI코리아24 커뮤니티 회원에게 전체 강좌 콘텐츠를 제공합니다.<br/>
-                  Google 계정 하나로 바로 시작할 수 있습니다.
-                </p>
-                <a href={`/auth/consent?redirect_to=/community/${id}`}
-                   class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
-                  Google 로그인
-                </a>
+                {notEnrolled ? (
+                  /* 로그인 + 미등록 + 강의 글 */
+                  <>
+                    <h3 class="text-lg font-bold text-white mb-2">수강생 전용 콘텐츠입니다</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                      이 레슨은 7일 강좌 수강생에게만 제공됩니다.<br/>
+                      지금 신청하고 모든 강의 콘텐츠를 이용하세요.
+                    </p>
+                    <a href="/courses/7day-starter/"
+                       class="inline-block bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-emerald-500 hover:to-teal-500 transition-all">
+                      📚 7일 강좌 신청하기
+                    </a>
+                  </>
+                ) : !currentUser && courseSlug ? (
+                  /* 비로그인 + 강의 글 */
+                  <>
+                    <h3 class="text-lg font-bold text-white mb-2">전체 내용을 보려면 로그인하세요</h3>
+                    <p class="text-sm text-gray-400 mb-4">
+                      이 레슨은 7일 강좌 수강생에게 공개됩니다.<br/>
+                      강좌 신청하고 로그인하면 계속 읽을 수 있습니다.
+                    </p>
+                    <div class="flex flex-col items-center gap-3">
+                      <a href="/courses/7day-starter/"
+                         class="inline-block bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-emerald-500 hover:to-teal-500 transition-all">
+                        📚 7일 강좌 신청하기
+                      </a>
+                      <a href={`/auth/consent?redirect_to=/community/${id}`}
+                         class="text-sm text-blue-400 hover:text-blue-300 underline">
+                        이미 수강생이라면 로그인
+                      </a>
+                    </div>
+                  </>
+                ) : (
+                  /* 비로그인 + 일반 members 글 */
+                  <>
+                    <h3 class="text-lg font-bold text-white mb-2">전체 내용을 보려면 로그인하세요</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                      AI코리아24 커뮤니티 회원에게 전체 콘텐츠를 제공합니다.<br/>
+                      Google 계정 하나로 바로 시작할 수 있습니다.
+                    </p>
+                    <a href={`/auth/consent?redirect_to=/community/${id}`}
+                       class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
+                      Google 로그인
+                    </a>
+                  </>
+                )}
                 <p class="text-xs text-gray-600 mt-4">
                   로그인하면 개인정보 수집·이용에 동의한 것으로 간주됩니다.
                 </p>
               </div>
             )}
+
+            {isAdmin && (
+              <div class="mt-4 flex items-center gap-2 p-3 rounded-lg bg-white/[0.03] border border-white/[0.06]">
+                <a href={`/community/${id}/edit`}
+                   class="px-3 py-1.5 rounded-md text-xs font-medium bg-blue-600/20 text-blue-300 hover:bg-blue-600/30 transition-colors">
+                  수정
+                </a>
+                <button id="btn-toggle-vis"
+                   class="px-3 py-1.5 rounded-md text-xs font-medium bg-yellow-600/20 text-yellow-300 hover:bg-yellow-600/30 transition-colors"
+                   data-post-id={id}
+                   data-current-vis={post.visibility}>
+                  {post.visibility === 'members' ? '→ Public' : '→ Members'}
+                </button>
+                <button id="btn-delete"
+                   class="px-3 py-1.5 rounded-md text-xs font-medium bg-red-600/20 text-red-300 hover:bg-red-600/30 transition-colors"
+                   data-post-id={id}>
+                  삭제
+                </button>
+                <span class="ml-auto text-xs text-gray-500">visibility: {post.visibility}</span>
+              </div>
+            )}
           </div>
+
+          {!isGated && (
+            <div style="text-align:center;margin:24px auto;max-width:728px;width:100%;overflow:hidden;">
+              <ins class="adsbygoogle"
+                   style="display:block;width:100%;"
+                   data-ad-client="ca-pub-5938862195544185"
+                   data-ad-slot="3350911709"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
+              <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+            </div>
+          )}
 
           <div class="mb-8">
             <h3 class="font-semibold mb-4">댓글 {comments.length}개</h3>
@@ -146,4 +330,39 @@ if (Astro.request.method === 'POST' && currentUser && db) {
       <a href="/community" class="inline-block mt-8 text-sm text-gray-500 hover:text-gray-300">← 목록으로</a>
     </div>
   </div>
+
+  <script>
+    // Visibility toggle
+    const btnVis = document.getElementById('btn-toggle-vis');
+    if (btnVis) {
+      btnVis.addEventListener('click', async () => {
+        const id = btnVis.dataset.postId;
+        const current = btnVis.dataset.currentVis;
+        const next = current === 'members' ? 'public' : 'members';
+        const res = await fetch(`/api/community/${id}/visibility/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ visibility: next }),
+        });
+        if (res.ok) location.reload();
+        else alert('변경 실패');
+      });
+    }
+
+    // Delete with confirmation
+    const btnDel = document.getElementById('btn-delete');
+    if (btnDel) {
+      btnDel.addEventListener('click', async () => {
+        const id = btnDel.dataset.postId;
+        if (!confirm('정말 삭제하시겠습니까?')) return;
+        const res = await fetch(`/api/community/${id}/delete/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({}),
+        });
+        if (res.ok) window.location.href = '/community';
+        else alert('삭제 실패');
+      });
+    }
+  </script>
 </Layout>

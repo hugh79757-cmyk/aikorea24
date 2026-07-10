@@ -39,12 +39,16 @@ export async function verifySession(signedSession: string, secret: string): Prom
 }
 
 // 세션에서 유저 정보 추출 (HMAC 검증 포함)
-export async function getSessionUser(cookies: any, secret: string): Promise<{ email: string; name: string } | null> {
+export async function getSessionUser(cookies: any, secret: string): Promise<{ id: number; email: string; name: string; role?: string } | null> {
   const session = cookies.get('session')?.value;
   if (!session) return null;
   const data = await verifySession(session, secret);
   if (!data || !data.email || !data.name) return null;
-  return { email: data.email, name: data.name };
+  return { id: data.id, email: data.email, name: data.name, role: data.role };
+}
+
+export function isOwner(user: { role?: string } | null): boolean {
+  return user?.role === 'owner';
 }
 
 // DB에서 유저 멤버십 조회

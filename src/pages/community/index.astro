@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { verifySession } from '../../lib/auth';
+import { verifySession, isOwner } from '../../lib/auth';
 
 const runtime = (Astro.locals as any).runtime;
 const db = runtime?.env?.DB;
@@ -51,6 +51,7 @@ const categoryMap: Record<string, string> = {
   tip: '꿀팁공유',
   project: '프로젝트',
   review: '🔧 툴 리뷰',
+  '강의': '📚 강의',
 };
 
 const categoryColors: Record<string, string> = {
@@ -60,14 +61,17 @@ const categoryColors: Record<string, string> = {
   tip: 'bg-yellow-500/20 text-yellow-300',
   project: 'bg-pink-500/20 text-pink-300',
   review: 'bg-orange-500/20 text-orange-300',
+  '강의': 'bg-violet-500/20 text-violet-300',
 };
 
 // 세션 확인
 const session = Astro.cookies.get('session')?.value;
 let loggedIn = false;
+let isAdmin = false;
 if (session) {
   const user = await verifySession(session, Astro.locals.sessionSecret);
   loggedIn = !!user;
+  isAdmin = isOwner(user);
 }
 
 // SEO 변수
@@ -119,32 +123,40 @@ const seoTitle = pageTitle + currentPageLabel;
         </div>
       ) : (
         posts.map((post: any) => (
-          <a href={`/community/${post.id}`} class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-white/5 border-b border-gray-800 transition cursor-pointer">
-            <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.id}</div>
-            <div class="col-span-2">
-              <span class={`inline-block px-2 py-1 rounded text-xs font-medium ${categoryColors[post.category] || 'bg-gray-500/20 text-gray-300'}`}>
-                {categoryMap[post.category] || post.category}
-              </span>
-            </div>
-            <div class="col-span-5">
-              <span class="text-white font-medium hover:text-blue-400 transition">{post.title}</span>
-              {post.visibility === 'members' && (
-                <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-purple-500/20 text-purple-300">회원전용</span>
-              )}
-              {post.access_level === 'basic' && (
-                <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-yellow-500/20 text-yellow-300">Basic</span>
-              )}
-              {post.access_level === 'premium' && (
-                <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-red-500/20 text-red-300">Premium</span>
-              )}
-              {post.comment_count > 0 && (
-                <span class="ml-2 text-blue-400 text-sm">[{post.comment_count}]</span>
-              )}
-            </div>
-            <div class="col-span-2 text-gray-400 text-sm">{post.author_name}</div>
-            <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.views}</div>
-            <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.created_at?.slice(5, 10)}</div>
-          </a>
+          <div>
+            <a href={`/community/${post.id}`} class="grid grid-cols-1 md:grid-cols-12 gap-2 md:gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-white/5 border-b border-gray-800 transition cursor-pointer">
+              <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.id}</div>
+              <div class="col-span-2">
+                <span class={`inline-block px-2 py-1 rounded text-xs font-medium ${categoryColors[post.category] || 'bg-gray-500/20 text-gray-300'}`}>
+                  {categoryMap[post.category] || post.category}
+                </span>
+              </div>
+              <div class="col-span-5">
+                <span class="text-white font-medium hover:text-blue-400 transition">{post.title}</span>
+                {post.visibility === 'members' && (
+                  <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-purple-500/20 text-purple-300">회원전용</span>
+                )}
+                {post.access_level === 'basic' && (
+                  <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-yellow-500/20 text-yellow-300">Basic</span>
+                )}
+                {post.access_level === 'premium' && (
+                  <span class="ml-2 px-1.5 py-0.5 rounded text-xs bg-red-500/20 text-red-300">Premium</span>
+                )}
+                {post.comment_count > 0 && (
+                  <span class="ml-2 text-blue-400 text-sm">[{post.comment_count}]</span>
+                )}
+              </div>
+              <div class="col-span-2 text-gray-400 text-sm">{post.author_name}</div>
+              <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.views}</div>
+              <div class="hidden md:block col-span-1 text-center text-gray-400 dark:text-gray-500 text-sm">{post.created_at?.slice(5, 10)}</div>
+            </a>
+            {isAdmin && (
+              <div class="flex items-center gap-2 px-6 pb-3 -mt-1">
+                <span class="text-[10px] text-gray-600">{post.visibility}</span>
+                <a href={`/community/${post.id}/edit`} class="text-[10px] text-blue-400 hover:text-blue-300 underline">수정</a>
+              </div>
+            )}
+          </div>
         ))
       )}
     </div>

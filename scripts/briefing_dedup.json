@@ -2135,6 +2135,144 @@
           "date": "2026-07-10"
         }
       ]
+    },
+    {
+      "date": "2026-07-10",
+      "briefing_id": 168,
+      "articles": [
+        {
+          "id": "40059",
+          "title": "OpenAI, Microsoft Copilot 365의 '선호 모델'로 GPT 5.6 발표",
+          "original_title": "",
+          "description": "OpenAI의 새로운 모델 패밀리는 Microsoft의 직장 및 생산성 앱 제품군을 지원할 예정이다. 이 발표는 최근의 분리에 대한 논의 속에서 이루어졌다.",
+          "link": "https://techcrunch.com/2026/07/09/openai-says-gpt-5-6-is-the-preferred-model-for-microsoft-copilot-amid-breakup-chatter/",
+          "entities": [
+            "Microsoft",
+            "GPT",
+            "OpenAI",
+            "Copilot"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "40092",
+          "title": "난야, AI 메모리 붐을 타고 2027년에 60억 달러 지출 계획",
+          "original_title": "",
+          "description": "난야 테크놀로지는 메모리 사업에서 여러 해 동안 뒤처진 업체였습니다. 그러나 AI 붐이 이 시장의 판도를 바꾸었고, 이 회사는 메모리 부족 문제를 해결하기 위해 2027년에 약 60억 달러를 지출할 계획입니다.",
+          "link": "https://thenextweb.com/news/nanya-6-billion-2027-ai-memory",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "40076",
+          "title": "리브스, AI 재교육을 기업에 약속하는 시티 '기술 협약' 발표 예정",
+          "original_title": "",
+          "description": "재무부 장관 레이첼 리브스는 바클레이스와 로이드와 같은 기업들이 AI 혁명에 대비해 수천 명의 금융업 종사자들을 재교육할 것을 약속하는 새로운 시티 '기술 협약'을 발표할 예정입니다. 이는 기술 혁명에 발맞추기 위한 방안으로, 많은 금융 근로자들의 기술 향상을 도모하고자 합니다.",
+          "link": "https://www.theguardian.com/business/2026/jul/10/rachel-reeves-city-skills-compact-ai-training",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "40062",
+          "title": "연준, AI 투자자 마크 앤드리슨에게 물가 안정 여부 조언 요청",
+          "original_title": "",
+          "description": "연준 의장 케빈 워시는 벤처 자본가 마크 앤드리슨을 경제적 영향에 대한 조언자로 임명했습니다. 워시는 AI를 \"상당한 디플레이션력\"으로 보고 있지만, 앤드리슨의 투자 회사는 AI 기업에 크게 투자하고 있어 이해 상충 문제를 제기하고 있습니다.",
+          "link": "https://the-decoder.com/the-fed-wants-ai-investor-marc-andreessen-to-help-figure-out-if-ai-can-tame-inflation/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "40063",
+          "title": "번, 클로드 페이블 5의 도움으로 지그에서 러스트로 전환하며 11일 동안 100만 라인 코",
+          "original_title": "",
+          "description": "자바스크립트 도구인 번은 지그에서 러스트로 완전히 재작성되었으며, 안트로픽의 페이블 5가 대부분의 작업을 수행했습니다. 이 기사가 처음으로 더코더에 게재되었습니다.",
+          "link": "https://the-decoder.com/bun-ditches-zig-for-rust-with-help-from-claude-fable-5-writes-over-a-million-lines-of-code-in-11-days/",
+          "entities": [],
+          "date": "2026-07-10"
+        },
+        {
+          "id": "40067",
+          "title": "새로운 체험 갤러리가 AI 예술에 대한 당신의 생각을 바꿀지도 모른다",
+          "original_title": "",
+          "description": "\"세계 최초의 AI 예술 박물관\"으로 불리는 Dataland는 착용 장치와 아마존의 방대한 자료를 활용하여 자연, 생체 인식 및 예술을 융합하고 있습니다.",
+          "link": "https://www.wired.com/story/a-new-experiential-gallery-just-might-change-your-mind-about-ai-art/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-10"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-11",
+      "briefing_id": 169,
+      "articles": [
+        {
+          "id": "40177",
+          "title": "애플, 기밀 유출 혐의로 OpenAI를 고소하다",
+          "original_title": "",
+          "description": "애플은 이 잘못된 행위가 OpenAI의 고위 경영진, 특히 한 오랜 전 직원에 의해 주도되었다고 주장하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/10/apple-sues-openai-over-alleged-trade-secret-theft/",
+          "entities": [],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40191",
+          "title": "시스템 드리프트 모니터링이 조직 회복력의 다음 단계로 안내할 수 있다",
+          "original_title": "",
+          "description": "인공지능은 점점 더 상호 연결된 기업 생태계를 창출하는 것처럼 보이며, 조직이 운영 전반에 걸쳐 기술을 관리하는 복잡성을 확장합니다. AI가 중요한 워크플로에 더 깊이 내재화됨에 따라 시스템 의존성을 유지하는 것이 중요해 보입니다.",
+          "link": "https://thenextweb.com/news/systemic-drift-ai-organizational-resilience",
+          "entities": [],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40195",
+          "title": "AI 경쟁이 더 큰 모델에서 더 저렴하고 스마트한 시스템으로 이동하고 있다",
+          "original_title": "",
+          "description": "기업들은 이제 단순히 리더보드 순위가 아닌 작업, 비용 및 통제 기준으로 AI 모델을 선택하기 시작하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/07/10/the-ai-race-is-shifting-from-bigger-models-to-cheaper-smarter-systems.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40182",
+          "title": "애플, 오픈AI를 하드웨어 비밀 절취로 고소하다",
+          "original_title": "",
+          "description": "아이폰 제조업체인 애플은 오픈AI가 채용한 직원들이 기밀 프레젠테이션, 비밀 프로토타입 및 주요 공급업체 정보를 가져오도록 유도했다고 주장하고 있습니다.",
+          "link": "https://www.wired.com/story/apple-sues-openai-allegedly-stealing-ip-hardware/",
+          "entities": [],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40065",
+          "title": "메타의 뮤즈 스파크 1.1 API 가격, AI 가격 전쟁으로 오픈AI와 안트로픽의 압박",
+          "original_title": "",
+          "description": "메타는 뮤즈 스파크 1.1과 함께 AI API 사업에 진출하며, 어제 출시된 저렴한 그록 4.5보다도 낮은 가격으로 제공합니다. 메타는 출력 토큰 100만 개당 4.25달러를 청구하며, 이는 안트로픽이나 오픈AI가 요구하는 가격의 일부에 불과합니다.",
+          "link": "https://the-decoder.com/metas-muse-spark-1-1-api-pricing-squeezes-openai-and-anthropic-as-the-ai-price-war-heats-up/",
+          "entities": [
+            "API",
+            "AI"
+          ],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40077",
+          "title": "로봇타 리뷰 – 고전 SF의 차세대 버전에서 롤러코스터를 타는 기계들",
+          "original_title": "",
+          "description": "옥스포드의 슈바르츠먼 센터에서 진행되는 이번 작품은 카렐 차페크의 1920년 로맨스와 로봇 이야기에서 영감을 받아 기술의 위협에 대한 시의적절한 논의를 담고 있습니다. 하지만 때때로 철학적 논의가 지루해지기도 합니다. 현재 우리가 생성적 AI와 초지능의 대담한 미래에 대해 고민하고 있는 만큼, 이러한 주제가 더욱 중요해질 것입니다.",
+          "link": "https://www.theguardian.com/stage/2026/jul/10/robota-review-schwarzman-centre-oxford",
+          "entities": [],
+          "date": "2026-07-11"
+        }
+      ]
     }
   ],
   "articles": [
@@ -4087,6 +4225,132 @@
         "Mythos"
       ],
       "date": "2026-07-10"
+    },
+    {
+      "id": "40059",
+      "title": "OpenAI, Microsoft Copilot 365의 '선호 모델'로 GPT 5.6 발표",
+      "original_title": "",
+      "description": "OpenAI의 새로운 모델 패밀리는 Microsoft의 직장 및 생산성 앱 제품군을 지원할 예정이다. 이 발표는 최근의 분리에 대한 논의 속에서 이루어졌다.",
+      "link": "https://techcrunch.com/2026/07/09/openai-says-gpt-5-6-is-the-preferred-model-for-microsoft-copilot-amid-breakup-chatter/",
+      "entities": [
+        "Microsoft",
+        "GPT",
+        "OpenAI",
+        "Copilot"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40092",
+      "title": "난야, AI 메모리 붐을 타고 2027년에 60억 달러 지출 계획",
+      "original_title": "",
+      "description": "난야 테크놀로지는 메모리 사업에서 여러 해 동안 뒤처진 업체였습니다. 그러나 AI 붐이 이 시장의 판도를 바꾸었고, 이 회사는 메모리 부족 문제를 해결하기 위해 2027년에 약 60억 달러를 지출할 계획입니다.",
+      "link": "https://thenextweb.com/news/nanya-6-billion-2027-ai-memory",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40076",
+      "title": "리브스, AI 재교육을 기업에 약속하는 시티 '기술 협약' 발표 예정",
+      "original_title": "",
+      "description": "재무부 장관 레이첼 리브스는 바클레이스와 로이드와 같은 기업들이 AI 혁명에 대비해 수천 명의 금융업 종사자들을 재교육할 것을 약속하는 새로운 시티 '기술 협약'을 발표할 예정입니다. 이는 기술 혁명에 발맞추기 위한 방안으로, 많은 금융 근로자들의 기술 향상을 도모하고자 합니다.",
+      "link": "https://www.theguardian.com/business/2026/jul/10/rachel-reeves-city-skills-compact-ai-training",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40062",
+      "title": "연준, AI 투자자 마크 앤드리슨에게 물가 안정 여부 조언 요청",
+      "original_title": "",
+      "description": "연준 의장 케빈 워시는 벤처 자본가 마크 앤드리슨을 경제적 영향에 대한 조언자로 임명했습니다. 워시는 AI를 \"상당한 디플레이션력\"으로 보고 있지만, 앤드리슨의 투자 회사는 AI 기업에 크게 투자하고 있어 이해 상충 문제를 제기하고 있습니다.",
+      "link": "https://the-decoder.com/the-fed-wants-ai-investor-marc-andreessen-to-help-figure-out-if-ai-can-tame-inflation/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40063",
+      "title": "번, 클로드 페이블 5의 도움으로 지그에서 러스트로 전환하며 11일 동안 100만 라인 코",
+      "original_title": "",
+      "description": "자바스크립트 도구인 번은 지그에서 러스트로 완전히 재작성되었으며, 안트로픽의 페이블 5가 대부분의 작업을 수행했습니다. 이 기사가 처음으로 더코더에 게재되었습니다.",
+      "link": "https://the-decoder.com/bun-ditches-zig-for-rust-with-help-from-claude-fable-5-writes-over-a-million-lines-of-code-in-11-days/",
+      "entities": [],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40067",
+      "title": "새로운 체험 갤러리가 AI 예술에 대한 당신의 생각을 바꿀지도 모른다",
+      "original_title": "",
+      "description": "\"세계 최초의 AI 예술 박물관\"으로 불리는 Dataland는 착용 장치와 아마존의 방대한 자료를 활용하여 자연, 생체 인식 및 예술을 융합하고 있습니다.",
+      "link": "https://www.wired.com/story/a-new-experiential-gallery-just-might-change-your-mind-about-ai-art/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-10"
+    },
+    {
+      "id": "40177",
+      "title": "애플, 기밀 유출 혐의로 OpenAI를 고소하다",
+      "original_title": "",
+      "description": "애플은 이 잘못된 행위가 OpenAI의 고위 경영진, 특히 한 오랜 전 직원에 의해 주도되었다고 주장하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/10/apple-sues-openai-over-alleged-trade-secret-theft/",
+      "entities": [],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40191",
+      "title": "시스템 드리프트 모니터링이 조직 회복력의 다음 단계로 안내할 수 있다",
+      "original_title": "",
+      "description": "인공지능은 점점 더 상호 연결된 기업 생태계를 창출하는 것처럼 보이며, 조직이 운영 전반에 걸쳐 기술을 관리하는 복잡성을 확장합니다. AI가 중요한 워크플로에 더 깊이 내재화됨에 따라 시스템 의존성을 유지하는 것이 중요해 보입니다.",
+      "link": "https://thenextweb.com/news/systemic-drift-ai-organizational-resilience",
+      "entities": [],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40195",
+      "title": "AI 경쟁이 더 큰 모델에서 더 저렴하고 스마트한 시스템으로 이동하고 있다",
+      "original_title": "",
+      "description": "기업들은 이제 단순히 리더보드 순위가 아닌 작업, 비용 및 통제 기준으로 AI 모델을 선택하기 시작하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/07/10/the-ai-race-is-shifting-from-bigger-models-to-cheaper-smarter-systems.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40182",
+      "title": "애플, 오픈AI를 하드웨어 비밀 절취로 고소하다",
+      "original_title": "",
+      "description": "아이폰 제조업체인 애플은 오픈AI가 채용한 직원들이 기밀 프레젠테이션, 비밀 프로토타입 및 주요 공급업체 정보를 가져오도록 유도했다고 주장하고 있습니다.",
+      "link": "https://www.wired.com/story/apple-sues-openai-allegedly-stealing-ip-hardware/",
+      "entities": [],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40065",
+      "title": "메타의 뮤즈 스파크 1.1 API 가격, AI 가격 전쟁으로 오픈AI와 안트로픽의 압박",
+      "original_title": "",
+      "description": "메타는 뮤즈 스파크 1.1과 함께 AI API 사업에 진출하며, 어제 출시된 저렴한 그록 4.5보다도 낮은 가격으로 제공합니다. 메타는 출력 토큰 100만 개당 4.25달러를 청구하며, 이는 안트로픽이나 오픈AI가 요구하는 가격의 일부에 불과합니다.",
+      "link": "https://the-decoder.com/metas-muse-spark-1-1-api-pricing-squeezes-openai-and-anthropic-as-the-ai-price-war-heats-up/",
+      "entities": [
+        "API",
+        "AI"
+      ],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40077",
+      "title": "로봇타 리뷰 – 고전 SF의 차세대 버전에서 롤러코스터를 타는 기계들",
+      "original_title": "",
+      "description": "옥스포드의 슈바르츠먼 센터에서 진행되는 이번 작품은 카렐 차페크의 1920년 로맨스와 로봇 이야기에서 영감을 받아 기술의 위협에 대한 시의적절한 논의를 담고 있습니다. 하지만 때때로 철학적 논의가 지루해지기도 합니다. 현재 우리가 생성적 AI와 초지능의 대담한 미래에 대해 고민하고 있는 만큼, 이러한 주제가 더욱 중요해질 것입니다.",
+      "link": "https://www.theguardian.com/stage/2026/jul/10/robota-review-schwarzman-centre-oxford",
+      "entities": [],
+      "date": "2026-07-11"
     }
   ]
 }

@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: milestone
-status: phase_17_in_progress
-stopped_at: Phase 17 — 강좌 시스템 MVP-1: 등록 흐름
-last_updated: 2026-07-10T17:30:00.000Z
+status: course_content_complete
+stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
+last_updated: 2026-07-10T16:30:00.000Z
 last_activity: 2026-07-10
 progress:
-  total_phases: 17
-  completed_phases: 16
-  total_plans: 36
-  completed_plans: 36
-  percent: 94
+  total_phases: 22
+  completed_phases: 20
+  total_plans: 42
+  completed_plans: 40
+  percent: 95
 ---
 
 # Project State
@@ -25,12 +25,36 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 18 (retention-funnel) — Complete
-Plan: Priority 1+2 (히어로 순서 변경 + 블로그 CTA 3종) + CSP 차단 해결 + /subscribe/ 페이지
-Status: Phase 18 완료, 배포 완료
+Phase: 20 (course-content-complete) — 오케스트레이터 프레임 확정 + 메타강의 + 중간 강좌 완료
+Status: 히어로 강좌(7day-agent) 설계 대기, 발송 cron은 마지막에 활성화
 Last activity: 2026-07-10
 
-Progress: [████████████████████████] 100%
+Progress: [████████████████████████████████] 95%
+
+### Course System Status
+- **프레임**: 오케스트레이터 — "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"
+- **타겟**: AI로 혼자 무언가를 만드는 사람 (개인사업자 + 직장인 부업러 + 프리랜서 + 1인 창작자)
+- **로드맵**: "코드를 쓰는 사람에서, AI를 지휘하는 사람으로. 21일."
+- **분기**: 선형 분기 (완강 → 다음 강좌 오픈), slug 브랜드 통일 안 함
+
+| 강좌 | slug | day | 상태 |
+|------|------|-----|------|
+| 첫 AI, 7일 | 7day-starter | 0~7 (8개) | ✅ 시드 완료 + 과목명 업데이트 |
+| 0원 인프라, 7일 | 7day-infra | 8~14 (7개) | ✅ 시드 완료 |
+| 무료 에이전트, 7일 | 7day-agent | 15~21 (7개) | ⏳ 설계 대기 |
+
+### Phase 19 Details (MVP-3: 자동 발송) — Coded, Deferred
+- **Goal**: 7일 강좌 자동 이메일 발송
+- **Plans**: 3/3 complete (코드 완료)
+- **Files created**:
+  - `src/pages/api/courses/send-daily.ts` (272 lines)
+  - `src/pages/api/courses/templates/lesson-email.ts` (99 lines)
+  - `src/pages/api/courses/track.ts` (84 lines)
+  - `scripts/send_course_emails.sh` (43 lines)
+  - `scripts/course-email-sender.plist.template` (32 lines)
+  - `scripts/install_course_sender.sh` (50 lines)
+- **Decision**: Workers API for send logic, Brevo transactional for email, launchd for schedule
+- **NOTE**: launchd plist NOT installed, day 0 immediate send hook NOT implemented — 모든 콘텐츠 준비 후 마지막에 활성화 예정
 
 ### Phase 15 Details (Vectorize + D1 fix + Writer fallback + Hook fix)
 - **Goal**: Vectorize 의미적 중복제거 도입, failed_crawls TTL 적용, 카드 JSON 배열 전환, D1 link dedup 버그 수정, Writer fallback 복구, hook 검증 버그 수정.
