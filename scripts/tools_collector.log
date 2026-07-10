@@ -1038,3 +1038,73 @@ remote:     - Push cann
 [D1 동기화] tools 테이블 업데이트 중...
   SQL 생성: -- ✅ 총 164개 도구 INSERT SQL 생성 완료
   D1 tools 테이블 동기화 완료 ✅
+[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 10개)
+  Product Hunt: 10개 수집 (AI 필터 후)
+  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)
+  Futurepedia: 0개
+  Hugging Face Papers: 2개
+  TopAI.tools: 5개 수집
+  총 16개 (중복 제거 후)
+수집 완료: 16개
+기존 툴: 164개 (슬러그), 164개 (이름)
+  중복 스킵: Bono AI
+  중복 스킵: AI Emaily
+  중복 스킵: Ogment AI
+  중복 스킵: Kadoink AI
+  중복 스킵: Lemonade AI
+신규 툴: 11개 (배치=10, 스레드=3)
+
+--- 배치 1/2 (10건) ---
+  크롤링 성공: https://timbal.ai/?ref=producthunt... (설명 152자)
+  크롤링 성공: https://perfai.ai/?ref=producthunt... (설명 253자)
+  크롤링 성공: https://constellationgate.ai/?ref=producthunt... (설명 153자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/perfai-security.md
+  ✅ Perfai Security → perfai-security.md
+  ⚠️ Timbal AI — AI tell 점수 16 (임계 15 초과), 후처리 강화
+     후처리 후: 12
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/timbal-ai.md
+  ✅ Timbal AI → timbal-ai.md
+  크롤링 성공: https://www.monogram.ai/?ref=producthunt... (설명 98자)
+  크롤링 성공: https://www.producthunt.com/r/p/1191675?app_id=339... (설명 94자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/constellation-gate-ai.md
+  ✅ Constellation Gate AI → constellation-gate-ai.md
+  크롤링 성공: https://opper.ai/?ref=producthunt... (설명 150자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/gpt-live.md
+  ✅ GPT-Live → gpt-live.md
+  크롤링 성공: https://huggingface.co/papers... (설명 38자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/monogram-ai.md
+  ✅ Monogram AI → monogram-ai.md
+  크롤링 성공: https://topai.tools/t/oreate-ai... (설명 151자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/opper-ai.md
+  ✅ Opper AI → opper-ai.md
+  크롤링 성공: https://topai.tools/t/chatgpt-work... (설명 149자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/oreate-ai.md
+  ✅ Oreate AI → oreate-ai.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/dual-latent-memory-in-vision-language-action-model.md
+  ✅ Dual Latent Memory in Vision-Language-Action Model → dual-latent-memory-in-vision-language-action-model.md
+  크롤링 성공: https://topai.tools/t/dateguard-ai... (설명 144자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/chatgpt-work.md
+  ✅ Chatgpt Work → chatgpt-work.md
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/dateguard-ai.md
+  ✅ DateGuard.ai → dateguard-ai.md
+
+--- 배치 2/2 (1건) ---
+  크롤링 성공: https://topai.tools/t/abnormal-ai... (설명 149자)
+  저장: /Users/twinssn/Projects/aikorea24/src/content/tools/abnormal-ai.md
+  ✅ Abnormal AI → abnormal-ai.md
+
+==================================================
+처리 완료: 11/16개 생성 (68.3초)
+  git commit: [main 0d9d612] feat: AI 툴 11개 추가 (2026-07-10)
+ 42 files changed, 3227 insertions(+), 285 deletions(-)
+ create mode 100644 .omo/run-continuation/ses_0ba1dffbcffe6FjIR1a7UDhqzY.json
+ create mode 100644 
+  git push 완료
+  텔레그램 알림 전송 완료
+
+[배포] Cloudflare Pages 배포 중...
+  배포 완료 ✅
+
+[D1 동기화] tools 테이블 업데이트 중...
+  SQL 생성: -- ✅ 총 175개 도구 INSERT SQL 생성 완료
+  D1 tools 테이블 동기화 완료 ✅

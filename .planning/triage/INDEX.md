@@ -1,3 +1,4 @@
+- 2026-07-10 | fix | remove-hardcoded-prompt-patterns | 프롬프트 하드코딩 패턴 "~라는 말"/"근데" 제거 — 모델 표현 자유도 향상
 - 2026-07-09 | fix | env-loader-setdefault | load_to_environ() setdefault로 인해 project .env 무시 — D1 인증 실패
 - 2026-07-09 | fix | deepseek-empty-response | DeepSeek 빈 응답 시 로그 없이 silent fallthrough + 재시도 부재
 - 2026-07-09 | fix | card-1-stanza-structure | Card 1/2/5 prompt refinements — 3-stanza 강제, 5번 꼬리 금지, 줄바꿈 규칙 강화

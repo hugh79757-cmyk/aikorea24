@@ -10,6 +10,24 @@ const { id } = Astro.params;
 const db = Astro.locals.runtime?.env?.DB;
 let post = null;
 let comments = [];
+let previewContent = '';
+let isGated = false;
+
+// 미리보기 분할: 첫 번째 ### (H3) 또는 --- 구분선 기준으로 분할
+function splitPreview(content: string): string {
+  // H3 헤딩 (### )을 첫 번째 분할 지점으로
+  const h3Match = content.match(/\n(?=### )/);
+  if (h3Match && h3Match.index) {
+    return content.slice(0, h3Match.index);
+  }
+  // --- 구분선을 두 번째 분할 지점으로
+  const sepMatch = content.match(/\n---\n/);
+  if (sepMatch && sepMatch.index) {
+    return content.slice(0, sepMatch.index);
+  }
+  // 둘 다 없으면 상단 1/3
+  return content.slice(0, Math.floor(content.length / 3));
+}
 
 if (db && id) {
   await db.prepare(`UPDATE posts SET views = views + 1 WHERE id = ?`).bind(id).run();
@@ -32,6 +50,12 @@ if (db && id) {
 
   if (!post) {
     return { notFound: true };
+  }
+
+  // MVP-2: visibility gate
+  if (post.visibility === 'members' && !currentUser) {
+    isGated = true;
+    previewContent = splitPreview(post.content || '');
   }
 
   const commentResult = await db.prepare(`
@@ -69,7 +93,25 @@ if (Astro.request.method === 'POST' && currentUser && db) {
               <span class="text-sm text-gray-400">{post.author}</span>
               <span class="text-sm text-gray-600">{post.created_at?.slice(0, 10)}</span>
             </div>
-            <div class="bg-white/[0.05] border border-white/[0.08] rounded-xl p-6 whitespace-pre-wrap text-gray-300 leading-relaxed">{post.content}</div>
+            <div class="bg-white/[0.05] border border-white/[0.08] rounded-xl p-6 whitespace-pre-wrap text-gray-300 leading-relaxed">{isGated ? previewContent : post.content}</div>
+
+            {isGated && (
+              <div class="mt-6 p-8 rounded-xl border border-blue-500/30 bg-gradient-to-b from-blue-900/20 to-purple-900/20 text-center">
+                <div class="text-3xl mb-3">🔒</div>
+                <h3 class="text-lg font-bold text-white mb-2">전체 내용을 보려면 로그인하세요</h3>
+                <p class="text-sm text-gray-400 mb-6">
+                  AI코리아24 커뮤니티 회원에게 전체 강좌 콘텐츠를 제공합니다.<br/>
+                  Google 계정 하나로 바로 시작할 수 있습니다.
+                </p>
+                <a href="/auth/consent?redirect_to=/community/{id}"
+                   class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
+                  Google 로그인
+                </a>
+                <p class="text-xs text-gray-600 mt-4">
+                  로그인하면 개인정보 수집·이용에 동의한 것으로 간주됩니다.
+                </p>
+              </div>
+            )}
           </div>
 
           <div class="mb-8">

@@ -6,6 +6,9 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   const code = url.searchParams.get('code');
   if (!code) return redirect('/?error=no_code');
 
+  // OAuth state 파라미터 — 로그인 후 리다이렉트할 URL
+  const state = url.searchParams.get('state') || '';
+
   const runtime = (locals as any).runtime;
   const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
   const clientSecret = runtime?.env?.GOOGLE_CLIENT_SECRET || import.meta.env.GOOGLE_CLIENT_SECRET;
@@ -47,5 +50,9 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
     });
   }
 
+  // state가 유효한 동일 도메인 경로면 해당 URL로, 아니면 홈으로
+  if (state && state.startsWith('/') && !state.includes('//') && !state.includes('\\')) {
+    return redirect(state);
+  }
   return redirect('/');
 };
