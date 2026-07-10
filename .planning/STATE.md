@@ -4,7 +4,7 @@ milestone: v2.0
 milestone_name: milestone
 status: phase_17_in_progress
 stopped_at: Phase 17 — 강좌 시스템 MVP-1: 등록 흐름
-last_updated: 2026-07-10T09:00:00.000Z
+last_updated: 2026-07-10T17:30:00.000Z
 last_activity: 2026-07-10
 progress:
   total_phases: 17
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 17 (course-system-mvp1) — In Progress
-Plan: MVP-1 등록 흐름 (D1 스키마 + 시드 데이터 + enroll API + 랜딩 페이지)
-Status: Phase 17 진행 중 (v2.0 마일스톤 시작)
+Phase: 18 (retention-funnel) — Complete
+Plan: Priority 1+2 (히어로 순서 변경 + 블로그 CTA 3종) + CSP 차단 해결 + /subscribe/ 페이지
+Status: Phase 18 완료, 배포 완료
 Last activity: 2026-07-10
 
 Progress: [████████████████████████] 100%

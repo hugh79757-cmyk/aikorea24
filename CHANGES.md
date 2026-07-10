@@ -800,3 +800,26 @@
 2. `python3 scripts/seed_course_7day_starter.py`
 3. `npm run dev`로 랜딩 페이지 확인
 4. 본인 계정으로 등록 테스트 → Brevo 태그 확인
+
+---
+
+## 2026-07-10 — Phase 18 체류 퍼널 재설계 + CSP 차단 해결 (3 deploy)
+
+### 변경
+- `src/pages/index.astro`: HeroSection/BriefingSection 순서 변경 (히어로 먼저)
+- `src/components/home/HeroSection.astro`: CTA 3종 + 카피 개선 (강좌/브리핑/소개)
+- `src/pages/blog/[...id].astro`: 본문 하단 CTA 3카드 (강좌/구독/용어) — 350+개 글 일괄 적용
+- `src/pages/subscribe.astro`: 신규 구독 랜딩 페이지
+- `src/layouts/Layout.astro`: "구독" 네비게이션 링크 추가
+- `src/middleware.ts`: CSP 확장 — AdSense(pagead2), GTM(googletagmanager), CDN(jsdelivr), Cloudflare beacon, Google Analytics, DoubleClick, shields.io, Pretendard/Google Fonts 허용
+
+### 의사결정
+- CSP allowlist 방식: 필요한 도메인만 허용하여 보안 유지
+- 블로그 CTA 3카드: 템플릿 1회 수정으로 전체 prerendered 글에 적용
+- 히어로 CTA 3종: 두 타겟(입문자→강좌, 뉴스관심자→브리핑) 동시 공략
+
+### 영향
+- 방문자 첫 인상: 뉴스 브리핑 → AI 시작하기 히어로로 변경
+- 블로그 이탈률 개선: 모든 글에서 CTA → 강좌/구독/용어
+- AdSense/GTM 정상 로드 (CSP 차단 해결)
+- 3회 빌드+배포 완료, commit `b7dd210`
