@@ -286,6 +286,32 @@ Plans:
 - [x] JSON 4단계 복구 파싱 (JSON → ```json → brace matching → delimiter)
 - [x] Hook 검증 버그 수정: `cards[0]` 전체 → 첫 줄만 검사
 
+---
+
+## 마일스톤 v2.0 — 강좌 시스템 (Course System)
+
+**목표**: 커뮤니티 게이트웨이 패턴 기반 강좌 시스템. 강좌 콘텐츠는 `posts`에 저장되고, 이메일은 티저 + 링크만 발송. 커뮤니티 로그인 게이트를 통해 전체 콘텐츠 열람.
+
+**MVP 분할**:
+- **MVP-1 (Phase 17)**: 등록 흐름 — D1 스키마 + 7일 강좌 시드 + enroll API + 랜딩 페이지
+- **MVP-2 (Phase 18)**: 커뮤니티 게이트 — posts visibility 분기, 로그인 리다이렉트
+- **MVP-3 (Phase 19)**: 자동 발송 — send-daily API, launchd cron, 클릭 추적
+- **MVP-4 (Phase 20)**: 완강 분기 — 완강 태그, 드롭오프 추적, 다음 단계 CTA
+
+### Phase 17: 강좌 시스템 MVP-1 — 등록 흐름
+**Goal**: 7일 강좌의 콘텐츠 저장/등록/랜딩 페이지 구현. 발송은 수동.
+**Mode**: mvp
+**Depends on**: Nothing (v2.0 milestone)
+**Requirements**: CRS-01 ~ CRS-06
+**Definition of Done**:
+1. D1 마이그레이션 5개 항목 완료 (posts.visibility, courses, course_lessons, enrollments, lesson_clicks)
+2. 7개 강좌 글이 posts에 visibility='members'로 저장됨
+3. course_lessons에 7개 매핑 + 티저 저장됨
+4. `/api/courses/enroll`가 3가지 응답 케이스 정상 처리 (신규/중복/오류)
+5. 강좌 랜딩 페이지 렌더링됨
+6. 본인 계정으로 등록 테스트 통과
+7. Brevo에 태그 `course-enrolled-7day-starter` 정상 추가
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -306,6 +332,8 @@ Plans:
 | 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
 | 12. Writer Instability Fix | 2/2 | Complete | 2026-07-05 |
 | 13. Card Separation Fix & Validation Hardening | 3/3 | Complete | 2026-07-05 |
-| 14. Delimiter Reconfiguration | 1/1 | Complete | 2026-07-05 |
+| 14. Delimiter Reconfiguration | 1/1 | Complete   | 2026-07-05 |
 | 15. Vectorize + Crawl Fix + JSON Cards | ad-hoc | Complete   | 2026-07-07 |
-| **Total** | **34/34** | | |
+| 16. Writer prompt v2: jisang-aligned card structure | ad-hoc | Complete   | 2026-07-09 |
+| 17. 강좌 시스템 MVP-1: 등록 흐름 | pending | In Progress | 2026-07-10 |
+| **Total** | **36/36** | | |

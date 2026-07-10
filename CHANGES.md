@@ -760,3 +760,43 @@
 - 5번 카드 닫힌 결론 금지 규칙 추가
 
 ---
+
+---
+
+## 2026-07-10 — Phase 17: 강좌 시스템 MVP-1 — 등록 흐름 (신규)
+
+### 마일스톤
+- v2.0 마일스톤 신규 생성
+- Phase 17 정의: 강좌 시스템 MVP-1 등록 흐름
+
+### 변경 파일
+#### 신규
+- `schema.sql` — courses, course_lessons, enrollments, lesson_clicks 테이블 + posts.visibility 컬럼
+- `scripts/migrations/20260710_add_course_system.sql` — D1 마이그레이션 SQL
+- `scripts/seed_course_7day_starter.py` — 7일 AI 입문 강좌 시드 데이터 생성기 (540줄)
+- `src/pages/api/courses/enroll.ts` — 강좌 등록 API (신규/중복/오류 3종 응답)
+- `src/pages/courses/7day-starter.astro` — 강좌 랜딩 페이지 (신청 폼 + 커리큘럼 + FAQ)
+
+#### 수정
+- `.planning/ROADMAP.md` — v2.0 마일스톤 + Phase 17 추가
+- `.planning/STATE.md` — 현재 위치 Phase 17로 업데이트
+
+### 의사결정
+- **커뮤니티 게이트웨이 패턴**: 강좌 콘텐츠는 `posts`에 저장, 이메일은 티저 + 링크만
+- **posts.visibility 3종**: public/members/premium (유료 전환 대비)
+- **Brevo 유지**: Brevo 트랜잭셔널 API로 발송, 태그 체계로 세그먼테이션
+- **MVP 분할**: 4개 (등록 → 게이트 → 발송 → 완강)
+- **시작 정책**: 등록 후 첫 18:00에 1일차 발송
+- **course_lessons.email_send_hour NULL = courses.default_send_hour 사용
+
+### 검증
+- Python seed script: syntax OK
+- enroll.ts: 구조 정상 (import 1, export 있음)
+- 랜딩 페이지: Astro 구조 정상
+- 산출물 5개, 총 1,153줄
+
+### 다음 스텝 (수동 실행 필요)
+1. `npx wrangler d1 execute aikorea24-db --remote --file scripts/migrations/20260710_add_course_system.sql`
+2. `python3 scripts/seed_course_7day_starter.py`
+3. `npm run dev`로 랜딩 페이지 확인
+4. 본인 계정으로 등록 테스트 → Brevo 태그 확인

@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.0
+milestone: v2.0
 milestone_name: milestone
-status: phase_16_completed
-stopped_at: Phase 16 — Writer prompt v2: jisang-aligned card structure
-last_updated: 2026-07-09T17:30:00.000Z
-last_activity: 2026-07-09
+status: phase_17_in_progress
+stopped_at: Phase 17 — 강좌 시스템 MVP-1: 등록 흐름
+last_updated: 2026-07-10T09:00:00.000Z
+last_activity: 2026-07-10
 progress:
-  total_phases: 16
+  total_phases: 17
   completed_phases: 16
   total_plans: 36
   completed_plans: 36
-  percent: 100
+  percent: 94
 ---
 
 # Project State
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 15 (vectorize-crawlfix-json-cards) — Complete
-Plan: ad-hoc execution (Vectorize, D1 fix, Writer fallback, JSON parsing, Hook fix)
-Status: All phases complete
-Last activity: 2026-07-07
+Phase: 17 (course-system-mvp1) — In Progress
+Plan: MVP-1 등록 흐름 (D1 스키마 + 시드 데이터 + enroll API + 랜딩 페이지)
+Status: Phase 17 진행 중 (v2.0 마일스톤 시작)
+Last activity: 2026-07-10
 
 Progress: [████████████████████████] 100%
 
@@ -117,13 +117,23 @@ Recent decisions affecting current work:
 - [Phase 15]: failed_crawls.json TTL 24시간 적용 — 영구 제외로 인한 기사 풀 고갈 해결
 - [Phase 15]: 카드 분할 JSON 배열 전환 — delimiter 충돌 근본 해결, fallback 제거
 
+### Key Decisions (Phase 17)
+
+- [Phase 17] **커뮤니티 게이트웨이 패턴**: 강좌 콘텐츠는 `posts`에 저장, 이메일은 티저 + 커뮤니티 링크만 발송
+- [Phase 17] **visibility 3종**: `public`(기존), `members`(로그인+강좌 무관), `premium`(추후 유료)
+- [Phase 17] **Brevo 유지**: 기존 Brevo 인프라 그대로 사용, Cloudflare Email Service 전환 안 함
+- [Phase 17] **Brevo 태그 체계**: `course-enrolled-7day-starter`, `course-completed-7day-starter` 등
+- [Phase 17] **MVP 분할**: 4개로 나눠 순차 검증 (등록 → 게이트 → 발송 → 완강)
+- [Phase 17] **시작 정책**: 등록 후 첫 18:00에 1일차 발송
+- [Phase 17] **발송 방식**: Brevo Automation 대신 Workers + Brevo 트랜잭셔널 API 조합
+
 ### Pending Todos
 
 None.
 
 ### Blockers/Concerns
 
-None. All phases complete. Pipeline 운영 중.
+None.
 
 ## Deferred Items
 
@@ -131,9 +141,12 @@ None. All phases complete. Pipeline 운영 중.
 |----------|------|--------|-------------|
 | Architecture | ThreadForge 마이그레이션 검토 | 대기 | 2026-07-06 |
 | Cost | GPT-4o 사용 중단 → MiMo v2.5 전환 | 완료 | 2026-07-06 |
+| Architecture | MVP-2 커뮤니티 게이트 | 대기 | 2026-07-10 |
+| Architecture | MVP-3 자동 발송 | 대기 | 2026-07-10 |
+| Architecture | MVP-4 완강 분기 | 대기 | 2026-07-10 |
 
 ## Session Continuity
 
-Last session: 2026-07-07T09:00:00.000Z
-Stopped at: Phase 15 complete — pipeline 운영 중
-Next: Threads publisher launchd agent 활성화됨 (2시간 간격 자동 발행)
+Last session: 2026-07-10T09:00:00.000Z
+Stopped at: Phase 17 MVP-1 시작 — D1 스키마 설계 중
+Next: migration SQL → 시드 스크립트 → enroll API → 랜딩 페이지
