@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-11T15:12:00.000Z
+last_updated: 2026-07-11T16:00:00.000Z
 last_activity: 2026-07-11
 progress:
   total_phases: 22
   completed_phases: 20
   total_plans: 42
-  completed_plans: 41
-  percent: 98
+  completed_plans: 42
+  percent: 100
 ---
 
 # Project State
@@ -25,8 +25,8 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 17 (Instagram Carousel + Reels) — Plan 17-02 complete (HTML → PNG generator)
-Status: Plan 17-03 (FFmpeg video renderer) 대기
+Phase: 17 (Instagram Carousel + Reels) — Plan 17-06 complete (PipelineStep + launchd scheduling)
+Status: Plan 17-06 완료
 Last activity: 2026-07-11
 
 Progress: [██████████████████████████████████] 98%
@@ -134,6 +134,7 @@ Progress: [███████████████████████
 | Phase 13-card-separation-fix 13-02 | 1min | 4 tasks | 3 files |
 | Phase 13-card-separation-fix 13-03 | 2min | 6 tasks | 4 files |
 | Phase 17-instagram-carousel 17-02 | 8min | 3 tasks | 5 files |
+| Phase 17-instagram-carousel 17-06 | 5min | 1 task | 4 files |
 
 ## Accumulated Context
 
@@ -165,6 +166,8 @@ Recent decisions affecting current work:
 - [Phase 17] **발송 방식**: Brevo Automation 대신 Workers + Brevo 트랜잭셔널 API 조합
 - [Phase 17-02] **HTML 렌더러**: string.Template + Playwright CLI 조합 ($0 비용)
 - [Phase 17-02] **배치 렌더링**: 순차 처리로 슬라이드 순서 보장, 부분 실패 허용
+- [Phase 17-06] **Instagram PipelineStep**: Lazy imports로 환경 변수 의존성 처리, dry_run 모드 지원
+- [Phase 17-06] **launchd 스케줄**: 캐러셀 08:00 + 릴스 19:00 KST 별도 에이전트
 
 ### Pending Todos
 
@@ -186,6 +189,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-07-11T15:12:00.000Z
-Stopped at: Phase 17 Plan 17-02 완료 — HTML → PNG 생성 파이프라인 구축 완료
-Next: Plan 17-03 (FFmpeg video renderer) — PNG → MP4 변환
+Last session: 2026-07-11T16:00:00.000Z
+Stopped at: Phase 17 Plan 17-06 완료 — PipelineStep + launchd scheduling
+Next: Phase 17 완료 검증 또는 다음 phase
