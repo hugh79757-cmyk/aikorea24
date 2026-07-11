@@ -1,5 +1,6 @@
 from pipeline.instagram.models import SlideType, InstagramSlide, InstagramReelScene
 from pipeline.instagram.content_converter import convert_format_d_to_carousel, convert_format_d_to_reel_script
+from pipeline.instagram.tts_generator import TTSGenerator, batch_generate_tts
 from pipeline.instagram.html_renderer import (
     render_carousel_slides,
     render_reel_cover,
@@ -35,4 +36,6 @@ __all__ = [
     "timestamp_kst",
     "create_run_directory",
     "ensure_output_dir",
+    "TTSGenerator",
+    "batch_generate_tts",
 ]
