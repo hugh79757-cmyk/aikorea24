@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1350">
+  <title>{{slide.title}}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Pretendard', sans-serif; }
+    .carousel-card { width: 1080px; height: 1350px; }
+    .gradient-purple { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%); }
+    .gradient-red { background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 50%, #1e3a8a 100%); }
+    .gradient-blue { background: linear-gradient(135deg, #1e3a8a 0%, #312e81 50%, #0f172a 100%); }
+    .dark-card { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+    .gradient-green { background: linear-gradient(135deg, #14532d 0%, #166534 50%, #14532d 100%); }
+    .minimal-dark { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+    .brand-footer { background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
+  </style>
+</head>
+<body>
+  <div class="carousel-card relative flex flex-col items-center justify-center px-16 py-20 {{style_hint}} overflow-hidden">
+    <!-- 배경 블롭 (depth감) -->
+    {% if style_hint == "gradient-purple" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-purple-600/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl"></div>
+    {% elif style_hint == "gradient-red" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-red-600/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-orange-500/20 blur-3xl"></div>
+    {% elif style_hint == "gradient-blue" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-teal-400/20 blur-3xl"></div>
+    {% elif style_hint == "gradient-green" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-green-500/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-emerald-400/20 blur-3xl"></div>
+    {% elif style_hint == "gradient-red" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-red-500/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-orange-500/20 blur-3xl"></div>
+    {% elif style_hint == "gradient-green" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-green-500/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-emerald-400/20 blur-3xl"></div>
+    {% elif style_hint == "minimal-dark" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gray-500/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-slate-400/10 blur-3xl"></div>
+    {% elif style_hint == "brand-footer" %}
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-purple-500/10 blur-3xl"></div>
+    {% endif %}
+    {% if style_hint == "dark-card" %}
+    <div class="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-slate-500/15 blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-64 h-64 rounded-full bg-slate-600/15 blur-3xl"></div>
+    {% endif %}
+    
+    <!-- 상단 인디케이터 -->
+    <div class="flex items-center justify-center pt-12 px-8">
+      <div class="flex items-center gap-3">
+        <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold">AI 캐러셀</span>
+        <span class="w-12 h-px bg-gradient-to-r from-blue-600 to-purple-600"></span>
+        <span class="text-gray-400 text-sm">{{slide_index}}/{{total_slides}}</span>
+      </div>
+    </div>
+    
+    <!-- 메인 콘텐츠 -->
+    <div class="flex-1 flex flex-col items-center justify-center px-16 text-center z-10">
+      {% if slide_type == "HOOK" %}
+      <div class="absolute top-16 left-16 text-blue-400 font-bold text-4xl">01</div>
+      {% elif slide_type == "CONFLICT" %}
+      <div class="absolute top-16 left-16 text-red-400 font-bold text-4xl">02</div>
+      {% elif slide_type == "TWIST" %}
+      <div class="absolute top-16 left-16 text-blue-400 font-bold text-4xl">03</div>
+      {% elif slide_type == "EXPANSION" %}
+      <div class="absolute top-16 left-16 text-blue-400 font-bold text-4xl">04</div>
+      {% elif slide_type == "CTA" %}
+      <div class="absolute top-16 left-16 text-green-400 font-bold text-4xl">04</div>
+      {% elif slide_type == "LINK" %}
+        <div class="absolute top-16 left-16 text-gray-400 font-bold text-4xl">05</div>
+      {% elif slide_type == "BRANDING" %}
+        <div class="absolute top-16 left-16 text-gray-400 font-bold text-4xl">06</div>
+      {% endif %}
+      
+      <!-- 카테고리 배지 (첫 슬라이드만) -->
+      {% if slide_type == "HOOK" %}
+      <div class="mb-10 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-base shadow-lg">
+        <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+        이주의 AI 툴 3가지
+      </div>
+      {% elif slide_type == "CONFLICT" %}
+      <div class="mb-10 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-red-500/20 border border-red-400/30 text-white text-sm font-semibold">
+        <span class="w-2 h-2 rounded-full bg-red-400"></span>
+        충돌 A면
+      </div>
+      {% elif slide_type == "TWIST" %}
+      <div class="mb-10 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-purple-500/20 border border-purple-400/30 text-white text-sm font-semibold">
+        <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+        반전
+      </div>
+      {% elif slide_type == "EXPANSION" %}
+      <div class="mb-10 inline-flex items-center gap-3 px-6 py-3 rounded-full bg-blue-500/20 border border-blue-400/30 text-white text-sm font-semibold">
+        <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+        확장
+      </div>
+      {% endif %}
+      
+      <!-- 메인 텍스트 -->
+      <div class="mb-8">
+        <p class="text-5xl md:text-6xl font-extrabold text-white leading-tight mb-6 tracking-tight">
+          {% if highlight_number %}
+          {{title | replace(highlight_number, '<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-teal-400">' ~ highlight_number ~ '</span>') | safe}}
+          {% else %}
+          {{title}}
+          {% endif %}
+        </p>
+        
+        <div class="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mb-8"></div>
+        
+        <p class="text-xl text-gray-400 font-medium leading-relaxed max-w-2xl mx-auto">
+          {{body}}
+        </p>
+      </div>
+      
+      <!-- 하단 특징 태그 (두 번째 카드부터) -->
+      {% if slide_type in ["CONFLICT", "TWIST", "EXPANSION"] %}
+      <div class="flex items-center justify-center gap-4 text-white/70 text-sm font-medium mt-8">
+        {% if slide_type == "CONFLICT" %}
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l4.293 4.293a1 1 0 001.414-1.414l-7-7z"/></svg> 사람 눈 필요</span>
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.096A9.017 9.017 0 0112 15c2.34 0 4.45.865 6.25 2.384V15a1 1 0 112 0v1.5a9.02 9.02 0 01-5.25 2.616A9.023 9.023 0 014.75 12.096z"/></svg> 알고리즘 우회</span>
+        {% elif slide_type == "TWIST" %}
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 11l-2 2-4-4"/></svg> 반전</span>
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> AI 업데이트 필요</span>
+        {% elif slide_type == "EXPANSION" %}
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 002-2V5a2 2 0 012-2h2a2 2 0 002-2V0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 00-2 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6a2 2 0 012-2h2z"/></svg> 확장</span>
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 002-2V5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 002 2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 00-2 2v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6a2 2 0 012-2h2z"/></svg> 맥락</span>
+        {% endif %}
+      </div>
+      {% endif %}
+      
+      {% if slide_type == "CTA" %}
+      <a href="https://aikorea24.kr" class="mt-10 inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg hover:from-blue-500 hover:to-purple-500 transition-colors shadow-xl">
+        <span>전체 기사 읽으러 가기</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <div class="mt-8 flex items-center justify-center gap-6 text-white/60 text-sm">
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg> 프로필 링크</span>
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg> 댓글 남기기</span>
+      </div>
+      {% endif %}
+      
+      {% if slide_type == "LINK" %}
+      <a href="https://aikorea24.kr" class="mt-10 inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg hover:from-blue-500 hover:to-purple-500 transition-colors shadow-xl">
+        <span>전체 기사 읽으러 가기</span>
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+      <div class="mt-8 flex items-center justify-center gap-6 text-white/70 text-sm">
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg> 프로필 링크</span>
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg> 댓글로 의견 남기기</span>
+      </div>
+      {% endif %}
+      
+      {% if slide_type == "BRANDING" %}
+      <div class="mt-10 flex items-center justify-center gap-4 text-white/60 text-sm">
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/></svg> 프로필 링크</span>
+        <span class="flex items-center gap-1"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 01-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg> 댓글로 의견 남기기</span>
+      </div>
+      {% endif %}
+    </div>
+    
+    <!-- 하단 브랜딩 -->
+    <div class="absolute bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-3">
+      <span class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-xs">AI</span>
+      <span class="text-white/80 text-sm font-medium">aikorea24.kr</span>
+    </div>
+    
+    <!-- 스와이프 힌트 (첫 슬라이드만) -->
+    {% if slide_type == "HOOK" %}
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 text-gray-300 text-sm animate-bounce">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+      <span>왼쪽으로 넘겨보기</span>
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>

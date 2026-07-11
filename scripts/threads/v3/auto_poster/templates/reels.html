@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1920">
+  <title>{{scene.text[:50]}}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Pretendard', sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="w-[1080px] h-[1920px] relative overflow-hidden" style="background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e3a8a 100%);">
+    <!-- 배경 데코 -->
+    <div class="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-purple-600/20 blur-3xl"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-blue-600/20 blur-3xl"></div>
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 20 0 L 0 0 0 20" fill="none" stroke="white" stroke-width="0.5"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100" height="100" fill="url(%23grid)"/%3E%3C/svg%3E');"></div>
+    
+    <div class="relative z-10 h-full flex flex-col">
+      <!-- 상단 인디케이터 -->
+      <div class="flex items-center justify-center pt-12 px-8">
+        <div class="flex items-center gap-3">
+          <span class="px-4 py-1.5 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold">AI Shorts</span>
+          <span class="w-12 h-px bg-gradient-to-r from-blue-600 to-purple-600"></span>
+          <span class="text-gray-400 text-sm">{{scene_index + 1}}/6</span>
+        </div>
+      </div>
+      
+      <!-- 메인 콘텐츠 -->
+      <div class="flex-1 flex flex-col items-center justify-center px-12 text-center relative z-10">
+        <!-- 씬 번호 -->
+        <div class="absolute top-16 left-16 text-blue-400 font-bold text-4xl">{{scene_index + 1}}</div>
+        
+        <!-- 씬 타입 배지 -->
+        <div class="mb-10">
+          {% if scene_index == 0 %}
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-base shadow-lg">
+              <span class="w-2.5 h-2.5 rounded-full bg-teal-400 animate-pulse"></span>
+              훅
+            </div>
+          {% elif scene_index == 1 %}
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-red-500/20 border border-red-400/30 text-white text-sm font-semibold">
+              <span class="w-2 h-2 rounded-full bg-red-400"></span>
+              충돌
+            </div>
+          {% elif scene_index == 2 %}
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-purple-500/20 border border-purple-400/30 text-white text-sm font-semibold">
+              <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+              반전
+            </div>
+          {% elif scene_index == 3 %}
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-blue-500/20 border border-blue-400/30 text-white text-sm font-semibold">
+              <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+              확장
+            </div>
+          {% elif scene_index == 4 %}
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-green-500/20 border border-green-400/30 text-white text-sm font-semibold">
+              <span class="w-2 h-2 rounded-full bg-green-400"></span>
+              액션
+            </div>
+          {% elif scene_index == 5 %}
+            <div class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-orange-500/20 border border-orange-400/30 text-white text-sm font-semibold">
+              <span class="w-2 h-2 rounded-full bg-orange-400"></span>
+              마무리
+            </div>
+          {% endif %}
+        </div>
+        
+        <!-- 메인 텍스트 -->
+        <div class="text-center mb-10">
+          <p class="text-5xl md:text-6xl font-extrabold text-white leading-tight mb-8 tracking-tight max-w-4xl mx-auto">
+            {{text}}
+          </p>
+        </div>
+        
+        <!-- 하단 CTA -->
+        {% if scene_index == 4 %}
+        <a href="https://aikorea24.kr" class="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-yellow-300 to-orange-400 text-gray-900 font-bold text-lg hover:from-yellow-200 hover:to-orange-300 transition-colors shadow-xl">
+          <span>전체 툴 리스트 보기</span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        {% endif %}
+        
+        {% if scene_index == 5 %}
+        <a href="https://aikorea24.kr" class="inline-flex items-center gap-3 px-10 py-4 rounded-full bg-gradient-to-r from-yellow-300 to-orange-400 text-gray-900 font-bold text-lg hover:from-yellow-200 hover:to-orange-300 transition-colors shadow-xl">
+          <span>전체 툴 리스트 보기</span>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        {% endif %}
+      </div>
+      
+      <!-- 하단 브랜딩 -->
+      <div class="absolute bottom-16 left-1/2 -translate-x-1/2 flex items-center gap-3">
+        <span class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold text-xs">AI</span>
+        <span class="text-white/80 text-sm font-medium">aikorea24.kr</span>
+      </div>
+      
+      <!-- 스와이프 힌트 (첫 씬만) -->
+      {% if scene_index == 0 %}
+      <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2 text-gray-300 text-sm animate-bounce">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        <span>위로 스와이프</span>
+      </div>
+      {% endif %}
+    </div>
+    
+    <!-- 하단 스와이프 힌트 (모든 씬 공통) -->
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 text-white/50 text-xs animate-bounce" style="animation-delay: 2s;">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V4"/></svg>
+      <span>위로 스와이프해서 계속 보기</span>
+    </div>
+  </div>
+</body>
+</html>

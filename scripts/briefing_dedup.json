@@ -2273,6 +2273,149 @@
           "date": "2026-07-11"
         }
       ]
+    },
+    {
+      "date": "2026-07-11",
+      "briefing_id": 170,
+      "articles": [
+        {
+          "id": "40246",
+          "title": "OpenAI가 연구에 안전성을 다시 통합했습니다. 안전팀장이 퇴사합니다.",
+          "original_title": "",
+          "description": "OpenAI의 안전 시스템 책임자인 요하네스 하이데케가 내부 구조조정으로 인해 회사를 떠나게 되었습니다. 이번 재편성은 안전 및 연구 팀을 단일 리더 아래 통합한 것입니다.",
+          "link": "https://thenextweb.com/news/openai-heidecke-safety-head-leaving-research-merger",
+          "entities": [],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40192",
+          "title": "이발 스택: 에이전트가 맞다고 증명하는 대신 주장하기",
+          "original_title": "",
+          "description": "대부분의 AI 연구 도구는 언어 모델을 웹에 맞추고 출력을 신뢰합니다. 사르스 샤는 Sixtyfour를 반대의 본능에 기반하여 구축했습니다: 모든 것을 채점하고 점수를 향상시키는 것만 배송합니다. 사르스 샤는 스코어보드를 유지합니다. Sixtyfour의 연구 에이전트의 모든 빌드는 팀에서 제기한 질문에 대해 채점됩니다.",
+          "link": "https://thenextweb.com/news/the-eval-stack-proving-the-agents-are-right-instead-of-claiming-it",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40234",
+          "title": "A.I. '배우' 틸리 노우드가 새로운 영화를 발표한다. 이 미래에서 벗어나게 해 줘 | ",
+          "original_title": "",
+          "description": "연기는 문화적, 사회적 경계를 넘는 인간의 연결에 관한 것이다. 하지만 '틸리버스'에서는 그런 기대를 할 수 없다. 영화 애호가 여러분, 기뻐하세요. 틸리 노우드가 돌아왔다! 익숙하지 않으신가요? 그녀는 아직 널리 알려진 이름이 아니기 때문이다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jul/11/ai-actor-tilly-norwood-movie",
+          "entities": [
+            "A.I"
+          ],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40229",
+          "title": "메타, 논란의 AI 기능을 인스타그램에서 삭제하다",
+          "original_title": "",
+          "description": "회사는 블로그 게시물에서 \"우리의 의도는 유용한 창의적 도구를 제공하고 사람들이 공개 콘텐츠가 이렇게 참조될 수 있는지 제어할 수 있도록 하는 것이었다\"고 밝히며, \"이 기능이 목표를 빗나갔다는 피드백을 들었고, 그래서 더 이상 사용할 수 없다\"고 말했다.",
+          "link": "https://techcrunch.com/2026/07/10/meta-removes-controversial-ai-feature-on-instagram-after-backlash/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40231",
+          "title": "오픈AI 안전 담당자 퇴사",
+          "original_title": "",
+          "description": "요하네스 하이데케의 퇴사는 오픈AI가 연구 및 안전 팀의 통합을 더욱 추진하는 가운데 이루어졌습니다.",
+          "link": "https://www.wired.com/story/openai-head-of-safety-leaving/",
+          "entities": [],
+          "date": "2026-07-11"
+        },
+        {
+          "id": "40249",
+          "title": "애플, Open AI를 고소하며 ‘영업 비밀’을 훔쳤다고 주장",
+          "original_title": "",
+          "description": "애플은 Open AI와 두 명의 전직 직원이 비밀 정보를 훔쳤다고 주장하며 고소했습니다. 실리콘 밸리의 두 거대 기업이 소비자 전자 기기 시장에서 경쟁할 준비를 하고 있습니다.",
+          "link": "https://www.cityam.com/apple-sues-open-ai-accusing-them-of-stealing-trade-secrets/",
+          "entities": [
+            "Open"
+          ],
+          "date": "2026-07-11"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-12",
+      "briefing_id": 171,
+      "articles": [
+        {
+          "id": "40282",
+          "title": "ChatGPT가 가정으로 더 깊숙이 들어가며 가족에 베팅하는 OpenAI",
+          "original_title": "",
+          "description": "ChatGPT는 가족, 돌봄 제공자 및 노인을 위한 경험을 구축할 전담 제품 관리자를 채용할 예정이라고 채용 공고에서 밝혔습니다.",
+          "link": "https://techcrunch.com/2026/07/11/openai-bets-on-families-as-chatgpt-goes-deeper-into-households/",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40286",
+          "title": "호주 저작권법을 완화하려는 AI 기업들. 예술가들은 분노하고, 노동당은 갈등 중",
+          "original_title": "",
+          "description": "앤서니 앨버니지가 이번 주 AI에 대한 중대한 연설을 할 예정이며, 의원들은 데이터 센터 투자 유치와 창작자의 권리 보호 사이에서 갈등하고 있습니다. 앤나 펀더가 국회에서 기자들 앞에 섰던 일도 그 연장선상이죠.",
+          "link": "https://www.theguardian.com/technology/2026/jul/12/ai-australia-will-labor-water-down-copyright-laws-datacentres",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40288",
+          "title": "변동성이 큰 AI 거래가 상승했지만, 석유가 월스트리트를 긴장하게 하다",
+          "original_title": "",
+          "description": "반도체 주식들이 변동성이 크면서도 강한 주간을 보냈습니다. 메타가 우리의 포트폴리오를 상승시켰습니다.",
+          "link": "https://www.cnbc.com/2026/07/11/the-volatile-ai-rally-marched-higher-but-oil-kept-wall-street-on-edge-last-week.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40290",
+          "title": "트럼프 AI 홍보 프로그램의 출범, 기대 이하",
+          "original_title": "",
+          "description": "행정부는 글로벌 AI 지배에 대한 열망과 임시적인 보안 제한 사이에서 균형을 맞추는 데 어려움을 겪고 있습니다.",
+          "link": "https://www.politico.com/news/2026/07/11/trump-administration-commerce-ai-program-00993532?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40235",
+          "title": "A.I.로부터 안전한: 어떤 직업이 미래에 당신을 번영하게 할 것인가?",
+          "original_title": "",
+          "description": "전문가들은 교육, 호텔, 법률 분야 등에서 여전히 기회가 있을 것이라고 말한다. 일의 세계에 들어가는 것은 종종 불확실함을 동반하지만, 이제 또 다른 질문이 있다: 어떻게 하면 내 경력을 A.I.로부터 보호할 수 있을까?",
+          "link": "https://www.theguardian.com/money/2026/jul/11/ai-work-jobs-future-medicine-teaching-hotels-law",
+          "entities": [
+            "A.I."
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40283",
+          "title": "오픈AI의 GPT-5.6 솔 울트라, 50년 된 수학 문제를 1시간 만에 해결",
+          "original_title": "",
+          "description": "오픈AI의 GPT-5.6 솔 울트라는 64개의 하위 에이전트를 동시에 활용해 Cycle Double Cover Conjecture에 대한 증명을 1시간 이내에 생산했습니다. 이 추측은 50년 동안 해결되지 않은 문제였으며, 수학자 토머스 블룸은 이 증명이 놀랍도록 기초적이라고 평가했지만 인용 부족을 비판했습니다.",
+          "link": "https://the-decoder.com/openais-gpt-5-6-sol-ultra-reportedly-solves-a-50-year-old-math-problem-in-under-an-hour/",
+          "entities": [
+            "Cover",
+            "GPT-5.6",
+            "Cycle",
+            "Double"
+          ],
+          "date": "2026-07-12"
+        }
+      ]
     }
   ],
   "articles": [
@@ -4351,6 +4494,137 @@
       "link": "https://www.theguardian.com/stage/2026/jul/10/robota-review-schwarzman-centre-oxford",
       "entities": [],
       "date": "2026-07-11"
+    },
+    {
+      "id": "40246",
+      "title": "OpenAI가 연구에 안전성을 다시 통합했습니다. 안전팀장이 퇴사합니다.",
+      "original_title": "",
+      "description": "OpenAI의 안전 시스템 책임자인 요하네스 하이데케가 내부 구조조정으로 인해 회사를 떠나게 되었습니다. 이번 재편성은 안전 및 연구 팀을 단일 리더 아래 통합한 것입니다.",
+      "link": "https://thenextweb.com/news/openai-heidecke-safety-head-leaving-research-merger",
+      "entities": [],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40192",
+      "title": "이발 스택: 에이전트가 맞다고 증명하는 대신 주장하기",
+      "original_title": "",
+      "description": "대부분의 AI 연구 도구는 언어 모델을 웹에 맞추고 출력을 신뢰합니다. 사르스 샤는 Sixtyfour를 반대의 본능에 기반하여 구축했습니다: 모든 것을 채점하고 점수를 향상시키는 것만 배송합니다. 사르스 샤는 스코어보드를 유지합니다. Sixtyfour의 연구 에이전트의 모든 빌드는 팀에서 제기한 질문에 대해 채점됩니다.",
+      "link": "https://thenextweb.com/news/the-eval-stack-proving-the-agents-are-right-instead-of-claiming-it",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40234",
+      "title": "A.I. '배우' 틸리 노우드가 새로운 영화를 발표한다. 이 미래에서 벗어나게 해 줘 | ",
+      "original_title": "",
+      "description": "연기는 문화적, 사회적 경계를 넘는 인간의 연결에 관한 것이다. 하지만 '틸리버스'에서는 그런 기대를 할 수 없다. 영화 애호가 여러분, 기뻐하세요. 틸리 노우드가 돌아왔다! 익숙하지 않으신가요? 그녀는 아직 널리 알려진 이름이 아니기 때문이다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jul/11/ai-actor-tilly-norwood-movie",
+      "entities": [
+        "A.I"
+      ],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40229",
+      "title": "메타, 논란의 AI 기능을 인스타그램에서 삭제하다",
+      "original_title": "",
+      "description": "회사는 블로그 게시물에서 \"우리의 의도는 유용한 창의적 도구를 제공하고 사람들이 공개 콘텐츠가 이렇게 참조될 수 있는지 제어할 수 있도록 하는 것이었다\"고 밝히며, \"이 기능이 목표를 빗나갔다는 피드백을 들었고, 그래서 더 이상 사용할 수 없다\"고 말했다.",
+      "link": "https://techcrunch.com/2026/07/10/meta-removes-controversial-ai-feature-on-instagram-after-backlash/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40231",
+      "title": "오픈AI 안전 담당자 퇴사",
+      "original_title": "",
+      "description": "요하네스 하이데케의 퇴사는 오픈AI가 연구 및 안전 팀의 통합을 더욱 추진하는 가운데 이루어졌습니다.",
+      "link": "https://www.wired.com/story/openai-head-of-safety-leaving/",
+      "entities": [],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40249",
+      "title": "애플, Open AI를 고소하며 ‘영업 비밀’을 훔쳤다고 주장",
+      "original_title": "",
+      "description": "애플은 Open AI와 두 명의 전직 직원이 비밀 정보를 훔쳤다고 주장하며 고소했습니다. 실리콘 밸리의 두 거대 기업이 소비자 전자 기기 시장에서 경쟁할 준비를 하고 있습니다.",
+      "link": "https://www.cityam.com/apple-sues-open-ai-accusing-them-of-stealing-trade-secrets/",
+      "entities": [
+        "Open"
+      ],
+      "date": "2026-07-11"
+    },
+    {
+      "id": "40282",
+      "title": "ChatGPT가 가정으로 더 깊숙이 들어가며 가족에 베팅하는 OpenAI",
+      "original_title": "",
+      "description": "ChatGPT는 가족, 돌봄 제공자 및 노인을 위한 경험을 구축할 전담 제품 관리자를 채용할 예정이라고 채용 공고에서 밝혔습니다.",
+      "link": "https://techcrunch.com/2026/07/11/openai-bets-on-families-as-chatgpt-goes-deeper-into-households/",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40286",
+      "title": "호주 저작권법을 완화하려는 AI 기업들. 예술가들은 분노하고, 노동당은 갈등 중",
+      "original_title": "",
+      "description": "앤서니 앨버니지가 이번 주 AI에 대한 중대한 연설을 할 예정이며, 의원들은 데이터 센터 투자 유치와 창작자의 권리 보호 사이에서 갈등하고 있습니다. 앤나 펀더가 국회에서 기자들 앞에 섰던 일도 그 연장선상이죠.",
+      "link": "https://www.theguardian.com/technology/2026/jul/12/ai-australia-will-labor-water-down-copyright-laws-datacentres",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40288",
+      "title": "변동성이 큰 AI 거래가 상승했지만, 석유가 월스트리트를 긴장하게 하다",
+      "original_title": "",
+      "description": "반도체 주식들이 변동성이 크면서도 강한 주간을 보냈습니다. 메타가 우리의 포트폴리오를 상승시켰습니다.",
+      "link": "https://www.cnbc.com/2026/07/11/the-volatile-ai-rally-marched-higher-but-oil-kept-wall-street-on-edge-last-week.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40290",
+      "title": "트럼프 AI 홍보 프로그램의 출범, 기대 이하",
+      "original_title": "",
+      "description": "행정부는 글로벌 AI 지배에 대한 열망과 임시적인 보안 제한 사이에서 균형을 맞추는 데 어려움을 겪고 있습니다.",
+      "link": "https://www.politico.com/news/2026/07/11/trump-administration-commerce-ai-program-00993532?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40235",
+      "title": "A.I.로부터 안전한: 어떤 직업이 미래에 당신을 번영하게 할 것인가?",
+      "original_title": "",
+      "description": "전문가들은 교육, 호텔, 법률 분야 등에서 여전히 기회가 있을 것이라고 말한다. 일의 세계에 들어가는 것은 종종 불확실함을 동반하지만, 이제 또 다른 질문이 있다: 어떻게 하면 내 경력을 A.I.로부터 보호할 수 있을까?",
+      "link": "https://www.theguardian.com/money/2026/jul/11/ai-work-jobs-future-medicine-teaching-hotels-law",
+      "entities": [
+        "A.I."
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40283",
+      "title": "오픈AI의 GPT-5.6 솔 울트라, 50년 된 수학 문제를 1시간 만에 해결",
+      "original_title": "",
+      "description": "오픈AI의 GPT-5.6 솔 울트라는 64개의 하위 에이전트를 동시에 활용해 Cycle Double Cover Conjecture에 대한 증명을 1시간 이내에 생산했습니다. 이 추측은 50년 동안 해결되지 않은 문제였으며, 수학자 토머스 블룸은 이 증명이 놀랍도록 기초적이라고 평가했지만 인용 부족을 비판했습니다.",
+      "link": "https://the-decoder.com/openais-gpt-5-6-sol-ultra-reportedly-solves-a-50-year-old-math-problem-in-under-an-hour/",
+      "entities": [
+        "Cover",
+        "GPT-5.6",
+        "Cycle",
+        "Double"
+      ],
+      "date": "2026-07-12"
     }
   ]
 }

@@ -20,7 +20,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Optional
 
-from pipeline.instagram.models import InstagramReelScene
+from pipeline.instagram.models import InstagramReelScene, SlideType
 
 log = logging.getLogger(__name__)
 
@@ -60,6 +60,28 @@ FILTER_SCRIPT_THRESHOLD = 2000
 # FFmpeg 실행 타임아웃 (초)
 FFMPEG_TIMEOUT = 120
 
+# 텍스트 밀도 기반 전환 선택
+TEXT_HEAVY_TRANSITIONS = ["wipeleft", "slideleft", "circleopen"]
+LOW_TEXT_TRANSITIONS = ["dissolve", "fade"]
+TEXT_HEAVY_TYPES = {SlideType.HOOK, SlideType.CONFLICT, SlideType.TWIST, SlideType.EXPANSION}
+
+# xfade offset 계산
+def compute_xfade_offset(cumulative_duration: float, trans_dur: float) -> float:
+    """xfade offset = 누적 클립 길이 - 전환 시간"""
+    return round(cumulative_duration - trans_dur, 3)
+
+
+# 전환 선택
+def pick_transition_for_types(
+    prev_type: Optional[SlideType], next_type: Optional[SlideType]
+) -> str:
+    """슬라이드 타입에 따라 전환 선택: 텍스트 밀집 = wipe/slide, 단순 = dissolve/fade"""
+    prev_heavy = prev_type in TEXT_HEAVY_TYPES if prev_type else True
+    next_heavy = next_type in TEXT_HEAVY_TYPES if next_type else True
+    if prev_heavy or next_heavy:
+        return random.choice(TEXT_HEAVY_TRANSITIONS)
+    return random.choice(LOW_TEXT_TRANSITIONS)
+
 
 # ──────────────────────────────────────────────
 # Task 1: Ken Burns + xfade 필터 로직
@@ -85,7 +107,8 @@ def build_ken_burns_filter(
     Returns:
         FFmpeg zoompan 필터 문자열
     """
-    zoom_expr = f"min(zoom+{DEFAULT_ZOOM_SPEED},{DEFAULT_MAX_ZOOM})"
+    zoom_range = round(DEFAULT_MAX_ZOOM - 1, 4)  # e.g. 1.12 - 1.0 = 0.12
+    zoom_expr = f"1+({zoom_range})*pow(sin(PI/2*min(1,on/{duration_frames})),2)"
 
     # 팬 방향에 따른 x/y 오프셋
     pan_offsets = {
@@ -187,7 +210,7 @@ def build_scene_filter_chain(
         kb = build_ken_burns_filter(
             scene["image"], duration_frames, output_size, fps, pan_dir
         )
-        filter_parts.append(f"[{i}:v]scale={output_size}:force_original_aspect_ratio=increase,crop={output_size},{kb}[v{i}]")
+        filter_parts.append(f"[{i}:v]scale={output_size}:force_original_aspect_ratio=increase,crop={output_size.replace('x', ':')},{kb}[v{i}]")
 
     # 2단계: xfade 체인
     if n == 1:
@@ -205,10 +228,9 @@ def build_scene_filter_chain(
                 # 첫 씬 → 두 번째 씬: 전환 적용
                 transition = random.choice(SUPPORTED_TRANSITIONS)
 
-            xfade = build_xfade_filter(transition, trans_duration, cumulative_offset)
             out_label = f"v{i}out" if i < n - 1 else "vout"
             filter_parts.append(
-                f"[{last_label}][v{i}]xfade=transition={transition}:duration={trans_duration}:offset={cumulative_offset:.3f}[{out_label}]"
+                f"[{last_label}][v{i}]xfade=transition={transition}:duration={trans_duration}:offset={cumulative_offset - trans_duration:.3f}[{out_label}]"
             )
             last_label = out_label
             cumulative_offset += scenes[i].get("duration", DEFAULT_SLIDE_DURATION) - trans_duration
@@ -662,7 +684,7 @@ def build_render_command(
         )
         filter_parts.append(
             f"[{i}:v]scale={output_size}:force_original_aspect_ratio=increase,"
-            f"crop={output_size},{kb}[v{i}]"
+            f"crop={output_size.replace('x', ':')},{kb}[v{i}]"
         )
 
     # xfade 체인
@@ -680,7 +702,7 @@ def build_render_command(
             out_label = f"v{i}out" if i < n - 1 else "vout"
             filter_parts.append(
                 f"[{last_label}][v{i}]xfade=transition={trans}"
-                f":duration={transition_duration}:offset={cumulative_offset:.3f}"
+                f":duration={transition_duration}:offset={cumulative_offset - transition_duration:.3f}"
                 f"[{out_label}]"
             )
             last_label = out_label
@@ -766,7 +788,7 @@ def render_carousel_video(
             transitions_list.append(scene.transition_type)
     else:
         slide_durations = [DEFAULT_SLIDE_DURATION] * len(slides)
-        transitions_list = select_random_transitions(len(slides))
+        transitions_list = select_random_transitions(len(slides), use_text_heavy=True)
 
     # FFmpeg 필터그래프 구성
     filter_parts: list[str] = []
@@ -782,7 +804,7 @@ def render_carousel_video(
         )
         filter_parts.append(
             f"[{i}:v]scale={output_size}:force_original_aspect_ratio=increase,"
-            f"crop={output_size},{kb}[v{i}]"
+            f"crop={output_size.replace('x', ':')},{kb}[v{i}]"
         )
 
     # xfade 체인
@@ -793,15 +815,27 @@ def render_carousel_video(
         cumulative_offset = slide_durations[0] if slide_durations else DEFAULT_SLIDE_DURATION
 
         for i in range(1, n):
-            trans = transitions_list[i] if i < len(transitions_list) and transitions_list[i] else random.choice(SUPPORTED_TRANSITIONS)
+            explicit_trans = transitions_list[i] if i < len(transitions_list) else None
+            if explicit_trans:
+                trans = explicit_trans
+            elif scenes:
+                prev_scene = scenes[i - 1] if i - 1 < len(scenes) else None
+                this_scene = scenes[i] if i < len(scenes) else None
+                trans = pick_transition_for_types(
+                    prev_scene.slide_ref if prev_scene else None,
+                    this_scene.slide_ref if this_scene else None,
+                )
+            else:
+                trans = random.choice(SUPPORTED_TRANSITIONS)
             if not is_supported_xfade(trans):
                 trans = DEFAULT_TRANSITION
 
             trans_dur = DEFAULT_TRANSITION_DURATION
+            xfade_offset = compute_xfade_offset(cumulative_offset, trans_dur)
             out_label = f"v{i}out" if i < n - 1 else "vout"
             filter_parts.append(
                 f"[{last_label}][v{i}]xfade=transition={trans}"
-                f":duration={trans_dur}:offset={cumulative_offset:.3f}"
+                f":duration={trans_dur}:offset={xfade_offset:.3f}"
                 f"[{out_label}]"
             )
             last_label = out_label
@@ -906,7 +940,7 @@ def render_reel_video(
         )
         filter_parts.append(
             f"[{i}:v]scale={output_size}:force_original_aspect_ratio=increase,"
-            f"crop={output_size},{kb}[v{i}]"
+            f"crop={output_size.replace('x', ':')},{kb}[v{i}]"
         )
 
     # xfade 체인
@@ -917,16 +951,26 @@ def render_reel_video(
         cumulative_offset = (scenes[0].duration_seconds * scale_factor) if scenes else audio_dur / n
 
         for i in range(1, n):
+            prev_scene = scenes[i - 1] if i - 1 < len(scenes) else None
             scene = scenes[i] if i < len(scenes) else None
-            trans = scene.transition_type if scene and scene.transition_type else random.choice(SUPPORTED_TRANSITIONS)
+
+            trans = (
+                scene.transition_type
+                if scene and scene.transition_type
+                else pick_transition_for_types(
+                    prev_scene.slide_ref if prev_scene else None,
+                    scene.slide_ref if scene else None,
+                )
+            )
             if not is_supported_xfade(trans):
                 trans = DEFAULT_TRANSITION
 
             trans_dur = DEFAULT_TRANSITION_DURATION
+            xfade_offset = compute_xfade_offset(cumulative_offset, trans_dur)
             out_label = f"v{i}out" if i < n - 1 else "vout"
             filter_parts.append(
                 f"[{last_label}][v{i}]xfade=transition={trans}"
-                f":duration={trans_dur}:offset={cumulative_offset:.3f}"
+                f":duration={trans_dur}:offset={xfade_offset:.3f}"
                 f"[{out_label}]"
             )
             last_label = out_label

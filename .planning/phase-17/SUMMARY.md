@@ -2,8 +2,9 @@
 
 > **Phase:** 17 — Instagram Carousel + Shorts/Reels 자동화 파이프라인
 > **Mode:** ad-hoc (MVP)
-> **Status:** Planned
+> **Status:** ✅ 구현 완료 (17-01~17-06) — **17-07 테스트/검증 + Graph API 토큰 발급 필요**
 > **Created:** 2026-07-11
+> **Completed:** 2026-07-11
 
 ---
 
@@ -19,15 +20,15 @@
 
 ## 구현 작업 분해 (7개 서브태스크)
 
-| Task ID | 작업 | 핵심 내용 | 의존성 |
-|---------|------|-----------|--------|
-| 17-01 | **콘텐츠 변환기** | Format D(5카드) → Carousel 5~7장 / Shorts 15~30초 대본 변환 | Phase 16 완료 |
-| 17-02 | **이미지 생성기** | HTML 템플릿 → Playwright 캡처 (1080×1350 / 1080×1920 PNG) | 17-01 |
-| 17-03 | **비디오 렌더러** | FFmpeg: Ken Burns(zoompan) + xfade(전환) + drawtext(자막 바운스) | 17-02 |
-| 17-04 | **TTS + 자막** | edge-tts(무료) + SRT 생성 + FFmpeg drawtext 바운스 애니메이션 | 17-03 |
-| 17-05 | **Instagram 발행** | Graph API: Carousel Container → Publish / Reels Container → Publish | 17-04 |
-| 17-06 | **스케줄러/오케스트레이터** | launchd 연동: 일 2회(캐러셀 08:00, Shorts 19:00) 자동 실행 | 17-05 |
-| 17-07 | **테스트/검증** | 3일 드라이런 → 품질 체크 → 정식 운영 전환 | 17-06 |
+| Task ID | 작업 | 핵심 내용 | 파일 | 상태 |
+|---------|------|-----------|------|------|
+| 17-01 | **콘텐츠 변환기** | Format D(5카드) → Carousel 5~7장 / Shorts 15~30초 대본 변환 | `content_converter.py` | ✅ 완료 |
+| 17-02 | **이미지 생성기** | HTML 템플릿 → Playwright 캡처 (1080×1350 / 1080×1920 PNG) | `html_renderer.py`, `utils.py`, `templates/` | ✅ 완료 |
+| 17-03 | **비디오 렌더러** | FFmpeg: Ken Burns(zoompan) + xfade(전환) + drawtext(자막 바운스) | `video_renderer.py` (1013 lines) | ✅ 완료 |
+| 17-04 | **TTS + 자막** | edge-tts(무료) + SRT 생성 + FFmpeg drawtext 바운스 애니메이션 | `tts_generator.py` (646 lines) | ✅ 완료 |
+| 17-05 | **Instagram 발행** | Graph API: Carousel/Reels Container → Publish (urllib-only) | `instagram_publisher.py` (889 lines), `config.py` | ✅ 완료 (토큰 설정 필요) |
+| 17-06 | **스케줄러/오케스트레이터** | PipelineStep + launchd: 일 2회(캐러셀 08:00, Shorts 19:00) | `step_instagram.py`, `scripts/*.plist.template` | ✅ 완료 |
+| 17-07 | **테스트/검증** | 3일 드라이런 → 품질 체크 → 정식 운영 전환 | — | ⏸️ 보류 (토큰 발급 후) |
 
 ---
 
@@ -85,12 +86,25 @@
 
 ---
 
+## 실행 내역 (2026-07-11)
+
+| Wave | Sub-Plan | 실행 시간 | 담당 |
+|------|----------|-----------|------|
+| Wave 1 | 17-02 (HTML Renderer) + 17-04 (TTS Generator) | 오전 | gsd-executor |
+| Wave 2 | 17-03 (Video Renderer, FFmpeg) | 오전 | gsd-executor |
+| Wave 3 | 17-05 (Instagram Publisher) | 오후 | gsd-executor |
+| Wave 4 | 17-06 (Scheduler + Orchestrator) | 오후 | gsd-executor |
+
+**총 코드**: 3,476 lines across 8 files (`pipeline/instagram/`)
+**커밋**: `813afae`, `78ea289`, `8a62315`, `e3416ea`, `49761c9`
+
 ## 다음 단계
 
-1. ✅ CONTEXT.md, RESEARCH.md, PLAN.md 작성 완료
-2. 🔄 **다음**: `gsd-plan-checker`로 검증 → 승인 시 실행 착수
-3. 실행 순서: 17-01 → 17-02 → 17-03 → 17-04 → 17-05 → 17-06 → 17-07
-4. 예상 소요: ~10일 (2주)
+1. ✅ **Phase 17 코드 구현 완료** (17-01 ~ 17-06)
+2. ⏸️ **17-07 테스트/검증**: 사용자가 Meta Graph API 토큰 발급 후 실행
+   - `.env` 필요: `INSTAGRAM_ACCESS_TOKEN`, `INSTAGRAM_BUSINESS_ACCOUNT_ID`, `FACEBOOK_PAGE_ID`
+   - 가이드: `pipeline/instagram/SETUP_GRAPH_API.md`
+3. 🔲 launchd 등록: `bash scripts/install_instagram_launchd.sh`
 
 ---
 

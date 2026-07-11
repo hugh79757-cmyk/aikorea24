@@ -6,6 +6,7 @@ Playwright 로컬 설치 기반 ($0 비용).
 from __future__ import annotations
 
 import logging
+import shutil
 import subprocess
 import tempfile
 from pathlib import Path
@@ -57,6 +58,14 @@ def _load_template(name: str) -> Template:
     return Template(template_path.read_text(encoding="utf-8"))
 
 
+def _ensure_tokens_css(html_path: Path) -> None:
+    """Copy tokens.css from templates dir to the same dir as the HTML file."""
+    tokens_source = TEMPLATE_DIR / "tokens.css"
+    tokens_target = html_path.parent / "tokens.css"
+    if tokens_source.exists() and not tokens_target.exists():
+        shutil.copy2(str(tokens_source), str(tokens_target))
+
+
 def _render_slide_to_html(
     slide: InstagramSlide,
     template: Template,
@@ -80,6 +89,7 @@ def _render_slide_to_html(
     )
 
     output_path.write_text(result, encoding="utf-8")
+    _ensure_tokens_css(output_path)
     return output_path
 
 
@@ -110,8 +120,9 @@ def capture_html_to_png(
     cmd = [
         pw_path,
         "screenshot",
-        "--device-scale-factor=2",
-        "--viewport-size", f"{width}x{height}",
+        "--viewport-size", f"{width},{height}",
+        "--wait-for-selector", "[data-fonts-loaded=\"true\"]",  # wait for Pretendard web font
+        "--wait-for-timeout", "2000",  # safety margin after font load
         f"file://{html_path}",
         str(output_path),
     ]

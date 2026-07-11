@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=1080, height=1350">
   <title>Instagram Carousel Slide</title>
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v2/dist/web/static/pretendard.css" rel="stylesheet">
+  <link rel="stylesheet" href="tokens.css">
   <style>
     * {
       margin: 0;
@@ -12,21 +13,6 @@
       box-sizing: border-box;
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
       word-break: keep-all;
-    }
-
-    :root {
-      --bg-hook: linear-gradient(135deg, #1a0533 0%, #0D1117 100%);
-      --bg-conflict: linear-gradient(135deg, #330a0a 0%, #0D1117 100%);
-      --bg-twist: linear-gradient(135deg, #0a1a33 0%, #0D1117 100%);
-      --bg-expansion: #1a1a2e;
-      --bg-cta: linear-gradient(135deg, #0a3314 0%, #0D1117 100%);
-      --bg-link: #0D1117;
-      --bg-brand: linear-gradient(135deg, #0D1117 0%, #1a0533 100%);
-      --accent-purple: #A855F7;
-      --accent-red: #EF4444;
-      --accent-blue: #3B82F6;
-      --accent-green: #22C55E;
-      --accent-yellow: #EAB308;
     }
 
     .slide {
@@ -39,38 +25,32 @@
       color: #ffffff;
     }
 
-    .slide.bg-hook { background: var(--bg-hook); }
-    .slide.bg-conflict { background: var(--bg-conflict); }
-    .slide.bg-twist { background: var(--bg-twist); }
-    .slide.bg-expansion { background: var(--bg-expansion); }
-    .slide.bg-cta { background: var(--bg-cta); }
-    .slide.bg-link { background: var(--bg-link); }
-    .slide.bg-brand { background: var(--bg-brand); }
-
-    /* Decorative blur orbs */
+    /* Decorative blur orbs — template-specific sizes */
     .slide::before {
       content: '';
       position: absolute;
       top: -120px;
       right: -120px;
-      width: 400px;
-      height: 400px;
+      width: var(--orb-size);
+      height: var(--orb-size);
       border-radius: 50%;
       background: rgba(168, 85, 247, 0.08);
-      filter: blur(80px);
+      filter: blur(var(--orb-blur, 80px));
       pointer-events: none;
+      z-index: 0;
     }
     .slide::after {
       content: '';
       position: absolute;
       bottom: -120px;
       left: -120px;
-      width: 400px;
-      height: 400px;
+      width: var(--orb-size);
+      height: var(--orb-size);
       border-radius: 50%;
       background: rgba(59, 130, 246, 0.06);
-      filter: blur(80px);
+      filter: blur(var(--orb-blur, 80px));
       pointer-events: none;
+      z-index: 0;
     }
 
     .slide-inner {
@@ -79,28 +59,28 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 80px 72px;
+      padding: var(--padding-slide-y) var(--padding-slide-x);
     }
 
     /* Top section: emoji + highlight number */
     .top-section {
       flex: 0 0 auto;
-      margin-bottom: 48px;
+      margin-bottom: var(--spacing-section);
     }
 
     .emoji-prefix {
-      font-size: 64px;
+      font-size: var(--fs-emoji);
       line-height: 1;
-      margin-bottom: 24px;
+      margin-bottom: var(--spacing-small);
       display: block;
     }
 
     .highlight-number {
-      font-size: 120px;
+      font-size: var(--fs-highlight);
       font-weight: 800;
       line-height: 1;
       letter-spacing: -3px;
-      background: linear-gradient(135deg, #A855F7, #3B82F6);
+      background: var(--grad-accent);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -115,27 +95,26 @@
     }
 
     .title {
-      font-size: 48px;
+      font-size: var(--fs-title);
       font-weight: 700;
       line-height: 1.3;
-      margin-bottom: 32px;
+      margin-bottom: var(--spacing-content);
       color: #ffffff;
     }
 
-    .divider {
-      width: 64px;
-      height: 4px;
-      background: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
-      border-radius: 2px;
-      margin-bottom: 32px;
-    }
-
     .body {
-      font-size: 28px;
+      font-size: var(--fs-body);
       font-weight: 400;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.7);
       max-width: 900px;
+    }
+
+    /* CTA-specific: center-aligned button */
+    .cta-wrapper {
+      flex: 0 0 auto;
+      text-align: center;
+      margin-top: var(--spacing-section);
     }
 
     /* Bottom section: subtitle */
@@ -145,40 +124,17 @@
     }
 
     .subtitle {
-      font-size: 20px;
+      font-size: var(--fs-subtitle);
       color: rgba(255, 255, 255, 0.4);
       font-weight: 500;
     }
 
-    /* Brand watermark */
-    .brand-watermark {
-      position: absolute;
-      bottom: 32px;
-      right: 40px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      opacity: 0.3;
-    }
+    /* Conditional elements: hidden by default, shown by slide type */
+    .cta-wrapper { display: none; }
+    .slide.bg-cta .cta-wrapper { display: block; }
 
-    .brand-watermark .brand-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-
-    .brand-watermark .brand-text {
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 500;
-    }
+    .section-label-wrapper { display: none; }
+    .slide.bg-expansion .section-label-wrapper { display: block; }
 
     /* Swipe hint at bottom */
     .swipe-hint {
@@ -192,10 +148,11 @@
       color: rgba(255, 255, 255, 0.35);
       font-size: 15px;
       font-weight: 500;
-      animation: bounce 2s infinite;
+      animation: swipe-bounce 2s infinite;
+      z-index: 1;
     }
 
-    @keyframes bounce {
+    @keyframes swipe-bounce {
       0%, 100% { transform: translateX(-50%) translateY(0); }
       50% { transform: translateX(-50%) translateY(-6px); }
     }
@@ -208,6 +165,9 @@
 </head>
 <body style="background: #000;">
   <div class="slide $bg_class">
+    <!-- Grain texture layer -->
+    <div class="grain-overlay"></div>
+
     <div class="slide-inner">
       <div class="top-section">
         <span class="emoji-prefix">$emoji_prefix</span>
@@ -215,9 +175,17 @@
       </div>
 
       <div class="middle-section">
+        <!-- Section label (shown for EXPANSION slides via CSS) -->
+        <div class="section-label-wrapper">
+          <div class="section-label">이게 의미하는 것</div>
+        </div>
         <div class="title">$title</div>
-        <div class="divider"></div>
+        <div class="slide-divider"></div>
         <div class="body">$body</div>
+        <!-- CTA button (shown for CTA slides via CSS) -->
+        <div class="cta-wrapper">
+          <div class="cta-button">AI코리아24에서 매일 브리핑 보기</div>
+        </div>
       </div>
 
       <div class="bottom-section">
@@ -240,5 +208,10 @@
       </svg>
     </div>
   </div>
+  <script>
+    document.fonts.ready.then(function() {
+      document.body.dataset.fontsLoaded = 'true';
+    });
+  </script>
 </body>
 </html>

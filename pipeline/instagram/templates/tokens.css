@@ -1,0 +1,175 @@
+/* ===================================================================
+ * tokens.css — Unified Design Tokens for aikoRea24 Instagram Templates
+ *
+ * Usage: <link rel="stylesheet" href="tokens.css">
+ * html_renderer.py copies this to temp dir alongside slide HTML.
+ * =================================================================== */
+
+:root {
+  /* ── Slide type background colors ── */
+  --bg-hook-1: #1a0533;
+  --bg-hook-2: #0d1117;
+
+  --bg-conflict-1: #330a0a;
+  --bg-conflict-2: #0d1117;
+
+  --bg-twist-1: #0a1a33;
+  --bg-twist-2: #0d1117;
+
+  --bg-expansion: #1a1a2e;
+
+  --bg-cta-1: #0a3314;
+  --bg-cta-2: #0d1117;
+
+  --bg-link: #0d1117;
+  --bg-brand-1: #0d1117;
+  --bg-brand-2: #1a0533;
+
+  /* ── Gradients ── */
+  --grad-hook: linear-gradient(135deg, var(--bg-hook-1), var(--bg-hook-2));
+  --grad-conflict: linear-gradient(135deg, var(--bg-conflict-1), var(--bg-conflict-2));
+  --grad-twist: linear-gradient(135deg, var(--bg-twist-1), var(--bg-twist-2));
+  --grad-expansion: var(--bg-expansion);
+  --grad-cta: linear-gradient(135deg, var(--bg-cta-1), var(--bg-cta-2));
+  --grad-link: var(--bg-link);
+  --grad-brand: linear-gradient(135deg, var(--bg-brand-1), var(--bg-brand-2));
+
+  --grad-accent: linear-gradient(90deg, var(--accent-purple), var(--accent-blue));
+  --grad-cta-button: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+
+  /* ── Accent colors ── */
+  --accent-purple: #a855f7;
+  --accent-red: #ef4444;
+  --accent-blue: #3b82f6;
+  --accent-green: #22c55e;
+  --accent-yellow: #eab308;
+
+  /* ── Typography scales (clamp: min, preferred, max) ── */
+  --fs-highlight: clamp(96px, 12vw, 140px);
+  --fs-title: clamp(40px, 5vw, 56px);
+  --fs-body: clamp(24px, 3vw, 32px);
+  --fs-subtitle: clamp(18px, 2vw, 22px);
+  --fs-section-label: clamp(20px, 2.2vw, 24px);
+  --fs-emoji: 64px;
+  --fs-emoji-reel: 80px;
+
+  /* ── Spacing ── */
+  --spacing-section: 48px;
+  --spacing-content: 32px;
+  --spacing-small: 24px;
+  --padding-slide-x: 72px;
+  --padding-slide-y: 80px;
+  --padding-slide-y-reel: 120px;
+
+  /* ── Effects ── */
+  --grain-opacity: 0.04;
+  --watermark-opacity: 0.45;
+  --orb-blur: 80px;
+  --orb-blur-reel: 100px;
+  --orb-size: 400px;
+  --orb-size-reel: 500px;
+
+  /* ── CTA button ── */
+  --cta-button-padding-x: 48px;
+  --cta-button-padding-y: 20px;
+  --cta-button-radius: 100px;
+  --cta-button-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+
+  /* ── Divider ── */
+  --divider-width: 64px;
+  --divider-height: 4px;
+  --divider-radius: 2px;
+}
+
+/* ── Background class definitions ── */
+.slide.bg-hook { background: var(--grad-hook); }
+.slide.bg-conflict { background: var(--grad-conflict); }
+.slide.bg-twist { background: var(--grad-twist); }
+.slide.bg-expansion { background: var(--grad-expansion); }
+.slide.bg-cta { background: var(--grad-cta); }
+.slide.bg-link { background: var(--grad-link); }
+.slide.bg-brand { background: var(--grad-brand); }
+
+/* ── Grain texture overlay ── */
+.grain-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: overlay;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* ── Section label (EXPANSION 소제목 등) ── */
+.section-label {
+  font-size: var(--fs-section-label);
+  font-weight: 600;
+  color: var(--accent-purple);
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+/* ── CTA button visual (non-interactive, PNG-only) ── */
+.cta-button {
+  display: inline-block;
+  padding: var(--cta-button-padding-y) var(--cta-button-padding-x);
+  border-radius: var(--cta-button-radius);
+  background: var(--grad-cta-button);
+  box-shadow: var(--cta-button-shadow);
+  position: relative;
+  font-size: var(--fs-body);
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+}
+.cta-button::before {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 1px;
+}
+
+/* ── Brand watermark ── */
+.brand-watermark {
+  position: absolute;
+  bottom: 32px;
+  right: 40px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: var(--watermark-opacity);
+}
+.brand-watermark .brand-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+}
+.brand-watermark .brand-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+/* ── Divider ── */
+.slide-divider {
+  width: var(--divider-width);
+  height: var(--divider-height);
+  background: var(--grad-accent);
+  border-radius: var(--divider-radius);
+  margin-bottom: var(--spacing-content);
+}

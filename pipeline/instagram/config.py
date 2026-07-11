@@ -23,7 +23,14 @@ DEFAULT_HASHTAGS: list[str] = [
 ]
 
 # Caption templates — {hook_text}, {cta_text}, {hashtags} placeholders
-CAROUSEL_CAPTION_TEMPLATE: str = "{hook_text}\n\n{cta_text}\n\n{hashtags}"
+CAROUSEL_CAPTION_TEMPLATE: str = (
+    "{hook_text}\n\n"
+    "{cta_text}\n\n"
+    "---\n"
+    "이 이슈, 3분 안에 정리해서 매일 브리핑에서 봅니다\n"
+    "팔로우해서 매일 AI 뉴스 받아보기 → @aikorea24\n\n"
+    "{hashtags}"
+)
 REEL_CAPTION_TEMPLATE: str = "{hook_text}\n\n{hashtags}"
 
 # Rate limiting

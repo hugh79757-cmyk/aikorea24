@@ -18,9 +18,14 @@
     "@tailwindcss/typography": "^0.5.19",
     "astro": "^5.17.1",
     "beautifulsoup4": "^0.0.1-security",
+    "edge-tts": "^1.0.1",
     "marked": "^18.0.6",
     "openai": "^6.45.0",
+    "requests": "^0.3.0",
     "sanitize-html": "^2.17.5",
     "tailwindcss": "^3.4.19"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
   }
 }

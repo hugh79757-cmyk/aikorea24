@@ -168,7 +168,85 @@ launchd (macOS) / systemd (Linux) → 일 2회 자동 실행
 
 ---
 
-## 7. 참고 링크
+## 7. 구현 가능성 평가 (17-02 ~ 17-07)
+
+### 17-02: HTML → PNG 이미지 생성기
+| 항목 | 평가 |
+|------|------|
+| **난이도** | 🟢 **쉬움** |
+| **선행 패키지** | `playwright` (1.61.0 설치 완료, Chromium browser ready) |
+| **프로토타입** | `prototypes/html_to_png.mjs` — Playwright JS 버전 검증 완료 |
+| **방법** | `playwright.sync_api` Python API로 HTML 파일 로드 → `page.screenshot()` |
+| **생산 고려** | 헤드리스 Chromium, 타임아웃 30초, 재시도 로직 필요 |
+| **예상 시간** | 2~3시간 |
+| **리스크** | 🟢 낮음 — 검증된 접근법 |
+
+### 17-03: FFmpeg 비디오 렌더러
+| 항목 | 평가 |
+|------|------|
+| **난이도** | 🟡 **중간** |
+| **선행 패키지** | `ffmpeg` (8.1.1 설치 완료, videotoolbox HW 가속 지원) |
+| **프로토타입** | `prototypes/build_reel.py`, `test_reel*.py` — FFmpeg 필터그래프 검증 완료 |
+| **방법** | `subprocess.run()` + `-filter_complex_script` (쉘 이스케이프 회피) |
+| **핵심 필터** | zoompan (Ken Burns) + xfade (전환) + drawtext/subtitles (자막) + concat (오디오) |
+| **생산 고려** | `-hwaccel videotoolbox`로 H.264 인코딩 가속, CRF 20~23 |
+| **예상 시간** | 4~6시간 |
+| **리스크** | 🟡 중간 — 필터그래프 디버깅이 가장 까다로움. 쉘 이스케이프 문제는 `-filter_complex_script`로 회피 |
+
+### 17-04: TTS + 자막 생성기
+| 항목 | 평가 |
+|------|------|
+| **난이도** | 🟢 **쉬움** |
+| **선행 패키지** | `edge-tts` (7.2.8 설치 완료) |
+| **프로토타입** | `prototypes/create_reel.py`, `build_reel.py` — edge-tts 비동기 호출 검증 완료 |
+| **방법** | `edge_tts.Communicate(text, voice).save(mp3_path, srt_path)` — SRT 네이티브 생성 |
+| **음성** | `ko-KR-SunHiNeural` — 자연스러운 한국어 여성 음성 |
+| **생산 고려** | `asyncio.gather()`로 병렬 생성, 재시도 로직 (네트워크 오류 대비) |
+| **예상 시간** | 1~2시간 |
+| **리스크** | 🟢 낮음 — 검증된 라이브러리, 무제한 무료 |
+
+### 17-05: Instagram Graph API 발행
+| 항목 | 평가 |
+|------|------|
+| **난이도** | 🟡 **중간** |
+| **선행 패키지** | `requests` (2.34.2 설치 완료) — `facebook_business` SDK 불필요 |
+| **API 버전** | v25.0 (최신) |
+| **방법** | REST API: 1) Media Container 생성 → 2) 상태 폴링 → 3) Publish |
+| **Carousel** | 각 슬라이드 → child container (`is_carousel_item=true`) → parent container (`media_type=CAROUSEL`) |
+| **Reels** | 단일 container (`media_type=REELS`, `video_url=공개URL`) |
+| **토큰** | Long-lived (60일), 사용자 OAuth 필요 (SETUP_GRAPH_API.md 참조) |
+| **미디어 URL** | 이미지/비디오를 공개 URL로 호스팅 필요 (R2/Pages) |
+| **레이트 리밋** | 앱당 200회/시간 — 일 2회 발행이면 문제 없음 |
+| **예상 시간** | 3~5시간 |
+| **리스크** | 🟡 중간 — 토큰 갱신, 미디어 URL 호스팅, Graph API 에러 처리 (FINISHED 상태 폴링 필수) |
+
+### 17-06: 스케줄러 + 오케스트레이터
+| 항목 | 평가 |
+|------|------|
+| **난이도** | 🟢 **쉬움** |
+| **선행 패턴** | 기존 `pipeline/orchestrator.py` (PipelineOrchestrator + PipelineStep 프로토콜) 재사용 |
+| **launchd 템플릿** | 기존 `.plist` 파일들 참조 가능 |
+| **방법** | 기존 `PipelineOrchestrator`에 Instagram 스텝 등록 + launchd plist 생성 |
+| **DB 상태** | D1에 `sns_jobs` 또는 `pipeline_runs` 테이블 활용 |
+| **알림** | 기존 Telegram 알림 인프라 재사용 |
+| **예상 시간** | 2~3시간 |
+| **리스크** | 🟢 낮음 — 기존 인프라와 동일 패턴 |
+
+### 17-07: 통합 테스트 + 문서화
+| 항목 | 평가 |
+|------|------|
+| **난이도** | 🟢 **쉬움** |
+| **방법** | E2E dry-run: Format D → Carousel PNG → Reels MP4 → Graph API (dry-run) |
+| **품질 체크** | 해상도, 길이, 자막 싱크, Ken Burns 부드러움, 전환 자연스러움 |
+| **문서** | 설치/설정/실행/모니터링/트러블슈팅 |
+| **예상 시간** | 2~3시간 |
+| **리스크** | 🟢 낮음 |
+
+### 총 예상 시간: 14~22시간
+
+---
+
+## 8. 참고 링크
 
 - [FFmpeg xfade 문서](https://ffmpeg.org/ffmpeg-filters.html#xfade)
 - [FFmpeg zoompan 문서](https://ffmpeg.org/ffmpeg-filters.html#zoompan)
