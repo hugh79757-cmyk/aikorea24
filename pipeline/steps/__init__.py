@@ -2,5 +2,13 @@
 # 기존 진입점을 subprocess로 호출하는 얇은 래퍼들
 
 from pipeline.steps.step_run_threads import StepRunThreads
+from pipeline.instagram.step_instagram import (
+    StepRunInstagramCarousel,
+    StepRunInstagramReel,
+)
 
-__all__ = ["StepRunThreads"]
+__all__ = [
+    "StepRunThreads",
+    "StepRunInstagramCarousel",
+    "StepRunInstagramReel",
+]
