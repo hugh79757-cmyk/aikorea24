@@ -37,6 +37,9 @@ backup3.py
 .reasonix/
 *.plist
 
+# OpenCode runtime session files
+.omo/run-continuation/
+
 # Log directories
 naver_blog/logs/
 scripts/threads/logs/
@@ -48,3 +51,20 @@ scripts/__pycache__/
 scripts/threads/posted.json
 scripts/threads/logs/
 scripts/tools_collector.log
+
+# Phase 17 - Instagram pipeline generated artifacts
+instagram-carousel-output/
+instagram-reel-output/
+cards/
+tts/
+pipeline/instagram/__pycache__/
+
+# Root-level test artifacts (Reel prototypes)
+*.mp4
+*.mp3
+*.srt
+narration_*.txt
+filter.txt
+
+# Playwright session artifacts
+.playwright-mcp/

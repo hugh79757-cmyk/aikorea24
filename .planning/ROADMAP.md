@@ -288,6 +288,34 @@ Plans:
 
 ---
 
+### Phase 17: SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels
+**Goal**: 기존 뉴스 파이프라인(Format D → Threads) 확장하여, **Instagram Carousel(캐러셀) + Shorts/Reels(쇼츠/릴스)** 자동 생성/발행 파이프라인 구축.
+**Mode:** ad-hoc (MVP)
+**Depends on:** Phase 16 (Writer prompt v2 완료), 기존 파이프라인 인프라
+**Priority:** High (콘텐츠 배포 채널 확장)
+**Requirements:** REQ-01 ~ REQ-07
+
+**Success Criteria:**
+1. **Instagram Carousel 생성**: 5~7장 슬라이드, 1080×1350(4:5), Ken Burns + 전환 + 자막 바운스
+2. **Shorts/Reels 생성**: 9:16(1080×1920), 15~30초, Ken Burns + 자막 바운스 + 비트 싱크 컷
+3. **콘텐츠 변환**: 기존 Format D(펀치 브리핑 5카드) → 캐러셀 5~7장 / Shorts 15~30초 대본 자동 변환
+4. **자동 발행**: Instagram Graph API + Meta Business Suite 연동 (캐러셀/릴스 각각)
+5. **스케줄링**: 일 1회(캐러셀 오전 8시) + 일 1회(Shorts 오후 7시), 한국 시간
+6. **무료 운영**: edge-tts + FFmpeg + Meta Graph API (무료 티어)
+
+**Plans:** 7 plans
+
+Plans:
+- [ ] 17-01-PLAN.md — 콘텐츠 변환기 (Format D → Carousel/Shorts 변환기)
+- [ ] 17-02-PLAN.md — 이미지 생성기 (HTML 템플릿 → Playwright 캡처)
+- [ ] 17-03-PLAN.md — 비디오 렌더러 (FFmpeg: Ken Burns + xfade + drawtext)
+- [ ] 17-04-PLAN.md — TTS + 자막 (edge-tts + SRT + drawtext 바운스)
+- [ ] 17-05-PLAN.md — Instagram 발행 (Graph API Carousel/Reels)
+- [ ] 17-06-PLAN.md — 스케줄러/오케스트레이터 (launchd 연동)
+- [ ] 17-07-PLAN.md — 테스트/검증 (드라이런 → 품질 체크 → 정식 운영)
+
+---
+
 ## 마일스톤 v2.0 — 강좌 시스템 (Course System)
 
 **목표**: 커뮤니티 게이트웨이 패턴 기반 강좌 시스템. 강좌 콘텐츠는 `posts`에 저장되고, 이메일은 티저 + 링크만 발송. 커뮤니티 로그인 게이트를 통해 전체 콘텐츠 열람.
@@ -373,4 +401,5 @@ Plans:
 | 20. 강좌 콘텐츠 완성 | ad-hoc | Complete | 2026-07-10 |
 | 21. 히어로 강좌 설계 | — | Pending | — |
 | 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
+| 23. SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels | 0/7 | Planned | — |
 | **Total** | **42/47** | | |

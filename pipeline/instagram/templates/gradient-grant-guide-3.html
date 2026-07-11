@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080, height=1350">
+  <title>Grant Guide - Step 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>*{font-family:'Pretendard',sans-serif;}</style>
+</head>
+<body>
+  <div class="w-[1080px] h-[1350px] relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500"></div>
+    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cdefs%3E%3Cpattern id=\"grid\" width=\"20\" height=\"20\" patternUnits=\"userSpaceOnUse\"%3E%3Cpath d=\"M 20 0 L 0 0 0 20\" fill=\"none\" stroke=\"white\" stroke-width=\"0.5\"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width=\"100\" height=\"100\" fill=\"url(%23grid)\"/%3E%3C/svg%3E');"></div>
+    <div class="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-yellow-400/20 blur-3xl"></div>
+    <div class="absolute -bottom-32 -left-32 w-64 h-64 rounded-full bg-teal-400/20 blur-3xl"></div>
+    <div class="relative z-10 h-full flex flex-col">
+      <div class="flex items-start justify-between p-10 pt-16">
+        <div>
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white text-sm font-semibold mb-4">
+            <span class="w-2 h-2 rounded-full bg-yellow-300 animate-pulse"></span>
+            마감 D-3
+          </span>
+          <h1 class="text-5xl font-extrabold text-white leading-tight tracking-tight max-w-3xl">
+            AI 바우처<br>
+            <span class="bg-gradient-to-r from-yellow-300 to-orange-400 bg-clip-text text-transparent">3천만원</span><br>
+            받는 법
+          </h1>
+        </div>
+        <div class="hidden md:block w-48 h-48 rounded-3xl bg-gradient-to-br from-yellow-400/30 to-orange-500/30 border border-white/20 flex items-center justify-center">
+          <svg class="w-24 h-24 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+      </div>
+      <div class="flex-1 px-10 py-6">
+        <div class="space-y-5">
+          <!-- Step 1 - Completed -->
+          <div class="flex items-start gap-5 group">
+            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg">
+              <span class="text-2xl font-extrabold text-white">✓</span>
+            </div>
+            <div class="flex-1 pt-2">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="text-xl font-bold text-white">자격 확인</h3>
+                <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-300 text-xs font-semibold">자동 진단</span>
+              </div>
+              <p class="text-white/70 leading-relaxed">중소기업·소상공인·예비창업자 대상<br>AI 도입 필요성만 있으면 신청 가능</p>
+            </div>
+          </div>
+          <div class="ml-7 w-0.5 h-10 bg-gradient-to-b from-yellow-400 to-transparent"></div>
+          <!-- Step 2 - ACTIVE (Current) -->
+          <div class="flex items-start gap-5 group">
+            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center shadow-lg">
+              <span class="text-2xl font-extrabold text-white">2</span>
+            </div>
+            <div class="flex-1 pt-2">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="text-xl font-bold text-white">사업계획서 작성</h3>
+                <span class="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-semibold">템플릿 제공</span>
+              </div>
+              <p class="text-white/70 leading-relaxed">AI가 대신 써주는 사업계획서 초안<br>우리 사이트 'AI 강좌'에서 무료 템플릿 다운로드</p>
+            </div>
+          </div>
+          <div class="ml-7 w-0.5 h-10 bg-gradient-to-b from-blue-400 to-transparent"></div>
+          <!-- Step 3 - Upcoming -->
+          <div class="flex items-start gap-5 group">
+            <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br from-pink-400 to-red-500 flex items-center justify-center shadow-lg opacity-40">
+              <span class="text-2xl font-extrabold text-white">3</span>
+            </div>
+            <div class="flex-1 pt-2 opacity-40">
+              <div class="flex items-center gap-3 mb-2">
+                <h3 class="text-xl font-bold text-white">온라인 신청</h3>
+                <span class="px-3 py-1 rounded-full bg-red-500/20 text-red-300 text-xs font-semibold">마감 임박</span>
+              </div>
+              <p class="text-white/70 leading-relaxed">중소벤처기업부 홈페이지서 접수<br>D-day 알림 신청하면 카톡으로 알려드림</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-10 pb-16">
+        <a href="https://aikorea24.kr/grants" class="block w-full max-w-xl mx-auto py-5 px-8 rounded-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-bold text-lg text-center shadow-xl hover:from-yellow-300 hover:to-orange-400 transition-all">
+          지금 자격 진단하러 가기 →
+        </a>
+        <p class="text-center text-white/60 text-sm mt-4">프로필 링크에서 무료 진단 시작</p>
+      </div>
+    </div>
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
+      <span class="w-7 h-7 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-white font-bold text-xs border border-white/20">AI</span>
+      <span class="text-white/70 text-sm font-medium">aikorea24.kr</span>
+    </div>
+  </div>
+</body>
+</html>
