@@ -4,6 +4,9 @@ from pipeline.instagram.html_renderer import (
     render_carousel_slides,
     render_reel_cover,
     render_reel_thumbnail,
+    batch_render_carousel,
+    render_carousel_cover,
+    render_full_carousel,
     capture_html_to_png,
 )
 from pipeline.instagram.utils import (
@@ -23,6 +26,9 @@ __all__ = [
     "render_carousel_slides",
     "render_reel_cover",
     "render_reel_thumbnail",
+    "batch_render_carousel",
+    "render_carousel_cover",
+    "render_full_carousel",
     "capture_html_to_png",
     "ensure_dir",
     "slugify",

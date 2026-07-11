@@ -234,10 +234,112 @@ def render_reel_thumbnail(slides: list[InstagramSlide]) -> Path | None:
     return render_reel_cover(slides[0], output_dir)
 
 
+def batch_render_carousel(
+    slides: list[InstagramSlide],
+    output_dir: str | Path,
+) -> list[Path]:
+    """Render all carousel slides sequentially with progress logging.
+
+    Each slide is rendered independently — partial failures are skipped.
+    Returns list of successfully generated PNG paths.
+    """
+    output_dir = Path(output_dir)
+    ensure_dir(output_dir)
+    total = len(slides)
+    png_paths: list[Path] = []
+
+    for idx, slide in enumerate(slides, 1):
+        slug = slide.slide_type.value
+        logger.info("[%d/%d] Rendering %s slide...", idx, total, slug.upper())
+
+        html_path = output_dir / f"slide_{idx:02d}_{slug}.html"
+        png_path = output_dir / f"slide_{idx:02d}_{slug}.png"
+
+        try:
+            template = _load_template("carousel_slide.html")
+            _render_slide_to_html(slide, template, html_path)
+            success = capture_html_to_png(
+                html_path, png_path, CAROUSEL_WIDTH, CAROUSEL_HEIGHT,
+            )
+            if success:
+                png_paths.append(png_path)
+                logger.info("[%d/%d] OK: %s", idx, total, png_path.name)
+            else:
+                logger.warning("[%d/%d] FAILED: %s capture failed", idx, total, slug)
+        except Exception:
+            logger.exception("[%d/%d] ERROR rendering %s", idx, total, slug)
+
+    cleanup_old_html(output_dir)
+    return png_paths
+
+
+def render_carousel_cover(
+    slides: list[InstagramSlide],
+    output_dir: str | Path,
+) -> Path | None:
+    """Render a carousel cover image from the first slide.
+
+    Uses carousel_slide.html at 1080x1350.
+    Returns the PNG path on success, None on failure.
+    """
+    if not slides:
+        logger.warning("No slides provided for carousel cover")
+        return None
+
+    output_dir = Path(output_dir)
+    ensure_dir(output_dir)
+    template = _load_template("carousel_slide.html")
+
+    cover = slides[0]
+    html_path = output_dir / "cover.html"
+    png_path = output_dir / "cover.png"
+
+    try:
+        _render_slide_to_html(cover, template, html_path)
+        success = capture_html_to_png(
+            html_path, png_path, CAROUSEL_WIDTH, CAROUSEL_HEIGHT,
+        )
+        if success:
+            return png_path
+    except Exception:
+        logger.exception("Error rendering carousel cover")
+    finally:
+        if html_path.exists():
+            html_path.unlink(missing_ok=True)
+
+    return None
+
+
+def render_full_carousel(
+    slides: list[InstagramSlide],
+) -> dict[str, Path | list[Path]]:
+    """Render a complete carousel: cover + all slides.
+
+    Single-call entry point for the full carousel generation pipeline.
+    Returns: {"cover": Path, "slides": [Path, ...], "output_dir": Path}
+    """
+    from pipeline.instagram.utils import create_run_directory
+
+    output_dir = create_run_directory("instagram-carousel-output")
+    logger.info("Output directory: %s", output_dir)
+
+    cover_path = render_carousel_cover(slides, output_dir)
+    slide_paths = batch_render_carousel(slides, output_dir)
+
+    return {
+        "cover": cover_path,
+        "slides": slide_paths,
+        "output_dir": output_dir,
+    }
+
+
 __all__ = [
     "render_carousel_slides",
     "render_reel_cover",
     "render_reel_thumbnail",
+    "batch_render_carousel",
+    "render_carousel_cover",
+    "render_full_carousel",
     "capture_html_to_png",
     "STYLE_TO_BG_CLASS",
 ]
