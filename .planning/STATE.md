@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-11T08:05:00.000Z
+last_updated: 2026-07-11T15:12:00.000Z
 last_activity: 2026-07-11
 progress:
   total_phases: 22
   completed_phases: 20
   total_plans: 42
-  completed_plans: 40
-  percent: 95
+  completed_plans: 41
+  percent: 98
 ---
 
 # Project State
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 20 (course-content-complete) — 오케스트레이터 프레임 확정 + 메타강의 + 중간 강좌 완료
-Status: 히어로 강좌(7day-agent) 설계 대기, 발송 cron은 마지막에 활성화
-Last activity: 2026-07-10
+Phase: 17 (Instagram Carousel + Reels) — Plan 17-02 complete (HTML → PNG generator)
+Status: Plan 17-03 (FFmpeg video renderer) 대기
+Last activity: 2026-07-11
 
-Progress: [████████████████████████████████] 95%
+Progress: [██████████████████████████████████] 98%
 
 ### Course System Status
 - **프레임**: 오케스트레이터 — "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"
@@ -42,6 +42,18 @@ Progress: [███████████████████████
 | 첫 AI, 7일 | 7day-starter | 0~7 (8개) | ✅ 시드 완료 + 과목명 업데이트 |
 | 0원 인프라, 7일 | 7day-infra | 8~14 (7개) | ✅ 시드 완료 |
 | 무료 에이전트, 7일 | 7day-agent | 15~21 (7개) | ⏳ 설계 대기 |
+
+### Phase 17-02 Details (HTML → PNG Image Generator)
+- **Goal**: HTML 템플릿 기반 Instagram Carousel(1080×1350) + Reels(1080×1920) PNG 생성
+- **Plans**: 1/1 complete
+- **Files created**:
+  - `pipeline/instagram/html_renderer.py` — 렌더링 + Playwright 캡처 오케스트레이션
+  - `pipeline/instagram/utils.py` — ensure_dir, slugify, timestamp_kst, create_run_directory
+  - `pipeline/instagram/templates/carousel_slide.html` — 1080×1350 다크 테마 템플릿
+  - `pipeline/instagram/templates/reel_cover.html` — 1080×1920 세로형 템플릿
+  - `pipeline/instagram/__init__.py` — 16개 public API export
+- **Key functions**: render_full_carousel(), batch_render_carousel(), render_reel_cover(), capture_html_to_png()
+- **Decision**: string.Template (stdlib) over Jinja2, Playwright CLI subprocess over Python API
 
 ### Phase 19 Details (MVP-3: 자동 발송) — Coded, Deferred
 - **Goal**: 7일 강좌 자동 이메일 발송
@@ -121,6 +133,7 @@ Progress: [███████████████████████
 | Phase 13-card-separation-fix 13-01 | — | 4 tasks | 3 files |
 | Phase 13-card-separation-fix 13-02 | 1min | 4 tasks | 3 files |
 | Phase 13-card-separation-fix 13-03 | 2min | 6 tasks | 4 files |
+| Phase 17-instagram-carousel 17-02 | 8min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -150,6 +163,8 @@ Recent decisions affecting current work:
 - [Phase 17] **MVP 분할**: 4개로 나눠 순차 검증 (등록 → 게이트 → 발송 → 완강)
 - [Phase 17] **시작 정책**: 등록 후 첫 18:00에 1일차 발송
 - [Phase 17] **발송 방식**: Brevo Automation 대신 Workers + Brevo 트랜잭셔널 API 조합
+- [Phase 17-02] **HTML 렌더러**: string.Template + Playwright CLI 조합 ($0 비용)
+- [Phase 17-02] **배치 렌더링**: 순차 처리로 슬라이드 순서 보장, 부분 실패 허용
 
 ### Pending Todos
 
@@ -171,6 +186,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-07-10T09:00:00.000Z
-Stopped at: Phase 17 MVP-1 시작 — D1 스키마 설계 중
-Next: migration SQL → 시드 스크립트 → enroll API → 랜딩 페이지
+Last session: 2026-07-11T15:12:00.000Z
+Stopped at: Phase 17 Plan 17-02 완료 — HTML → PNG 생성 파이프라인 구축 완료
+Next: Plan 17-03 (FFmpeg video renderer) — PNG → MP4 변환
