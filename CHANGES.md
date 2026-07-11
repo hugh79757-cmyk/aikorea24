@@ -887,3 +887,36 @@
 - 블로그 이탈률 개선: 모든 글에서 CTA → 강좌/구독/용어
 - AdSense/GTM 정상 로드 (CSP 차단 해결)
 - 3회 빌드+배포 완료, commit `b7dd210`
+
+---
+
+## 2026-07-11 — Phase 17 xfade offset 버그 수정 + 텍스트 밀도 전환 (미커밋)
+
+### 변경
+- `pipeline/instagram/video_renderer.py`:
+  - **xfade offset 버그 수정**: 4개 함수에서 `offset=cumulative_offset` → `offset=cumulative_offset - trans_dur` (전환이 0.5초씩 늦게 시작)
+  - **`compute_xfade_offset()` 헬퍼 함수** 추가 — offset 계산 단일화
+  - **`pick_transition_for_types()`** 추가 — 텍스트 밀도 기반 전환 선택
+    - TEXT_HEAVY_TYPES(HOOK/CONFLICT/TWIST/EXPANSION): wipeleft/slideleft/circleopen
+    - 저밀도(CTA/LINK/BRANDING/COVER): dissolve/fade
+  - **crop filter 구분자 수정**: `crop={output_size}` → `crop={output_size.replace('x', ':')}` (FFmpeg는 `:` 필요)
+- `pipeline/instagram/templates/tokens.css`: 신규 — 디자인 토큰 파일
+- `pipeline/instagram/templates/carousel_slide.html`: tokens.css, grain, CTA button, EXPANSION label
+- `pipeline/instagram/templates/reel_cover.html`: tokens.css, grain, font loading
+- `pipeline/instagram/html_renderer.py`: _ensure_tokens_css(), viewport comma format
+- `pipeline/instagram/config.py`: CTA caption + brand callout
+
+### 의사결정
+- xfade offset은 항상 `cumulative_duration - trans_dur`로 계산 (클립 종료 시점에서 전환 시간 차감)
+- dissolve는 텍스트 빽빽한 슬라이드에 부적합 → text-heavy 타입은 wipe/slide 전환
+- `build_xfade_filter()` 호출 미사용 코드 제거 (dead code)
+- Ken Burns ease-in-out 커브 도입 (sin² 기반)
+
+### 렌더링 테스트
+- `tmp_test/carousel_test_hook.mp4` — 8.0s, 1080×1350, H.264, 30fps, 2.4MB
+- 전환 오프셋 검증 완료 (xfade at 2.5s / 5.0s, 정상)
+- 키 프레임 5장 추출 완료
+
+### 상태
+- 🔴 사용자 피드백 대기 중 (영상 확인)
+- 미커밋 — git status 확인 필요

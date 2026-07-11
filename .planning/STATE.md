@@ -4,7 +4,7 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-11T16:00:00.000Z
+last_updated: 2026-07-11T22:50:00.000Z
 last_activity: 2026-07-11
 progress:
   total_phases: 22
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 17 (Instagram Carousel + Reels) — Plan 17-06 complete (PipelineStep + launchd scheduling)
-Status: Plan 17-06 완료
-Last activity: 2026-07-11
+Phase: 17 (Instagram Carousel + Reels) — xfade offset bug fixed, re-rendered, awaiting feedback
+Status: 🐛 버그 수정 완료 — 사용자 영상 확인 대기
+Last activity: 2026-07-11T22:50
 
 Progress: [██████████████████████████████████] 98%
 
