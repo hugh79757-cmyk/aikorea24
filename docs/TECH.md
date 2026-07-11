@@ -471,3 +471,54 @@ Phase 8: 전체 검증 체인 재설계 필요
 1. 어떤 검증도 단 한 곳에서만 의존하지 않는다
 2. "해결됨"이라고 안심하지 않는다 — 반드시 회귀 테스트로 확인
 3. 검증은 "해당 단계 출력"이 아니라 "다음 단계 입력" 기준으로 설계
+
+---
+
+## 12. 강좌 시스템 (Course System)
+
+> 마일스톤 v2.0 — 커뮤니티 게이트웨이 패턴 기반.
+
+### 12.1 아키텍처 원칙
+
+- **커뮤니티 게이트웨이**: 강좌 콘텐츠는 `posts` 테이블에 저장, 이메일은 티저 + 커뮤니티 링크만 발송
+- **visibility 3종**: `public`(기존), `members`(로그인 필요), `premium`(추후 유료)
+- **이메일**: Brevo 트랜잭셔널 API — Cloudflare Workers에서 직접 호출
+- **태그 체계**: `course-enrolled-{slug}`, `course-completed-{slug}`
+
+### 12.2 DB 스키마
+
+| 테이블 | 설명 |
+|--------|------|
+| `courses` | 강좌 메타 (slug, title, total_days, default_send_hour) |
+| `course_lessons` | 레슨-커뮤니티글 매핑 (course_slug, day_number, community_post_id, teaser_html) |
+| `enrollments` | 수강 등록 (email, course_slug, start_date, days_sent, completed) |
+| `lesson_clicks` | 이메일 클릭 추적 (enrollment_id, day_number, clicked_at) |
+
+### 12.3 강좌 목록 (v2.0)
+
+| 슬러그 | 제목 | 일수 | 상태 |
+|--------|------|------|------|
+| `7day-starter` | 첫 AI, 7일 — AI에게 말로 일을 시키는 첫 7일 | day 0~7 (8개) | ✅ 시드 완료 |
+| `7day-infra` | 0원 인프라, 7일 — AI에게 사이트를 만들라 하고, 0원으로 운영한다 | day 8~14 (7개) | ✅ 시드 완료 |
+| `7day-agent` | 무료 에이전트, 7일 | day 15~21 (7개) | ⏳ 설계 대기 |
+
+### 12.4 API 엔드포인트
+
+| 경로 | 메서드 | 설명 |
+|------|--------|------|
+| `/api/courses/enroll` | POST | 강좌 등록 (D1 + Brevo 태그) |
+| `/api/courses/send-daily` | POST | 당일 발송 대상 조회 → 이메일 전송 |
+| `/api/courses/track` | GET | 클릭 추적 리다이렉트 |
+| `/courses/7day-starter` | GET | 강좌 랜딩 페이지 |
+
+### 12.5 시드 데이터
+
+- `scripts/seed_course_7day_starter.py` — `--update` 모드 지원 (UPSERT)
+- `scripts/seed_course_7day_infra.py` — 0원 인프라 7개 레슨
+- 실행: `python3 scripts/seed_course_7day_starter.py --update`
+
+### 12.6 발송 상태
+
+- **launchd plist**: 미설치 — 모든 콘텐츠 준비 후 마지막에 활성화 예정
+- **day 0 즉시 발송 hook**: enroll.ts에 미구현 — Phase 22에서 처리 예정
+- **강좌 페이지**: 현재 Coming Soon 상태 (오픈 알림만 등록 가능)

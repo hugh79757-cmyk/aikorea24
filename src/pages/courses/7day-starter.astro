@@ -40,8 +40,8 @@ const pageDesc = course.description;
       <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-purple-900/30 to-transparent pointer-events-none" />
       <div class="max-w-4xl mx-auto px-4 py-20 md:py-28 relative">
         <div class="text-center mb-6">
-          <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 mb-4">
-            완전 무료 · 7일 코스
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 mb-4">
+            🎯 곧 오픈 · 알림 신청 중
           </span>
         </div>
         <h1 class="text-4xl md:text-5xl font-bold text-center leading-tight mb-4">
@@ -55,6 +55,11 @@ const pageDesc = course.description;
           ChatGPT 사용법부터 프롬프트 작성, 이미지 생성, 업무 활용까지.
           커뮤니티에서 질문하며 함께 학습합니다.
         </p>
+
+        {/* Coming Soon Notice */}
+        <div class="max-w-md mx-auto mb-4 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-200 text-center">
+          📢 강좌가 곧 오픈됩니다. 준비되면 이메일로 알려드리겠습니다.
+        </div>
 
         {/* Signup Form */}
         <div class="max-w-md mx-auto" id="signup-section">
@@ -71,7 +76,7 @@ const pageDesc = course.description;
               id="enroll-btn"
               class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3.5 rounded-xl text-sm font-semibold hover:from-blue-500 hover:to-purple-500 transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              무료 신청하기
+              오픈 알림 신청
             </button>
           </form>
           <div id="enroll-message" class="mt-4 text-sm text-center"></div>
@@ -179,11 +184,11 @@ const pageDesc = course.description;
     {/* CTA */}
     <section class="max-w-4xl mx-auto px-4 pb-24">
       <div class="text-center bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-white/[0.08] rounded-2xl p-12">
-        <h2 class="text-2xl font-bold mb-4">지금 바로 시작하세요</h2>
-        <p class="text-gray-400 mb-8">7일 후, AI가 훨씬 더 가까워집니다.</p>
+        <h2 class="text-2xl font-bold mb-4">곧 오픈됩니다</h2>
+        <p class="text-gray-400 mb-8">알림을 신청하고 가장 먼저 시작하세요.</p>
         <a href="#signup-section"
            class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-xl font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
-          무료 신청하기
+          오픈 알림 신청
         </a>
       </div>
     </section>
@@ -219,11 +224,11 @@ const pageDesc = course.description;
         if (data.ok) {
           msg.className = 'mt-4 text-sm text-center text-green-400';
           msg.innerHTML = `
-            <p class="font-semibold">🎉 신청이 완료되었습니다!</p>
-            <p class="text-gray-400 mt-1">${data.first_lesson_at}에 첫 레슨이 발송됩니다.</p>
+            <p class="font-semibold">🎉 오픈 알림이 등록되었습니다!</p>
+            <p class="text-gray-400 mt-1">준비가 완료되면 ${data.first_lesson_at}에 첫 레슨을 보내드립니다.</p>
           `;
           emailInput.value = '';
-          btn.textContent = '✅ 신청 완료';
+          btn.textContent = '✅ 알림 등록 완료';
         } else if (data.reason === 'already_enrolled') {
           const day = data.current_day || 0;
           msg.className = 'mt-4 text-sm text-center text-yellow-400';
@@ -236,13 +241,13 @@ const pageDesc = course.description;
           msg.className = 'mt-4 text-sm text-center text-red-400';
           msg.textContent = data.error || '오류가 발생했습니다. 다시 시도해주세요.';
           btn.disabled = false;
-          btn.textContent = '무료 신청하기';
+          btn.textContent = '오픈 알림 신청';
         }
       } catch (err) {
         msg.className = 'mt-4 text-sm text-center text-red-400';
         msg.textContent = '네트워크 오류가 발생했습니다. 다시 시도해주세요.';
         btn.disabled = false;
-        btn.textContent = '무료 신청하기';
+        btn.textContent = '오픈 알림 신청';
       }
     });
   }
