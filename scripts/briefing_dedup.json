@@ -2416,6 +2416,74 @@
           "date": "2026-07-12"
         }
       ]
+    },
+    {
+      "date": "2026-07-12",
+      "briefing_id": 172,
+      "articles": [
+        {
+          "id": "40302",
+          "title": "S&P 글로벌, 오라클의 \"핵심 신용 위험\"으로 OpenAI 지목하며 신용 등급 하향 조정",
+          "original_title": "",
+          "description": "S&P 글로벌은 오라클의 신용 등급을 \"BBB-\"로 하향 조정했습니다. 이는 정크 등급 바로 위에 해당하며, OpenAI가 오라클의 6,380억 달러 계약 의무의 약 절반을 차지하고 있습니다. OpenAI가 계약을 중단할 경우, 오라클은 막대한 데이터 센터 용량을 감당할 수 없게 됩니다.",
+          "link": "https://the-decoder.com/sp-global-sees-openai-as-a-key-credit-risk-for-oracle-and-cuts-its-credit-rating/",
+          "entities": [
+            "BBB",
+            "OpenAI",
+            "S&P"
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40303",
+          "title": "안트로픽, 클로드 코워크의 가장 큰 활용 사례는 아무도 소유하고 싶지 않은 일상적인 사무작",
+          "original_title": "",
+          "description": "안트로픽은 60만 개 이상의 조직에서 분석된 120만 개의 클로드 코워크 세션을 분석했습니다. 전체 사용의 약 절반이 비즈니스 프로세스 및 텍스트 작성에 사용되며, 이는 안트로픽이 \"일의 작업\"이라고 부릅니다. 여기에는 상태 보고서 작성, 온보딩 체크리스트 작성 등의 작업이 포함됩니다.",
+          "link": "https://the-decoder.com/claude-coworks-biggest-use-case-is-the-mundane-office-work-nobody-wants-to-own-anthropic-says/",
+          "entities": [],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40307",
+          "title": "과학자들의 부업? AI와 양자 컴퓨팅을 활용해 새로운 펩타이드 생성하기",
+          "original_title": "",
+          "description": "연구자들은 양자 컴퓨팅이 소외된 인구를 돕고 희귀 질병과 싸우는 약물 개발에 어떻게 도움이 될 수 있는지를 보여주기 위해 자금과 시간을 모았습니다.",
+          "link": "https://www.wired.com/story/scientists-using-ai-and-quantum-computing-to-generate-new-peptides/",
+          "entities": [],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40309",
+          "title": "새로운 기술 습득, 기본으로 돌아가기, 그리고 집단 행동 촉구: 소프트웨어 엔지니어들이 A",
+          "original_title": "",
+          "description": "소프트웨어 엔지니어링은 2022년 미국에서 가장 높은 수익을 올린 직업 중 하나였으나, AI의 출현으로 여러 해고와 고용 불안이 발생했다. 매일 직장으로 향하는 4시간의 기차 통근 시간 동안, 소프트웨어 엔지니어인 매트는 작업에 전념하고 있다.",
+          "link": "https://www.theguardian.com/technology/ng-interactive/2026/jul/12/software-developers-engineers-ai",
+          "entities": [],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40314",
+          "title": "'거의 무한대': 임원들은 기업들이 '가치 최대화'에 나서더라도 AI 수요는 여전히 강하다",
+          "original_title": "",
+          "description": "AI 관련 반도체 주식은 AI 수요와 지출에 대한 논란 속에서 변동성이 있었습니다.",
+          "link": "https://www.cnbc.com/2026/07/12/ai-demand-chips-data-centers-stock-volatility.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-12"
+        },
+        {
+          "id": "40289",
+          "title": "이러한 저조한 거래가 향후 6개월간 큰 수익을 얻을 수 있습니다",
+          "original_title": "",
+          "description": "ETF Action의 마이크 아킨스는 주요 인공지능 주식에 비해 저조한 성과를 보인 그룹에 대한 노출을 늘릴 것을 투자자들에게 권장하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/07/11/mag-7-and-software-could-boost-portfolio-in-second-half-etf-action.html",
+          "entities": [
+            "ETF"
+          ],
+          "date": "2026-07-12"
+        }
+      ]
     }
   ],
   "articles": [
@@ -4623,6 +4691,68 @@
         "GPT-5.6",
         "Cycle",
         "Double"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40302",
+      "title": "S&P 글로벌, 오라클의 \"핵심 신용 위험\"으로 OpenAI 지목하며 신용 등급 하향 조정",
+      "original_title": "",
+      "description": "S&P 글로벌은 오라클의 신용 등급을 \"BBB-\"로 하향 조정했습니다. 이는 정크 등급 바로 위에 해당하며, OpenAI가 오라클의 6,380억 달러 계약 의무의 약 절반을 차지하고 있습니다. OpenAI가 계약을 중단할 경우, 오라클은 막대한 데이터 센터 용량을 감당할 수 없게 됩니다.",
+      "link": "https://the-decoder.com/sp-global-sees-openai-as-a-key-credit-risk-for-oracle-and-cuts-its-credit-rating/",
+      "entities": [
+        "BBB",
+        "OpenAI",
+        "S&P"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40303",
+      "title": "안트로픽, 클로드 코워크의 가장 큰 활용 사례는 아무도 소유하고 싶지 않은 일상적인 사무작",
+      "original_title": "",
+      "description": "안트로픽은 60만 개 이상의 조직에서 분석된 120만 개의 클로드 코워크 세션을 분석했습니다. 전체 사용의 약 절반이 비즈니스 프로세스 및 텍스트 작성에 사용되며, 이는 안트로픽이 \"일의 작업\"이라고 부릅니다. 여기에는 상태 보고서 작성, 온보딩 체크리스트 작성 등의 작업이 포함됩니다.",
+      "link": "https://the-decoder.com/claude-coworks-biggest-use-case-is-the-mundane-office-work-nobody-wants-to-own-anthropic-says/",
+      "entities": [],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40307",
+      "title": "과학자들의 부업? AI와 양자 컴퓨팅을 활용해 새로운 펩타이드 생성하기",
+      "original_title": "",
+      "description": "연구자들은 양자 컴퓨팅이 소외된 인구를 돕고 희귀 질병과 싸우는 약물 개발에 어떻게 도움이 될 수 있는지를 보여주기 위해 자금과 시간을 모았습니다.",
+      "link": "https://www.wired.com/story/scientists-using-ai-and-quantum-computing-to-generate-new-peptides/",
+      "entities": [],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40309",
+      "title": "새로운 기술 습득, 기본으로 돌아가기, 그리고 집단 행동 촉구: 소프트웨어 엔지니어들이 A",
+      "original_title": "",
+      "description": "소프트웨어 엔지니어링은 2022년 미국에서 가장 높은 수익을 올린 직업 중 하나였으나, AI의 출현으로 여러 해고와 고용 불안이 발생했다. 매일 직장으로 향하는 4시간의 기차 통근 시간 동안, 소프트웨어 엔지니어인 매트는 작업에 전념하고 있다.",
+      "link": "https://www.theguardian.com/technology/ng-interactive/2026/jul/12/software-developers-engineers-ai",
+      "entities": [],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40314",
+      "title": "'거의 무한대': 임원들은 기업들이 '가치 최대화'에 나서더라도 AI 수요는 여전히 강하다",
+      "original_title": "",
+      "description": "AI 관련 반도체 주식은 AI 수요와 지출에 대한 논란 속에서 변동성이 있었습니다.",
+      "link": "https://www.cnbc.com/2026/07/12/ai-demand-chips-data-centers-stock-volatility.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-12"
+    },
+    {
+      "id": "40289",
+      "title": "이러한 저조한 거래가 향후 6개월간 큰 수익을 얻을 수 있습니다",
+      "original_title": "",
+      "description": "ETF Action의 마이크 아킨스는 주요 인공지능 주식에 비해 저조한 성과를 보인 그룹에 대한 노출을 늘릴 것을 투자자들에게 권장하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/07/11/mag-7-and-software-could-boost-portfolio-in-second-half-etf-action.html",
+      "entities": [
+        "ETF"
       ],
       "date": "2026-07-12"
     }
