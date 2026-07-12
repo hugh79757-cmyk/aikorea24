@@ -5,6 +5,24 @@
 
 ---
 
+## 2026-07-12 — 프롬프트 ** 볼드 마크다운 누출 수정
+
+### 변경
+- `scripts/threads/v3/style_examples.md` — 4개 예시 첫 문장 `**내용**` → `내용` (볼드 마크다운 제거)
+- `pipeline/threads/writer.py:119` — system prompt stanza1 `**첫 줄 = ...**` → `첫 줄 = ...`
+- `pipeline/threads/writer.py:658,661-664` — user prompt 변환 예시 4개 `**"..."**` → `"..."`
+- `pipeline/threads/writer.py:385` — `_cleanup_source_attribution()`에 `re.sub(r'\*\*', '')` 방어적 제거 추가
+
+### 원인
+- system prompt에 "볼드 금지" 규칙이 있었지만, `style_examples.md` few-shot 예시에 `**내용**`이 포함되어 LLM이 예시를 규칙보다 우선시
+
+### 검증
+- `python3 -m py_compile` writer.py / writer_v3.py 통과
+- 40/41 writer 테스트 통과 (1 pre-existing — humanize 제거로 인한 test fixture 불일치)
+- 미커밋 (사용자 커밋 요청 대기)
+
+---
+
 ## 2026-07-12 — Vectorize threshold 완화 + 워킹트리 정리
 
 ### 변경

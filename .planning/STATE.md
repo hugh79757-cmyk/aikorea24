@@ -4,7 +4,7 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-12T10:10:00.000Z
+last_updated: 2026-07-12T15:50:00.000Z
 last_activity: 2026-07-12
 progress:
   total_phases: 23
