@@ -116,7 +116,7 @@ def build_system_prompt_D():
 [카드 구조 — 6개, --- 로 구분]
 
 1번 — 3-stanza. 각 stanza는 2~3줄. 각 줄 20~35자.
-  stanza1 (통념): **첫 줄 = 두괄식 핵심 주장(한 문장, 35자 내). 둘째 줄 = 구체 근거(숫자/인명/기관).**
+  stanza1 (통념): 첫 줄 = 두괄식 핵심 주장(한 문장, 35자 내). 둘째 줄 = 구체 근거(숫자/인명/기관).
   stanza2 (전환): 줄1 전환시그널("하지만","그런데") + 줄2 첫 증거(인명·숫자)
   stanza3 (증거): 2~3줄. 각 줄 하나의 사실만.
 
@@ -382,6 +382,7 @@ def _cleanup_source_attribution(cards):
             cleaned.append('\n'.join(clean_lines).strip())
     cleaned = [re.sub(r'(?<!\d)2000(?!\d)(?!년)', '', card) for card in cleaned]
     cleaned = [re.sub(r'^\s*\d+\s*/\s*\d+\s*\n?', '', card) for card in cleaned]
+    cleaned = [re.sub(r'\*\*', '', card) for card in cleaned]  # 방어적: LLM이 남긴 볼드 마크다운 제거
     cleaned = [re.sub(r'\n{3,}', '\n\n', card).strip() for card in cleaned]
     return cleaned
 
@@ -655,13 +656,13 @@ def write_thread(pitch, all_articles, format_choice=None):
     user_prompt = f"""아래 피치와 기사들을 바탕으로 Threads 쓰레드를 작성해주세요.
 
 === 피치 ===
-첫 문장 (통념으로 재구성 → **두괄식 핵심 주장으로 압축**): {pitch['hook']}
-  hook이 but_line 성격이면(모순/역설/하지만 포함), **통념의 반대편을 두괄식 결론으로** 재구성.
+첫 문장 (통념으로 재구성 → 두괄식 핵심 주장으로 압축): {pitch['hook']}
+  hook이 but_line 성격이면(모순/역설/하지만 포함), 통념의 반대편을 두괄식 결론으로 재구성.
   예시:
-  - "AI 교육이 진보를 약속하지만 역설" → **"AI 교육이 시민을 강화한다는 말, 당연시되어 왔음 — 실제론 격차만 벌림"**
-  - "오픈소스 AI가 대세라지만" → **"오픈소스가 혁신을 이끈다는 주장, 업계 표준처럼 받아들여졌음 — 실상은 빅테크 종속 심화"**
-  - "GPU 부족이 해소됐다지만" → **"칩 공급난 끝났다는 보도, 올 초부터 반복돼 왔음 — H100 대기 여전히 52주"**
-  hook이 이미 통념이면 **두괄식(핵심 주장→근거)**으로 압축.
+  - "AI 교육이 진보를 약속하지만 역설" → "AI 교육이 시민을 강화한다는 말, 당연시되어 왔음 — 실제론 격차만 벌림"
+  - "오픈소스 AI가 대세라지만" → "오픈소스가 혁신을 이끈다는 주장, 업계 표준처럼 받아들여졌음 — 실상은 빅테크 종속 심화"
+  - "GPU 부족이 해소됐다지만" → "칩 공급난 끝났다는 보도, 올 초부터 반복돼 왔음 — H100 대기 여전히 52주"
+  hook이 이미 통념이면 두괄식(핵심 주장→근거)으로 압축.
 핵심 이야기: {pitch.get('narrative','')}
 반전: {pitch.get('twist','')}
 감정: {pitch.get('emotion','')}
