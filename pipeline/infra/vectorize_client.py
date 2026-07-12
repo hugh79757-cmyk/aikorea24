@@ -16,7 +16,7 @@ from pipeline.infra.config import project_root
 INDEX_NAME = "aikorea24-dedup"
 EMBEDDING_MODEL = "text-embedding-3-small"
 EMBEDDING_DIMS = 1536
-SIMILARITY_THRESHOLD = 0.85
+SIMILARITY_THRESHOLD = 0.60
 BATCH_SIZE = 10
 MAX_RETRIES = 2
 TTL_HOURS = 24
