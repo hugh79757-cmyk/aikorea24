@@ -427,7 +427,7 @@ WHERE slug = '{COURSE_SLUG}';
 
             stmts.append(f"""-- {day}. post ensure
 INSERT OR IGNORE INTO posts (user_id, title, content, category, visibility, author_email, author_name, created_at)
-VALUES (1, '{title}', '{content}', 'free', 'members', 'system@aikorea24.kr', 'AI코리아24', '{kst}');
+VALUES (1, '{title}', '{content}', '강의', 'members', 'system@aikorea24.kr', 'AI코리아24', '{kst}');
 """)
             stmts.append(f"""-- {day}. course_lessons ensure
 INSERT OR IGNORE INTO course_lessons (course_slug, day_number, community_post_id, teaser_html)
@@ -452,7 +452,7 @@ VALUES (
   1,
   '{title}',
   '{content}',
-  'free',
+  '강의',
   'members',
   'system@aikorea24.kr',
   'AI코리아24',

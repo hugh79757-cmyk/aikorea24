@@ -590,7 +590,7 @@ WHERE slug = '{COURSE_SLUG}';
             # INSERT if post doesn't exist (신규 lesson)
             stmts.append(f"""-- {day}. post ensure
 INSERT OR IGNORE INTO posts (user_id, title, content, category, visibility, author_email, author_name, created_at)
-VALUES (1, '{title}', '{content}', 'free', 'members', 'system@aikorea24.kr', 'AI코리아24', '{kst}');
+VALUES (1, '{title}', '{content}', '강의', 'members', 'system@aikorea24.kr', 'AI코리아24', '{kst}');
 """)
             # INSERT if course_lessons mapping doesn't exist (신규 lesson)
             stmts.append(f"""-- {day}. course_lessons ensure
@@ -617,7 +617,7 @@ VALUES (
   1,
   '{title}',
   '{content}',
-  'free',
+  '강의',
   'members',
   'system@aikorea24.kr',
   'AI코리아24',
