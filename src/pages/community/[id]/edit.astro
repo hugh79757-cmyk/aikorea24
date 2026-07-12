@@ -35,33 +35,33 @@ const pageDesc = `"${post.title}" 편집하기`;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
-  <div class="bg-[#0A0E1A] text-white min-h-screen">
+  <div class="min-h-screen">
     <div class="max-w-3xl mx-auto px-4 py-12">
-      <a href={`/community/${id}`} class="inline-block mb-6 text-sm text-gray-500 hover:text-gray-300">← 글 보기로 돌아가기</a>
+      <a href={`/community/${id}`} class="inline-block mb-6 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300">← 글 보기로 돌아가기</a>
 
-      <h1 class="text-2xl font-bold mb-8">글 편집</h1>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">글 편집</h1>
 
       <form id="edit-form" class="space-y-6">
         <input type="hidden" name="id" value={id} />
 
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">제목</label>
+          <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">제목</label>
           <input type="text" name="title" value={post.title} required
-            class="w-full bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" />
+            class="w-full bg-white dark:bg-white/[0.05] border border-gray-300 dark:border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-blue-500" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-300 mb-2">내용 (마크다운)</label>
+          <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">내용 (마크다운)</label>
           <textarea name="content" rows="20" required
-            class="w-full bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 font-mono"
+            class="w-full bg-white dark:bg-white/[0.05] border border-gray-300 dark:border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 font-mono"
           >{post.content}</textarea>
         </div>
 
         <div class="flex items-center gap-4">
           <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">카테고리</label>
+            <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">카테고리</label>
             <select name="category"
-              class="bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              class="bg-white dark:bg-white/[0.05] border border-gray-300 dark:border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500">
               <option value="free" {post.category === 'free' ? 'selected' : ''}>자유게시판</option>
               <option value="qna" {post.category === 'qna' ? 'selected' : ''}>질문답변</option>
               <option value="news" {post.category === 'news' ? 'selected' : ''}>AI 뉴스</option>
@@ -72,9 +72,9 @@ const pageDesc = `"${post.title}" 편집하기`;
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-300 mb-2">공개 설정</label>
+            <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">공개 설정</label>
             <select name="visibility"
-              class="bg-white/[0.05] border border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              class="bg-white dark:bg-white/[0.05] border border-gray-300 dark:border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500">
               <option value="public" {post.visibility === 'public' ? 'selected' : ''}>Public (전체 공개)</option>
               <option value="members" {post.visibility === 'members' ? 'selected' : ''}>Members (회원 전용)</option>
               <option value="premium" {post.visibility === 'premium' ? 'selected' : ''}>Premium (유료 회원)</option>
@@ -88,7 +88,7 @@ const pageDesc = `"${post.title}" 편집하기`;
             저장
           </button>
           <a href={`/community/${id}`}
-            class="text-sm text-gray-400 hover:text-gray-300 transition-colors">
+            class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-300 transition-colors">
             취소
           </a>
         </div>
@@ -120,17 +120,17 @@ const pageDesc = `"${post.title}" 편집하기`;
         });
         const result = await res.json();
         if (res.ok && result.ok) {
-          msgEl.className = 'text-sm text-green-400';
+          msgEl.className = 'text-sm text-green-600 dark:text-green-400';
           msgEl.textContent = '저장되었습니다. 글 보기로 이동합니다...';
           msgEl.classList.remove('hidden');
           setTimeout(() => { window.location.href = `/community/${id}`; }, 1000);
         } else {
-          msgEl.className = 'text-sm text-red-400';
+          msgEl.className = 'text-sm text-red-600 dark:text-red-400';
           msgEl.textContent = result.error || '저장 실패';
           msgEl.classList.remove('hidden');
         }
       } catch (err) {
-        msgEl.className = 'text-sm text-red-400';
+        msgEl.className = 'text-sm text-red-600 dark:text-red-400';
         msgEl.textContent = '네트워크 오류';
         msgEl.classList.remove('hidden');
       }

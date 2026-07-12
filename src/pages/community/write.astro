@@ -26,36 +26,36 @@ const categoryMap: Record<string, string> = {
 
   <main class="max-w-4xl mx-auto px-4 py-8">
 
-    <h1 class="text-2xl font-bold text-white mb-8">글쓰기</h1>
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">글쓰기</h1>
 
-    <div id="error-msg" class="hidden bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg mb-6"></div>
+    <div id="error-msg" class="hidden bg-red-50 dark:bg-red-500/20 border border-red-200 dark:border-red-500/50 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-6"></div>
 
     <form id="write-form" class="space-y-6">
 
       <div class="flex gap-4">
         <div class="flex-shrink-0">
           <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">카테고리</label>
-          <select id="category" class="rounded-lg px-4 py-3 w-40">
+          <select id="category" class="bg-white dark:bg-white/10 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 w-40">
             {Object.entries(categoryMap).map(([key, label]) => (
               <option value={key} selected={key === 'review' && toolId}>{label}</option>
             ))}
           </select>
           <input type="hidden" id="tool_id" value={toolId || ''} />
           {toolName && (
-            <p class="text-sm text-blue-400 mt-1">📌 리뷰 대상: {toolName}</p>
+            <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">📌 리뷰 대상: {toolName}</p>
           )}
         </div>
         <div class="flex-1">
           <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">제목</label>
           <input type="text" id="title" maxlength="200" placeholder="제목을 입력하세요"
-                 class="rounded-lg px-4 py-3 w-full" required />
+                 class="bg-white dark:bg-white/10 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 w-full" required />
         </div>
       </div>
 
       <div class="flex gap-4">
         <div>
           <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">공개 범위</label>
-          <select id="access_level" class="rounded-lg px-4 py-3 w-40">
+          <select id="access_level" class="bg-white dark:bg-white/10 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 w-40">
             <option value="free">무료 (전체공개)</option>
             <option value="basic">Basic (구독자)</option>
             <option value="premium">Premium (프리미엄)</option>
@@ -64,7 +64,7 @@ const categoryMap: Record<string, string> = {
         <div>
           <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">건별 가격 (원)</label>
           <input type="number" id="price" min="0" step="100" value="0" placeholder="0이면 건별구매 불가"
-                 class="rounded-lg px-4 py-3 w-40" />
+                 class="bg-white dark:bg-white/10 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 w-40" />
         </div>
       </div>
 
@@ -73,7 +73,7 @@ const categoryMap: Record<string, string> = {
         <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">⭐ 평점</label>
         <div class="flex gap-2 text-2xl" id="star-rating">
           {[1,2,3,4,5].map(i => (
-            <span class="star cursor-pointer text-gray-500 hover:text-yellow-400" data-value={i}>★</span>
+            <span class="star cursor-pointer text-gray-400 dark:text-gray-500 hover:text-yellow-400" data-value={i}>★</span>
           ))}
         </div>
         <input type="hidden" id="rating" value="5" />
@@ -82,13 +82,13 @@ const categoryMap: Record<string, string> = {
       <div id="preview-section" class="hidden">
         <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">미리보기 내용 (비회원에게 보이는 부분)</label>
         <textarea id="preview_content" rows="4" maxlength="500" placeholder="유료 글의 맛보기 내용을 입력하세요"
-                  class="rounded-lg px-4 py-3 w-full resize-y"></textarea>
+                  class="bg-white dark:bg-white/10 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 w-full resize-y"></textarea>
       </div>
 
       <div>
         <label class="block text-sm text-gray-500 dark:text-gray-400 mb-2">내용</label>
         <textarea id="content" rows="15" maxlength="10000" placeholder="내용을 입력하세요"
-                  class="rounded-lg px-4 py-3 w-full resize-y" required></textarea>
+                  class="bg-white dark:bg-white/10 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-4 py-3 w-full resize-y" required></textarea>
         <div class="text-right text-xs text-gray-500 mt-1">
           <span id="char-count">0</span> / 10,000
         </div>
@@ -97,7 +97,7 @@ const categoryMap: Record<string, string> = {
       <div class="flex justify-between items-center">
         <span class="text-sm text-gray-500 dark:text-gray-400">작성자: {currentUser.name || currentUser.email}</span>
         <div class="flex gap-3">
-          <a href="/community" class="px-6 py-3 rounded-lg glass text-gray-600 dark:text-gray-300 hover:text-white transition">취소</a>
+          <a href="/community" class="px-6 py-3 rounded-lg glass text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">취소</a>
           <button type="submit" id="submit-btn"
                   class="px-6 py-3 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition">
             등록하기
