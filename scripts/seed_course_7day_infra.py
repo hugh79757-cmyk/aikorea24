@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""0원 인프라 강좌 시드 데이터 생성기 (+ 콘텐츠 업데이트).
+"""0원 인프라 강좌 시드 데이터 생성기 (부트스트랩/구조 보강 전용).
 
 사용법:
   python3 scripts/seed_course_7day_infra.py           # wrangler d1 execute로 삽입
   python3 scripts/seed_course_7day_infra.py --dry     # SQL만 출력
-  python3 scripts/seed_course_7day_infra.py --update  # 기존 post 콘텐츠 UPDATE
-  python3 scripts/seed_course_7day_infra.py --dry --update
+  python3 scripts/seed_course_7day_infra.py --update  # 신규 레슨/매핑만 보강 (기존 본문 갱신 안 함)
+  python3 scripts/seed_course_7day_infra.py --dry --update  # SQL 미리보기 (본문 갱신 없음 확인)
 """
 import argparse
 import os
@@ -418,7 +418,7 @@ VALUES (
   description = '{COURSE_DESC.replace("'", "''")}'
 WHERE slug = '{COURSE_SLUG}';
 """)
-        stmts.append("-- 3. post + course_lessons UPSERT\n")
+        stmts.append("-- 3. post + course_lessons 신규 보강 (INSERT OR IGNORE만, 기존 본문 갱신 안 함)\n")
         for lesson in LESSONS:
             day = lesson["day"]
             title = lesson["title"].replace("'", "''")
@@ -438,20 +438,6 @@ AND NOT EXISTS (
   SELECT 1 FROM course_lessons
   WHERE course_slug = '{COURSE_SLUG}' AND day_number = {day}
 );
-""")
-            stmts.append(f"""-- {day}. update content + teaser
-UPDATE posts SET
-  title = '{title}',
-  content = '{content}',
-  updated_at = '{kst}'
-WHERE id = (
-  SELECT community_post_id FROM course_lessons
-  WHERE course_slug = '{COURSE_SLUG}' AND day_number = {day}
-);
-
-UPDATE course_lessons SET
-  teaser_html = '{teaser}'
-WHERE course_slug = '{COURSE_SLUG}' AND day_number = {day};
 """)
     else:
         for lesson in LESSONS:
@@ -522,7 +508,7 @@ def main():
     parser = argparse.ArgumentParser(description="0원 인프라 강좌 시드 데이터 생성")
     parser.add_argument("--dry", action="store_true", help="SQL만 출력")
     parser.add_argument("--file", type=str, help="SQL을 파일로 저장")
-    parser.add_argument("--update", action="store_true", help="기존 post 콘텐츠 UPDATE")
+    parser.add_argument("--update", action="store_true", help="신규 레슨/매핑만 보강 (기존 본문은 갱신 안 함)")
     args = parser.parse_args()
 
     mode = "UPDATE" if args.update else "INSERT"

@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""7일 AI 입문 강좌 시드 데이터 생성기 (+ 콘텐츠 업데이트).
+"""7일 AI 입문 강좌 시드 데이터 생성기 (부트스트랩/구조 보강 전용).
 post에 콘텐츠를 저장하고 course_lessons에 매핑 + 티저를 저장.
 
 사용법:
   python3 scripts/seed_course_7day_starter.py           # wrangler d1 execute로 삽입
   python3 scripts/seed_course_7day_starter.py --dry     # SQL만 출력
-  python3 scripts/seed_course_7day_starter.py --update  # 기존 post 콘텐츠 UPDATE (재실행용)
-  python3 scripts/seed_course_7day_starter.py --dry --update  # UPDATE SQL 미리보기
+  python3 scripts/seed_course_7day_starter.py --update  # 신규 레슨/매핑만 보강 (기존 본문 갱신 안 함)
+  python3 scripts/seed_course_7day_starter.py --dry --update  # SQL 미리보기 (본문 갱신 없음 확인)
 """
 import argparse
 import json
@@ -580,7 +580,7 @@ VALUES (
 WHERE slug = '{COURSE_SLUG}';
 """)
 
-        stmts.append("-- 3. post + course_lessons UPSERT (신규 INSERT, 기존 UPDATE)\n")
+        stmts.append("-- 3. post + course_lessons 신규 보강 (INSERT OR IGNORE만, 기존 본문 갱신 안 함)\n")
         for lesson in LESSONS:
             day = lesson["day"]
             title = lesson["title"].replace("'", "''")
@@ -602,21 +602,6 @@ AND NOT EXISTS (
   SELECT 1 FROM course_lessons
   WHERE course_slug = '{COURSE_SLUG}' AND day_number = {day}
 );
-""")
-            # UPDATE content + teaser (기존 lesson 갱신)
-            stmts.append(f"""-- {day}. update content + teaser
-UPDATE posts SET
-  title = '{title}',
-  content = '{content}',
-  updated_at = '{kst}'
-WHERE id = (
-  SELECT community_post_id FROM course_lessons
-  WHERE course_slug = '{COURSE_SLUG}' AND day_number = {day}
-);
-
-UPDATE course_lessons SET
-  teaser_html = '{teaser}'
-WHERE course_slug = '{COURSE_SLUG}' AND day_number = {day};
 """)
     else:
         # INSERT 모드 (최초 실행): post INSERT → course_lessons INSERT
@@ -689,7 +674,7 @@ def main():
     parser = argparse.ArgumentParser(description="7일 AI 입문 강좌 시드 데이터 생성")
     parser.add_argument("--dry", action="store_true", help="SQL만 출력하고 실행 안 함")
     parser.add_argument("--file", type=str, help="SQL을 파일로 저장 (경로)")
-    parser.add_argument("--update", action="store_true", help="기존 post 콘텐츠 UPDATE (재실행용)")
+    parser.add_argument("--update", action="store_true", help="신규 레슨/매핑만 보강 (기존 본문은 갱신 안 함)")
     args = parser.parse_args()
 
     mode = "UPDATE" if args.update else "INSERT"
