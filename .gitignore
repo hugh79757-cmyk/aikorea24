@@ -7,6 +7,10 @@ dist/
 # dependencies
 node_modules/
 
+# Python bytecode (all __pycache__ directories globally)
+__pycache__/
+*.pyc
+
 # logs
 npm-debug.log*
 yarn-debug.log*
@@ -42,16 +46,12 @@ backup3.py
 
 # Log directories
 naver_blog/logs/
-scripts/threads/logs/
 
 # Runtime state (changes every pipeline run)
 pipeline/posted.json
 config/pexels_used_ids.json
-scripts/__pycache__/
 scripts/threads/posted.json
 scripts/threads/logs/
-scripts/tools_collector.log
-pipeline/infra/__pycache__/
 
 # Blog thumbnail images — deployed via `wrangler pages deploy` (local build), not committed to git
 public/images/
@@ -61,7 +61,6 @@ instagram-carousel-output/
 instagram-reel-output/
 cards/
 tts/
-pipeline/instagram/__pycache__/
 
 # Root-level test artifacts (Reel prototypes)
 *.mp4
