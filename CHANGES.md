@@ -5,6 +5,45 @@
 
 ---
 
+## 2026-07-12 — Phase 25: 커뮤니티 레슨 순차 해금
+
+### 변경
+- `src/pages/community/[id].astro`:
+  - 게이트 재작성 — 강의 레슨 판별을 `category==='강의'`(시드엔 `free`라 분기 누락)에서 **`course_lessons` 매핑 존재 여부**로 변경 (시드 데이터 변경 없음)
+  - 순차 해금: 등록 사용자 `days_sent >= day_number` 이면 전체 본문, 아니면 preview + 잠금
+  - 3상태 잠금 카드 UI: 비로그인(로그인+강좌 신청 CTA) / 로그인+미등록(수강생 전용) / 로그인+등록+대기("N일차 잠금 해제 전" 안내)
+
+### 의사결정
+- 해금 기준 = `days_sent`(이메일 드립 진도 미러). 크론 OFF 상태에선 days_sent=0 유지 → 콘텐츠 검수 끝날 때까지 전 레슨 잠금 (사용자 승인)
+- auto-enroll 없음. 강좌 폼(`/api/courses/enroll`)과 뉴스레터 폼(`/api/subscribe`)은 이미 분리 — `enrollments`가 단일 진실원
+- 부수 발견(별도 이슈): day 0 고아 레슨(이메일로 절대 안 나감), 랜딩페이지 커리큘럼/시드 불일치
+
+### 배포/커밋
+- 코드 변경 완료, `npm run build` 통과. 커밋/배포는 미실행 (명시 요청 대기)
+
+---
+
+## 2026-07-12 — Phase 24: 썸네일 파이프라인 수정 + 이미지 gitignore
+
+### 변경
+- `scripts/auto_thumbnail.py`:
+  - dedup 재사용 버그 수정 — `photos[0]` 즉시 재사용 → 미사용 사진 탐색(`_pick_unused_photo`), 없으면 `DEEPSEEK_POOL` 대체 쿼리 3개 시도
+  - `search_pexels`/`download_image`에 `@retry(max_retries=3, delay=1.0, backoff=2.0)` 적용 (`pipeline/infra/retry.py`)
+  - Pexels 전면 실패 시 커밋된 `public/images/news-keyword-og.webp`를 placeholder로 복사 (`_use_default_thumbnail`) — 깨진 `image:` 참조 제거
+- `scripts/auto_deep_article.py` / `scripts/blog_draft_generator.py`: 썸네일 파일 존재 시에만 `image:` frontmatter 기록
+- `.gitignore`: `public/images/` 추가 (썸네일은 wrangler 배포로만 반영, git 비포함)
+
+### 의사결정
+- 배포는 `wrangler pages deploy --commit-dirty=true` 직접 업로드 → git 푸시 불필요. images를 git에서 제외해도 라이브 영향 없음
+- placeholder는 의도된 단일 기본 이미지 (재사용된 스톡 사진 위장 문제 해결)
+- 오늘(07-12) 3건 재사용 표지 재생성은 보류 — Pexels 실패 시 placeholder가 현재 표지보다 열화 우려
+
+### 배포/커밋
+- 커밋 `b49a09b` — 코드 수정 + 5개 블로그 포스트 동기화 (썸네일은 로컬 유지, git 미포함)
+- 라이브 사이트 HTTP 200 유지 (코드 변경은 차기 wrangler 배포 시 반영)
+
+---
+
 ## 2026-07-11 — 강좌 랜딩 Coming Soon 공지 + 배포 (1 deploy)
 
 ### 변경

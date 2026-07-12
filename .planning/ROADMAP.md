@@ -372,6 +372,17 @@ Plans:
 4. 7day-agent 등록 오픈 (완성 후)
 5. 전체 사이클 E2E 테스트
 
+### Phase 25: 커뮤니티 레슨 순차 해금 (Community Lesson Unlock)
+**Goal**: 커뮤니티에서 강좌 레슨을 이메일 드립 진도(`days_sent`)와 동일하게 하나씩 잠금 해제.
+**Mode**: ad-hoc
+**Depends on**: Phase 17, 19
+**Key outcomes**:
+1. **버그 수정**: 강의 레슨 판별을 `category==='강의'`(시드엔 `free`) 분기에서 `course_lessons` 매핑 존재 여부로 변경 — 등록 무관 즉시 전체 공개 bug 해결
+2. **days_sent 기반 순차 해금**: `enrollment.days_sent >= day_number` 이면 전체 본문, 아니면 잠금 (이메일 드립 미러)
+3. **3상태 잠금 UI**: 비로그인(로그인+신청) / 로그인+미등록(수강생 전용) / 로그인+등록+대기(잠금 해제 전)
+4. **auto-enroll 없음**: 강좌 폼(`/api/courses/enroll`)과 뉴스레터 폼(`/api/subscribe`) 이미 분리 — `enrollments`가 단일 진실원
+**Status**: Complete (코드 + 빌드 통과). 런타임 확인은 크론 활성화 후.
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -402,4 +413,5 @@ Plans:
 | 21. 히어로 강좌 설계 | — | Pending | — |
 | 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
 | 23. SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels | 0/7 | Planned | — |
-| **Total** | **42/47** | | |
+| 25. 커뮤니티 레슨 순차 해금 | 1/1 | Complete | 2026-07-12 |
+| **Total** | **43/48** | | |

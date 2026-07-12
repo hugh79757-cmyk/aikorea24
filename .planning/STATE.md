@@ -4,13 +4,13 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-11T22:50:00.000Z
-last_activity: 2026-07-11
+last_updated: 2026-07-12T10:10:00.000Z
+last_activity: 2026-07-12
 progress:
-  total_phases: 22
-  completed_phases: 20
-  total_plans: 42
-  completed_plans: 42
+  total_phases: 23
+  completed_phases: 21
+  total_plans: 44
+  completed_plans: 44
   percent: 100
 ---
 
@@ -168,6 +168,18 @@ Recent decisions affecting current work:
 - [Phase 17-02] **배치 렌더링**: 순차 처리로 슬라이드 순서 보장, 부분 실패 허용
 - [Phase 17-06] **Instagram PipelineStep**: Lazy imports로 환경 변수 의존성 처리, dry_run 모드 지원
 - [Phase 17-06] **launchd 스케줄**: 캐러셀 08:00 + 릴스 19:00 KST 별도 에이전트
+
+### Phase 25 Details (커뮤니티 레슨 순차 해금)
+- **Goal**: 커뮤니티에서 강좌 레슨을 이메일 드립 진도(`days_sent`)와 동일하게 하나씩 잠금 해제
+- **Plans**: 1/1 complete (RESEARCH.md + PLAN.md in `.planning/phases/25-community-lesson-unlock/`)
+- **Files changed**:
+  - `src/pages/community/[id].astro` — 게이트 재작성 + 잠금 카드 UI
+- **Key changes**:
+  1. 강의 레슨 판별: `category==='강의'` → **`course_lessons` 매핑 존재 여부** (시드가 `category='free'`로 저장해 분기 불일치 bug 수정, 데이터 안 건드림)
+  2. 순차 해금: 등록 사용자 `days_sent >= day_number` 이면 전체 본문, 아니면 잠금 (이메일 드립 미러)
+  3. 3상태 잠금 UI: 비로그인(로그인+신청 CTA) / 로그인+미등록(수강생 전용) / 로그인+등록+대기(잠금 해제 전 안내)
+- **Verification**: `npm run build` 통과. 런타임 상태 확인은 D1 필요(크론 OFF → days_sent=0 유지, 운영 반영해도 전 레슨 잠금 상태)
+- **Decision**: 해금 기준 = days_sent (사용자 확정, 크론 OFF 수용). auto-enroll 없음(강좌 폼/뉴스레터 폼 이미 분리). day 0 고아 레슨·랜딩 커리큘럼 불일치는 별도 이슈.
 
 ### Pending Todos
 

@@ -84,6 +84,7 @@ let comments = [];
 let previewContent = '';
 let isGated = false;
 let notEnrolled = false; // true = logged in but not enrolled in this 강의 course
+let lockedWaiting = false; // true = logged in + enrolled but this day not yet unlocked (days_sent < day)
 let courseSlug = '';
 let courseDay = 0;
 let pageTitle = '게시글을 찾을 수 없습니다';
@@ -128,45 +129,45 @@ if (db && id) {
     return { notFound: true };
   }
 
-  // Visibility + enrollment gate (MVP-3)
+  // Visibility + enrollment gate (Phase 25: days_sent 기반 순차 해금)
   if (post.visibility === 'members') {
-    if (post.category === '강의') {
-      // 방식 A: course_lessons에서 community_post_id로 course_slug 역조회
-      const lesson = await db.prepare(
-        `SELECT course_slug, day_number FROM course_lessons WHERE community_post_id = ?`
-      ).bind(id).first<any>();
+    // 강의 레슨 판별: category('강의') 가 아닌 course_lessons 매핑 존재 여부로 결정
+    // (시드가 레슨을 category='free'로 저장하므로 category 분기로는 판별 불가 — 매핑 기반으로 우회)
+    const lesson = await db.prepare(
+      `SELECT course_slug, day_number FROM course_lessons WHERE community_post_id = ?`
+    ).bind(id).first<any>();
 
-      if (lesson) {
-        courseSlug = lesson.course_slug;
-        courseDay = lesson.day_number;
+    if (lesson) {
+      courseSlug = lesson.course_slug;
+      courseDay = lesson.day_number;
 
-        if (!currentUser) {
-          // 비로그인 + 강의 글 → 미리보기 + 게이트 (강좌 신청 CTA + 로그인 링크)
-          isGated = true;
-          previewContent = splitPreview(post.content || '');
-        } else {
-          // 로그인 + 강의 글 → enrollment 검증 (옵션 X: 등록 즉시 전체 공개)
-          const enrollment = await db.prepare(
-            `SELECT id FROM enrollments WHERE user_id = ? AND course_slug = ?`
-          ).bind(currentUser.id, lesson.course_slug).first<any>();
-
-          if (!enrollment) {
-            // 로그인 + 미등록 → 미리보기 + 게이트 ("이 강의는 수강생 전용입니다")
-            isGated = true;
-            notEnrolled = true;
-            previewContent = splitPreview(post.content || '');
-          }
-          // 등록 완료 → isGated false, 전체 본문 표시
-        }
+      if (!currentUser) {
+        // 비로그인 → 미리보기 + 게이트 (로그인 + 강좌 신청 CTA)
+        isGated = true;
+        previewContent = splitPreview(post.content || '');
       } else {
-        // course_lessons 매핑 없음 → 일반 members 게시글처럼 처리
-        if (!currentUser) {
+        // 로그인 → enrollment 확인 (days_sent 포함)
+        const enrollment = await db.prepare(
+          `SELECT id, days_sent, completed FROM enrollments WHERE user_id = ? AND course_slug = ?`
+        ).bind(currentUser.id, lesson.course_slug).first<any>();
+
+        if (!enrollment) {
+          // 로그인 + 미등록 → 미리보기 + 게이트 ("수강생 전용")
           isGated = true;
+          notEnrolled = true;
+          previewContent = splitPreview(post.content || '');
+        } else if ((enrollment.days_sent || 0) >= lesson.day_number) {
+          // 등록 + 해금 조건 충족(이메일 드립 진도 미러) → 전체 본문 공개
+          isGated = false;
+        } else {
+          // 등록 + 아직 잠금 대기(days_sent < day) → 미리보기 + 대기 안내
+          isGated = true;
+          lockedWaiting = true;
           previewContent = splitPreview(post.content || '');
         }
       }
     } else {
-      // 일반 members 글 (강의 아님) → 기존 로직 유지, enrollment 검증 안 함
+      // course_lessons 매핑 없음 → 일반 members 게시글 (기존 로그인 게이트)
       if (!currentUser) {
         isGated = true;
         previewContent = splitPreview(post.content || '');
@@ -214,7 +215,20 @@ if (Astro.request.method === 'POST' && currentUser && db) {
             {isGated && (
               <div class="mt-6 p-8 rounded-xl border border-blue-500/30 bg-gradient-to-b from-blue-900/20 to-purple-900/20 text-center">
                 <div class="text-3xl mb-3">🔒</div>
-                {notEnrolled ? (
+                {lockedWaiting ? (
+                  /* 로그인 + 등록 + 잠금 대기 (days_sent < day) */
+                  <>
+                    <h3 class="text-lg font-bold text-white mb-2">이 레슨은 아직 잠금 해제 전입니다 🔓</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                      {courseDay}일차 레슨은 매일 저녁 이메일로 발송되는 순서대로 열립니다.<br/>
+                      다음 레슨이 도착하면 여기서도 전체 내용을 읽을 수 있어요.
+                    </p>
+                    <a href="/community"
+                       class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
+                      커뮤니티 둘러보기
+                    </a>
+                  </>
+                ) : notEnrolled ? (
                   /* 로그인 + 미등록 + 강의 글 */
                   <>
                     <h3 class="text-lg font-bold text-white mb-2">수강생 전용 콘텐츠입니다</h3>
