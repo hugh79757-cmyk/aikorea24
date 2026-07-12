@@ -1,3 +1,4 @@
+- 2026-07-12 | fix | light-mode-redesign-warm-palette | 라이트 모드 웜 페이퍼 팔레트 전면 교체 — CSS 변수 + Tailwind utility 오버라이드
 - 2026-07-12 | fix | prompt-bold-markdown-leak | 프롬프트 내 ** 볼드 마크다운 누출 — style_examples + system/user prompt에서 ** 제거
 - 2026-07-12 | fix | hook-first-sentence-improvement | Hook 첫 문장 두괄식 개선 — 이해관계+구체성 결합으로 독자 유지율 강화
 - 2026-07-10 | fix | remove-hardcoded-prompt-patterns | 프롬프트 하드코딩 패턴 "~라는 말"/"근데" 제거 — 모델 표현 자유도 향상

@@ -2484,6 +2484,78 @@
           "date": "2026-07-12"
         }
       ]
+    },
+    {
+      "date": "2026-07-13",
+      "briefing_id": 173,
+      "articles": [
+        {
+          "id": "40351",
+          "title": "연구에 따르면 링크드인은 길고 형식적인 AI 콘텐츠의 무적의 왕",
+          "original_title": "",
+          "description": "팬그램의 분석에 따르면 긴 소셜 미디어 게시물 중 4분의 1이 완전히 AI에 의해 생성된 것입니다. 링크드인은 41%의 긴 게시물이 AI가 작성된 것으로 표시되어 1위에 올랐습니다. 이 플랫폼은 조사된 모든 게시물의 3분의 1에 해당하지만 감지된 AI 콘텐츠의 거의 2/3를 차지합니다.",
+          "link": "https://the-decoder.com/linkedin-is-the-undisputed-king-of-long-form-ai-slop-according-to-a-study-spanning-five-platforms/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-13"
+        },
+        {
+          "id": "40355",
+          "title": "AI가 역사상 가장 큰 가스 발전소 건설 붐을 촉발했으며, 이를 저지하기 위한 조용한 싸움",
+          "original_title": "",
+          "description": "AI 확장은 화석 연료 산업이 스스로 할 수 없었던 일을 했습니다. AP 통신에 따르면, 가스 발전소 건설 붐을 촉발했습니다.",
+          "link": "https://thenextweb.com/news/ai-data-centres-gas-plants-clean-energy-fight",
+          "entities": [
+            "AP",
+            "AI"
+          ],
+          "date": "2026-07-13"
+        },
+        {
+          "id": "40361",
+          "title": "엘론 머스크와 샘 올트만, 애플이 오픈AI 고소한 후 X에서 논쟁하다.",
+          "original_title": "",
+          "description": "샘 올트만은 이번 주 초 오픈AI 모델을 공개한 이후 엘론 머스크가 다시 자신에게 집착하고 있다고 주장했습니다.",
+          "link": "https://www.cnbc.com/2026/07/12/elon-musk-and-sam-altman-spar-.html",
+          "entities": [],
+          "date": "2026-07-13"
+        },
+        {
+          "id": "40353",
+          "title": "\"이것은 지금까지 만들어진 가장 복잡한 구조물 중 일부입니다\": 기술 보도가 물리적 세계로",
+          "original_title": "",
+          "description": "가디언의 글로벌 기술 보도팀은 AI 혁명을 지원하기 위해 건설되고 있는 방대한 데이터 센터의 영향에 대해 조사하고 있습니다. 우리는 그들과 인터뷰하여 그들의 보도가 점점 더 오프라인으로 확장되고 있는 방법에 대해 이야기했습니다.",
+          "link": "https://www.theguardian.com/membership/2026/jul/12/tech-reporting-physical-world-ai-revolution-datacentres",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-13"
+        },
+        {
+          "id": "40357",
+          "title": "메타, AI 투자로 벌어진 시련을 끝내고 투자자들에게 돈을 회수할 방법을 밝혔다.",
+          "original_title": "",
+          "description": "메타는 시장에서 힘든 한 해를 보냈고, 나스닥-100이 18% 상승하는 동안 주가는 제자리걸음이었습니다. 그러나 갑자기 상황이 바뀌었고, 최근 주가는 2024년 초 이후 최고의 주간 성과를 기록했습니다. 금요일 주가는 약 6% 상승했으며, 주 전체로는 약 15% 올랐습니다.",
+          "link": "https://thenextweb.com/news/meta-stock-best-week-ai-cloud-compute",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-13"
+        },
+        {
+          "id": "40304",
+          "title": "OpenAI CEO 알트만, AI가 순수하게 일자리를 창출한다고 \"상당히 확신\"한다고 밝혀",
+          "original_title": "",
+          "description": "OpenAI CEO 샘 알트만은 이제 AI가 없애는 것보다 더 많은 일자리를 창출하고 있다고 \"상당히 확신\"한다고 말했습니다. 이는 모든 직업이 사라질 것이라는 그의 이전 경고와는 상반된 입장입니다. 안트로픽 CEO인 다리오 아모디 역시 유사한 주장을 철회하고 있습니다.",
+          "link": "https://the-decoder.com/openai-ceo-altman-is-now-pretty-sure-ai-is-net-job-creating-which-is-quite-the-pivot-from-predicting-mass-layoffs/",
+          "entities": [
+            "OpenAI",
+            "CEO"
+          ],
+          "date": "2026-07-13"
+        }
+      ]
     }
   ],
   "articles": [
@@ -4755,6 +4827,72 @@
         "ETF"
       ],
       "date": "2026-07-12"
+    },
+    {
+      "id": "40351",
+      "title": "연구에 따르면 링크드인은 길고 형식적인 AI 콘텐츠의 무적의 왕",
+      "original_title": "",
+      "description": "팬그램의 분석에 따르면 긴 소셜 미디어 게시물 중 4분의 1이 완전히 AI에 의해 생성된 것입니다. 링크드인은 41%의 긴 게시물이 AI가 작성된 것으로 표시되어 1위에 올랐습니다. 이 플랫폼은 조사된 모든 게시물의 3분의 1에 해당하지만 감지된 AI 콘텐츠의 거의 2/3를 차지합니다.",
+      "link": "https://the-decoder.com/linkedin-is-the-undisputed-king-of-long-form-ai-slop-according-to-a-study-spanning-five-platforms/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-13"
+    },
+    {
+      "id": "40355",
+      "title": "AI가 역사상 가장 큰 가스 발전소 건설 붐을 촉발했으며, 이를 저지하기 위한 조용한 싸움",
+      "original_title": "",
+      "description": "AI 확장은 화석 연료 산업이 스스로 할 수 없었던 일을 했습니다. AP 통신에 따르면, 가스 발전소 건설 붐을 촉발했습니다.",
+      "link": "https://thenextweb.com/news/ai-data-centres-gas-plants-clean-energy-fight",
+      "entities": [
+        "AP",
+        "AI"
+      ],
+      "date": "2026-07-13"
+    },
+    {
+      "id": "40361",
+      "title": "엘론 머스크와 샘 올트만, 애플이 오픈AI 고소한 후 X에서 논쟁하다.",
+      "original_title": "",
+      "description": "샘 올트만은 이번 주 초 오픈AI 모델을 공개한 이후 엘론 머스크가 다시 자신에게 집착하고 있다고 주장했습니다.",
+      "link": "https://www.cnbc.com/2026/07/12/elon-musk-and-sam-altman-spar-.html",
+      "entities": [],
+      "date": "2026-07-13"
+    },
+    {
+      "id": "40353",
+      "title": "\"이것은 지금까지 만들어진 가장 복잡한 구조물 중 일부입니다\": 기술 보도가 물리적 세계로",
+      "original_title": "",
+      "description": "가디언의 글로벌 기술 보도팀은 AI 혁명을 지원하기 위해 건설되고 있는 방대한 데이터 센터의 영향에 대해 조사하고 있습니다. 우리는 그들과 인터뷰하여 그들의 보도가 점점 더 오프라인으로 확장되고 있는 방법에 대해 이야기했습니다.",
+      "link": "https://www.theguardian.com/membership/2026/jul/12/tech-reporting-physical-world-ai-revolution-datacentres",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-13"
+    },
+    {
+      "id": "40357",
+      "title": "메타, AI 투자로 벌어진 시련을 끝내고 투자자들에게 돈을 회수할 방법을 밝혔다.",
+      "original_title": "",
+      "description": "메타는 시장에서 힘든 한 해를 보냈고, 나스닥-100이 18% 상승하는 동안 주가는 제자리걸음이었습니다. 그러나 갑자기 상황이 바뀌었고, 최근 주가는 2024년 초 이후 최고의 주간 성과를 기록했습니다. 금요일 주가는 약 6% 상승했으며, 주 전체로는 약 15% 올랐습니다.",
+      "link": "https://thenextweb.com/news/meta-stock-best-week-ai-cloud-compute",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-13"
+    },
+    {
+      "id": "40304",
+      "title": "OpenAI CEO 알트만, AI가 순수하게 일자리를 창출한다고 \"상당히 확신\"한다고 밝혀",
+      "original_title": "",
+      "description": "OpenAI CEO 샘 알트만은 이제 AI가 없애는 것보다 더 많은 일자리를 창출하고 있다고 \"상당히 확신\"한다고 말했습니다. 이는 모든 직업이 사라질 것이라는 그의 이전 경고와는 상반된 입장입니다. 안트로픽 CEO인 다리오 아모디 역시 유사한 주장을 철회하고 있습니다.",
+      "link": "https://the-decoder.com/openai-ceo-altman-is-now-pretty-sure-ai-is-net-job-creating-which-is-quite-the-pivot-from-predicting-mass-layoffs/",
+      "entities": [
+        "OpenAI",
+        "CEO"
+      ],
+      "date": "2026-07-13"
     }
   ]
 }
