@@ -6,7 +6,7 @@ const { items } = Astro.props;
   <div class="max-w-6xl mx-auto">
     <div class="flex items-center gap-3 mb-8">
       <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-sm">📋</div>
-      <h2 class="text-xl font-bold">AI 정책 브리핑</h2>
+      <h2 class="text-xl font-bold text-gray-900 dark:text-white">AI 정책 브리핑</h2>
       <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4"></div>
     </div>
     {items.length > 0 ? (
@@ -25,7 +25,7 @@ const { items } = Astro.props;
     ) : (
       <div class="bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
         <div class="text-4xl mb-4">📋</div>
-        <p class="text-gray-400 font-medium mb-2">정책 데이터를 불러오는 중입니다</p>
+        <p class="text-gray-500 dark:text-gray-400 font-medium mb-2">정책 데이터를 불러오는 중입니다</p>
       </div>
     )}
   </div>
