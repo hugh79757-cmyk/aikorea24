@@ -44,7 +44,7 @@ const pageDesc = course.description;
             🎯 곧 오픈 · 알림 신청 중
           </span>
         </div>
-        <h1 class="text-4xl md:text-5xl font-bold text-center leading-tight mb-4">
+        <h1 class="text-3xl md:text-5xl font-bold text-center leading-snug mb-4">
           AI, 처음이세요?
           <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mt-2">
             7일면 충분합니다
@@ -57,7 +57,7 @@ const pageDesc = course.description;
         </p>
 
         {/* Coming Soon Notice */}
-        <div class="max-w-md mx-auto mb-4 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-200 text-center">
+        <div class="max-w-md mx-auto mb-4 px-3 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-300 text-center">
           📢 강좌가 곧 오픈됩니다. 준비되면 이메일로 알려드리겠습니다.
         </div>
 
@@ -80,41 +80,43 @@ const pageDesc = course.description;
             </button>
           </form>
           <div id="enroll-message" class="mt-4 text-sm text-center"></div>
-          <p class="text-xs text-gray-600 text-center mt-3">구독 해지는 언제든 가능합니다. 스팸 메일은 없습니다.</p>
+          <p class="text-xs text-gray-400 text-center mt-3">구독 해지는 언제든 가능합니다. 스팸 메일은 없습니다.</p>
         </div>
 
-        {/* Social proof */}
-        <div class="flex justify-center gap-8 mt-10 text-center">
-          <div>
-            <div class="text-2xl font-bold text-white">7일</div>
-            <div class="text-xs text-gray-500">총 학습 기간</div>
-          </div>
-          <div>
-            <div class="text-2xl font-bold text-white">5분</div>
-            <div class="text-xs text-gray-500">일일 학습 시간</div>
-          </div>
-          <div>
-            <div class="text-2xl font-bold text-white">무료</div>
-            <div class="text-xs text-gray-500">평생 무료</div>
+        {/* Social proof — full-bleed */}
+        <div class="-mx-4 mt-10 py-5 px-4 bg-white/[0.02] border-y border-white/[0.06]">
+          <div class="flex justify-center gap-6 md:gap-8 text-center">
+            <div>
+              <div class="text-xl md:text-3xl font-bold text-white">7일</div>
+              <div class="text-xs text-gray-400">총 학습 기간</div>
+            </div>
+            <div>
+              <div class="text-xl md:text-3xl font-bold text-white">5분</div>
+              <div class="text-xs text-gray-400">일일 학습 시간</div>
+            </div>
+            <div>
+              <div class="text-xl md:text-3xl font-bold text-white">무료</div>
+              <div class="text-xs text-gray-400">평생 무료</div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
     {/* 커리큘럼 */}
-    <section class="max-w-4xl mx-auto px-4 py-16">
-      <h2 class="text-2xl font-bold text-center mb-2">7일 커리큘럼</h2>
-      <p class="text-gray-500 text-center mb-12">매일 저녁 이메일로 전송됩니다</p>
+    <section class="max-w-4xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-xl md:text-2xl font-bold text-center mb-2">7일 커리큘럼</h2>
+      <p class="text-gray-400 text-center mb-10 md:mb-12">매일 저녁 이메일로 전송됩니다</p>
 
-      <div class="grid gap-4">
+      <div class="grid gap-3 md:gap-4">
         {curriculum.map((item) => (
-          <div class="flex gap-4 items-start p-5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.06] transition">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-sm font-bold shrink-0">
+          <div class="flex gap-3 md:gap-4 items-start p-4 md:p-5 rounded-xl bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.06] transition">
+            <div class="w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-xs md:text-sm font-bold shrink-0">
               {item.day}
             </div>
             <div>
-              <h3 class="font-semibold text-white mb-1">{item.title}</h3>
-              <p class="text-sm text-gray-400">{item.desc}</p>
+              <h3 class="font-semibold text-white mb-0.5 md:mb-1 leading-snug">{item.title}</h3>
+              <p class="text-sm text-gray-300 leading-relaxed">{item.desc}</p>
             </div>
           </div>
         ))}
@@ -122,42 +124,42 @@ const pageDesc = course.description;
     </section>
 
     {/* HOW IT WORKS */}
-    <section class="max-w-4xl mx-auto px-4 py-16">
-      <h2 class="text-2xl font-bold text-center mb-12">이렇게 진행됩니다</h2>
-      <div class="grid md:grid-cols-3 gap-8 text-center">
+    <section class="max-w-4xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-xl md:text-2xl font-bold text-center mb-8 md:mb-12">이렇게 진행됩니다</h2>
+      <div class="grid md:grid-cols-3 gap-6 md:gap-8 text-center">
         <div>
-          <div class="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
           <h3 class="font-semibold mb-2">1. 이메일로 신청</h3>
-          <p class="text-sm text-gray-400">이메일 하나로 바로 시작합니다. 복잡한 가입 절차 없음.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">이메일 하나로 바로 시작합니다. 복잡한 가입 절차 없음.</p>
         </div>
         <div>
-          <div class="w-16 h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </div>
           <h3 class="font-semibold mb-2">2. 매일 저녁 이메일</h3>
-          <p class="text-sm text-gray-400">18시에 오늘의 레슨이 담긴 이메일이 도착합니다. 티저를 읽고 커뮤니티에서 전체 내용을 확인하세요.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">18시에 오늘의 레슨이 담긴 이메일이 도착합니다. 티저를 읽고 커뮤니티에서 전체 내용을 확인하세요.</p>
         </div>
         <div>
-          <div class="w-16 h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-4">
-            <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
           <h3 class="font-semibold mb-2">3. 커뮤니티에서 성장</h3>
-          <p class="text-sm text-gray-400">로그인 후 전체 레슨을 읽고, 댓글로 질문하며 다른 수강생과 함께 배웁니다.</p>
+          <p class="text-sm text-gray-300 leading-relaxed">로그인 후 전체 레슨을 읽고, 댓글로 질문하며 다른 수강생과 함께 배웁니다.</p>
         </div>
       </div>
     </section>
 
     {/* FAQ */}
-    <section class="max-w-3xl mx-auto px-4 py-16">
-      <h2 class="text-2xl font-bold text-center mb-12">자주 묻는 질문</h2>
+    <section class="max-w-3xl mx-auto px-4 py-12 md:py-16">
+      <h2 class="text-xl md:text-2xl font-bold text-center mb-8 md:mb-12">자주 묻는 질문</h2>
       <div class="space-y-4">
         {[
           { q: '진짜 무료인가요?', a: '네, 완전 무료입니다. 결제 정보를 요구하지 않습니다.' },
@@ -167,13 +169,13 @@ const pageDesc = course.description;
           { q: '중간에 그만두면 어떻게 되나요?', a: '언제든지 구독을 해지할 수 있습니다. 다시 시작하고 싶으면 재신청하세요.' },
         ].map((faq) => (
           <details class="group bg-white/[0.03] border border-white/[0.08] rounded-xl overflow-hidden">
-            <summary class="px-5 py-4 cursor-pointer font-medium text-sm text-white hover:bg-white/[0.03] transition flex items-center justify-between">
+            <summary class="px-4 md:px-5 py-4 cursor-pointer font-medium text-sm text-white hover:bg-white/[0.03] transition flex items-center justify-between min-h-[44px]">
               {faq.q}
-              <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </summary>
-            <div class="px-5 pb-4 text-sm text-gray-400 leading-relaxed">
+            <div class="px-4 md:px-5 pb-4 text-sm text-gray-300 leading-relaxed">
               {faq.a}
             </div>
           </details>
@@ -182,12 +184,12 @@ const pageDesc = course.description;
     </section>
 
     {/* CTA */}
-    <section class="max-w-4xl mx-auto px-4 pb-24">
-      <div class="text-center bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-white/[0.08] rounded-2xl p-12">
-        <h2 class="text-2xl font-bold mb-4">곧 오픈됩니다</h2>
-        <p class="text-gray-400 mb-8">알림을 신청하고 가장 먼저 시작하세요.</p>
+    <section class="max-w-4xl mx-auto px-4 pb-20 md:pb-24">
+      <div class="text-center bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-white/[0.08] rounded-2xl p-6 md:p-12">
+        <h2 class="text-xl md:text-2xl font-bold mb-4">곧 오픈됩니다</h2>
+        <p class="text-gray-300 mb-6 md:mb-8">알림을 신청하고 가장 먼저 시작하세요.</p>
         <a href="#signup-section"
-           class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-10 py-4 rounded-xl font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
+           class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white w-full sm:w-auto px-8 md:px-10 py-4 rounded-xl text-sm md:text-base font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
           오픈 알림 신청
         </a>
       </div>
