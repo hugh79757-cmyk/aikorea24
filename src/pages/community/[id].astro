@@ -52,9 +52,6 @@ function insertInfeedAds(html: string): string {
 const categoryBadge: Record<string, string> = {
   free: 'bg-blue-500/20 text-blue-300',
   qna: 'bg-green-500/20 text-green-300',
-  news: 'bg-purple-500/20 text-purple-300',
-  tip: 'bg-yellow-500/20 text-yellow-300',
-  project: 'bg-pink-500/20 text-pink-300',
   review: 'bg-orange-500/20 text-orange-300',
   '강의': 'bg-violet-500/20 text-violet-300',
 };
@@ -62,9 +59,6 @@ const categoryBadge: Record<string, string> = {
 const categoryLabel: Record<string, string> = {
   free: '자유게시판',
   qna: '질문답변',
-  news: 'AI 뉴스',
-  tip: '꿀팁공유',
-  project: '프로젝트',
   review: '툴 리뷰',
   '강의': '📚 강의',
 };
@@ -116,9 +110,8 @@ if (db && id) {
   const categoryNames: Record<string, string> = {
     free: '자유게시판',
     qna: '질문답변',
-    news: 'AI 뉴스',
-    tip: '꿀팁공유',
-    project: '프로젝트'
+    review: '툴 리뷰',
+    '강의': '강의'
   };
   const catName = categoryNames[post?.category] || post?.category || '';
   const cleanContent = post?.content?.replace(/<[^>]*>/g, '').substring(0, 150) || '';

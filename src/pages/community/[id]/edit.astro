@@ -60,16 +60,13 @@ const pageDesc = `"${post.title}" 편집하기`;
         <div class="flex items-center gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">카테고리</label>
-            <select name="category"
-              class="bg-white dark:bg-white/[0.05] border border-gray-300 dark:border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500">
-              <option value="free" {post.category === 'free' ? 'selected' : ''}>자유게시판</option>
-              <option value="qna" {post.category === 'qna' ? 'selected' : ''}>질문답변</option>
-              <option value="news" {post.category === 'news' ? 'selected' : ''}>AI 뉴스</option>
-              <option value="tip" {post.category === 'tip' ? 'selected' : ''}>꿀팁공유</option>
-              <option value="project" {post.category === 'project' ? 'selected' : ''}>프로젝트</option>
-              <option value="review" {post.category === 'review' ? 'selected' : ''}>툴 리뷰</option>
-              <option value="강의" {post.category === '강의' ? 'selected' : ''}>📚 강의</option>
-            </select>
+              <select name="category"
+                class="bg-white dark:bg-white/[0.05] border border-gray-300 dark:border-white/[0.15] rounded-lg px-4 py-2.5 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-blue-500">
+                <option value="free" {post.category === 'free' ? 'selected' : ''}>자유게시판</option>
+                <option value="qna" {post.category === 'qna' ? 'selected' : ''}>질문답변</option>
+                <option value="review" {post.category === 'review' ? 'selected' : ''}>툴 리뷰</option>
+                <option value="강의" {post.category === '강의' ? 'selected' : ''}>📚 강의</option>
+              </select>
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">공개 설정</label>

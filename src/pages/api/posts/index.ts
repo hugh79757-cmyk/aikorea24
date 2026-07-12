@@ -79,7 +79,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       return new Response(JSON.stringify({ error: '제목과 내용을 입력하세요.' }), { status: 400 });
     }
 
-    const allowedCategories = ['free', 'qna', 'news', 'tip', 'project', 'review'];
+    const allowedCategories = ['free', 'qna', 'review'];
     const cat = allowedCategories.includes(category) ? category : 'free';
 
     const accessLevels = ['free', 'basic', 'premium'];
