@@ -51,6 +51,7 @@ scripts/__pycache__/
 scripts/threads/posted.json
 scripts/threads/logs/
 scripts/tools_collector.log
+pipeline/infra/__pycache__/
 
 # Blog thumbnail images — deployed via `wrangler pages deploy` (local build), not committed to git
 public/images/
