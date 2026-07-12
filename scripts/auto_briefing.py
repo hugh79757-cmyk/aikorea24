@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """aikorea24 브리핑 자동 생성기"""
 
+import re
 import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
@@ -44,12 +45,22 @@ def d1_execute(sql):
         log(f"  D1 예외: {e}")
         return False
 
+def remove_chinese(text):
+    """중국어(한자) CJK 통합 한자 블록 제거"""
+    return re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', text)
+
+
 def generate_comment(article):
     """MiMo API로 기사 코멘트 생성"""
     title = article.get("title", "")
     description = (article.get("description") or "")[:300]
     source = article.get("source", "")
 
+    system_prompt = (
+        "당신은 한국어 뉴스 코멘트 작성 전문가입니다.\n"
+        "중요: 중국어(한자)를 절대 사용하지 마세요. 모든 내용을 순수 한국어로만 작성하세요.\n"
+        "한자어가 필요한 경우 반드시 순수 한글로 풀어서 표현하세요."
+    )
     prompt = (
         f"다음 AI 뉴스에 대해 1~2문장의 간결한 한국어 코멘트를 작성해줘.\n\n"
         f"제목: {title}\n"
@@ -67,9 +78,12 @@ def generate_comment(article):
             },
             json={
                 "model": MIMO_MODEL,
-                "messages": [{"role": "user", "content": prompt}],
+                "messages": [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt},
+                ],
                 "max_tokens": 500,
-                "temperature": 0.5,
+                "temperature": 0.3,
             },
             timeout=30,
         )
@@ -80,7 +94,12 @@ def generate_comment(article):
         comment = data["choices"][0]["message"]["content"].strip()
         if not comment:
             return None
-        return comment
+        # 중국어 문자 제거 (안전망)
+        cleaned = remove_chinese(comment)
+        if cleaned != comment:
+            removed = len(comment) - len(cleaned)
+            log(f"    ⚠️ 중국어 문자 {removed}개 제거됨 (comment)")
+        return cleaned
     except Exception as e:
         log(f"  API 예외: {e}")
         return None

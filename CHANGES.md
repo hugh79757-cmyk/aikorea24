@@ -1051,3 +1051,20 @@
 ### 상태
 - 🔴 사용자 피드백 대기 중 (영상 확인)
 - 미커밋 — git status 확인 필요
+
+---
+
+## 2026-07-12 — 브리핑 중국어 완전 차단 + 심층글 비활성화 (Phase 26)
+
+### 변경
+- `scripts/auto_briefing.py` — `generate_comment()`에 중국어 금지 system prompt 추가 + `remove_chinese()` 후처리 + 탐지 로깅
+- `scripts/run_pipeline.py` — `--skip-deep` 기본값 True로 변경 (심층글 기본 생략)
+- `scripts/auto_deep_article.py` — DEPRECATED 문서화 (비활성화 상태 명시)
+
+### 원인
+- `generate_comment()`에 중국어(한자) 금지 지시가 없어 모델이 간헐적으로 한국어 뉴스 원문의 한자를 그대로 출력. 블로그 생성기에는 방어 체계가 있었으나 브리핑 쪽이 누락됨.
+
+### 검증
+- Python 파일 3개 수정 완료 (웹사이트 변경 없음)
+- `pip_compile` 확인 — syntax 오류 없음
+- ROADMAP.md, CHANGES.md 문서 업데이트 완료

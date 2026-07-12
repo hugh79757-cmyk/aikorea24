@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-12T15:52:30.000Z
+last_updated: 2026-07-12T18:30:00.000Z
 last_activity: 2026-07-12
 progress:
-  total_phases: 23
-  completed_phases: 22
-  total_plans: 44
-  completed_plans: 44
-  percent: 100
+  total_phases: 24
+  completed_phases: 23
+  total_plans: 49
+  completed_plans: 45
+  percent: 92
 ---
 
 # Project State
@@ -25,11 +25,11 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 17 (Instagram Carousel + Reels) — xfade offset bug fixed, re-rendered, awaiting feedback
-Status: 🐛 버그 수정 완료 — 사용자 영상 확인 대기
-Last activity: 2026-07-11T22:50
+Phase: 26 (브리핑 중국어 차단 + 심층글 비활성화) — Complete
+Status: ✅ 코드 변경 + 문서 업데이트 완료
+Last activity: 2026-07-12T18:30
 
-Progress: [██████████████████████████████████] 98%
+Progress: [██████████████████████████████████] 92%
 
 ### Course System Status
 - **프레임**: 오케스트레이터 — "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"

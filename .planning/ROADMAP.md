@@ -23,6 +23,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 14: Delimiter Reconfiguration** — JSON-first parsing with `response_format`, fallback retained, delimiter collision eliminated (completed 2026-07-05)
 - [x] **Phase 15: Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환** — Vectorize 의미적 중복제거, failed_crawls TTL, 카드 JSON 배열 전환 (completed 2026-07-07)
 - [x] **Phase 16: Writer prompt v2 — jisang-aligned card structure** — 6카드 구조 통념→전환→증거A→증거B→열린질문→링크, but_line/question/gap_source writer 전달, style_examples 업데이트 (completed 2026-07-09)
+- [x] **Phase 26: 브리핑 중국어 완전 차단 + 심층글 비활성화** — generate_comment()에 system prompt + remove_chinese() 후처리 + 탐지 로깅, run_pipeline.py --skip-deep 기본 True, auto_deep_article.py DEPRECATED (completed 2026-07-12)
 
 ## Phase Details
 
@@ -383,6 +384,21 @@ Plans:
 4. **auto-enroll 없음**: 강좌 폼(`/api/courses/enroll`)과 뉴스레터 폼(`/api/subscribe`) 이미 분리 — `enrollments`가 단일 진실원
 **Status**: Complete (코드 + 빌드 통과). 런타임 확인은 크론 활성화 후.
 
+### Phase 26: 브리핑 중국어 완전 차단 + 심층글 비활성화
+**Goal**: 브리핑 코멘트에 중국어(한자)가 절대 나오지 않도록 방어 체계 구축. 미사용 심층글(deep article) 기능 비활성화.
+**Mode**: ad-hoc
+**Depends on**: Nothing (standalone fix)
+**Success Criteria** (what must be TRUE):
+  1. `generate_comment()` 요청에 중국어 금지 system prompt 포함됨
+  2. 응답 후 `remove_chinese()` 안전망 후처리 적용됨
+  3. 중국어 문자 제거 시 로그에 탐지 건수 기록됨
+  4. `run_pipeline.py --skip-deep` 기본값 True (심층글 기본 생략)
+  5. `auto_deep_article.py` DEPRECATED 명시
+**Plans**: 1 plan (inline — 코드 직접 수정)
+
+Plans:
+- [x] 26-PLAN.md — 중국어 방어 체계 (system prompt + remove_chinese + logging) + 심층글 비활성화
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -414,4 +430,5 @@ Plans:
 | 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
 | 23. SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels | 0/7 | Planned | — |
 | 25. 커뮤니티 레슨 순차 해금 | 1/1 | Complete | 2026-07-12 |
-| **Total** | **43/48** | | |
+| 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | Complete | 2026-07-12 |
+| **Total** | **44/49** | | |

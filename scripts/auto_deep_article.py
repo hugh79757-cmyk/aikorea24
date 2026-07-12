@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""aikorea24 심층글 자동 생성기"""
+"""aikorea24 심층글 자동 생성기
+
+DEPRECATED: 심층글 생성 기능은 비활성화되었습니다 (2026-07-12).
+- run_pipeline.py --skip-deep 기본값 = True (기본 생략)
+- --deep 플래그 없이 심층글 실행되지 않음 (--skip-deep 우회 불가)
+- 코드는 참조용으로 유지 (삭제하지 않음)
+"""
 
 import json
 import os
