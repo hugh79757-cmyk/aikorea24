@@ -5,6 +5,42 @@
 
 ---
 
+## 2026-07-12 — Vectorize threshold 완화 + 워킹트리 정리
+
+### 변경
+- `pipeline/infra/vectorize_client.py` — `SIMILARITY_THRESHOLD = 0.85 → 0.60`
+  - 의도: 같은 사건/기업/맥락의 다른 각도 기사도 중복으로 차단
+  - 0.85는 거의 동일 기사만 잡아서 시간차 관련 기사가 나란히 발행되는 문제 발생
+  - 발행 빈도가 낮으므로 보수적 0.85 → 0.60으로 완화
+- `.gitignore` — 글로벌 `__pycache__/` + `*.pyc` 패턴 추가
+  - 누락 디렉토리 4개 (`api_test/`, `pipeline/`, `pipeline/steps/`, `pipeline/threads/`, `tests/`) 자동 커버
+  - 중복된 개별 `__pycache__/` 명시 항목 제거
+
+### 추적 해제 (워크트리 노이즈 정리)
+- 80개 파일 `git rm --cached`:
+  - `.pyc` ~30개 (4개 `__pycache__/` 디렉토리)
+  - `.log` ~15개 (`api_test/cron*.log`, `manual_run.log`, `naver_blog/logs/auto_publish_err.log` 등)
+  - 런타임 상태 ~35개 (`scripts/threads/posted.json`, `tools_collector.log` 등)
+
+### 의사결정
+- threshold 0.60: 코사인 유사도 0.60 이상이면 중복 처리. 의미적으로 관련된 기사를 한 토픽으로 묶어 발행 빈도 자연 감소
+- `.gitignore` 글로벌 패턴: 명시 항목 나열 대신 와일드카드로 단순화, 신규 디렉토리 자동 커버
+
+### 커밋
+- `bfeb994` fix(vectorize): 중복 threshold 0.85 → 0.60
+- `38906a6` chore: 광범위 런타임 아티팩트 추적 해제 + .gitignore 통합
+- `113e377` chore: .gitignore 글로벌 __pycache__ 패턴 명시 추가
+- `00b2a95` chore: 추적 해제 — 런타임 아티팩트 + pipeline/infra/__pycache__/
+
+### 검증
+- `touch test.pyc test.log` → `git status` 미감지 확인
+- 워킹트리 깨끗 (untracked 0, modified 0)
+
+### 미해결
+- `.continue-here.md`의 "Option B seed uncommitted" 표기 stale → 실제 `4177c4a`에 커밋됨 (라이브 배포). 핸드오프 갱신 필요
+
+---
+
 ## 2026-07-12 — Phase 25: 커뮤니티 레슨 순차 해금
 
 ### 변경
