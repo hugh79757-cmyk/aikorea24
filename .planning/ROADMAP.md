@@ -352,11 +352,11 @@ Plans:
 5. **시드 스크립트 개선**: `--update` UPSERT 모드 + courses UPDATE 지원
 6. **슬러그 확정**: `7day-starter` / `7day-infra` / `7day-agent`
 
-### Phase 21: 히어로 강좌 설계 (Pending)
+### Phase 21: 히어로 강좌 설계 (Complete)
 **Goal**: 무료 에이전트, 7일 — 7개 레슨 (day 15~21) 작성 및 D1 시드.
 **Mode**: ad-hoc
 **Depends on**: Phase 20
-**Status**: 설계 대기
+**Status**: 시드 완료
 
 ### Phase 22: 발송 시스템 활성화 (Deferred — 마지막)
 **Goal**: launchd plist 설치 + day 0 즉시 발송 hook + 3개 강좌 등록·발송·완강 사이클 운영.
@@ -410,7 +410,7 @@ Plans:
 | 18. 체류 퍼널 재설계 | pending | Complete | 2026-07-10 |
 | 19. 강좌 시스템 MVP-3: 자동 발송 | 3/3 | Complete (코드, 미설치) | 2026-07-10 |
 | 20. 강좌 콘텐츠 완성 | ad-hoc | Complete | 2026-07-10 |
-| 21. 히어로 강좌 설계 | — | Pending | — |
+| 21. 히어로 강좌 설계 | ad-hoc | Complete | 2026-07-12 |
 | 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
 | 23. SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels | 0/7 | Planned | — |
 | 25. 커뮤니티 레슨 순차 해금 | 1/1 | Complete | 2026-07-12 |

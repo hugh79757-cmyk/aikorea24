@@ -4,11 +4,11 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-12T15:50:00.000Z
+last_updated: 2026-07-12T15:52:30.000Z
 last_activity: 2026-07-12
 progress:
   total_phases: 23
-  completed_phases: 21
+  completed_phases: 22
   total_plans: 44
   completed_plans: 44
   percent: 100
@@ -41,7 +41,7 @@ Progress: [███████████████████████
 |------|------|-----|------|
 | 첫 AI, 7일 | 7day-starter | 0~7 (8개) | ✅ 시드 완료 + 과목명 업데이트 |
 | 0원 인프라, 7일 | 7day-infra | 8~14 (7개) | ✅ 시드 완료 |
-| 무료 에이전트, 7일 | 7day-agent | 15~21 (7개) | ⏳ 설계 대기 |
+| 무료 에이전트, 7일 | 7day-agent | 15~21 (7개) | ✅ 시드 완료 |
 
 ### Phase 17-02 Details (HTML → PNG Image Generator)
 - **Goal**: HTML 템플릿 기반 Instagram Carousel(1080×1350) + Reels(1080×1920) PNG 생성

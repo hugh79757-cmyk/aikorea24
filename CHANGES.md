@@ -956,9 +956,47 @@
 - day 0 등록 즉시 발송 hook **미구현** — Phase 22에서 처리 예정
 
 ### 다음 스텝
-1. 히어로 강좌(7day-agent) 설계
+1. ~~히어로 강좌(7day-agent) 설계~~ ✅ 완료
 2. Phase 22 발송 시스템 활성화 (launchd plist + day 0 hook)
 3. E2E 테스트 (등록→발송→완강)
+
+---
+
+## 2026-07-12 — Phase 21: 히어로 강좌 설계 — 무료 에이전트, 7일 (시드 완료)
+
+### 변경
+- `scripts/seed_course_7day_agent.py` — **신규**: 무료 에이전트 강좌 시드 데이터 생성기 (7개 레슨, day 15~21)
+  - 기존 `seed_course_7day_infra.py`와 동일한 구조 (SQL 생성 + wrangler d1 execute)
+  - `--dry` / `--file` / `--update` 플래그 모두 지원
+
+### 7개 레슨 디자인
+
+| Day | 주제 | 핵심 내용 |
+|-----|------|----------|
+| 15 | LLM 직접 부르기 | OpenRouter API 키 → curl 첫 호출, 무료 LLM 비교 |
+| 16 | Workers + AI = 첫 에이전트 | Workers에서 AI 호출, 요청→프롬프트→응답 파이프라인 |
+| 17 | 일정 자동화 | Workers Cron Triggers / launchd / cron 스케줄링 |
+| 18 | 뉴스 수집→요약→메일 | RSS → LLM 요약 → Brevo/Email 발송 파이프라인 |
+| 19 | 블로그→SNS 자동 포스팅 | RSS 감지 → LLM 카피 → Twitter/LinkedIn 발행 |
+| 20 | 자는 동안 돌아가는 시스템 | 전체 통합 + 로깅 + 에러 처리 + 모니터링 |
+| 21 | 당신도 오케스트레이터 | 🎉 21일 완강 — 3개 강좌 정리 + 비전 |
+
+### 오케스트레이터 프레임 일관성
+- 제로 강좌: "AI에게 말로 일을 시키는 첫 7일"
+- 인프라 강좌: "AI가 만든 사이트를 0원에 운영하는 7일"
+- **에이전트 강좌: "AI를 지휘하는 사람으로"** ← 신규
+- 전체 21일 아크: 코드 두려움 → AI 활용 → AI 지휘
+
+### D1 상태 (ALL COURSES COMPLETE 🎉)
+| 강좌 | slug | 레슨 | 상태 |
+|------|------|------|------|
+| 첫 AI, 7일 | 7day-starter | day 0~7 (8개) | ✅ 시드 완료 |
+| 0원 인프라, 7일 | 7day-infra | day 8~14 (7개) | ✅ 시드 완료 |
+| 무료 에이전트, 7일 | 7day-agent | day 15~21 (7개) | ✅ **시드 완료 (신규)** |
+
+### 다음 스텝
+1. Phase 22: 발송 시스템 활성화 (launchd plist + day 0 hook)
+2. E2E 테스트 (등록→발송→완강 3개 강좌 사이클)
 
 ## 2026-07-10 — Phase 18 체류 퍼널 재설계 + CSP 차단 해결 (3 deploy)
 
