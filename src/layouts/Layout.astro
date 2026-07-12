@@ -72,7 +72,7 @@ const currentPath = Astro.url.pathname;
 </head>
 <body class="min-h-screen flex flex-col">
 
-  <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06]">
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06]" style="background-color:var(--bg-header)">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
       <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
         AI코리아24
@@ -121,7 +121,7 @@ const currentPath = Astro.url.pathname;
         </svg>
       </button>
     </nav>
-    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-white/[0.06] bg-white/95 dark:bg-[#0A0E1A]/95 backdrop-blur-md">
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-white/[0.06] backdrop-blur-md" style="background-color:var(--bg-header)">
       {navItems.map(item => (
         <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.05] border-b border-gray-100 dark:border-white/[0.06]">
           {item.label}
@@ -147,7 +147,7 @@ const currentPath = Astro.url.pathname;
 
   <!-- 검색 모달 -->
   <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
-    <div class="max-w-xl mx-auto mt-20 px-4 bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
+    <div class="max-w-xl mx-auto mt-20 px-4 rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden" style="background-color:var(--card-bg)">
       <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
         <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <input id="search-input" type="text" placeholder="블로그 검색... (제목, 설명, 태그)" class="flex-1 bg-transparent text-gray-900 dark:text-gray-100 placeholder-gray-400 outline-none text-base" autocomplete="off" />
@@ -336,7 +336,7 @@ const currentPath = Astro.url.pathname;
   </script>
 
   <div id="share-copy-wrap" style="position:fixed;bottom:24px;right:16px;z-index:9999;max-width:calc(100vw - 32px);">
-    <button id="copy-link-btn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){var t=document.getElementById('copy-toast');t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},2000);})" style="display:flex;align-items:center;gap:6px;padding:12px 20px;background:#1f2937;color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
+    <button id="copy-link-btn" onclick="navigator.clipboard.writeText(window.location.href).then(function(){var t=document.getElementById('copy-toast');t.style.opacity='1';setTimeout(function(){t.style.opacity='0';},2000);})" style="display:flex;align-items:center;gap:6px;padding:12px 20px;background:var(--share-btn-bg,#1f2937);color:#fff;border:none;border-radius:999px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,0.3);transition:all 0.2s;-webkit-tap-highlight-color:transparent;">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
       공유하기
     </button>
