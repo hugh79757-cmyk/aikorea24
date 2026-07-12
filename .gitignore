@@ -52,6 +52,9 @@ scripts/threads/posted.json
 scripts/threads/logs/
 scripts/tools_collector.log
 
+# Blog thumbnail images — deployed via `wrangler pages deploy` (local build), not committed to git
+public/images/
+
 # Phase 17 - Instagram pipeline generated artifacts
 instagram-carousel-output/
 instagram-reel-output/

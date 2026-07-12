@@ -260,6 +260,9 @@ def save_draft(gpt_output, keyword, file_num, today_str):
     now_kst = datetime.now(KST)
     date_str = now_kst.strftime("%Y-%m-%dT%H:%M:%S+09:00")
 
+    thumbnail_file = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
+    image_line = f'image: "/images/{slug}/thumbnail.webp"\n' if os.path.exists(thumbnail_file) else ""
+
     md = f"""---
 title: "{seo_title}"
 description: "{desc_raw}"
@@ -268,8 +271,7 @@ category: "뉴스"
 tags:
   - "{keyword}"
 draft: false
-image: "/images/{slug}/thumbnail.webp"
----
+{image_line}---
 
 {content}
 """

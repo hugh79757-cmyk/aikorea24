@@ -12,6 +12,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -22,6 +23,7 @@ from PIL import Image
 from openai import OpenAI
 
 from pipeline.infra.logger import get_scrubbed_logger
+from pipeline.infra.retry import retry
 logger = get_scrubbed_logger(__name__)
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
@@ -115,6 +117,7 @@ def _extract_deepseek_keyword(description):
         return None
 
 
+@retry(max_retries=3, delay=1.0, backoff=2.0)
 def search_pexels(query, per_page=15):
     api_key = _load_pexels_key()
     if not api_key:
@@ -136,6 +139,7 @@ def search_pexels(query, per_page=15):
         return []
 
 
+@retry(max_retries=3, delay=1.0, backoff=2.0)
 def download_image(url):
     try:
         headers = {"User-Agent": USER_AGENT}
@@ -188,20 +192,23 @@ def process_thumbnail(url, slug, title="", description=""):
         log("  Pexels 결과 없음, fallback: artificial intelligence")
         photos = search_pexels("artificial intelligence")
 
-    if not photos:
-        log("  최종 fallback 실패")
-        return None
-
-    chosen = None
-    for photo in photos:
-        pid = photo.get("id")
-        if pid and pid not in used_ids:
-            chosen = photo
-            break
+    chosen = _pick_unused_photo(photos, used_ids)
+    if not chosen:
+        # 미사용 사진이 없으면 대체 쿼리로 재시도 (최대 3개)
+        log("  미사용 사진 없음, 대체 쿼리 시도")
+        for alt in DEEPSEEK_POOL[:3]:
+            alt_photos = search_pexels(alt)
+            chosen = _pick_unused_photo(alt_photos, used_ids)
+            if chosen:
+                break
 
     if not chosen:
-        log("  모든 결과가 사용됨, 첫번째 이미지 재사용")
-        chosen = photos[0]
+        if photos:
+            log("  모든 Pexels 결과 사용됨, 동일 이미지 재사용")
+            chosen = photos[0]
+        else:
+            # Pexels 전면 실패 → 기본 placeholder 사용 (깨진 참조 방지)
+            return _use_default_thumbnail(slug)
 
     pid = chosen.get("id")
     log(f"  선택: ID={pid} | {chosen.get('alt', '')[:60]}")
@@ -210,14 +217,14 @@ def process_thumbnail(url, slug, title="", description=""):
     if not img_url:
         img_url = chosen.get("src", {}).get("medium")
     if not img_url:
-        log("  이미지 URL 없음")
-        return None
+        log("  이미지 URL 없음, 기본 placeholder 사용")
+        return _use_default_thumbnail(slug)
 
     log("이미지 다운로드 중...")
     image_data = download_image(img_url)
     if not image_data:
-        log("  이미지 다운로드 실패")
-        return None
+        log("  이미지 다운로드 실패, 기본 placeholder 사용")
+        return _use_default_thumbnail(slug)
 
     log(f"  다운로드 완료: {len(image_data):,} bytes")
 
@@ -233,6 +240,32 @@ def process_thumbnail(url, slug, title="", description=""):
     rel_path = f"/images/{slug}/thumbnail.webp"
     log(f"  경로: {rel_path}")
     return rel_path
+
+
+def _pick_unused_photo(photos, used_ids):
+    if not photos:
+        return None
+    for photo in photos:
+        pid = photo.get("id")
+        if pid and pid not in used_ids:
+            return photo
+    return None
+
+
+def _use_default_thumbnail(slug):
+    src = PROJECT_DIR / "public" / "images" / "news-keyword-og.webp"
+    dst = PUBLIC_IMAGES_DIR / slug / "thumbnail.webp"
+    if not src.exists():
+        log("  기본 placeholder 이미지 없음, 썸네일 생성 포기")
+        return None
+    try:
+        os.makedirs(os.path.dirname(str(dst)), exist_ok=True)
+        shutil.copy(str(src), str(dst))
+        log(f"  기본 placeholder 사용: {dst}")
+        return f"/images/{slug}/thumbnail.webp"
+    except OSError as e:
+        log(f"  기본 placeholder 복사 실패: {e}")
+        return None
 
 
 def main():

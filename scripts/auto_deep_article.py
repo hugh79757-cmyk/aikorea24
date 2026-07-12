@@ -286,9 +286,11 @@ def save_article(markdown_content, title):
     slug = re.sub(r'[^a-z0-9가-힣]+', '-', title.lower())[:60]
     slug = slug.strip('-')
     thumbnail_path = f"/images/{slug}/thumbnail.webp"
+    thumbnail_file = PROJECT_DIR / "public" / "images" / slug / "thumbnail.webp"
 
-    # 프론트매터에 image: 필드 자동 주입
-    markdown_content = inject_frontmatter_image(markdown_content, thumbnail_path)
+    # 썸네일 파일이 실제로 존재할 때만 image: 필드 주입 (깨진 참조 방지)
+    if thumbnail_file.exists():
+        markdown_content = inject_frontmatter_image(markdown_content, thumbnail_path)
 
     today = datetime.now(KST).strftime("%Y-%m-%d")
     filename = f"{today}-{slug}.md"
