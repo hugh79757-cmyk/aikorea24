@@ -1068,3 +1068,21 @@
 - Python 파일 3개 수정 완료 (웹사이트 변경 없음)
 - `pip_compile` 확인 — syntax 오류 없음
 - ROADMAP.md, CHANGES.md 문서 업데이트 완료
+
+---
+
+## 2026-07-13 — 모바일 생태계 RSS 소스 3개 추가
+
+### 변경
+- `api_test/news_collector.py` — `GLOBAL_RSS_FEEDS`에 9to5Google, Android Central, SamMobile 추가 + `ENHANCED_FILTER_URLS`에 3개 URL 등록 (is_ai_related 필터 적용)
+- `config/crawlable_sources.json` — `crawlable` 배열에 9to5Google (avg_content_length: 5000), Android Central (5500), SamMobile (4000) 추가
+
+### 배경
+- GSMArena가 2026-07-11 보도한 "Samsung Health 데이터 AI 학습 강제 동의" 기사가 기존 30개+ 소스 중 어디에서도 수집되지 않음
+- Samsung Health × AI × 강제 동의는 모바일 생태계 × AI 정책 교차점의 뉴스로, 순수 AI/일반 테크 매체로는 포착되지 않는 영역
+- GSMArena RSS 자체는 "iOS만 벤치마크" 단일 기사만 노출되어 부적합 — 대신 9to5Google, Android Central, SamMobile 3개 선정
+
+### 검증
+- 3개 RSS 피드 정상 동작 확인
+- Python syntax ✅ / JSON ✅
+- 테스트 236/237 pass (1 pre-existing — card validation unrelated)
