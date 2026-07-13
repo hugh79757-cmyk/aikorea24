@@ -19,7 +19,10 @@
     {"name": "Politico EU Tech", "rss_url": "https://www.politico.eu/feed/", "avg_content_length": 2079},
     {"name": "Memphis Flyer", "rss_url": "https://www.memphisflyer.com/feed", "avg_content_length": 4328},
     {"name": "CNBC Tech", "rss_url": "https://www.cnbc.com/id/19854910/device/rss/rss.html", "avg_content_length": 3015},
-    {"name": "NYT AI Spotlight", "rss_url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "avg_content_length": 2584}
+    {"name": "NYT AI Spotlight", "rss_url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "avg_content_length": 2584},
+    {"name": "9to5Google", "rss_url": "https://9to5google.com/feed/", "avg_content_length": 5000},
+    {"name": "Android Central", "rss_url": "https://www.androidcentral.com/rss", "avg_content_length": 5500},
+    {"name": "SamMobile", "rss_url": "https://www.sammobile.com/feed/", "avg_content_length": 4000}
   ],
   "rss_only": [
     {"name": "Hacker News", "rss_url": "https://hnrss.org/newest?q=AI", "reason": "본문 553자 (댓글 위주)"},

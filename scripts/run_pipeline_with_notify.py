@@ -78,8 +78,13 @@ def main():
     pipeline_script = os.path.join(SCRIPTS_DIR, 'run_pipeline.py')
     
     try:
+        # 모든 플래그를 명시적으로 전달 — 기본값 변경에 영향받지 않도록 함
+        pipeline_args = [
+            sys.executable, pipeline_script,
+            "--skip-deep=False",       # 심층글(블로그) 생성 활성화
+        ]
         result = subprocess.run(
-            [sys.executable, pipeline_script],
+            pipeline_args,
             capture_output=True,
             text=True,
             timeout=600,  # 10분 타임아웃

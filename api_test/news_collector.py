@@ -521,7 +521,7 @@ AI_FEED_URLS = {
     'https://www.fastcompany.com/section/artificial-intelligence/rss',
 }
 
-# 신규 강화 필터 적용 소스 전체 URL 목록 (AI_FEED_URLS 포함)
+    # 신규 강화 필터 적용 소스 전체 URL 목록 (AI_FEED_URLS 포함)
 ENHANCED_FILTER_URLS = {
     # 일반 테크 소스는 is_ai(기존 필터)로 처리 → 여기서 제거
     # AI 전용 피드만 강화 필터 적용
@@ -546,6 +546,10 @@ ENHANCED_FILTER_URLS = {
     'https://news.google.com/rss/search?q=site:aljazeera.com+artificial+intelligence&hl=en&gl=US&ceid=US:en',
     'https://news.google.com/rss/search?q=site:anthropic.com+news&hl=en&gl=US&ceid=US:en',
     'https://www.memphisflyer.com/feed',
+    # 2026-07-13 추가: 모바일 생태계 소스 (is_ai_related 강화 필터 적용)
+    'https://9to5google.com/feed/',
+    'https://www.androidcentral.com/rss',
+    'https://www.sammobile.com/feed/',
 }
 
 
@@ -608,6 +612,10 @@ GLOBAL_RSS_FEEDS = [
     ('https://news.google.com/rss/search?q=site:aljazeera.com+artificial+intelligence&hl=en&gl=US&ceid=US:en', 'Al Jazeera AI (via Google News)', 'us'),
     ('https://news.google.com/rss/search?q=site:anthropic.com+news&hl=en&gl=US&ceid=US:en', 'Anthropic News (via Google News)', 'us'),
     ('https://www.memphisflyer.com/feed', 'Memphis Flyer', 'us'),
+    # === 신규 해외 RSS 소스 (2026-07-13 추가: 모바일 생태계) ===
+    ('https://9to5google.com/feed/', '9to5Google', 'us'),
+    ('https://www.androidcentral.com/rss', 'Android Central', 'us'),
+    ('https://www.sammobile.com/feed/', 'SamMobile', 'us'),
 ]
 
 
