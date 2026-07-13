@@ -3,30 +3,23 @@
 @tailwind utilities;
 
 @layer base {
-  /* ─────── 라이트 모드 (웜 팔레트) ─────── */
+  /* 라이트 모드 기본 */
   :root {
-    --bg-primary:  #FBF9F6;
-    --bg-secondary:#F2EFEA;
-    --bg-tertiary: #EBE7E0;
-    --bg-hover:    #E8E4DD;
-    --bg-header:   rgba(251, 249, 246, 0.92);
-    --text-primary: #1A1714;
-    --text-secondary: #6B6258;
-    --text-muted: #9E9488;
-    --border-color: #DDD7D0;
-    --card-bg: #FFFFFF;
-    --card-border: #E5DFD8;
-    --accent-blue: #2563EB;
-    --accent-purple: #7C3AED;
-    --share-btn-bg: #3A3530;
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-header: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #94a3b8;
+    --border-color: #e2e8f0;
+    --card-bg: #ffffff;
+    --card-border: #e2e8f0;
   }
 
-  /* ─────── 다크 모드 ─────── */
+  /* 다크 모드 */
   .dark {
     --bg-primary: #0A0E1A;
     --bg-secondary: #111827;
-    --bg-tertiary: #1E293B;
-    --bg-hover: rgba(255, 255, 255, 0.08);
     --bg-header: rgba(10, 14, 26, 0.85);
     --text-primary: #e2e8f0;
     --text-secondary: #94a3b8;
@@ -34,45 +27,15 @@
     --border-color: rgba(255, 255, 255, 0.06);
     --card-bg: rgba(30, 41, 59, 0.7);
     --card-border: rgba(148, 163, 184, 0.1);
-    --accent-blue: #60A5FA;
-    --accent-purple: #A78BFA;
-    --share-btn-bg: #1f2937;
   }
 
-  /* CSS 변수 → body */
+  /* CSS 변수를 body에 적용 — 모든 상속 요소에 자동 적용 */
   html, body {
     background-color: var(--bg-primary);
     color: var(--text-primary);
   }
 
-  /* ───── Tailwind 유틸리티 오버라이드 (라이트 모드 전용) ───── */
-  /* 배경: 섹션/카드 배경을 웜 톤으로 */
-  html:not(.dark) .bg-gray-50,
-  html:not(.dark) .bg-gray-100 { background-color: var(--bg-secondary); }
-  html:not(.dark) .bg-gray-200 { background-color: var(--bg-tertiary); }
-
-  /* 테두리: 웜 톤으로 */
-  html:not(.dark) .border-gray-200 { border-color: var(--border-color); }
-  html:not(.dark) .border-gray-300 { border-color: var(--border-color); }
-
-  /* 텍스트: 웜 그레이 계열 */
-  html:not(.dark) .text-gray-900 { color: var(--text-primary); }
-  html:not(.dark) .text-gray-700,
-  html:not(.dark) .text-gray-600 { color: var(--text-secondary); }
-  html:not(.dark) .text-gray-500 { color: var(--text-muted); }
-  html:not(.dark) .text-gray-400 { color: var(--text-muted); }
-
-  /* hover 상태 — 라이트 모드 */
-  html:not(.dark) .hover\:bg-gray-100:hover { background-color: var(--bg-hover); }
-  html:not(.dark) .hover\:bg-gray-200:hover { background-color: var(--bg-tertiary); }
-  html:not(.dark) .hover\:text-gray-900:hover { color: var(--text-primary); }
-
-  /* 헤더 전용 — hardcoded 클래스 오버라이드 */
-  html:not(.dark) .bg-white\/\[0\.07\] { background-color: rgba(251, 249, 246, 0.7); }
-  html:not(.dark) .border-gray-200\/\[0\.06\] { border-color: var(--border-color); }
-  html:not(.dark) .bg-gray-100\/\[0\.07\] { background-color: rgba(242, 239, 234, 0.7); }
-
-  /* ───── prose 다크 모드 ───── */
+  /* prose 다크 모드 */
   .dark .prose {
     --tw-prose-body: #d1d5db;
     --tw-prose-headings: #f9fafb;
@@ -92,23 +55,23 @@
     --tw-prose-td-borders: #374151;
   }
 
-  /* prose 라이트 모드 — 웜 팔레트 반영 */
+  /* prose 라이트 모드 */
   .prose {
-    --tw-prose-body: #3A3530;
-    --tw-prose-headings: #1A1714;
+    --tw-prose-body: #374151;
+    --tw-prose-headings: #111827;
     --tw-prose-links: #2563eb;
-    --tw-prose-bold: #1A1714;
-    --tw-prose-counters: #6B6258;
-    --tw-prose-bullets: #9E9488;
-    --tw-prose-hr: #DDD7D0;
-    --tw-prose-quotes: #3A3530;
-    --tw-prose-quote-borders: #DDD7D0;
-    --tw-prose-captions: #6B6258;
+    --tw-prose-bold: #111827;
+    --tw-prose-counters: #6b7280;
+    --tw-prose-bullets: #9ca3af;
+    --tw-prose-hr: #e5e7eb;
+    --tw-prose-quotes: #374151;
+    --tw-prose-quote-borders: #d1d5db;
+    --tw-prose-captions: #6b7280;
     --tw-prose-code: #be185d;
-    --tw-prose-pre-code: #2D2820;
-    --tw-prose-pre-bg: #F2EFEA;
-    --tw-prose-th-borders: #DDD7D0;
-    --tw-prose-td-borders: #E5DFD8;
+    --tw-prose-pre-code: #1f2937;
+    --tw-prose-pre-bg: #f3f4f6;
+    --tw-prose-th-borders: #d1d5db;
+    --tw-prose-td-borders: #e5e7eb;
   }
 
   /* theme-aware glass utility */
@@ -118,7 +81,7 @@
     border: 1px solid rgba(148, 163, 184, 0.1);
   }
   :root .glass {
-    background: rgba(251, 249, 246, 0.7);
+    background: rgba(255, 255, 255, 0.7);
     border: 1px solid rgba(0, 0, 0, 0.08);
   }
 
@@ -195,7 +158,7 @@ html, body {
   margin: 1em 0;
 }
 :root .prose-container pre {
-  background: #F2EFEA;
+  background: #f8fafc;
 }
 .prose-container pre code {
   background: none;
