@@ -1,3 +1,4 @@
+- 2026-07-14 | fix | card1-opening-pattern-diversity | Threads Card 1 오프닝 패턴 반복 해소 — 유저 프롬프트 예시 다양화 + 금지 패턴 템플릿 제거
 - 2026-07-12 | fix | light-mode-redesign-warm-palette | 라이트 모드 웜 페이퍼 팔레트 전면 교체 — CSS 변수 + Tailwind utility 오버라이드
 - 2026-07-12 | fix | prompt-bold-markdown-leak | 프롬프트 내 ** 볼드 마크다운 누출 — style_examples + system/user prompt에서 ** 제거
 - 2026-07-12 | fix | hook-first-sentence-improvement | Hook 첫 문장 두괄식 개선 — 이해관계+구체성 결합으로 독자 유지율 강화
