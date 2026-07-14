@@ -48,7 +48,7 @@ function getFlag(country: string): string {
             <a href={n.link} target="_blank" rel="noopener" class="block bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all">
               <div class="flex items-center gap-2 mb-2">
                 <span class={`text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/10 ${getSourceColor(n.source)}`}>{getFlag(n.country)} {n.source}</span>
-                <span class="text-xs text-gray-600">{n.pub_date}</span>
+                <span class="text-xs text-gray-600 dark:text-gray-400">{n.pub_date}</span>
               </div>
               <h2 class="font-medium text-gray-900 dark:text-white mb-1">{n.title}</h2>
               <p class="text-xs text-gray-400 mb-1">{n.original_title}</p>

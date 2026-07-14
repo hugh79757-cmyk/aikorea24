@@ -1086,3 +1086,63 @@
 - 3개 RSS 피드 정상 동작 확인
 - Python syntax ✅ / JSON ✅
 - 테스트 236/237 pass (1 pre-existing — card validation unrelated)
+
+---
+
+## 2026-07-14 — Wrangler Auth Profile 설정 (Cloudflare 로그인 문제 해결)
+
+### 변경
+- `wrangler` 4.50.0 → 4.110.0 업그레이드 (auth profiles 기능 지원)
+- `hugh79757` OAuth profile 생성 + `/Users/twinssn/Projects/aikorea24` 디렉터리 바인딩
+- `.env`에서 `CLOUDFLARE_API_TOKEN` 제거 (주석처리, auth profile로 대체)
+- `AGENTS.md`에 Cloudflare Auth Profile 섹션 추가
+- `.planning/triage/20260714--wrangler-auth-profile-setup.md` triage 작성
+
+### 원인
+- OpenCode/Codex agent가 매 세션 `CLOUDFLARE_API_TOKEN` 환경변수 설정 → wrangler auth profile 차단
+- Pages 배포 권한이 해당 token에 없어 `wrangler deploy` 실패
+
+### 검증
+- `wrangler whoami` → `Active profile: hugh79757` / `hugh79757@gmail.com` OAuth 인증
+- `wrangler pages deploy dist --project-name aikorea24 --branch main --commit-dirty=true` → `Deployment complete!`
+
+---
+
+## 2026-07-14 — 라이트모드 다크텍스트 가시성 버그 수정
+
+### 변경
+- `src/pages/community/review.astro:30` — h1: `text-white` → `text-gray-900 dark:text-white`
+- `src/pages/community/review.astro:54,71,84` — star rating: `text-gray-600` → +`dark:text-gray-400`
+- `src/pages/blog/[...id].astro:218,228,238` — CTA h3: `text-white` → `text-gray-900 dark:text-white` (반투명 배경 위)
+- `src/pages/news.astro:33` — date span: `text-gray-600` → +`dark:text-gray-400`
+- `src/pages/global.astro:51` — date span: `text-gray-600` → +`dark:text-gray-400`
+- `src/pages/community/index.astro:149` — visibility span: `text-gray-600` → +`dark:text-gray-400`
+- `src/styles/global.css` — `.glass` utility: hardcoded `rgba(30,41,59,0.7)` → `var(--card-bg)` / `var(--card-border)` CSS vars
+
+### 참고: 블로그 페이지(`/blog/`)는 이미 `text-gray-900 dark:text-white`로 **올바르게** 작성되어 있었음 (Playwright computed style 확인)
+
+### 검증
+- Playwright로 dev 서버 blog/news 페이지 light/dark computed style 직접 검증 — 양쪽 모드 정상 가시성
+- `.planning/triage/20260714--light-mode-dark-text-fixes.md` triage 작성
+
+---
+
+## 2026-07-14 — writer.py 프롬프트 오버엔지니어링 제거 + OpenAI 검증 제거
+
+### 변경
+- `pipeline/threads/writer.py:build_system_prompt_D()` — 150줄 → 20줄로 전면 재작성
+  - 제거: 줄 길이 제한(20~35자), stanza 구조, 어미 규칙표(~임/~했음/~있음), 금지 패턴 10개, 대비 구조, 숫자-설명 쌍, 연도 원칙, 키워드 규칙, 카드 역할 정의
+  - 유지: 6카드 포맷, 500자 제한, 한자/일본어 금지, 고유명사 영어 유지, 반말체, JSON 출력 형식, 예시 4개
+- `pipeline/threads/writer.py:fix_cards()` — `_fix_one()` (OpenAI MiMo 글자 오류 수정) 제거. 정규식 클린업만 유지
+- `pipeline/threads/writer.py:write_thread()` — OpenAI GPT-4o-mini fallback 제거 (DeepSeek 단독)
+- `pipeline/threads/writer.py:user_prompt` — 한국어→영어 전환, 중복 규칙 제거, 강제 줄바꿈 35자 규칙 삭제
+
+### 원인
+- 150줄 프롬프트가 오히려 비문 유발 (예: `~이라고 되고 싶지 않다` — 35자 줄바꿈 제약 × stanza 규칙 충돌)
+- `humanize_cards()`는 CoT 훅 약화로 이미 제거됐으나, `_fix_one()` + OpenAI fallback 잔존
+- "프롬프트로 모든 걸 규제하려는" 오버엔지니어링이 품질 저하
+
+### 의사결정
+- 예시 4개로 충분히 패턴 학습 가능 → 프롬프트 규제 최소화
+- OpenAI(gpt-4o-mini) 의존 완전 제거 → DeepSeek 단독 처리
+- 정규식 기반 validators는 유지 (AI 미사용 안전망)

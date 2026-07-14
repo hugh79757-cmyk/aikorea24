@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Pre-build validation: check all blog posts for valid frontmatter and content."""
 import os, sys, re
+from collections import Counter
 
 BLOG_DIR = os.path.join(os.path.dirname(__file__), '..', 'src', 'content', 'blog')
 
@@ -55,6 +56,24 @@ def validate_file(fpath):
     return issues
 
 
+def check_duplicate_ids():
+    """Astro가 content collection ID를 lowercase로 정규화할 때 중복되는 파일이 있는지 검사."""
+    blog_dir = BLOG_DIR
+    ids = Counter()
+    for fname in os.listdir(blog_dir):
+        if not fname.endswith('.md'):
+            continue
+        normalized = fname.lower()  # Astro 정규화 방식과 동일
+        ids[normalized] += 1
+    
+    issues = []
+    for nid, count in ids.items():
+        if count > 1:
+            originals = [f for f in os.listdir(blog_dir) if f.lower() == nid and f.endswith('.md')]
+            issues.append(f"중복 ID (lowercase): {nid} — 파일: {originals}")
+    return issues
+
+
 def validate_all():
     """전체 블로그 포스트를 검증. 문제 있으면 False, 정상이면 True."""
     blog_dir = BLOG_DIR
@@ -63,6 +82,15 @@ def validate_all():
         return False
 
     failed_files = []
+    
+    # 1. 중복 ID 검사
+    dup_issues = check_duplicate_ids()
+    for issue in dup_issues:
+        print(f"  ❌ {issue}")
+    if dup_issues:
+        failed_files.append(("(중복 ID)", dup_issues))
+    
+    # 2. 개별 파일 검사
     for fname in sorted(os.listdir(blog_dir)):
         if not fname.endswith('.md'):
             continue

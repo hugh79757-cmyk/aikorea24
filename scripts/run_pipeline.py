@@ -193,7 +193,7 @@ def main():
     )
     parser.add_argument("--skip-news", action="store_true", help="뉴스 선정 단계 건너뜀")
     parser.add_argument("--skip-briefing", action="store_true", help="브리핑 생성 단계 건너뜀")
-    parser.add_argument("--skip-deep", action="store_true", default=False, help="심층글 생성 단계 건너뜀")
+    parser.add_argument("--skip-deep", action="store_true", default=True, help="심층글 생성 단계 건너뜀 (blog-draft가 대체)")
     parser.add_argument("--skip-thumbnails", action="store_true", help="썸네일 생성 단계 건너뜀")
     parser.add_argument("--skip-email", action="store_true", help="이메일 발송 단계 건너뜀")
     parser.add_argument("--skip-deploy", action="store_true", help="빌드/배포 단계 건너뜀")

@@ -9,34 +9,32 @@ aikorea24 블로그 초안 자동 생성기
 import os, re, json, glob, sys
 from datetime import datetime, date, timezone, timedelta
 
+# launchd 환경: sys.path 미설정 상태이므로 __file__ 기반으로 먼저 추가
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_PROJECT_DIR = os.path.dirname(_script_dir)
+sys.path.insert(0, _PROJECT_DIR)
+sys.path.insert(0, os.path.join(_PROJECT_DIR, 'scripts', 'threads', 'v3'))
+
 from pipeline.infra.logger import get_scrubbed_logger
 logger = get_scrubbed_logger(__name__)
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
 KST = timezone(timedelta(hours=9))
 
-# ============================================
-# 중국어 문자 제거 (안전망)
-# ============================================
 def remove_chinese(text):
     """CJK 통합 한자 블록(U+4E00–U+9FFF, U+3400–U+4DBF) 제거"""
     return re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', text)
 
 # ============================================
-# 고단가 키워드 테이블
+# 고단가 키워드 테이블 (deprecated: 브리핑 기사 직접 사용)
 # ============================================
-KEYWORDS = {
-    "A": ["챗GPT", "ChatGPT", "OpenAI", "클로드", "Anthropic", "AI에이전트", "AI 에이전트"],
-    "B": ["엔비디아", "NVIDIA", "제미나이", "Gemini", "생성형AI", "생성형 AI", "GPT", "딥시크"],
-    "C": ["인공지능", "LLM", "AI자동화", "AI 자동화", "AI반도체", "AI 반도체", "코파일럿"],
-}
-GRADE_SCORE = {"A": 100, "B": 60, "C": 30}
 
 # ============================================
-# 경로 / 설정
+# model_router (threads/v3)
 # ============================================
-from pipeline.infra import project_root; PROJECT_DIR = project_root()
-sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 from model_router import chat_completion
+
+# (썸네일 생성: auto_thumbnail 비활성화 — Pexels 미사용)
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 
@@ -75,59 +73,91 @@ def load_env():
                 os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
 # ============================================
-# D1 쿼리 (REST API)
+# D1 쿼리 (wrangler CLI — OAuth profile 사용)
 # ============================================
+_WRANGLER = "/opt/homebrew/bin/wrangler"
+_DB = "aikorea24-db"
+
+def _d1_run(sql):
+    """wrangler d1 execute 실행, results 반환."""
+    import subprocess, json, re
+    cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
+    env = dict(os.environ)
+    env.pop("CLOUDFLARE_API_TOKEN", None)  # profile 우선 사용
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env, cwd=PROJECT_DIR)
+        if r.returncode != 0:
+            log(f"  wrangler 오류 (rc={r.returncode}): {r.stderr[:200]}")
+            return None
+        m = re.search(r'"results"\s*:\s*(\[.*?\])\s*,\s*"success"', r.stdout, re.DOTALL)
+        return json.loads(m.group(1)) if m else []
+    except Exception as e:
+        log(f"  wrangler 예외: {e}")
+        return None
+
 def query_d1(sql):
-    import requests
-    account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
-    api_token = os.environ.get("CLOUDFLARE_API_TOKEN", "")
-    if not account_id or not api_token:
-        raise RuntimeError("CLOUDFLARE_ACCOUNT_ID 또는 CLOUDFLARE_API_TOKEN 없음")
-    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/d1/database/{DB_ID}/query"
-    r = requests.post(url,
-        headers={"Authorization": f"Bearer {api_token}", "Content-Type": "application/json"},
-        json={"sql": sql}
+    """D1 SELECT 실행, 결과 리스트 반환."""
+    results = _d1_run(sql)
+    if results is None:
+        raise RuntimeError("D1 query failed")
+    return results
+
+def execute_d1(sql):
+    """D1 UPDATE/INSERT 실행. 성공 여부 반환."""
+    results = _d1_run(sql)
+    return results is not None
+
+def get_today_briefing_id():
+    """오늘 발행된 브리핑 ID 조회 (없으면 None)."""
+    today = date.today().strftime("%Y-%m-%d")
+    try:
+        rows = query_d1(
+            f"SELECT id FROM briefings WHERE date LIKE '{today}%' AND status = 'published' ORDER BY date DESC LIMIT 1"
+        )
+        return rows[0]["id"] if rows else None
+    except Exception as e:
+        log(f"  브리핑 조회 실패: {e}")
+        return None
+
+def update_deep_dive_url(news_id, blog_url):
+    """briefing_items의 deep_dive_url을 블로그 URL로 업데이트."""
+    if not news_id or not blog_url:
+        return False
+    briefing_id = get_today_briefing_id()
+    if not briefing_id:
+        log(f"  ⚠️ 오늘 브리핑 없음, deep_dive_url 연결 불가 (news_id={news_id})")
+        return False
+    sql = (
+        f"UPDATE briefing_items SET deep_dive_url = '{blog_url}' "
+        f"WHERE briefing_id = {briefing_id} AND news_id = {news_id}"
     )
-    data = r.json()
-    if not data.get("success"):
-        raise RuntimeError(f"D1 query failed: {data.get('errors')}")
-    return data["result"][0]["results"]
+    if execute_d1(sql):
+        log(f"  🔗 deep_dive_url 연결: {blog_url} (news_id={news_id})")
+        return True
+    else:
+        log(f"  ⚠️ deep_dive_url 연결 실패 (news_id={news_id})")
+        return False
 
 # ============================================
 # 오늘 뉴스 조회
 # ============================================
-def get_today_articles():
-    """오늘 수집된 글로벌/국내 AI 뉴스 조회"""
-    today = date.today().strftime("%Y-%m-%d")
+def get_briefing_articles():
+    """오늘 브리핑에 포함된 기사 목록 조회."""
+    briefing_id = get_today_briefing_id()
+    if not briefing_id:
+        log("  오늘 발행된 브리핑 없음")
+        return []
     sql = f"""
-        SELECT title, description, source, category, link
-        FROM news
-        WHERE DATE(created_at) = '{today}'
-          AND category IN ('global', 'news')
-        ORDER BY
-          CASE category WHEN 'global' THEN 0 ELSE 1 END,
-          created_at DESC
+        SELECT n.id, n.title, n.description, n.source, n.category, n.link,
+               bi.sort_order, bi.comment, bi.deep_dive_url
+        FROM briefing_items bi
+        JOIN news n ON bi.news_id = n.id
+        WHERE bi.briefing_id = {briefing_id}
+        ORDER BY bi.sort_order
     """
     rows = query_d1(sql)
-    log(f"오늘 수집 기사: {len(rows)}건")
+    log(f"오늘 브리핑 기사: {len(rows)}건 (briefing_id={briefing_id})")
     return rows
-
-# ============================================
-# 키워드 매칭
-# ============================================
-def match_keywords(articles):
-    """기사 제목/설명에서 고단가 키워드 매칭 → 키워드별 그룹"""
-    matches = {}
-    for a in articles:
-        text = (a["title"] + " " + (a.get("description") or "")).upper()
-        for grade in ["A", "B", "C"]:
-            for kw in KEYWORDS[grade]:
-                if kw.upper() in text:
-                    if kw not in matches:
-                        matches[kw] = {"articles": [], "grade": grade, "score": GRADE_SCORE[grade]}
-                    matches[kw]["articles"].append(a)
-    log(f"매칭된 키워드: {len(matches)}개")
-    return matches
 
 # ============================================
 # 블로그 초안 생성 (MiMo v2.5 via model_router)
@@ -230,13 +260,26 @@ def make_slug(title):
     slug = re.sub(r"[^\w\s가-힣]", "", slug)
     slug = re.sub(r"\s+", "-", slug)
     slug = slug[:80].rstrip("-")
-    return slug.lower() if slug.isascii() else slug
+    return slug.lower()
 
 # ============================================
 # 블로그 파일 저장
 # ============================================
-def save_draft(gpt_output, keyword, file_num, today_str):
-    """GPT 출력 파싱 → .md 파일 저장"""
+def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
+    """GPT 출력 파싱 → .md 파일 저장. articles 전달 시 deep_dive_url 연결."""
+    filepath, seo_title = _save_file(gpt_output, keyword, file_num, today_str)
+    # deep_dive_url 연결 (slug 소문자: Astro가 content collection ID를 lowercase로 정규화)
+    if articles and filepath:
+        slug = filepath.stem if hasattr(filepath, 'stem') else os.path.basename(filepath).replace('.md', '')
+        slug = slug.lower()
+        for art in articles:
+            news_id = art.get("id")
+            if news_id:
+                update_deep_dive_url(news_id, blog_url)
+    return filepath, seo_title
+
+def _save_file(gpt_output, keyword, file_num, today_str):
+    """GPT 출력 파싱 → .md 파일 저장 (내부)."""
     # TITLE: ... / --- / 본문
     seo_title = keyword
     content = gpt_output
@@ -311,73 +354,94 @@ def main():
     log(f"블로그 초안 생성 시작 ({today_str})")
     print()
 
-    # 1. 오늘 뉴스 조회
-    log("[1/5] 뉴스 조회 중...")
+    # 1. 오늘 브리핑 기사 조회
+    log("[1/5] 브리핑 기사 조회 중...")
     try:
-        articles = get_today_articles()
+        articles = get_briefing_articles()
     except Exception as e:
-        log(f"  뉴스 조회 실패: {e}")
-        send_telegram(f"❌ [{today_str}] 블로그 초안 생성 실패: 뉴스 조회 오류")
+        log(f"  브리핑 조회 실패: {e}")
+        send_telegram(f"❌ [{today_str}] 블로그 초안 생성 실패: 브리핑 조회 오류")
         sys.exit(1)
 
     if not articles:
-        log("  오늘 수집된 기사 없음, 종료")
-        send_telegram(f"📭 [{today_str}] 블로그 초안 생성 스킵: 수집된 기사 없음")
+        log("  오늘 브리핑 없음, 종료")
+        send_telegram(f"📭 [{today_str}] 블로그 초안 생성 스킵: 브리핑 없음")
         return
     print()
 
-    # 2. 키워드 매칭
-    log("[2/5] 키워드 매칭 중...")
-    matches = match_keywords(articles)
-    if not matches:
-        log("  매칭된 고단가 키워드 없음, 종료")
-        send_telegram(f"📭 [{today_str}] 블로그 초안 생성 스킵: 매칭 키워드 없음")
-        return
-
-    # 통계 출력
-    for grade in ["A", "B", "C"]:
-        grade_matches = {k: v for k, v in matches.items() if v["grade"] == grade}
-        if grade_matches:
-            for kw, info in sorted(grade_matches.items(), key=lambda x: -x[1]["score"]):
-                log(f"  [{grade}] {kw} ({len(info['articles'])}건, {info['score']}점)")
-    print()
-
-    # 3. 점수순 정렬 후 생성 (최대 5개)
-    log("[3/5] 블로그 초안 생성 중...")
-    sorted_matches = sorted(matches.items(), key=lambda x: -x[1]["score"])
+    # 2. 블로그 글 생성 (브리핑 기사별 1개씩)
+    log("[2/5] 블로그 초안 생성 중...")
     file_num = next_file_number(today_str)
     created = []
 
-    for kw, info in sorted_matches[:5]:
-        art_count = len(info["articles"])
-        dtype = "심층형" if art_count == 1 else "종합형"
-        log(f"  → [{info['grade']}] '{kw}' ({dtype}, {art_count}건)")
+    for i, art in enumerate(articles, 1):
+        art_id = art.get("id")
+        title = art.get("title", "")
+        link = art.get("link", "")
+        deep_dive = art.get("deep_dive_url")
+        sort_order = art.get("sort_order", i)
+
+        if deep_dive:
+            log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 이미 연결됨, 스킵")
+            created.append((None, title, sort_order, 0))
+            continue
+
+        log(f"  [{i}/{len(articles)}] '{title[:50]}...' 생성 중...")
         try:
-            gpt_output = generate_draft(kw, info["articles"], info["grade"])
-            filepath, seo_title = save_draft(gpt_output, kw, file_num, today_str)
-            created.append((filepath, seo_title, kw, art_count))
+            gpt_output = generate_draft(title, [art], "A")
+            if not gpt_output:
+                log(f"    ❌ 생성 실패")
+                continue
+
+            filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
+            created.append((filepath, seo_title or title, sort_order, 1))
             file_num += 1
         except Exception as e:
-            log(f"  ❌ '{kw}' 생성 실패: {e}")
+            log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
+
+    # deep_dive_url이 없는 항목은 update_deep_dive_url이 save_draft 내에서 호출됨
+    # (save_draft → articles 파라미터로 전달된 기사들의 id로 deep_dive_url 업데이트)
     print()
 
-    # 4. 텔레그램 알림
-    log("[4/5] 텔레그램 알림...")
-    if created:
+    # 3. 텔레그램 알림
+    log("[3/5] 텔레그램 알림...")
+    generated = [c for c in created if c[0] is not None]
+    skipped = [c for c in created if c[0] is None]
+    if generated:
         msg_lines = [f"🤖 <b>[{today_str}] 블로그 초안 생성 완료</b>"]
-        for fp, title, kw, cnt in created:
+        msg_lines.append(f"\n📝 생성: {len(generated)}건")
+        for fp, title, sort_order, _ in generated:
             fname = os.path.basename(fp)
-            msg_lines.append(f"\n📄 <b>{kw}</b> ({cnt}건) → {title}")
-            msg_lines.append(f"   file://{fp}")
+            msg_lines.append(f"\n  #{sort_order} {title[:60]} → {fname}")
+        if skipped:
+            msg_lines.append(f"\n⏭ 이미 연결됨: {len(skipped)}건")
         send_telegram("\n".join(msg_lines))
     else:
-        send_telegram(f"❌ [{today_str}] 블로그 초안 생성 실패 (모든 키워드 실패)")
+        msg_lines = [f"📭 <b>[{today_str}] 블로그 초안 생성</b>"]
+        if skipped:
+            msg_lines.append(f"\n모두 이미 연결됨 ({len(skipped)}건)")
+        else:
+            msg_lines.append(f"\n생성된 글 없음")
+        send_telegram("\n".join(msg_lines))
     print()
 
-    # 5. 완료
-    log(f"[5/5] 완료! {len(created)}건 생성")
-    for fp, title, kw, cnt in created:
-        log(f"  ✅ {os.path.basename(fp)}")
+    # 4. 완료
+    log(f"[4/5] 완료! 생성: {len(generated)}건, 스킵(이미연결): {len(skipped)}건")
+    for fp, title, sort_order, _ in generated:
+        log(f"  ✅ #{sort_order} {title[:60]}")
+    for _, title, sort_order, _ in skipped:
+        log(f"  ⏭ #{sort_order} {title[:60]} (이미 연결됨)")
+
+    # 5. 사후 검증 (중복 ID, frontmatter 정합성)
+    log("[5] 블로그 포스트 검증 중...")
+    try:
+        import validate_blog_posts as vbp
+        if not vbp.validate_all():
+            log("  ⚠️ 블로그 포스트 검증 경고 발생 (계속 진행)")
+        else:
+            log("  ✅ 검증 통과")
+    except Exception as e:
+        log(f"  ⚠️ 검증 예외: {e}")
 
 
 if __name__ == "__main__":

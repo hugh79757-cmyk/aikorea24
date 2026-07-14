@@ -30,7 +30,7 @@ try {
             <a href={n.link} target="_blank" rel="noopener" class="block bg-white/[0.05] border border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all">
               <div class="flex items-center gap-2 mb-2">
                 <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{n.source}</span>
-                <span class="text-xs text-gray-600">{n.pub_date || n.created_at?.slice(0, 10)}</span>
+                <span class="text-xs text-gray-600 dark:text-gray-400">{n.pub_date || n.created_at?.slice(0, 10)}</span>
               </div>
               <h2 class="font-medium text-gray-900 dark:text-white mb-1">{n.title}</h2>
               <p class="text-sm text-gray-500 line-clamp-2">{n.description}</p>

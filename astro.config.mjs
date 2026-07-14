@@ -11,7 +11,7 @@ export default defineConfig({
   }),
   trailingSlash: 'always',
   integrations: [
-    tailwind(),
+    tailwind({ applyBaseStyles: false }),
     mdx()
   ],
 });

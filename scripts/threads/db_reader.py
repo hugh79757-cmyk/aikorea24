@@ -149,10 +149,12 @@ def save_posted(data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def d1_query(sql, retries=2):
-    cmd = ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql]
+    cmd = ['/opt/homebrew/bin/wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql]
+    env = dict(os.environ)
+    env.pop('CLOUDFLARE_API_TOKEN', None)
     for attempt in range(retries):
         try:
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=PROJECT_DIR)
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=PROJECT_DIR, env=env)
             if r.returncode != 0:
                 if attempt < retries - 1:
                     log(f'  ⚠️ D1 반환코드 {r.returncode}, 5초 후 재시도 ({attempt+1}/{retries})')

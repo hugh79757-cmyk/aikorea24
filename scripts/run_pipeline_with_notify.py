@@ -51,7 +51,7 @@ def send_telegram(message):
         url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
         data = json.dumps({
             "chat_id": chat_id,
-            "text": message,
+            "message": message,
             "parse_mode": "HTML"
         }).encode()
         
@@ -59,7 +59,7 @@ def send_telegram(message):
         resp = urllib.request.urlopen(req, timeout=10)
         result = json.loads(resp.read())
         if result.get("ok"):
-            print("  ✅ 텔레그램 알림 발송 완료")
+            print(f"  ✅ 텔레그램 알림 발송 완료")
             return True
         else:
             print(f"  ❌ 텔레그램 에러: {result}")
@@ -78,10 +78,11 @@ def main():
     pipeline_script = os.path.join(SCRIPTS_DIR, 'run_pipeline.py')
     
     try:
-        # 모든 플래그를 명시적으로 전달 — 기본값 변경에 영향받지 않도록 함
+        # 심층글/썸네일은 blog-draft launchd job(07:00)이 대체
         pipeline_args = [
             sys.executable, pipeline_script,
-            "--skip-deep=False",       # 심층글(블로그) 생성 활성화
+            "--skip-deep",
+            "--skip-thumbnails",
         ]
         result = subprocess.run(
             pipeline_args,

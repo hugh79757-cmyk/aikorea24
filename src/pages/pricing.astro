@@ -74,8 +74,8 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
           <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 무료 게시글 열람</li>
           <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 커뮤니티 참여</li>
           <li class="flex items-center gap-2"><span class="text-green-400">✓</span> AI 뉴스 브리핑</li>
-          <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Basic 콘텐츠</span></li>
-          <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
+          <li class="flex items-center gap-2"><span class="text-gray-500">✗</span> <span class="text-gray-500">Basic 콘텐츠</span></li>
+          <li class="flex items-center gap-2"><span class="text-gray-500">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
         </ul>
         {currentLevel === 'free' ? (
           <div class="w-full py-3 rounded-lg bg-gray-700 text-gray-500 dark:text-gray-400 text-center font-medium">현재 플랜</div>
@@ -97,7 +97,7 @@ const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
           <li class="flex items-center gap-2"><span class="text-green-400">✓</span> Basic 전용 콘텐츠</li>
           <li class="flex items-center gap-2"><span class="text-green-400">✓</span> AI 도구 심층 리뷰</li>
           <li class="flex items-center gap-2"><span class="text-green-400">✓</span> 지원사업 상세 가이드</li>
-          <li class="flex items-center gap-2"><span class="text-gray-600">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
+          <li class="flex items-center gap-2"><span class="text-gray-500">✗</span> <span class="text-gray-500">Premium 콘텐츠</span></li>
         </ul>
         {currentLevel === 'basic' ? (
           <div class="w-full py-3 rounded-lg bg-blue-600/30 text-blue-300 text-center font-medium">현재 플랜</div>

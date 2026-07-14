@@ -1,3 +1,9 @@
+- 2026-07-14 | refactor | writer-prompt-overhaul | build_system_prompt_D 150→20줄 다이어트 + OpenAI 검증/fallback 제거
+- 2026-07-14 | fix | blog-draft-threads-fix | blog-draft 심층글 대체 + thread-topic-finder 복구 + deep_dive_url slug lowercase
+- 2026-07-14 | config | auto-thumbnail-deactivation | Pexels auto_thumbnail 비활성화 — blog-draft slug 불일치로 사용 중단
+- 2026-07-14 | fix | dark-mode-css-fix | 다크모드 배경 미변경 — global.css 미import로 CSS 변수 미로드, Layout.astro import + applyBaseStyles: false
+- 2026-07-14 | fix | light-mode-dark-text-fixes | 라이트모드 text-white 하드코딩 버그 수정 (review/blog CTA/news/global/community) + .glass utility CSS vars 전환
+- 2026-07-14 | config | wrangler-auth-profile-setup | Wrangler Auth Profile → OAuth 전환, CLOUDFLARE_API_TOKEN env var 우회, Pages 배포 복구
 - 2026-07-14 | debug | article-ids-int-defense | article_ids int 타입 방어 누락 — is_duplicate_pitch() + main_v3 4개 경로 TypeError crash 수정
 - 2026-07-14 | fix | card1-opening-pattern-diversity | Threads Card 1 오프닝 패턴 반복 해소 — 유저 프롬프트 예시 다양화 + 금지 패턴 템플릿 제거
 - 2026-07-12 | fix | light-mode-redesign-warm-palette | 라이트 모드 웜 페이퍼 팔레트 전면 교체 — CSS 변수 + Tailwind utility 오버라이드

@@ -187,13 +187,15 @@ bash scripts/deploy.sh
     ↓
 브리핑 생성 (auto_briefing) → D1 briefings + briefing_items
     ↓
-블로그 생성 (auto_deep_article) → src/content/blog/{date}-{slug}.md
-    ↓                          → briefing_items.deep_dive_url 자동 연결
-썸네일 생성 (auto_thumbnail) → public/images/{slug}/thumbnail.webp
-    ↓
+블로그 생성 (blog_draft_generator.py, launchd 07:00) → src/content/blog/{date}-{num}-{slug}.md
+    ↓                                                       → briefing_items.deep_dive_url 자동 연결
 이메일 발송 (auto_email_sender) → Brevo API
     ↓
 빌드 + 배포 (deploy.sh) → npm run build → wrangler pages deploy
+
+> **참고**: `auto_thumbnail.py`(Pexels)는 비활성화됨 (2026-07-14).
+> blog-draft의 slug(SEO 제목 기반)와 pipeline의 slug(기사 제목 기반) 불일치로 사용 중단.
+> 자세한 사유: `.planning/triage/20260714--auto-thumbnail-deactivation.md`
 ```
 
 ### 9.2 단계별 설명
@@ -202,10 +204,9 @@ bash scripts/deploy.sh
 |------|---------|---------|
 | 1. 뉴스 선정 | `auto_news_selector.py` | D1에서 최근 뉴스 조회, 중복 제거, 6개 선정 |
 | 2. 브리핑 생성 | `auto_briefing.py` | 각 뉴스에 comment 생성, D1 `briefings`/`briefing_items` 저장 |
-| 3. 블로그 생성 | `auto_deep_article.py` | 뉴스 원문 크롤링 → AI로 블로그 포스트 생성 → `src/content/blog/` 저장 → `briefing_items.deep_dive_url` 자동 UPDATE |
-| 4. 썸네일 | `auto_thumbnail.py` | Pexels API + DeepSeek 키워드로 썸네일 생성 |
-| 5. 이메일 | `auto_email_sender.py` | Brevo API로 뉴스레터 발송 |
-| 6. 배포 | `deploy.sh` | `npm run build` + `npx wrangler pages deploy` |
+| 3. 블로그 생성 | `blog_draft_generator.py` (launchd 07:00) | 오늘 브리핑 기사 조회 → AI로 블로그 포스트 생성 → `src/content/blog/` 저장 → `briefing_items.deep_dive_url` 자동 UPDATE |
+| 4. 이메일 | `auto_email_sender.py` | Brevo API로 뉴스레터 발송 |
+| 5. 배포 | `deploy.sh` | `npm run build` + `npx wrangler pages deploy` |
 
 ### 9.3 deep_dive_url 연결
 

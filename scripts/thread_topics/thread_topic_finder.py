@@ -8,12 +8,15 @@ import os, re, json, sys, time
 from datetime import datetime, date, timezone, timedelta
 from typing import Any
 
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(_script_dir, '..', '..'))
+sys.path.insert(0, os.path.join(_script_dir, '..', '..', 'scripts', 'threads', 'v3'))
+
 from pipeline.infra.logger import get_scrubbed_logger
 logger = get_scrubbed_logger(__name__)
+from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
 KST = timezone(timedelta(hours=9))
-from pipeline.infra import project_root; PROJECT_DIR = project_root()
-sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 from model_router import chat_completion
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 THREADS_DIR = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "topics")
@@ -64,25 +67,26 @@ def load_env() -> None:
 
 
 # ============================================
-# D1 쿼리 (REST API)
+# D1 쿼리 (wrangler CLI — OAuth profile 사용)
 # ============================================
+_WRANGLER = "/opt/homebrew/bin/wrangler"
+_DB = "aikorea24-db"
+
 def query_d1(sql: str) -> list[dict]:
-    import requests
-    account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
-    api_token = os.environ.get("CLOUDFLARE_API_TOKEN", "")
-    if not account_id or not api_token:
-        raise RuntimeError("CLOUDFLARE_ACCOUNT_ID 또는 CLOUDFLARE_API_TOKEN 없음")
-    url = f"https://api.cloudflare.com/client/v4/accounts/{account_id}/d1/database/{DB_ID}/query"
-    r = requests.post(url,
-        headers={"Authorization": f"Bearer {api_token}", "Content-Type": "application/json"},
-        json={"sql": sql}
-    )
-    data = r.json()
-    if not data.get("success"):
-        raise RuntimeError(f"D1 query failed: {data.get('errors')}")
-    if not data.get("result") or len(data["result"]) == 0:
+    import subprocess, json, re
+    cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
+    env = dict(os.environ)
+    env.pop("CLOUDFLARE_API_TOKEN", None)
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env, cwd=PROJECT_DIR)
+        if r.returncode != 0:
+            raise RuntimeError(f"wrangler D1 error (rc={r.returncode}): {r.stderr[:200]}")
+        m = re.search(r'"results"\s*:\s*(\[.*?\])\s*,\s*"success"', r.stdout, re.DOTALL)
+        return json.loads(m.group(1)) if m else []
+    except json.JSONDecodeError:
         return []
-    return data["result"][0]["results"]
+    except Exception as e:
+        raise RuntimeError(f"D1 query failed: {e}")
 
 
 # ============================================

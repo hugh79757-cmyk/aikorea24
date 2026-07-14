@@ -146,4 +146,48 @@ Phase 6가 피치에만 프롬프트 검증 적용 → "해결됨" → 결국 �
 2. **"해결됨"이라고 안심하지 않는다** — 반드시 회귀 테스트로 확인
 3. **검증은 "해당 단계 출력"이 아니라 "다음 단계 입력" 기준으로 설계**
 4. **검증 추가 시 스코프 확인** — 해당 단계만이 아니라 다음 단계에도 적용되는지
+
+---
+
+## Cloudflare Auth Profile (2026-07-14 설정)
+
+> **문제**: OpenCode/Codex agent가 매 세션 `CLOUDFLARE_API_TOKEN` 환경변수를 설정 → wrangler auth profile보다 우선 적용되어 Pages 배포 실패 (`Authentication error code: 10000`)
+
+### 현재 설정
+
+| Profile | Bind Directory | 계정 |
+|---|---|---|
+| `hugh79757` | `/Users/twinssn/Projects/aikorea24` | hugh79757@gmail.com |
+| `farmsolution` | `/Users/twinssn/projects2/farmsolution` | farmsolution 계정 |
+
+### 권장: wrangler 실행 시 env var 해제
+
+```bash
+# agent 세션 (OpenCode/Codex)에서 wrangler 호출 시
+env -u CLOUDFLARE_API_TOKEN wrangler pages deploy dist --project-name aikorea24 --branch main
+
+# 또는 글로벌 바이너리 직접 호출 (4.110.0, auth profiles 지원)
+env -u CLOUDFLARE_API_TOKEN /opt/homebrew/bin/wrangler pages deploy dist --project-name aikorea24 --branch main
+```
+
+### .zshrc 함수 (interactive shell 전용)
+
+`.zshrc` lines 84-99에 wrangler 함수 이미 정의 — `CLOUDFLARE_API_TOKEN` 등 4개 env var를 자동 unset/restore.
+
+### deploy.sh (아직 수정 필요)
+
+`scripts/deploy.sh`가 `npx wrangler`를 사용 → 로컬 4.50.0 (profiles 미지원) 실행됨. 수정 필요:
+```bash
+# 현재 (실패):
+npx wrangler pages deploy dist ...
+
+# 수정안:
+env -u CLOUDFLARE_API_TOKEN /opt/homebrew/bin/wrangler pages deploy dist \
+  --project-name aikorea24 --branch main --commit-dirty=true
+```
+
+### 참고
+
+- 상세: `.planning/triage/20260714--wrangler-auth-profile-setup.md`
+- wrangler 4.110.0 이상에서 auth profiles 지원 (2026-07-14 업그레이드 완료)
 ```
