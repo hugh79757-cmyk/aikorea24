@@ -1,3 +1,4 @@
+- 2026-07-14 | debug | article-ids-int-defense | article_ids int 타입 방어 누락 — is_duplicate_pitch() + main_v3 4개 경로 TypeError crash 수정
 - 2026-07-14 | fix | card1-opening-pattern-diversity | Threads Card 1 오프닝 패턴 반복 해소 — 유저 프롬프트 예시 다양화 + 금지 패턴 템플릿 제거
 - 2026-07-12 | fix | light-mode-redesign-warm-palette | 라이트 모드 웜 페이퍼 팔레트 전면 교체 — CSS 변수 + Tailwind utility 오버라이드
 - 2026-07-12 | fix | prompt-bold-markdown-leak | 프롬프트 내 ** 볼드 마크다운 누출 — style_examples + system/user prompt에서 ** 제거
