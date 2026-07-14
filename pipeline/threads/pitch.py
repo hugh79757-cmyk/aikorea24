@@ -467,6 +467,35 @@ def save_pitch_to_history(pitch):
         pass
 
 
+def _pre_filter_candidates(articles, limit=10):
+    """D1 후보 기사를 시의성 + AI 관련도 기준으로 선별하여 상위 limit개만 반환"""
+    def score_article(a):
+        score = 0
+        pub_date = a.get('pub_date', '')
+        if pub_date:
+            try:
+                days_old = (datetime.now() - datetime.strptime(pub_date, '%Y-%m-%d')).days
+                if days_old <= 1:
+                    score += 10
+                elif days_old <= 3:
+                    score += 5
+                elif days_old <= 7:
+                    score += 2
+            except Exception:
+                pass
+        
+        title_desc = (a.get('title', '') + ' ' + a.get('description', '')).lower()
+        ai_keywords = ['ai', '인공지능', '머신러닝', 'llm', '챗gpt', '클로드', '제미나이', 'gemini', 'anthropic']
+        for kw in ai_keywords:
+            if kw in title_desc:
+                score += 3
+        return score
+    
+    scored = [(score_article(a), a) for a in articles]
+    scored.sort(key=lambda x: -x[0])
+    return [a for _, a in scored[:limit]]
+
+
 def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
     """배치 처리: description 스캔 → 후보 선별 → 단일 기사 크롤링 → 크롤링 본문 기반 피치 생성"""
     from v3.model_router import chat_completion
@@ -479,8 +508,12 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         _log(f'  피치 이력: {len(pitch_history)}개 존재')
 
     selected = articles[:max_articles]
-    shuffled = selected.copy()
-    random.shuffle(shuffled)
+    
+    # Phase 24-02: 사전 필터링 - 시의성 + AI 관련도 기준 상위 10개만 선별
+    shuffled = _pre_filter_candidates(selected)
+    if not shuffled:
+        _log('  ❌ 사전 필터링 후 후보 없음')
+        return ([], set())
 
     exclude_ids = exclude_ids or set()
     if exclude_ids:
@@ -494,8 +527,10 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         _log('  ❌ 모든 기사가 제외됨 (크롤링 실패 이력)')
         return ([], set())
 
-    batches = [shuffled[i:i+batch_size] for i in range(0, len(shuffled), batch_size)]
-    _log(f'[배치 처리] 총 {len(shuffled)}개 → {batch_size}개 × {len(batches)}배치')
+    # Phase 24-01: batch_size 축소 - LLM context overflow 방지
+    effective_batch_size = min(batch_size, 5)
+    batches = [shuffled[i:i+effective_batch_size] for i in range(0, len(shuffled), effective_batch_size)]
+    _log(f'[배치 처리] 총 {len(shuffled)}개 → {effective_batch_size}개 × {len(batches)}배치')
 
     id_to_link = {}
     id_to_title = {}
@@ -592,7 +627,11 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         p_titles = []
         p_original_titles = []
         p_descriptions = []
-        for aid in p.get('article_ids', []):
+        # Defensive: article_ids can be int or list from LLM
+        article_ids = p.get('article_ids', [])
+        if isinstance(article_ids, int):
+            article_ids = [article_ids]
+        for aid in article_ids:
             aid_str = str(aid).lstrip('#').strip()
             if aid_str:
                 p_urls.append(id_to_link.get(aid_str, ''))

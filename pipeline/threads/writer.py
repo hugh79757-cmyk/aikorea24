@@ -579,6 +579,9 @@ def write_thread(pitch, all_articles, format_choice=None):
     pre_crawled_url = pitch.get('crawled_url', '')
 
     article_ids = pitch.get('article_ids', [])
+    # Defensive: article_ids can be int or list from LLM
+    if isinstance(article_ids, int):
+        article_ids = [article_ids]
     article_id_set = set()
     for aid in article_ids:
         raw = str(aid).lstrip('#').strip()

@@ -315,6 +315,21 @@ Plans:
 - [ ] 17-06-PLAN.md — 스케줄러/오케스트레이터 (launchd 연동)
 - [ ] 17-07-PLAN.md — 테스트/검증 (드라이런 → 품질 체크 → 정식 운영)
 
+### Phase 24: Threads Pipeline Batch 최적화
+**Goal**: 33개 기사 배치 → 5개 이하로 축소. LLM context 과부하 방지.
+**Mode:** ad-hoc
+**Depends on**: Phase 16 (Writer prompt v2 완료)
+**Success Criteria** (what must be TRUE):
+1. `batch_size=5`로 축소됨 (max 5개 기사 LLM에 한 번에)
+2. dry-run 테스트 통과: "배치 N/7 5개" 형태
+3. `article_ids` 타입 에러 0건 (int/list 방어 유지)
+4. All 292 tests pass (기존 테스트 영향 없음)
+
+Plans: 3 plans
+- [ ] 24-01-PLAN.md — batch_size=5 축소
+- [ ] 24-02-PLAN.md — 순차 후보 선별 로직 (선택)
+- [ ] 24-03-PLAN.md — 테스트 및 검증
+
 ---
 
 ## 마일스톤 v2.0 — 강좌 시스템 (Course System)
@@ -429,6 +444,7 @@ Plans:
 | 21. 히어로 강좌 설계 | ad-hoc | Complete | 2026-07-12 |
 | 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
 | 23. SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels | 0/7 | Planned | — |
+| 24. Threads Pipeline Batch 최적화 | 0/3 | Planned | — |
 | 25. 커뮤니티 레슨 순차 해금 | 1/1 | Complete | 2026-07-12 |
 | 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | Complete | 2026-07-12 |
 | **Total** | **44/49** | | |
