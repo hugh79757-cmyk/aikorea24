@@ -332,18 +332,22 @@ def _but_line_similarity(bl1: str, bl2: str) -> float:
 
 def is_duplicate_pitch(pitch, history, posted=None):
     """비슷한 피치가 이미 history에 있는지 확인"""
+    # Defensive: article_ids can be int or list from LLM
+    raw_ids = pitch.get('article_ids', [])
+    if isinstance(raw_ids, int):
+        raw_ids = [raw_ids]
     hook = pitch.get('hook', '')[:80]
     narrative = pitch.get('narrative', '')[:120]
     new_but_line = pitch.get('but_line', '')
     new_question = pitch.get('question', '')
-    new_ids = set(str(x).lstrip('#').strip() for x in pitch.get('article_ids', []) if str(x).strip())
+    new_ids = set(str(x).lstrip('#').strip() for x in raw_ids if str(x).strip())
     new_urls = set(pitch.get('article_urls', []))
     new_titles = list(pitch.get('article_titles', []))
     new_original_titles = list(pitch.get('article_original_titles', []))
 
     if posted:
-        for i in range(len(pitch.get('article_ids', []))):
-            aid = str(pitch['article_ids'][i]).lstrip('#').strip()
+        for i in range(len(raw_ids)):
+            aid = str(raw_ids[i]).lstrip('#').strip()
             link = list(new_urls)[i] if i < len(new_urls) else ''
             title = new_titles[i] if i < len(new_titles) else ''
             orig_title = new_original_titles[i] if i < len(new_original_titles) else ''

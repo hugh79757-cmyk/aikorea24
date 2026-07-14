@@ -58,6 +58,19 @@ def send_telegram(message):
         log(f"  텔레그램 전송 실패: {e}")
 
 
+def _normalize_article_ids(pitch):
+    """LLM 응답에서 article_ids가 int 또는 list일 수 있으므로 항상 list로 정규화"""
+    ids = pitch.get('article_ids', [])
+    if isinstance(ids, int):
+        ids = [ids]
+    return ids
+
+def _get_first_article_id(pitch):
+    """article_ids에서 첫 번째 ID 반환 (int/list 방어)"""
+    ids = _normalize_article_ids(pitch)
+    return ids[0] if ids else None
+
+
 def _log_api_based_publish(pitch, published_article, root_post_id=None):
     """api_based 매체 발행 건을 별도 로그에 기록 (한국어 처리 품질 모니터링)."""
     source = published_article.get("source", "") if published_article else ""
@@ -65,7 +78,7 @@ def _log_api_based_publish(pitch, published_article, root_post_id=None):
         return
     entry = {
         "scraped_at": datetime.now().isoformat(),
-        "article_id": (pitch.get("article_ids") or [None])[0],
+        "article_id": _get_first_article_id(pitch),
         "source": source,
         "but_line": pitch.get("but_line"),
         "question": pitch.get("question"),
@@ -208,7 +221,7 @@ def run_v3(dry_run=False):
 
         if not cards:
             log(f' ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
-            pitch_ids = pitch.get('article_ids', [])
+            pitch_ids = _normalize_article_ids(pitch)
             for aid in pitch_ids:
                 aid_str = str(aid).lstrip('#').strip()
                 if aid_str:
@@ -233,7 +246,8 @@ def run_v3(dry_run=False):
             # 업데이트 전 스냅샷
             before = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
             posted.setdefault('posted_article_meta', {})
-            pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
+            _pitch_ids_dry = _normalize_article_ids(pitch)
+            pitch_ids = [str(aid).lstrip('#').strip() for aid in _pitch_ids_dry if str(aid).strip()]
             for aid_str in pitch_ids:
                 if aid_str and aid_str not in posted.get('posted_ids', []):
                     posted.setdefault('posted_ids', []).append(aid_str)
@@ -295,7 +309,7 @@ def run_v3(dry_run=False):
         from publisher import publish_thread_chain
         log('  발행 시작...')
         # article_ids[0]의 실제 기사 찾기 (중복 발행 방지)
-        pitch_id = str(pitch.get('article_ids', [None])[0]).lstrip('#').strip() if pitch.get('article_ids') else None
+        pitch_id = str(_get_first_article_id(pitch) or '').lstrip('#').strip()
         publish_article = articles[0]  # fallback
         if pitch_id:
             for a in articles:
@@ -312,7 +326,8 @@ def run_v3(dry_run=False):
             # 업데이트 전 스냅샷
             before = {k: len(v) for k, v in posted.items() if isinstance(v, list)}
             posted.setdefault('posted_article_meta', {})
-            pitch_ids = [str(aid).lstrip('#').strip() for aid in pitch.get('article_ids', []) if str(aid).strip()]
+            _pitch_ids_raw = _normalize_article_ids(pitch)
+            pitch_ids = [str(aid).lstrip('#').strip() for aid in _pitch_ids_raw if str(aid).strip()]
             for aid_str in pitch_ids:
                 if aid_str and aid_str not in posted.get('posted_ids', []):
                     posted.setdefault('posted_ids', []).append(aid_str)
