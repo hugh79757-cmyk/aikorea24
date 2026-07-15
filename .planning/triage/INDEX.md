@@ -1,3 +1,4 @@
+- 2026-07-15 | fix | pipeline-trigger-blog-draft | pipeline-runner가 blog-draft 직접 호출 (launchd 20:15 미실행 방지)
 - 2026-07-15 | feat | telegram-two-stage-notify | 브리핑/블로그 2단계 텔레그램 메시지 구조화 - 브리핑 완료→블로그 15분 후 알림
 - 2026-07-15 | config | blog-schedule-15min-delay | blog-draft 07:00→07:15로 변경 (브리핑 발행 후 딥링크 연결 시간 확보)
 - 2026-07-14 | refactor | writer-prompt-overhaul | build_system_prompt_D 150→20줄 다이어트 + OpenAI 검증/fallback 제거
@@ -13,11 +14,12 @@
 - 2026-07-12 | fix | light-mode-redesign-warm-palette | 라이트 모드 웜 페이퍼 팔레트 전면 교체 — CSS 변수 + Tailwind utility 오버라이드
 - 2026-07-12 | fix | prompt-bold-markdown-leak | 프롬프트 내 ** 볼드 마크다운 누출 — style_examples + system/user prompt에서 ** 제거
 - 2026-07-12 | fix | hook-first-sentence-improvement | Hook 첫 문장 두괄식 개선 — 이해관계+구체성 결합으로 독자 유지율 강화
+- 2026-07-11 | fix | reels-shorts-automation-pipeline | TikTok/Instagram Reels/YouTube Shorts 자동 발행 파이프라인 구축 — 캐러셀 카드 + TTS + Ken Burns 비디오
 - 2026-07-10 | fix | remove-hardcoded-prompt-patterns | 프롬프트 하드코딩 패턴 "~라는 말"/"근데" 제거 — 모델 표현 자유도 향상
 - 2026-07-09 | fix | env-loader-setdefault | load_to_environ() setdefault로 인해 project .env 무시 — D1 인증 실패
 - 2026-07-09 | fix | deepseek-empty-response | DeepSeek 빈 응답 시 로그 없이 silent fallthrough + 재시도 부재
 - 2026-07-09 | fix | card-1-stanza-structure | Card 1/2/5 prompt refinements — 3-stanza 강제, 5번 꼬리 금지, 줄바꿈 규칙 강화
-- 2026-07-07 | fix | hook-validation-first-line | validate_card_structure() hook 검증을 첫 카드 전체 → 첫 줄만으로 변경 (ThreadForge 정렬)
+- 2026-07-07 | fix | hook-validation-first-line-only | validate_card_structure() hook 검증을 첫 카드 전체 → 첫 줄만으로 변경 (ThreadForge 정렬)
 - 2026-07-05 | fix | persistent-failed-articles | Phase 13-01: failed_articles.py 영구 저장 → article 38290 무한 재시도 차단
 - 2026-07-05 | fix | chinese-period-validation | Phase 13-02: \u3002(중국어 마침표)를 sentence_enders에 추가 → MiMo `。` 검증 통과
 - 2026-07-05 | fix | duplicate-link-removal | Phase 13-02: _remove_duplicate_links() parse_cards + assemble_final 이중 방어

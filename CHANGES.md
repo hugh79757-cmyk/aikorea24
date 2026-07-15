@@ -5,6 +5,30 @@
 
 ---
 
+## 2026-07-15 — 저녁 blog-draft launchd 미실행 → pipeline 직접 호출로 전환
+
+### 변경
+- `scripts/run_pipeline_with_notify.py`: pipeline 성공 시 `blog_draft_generator.py`를 subprocess로 직접 실행
+- Telegram 메시지 "Blog notification follows in 15 minutes" 제거
+- 저녁 블로그 6편 수동 생성 + 배포 완료 (12개 포스트 라이브 확인)
+- `.planning/triage/INDEX.md`: `pipeline-trigger-blog-draft` 항목 추가
+
+### 문제 원인
+- launchd `kr.aikorea24.blog-draft`의 `StartCalendarInterval` 20:15가 macOS Sleep 상태에서 skip됨
+- pipeline-runner(20:00)는 정상 실행되었으나 blog-draft(20:15)는 미실행 → 저녁 블로그 6편 누락
+
+### 해결
+- pipeline-runner 완료 직후 blog-draft 직접 호출 (launchd 의존성 제거)
+- `deep_dive_url` 중복 체크로 15분 후 launchd가 다시 실행돼도 안전 (모두 스킵)
+- launchd job은 backup으로 유지 (이중 방어)
+
+### 검증
+- 저녁 블로그 수동 생성 → site rebuild → wrangler deploy → 12개 포스트 라이브
+- `python3 -c "import ast; ast.parse(...)"` syntax OK
+- `/blog` 페이지에 12개 7/15 포스트 정상 표시 확인
+
+---
+
 ## 2026-07-15 — 블로그 발행 스케줄 15분 지연
  
 ### 변경
