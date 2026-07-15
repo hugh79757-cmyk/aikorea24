@@ -4,8 +4,8 @@ milestone: v2.0
 milestone_name: milestone
 status: course_content_complete
 stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-14T21:30:00.000Z
-last_activity: 2026-07-14
+last_updated: 2026-07-15T13:00:00.000Z
+last_activity: 2026-07-15
 progress:
   total_phases: 24
   completed_phases: 23
@@ -26,8 +26,8 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 ## Current Position
 
 Phase: 26 (브리핑 중국어 차단 + 심층글 비활성화) — Complete
-Status: ✅ 코드 변경 + 문서 업데이트 완료 (ad-hoc: 라이트모드 텍스트 버그 수정)
-Last activity: 2026-07-14T12:00
+Status: ✅ 코드 변경 + 문서 업데이트 + schedule 15분 지연 완료
+Last activity: 2026-07-15T13:00
 
 Progress: [██████████████████████████████████] 92%
 
@@ -201,6 +201,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-07-14T21:30:00.000Z
-Stopped at: writer.py 프롬프트 오버엔지니어링 제거 + OpenAI 검증 제거 완료
-Next: 필요 시 대기 중. 다음 쓰레드 발행 주기부터 변경사항 자동 적용.
+Last session: 2026-07-15T13:00:00.000Z
+Stopped at: blog-draft schedule 15분 지연 적용 + Launchd 재로드 완료
+Next: 내일 아침 06:15 파이프라인 실행 확인 (딥링크 연결)
