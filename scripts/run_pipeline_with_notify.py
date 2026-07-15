@@ -51,7 +51,7 @@ def send_telegram(message):
         url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
         data = json.dumps({
             "chat_id": chat_id,
-            "message": message,
+            "text": message,
             "parse_mode": "HTML"
         }).encode()
         
