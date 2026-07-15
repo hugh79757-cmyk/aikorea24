@@ -2842,6 +2842,80 @@
           "date": "2026-07-15"
         }
       ]
+    },
+    {
+      "date": "2026-07-16",
+      "briefing_id": 178,
+      "articles": [
+        {
+          "id": "40739",
+          "title": "Zipline, 클리블랜드 클리닉과 함께 의료 드론 배달 시작",
+          "original_title": "",
+          "description": "Zipline은 자신의 앱을 통해 제공되는 배달 서비스의 수가 2026년 상반기 동안 13배 증가했다고 밝혔습니다. 이 자율 드론 배송 회사는 250만 건 이상의 상업용 배송을 완료했으며, 그 중 100만 건은 지난 1년 동안 이루어졌습니다.",
+          "link": "https://thenextweb.com/news/zipline-13x-marketplace-growth-cleveland-austin",
+          "entities": [
+            "Zipline"
+          ],
+          "date": "2026-07-16"
+        },
+        {
+          "id": "40748",
+          "title": "ASML, AI 칩 수요 증가로 올해 두 번째로 매출 전망 상향 조정",
+          "original_title": "",
+          "description": "ASML은 고객들이 AI 칩의 생산 능력을 계속 늘리고 있어 올해 두 번째로 매출 전망을 상향 조정했습니다.",
+          "link": "https://www.cnbc.com/2026/07/15/asml-2q-earnings-ai-chips-orders.html",
+          "entities": [
+            "ASML",
+            "AI"
+          ],
+          "date": "2026-07-16"
+        },
+        {
+          "id": "40829",
+          "title": "삼성, 월 100만 웨이퍼 생산 목표를 위해 신규 반도체 공장 건설을 가속화",
+          "original_title": "",
+          "description": "삼성은 이전 분기에서 기록적인 수익을 올린 후 AI 붐 동안 수요를 충족하기 위해 충분한 반도체를 확보하고 있습니다. 이 회사는 한국 용인에 첫 번째 반도체 제조 공장 건설을 가속화하기 위한 전략적 결정을 내렸습니다.",
+          "link": "https://www.sammobile.com/news/samsung-fast-tracks-new-chip-plant-1-million-wafers-per-month/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-16"
+        },
+        {
+          "id": "40723",
+          "title": "조지 루카스, AI 회의론자를 말과 마차에 집착하는 러다이트로 비유하다",
+          "original_title": "",
+          "description": "스타워즈 감독은 AI 기술을 '영화 제작의 미래'라고 부르며 '어쩔 수 없다'고 조언합니다. 조지 루카스 감독은 영화 제작에서 AI 도구의 사용 증가에 호의적인 영화 제작자들의 목소리에 동참했습니다.",
+          "link": "https://www.theguardian.com/film/2026/jul/15/george-lucas-likens-ai-sceptics-to-luddites-clinging-to-horses-and-carts",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-16"
+        },
+        {
+          "id": "40711",
+          "title": "빈트 서프, 오픈 인터넷에서 AI 에이전트를 활용하기 위한 계획 작업 중",
+          "original_title": "",
+          "description": "TCP/IP의 창시자인 빈트 서프는 야생에서 AI 에이전트를 식별하기 위한 표준을 개발하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/15/vint-cerf-is-working-on-a-plan-to-unleash-ai-agents-on-the-open-internet/",
+          "entities": [
+            "TCP",
+            "AI"
+          ],
+          "date": "2026-07-16"
+        },
+        {
+          "id": "40726",
+          "title": "AI는 앤서니 알바니제가 이번 임기 동안 직면한 가장 어려운 도전이 될 수 있다. 긴급한 ",
+          "original_title": "",
+          "description": "일관된 의사 결정과 내부 책임성은 이 혼란스러운 순간을 맞이하는 데 중요합니다. 앤서니 알바니제는 AI 투자를 강화하기 위해 데이터 센터의 빠른 승인을 약속했습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jul/15/australia-ai-challenge-anthony-albanese",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-16"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5441,6 +5515,74 @@
         "Leading"
       ],
       "date": "2026-07-15"
+    },
+    {
+      "id": "40739",
+      "title": "Zipline, 클리블랜드 클리닉과 함께 의료 드론 배달 시작",
+      "original_title": "",
+      "description": "Zipline은 자신의 앱을 통해 제공되는 배달 서비스의 수가 2026년 상반기 동안 13배 증가했다고 밝혔습니다. 이 자율 드론 배송 회사는 250만 건 이상의 상업용 배송을 완료했으며, 그 중 100만 건은 지난 1년 동안 이루어졌습니다.",
+      "link": "https://thenextweb.com/news/zipline-13x-marketplace-growth-cleveland-austin",
+      "entities": [
+        "Zipline"
+      ],
+      "date": "2026-07-16"
+    },
+    {
+      "id": "40748",
+      "title": "ASML, AI 칩 수요 증가로 올해 두 번째로 매출 전망 상향 조정",
+      "original_title": "",
+      "description": "ASML은 고객들이 AI 칩의 생산 능력을 계속 늘리고 있어 올해 두 번째로 매출 전망을 상향 조정했습니다.",
+      "link": "https://www.cnbc.com/2026/07/15/asml-2q-earnings-ai-chips-orders.html",
+      "entities": [
+        "ASML",
+        "AI"
+      ],
+      "date": "2026-07-16"
+    },
+    {
+      "id": "40829",
+      "title": "삼성, 월 100만 웨이퍼 생산 목표를 위해 신규 반도체 공장 건설을 가속화",
+      "original_title": "",
+      "description": "삼성은 이전 분기에서 기록적인 수익을 올린 후 AI 붐 동안 수요를 충족하기 위해 충분한 반도체를 확보하고 있습니다. 이 회사는 한국 용인에 첫 번째 반도체 제조 공장 건설을 가속화하기 위한 전략적 결정을 내렸습니다.",
+      "link": "https://www.sammobile.com/news/samsung-fast-tracks-new-chip-plant-1-million-wafers-per-month/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-16"
+    },
+    {
+      "id": "40723",
+      "title": "조지 루카스, AI 회의론자를 말과 마차에 집착하는 러다이트로 비유하다",
+      "original_title": "",
+      "description": "스타워즈 감독은 AI 기술을 '영화 제작의 미래'라고 부르며 '어쩔 수 없다'고 조언합니다. 조지 루카스 감독은 영화 제작에서 AI 도구의 사용 증가에 호의적인 영화 제작자들의 목소리에 동참했습니다.",
+      "link": "https://www.theguardian.com/film/2026/jul/15/george-lucas-likens-ai-sceptics-to-luddites-clinging-to-horses-and-carts",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-16"
+    },
+    {
+      "id": "40711",
+      "title": "빈트 서프, 오픈 인터넷에서 AI 에이전트를 활용하기 위한 계획 작업 중",
+      "original_title": "",
+      "description": "TCP/IP의 창시자인 빈트 서프는 야생에서 AI 에이전트를 식별하기 위한 표준을 개발하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/15/vint-cerf-is-working-on-a-plan-to-unleash-ai-agents-on-the-open-internet/",
+      "entities": [
+        "TCP",
+        "AI"
+      ],
+      "date": "2026-07-16"
+    },
+    {
+      "id": "40726",
+      "title": "AI는 앤서니 알바니제가 이번 임기 동안 직면한 가장 어려운 도전이 될 수 있다. 긴급한 ",
+      "original_title": "",
+      "description": "일관된 의사 결정과 내부 책임성은 이 혼란스러운 순간을 맞이하는 데 중요합니다. 앤서니 알바니제는 AI 투자를 강화하기 위해 데이터 센터의 빠른 승인을 약속했습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jul/15/australia-ai-challenge-anthony-albanese",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-16"
     }
   ]
 }
