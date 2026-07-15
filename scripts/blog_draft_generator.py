@@ -299,8 +299,9 @@ def _save_file(gpt_output, keyword, file_num, today_str):
     filename = f"{today_str}-{file_num:03d}-{slug}.md"
     filepath = os.path.join(PROJECT_DIR, "src", "content", "blog", filename)
 
-    # description: 앞 150자 평문
-    desc_raw = re.sub(r"[#*>\n\s]+", " ", content)[:150].strip()
+    # description: "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거 + 250자 평문
+    desc_raw = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", content)
+    desc_raw = re.sub(r"[#*>\n\s]+", " ", desc_raw)[:250].strip()
 
     now_kst = datetime.now(KST)
     date_str = now_kst.strftime("%Y-%m-%dT%H:%M:%S+09:00")
