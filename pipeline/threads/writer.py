@@ -52,8 +52,7 @@ def build_system_prompt_D():
 FORMAT:
 - 6 cards total: 5 content cards (1→5) + 1 link card (card 6: 🔗 url only)
 - Cards separated by ---
-- Each card: max 500 characters (Threads API hard limit)
-- Card 5 MUST end with an open question — no conclusion, no answer, no宣言
+- Each card: max 500 characters (Threads API hard limit) — 각 카드는 이 공간을 충분히 활용해 구체적인 숫자·인용·비교 등 정보를 전달할 것
 
 CONSTRAINTS:
 - Write in 반말체 (~임, ~했음, ~있음). NEVER use ~합니다/~입니다.
@@ -496,7 +495,7 @@ Gap source: {pitch.get('gap_source','')}
 1. Follow the system prompt format exactly.
 2. Use ALL numbers from the article body — no vague expressions like "많은" or "대규모".
 3. Never include pitch metadata labels (핵심 이야기:, 반전:, 감정:) in the output.
-4. Card 5 MUST end with the open question from the pitch.
+4. Card 5: 끝을 강제하지 않음 — 질문이 자연스러우면 OK, 결론이 자연스러워도 OK
 5. Output: JSON only — {{"cards": ["card1", ..., "card5", "🔗 url"]}}"""
 
     _log(f'  쓰레드 생성 중... (temperature=0.4)')
