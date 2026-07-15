@@ -12,6 +12,10 @@ Usage:
 import argparse
 import sys
 
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+
 from pipeline.infra.d1_client import d1_query
 from pipeline.infra.logger import get_scrubbed_logger
 

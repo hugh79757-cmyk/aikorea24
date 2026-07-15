@@ -16,6 +16,10 @@ sys.path.insert(0, _PROJECT_DIR)
 sys.path.insert(0, _script_dir)
 sys.path.insert(0, os.path.join(_PROJECT_DIR, 'scripts', 'threads', 'v3'))
 
+from pipeline.infra.env_loader import EnvConfig
+_config = EnvConfig()
+_config.load_to_environ()
+
 from pipeline.infra.logger import get_scrubbed_logger
 logger = get_scrubbed_logger(__name__)
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
