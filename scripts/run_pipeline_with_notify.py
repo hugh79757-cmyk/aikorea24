@@ -109,9 +109,27 @@ def main():
 ⏰ {now}
 
 📰 News selection + 📖 Briefing published
-Blog/deep-link notification follows in 15 minutes
 
 <pre>{body}</pre>"""
+
+            # blog-draft 실행 (launchd 15분 후 작업이 누락될 수 있으므로 직접 호출)
+            blog_draft_script = os.path.join(SCRIPTS_DIR, 'blog_draft_generator.py')
+            print(f"\n{'='*60}")
+            print(f"blog-draft 실행 중...")
+            print(f"{'='*60}")
+            try:
+                blog_result = subprocess.run(
+                    [sys.executable, blog_draft_script],
+                    capture_output=True,
+                    text=True,
+                    timeout=600,
+                    cwd=PROJECT_DIR
+                )
+                print(blog_result.stdout)
+                if blog_result.stderr:
+                    print(f"=== blog-draft 에러 ===\n{blog_result.stderr}")
+            except Exception as be:
+                print(f"  ⚠️ blog-draft 실행 실패: {be}")
         else:
             err_body = html.escape(error[-500:] if len(error) > 500 else error)
             out_body = html.escape(output[-500:] if len(output) > 500 else output)
