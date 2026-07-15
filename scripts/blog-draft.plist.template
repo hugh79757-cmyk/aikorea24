@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>OPENAI_API_KEY</key>
+		<string>{{OPENAI_API_KEY}}</string>
+		<key>PATH</key>
+		<string>/Users/twinssn/Projects/aikorea24/.venv/bin:/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+	</dict>
+	<key>Label</key>
+	<string>kr.aikorea24.blog-draft</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/twinssn/Projects/aikorea24/.venv/bin/python3</string>
+		<string>/Users/twinssn/Projects/aikorea24/scripts/blog_draft_generator.py</string>
+	</array>
+	<key>StandardErrorPath</key>
+	<string>/Users/twinssn/Projects/aikorea24/scripts/blog_draft_error.log</string>
+	<key>StandardOutPath</key>
+	<string>/Users/twinssn/Projects/aikorea24/scripts/blog_draft.log</string>
+	<key>StartCalendarInterval</key>
+	<array>
+		<dict>
+			<key>Hour</key>
+			<integer>6</integer>
+			<key>Minute</key>
+			<integer>15</integer>
+		</dict>
+		<dict>
+			<key>Hour</key>
+			<integer>20</integer>
+			<key>Minute</key>
+			<integer>15</integer>
+		</dict>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>/Users/twinssn/Projects/aikorea24</string>
+</dict>
+</plist>
