@@ -51,7 +51,12 @@ echo "=== [1/3] 빌드 ==="
 npm run build
 
 echo "=== [2/3] Cloudflare Pages 배포 ==="
-npx wrangler pages deploy dist \
+# auth profile(hugh79757) 사용, CLOUDFLARE_API_TOKEN env var 우회 방지
+WRANGLER="/opt/homebrew/bin/wrangler"
+if [ ! -x "$WRANGLER" ]; then
+  WRANGLER=$(command -v wrangler 2>/dev/null || echo "npx wrangler")
+fi
+env -u CLOUDFLARE_API_TOKEN $WRANGLER pages deploy dist \
   --project-name aikorea24 \
   --branch main \
   --commit-dirty=true
