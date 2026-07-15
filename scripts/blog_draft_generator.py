@@ -272,6 +272,7 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
     if articles and filepath:
         slug = filepath.stem if hasattr(filepath, 'stem') else os.path.basename(filepath).replace('.md', '')
         slug = slug.lower()
+        blog_url = f"https://aikorea24.kr/blog/{slug}/"
         for art in articles:
             news_id = art.get("id")
             if news_id:
