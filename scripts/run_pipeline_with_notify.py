@@ -102,11 +102,14 @@ def main():
             print("=== 에러 ===")
             print(error)
         
-        # 결과 메시지 생성 (HTML 태그 파싱 오류 방지: 본문은 escape 후 <pre>로 감쌈)
+        # 결과 메시지 생성 (브리핑 발행 완료)
         if result.returncode == 0:
             body = html.escape(output[-1000:] if len(output) > 1000 else output)
             message = f"""✅ <b>aikorea24 파이프라인 완료</b>
 ⏰ {now}
+
+📰 News selection + 📖 Briefing published
+Blog/deep-link notification follows in 15 minutes
 
 <pre>{body}</pre>"""
         else:

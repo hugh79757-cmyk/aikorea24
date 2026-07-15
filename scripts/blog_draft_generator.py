@@ -441,20 +441,22 @@ def main():
     generated = [c for c in created if c[0] is not None]
     skipped = [c for c in created if c[0] is None]
     if generated:
-        msg_lines = [f"🤖 <b>[{today_str}] 블로그 초안 생성 완료</b>"]
+        msg_lines = [f"🤖 <b>[{today_str}] 블로그 발행 완료</b>"]
         msg_lines.append(f"\n📝 생성: {len(generated)}건")
         for fp, title, sort_order, _ in generated:
             fname = os.path.basename(fp)
             msg_lines.append(f"\n  #{sort_order} {title[:60]} → {fname}")
+        msg_lines.append(f"\n🔗 딥링크 연결 완료")
         if skipped:
             msg_lines.append(f"\n⏭ 이미 연결됨: {len(skipped)}건")
         send_telegram("\n".join(msg_lines))
+    elif skipped:
+        msg_lines = [f"📭 <b>[{today_str}] 블로그 발행</b>"]
+        msg_lines.append(f"\n모두 이미 연결됨 ({len(skipped)}건)")
+        send_telegram("\n".join(msg_lines))
     else:
-        msg_lines = [f"📭 <b>[{today_str}] 블로그 초안 생성</b>"]
-        if skipped:
-            msg_lines.append(f"\n모두 이미 연결됨 ({len(skipped)}건)")
-        else:
-            msg_lines.append(f"\n생성된 글 없음")
+        msg_lines = [f"📭 <b>[{today_str}] 블로그 발행</b>"]
+        msg_lines.append(f"\n생성된 글 없음 (브리핑 없음)")
         send_telegram("\n".join(msg_lines))
     print()
 
