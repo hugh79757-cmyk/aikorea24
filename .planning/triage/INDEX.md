@@ -1,3 +1,4 @@
+- 2026-07-15 | config | blog-schedule-15min-delay | blog-draft 07:00→07:15로 변경 (브리핑 발행 후 딥링크 연결 시간 확보)
 - 2026-07-14 | refactor | writer-prompt-overhaul | build_system_prompt_D 150→20줄 다이어트 + OpenAI 검증/fallback 제거
 - 2026-07-14 | fix | blog-draft-threads-fix | blog-draft 심층글 대체 + thread-topic-finder 복구 + deep_dive_url slug lowercase
 - 2026-07-14 | config | auto-thumbnail-deactivation | Pexels auto_thumbnail → blog-draft 내부 통합 (slug 불일치 해소, 적극 사용 전환)
