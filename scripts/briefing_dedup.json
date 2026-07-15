@@ -2766,6 +2766,82 @@
           "date": "2026-07-15"
         }
       ]
+    },
+    {
+      "date": "2026-07-15",
+      "briefing_id": 177,
+      "articles": [
+        {
+          "id": "40722",
+          "title": "'시장에서의 거래는 없다': 알바니제, AI 사무소 설립 및 호주 창작자를 저작권 '도난'",
+          "original_title": "",
+          "description": "총리는 데이터 센터 개발 계획을 제시하며 기술 기업들이 호주 데이터를 무료로 사용할 수 있는 가능성을 거부했습니다. 알바니제 총리는 \"가장 강력한 보호 조치를 약속하겠다\"고 밝혔습니다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/15/office-of-ai-artificial-intelligence-copyright-australia-government",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-15"
+        },
+        {
+          "id": "40747",
+          "title": "알리바바, Qwen AI가 애플 인텔리전스에 통합될 예정으로 미국 상장 주가 4% 상승",
+          "original_title": "",
+          "description": "중국 사이버공간관리국은 수요일 애플의 AI 서비스가 승인된 제공자 목록에 포함되었다고 발표했습니다.",
+          "link": "https://www.cnbc.com/2026/07/15/alibaba-qwen-ai-apple-intelligence.html",
+          "entities": [
+            "Qwen",
+            "AI"
+          ],
+          "date": "2026-07-15"
+        },
+        {
+          "id": "40710",
+          "title": "인도 AI 코딩 스타트업 에머전트, 1억 3천만 달러 시리즈 C로 유니콘이 되다",
+          "original_title": "",
+          "description": "이 스타트업은 연간 1억 2천만 달러의 수익률을 달성했으며 20만 명 이상의 유료 고객을 확보했습니다.",
+          "link": "https://techcrunch.com/2026/07/15/indian-ai-coding-startup-emergent-becomes-a-unicorn-just-over-a-year-after-launch/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-15"
+        },
+        {
+          "id": "40738",
+          "title": "호주, 국가 AI 사무소 개설",
+          "original_title": "",
+          "description": "호주가 국가 AI 사무소를 개설했습니다. 앤서니 알바네즈 총리는 시드니에서 열린 연설에서 창작자들을 위한 새로운 저작권 보호를 약속했습니다. 그는 시드니 대학교에서 AI에 대한 주요 연설을 하며 이 계획을 발표했습니다.",
+          "link": "https://thenextweb.com/news/australia-office-of-ai-copyright-datacentres",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-15"
+        },
+        {
+          "id": "40745",
+          "title": "크라운 검찰 서비스, AI 환각 증거 사용으로 적발",
+          "original_title": "",
+          "description": "영국 법원은 범죄 기소를 담당하는 기관이 제출한 'AI 환각' 증거에 대한 또 다른 사건을 처리해야 했습니다. 크라운 검찰 서비스(CPS)는 송환 요청에 대한 문서를 제출한 후 고등法院에 두 번 사과했습니다.",
+          "link": "https://www.cityam.com/crown-prosecution-service-caught-using-ai-hallucination-evidence/",
+          "entities": [
+            "AI",
+            "CPS"
+          ],
+          "date": "2026-07-15"
+        },
+        {
+          "id": "40719",
+          "title": "OpenAI 직원들이 상사를 견제하기 위해 경쟁 슈퍼 PAC에 기부",
+          "original_title": "",
+          "description": "OpenAI 직원들은 회사의 사장 Greg Brockman이 지지하는 그룹인 Leading the Future에 대항하는 정치적 노력에 215,000달러 이상을 기부했습니다.",
+          "link": "https://www.wired.com/story/openai-employees-donations-guardrails-alliance-leading-the-future/",
+          "entities": [
+            "OpenAI",
+            "Greg",
+            "Leading"
+          ],
+          "date": "2026-07-15"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5293,6 +5369,76 @@
       "link": "https://the-decoder.com/deepseek-needs-more-cash-just-weeks-after-closing-its-first-7-billion-round/",
       "entities": [
         "AI"
+      ],
+      "date": "2026-07-15"
+    },
+    {
+      "id": "40722",
+      "title": "'시장에서의 거래는 없다': 알바니제, AI 사무소 설립 및 호주 창작자를 저작권 '도난'",
+      "original_title": "",
+      "description": "총리는 데이터 센터 개발 계획을 제시하며 기술 기업들이 호주 데이터를 무료로 사용할 수 있는 가능성을 거부했습니다. 알바니제 총리는 \"가장 강력한 보호 조치를 약속하겠다\"고 밝혔습니다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/15/office-of-ai-artificial-intelligence-copyright-australia-government",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-15"
+    },
+    {
+      "id": "40747",
+      "title": "알리바바, Qwen AI가 애플 인텔리전스에 통합될 예정으로 미국 상장 주가 4% 상승",
+      "original_title": "",
+      "description": "중국 사이버공간관리국은 수요일 애플의 AI 서비스가 승인된 제공자 목록에 포함되었다고 발표했습니다.",
+      "link": "https://www.cnbc.com/2026/07/15/alibaba-qwen-ai-apple-intelligence.html",
+      "entities": [
+        "Qwen",
+        "AI"
+      ],
+      "date": "2026-07-15"
+    },
+    {
+      "id": "40710",
+      "title": "인도 AI 코딩 스타트업 에머전트, 1억 3천만 달러 시리즈 C로 유니콘이 되다",
+      "original_title": "",
+      "description": "이 스타트업은 연간 1억 2천만 달러의 수익률을 달성했으며 20만 명 이상의 유료 고객을 확보했습니다.",
+      "link": "https://techcrunch.com/2026/07/15/indian-ai-coding-startup-emergent-becomes-a-unicorn-just-over-a-year-after-launch/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-15"
+    },
+    {
+      "id": "40738",
+      "title": "호주, 국가 AI 사무소 개설",
+      "original_title": "",
+      "description": "호주가 국가 AI 사무소를 개설했습니다. 앤서니 알바네즈 총리는 시드니에서 열린 연설에서 창작자들을 위한 새로운 저작권 보호를 약속했습니다. 그는 시드니 대학교에서 AI에 대한 주요 연설을 하며 이 계획을 발표했습니다.",
+      "link": "https://thenextweb.com/news/australia-office-of-ai-copyright-datacentres",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-15"
+    },
+    {
+      "id": "40745",
+      "title": "크라운 검찰 서비스, AI 환각 증거 사용으로 적발",
+      "original_title": "",
+      "description": "영국 법원은 범죄 기소를 담당하는 기관이 제출한 'AI 환각' 증거에 대한 또 다른 사건을 처리해야 했습니다. 크라운 검찰 서비스(CPS)는 송환 요청에 대한 문서를 제출한 후 고등法院에 두 번 사과했습니다.",
+      "link": "https://www.cityam.com/crown-prosecution-service-caught-using-ai-hallucination-evidence/",
+      "entities": [
+        "AI",
+        "CPS"
+      ],
+      "date": "2026-07-15"
+    },
+    {
+      "id": "40719",
+      "title": "OpenAI 직원들이 상사를 견제하기 위해 경쟁 슈퍼 PAC에 기부",
+      "original_title": "",
+      "description": "OpenAI 직원들은 회사의 사장 Greg Brockman이 지지하는 그룹인 Leading the Future에 대항하는 정치적 노력에 215,000달러 이상을 기부했습니다.",
+      "link": "https://www.wired.com/story/openai-employees-donations-guardrails-alliance-leading-the-future/",
+      "entities": [
+        "OpenAI",
+        "Greg",
+        "Leading"
       ],
       "date": "2026-07-15"
     }
