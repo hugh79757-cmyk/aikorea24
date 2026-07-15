@@ -4,22 +4,30 @@ type: config
 status: resolved
 ---
 
-# auto_thumbnail (Pexels) 비활성화
+# auto_thumbnail (Pexels) → blog-draft 내부 통합
 
 ## What
-`scripts/auto_thumbnail.py`의 Pexels 검색 기반 썸네일 생성 기능을 비활성화.
-`run_pipeline.py`의 `step_thumbnails` 호출을 제거 (notify script에 `--skip-thumbnails` 추가).
+`scripts/auto_thumbnail.py`의 Pexels 검색 기반 썸네일 생성 기능을 **pipeline → blog-draft로 이동**.
 
-## Why
-blog-draft(`blog_draft_generator.py`)로 블로그 생성 주체가 변경되면서 slug 불일치 발생:
-- 심층글(pipeline) 시절: `step_thumbnails`가 심층글과 같은 slug를 사용 → 썸네일 일치
-- blog-draft: AI가 생성한 SEO 제목을 slug로 사용 → pipeline이 생성한 썸네일 slug와 불일치
-- blog-draft 내에서 Pexels 썸네일을 생성할 수도 있으나, Pexels 의존성(API 키, 중복 관리, 저작권) 대비 효과 미미하여 사용하지 않기로 결정
+## 배경
+- pipeline 시절: `step_thumbnails`가 pipeline slug로 썸네일 생성 → blog-draft로 블로그 생성 주체가 바뀌면서 slug 불일치 발생
+- 2026-07-14: slug 불일치로 인해 pipeline의 `step_thumbnails` 호출을 중단 (`--skip-thumbnails`)
+- **2026-07-15 결정**: Pexels 이미지 품질이 placeholder 대비 월등히 좋으므로, blog-draft 내부에서 직접 Pexels 썸네일을 생성하도록 통합하기로 결정
+
+## 해결 방안
+- `blog_draft_generator.py`가 블로그 `.md` 저장 직후, 같은 slug로 `process_thumbnail()` 호출
+- `_save_file()`에 기존에 있던 조건부 image 삽입 로직(`lines 307-308`) 활용
+- slug가 blog-draft 내에서 결정되므로 불일치 문제가 원천 해소됨
+- Pexels API 키/중복 관리/저작권은 그대로 유지 (`auto_thumbnail.py`의 기존 로직 재사용)
 
 ## Files changed
-- `scripts/run_pipeline_with_notify.py`: `--skip-thumbnails` 추가
-- `scripts/blog_draft_generator.py`: `_generate_thumbnail` 함수 제거 (비활성화)
+- `scripts/run_pipeline_with_notify.py`: `--skip-thumbnails` 유지 (pipeline에서는 계속 스킵)
+- `scripts/blog_draft_generator.py`: `process_thumbnail` import + thumbnail 생성 + frontmatter `image` 필드 주입 추가
+- `scripts/auto_thumbnail.py`: 변경 없음 (재사용)
 
 ## Verification
-파이프라인 실행 시 step_thumbnails가 skip되어 로그에 표시됨.
-blog-draft 실행 시 썸네일 생성 없이 블로그 글만 생성됨.
+blog-draft 실행 시:
+1. 블로그 `.md` 저장
+2. `public/images/{slug}/thumbnail.webp` 생성 (Pexels)
+3. `.md` frontmatter에 `image: /images/{slug}/thumbnail.webp` 자동 추가
+4. `SEOHead.astro`가 `image` 필드를 읽어 OG image로 렌더링

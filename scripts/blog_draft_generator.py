@@ -13,6 +13,7 @@ from datetime import datetime, date, timezone, timedelta
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_DIR = os.path.dirname(_script_dir)
 sys.path.insert(0, _PROJECT_DIR)
+sys.path.insert(0, _script_dir)
 sys.path.insert(0, os.path.join(_PROJECT_DIR, 'scripts', 'threads', 'v3'))
 
 from pipeline.infra.logger import get_scrubbed_logger
@@ -33,8 +34,8 @@ def remove_chinese(text):
 # model_router (threads/v3)
 # ============================================
 from model_router import chat_completion
+from auto_thumbnail import process_thumbnail
 
-# (썸네일 생성: auto_thumbnail 비활성화 — Pexels 미사용)
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
 
@@ -325,6 +326,24 @@ draft: false
     return filepath, seo_title
 
 # ============================================
+# 썸네일 삽입 (frontmatter image 필드)
+# ============================================
+def _add_image_to_frontmatter(filepath, image_rel_path):
+    if not filepath or not image_rel_path:
+        return
+    with open(filepath, "r", encoding="utf-8") as f:
+        content = f.read()
+    if re.search(r'^image:', content, re.MULTILINE):
+        return
+    updated = content.replace("draft: false\n---", f'draft: false\nimage: "{image_rel_path}"\n---', 1)
+    if updated == content:
+        log(f"  ⚠️ image 필드 삽입 실패 (frontmatter 구조 예상과 다름)")
+        return
+    with open(filepath, "w", encoding="utf-8") as f:
+        f.write(updated)
+    log(f"  🖼️ image 필드 추가: {image_rel_path}")
+
+# ============================================
 # 텔레그램 알림
 # ============================================
 def send_telegram(message):
@@ -397,6 +416,19 @@ def main():
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
             created.append((filepath, seo_title or title, sort_order, 1))
             file_num += 1
+
+            # 썸네일 생성 (Pexels)
+            try:
+                slug = os.path.basename(filepath).replace('.md', '').lower()
+                thumb_rel = process_thumbnail(
+                    link, slug,
+                    title=title,
+                    description=art.get("description", "")
+                )
+                if thumb_rel:
+                    _add_image_to_frontmatter(filepath, thumb_rel)
+            except Exception as thumb_e:
+                log(f"  ⚠️ '{title[:40]}' 썸네일 생성 실패: {thumb_e}")
         except Exception as e:
             log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
 
