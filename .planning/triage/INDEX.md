@@ -1,3 +1,4 @@
+- 2026-07-15 | feat | telegram-two-stage-notify | 브리핑/블로그 2단계 텔레그램 메시지 구조화 - 브리핑 완료→블로그 15분 후 알림
 - 2026-07-15 | config | blog-schedule-15min-delay | blog-draft 07:00→07:15로 변경 (브리핑 발행 후 딥링크 연결 시간 확보)
 - 2026-07-14 | refactor | writer-prompt-overhaul | build_system_prompt_D 150→20줄 다이어트 + OpenAI 검증/fallback 제거
 - 2026-07-14 | fix | blog-draft-threads-fix | blog-draft 심층글 대체 + thread-topic-finder 복구 + deep_dive_url slug lowercase
