@@ -1,6 +1,8 @@
 - 2026-07-14 | refactor | writer-prompt-overhaul | build_system_prompt_D 150→20줄 다이어트 + OpenAI 검증/fallback 제거
 - 2026-07-14 | fix | blog-draft-threads-fix | blog-draft 심층글 대체 + thread-topic-finder 복구 + deep_dive_url slug lowercase
-- 2026-07-14 | config | auto-thumbnail-deactivation | Pexels auto_thumbnail 비활성화 — blog-draft slug 불일치로 사용 중단
+- 2026-07-14 | config | auto-thumbnail-deactivation | Pexels auto_thumbnail → blog-draft 내부 통합 (slug 불일치 해소, 적극 사용 전환)
+- 2026-07-15 | fix | pipeline-3bug-recovery | blog_url NameError + Telegram "message"→"text" + deploy.sh wrangler auth profile + --skip-deep BooleanOptionalAction
+- 2026-07-15 | feat | pexels-thumbnail-blog-draft | blog_draft_generator에 Pexels 썸네일 생성 통합 + frontmatter image 필드 주입 + 6건 백필
 - 2026-07-14 | fix | dark-mode-css-fix | 다크모드 배경 미변경 — global.css 미import로 CSS 변수 미로드, Layout.astro import + applyBaseStyles: false
 - 2026-07-14 | fix | light-mode-dark-text-fixes | 라이트모드 text-white 하드코딩 버그 수정 (review/blog CTA/news/global/community) + .glass utility CSS vars 전환
 - 2026-07-14 | config | wrangler-auth-profile-setup | Wrangler Auth Profile → OAuth 전환, CLOUDFLARE_API_TOKEN env var 우회, Pages 배포 복구
