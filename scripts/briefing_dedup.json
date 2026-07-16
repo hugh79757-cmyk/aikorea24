@@ -2988,6 +2988,78 @@
           "date": "2026-07-16"
         }
       ]
+    },
+    {
+      "date": "2026-07-17",
+      "briefing_id": 180,
+      "articles": [
+        {
+          "id": "41027",
+          "title": "폭스바겐, 함부르크에서 공유 셔틀 서비스를 통해 로봇 택시 경주에 참가하다",
+          "original_title": "",
+          "description": "폭스바겐의 자율주행 모빌리티 자회사인 모이아는 함부르크에서 자율주행 ID Buzz 밴으로 사전 등록된 주민들에게 승차 서비스를 제공하기 시작했습니다. 이는 주요 유럽 자동차 제조업체가 자국에서 자율주행 승객 서비스를 시작한 첫 번째 사례입니다.",
+          "link": "https://thenextweb.com/news/volkswagen-moia-robotaxi-hamburg-id-buzz",
+          "entities": [
+            "Buzz",
+            "ID"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "40993",
+          "title": "구글 비드, 이제 자신의 AI 동영상 주인공이 되어보세요",
+          "original_title": "",
+          "description": "구글은 사용자가 디지털 자기 자신이 주인공인 동영상을 만들 수 있도록 개인화된 AI 아바타를 비드에 추가하고, 프롬프트 및 참조 이미지에서 동영상을 생성하고 편집할 수 있는 제미니 옴니 기반 도구를 제공하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/16/google-vids-now-lets-you-star-in-your-own-ai-videos/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41008",
+          "title": "관리자들은 회사의 AI 변환에서 중요한 역할을 하며, 이를 잘 알고 있습니다",
+          "original_title": "",
+          "description": "중간 관리자 3분의 2 이상은 AI가 미래의 업무에서 중요한 역할을 할 것이라고 낙관하며, 팀의 AI 도구 채택에 대해 개인적인 책임감을 느끼고 있습니다.",
+          "link": "https://www.zdnet.com/article/managers-play-critical-role-in-ai-transformation/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41004",
+          "title": "독일, 구글의 AI 개요 및 Perplexity를 미디어 법에 따라 규제하는 최초의 판결",
+          "original_title": "",
+          "description": "독일 미디어 규제 기관은 구글의 AI 개요가 구글 자체의 콘텐츠이며 중립적인 검색 결과가 아니라고 밝혔습니다. 이들은 국가 미디어 조약에 따라 구글과 Perplexity에 대한 최초의 판결을 내렸으며, 두 회사는 한 달 이내에 항소할 수 있습니다.",
+          "link": "https://the-decoder.com/germany-puts-googles-ai-overviews-and-perplexity-under-media-law-in-first-of-its-kind-ruling/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41035",
+          "title": "우리의 3개 주식은 AI 랠리를 타고, 3개 주식은 지난달 이후 부진",
+          "original_title": "",
+          "description": "CNBC 투자 클럽의 7월 월간 회의에 앞서, 지난 회의 이후 우리의 최고의 성과 및 최악의 성과를 기록한 3개 주식의 변동을 살펴봅니다.",
+          "link": "https://www.cnbc.com/2026/07/16/3-of-our-stocks-rode-the-ai-rally-while-3-others-fell-out-of-favor-since-last-month.html",
+          "entities": [
+            "CNBC",
+            "AI"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41046",
+          "title": "제미니 3.5 프로, 코딩 성능 문제로 지연, 업그레이드된 플래시 모델 테스트 중",
+          "original_title": "",
+          "description": "구글은 5월 중순에 I/O 2026에서 제미니 3.5 플래시를 발표하며 프로 버전은 6월에 출시될 것이라고 밝혔습니다. 그러나 기한이 지났음에도 업데이트가 없는 상황입니다.",
+          "link": "https://9to5google.com/2026/07/16/gemini-3-5-pro-delays/",
+          "entities": [],
+          "date": "2026-07-17"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5721,6 +5793,72 @@
         "AI"
       ],
       "date": "2026-07-16"
+    },
+    {
+      "id": "41027",
+      "title": "폭스바겐, 함부르크에서 공유 셔틀 서비스를 통해 로봇 택시 경주에 참가하다",
+      "original_title": "",
+      "description": "폭스바겐의 자율주행 모빌리티 자회사인 모이아는 함부르크에서 자율주행 ID Buzz 밴으로 사전 등록된 주민들에게 승차 서비스를 제공하기 시작했습니다. 이는 주요 유럽 자동차 제조업체가 자국에서 자율주행 승객 서비스를 시작한 첫 번째 사례입니다.",
+      "link": "https://thenextweb.com/news/volkswagen-moia-robotaxi-hamburg-id-buzz",
+      "entities": [
+        "Buzz",
+        "ID"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "40993",
+      "title": "구글 비드, 이제 자신의 AI 동영상 주인공이 되어보세요",
+      "original_title": "",
+      "description": "구글은 사용자가 디지털 자기 자신이 주인공인 동영상을 만들 수 있도록 개인화된 AI 아바타를 비드에 추가하고, 프롬프트 및 참조 이미지에서 동영상을 생성하고 편집할 수 있는 제미니 옴니 기반 도구를 제공하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/16/google-vids-now-lets-you-star-in-your-own-ai-videos/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41008",
+      "title": "관리자들은 회사의 AI 변환에서 중요한 역할을 하며, 이를 잘 알고 있습니다",
+      "original_title": "",
+      "description": "중간 관리자 3분의 2 이상은 AI가 미래의 업무에서 중요한 역할을 할 것이라고 낙관하며, 팀의 AI 도구 채택에 대해 개인적인 책임감을 느끼고 있습니다.",
+      "link": "https://www.zdnet.com/article/managers-play-critical-role-in-ai-transformation/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41004",
+      "title": "독일, 구글의 AI 개요 및 Perplexity를 미디어 법에 따라 규제하는 최초의 판결",
+      "original_title": "",
+      "description": "독일 미디어 규제 기관은 구글의 AI 개요가 구글 자체의 콘텐츠이며 중립적인 검색 결과가 아니라고 밝혔습니다. 이들은 국가 미디어 조약에 따라 구글과 Perplexity에 대한 최초의 판결을 내렸으며, 두 회사는 한 달 이내에 항소할 수 있습니다.",
+      "link": "https://the-decoder.com/germany-puts-googles-ai-overviews-and-perplexity-under-media-law-in-first-of-its-kind-ruling/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41035",
+      "title": "우리의 3개 주식은 AI 랠리를 타고, 3개 주식은 지난달 이후 부진",
+      "original_title": "",
+      "description": "CNBC 투자 클럽의 7월 월간 회의에 앞서, 지난 회의 이후 우리의 최고의 성과 및 최악의 성과를 기록한 3개 주식의 변동을 살펴봅니다.",
+      "link": "https://www.cnbc.com/2026/07/16/3-of-our-stocks-rode-the-ai-rally-while-3-others-fell-out-of-favor-since-last-month.html",
+      "entities": [
+        "CNBC",
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41046",
+      "title": "제미니 3.5 프로, 코딩 성능 문제로 지연, 업그레이드된 플래시 모델 테스트 중",
+      "original_title": "",
+      "description": "구글은 5월 중순에 I/O 2026에서 제미니 3.5 플래시를 발표하며 프로 버전은 6월에 출시될 것이라고 밝혔습니다. 그러나 기한이 지났음에도 업데이트가 없는 상황입니다.",
+      "link": "https://9to5google.com/2026/07/16/gemini-3-5-pro-delays/",
+      "entities": [],
+      "date": "2026-07-17"
     }
   ]
 }
