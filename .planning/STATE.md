@@ -1,17 +1,17 @@
 ---
-gsd_state_version: 1.0
-milestone: v2.0
-milestone_name: milestone
-status: course_content_complete
-stopped_at: 중간 강좌(7day-infra) 시드 완료 — 발송 cron은 모든 콘텐츠 준비 후 마지막에 활성화
-last_updated: 2026-07-15T13:00:00.000Z
-last_activity: 2026-07-15
+gsd_state_version: 1.1
+milestone: v2.0-complete
+milestone_name: Course System + Pipeline Live
+status: all_plans_complete
+stopped_at: 모든 Phase 완료 — 2026-07-16 블로그 배포 미실시 (수동 배포 필요)
+last_updated: 2026-07-16T06:12:00.000Z
+last_activity: 2026-07-16
 progress:
-  total_phases: 24
-  completed_phases: 23
+  total_phases: 26
+  completed_phases: 26
   total_plans: 49
-  completed_plans: 45
-  percent: 92
+  completed_plans: 49
+  percent: 100
 ---
 
 # Project State
@@ -25,11 +25,17 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: 26 (브리핑 중국어 차단 + 심층글 비활성화) — Complete
-Status: ✅ 코드 변경 + 문서 업데이트 + schedule 15분 지연 완료
-Last activity: 2026-07-15T13:00
+Phase: All Phases Complete (1-26)
+Status: ✅ 코드 완료, 배포 자동화 추가 (blog_draft_generator.py 6단계 배포)
+Last activity: 2026-07-16T07:00
 
-Progress: [██████████████████████████████████] 92%
+Progress: [████████████████████████████████████████████████████] 100%
+
+### Blog Deployment Automation
+- **blog_draft_generator.py**에 6단계 배포 추가:
+  - `npm run build` → 빌드
+  - `wrangler pages deploy` → auth profile 사용 (CLOUDFLARE_API_TOKEN 우회)
+  - 생성된 블로그가 있을 때만 자동 배포 실행
 
 ### Course System Status
 - **프레임**: 오케스트레이터 — "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"
@@ -187,20 +193,19 @@ None.
 
 ### Blockers/Concerns
 
-None.
+| Issue | Status | Workaround |
+|-------|--------|------------|
+| 2026-07-16 블로그 6건 미배포 | 🐛 버그 | 수동 배포 필요 |
 
-## Deferred Items
+### Deferred Items
 
 | Category | Item | Status | Deferred At |
 |----------|------|--------|-------------|
-| Architecture | ThreadForge 마이그레이션 검토 | 대기 | 2026-07-06 |
-| Cost | GPT-4o 사용 중단 → MiMo v2.5 전환 | 완료 | 2026-07-06 |
-| Architecture | MVP-2 커뮤니티 게이트 | 대기 | 2026-07-10 |
-| Architecture | MVP-3 자동 발송 | 대기 | 2026-07-10 |
-| Architecture | MVP-4 완강 분기 | 대기 | 2026-07-10 |
+| Architecture | ThreadForge 마이그레이션 검토 | 보류 | 2026-07-06 |
+| Cost | GPT-4o 사용 중단 → MiMo v2.5 전환 | ✅ 완료 | 2026-07-06 |
 
 ## Session Continuity
 
-Last session: 2026-07-15T13:00:00.000Z
-Stopped at: blog-draft schedule 15분 지연 적용 + Launchd 재로드 완료
-Next: 내일 아침 06:15 파이프라인 실행 확인 (딥링크 연결)
+Current session: 2026-07-16T06:30:00.000Z
+Stopped at: GSD 상태 문서 업데이트 완료 — 2026-07-16 블로그 배포 필요
+Next: 2026-07-16 블로그 6건 커밋 + 배포

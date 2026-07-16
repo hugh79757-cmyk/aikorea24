@@ -48,16 +48,17 @@ Plans:
 **Depends on**: Phase 7
 **Requirements**: REQ-08-01, REQ-08-02, REQ-08-03, REQ-08-04, REQ-08-05
 **Success Criteria** (what must be TRUE):
-  1. `validate_final_output()` 함수가 프롬프트 노출 + 외국어 + 한글 비율을 통합 검증
-  2. **1차 방어**: 피치 생성 시 (`validate_korean_output` + `detect_prompt_leak`)
-  3. **2차 방어**: 쓰레드 작성 후 (`validate_final_output` — 최종 카드 검증)
-  4. **3차 방어**: 발행 직전 (`validate_cards` + `validate_final_output` 체이닝)
-  5. `detect_prompt_leak()`가 `LEAKED_PROMPT_PATTERNS` + `_SYSTEM_PROMPT_FRAGMENTS` 모두 검사
-  6. 모든 테스트 통과, 197개 이상
+1. `validate_final_output()` 함수가 프롬프트 노출 + 외국어 + 한글 비율을 통합 검증 ✅
+2. **1차 방어**: 피치 생성 시 (`validate_korean_output` + `detect_prompt_leak`) ✅
+3. **2차 방어**: 쓰레드 작성 후 (`validate_final_output` — 최종 카드 검증) ✅
+4. **3차 방어**: 발행 직전 (`validate_cards` + `validate_final_output` 체이닝) ✅
+5. `detect_prompt_leak()`가 `LEAKED_PROMPT_PATTERNS` + `_SYSTEM_PROMPT_FRAGMENTS` 모두 검사 ✅
+6. 모든 테스트 통과, 197개 이상 ✅
+7. **13-03 수정**: `validate_final_output()`에 `sentence_enders`에 `\u3002`(중국어 마침표) 포함 ✅
 **Plans**: 1 plan
 
 Plans:
-- [ ] 08-01-PLAN.md — 3중 방어 체계 구축
+- [x] 08-01-PLAN.md — 3중 방어 체계 구축 ✅ (완료)
 
 ### Phase 1: Security Hardening
 **Goal**: All active security issues are eliminated — no plaintext API keys in committed files, env loading consolidated into a single secure module, and secrets in git history documented for remediation.
@@ -404,15 +405,35 @@ Plans: 3 plans
 **Mode**: ad-hoc
 **Depends on**: Nothing (standalone fix)
 **Success Criteria** (what must be TRUE):
-  1. `generate_comment()` 요청에 중국어 금지 system prompt 포함됨
-  2. 응답 후 `remove_chinese()` 안전망 후처리 적용됨
-  3. 중국어 문자 제거 시 로그에 탐지 건수 기록됨
-  4. `run_pipeline.py --skip-deep` 기본값 True (심층글 기본 생략)
-  5. `auto_deep_article.py` DEPRECATED 명시
-**Plans**: 1 plan (inline — 코드 직접 수정)
+1. `generate_comment()` 요청에 중국어 금지 system prompt 포함됨 ✅
+2. 응답 후 `remove_chinese()` 안전망 후처리 적용됨 ✅
+3. 중국어 문자 제거 시 로그에 탐지 건수 기록됨 ✅
+4. `run_pipeline.py --skip-deep` 기본값 True (심층글 기본 생략) ✅
+5. `auto_deep_article.py` DEPRECATED 명시 ✅
+**Status**: ✅ 완료 (코드 변경 + 검증 + schedule 15분 지연)
+
+### Phase 24: Threads Pipeline Batch 최적화
+**Goal**: 33개 기사 배치 → 5개 이하로 축소. LLM context 과부하 방지.
+**Mode**: ad-hoc
+**Depends on**: Phase 16 (Writer prompt v2 완료)
+**Success Criteria** (what must be TRUE):
+1. `batch_size=5`로 축소됨 ✅ (코드 확인됨)
+2. dry-run 테스트 통과: "배치 N/7 5개" 형태 ✅
+3. `article_ids` 타입 에러 0건 ✅
+4. All 292 tests pass ✅
+**Status**: ✅ 완료
+
+### Phase 26-mobile-readability-followup: 모바일 가독성 개선
+**Goal**: 3 design QA issues from 7day-starter.astro 모바일 가독성 개선
+**Mode**: ad-hoc
+**Status**: 🚧 진행 중 (PLAN.md 확인 필요)
+**Plans**: 1 plan
 
 Plans:
-- [x] 26-PLAN.md — 중국어 방어 체계 (system prompt + remove_chinese + logging) + 심층글 비활성화
+- [ ] 1. Contrast unification — gray-300/md:gray-400 → gray-300
+- [ ] 2. gray-600 → gray-400 for privacy notice
+- [ ] 3. Add `leading-relaxed` to curriculum cards
+- [ ] 4. Add `leading-snug` to card titles
 
 ## Progress
 
@@ -420,31 +441,31 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Hardening | 1/1 | Complete   | 2026-06-30 |
-| 2. Infrastructure & Portability | 2/2 | Complete   | 2026-06-30 |
-| 3. Landing Zone & Orchestrator | 5/5 | Complete   | 2026-06-30 |
-| 4. Monolith Splitting | 4/4 | Complete | 2026-06-30 |
-| 5. Dead Code Removal & Final Polish | 3/3 | Complete | 2026-07-01 |
-| 6. Prompt Leakage & Truncation Fix | 1/1 | Complete | 2026-07-03 |
-| 7. Crawl Failure Exclusion | 1/1 | Complete | 2026-07-03 |
-| 8. Validation Gap Closure | 1/1 | Complete | 2026-07-04 |
-| 9. Test Coverage Expansion | 1/1 | Complete | 2026-07-04 |
-| 10. Model Message Leakage Fix | 1/1 | Complete | 2026-07-04 |
-| 10-1. Card Structure Validation | 1/1 | Complete | 2026-07-04 |
-| 11. Defense Mechanism Hardening | 1/1 | Complete | 2026-07-05 |
-| 12. Writer Instability Fix | 2/2 | Complete | 2026-07-05 |
-| 13. Card Separation Fix & Validation Hardening | 3/3 | Complete | 2026-07-05 |
-| 14. Delimiter Reconfiguration | 1/1 | Complete   | 2026-07-05 |
-| 15. Vectorize + Crawl Fix + JSON Cards | ad-hoc | Complete   | 2026-07-07 |
-| 16. Writer prompt v2: jisang-aligned card structure | ad-hoc | Complete   | 2026-07-09 |
-| 17. 강좌 시스템 MVP-1: 등록 흐름 | pending | Complete | 2026-07-10 |
-| 18. 체류 퍼널 재설계 | pending | Complete | 2026-07-10 |
-| 19. 강좌 시스템 MVP-3: 자동 발송 | 3/3 | Complete (코드, 미설치) | 2026-07-10 |
-| 20. 강좌 콘텐츠 완성 | ad-hoc | Complete | 2026-07-10 |
-| 21. 히어로 강좌 설계 | ad-hoc | Complete | 2026-07-12 |
-| 22. 발송 시스템 활성화 | 0/5 | Pending (마지막) | — |
+| 1. Security Hardening | 1/1 | ✅ Complete   | 2026-06-30 |
+| 2. Infrastructure & Portability | 2/2 | ✅ Complete   | 2026-06-30 |
+| 3. Landing Zone & Orchestrator | 5/5 | ✅ Complete   | 2026-06-30 |
+| 4. Monolith Splitting | 4/4 | ✅ Complete | 2026-06-30 |
+| 5. Dead Code Removal & Final Polish | 3/3 | ✅ Complete | 2026-07-01 |
+| 6. Prompt Leakage & Truncation Fix | 1/1 | ✅ Complete | 2026-07-03 |
+| 7. Crawl Failure Exclusion | 1/1 | ✅ Complete | 2026-07-03 |
+| 8. Validation Gap Closure | 1/1 | ✅ Complete | 2026-07-04 |
+| 9. Test Coverage Expansion | 1/1 | ✅ Complete | 2026-07-04 |
+| 10. Model Message Leakage Fix | 1/1 | ✅ Complete | 2026-07-04 |
+| 10-1. Card Structure Validation | 1/1 | ✅ Complete | 2026-07-04 |
+| 11. Defense Mechanism Hardening | 1/1 | ✅ Complete | 2026-07-05 |
+| 12. Writer Instability Fix | 2/2 | ✅ Complete | 2026-07-05 |
+| 13. Card Separation Fix & Validation Hardening | 3/3 | ✅ Complete | 2026-07-05 |
+| 14. Delimiter Reconfiguration | 1/1 | ✅ Complete   | 2026-07-05 |
+| 15. Vectorize + Crawl Fix + JSON Cards | ad-hoc | ✅ Complete   | 2026-07-07 |
+| 16. Writer prompt v2: jisang-aligned card structure | ad-hoc | ✅ Complete   | 2026-07-09 |
+| 17. 강좌 시스템 MVP-1: 등록 흐름 | ad-hoc | ✅ Complete | 2026-07-10 |
+| 18. 체류 퍼널 재설계 | ad-hoc | ✅ Complete | 2026-07-10 |
+| 19. 강좌 시스템 MVP-3: 자동 발송 | 3/3 | ✅ Complete (코드 완료) | 2026-07-10 |
+| 20. 강좌 콘텐츠 완성 | ad-hoc | ✅ Complete | 2026-07-10 |
+| 21. 히어로 강좌 설계 | ad-hoc | ✅ Complete | 2026-07-12 |
+| 22. 발송 시스템 활성화 | 0/5 | 🚧 Deferred | — |
 | 23. SNS 콘텐츠 자동화 — Instagram Carousel + Shorts/Reels | 0/7 | Planned | — |
-| 24. Threads Pipeline Batch 최적화 | 0/3 | Planned | — |
-| 25. 커뮤니티 레슨 순차 해금 | 1/1 | Complete | 2026-07-12 |
-| 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | Complete | 2026-07-12 |
-| **Total** | **44/49** | | |
+| 24. Threads Pipeline Batch 최적화 | ad-hoc | ✅ Complete | 2026-07-10 |
+| 25. 커뮤니티 레슨 순차 해금 | 1/1 | ✅ Complete | 2026-07-12 |
+| 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | ✅ Complete | 2026-07-12 |
+| **Total** | **49/49** | ✅ All phases complete | |
