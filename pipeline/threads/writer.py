@@ -566,6 +566,8 @@ Gap source: {pitch.get('gap_source','')}
     final_ok, final_reason = validate_final_output(cards)
     if not final_ok:
         _log(f'⚠️ 최종 검증 실패: {final_reason}')
+        for i, card in enumerate(cards, 1):
+            _log(f'   원본 Card {i}: {card[:60]}')
         return []
 
     primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
