@@ -16,29 +16,34 @@ class TestValidateCards:
     def test_valid_card_count(self):
         cards = ["Card one\nline 2", "Card two", "Card three", "Card four", "Card five"]
         pitch = {"hook": "Test hook"}
-        assert validate_cards(cards, pitch) is True
+        ok, reason = validate_cards(cards, pitch)
+        assert ok is True
 
     @pytest.mark.unit
     def test_invalid_card_count_too_few(self):
         cards = ["Card one\nline 2", "Card two"]
         pitch = {"hook": "Test"}
-        assert validate_cards(cards, pitch) is False
+        ok, reason = validate_cards(cards, pitch)
+        assert ok is False
 
     @pytest.mark.unit
     def test_invalid_card_count_too_many(self):
         cards = [f"Card {i}\nline" for i in range(8)]
         pitch = {"hook": "Test"}
-        assert validate_cards(cards, pitch) is False
+        ok, reason = validate_cards(cards, pitch)
+        assert ok is False
 
     @pytest.mark.unit
     def test_first_line_too_short(self):
         cards = ["AB", "Card two\nline", "Card three\nline", "Card four\nline", "Card five\nline"]
         pitch = {"hook": "Test"}
-        assert validate_cards(cards, pitch) is False
+        ok, reason = validate_cards(cards, pitch)
+        assert ok is False
 
     @pytest.mark.unit
     def test_empty_cards(self):
-        assert validate_cards([], {"hook": "Test"}) is False
+        ok, reason = validate_cards([], {"hook": "Test"})
+        assert ok is False
 
 
 class TestValidateYear:
@@ -46,13 +51,15 @@ class TestValidateYear:
     def test_year_valid(self):
         cards = ["Hook line\ncontent", "2026년 3월 15일 발표"]
         article_body = "2026년 3월 15일에 발표된 내용입니다."
-        assert validate_year(cards, article_body) is True
+        ok, reason = validate_year(cards, article_body)
+        assert ok is True
 
     @pytest.mark.unit
     def test_year_hallucinated(self):
         cards = ["Hook line\ncontent", "2025년에 발표된 내용"]
         article_body = "2024년 6월에 발표된 내용입니다."
-        assert validate_year(cards, article_body) is False
+        ok, reason = validate_year(cards, article_body)
+        assert ok is False
 
     @pytest.mark.unit
     def test_current_year_allowed(self):
@@ -60,13 +67,15 @@ class TestValidateYear:
         cy = datetime.now().year
         cards = ["Hook line\ncontent", f"{cy}년 현재"]
         article_body = "기사 내용입니다."
-        assert validate_year(cards, article_body) is True
+        ok, reason = validate_year(cards, article_body)
+        assert ok is True
 
     @pytest.mark.unit
     def test_no_year_in_thread(self):
         cards = ["Hook line\ncontent", "이런 상황이 발생했음"]
         article_body = "2026년에 발표된 내용입니다."
-        assert validate_year(cards, article_body) is True
+        ok, reason = validate_year(cards, article_body)
+        assert ok is True
 
 
 class TestValidateKeywords:
@@ -74,18 +83,21 @@ class TestValidateKeywords:
     def test_keywords_match(self):
         cards = ["첫번째 카드\n인공지능 기술 발전", "두번째 카드\n딥러닝 모델 혁신"]
         article_body = "인공지능 기술 발전과 딥러닝 모델 혁신 인공지능 딥러닝"
-        assert validate_keywords(cards, article_body) is True
+        ok, reason = validate_keywords(cards, article_body)
+        assert ok is True
 
     @pytest.mark.unit
     def test_few_keywords_no_fail(self):
         cards = ["짧은 글"]
         article_body = "짧은 본문"
-        assert validate_keywords(cards, article_body) is True
+        ok, reason = validate_keywords(cards, article_body)
+        assert ok is True
 
     @pytest.mark.unit
     def test_no_body_text(self):
         cards = ["Test card\ncontent"]
-        assert validate_keywords(cards, "") is True
+        ok, reason = validate_keywords(cards, "")
+        assert ok is True
 
 
 class TestValidateFinalOutput:
@@ -210,52 +222,62 @@ class TestValidateModelMessage:
     @pytest.mark.unit
     def test_known_message(self):
         card = "수정할 글자 단위 오류가 발견되지 않았습니다."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_polite_form(self):
         card = "수정이 필요 없습니다."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_short_response(self):
         card = "네"
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_english_message(self):
         card = "No changes needed."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_valid_content(self):
         card = "Mia Taylor는 투표 용지를 촬영해 Claude에게 물었음."
-        assert validate_model_message(card) is True
+        ok, reason = validate_model_message(card)
+        assert ok is True
 
     @pytest.mark.unit
     def test_link_card(self):
         card = "🔗 https://example.com"
-        assert validate_model_message(card) is True
+        ok, reason = validate_model_message(card)
+        assert ok is True
 
     @pytest.mark.unit
     def test_confirmed_message(self):
         card = "확인됨."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_completed_message(self):
         card = "완료했음."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_no_errors_message(self):
         card = "No errors found."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
     @pytest.mark.unit
     def test_returning_original_message(self):
         card = "Returning original content."
-        assert validate_model_message(card) is False
+        ok, reason = validate_model_message(card)
+        assert ok is False
 
 
 class TestValidateCardStructure:

@@ -5,6 +5,28 @@
 
 ---
 
+## 2026-07-16 — Phase 27: Validation logging 추가 + 테스트 수정
+
+### 변경
+- `pipeline/threads/validator.py`:
+  - `validate_cards()` → `tuple[bool, str]` 반환 (실패 이유 포함)
+  - `validate_year()` → `tuple[bool, str]` 반환 (만들어진 연도/없음 표시)
+  - `validate_keywords()` → `tuple[bool, str]` 반환 (잘림/누락 이유)
+  - `validate_model_message()` → `tuple[bool, str]` 반환 (패턴/길이/한글 비율)
+- `pipeline/threads/writer.py`:
+  - 검증 실패 시 상세 이유 로깅 추가 (cards/year/keywords/mm 각각)
+  - 예: "⚠️ 검증 실패: cards=카드 수 부족, year=OK, keywords=OK"
+
+### 의도
+- DeepSeek v4-flash 한자 출력, 기타 검증 실패 원인 파악 불가능
+- 실패 시 어느 검증이 왜 실패했는지 로그에 명시
+- 영구 실패 기사 저장 시 구체적 이유도 함께 기록
+
+### 검증
+- 283/283 테스트 통과
+
+---
+
 ## 2026-07-15 — 저녁 blog-draft launchd 미실행 → pipeline 직접 호출로 전환
 
 ### 변경

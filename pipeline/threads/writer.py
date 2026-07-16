@@ -540,8 +540,14 @@ Gap source: {pitch.get('gap_source','')}
     cards = fix_cards(cards)
     cards = _cleanup_source_attribution(cards)
 
-    if not (validate_cards(cards, pitch, format_choice) and validate_year(cards, article_body_text) and validate_keywords(cards, article_body_text)):
-        _log(f'⚠️ 검증 실패: {len(cards)}개 조각')
+    vc_ok, vc_reason = validate_cards(cards, pitch, format_choice)
+    vy_ok, vy_reason = validate_year(cards, article_body_text)
+    vk_ok, vk_reason = validate_keywords(cards, article_body_text)
+    if not (vc_ok and vy_ok and vk_ok):
+        _log(f'⚠️ 검증 실패:')
+        _log(f'   - cards: {vc_reason}')
+        _log(f'   - year: {vy_reason}')
+        _log(f'   - keywords: {vk_reason}')
         return []
 
     structure_ok, structure_reason = validate_card_structure(cards)
@@ -552,8 +558,9 @@ Gap source: {pitch.get('gap_source','')}
 
     # Model message validation
     for i, card in enumerate(cards, 1):
-        if not validate_model_message(card):
-            _log(f'⚠️ Card {i}: 모델 메시지 탐지')
+        mm_ok, mm_reason = validate_model_message(card)
+        if not mm_ok:
+            _log(f'⚠️ Card {i} 모델 메시지 검증 실패: {mm_reason}')
             return []
 
     final_ok, final_reason = validate_final_output(cards)

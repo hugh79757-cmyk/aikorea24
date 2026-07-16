@@ -1,3 +1,4 @@
+- 2026-07-16 | fix | validation-logging-enhancement | Phase 27: validator.py 4개 함수가 tuple 반환 + writer.py 상세 로깅 추가
 - 2026-07-16 | assessment | gsd-state-update | 모든 Phase(1-26) 코드 완료 확인, 2026-07-16 블로그 6건 미배포 문제 파악
 - 2026-07-15 | feat | telegram-two-stage-notify | 브리핑/블로그 2단계 텔레그램 메시지 구조화 - 브리핑 완료→블로그 15분 후 알림
 - 2026-07-15 | config | blog-schedule-15min-delay | blog-draft 07:00→07:15로 변경 (브리핑 발행 후 딥링크 연결 시간 확보)

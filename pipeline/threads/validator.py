@@ -66,12 +66,16 @@ STOPLIST = {
 def validate_cards(cards, pitch, format_choice='D'):
     """기본 검증 (format별 카드 수 + hook 근사 일치)"""
     lo, hi = FORMAT_CARD_COUNT_TOLERANCE.get(format_choice, (5, 6))
-    if not cards or len(cards) < lo or len(cards) > hi:
-        return False
+    if not cards:
+        return False, "카드 없음"
+    if len(cards) < lo:
+        return False, f"카드 수 부족 ({len(cards)}개, 최소 {lo}개 필요)"
+    if len(cards) > hi:
+        return False, f"카드 수 초과 ({len(cards)}개, 최대 {hi}개 제한)"
     first_line = cards[0].strip().split('\n')[0].strip()
     if len(first_line) < 3:
-        return False
-    return True
+        return False, f"Hook 첫 줄 너무 짧음 ({len(first_line)}자)"
+    return True, "OK"
 
 
 def validate_year(cards, article_body_text):
@@ -93,14 +97,14 @@ def validate_year(cards, article_body_text):
         body_years.add(int(m.group()))
 
     if not rest_years:
-        return True
+        return True, "OK"
 
     allowed = body_years | {current_year}
     invented = rest_years - allowed
     if invented:
-        return False
+        return False, f"만들어진 연도: {invented}"
 
-    return True
+    return True, "OK"
 
 
 def validate_keywords(cards, article_body_text):
@@ -108,7 +112,7 @@ def validate_keywords(cards, article_body_text):
     body_text = article_body_text or ''
     thread_text = ' '.join(cards)
     if not body_text or not thread_text:
-        return True
+        return True, "OK"
 
     body_words = re.findall(r'[가-힣]{2,8}', body_text)
     body_counter = Counter(body_words)
@@ -117,7 +121,7 @@ def validate_keywords(cards, article_body_text):
     keywords = keywords - STOPLIST
 
     if len(keywords) <= 5:
-        return True
+        return True, "OK"
 
     thread_words = set(re.findall(r'[가-힣]{2,}', thread_text))
 
@@ -142,10 +146,10 @@ def validate_keywords(cards, article_body_text):
     if missing:
         critical = [m for m in missing if '잘림' in m[2]]
         if len(critical) >= 3:
-            return False
-        return True
+            return False, f"키워드 {len(critical)}개 잘림/누락"
+        return True, "OK"
 
-    return True
+    return True, "OK"
 
 
 # === 외국어 감지 패턴 ===
@@ -216,24 +220,24 @@ def validate_model_message(card: str) -> bool:
 
     # Skip link cards
     if card.strip().startswith('🔗'):
-        return True
+        return True, "OK"
 
     # Check against all patterns
     for pattern in ALL_MESSAGE_PATTERNS:
         if re.match(pattern, card):
-            return False
+            return False, "모델 메시지 패턴 탐지"
 
     # Structural checks
     # 1. Minimum length
     if len(card) < 20:
-        return False
+        return False, f"최소 길이 미달 ({len(card)}자)"
 
     # 2. Korean content requirement
     korean_chars = len(re.findall(r'[가-힣]', card))
     if len(card) > 0 and korean_chars / len(card) < 0.3:
-        return False
+        return False, f"한글 비율 부족 ({korean_chars}/{len(card)})"
 
-    return True
+    return True, "OK"
 
 
 def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
