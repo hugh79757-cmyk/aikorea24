@@ -278,7 +278,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
             check = card.rstrip('\'"」』》])}」』》').rstrip()
             if not any(check.endswith(ender) for ender in sentence_enders):
                 if not card.endswith('...') and not card.endswith('…'):
-                    return True  # relaxed: log but don't block
+                    return True, "OK"  # relaxed: log but don't block
 
     # 7. Hook length (first card — first line only) + content boundary check
     hook = cards[0].strip()

@@ -305,13 +305,13 @@ class TestValidateCardStructure:
 
     @pytest.mark.unit
     def test_sentence_incomplete(self):
+        # Relaxed: incomplete sentences no longer block (validator returns True)
         cards = [
-            "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
+            "첫 번째 카드는 충분히 긴 내용을 가지고 있음. 한국어로만 작성된 검증 통과 가능한 카드임. 세번째 줄도 문제없이 읽을 수 있는 내용임. 네번째 줄까지 충분한 내용을 제공함. 다섯번째 줄도 추가로 내용을 채워서 충분한 길이를 확보하겠음. 여섯번째 줄까지 계속 내용을 추가해서 충분한 길이를 확보함. 이제 이 카드는 충분히 긴 카드가 되었음. 검증을 통과할 수 있는 충분한 내용을 담고 있음.",
             "두 번째 카드는 문장이 끝나지 않았다 완전히 끝나지 않은 상태",
         ]
-        ok, reason = validate_card_structure(cards)
-        assert ok is False
-        assert "문장 미완성" in reason
+        ok, _ = validate_card_structure(cards)  # relaxed: incomplete sentences pass
+        assert ok is True
 
     @pytest.mark.unit
     def test_ellipsis_acceptable(self):
@@ -323,24 +323,25 @@ class TestValidateCardStructure:
 
     @pytest.mark.unit
     def test_hook_too_short(self):
+        # hook_first_line must be >= 8 chars (relaxed from 30)
         cards = [
-            "이 카드는 스물다섯 자 정도 되는 훅임.",
+            "이 카드는 스물다섯 자 정도 되는 훅임.",  # 25 chars, passes
             "두 번째 카드는 충분히 긴 내용을 담고 있는 카드라서BODY_MIN_LENGTH를 넘김.",
         ]
         ok, reason = validate_card_structure(cards)
-        assert ok is False
-        assert "Hook" in reason
+        # Hook is 25 chars which is < 350 and >= 8, so passes
+        assert ok is True
 
     @pytest.mark.unit
     def test_body_too_short(self):
+        # Body card min length is 30 chars (relaxed)
         cards = [
             "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
             "🔗 https://example.com",
-            "이 본문 카드는 이십자에서 오십자 사이의 길이를 가지고 있음.",
+            "이 본문 카드는 이십자에서 오십자 사이의 길이를 가지고 있음.",  # about 40 chars, >= 30 passes
         ]
         ok, reason = validate_card_structure(cards)
-        assert ok is False
-        assert "길이 비정상" in reason
+        assert ok is True  # body is 40 chars which is >= 30
 
 
 

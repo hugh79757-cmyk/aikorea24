@@ -483,6 +483,49 @@ def main():
     except Exception as e:
         log(f"  ⚠️ 검증 예외: {e}")
 
+    # 6. 자동 배포 (새 블로그 포스트가 생성되었으면)
+    if generated:
+        log("[6] Cloudflare Pages 배포 중...")
+        import subprocess
+        try:
+            # npm run build
+            build_result = subprocess.run(
+                ["npm", "run", "build"],
+                capture_output=True, text=True, timeout=300, cwd=PROJECT_DIR
+            )
+            if build_result.returncode != 0:
+                log(f"  ❌ 빌드 실패: {build_result.stderr[:200]}")
+                send_telegram(f"❌ [{today_str}] 블로그 빌드 실패")
+            else:
+                log("  ✅ 빌드 완료")
+
+                # wrangler pages deploy (auth profile 사용)
+                wrangler = "/opt/homebrew/bin/wrangler"
+                if not os.path.exists(wrangler):
+                    wrangler = "npx"
+                    cmd = [wrangler, "pages", "deploy", "dist",
+                           "--project-name", "aikorea24", "--branch", "main", "--commit-dirty=true"]
+                else:
+                    cmd = [wrangler, "pages", "deploy", "dist",
+                           "--project-name", "aikorea24", "--branch", "main", "--commit-dirty=true"]
+
+                deploy_env = dict(os.environ)
+                deploy_env.pop("CLOUDFLARE_API_TOKEN", None)  # auth profile 우선
+
+                deploy_result = subprocess.run(
+                    cmd, capture_output=True, text=True, timeout=180,
+                    cwd=PROJECT_DIR, env=deploy_env
+                )
+                if deploy_result.returncode == 0:
+                    log("  ✅ 배포 완료: https://aikorea24.kr")
+                    send_telegram(f"🚀 [{today_str}] 블로그 {len(generated)}건 배포 완료")
+                else:
+                    log(f"  ❌ 배포 실패: {deploy_result.stderr[:200]}")
+                    send_telegram(f"❌ [{today_str}] 블로그 배포 실패")
+        except Exception as deploy_e:
+            log(f"  ⚠️ 배포 예외: {deploy_e}")
+            send_telegram(f"⚠️ [{today_str}] 블로그 배포 예외: {str(deploy_e)[:100]}")
+
 
 if __name__ == "__main__":
     main()

@@ -83,7 +83,7 @@ def _make_mock(generate_cards=None):
     """Create a mock_chat that handles the new per-card pipeline.
 
     Uses message content inspection (not call count) to distinguish:
-    - Generate call (contains '=== 피치 ===' or '=== 관련 기사 ===')
+    - Generate call (contains '=== PITCH ===' or '=== ARTICLES ===')
     - Per-card humanize call (contains '다음 카드의 AI 말투')
     - Per-card MiMo call (contains '--- 카드 시작 ---')
 
@@ -96,14 +96,15 @@ def _make_mock(generate_cards=None):
         call_log.append(1)
         user_msg = messages[0]['content'] if messages else ''
 
-        if '=== 피치 ===' in user_msg or '=== 관련 기사 ===' in user_msg:
+        # Match actual markers in user_prompt (ENGLISH: PITCH/ARTICLES)
+        if '=== PITCH ===' in user_msg or '=== ARTICLES ===' in user_msg:
             return json.dumps({"cards": gen_cards})
 
         if '--- 카드 시작 ---' in user_msg:
             return _extract_card_between(user_msg, '--- 카드 시작 ---\n', ['\n--- 카드 끝 ---'])
 
         if '다음 카드의 AI 말투' in user_msg:
-            return _extract_card_between(user_msg, '[카드 내용]\n', ['\n\n[', '\n\n===苏', '\n\n---'])
+            return _extract_card_between(user_msg, '[카드 내용]\n', ['\n\n[', '\n\n---'])
 
         return None
 
@@ -168,7 +169,7 @@ class TestWriteThreadValidationChain:
         cards = write_thread(sample_pitch, sample_articles, format_choice="D")
         assert cards is not None
         assert len(cards) > 0
-        assert len(call_log) >= 12  # 1 generate + 6 humanize + 5 MiMo (link card skipped)
+        assert len(call_log) >= 1  # single-pass DeepSeek generation (humanize/MiMo pipeline removed)
 
     @pytest.mark.integration
     def test_link_card_stripped(self, sample_pitch, sample_articles, monkeypatch):

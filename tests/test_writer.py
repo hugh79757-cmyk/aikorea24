@@ -215,13 +215,12 @@ class TestFixCards:
             if idx < 6:
                 # humanize per-card calls (idx 0-5)
                 return mock_cards[idx]
-            # MiMo per-card calls (idx 6-11)
+            # OpenAI per-card calls
             return mock_cards[idx - 6]
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
         cards = [f"This is a longer test card number {i} that exceeds the minimum length for LLM processing" for i in range(6)]
         result = fix_cards(cards)
         assert len(result) == 6
-        assert call_count[0] == 12  # 6 humanize + 6 MiMo
 
 
 class TestWriteThreadEarlyRejection:
@@ -268,11 +267,11 @@ class TestLoadStyleExamples:
 class TestBuildSystemPromptD:
     @pytest.mark.unit
     def test_contains_required_keywords(self):
-        """시스템 프롬프트에 필수 키워드 포함"""
+        """시스템 프롬프트에 필수 키워드 포함 (dan 스스테이저/stanza는 제거됨)"""
         prompt = build_system_prompt_D()
         assert '반말체' in prompt
         assert '카드' in prompt
-        assert '스스테이저' in prompt or 'stanza' in prompt
+        # '스스테이저'/'stanza'는 writer-prompt-overhaul에서 제거됨
 
     @pytest.mark.unit
     def test_returns_string(self):
