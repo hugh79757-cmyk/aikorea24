@@ -1,3 +1,4 @@
+- 2026-07-17 | fix | threads-literal-n-n-defensive-fix | Threads `\n\n` 리터럴 줄바꿈 누출 — response_format 전달 + add_line_spacing 방어
 - 2026-07-16 | fix | validation-logging-enhancement | Phase 27: validator.py 4개 함수가 tuple 반환 + writer.py 상세 로깅 추가
 - 2026-07-16 | assessment | gsd-state-update | 모든 Phase(1-26) 코드 완료 확인, 2026-07-16 블로그 6건 미배포 문제 파악
 - 2026-07-15 | feat | telegram-two-stage-notify | 브리핑/블로그 2단계 텔레그램 메시지 구조화 - 브리핑 완료→블로그 15분 후 알림

@@ -235,6 +235,8 @@ def parse_cards(text):
 def add_line_spacing(text):
     """AI가 이미 stanza 구조로 작성했다면 유지, 아니면 문장 단위로 공백 추가"""
     import re as _re
+    # 방어: 리터럴 \n → 실제 개행 (DeepSeek JSON 이중 이스케이프 대응)
+    text = text.replace('\\n', '\n')
     # 이미 빈 줄로 구분된 구조면 그대로 반환 (AI가 의도한 리듬 유지)
     if '\n\n' in text.strip():
         return text

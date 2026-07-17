@@ -510,6 +510,7 @@ Gap source: {pitch.get('gap_source','')}
             temperature=0.4,
             max_tokens=16000,
             model_override=model_name,
+            response_format=json_schema,
             extra_body=extra,
         )
 
