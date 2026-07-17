@@ -3060,6 +3060,141 @@
           "date": "2026-07-17"
         }
       ]
+    },
+    {
+      "date": "2026-07-17",
+      "briefing_id": 181,
+      "articles": [
+        {
+          "id": "41104",
+          "title": "중국의 BrainCo, 당신의 생각으로 로봇을 제어할 수 있는 플랫폼을 선보이다",
+          "original_title": "",
+          "description": "가벼운 헤드셋을 착용하고 컵을 집어 올리는 생각을 하면 로봇 팔이 이를 수행한다. 버튼, 음성 명령, 움직임이 필요 없다. BrainCo는 상하이에서 열린 세계 AI 회의(WAIC)에서 이 시연으로 관중을 사로잡았다.",
+          "link": "https://thenextweb.com/news/brainco-brain-to-robot-platform-waic",
+          "entities": [
+            "BrainCo",
+            "WAIC",
+            "AI"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41088",
+          "title": "스마트 안경은 매우 불안하다. 카일리 제너와 같은 유명인들은 왜 이를 지지할까?",
+          "original_title": "",
+          "description": "메타는 안전 기능을 주장하지만, 여성들에게 이 녹음 장치의 위험은 분명합니다. 집을 나설 때마다 만나는 낯선 사람이 비밀리에 나를 녹화하고 있을지도 모른다는 상상은 끔찍합니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/jul/17/ai-meta-smart-glasses",
+          "entities": [],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41111",
+          "title": "시진핑, 개발도상국에 AI 파트너로 중국을 제안하며 리스크와 보안 침해에 대해 경고하다",
+          "original_title": "",
+          "description": "중국은 개발도상국에 AI 교육 및 세미나 프로그램을 통해 5,000개의 기회를 제공하고 다양한 블록과 협력하여 AI를 발전시킬 계획이다.",
+          "link": "https://www.cnbc.com/2026/07/17/x-china-ai-summit-risks-security.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41107",
+          "title": "AI의 가장 치열한 경쟁자들이 한 가지에 동의하다: 최전선 AI를 지금 규제하라",
+          "original_title": "",
+          "description": "가장 강력한 AI를 개발하는 사람들은 종종 많은 것에 동의하지 않는다. 하지만 이번 주, 그들 중 세 명이 한 가지 큰 것에 동의했다. 최전선에 대한 규제가 필요하며, 그것이 곧 이루어져야 한다.",
+          "link": "https://thenextweb.com/news/ai-godfathers-frontier-ai-regulation-converge",
+          "entities": [],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41047",
+          "title": "구글, 제미니 음성을 속도, 에너지 등으로 사용자 지정할 수 있도록 준비 중",
+          "original_title": "",
+          "description": "I/O 이후 두 가지 새로운 옵션을 발표한 구글은 곧 제미니 음성을 네 가지 매개변수로 사용자 지정할 수 있게 할 계획입니다. 이는 사용자 경험을 향상시키기 위한 조치입니다.",
+          "link": "https://9to5google.com/2026/07/16/customize-gemini-voices/",
+          "entities": [],
+          "date": "2026-07-17"
+        },
+        {
+          "id": "41051",
+          "title": "구글, AI 안경이 신뢰 없이는 성공하지 못할 것이라는 사실을 인식하고 - 안드로이드 XR",
+          "original_title": "",
+          "description": "구글의 XR 제품 책임자는 사람들이 공공 장소에서 스마트 안경을 착용하는 데 불편함을 느낀다면 절대 착용하지 않을 것이라고 말하며, 회사는 이러한 현실을 고려해 디자인하고 있습니다.",
+          "link": "https://www.androidcentral.com/wearables/google-integrating-ai-glasses-anti-tampering-protections-android-xr-from-day-one",
+          "entities": [
+            "XR",
+            "AI"
+          ],
+          "date": "2026-07-17"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-18",
+      "briefing_id": 182,
+      "articles": [
+        {
+          "id": "41179",
+          "title": "앤트로픽, 메타로부터 100억 달러의 컴퓨팅 파워 임대 초기 논의 중",
+          "original_title": "",
+          "description": "앤트로픽이 메타로부터 약 100억 달러 규모의 컴퓨팅 파워를 임대하기 위한 초기 논의에 있다고 뉴욕 타임즈가 금요일 보도했다. CNBC도 이 초기 단계 논의를 확인했다. 이 논의는 앤트로픽이 스페이스X와 월 12억 5천만 달러 규모의 계약을 발표한 지 몇 주 후에 이루어진 것이다.",
+          "link": "https://thenextweb.com/news/anthropic-meta-10-billion-compute-deal-talks",
+          "entities": [],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41161",
+          "title": "데이터브릭스, 1,880억 달러 가치 평가에 도달하며 AI의 차세대 스타로 자리매김",
+          "original_title": "",
+          "description": "데이터브릭스는 AI 기업으로의 이미지를 재구성했으며, 코딩을 위한 오픈 웨이트 AI 모델의 비용 절감에 관한 연구를 발표했습니다.",
+          "link": "https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41182",
+          "title": "백악관이 최전선 AI 모델에 대한 접근을 지시하며 기술 대기업의 권력을 이동시키고 있다",
+          "original_title": "",
+          "description": "트럼프 행정부는 최신 최전선 모델에 대한 접근을 누가 받을 수 있는지 통제하기 위한 조치를 취하고 있다고 CNBC에 정통한 소식통이 전했습니다.",
+          "link": "https://www.cnbc.com/2026/07/17/white-house-ai-access-anthropic-openai.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41089",
+          "title": "‘대항 의류’: 얼굴 인식 시스템을 혼란스럽게 만들기 위해 설계된 옷이 주류가 될까?",
+          "original_title": "",
+          "description": "디자이너들은 감시로부터 어느 정도 보호를 제공하는 동시에, 그들의 옷이 개인 정보 보호의 중요성에 대한 강력한 패션 성명이라고 말합니다. 얼굴 인식 기술이 영국의 공공 장소에 도입됨에 따라 새로운 세대의 디자이너들이 개인 정보 보호의 중요성을 강조하고 있습니다.",
+          "link": "https://www.theguardian.com/fashion/2026/jul/17/adversarial-clothing-are-garments-designed-to-confuse-facial-recognition-systems-about-to-go-mainstream",
+          "entities": [],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41166",
+          "title": "저커버그의 잉여 AI 컴퓨팅 판매 계획, 앤트로픽이 첫 큰 고객 될 가능성",
+          "original_title": "",
+          "description": "메타가 앤트로픽과 데이터 센터의 컴퓨팅 용량을 임대하는 논의를 하고 있다고 보도되었습니다. 이 기사는 저커버그의 잉여 AI 컴퓨팅 판매 계획이 앤트로픽이라는 첫 번째 큰 고객을 찾을 수 있다는 내용입니다.",
+          "link": "https://the-decoder.com/zuckerbergs-plan-to-sell-excess-ai-compute-could-finds-its-first-big-customer-in-anthropic/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41169",
+          "title": "애플이 오픈AI를 고소한 이유, 뉴욕이 데이터 센터를 다루는 방법, 사이클로스포리시스에 대",
+          "original_title": "",
+          "description": "오늘의 언캐니 밸리에서는 오픈AI의 법적 및 평판 문제를 살펴보고, 이러한 발전이 특히 안트로픽과의 싸움에서 회사에 더 큰 피해를 줄 수 있는지 논의합니다.",
+          "link": "https://www.wired.com/story/uncanny-valley-podcase-apple-sued-openai-new-york-data-center-moratorium-cyclosporiasis-outbreak/",
+          "entities": [],
+          "date": "2026-07-18"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5859,6 +5994,129 @@
       "link": "https://9to5google.com/2026/07/16/gemini-3-5-pro-delays/",
       "entities": [],
       "date": "2026-07-17"
+    },
+    {
+      "id": "41104",
+      "title": "중국의 BrainCo, 당신의 생각으로 로봇을 제어할 수 있는 플랫폼을 선보이다",
+      "original_title": "",
+      "description": "가벼운 헤드셋을 착용하고 컵을 집어 올리는 생각을 하면 로봇 팔이 이를 수행한다. 버튼, 음성 명령, 움직임이 필요 없다. BrainCo는 상하이에서 열린 세계 AI 회의(WAIC)에서 이 시연으로 관중을 사로잡았다.",
+      "link": "https://thenextweb.com/news/brainco-brain-to-robot-platform-waic",
+      "entities": [
+        "BrainCo",
+        "WAIC",
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41088",
+      "title": "스마트 안경은 매우 불안하다. 카일리 제너와 같은 유명인들은 왜 이를 지지할까?",
+      "original_title": "",
+      "description": "메타는 안전 기능을 주장하지만, 여성들에게 이 녹음 장치의 위험은 분명합니다. 집을 나설 때마다 만나는 낯선 사람이 비밀리에 나를 녹화하고 있을지도 모른다는 상상은 끔찍합니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/jul/17/ai-meta-smart-glasses",
+      "entities": [],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41111",
+      "title": "시진핑, 개발도상국에 AI 파트너로 중국을 제안하며 리스크와 보안 침해에 대해 경고하다",
+      "original_title": "",
+      "description": "중국은 개발도상국에 AI 교육 및 세미나 프로그램을 통해 5,000개의 기회를 제공하고 다양한 블록과 협력하여 AI를 발전시킬 계획이다.",
+      "link": "https://www.cnbc.com/2026/07/17/x-china-ai-summit-risks-security.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41107",
+      "title": "AI의 가장 치열한 경쟁자들이 한 가지에 동의하다: 최전선 AI를 지금 규제하라",
+      "original_title": "",
+      "description": "가장 강력한 AI를 개발하는 사람들은 종종 많은 것에 동의하지 않는다. 하지만 이번 주, 그들 중 세 명이 한 가지 큰 것에 동의했다. 최전선에 대한 규제가 필요하며, 그것이 곧 이루어져야 한다.",
+      "link": "https://thenextweb.com/news/ai-godfathers-frontier-ai-regulation-converge",
+      "entities": [],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41047",
+      "title": "구글, 제미니 음성을 속도, 에너지 등으로 사용자 지정할 수 있도록 준비 중",
+      "original_title": "",
+      "description": "I/O 이후 두 가지 새로운 옵션을 발표한 구글은 곧 제미니 음성을 네 가지 매개변수로 사용자 지정할 수 있게 할 계획입니다. 이는 사용자 경험을 향상시키기 위한 조치입니다.",
+      "link": "https://9to5google.com/2026/07/16/customize-gemini-voices/",
+      "entities": [],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41051",
+      "title": "구글, AI 안경이 신뢰 없이는 성공하지 못할 것이라는 사실을 인식하고 - 안드로이드 XR",
+      "original_title": "",
+      "description": "구글의 XR 제품 책임자는 사람들이 공공 장소에서 스마트 안경을 착용하는 데 불편함을 느낀다면 절대 착용하지 않을 것이라고 말하며, 회사는 이러한 현실을 고려해 디자인하고 있습니다.",
+      "link": "https://www.androidcentral.com/wearables/google-integrating-ai-glasses-anti-tampering-protections-android-xr-from-day-one",
+      "entities": [
+        "XR",
+        "AI"
+      ],
+      "date": "2026-07-17"
+    },
+    {
+      "id": "41179",
+      "title": "앤트로픽, 메타로부터 100억 달러의 컴퓨팅 파워 임대 초기 논의 중",
+      "original_title": "",
+      "description": "앤트로픽이 메타로부터 약 100억 달러 규모의 컴퓨팅 파워를 임대하기 위한 초기 논의에 있다고 뉴욕 타임즈가 금요일 보도했다. CNBC도 이 초기 단계 논의를 확인했다. 이 논의는 앤트로픽이 스페이스X와 월 12억 5천만 달러 규모의 계약을 발표한 지 몇 주 후에 이루어진 것이다.",
+      "link": "https://thenextweb.com/news/anthropic-meta-10-billion-compute-deal-talks",
+      "entities": [],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41161",
+      "title": "데이터브릭스, 1,880억 달러 가치 평가에 도달하며 AI의 차세대 스타로 자리매김",
+      "original_title": "",
+      "description": "데이터브릭스는 AI 기업으로의 이미지를 재구성했으며, 코딩을 위한 오픈 웨이트 AI 모델의 비용 절감에 관한 연구를 발표했습니다.",
+      "link": "https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41182",
+      "title": "백악관이 최전선 AI 모델에 대한 접근을 지시하며 기술 대기업의 권력을 이동시키고 있다",
+      "original_title": "",
+      "description": "트럼프 행정부는 최신 최전선 모델에 대한 접근을 누가 받을 수 있는지 통제하기 위한 조치를 취하고 있다고 CNBC에 정통한 소식통이 전했습니다.",
+      "link": "https://www.cnbc.com/2026/07/17/white-house-ai-access-anthropic-openai.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41089",
+      "title": "‘대항 의류’: 얼굴 인식 시스템을 혼란스럽게 만들기 위해 설계된 옷이 주류가 될까?",
+      "original_title": "",
+      "description": "디자이너들은 감시로부터 어느 정도 보호를 제공하는 동시에, 그들의 옷이 개인 정보 보호의 중요성에 대한 강력한 패션 성명이라고 말합니다. 얼굴 인식 기술이 영국의 공공 장소에 도입됨에 따라 새로운 세대의 디자이너들이 개인 정보 보호의 중요성을 강조하고 있습니다.",
+      "link": "https://www.theguardian.com/fashion/2026/jul/17/adversarial-clothing-are-garments-designed-to-confuse-facial-recognition-systems-about-to-go-mainstream",
+      "entities": [],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41166",
+      "title": "저커버그의 잉여 AI 컴퓨팅 판매 계획, 앤트로픽이 첫 큰 고객 될 가능성",
+      "original_title": "",
+      "description": "메타가 앤트로픽과 데이터 센터의 컴퓨팅 용량을 임대하는 논의를 하고 있다고 보도되었습니다. 이 기사는 저커버그의 잉여 AI 컴퓨팅 판매 계획이 앤트로픽이라는 첫 번째 큰 고객을 찾을 수 있다는 내용입니다.",
+      "link": "https://the-decoder.com/zuckerbergs-plan-to-sell-excess-ai-compute-could-finds-its-first-big-customer-in-anthropic/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41169",
+      "title": "애플이 오픈AI를 고소한 이유, 뉴욕이 데이터 센터를 다루는 방법, 사이클로스포리시스에 대",
+      "original_title": "",
+      "description": "오늘의 언캐니 밸리에서는 오픈AI의 법적 및 평판 문제를 살펴보고, 이러한 발전이 특히 안트로픽과의 싸움에서 회사에 더 큰 피해를 줄 수 있는지 논의합니다.",
+      "link": "https://www.wired.com/story/uncanny-valley-podcase-apple-sued-openai-new-york-data-center-moratorium-cyclosporiasis-outbreak/",
+      "entities": [],
+      "date": "2026-07-18"
     }
   ]
 }

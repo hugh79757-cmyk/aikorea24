@@ -25,7 +25,17 @@ save_draft hexdump에서 `5c 6e 5c 6e` (리터럴 `\n\n`) 확인됨 — Threads�
 1. **writer.py**: `json_schema = {"type": "json_object"}`가 선언만 되어있던 것을 `_try_model()`의 `chat_completion()` 호출에 `response_format` 파라미터로 전달 — API 수준에서 JSON 출력 강제
 2. **publisher.py**: `add_line_spacing()` 시작부에 `text.replace('\\n', '\n')` 추가 — 모델이 `\\n`을 출력해도 실제 개행으로 변환하는 2차 방어
 
-## Verification
-- hexdump로 `\n\n` 리터럴 확인 후 grep 검증: 7/12~7/16 40+개 초안은 전부 clean, 7/17 07:35 1건만 42회 발생 확인
-- 오늘 07:35 초안이 유일한 발병 사례 — DeepSeek API 측 행동 변경이 원인
-- 수정 후 발행 테스트는 다음 launchd 스케줄(2시간 간격)에서 자동 검증
+## Additional: 종결어미 ~다 일괄 전환 문제
+- 15:54 발행에서 모든 문장이 `~다/~했다`로 종결 — 조회수 300 (정상 1000+)
+- 동일한 DeepSeek API 행동 변경의 영향으로 추정
+- **시도 1 (hard ban)**: `~다/~했다/~ㄴ다 절대 금지` → 롤백 (모델 창의성 저해 우려)
+- **시도 2 (soft guidance)**: `종결어미 ~임/~했음/~있음 중심. ~다/~했다 신문 기사체 지양` → 최종 채택
+- 원칙: 금지가 아닌 이유(대화체 vs 신문 기사체)를 알려주는 soft guidance. 모델 판단 존중.
+
+## Files changed (additional)
+- `pipeline/threads/writer.py` (line 58): 종결어미 영문 → 한국어 soft guidance로 교체
+
+## Monitoring
+- `\n\n` 리터럴: 다음 발행부터 정상 줄바꿈 예상
+- 종결어미 `~임`/`~다` 비율: 모니터링 필요
+- 조회수 추이: 300(비정상) vs 1000+(정상) — `~다` 비중과 상관관계 확인
