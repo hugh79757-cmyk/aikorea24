@@ -55,7 +55,7 @@ FORMAT:
 - Each card: max 500 characters (Threads API hard limit) — 각 카드는 이 공간을 충분히 활용해 구체적인 숫자·인용·비교 등 정보를 전달할 것
 
 CONSTRAINTS:
-- 종결어미 반드시 ~임/~했음/~있음/~함/~아님. ~다/~했다/~ㄴ다/~합니다/~입니다 절대 금지.
+- Write in 반말체 (~임, ~했음, ~있음). NEVER use ~합니다/~입니다.
 - 고유명사(기업·인물·제품명)는 영어 원문 유지 (예: 화웨이→Huawei, 앤트로픽→Anthropic, 오픈AI→OpenAI)
 - 한자·일본어·히라가나·가타카나 절대 금지 — 발행이 차단됨
 - DO NOT include pitch metadata labels like "핵심 이야기:", "반전:", "감정:" in the thread
