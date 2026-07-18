@@ -111,7 +111,6 @@ def normalize_output(hook: str, narrative: str) -> dict:
 _LANG_SECTION = """
 [언어 규칙 - 최우선]
 - 모든 문장은 반드시 한국어로 작성한다.
-- 고유명사(기업명, 인물명, 제품명, 기술명)만 영어 원문을 유지한다.
 - 고유명사가 문장 맨 앞에 와도 해당 문장은 한국어로 시작해야 한다.
 - 예시:
   ✓ "Boeing의 Wisk Aero가 FAA 테스트 축소 의혹으로 내부고발 소송에 직면했다."

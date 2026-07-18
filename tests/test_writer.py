@@ -9,7 +9,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts" / "thr
 
 from pipeline.threads.writer import (
     parse_cards_json_first, save_draft,
-    _clean_english_leakage, _fix_korean_particle_spacing,
     _cleanup_source_attribution, _strip_instruction_leak,
     assemble_final, humanize_cards, fix_cards,
     load_style_examples, build_system_prompt_D,
@@ -81,30 +80,6 @@ class TestParseCardsJSONFirst:
         result = parse_cards_json_first(json_str, 'D')
         assert len(result) == 6
         assert result[-1].startswith('🔗')
-
-
-class TestCleanEnglishLeakage:
-    @pytest.mark.unit
-    def test_removes_leakage(self):
-        result = _clean_english_leakage("한글English한글")
-        assert "English" not in result
-
-    @pytest.mark.unit
-    def test_no_leakage(self):
-        text = "순수 한글 텍스트입니다."
-        assert _clean_english_leakage(text) == text
-
-
-class TestFixKoreanParticleSpacing:
-    @pytest.mark.unit
-    def test_adds_space(self):
-        result = _fix_korean_particle_spacing("AI가")
-        assert "AI 가" in result
-
-    @pytest.mark.unit
-    def test_no_change(self):
-        text = "안녕하세요"
-        assert _fix_korean_particle_spacing(text) == text
 
 
 class TestStripInstructionLeak:
@@ -200,27 +175,6 @@ class TestHumanizeCards:
         cards = ["short"]
         result = humanize_cards(cards)
         assert result == cards  # 내용 동일 (per-card는 새 리스트 반환)
-
-
-class TestFixCards:
-    @pytest.mark.unit
-    def test_fix_cards_preserves_card_count(self, monkeypatch):
-        """fix_cards: 6개 카드 입력 → 항상 6개 카드 출력 (per-card invariant)"""
-        import v3.model_router
-        call_count = [0]
-        mock_cards = [f"This is a longer test card number {i} that exceeds the minimum length for LLM processing" for i in range(6)]
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
-            idx = call_count[0]
-            call_count[0] += 1
-            if idx < 6:
-                # humanize per-card calls (idx 0-5)
-                return mock_cards[idx]
-            # OpenAI per-card calls
-            return mock_cards[idx - 6]
-        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = [f"This is a longer test card number {i} that exceeds the minimum length for LLM processing" for i in range(6)]
-        result = fix_cards(cards)
-        assert len(result) == 6
 
 
 class TestWriteThreadEarlyRejection:
@@ -387,33 +341,6 @@ class TestStripModelExplanatory:
         filtered = _strip_model_explanatory(result)
         # '변경 사항이' 패턴은 끝부분 '없' 불일치 → 유지
         assert "변경 사항이 중요하다고" in filtered
-
-
-class TestFixCardsModelMessage:
-    """fix_cards에서 모델 메시지 필터링 통합 테스트"""
-
-    @pytest.mark.unit
-    def test_model_message_filtered(self, monkeypatch):
-        """모델 메시지가 fix_cards 출력에서 제거되는지 검증"""
-        import v3.model_router
-        call_count = [0]
-        def mock_chat(*, system_prompt, messages, temperature, max_tokens, **kwargs):
-            idx = call_count[0]
-            call_count[0] += 1
-            if idx < 6:
-                # humanize per-card: return original card
-                return f"This is a longer test card number {idx} that exceeds the minimum"
-            # MiMo per-card: model message for card 0, normal for rest
-            if idx == 6:
-                return "수정할 게 없습니다."
-            return f"fixed card {idx - 7}"
-        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = [f"This is a longer test card number {i} that exceeds the minimum" for i in range(6)]
-        result = fix_cards(cards)
-        assert len(result) == 6
-        # Card 0: model message stripped → original kept
-        # Cards 1-5: fixed
-        assert "수정할 게 없습니다" not in result[0]
 
 
 class TestHumanizeCardsModelMessage:

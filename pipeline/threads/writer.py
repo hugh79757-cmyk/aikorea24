@@ -56,7 +56,6 @@ FORMAT:
 
 CONSTRAINTS:
 - 종결어미 ~임/~했음/~있음 중심 (대화하듯 자연스럽게). ~다/~했다 신문 기사체는 Threads에 부자연스러우니 지양.
-- 고유명사(기업·인물·제품명)는 영어 원문 유지 (예: 화웨이→Huawei, 앤트로픽→Anthropic, 오픈AI→OpenAI)
 - 한자·일본어·히라가나·가타카나 절대 금지 — 발행이 차단됨
 - DO NOT include pitch metadata labels like "핵심 이야기:", "반전:", "감정:" in the thread
 - DO NOT include explanatory text, reasoning, or anything outside the JSON output
@@ -259,23 +258,7 @@ def _cleanup_source_attribution(cards):
     return cleaned
 
 
-def _clean_english_leakage(text):
-    text = re.sub(r'([가-힣])([A-Za-z][A-Za-z ]{1,30}?)([가-힣])', r'\1\3', text)
-    text = re.sub(r'([가-힣])([A-Za-z][A-Za-z ]{1,30})$', r'\1', text)
-    text = re.sub(r'([가-힣])([A-Za-z][A-Za-z ]{1,30}?)\n', r'\1\n', text)
-    return text
-
-
-def _fix_korean_particle_spacing(text):
-    text = re.sub(r'([A-Za-z][A-Za-z0-9.+#]*)([가-힣])', r'\1 \2', text)
-    return text
-
-
 def fix_cards(cards):
-    cards = [_clean_english_leakage(c) for c in cards]
-    cards = [_fix_korean_particle_spacing(c) for c in cards]
-    cards = [_clean_english_leakage(c) for c in cards]
-    cards = [_fix_korean_particle_spacing(c) for c in cards]
     return cards
 
 

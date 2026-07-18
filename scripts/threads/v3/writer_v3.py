@@ -18,7 +18,6 @@ from pipeline.threads.writer import (  # noqa: F401, E402
     humanize_cards, load_style_examples, build_system_prompt_D,
     FORMAT_LABELS, FORMAT_BUILDERS, INSTRUCTION_PATTERNS,
     STYLE_EXAMPLES_PATH,
-    _clean_english_leakage, _fix_korean_particle_spacing,
     _cleanup_source_attribution, _strip_instruction_leak,
 )
 
