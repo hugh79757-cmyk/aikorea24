@@ -3,9 +3,9 @@ gsd_state_version: 1.1
 milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: all_plans_complete
-stopped_at: 완료 — Phase 27 validation logging (2026-07-16)
-last_updated: 2026-07-16T12:15:00.000Z
-last_activity: 2026-07-16
+stopped_at: 완료 — pipeline-path-bug 수정 + Telegram 중앙화 리팩터 + 7/18 블로그 12건 배포 (2026-07-20)
+last_updated: 2026-07-20T21:00:00.000Z
+last_activity: 2026-07-20
 progress:
   total_phases: 26
   completed_phases: 26
@@ -195,7 +195,7 @@ None.
 
 | Issue | Status | Workaround |
 |-------|--------|------------|
-| 2026-07-16 블로그 6건 미배포 | 🐛 버그 | 수동 배포 필요 |
+| (2026-07-16 블로그 6건 미배포 → ✅ 7/20 수동 배포 완료) | | |
 
 ### Deferred Items
 
@@ -206,6 +206,6 @@ None.
 
 ## Session Continuity
 
-Current session: 2026-07-16T06:30:00.000Z
-Stopped at: GSD 상태 문서 업데이트 완료 — 2026-07-16 블로그 배포 필요
-Next: 2026-07-16 블로그 6건 커밋 + 배포
+Current session: 2026-07-20T19:00:00.000Z
+Stopped at: pipeline-path-bug 수정 + Telegram 중앙화 리팩터 + 7/18 블로그 12건 배포 완료
+Next: 내일 아침 파이프라인 정상 실행 확인
