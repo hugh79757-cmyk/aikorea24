@@ -1,3 +1,4 @@
+- 2026-07-20 | fix | pipeline-path-bug | run_pipeline_with_notify.py SCRIPTS_DIR scripts/scripts/ 중복 — 7/19-20 블로그 발행 0건
 - 2026-07-18 | refactor | remove-keep-english-rule | 고유명사 영어 원문 유지 규칙 제거 + 후처리 제거 — 모델 자유도 향상
 - 2026-07-17 | fix | threads-ending-style-soft-guidance | 종결어미 ~다 일괄 전환 — soft guidance 적용 (hard ban → 롤백 → 지양)
 - 2026-07-17 | fix | threads-literal-n-n-defensive-fix | Threads `\n\n` 리터럴 줄바꿈 누출 — response_format 전달 + add_line_spacing 방어
