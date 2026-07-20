@@ -449,26 +449,7 @@ def update_seeds(new_seed_list, current_seeds):
     return final
 
 
-# ============================================
-# STEP 7: 텔레그램 알림
-# ============================================
-def send_telegram(message):
-    import requests
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
-        return
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    try:
-        requests.post(url, json={
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        })
-        log("  텔레그램 알림 전송 완료")
-    except Exception as e:
-        log(f"  텔레그램 전송 실패: {e}")
+from pipeline.infra.telegram import send_telegram
 
 
 # ============================================

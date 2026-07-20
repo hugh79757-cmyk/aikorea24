@@ -1,3 +1,4 @@
+- 2026-07-18 | refactor | remove-keep-english-rule | 고유명사 영어 원문 유지 규칙 제거 + 후처리 제거 — 모델 자유도 향상
 - 2026-07-17 | fix | threads-ending-style-soft-guidance | 종결어미 ~다 일괄 전환 — soft guidance 적용 (hard ban → 롤백 → 지양)
 - 2026-07-17 | fix | threads-literal-n-n-defensive-fix | Threads `\n\n` 리터럴 줄바꿈 누출 — response_format 전달 + add_line_spacing 방어
 - 2026-07-16 | fix | validation-logging-enhancement | Phase 27: validator.py 4개 함수가 tuple 반환 + writer.py 상세 로깅 추가

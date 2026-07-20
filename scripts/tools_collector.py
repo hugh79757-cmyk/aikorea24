@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.join(_PROJECT_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(_PROJECT_DIR, 'api_test'))
 
 from pipeline.infra.logger import get_scrubbed_logger
+from pipeline.instagram.utils import slugify
 logger = get_scrubbed_logger(__name__)
 
 from pipeline.infra.env_loader import EnvConfig
@@ -800,6 +801,9 @@ def title_to_slug(name: str) -> str:
     return s
 
 
+from pipeline.infra.telegram import send_telegram
+
+
 # ============================================
 # GPT 한국어 메타데이터 생성 (with im-not-ai 1단계)
 # ============================================
@@ -991,14 +995,7 @@ def generate_metadata(tool_info: dict) -> dict:
 # MD 파일 생성
 # ============================================
 def slugify(name: str) -> str:
-    s = name.lower().strip()
-    s = re.sub(r'[^a-z0-9가-힣]', '-', s)
-    s = re.sub(r'-+', '-', s)
-    s = s.strip('-')
-    # 50자 제한 + trailing - 제거
-    if len(s) > 50:
-        s = s[:50].rstrip('-')
-    return s
+    return title_to_slug(name)
 
 
 def validate_tool_url(url: str) -> bool:
@@ -1208,29 +1205,6 @@ def save_tool_md(name: str, meta: dict, order: int, tool_url: str = '') -> str:
         f.write(content)
     print(f"  저장: {filepath}")
     return slug
-
-
-# ============================================
-# 텔레그램 알림 (news_collector 패턴 재사용)
-# ============================================
-def send_telegram(message: str) -> None:
-    import requests
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
-        print("  텔레그램 토큰/챗ID 없음, 알림 스킵")
-        return
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    try:
-        requests.post(url, json={
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        })
-        print("  텔레그램 알림 전송 완료")
-    except Exception as e:
-        print(f"  텔레그램 전송 실패: {e}")
 
 
 # ============================================

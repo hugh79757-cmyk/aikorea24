@@ -23,7 +23,6 @@ from PIL import Image
 from openai import OpenAI
 
 from pipeline.infra.logger import get_scrubbed_logger
-from pipeline.infra.retry import retry
 logger = get_scrubbed_logger(__name__)
 
 PROJECT_DIR = Path(__file__).resolve().parent.parent
@@ -117,7 +116,6 @@ def _extract_deepseek_keyword(description):
         return None
 
 
-@retry(max_retries=3, delay=1.0, backoff=2.0)
 def search_pexels(query, per_page=15):
     api_key = _load_pexels_key()
     if not api_key:
@@ -139,7 +137,6 @@ def search_pexels(query, per_page=15):
         return []
 
 
-@retry(max_retries=3, delay=1.0, backoff=2.0)
 def download_image(url):
     try:
         headers = {"User-Agent": USER_AGENT}

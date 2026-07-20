@@ -1,8 +1,8 @@
 from pipeline.infra.config import project_root
 from pipeline.infra.env_loader import EnvConfig
 from pipeline.infra.models import NewsArticle, BriefingItem, ThreadsPost, PipelineStepResult, PipelineRun
-from pipeline.infra.retry import retry
 from pipeline.infra.d1_client import d1_query
+from pipeline.infra.telegram import send_telegram
 from pipeline.infra.logger import (
     get_scrubbed_logger,
     ScrubRegistry,
@@ -21,8 +21,8 @@ __all__ = [
     "ThreadsPost",
     "PipelineStepResult",
     "PipelineRun",
-    "retry",
     "d1_query",
+    "send_telegram",
     "get_scrubbed_logger",
     "ScrubRegistry",
     "ScrubLogFilter",

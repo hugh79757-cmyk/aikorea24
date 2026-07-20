@@ -333,27 +333,8 @@ def save_outline(keyword_name, search_volume, grade, intent, outline_text, artic
     return filepath, keyword_name
 
 
-# ============================================
-# 텔레그램 알림
-# ============================================
-def send_telegram(message):
-    import requests
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
-        log("  텔레그램 토큰/챗ID 없음, 알림 스킵")
-        return
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    try:
-        requests.post(url, json={
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        })
-        log("  텔레그램 알림 전송 완료")
-    except Exception as e:
-        log(f"  텔레그램 전송 실패: {e}")
+from pipeline.infra.telegram import send_telegram
+
 
 # ============================================
 # 메인

@@ -19,6 +19,7 @@ _config.load_to_environ()
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
 from pipeline.infra.logger import get_scrubbed_logger
+from pipeline.infra.telegram import send_telegram
 logger = get_scrubbed_logger(__name__)
 
 THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
@@ -38,25 +39,6 @@ def log(msg):
     print(f'[{ts}] {msg}')
     with open(os.path.join(LOGS_DIR, datetime.now().strftime('%Y-%m-%d') + '.log'), 'a', encoding='utf-8') as f:
         f.write(f'[{ts}] [v3] {msg}\n')
-
-def send_telegram(message):
-    import requests
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
-        log("  텔레그램 토큰/챗ID 없음, 알림 스킵")
-        return
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    try:
-        requests.post(url, json={
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        })
-    except Exception as e:
-        log(f"  텔레그램 전송 실패: {e}")
-
 
 def _normalize_article_ids(pitch):
     """LLM 응답에서 article_ids가 int 또는 list일 수 있으므로 항상 list로 정규화"""

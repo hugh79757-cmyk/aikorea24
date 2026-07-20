@@ -13,6 +13,7 @@ sys.path.insert(0, os.path.join(_script_dir, '..', '..'))
 sys.path.insert(0, os.path.join(_script_dir, '..', '..', 'scripts', 'threads', 'v3'))
 
 from pipeline.infra.logger import get_scrubbed_logger
+from pipeline.infra.telegram import send_telegram
 logger = get_scrubbed_logger(__name__)
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
@@ -438,29 +439,6 @@ def save_thread_md(
         f.write(md)
     log(f"  저장: {filename}")
     return filepath, topic
-
-
-# ============================================
-# STEP 6: 텔레그램 알림
-# ============================================
-def send_telegram(message: str) -> None:
-    import requests
-    token = os.environ.get("TELEGRAM_BOT_TOKEN", "")
-    chat_id = os.environ.get("TELEGRAM_CHAT_ID", "")
-    if not token or not chat_id:
-        log("  텔레그램 토큰/챗ID 없음, 알림 스킵")
-        return
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    try:
-        requests.post(url, json={
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "HTML",
-            "disable_web_page_preview": True,
-        })
-        log("  텔레그램 알림 전송 완료")
-    except Exception as e:
-        log(f"  텔레그램 전송 실패: {e}")
 
 
 # ============================================

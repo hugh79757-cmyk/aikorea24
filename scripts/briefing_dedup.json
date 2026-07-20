@@ -3195,6 +3195,78 @@
           "date": "2026-07-18"
         }
       ]
+    },
+    {
+      "date": "2026-07-18",
+      "briefing_id": 183,
+      "articles": [
+        {
+          "id": "41208",
+          "title": "닐 리머는 AI 자금이 다시 나올 것이라고 생각한다",
+          "original_title": "",
+          "description": "인덱스 벤처스를 공동 설립한 벤처 자본가 닐 리머는 실리콘밸리에서 AI가 창출하고 있는 역사적인 부가 자발적이든 비자발적이든 재분배되어야 할 것이라고 예측하고 있다.",
+          "link": "https://techcrunch.com/2026/07/17/neil-rimer-thinks-the-ai-money-is-coming-back-out/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41226",
+          "title": "프랑스 스타트업이 AI를 핵심으로 한 방사선 이미징 뷰어를 처음부터 만들었습니다. 모피트 ",
+          "original_title": "",
+          "description": "파리 및 실리콘밸리에 본사를 둔 방사선 스타트업 Raidium은 미국의 암 연구 기관인 모피트 암센터에서 AI 기반의 이미징 플랫폼을 출범했습니다. 'Raidium Read'라고 불리는 이 플랫폼은 모피트의 기존 방사선 응용 프로그램을 대체했습니다.",
+          "link": "https://thenextweb.com/news/raidium-ai-radiology-moffitt-cancer-center-us-launch",
+          "entities": [
+            "Read",
+            "AI",
+            "Raidium"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41211",
+          "title": "중국의 새로운 세계 인공지능 협력 기구는 시 주석의 평행한 AI 질서 구축을 위한 가장 명",
+          "original_title": "",
+          "description": "상하이에서 열린 세계 AI 컨퍼런스에서 시진핑 주석은 글로벌 남반구 국가들을 위한 5,000개의 AI 교육 기회를 발표하고 \"세계 인공지능 협력 기구\"를 출범한다고 발표했습니다. ASEAN, 아프리카 연합, BRICS 등과의 협력 센터도 계획되고 있습니다.",
+          "link": "https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/",
+          "entities": [
+            "BRICS",
+            "AI",
+            "ASEAN"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41214",
+          "title": "구글의 새로운 제민아이 사용량 계산 방식과 추적 방법",
+          "original_title": "",
+          "description": "구글이 사용량 쿼터 집계 방식을 변경하면서, 이전처럼 많은 AI 응답을 받지 못할 수 있습니다. 이에 따라 어떤 변화가 있었는지 확인하고 자신의 사용량을 효과적으로 추적할 수 있는 방법을 알아보세요.",
+          "link": "https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41230",
+          "title": "엔비디아 CEO가 착용한 가죽 재킷, 소더비 경매에서 100만 달러 미만에 낙찰",
+          "original_title": "",
+          "description": "이 의류의 높은 가격은 수집가들이 인공지능 붐에서 나온 아티팩트와 수집품에 입찰할 준비를 하고 있다는 신호입니다.",
+          "link": "https://www.cnbc.com/2026/07/17/leather-jacket-worn-by-nvidia-ceo-goes-for-just-under-1-million-at-sothebys-auction-.html",
+          "entities": [],
+          "date": "2026-07-18"
+        },
+        {
+          "id": "41170",
+          "title": "iOS 27의 저평가된 5가지 기능, 내 아이폰을 훨씬 더 좋게 만들어 준다 - 그리고 모",
+          "original_title": "",
+          "description": "iOS 27에서 내가 가장 좋아하는 새로운 기능 몇 가지가 주목받지 못하고 있지만, 그 영향력은 결코 적지 않습니다.",
+          "link": "https://www.zdnet.com/article/i-used-ios-27-for-a-month-and-these-5-non-siri-ai-features-are-already-making-my-life-easier/",
+          "entities": [],
+          "date": "2026-07-18"
+        }
+      ]
     }
   ],
   "articles": [
@@ -6115,6 +6187,72 @@
       "original_title": "",
       "description": "오늘의 언캐니 밸리에서는 오픈AI의 법적 및 평판 문제를 살펴보고, 이러한 발전이 특히 안트로픽과의 싸움에서 회사에 더 큰 피해를 줄 수 있는지 논의합니다.",
       "link": "https://www.wired.com/story/uncanny-valley-podcase-apple-sued-openai-new-york-data-center-moratorium-cyclosporiasis-outbreak/",
+      "entities": [],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41208",
+      "title": "닐 리머는 AI 자금이 다시 나올 것이라고 생각한다",
+      "original_title": "",
+      "description": "인덱스 벤처스를 공동 설립한 벤처 자본가 닐 리머는 실리콘밸리에서 AI가 창출하고 있는 역사적인 부가 자발적이든 비자발적이든 재분배되어야 할 것이라고 예측하고 있다.",
+      "link": "https://techcrunch.com/2026/07/17/neil-rimer-thinks-the-ai-money-is-coming-back-out/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41226",
+      "title": "프랑스 스타트업이 AI를 핵심으로 한 방사선 이미징 뷰어를 처음부터 만들었습니다. 모피트 ",
+      "original_title": "",
+      "description": "파리 및 실리콘밸리에 본사를 둔 방사선 스타트업 Raidium은 미국의 암 연구 기관인 모피트 암센터에서 AI 기반의 이미징 플랫폼을 출범했습니다. 'Raidium Read'라고 불리는 이 플랫폼은 모피트의 기존 방사선 응용 프로그램을 대체했습니다.",
+      "link": "https://thenextweb.com/news/raidium-ai-radiology-moffitt-cancer-center-us-launch",
+      "entities": [
+        "Read",
+        "AI",
+        "Raidium"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41211",
+      "title": "중국의 새로운 세계 인공지능 협력 기구는 시 주석의 평행한 AI 질서 구축을 위한 가장 명",
+      "original_title": "",
+      "description": "상하이에서 열린 세계 AI 컨퍼런스에서 시진핑 주석은 글로벌 남반구 국가들을 위한 5,000개의 AI 교육 기회를 발표하고 \"세계 인공지능 협력 기구\"를 출범한다고 발표했습니다. ASEAN, 아프리카 연합, BRICS 등과의 협력 센터도 계획되고 있습니다.",
+      "link": "https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/",
+      "entities": [
+        "BRICS",
+        "AI",
+        "ASEAN"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41214",
+      "title": "구글의 새로운 제민아이 사용량 계산 방식과 추적 방법",
+      "original_title": "",
+      "description": "구글이 사용량 쿼터 집계 방식을 변경하면서, 이전처럼 많은 AI 응답을 받지 못할 수 있습니다. 이에 따라 어떤 변화가 있었는지 확인하고 자신의 사용량을 효과적으로 추적할 수 있는 방법을 알아보세요.",
+      "link": "https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41230",
+      "title": "엔비디아 CEO가 착용한 가죽 재킷, 소더비 경매에서 100만 달러 미만에 낙찰",
+      "original_title": "",
+      "description": "이 의류의 높은 가격은 수집가들이 인공지능 붐에서 나온 아티팩트와 수집품에 입찰할 준비를 하고 있다는 신호입니다.",
+      "link": "https://www.cnbc.com/2026/07/17/leather-jacket-worn-by-nvidia-ceo-goes-for-just-under-1-million-at-sothebys-auction-.html",
+      "entities": [],
+      "date": "2026-07-18"
+    },
+    {
+      "id": "41170",
+      "title": "iOS 27의 저평가된 5가지 기능, 내 아이폰을 훨씬 더 좋게 만들어 준다 - 그리고 모",
+      "original_title": "",
+      "description": "iOS 27에서 내가 가장 좋아하는 새로운 기능 몇 가지가 주목받지 못하고 있지만, 그 영향력은 결코 적지 않습니다.",
+      "link": "https://www.zdnet.com/article/i-used-ios-27-for-a-month-and-these-5-non-siri-ai-features-are-already-making-my-life-easier/",
       "entities": [],
       "date": "2026-07-18"
     }

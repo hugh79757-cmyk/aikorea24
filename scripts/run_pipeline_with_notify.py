@@ -7,13 +7,17 @@ aikorea24 파이프라인 실행기 + 텔레그램 알림
 import os
 import sys
 import subprocess
-import json
-import urllib.request
 import html
 from datetime import datetime
 
-PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
-SCRIPTS_DIR = os.path.join(PROJECT_DIR, 'scripts')
+# 프로젝트 루트 먼저 path에 추가
+_PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, _PROJECT_DIR)
+
+from pipeline.infra.telegram import send_telegram
+
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+SCRIPTS_DIR = os.path.join(_PROJECT_DIR, 'scripts')
 
 # 환경변수 로드
 def load_env(path):
@@ -37,36 +41,6 @@ def load_env(path):
 
 load_env(os.path.join(PROJECT_DIR, '.env'))
 
-# 텔레그램 알림 함수
-def send_telegram(message):
-    """텔레그램으로 메시지 발송"""
-    bot_token = os.environ.get('TELEGRAM_BOT_TOKEN', '')
-    chat_id = os.environ.get('TELEGRAM_CHAT_ID', '')
-    
-    if not bot_token or not chat_id:
-        print(f"  ⚠ 텔레그램 설정 없음: {message}")
-        return False
-    
-    try:
-        url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-        data = json.dumps({
-            "chat_id": chat_id,
-            "text": message,
-            "parse_mode": "HTML"
-        }).encode()
-        
-        req = urllib.request.Request(url, data=data, headers={"Content-Type": "application/json"})
-        resp = urllib.request.urlopen(req, timeout=10)
-        result = json.loads(resp.read())
-        if result.get("ok"):
-            print(f"  ✅ 텔레그램 알림 발송 완료")
-            return True
-        else:
-            print(f"  ❌ 텔레그램 에러: {result}")
-            return False
-    except Exception as e:
-        print(f"  ❌ 텔레그램 발송 실패: {e}")
-        return False
 
 def main():
     now = datetime.now().strftime('%Y-%m-%d %H:%M')

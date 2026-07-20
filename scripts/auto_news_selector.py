@@ -20,7 +20,7 @@ _project_root = str(Path(__file__).resolve().parent.parent)
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
 
-from pipeline.infra.d1_client import d1_query as d1_query_new
+from pipeline.infra.d1_client import d1_query
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
 from pipeline.infra.logger import get_scrubbed_logger
@@ -43,25 +43,6 @@ def load_crawlable_sources():
     with open(CONFIG_PATH) as f:
         data = json.load(f)
     return [s["name"] for s in data.get("crawlable", [])]
-
-
-def d1_query(sql, retries=2):
-    cmd = ["/opt/homebrew/bin/wrangler", "d1", "execute", "aikorea24-db", "--remote", "--command", sql]
-    env = dict(os.environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)
-    for attempt in range(retries):
-        try:
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=60, cwd=PROJECT_DIR, env=env)
-            if r.returncode != 0:
-                log(f"  D1 반환코드 {r.returncode}, 재시도 ({attempt+1}/{retries})")
-                continue
-            m = re.search(r'"results"\s*:\s*(\[[\s\S]*?\])\s*,\s*"success"', r.stdout)
-            if m:
-                return json.loads(m.group(1))
-            return []
-        except Exception as e:
-            log(f"  D1 오류: {e}, 재시도 ({attempt+1}/{retries})")
-    return []
 
 
 def get_recent_news(hours=24):
