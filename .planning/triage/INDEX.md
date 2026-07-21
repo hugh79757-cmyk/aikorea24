@@ -1,3 +1,4 @@
+- 2026-07-21 | debug | korean-slug-404-debug | Cloudflare Pages 한국어 slug 404 원인 분석 — _redirects 가로채기 가설 기각, deep_dive_url raw UTF-8 + trailing-slash 후보 수렴 / 대표님 404 URL 대기 중
 - 2026-07-20 | fix | pipeline-path-bug | run_pipeline_with_notify.py SCRIPTS_DIR scripts/scripts/ 중복 — 7/19-20 블로그 발행 0건
 - 2026-07-18 | refactor | remove-keep-english-rule | 고유명사 영어 원문 유지 규칙 제거 + 후처리 제거 — 모델 자유도 향상
 - 2026-07-17 | fix | threads-ending-style-soft-guidance | 종결어미 ~다 일괄 전환 — soft guidance 적용 (hard ban → 롤백 → 지양)
