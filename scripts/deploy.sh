@@ -56,10 +56,25 @@ WRANGLER="/opt/homebrew/bin/wrangler"
 if [ ! -x "$WRANGLER" ]; then
   WRANGLER=$(command -v wrangler 2>/dev/null || echo "npx wrangler")
 fi
-env -u CLOUDFLARE_API_TOKEN $WRANGLER pages deploy dist \
-  --project-name aikorea24 \
-  --branch main \
-  --commit-dirty=true
+
+# retry wrapper: 3회 재시도 (일시적 네트워크/Cloudflare 오류 대응)
+deploy_ok=0
+for attempt in 1 2 3; do
+  echo "  배포 시도 $attempt/3..."
+  if env -u CLOUDFLARE_API_TOKEN $WRANGLER pages deploy dist \
+    --project-name aikorea24 \
+    --branch main \
+    --commit-dirty=true; then
+    deploy_ok=1
+    break
+  fi
+  echo "  ⚠️ 배포 실패 (시도 $attempt/3), 5초 후 재시도..."
+  sleep 5
+done
+if [ "$deploy_ok" -ne 1 ]; then
+  echo "[ERROR] Cloudflare Pages 배포 실패 (3회 모두 실패)"
+  exit 1
+fi
 
 echo ""
 echo "배포 완료: https://aikorea24.kr"
