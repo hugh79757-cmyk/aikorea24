@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
 import HeroSection from '../components/home/HeroSection.astro';
 import BriefingSection from '../components/home/BriefingSection.astro';
 import CourseSection from '../components/home/CourseSection.astro';
@@ -11,12 +10,9 @@ import OpenSourceBanner from '../components/home/OpenSourceBanner.astro';
 import SubscribeBanner from '../components/home/SubscribeBanner.astro';
 import ContentHub from '../components/home/ContentHub.astro';
 
-// --- 블로그 데이터 ---
-const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
-  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-
-const recentPosts = allPosts.filter(p => p.data.category !== 'AI 강좌').slice(0, 3);
-const coursePosts = allPosts.filter(p => (p.data.tags || []).includes('바이브코딩')).slice(0, 3);
+// --- 블로그 데이터는 클라이언트 사이드에서 로딩 ---
+const recentPosts: any[] = [];
+const coursePosts: any[] = [];
 
 // --- 브리핑 데이터 ---
 let briefing: any = null;
@@ -69,7 +65,62 @@ try {
 
   <script is:inline src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script is:inline>
+    // 블로그 데이터 클라이언트 사이드 로딩
+    async function loadBlogData() {
+      try {
+        const res = await fetch('/api/home-content');
+        const data = await res.json();
+        
+        // RecentBlog 컴포넌트 렌더링
+        const blogContainer = document.getElementById('latest-blog-posts');
+        if (blogContainer && data.recentPosts?.length > 0) {
+          blogContainer.innerHTML = data.recentPosts.map(post => {
+            const rawDate = post.data.date?.substring(0, 10) || '';
+            const [y, m, d] = rawDate.split('-').map(Number);
+            const dateFormatted = y ? `${y}년 ${m}월 ${d}일` : '';
+            const categoryEmoji = {'AI 도구': '🛠️', 'AI 강좌': '📚', 'AI 뉴스': '📰', 'AI 지원사업': '💰', 'AI 체험': '🧪', '재테크': '💎'}[post.data.category] || '✍️';
+            return `
+              <a href="/blog/${post.slug}/" class="group block bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.06] overflow-hidden hover:border-blue-400 dark:hover:border-blue-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/5">
+                <div class="p-5">
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs px-2.5 py-1 bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full font-medium">${categoryEmoji} ${post.data.category || 'AI 뉴스'}</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500">${dateFormatted}</span>
+                  </div>
+                  <h3 class="font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-2">${post.data.title}</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">${post.data.description || ''}</p>
+                </div>
+              </a>`;
+          }).join('');
+        }
+
+        // CourseSection 컴포넌트 렌더링
+        const courseContainer = document.getElementById('course-posts');
+        if (courseContainer && data.coursePosts?.length > 0) {
+          courseContainer.innerHTML = data.coursePosts.map(post => {
+            const rawDate = post.data.date?.substring(0, 10) || '';
+            const [y, m, d] = rawDate.split('-').map(Number);
+            const dateFormatted = y ? `${y}년 ${m}월 ${d}일` : '';
+            const tags = post.data.tags || [];
+            const level = tags.find(t => t.startsWith('강좌'))?.replace('강좌', 'Step ') || (tags.includes('입문') ? '입문' : tags.includes('실습') ? '실습' : '강좌');
+            return `
+              <a href="/blog/${post.slug}/" class="group block bg-white dark:bg-white/[0.03] rounded-2xl border border-gray-200 dark:border-white/[0.06] overflow-hidden hover:border-purple-400 dark:hover:border-purple-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/5">
+                <div class="p-5">
+                  <div class="flex items-center gap-2 mb-3">
+                    <span class="text-xs px-2.5 py-1 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 rounded-full font-medium">📚 ${level}</span>
+                    <span class="text-xs text-gray-400 dark:text-gray-500">${dateFormatted}</span>
+                  </div>
+                  <h3 class="font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors line-clamp-2 mb-2">${post.data.title}</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">${post.data.description || ''}</p>
+                </div>
+              </a>`;
+          }).join('');
+        }
+      } catch (e) { console.error('Blog load error:', e); }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
+      loadBlogData();
+
       if (typeof particlesJS !== 'undefined' && document.getElementById('particles-js')) {
         particlesJS('particles-js', {
           particles: {

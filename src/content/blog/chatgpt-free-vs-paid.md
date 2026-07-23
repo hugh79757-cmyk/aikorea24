@@ -4,6 +4,7 @@ description: "ChatGPT 무료 플랜과 Plus 유료 플랜의 차이점을 기능
 date: 2026-02-12
 category: "AI입문"
 tags: ["ChatGPT", "GPT-4", "무료", "유료", "비교"]
+image: "/images/chatgpt-free-vs-paid/thumbnail.webp"
 ---
 
 ## ChatGPT란?

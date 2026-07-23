@@ -4,6 +4,7 @@ description: "코딩을 몰라도 AI에게 자연어로 설명하면 웹사이�
 date: 2026-02-11
 category: "AI입문"
 tags: ["바이브코딩", "Vibe Coding", "AI 코딩", "입문"]
+image: "/images/vibe-coding-intro/thumbnail.webp"
 ---
 
 ## 바이브코딩이란?

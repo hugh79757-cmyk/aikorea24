@@ -1,19 +1,19 @@
 ---
-export const prerender = false;
+export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
-import { verifySession } from '../../lib/auth';
 
-const TASK_BASE = '/tools/task/';
-
-const allToolsList = await getCollection('tools');
-const toolId = Astro.params.id;
-const tool = allToolsList.find(t => t.id === toolId);
-
-if (!tool) {
-  return Astro.redirect('/tools/', 302);
+export async function getStaticPaths() {
+  const allTools = await getCollection('tools');
+  return allTools.map(tool => ({
+    params: { id: tool.id },
+    props: { tool },
+  }));
 }
+
+const { tool } = Astro.props;
+const TASK_BASE = '/tools/task/';
 
 const { Content } = await render(tool);
 
@@ -34,9 +34,12 @@ const taskLinks = (tool.data.tasks ?? []).filter((s: string) => ALL_TASKS[s]).ma
   title: ALL_TASKS[s].title,
 }));
 
+const toolIndex = tool.data.index || 0;
+
 // 비슷한 툴: 같은 카테고리 + tags 겹치는 수로 정렬
+const allToolsList = await getCollection('tools');
 const toolTags = new Set(tool.data.tags ?? []);
-const relatedTools = allToolsList
+const similarTools = allToolsList
   .filter(t => t.id !== tool.id && t.data.category === tool.data.category)
   .map(t => ({
     tool: t,
@@ -45,36 +48,6 @@ const relatedTools = allToolsList
   .sort((a, b) => b.score - a.score)
   .slice(0, 4)
   .map(item => item.tool);
-const similarTools = relatedTools;
-
-// ---- DB / Auth 초기화 ----
-const runtime = (Astro.locals as any).runtime;
-const db = runtime?.env?.DB;
-const session = Astro.cookies.get('session')?.value;
-let isAuth = false;
-let sessionUser: { email: string; name: string } | null = null;
-if (session) {
-  sessionUser = await verifySession(session, Astro.locals.sessionSecret);
-  isAuth = !!sessionUser?.email;
-}
-
-// ---- 투표 수 조회 ----
-let voteCount = 0;
-let userVoted = false;
-if (db) {
-  try {
-    const voteResult = await db.prepare(
-      'SELECT COUNT(*) as cnt FROM tool_votes WHERE tool_id = ?'
-    ).bind(tool.id).first();
-    voteCount = voteResult?.cnt || 0;
-    if (isAuth && sessionUser) {
-      const votedRow = await db.prepare(
-        'SELECT id FROM tool_votes WHERE tool_id = ? AND user_email = ?'
-      ).bind(tool.id, sessionUser.email).first();
-      userVoted = !!votedRow;
-    }
-  } catch {}
-}
 
 // ---- FAQ 구조화 데이터 생성 ----
 const toolBody: string = (tool as any).body || '';
@@ -100,30 +73,6 @@ if (currentQ && currentA.length) {
 const faqSchema: string | null = faqEntities.length > 0
   ? JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqEntities.slice(0, 5) })
   : null;
-
-// ---- 리뷰 데이터 조회 ----
-let reviews: any[] = [];
-let avgRating = 0;
-if (db) {
-  try {
-    const reviewResult = await db.prepare(`
-      SELECT p.*, u.name as author, u.avatar
-      FROM posts p
-      JOIN users u ON p.user_id = u.id
-      WHERE p.tool_id = ? AND p.category = 'review'
-      ORDER BY p.created_at DESC
-      LIMIT 10
-    `).bind(tool.data.index || 0).all();
-    reviews = reviewResult?.results || [];
-
-    if (reviews.length > 0) {
-      const total = reviews.reduce((sum: number, r: any) => sum + (r.rating || 5), 0);
-      avgRating = Math.round(total / reviews.length * 10) / 10;
-    }
-  } catch (e) {
-    console.error('Review fetch error:', e);
-  }
-}
 
 ---
 
@@ -173,8 +122,8 @@ if (db) {
         <span class:list={["text-xs px-3 py-1.5 rounded-lg font-medium border", difficultyColor(tool.data.difficulty)]}>
           {difficultyLabel(tool.data.difficulty)}
         </span>
-        <span class="text-xs px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg font-medium border border-amber-200 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/25">
-          ⭐ {avgRating || '—'} ({reviews.length}개 리뷰)
+        <span id="review-badge" class="text-xs px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg font-medium border border-amber-200 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/25">
+          ⭐ — (리뷰 로딩 중)
         </span>
       </div>
 
@@ -186,23 +135,17 @@ if (db) {
         </a>
         <button id="vote-btn"
           data-tool-id={tool.id}
-          data-voted={userVoted ? "true" : "false"}
-          class:list={[
-            "inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border",
-            userVoted
-              ? "bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 dark:bg-amber-500/20 dark:border-amber-500/50 dark:text-amber-300"
-              : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-white/[0.05] dark:border-white/[0.15] dark:text-gray-300 dark:hover:bg-white/[0.1]"
-          ]}>
+          data-voted="false"
+          class="inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-white/[0.05] dark:border-white/[0.15] dark:text-gray-300 dark:hover:bg-white/[0.1]">
           <span id="vote-icon">👍</span>
-          <span id="vote-label">{userVoted ? " 추천함" : " 추천"}</span>
-          <span id="vote-count" class="text-xs opacity-70">{voteCount}</span>
+          <span id="vote-label"> 추천</span>
+          <span id="vote-count" class="text-xs opacity-70">0</span>
         </button>
-        {isAuth && (
-          <a href={`/community/review?tool_id=${tool.data.index || 0}&tool_name=${encodeURIComponent(tool.data.name)}`}
-             class="inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all text-sm border border-gray-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] dark:text-gray-300 dark:border-white/[0.15]">
-            ✍️ 리뷰 쓰기
-          </a>
-        )}
+        <a href={`/community/review?tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
+           id="review-write-btn"
+           class="hidden inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all text-sm border border-gray-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] dark:text-gray-300 dark:border-white/[0.15]">
+          ✍️ 리뷰 쓰기
+        </a>
       </div>
     </div>
 
@@ -258,45 +201,24 @@ if (db) {
     </div>
   </div>
 
-  <!-- 리뷰 섹션 -->
-  {reviews.length > 0 && (
-  <div class="max-w-3xl mx-auto px-4 pb-4">
+  <!-- 리뷰 섹션 (클라이언트 로딩) -->
+  <div id="reviews-section" class="max-w-3xl mx-auto px-4 pb-4 hidden">
     <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white">💬 사용자 리뷰</h3>
-        <span class="text-sm text-yellow-500">
-          {'★'.repeat(Math.round(avgRating))} {avgRating} ({reviews.length}개)
-        </span>
+        <span id="reviews-summary" class="text-sm text-yellow-500"></span>
       </div>
-
-      {reviews.map((review: any) => (
-        <div class="border-b border-gray-200 dark:border-gray-700/30 py-3 last:border-0">
-          <div class="flex items-center justify-between mb-1">
-            <div class="flex items-center gap-2">
-              {review.avatar && <img src={review.avatar} class="w-5 h-5 rounded-full" />}
-              <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{review.author}</span>
-            </div>
-            <span class="text-yellow-500 text-sm">{'★'.repeat(review.rating || 5)}</span>
-          </div>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{review.content.substring(0, 200)}</p>
-          <a href={`/community/${review.id}`} class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">
-            전체 보기 →
-          </a>
-        </div>
-      ))}
+      <div id="reviews-list"></div>
     </div>
   </div>
-  )}
 
   <!-- 리뷰 작성 버튼 -->
-  {isAuth && (
-  <div class="max-w-3xl mx-auto px-4 pb-4 text-center">
-    <a href={`/community/write?category=review&tool_id=${tool.data.index || 0}&tool_name=${encodeURIComponent(tool.data.name)}`}
+  <div id="review-cta" class="max-w-3xl mx-auto px-4 pb-4 text-center hidden">
+    <a href={`/community/write?category=review&tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
        class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm">
       ✍️ {tool.data.name} 리뷰 작성하기
     </a>
   </div>
-  )}
 
   <!-- 뉴스레터 구독 CTA -->
   <div class="max-w-3xl mx-auto px-4 pb-4">
@@ -345,34 +267,107 @@ if (db) {
   </div>
   )}
 
-<script>
+<script define:vars={{ toolId: tool.id, toolIndex }}>
+// 투표 + 리뷰 클라이언트 로딩
+const TOOL_ID = toolId;
+const TOOL_INDEX = toolIndex;
+
+// 투표 데이터 로드
+async function loadVoteData() {
+  try {
+    const res = await fetch(`/api/tools/vote?tool_id=${encodeURIComponent(TOOL_ID)}`);
+    const data = await res.json();
+    const voteBtn = document.getElementById('vote-btn');
+    if (voteBtn) {
+      voteBtn.dataset.voted = data.voted ? "true" : "false";
+      document.getElementById('vote-label').textContent = data.voted ? " 추천함" : " 추천";
+      document.getElementById('vote-count').textContent = String(data.count);
+      if (data.voted) {
+        voteBtn.className = 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 dark:bg-amber-500/20 dark:border-amber-500/50 dark:text-amber-300';
+      }
+    }
+  } catch (e) { console.error('Vote load error:', e); }
+}
+
+// 리뷰 데이터 로드
+async function loadReviewData() {
+  try {
+    const res = await fetch(`/api/tools/reviews?tool_index=${TOOL_INDEX}`);
+    const data = await res.json();
+    const { reviews, avgRating } = data;
+    
+    if (reviews.length > 0) {
+      // 리뷰 뱃지 업데이트
+      const badge = document.getElementById('review-badge');
+      if (badge) {
+        badge.textContent = `⭐ ${avgRating} (${reviews.length}개 리뷰)`;
+      }
+      
+      // 리뷰 섹션 표시
+      const section = document.getElementById('reviews-section');
+      if (section) section.classList.remove('hidden');
+      
+      const summary = document.getElementById('reviews-summary');
+      if (summary) summary.textContent = `${'★'.repeat(Math.round(avgRating))} ${avgRating} (${reviews.length}개)`;
+      
+      const list = document.getElementById('reviews-list');
+      if (list) {
+        list.innerHTML = reviews.map(r => `
+          <div class="border-b border-gray-200 dark:border-gray-700/30 py-3 last:border-0">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                ${r.avatar ? `<img src="${r.avatar}" class="w-5 h-5 rounded-full" />` : ''}
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">${r.author || '익명'}</span>
+              </div>
+              <span class="text-yellow-500 text-sm">${'★'.repeat(r.rating || 5)}</span>
+            </div>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${(r.content || '').substring(0, 200)}</p>
+            <a href="/community/${r.id}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">전체 보기 →</a>
+          </div>
+        `).join('');
+      }
+      
+      // 리뷰 작성 CTA
+      const cta = document.getElementById('review-cta');
+      if (cta) cta.classList.remove('hidden');
+    }
+  } catch (e) { console.error('Review load error:', e); }
+}
+
+// 로그인 체크 → 리뷰 쓰기 버튼 표시
+function checkAuth() {
+  const isLoggedIn = document.cookie.includes('session=');
+  const reviewWriteBtn = document.getElementById('review-write-btn');
+  if (reviewWriteBtn && isLoggedIn) reviewWriteBtn.classList.remove('hidden');
+}
+
 // 투표 버튼 처리
-const voteBtn = document.getElementById('vote-btn') as HTMLButtonElement | null;
+const voteBtn = document.getElementById('vote-btn');
 if (voteBtn) {
   voteBtn.addEventListener('click', async () => {
-    const toolId = voteBtn.dataset.toolId;
     const isLoggedIn = document.cookie.includes('session=');
     if (!isLoggedIn) { window.location.href = '/api/auth/login'; return; }
     try {
       const res = await fetch('/api/tools/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tool_id: toolId })
+        body: JSON.stringify({ tool_id: TOOL_ID })
       });
       const data = await res.json();
       if (res.ok) {
         const voted = data.voted;
         voteBtn.dataset.voted = voted ? 'true' : 'false';
-        document.getElementById('vote-label')!.textContent = voted ? ' 추천함' : ' 추천';
-        document.getElementById('vote-count')!.textContent = String(data.count);
+        document.getElementById('vote-label').textContent = voted ? ' 추천함' : ' 추천';
+        document.getElementById('vote-count').textContent = String(data.count);
         voteBtn.className = voted
-          ? 'px-5 py-2.5 font-medium rounded-lg transition-colors text-sm border bg-yellow-500/20 border-yellow-500/50 text-yellow-300 hover:bg-yellow-500/30'
-          : 'px-5 py-2.5 font-medium rounded-lg transition-colors text-sm border bg-white/5 border-white/20 text-gray-300 hover:bg-white/10';
+          ? 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 dark:bg-amber-500/20 dark:border-amber-500/50 dark:text-amber-300'
+          : 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-white/[0.05] dark:border-white/[0.15] dark:text-gray-300 dark:hover:bg-white/[0.1]';
       }
     } catch (e) { console.error(e); }
   });
 }
 
+// 뉴스레터 구독
 document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('subscribe-email').value.trim();
@@ -408,6 +403,11 @@ document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e)
     msg.classList.remove('hidden');
   }
 });
+
+// 초기 데이터 로드
+loadVoteData();
+loadReviewData();
+checkAuth();
 </script>
   <!-- FAQPage 구조화 데이터 -->
   {faqSchema && (

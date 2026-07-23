@@ -1,12 +1,7 @@
 # 404 URL 리다이렉트 규칙 - aikorea24
-# trailing hyphen URL은 middleware에서 동적 처리
 
-# 템플릿 미치환 URL → 410 Gone (리터럴 + URL 인코딩 버전)
-/blog/${n.slug}/  /410  410
-/blog/%24%7Bn.slug%7D/  /410  410
-
-# /blog/2026- → 410 Gone (추정 연도-only 슬러그, middleware fallback)
-/blog/2026-  /410  410
+# /blog/2026/ (연도-only, 불완전 슬러그) → 410 Gone
+/blog/2026/  /410  410
 
 # 짧은/숫자 슬러그 → 410 Gone (D1 매핑 없음)
 /blog/293  /410  410

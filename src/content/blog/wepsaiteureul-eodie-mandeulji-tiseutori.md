@@ -13,6 +13,7 @@ tags:
   - "바이브코딩"
 draft: false
 
+image: "/images/wepsaiteureul-eodie-mandeulji-tiseutori/thumbnail.webp"
 ---
 
 - [티스토리 공식 사이트](https://www.tistory.com/)

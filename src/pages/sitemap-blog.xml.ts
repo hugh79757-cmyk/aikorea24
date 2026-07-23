@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { buildUrlset, toDateStr } from '../lib/sitemap';
 
-export const prerender = false;
+export const prerender = true;
 
 export const GET: APIRoute = async () => {
   const base = 'https://aikorea24.kr';

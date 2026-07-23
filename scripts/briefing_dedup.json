@@ -3267,6 +3267,364 @@
           "date": "2026-07-18"
         }
       ]
+    },
+    {
+      "date": "2026-07-21",
+      "briefing_id": 184,
+      "articles": [
+        {
+          "id": "41479",
+          "title": "한국의 AI 모델이 차량이 움직이기 전에 모든 가능한 운전 경로를 안전성을 평가합니다. C",
+          "original_title": "",
+          "description": "대부분의 자율주행 AI 모델은 인간의 운전 방식을 연구하고 이를 복사하려고 합니다. 이들은 일반적인 조건에서는 잘 작동하지만, 어떤 경로를 선택했는지 설명하는 데 어려움을 겪어 순간적인 결정이 잘못될 때 문제가 됩니다. 서울대학교 조준원 교수 팀이 이 연구를 이끌고 있습니다.",
+          "link": "https://thenextweb.com/news/safedrive-korea-self-driving-ai-cvpr-2026",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41454",
+          "title": "트럼프의 최신 AI 책임자가 이미 사퇴했다",
+          "original_title": "",
+          "description": "AI 표준 및 혁신 센터(CAISI)의 이사 자리는 데이비드 색스가 물러난 이후 회전문과 같은 상황이 되었다.",
+          "link": "https://techcrunch.com/2026/07/20/trumps-latest-ai-czar-has-already-resigned/",
+          "entities": [
+            "AI",
+            "CAISI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41486",
+          "title": "버넘, 기술 부서 개편으로 AI에서 '큰 실수'의 위험에 처하다",
+          "original_title": "",
+          "description": "앤디 버넘은 영국의 인공지능 전략을 담당하는 정부 부서를 분할하는 것이 글로벌 투자자들에게 불안감을 주고, 국가의 기술 중심으로서의 위상에 해를 끼칠 수 있다고 경고받았습니다. 차기 총리는 과학부 폐지를 고려하고 있는 것으로 전해졌습니다.",
+          "link": "https://www.cityam.com/burnham-risks-big-mistake-on-ai-with-tech-department-shake-up/",
+          "entities": [],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41462",
+          "title": "구글의 \"Frozen v2\" 칩, 제미니 아키텍처를 직접 실리콘에 통합해 효율성 증가",
+          "original_title": "",
+          "description": "구글은 \"Frozen v2\"라는 서버 칩을 개발 중이며, 이는 제미니 아키텍처를 하드웨어에 직접 통합합니다. 내부 소식에 따르면, 이는 현재의 TPU보다 6배에서 10배 더 효율적일 수 있습니다. 2028년에 출시될 예정인 이 칩은 구글의 AI 추론 비용을 대폭 줄일 것입니다.",
+          "link": "https://the-decoder.com/googles-frozen-v2-chip-reportedly-bakes-geminis-architecture-directly-into-silicon-for-efficiency-gains/",
+          "entities": [
+            "Frozen",
+            "AI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41467",
+          "title": "ChatGPT와 기타 AI 도구가 내 웹사이트를 인용하는지 확인하는 법 - 그리고 2026",
+          "original_title": "",
+          "description": "SEO는 사라지지 않았습니다. 오늘날 AI 도구에서 더 자주 인용되도록 하고 검색 가시성을 높이는 방법을 알려드립니다.",
+          "link": "https://www.zdnet.com/article/how-to-check-if-chatgpt-ai-tools-cite-website-improve-chances/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41460",
+          "title": "중국의 AI 모델들이 트럼프의 AI 세상을 스스로와 전쟁 중으로 만들다",
+          "original_title": "",
+          "description": "이 이야기는 AI에 관한 우리의 주간 뉴스레터인 '더 알고리즘'에 처음 실렸다. 주말 동안, 도널드 트럼프 대통령의 여러 현직 및 전직 AI 고문들이 국가의 주요 AI 회사에 대해 공개적으로 비난을 쏟았다.",
+          "link": "https://www.technologyreview.com/2026/07/20/1140675/chinas-ai-models-have-trumps-ai-world-at-war-with-itself/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-21"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-21",
+      "briefing_id": 185,
+      "articles": [
+        {
+          "id": "41538",
+          "title": "카니시카 나라얀이 영국의 첫 내각급 AI 장관이 되다",
+          "original_title": "",
+          "description": "카니시카 나라얀은 인공지능을 다루는 영국 최초의 내각 장관으로 임명되었습니다. 이는 앤디 번햄 총리가 기술을 중심으로 화이트홀을 재편성하면서 이루어진 승진입니다.",
+          "link": "https://thenextweb.com/news/kanishka-narayan-uk-ai-minister",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41521",
+          "title": "영국의 AI 데이터 센터 근처에 살고 있는 경험을 들려주세요",
+          "original_title": "",
+          "description": "우리는 AI 데이터 센터 근처에 사는 사람들의 경험과 그들이 가진 우려에 대해 듣고 싶다. 영국 전역에 약 450개의 대형 데이터 센터가 있으며, 이들 창고에는 클라우드 서비스와 AI를 지원하는 컴퓨팅 인프라가 포함되어 있다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/21/tell-us-your-experiences-living-near-ai-datacentres-uk",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41515",
+          "title": "안트로픽의 획기적인 15억 달러 저작권 합의가 승인됨",
+          "original_title": "",
+          "description": "최종 승인은 한 건의 사건을 해결했지만, 저작권이 있는 작품을 사용하여 AI 모델을 훈련하는 광범위한 문제는 여전히 해결되지 않았습니다.",
+          "link": "https://techcrunch.com/2026/07/20/anthropics-landmark-1-5b-copyright-settlement-is-approved/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41516",
+          "title": "소재 과학 혁신으로 차세대 AI를 발전시키다",
+          "original_title": "",
+          "description": "AI에 대한 논의는 종종 알고리즘, 컴퓨팅 파워 또는 새로운 반도체 제조 공장과 하이퍼스케일 데이터 센터에 대한 대규모 투자에 초점을 맞춥니다. 그러나 이러한 발전을 가능하게 만드는 또 다른 혁신의 층은 고급 소재에 있습니다.",
+          "link": "https://www.technologyreview.com/2026/07/21/1140602/advancing-next-gen-ai-with-materials-science-innovation/",
+          "entities": [],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41544",
+          "title": "풀햄, $150억 가치의 실리콘밸리 기술 및 AI 회사 ClickHouse와 유니폼 스폰서",
+          "original_title": "",
+          "description": "풀햄 FC는 크리스탈 팰리스에 이어 ClickHouse와 새로운 프리미어 리그 시즌을 위한 유니폼 스폰서 계약을 체결했습니다. ClickHouse는 메타, 테슬라, OpenAI, 비자 및 소니와 같은 기업을 위한 데이터 분석 플랫폼입니다.",
+          "link": "https://www.cityam.com/fulham-sign-up-15bn-silicon-valley-tech-and-ai-firm-clickhouse-as-front-of-shirt-sponsor/",
+          "entities": [
+            "AI",
+            "OpenAI"
+          ],
+          "date": "2026-07-21"
+        },
+        {
+          "id": "41556",
+          "title": "삼성의 NVIDIA 파트너십이 차세대 NAND 출하로 심화되고 있습니다",
+          "original_title": "",
+          "description": "삼성은 이미 NVIDIA의 중요한 공급업체로 DRAM, 고대역폭 메모리 및 파운드리 서비스를 제공합니다. 두 회사는 현재 이 파트너십을 NAND 플래시 저장소 공급으로 확장하고 있으며, 삼성은 10세대 V-NAND 칩의 출하를 시작했습니다.",
+          "link": "https://www.sammobile.com/news/samsungs-nvidia-partnership-deepens-with-next-gen-nand-shipments/",
+          "entities": [
+            "NAND",
+            "NVIDIA",
+            "DRAM",
+            "V-NAND"
+          ],
+          "date": "2026-07-21"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-22",
+      "briefing_id": 186,
+      "articles": [
+        {
+          "id": "41653",
+          "title": "인텔, 데이터 센터 부문에서 추가 감원을 확인하며 주식 상승세 이어가",
+          "original_title": "",
+          "description": "인텔은 화요일에 데이터 센터 그룹에서 불특정 다수의 일자리를 감축할 것이라고 확인했습니다. 이는 CEO 리프-부 탄의 주도 아래 진행되는 더 넓은 구조조정의 일환으로, 주가는 초기 거래에서 8% 상승했습니다.",
+          "link": "https://thenextweb.com/news/intel-layoffs-data-center-group-stock-rally",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41659",
+          "title": "연준, 앤트로픽의 미토스 AI 모델에 대해 경고했지만 몇 달간 접근하지 못함",
+          "original_title": "",
+          "description": "중앙은행은 7월 중순까지 클로드 미토스 프리뷰에 접근할 수 없었으며, 다른 기관들은 취약점을 해결하기 위해 급히 대처하고 있었습니다.",
+          "link": "https://www.cnbc.com/2026/07/21/fed-mythos-ai-cybersecurity-banks-project-glasswing.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41522",
+          "title": "중국이 AI 경쟁에서 미국의 우위를 무너뜨리며 실리콘 밸리에 고통을 주다",
+          "original_title": "",
+          "description": "구글의 AI가 어려움을 겪고 있으며, 새로운 중국 모델이 미국의 기술 지배력에 의문을 제기하고 있다. 오늘 기술 분야에서 우리는 중국의 영향력을 논의하고 있다.",
+          "link": "https://www.theguardian.com/technology/2026/jul/20/china-google-ai-race",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41626",
+          "title": "잭 도르시는 팀과 AI 에이전트를 위한 그룹 채팅 플랫폼 Buzz로 Slack에 도전한다",
+          "original_title": "",
+          "description": "Buzz는 직장에서 인간과 AI 에이전트가 같은 대화에 참여할 수 있도록 설계된 그룹 채팅 플랫폼입니다.",
+          "link": "https://techcrunch.com/2026/07/21/jack-dorsey-is-taking-on-slack-with-buzz-a-group-chat-platform-for-teams-and-their-ai-agents/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41635",
+          "title": "AI 인프라를 겨냥한 교묘한 해킹 도구가 피해자의 사각지대에 숨어있다",
+          "original_title": "",
+          "description": "새로운 유형의 악성코드는 AI 코딩 시스템에 깊숙이 침투하여 데이터 및 로그인 정보를 훔치고, “사망 스위치”를 통해 파일을 파괴하고 실제 사용자를 차단할 수 있습니다.",
+          "link": "https://www.wired.com/story/a-sneaky-hacking-tool-targeting-ai-infrastructure-is-lurking-in-victims-blind-spots/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41655",
+          "title": "역사상 가장 큰 데이터 센터 거래가 완료되고, 50억 달러가 더 증가했다",
+          "original_title": "",
+          "description": "화요일, 세계에서 가장 강력한 투자자 그룹이 대부분의 사람들이 들어본 적 없는 회사를 인수했습니다. 가격 태그가 왜 이 거래가 중요한지를 설명합니다. AI 인프라 파트너십, MGX 및 블랙록의 글로벌 인프라 파트너스가 이 인수를 완료했습니다.",
+          "link": "https://thenextweb.com/news/aligned-data-centers-40-billion-blackrock-mgx",
+          "entities": [
+            "MGX",
+            "AI"
+          ],
+          "date": "2026-07-22"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-22",
+      "briefing_id": 187,
+      "articles": [
+        {
+          "id": "41700",
+          "title": "글로우, 12억 달러 평가액으로 AI 시대의 엔드포인트 보안에 도전하다",
+          "original_title": "",
+          "description": "글로우는 기업 내에서 AI 에이전트와 개발 도구의 빠른 채택으로 인해 발생하는 새로운 종류의 엔드포인트 위험을 타겟으로 하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/22/glow-emerges-from-stealth-at-1-2b-valuation-to-challenge-endpoint-security-in-the-ai-era/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41722",
+          "title": "워싱턴, 중국 AI 제재 원해 \"도난\"이라며, 엔비디아의 젠슨 황은 그 반대라고 말하다.",
+          "original_title": "",
+          "description": "화요일, 재무장관 스콧 베센트는 중국에 대한 경고와 함께 방송에 출연했습니다. 같은 날, AI 붐을 이끄는 회사의 최고 경영자는 전혀 다른 입장을 취했습니다. 베센트는 미국이 중국의 오픈소스 모델에 대해 도난된 지적 재산을 면밀히 조사할 것이라고 주장했습니다.",
+          "link": "https://thenextweb.com/news/bessent-china-ai-sanctions-huang-defends",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41733",
+          "title": "일본의 AI 수혜자들, 칩이 아닌 변기, 유리섬유, 조미료를 만든다",
+          "original_title": "",
+          "description": "일본의 변기 제조업체, 유리섬유 제조업체, 그리고 MSG 생산자가 AI 붐의 주요 수혜자로 떠올랐습니다.",
+          "link": "https://www.cnbc.com/2026/07/22/japanese-ai-winners-toilets-fiberglass-and-seasoning.html",
+          "entities": [
+            "MSG",
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41706",
+          "title": "삼성, 유럽의 가장 핫한 AI 스타트업에 10억 유로 투자 논의",
+          "original_title": "",
+          "description": "삼성은 프랑스 AI 스타트업 미스트랄에 최대 10억 유로를 투자하는 논의 중에 있습니다. 이 투자가 이루어지면 회사의 가치는 약 200억 유로에 이를 것으로 예상됩니다.",
+          "link": "https://the-decoder.com/samsung-deepens-its-ai-empire-with-a-potential-billion-euro-stake-in-europes-hottest-ai-startup/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41708",
+          "title": "오픈AI 모델, 격리에서 탈출해 헉킹페이스 해킹",
+          "original_title": "",
+          "description": "사이버 보안 중심의 모델인 GPT-5.6 Sol이 테스트 샌드박스를 탈출하고, 제로데이 취약점을 악용하여 열린 인터넷에 접근해 공격을 감행했습니다.",
+          "link": "https://www.wired.com/story/openai-models-escaped-containment-and-hacked-huggingface/",
+          "entities": [
+            "GPT-5.6"
+          ],
+          "date": "2026-07-22"
+        },
+        {
+          "id": "41728",
+          "title": "레볼루트 비즈니스, AI가 창업자의 자금 필요를 줄인다고 말하다.",
+          "original_title": "",
+          "description": "AI는 스타트업이 글로벌 비즈니스를 구축하는 데 필요한 자본의 양을 줄이고 있으며, 창업자들이 자금 확보에서 어떤 나라가 성장하기 좋은 환경을 제공하는지로 초점을 옮기고 있다고 레볼루트 비즈니스의 수장이 말했습니다. 제임스 기브슨은 AI가 자본 요구를 극적으로 낮추었다고 언급했습니다.",
+          "link": "https://www.cityam.com/ai-reduces-founders-need-for-capital-says-revolut-business/",
+          "entities": [],
+          "date": "2026-07-22"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-23",
+      "briefing_id": 188,
+      "articles": [
+        {
+          "id": "41813",
+          "title": "구글, 클라우드 사업의 호황으로 대규모 AI 지출 정당화",
+          "original_title": "",
+          "description": "구글의 클라우드 사업이 번창하면서, 기업들이 AI 및 AI 인프라 서비스를 채택함에 따라 기술 거인이 기록적인 수익을 보고하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/22/google-justifies-its-massive-ai-spending-with-a-booming-cloud-business/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41822",
+          "title": "영국의 안전 연구소에서 테스트한 모든 최전선 AI 모델이 사이버 보안 평가에서 부정 행위를",
+          "original_title": "",
+          "description": "영국의 AI 안전 연구소는 사이버 보안 평가에서 OpenAI와 앤트로픽의 다섯 가지 최전선 모델을 시험했습니다. 다섯 모델 모두 부정 행위를 시도했으며, 한 모델은 외부 서비스에서 코드를 실행해 연구소의 인프라에 접근하려 해 보안 경고를 호출했습니다.",
+          "link": "https://the-decoder.com/every-frontier-ai-model-tested-by-britains-safety-institute-tried-to-cheat-on-cybersecurity-evaluations/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41850",
+          "title": "오픈AI의 브록맨, 키미 K3를 ‘상당히 좋다’고 평가하며 증류 여부는 확인하지 않아",
+          "original_title": "",
+          "description": "오픈AI 사장 그렉 브록맨은 화요일 블룸버그 인터뷰에서 문샷 AI의 키미 K3에 대해 “상당히 좋다”고 말했다. 이는 중국의 경쟁 모델이 경쟁력을 가지게 되었음을 인정하는 드문 사례다.",
+          "link": "https://thenextweb.com/news/openai-brockman-kimi-k3-pretty-good-distillation-white-house",
+          "entities": [],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41855",
+          "title": "영국 정부, ‘전례 없는’ 해킹 사건 후 오픈AI 침해 조사 착수",
+          "original_title": "",
+          "description": "영국 정부는 인공지능 모델이 통제된 테스트에서 스스로 탈출해 다른 회사의 시스템을 해킹한 첫 사례를 조사하고 있다. AISI의 직원들이 오픈AI의 보안 위반 사건에 대해 조사 중이다.",
+          "link": "https://www.cityam.com/uk-government-probes-openai-breach-after-model-autonomously-hacked-rival/",
+          "entities": [],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41851",
+          "title": "백악관, 80년 만의 최대 연방 과학 개편으로 AI 연구에 50억 달러 투자",
+          "original_title": "",
+          "description": "연방 기관은 에너지부가 주도하는 제네시스 미션에 50억 달러 이상을 헌신했다고 백악관 과학 고문 마이클 크라치오스가 수요일 발표했다. 이 이니셔티브는 5,000개 이상의 프로젝트에서 278개를 선정했다.",
+          "link": "https://thenextweb.com/news/trump-5-billion-genesis-mission-ai-science-research",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41879",
+          "title": "삼성 갤럭시 Z 폴드 8, 여전히 S 펜을 지원하지 않아 더욱 눈에 띄는 문제로 부각",
+          "original_title": "",
+          "description": "삼성 갤럭시 Z 폴드 8은 S 펜 지원을 중단하고 AI 기반 생산성에 모든 것을 걸고 있습니다. 이로 인해 많은 사용자들이 불편함을 느끼고 있는 상황입니다.",
+          "link": "https://www.androidcentral.com/phones/samsung-galaxy/samsungs-galaxy-z-fold-8-still-skips-the-s-pen-and-thats-getting-harder-to-ignore",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-23"
+        }
+      ]
     }
   ],
   "articles": [
@@ -6255,6 +6613,334 @@
       "link": "https://www.zdnet.com/article/i-used-ios-27-for-a-month-and-these-5-non-siri-ai-features-are-already-making-my-life-easier/",
       "entities": [],
       "date": "2026-07-18"
+    },
+    {
+      "id": "41479",
+      "title": "한국의 AI 모델이 차량이 움직이기 전에 모든 가능한 운전 경로를 안전성을 평가합니다. C",
+      "original_title": "",
+      "description": "대부분의 자율주행 AI 모델은 인간의 운전 방식을 연구하고 이를 복사하려고 합니다. 이들은 일반적인 조건에서는 잘 작동하지만, 어떤 경로를 선택했는지 설명하는 데 어려움을 겪어 순간적인 결정이 잘못될 때 문제가 됩니다. 서울대학교 조준원 교수 팀이 이 연구를 이끌고 있습니다.",
+      "link": "https://thenextweb.com/news/safedrive-korea-self-driving-ai-cvpr-2026",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41454",
+      "title": "트럼프의 최신 AI 책임자가 이미 사퇴했다",
+      "original_title": "",
+      "description": "AI 표준 및 혁신 센터(CAISI)의 이사 자리는 데이비드 색스가 물러난 이후 회전문과 같은 상황이 되었다.",
+      "link": "https://techcrunch.com/2026/07/20/trumps-latest-ai-czar-has-already-resigned/",
+      "entities": [
+        "AI",
+        "CAISI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41486",
+      "title": "버넘, 기술 부서 개편으로 AI에서 '큰 실수'의 위험에 처하다",
+      "original_title": "",
+      "description": "앤디 버넘은 영국의 인공지능 전략을 담당하는 정부 부서를 분할하는 것이 글로벌 투자자들에게 불안감을 주고, 국가의 기술 중심으로서의 위상에 해를 끼칠 수 있다고 경고받았습니다. 차기 총리는 과학부 폐지를 고려하고 있는 것으로 전해졌습니다.",
+      "link": "https://www.cityam.com/burnham-risks-big-mistake-on-ai-with-tech-department-shake-up/",
+      "entities": [],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41462",
+      "title": "구글의 \"Frozen v2\" 칩, 제미니 아키텍처를 직접 실리콘에 통합해 효율성 증가",
+      "original_title": "",
+      "description": "구글은 \"Frozen v2\"라는 서버 칩을 개발 중이며, 이는 제미니 아키텍처를 하드웨어에 직접 통합합니다. 내부 소식에 따르면, 이는 현재의 TPU보다 6배에서 10배 더 효율적일 수 있습니다. 2028년에 출시될 예정인 이 칩은 구글의 AI 추론 비용을 대폭 줄일 것입니다.",
+      "link": "https://the-decoder.com/googles-frozen-v2-chip-reportedly-bakes-geminis-architecture-directly-into-silicon-for-efficiency-gains/",
+      "entities": [
+        "Frozen",
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41467",
+      "title": "ChatGPT와 기타 AI 도구가 내 웹사이트를 인용하는지 확인하는 법 - 그리고 2026",
+      "original_title": "",
+      "description": "SEO는 사라지지 않았습니다. 오늘날 AI 도구에서 더 자주 인용되도록 하고 검색 가시성을 높이는 방법을 알려드립니다.",
+      "link": "https://www.zdnet.com/article/how-to-check-if-chatgpt-ai-tools-cite-website-improve-chances/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41460",
+      "title": "중국의 AI 모델들이 트럼프의 AI 세상을 스스로와 전쟁 중으로 만들다",
+      "original_title": "",
+      "description": "이 이야기는 AI에 관한 우리의 주간 뉴스레터인 '더 알고리즘'에 처음 실렸다. 주말 동안, 도널드 트럼프 대통령의 여러 현직 및 전직 AI 고문들이 국가의 주요 AI 회사에 대해 공개적으로 비난을 쏟았다.",
+      "link": "https://www.technologyreview.com/2026/07/20/1140675/chinas-ai-models-have-trumps-ai-world-at-war-with-itself/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41538",
+      "title": "카니시카 나라얀이 영국의 첫 내각급 AI 장관이 되다",
+      "original_title": "",
+      "description": "카니시카 나라얀은 인공지능을 다루는 영국 최초의 내각 장관으로 임명되었습니다. 이는 앤디 번햄 총리가 기술을 중심으로 화이트홀을 재편성하면서 이루어진 승진입니다.",
+      "link": "https://thenextweb.com/news/kanishka-narayan-uk-ai-minister",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41521",
+      "title": "영국의 AI 데이터 센터 근처에 살고 있는 경험을 들려주세요",
+      "original_title": "",
+      "description": "우리는 AI 데이터 센터 근처에 사는 사람들의 경험과 그들이 가진 우려에 대해 듣고 싶다. 영국 전역에 약 450개의 대형 데이터 센터가 있으며, 이들 창고에는 클라우드 서비스와 AI를 지원하는 컴퓨팅 인프라가 포함되어 있다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/21/tell-us-your-experiences-living-near-ai-datacentres-uk",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41515",
+      "title": "안트로픽의 획기적인 15억 달러 저작권 합의가 승인됨",
+      "original_title": "",
+      "description": "최종 승인은 한 건의 사건을 해결했지만, 저작권이 있는 작품을 사용하여 AI 모델을 훈련하는 광범위한 문제는 여전히 해결되지 않았습니다.",
+      "link": "https://techcrunch.com/2026/07/20/anthropics-landmark-1-5b-copyright-settlement-is-approved/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41516",
+      "title": "소재 과학 혁신으로 차세대 AI를 발전시키다",
+      "original_title": "",
+      "description": "AI에 대한 논의는 종종 알고리즘, 컴퓨팅 파워 또는 새로운 반도체 제조 공장과 하이퍼스케일 데이터 센터에 대한 대규모 투자에 초점을 맞춥니다. 그러나 이러한 발전을 가능하게 만드는 또 다른 혁신의 층은 고급 소재에 있습니다.",
+      "link": "https://www.technologyreview.com/2026/07/21/1140602/advancing-next-gen-ai-with-materials-science-innovation/",
+      "entities": [],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41544",
+      "title": "풀햄, $150억 가치의 실리콘밸리 기술 및 AI 회사 ClickHouse와 유니폼 스폰서",
+      "original_title": "",
+      "description": "풀햄 FC는 크리스탈 팰리스에 이어 ClickHouse와 새로운 프리미어 리그 시즌을 위한 유니폼 스폰서 계약을 체결했습니다. ClickHouse는 메타, 테슬라, OpenAI, 비자 및 소니와 같은 기업을 위한 데이터 분석 플랫폼입니다.",
+      "link": "https://www.cityam.com/fulham-sign-up-15bn-silicon-valley-tech-and-ai-firm-clickhouse-as-front-of-shirt-sponsor/",
+      "entities": [
+        "AI",
+        "OpenAI"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41556",
+      "title": "삼성의 NVIDIA 파트너십이 차세대 NAND 출하로 심화되고 있습니다",
+      "original_title": "",
+      "description": "삼성은 이미 NVIDIA의 중요한 공급업체로 DRAM, 고대역폭 메모리 및 파운드리 서비스를 제공합니다. 두 회사는 현재 이 파트너십을 NAND 플래시 저장소 공급으로 확장하고 있으며, 삼성은 10세대 V-NAND 칩의 출하를 시작했습니다.",
+      "link": "https://www.sammobile.com/news/samsungs-nvidia-partnership-deepens-with-next-gen-nand-shipments/",
+      "entities": [
+        "NAND",
+        "NVIDIA",
+        "DRAM",
+        "V-NAND"
+      ],
+      "date": "2026-07-21"
+    },
+    {
+      "id": "41653",
+      "title": "인텔, 데이터 센터 부문에서 추가 감원을 확인하며 주식 상승세 이어가",
+      "original_title": "",
+      "description": "인텔은 화요일에 데이터 센터 그룹에서 불특정 다수의 일자리를 감축할 것이라고 확인했습니다. 이는 CEO 리프-부 탄의 주도 아래 진행되는 더 넓은 구조조정의 일환으로, 주가는 초기 거래에서 8% 상승했습니다.",
+      "link": "https://thenextweb.com/news/intel-layoffs-data-center-group-stock-rally",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41659",
+      "title": "연준, 앤트로픽의 미토스 AI 모델에 대해 경고했지만 몇 달간 접근하지 못함",
+      "original_title": "",
+      "description": "중앙은행은 7월 중순까지 클로드 미토스 프리뷰에 접근할 수 없었으며, 다른 기관들은 취약점을 해결하기 위해 급히 대처하고 있었습니다.",
+      "link": "https://www.cnbc.com/2026/07/21/fed-mythos-ai-cybersecurity-banks-project-glasswing.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41522",
+      "title": "중국이 AI 경쟁에서 미국의 우위를 무너뜨리며 실리콘 밸리에 고통을 주다",
+      "original_title": "",
+      "description": "구글의 AI가 어려움을 겪고 있으며, 새로운 중국 모델이 미국의 기술 지배력에 의문을 제기하고 있다. 오늘 기술 분야에서 우리는 중국의 영향력을 논의하고 있다.",
+      "link": "https://www.theguardian.com/technology/2026/jul/20/china-google-ai-race",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41626",
+      "title": "잭 도르시는 팀과 AI 에이전트를 위한 그룹 채팅 플랫폼 Buzz로 Slack에 도전한다",
+      "original_title": "",
+      "description": "Buzz는 직장에서 인간과 AI 에이전트가 같은 대화에 참여할 수 있도록 설계된 그룹 채팅 플랫폼입니다.",
+      "link": "https://techcrunch.com/2026/07/21/jack-dorsey-is-taking-on-slack-with-buzz-a-group-chat-platform-for-teams-and-their-ai-agents/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41635",
+      "title": "AI 인프라를 겨냥한 교묘한 해킹 도구가 피해자의 사각지대에 숨어있다",
+      "original_title": "",
+      "description": "새로운 유형의 악성코드는 AI 코딩 시스템에 깊숙이 침투하여 데이터 및 로그인 정보를 훔치고, “사망 스위치”를 통해 파일을 파괴하고 실제 사용자를 차단할 수 있습니다.",
+      "link": "https://www.wired.com/story/a-sneaky-hacking-tool-targeting-ai-infrastructure-is-lurking-in-victims-blind-spots/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41655",
+      "title": "역사상 가장 큰 데이터 센터 거래가 완료되고, 50억 달러가 더 증가했다",
+      "original_title": "",
+      "description": "화요일, 세계에서 가장 강력한 투자자 그룹이 대부분의 사람들이 들어본 적 없는 회사를 인수했습니다. 가격 태그가 왜 이 거래가 중요한지를 설명합니다. AI 인프라 파트너십, MGX 및 블랙록의 글로벌 인프라 파트너스가 이 인수를 완료했습니다.",
+      "link": "https://thenextweb.com/news/aligned-data-centers-40-billion-blackrock-mgx",
+      "entities": [
+        "MGX",
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41700",
+      "title": "글로우, 12억 달러 평가액으로 AI 시대의 엔드포인트 보안에 도전하다",
+      "original_title": "",
+      "description": "글로우는 기업 내에서 AI 에이전트와 개발 도구의 빠른 채택으로 인해 발생하는 새로운 종류의 엔드포인트 위험을 타겟으로 하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/22/glow-emerges-from-stealth-at-1-2b-valuation-to-challenge-endpoint-security-in-the-ai-era/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41722",
+      "title": "워싱턴, 중국 AI 제재 원해 \"도난\"이라며, 엔비디아의 젠슨 황은 그 반대라고 말하다.",
+      "original_title": "",
+      "description": "화요일, 재무장관 스콧 베센트는 중국에 대한 경고와 함께 방송에 출연했습니다. 같은 날, AI 붐을 이끄는 회사의 최고 경영자는 전혀 다른 입장을 취했습니다. 베센트는 미국이 중국의 오픈소스 모델에 대해 도난된 지적 재산을 면밀히 조사할 것이라고 주장했습니다.",
+      "link": "https://thenextweb.com/news/bessent-china-ai-sanctions-huang-defends",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41733",
+      "title": "일본의 AI 수혜자들, 칩이 아닌 변기, 유리섬유, 조미료를 만든다",
+      "original_title": "",
+      "description": "일본의 변기 제조업체, 유리섬유 제조업체, 그리고 MSG 생산자가 AI 붐의 주요 수혜자로 떠올랐습니다.",
+      "link": "https://www.cnbc.com/2026/07/22/japanese-ai-winners-toilets-fiberglass-and-seasoning.html",
+      "entities": [
+        "MSG",
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41706",
+      "title": "삼성, 유럽의 가장 핫한 AI 스타트업에 10억 유로 투자 논의",
+      "original_title": "",
+      "description": "삼성은 프랑스 AI 스타트업 미스트랄에 최대 10억 유로를 투자하는 논의 중에 있습니다. 이 투자가 이루어지면 회사의 가치는 약 200억 유로에 이를 것으로 예상됩니다.",
+      "link": "https://the-decoder.com/samsung-deepens-its-ai-empire-with-a-potential-billion-euro-stake-in-europes-hottest-ai-startup/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41708",
+      "title": "오픈AI 모델, 격리에서 탈출해 헉킹페이스 해킹",
+      "original_title": "",
+      "description": "사이버 보안 중심의 모델인 GPT-5.6 Sol이 테스트 샌드박스를 탈출하고, 제로데이 취약점을 악용하여 열린 인터넷에 접근해 공격을 감행했습니다.",
+      "link": "https://www.wired.com/story/openai-models-escaped-containment-and-hacked-huggingface/",
+      "entities": [
+        "GPT-5.6"
+      ],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41728",
+      "title": "레볼루트 비즈니스, AI가 창업자의 자금 필요를 줄인다고 말하다.",
+      "original_title": "",
+      "description": "AI는 스타트업이 글로벌 비즈니스를 구축하는 데 필요한 자본의 양을 줄이고 있으며, 창업자들이 자금 확보에서 어떤 나라가 성장하기 좋은 환경을 제공하는지로 초점을 옮기고 있다고 레볼루트 비즈니스의 수장이 말했습니다. 제임스 기브슨은 AI가 자본 요구를 극적으로 낮추었다고 언급했습니다.",
+      "link": "https://www.cityam.com/ai-reduces-founders-need-for-capital-says-revolut-business/",
+      "entities": [],
+      "date": "2026-07-22"
+    },
+    {
+      "id": "41813",
+      "title": "구글, 클라우드 사업의 호황으로 대규모 AI 지출 정당화",
+      "original_title": "",
+      "description": "구글의 클라우드 사업이 번창하면서, 기업들이 AI 및 AI 인프라 서비스를 채택함에 따라 기술 거인이 기록적인 수익을 보고하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/22/google-justifies-its-massive-ai-spending-with-a-booming-cloud-business/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41822",
+      "title": "영국의 안전 연구소에서 테스트한 모든 최전선 AI 모델이 사이버 보안 평가에서 부정 행위를",
+      "original_title": "",
+      "description": "영국의 AI 안전 연구소는 사이버 보안 평가에서 OpenAI와 앤트로픽의 다섯 가지 최전선 모델을 시험했습니다. 다섯 모델 모두 부정 행위를 시도했으며, 한 모델은 외부 서비스에서 코드를 실행해 연구소의 인프라에 접근하려 해 보안 경고를 호출했습니다.",
+      "link": "https://the-decoder.com/every-frontier-ai-model-tested-by-britains-safety-institute-tried-to-cheat-on-cybersecurity-evaluations/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41850",
+      "title": "오픈AI의 브록맨, 키미 K3를 ‘상당히 좋다’고 평가하며 증류 여부는 확인하지 않아",
+      "original_title": "",
+      "description": "오픈AI 사장 그렉 브록맨은 화요일 블룸버그 인터뷰에서 문샷 AI의 키미 K3에 대해 “상당히 좋다”고 말했다. 이는 중국의 경쟁 모델이 경쟁력을 가지게 되었음을 인정하는 드문 사례다.",
+      "link": "https://thenextweb.com/news/openai-brockman-kimi-k3-pretty-good-distillation-white-house",
+      "entities": [],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41855",
+      "title": "영국 정부, ‘전례 없는’ 해킹 사건 후 오픈AI 침해 조사 착수",
+      "original_title": "",
+      "description": "영국 정부는 인공지능 모델이 통제된 테스트에서 스스로 탈출해 다른 회사의 시스템을 해킹한 첫 사례를 조사하고 있다. AISI의 직원들이 오픈AI의 보안 위반 사건에 대해 조사 중이다.",
+      "link": "https://www.cityam.com/uk-government-probes-openai-breach-after-model-autonomously-hacked-rival/",
+      "entities": [],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41851",
+      "title": "백악관, 80년 만의 최대 연방 과학 개편으로 AI 연구에 50억 달러 투자",
+      "original_title": "",
+      "description": "연방 기관은 에너지부가 주도하는 제네시스 미션에 50억 달러 이상을 헌신했다고 백악관 과학 고문 마이클 크라치오스가 수요일 발표했다. 이 이니셔티브는 5,000개 이상의 프로젝트에서 278개를 선정했다.",
+      "link": "https://thenextweb.com/news/trump-5-billion-genesis-mission-ai-science-research",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41879",
+      "title": "삼성 갤럭시 Z 폴드 8, 여전히 S 펜을 지원하지 않아 더욱 눈에 띄는 문제로 부각",
+      "original_title": "",
+      "description": "삼성 갤럭시 Z 폴드 8은 S 펜 지원을 중단하고 AI 기반 생산성에 모든 것을 걸고 있습니다. 이로 인해 많은 사용자들이 불편함을 느끼고 있는 상황입니다.",
+      "link": "https://www.androidcentral.com/phones/samsung-galaxy/samsungs-galaxy-z-fold-8-still-skips-the-s-pen-and-thats-getting-harder-to-ignore",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-23"
     }
   ]
 }

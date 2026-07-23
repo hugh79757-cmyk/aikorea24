@@ -4,6 +4,7 @@ description: "AI에게 원하는 결과를 정확히 얻기 위한 프롬프트 
 date: 2026-02-08
 category: "AI입문"
 tags: ["프롬프트", "프롬프트 엔지니어링", "ChatGPT", "질문법"]
+image: "/images/prompt-engineering-basics/thumbnail.webp"
 ---
 
 ## 프롬프트란?

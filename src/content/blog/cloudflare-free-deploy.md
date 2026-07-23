@@ -4,6 +4,7 @@ description: "GitHub와 Cloudflare Pages를 사용해서 내 웹사이트를 완
 date: 2026-02-10
 category: "AI입문"
 tags: ["Cloudflare", "배포", "무료", "GitHub", "웹사이트"]
+image: "/images/cloudflare-free-deploy/thumbnail.webp"
 ---
 
 ## 왜 Cloudflare Pages인가?

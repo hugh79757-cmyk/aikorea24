@@ -4,6 +4,7 @@ description: "정부의 AI 바우처 지원사업이란 무엇이고, 누가 신
 date: 2026-02-09
 category: "소상공인AI"
 tags: ["AI 바우처", "정부 지원", "보조금", "NIPA"]
+image: "/images/ai-voucher-guide-2026/thumbnail.webp"
 ---
 
 ## AI 바우처 지원사업이란?

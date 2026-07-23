@@ -20,7 +20,8 @@ function getCategoryEmoji(category: string): string {
       </div>
       <a href="/blog" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors hidden md:block">전체 보기 →</a>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div id="latest-blog-posts" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+      {posts.length === 0 && <div class="col-span-3 text-center text-gray-400 py-8">로딩 중...</div>}
       {posts.map((post: any) => {
         const rawDate = post.data.date instanceof Date
           ? post.data.date.toISOString()
