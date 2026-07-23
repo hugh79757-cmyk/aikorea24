@@ -423,6 +423,22 @@ Plans: 3 plans
 4. All 292 tests pass ✅
 **Status**: ✅ 완료
 
+### Phase 27: 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결
+**Goal**: 블로그 발행 파이프라인의 인프라 안정성 3대 문제 해결 — 썸네일 image: 필드 frontmatter 누락 복구, deploy.sh 3회 retry, 링크 연결 장애 fallback.
+**Mode**: ad-hoc
+**Depends on**: Nothing (standalone fixes)
+**Success Criteria** (what must be TRUE):
+1. `_add_image_to_frontmatter()` replace 패턴이 실제 frontmatter 구조(빈 줄 포함)와 매칭되어 image: 필드 정상 삽입
+2. 7/21~7/23 발행 글 중 public/images/에 썸네일이 있는 모든 글에 image: 필드 일괄 복구
+3. deploy.sh step 2에 3회 retry + 지연 추가 (set -e 유지, if 조건문 사용)
+4. 링크 연결(deep_dive_url) 실패 시 retry/fallback 처리
+**Plans**: 3 plans
+
+Plans:
+- [ ] 27-01-PLAN.md — 썸네일 frontmatter 버그 수정 + 기존 글 일괄 복구
+- [ ] 27-02-PLAN.md — deploy.sh retry 로직 (3회, if 조건문, set -e 유지)
+- [ ] 27-03-PLAN.md — 링크 연결 장애 대응 (retry/fallback)
+
 ### Phase 26-mobile-readability-followup: 모바일 가독성 개선
 **Goal**: 3 design QA issues from 7day-starter.astro 모바일 가독성 개선
 **Mode**: ad-hoc
@@ -468,4 +484,5 @@ Plans:
 | 24. Threads Pipeline Batch 최적화 | ad-hoc | ✅ Complete | 2026-07-10 |
 | 25. 커뮤니티 레슨 순차 해금 | 1/1 | ✅ Complete | 2026-07-12 |
 | 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | ✅ Complete | 2026-07-12 |
-| **Total** | **49/49** | ✅ All phases complete | |
+| 27. 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결 | 0/3 | 🚧 Planned | — |
+| **Total** | **49/52** | ✅ 49 complete, 3 planned | |
