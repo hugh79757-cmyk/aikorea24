@@ -445,14 +445,14 @@ Plans:
 ### Phase 26-mobile-readability-followup: 모바일 가독성 개선
 **Goal**: 3 design QA issues from 7day-starter.astro 모바일 가독성 개선
 **Mode**: ad-hoc
-**Status**: 🚧 진행 중 (PLAN.md 확인 필요)
+**Status**: ✅ 완료 (commit b9d0db7)
 **Plans**: 1 plan
 
 Plans:
-- [ ] 1. Contrast unification — gray-300/md:gray-400 → gray-300
-- [ ] 2. gray-600 → gray-400 for privacy notice
-- [ ] 3. Add `leading-relaxed` to curriculum cards
-- [ ] 4. Add `leading-snug` to card titles
+- [x] 1. Contrast unification — gray-300/md:gray-400 → gray-300 ✅ (명도비 통일)
+- [x] 2. gray-600 → gray-400 for privacy notice ✅ (접근성 위반 수정)
+- [x] 3. Add `leading-relaxed` to curriculum cards ✅ (desc leading-relaxed)
+- [x] 4. Add `leading-snug` to card titles ✅ (title leading-snug)
 
 ## Progress
 
@@ -487,5 +487,6 @@ Plans:
 | 24. Threads Pipeline Batch 최적화 | ad-hoc | ✅ Complete | 2026-07-10 |
 | 25. 커뮤니티 레슨 순차 해금 | 1/1 | ✅ Complete | 2026-07-12 |
 | 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | ✅ Complete | 2026-07-12 |
+| 26-mobile. 모바일 가독성 개선 | 4/4 | ✅ Complete | 2026-07-12 |
 | 27. 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결 | 3/3 | ✅ Complete | 2026-07-23 |
-| **Total** | **52/52** | ✅ All phases complete | |
+| **Total** | **56/56** | ✅ All phases complete | |
