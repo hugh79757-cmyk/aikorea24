@@ -428,16 +428,19 @@ Plans: 3 plans
 **Mode**: ad-hoc
 **Depends on**: Nothing (standalone fixes)
 **Success Criteria** (what must be TRUE):
-1. `_add_image_to_frontmatter()` replace 패턴이 실제 frontmatter 구조(빈 줄 포함)와 매칭되어 image: 필드 정상 삽입
-2. 7/21~7/23 발행 글 중 public/images/에 썸네일이 있는 모든 글에 image: 필드 일괄 복구
-3. deploy.sh step 2에 3회 retry + 지연 추가 (set -e 유지, if 조건문 사용)
-4. 링크 연결(deep_dive_url) 실패 시 retry/fallback 처리
+1. `_add_image_to_frontmatter()` replace 패턴이 실제 frontmatter 구조(빈 줄 포함)와 매칭되어 image: 필드 정상 삽입 ✅
+2. 7/21~7/23 발행 글 중 public/images/에 썸네일이 있는 모든 글(24개)에 image: 필드 일괄 복구 ✅
+3. deploy.sh step 2에 3회 retry + 지연 추가 (set -e 유지, if 조건문 사용) ✅
+4. 링크 연결(deep_dive_url) 실패 시 3회 retry 처리 ✅
+5. description YAML 큰따옴표 이스케이프 추가 (빌드 차단 해결) ✅
+**Status**: ✅ 완료
 **Plans**: 3 plans
 
 Plans:
-- [ ] 27-01-PLAN.md — 썸네일 frontmatter 버그 수정 + 기존 글 일괄 복구
-- [ ] 27-02-PLAN.md — deploy.sh retry 로직 (3회, if 조건문, set -e 유지)
-- [ ] 27-03-PLAN.md — 링크 연결 장애 대응 (retry/fallback)
+- [x] 27-01-PLAN.md — 썸네일 frontmatter 버그 수정 + 기존 글 일괄 복구 (commit 4cd7878)
+- [x] 27-02-PLAN.md — deploy.sh retry 로직 (3회, if 조건문, set -e 유지) (commit adb5a86)
+- [x] 27-03-PLAN.md — 링크 연결 장애 대응 (retry/fallback) (commit 4d8515d)
+- Additional: description YAML 이스케이프 + 기존 1개 파일 복구 (commit 54954e7)
 
 ### Phase 26-mobile-readability-followup: 모바일 가독성 개선
 **Goal**: 3 design QA issues from 7day-starter.astro 모바일 가독성 개선
@@ -484,5 +487,5 @@ Plans:
 | 24. Threads Pipeline Batch 최적화 | ad-hoc | ✅ Complete | 2026-07-10 |
 | 25. 커뮤니티 레슨 순차 해금 | 1/1 | ✅ Complete | 2026-07-12 |
 | 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | ✅ Complete | 2026-07-12 |
-| 27. 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결 | 0/3 | 🚧 Planned | — |
-| **Total** | **49/52** | ✅ 49 complete, 3 planned | |
+| 27. 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결 | 3/3 | ✅ Complete | 2026-07-23 |
+| **Total** | **52/52** | ✅ All phases complete | |
