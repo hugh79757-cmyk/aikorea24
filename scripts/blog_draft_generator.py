@@ -317,6 +317,7 @@ def _save_file(gpt_output, keyword, file_num, today_str):
     # description: "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거 + 250자 평문
     desc_raw = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", content)
     desc_raw = re.sub(r"[#*>\n\s]+", " ", desc_raw)[:250].strip()
+    desc_escaped = desc_raw.replace('"', "'")  # YAML frontmatter 안전성 (큰따옴표 이스케이프)
 
     now_kst = datetime.now(KST)
     date_str = now_kst.strftime("%Y-%m-%dT%H:%M:%S+09:00")
@@ -326,7 +327,7 @@ def _save_file(gpt_output, keyword, file_num, today_str):
 
     md = f"""---
 title: "{seo_title_escaped}"
-description: "{desc_raw}"
+description: "{desc_escaped}"
 date: {date_str}
 category: "뉴스"
 tags:
