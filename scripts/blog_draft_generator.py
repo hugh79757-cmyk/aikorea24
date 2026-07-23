@@ -353,17 +353,25 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
         content = f.read()
     if re.search(r'^image:', content, re.MULTILINE):
         return
-    # frontmatter 구조: "draft: false\n\n---" (image_line이 빈 문자열이면 빈 줄 생성)
-    # 정규식으로 draft: false 바로 다음의 ---를 찾아 image: 필드 삽입
-    pattern = r'^(draft: false\s*\n)(---)$'
-    replacement = rf'\1image: "{image_rel_path}"\n\2'
-    updated = re.sub(pattern, replacement, content, count=1, flags=re.MULTILINE)
-    if updated == content:
-        log(f"  ⚠️ image 필드 삽입 실패 (frontmatter 구조 예상과 다름: draft: false 다음 --- 매칭 실패)")
+    # 모든 frontmatter 구조 대응: 첫 번째 --- 내부, 두 번째 --- 앞에 image: 필드 삽입
+    # (draft: false 위치/존재 여부와 무관)
+    parts = content.split('---', 2)
+    if len(parts) < 2:
+        log(f"  ⚠️ image 필드 삽입 실패 (frontmatter --- 구분자 없음)")
         return
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(updated)
-    log(f"  🖼️ image 필드 추가: {image_rel_path}")
+    # parts[0] = before first --- (empty or whitespace)
+    # parts[1] = frontmatter content (between the two ---)
+    # parts[2] = body content (after the second ---)
+    fm_content = parts[1]
+    image_line = f'image: "{image_rel_path}"'
+    # Insert image: right before the closing --- (inside frontmatter)
+    updated = f"---{fm_content}{image_line}\n---{parts[2] if len(parts) > 2 else ''}"
+    try:
+        with open(filepath, "w", encoding="utf-8") as f:
+            f.write(updated)
+        log(f"  🖼️ image 필드 추가: {image_rel_path}")
+    except Exception as e:
+        log(f"  ⚠️ image 필드 저장 실패: {e}")
 
 from pipeline.infra.telegram import send_telegram
 
