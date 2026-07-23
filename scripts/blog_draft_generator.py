@@ -6,7 +6,7 @@ aikorea24 블로그 초안 자동 생성기
 - src/content/blog/ 에 마크다운 파일 저장
 - 텔레그램 알림
 """
-import os, re, json, glob, sys
+import os, re, json, glob, sys, time
 from datetime import datetime, date, timezone, timedelta
 
 # launchd 환경: sys.path 미설정 상태이므로 __file__ 기반으로 먼저 추가
@@ -281,7 +281,15 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
         for art in articles:
             news_id = art.get("id")
             if news_id:
-                update_deep_dive_url(news_id, blog_url)
+                # retry: 일시적 D1 네트워크 오류 대응 (2회 재시도)
+                for attempt in range(3):
+                    if update_deep_dive_url(news_id, blog_url):
+                        break
+                    if attempt < 2:
+                        log(f"  🔄 deep_dive_url 재시도 {attempt+1}/2...")
+                        time.sleep(2)
+                else:
+                    log(f"  ⚠️ deep_dive_url 연결 최종 실패 (news_id={news_id}, 3회 모두 실패)")
     return filepath, seo_title
 
 def _save_file(gpt_output, keyword, file_num, today_str):
