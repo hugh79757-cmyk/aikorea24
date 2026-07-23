@@ -299,6 +299,9 @@ def _save_file(gpt_output, keyword, file_num, today_str):
             if len(body_parts) > 1:
                 content = body_parts[1].strip()
 
+    # title에서 따옴표 이스케이프 (YAML frontmatter 안전성)
+    seo_title_escaped = seo_title.replace('"', "'")
+
     slug = make_slug(seo_title)
     filename = f"{today_str}-{file_num:03d}-{slug}.md"
     filepath = os.path.join(PROJECT_DIR, "src", "content", "blog", filename)
@@ -314,14 +317,15 @@ def _save_file(gpt_output, keyword, file_num, today_str):
     image_line = f'image: "/images/{slug}/thumbnail.webp"\n' if os.path.exists(thumbnail_file) else ""
 
     md = f"""---
-title: "{seo_title}"
+title: "{seo_title_escaped}"
 description: "{desc_raw}"
 date: {date_str}
 category: "뉴스"
 tags:
-  - "{keyword}"
+  - "{keyword.replace('"', "'")}"
 draft: false
-{image_line}---
+{image_line}
+---
 
 {content}
 """
@@ -340,9 +344,13 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
         content = f.read()
     if re.search(r'^image:', content, re.MULTILINE):
         return
-    updated = content.replace("draft: false\n---", f'draft: false\nimage: "{image_rel_path}"\n---', 1)
+    # frontmatter 구조: "draft: false\n\n---" (image_line이 빈 문자열이면 빈 줄 생성)
+    # 정규식으로 draft: false 바로 다음의 ---를 찾아 image: 필드 삽입
+    pattern = r'^(draft: false\s*\n)(---)$'
+    replacement = rf'\1image: "{image_rel_path}"\n\2'
+    updated = re.sub(pattern, replacement, content, count=1, flags=re.MULTILINE)
     if updated == content:
-        log(f"  ⚠️ image 필드 삽입 실패 (frontmatter 구조 예상과 다름)")
+        log(f"  ⚠️ image 필드 삽입 실패 (frontmatter 구조 예상과 다름: draft: false 다음 --- 매칭 실패)")
         return
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(updated)
