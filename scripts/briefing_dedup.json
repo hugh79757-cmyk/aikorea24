@@ -3917,6 +3917,76 @@
           "date": "2026-07-25"
         }
       ]
+    },
+    {
+      "date": "2026-07-25",
+      "briefing_id": 193,
+      "articles": [
+        {
+          "id": "42279",
+          "title": "OpenAI의 새로운 AI 키패드를 사용해보았다 — 일부 코더들에게는 재미있고, 나머지 사",
+          "original_title": "",
+          "description": "OpenAI의 멋진 새로운 AI 키패드는 일부에게는 많은 재미를 주겠지만, 많은 사람들은 손대지 않을 가능성이 높다.",
+          "link": "https://techcrunch.com/2026/07/24/i-tried-out-openais-new-ai-keypad-which-will-be-fun-for-coders-and-slightly-mystifying-to-everyone-else/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42293",
+          "title": "삼성, 2030년까지 메모리, 파운드리 및 고급 패키지를 포함한 2,000억 달러 규모의 ",
+          "original_title": "",
+          "description": "삼성전자와 브로드컴은 인공지능 반도체를 위한 메모리 칩, 파운드리 제조 및 고급 패키지를 포함하는 2,000억 달러 이상의 양해각서를 체결했다. 이 계약은 샌프란시스코의 AI 정상 회의에서 발표되었으며, 5년간 지속된다.",
+          "link": "https://thenextweb.com/news/samsung-broadcom-200-billion-chip-deal-ai-memory-foundry",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42215",
+          "title": "코그니션이 포크를 인수한 이유: AI의 개성이 경쟁 우위로 자리잡고 있다",
+          "original_title": "",
+          "description": "AI 코딩 스타트업인 코그니션은 친구처럼 문자 메시지를 보낼 수 있는 AI 어시스턴트 포크를 인수했으며, 이 인수로 스타트업의 가치는 아홉 자리 수 저중반으로 평가되었습니다. 이 인수는 포크의 대화 스타일과 상호작용 모델을 코그니션의 코딩 에이전트인 데빈에 통합하여 AI 어시스턴트의 역할에 대한 인식을 반영합니다.",
+          "link": "https://techcrunch.com/2026/07/24/why-cognition-bought-poke-ai-personality-is-becoming-a-competitive-advantage/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42303",
+          "title": "제미니 메모리 개선: 스마트 홈 업데이트 자동화 및 추가 개선",
+          "original_title": "",
+          "description": "구글은 7월 말 업데이트를 통해 제미니의 대화 메모리 개선 작업을 계속 진행하고 있으며, 자동화 안내와 기타 기능을 추가했습니다.",
+          "link": "https://www.androidcentral.com/accessories/smart-home/gemini-gets-better-memory-smart-home-update-refines-automations-and-more",
+          "entities": [],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42222",
+          "title": "팀이 AlphaFold AI를 사용하여 유전자 편집 단백질을 더 안전하게 redesign",
+          "original_title": "",
+          "description": "구글의 AlphaFold는 유전자 편집 단백질에서 실수를 가능하게 하는 부분을 식별하는 데 도움을 줄 수 있습니다.",
+          "link": "https://arstechnica.com/science/2026/07/team-uses-alphafold-ai-to-redesign-gene-editing-proteins-to-make-them-safer/",
+          "entities": [
+            "AlphaFold"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42281",
+          "title": "오푸스 5, 브라우저 기반 프롬프트 인젝션 문제를 해결했을 수 있다",
+          "original_title": "",
+          "description": "오푸스 5는 오토 모드와 함께 129개의 테스트 시나리오에서 브라우저 에이전트의 프롬프트 인젝션 성공률을 0%로 달성했습니다. 추가적인 보호 장치 없이 진행할 경우, 성공률은 3.7%로 상승합니다. 이 수치가 실제로 적용된다면, 앤트로픽은 AI 에이전트가 직면한 가장 큰 보안 문제를 해결했을 수 있습니다.",
+          "link": "https://the-decoder.com/opus-5-may-have-solved-browser-based-prompt-injection-the-biggest-security-flaw-haunting-ai-agents/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7497,6 +7567,70 @@
       "original_title": "",
       "description": "엔비디아와 미스트랄을 포함한 AI 기업들은 워싱턴에서 중국 AI와 모델 증류에 대한 대응을 논의하는 가운데, 오픈 웨이트 AI 모델에 대한 광범위한 제한을 피할 것을 정책 입안자들에게 촉구하고 있습니다.",
       "link": "https://techcrunch.com/2026/07/24/as-us-weighs-response-to-chinese-ai-industry-urges-against-broad-open-weight-restrictions/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42279",
+      "title": "OpenAI의 새로운 AI 키패드를 사용해보았다 — 일부 코더들에게는 재미있고, 나머지 사",
+      "original_title": "",
+      "description": "OpenAI의 멋진 새로운 AI 키패드는 일부에게는 많은 재미를 주겠지만, 많은 사람들은 손대지 않을 가능성이 높다.",
+      "link": "https://techcrunch.com/2026/07/24/i-tried-out-openais-new-ai-keypad-which-will-be-fun-for-coders-and-slightly-mystifying-to-everyone-else/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42293",
+      "title": "삼성, 2030년까지 메모리, 파운드리 및 고급 패키지를 포함한 2,000억 달러 규모의 ",
+      "original_title": "",
+      "description": "삼성전자와 브로드컴은 인공지능 반도체를 위한 메모리 칩, 파운드리 제조 및 고급 패키지를 포함하는 2,000억 달러 이상의 양해각서를 체결했다. 이 계약은 샌프란시스코의 AI 정상 회의에서 발표되었으며, 5년간 지속된다.",
+      "link": "https://thenextweb.com/news/samsung-broadcom-200-billion-chip-deal-ai-memory-foundry",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42215",
+      "title": "코그니션이 포크를 인수한 이유: AI의 개성이 경쟁 우위로 자리잡고 있다",
+      "original_title": "",
+      "description": "AI 코딩 스타트업인 코그니션은 친구처럼 문자 메시지를 보낼 수 있는 AI 어시스턴트 포크를 인수했으며, 이 인수로 스타트업의 가치는 아홉 자리 수 저중반으로 평가되었습니다. 이 인수는 포크의 대화 스타일과 상호작용 모델을 코그니션의 코딩 에이전트인 데빈에 통합하여 AI 어시스턴트의 역할에 대한 인식을 반영합니다.",
+      "link": "https://techcrunch.com/2026/07/24/why-cognition-bought-poke-ai-personality-is-becoming-a-competitive-advantage/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42303",
+      "title": "제미니 메모리 개선: 스마트 홈 업데이트 자동화 및 추가 개선",
+      "original_title": "",
+      "description": "구글은 7월 말 업데이트를 통해 제미니의 대화 메모리 개선 작업을 계속 진행하고 있으며, 자동화 안내와 기타 기능을 추가했습니다.",
+      "link": "https://www.androidcentral.com/accessories/smart-home/gemini-gets-better-memory-smart-home-update-refines-automations-and-more",
+      "entities": [],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42222",
+      "title": "팀이 AlphaFold AI를 사용하여 유전자 편집 단백질을 더 안전하게 redesign",
+      "original_title": "",
+      "description": "구글의 AlphaFold는 유전자 편집 단백질에서 실수를 가능하게 하는 부분을 식별하는 데 도움을 줄 수 있습니다.",
+      "link": "https://arstechnica.com/science/2026/07/team-uses-alphafold-ai-to-redesign-gene-editing-proteins-to-make-them-safer/",
+      "entities": [
+        "AlphaFold"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42281",
+      "title": "오푸스 5, 브라우저 기반 프롬프트 인젝션 문제를 해결했을 수 있다",
+      "original_title": "",
+      "description": "오푸스 5는 오토 모드와 함께 129개의 테스트 시나리오에서 브라우저 에이전트의 프롬프트 인젝션 성공률을 0%로 달성했습니다. 추가적인 보호 장치 없이 진행할 경우, 성공률은 3.7%로 상승합니다. 이 수치가 실제로 적용된다면, 앤트로픽은 AI 에이전트가 직면한 가장 큰 보안 문제를 해결했을 수 있습니다.",
+      "link": "https://the-decoder.com/opus-5-may-have-solved-browser-based-prompt-injection-the-biggest-security-flaw-haunting-ai-agents/",
       "entities": [
         "AI"
       ],
