@@ -583,9 +583,30 @@ def main():
     if quality_issues:
         log(f"  ⚠️ 품질 이슈: {quality_issues}")
 
-    # 6. 자동 배포 (새 블로그 포스트가 생성되었으면)
-    if generated:
+    # 6. 자동 배포 (새 블로그 포스트가 생성되었거나 미커밋 파일이 있으면)
+    # 미커밋 블로그 파일 감지 (git status --porcelain)
+    untracked_blog_files = []
+    try:
+        import subprocess
+        git_status = subprocess.run(
+            ["git", "status", "--porcelain", "src/content/blog/"],
+            capture_output=True, text=True, timeout=10, cwd=PROJECT_DIR
+        )
+        if git_status.returncode == 0:
+            for line in git_status.stdout.strip().split('\n'):
+                if line and (line.startswith('??') or line.startswith('A ')):
+                    untracked_blog_files.append(line[3:].strip())
+    except Exception as e:
+        log(f"  ⚠️ git status 확인 실패: {e}")
+
+    if generated or untracked_blog_files:
         log("[6] Cloudflare Pages 배포 중...")
+        if untracked_blog_files:
+            log(f"  📦 미커밋 블로그 파일 {len(untracked_blog_files)}개 감지 → 배포 실행")
+            for f in untracked_blog_files[:5]:  # 최대 5개만 로그
+                log(f"    - {f}")
+            if len(untracked_blog_files) > 5:
+                log(f"    ... 외 {len(untracked_blog_files) - 5}개")
         import subprocess
         try:
             # npm run build

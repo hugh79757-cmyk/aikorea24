@@ -197,6 +197,12 @@ None.
 |-------|--------|------------|
 | (2026-07-16 블로그 6건 미배포 → ✅ 7/20 수동 배포 완료) | | |
 
+### Quick Tasks Completed
+
+| Date | Slug | Description |
+|------|------|-------------|
+| 2026-07-26 | fix-blog-deploy-condition | blog_draft_generator.py 배포 조건 수정: `generated`만 체크 → `generated or untracked_blog_files`로 확대. 미커밋 블로그 6건(7/25-007~012) 감지 시 배포 실행 |
+
 ### Deferred Items
 
 | Category | Item | Status | Deferred At |
