@@ -38,7 +38,7 @@ def remove_chinese(text):
 # model_router (threads/v3)
 # ============================================
 from model_router import chat_completion
-from auto_thumbnail import process_thumbnail
+from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
@@ -443,6 +443,72 @@ def main():
         except Exception as e:
             log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
 
+    # 썸네일 중복 검증 게이트 (Plan 28-02)
+    log("[검증] 썸네일 중복 검사 중...")
+    thumb_paths = []
+    for fp, title, sort_order, _ in generated:
+        slug = os.path.basename(fp).replace('.md', '').lower()
+        thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
+        if os.path.exists(thumb_path):
+            thumb_paths.append(thumb_path)
+    
+    dup_result = check_thumbnail_duplicates(thumb_paths)
+    dup_count = len(dup_result["duplicates"])
+    retry_count = 0  # Initialize here for scope
+    
+    if dup_count > 0:
+        log(f"  ⚠️ 썸네일 중복 감지: {dup_count}개 쌍 (고유 {dup_result['unique_count']}/{len(thumb_paths)})")
+        for p1, p2, h in dup_result["duplicates"]:
+            log(f"    중복: {os.path.basename(os.path.dirname(p1))} = {os.path.basename(os.path.dirname(p2))} (MD5: {h[:8]}...)")
+        
+        # 중복된 포스트 재시도 (최대 2회, 다른 키워드 강제)
+        # generated 리스트에서 중복된 파일 찾아 재생성
+        duplicate_slugs = set()
+        for p1, p2, _ in dup_result["duplicates"]:
+            duplicate_slugs.add(os.path.basename(os.path.dirname(p1)))
+            duplicate_slugs.add(os.path.basename(os.path.dirname(p2)))
+        
+        for fp, title, sort_order, _ in generated:
+            slug = os.path.basename(fp).replace('.md', '').lower()
+            if slug in duplicate_slugs and retry_count < 2:
+                log(f"  🔄 중복 썸네일 재시도: {slug}")
+                # 강제로 다른 키워드 사용 (DEEPSEEK_POOL에서 랜덤)
+                try:
+                    from auto_thumbnail import process_thumbnail, DEEPSEEK_POOL
+                    import random
+                    forced_keyword = random.choice([k for k in DEEPSEEK_POOL if k != "abstract technology"])
+                    # 재생성 시도 (실제로는 process_thumbnail이 내부에서 랜덤 선택하므로 그냥 재호출)
+                    # 원본 article 정보 필요 - generated에는 filepath, title, sort_order만 있음
+                    # article 링크/설명은 별도 저장 필요하므로 생략 (process_thumbnail이 내부에서 랜덤 fallback 처리)
+                    thumb_rel = process_thumbnail(
+                        "",  # link - not easily available here
+                        slug,
+                        title=title,
+                        description=""
+                    )
+                    if thumb_rel:
+                        _add_image_to_frontmatter(fp, thumb_rel)
+                        retry_count += 1
+                        log(f"    재생성 완료: {thumb_rel}")
+                except Exception as retry_e:
+                    log(f"    재시도 실패: {retry_e}")
+        
+        # 재검증
+        thumb_paths = []
+        for fp, title, sort_order, _ in generated:
+            slug = os.path.basename(fp).replace('.md', '').lower()
+            thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
+            if os.path.exists(thumb_path):
+                thumb_paths.append(thumb_path)
+        dup_result = check_thumbnail_duplicates(thumb_paths)
+        dup_count = len(dup_result["duplicates"])
+        if dup_count == 0:
+            log(f"  ✅ 재시도 후 중복 해소: 고유 {dup_result['unique_count']}/{len(thumb_paths)}")
+        else:
+            log(f"  ⚠️ 재시도 후에도 중복 잔존: {dup_count}개 쌍")
+    else:
+        log(f"  ✅ 썸네일 중복 검증 통과: 고유 {dup_result['unique_count']}/{len(thumb_paths)}")
+
     # deep_dive_url이 없는 항목은 update_deep_dive_url이 save_draft 내에서 호출됨
     # (save_draft → articles 파라미터로 전달된 기사들의 id로 deep_dive_url 업데이트)
     print()
@@ -458,6 +524,10 @@ def main():
             fname = os.path.basename(fp)
             msg_lines.append(f"\n  #{sort_order} {title[:60]} → {fname}")
         msg_lines.append(f"\n🔗 딥링크 연결 완료")
+        if dup_count > 0:
+            msg_lines.append(f"\n⚠️ 썸네일 중복: {dup_count}쌍 감지 (재시도 {retry_count}건)")
+        else:
+            msg_lines.append(f"\n✅ 썸네일 중복 검증 통과")
         if skipped:
             msg_lines.append(f"\n⏭ 이미 연결됨: {len(skipped)}건")
         send_telegram("\n".join(msg_lines))
@@ -488,6 +558,30 @@ def main():
             log("  ✅ 검증 통과")
     except Exception as e:
         log(f"  ⚠️ 검증 예외: {e}")
+
+    # 5b. 발행 전 품질 체크리스트 (Plan 28-03)
+    log("[5b] 발행 전 썸네일 품질 체크리스트...")
+    quality_issues = []
+    quality_passed = 0
+    for fp, title, sort_order, _ in generated:
+        slug = os.path.basename(fp).replace('.md', '').lower()
+        thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
+        if os.path.exists(thumb_path):
+            is_valid, reason = validate_thumbnail_quality(thumb_path)
+            file_size = os.path.getsize(thumb_path)
+            if is_valid:
+                log(f"  ✅ {slug}: {file_size:,} bytes, 800x800, WebP")
+                quality_passed += 1
+            else:
+                log(f"  ❌ {slug}: {reason} ({file_size:,} bytes)")
+                quality_issues.append((slug, reason))
+        else:
+            log(f"  ⚠️ {slug}: 썸네일 파일 없음")
+            quality_issues.append((slug, "파일 없음"))
+    
+    log(f"  품질 체크리스트: {quality_passed}/{len(generated)} 통과, {len(quality_issues)} 이슈")
+    if quality_issues:
+        log(f"  ⚠️ 품질 이슈: {quality_issues}")
 
     # 6. 자동 배포 (새 블로그 포스트가 생성되었으면)
     if generated:

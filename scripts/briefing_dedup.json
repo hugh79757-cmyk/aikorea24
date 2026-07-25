@@ -3625,6 +3625,298 @@
           "date": "2026-07-23"
         }
       ]
+    },
+    {
+      "date": "2026-07-23",
+      "briefing_id": 189,
+      "articles": [
+        {
+          "id": "41923",
+          "title": "AI가 과학자들이 차세대 의약품을 설계하도록 돕는 방법",
+          "original_title": "",
+          "description": "새로운 의약품을 설계하고 개발하는 것은 비용이 많이 들고 실패할 위험이 큰 과학적 도전입니다. 새로운 약물의 개발에는 많은 시간이 소요되며, 이는 상당한 투자의 대가로 이어집니다. 하지만 대부분의 후보 물질은 환자에게 도달하기조차 힘듭니다.",
+          "link": "https://www.technologyreview.com/2026/07/23/1140346/how-ai-helps-scientists-design-the-next-generation-of-medicines/",
+          "entities": [],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41933",
+          "title": "OpenAI, ChatGPT의 '위험한' 건강 조언으로 고소당하다",
+          "original_title": "",
+          "description": "이번 사건은 챗봇의 조언이 의료 문제에 대한 안내를 찾던 사람에게 해를 끼쳤다고 주장하는 첫 번째 사례처럼 보입니다.",
+          "link": "https://www.nytimes.com/2026/07/22/well/openai-chatgpt-health-lawsuit.html",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41945",
+          "title": "엔비디아, 미국 군 최고의 과학 학교에 DGX GB300 기부",
+          "original_title": "",
+          "description": "젠슨 황은 이번 주 몬터레이로 여행을 떠나 미국 해군에 방산업체들이 판매할 기계인 DGX GB300을 기부했다. 이는 미군 내에 설치된 최초의 인공지능 슈퍼컴퓨터이다.",
+          "link": "https://thenextweb.com/news/nvidia-supercomputer-naval-postgraduate-school",
+          "entities": [
+            "DGX",
+            "GB300"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41922",
+          "title": "충격적인 분기를 겪은 IBM, AI가 메인프레임을 죽이지 않았다고 주장하다",
+          "original_title": "",
+          "description": "IBM 주식이 메인프레임 판매 부진 경고로 폭락한 후, CEO는 AI가 기업의 하드웨어 예산을 일시적으로 망가뜨렸다고 설명했습니다.",
+          "link": "https://techcrunch.com/2026/07/22/after-shocking-quarter-ibm-insists-that-ai-isnt-killing-the-mainframe/",
+          "entities": [
+            "IBM"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41954",
+          "title": "문샷 AI, 중국 수출 금지에도 불구하고 엔비디아 칩에 접근",
+          "original_title": "",
+          "description": "한 백악관 관계자는 지난주 강력한 키미 K3 모델을 출시한 문샷 AI가 태국에서 엔비디아의 GB300 칩에 접근했다고 말했습니다.",
+          "link": "https://www.cnbc.com/2026/07/23/moonshot-kimi-nvidia-ai-chips-export-ban.html",
+          "entities": [
+            "AI",
+            "GB300",
+            "K3"
+          ],
+          "date": "2026-07-23"
+        },
+        {
+          "id": "41927",
+          "title": "저는 앤소로픽의 클로드 AI 도구를 아주 다른 작업에 사용합니다: 모델, 코드 및 동료 간",
+          "original_title": "",
+          "description": "앤소로픽의 AI 도구가 어떻게 작동하는지, 무엇을 달성할 수 있는지, 그리고 왜 보안, 비용 및 감독이 여전히 중요한지를 설명합니다.",
+          "link": "https://www.zdnet.com/article/anthropics-claude-lineup-cowork-code-ai/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-23"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-24",
+      "briefing_id": 190,
+      "articles": [
+        {
+          "id": "42069",
+          "title": "IBM의 크리슈나, AI가 회사의 소프트웨어 부문을 방해하지 않을 것이라며 투자자들을 안심",
+          "original_title": "",
+          "description": "IBM의 CEO는 메인프레임 하드웨어 용량의 증가를 강조하며 소프트웨어 부문은 1년 내로 \"다시 따라잡을 것\"이라고 말했습니다.",
+          "link": "https://www.cnbc.com/2026/07/23/ibms-krishna-argues-that-ai-wont-disrupt-software-unit.html",
+          "entities": [],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42064",
+          "title": "DOGE의 전 직원 네 명이 AI 군사 사이버 스타트업을 위해 1억 6천만 달러를 모았다",
+          "original_title": "",
+          "description": "Cathedral은 정부 효율성 부서의 전 직원들이 설립한 비밀 군사 사이버 보안 스타트업으로, 14억 달러 가치 평가에서 1억 6천만 달러를 모았습니다. Andreessen Horowitz와 Sequoia Capital이 이 라운드를 이끌며 이사회에 참여하였습니다.",
+          "link": "https://thenextweb.com/news/cathedral-doge-alumni-military-cyber-startup-1-4-billion",
+          "entities": [
+            "Sequoia",
+            "Andreessen",
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42037",
+          "title": "앤트로픽, 클라우드 음성 모드에 더 강력한 모델 업데이트",
+          "original_title": "",
+          "description": "클라우드의 새로운 음성 모델은 사용자가 회의 일정을 조정하거나 이메일을 작성할 수 있도록 도와줍니다.",
+          "link": "https://techcrunch.com/2026/07/23/anthropic-updates-claude-voice-mode-with-more-capable-models/",
+          "entities": [],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42067",
+          "title": "인텔, AI 호황으로 15년 만에 가장 빠른 수익 성장 기록",
+          "original_title": "",
+          "description": "인텔은 반도체 기업이란 보고서에 힘입어 주가가 급등했습니다. 회사는 놀라운 실적과 전망을 발표했습니다.",
+          "link": "https://www.cnbc.com/2026/07/23/intel-intc-earnings-report-q2-2026.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42083",
+          "title": "제미니 스파크, 미국 구글 AI 프로 사용자에게 배포 시작",
+          "original_title": "",
+          "description": "AI 울트라와 함께 5월에 출시된 제미니 스파크가 이제 미국의 구글 AI 프로 구독자에게 배포되고 있습니다. 곧 다른 국가의 AI 프로 회원에게도 제공될 예정입니다.",
+          "link": "https://9to5google.com/2026/07/23/gemini-spark-google-ai-pro-us/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42045",
+          "title": "메타의 새 감동 AI 광고, 세상의 종말에 대한 노래 사용",
+          "original_title": "",
+          "description": "이 클립은 “Earth was really dying (dying)”와 같은 가사를 포함한 데이비드 보위의 곡 “Five Years”를 특징으로 하고 있습니다.",
+          "link": "https://www.wired.com/story/meta-david-bowie-apocalypse-ad-is-optimistic-actually/",
+          "entities": [
+            "Five",
+            "Earth",
+            "Years",
+            "AI"
+          ],
+          "date": "2026-07-24"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-24",
+      "briefing_id": 191,
+      "articles": [
+        {
+          "id": "42138",
+          "title": "미국 및 다른 국가들, 중국 정상회의에서 '강력한 보안'의 오픈 소스 AI 지지",
+          "original_title": "",
+          "description": "APEC 성명서는 중국의 산업 및 정보 기술 장관 리 레청에 따르면, 장관급에서 오픈 소스 협력을 처음으로 포함했습니다.",
+          "link": "https://www.cnbc.com/2026/07/24/china-ai-open-source-apec.html",
+          "entities": [
+            "APEC",
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42115",
+          "title": "AI 가드레일이 공격 사이버 보안 연구자들의 작업에 미치는 영향",
+          "original_title": "",
+          "description": "우리는 알려지지 않은 취약점을 찾아내고 이를 악용할 도구를 개발하는 여러 사이버 보안 연구자들과 이야기를 나누었습니다. 그들은 OpenAI와 Anthropic의 가드레일이 자신의 작업에 어떻게 영향을 미치는지에 대해 설명하였습니다.",
+          "link": "https://techcrunch.com/2026/07/23/how-ai-guardrails-are-impeding-the-work-of-offensive-cybersecurity-researchers/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42118",
+          "title": "개의 에펠탑에 해당하는 쓰레기: AI 붐의 유독한 하드웨어 문제",
+          "original_title": "",
+          "description": "칩, 서버, 케이블 등은 이미 심각한 문제를 더욱 악화시킬 수 있다 - 이는 누구에게 영향을 미치며, 그 문제를 해결하기 위해 무엇이 이루어지고 있는지 알아보자.",
+          "link": "https://www.zdnet.com/article/ai-data-center-boom-e-waste-problem/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42038",
+          "title": "구글 보안 임원들이 설립한 AegisAI, AI 기반 스피어 피싱 방지를 위해 3600만 ",
+          "original_title": "",
+          "description": "AegisAI의 공동 창립자들은 각 메시지를 인간처럼 신속하게 분석하는 AI 에이전트를 개발했으며, 가장 정교한 체크리스트로도 발견할 수 없는 작은 이상에 주목합니다.",
+          "link": "https://techcrunch.com/2026/07/23/aegisai-founded-by-former-google-security-execs-lands-36m-to-stop-ai-driven-spear-phishing/",
+          "entities": [
+            "AegisAI",
+            "AI"
+          ],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42051",
+          "title": "트럼프, 약 200개 기업이 데이터 센터로 인한 비용으로부터 미국인을 보호하겠다고 서명했다",
+          "original_title": "",
+          "description": "'요금 납부자 보호 서약'의 대통령은 사람들이 계속해서 치솟는 요금에 어려움을 겪고 있는 가운데 비구속적인 서약을 자랑했습니다. 도널드 트럼프는 약 200개의 기관이 비구속적인 \"요금 납부자 보호 서약\"에 서명했다고 발표했습니다.",
+          "link": "https://www.theguardian.com/us-news/2026/jul/23/trump-datacenter-costs-big-tech",
+          "entities": [],
+          "date": "2026-07-24"
+        },
+        {
+          "id": "42084",
+          "title": "제미니 포 홈, 맥락 기억 15분으로 확장 및 Nest Cam 2026년 7월 업데이트 배",
+          "original_title": "",
+          "description": "구글 홈이 제미니 포 홈과 모바일 앱의 최신 업데이트를 배포하고 있습니다. 새로운 Nest Cam 펌웨어도 함께 제공되고 있습니다.",
+          "link": "https://9to5google.com/2026/07/23/nest-cam-july-2026-update/",
+          "entities": [
+            "Cam",
+            "Nest"
+          ],
+          "date": "2026-07-24"
+        }
+      ]
+    },
+    {
+      "date": "2026-07-25",
+      "briefing_id": 192,
+      "articles": [
+        {
+          "id": "42214",
+          "title": "프렌티스, 레이드 호프만과 마크 핀커스가 공동 설립한 새로운 AI 연구소가 1억 달러 조달",
+          "original_title": "",
+          "description": "이 신규 연구소는 루틴한 컴퓨터 작업을 자동화하는 것이 AI의 가장 큰 활용 사례로서 코딩보다 더 빠르게 성장할 것이라는 데 베팅하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/24/prentis-new-ai-lab-co-founded-by-reid-hoffman-marc-pincus-in-talks-to-raise-100m/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42246",
+          "title": "테슬라의 자율주행 소프트웨어가 사상 최대 속도로 판매되고 있으며, 여전히 인간 운전자가 필",
+          "original_title": "",
+          "description": "테슬라의 풀 자율주행(FSD) 구독자는 현재 150만 명에 가까워졌으며, 2분기에 20만 명의 사용자가 추가돼 역대 최대 분기 증가를 기록했다. CFO인 Vaibhav Taneja는 2분기 동안 북미의 55% 배달이 구매 시점에서 FSD가 활성화되었다고 밝혔다.",
+          "link": "https://thenextweb.com/news/tesla-fsd-subscribers-nearly-1-5-million-q2-2026",
+          "entities": [
+            "Vaibhav",
+            "FSD"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42221",
+          "title": "캐나다 의원, 바닥 발언 중 LLM 응답을 읽다",
+          "original_title": "",
+          "description": "\"다음은 그 부분의 더 자연스럽고 흐름이 있는 버전입니다...\"",
+          "link": "https://arstechnica.com/ai/2026/07/canadian-legislator-reads-out-apparent-llm-response-in-floor-speech/",
+          "entities": [
+            "LLM"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42253",
+          "title": "위대한 클라우드 기업 하락, 3개 남았다. 알파벳, AI 지출에 집중한다",
+          "original_title": "",
+          "description": "알파벳이 다음 주 빅테크 실적 발표를 앞두고 AI 지출에 대한 의지를 강하게 드러냈습니다. 클럽 포트폴리오 이사인 제프 마크스는 \"자본 지출 트렌드가 가장 중요한 초점이 될 것\"이라고 말했습니다.",
+          "link": "https://www.cnbc.com/2026/07/24/1-hyperscaler-megacap-down-3-to-go-alphabet-raises-the-stakes-on-ai-spending.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42228",
+          "title": "실리콘밸리는 중국 AI에 대해 완전히 나뉘어 있다",
+          "original_title": "",
+          "description": "수십억 달러의 가치가 있는 AI \"스타트업\"들이 중국 AI에 대한 경각심을 일깨우고 있습니다. 그러나 더 작은 기업들은 전혀 다른 시각을 가지고 있습니다.",
+          "link": "https://www.wired.com/story/silicon-valley-is-completely-divided-over-chinese-ai/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        },
+        {
+          "id": "42217",
+          "title": "미국, 중국 AI에 대한 대응을 고민하며 산업계는 광범위한 오픈 웨이트 제한 반대를 촉구하",
+          "original_title": "",
+          "description": "엔비디아와 미스트랄을 포함한 AI 기업들은 워싱턴에서 중국 AI와 모델 증류에 대한 대응을 논의하는 가운데, 오픈 웨이트 AI 모델에 대한 광범위한 제한을 피할 것을 정책 입안자들에게 촉구하고 있습니다.",
+          "link": "https://techcrunch.com/2026/07/24/as-us-weighs-response-to-chinese-ai-industry-urges-against-broad-open-weight-restrictions/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-07-25"
+        }
+      ]
     }
   ],
   "articles": [
@@ -6941,6 +7233,274 @@
         "AI"
       ],
       "date": "2026-07-23"
+    },
+    {
+      "id": "41923",
+      "title": "AI가 과학자들이 차세대 의약품을 설계하도록 돕는 방법",
+      "original_title": "",
+      "description": "새로운 의약품을 설계하고 개발하는 것은 비용이 많이 들고 실패할 위험이 큰 과학적 도전입니다. 새로운 약물의 개발에는 많은 시간이 소요되며, 이는 상당한 투자의 대가로 이어집니다. 하지만 대부분의 후보 물질은 환자에게 도달하기조차 힘듭니다.",
+      "link": "https://www.technologyreview.com/2026/07/23/1140346/how-ai-helps-scientists-design-the-next-generation-of-medicines/",
+      "entities": [],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41933",
+      "title": "OpenAI, ChatGPT의 '위험한' 건강 조언으로 고소당하다",
+      "original_title": "",
+      "description": "이번 사건은 챗봇의 조언이 의료 문제에 대한 안내를 찾던 사람에게 해를 끼쳤다고 주장하는 첫 번째 사례처럼 보입니다.",
+      "link": "https://www.nytimes.com/2026/07/22/well/openai-chatgpt-health-lawsuit.html",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41945",
+      "title": "엔비디아, 미국 군 최고의 과학 학교에 DGX GB300 기부",
+      "original_title": "",
+      "description": "젠슨 황은 이번 주 몬터레이로 여행을 떠나 미국 해군에 방산업체들이 판매할 기계인 DGX GB300을 기부했다. 이는 미군 내에 설치된 최초의 인공지능 슈퍼컴퓨터이다.",
+      "link": "https://thenextweb.com/news/nvidia-supercomputer-naval-postgraduate-school",
+      "entities": [
+        "DGX",
+        "GB300"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41922",
+      "title": "충격적인 분기를 겪은 IBM, AI가 메인프레임을 죽이지 않았다고 주장하다",
+      "original_title": "",
+      "description": "IBM 주식이 메인프레임 판매 부진 경고로 폭락한 후, CEO는 AI가 기업의 하드웨어 예산을 일시적으로 망가뜨렸다고 설명했습니다.",
+      "link": "https://techcrunch.com/2026/07/22/after-shocking-quarter-ibm-insists-that-ai-isnt-killing-the-mainframe/",
+      "entities": [
+        "IBM"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41954",
+      "title": "문샷 AI, 중국 수출 금지에도 불구하고 엔비디아 칩에 접근",
+      "original_title": "",
+      "description": "한 백악관 관계자는 지난주 강력한 키미 K3 모델을 출시한 문샷 AI가 태국에서 엔비디아의 GB300 칩에 접근했다고 말했습니다.",
+      "link": "https://www.cnbc.com/2026/07/23/moonshot-kimi-nvidia-ai-chips-export-ban.html",
+      "entities": [
+        "AI",
+        "GB300",
+        "K3"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "41927",
+      "title": "저는 앤소로픽의 클로드 AI 도구를 아주 다른 작업에 사용합니다: 모델, 코드 및 동료 간",
+      "original_title": "",
+      "description": "앤소로픽의 AI 도구가 어떻게 작동하는지, 무엇을 달성할 수 있는지, 그리고 왜 보안, 비용 및 감독이 여전히 중요한지를 설명합니다.",
+      "link": "https://www.zdnet.com/article/anthropics-claude-lineup-cowork-code-ai/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-23"
+    },
+    {
+      "id": "42069",
+      "title": "IBM의 크리슈나, AI가 회사의 소프트웨어 부문을 방해하지 않을 것이라며 투자자들을 안심",
+      "original_title": "",
+      "description": "IBM의 CEO는 메인프레임 하드웨어 용량의 증가를 강조하며 소프트웨어 부문은 1년 내로 \"다시 따라잡을 것\"이라고 말했습니다.",
+      "link": "https://www.cnbc.com/2026/07/23/ibms-krishna-argues-that-ai-wont-disrupt-software-unit.html",
+      "entities": [],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42064",
+      "title": "DOGE의 전 직원 네 명이 AI 군사 사이버 스타트업을 위해 1억 6천만 달러를 모았다",
+      "original_title": "",
+      "description": "Cathedral은 정부 효율성 부서의 전 직원들이 설립한 비밀 군사 사이버 보안 스타트업으로, 14억 달러 가치 평가에서 1억 6천만 달러를 모았습니다. Andreessen Horowitz와 Sequoia Capital이 이 라운드를 이끌며 이사회에 참여하였습니다.",
+      "link": "https://thenextweb.com/news/cathedral-doge-alumni-military-cyber-startup-1-4-billion",
+      "entities": [
+        "Sequoia",
+        "Andreessen",
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42037",
+      "title": "앤트로픽, 클라우드 음성 모드에 더 강력한 모델 업데이트",
+      "original_title": "",
+      "description": "클라우드의 새로운 음성 모델은 사용자가 회의 일정을 조정하거나 이메일을 작성할 수 있도록 도와줍니다.",
+      "link": "https://techcrunch.com/2026/07/23/anthropic-updates-claude-voice-mode-with-more-capable-models/",
+      "entities": [],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42067",
+      "title": "인텔, AI 호황으로 15년 만에 가장 빠른 수익 성장 기록",
+      "original_title": "",
+      "description": "인텔은 반도체 기업이란 보고서에 힘입어 주가가 급등했습니다. 회사는 놀라운 실적과 전망을 발표했습니다.",
+      "link": "https://www.cnbc.com/2026/07/23/intel-intc-earnings-report-q2-2026.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42083",
+      "title": "제미니 스파크, 미국 구글 AI 프로 사용자에게 배포 시작",
+      "original_title": "",
+      "description": "AI 울트라와 함께 5월에 출시된 제미니 스파크가 이제 미국의 구글 AI 프로 구독자에게 배포되고 있습니다. 곧 다른 국가의 AI 프로 회원에게도 제공될 예정입니다.",
+      "link": "https://9to5google.com/2026/07/23/gemini-spark-google-ai-pro-us/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42045",
+      "title": "메타의 새 감동 AI 광고, 세상의 종말에 대한 노래 사용",
+      "original_title": "",
+      "description": "이 클립은 “Earth was really dying (dying)”와 같은 가사를 포함한 데이비드 보위의 곡 “Five Years”를 특징으로 하고 있습니다.",
+      "link": "https://www.wired.com/story/meta-david-bowie-apocalypse-ad-is-optimistic-actually/",
+      "entities": [
+        "Five",
+        "Earth",
+        "Years",
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42138",
+      "title": "미국 및 다른 국가들, 중국 정상회의에서 '강력한 보안'의 오픈 소스 AI 지지",
+      "original_title": "",
+      "description": "APEC 성명서는 중국의 산업 및 정보 기술 장관 리 레청에 따르면, 장관급에서 오픈 소스 협력을 처음으로 포함했습니다.",
+      "link": "https://www.cnbc.com/2026/07/24/china-ai-open-source-apec.html",
+      "entities": [
+        "APEC",
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42115",
+      "title": "AI 가드레일이 공격 사이버 보안 연구자들의 작업에 미치는 영향",
+      "original_title": "",
+      "description": "우리는 알려지지 않은 취약점을 찾아내고 이를 악용할 도구를 개발하는 여러 사이버 보안 연구자들과 이야기를 나누었습니다. 그들은 OpenAI와 Anthropic의 가드레일이 자신의 작업에 어떻게 영향을 미치는지에 대해 설명하였습니다.",
+      "link": "https://techcrunch.com/2026/07/23/how-ai-guardrails-are-impeding-the-work-of-offensive-cybersecurity-researchers/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42118",
+      "title": "개의 에펠탑에 해당하는 쓰레기: AI 붐의 유독한 하드웨어 문제",
+      "original_title": "",
+      "description": "칩, 서버, 케이블 등은 이미 심각한 문제를 더욱 악화시킬 수 있다 - 이는 누구에게 영향을 미치며, 그 문제를 해결하기 위해 무엇이 이루어지고 있는지 알아보자.",
+      "link": "https://www.zdnet.com/article/ai-data-center-boom-e-waste-problem/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42038",
+      "title": "구글 보안 임원들이 설립한 AegisAI, AI 기반 스피어 피싱 방지를 위해 3600만 ",
+      "original_title": "",
+      "description": "AegisAI의 공동 창립자들은 각 메시지를 인간처럼 신속하게 분석하는 AI 에이전트를 개발했으며, 가장 정교한 체크리스트로도 발견할 수 없는 작은 이상에 주목합니다.",
+      "link": "https://techcrunch.com/2026/07/23/aegisai-founded-by-former-google-security-execs-lands-36m-to-stop-ai-driven-spear-phishing/",
+      "entities": [
+        "AegisAI",
+        "AI"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42051",
+      "title": "트럼프, 약 200개 기업이 데이터 센터로 인한 비용으로부터 미국인을 보호하겠다고 서명했다",
+      "original_title": "",
+      "description": "'요금 납부자 보호 서약'의 대통령은 사람들이 계속해서 치솟는 요금에 어려움을 겪고 있는 가운데 비구속적인 서약을 자랑했습니다. 도널드 트럼프는 약 200개의 기관이 비구속적인 \"요금 납부자 보호 서약\"에 서명했다고 발표했습니다.",
+      "link": "https://www.theguardian.com/us-news/2026/jul/23/trump-datacenter-costs-big-tech",
+      "entities": [],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42084",
+      "title": "제미니 포 홈, 맥락 기억 15분으로 확장 및 Nest Cam 2026년 7월 업데이트 배",
+      "original_title": "",
+      "description": "구글 홈이 제미니 포 홈과 모바일 앱의 최신 업데이트를 배포하고 있습니다. 새로운 Nest Cam 펌웨어도 함께 제공되고 있습니다.",
+      "link": "https://9to5google.com/2026/07/23/nest-cam-july-2026-update/",
+      "entities": [
+        "Cam",
+        "Nest"
+      ],
+      "date": "2026-07-24"
+    },
+    {
+      "id": "42214",
+      "title": "프렌티스, 레이드 호프만과 마크 핀커스가 공동 설립한 새로운 AI 연구소가 1억 달러 조달",
+      "original_title": "",
+      "description": "이 신규 연구소는 루틴한 컴퓨터 작업을 자동화하는 것이 AI의 가장 큰 활용 사례로서 코딩보다 더 빠르게 성장할 것이라는 데 베팅하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/24/prentis-new-ai-lab-co-founded-by-reid-hoffman-marc-pincus-in-talks-to-raise-100m/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42246",
+      "title": "테슬라의 자율주행 소프트웨어가 사상 최대 속도로 판매되고 있으며, 여전히 인간 운전자가 필",
+      "original_title": "",
+      "description": "테슬라의 풀 자율주행(FSD) 구독자는 현재 150만 명에 가까워졌으며, 2분기에 20만 명의 사용자가 추가돼 역대 최대 분기 증가를 기록했다. CFO인 Vaibhav Taneja는 2분기 동안 북미의 55% 배달이 구매 시점에서 FSD가 활성화되었다고 밝혔다.",
+      "link": "https://thenextweb.com/news/tesla-fsd-subscribers-nearly-1-5-million-q2-2026",
+      "entities": [
+        "Vaibhav",
+        "FSD"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42221",
+      "title": "캐나다 의원, 바닥 발언 중 LLM 응답을 읽다",
+      "original_title": "",
+      "description": "\"다음은 그 부분의 더 자연스럽고 흐름이 있는 버전입니다...\"",
+      "link": "https://arstechnica.com/ai/2026/07/canadian-legislator-reads-out-apparent-llm-response-in-floor-speech/",
+      "entities": [
+        "LLM"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42253",
+      "title": "위대한 클라우드 기업 하락, 3개 남았다. 알파벳, AI 지출에 집중한다",
+      "original_title": "",
+      "description": "알파벳이 다음 주 빅테크 실적 발표를 앞두고 AI 지출에 대한 의지를 강하게 드러냈습니다. 클럽 포트폴리오 이사인 제프 마크스는 \"자본 지출 트렌드가 가장 중요한 초점이 될 것\"이라고 말했습니다.",
+      "link": "https://www.cnbc.com/2026/07/24/1-hyperscaler-megacap-down-3-to-go-alphabet-raises-the-stakes-on-ai-spending.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42228",
+      "title": "실리콘밸리는 중국 AI에 대해 완전히 나뉘어 있다",
+      "original_title": "",
+      "description": "수십억 달러의 가치가 있는 AI \"스타트업\"들이 중국 AI에 대한 경각심을 일깨우고 있습니다. 그러나 더 작은 기업들은 전혀 다른 시각을 가지고 있습니다.",
+      "link": "https://www.wired.com/story/silicon-valley-is-completely-divided-over-chinese-ai/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
+    },
+    {
+      "id": "42217",
+      "title": "미국, 중국 AI에 대한 대응을 고민하며 산업계는 광범위한 오픈 웨이트 제한 반대를 촉구하",
+      "original_title": "",
+      "description": "엔비디아와 미스트랄을 포함한 AI 기업들은 워싱턴에서 중국 AI와 모델 증류에 대한 대응을 논의하는 가운데, 오픈 웨이트 AI 모델에 대한 광범위한 제한을 피할 것을 정책 입안자들에게 촉구하고 있습니다.",
+      "link": "https://techcrunch.com/2026/07/24/as-us-weighs-response-to-chinese-ai-industry-urges-against-broad-open-weight-restrictions/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-07-25"
     }
   ]
 }

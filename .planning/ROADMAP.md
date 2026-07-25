@@ -454,6 +454,32 @@ Plans:
 - [x] 3. Add `leading-relaxed` to curriculum cards ✅ (desc leading-relaxed)
 - [x] 4. Add `leading-snug` to card titles ✅ (title leading-snug)
 
+### Phase 28: 썸네일 DeepSeek API 장애 대응 + 블로그 발행 개선
+**Goal**: DeepSeek API 불안정으로 인한 썸네일 중복 문제 근본 해결 + 블로그 발행 파이프라인 품질/안정성 향상
+**Mode**: mvp
+**Depends on**: Phase 27
+**Priority**: High (발행 품질 직결)
+
+**Root Cause (from 2026-07-25 analysis)**:
+- DeepSeek API 실패 시 fallback 키워드 "abstract technology" 고정 사용
+- DEEPSEEK_POOL[:3]에 원본 키워드 포함 → 대체 쿼리 재시도도 동일 결과
+- 최종 폴백에서 `photos[0]` 재사용 → 5개 포스트 동일 썸네일 발생 (MD5: 8c93b87916afb3bc1e227bdda928b569)
+
+**Success Criteria** (what must be TRUE):
+1. DeepSeek 실패 시 고정 fallback 대신 `DEEPSEEK_POOL`에서 **랜덤/순환 선택** 적용
+2. 대체 쿼리 풀에서 **원본 검색 키워드 제외** 로직 추가
+3. 모든 Pexels 결과 사용 시 `photos[0]` 재사용 대신 **placeholder 복사** (`_use_default_thumbnail`) 호출
+4. Pexels 페이지네이션(`page=2,3...`) 지원으로 더 넓은 미사용 사진 풀 탐색
+5. 썸네일 생성 실패 시 **에러 로깅 강화** (키워드, 시도 횟수, 최종 액션 기록)
+6. 블로그 발행 전 **썸네일 중복 검증** 단계 추가 (MD5 해시 비교, 중복 시 재생성/경고)
+7. 발행 파이프라인에 **이미지 품질 체크** (최소 파일 크기, 해상도, WebP 유효성) 추가
+
+**Plans**: 4 plans
+- 28-01: DeepSeek fallback 로직 개선 + Pexels 페이지네이션 + placeholder 폴백
+- 28-02: 썸네일 중복 검증 게이트 (blog_draft_generator.py 통합)
+- 28-03: 이미지 품질 검증 + 발행 전 체크리스트
+- 28-04: 재발 방지를 위한 모니터링/알림 (텔레그램 중복 썸네일 감지 시 알림)
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -489,4 +515,5 @@ Plans:
 | 26. 브리핑 중국어 차단 + 심층글 비활성화 | 1/1 | ✅ Complete | 2026-07-12 |
 | 26-mobile. 모바일 가독성 개선 | 4/4 | ✅ Complete | 2026-07-12 |
 | 27. 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결 | 3/3 | ✅ Complete | 2026-07-23 |
+| 28. 썸네일 DeepSeek API 장애 대응 + 블로그 발행 개선 | 0/4 | 📋 Planned | — |
 | **Total** | **56/56** | ✅ All phases complete | |

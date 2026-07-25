@@ -11,6 +11,7 @@ Usage:
 import argparse
 import json
 import os
+import random
 import re
 import shutil
 import sys
@@ -98,43 +99,65 @@ def _extract_deepseek_keyword(description):
     if not key:
         return None
 
-    try:
-        client = OpenAI(base_url="https://api.deepseek.com/v1", api_key=key)
-        pool_str = ", ".join(DEEPSEEK_POOL)
-        resp = client.chat.completions.create(
-            model="deepseek-chat",
-            messages=[
-                {"role": "system", "content": f"Pick the best stock photo keyword for this news from: {pool_str}. Or create a 1-2 word similar visual keyword. Return ONLY the keyword, lowercase, max 3 words."},
-                {"role": "user", "content": (description or "")[:400]}
-            ],
-            temperature=0.3,
-            max_tokens=20,
-        )
-        kw = resp.choices[0].message.content.strip().lower()
-        return kw if kw else None
-    except Exception:
-        return None
+    # Retry logic for DeepSeek API (max 3 attempts)
+    for attempt in range(3):
+        try:
+            client = OpenAI(base_url="https://api.deepseek.com/v1", api_key=key)
+            pool_str = ", ".join(DEEPSEEK_POOL)
+            resp = client.chat.completions.create(
+                model="deepseek-chat",
+                messages=[
+                    {"role": "system", "content": f"Pick the best stock photo keyword for this news from: {pool_str}. Or create a 1-2 word similar visual keyword. Return ONLY the keyword, lowercase, max 3 words."},
+                    {"role": "user", "content": (description or "")[:400]}
+                ],
+                temperature=0.3,
+                max_tokens=20,
+            )
+            kw = resp.choices[0].message.content.strip().lower()
+            if kw:
+                log(f"  DeepSeek 성공 (시도 {attempt+1}/3): '{kw}'")
+                return kw
+        except Exception as e:
+            log(f"  DeepSeek 시도 {attempt+1}/3 실패: {e}")
+            if attempt < 2:
+                import time
+                time.sleep(1 * (attempt + 1))  # exponential backoff: 1s, 2s
+
+    # All retries failed - random fallback from pool
+    fallback = random.choice(DEEPSEEK_POOL)
+    log(f"  DeepSeek 3회 모두 실패 → 랜덤 fallback: '{fallback}'")
+    return fallback
 
 
-def search_pexels(query, per_page=15):
+def search_pexels(query, per_page=15, max_pages=3):
+    """Pexels 검색 with pagination (default 3 pages = up to 45 candidates)"""
     api_key = _load_pexels_key()
     if not api_key:
         log("  Pexels API 키 없음")
         return []
-    try:
-        url = "https://api.pexels.com/v1/search"
-        resp = requests.get(
-            url,
-            headers={"Authorization": api_key},
-            params={"query": query, "per_page": per_page},
-            timeout=15,
-        )
-        resp.raise_for_status()
-        data = resp.json()
-        return data.get("photos", [])
-    except Exception as e:
-        log(f"  Pexels 검색 에러: {e}")
-        return []
+    
+    all_photos = []
+    for page in range(1, max_pages + 1):
+        try:
+            url = "https://api.pexels.com/v1/search"
+            resp = requests.get(
+                url,
+                headers={"Authorization": api_key},
+                params={"query": query, "per_page": per_page, "page": page},
+                timeout=15,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            photos = data.get("photos", [])
+            if not photos:
+                break
+            all_photos.extend(photos)
+            log(f"  Pexels 검색: '{query}' page={page} → {len(photos)}장 (누적 {len(all_photos)})")
+        except Exception as e:
+            log(f"  Pexels 검색 에러 (page={page}): {e}")
+            break
+    
+    return all_photos
 
 
 def download_image(url):
@@ -169,6 +192,107 @@ def create_thumbnail(image_data, output_path):
     return output_path
 
 
+def validate_thumbnail_quality(filepath, min_size_kb=15):
+    """Validate thumbnail quality: file size, dimensions, format, integrity.
+    
+    Args:
+        filepath: Path to the thumbnail file
+        min_size_kb: Minimum file size in KB (default 15KB)
+        
+    Returns:
+        tuple: (is_valid: bool, reason: str)
+    """
+    try:
+        # Check file exists
+        if not os.path.exists(filepath):
+            return False, "파일 없음"
+        
+        # Check file size
+        file_size = os.path.getsize(filepath)
+        if file_size < min_size_kb * 1024:
+            return False, f"파일 크기 미달: {file_size//1024}KB < {min_size_kb}KB"
+        
+        # Check with PIL
+        with Image.open(filepath) as img:
+            # Verify it's a valid image
+            img.verify()
+            
+        # Re-open for dimension check (verify() closes the file)
+        with Image.open(filepath) as img:
+            # Check dimensions
+            if img.size != THUMBNAIL_SIZE:
+                return False, f"해상도 불일치: {img.size} != {THUMBNAIL_SIZE}"
+            
+            # Check format
+            if img.format != "WEBP":
+                return False, f"포맷 불일치: {img.format} != WEBP"
+        
+        return True, "OK"
+    except Exception as e:
+        return False, f"검증 에러: {e}"
+
+
+def _pick_unused_photo(photos, used_ids):
+    if not photos:
+        return None
+    for photo in photos:
+        pid = photo.get("id")
+        if pid and pid not in used_ids:
+            return photo
+    return None
+
+
+def check_thumbnail_duplicates(thumbnail_paths):
+    """Check for duplicate thumbnails by MD5 hash.
+    
+    Args:
+        thumbnail_paths: List of absolute paths to thumbnail files
+        
+    Returns:
+        dict: {"duplicates": [(path1, path2, hash), ...], "unique_count": N, "hash_map": {hash: [paths]}}
+    """
+    import hashlib
+    hash_map = {}
+    duplicates = []
+    
+    for path in thumbnail_paths:
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, 'rb') as f:
+                file_hash = hashlib.md5(f.read()).hexdigest()
+            if file_hash in hash_map:
+                hash_map[file_hash].append(path)
+                duplicates.append((hash_map[file_hash][0], path, file_hash))
+            else:
+                hash_map[file_hash] = [path]
+        except Exception as e:
+            log(f"  ⚠️ 해시 계산 실패 {path}: {e}")
+    
+    unique_count = len(hash_map)
+    return {
+        "duplicates": duplicates,
+        "unique_count": unique_count,
+        "hash_map": hash_map
+    }
+
+
+def _use_default_thumbnail(slug):
+    src = PROJECT_DIR / "public" / "images" / "news-keyword-og.webp"
+    dst = PUBLIC_IMAGES_DIR / slug / "thumbnail.webp"
+    if not src.exists():
+        log("  기본 placeholder 이미지 없음, 썸네일 생성 포기")
+        return None
+    try:
+        os.makedirs(os.path.dirname(str(dst)), exist_ok=True)
+        shutil.copy(str(src), str(dst))
+        log(f"  기본 placeholder 사용: {dst}")
+        return f"/images/{slug}/thumbnail.webp"
+    except OSError as e:
+        log(f"  기본 placeholder 복사 실패: {e}")
+        return None
+
+
 def process_thumbnail(url, slug, title="", description=""):
     text = description or title or ""
     if not text:
@@ -177,38 +301,40 @@ def process_thumbnail(url, slug, title="", description=""):
 
     log(f"DeepSeek 키워드 추출 중...")
     keyword = _extract_deepseek_keyword(text)
-    if not keyword:
-        log("  DeepSeek 실패, fallback: abstract technology")
-        keyword = "abstract technology"
-
+    # _extract_deepseek_keyword now always returns a keyword (random fallback if API fails)
+    
     log(f"  키워드: '{keyword}'")
 
     used_ids = _load_used_ids()
-    photos = search_pexels(keyword)
+    photos = search_pexels(keyword, max_pages=3)
     if not photos:
         log("  Pexels 결과 없음, fallback: artificial intelligence")
-        photos = search_pexels("artificial intelligence")
+        photos = search_pexels("artificial intelligence", max_pages=3)
 
     chosen = _pick_unused_photo(photos, used_ids)
+    fallback_reason = None
+    
     if not chosen:
-        # 미사용 사진이 없으면 대체 쿼리로 재시도 (최대 3개)
-        log("  미사용 사진 없음, 대체 쿼리 시도")
-        for alt in DEEPSEEK_POOL[:3]:
-            alt_photos = search_pexels(alt)
+        # 미사용 사진이 없으면 대체 쿼리로 재시도 (원본 키워드 제외)
+        alt_queries = [q for q in DEEPSEEK_POOL if q != keyword][:5]
+        log(f"  미사용 사진 없음, 대체 쿼리 {len(alt_queries)}개 시도 (원본 '{keyword}' 제외)")
+        
+        for alt in alt_queries:
+            alt_photos = search_pexels(alt, max_pages=3)
             chosen = _pick_unused_photo(alt_photos, used_ids)
             if chosen:
+                fallback_reason = f"alt_query={alt}"
+                log(f"  대체 쿼리 성공: '{alt}' → ID={chosen.get('id')}")
                 break
-
+    
+    # 최종 폴백: placeholder 사용 (photos[0] 재사용 안 함)
     if not chosen:
-        if photos:
-            log("  모든 Pexels 결과 사용됨, 동일 이미지 재사용")
-            chosen = photos[0]
-        else:
-            # Pexels 전면 실패 → 기본 placeholder 사용 (깨진 참조 방지)
-            return _use_default_thumbnail(slug)
+        fallback_reason = "all_exhausted"
+        log("  모든 Pexels 결과 소진 → placeholder 사용")
+        return _use_default_thumbnail(slug)
 
     pid = chosen.get("id")
-    log(f"  선택: ID={pid} | {chosen.get('alt', '')[:60]}")
+    log(f"  선택: ID={pid} | {chosen.get('alt', '')[:60]} | fallback={fallback_reason or 'none'}")
 
     img_url = chosen.get("src", {}).get("large")
     if not img_url:
@@ -232,37 +358,40 @@ def process_thumbnail(url, slug, title="", description=""):
     file_size = os.path.getsize(output_path)
     log(f"  생성 완료: {file_size:,} bytes")
 
+    # 품질 검증 (Plan 28-03)
+    is_valid, reason = validate_thumbnail_quality(output_path)
+    if not is_valid:
+        log(f"  ⚠️ 품질 검증 실패: {reason} → 재시도/placeholder")
+        # 재시도: 다른 키워드로 다시 시도 (최대 2회)
+        for retry in range(2):
+            log(f"  🔄 품질 재시도 {retry+1}/2 (다른 키워드)")
+            # 새로운 키워드로 다시 검색
+            retry_keyword = random.choice([q for q in DEEPSEEK_POOL if q != keyword])
+            retry_photos = search_pexels(retry_keyword, max_pages=3)
+            retry_chosen = _pick_unused_photo(retry_photos, used_ids)
+            if retry_chosen:
+                retry_url = retry_chosen.get("src", {}).get("large") or retry_chosen.get("src", {}).get("medium")
+                if retry_url:
+                    retry_data = download_image(retry_url)
+                    if retry_data:
+                        create_thumbnail(retry_data, output_path)
+                        is_valid, reason = validate_thumbnail_quality(output_path)
+                        if is_valid:
+                            log(f"  ✅ 재시도 성공: {retry_keyword}")
+                            pid = retry_chosen.get("id")
+                            break
+                        else:
+                            log(f"  ❌ 재시도 품질 실패: {reason}")
+        
+        if not is_valid:
+            log("  ⚠️ 품질 재시도 모두 실패 → placeholder 사용")
+            return _use_default_thumbnail(slug)
+
     _save_used_id(pid)
 
     rel_path = f"/images/{slug}/thumbnail.webp"
     log(f"  경로: {rel_path}")
     return rel_path
-
-
-def _pick_unused_photo(photos, used_ids):
-    if not photos:
-        return None
-    for photo in photos:
-        pid = photo.get("id")
-        if pid and pid not in used_ids:
-            return photo
-    return None
-
-
-def _use_default_thumbnail(slug):
-    src = PROJECT_DIR / "public" / "images" / "news-keyword-og.webp"
-    dst = PUBLIC_IMAGES_DIR / slug / "thumbnail.webp"
-    if not src.exists():
-        log("  기본 placeholder 이미지 없음, 썸네일 생성 포기")
-        return None
-    try:
-        os.makedirs(os.path.dirname(str(dst)), exist_ok=True)
-        shutil.copy(str(src), str(dst))
-        log(f"  기본 placeholder 사용: {dst}")
-        return f"/images/{slug}/thumbnail.webp"
-    except OSError as e:
-        log(f"  기본 placeholder 복사 실패: {e}")
-        return None
 
 
 def main():
