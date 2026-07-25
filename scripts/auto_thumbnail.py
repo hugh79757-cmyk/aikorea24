@@ -105,7 +105,7 @@ def _extract_deepseek_keyword(description):
             client = OpenAI(base_url="https://api.deepseek.com/v1", api_key=key)
             pool_str = ", ".join(DEEPSEEK_POOL)
             resp = client.chat.completions.create(
-                model="deepseek-chat",
+                model="deepseek-v4-pro",
                 messages=[
                     {"role": "system", "content": f"Pick the best stock photo keyword for this news from: {pool_str}. Or create a 1-2 word similar visual keyword. Return ONLY the keyword, lowercase, max 3 words."},
                     {"role": "user", "content": (description or "")[:400]}
