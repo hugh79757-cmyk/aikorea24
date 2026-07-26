@@ -6,10 +6,14 @@ aikorea24 블로그 초안 자동 생성기
 - src/content/blog/ 에 마크다운 파일 저장
 - 텔레그램 알림
 """
-import os, re, json, glob, sys, time
+# launchd 환경 방어: 가장 먼저 sys.path 설정 (모든 import보다 앞)
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+import os, re, json, glob, time
 from datetime import datetime, date, timezone, timedelta
 
-# launchd 환경: sys.path 미설정 상태이므로 __file__ 기반으로 먼저 추가
+# launchd 환경: sys.path 미설정 상태이므로 __file__ 기반으로 추가
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_DIR = os.path.dirname(_script_dir)
 sys.path.insert(0, _PROJECT_DIR)
@@ -292,6 +296,132 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
                     log(f"  ⚠️ deep_dive_url 연결 최종 실패 (news_id={news_id}, 3회 모두 실패)")
     return filepath, seo_title
 
+# ============================================
+# 유틸: 한국어 종결어미 패턴 (공통)
+# ============================================
+_KOREAN_SENTENCE_ENDINGS = (
+    r'(?<!\d)[.!?](?!\d)|'  # 문장 부호 (숫자 사이가 아닌 경우만: 버전/소수점 제외)
+    r'(?:'  # 한국어 종결어미들 (명확한 것만)
+    r'습니다|입니다|했습니다|'  # 존댓말 과거/현재
+    r'합니다|있습니다|였습니다|됩니다|'  # 존댓말 현재
+    r'봅니다|듣습니다|옵니다|갑니다|줍니다|삽니다|팝니다|만듭니다|'  # 동사 존댓말
+    r'생각합니다|느낍니다|알고 있습니다|모릅니다|'  # 심리/인지
+    r'임|음|이다|한다|했다|'  # 명사형/서술형 (확실한 것만)
+    r'요|함'  # 해요체/명사형 종결
+    r')(?=[\s\.\!\?]|$)'
+)
+
+# 컴파일된 정규식 (성능 최적화)
+_KOR_END_PATTERN = re.compile(_KOREAN_SENTENCE_ENDINGS)
+
+
+# ============================================
+# 유틸: 문장 경계에서 텍스트 자르기 (한국어 종결어미 고려) — 기존 호환용
+# ============================================
+def _truncate_at_sentence_boundary(text, max_len):
+    """텍스트를 max_len 이하로 자르되, 한국어 문장 종결어미에서 자름."""
+    if len(text) <= max_len:
+        return text.strip()
+    
+    # max_len 근처에서 앞쪽으로 검색하며 종결어미 찾기
+    search_start = max(0, max_len - 50)  # 여유분 50자
+    truncated = text[:max_len]
+    
+    # max_len 이전의 마지막 종결어미 찾기
+    matches = list(_KOR_END_PATTERN.finditer(truncated[search_start:]))
+    
+    if matches:
+        # 가장 마지막 종결어미 위치 계산
+        last_match = matches[-1]
+        end_pos = search_start + last_match.end()
+        return truncated[:end_pos].strip()
+    
+    # 종결어미 못 찾으면 공백에서 자름
+    last_space = truncated.rfind(' ', search_start)
+    if last_space > search_start:
+        return truncated[:last_space].strip()
+    
+    # 그것도 안 되면 그냥 자름
+    return truncated.strip()
+
+
+# ============================================
+# 유틸: 첫 번째 완전한 문장 추출 (description용)
+# ============================================
+def _extract_first_sentence(text, max_len=300):
+    """텍스트에서 첫 번째 완전한 문장만 추출.
+    
+    마크다운 헤딩이 포함된 경우, 헤딩을 제거하고 첫 번째 실제 문장(한국어 종결어미 포함)을 추출.
+    
+    Args:
+        text: 입력 텍스트 (마크다운 헤딩 포함 가능)
+        max_len: 최대 길이 (첫 문장이 너무 길면 안전장치로 자름)
+    
+    Returns:
+        첫 번째 완전한 문장 (종결어미 포함)
+    """
+    if not text:
+        return ""
+    
+    # 마크다운 헤딩, 강조, 줄바꿈 제거
+    # 1. "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거
+    text = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", text)
+    # 2. 일반 헤딩 제거 (## 텍스트\n 또는 # 텍스트\n, 뒤따르는 공백 포함)
+    text = re.sub(r"^##?\s+[^\n]+\n\s*", "", text)
+    # 3. 남은 마크다운 문법 제거
+    text = re.sub(r"[#*>\n\s]+", " ", text).strip()
+    
+    if not text:
+        return ""
+    
+    # 텍스트가 max_len 이내면 전체에서 첫 종결어미 찾기
+    if len(text) <= max_len:
+        m = _KOR_END_PATTERN.search(text)
+        if m:
+            return text[:m.end()].strip()
+        return text
+    
+    # max_len 이후에서 첫 종결어미 찾기 (안전장치)
+    m = _KOR_END_PATTERN.search(text, max_len - 50)
+    if m:
+        # 첫 번째 종결어미 위치에서 문장 추출
+        end_pos = m.end()
+        # 문장 시작점 찾기: 종결어미 앞쪽으로 역추적하여 문장 경계 찾기
+        sentence_text = text[:end_pos]
+        # 마지막 문장 경계(마침표, 느낌표, 물음표, 줄바꿈) 찾기
+        # 한국어 문장은 보통 ". ", "! ", "? ", "\n", 또는 종결어미+공백 뒤부터 시작
+        last_boundary = -1
+        for pattern in ['. ', '! ', '? ', '\n']:
+            idx = sentence_text.rfind(pattern)
+            if idx > last_boundary:
+                last_boundary = idx
+        # 한국어 종결어미 뒤 공백도 체크
+        for ending in ['다 ', '요 ', '함 ', '습니다 ', '입니다 ', '했습니다 ', '합니다 ', '있습니다 ', '였습니다 ', '됩니다 ']:
+            idx = sentence_text.rfind(ending)
+            if idx > last_boundary:
+                last_boundary = idx + len(ending) - 1
+        
+        if last_boundary > 0:
+            start = last_boundary + 1
+        else:
+            start = 0
+        
+        first_sentence = sentence_text[start:end_pos].strip()
+        # 너무 짧으면 (헤딩만 남은 경우) 전체에서 첫 종결어미까지
+        if len(first_sentence) < 10:
+            m2 = _KOR_END_PATTERN.search(text)
+            if m2:
+                return text[:m2.end()].strip()
+        return first_sentence
+    
+    # 종결어미 못 찾으면 max_len에서 공백 기준 자름
+    last_space = text.rfind(' ', 0, max_len)
+    if last_space > 0:
+        return text[:last_space].strip()
+    
+    return text[:max_len].strip()
+
+
 def _save_file(gpt_output, keyword, file_num, today_str):
     """GPT 출력 파싱 → .md 파일 저장 (내부)."""
     # TITLE: ... / --- / 본문
@@ -314,9 +444,19 @@ def _save_file(gpt_output, keyword, file_num, today_str):
     filename = f"{today_str}-{file_num:03d}-{slug}.md"
     filepath = os.path.join(PROJECT_DIR, "src", "content", "blog", filename)
 
-    # description: "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거 + 250자 평문
-    desc_raw = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", content)
-    desc_raw = re.sub(r"[#*>\n\s]+", " ", desc_raw)[:250].strip()
+# description: "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거 + TITLE/--- 제거 + 일반 헤딩 제거 + 첫 번째 완전한 문장 추출
+    # 1. TITLE: ... 제거 (content에 TITLE이 섞여있을 수 있음)
+    desc_raw = re.sub(r"^TITLE:\s*[^\n]+\n", "", content)
+    # 2. --- 구분자 이전 내용 제거
+    desc_raw = re.sub(r"^---+\s*\n", "", desc_raw)
+    # 3. "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거 (##?, #? 선택적)
+    desc_raw = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*|^(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", desc_raw)
+    # 4. 일반 마크다운 헤딩 제거 (## 텍스트\n 또는 # 텍스트\n, 뒤따르는 공백 포함)
+    desc_raw = re.sub(r"^##?\s+[^\n]+\n\s*", "", desc_raw)
+    # 5. 남은 마크다운 문법 제거
+    desc_raw = re.sub(r"[#*>\n\s]+", " ", desc_raw).strip()
+    # 6. 첫 번째 완전한 문장 추출
+    desc_raw = _extract_first_sentence(desc_raw, 300)
     desc_escaped = desc_raw.replace('"', "'")  # YAML frontmatter 안전성 (큰따옴표 이스케이프)
 
     now_kst = datetime.now(KST)
@@ -443,6 +583,10 @@ def main():
         except Exception as e:
             log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
 
+    # generated/skipped 분류 (thumbnail 검증에 필요하므로 여기서 미리 정의)
+    generated = [c for c in created if c[0] is not None]
+    skipped = [c for c in created if c[0] is None]
+
     # 썸네일 중복 검증 게이트 (Plan 28-02)
     log("[검증] 썸네일 중복 검사 중...")
     thumb_paths = []
@@ -515,8 +659,6 @@ def main():
 
     # 3. 텔레그램 알림
     log("[3/5] 텔레그램 알림...")
-    generated = [c for c in created if c[0] is not None]
-    skipped = [c for c in created if c[0] is None]
     if generated:
         msg_lines = [f"🤖 <b>[{today_str}] 블로그 발행 완료</b>"]
         msg_lines.append(f"\n📝 생성: {len(generated)}건")
@@ -531,14 +673,10 @@ def main():
         if skipped:
             msg_lines.append(f"\n⏭ 이미 연결됨: {len(skipped)}건")
         send_telegram("\n".join(msg_lines))
-    elif skipped:
-        msg_lines = [f"📭 <b>[{today_str}] 블로그 발행</b>"]
-        msg_lines.append(f"\n모두 이미 연결됨 ({len(skipped)}건)")
-        send_telegram("\n".join(msg_lines))
+    # elif skipped or not generated:
+    #     알림 생략: 생성된 글 없을 때만 로그만 남김 (텔레그램 알림 불필요)
     else:
-        msg_lines = [f"📭 <b>[{today_str}] 블로그 발행</b>"]
-        msg_lines.append(f"\n생성된 글 없음 (브리핑 없음)")
-        send_telegram("\n".join(msg_lines))
+        log(f"  📭 생성된 글 없음 (skipped: {len(skipped)}건) — 텔레그램 알림 생략")
     print()
 
     # 4. 완료
@@ -639,7 +777,11 @@ def main():
                 )
                 if deploy_result.returncode == 0:
                     log("  ✅ 배포 완료: https://aikorea24.kr")
-                    send_telegram(f"🚀 [{today_str}] 블로그 {len(generated)}건 배포 완료")
+                    # 실제로 생성된 글이 있을 때만 배포 완료 알림 (미커밋 재배포 시 중복 방지)
+                    if generated:
+                        send_telegram(f"🚀 [{today_str}] 블로그 {len(generated)}건 배포 완료")
+                    else:
+                        log("  ℹ️ 신규 생성 글 없음 → 배포 알림 생략 (미커밋 파일 재배포)")
                 else:
                     log(f"  ❌ 배포 실패: {deploy_result.stderr[:200]}")
                     send_telegram(f"❌ [{today_str}] 블로그 배포 실패")

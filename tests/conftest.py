@@ -186,7 +186,7 @@ def monkeypatch_deepseek(monkeypatch):
     return mock
 
 
-@pytest.fixture
+@ pytest.fixture
 def monkeypatch_http(monkeypatch):
     """HTTP 요청 (requests.get, urllib.request.urlopen)을 Mock 처리합니다.
 
@@ -238,3 +238,10 @@ def monkeypatch_http(monkeypatch):
     monkeypatch.setattr("requests.get", mock_get)
     monkeypatch.setattr("urllib.request.urlopen", mock_urlopen)
     return mock_get
+
+
+@pytest.fixture(autouse=True)
+def disable_telegram_in_tests(monkeypatch):
+    """테스트 중 텔레그램 알림 비활성화 - orchestrator 테스트에서 가짜 실패 알림 방지"""
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "")
