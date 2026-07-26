@@ -1,26 +1,28 @@
 ---
-title: "프롬프트 CO-STAR 공식 마케팅과 고객 대상 글에 강한 프레임워크"
-description: "프롬프트 CO-STAR 공식을 상세히 알아봅니다. Context, Objective, Style, Tone, Audience, Response 6가지 요소로 타깃 맞춤형 콘텐츠를 만드는 방법을 정리했습니다."
-date: 2026-02-24T10:40:25+09:00
-category: "AI 강좌"
+title: 프롬프트 CO-STAR 공식 마케팅과 고객 대상 글에 강한 프레임워크
+description: CO-STAR는 Context, Objective, Style, Tone, Audience, Response의 앞글자를 딴
+  프레임워크입니다
+date: '2026-02-24 10:40:25+09:00'
+category: AI 강좌
 tags:
-  - "프롬프트"
-  - "CO-STAR"
-  - "ChatGPT"
-  - "프롬프트공식"
-  - "AI활용"
-  - "마케팅"
+- 프롬프트
+- CO-STAR
+- ChatGPT
+- 프롬프트공식
+- AI활용
+- 마케팅
 draft: false
-image: "/images/thumbnails/프롬프트-co-star-공식.jpg"
+image: /images/thumbnails/프롬프트-co-star-공식.jpg
 ---
-
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)
 
 프롬프트 5가지 공식 중 다섯 번째, CO-STAR를 자세히 알아보겠습니다. CO-STAR는 싱가포르 정부 주최 AI 프롬프트 대회에서 1등을 차지한 프레임워크입니다. 마케팅, 세일즈, 고객 커뮤니케이션처럼 특정 청중을 대상으로 하는 글쓰기에 특화되어 있습니다.
 
+CO-STAR는 Context, Objective, Style, Tone, Audience, Response의 앞글자를 딴 프레임워크입니다. 6가지 요소가 각각 역할을 담당합니다.
+
 ## CO-STAR가 뭔가요
 
-CO-STAR는 Context, Objective, Style, Tone, Audience, Response의 앞글자를 딴 프레임워크입니다. 6가지 요소가 각각 역할을 담당합니다.
+
 
 **Context** 는 배경 상황을 설명합니다. 회사가 뭘 하는지, 현재 어떤 상황인지, 왜 이 글을 써야 하는지를 알려줍니다. AI에게 충분한 맥락을 제공해야 상황에 맞는 글이 나옵니다.
 

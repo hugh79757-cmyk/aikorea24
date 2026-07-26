@@ -1,21 +1,19 @@
 ---
-title: "Reasonix 사용방법 DeepSeek 전용 터미널 코딩 에이전트 완전 정복"
-description: "Reasonix는 DeepSeek API만 사용하는 터미널 코딩 에이전트로 AI 코딩 비용을 최대 50배 줄일 수 있습니다. 설치부터 슬래시 명령어, 비용 절감 전략까지 2026년 최신 기준으로 완전 정리했습니다."
-date: 2026-06-02T16:24:52+09:00
-category: "AI 강좌"
+title: Reasonix 사용방법 DeepSeek 전용 터미널 코딩 에이전트 완전 정복
+description: Reasonix는 DeepSeek API만 사용하도록 설계된 오픈소스 터미널 AI 코딩 에이전트 입니다
+date: '2026-06-02 16:24:52+09:00'
+category: AI 강좌
 tags:
-  - "Reasonix"
-  - "DeepSeek"
-  - "AI코딩에이전트"
-  - "터미널코딩"
-  - "DeepSeekAPI"
-  - "코딩자동화"
-  - "개발자툴"
+- Reasonix
+- DeepSeek
+- AI코딩에이전트
+- 터미널코딩
+- DeepSeekAPI
+- 코딩자동화
+- 개발자툴
 draft: false
-image: "/images/2026-06-02-010-reasonix-사용방법-deepseek-전용-터미널-코딩-에이전트-완전/thumbnail.webp"
+image: /images/2026-06-02-010-reasonix-사용방법-deepseek-전용-터미널-코딩-에이전트-완전/thumbnail.webp
 ---
-
-
 
 Claude Code 쓰고 싶은데 요금 청구서 보고 멈칫하셨나요?
 
@@ -25,9 +23,11 @@ AI 코딩 에이전트가 개발자의 생산성을 바꿔놓은 것은 분명�
 
 [GitHub Reasonix 바로가기](https://github.com/esengine/DeepSeek-Reasonix)
 
+Reasonix는 **DeepSeek API만 사용하도록 설계된 오픈소스 터미널 AI 코딩 에이전트**입니다. MIT 라이선스로 공개되어 있고, GitHub에서 14,000개 이상의 스타를 기록하고 있으며, DeepSeek 공식 `awesome-deepseek-agent` 디렉토리에도 등재된 검증된 커뮤니티 도구입니다.
+
 ## Reasonix란 무엇인가
 
-Reasonix는 **DeepSeek API만 사용하도록 설계된 오픈소스 터미널 AI 코딩 에이전트**입니다. MIT 라이선스로 공개되어 있고, GitHub에서 14,000개 이상의 스타를 기록하고 있으며, DeepSeek 공식 `awesome-deepseek-agent` 디렉토리에도 등재된 검증된 커뮤니티 도구입니다.
+
 
 Claude Code나 Codex CLI가 특정 모델에 번역 레이어를 씌워 작동하는 방식과 달리, Reasonix는 `api.deepseek.com`에 직접 통신합니다. 이 차이가 단순한 기술적 디테일처럼 보이지만, 실제 비용에서는 엄청난 차이를 만들어냅니다.
 
@@ -41,11 +41,9 @@ DeepSeek API에는 특별한 기능이 있습니다. 바로 **prefix 캐시**입
 
 Reasonix는 이 문제를 **append-only 루프 구조**로 해결합니다. 대화를 절대 재정렬하거나 압축하지 않고 뒤에만 붙여나가는 방식으로 prefix를 고정시켜 캐시 히트율을 극한까지 끌어올립니다. 실제 테스트에서 하루 동안 **4억 3,500만 개의 입력 토큰**을 처리하면서 **캐시 히트율 99.82%** 를 달성해, 원래 61이었을 비용을 **12로 줄인** 사례가 공식 문서에 기록되어 있습니다.
 
----
 
 **그렇다면 이 도구를 실제로 어떻게 설치하고 사용할까요?**
 
----
 
 ## 설치 및 첫 실행 방법
 

@@ -1,15 +1,19 @@
 ---
-title: "전 OpenAI 임원, 스페이스X 경쟁사 보드 합류: AI와 우주 산업의 교차점 분석"
-description: "전 OpenAI 최고제품책임자 케빈 와일이 우주 스타트업 스토크스페이스의 이사로 합류한 배경과 의미를 심층 분석합니다."
-date: 2026-07-08
+title: '전 OpenAI 임원, 스페이스X 경쟁사 보드 합류: AI와 우주 산업의 교차점 분석'
+description: 전 오픈AI(OpenAI) 최고제품책임자이자 트위터, 메타 등에서 경력을 쌓은 베테랑 기술 경영인 케빈 와일(Kevin Weil)이
+  우주 스타트업 스토크스페이스(Stoke Space)의 이사회에 합류했습니다
+date: '2026-07-08'
+category: 뉴스
+tags:
+- 케빈와일
+- 스토크스페이스
+- 오픈AI
+- 우주산업
+- 로켓재사용
+- 기술경영
 draft: false
-image: "/images/전-openai-임원-kevin-weil-stoke-space-이사로-임명/thumbnail.webp"
-tags: ["케빈와일", "스토크스페이스", "오픈AI", "우주산업", "로켓재사용", "기술경영"]
-category: "뉴스"
+image: /images/전-openai-임원-kevin-weil-stoke-space-이사로-임명/thumbnail.webp
 ---
-
-## 디지털 제품의 거장이 우주로 향한 이유
-
 전 오픈AI(OpenAI) 최고제품책임자이자 트위터, 메타 등에서 경력을 쌓은 베테랑 기술 경영인 케빈 와일(Kevin Weil)이 우주 스타트업 스토크스페이스(Stoke Space)의 이사회에 합류했습니다. 이 소식은 단순한 인사 이동을 넘어, 인공지능과 우주라는 두 거대한 기술 영역이 교차하는 새로운 시대를 암시하는 중요한 신호로 읽힙니다. 오픈AI의 과학 연구 가속화 프로그램을 이끌던 그가 왜 로켓을 만드는 회사로 이동했는지, 그 배경과 맥락을 살펴볼 필요가 있습니다.
 
 ## 엔지니어 CEO에게 필요한 것은 기술이 아니었다

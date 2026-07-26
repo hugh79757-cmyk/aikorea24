@@ -1,21 +1,20 @@
 ---
-title: "지푸 GLM 5.1 출시 월 3달러로 Claude Opus 4.6의 94.6% 코딩 성능 오픈소스"
-description: "중국 지푸 AI가 GLM-5.1을 출시했습니다. Claude Opus 4.6 대비 94.6% 코딩 성능을 월 3달러 오픈소스로 제공하며 AI 가격 구조를 다시 흔들고 있습니다."
-date: 2026-03-30T09:00:27+09:00
-category: "뉴스"
+title: 지푸 GLM 5.1 출시 월 3달러로 Claude Opus 4.6의 94.6% 코딩 성능 오픈소스
+description: 2026년 3월 27일, 지푸 AI(Z.
+date: '2026-03-30 09:00:27+09:00'
+category: 뉴스
 tags:
-  - "GLM5.1"
-  - "지푸AI"
-  - "오픈소스AI"
-  - "AI코딩모델"
-  - "ClaudeOpus"
-  - "AI가격"
-  - "DeepSeek패턴"
-  - "Z.ai"
+- GLM5.1
+- 지푸AI
+- 오픈소스AI
+- AI코딩모델
+- ClaudeOpus
+- AI가격
+- DeepSeek패턴
+- Z.ai
 draft: false
-image: "/images/thumbnails/지푸-glm-51-출시.jpg"
+image: /images/thumbnails/지푸-glm-51-출시.jpg
 ---
-
 중국 지푸 AI(Z.ai)가 코딩 특화 모델 **GLM-5.1** 을 출시했습니다. Claude Code 환경에서 45.3점을 기록해 Claude Opus 4.6의 47.9점 대비 94.6% 수준이며, 가격은 프로모션 기준 월 3달러, 정가 월 10달러입니다. 오픈소스입니다.
 
 같은 주에 Anthropic의 미공개 모델 Mythos는 "서빙 비용이 매우 높다"고 알려졌습니다. 최상위 모델의 가격이 올라가는 바로 그 시점에, 94.6% 성능을 7분의 1 가격에 오픈소스로 제공하는 모델이 나온 것입니다. 이것은 DeepSeek가 보여줬던 패턴의 반복입니다. 이 글에서는 GLM-5.1의 성능, DeepSeek 패턴의 구조, 그리고 한국 개발자에게 미치는 실질적 영향을 분석합니다.
@@ -24,9 +23,11 @@ image: "/images/thumbnails/지푸-glm-51-출시.jpg"
 
 기사 원문과 브리핑: [AI코리아24 2026년 3월 30일](https://aikorea24.kr/briefing/2026-03-30/#item-1)
 
+2026년 3월 27일, 지푸 AI(Z.ai, 구 Zhipu AI)는 GLM-5.1을 정식 출시하고 기존 GLM 코딩 플랜 사용자에게 전면 개방했습니다. 핵심 수치를 정리하면 다음과 같습니다.
+
 ## GLM 5.1 코딩 벤치마크 성능과 가격 분석
 
-2026년 3월 27일, 지푸 AI(Z.ai, 구 Zhipu AI)는 GLM-5.1을 정식 출시하고 기존 GLM 코딩 플랜 사용자에게 전면 개방했습니다. 핵심 수치를 정리하면 다음과 같습니다.
+
 
 Claude Code를 테스트 프레임워크로 활용한 코딩 성능 평가에서 GLM-5.1은 45.3점을 기록했습니다. Claude Opus 4.6을 적용했을 때의 47.9점에 단 2.6점 모자란 수치로, 약 94.6%에 해당합니다. 전작 GLM-5의 35.4점에서 한 달 만에 약 28% 상승한 것입니다.
 

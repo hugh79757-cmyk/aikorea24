@@ -1,26 +1,28 @@
 ---
-title: "프롬프트 CREATE 공식 콘텐츠와 창작 작업에 강한 프레임워크"
-description: "프롬프트 CREATE 공식을 상세히 알아봅니다. Character, Request, Examples, Adjustments, Type, Extras 6가지 요소로 광고 문구부터 영상 스크립트까지 만드는 방법을 정리했습니다."
-date: 2026-02-24T10:32:54+09:00
-category: "AI 강좌"
+title: 프롬프트 CREATE 공식 콘텐츠와 창작 작업에 강한 프레임워크
+description: CREATE는 Character, Request, Examples, Adjustments, Type of Output, Extras의
+  앞글자를 딴 프레임워크입니다
+date: '2026-02-24 10:32:54+09:00'
+category: AI 강좌
 tags:
-  - "프롬프트"
-  - "CREATE"
-  - "ChatGPT"
-  - "프롬프트공식"
-  - "AI활용"
-  - "콘텐츠제작"
+- 프롬프트
+- CREATE
+- ChatGPT
+- 프롬프트공식
+- AI활용
+- 콘텐츠제작
 draft: false
-image: "/images/thumbnails/프롬프트-create-공식-콘텐츠와.jpg"
+image: /images/thumbnails/프롬프트-create-공식-콘텐츠와.jpg
 ---
-
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)
 
 프롬프트 5가지 공식 중 두 번째, CREATE를 자세히 알아보겠습니다. CREATE는 광고 문구, 블로그 글, 영상 스크립트, SNS 콘텐츠처럼 뭔가를 만들어내는 창작 작업에 특화된 프레임워크입니다. RISE가 분석에 강하다면, CREATE는 창작에 강합니다.
 
+CREATE는 Character, Request, Examples, Adjustments, Type of Output, Extras의 앞글자를 딴 프레임워크입니다. 6가지 요소가 각각 역할을 담당합니다.
+
 ## CREATE가 뭔가요
 
-CREATE는 Character, Request, Examples, Adjustments, Type of Output, Extras의 앞글자를 딴 프레임워크입니다. 6가지 요소가 각각 역할을 담당합니다.
+
 
 **Character** 는 AI가 어떤 관점에서 작업할지 정합니다. "5년 경력 카피라이터", "MZ세대 감성을 잘 아는 콘텐츠 크리에이터"처럼 창작자의 페르소나를 설정합니다. RISE의 Role과 비슷하지만, CREATE에서는 창작 스타일까지 포함합니다.
 

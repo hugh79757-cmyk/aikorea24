@@ -1,22 +1,12 @@
 ---
-title: "AI 챗봇 응답 4건 중 1건은 저널리즘 출처 Muckrack 1500만건 분석과 언론 산업의 딜레마"
-description: "Gemini, Perplexity, Claude, ChatGPT의 인용 1500만건 분석 결과 25%가 언론사 출처였다. AI가 저널리즘을 먹고 저널리즘을 대체하는 구조적 모순을 분석한다."
-date: 2026-04-09T10:19:40+09:00
-category: "뉴스"
-tags:
-  - "AI챗봇인용"
-  - "Muckrack"
-  - "저널리즘AI"
-  - "언론산업"
-  - "Reuters"
-  - "AI저작권"
-  - "미디어위기"
-  - "AI검색"
+title: AI 챗봇 응답 4건 중 1건은 저널리즘 출처 Muckrack 1500만건 분석과 언론 산업의 딜레마
+description: Muckrack은 4개 주요
+date: '2026-04-09T10:19:40+09:00'
+category: 뉴스
 draft: false
-image: "/images/thumbnails/ai-챗봇-응답-4건.jpg"
+image: /images/thumbnails/ai-챗봇-응답-4건.jpg
 ---
 
----
 
 AI 챗봇이 생성하는 응답 4건 중 1건의 인용 출처는 저널리즘입니다. PR 데이터베이스 **Muckrack**이 Gemini, Perplexity, Claude, ChatGPT에서 수집한 **1500만 건**의 인용문을 분석한 결과입니다. 전 세계 출처 순위는 Reuters 1위, Forbes 2위, The Guardian 3위였습니다.
 
@@ -24,9 +14,11 @@ AI 챗봇이 생성하는 응답 4건 중 1건의 인용 출처는 저널리즘�
 
 관련 뉴스 브리핑: [AI코리아24 브리핑 2026-04-09](https://aikorea24.kr/briefing/2026-04-09/#item-1)
 
+Muckrack은 4개 주요 AI 서비스에 수백만 건의 쿼리를 전송하고, 응답에 등장하는 저널리스트와 언론사 출처를 추적했습니다.
+
 ## Muckrack 분석의 핵심 수치들
 
-Muckrack은 4개 주요 AI 서비스에 수백만 건의 쿼리를 전송하고, 응답에 등장하는 저널리스트와 언론사 출처를 추적했습니다.
+
 
 전 세계 출처 상위권은 다음과 같습니다. Reuters가 1위, Forbes 2위, The Guardian 3위, Financial Times 4위, CNBC 5위입니다. 영국만 따로 보면 The Guardian이 1위이고, 인테리어 전문지 Homes and Gardens가 2위에 올랐습니다. 전문 매체가 상위권에 오른 것은 AI가 특정 분야의 권위 있는 출처를 집중적으로 참조한다는 의미입니다.
 

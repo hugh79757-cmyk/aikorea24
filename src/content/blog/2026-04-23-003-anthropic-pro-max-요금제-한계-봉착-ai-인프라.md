@@ -1,21 +1,20 @@
 ---
-title: "Anthropic Pro Max 요금제 한계 봉착 AI 인프라 위기가 구독자에게 미치는 영향"
-description: "Anthropic이 신규 가입자 대상으로 Pro 플랜에서 Claude Code를 일시 제외했다가 철회했다 GPU 가격 48% 급등과 API 가동률 저하로 드러난 AI 인프라 위기가 실제 구독자에게 미치는 영향을 분석한다"
-date: 2026-04-23T12:06:53+09:00
-category: "뉴스"
+title: Anthropic Pro Max 요금제 한계 봉착 AI 인프라 위기가 구독자에게 미치는 영향
+description: 미디어 분석가 에드 지트론(Ed Zitron)이 Anthropic 공식 웹사이트의 가격 페이지가 변경된 것을 포착했습니다
+date: '2026-04-23T12:06:53+09:00'
+category: 뉴스
 tags:
-  - "Anthropic요금제"
-  - "ClaudeCode"
-  - "ProMax플랜"
-  - "AI인프라위기"
-  - "GPU부족"
-  - "AI구독"
-  - "클로드요금"
+- Anthropic요금제
+- ClaudeCode
+- ProMax플랜
+- AI인프라위기
+- GPU부족
+- AI구독
+- 클로드요금
 draft: false
-image: "/images/2026-04-23-003-anthropic-pro-max-요금제-한계-봉착-ai-인프라/thumbnail.webp"
+image: /images/2026-04-23-003-anthropic-pro-max-요금제-한계-봉착-ai-인프라/thumbnail.webp
 ---
 
----
 
 Anthropic이 신규 가입자 중 일부를 대상으로 Pro 플랜에서 Claude Code를 제외하는 테스트를 진행했다가, 공개 비판이 이어지자 수 시간 만에 철회했습니다. 단순한 요금제 실험처럼 보이지만, 이 사건의 배경에는 전 AI 산업을 압박하고 있는 컴퓨팅 자원 부족이라는 구조적 문제가 있습니다.
 
@@ -23,9 +22,11 @@ Anthropic 성장 담당 임원은 이번 해프닝을 해명하면서 "현재 �
 
 오늘의 AI 뉴스 전체 브리핑은 [aikorea24.kr 2026년 4월 23일 브리핑](https://aikorea24.kr/briefing/2026-04-23/)에서 확인하실 수 있습니다.
 
+미디어 분석가 에드 지트론(Ed Zitron)이 Anthropic 공식 웹사이트의 가격 페이지가 변경된 것을 포착했습니다. 모바일과 데스크톱 모두에서 Pro 플랜 항목에 Claude Code가 X 표시로 제외되어 있었고, Max 5x와 Max 20x 플랜만 Claude Code 접근을 유지하고 있었습니다. 지원 문서도 같은 방향으로 수정됐습니다.
+
 ## 무슨 일이 있었나
 
-미디어 분석가 에드 지트론(Ed Zitron)이 Anthropic 공식 웹사이트의 가격 페이지가 변경된 것을 포착했습니다. 모바일과 데스크톱 모두에서 Pro 플랜 항목에 Claude Code가 X 표시로 제외되어 있었고, Max 5x와 Max 20x 플랜만 Claude Code 접근을 유지하고 있었습니다. 지원 문서도 같은 방향으로 수정됐습니다.
+
 
 공개 비판이 빠르게 확산되자 Anthropic 성장 담당 임원 아몰 아바사레(Amol Avasare)가 X에 해명 게시물을 올렸습니다. "신규 프로슈머 가입자의 약 2%를 대상으로 한 소규모 테스트"였으며, 기존 Pro·Max 구독자는 영향을 받지 않는다는 설명이었습니다.
 

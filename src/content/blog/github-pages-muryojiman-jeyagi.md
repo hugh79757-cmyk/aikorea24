@@ -1,38 +1,37 @@
 ---
-title: "GitHub Pages 무료지만 제약이 있다"
-description: "GitHub Pages의 특징과 제한 사항을 정리합니다. 가장 간단한 무료 호스팅이지만 알아야 할 제약들이 있습니다."
-date: 2026-02-12T22:46:32+09:00
-category: "바이브코딩심화"
+title: GitHub Pages 무료지만 제약이 있다
+description: GitHub Pages를 활성화하는 방법은 간단합니다
+date: '2026-02-12 22:46:32+09:00'
+category: 바이브코딩심화
 tags:
-  - "GitHubPages"
-  - "무료호스팅"
-  - "정적사이트"
-  - "웹배포"
-  - "GitHub"
-  - "바이브코딩"
+- GitHubPages
+- 무료호스팅
+- 정적사이트
+- 웹배포
+- GitHub
+- 바이브코딩
 draft: false
-image: "/images/thumbnails/github-pages-muryojiman-jeyagi.jpg"
+image: /images/thumbnails/github-pages-muryojiman-jeyagi.jpg
 ---
 
 - [GitHub Pages 공식 문서](https://docs.github.com/ko/pages)
 - [GitHub Pages 제한 사항](https://docs.github.com/ko/pages/getting-started-with-github-pages/github-pages-limits)
 - [GitHub Pages 시작하기](https://pages.github.com/)
 
----
 
 GitHub Pages는 GitHub에서 제공하는 무료 정적 사이트 호스팅 서비스입니다. 별도의 서비스에 가입하거나 설정할 필요 없이 GitHub 레포지토리만 있으면 바로 웹사이트를 공개할 수 있습니다. 가장 단순하고 빠른 방법이지만, 알아두어야 할 제약 사항들이 있습니다.
 
 Cloudflare Pages나 Vercel에 비해 기능이 제한적이지만, 간단한 포트폴리오나 문서 사이트라면 GitHub Pages만으로 충분합니다. 특히 GitHub 계정만 있으면 추가 가입 없이 바로 사용할 수 있다는 점이 가장 큰 장점입니다.
 
----
-
-## GitHub Pages 사용법
 
 GitHub Pages를 활성화하는 방법은 간단합니다. 레포지토리 설정(Settings)에서 Pages 메뉴로 이동합니다. Source에서 배포할 브랜치(보통 main)와 폴더(/(root) 또는 /docs)를 선택하고 Save를 클릭합니다. 몇 분 후에 사용자이름.github.io/레포지토리이름 주소로 사이트에 접속할 수 있습니다.
 
+## GitHub Pages 사용법
+
+
+
 특별한 케이스로 사용자이름.github.io라는 이름의 레포지토리를 만들면 사용자이름.github.io 주소가 바로 연결됩니다. 개인 블로그나 포트폴리오 메인 페이지로 사용하기 좋습니다. 커스텀 도메인 연결도 무료로 가능합니다.
 
----
 
 ## GitHub Pages의 제한 사항
 

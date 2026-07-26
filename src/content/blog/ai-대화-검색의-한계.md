@@ -1,23 +1,17 @@
 ---
-title: "AI 대화 검색의 한계 LIKE에서 벡터 검색으로 넘어가는 이유"
-description: "AIKeep24에 Cloudflare Vectorize 벡터 검색을 추가하는 과정을 통해 임베딩, 코사인 유사도, 벡터 DB의 개념을 좌표 비유로 쉽게 설명합니다"
-date: 2026-03-17T09:58:31+09:00
-category: "바이브코딩"
-tags:
-  - "벡터검색"
-  - "임베딩"
-  - "Vectorize"
-  - "Cloudflare"
-  - "코사인유사도"
-  - "AIKeep24"
-  - "EXAONE"
+title: AI 대화 검색의 한계 LIKE에서 벡터 검색으로 넘어가는 이유
+description: ''
+date: '2026-03-17T09:58:31+09:00'
+category: 바이브코딩
 draft: false
-image: "/images/thumbnails/ai-대화-검색의-한계.jpg"
+image: /images/thumbnails/ai-대화-검색의-한계.jpg
 ---
+
+[GitHub - aikorea24/aikeep24: AI 대화 맥락 관리 도구 — Never lose context from your AI conversations. Auto-summary, tagging &amp; search powered by local LLM. · GitHub](https://github.com/aikorea24/aikeep24)
 
 ## 도서관에서 책 찾기, 두 가지 방법
 
-[GitHub - aikorea24/aikeep24: AI 대화 맥락 관리 도구 — Never lose context from your AI conversations. Auto-summary, tagging &amp; search powered by local LLM. · GitHub](https://github.com/aikorea24/aikeep24)
+
 
 도서관에 가서 "맥락 유실 문제 해결 방법"이라는 주제의 책을 찾는다고 생각해 보겠습니다. 방법은 두 가지입니다.
 
@@ -25,7 +19,6 @@ image: "/images/thumbnails/ai-대화-검색의-한계.jpg"
 
 두 번째는 사서에게 "AI 대화가 길어지면 앞부분을 까먹는 문제를 다룬 책이 있을까요?"라고 물어보는 것입니다. 사서는 "맥락"이라는 단어가 제목에 없어도, 그 주제를 다루는 책이 어디에 꽂혀 있는지 알고 있습니다. "컨텍스트 윈도우 한계", "장기 기억 구현", "세션 연속성"이라는 제목의 책까지 모두 꺼내 줍니다. 이것이 벡터 검색입니다. 단어가 아니라 의미로 찾는 것입니다.
 
----
 
 ## 임베딩이란 무엇인가
 
@@ -35,7 +28,6 @@ image: "/images/thumbnails/ai-대화-검색의-한계.jpg"
 
 여기서 768이라는 숫자는 좌표의 차원 수입니다. 지도가 위도와 경도의 2차원이라면, 임베딩은 768차원입니다. 사람이 768차원을 상상하기는 어렵지만, 컴퓨터에게는 2차원이든 768차원이든 거리 계산이 똑같이 간단합니다.
 
----
 
 ## 코사인 유사도, 방향이 같으면 비슷하다
 

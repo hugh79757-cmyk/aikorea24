@@ -1,28 +1,29 @@
 ---
-title: "샤오미 MiMo-V2.5-Pro 오픈소스로 Claude Opus 4.6에 도전 4.3시간 자율 코딩과 토큰 효율 혁신 분석"
-description: "샤오미가 공개한 MiMo-V2.5-Pro가 4.3시간 만에 컴파일러를 완성하고 Claude Opus 4.6과 코딩 벤치마크에서 대등한 성능을 보였다 토큰을 40~60% 덜 쓰면서 비슷한 결과를 내는 이 오픈소스 모델이 AI 시장에 던지는 의미를 분석한다"
-date: 2026-05-04T11:00:02+09:00
-category: "뉴스"
+title: 샤오미 MiMo-V2.5-Pro 오픈소스로 Claude Opus 4.6에 도전 4.3시간 자율 코딩과 토큰 효율 혁신 분석
+description: 기술 구조부터 짚겠습니다
+date: '2026-05-04 11:00:02+09:00'
+category: 뉴스
 tags:
-  - "샤오미MiMo"
-  - "MiMoV25Pro"
-  - "오픈소스AI"
-  - "Claude Opus대항"
-  - "AI코딩에이전트"
-  - "중국AI모델"
-  - "자율코딩"
-  - "토큰효율"
+- 샤오미MiMo
+- MiMoV25Pro
+- 오픈소스AI
+- Claude Opus대항
+- AI코딩에이전트
+- 중국AI모델
+- 자율코딩
+- 토큰효율
 draft: false
-image: "/images/2026-05-04-004-샤오미-mimo-v25-pro-오픈소스로-claude-opus-46에/thumbnail.webp"
+image: /images/2026-05-04-004-샤오미-mimo-v25-pro-오픈소스로-claude-opus-46에/thumbnail.webp
 ---
-
 스마트폰 회사가 Claude Opus 4.6에 도전했습니다. 샤오미(Xiaomi)가 2026년 5월 3일 공개한 **MiMo-V2.5-Pro**는 단일 컴파일러(compiler, 사람이 쓴 코드를 컴퓨터가 실행할 수 있는 형태로 변환하는 프로그램)를 4.3시간 만에 자율적으로 완성했고, 코딩 벤치마크에서 Anthropic의 Claude Opus 4.6과 대등한 수준을 기록했습니다. 더 중요한 것은 서방 경쟁 모델 대비 토큰을 40~60% 덜 쓰면서 이 결과를 냈다는 점입니다.
 
 이 모델이 오픈소스(open-weight, 모델 가중치를 공개해 누구나 다운받아 쓸 수 있는 방식)로 공개됐다는 사실이 핵심입니다. Claude Opus 4.6을 쓰려면 Anthropic의 API 요금을 내야 합니다. MiMo-V2.5-Pro는 허깅페이스(Hugging Face, AI 모델 공유 플랫폼)에서 무료로 받아 직접 실행할 수 있습니다. 관련 브리핑과 기사원문은 [AI코리아24](https://aikorea24.kr/briefing/2026-05-04/#item-5)에서 확인할 수 있습니다.
 
+기술 구조부터 짚겠습니다.
+
 ## MiMo-V2.5-Pro가 무엇인지 먼저 이해하기
 
-기술 구조부터 짚겠습니다.
+
 
 MiMo-V2.5-Pro는 **MoE(Mixture of Experts, 전문가 혼합)** 구조입니다. 전체 파라미터는 1조 20억 개(1.02조)이지만, 한 번의 요청을 처리할 때 실제로 작동하는 것은 420억 개뿐입니다. 전체를 다 켜는 것이 아니라 해당 작업에 맞는 '전문가' 부분만 활성화하는 방식입니다. 덕분에 1조 개 규모의 모델이지만 실제 연산 비용은 훨씬 적습니다.
 

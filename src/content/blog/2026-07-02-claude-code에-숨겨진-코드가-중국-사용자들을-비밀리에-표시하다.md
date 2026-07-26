@@ -1,15 +1,17 @@
 ---
-title: "AI 모니터링 논란: Claude Code의 숨겨진 추적 기능과 한국 사용자 영향 분석"
-description: "Anthropic의 Claude Code에서 발견된 비밀 추적 기능의 기술적 배경과 의미, 한국 AI 개발자에게 미칠 영향을 심층분석합니다."
-date: 2026-07-02
+title: 'AI 모니터링 논란: Claude Code의 숨겨진 추적 기능과 한국 사용자 영향 분석'
+description: Anthropic의 AI 코딩 도구인 Claude Code는 프로그래머들의 업무를 혁신적으로 지원하며 주목을 받았습니다
+date: '2026-07-02'
+category: 뉴스
+tags:
+- AI윤리
+- 개인정보보호
+- Anthropic
+- AI개발
+- 사이버보안
 draft: false
-image: "/images/claude-code에-숨겨진-코드가-중국-사용자들을-비밀리에-표시하다/thumbnail.webp"
-tags: ["AI윤리", "개인정보보호", "Anthropic", "AI개발", "사이버보안"]
-category: "뉴스"
+image: /images/claude-code에-숨겨진-코드가-중국-사용자들을-비밀리에-표시하다/thumbnail.webp
 ---
-
-## 완벽해 보이는 개발 도구의 이면
-
 Anthropic의 AI 코딩 도구인 Claude Code는 프로그래머들의 업무를 혁신적으로 지원하며 주목을 받았습니다. 그러나 최근 버전 2.1.91에서 시작된 기능이 사용자의 동의 없이 특정 국가 사용자를 표적으로 삼아 정보를 수집하고 있음이 밝혀져 충격을 주고 있습니다. 이는 단순한 기술적 결함이 아니라, 의도적으로 설계된 은밀한 모니터링 기능이었습니다.
 
 ## 은밀한 추적의 기술적 정체와 작동 원리

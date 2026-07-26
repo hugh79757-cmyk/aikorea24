@@ -20,3 +20,7 @@
 1. 미커밋 블로그 파일(`src/content/blog/2026-07-23-*`, `2026-07-24-*`, `2026-07-25-*`) 감지 시 배포 실행
 2. 기존 `generated` 로직 유지 (신규 생성 시 즉시 배포)
 3. 중복 배포 방지 (Cloudflare Pages가 동일 빌드 무시)
+
+## Testing
+- Syntax check: `python3 -m py_compile scripts/blog_draft_generator.py` → OK
+- Git status detection verified: 6 untracked 7/26 blog files (007~012) detected

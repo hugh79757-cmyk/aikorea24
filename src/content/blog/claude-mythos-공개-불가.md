@@ -1,30 +1,31 @@
 ---
-title: "Claude Mythos 공개 불가 선언 AI가 27년된 보안 취약점을 찾아내다 Project Glasswing 분석"
-description: "Anthropic이 신모델 Claude Mythos를 일반 공개하지 않기로 했다. 27년된 버그를 찾아내고 스스로 익스플로잇을 만든 AI, 이것이 왜 게임체인저인지 분석한다."
-date: 2026-04-09T10:15:06+09:00
-category: "뉴스"
+title: Claude Mythos 공개 불가 선언 AI가 27년된 보안 취약점을 찾아내다 Project Glasswing 분석
+description: Claude Mythos Preview의 사이버보안 능력은 숫자로 먼저 이해해야 합니다
+date: '2026-04-09 10:15:06+09:00'
+category: 뉴스
 tags:
-  - "ClaudeMythos"
-  - "ProjectGlasswing"
-  - "Anthropic"
-  - "AI보안"
-  - "사이버보안"
-  - "취약점"
-  - "AI위험성"
-  - "오픈소스보안"
+- ClaudeMythos
+- ProjectGlasswing
+- Anthropic
+- AI보안
+- 사이버보안
+- 취약점
+- AI위험성
+- 오픈소스보안
 draft: false
-image: "/images/thumbnails/claude-mythos-공개-불가.jpg"
+image: /images/thumbnails/claude-mythos-공개-불가.jpg
 ---
-
 Anthropic이 새 프론티어 모델 **Claude Mythos Preview**를 일반에 공개하지 않기로 결정했습니다. 2019년 OpenAI가 GPT-2를 "너무 위험하다"며 공개를 미뤘을 때 업계는 비웃었습니다. 7년이 지난 지금 상황이 달라졌습니다. AI가 스스로 27년 된 보안 취약점을 발견하고, 그 취약점을 실제로 공격하는 코드까지 독자적으로 작성했기 때문입니다.
 
 이 결정은 단순한 보안 우려가 아니라, AI 능력이 인간의 검토 속도를 앞지르기 시작했다는 신호입니다. Anthropic이 AWS, Apple, Google, Microsoft, NVIDIA 등 11개 기관과 함께 출범시킨 **Project Glasswing**은 AI 안전 논의의 새로운 기준점이 될 수 있습니다.
 
 뉴스 원문은  [AI코리아24 브리핑 2026-04-09](https://aikorea24.kr/briefing/2026-04-09/#item-1) 에서 확인할 수 있습니다.
 
+Claude Mythos Preview의 사이버보안 능력은 숫자로 먼저 이해해야 합니다.
+
 ## Claude Mythos가 실제로 찾아낸 것들
 
-Claude Mythos Preview의 사이버보안 능력은 숫자로 먼저 이해해야 합니다.
+
 
 벤치마크 방식은 이렇습니다. Firefox의 **알려진 취약점 147개**를 AI에게 주고, 각각에 대해 실제로 작동하는 익스플로잇(exploit, 취약점을 실제로 공격하는 코드)을 만들어보라고 시킵니다. 147번의 과제가 주어지는 셈입니다.
 

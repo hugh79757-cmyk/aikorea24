@@ -1,21 +1,20 @@
 ---
-title: "OpenAI Codex Chronicle 화면 감시 AI 코딩 도구 편리함과 보안 사이의 경계 분석"
-description: "OpenAI Codex의 신기능 Chronicle이 화면을 녹화하고 업무 기록을 AI 메모리로 저장한다. 암호화 없는 로컬 저장과 프롬프트 인젝션 위험, Microsoft Recall과의 비교 분석."
-date: 2026-04-21T09:12:30+09:00
-category: "뉴스"
+title: OpenAI Codex Chronicle 화면 감시 AI 코딩 도구 편리함과 보안 사이의 경계 분석
+description: Chronicle은 사용자가 직접 활성화해야 하는 옵트인(opt-in) 방식으로 제공됩니다
+date: '2026-04-21T09:12:30+09:00'
+category: 뉴스
 tags:
-  - "OpenAI"
-  - "CodexChronicle"
-  - "AI보안"
-  - "화면녹화AI"
-  - "프롬프트인젝션"
-  - "MicrosoftRecall"
-  - "AI개인정보"
+- OpenAI
+- CodexChronicle
+- AI보안
+- 화면녹화AI
+- 프롬프트인젝션
+- MicrosoftRecall
+- AI개인정보
 draft: false
-image: "/images/2026-04-21-004-openai-codex-chronicle-화면-감시-ai-코딩-도구/thumbnail.webp"
+image: /images/2026-04-21-004-openai-codex-chronicle-화면-감시-ai-코딩-도구/thumbnail.webp
 ---
 
----
 
 기사 원문은 [이 링크](https://aikorea24.kr/briefing/2026-04-21/#item-1)를 통해 확인하실 수 있습니다.
 
@@ -25,9 +24,11 @@ OpenAI는 2026년 4월 20일, Codex 앱에 **Chronicle**이라는 신기능을 �
 
 기능 자체는 개발자의 오랜 불편을 해소하는 방향입니다. AI 도구를 쓸 때마다 "지금 이 프로젝트는 이런 구조이고, 이 파일은 이런 역할을 하며, 나는 지금 이 문제를 해결하려 한다"는 설명을 반복해야 하는 맥락 재설정 비용이 사라집니다. 그러나 OpenAI 스스로 공식 문서에서 세 가지 위험을 직접 경고했습니다. 이것이 이 기능을 단순한 업데이트 이상으로 주목하게 만드는 이유입니다.
 
+Chronicle은 사용자가 직접 활성화해야 하는 옵트인(opt-in) 방식으로 제공됩니다. macOS의 Codex 설정에서 Personalization → Memories → Chronicle을 순서대로 켜고, 화면 녹화 및 접근성 권한을 부여해야 합니다. 현재 ChatGPT Pro 구독자만 이용 가능하며, EU·영국·스위스에서는 제공되지 않습니다.
+
 ## Chronicle의 구체적 작동 방식
 
-Chronicle은 사용자가 직접 활성화해야 하는 옵트인(opt-in) 방식으로 제공됩니다. macOS의 Codex 설정에서 Personalization → Memories → Chronicle을 순서대로 켜고, 화면 녹화 및 접근성 권한을 부여해야 합니다. 현재 ChatGPT Pro 구독자만 이용 가능하며, EU·영국·스위스에서는 제공되지 않습니다.
+
 
 작동 방식은 이렇습니다. Chronicle이 켜져 있으면 백그라운드에서 화면이 녹화됩니다. AI 에이전트는 이 녹화 영상을 분석해 요약본을 생성합니다. 요약본은 마크다운 파일 형태로 기기에 로컬 저장됩니다. 원본 녹화 영상은 6시간 후 삭제됩니다. 저장된 메모리는 이후 Codex가 작업 지시를 받을 때 자동으로 문맥으로 활용됩니다.
 

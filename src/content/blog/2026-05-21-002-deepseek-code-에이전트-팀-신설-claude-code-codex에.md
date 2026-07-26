@@ -1,22 +1,13 @@
 ---
-title: "DeepSeek Code 에이전트 팀 신설 Claude Code Codex에 도전하는 중국 AI의 코딩 에이전트 전략"
-description: "DeepSeek이 Claude Code와 OpenAI Codex에 맞서는 코드 에이전트 전담팀을 출범시켰다. 코딩 에이전트 시장이 단순 모델 성능 경쟁을 넘어 에이전트 하네스 영역으로 진화하는 이유를 분석한다."
-date: 2026-05-21T09:20:23+09:00
-category: "뉴스"
-tags:
-  - "DeepSeek"
-  - "DeepSeekCode"
-  - "ClaudeCode"
-  - "Codex"
-  - "코딩에이전트"
-  - "AI코딩"
-  - "MCP"
-  - "중국AI"
+title: DeepSeek Code 에이전트 팀 신설 Claude Code Codex에 도전하는 중국 AI의 코딩 에이전트 전략
+description: DeepSeek은 2024년 말 DeepSeek-V3와 R1 모델을 공개하면서 GPT-4급 성능을 훨씬 낮은 비용으로 달성했다는
+  평가를 받았습니다
+date: '2026-05-21T09:20:23+09:00'
+category: 뉴스
 draft: false
-image: "/images/2026-05-21-002-deepseek-code-에이전트-팀-신설-claude-code-codex에/thumbnail.webp"
+image: /images/2026-05-21-002-deepseek-code-에이전트-팀-신설-claude-code-codex에/thumbnail.webp
 ---
 
----
 
 중국 AI 기업 DeepSeek이 코딩 에이전트(AI가 자율적으로 코드를 작성·실행·수정하는 소프트웨어) 시장에 본격 진출을 선언했습니다. Claude Code, OpenAI Codex와 직접 경쟁할 전담팀을 신설한 것입니다. DeepSeek이 이미 모델 성능에서 글로벌 수준의 경쟁력을 입증한 만큼, 이번 행보는 코딩 에이전트 시장 전체의 판도를 바꿀 수 있는 변수입니다.
 
@@ -24,9 +15,11 @@ image: "/images/2026-05-21-002-deepseek-code-에이전트-팀-신설-claude-code
 
 기사원문보기: [2026년 5월 21일 (목) AI 브리핑 - AI코리아24](https://aikorea24.kr/briefing/2026-05-21/#item-4)
 
+DeepSeek은 2024년 말 DeepSeek-V3와 R1 모델을 공개하면서 GPT-4급 성능을 훨씬 낮은 비용으로 달성했다는 평가를 받았습니다. 특히 코딩 벤치마크(성능 평가 기준)에서 강점을 보인 것이 이번 전략의 토대가 됐습니다.
+
 ## DeepSeek이 코딩 에이전트 시장을 노리는 이유
 
-DeepSeek은 2024년 말 DeepSeek-V3와 R1 모델을 공개하면서 GPT-4급 성능을 훨씬 낮은 비용으로 달성했다는 평가를 받았습니다. 특히 코딩 벤치마크(성능 평가 기준)에서 강점을 보인 것이 이번 전략의 토대가 됐습니다.
+
 
 코딩 에이전트 시장을 노리는 이유는 명확합니다. 개발자는 AI를 가장 적극적으로 도입하는 직군이며, 한 번 특정 코딩 에이전트에 익숙해지면 전환 비용이 높습니다. 즉 고착성(Lock-in)이 강한 시장입니다. Claude Code가 이미 많은 개발자들 사이에서 "없으면 안 되는" 도구로 자리잡아가는 것이 그 증거입니다.
 

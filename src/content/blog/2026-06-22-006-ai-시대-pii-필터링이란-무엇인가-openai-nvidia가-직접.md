@@ -1,30 +1,31 @@
 ---
-title: "AI 시대 PII 필터링이란 무엇인가 OpenAI NVIDIA가 직접 뛰어든 개인정보 보호 기술의 현재"
-description: "OpenAI Privacy Filter와 NVIDIA GLiNER-PII 등 빅테크가 AI 기반 개인정보 필터링 모델을 잇따라 공개하고 있다. PII 필터링이 왜 기업의 핵심 거버넌스 과제가 됐는지 분석한다."
-date: 2026-06-22T14:36:15+09:00
-category: "뉴스"
+title: AI 시대 PII 필터링이란 무엇인가 OpenAI NVIDIA가 직접 뛰어든 개인정보 보호 기술의 현재
+description: PII(Personally Identifiable Information)는 특정 개인을 식별할 수 있는 모든 정보를 말합니다
+date: '2026-06-22 14:36:15+09:00'
+category: 뉴스
 tags:
-  - "PII필터링"
-  - "개인정보보호"
-  - "OpenAIPrivacyFilter"
-  - "NVIDIAGLINER"
-  - "AI거버넌스"
-  - "GDPR"
-  - "개인정보보호법"
-  - "생성형AI보안"
+- PII필터링
+- 개인정보보호
+- OpenAIPrivacyFilter
+- NVIDIAGLINER
+- AI거버넌스
+- GDPR
+- 개인정보보호법
+- 생성형AI보안
 draft: false
-image: "/images/2026-06-22-006-ai-시대-pii-필터링이란-무엇인가-openai-nvidia가-직접/thumbnail.webp"
+image: /images/2026-06-22-006-ai-시대-pii-필터링이란-무엇인가-openai-nvidia가-직접/thumbnail.webp
 ---
-
 2026년 4월, OpenAI가 'Privacy Filter'라는 오픈소스 모델을 공개했습니다. 텍스트 안에서 이름, 이메일, 전화번호, 계좌번호, 날짜 등 개인 식별 정보(PII, Personally Identifiable Information)를 자동으로 탐지하고 마스킹해 주는 AI입니다. 그보다 6개월 앞선 2025년 10월에는 NVIDIA가 'GLiNER-PII'를 먼저 공개했습니다. AI 시장에서 가장 주목받는 두 기업이 6개월 사이에 같은 종류의 모델을 잇따라 내놓은 것은 우연이 아닙니다. PII 필터링이 이제 AI 거버넌스의 핵심 인프라로 자리잡고 있다는 신호입니다.
 
 이 트렌드를 이해하려면 먼저 "왜 지금인가"라는 질문이 필요합니다. 임직원들이 ChatGPT, Claude 같은 생성형 AI를 업무에 사용하는 경로가 폭발적으로 늘어나면서, AI 입력창에 고객 이름, 주민등록번호, 계좌 정보가 무방비로 입력되는 상황이 현실이 됐기 때문입니다.
 
 [기사원문보기 ](https://openai.com/ko-KR/index/introducing-openai-privacy-filter/)
 
+PII(Personally Identifiable Information)는 특정 개인을 식별할 수 있는 모든 정보를 말합니다. 이름, 주민등록번호, 전화번호, 이메일, 주소, 신용카드 번호, 생년월일 등이 대표적입니다.
+
 ## PII 필터링이란 무엇인가
 
-PII(Personally Identifiable Information)는 특정 개인을 식별할 수 있는 모든 정보를 말합니다. 이름, 주민등록번호, 전화번호, 이메일, 주소, 신용카드 번호, 생년월일 등이 대표적입니다.
+
 
 PII 필터링은 텍스트나 문서에서 이러한 정보를 자동으로 찾아내고, 외부로 나가기 전에 가리거나(마스킹) 삭제하는 기술입니다. 예를 들어 직원이 AI 서비스에 "고객 김철수(주민번호 900101-1234567)의 대출 조건을 분석해 줘"라고 입력하면, PII 필터가 이 정보를 감지해 "\[이름] (\[주민번호])의 대출 조건을 분석해 줘"로 변환한 뒤 AI에 전달합니다. AI의 응답이 오면 역으로 복원하는 방식입니다.
 

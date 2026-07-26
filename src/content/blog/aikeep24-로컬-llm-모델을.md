@@ -1,30 +1,22 @@
 ---
-title: "AIKeep24 로컬 LLM 모델을 엑사원에서 Qwen으로 교체한 이유와 체감 성능 변화"
-description: "AI 대화 자동 저장 크롬 확장 AIKeep24가 요약 엔진을 EXAONE 3.5에서 Qwen3.5로 교체했다 체감 30% 속도 향상과 발열 트레이드오프 실사용 후기"
-date: 2026-04-03T10:14:56+09:00
-category: "뉴스"
-tags:
-  - "AIKeep24"
-  - "로컬LLM"
-  - "Qwen3.5"
-  - "엑사원"
-  - "EXAONE"
-  - "크롬확장"
-  - "AI대화저장"
-  - "Ollama"
+title: AIKeep24 로컬 LLM 모델을 엑사원에서 Qwen으로 교체한 이유와 체감 성능 변화
+description: 클로드 화면에서 작동하는
+date: '2026-04-03T10:14:56+09:00'
+category: 뉴스
 draft: false
-image: "/images/thumbnails/aikeep24-로컬-llm-모델을.jpg"
+image: /images/thumbnails/aikeep24-로컬-llm-모델을.jpg
 ---
-
 ChatGPT와 대화하다가 "그때 그 결정이 뭐였지?" 싶을 때가 있습니다. Claude에서 코드 리뷰를 받았는데, 며칠 뒤 그 맥락이 통째로 사라져 있을 때도 있습니다. AI 대화는 쌓이는데, 정작 필요할 때 찾을 수가 없습니다. **[AIkeep24](https://aikorea24.kr/#aikeep24)** 는 이 문제를 해결하기 위해 만든 오픈소스 크롬 확장 프로그램입니다. 크롬에서 AI와 대화하면 확장이 실시간으로 감지하고, 로컬 LLM이 자동으로 요약·태깅하여 DB에 저장합니다.
 
 이번에 AIKeep24의 요약 엔진을 기존 **엑사원(EXAONE) 3.5 7.8B** 에서 **Qwen3.5 계열** 로 교체했습니다. 결론부터 말하면, 체감 속도가 약 30% 빨라졌습니다. 다만 공짜 점심은 없었습니다.
 
 > 관련 브리핑: [알리바바, 단 며칠 만에 세 번째 독자적 AI 모델 Qwen3.6-Plus 출시](https://aikorea24.kr/briefing/2026-04-03/#item-3)
 
+클로드 화면에서 작동하는 aikeep24
+
 ## AIKeep24는 어떤 도구인가
 
-클로드 화면에서 작동하는 aikeep24
+
 
 ![20260328124411.webp](https://img.aikorea24.kr/images/aikeep24-로컬-llm-모델을/1a342b3d07737d93fb3342b44d525d12f715db95.webp)
 

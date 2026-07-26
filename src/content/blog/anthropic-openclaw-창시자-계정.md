@@ -1,29 +1,23 @@
 ---
-title: "Anthropic OpenClaw 창시자 계정 정지 사건 AI 플랫폼 오픈소스 생태계 갈등의 전말"
-description: "Anthropic이 OpenClaw 창시자 Steinberger의 계정을 일시 정지했다. 오픈소스 도구 차단과 자사 제품 강화가 맞물린 이 사건이 AI 플랫폼 생태계 신뢰에 던지는 질문을 분석한다"
-date: 2026-04-11T14:21:23+09:00
-category: "뉴스"
-tags:
-  - "Anthropic"
-  - "OpenClaw"
-  - "Steinberger"
-  - "Claude"
-  - "오픈소스AI"
-  - "AI플랫폼"
-  - "OpenAI"
+title: Anthropic OpenClaw 창시자 계정 정지 사건 AI 플랫폼 오픈소스 생태계 갈등의 전말
+description: OpenClaw 는 Claude, ChatGPT 등 다양한 AI 모델을 연결해 복잡한 자동화 작업을 수행할 수 있게 해주는
+  오픈소스 AI 프레임워크입니다
+date: '2026-04-11T14:21:23+09:00'
+category: 뉴스
 draft: false
-image: "/images/thumbnails/anthropic-openclaw-창시자-계정.jpg"
+image: /images/thumbnails/anthropic-openclaw-창시자-계정.jpg
 ---
 
----
 
 Anthropic이 오픈소스 AI 도구 OpenClaw의 창시자 Peter Steinberger의 계정을 "의심스러운 활동"을 이유로 일시 정지했습니다. 정지는 몇 시간 만에 해제됐지만, 이 사건은 단순한 오탐(False Positive·오류 감지)으로 마무리되지 않습니다. Anthropic이 서드파티 도구 정책을 바꾸고 자체 에이전트 기능을 강화하는 흐름 속에서 발생했기 때문입니다.
 
 기사 원문은 이곳에서 확인할 수 있습니다: [AI코리아24 브리핑](https://aikorea24.kr/briefing/2026-04-11/#item-2)
 
+**OpenClaw** 는 Claude, ChatGPT 등 다양한 AI 모델을 연결해 복잡한 자동화 작업을 수행할 수 있게 해주는 오픈소스 AI 프레임워크입니다. **에이전트 AI 하네스(Agentic AI Harness)** 라고도 불리며, 개발자들이 AI를 활용한 자동화 워크플로를 구축하는 데 널리 사용됩니다.
+
 ## OpenClaw란 무엇이고 이번 사건의 경위는
 
-**OpenClaw** 는 Claude, ChatGPT 등 다양한 AI 모델을 연결해 복잡한 자동화 작업을 수행할 수 있게 해주는 오픈소스 AI 프레임워크입니다. **에이전트 AI 하네스(Agentic AI Harness)** 라고도 불리며, 개발자들이 AI를 활용한 자동화 워크플로를 구축하는 데 널리 사용됩니다.
+
 
 Steinberger는 이 도구를 만들었고, 현재는 Anthropic의 경쟁사 OpenAI에 재직 중입니다. 그가 Claude를 테스트 목적으로 사용하다 계정이 정지됐고, 이를 X(트위터)에 공개하자 수백 개의 댓글이 달리며 빠르게 바이럴됐습니다. 몇 시간 후 계정은 복구됐고 Anthropic 엔지니어가 직접 "OpenClaw 사용 때문에 차단한 적 없다"고 댓글을 남겼습니다.
 

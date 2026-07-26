@@ -3,14 +3,14 @@ gsd_state_version: 1.1
 milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: all_plans_complete
-stopped_at: 완료 — pipeline-path-bug 수정 + Telegram 중앙화 리팩터 + 7/18 블로그 12건 배포 (2026-07-20)
-last_updated: 2026-07-20T21:00:00.000Z
-last_activity: 2026-07-20
+stopped_at: Phase 29+30+31: description 백필/첫문장추출/추출버그수정 완료 (2026-07-26) — 미커밋
+last_updated: 2026-07-26T21:02:00.000Z
+last_activity: 2026-07-26
 progress:
-  total_phases: 26
-  completed_phases: 26
-  total_plans: 49
-  completed_plans: 49
+  total_phases: 31
+  completed_phases: 31
+  total_plans: 58
+  completed_plans: 58
   percent: 100
 ---
 
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: All Phases Complete (1-26)
-Status: ✅ 코드 완료, 배포 자동화 추가 (blog_draft_generator.py 6단계 배포)
-Last activity: 2026-07-16T07:00
+Phase: All Phases Complete (1-31)
+Status: ✅ Phase 29-31 description 로직 개선 완료 (미커밋)
+Last activity: 2026-07-26T21:02
 
 Progress: [████████████████████████████████████████████████████] 100%
 
@@ -212,6 +212,6 @@ None.
 
 ## Session Continuity
 
-Current session: 2026-07-20T19:00:00.000Z
-Stopped at: pipeline-path-bug 수정 + Telegram 중앙화 리팩터 + 7/18 블로그 12건 배포 완료
-Next: 내일 아침 파이프라인 정상 실행 확인
+Current session: 2026-07-26T21:02:00.000Z
+Stopped at: Phase 29/30/31 description 개선 — 백필 스크립트 생성, _extract_first_sentence 수정, blog_draft_generator prompt 개선 (미커밋)
+Next: 변경사항 커밋 및 배포, Phase 32-36 확인 및 실행

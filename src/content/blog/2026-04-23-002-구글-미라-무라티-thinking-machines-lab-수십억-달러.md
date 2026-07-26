@@ -1,21 +1,21 @@
 ---
-title: "구글 미라 무라티 Thinking Machines Lab 수십억 달러 클라우드 계약 AI 인프라 전쟁의 새 전선"
-description: "전 OpenAI CTO 미라 무라티의 Thinking Machines Lab이 구글 클라우드와 단일 자릿수 수십억 달러 규모 계약을 체결했다 프론티어 AI 랩 선점 경쟁으로 확산되는 클라우드 인프라 전쟁을 분석한다"
-date: 2026-04-23T12:06:50+09:00
-category: "뉴스"
+title: 구글 미라 무라티 Thinking Machines Lab 수십억 달러 클라우드 계약 AI 인프라 전쟁의 새 전선
+description: 미라 무라티는 2025년 2월 OpenAI 최고기술책임자(CTO) 직에서 물러난 뒤 Thinking Machines Lab을
+  설립했습니다
+date: '2026-04-23T12:06:50+09:00'
+category: 뉴스
 tags:
-  - "ThinkingMachinesLab"
-  - "미라무라티"
-  - "구글클라우드"
-  - "GB300칩"
-  - "AI인프라전쟁"
-  - "강화학습"
-  - "프론티어AI"
+- ThinkingMachinesLab
+- 미라무라티
+- 구글클라우드
+- GB300칩
+- AI인프라전쟁
+- 강화학습
+- 프론티어AI
 draft: false
-image: "/images/2026-04-23-002-구글-미라-무라티-thinking-machines-lab-수십억-달러/thumbnail.webp"
+image: /images/2026-04-23-002-구글-미라-무라티-thinking-machines-lab-수십억-달러/thumbnail.webp
 ---
 
----
 
 전 OpenAI CTO 미라 무라티(Mira Murati)가 설립한 Thinking Machines Lab이 Google Cloud와 단일 자릿수 수십억 달러 규모의 인프라 계약을 체결했습니다. 이 계약은 단순한 클라우드 서비스 도입이 아닙니다. Google이 차세대 프론티어 AI 랩(최첨단 AI를 연구·개발하는 조직)을 자사 생태계 안으로 선점하려는 전략적 포석입니다.
 
@@ -23,9 +23,11 @@ image: "/images/2026-04-23-002-구글-미라-무라티-thinking-machines-lab-수
 
 오늘의 AI 뉴스 전체 브리핑은 [aikorea24.kr 2026년 4월 23일 브리핑](https://aikorea24.kr/briefing/2026-04-23/)에서 확인하실 수 있습니다.
 
+미라 무라티는 2025년 2월 OpenAI 최고기술책임자(CTO) 직에서 물러난 뒤 Thinking Machines Lab을 설립했습니다. 설립 직후 20억 달러 시드 라운드를 통해 120억 달러의 기업 가치를 인정받으며 단숨에 주목받는 스타트업이 됐습니다.
+
 ## Thinking Machines Lab은 어떤 회사인가
 
-미라 무라티는 2025년 2월 OpenAI 최고기술책임자(CTO) 직에서 물러난 뒤 Thinking Machines Lab을 설립했습니다. 설립 직후 20억 달러 시드 라운드를 통해 120억 달러의 기업 가치를 인정받으며 단숨에 주목받는 스타트업이 됐습니다.
+
 
 회사는 설립 이후 극도로 비밀스러운 운영 방식을 유지해왔습니다. 첫 번째 제품 'Tinker'는 2025년 10월 공개됐는데, AI 모델 커스터마이징(맞춤화)을 자동화하는 도구입니다. 기업이 자신들의 데이터로 프론티어급 AI 모델을 만들 수 있도록 전체 과정을 자동화하는 것이 핵심 기능입니다.
 

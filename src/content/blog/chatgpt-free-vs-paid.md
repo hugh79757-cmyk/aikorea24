@@ -1,14 +1,16 @@
 ---
-title: "ChatGPT 무료 vs 유료, 뭐가 다를까? 완벽 비교"
-description: "ChatGPT 무료 플랜과 Plus 유료 플랜의 차이점을 기능, 속도, 모델별로 상세 비교합니다."
-date: 2026-02-12
-category: "AI입문"
-tags: ["ChatGPT", "GPT-4", "무료", "유료", "비교"]
-image: "/images/chatgpt-free-vs-paid/thumbnail.webp"
+title: ChatGPT 무료 vs 유료, 뭐가 다를까? 완벽 비교
+description: ChatGPT는 OpenAI가 만든 대화형 AI 서비스입니다
+date: '2026-02-12'
+category: AI입문
+tags:
+- ChatGPT
+- GPT-4
+- 무료
+- 유료
+- 비교
+image: /images/chatgpt-free-vs-paid/thumbnail.webp
 ---
-
-## ChatGPT란?
-
 ChatGPT는 OpenAI가 만든 대화형 AI 서비스입니다. 2022년 11월 출시 이후 전 세계적으로 가장 많이 사용되는 AI 도구가 되었으며, 한국은 사용자 수 기준 세계 최상위권 국가입니다.
 
 ## 무료 플랜 (Free)

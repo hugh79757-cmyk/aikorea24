@@ -1,31 +1,31 @@
 ---
-title: "미국 정부 AI 킬스위치 발동 Anthropic Fable 5 Mythos 5 전 세계 강제 차단 사태 분석"
-description: "2026년 6월 12일 미국 상무부가 Anthropic의 최신 AI 모델 Fable 5와 Mythos 5에 킬스위치를 발동했습니다. 출시 3일 만에 벌어진 이 사태가 AI 산업 전체에 미치는 의미를 분석합니다."
-date: 2026-06-17T10:43:07+09:00
-category: "뉴스"
+title: 미국 정부 AI 킬스위치 발동 Anthropic Fable 5 Mythos 5 전 세계 강제 차단 사태 분석
+description: Anthropic은 6월 9일 Claude Fable 5와 Mythos 5를 동시에 출시했습니다
+date: '2026-06-17 10:43:07+09:00'
+category: 뉴스
 tags:
-  - "Anthropic"
-  - "Fable5"
-  - "Mythos5"
-  - "AI수출통제"
-  - "킬스위치"
-  - "트럼프AI정책"
-  - "AI규제"
-  - "DarioAmodei"
+- Anthropic
+- Fable5
+- Mythos5
+- AI수출통제
+- 킬스위치
+- 트럼프AI정책
+- AI규제
+- DarioAmodei
 draft: false
-image: "/images/2026-06-17-001-미국-정부-ai-킬스위치-발동-anthropic-fable-5/thumbnail.webp"
+image: /images/2026-06-17-001-미국-정부-ai-킬스위치-발동-anthropic-fable-5/thumbnail.webp
 ---
-
 2026년 6월 12일 오후 5시 21분, 미국 상무부가 Anthropic에 공문 한 통을 보냈습니다. 내용은 단 하나였습니다. **Fable 5와 Mythos 5에 대한 외국인 접근을 즉시 차단하라.** Anthropic은 외국인 사용자와 미국인 사용자를 실시간으로 분리할 수 없다는 이유로, 전 세계 모든 사용자의 접근을 차단했습니다. 출시 3일 만이었습니다.
 
 이 사태는 단순한 보안 조치가 아닙니다. 미국 정부가 민간 AI 기업의 상용 모델에 **킬스위치(강제 종료 명령)** 를 실제로 작동시킨 역사상 첫 번째 사례입니다. AI 산업의 규제 환경이 이론에서 현실로 바뀐 순간입니다.
 
 [기사원문보기](https://aikorea24.kr/briefing/2026-06-17/#item-1)
 
+Anthropic은 6월 9일 Claude Fable 5와 Mythos 5를 동시에 출시했습니다. Fable 5는 일반 사용자와 기업용으로 공개된 모델이고, Mythos 5는 Project Glasswing이라는 신뢰 파트너 프로그램을 통해 제한적으로 공개된 최고 성능 모델입니다.
 
 ## Fable 5와 Mythos 5란?
 
-Anthropic은 6월 9일 Claude Fable 5와 Mythos 5를 동시에 출시했습니다. Fable 5는 일반 사용자와 기업용으로 공개된 모델이고, Mythos 5는 Project Glasswing이라는 신뢰 파트너 프로그램을 통해 제한적으로 공개된 최고 성능 모델입니다.
+
 
 두 모델의 핵심 특징은 **사이버보안 분야에서 이례적인 능력** 을 보인다는 점이었습니다. Anthropic은 출시 전 1,000시간 이상의 레드팀(모의 해킹 테스트)을 거쳤다고 밝혔습니다. 하지만 그것이 오히려 정부의 주목을 끌었습니다.
 

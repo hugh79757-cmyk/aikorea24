@@ -1,3 +1,5 @@
+- 2026-07-26 | fix | alarm-alert-system-improvements | 썸네일 중복 알림 + 품질 체크리스트 + 텔레그램 스팸 방지 — blog_draft_generator send_telegram 알림 추가, run_pipeline_with_notify 중복 실행 제거
+- 2026-07-26 | fix | blog-pipeline-reliability-fixes | 3개 Quick Task로 블로그 파이프라인 신뢰성 확보 — 1) 배포 조건 확대(git status 감지) 2) placeholder 품질 상향(12.7KB→45.6KB) + DeepSeek 모델명 수정 3) pipeline import 방어적 경로 추가(launchd crash 방지)
 - 2026-07-21 | debug | korean-slug-404-debug | Cloudflare Pages 한국어 slug 404 원인 분석 — _redirects 가로채기 가설 기각, deep_dive_url raw UTF-8 + trailing-slash 후보 수렴 / 대표님 404 URL 대기 중
 - 2026-07-20 | fix | pipeline-path-bug | run_pipeline_with_notify.py SCRIPTS_DIR scripts/scripts/ 중복 — 7/19-20 블로그 발행 0건
 - 2026-07-18 | refactor | remove-keep-english-rule | 고유명사 영어 원문 유지 규칙 제거 + 후처리 제거 — 모델 자유도 향상

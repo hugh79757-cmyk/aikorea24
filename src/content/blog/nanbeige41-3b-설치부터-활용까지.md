@@ -1,20 +1,19 @@
 ---
-title: "Nanbeige4.1 3B 설치부터 활용까지 Ollama로 시작하는 초소형 AI"
-description: "Nanbeige4.1-3B 모델을 Ollama로 설치하고 로컬에서 실행하는 방법을 소개합니다. 3B 파라미터로 32B 모델을 뛰어넘는 벤치마크 성능과 실전 활용법을 확인해보세요."
-date: 2026-03-06T09:04:38+09:00
-category: "뉴스"
+title: Nanbeige4.1 3B 설치부터 활용까지 Ollama로 시작하는 초소형 AI
+description: Nanbeige4.1-3B는 Nanbeige LLM Lab에서 개발한 오픈소스 언어 모델입니다
+date: '2026-03-06 09:04:38+09:00'
+category: 뉴스
 tags:
-  - "Nanbeige4.1"
-  - "Ollama"
-  - "로컬AI"
-  - "소형언어모델"
-  - "SLM"
-  - "GGUF"
-  - "맥북AI"
+- Nanbeige4.1
+- Ollama
+- 로컬AI
+- 소형언어모델
+- SLM
+- GGUF
+- 맥북AI
 draft: false
-image: "/images/thumbnails/nanbeige41-3b-설치부터-활용까지.jpg"
+image: /images/thumbnails/nanbeige41-3b-설치부터-활용까지.jpg
 ---
-
 [Nanbeige4.1-3B Hugging Face 모델 페이지](https://huggingface.co/Nanbeige/Nanbeige4.1-3B)
 
 [Ollama 커뮤니티 모델 (fauxpaslife/nanbeige4.1)](https://ollama.com/fauxpaslife/nanbeige4.1)
@@ -23,9 +22,11 @@ image: "/images/thumbnails/nanbeige41-3b-설치부터-활용까지.jpg"
 
 더 놀라운 것은 이 모델을 여러분의 맥북이나 일반 데스크톱에서 바로 돌릴 수 있다는 사실입니다. Ollama를 통해 터미널 명령어 한 줄이면 설치와 실행이 완료됩니다. 이 글에서는 Nanbeige4.1-3B가 어떤 모델인지, 어떻게 설치하고 사용하는지, 그리고 실제로 어떤 곳에 활용할 수 있는지 상세히 살펴보겠습니다.
 
+Nanbeige4.1-3B는 Nanbeige LLM Lab에서 개발한 오픈소스 언어 모델입니다. 남북阁(남북각, 영문 Nanbeige)이라는 이름의 이 연구팀은 중국 최대 온라인 채용 플랫폼인 BOSS Zhipin을 운영하는 Kanzhun Limited 소속입니다. 이전 버전인 Nanbeige4-3B-Base 위에 SFT(Supervised Fine-Tuning)와 RL(Reinforcement Learning)을 추가로 적용하여 만들어졌으며, 23조(23T) 토큰의 고품질 데이터로 사전 학습된 기반 모델의 잠재력을 극한까지 끌어올린 것이 특징입니다.
+
 ## Nanbeige4.1-3B는 어떤 모델인가
 
-Nanbeige4.1-3B는 Nanbeige LLM Lab에서 개발한 오픈소스 언어 모델입니다. 남북阁(남북각, 영문 Nanbeige)이라는 이름의 이 연구팀은 중국 최대 온라인 채용 플랫폼인 BOSS Zhipin을 운영하는 Kanzhun Limited 소속입니다. 이전 버전인 Nanbeige4-3B-Base 위에 SFT(Supervised Fine-Tuning)와 RL(Reinforcement Learning)을 추가로 적용하여 만들어졌으며, 23조(23T) 토큰의 고품질 데이터로 사전 학습된 기반 모델의 잠재력을 극한까지 끌어올린 것이 특징입니다.
+
 
 이 모델이 주목받는 이유는 크게 세 가지입니다. 첫째, **추론 능력** 입니다. AIME 2026 I(수학 올림피아드 벤치마크)에서 87.40점을 기록하며, 같은 크기의 Qwen3-4B(81.46점)는 물론 Qwen3-32B(75.83점)까지 넘어섰습니다. 둘째, **선호도 정렬(Alignment)** 성능입니다. Arena-Hard-v2에서 73.2점, Multi-Challenge에서 52.21점을 달성하여, 파라미터 수가 10배 이상인 대형 모델들과 대등하거나 더 나은 결과를 보여주었습니다. 셋째, **에이전트 역량** 입니다. 500라운드 이상의 도구 호출을 안정적으로 수행할 수 있는 최초의 소형 범용 모델로, 딥서치(Deep Search) 작업까지 네이티브로 지원합니다.
 

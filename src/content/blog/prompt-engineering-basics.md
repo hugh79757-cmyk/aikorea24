@@ -1,14 +1,15 @@
 ---
-title: "프롬프트 엔지니어링 입문: AI에게 잘 질문하는 법"
-description: "AI에게 원하는 결과를 정확히 얻기 위한 프롬프트 작성법의 기초를 배웁니다."
-date: 2026-02-08
-category: "AI입문"
-tags: ["프롬프트", "프롬프트 엔지니어링", "ChatGPT", "질문법"]
-image: "/images/prompt-engineering-basics/thumbnail.webp"
+title: '프롬프트 엔지니어링 입문: AI에게 잘 질문하는 법'
+description: 프롬프트(Prompt)는 AI에게 보내는 질문이나 지시문입니다
+date: '2026-02-08'
+category: AI입문
+tags:
+- 프롬프트
+- 프롬프트 엔지니어링
+- ChatGPT
+- 질문법
+image: /images/prompt-engineering-basics/thumbnail.webp
 ---
-
-## 프롬프트란?
-
 프롬프트(Prompt)는 AI에게 보내는 질문이나 지시문입니다. 같은 AI라도 어떻게 질문하느냐에 따라 결과의 품질이 크게 달라집니다. 프롬프트 엔지니어링은 AI에게 효과적으로 질문하는 기술입니다.
 
 ## 나쁜 프롬프트 vs 좋은 프롬프트

@@ -1,20 +1,19 @@
 ---
-title: "GitHub 처음이라도 괜찮아요 AI에게 물어보며 배우는 Git 기초"
-description: "Git과 GitHub의 개념을 AI 프롬프트로 질문하며 익히고 커밋과 푸시와 풀 명령어를 실습하는 초보자 가이드입니다."
-date: 2026-02-12T22:14:46+09:00
-category: "바이브코딩"
+title: GitHub 처음이라도 괜찮아요 AI에게 물어보며 배우는 Git 기초
+description: 먼저 가장 기본적인 개념부터 정리하겠습니다
+date: '2026-02-12 22:14:46+09:00'
+category: 바이브코딩
 tags:
-  - "GitHub"
-  - "Git"
-  - "버전관리"
-  - "AI 학습"
-  - "바이브코딩"
-  - "개발입문"
-  - "협업도구"
+- GitHub
+- Git
+- 버전관리
+- AI 학습
+- 바이브코딩
+- 개발입문
+- 협업도구
 draft: false
-image: "/images/thumbnails/github-cheoeumirado-gwaenchanayo-aiege.jpg"
+image: /images/thumbnails/github-cheoeumirado-gwaenchanayo-aiege.jpg
 ---
-
 [GitHub 공식 사이트](https://github.com)
 
 [Git 공식 다운로드](https://git-scm.com)
@@ -25,9 +24,11 @@ image: "/images/thumbnails/github-cheoeumirado-gwaenchanayo-aiege.jpg"
 
 하지만 리포지토리, 커밋, 브랜치 같은 용어가 처음에는 어렵게 느껴집니다. 전통적인 학습 방법으로는 긴 문서를 읽거나 영상 강의를 시청해야 했습니다. 이번 18강에서는 AI에게 질문하며 Git 기초를 익히는 **학습 전략** 을 소개합니다. 모르는 것이 생길 때마다 AI에게 물어보면서 실습하면 훨씬 빠르게 배울 수 있습니다.
 
+먼저 가장 기본적인 개념부터 정리하겠습니다. **Git** 은 로컬에서 파일 변경 이력을 관리하는 버전 관리 프로그램입니다. 내 컴퓨터에 설치해서 사용하며, 인터넷 연결 없이도 작동합니다. 반면 **GitHub** 는 Git 저장소를 원격에서 호스팅하는 웹 서비스입니다. 쉽게 말해 Git은 도구이고 GitHub는 그 도구로 만든 작업물을 저장하는 클라우드 공간입니다.
+
 ## Git과 GitHub의 차이점
 
-먼저 가장 기본적인 개념부터 정리하겠습니다. **Git** 은 로컬에서 파일 변경 이력을 관리하는 버전 관리 프로그램입니다. 내 컴퓨터에 설치해서 사용하며, 인터넷 연결 없이도 작동합니다. 반면 **GitHub** 는 Git 저장소를 원격에서 호스팅하는 웹 서비스입니다. 쉽게 말해 Git은 도구이고 GitHub는 그 도구로 만든 작업물을 저장하는 클라우드 공간입니다.
+
 
 AI에게 이 개념을 더 쉽게 설명해 달라고 요청할 수 있습니다. "Git과 GitHub의 차이점을 초등학생도 이해할 수 있게 비유로 설명해 줘"라고 물어보면 AI가 친숙한 예시를 들어 설명해 줍니다. 예를 들어 Git은 작업 일지를 기록하는 노트이고, GitHub는 그 노트를 보관하는 도서관이라는 식의 비유를 들 수 있습니다.
 

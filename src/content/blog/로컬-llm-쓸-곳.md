@@ -1,30 +1,31 @@
 ---
-title: "로컬 LLM 쓸 곳 없다고 느꼈다면 AI 대화 자동 요약을 해보세요"
-description: "16GB 맥북에서 여러 로컬 LLM을 시도했지만 실망만 반복했습니다. EXAONE 3.5 7.8B를 만나고 AI 대화 기록 자동 요약이라는 확실한 용도를 찾은 ODS 프로젝트 개발기를 공유합니다."
-date: 2026-03-12T22:26:54+09:00
-category: "바이브코딩"
+title: 로컬 LLM 쓸 곳 없다고 느꼈다면 AI 대화 자동 요약을 해보세요
+description: Ollama를 설치하고, 모델을 받아보고, 몇 번 대화해 보고, 그리고 다시 ChatGPT로 돌아갑니다
+date: '2026-03-12 22:26:54+09:00'
+category: 바이브코딩
 tags:
-  - "로컬LLM"
-  - "EXAONE"
-  - "AI대화요약"
-  - "Cloudflare D1"
-  - "옵시디언"
-  - "ODS프로젝트"
-  - "Ollama"
-  - "바이브코딩"
+- 로컬LLM
+- EXAONE
+- AI대화요약
+- Cloudflare D1
+- 옵시디언
+- ODS프로젝트
+- Ollama
+- 바이브코딩
 draft: false
-image: "/images/thumbnails/로컬-llm-쓸-곳.jpg"
+image: /images/thumbnails/로컬-llm-쓸-곳.jpg
 ---
-
 [북마크 클릭 한번으로 AI 대화 내용 저장하는 방법 (AI코리아24)](https://aikorea24.kr/blog/%EB%B6%81%EB%A7%88%ED%81%AC-%ED%81%B4%EB%A6%AD-%ED%95%9C%EB%B2%88%EC%9C%BC%EB%A1%9C-ai/)
 
 [EXAONE 3.5 공식 기술 보고서 (LG AI Research)](https://www.lgresearch.ai/blog/view?seq=506)
 
 [Ollama 공식 사이트](https://ollama.com/)
 
+Ollama를 설치하고, 모델을 받아보고, 몇 번 대화해 보고, 그리고 다시 ChatGPT로 돌아갑니다. 이 루틴을 반복한 분이 저만은 아닐 겁니다. 16GB 맥북에어에서 Qwen 2.5 Coding Instructor 3B, Llama 7B, 여러 소형 모델들을 돌려봤는데 솔직히 형편없었습니다. 한국어 응답은 어색하고, 할루시네이션은 심하고, 속도도 느렸습니다. "로컬 LLM, 대체 어디에 쓰는 거지?"라는 생각이 매일 들었습니다.
+
 ## 로컬 LLM을 깔아놓고 매일 고민했다
 
-Ollama를 설치하고, 모델을 받아보고, 몇 번 대화해 보고, 그리고 다시 ChatGPT로 돌아갑니다. 이 루틴을 반복한 분이 저만은 아닐 겁니다. 16GB 맥북에어에서 Qwen 2.5 Coding Instructor 3B, Llama 7B, 여러 소형 모델들을 돌려봤는데 솔직히 형편없었습니다. 한국어 응답은 어색하고, 할루시네이션은 심하고, 속도도 느렸습니다. "로컬 LLM, 대체 어디에 쓰는 거지?"라는 생각이 매일 들었습니다.
+
 
 그러다 **EXAONE 3.5 7.8B**를 만났습니다. LG AI Research가 만든 한국어 특화 모델인데, 7B급으로 가볍지만 한국어는 놀라울 정도로 잘합니다. 처음으로 "이거 쓸 만하다"는 느낌을 받았습니다. 하지만 여전히 문제는 남아 있었습니다. 쓸 만한 모델을 찾긴 했는데, 매일 반복적으로 사용할 확실한 **용도**가 필요했습니다.
 

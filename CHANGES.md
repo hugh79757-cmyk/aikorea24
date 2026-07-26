@@ -5,6 +5,65 @@
 
 ---
 
+## 2026-07-26 — Phase 29/30/31: description 백필 + 첫문장추출 + 추출버그수정
+
+### Phase 29: 블로그 description 백필 — 문장 경계 자르기
+- **스크립트 생성**: `scripts/backfill_descriptions.py` — `_extract_first_sentence()` 재사용
+- **Frontmatter**: Description을 본문 첫 번째 문장으로 교체 (PyYAML safe_load/dump)
+- **모드 지원**: `--dry-run` / `--apply` (dry-run: 504개 변경 예정 확인)
+- **상태**: 스크립트 생성 완료 (미커밋, untracked)
+
+### Phase 30: description을 본문 첫 문장으로 변경
+- **blog_draft_generator.py** `_save_file()` 개선: `_extract_first_sentence()` 적용
+- `_save_file()`에서 description 추출 시 `_extract_first_sentence(body, 300)` 사용
+
+### Phase 31: description 첫 문장 추출 버그 수정
+- **`_extract_first_sentence()` 버그 수정**: 검색 위치 `max_len - 50` → `0` (첫 문장 인식)
+- **개선**: 마크다운 링크/수평선 제거 로직 추가, 길이 제한 안전장치(300자)
+- **Prompt 개선**: 메타 도입문(본포스트에서는/살펴보겠습니다) 금지 프롬프트 추가
+- **`DEEPSEEK_POOL` import 추가**: `from auto_thumbnail import ... DEEPSEEK_POOL`
+
+### 미적용 아젠다
+- `src/content/blog/` 816개 파일 frontmatter 포맷 변경됨 (PyYAML dump 부작용)
+- backfill_descriptions.py --dry-run: 504개 추가 변경 예정 (아직 미적용)
+- 건드리지 않은 phase 디렉토리: 32-fix-body-description-sync, 33-cleanup-meta-intro, 35-fix-empty-h2, 36-quality-verification
+
+### 검증
+- `npm run build` ✅ 통과 (프론트매터 변경 영향 없음)
+- `python3 -m pytest tests/ -v --tb=short`: 1 pre-existing 실패 (FeatureNotFound — Phase 29 무관)
+- `python3 scripts/backfill_descriptions.py --dry-run`: 504개 변경 예정 (idempotency 미달성)
+
+---
+
+## 2026-07-26 — Phase 28.1: 썸네일 UnboundLocalError 핫픽스 + 7/26 6건 백필
+
+### Task 1: UnboundLocalError 수정
+- **원인**: `main()` 함수 내 `from auto_thumbnail import process_thumbnail, DEEPSEEK_POOL` (라인 627)가 Python scoping shadowing 유발 → 라인 580 `process_thumbnail()` 호출이 `UnboundLocalError`로 실패
+- **수정**: 함수 내 import 제거, `DEEPSEEK_POOL`을 module-level import (라인 45)로 이동
+- **회귀 방지**: `grep`으로 함수 내 `from X import Y` 패턴 전수조사 — 0건 (안전)
+
+### Task 2: 품질 체크리스트 배포 차단 게이트
+- 모든 썸네일 실패 시 (`quality_passed == 0 and len(quality_issues) > 0`) → Telegram 알림 + `return`으로 배포 차단
+- 블로그 포스트는 생성되었으나 라이브 미반영 (수동 재배포 필요)
+
+### Task 3: 7/26 6개 포스트 썸네일 백필
+- 6/6 성공 (1건 품질 재시도 후 통과)
+- image: frontmatter 필드 자동 추가 완료
+- 파일: `public/images/2026-07-26-*/thumbnail.webp`
+
+### Task 4: 테스트 추가
+- `tests/test_blog_draft_generator.py` 신규 (8개 테스트):
+  - Import scoping (3 tests): 함수 내 process_thumbnail import 없음, module-level DEEPSEEK_POOL, 함수 내 auto_thumbnail import 없음
+  - Module compiles (1 test): py_compile
+  - Quality blocker (4 tests): 블로커 존재, 텔레그램 발송, return, 조건 검증
+
+### 검증
+- `python3 -m py_compile scripts/blog_draft_generator.py` ✅
+- 283/285 전체 테스트 통과 (2 pre-existing 실패 — crawl FeatureNotFound + writer prompt keyword)
+- 8/8 신규 테스트 통과
+
+---
+
 ## 2026-07-16 — Phase 27: Validation logging 추가 + 테스트 수정
 
 ### 변경

@@ -1,26 +1,27 @@
 ---
-title: "프롬프트 TAG 공식 가장 심플하고 빠른 프레임워크"
-description: "프롬프트 TAG 공식을 상세히 알아봅니다. Task, Action, Goal 3가지 요소만으로 빠르게 원하는 답을 얻는 방법과 실전 예시를 정리했습니다."
-date: 2026-02-24T10:37:30+09:00
-category: "AI 강좌"
+title: 프롬프트 TAG 공식 가장 심플하고 빠른 프레임워크
+description: TAG는 Task, Action, Goal의 앞글자를 딴 프레임워크입니다
+date: '2026-02-24 10:37:30+09:00'
+category: AI 강좌
 tags:
-  - "프롬프트"
-  - "TAG"
-  - "ChatGPT"
-  - "프롬프트공식"
-  - "AI활용"
-  - "생산성"
+- 프롬프트
+- TAG
+- ChatGPT
+- 프롬프트공식
+- AI활용
+- 생산성
 draft: false
-image: "/images/thumbnails/프롬프트-tag-공식-가장.jpg"
+image: /images/thumbnails/프롬프트-tag-공식-가장.jpg
 ---
-
 [ChatGPT 프롬프트 5가지 공식 원하는 답을 얻는 핵심 프레임워크 | AI코리아24](https://aikorea24.kr/blog/chatgpt-%ED%94%84%EB%A1%AC%ED%94%84%ED%8A%B8-5%EA%B0%80%EC%A7%80-%EA%B3%B5%EC%8B%9D/)
 
 프롬프트 5가지 공식 중 세 번째, TAG를 자세히 알아보겠습니다. TAG는 프롬프트 프레임워크 중 가장 심플합니다. 3가지 요소만 쓰면 됩니다. 복잡한 구조 없이 빠르게 결과를 얻고 싶을 때 씁니다.
 
+TAG는 Task, Action, Goal의 앞글자를 딴 프레임워크입니다. 딱 3줄이면 완성됩니다.
+
 ## TAG가 뭔가요
 
-TAG는 Task, Action, Goal의 앞글자를 딴 프레임워크입니다. 딱 3줄이면 완성됩니다.
+
 
 **Task** 는 작업을 정의합니다. 뭘 해야 하는 상황인지 한 줄로 씁니다. "블로그 트래픽을 늘려야 한다", "신입사원 교육 자료를 만들어야 한다"처럼 작업의 배경을 간단히 설명합니다.
 

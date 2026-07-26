@@ -1,20 +1,11 @@
 ---
-title: "적자 원인을 AI가 찾아준다 엑셀 매출 분석 자동화"
-description: "매달 적자인데 원인을 모르는 사장님을 위해 AI 엑셀 분석으로 적자 원인을 파악하고 개선하는 방법을 알려드립니다"
-date: 2026-02-16T21:48:13+09:00
-category: "소상공인AI"
-tags:
-  - "적자원인분석"
-  - "AI매출분석"
-  - "엑셀자동화"
-  - "소상공인경영"
-  - "수익성분석"
-  - "비용절감"
-  - "경영개선"
+title: 적자 원인을 AI가 찾아준다 엑셀 매출 분석 자동화
+description: 먼저 소상공인에게 적자가 발생하는 대표적인
+date: '2026-02-16T21:48:13+09:00'
+category: 소상공인AI
 draft: false
-image: "/images/thumbnails/적자-원인을-ai가-찾아준다.jpg"
+image: /images/thumbnails/적자-원인을-ai가-찾아준다.jpg
 ---
-
 [Microsoft 365 Copilot](https://www.microsoft.com/ko-kr/microsoft-365/copilot)
 
 [ChatGPT 데이터 분석](https://chat.openai.com/)
@@ -27,9 +18,11 @@ image: "/images/thumbnails/적자-원인을-ai가-찾아준다.jpg"
 
 다행히 이제 **AI** 가 이 분석을 대신 해줍니다. 매출 데이터를 넣고 물어보면 AI가 문제점을 찾아줍니다. 오늘은 AI를 활용해 적자 원인을 파악하고 개선하는 방법을 알려드리겠습니다.
 
+먼저 소상공인에게 적자가 발생하는 대표적인 원인을
+
 ## 적자가 발생하는 5가지 이유
 
-먼저 소상공인에게 적자가 발생하는 대표적인 원인을 살펴보겠습니다.
+
 
 **원가율 문제**
 

@@ -1,27 +1,28 @@
 ---
-title: "Claude Fable 5 요금 완전 정리 Pro Max Enterprise 플랜별 비교와 주의사항"
-description: "Claude Fable 5 요금 구조를 Pro, Max, Team, Enterprise 플랜별로 정리합니다. 6월 23일 이후 크레딧 전환, 30일 데이터 보관 정책 등 기업 도입 전 반드시 확인해야 할 사항을 분석합니다."
-date: 2026-06-11T12:22:05+09:00
-category: "뉴스"
+title: Claude Fable 5 요금 완전 정리 Pro Max Enterprise 플랜별 비교와 주의사항
+description: Claude Fable 5와 Claude Mythos 5는 동일한 가격으로 제공됩니다
+date: '2026-06-11 12:22:05+09:00'
+category: 뉴스
 tags:
-  - "ClaudeFable5요금"
-  - "앤트로픽가격"
-  - "Claude요금제"
-  - "ClaudePro"
-  - "ClaudeMax"
-  - "ClaudeEnterprise"
-  - "AI구독료"
+- ClaudeFable5요금
+- 앤트로픽가격
+- Claude요금제
+- ClaudePro
+- ClaudeMax
+- ClaudeEnterprise
+- AI구독료
 draft: false
-image: "/images/2026-06-11-003-claude-fable-5-요금-완전-정리-pro-max/thumbnail.webp"
+image: /images/2026-06-11-003-claude-fable-5-요금-완전-정리-pro-max/thumbnail.webp
 ---
-
 Claude Fable 5는 현재 가장 강력한 공개 AI 모델이지만, 요금 구조가 이전 모델보다 크게 복잡해졌습니다. API 기준 입력 토큰당 10달러(약 1만 4천 원)로 Claude Opus 4.8의 두 배이며, 6월 23일 이후에는 구독 플랜에서도 크레딧이 소진되면 접근이 제한됩니다. 기업 도입을 검토하거나 개인 플랜을 선택하려는 분들이 놓치기 쉬운 세부 사항들을 정리합니다.
 
 [관련 기사보기](https://aikorea24.kr/briefing/2026-06-11/#item-1)
 
+Claude Fable 5와 Claude Mythos 5는 동일한 가격으로 제공됩니다. 아래는 API 기준 요금입니다.
+
 ## API 기준 토큰 요금 구조
 
-Claude Fable 5와 Claude Mythos 5는 동일한 가격으로 제공됩니다. 아래는 API 기준 요금입니다.
+
 
 **Claude Fable 5 및 Mythos 5**
 

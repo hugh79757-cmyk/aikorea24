@@ -1,26 +1,27 @@
 ---
-title: "프롬프트 RISEN 공식 RISE보다 정교한 결과가 필요할 때"
-description: "프롬프트 RISEN 공식을 상세히 알아봅니다. Role, Instructions, Steps, End Goal, Narrowing 5가지 요소로 제약 조건이 있는 작업에서 정확한 결과를 얻는 방법을 정리했습니다."
-date: 2026-02-24T10:38:53+09:00
-category: "AI 강좌"
+title: 프롬프트 RISEN 공식 RISE보다 정교한 결과가 필요할 때
+description: RISEN은 Role, Instructions, Steps, End Goal, Narrowing의 앞글자를 딴 프레임워크입니다
+date: '2026-02-24 10:38:53+09:00'
+category: AI 강좌
 tags:
-  - "프롬프트"
-  - "RISEN"
-  - "ChatGPT"
-  - "프롬프트공식"
-  - "AI활용"
-  - "문서작성"
+- 프롬프트
+- RISEN
+- ChatGPT
+- 프롬프트공식
+- AI활용
+- 문서작성
 draft: false
-image: "/images/thumbnails/프롬프트-risen-공식-rise보다.jpg"
+image: /images/thumbnails/프롬프트-risen-공식-rise보다.jpg
 ---
-
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)
 
 프롬프트 5가지 공식 중 네 번째, RISEN을 자세히 알아보겠습니다. RISEN은 RISE의 확장판입니다. RISE에 Narrowing이 추가됐습니다. 제약 조건이 명확한 작업, 형식이 정해진 문서 작성에 강합니다.
 
+RISEN은 Role, Instructions, Steps, End Goal, Narrowing의 앞글자를 딴 프레임워크입니다. RISE의 4가지 요소에 Narrowing이 추가되어 5가지 요소로 구성됩니다.
+
 ## RISEN이 뭔가요
 
-RISEN은 Role, Instructions, Steps, End Goal, Narrowing의 앞글자를 딴 프레임워크입니다. RISE의 4가지 요소에 Narrowing이 추가되어 5가지 요소로 구성됩니다.
+
 
 **Role** 은 AI에게 전문가 역할을 부여합니다. RISE와 동일합니다.
 

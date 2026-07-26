@@ -1,21 +1,12 @@
 ---
-title: "스마트폰 회사가 Claude에 도전장을 내밀었다"
-description: "샤오미가 MiMo-V2 시리즈 3종을 동시 출시하며 AI 에이전트 플랫폼 전쟁에 뛰어든 배경과 의미"
-date: 2026-03-23T11:48:05+09:00
-category: "AI산업분석"
-tags:
-  - "샤오미"
-  - "MiMo"
-  - "AI에이전트"
-  - "Claude"
-  - "가격전쟁"
-  - "HunterAlpha"
-  - "중국AI"
+title: 스마트폰 회사가 Claude에 도전장을 내밀었다
+description: 공식 발표 전 흥미로운 일이 벌어졌습니다
+date: '2026-03-23T11:48:05+09:00'
+category: AI산업분석
 draft: false
-image: "/images/thumbnails/스마트폰-회사가-claude에-도전장을.jpg"
+image: /images/thumbnails/스마트폰-회사가-claude에-도전장을.jpg
 ---
 
----
 
 [2026년 3월 23일 (월) AI 브리핑 - AI코리아24](https://aikorea24.kr/briefing/2026-03-23/#item-4)
 
@@ -23,9 +14,11 @@ image: "/images/thumbnails/스마트폰-회사가-claude에-도전장을.jpg"
 
 MiMo-V2-Pro는 코딩 벤치마크 SWE-bench Verified에서 78%를 기록했습니다. Claude Opus 4.6이 80.8%, Claude Sonnet 4.6이 79.6%이니 거의 동급입니다. 에이전트 벤치마크 ClawEval에서는 81점으로 Claude Opus 4.6의 81.5점에 0.5점 차이입니다. 가격은 입력 100만 토큰당 1달러, 출력 3달러. Claude Sonnet 4.6(3/15달러)의 3분의 1에서 5분의 1 수준입니다.
 
+공식 발표 전 흥미로운 일이 벌어졌습니다. MiMo-V2-Pro는 API 플랫폼 OpenRouter에 "Hunter Alpha"라는 익명의 모델로 등록되었습니다. 개발자들은 정체를 모른 채 이 모델을 사용했고, 며칠간 일간 랭킹 1위를 유지하며 총 1조 토큰 이상이 소비됐습니다. 가장 인기 있는 용도는 코딩이었습니다.
+
 ## Hunter Alpha의 정체
 
-공식 발표 전 흥미로운 일이 벌어졌습니다. MiMo-V2-Pro는 API 플랫폼 OpenRouter에 "Hunter Alpha"라는 익명의 모델로 등록되었습니다. 개발자들은 정체를 모른 채 이 모델을 사용했고, 며칠간 일간 랭킹 1위를 유지하며 총 1조 토큰 이상이 소비됐습니다. 가장 인기 있는 용도는 코딩이었습니다.
+
 
 많은 사용자가 Hunter Alpha를 DeepSeek V4로 추측했습니다. 하지만 DeepSeek의 차기 모델은 규모 확대로 출시가 지연되고 있었고, 정체는 샤오미였습니다. 이 전략은 영리합니다. 브랜드 편향 없이 순수하게 성능만으로 평가받은 뒤, "그 모델이 사실 우리 것이었다"고 밝히는 것은 어떤 벤치마크 수치보다 강력한 마케팅입니다.
 

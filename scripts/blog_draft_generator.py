@@ -42,7 +42,7 @@ def remove_chinese(text):
 # model_router (threads/v3)
 # ============================================
 from model_router import chat_completion
-from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality
+from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, DEEPSEEK_POOL
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
@@ -200,7 +200,10 @@ def generate_draft(keyword, articles, grade):
             f"- 마지막에 📌 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
-            f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n\n"
+            f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
+            f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
+            f"'살펴보겠습니다', '알아보겠습니다', '다루겠습니다' 등 메타 성격의 도입문(메타 도입문) 절대 금지.** "
+            f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n\n"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
@@ -222,7 +225,10 @@ def generate_draft(keyword, articles, grade):
             f"- 마지막에 📌 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
-            f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n\n"
+            f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
+            f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
+            f"'살펴보겠습니다', '알아보겠습니다', '다루겠습니다' 등 메타 성격의 도입문(메타 도입문) 절대 금지.** "
+            f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n\n"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
@@ -351,10 +357,10 @@ def _truncate_at_sentence_boundary(text, max_len):
 def _extract_first_sentence(text, max_len=300):
     """텍스트에서 첫 번째 완전한 문장만 추출.
     
-    마크다운 헤딩이 포함된 경우, 헤딩을 제거하고 첫 번째 실제 문장(한국어 종결어미 포함)을 추출.
+    마크다운 헤딩, 링크, 수평선이 포함된 경우, 이를 제거하고 첫 번째 실제 문장(한국어 종결어미 포함)을 추출.
     
     Args:
-        text: 입력 텍스트 (마크다운 헤딩 포함 가능)
+        text: 입력 텍스트 (마크다운 헤딩, 링크, 수평선 포함 가능)
         max_len: 최대 길이 (첫 문장이 너무 길면 안전장치로 자름)
     
     Returns:
@@ -363,32 +369,29 @@ def _extract_first_sentence(text, max_len=300):
     if not text:
         return ""
     
-    # 마크다운 헤딩, 강조, 줄바꿈 제거
+    # 0. 선행 수평선(---, ***) 제거
+    text = re.sub(r"^(\s*[-*]{3,}\s*)+", "", text)
+    
+    # 마크다운 헤딩, 링크, 강조, 줄바꿈 제거
     # 1. "서론:", "들어가며:", "시작하며:", "개요:" 프리픽스 제거
     text = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", text)
     # 2. 일반 헤딩 제거 (## 텍스트\n 또는 # 텍스트\n, 뒤따르는 공백 포함)
     text = re.sub(r"^##?\s+[^\n]+\n\s*", "", text)
-    # 3. 남은 마크다운 문법 제거
+    # 3. 마크다운 링크 제거 (맨 앞의 링크들) - [텍스트](URL) 패턴, 여러 개 연속 처리
+    text = re.sub(r"^(\s*\[.*?\]\([^)]+\)\s*)+", "", text)
+    # 4. 남은 마크다운 문법 제거
     text = re.sub(r"[#*>\n\s]+", " ", text).strip()
     
     if not text:
         return ""
     
-    # 텍스트가 max_len 이내면 전체에서 첫 종결어미 찾기
-    if len(text) <= max_len:
-        m = _KOR_END_PATTERN.search(text)
-        if m:
-            return text[:m.end()].strip()
-        return text
-    
-    # max_len 이후에서 첫 종결어미 찾기 (안전장치)
-    m = _KOR_END_PATTERN.search(text, max_len - 50)
+    # 전체 텍스트에서 첫 번째 종결어미 찾기 (처음부터 검색)
+    m = _KOR_END_PATTERN.search(text)
     if m:
-        # 첫 번째 종결어미 위치에서 문장 추출
         end_pos = m.end()
-        # 문장 시작점 찾기: 종결어미 앞쪽으로 역추적하여 문장 경계 찾기
+        # 첫 번째 종결어미 위치에서 문장 추출
         sentence_text = text[:end_pos]
-        # 마지막 문장 경계(마침표, 느낌표, 물음표, 줄바꿈) 찾기
+        # 문장 시작점 찾기: 종결어미 앞쪽으로 역추적하여 문장 경계 찾기
         # 한국어 문장은 보통 ". ", "! ", "? ", "\n", 또는 종결어미+공백 뒤부터 시작
         last_boundary = -1
         for pattern in ['. ', '! ', '? ', '\n']:
@@ -412,6 +415,9 @@ def _extract_first_sentence(text, max_len=300):
             m2 = _KOR_END_PATTERN.search(text)
             if m2:
                 return text[:m2.end()].strip()
+        # 길이 제한 적용
+        if len(first_sentence) > max_len:
+            return first_sentence[:max_len].strip()
         return first_sentence
     
     # 종결어미 못 찾으면 max_len에서 공백 기준 자름
@@ -618,7 +624,6 @@ def main():
                 log(f"  🔄 중복 썸네일 재시도: {slug}")
                 # 강제로 다른 키워드 사용 (DEEPSEEK_POOL에서 랜덤)
                 try:
-                    from auto_thumbnail import process_thumbnail, DEEPSEEK_POOL
                     import random
                     forced_keyword = random.choice([k for k in DEEPSEEK_POOL if k != "abstract technology"])
                     # 재생성 시도 (실제로는 process_thumbnail이 내부에서 랜덤 선택하므로 그냥 재호출)
@@ -720,6 +725,12 @@ def main():
     log(f"  품질 체크리스트: {quality_passed}/{len(generated)} 통과, {len(quality_issues)} 이슈")
     if quality_issues:
         log(f"  ⚠️ 품질 이슈: {quality_issues}")
+
+    # 모든 썸네일 실패 시 배포 차단 (Task 28.1-02)
+    if quality_passed == 0 and len(quality_issues) > 0 and len(generated) > 0:
+        log("  ❌ 모든 썸네일 품질 검증 실패 — 배포 차단")
+        send_telegram(f"❌ [{today_str}] 썸네일 전면 실패: {len(quality_issues)}건 — 배포 차단됨")
+        return
 
     # 6. 자동 배포 (새 블로그 포스트가 생성되었거나 미커밋 파일이 있으면)
     # 미커밋 블로그 파일 감지 (git status --porcelain)

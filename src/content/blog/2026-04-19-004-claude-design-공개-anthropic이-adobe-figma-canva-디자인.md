@@ -1,21 +1,20 @@
 ---
-title: "Claude Design 공개 Anthropic이 Adobe Figma Canva 디자인 시장에 도전장을 내밀다"
-description: "Anthropic이 대화형 AI 디자인 도구 Claude Design을 출시했다 자연어로 디자인하고 Claude Code로 바로 구현하는 통합 플랫폼 전략이 기존 디자인 소프트웨어 시장에 미치는 영향을 분석한다"
-date: 2026-04-19T08:59:04+09:00
-category: "뉴스"
+title: Claude Design 공개 Anthropic이 Adobe Figma Canva 디자인 시장에 도전장을 내밀다
+description: Claude Design은 최신 모델 Claude Opus 4.7을 기반으로 작동합니다
+date: '2026-04-19T08:59:04+09:00'
+category: 뉴스
 tags:
-  - "ClaudeDesign"
-  - "Anthropic"
-  - "Figma"
-  - "Adobe"
-  - "Canva"
-  - "AI디자인도구"
-  - "디자인민주화"
+- ClaudeDesign
+- Anthropic
+- Figma
+- Adobe
+- Canva
+- AI디자인도구
+- 디자인민주화
 draft: false
-image: "/images/2026-04-19-004-claude-design-공개-anthropic이-adobe-figma-canva-디자인/thumbnail.webp"
+image: /images/2026-04-19-004-claude-design-공개-anthropic이-adobe-figma-canva-디자인/thumbnail.webp
 ---
 
----
 
 Anthropic이 디자인 시장에 진출했습니다. 2026년 4월 17일, 대화형 AI 기반 시각 디자인 도구 'Claude Design'이 공개되었습니다. 자연어(일상적 언어)로 원하는 디자인을 설명하면 AI가 초안을 생성하고, 이를 반복적으로 수정해 완성도를 높이는 방식입니다.
 
@@ -23,9 +22,11 @@ Anthropic이 디자인 시장에 진출했습니다. 2026년 4월 17일, 대화�
 
 기사원문은 AI코리아24 기사 브리핑 페이지에서 확인할 수 있습니다. 
 
+Claude Design은 최신 모델 Claude Opus 4.7을 기반으로 작동합니다. 현재 프로, 맥스, 팀, 엔터프라이즈 구독자를 대상으로 연구 미리보기(Research Preview) 형태로 순차 제공되고 있습니다.
+
 ## Claude Design의 핵심 기능과 차별점
 
-Claude Design은 최신 모델 Claude Opus 4.7을 기반으로 작동합니다. 현재 프로, 맥스, 팀, 엔터프라이즈 구독자를 대상으로 연구 미리보기(Research Preview) 형태로 순차 제공되고 있습니다.
+
 
 핵심 기능은 세 가지로 정리됩니다.
 

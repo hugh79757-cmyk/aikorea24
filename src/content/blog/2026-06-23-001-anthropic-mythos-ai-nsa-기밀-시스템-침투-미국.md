@@ -1,29 +1,30 @@
 ---
-title: "Anthropic Mythos AI NSA 기밀 시스템 침투 미국 수출 규제와 Fable 5 전면 셧다운의 전말"
-description: "Anthropic의 Mythos AI가 NSA 기밀 시스템을 수 시간 만에 뚫었다는 상원 증언이 공개됐다. AI 모델 직접 겨냥 수출 규제라는 전례 없는 조치가 AI 업계 전체에 던지는 의미를 분석한다"
-date: 2026-06-23T20:58:10+09:00
-category: "뉴스"
+title: Anthropic Mythos AI NSA 기밀 시스템 침투 미국 수출 규제와 Fable 5 전면 셧다운의 전말
+description: 사건의 시작은 2026년 6월 11일입니다
+date: '2026-06-23 20:58:10+09:00'
+category: 뉴스
 tags:
-  - "AnthropicMythos"
-  - "NSA해킹"
-  - "Fable5금지"
-  - "AI수출규제"
-  - "ProjectGlasswing"
-  - "AI국가안보"
-  - "미국AI규제"
+- AnthropicMythos
+- NSA해킹
+- Fable5금지
+- AI수출규제
+- ProjectGlasswing
+- AI국가안보
+- 미국AI규제
 draft: false
-image: "/images/2026-06-23-001-anthropic-mythos-ai-nsa-기밀-시스템-침투-미국/thumbnail.webp"
+image: /images/2026-06-23-001-anthropic-mythos-ai-nsa-기밀-시스템-침투-미국/thumbnail.webp
 ---
-
 **Anthropic의 최강 AI 모델 Mythos**가 미 국가안보국(NSA) 기밀 시스템 대부분을 단 몇 시간 만에 침투했다는 상원 청문회 증언이 공개되며 AI 업계 전체가 충격에 빠졌습니다. 미 상무부는 즉각 Fable 5와 Mythos 5에 대한 외국 국적자 접근 차단 수출 규제를 발령했고, Anthropic은 전 세계 모든 사용자를 대상으로 두 모델을 전면 셧다운했습니다.
 
 AI 모델 자체를 직접 겨냥한 수출 규제는 미국 역사상 처음입니다. 지금까지 수출 규제는 AI를 구동하는 반도체 칩에 적용되었지 모델 자체에 적용된 전례는 없었습니다. 이 조치가 AI 거버넌스와 국가안보 정책에 어떤 선례를 남겼는지, 그리고 한국을 포함한 동맹국과 기업들에 어떤 파장을 미치는지 살펴봅니다.
 
 [기사원문보기](https://aikorea24.kr/briefing/2026-06-23/#item-1)
 
+사건의 시작은 2026년 6월 11일입니다. 이날 미 상원 정보위원회 청문회에서 부위원장 Mark Warner 의원은 NSA 국장 겸 사이버사령부 사령관 Joshua Rudd 장군으로부터 직접 들은 내용을 공개했습니다. Rudd 장군은 "이 도구(Mythos)가 우리 기밀 시스템 거의 전부를 몇 주가 아닌 몇 시간 만에 뚫었다"고 밝혔습니다.
+
 ## NSA 침투 증언의 전말과 규제 발령 타임라인
 
-사건의 시작은 2026년 6월 11일입니다. 이날 미 상원 정보위원회 청문회에서 부위원장 Mark Warner 의원은 NSA 국장 겸 사이버사령부 사령관 Joshua Rudd 장군으로부터 직접 들은 내용을 공개했습니다. Rudd 장군은 "이 도구(Mythos)가 우리 기밀 시스템 거의 전부를 몇 주가 아닌 몇 시간 만에 뚫었다"고 밝혔습니다.
+
 
 이 증언은 영국 이코노미스트지가 6월 14일 처음 보도했지만 초기에는 주목받지 못했습니다. 이후 6월 21일경 소셜미디어를 통해 급속도로 확산되며 "Mythos가 NSA를 해킹했다"는 표현으로 바이럴되었습니다. 그러나 이코노미스트 원저자는 이튿날 해당 표현이 과장된 것이라고 직접 해명에 나서야 했습니다. 중요한 사실은 이것이 **외부 공격이 아닌 통제된 환경의 레드팀(red-team, 보안 취약점 테스트를 위해 실제 공격자 역할을 맡는 팀) 평가**였다는 점입니다.
 

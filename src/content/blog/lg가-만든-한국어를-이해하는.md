@@ -1,20 +1,19 @@
 ---
-title: "LG가 만든 한국어를 이해하는 로컬 LLM 엑사원 3.5 7.8B 설치부터 활용까지 완전 정리"
-description: "LG AI연구원이 개발한 한국어 특화 로컬 LLM EXAONE 3.5 7.8B의 성능과 특징, Ollama를 통한 설치 방법, 실제 활용 사례까지 상세하게 정리합니다"
-date: 2026-03-15T22:16:31+09:00
-category: "바이브코딩"
+title: LG가 만든 한국어를 이해하는 로컬 LLM 엑사원 3.5 7.8B 설치부터 활용까지 완전 정리
+description: EXAONE(엑사원)은 LG AI연구원이 2021년부터 개발해 온 자체 대규모 언어 모델입니다
+date: '2026-03-15 22:16:31+09:00'
+category: 바이브코딩
 tags:
-  - "EXAONE"
-  - "엑사원"
-  - "로컬LLM"
-  - "Ollama"
-  - "LG AI연구원"
-  - "한국어LLM"
-  - "바이브코딩"
+- EXAONE
+- 엑사원
+- 로컬LLM
+- Ollama
+- LG AI연구원
+- 한국어LLM
+- 바이브코딩
 draft: false
-image: "/images/thumbnails/lg가-만든-한국어를-이해하는.jpg"
+image: /images/thumbnails/lg가-만든-한국어를-이해하는.jpg
 ---
-
 [LG AI연구원 공식 사이트](https://www.lgresearch.ai/)
 
 [Ollama EXAONE 3.5 7.8B 모델 페이지](https://ollama.com/library/exaone3.5:7.8b)
@@ -27,9 +26,11 @@ ChatGPT, Claude, Gemini 같은 클라우드 AI는 익숙하지만, 내 컴퓨터
 
 이 글에서는 EXAONE 3.5 7.8B가 무엇인지, 왜 주목할 만한지, 그리고 내 컴퓨터에 어떻게 설치해서 쓸 수 있는지를 처음부터 끝까지 정리합니다.
 
+EXAONE(엑사원)은 LG AI연구원이 2021년부터 개발해 온 자체 대규모 언어 모델입니다. 이름은 **EX** pert **A** I for Ever **ONE** 의 약자로, "모두를 위한 전문가 AI"라는 의미를 담고 있습니다. LG AI연구원은 LG 그룹 산하의 독립 AI 연구 조직으로, 삼성의 삼성리서치, 네이버의 하이퍼클로바와 함께 국내 3대 자체 LLM 개발 기관 중 하나입니다.
+
 ## EXAONE이란?
 
-EXAONE(엑사원)은 LG AI연구원이 2021년부터 개발해 온 자체 대규모 언어 모델입니다. 이름은 **EX** pert **A** I for Ever **ONE** 의 약자로, "모두를 위한 전문가 AI"라는 의미를 담고 있습니다. LG AI연구원은 LG 그룹 산하의 독립 AI 연구 조직으로, 삼성의 삼성리서치, 네이버의 하이퍼클로바와 함께 국내 3대 자체 LLM 개발 기관 중 하나입니다.
+
 
 EXAONE의 발전 과정을 보면 그 성장세가 뚜렷합니다. 2024년 8월에 EXAONE 3.0 7.8B가 처음 오픈소스로 공개되었고, 같은 해 12월에 EXAONE 3.5가 2.4B, 7.8B, 32B 세 가지 크기로 출시되었습니다. 2025년 3월에는 수학과 코딩 추론에 특화된 EXAONE Deep이 나왔고, 2025년 7월에는 추론과 범용을 결합한 하이브리드 모델 EXAONE 4.0이 공개되었습니다. 2026년 1월에는 MoE(Mixture-of-Experts) 아키텍처를 적용한 K-EXAONE이 등장해 글로벌 7위, 국내 1위 성능을 기록했습니다.
 

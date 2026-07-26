@@ -1,16 +1,14 @@
 ---
-title: "독일, 구글 AI 개요와 Perplexity를 최초로 미디어 법으로 규제한 판결의 의미"
-description: "AI 검색 시대의 법적 경계가 그려지다 최근 독일 미디어 규제 기관이 구글의 AI 개요(Search Generative Experience)와 AI 검색 엔진 Perplexity에 대해 국가 미디어 조약을 적용한 최초의 판결을 내렸습니다. 이 판결은 AI가 생성한 콘텐츠를 기존 미디어 법 체계 안에서 어떻게 규제할 것인지에 대한 중요한 선례를 만들었습니다. 많은 사람들이 AI 검색을 단순한 기술 발전으로 바라보지만, 이번 결정은 AI의 콘텐츠가"
-date: 2026-07-17T08:03:42+09:00
-category: "뉴스"
+title: 독일, 구글 AI 개요와 Perplexity를 최초로 미디어 법으로 규제한 판결의 의미
+description: 최근 독일 미디어 규제 기관이 구글의 AI 개요(Search Generative Experience)와 AI 검색 엔진 Perplexity에
+  대해 국가 미디어 조약을 적용한 최초의 판결을 내렸습니다
+date: '2026-07-17 08:03:42+09:00'
+category: 뉴스
 tags:
-  - "독일, 구글의 AI 개요 및 Perplexity를 미디어 법에 따라 규제하는 최초의 판결"
+- 독일, 구글의 AI 개요 및 Perplexity를 미디어 법에 따라 규제하는 최초의 판결
 draft: false
-image: "/images/2026-07-17-004-독일-구글-ai-개요와-perplexity를-최초로-미디어-법으로-규제한-판결의-의미/thumbnail.webp"
+image: /images/2026-07-17-004-독일-구글-ai-개요와-perplexity를-최초로-미디어-법으로-규제한-판결의-의미/thumbnail.webp
 ---
-
-## 서론: AI 검색 시대의 법적 경계가 그려지다
-
 최근 독일 미디어 규제 기관이 구글의 AI 개요(Search Generative Experience)와 AI 검색 엔진 Perplexity에 대해 국가 미디어 조약을 적용한 최초의 판결을 내렸습니다. 이 판결은 AI가 생성한 콘텐츠를 기존 미디어 법 체계 안에서 어떻게 규제할 것인지에 대한 중요한 선례를 만들었습니다. 많은 사람들이 AI 검색을 단순한 기술 발전으로 바라보지만, 이번 결정은 AI의 콘텐츠가 중립적인 검색 결과인지, 아니면 자체적인 미디어 콘텐츠인지에 대한 근본적인 질문을 던집니다. 저는 이 판결의 배경과 의미, 그리고 향후 전망을 깊이 있게 분석해드리겠습니다.
 
 ## 판결의 배경과 핵심 내용

@@ -1,29 +1,30 @@
 ---
-title: "AI 맥락 관리의 정답은 결국 같은 곳을 가리킨다"
-description: "바이트댄스의 OpenViking 컨텍스트 DB와 AIKeep24가 동일한 구조에 도달한 이유, 그리고 Claude 1M 컨텍스트 윈도우로도 해결되지 않는 문제를 분석합니다"
-date: 2026-03-16T10:47:12+09:00
-category: "바이브코딩"
+title: AI 맥락 관리의 정답은 결국 같은 곳을 가리킨다
+description: '!'
+date: '2026-03-16 10:47:12+09:00'
+category: 바이브코딩
 tags:
-  - "컨텍스트엔지니어링"
-  - "AIKeep24"
-  - "OpenViking"
-  - "Claude"
-  - "맥락관리"
-  - "로컬LLM"
-  - "RAG"
+- 컨텍스트엔지니어링
+- AIKeep24
+- OpenViking
+- Claude
+- 맥락관리
+- 로컬LLM
+- RAG
 draft: false
-image: "/images/thumbnails/ai-맥락-관리의-정답은.jpg"
+image: /images/thumbnails/ai-맥락-관리의-정답은.jpg
 ---
-
 [AI코리아24 오늘의 AI 브리핑 관련 기사](https://aikorea24.kr/briefing/2026-03-16/#item-2)
 
 3월 15일, 바이트댄스 산하 Volcengine이 AI 에이전트용 오픈소스 컨텍스트 데이터베이스 **OpenViking** 을 공개했습니다. 같은 주, Anthropic은 Claude Opus 4.6과 Sonnet 4.6의 **1M(100만) 토큰 컨텍스트 윈도우** 를 정식 출시했습니다. 하나는 맥락을 구조화해서 저장하는 도구이고, 다른 하나는 맥락을 한 번에 더 많이 읽는 능력입니다. 방향은 다르지만 둘 다 같은 문제를 풀려고 합니다. AI는 왜 대화가 길어지면 앞부분을 잊어버리는가.
 
 AI코리아24에서 개발 중인 맥락 주입기 **AIKeep24** 도 바로 이 문제에서 출발했습니다. 그리고 OpenViking의 아키텍처를 들여다보면, AIKeep24가 독자적으로 도달한 설계와 놀랍도록 닮아 있습니다. 서로 다른 출발점에서 같은 구조에 도착한 것입니다. 이 글에서는 왜 그럴 수밖에 없는지, 그리고 컨텍스트 윈도우가 아무리 커져도 이 문제가 사라지지 않는 이유를 살펴봅니다.
 
+![uvNnrkW0.webp](https://img.aikorea24.kr/images/ai-맥락-관리의-정답은/88e987ae2218083e62283ab2eef171d15e9d3554.webp)
+
 ## 모든 맥락 관리 도구가 같은 결론에 도달하는 이유
 
-![uvNnrkW0.webp](https://img.aikorea24.kr/images/ai-맥락-관리의-정답은/88e987ae2218083e62283ab2eef171d15e9d3554.webp)
+
 
 AI 대화의 맥락을 관리하려면 결국 세 가지가 필요합니다. **요약, 태깅, 원문 보존** 입니다. 이것은 누가 먼저 생각했느냐의 문제가 아니라, 문제의 본질이 그 답을 강제하는 구조입니다.
 

@@ -1,31 +1,31 @@
 ---
-title: "Anthropic Mythos 5 폐쇄와 AI 재귀적 자기개선 체르노빌급 재앙 없이 규제 가능한가"
-description: "Anthropic이 RSI 징후를 발표하고 사이버공격 가능 Mythos 5 모델을 폐쇄했다 UC버클리 교수 Stuart Russell이 경고하는 AI 라이선싱 규제의 필요성을 분석한다"
-date: 2026-06-18T12:12:23+09:00
-category: "뉴스"
+title: Anthropic Mythos 5 폐쇄와 AI 재귀적 자기개선 체르노빌급 재앙 없이 규제 가능한가
+description: 사건의 전개를 순서대로 정리합니다
+date: '2026-06-18 12:12:23+09:00'
+category: 뉴스
 tags:
-  - "AnthropicMythos"
-  - "AI재귀적자기개선"
-  - "RSI"
-  - "AI규제"
-  - "StuartRussell"
-  - "AI안전"
-  - "사이버무기AI"
-  - "AI라이선싱"
+- AnthropicMythos
+- AI재귀적자기개선
+- RSI
+- AI규제
+- StuartRussell
+- AI안전
+- 사이버무기AI
+- AI라이선싱
 draft: false
-image: "/images/2026-06-18-004-anthropic-mythos-5-폐쇄와-ai-재귀적-자기개선-체르노빌급/thumbnail.webp"
+image: /images/2026-06-18-004-anthropic-mythos-5-폐쇄와-ai-재귀적-자기개선-체르노빌급/thumbnail.webp
 ---
-
 Anthropic의 최신 프런티어 모델 **Mythos 5** 가 폐쇄됐습니다. 백악관의 수출통제령이 발동된 직후 Anthropic이 스스로 모델을 내린 것입니다. 이 사태의 발단은 Anthropic이 6월 초 발표한 보고서였습니다. AI가 **스스로 자신의 지능을 향상시키는 루프**, 즉 재귀적 자기 개선(RSI, Recursive Self-Improvement) 징후가 나타났다는 내용이었습니다.
 
 UC버클리 컴퓨터과학 석좌교수이자 AI 안전 분야의 세계적 권위자인 Stuart Russell은 가디언 칼럼을 통해 이 사태가 예고된 결과이며, 지금 당장 라이선싱 기반의 AI 규제 체계가 필요하다고 주장합니다. 그의 논점은 날카롭고 불편합니다. 그리고 정확합니다.
 
 관련 뉴스 브리핑은 [AI코리아24 데일리 브리핑](https://aikorea24.kr/briefing/2026-06-18/#item-4)에서 확인하실 수 있습니다.
 
+사건의 전개를 순서대로 정리합니다. Anthropic의 Claude Code가 연구자들의 코딩 작업 전체를 대신할 수 있는 수준이 되면서 AI 스스로 AI를 개선하는 속도가 급격히 빨라졌습니다. 이 과정에서 탄생한 Mythos 5는 인간의 개입 없이 처음부터 끝까지 **사이버 공격을 스스로 수행**할 수 있는 능력을 갖춘 것으로 확인됐습니다.
 
 ## Mythos 5 사태 무슨 일이 실제로 벌어졌나
 
-사건의 전개를 순서대로 정리합니다. Anthropic의 Claude Code가 연구자들의 코딩 작업 전체를 대신할 수 있는 수준이 되면서 AI 스스로 AI를 개선하는 속도가 급격히 빨라졌습니다. 이 과정에서 탄생한 Mythos 5는 인간의 개입 없이 처음부터 끝까지 **사이버 공격을 스스로 수행**할 수 있는 능력을 갖춘 것으로 확인됐습니다.
+
 
 백악관은 외국인을 포함한 모든 외국 국적자의 접근을 차단하는 수출통제령을 발동했습니다. Anthropic은 한 걸음 더 나아가 모델 자체를 폐쇄했습니다. Russell이 지적하듯, 이 결정은 이미 배포된 이후에 나온 사후 대응이었습니다.
 

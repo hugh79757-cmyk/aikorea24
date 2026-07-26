@@ -1,22 +1,21 @@
 ---
-title: "AMD vs Nvidia 종합 비교 2026년 AI 반도체 시장의 다윗과 골리앗"
-description: "2026년 2월 기준 AMD와 Nvidia의 시가총액, 매출, GPU 성능, 소프트웨어 생태계를 종합 비교합니다. Meta와 OpenAI 대형 딜로 추격전에 나선 AMD의 현재 위치를 분석합니다."
-date: 2026-02-25T08:40:27+09:00
-category: "뉴스"
+title: AMD vs Nvidia 종합 비교 2026년 AI 반도체 시장의 다윗과 골리앗
+description: 두 회사의 규모 차이는 압도적입니다
+date: '2026-02-25 08:40:27+09:00'
+category: 뉴스
 tags:
-  - "AMD"
-  - "Nvidia"
-  - "AI반도체"
-  - "GPU"
-  - "데이터센터"
-  - "MI350X"
-  - "B200"
-  - "CUDA"
-  - "ROCm"
+- AMD
+- Nvidia
+- AI반도체
+- GPU
+- 데이터센터
+- MI350X
+- B200
+- CUDA
+- ROCm
 draft: false
-image: "/images/thumbnails/amd-vs-nvidia-종합.jpg"
+image: /images/thumbnails/amd-vs-nvidia-종합.jpg
 ---
-
 [AMD 관련 기사 원문 보기 (The Decoder)](https://the-decoder.com/amd-basically-copy-pasted-its-openai-deal-for-meta-six-gigawatts-and-ten-percent-equity-included/)
 
 [Nvidia 투자자 정보 페이지](https://investor.nvidia.com)
@@ -29,9 +28,11 @@ AMD가 Meta, OpenAI와 연달아 대형 계약을 체결했습니다. 각각 6�
 
 물론 Nvidia와의 격차는 여전히 큽니다. 하지만 후발주자 AMD가 본격적인 추격전에 나선 것만은 분명합니다. 이 글에서는 2026년 2월 현재 시점에서 두 회사를 다각도로 비교 분석해 보겠습니다.
 
+두 회사의 규모 차이는 압도적입니다.
+
 ## 회사 규모 비교
 
-두 회사의 규모 차이는 압도적입니다.
+
 
 Nvidia의 시가총액은 약 **4.7조 달러** 수준입니다. 한화로 환산하면 약 6,500조 원에 달합니다. 이는 세계 최대 시가총액 기업들과 어깨를 나란히 하는 수준입니다.
 

@@ -1,35 +1,35 @@
 ---
-title: "GitHub Cloudflare Pages 무료로 세상에 공개하는 최고의 조합"
-description: "GitHub과 Cloudflare Pages를 연동해서 웹사이트를 무료로 배포하는 방법을 안내합니다. 호스팅 비용 없이 전문적인 웹사이트를 운영할 수 있습니다."
-date: 2026-02-12T22:39:55+09:00
-category: "개발배포"
+title: GitHub Cloudflare Pages 무료로 세상에 공개하는 최고의 조합
+description: GitHub Pages도 훌륭하지만 Cloudflare Pages를 추천하는 이유가 있습니다
+date: '2026-02-12 22:39:55+09:00'
+category: 개발배포
 tags:
-  - "CloudflarePages"
-  - "GitHub"
-  - "무료호스팅"
-  - "웹배포"
-  - "정적사이트"
-  - "바이브코딩"
-  - "무료웹사이트"
+- CloudflarePages
+- GitHub
+- 무료호스팅
+- 웹배포
+- 정적사이트
+- 바이브코딩
+- 무료웹사이트
 draft: false
-image: "/images/thumbnails/github-cloudflare-pages-muryoro.jpg"
+image: /images/thumbnails/github-cloudflare-pages-muryoro.jpg
 ---
 
 - [Cloudflare Pages 공식 사이트](https://pages.cloudflare.com/)
 - [Cloudflare 가입](https://dash.cloudflare.com/sign-up)
 - [GitHub Pages 가이드](https://pages.github.com/)
 
----
 
 코드를 GitHub에 올렸습니다. 하지만 이 상태로는 다른 사람이 여러분의 웹사이트를 볼 수 없습니다. 웹사이트를 인터넷에 공개하려면 "호스팅"이 필요합니다. 호스팅은 보통 월 몇 천 원에서 몇 만 원의 비용이 드는데, 정적 사이트라면 완전 무료로 호스팅할 수 있습니다.
 
 GitHub Pages와 Cloudflare Pages가 대표적인 무료 호스팅 서비스입니다. 둘 다 GitHub 레포지토리와 연동해서 자동으로 웹사이트를 배포합니다. 코드를 푸시하면 몇 초 후에 변경 사항이 반영됩니다. 이번 강에서는 Cloudflare Pages를 사용해서 웹사이트를 세상에 공개하는 방법을 알아보겠습니다.
 
----
+
+GitHub Pages도 훌륭하지만 Cloudflare Pages를 추천하는 이유가 있습니다. 첫째, 빌드 속도가 빠릅니다. Hugo, Astro 같은 정적 사이트 생성기를 자동으로 빌드해 줍니다. 둘째, 전 세계 CDN(콘텐츠 전송 네트워크)을 통해 어디서든 빠르게 접속됩니다. 셋째, 무료 SSL 인증서가 자동으로 적용되어 https로 안전하게 접속할 수 있습니다.
 
 ## Cloudflare Pages 선택 이유
 
-GitHub Pages도 훌륭하지만 Cloudflare Pages를 추천하는 이유가 있습니다. 첫째, 빌드 속도가 빠릅니다. Hugo, Astro 같은 정적 사이트 생성기를 자동으로 빌드해 줍니다. 둘째, 전 세계 CDN(콘텐츠 전송 네트워크)을 통해 어디서든 빠르게 접속됩니다. 셋째, 무료 SSL 인증서가 자동으로 적용되어 https로 안전하게 접속할 수 있습니다.
+
 
 또한 비공개 레포지토리에서도 무료로 배포할 수 있습니다. GitHub Pages는 무료 플랜에서 공개 레포지토리만 지원하지만, Cloudflare Pages는 비공개 레포지토리도 연결할 수 있습니다. 월 요청 횟수 제한도 일반 개인 블로그 수준에서는 신경 쓸 필요가 없을 만큼 넉넉합니다.
 
@@ -37,7 +37,6 @@ GitHub Pages도 훌륭하지만 Cloudflare Pages를 추천하는 이유가 있�
 
 위의 사이트를 방문해서 속도가 얼마나 빠른지 한번 시험해보세요. 티스토리나 워드프레스 사이트와 같이 애드센스 광고도 노출이 됩니다.  
 
----
 
 ## Cloudflare 계정 만들기
 

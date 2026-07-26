@@ -1,21 +1,20 @@
 ---
-title: "Cloudflare 역사를 알면 서비스가 보인다 DNS에서 풀스택 플랫폼까지"
-description: "Cloudflare가 DNS와 CDN 회사에서 어떻게 개발자 플랫폼으로 진화했는지, 역사를 통해 Workers, Pages, D1 등 서비스의 탄생 배경을 이해합니다."
-date: 2026-02-22T16:46:55+09:00
-category: "개발배포"
+title: Cloudflare 역사를 알면 서비스가 보인다 DNS에서 풀스택 플랫폼까지
+description: Cloudflare의 시작은 의외로 소박합니다
+date: '2026-02-22 16:46:55+09:00'
+category: 개발배포
 tags:
-  - "Cloudflare"
-  - "CDN"
-  - "DNS"
-  - "Workers"
-  - "Pages"
-  - "인터넷인프라"
-  - "서버리스"
-  - "클라우드"
+- Cloudflare
+- CDN
+- DNS
+- Workers
+- Pages
+- 인터넷인프라
+- 서버리스
+- 클라우드
 draft: false
-image: "/images/thumbnails/cloudflare-역사를-알면-서비스가.jpg"
+image: /images/thumbnails/cloudflare-역사를-알면-서비스가.jpg
 ---
-
 [Cloudflare 15주년 타임라인](https://timeline.www.cloudflare.com/) | [Cloudflare 공식 블로그](https://blog.cloudflare.com/)
 
 2025년 11월 18일 밤, 갑자기 ChatGPT가 안 됐습니다. X(트위터)도 먹통, Canva도 접속 불가. "내 인터넷 문제인가?" 싶어서 이것저것 눌러봤지만 소용없었습니다. 알고 보니 **Cloudflare** 서버에 장애가 발생한 것이었습니다. 전 세계 수백만 개 웹사이트가 동시에 마비됐고, 약 3시간 만에 복구됐습니다.
@@ -24,9 +23,11 @@ image: "/images/thumbnails/cloudflare-역사를-알면-서비스가.jpg"
 
 Cloudflare의 역사를 알면 지금 제공하는 서비스들이 왜 존재하는지, 어떻게 활용해야 하는지가 명확해집니다. 이번 글에서는 Cloudflare가 어떻게 작은 보안 회사에서 글로벌 인터넷 인프라 기업으로 성장했는지, 그 과정에서 탄생한 서비스들의 배경을 풀어보겠습니다.
 
+Cloudflare의 시작은 의외로 소박합니다. 2004년 Matthew Prince와 Lee Holloway라는 두 사람이 **Project Honey Pot** 이라는 프로젝트를 시작했습니다. "스팸 이메일이 도대체 어디서 오는 거지?"라는 단순한 궁금증에서 출발한 프로젝트였습니다.
+
 ## 시작은 스팸 추적이었습니다
 
-Cloudflare의 시작은 의외로 소박합니다. 2004년 Matthew Prince와 Lee Holloway라는 두 사람이 **Project Honey Pot** 이라는 프로젝트를 시작했습니다. "스팸 이메일이 도대체 어디서 오는 거지?"라는 단순한 궁금증에서 출발한 프로젝트였습니다.
+
 
 이들은 웹사이트에 "덫"을 설치해서 스팸봇의 움직임을 추적했습니다. 그러다 깨달은 게 있었습니다. "우리가 이렇게 많은 악성 트래픽 데이터를 갖고 있으니, 이걸 활용해서 웹사이트를 보호해줄 수 있지 않을까?"
 

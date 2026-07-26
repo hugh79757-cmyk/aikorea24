@@ -1,14 +1,15 @@
 ---
-title: "2026 AI 바우처 지원사업 신청 가이드"
-description: "정부의 AI 바우처 지원사업이란 무엇이고, 누가 신청할 수 있으며, 어떻게 준비해야 하는지 정리했습니다."
-date: 2026-02-09
-category: "소상공인AI"
-tags: ["AI 바우처", "정부 지원", "보조금", "NIPA"]
-image: "/images/ai-voucher-guide-2026/thumbnail.webp"
+title: 2026 AI 바우처 지원사업 신청 가이드
+description: AI 바우처는 중소·중견기업이 AI 솔루션을 도입할 때 정부가 비용의 일부를 지원하는 사업입니다
+date: '2026-02-09'
+category: 소상공인AI
+tags:
+- AI 바우처
+- 정부 지원
+- 보조금
+- NIPA
+image: /images/ai-voucher-guide-2026/thumbnail.webp
 ---
-
-## AI 바우처 지원사업이란?
-
 AI 바우처는 중소·중견기업이 AI 솔루션을 도입할 때 정부가 비용의 일부를 지원하는 사업입니다. 정보통신산업진흥원(NIPA)이 운영하며, 최대 3억 원까지 지원받을 수 있습니다.
 
 ## 누가 신청할 수 있을까?

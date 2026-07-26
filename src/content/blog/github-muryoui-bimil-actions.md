@@ -1,39 +1,38 @@
 ---
-title: "GitHub 무료의 비밀 Actions 2000분이면 충분한 이유"
-description: "GitHub Actions 무료 플랜의 월 2,000분 사용량을 분석합니다. 개인 프로젝트에 충분한 이유와 효율적인 활용 방법을 안내합니다."
-date: 2026-02-12T23:02:53+09:00
-category: "바이브코딩"
+title: GitHub 무료의 비밀 Actions 2000분이면 충분한 이유
+description: 월 2,000분은 약 33시간입니다
+date: '2026-02-12 23:02:53+09:00'
+category: 바이브코딩
 tags:
-  - "GitHubActions"
-  - "CICD"
-  - "자동화"
-  - "무료플랜"
-  - "빌드자동화"
-  - "GitHub"
-  - "바이브코딩"
+- GitHubActions
+- CICD
+- 자동화
+- 무료플랜
+- 빌드자동화
+- GitHub
+- 바이브코딩
 draft: false
-image: "/images/thumbnails/github-muryoui-bimil-actions.jpg"
+image: /images/thumbnails/github-muryoui-bimil-actions.jpg
 ---
 
 - [GitHub Actions 문서](https://docs.github.com/ko/actions)
 - [GitHub Actions 가격 정책](https://docs.github.com/ko/billing/concepts/product-billing/github-actions)
 - [GitHub 플랜 비교](https://docs.github.com/ko/get-started/learning-about-github/githubs-plans)
 
----
 
 GitHub Actions는 GitHub에서 제공하는 자동화 도구입니다. 코드를 푸시하면 자동으로 테스트, 빌드, 배포를 실행해 줍니다. 무료 플랜에서는 월 2,000분의 실행 시간이 제공되는데, 이게 많은 건지 적은 건지 감이 안 오실 겁니다.
 
 결론부터 말씀드리면, 개인 프로젝트에는 2,000분이 매우 충분합니다. 실제로 어떻게 계산되는지, 어떻게 하면 효율적으로 사용할 수 있는지 알아보겠습니다. 참고로 공개(Public) 레포지토리는 무제한 무료입니다. 2,000분 제한은 비공개(Private) 레포지토리에만 적용됩니다.
 
----
-
-## 2000분이 얼마나 되는 시간일까
 
 월 2,000분은 약 33시간입니다. Hugo 블로그의 빌드 시간은 보통 1~2분 정도입니다. 매일 한 번씩 배포한다면 월 30~60분을 사용합니다. 2,000분 중 3%도 안 되는 양입니다.
 
+## 2000분이 얼마나 되는 시간일까
+
+
+
 Next.js 같은 복잡한 프로젝트도 빌드에 3~5분 정도 걸립니다. 하루 5번 배포하면 월 450~750분입니다. 여전히 2,000분의 절반도 안 됩니다. 일반적인 개인 프로젝트에서 2,000분을 모두 소진하기는 어렵습니다.
 
----
 
 ## 공개 레포지토리는 무제한
 

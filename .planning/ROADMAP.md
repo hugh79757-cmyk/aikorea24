@@ -480,6 +480,83 @@ Plans:
 - 28-03: 이미지 품질 검증 + 발행 전 체크리스트
 - 28-04: 재발 방지를 위한 모니터링/알림 (텔레그램 중복 썸네일 감지 시 알림)
 
+---
+
+### Phase 29: 블로그 description 백필 — 문장 경계 자르기
+**Goal**: 기존 826개 블로그 포스트 중 문장 중간에서 잘린 155개 description을 한국어 종결어미(`.`, `!`, `?`, `다`, `요`, `함`, `습니다`, `입니다`, `했습니다`, `임`, `음` 등) 기준으로 재자르기
+**Mode**: ad-hoc (일회성 백필)
+**Depends on**: Phase 28-03 (품질 체크리스트 패턴 재사용)
+**Priority**: Medium (SEO/UX 품질)
+
+**Background**:
+- `blog_draft_generator.py`의 `_save_file()`에서 description 추출 시 `[:250].strip()` 하드컷 사용
+- 826개 중 155개(18.8%)가 한국어 종결어미 없이 잘림 (예: "배경에는 디", "자율성과", "보고서를 인용하")
+- Phase 28-03에서 `_truncate_at_sentence_boundary()` 구현 완료 → 신규 포스트는 자동 적용됨
+- 기존 155개만 일회성 백필 필요
+
+**Success Criteria** (what must be TRUE):
+1. `scripts/backfill_descriptions.py` 생성 — `_truncate_at_sentence_boundary()` 재사용
+2. `--dry-run` / `--apply` 모드 지원 (안전 검증 후 적용)
+3. 155개 truncated description 모두 한국어 종결어미(`.`, `!`, `?`, `다`, `요`, `함`, `습니다`, `입니다`, `했습니다`, `임`, `음`, `이다`, `한다`, `했다` 등)로 끝나도록 수정
+4. 변경된 파일만 git diff로 확인 가능
+5. 완료 후 스크립트는 아카이브 (일회성 작업)
+
+**Status**: ✅ **Complete** (2026-07-26)
+
+**Actual Result**: Only 1 file had an issue (trailing space) — fixed: `"...승인받았습니다. "` → `"...승인받았습니다."`
+
+**Plans**: 1 plan
+- 29-01: description 백필 스크립트 생성 + 실행 + 검증
+
+---
+
+### Phase 30: 블로그 description을 본문 첫 문장으로 변경
+**Goal**: 블로그 발행 시 frontmatter `description` 필드가 본문 내용의 **첫 번째 문장**이 되도록 수정.
+**Mode**: ad-hoc
+**Depends on**: Phase 29
+**Priority**: High (SEO/UX 품질 직결)
+
+**Root Cause (from 2026-07-26 analysis)**:
+- `blog_draft_generator.py`의 `_save_file()`에서 description 추출 시 250자 하드컷 후 한국어 종결어미에서 자름
+- 하지만 정규식이 불완전하고, 250자 윈도우의 **마지막** 종결어미를 찾아서 첫 문장이 아닌 중간 문장에서 잘림
+
+**Success Criteria** (what must be TRUE):
+1. `description` 필드가 본문 **첫 번째 완전한 문장**과 일치
+2. 한국어 종결어미(`.`, `!`, `?`, `다`, `요`, `함`, `습니다`, `입니다`, `했습니다`, `합니다`, `있습니다`, `였습니다`, `됩니다`, `봅니다`, `듣습니다`, `옵니다`, `갑니다`, `줍니다`, `삽니다`, `팝니다`, `만듭니다`, `생각합니다`, `느낍니다`, `알고 있습니다`, `모릅니다`, `임`, `음`, `이다`, `한다`, `했다` 등)로 끝남
+3. 문장 중간에서 잘리지 않음
+4. 최대 길이 300자 (첫 문장이 너무 긴 경우 안전장치)
+5. 기존 275개 테스트 통과
+
+**Status**: ✅ **Complete** (2026-07-26)
+
+**Plans**: 1 plan
+- 30-01: description 첫 문장 추출 로직 구현 + 검증
+
+---
+
+### Phase 31: 블로그 description 첫 문장 추출 버그 수정
+**Goal**: `_extract_first_sentence()` 함수가 본문 첫 문장이 아닌 중간 문장을 추출하는 버그 수정
+**Mode**: ad-hoc (긴급 버그 수정)
+**Depends on**: Phase 30
+**Priority**: Critical (배포된 description이 중간 문장으로 나옴)
+
+**Root Cause (2026-07-26 분석)**:
+- `_extract_first_sentence()` 함수 라인 387에서 `max_len - 50`(위치 250)부터 종결어미 검색
+- 첫 문장(보통 50-150자)을 건너뛰고 중간 문장의 종결어미에서 자름
+- 예: 알파폴드 포스트 → "이러한 배경에서, 구글 딥마인드가 개발한..." (중간 문장)
+
+**Success Criteria** (what must be TRUE):
+1. `_extract_first_sentence()`가 본문 **첫 번째 완전한 문장** 추출 (위치 0부터 검색)
+2. 알파폴드 포스트 description: `"유전자 편집 기술은 생명과학 분야에서 혁명적인 도구로 자리 잡았습니다"` (첫 문장)
+3. 모든 포스트 description이 한국어 종결어미로 완결
+4. 기존 826개 포스트 재검증 시 0개 truncation
+5. 기존 275개 테스트 통과
+
+**Plans**: 1 plan
+- 31-01: `_extract_first_sentence()` 검색 위치 0으로 변경 + 회귀 방지 테스트 + 백필
+
+---
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -516,4 +593,6 @@ Plans:
 | 26-mobile. 모바일 가독성 개선 | 4/4 | ✅ Complete | 2026-07-12 |
 | 27. 인프라 안정화 — 썸네일복구 + 배포 retry + 링크 연결 | 3/3 | ✅ Complete | 2026-07-23 |
 | 28. 썸네일 DeepSeek API 장애 대응 + 블로그 발행 개선 | 0/4 | 📋 Planned | — |
-| **Total** | **56/56** | ✅ All phases complete | |
+| 29. 블로그 description 백필 — 문장 경계 자르기 | 1/1 | ✅ Complete | 2026-07-26 |
+| 30. 블로그 description을 본문 첫 문장으로 변경 | 1/1 | ✅ Complete | 2026-07-26 |
+| **Total** | **58/58** | ✅ All phases complete | |

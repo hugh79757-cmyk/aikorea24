@@ -1,21 +1,20 @@
 ---
-title: "GPT-5.5-Cyber 출시 OpenAI 보안 연구자에게 해킹 AI를 열다"
-description: "OpenAI가 GPT-5.5-Cyber를 공개해 보안 연구자에게 취약점 익스플로잇과 침투 테스트 기능을 허용했다. Anthropic Mythos와의 차이, 악용 우려와 규제 공백을 분석합니다."
-date: 2026-05-09T09:23:07+09:00
-category: "뉴스"
+title: GPT-5.5-Cyber 출시 OpenAI 보안 연구자에게 해킹 AI를 열다
+description: OpenAI는 접근 권한을 세 단계로 설계했습니다
+date: '2026-05-09T09:23:07+09:00'
+category: 뉴스
 tags:
-  - "GPT55Cyber"
-  - "OpenAI보안"
-  - "AI해킹"
-  - "침투테스트"
-  - "AnthropicMythos"
-  - "AI사이버보안"
-  - "AI규제"
+- GPT55Cyber
+- OpenAI보안
+- AI해킹
+- 침투테스트
+- AnthropicMythos
+- AI사이버보안
+- AI규제
 draft: false
-image: "/images/2026-05-09-004-gpt-55-cyber-출시-openai-보안-연구자에게-해킹/thumbnail.webp"
+image: /images/2026-05-09-004-gpt-55-cyber-출시-openai-보안-연구자에게-해킹/thumbnail.webp
 ---
 
----
 
 OpenAI가 **GPT-5.5-Cyber** 를 공개하며 보안 연구자들에게 대폭 제한을 완화한 모델을 제공하기 시작했습니다. 이 모델은 일반 ChatGPT가 거부하는 요청들 — 취약점 익스플로잇(exploit, 보안 취약점을 이용한 공격 코드) 작성, 악성코드 분석, 실제 공격 시뮬레이션 — 을 수행할 수 있습니다.
 
@@ -25,9 +24,11 @@ OpenAI가 **GPT-5.5-Cyber** 를 공개하며 보안 연구자들에게 대폭 �
 
 [2026년 5월 9일 AI코리아24 브리핑](https://aikorea24.kr/briefing/2026-05-09/)에서 이 뉴스를 먼저 다뤘습니다.
 
+OpenAI는 접근 권한을 세 단계로 설계했습니다.
+
 ## GPT-5.5-Cyber의 세 단계 접근 구조
 
-OpenAI는 접근 권한을 세 단계로 설계했습니다.
+
 
 **1단계 (일반 공개 모델):** 기존 ChatGPT와 동일한 제한을 유지합니다. 해킹처럼 들리는 요청은 거부됩니다.
 

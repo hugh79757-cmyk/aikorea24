@@ -1,34 +1,32 @@
 ---
-title: "깃 레포 VSCode 바이브코딩 준비 끝"
-description: "GitHub 레포지토리와 VSCode를 연결하는 방법을 안내합니다. 클론부터 커밋, 푸시까지 바이브코딩을 위한 워크플로우를 완성합니다."
-date: 2026-02-12T22:36:56+09:00
-category: "개발배포"
+title: 깃 레포 VSCode 바이브코딩 준비 끝
+description: '- [VSCode Git 연동 가이드](https://code.'
+date: '2026-02-12 22:36:56+09:00'
+category: 개발배포
 tags:
-  - "GitHub"
-  - "VSCode"
-  - "Git연동"
-  - "클론"
-  - "커밋"
-  - "푸시"
-  - "바이브코딩"
-  - "개발환경"
+- GitHub
+- VSCode
+- Git연동
+- 클론
+- 커밋
+- 푸시
+- 바이브코딩
+- 개발환경
 draft: false
-image: "/images/thumbnails/git-repo-vscode-baibeukoding.jpg"
+image: /images/thumbnails/git-repo-vscode-baibeukoding.jpg
 ---
+
+- [VSCode Git 연동 가이드](https://code.visualstudio.com/docs/sourcecontrol/overview) - [GitHub Desktop 다운로드](https://desktop.github.com/) - [Git 설치 가이드](https://git-scm.com/book/ko/v2/%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0-Git-%EC%84%A4%EC%B9%98)
 
 ## 관련 링크
 
-- [VSCode Git 연동 가이드](https://code.visualstudio.com/docs/sourcecontrol/overview)
-- [GitHub Desktop 다운로드](https://desktop.github.com/)
-- [Git 설치 가이드](https://git-scm.com/book/ko/v2/%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0-Git-%EC%84%A4%EC%B9%98)
 
----
+
 
  VSCode를 설치하고 GitHub 계정을 만들었습니다. 바이브 코드할 때 가장 기본이 되는 두 가지 툴입니다. 이제 이 둘을 연결할 차례입니다. GitHub에 만들어둔 레포지토리를 내 컴퓨터로 가져오고(클론 시킨다고 합니다), 코드를 수정하고, 변경 사항을 GitHub에 다시 올리는(푸시) 과정을 배웁니다. 이 워크플로우만 익히면 바이브코딩을 위한 환경 설정은 완료됩니다.
 
 어렵게 생각하지 마세요. GitHub에서 코드를 내려받고, VSCode에서 수정하고, 다시 GitHub에 올리는 것입니다. 마치 클라우드 드라이브에서 파일을 내려받아 수정하고 다시 올리는 것과 같습니다. 다만 코드 전용이라서 변경 이력까지 꼼꼼히 관리해 준다는 점이 다릅니다.
 
----
 
 ## 레포지토리 클론하기
 
@@ -36,7 +34,6 @@ image: "/images/thumbnails/git-repo-vscode-baibeukoding.jpg"
 
 VSCode를 열고 Ctrl+Shift+P(맥은 Cmd+Shift+P)를 눌러 명령 팔레트를 엽니다. "Git: Clone"을 입력하고 선택합니다. 복사한 URL을 붙여넣고 엔터를 누릅니다. 저장할 폴더를 선택하면 레포지토리가 내 컴퓨터에 다운로드됩니다. "Open" 버튼을 클릭하면 VSCode에서 바로 작업을 시작할 수 있습니다.
 
----
 
 ## 코드 수정하고 변경 사항 확인하기
 

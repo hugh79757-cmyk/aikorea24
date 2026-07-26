@@ -1,18 +1,18 @@
 ---
-title: "AI 코딩 도구 비교 ChatGPT vs Claude vs Cursor vs Copilot"
-description: "바이브코딩에 사용되는 대표적인 AI 도구들을 비교 분석합니다. ChatGPT, Claude, Cursor, GitHub Copilot의 특징과 장단점, 요금제를 정리했습니다."
-date: 2026-02-12T22:02:26+09:00
-category: "바이브코딩"
+title: AI 코딩 도구 비교 ChatGPT vs Claude vs Cursor vs Copilot
+description: ChatGPT는 OpenAI가 개발한 대화형 AI로, 코딩 외에도 글쓰기, 번역, 분석 등 다양한 작업에 활용됩니다
+date: '2026-02-12 22:02:26+09:00'
+category: 바이브코딩
 tags:
-  - "AI코딩도구"
-  - "ChatGPT"
-  - "Claude"
-  - "Cursor"
-  - "GitHubCopilot"
-  - "바이브코딩"
-  - "AI비교"
+- AI코딩도구
+- ChatGPT
+- Claude
+- Cursor
+- GitHubCopilot
+- 바이브코딩
+- AI비교
 draft: false
-image: "/images/thumbnails/ai-koding-dogu-bigyo.jpg"
+image: /images/thumbnails/ai-koding-dogu-bigyo.jpg
 ---
 
 - [ChatGPT 공식 사이트](https://chat.openai.com/)
@@ -20,21 +20,20 @@ image: "/images/thumbnails/ai-koding-dogu-bigyo.jpg"
 - [Cursor AI 공식 사이트](https://cursor.sh/)
 - [GitHub Copilot 공식 사이트](https://github.com/features/copilot)
 
----
 
 바이브코딩을 시작하려면 어떤 AI 도구를 선택해야 할까요? 현재 가장 많이 사용되는 AI 코딩 도구는 ChatGPT, Claude, Cursor, GitHub Copilot 네 가지입니다. 각 도구마다 강점이 다르기 때문에 본인의 목적과 수준에 맞는 도구를 선택하는 것이 중요합니다.
 
 이번 강에서는 네 가지 대표 AI 코딩 도구의 특징, 장단점, 요금제를 비교 분석합니다. 입문자라면 어떤 도구로 시작하면 좋을지, 이미 개발 경험이 있다면 어떤 도구가 생산성을 높여줄지 알아보겠습니다.
 
----
-
-## ChatGPT 가장 범용적인 AI 도구
 
 ChatGPT는 OpenAI가 개발한 대화형 AI로, 코딩 외에도 글쓰기, 번역, 분석 등 다양한 작업에 활용됩니다. 웹 브라우저에서 바로 사용할 수 있어 접근성이 좋고, 프롬프트를 입력하면 코드와 함께 설명을 제공해 초보자가 이해하기 쉽습니다.
 
+## ChatGPT 가장 범용적인 AI 도구
+
+
+
 장점으로는 범용성이 뛰어나 코딩 외의 작업도 함께 처리할 수 있고, 대화 맥락을 잘 기억해 연속적인 작업에 강합니다. 단점은 긴 코드를 생성할 때 중간에 끊기는 경우가 있고, 실시간 코드 편집이 불가능해 생성된 코드를 별도의 에디터에 복사해서 사용해야 합니다. 무료 버전도 있지만, 고급 기능을 사용하려면 월 20달러의 Plus 요금제가 필요합니다.
 
----
 
 ## Claude 긴 코드와 문서 처리에 강한 AI
 

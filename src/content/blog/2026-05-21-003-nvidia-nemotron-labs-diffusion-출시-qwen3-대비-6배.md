@@ -1,22 +1,12 @@
 ---
-title: "NVIDIA Nemotron Labs Diffusion 출시 Qwen3 대비 6배 토큰 처리 AR 확산 추론 통합 모델"
-description: "NVIDIA가 AR 확산 자기추측 디코딩을 단일 모델에 통합한 Nemotron Labs Diffusion을 공개했다. Qwen3-8B 대비 6배 빠른 토큰 처리 속도의 의미와 한계를 분석한다."
-date: 2026-05-21T09:20:26+09:00
-category: "뉴스"
-tags:
-  - "NVIDIA"
-  - "Nemotron"
-  - "확산모델"
-  - "DiffusionLLM"
-  - "추론효율"
-  - "Qwen3"
-  - "자기추측디코딩"
-  - "AI모델"
+title: NVIDIA Nemotron Labs Diffusion 출시 Qwen3 대비 6배 토큰 처리 AR 확산 추론 통합 모델
+description: 이 모델의 차별성을 이해하려면 세 가지 기술이 어떻게 결합됐는지 알아야 합니다
+date: '2026-05-21T09:20:26+09:00'
+category: 뉴스
 draft: false
-image: "/images/2026-05-21-003-nvidia-nemotron-labs-diffusion-출시-qwen3-대비-6배/thumbnail.webp"
+image: /images/2026-05-21-003-nvidia-nemotron-labs-diffusion-출시-qwen3-대비-6배/thumbnail.webp
 ---
 
----
 
 NVIDIA가 AI 추론(AI 모델이 답변을 생성하는 과정) 효율의 새로운 기준을 제시하는 모델을 공개했습니다. **Nemotron Labs Diffusion** 은 AR(자기회귀, 텍스트를 한 토큰씩 순서대로 생성하는 방식), 확산(Diffusion, 노이즈에서 점진적으로 결과를 생성하는 방식), 자기추측 디코딩(Speculative Decoding, 빠른 모델이 초안을 만들고 메인 모델이 검증하는 방식)이라는 세 가지 기술을 하나의 모델에 통합했습니다.
 
@@ -24,9 +14,11 @@ NVIDIA가 AI 추론(AI 모델이 답변을 생성하는 과정) 효율의 새로
 
 기사원문 보기:[2026년 5월 21일 (목) AI 브리핑 - AI코리아24](https://aikorea24.kr/briefing/2026-05-21/#item-3)
 
+이 모델의 차별성을 이해하려면 세 가지 기술이 어떻게 결합됐는지 알아야 합니다.
+
 ## Nemotron Labs Diffusion의 핵심 기술 세 가지
 
-이 모델의 차별성을 이해하려면 세 가지 기술이 어떻게 결합됐는지 알아야 합니다.
+
 
 **AR(자기회귀) 방식** 은 GPT, Claude 등 대부분의 언어 모델이 사용하는 기본 방식입니다. 단어를 하나씩 순서대로 생성하기 때문에 직관적이지만, 뒤에 나올 단어를 미리 병렬로 처리하지 못한다는 속도 한계가 있습니다.
 

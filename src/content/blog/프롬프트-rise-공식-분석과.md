@@ -1,26 +1,27 @@
 ---
-title: "프롬프트 RISE 공식 분석과 보고서 작업에 강한 프레임워크"
-description: "프롬프트 RISE 공식을 상세히 알아봅니다. Role, Input, Steps, Expectation 4가지 요소의 의미와 실전 예시를 통해 AI에게 체계적인 결과물을 얻는 방법을 정리했습니다."
-date: 2026-02-24T10:29:11+09:00
-category: "AI 강좌"
+title: 프롬프트 RISE 공식 분석과 보고서 작업에 강한 프레임워크
+description: RISE는 Role, Input, Steps, Expectation의 앞글자를 딴 프레임워크입니다
+date: '2026-02-24 10:29:11+09:00'
+category: AI 강좌
 tags:
-  - "프롬프트"
-  - "RISE"
-  - "ChatGPT"
-  - "프롬프트공식"
-  - "AI활용"
-  - "보고서작성"
+- 프롬프트
+- RISE
+- ChatGPT
+- 프롬프트공식
+- AI활용
+- 보고서작성
 draft: false
-image: "/images/thumbnails/프롬프트-rise-공식-분석과.jpg"
+image: /images/thumbnails/프롬프트-rise-공식-분석과.jpg
 ---
-
 [프롬프트 5가지 공식 총정리](https://aikorea24.kr/blog/chatgpt-프롬프트-5가지-공식)
 
 프롬프트 5가지 공식 중 첫 번째, RISE를 자세히 알아보겠습니다. RISE는 분석, 보고서, 평가처럼 체계적인 결과물이 필요한 작업에 가장 강력한 프레임워크입니다. 복잡한 요청도 4가지 요소로 정리하면 AI가 정확히 이해합니다.
 
+RISE는 Role, Input, Steps, Expectation의 앞글자를 딴 프레임워크입니다. 각 요소가 하나의 역할을 담당하고, 네 가지를 조합하면 완성된 프롬프트가 됩니다.
+
 ## RISE가 뭔가요
 
-RISE는 Role, Input, Steps, Expectation의 앞글자를 딴 프레임워크입니다. 각 요소가 하나의 역할을 담당하고, 네 가지를 조합하면 완성된 프롬프트가 됩니다.
+
 
 **Role** 은 AI에게 전문가 역할을 부여합니다. "당신은 10년 경력의 채용 전문가입니다"처럼 구체적인 페르소나를 주면 AI가 그 관점에서 답변합니다. 역할을 주지 않으면 AI는 일반적인 답변을 하지만, 역할을 주면 해당 분야 전문가처럼 깊이 있는 답변을 합니다.
 

@@ -1,29 +1,31 @@
 ---
-title: "아마존이 퍼플렉시티 AI 쇼핑 에이전트를 막은 진짜 이유"
-description: "아마존의 퍼플렉시티 코멧 금지 가처분 사건 이면에 있는 500억 달러 OpenAI 투자와 AI 커머스 주도권 전쟁을 심층 분석합니다"
-date: 2026-03-11T09:11:08+09:00
-category: "IT"
+title: 아마존이 퍼플렉시티 AI 쇼핑 에이전트를 막은 진짜 이유
+description: 2026년 3월 10일, 샌프란시스코 연방법원이 AI 스타트업 퍼플렉시티(Perplexity) 에 대해 아마존의 가처분 신청을
+  인용했습니다
+date: '2026-03-11 09:11:08+09:00'
+category: IT
 tags:
-  - "AI에이전트"
-  - "아마존"
-  - "퍼플렉시티"
-  - "OpenAI"
-  - "AI쇼핑"
-  - "빅테크"
-  - "반독점"
+- AI에이전트
+- 아마존
+- 퍼플렉시티
+- OpenAI
+- AI쇼핑
+- 빅테크
+- 반독점
 draft: false
-image: "/images/thumbnails/아마존이-퍼플렉시티-ai-쇼핑.jpg"
+image: /images/thumbnails/아마존이-퍼플렉시티-ai-쇼핑.jpg
 ---
-
 [뉴스원문보기 - AI 브리핑](https://aikorea24.kr/briefing/2026-03-11/#item-1)
 
 [아마존-OpenAI 파트너십 공식 발표 - About Amazon](https://www.aboutamazon.com/news/aws/amazon-open-ai-strategic-partnership-investment)
 
 [Reuters - OpenAI 1,100억 달러 펀딩 라운드](https://www.reuters.com/business/retail-consumer/openais-110-billion-funding-round-draws-investment-amazon-nvidia-softbank-2026-02-27/)
 
+2026년 3월 10일, 샌프란시스코 연방법원이 AI 스타트업 **퍼플렉시티(Perplexity)** 에 대해 아마존의 가처분 신청을 인용했습니다. 퍼플렉시티가 만든 AI 브라우저 에이전트 **코멧(Comet)** 이 아마존 플랫폼에서 사용자를 대신해 상품을 검색하고 구매하는 행위를 금지하는 판결입니다. 맥신 체스니 판사는 퍼플렉시티가 사용자의 비밀번호로 보호된 아마존 계정에 사용자 동의는 받았지만 아마존의 승인 없이 접근했다는 점에서 아마존 측의 주장에 강한 근거가 있다고 판단했습니다.
+
 ## 사건의 표면
 
-2026년 3월 10일, 샌프란시스코 연방법원이 AI 스타트업 **퍼플렉시티(Perplexity)** 에 대해 아마존의 가처분 신청을 인용했습니다. 퍼플렉시티가 만든 AI 브라우저 에이전트 **코멧(Comet)** 이 아마존 플랫폼에서 사용자를 대신해 상품을 검색하고 구매하는 행위를 금지하는 판결입니다. 맥신 체스니 판사는 퍼플렉시티가 사용자의 비밀번호로 보호된 아마존 계정에 사용자 동의는 받았지만 아마존의 승인 없이 접근했다는 점에서 아마존 측의 주장에 강한 근거가 있다고 판단했습니다.
+
 
 퍼플렉시티는 수집한 아마존 데이터를 전부 삭제해야 하며, 항소 기한은 1주일입니다.
 

@@ -1,39 +1,38 @@
 ---
-title: "내 컴퓨터에 개발환경 만들기 맥이든 윈도우든 VSCode 하나면 된다"
-description: "바이브코딩을 위한 개발환경을 설정합니다. VSCode 설치부터 한글 설정, 필수 확장 프로그램까지 초보자도 따라할 수 있게 안내합니다."
-date: 2026-02-12T22:30:38+09:00
-category: "개발배포"
+title: 내 컴퓨터에 개발환경 만들기 맥이든 윈도우든 VSCode 하나면 된다
+description: 에 접속합니다
+date: '2026-02-12 22:30:38+09:00'
+category: 개발배포
 tags:
-  - "VSCode"
-  - "개발환경"
-  - "코드에디터"
-  - "설치가이드"
-  - "바이브코딩"
-  - "개발도구"
-  - "초보자"
+- VSCode
+- 개발환경
+- 코드에디터
+- 설치가이드
+- 바이브코딩
+- 개발도구
+- 초보자
 draft: false
-image: "/images/thumbnails/nae-keompyuteoe-gaebalhwangyeong-mandeulgi.jpg"
+image: /images/thumbnails/nae-keompyuteoe-gaebalhwangyeong-mandeulgi.jpg
 ---
 
 - [VSCode 공식 다운로드](https://code.visualstudio.com/)
 - [VSCode 한국어 설정 가이드](https://code.visualstudio.com/docs/getstarted/locales)
 - [VSCode 초보 가이드](https://code.visualstudio.com/docs/introvideos/basics)
 
----
 
 바이브코딩을 시작하려면 코드를 작성하고 편집할 도구가 필요합니다. 여러 가지 선택지가 있지만, 가장 추천하는 것은 Visual Studio Code, 줄여서 VSCode입니다. 무료이고, 맥과 윈도우 모두에서 동작하며, 전 세계 개발자들이 가장 많이 사용하는 에디터입니다. AI 코딩 도구들과의 연동도 뛰어납니다.
 
 "개발환경 설정"이라고 하면 어렵게 느껴지실 수 있습니다. 하지만 VSCode 하나만 설치하면 바이브코딩을 시작할 준비가 끝납니다. 복잡한 설정 없이, 프로그램 하나 설치하는 것이 전부입니다. 지금부터 단계별로 따라해 보겠습니다.
 
----
-
-## VSCode 다운로드 및 설치
 
 [VSCode 공식 사이트](code.visualstudio.com)에 접속합니다. 화면 중앙에 큰 다운로드 버튼이 보입니다. 사이트가 자동으로 여러분의 운영체제를 감지해서 맞는 버전을 보여줍니다. 윈도우 사용자는 Windows용, 맥 사용자는 Mac용 버튼을 클릭하면 됩니다.
 
+## VSCode 다운로드 및 설치
+
+
+
 다운로드가 완료되면 설치 파일을 실행합니다. 윈도우에서는 .exe 파일을 더블클릭하고, 맥에서는 .dmg 파일을 열어서 Applications 폴더에 드래그합니다. 설치 과정에서 특별히 변경할 옵션은 없으니 다음(Next) 버튼을 계속 눌러 진행하시면 됩니다. 1~2분이면 설치가 완료됩니다.
 
----
 
 ![ghwOM2EV.webp](https://img.aikorea24.kr/images/nae-keompyuteoe-gaebalhwangyeong-mandeulgi/981552f8de681121edc8a3955a7a5e92a9d96f3a.webp)
 

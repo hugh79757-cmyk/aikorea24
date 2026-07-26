@@ -1,29 +1,22 @@
 ---
-title: "AGI 5년 내 실현 하사비스 DeepMind CEO가 말하는 산업혁명 10배 충격의 실체"
-description: "DeepMind CEO 하사비스가 AGI를 산업혁명 10배 속도로 묘사했다. 과장인가 예언인가. 현재 AI의 한계와 AGI까지의 거리를 실제 데이터로 분석한다"
-date: 2026-04-11T14:15:51+09:00
-category: "뉴스"
-tags:
-  - "AGI"
-  - "하사비스"
-  - "DeepMind"
-  - "범용인공지능"
-  - "AI미래"
-  - "인공지능혁명"
-  - "20VC"
+title: AGI 5년 내 실현 하사비스 DeepMind CEO가 말하는 산업혁명 10배 충격의 실체
+description: 현재 우리가 사용하는 ChatGPT, Claude, Gemini 같은 AI는 모두 좁은 AI(Narrow AI) 입니다
+date: '2026-04-11T14:15:51+09:00'
+category: 뉴스
 draft: false
-image: "/images/thumbnails/agi-5년-내-실현.jpg"
+image: /images/thumbnails/agi-5년-내-실현.jpg
 ---
 
----
 
 DeepMind CEO 데미스 하사비스가 AGI(범용 인공지능)를 "100년짜리 산업혁명이 10년으로 압축되는 충격"으로 규정하며 5년 내 실현 가능성을 공개적으로 밝혔습니다. 20VC 팟캐스트를 통해 나온 이 발언은 단순한 낙관론이 아닙니다. 동시에 현재 AI의 구조적 한계를 직접 인정했다는 점에서 업계 전반에 시사하는 바가 큽니다.
 
 기사 원문은 이곳에서 확인할 수 있습니다: [AI코리아24 브리핑](https://aikorea24.kr/briefing/2026-04-11/#item-2)
 
+현재 우리가 사용하는 ChatGPT, Claude, Gemini 같은 AI는 모두 **좁은 AI(Narrow AI)** 입니다. 글쓰기는 잘하지만 스스로 실험을 설계하거나, 오늘 배운 내용을 내일 기억하며 성장하지는 못합니다. 정해진 범위 안에서만 뛰어납니다.
+
 ## AGI란 무엇인가, 지금 AI와 무엇이 다른가
 
-현재 우리가 사용하는 ChatGPT, Claude, Gemini 같은 AI는 모두 **좁은 AI(Narrow AI)** 입니다. 글쓰기는 잘하지만 스스로 실험을 설계하거나, 오늘 배운 내용을 내일 기억하며 성장하지는 못합니다. 정해진 범위 안에서만 뛰어납니다.
+
 
 **AGI(Artificial General Intelligence, 범용 인공지능)** 는 그 경계가 없는 AI입니다. 아침에 물리학을 공부하고, 오후에 그 내용을 바탕으로 실험을 설계하고, 저녁에는 논문과 특허를 직접 출원하는 수준입니다. 인간 연구자가 수행하는 모든 인지적 작업을 스스로 해낼 수 있는 AI를 말합니다.
 

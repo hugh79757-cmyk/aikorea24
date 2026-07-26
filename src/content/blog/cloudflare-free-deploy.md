@@ -1,15 +1,21 @@
 ---
-title: "웹사이트를 0원에 배포하는 방법: Cloudflare Pages 가이드"
-description: "GitHub와 Cloudflare Pages를 사용해서 내 웹사이트를 완전 무료로 전 세계에 배포하는 방법을 단계별로 안내합니다."
-date: 2026-02-10
-category: "AI입문"
-tags: ["Cloudflare", "배포", "무료", "GitHub", "웹사이트"]
-image: "/images/cloudflare-free-deploy/thumbnail.webp"
+title: '웹사이트를 0원에 배포하는 방법: Cloudflare Pages 가이드'
+description: 웹사이트를 만들었으면 인터넷에 올려야 다른 사람들이 볼 수 있습니다
+date: '2026-02-10'
+category: AI입문
+tags:
+- Cloudflare
+- 배포
+- 무료
+- GitHub
+- 웹사이트
+image: /images/cloudflare-free-deploy/thumbnail.webp
 ---
+웹사이트를 만들었으면 인터넷에 올려야 다른 사람들이 볼 수 있습니다. 이것을 '배포'라고 합니다. Cloudflare Pages는 배포 서비스 중 무료 플랜이 가장 넉넉합니다.
 
 ## 왜 Cloudflare Pages인가?
 
-웹사이트를 만들었으면 인터넷에 올려야 다른 사람들이 볼 수 있습니다. 이것을 '배포'라고 합니다. Cloudflare Pages는 배포 서비스 중 무료 플랜이 가장 넉넉합니다.
+
 
 대역폭(사람들이 사이트에 접속할 때 사용되는 데이터) 무제한, 월 500회 빌드, 한국을 포함한 전 세계 CDN을 무료로 제공합니다.
 

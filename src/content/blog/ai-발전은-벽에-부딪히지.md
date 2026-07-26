@@ -1,22 +1,12 @@
 ---
-title: "AI 발전은 벽에 부딪히지 않는다 Microsoft AI CEO Mustafa Suleyman 컴퓨팅 폭발 분석"
-description: "Microsoft AI CEO Mustafa Suleyman이 MIT Technology Review에 기고했다. 2010년 이후 연산량 1조 배 증가, 2028년까지 1000배 추가 확장 예측의 근거와 한계를 분석한다."
-date: 2026-04-09T10:16:46+09:00
-category: "뉴스"
-tags:
-  - "MustafaSuleyman"
-  - "MicrosoftAI"
-  - "AI컴퓨팅"
-  - "GPU"
-  - "AI인프라"
-  - "에이전트AI"
-  - "AI낙관론"
-  - "AGI"
+title: AI 발전은 벽에 부딪히지 않는다 Microsoft AI CEO Mustafa Suleyman 컴퓨팅 폭발 분석
+description: Suleyman이 제시하는 AI 성장의 근거는 세 개의 동시 진행 기술 혁신입니다
+date: '2026-04-09T10:16:46+09:00'
+category: 뉴스
 draft: false
-image: "/images/thumbnails/ai-발전은-벽에-부딪히지.jpg"
+image: /images/thumbnails/ai-발전은-벽에-부딪히지.jpg
 ---
 
----
 
 "AI 발전은 벽에 부딪히지 않는다." Microsoft AI CEO **Mustafa Suleyman**이 MIT Technology Review에 직접 기고한 이 주장은, AI 업계에서 가장 영향력 있는 낙관론 선언 중 하나입니다. 2010년부터 지금까지 AI 훈련에 투입된 연산량이 **1조 배** 증가했고, 2028년까지 추가로 **1,000배** 더 확장될 것이라는 예측입니다.
 
@@ -24,9 +14,11 @@ image: "/images/thumbnails/ai-발전은-벽에-부딪히지.jpg"
 
 관련 뉴스 브리핑: [AI코리아24 브리핑 2026-04-09](https://aikorea24.kr/briefing/2026-04-09/#item-1)
 
+Suleyman이 제시하는 AI 성장의 근거는 세 개의 동시 진행 기술 혁신입니다.
+
 ## 컴퓨팅 폭발의 세 가지 엔진
 
-Suleyman이 제시하는 AI 성장의 근거는 세 개의 동시 진행 기술 혁신입니다.
+
 
 첫 번째는 **칩 자체의 성능 향상**입니다. Nvidia GPU의 원시 연산 성능은 2020년 대비 2026년 현재 7배 이상 향상됐습니다. Microsoft가 올해 1월 출시한 자체 칩 Maia 200은 동사 보유 하드웨어 중 비용 대비 성능이 30% 앞선다고 밝혔습니다.
 

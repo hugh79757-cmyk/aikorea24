@@ -1,19 +1,19 @@
 ---
-title: "GitHub Copilot 맞춤형 에이전트 설정 방법 커스텀 에이전트 만들기 완전 가이드"
-description: "GitHub Copilot 커스텀 에이전트를 YAML과 Markdown으로 직접 만드는 방법, 보안 감사·테스트 전문가·구현 플래너 에이전트 설정 예시와 CLI·클라우드 환경 활용법 총정리"
-date: 2026-06-10T16:52:11+09:00
-category: "개발도구"
+title: GitHub Copilot 맞춤형 에이전트 설정 방법 커스텀 에이전트 만들기 완전 가이드
+description: 커스텀 에이전트는 하나의 `.
+date: '2026-06-10 16:52:11+09:00'
+category: 개발도구
 tags:
-  - "GitHub Copilot에이전트"
-  - "커스텀에이전트"
-  - "GitHubCopilot"
-  - "코파일럿설정"
-  - "AI에이전트"
-  - "copilot-instructions"
-  - "개발자도구"
-  - "에이전트모드"
+- GitHub Copilot에이전트
+- 커스텀에이전트
+- GitHubCopilot
+- 코파일럿설정
+- AI에이전트
+- copilot-instructions
+- 개발자도구
+- 에이전트모드
 draft: false
-image: "/images/2026-06-10-009-github-copilot-맞춤형-에이전트-설정-방법-커스텀-에이전트/thumbnail.webp"
+image: /images/2026-06-10-009-github-copilot-맞춤형-에이전트-설정-방법-커스텀-에이전트/thumbnail.webp
 ---
 
 [GitHub Copilot 커스텀 에이전트 공식 문서](https://docs.github.com/ko/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
@@ -22,10 +22,11 @@ GitHub Copilot에서 **맞춤형 에이전트(Custom Agent)** 는 특정 작업�
 
 커스텀 에이전트는 GitHub Copilot CLI, GitHub.com의 Copilot 클라우드 에이전트, VS Code, JetBrains 등 모든 Copilot 환경에서 동일하게 사용할 수 있습니다. 파일 형식은 `.agent.md` 확장자의 단순한 마크다운 파일이며, YAML 프런트매터로 에이전트 속성을 정의하고, 아래 마크다운 본문에 행동 지침을 작성합니다. 이 글은 커스텀 에이전트를 처음 만드는 사람을 위한 단계별 가이드입니다.
 
+커스텀 에이전트는 하나의 `.agent.md` 파일로 정의됩니다. 파일 상단의 YAML 프런트매터에 에이전트의 메타정보를 작성하고, 그 아래 마크다운 영역에 구체적인 행동 지침(프롬프트)을 작성하는 구조입니다. 전체 프롬프트는 최대 30,000자까지 작성할 수 있습니다.
 
 ## 커스텀 에이전트 파일 구조와 핵심 속성 이해하기
 
-커스텀 에이전트는 하나의 `.agent.md` 파일로 정의됩니다. 파일 상단의 YAML 프런트매터에 에이전트의 메타정보를 작성하고, 그 아래 마크다운 영역에 구체적인 행동 지침(프롬프트)을 작성하는 구조입니다. 전체 프롬프트는 최대 30,000자까지 작성할 수 있습니다.
+
 
 YAML 프런트매터에서 사용할 수 있는 핵심 속성은 다음과 같습니다.
 
@@ -86,7 +87,6 @@ tools: ["read", "search", "edit"]
 - 명확한 단계, 의존성, 타임라인이 포함된 상세 기술 명세서를 작성합니다
 - API 설계, 데이터 모델, 시스템 상호작용을 문서화합니다
 - 개발팀이 따를 수 있는 구조화된 계획 파일을 마크다운으로 생성합니다
---- 
 
 항상 명확한 헤딩, 태스크 분류, 완료 기준으로 계획을 구성합니다. 테스트, 배포, 잠재적 리스크에 대한 고려사항을 포함합니다. 코드 구현보다 철저한 문서화에 집중합니다.
 ```

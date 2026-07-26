@@ -1,15 +1,18 @@
 ---
-title: "머스크 Anthropic 칭찬과 SpaceX 협력의 진짜 의미"
-description: "일론 머스크가 라이벌 Anthropic을 칭찬하고 차단하지 않겠다고 약속한 배경과, 이를 둘러싼 AI 업계의 복잡한 이해관계를 분석합니다."
-date: 2026-07-10
+title: 머스크 Anthropic 칭찬과 SpaceX 협력의 진짜 의미
+description: 최근 일론 머스크 테슬라 및 SpaceX 최고경영자(CEO)가 주목할 만한 발언을 내놓았습니다
+date: '2026-07-10'
+category: 뉴스
+tags:
+- 일론머스크
+- Anthropic
+- SpaceX
+- xAI
+- AI인프라
+- 기업용AI
 draft: false
-image: "/images/일론-머스크-mythos-fable을-칭찬하며-anthropic을-차단하지-않겠다-약속/thumbnail.webp"
-tags: ["일론머스크", "Anthropic", "SpaceX", "xAI", "AI인프라", "기업용AI"]
-category: "뉴스"
+image: /images/일론-머스크-mythos-fable을-칭찬하며-anthropic을-차단하지-않겠다-약속/thumbnail.webp
 ---
-
-## 라이벌을 향한 깜짝 찬사의 배경
-
 최근 일론 머스크 테슬라 및 SpaceX 최고경영자(CEO)가 주목할 만한 발언을 내놓았습니다. 그가 운영하는 X(구 트위터) 플랫폼에서 한 사용자가 "SpaceX의 서버에서 운영되는 Anthropic의 인공지능(AI) 모델을 갑자기 끄지 않을 것이라 장담할 수 있느냐"는 질문을 던졌습니다. 이는 머스크가 과거 라이벌 기업을 상대로 했던 파격적인 행보를 고려하면 충분히 나올 법한 의문이었습니다. 그런데 머스크는 놀랍게도 "그런 일은 내 스타일이 아니다"라고 선언하며, Anthropic에 대한 찬사를 아끼지 않았습니다. 그는 "나는 Anthropic에 대해 명백히 잘못 생각했다"고 말하며, 올해 초 출시된 Anthropic의 최신 모델 'Mythos/Fable'이 현재 업계 최고 수준이라고 평가했습니다. 이 발언의 이면에는 단순한 격려를 넘어, 거대한 상업적 이해관계와 AI 산업의 판도를 뒤흔들 수 있는 전략적 변화가 숨어 있습니다.
 
 ## 거대한 컴퓨팅 거래가 만든 '공생 관계'

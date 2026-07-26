@@ -1,24 +1,25 @@
 ---
-title: "Claude Mythos 유출과 OpenAI Spud Anthropic과 OpenAI가 IPO 전쟁에서 꺼낸 최강 모델"
-description: "Anthropic의 데이터 유출로 미공개 모델 Claude Mythos의 존재가 확인되었습니다. 기존 Opus 라인을 넘어서는 새로운 클래스로 사이버보안 능력이 방어자를 압도하는 수준입니다. OpenAI의 Spud와 함께 올해 IPO 경쟁의 핵심 무기가 됩니다."
-date: 2026-03-28T09:32:45+09:00
-category: "뉴스"
+title: Claude Mythos 유출과 OpenAI Spud Anthropic과 OpenAI가 IPO 전쟁에서 꺼낸 최강 모델
+description: 3월 27일, Fortune이 Anthropic의 내부 데이터 유출을 보도했습니다
+date: '2026-03-28 09:32:45+09:00'
+category: 뉴스
 tags:
-  - "Claude Mythos"
-  - "Anthropic 유출"
-  - "OpenAI Spud"
-  - "AI IPO 경쟁"
-  - "Anthropic IPO"
-  - "OpenAI IPO"
-  - "AI 모델 경쟁"
-  - "사이버보안 AI"
+- Claude Mythos
+- Anthropic 유출
+- OpenAI Spud
+- AI IPO 경쟁
+- Anthropic IPO
+- OpenAI IPO
+- AI 모델 경쟁
+- 사이버보안 AI
 draft: false
-image: "/images/thumbnails/claude-mythos-유출과-openai.jpg"
+image: /images/thumbnails/claude-mythos-유출과-openai.jpg
 ---
+3월 27일, Fortune이 Anthropic의 내부 데이터 유출을 보도했습니다. CMS(콘텐츠 관리 시스템) 설정 오류로 약 **3,000건의 내부 문서** 가 외부에 노출되었고, 그 안에 미공개 모델 **Claude Mythos** 의 블로그 초안이 포함되어 있었습니다. Anthropic은 Fortune에 이 모델이 실재하며 현재 테스팅 중이라고 공식 확인했습니다.
 
 ## Anthropic의 보안 사고로 사상 최강 AI 모델의 존재가 드러났다
 
-3월 27일, Fortune이 Anthropic의 내부 데이터 유출을 보도했습니다. CMS(콘텐츠 관리 시스템) 설정 오류로 약 **3,000건의 내부 문서** 가 외부에 노출되었고, 그 안에 미공개 모델 **Claude Mythos** 의 블로그 초안이 포함되어 있었습니다. Anthropic은 Fortune에 이 모델이 실재하며 현재 테스팅 중이라고 공식 확인했습니다.
+
 
 같은 주에 Anthropic은 펜타곤과의 법정 싸움에서 가처분을 이끌어냈고, 10월 IPO를 검토 중이라는 Bloomberg 보도가 나왔으며, 경제 지수 보고서를 발표했습니다. 한 주에 이 모든 일이 동시에 터진 것은 우연이 아닙니다. AI 업계는 지금 IPO라는 단일 목표를 향해 모든 것을 쏟아붓는 시기에 들어섰습니다.
 

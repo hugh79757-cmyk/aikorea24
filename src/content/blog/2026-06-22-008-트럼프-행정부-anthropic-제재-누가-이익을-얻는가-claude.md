@@ -1,29 +1,31 @@
 ---
-title: "트럼프 행정부 Anthropic 제재 누가 이익을 얻는가 Claude Fable Mythos 수출통제 AI패권 분석"
-description: "트럼프 행정부가 Anthropic의 Fable 5와 Mythos 5 모델에 외국인 접근 차단 명령을 내렸다 이 규제가 OpenAI와 Google에 유리하게 작동하는 구조와 AI패권 경쟁의 함의를 분석합니다"
-date: 2026-06-22T15:11:04+09:00
-category: "뉴스"
+title: 트럼프 행정부 Anthropic 제재 누가 이익을 얻는가 Claude Fable Mythos 수출통제 AI패권 분석
+description: 상무부의 수출 통제 명령은 모든 외국 국적자(foreign national) 의 Fable 5 및 Mythos 5 접근을 전면
+  차단하는 내용입니다
+date: '2026-06-22 15:11:04+09:00'
+category: 뉴스
 tags:
-  - "Anthropic규제"
-  - "트럼프AI정책"
-  - "Fable5"
-  - "Mythos5"
-  - "Claude수출통제"
-  - "AI패권"
-  - "OpenAI경쟁"
+- Anthropic규제
+- 트럼프AI정책
+- Fable5
+- Mythos5
+- Claude수출통제
+- AI패권
+- OpenAI경쟁
 draft: false
-image: "/images/2026-06-22-008-트럼프-행정부-anthropic-제재-누가-이익을-얻는가-claude/thumbnail.webp"
+image: /images/2026-06-22-008-트럼프-행정부-anthropic-제재-누가-이익을-얻는가-claude/thumbnail.webp
 ---
-
 트럼프 행정부가 AI 스타트업 **Anthropic**에 전례 없는 규제를 가했습니다. 2026년 6월 12일 미국 상무부는 Anthropic의 최신 모델인 **Fable 5**와 **Mythos 5**에 대한 모든 외국인 접근을 차단하는 수출 통제 명령을 내렸습니다. Anthropic은 이유를 통보받지 못한 채 전 세계 사용자의 접근을 차단해야 했습니다.
 
 이 결정이 국가 안보 우려에서 비롯됐다는 백악관의 설명 뒤에는 복잡한 이해관계가 얽혀 있습니다. Anthropic이 제재를 받는 동안, 경쟁사인 **OpenAI**와 **Google**은 어떤 위치에 있는가. 그리고 이 규제가 한국을 포함한 해외 사용자와 기업에 어떤 현실적 영향을 미치는가. TechCrunch의 분석을 기반으로 이 사건의 구조를 해부합니다.
 
 [기사원문보기](https://aikorea24.kr/briefing/2026-06-22/#item-2)
 
+상무부의 수출 통제 명령은 **모든 외국 국적자(foreign national)** 의 Fable 5 및 Mythos 5 접근을 전면 차단하는 내용입니다. Anthropic은 이 명령에 따라 즉각적으로 해당 모델에 대한 글로벌 접근을 비활성화했습니다.
+
 ## Fable 5와 Mythos 5 차단 명령의 구체적 내용
 
-상무부의 수출 통제 명령은 **모든 외국 국적자(foreign national)** 의 Fable 5 및 Mythos 5 접근을 전면 차단하는 내용입니다. Anthropic은 이 명령에 따라 즉각적으로 해당 모델에 대한 글로벌 접근을 비활성화했습니다.
+
 
 Anthropic이 공개한 성명에 따르면, 회사는 구체적인 이유를 사전에 통보받지 못했습니다. 미국 내 시민권자나 영주권자가 아닌 모든 이용자, 즉 사실상 전 세계 대부분의 사용자가 이 두 모델을 사용할 수 없게 됐습니다.
 

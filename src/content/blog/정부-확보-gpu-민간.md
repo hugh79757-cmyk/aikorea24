@@ -1,23 +1,24 @@
 ---
-title: "정부 확보 GPU 민간 공급 시작 — 누가 받고 어떻게 사회에 환원하나 조건 총정리"
-description: "정부가 확보한 엔비디아 첨단 GPU가 본격적으로 산업계·학계·연구계에 공급됩니다. 공급 대상, 자부담 조건, 사회 환원 의무를 공식 발표 기준으로 정리합니다."
-date: 2026-03-03T08:20:44+09:00
-category: "뉴스"
+title: 정부 확보 GPU 민간 공급 시작 — 누가 받고 어떻게 사회에 환원하나 조건 총정리
+description: ''
+date: '2026-03-03 08:20:44+09:00'
+category: 뉴스
 tags:
-  - "GPU"
-  - "AI인프라"
-  - "정부GPU"
-  - "엔비디아"
-  - "소버린AI"
-  - "NIPA"
-  - "AI정책"
+- GPU
+- AI인프라
+- 정부GPU
+- 엔비디아
+- 소버린AI
+- NIPA
+- AI정책
 draft: false
-image: "/images/thumbnails/정부-확보-gpu-민간.jpg"
+image: /images/thumbnails/정부-확보-gpu-민간.jpg
 ---
+[대한민국 정책브리핑](https://www.korea.kr/news/policyNewsView.do?newsId=148956711)
 
 ## 사업의 배경 — 왜 정부가 GPU를 사서 나눠주나
 
-[대한민국 정책브리핑](https://www.korea.kr/news/policyNewsView.do?newsId=148956711)
+
 
 인공지능(AI) 모델을 개발하려면 대규모 연산 자원, 즉 고성능 GPU가 필수입니다. 그런데 엔비디아 H200·B200급 첨단 GPU는 전 세계적으로 품귀 현상이 심각해 대기업조차 원하는 물량을 제때 확보하기 어려운 상황이 계속되어 왔습니다. 중소기업이나 스타트업, 대학·연구소는 사실상 접근 자체가 불가능했습니다.
 

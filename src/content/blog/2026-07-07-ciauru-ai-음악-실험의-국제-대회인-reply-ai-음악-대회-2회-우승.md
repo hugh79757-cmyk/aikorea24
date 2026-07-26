@@ -1,16 +1,23 @@
 ---
-title: "AI 음악 대회 우승작 분석, Reply AI Music Contest 2회 Ciauru의 혁신"
-description: "국제 AI 음악 대회 Reply AI Music Contest 2회 우승작 Ciauru의 RAW BOTANICAL DATA를 심층 분석하고, AI 음악 창작의 현재와 한국 음악 산업에 미치는 영향을 살펴봅니다."
-date: 2026-07-07
+title: AI 음악 대회 우승작 분석, Reply AI Music Contest 2회 Ciauru의 혁신
+description: 2026년 7월, 이탈리아에서 개최된 Kappa FuturFestival 무대 위에서 하나의 역사적인 순간이 탄생했습니다
+date: '2026-07-07'
+category: 뉴스
+tags:
+- AI 음악
+- Reply AI Music Contest
+- Ciauru
+- AI 창작
+- 전자음악
+- Kappa FuturFestival
 draft: false
-image: "/images/ciauru-ai-음악-실험의-국제-대회인-reply-ai-음악-대회-2회-우승/thumbnail.webp"
-tags: ["AI 음악", "Reply AI Music Contest", "Ciauru", "AI 창작", "전자음악", "Kappa FuturFestival"]
-category: "뉴스"
+image: /images/ciauru-ai-음악-실험의-국제-대회인-reply-ai-음악-대회-2회-우승/thumbnail.webp
 ---
+2026년 7월, 이탈리아에서 개최된 Kappa FuturFestival 무대 위에서 하나의 역사적인 순간이 탄생했습니다. Reply가 주최한 국제 AI 음악 대회인 Reply AI Music Contest 2회 대회에서 이탈리아의 DJ 겸 프로듀서인 Ciauru(Simone Privitera)가 우승을 차지한 것입니다. 이 대회는 단순한 음악 경연을 넘어, 인공지능과 음악, 라이브 퍼포먼스를 융합하는 새로운 예술적 표현의 가능성을 탐구하는 자리였습니다.
 
 ## AI와 라이브 공연이 만나는 순간
 
-2026년 7월, 이탈리아에서 개최된 Kappa FuturFestival 무대 위에서 하나의 역사적인 순간이 탄생했습니다. Reply가 주최한 국제 AI 음악 대회인 Reply AI Music Contest 2회 대회에서 이탈리아의 DJ 겸 프로듀서인 Ciauru(Simone Privitera)가 우승을 차지한 것입니다. 이 대회는 단순한 음악 경연을 넘어, 인공지능과 음악, 라이브 퍼포먼스를 융합하는 새로운 예술적 표현의 가능성을 탐구하는 자리였습니다.
+
 
 표면적으로는 한 DJ의 우승 소식으로 보일 수 있지만, 이 사건의 이면에는 음악 산업의 패러다임 전환과 AI 창작 도구의 실용화라는 거대한 흐름이 숨겨져 있습니다. 이번 글에서는 Ciauru의 우승작인 RAW BOTANICAL DATA의 기술적 특징을 비유와 일상적 예시를 통해 풀어보고, 이것이 한국 음악 산업과 우리에게 어떤 시사점을 전하는지 짚어보겠습니다.
 

@@ -1,41 +1,40 @@
 ---
-title: "GitHub Vercel 또 다른 선택지 뭐가 다를까"
-description: "Vercel과 Cloudflare Pages의 차이점을 비교합니다. Next.js 프로젝트에 최적화된 Vercel의 특징과 무료 플랜 제한, 선택 기준을 안내합니다."
-date: 2026-02-12T22:44:27+09:00
-category: "바이브코딩"
+title: GitHub Vercel 또 다른 선택지 뭐가 다를까
+description: Vercel은 Next.
+date: '2026-02-12 22:44:27+09:00'
+category: 바이브코딩
 tags:
-  - "Vercel"
-  - "GitHub"
-  - "Nextjs"
-  - "무료호스팅"
-  - "웹배포"
-  - "CloudflarePages"
-  - "바이브코딩"
+- Vercel
+- GitHub
+- Nextjs
+- 무료호스팅
+- 웹배포
+- CloudflarePages
+- 바이브코딩
 draft: false
-image: "/images/thumbnails/github-vercel-tto-dareun.jpg"
+image: /images/thumbnails/github-vercel-tto-dareun.jpg
 ---
 
 - [Vercel 공식 사이트](https://vercel.com/)
 - [Vercel 가격 정책](https://vercel.com/pricing)
 - [Vercel과 Cloudflare 비교](https://lapidix.dev/posts/vercel-and-aws)
 
----
 
 지난 강에서 Cloudflare Pages를 사용해 웹사이트를 배포하는 방법을 배웠습니다. 그런데 인터넷을 검색하다 보면 Vercel이라는 서비스도 자주 보입니다. 특히 Next.js를 사용하는 프로젝트에서 Vercel을 많이 추천하는데, 도대체 뭐가 다른 걸까요?
 
 결론부터 말씀드리면, 둘 다 훌륭한 무료 호스팅 서비스입니다. 정적 사이트만 배포한다면 Cloudflare Pages가 더 관대한 무료 플랜을 제공합니다. 하지만 Next.js처럼 서버 기능이 필요한 프로젝트라면 Vercel이 더 편리합니다. 각자의 특징을 알아보고 상황에 맞는 선택을 해보겠습니다.
 
----
+
+Vercel은 Next.js를 만든 회사에서 운영하는 프론트엔드 배포 플랫폼입니다. GitHub 레포지토리와 연동하면 코드를 푸시할 때마다 자동으로 빌드하고 배포합니다. Cloudflare Pages와 기본 개념은 같지만, 서버리스 함수(Serverless Functions) 지원이 강력하다는 점이 다릅니다.
 
 ## Vercel은 무엇인가
 
-Vercel은 Next.js를 만든 회사에서 운영하는 프론트엔드 배포 플랫폼입니다. GitHub 레포지토리와 연동하면 코드를 푸시할 때마다 자동으로 빌드하고 배포합니다. Cloudflare Pages와 기본 개념은 같지만, 서버리스 함수(Serverless Functions) 지원이 강력하다는 점이 다릅니다.
+
 
 가장 큰 장점은 Next.js와의 궁합입니다. Next.js의 모든 기능(SSR, ISR, API Routes 등)을 추가 설정 없이 바로 사용할 수 있습니다. 배포 과정도 매우 간단해서 Git 푸시만 하면 몇 분 안에 전 세계 CDN에 배포됩니다. 미리보기 배포(Preview Deployment) 기능으로 브랜치별로 별도 URL을 제공해 테스트하기도 편리합니다.
 
 ![4HFZUY07.webp](https://img.aikorea24.kr/images/github-vercel-tto-dareun/66e47b6d75a4042b7b4e223c282890d1a2e3f376.webp)
 
----
 
 ## Vercel 무료 플랜의 제한
 

@@ -1,20 +1,19 @@
 ---
-title: "GPT 4.1 Nano vs Solar Pro 3 vs Clova HCX 005 한국어 콘텐츠 생성 LLM 비교 테스트"
-description: "GPT-4o mini 단종 시대, 한국어 콘텐츠 생성에 최적화된 경량 LLM을 찾기 위해 GPT-4.1 Nano, Solar Pro 3, Clova HCX-005 세 모델을 동일 조건에서 비교 테스트한 결과를 공유합니다."
-date: 2026-03-08T11:07:23+09:00
-category: "AI"
+title: GPT 4.1 Nano vs Solar Pro 3 vs Clova HCX 005 한국어 콘텐츠 생성 LLM 비교 테스트
+description: 이번 비교에 포함된 세 모델은 각각 출신 배경과 설계 철학이 다릅니다.
+date: '2026-03-08 11:07:23+09:00'
+category: AI
 tags:
-  - "GPT-4.1 Nano"
-  - "Solar Pro 3"
-  - "Clova HCX-005"
-  - "한국어 LLM 비교"
-  - "GPT-4o mini 대체"
-  - "업스테이지"
-  - "AI 콘텐츠 생성"
+- GPT-4.1 Nano
+- Solar Pro 3
+- Clova HCX-005
+- 한국어 LLM 비교
+- GPT-4o mini 대체
+- 업스테이지
+- AI 콘텐츠 생성
 draft: false
-image: "/images/thumbnails/gpt-41-nano-vs.jpg"
+image: /images/thumbnails/gpt-41-nano-vs.jpg
 ---
-
 GPT-4o mini를 API 기반 콘텐츠 자동화에 활용해 온 분들이라면 최근 마음이 급해지셨을 것입니다. OpenAI가 2026년 2월 13일부로 GPT-4o를 ChatGPT에서 퇴장시켰고, Azure 기준 GPT-4o mini 역시 2026년 3월 31일 Standard 배포 종료가 예정되어 있습니다. 후속 모델인 GPT-5 nano로의 전환은 단순히 모델명을 바꾸는 것으로 끝나지 않습니다. temperature 파라미터가 사라지고, max_tokens 대신 max_completion_tokens를 써야 하며, reasoning_effort를 설정하지 않으면 비용이 13배 뛰는 구조적 변화가 따릅니다.
 
 이런 상황에서 **"GPT-4o mini의 빈자리를 어떤 모델로 채울 것인가"** 라는 질문은 단순한 호기심이 아니라 운영 비용과 콘텐츠 품질에 직결되는 실무적 과제입니다. 한국어 콘텐츠를 대량 생성하는 워크플로를 운영 중이라면, 한국어 자연스러움과 지시사항 준수율까지 동시에 충족하는 모델을 찾아야 합니다.
@@ -23,9 +22,11 @@ GPT-4o mini를 API 기반 콘텐츠 자동화에 활용해 온 분들이라면 �
 
 [GPT-4o mini에서 GPT-5 nano 전환 시 확인할 3가지 (Threads)](https://www.threads.com/@aikorea24/post/DVfPfppkQIh?xmt=AQF0mzbJmkHYJoghSQp9uqrscsqESg9k-N1tdVJ-9lgkxQ)
 
+이번 비교에 포함된 세 모델은 각각 출신 배경과 설계 철학이 다릅니다.
+
 ## 테스트 대상 모델 소개
 
-이번 비교에 포함된 세 모델은 각각 출신 배경과 설계 철학이 다릅니다.
+
 
 **Upstage Solar Pro 3** 는 한국 AI 스타트업 업스테이지(Upstage)가 개발한 최신 LLM입니다. 업스테이지는 2020년 전 네이버 클로바 AI 헤드 출신인 김성훈 홍콩과기대 교수가 설립한 회사로, 자체 LLM인 솔라(Solar) 시리즈로 글로벌 시장에서 주목받아 왔습니다. 2023년 허깅페이스 오픈 LLM 순위에서 세계 1위를 기록한 이력이 있으며, 현재는 미국과 일본에도 법인을 두고 있습니다. Solar Pro 3는 102B 파라미터를 가진 MoE(Mixture of Experts) 구조이지만 실제 추론 시에는 12B만 활성화되어 처리 속도가 빠릅니다. 128K 토큰 컨텍스트 윈도우를 지원하며, OpenAI SDK와 호환되는 API를 제공합니다. 전작 Solar Pro 2 대비 지시 이행 능력이 52%, 복잡한 추론 작업이 30% 향상되었다고 공식 발표되었습니다.
 

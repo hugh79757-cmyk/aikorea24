@@ -1,15 +1,21 @@
 ---
-title: "바이브코딩이란? AI에게 말로 설명하면 코드가 완성된다"
-description: "코딩을 몰라도 AI에게 자연어로 설명하면 웹사이트가 만들어지는 바이브코딩의 개념과 시작 방법을 알려드립니다."
-date: 2026-02-11
-category: "AI입문"
-tags: ["바이브코딩", "Vibe Coding", "AI 코딩", "입문"]
-image: "/images/vibe-coding-intro/thumbnail.webp"
+title: 바이브코딩이란? AI에게 말로 설명하면 코드가 완성된다
+description: 바이브코딩(Vibe Coding)은 프로그래밍 언어를 직접 작성하는 대신, AI에게 자연어(한국어)로 원하는 것을 설명하면
+  AI가 코드를 생성해주는 새로운 개발 방식입니다
+date: '2026-02-11'
+category: AI입문
+tags:
+- 바이브코딩
+- Vibe Coding
+- AI 코딩
+- 입문
+image: /images/vibe-coding-intro/thumbnail.webp
 ---
+바이브코딩(Vibe Coding)은 프로그래밍 언어를 직접 작성하는 대신, AI에게 자연어(한국어)로 원하는 것을 설명하면 AI가 코드를 생성해주는 새로운 개발 방식입니다.
 
 ## 바이브코딩이란?
 
-바이브코딩(Vibe Coding)은 프로그래밍 언어를 직접 작성하는 대신, AI에게 자연어(한국어)로 원하는 것을 설명하면 AI가 코드를 생성해주는 새로운 개발 방식입니다.
+
 
 예를 들어 "블로그 메인 페이지를 만들어줘. 카드형 레이아웃으로 최신 글이 위에 오도록 해줘"라고 말하면, AI가 HTML, CSS, JavaScript 코드를 자동으로 작성합니다.
 

@@ -1,21 +1,20 @@
 ---
-title: "OpenAI는 합치고 마이크로소프트는 빼고 AI 빅테크 전략 대전환의 두 갈래 길"
-description: "OpenAI가 ChatGPT Codex Atlas를 슈퍼앱으로 통합하고 마이크로소프트가 Windows에서 Copilot을 축소하는 상반된 전략 전환의 배경과 의미를 심층 분석합니다"
-date: 2026-03-21T09:25:53+09:00
-category: "뉴스"
+title: OpenAI는 합치고 마이크로소프트는 빼고 AI 빅테크 전략 대전환의 두 갈래 길
+description: OpenAI는 2025년 한 해 동안 유례없는 속도로 제품을 쏟아냈습니다
+date: '2026-03-21 09:25:53+09:00'
+category: 뉴스
 tags:
-  - "OpenAI"
-  - "마이크로소프트"
-  - "Copilot"
-  - "슈퍼앱"
-  - "Anthropic"
-  - "ClaudeCode"
-  - "Codex"
-  - "AI전략"
+- OpenAI
+- 마이크로소프트
+- Copilot
+- 슈퍼앱
+- Anthropic
+- ClaudeCode
+- Codex
+- AI전략
 draft: false
-image: "/images/thumbnails/openai는-합치고-마이크로소프트는-빼고.jpg"
+image: /images/thumbnails/openai는-합치고-마이크로소프트는-빼고.jpg
 ---
-
 [AI코리아24 오늘의 브리핑에서 관련 뉴스 확인하기](https://aikorea24.kr/briefing/2026-03-21/#item-1)
 
 같은 주에, 정반대의 결정이 내려졌습니다.
@@ -24,9 +23,11 @@ image: "/images/thumbnails/openai는-합치고-마이크로소프트는-빼고.j
 
 하나는 흩어진 것을 모으고, 다른 하나는 넣었던 것을 빼고 있습니다. 두 결정의 표면은 상반되지만, 뿌리는 같습니다. "AI를 많이 만드는 것이 아니라, 의미 있는 곳에 집중해야 한다"는 인식입니다. 이 글은 두 전략 전환의 배경, 촉발 요인, 그리고 AI 산업 전체에 보내는 신호를 분석합니다.
 
+OpenAI는 2025년 한 해 동안 유례없는 속도로 제품을 쏟아냈습니다. AI 비디오 생성기 Sora, AI 웹 브라우저 Atlas, 조니 아이브와 협업하는 AI 하드웨어, ChatGPT 에이전트 모드, 이커머스 기능까지. 샘 올트먼은 이 전략을 "OpenAI 안에서 여러 스타트업에 동시에 투자하는 것"이라고 표현했습니다.
+
 ## OpenAI: '사이드 퀘스트'의 대가
 
-OpenAI는 2025년 한 해 동안 유례없는 속도로 제품을 쏟아냈습니다. AI 비디오 생성기 Sora, AI 웹 브라우저 Atlas, 조니 아이브와 협업하는 AI 하드웨어, ChatGPT 에이전트 모드, 이커머스 기능까지. 샘 올트먼은 이 전략을 "OpenAI 안에서 여러 스타트업에 동시에 투자하는 것"이라고 표현했습니다.
+
 
 결과는 처참했습니다.
 

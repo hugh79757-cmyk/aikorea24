@@ -1,22 +1,14 @@
 ---
-title: "Cursor Composer 2.5 출시 중국 모델 기반 AI 코딩 도구가 Claude Opus GPT5와 동등한 성능을 훨씬 낮은 비용에 달성"
-description: "Cursor가 중국 Kimi K2.5 기반 Composer 2.5를 출시해 Claude Opus 4.7 GPT5.5와 동급 벤치마크를 달성하면서 AI 코딩 도구 시장의 가격 경쟁이 새 국면에 접어들었다"
-date: 2026-05-19T10:19:58+09:00
-category: "뉴스"
-tags:
-  - "Cursor"
-  - "Composer25"
-  - "AI코딩"
-  - "KimiK2"
-  - "ClaudeOpus"
-  - "GPT5"
-  - "AI개발도구"
-  - "AI코드에디터"
+title: Cursor Composer 2.5 출시 중국 모델 기반 AI 코딩 도구가 Claude Opus GPT5와 동등한 성능을 훨씬 낮은 비용에
+  달성
+description: Composer 2.5는 중국 AI 기업 문샷(Moonshot AI)이 개발한 오픈소스 모델 Kimi K2.5 를 기반으로
+  구축됐습니다
+date: '2026-05-19T10:19:58+09:00'
+category: 뉴스
 draft: false
-image: "/images/2026-05-19-005-cursor-composer-25-출시-중국-모델-기반-ai/thumbnail.webp"
+image: /images/2026-05-19-005-cursor-composer-25-출시-중국-모델-기반-ai/thumbnail.webp
 ---
 
----
 
 AI 코딩 도구 시장에 새로운 이정표가 세워졌습니다. Cursor가 자체 개발 코딩 모델 Composer 2.5를 출시하며, 입력 토큰 100만 개당 0.50달러, 출력 토큰 100만 개당 2.50달러라는 가격에 Claude Opus 4.7, GPT-5.5와 동급의 벤치마크 성능을 달성했다고 밝혔습니다.
 
@@ -24,9 +16,11 @@ AI 코딩 도구 시장에 새로운 이정표가 세워졌습니다. Cursor가 
 
 기사원문보기: [2026년 5월 19일 (화) AI 브리핑 - AI코리아24](https://aikorea24.kr/briefing/2026-05-19/)
 
+Composer 2.5는 중국 AI 기업 문샷(Moonshot AI)이 개발한 오픈소스 모델 **Kimi K2.5**를 기반으로 구축됐습니다. Cursor는 전체 컴퓨팅 예산의 85%를 추가 학습과 강화학습(RL, Reinforcement Learning)에 투입했으며, 전작 Composer 2 대비 **25배 많은 합성 태스크**(synthetic tasks, AI가 생성한 프로그래밍 과제)로 파인튜닝(fine-tuning, 특정 목적에 맞게 추가 학습)했습니다.
+
 ## Composer 2.5의 핵심 스펙
 
-Composer 2.5는 중국 AI 기업 문샷(Moonshot AI)이 개발한 오픈소스 모델 **Kimi K2.5**를 기반으로 구축됐습니다. Cursor는 전체 컴퓨팅 예산의 85%를 추가 학습과 강화학습(RL, Reinforcement Learning)에 투입했으며, 전작 Composer 2 대비 **25배 많은 합성 태스크**(synthetic tasks, AI가 생성한 프로그래밍 과제)로 파인튜닝(fine-tuning, 특정 목적에 맞게 추가 학습)했습니다.
+
 
 주요 벤치마크 결과는 다음과 같습니다. SWE-Bench Multilingual(다국어 소프트웨어 엔지니어링 과제)에서 79.8%, CursorBench v3.1에서 63.2%를 기록했습니다. 이는 Anthropic의 Claude Opus 4.7, OpenAI의 GPT-5.5와 동급 수준이라고 Cursor는 밝혔습니다.
 

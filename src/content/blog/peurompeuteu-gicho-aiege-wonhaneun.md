@@ -1,38 +1,37 @@
 ---
-title: "프롬프트 기초 AI에게 원하는 결과를 얻는 말하기 법칙"
-description: "바이브코딩의 핵심인 프롬프트 작성법을 배웁니다. AI에게 명확한 지시를 내리고 원하는 코드를 얻기 위한 기본 원칙과 예시를 정리했습니다."
-date: 2026-02-12T22:08:24+09:00
-category: "바이브코딩"
+title: 프롬프트 기초 AI에게 원하는 결과를 얻는 말하기 법칙
+description: 효과적인 프롬프트는 역할 지정, 작업 내용, 제약 조건, 출력 형식 네 가지 요소로 구성됩니다
+date: '2026-02-12 22:08:24+09:00'
+category: 바이브코딩
 tags:
-  - "프롬프트"
-  - "프롬프트엔지니어링"
-  - "AI프롬프트"
-  - "바이브코딩"
-  - "ChatGPT활용"
-  - "코딩입문"
+- 프롬프트
+- 프롬프트엔지니어링
+- AI프롬프트
+- 바이브코딩
+- ChatGPT활용
+- 코딩입문
 draft: false
-image: "/images/thumbnails/peurompeuteu-gicho-aiege-wonhaneun.jpg"
+image: /images/thumbnails/peurompeuteu-gicho-aiege-wonhaneun.jpg
 ---
 
 - [Google Cloud 프롬프트 엔지니어링 가이드](https://cloud.google.com/discover/what-is-prompt-engineering?hl=ko)
 - [Salesforce 프롬프트 가이드](https://www.salesforce.com/kr/blog/generative-ai-prompts/)
 - [위키독스 프롬프트 작성법](https://wikidocs.net/287403)
 
----
 
 바이브코딩에서 가장 중요한 것은 AI에게 어떻게 말하느냐입니다. 같은 AI를 사용해도 프롬프트를 어떻게 작성하느냐에 따라 결과물의 품질이 크게 달라집니다. "웹페이지 만들어줘"보다 "모바일에서도 최적화된 반응형 포트폴리오 웹페이지를 만들어줘, 다크모드 지원하고 스크롤 애니메이션 넣어줘"라고 요청하면 훨씬 원하는 결과에 가까운 코드를 얻을 수 있습니다.
 
 프롬프트는 AI에게 주는 지시사항으로, 질문, 명령, 맥락 정보를 포함합니다. 좋은 프롬프트를 작성하는 능력을 프롬프트 엔지니어링이라고 부르며, 이는 바이브코딩의 핵심 역량입니다. 이번 강에서는 프롬프트 작성의 기본 원칙을 배워보겠습니다.
 
----
-
-## 프롬프트의 기본 구조
 
 효과적인 프롬프트는 역할 지정, 작업 내용, 제약 조건, 출력 형식 네 가지 요소로 구성됩니다. 역할 지정은 AI에게 특정 전문가의 관점으로 답변하도록 요청하는 것입니다. "너는 10년 경력의 프론트엔드 개발자야"처럼 역할을 부여하면 더 전문적인 답변을 얻을 수 있습니다.
 
+## 프롬프트의 기본 구조
+
+
+
 작업 내용은 AI에게 무엇을 해달라고 요청하는 부분입니다. 가능한 구체적으로 작성하되, 한 번에 너무 많은 것을 요청하지 않는 것이 좋습니다. 제약 조건은 "JavaScript만 사용해줘", "100줄 이내로 작성해줘"처럼 결과물의 범위를 제한합니다. 출력 형식은 "코드만 출력해줘", "주석도 달아줘"처럼 결과물의 형태를 지정합니다.
 
----
 
 ![KwWYJnbF.webp](https://img.aikorea24.kr/images/peurompeuteu-gicho-aiege-wonhaneun/04c1519e828c022d5a24b5fb175cb444ec5764c6.webp)
 

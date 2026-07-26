@@ -19,3 +19,12 @@
 1. Pexels/DeepSeek 완전 실패 시 → `news-keyword-og.webp` placeholder 복사됨
 2. 품질 검증 실패 2회 후 → placeholder 복사됨
 3. 로그에 "기본 placeholder 사용" 명시 출력
+
+## Additional Fixes Applied
+- Placeholder 품질 상향: 15KB 미만 → **45.6KB** (quality=98, 800×800 WebP) — 품질 검증 통과 보장
+- DeepSeek 모델명: `deepseek-chat` → **`deepseek-v4-pro`** (API 변경 반영)
+
+## Testing
+- Syntax check: `python3 -m py_compile scripts/auto_thumbnail.py` → OK
+- Placeholder validation: `validate_thumbnail_quality('public/images/news-keyword-og.webp')` → (True, 'OK')
+- 7/25 중복 5개(002~006) 모두 고유 이미지로 재생성 완료 (MD5 모두 다름)

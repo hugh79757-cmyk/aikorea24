@@ -1,21 +1,21 @@
 ---
-title: "Arcee AI Trinity Large Thinking 오픈 추론 모델 Claude Opus 성능 비교 분석"
-description: "미국 스타트업 Arcee AI가 벤처캐피털 절반을 투자해 Claude Opus에 필적하는 오픈소스 추론 모델을 공개했다 에이전트 벤치마크 성능과 한계를 분석한다"
-date: 2026-04-13T13:32:32+09:00
-category: "뉴스"
+title: Arcee AI Trinity Large Thinking 오픈 추론 모델 Claude Opus 성능 비교 분석
+description: Trinity-Large-Thinking은 총 400억 파라미터(parameter, AI 모델의 학습 가중치 수로 모델 크기를
+  나타냄) 규모입니다
+date: '2026-04-13 13:32:32+09:00'
+category: 뉴스
 tags:
-  - "ArceeAI"
-  - "TrinityLargeThinking"
-  - "오픈소스AI"
-  - "추론모델"
-  - "ClaudeOpus"
-  - "에이전트AI"
-  - "SMEBU"
-  - "오픈웨이트"
+- ArceeAI
+- TrinityLargeThinking
+- 오픈소스AI
+- 추론모델
+- ClaudeOpus
+- 에이전트AI
+- SMEBU
+- 오픈웨이트
 draft: false
-image: "/images/thumbnails/arcee-ai-trinity-large.jpg"
+image: /images/thumbnails/arcee-ai-trinity-large.jpg
 ---
-
 미국 스타트업 Arcee AI가 약 2,000만 달러(한화 약 280억 원)를 투자해 오픈소스 추론 모델 **Trinity-Large-Thinking**을 공개했습니다. 이 금액은 회사 전체 벤처캐피털 조달액의 절반에 해당합니다. 사실상 회사의 존폐를 건 베팅입니다.
 
 이번 모델이 주목받는 이유는 성능 수치 때문만이 아닙니다. 오픈 모델 생태계가 중국 빅테크 랩(Qwen, MiniMax, Zhipu AI 등)에 편중된 현실에서, 미국 스타트업이 Apache 2.0 라이선스(상업적 이용과 수정이 자유로운 오픈소스 라이선스)로 이 시장에 정면 도전했다는 점이 핵심입니다.
@@ -24,9 +24,11 @@ image: "/images/thumbnails/arcee-ai-trinity-large.jpg"
 
 Arcee AI를 이전에 분석한 적이 있습니다. [Arcee AI의 모델 전략과 배경은 여기서 확인할 수 있습니다.](https://aikorea24.kr/blog/%EC%95%84%EB%A5%B4%EC%8B%9C-ai-trinity-large/)
 
+Trinity-Large-Thinking은 총 **400억 파라미터(parameter, AI 모델의 학습 가중치 수로 모델 크기를 나타냄)** 규모입니다. 그러나 실제로 작동 시 활성화되는 파라미터는 약 130억 개에 불과합니다.
+
 ## Trinity-Large-Thinking의 구조와 핵심 수치
 
-Trinity-Large-Thinking은 총 **400억 파라미터(parameter, AI 모델의 학습 가중치 수로 모델 크기를 나타냄)** 규모입니다. 그러나 실제로 작동 시 활성화되는 파라미터는 약 130억 개에 불과합니다.
+
 
 이것이 가능한 이유는 **혼합 전문가 아키텍처(MoE, Mixture of Experts)** 때문입니다. 256개의 전문화된 하위 네트워크 중 토큰(단어 단위)당 4개만 선택적으로 활성화됩니다. 쉽게 말하면, 256명의 전문가 팀이 있지만 질문마다 가장 적합한 4명만 투입하는 방식입니다. 모델 전체 규모의 성능을 유지하면서 연산 비용을 대폭 낮출 수 있습니다.
 

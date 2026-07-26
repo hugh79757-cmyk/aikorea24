@@ -1,15 +1,18 @@
 ---
-title: "SALESmanago에서 Manago AI로, 에이전틱 AI로 마케팅 자동화의 패러다임을 바꾸다"
-description: "유럽 마케팅 자동화 선도 기업 SALESmanago가 Manago AI로 리브랜딩하며, 에이전틱 AI와 대화형 워크플로우를 공개한 심층 분석"
-date: 2026-06-30
+title: SALESmanago에서 Manago AI로, 에이전틱 AI로 마케팅 자동화의 패러다임을 바꾸다
+description: 유럽 최초의 마케팅 자동화 플랫폼 중 하나로 잘 알려진 SALESmanago가 최근 사명을 'Manago AI'로 변경하고
+  새로운 AI 기능을 발표했습니다
+date: '2026-06-30'
+category: 뉴스
+tags:
+- 마케팅 자동화
+- AI 기능
+- 에이전틱 AI
+- 고객 인게이지먼트
+- 대화형 AI
 draft: false
-image: "/images/manago-ai-이전의-salesmanago-새로운-정체성과-강력한-ai-기능-공개/thumbnail.webp"
-tags: ["마케팅 자동화", "AI 기능", "에이전틱 AI", "고객 인게이지먼트", "대화형 AI"]
-category: "뉴스"
+image: /images/manago-ai-이전의-salesmanago-새로운-정체성과-강력한-ai-기능-공개/thumbnail.webp
 ---
-
-## 유럽 1세대 마케팅 자동화의 변신, 그 배경
-
 유럽 최초의 마케팅 자동화 플랫폼 중 하나로 잘 알려진 SALESmanago가 최근 사명을 'Manago AI'로 변경하고 새로운 AI 기능을 발표했습니다. 이번 변화는 단순한 이름 변경을 넘어, 기업이 데이터를 분석하고 캠페인을 실행하는 방식 자체를 혁신하겠다는 강력한 선언입니다. 원래 기사에서 CEO 필 드레이퍼는 "마케팅 팀은 데이터 문제가 아니라 실행 문제가 있다"고 명확히 진단합니다. 방대한 고객 데이터와 인사이트가 대시보드에 쌓여 있음에도 불구하고, 이를 실제 캠페인으로 전환하는 과정은 여전히 수동적이고 복잡하다는 점을 지적하는 것입니다. Manago AI는 이 격차를 '하루에서 몇 분으로' 줄이는 것을 핵심 가치로 내세우고 있습니다.
 
 ## 에이전틱 AI와 대화형 워크플로우의 실질적 의미

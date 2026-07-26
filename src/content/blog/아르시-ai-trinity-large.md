@@ -1,32 +1,33 @@
 ---
-title: "아르시 AI Trinity Large Thinking 26명이 만든 오픈소스 400B 모델 역사와 사용법"
-description: "2023년 마이애미에서 시작한 Arcee AI의 창업 스토리와 최신 모델 Trinity Large Thinking 지금 바로 무료로 사용하는 방법까지 한 번에 정리했다"
-date: 2026-04-08T09:45:12+09:00
-category: "뉴스"
+title: 아르시 AI Trinity Large Thinking 26명이 만든 오픈소스 400B 모델 역사와 사용법
+description: Arcee AI의 출발점은 2022년 말, ChatGPT가 세상에 등장했던 그 순간입니다
+date: '2026-04-08 09:45:12+09:00'
+category: 뉴스
 tags:
-  - "ArceeAI"
-  - "TrinityLargeThinking"
-  - "오픈소스AI"
-  - "소형언어모델"
-  - "SLM"
-  - "Apache2.0"
-  - "OpenRouter"
-  - "HuggingFace"
-  - "AI스타트업"
-  - "중국AI대안"
+- ArceeAI
+- TrinityLargeThinking
+- 오픈소스AI
+- 소형언어모델
+- SLM
+- Apache2.0
+- OpenRouter
+- HuggingFace
+- AI스타트업
+- 중국AI대안
 draft: false
-image: "/images/thumbnails/아르시-ai-trinity-large.jpg"
+image: /images/thumbnails/아르시-ai-trinity-large.jpg
 ---
-
 AI 뉴스에서 잘 언급되지 않는 작은 회사가 큰 파장을 일으키고 있습니다. 직원 26명, 예산 2천만 달러. 그런데 이 회사가 만든 모델이 "비중국 기업이 출시한 가장 강력한 오픈웨이트 모델"이라는 주장이 나왔습니다. 회사 이름은 **Arcee AI**, 모델 이름은 **Trinity Large Thinking**입니다.
 
 기사원문은 [aikorea24 오늘의 브리핑](https://aikorea24.kr/briefing/2026-04-08/#item-1)에서 확인할 수 있습니다. 
 
 이름조차 생소할 수 있는 이 회사가 어디서 왔는지, 지금 무엇을 하는지, 그리고 오늘 당장 어떻게 써볼 수 있는지 처음부터 정리합니다.
 
+Arcee AI의 출발점은 2022년 말, ChatGPT가 세상에 등장했던 그 순간입니다. 두 명의 연구자, 브라이언 베네딕트와 마크 맥쿼이드는 OpenAI 모델의 충격을 목격한 후 AI 분야에서 무엇인가를 만들어야 한다는 결심을 합니다.
+
 ## Arcee AI는 어떤 회사인가 창업 배경과 역사
 
-Arcee AI의 출발점은 2022년 말, ChatGPT가 세상에 등장했던 그 순간입니다. 두 명의 연구자, 브라이언 베네딕트와 마크 맥쿼이드는 OpenAI 모델의 충격을 목격한 후 AI 분야에서 무엇인가를 만들어야 한다는 결심을 합니다.
+
 
 2023년 봄, 브라이언, 마크, 그리고 제이콥 솔라웨츠 세 명이 플로리다 마이애미에서 Arcee를 창업했습니다. 세 사람이 포착한 문제의식은 명확했습니다. 기업들이 GPT 같은 거대 언어 모델(LLM)에 자사 문서를 넣어 활용하려 할 때, 정확도가 들쭉날쭉하고 속도는 느리고 비용은 높다는 것이었습니다. 이른바 **"RAG 한계(RAG plateau)"** 였습니다. RAG(Retrieval-Augmented Generation)는 AI가 외부 데이터를 참조해 답변을 생성하는 방식입니다.
 

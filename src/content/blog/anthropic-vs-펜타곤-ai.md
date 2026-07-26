@@ -1,19 +1,20 @@
 ---
-title: "Anthropic vs 펜타곤 AI 안전의 마지노선을 둘러싼 역사적 대치"
-description: "Anthropic이 펜타곤의 무조건적 AI 군사 사용 요구를 거부하며 대량 감시와 자율 무기라는 두 가지 레드라인을 지킨 역사적 대치의 전말을 정리했습니다."
-date: 2026-02-27T09:25:41+09:00
-category: "AI"
+title: Anthropic vs 펜타곤 AI 안전의 마지노선을 둘러싼 역사적 대치
+description: 2025년 여름, 펜타곤의 디지털 AI 최고사무실(CDAO)은 Anthropic, OpenAI, Google, xAI 네 기업에
+  각각 최대 2억 달러 규모의 AI 계약을 수여했습니다
+date: '2026-02-27 09:25:41+09:00'
+category: AI
 tags:
-  - "Anthropic"
-  - "펜타곤"
-  - "AI안전"
-  - "DarioAmodei"
-  - "Claude"
-  - "국방부"
-  - "AI윤리"
-  - "AI군사화"
+- Anthropic
+- 펜타곤
+- AI안전
+- DarioAmodei
+- Claude
+- 국방부
+- AI윤리
+- AI군사화
 draft: false
-image: "/images/thumbnails/anthropic-vs-펜타곤-ai.jpg"
+image: /images/thumbnails/anthropic-vs-펜타곤-ai.jpg
 ---
 
 [Anthropic 공식 성명 원문 보기](https://www.anthropic.com/news/statement-department-of-war)
@@ -26,9 +27,11 @@ Anthropic CEO 다리오 아모데이(Dario Amodei)는 2월 26일 공식 성명�
 
 [AI 뉴스 브리핑 - AI코리아24](https://aikorea24.kr/briefing/2026-02-27/#item-5)
 
+2025년 여름, 펜타곤의 디지털 AI 최고사무실(CDAO)은 Anthropic, OpenAI, Google, xAI 네 기업에 각각 최대 2억 달러 규모의 AI 계약을 수여했습니다. 이 가운데 Anthropic의 **Claude** 는 독보적인 위치를 점했습니다. Palantir과의 파트너십을 통해 미 국방부의 기밀(classified) 네트워크에 **최초로 통합된 프론티어 AI 모델** 이었기 때문입니다.
+
 ## 2억 달러 계약과 Claude의 기밀 시스템 통합
 
-2025년 여름, 펜타곤의 디지털 AI 최고사무실(CDAO)은 Anthropic, OpenAI, Google, xAI 네 기업에 각각 최대 2억 달러 규모의 AI 계약을 수여했습니다. 이 가운데 Anthropic의 **Claude** 는 독보적인 위치를 점했습니다. Palantir과의 파트너십을 통해 미 국방부의 기밀(classified) 네트워크에 **최초로 통합된 프론티어 AI 모델** 이었기 때문입니다.
+
 
 국가 안보 고객을 위한 커스텀 모델인 **Claude Gov** 도 이미 배치되어 정보 분석, 모델링과 시뮬레이션, 작전 계획, 사이버 작전 등 핵심 임무에 활용되고 있었습니다. 원래 계약에는 Anthropic의 사용 정책(Usage Policy)이 적용되는 조건이 포함되어 있었습니다. 즉 펜타곤도 Anthropic의 윤리 가이드라인 안에서 Claude를 사용해야 했고, 이는 양측이 합의한 사항이었습니다. Anthropic에 따르면 이 조건이 실제 군사 운용에 장애가 된 적은 한 번도 없었다고 합니다.
 
@@ -76,6 +79,5 @@ Anthropic이 제시한 두 가지 레드라인인 대량 국내 감시 금지와
 
 오늘 오후 5시 01분 이후 어떤 결정이 내려지든, 이번 사건은 AI 시대의 정부와 기업 관계, 기술 윤리, 그리고 민주주의 사회에서 안보와 자유의 균형이라는 근본적 문제에 대해 중요한 선례로 기록될 것입니다.
 
----
 
 #Anthropic #펜타곤 #AI안전 #DarioAmodei #Claude #국방부 #DefenseProductionAct #AI윤리 #SupplyChainRisk #PeteHegseth #AI군사화

@@ -1,40 +1,39 @@
 ---
-title: "Cloudflare 무료의 한계 빌드 제한과 하루 1회 배포 전략"
-description: "Cloudflare Pages 무료 플랜의 빌드 제한을 효율적으로 활용하는 방법을 안내합니다. 월 500회 빌드 제한 안에서 현명하게 배포하는 전략을 소개합니다."
-date: 2026-02-12T22:52:44+09:00
-category: "바이브코딩"
+title: Cloudflare 무료의 한계 빌드 제한과 하루 1회 배포 전략
+description: '!'
+date: '2026-02-12 22:52:44+09:00'
+category: 바이브코딩
 tags:
-  - "CloudflarePages"
-  - "빌드제한"
-  - "무료호스팅"
-  - "배포전략"
-  - "바이브코딩"
-  - "효율적배포"
+- CloudflarePages
+- 빌드제한
+- 무료호스팅
+- 배포전략
+- 바이브코딩
+- 효율적배포
 draft: false
-image: "/images/thumbnails/cloudflare-muryoui-hangye-bildeu.jpg"
+image: /images/thumbnails/cloudflare-muryoui-hangye-bildeu.jpg
 ---
 
 - [Cloudflare Pages 제한 사항](https://developers.cloudflare.com/pages/platform/limits/)
 - [Cloudflare Pages 가격 정책](https://www.cloudflare.com/ko-kr/developer-platform/products/pages/)
 - [Cloudflare 대시보드](https://dash.cloudflare.com/)
 
----
 
 Cloudflare Pages는 무료로 사용할 수 있는 최고의 호스팅 서비스 중 하나입니다. 대역폭 무제한, 빠른 글로벌 CDN, 자동 SSL까지 제공합니다. 하지만 무료 플랜에는 한 가지 중요한 제한이 있습니다. 바로 월 500회 빌드 제한입니다.
 
 500회라고 하면 많아 보이지만, 바이브코딩을 하다 보면 작은 수정 하나에도 푸시를 하게 됩니다. "버튼 색깔 바꿔줘" → 푸시 → "아 더 진하게" → 푸시. 이런 식으로 하루에 수십 번 배포하다 보면 금방 제한에 도달합니다. 효율적인 배포 전략을 세워야 합니다.
 
----
+
+![gXV00UQy.webp](https://img.aikorea24.kr/images/cloudflare-muryoui-hangye-bildeu/7b096c716d18a6c2b34ad43bd02da505b321dca4.webp)
 
 ## 월 500회 빌드 현실적인 계산
 
-![gXV00UQy.webp](https://img.aikorea24.kr/images/cloudflare-muryoui-hangye-bildeu/7b096c716d18a6c2b34ad43bd02da505b321dca4.webp)
+
 
 월 500회를 30일로 나누면 하루 약 16회입니다. 하루 16번이면 넉넉해 보이지만, 실제로 개발 중에는 쉽게 넘길 수 있는 숫자입니다. 특히 바이브코딩 초반에는 AI에게 이것저것 요청하고 결과를 확인하느라 배포 횟수가 많아집니다.
 
 한 달 동안 여러 프로젝트를 진행하면 상황이 더 빡빡해집니다. Cloudflare 계정 전체에서 500회가 공유되기 때문입니다. 프로젝트 3개를 운영하면 각각 월 160회 정도만 사용할 수 있습니다. 계획적인 배포가 필요합니다.
 
----
 
 ## 하루 1회 배포 전략
 
