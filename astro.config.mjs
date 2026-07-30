@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import mdx from '@astrojs/mdx';
 import cloudflare from '@astrojs/cloudflare';
+import remarkGfm from 'remark-gfm';
 
 export default defineConfig({
   site: 'https://aikorea24.kr',
@@ -14,4 +15,8 @@ export default defineConfig({
     tailwind({ applyBaseStyles: false }),
     mdx()
   ],
+  markdown: {
+    gfm: false,
+    remarkPlugins: [[remarkGfm, { singleTilde: false }]],
+  },
 });
