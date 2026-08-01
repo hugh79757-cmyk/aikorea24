@@ -573,7 +573,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
 
 {all_articles_joined}"""}],
                 temperature=0.9,
-                max_tokens=3000,
+                max_tokens=6000,
                 model_override='deepseek',
             )
             pitches = parse_pitches_from_text(resp, articles_text)
@@ -595,7 +595,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
 
 {all_articles_joined}"""}],
                     temperature=0.9,
-                    max_tokens=3000,
+                    max_tokens=6000,
                     model_override='deepseek',
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
@@ -748,7 +748,7 @@ def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, o
 제목: {article_title}
 URL: {article_url}
 본문:
-{body[:8000]}
+{body[:15000]}
 
 === 참고: description 기반 1차 선별 결과 ===
 hook: {ref_hook}
@@ -762,7 +762,7 @@ question: {ref_question}
             system_prompt=system,
             messages=[{'role': 'user', 'content': user_msg}],
             temperature=0.7,
-            max_tokens=3000,
+            max_tokens=6000,
             model_override='deepseek',
         )
         if not resp:

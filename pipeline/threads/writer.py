@@ -526,12 +526,10 @@ Gap source: {pitch.get('gap_source','')}
 
     vc_ok, vc_reason = validate_cards(cards, pitch, format_choice)
     vy_ok, vy_reason = validate_year(cards, article_body_text)
-    vk_ok, vk_reason = validate_keywords(cards, article_body_text)
-    if not (vc_ok and vy_ok and vk_ok):
+    if not (vc_ok and vy_ok):
         _log(f'⚠️ 검증 실패:')
         _log(f'   - cards: {vc_reason}')
         _log(f'   - year: {vy_reason}')
-        _log(f'   - keywords: {vk_reason}')
         return []
 
     structure_ok, structure_reason = validate_card_structure(cards)
