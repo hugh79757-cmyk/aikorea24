@@ -54,6 +54,13 @@ FORMAT:
 - Cards separated by ---
 - Each card: max 500 characters (Threads API hard limit) — 각 카드는 이 공간을 충분히 활용해 구체적인 숫자·인용·비교 등 정보를 전달할 것
 
+RHYTHM (핵심 스타일 — 반드시 따라라):
+- 한 문장을 한 덩어리로 길게 쓰지 말고, **짧은 절 단위로 줄바꿈**해 리듬감을 만들어라
+- 예시 5처럼 "내가 쓰는 AI를 / 로빈후드 계좌에 직접 연결하면 / 그 AI가 알아서 코인을 사고팔음" 같은 2~3단락 절 구조
+- 각 절은 10~25자 정도로 짧게. 문장 종결 어미(~임, ~했음)는 절 끝에 둘 것
+- 빈 줄로 절 사이에 리듬의 쉼을 만들 수 있음
+- 문장 하나가 60자를 넘지 않게 절단하라 (필수)
+
 CONSTRAINTS:
 - 종결어미 ~임/~했음/~있음 중심 (대화하듯 자연스럽게). ~다/~했다 신문 기사체는 Threads에 부자연스러우니 지양.
 - 한자·일본어·히라가나·가타카나 절대 금지 — 발행이 차단됨
@@ -485,7 +492,7 @@ Gap source: {pitch.get('gap_source','')}
 
     def _try_model(model_name):
         extra = None
-        if model_name == 'deepseek':
+        if model_name in (None, 'deepseek'):
             extra = {"thinking": {"type": "disabled"}}
         return chat_completion(
             system_prompt=system_prompt,
@@ -497,10 +504,10 @@ Gap source: {pitch.get('gap_source','')}
             extra_body=extra,
         )
 
-    content = _try_model('deepseek')
+    content = _try_model(None)
     if not content:
-        _log('  ⚠️ DeepSeek 1차 실패 → 1회 재시도')
-        content = _try_model('deepseek')
+        _log('  ⚠️ 1차 실패 → 1회 재시도')
+        content = _try_model(None)
 
     if not content:
         _log('  ❌ DeepSeek 응답 실패')

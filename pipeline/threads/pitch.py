@@ -573,8 +573,8 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
 
 {all_articles_joined}"""}],
                 temperature=0.9,
-                max_tokens=6000,
-                model_override='deepseek',
+                max_tokens=8000,
+                model_override=None,
             )
             pitches = parse_pitches_from_text(resp, articles_text)
             _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -595,8 +595,8 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
 
 {all_articles_joined}"""}],
                     temperature=0.9,
-                    max_tokens=6000,
-                    model_override='deepseek',
+                    max_tokens=8000,
+                    model_override=None,
                 )
                 pitches = parse_pitches_from_text(resp2, articles_text)
                 _log(f'[배치 {idx+1}/{len(batches)}] → {len(pitches)}개 피치 발견')
@@ -762,8 +762,8 @@ question: {ref_question}
             system_prompt=system,
             messages=[{'role': 'user', 'content': user_msg}],
             temperature=0.7,
-            max_tokens=6000,
-            model_override='deepseek',
+            max_tokens=8000,
+            model_override=None,
         )
         if not resp:
             return None

@@ -228,8 +228,8 @@ def validate_model_message(card: str) -> bool:
             return False, "모델 메시지 패턴 탐지"
 
     # Structural checks
-    # 1. Minimum length
-    if len(card) < 20:
+    # 1. Minimum length (절 스타일: 10자까지 허용)
+    if len(card) < 10:
         return False, f"최소 길이 미달 ({len(card)}자)"
 
     # 2. Korean content requirement
@@ -261,8 +261,8 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
         if card.startswith('🔗'):
             continue
 
-        # 3. Minimum length
-        if len(card) < 20:
+        # 3. Minimum length (절 스타일: 짧은 절도 허용)
+        if len(card) < 10:
             return False, f"Card {i}: 너무 짧음 ({len(card)}자)"
 
         # 4. Korean content (AI/tech 뉴스는 고유명사/모델명/숫자가 많아 15%로 완화)
@@ -270,9 +270,10 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
         if len(card) > 0 and korean_chars / len(card) < 0.15:
             return False, f"Card {i}: 한글 비율 부족 ({korean_chars}/{len(card)})"
 
-        # 5. Content density
-        content_chars = len(re.findall(r'\S', card))
-        if len(card) > 0 and content_chars / len(card) < 0.5:
+        # 5. Content density (절 + 줄바꿈 스타일 허용 — 개행은 공백으로 치지 않음)
+        no_newlines = card.replace('\n', '')
+        content_chars = len(re.findall(r'\S', no_newlines))
+        if len(no_newlines) > 0 and content_chars / len(no_newlines) < 0.5:
             return False, f"Card {i}: 공백 과다"
 
         # 6. Sentence completeness (body cards only)
@@ -295,8 +296,8 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
         if len(hook_first_line.strip()) < 8 or len(hook_first_line) > 350:
             return False, f"Hook 길이 비정상 ({len(hook_first_line)}자)"
 
-    # 8. Body card length (일부 카드는 의도적으로 짧을 수 있음 → 30자로 완화)
-    body_min = 30
+    # 8. Body card length (절 스타일: 12자까지 허용, 상한 500자 유지)
+    body_min = 12
     for i, card in enumerate(cards[2:], 3):  # Skip hook and link
         card = card.strip()
         if card.startswith('🔗'):
