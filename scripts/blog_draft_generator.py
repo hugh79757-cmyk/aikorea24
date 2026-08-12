@@ -171,20 +171,85 @@ def get_briefing_articles():
 # ============================================
 # 블로그 초안 생성 (MiMo v2.5 via model_router)
 # ============================================
-def generate_draft(keyword, articles, grade):
+def generate_draft(keyword, articles, grade, retry_count=0):
     is_deep = len(articles) == 1
 
-    # 기사 텍스트 조립
+    # 기사 텍스트 조립 — 원문 URL·출처·발행일 포함 (Task 1)
     article_lines = []
+    articles_with_url = []
     for i, a in enumerate(articles, 1):
         desc = (a.get("description") or "")[:300]
-        article_lines.append(f"[기사 {i}]\n"
-                             f"제목: {a['title']}\n"
-                             f"출처: {a['source']}\n"
-                             f"내용: {desc}")
+        link = a.get("link", "") or ""
+        source = a.get("source", "") or ""
+        published_at = a.get("published_at", "") or ""
+        article_lines.append(
+            f"[기사 {i}]\n"
+            f"제목: {a['title']}\n"
+            f"매체: {source}\n"
+            f"원문 URL: {link}\n"
+            f"원문 발행일: {published_at}\n"
+            f"내용: {desc}"
+        )
+        if link:
+            articles_with_url.append(a)
+
     articles_str = "\n\n".join(article_lines)
 
-    # GPT 프롬프트
+    # 원문 URL이 없는 기사가 있으면 경고 (초안 큐 보관 대상)
+    articles_without_url = [a for a in articles if not (a.get("link") or "")]
+    if articles_without_url:
+        log(f"  ⚠️ 원문 URL 없는 기사 {len(articles_without_url)}건 — 자동 발행 제외 대상")
+
+    # GPT 프롬프트 — 원문 분류·조건 분기·출처 강제·content_type별 섹션 포함 (Task 2)
+    prompt_extra = ""
+    if articles_without_url:
+        prompt_extra += (
+            f"\n\n[⚠️ 주의: 아래 {'여러' if not is_deep else '한'} 기사 중 "
+            f"원문 URL이 없는 기사가 있습니다. 해당 기사의 수치는 '원문 기준'으로 표기하고, "
+            f"가능하면 다른 기사의 원문 URL로 교차 확인하십시오. "
+            f"URL을 임의로 생성하지 마십시오.]\n"
+        )
+
+    common_rules = f"""
+[사전 분석 - 반드시 먼저 수행]
+아래 원문을 분석하여 다음 플래그를 판정하라. 결과는 내부적으로만 사용한다.
+- has_numeric: 수치 데이터(금액/퍼센트/성능수치/사용자수/날짜별 변화)가 2개 이상 있는가? (Y/N)
+- has_comparison: 비교 대상이 2개 이상인가? (기업 vs 기업, 이전 vs 이후, 모델 vs 모델) (Y/N)
+- has_source_entity: 특정 출처가 명시돼 있는가? (기업 실적발표, 조사기관 보고서, 논문, SEC 공시 등) (Y/N)
+- content_type: [실적/시장] | [제품출시] | [연구/논문] | [사건/논란] | [정책/규제] 중 하나
+
+[조건 분기 — 표 삽입 규칙]
+- has_numeric=Y AND has_comparison=Y → 비교표 필수 (항목·값A·값B·변화율 열 포함, 모든 행 값 채워야 함)
+- has_numeric=Y AND has_comparison=N → 사실확인표 필수 (지표·수치·기준일·출처 열 포함, 모든 행 값 채워야 함)
+- has_numeric=N → 표 대신 핵심 요점 3줄로 대체
+- content_type=[연구/논문] → 표 + 방법론 한 줄 명시 필수
+- 표를 생성할 경우 모든 셀이 채워져야 한다. 빈 셀이 있으면 초안 reject 대상.
+
+[출처 규칙 — 위반 시 재생성]
+- 본문에 등장하는 모든 수치는 출처 각주 또는 인라인 링크를 가져야 한다.
+- has_source_entity=Y인 경우: 원문 출처(기관명+보고서명)를 본문에 명시하고, 원문 URL을 [출처] 섹션에 최소 1개 넣는다.
+- 출처를 확인할 수 없는 수치는 "~로 알려졌다" 대신 문장에서 삭제하거나 "원문 기준" 표기를 명시한다.
+- 추측성 수치를 생성하지 않는다. 원문 URL을 그대로 Markdown 링크로 사용한다.
+
+[content_type별 필수 섹션]
+공통(항상): 한 문장 결론(첫 120자 내) → 본문 → [한국 독자 관점] 섹션 → [요약] 섹션
+- [실적/시장]: 사실확인표 + "투자/사업 관점 시사점"(단, 투자권유 아님 명시)
+- [제품출시]: 스펙/가격표 + "기존 대안과 비교" + "국내 사용 가능 여부"
+- [연구/논문]: 방법론/한계 + 원논문 링크
+- [사건/논란]: 사실관계 타임라인 + 입장 양측 병기
+- [정책/규제]: "한국 현행 제도와 비교" 필수
+
+[제목 규칙]
+- 한국어 독자가 검색하는 키워드를 기준으로 제목을 작성한다.
+- 영문 원제를 그대로 제목으로 쓰지 않는다. 반드시 한국어로 번역·요약한 제목을 사용한다.
+- 제목에 영문이 섞이더라도 한글이 주가 되어야 한다.
+
+[독자 행동·관련 허브]
+- 글 마지막에 [관련 문서] 섹션을 넣어 aikorea24 내 관련 글(허브)로 연결한다.
+  (정확한 URL이 없으면 글 제목만 링크 텍스트로 표시)
+- 독자가 이 글을 읽은 뒤 취할 수 있는 구체적 행동 1~2개를 [액션] 항목 형태로 제시한다.
+"""
+
     if is_deep:
         system_prompt = (
             "당신은 AI/테크 뉴스를 분석하는 한국어 블로거입니다. "
@@ -194,46 +259,52 @@ def generate_draft(keyword, articles, grade):
         user_prompt = (
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
-            f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
+            f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목 (한글 우선)\n"
             f"- 본문: 1500자 이상, 소제목(##) 3개 이상 포함\n"
             f"- 기사의 배경/의미/전망을 분석, 독자가 쉽게 이해할 수 있도록\n"
-            f"- 마지막에 📌 **요약** 섹션 포함\n"
+            f"- 기사 수치·비교 데이터가 있으면 적절한 표를 반드시 포함\n"
+            f"- 마지막에 📌 **요약** 섹션 + [한국 독자 관점] 섹션 + [관련 문서] 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
-            f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
+            f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', "
             f"'살펴보겠습니다', '알아보겠습니다', '다루겠습니다' 등 메타 성격의 도입문(메타 도입문) 절대 금지.** "
-            f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n\n"
+            f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n"
+            f"{common_rules}\n\n"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
             f"[마크다운 본문]\n\n"
-            f"## 기사\n{articles_str}"
+            f"## 원문 기사\n{articles_str}"
+            f"{prompt_extra}"
         )
     else:
         system_prompt = (
             "당신은 AI/테크 뉴스를 분석하는 한국어 블로거입니다. "
             "여러 기사를 종합하여 트렌드 분석 블로그 초안을 작성해주세요. "
-            "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
+            " 중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
         )
         user_prompt = (
             f"아래 '{keyword}' 관련 여러 기사를 종합한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
-            f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목\n"
+            f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목 (한글 우선)\n"
             f"- 본문: 2000자 이상, 소제목(##) 3개 이상 포함\n"
             f"- 각 기사의 핵심 내용을 비교/종합하여 트렌드 분석\n"
-            f"- 마지막에 📌 **요약** 섹션 포함\n"
+            f"- 여러 기사에 수치·비교 데이터가 있으면 비교표를 반드시 포함\n"
+            f"- 마지막에 📌 **요약** 섹션 + [한국 독자 관점] 섹션 + [관련 문서] 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
-            f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
+            f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', "
             f"'살펴보겠습니다', '알아보겠습니다', '다루겠습니다' 등 메타 성격의 도입문(메타 도입문) 절대 금지.** "
-            f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n\n"
+            f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n"
+            f"{common_rules}\n\n"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
             f"[마크다운 본문]\n\n"
-            f"## 기사들\n{articles_str}"
+            f"## 원문 기사들\n{articles_str}"
+            f"{prompt_extra}"
         )
 
     content = chat_completion(
@@ -319,6 +390,328 @@ _KOREAN_SENTENCE_ENDINGS = (
 
 # 컴파일된 정규식 (성능 최적화)
 _KOR_END_PATTERN = re.compile(_KOREAN_SENTENCE_ENDINGS)
+
+# ============================================
+# 유틸: 숫자+단위 추출 정규식 (검수 게이트용)
+# ============================================
+# 숫자(정수/소수) + 단위(%, 억, 만, 달러, $, 배, 배율, 포인트, 퍼센트, 배)
+_NUMERIC_UNIT_PATTERN = re.compile(
+    r'(\d+[\.\d]*)\s*(%|억|만|달러|\$|배|배율|포인트|퍼센트)',
+    re.IGNORECASE
+)
+# 보완: 숫자 뒤에 단위가 바로 붙는 경우 (예: "13%", "2배", "100억")
+_NUMERIC_DIRECT_PATTERN = re.compile(
+    r'(\d+[\.\d]*)(%|달러|\$|억|만|배|포인트|퍼센트)',
+    re.IGNORECASE
+)
+# Markdown 링크 패턴: [텍스트](URL)
+_MD_LINK_PATTERN = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+# 출처 엔티티 힌트: 기관명/보고서명 등이 포함된 단어 (대략적)
+_SOURCE_ENTITY_HINTS = re.compile(
+    r'(보고서|조사|발표|공시|데이터|통계|연구|논문|조사결과|분석|자료|기준|원문)',
+    re.IGNORECASE
+)
+
+# 결론 신호어 패턴 (첫 120자 내 결론 판정용)
+_CONCLUSION_SIGNAL_PATTERN = re.compile(
+    r'(이다|로 나타났다|로 확인됐다|라는 결과다|것으로 나타났다|으로 나타났다|'
+    r'로 조사됐다|로 밝혀졌다|로 드러났다|것으로 확인됐다|것으로 조사됐다|'
+    r'것이다|라는 점이다|라는 것이다|수준이다|기록했다|증가했다|감소했다|'
+    r'올랐다|내렸다|상승했다|하락했다|돌파했다|넘어섰다|보였다|보여줬다|'
+    r'시작됐다|주목했다|확인됐다|밝혀졌다|드러났다|나타났다|조사됐다|기록됐다|'
+    r'발표했다|공개했다|도입했다|출시했다|확대했다|축소했다|개선했다|하락세|상승세)',
+    re.IGNORECASE
+)
+
+# 영문 비율 계산용 (한글/한자 제외 순수 영문 글자)
+_LETTER_PATTERN = re.compile(r'[A-Za-z]')
+_HANGUL_PATTERN = re.compile(r'[가-힣]')
+
+# Markdown 표 파서
+def _parse_markdown_tables(text):
+    """텍스트에서 Markdown 표를 파싱하여 (헤더행, 데이터행들) 리스트 반환.
+    각 행은 셀 문자열 리스트. 구분선 행(|---|...)은 무시.
+    """
+    tables = []
+    lines = text.split('\n')
+    in_table = False
+    header = None
+    rows = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped.startswith('|') or not stripped.endswith('|'):
+            if in_table:
+                # 표 종료
+                if header is not None and rows:
+                    tables.append((header, rows))
+                in_table = False
+                header = None
+                rows = []
+            continue
+
+        # 셀 분할
+        cells = [c.strip() for c in stripped.split('|')[1:-1]]
+        # 구분선 행 체크 (| --- | --- | 등)
+        if all(re.match(r'^[-: ]+$', c) for c in cells):
+            if in_table and header is not None:
+                # 구분선 발견 → 기존 헤더 유지, 새로운 데이터 행수집 시작
+                pass
+            continue
+
+        if not in_table:
+            in_table = True
+            header = cells
+            rows = []
+        else:
+            rows.append(cells)
+
+    if in_table and header is not None and rows:
+        tables.append((header, rows))
+
+    return tables
+
+def _check_table_integrity(draft_text):
+    """표 무결성 검수: 빈 셀(값이 비어있는 셀)이 있는지 확인.
+    반환: (passed: bool, empty_cells: int, table_count: int)
+    """
+    tables = _parse_markdown_tables(draft_text)
+    if not tables:
+        return (True, 0, 0)  # 표가 없으면 통과 (표 강제는 프롬프트에서 처리)
+
+    total_empty = 0
+    table_count = len(tables)
+    for header, rows in tables:
+        all_cells = [header] + rows
+        for row in all_cells:
+            for cell in row:
+                if cell == '':
+                    total_empty += 1
+
+    passed = total_empty == 0
+    return (passed, total_empty, table_count)
+
+def _check_title_language(title):
+    """제목 언어 일관성 검수: 영문 비율이 40% 초과면 fail.
+    title은 '#'이나 'TITLE:' 접두사가 제거된 순수 제목 문자열로 전달 필요.
+    반환: (passed: bool, en_ratio: float)
+    """
+    if not title:
+        return (True, 0.0)
+
+    letters = _LETTER_PATTERN.findall(title)
+    hanguls = _HANGUL_PATTERN.findall(title)
+    total_letters = len(letters) + len(hanguls)
+
+    if total_letters == 0:
+        # 숫자·기호뿐이면 통과
+        return (True, 0.0)
+
+    en_ratio = len(letters) / total_letters
+    passed = en_ratio <= 0.40
+    return (passed, en_ratio)
+
+def _check_first_120chars_conclusion(draft_text):
+    """첫 120자 내 결론 신호어 포함 여부 검정.
+    반환: (passed: bool, has_signal: bool, first_120: str)
+    """
+    if not draft_text:
+        return (False, False, "")
+
+    first_120 = draft_text[:120]
+    has_signal = bool(_CONCLUSION_SIGNAL_PATTERN.search(first_120))
+    passed = has_signal
+    return (passed, has_signal, first_120)
+
+def _find_numbers_without_source(draft_text):
+    """출처 없는 숫자 검출 (heuristic).
+    숫자+단위 패턴을 모두 찾고, 해당 문단에 링크 또는 출처 엔티티 힌트가 있는지 확인.
+    반환: [(number_str, 문단_index, has_source: bool), ...]
+    """
+    if not draft_text:
+        return []
+
+    paragraphs = re.split(r'\n\n+', draft_text)
+    results = []
+
+    for pi, para in enumerate(paragraphs):
+        # 문단에서 숫자+단위 패턴 모두 찾기
+        # 직접 붙는 패턴 우선
+        for m in _NUMERIC_DIRECT_PATTERN.finditer(para):
+            num_str = m.group(0)
+            # 같은 문단에 Markdown 링크나 출처 힌트가 있는지
+            has_link = bool(_MD_LINK_PATTERN.search(para))
+            has_source_hint = bool(_SOURCE_ENTITY_HINTS.search(para))
+            has_source = has_link or has_source_hint
+            results.append((num_str, pi, has_source))
+
+        # 공백이 있는 패턴 (예: "13 %", "350 억")
+        for m in _NUMERIC_UNIT_PATTERN.finditer(para):
+            num_str = m.group(0)
+            has_link = bool(_MD_LINK_PATTERN.search(para))
+            has_source_hint = bool(_SOURCE_ENTITY_HINTS.search(para))
+            has_source = has_link or has_source_hint
+            # 중복 체크: 이미 direct 패턴에서 잡혔으면 skip
+            if num_str not in [r[0] for r in results if r[1] == pi]:
+                results.append((num_str, pi, has_source))
+
+    return results
+
+def _judge_generalness_llm(paragraphs, max_paragraphs=5):
+    """LLM 일반론 판정: 각 문단이 특정 사실 없이 일반적으로 성립하는지 판정.
+    비용 고려로 최대 max_paragraphs개만 검사.
+    반환: {'general_count': int, 'total_checked': int, 'general_ratio': float, 'details': list}
+    모델 호출이 불가능하면 {'error': '모델 호출 불가'} 반환.
+    """
+    if not paragraphs:
+        return {'general_count': 0, 'total_checked': 0, 'general_ratio': 0.0, 'details': []}
+
+    # 샘플 문단 선택 (앞에서부터 최대 max_paragraphs개)
+    sample = paragraphs[:max_paragraphs]
+    total_checked = len(sample)
+
+    prompt_items = []
+    for i, p in enumerate(sample, 1):
+        # 빈 문단/너무 짧은 문단 스킵
+        if len(p.strip()) < 20:
+            continue
+        prompt_items.append(f"문단 {i}:\n{p.strip()}\n\n")
+
+    if not prompt_items:
+        return {'general_count': 0, 'total_checked': 0, 'general_ratio': 0.0, 'details': []}
+
+    # model_router.chat_completion 호출
+    try:
+        from model_router import chat_completion
+        prompt_text = (
+            "다음 각 문단이 특정 사실·수치·사건·인용 없이 일반적으로 성립하는 문장인지 판정하라. "
+            "각 문단마다 'Y'(일반론) 또는 'N'(특정 사실 있음)으로만 줄마다 답하라. "
+            "다른 말은 하지 마라.\n\n"
+            + "".join(prompt_items)
+        )
+        response = chat_completion(
+            messages=[{"role": "user", "content": prompt_text}],
+            system_prompt="당신은 텍스트 분석 전문가다. 객관적으로 판정하라.",
+            max_tokens=200,
+            temperature=0.0,
+        )
+        if not response:
+            return {'error': 'LLM 응답 없음'}
+
+        lines = [l.strip() for l in response.strip().split('\n') if l.strip()]
+        general_count = sum(1 for l in lines if l.upper() == 'Y')
+        actual_checked = len(lines)
+
+        return {
+            'general_count': general_count,
+            'total_checked': actual_checked,
+            'general_ratio': general_count / actual_checked if actual_checked > 0 else 0.0,
+            'details': lines,
+        }
+    except Exception as e:
+        logger.warning(f"  ⚠️ LLM 일반론 판정 실패: {e}")
+        return {'error': str(e)}
+
+
+def validate_draft_quality(draft_text, articles):
+    """발행 전 자동 검수 게이트 (heuristic 4 + LLM 1).
+    반환: {
+        'passed': bool,  # 전체 통과 여부
+        'checks': {      # 항목별 결과
+            'numbers_without_source': {'passed': bool, 'unmatched_count': int},
+            'first_120_conclusion': {'passed': bool, 'has_signal': bool},
+            'table_integrity': {'passed': bool, 'empty_cells': int, 'table_count': int},
+            'title_language': {'passed': bool, 'en_ratio': float},
+            'generalness': {'passed': bool, 'general_ratio': float, 'error': str|None},
+        },
+        'reasons': [str],  # 실패 사유 목록
+    }
+    """
+    reasons = []
+    checks = {}
+
+    # 1. 출처 없는 숫자 (heuristic)
+    num_results = _find_numbers_without_source(draft_text)
+    unmatched = [r for r in num_results if not r[2]]
+    checks['numbers_without_source'] = {
+        'passed': len(unmatched) == 0,
+        'unmatched_count': len(unmatched),
+    }
+    if unmatched:
+        sample = unmatched[:3]
+        reasons.append(
+            f"출처 없는 숫자 {len(unmatched)}건 검출: {', '.join(r[0] for r in sample)}"
+        )
+
+    # 2. 첫 120자 결론 (heuristic)
+    concl_passed, has_signal, first_120 = _check_first_120chars_conclusion(draft_text)
+    checks['first_120_conclusion'] = {
+        'passed': concl_passed,
+        'has_signal': has_signal,
+    }
+    if not concl_passed:
+        reasons.append(
+            f"첫 120자에 결론 신호어 없음 (앞부분: '{first_120[:60]}...')"
+        )
+
+    # 3. 표 무결성 (heuristic)
+    tbl_passed, empty_cells, table_count = _check_table_integrity(draft_text)
+    checks['table_integrity'] = {
+        'passed': tbl_passed,
+        'empty_cells': empty_cells,
+        'table_count': table_count,
+    }
+    if not tbl_passed:
+        reasons.append(f"표에 빈 셀 {empty_cells}개 존재 (표 {table_count}개)")
+
+    # 4. 제목 언어 일관성 (heuristic) — 제목 추출 필요
+    # TITLE: ... 줄에서 제목 추출
+    title = ""
+    if "TITLE:" in draft_text:
+        parts = draft_text.split("TITLE:", 1)
+        title_line = parts[1].split("\n", 1)[0].strip()
+        title = title_line
+    elif draft_text.startswith("# "):
+        title = draft_text.split("\n", 1)[0].strip("# ").strip()
+
+    lang_passed, en_ratio = _check_title_language(title)
+    checks['title_language'] = {
+        'passed': lang_passed,
+        'en_ratio': en_ratio,
+    }
+    if not lang_passed:
+        reasons.append(f"제목 영문 비율 {en_ratio:.0%}로 40% 초과 (제목: '{title[:50]}')")
+
+    # 5. 일반론 과다 (LLM) — 별도 호출
+    paragraphs = [p.strip() for p in re.split(r'\n\n+', draft_text) if p.strip()]
+    # 소제목(##) 라인 필터링: 순수 본문 문단만
+    body_paras = [p for p in paragraphs if not p.startswith('##') and not p.startswith('TITLE')]
+    generalness = _judge_generalness_llm(body_paras, max_paragraphs=5)
+    if 'error' in generalness:
+        # LLM 실패 시 경고만 하고 통과 처리 (과도한 발행 차단 방지)
+        checks['generalness'] = {
+            'passed': True,
+            'general_ratio': 0.0,
+            'error': generalness['error'],
+        }
+        reasons.append(f"일반론 판정 LLM 실패 (경고): {generalness['error']}")
+    else:
+        gen_ratio = generalness['general_ratio']
+        gen_passed = gen_ratio <= 0.30
+        checks['generalness'] = {
+            'passed': gen_passed,
+            'general_ratio': gen_ratio,
+            'error': None,
+        }
+        if not gen_passed:
+            reasons.append(f"일반론 문단 비율 {gen_ratio:.0%}로 30% 초과 (LLM 판정)")
+
+    all_passed = all(c['passed'] for c in checks.values())
+    return {
+        'passed': all_passed,
+        'checks': checks,
+        'reasons': reasons,
+    }
 
 
 # ============================================
@@ -568,6 +961,15 @@ def main():
             gpt_output = generate_draft(title, [art], "A")
             if not gpt_output:
                 log(f"    ❌ 생성 실패")
+                continue
+
+            # 발행 전 검수 게이트 (Task 3)
+            quality = validate_draft_quality(gpt_output, [art])
+            if not quality['passed']:
+                log(f"    ⚠️ 검수 실패 — 초안 큐 보관:")
+                for reason in quality['reasons']:
+                    log(f"      - {reason}")
+                log(f"    (검수 상세: {quality['checks']})")
                 continue
 
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
