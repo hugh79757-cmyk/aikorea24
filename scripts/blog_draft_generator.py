@@ -1014,12 +1014,55 @@ def main():
     
     dup_result = check_thumbnail_duplicates(thumb_paths)
     dup_count = len(dup_result["duplicates"])
-    
+
     if dup_count > 0:
         log(f"  ⚠️ 썸네일 중복 감지: {dup_count}개 쌍 (고유 {dup_result['unique_count']}/{len(thumb_paths)})")
+
+        # [28-04] 중복 발생 조건 추적 로그 (재발 방지)
+        dup_conditions = {
+            "dup_count": dup_count,
+            "unique_count": dup_result["unique_count"],
+            "total_thumbnails": len(thumb_paths),
+            "duplicate_pairs": [],
+            "hash_groups": {},
+        }
+        for h, paths in dup_result["hash_map"].items():
+            if len(paths) > 1:
+                dup_conditions["hash_groups"][h] = [
+                    os.path.basename(os.path.dirname(p)) for p in paths
+                ]
+
+        # 중복 쌍 상세 로깅 + 조건 정보 축적
         for p1, p2, h in dup_result["duplicates"]:
-            log(f"    중복: {os.path.basename(os.path.dirname(p1))} = {os.path.basename(os.path.dirname(p2))} (MD5: {h[:8]}...)")
-        
+            slug1 = os.path.basename(os.path.dirname(p1))
+            slug2 = os.path.basename(os.path.dirname(p2))
+            log(f"    중복: {slug1} = {slug2} (MD5: {h})")
+            log(f"      경로: {p1} ↔ {p2}")
+            dup_conditions["duplicate_pairs"].append({
+                "slug1": slug1, "slug2": slug2,
+                "md5": h, "path1": p1, "path2": p2,
+            })
+
+        # 중복 감지 시 상세 텔레그램 알림 [28-04]
+        dup_msg_parts = [f"⚠️ <b>[{today_str}] 썸네일 중복 감지</b>"]
+        dup_msg_parts.append(f"\n👥 중복: {dup_count}쌍 | 고유: {dup_result['unique_count']}/{len(thumb_paths)}")
+        for entry in dup_conditions["duplicate_pairs"]:
+            dup_msg_parts.append(
+                f"\n  · <code>{entry['slug1']}</code> = <code>{entry['slug2']}</code>"
+                f"\n    MD5: <code>{entry['md5']}</code>"
+                f"\n    경로: <code>{entry['path1']}</code> ↔ <code>{entry['path2']}</code>"
+            )
+        dup_msg_parts.append(f"\n🔄 자동 재시도 진행 예정 (슬러그별 최대 2회)")
+        send_telegram("\n".join(dup_msg_parts))
+
+        # [28-04] 재발 방지 추적용 구조화 로그 (중복 조건 기록)
+        log(f"  [중복추적] detected={{"
+            f"dup_count: {dup_count}, "
+            f"unique_count: {dup_result['unique_count']}, "
+            f"total: {len(thumb_paths)}, "
+            f"hash_groups: {json.dumps(dup_conditions['hash_groups'], ensure_ascii=False)}"
+            f"}}")
+
         # 중복된 포스트 재시도 (슬러그별 최대 2회, 다른 키워드 강제)
         duplicate_slugs = set()
         for p1, p2, _ in dup_result["duplicates"]:
@@ -1069,16 +1112,39 @@ def main():
             thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
             if os.path.exists(thumb_path):
                 thumb_paths.append(thumb_path)
-        dup_result = check_thumbnail_duplicates(thumb_paths)
-        dup_count = len(dup_result["duplicates"])
+        dup_result_after = check_thumbnail_duplicates(thumb_paths)
+        dup_count_after = len(dup_result_after["duplicates"])
         retry_count = total_retries  # 텔레그램 알림용
-        if dup_count == 0:
-            log(f"  ✅ 재시도 후 중복 해소: 고유 {dup_result['unique_count']}/{len(thumb_paths)}")
+
+        if dup_count_after == 0:
+            log(f"  ✅ 재시도 후 중복 해소: 고유 {dup_result_after['unique_count']}/{len(thumb_paths)}")
+            # [28-04] 재시도 완료 알림 (중복 해소됨)
+            resolved_slugs = [s for s in duplicate_slugs if s not in
+                              {os.path.basename(os.path.dirname(p)) for p, _, _ in dup_result_after["duplicates"]}]
+            if resolved_slugs:
+                send_telegram(
+                    f"✅ <b>[{today_str}] 썸네일 중복 해소 완료</b>\n"
+                    f"\n재시도 {retry_count}건 | 중복 {dup_count}쌍 → 해소\n"
+                    f"해소된 슬러그: {', '.join(sorted(resolved_slugs))}"
+                )
         else:
-            log(f"  ⚠️ 재시도 후에도 중복 잔존: {dup_count}개 쌍")
+            log(f"  ⚠️ 재시도 후에도 중복 잔존: {dup_count_after}개 쌍")
+            # [28-04] 재시도 후 중복 잔존 시 별도 경고 알림
+            residual_msg = [f"⚠️ <b>[{today_str}] 썸네일 중복 재시도 후에도 잔존</b>"]
+            residual_msg.append(f"\n재시도: {retry_count}건 | 잔존 중복: {dup_count_after}쌍")
+            residual_msg.append(f"\n잔존 슬러그 쌍:")
+            for p1, p2, h in dup_result_after["duplicates"]:
+                s1 = os.path.basename(os.path.dirname(p1))
+                s2 = os.path.basename(os.path.dirname(p2))
+                residual_msg.append(f"  · <code>{s1}</code> = <code>{s2}</code> (MD5: <code>{h}</code>)")
+            if retry_count >= 2:
+                residual_msg.append(f"\nℹ️ 재시도 한도(슬러그당 2회) 도달 — 수동 조치 필요")
+            send_telegram("\n".join(residual_msg))
     else:
         log(f"  ✅ 썸네일 중복 검증 통과: 고유 {dup_result['unique_count']}/{len(thumb_paths)}")
         retry_count = 0  # 텔레그램 알림용
+        dup_count_after = 0
+        dup_result_after = dup_result  # 참조용 (중복 없음)
 
     # deep_dive_url이 없는 항목은 update_deep_dive_url이 save_draft 내에서 호출됨
     # (save_draft → articles 파라미터로 전달된 기사들의 id로 deep_dive_url 업데이트)
@@ -1093,10 +1159,14 @@ def main():
             fname = os.path.basename(fp)
             msg_lines.append(f"\n  #{sort_order} {title[:60]} → {fname}")
         msg_lines.append(f"\n🔗 딥링크 연결 완료")
-        if dup_count > 0:
-            msg_lines.append(f"\n⚠️ 썸네일 중복: {dup_count}쌍 감지 (재시도 {retry_count}건)")
+        if dup_count_after > 0:
+            msg_lines.append(f"\n⚠️ 썸네일 중복: {dup_count_after}쌍 잔존 (재시도 {retry_count}건)")
+            for p1, p2, h in dup_result_after["duplicates"]:
+                s1 = os.path.basename(os.path.dirname(p1))
+                s2 = os.path.basename(os.path.dirname(p2))
+                msg_lines.append(f"  · <code>{s1}</code> = <code>{s2}</code> (MD5: <code>{h}</code>)")
         else:
-            msg_lines.append(f"\n✅ 썸네일 중복 검증 통과")
+            msg_lines.append(f"\n✅ 썸네일 중복 검증 통과 (고유 {dup_result_after['unique_count']}/{len(thumb_paths)})")
         if skipped:
             msg_lines.append(f"\n⏭ 이미 연결됨: {len(skipped)}건")
         send_telegram("\n".join(msg_lines))
