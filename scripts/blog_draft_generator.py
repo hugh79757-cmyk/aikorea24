@@ -973,7 +973,8 @@ def main():
                 continue
 
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
-            created.append((filepath, seo_title or title, sort_order, 1))
+            # article 링크/설명도 함께 저장 (썸네일 중복 재시도 시 사용)
+            created.append((filepath, seo_title or title, sort_order, 1, link, art.get("description", "")))
             file_num += 1
 
             # 썸네일 생성 (Pexels)
@@ -992,13 +993,20 @@ def main():
             log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
 
     # generated/skipped 분류 (thumbnail 검증에 필요하므로 여기서 미리 정의)
+    # created 튜플: (filepath, title, sort_order, count, article_link, article_description)
     generated = [c for c in created if c[0] is not None]
     skipped = [c for c in created if c[0] is None]
+
+    # article 링크/설명을 빠르게 조회할 수 있는 매핑 (slug → (link, description))
+    article_info_by_slug = {}
+    for fp, title, sort_order, count, art_link, art_desc in generated:
+        slug = os.path.basename(fp).replace('.md', '').lower()
+        article_info_by_slug[slug] = (art_link, art_desc)
 
     # 썸네일 중복 검증 게이트 (Plan 28-02)
     log("[검증] 썸네일 중복 검사 중...")
     thumb_paths = []
-    for fp, title, sort_order, _ in generated:
+    for fp, title, sort_order, _, _, _ in generated:
         slug = os.path.basename(fp).replace('.md', '').lower()
         thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
         if os.path.exists(thumb_path):
@@ -1006,59 +1014,71 @@ def main():
     
     dup_result = check_thumbnail_duplicates(thumb_paths)
     dup_count = len(dup_result["duplicates"])
-    retry_count = 0  # Initialize here for scope
     
     if dup_count > 0:
         log(f"  ⚠️ 썸네일 중복 감지: {dup_count}개 쌍 (고유 {dup_result['unique_count']}/{len(thumb_paths)})")
         for p1, p2, h in dup_result["duplicates"]:
             log(f"    중복: {os.path.basename(os.path.dirname(p1))} = {os.path.basename(os.path.dirname(p2))} (MD5: {h[:8]}...)")
         
-        # 중복된 포스트 재시도 (최대 2회, 다른 키워드 강제)
-        # generated 리스트에서 중복된 파일 찾아 재생성
+        # 중복된 포스트 재시도 (슬러그별 최대 2회, 다른 키워드 강제)
         duplicate_slugs = set()
         for p1, p2, _ in dup_result["duplicates"]:
             duplicate_slugs.add(os.path.basename(os.path.dirname(p1)))
             duplicate_slugs.add(os.path.basename(os.path.dirname(p2)))
         
-        for fp, title, sort_order, _ in generated:
+        # slug별 재시도 횟수 추적
+        retry_count_by_slug = {}
+        total_retries = 0
+        
+        for fp, title, sort_order, _, _, _ in generated:
             slug = os.path.basename(fp).replace('.md', '').lower()
-            if slug in duplicate_slugs and retry_count < 2:
-                log(f"  🔄 중복 썸네일 재시도: {slug}")
-                # 강제로 다른 키워드 사용 (DEEPSEEK_POOL에서 랜덤)
-                try:
-                    import random
-                    forced_keyword = random.choice([k for k in DEEPSEEK_POOL if k != "abstract technology"])
-                    # 재생성 시도 (실제로는 process_thumbnail이 내부에서 랜덤 선택하므로 그냥 재호출)
-                    # 원본 article 정보 필요 - generated에는 filepath, title, sort_order만 있음
-                    # article 링크/설명은 별도 저장 필요하므로 생략 (process_thumbnail이 내부에서 랜덤 fallback 처리)
-                    thumb_rel = process_thumbnail(
-                        "",  # link - not easily available here
-                        slug,
-                        title=title,
-                        description=""
-                    )
-                    if thumb_rel:
-                        _add_image_to_frontmatter(fp, thumb_rel)
-                        retry_count += 1
-                        log(f"    재생성 완료: {thumb_rel}")
-                except Exception as retry_e:
-                    log(f"    재시도 실패: {retry_e}")
+            if slug not in duplicate_slugs:
+                continue
+            
+            # 이 슬러그의 현재 재시도 횟수 확인
+            current_retries = retry_count_by_slug.get(slug, 0)
+            if current_retries >= 2:
+                log(f"  ⏭ {slug} 재시도 한도(2회) 도달, 스킵")
+                continue
+            
+            log(f"  🔄 중복 썸네일 재시도 ({current_retries+1}/2): {slug}")
+            art_link, art_desc = article_info_by_slug.get(slug, ("", ""))
+            
+            try:
+                # 원본 article의 링크/설명을 사용하여 Pexels 검색 품질 향상
+                thumb_rel = process_thumbnail(
+                    art_link or "",
+                    slug,
+                    title=title,
+                    description=art_desc or ""
+                )
+                if thumb_rel:
+                    _add_image_to_frontmatter(fp, thumb_rel)
+                    retry_count_by_slug[slug] = current_retries + 1
+                    total_retries += 1
+                    log(f"    재생성 완료: {thumb_rel}")
+                else:
+                    log(f"    재시도 실패: 썸네일 생성 결과 없음")
+            except Exception as retry_e:
+                log(f"    재시도 실패: {retry_e}")
         
         # 재검증
         thumb_paths = []
-        for fp, title, sort_order, _ in generated:
+        for fp, title, sort_order, _, _, _ in generated:
             slug = os.path.basename(fp).replace('.md', '').lower()
             thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
             if os.path.exists(thumb_path):
                 thumb_paths.append(thumb_path)
         dup_result = check_thumbnail_duplicates(thumb_paths)
         dup_count = len(dup_result["duplicates"])
+        retry_count = total_retries  # 텔레그램 알림용
         if dup_count == 0:
             log(f"  ✅ 재시도 후 중복 해소: 고유 {dup_result['unique_count']}/{len(thumb_paths)}")
         else:
             log(f"  ⚠️ 재시도 후에도 중복 잔존: {dup_count}개 쌍")
     else:
         log(f"  ✅ 썸네일 중복 검증 통과: 고유 {dup_result['unique_count']}/{len(thumb_paths)}")
+        retry_count = 0  # 텔레그램 알림용
 
     # deep_dive_url이 없는 항목은 update_deep_dive_url이 save_draft 내에서 호출됨
     # (save_draft → articles 파라미터로 전달된 기사들의 id로 deep_dive_url 업데이트)
