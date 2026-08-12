@@ -97,9 +97,11 @@ def _extract_deepseek_keyword(description):
                         key = line.split("=", 1)[1].strip().strip("\"'")
                         break
     if not key:
-        return None
+        log("  DeepSeek API 토큰 없음 → 즉시 fallback")
+        return random.choice(DEEPSEEK_POOL)
 
     # Retry logic for DeepSeek API (max 3 attempts)
+    last_error = None
     for attempt in range(3):
         try:
             client = OpenAI(base_url="https://api.deepseek.com/v1", api_key=key)
@@ -118,14 +120,33 @@ def _extract_deepseek_keyword(description):
                 log(f"  DeepSeek 성공 (시도 {attempt+1}/3): '{kw}'")
                 return kw
         except Exception as e:
+            last_error = e
             log(f"  DeepSeek 시도 {attempt+1}/3 실패: {e}")
             if attempt < 2:
                 import time
                 time.sleep(1 * (attempt + 1))  # exponential backoff: 1s, 2s
 
-    # All retries failed - random fallback from pool
-    fallback = random.choice(DEEPSEEK_POOL)
-    log(f"  DeepSeek 3회 모두 실패 → 랜덤 fallback: '{fallback}'")
+    # All retries failed - fallback from pool (원본 키워드 추정값 제외)
+    # 설명에서 단어를 추출해 원본 키워드 후보 추정 (간단한 heuristic)
+    estimated_original = None
+    if description:
+        # 설명에서 1-2단어 후보를 추출 시도 (공백 기준 첫 2단어)
+        words = description.lower().split()[:2]
+        candidates = [w for w in words if len(w) >= 3 and w.isalpha()]
+        if candidates:
+            estimated_original = candidates[0]
+
+    # 원본 추정 키워드가 풀에 있으면 제외
+    pool_without_original = DEEPSEEK_POOL
+    if estimated_original and estimated_original in DEEPSEEK_POOL:
+        pool_without_original = [q for q in DEEPSEEK_POOL if q != estimated_original]
+        log(f"  DeepSeek 3회 모두 실패 → 원본 추정 키워드 '{estimated_original}' 제외 후 fallback")
+
+    if not pool_without_original:
+        pool_without_original = DEEPSEEK_POOL  # 안전망
+
+    fallback = random.choice(pool_without_original)
+    log(f"  DeepSeek 3회 모두 실패 (최종 에러: {last_error}) → 랜덤 fallback: '{fallback}'")
     return fallback
 
 
@@ -133,11 +154,13 @@ def search_pexels(query, per_page=15, max_pages=3):
     """Pexels 검색 with pagination (default 3 pages = up to 45 candidates)"""
     api_key = _load_pexels_key()
     if not api_key:
-        log("  Pexels API 키 없음")
+        log("  Pexels API 키 없음 → 빈 결과 반환")
         return []
     
     all_photos = []
+    pages_attempted = 0
     for page in range(1, max_pages + 1):
+        pages_attempted += 1
         try:
             url = "https://api.pexels.com/v1/search"
             resp = requests.get(
@@ -150,6 +173,7 @@ def search_pexels(query, per_page=15, max_pages=3):
             data = resp.json()
             photos = data.get("photos", [])
             if not photos:
+                log(f"  Pexels 검색: '{query}' page={page} → 0장 (더 이상 결과 없음, 중단)")
                 break
             all_photos.extend(photos)
             log(f"  Pexels 검색: '{query}' page={page} → {len(photos)}장 (누적 {len(all_photos)})")
@@ -157,6 +181,7 @@ def search_pexels(query, per_page=15, max_pages=3):
             log(f"  Pexels 검색 에러 (page={page}): {e}")
             break
     
+    log(f"  Pexels '{query}' 검색 완료: {pages_attempted}페이지 시도, 총 {len(all_photos)}장")
     return all_photos
 
 
@@ -313,6 +338,7 @@ def process_thumbnail(url, slug, title="", description=""):
 
     chosen = _pick_unused_photo(photos, used_ids)
     fallback_reason = None
+    total_pexels_pages = 0  # 총 Pexels 페이지 시도 횟수 추적
     
     if not chosen:
         # 미사용 사진이 없으면 대체 쿼리로 재시도 (원본 키워드 제외)
@@ -321,6 +347,7 @@ def process_thumbnail(url, slug, title="", description=""):
         
         for alt in alt_queries:
             alt_photos = search_pexels(alt, max_pages=3)
+            total_pexels_pages += 3
             chosen = _pick_unused_photo(alt_photos, used_ids)
             if chosen:
                 fallback_reason = f"alt_query={alt}"
@@ -330,8 +357,10 @@ def process_thumbnail(url, slug, title="", description=""):
     # 최종 폴백: placeholder 사용 (photos[0] 재사용 안 함)
     if not chosen:
         fallback_reason = "all_exhausted"
-        log("  모든 Pexels 결과 소진 → placeholder 사용")
-        return _use_default_thumbnail(slug)
+        log(f"  모든 Pexels 결과 소진 (총 {total_pexels_pages}페이지 시도, 키워드 '{keyword}') → placeholder 사용")
+        result = _use_default_thumbnail(slug)
+        log(f"  최종 액션: placeholder 복사 → {'성공' if result else '실패'}")
+        return result
 
     pid = chosen.get("id")
     log(f"  선택: ID={pid} | {chosen.get('alt', '')[:60]} | fallback={fallback_reason or 'none'}")
@@ -341,13 +370,17 @@ def process_thumbnail(url, slug, title="", description=""):
         img_url = chosen.get("src", {}).get("medium")
     if not img_url:
         log("  이미지 URL 없음, 기본 placeholder 사용")
-        return _use_default_thumbnail(slug)
+        result = _use_default_thumbnail(slug)
+        log(f"  최종 액션: placeholder 복사 (이미지URL 없음) → {'성공' if result else '실패'}")
+        return result
 
     log("이미지 다운로드 중...")
     image_data = download_image(img_url)
     if not image_data:
         log("  이미지 다운로드 실패, 기본 placeholder 사용")
-        return _use_default_thumbnail(slug)
+        result = _use_default_thumbnail(slug)
+        log(f"  최종 액션: placeholder 복사 (다운로드 실패) → {'성공' if result else '실패'}")
+        return result
 
     log(f"  다운로드 완료: {len(image_data):,} bytes")
 
@@ -363,7 +396,9 @@ def process_thumbnail(url, slug, title="", description=""):
     if not is_valid:
         log(f"  ⚠️ 품질 검증 실패: {reason} → 재시도/placeholder")
         # 재시도: 다른 키워드로 다시 시도 (최대 2회)
+        quality_retries = 0
         for retry in range(2):
+            quality_retries += 1
             log(f"  🔄 품질 재시도 {retry+1}/2 (다른 키워드)")
             # 새로운 키워드로 다시 검색
             retry_keyword = random.choice([q for q in DEEPSEEK_POOL if q != keyword])
@@ -384,13 +419,16 @@ def process_thumbnail(url, slug, title="", description=""):
                             log(f"  ❌ 재시도 품질 실패: {reason}")
         
         if not is_valid:
-            log("  ⚠️ 품질 재시도 모두 실패 → placeholder 사용")
-            return _use_default_thumbnail(slug)
+            log(f"  ⚠️ 품질 재시도 {quality_retries}회 모두 실패 → placeholder 사용")
+            result = _use_default_thumbnail(slug)
+            log(f"  최종 액션: placeholder 복사 (품질 재시도 실패) → {'성공' if result else '실패'}")
+            return result
 
     _save_used_id(pid)
 
     rel_path = f"/images/{slug}/thumbnail.webp"
     log(f"  경로: {rel_path}")
+    log(f"  ✅ 썸네일 생성 완료: {rel_path} (키워드='{keyword}', fallback={fallback_reason or 'none'})")
     return rel_path
 
 
