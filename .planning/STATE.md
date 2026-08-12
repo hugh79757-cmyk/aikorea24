@@ -4,8 +4,8 @@ milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: all_plans_complete
 stopped_at: Phase 29+30+31: description 백필/첫문장추출/추출버그수정 완료 (2026-07-26) — 미커밋
-last_updated: 2026-07-26T21:02:00.000Z
-last_activity: 2026-07-26
+last_updated: 2026-08-12T12:25:13.000Z
+last_activity: 2026-08-12
 progress:
   total_phases: 31
   completed_phases: 31
@@ -160,6 +160,11 @@ Recent decisions affecting current work:
 - [Phase 15]: Vectorize REST API 도입 — Cloudflare Vectorize로 의미적 중복제거 추가 (보조 레이어)
 - [Phase 15]: failed_crawls.json TTL 24시간 적용 — 영구 제외로 인한 기사 풀 고갈 해결
 - [Phase 15]: 카드 분할 JSON 배열 전환 — delimiter 충돌 근본 해결, fallback 제거
+- [Phase 28-05]: generate_draft() 기사 조립부에 원문 URL·매체·발행일 포함 — LLM이 URL을 임의 생성하지 않고 시스템 보유 URL만 Markdown 링크로 사용하도록 프롬프트에 명시
+- [Phase 28-05]: 조건 분기 규칙 도입: has_numeric + has_comparison 4가지 조합 + content_type 5종 → 표·섹션 조건부 강제
+- [Phase 28-05]: title 한글 우선 규칙: 영문 비율 40% 초과 시 검수 fail (제품명은 프롬프트 지침으로 한글 번역 유도)
+- [Phase 28-05]: 발행 전 자동 검수 게이트 5종 구현: heuristic 4종(출처 없는 숫자·첫 120자 결론·표 무결성·제목 언어) + LLM 일반론 판정 1종 → validate_draft_quality()로 통합, main() 생성 루프에 연결
+- [Phase 28-05]: auto_deep_article.py 표 사용 금지 규칙 삭제 + 조건 분기·출처·독자행동·관련 허브 섹션 요구 추가 → generate_draft와 프롬프트 일관성 확보
 
 ### Key Decisions (Phase 17)
 
