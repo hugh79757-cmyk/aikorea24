@@ -148,18 +148,20 @@ def save_posted(data):
     with open(POSTED_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
-def d1_query(sql, retries=2):
+def d1_query(sql, retries=3):
     cmd = ['/opt/homebrew/bin/wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql]
     env = dict(os.environ)
     env.pop('CLOUDFLARE_API_TOKEN', None)
     for attempt in range(retries):
         try:
-            r = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=PROJECT_DIR, env=env)
+            r = subprocess.run(cmd, capture_output=True, text=True, timeout=180, cwd=PROJECT_DIR, env=env)
             if r.returncode != 0:
                 if attempt < retries - 1:
-                    log(f'  ⚠️ D1 반환코드 {r.returncode}, 5초 후 재시도 ({attempt+1}/{retries})')
-                    time.sleep(5)
+                    delay = 5 * (attempt + 1)  # 5s, 10s, 15s 점진적 증가
+                    log(f'  ⚠️ D1 반환코드 {r.returncode}, {delay}초 후 재시도 ({attempt+1}/{retries})')
+                    time.sleep(delay)
                     continue
+                log(f'  ❌ D1 실패: 반환코드 {r.returncode}, stderr: {r.stderr[:200]}')
                 return []
             m = re.search(r'"results"\s*:\s*(\[[\s\S]*?\])\s*,\s*"success"', r.stdout)
             if m:
@@ -167,17 +169,19 @@ def d1_query(sql, retries=2):
             return []
         except subprocess.TimeoutExpired:
             if attempt < retries - 1:
-                log(f'  ⚠️ D1 타임아웃, 5초 후 재시도 ({attempt+1}/{retries})')
-                time.sleep(5)
+                delay = 10 * (attempt + 1)  # 10s, 20s, 30s
+                log(f'  ⚠️ D1 타임아웃(180s), {delay}초 후 재시도 ({attempt+1}/{retries})')
+                time.sleep(delay)
                 continue
-            log(f'  ⚠️ D1 타임아웃: {retries}회 재시도 모두 실패')
+            log(f'  ❌ D1 타임아웃: {retries}회 재시도 모두 실패')
             return []
         except Exception as e:
             if attempt < retries - 1:
-                log(f'  ⚠️ D1 오류: {e}, 5초 후 재시도 ({attempt+1}/{retries})')
-                time.sleep(5)
+                delay = 5 * (attempt + 1)
+                log(f'  ⚠️ D1 오류: {e}, {delay}초 후 재시도 ({attempt+1}/{retries})')
+                time.sleep(delay)
                 continue
-            log(f'  ⚠️ D1 오류: {e}')
+            log(f'  ❌ D1 오류: {e}')
             return []
     return []
 

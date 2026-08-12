@@ -3,7 +3,7 @@
 aikorea24 Threads API 발행기
 - 연속 답글 체인 발행 (reply_to_id)
 - requests 라이브러리 사용
-- 3회 재시도 + 토큰 자동 갱신
+- 3회 재시도 + 토큰 자동 갱신 + 지수 백오프 + 연결 풀링
 """
 import os, sys, json, time, socket, requests
 from datetime import datetime
@@ -97,6 +97,20 @@ def refresh_token():
         log(f'  ❌ 토큰 갱신 오류: {e}')
         return None
 
+def retry_with_backoff(func, max_retries=3, base_delay=10, max_delay=60, label="요청"):
+    """지수 백오프로 재시도하는 헬퍼 함수"""
+    for attempt in range(max_retries):
+        try:
+            return func()
+        except Exception as e:
+            if attempt < max_retries - 1:
+                delay = min(base_delay * (2 ** attempt), max_delay)
+                log(f'  {label} 시도 {attempt+1}/{max_retries} 실패: {e} → {delay}초 후 재시도')
+                time.sleep(delay)
+            else:
+                log(f'  ❌ {label} {max_retries}회 모두 실패: {e}')
+                raise
+
 def publish_thread_chain(cards, article):
     """연속 답글 체인 발행"""
     envs = load_env()
@@ -141,6 +155,10 @@ def publish_thread_chain(cards, article):
                         cards[i] = card_text[:MAX_CHARS]
             log(f'  ✂️ 카드 {i+1}: {len(card_text)}자 → {len(cards[i])}자 (중간 문장 제거)')
 
+    # 연결 풀링을 위한 Session 생성
+    session = requests.Session()
+    session.headers.update({'User-Agent': 'aikorea24-threads/1.0'})
+
     for i, card_text in enumerate(cards):
         params = {
             'media_type': 'TEXT',
@@ -150,53 +168,54 @@ def publish_thread_chain(cards, article):
         if previous_post_id:
             params['reply_to_id'] = previous_post_id
 
-        # 컨테이너 생성 (3회 재시도)
-        container_id = None
-        for attempt in range(3):
-            try:
-                r = requests.post(
-                    f'https://graph.threads.net/v1.0/{user_id}/threads',
-                    params=params, timeout=30
-                )
-                data = r.json()
-                if 'id' in data:
-                    container_id = data['id']
-                    break
-                log(f'  컨테이너 응답 (id 없음): {str(data)[:200]}')
-                if data.get('error', {}).get('code') == 190:
-                    log(f'  토큰 만료 → 갱신')
-                    new_tok = refresh_token()
-                    if new_tok:
-                        params['access_token'] = new_tok
-                        access_token = new_tok
-                        continue
-            except Exception as e:
-                log(f'  컨테이너 생성 시도 {attempt+1}/3 실패: {e}')
-            time.sleep(10)
-        else:
+        # 컨테이너 생성 (3회 재시도 + 백오프)
+        def create_container():
+            r = session.post(
+                f'https://graph.threads.net/v1.0/{user_id}/threads',
+                params=params, timeout=60
+            )
+            data = r.json()
+            if 'id' in data:
+                return data['id']
+            log(f'  컨테이너 응답 (id 없음): {str(data)[:200]}')
+            if data.get('error', {}).get('code') == 190:
+                log(f'  토큰 만료 → 갱신')
+                new_tok = refresh_token()
+                if new_tok:
+                    params['access_token'] = new_tok
+                    nonlocal access_token
+                    access_token = new_tok
+                    raise Exception("토큰 갱신됨, 재시도")
+            raise Exception(f"컨테이너 생성 실패: {data}")
+
+        try:
+            container_id = retry_with_backoff(
+                create_container, max_retries=3, base_delay=15, max_delay=45, label=f"카드 {i+1} 컨테이너"
+            )
+        except Exception:
             log(f'  ❌ 카드 {i+1} 컨테이너 생성 실패')
             return None
 
         time.sleep(10)
 
-        # 발행 (3회 재시도)
-        post_id = None
-        for attempt in range(3):
-            try:
-                r2 = requests.post(
-                    f'https://graph.threads.net/v1.0/{user_id}/threads_publish',
-                    params={'creation_id': container_id, 'access_token': access_token},
-                    timeout=30
-                )
-                data2 = r2.json()
-                if 'id' in data2:
-                    post_id = data2['id']
-                    break
-                log(f'  발행 응답 (id 없음): {str(data2)[:200]}')
-            except Exception as e:
-                log(f'  발행 시도 {attempt+1}/3 실패: {e}')
-            time.sleep(10)
-        else:
+        # 발행 (3회 재시도 + 백오프)
+        def publish_container():
+            r2 = session.post(
+                f'https://graph.threads.net/v1.0/{user_id}/threads_publish',
+                params={'creation_id': container_id, 'access_token': access_token},
+                timeout=60
+            )
+            data2 = r2.json()
+            if 'id' in data2:
+                return data2['id']
+            log(f'  발행 응답 (id 없음): {str(data2)[:200]}')
+            raise Exception(f"발행 실패: {data2}")
+
+        try:
+            post_id = retry_with_backoff(
+                publish_container, max_retries=3, base_delay=15, max_delay=45, label=f"카드 {i+1} 발행"
+            )
+        except Exception:
             log(f'  ❌ 카드 {i+1} 발행 실패')
             return None
 
@@ -204,9 +223,7 @@ def publish_thread_chain(cards, article):
             root_post_id = post_id
         previous_post_id = post_id
         log(f'  카드 {i+1}/{len(cards)} 발행: {post_id}')
-        time.sleep(10)
-
-
+        time.sleep(15)  # 카드 간 대기 시간 증가 (API 레이트리밋 회피)
 
     # posted.json 저장
     posted = load_posted()
@@ -226,7 +243,6 @@ def publish_thread_chain(cards, article):
     log(f'  posted.json 업데이트 완료')
 
     return root_post_id
-
 
 def parse_cards(text):
     cards = [c.strip() for c in text.split('---') if c.strip()]
