@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.join(_PROJECT_DIR, 'scripts'))
 sys.path.insert(0, os.path.join(_PROJECT_DIR, 'api_test'))
 
 from pipeline.infra.logger import get_scrubbed_logger
-from pipeline.instagram.utils import slugify
+from pipeline.infra.utils import slugify
 logger = get_scrubbed_logger(__name__)
 
 from pipeline.infra.env_loader import EnvConfig
