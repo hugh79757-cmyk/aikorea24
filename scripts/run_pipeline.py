@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """aikorea24 데일리 파이프라인 (Blog Pipeline)
 
-뉴스 → 브리핑 → 블로그(자동생성) → 이메일 → 배포:
+뉴스 → 브리핑 → 썸네일 → 이메일 → 배포:
 1. 뉴스 선정 (auto_news_selector)
 2. 브리핑 생성 (auto_briefing)
-3. 블로그 생성 (auto_deep_article)  ← "심층글"은 블로그 포스트
-4. 썸네일 생성 (auto_thumbnail)
-5. 이메일 발송 (auto_email_sender)
-6. 빌드 + 배포 (scripts/deploy.sh)
+3. 썸네일 생성 (auto_thumbnail)
+4. 이메일 발송 (auto_email_sender)
+5. 빌드 + 배포 (scripts/deploy.sh)
 
 Usage:
-    python3 scripts/run_pipeline.py [--skip-news] [--skip-briefing] [--skip-deep|--no-skip-deep]
+    python3 scripts/run_pipeline.py [--skip-news] [--skip-briefing]
     python3 scripts/run_pipeline.py [--skip-email] [--skip-thumbnails] [--skip-deploy]
     python3 scripts/run_pipeline.py [--date YYYY-MM-DD] [--dry-run]
 """
-
 import argparse
 import subprocess
 import sys
@@ -27,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 
 KST = timezone(timedelta(hours=9))
+
 
 def log(msg):
     ts = datetime.now().strftime("%H:%M:%S")
@@ -55,79 +54,15 @@ def step_briefing(articles):
     elif articles is None:
         return auto_briefing.main()
     else:
-        log("  선정된 기사가 없어 브리핑을 건너<0xEB><0x9C><0x8D>니다.")
+        log("  선정된 기사가 없어 브리핑을 건너뜁니다.")
         return None
 
 
-def step_deep_articles(articles, briefing_id=None):
-    """Step 3: 심층글 생성 + briefing_items.deep_dive_url 자동 연결"""
-    import auto_deep_article
-    from auto_briefing import d1_query, d1_execute
-
-    log("═══ Step 3: 심층글 생성 ═══")
-
-    if not briefing_id:
-        today = datetime.now(KST).strftime("%Y-%m-%d")
-        briefing_rows = d1_query(f"SELECT id FROM briefings WHERE date LIKE '{today}%' AND status = 'published' ORDER BY date DESC LIMIT 1")
-        briefing_id = briefing_rows[0]["id"] if briefing_rows else None
-    if not briefing_id:
-        log("  ⚠️ 오늘 브리핑을 찾을 수 없어 deep_dive_url 연결 불가")
-
-    results = []
-    for i, art in enumerate(articles, 1):
-        title = art.get("title", "")
-        url = art.get("link", "")
-        news_id = art.get("id")
-        log(f"  [{i}/{len(articles)}] {title[:60]}")
-
-        if not url:
-            log("    URL 없음, 스킵")
-            continue
-
-        try:
-            content = auto_deep_article.crawl_article(url)
-            if not content:
-                log("    크롤링 실패")
-                continue
-
-            article_md = auto_deep_article.generate_deep_article(title, content, url)
-            if not article_md:
-                log("    글 생성 실패")
-                continue
-
-            filepath = auto_deep_article.save_article(article_md, title)
-            log(f"    ✅ 저장: {filepath.name}")
-            results.append({"title": title, "filepath": str(filepath)})
-
-            if briefing_id and news_id:
-                blog_url = f"https://aikorea24.kr/blog/{filepath.stem}"
-                sql = (
-                    f"UPDATE briefing_items SET deep_dive_url = '{blog_url}' "
-                    f"WHERE briefing_id = {briefing_id} AND news_id = {news_id}"
-                )
-                if d1_execute(sql):
-                    log(f"    🔗 deep_dive_url 연결: {blog_url}")
-                else:
-                    log("    ⚠️ deep_dive_url 연결 실패")
-
-        except Exception as e:
-            log(f"    ❌ 에러: {e}")
-
-    # 심층글 저장 직후 frontmatter 게이트 → 배포/이메일 전에 불량 포스트 차단
-    if results:
-        import validate_blog_posts
-        log("  🛡️  블로그 frontmatter 최종 검증")
-        if not validate_blog_posts.validate_all():
-            raise RuntimeError("블로그 포스트 검증 실패: 더 이상 진행하지 않습니다.")
-
-    return results
-
-
 def step_thumbnails(articles):
-    """Step 4: 썸네일 생성"""
+    """Step 3: 썸네일 생성"""
     import auto_thumbnail
 
-    log("═══ Step 4: 썸네일 생성 ═══")
+    log("═══ Step 3: 썸네일 생성 ═══")
     import re as re_mod
 
     results = []
@@ -155,16 +90,16 @@ def step_thumbnails(articles):
 
 
 def step_email():
-    """Step 5: 이메일 발송"""
+    """Step 4: 이메일 발송"""
     import auto_email_sender
 
-    log("═══ Step 5: 이메일 발송 ═══")
+    log("═══ Step 4: 이메일 발송 ═══")
     auto_email_sender.main()
 
 
 def step_deploy():
-    """Step 6: 빌드 + Cloudflare Pages 배포"""
-    log("═══ Step 6: 빌드 + 배포 ═══")
+    """Step 5: 빌드 + Cloudflare Pages 배포"""
+    log("═══ Step 5: 빌드 + 배포 ═══")
     deploy_script = str(Path(__file__).resolve().parent / "deploy.sh")
     if not Path(deploy_script).exists():
         log("  deploy.sh 없음, 건너뜀")
@@ -189,11 +124,10 @@ def step_deploy():
 def main():
     parser = argparse.ArgumentParser(
         description="aikorea24 데일리 파이프라인",
-        epilog="전체 워크플로우: 뉴스선정 → 브리핑 → 심층글 → 썸네일 → 이메일 → 빌드/배포",
+        epilog="전체 워크플로우: 뉴스선정 → 브리핑 → 썸네일 → 이메일 → 빌드/배포",
     )
     parser.add_argument("--skip-news", action="store_true", help="뉴스 선정 단계 건너뜀")
     parser.add_argument("--skip-briefing", action="store_true", help="브리핑 생성 단계 건너뜀")
-    parser.add_argument("--skip-deep", action=argparse.BooleanOptionalAction, default=True, help="심층글 생성 단계 건너뜀 (blog-draft가 대체). --no-skip-deep 로 실행 가능")
     parser.add_argument("--skip-thumbnails", action="store_true", help="썸네일 생성 단계 건너뜀")
     parser.add_argument("--skip-email", action="store_true", help="이메일 발송 단계 건너뜀")
     parser.add_argument("--skip-deploy", action="store_true", help="빌드/배포 단계 건너뜀")
@@ -209,7 +143,6 @@ def main():
     start_time = datetime.now()
     summary = {
         "news": [],
-        "deep_articles": [],
         "thumbnails": [],
         "errors": [],
     }
@@ -221,14 +154,12 @@ def main():
             steps.append("1. 뉴스 선정")
         if not args.skip_briefing:
             steps.append("2. 브리핑 생성")
-        if not args.skip_deep:
-            steps.append("3. 심층글 생성")
         if not args.skip_thumbnails:
-            steps.append("4. 썸네일 생성")
+            steps.append("3. 썸네일 생성")
         if not args.skip_email:
-            steps.append("5. 이메일 발송")
+            steps.append("4. 이메일 발송")
         if not args.skip_deploy:
-            steps.append("6. 빌드/배포")
+            steps.append("5. 빌드/배포")
         for s in steps:
             log(f"  → {s}")
         return
@@ -261,21 +192,6 @@ def main():
         log("⏭ 브리핑 생성 건너뜀")
 
     log("")
-
-    # Step 3: 심층글 생성 (Step 2의 briefing_id 전달)
-    if not args.skip_deep:
-        try:
-            if not articles:
-                log("선정된 뉴스가 없어 심층글을 건너뜁니다.")
-            else:
-                deep_results = step_deep_articles(articles, briefing_id)
-                summary["deep_articles"] = [r["title"] for r in deep_results]
-        except Exception as e:
-            log(f"심층글 생성 에러: {e}")
-            traceback.print_exc()
-            summary["errors"].append(f"심층글 생성: {e}")
-    else:
-        log("⏭ 심층글 생성 건너뜀")
 
     log("")
 
@@ -328,7 +244,6 @@ def main():
     log("╚══════════════════════════════════════╝")
     log(f"  소요 시간: {elapsed:.1f}초")
     log(f"  선정 뉴스: {len(summary['news'])}건")
-    log(f"  심층글:   {len(summary['deep_articles'])}건")
     log(f"  썸네일:   {len(summary['thumbnails'])}건")
 
     if summary["errors"]:
