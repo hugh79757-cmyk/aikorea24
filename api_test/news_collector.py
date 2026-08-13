@@ -416,34 +416,44 @@ def dedup_similar(articles):
 
 
 # ============================================
-# 번역
+# 번역 (무료 LLM 폴백 체인 — model_router 사용)
 # ============================================
+# model_router를 api_test 디렉토리에서 import할 수 있도록 경로 추가
+_sys_path_inserted = False
+if PROJECT_DIR not in sys.path:
+    sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+    _sys_path_inserted = True
+
+try:
+    from model_router import chat_completion
+except ImportError:
+    chat_completion = None
+    print("  [경고] model_router import 실패 — 번역에 무료 LLM 체인 사용 불가")
 def translate_to_korean(title, description=""):
-    """영문 → 한국어 번역 (타이틀만, GPT-4o-mini)"""
+    """영문 → 한국어 번역 (타이틀만, 무료 LLM 폴백 체인)"""
+    if chat_completion is None:
+        return title, description
     try:
-        import openai
-        client = openai.OpenAI(api_key=OPENAI_KEY)
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation."},
-                {"role": "user", "content": title}
-            ],
-            max_completion_tokens=100)
-        kr_title = resp.choices[0].message.content.strip().strip(chr(34)).strip(chr(39))
-        return kr_title, description
+        kr_title = chat_completion(
+            messages=[{"role": "user", "content": title}],
+            system_prompt="Translate the following English AI/tech news title into natural Korean. Return ONLY the translated title text. No quotes, no explanation.",
+            temperature=0.3,
+            max_tokens=100,
+            model_override=None,  # 무료 LLM 폴백 체인 사용
+        )
+        if kr_title:
+            kr_title = kr_title.strip().strip(chr(34)).strip(chr(39))
+            return kr_title, description
+        return title, description
     except Exception as e:
         print(f"    번역 실패: {e}")
         return title, description
 
 def batch_translate(articles):
-    """해외 기사 병렬 배치 번역 (10건/배치, 5스레드 동시)"""
-    if not OPENAI_KEY:
-        print("  OPENAI_API_KEY 없음 - 번역 건너뜀")
+    """해외 기사 병렬 배치 번역 (10건/배치, 무료 LLM 폴백 체인)"""
+    if chat_completion is None:
+        print("  [안내] 무료 LLM 체인 사용 불가 — 번역 건너뜀")
         return articles
-    from concurrent.futures import ThreadPoolExecutor, as_completed
-    import openai
-    client = openai.OpenAI(api_key=OPENAI_KEY)
     targets = []
     for i, a in enumerate(articles):
         if a.get("country", "kr") == "kr":
@@ -456,8 +466,9 @@ def batch_translate(articles):
         return articles
     BATCH = 10
     batches = [targets[b:b+BATCH] for b in range(0, len(targets), BATCH)]
-    print(f"  번역 대상: {len(targets)}건 → {len(batches)}배치 (5스레드 병렬)")
-    def translate_batch(batch_idx, batch_num):
+    print(f"  번역 대상: {len(targets)}건 → {len(batches)}배치 (무료 LLM 체인)")
+    translated = 0
+    for batch_num, batch_idx in enumerate(batches, 1):
         items = []
         for j, i in enumerate(batch_idx):
             t = articles[i]["title"]
@@ -466,46 +477,40 @@ def batch_translate(articles):
             items.append(f"   DESC: {d}")
         numbered = chr(10).join(items)
         try:
-            resp = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system", "content": "Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation."},
-                    {"role": "user", "content": numbered}
-                ],
-                max_completion_tokens=len(batch_idx) * 200)
-            text = resp.choices[0].message.content.strip()
-            kr_titles = []
-            kr_descs = []
-            for line in text.split(chr(10)):
-                line = line.strip()
-                if not line:
-                    continue
-                if "TITLE:" in line:
-                    cleaned = line.split("TITLE:", 1)[1].strip()
-                    cleaned = cleaned.lstrip("0123456789").lstrip(".").lstrip(")").strip()
-                    kr_titles.append(cleaned)
-                elif "DESC:" in line:
-                    cleaned = line.split("DESC:", 1)[1].strip()
-                    kr_descs.append(cleaned)
-            return batch_num, batch_idx, kr_titles, kr_descs
+            text = chat_completion(
+                messages=[{"role": "user", "content": numbered}],
+                system_prompt="Translate each numbered English AI/tech news item (TITLE and DESC) into natural Korean. Return the result in this exact format for each item:\n1. TITLE: 번역된 제목\n   DESC: 번역된 설명(2-3문장 자연스러운 한국어)\nKeep the same numbering. No explanation.",
+                temperature=0.3,
+                max_tokens=len(batch_idx) * 200,
+                model_override=None,  # 무료 LLM 폴백 체인 사용
+            )
+            if text:
+                kr_titles = []
+                kr_descs = []
+                for line in text.split(chr(10)):
+                    line = line.strip()
+                    if not line:
+                        continue
+                    if "TITLE:" in line:
+                        cleaned = line.split("TITLE:", 1)[1].strip()
+                        cleaned = cleaned.lstrip("0123456789").lstrip(".").lstrip(")").strip()
+                        kr_titles.append(cleaned)
+                    elif "DESC:" in line:
+                        cleaned = line.split("DESC:", 1)[1].strip()
+                        kr_descs.append(cleaned)
+                for k, idx in enumerate(batch_idx):
+                    articles[idx]["original_title"] = articles[idx]["title"]
+                    if k < len(kr_titles):
+                        articles[idx]["title"] = kr_titles[k]
+                    if k < len(kr_descs) and kr_descs[k]:
+                        articles[idx]["description"] = kr_descs[k]
+                    translated += 1
+                print(f"    배치 {batch_num}: {len(batch_idx)}건 완료")
+            else:
+                print(f"    배치 {batch_num}: 응답 없음 (스킵)")
         except Exception as e:
             print(f"    배치 {batch_num} 실패: {e}")
-            return batch_num, batch_idx, [], []
-    translated = 0
-    with ThreadPoolExecutor(max_workers=5) as pool:
-        futures = [pool.submit(translate_batch, b, i+1) for i, b in enumerate(batches)]
-        for future in as_completed(futures):
-            batch_num, batch_idx, kr_titles, kr_descs = future.result()
-            for k, idx in enumerate(batch_idx):
-                articles[idx]["original_title"] = articles[idx]["title"]
-                if k < len(kr_titles):
-                    articles[idx]["title"] = kr_titles[k]
-                if k < len(kr_descs) and kr_descs[k]:
-                    articles[idx]["description"] = kr_descs[k]
-                translated += 1
-            print(f"    배치 {batch_num}: {len(batch_idx)}건 완료")
-    print(f"  번역 완료: {translated}건 ({len(batches)}배치 병렬처리)")
-    return articles
+    print(f"  번역 완료: {translated}건 ({len(batches)}배치 처리)")
 
 # ============================================
 # 신규 해외 소스 분류 상수
