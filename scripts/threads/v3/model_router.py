@@ -2,7 +2,7 @@
 model_router.py - AI 모델 호출 라우터 (무료 LLM 폴백 체인 통합)
 - 무료 체인: config/models.yaml의 tier_order 16개 무료 모델 순차 시도
 - 최후 수단: 유료 DeepSeek V4 Flash (default tier)
-- 평가/후처리: GPT-4o-mini (OpenAI, model_override='openai')
+- 평가/후처리: 무료 LLM 폴백 체인 (model_override=None) — GPT-4o-mini 2026-08-12 제거
 - .env / ~/.env.common에서 각 프로바이더 API 키 자동 로드
 """
 import os, sys, time
@@ -354,26 +354,12 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
         print(f'  [안내] DEEPSEEK_API_TOKEN 없음')
         return None
 
-    # 3순위: GPT-4o-mini (명시적 요청 시)
-    if model_override in ("openai", None):
-        client = get_openai_client()
-        if client:
-            try:
-                print(f'  [모델] GPT-4o-mini')
-                resp = client.chat.completions.create(
-                    model=OPENAI_MODEL,
-                    messages=full_messages,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    **kwargs,
-                )
-                text = resp.choices[0].message.content
-                if text and text.strip():
-                    return text.strip()
-            except Exception as e:
-                print(f'  [경고] GPT-4o-mini 실패: {type(e).__name__}')
-        else:
-            print(f'  [안내] OPENAI_API_KEY 없음')
+    # GPT-4o-mini는 2026-08-12부로 쓰레드 파이프라인에서 완전 제거됨
+    # 이유: 구형 모델, RHYTHM 지침 준수율 낮음, 무료 체인으로 충분
+    # 어떤 용도로도 model_override='openai' 호출 금지
+    if model_override == "openai":
+        print('  [차단] GPT-4o-mini는 쓰레드 파이프라인에서 제거됨 (model_override="openai" 사용 금지)')
+        return None
 
     return None
 

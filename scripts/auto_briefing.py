@@ -6,26 +6,16 @@ import subprocess
 import sys
 from datetime import datetime, timedelta, timezone
 import os
-import requests
 from pathlib import Path
 
 KST = timezone(timedelta(hours=9))
 PROJECT_DIR = "/Users/twinssn/Projects/aikorea24"
 
-# Load API key from .env.common
-_env_path = os.path.expanduser("~/.env.common")
-_mimo_key = ""
-if os.path.exists(_env_path):
-    with open(_env_path) as f:
-        for line in f:
-            if line.startswith("MIMO_API_KEY="):
-                _mimo_key = line.split("=", 1)[1].strip()
-                break
-
-MIMO_BASE_URL = "https://api.xiaomimimo.com/v1"
-MIMO_MODEL = "mimo-v2.5"
-
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+sys.path.insert(0, PROJECT_DIR)
+from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
+from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
 from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
 
 def log(msg):
@@ -53,7 +43,7 @@ def remove_chinese(text):
 
 
 def generate_comment(article):
-    """MiMo API로 기사 코멘트 생성"""
+    """무료 LLM 폴백 체인으로 기사 코멘트 생성 (한국어 출력)"""
     title = article.get("title", "")
     description = (article.get("description") or "")[:300]
     source = article.get("source", "")
@@ -63,7 +53,7 @@ def generate_comment(article):
         "중요: 중국어(한자)를 절대 사용하지 마세요. 모든 내용을 순수 한국어로만 작성하세요.\n"
         "한자어가 필요한 경우 반드시 순수 한글로 풀어서 표현하세요."
     )
-    prompt = (
+    user_prompt = (
         f"다음 AI 뉴스에 대해 1~2문장의 간결한 한국어 코멘트를 작성해줘.\n\n"
         f"제목: {title}\n"
         f"출처: {source}\n"
@@ -72,29 +62,15 @@ def generate_comment(article):
     )
 
     try:
-        resp = requests.post(
-            f"{MIMO_BASE_URL}/chat/completions",
-            headers={
-                "Authorization": f"Bearer {_mimo_key}",
-                "Content-Type": "application/json",
-            },
-            json={
-                "model": MIMO_MODEL,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt},
-                ],
-                "max_tokens": 500,
-                "temperature": 0.3,
-            },
-            timeout=30,
+        comment = chat_completion(
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=system_prompt,
+            temperature=0.3,
+            max_tokens=500,
+            model_override=None,  # 무료 LLM 폴백 체인 사용 (16개 무료 → 최후 수단 DeepSeek)
         )
-        if resp.status_code != 200:
-            log(f"  API 오류 ({resp.status_code}): {resp.text[:200]}")
-            return None
-        data = resp.json()
-        comment = data["choices"][0]["message"]["content"].strip()
         if not comment:
+            log(f"  코멘트 생성 실패 (LLM 응답 없음)")
             return None
         # 중국어 문자 제거 (안전망)
         cleaned = remove_chinese(comment)
@@ -103,7 +79,7 @@ def generate_comment(article):
             log(f"    ⚠️ 중국어 문자 {removed}개 제거됨 (comment)")
         return cleaned
     except Exception as e:
-        log(f"  API 예외: {e}")
+        log(f"  LLM 예외: {e}")
         return None
 
 

@@ -53,6 +53,7 @@ def load_env(path):
                     os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
 PROJECT_DIR = '/Users/twinssn/Projects/aikorea24'
+sys.path.insert(0, PROJECT_DIR)
 load_env(os.path.join(PROJECT_DIR, 'api_test', '.env.sh'))
 load_env(os.path.join(PROJECT_DIR, '.env'))
 
@@ -418,17 +419,8 @@ def dedup_similar(articles):
 # ============================================
 # 번역 (무료 LLM 폴백 체인 — model_router 사용)
 # ============================================
-# model_router를 api_test 디렉토리에서 import할 수 있도록 경로 추가
-_sys_path_inserted = False
-if PROJECT_DIR not in sys.path:
-    sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
-    _sys_path_inserted = True
-
-try:
-    from model_router import chat_completion
-except ImportError:
-    chat_completion = None
-    print("  [경고] model_router import 실패 — 번역에 무료 LLM 체인 사용 불가")
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+from model_router import chat_completion
 def translate_to_korean(title, description=""):
     """영문 → 한국어 번역 (타이틀만, 무료 LLM 폴백 체인)"""
     if chat_completion is None:
@@ -450,7 +442,7 @@ def translate_to_korean(title, description=""):
         return title, description
 
 def batch_translate(articles):
-    """해외 기사 병렬 배치 번역 (10건/배치, 무료 LLM 폴백 체인)"""
+    """해외 기사 배치 번역 (10건/배치, 무료 LLM 폴백 체인, 순차 처리)"""
     if chat_completion is None:
         print("  [안내] 무료 LLM 체인 사용 불가 — 번역 건너뜀")
         return articles
@@ -466,7 +458,7 @@ def batch_translate(articles):
         return articles
     BATCH = 10
     batches = [targets[b:b+BATCH] for b in range(0, len(targets), BATCH)]
-    print(f"  번역 대상: {len(targets)}건 → {len(batches)}배치 (무료 LLM 체인)")
+    print(f"  번역 대상: {len(targets)}건 → {len(batches)}배치 (무료 LLM 체인, 순차)")
     translated = 0
     for batch_num, batch_idx in enumerate(batches, 1):
         items = []
@@ -511,6 +503,7 @@ def batch_translate(articles):
         except Exception as e:
             print(f"    배치 {batch_num} 실패: {e}")
     print(f"  번역 완료: {translated}건 ({len(batches)}배치 처리)")
+    return articles
 
 # ============================================
 # 신규 해외 소스 분류 상수
