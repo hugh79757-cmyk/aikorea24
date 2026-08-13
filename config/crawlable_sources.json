@@ -22,7 +22,10 @@
     {"name": "NYT AI Spotlight", "rss_url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "avg_content_length": 2584},
     {"name": "9to5Google", "rss_url": "https://9to5google.com/feed/", "avg_content_length": 5000},
     {"name": "Android Central", "rss_url": "https://www.androidcentral.com/rss", "avg_content_length": 5500},
-    {"name": "SamMobile", "rss_url": "https://www.sammobile.com/feed/", "avg_content_length": 4000}
+    {"name": "SamMobile", "rss_url": "https://www.sammobile.com/feed/", "avg_content_length": 4000},
+    {"name": "AI타임스", "rss_url": "https://www.aitimes.com/rss/allArticle.xml", "avg_content_length": 3500},
+    {"name": "인공지능신문", "rss_url": "https://www.aitimes.kr/rss/allArticle.xml", "avg_content_length": 3600},
+    {"name": "The Hacker News", "rss_url": "https://www.thehackernews.com/feeds/posts/default", "avg_content_length": 7500}
   ],
   "rss_only": [
     {"name": "Hacker News", "rss_url": "https://hnrss.org/newest?q=AI", "reason": "본문 553자 (댓글 위주)"},
@@ -31,13 +34,12 @@
     {"name": "Axios", "rss_url": "https://api.axios.com/feed/", "reason": "403 Forbidden"},
     {"name": "NYT Technology", "rss_url": "https://rss.nytimes.com/services/xml/rss/nyt/Technology.xml", "reason": "403 Forbidden"},
     {"name": "NL Times", "rss_url": "https://nltimes.nl/rss", "reason": "403 Forbidden"},
-    {"name": "SCMP China Tech", "rss_url": "https://www.scmp.com/rss/91/feed", "reason": "본문 643자 (제한)"}
+    {"name": "SCMP China Tech", "rss_url": "https://www.scmp.com/rss/91/feed", "reason": "본문 643자 (제한)"},
+    {"name": "BleepingComputer", "rss_url": "https://www.bleepingcomputer.com/feed/", "reason": "Cloudflare 차단"}
   ],
   "no_rss": [
-    {"name": "AI타임스", "reason": "RSS 404"},
     {"name": "전자신문", "reason": "XML 파싱 에러"},
     {"name": "IT조선", "reason": "본문 38자 (제한)"},
-    {"name": "인공지능신문", "reason": "연결 타임아웃"},
     {"name": "디지털투데이", "reason": "RSS 404"},
     {"name": "CNN Technology", "reason": "RSS 404"},
     {"name": "OpenAI Blog", "reason": "RSS 403"},
