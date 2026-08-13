@@ -30,6 +30,10 @@ _config = EnvConfig()
 _config.load_to_environ()
 from pipeline.infra import project_root; PROJECT_DIR = project_root()
 
+# model_router (무료 LLM 폴백 체인) 경로 추가
+sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
+from model_router import chat_completion
+
 # ============================================
 # 환경 설정
 # ============================================
@@ -52,9 +56,6 @@ import sys
 sys.path.insert(0, '/Users/twinssn/Projects')
 from common_env_loader import load_env_with_fallback
 load_env_with_fallback(os.path.join(PROJECT_DIR, '.env'))
-
-OPENAI_KEY = os.environ.get('OPENAI_API_KEY', '')
-OPENROUTER_KEY = os.environ.get('OPENROUTER_API_KEY', '')
 
 # ============================================
 # news_collector.py에서 batch_translate import
@@ -935,25 +936,7 @@ def crawl_tool_page(url: str) -> dict:
 
 
 def generate_metadata(tool_info: dict) -> dict:
-    """DeepSeek V4 Flash (OpenRouter) 호출 → 한국어 메타데이터"""
-    api_key = OPENROUTER_KEY or OPENAI_KEY
-    if not api_key:
-        print("  API 키 없음 (OPENROUTER_API_KEY 또는 OPENAI_API_KEY)")
-        return None
-
-    # OpenRouter 사용 시 base_url 변경
-    if OPENROUTER_KEY and not OPENAI_KEY:
-        import openai
-        client = openai.OpenAI(
-            api_key=OPENROUTER_KEY,
-            base_url="https://openrouter.ai/api/v1"
-        )
-        model = "deepseek/deepseek-v4-flash"
-    else:
-        import openai
-        client = openai.OpenAI(api_key=OPENAI_KEY)
-        model = "gpt-4o-mini"
-
+    """무료 LLM 폴백 체인(model_router) → 한국어 메타데이터"""
     # URL 크롤링
     crawled = crawl_tool_page(tool_info.get('url', ''))
     crawled_desc = crawled.get('description', '') or tool_info.get('description', '')[:500]
@@ -966,16 +949,16 @@ def generate_metadata(tool_info: dict) -> dict:
         .replace('__URL__', tool_info.get('url', '')) \
         .replace('__CRAWLED_PRICING__', crawled_pricing)
     try:
-        resp = client.chat.completions.create(
-            model=model,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt}
-            ],
-            max_completion_tokens=3000,
+        raw = chat_completion(
+            messages=[{"role": "user", "content": prompt}],
+            system_prompt=SYSTEM_PROMPT,
             temperature=0.5,
+            max_tokens=3000,
+            model_override=None,  # 무료 LLM 폴백 체인 사용
         )
-        raw = resp.choices[0].message.content.strip()
+        if not raw:
+            print("  LLM 호출 실패 (모든 모델 시도 후 None 반환)")
+            return None
         # JSON 파싱 (```json ... ``` 처리)
         json_match = re.search(r'```(?:json)?\s*\n?(.*?)\n?```', raw, re.DOTALL)
         if json_match:
@@ -987,7 +970,7 @@ def generate_metadata(tool_info: dict) -> dict:
         print(f"    원문: {raw[:300]}")
         return None
     except Exception as e:
-        print(f"    GPT 호출 실패: {e}")
+        print(f"    LLM 호출 실패: {e}")
         return None
 
 
@@ -1098,7 +1081,13 @@ def build_body(meta: dict) -> str:
         lines.append('')
         for feat in features:
             if isinstance(feat, dict):
-                lines.append(f'- **{feat.get("name", "")}**: {feat.get("desc", "")}')
+                name = feat.get("name", "")
+                desc = feat.get("desc", "")
+                if isinstance(desc, list):
+                    desc = ' '.join(str(x) for x in desc)
+                lines.append(f'- **{name}**: {desc}')
+            elif isinstance(feat, list):
+                lines.append(f'- {" ".join(str(x) for x in feat)}')
             else:
                 lines.append(f'- {feat}')
         lines.append('')
@@ -1142,7 +1131,13 @@ def build_body(meta: dict) -> str:
         lines.append('')
         for ex in examples:
             if isinstance(ex, dict):
-                lines.append(f'- **{ex.get("persona", "")}**: {ex.get("example", "")}')
+                persona = ex.get("persona", "")
+                example = ex.get("example", "")
+                if isinstance(example, list):
+                    example = ' '.join(str(x) for x in example)
+                lines.append(f'- **{persona}**: {example}')
+            elif isinstance(ex, list):
+                lines.append(f'- {" ".join(str(x) for x in ex)}')
             else:
                 lines.append(f'- {ex}')
         lines.append('')
@@ -1159,11 +1154,15 @@ def build_body(meta: dict) -> str:
             if pros:
                 lines.append('**장점:**')
                 for p in pros:
+                    if isinstance(p, list):
+                        p = ' '.join(str(x) for x in p)
                     lines.append(f'- {p}')
                 lines.append('')
             if cons:
                 lines.append('**단점:**')
                 for c in cons:
+                    if isinstance(c, list):
+                        c = ' '.join(str(x) for x in c)
                     lines.append(f'- {c}')
                 lines.append('')
             if best:
@@ -1178,9 +1177,13 @@ def build_body(meta: dict) -> str:
         lines.append('## 자주 묻는 질문')
         lines.append('')
         for faq in faqs:
-            lines.append(f'**{faq.get("q", "")}**')
+            q = faq.get("q", "") if isinstance(faq, dict) else str(faq)
+            a = faq.get("a", "") if isinstance(faq, dict) else ""
+            if isinstance(a, list):
+                a = ' '.join(str(x) for x in a)
+            lines.append(f'**{q}**')
             lines.append('')
-            lines.append(f'{faq.get("a", "")}')
+            lines.append(f'{a}')
             lines.append('')
 
     return '\n'.join(lines)

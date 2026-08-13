@@ -190,7 +190,7 @@ def find_fallback_url(title, max_title_chars=80) -> str | None
 호출 함수: chat_completion(messages, system_prompt, temperature, max_tokens, model_override)
 ```
 
-- `model_override` 옵션: `'mimo'` → OpenAI+DeepSeek 건너뛰고 MiMo, `'openai'` → DeepSeek부터 시작
+- `model_override` 옵션: `'mimo'` → MiMo v2.5 단독, `'openai'` → **차단됨** (GPT-4o-mini 2026-08-12 제거), `None` → 무료 체인
 - 각 API 키는 `.env`에서 로드
 
 ### 5. format_selector.py — 형식 선택 (2026-06-29 신규)

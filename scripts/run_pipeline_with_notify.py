@@ -52,10 +52,9 @@ def main():
     pipeline_script = os.path.join(SCRIPTS_DIR, 'run_pipeline.py')
     
     try:
-        # 심층글/썸네일은 blog-draft launchd job(07:00)이 대체
+        # 블로그/썸네일은 blog-draft launchd job(07:00/20:00)이 대체
         pipeline_args = [
             sys.executable, pipeline_script,
-            "--skip-deep",
             "--skip-thumbnails",
         ]
         result = subprocess.run(

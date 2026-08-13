@@ -45,4 +45,5 @@
 - 2026-07-03 | fix | crawl-fail-discard | get_pitches() 크롤링 실패 시 RSS fallback 제거, return []로 폐기
 - 2026-07-03 | fix | test-coverage-validation-gaps | 체계적 방지 프레임워크 — 테스트 커버리지 갭 발견: validate_korean_output, detect_prompt_leak, f
 - 2026-07-03 | fix | 5layer-korean-defense | 5-Layer Korean Language Defense Framework — Prompt Shield, Output Guard, Sanitizer, Publish Gate, JSON Hybrid
+- 2026-08-12 | fix | home-briefing-email-english-description-removed | 홈피 및 이메일에서 영어 설명 제거 — BriefingSection.astro + send-email.ts news_desc 제거, 빈 코멘트/비한국어 코멘트 발송 차단
 - 2026-08-09 | diagnostic | vectorize-threads-json | Vectorize dedup + threads JSON 파싱 + 프롬프트 릭 방어 — 진단/현황 기록 (Phase 13~15: `---` 구분자 실패 → JSON-first 전환, Vectorize `aikorea24-dedup` + OpenAI text-embedding-3-small, 인제스트/크롤링/D1/Vectorize 인덱싱 흐름)

@@ -43,14 +43,38 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
 
     // 2. 브리핑 아이템 + 뉴스 조회
     const items = await db.prepare(
-      `SELECT bi.*, n.title as news_title, n.description as news_desc, n.link as news_link, n.source as news_source
+      `SELECT bi.*, n.title as news_title, n.link as news_link, n.source as news_source
        FROM briefing_items bi
        LEFT JOIN news n ON bi.news_id = n.id
        WHERE bi.briefing_id = ?
        ORDER BY bi.sort_order ASC`
     ).bind(briefing.id).all();
 
-    // 3. HTML 이메일 본문 생성 (3개만 표시 + 더보기)
+    // 3. 안전장치: 코멘트가 한국어인지 검증 (영어/외국어/빈 코멘트 발송 차단)
+    const invalidItems = (items.results || []).filter((item: any) => {
+      const comment = (item.comment || '').trim();
+      // 1) 빈 코멘트: 차단
+      if (!comment) return true;
+      // 2) 한글 없는 코멘트(영어/외국어): 차단
+      return !/[\u3131-\u314E\uAC00-\uD7A3]/.test(comment);
+    });
+    if (invalidItems.length > 0) {
+      const badTitles = invalidItems.map((i: any) => i.news_title).join(', ');
+      const reasons = invalidItems.map((i: any) => {
+        const c = (i.comment || '').trim();
+        return c ? '비한국어' : '빈 코멘트';
+      }).join('/');
+      console.error(`[차단] 비정상 코멘트 감지 — 이메일 발송 중단 (${reasons}): ${badTitles}`);
+      return new Response(JSON.stringify({
+        ok: false,
+        error: `비정상 코멘트 ${invalidItems.length}건 감지: ${badTitles}`
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
+    // 4. HTML 이메일 본문 생성 (3개만 표시 + 더보기)
     const displayItems = (items.results || []).slice(0, 3);
     const totalCount = items.results?.length || 0;
 
@@ -87,7 +111,6 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     let itemsHtml = '';
     for (const item of displayItems) {
       const briefingUrl = `https://aikorea24.kr/briefing/${today}${item.sort_order ? `#item-${item.sort_order}` : ''}`;
-      const desc = item.news_desc ? escapeHtml(item.news_desc.substring(0, 150)) : '';
       itemsHtml += `
         <tr>
           <td style="padding:16px 0;border-bottom:1px solid #e5e7eb;">
@@ -99,7 +122,6 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
                 </td>
               </tr>
               ${item.comment ? `<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">${escapeHtml(item.comment)}</td></tr>` : ''}
-              ${desc ? `<tr><td style="font-size:13px;color:#6b7280;line-height:1.5;padding-top:6px;">${desc}</td></tr>` : ''}
               <tr><td style="padding-top:8px;">
                 <a href="${briefingUrl}" style="font-size:12px;color:#2563eb;text-decoration:underline;font-weight:600;">
                   AI코리아24에서 자세히 보기 →
@@ -121,7 +143,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
         </tr>`;
     }
 
-    // 4. 신규 AI 툴 섹션
+    // 5. 신규 AI 툴 섹션
     let toolsHtml = '';
     try {
       const tools = await db.prepare(
@@ -240,7 +262,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
       </body>
       </html>`;
 
-    // 4. Brevo 구독자 목록 조회
+    // 6. Brevo 구독자 목록 조회
     let allContacts: string[] = [];
     let offset = 0;
     const limit = 100;
@@ -267,7 +289,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
       });
     }
 
-    // 5. Brevo 이메일 발송 (100명씩 배치)
+    // 7. Brevo 이메일 발송 (100명씩 배치)
     let sentCount = 0;
     const batchSize = 100;
 

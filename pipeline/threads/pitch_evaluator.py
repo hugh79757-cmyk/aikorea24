@@ -68,7 +68,7 @@ def evaluate_pitch(pitch):
             messages=[{'role': 'user', 'content': f'평가할 피치:\n{pitch_json}'}],
             temperature=0.1,
             max_tokens=1200,
-            model_override='openai',
+            model_override=None,  # 무료 체인 사용 (GPT-4o-mini 제거 2026-08-12)
         )
         if not resp:
             raise ValueError('chat_completion returned None')

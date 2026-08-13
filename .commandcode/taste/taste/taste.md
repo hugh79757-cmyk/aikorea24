@@ -1,0 +1,15 @@
+# Taste
+- Communicates in Korean; prefers responses in Korean. Confidence: 0.9
+- Prefers polite/formal Korean (존대말), not casual speech (반말); apologized when a response slipped into 반말 and committed to 존대말 going forward. Confidence: 0.85
+- Prefers free LLM providers first and paid models only as a last-resort fallback — confirmed a design keeping paid DeepSeek as the final tier after 16 free models. Confidence: 0.85
+- Prefers pragmatic, HTTP-success-based acceptance over strict content-quality gates when integrating free models — declined the recommended Chinese-leakage/multilingual-leakage quality checks in favor of availability. Confidence: 0.7
+- Wants thorough pre-deployment verification (per-model smoke tests, multiple pipeline dry-runs, manual draft review) before production scheduler changes go live. Confidence: 0.8
+- Expects the assistant to actually read the generated drafts/content and report on output quality (tone, structure, naturalness), not just summarize test pass/fail results — asked "did you actually read the articles?" when results were reported; again asked to read all published articles and judge whether the free LLM chain produced acceptable quality ("오늘 발행한 6개의 글을 전부 읽고 판단해줘"), i.e., review ALL published outputs, not a sample. Confidence: 0.9
+- Wants to see the complete set of actual outputs displayed in full (all drafts/results verbatim, not just highlights or a partial subset) when asking to see results — explicitly requested "결과 모두 보여줘. 보고 싶어." (show me all the results). Confidence: 0.6
+- When anything deviates from expectations — output quality/style or production pipeline results (e.g., only 3 of 6 scheduled blog posts published) — wants a root-cause diagnosis from logs (model token limits, rate limits, fallback chain failures) rather than a surface-level explanation or quick patch; asked "원인이 뭐지? 강하게 규제하는게 있어? 형식을?" and "원인이 뭔지 확인해줘". Confidence: 0.7
+- Prefers relaxing validator constraints over tightening them — explicitly instructed "완화해야 해" and stated DeepSeek/Gemini are smart enough that "the more you relax, the better the writing" (완화할 수록 좋은 글이 나온다); favors looser rules (min-length, whitespace checks) so models can produce their natural best. Confidence: 0.8
+- Wants thread content written in a short-clause, line-break rhythm style (짧은 절 + 잦은 줄바꿈, ~임/~했음 endings) — provided his own full example thread (resume prompt-injection article) and asked for it to be added as a style sample the LLM must follow. Confidence: 0.8
+- Guides LLM writing style by adding concrete example threads into the prompt (style_examples.md) rather than relying on abstract style descriptions alone. Confidence: 0.6
+- Expects completed work to be committed to git — after a task is finished, asks "커밋해줘" / "코드 바뀐것은 바뀐내용은 커밋해줘" to have the session's code and content changes committed. Confidence: 0.8
+LM writing style by adding concrete example threads into the prompt (style_examples.md) rather than relying on abstract style descriptions alone. Confidence: 0.6
+- Expects completed work to be committed to git — after a task is finished, asks "커밋해줘" to have the session's changes committed. Confidence: 0.6

@@ -56,10 +56,10 @@ FORMAT:
 
 RHYTHM (핵심 스타일 — 반드시 따라라):
 - 한 문장을 한 덩어리로 길게 쓰지 말고, **짧은 절 단위로 줄바꿈**해 리듬감을 만들어라
-- 예시 5처럼 "내가 쓰는 AI를 / 로빈후드 계좌에 직접 연결하면 / 그 AI가 알아서 코인을 사고팔음" 같은 2~3단락 절 구조
 - 각 절은 10~25자 정도로 짧게. 문장 종결 어미(~임, ~했음)는 절 끝에 둘 것
-- 빈 줄로 절 사이에 리듬의 쉼을 만들 수 있음
+- **절과 절 사이에는 반드시 빈 줄(\n\n)을 넣어라.** 빈 줄이 리듬의 쉼표다.
 - 문장 하나가 60자를 넘지 않게 절단하라 (필수)
+- 출력 예: "AI가 내 돈을\n\n대신 관리해준다고?\n\n핀테크 앱이\n은행 계좌에 직접 접근해\n자동 투자까지 가능함"
 
 CONSTRAINTS:
 - 종결어미 ~임/~했음/~있음 중심 (대화하듯 자연스럽게). ~다/~했다 신문 기사체는 Threads에 부자연스러우니 지양.
@@ -225,7 +225,7 @@ def humanize_cards(cards):
                 messages=[{'role': 'user', 'content': prompt}],
                 temperature=0.3,
                 max_tokens=2000,
-                model_override='openai',
+                model_override=None,  # 무료 체인 사용 (GPT-4o-mini 제거 2026-08-12)
             )
             if result:
                 result = _strip_instruction_leak(result)

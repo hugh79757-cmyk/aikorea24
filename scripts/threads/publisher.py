@@ -249,13 +249,21 @@ def parse_cards(text):
     return cards
 
 def add_line_spacing(text):
-    """AI가 이미 stanza 구조로 작성했다면 유지, 아니면 문장 단위로 공백 추가"""
+    """AI가 이미 절 단위 줄바꿈 구조로 작성했다면 유지, 아니면 문장 단위로 분할
+
+    처리 원칙:
+    - \n\n(빈 줄) 있음 → 절 사이 리듬 구조로 간주, 그대로 유지
+    - 단일 \n만 있음 → 짧은 절 단위 줄바꿈으로 간주, 그대로 유지 (신규)
+    - \n 전혀 없음 → 통단락. 문장 단위(. ! ?)로 분할 후 \n\n로 연결
+    """
     import re as _re
     # 방어: 리터럴 \n → 실제 개행 (DeepSeek JSON 이중 이스케이프 대응)
     text = text.replace('\\n', '\n')
-    # 이미 빈 줄로 구분된 구조면 그대로 반환 (AI가 의도한 리듬 유지)
-    if '\n\n' in text.strip():
+    text = text.strip()
+    # 이미 개행(\n)이 하나라도 있으면 AI가 의도한 줄 구조로 간주하고 유지
+    if '\n' in text:
         return text
+    # 개행 없는 통단락만 문장 단위로 분할
     sentences = _re.split(r'(?<=[.!?])\s+', text)
     result = '\n\n'.join(s.strip() for s in sentences if s.strip())
     return result

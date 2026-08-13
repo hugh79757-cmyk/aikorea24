@@ -48,14 +48,9 @@ function formatDate(dateStr: string) {
                       {item.title}
                     </h3>
                   </a>
-                  {item.comment && (
+                   {item.comment && (
                     <p class="text-base text-blue-600 dark:text-blue-300 mb-2 leading-relaxed">
                       {item.comment}
-                    </p>
-                  )}
-                  {item.description && (
-                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3 leading-relaxed line-clamp-2">
-                      {item.description}
                     </p>
                   )}
                   <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">

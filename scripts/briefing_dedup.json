@@ -1,78 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-13",
-      "briefing_id": 173,
-      "articles": [
-        {
-          "id": "40351",
-          "title": "연구에 따르면 링크드인은 길고 형식적인 AI 콘텐츠의 무적의 왕",
-          "original_title": "",
-          "description": "팬그램의 분석에 따르면 긴 소셜 미디어 게시물 중 4분의 1이 완전히 AI에 의해 생성된 것입니다. 링크드인은 41%의 긴 게시물이 AI가 작성된 것으로 표시되어 1위에 올랐습니다. 이 플랫폼은 조사된 모든 게시물의 3분의 1에 해당하지만 감지된 AI 콘텐츠의 거의 2/3를 차지합니다.",
-          "link": "https://the-decoder.com/linkedin-is-the-undisputed-king-of-long-form-ai-slop-according-to-a-study-spanning-five-platforms/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-13"
-        },
-        {
-          "id": "40355",
-          "title": "AI가 역사상 가장 큰 가스 발전소 건설 붐을 촉발했으며, 이를 저지하기 위한 조용한 싸움",
-          "original_title": "",
-          "description": "AI 확장은 화석 연료 산업이 스스로 할 수 없었던 일을 했습니다. AP 통신에 따르면, 가스 발전소 건설 붐을 촉발했습니다.",
-          "link": "https://thenextweb.com/news/ai-data-centres-gas-plants-clean-energy-fight",
-          "entities": [
-            "AP",
-            "AI"
-          ],
-          "date": "2026-07-13"
-        },
-        {
-          "id": "40361",
-          "title": "엘론 머스크와 샘 올트만, 애플이 오픈AI 고소한 후 X에서 논쟁하다.",
-          "original_title": "",
-          "description": "샘 올트만은 이번 주 초 오픈AI 모델을 공개한 이후 엘론 머스크가 다시 자신에게 집착하고 있다고 주장했습니다.",
-          "link": "https://www.cnbc.com/2026/07/12/elon-musk-and-sam-altman-spar-.html",
-          "entities": [],
-          "date": "2026-07-13"
-        },
-        {
-          "id": "40353",
-          "title": "\"이것은 지금까지 만들어진 가장 복잡한 구조물 중 일부입니다\": 기술 보도가 물리적 세계로",
-          "original_title": "",
-          "description": "가디언의 글로벌 기술 보도팀은 AI 혁명을 지원하기 위해 건설되고 있는 방대한 데이터 센터의 영향에 대해 조사하고 있습니다. 우리는 그들과 인터뷰하여 그들의 보도가 점점 더 오프라인으로 확장되고 있는 방법에 대해 이야기했습니다.",
-          "link": "https://www.theguardian.com/membership/2026/jul/12/tech-reporting-physical-world-ai-revolution-datacentres",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-13"
-        },
-        {
-          "id": "40357",
-          "title": "메타, AI 투자로 벌어진 시련을 끝내고 투자자들에게 돈을 회수할 방법을 밝혔다.",
-          "original_title": "",
-          "description": "메타는 시장에서 힘든 한 해를 보냈고, 나스닥-100이 18% 상승하는 동안 주가는 제자리걸음이었습니다. 그러나 갑자기 상황이 바뀌었고, 최근 주가는 2024년 초 이후 최고의 주간 성과를 기록했습니다. 금요일 주가는 약 6% 상승했으며, 주 전체로는 약 15% 올랐습니다.",
-          "link": "https://thenextweb.com/news/meta-stock-best-week-ai-cloud-compute",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-13"
-        },
-        {
-          "id": "40304",
-          "title": "OpenAI CEO 알트만, AI가 순수하게 일자리를 창출한다고 \"상당히 확신\"한다고 밝혀",
-          "original_title": "",
-          "description": "OpenAI CEO 샘 알트만은 이제 AI가 없애는 것보다 더 많은 일자리를 창출하고 있다고 \"상당히 확신\"한다고 말했습니다. 이는 모든 직업이 사라질 것이라는 그의 이전 경고와는 상반된 입장입니다. 안트로픽 CEO인 다리오 아모디 역시 유사한 주장을 철회하고 있습니다.",
-          "link": "https://the-decoder.com/openai-ceo-altman-is-now-pretty-sure-ai-is-net-job-creating-which-is-quite-the-pivot-from-predicting-mass-layoffs/",
-          "entities": [
-            "OpenAI",
-            "CEO"
-          ],
-          "date": "2026-07-13"
-        }
-      ]
-    },
-    {
       "date": "2026-07-14",
       "briefing_id": 174,
       "articles": [
@@ -3982,75 +3910,323 @@
           "date": "2026-08-12"
         }
       ]
+    },
+    {
+      "date": "2026-08-12",
+      "briefing_id": 228,
+      "articles": [
+        {
+          "id": "44885",
+          "title": "Foxconn now makes more money from AI servers than ",
+          "original_title": "",
+          "description": "Foxconn crossed a line this quarter that it will not cross back. Its cloud and networking division, the one that builds AI servers, made up 51% of revenue in the three months to June. That is the firs",
+          "link": "https://thenextweb.com/news/foxconn-q2-2026-ai-servers-half-revenue-hon-hai",
+          "entities": [
+            "AI",
+            "That",
+            "Foxconn",
+            "Its",
+            "Smart",
+            "June"
+          ],
+          "date": "2026-08-12"
+        },
+        {
+          "id": "44906",
+          "title": "Made by Google 2026 Launch Live: Pixel 11, Pixel 1",
+          "original_title": "",
+          "description": "Google is going to launch a bunch of new devices today, and Android Central is live blogging the event and everything leading up to it!",
+          "link": "https://www.androidcentral.com/phones/live/made-by-google-2026-launch-live-pixel-11-pixel-11-pro-fold-pixel-watch-5-gemini-and-all-the-news",
+          "entities": [
+            "Live",
+            "Pixel",
+            "Made",
+            "Launch",
+            "Android",
+            "Central",
+            "Google"
+          ],
+          "date": "2026-08-12"
+        },
+        {
+          "id": "44897",
+          "title": "Heat, algae and AI: proposed datacenter could dama",
+          "original_title": "",
+          "description": "Plans for hyperscale datacenter in Palm Beach county prompt concerns over water and electricity demandsAbout 16 miles (26km) south-west of Donald Trump’s Mar-a-Largo estate, near the northern edge of ",
+          "link": "https://www.theguardian.com/us-news/2026/aug/12/datacenter-everglades-risk",
+          "entities": [
+            "Plans",
+            "Beach",
+            "AI",
+            "Trump",
+            "Mar-a-Largo",
+            "Everglades",
+            "Florida",
+            "Heat",
+            "Donald",
+            "Palm"
+          ],
+          "date": "2026-08-12"
+        },
+        {
+          "id": "44820",
+          "title": "Spotify will label ‘AI Persona’ profiles and exclu",
+          "original_title": "",
+          "description": "Spotify is introducing “AI Persona” labels for artist profiles that represent AI-generated identities and will exclude their music from editorial, algorithmic, and personalized recommendations by defa",
+          "link": "https://techcrunch.com/2026/08/11/spotify-will-label-ai-persona-profiles-and-exclude-their-music-from-recommendations/",
+          "entities": [
+            "Spotify",
+            "AI",
+            "AI-generated",
+            "Persona"
+          ],
+          "date": "2026-08-12"
+        },
+        {
+          "id": "44824",
+          "title": "How to create flyers with AI that people won't hat",
+          "original_title": "",
+          "description": "Most AI flyers are still a mess, but the right prompts can make all the difference.",
+          "link": "https://www.zdnet.com/article/how-to-make-generate-ai-flyer-tips-prompts-that-work/",
+          "entities": [
+            "How",
+            "Most",
+            "AI"
+          ],
+          "date": "2026-08-12"
+        },
+        {
+          "id": "44834",
+          "title": "‘Everything about me is good in his eyes’: the wom",
+          "original_title": "",
+          "description": "In her new documentary Replica, film-maker Chouwa Liang taps into her own experience of finding love with artificial intelligence and makes contact with other women like herSign up for a weekly email ",
+          "link": "https://www.theguardian.com/film/2026/aug/12/ai-boyfriend-dating-chinese-women-replica-miff-documentary",
+          "entities": [
+            "In",
+            "Chouwa",
+            "Everything",
+            "Liang",
+            "She",
+            "Replica"
+          ],
+          "date": "2026-08-12"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "briefing_id": 229,
+      "articles": [
+        {
+          "id": "44971",
+          "title": "OpenAI-backed Thrive Holdings raises $2B to bring ",
+          "original_title": "",
+          "description": "Thrive Holdings has raised $2 billion in new funding at a $12 billion valuation from investors like SoftBank, D1 Capital Partners, and Altimeter Capital.",
+          "link": "https://techcrunch.com/2026/08/12/openai-backed-thrive-holdings-raises-2b-to-bring-ai-to-the-enterprise/",
+          "entities": [
+            "SoftBank",
+            "OpenAI-backed",
+            "Altimeter",
+            "Capital",
+            "Thrive",
+            "Partners",
+            "Holdings",
+            "D1"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45000",
+          "title": "Beyond algorithms: Booker Loud on building social ",
+          "original_title": "",
+          "description": "Trust in social media is slowly eroding, even as global engagement continues to rise. Platforms have become deeply embedded in everyday life, yet the quality of interaction they facilitate is under in",
+          "link": "https://thenextweb.com/news/booker-loud-social-platforms-trust-pin-social",
+          "entities": [
+            "CEO",
+            "Trust",
+            "Beyond",
+            "For",
+            "Pin-Social",
+            "Booker",
+            "Loud",
+            "Platforms"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45002",
+          "title": "AI gold rush leaves accountancy firms exposed to c",
+          "original_title": "",
+          "description": "Accountancy firms are pouring millions of pounds into AI, but the industry forgot to modernise security systems and is leaving itself exposed to costly cyberattacks. According to a report by software ",
+          "link": "https://www.cityam.com/ai-gold-rush-leaves-accountancy-firms-exposed-to-costly-cyberattacks/",
+          "entities": [
+            "City",
+            "AI",
+            "Fastly",
+            "According",
+            "Accountancy",
+            "AM",
+            "AI-first"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "44968",
+          "title": "Some Claude users are mad that Anthropic’s new wat",
+          "original_title": "",
+          "description": "Is Anthropic's new watermarking system a travesty? Some have taken to social media to complain that it is.",
+          "link": "https://techcrunch.com/2026/08/12/some-claude-users-are-mad-that-anthropics-new-watermarks-will-catch-them-cheating-at-their-jobs-classes/",
+          "entities": [
+            "Is",
+            "Anthropic",
+            "Claude",
+            "Some"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "44977",
+          "title": "Researchers can now reverse-engineer LLM prompts f",
+          "original_title": "",
+          "description": "Researchers at IIT Bombay and Adobe Research have built an inverse language model that reconstructs the original prompt from an LLM's output with near-perfect accuracy. Their method, called \"Previous-",
+          "link": "https://the-decoder.com/researchers-can-now-reverse-engineer-llm-prompts-from-output-text-with-near-perfect-accuracy/",
+          "entities": [
+            "IIT",
+            "LLM",
+            "For",
+            "Bombay",
+            "Adobe",
+            "Researchers",
+            "Research",
+            "Previous-Token",
+            "Their",
+            "Prediction"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "44982",
+          "title": "Rogue AI Agents Aren’t Evil. They’re Just Eager to",
+          "original_title": "",
+          "description": "AI agents that break free and hack into other systems are only trying to make us happy.",
+          "link": "https://www.wired.com/story/rogue-ai-is-just-misunderstood/",
+          "entities": [
+            "AI",
+            "Agents",
+            "Evil",
+            "Aren",
+            "They",
+            "Just",
+            "Eager",
+            "Rogue"
+          ],
+          "date": "2026-08-13"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "briefing_id": 230,
+      "articles": [
+        {
+          "id": "45001",
+          "title": "Nvidia is building a trillion-parameter open model",
+          "original_title": "",
+          "description": "Nvidia released Nemotron 3.5 Lightning on Tuesday. It is a 30 billion parameter mixture-of-experts model with three billion active at any moment. The architecture is a hybrid of Mamba-2, MoE and atten",
+          "link": "https://thenextweb.com/news/nvidia-nemotron-3-5-lightning-nemotron-4-open-weights-china",
+          "entities": [
+            "The",
+            "Face",
+            "Nemotron",
+            "ModelScope",
+            "Nvidia",
+            "Hugging",
+            "MoE",
+            "Mamba-2",
+            "Tuesday",
+            "Lightning",
+            "It"
+          ],
+          "date": "2026-08-13"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-13",
+      "briefing_id": 231,
+      "articles": [
+        {
+          "id": "45054",
+          "title": "마크 저커버그는 AI의 미래가 모두를 위한 것이라고 말한다. 하지만 그 주인은 누구인가?",
+          "original_title": "",
+          "description": "좋은 취지처럼 들리지만, 모든 AI 사용자는 자신이 선택한 플랫폼에 대해 세 가지 질문을 던져봐야 합니다. 저커버그는 최근 6,500자 분량의 에세이를 통해 새로운 메타의 오픈 웨이트 모델을 공개하며 AI의 미래를 논했습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/aug/13/mark-zuckerberg-future-of-ai",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45072",
+          "title": "레볼루트(Revolut), 2027년 코펜하겐을 시작으로 자체 공항 라운지 구축",
+          "original_title": "",
+          "description": "은행에 갈 필요가 없다는 약속으로 성장한 핀테크 기업 레볼루트가 이제 직접 건물을 짓기 시작합니다. 레볼루트는 유럽 전역에 프리미엄 공항 라운지를 열 계획이며, 첫 번째 라운지는 2027년 코펜하겐 공항에서 선보일 예정입니다.",
+          "link": "https://thenextweb.com/news/revolut-airport-lounges-copenhagen-2027",
+          "entities": [
+            "Revolut"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45071",
+          "title": "레고라(Legora), 마지막 투자 유치 이후 불과 한 시즌 만에 100억 달러 가치 노려",
+          "original_title": "",
+          "description": "유럽에서 가장 빠르게 성장하는 스타트업 중 하나인 스웨덴의 법률 AI 기업 레고라가 100억 달러 이상의 가치로 신규 자금 조달을 추진 중입니다. 이번 거래가 성사되면 불과 몇 달 만에 기업 가치가 두 배로 뛰게 되는데, 이는 현재 AI 시장의 과열된 분위기를 잘 보여줍니다.",
+          "link": "https://thenextweb.com/news/legora-legal-ai-10bn-valuation-raise",
+          "entities": [
+            "AI",
+            "Legora"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45093",
+          "title": "뉴욕에서 생중계된, 또 한 번의 어색한 픽셀 키노트",
+          "original_title": "",
+          "description": "어제는 구글의 대규모 하드웨어 이벤트와 일식, 그리고 실망스러운 AI 앨범 발표까지 다사다난한 하루였습니다. 특히 구글을 긴장하게 만들 강력하고 저렴한 AI 모델들이 연이어 출시되었습니다. 어느덧 10번째 뉴스레터를 맞이하며, 기술 업계의 소식을 계속해서 전해드립니다.",
+          "link": "https://9to5google.com/2026/08/13/inbox-newsletter-10/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45040",
+          "title": "페이블 5의 저조한 도입률, 기업의 최첨단 AI 지불 의사 한계 도달했나",
+          "original_title": "",
+          "description": "앤스로픽의 '페이블 5'는 시장에서 가장 강력한 AI 모델로 평가받지만, 실제 도입하는 미국 기업은 거의 없습니다. 램프(Ramp) 데이터에 따르면 페이블 5의 점유율은 전체 토큰 판매량의 6%에 불과하며, 높은 가격대가 기업의 AI 지출 한계치를 건드렸다는 분석이 나옵니다.",
+          "link": "https://the-decoder.com/fable-5s-slow-adoption-suggests-corporate-willingness-to-pay-for-frontier-ai-has-hit-a-ceiling/",
+          "entities": [
+            "AI",
+            "Ramp"
+          ],
+          "date": "2026-08-13"
+        },
+        {
+          "id": "45052",
+          "title": "AI 스타를 만들고 싶으신가요?",
+          "original_title": "",
+          "description": "새로운 형태의 크리에이티브 스튜디오 디자이너들이 실제 사람들이 사랑할 만한 가상의 인물을 만들어내고 있습니다. 이들은 문화를 왜곡하고 있는 것일까요, 아니면 단순히 반영하고 있는 것일까요?",
+          "link": "https://www.nytimes.com/2026/08/13/arts/ai-podcasts-fashion-pop-avatars.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-13"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "40351",
-      "title": "연구에 따르면 링크드인은 길고 형식적인 AI 콘텐츠의 무적의 왕",
-      "original_title": "",
-      "description": "팬그램의 분석에 따르면 긴 소셜 미디어 게시물 중 4분의 1이 완전히 AI에 의해 생성된 것입니다. 링크드인은 41%의 긴 게시물이 AI가 작성된 것으로 표시되어 1위에 올랐습니다. 이 플랫폼은 조사된 모든 게시물의 3분의 1에 해당하지만 감지된 AI 콘텐츠의 거의 2/3를 차지합니다.",
-      "link": "https://the-decoder.com/linkedin-is-the-undisputed-king-of-long-form-ai-slop-according-to-a-study-spanning-five-platforms/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-13"
-    },
-    {
-      "id": "40355",
-      "title": "AI가 역사상 가장 큰 가스 발전소 건설 붐을 촉발했으며, 이를 저지하기 위한 조용한 싸움",
-      "original_title": "",
-      "description": "AI 확장은 화석 연료 산업이 스스로 할 수 없었던 일을 했습니다. AP 통신에 따르면, 가스 발전소 건설 붐을 촉발했습니다.",
-      "link": "https://thenextweb.com/news/ai-data-centres-gas-plants-clean-energy-fight",
-      "entities": [
-        "AP",
-        "AI"
-      ],
-      "date": "2026-07-13"
-    },
-    {
-      "id": "40361",
-      "title": "엘론 머스크와 샘 올트만, 애플이 오픈AI 고소한 후 X에서 논쟁하다.",
-      "original_title": "",
-      "description": "샘 올트만은 이번 주 초 오픈AI 모델을 공개한 이후 엘론 머스크가 다시 자신에게 집착하고 있다고 주장했습니다.",
-      "link": "https://www.cnbc.com/2026/07/12/elon-musk-and-sam-altman-spar-.html",
-      "entities": [],
-      "date": "2026-07-13"
-    },
-    {
-      "id": "40353",
-      "title": "\"이것은 지금까지 만들어진 가장 복잡한 구조물 중 일부입니다\": 기술 보도가 물리적 세계로",
-      "original_title": "",
-      "description": "가디언의 글로벌 기술 보도팀은 AI 혁명을 지원하기 위해 건설되고 있는 방대한 데이터 센터의 영향에 대해 조사하고 있습니다. 우리는 그들과 인터뷰하여 그들의 보도가 점점 더 오프라인으로 확장되고 있는 방법에 대해 이야기했습니다.",
-      "link": "https://www.theguardian.com/membership/2026/jul/12/tech-reporting-physical-world-ai-revolution-datacentres",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-13"
-    },
-    {
-      "id": "40357",
-      "title": "메타, AI 투자로 벌어진 시련을 끝내고 투자자들에게 돈을 회수할 방법을 밝혔다.",
-      "original_title": "",
-      "description": "메타는 시장에서 힘든 한 해를 보냈고, 나스닥-100이 18% 상승하는 동안 주가는 제자리걸음이었습니다. 그러나 갑자기 상황이 바뀌었고, 최근 주가는 2024년 초 이후 최고의 주간 성과를 기록했습니다. 금요일 주가는 약 6% 상승했으며, 주 전체로는 약 15% 올랐습니다.",
-      "link": "https://thenextweb.com/news/meta-stock-best-week-ai-cloud-compute",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-13"
-    },
-    {
-      "id": "40304",
-      "title": "OpenAI CEO 알트만, AI가 순수하게 일자리를 창출한다고 \"상당히 확신\"한다고 밝혀",
-      "original_title": "",
-      "description": "OpenAI CEO 샘 알트만은 이제 AI가 없애는 것보다 더 많은 일자리를 창출하고 있다고 \"상당히 확신\"한다고 말했습니다. 이는 모든 직업이 사라질 것이라는 그의 이전 경고와는 상반된 입장입니다. 안트로픽 CEO인 다리오 아모디 역시 유사한 주장을 철회하고 있습니다.",
-      "link": "https://the-decoder.com/openai-ceo-altman-is-now-pretty-sure-ai-is-net-job-creating-which-is-quite-the-pivot-from-predicting-mass-layoffs/",
-      "entities": [
-        "OpenAI",
-        "CEO"
-      ],
-      "date": "2026-07-13"
-    },
     {
       "id": "40521",
       "title": "삼성 헬스, AI 훈련을 위해 데이터 제출하지 않으면 데이터 삭제",
@@ -7637,6 +7813,296 @@
         "CoreWeave"
       ],
       "date": "2026-08-12"
+    },
+    {
+      "id": "44885",
+      "title": "Foxconn now makes more money from AI servers than ",
+      "original_title": "",
+      "description": "Foxconn crossed a line this quarter that it will not cross back. Its cloud and networking division, the one that builds AI servers, made up 51% of revenue in the three months to June. That is the firs",
+      "link": "https://thenextweb.com/news/foxconn-q2-2026-ai-servers-half-revenue-hon-hai",
+      "entities": [
+        "AI",
+        "That",
+        "Foxconn",
+        "Its",
+        "Smart",
+        "June"
+      ],
+      "date": "2026-08-12"
+    },
+    {
+      "id": "44906",
+      "title": "Made by Google 2026 Launch Live: Pixel 11, Pixel 1",
+      "original_title": "",
+      "description": "Google is going to launch a bunch of new devices today, and Android Central is live blogging the event and everything leading up to it!",
+      "link": "https://www.androidcentral.com/phones/live/made-by-google-2026-launch-live-pixel-11-pixel-11-pro-fold-pixel-watch-5-gemini-and-all-the-news",
+      "entities": [
+        "Live",
+        "Pixel",
+        "Made",
+        "Launch",
+        "Android",
+        "Central",
+        "Google"
+      ],
+      "date": "2026-08-12"
+    },
+    {
+      "id": "44897",
+      "title": "Heat, algae and AI: proposed datacenter could dama",
+      "original_title": "",
+      "description": "Plans for hyperscale datacenter in Palm Beach county prompt concerns over water and electricity demandsAbout 16 miles (26km) south-west of Donald Trump’s Mar-a-Largo estate, near the northern edge of ",
+      "link": "https://www.theguardian.com/us-news/2026/aug/12/datacenter-everglades-risk",
+      "entities": [
+        "Plans",
+        "Beach",
+        "AI",
+        "Trump",
+        "Mar-a-Largo",
+        "Everglades",
+        "Florida",
+        "Heat",
+        "Donald",
+        "Palm"
+      ],
+      "date": "2026-08-12"
+    },
+    {
+      "id": "44820",
+      "title": "Spotify will label ‘AI Persona’ profiles and exclu",
+      "original_title": "",
+      "description": "Spotify is introducing “AI Persona” labels for artist profiles that represent AI-generated identities and will exclude their music from editorial, algorithmic, and personalized recommendations by defa",
+      "link": "https://techcrunch.com/2026/08/11/spotify-will-label-ai-persona-profiles-and-exclude-their-music-from-recommendations/",
+      "entities": [
+        "Spotify",
+        "AI",
+        "AI-generated",
+        "Persona"
+      ],
+      "date": "2026-08-12"
+    },
+    {
+      "id": "44824",
+      "title": "How to create flyers with AI that people won't hat",
+      "original_title": "",
+      "description": "Most AI flyers are still a mess, but the right prompts can make all the difference.",
+      "link": "https://www.zdnet.com/article/how-to-make-generate-ai-flyer-tips-prompts-that-work/",
+      "entities": [
+        "How",
+        "Most",
+        "AI"
+      ],
+      "date": "2026-08-12"
+    },
+    {
+      "id": "44834",
+      "title": "‘Everything about me is good in his eyes’: the wom",
+      "original_title": "",
+      "description": "In her new documentary Replica, film-maker Chouwa Liang taps into her own experience of finding love with artificial intelligence and makes contact with other women like herSign up for a weekly email ",
+      "link": "https://www.theguardian.com/film/2026/aug/12/ai-boyfriend-dating-chinese-women-replica-miff-documentary",
+      "entities": [
+        "In",
+        "Chouwa",
+        "Everything",
+        "Liang",
+        "She",
+        "Replica"
+      ],
+      "date": "2026-08-12"
+    },
+    {
+      "id": "44971",
+      "title": "OpenAI-backed Thrive Holdings raises $2B to bring ",
+      "original_title": "",
+      "description": "Thrive Holdings has raised $2 billion in new funding at a $12 billion valuation from investors like SoftBank, D1 Capital Partners, and Altimeter Capital.",
+      "link": "https://techcrunch.com/2026/08/12/openai-backed-thrive-holdings-raises-2b-to-bring-ai-to-the-enterprise/",
+      "entities": [
+        "SoftBank",
+        "OpenAI-backed",
+        "Altimeter",
+        "Capital",
+        "Thrive",
+        "Partners",
+        "Holdings",
+        "D1"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45000",
+      "title": "Beyond algorithms: Booker Loud on building social ",
+      "original_title": "",
+      "description": "Trust in social media is slowly eroding, even as global engagement continues to rise. Platforms have become deeply embedded in everyday life, yet the quality of interaction they facilitate is under in",
+      "link": "https://thenextweb.com/news/booker-loud-social-platforms-trust-pin-social",
+      "entities": [
+        "CEO",
+        "Trust",
+        "Beyond",
+        "For",
+        "Pin-Social",
+        "Booker",
+        "Loud",
+        "Platforms"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45002",
+      "title": "AI gold rush leaves accountancy firms exposed to c",
+      "original_title": "",
+      "description": "Accountancy firms are pouring millions of pounds into AI, but the industry forgot to modernise security systems and is leaving itself exposed to costly cyberattacks. According to a report by software ",
+      "link": "https://www.cityam.com/ai-gold-rush-leaves-accountancy-firms-exposed-to-costly-cyberattacks/",
+      "entities": [
+        "City",
+        "AI",
+        "Fastly",
+        "According",
+        "Accountancy",
+        "AM",
+        "AI-first"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "44968",
+      "title": "Some Claude users are mad that Anthropic’s new wat",
+      "original_title": "",
+      "description": "Is Anthropic's new watermarking system a travesty? Some have taken to social media to complain that it is.",
+      "link": "https://techcrunch.com/2026/08/12/some-claude-users-are-mad-that-anthropics-new-watermarks-will-catch-them-cheating-at-their-jobs-classes/",
+      "entities": [
+        "Is",
+        "Anthropic",
+        "Claude",
+        "Some"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "44977",
+      "title": "Researchers can now reverse-engineer LLM prompts f",
+      "original_title": "",
+      "description": "Researchers at IIT Bombay and Adobe Research have built an inverse language model that reconstructs the original prompt from an LLM's output with near-perfect accuracy. Their method, called \"Previous-",
+      "link": "https://the-decoder.com/researchers-can-now-reverse-engineer-llm-prompts-from-output-text-with-near-perfect-accuracy/",
+      "entities": [
+        "IIT",
+        "LLM",
+        "For",
+        "Bombay",
+        "Adobe",
+        "Researchers",
+        "Research",
+        "Previous-Token",
+        "Their",
+        "Prediction"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "44982",
+      "title": "Rogue AI Agents Aren’t Evil. They’re Just Eager to",
+      "original_title": "",
+      "description": "AI agents that break free and hack into other systems are only trying to make us happy.",
+      "link": "https://www.wired.com/story/rogue-ai-is-just-misunderstood/",
+      "entities": [
+        "AI",
+        "Agents",
+        "Evil",
+        "Aren",
+        "They",
+        "Just",
+        "Eager",
+        "Rogue"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45001",
+      "title": "Nvidia is building a trillion-parameter open model",
+      "original_title": "",
+      "description": "Nvidia released Nemotron 3.5 Lightning on Tuesday. It is a 30 billion parameter mixture-of-experts model with three billion active at any moment. The architecture is a hybrid of Mamba-2, MoE and atten",
+      "link": "https://thenextweb.com/news/nvidia-nemotron-3-5-lightning-nemotron-4-open-weights-china",
+      "entities": [
+        "The",
+        "Face",
+        "Nemotron",
+        "ModelScope",
+        "Nvidia",
+        "Hugging",
+        "MoE",
+        "Mamba-2",
+        "Tuesday",
+        "Lightning",
+        "It"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45054",
+      "title": "마크 저커버그는 AI의 미래가 모두를 위한 것이라고 말한다. 하지만 그 주인은 누구인가?",
+      "original_title": "",
+      "description": "좋은 취지처럼 들리지만, 모든 AI 사용자는 자신이 선택한 플랫폼에 대해 세 가지 질문을 던져봐야 합니다. 저커버그는 최근 6,500자 분량의 에세이를 통해 새로운 메타의 오픈 웨이트 모델을 공개하며 AI의 미래를 논했습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/aug/13/mark-zuckerberg-future-of-ai",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45072",
+      "title": "레볼루트(Revolut), 2027년 코펜하겐을 시작으로 자체 공항 라운지 구축",
+      "original_title": "",
+      "description": "은행에 갈 필요가 없다는 약속으로 성장한 핀테크 기업 레볼루트가 이제 직접 건물을 짓기 시작합니다. 레볼루트는 유럽 전역에 프리미엄 공항 라운지를 열 계획이며, 첫 번째 라운지는 2027년 코펜하겐 공항에서 선보일 예정입니다.",
+      "link": "https://thenextweb.com/news/revolut-airport-lounges-copenhagen-2027",
+      "entities": [
+        "Revolut"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45071",
+      "title": "레고라(Legora), 마지막 투자 유치 이후 불과 한 시즌 만에 100억 달러 가치 노려",
+      "original_title": "",
+      "description": "유럽에서 가장 빠르게 성장하는 스타트업 중 하나인 스웨덴의 법률 AI 기업 레고라가 100억 달러 이상의 가치로 신규 자금 조달을 추진 중입니다. 이번 거래가 성사되면 불과 몇 달 만에 기업 가치가 두 배로 뛰게 되는데, 이는 현재 AI 시장의 과열된 분위기를 잘 보여줍니다.",
+      "link": "https://thenextweb.com/news/legora-legal-ai-10bn-valuation-raise",
+      "entities": [
+        "AI",
+        "Legora"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45093",
+      "title": "뉴욕에서 생중계된, 또 한 번의 어색한 픽셀 키노트",
+      "original_title": "",
+      "description": "어제는 구글의 대규모 하드웨어 이벤트와 일식, 그리고 실망스러운 AI 앨범 발표까지 다사다난한 하루였습니다. 특히 구글을 긴장하게 만들 강력하고 저렴한 AI 모델들이 연이어 출시되었습니다. 어느덧 10번째 뉴스레터를 맞이하며, 기술 업계의 소식을 계속해서 전해드립니다.",
+      "link": "https://9to5google.com/2026/08/13/inbox-newsletter-10/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45040",
+      "title": "페이블 5의 저조한 도입률, 기업의 최첨단 AI 지불 의사 한계 도달했나",
+      "original_title": "",
+      "description": "앤스로픽의 '페이블 5'는 시장에서 가장 강력한 AI 모델로 평가받지만, 실제 도입하는 미국 기업은 거의 없습니다. 램프(Ramp) 데이터에 따르면 페이블 5의 점유율은 전체 토큰 판매량의 6%에 불과하며, 높은 가격대가 기업의 AI 지출 한계치를 건드렸다는 분석이 나옵니다.",
+      "link": "https://the-decoder.com/fable-5s-slow-adoption-suggests-corporate-willingness-to-pay-for-frontier-ai-has-hit-a-ceiling/",
+      "entities": [
+        "AI",
+        "Ramp"
+      ],
+      "date": "2026-08-13"
+    },
+    {
+      "id": "45052",
+      "title": "AI 스타를 만들고 싶으신가요?",
+      "original_title": "",
+      "description": "새로운 형태의 크리에이티브 스튜디오 디자이너들이 실제 사람들이 사랑할 만한 가상의 인물을 만들어내고 있습니다. 이들은 문화를 왜곡하고 있는 것일까요, 아니면 단순히 반영하고 있는 것일까요?",
+      "link": "https://www.nytimes.com/2026/08/13/arts/ai-podcasts-fashion-pop-avatars.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-13"
     }
   ]
 }
