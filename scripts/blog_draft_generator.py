@@ -963,15 +963,6 @@ def main():
                 log(f"    ❌ 생성 실패")
                 continue
 
-            # 발행 전 검수 게이트 (Task 3)
-            quality = validate_draft_quality(gpt_output, [art])
-            if not quality['passed']:
-                log(f"    ⚠️ 검수 실패 — 초안 큐 보관:")
-                for reason in quality['reasons']:
-                    log(f"      - {reason}")
-                log(f"    (검수 상세: {quality['checks']})")
-                continue
-
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
             # article 링크/설명도 함께 저장 (썸네일 중복 재시도 시 사용)
             created.append((filepath, seo_title or title, sort_order, 1, link, art.get("description", "")))
