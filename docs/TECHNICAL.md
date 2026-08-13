@@ -341,7 +341,7 @@ Step 6: 빌드 + 배포 (deploy.sh)
 ```bash
 python3 scripts/run_pipeline.py                    # 전체 실행
 python3 scripts/run_pipeline.py --skip-news        # 뉴스 선정 건너뜀
-python3 scripts/run_pipeline.py --skip-deep        # 심층글 건너뜀
+python3 scripts/run_pipeline.py --skip-briefing   # 브리핑 생성 건너뜀
 python3 scripts/run_pipeline.py --skip-deploy      # 배포 건너뜀
 python3 scripts/run_pipeline.py --dry-run          # 계획만 출력
 python3 scripts/run_pipeline.py --date YYYY-MM-DD  # 특정 날짜

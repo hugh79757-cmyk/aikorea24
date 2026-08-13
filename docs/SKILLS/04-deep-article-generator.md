@@ -47,8 +47,10 @@ pip install requests beautifulsoup4
 
 ```bash
 cd /Users/twinssn/Projects/aikorea24
-python3 scripts/run_pipeline.py --no-skip-deep
+python3 scripts/run_pipeline.py
 ```
+
+※ 심층글(deep article) 기능은 2026-07-12 Phase 26에서 비활성화되었으며, 2026-08-13 기준 auto_deep_article.py는 제거되었습니다. 현재 블로그 글 생성은 blog_draft_generator.py의 generate_draft()를 통해 이루어집니다.
 
 ### 3.2 단독 테스트 실행
 
@@ -210,7 +212,7 @@ src/content/blog/                 # 생성된 블로그 포스트
 - [ ] `python3 scripts/validate_blog_posts.py` 검증 통과 확인
 
 ### 파이프라인 통합
-- [ ] `run_pipeline.py --no-skip-deep` 실행 확인
+- [ ] `run_pipeline.py` 실행 확인 (기본 실행)
 - [ ] 브리핑 아이템의 `deep_dive_url`이 생성된 블로그 URL로 연결되는지 확인
 - [ ] 썸네일과 blog post의 image: 필드 연결 확인
 

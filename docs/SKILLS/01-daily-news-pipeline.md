@@ -91,11 +91,11 @@ python3 scripts/run_pipeline.py
 ### 3.2 단계별 건너뛰기
 
 ```bash
-# 심층글만 실행 (나머지는 기본)
-python3 scripts/run_pipeline.py --no-skip-deep
-
 # 뉴스 선정 건너뛰고 기존 브리핑으로 진행
 python3 scripts/run_pipeline.py --skip-news
+
+# 브리핑 생성 건너뛰기
+python3 scripts/run_pipeline.py --skip-briefing
 
 # 이메일 발송만 건너뛰기
 python3 scripts/run_pipeline.py --skip-email
@@ -104,7 +104,7 @@ python3 scripts/run_pipeline.py --skip-email
 python3 scripts/run_pipeline.py --skip-deploy
 
 # 여러 단계 조합
-python3 scripts/run_pipeline.py --skip-deep --skip-thumbnails --skip-deploy
+python3 scripts/run_pipeline.py --skip-news --skip-thumbnails --skip-deploy
 ```
 
 ### 3.3 Dry-run (실행 계획만 확인)
