@@ -79,13 +79,9 @@ for (const file of files) {
   insertCount++;
 }
 
-// 트랜잭션으로 묶기
-console.log('BEGIN TRANSACTION;');
-console.log('');
+// 각 INSERT는 원자적(atomic)으로 실행됨 (D1은 트랜잭션 미지원)
 for (const sql of inserts) {
   console.log(sql);
 }
-console.log('');
-console.log('COMMIT;');
 
 console.error(`-- ✅ 총 ${insertCount}개 도구 INSERT SQL 생성 완료`);
