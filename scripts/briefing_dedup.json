@@ -4162,6 +4162,89 @@
           "date": "2026-08-14"
         }
       ]
+    },
+    {
+      "date": "2026-08-14",
+      "briefing_id": 233,
+      "articles": [
+        {
+          "id": "45247",
+          "title": "월스트리트 거물들, AI 프로젝트 붐을 위해 엔비디아에 5천억 달러 투자",
+          "original_title": "",
+          "description": "이 자금은 AI 데이터와 연산을 처리하는 수많은 컴퓨터 칩을 수용하고 냉각하기 위한 새로운 데이터 센터 구축에 사용될 예정입니다. AI 인프라 확장을 위한 대규모 투자가 본격화되고 있습니다.",
+          "link": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45164",
+          "title": "OpenAI, 경영진 개편 속 신임 최고수익책임자(CRO) 영입",
+          "original_title": "",
+          "description": "OpenAI가 취임 9개월 만에 데니스 드레서(Denise Dresser) 최고수익책임자를 교체하고, 위즈(Wiz)의 사장 겸 최고운영책임자인 달리 라직(Dali Rajic)을 새로운 영업 총괄로 영입했습니다. 이번 인사는 지속적인 경영진 개편의 일환으로 풀이됩니다.",
+          "link": "https://techcrunch.com/2026/08/13/openai-hires-new-cro-as-executive-shake-up-continues/",
+          "entities": [
+            "Rajic",
+            "Denise",
+            "OpenAI",
+            "Dresser",
+            "Wiz",
+            "CRO",
+            "Dali"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45260",
+          "title": "에어비앤비 CEO \"일반인을 위한 AI를 만드는 곳은 없다\"… 그는 Y 콤비네이터 이사회 ",
+          "original_title": "",
+          "description": "에어비앤비 최고경영자는 이번 주 야후 파이낸스 팟캐스트에서 AI에 대한 두 가지 문제를 지적했습니다. 그는 우리가 AI를 올바르게 논의하지 못하는 서사적 문제와, 실제 일반인을 위한 제품 개발이 부족하다는 점을 꼬집었습니다.",
+          "link": "https://thenextweb.com/news/consumer-ai-gap-brian-chesky-y-combinator-enterprise",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45238",
+          "title": "클로드 코드(Claude Code), 앤스로픽 소프트웨어 일일 유지보수 수행… 병합률 46",
+          "original_title": "",
+          "description": "앤스로픽은 자사 앱의 일일 유지보수 작업에 '클로드 코드'를 투입해 성능을 시험하고 있습니다. 몇 주간 AI가 생성한 388개의 풀 리퀘스트 중 46%가 인간의 검토를 거쳐 실제 코드에 병합되었으며, 개발자들은 이를 AI 자율성의 초기 징후로 보고 있습니다.",
+          "link": "https://the-decoder.com/claude-code-now-runs-daily-maintenance-on-anthropics-software-with-a-46-percent-merge-rate/",
+          "entities": [
+            "AI",
+            "Code",
+            "Claude"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45242",
+          "title": "오픈팩토리(OpenFactory)로 하룻밤 만에 나만의 리눅스 배포판 만들기 - 이 AI ",
+          "original_title": "",
+          "description": "나만의 리눅스 배포판이 필요하지만 만드는 법을 배울 시간이 없으신가요? 오픈팩토리가 그 과정을 도와줄 수 있습니다.",
+          "link": "https://www.zdnet.com/article/openfactory-is-an-impressive-new-service-that-allows-you-to-build-your-own-linux-distribution/",
+          "entities": [
+            "OpenFactory",
+            "AI"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45239",
+          "title": "지푸(Zhipu) AI, 최강의 오픈 웨이트 코딩 모델 'GLM-5.3' 출시",
+          "original_title": "",
+          "description": "지푸 AI가 이전 모델 대비 사후 학습만으로 성능을 50% 향상시킨 'GLM-5.3'을 공개했습니다. 자체 벤치마크 결과 가장 강력한 오픈 웨이트 코딩 모델로 평가받는 이 모델은 사이버 보안 분야에 특화되어 269개 프로젝트에서 2,436개의 취약점을 발견하는 성과를 냈습니다.",
+          "link": "https://the-decoder.com/zhipu-ai-releases-glm-5-3-claims-its-the-strongest-open-weights-coding-model/",
+          "entities": [
+            "AI",
+            "Zhipu",
+            "GLM-5.3"
+          ],
+          "date": "2026-08-14"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7983,6 +8066,83 @@
       "link": "https://www.theguardian.com/commentisfree/2026/aug/13/lost-jobs-inequality-ai-oligarchs",
       "entities": [
         "AI"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45247",
+      "title": "월스트리트 거물들, AI 프로젝트 붐을 위해 엔비디아에 5천억 달러 투자",
+      "original_title": "",
+      "description": "이 자금은 AI 데이터와 연산을 처리하는 수많은 컴퓨터 칩을 수용하고 냉각하기 위한 새로운 데이터 센터 구축에 사용될 예정입니다. AI 인프라 확장을 위한 대규모 투자가 본격화되고 있습니다.",
+      "link": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45164",
+      "title": "OpenAI, 경영진 개편 속 신임 최고수익책임자(CRO) 영입",
+      "original_title": "",
+      "description": "OpenAI가 취임 9개월 만에 데니스 드레서(Denise Dresser) 최고수익책임자를 교체하고, 위즈(Wiz)의 사장 겸 최고운영책임자인 달리 라직(Dali Rajic)을 새로운 영업 총괄로 영입했습니다. 이번 인사는 지속적인 경영진 개편의 일환으로 풀이됩니다.",
+      "link": "https://techcrunch.com/2026/08/13/openai-hires-new-cro-as-executive-shake-up-continues/",
+      "entities": [
+        "Rajic",
+        "Denise",
+        "OpenAI",
+        "Dresser",
+        "Wiz",
+        "CRO",
+        "Dali"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45260",
+      "title": "에어비앤비 CEO \"일반인을 위한 AI를 만드는 곳은 없다\"… 그는 Y 콤비네이터 이사회 ",
+      "original_title": "",
+      "description": "에어비앤비 최고경영자는 이번 주 야후 파이낸스 팟캐스트에서 AI에 대한 두 가지 문제를 지적했습니다. 그는 우리가 AI를 올바르게 논의하지 못하는 서사적 문제와, 실제 일반인을 위한 제품 개발이 부족하다는 점을 꼬집었습니다.",
+      "link": "https://thenextweb.com/news/consumer-ai-gap-brian-chesky-y-combinator-enterprise",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45238",
+      "title": "클로드 코드(Claude Code), 앤스로픽 소프트웨어 일일 유지보수 수행… 병합률 46",
+      "original_title": "",
+      "description": "앤스로픽은 자사 앱의 일일 유지보수 작업에 '클로드 코드'를 투입해 성능을 시험하고 있습니다. 몇 주간 AI가 생성한 388개의 풀 리퀘스트 중 46%가 인간의 검토를 거쳐 실제 코드에 병합되었으며, 개발자들은 이를 AI 자율성의 초기 징후로 보고 있습니다.",
+      "link": "https://the-decoder.com/claude-code-now-runs-daily-maintenance-on-anthropics-software-with-a-46-percent-merge-rate/",
+      "entities": [
+        "AI",
+        "Code",
+        "Claude"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45242",
+      "title": "오픈팩토리(OpenFactory)로 하룻밤 만에 나만의 리눅스 배포판 만들기 - 이 AI ",
+      "original_title": "",
+      "description": "나만의 리눅스 배포판이 필요하지만 만드는 법을 배울 시간이 없으신가요? 오픈팩토리가 그 과정을 도와줄 수 있습니다.",
+      "link": "https://www.zdnet.com/article/openfactory-is-an-impressive-new-service-that-allows-you-to-build-your-own-linux-distribution/",
+      "entities": [
+        "OpenFactory",
+        "AI"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45239",
+      "title": "지푸(Zhipu) AI, 최강의 오픈 웨이트 코딩 모델 'GLM-5.3' 출시",
+      "original_title": "",
+      "description": "지푸 AI가 이전 모델 대비 사후 학습만으로 성능을 50% 향상시킨 'GLM-5.3'을 공개했습니다. 자체 벤치마크 결과 가장 강력한 오픈 웨이트 코딩 모델로 평가받는 이 모델은 사이버 보안 분야에 특화되어 269개 프로젝트에서 2,436개의 취약점을 발견하는 성과를 냈습니다.",
+      "link": "https://the-decoder.com/zhipu-ai-releases-glm-5-3-claims-its-the-strongest-open-weights-coding-model/",
+      "entities": [
+        "AI",
+        "Zhipu",
+        "GLM-5.3"
       ],
       "date": "2026-08-14"
     }

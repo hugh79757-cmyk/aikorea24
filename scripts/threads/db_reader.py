@@ -321,7 +321,7 @@ def get_articles():
                      END || '-' || 
                      CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                    ELSE NULL
-                 END >= date('now', '-3 days')
+                 END >= date('now', '-7 days')
                {source_filter}
               ORDER BY pub_date DESC LIMIT 2000"""
     rows2 = d1_query(sql2)
@@ -340,7 +340,7 @@ def get_articles():
                 r['priority'] = 2
                 articles.append(r)
                 existing_ids.add(str(r['id']))
-    log(f'  2순위 최근3일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개')
+    log(f'  2순위 최근7일: {len(rows2)}개 중 신규 {len([a for a in articles if a["priority"]==2])}개')
 
     # 3순위: 이전 기사
     if len(articles) < 50:
@@ -362,7 +362,7 @@ def get_articles():
                          END || '-' || 
                          CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                        ELSE NULL
-                     END < date('now', '-3 days')
+                     END < date('now', '-7 days')
                    {source_filter}
               ORDER BY pub_date DESC LIMIT {remaining + 20}"""
         rows3 = d1_query(sql3)
@@ -394,7 +394,7 @@ if __name__ == '__main__':
     p1 = sum(1 for a in articles if a['priority'] == 1)
     p2 = sum(1 for a in articles if a['priority'] == 2)
     p3 = sum(1 for a in articles if a['priority'] == 3)
-    print(f'\n기사 풀 현황: 브리핑 {p1}개 + 최근3일 {p2}개 + 이전 {p3}개 = 총 {len(articles)}개')
+    print(f'\n기사 풀 현황: 브리핑 {p1}개 + 최근7일 {p2}개 + 이전 {p3}개 = 총 {len(articles)}개')
     for a in articles[:5]:
         print(f'  [P{a["priority"]}] [{a["id"]}] {a["title"][:55]}')
     if len(articles) > 5:

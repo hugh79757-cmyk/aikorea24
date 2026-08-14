@@ -199,9 +199,11 @@ def run_v3(dry_run=False):
 
         if not result or not result.get('cards'):
             log(f' ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
-            pitch_ids = _normalize_article_ids(pitch)
-            for aid in pitch_ids:
-                aid_str = str(aid).lstrip('#').strip()
+            # Only record the PRIMARY article (first one used for writing),
+            # not all related articles — related articles may work fine with other pitches
+            first_id = _get_first_article_id(pitch)
+            if first_id:
+                aid_str = str(first_id).lstrip('#').strip()
                 if aid_str:
                     failed_articles.save_failed_article(aid_str, reason="write_validation_failed", title=pitch.get('title', ''), url=pitch.get('link', ''))
             continue
