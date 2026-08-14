@@ -137,20 +137,21 @@ class TestValidateFinalCardsLength:
 
 
 class TestValidateFinalCardsSourceLink:
-    """출처 링크 검증"""
+    """출처 링크 검증 — FORMAT_D: 링크 카드 별도 반환, validate_final_cards는 출처 링크 검증 미도입"""
 
     def test_missing_source_link(self):
-        """마지막 카드에 http/🔗 없음 → '출처 링크 없음' 오류"""
+        """validate_final_cards는 출처 링크 검증을 하지 않음 (링크는 publisher에서 별도 처리).
+        5개 정상 카드 → 통과."""
         cards = [
             "첫 번째 카드 내용임.\n정상적인 내용.",
             "두 번째 카드 내용임.\n정상적인 내용.",
             "세 번째 카드 내용임.\n정상적인 내용.",
             "네 번째 카드 내용임.\n정상적인 내용.",
-            "마지막 카드인데 링크가 없음.\n문제가 발생해야 함.",
+            "다섯 번째 카드인데 링크가 없지만 문제없음.\n출처 링크는 별도 답글로 발행.",
         ]
         valid, issues = validate_final_cards(cards)
-        assert valid is False
-        assert any("출처 링크 없음" in issue for issue in issues)
+        assert valid is True
+        assert issues == []
 
 
 class TestValidateFinalCardsIncompleteSentence:

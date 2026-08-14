@@ -25,7 +25,7 @@ class TestParseCardsJSONFirst:
 
     @pytest.mark.unit
     def test_json_parses_valid(self):
-        """Valid JSON with 6 cards parses successfully."""
+        """Valid JSON with 5 content cards parses successfully (FORMAT_D: no link card)."""
         json_str = json.dumps({
             "cards": [
                 "Card 1 content with sufficient length to pass validation.",
@@ -33,11 +33,10 @@ class TestParseCardsJSONFirst:
                 "Card 3 content continues the pattern with adequate length.",
                 "Card 4 content is long enough to meet minimum requirements.",
                 "Card 5 content must be over 100 characters to be considered valid by later checks but here we just test parsing.",
-                "🔗 https://example.com"
             ]
         })
         result = parse_cards_json_first(json_str, 'D')
-        assert len(result) == 6
+        assert len(result) == 5
         assert all(isinstance(c, str) for c in result)
         assert result[0].strip() != ""
 
@@ -64,22 +63,9 @@ class TestParseCardsJSONFirst:
         result = parse_cards_json_first(text, 'D')
         assert result == []
 
-    @pytest.mark.unit
-    def test_link_card_preserved(self):
-        """Link card starting with 🔗 is retained in JSON parsing."""
-        json_str = json.dumps({
-            "cards": [
-                "Normal card content here.",
-                "Another normal card.",
-                "Third card with enough length.",
-                "Fourth card content.",
-                "Fifth card content.",
-                "🔗 https://example.com"
-            ]
-        })
-        result = parse_cards_json_first(json_str, 'D')
-        assert len(result) == 6
-        assert result[-1].startswith('🔗')
+    # test_link_card_preserved: REMOVED — FORMAT_D no longer includes link card in main chain.
+    # Link card preservation in JSON parser is irrelevant when link is returned separately.
+    # See: test_link_returned_separately, test_only_5_content_cards (test_write_thread_validation.py)
 
 
 class TestStripInstructionLeak:
@@ -180,26 +166,28 @@ class TestHumanizeCards:
 class TestWriteThreadEarlyRejection:
     @pytest.mark.unit
     def test_early_rejection_range(self, monkeypatch):
-        """write_thread 내부 로직: lo=4 기준 1~3장 카드는 조기 rejection"""
+        """write_thread 내부 로직: lo=5 기준 1~4장 카드는 조기 rejection (FORMAT_D: 5카드 엄격)"""
         lo, _ = FORMAT_CARD_COUNT_TOLERANCE.get('D', (5, 5))
-        assert lo == 4
-        for n in range(1, 4):
+        assert lo == 5
+        for n in range(1, 5):
             assert n < lo, f"{n} should be < lo={lo}"
-        for n in range(4, 8):
+        for n in range(5, 8):
             assert n >= lo, f"{n} should be >= lo={lo}"
 
 
 class TestAssembleFinal:
     @pytest.mark.unit
     def test_url_appended(self, monkeypatch):
+        """assemble_final()은 더 이상 URL append 안 함 — 링크는 publisher에서 별도 답글로 발행.
+        카드는 그대로 반환 (cleanup만 적용)."""
         import db_reader
         def mock_validate(url, timeout=5):
             return True
         monkeypatch.setattr(db_reader, "validate_link", mock_validate)
         cards = ["Card one", "Card two"]
         result = assemble_final(cards, [], primary_url="https://example.com")
-        assert len(result) == 3
-        assert "https://example.com" in result[-1]
+        assert len(result) == 2
+        assert result == cards  # 원본 그대로, 변경 없음
 
 
 class TestLoadStyleExamples:
@@ -221,11 +209,12 @@ class TestLoadStyleExamples:
 class TestBuildSystemPromptD:
     @pytest.mark.unit
     def test_contains_required_keywords(self):
-        """시스템 프롬프트에 필수 키워드 포함 (dan 스스테이저/stanza는 제거됨)"""
+        """시스템 프롬프트에 필수 키워드 포함 — FORMAT_D: 5 content cards only, 영어 프롬프트"""
         prompt = build_system_prompt_D()
-        assert '반말체' in prompt
-        assert '카드' in prompt
-        # '스스테이저'/'stanza'는 writer-prompt-overhaul에서 제거됨
+        assert '5 content cards' in prompt
+        assert 'card' in prompt
+        assert 'CARD 5 RULE' in prompt
+        # '반말체'/'스스테이저'/'stanza'는 writer-prompt-overhaul에서 제거됨 (영어 프롬프트)
 
     @pytest.mark.unit
     def test_returns_string(self):

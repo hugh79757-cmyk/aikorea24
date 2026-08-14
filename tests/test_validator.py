@@ -147,10 +147,14 @@ class TestValidateFinalOutput:
 
     @pytest.mark.unit
     def test_link_card_skip_korean_check(self):
-        """출처 링크 카드 — 한글 비율 검사 스킵"""
+        """LINK CARD TEST UPDATED: FORMAT_D 5개 콘텐츠 카드 — 한글 비율 정상 통과.
+        링크 카드는 더 이상 메인 체인에 포함되지 않음 (별도 답글로 발행)."""
         cards = [
             "소프트뱅크가 오픈AI 지분을 담보로 대출 제안을 다시 꺼냄.",
-            "🔗 https://example.com/news"
+            "이번 제안에는 개인적인 채무 보증도 포함돼 있음.",
+            "소프트뱅크는 2024년 오픈AI에 5억 달러를 투자했음.",
+            "지분 담보 대출은 기업 가치가 높을 때 자금을 끌어쓰는 전략임.",
+            "소프트뱅크가 AI 기업에 다시 베팅하는 신호로 해석됨.",
         ]
         ok, reason = validate_final_output(cards)
         assert ok is True
@@ -313,9 +317,15 @@ class TestValidateCardStructure:
 
     @pytest.mark.unit
     def test_link_card_exempt(self):
+        """LINK CARD TEST UPDATED: FORMAT_D 5개 콘텐츠 카드 — 구조 검증 통과.
+        링크 카드는 더 이상 카드 구조 검증 대상에 포함되지 않음.
+        마지막 카드는 답글 유도형 열린 종결 필수 (CARD 5 RULE)."""
         cards = [
             "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
-            "🔗 https://example.com",
+            "두 번째 카드도 충분한 내용을 담고 있음. 한국어로 작성된 카드임.",
+            "세 번째 카드는 충분한 내용을 포함하고 있음. 검증 통과 가능.",
+            "네 번째 카드는 충분한 길이를 가지고 있음. 문제없이 통과.",
+            "다섯 번째 카드는 충분한 내용임. 이게 정말 답글을 유도할 수 있을까?",
         ]
         assert validate_card_structure(cards) == (True, "OK")
 
@@ -356,14 +366,17 @@ class TestValidateCardStructure:
 
     @pytest.mark.unit
     def test_body_too_short(self):
-        # Body card min length is 30 chars (relaxed)
+        # Body card min length is 12 chars (relaxed). FORMAT_D: 5 content cards, no link card.
+        # 마지막 카드는 답글 유도형 열린 종결 필수 (CARD 5 RULE).
         cards = [
             "첫 번째 카드는 충분히 긴 내용을 담고 있는 카드라서HOOK_MIN_LENGTH를 넘김.",
-            "🔗 https://example.com",
-            "이 본문 카드는 이십자에서 오십자 사이의 길이를 가지고 있음.",  # about 40 chars, >= 30 passes
+            "두 번째 카드도 충분한 내용을 담고 있음. 한국어로 작성된 카드임.",
+            "이 본문 카드는 십이 자 이상의 길이를 가지고 있음.",  # 30 chars, >= 12 passes
+            "네 번째 카드는 충분한 길이를 가지고 있음. 문제없이 통과.",
+            "다섯 번째 카드는 충분한 내용임. 이게 정말 답글을 부를까?",
         ]
         ok, reason = validate_card_structure(cards)
-        assert ok is True  # body is 40 chars which is >= 30
+        assert ok is True  # all cards pass structure validation
 
 
 

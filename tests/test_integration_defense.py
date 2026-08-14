@@ -13,14 +13,13 @@ from pipeline.threads.pitch import detect_prompt_leak, clean_leaked_prompt
 class TestValidateFinalOutputIntegration:
     @pytest.mark.unit
     def test_real_cards_sample_1(self):
-        """실제 카드 샘플 — 통과"""
+        """실제 카드 샘플 — 통과 (FORMAT_D: 5 콘텐츠 카드, 링크 별도)"""
         cards = [
             "소프트뱅크가 오픈AI 지분을 담보로 100억 달러 대출 제안을 다시 꺼냄.",
             "이번 제안에는 개인적인 채무 보증도 포함돼 있음.",
             "소프트뱅크는 2024년 오픈AI에 5억 달러를 투자했음.",
             "지분 담보 대출은 기업 가치가 높을 때 자금을 끌어쓰는 전략임.",
             "소프트뱅크가 AI 기업에 다시 베팅하는 신호로 해석됨.",
-            "🔗 https://example.com/news"
         ]
         ok, reason = validate_final_output(cards)
         assert ok is True
