@@ -267,3 +267,67 @@ class TestWriteThreadValidationChain:
         assert result is not None
         assert isinstance(result, dict)
         assert len(result["cards"]) == 5  # 열린 종결 → 통과 → 5카드 반환
+
+
+class TestHookBodyEntityConsistency:
+    """Hook↔본문 고유명사 교차 검증 테스트 (validate_final_output 내 6번 검증)"""
+
+    @pytest.mark.unit
+    def test_hook_entity_mismatch_rejected(self):
+        """Hook이 Wrtn을 지목했는데 본문 카드가 하이퍼만 언급 → 거부."""
+        from pipeline.threads.validator import validate_final_output
+        cards = [
+            "AI 엔터테인먼트 플랫폼 Wrtn이 게임 전시회 G-STAR 2026의 메인 스폰서로 선정되었다.",
+            "국내 최대 게임 전시회 지스타 2026의 메인 스폰서가 발표됐음. 주인공은 게임사가 아닌 AI 엔터테인먼트 플랫폼 '하이퍼'.",
+            "전통적인 게임사가 게임 시장의 주인공이었는데, 사실은 AI 플랫폼이 그 자리를 차지했음.",
+            "하이퍼는 2024년 3월 캐릭터 챗 기능으로 처음 시작됐음.",
+            "게임 산업의 핵심 동력은 고정된 소프트웨어를 넘어 AI가 실시간으로 생성하는 내러티브로 이동하고 있음. AI가 정말 인간의 감정을 이해하는 시대가 올 수 있을까?",
+        ]
+        ok, reason = validate_final_output(cards)
+        assert ok is False
+        assert "Wrtn" in reason
+
+    @pytest.mark.unit
+    def test_hook_entity_match_accepted(self):
+        """Hook과 본문이 같은 고유명사(Wrtn) 공유 → 통과."""
+        from pipeline.threads.validator import validate_final_output
+        cards = [
+            "AI 엔터테인먼트 플랫폼 Wrtn이 게임 전시회 G-STAR 2026의 메인 스폰서로 선정되었다.",
+            "국내 최대 게임 전시회 지스타 2026의 메인 스폰서가 발표됐음. 주인공은 게임사가 아닌 AI 엔터테인먼트 플랫폼 Wrtn.",
+            "전통적인 게임사가 게임 시장의 주인공이었는데, 사실은 AI 플랫폼이 그 자리를 차지했음.",
+            "Wrtn은 2024년 3월 뤼튼 서비스 내부의 캐릭터 챗 기능으로 처음 시작됐음.",
+            "게임 산업의 핵심 동력은 고정된 소프트웨어를 넘어 AI가 실시간으로 생성하는 내러티브로 이동하고 있음. Wrtn의 행보에 주목할 필요가 있을까?",
+        ]
+        ok, reason = validate_final_output(cards)
+        assert ok is True
+        assert reason == "OK"
+
+    @pytest.mark.unit
+    def test_hook_entity_quote_marked_accepted(self):
+        """Hook에서 따옴표로 감싼 명칭('뤼튼')이 본문에 등장 → 통과."""
+        from pipeline.threads.validator import validate_final_output
+        cards = [
+            "AI 플랫폼 '뤼튼'이 게임 전시회 G-STAR 2026의 메인 스폰서로 등장했다.",
+            "지스타 역사상 게임사가 아닌 기업이 메인 스폰서를 맡은 건 이번이 처음임. 주인공 기업은 뤼튼.",
+            "뤼튼은 2024년 3월 캐릭터 챗 기능으로 시작했음.",
+            "이후 2025년 4월 별도의 웹과 앱으로 독립했음.",
+            "미래 게임은 인간 개발자의 창작물일까, 아니면 뤼튼이 생성하는 실시간 상호작용일까?",
+        ]
+        ok, reason = validate_final_output(cards)
+        assert ok is True
+        assert reason == "OK"
+
+    @pytest.mark.unit
+    def test_hook_no_entity_skips_check(self):
+        """Hook에 추출 가능한 고유명사가 없으면 검증 건너뜀 → 통과."""
+        from pipeline.threads.validator import validate_final_output
+        cards = [
+            "게임 전시회 지스타 2026의 메인 스폰서가 발표되었음.",
+            "국내 최대 게임 전시회 지스타의 메인 스폰서가 게임사가 아닌 기업으로 선정됐음.",
+            "전통적인 게임사가 게임 시장의 주인공이었는데, 이제는 AI 플랫폼이 그 자리를 차지했음.",
+            "이 기업은 2024년 3월 캐릭터 챗 기능으로 처음 시작했음.",
+            "게임 산업의 핵심 동력은 고정된 소프트웨어를 넘어 AI가 실시간으로 생성하는 내러티브로 이동하고 있음. 과연 미래 게임은 무엇일까?",
+        ]
+        ok, reason = validate_final_output(cards)
+        assert ok is True
+        assert reason == "OK"

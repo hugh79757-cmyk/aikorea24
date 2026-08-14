@@ -210,6 +210,70 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
         for pattern in ALL_MESSAGE_PATTERNS:
             if re.match(pattern, card.strip()):
                 return False, f"Card {i}: 모델 메시지 탐지"
+
+    # 6. Hook↔본문 고유명사 교차 검증 (2026-08-14 추가)
+    ok, reason = _validate_hook_body_entity_consistency(cards)
+    if not ok:
+        return False, reason
+
+    return True, "OK"
+
+
+def _extract_hook_entities(hook: str) -> set[str]:
+    """Hook에서 주요 고유명사 추출.
+
+    대상:
+    - 대문자 시작 영문 토큰 (예: Wrtn, Cisco, Gemini, Anthropic)
+    - 따옴표로 감싼 명칭 (예: '크랙', "크랙", '뤼튼')
+    """
+    entities = set()
+    # 대문자 시작 영문 단어 (앞뒤에 영문 알파벳이 없는 경계, 3글자 이상만 고유명사로 간주)
+    for m in re.finditer(r'(?<![a-zA-Z])[A-Z][a-zA-Z]+(?![a-zA-Z])', hook):
+        word = m.group()
+        if len(word) >= 3:
+            entities.add(word)
+    # 따옴표로 감싼 명칭 (single/double quotes)
+    for m in re.finditer(r"""['"]([^'"]+)['"]""", hook):
+        content = m.group(1).strip()
+        if content and len(content) >= 2:
+            entities.add(content)
+    return entities
+
+
+def _validate_hook_body_entity_consistency(cards: list[str]) -> tuple[bool, str]:
+    """Hook(카드1)에 등장하는 주요 고유명사가 본문 카드(2~5)에 최소 1개 이상 등장하는지 검증.
+
+    훅이 특정 엔티티(예: Wrtn)를 지목했는데 본문 카드가 다른 엔티티(예: 크랙)만
+    언급하면 사실 오류. 최소 1개 고유명사가 본문에서 재현되어야 함.
+    """
+    if len(cards) < 2:
+        return True, "OK"
+
+    hook_text = cards[0]
+    body_text = '\n'.join(cards[1:])
+
+    entities = _extract_hook_entities(hook_text)
+    if not entities:
+        return True, "OK"  # 추출할 고유명사 없음 → 검사 건너뜀
+
+    body_lower = body_text.lower()
+    matched = False
+    for entity in entities:
+        # 영문 고유명사는 대소문자 구분 없이 검색
+        if entity[0].isalpha() and entity[0].isupper():
+            if entity.lower() in body_lower:
+                matched = True
+                break
+        else:
+            # 한글 등 따옴표 엔티티는 원문 검색
+            if entity in body_text:
+                matched = True
+                break
+
+    if not matched:
+        entity_list = ', '.join(sorted(entities)[:5])
+        return False, f"Hook 고유명사({entity_list})가 본문 카드에 없음 — 사실 오류 가능"
+
     return True, "OK"
 
 

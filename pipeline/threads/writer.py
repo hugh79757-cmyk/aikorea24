@@ -460,14 +460,18 @@ def write_thread(pitch, all_articles, format_choice=None):
         for a in related:
             url = a.get('link', '')
             from db_reader import validate_link
-            if not validate_link(url, timeout=5):
-                _log(f'  ⚠️ URL 차단/실패 → 기사 제외: {url[:60]}...')
-                log_failed_crawl(url, a.get('source', ''), a.get('title', ''), 'validate_link_fail')
-                continue
+            fetch_ok = validate_link(url, timeout=5)
+            if not fetch_ok:
+                _log(f'  ⚠️ URL 검증 실패 → D1 description 폴백 시도: {url[:60]}...')
             body = fetch_article_body(url, source=a.get('source', ''), title=a.get('title', ''))
             if not body:
-                _log(f'  ⚠️ 크롤링 실패 → 기사 제외 (URL: {url[:60]}...)')
-                continue
+                # Fall back to D1 description (1차 pitch 선별에 이미 사용된 텍스트)
+                body = a.get('description', '') or ''
+                if body:
+                    _log(f'  ⚠️ 크롤링/검증 실패 → D1 description 사용 ({len(body)}자)')
+                else:
+                    _log(f'  ⚠️ 본문 확보 불가 → 기사 제외 (URL: {url[:60]}...)')
+                    continue
             all_fallback = False
             crawled_urls.append(url)
             article_bodies.append(body)

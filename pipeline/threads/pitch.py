@@ -686,8 +686,8 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
     crawled_body = fetch_article_body(article_url, source='', title=article_title)
 
     if not crawled_body:
-        _log(f'  ⚠️ 크롤링 실패 → 피치 폐기')
-        return ([], {article_id_str} if article_id_str else set())
+        _log(f'  ⚠️ 크롤링 실패 → D1 description 기반 원 피치로 발행')
+        return ([top], set())
 
     _log(f'  📰 크롤링 완료: {len(crawled_body)}자')
 
@@ -700,8 +700,8 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         _log(f'  ✅ 크롤링 기반 피치 재생성 완료: "{regenerated.get("hook", "")[:50]}"')
         return ([regenerated], set())
     else:
-        _log(f'  ⚠️ 피치 재생성 실패 → 피치 폐기')
-        return ([], {article_id_str} if article_id_str else set())
+        _log(f'  ⚠️ 피치 재생성 실패 → D1 description 기반 원 피치 사용')
+        return ([top], set())
 
 
 def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, original_pitch):
