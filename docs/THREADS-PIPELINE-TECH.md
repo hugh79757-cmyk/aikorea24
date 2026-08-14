@@ -592,7 +592,7 @@ Phase 4에서 진행 중인 Strangler Fig 패턴:
 1. **posted.json → D1 DB 이전**: 단일 JSON 파일의 레이스 컨디션 위험 해소
 2. **카드 수 확장성**: 현재 FORMAT_D(6카드)만 지원. FORMAT_LABELS에 다른 형식 추가 가능 구조
 3. **프롬프트 릭 방어 고도화**: `detect_prompt_leak()`의 프래그먼트 목록을 자동화된 방식으로 관리
-4. **Humanize 파이프라인 제거 검토**: 현재 writer_v3 test comment에 "humanize/MiMo pipeline removed" 표기 — 실제 writer.py에는 `humanize_cards()` 존재. 제거 여부와 시기 명확화 필요.
+4. **Humanize 파이프라인 상태 명확화 (2026-08-14 완료)**: `humanize_cards()`는 AI-어휘 방어용으로 보존됨. `AI_KOREAN_PATTERNS` 리스트 추가됨 (실제 한국어 AI 출력 패턴). writer_v3 test comment "removed" → "preserved as AI-vocabulary defense"로 수정 완료.
 5. **발행 후 검증(Insight) 수집**: `thread-writing-api`의 `get_post_insights()` 연동 → viral 분석 파이프라인 연결
 
 ---

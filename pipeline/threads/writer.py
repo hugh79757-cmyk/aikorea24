@@ -134,6 +134,23 @@ def _strip_instruction_leak(text):
     return '\n'.join(cleaned).strip()
 
 
+# 실제 한국어 AI 출력에서 자주 관찰되는 패턴 (의미 불변 교체 대상)
+# writer_v3.py 테스트 주석과 달리 humanize는 AI-어휘 방어용으로 보존됨
+AI_KOREAN_PATTERNS = [
+    ("획기적인", "새로운"),
+    ("혁명적인", "큰"),
+    ("궁극적으로", "결국"),
+    ("가속화되", "빨라지"),
+    ("융합하여", "합쳐"),
+    ("핵심은", "중요한 건"),
+    ("중요한 것은", "중요한 건"),
+    ("~게 됩니다", "~게 돼"),
+    ("~할 수 있습니다", "~할 수 있어"),
+    ("~입니다.", "~임."),
+    ("~합니다.", "~함."),
+]
+
+
 def humanize_cards(cards):
     from v3.model_router import chat_completion
 
