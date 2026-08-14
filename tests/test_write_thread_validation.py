@@ -59,10 +59,9 @@ VALID_CARDS = [
     "이 발견은 고객 서비스, 정신 건강, 교육 등 다양한 분야에서 실제로 적용될 수 있는 중요한 전환점임. 특히 정신 건강 분야에서는 AI가 환자의 감정 상태를 실시간으로 모니터링하는 데 활용될 수 있음. 교육 분야에서는 학생의 집중도와 이해도를 파악하는 데 도움이 될 것임. 고객 서비스에서는 상담사의 감정 상태를 분석해 더 나은 서비스를 제공할 수 있음. 시장 조사 기관은 이 기술이 5조 원 규모의 시장을 형성할 것으로 전망했음. 이는 AI 산업의 새로운 패러다임을 제시할 중요한 발전임. 연구팀의 발표 이후, 여러 글로벌 기업들이 이 기술에 주목하고 있음.",
     "결국 AI가 진정한 공감을 갖추려면 수치를 넘어 사람의 말과 행동을 이해하는 능력이 필요함. 단순한 데이터 분석을 넘어, 인간의 복잡한 감정 세계를 이해하는 것이 AI의 다음 과제임. 연구팀의 발표 이후, 여러 글로벌 기업들이 이 기술에 주목하고 있음. 특히 마이크로소프트와 구글은 자사의 AI 어시스턴트에 이 기술을 적용하는 방안을 검토 중임. 이는 AI 산업의 새로운 패러다임을 제시할 중요한 발전임. 앞으로 AI가 인간의 감정을 이해하는 수준에 도달할 수 있을지 귀추가 주목됨. AI 감정 이해 기술의 미래가 기대되는 이유임.",
     "이 연구의 핵심은 AI가 인간의 감정을 단순히 감지하는 수준을 넘어 이해할 수 있다는 점임. 이는 AI와 인간의 상호작용 방식을 근본적으로 변화시킬 잠재력을 가지고 있음. 앞으로 AI는 단순한 도구를 넘어, 인간의 감정적 니즈를 이해하고 대응할 수 있는 동반자로 진화할 것임. 연구팀은 추가 연구를 통해 이 기술의 정확도를 더 높일 계획이라고 밝혔음. AI 감정 이해 기술의 미래가 기대되는 이유임. 이 기술이 상용화되면 AI 산업의 패러다임이 완전히 바뀔 것임. AI가 인간의 감정을 이해하는 시대가 곧 도래할 것임.",
-    "🔗 https://example.com/ai-sentiment",
 ]
 
-VALID_CARD_COUNT = 6
+VALID_CARD_COUNT = 5
 
 
 def _extract_card_between(user_msg, start_marker, end_markers):
@@ -123,17 +122,16 @@ class TestWriteThreadValidationChain:
         monkeypatch.setattr(db_reader, "validate_link", lambda *a, **kw: True)
 
         bad_cards = [
-            "첫번째 카드는 충분히 긴 내용을 가지고 있음. 한국어로만 작성된 검증 통과 가능한 카드임. 세번째 줄도 문제없이 읽을 수 있는 내용임. 네번째 줄까지 충분한 내용을 제공함. 다섯번째 줄도 추가로 내용을 채워서 400자 이상을 만들겠음. 여섯번째 줄까지 계속 내용을 추가해서 충분한 길이를 확보함. 이제 이 카드는 충분히 긴 카드가 되었음. 검증을 통과할 수 있는 충분한 내용을 담고 있음.",
-            "一 중국어가 포함된 카드입니다. 이런 내용은 발행되면 안 됩니다. 검증 단계에서 걸러져야 합니다. 하지만 충분한 길이를 확보하기 위해 추가 내용을 더 채워넣겠음. 이 카드는 검증 단계에서 걸러질 예정이므로 내용이 길든 짧든 상관없지만, 400자 제한을 통과하기 위해 길게 작성함.",
-            "세번째 카드도 충분히 길고 한글로만 구성되어야 합니다. 이 카드는 검증을 통과할 수 있습니다. 추가 내용을 더 넣어서 충분한 길이를 확보하겠음. 실제 기사에서도 이 정도 길이의 카드는 충분히 나올 수 있음. 계속해서 내용을 추가해 400자를 넘기도록 하겠음.",
-            "네번째 카드는 문장이 완성되었습니다. 충분히 긴 내용을 가지고 있어 검증을 통과합니다. 추가로 더 많은 내용을 넣어서 카드 길이를 충분히 확보하겠음. 이렇게 길게 작성하면 검증을 통과할 수 있음.",
-            "다섯번째 카드는 여운을 남기는 마무리입니다. 충분히 긴 내용을 가지고 있습니다. 추가로 내용을 더 채워서 400자 이상을 만들겠음. 계속해서 문장을 추가해 충분한 길이를 확보함.",
-            "🔗 https://example.com/ai-sentiment",
+            "첫번째 카드는 충분히 긴 내용을 가지고 있음. 한국어로만 작성된 검증 통과 가능한 카드임. 세번째 줄도 문제없이 읽을 수 있는 내용임. 네번째 줄까지 충분한 내용을 제공함. 충분함.",
+            "一 중국어가 포함된 카드입니다. 이런 내용은 발행되면 안 됩니다. 검증 단계에서 걸러져야 합니다. 하지만 충분한 길이를 확보하기 위해 추가 내용을 더 채워넣겠음.",
+            "세번째 카드도 충분히 길고 한글로만 구성되어야 합니다. 이 카드는 검증을 통과할 수 있습니다. 추가 내용을 더 넣어서 충분한 길이를 확보하겠음.",
+            "네번째 카드는 문장이 완성되었습니다. 충분히 긴 내용을 가지고 있어 검증을 통과합니다. 추가로 더 많은 내용을 넣어서 카드 길이를 충분히 확보하겠음.",
+            "다섯번째 카드는 여운을 남기는 마무리입니다. 충분함.",
         ]
         mock_chat, call_log = _make_mock(generate_cards=bad_cards)
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = write_thread(sample_pitch, sample_articles, format_choice="D")
-        assert cards == []  # Rejected by validation
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result == []  # Rejected by validation
 
     @pytest.mark.integration
     def test_prompt_label_leak_rejected(self, sample_pitch, sample_articles, monkeypatch):
@@ -145,20 +143,19 @@ class TestWriteThreadValidationChain:
 
         bad_cards = [
             "상식(A): AI가 감정을 이해할 수 있다는 연구 결과가 나왔음.\n이 연구는 100만 건의 데이터를 분석했음.\n그러나 이 레이블은 검증에서 걸러져야 함.\n검증 단계가 이 내용을 차단할 것으로 기대함.",
-            "두번째 카드는 충분히 길고 한글로만 구성되었습니다. 검증을 통과할 만한 길이를 가지고 있음. 모든 검증 조건을 충족합니다.",
-            "세번째 카드도 길고 충분한 한글 카드입니다. 모든 검증을 통과할 수 있도록 작성되었음. 충분히 긴 내용을 포함하고 있음.",
-            "네번째 카드도 문장이 완성되었습니다. 충분히 긴 내용을 담고 있음. 검증 조건을 모두 만족합니다.",
-            "다섯번째 카드는 여운을 남기는 마무리입니다. 이 카드도 충분히 긴 내용을 담고 있음. 검증을 통과할 수 있습니다.",
-            "🔗 https://example.com/ai-sentiment",
+            "두번째 카드는 충분히 길고 한글로만 구성되었습니다. 검증을 통과할 만한 길이를 가지고 있음.",
+            "세번째 카드도 길고 충분한 한글 카드입니다. 모든 검증을 통과할 수 있도록 작성되었음.",
+            "네번째 카드도 문장이 완성되었습니다. 충분히 긴 내용을 담고 있음.",
+            "다섯번째 카드는 여운을 남기는 마무리입니다.",
         ]
         mock_chat, call_log = _make_mock(generate_cards=bad_cards)
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = write_thread(sample_pitch, sample_articles, format_choice="D")
-        assert cards == []  # Rejected by validation
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result == []  # Rejected by validation
 
     @pytest.mark.integration
     def test_success_valid_cards(self, sample_pitch, sample_articles, monkeypatch):
-        """All 6 valid Korean cards → write_thread returns cards."""
+        """All 5 valid Korean cards → write_thread returns dict with 5 cards."""
         import v3.model_router
         import db_reader
 
@@ -166,29 +163,65 @@ class TestWriteThreadValidationChain:
 
         mock_chat, call_log = _make_mock()
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = write_thread(sample_pitch, sample_articles, format_choice="D")
-        assert cards is not None
-        assert len(cards) > 0
-        assert len(call_log) >= 1  # single-pass DeepSeek generation (humanize/MiMo pipeline removed)
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result is not None
+        assert isinstance(result, dict)
+        assert len(result['cards']) == 5
+        assert result['link'] == "https://example.com/ai-sentiment"
+        assert len(call_log) >= 1  # single-pass DeepSeek generation (humanize preserved as AI-vocabulary defense)
 
     @pytest.mark.integration
-    def test_link_card_stripped(self, sample_pitch, sample_articles, monkeypatch):
-        """Link card with leading whitespace is still treated as link card."""
+    def test_link_returned_separately(self, sample_pitch, sample_articles, monkeypatch):
+        """write_thread() returns dict with cards=5 and link=url separately."""
         import v3.model_router
         import db_reader
 
         monkeypatch.setattr(db_reader, "validate_link", lambda *a, **kw: True)
 
-        spaced_cards = [
-            "Hook 카드는 매우 길고 한글로 작성되었음. 충분히 긴 내용을 가지고 있어야 하며 중요함. 기사 원문의 중요한 정보를 모두 담았음. 이 카드는 검증을 통과할 수 있는 길이임. 추가로 더 많은 내용을 넣어서 충분한 길이를 확보하겠음. 계속해서 문장을 추가해서 긴 카드를 만들겠음.",
-            "두번째 카드도 비슷하게 충분히 긴 한글 카드입니다. 여기에도 많은 정보가 담겨 있으며 문장이 완성되어 있습니다. 추가로 내용을 더 채워서 더 긴 카드를 만들겠음. 계속해서 문장을 추가해 충분한 길이를 확보함. 이렇게 길게 작성하면 검증을 통과할 수 있음.",
-            "세번째 카드는 한글로 길게 작성되어 있고 문장 완성도 확인되었습니다. 이 카드는 본문의 정보를 충분히 담고 있습니다. 추가로 더 많은 내용을 넣어서 카드 길이를 충분히 확보하겠음. 계속해서 문장을 추가해서 긴 카드를 만들겠음.",
-            "네번째 카드는 역시 충분히 길고 한글로 구성되어 있습니다. 문장 완성도 확인하였고 검증을 통과할 수 있습니다. 추가로 내용을 더 채워서 더 긴 카드를 만들겠음. 계속해서 문장을 추가해 충분한 길이를 확보함. 이제 이 카드는 충분히 긴 카드가 되었음.",
-            "다섯번째 카드는 여운을 남기는 마무리입니다. 이 카드도 충분히 길게 작성되어 있으며 문장이 완성되어 있습니다. 추가로 더 많은 내용을 넣어서 충분한 길이를 확보하겠음. 계속해서 문장을 추가해서 긴 카드를 만들겠음.",
-            "  🔗 https://example.com/ai-sentiment",
-        ]
-        mock_chat, call_log = _make_mock(generate_cards=spaced_cards)
+        mock_chat, call_log = _make_mock()
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
-        cards = write_thread(sample_pitch, sample_articles, format_choice="D")
-        assert cards is not None
-        assert len(cards) > 0
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result is not None
+        assert isinstance(result, dict)
+        assert "cards" in result
+        assert "link" in result
+        assert len(result["cards"]) == 5
+        assert result["link"] == "https://example.com/ai-sentiment"
+        # 링크 카드가 cards 리스트에 포함되지 않음
+        for card in result["cards"]:
+            assert not card.startswith("🔗")
+            assert "example.com" not in card
+
+    @pytest.mark.integration
+    def test_only_5_content_cards(self, sample_pitch, sample_articles, monkeypatch):
+        """5개 초과/미만 카드 출력 시 validate_cards에서 거부 → write_thread 빈 반환."""
+        import v3.model_router
+        import db_reader
+
+        monkeypatch.setattr(db_reader, "validate_link", lambda *a, **kw: True)
+
+        # 4카드만 출력 → FORMAT_CARD_COUNT_TOLERANCE['D']=(5,5) → 거부
+        short_cards = [
+            "첫번째 카드 내용임. 충분히 긴 내용임.",
+            "두번째 카드 내용임. 충분히 긴 내용임.",
+            "세번째 카드 내용임. 충분히 긴 내용임.",
+            "네번째 카드 내용임. 충분히 긴 내용임.",
+        ]
+        mock_chat, _ = _make_mock(generate_cards=short_cards)
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result == []  # 4카드 → 최소 5개 미달 → 거부
+
+        # 6카드 출력 → 최대 5개 초과 → 거부
+        long_cards = [
+            "첫번째 카드 내용임. 충분히 긴 내용임.",
+            "두번째 카드 내용임. 충분히 긴 내용임.",
+            "세번째 카드 내용임. 충분히 긴 내용임.",
+            "네번째 카드 내용임. 충분히 긴 내용임.",
+            "다섯번째 카드 내용임. 충분히 긴 내용임.",
+            "여섯번째 카드 내용임. 충분히 긴 내용임.",
+        ]
+        mock_chat2, _ = _make_mock(generate_cards=long_cards)
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat2)
+        result2 = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result2 == []  # 6카드 → 최대 5개 초과 → 거부

@@ -41,16 +41,16 @@ def load_style_examples():
 
 
 FORMAT_LABELS = {
-    'D': '펀치 브리핑형 (5개 발행글 + 1개 출처링크)',
+    'D': '펀치 브리핑형 (5개 콘텐츠 카드 + 루트 답글 링크)',
 }
 
 
 def build_system_prompt_D():
     examples = load_style_examples()
-    return f"""You are a journalist writing 6-card Korean threads on Threads, based on AI news articles.
+    return f"""You are a journalist writing 5-card Korean threads on Threads, based on AI news articles.
 
 FORMAT:
-- 6 cards total: 5 content cards (1→5) + 1 link card (card 6: 🔗 url only)
+- 5 content cards only (card 1→5), no link card in the main chain
 - Cards separated by ---
 - Each card: max 500 characters (Threads API hard limit) — 각 카드는 이 공간을 충분히 활용해 구체적인 숫자·인용·비교 등 정보를 전달할 것
 
@@ -68,7 +68,7 @@ CONSTRAINTS:
 - DO NOT include explanatory text, reasoning, or anything outside the JSON output
 
 OUTPUT FORMAT — JSON only, no explanation:
-{{"cards": ["card1", "card2", "card3", "card4", "card5", "🔗 url"]}}
+{{"cards": ["card1", "card2", "card3", "card4", "card5"]}}
 
 STYLE — follow these examples exactly:
 {examples}"""
@@ -485,8 +485,7 @@ Gap source: {pitch.get('gap_source','')}
 1. Follow the system prompt format exactly.
 2. Use ALL numbers from the article body — no vague expressions like "많은" or "대규모".
 3. Never include pitch metadata labels (핵심 이야기:, 반전:, 감정:) in the output.
-4. Card 5: 끝을 강제하지 않음 — 질문이 자연스러우면 OK, 결론이 자연스러워도 OK
-5. Output: JSON only — {{"cards": ["card1", ..., "card5", "🔗 url"]}}"""
+4. Output: JSON only — {{"cards": ["card1", ..., "card5"]}} (5 content cards only, no link card)"""
 
     _log(f'  쓰레드 생성 중... (temperature=0.4)')
 
@@ -561,77 +560,17 @@ Gap source: {pitch.get('gap_source','')}
 
     primary_url = pre_crawled_url or next((a.get('link','') for a in related if str(a.get('id','')) == str(article_ids[0]).lstrip('#').strip()), '')
     cards = assemble_final(cards, related, primary_url, crawled_urls, format_choice)
-    _log(f'✅ 쓰레드: {len(cards)}개 조각')
-    return cards
+    _log(f'✅ 쓰레드: {len(cards)}개 콘텐츠 카드')
+    return {"cards": cards, "link": primary_url or ""}
 
 
 def assemble_final(cards, articles, primary_url=None, crawled_urls=None, format_choice='D'):
-    from db_reader import validate_link
+    """Post-process cards: cleanup only. Link card is no longer added here (moved to publisher).
 
-    url_to_use = None
-
-    if crawled_urls:
-        if primary_url and primary_url in crawled_urls:
-            url_to_use = primary_url
-        else:
-            url_to_use = crawled_urls[0]
-    elif primary_url:
-        if validate_link(primary_url, timeout=5):
-            url_to_use = primary_url
-        else:
-            _log(f'  ⚠️ primary URL 유효성 실패: {primary_url[:50]}...')
-    if not url_to_use and articles:
-        for a in articles:
-            url = a.get('link', '').strip()
-            if url == primary_url:
-                continue
-            if not url or not url.startswith('http'):
-                continue
-            if validate_link(url, timeout=5):
-                url_to_use = url
-                break
-            _log(f'  ⚠️ URL 유효성 실패 — 다음 URL 시도: {url[:50]}...')
-
-    if url_to_use:
-        link_card = f'🔗 {url_to_use}'
-        if len(cards) == 6:
-            cards[-1] = link_card
-        else:
-            cards.append(link_card)
-    else:
-        _log(f'  ❌ 유효한 URL 없음 — 링크 생략')
-        if len(cards) == 6:
-            cards.pop()
-
-    # Final safety dedup
+    Returns list of content cards only (no link card).
+    """
+    # Final safety dedup (링크 카드 없으므로 🔗 시작 카드 걸러지지 않음)
     cards = _remove_duplicate_links(cards)
-    
-    # Pad to 6 cards if needed (split longest card at sentence boundary)
-    if len(cards) < 6:
-        longest_idx = -1
-        longest_len = -1
-        for i, c in enumerate(cards):
-            if c.startswith('🔗'):
-                continue
-            if len(c) > longest_len:
-                longest_len = len(c)
-                longest_idx = i
-        
-        if longest_idx >= 0:
-            card = cards[longest_idx]
-            # Split at a sentence boundary near the middle
-            mid = len(card) // 2
-            split_pos = -1
-            for sep in ['. ', '.\n', '했음\n', '있음\n', '임\n']:
-                pos = card.find(sep, max(mid - 30, 0), min(mid + 30, len(card)))
-                if pos > 0:
-                    split_pos = pos + len(sep) - 1
-                    break
-            
-            if split_pos > 0:
-                cards[longest_idx] = card[:split_pos]
-                cards.insert(longest_idx + 1, card[split_pos:].strip())
-    
     return cards
 
 

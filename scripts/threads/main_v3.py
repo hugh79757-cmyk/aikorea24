@@ -97,10 +97,6 @@ def validate_final_cards(cards):
         if len(card) > 500:
             issues.append(f'카드 {i+1}: {len(card)}자 (500자 초과)')
 
-    last = cards[-1] if cards else ''
-    if 'http' not in last and '🔗' not in last:
-        issues.append('마지막 카드: 출처 링크 없음')
-
     for i, card in enumerate(cards):
         last_line = card.strip().split('\n')[-1].strip()
         trailing = last_line.rstrip('\'"」』)}')
@@ -199,9 +195,9 @@ def run_v3(dry_run=False):
         # 3. 쓰레드 작성
         from v3.writer_v3 import write_thread, save_draft
         log('  쓰레드 작성...')
-        cards = write_thread(pitch, articles)
+        result = write_thread(pitch, articles)
 
-        if not cards:
+        if not result or not result.get('cards'):
             log(f' ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
             pitch_ids = _normalize_article_ids(pitch)
             for aid in pitch_ids:
@@ -210,8 +206,11 @@ def run_v3(dry_run=False):
                     failed_articles.save_failed_article(aid_str, reason="write_validation_failed", title=pitch.get('title', ''), url=pitch.get('link', ''))
             continue
 
+        cards = result['cards']
+        link_url = result.get('link', '')
+
         save_draft(cards, pitch)
-        log(f' ✅ {len(cards)}개 조각 작성 완료')
+        log(f' ✅ {len(cards)}개 콘텐츠 카드 작성 완료')
 
         # 발행 전 최종 검증
         valid, issues = validate_final_cards(cards)
@@ -284,6 +283,8 @@ def run_v3(dry_run=False):
             print(f'Twist: {pitch.get("twist")}')
             print(f'{":"*60}')
             print('\n---\n'.join(cards))
+            if link_url:
+                print(f'\n--- 링크 답글: {link_url} ---')
             print(f'\n{"="*60}')
             return
 
@@ -298,7 +299,7 @@ def run_v3(dry_run=False):
                 if str(a.get('id', '')) == pitch_id:
                     publish_article = a
                     break
-        result = publish_thread_chain(cards, publish_article)
+        result = publish_thread_chain(cards, publish_article, link_url=link_url)
         if result:
             log(f'  ✅ 발행 완료: 루트 ID {result}')
             _log_api_based_publish(pitch, publish_article, root_post_id=result)

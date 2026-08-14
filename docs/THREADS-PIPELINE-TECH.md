@@ -183,19 +183,23 @@ articles (최대 600개)
 
 ### 4.3 Step 3: 쓰레드 작성 (`writer.write_thread()`)
 
-**FORMAT_D (기본):**
+**FORMAT_D (기본) — 2026-08-14 개정:**
 
-- 6카드 구성: 5개 내용 카드 + 1개 링크 카드 (`🔗 url`)
+- 5개 콘텐츠 카드만 작성 (링크 카드 미포함)
 - 카드 구분자: `---`
 - 각 카드 최대 500자 (Threads API 제한)
+- `write_thread()` 반환값: `dict {"cards": [5개 카드], "link": "url"}`
+  - `cards`: 5개 콘텐츠 카드 리스트
+  - `link`: 원문 URL 문자열 (publisher가 루트 답글로 별도 발행)
+- `FORMAT_CARD_COUNT_TOLERANCE['D']` = `(5, 5)` (5개만 허용, 4카드 시 다음 tier 폴백 유도)
 
 ** SYSTEM 프롬프트 (build_system_prompt_D):**
 
 ```
-You are a journalist writing 6-card Korean threads on Threads, based on AI news articles.
+You are a journalist writing 5-card Korean threads on Threads, based on AI news articles.
 
 FORMAT:
-- 6 cards total: 5 content cards (1→5) + 1 link card (card 6: 🔗 url only)
+- 5 content cards only (card 1→5), no link card in the main chain
 - Cards separated by ---
 - Each card: max 500 characters
 
@@ -207,7 +211,10 @@ RHYTHM (핵심 스타일):
 CONSTRAINTS:
 - 종결어미 ~임/~했음/~있음 중심
 - 한자·일본어·히라가나·가타카나 절대 금지
-- pitch metadata 라벨("핵심 이야기:", "반전:" 등) 절대 금지
+- pitch 메타데이터 라벨("핵심 이야기:", "반전:" 등) 절대 금지
+
+OUTPUT FORMAT — JSON only:
+{"cards": ["card1", "card2", "card3", "card4", "card5"]}
 ```
 
 **사용자 프롬프트 구성:**
@@ -223,7 +230,7 @@ Question: {pitch['question']}
 Gap source: {pitch['gap_source']}
 
 === FORMAT ===
-{FORMAT_LABELS[format_choice]} (펀치 브리핑형)
+{FORMAT_LABELS[format_choice]} (펀치 브리핑형, 5개 콘텐츠 카드 + 루트 답글 링크)
 
 === ARTICLES ===
 {article_id}: {title}\n발행일: {pub_date}\n본문: {body}\n출처: {source}\n링크: {url}
@@ -232,8 +239,7 @@ Gap source: {pitch['gap_source']}
 1. Follow the system prompt format exactly.
 2. Use ALL numbers from the article body — no vague expressions.
 3. Never include pitch metadata labels.
-4. Card 5: 끝을 강제하지 않음.
-5. Output: JSON only — {"cards": ["card1", ..., "card5", "🔗 url"]}
+4. Output: JSON only — {"cards": ["card1", ..., "card5"]} (5 content cards only, no link card)
 ```
 
 **후처리 파이프라인:**
@@ -243,11 +249,21 @@ cards = parse_cards_json_first(content)    # JSON 파싱 (4단계 fallback)
 cards = _cleanup_source_attribution(cards)  # 출처 표기 제거, 볼드 마크다운 제거
 cards = fix_cards(cards)                    # (현재 pass-through)
 │
-├─ validate_cards()     — 카드 수·hook 길이
+├─ validate_cards()     — 카드 수 strict (5개만 허용)
 ├─ validate_year()      — 연도 조작 검증 (기사 본문 연도만 허용)
 ├─ validate_card_structure() — 구조 검증 (중복·길이·한글비율·공백과다·문장종결)
+│   └─ _validate_last_card_opens_reply() — 마지막 카드 답글 유도형 검사 (2-2)
 ├─ validate_model_message() — 모델 설명 메시지 탐지 (카드별)
 └─ validate_final_output() — 발행 직전 종합 검증 (프롬프트 릭·외국어·한글비율·모델메시지)
+```
+
+**반환값 구조 (2-1 변경):**
+
+```
+write_thread() → {
+    "cards": [card1, card2, card3, card4, card5],  # 5개 콘텐츠 카드
+    "link": "https://example.com/article"           # 원문 URL (publisher가 답글로 발행)
+}
 ```
 
 **Humanize (옵션):**
@@ -479,7 +495,7 @@ score = (0.35*jaccard_en + 0.25*jaccard_ko + 0.25*jaccard_all + 0.15*entity_fact
 
 | 항목 | 값 | 비고 |
 |------|-----|------|
-| 기본 카드 수 (FORMAT_D) | 6 | 5 내용 + 1 링크 |
+| 기본 카드 수 (FORMAT_D) | 5 | 콘텐츠 카드만 (링크는 루트 답글로 분리 발행) |
 | 카드 최대 길이 | 500자 | Threads API 하드 제한 |
 | 카드 최소 길이 (body) | 12자 | validator 구조 검증 |
 | 한글 비율 최소 (body) | 15% | 고유명사·숫자 많은 AI 뉴스 고려 |
@@ -618,13 +634,13 @@ Phase 4에서 진행 중인 Strangler Fig 패턴:
 ]
 ```
 
-### A.2FORMAT_D SYSTEM 프롬프트 (writer.py)
+### A.2 FORMAT_D SYSTEM 프롬프트 (writer.py) — 2026-08-14 개정
 
 ```
-You are a journalist writing 6-card Korean threads on Threads.
+You are a journalist writing 5-card Korean threads on Threads, based on AI news articles.
 
 FORMAT:
-- 6 cards total: 5 content cards (1→5) + 1 link card (card 6: 🔗 url only)
+- 5 content cards only (card 1→5), no link card in the main chain
 - Cards separated by ---
 - Each card: max 500 characters
 
@@ -636,11 +652,22 @@ RHYTHM:
 CONSTRAINTS:
 - 종결어미 ~임/~했음/~있음 중심
 - 한자·일본어·히라가나·가타카나 절대 금지
-- pitch metadata 라벨 절대 금지
+- pitch 메타데이터 라벨 절대 금지
+
+CARD 5 RULE (필수):
+- 반드시 열린 질문, 불완전한 결론, 또는 반론을 유발하는 형태로 끝낼 것
+- 물음표(?) 또는 열린 어미("~일까", "~일수록", "~인데" 등)로 종결
+- 완결된 주장("~했다", "~이다")으로 끝내는 것 금지
+- 독자가 답글을 쓰고 싶게 만드는 한 줄만 허용
 
 OUTPUT FORMAT — JSON only:
-{"cards": ["card1", "card2", "card3", "card4", "card5", "🔗 url"]}
+{"cards": ["card1", "card2", "card3", "card4", "card5"]}
 ```
+
+**발행 구조 (2-1 변경):**
+- `write_thread()` → `{"cards": [5개], "link": "url"}` 반환
+- `publisher.publish_thread_chain(cards, article, link_url)` → 5카드 체인 발행 후 루트 답글로 링크 발행
+- 카드 5 발행 후 15초 대기 → 링크 답글 발행 (reply_to_id = 카드1 ID)
 
 ---
 

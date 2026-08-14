@@ -47,8 +47,8 @@ ADDITIONAL_MESSAGE_PATTERNS = [
 
 ALL_MESSAGE_PATTERNS = MODEL_MESSAGE_PATTERNS + ADDITIONAL_MESSAGE_PATTERNS
 
-FORMAT_CARD_COUNTS = {'D': 6}
-FORMAT_CARD_COUNT_TOLERANCE = {'D': (4, 7)}
+FORMAT_CARD_COUNTS = {'D': 5}
+FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 5)}
 
 STOPLIST = {
     '무단전재', '수정하거나', '관련기사', '보도했다', '보도했음',
@@ -200,12 +200,11 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
         if japanese:
             return False, f"Card {i}: 일본어 감지 ({len(japanese)}개) — {''.join(japanese[:5])}"
         
-        # 4. 한글 비율 검사 (출처 링크 카드 제외)
-        if not card.strip().startswith('🔗'):
-            korean = len(_KOREAN_PATTERN.findall(card_normalized))
-            total = len(card.strip())
-            if total > 10 and korean < total * 0.3:
-                return False, f"Card {i}: 한글 비율 부족 ({korean}/{total})"
+        # 4. 한글 비율 검사
+        korean = len(_KOREAN_PATTERN.findall(card_normalized))
+        total = len(card.strip())
+        if total > 10 and korean < total * 0.3:
+            return False, f"Card {i}: 한글 비율 부족 ({korean}/{total})"
 
         # 5. 모델 설명 메시지 검사
         for pattern in ALL_MESSAGE_PATTERNS:
@@ -257,10 +256,6 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
     for i, card in enumerate(cards, 1):
         card = card.strip()
 
-        # Skip link cards for most checks
-        if card.startswith('🔗'):
-            continue
-
         # 3. Minimum length (절 스타일: 짧은 절도 허용)
         if len(card) < 10:
             return False, f"Card {i}: 너무 짧음 ({len(card)}자)"
@@ -298,10 +293,8 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
 
     # 8. Body card length (절 스타일: 12자까지 허용, 상한 500자 유지)
     body_min = 12
-    for i, card in enumerate(cards[2:], 3):  # Skip hook and link
+    for i, card in enumerate(cards[1:], 2):  # Skip hook (card 1), body starts at card 2
         card = card.strip()
-        if card.startswith('🔗'):
-            continue
         if len(card) < body_min or len(card) > 500:
             return False, f"Card {i}: 길이 비정상 ({len(card)}자)"
 

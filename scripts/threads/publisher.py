@@ -111,8 +111,13 @@ def retry_with_backoff(func, max_retries=3, base_delay=10, max_delay=60, label="
                 log(f'  ❌ {label} {max_retries}회 모두 실패: {e}')
                 raise
 
-def publish_thread_chain(cards, article):
-    """연속 답글 체인 발행"""
+def publish_thread_chain(cards, article, link_url: str = ""):
+    """연속 답글 체인 발행 (5 콘텐츠 카드 + 루트 답글 링크)
+
+    - cards: 5개 콘텐츠 카드 리스트
+    - article: posted.json 저장용 기사 메타
+    - link_url: 루트 답글로 발행할 원문 URL (card 1의 reply_to_id 사용)
+    """
     envs = load_env()
     access_token = envs.get('THREADS_ACCESS_TOKEN', '')
     user_id = envs.get('THREADS_USER_ID', '')
@@ -224,6 +229,60 @@ def publish_thread_chain(cards, article):
         previous_post_id = post_id
         log(f'  카드 {i+1}/{len(cards)} 발행: {post_id}')
         time.sleep(15)  # 카드 간 대기 시간 증가 (API 레이트리밋 회피)
+
+    # 5카드 발행 완료 → 루트 답글로 링크 발행 (15초 대기 후)
+    if link_url:
+        log(f'  ⏳ 15초 대기 후 링크 답글 발행...')
+        time.sleep(15)
+        link_params = {
+            'media_type': 'TEXT',
+            'text': add_line_spacing(f'🔗 {link_url}'),
+            'access_token': access_token,
+            'reply_to_id': root_post_id,  # 루트 포스트에 답글
+        }
+        def create_link_container():
+            r = session.post(
+                f'https://graph.threads.net/v1.0/{user_id}/threads',
+                params=link_params, timeout=60
+            )
+            data = r.json()
+            if 'id' in data:
+                return data['id']
+            log(f'  링크 컨테이너 응답 (id 없음): {str(data)[:200]}')
+            if data.get('error', {}).get('code') == 190:
+                new_tok = refresh_token()
+                if new_tok:
+                    link_params['access_token'] = new_tok
+                    raise Exception("토큰 갱신됨, 재시도")
+            raise Exception(f"링크 컨테이너 생성 실패: {data}")
+
+        try:
+            link_container_id = retry_with_backoff(
+                create_link_container, max_retries=3, base_delay=15, max_delay=45, label="링크 답글 컨테이너"
+            )
+        except Exception:
+            log(f'  ❌ 링크 답글 컨테이너 생성 실패')
+        else:
+            time.sleep(10)
+            def publish_link_container():
+                r2 = session.post(
+                    f'https://graph.threads.net/v1.0/{user_id}/threads_publish',
+                    params={'creation_id': link_container_id, 'access_token': access_token},
+                    timeout=60
+                )
+                data2 = r2.json()
+                if 'id' in data2:
+                    return data2['id']
+                log(f'  링크 발행 응답 (id 없음): {str(data2)[:200]}')
+                raise Exception(f"링크 발행 실패: {data2}")
+
+            try:
+                link_post_id = retry_with_backoff(
+                    publish_link_container, max_retries=3, base_delay=15, max_delay=45, label="링크 답글 발행"
+                )
+                log(f'  🔗 링크 답글 발행 완료: {link_post_id}')
+            except Exception:
+                log(f'  ❌ 링크 답글 발행 실패')
 
     # posted.json 저장
     posted = load_posted()
