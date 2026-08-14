@@ -298,7 +298,38 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
         if len(card) < body_min or len(card) > 500:
             return False, f"Card {i}: 길이 비정상 ({len(card)}자)"
 
+    # 9. Last card must open reply (답글 유도형 강제 — 2026-08-14 추가)
+    last_ok, last_reason = _validate_last_card_opens_reply(cards)
+    if not last_ok:
+        return False, last_reason
+
     return True, "OK"
+
+
+def _validate_last_card_opens_reply(cards: list[str]) -> tuple[bool, str]:
+    """마지막 콘텐츠 카드가 답글을 유도하는 열린 형태로 끝나는지 검사.
+
+    CARD 5 RULE 구현: 마지막 카드가 물음표 또는 열린 어미로 종결되어야 함.
+    닫힌 종결("~했다", "~이다" 등)로 끝나면 거부.
+    """
+    if len(cards) < 4:
+        return True, "OK"  # 카드 수 자체가 문제 — 다른 검증에서 처리
+
+    last_card = cards[-1].strip()
+    if not last_card:
+        return False, "마지막 카드가 비어있음"
+
+    last_char = last_card[-1] if last_card else ""
+    open_endings = ("?", "까", "까?", "일수록", "인데", "을까", "일까", "ㄹ까")
+
+    if last_char == "?":
+        return True, "OK"
+
+    for ending in open_endings:
+        if last_card.endswith(ending):
+            return True, "OK"
+
+    return False, f"마지막 카드가 닫힌 종결로 끝남 — 답글 유도형 필요 (끝: '{last_card[-20:]}' )"
 
 
 

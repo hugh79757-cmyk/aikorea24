@@ -67,6 +67,12 @@ CONSTRAINTS:
 - DO NOT include pitch metadata labels like "핵심 이야기:", "반전:", "감정:" in the thread
 - DO NOT include explanatory text, reasoning, or anything outside the JSON output
 
+CARD 5 RULE (필수):
+- 반드시 열린 질문, 불완전한 결론, 또는 반론을 유발하는 형태로 끝낼 것
+- 물음표(?) 또는 열린 어미("~일까", "~일수록", "~인데" 등)로 종결
+- 완결된 주장("~했다", "~이다")으로 끝내는 것 금지
+- 독자가 답글을 쓰고 싶게 만드는 한 줄만 허용
+
 OUTPUT FORMAT — JSON only, no explanation:
 {{"cards": ["card1", "card2", "card3", "card4", "card5"]}}
 

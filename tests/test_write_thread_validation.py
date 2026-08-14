@@ -58,7 +58,7 @@ VALID_CARDS = [
     "그런데 새 시스템은 AI가 감정을 감지하는 것이 아닌 이해하는 것임을 입증했음. 감정 공감 능력의 큰 변화임. 이는 단순한 패턴 인식을 넘어, 실제로 인간의 감정 상태를 이해하는 수준에 도달했음을 의미함. 연구팀은 100만 건의 대화 데이터를 학습시켜 이 결과를 얻었음. 기존 AI 감정 분석 시스템은 표정이나 목소리 톤 같은 표면적 신호에 의존했음. 하지만 새 시스템은 문맥과 대화 흐름을 종합적으로 분석해 더 정확한 결과를 도출함. 이번 연구는 AI 업계에 큰 반향을 일으켰으며, 앞으로 이 기술이 어떻게 발전할지 주목됨. AI 감정 이해 기술이 상용화되면 산업 전반에 큰 변화가 일어날 것임.",
     "이 발견은 고객 서비스, 정신 건강, 교육 등 다양한 분야에서 실제로 적용될 수 있는 중요한 전환점임. 특히 정신 건강 분야에서는 AI가 환자의 감정 상태를 실시간으로 모니터링하는 데 활용될 수 있음. 교육 분야에서는 학생의 집중도와 이해도를 파악하는 데 도움이 될 것임. 고객 서비스에서는 상담사의 감정 상태를 분석해 더 나은 서비스를 제공할 수 있음. 시장 조사 기관은 이 기술이 5조 원 규모의 시장을 형성할 것으로 전망했음. 이는 AI 산업의 새로운 패러다임을 제시할 중요한 발전임. 연구팀의 발표 이후, 여러 글로벌 기업들이 이 기술에 주목하고 있음.",
     "결국 AI가 진정한 공감을 갖추려면 수치를 넘어 사람의 말과 행동을 이해하는 능력이 필요함. 단순한 데이터 분석을 넘어, 인간의 복잡한 감정 세계를 이해하는 것이 AI의 다음 과제임. 연구팀의 발표 이후, 여러 글로벌 기업들이 이 기술에 주목하고 있음. 특히 마이크로소프트와 구글은 자사의 AI 어시스턴트에 이 기술을 적용하는 방안을 검토 중임. 이는 AI 산업의 새로운 패러다임을 제시할 중요한 발전임. 앞으로 AI가 인간의 감정을 이해하는 수준에 도달할 수 있을지 귀추가 주목됨. AI 감정 이해 기술의 미래가 기대되는 이유임.",
-    "이 연구의 핵심은 AI가 인간의 감정을 단순히 감지하는 수준을 넘어 이해할 수 있다는 점임. 이는 AI와 인간의 상호작용 방식을 근본적으로 변화시킬 잠재력을 가지고 있음. 앞으로 AI는 단순한 도구를 넘어, 인간의 감정적 니즈를 이해하고 대응할 수 있는 동반자로 진화할 것임. 연구팀은 추가 연구를 통해 이 기술의 정확도를 더 높일 계획이라고 밝혔음. AI 감정 이해 기술의 미래가 기대되는 이유임. 이 기술이 상용화되면 AI 산업의 패러다임이 완전히 바뀔 것임. AI가 인간의 감정을 이해하는 시대가 곧 도래할 것임.",
+    "이 연구의 핵심은 AI가 인간의 감정을 단순히 감지하는 수준을 넘어 이해할 수 있다는 점임. 이는 AI와 인간의 상호작용 방식을 근본적으로 변화시킬 잠재력을 가지고 있음. 앞으로 AI는 단순한 도구를 넘어, 인간의 감정적 니즈를 이해하고 대응할 수 있는 동반자로 진화할 것임. 연구팀은 추가 연구를 통해 이 기술의 정확도를 더 높일 계획이라고 밝혔음. AI 감정 이해 기술의 미래가 기대되는 이유임. 이 기술이 상용화되면 AI 산업의 패러다임이 완전히 바뀔 것임. AI가 정말 인간의 감정을 이해하는 시대가 올 수 있을까?",
 ]
 
 VALID_CARD_COUNT = 5
@@ -225,3 +225,45 @@ class TestWriteThreadValidationChain:
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat2)
         result2 = write_thread(sample_pitch, sample_articles, format_choice="D")
         assert result2 == []  # 6카드 → 최대 5개 초과 → 거부
+
+    @pytest.mark.integration
+    def test_last_card_closed_ending_rejected(self, sample_pitch, sample_articles, monkeypatch):
+        """마지막 카드가 닫힌 종결("이것이 결론이다.")로 끝나면 거부."""
+        import v3.model_router
+        import db_reader
+
+        monkeypatch.setattr(db_reader, "validate_link", lambda *a, **kw: True)
+
+        closed_ending_cards = [
+            "AI 공감 능력 평가의 새로운 방법론이 발표되었음. 충분히 긴 내용임.",
+            "그런데 새 시스템은 감정을 이해하는 것임을 입증했음. 충분히 긴 내용임.",
+            "이 발견은 다양한 분야에서 적용될 수 있는 전환점임. 충분히 긴 내용임.",
+            "결국 AI가 진정한 공감을 갖추려면 이해가 필요함. 충분히 긴 내용임.",
+            "이것이 결론이다. AI는 인간의 감정을 이해할 수 있게 되었음.",  # 닫힌 종결 → 거부
+        ]
+        mock_chat, _ = _make_mock(generate_cards=closed_ending_cards)
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result == []  # 마지막 카드 닫힌 종결 → validate_card_structure 실패
+
+    @pytest.mark.integration
+    def test_last_card_open_ending_accepted(self, sample_pitch, sample_articles, monkeypatch):
+        """마지막 카드가 열린 종결("이것이 맞을까?")로 끝나면 통과."""
+        import v3.model_router
+        import db_reader
+
+        monkeypatch.setattr(db_reader, "validate_link", lambda *a, **kw: True)
+
+        open_ending_cards = [
+            "AI 공감 능력 평가의 새로운 방법론이 발표되었음. 충분히 긴 내용임.",
+            "그런데 새 시스템은 감정을 이해하는 것임을 입증했음. 충분히 긴 내용임.",
+            "이 발견은 다양한 분야에서 적용될 수 있는 전환점임. 충분히 긴 내용임.",
+            "결국 AI가 진정한 공감을 갖추려면 이해가 필요함. 충분히 긴 내용임.",
+            "이것이 맞을까? AI가 정말 인간의 감정을 이해하게 될까?",  # 열린 종결 → 통과
+        ]
+        mock_chat, _ = _make_mock(generate_cards=open_ending_cards)
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        result = write_thread(sample_pitch, sample_articles, format_choice="D")
+        assert result is not None
+        assert isinstance(result, dict)
+        assert len(result["cards"]) == 5  # 열린 종결 → 통과 → 5카드 반환
