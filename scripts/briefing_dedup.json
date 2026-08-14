@@ -1,144 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-14",
-      "briefing_id": 174,
-      "articles": [
-        {
-          "id": "40521",
-          "title": "삼성 헬스, AI 훈련을 위해 데이터 제출하지 않으면 데이터 삭제",
-          "original_title": "",
-          "description": "삼성 헬스의 새로운 디자인이 출시되면서 사용자에게 선택을 강요하고 있습니다. 데이터가 AI 훈련에 사용되도록 허용하지 않으면 장기적으로 데이터가 사실상 무용지물이 될 것입니다.",
-          "link": "https://9to5google.com/2026/07/13/samsung-health-ai-training-data-consent/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40505",
-          "title": "나델라, AI에 대해 두 번 지불한다고 말하며 마이크로소프트가 함정을 만들었다고 주장",
-          "original_title": "",
-          "description": "마이크로소프트의 사티아 나델라는 AI를 사용하는 모든 기업이 두 번 지불하고 있다고 주장한다. 그는 이를 '역정보 패러독스'라고 명명하며, 이 함정을 만든 회사의 CEO이기도 하다.",
-          "link": "https://thenextweb.com/news/nadella-reverse-information-paradox-ai-ip",
-          "entities": [],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40495",
-          "title": "알바니즈, AI의 중대한 순간을 재생 에너지 전환과 비교하며 접근 방식을 설명하다",
-          "original_title": "",
-          "description": "노동 관계자는 총리가 이번 주 연설에서 안전 문제를 논의할 예정이지만, 예술가 보호를 위한 저작권 개정에 대한 업데이트는 제공하지 않을 것이라고 말했습니다. 최신 뉴스를 위해 호주 뉴스 생중계 블로그를 팔로우하세요.",
-          "link": "https://www.theguardian.com/australia-news/2026/jul/14/anthony-albanese-ai-speech-safety-copyright-datacentres-social-licence",
-          "entities": [],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40524",
-          "title": "이제 AI 생성 구글 광고를 볼 수 있는 방법, 알면 유용",
-          "original_title": "",
-          "description": "구글은 검색, 유튜브, 디스커버의 광고에 AI 라벨을 추가하고 있습니다. 이는 투명성을 높이는 데 긍정적이지만, 제3자의 AI 공개는 여전히 광고주가 공정하게 행동하는 데 의존하고 있습니다.",
-          "link": "https://www.androidcentral.com/apps-software/you-can-now-spot-ai-generated-google-ads-if-you-know-where-to-look",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40480",
-          "title": "애플, OpenAI를 상대로 한 영업비밀 소송의 가장 황당한 주장",
-          "original_title": "",
-          "description": "애플의 OpenAI에 대한 영업비밀 소송에는 직원들이 애플 시스템에 대한 무단 접근을 농담으로 이야기한 것부터 지원자들에게 애플 하드웨어를 면접에 가져오라고 요청했다는 주장까지 다양한 내용이 포함되어 있습니다. 이 소송의 가장 눈에 띄는 주장을 소개합니다.",
-          "link": "https://techcrunch.com/2026/07/13/the-wildest-allegations-in-apples-trade-secrets-lawsuit-against-openai/",
-          "entities": [],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40479",
-          "title": "사티아 나델라, AI를 사용하는 기업에 충격적인 경고",
-          "original_title": "",
-          "description": "AI의 잠재적인 부작용에 대한 다양한 논의가 있는 가운데, 실리콘밸리의 AI 애호가들 사이에서 가장 큰 걱정거리는 대형 AI 연구소들이 독점 모델을 판매하며 마치 트로이 목마처럼 행동할 수 있다는 우려입니다.",
-          "link": "https://techcrunch.com/2026/07/13/satya-nadella-has-issued-a-shocking-warning-to-companies-using-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-14"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-14",
-      "briefing_id": 175,
-      "articles": [
-        {
-          "id": "40567",
-          "title": "강화 학습의 아버지가 카맥을 떠나 자신의 AI를 만들기로 결정",
-          "original_title": "",
-          "description": "AI 분야에서 가장 저명한 인물 중 한 명인 리차드 서튼이 독립적으로 새 회사를 시작한다고 발표했습니다. 그는 현대 강화 학습의 기초를 마련한 공로로 2024년 튜링상을 공동 수상했습니다.",
-          "link": "https://thenextweb.com/news/richard-sutton-oak-lab-reinforcement-learning",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40546",
-          "title": "비밀을 공유하는 이유를 예고한 챗봇, ChatGPT",
-          "original_title": "",
-          "description": "1960년대 MIT 교수인 요셉 와이젠바움은 ELIZA라는 챗봇을 만들었습니다. 사람들이 이와 대화한 경험은 이후의 챗봇들이 발전하는 데 중요한 토대가 되었습니다.",
-          "link": "https://www.wired.com/story/inventing-eliza-book-excerpt-chatbot/",
-          "entities": [
-            "ChatGPT",
-            "MIT"
-          ],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40553",
-          "title": "앤서니 알바니지가 데이터 센터의 신속 승인 약속으로 AI 투자에 힘 보탠다",
-          "original_title": "",
-          "description": "총리는 오스트레일리아를 세계 최초로 AI로 인한 경제, 사회, 보안 및 환경 문제를 단일 기관 아래 가져올 것이라고 주요 연설에서 선언할 예정입니다. 알바니지는 연방 정부가 신속한 승인 절차를 도입할 것이라고 밝혔습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/14/anthony-albanese-promises-fast-track-approvals-for-datacentres-to-shore-up-ai-investment",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40541",
-          "title": "우버의 제품 책임자가 호텔, 로봇 택시, 그리고 회사가 '모든 사람을 위한 모든 것'이 되",
-          "original_title": "",
-          "description": "우버의 최고 제품 책임자 사친 칸살은 TechCrunch와 인터뷰를 통해 회사의 금융 서비스 야망, 웨이모와의 복잡한 관계, 새로운 자율주행차 관련 데이터 운영, 그리고 AI가 승객과 운전자가 실제로 인식할 수 있는 방식으로 나타나기 시작한 상황에 대해 설명했습니다.",
-          "link": "https://techcrunch.com/2026/07/13/ubers-product-chief-on-hotels-robotaxis-and-why-the-company-doesnt-want-to-be-everything-for-everyone/",
-          "entities": [],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40580",
-          "title": "삼성, 앤트로픽을 위한 2nm AI 칩을 제조할 예정",
-          "original_title": "",
-          "description": "며칠 전, 삼성이 앤트로픽을 위한 고성능 AI 칩 계약을 따낼 가능성이 있다는 보도가 있었습니다. 새로운 보고서는 삼성 파운드리가 인기 있는 클로드 AI 시스템 뒤에 있는 AI 회사인 앤트로픽을 위한 칩을 만들기 위한 계약을 확보했다고 주장합니다.",
-          "link": "https://www.sammobile.com/news/samsung-anthropic-2nm-ai-chips/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-14"
-        },
-        {
-          "id": "40547",
-          "title": "DOGE, 주택 정책에 AI를 사용하다. 정부는 어떻게 사용했는지 말하지 않는다",
-          "original_title": "",
-          "description": "공공 기록 요청에 따라, HUD는 DOGE의 AI 사용에 관한 문서를 withheld했습니다. 이 과정에서 존재하지 않는 특권을 인용하기도 했습니다.",
-          "link": "https://www.wired.com/story/doge-deployed-ai-housing-policy/",
-          "entities": [
-            "DOGE",
-            "AI"
-          ],
-          "date": "2026-07-14"
-        }
-      ]
-    },
-    {
       "date": "2026-07-15",
       "briefing_id": 176,
       "articles": [
@@ -4224,135 +4086,85 @@
           "date": "2026-08-13"
         }
       ]
+    },
+    {
+      "date": "2026-08-14",
+      "briefing_id": 232,
+      "articles": [
+        {
+          "id": "45121",
+          "title": "\"호흡 멈추면 AI가 스스로 구조 요청한다 \"…구글, '픽셀 워치' 호흡 응급 감지 기능 ",
+          "original_title": "",
+          "description": "구글이 사람이 호흡 응급상황으로 의식을 잃고 스스로 도움을 요청하지 못하는 상황을 감지해 자동으로 응급서비스에 연락하는 새로운 안전 기능을 픽셀 워치에 도입했다. 12일(현지시간) 인공지능(AI) 기반 ‘호흡 응급 감지(Breathing Emergency Detection)’ 기능의 작동 원리와 개발 과정을 소개했다.호흡 응급상황은 심각한 폐렴이나 약물 과",
+          "link": "https://www.aitimes.kr/news/articleView.html?idxno=41445",
+          "entities": [
+            "AI",
+            "Emergency",
+            "Breathing",
+            "Detection"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45211",
+          "title": "[8월13일] 클로드 워터마크 도입에 불붙은 논쟁…\"AI가 썼다와 AI가 처리했다는 다르다",
+          "original_title": "",
+          "description": "앤트로픽이 '클로드'가 생성한 텍스트에 보이지 않는 워터마크를 넣기 시작하면서 AI 글쓰기를 둘러싼 사용자들의 반응이 속출하고 있습니다.사실 구글의 '제미나이'도 이미 신스ID를 적용해 AI가 생성한 콘텐츠를 식별할 수 있습니다. 다만 일반 사용자가 이를 직접 활용하기에는 여전히 번거로운 방식입니다. 클로드는 아직 식별 도구는 공개하지 않은 상태입니다.앤트",
+          "link": "https://www.aitimes.com/news/articleView.html?idxno=213884",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45161",
+          "title": "OpenAI, GPT-5.6 Sol의 속도를 14배 높인 ‘울트라패스트(Ultrafast)",
+          "original_title": "",
+          "description": "OpenAI가 기업 고객을 유치하기 위해 자사의 최신 고성능 모델인 GPT-5.6 Sol의 속도를 대폭 개선한 프리뷰 버전을 출시합니다. 이번 업데이트는 복잡한 작업을 빠르게 처리해야 하는 기업 사용자들에게 큰 도움이 될 것으로 보입니다.",
+          "link": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed/",
+          "entities": [
+            "Ultrafast",
+            "OpenAI",
+            "GPT-5.6"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45166",
+          "title": "엔비디아의 5,000억 달러 규모 신규 계획, 노후 GPU 활용을 위한 위험하지만 영리한 ",
+          "original_title": "",
+          "description": "엔비디아는 자사 GPU의 가치가 하락하지 않도록 보장하기 위한 새로운 계획을 세웠습니다. 이들은 새로운 투자자들을 설득하여 AI 인프라 구축을 위한 자금 대출을 지속하도록 유도할 방침입니다.",
+          "link": "https://techcrunch.com/2026/08/13/nvidias-new-500b-plan-is-risky-but-brilliant-especially-for-aging-gpus/",
+          "entities": [
+            "AI",
+            "GPU"
+          ],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45188",
+          "title": "구글의 저가형 모델, 플래그십 모델보다 두 버전 앞서 나가",
+          "original_title": "",
+          "description": "구글은 코딩 성능이 대폭 향상된 '제미나이 3.7 플래시'를 토큰당 저렴한 가격에 출시했습니다. 반면 플래그십인 '제미나이 3.5 프로'는 출시가 수개월째 지연되고 있으며, 구글은 향후 출시 여부에 대해서도 명확한 답변을 내놓지 않고 있습니다.",
+          "link": "https://thenextweb.com/news/google-gemini-3-7-flash-launch-pro-delay",
+          "entities": [],
+          "date": "2026-08-14"
+        },
+        {
+          "id": "45055",
+          "title": "일자리 상실, 불평등, 통제 불능의 에이전트: 우리는 왜 소수 엘리트의 AI 의제를 받아들",
+          "original_title": "",
+          "description": "AI의 위험성은 날이 갈수록 명확해지고 있습니다. 우리는 왜 마치 미래를 선택할 권한이 없는 것처럼 수동적으로 행동하고 있는 것일까요?",
+          "link": "https://www.theguardian.com/commentisfree/2026/aug/13/lost-jobs-inequality-ai-oligarchs",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-14"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "40521",
-      "title": "삼성 헬스, AI 훈련을 위해 데이터 제출하지 않으면 데이터 삭제",
-      "original_title": "",
-      "description": "삼성 헬스의 새로운 디자인이 출시되면서 사용자에게 선택을 강요하고 있습니다. 데이터가 AI 훈련에 사용되도록 허용하지 않으면 장기적으로 데이터가 사실상 무용지물이 될 것입니다.",
-      "link": "https://9to5google.com/2026/07/13/samsung-health-ai-training-data-consent/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40505",
-      "title": "나델라, AI에 대해 두 번 지불한다고 말하며 마이크로소프트가 함정을 만들었다고 주장",
-      "original_title": "",
-      "description": "마이크로소프트의 사티아 나델라는 AI를 사용하는 모든 기업이 두 번 지불하고 있다고 주장한다. 그는 이를 '역정보 패러독스'라고 명명하며, 이 함정을 만든 회사의 CEO이기도 하다.",
-      "link": "https://thenextweb.com/news/nadella-reverse-information-paradox-ai-ip",
-      "entities": [],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40495",
-      "title": "알바니즈, AI의 중대한 순간을 재생 에너지 전환과 비교하며 접근 방식을 설명하다",
-      "original_title": "",
-      "description": "노동 관계자는 총리가 이번 주 연설에서 안전 문제를 논의할 예정이지만, 예술가 보호를 위한 저작권 개정에 대한 업데이트는 제공하지 않을 것이라고 말했습니다. 최신 뉴스를 위해 호주 뉴스 생중계 블로그를 팔로우하세요.",
-      "link": "https://www.theguardian.com/australia-news/2026/jul/14/anthony-albanese-ai-speech-safety-copyright-datacentres-social-licence",
-      "entities": [],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40524",
-      "title": "이제 AI 생성 구글 광고를 볼 수 있는 방법, 알면 유용",
-      "original_title": "",
-      "description": "구글은 검색, 유튜브, 디스커버의 광고에 AI 라벨을 추가하고 있습니다. 이는 투명성을 높이는 데 긍정적이지만, 제3자의 AI 공개는 여전히 광고주가 공정하게 행동하는 데 의존하고 있습니다.",
-      "link": "https://www.androidcentral.com/apps-software/you-can-now-spot-ai-generated-google-ads-if-you-know-where-to-look",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40480",
-      "title": "애플, OpenAI를 상대로 한 영업비밀 소송의 가장 황당한 주장",
-      "original_title": "",
-      "description": "애플의 OpenAI에 대한 영업비밀 소송에는 직원들이 애플 시스템에 대한 무단 접근을 농담으로 이야기한 것부터 지원자들에게 애플 하드웨어를 면접에 가져오라고 요청했다는 주장까지 다양한 내용이 포함되어 있습니다. 이 소송의 가장 눈에 띄는 주장을 소개합니다.",
-      "link": "https://techcrunch.com/2026/07/13/the-wildest-allegations-in-apples-trade-secrets-lawsuit-against-openai/",
-      "entities": [],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40479",
-      "title": "사티아 나델라, AI를 사용하는 기업에 충격적인 경고",
-      "original_title": "",
-      "description": "AI의 잠재적인 부작용에 대한 다양한 논의가 있는 가운데, 실리콘밸리의 AI 애호가들 사이에서 가장 큰 걱정거리는 대형 AI 연구소들이 독점 모델을 판매하며 마치 트로이 목마처럼 행동할 수 있다는 우려입니다.",
-      "link": "https://techcrunch.com/2026/07/13/satya-nadella-has-issued-a-shocking-warning-to-companies-using-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40567",
-      "title": "강화 학습의 아버지가 카맥을 떠나 자신의 AI를 만들기로 결정",
-      "original_title": "",
-      "description": "AI 분야에서 가장 저명한 인물 중 한 명인 리차드 서튼이 독립적으로 새 회사를 시작한다고 발표했습니다. 그는 현대 강화 학습의 기초를 마련한 공로로 2024년 튜링상을 공동 수상했습니다.",
-      "link": "https://thenextweb.com/news/richard-sutton-oak-lab-reinforcement-learning",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40546",
-      "title": "비밀을 공유하는 이유를 예고한 챗봇, ChatGPT",
-      "original_title": "",
-      "description": "1960년대 MIT 교수인 요셉 와이젠바움은 ELIZA라는 챗봇을 만들었습니다. 사람들이 이와 대화한 경험은 이후의 챗봇들이 발전하는 데 중요한 토대가 되었습니다.",
-      "link": "https://www.wired.com/story/inventing-eliza-book-excerpt-chatbot/",
-      "entities": [
-        "ChatGPT",
-        "MIT"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40553",
-      "title": "앤서니 알바니지가 데이터 센터의 신속 승인 약속으로 AI 투자에 힘 보탠다",
-      "original_title": "",
-      "description": "총리는 오스트레일리아를 세계 최초로 AI로 인한 경제, 사회, 보안 및 환경 문제를 단일 기관 아래 가져올 것이라고 주요 연설에서 선언할 예정입니다. 알바니지는 연방 정부가 신속한 승인 절차를 도입할 것이라고 밝혔습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/14/anthony-albanese-promises-fast-track-approvals-for-datacentres-to-shore-up-ai-investment",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40541",
-      "title": "우버의 제품 책임자가 호텔, 로봇 택시, 그리고 회사가 '모든 사람을 위한 모든 것'이 되",
-      "original_title": "",
-      "description": "우버의 최고 제품 책임자 사친 칸살은 TechCrunch와 인터뷰를 통해 회사의 금융 서비스 야망, 웨이모와의 복잡한 관계, 새로운 자율주행차 관련 데이터 운영, 그리고 AI가 승객과 운전자가 실제로 인식할 수 있는 방식으로 나타나기 시작한 상황에 대해 설명했습니다.",
-      "link": "https://techcrunch.com/2026/07/13/ubers-product-chief-on-hotels-robotaxis-and-why-the-company-doesnt-want-to-be-everything-for-everyone/",
-      "entities": [],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40580",
-      "title": "삼성, 앤트로픽을 위한 2nm AI 칩을 제조할 예정",
-      "original_title": "",
-      "description": "며칠 전, 삼성이 앤트로픽을 위한 고성능 AI 칩 계약을 따낼 가능성이 있다는 보도가 있었습니다. 새로운 보고서는 삼성 파운드리가 인기 있는 클로드 AI 시스템 뒤에 있는 AI 회사인 앤트로픽을 위한 칩을 만들기 위한 계약을 확보했다고 주장합니다.",
-      "link": "https://www.sammobile.com/news/samsung-anthropic-2nm-ai-chips/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
-    {
-      "id": "40547",
-      "title": "DOGE, 주택 정책에 AI를 사용하다. 정부는 어떻게 사용했는지 말하지 않는다",
-      "original_title": "",
-      "description": "공공 기록 요청에 따라, HUD는 DOGE의 AI 사용에 관한 문서를 withheld했습니다. 이 과정에서 존재하지 않는 특권을 인용하기도 했습니다.",
-      "link": "https://www.wired.com/story/doge-deployed-ai-housing-policy/",
-      "entities": [
-        "DOGE",
-        "AI"
-      ],
-      "date": "2026-07-14"
-    },
     {
       "id": "40659",
       "title": "AI 위협에 대응하려면 글로벌 협력이 필요하다고 영국 중앙은행 총재가 말하다",
@@ -8103,6 +7915,76 @@
         "AI"
       ],
       "date": "2026-08-13"
+    },
+    {
+      "id": "45121",
+      "title": "\"호흡 멈추면 AI가 스스로 구조 요청한다 \"…구글, '픽셀 워치' 호흡 응급 감지 기능 ",
+      "original_title": "",
+      "description": "구글이 사람이 호흡 응급상황으로 의식을 잃고 스스로 도움을 요청하지 못하는 상황을 감지해 자동으로 응급서비스에 연락하는 새로운 안전 기능을 픽셀 워치에 도입했다. 12일(현지시간) 인공지능(AI) 기반 ‘호흡 응급 감지(Breathing Emergency Detection)’ 기능의 작동 원리와 개발 과정을 소개했다.호흡 응급상황은 심각한 폐렴이나 약물 과",
+      "link": "https://www.aitimes.kr/news/articleView.html?idxno=41445",
+      "entities": [
+        "AI",
+        "Emergency",
+        "Breathing",
+        "Detection"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45211",
+      "title": "[8월13일] 클로드 워터마크 도입에 불붙은 논쟁…\"AI가 썼다와 AI가 처리했다는 다르다",
+      "original_title": "",
+      "description": "앤트로픽이 '클로드'가 생성한 텍스트에 보이지 않는 워터마크를 넣기 시작하면서 AI 글쓰기를 둘러싼 사용자들의 반응이 속출하고 있습니다.사실 구글의 '제미나이'도 이미 신스ID를 적용해 AI가 생성한 콘텐츠를 식별할 수 있습니다. 다만 일반 사용자가 이를 직접 활용하기에는 여전히 번거로운 방식입니다. 클로드는 아직 식별 도구는 공개하지 않은 상태입니다.앤트",
+      "link": "https://www.aitimes.com/news/articleView.html?idxno=213884",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45161",
+      "title": "OpenAI, GPT-5.6 Sol의 속도를 14배 높인 ‘울트라패스트(Ultrafast)",
+      "original_title": "",
+      "description": "OpenAI가 기업 고객을 유치하기 위해 자사의 최신 고성능 모델인 GPT-5.6 Sol의 속도를 대폭 개선한 프리뷰 버전을 출시합니다. 이번 업데이트는 복잡한 작업을 빠르게 처리해야 하는 기업 사용자들에게 큰 도움이 될 것으로 보입니다.",
+      "link": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed/",
+      "entities": [
+        "Ultrafast",
+        "OpenAI",
+        "GPT-5.6"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45166",
+      "title": "엔비디아의 5,000억 달러 규모 신규 계획, 노후 GPU 활용을 위한 위험하지만 영리한 ",
+      "original_title": "",
+      "description": "엔비디아는 자사 GPU의 가치가 하락하지 않도록 보장하기 위한 새로운 계획을 세웠습니다. 이들은 새로운 투자자들을 설득하여 AI 인프라 구축을 위한 자금 대출을 지속하도록 유도할 방침입니다.",
+      "link": "https://techcrunch.com/2026/08/13/nvidias-new-500b-plan-is-risky-but-brilliant-especially-for-aging-gpus/",
+      "entities": [
+        "AI",
+        "GPU"
+      ],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45188",
+      "title": "구글의 저가형 모델, 플래그십 모델보다 두 버전 앞서 나가",
+      "original_title": "",
+      "description": "구글은 코딩 성능이 대폭 향상된 '제미나이 3.7 플래시'를 토큰당 저렴한 가격에 출시했습니다. 반면 플래그십인 '제미나이 3.5 프로'는 출시가 수개월째 지연되고 있으며, 구글은 향후 출시 여부에 대해서도 명확한 답변을 내놓지 않고 있습니다.",
+      "link": "https://thenextweb.com/news/google-gemini-3-7-flash-launch-pro-delay",
+      "entities": [],
+      "date": "2026-08-14"
+    },
+    {
+      "id": "45055",
+      "title": "일자리 상실, 불평등, 통제 불능의 에이전트: 우리는 왜 소수 엘리트의 AI 의제를 받아들",
+      "original_title": "",
+      "description": "AI의 위험성은 날이 갈수록 명확해지고 있습니다. 우리는 왜 마치 미래를 선택할 권한이 없는 것처럼 수동적으로 행동하고 있는 것일까요?",
+      "link": "https://www.theguardian.com/commentisfree/2026/aug/13/lost-jobs-inequality-ai-oligarchs",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-14"
     }
   ]
 }

@@ -9,7 +9,10 @@ node_modules/
 
 # Python bytecode (all __pycache__ directories globally)
 __pycache__/
+pycache/
 *.pyc
+*.pyo
+*.pyd
 
 # logs
 npm-debug.log*
@@ -25,6 +28,11 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# Python virtual environments
+.venv/
+venv/
+env/
 
 # jetbrains setting folder
 .idea/
@@ -52,6 +60,7 @@ pipeline/posted.json
 config/pexels_used_ids.json
 scripts/threads/posted.json
 scripts/threads/logs/
+failed_crawls.json
 
 # Blog thumbnail images — deployed via `wrangler pages deploy` (local build), not committed to git
 public/images/
