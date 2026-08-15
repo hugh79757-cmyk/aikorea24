@@ -1,154 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-15",
-      "briefing_id": 176,
-      "articles": [
-        {
-          "id": "40659",
-          "title": "AI 위협에 대응하려면 글로벌 협력이 필요하다고 영국 중앙은행 총재가 말하다",
-          "original_title": "",
-          "description": "앤드류 베일리는 미국이 단독으로 목표를 달성할 수 없을 것이라고 경고했습니다. 그는 AI 위협이 증가하는 가운데 국제적인 협력의 필요성을 강조했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/14/global-cooperation-needed-to-tackle-ai-threats-says-bank-of-england-governor",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40646",
-          "title": "OpenAI의 첫 하드웨어 장치는 이동할 수 있는 화면 없는 스피커라고 보도됨",
-          "original_title": "",
-          "description": "OpenAI의 첫 하드웨어 장치는 화면이 없는 AI 안내 스마트 스피커로, 이동이 가능하다고 전해졌습니다. 이 제품은 충분히 이상하게 느껴지나요?",
-          "link": "https://techcrunch.com/2026/07/14/openais-first-hardware-device-is-reportedly-a-screenless-speaker-that-can-move/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40649",
-          "title": "애플, iOS 27 공개 베타로 모든 사용자에게 새로운 시리(AI)를 열다",
-          "original_title": "",
-          "description": "애플의 새롭게 개편된 시리를 개발자 베타 버전 없이 사용해보고 싶었나요? 회사는 화요일에 iOS 27 공개 베타를 출시하여, 아이폰 소유자들이 이번 가을 소프트웨어 공식 출시 전에 AI 보조 서비스와 다른 새로운 기능들을 미리 사용할 수 있게 했습니다.",
-          "link": "https://techcrunch.com/2026/07/14/apple-opens-its-new-siri-ai-to-everyone-with-the-ios-27-public-beta/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40673",
-          "title": "메타, 의료 휴직 중인 근로자들에 대한 해고 대상으로 AI 시스템 사용했다는 직원 26명에",
-          "original_title": "",
-          "description": "현재와 이전의 메타 직원 26명이 연방법원에 고소하여 회사가 대규모 해고를 선정할 때 장애가 있는 근로자나 의료 휴직 중인 근로자를 불균형적으로 타겟팅하는 AI 시스템을 사용했다고 주장하고 있다. 이 소송은 캘리포니아 오클랜드에서 월요일에 제기되었다.",
-          "link": "https://thenextweb.com/news/meta-lawsuit-ai-layoffs-medical-leave-disability",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40675",
-          "title": "다이먼, AI가 일부 JPMorgan 부서에서 30~40%의 일자리를 없앴다고 전하다",
-          "original_title": "",
-          "description": "JPMorgan Chase는 AI를 사용하여 일부 부서에서 최대 40%의 일자리를 줄였다고 제이미 다이먼 CEO가 화요일 회사의 2분기 실적 발표에서 언급했다. 그러나 이 기술이 수익 마진을 극적으로 개선할 것이라는 기대에 대해 투자자들은 실망할 가능성이 높다.",
-          "link": "https://thenextweb.com/news/jpmorgan-dimon-ai-jobs-cuts-margins-q2-earnings",
-          "entities": [
-            "JPMorgan"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40655",
-          "title": "딥시크, 첫 번째 70억 달러 라운드 종료 불과 몇 주 만에 추가 자금 필요",
-          "original_title": "",
-          "description": "딥시크는 첫 번째 자금 조달 라운드를 완료한 후 다시 자금을 모으고 있습니다. 이 중국 AI 연구소는 경쟁력 있는 가격 전략을 유지하기 위해 자체 데이터 센터와 칩에 필요한 자본이 필요합니다.",
-          "link": "https://the-decoder.com/deepseek-needs-more-cash-just-weeks-after-closing-its-first-7-billion-round/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-15",
-      "briefing_id": 177,
-      "articles": [
-        {
-          "id": "40722",
-          "title": "'시장에서의 거래는 없다': 알바니제, AI 사무소 설립 및 호주 창작자를 저작권 '도난'",
-          "original_title": "",
-          "description": "총리는 데이터 센터 개발 계획을 제시하며 기술 기업들이 호주 데이터를 무료로 사용할 수 있는 가능성을 거부했습니다. 알바니제 총리는 \"가장 강력한 보호 조치를 약속하겠다\"고 밝혔습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/15/office-of-ai-artificial-intelligence-copyright-australia-government",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40747",
-          "title": "알리바바, Qwen AI가 애플 인텔리전스에 통합될 예정으로 미국 상장 주가 4% 상승",
-          "original_title": "",
-          "description": "중국 사이버공간관리국은 수요일 애플의 AI 서비스가 승인된 제공자 목록에 포함되었다고 발표했습니다.",
-          "link": "https://www.cnbc.com/2026/07/15/alibaba-qwen-ai-apple-intelligence.html",
-          "entities": [
-            "Qwen",
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40710",
-          "title": "인도 AI 코딩 스타트업 에머전트, 1억 3천만 달러 시리즈 C로 유니콘이 되다",
-          "original_title": "",
-          "description": "이 스타트업은 연간 1억 2천만 달러의 수익률을 달성했으며 20만 명 이상의 유료 고객을 확보했습니다.",
-          "link": "https://techcrunch.com/2026/07/15/indian-ai-coding-startup-emergent-becomes-a-unicorn-just-over-a-year-after-launch/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40738",
-          "title": "호주, 국가 AI 사무소 개설",
-          "original_title": "",
-          "description": "호주가 국가 AI 사무소를 개설했습니다. 앤서니 알바네즈 총리는 시드니에서 열린 연설에서 창작자들을 위한 새로운 저작권 보호를 약속했습니다. 그는 시드니 대학교에서 AI에 대한 주요 연설을 하며 이 계획을 발표했습니다.",
-          "link": "https://thenextweb.com/news/australia-office-of-ai-copyright-datacentres",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40745",
-          "title": "크라운 검찰 서비스, AI 환각 증거 사용으로 적발",
-          "original_title": "",
-          "description": "영국 법원은 범죄 기소를 담당하는 기관이 제출한 'AI 환각' 증거에 대한 또 다른 사건을 처리해야 했습니다. 크라운 검찰 서비스(CPS)는 송환 요청에 대한 문서를 제출한 후 고등法院에 두 번 사과했습니다.",
-          "link": "https://www.cityam.com/crown-prosecution-service-caught-using-ai-hallucination-evidence/",
-          "entities": [
-            "AI",
-            "CPS"
-          ],
-          "date": "2026-07-15"
-        },
-        {
-          "id": "40719",
-          "title": "OpenAI 직원들이 상사를 견제하기 위해 경쟁 슈퍼 PAC에 기부",
-          "original_title": "",
-          "description": "OpenAI 직원들은 회사의 사장 Greg Brockman이 지지하는 그룹인 Leading the Future에 대항하는 정치적 노력에 215,000달러 이상을 기부했습니다.",
-          "link": "https://www.wired.com/story/openai-employees-donations-guardrails-alliance-leading-the-future/",
-          "entities": [
-            "OpenAI",
-            "Greg",
-            "Leading"
-          ],
-          "date": "2026-07-15"
-        }
-      ]
-    },
-    {
       "date": "2026-07-16",
       "briefing_id": 178,
       "articles": [
@@ -4245,145 +4097,159 @@
           "date": "2026-08-14"
         }
       ]
+    },
+    {
+      "date": "2026-08-15",
+      "briefing_id": 234,
+      "articles": [
+        {
+          "id": "45350",
+          "title": "왜 모든 것이 시시하게 느껴질까? 우리는 즐거움 없는 퇴폐의 시대에 살고 있다 – 카이와 ",
+          "original_title": "",
+          "description": "이론적으로 우리는 행복해야 합니다. 스마트폰 덕분에 우리는 좋아하는 가수의 전곡을 듣고, 고급 음식을 집으로 배달시키며, 끝없는 스크롤을 통해 전 세계를 여행하는 등 거의 모든 것을 할 수 있습니다. 그런데 왜 이러한 경험들 중 상당수가 즐겁지 않게 느껴지는 걸까요?",
+          "link": "https://www.theguardian.com/us-news/video/2026/aug/14/era-of-joyless-decadence-stateside-podcast",
+          "entities": [],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45362",
+          "title": "오픈AI의 인재 이탈, IPO 앞두고 '거대한 적신호' 켜졌다",
+          "original_title": "",
+          "description": "오픈AI 경영진의 잇따른 교체는 대규모 기업공개(IPO)를 추진 중인 회사에 투자자들의 우려를 더하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/08/14/open-ai-ipo-red-flag.html",
+          "entities": [
+            "IPO"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45337",
+          "title": "구글, 이제 AI 생성 이미지에서 눈에 보이는 워터마크 제거 허용",
+          "original_title": "",
+          "description": "이 설정을 끄더라도 AI 생성 파일을 식별하는 데 사용되는 보이지 않는 벤치마크 데이터에는 영향을 주지 않습니다.",
+          "link": "https://techcrunch.com/2026/08/14/google-will-now-allow-users-to-remove-visible-watermark-from-its-ai-generations/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45345",
+          "title": "기술 선구자가 말하는 '거대 AI 연구소들이 대중의 니즈를 모르는 이유'",
+          "original_title": "",
+          "description": "팀 오라일리는 AI로 인해 위기를 맞은 출판 제국을 일군 인물입니다. 그럼에도 그는 AI가 오픈 소스로 유지되는 한, AI 기술을 매우 긍정적으로 평가합니다.",
+          "link": "https://www.wired.com/story/tech-visionary-says-the-big-ai-labs-dont-get-what-people-want/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45361",
+          "title": "Arm 공동 창업자, AI는 이전의 어떤 혁명보다 큰 가치를 창출할 것이나 롤러코스터 같은",
+          "original_title": "",
+          "description": "하우저는 이번 달 CNBC의 '더 테크 다운로드(The Tech Download)' 팟캐스트에 출연했습니다. 1978년 에이콘 컴퓨터를 공동 창업하고 Arm 설립을 도왔으며, 현재 아마데우스 캐피털을 통해 유럽의 딥테크 스타트업을 지원하는 그의 이력은 그의 발언에 무게를 실어줍니다.",
+          "link": "https://thenextweb.com/news/hermann-hauser-ai-bubble-europe-technology-colony",
+          "entities": [
+            "Arm",
+            "Tech",
+            "Download",
+            "The"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45343",
+          "title": "오픈AI의 '컴퓨터 히스토리', 클릭과 키 입력을 검색 가능한 챗GPT 메모리 타임라인으로",
+          "original_title": "",
+          "description": "오픈AI의 '컴퓨터 히스토리' 기능은 맥(Mac)에서의 클릭, 키 입력, 앱 전환 기록을 챗GPT와 코덱(Codex)에서 검색 가능한 타임라인으로 만들어줍니다. 데이터는 암호화되지 않은 마크다운 파일로 로컬에 저장됩니다. 오픈AI는 이 데이터가 AI 학습에 사용되지는 않지만, 대화에 활용되는 메모리가 학습 데이터로 유입될 가능성은 있다고 밝혔습니다.",
+          "link": "https://the-decoder.com/openais-computer-history-turns-your-clicks-and-keystrokes-into-a-searchable-chatgpt-memory-timeline/",
+          "entities": [
+            "Codex",
+            "AI",
+            "Mac"
+          ],
+          "date": "2026-08-15"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-15",
+      "briefing_id": 235,
+      "articles": [
+        {
+          "id": "45394",
+          "title": "아마존 뒤덮은 AI 생성 도서, 인간 저자들의 매출 감소 야기",
+          "original_title": "",
+          "description": "아마존의 자가 출판 도서 중 20%가 AI 생성 콘텐츠이지만, 실제 매출 비중은 12%에 그치는 것으로 나타났습니다. 최근 연구에 따르면 8개 장르 중 7개에서 인간 저자의 도서당 수익이 감소하고 있으며, 이는 저작권 소송에서 AI로 인한 시장 피해를 입증하는 근거가 될 수 있습니다.",
+          "link": "https://the-decoder.com/ai-generated-books-are-flooding-amazon-and-tanking-sales-for-human-authors/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45401",
+          "title": "중고 서적 판매 급증, 혹시 AI 때문일까?",
+          "original_title": "",
+          "description": "서점가에서 의문의 대량 주문이 이어지고 있습니다. 이 책들이 AI 학습에 사용된 뒤 결국 폐기 처분되는 것으로 추정됩니다.",
+          "link": "https://www.bbc.co.uk/news/articles/cp3rprx2wl4o?at_medium=RSS&at_campaign=rss",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45339",
+          "title": "코그(Kog), GPU 추론 효율 극대화에 박차",
+          "original_title": "",
+          "description": "프랑스 스타트업 코그(Kog)에 따르면, GPU가 에이전트 워크플로우에 적합하지 않다는 생각은 오해일 수 있습니다.",
+          "link": "https://techcrunch.com/2026/08/14/kog-is-going-deeper-to-squeeze-more-inference-out-of-gpus/",
+          "entities": [
+            "Kog",
+            "GPU"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45351",
+          "title": "스코틀랜드 경찰, AI 데이터센터 공격 막기 위한 ‘강력한 보안’ 필요 경고",
+          "original_title": "",
+          "description": "에든버러 인근에 제안된 데이터센터에 대해 ‘상당한 대중의 반대’가 예상된다고 경찰은 밝혔습니다. 스코틀랜드 경찰은 AI 데이터센터가 시위대의 공격을 받는 것을 막기 위해 강력한 보안 조치가 필요하다는 엄중한 경고를 내놓았습니다. 최근 AI 시설에 대한 반대 여론이 거세지고 있습니다.",
+          "link": "https://www.theguardian.com/uk-news/2026/aug/14/scottish-police-expect-public-opposition-larbert-datacentre",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45369",
+          "title": "픽셀 저널 업데이트: 클라우드 기반 프라이빗 AI 컴퓨팅 및 UI 개선 등",
+          "original_title": "",
+          "description": "픽셀 11 출시와 함께 구글은 저널(Journal) 앱에 여러 업데이트를 적용했으며, 이는 기존 기기에서도 순차적으로 확인되고 있습니다. 이번 업데이트에는 클라우드 기반의 프라이빗 AI 컴퓨팅 기능과 사용자 인터페이스 개선 사항이 포함되었습니다.",
+          "link": "https://9to5google.com/2026/08/14/pixel-journal-ai-update/",
+          "entities": [
+            "Journal",
+            "AI",
+            "UI"
+          ],
+          "date": "2026-08-15"
+        },
+        {
+          "id": "45346",
+          "title": "맥(Mac) 활동 기록을 추적해 타임라인을 만드는 챗GPT의 새 기능, 사용해도 괜찮을까?",
+          "original_title": "",
+          "description": "챗GPT 맥 앱에 도입된 '컴퓨터 히스토리'는 사용자가 맥에서 사용하는 앱과 웹사이트 활동을 기반으로 타임라인을 생성합니다. 과연 이것이 개인정보 보호에 위험 요소는 아닐까요?",
+          "link": "https://www.zdnet.com/article/chatgpt-computer-history/",
+          "entities": [
+            "Mac"
+          ],
+          "date": "2026-08-15"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "40659",
-      "title": "AI 위협에 대응하려면 글로벌 협력이 필요하다고 영국 중앙은행 총재가 말하다",
-      "original_title": "",
-      "description": "앤드류 베일리는 미국이 단독으로 목표를 달성할 수 없을 것이라고 경고했습니다. 그는 AI 위협이 증가하는 가운데 국제적인 협력의 필요성을 강조했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/14/global-cooperation-needed-to-tackle-ai-threats-says-bank-of-england-governor",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40646",
-      "title": "OpenAI의 첫 하드웨어 장치는 이동할 수 있는 화면 없는 스피커라고 보도됨",
-      "original_title": "",
-      "description": "OpenAI의 첫 하드웨어 장치는 화면이 없는 AI 안내 스마트 스피커로, 이동이 가능하다고 전해졌습니다. 이 제품은 충분히 이상하게 느껴지나요?",
-      "link": "https://techcrunch.com/2026/07/14/openais-first-hardware-device-is-reportedly-a-screenless-speaker-that-can-move/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40649",
-      "title": "애플, iOS 27 공개 베타로 모든 사용자에게 새로운 시리(AI)를 열다",
-      "original_title": "",
-      "description": "애플의 새롭게 개편된 시리를 개발자 베타 버전 없이 사용해보고 싶었나요? 회사는 화요일에 iOS 27 공개 베타를 출시하여, 아이폰 소유자들이 이번 가을 소프트웨어 공식 출시 전에 AI 보조 서비스와 다른 새로운 기능들을 미리 사용할 수 있게 했습니다.",
-      "link": "https://techcrunch.com/2026/07/14/apple-opens-its-new-siri-ai-to-everyone-with-the-ios-27-public-beta/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40673",
-      "title": "메타, 의료 휴직 중인 근로자들에 대한 해고 대상으로 AI 시스템 사용했다는 직원 26명에",
-      "original_title": "",
-      "description": "현재와 이전의 메타 직원 26명이 연방법원에 고소하여 회사가 대규모 해고를 선정할 때 장애가 있는 근로자나 의료 휴직 중인 근로자를 불균형적으로 타겟팅하는 AI 시스템을 사용했다고 주장하고 있다. 이 소송은 캘리포니아 오클랜드에서 월요일에 제기되었다.",
-      "link": "https://thenextweb.com/news/meta-lawsuit-ai-layoffs-medical-leave-disability",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40675",
-      "title": "다이먼, AI가 일부 JPMorgan 부서에서 30~40%의 일자리를 없앴다고 전하다",
-      "original_title": "",
-      "description": "JPMorgan Chase는 AI를 사용하여 일부 부서에서 최대 40%의 일자리를 줄였다고 제이미 다이먼 CEO가 화요일 회사의 2분기 실적 발표에서 언급했다. 그러나 이 기술이 수익 마진을 극적으로 개선할 것이라는 기대에 대해 투자자들은 실망할 가능성이 높다.",
-      "link": "https://thenextweb.com/news/jpmorgan-dimon-ai-jobs-cuts-margins-q2-earnings",
-      "entities": [
-        "JPMorgan"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40655",
-      "title": "딥시크, 첫 번째 70억 달러 라운드 종료 불과 몇 주 만에 추가 자금 필요",
-      "original_title": "",
-      "description": "딥시크는 첫 번째 자금 조달 라운드를 완료한 후 다시 자금을 모으고 있습니다. 이 중국 AI 연구소는 경쟁력 있는 가격 전략을 유지하기 위해 자체 데이터 센터와 칩에 필요한 자본이 필요합니다.",
-      "link": "https://the-decoder.com/deepseek-needs-more-cash-just-weeks-after-closing-its-first-7-billion-round/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40722",
-      "title": "'시장에서의 거래는 없다': 알바니제, AI 사무소 설립 및 호주 창작자를 저작권 '도난'",
-      "original_title": "",
-      "description": "총리는 데이터 센터 개발 계획을 제시하며 기술 기업들이 호주 데이터를 무료로 사용할 수 있는 가능성을 거부했습니다. 알바니제 총리는 \"가장 강력한 보호 조치를 약속하겠다\"고 밝혔습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/15/office-of-ai-artificial-intelligence-copyright-australia-government",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40747",
-      "title": "알리바바, Qwen AI가 애플 인텔리전스에 통합될 예정으로 미국 상장 주가 4% 상승",
-      "original_title": "",
-      "description": "중국 사이버공간관리국은 수요일 애플의 AI 서비스가 승인된 제공자 목록에 포함되었다고 발표했습니다.",
-      "link": "https://www.cnbc.com/2026/07/15/alibaba-qwen-ai-apple-intelligence.html",
-      "entities": [
-        "Qwen",
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40710",
-      "title": "인도 AI 코딩 스타트업 에머전트, 1억 3천만 달러 시리즈 C로 유니콘이 되다",
-      "original_title": "",
-      "description": "이 스타트업은 연간 1억 2천만 달러의 수익률을 달성했으며 20만 명 이상의 유료 고객을 확보했습니다.",
-      "link": "https://techcrunch.com/2026/07/15/indian-ai-coding-startup-emergent-becomes-a-unicorn-just-over-a-year-after-launch/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40738",
-      "title": "호주, 국가 AI 사무소 개설",
-      "original_title": "",
-      "description": "호주가 국가 AI 사무소를 개설했습니다. 앤서니 알바네즈 총리는 시드니에서 열린 연설에서 창작자들을 위한 새로운 저작권 보호를 약속했습니다. 그는 시드니 대학교에서 AI에 대한 주요 연설을 하며 이 계획을 발표했습니다.",
-      "link": "https://thenextweb.com/news/australia-office-of-ai-copyright-datacentres",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40745",
-      "title": "크라운 검찰 서비스, AI 환각 증거 사용으로 적발",
-      "original_title": "",
-      "description": "영국 법원은 범죄 기소를 담당하는 기관이 제출한 'AI 환각' 증거에 대한 또 다른 사건을 처리해야 했습니다. 크라운 검찰 서비스(CPS)는 송환 요청에 대한 문서를 제출한 후 고등法院에 두 번 사과했습니다.",
-      "link": "https://www.cityam.com/crown-prosecution-service-caught-using-ai-hallucination-evidence/",
-      "entities": [
-        "AI",
-        "CPS"
-      ],
-      "date": "2026-07-15"
-    },
-    {
-      "id": "40719",
-      "title": "OpenAI 직원들이 상사를 견제하기 위해 경쟁 슈퍼 PAC에 기부",
-      "original_title": "",
-      "description": "OpenAI 직원들은 회사의 사장 Greg Brockman이 지지하는 그룹인 Leading the Future에 대항하는 정치적 노력에 215,000달러 이상을 기부했습니다.",
-      "link": "https://www.wired.com/story/openai-employees-donations-guardrails-alliance-leading-the-future/",
-      "entities": [
-        "OpenAI",
-        "Greg",
-        "Leading"
-      ],
-      "date": "2026-07-15"
-    },
     {
       "id": "40739",
       "title": "Zipline, 클리블랜드 클리닉과 함께 의료 드론 배달 시작",
@@ -8145,6 +8011,144 @@
         "GLM-5.3"
       ],
       "date": "2026-08-14"
+    },
+    {
+      "id": "45350",
+      "title": "왜 모든 것이 시시하게 느껴질까? 우리는 즐거움 없는 퇴폐의 시대에 살고 있다 – 카이와 ",
+      "original_title": "",
+      "description": "이론적으로 우리는 행복해야 합니다. 스마트폰 덕분에 우리는 좋아하는 가수의 전곡을 듣고, 고급 음식을 집으로 배달시키며, 끝없는 스크롤을 통해 전 세계를 여행하는 등 거의 모든 것을 할 수 있습니다. 그런데 왜 이러한 경험들 중 상당수가 즐겁지 않게 느껴지는 걸까요?",
+      "link": "https://www.theguardian.com/us-news/video/2026/aug/14/era-of-joyless-decadence-stateside-podcast",
+      "entities": [],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45362",
+      "title": "오픈AI의 인재 이탈, IPO 앞두고 '거대한 적신호' 켜졌다",
+      "original_title": "",
+      "description": "오픈AI 경영진의 잇따른 교체는 대규모 기업공개(IPO)를 추진 중인 회사에 투자자들의 우려를 더하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/08/14/open-ai-ipo-red-flag.html",
+      "entities": [
+        "IPO"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45337",
+      "title": "구글, 이제 AI 생성 이미지에서 눈에 보이는 워터마크 제거 허용",
+      "original_title": "",
+      "description": "이 설정을 끄더라도 AI 생성 파일을 식별하는 데 사용되는 보이지 않는 벤치마크 데이터에는 영향을 주지 않습니다.",
+      "link": "https://techcrunch.com/2026/08/14/google-will-now-allow-users-to-remove-visible-watermark-from-its-ai-generations/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45345",
+      "title": "기술 선구자가 말하는 '거대 AI 연구소들이 대중의 니즈를 모르는 이유'",
+      "original_title": "",
+      "description": "팀 오라일리는 AI로 인해 위기를 맞은 출판 제국을 일군 인물입니다. 그럼에도 그는 AI가 오픈 소스로 유지되는 한, AI 기술을 매우 긍정적으로 평가합니다.",
+      "link": "https://www.wired.com/story/tech-visionary-says-the-big-ai-labs-dont-get-what-people-want/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45361",
+      "title": "Arm 공동 창업자, AI는 이전의 어떤 혁명보다 큰 가치를 창출할 것이나 롤러코스터 같은",
+      "original_title": "",
+      "description": "하우저는 이번 달 CNBC의 '더 테크 다운로드(The Tech Download)' 팟캐스트에 출연했습니다. 1978년 에이콘 컴퓨터를 공동 창업하고 Arm 설립을 도왔으며, 현재 아마데우스 캐피털을 통해 유럽의 딥테크 스타트업을 지원하는 그의 이력은 그의 발언에 무게를 실어줍니다.",
+      "link": "https://thenextweb.com/news/hermann-hauser-ai-bubble-europe-technology-colony",
+      "entities": [
+        "Arm",
+        "Tech",
+        "Download",
+        "The"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45343",
+      "title": "오픈AI의 '컴퓨터 히스토리', 클릭과 키 입력을 검색 가능한 챗GPT 메모리 타임라인으로",
+      "original_title": "",
+      "description": "오픈AI의 '컴퓨터 히스토리' 기능은 맥(Mac)에서의 클릭, 키 입력, 앱 전환 기록을 챗GPT와 코덱(Codex)에서 검색 가능한 타임라인으로 만들어줍니다. 데이터는 암호화되지 않은 마크다운 파일로 로컬에 저장됩니다. 오픈AI는 이 데이터가 AI 학습에 사용되지는 않지만, 대화에 활용되는 메모리가 학습 데이터로 유입될 가능성은 있다고 밝혔습니다.",
+      "link": "https://the-decoder.com/openais-computer-history-turns-your-clicks-and-keystrokes-into-a-searchable-chatgpt-memory-timeline/",
+      "entities": [
+        "Codex",
+        "AI",
+        "Mac"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45394",
+      "title": "아마존 뒤덮은 AI 생성 도서, 인간 저자들의 매출 감소 야기",
+      "original_title": "",
+      "description": "아마존의 자가 출판 도서 중 20%가 AI 생성 콘텐츠이지만, 실제 매출 비중은 12%에 그치는 것으로 나타났습니다. 최근 연구에 따르면 8개 장르 중 7개에서 인간 저자의 도서당 수익이 감소하고 있으며, 이는 저작권 소송에서 AI로 인한 시장 피해를 입증하는 근거가 될 수 있습니다.",
+      "link": "https://the-decoder.com/ai-generated-books-are-flooding-amazon-and-tanking-sales-for-human-authors/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45401",
+      "title": "중고 서적 판매 급증, 혹시 AI 때문일까?",
+      "original_title": "",
+      "description": "서점가에서 의문의 대량 주문이 이어지고 있습니다. 이 책들이 AI 학습에 사용된 뒤 결국 폐기 처분되는 것으로 추정됩니다.",
+      "link": "https://www.bbc.co.uk/news/articles/cp3rprx2wl4o?at_medium=RSS&at_campaign=rss",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45339",
+      "title": "코그(Kog), GPU 추론 효율 극대화에 박차",
+      "original_title": "",
+      "description": "프랑스 스타트업 코그(Kog)에 따르면, GPU가 에이전트 워크플로우에 적합하지 않다는 생각은 오해일 수 있습니다.",
+      "link": "https://techcrunch.com/2026/08/14/kog-is-going-deeper-to-squeeze-more-inference-out-of-gpus/",
+      "entities": [
+        "Kog",
+        "GPU"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45351",
+      "title": "스코틀랜드 경찰, AI 데이터센터 공격 막기 위한 ‘강력한 보안’ 필요 경고",
+      "original_title": "",
+      "description": "에든버러 인근에 제안된 데이터센터에 대해 ‘상당한 대중의 반대’가 예상된다고 경찰은 밝혔습니다. 스코틀랜드 경찰은 AI 데이터센터가 시위대의 공격을 받는 것을 막기 위해 강력한 보안 조치가 필요하다는 엄중한 경고를 내놓았습니다. 최근 AI 시설에 대한 반대 여론이 거세지고 있습니다.",
+      "link": "https://www.theguardian.com/uk-news/2026/aug/14/scottish-police-expect-public-opposition-larbert-datacentre",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45369",
+      "title": "픽셀 저널 업데이트: 클라우드 기반 프라이빗 AI 컴퓨팅 및 UI 개선 등",
+      "original_title": "",
+      "description": "픽셀 11 출시와 함께 구글은 저널(Journal) 앱에 여러 업데이트를 적용했으며, 이는 기존 기기에서도 순차적으로 확인되고 있습니다. 이번 업데이트에는 클라우드 기반의 프라이빗 AI 컴퓨팅 기능과 사용자 인터페이스 개선 사항이 포함되었습니다.",
+      "link": "https://9to5google.com/2026/08/14/pixel-journal-ai-update/",
+      "entities": [
+        "Journal",
+        "AI",
+        "UI"
+      ],
+      "date": "2026-08-15"
+    },
+    {
+      "id": "45346",
+      "title": "맥(Mac) 활동 기록을 추적해 타임라인을 만드는 챗GPT의 새 기능, 사용해도 괜찮을까?",
+      "original_title": "",
+      "description": "챗GPT 맥 앱에 도입된 '컴퓨터 히스토리'는 사용자가 맥에서 사용하는 앱과 웹사이트 활동을 기반으로 타임라인을 생성합니다. 과연 이것이 개인정보 보호에 위험 요소는 아닐까요?",
+      "link": "https://www.zdnet.com/article/chatgpt-computer-history/",
+      "entities": [
+        "Mac"
+      ],
+      "date": "2026-08-15"
     }
   ]
 }
