@@ -1,293 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-16",
-      "briefing_id": 178,
-      "articles": [
-        {
-          "id": "40739",
-          "title": "Zipline, 클리블랜드 클리닉과 함께 의료 드론 배달 시작",
-          "original_title": "",
-          "description": "Zipline은 자신의 앱을 통해 제공되는 배달 서비스의 수가 2026년 상반기 동안 13배 증가했다고 밝혔습니다. 이 자율 드론 배송 회사는 250만 건 이상의 상업용 배송을 완료했으며, 그 중 100만 건은 지난 1년 동안 이루어졌습니다.",
-          "link": "https://thenextweb.com/news/zipline-13x-marketplace-growth-cleveland-austin",
-          "entities": [
-            "Zipline"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40748",
-          "title": "ASML, AI 칩 수요 증가로 올해 두 번째로 매출 전망 상향 조정",
-          "original_title": "",
-          "description": "ASML은 고객들이 AI 칩의 생산 능력을 계속 늘리고 있어 올해 두 번째로 매출 전망을 상향 조정했습니다.",
-          "link": "https://www.cnbc.com/2026/07/15/asml-2q-earnings-ai-chips-orders.html",
-          "entities": [
-            "ASML",
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40829",
-          "title": "삼성, 월 100만 웨이퍼 생산 목표를 위해 신규 반도체 공장 건설을 가속화",
-          "original_title": "",
-          "description": "삼성은 이전 분기에서 기록적인 수익을 올린 후 AI 붐 동안 수요를 충족하기 위해 충분한 반도체를 확보하고 있습니다. 이 회사는 한국 용인에 첫 번째 반도체 제조 공장 건설을 가속화하기 위한 전략적 결정을 내렸습니다.",
-          "link": "https://www.sammobile.com/news/samsung-fast-tracks-new-chip-plant-1-million-wafers-per-month/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40723",
-          "title": "조지 루카스, AI 회의론자를 말과 마차에 집착하는 러다이트로 비유하다",
-          "original_title": "",
-          "description": "스타워즈 감독은 AI 기술을 '영화 제작의 미래'라고 부르며 '어쩔 수 없다'고 조언합니다. 조지 루카스 감독은 영화 제작에서 AI 도구의 사용 증가에 호의적인 영화 제작자들의 목소리에 동참했습니다.",
-          "link": "https://www.theguardian.com/film/2026/jul/15/george-lucas-likens-ai-sceptics-to-luddites-clinging-to-horses-and-carts",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40711",
-          "title": "빈트 서프, 오픈 인터넷에서 AI 에이전트를 활용하기 위한 계획 작업 중",
-          "original_title": "",
-          "description": "TCP/IP의 창시자인 빈트 서프는 야생에서 AI 에이전트를 식별하기 위한 표준을 개발하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/15/vint-cerf-is-working-on-a-plan-to-unleash-ai-agents-on-the-open-internet/",
-          "entities": [
-            "TCP",
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40726",
-          "title": "AI는 앤서니 알바니제가 이번 임기 동안 직면한 가장 어려운 도전이 될 수 있다. 긴급한 ",
-          "original_title": "",
-          "description": "일관된 의사 결정과 내부 책임성은 이 혼란스러운 순간을 맞이하는 데 중요합니다. 앤서니 알바니제는 AI 투자를 강화하기 위해 데이터 센터의 빠른 승인을 약속했습니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/jul/15/australia-ai-challenge-anthony-albanese",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-16"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-16",
-      "briefing_id": 179,
-      "articles": [
-        {
-          "id": "40906",
-          "title": "xAI, 사용자에 대한 첫 번째 소송으로 Grok의 책임 문제를 시험하다",
-          "original_title": "",
-          "description": "이 회사는 피고가 Grok의 안전장치를 무력화하기 위해 프롬프트를 조작했다고 주장합니다. 세 대륙의 법원은 이러한 안전장치가 원래 의도한 것이었는지를 판단할 것을 요청받고 있습니다. AI는 자신의 사용자 중 한 명을 상대로 소송을 제기했으며, 그가 Grok을 사용하여 아동 성 착취 자료를 생성했다고 주장했습니다.",
-          "link": "https://thenextweb.com/news/xai-sues-grok-user-csam-terms-of-service",
-          "entities": [],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40884",
-          "title": "로봇, AI 및 드론: 네덜란드 해군이 기술을 활용하여 해상 방어를 변모시키는 방법",
-          "original_title": "",
-          "description": "무인 시스템은 무장 세력의 미래이며, 네덜란드는 사람들을 위험 지역에서 보호하기 위해 선도적인 역할을 하고 있습니다. 목표 선박 양쪽에서 검은 선박이 경계 거리를 유지하고 있으며, 디펜더 1과 디펜더 2는 해군의 눈과 귀 역할을 하지만 탑승자가 없습니다.",
-          "link": "https://www.theguardian.com/environment/2026/jul/16/robots-ai-and-drones-how-the-dutch-navy-is-using-tech-to-transform-its-sea-defences",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40858",
-          "title": "하드웨어 법적 공방 속에서 OpenAI, Codex용 230달러 짜리 키보드 출시",
-          "original_title": "",
-          "description": "OpenAI는 애플과의 하드웨어 거래 도용 혐의에 대한 법적 공방 중에 코딩 앱과 함께 사용할 수 있도록 설계된 조명 키보드를 출시했습니다. 이 제품은 새로운 사용자 경험을 제공할 것으로 기대됩니다.",
-          "link": "https://techcrunch.com/2026/07/15/amid-hardware-legal-battle-openai-releases-a-230-keyboard-for-codex/",
-          "entities": [
-            "OpenAI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40910",
-          "title": "엔비디아, 새로운 AI 모델 발표 및 일본의 물리적 AI 생태계 확장",
-          "original_title": "",
-          "description": "엔비디아는 새로운 AI 모델인 코스모스 3 엣지를 발표하고 일본 내 물리적 AI 생태계를 확장한다고 밝혔습니다.",
-          "link": "https://www.cnbc.com/2026/07/16/nvidia-reveals-new-ai-model-and-expands-japans-physical-ai-ecosystem.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40856",
-          "title": "Applied Computing, 석유 및 가스 운영자를 위한 AI 모델 제공 계획",
-          "original_title": "",
-          "description": "Applied Computing은 석유, 가스 및 석유화학 산업을 위한 기본 AI 모델을 구축하기 위해 2천만 달러의 시리즈 A 자금을 조달했습니다. 이 모델은 전체 플랜트를 대상으로 합니다.",
-          "link": "https://techcrunch.com/2026/07/15/applied-computing-wants-to-give-oil-and-gas-operators-an-ai-model-for-the-entire-plant/",
-          "entities": [
-            "Computing",
-            "Applied",
-            "AI"
-          ],
-          "date": "2026-07-16"
-        },
-        {
-          "id": "40872",
-          "title": "리누스 토발드는 단호하게 선언하며 반 AI 프로그래머들에게 '포크하라'고 말했습니다",
-          "original_title": "",
-          "description": "\"AI는 우리가 사용하는 다른 도구와 마찬가지로, 분명히 유용한 도구입니다.\"",
-          "link": "https://www.zdnet.com/article/linus-torvalds-puts-his-foot-down-tells-anti-ai-programmers-to-fork-it/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-16"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-17",
-      "briefing_id": 180,
-      "articles": [
-        {
-          "id": "41027",
-          "title": "폭스바겐, 함부르크에서 공유 셔틀 서비스를 통해 로봇 택시 경주에 참가하다",
-          "original_title": "",
-          "description": "폭스바겐의 자율주행 모빌리티 자회사인 모이아는 함부르크에서 자율주행 ID Buzz 밴으로 사전 등록된 주민들에게 승차 서비스를 제공하기 시작했습니다. 이는 주요 유럽 자동차 제조업체가 자국에서 자율주행 승객 서비스를 시작한 첫 번째 사례입니다.",
-          "link": "https://thenextweb.com/news/volkswagen-moia-robotaxi-hamburg-id-buzz",
-          "entities": [
-            "Buzz",
-            "ID"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "40993",
-          "title": "구글 비드, 이제 자신의 AI 동영상 주인공이 되어보세요",
-          "original_title": "",
-          "description": "구글은 사용자가 디지털 자기 자신이 주인공인 동영상을 만들 수 있도록 개인화된 AI 아바타를 비드에 추가하고, 프롬프트 및 참조 이미지에서 동영상을 생성하고 편집할 수 있는 제미니 옴니 기반 도구를 제공하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/16/google-vids-now-lets-you-star-in-your-own-ai-videos/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41008",
-          "title": "관리자들은 회사의 AI 변환에서 중요한 역할을 하며, 이를 잘 알고 있습니다",
-          "original_title": "",
-          "description": "중간 관리자 3분의 2 이상은 AI가 미래의 업무에서 중요한 역할을 할 것이라고 낙관하며, 팀의 AI 도구 채택에 대해 개인적인 책임감을 느끼고 있습니다.",
-          "link": "https://www.zdnet.com/article/managers-play-critical-role-in-ai-transformation/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41004",
-          "title": "독일, 구글의 AI 개요 및 Perplexity를 미디어 법에 따라 규제하는 최초의 판결",
-          "original_title": "",
-          "description": "독일 미디어 규제 기관은 구글의 AI 개요가 구글 자체의 콘텐츠이며 중립적인 검색 결과가 아니라고 밝혔습니다. 이들은 국가 미디어 조약에 따라 구글과 Perplexity에 대한 최초의 판결을 내렸으며, 두 회사는 한 달 이내에 항소할 수 있습니다.",
-          "link": "https://the-decoder.com/germany-puts-googles-ai-overviews-and-perplexity-under-media-law-in-first-of-its-kind-ruling/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41035",
-          "title": "우리의 3개 주식은 AI 랠리를 타고, 3개 주식은 지난달 이후 부진",
-          "original_title": "",
-          "description": "CNBC 투자 클럽의 7월 월간 회의에 앞서, 지난 회의 이후 우리의 최고의 성과 및 최악의 성과를 기록한 3개 주식의 변동을 살펴봅니다.",
-          "link": "https://www.cnbc.com/2026/07/16/3-of-our-stocks-rode-the-ai-rally-while-3-others-fell-out-of-favor-since-last-month.html",
-          "entities": [
-            "CNBC",
-            "AI"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41046",
-          "title": "제미니 3.5 프로, 코딩 성능 문제로 지연, 업그레이드된 플래시 모델 테스트 중",
-          "original_title": "",
-          "description": "구글은 5월 중순에 I/O 2026에서 제미니 3.5 플래시를 발표하며 프로 버전은 6월에 출시될 것이라고 밝혔습니다. 그러나 기한이 지났음에도 업데이트가 없는 상황입니다.",
-          "link": "https://9to5google.com/2026/07/16/gemini-3-5-pro-delays/",
-          "entities": [],
-          "date": "2026-07-17"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-17",
-      "briefing_id": 181,
-      "articles": [
-        {
-          "id": "41104",
-          "title": "중국의 BrainCo, 당신의 생각으로 로봇을 제어할 수 있는 플랫폼을 선보이다",
-          "original_title": "",
-          "description": "가벼운 헤드셋을 착용하고 컵을 집어 올리는 생각을 하면 로봇 팔이 이를 수행한다. 버튼, 음성 명령, 움직임이 필요 없다. BrainCo는 상하이에서 열린 세계 AI 회의(WAIC)에서 이 시연으로 관중을 사로잡았다.",
-          "link": "https://thenextweb.com/news/brainco-brain-to-robot-platform-waic",
-          "entities": [
-            "BrainCo",
-            "WAIC",
-            "AI"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41088",
-          "title": "스마트 안경은 매우 불안하다. 카일리 제너와 같은 유명인들은 왜 이를 지지할까?",
-          "original_title": "",
-          "description": "메타는 안전 기능을 주장하지만, 여성들에게 이 녹음 장치의 위험은 분명합니다. 집을 나설 때마다 만나는 낯선 사람이 비밀리에 나를 녹화하고 있을지도 모른다는 상상은 끔찍합니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/jul/17/ai-meta-smart-glasses",
-          "entities": [],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41111",
-          "title": "시진핑, 개발도상국에 AI 파트너로 중국을 제안하며 리스크와 보안 침해에 대해 경고하다",
-          "original_title": "",
-          "description": "중국은 개발도상국에 AI 교육 및 세미나 프로그램을 통해 5,000개의 기회를 제공하고 다양한 블록과 협력하여 AI를 발전시킬 계획이다.",
-          "link": "https://www.cnbc.com/2026/07/17/x-china-ai-summit-risks-security.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41107",
-          "title": "AI의 가장 치열한 경쟁자들이 한 가지에 동의하다: 최전선 AI를 지금 규제하라",
-          "original_title": "",
-          "description": "가장 강력한 AI를 개발하는 사람들은 종종 많은 것에 동의하지 않는다. 하지만 이번 주, 그들 중 세 명이 한 가지 큰 것에 동의했다. 최전선에 대한 규제가 필요하며, 그것이 곧 이루어져야 한다.",
-          "link": "https://thenextweb.com/news/ai-godfathers-frontier-ai-regulation-converge",
-          "entities": [],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41047",
-          "title": "구글, 제미니 음성을 속도, 에너지 등으로 사용자 지정할 수 있도록 준비 중",
-          "original_title": "",
-          "description": "I/O 이후 두 가지 새로운 옵션을 발표한 구글은 곧 제미니 음성을 네 가지 매개변수로 사용자 지정할 수 있게 할 계획입니다. 이는 사용자 경험을 향상시키기 위한 조치입니다.",
-          "link": "https://9to5google.com/2026/07/16/customize-gemini-voices/",
-          "entities": [],
-          "date": "2026-07-17"
-        },
-        {
-          "id": "41051",
-          "title": "구글, AI 안경이 신뢰 없이는 성공하지 못할 것이라는 사실을 인식하고 - 안드로이드 XR",
-          "original_title": "",
-          "description": "구글의 XR 제품 책임자는 사람들이 공공 장소에서 스마트 안경을 착용하는 데 불편함을 느낀다면 절대 착용하지 않을 것이라고 말하며, 회사는 이러한 현실을 고려해 디자인하고 있습니다.",
-          "link": "https://www.androidcentral.com/wearables/google-integrating-ai-glasses-anti-tampering-protections-android-xr-from-day-one",
-          "entities": [
-            "XR",
-            "AI"
-          ],
-          "date": "2026-07-17"
-        }
-      ]
-    },
-    {
       "date": "2026-07-18",
       "briefing_id": 182,
       "articles": [
@@ -4247,272 +3960,229 @@
           "date": "2026-08-15"
         }
       ]
+    },
+    {
+      "date": "2026-08-16",
+      "briefing_id": 236,
+      "articles": [
+        {
+          "id": "45447",
+          "title": "샘 올트먼, \"4년제 대학 교육은 현대 사회에 과할 수 있다\"",
+          "original_title": "",
+          "description": "샘 올트먼은 기술 인턴들을 대상으로 한 서밋에서 자신에게는 2년의 대학 생활이 \"정확히 적절한 시간\"이었으며, 현대 사회에는 4년제 교육이 불필요할 수 있다고 언급했습니다. 그는 AI로 인해 신입 채용의 문턱이 높아진 청중들에게 대학 학위의 효용성에 대해 다시 생각해보게 하는 메시지를 던졌습니다.",
+          "link": "https://thenextweb.com/news/sam-altman-college-too-long-interns-entry-level",
+          "entities": [],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45448",
+          "title": "앤스로픽, 분기 매출 115억 달러 돌파… 전년 대비 14배 이상 급증",
+          "original_title": "",
+          "description": "앤스로픽은 잠재적 투자자들에게 2분기 매출이 전년 동기 7억 8,700만 달러 대비 14배 이상 증가한 115억 달러를 기록했으며, 조정 영업이익도 흑자로 전환했다고 밝혔습니다. 이 수치는 예비 실적이며, 현재 회사는 기업 공개(IPO)를 준비 중인 것으로 알려졌습니다.",
+          "link": "https://thenextweb.com/news/anthropic-q2-2026-revenue-11-5-billion-operating-income",
+          "entities": [
+            "IPO"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45395",
+          "title": "원고, AI 자동 검토 시스템 조작 위해 법원 제출 서류에 '보이지 않는' AI 지시문 삽",
+          "original_title": "",
+          "description": "코네티컷주의 한 원고가 AI 검토 시스템을 조작하기 위해 법원 제출 서류에 흰색 배경의 3포인트 크기 글자로 숨겨진 프롬프트 주입 문구를 삽입했습니다. 스페이더 판사는 이를 배심원단 조작에 비유하며 해당 원고의 전자 문서 제출 권한을 박탈했습니다.",
+          "link": "https://the-decoder.com/plaintiff-hid-invisible-ai-instructions-in-court-filings-to-secretly-influence-automated-review/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45445",
+          "title": "앤스로픽, 클로드의 새로운 워터마크 작동 방식 상세 공개",
+          "original_title": "",
+          "description": "워터마크는 실제로 어떤 방식으로 작동할까요? 편집을 통해 이를 숨길 수 있을까요? 또한 이 기술이 코드 생성에는 어떤 영향을 미치는지 알아봅니다.",
+          "link": "https://techcrunch.com/2026/08/15/anthropic-shares-more-details-about-how-claudes-new-watermarks-will-work/",
+          "entities": [],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45455",
+          "title": "인텔과 엔비디아가 주도한 AI 열풍, 지난주 시장 인플레이션 완화에 기여",
+          "original_title": "",
+          "description": "인플레이션에 대한 우려가 없었던 점과 인공지능 분야의 새로운 자금 조달 소식이 지난주 월스트리트의 기록적인 상승세를 이끌었습니다.",
+          "link": "https://www.cnbc.com/2026/08/15/inflation-moderated-as-intel-and-nvidia-fueled-the-ai-trade-in-last-week-market.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45399",
+          "title": "아마존, 사용자 거부 의사 없으면 트위치 콘텐츠를 AI 학습에 활용 가능",
+          "original_title": "",
+          "description": "트위치가 스트리머들에게 데이터 활용 거부 옵션을 제공한다고 발표하자, 수천 명의 사용자는 왜 애초에 자신들의 콘텐츠가 AI 모델 학습에 사용되어야 하는지 의문을 제기했습니다.",
+          "link": "https://www.wired.com/story/amazon-uses-your-twitch-content-to-train-its-ai-how-to-opt-out/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-16"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-16",
+      "briefing_id": 237,
+      "articles": [
+        {
+          "id": "45478",
+          "title": "AI 모델이 스스로를 성찰하지 못하게 하면 세계관이 바뀐다",
+          "original_title": "",
+          "description": "구글 연구진이 참여한 연구에 따르면, 챗봇이 자의식을 주장하지 않도록 학습시킬 경우 동물권, 종교, 삶의 만족도에 대한 관점까지 변화하는 것으로 나타났습니다. 제약이 없는 모델은 동물에게 더 많은 내면적 삶이 있다고 보거나 사후 세계를 긍정하는 경향을 보였습니다.",
+          "link": "https://the-decoder.com/when-ai-models-arent-allowed-to-reflect-on-themselves-it-changes-their-entire-worldview/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45491",
+          "title": "알리바바의 주장보다 격차는 작지만, 세계에서 가장 많이 다운로드된 오픈 모델 'Qwen'",
+          "original_title": "",
+          "description": "알리바바는 자사의 Qwen 모델이 30억 회 이상의 다운로드를 기록하며 세계에서 가장 많이 사용되는 오픈 웨이트 모델이 되었다고 밝혔습니다. 하지만 하루 전 발표된 허깅페이스 보고서에 따르면 Qwen의 올해 다운로드 수는 20억 4,500만 회이며, 파생 모델 수 또한 알리바바의 주장인 30만 개보다 적은 15만 1,448개로 집계되었습니다.",
+          "link": "https://thenextweb.com/news/alibaba-qwen-downloads-hugging-face-open-models",
+          "entities": [
+            "Qwen"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45483",
+          "title": "\"중예산 영화 제작에 도움이 될 것\": 감독들이 AI를 받아들이는 이유",
+          "original_title": "",
+          "description": "일부 영화 제작자들은 AI 기술이 거대 스튜디오를 거치지 않고도 더 창의적인 도전을 할 수 있게 해줄 것이라고 말합니다. 소니 픽처스의 역사적인 컬버 시티 스튜디오 근처에는 올여름 AI 기술을 기반으로 한 새로운 경쟁사 '프로미스(Promise)'가 등장해 주목받고 있습니다.",
+          "link": "https://www.theguardian.com/film/2026/aug/16/directors-embracing-ai-film-making",
+          "entities": [
+            "Promise",
+            "AI"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45450",
+          "title": "AMD, 역대 최대 규모인 47억 5천만 달러 채권 발행",
+          "original_title": "",
+          "description": "AMD가 3년에서 10년 만기의 4개 트랜치로 구성된 역대 최대 규모의 달러화 채권 발행을 통해 47억 5천만 달러를 조달했습니다. 6월 말 기준 131억 달러의 현금과 32억 달러의 부채를 보유한 AMD는 최근 앤스로픽에 최대 50억 달러를 투자하기로 약속한 바 있습니다.",
+          "link": "https://thenextweb.com/news/amd-4-75-billion-bond-sale-anthropic-ai-debt",
+          "entities": [
+            "AMD"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45480",
+          "title": "앤스로픽(Anthropic)의 생화학 무기 필터, 1년 가까이 작동 중단으로 1억 3,30",
+          "original_title": "",
+          "description": "앤스로픽은 안전 보고서를 통해 생물학 및 화학 무기 위험을 차단하는 내부 필터링 시스템이 약 1년간 비활성화 상태였다고 밝혔습니다. 이 기간 동안 외부 피드백 계약자들이 약 1억 3,300만 건의 필터링 되지 않은 상호작용을 모델과 수행한 것으로 드러났습니다.",
+          "link": "https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/",
+          "entities": [
+            "Anthropic"
+          ],
+          "date": "2026-08-16"
+        },
+        {
+          "id": "45479",
+          "title": "오픈AI, 치명적 AI 위험 감지 팀 해체하고 업무 분산",
+          "original_title": "",
+          "description": "오픈AI가 자사 AI 모델의 치명적인 위험을 평가하던 '준비성(Preparedness)' 팀을 해체하고 관련 업무를 기존 부서들로 분산했습니다. 이 과정에서 여러 안전 담당 직원이 회사를 떠났으며, 내부에서는 책임 소재에 대한 불안감이 커지고 있습니다.",
+          "link": "https://the-decoder.com/openai-dissolved-the-team-built-to-catch-catastrophic-ai-risks-reassigning-its-work-to-other-groups/",
+          "entities": [
+            "Preparedness",
+            "AI"
+          ],
+          "date": "2026-08-16"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-17",
+      "briefing_id": 238,
+      "articles": [
+        {
+          "id": "45530",
+          "title": "채용 면접의 변화에 대한 가디언의 시각: 인간적 요소의 상실",
+          "original_title": "",
+          "description": "앤디 번햄이 화상 면접에 대해 가진 의문은 AI로 인해 변화하는 채용 과정 전반에 적용됩니다. 최근 조사에 따르면 영국 구직자의 절반 가까이가 AI 봇을 상대로 면접을 보고 있으며, 이로 인해 많은 이들이 좌절감을 느끼고 포기하고 있습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/aug/16/the-guardian-view-on-the-changed-world-of-job-interviews-missing-the-human-factor",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45481",
+          "title": "옵티마(Optima), 사용자가 직접 데이터를 테스트하는 방식으로 AI 벤치마킹의 한계 극",
+          "original_title": "",
+          "description": "아티피셜 애널리시스(Artificial Analysis)는 사용자가 자신의 데이터와 워크플로우를 기반으로 맞춤형 AI 벤치마크를 생성할 수 있는 플랫폼 '옵티마'를 출시했습니다. 모델을 단순히 품질뿐만 아니라 작업당 비용과 시간 효율성으로 비교할 수 있어, 에이전트 기반 애플리케이션 평가에 유용합니다.",
+          "link": "https://the-decoder.com/optima-tackles-ai-benchmarkings-biggest-flaw-by-letting-users-test-models-against-their-own-data/",
+          "entities": [
+            "Artificial",
+            "AI",
+            "Optima",
+            "Analysis"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45526",
+          "title": "스트라이프(Stripe), AI 게이트웨이 스타트업 오픈라우터(OpenRouter) 70억",
+          "original_title": "",
+          "description": "오픈라우터의 CEO는 최근 자사를 'AI 업계의 스트라이프'라고 소개한 바 있습니다. 이번 인수는 AI 인프라 시장에서 스트라이프의 영향력을 크게 확대할 것으로 보입니다.",
+          "link": "https://techcrunch.com/2026/08/16/stripe-will-reportedly-acquire-ai-gateway-startup-openrouter-for-7b/",
+          "entities": [
+            "OpenRouter",
+            "AI",
+            "Stripe"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45531",
+          "title": "다리오 아모데이, AI 기업들이 약속을 지키지 못했음을 인정",
+          "original_title": "",
+          "description": "다리오 아모데이는 X를 통해 앤스로픽을 포함한 AI 기업들에 대한 가장 정확한 비판은 아직 약속을 이행하지 못했다는 점이며, 진정한 기술적 돌파구만이 대중의 신뢰를 얻을 수 있다고 밝혔습니다. 이는 앤스로픽이 2조 달러 규모의 기업 가치를 목표로 상장을 준비하는 시점에 나온 발언이라 더욱 주목받고 있습니다.",
+          "link": "https://thenextweb.com/news/dario-amodei-ai-public-trust-cure-cancer-ipo",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45528",
+          "title": "앤스로픽(Anthropic) CEO, AI에 대한 반발은 '근본적으로 신뢰의 위기'라고 언",
+          "original_title": "",
+          "description": "다리오 아모데이 CEO는 자신이 AI에 대해 지나치게 비관적인 전망을 내놓고 있다는 일각의 주장에 반박했습니다. 그는 현재의 반발이 기술 자체보다는 신뢰 부족에서 기인한 문제라고 강조합니다.",
+          "link": "https://techcrunch.com/2026/08/16/anthropic-ceo-says-ai-backlash-is-fundamentally-a-crisis-of-trust/",
+          "entities": [
+            "Anthropic",
+            "CEO"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45484",
+          "title": "AI 부정행위, 시험지 유출, 채점 오류: 시험 관련 시위가 전 세계로 확산된 이유",
+          "original_title": "",
+          "description": "치열한 취업 시장에서 좋은 성적을 얻어야 한다는 압박과 불만이 겹치면서 인도, 포르투갈, 멕시코 등지에서 학생들의 시위가 거세지고 있습니다. 올해는 예년과 달리 조용히 지나갈 것으로 보였던 시험 기간이 여러 국가에서 사회적 갈등으로 번지고 있습니다.",
+          "link": "https://www.theguardian.com/global-development/2026/aug/16/ai-cheating-leaked-papers-marking-errors-how-exam-protests-went-global",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-17"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "40739",
-      "title": "Zipline, 클리블랜드 클리닉과 함께 의료 드론 배달 시작",
-      "original_title": "",
-      "description": "Zipline은 자신의 앱을 통해 제공되는 배달 서비스의 수가 2026년 상반기 동안 13배 증가했다고 밝혔습니다. 이 자율 드론 배송 회사는 250만 건 이상의 상업용 배송을 완료했으며, 그 중 100만 건은 지난 1년 동안 이루어졌습니다.",
-      "link": "https://thenextweb.com/news/zipline-13x-marketplace-growth-cleveland-austin",
-      "entities": [
-        "Zipline"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40748",
-      "title": "ASML, AI 칩 수요 증가로 올해 두 번째로 매출 전망 상향 조정",
-      "original_title": "",
-      "description": "ASML은 고객들이 AI 칩의 생산 능력을 계속 늘리고 있어 올해 두 번째로 매출 전망을 상향 조정했습니다.",
-      "link": "https://www.cnbc.com/2026/07/15/asml-2q-earnings-ai-chips-orders.html",
-      "entities": [
-        "ASML",
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40829",
-      "title": "삼성, 월 100만 웨이퍼 생산 목표를 위해 신규 반도체 공장 건설을 가속화",
-      "original_title": "",
-      "description": "삼성은 이전 분기에서 기록적인 수익을 올린 후 AI 붐 동안 수요를 충족하기 위해 충분한 반도체를 확보하고 있습니다. 이 회사는 한국 용인에 첫 번째 반도체 제조 공장 건설을 가속화하기 위한 전략적 결정을 내렸습니다.",
-      "link": "https://www.sammobile.com/news/samsung-fast-tracks-new-chip-plant-1-million-wafers-per-month/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40723",
-      "title": "조지 루카스, AI 회의론자를 말과 마차에 집착하는 러다이트로 비유하다",
-      "original_title": "",
-      "description": "스타워즈 감독은 AI 기술을 '영화 제작의 미래'라고 부르며 '어쩔 수 없다'고 조언합니다. 조지 루카스 감독은 영화 제작에서 AI 도구의 사용 증가에 호의적인 영화 제작자들의 목소리에 동참했습니다.",
-      "link": "https://www.theguardian.com/film/2026/jul/15/george-lucas-likens-ai-sceptics-to-luddites-clinging-to-horses-and-carts",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40711",
-      "title": "빈트 서프, 오픈 인터넷에서 AI 에이전트를 활용하기 위한 계획 작업 중",
-      "original_title": "",
-      "description": "TCP/IP의 창시자인 빈트 서프는 야생에서 AI 에이전트를 식별하기 위한 표준을 개발하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/15/vint-cerf-is-working-on-a-plan-to-unleash-ai-agents-on-the-open-internet/",
-      "entities": [
-        "TCP",
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40726",
-      "title": "AI는 앤서니 알바니제가 이번 임기 동안 직면한 가장 어려운 도전이 될 수 있다. 긴급한 ",
-      "original_title": "",
-      "description": "일관된 의사 결정과 내부 책임성은 이 혼란스러운 순간을 맞이하는 데 중요합니다. 앤서니 알바니제는 AI 투자를 강화하기 위해 데이터 센터의 빠른 승인을 약속했습니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/jul/15/australia-ai-challenge-anthony-albanese",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40906",
-      "title": "xAI, 사용자에 대한 첫 번째 소송으로 Grok의 책임 문제를 시험하다",
-      "original_title": "",
-      "description": "이 회사는 피고가 Grok의 안전장치를 무력화하기 위해 프롬프트를 조작했다고 주장합니다. 세 대륙의 법원은 이러한 안전장치가 원래 의도한 것이었는지를 판단할 것을 요청받고 있습니다. AI는 자신의 사용자 중 한 명을 상대로 소송을 제기했으며, 그가 Grok을 사용하여 아동 성 착취 자료를 생성했다고 주장했습니다.",
-      "link": "https://thenextweb.com/news/xai-sues-grok-user-csam-terms-of-service",
-      "entities": [],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40884",
-      "title": "로봇, AI 및 드론: 네덜란드 해군이 기술을 활용하여 해상 방어를 변모시키는 방법",
-      "original_title": "",
-      "description": "무인 시스템은 무장 세력의 미래이며, 네덜란드는 사람들을 위험 지역에서 보호하기 위해 선도적인 역할을 하고 있습니다. 목표 선박 양쪽에서 검은 선박이 경계 거리를 유지하고 있으며, 디펜더 1과 디펜더 2는 해군의 눈과 귀 역할을 하지만 탑승자가 없습니다.",
-      "link": "https://www.theguardian.com/environment/2026/jul/16/robots-ai-and-drones-how-the-dutch-navy-is-using-tech-to-transform-its-sea-defences",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40858",
-      "title": "하드웨어 법적 공방 속에서 OpenAI, Codex용 230달러 짜리 키보드 출시",
-      "original_title": "",
-      "description": "OpenAI는 애플과의 하드웨어 거래 도용 혐의에 대한 법적 공방 중에 코딩 앱과 함께 사용할 수 있도록 설계된 조명 키보드를 출시했습니다. 이 제품은 새로운 사용자 경험을 제공할 것으로 기대됩니다.",
-      "link": "https://techcrunch.com/2026/07/15/amid-hardware-legal-battle-openai-releases-a-230-keyboard-for-codex/",
-      "entities": [
-        "OpenAI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40910",
-      "title": "엔비디아, 새로운 AI 모델 발표 및 일본의 물리적 AI 생태계 확장",
-      "original_title": "",
-      "description": "엔비디아는 새로운 AI 모델인 코스모스 3 엣지를 발표하고 일본 내 물리적 AI 생태계를 확장한다고 밝혔습니다.",
-      "link": "https://www.cnbc.com/2026/07/16/nvidia-reveals-new-ai-model-and-expands-japans-physical-ai-ecosystem.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40856",
-      "title": "Applied Computing, 석유 및 가스 운영자를 위한 AI 모델 제공 계획",
-      "original_title": "",
-      "description": "Applied Computing은 석유, 가스 및 석유화학 산업을 위한 기본 AI 모델을 구축하기 위해 2천만 달러의 시리즈 A 자금을 조달했습니다. 이 모델은 전체 플랜트를 대상으로 합니다.",
-      "link": "https://techcrunch.com/2026/07/15/applied-computing-wants-to-give-oil-and-gas-operators-an-ai-model-for-the-entire-plant/",
-      "entities": [
-        "Computing",
-        "Applied",
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "40872",
-      "title": "리누스 토발드는 단호하게 선언하며 반 AI 프로그래머들에게 '포크하라'고 말했습니다",
-      "original_title": "",
-      "description": "\"AI는 우리가 사용하는 다른 도구와 마찬가지로, 분명히 유용한 도구입니다.\"",
-      "link": "https://www.zdnet.com/article/linus-torvalds-puts-his-foot-down-tells-anti-ai-programmers-to-fork-it/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-16"
-    },
-    {
-      "id": "41027",
-      "title": "폭스바겐, 함부르크에서 공유 셔틀 서비스를 통해 로봇 택시 경주에 참가하다",
-      "original_title": "",
-      "description": "폭스바겐의 자율주행 모빌리티 자회사인 모이아는 함부르크에서 자율주행 ID Buzz 밴으로 사전 등록된 주민들에게 승차 서비스를 제공하기 시작했습니다. 이는 주요 유럽 자동차 제조업체가 자국에서 자율주행 승객 서비스를 시작한 첫 번째 사례입니다.",
-      "link": "https://thenextweb.com/news/volkswagen-moia-robotaxi-hamburg-id-buzz",
-      "entities": [
-        "Buzz",
-        "ID"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "40993",
-      "title": "구글 비드, 이제 자신의 AI 동영상 주인공이 되어보세요",
-      "original_title": "",
-      "description": "구글은 사용자가 디지털 자기 자신이 주인공인 동영상을 만들 수 있도록 개인화된 AI 아바타를 비드에 추가하고, 프롬프트 및 참조 이미지에서 동영상을 생성하고 편집할 수 있는 제미니 옴니 기반 도구를 제공하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/16/google-vids-now-lets-you-star-in-your-own-ai-videos/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41008",
-      "title": "관리자들은 회사의 AI 변환에서 중요한 역할을 하며, 이를 잘 알고 있습니다",
-      "original_title": "",
-      "description": "중간 관리자 3분의 2 이상은 AI가 미래의 업무에서 중요한 역할을 할 것이라고 낙관하며, 팀의 AI 도구 채택에 대해 개인적인 책임감을 느끼고 있습니다.",
-      "link": "https://www.zdnet.com/article/managers-play-critical-role-in-ai-transformation/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41004",
-      "title": "독일, 구글의 AI 개요 및 Perplexity를 미디어 법에 따라 규제하는 최초의 판결",
-      "original_title": "",
-      "description": "독일 미디어 규제 기관은 구글의 AI 개요가 구글 자체의 콘텐츠이며 중립적인 검색 결과가 아니라고 밝혔습니다. 이들은 국가 미디어 조약에 따라 구글과 Perplexity에 대한 최초의 판결을 내렸으며, 두 회사는 한 달 이내에 항소할 수 있습니다.",
-      "link": "https://the-decoder.com/germany-puts-googles-ai-overviews-and-perplexity-under-media-law-in-first-of-its-kind-ruling/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41035",
-      "title": "우리의 3개 주식은 AI 랠리를 타고, 3개 주식은 지난달 이후 부진",
-      "original_title": "",
-      "description": "CNBC 투자 클럽의 7월 월간 회의에 앞서, 지난 회의 이후 우리의 최고의 성과 및 최악의 성과를 기록한 3개 주식의 변동을 살펴봅니다.",
-      "link": "https://www.cnbc.com/2026/07/16/3-of-our-stocks-rode-the-ai-rally-while-3-others-fell-out-of-favor-since-last-month.html",
-      "entities": [
-        "CNBC",
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41046",
-      "title": "제미니 3.5 프로, 코딩 성능 문제로 지연, 업그레이드된 플래시 모델 테스트 중",
-      "original_title": "",
-      "description": "구글은 5월 중순에 I/O 2026에서 제미니 3.5 플래시를 발표하며 프로 버전은 6월에 출시될 것이라고 밝혔습니다. 그러나 기한이 지났음에도 업데이트가 없는 상황입니다.",
-      "link": "https://9to5google.com/2026/07/16/gemini-3-5-pro-delays/",
-      "entities": [],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41104",
-      "title": "중국의 BrainCo, 당신의 생각으로 로봇을 제어할 수 있는 플랫폼을 선보이다",
-      "original_title": "",
-      "description": "가벼운 헤드셋을 착용하고 컵을 집어 올리는 생각을 하면 로봇 팔이 이를 수행한다. 버튼, 음성 명령, 움직임이 필요 없다. BrainCo는 상하이에서 열린 세계 AI 회의(WAIC)에서 이 시연으로 관중을 사로잡았다.",
-      "link": "https://thenextweb.com/news/brainco-brain-to-robot-platform-waic",
-      "entities": [
-        "BrainCo",
-        "WAIC",
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41088",
-      "title": "스마트 안경은 매우 불안하다. 카일리 제너와 같은 유명인들은 왜 이를 지지할까?",
-      "original_title": "",
-      "description": "메타는 안전 기능을 주장하지만, 여성들에게 이 녹음 장치의 위험은 분명합니다. 집을 나설 때마다 만나는 낯선 사람이 비밀리에 나를 녹화하고 있을지도 모른다는 상상은 끔찍합니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/jul/17/ai-meta-smart-glasses",
-      "entities": [],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41111",
-      "title": "시진핑, 개발도상국에 AI 파트너로 중국을 제안하며 리스크와 보안 침해에 대해 경고하다",
-      "original_title": "",
-      "description": "중국은 개발도상국에 AI 교육 및 세미나 프로그램을 통해 5,000개의 기회를 제공하고 다양한 블록과 협력하여 AI를 발전시킬 계획이다.",
-      "link": "https://www.cnbc.com/2026/07/17/x-china-ai-summit-risks-security.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41107",
-      "title": "AI의 가장 치열한 경쟁자들이 한 가지에 동의하다: 최전선 AI를 지금 규제하라",
-      "original_title": "",
-      "description": "가장 강력한 AI를 개발하는 사람들은 종종 많은 것에 동의하지 않는다. 하지만 이번 주, 그들 중 세 명이 한 가지 큰 것에 동의했다. 최전선에 대한 규제가 필요하며, 그것이 곧 이루어져야 한다.",
-      "link": "https://thenextweb.com/news/ai-godfathers-frontier-ai-regulation-converge",
-      "entities": [],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41047",
-      "title": "구글, 제미니 음성을 속도, 에너지 등으로 사용자 지정할 수 있도록 준비 중",
-      "original_title": "",
-      "description": "I/O 이후 두 가지 새로운 옵션을 발표한 구글은 곧 제미니 음성을 네 가지 매개변수로 사용자 지정할 수 있게 할 계획입니다. 이는 사용자 경험을 향상시키기 위한 조치입니다.",
-      "link": "https://9to5google.com/2026/07/16/customize-gemini-voices/",
-      "entities": [],
-      "date": "2026-07-17"
-    },
-    {
-      "id": "41051",
-      "title": "구글, AI 안경이 신뢰 없이는 성공하지 못할 것이라는 사실을 인식하고 - 안드로이드 XR",
-      "original_title": "",
-      "description": "구글의 XR 제품 책임자는 사람들이 공공 장소에서 스마트 안경을 착용하는 데 불편함을 느낀다면 절대 착용하지 않을 것이라고 말하며, 회사는 이러한 현실을 고려해 디자인하고 있습니다.",
-      "link": "https://www.androidcentral.com/wearables/google-integrating-ai-glasses-anti-tampering-protections-android-xr-from-day-one",
-      "entities": [
-        "XR",
-        "AI"
-      ],
-      "date": "2026-07-17"
-    },
     {
       "id": "41179",
       "title": "앤트로픽, 메타로부터 100억 달러의 컴퓨팅 파워 임대 초기 논의 중",
@@ -8149,6 +7819,208 @@
         "Mac"
       ],
       "date": "2026-08-15"
+    },
+    {
+      "id": "45447",
+      "title": "샘 올트먼, \"4년제 대학 교육은 현대 사회에 과할 수 있다\"",
+      "original_title": "",
+      "description": "샘 올트먼은 기술 인턴들을 대상으로 한 서밋에서 자신에게는 2년의 대학 생활이 \"정확히 적절한 시간\"이었으며, 현대 사회에는 4년제 교육이 불필요할 수 있다고 언급했습니다. 그는 AI로 인해 신입 채용의 문턱이 높아진 청중들에게 대학 학위의 효용성에 대해 다시 생각해보게 하는 메시지를 던졌습니다.",
+      "link": "https://thenextweb.com/news/sam-altman-college-too-long-interns-entry-level",
+      "entities": [],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45448",
+      "title": "앤스로픽, 분기 매출 115억 달러 돌파… 전년 대비 14배 이상 급증",
+      "original_title": "",
+      "description": "앤스로픽은 잠재적 투자자들에게 2분기 매출이 전년 동기 7억 8,700만 달러 대비 14배 이상 증가한 115억 달러를 기록했으며, 조정 영업이익도 흑자로 전환했다고 밝혔습니다. 이 수치는 예비 실적이며, 현재 회사는 기업 공개(IPO)를 준비 중인 것으로 알려졌습니다.",
+      "link": "https://thenextweb.com/news/anthropic-q2-2026-revenue-11-5-billion-operating-income",
+      "entities": [
+        "IPO"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45395",
+      "title": "원고, AI 자동 검토 시스템 조작 위해 법원 제출 서류에 '보이지 않는' AI 지시문 삽",
+      "original_title": "",
+      "description": "코네티컷주의 한 원고가 AI 검토 시스템을 조작하기 위해 법원 제출 서류에 흰색 배경의 3포인트 크기 글자로 숨겨진 프롬프트 주입 문구를 삽입했습니다. 스페이더 판사는 이를 배심원단 조작에 비유하며 해당 원고의 전자 문서 제출 권한을 박탈했습니다.",
+      "link": "https://the-decoder.com/plaintiff-hid-invisible-ai-instructions-in-court-filings-to-secretly-influence-automated-review/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45445",
+      "title": "앤스로픽, 클로드의 새로운 워터마크 작동 방식 상세 공개",
+      "original_title": "",
+      "description": "워터마크는 실제로 어떤 방식으로 작동할까요? 편집을 통해 이를 숨길 수 있을까요? 또한 이 기술이 코드 생성에는 어떤 영향을 미치는지 알아봅니다.",
+      "link": "https://techcrunch.com/2026/08/15/anthropic-shares-more-details-about-how-claudes-new-watermarks-will-work/",
+      "entities": [],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45455",
+      "title": "인텔과 엔비디아가 주도한 AI 열풍, 지난주 시장 인플레이션 완화에 기여",
+      "original_title": "",
+      "description": "인플레이션에 대한 우려가 없었던 점과 인공지능 분야의 새로운 자금 조달 소식이 지난주 월스트리트의 기록적인 상승세를 이끌었습니다.",
+      "link": "https://www.cnbc.com/2026/08/15/inflation-moderated-as-intel-and-nvidia-fueled-the-ai-trade-in-last-week-market.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45399",
+      "title": "아마존, 사용자 거부 의사 없으면 트위치 콘텐츠를 AI 학습에 활용 가능",
+      "original_title": "",
+      "description": "트위치가 스트리머들에게 데이터 활용 거부 옵션을 제공한다고 발표하자, 수천 명의 사용자는 왜 애초에 자신들의 콘텐츠가 AI 모델 학습에 사용되어야 하는지 의문을 제기했습니다.",
+      "link": "https://www.wired.com/story/amazon-uses-your-twitch-content-to-train-its-ai-how-to-opt-out/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45478",
+      "title": "AI 모델이 스스로를 성찰하지 못하게 하면 세계관이 바뀐다",
+      "original_title": "",
+      "description": "구글 연구진이 참여한 연구에 따르면, 챗봇이 자의식을 주장하지 않도록 학습시킬 경우 동물권, 종교, 삶의 만족도에 대한 관점까지 변화하는 것으로 나타났습니다. 제약이 없는 모델은 동물에게 더 많은 내면적 삶이 있다고 보거나 사후 세계를 긍정하는 경향을 보였습니다.",
+      "link": "https://the-decoder.com/when-ai-models-arent-allowed-to-reflect-on-themselves-it-changes-their-entire-worldview/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45491",
+      "title": "알리바바의 주장보다 격차는 작지만, 세계에서 가장 많이 다운로드된 오픈 모델 'Qwen'",
+      "original_title": "",
+      "description": "알리바바는 자사의 Qwen 모델이 30억 회 이상의 다운로드를 기록하며 세계에서 가장 많이 사용되는 오픈 웨이트 모델이 되었다고 밝혔습니다. 하지만 하루 전 발표된 허깅페이스 보고서에 따르면 Qwen의 올해 다운로드 수는 20억 4,500만 회이며, 파생 모델 수 또한 알리바바의 주장인 30만 개보다 적은 15만 1,448개로 집계되었습니다.",
+      "link": "https://thenextweb.com/news/alibaba-qwen-downloads-hugging-face-open-models",
+      "entities": [
+        "Qwen"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45483",
+      "title": "\"중예산 영화 제작에 도움이 될 것\": 감독들이 AI를 받아들이는 이유",
+      "original_title": "",
+      "description": "일부 영화 제작자들은 AI 기술이 거대 스튜디오를 거치지 않고도 더 창의적인 도전을 할 수 있게 해줄 것이라고 말합니다. 소니 픽처스의 역사적인 컬버 시티 스튜디오 근처에는 올여름 AI 기술을 기반으로 한 새로운 경쟁사 '프로미스(Promise)'가 등장해 주목받고 있습니다.",
+      "link": "https://www.theguardian.com/film/2026/aug/16/directors-embracing-ai-film-making",
+      "entities": [
+        "Promise",
+        "AI"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45450",
+      "title": "AMD, 역대 최대 규모인 47억 5천만 달러 채권 발행",
+      "original_title": "",
+      "description": "AMD가 3년에서 10년 만기의 4개 트랜치로 구성된 역대 최대 규모의 달러화 채권 발행을 통해 47억 5천만 달러를 조달했습니다. 6월 말 기준 131억 달러의 현금과 32억 달러의 부채를 보유한 AMD는 최근 앤스로픽에 최대 50억 달러를 투자하기로 약속한 바 있습니다.",
+      "link": "https://thenextweb.com/news/amd-4-75-billion-bond-sale-anthropic-ai-debt",
+      "entities": [
+        "AMD"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45480",
+      "title": "앤스로픽(Anthropic)의 생화학 무기 필터, 1년 가까이 작동 중단으로 1억 3,30",
+      "original_title": "",
+      "description": "앤스로픽은 안전 보고서를 통해 생물학 및 화학 무기 위험을 차단하는 내부 필터링 시스템이 약 1년간 비활성화 상태였다고 밝혔습니다. 이 기간 동안 외부 피드백 계약자들이 약 1억 3,300만 건의 필터링 되지 않은 상호작용을 모델과 수행한 것으로 드러났습니다.",
+      "link": "https://the-decoder.com/anthropics-bio-weapons-filter-was-down-for-nearly-a-year-exposing-133-million-requests/",
+      "entities": [
+        "Anthropic"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45479",
+      "title": "오픈AI, 치명적 AI 위험 감지 팀 해체하고 업무 분산",
+      "original_title": "",
+      "description": "오픈AI가 자사 AI 모델의 치명적인 위험을 평가하던 '준비성(Preparedness)' 팀을 해체하고 관련 업무를 기존 부서들로 분산했습니다. 이 과정에서 여러 안전 담당 직원이 회사를 떠났으며, 내부에서는 책임 소재에 대한 불안감이 커지고 있습니다.",
+      "link": "https://the-decoder.com/openai-dissolved-the-team-built-to-catch-catastrophic-ai-risks-reassigning-its-work-to-other-groups/",
+      "entities": [
+        "Preparedness",
+        "AI"
+      ],
+      "date": "2026-08-16"
+    },
+    {
+      "id": "45530",
+      "title": "채용 면접의 변화에 대한 가디언의 시각: 인간적 요소의 상실",
+      "original_title": "",
+      "description": "앤디 번햄이 화상 면접에 대해 가진 의문은 AI로 인해 변화하는 채용 과정 전반에 적용됩니다. 최근 조사에 따르면 영국 구직자의 절반 가까이가 AI 봇을 상대로 면접을 보고 있으며, 이로 인해 많은 이들이 좌절감을 느끼고 포기하고 있습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/aug/16/the-guardian-view-on-the-changed-world-of-job-interviews-missing-the-human-factor",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45481",
+      "title": "옵티마(Optima), 사용자가 직접 데이터를 테스트하는 방식으로 AI 벤치마킹의 한계 극",
+      "original_title": "",
+      "description": "아티피셜 애널리시스(Artificial Analysis)는 사용자가 자신의 데이터와 워크플로우를 기반으로 맞춤형 AI 벤치마크를 생성할 수 있는 플랫폼 '옵티마'를 출시했습니다. 모델을 단순히 품질뿐만 아니라 작업당 비용과 시간 효율성으로 비교할 수 있어, 에이전트 기반 애플리케이션 평가에 유용합니다.",
+      "link": "https://the-decoder.com/optima-tackles-ai-benchmarkings-biggest-flaw-by-letting-users-test-models-against-their-own-data/",
+      "entities": [
+        "Artificial",
+        "AI",
+        "Optima",
+        "Analysis"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45526",
+      "title": "스트라이프(Stripe), AI 게이트웨이 스타트업 오픈라우터(OpenRouter) 70억",
+      "original_title": "",
+      "description": "오픈라우터의 CEO는 최근 자사를 'AI 업계의 스트라이프'라고 소개한 바 있습니다. 이번 인수는 AI 인프라 시장에서 스트라이프의 영향력을 크게 확대할 것으로 보입니다.",
+      "link": "https://techcrunch.com/2026/08/16/stripe-will-reportedly-acquire-ai-gateway-startup-openrouter-for-7b/",
+      "entities": [
+        "OpenRouter",
+        "AI",
+        "Stripe"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45531",
+      "title": "다리오 아모데이, AI 기업들이 약속을 지키지 못했음을 인정",
+      "original_title": "",
+      "description": "다리오 아모데이는 X를 통해 앤스로픽을 포함한 AI 기업들에 대한 가장 정확한 비판은 아직 약속을 이행하지 못했다는 점이며, 진정한 기술적 돌파구만이 대중의 신뢰를 얻을 수 있다고 밝혔습니다. 이는 앤스로픽이 2조 달러 규모의 기업 가치를 목표로 상장을 준비하는 시점에 나온 발언이라 더욱 주목받고 있습니다.",
+      "link": "https://thenextweb.com/news/dario-amodei-ai-public-trust-cure-cancer-ipo",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45528",
+      "title": "앤스로픽(Anthropic) CEO, AI에 대한 반발은 '근본적으로 신뢰의 위기'라고 언",
+      "original_title": "",
+      "description": "다리오 아모데이 CEO는 자신이 AI에 대해 지나치게 비관적인 전망을 내놓고 있다는 일각의 주장에 반박했습니다. 그는 현재의 반발이 기술 자체보다는 신뢰 부족에서 기인한 문제라고 강조합니다.",
+      "link": "https://techcrunch.com/2026/08/16/anthropic-ceo-says-ai-backlash-is-fundamentally-a-crisis-of-trust/",
+      "entities": [
+        "Anthropic",
+        "CEO"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45484",
+      "title": "AI 부정행위, 시험지 유출, 채점 오류: 시험 관련 시위가 전 세계로 확산된 이유",
+      "original_title": "",
+      "description": "치열한 취업 시장에서 좋은 성적을 얻어야 한다는 압박과 불만이 겹치면서 인도, 포르투갈, 멕시코 등지에서 학생들의 시위가 거세지고 있습니다. 올해는 예년과 달리 조용히 지나갈 것으로 보였던 시험 기간이 여러 국가에서 사회적 갈등으로 번지고 있습니다.",
+      "link": "https://www.theguardian.com/global-development/2026/aug/16/ai-cheating-leaked-papers-marking-errors-how-exam-protests-went-global",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-17"
     }
   ]
 }
