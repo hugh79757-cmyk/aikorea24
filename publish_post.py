@@ -9,7 +9,7 @@ TOKEN = os.getenv("THREADS_ACCESS_TOKEN")
 CONTAINER_ID = "17902396659449576"
 
 r = requests.post(
-    f"https://graph.threads.net/v1.0/{USER_ID}/threads_publish",
+    f"https://graph.threads.com/v1.0/{USER_ID}/threads_publish",
     params={
         "creation_id": CONTAINER_ID,
         "access_token": TOKEN

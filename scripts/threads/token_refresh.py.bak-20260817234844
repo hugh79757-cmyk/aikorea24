@@ -44,7 +44,7 @@ THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 STATE_FILE = os.path.join(THREADS_DIR, '.token_refresh_state.json')
 
 # 공식 최신 호스트 (단일 출처)
-THREADS_API_HOST = "graph.threads.net"
+THREADS_API_HOST = "graph.threads.com"
 
 REQUEST_TIMEOUT = 20
 
@@ -112,8 +112,8 @@ def _compute_expires_at(expires_in: int):
 
 
 def _record_state(status=None, sanitized_error_code=None, error_type=None,
-                  sanitized_error_subcode=None, sanitized_error_message=None,
-                  last_successful=None, expires_in=None, expires_at=None) -> None:
+                  sanitized_error_message=None, last_successful=None,
+                  expires_in=None, expires_at=None) -> None:
     """안전한 상태만 기록. 토큰 값은 절대 저장하지 않음."""
     st = _state()
     st["last_validation_at"] = datetime.now().isoformat()
@@ -123,8 +123,6 @@ def _record_state(status=None, sanitized_error_code=None, error_type=None,
         st["sanitized_error_code"] = sanitized_error_code
     if error_type is not None:
         st["sanitized_error_type"] = error_type
-    if sanitized_error_subcode is not None:
-        st["sanitized_error_subcode"] = sanitized_error_subcode
     if sanitized_error_message is not None:
         st["sanitized_error_message"] = sanitized_error_message
     if last_successful is not None:
@@ -147,7 +145,7 @@ def _record_state(status=None, sanitized_error_code=None, error_type=None,
 # ── 오류 상세 추출 (안전 필드만) ───────────────────────
 def _extract_error_detail(resp) -> dict:
     detail = {"http_status": getattr(resp, "status_code", None),
-              "error_code": None, "error_type": None, "error_subcode": None, "message": None}
+              "error_code": None, "error_type": None, "message": None}
     try:
         body = resp.json()
     except Exception:
@@ -156,7 +154,6 @@ def _extract_error_detail(resp) -> dict:
     raw_msg = str(err.get("message", "") or "")
     detail["error_code"] = err.get("code")
     detail["error_type"] = err.get("type")
-    detail["error_subcode"] = err.get("error_subcode")
     # 토큰/시크릿이 message 에 포함될 수 있으므로 스크럽 후 저장
     detail["message"] = ScrubRegistry.scrub(raw_msg) if raw_msg else None
     return detail
@@ -354,8 +351,7 @@ def run_exchange_classified() -> dict:
     """
     result = {
         "result": None, "http_status": None, "error_code": None,
-        "error_subcode": None, "error_type": None, "message": None,
-        "expires_in": 0, "expires_at": None,
+        "error_type": None, "message": None, "expires_in": 0, "expires_at": None,
     }
     sec = load_secrets()
 
@@ -405,13 +401,11 @@ def run_exchange_classified() -> dict:
 
     # 4) 교환 실패 → 6분류
     result.update(http_status=err.get("http_status"), error_code=err.get("error_code"),
-                  error_subcode=err.get("error_subcode"),
                   error_type=err.get("error_type"), message=err.get("message"))
     bucket = classify_exchange_failure(err.get("error_code"), err.get("error_type"), err.get("message"))
     result["result"] = bucket
     _record_state(status=bucket, sanitized_error_code=err.get("error_code"),
                   error_type=err.get("error_type"),
-                  sanitized_error_subcode=err.get("error_subcode"),
                   sanitized_error_message=err.get("message"))
     logger.error("[exchange] 실패 분류=%s (HTTP %s / code=%s)",
                  bucket, err.get("http_status"), err.get("error_code"))
@@ -432,8 +426,8 @@ def cmd_check() -> int:
 
 def cmd_exchange() -> int:
     res = run_exchange_classified()
-    logger.info("[exchange] 결과=%s HTTP=%s code=%s subcode=%s type=%s message=%s expires_at=%s",
-                res["result"], res["http_status"], res["error_code"], res["error_subcode"],
+    logger.info("[exchange] 결과=%s HTTP=%s code=%s type=%s message=%s expires_at=%s",
+                res["result"], res["http_status"], res["error_code"],
                 res["error_type"], res["message"], res["expires_at"])
     return 0 if res["result"] == EXCHANGE_SUCCESS else 1
 

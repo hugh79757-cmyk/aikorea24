@@ -4180,6 +4180,81 @@
           "date": "2026-08-17"
         }
       ]
+    },
+    {
+      "date": "2026-08-17",
+      "briefing_id": 239,
+      "articles": [
+        {
+          "id": "45569",
+          "title": "서브 로보틱스(Serve Robotics), 그럽허브와 파트너십 체결… 미국 음식 배달의 ",
+          "original_title": "",
+          "description": "우버에서 분사한 보도 배달 로봇 기업 서브 로보틱스가 그럽허브를 파트너로 추가하며 미국 음식 배달 로봇 시장의 중립적인 인프라로 자리 잡고 있습니다. 그럽허브의 모회사인 원더와의 계약을 통해 서브 로보틱스의 아이스박스 크기 로봇들이 더 넓은 영역을 누비게 될 전망입니다.",
+          "link": "https://thenextweb.com/news/serve-robotics-grubhub-wonder-delivery-2000-robots",
+          "entities": [
+            "Robotics",
+            "Serve"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45559",
+          "title": "하늘 위의 AI 감시자: 새로운 위성과 인공지능이 산불 탐지 방식을 바꾸다",
+          "original_title": "",
+          "description": "지구 궤도와 지상에 설치된 첨단 카메라가 AI와 결합하여 소방관들이 산불을 조기에 진압할 수 있도록 돕고 있습니다. 올여름 워싱턴주 스포캔에서 발생한 화재는 산불의 발견 시점이 초기 대응만큼이나 중요하다는 사실을 다시 한번 일깨워주었습니다.",
+          "link": "https://www.theguardian.com/us-news/2026/aug/17/satellites-ai-wildfire-detection",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45555",
+          "title": "앤스로픽, 클로드 출력물에 워터마크 도입… 비판론자들은 부작용 우려",
+          "original_title": "",
+          "description": "앤스로픽은 클로드의 생성물에 워터마크를 삽입하여 AI 생성 콘텐츠를 식별할 수 있도록 했습니다. 그러나 비평가들은 이 과정에서 단어 선택의 자연스러움이 훼손될 수 있다고 지적하며, 법조계에서는 투명성 확보와 관련한 새로운 고민이 제기되고 있습니다.",
+          "link": "https://the-decoder.com/anthropic-watermarks-claudes-output-but-critics-question-the-tradeoffs/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45557",
+          "title": "구글 워크스페이스, 기본 설정으로 제미나이가 회사 데이터에 접근… 차단 방법은?",
+          "original_title": "",
+          "description": "구글 워크스페이스에서 제미나이는 기본적으로 Gmail, 문서, 캘린더, 채팅 등에 접근할 수 있습니다. 이것이 왜 중요한 문제인지, 그리고 관리자가 지금 바로 이를 비활성화하는 방법을 소개합니다.",
+          "link": "https://www.zdnet.com/article/google-workspace-lets-gemini-access-your-company-data-by-default-how-to-shut-it-down/",
+          "entities": [
+            "Gmail"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45575",
+          "title": "알리바바, 메타의 AI 도전에 맞서 노트북용 모델 공개",
+          "original_title": "",
+          "description": "알리바바가 노트북에서 구동 가능한 AI 모델을 출시하고 가장 강력한 '큐원(Qwen)' 모델의 가중치를 공개하며, 오픈 웨이트 AI 분야에서 메타와의 경쟁을 격화시키고 있습니다.",
+          "link": "https://www.cnbc.com/2026/08/17/alibaba-meta-qwen-open-weight-ai-laptop-models.html",
+          "entities": [
+            "AI",
+            "Qwen"
+          ],
+          "date": "2026-08-17"
+        },
+        {
+          "id": "45558",
+          "title": "제미나이(Gemini)와 픽셀(Pixel)로 더 가까워진 경기 관람 경험",
+          "original_title": "",
+          "description": "구글 제미나이와 픽셀이 5개의 글로벌 축구 클럽과 파트너십을 맺었습니다. AI와 스마트폰 기술을 활용하여 팬들의 경기 당일 관람 경험을 한층 더 향상시킬 예정입니다.",
+          "link": "https://blog.google/products-and-platforms/products/gemini/google-gemini-pixel-football-club-partnerships/",
+          "entities": [
+            "Pixel",
+            "Gemini"
+          ],
+          "date": "2026-08-17"
+        }
+      ]
     }
   ],
   "articles": [
@@ -8019,6 +8094,75 @@
       "link": "https://www.theguardian.com/global-development/2026/aug/16/ai-cheating-leaked-papers-marking-errors-how-exam-protests-went-global",
       "entities": [
         "AI"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45569",
+      "title": "서브 로보틱스(Serve Robotics), 그럽허브와 파트너십 체결… 미국 음식 배달의 ",
+      "original_title": "",
+      "description": "우버에서 분사한 보도 배달 로봇 기업 서브 로보틱스가 그럽허브를 파트너로 추가하며 미국 음식 배달 로봇 시장의 중립적인 인프라로 자리 잡고 있습니다. 그럽허브의 모회사인 원더와의 계약을 통해 서브 로보틱스의 아이스박스 크기 로봇들이 더 넓은 영역을 누비게 될 전망입니다.",
+      "link": "https://thenextweb.com/news/serve-robotics-grubhub-wonder-delivery-2000-robots",
+      "entities": [
+        "Robotics",
+        "Serve"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45559",
+      "title": "하늘 위의 AI 감시자: 새로운 위성과 인공지능이 산불 탐지 방식을 바꾸다",
+      "original_title": "",
+      "description": "지구 궤도와 지상에 설치된 첨단 카메라가 AI와 결합하여 소방관들이 산불을 조기에 진압할 수 있도록 돕고 있습니다. 올여름 워싱턴주 스포캔에서 발생한 화재는 산불의 발견 시점이 초기 대응만큼이나 중요하다는 사실을 다시 한번 일깨워주었습니다.",
+      "link": "https://www.theguardian.com/us-news/2026/aug/17/satellites-ai-wildfire-detection",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45555",
+      "title": "앤스로픽, 클로드 출력물에 워터마크 도입… 비판론자들은 부작용 우려",
+      "original_title": "",
+      "description": "앤스로픽은 클로드의 생성물에 워터마크를 삽입하여 AI 생성 콘텐츠를 식별할 수 있도록 했습니다. 그러나 비평가들은 이 과정에서 단어 선택의 자연스러움이 훼손될 수 있다고 지적하며, 법조계에서는 투명성 확보와 관련한 새로운 고민이 제기되고 있습니다.",
+      "link": "https://the-decoder.com/anthropic-watermarks-claudes-output-but-critics-question-the-tradeoffs/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45557",
+      "title": "구글 워크스페이스, 기본 설정으로 제미나이가 회사 데이터에 접근… 차단 방법은?",
+      "original_title": "",
+      "description": "구글 워크스페이스에서 제미나이는 기본적으로 Gmail, 문서, 캘린더, 채팅 등에 접근할 수 있습니다. 이것이 왜 중요한 문제인지, 그리고 관리자가 지금 바로 이를 비활성화하는 방법을 소개합니다.",
+      "link": "https://www.zdnet.com/article/google-workspace-lets-gemini-access-your-company-data-by-default-how-to-shut-it-down/",
+      "entities": [
+        "Gmail"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45575",
+      "title": "알리바바, 메타의 AI 도전에 맞서 노트북용 모델 공개",
+      "original_title": "",
+      "description": "알리바바가 노트북에서 구동 가능한 AI 모델을 출시하고 가장 강력한 '큐원(Qwen)' 모델의 가중치를 공개하며, 오픈 웨이트 AI 분야에서 메타와의 경쟁을 격화시키고 있습니다.",
+      "link": "https://www.cnbc.com/2026/08/17/alibaba-meta-qwen-open-weight-ai-laptop-models.html",
+      "entities": [
+        "AI",
+        "Qwen"
+      ],
+      "date": "2026-08-17"
+    },
+    {
+      "id": "45558",
+      "title": "제미나이(Gemini)와 픽셀(Pixel)로 더 가까워진 경기 관람 경험",
+      "original_title": "",
+      "description": "구글 제미나이와 픽셀이 5개의 글로벌 축구 클럽과 파트너십을 맺었습니다. AI와 스마트폰 기술을 활용하여 팬들의 경기 당일 관람 경험을 한층 더 향상시킬 예정입니다.",
+      "link": "https://blog.google/products-and-platforms/products/gemini/google-gemini-pixel-football-club-partnerships/",
+      "entities": [
+        "Pixel",
+        "Gemini"
       ],
       "date": "2026-08-17"
     }

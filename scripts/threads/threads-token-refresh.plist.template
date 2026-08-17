@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GENERATED from threads-token-refresh.plist.template. Do not edit directly. -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>kr.aikorea24.threads-token-refresh</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>${VENV_PYTHON}</string>
+		<string>${SCRIPT_PATH}</string>
+		<string>daily</string>
+	</array>
+	<key>WorkingDirectory</key>
+	<string>${PROJECT_DIR}</string>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>${PROJECT_DIR}/.venv/bin:/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin</string>
+	</dict>
+	<key>StandardOutPath</key>
+	<string>${LOG_DIR}/token_refresh.log</string>
+	<key>StandardErrorPath</key>
+	<string>${LOG_DIR}/token_refresh_error.log</string>
+	<key>StartCalendarInterval</key>
+	<array>
+		<!-- 발행(01:00~)보다 앞서 토큰 갱신 선행 -->
+		<dict><key>Hour</key><integer>0</integer><key>Minute</key><integer>30</integer></dict>
+	</array>
+	<key>KeepAlive</key>
+	<false/>
+	<key>RunAtLoad</key>
+	<false/>
+</dict>
+</plist>

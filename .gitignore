@@ -25,6 +25,7 @@ pnpm-debug.log*
 .env
 .env.production
 .env.bak*
+.token_refresh_state.json
 
 # macOS-specific files
 .DS_Store

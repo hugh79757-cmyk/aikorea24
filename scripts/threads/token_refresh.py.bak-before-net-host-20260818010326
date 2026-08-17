@@ -44,7 +44,7 @@ THREADS_DIR = os.path.join(PROJECT_DIR, 'scripts', 'threads')
 STATE_FILE = os.path.join(THREADS_DIR, '.token_refresh_state.json')
 
 # 공식 최신 호스트 (단일 출처)
-THREADS_API_HOST = "graph.threads.net"
+THREADS_API_HOST = "graph.threads.com"
 
 REQUEST_TIMEOUT = 20
 
