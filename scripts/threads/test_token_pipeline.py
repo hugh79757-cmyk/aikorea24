@@ -181,6 +181,7 @@ def test_exchange_classified_failure_preserves_env():
 
 # ── 작업6 신규: run_daily 상태 저장/선제갱신 ──
 def test_daily_records_validation_and_expiry_unknown_when_no_op():
+    """종류 미상 → exchange 시도(code=100) → refresh 폴백(code=452) → 기존 토큰 유지."""
     tmp = tempfile.mkdtemp()
     try:
         env = os.path.join(tmp, ".env")
@@ -189,11 +190,15 @@ def test_daily_records_validation_and_expiry_unknown_when_no_op():
         orig_env, orig_state = tr.ENV_FILE, tr.STATE_FILE
         tr.ENV_FILE, tr.STATE_FILE = env, os.path.join(tmp, "state.json")
         try:
-            # validate OK, refresh 실패(452) → 기존 토큰 유지, 상태 기록, expiry_unknown
+            ok_resp = _resp(200, {"id": UID, "username": "aikorea24"})
             with mock.patch.object(tr, "load_secrets", return_value={"token": TOKEN, "user_id": UID, "app_secret": SECRET}), \
                  mock.patch.object(tr.requests, "get", side_effect=[
-                     _resp(200, {"id": UID, "username": "aikorea24"}),
-                     _resp(400, {"error": {"code": 452, "type": "OAuthException"}}),
+                     ok_resp,  # 1. run_daily validate
+                     ok_resp,  # 2. renew_token validate
+                     ok_resp,  # 3. run_exchange_classified validate
+                     _resp(400, {"error": {"code": 100, "subcode": 4279023, "message": "Invalid parameter", "type": "OAuthException"}}),  # 4. exchange GET → code=100 (이미 장기)
+                     ok_resp,  # 5. run_refresh_classified validate
+                     _resp(400, {"error": {"code": 452, "type": "OAuthException"}}),  # 6. refresh GET → 452 (아직 24h 미경과)
                  ]):
                 rc = tr.run_daily()
             assert rc == 1

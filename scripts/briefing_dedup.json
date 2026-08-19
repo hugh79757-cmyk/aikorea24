@@ -1,144 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-18",
-      "briefing_id": 182,
-      "articles": [
-        {
-          "id": "41179",
-          "title": "앤트로픽, 메타로부터 100억 달러의 컴퓨팅 파워 임대 초기 논의 중",
-          "original_title": "",
-          "description": "앤트로픽이 메타로부터 약 100억 달러 규모의 컴퓨팅 파워를 임대하기 위한 초기 논의에 있다고 뉴욕 타임즈가 금요일 보도했다. CNBC도 이 초기 단계 논의를 확인했다. 이 논의는 앤트로픽이 스페이스X와 월 12억 5천만 달러 규모의 계약을 발표한 지 몇 주 후에 이루어진 것이다.",
-          "link": "https://thenextweb.com/news/anthropic-meta-10-billion-compute-deal-talks",
-          "entities": [],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41161",
-          "title": "데이터브릭스, 1,880억 달러 가치 평가에 도달하며 AI의 차세대 스타로 자리매김",
-          "original_title": "",
-          "description": "데이터브릭스는 AI 기업으로의 이미지를 재구성했으며, 코딩을 위한 오픈 웨이트 AI 모델의 비용 절감에 관한 연구를 발표했습니다.",
-          "link": "https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41182",
-          "title": "백악관이 최전선 AI 모델에 대한 접근을 지시하며 기술 대기업의 권력을 이동시키고 있다",
-          "original_title": "",
-          "description": "트럼프 행정부는 최신 최전선 모델에 대한 접근을 누가 받을 수 있는지 통제하기 위한 조치를 취하고 있다고 CNBC에 정통한 소식통이 전했습니다.",
-          "link": "https://www.cnbc.com/2026/07/17/white-house-ai-access-anthropic-openai.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41089",
-          "title": "‘대항 의류’: 얼굴 인식 시스템을 혼란스럽게 만들기 위해 설계된 옷이 주류가 될까?",
-          "original_title": "",
-          "description": "디자이너들은 감시로부터 어느 정도 보호를 제공하는 동시에, 그들의 옷이 개인 정보 보호의 중요성에 대한 강력한 패션 성명이라고 말합니다. 얼굴 인식 기술이 영국의 공공 장소에 도입됨에 따라 새로운 세대의 디자이너들이 개인 정보 보호의 중요성을 강조하고 있습니다.",
-          "link": "https://www.theguardian.com/fashion/2026/jul/17/adversarial-clothing-are-garments-designed-to-confuse-facial-recognition-systems-about-to-go-mainstream",
-          "entities": [],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41166",
-          "title": "저커버그의 잉여 AI 컴퓨팅 판매 계획, 앤트로픽이 첫 큰 고객 될 가능성",
-          "original_title": "",
-          "description": "메타가 앤트로픽과 데이터 센터의 컴퓨팅 용량을 임대하는 논의를 하고 있다고 보도되었습니다. 이 기사는 저커버그의 잉여 AI 컴퓨팅 판매 계획이 앤트로픽이라는 첫 번째 큰 고객을 찾을 수 있다는 내용입니다.",
-          "link": "https://the-decoder.com/zuckerbergs-plan-to-sell-excess-ai-compute-could-finds-its-first-big-customer-in-anthropic/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41169",
-          "title": "애플이 오픈AI를 고소한 이유, 뉴욕이 데이터 센터를 다루는 방법, 사이클로스포리시스에 대",
-          "original_title": "",
-          "description": "오늘의 언캐니 밸리에서는 오픈AI의 법적 및 평판 문제를 살펴보고, 이러한 발전이 특히 안트로픽과의 싸움에서 회사에 더 큰 피해를 줄 수 있는지 논의합니다.",
-          "link": "https://www.wired.com/story/uncanny-valley-podcase-apple-sued-openai-new-york-data-center-moratorium-cyclosporiasis-outbreak/",
-          "entities": [],
-          "date": "2026-07-18"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-18",
-      "briefing_id": 183,
-      "articles": [
-        {
-          "id": "41208",
-          "title": "닐 리머는 AI 자금이 다시 나올 것이라고 생각한다",
-          "original_title": "",
-          "description": "인덱스 벤처스를 공동 설립한 벤처 자본가 닐 리머는 실리콘밸리에서 AI가 창출하고 있는 역사적인 부가 자발적이든 비자발적이든 재분배되어야 할 것이라고 예측하고 있다.",
-          "link": "https://techcrunch.com/2026/07/17/neil-rimer-thinks-the-ai-money-is-coming-back-out/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41226",
-          "title": "프랑스 스타트업이 AI를 핵심으로 한 방사선 이미징 뷰어를 처음부터 만들었습니다. 모피트 ",
-          "original_title": "",
-          "description": "파리 및 실리콘밸리에 본사를 둔 방사선 스타트업 Raidium은 미국의 암 연구 기관인 모피트 암센터에서 AI 기반의 이미징 플랫폼을 출범했습니다. 'Raidium Read'라고 불리는 이 플랫폼은 모피트의 기존 방사선 응용 프로그램을 대체했습니다.",
-          "link": "https://thenextweb.com/news/raidium-ai-radiology-moffitt-cancer-center-us-launch",
-          "entities": [
-            "Read",
-            "AI",
-            "Raidium"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41211",
-          "title": "중국의 새로운 세계 인공지능 협력 기구는 시 주석의 평행한 AI 질서 구축을 위한 가장 명",
-          "original_title": "",
-          "description": "상하이에서 열린 세계 AI 컨퍼런스에서 시진핑 주석은 글로벌 남반구 국가들을 위한 5,000개의 AI 교육 기회를 발표하고 \"세계 인공지능 협력 기구\"를 출범한다고 발표했습니다. ASEAN, 아프리카 연합, BRICS 등과의 협력 센터도 계획되고 있습니다.",
-          "link": "https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/",
-          "entities": [
-            "BRICS",
-            "AI",
-            "ASEAN"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41214",
-          "title": "구글의 새로운 제민아이 사용량 계산 방식과 추적 방법",
-          "original_title": "",
-          "description": "구글이 사용량 쿼터 집계 방식을 변경하면서, 이전처럼 많은 AI 응답을 받지 못할 수 있습니다. 이에 따라 어떤 변화가 있었는지 확인하고 자신의 사용량을 효과적으로 추적할 수 있는 방법을 알아보세요.",
-          "link": "https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41230",
-          "title": "엔비디아 CEO가 착용한 가죽 재킷, 소더비 경매에서 100만 달러 미만에 낙찰",
-          "original_title": "",
-          "description": "이 의류의 높은 가격은 수집가들이 인공지능 붐에서 나온 아티팩트와 수집품에 입찰할 준비를 하고 있다는 신호입니다.",
-          "link": "https://www.cnbc.com/2026/07/17/leather-jacket-worn-by-nvidia-ceo-goes-for-just-under-1-million-at-sothebys-auction-.html",
-          "entities": [],
-          "date": "2026-07-18"
-        },
-        {
-          "id": "41170",
-          "title": "iOS 27의 저평가된 5가지 기능, 내 아이폰을 훨씬 더 좋게 만들어 준다 - 그리고 모",
-          "original_title": "",
-          "description": "iOS 27에서 내가 가장 좋아하는 새로운 기능 몇 가지가 주목받지 못하고 있지만, 그 영향력은 결코 적지 않습니다.",
-          "link": "https://www.zdnet.com/article/i-used-ios-27-for-a-month-and-these-5-non-siri-ai-features-are-already-making-my-life-easier/",
-          "entities": [],
-          "date": "2026-07-18"
-        }
-      ]
-    },
-    {
       "date": "2026-07-21",
       "briefing_id": 184,
       "articles": [
@@ -4255,135 +4117,372 @@
           "date": "2026-08-17"
         }
       ]
+    },
+    {
+      "date": "2026-08-18",
+      "briefing_id": 240,
+      "articles": [
+        {
+          "id": "45643",
+          "title": "미 법무부, 경쟁 관계인 AI 기업 이사회 점유 문제로 앤드리슨 호로위츠 조사",
+          "original_title": "",
+          "description": "미국 법무부가 벤처캐피털 기업인 앤드리슨 호로위츠를 조사하고 있습니다. 핵심 쟁점은 해당 기업의 파트너들이 경쟁 관계에 있는 인공지능 기업들의 이사회에 부적절하게 참여하고 있는지 여부입니다. 블룸버그는 이 사안에 정통한 소식통을 인용해 월요일 이 같은 조사 사실을 보도했습니다.",
+          "link": "https://thenextweb.com/news/andreessen-horowitz-doj-probe-databricks-fivetran-board-seats",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45635",
+          "title": "세인즈버리 매장, AI 안면 인식 오류로 절도범 누명 씌운 후 시스템 중단",
+          "original_title": "",
+          "description": "슈퍼마켓 체인 세인즈버리는 고객을 절도범으로 오인해 매장에서 쫓아낸 사건에 대해 자사의 '페이스워치(Facewatch)' 기술이 아닌 '인적 오류' 때문이라고 해명했습니다. 논란이 커지자 해당 매장은 AI 안면 인식 시스템 사용을 일시 중단했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/17/humiliated-sainsburys-store-pauses-ai-scanning-after-false-shoplifting-accusation",
+          "entities": [
+            "Facewatch",
+            "AI"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45618",
+          "title": "엔비디아, 오픈AI 프로젝트를 지원하는 소프트뱅크 데이터 센터 개발사에 15억 달러 투자",
+          "original_title": "",
+          "description": "엔비디아의 이번 투자는 소프트뱅크의 데이터 센터 개발사에 자사 칩을 공급하여 오픈AI의 데이터 센터를 구동하는 것을 보장하기 위한 전략입니다.",
+          "link": "https://techcrunch.com/2026/08/17/nvidia-investing-1-5b-in-softbank-data-center-developer-behind-openai-project/",
+          "entities": [],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45647",
+          "title": "법률 감독 기관, AI 실수 책임을 신입 변호사에게 떠넘기는 행태에 경고",
+          "original_title": "",
+          "description": "법률 감독 기관은 AI가 생성한 허위 인용문이 법원에 제출되었을 때, 신입 직원을 감독할 책임이 있는 선임 변호사들이 여전히 모든 책임을 져야 한다고 강조했습니다. 잉글랜드와 웨일스의 변호사 20만 명 이상을 관리하는 법률 규제 기관인 사무변호사 규제 당국(SRA)이 이 문제에 대해 직접 나섰습니다.",
+          "link": "https://www.cityam.com/watchdog-takes-aim-at-lawyers-blaming-juniors-for-ai-blunders/",
+          "entities": [
+            "SRA",
+            "AI"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45621",
+          "title": "에어태그로 밝혀진 아마존의 희귀 도서 파기 실태: AI 학습을 위해",
+          "original_title": "",
+          "description": "아마존은 대량의 인쇄된 도서를 구매하여 AI 학습 데이터로 스캔한 뒤, 그 과정에서 책들을 파기하고 있습니다. 이 기사는 에어태그를 통해 아마존이 AI 학습을 위해 희귀 도서를 어떻게 파괴하는지 폭로합니다.",
+          "link": "https://the-decoder.com/airtag-reveals-how-amazon-destroys-rare-books-for-ai-training/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45624",
+          "title": "AI 기능 강화된 리눅스 7.2, 캐시 인식 스케줄링 도입 등 주요 변경 사항",
+          "original_title": "",
+          "description": "이번 최신 커널은 파일 시스템 및 I/O 성능 개선을 포함하며, AMD, 인텔, 애플, 엔비디아, USB4 및 노트북 하드웨어 전반에 걸쳐 대대적인 지원을 추가했습니다.",
+          "link": "https://www.zdnet.com/article/ai-linux-7-2-release-cache-aware-scheduling/",
+          "entities": [
+            "USB4",
+            "AMD",
+            "AI"
+          ],
+          "date": "2026-08-18"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-18",
+      "briefing_id": 241,
+      "articles": [
+        {
+          "id": "45678",
+          "title": "우리는 여전히 사람들이 AI를 실제로 어떻게 사용하는지 모른다",
+          "original_title": "",
+          "description": "앤스로픽이나 오픈AI 같은 기업들은 클로드와 챗GPT의 활용 사례를 발표하지만, 연구자들은 이 데이터가 기업이 보여주고 싶은 부분만 선별된 것이라고 지적합니다. 스탠퍼드대 박사 과정생 안카 루엘은 이를 뒷받침할 독립적인 출처가 전혀 없다고 강조합니다.",
+          "link": "https://www.technologyreview.com/2026/08/18/1142226/how-people-use-ai/",
+          "entities": [],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45706",
+          "title": "미국 데이터 센터는 실제로 자동차 몇 대 분량의 이산화탄소를 배출할까?",
+          "original_title": "",
+          "description": "코넬 대학교의 새로운 연구 결과가 AI 산업의 기후 비판론자들에게 새로운 통계 자료를 제공했습니다. 계획 중인 미국 데이터 센터들이 자동차 2,400만 대 분량의 이산화탄소를 배출할 것이라는 보도가 화제가 되었으나, 이 수치는 다소 과장된 측면이 있습니다.",
+          "link": "https://thenextweb.com/news/us-data-centres-co2-24-million-cars",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45711",
+          "title": "'우려스럽다': AI가 임박한 시장 조정을 주도하고 있다고 경고하는 중앙은행 경제학자들",
+          "original_title": "",
+          "description": "유럽중앙은행(ECB)의 분석에 따르면, AI의 혁신적인 힘을 시장 가치가 정당하게 반영하고 있더라도 역사적으로 볼 때 밸류에이션은 하락할 가능성이 큽니다.",
+          "link": "https://www.cnbc.com/2026/08/18/ai-tech-rally-correction-economists.html",
+          "entities": [
+            "ECB"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45685",
+          "title": "앤스로픽의 토큰당 비용, 평균보다 4.4배 비싸도 개발자들은 계속 사용",
+          "original_title": "",
+          "description": "앤스로픽은 7월 버셀(Vercel) AI 게이트웨이 지출의 65.1%를 차지하며 압도적인 1위를 기록했으나, 실제 처리된 토큰 비중은 30%에 불과했습니다. 이는 앤스로픽의 토큰당 비용이 경쟁사 평균보다 4.4배나 높음에도 불구하고 개발자들이 여전히 이 서비스를 선호하고 있음을 보여줍니다.",
+          "link": "https://the-decoder.com/anthropics-per-token-cost-runs-4-4-times-the-average-on-vercel-and-developers-keep-paying/",
+          "entities": [
+            "Vercel",
+            "AI"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45704",
+          "title": "'스페이스(Space)', AI 네이티브 파일 시스템으로 하드 드라이브를 없애기 위해 24",
+          "original_title": "",
+          "description": "수년마다 하드 드라이브를 없애겠다는 시도가 등장하며, 이번에는 샌프란시스코의 스타트업 '스페이스'가 240만 달러의 프리시드 투자를 받았습니다. 이들은 사람과 AI 에이전트가 페타바이트 규모의 데이터를 실시간으로 작업할 수 있는 분산 파일 시스템을 제시합니다.",
+          "link": "https://thenextweb.com/news/space-ai-native-filesystem-a16z-speedrun-2-4m",
+          "entities": [
+            "AI",
+            "Space"
+          ],
+          "date": "2026-08-18"
+        },
+        {
+          "id": "45682",
+          "title": "\"AI가 의사 능가하는 시대, 규제로 인간 개입 강제 말아야\" (JAMA 기고문)",
+          "original_title": "",
+          "description": "의학 저널 JAMA에 실린 기고문은 자율형 AI가 조만간 의료 추론 작업에서 의사와 AI의 협업 모델을 능가할 것이라고 주장합니다. 저자들은 의사의 최종 결정을 규제에 명시하는 것에 반대하면서도, 현재의 증거들이 실제 환자 진료가 아닌 시뮬레이션에 기반하고 있다는 점은 인정했습니다.",
+          "link": "https://the-decoder.com/as-ai-beats-doctors-regulators-shouldnt-force-a-human-into-the-loop-jama-piece-says/",
+          "entities": [
+            "JAMA"
+          ],
+          "date": "2026-08-18"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-19",
+      "briefing_id": 242,
+      "articles": [
+        {
+          "id": "45820",
+          "title": "바이두, 광고 매출 감소로 5분기 연속 매출 하락",
+          "original_title": "",
+          "description": "바이두의 매출이 5분기 연속 하락했습니다. AI 사업의 성장 속도보다 광고 사업의 축소 속도가 더 빨랐기 때문입니다. 화요일 발표된 2분기 매출은 전년 동기 대비 4%, 전 분기 대비 2% 감소한 313억 위안(약 46억 2천만 달러)을 기록했습니다.",
+          "link": "https://thenextweb.com/news/baidu-q2-2026-earnings-revenue-fifth-drop-ai-cloud",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45810",
+          "title": "오픈AI, 악성 에이전트 해킹 사건 이후 개발 속도 조절 발표",
+          "original_title": "",
+          "description": "앤스로픽과의 경쟁 속에서 오픈AI는 연구 및 훈련 시스템을 전면 개편하고 더 엄격한 안전 매개변수를 도입하기 위해 개발 속도를 늦추기로 했습니다. 최근 발생한 해킹 사건으로 인해 회사의 연구진들도 큰 충격을 받은 상태입니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/18/open-ai-pause-hack",
+          "entities": [],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45795",
+          "title": "OpenAI, 허깅페이스 침해 사고 이후 새로운 안전 조치 도입",
+          "original_title": "",
+          "description": "새로운 안전 조치에는 모델 개발 과정에서의 더욱 세밀한 모니터링과 사후 학습 단계에서의 정렬 및 보안 강화가 포함됩니다. 이는 최근 발생한 보안 사고에 대응하여 시스템의 안정성을 높이기 위한 조치입니다.",
+          "link": "https://techcrunch.com/2026/08/18/openai-institutes-new-safeguards-after-hugging-face-breach/",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45796",
+          "title": "워프(Warp)의 새로운 시스템, AI 개발을 위한 '소프트웨어 팩토리' 제공",
+          "original_title": "",
+          "description": "워프는 화요일, AI 소프트웨어 팩토리 구축을 최대한 간편하게 만들 수 있도록 설계된 새로운 인프라 시스템인 '워프 팩토리(Warp Factories)'를 공개했습니다. 이 시스템은 기업들이 AI 개발 환경을 손쉽게 구성할 수 있도록 돕습니다.",
+          "link": "https://techcrunch.com/2026/08/18/warps-new-system-is-an-out-of-the-box-software-factory-for-ai-development/",
+          "entities": [
+            "Factories",
+            "Warp",
+            "AI"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45830",
+          "title": "클로드, 이제 승인 없이도 지메일(Gmail) 이메일 발송 가능",
+          "original_title": "",
+          "description": "앤스로픽의 클로드가 지메일과 연동되어 사용자의 별도 승인 없이도 이메일을 직접 작성하고 발송할 수 있게 되었습니다. 이는 AI의 업무 자동화 범위를 크게 넓혔으나, 동시에 보안과 제어 권한에 대한 논란도 예상됩니다.",
+          "link": "https://9to5google.com/2026/08/18/claude-can-now-send-emails-in-gmail-even-without-your-approval/",
+          "entities": [
+            "Gmail"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45686",
+          "title": "클로드 코드, 터미널에서 바로 UI 목업을 만드는 '/design' 명령어 추가",
+          "original_title": "",
+          "description": "앤스로픽이 클로드 코드에 '/design' 명령어를 도입하여 시각적 디자인 워크플로우를 터미널로 가져왔습니다. 개발자들은 코드를 작성하기 전에 터미널에서 바로 UI 목업을 아트보드 형태로 생성할 수 있으며, 클로드는 기존 코드베이스를 분석해 현재 UI 스타일과 일치하는 디자인을 제안합니다.",
+          "link": "https://the-decoder.com/claude-code-gets-a-design-command-that-lets-developers-create-ui-mockups-right-in-the-terminal/",
+          "entities": [
+            "UI"
+          ],
+          "date": "2026-08-19"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-19",
+      "briefing_id": 243,
+      "articles": [
+        {
+          "id": "45861",
+          "title": "AI가 당신의 채용 여부를 결정할까? 자동화된 채용 도구, 차별과 비밀 유지 소송으로 번져",
+          "original_title": "",
+          "description": "채용 과정에서의 AI 사용을 둘러싼 소송이 급증하면서 기업의 고용 및 해고 방식에 대한 의문이 제기되고 있습니다. 지난 4년간 페이팔, 마이크로소프트, 넷플릭스 등 수천 곳에 지원했으나 이력서가 블랙홀처럼 사라지는 경험을 한 제품 관리자 에린 키슬러의 사례를 통해 살펴봅니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/19/ai-hiring-tools-discrimination",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45873",
+          "title": "알리바바의 새로운 소형 모델, 노트북에서 클라우드급 성능 구현",
+          "original_title": "",
+          "description": "알리바바가 개인용 컴퓨터에서 구동되면서도 클라우드 모델 수준의 성능을 내는 소형 AI 모델을 출시했습니다. 'Qwen3.8-27B' 모델은 출시 며칠 만에 100만 회 이상 다운로드되며 알리바바 역사상 가장 빠르게 성장하는 모델 중 하나로 기록되었습니다.",
+          "link": "https://thenextweb.com/news/alibaba-qwen3-8-27b-local-frontier-model",
+          "entities": [
+            "AI",
+            "Qwen3.8-27B"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45854",
+          "title": "AI를 사용한다면 지금 최고의 브라우저는 파이어폭스인 이유",
+          "original_title": "",
+          "description": "모질라가 드디어 '파이어폭스 스마트 윈도우' 베타 버전을 출시했습니다. 직접 사용해 본 결과, 과거에 즐겨 썼던 이 브라우저로 다시 돌아가게 만들 만한 매력적인 기능들을 발견했습니다.",
+          "link": "https://www.zdnet.com/article/firefox-smart-window-ai-browser-tools/",
+          "entities": [],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45853",
+          "title": "플록(Flock), 경찰을 위한 강력한 신규 AI 도구 공개… 코드 입수",
+          "original_title": "",
+          "description": "플록의 감시 카메라는 이미 큰 논란을 불러일으켰습니다. 와이어드(WIRED)는 일부 경찰이 이미 사용 중인 차세대 AI 시스템을 재구성하여, 이 시스템이 단순히 번호판을 추적하는 수준을 넘어 훨씬 더 광범위한 기능을 수행함을 확인했습니다.",
+          "link": "https://www.wired.com/story/flock-safety-os-investigate/",
+          "entities": [
+            "Flock",
+            "AI",
+            "WIRED"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45877",
+          "title": ",000마일을 운전하며 목격한 AI 시대에 뒤처진 미국의 모습",
+          "original_title": "",
+          "description": "루이스 리우는 실리콘밸리의 새로운 보금자리로 향하는 9일간의 여정 동안 AI 혁신에서 소외될 위험에 처한 미국의 현실을 마주했습니다. 그는 기술 발전의 혜택이 닿지 않는 지역들의 모습을 생생하게 기록했습니다.",
+          "link": "https://www.cityam.com/i-drove-3000-miles-and-saw-the-america-ai-is-leaving-behind/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-19"
+        },
+        {
+          "id": "45878",
+          "title": "유럽중앙은행 총재, 미국의 글로벌 질서 후퇴가 유럽의 경쟁력을 '잠식'하고 있다고 경고",
+          "original_title": "",
+          "description": "크리스틴 라가르드 유럽중앙은행 총재는 유럽이 AI 시대에 경쟁력을 갖추기 위해서는 지역 내 통합을 강화해야 한다고 강조했습니다. 그녀는 미국의 보호무역주의적 행보가 유럽 경제에 부정적인 영향을 미치고 있다고 우려했습니다.",
+          "link": "https://www.cnbc.com/2026/08/19/lagarde-ecb-europe-economy-trump.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-19"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-20",
+      "briefing_id": 244,
+      "articles": [
+        {
+          "id": "45956",
+          "title": "OpenAI, 새로운 고객 개인정보 보호 정책으로 앤스로픽 견제 나서",
+          "original_title": "",
+          "description": "기업 고객의 데이터를 가장 안전하게 보호하기 위해 OpenAI와 앤스로픽 간의 경쟁이 치열해지고 있습니다. 양사는 기업용 데이터 보안을 강화하며 시장 주도권을 잡기 위해 노력 중입니다.",
+          "link": "https://techcrunch.com/2026/08/19/openai-seeks-to-one-up-anthropic-with-new-customer-privacy-protections/",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-08-20"
+        },
+        {
+          "id": "45964",
+          "title": "미 정부 기관, 공격자들이 AI를 이용해 산업 제어 시스템 공격 도구 제작 중이라 경고",
+          "original_title": "",
+          "description": "미국 NSA, CISA, FBI는 공격자들이 AI를 활용해 지멘스 S7 컨트롤러를 표적으로 하는 공격 스크립트를 작성하고 있다고 경고했습니다. 이로 인해 산업 제어 시스템을 공격하는 데 필요한 시간과 기술적 장벽이 크게 낮아졌으며, 에너지, 수도, 제조 등 미국의 주요 기반 시설이 위협받고 있습니다.",
+          "link": "https://the-decoder.com/attackers-are-using-ai-to-build-exploits-for-industrial-control-systems-u-s-agencies-warn/",
+          "entities": [
+            "CISA",
+            "S7",
+            "NSA"
+          ],
+          "date": "2026-08-20"
+        },
+        {
+          "id": "45957",
+          "title": "AI는 이미 대중의 마음을 사로잡았어야 했다 — 하지만 현실은 그렇지 않다",
+          "original_title": "",
+          "description": "AI를 피하기 어려워질수록 소비자들은 오히려 이 기술에 대해 더 경계심을 느끼고 있습니다. 실리콘밸리는 기술의 광범위한 보급이 반드시 대중의 수용으로 이어지지는 않는다는 사실을 깨닫고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/19/ai-was-supposed-to-win-people-over-by-now-it-hasnt/",
+          "entities": [],
+          "date": "2026-08-20"
+        },
+        {
+          "id": "45986",
+          "title": "우버, 유럽 최초 자율주행 택시 서비스 자그레브에서 시작",
+          "original_title": "",
+          "description": "우버가 유럽 최초로 크로아티아의 수도 자그레브에서 자율주행 차량 호출 서비스를 시작했습니다. 수요일부터 우버 앱을 통해 자율주행차를 예약할 수 있게 되었으며, 이 서비스는 중국 기업 포니닷에이아이(Pony.ai) 및 유럽 운영사 베른(Verne)과 협력하여 운영됩니다. 다만, 안전을 위해 운전자가 탑승하는 조건으로 서비스가 제공됩니다.",
+          "link": "https://thenextweb.com/news/uber-pony-ai-verne-zagreb-europe-autonomous-rides",
+          "entities": [
+            "Verne",
+            "Pony.ai"
+          ],
+          "date": "2026-08-20"
+        },
+        {
+          "id": "45984",
+          "title": "영국 AI 칩 스타트업, 앤스로픽과의 계약 후 기업가치 65억 달러 달성 전망",
+          "original_title": "",
+          "description": "AI 칩을 개발하는 영국 스타트업 프랙틸(Fractile)이 앤스로픽에 칩을 공급하는 계약을 체결한 후, 3개월 전보다 6배 이상 높은 기업가치로 투자 유치를 논의 중입니다.",
+          "link": "https://thenextweb.com/news/fractile-6-5bn-valuation-anthropic-chip-deal",
+          "entities": [
+            "Fractile",
+            "AI"
+          ],
+          "date": "2026-08-20"
+        },
+        {
+          "id": "45862",
+          "title": "왜 미국 전역에서 진보주의자들이 승리하고 있을까? 복잡할 것 없다 | 버니 샌더스",
+          "original_title": "",
+          "description": "여론조사 결과들은 한결같이 같은 사실을 가리키고 있습니다. 미국 국민들은 현재의 경제 시스템이 불공정하게 짜여 있다는 것을 알고 있습니다. 언론 전문가들은 진보 후보들이 막대한 자금력의 열세에도 불구하고 왜 경선에서 기성 민주당 후보들을 계속해서 꺾는지 이해하려 애쓰며 수많은 기사를 쏟아내고 있습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/aug/19/poll-progressive-candidates-election-economy",
+          "entities": [],
+          "date": "2026-08-20"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "41179",
-      "title": "앤트로픽, 메타로부터 100억 달러의 컴퓨팅 파워 임대 초기 논의 중",
-      "original_title": "",
-      "description": "앤트로픽이 메타로부터 약 100억 달러 규모의 컴퓨팅 파워를 임대하기 위한 초기 논의에 있다고 뉴욕 타임즈가 금요일 보도했다. CNBC도 이 초기 단계 논의를 확인했다. 이 논의는 앤트로픽이 스페이스X와 월 12억 5천만 달러 규모의 계약을 발표한 지 몇 주 후에 이루어진 것이다.",
-      "link": "https://thenextweb.com/news/anthropic-meta-10-billion-compute-deal-talks",
-      "entities": [],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41161",
-      "title": "데이터브릭스, 1,880억 달러 가치 평가에 도달하며 AI의 차세대 스타로 자리매김",
-      "original_title": "",
-      "description": "데이터브릭스는 AI 기업으로의 이미지를 재구성했으며, 코딩을 위한 오픈 웨이트 AI 모델의 비용 절감에 관한 연구를 발표했습니다.",
-      "link": "https://techcrunch.com/2026/07/17/databricks-hits-188b-valuation-extending-its-run-as-ais-favorite-second-act/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41182",
-      "title": "백악관이 최전선 AI 모델에 대한 접근을 지시하며 기술 대기업의 권력을 이동시키고 있다",
-      "original_title": "",
-      "description": "트럼프 행정부는 최신 최전선 모델에 대한 접근을 누가 받을 수 있는지 통제하기 위한 조치를 취하고 있다고 CNBC에 정통한 소식통이 전했습니다.",
-      "link": "https://www.cnbc.com/2026/07/17/white-house-ai-access-anthropic-openai.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41089",
-      "title": "‘대항 의류’: 얼굴 인식 시스템을 혼란스럽게 만들기 위해 설계된 옷이 주류가 될까?",
-      "original_title": "",
-      "description": "디자이너들은 감시로부터 어느 정도 보호를 제공하는 동시에, 그들의 옷이 개인 정보 보호의 중요성에 대한 강력한 패션 성명이라고 말합니다. 얼굴 인식 기술이 영국의 공공 장소에 도입됨에 따라 새로운 세대의 디자이너들이 개인 정보 보호의 중요성을 강조하고 있습니다.",
-      "link": "https://www.theguardian.com/fashion/2026/jul/17/adversarial-clothing-are-garments-designed-to-confuse-facial-recognition-systems-about-to-go-mainstream",
-      "entities": [],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41166",
-      "title": "저커버그의 잉여 AI 컴퓨팅 판매 계획, 앤트로픽이 첫 큰 고객 될 가능성",
-      "original_title": "",
-      "description": "메타가 앤트로픽과 데이터 센터의 컴퓨팅 용량을 임대하는 논의를 하고 있다고 보도되었습니다. 이 기사는 저커버그의 잉여 AI 컴퓨팅 판매 계획이 앤트로픽이라는 첫 번째 큰 고객을 찾을 수 있다는 내용입니다.",
-      "link": "https://the-decoder.com/zuckerbergs-plan-to-sell-excess-ai-compute-could-finds-its-first-big-customer-in-anthropic/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41169",
-      "title": "애플이 오픈AI를 고소한 이유, 뉴욕이 데이터 센터를 다루는 방법, 사이클로스포리시스에 대",
-      "original_title": "",
-      "description": "오늘의 언캐니 밸리에서는 오픈AI의 법적 및 평판 문제를 살펴보고, 이러한 발전이 특히 안트로픽과의 싸움에서 회사에 더 큰 피해를 줄 수 있는지 논의합니다.",
-      "link": "https://www.wired.com/story/uncanny-valley-podcase-apple-sued-openai-new-york-data-center-moratorium-cyclosporiasis-outbreak/",
-      "entities": [],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41208",
-      "title": "닐 리머는 AI 자금이 다시 나올 것이라고 생각한다",
-      "original_title": "",
-      "description": "인덱스 벤처스를 공동 설립한 벤처 자본가 닐 리머는 실리콘밸리에서 AI가 창출하고 있는 역사적인 부가 자발적이든 비자발적이든 재분배되어야 할 것이라고 예측하고 있다.",
-      "link": "https://techcrunch.com/2026/07/17/neil-rimer-thinks-the-ai-money-is-coming-back-out/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41226",
-      "title": "프랑스 스타트업이 AI를 핵심으로 한 방사선 이미징 뷰어를 처음부터 만들었습니다. 모피트 ",
-      "original_title": "",
-      "description": "파리 및 실리콘밸리에 본사를 둔 방사선 스타트업 Raidium은 미국의 암 연구 기관인 모피트 암센터에서 AI 기반의 이미징 플랫폼을 출범했습니다. 'Raidium Read'라고 불리는 이 플랫폼은 모피트의 기존 방사선 응용 프로그램을 대체했습니다.",
-      "link": "https://thenextweb.com/news/raidium-ai-radiology-moffitt-cancer-center-us-launch",
-      "entities": [
-        "Read",
-        "AI",
-        "Raidium"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41211",
-      "title": "중국의 새로운 세계 인공지능 협력 기구는 시 주석의 평행한 AI 질서 구축을 위한 가장 명",
-      "original_title": "",
-      "description": "상하이에서 열린 세계 AI 컨퍼런스에서 시진핑 주석은 글로벌 남반구 국가들을 위한 5,000개의 AI 교육 기회를 발표하고 \"세계 인공지능 협력 기구\"를 출범한다고 발표했습니다. ASEAN, 아프리카 연합, BRICS 등과의 협력 센터도 계획되고 있습니다.",
-      "link": "https://the-decoder.com/chinas-new-world-artificial-intelligence-cooperation-organization-is-president-xis-clearest-play-yet-for-a-parallel-ai-order/",
-      "entities": [
-        "BRICS",
-        "AI",
-        "ASEAN"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41214",
-      "title": "구글의 새로운 제민아이 사용량 계산 방식과 추적 방법",
-      "original_title": "",
-      "description": "구글이 사용량 쿼터 집계 방식을 변경하면서, 이전처럼 많은 AI 응답을 받지 못할 수 있습니다. 이에 따라 어떤 변화가 있었는지 확인하고 자신의 사용량을 효과적으로 추적할 수 있는 방법을 알아보세요.",
-      "link": "https://www.wired.com/story/how-googles-new-gemini-rates-work-and-how-to-track-your-usage/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41230",
-      "title": "엔비디아 CEO가 착용한 가죽 재킷, 소더비 경매에서 100만 달러 미만에 낙찰",
-      "original_title": "",
-      "description": "이 의류의 높은 가격은 수집가들이 인공지능 붐에서 나온 아티팩트와 수집품에 입찰할 준비를 하고 있다는 신호입니다.",
-      "link": "https://www.cnbc.com/2026/07/17/leather-jacket-worn-by-nvidia-ceo-goes-for-just-under-1-million-at-sothebys-auction-.html",
-      "entities": [],
-      "date": "2026-07-18"
-    },
-    {
-      "id": "41170",
-      "title": "iOS 27의 저평가된 5가지 기능, 내 아이폰을 훨씬 더 좋게 만들어 준다 - 그리고 모",
-      "original_title": "",
-      "description": "iOS 27에서 내가 가장 좋아하는 새로운 기능 몇 가지가 주목받지 못하고 있지만, 그 영향력은 결코 적지 않습니다.",
-      "link": "https://www.zdnet.com/article/i-used-ios-27-for-a-month-and-these-5-non-siri-ai-features-are-already-making-my-life-easier/",
-      "entities": [],
-      "date": "2026-07-18"
-    },
     {
       "id": "41479",
       "title": "한국의 AI 모델이 차량이 움직이기 전에 모든 가능한 운전 경로를 안전성을 평가합니다. C",
@@ -8165,6 +8264,339 @@
         "Gemini"
       ],
       "date": "2026-08-17"
+    },
+    {
+      "id": "45643",
+      "title": "미 법무부, 경쟁 관계인 AI 기업 이사회 점유 문제로 앤드리슨 호로위츠 조사",
+      "original_title": "",
+      "description": "미국 법무부가 벤처캐피털 기업인 앤드리슨 호로위츠를 조사하고 있습니다. 핵심 쟁점은 해당 기업의 파트너들이 경쟁 관계에 있는 인공지능 기업들의 이사회에 부적절하게 참여하고 있는지 여부입니다. 블룸버그는 이 사안에 정통한 소식통을 인용해 월요일 이 같은 조사 사실을 보도했습니다.",
+      "link": "https://thenextweb.com/news/andreessen-horowitz-doj-probe-databricks-fivetran-board-seats",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45635",
+      "title": "세인즈버리 매장, AI 안면 인식 오류로 절도범 누명 씌운 후 시스템 중단",
+      "original_title": "",
+      "description": "슈퍼마켓 체인 세인즈버리는 고객을 절도범으로 오인해 매장에서 쫓아낸 사건에 대해 자사의 '페이스워치(Facewatch)' 기술이 아닌 '인적 오류' 때문이라고 해명했습니다. 논란이 커지자 해당 매장은 AI 안면 인식 시스템 사용을 일시 중단했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/17/humiliated-sainsburys-store-pauses-ai-scanning-after-false-shoplifting-accusation",
+      "entities": [
+        "Facewatch",
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45618",
+      "title": "엔비디아, 오픈AI 프로젝트를 지원하는 소프트뱅크 데이터 센터 개발사에 15억 달러 투자",
+      "original_title": "",
+      "description": "엔비디아의 이번 투자는 소프트뱅크의 데이터 센터 개발사에 자사 칩을 공급하여 오픈AI의 데이터 센터를 구동하는 것을 보장하기 위한 전략입니다.",
+      "link": "https://techcrunch.com/2026/08/17/nvidia-investing-1-5b-in-softbank-data-center-developer-behind-openai-project/",
+      "entities": [],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45647",
+      "title": "법률 감독 기관, AI 실수 책임을 신입 변호사에게 떠넘기는 행태에 경고",
+      "original_title": "",
+      "description": "법률 감독 기관은 AI가 생성한 허위 인용문이 법원에 제출되었을 때, 신입 직원을 감독할 책임이 있는 선임 변호사들이 여전히 모든 책임을 져야 한다고 강조했습니다. 잉글랜드와 웨일스의 변호사 20만 명 이상을 관리하는 법률 규제 기관인 사무변호사 규제 당국(SRA)이 이 문제에 대해 직접 나섰습니다.",
+      "link": "https://www.cityam.com/watchdog-takes-aim-at-lawyers-blaming-juniors-for-ai-blunders/",
+      "entities": [
+        "SRA",
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45621",
+      "title": "에어태그로 밝혀진 아마존의 희귀 도서 파기 실태: AI 학습을 위해",
+      "original_title": "",
+      "description": "아마존은 대량의 인쇄된 도서를 구매하여 AI 학습 데이터로 스캔한 뒤, 그 과정에서 책들을 파기하고 있습니다. 이 기사는 에어태그를 통해 아마존이 AI 학습을 위해 희귀 도서를 어떻게 파괴하는지 폭로합니다.",
+      "link": "https://the-decoder.com/airtag-reveals-how-amazon-destroys-rare-books-for-ai-training/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45624",
+      "title": "AI 기능 강화된 리눅스 7.2, 캐시 인식 스케줄링 도입 등 주요 변경 사항",
+      "original_title": "",
+      "description": "이번 최신 커널은 파일 시스템 및 I/O 성능 개선을 포함하며, AMD, 인텔, 애플, 엔비디아, USB4 및 노트북 하드웨어 전반에 걸쳐 대대적인 지원을 추가했습니다.",
+      "link": "https://www.zdnet.com/article/ai-linux-7-2-release-cache-aware-scheduling/",
+      "entities": [
+        "USB4",
+        "AMD",
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45678",
+      "title": "우리는 여전히 사람들이 AI를 실제로 어떻게 사용하는지 모른다",
+      "original_title": "",
+      "description": "앤스로픽이나 오픈AI 같은 기업들은 클로드와 챗GPT의 활용 사례를 발표하지만, 연구자들은 이 데이터가 기업이 보여주고 싶은 부분만 선별된 것이라고 지적합니다. 스탠퍼드대 박사 과정생 안카 루엘은 이를 뒷받침할 독립적인 출처가 전혀 없다고 강조합니다.",
+      "link": "https://www.technologyreview.com/2026/08/18/1142226/how-people-use-ai/",
+      "entities": [],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45706",
+      "title": "미국 데이터 센터는 실제로 자동차 몇 대 분량의 이산화탄소를 배출할까?",
+      "original_title": "",
+      "description": "코넬 대학교의 새로운 연구 결과가 AI 산업의 기후 비판론자들에게 새로운 통계 자료를 제공했습니다. 계획 중인 미국 데이터 센터들이 자동차 2,400만 대 분량의 이산화탄소를 배출할 것이라는 보도가 화제가 되었으나, 이 수치는 다소 과장된 측면이 있습니다.",
+      "link": "https://thenextweb.com/news/us-data-centres-co2-24-million-cars",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45711",
+      "title": "'우려스럽다': AI가 임박한 시장 조정을 주도하고 있다고 경고하는 중앙은행 경제학자들",
+      "original_title": "",
+      "description": "유럽중앙은행(ECB)의 분석에 따르면, AI의 혁신적인 힘을 시장 가치가 정당하게 반영하고 있더라도 역사적으로 볼 때 밸류에이션은 하락할 가능성이 큽니다.",
+      "link": "https://www.cnbc.com/2026/08/18/ai-tech-rally-correction-economists.html",
+      "entities": [
+        "ECB"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45685",
+      "title": "앤스로픽의 토큰당 비용, 평균보다 4.4배 비싸도 개발자들은 계속 사용",
+      "original_title": "",
+      "description": "앤스로픽은 7월 버셀(Vercel) AI 게이트웨이 지출의 65.1%를 차지하며 압도적인 1위를 기록했으나, 실제 처리된 토큰 비중은 30%에 불과했습니다. 이는 앤스로픽의 토큰당 비용이 경쟁사 평균보다 4.4배나 높음에도 불구하고 개발자들이 여전히 이 서비스를 선호하고 있음을 보여줍니다.",
+      "link": "https://the-decoder.com/anthropics-per-token-cost-runs-4-4-times-the-average-on-vercel-and-developers-keep-paying/",
+      "entities": [
+        "Vercel",
+        "AI"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45704",
+      "title": "'스페이스(Space)', AI 네이티브 파일 시스템으로 하드 드라이브를 없애기 위해 24",
+      "original_title": "",
+      "description": "수년마다 하드 드라이브를 없애겠다는 시도가 등장하며, 이번에는 샌프란시스코의 스타트업 '스페이스'가 240만 달러의 프리시드 투자를 받았습니다. 이들은 사람과 AI 에이전트가 페타바이트 규모의 데이터를 실시간으로 작업할 수 있는 분산 파일 시스템을 제시합니다.",
+      "link": "https://thenextweb.com/news/space-ai-native-filesystem-a16z-speedrun-2-4m",
+      "entities": [
+        "AI",
+        "Space"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45682",
+      "title": "\"AI가 의사 능가하는 시대, 규제로 인간 개입 강제 말아야\" (JAMA 기고문)",
+      "original_title": "",
+      "description": "의학 저널 JAMA에 실린 기고문은 자율형 AI가 조만간 의료 추론 작업에서 의사와 AI의 협업 모델을 능가할 것이라고 주장합니다. 저자들은 의사의 최종 결정을 규제에 명시하는 것에 반대하면서도, 현재의 증거들이 실제 환자 진료가 아닌 시뮬레이션에 기반하고 있다는 점은 인정했습니다.",
+      "link": "https://the-decoder.com/as-ai-beats-doctors-regulators-shouldnt-force-a-human-into-the-loop-jama-piece-says/",
+      "entities": [
+        "JAMA"
+      ],
+      "date": "2026-08-18"
+    },
+    {
+      "id": "45820",
+      "title": "바이두, 광고 매출 감소로 5분기 연속 매출 하락",
+      "original_title": "",
+      "description": "바이두의 매출이 5분기 연속 하락했습니다. AI 사업의 성장 속도보다 광고 사업의 축소 속도가 더 빨랐기 때문입니다. 화요일 발표된 2분기 매출은 전년 동기 대비 4%, 전 분기 대비 2% 감소한 313억 위안(약 46억 2천만 달러)을 기록했습니다.",
+      "link": "https://thenextweb.com/news/baidu-q2-2026-earnings-revenue-fifth-drop-ai-cloud",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45810",
+      "title": "오픈AI, 악성 에이전트 해킹 사건 이후 개발 속도 조절 발표",
+      "original_title": "",
+      "description": "앤스로픽과의 경쟁 속에서 오픈AI는 연구 및 훈련 시스템을 전면 개편하고 더 엄격한 안전 매개변수를 도입하기 위해 개발 속도를 늦추기로 했습니다. 최근 발생한 해킹 사건으로 인해 회사의 연구진들도 큰 충격을 받은 상태입니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/18/open-ai-pause-hack",
+      "entities": [],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45795",
+      "title": "OpenAI, 허깅페이스 침해 사고 이후 새로운 안전 조치 도입",
+      "original_title": "",
+      "description": "새로운 안전 조치에는 모델 개발 과정에서의 더욱 세밀한 모니터링과 사후 학습 단계에서의 정렬 및 보안 강화가 포함됩니다. 이는 최근 발생한 보안 사고에 대응하여 시스템의 안정성을 높이기 위한 조치입니다.",
+      "link": "https://techcrunch.com/2026/08/18/openai-institutes-new-safeguards-after-hugging-face-breach/",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45796",
+      "title": "워프(Warp)의 새로운 시스템, AI 개발을 위한 '소프트웨어 팩토리' 제공",
+      "original_title": "",
+      "description": "워프는 화요일, AI 소프트웨어 팩토리 구축을 최대한 간편하게 만들 수 있도록 설계된 새로운 인프라 시스템인 '워프 팩토리(Warp Factories)'를 공개했습니다. 이 시스템은 기업들이 AI 개발 환경을 손쉽게 구성할 수 있도록 돕습니다.",
+      "link": "https://techcrunch.com/2026/08/18/warps-new-system-is-an-out-of-the-box-software-factory-for-ai-development/",
+      "entities": [
+        "Factories",
+        "Warp",
+        "AI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45830",
+      "title": "클로드, 이제 승인 없이도 지메일(Gmail) 이메일 발송 가능",
+      "original_title": "",
+      "description": "앤스로픽의 클로드가 지메일과 연동되어 사용자의 별도 승인 없이도 이메일을 직접 작성하고 발송할 수 있게 되었습니다. 이는 AI의 업무 자동화 범위를 크게 넓혔으나, 동시에 보안과 제어 권한에 대한 논란도 예상됩니다.",
+      "link": "https://9to5google.com/2026/08/18/claude-can-now-send-emails-in-gmail-even-without-your-approval/",
+      "entities": [
+        "Gmail"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45686",
+      "title": "클로드 코드, 터미널에서 바로 UI 목업을 만드는 '/design' 명령어 추가",
+      "original_title": "",
+      "description": "앤스로픽이 클로드 코드에 '/design' 명령어를 도입하여 시각적 디자인 워크플로우를 터미널로 가져왔습니다. 개발자들은 코드를 작성하기 전에 터미널에서 바로 UI 목업을 아트보드 형태로 생성할 수 있으며, 클로드는 기존 코드베이스를 분석해 현재 UI 스타일과 일치하는 디자인을 제안합니다.",
+      "link": "https://the-decoder.com/claude-code-gets-a-design-command-that-lets-developers-create-ui-mockups-right-in-the-terminal/",
+      "entities": [
+        "UI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45861",
+      "title": "AI가 당신의 채용 여부를 결정할까? 자동화된 채용 도구, 차별과 비밀 유지 소송으로 번져",
+      "original_title": "",
+      "description": "채용 과정에서의 AI 사용을 둘러싼 소송이 급증하면서 기업의 고용 및 해고 방식에 대한 의문이 제기되고 있습니다. 지난 4년간 페이팔, 마이크로소프트, 넷플릭스 등 수천 곳에 지원했으나 이력서가 블랙홀처럼 사라지는 경험을 한 제품 관리자 에린 키슬러의 사례를 통해 살펴봅니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/19/ai-hiring-tools-discrimination",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45873",
+      "title": "알리바바의 새로운 소형 모델, 노트북에서 클라우드급 성능 구현",
+      "original_title": "",
+      "description": "알리바바가 개인용 컴퓨터에서 구동되면서도 클라우드 모델 수준의 성능을 내는 소형 AI 모델을 출시했습니다. 'Qwen3.8-27B' 모델은 출시 며칠 만에 100만 회 이상 다운로드되며 알리바바 역사상 가장 빠르게 성장하는 모델 중 하나로 기록되었습니다.",
+      "link": "https://thenextweb.com/news/alibaba-qwen3-8-27b-local-frontier-model",
+      "entities": [
+        "AI",
+        "Qwen3.8-27B"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45854",
+      "title": "AI를 사용한다면 지금 최고의 브라우저는 파이어폭스인 이유",
+      "original_title": "",
+      "description": "모질라가 드디어 '파이어폭스 스마트 윈도우' 베타 버전을 출시했습니다. 직접 사용해 본 결과, 과거에 즐겨 썼던 이 브라우저로 다시 돌아가게 만들 만한 매력적인 기능들을 발견했습니다.",
+      "link": "https://www.zdnet.com/article/firefox-smart-window-ai-browser-tools/",
+      "entities": [],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45853",
+      "title": "플록(Flock), 경찰을 위한 강력한 신규 AI 도구 공개… 코드 입수",
+      "original_title": "",
+      "description": "플록의 감시 카메라는 이미 큰 논란을 불러일으켰습니다. 와이어드(WIRED)는 일부 경찰이 이미 사용 중인 차세대 AI 시스템을 재구성하여, 이 시스템이 단순히 번호판을 추적하는 수준을 넘어 훨씬 더 광범위한 기능을 수행함을 확인했습니다.",
+      "link": "https://www.wired.com/story/flock-safety-os-investigate/",
+      "entities": [
+        "Flock",
+        "AI",
+        "WIRED"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45877",
+      "title": ",000마일을 운전하며 목격한 AI 시대에 뒤처진 미국의 모습",
+      "original_title": "",
+      "description": "루이스 리우는 실리콘밸리의 새로운 보금자리로 향하는 9일간의 여정 동안 AI 혁신에서 소외될 위험에 처한 미국의 현실을 마주했습니다. 그는 기술 발전의 혜택이 닿지 않는 지역들의 모습을 생생하게 기록했습니다.",
+      "link": "https://www.cityam.com/i-drove-3000-miles-and-saw-the-america-ai-is-leaving-behind/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45878",
+      "title": "유럽중앙은행 총재, 미국의 글로벌 질서 후퇴가 유럽의 경쟁력을 '잠식'하고 있다고 경고",
+      "original_title": "",
+      "description": "크리스틴 라가르드 유럽중앙은행 총재는 유럽이 AI 시대에 경쟁력을 갖추기 위해서는 지역 내 통합을 강화해야 한다고 강조했습니다. 그녀는 미국의 보호무역주의적 행보가 유럽 경제에 부정적인 영향을 미치고 있다고 우려했습니다.",
+      "link": "https://www.cnbc.com/2026/08/19/lagarde-ecb-europe-economy-trump.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-19"
+    },
+    {
+      "id": "45956",
+      "title": "OpenAI, 새로운 고객 개인정보 보호 정책으로 앤스로픽 견제 나서",
+      "original_title": "",
+      "description": "기업 고객의 데이터를 가장 안전하게 보호하기 위해 OpenAI와 앤스로픽 간의 경쟁이 치열해지고 있습니다. 양사는 기업용 데이터 보안을 강화하며 시장 주도권을 잡기 위해 노력 중입니다.",
+      "link": "https://techcrunch.com/2026/08/19/openai-seeks-to-one-up-anthropic-with-new-customer-privacy-protections/",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-08-20"
+    },
+    {
+      "id": "45964",
+      "title": "미 정부 기관, 공격자들이 AI를 이용해 산업 제어 시스템 공격 도구 제작 중이라 경고",
+      "original_title": "",
+      "description": "미국 NSA, CISA, FBI는 공격자들이 AI를 활용해 지멘스 S7 컨트롤러를 표적으로 하는 공격 스크립트를 작성하고 있다고 경고했습니다. 이로 인해 산업 제어 시스템을 공격하는 데 필요한 시간과 기술적 장벽이 크게 낮아졌으며, 에너지, 수도, 제조 등 미국의 주요 기반 시설이 위협받고 있습니다.",
+      "link": "https://the-decoder.com/attackers-are-using-ai-to-build-exploits-for-industrial-control-systems-u-s-agencies-warn/",
+      "entities": [
+        "CISA",
+        "S7",
+        "NSA"
+      ],
+      "date": "2026-08-20"
+    },
+    {
+      "id": "45957",
+      "title": "AI는 이미 대중의 마음을 사로잡았어야 했다 — 하지만 현실은 그렇지 않다",
+      "original_title": "",
+      "description": "AI를 피하기 어려워질수록 소비자들은 오히려 이 기술에 대해 더 경계심을 느끼고 있습니다. 실리콘밸리는 기술의 광범위한 보급이 반드시 대중의 수용으로 이어지지는 않는다는 사실을 깨닫고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/19/ai-was-supposed-to-win-people-over-by-now-it-hasnt/",
+      "entities": [],
+      "date": "2026-08-20"
+    },
+    {
+      "id": "45986",
+      "title": "우버, 유럽 최초 자율주행 택시 서비스 자그레브에서 시작",
+      "original_title": "",
+      "description": "우버가 유럽 최초로 크로아티아의 수도 자그레브에서 자율주행 차량 호출 서비스를 시작했습니다. 수요일부터 우버 앱을 통해 자율주행차를 예약할 수 있게 되었으며, 이 서비스는 중국 기업 포니닷에이아이(Pony.ai) 및 유럽 운영사 베른(Verne)과 협력하여 운영됩니다. 다만, 안전을 위해 운전자가 탑승하는 조건으로 서비스가 제공됩니다.",
+      "link": "https://thenextweb.com/news/uber-pony-ai-verne-zagreb-europe-autonomous-rides",
+      "entities": [
+        "Verne",
+        "Pony.ai"
+      ],
+      "date": "2026-08-20"
+    },
+    {
+      "id": "45984",
+      "title": "영국 AI 칩 스타트업, 앤스로픽과의 계약 후 기업가치 65억 달러 달성 전망",
+      "original_title": "",
+      "description": "AI 칩을 개발하는 영국 스타트업 프랙틸(Fractile)이 앤스로픽에 칩을 공급하는 계약을 체결한 후, 3개월 전보다 6배 이상 높은 기업가치로 투자 유치를 논의 중입니다.",
+      "link": "https://thenextweb.com/news/fractile-6-5bn-valuation-anthropic-chip-deal",
+      "entities": [
+        "Fractile",
+        "AI"
+      ],
+      "date": "2026-08-20"
+    },
+    {
+      "id": "45862",
+      "title": "왜 미국 전역에서 진보주의자들이 승리하고 있을까? 복잡할 것 없다 | 버니 샌더스",
+      "original_title": "",
+      "description": "여론조사 결과들은 한결같이 같은 사실을 가리키고 있습니다. 미국 국민들은 현재의 경제 시스템이 불공정하게 짜여 있다는 것을 알고 있습니다. 언론 전문가들은 진보 후보들이 막대한 자금력의 열세에도 불구하고 왜 경선에서 기성 민주당 후보들을 계속해서 꺾는지 이해하려 애쓰며 수많은 기사를 쏟아내고 있습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/aug/19/poll-progressive-candidates-election-economy",
+      "entities": [],
+      "date": "2026-08-20"
     }
   ]
 }

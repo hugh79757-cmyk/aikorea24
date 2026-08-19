@@ -64,6 +64,7 @@ EXCHANGE_INVALID_REQUEST = "exchange_invalid_request"
 EXCHANGE_INVALID_SECRET = "exchange_invalid_secret"
 EXCHANGE_PERMISSION = "exchange_permission_error"
 EXCHANGE_UNKNOWN = "exchange_unknown_error"
+REFRESH_SUCCESS = "refresh_success"
 
 EXPIRY_UNKNOWN = "expiry_unknown"
 # 선제 갱신 여유 (만료 D-7 이내면 갱신)
@@ -224,7 +225,7 @@ def exchange_short_lived_token(token: str, app_secret: str):
     if not app_secret:
         logger.error("[exchange] THREADS_APP_SECRET 없음 — 교환 불가")
         return SECRET_MISSING, None, 0, {}
-    url = f"https://{THREADS_API_HOST}/access_token"
+    url = f"https://{THREADS_API_HOST}/v1.0/access_token"
     params = {
         "grant_type": "th_exchange_token",
         "client_secret": app_secret,
@@ -257,7 +258,7 @@ def refresh_long_lived_token(token: str):
     Returns:
         (state, new_token_or_None, expires_in_or_0, error_detail_or_{})
     """
-    url = f"https://{THREADS_API_HOST}/refresh_access_token"
+    url = f"https://{THREADS_API_HOST}/v1.0/refresh_access_token"
     params = {"grant_type": "th_refresh_token", "access_token": token}
     try:
         r = requests.get(url, params=params, timeout=REQUEST_TIMEOUT)
@@ -418,6 +419,84 @@ def run_exchange_classified() -> dict:
     return result
 
 
+# ── 갱신 분류 흐름 ──────────────────────────────────────
+def run_refresh_classified() -> dict:
+    """장기 토큰 갱신 → 검증 → .env 교체까지 분류 결과 포함 반환."""
+    result = {"result": None, "http_status": None, "error_code": None,
+              "error_subcode": None, "error_type": None, "message": None,
+              "expires_in": 0, "expires_at": None}
+    sec = load_secrets()
+    state, _ = validate_token(sec["token"], sec["user_id"])
+    if state == NETWORK_ERROR:
+        result.update(result="refresh_network_error", message="network_error")
+        _record_state(status=NETWORK_ERROR)
+        return result
+    if state != TOKEN_VALID:
+        result.update(result="refresh_token_invalid", message=state)
+        _record_state(status=state)
+        return result
+    rstate, new_tok, expires_in, err = refresh_long_lived_token(sec["token"])
+    if rstate == TOKEN_VALID and new_tok:
+        vstate, account = validate_token(new_tok, sec["user_id"])
+        if vstate == TOKEN_VALID and update_env_atomically(new_tok):
+            expires_at = _compute_expires_at(expires_in)
+            _record_state(status=TOKEN_VALID, last_successful="refresh",
+                          expires_in=expires_in, expires_at=expires_at)
+            result.update(result=REFRESH_SUCCESS, expires_in=expires_in, expires_at=expires_at)
+            logger.info("[refresh-classified] 완료 — 만료 %s일", expires_in // 86400)
+            return result
+        result.update(result="refresh_validate_failed", message="new_token_validation_failed")
+        _record_state(status=vstate)
+        return result
+    result.update(http_status=err.get("http_status"), error_code=err.get("error_code"),
+                  error_subcode=err.get("error_subcode"), error_type=err.get("error_type"),
+                  message=err.get("message"))
+    result["result"] = TOKEN_REFRESH_FAILED
+    _record_state(status=TOKEN_REFRESH_FAILED,
+                  sanitized_error_code=err.get("error_code"),
+                  sanitized_error_subcode=err.get("error_subcode"),
+                  error_type=err.get("error_type"))
+    logger.error("[refresh-classified] 실패 상태=%s (code=%s) — .env 미변경",
+                 TOKEN_REFRESH_FAILED, err.get("error_code"))
+    return result
+
+
+# ── 분기 갱신 (단기→교환 / 장기→갱신) ─────────────────────
+def renew_token() -> dict:
+    """토큰 종류에 따라 자동 분기.
+
+    - 알려진 장기 토큰: th_refresh_token 으로 갱신만 시도 (교환 시도 안 함)
+    - 종류 미상: 단기 가정 → 교환 시도, 이미 장기이면 갱신으로 폴백
+    """
+    sec = load_secrets()
+    state, _ = validate_token(sec["token"], sec["user_id"])
+    if state != TOKEN_VALID:
+        logger.error("[renew] 토큰 무효(%s) — 재인증 필요", state)
+        return {"result": state, "expires_at": None}
+
+    st = _state()
+    known_long = (
+        st.get("expiry_known") is True
+        or st.get("last_successful_token_operation") in ("exchange", "refresh")
+    )
+    if known_long:
+        logger.info("[renew] 알려진 장기 토큰 → th_refresh_token")
+        return run_refresh_classified()
+
+    # 종류 미상 → 단기 가정, 교환 시도
+    logger.info("[renew] 토큰 종류 미상 → th_exchange_token 시도")
+    ex = run_exchange_classified()
+    if ex["result"] == EXCHANGE_SUCCESS:
+        return ex
+    # 교환 실패가 '이미 장기' 신호면 갱신으로 폴백
+    if ex["result"] in (EXCHANGE_INVALID_REQUEST, EXCHANGE_UNKNOWN):
+        logger.info("[renew] 교환 실패(%s) → 이미 장기 토큰 가능성, 갱신 폴백", ex["result"])
+        return run_refresh_classified()
+    # 그 외(secret/만료/권한) → 중단
+    logger.error("[renew] 교환 실패(%s) — 갱신 폴백 안 함", ex["result"])
+    return ex
+
+
 # ── 상위 흐름 (기존 호환) ────────────────────────────────
 def cmd_check() -> int:
     sec = load_secrets()
@@ -463,12 +542,12 @@ def cmd_refresh() -> int:
 
 
 def run_daily() -> int:
-    """launchd 1일 1회 갱신.
+    """launchd 1일 1회 갱신 (단기→교환 / 장기→갱신 자동 분기).
 
     - 네트워크 오류: today 보류
     - 만료/무효: 자동 재인증 불가 → 재인증 필요 상태 종료
     - expires_at 알려진 경우: D-7 이내면 선제 갱신, 여유 있으면 보류
-    - expires_at 모르는 경우: 1회 갱신 시도, 실패해도 기존 토큰 유지
+    - expires_at 모르는 경우: renew_token()이 종류 감지 후 분기 처리
     """
     sec = load_secrets()
     state, account = validate_token(sec["token"], sec["user_id"])
@@ -496,24 +575,14 @@ def run_daily() -> int:
         except Exception:
             pass  # 파싱 실패 시 아래 1회 시도로 진행
 
-    # expires_at 모름 또는 임박 → 1회 갱신 시도
-    rstate, new_tok, expires_in, err = refresh_long_lived_token(sec["token"])
-    if rstate == TOKEN_VALID and new_tok:
-        vstate, account = validate_token(new_tok, sec["user_id"])
-        if vstate == TOKEN_VALID and update_env_atomically(new_tok):
-            expires_at = _compute_expires_at(expires_in)
-            _record_state(status=TOKEN_VALID, last_successful="refresh",
-                          expires_in=expires_in, expires_at=expires_at)
-            logger.info("[daily] 갱신 완료 — 만료 %s일", expires_in // 86400)
-            return 0
-        _record_state(status=vstate, sanitized_error_code=err.get("error_code"))
-        logger.error("[daily] 새 토큰 검증/교체 실패 — 기존 토큰 유지")
-        return 1
-    # 갱신 실패
-    _record_state(status=rstate, sanitized_error_code=err.get("error_code"),
-                  error_type=err.get("error_type"))
-    logger.error("[daily] 갱신 실패 상태=%s (code=%s) — 기존 토큰 유지", rstate, err.get("error_code"))
-    return 1
+    # expires_at 모름 또는 임박 → 분기 갱신
+    res = renew_token()
+    ok = res.get("result") in (EXCHANGE_SUCCESS, REFRESH_SUCCESS, TOKEN_VALID)
+    if ok:
+        logger.info("[daily] 갱신 완료 — 결과=%s", res.get("result"))
+    else:
+        logger.error("[daily] 갱신 실패 — 결과=%s", res.get("result"))
+    return 0 if ok else 1
 
 
 def cmd_state() -> int:
@@ -522,12 +591,21 @@ def cmd_state() -> int:
     return 0
 
 
+def cmd_renew() -> int:
+    """단기→교환 / 장기→갱신 자동 분기 실행."""
+    res = renew_token()
+    logger.info("[renew] 결과=%s expires_at=%s",
+                res.get("result"), res.get("expires_at"))
+    return 0 if res.get("result") in (EXCHANGE_SUCCESS, REFRESH_SUCCESS, TOKEN_VALID) else 1
+
+
 if __name__ == '__main__':
     cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
     handlers = {
         "check": cmd_check,
         "exchange": cmd_exchange,
         "refresh": cmd_refresh,
+        "renew": cmd_renew,
         "daily": run_daily,
         "state": cmd_state,
     }

@@ -1,3 +1,4 @@
+- 2026-08-18 | fix | threads-token-renew-branching | Threads API 토큰 갱신 분기 로직 추가 — 단기→exchange/장기→refresh 자동 분기, refresh URL /v1.0/ 추가, 스킬 문서 작성
 - 2026-08-14 | debug | gemini-flash-lite-stability-and-failed-articles-fix | gemini-3.1-flash-lite 안정화 + failed_articles 기록 버그 — 모델 순서 변경(gemini-2.5-flash 1순위), 5회 실패 시 마지막 기사 기록 누락 수정, retention 2h→24h 확대
 - 2026-07-26 | fix | alarm-alert-system-improvements | 썸네일 중복 알림 + 품질 체크리스트 + 텔레그램 스팸 방지 — blog_draft_generator send_telegram 알림 추가, run_pipeline_with_notify 중복 실행 제거
 - 2026-07-26 | fix | blog-pipeline-reliability-fixes | 3개 Quick Task로 블로그 파이프라인 신뢰성 확보 — 1) 배포 조건 확대(git status 감지) 2) placeholder 품질 상향(12.7KB→45.6KB) + DeepSeek 모델명 수정 3) pipeline import 방어적 경로 추가(launchd crash 방지)
