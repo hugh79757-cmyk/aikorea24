@@ -442,6 +442,9 @@ def _save_file(gpt_output, keyword, file_num, today_str):
             body_parts = gpt_output.split("---", 1)
             if len(body_parts) > 1:
                 content = body_parts[1].strip()
+        else:
+            # --- 구분자 없으면 TITLE: 라인만 본문에서 제거
+            content = re.sub(r"^TITLE:\s*[^\n]+\n*", "", content).strip()
 
     # title에서 따옴표 이스케이프 (YAML frontmatter 안전성)
     seo_title_escaped = seo_title.replace('"', "'")
