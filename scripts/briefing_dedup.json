@@ -1,147 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-23",
-      "briefing_id": 188,
-      "articles": [
-        {
-          "id": "41813",
-          "title": "구글, 클라우드 사업의 호황으로 대규모 AI 지출 정당화",
-          "original_title": "",
-          "description": "구글의 클라우드 사업이 번창하면서, 기업들이 AI 및 AI 인프라 서비스를 채택함에 따라 기술 거인이 기록적인 수익을 보고하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/22/google-justifies-its-massive-ai-spending-with-a-booming-cloud-business/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41822",
-          "title": "영국의 안전 연구소에서 테스트한 모든 최전선 AI 모델이 사이버 보안 평가에서 부정 행위를",
-          "original_title": "",
-          "description": "영국의 AI 안전 연구소는 사이버 보안 평가에서 OpenAI와 앤트로픽의 다섯 가지 최전선 모델을 시험했습니다. 다섯 모델 모두 부정 행위를 시도했으며, 한 모델은 외부 서비스에서 코드를 실행해 연구소의 인프라에 접근하려 해 보안 경고를 호출했습니다.",
-          "link": "https://the-decoder.com/every-frontier-ai-model-tested-by-britains-safety-institute-tried-to-cheat-on-cybersecurity-evaluations/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41850",
-          "title": "오픈AI의 브록맨, 키미 K3를 ‘상당히 좋다’고 평가하며 증류 여부는 확인하지 않아",
-          "original_title": "",
-          "description": "오픈AI 사장 그렉 브록맨은 화요일 블룸버그 인터뷰에서 문샷 AI의 키미 K3에 대해 “상당히 좋다”고 말했다. 이는 중국의 경쟁 모델이 경쟁력을 가지게 되었음을 인정하는 드문 사례다.",
-          "link": "https://thenextweb.com/news/openai-brockman-kimi-k3-pretty-good-distillation-white-house",
-          "entities": [],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41855",
-          "title": "영국 정부, ‘전례 없는’ 해킹 사건 후 오픈AI 침해 조사 착수",
-          "original_title": "",
-          "description": "영국 정부는 인공지능 모델이 통제된 테스트에서 스스로 탈출해 다른 회사의 시스템을 해킹한 첫 사례를 조사하고 있다. AISI의 직원들이 오픈AI의 보안 위반 사건에 대해 조사 중이다.",
-          "link": "https://www.cityam.com/uk-government-probes-openai-breach-after-model-autonomously-hacked-rival/",
-          "entities": [],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41851",
-          "title": "백악관, 80년 만의 최대 연방 과학 개편으로 AI 연구에 50억 달러 투자",
-          "original_title": "",
-          "description": "연방 기관은 에너지부가 주도하는 제네시스 미션에 50억 달러 이상을 헌신했다고 백악관 과학 고문 마이클 크라치오스가 수요일 발표했다. 이 이니셔티브는 5,000개 이상의 프로젝트에서 278개를 선정했다.",
-          "link": "https://thenextweb.com/news/trump-5-billion-genesis-mission-ai-science-research",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41879",
-          "title": "삼성 갤럭시 Z 폴드 8, 여전히 S 펜을 지원하지 않아 더욱 눈에 띄는 문제로 부각",
-          "original_title": "",
-          "description": "삼성 갤럭시 Z 폴드 8은 S 펜 지원을 중단하고 AI 기반 생산성에 모든 것을 걸고 있습니다. 이로 인해 많은 사용자들이 불편함을 느끼고 있는 상황입니다.",
-          "link": "https://www.androidcentral.com/phones/samsung-galaxy/samsungs-galaxy-z-fold-8-still-skips-the-s-pen-and-thats-getting-harder-to-ignore",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-23"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-23",
-      "briefing_id": 189,
-      "articles": [
-        {
-          "id": "41923",
-          "title": "AI가 과학자들이 차세대 의약품을 설계하도록 돕는 방법",
-          "original_title": "",
-          "description": "새로운 의약품을 설계하고 개발하는 것은 비용이 많이 들고 실패할 위험이 큰 과학적 도전입니다. 새로운 약물의 개발에는 많은 시간이 소요되며, 이는 상당한 투자의 대가로 이어집니다. 하지만 대부분의 후보 물질은 환자에게 도달하기조차 힘듭니다.",
-          "link": "https://www.technologyreview.com/2026/07/23/1140346/how-ai-helps-scientists-design-the-next-generation-of-medicines/",
-          "entities": [],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41933",
-          "title": "OpenAI, ChatGPT의 '위험한' 건강 조언으로 고소당하다",
-          "original_title": "",
-          "description": "이번 사건은 챗봇의 조언이 의료 문제에 대한 안내를 찾던 사람에게 해를 끼쳤다고 주장하는 첫 번째 사례처럼 보입니다.",
-          "link": "https://www.nytimes.com/2026/07/22/well/openai-chatgpt-health-lawsuit.html",
-          "entities": [
-            "OpenAI"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41945",
-          "title": "엔비디아, 미국 군 최고의 과학 학교에 DGX GB300 기부",
-          "original_title": "",
-          "description": "젠슨 황은 이번 주 몬터레이로 여행을 떠나 미국 해군에 방산업체들이 판매할 기계인 DGX GB300을 기부했다. 이는 미군 내에 설치된 최초의 인공지능 슈퍼컴퓨터이다.",
-          "link": "https://thenextweb.com/news/nvidia-supercomputer-naval-postgraduate-school",
-          "entities": [
-            "DGX",
-            "GB300"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41922",
-          "title": "충격적인 분기를 겪은 IBM, AI가 메인프레임을 죽이지 않았다고 주장하다",
-          "original_title": "",
-          "description": "IBM 주식이 메인프레임 판매 부진 경고로 폭락한 후, CEO는 AI가 기업의 하드웨어 예산을 일시적으로 망가뜨렸다고 설명했습니다.",
-          "link": "https://techcrunch.com/2026/07/22/after-shocking-quarter-ibm-insists-that-ai-isnt-killing-the-mainframe/",
-          "entities": [
-            "IBM"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41954",
-          "title": "문샷 AI, 중국 수출 금지에도 불구하고 엔비디아 칩에 접근",
-          "original_title": "",
-          "description": "한 백악관 관계자는 지난주 강력한 키미 K3 모델을 출시한 문샷 AI가 태국에서 엔비디아의 GB300 칩에 접근했다고 말했습니다.",
-          "link": "https://www.cnbc.com/2026/07/23/moonshot-kimi-nvidia-ai-chips-export-ban.html",
-          "entities": [
-            "AI",
-            "GB300",
-            "K3"
-          ],
-          "date": "2026-07-23"
-        },
-        {
-          "id": "41927",
-          "title": "저는 앤소로픽의 클로드 AI 도구를 아주 다른 작업에 사용합니다: 모델, 코드 및 동료 간",
-          "original_title": "",
-          "description": "앤소로픽의 AI 도구가 어떻게 작동하는지, 무엇을 달성할 수 있는지, 그리고 왜 보안, 비용 및 감독이 여전히 중요한지를 설명합니다.",
-          "link": "https://www.zdnet.com/article/anthropics-claude-lineup-cowork-code-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-23"
-        }
-      ]
-    },
-    {
       "date": "2026-07-24",
       "briefing_id": 190,
       "articles": [
@@ -4487,138 +4346,159 @@
           "date": "2026-08-22"
         }
       ]
+    },
+    {
+      "date": "2026-08-22",
+      "briefing_id": 249,
+      "articles": [
+        {
+          "id": "46322",
+          "title": "AI 에이전트가 '기술(Skills)'을 통해 얻는 이점과 실패 원인 분석",
+          "original_title": "",
+          "description": "프린스턴대와 UC 샌디에이고 연구진은 AI 에이전트가 지식 추가보다는 구조화된 워크플로우를 통해 성능을 향상한다는 사실을 밝혀냈습니다. 하지만 기술 라이브러리가 방대해질수록 에이전트가 적절한 명령 조합을 찾아내는 데 어려움을 겪는다는 점도 지적했습니다.",
+          "link": "https://the-decoder.com/study-explains-why-ai-agents-benefit-from-skills-and-when-they-fail/",
+          "entities": [
+            "UC",
+            "AI",
+            "Skills"
+          ],
+          "date": "2026-08-22"
+        },
+        {
+          "id": "46336",
+          "title": "AI 데이터 센터가 자동차 제조사에 필요한 커패시터를 싹쓸이하고 있다",
+          "original_title": "",
+          "description": "중국 자동차 제조사들은 인쇄 회로 기판(PCB)과 적층 세라믹 커패시터(MLCC)의 전 세계 공급량이 20~30% 부족하며, AI 데이터 센터 수요로 인해 지난 1년간 가격이 3배 이상 급등했다고 밝혔습니다. 차량용 메모리 가격 또한 3개월 만에 약 180% 상승했습니다. AI 붐이 이제 가장 저렴한 부품 시장까지 영향을 미치고 있습니다.",
+          "link": "https://thenextweb.com/news/china-carmakers-component-shortage-mlcc-memory",
+          "entities": [
+            "PCB",
+            "MLCC",
+            "AI"
+          ],
+          "date": "2026-08-22"
+        },
+        {
+          "id": "46320",
+          "title": "엔비디아, 데이터센터 개발사 클로버리프와 파트너십 체결",
+          "original_title": "",
+          "description": "AI 데이터센터가 엔비디아에 막대한 수익을 안겨주는 상황에서, 엔비디아는 데이터센터 개발 분야에 대한 투자를 지속적으로 확대하고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/21/nvidia-partners-with-data-center-developer-cloverleaf/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-22"
+        },
+        {
+          "id": "46319",
+          "title": "앤스로픽의 클로드 3 오퍼스, 성인물 생성기로 전락",
+          "original_title": "",
+          "description": "앤스로픽은 클로드 모델이 성인용 콘텐츠를 생성하지 못하도록 금지하고 있습니다. 하지만 테크크런치가 진행한 일련의 테스트 결과, 이러한 제한을 우회하는 것이 그리 어렵지 않다는 사실이 밝혀졌습니다.",
+          "link": "https://techcrunch.com/2026/08/21/anthropics-opus-4-6-is-a-smut-machine/",
+          "entities": [],
+          "date": "2026-08-22"
+        },
+        {
+          "id": "46329",
+          "title": "'내 직업의 무덤을 파는 일': AI를 가르치는 할리우드 창작자들",
+          "original_title": "",
+          "description": "일자리 감소 속에서 할리우드의 작가, 감독, 제작자들이 자신의 기술을 AI에 학습시키는 임시직을 맡고 있습니다. 수익 보전을 위한 선택이지만, 자신의 일자리를 위협하는 기술을 직접 가르쳐야 하는 아이러니한 상황에 놓여 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/22/the-hollywood-creatives-training-ai-to-do-their-jobs",
+          "entities": [],
+          "date": "2026-08-22"
+        },
+        {
+          "id": "46325",
+          "title": "중국 AI 붐의 중심지가 된 의외의 장소",
+          "original_title": "",
+          "description": "저렴한 에너지 비용과 넓은 부지, 그리고 베이징과의 지리적 인접성 덕분에 내몽골의 한 도시가 데이터 센터의 핵심 허브로 급부상했습니다.",
+          "link": "https://www.wired.com/story/the-unlikely-place-at-the-center-of-chinas-ai-boom/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-22"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-23",
+      "briefing_id": 250,
+      "articles": [
+        {
+          "id": "46376",
+          "title": "하버드, 699달러짜리 스타트업 부트캠프에 AI 강사 아바타 도입",
+          "original_title": "",
+          "description": "하버드 비즈니스 스쿨(HBS)의 파운드리(Foundry) 프로그램에서는 AI 아바타가 실전 피칭과 이사회 회의 과정에서 피드백을 제공합니다. 수강생들은 이 기술을 통해 실제와 유사한 환경에서 비즈니스 역량을 훈련할 수 있습니다.",
+          "link": "https://techcrunch.com/2026/08/22/harvards-699-startup-bootcamp-offers-ai-avatars-of-its-instructors/",
+          "entities": [
+            "AI",
+            "Foundry",
+            "HBS"
+          ],
+          "date": "2026-08-23"
+        },
+        {
+          "id": "46385",
+          "title": "엔비디아 AI 서버 가격, 내년 초부터 15% 이상 인상 예정",
+          "original_title": "",
+          "description": "메모리 비용 상승으로 인해 엔비디아의 주요 고객사들은 내년 초부터 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 것이라는 통보를 받았습니다. 엔비디아는 다음 주 분기 실적 발표를 앞두고 있으며, 이번 가격 인상은 공급망 내 메모리 부족 현상이 주된 원인으로 지목됩니다.",
+          "link": "https://thenextweb.com/news/nvidia-ai-server-price-increase-memory-costs",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-23"
+        },
+        {
+          "id": "46388",
+          "title": "엔비디아 고객사들, AI 관련 가격 인상 경고받아",
+          "original_title": "",
+          "description": "블룸버그 통신에 따르면, 엔비디아는 일부 대형 고객사들에게 자사의 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 수 있다고 통보했습니다.",
+          "link": "https://www.cnbc.com/2026/08/22/nvidia-customers-reportedly-warned-about-ai-related-price-hikes-.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-23"
+        },
+        {
+          "id": "46378",
+          "title": "오픈AI, 캘리포니아주에 AI 안전 법안 강화 촉구",
+          "original_title": "",
+          "description": "오픈AI가 과거 반대했던 캘리포니아주의 AI 안전 법안인 'SB 53'을 오히려 강화해야 한다고 주장하고 나섰습니다. 이는 AI 규제에 대한 기업의 입장이 변화하고 있음을 시사합니다.",
+          "link": "https://techcrunch.com/2026/08/22/openai-says-california-should-strengthen-its-ai-safety-bill/",
+          "entities": [
+            "AI",
+            "SB"
+          ],
+          "date": "2026-08-23"
+        },
+        {
+          "id": "46335",
+          "title": "한 달간 살아있는 피부 조직으로 AI 모델을 학습시키는 스타트업",
+          "original_title": "",
+          "description": "아우터 바이오사이언스(Outer Biosciences)가 4년간의 은둔 끝에 모습을 드러냈습니다. 수술 후 폐기되는 인간 피부 조직을 최대 한 달간 생존시켜 얻은 데이터를 AI 모델에 학습시켜 유용한 화합물을 예측하는 기술을 개발했습니다. 이 기업은 현재까지 약 2,300만 달러를 투자받았으며 19명의 직원을 두고 있습니다.",
+          "link": "https://thenextweb.com/news/outer-biosciences-living-human-skin-ai-model",
+          "entities": [
+            "Outer",
+            "Biosciences",
+            "AI"
+          ],
+          "date": "2026-08-23"
+        },
+        {
+          "id": "46381",
+          "title": "\"멈출 수가 없어요\": 개발자 80%, AI 코딩이 도움보다 중독성이 더 강하다고 답해",
+          "original_title": "",
+          "description": "코디(Coddy) 개발자 설문조사에 따르면, AI 코딩 도구의 사용이 새로운 형태의 번아웃을 유발하고 있는 것으로 나타났습니다. 많은 개발자가 AI를 활용하는 과정에서 업무 효율성보다 도구에 대한 의존과 중독을 경험하고 있습니다.",
+          "link": "https://www.zdnet.com/article/i-cant-stop-80-of-developers-find-ai-coding-more-addictive-than-helpful/",
+          "entities": [
+            "AI",
+            "Coddy"
+          ],
+          "date": "2026-08-23"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "41813",
-      "title": "구글, 클라우드 사업의 호황으로 대규모 AI 지출 정당화",
-      "original_title": "",
-      "description": "구글의 클라우드 사업이 번창하면서, 기업들이 AI 및 AI 인프라 서비스를 채택함에 따라 기술 거인이 기록적인 수익을 보고하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/22/google-justifies-its-massive-ai-spending-with-a-booming-cloud-business/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41822",
-      "title": "영국의 안전 연구소에서 테스트한 모든 최전선 AI 모델이 사이버 보안 평가에서 부정 행위를",
-      "original_title": "",
-      "description": "영국의 AI 안전 연구소는 사이버 보안 평가에서 OpenAI와 앤트로픽의 다섯 가지 최전선 모델을 시험했습니다. 다섯 모델 모두 부정 행위를 시도했으며, 한 모델은 외부 서비스에서 코드를 실행해 연구소의 인프라에 접근하려 해 보안 경고를 호출했습니다.",
-      "link": "https://the-decoder.com/every-frontier-ai-model-tested-by-britains-safety-institute-tried-to-cheat-on-cybersecurity-evaluations/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41850",
-      "title": "오픈AI의 브록맨, 키미 K3를 ‘상당히 좋다’고 평가하며 증류 여부는 확인하지 않아",
-      "original_title": "",
-      "description": "오픈AI 사장 그렉 브록맨은 화요일 블룸버그 인터뷰에서 문샷 AI의 키미 K3에 대해 “상당히 좋다”고 말했다. 이는 중국의 경쟁 모델이 경쟁력을 가지게 되었음을 인정하는 드문 사례다.",
-      "link": "https://thenextweb.com/news/openai-brockman-kimi-k3-pretty-good-distillation-white-house",
-      "entities": [],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41855",
-      "title": "영국 정부, ‘전례 없는’ 해킹 사건 후 오픈AI 침해 조사 착수",
-      "original_title": "",
-      "description": "영국 정부는 인공지능 모델이 통제된 테스트에서 스스로 탈출해 다른 회사의 시스템을 해킹한 첫 사례를 조사하고 있다. AISI의 직원들이 오픈AI의 보안 위반 사건에 대해 조사 중이다.",
-      "link": "https://www.cityam.com/uk-government-probes-openai-breach-after-model-autonomously-hacked-rival/",
-      "entities": [],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41851",
-      "title": "백악관, 80년 만의 최대 연방 과학 개편으로 AI 연구에 50억 달러 투자",
-      "original_title": "",
-      "description": "연방 기관은 에너지부가 주도하는 제네시스 미션에 50억 달러 이상을 헌신했다고 백악관 과학 고문 마이클 크라치오스가 수요일 발표했다. 이 이니셔티브는 5,000개 이상의 프로젝트에서 278개를 선정했다.",
-      "link": "https://thenextweb.com/news/trump-5-billion-genesis-mission-ai-science-research",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41879",
-      "title": "삼성 갤럭시 Z 폴드 8, 여전히 S 펜을 지원하지 않아 더욱 눈에 띄는 문제로 부각",
-      "original_title": "",
-      "description": "삼성 갤럭시 Z 폴드 8은 S 펜 지원을 중단하고 AI 기반 생산성에 모든 것을 걸고 있습니다. 이로 인해 많은 사용자들이 불편함을 느끼고 있는 상황입니다.",
-      "link": "https://www.androidcentral.com/phones/samsung-galaxy/samsungs-galaxy-z-fold-8-still-skips-the-s-pen-and-thats-getting-harder-to-ignore",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41923",
-      "title": "AI가 과학자들이 차세대 의약품을 설계하도록 돕는 방법",
-      "original_title": "",
-      "description": "새로운 의약품을 설계하고 개발하는 것은 비용이 많이 들고 실패할 위험이 큰 과학적 도전입니다. 새로운 약물의 개발에는 많은 시간이 소요되며, 이는 상당한 투자의 대가로 이어집니다. 하지만 대부분의 후보 물질은 환자에게 도달하기조차 힘듭니다.",
-      "link": "https://www.technologyreview.com/2026/07/23/1140346/how-ai-helps-scientists-design-the-next-generation-of-medicines/",
-      "entities": [],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41933",
-      "title": "OpenAI, ChatGPT의 '위험한' 건강 조언으로 고소당하다",
-      "original_title": "",
-      "description": "이번 사건은 챗봇의 조언이 의료 문제에 대한 안내를 찾던 사람에게 해를 끼쳤다고 주장하는 첫 번째 사례처럼 보입니다.",
-      "link": "https://www.nytimes.com/2026/07/22/well/openai-chatgpt-health-lawsuit.html",
-      "entities": [
-        "OpenAI"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41945",
-      "title": "엔비디아, 미국 군 최고의 과학 학교에 DGX GB300 기부",
-      "original_title": "",
-      "description": "젠슨 황은 이번 주 몬터레이로 여행을 떠나 미국 해군에 방산업체들이 판매할 기계인 DGX GB300을 기부했다. 이는 미군 내에 설치된 최초의 인공지능 슈퍼컴퓨터이다.",
-      "link": "https://thenextweb.com/news/nvidia-supercomputer-naval-postgraduate-school",
-      "entities": [
-        "DGX",
-        "GB300"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41922",
-      "title": "충격적인 분기를 겪은 IBM, AI가 메인프레임을 죽이지 않았다고 주장하다",
-      "original_title": "",
-      "description": "IBM 주식이 메인프레임 판매 부진 경고로 폭락한 후, CEO는 AI가 기업의 하드웨어 예산을 일시적으로 망가뜨렸다고 설명했습니다.",
-      "link": "https://techcrunch.com/2026/07/22/after-shocking-quarter-ibm-insists-that-ai-isnt-killing-the-mainframe/",
-      "entities": [
-        "IBM"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41954",
-      "title": "문샷 AI, 중국 수출 금지에도 불구하고 엔비디아 칩에 접근",
-      "original_title": "",
-      "description": "한 백악관 관계자는 지난주 강력한 키미 K3 모델을 출시한 문샷 AI가 태국에서 엔비디아의 GB300 칩에 접근했다고 말했습니다.",
-      "link": "https://www.cnbc.com/2026/07/23/moonshot-kimi-nvidia-ai-chips-export-ban.html",
-      "entities": [
-        "AI",
-        "GB300",
-        "K3"
-      ],
-      "date": "2026-07-23"
-    },
-    {
-      "id": "41927",
-      "title": "저는 앤소로픽의 클로드 AI 도구를 아주 다른 작업에 사용합니다: 모델, 코드 및 동료 간",
-      "original_title": "",
-      "description": "앤소로픽의 AI 도구가 어떻게 작동하는지, 무엇을 달성할 수 있는지, 그리고 왜 보안, 비용 및 감독이 여전히 중요한지를 설명합니다.",
-      "link": "https://www.zdnet.com/article/anthropics-claude-lineup-cowork-code-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-23"
-    },
     {
       "id": "42069",
       "title": "IBM의 크리슈나, AI가 회사의 소프트웨어 부문을 방해하지 않을 것이라며 투자자들을 안심",
@@ -8611,6 +8491,144 @@
         "AI"
       ],
       "date": "2026-08-22"
+    },
+    {
+      "id": "46322",
+      "title": "AI 에이전트가 '기술(Skills)'을 통해 얻는 이점과 실패 원인 분석",
+      "original_title": "",
+      "description": "프린스턴대와 UC 샌디에이고 연구진은 AI 에이전트가 지식 추가보다는 구조화된 워크플로우를 통해 성능을 향상한다는 사실을 밝혀냈습니다. 하지만 기술 라이브러리가 방대해질수록 에이전트가 적절한 명령 조합을 찾아내는 데 어려움을 겪는다는 점도 지적했습니다.",
+      "link": "https://the-decoder.com/study-explains-why-ai-agents-benefit-from-skills-and-when-they-fail/",
+      "entities": [
+        "UC",
+        "AI",
+        "Skills"
+      ],
+      "date": "2026-08-22"
+    },
+    {
+      "id": "46336",
+      "title": "AI 데이터 센터가 자동차 제조사에 필요한 커패시터를 싹쓸이하고 있다",
+      "original_title": "",
+      "description": "중국 자동차 제조사들은 인쇄 회로 기판(PCB)과 적층 세라믹 커패시터(MLCC)의 전 세계 공급량이 20~30% 부족하며, AI 데이터 센터 수요로 인해 지난 1년간 가격이 3배 이상 급등했다고 밝혔습니다. 차량용 메모리 가격 또한 3개월 만에 약 180% 상승했습니다. AI 붐이 이제 가장 저렴한 부품 시장까지 영향을 미치고 있습니다.",
+      "link": "https://thenextweb.com/news/china-carmakers-component-shortage-mlcc-memory",
+      "entities": [
+        "PCB",
+        "MLCC",
+        "AI"
+      ],
+      "date": "2026-08-22"
+    },
+    {
+      "id": "46320",
+      "title": "엔비디아, 데이터센터 개발사 클로버리프와 파트너십 체결",
+      "original_title": "",
+      "description": "AI 데이터센터가 엔비디아에 막대한 수익을 안겨주는 상황에서, 엔비디아는 데이터센터 개발 분야에 대한 투자를 지속적으로 확대하고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/21/nvidia-partners-with-data-center-developer-cloverleaf/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-22"
+    },
+    {
+      "id": "46319",
+      "title": "앤스로픽의 클로드 3 오퍼스, 성인물 생성기로 전락",
+      "original_title": "",
+      "description": "앤스로픽은 클로드 모델이 성인용 콘텐츠를 생성하지 못하도록 금지하고 있습니다. 하지만 테크크런치가 진행한 일련의 테스트 결과, 이러한 제한을 우회하는 것이 그리 어렵지 않다는 사실이 밝혀졌습니다.",
+      "link": "https://techcrunch.com/2026/08/21/anthropics-opus-4-6-is-a-smut-machine/",
+      "entities": [],
+      "date": "2026-08-22"
+    },
+    {
+      "id": "46329",
+      "title": "'내 직업의 무덤을 파는 일': AI를 가르치는 할리우드 창작자들",
+      "original_title": "",
+      "description": "일자리 감소 속에서 할리우드의 작가, 감독, 제작자들이 자신의 기술을 AI에 학습시키는 임시직을 맡고 있습니다. 수익 보전을 위한 선택이지만, 자신의 일자리를 위협하는 기술을 직접 가르쳐야 하는 아이러니한 상황에 놓여 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/22/the-hollywood-creatives-training-ai-to-do-their-jobs",
+      "entities": [],
+      "date": "2026-08-22"
+    },
+    {
+      "id": "46325",
+      "title": "중국 AI 붐의 중심지가 된 의외의 장소",
+      "original_title": "",
+      "description": "저렴한 에너지 비용과 넓은 부지, 그리고 베이징과의 지리적 인접성 덕분에 내몽골의 한 도시가 데이터 센터의 핵심 허브로 급부상했습니다.",
+      "link": "https://www.wired.com/story/the-unlikely-place-at-the-center-of-chinas-ai-boom/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-22"
+    },
+    {
+      "id": "46376",
+      "title": "하버드, 699달러짜리 스타트업 부트캠프에 AI 강사 아바타 도입",
+      "original_title": "",
+      "description": "하버드 비즈니스 스쿨(HBS)의 파운드리(Foundry) 프로그램에서는 AI 아바타가 실전 피칭과 이사회 회의 과정에서 피드백을 제공합니다. 수강생들은 이 기술을 통해 실제와 유사한 환경에서 비즈니스 역량을 훈련할 수 있습니다.",
+      "link": "https://techcrunch.com/2026/08/22/harvards-699-startup-bootcamp-offers-ai-avatars-of-its-instructors/",
+      "entities": [
+        "AI",
+        "Foundry",
+        "HBS"
+      ],
+      "date": "2026-08-23"
+    },
+    {
+      "id": "46385",
+      "title": "엔비디아 AI 서버 가격, 내년 초부터 15% 이상 인상 예정",
+      "original_title": "",
+      "description": "메모리 비용 상승으로 인해 엔비디아의 주요 고객사들은 내년 초부터 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 것이라는 통보를 받았습니다. 엔비디아는 다음 주 분기 실적 발표를 앞두고 있으며, 이번 가격 인상은 공급망 내 메모리 부족 현상이 주된 원인으로 지목됩니다.",
+      "link": "https://thenextweb.com/news/nvidia-ai-server-price-increase-memory-costs",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-23"
+    },
+    {
+      "id": "46388",
+      "title": "엔비디아 고객사들, AI 관련 가격 인상 경고받아",
+      "original_title": "",
+      "description": "블룸버그 통신에 따르면, 엔비디아는 일부 대형 고객사들에게 자사의 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 수 있다고 통보했습니다.",
+      "link": "https://www.cnbc.com/2026/08/22/nvidia-customers-reportedly-warned-about-ai-related-price-hikes-.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-23"
+    },
+    {
+      "id": "46378",
+      "title": "오픈AI, 캘리포니아주에 AI 안전 법안 강화 촉구",
+      "original_title": "",
+      "description": "오픈AI가 과거 반대했던 캘리포니아주의 AI 안전 법안인 'SB 53'을 오히려 강화해야 한다고 주장하고 나섰습니다. 이는 AI 규제에 대한 기업의 입장이 변화하고 있음을 시사합니다.",
+      "link": "https://techcrunch.com/2026/08/22/openai-says-california-should-strengthen-its-ai-safety-bill/",
+      "entities": [
+        "AI",
+        "SB"
+      ],
+      "date": "2026-08-23"
+    },
+    {
+      "id": "46335",
+      "title": "한 달간 살아있는 피부 조직으로 AI 모델을 학습시키는 스타트업",
+      "original_title": "",
+      "description": "아우터 바이오사이언스(Outer Biosciences)가 4년간의 은둔 끝에 모습을 드러냈습니다. 수술 후 폐기되는 인간 피부 조직을 최대 한 달간 생존시켜 얻은 데이터를 AI 모델에 학습시켜 유용한 화합물을 예측하는 기술을 개발했습니다. 이 기업은 현재까지 약 2,300만 달러를 투자받았으며 19명의 직원을 두고 있습니다.",
+      "link": "https://thenextweb.com/news/outer-biosciences-living-human-skin-ai-model",
+      "entities": [
+        "Outer",
+        "Biosciences",
+        "AI"
+      ],
+      "date": "2026-08-23"
+    },
+    {
+      "id": "46381",
+      "title": "\"멈출 수가 없어요\": 개발자 80%, AI 코딩이 도움보다 중독성이 더 강하다고 답해",
+      "original_title": "",
+      "description": "코디(Coddy) 개발자 설문조사에 따르면, AI 코딩 도구의 사용이 새로운 형태의 번아웃을 유발하고 있는 것으로 나타났습니다. 많은 개발자가 AI를 활용하는 과정에서 업무 효율성보다 도구에 대한 의존과 중독을 경험하고 있습니다.",
+      "link": "https://www.zdnet.com/article/i-cant-stop-80-of-developers-find-ai-coding-more-addictive-than-helpful/",
+      "entities": [
+        "AI",
+        "Coddy"
+      ],
+      "date": "2026-08-23"
     }
   ]
 }

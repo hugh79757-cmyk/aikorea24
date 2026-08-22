@@ -1,3 +1,5 @@
+- 2026-08-22 | feat | add-briefing-source-link-to-blog-posts | 블로그 포스트 첫 문단 뒤 브리핑 페이지 링크 자동 주입 — DB 조회로 briefing URL 생성, 체류시간 확보
+- 2026-08-22 | fix | fix-title-prefix-in-content | TITLE: prefix가 본문에 남는 버그 수정 — _save_file() else 분기 추가로 TITLE: 라인 자동 제거
 - 2026-08-18 | fix | threads-token-renew-branching | Threads API 토큰 갱신 분기 로직 추가 — 단기→exchange/장기→refresh 자동 분기, refresh URL /v1.0/ 추가, 스킬 문서 작성
 - 2026-08-14 | debug | gemini-flash-lite-stability-and-failed-articles-fix | gemini-3.1-flash-lite 안정화 + failed_articles 기록 버그 — 모델 순서 변경(gemini-2.5-flash 1순위), 5회 실패 시 마지막 기사 기록 누락 수정, retention 2h→24h 확대
 - 2026-07-26 | fix | alarm-alert-system-improvements | 썸네일 중복 알림 + 품질 체크리스트 + 텔레그램 스팸 방지 — blog_draft_generator send_telegram 알림 추가, run_pipeline_with_notify 중복 실행 제거
