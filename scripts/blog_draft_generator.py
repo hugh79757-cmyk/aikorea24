@@ -282,6 +282,14 @@ def make_slug(title):
 # ============================================
 def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
     """GPT 출력 파싱 → .md 파일 저장. articles 전달 시 deep_dive_url 연결."""
+    # slug 미리 생성 (링크 주입용)
+    slug = make_slug(re.sub(r"^TITLE:\s*[^\n]+\n", "", gpt_output).split("\n\n")[0][:80])
+    slug = slug.lower()
+    blog_url = f"https://aikorea24.kr/blog/{slug}/"
+    # articles에 blog_url 추가 (링크 주입에 사용)
+    if articles:
+        for art in articles:
+            art["_blog_url"] = blog_url
     filepath, seo_title = _save_file(gpt_output, keyword, file_num, today_str, articles)
     # deep_dive_url 연결 (slug 소문자: Astro가 content collection ID를 lowercase로 정규화)
     if articles and filepath:
@@ -446,16 +454,15 @@ def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
             # --- 구분자 없으면 TITLE: 라인만 본문에서 제거
             content = re.sub(r"^TITLE:\s*[^\n]+\n*", "", content).strip()
 
-    # 원문 기사 링크 주입 (첫 문단 뒤)
+    # 원문 기사 링크 주입 (첫 문단 뒤) — 블로그 포스트 URL 사용 (체류시간 확보)
     if articles:
-        source_links = []
+        blog_urls = []
         for art in articles:
-            link = art.get("link", "")
-            if link:
-                source_links.append(link)
-        if source_links:
-            # 첫 번째 링크 사용 (단일 기사 기준)
-            source_url = source_links[0]
+            blog_url = art.get("_blog_url", "")
+            if blog_url:
+                blog_urls.append(blog_url)
+        if blog_urls:
+            source_url = blog_urls[0]
             source_block = f"\n\n원문기사는 아래의 링크를 통해 확인할 수 있습니다. [기사원문보기]({source_url})"
             # 첫 문단 뒤에 삽입 (빈 줄 기준 분리)
             parts = content.split("\n\n", 1)
