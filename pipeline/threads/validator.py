@@ -224,7 +224,7 @@ def _extract_hook_entities(hook: str) -> set[str]:
 
     대상:
     - 대문자 시작 영문 토큰 (예: Wrtn, Cisco, Gemini, Anthropic)
-    - 따옴표로 감싼 명칭 (예: '크랙', "크랙", '뤼튼')
+    - 따옴표로 감싼 영문 고유명사만 (예: 'FireSat', "CISA")
     """
     entities = set()
     # 대문자 시작 영문 단어 (앞뒤에 영문 알파벳이 없는 경계, 3글자 이상만 고유명사로 간주)
@@ -232,11 +232,9 @@ def _extract_hook_entities(hook: str) -> set[str]:
         word = m.group()
         if len(word) >= 3:
             entities.add(word)
-    # 따옴표로 감싼 명칭 (single/double quotes)
-    for m in re.finditer(r"""['"]([^'"]+)['"]""", hook):
-        content = m.group(1).strip()
-        if content and len(content) >= 2:
-            entities.add(content)
+    # 따옴표로 감싼 영문 고유명사만 추출 (한글 따옴표 표현 제외)
+    for m in re.finditer(r"""['"]([A-Za-z][A-Za-z0-9.&+#\-]{2,})['"]""", hook):
+        entities.add(m.group(1).strip())
     return entities
 
 
