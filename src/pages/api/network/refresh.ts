@@ -65,6 +65,24 @@ function extractItems(xml: string, platform: string): ParsedItem[] {
     }
   }
 
+  // ponytail: sitemap <url> 폴백 — RSS 없는 사이트(mbti 등)용. 제목은 슬러그 유추라 품질 한계 있음
+  if (items.length === 0) {
+    const locRegex = /<loc>\s*(.*?)\s*<\/loc>/gi;
+    while ((match = locRegex.exec(xml)) !== null && items.length < 5) {
+      const link = match[1];
+      try {
+        const u = new URL(link);
+        if (u.pathname === '/' || u.pathname === '') continue;
+        const slug = u.pathname.replace(/\/+$/, '').split('/').pop() || '';
+        if (!slug) continue;
+        const title = decodeURIComponent(slug).replace(/[-_]+/g, ' ');
+        items.push({ title, link, pub_date: '' });
+      } catch {
+        continue;
+      }
+    }
+  }
+
   return items;
 }
 

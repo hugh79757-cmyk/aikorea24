@@ -4502,6 +4502,75 @@
           "date": "2026-08-24"
         }
       ]
+    },
+    {
+      "date": "2026-08-24",
+      "briefing_id": 253,
+      "articles": [
+        {
+          "id": "46495",
+          "title": "샤오펑(XPENG) 로봇 사업부, 휴머노이드 생산 앞두고 9억 달러 이상 투자 유치",
+          "original_title": "",
+          "description": "샤오펑은 로봇 사업부가 첫 번째 펀딩 라운드에서 9억 달러 이상을 조달했다고 밝혔습니다. 아직 상용화된 로봇을 단 한 대도 판매하지 않은 사업부로서는 엄청난 규모입니다. 샤오펑은 자사의 'IRON' 휴머노이드 생산을 공식화하며 이번 투자를 단행했습니다.",
+          "link": "https://thenextweb.com/news/xpeng-robotics-900m-funding-round",
+          "entities": [
+            "IRON",
+            "XPENG"
+          ],
+          "date": "2026-08-24"
+        },
+        {
+          "id": "46481",
+          "title": "아이들은 AI보다 더 잘 배운다—그 이유는 여전히 미스터리",
+          "original_title": "",
+          "description": "인류는 최소 10만 년 동안 언어를 사용해 왔으며, 완벽한 수준의 언어 습득 능력을 갖춘 존재는 오직 인간의 아이뿐이었습니다. 하지만 챗GPT가 등장한 지 4년 만에 이제는 AI도 언어를 구사하게 되었음에도, 아이들이 학습하는 근본적인 원리는 여전히 밝혀지지 않았습니다.",
+          "link": "https://www.technologyreview.com/2026/08/24/1141740/kids-machines-language-learning/",
+          "entities": [],
+          "date": "2026-08-24"
+        },
+        {
+          "id": "46486",
+          "title": "블랙 박스: 1화 – 커넥셔니스트(연결주의자들) – 팟캐스트",
+          "original_title": "",
+          "description": "가디언의 저널리스트 마이클 사피가 인공지능의 세계를 다시 돌아보며, AI가 사회에 가져올 위험과 가능성을 탐구합니다. 현재 '오늘의 포커스'는 여름 휴방기이며, 그동안 '블랙 박스' 시즌 1을 다시 선보입니다.",
+          "link": "https://www.theguardian.com/news/audio/2026/aug/24/black-box-episode-1-the-connectionists-podcast",
+          "entities": [],
+          "date": "2026-08-24"
+        },
+        {
+          "id": "46496",
+          "title": "포낙(Phonak)의 신형 EON 보청기, 저전력 칩으로 두 개의 AI 시스템 구동",
+          "original_title": "",
+          "description": "포낙은 자체 개발한 'HYPERSONIC' 프로세서를 탑재한 EON 보청기 플랫폼을 출시했습니다. 이 칩은 이전 세대보다 전력 소모를 37% 줄이면서도 두 개의 AI 시스템을 동시에 구동할 수 있습니다. 소노바(Sonova) 산하의 이 브랜드는 이번 신제품을 통해 시장 공략에 나섰습니다.",
+          "link": "https://thenextweb.com/news/phonak-eon-hearing-aid-hypersonic-chip",
+          "entities": [
+            "Sonova",
+            "AI",
+            "HYPERSONIC",
+            "EON",
+            "Phonak"
+          ],
+          "date": "2026-08-24"
+        },
+        {
+          "id": "46503",
+          "title": "대졸자 채용 시장, 역대 최저치로 추락",
+          "original_title": "",
+          "description": "고용 비용이 급증하고 기업들이 신입 사원 업무를 AI로 대체하면서 영국의 대졸자 채용 시장이 사상 최저 수준으로 떨어졌습니다. 채용 정보 업체에 따르면, 7월까지 영국의 대졸자 공석은 전년 대비 45.6% 감소한 8,383건을 기록하며 지난 5월의 최저치를 경신했습니다.",
+          "link": "https://www.cityam.com/graduate-jobs-market-slumps-to-new-low/",
+          "entities": [],
+          "date": "2026-08-24"
+        },
+        {
+          "id": "46505",
+          "title": "린지 클랜시 사건, 소셜 미디어상 음모론으로 과열",
+          "original_title": "",
+          "description": "매사추세츠주에서 세 자녀를 살해한 혐의를 받는 린지 클랜시의 재판이 마무리 단계에 접어들면서, 소셜 미디어상에서 관련 음모론과 허위 정보가 급증하고 있습니다. 전문가들은 이러한 현상의 배경에 알고리즘이 큰 역할을 하고 있다고 지적합니다.",
+          "link": "https://www.theguardian.com/us-news/2026/aug/24/lindsay-clancy-trial-social-media-conspiracy-theories",
+          "entities": [],
+          "date": "2026-08-24"
+        }
+      ]
     }
   ],
   "articles": [
@@ -8640,6 +8709,69 @@
       "entities": [
         "EU"
       ],
+      "date": "2026-08-24"
+    },
+    {
+      "id": "46495",
+      "title": "샤오펑(XPENG) 로봇 사업부, 휴머노이드 생산 앞두고 9억 달러 이상 투자 유치",
+      "original_title": "",
+      "description": "샤오펑은 로봇 사업부가 첫 번째 펀딩 라운드에서 9억 달러 이상을 조달했다고 밝혔습니다. 아직 상용화된 로봇을 단 한 대도 판매하지 않은 사업부로서는 엄청난 규모입니다. 샤오펑은 자사의 'IRON' 휴머노이드 생산을 공식화하며 이번 투자를 단행했습니다.",
+      "link": "https://thenextweb.com/news/xpeng-robotics-900m-funding-round",
+      "entities": [
+        "IRON",
+        "XPENG"
+      ],
+      "date": "2026-08-24"
+    },
+    {
+      "id": "46481",
+      "title": "아이들은 AI보다 더 잘 배운다—그 이유는 여전히 미스터리",
+      "original_title": "",
+      "description": "인류는 최소 10만 년 동안 언어를 사용해 왔으며, 완벽한 수준의 언어 습득 능력을 갖춘 존재는 오직 인간의 아이뿐이었습니다. 하지만 챗GPT가 등장한 지 4년 만에 이제는 AI도 언어를 구사하게 되었음에도, 아이들이 학습하는 근본적인 원리는 여전히 밝혀지지 않았습니다.",
+      "link": "https://www.technologyreview.com/2026/08/24/1141740/kids-machines-language-learning/",
+      "entities": [],
+      "date": "2026-08-24"
+    },
+    {
+      "id": "46486",
+      "title": "블랙 박스: 1화 – 커넥셔니스트(연결주의자들) – 팟캐스트",
+      "original_title": "",
+      "description": "가디언의 저널리스트 마이클 사피가 인공지능의 세계를 다시 돌아보며, AI가 사회에 가져올 위험과 가능성을 탐구합니다. 현재 '오늘의 포커스'는 여름 휴방기이며, 그동안 '블랙 박스' 시즌 1을 다시 선보입니다.",
+      "link": "https://www.theguardian.com/news/audio/2026/aug/24/black-box-episode-1-the-connectionists-podcast",
+      "entities": [],
+      "date": "2026-08-24"
+    },
+    {
+      "id": "46496",
+      "title": "포낙(Phonak)의 신형 EON 보청기, 저전력 칩으로 두 개의 AI 시스템 구동",
+      "original_title": "",
+      "description": "포낙은 자체 개발한 'HYPERSONIC' 프로세서를 탑재한 EON 보청기 플랫폼을 출시했습니다. 이 칩은 이전 세대보다 전력 소모를 37% 줄이면서도 두 개의 AI 시스템을 동시에 구동할 수 있습니다. 소노바(Sonova) 산하의 이 브랜드는 이번 신제품을 통해 시장 공략에 나섰습니다.",
+      "link": "https://thenextweb.com/news/phonak-eon-hearing-aid-hypersonic-chip",
+      "entities": [
+        "Sonova",
+        "AI",
+        "HYPERSONIC",
+        "EON",
+        "Phonak"
+      ],
+      "date": "2026-08-24"
+    },
+    {
+      "id": "46503",
+      "title": "대졸자 채용 시장, 역대 최저치로 추락",
+      "original_title": "",
+      "description": "고용 비용이 급증하고 기업들이 신입 사원 업무를 AI로 대체하면서 영국의 대졸자 채용 시장이 사상 최저 수준으로 떨어졌습니다. 채용 정보 업체에 따르면, 7월까지 영국의 대졸자 공석은 전년 대비 45.6% 감소한 8,383건을 기록하며 지난 5월의 최저치를 경신했습니다.",
+      "link": "https://www.cityam.com/graduate-jobs-market-slumps-to-new-low/",
+      "entities": [],
+      "date": "2026-08-24"
+    },
+    {
+      "id": "46505",
+      "title": "린지 클랜시 사건, 소셜 미디어상 음모론으로 과열",
+      "original_title": "",
+      "description": "매사추세츠주에서 세 자녀를 살해한 혐의를 받는 린지 클랜시의 재판이 마무리 단계에 접어들면서, 소셜 미디어상에서 관련 음모론과 허위 정보가 급증하고 있습니다. 전문가들은 이러한 현상의 배경에 알고리즘이 큰 역할을 하고 있다고 지적합니다.",
+      "link": "https://www.theguardian.com/us-news/2026/aug/24/lindsay-clancy-trial-social-media-conspiracy-theories",
+      "entities": [],
       "date": "2026-08-24"
     }
   ]
