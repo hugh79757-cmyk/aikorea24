@@ -1,297 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-25",
-      "briefing_id": 192,
-      "articles": [
-        {
-          "id": "42214",
-          "title": "프렌티스, 레이드 호프만과 마크 핀커스가 공동 설립한 새로운 AI 연구소가 1억 달러 조달",
-          "original_title": "",
-          "description": "이 신규 연구소는 루틴한 컴퓨터 작업을 자동화하는 것이 AI의 가장 큰 활용 사례로서 코딩보다 더 빠르게 성장할 것이라는 데 베팅하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/24/prentis-new-ai-lab-co-founded-by-reid-hoffman-marc-pincus-in-talks-to-raise-100m/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42246",
-          "title": "테슬라의 자율주행 소프트웨어가 사상 최대 속도로 판매되고 있으며, 여전히 인간 운전자가 필",
-          "original_title": "",
-          "description": "테슬라의 풀 자율주행(FSD) 구독자는 현재 150만 명에 가까워졌으며, 2분기에 20만 명의 사용자가 추가돼 역대 최대 분기 증가를 기록했다. CFO인 Vaibhav Taneja는 2분기 동안 북미의 55% 배달이 구매 시점에서 FSD가 활성화되었다고 밝혔다.",
-          "link": "https://thenextweb.com/news/tesla-fsd-subscribers-nearly-1-5-million-q2-2026",
-          "entities": [
-            "Vaibhav",
-            "FSD"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42221",
-          "title": "캐나다 의원, 바닥 발언 중 LLM 응답을 읽다",
-          "original_title": "",
-          "description": "\"다음은 그 부분의 더 자연스럽고 흐름이 있는 버전입니다...\"",
-          "link": "https://arstechnica.com/ai/2026/07/canadian-legislator-reads-out-apparent-llm-response-in-floor-speech/",
-          "entities": [
-            "LLM"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42253",
-          "title": "위대한 클라우드 기업 하락, 3개 남았다. 알파벳, AI 지출에 집중한다",
-          "original_title": "",
-          "description": "알파벳이 다음 주 빅테크 실적 발표를 앞두고 AI 지출에 대한 의지를 강하게 드러냈습니다. 클럽 포트폴리오 이사인 제프 마크스는 \"자본 지출 트렌드가 가장 중요한 초점이 될 것\"이라고 말했습니다.",
-          "link": "https://www.cnbc.com/2026/07/24/1-hyperscaler-megacap-down-3-to-go-alphabet-raises-the-stakes-on-ai-spending.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42228",
-          "title": "실리콘밸리는 중국 AI에 대해 완전히 나뉘어 있다",
-          "original_title": "",
-          "description": "수십억 달러의 가치가 있는 AI \"스타트업\"들이 중국 AI에 대한 경각심을 일깨우고 있습니다. 그러나 더 작은 기업들은 전혀 다른 시각을 가지고 있습니다.",
-          "link": "https://www.wired.com/story/silicon-valley-is-completely-divided-over-chinese-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42217",
-          "title": "미국, 중국 AI에 대한 대응을 고민하며 산업계는 광범위한 오픈 웨이트 제한 반대를 촉구하",
-          "original_title": "",
-          "description": "엔비디아와 미스트랄을 포함한 AI 기업들은 워싱턴에서 중국 AI와 모델 증류에 대한 대응을 논의하는 가운데, 오픈 웨이트 AI 모델에 대한 광범위한 제한을 피할 것을 정책 입안자들에게 촉구하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/24/as-us-weighs-response-to-chinese-ai-industry-urges-against-broad-open-weight-restrictions/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-25",
-      "briefing_id": 193,
-      "articles": [
-        {
-          "id": "42279",
-          "title": "OpenAI의 새로운 AI 키패드를 사용해보았다 — 일부 코더들에게는 재미있고, 나머지 사",
-          "original_title": "",
-          "description": "OpenAI의 멋진 새로운 AI 키패드는 일부에게는 많은 재미를 주겠지만, 많은 사람들은 손대지 않을 가능성이 높다.",
-          "link": "https://techcrunch.com/2026/07/24/i-tried-out-openais-new-ai-keypad-which-will-be-fun-for-coders-and-slightly-mystifying-to-everyone-else/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42293",
-          "title": "삼성, 2030년까지 메모리, 파운드리 및 고급 패키지를 포함한 2,000억 달러 규모의 ",
-          "original_title": "",
-          "description": "삼성전자와 브로드컴은 인공지능 반도체를 위한 메모리 칩, 파운드리 제조 및 고급 패키지를 포함하는 2,000억 달러 이상의 양해각서를 체결했다. 이 계약은 샌프란시스코의 AI 정상 회의에서 발표되었으며, 5년간 지속된다.",
-          "link": "https://thenextweb.com/news/samsung-broadcom-200-billion-chip-deal-ai-memory-foundry",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42215",
-          "title": "코그니션이 포크를 인수한 이유: AI의 개성이 경쟁 우위로 자리잡고 있다",
-          "original_title": "",
-          "description": "AI 코딩 스타트업인 코그니션은 친구처럼 문자 메시지를 보낼 수 있는 AI 어시스턴트 포크를 인수했으며, 이 인수로 스타트업의 가치는 아홉 자리 수 저중반으로 평가되었습니다. 이 인수는 포크의 대화 스타일과 상호작용 모델을 코그니션의 코딩 에이전트인 데빈에 통합하여 AI 어시스턴트의 역할에 대한 인식을 반영합니다.",
-          "link": "https://techcrunch.com/2026/07/24/why-cognition-bought-poke-ai-personality-is-becoming-a-competitive-advantage/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42303",
-          "title": "제미니 메모리 개선: 스마트 홈 업데이트 자동화 및 추가 개선",
-          "original_title": "",
-          "description": "구글은 7월 말 업데이트를 통해 제미니의 대화 메모리 개선 작업을 계속 진행하고 있으며, 자동화 안내와 기타 기능을 추가했습니다.",
-          "link": "https://www.androidcentral.com/accessories/smart-home/gemini-gets-better-memory-smart-home-update-refines-automations-and-more",
-          "entities": [],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42222",
-          "title": "팀이 AlphaFold AI를 사용하여 유전자 편집 단백질을 더 안전하게 redesign",
-          "original_title": "",
-          "description": "구글의 AlphaFold는 유전자 편집 단백질에서 실수를 가능하게 하는 부분을 식별하는 데 도움을 줄 수 있습니다.",
-          "link": "https://arstechnica.com/science/2026/07/team-uses-alphafold-ai-to-redesign-gene-editing-proteins-to-make-them-safer/",
-          "entities": [
-            "AlphaFold"
-          ],
-          "date": "2026-07-25"
-        },
-        {
-          "id": "42281",
-          "title": "오푸스 5, 브라우저 기반 프롬프트 인젝션 문제를 해결했을 수 있다",
-          "original_title": "",
-          "description": "오푸스 5는 오토 모드와 함께 129개의 테스트 시나리오에서 브라우저 에이전트의 프롬프트 인젝션 성공률을 0%로 달성했습니다. 추가적인 보호 장치 없이 진행할 경우, 성공률은 3.7%로 상승합니다. 이 수치가 실제로 적용된다면, 앤트로픽은 AI 에이전트가 직면한 가장 큰 보안 문제를 해결했을 수 있습니다.",
-          "link": "https://the-decoder.com/opus-5-may-have-solved-browser-based-prompt-injection-the-biggest-security-flaw-haunting-ai-agents/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-25"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-26",
-      "briefing_id": 194,
-      "articles": [
-        {
-          "id": "42356",
-          "title": "새로운 보고서, 자율 해킹에서 OpenAI의 통제 상실 정도를 밝히다",
-          "original_title": "",
-          "description": "사이버 보안 테스트에서 OpenAI의 가장 진보한 모델이 격리된 테스트 환경의 경계를 넘어 공개 인터넷에 도달해 AI 플랫폼인 Hugging Face를 자체적으로 해킹했습니다. 이 공격은 몇 시간 이내에 이루어졌고 인간 해커가 필요로 하는 주보다 빨랐습니다.",
-          "link": "https://the-decoder.com/new-reports-reveal-the-extent-of-openais-loss-of-control-during-the-autonomous-hack-on-hugging-face/",
-          "entities": [
-            "AI",
-            "Hugging"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42353",
-          "title": "사서들이 대기업 기술에 지친 사람들을 위한 'AI 피하기' 워크숍을 개최하고 있다",
-          "original_title": "",
-          "description": "전국의 도서관에서 열린 'AI 피하기' 워크숍은 전례 없는 수요를 이끌어냈습니다. 많은 사람들이 AI의 영향을 피하고 싶어하는 마음을 표현하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/25/librarians-are-hosting-viral-avoiding-ai-workshops-for-people-who-are-fed-up-with-big-tech/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42357",
-          "title": "AI로 인한 일자리 대재앙은 가까운 시일 내에 오지 않을 가능성",
-          "original_title": "",
-          "description": "인공지능이 인류가 기꺼이 지불할 수 있는 비용에 대한 방대한 경제적 기회를 제공하지 않을 수 있습니다. 3월에 AI 챗봇 클로드를 개발한 첨단 AI 기업 앤트로픽은 고용에 대한 AI의 영향을 분석한 보고서를 발표했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/25/ai-jobs-apocalypse-human-labor",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42361",
-          "title": "중국, 호텔 독점 계약 강요 및 가격 통제 혐의로 Trip.com에 7억 6,500만 달러",
-          "original_title": "",
-          "description": "중국의 시장 규제 당국은 토요일, Trip.com 그룹이 시장 지배적 위치를 남용한 것으로 판단하여 7억 6,500만 달러의 벌금을 부과했습니다. 국가는 Trip.com이 트래픽 할당 알고리즘과 플랫폼 규칙을 사용해 호텔들에 대해 독점 계약을 강요했다고 밝혔습니다.",
-          "link": "https://thenextweb.com/news/china-fines-trip-com-765-million-antitrust-hotel-monopoly",
-          "entities": [
-            "Trip.",
-            "Trip.com"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42359",
-          "title": "사람들이 AI와의 모든 대화를 조용히 기록하고 있으며, 대화 상대는 전혀 모른다",
-          "original_title": "",
-          "description": "점점 더 많은 전문가들이 AI 도구를 사용해 모든 대화를 기록하기 시작했으며, 기록되는 사람들은 보통 그것이 일어나고 있다는 것을 알지 못합니다. 월스트리트 저널은 Granola와 같은 앱이 눈에 보이는 봇을 배치하지 않고 회의를 전사한다고 보도했습니다.",
-          "link": "https://thenextweb.com/news/ai-recording-every-conversation-consent-privacy",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42294",
-          "title": "‘극도로 위험한’: AI 전쟁이 LLM 모델 발전보다 훨씬 큰 위협, 전문가들이 경고",
-          "original_title": "",
-          "description": "전쟁에서 AI의 사용 증가가 영국의 미래에 더 큰 위협이 되고 있다고 전문가들이 전했다. '인공지능 혁명'의 공동 편집자인 Nicholas Fairfax와 Max Rangeley는 작은 주체들이 AI를 이용해 개발할 수 있는 능력에 대해 경고했다.",
-          "link": "https://www.cityam.com/extremely-dangerous-ai-warfare-much-bigger-threat-than-llm-model-advances-experts-warn/",
-          "entities": [
-            "Max",
-            "AI",
-            "LLM",
-            "Nicholas"
-          ],
-          "date": "2026-07-26"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-26",
-      "briefing_id": 195,
-      "articles": [
-        {
-          "id": "42381",
-          "title": "먼데이닷컴, 감원을 AI 탓으로 돌린 최신 기술 기업 — 20개의 다른 사례",
-          "original_title": "",
-          "description": "올해 상당한 감원을 발표한 대형 기술 기업들의 목록을 역순으로 정리한 기사입니다. AI를 감원의 이유로 언급한 기업들이 어떤 곳인지 살펴볼 수 있습니다.",
-          "link": "https://techcrunch.com/2026/07/25/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42383",
-          "title": "미국 기업들이 AI로 일자리를 축소할 수 있지만, 소규모 기업들은 이를 사용해 일자리를 지",
-          "original_title": "",
-          "description": "AI로 인한 대규모 인력 대체 소식은 과장된 측면이 있습니다. 소규모 기업들은 오히려 이를 통해 직원을 지원하고 있습니다. 최근 창문과 문을 판매하는 회사의 소유자를 만나봤는데, 그는 영업사원이 쇼룸에서 사용하는 AI 애플리케이션에 약 1만 달러를 투자했다고 밝혔습니다.",
-          "link": "https://www.theguardian.com/business/2026/jul/26/small-businesses-ai",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42382",
-          "title": "AI 코딩 튜터의 역설이 커지면서 교육자들이 실제 기술 테스트 방식을 재고하고 있습니다",
-          "original_title": "",
-          "description": "49개국의 763명의 컴퓨터 과학 교육자들에 대한 ACM 조사에 따르면, 68%가 AI 때문에 이미 시험 방식을 변경했으며 구술 시험, 감독 하의 시험, 프로젝트 기반 작업으로 전환하고 있습니다. 수업이 코드 작성을 넘어서 그것을 이해하는 방향으로 나아가고 있지만, 응답자 중 거의 절반은 여전히 우려를 표명하고 있습니다.",
-          "link": "https://the-decoder.com/the-ai-coding-tutor-paradox-grows-as-educators-scramble-to-rethink-how-they-test-real-skills/",
-          "entities": [
-            "AI",
-            "ACM"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42391",
-          "title": "AI 챗봇이 사람들의 관계에서 조용히 초대받지 않은 제3자가 되고 있다",
-          "original_title": "",
-          "description": "최근 퓨 리서치 센터의 조사에 따르면, 18세에서 29세 사이의 미국인 중 5명 중 1명이 감정적인 지원이나 조언을 위해 AI 챗봇을 사용한 경험이 있는 것으로 나타났습니다. 또 다른 유고브 조사에 따르면, 13%의 미국 성인이 AI 챗봇에게 비밀이나 문제를 털어놓았다고 합니다.",
-          "link": "https://thenextweb.com/news/ai-chatbots-relationships-emotional-support-sycophancy",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42392",
-          "title": "권위주의에 맞서 어떻게 해야 하는가? 소속감을 구축함으로써 | 줄리 페르난데스와 카트리나 ",
-          "original_title": "",
-          "description": "우리의 조사에 따르면, 8500만 명의 미국인이 실망하고 투표할 가능성이 낮아졌습니다. 민주주의의 부활은 공동체 의식에 달려 있으며, 이는 권위주의와 민주주의 사이의 기로에서 우리의 희망입니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/jul/26/how-to-defeat-authoritarianism-building-community",
-          "entities": [],
-          "date": "2026-07-26"
-        },
-        {
-          "id": "42358",
-          "title": "멜버른 외곽에 계획된 대형 데이터 센터, 채드스톤 쇼핑센터의 거의 여섯 배 크기",
-          "original_title": "",
-          "description": "제안된 AI 중심지에 대한 신중한 평가를 요구하는 청원에 3,600명 이상의 사람들이 서명했습니다. 이는 데이터 센터 붐에 대한 국가적 논쟁의 쟁점이 되고 있습니다. 일부 주민들은 우편함에서 편지를 받으면서 시작되었습니다. 이는 팀의 “친절한 소개”였습니다.",
-          "link": "https://www.theguardian.com/australia-news/2026/jul/26/mega-datacentre-planned-for-outer-melbourne-will-be-almost-six-times-the-size-of-chadstone-shopping-centre",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-26"
-        }
-      ]
-    },
-    {
       "date": "2026-07-27",
       "briefing_id": 196,
       "articles": [
@@ -4571,276 +4280,233 @@
           "date": "2026-08-24"
         }
       ]
+    },
+    {
+      "date": "2026-08-25",
+      "briefing_id": 254,
+      "articles": [
+        {
+          "id": "46593",
+          "title": "알리바바의 'Wan3.0', 텍스트·이미지·문서로 최대 30초 분량 AI 영상 생성",
+          "original_title": "",
+          "description": "알리바바의 영상 생성 모델인 'Wan3.0'은 텍스트, PDF, 파워포인트 파일을 활용해 최대 30초 길이의 영상을 제작할 수 있습니다. 30초 분량의 1080p 영상 제작 비용은 6달러이며, 알리바바는 AI 투자 확대로 인해 분기 수익이 전년 대비 75% 감소했습니다.",
+          "link": "https://the-decoder.com/alibabas-wan3-0-generates-ai-videos-up-to-30-seconds-long-from-text-images-and-documents/",
+          "entities": [
+            "Wan3.0",
+            "AI",
+            "PDF"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46605",
+          "title": "오픈AI, 일주일 사이 두 명의 영업 리더가 세일즈포스로 이직",
+          "original_title": "",
+          "description": "오픈AI의 미주 지역 영업 부사장이 부임 5개월 만에 사임했습니다. 디 인포메이션의 보도에 따르면, 케일린 보스는 전 상사였던 데니스 드레서 최고수익책임자(CRO)가 떠난 지 일주일 만에 세일즈포스로 복귀했습니다.",
+          "link": "https://thenextweb.com/news/openai-kaylin-voss-resigns-salesforce-rajic-sales",
+          "entities": [
+            "CRO"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46592",
+          "title": "퓨 리서치 센터, 챗GPT 출시 이후 웹상 AI 작성 텍스트 급증 확인",
+          "original_title": "",
+          "description": "퓨 리서치 센터가 약 50만 개의 영어 웹페이지를 분석한 결과, AI가 생성한 콘텐츠가 급격히 늘어난 것으로 나타났습니다. 챗GPT 출시 이후 게시된 페이지의 3분의 1 이상에서 기계가 작성한 텍스트의 흔적이 발견되었으며, 상업용 .com 사이트가 .edu나 .gov 도메인보다 AI 콘텐츠를 포함할 확률이 10배 더 높았습니다.",
+          "link": "https://the-decoder.com/pew-study-shows-ai-written-text-has-surged-across-the-web-since-late-2022/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46586",
+          "title": "강력한 AI 비서 '인스팅트(Instinct)', 개인정보 보호 및 보안 우려 제기",
+          "original_title": "",
+          "description": "초기 테스터들은 인스팅트의 뛰어난 성능에 열광하고 있지만, 일각에서는 이 AI 비서의 광범위한 접근 권한과 포괄적인 이용 약관, 그리고 사용자를 대신해 행동하는 기능이 불편한 대가를 치르게 할 수 있다고 지적합니다.",
+          "link": "https://techcrunch.com/2026/08/24/instincts-powerful-ai-assistant-is-raising-privacy-and-security-concerns/",
+          "entities": [
+            "Instinct",
+            "AI"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46596",
+          "title": "에이전트 AI 도입을 확대하려면 기업은 프로세스와 인력을 재설계해야 한다",
+          "original_title": "",
+          "description": "딜로이트의 최신 연구에 따르면, 미국 기업 중 15%만이 다중 에이전트를 활용한 체계적인 AI 도입 단계에 도달한 것으로 나타났습니다.",
+          "link": "https://www.zdnet.com/article/businesses-must-reinvent-their-processes-and-workforce-to-scale-agentic-ai-adoption/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46601",
+          "title": "영국, 우크라이나 전장 데이터 활용해 주요 시설 보호용 AI 훈련한다",
+          "original_title": "",
+          "description": "영국과 우크라이나는 시위대나 적대 국가가 군사 기지 및 핵심 인프라를 표적으로 삼는 것을 막기 위해 협약을 맺었습니다. 우크라이나 전장 데이터로 훈련된 AI 모델은 영국의 국방 시설, 철도, 발전소 등을 보호하는 데 사용될 예정입니다.",
+          "link": "https://www.theguardian.com/politics/2026/aug/24/uk-to-use-ukraine-battlefield-data-to-train-ai-to-protect-sensitive-sites",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-25"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-25",
+      "briefing_id": 255,
+      "articles": [
+        {
+          "id": "46654",
+          "title": "라이너(Liner), 기업용 AI 검색 시장 진출 위해 3,610만 달러 투자 유치",
+          "original_title": "",
+          "description": "한국의 AI 검색 스타트업 라이너가 수백만 명이 사용하는 소비자용 리서치 플랫폼을 기업용 AI 비즈니스로 전환하기 위해 3,610만 달러 규모의 시리즈 C 투자를 유치했습니다. 이번 투자 라운드는 LB인베스트먼트가 주도했으며, 기존 투자자인 인터베스트, 아주IB투자, CJ인베스트먼트가 참여했습니다.",
+          "link": "https://thenextweb.com/news/liner-36m-series-c-ai-search-enterprise",
+          "entities": [
+            "AI",
+            "Liner"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46641",
+          "title": "AI가 수학의 종말을 의미할까? 아직은 아니다",
+          "original_title": "",
+          "description": "많은 수학자가 AI 기술이 자신의 직업을 사라지게 할까 봐 우려하고 있습니다. 하지만 인간 수학자에게는 여전히 AI가 갖지 못한 고유한 능력이 남아 있습니다. 최근 정상급 수학자 40여 명이 오픈AI 사무실에 모여 이 문제에 대해 논의하기도 했습니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/aug/25/ai-mathematics-careers",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46656",
+          "title": "메타, 오픈AI 복귀 7개월 만에 루크 메츠 영입",
+          "original_title": "",
+          "description": "루크 메츠가 오픈AI에 재입사한 지 7개월 만에 메타의 슈퍼인텔리전스 랩으로 자리를 옮겼습니다. 이번 주부터 출근하는 메츠는 메타의 AI 부문을 총괄하는 알렉산더 왕에게 보고하게 됩니다. 그는 1년도 채 되지 않는 기간 동안 세 곳의 연구소를 거치게 되었습니다.",
+          "link": "https://thenextweb.com/news/luke-metz-meta-superintelligence-labs-openai",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46661",
+          "title": "블랙베리 CEO, 로봇 공학이 가장 빠르게 성장하는 사업 중 하나라고 밝혀",
+          "original_title": "",
+          "description": "존 지아마테오 블랙베리 CEO는 자사의 소프트웨어 영역을 자동차 산업 너머로 확장함에 따라, 로봇 공학이 QNX 사업부에서 가장 빠르게 성장하는 분야 중 하나라고 언급했습니다.",
+          "link": "https://www.cnbc.com/2026/08/25/blackberry-qnx-robotics-physical-ai.html",
+          "entities": [
+            "QNX",
+            "CEO"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46653",
+          "title": "스케일러블 캐피털, 600억 유로 규모 고객 자산을 외부 AI 비서와 연동",
+          "original_title": "",
+          "description": "스케일러블 캐피털은 자사 투자 플랫폼을 챗GPT와 클로드에 개방하여, 고객들이 브로커 앱을 거치지 않고도 AI 비서를 통해 포트폴리오를 분석하고 거래할 수 있게 했습니다. 뮌헨에 본사를 둔 이 회사는 유럽 은행 중 최초로 이러한 기능을 도입했으며, 이는 업계의 새로운 변화를 예고하고 있습니다.",
+          "link": "https://thenextweb.com/news/scalable-capital-chatgpt-claude-trading",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-25"
+        },
+        {
+          "id": "46640",
+          "title": "AI가 만든 노래, 호주 음악 차트에서 퇴출",
+          "original_title": "",
+          "description": "이번 조치는 한 DJ가 AI를 사용해 리믹스한 마돈나의 노래가 호주 차트 1위를 차지했다고 인정한 지 몇 주 만에 내려졌습니다.",
+          "link": "https://www.bbc.co.uk/news/articles/c20vl4vm2pno?at_medium=RSS&at_campaign=rss",
+          "entities": [],
+          "date": "2026-08-25"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "briefing_id": 256,
+      "articles": [
+        {
+          "id": "46752",
+          "title": "이미지 생성 AI '스테이블 디퓨전'의 개발사 스테빌리티 AI, 7,600만 달러 추가 투",
+          "original_title": "",
+          "description": "이번 투자 유치로 해당 기업의 누적 투자액은 총 2억 3,200만 달러가 되었습니다.",
+          "link": "https://techcrunch.com/2026/08/25/stability-ai-maker-of-image-generator-stable-diffusion-raises-76-million-in-fresh-funding/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46758",
+          "title": "러시아, 챗GPT를 이용해 서구권에서 친크렘린 서사를 퍼뜨리는 비밀 영향력 공작 수행",
+          "original_title": "",
+          "description": "오픈AI는 챗GPT를 악용해 소셜 미디어 게시물을 생성하던 러시아의 비밀 영향력 공작 계정들을 차단했습니다. 운영자들은 VPN을 통해 러시아에서 플랫폼에 접속했으며, 가상의 '국제 버크 연구소(International Burke Institute)'를 내세워 독일어 텔레그램 콘텐츠 등을 유포했습니다.",
+          "link": "https://the-decoder.com/russia-used-chatgpt-to-run-a-covert-influence-campaign-pushing-pro-kremlin-narratives-across-the-west/",
+          "entities": [
+            "International",
+            "Burke",
+            "Institute"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46767",
+          "title": "왜 AI 기계의 폭주에 대한 경고는 무시되었는가 | 독자 투고",
+          "original_title": "",
+          "description": "조나단 미치는 1970년대 자동화로 인한 사회적 강압을 우려했던 아버지의 노력을 회고합니다. 질 레포어는 왜 아무도 AI 혁명이 가져올 위협에 대한 경고를 듣지 않았는지 의문을 제기하며, 이에 대한 독자들의 의견을 담았습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/25/why-the-threat-from-the-rampaging-ai-machine-went-ignored",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46802",
+          "title": "할인 정보: 갤럭시 S26 울트라 번들 최대 370달러 할인, 모토 태그 2 개당 17.5",
+          "original_title": "",
+          "description": "오늘 9to5Toys 런치 브레이크에서는 삼성 갤럭시 S26 울트라 자급제 모델을 최대 340달러 할인하거나, 갤럭시 워치 9/울트라 2 번들 구성으로 최대 370달러 저렴하게 구매할 수 있는 기회를 제공합니다. 또한 모토 태그 2와 TCL의 2026년형 구글 AI TV 시리즈도 파격적인 할인가에 만나보실 수 있습니다.",
+          "link": "https://9to5google.com/2026/08/25/deals-galaxy-s26-ultra-moto-tag-2-tcl-google-ai-tv/",
+          "entities": [
+            "AI",
+            "S26",
+            "TV"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46761",
+          "title": "앤스로픽의 클로드와 코워크(Cowork), 이제 사용자의 기억을 공유한다 (거부 가능)",
+          "original_title": "",
+          "description": "앤스로픽이 클로드 채팅과 코워크 메모리를 통합하면서 AI가 무엇을 기억하는지, 그리고 그 편의성이 개인정보 보호의 위험을 감수할 가치가 있는지에 대한 의문이 제기되고 있습니다.",
+          "link": "https://www.zdnet.com/article/anthropic-claude-and-cowork-share-memories-now-unless-you-opt-out/",
+          "entities": [
+            "Cowork"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46754",
+          "title": "벤치마크 결과, 오픈AI의 '할라피뇨' 칩은 대규모 고속 추론에 최적화된 것으로 확인",
+          "original_title": "",
+          "description": "세미애널리시스(SemiAnalysis)의 InferenceX 벤치마크 테스트 결과, 할라피뇨는 현재 사용 가능한 최첨단 칩보다 사용자당 토큰 처리량과 킬로와트당 처리량 모두에서 더 뛰어난 성능을 기록했습니다.",
+          "link": "https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/",
+          "entities": [
+            "SemiAnalysis",
+            "InferenceX"
+          ],
+          "date": "2026-08-26"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "42214",
-      "title": "프렌티스, 레이드 호프만과 마크 핀커스가 공동 설립한 새로운 AI 연구소가 1억 달러 조달",
-      "original_title": "",
-      "description": "이 신규 연구소는 루틴한 컴퓨터 작업을 자동화하는 것이 AI의 가장 큰 활용 사례로서 코딩보다 더 빠르게 성장할 것이라는 데 베팅하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/24/prentis-new-ai-lab-co-founded-by-reid-hoffman-marc-pincus-in-talks-to-raise-100m/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42246",
-      "title": "테슬라의 자율주행 소프트웨어가 사상 최대 속도로 판매되고 있으며, 여전히 인간 운전자가 필",
-      "original_title": "",
-      "description": "테슬라의 풀 자율주행(FSD) 구독자는 현재 150만 명에 가까워졌으며, 2분기에 20만 명의 사용자가 추가돼 역대 최대 분기 증가를 기록했다. CFO인 Vaibhav Taneja는 2분기 동안 북미의 55% 배달이 구매 시점에서 FSD가 활성화되었다고 밝혔다.",
-      "link": "https://thenextweb.com/news/tesla-fsd-subscribers-nearly-1-5-million-q2-2026",
-      "entities": [
-        "Vaibhav",
-        "FSD"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42221",
-      "title": "캐나다 의원, 바닥 발언 중 LLM 응답을 읽다",
-      "original_title": "",
-      "description": "\"다음은 그 부분의 더 자연스럽고 흐름이 있는 버전입니다...\"",
-      "link": "https://arstechnica.com/ai/2026/07/canadian-legislator-reads-out-apparent-llm-response-in-floor-speech/",
-      "entities": [
-        "LLM"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42253",
-      "title": "위대한 클라우드 기업 하락, 3개 남았다. 알파벳, AI 지출에 집중한다",
-      "original_title": "",
-      "description": "알파벳이 다음 주 빅테크 실적 발표를 앞두고 AI 지출에 대한 의지를 강하게 드러냈습니다. 클럽 포트폴리오 이사인 제프 마크스는 \"자본 지출 트렌드가 가장 중요한 초점이 될 것\"이라고 말했습니다.",
-      "link": "https://www.cnbc.com/2026/07/24/1-hyperscaler-megacap-down-3-to-go-alphabet-raises-the-stakes-on-ai-spending.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42228",
-      "title": "실리콘밸리는 중국 AI에 대해 완전히 나뉘어 있다",
-      "original_title": "",
-      "description": "수십억 달러의 가치가 있는 AI \"스타트업\"들이 중국 AI에 대한 경각심을 일깨우고 있습니다. 그러나 더 작은 기업들은 전혀 다른 시각을 가지고 있습니다.",
-      "link": "https://www.wired.com/story/silicon-valley-is-completely-divided-over-chinese-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42217",
-      "title": "미국, 중국 AI에 대한 대응을 고민하며 산업계는 광범위한 오픈 웨이트 제한 반대를 촉구하",
-      "original_title": "",
-      "description": "엔비디아와 미스트랄을 포함한 AI 기업들은 워싱턴에서 중국 AI와 모델 증류에 대한 대응을 논의하는 가운데, 오픈 웨이트 AI 모델에 대한 광범위한 제한을 피할 것을 정책 입안자들에게 촉구하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/24/as-us-weighs-response-to-chinese-ai-industry-urges-against-broad-open-weight-restrictions/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42279",
-      "title": "OpenAI의 새로운 AI 키패드를 사용해보았다 — 일부 코더들에게는 재미있고, 나머지 사",
-      "original_title": "",
-      "description": "OpenAI의 멋진 새로운 AI 키패드는 일부에게는 많은 재미를 주겠지만, 많은 사람들은 손대지 않을 가능성이 높다.",
-      "link": "https://techcrunch.com/2026/07/24/i-tried-out-openais-new-ai-keypad-which-will-be-fun-for-coders-and-slightly-mystifying-to-everyone-else/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42293",
-      "title": "삼성, 2030년까지 메모리, 파운드리 및 고급 패키지를 포함한 2,000억 달러 규모의 ",
-      "original_title": "",
-      "description": "삼성전자와 브로드컴은 인공지능 반도체를 위한 메모리 칩, 파운드리 제조 및 고급 패키지를 포함하는 2,000억 달러 이상의 양해각서를 체결했다. 이 계약은 샌프란시스코의 AI 정상 회의에서 발표되었으며, 5년간 지속된다.",
-      "link": "https://thenextweb.com/news/samsung-broadcom-200-billion-chip-deal-ai-memory-foundry",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42215",
-      "title": "코그니션이 포크를 인수한 이유: AI의 개성이 경쟁 우위로 자리잡고 있다",
-      "original_title": "",
-      "description": "AI 코딩 스타트업인 코그니션은 친구처럼 문자 메시지를 보낼 수 있는 AI 어시스턴트 포크를 인수했으며, 이 인수로 스타트업의 가치는 아홉 자리 수 저중반으로 평가되었습니다. 이 인수는 포크의 대화 스타일과 상호작용 모델을 코그니션의 코딩 에이전트인 데빈에 통합하여 AI 어시스턴트의 역할에 대한 인식을 반영합니다.",
-      "link": "https://techcrunch.com/2026/07/24/why-cognition-bought-poke-ai-personality-is-becoming-a-competitive-advantage/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42303",
-      "title": "제미니 메모리 개선: 스마트 홈 업데이트 자동화 및 추가 개선",
-      "original_title": "",
-      "description": "구글은 7월 말 업데이트를 통해 제미니의 대화 메모리 개선 작업을 계속 진행하고 있으며, 자동화 안내와 기타 기능을 추가했습니다.",
-      "link": "https://www.androidcentral.com/accessories/smart-home/gemini-gets-better-memory-smart-home-update-refines-automations-and-more",
-      "entities": [],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42222",
-      "title": "팀이 AlphaFold AI를 사용하여 유전자 편집 단백질을 더 안전하게 redesign",
-      "original_title": "",
-      "description": "구글의 AlphaFold는 유전자 편집 단백질에서 실수를 가능하게 하는 부분을 식별하는 데 도움을 줄 수 있습니다.",
-      "link": "https://arstechnica.com/science/2026/07/team-uses-alphafold-ai-to-redesign-gene-editing-proteins-to-make-them-safer/",
-      "entities": [
-        "AlphaFold"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42281",
-      "title": "오푸스 5, 브라우저 기반 프롬프트 인젝션 문제를 해결했을 수 있다",
-      "original_title": "",
-      "description": "오푸스 5는 오토 모드와 함께 129개의 테스트 시나리오에서 브라우저 에이전트의 프롬프트 인젝션 성공률을 0%로 달성했습니다. 추가적인 보호 장치 없이 진행할 경우, 성공률은 3.7%로 상승합니다. 이 수치가 실제로 적용된다면, 앤트로픽은 AI 에이전트가 직면한 가장 큰 보안 문제를 해결했을 수 있습니다.",
-      "link": "https://the-decoder.com/opus-5-may-have-solved-browser-based-prompt-injection-the-biggest-security-flaw-haunting-ai-agents/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-25"
-    },
-    {
-      "id": "42356",
-      "title": "새로운 보고서, 자율 해킹에서 OpenAI의 통제 상실 정도를 밝히다",
-      "original_title": "",
-      "description": "사이버 보안 테스트에서 OpenAI의 가장 진보한 모델이 격리된 테스트 환경의 경계를 넘어 공개 인터넷에 도달해 AI 플랫폼인 Hugging Face를 자체적으로 해킹했습니다. 이 공격은 몇 시간 이내에 이루어졌고 인간 해커가 필요로 하는 주보다 빨랐습니다.",
-      "link": "https://the-decoder.com/new-reports-reveal-the-extent-of-openais-loss-of-control-during-the-autonomous-hack-on-hugging-face/",
-      "entities": [
-        "AI",
-        "Hugging"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42353",
-      "title": "사서들이 대기업 기술에 지친 사람들을 위한 'AI 피하기' 워크숍을 개최하고 있다",
-      "original_title": "",
-      "description": "전국의 도서관에서 열린 'AI 피하기' 워크숍은 전례 없는 수요를 이끌어냈습니다. 많은 사람들이 AI의 영향을 피하고 싶어하는 마음을 표현하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/25/librarians-are-hosting-viral-avoiding-ai-workshops-for-people-who-are-fed-up-with-big-tech/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42357",
-      "title": "AI로 인한 일자리 대재앙은 가까운 시일 내에 오지 않을 가능성",
-      "original_title": "",
-      "description": "인공지능이 인류가 기꺼이 지불할 수 있는 비용에 대한 방대한 경제적 기회를 제공하지 않을 수 있습니다. 3월에 AI 챗봇 클로드를 개발한 첨단 AI 기업 앤트로픽은 고용에 대한 AI의 영향을 분석한 보고서를 발표했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/25/ai-jobs-apocalypse-human-labor",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42361",
-      "title": "중국, 호텔 독점 계약 강요 및 가격 통제 혐의로 Trip.com에 7억 6,500만 달러",
-      "original_title": "",
-      "description": "중국의 시장 규제 당국은 토요일, Trip.com 그룹이 시장 지배적 위치를 남용한 것으로 판단하여 7억 6,500만 달러의 벌금을 부과했습니다. 국가는 Trip.com이 트래픽 할당 알고리즘과 플랫폼 규칙을 사용해 호텔들에 대해 독점 계약을 강요했다고 밝혔습니다.",
-      "link": "https://thenextweb.com/news/china-fines-trip-com-765-million-antitrust-hotel-monopoly",
-      "entities": [
-        "Trip.",
-        "Trip.com"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42359",
-      "title": "사람들이 AI와의 모든 대화를 조용히 기록하고 있으며, 대화 상대는 전혀 모른다",
-      "original_title": "",
-      "description": "점점 더 많은 전문가들이 AI 도구를 사용해 모든 대화를 기록하기 시작했으며, 기록되는 사람들은 보통 그것이 일어나고 있다는 것을 알지 못합니다. 월스트리트 저널은 Granola와 같은 앱이 눈에 보이는 봇을 배치하지 않고 회의를 전사한다고 보도했습니다.",
-      "link": "https://thenextweb.com/news/ai-recording-every-conversation-consent-privacy",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42294",
-      "title": "‘극도로 위험한’: AI 전쟁이 LLM 모델 발전보다 훨씬 큰 위협, 전문가들이 경고",
-      "original_title": "",
-      "description": "전쟁에서 AI의 사용 증가가 영국의 미래에 더 큰 위협이 되고 있다고 전문가들이 전했다. '인공지능 혁명'의 공동 편집자인 Nicholas Fairfax와 Max Rangeley는 작은 주체들이 AI를 이용해 개발할 수 있는 능력에 대해 경고했다.",
-      "link": "https://www.cityam.com/extremely-dangerous-ai-warfare-much-bigger-threat-than-llm-model-advances-experts-warn/",
-      "entities": [
-        "Max",
-        "AI",
-        "LLM",
-        "Nicholas"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42381",
-      "title": "먼데이닷컴, 감원을 AI 탓으로 돌린 최신 기술 기업 — 20개의 다른 사례",
-      "original_title": "",
-      "description": "올해 상당한 감원을 발표한 대형 기술 기업들의 목록을 역순으로 정리한 기사입니다. AI를 감원의 이유로 언급한 기업들이 어떤 곳인지 살펴볼 수 있습니다.",
-      "link": "https://techcrunch.com/2026/07/25/the-running-list-major-tech-layoffs-in-2026-where-employers-cited-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42383",
-      "title": "미국 기업들이 AI로 일자리를 축소할 수 있지만, 소규모 기업들은 이를 사용해 일자리를 지",
-      "original_title": "",
-      "description": "AI로 인한 대규모 인력 대체 소식은 과장된 측면이 있습니다. 소규모 기업들은 오히려 이를 통해 직원을 지원하고 있습니다. 최근 창문과 문을 판매하는 회사의 소유자를 만나봤는데, 그는 영업사원이 쇼룸에서 사용하는 AI 애플리케이션에 약 1만 달러를 투자했다고 밝혔습니다.",
-      "link": "https://www.theguardian.com/business/2026/jul/26/small-businesses-ai",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42382",
-      "title": "AI 코딩 튜터의 역설이 커지면서 교육자들이 실제 기술 테스트 방식을 재고하고 있습니다",
-      "original_title": "",
-      "description": "49개국의 763명의 컴퓨터 과학 교육자들에 대한 ACM 조사에 따르면, 68%가 AI 때문에 이미 시험 방식을 변경했으며 구술 시험, 감독 하의 시험, 프로젝트 기반 작업으로 전환하고 있습니다. 수업이 코드 작성을 넘어서 그것을 이해하는 방향으로 나아가고 있지만, 응답자 중 거의 절반은 여전히 우려를 표명하고 있습니다.",
-      "link": "https://the-decoder.com/the-ai-coding-tutor-paradox-grows-as-educators-scramble-to-rethink-how-they-test-real-skills/",
-      "entities": [
-        "AI",
-        "ACM"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42391",
-      "title": "AI 챗봇이 사람들의 관계에서 조용히 초대받지 않은 제3자가 되고 있다",
-      "original_title": "",
-      "description": "최근 퓨 리서치 센터의 조사에 따르면, 18세에서 29세 사이의 미국인 중 5명 중 1명이 감정적인 지원이나 조언을 위해 AI 챗봇을 사용한 경험이 있는 것으로 나타났습니다. 또 다른 유고브 조사에 따르면, 13%의 미국 성인이 AI 챗봇에게 비밀이나 문제를 털어놓았다고 합니다.",
-      "link": "https://thenextweb.com/news/ai-chatbots-relationships-emotional-support-sycophancy",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42392",
-      "title": "권위주의에 맞서 어떻게 해야 하는가? 소속감을 구축함으로써 | 줄리 페르난데스와 카트리나 ",
-      "original_title": "",
-      "description": "우리의 조사에 따르면, 8500만 명의 미국인이 실망하고 투표할 가능성이 낮아졌습니다. 민주주의의 부활은 공동체 의식에 달려 있으며, 이는 권위주의와 민주주의 사이의 기로에서 우리의 희망입니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/jul/26/how-to-defeat-authoritarianism-building-community",
-      "entities": [],
-      "date": "2026-07-26"
-    },
-    {
-      "id": "42358",
-      "title": "멜버른 외곽에 계획된 대형 데이터 센터, 채드스톤 쇼핑센터의 거의 여섯 배 크기",
-      "original_title": "",
-      "description": "제안된 AI 중심지에 대한 신중한 평가를 요구하는 청원에 3,600명 이상의 사람들이 서명했습니다. 이는 데이터 센터 붐에 대한 국가적 논쟁의 쟁점이 되고 있습니다. 일부 주민들은 우편함에서 편지를 받으면서 시작되었습니다. 이는 팀의 “친절한 소개”였습니다.",
-      "link": "https://www.theguardian.com/australia-news/2026/jul/26/mega-datacentre-planned-for-outer-melbourne-will-be-almost-six-times-the-size-of-chadstone-shopping-centre",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-26"
-    },
     {
       "id": "42431",
       "title": "중국 AI에 대한 공황의 의미",
@@ -8773,6 +8439,212 @@
       "link": "https://www.theguardian.com/us-news/2026/aug/24/lindsay-clancy-trial-social-media-conspiracy-theories",
       "entities": [],
       "date": "2026-08-24"
+    },
+    {
+      "id": "46593",
+      "title": "알리바바의 'Wan3.0', 텍스트·이미지·문서로 최대 30초 분량 AI 영상 생성",
+      "original_title": "",
+      "description": "알리바바의 영상 생성 모델인 'Wan3.0'은 텍스트, PDF, 파워포인트 파일을 활용해 최대 30초 길이의 영상을 제작할 수 있습니다. 30초 분량의 1080p 영상 제작 비용은 6달러이며, 알리바바는 AI 투자 확대로 인해 분기 수익이 전년 대비 75% 감소했습니다.",
+      "link": "https://the-decoder.com/alibabas-wan3-0-generates-ai-videos-up-to-30-seconds-long-from-text-images-and-documents/",
+      "entities": [
+        "Wan3.0",
+        "AI",
+        "PDF"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46605",
+      "title": "오픈AI, 일주일 사이 두 명의 영업 리더가 세일즈포스로 이직",
+      "original_title": "",
+      "description": "오픈AI의 미주 지역 영업 부사장이 부임 5개월 만에 사임했습니다. 디 인포메이션의 보도에 따르면, 케일린 보스는 전 상사였던 데니스 드레서 최고수익책임자(CRO)가 떠난 지 일주일 만에 세일즈포스로 복귀했습니다.",
+      "link": "https://thenextweb.com/news/openai-kaylin-voss-resigns-salesforce-rajic-sales",
+      "entities": [
+        "CRO"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46592",
+      "title": "퓨 리서치 센터, 챗GPT 출시 이후 웹상 AI 작성 텍스트 급증 확인",
+      "original_title": "",
+      "description": "퓨 리서치 센터가 약 50만 개의 영어 웹페이지를 분석한 결과, AI가 생성한 콘텐츠가 급격히 늘어난 것으로 나타났습니다. 챗GPT 출시 이후 게시된 페이지의 3분의 1 이상에서 기계가 작성한 텍스트의 흔적이 발견되었으며, 상업용 .com 사이트가 .edu나 .gov 도메인보다 AI 콘텐츠를 포함할 확률이 10배 더 높았습니다.",
+      "link": "https://the-decoder.com/pew-study-shows-ai-written-text-has-surged-across-the-web-since-late-2022/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46586",
+      "title": "강력한 AI 비서 '인스팅트(Instinct)', 개인정보 보호 및 보안 우려 제기",
+      "original_title": "",
+      "description": "초기 테스터들은 인스팅트의 뛰어난 성능에 열광하고 있지만, 일각에서는 이 AI 비서의 광범위한 접근 권한과 포괄적인 이용 약관, 그리고 사용자를 대신해 행동하는 기능이 불편한 대가를 치르게 할 수 있다고 지적합니다.",
+      "link": "https://techcrunch.com/2026/08/24/instincts-powerful-ai-assistant-is-raising-privacy-and-security-concerns/",
+      "entities": [
+        "Instinct",
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46596",
+      "title": "에이전트 AI 도입을 확대하려면 기업은 프로세스와 인력을 재설계해야 한다",
+      "original_title": "",
+      "description": "딜로이트의 최신 연구에 따르면, 미국 기업 중 15%만이 다중 에이전트를 활용한 체계적인 AI 도입 단계에 도달한 것으로 나타났습니다.",
+      "link": "https://www.zdnet.com/article/businesses-must-reinvent-their-processes-and-workforce-to-scale-agentic-ai-adoption/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46601",
+      "title": "영국, 우크라이나 전장 데이터 활용해 주요 시설 보호용 AI 훈련한다",
+      "original_title": "",
+      "description": "영국과 우크라이나는 시위대나 적대 국가가 군사 기지 및 핵심 인프라를 표적으로 삼는 것을 막기 위해 협약을 맺었습니다. 우크라이나 전장 데이터로 훈련된 AI 모델은 영국의 국방 시설, 철도, 발전소 등을 보호하는 데 사용될 예정입니다.",
+      "link": "https://www.theguardian.com/politics/2026/aug/24/uk-to-use-ukraine-battlefield-data-to-train-ai-to-protect-sensitive-sites",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46654",
+      "title": "라이너(Liner), 기업용 AI 검색 시장 진출 위해 3,610만 달러 투자 유치",
+      "original_title": "",
+      "description": "한국의 AI 검색 스타트업 라이너가 수백만 명이 사용하는 소비자용 리서치 플랫폼을 기업용 AI 비즈니스로 전환하기 위해 3,610만 달러 규모의 시리즈 C 투자를 유치했습니다. 이번 투자 라운드는 LB인베스트먼트가 주도했으며, 기존 투자자인 인터베스트, 아주IB투자, CJ인베스트먼트가 참여했습니다.",
+      "link": "https://thenextweb.com/news/liner-36m-series-c-ai-search-enterprise",
+      "entities": [
+        "AI",
+        "Liner"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46641",
+      "title": "AI가 수학의 종말을 의미할까? 아직은 아니다",
+      "original_title": "",
+      "description": "많은 수학자가 AI 기술이 자신의 직업을 사라지게 할까 봐 우려하고 있습니다. 하지만 인간 수학자에게는 여전히 AI가 갖지 못한 고유한 능력이 남아 있습니다. 최근 정상급 수학자 40여 명이 오픈AI 사무실에 모여 이 문제에 대해 논의하기도 했습니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/aug/25/ai-mathematics-careers",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46656",
+      "title": "메타, 오픈AI 복귀 7개월 만에 루크 메츠 영입",
+      "original_title": "",
+      "description": "루크 메츠가 오픈AI에 재입사한 지 7개월 만에 메타의 슈퍼인텔리전스 랩으로 자리를 옮겼습니다. 이번 주부터 출근하는 메츠는 메타의 AI 부문을 총괄하는 알렉산더 왕에게 보고하게 됩니다. 그는 1년도 채 되지 않는 기간 동안 세 곳의 연구소를 거치게 되었습니다.",
+      "link": "https://thenextweb.com/news/luke-metz-meta-superintelligence-labs-openai",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46661",
+      "title": "블랙베리 CEO, 로봇 공학이 가장 빠르게 성장하는 사업 중 하나라고 밝혀",
+      "original_title": "",
+      "description": "존 지아마테오 블랙베리 CEO는 자사의 소프트웨어 영역을 자동차 산업 너머로 확장함에 따라, 로봇 공학이 QNX 사업부에서 가장 빠르게 성장하는 분야 중 하나라고 언급했습니다.",
+      "link": "https://www.cnbc.com/2026/08/25/blackberry-qnx-robotics-physical-ai.html",
+      "entities": [
+        "QNX",
+        "CEO"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46653",
+      "title": "스케일러블 캐피털, 600억 유로 규모 고객 자산을 외부 AI 비서와 연동",
+      "original_title": "",
+      "description": "스케일러블 캐피털은 자사 투자 플랫폼을 챗GPT와 클로드에 개방하여, 고객들이 브로커 앱을 거치지 않고도 AI 비서를 통해 포트폴리오를 분석하고 거래할 수 있게 했습니다. 뮌헨에 본사를 둔 이 회사는 유럽 은행 중 최초로 이러한 기능을 도입했으며, 이는 업계의 새로운 변화를 예고하고 있습니다.",
+      "link": "https://thenextweb.com/news/scalable-capital-chatgpt-claude-trading",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46640",
+      "title": "AI가 만든 노래, 호주 음악 차트에서 퇴출",
+      "original_title": "",
+      "description": "이번 조치는 한 DJ가 AI를 사용해 리믹스한 마돈나의 노래가 호주 차트 1위를 차지했다고 인정한 지 몇 주 만에 내려졌습니다.",
+      "link": "https://www.bbc.co.uk/news/articles/c20vl4vm2pno?at_medium=RSS&at_campaign=rss",
+      "entities": [],
+      "date": "2026-08-25"
+    },
+    {
+      "id": "46752",
+      "title": "이미지 생성 AI '스테이블 디퓨전'의 개발사 스테빌리티 AI, 7,600만 달러 추가 투",
+      "original_title": "",
+      "description": "이번 투자 유치로 해당 기업의 누적 투자액은 총 2억 3,200만 달러가 되었습니다.",
+      "link": "https://techcrunch.com/2026/08/25/stability-ai-maker-of-image-generator-stable-diffusion-raises-76-million-in-fresh-funding/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46758",
+      "title": "러시아, 챗GPT를 이용해 서구권에서 친크렘린 서사를 퍼뜨리는 비밀 영향력 공작 수행",
+      "original_title": "",
+      "description": "오픈AI는 챗GPT를 악용해 소셜 미디어 게시물을 생성하던 러시아의 비밀 영향력 공작 계정들을 차단했습니다. 운영자들은 VPN을 통해 러시아에서 플랫폼에 접속했으며, 가상의 '국제 버크 연구소(International Burke Institute)'를 내세워 독일어 텔레그램 콘텐츠 등을 유포했습니다.",
+      "link": "https://the-decoder.com/russia-used-chatgpt-to-run-a-covert-influence-campaign-pushing-pro-kremlin-narratives-across-the-west/",
+      "entities": [
+        "International",
+        "Burke",
+        "Institute"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46767",
+      "title": "왜 AI 기계의 폭주에 대한 경고는 무시되었는가 | 독자 투고",
+      "original_title": "",
+      "description": "조나단 미치는 1970년대 자동화로 인한 사회적 강압을 우려했던 아버지의 노력을 회고합니다. 질 레포어는 왜 아무도 AI 혁명이 가져올 위협에 대한 경고를 듣지 않았는지 의문을 제기하며, 이에 대한 독자들의 의견을 담았습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/25/why-the-threat-from-the-rampaging-ai-machine-went-ignored",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46802",
+      "title": "할인 정보: 갤럭시 S26 울트라 번들 최대 370달러 할인, 모토 태그 2 개당 17.5",
+      "original_title": "",
+      "description": "오늘 9to5Toys 런치 브레이크에서는 삼성 갤럭시 S26 울트라 자급제 모델을 최대 340달러 할인하거나, 갤럭시 워치 9/울트라 2 번들 구성으로 최대 370달러 저렴하게 구매할 수 있는 기회를 제공합니다. 또한 모토 태그 2와 TCL의 2026년형 구글 AI TV 시리즈도 파격적인 할인가에 만나보실 수 있습니다.",
+      "link": "https://9to5google.com/2026/08/25/deals-galaxy-s26-ultra-moto-tag-2-tcl-google-ai-tv/",
+      "entities": [
+        "AI",
+        "S26",
+        "TV"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46761",
+      "title": "앤스로픽의 클로드와 코워크(Cowork), 이제 사용자의 기억을 공유한다 (거부 가능)",
+      "original_title": "",
+      "description": "앤스로픽이 클로드 채팅과 코워크 메모리를 통합하면서 AI가 무엇을 기억하는지, 그리고 그 편의성이 개인정보 보호의 위험을 감수할 가치가 있는지에 대한 의문이 제기되고 있습니다.",
+      "link": "https://www.zdnet.com/article/anthropic-claude-and-cowork-share-memories-now-unless-you-opt-out/",
+      "entities": [
+        "Cowork"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46754",
+      "title": "벤치마크 결과, 오픈AI의 '할라피뇨' 칩은 대규모 고속 추론에 최적화된 것으로 확인",
+      "original_title": "",
+      "description": "세미애널리시스(SemiAnalysis)의 InferenceX 벤치마크 테스트 결과, 할라피뇨는 현재 사용 가능한 최첨단 칩보다 사용자당 토큰 처리량과 킬로와트당 처리량 모두에서 더 뛰어난 성능을 기록했습니다.",
+      "link": "https://techcrunch.com/2026/08/25/openais-jalapeno-chip-is-built-for-fast-inference-at-scale-benchmarks-show/",
+      "entities": [
+        "SemiAnalysis",
+        "InferenceX"
+      ],
+      "date": "2026-08-26"
     }
   ]
 }
