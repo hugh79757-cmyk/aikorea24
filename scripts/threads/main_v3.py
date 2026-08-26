@@ -120,10 +120,14 @@ def validate_final_cards(cards):
         return False, issues
     return True, []
 
-def run_v3(dry_run=False):
+def run_v3(dry_run=False, format_choice="D"):
     max_retries = 5
     retry_delays = [60, 60, 60, 60]  # 전부 1분
     failed_article_ids = failed_articles.load_failed_articles()
+    _fmt = str(format_choice or "D").strip() or "D"
+    if _fmt not in ("D", "contrast"):
+        _fmt = "D"
+    log(f'  📌 format: {_fmt}')
 
     for attempt in range(1, max_retries + 1):
         if attempt > 1:
@@ -143,6 +147,112 @@ def run_v3(dry_run=False):
                 continue
             return
         log(f'  기사: {len(articles)}개 로드')
+
+        # --format contrast branch: supports dry-run + publish
+        if _fmt == "contrast":
+            # seed selection: articles[0] (exclude failed ids if present)
+            seed_article = None
+            for a in articles:
+                sid = str(a.get("id", "")).strip()
+                if sid and sid not in failed_article_ids:
+                    seed_article = a
+                    break
+            if not seed_article:
+                seed_article = articles[0] if articles else None
+            if not seed_article:
+                log('  기사 없음 → 스킵 (contrast)')
+                continue
+            log(f'  [contrast] seed: id={seed_article.get("id")} title="{(seed_article.get("title") or "")[:40]}"')
+            try:
+                from pipeline.threads.contrast.orchestrator import run_contrast_thread
+            except Exception as e:
+                log(f'  ❌ contrast orchestrator import 실패: {e}')
+                continue
+            result_c = run_contrast_thread(seed_article, articles)
+            if not result_c or not result_c.get("cards"):
+                log('  ❌ contrast 쓰레드 생성 실패 → drop')
+                sid = str(seed_article.get("id", "")).lstrip("#").strip()
+                if sid:
+                    failed_articles.save_failed_article(sid, reason="contrast_write_failed", title=seed_article.get("title", ""), url=seed_article.get("link", ""))
+                continue
+            cards_c = result_c["cards"]
+            link_c = result_c.get("link", "") or seed_article.get("link", "")
+            # 3중 방어: validate_final_cards (500/미완결/중복) + validator validate_final_output
+            valid_c, issues_c = validate_final_cards(cards_c)
+            if not valid_c:
+                log('  ❌ contrast 최종 검증 실패 — 발행 중단')
+                continue
+            try:
+                from pipeline.threads.validator import validate_final_output as _vfo
+                vfo_ok, vfo_reason = _vfo(cards_c)
+                if not vfo_ok:
+                    log(f'  ❌ contrast validate_final_output 실패: {vfo_reason}')
+                    continue
+            except Exception as e:
+                log(f'  ⚠️ contrast validate_final_output 검사 오류: {e}')
+                continue
+            if dry_run:
+                # dry-run: draft only — no posted.json / vectorize / telegram side effects
+                print(f'\n{"="*60}')
+                print(f'[contrast][DRY RUN] Hook: {(seed_article.get("title") or "")[:60]}')
+                print(f'{"="*60}')
+                print('\n---\n'.join(cards_c))
+                if link_c:
+                    print(f'\n--- 링크 답글: {link_c} ---')
+                print(f'\n{"="*60}')
+                for i, c in enumerate(cards_c, 1):
+                    print(f'  Card {i}: {len(c)}자 {"?" if c.strip().endswith("?") or c.strip().endswith("까") else ""}')
+                log(f'[DRY RUN][contrast] draft only — posted.json/vectorize untouched, draft={result_c.get("draft_path","")}')
+                return
+            # publish path (dry_run=False)
+            from publisher import publish_thread_chain as _pub_c
+            log('  발행 시작... [contrast]')
+            pub_result = _pub_c(cards_c, seed_article, link_url=link_c)
+            if pub_result:
+                log(f'  ✅ contrast 발행 완료: 루트 ID {pub_result}')
+                _log_api_based_publish({"hook": seed_article.get("title",""), "article_ids": [str(seed_article.get("id",""))]}, seed_article, root_post_id=pub_result)
+                from db_reader import load_posted as _load_posted_c2, save_posted as _save_posted_c2, normalize_url as _norm_c2
+                posted_c2 = _load_posted_c2()
+                before_c2 = {k: len(v) for k, v in posted_c2.items() if isinstance(v, list)}
+                posted_c2.setdefault('posted_article_meta', {})
+                sid_c2 = str(seed_article.get("id", "")).lstrip("#").strip()
+                if sid_c2 and sid_c2 not in posted_c2.get('posted_ids', []):
+                    posted_c2.setdefault('posted_ids', []).append(sid_c2)
+                    posted_c2['posted_article_meta'][sid_c2] = {
+                        'title': seed_article.get('title', '') or '',
+                        'original_title': seed_article.get('original_title', '') or '',
+                        'description': seed_article.get('description', '') or '',
+                    }
+                    link_n2 = _norm_c2(seed_article.get('link', ''))
+                    if link_n2 and link_n2 not in posted_c2.get('posted_links', []):
+                        posted_c2.setdefault('posted_links', []).append(link_n2)
+                _save_posted_c2(posted_c2)
+                from v3.narrative_pitcher import save_pitch_to_history as _sph_c
+                try:
+                    _sph_c({"hook": seed_article.get("title","")[:40], "article_ids": [sid_c2]})
+                except Exception:
+                    pass
+                try:
+                    from pipeline.infra.vectorize_client import embed_article as _ea_c2, upsert_vectors as _uv_c2
+                    vec2 = _ea_c2(seed_article)
+                    if vec2:
+                        _uv_c2([vec2])
+                except Exception:
+                    pass
+                after_c2 = {k: len(v) for k, v in posted_c2.items() if isinstance(v, list)}
+                log(f'[발행 완료][contrast] posted.json 업데이트: posted_ids {before_c2.get("posted_ids",0)}→{after_c2.get("posted_ids",0)}')
+                print(f'\n{"="*60}')
+                print(f'[contrast] Hook: {(seed_article.get("title") or "")[:60]}')
+                print(f'{"="*60}')
+                print('\n---\n'.join(cards_c))
+                if link_c:
+                    print(f'\n--- 링크 답글: {link_c} ---')
+                print(f'\n{"="*60}')
+                return
+            else:
+                log('  ❌ contrast 발행 실패 — 2시간 후 재시도')
+                send_telegram(f'❌ Threads contrast 발행 실패: {(seed_article.get("title","") or "")[:60]}')
+                return
 
         # 2. 피치 생성 (2단계: 브리핑 우선 → 전체 fallback)
         from v3.narrative_pitcher import get_pitches
@@ -378,9 +488,10 @@ def main():
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true', help='발행 없이 글만 생성')
+    parser.add_argument('--format', choices=['D', 'contrast'], default='D', help='Threads format: D(기본 5카드 브리핑) vs contrast(대비 스토리텔링 7→5)')
     args = parser.parse_args()
 
-    run_v3(dry_run=args.dry_run)
+    run_v3(dry_run=args.dry_run, format_choice=args.format)
 
 
 if __name__ == '__main__':

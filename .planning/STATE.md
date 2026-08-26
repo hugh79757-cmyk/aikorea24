@@ -209,6 +209,7 @@ None.
 | 2026-07-26 | fix-blog-deploy-condition | blog_draft_generator.py 배포 조건 수정: `generated`만 체크 → `generated or untracked_blog_files`로 확대. 미커밋 블로그 6건(7/25-007~012) 감지 시 배포 실행 |
 | 2026-08-13 | fix-stale-skip-deep-docs | run_pipeline.py --skip-deep 제거(9fa7b05) 후 stale 문서화 수정: TECHNICAL.md, SKILLS/01-daily-news-pipeline.md, SKILLS/04-deep-article-generator.md에서 --skip-deep/--no-skip-deep 참조 제거 |
 | 2026-08-13 | decouple-tools-collector-instagram | tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 |
+| 2026-08-26 | verify-publish-isolation | 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) |
 
 ### Deferred Items
 
@@ -222,3 +223,10 @@ None.
 Current session: 2026-07-26T21:02:00.000Z
 Stopped at: Phase 29/30/31 description 개선 — 백필 스크립트 생성, _extract_first_sentence 수정, blog_draft_generator prompt 개선 (미커밋)
 Next: 변경사항 커밋 및 배포, Phase 32-36 확인 및 실행
+
+---
+phase_37: 2026-08-26 Threads Contrast Pivot (blog→Threads 7→5 dry-run only, no publish)
+  status: complete (impl done, dry-run verified, publish blocked)
+  plans: 3/3 (37-01 Foundation, 37-02 Writer, 37-03 Orchestrator dry-run)
+  tests: 37 new (19 extractor +10 background +8 writer/orch) + 326 existing = 326 pass / 2 pre-existing fail
+  guard: --format contrast only with --dry-run, orchestrator never calls publisher
