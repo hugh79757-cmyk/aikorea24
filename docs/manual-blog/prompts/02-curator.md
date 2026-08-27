@@ -19,16 +19,28 @@
 - 실제 해결 안 되고 가려진 근본 문제:
 → 이 대비 = 글 전체 논지
 
-[4단계: 서사 구조 7단락]
+[4단계: 서사 구조 7단락 → 5카드 압축]
 각 단락 3-4문장, 구체적 사실 1개 이상 포함. 순서 엄수:
 
 1. 놀라움: 반전 요소 먼저 제시
 2. 배경: 경위 시간순
 3. 전개: 논란 확산, 공식 대응
 4. 예상 밖 반응: 당사자 실제 반응 (긴장 완화 반전)
-5. 핵심 인물 등장: 진짜 피해자/이해관계자 신규 소개
+5. 핵심 인물 등장: 진짜 피해자/이해관계자 신규 소개 (예: James Stenham MEAA fed rep, 20yr Hamilton/Phantom)
 6. 논지 심화: 그 인물 시각에서 규정/해결책 허점 지적
 7. 결론: 3단계 대비 다시 정리
+
+[4-1: 7→5 매핑 — Threads Format D]
+- C1: 1+2 놀라움 (반전 먼저 + 경위 1줄)
+- C2: 2+3 배경전개 (but_line 대비 논지, 논란 확산)
+- C3: 4 반전 (예상 밖 반응 — 증거 A, 예: Powaz "great move")
+- C4: 5+6 핵심인물+논지 (진짜 피해자 + 허점 — 증거 B)
+- C5: 7 요약 (대비 재정의, 열린질문 ?/열린어미 강제)
+- 각 카드 350-450자 target, 500 hard limit, ~임 종결, 빈줄 리듬, 카드당 사실 1개+ 필수
+- 예시 수치: 4,800만, 2nd/4th, 16 weeks, 날짜 Aug24/Aug31/Aug28
+
+[워크플로우 5단계 게이트 — SPEC-5STEP.md 참조]
+3+ media(ABC/AFR/RollingStone/AlJazeera/ARIA) → 상위주제 1문장("AI impact on music jobs") → 5 categories 각 3개(실명+직함/경력/수치/날짜/인용) → 대비점 1("rule-makers vs unprotected") → 7→5 배치, 카드별 사실 1개+ + prompt에 multiple sources + contrast 명시. background 1건(Guardian/SMH/ABC Listen KeyComp) 별도 탐색, total 4 articles.
 
 [제약]
 - 검증 가능한 사실만. 과장/감정 표현 금지.

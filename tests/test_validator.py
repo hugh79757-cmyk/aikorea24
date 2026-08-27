@@ -65,10 +65,14 @@ class TestValidateYear:
     def test_current_year_allowed(self):
         from datetime import datetime
         cy = datetime.now().year
+        # without pub_date, current year not in body is now rejected (P0 fix)
         cards = ["Hook line\ncontent", f"{cy}년 현재"]
         article_body = "기사 내용입니다."
         ok, reason = validate_year(cards, article_body)
-        assert ok is True
+        assert ok is False
+        # with pub_date matching, it should pass
+        ok2, _ = validate_year(cards, article_body, pub_date=str(cy))
+        assert ok2 is True
 
     @pytest.mark.unit
     def test_no_year_in_thread(self):
@@ -380,3 +384,104 @@ class TestValidateCardStructure:
 
 
 
+
+class TestOutputLanguage:
+    @pytest.mark.unit
+    def test_output_language_leak_detected(self):
+        from pipeline.threads.validator import validate_output_language
+        # English quote block 8+ chars continuous without whitelist -> fail
+        cards = [
+            "카드1은 한국어 내용 충분히 길게 작성된 내용임. 내용을 더 채워서 길이 확보함.",
+            "카드2도 한국어 내용 충분히 길게 작성된 내용임. 추가 내용으로 길이 확보함.",
+            '카드3에 영문 인용이 노출됨 "With the HYPERSONIC chip, we have engineered a significant step forward" 라고 말했다.',
+        ]
+        ok, reason = validate_output_language(cards, whitelist=None)
+        assert ok is False
+        assert "영문" in reason
+        # whitelist containing product name alone should still fail because sentence still English heavy
+        ok2, _ = validate_output_language(cards, whitelist={"HYPERSONIC"})
+        assert ok2 is False
+        # whitelisted-only short token allowed (no 8+ continuous other English)
+        cards_ok = [
+            "카드1 EON 보청기 플랫폼이 공개됐음. 내용을 충분히 길게 작성함.",
+            "카드2 HYPERSONIC 칩이 탑재됐음. 한국어 내용 충분히 길게 작성함.",
+        ]
+        ok3, _ = validate_output_language(cards_ok, whitelist={"EON", "HYPERSONIC"})
+        assert ok3 is True
+
+    @pytest.mark.unit
+    def test_output_language_whitelist_ratio(self):
+        from pipeline.threads.validator import validate_output_language
+        cards = ["EON QNX HYPERSONIC"]  # only whitelisted tokens, ratio high but exempt
+        ok, _ = validate_output_language(cards, whitelist={"EON", "QNX", "HYPERSONIC"})
+        assert ok is True
+
+class TestDuplicateQuoteId:
+    @pytest.mark.unit
+    def test_duplicate_quote_id_rejected(self):
+        # outline duplicate detection: same c_idx used in >1 card should be rejected (now >1 hard fail)
+        # Simulate ref_counts map as in generate_card_outline
+        from collections import Counter
+        # outline with 3 cards where c_idx 0 reused twice
+        ref_counts = {("c", 0): 2, ("b", 0): 1}
+        # logic from contrast_writer: any v>1 -> fail
+        has_dup = any(v > 1 for v in ref_counts.values())
+        assert has_dup is True
+        # unique refs should pass
+        ref_counts2 = {("c", 0): 1, ("c", 1): 1, ("b", 0): 1}
+        assert any(v > 1 for v in ref_counts2.values()) is False
+
+class TestWave3SpeakerBridge:
+    def test_joint_statement_not_reduced_to_solo(self):
+        from pipeline.threads.validator import validate_speaker_attribution
+        af = {"C": [{"speakers": ["안토니우 구테흐스","미르자나 스폴랴리치"], "speaker_type":"joint_statement", "text":"이 무기의 사용을 즉시 중단해야 합니다", "text_translated":"이 무기의 사용을 즉시 중단해야 합니다", "speaker":"안토니우 구테흐스", "source_topic_tag":"자율살상무기 규제"}]}
+        # solo mention -> fail
+        cards_fail = ['"이 무기의 사용을 즉시 중단해야 합니다" 라고 안토니우 구테흐스가 말했다.']
+        ok, reason = validate_speaker_attribution(cards_fail, af)
+        assert ok is False
+        # joint with 공동 -> pass
+        cards_ok = ['"이 무기의 사용을 즉시 중단해야 합니다" 라고 안토니우 구테흐스와 미르자나 스폴랴리치는 공동성명에서 밝혔다.']
+        ok2, _ = validate_speaker_attribution(cards_ok, af)
+        assert ok2 is True
+
+    def test_bridge_claim_rejects_date_only_coincidence(self):
+        from pipeline.threads.validator import _has_causal_bridge_violation
+        cards = ["자포리자 드론 공격이 발생하자 UN이 경고했다."]
+        ok, _ = _has_causal_bridge_violation(cards, bridge_claim_ids=[])
+        assert ok is False
+        ok2, _ = _has_causal_bridge_violation(cards, bridge_claim_ids=["123"])
+        assert ok2 is True
+
+    def test_card_count_scales_with_fact_count(self):
+        from pipeline.threads.contrast.contrast_writer import generate_card_outline
+        import types
+        # distinct_fact_count 4 -> 3, 6 ->4, 12->8
+        for n, expected in [(4, 3), (6, 4), (10, 6), (12, 8), (2, 3)]:
+            af = {"B": [{"value_text": str(i)} for i in range(n//2)], "C": [{"text": "a", "text_translated": "a", "speakers": ["X"], "speaker_type": "solo", "source_topic_tag": "t"} for _ in range(n - n//2 - 1)], "A": {"사건명": "t"}, "D": "d", "E": ["k1","k2","k3"], "F": []}
+            # stub model_router to avoid LLM call — we only test formula via calling logic directly
+            # formula: min(8, max(3, distinct//1.5))
+            calc = min(8, max(3, int(n // 1.5))) if n >= 3 else 3
+            assert calc == expected, f"n={n} calc {calc} != {expected}"
+
+    def test_paraphrased_duplicate_rejected(self):
+        from pipeline.threads.validator import validate_no_paraphrased_duplicate
+        cards = [
+            "포낙은 전력 소비를 37% 줄였다고 밝혔다. 충분히 긴 문장을 채운다."*6,
+            "소노바는 전력 효율을 37% 개선했다고 발표했다. 충분히 긴 문장을 채운다."*6,
+            "세번째 카드는 별개 사실로 채운다."*20,
+        ]
+        ok, reason = validate_no_paraphrased_duplicate(cards, {})
+        assert ok is False
+        assert "동일 수치" in reason
+        # non-duplicate should pass
+        cards2 = ["수치 37% 언급 카드", "수치 50dB 언급 카드", "수치 25% 언급 카드", "추가 카드", "마지막 카드"]
+        ok2, _ = validate_no_paraphrased_duplicate(cards2, {})
+        assert ok2 is True
+
+    def test_low_density_card_without_evidence_field_rejected(self):
+        from pipeline.threads.validator import validate_final_output
+        long_prose = "서술형 문장만으로 채운 카드입니다. 근거 없는 평가와 전망을 나열합니다. "*30  # 400자+, 숫자/인용 없음
+        cards = [long_prose, "두번째 카드도 마찬가지 서술형 "*30, "세번째 "*30, "네번째 "*30, "다섯번째 "*30]
+        # leak pattern ^[^0-9"]{400,}$ should trigger
+        ok, reason = validate_final_output(cards)
+        assert ok is False

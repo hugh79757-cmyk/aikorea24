@@ -118,7 +118,7 @@ def execute_d1(sql):
 
 def get_today_briefing_id():
     """오늘 발행된 브리핑 ID 조회 (없으면 None)."""
-    today = date.today().strftime("%Y-%m-%d")
+    today = datetime.now(KST).strftime("%Y-%m-%d")
     try:
         rows = query_d1(
             f"SELECT id FROM briefings WHERE date LIKE '{today}%' AND status = 'published' ORDER BY date DESC LIMIT 1"
@@ -561,7 +561,7 @@ from pipeline.infra.telegram import send_telegram
 # ============================================
 def main():
     load_env()
-    today_str = date.today().strftime("%Y-%m-%d")
+    today_str = datetime.now(KST).strftime("%Y-%m-%d")
     log(f"블로그 초안 생성 시작 ({today_str})")
     print()
 

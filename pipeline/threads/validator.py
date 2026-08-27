@@ -6,6 +6,34 @@ from collections import Counter
 
 from pipeline.threads.pitch import detect_prompt_leak
 
+# Contrast pivot leak guard — ensure contrast system labels never leak to cards.
+# detect_prompt_leak covers these via pitch.py LEAKED_PROMPT_PATTERNS/_SYSTEM_PROMPT_FRAGMENTS.
+# This block documents the 3 contrast patterns for validator 3중 방어 traceability.
+_CONTRAST_LEAK_PATTERNS = [
+    r'상위\s*주제\s*[:：]',
+    r'근본\s*문제\s*[:：]',
+    r'대비\s*논지\s*[:：]',
+    r'차트는\s*정리됐고',
+    r'차트가\s*정리됐고',
+    r'기술적\s*검증\s*차원을\s*넘어',
+    r'영국\s*외\s*미국\s*사례에서도',
+    r'730억\s*갤런',
+    r'구원투수',
+    r'^[^0-9"\“\”]{400,}$',  # Wave4: 근거 필드 없이 400자 이상 서술형만 → low density hard fail
+]
+_CONTRAST_FRAGMENTS = ['상위 주제', '근본 문제', '대비 논지', '차트는 정리됐고', '기술적 검증 차원을 넘어', '영국 외 미국', '730억 갤런', '구원투수']
+
+# Wave3: causal bridge leak — bridge_claim 없이 인과 접속으로 seed/background를
+# 한 사건처럼 이어붙이는 서술 차단. validate_final_output이 _CONTRAST_LEAK_PATTERNS로 검사.
+_CAUSAL_BRIDGE_LEAK_PATTERNS = [
+    r'그러자',
+    r'이에\s*따라',
+    r'이러한\s*상황에서',
+    r'발생하자.*경고',
+    r'사건에\s*대한\s*반응',
+]
+_CONTRAST_LEAK_PATTERNS = _CONTRAST_LEAK_PATTERNS + _CAUSAL_BRIDGE_LEAK_PATTERNS
+
 MODEL_MESSAGE_PATTERNS = [
     r'^수정할\s+글자\s+단위',
     r'^원본을\s+그대로\s+반환',
@@ -47,8 +75,8 @@ ADDITIONAL_MESSAGE_PATTERNS = [
 
 ALL_MESSAGE_PATTERNS = MODEL_MESSAGE_PATTERNS + ADDITIONAL_MESSAGE_PATTERNS
 
-FORMAT_CARD_COUNTS = {'D': 5}
-FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 5)}
+FORMAT_CARD_COUNTS = {'D': 5, 'contrast': 8}
+FORMAT_CARD_COUNT_TOLERANCE = {'D': (5, 5), 'contrast': (3, 8)}
 
 STOPLIST = {
     '무단전재', '수정하거나', '관련기사', '보도했다', '보도했음',
@@ -78,8 +106,8 @@ def validate_cards(cards, pitch, format_choice='D'):
     return True, "OK"
 
 
-def validate_year(cards, article_body_text):
-    """연도 검증: 쓰레드 본문(1번 카드 첫 줄 제외)의 연도가 기사 본문에 있는 연도인지 확인"""
+def validate_year(cards, article_body_text, pub_date=None):
+    """연도 검증: 쓰레드 연도가 기사 본문 연도 또는 pub_date 연도만 허용"""
     body_text = article_body_text or ''
     current_year = datetime.now().year
 
@@ -99,7 +127,13 @@ def validate_year(cards, article_body_text):
     if not rest_years:
         return True, "OK"
 
-    allowed = body_years | {current_year}
+    pub_years = set()
+    if pub_date:
+        for m in re.finditer(r'(?<!\d)20\d{2}(?!\d)', str(pub_date)):
+            pub_years.add(int(m.group()))
+        allowed = body_years | pub_years
+    else:
+        allowed = body_years
     invented = rest_years - allowed
     if invented:
         return False, f"만들어진 연도: {invented}"
@@ -173,6 +207,34 @@ def validate_no_foreign_language(cards: list[str]) -> tuple[bool, str]:
     return True, "OK"
 
 
+def validate_output_language(cards: list[str], whitelist: set[str] | None = None, target_lang: str = "ko") -> tuple[bool, str]:
+    """출력 언어 순수성 검증: 라틴 연속 8자 이상 또는 라틴 15% 초과 시 hard fail.
+    whitelist에 포함된 고유명사(EON, QNX 등 seed 본문 고유명사)는 예외.
+    """
+    wl = set(w or "" for w in (whitelist or set()))
+    wl_norm = {w.lower() for w in wl if w}
+    for i, card in enumerate(cards, 1):
+        work = card
+        # remove whitelisted tokens before check (case-insensitive)
+        if wl:
+            for w in wl:
+                if w and len(w) >= 2:
+                    work = re.sub(re.escape(w), " ", work, flags=re.IGNORECASE)
+        latin_chars = re.findall(r'[A-Za-z]', work)
+        total = len(work.strip())
+        # 연속 라틴 8자 이상
+        if re.search(r'[A-Za-z]{8,}', work):
+            # find offending snippet
+            m = re.search(r'[A-Za-z]{8,}[A-Za-z\s\.,\'\"\-]*', work)
+            snippet = m.group(0)[:40] if m else ""
+            return False, f"Card {i}: 영문 블록 노출 ({snippet.strip()}) — whitelist 외 라틴 8자 연속"
+        # 전체 라틴 비율 15% 초과
+        if total > 20 and len(latin_chars) / max(1, total) >= 0.15:
+            ratio = len(latin_chars) / total
+            return False, f"Card {i}: 영문 비율 초과 {ratio:.0%} ({len(latin_chars)}/{total}) — whitelist 외"
+    return True, "OK"
+
+
 # === 최종 출력 통합 검증 (3차 방어) ===
 _KOREAN_PATTERN = re.compile(r'[가-힣]')
 
@@ -182,10 +244,13 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
     검증 순서: 프롬프트 노출 → unicodedata NFKC 정규화 → 외국어 → 한글 비율 → 모델 메시지
     """
     for i, card in enumerate(cards, 1):
-        # 1. 프롬프트 노출 검사
+        # 1. 프롬프트 노출 검사 (pitch patterns + contrast literals)
         leaked, reason = detect_prompt_leak(card)
         if leaked:
             return False, f"Card {i}: {reason}"
+        for pat in _CONTRAST_LEAK_PATTERNS:
+            if re.search(pat, card):
+                return False, f"Card {i}: contrast 리터럴 노출 — {pat}"
         
         # NFKC 정규화: 전각/반각 문자 통합 (중국어·일본어 감지 정확도 향상)
         card_normalized = unicodedata.normalize('NFKC', card)
@@ -371,7 +436,7 @@ def validate_card_structure(cards: list[str]) -> tuple[bool, str]:
 def _validate_last_card_opens_reply(cards: list[str]) -> tuple[bool, str]:
     """마지막 콘텐츠 카드가 답글을 유도하는 열린 형태로 끝나는지 검사.
 
-    CARD 5 RULE 구현: 마지막 카드가 물음표 또는 열린 어미로 종결되어야 함.
+    CARD 5 RULE: D=열린질문, contrast=확정통찰 모두 허용 (통찰은 ~임 종결)
     닫힌 종결("~했다", "~이다" 등)로 끝나면 거부.
     """
     if len(cards) < 4:
@@ -381,17 +446,110 @@ def _validate_last_card_opens_reply(cards: list[str]) -> tuple[bool, str]:
     if not last_card:
         return False, "마지막 카드가 비어있음"
 
-    last_char = last_card[-1] if last_card else ""
-    open_endings = ("?", "까", "까?", "일수록", "인데", "을까", "일까", "ㄹ까")
+    # strip trailing quotes/period for check (e.g. "있음." -> "있음")
+    check_card = last_card.rstrip('"」』》])} ').rstrip('.…! ')
+    last_char = check_card[-1] if check_card else ""
+    open_endings = ("?", "까", "까?", "일수록", "인데", "을까", "일까", "ㄹ까", "임", "했음", "있음", "됨", "함", "남", "잡음", "줌", "봄", "음", "했음.")  # contrast 확정 통찰 허용 — 줌/봄/음 포괄
 
-    if last_char == "?":
+    if check_card.endswith("?") or last_char == "?":
         return True, "OK"
 
     for ending in open_endings:
-        if last_card.endswith(ending):
+        if check_card.endswith(ending):
             return True, "OK"
 
     return False, f"마지막 카드가 닫힌 종결로 끝남 — 답글 유도형 필요 (끝: '{last_card[-20:]}' )"
+
+
+# === Wave3: 인용 귀속 검증 (joint_statement 단독 화자 축약 차단) ===
+def validate_speaker_attribution(cards: list[str], extracted_facts: dict) -> tuple[bool, str]:
+    """joint_statement 인용을 단독 화자로 축약했는지 검증 (hard fail).
+
+    extracted_facts["C"] 항목 중 speaker_type == "joint_statement" 이고 speakers 2인 이상인 것만 검사.
+    해당 인용문(text_translated 앞 10자)을 담은 카드가 speakers 중 1명만 언급하고
+    "공동" 키워드도 없으면 귀속 오류로 판정.
+    """
+    c_items = (extracted_facts or {}).get('C') or []
+    if not cards or not c_items:
+        return True, "OK"
+
+    for c in c_items:
+        if not isinstance(c, dict):
+            continue
+        if (c.get('speaker_type') or 'solo') != 'joint_statement':
+            continue
+        speakers = [str(s).strip() for s in (c.get('speakers') or []) if str(s or '').strip()]
+        if not speakers:
+            solo = str(c.get('speaker') or '').strip()
+            speakers = [solo] if solo else []
+        if len(speakers) < 2:
+            continue  # 병기할 화자가 없음 → 검사 불가
+
+        quote = str(c.get('text_translated') or c.get('text') or '').strip()
+        frag = quote[:10]
+        if len(frag) < 4:
+            continue  # 대조할 인용 조각 부족
+
+        for i, card in enumerate(cards, 1):
+            if frag not in card:
+                continue
+            if '공동' in card:
+                break
+            found = [s for s in speakers if s in card]
+            if len(found) >= 2:
+                break
+            return False, (
+                f"Card {i}: joint_statement 인용을 단독 화자로 축약 "
+                f"(언급 {found or ['없음']} / 필요 {speakers}) — '공동' 병기 또는 화자 2인 이상 필요"
+            )
+
+    return True, "OK"
+
+
+def validate_no_paraphrased_duplicate(cards: list[str], extracted_facts: dict | None = None) -> tuple[bool, str]:
+    """동일 수치/인용을 표현만 바꿔 재등장시키는지 정규화 대조 (Wave4).
+    숫자 추출 + 화자명 매칭으로 2개 이상 카드에서 동일 원자적 사실 재사용 탐지 → hard fail.
+    """
+    if not cards:
+        return True, "OK"
+    # 수치 중복: 각 카드의 숫자 토큰 집합
+    per_card_nums: list[set[str]] = []
+    per_card_quotes: list[set[str]] = []
+    for c in cards:
+        nums = set(re.findall(r'\d[\d,\.]*\s*[%‰]?|\d+', c))
+        # 정규화: 콤마/공백 제거, 소수점 유지
+        norm_nums = {re.sub(r'[\s,]+', '', n).lower() for n in nums}
+        per_card_nums.append(norm_nums)
+        # 인용 조각: 따옴표 안 8자 이상
+        qs = set(re.findall(r'"([^"]{8,})"', c) + re.findall(r'“([^”]{8,})”', c))
+        norm_q = {re.sub(r'\s+', '', q)[:20] for q in qs}
+        per_card_quotes.append(norm_q)
+    for i in range(len(cards)):
+        for j in range(i + 1, len(cards)):
+            dup_nums = per_card_nums[i] & per_card_nums[j]
+            # 동일 숫자 2카드 이상 등장 시 hard fail (단 1-2자리 일반 숫자는 제외)
+            dup_nums_filtered = {n for n in dup_nums if len(re.sub(r'[^0-9]', '', n)) >= 2}
+            if dup_nums_filtered:
+                return False, f"Card {i+1}↔{j+1}: 동일 수치의 표현만 바꾼 중복 — {sorted(dup_nums_filtered)[:2]}"
+            dup_q = per_card_quotes[i] & per_card_quotes[j]
+            if dup_q:
+                return False, f"Card {i+1}↔{j+1}: 동일 인용의 재서술 중복 — {list(dup_q)[0][:12]}"
+    return True, "OK"
+
+
+def _has_causal_bridge_violation(cards: list[str], bridge_claim_ids) -> tuple[bool, str]:
+    """bridge_claim 없이 인과 접속사로 서로 다른 출처를 한 사건처럼 잇는지 검사.
+
+    bridge_claim_ids가 있으면 인과 서술이 근거를 가진 것으로 보고 통과.
+    Returns (True, OK) on pass, (False, reason) on violation.
+    """
+    if bridge_claim_ids:
+        return True, "OK"
+    for i, card in enumerate(cards or [], 1):
+        for pat in _CAUSAL_BRIDGE_LEAK_PATTERNS:
+            if re.search(pat, card):
+                return False, f"Card {i}: bridge_claim 없는 인과 접속 — {pat}"
+    return True, "OK"
 
 
 

@@ -5,7 +5,15 @@ from pipeline.infra.logger import get_scrubbed_logger
 logger = get_scrubbed_logger(__name__)
 
 
-def run_contrast_thread(seed_article: dict, all_articles: list | None = None) -> dict | None:
+# SPEC Wave5: contrast card-count targets — soft, not hard floors
+# - B soft-target: 3+ uncapped B cards; post-filter cut at 6 (keep ≤6 B).
+# - C soft-target: 2+ uncapped C cards; post-filter cut at 4 (keep ≤4 C).
+# - Straight news (body 1500-2000 chars, distinct_fact_count 4-5 even with
+#   max background) → emit 3-4 cards as normal; NOT forced up to 8.
+# - Hard minimums (B≥5, C≥3) are NOT introduced. Revisit after rich material
+#   yields stable 8-card output.
+def run_contrast_thread(seed_article: dict, all_articles: list | None = None,
+                        writer_fn=None, writer_kwargs=None) -> dict | None:
     """End-to-end contrast pipeline for one seed article.
 
     Returns {"cards":[...5], "link":url} or None on any drop.
@@ -55,7 +63,10 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None) ->
             logger.warning("contrast orchestrator: extractor import fail: %s", e)
             return None
 
-        af = extract_af(body, title)
+        pub_date = seed_article.get("pub_date") or seed_article.get("published_at") or ""
+        # kicker7 경로는 컬렉션으로 씬소스 구출 → C 가드 완화
+        require_c = (writer_fn is None)
+        af = extract_af(body, title, pub_date=pub_date if pub_date else None, require_c=require_c)
         if not af:
             logger.info("contrast orchestrator: extractor_fail seed_id=%s -> drop", seed_id)
             return None
@@ -80,68 +91,167 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None) ->
         else:
             bg_keywords = e_keywords
 
+        # Wave4-1: 2차 시도용 키워드 — D(상위 주제) + F(미해결 질문) 토큰
+        _STOP = ("그리고", "하지만", "대한", "위한", "통한", "있는", "없는", "같은", "관련", "뉴스", "무엇", "어떻게")
+
+        def _retry_keywords() -> list[str]:
+            src = d_topic
+            f_list = af.get("F", []) if isinstance(af.get("F"), list) else []
+            src += " " + " ".join(str(x) for x in f_list)
+            out: list[str] = []
+            for w in re.findall(r'[가-힣A-Za-z0-9]{2,10}', src):
+                if w in _STOP or w in out or w in e_keywords:
+                    continue
+                out.append(w)
+                if len(out) >= 3:
+                    break
+            return out
+
+        backgrounds: list[dict] = []
         background = None
         cross_articles: list[dict] = []
         try:
             from pipeline.threads.contrast.background_search import find_background, find_cross_articles
+
+            def _collect_backgrounds(kws: list[str], exclude: list[str], want: int) -> None:
+                """find_background는 1건 반환 → 누적 id 제외하며 want개까지 반복."""
+                if not kws:
+                    return
+                for _ in range(want):
+                    if len(backgrounds) >= want:
+                        break
+                    got_ids = [str(b.get("id", "")).strip() for b in backgrounds if str(b.get("id", "")).strip()]
+                    try:
+                        bg = find_background(kws, exclude + got_ids)
+                    except Exception as be:
+                        logger.info("contrast orchestrator: find_background error: %s", be)
+                        break
+                    if not bg:
+                        break
+                    bid = str(bg.get("id", "")).strip()
+                    if bid and bid in got_ids:
+                        break
+                    backgrounds.append(bg)
+
+            def _merge_cross(new_list: list[dict]) -> None:
+                seen = {str(a.get("id", "")).strip() for a in cross_articles}
+                for a in new_list:
+                    aid = str(a.get("id", "")).strip()
+                    if aid and aid in seen:
+                        continue
+                    seen.add(aid)
+                    cross_articles.append(a)
+
             if e_keywords:
                 try:
-                    cross_articles = find_cross_articles(seed_id, e_keywords, 3) or []
+                    cross_articles = find_cross_articles(seed_id, e_keywords, 5) or []
                 except Exception as e:
                     logger.info("contrast orchestrator: find_cross error: %s", e)
                     cross_articles = []
-                # crawl cross bodies
-                if cross_articles:
-                    try:
-                        from pipeline.threads.crawler import fetch_article_body as _fetch
-                        crawled = 0
-                        for art in cross_articles:
-                            link_c = art.get("link") or art.get("url") or ""
-                            if not link_c:
-                                continue
-                            try:
-                                b = _fetch(link_c, source=art.get("source", ""), title=art.get("title", ""))
-                                if b and b.strip():
-                                    art["crawled_body"] = b.strip()
-                                    crawled += 1
-                            except Exception:
-                                pass
-                        logger.info("contrast cross crawled %d/%d", crawled, len(cross_articles))
-                    except Exception as e:
-                        logger.info("contrast orchestrator: cross crawl import fail: %s", e)
-            # background: D+E first, exclude seed+cross ids
-            if bg_keywords:
+            # background: D+E first, exclude seed+cross ids (목표 2-3건)
+            def _bg_exclude() -> list[str]:
                 cross_ids = [str(a.get("id", "")).strip() for a in cross_articles if str(a.get("id", "")).strip()]
-                exclude_ids = ([seed_id] + cross_ids) if seed_id else cross_ids
+                return ([seed_id] + cross_ids) if seed_id else cross_ids
+
+            if bg_keywords:
+                _collect_backgrounds(bg_keywords, _bg_exclude(), 3)
+
+            # Wave4-1: cross<4 또는 bg<2 → D+F 토큰으로 2차 시도 (재시도 1회만)
+            if len(cross_articles) < 4 or len(backgrounds) < 2:
+                rk = _retry_keywords()
+                logger.info("contrast retry search cross=%d bg=%d keywords=%s", len(cross_articles), len(backgrounds), rk)
+                if rk:
+                    if len(cross_articles) < 4:
+                        try:
+                            _merge_cross(find_cross_articles(seed_id, rk, 5) or [])
+                        except Exception as e:
+                            logger.info("contrast orchestrator: retry find_cross error: %s", e)
+                    if len(backgrounds) < 2:
+                        _collect_backgrounds(rk, _bg_exclude(), 3)
+
+            # crawl cross bodies (재시도 결과 포함)
+            if cross_articles:
                 try:
-                    background = find_background(bg_keywords, exclude_ids)
+                    from pipeline.threads.crawler import fetch_article_body as _fetch
+                    crawled = 0
+                    for art in cross_articles:
+                        link_c = art.get("link") or art.get("url") or ""
+                        if not link_c:
+                            continue
+                        try:
+                            b = _fetch(link_c, source=art.get("source", ""), title=art.get("title", ""))
+                            if b and b.strip():
+                                art["crawled_body"] = b.strip()
+                                crawled += 1
+                        except Exception:
+                            pass
+                    logger.info("contrast cross crawled %d/%d", crawled, len(cross_articles))
                 except Exception as e:
-                    logger.info("contrast orchestrator: find_background error: %s", e)
-                    background = None
+                    logger.info("contrast orchestrator: cross crawl import fail: %s", e)
         except Exception as e:
             logger.info("contrast orchestrator: background_search import fail: %s", e)
 
+        # backward compat: writer는 background 단건 기대 → 첫 건 유지
+        background = backgrounds[0] if backgrounds else None
+
         # search_count
         cross_n = len(cross_articles)
+        bg_n = len(backgrounds)
         bg_hit = 1 if background else 0
         bg_attempted = 1 if bg_keywords else 0
-        # total = cross hits + bg hit (matches example cross3 bg1 total4); also log attempt variant
-        total = cross_n + bg_hit if bg_hit else cross_n + bg_attempted if bg_attempted else cross_n
-        # normalize: if bg attempted but miss, total = cross_n + 1 (attempt)
-        # if no bg attempt, total = cross_n
-        if bg_attempted and not bg_hit:
+        # distinct_fact_count = A(1) + B + C
+        b_list = af.get("B", []) if isinstance(af.get("B"), list) else []
+        c_list = af.get("C", []) if isinstance(af.get("C"), list) else []
+        distinct_fact_count = 1 + len(b_list) + len(c_list)
+        total = cross_n + bg_n
+        if bg_attempted and not bg_n:
             total = cross_n + 1
-        elif bg_hit:
-            total = cross_n + 1
-        logger.info("contrast search_count cross=%d bg=%s total=%d", cross_n, "hit" if background else "miss", total)
+        logger.info(
+            "contrast search_count cross=%d bg=%d total=%d distinct_fact_count=%d",
+            cross_n, bg_n, total, distinct_fact_count,
+        )
+        # Wave3: bridge_claim_ids 이진 판정 — 단순 시간 근접/상위 카테고리만 공유 시 반려, 공통 엔티티 또는 명시적 언급 시만 인정
+        bridge_claim_ids=[]
+        if background and isinstance(background, dict):
+            try:
+                import re as _re2
+                def _tok(s): return set(m.group(0).lower() for m in _re2.finditer(r'[A-Za-z0-9]{2,}|[가-힣]{2,}', s or "")) - {"그리고","하지만","대한","위한","통한","있는","없는","같은","관련","뉴스"}
+                seed_t=_tok(seed_article.get("title","")+" "+seed_article.get("description",""))
+                bg_t=_tok(background.get("title","")+" "+background.get("description",""))
+                # explicit mention: bg mentions seed title entity or vice versa
+                overlap=len(seed_t & bg_t)
+                explicit = False
+                try:
+                    bg_text=(background.get("title","")+ " "+background.get("description","")).lower()
+                    seed_title_l=seed_article.get("title","").lower()
+                    if seed_title_l[:12] and seed_title_l[:12] in bg_text: explicit=True
+                except: pass
+                if overlap>=2 or explicit:
+                    bridge_claim_ids=[str(background.get("id",""))]
+                    logger.info("contrast bridge_claim valid overlap=%d explicit=%s ids=%s", overlap, explicit, bridge_claim_ids)
+                else:
+                    logger.info("contrast bridge_claim rejected overlap=%d explicit=%s (date-only coincidence)", overlap, explicit)
+            except Exception as e:
+                logger.info("contrast bridge_claim check fail %s", e)
+                bridge_claim_ids=[]
 
         # 4. build bundle
         bundle = {
             "seed_article": seed_article,
             "af": af,
             "background": background,
+            "backgrounds": backgrounds,
             "cross_articles": cross_articles,
-            "search_meta": {"cross": cross_n, "bg": bool(background), "total": total, "bg_hit": bg_hit},
+            "search_meta": {
+                "cross": cross_n,
+                "cross_n": cross_n,
+                "bg": bool(background),
+                "bg_n": bg_n,
+                "bg_hit": bool(bg_hit),
+                "total": total,
+                "distinct_fact_count": distinct_fact_count,
+                "bridge_claim_ids": bridge_claim_ids if "bridge_claim_ids" in locals() else [],
+            },
         }
 
         # 5. writer
@@ -150,6 +260,8 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None) ->
         except Exception as e:
             logger.warning("contrast orchestrator: contrast_writer import fail: %s", e)
             return None
+        # writer_fn 주입 시 컬렉션(다각도+배경)은 그대로, 글쓰기만 교체 (kicker7 등)
+        active_writer = writer_fn if writer_fn is not None else write_contrast_thread
 
         # all_articles_with_background: include seed + background for validator context if needed
         pool = list(all_articles) if isinstance(all_articles, list) else []
@@ -157,7 +269,7 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None) ->
         if seed_article not in pool:
             pool = [seed_article] + pool
 
-        result = write_contrast_thread(bundle, pool)
+        result = active_writer(bundle, pool, **(writer_kwargs or {}))
         if not result or not result.get("cards"):
             logger.info("contrast orchestrator: write_contrast_thread drop seed_id=%s", seed_id)
             return None
@@ -216,7 +328,7 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None) ->
             try:
                 meta = bundle.get("search_meta") or {}
                 cross_c = meta.get("cross", len(cross_articles))
-                bg_b = 1 if meta.get("bg") else 0
+                bg_b = meta.get("bg_n", 1 if meta.get("bg") else 0)
                 total_c = meta.get("total", cross_c + bg_b)
                 header = f"# search: cross {cross_c} bg {bg_b} total {total_c}\n"
                 if fpath:

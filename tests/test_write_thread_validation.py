@@ -239,7 +239,7 @@ class TestWriteThreadValidationChain:
             "그런데 새 시스템은 감정을 이해하는 것임을 입증했음. 충분히 긴 내용임.",
             "이 발견은 다양한 분야에서 적용될 수 있는 전환점임. 충분히 긴 내용임.",
             "결국 AI가 진정한 공감을 갖추려면 이해가 필요함. 충분히 긴 내용임.",
-            "이것이 결론이다. AI는 인간의 감정을 이해할 수 있게 되었음.",  # 닫힌 종결 → 거부
+            "이것이 결론이다.",  # 닫힌 종결 → 거부 (대비 확정통찰 음 허용 전 D 기준)
         ]
         mock_chat, _ = _make_mock(generate_cards=closed_ending_cards)
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)

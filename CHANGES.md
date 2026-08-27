@@ -5,6 +5,41 @@
 
 ---
 
+## 2026-08-27 — Phase 37: Threads Contrast Pivot + Kicker7 운영화
+
+### Phase 37 Foundation (37-01): extractor / background / prompts / leak guard
+- **contrast/extractor.py** (213L 신규): A-F JSON 추출, B>=1 C>=1 E==3 D>5 가드, E cap 3, code-fence 파서, leak 체크. B 최소 3 최대 6 evidence_sentence/condition, C bilingual (text/text_translated/speakers/speaker_type) verbatim, 날짜는 D1 pub_date만.
+- **contrast/background_search.py** (145L 신규): `find_background(E, exclude_id)` D1 LIKE 30일 DESC 3키워드 순차 + Vectorize fallback → None graceful, `find_cross_articles(limit=2)` 같은 패턴. _esc LIKE quote escape.
+- **contrast/prompts.py** (226L): SYSTEM_EXTRACTOR_CONDENSED A-F 스키마 + SYSTEM_CURATOR_CONTRAST 8슬롯(1핵심사건/2규모수치/3배경맥락/4 1차인용/5대비반대/6 2차인용/7후속일정/8한계) + 귀속·수치한정어·날짜·전환·joint_statement 규칙 + SLOT_PLAN(3~8카드)
+- **pitch.py / validator.py leak 확장**: LEAKED_PROMPT_PATTERNS 9개 추가(상위주제/근본문제/대비논지/차트는 정리됐고/기술적 검증 차원/영국 외 미국/730억 갤런/구원투수), _SYSTEM_PROMPT_FRAGMENTS 3개, validator _CONTRAST_LEAK_PATTERNS + pitch 3중 방어 연동
+
+### Phase 37 Writer (37-02): contrast_writer 7→5 + D delegation
+- **contrast/contrast_writer.py** (541L 신규): 2-stage curator (outline JSON → sentence JSON). outline slot 배정(카드 수 3~8 동적 = distinct//1.5), topic filter(C source_topic_tag vs seed), related_parts 병합, b_refs 3회 중복 금지, bridge_ok 대비 논지 가드, 카드 내부 여백 스키마 필드 채움. sentence 동적 카드 수(3~8), 500자·한자·누수·hook entity 검증, `FORMAT: 대비 5카드` 라벨.
+- **writer.py**: FORMAT_LABELS/BUILDERS contrast 등록, build_system_prompt_contrast lazy wrapper, write_thread contrast 분기 → write_contrast_thread 위임 (D 경로 무터치), writer/validator FORMAT_CARD_COUNTS contrast 8, TOLERANCE 3~8
+
+### Phase 37 Orchestrator (37-03): D1-only 4-article chain + dual format CLI
+- **contrast/orchestrator.py** (357L 신규): `run_contrast_thread(seed, all_articles, writer_fn, gate_signal)` — extract_af → find_cross(2) → find_background(1) → curator. cross 총 4매체(seed crawl 1 + D1 cross 2 + D1 bg 1), 외부 크롤 3회 금지, dry-run 전용 `create_contrast_bundle_from_seed`. gate_signal 전달로 중복 person_gate 호출 방지.
+- **scripts/threads/main_v3.py**: argparse `--format {D,contrast}` 추가, `FORMAT=contrast` 시 D1 published 체크·failed 기록 차단, posted 저장 스킵, contrast bundle → orchestrator 분기 (--dry-run 강제, publish 미연결)
+- **pipeline/threads/person_gate.py** (77L 신규): title+body 인물 실명+직함·경력 패턴 신호 (pass/person/reason) — 제거 아님 신호 전용
+- **contrast/kicker7_writer.py** (215L 신규): 블로그 대비 ThreadForge 변종 — 5카드+출처카드(카드6), `validate_final_cards(cards[:5])` 재사용, 사실토큰·화자실명·출처카드 게이트, link_url 루트 답글 분리
+- **scripts/auto_news_selector.py route_person_stories()**: 선별 기사 body 확보 → person_gate 신호 → run_contrast_thread(writer_fn=write_kicker7_thread) → `\n---\n` 카드6 통합 저장 (kicker7_selector/drafts)
+
+### Kicker7 운영화 (2026-08-26~27)
+- **docs/THREADS-PIPELINE-TECH.md §17**: kicker7 6카드 구조·판단카드 제거·출처카드·발행 게이트·publish_thread_chain 루트 답글·launchd 2시간 간격 :30 문서화, 버전 비교표 갱신
+- **scripts/threads/**: kicker7_dryrun_pool.py / kicker7_test_run.py / publish_kicker7_drafts.py 신규, draft 포맷 버그 수정 (`\n\n` → `\n---\n`, auto_news_selector.py:461)
+- **validator 확장**: validate_final_output latina 연속8자/비율15% 블록(whitelist), validate_card_structure last-card 확정통찰 허용(~임/했음/있음/됨/함/남/잡음/줌/봄/음), validate_speaker_attribution joint_statement 축약 차단 (화자 1명만 + 공동 없음 → hard fail)
+- **테스트**: contrast 신규 39 (extractor 21 + background 8 + writer/orchestrator 10) — 39/39 pass. 전체 336/338 pass (2 pre-existing: test_retention_from_env, test_hook_entity_quote_marked_accepted STAR 케이스)
+- **검증**: py_compile 5파일 OK, FORMAT contrast 등록 OK, leak 3패턴 노출 차단 OK, `main_v3 --dry-run --format contrast` graceful drop (E cap 5→3, extractor guard fail → orchestrator drop seed 46994), `--help` dual format 표시
+- **산출물**: src/content/blog 2026-08-26 12건 + 2026-08-27 4건 블로그 드래프트 (untracked), contrast 패키지 5파일, person_gate, kicker7 스크립트, phase37 docs (CONTEXT/PLAN/SPEC-5STEP/VERIFICATION)
+
+### 미반영·잔존
+- blog_draft_generator 신버전 미구현 (Phase 37 scope fence, 의도적)
+- contrast dynamic 3~8 카드: SPEC 5 고정과 divergence — 의도적 확장 (distinct 기반), 문서화됨
+- test_hook_entity_quote STAR 실패: validate_final_output Hook 고유명사 'STAR' body 미등장 — contrast 무관 pre-existing, 별도 triage 필요
+- 18개 블로그 untracked, 37개 전체 untracked — 커밋 전 `git add` 분류 필요 (drafts vs code 분리)
+
+---
+
 ## 2026-07-26 — Phase 29/30/31: description 백필 + 첫문장추출 + 추출버그수정
 
 ### Phase 29: 블로그 description 백필 — 문장 경계 자르기

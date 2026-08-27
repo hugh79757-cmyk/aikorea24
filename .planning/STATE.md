@@ -3,14 +3,14 @@ gsd_state_version: 1.1
 milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: all_plans_complete
-stopped_at: Phase 29+30+31: description 백필/첫문장추출/추출버그수정 완료 (2026-07-26) — 미커밋
-last_updated: 2026-08-12T12:25:13.000Z
-last_activity: 2026-08-12
+stopped_at: Phase 37 Threads Contrast Pivot + Kicker7 운영화 (2026-08-27) — impl done, dry-run verified, 18 blog drafts untracked, 미커밋
+last_updated: 2026-08-27T03:52:39.000Z
+last_activity: 2026-08-27
 progress:
-  total_phases: 31
-  completed_phases: 31
-  total_plans: 58
-  completed_plans: 58
+  total_phases: 37
+  completed_phases: 37
+  total_plans: 61
+  completed_plans: 61
   percent: 100
 ---
 
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: All Phases Complete (1-31)
-Status: ✅ Phase 29-31 description 로직 개선 완료 (미커밋)
-Last activity: 2026-07-26T21:02
+Phase: All Phases Complete (1-37)
+Status: ✅ Phase 37 Threads Contrast Pivot + Kicker7 운영화 완료 (dry-run verified, publish blocked, 39 contrast tests pass, 18 blog drafts untracked)
+Last activity: 2026-08-27T03:53
 
 Progress: [████████████████████████████████████████████████████] 100%
 
@@ -220,13 +220,14 @@ None.
 
 ## Session Continuity
 
-Current session: 2026-07-26T21:02:00.000Z
-Stopped at: Phase 29/30/31 description 개선 — 백필 스크립트 생성, _extract_first_sentence 수정, blog_draft_generator prompt 개선 (미커밋)
-Next: 변경사항 커밋 및 배포, Phase 32-36 확인 및 실행
+Current session: 2026-08-27T03:53:00.000Z
+Stopped at: Phase 37 Threads Contrast Pivot + Kicker7 운영화 — contrast 5모듈(1795L) + person_gate + kicker7_writer, writer/validator/pitch/main_v3 확장, auto_news_selector route_person_stories, 39 contrast tests pass, dry-run graceful drop verified, 18 blog drafts untracked (미커밋)
+Next: untracked 분류 커밋 (code vs drafts), STAR hook test triage, TECH.md Phase37 반영, kicker7 live 배포 :30 launchd 확인
 
 ---
-phase_37: 2026-08-26 Threads Contrast Pivot (blog→Threads 7→5 dry-run only, no publish)
-  status: complete (impl done, dry-run verified, publish blocked)
+phase_37: 2026-08-26~27 Threads Contrast Pivot + Kicker7 (blog→Threads 7→5 pivot, D untouched)
+  status: complete (impl done, dry-run verified, publish blocked, kicker7 live 1건 k7_46941 published root 17866975854642583, 4건 HOLD)
   plans: 3/3 (37-01 Foundation, 37-02 Writer, 37-03 Orchestrator dry-run)
-  tests: 37 new (19 extractor +10 background +8 writer/orch) + 326 existing = 326 pass / 2 pre-existing fail
-  guard: --format contrast only with --dry-run, orchestrator never calls publisher
+  tests: 39 new (21 extractor +8 background +10 writer/orch) = 39 pass / 전체 336/338 pass (2 pre-existing: retention_from_env, hook STAR)
+  guard: --format contrast only with --dry-run, orchestrator never calls publisher, writer.py D path untouched, kicker7 별도 launchd :30
+  artifacts: contrast 5모듈 + person_gate + kicker7_writer (1795L), scripts/threads 3개, phase37 docs 5개, blog drafts 18건

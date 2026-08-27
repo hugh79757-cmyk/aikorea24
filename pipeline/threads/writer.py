@@ -42,6 +42,7 @@ def load_style_examples():
 
 FORMAT_LABELS = {
     'D': '펀치 브리핑형 (5개 콘텐츠 카드 + 루트 답글 링크)',
+    'contrast': '대비 스토리텔링형 (7→5 압축, 상위주제 연결, 열린질문 종결)',
 }
 
 
@@ -81,8 +82,15 @@ STYLE — follow these examples exactly:
 
 
 
+def build_system_prompt_contrast():
+    """Lazy wrapper — delegates to contrast_writer to avoid circular import."""
+    from pipeline.threads.contrast.contrast_writer import build_system_prompt_contrast as _build
+    return _build()
+
+
 FORMAT_BUILDERS = {
     'D': build_system_prompt_D,
+    'contrast': build_system_prompt_contrast,
 }
 
 INSTRUCTION_PATTERNS = [
@@ -397,10 +405,19 @@ def _remove_duplicate_links(cards):
 
 
 def write_thread(pitch, all_articles, format_choice=None):
-    from v3.model_router import chat_completion
-
     if not format_choice:
         format_choice = 'D'
+    # Contrast delegation — keeps D path untouched
+    if format_choice == "contrast":
+        from pipeline.threads.contrast.contrast_writer import write_contrast_thread
+        # pitch is ContrastBundle when coming from orchestrator; all_articles may be None
+        result = write_contrast_thread(pitch, all_articles or [])
+        # Normalize None -> [] for writer.py callers expecting list/dict
+        if result is None:
+            return []
+        return result
+    from v3.model_router import chat_completion
+
     _log(f'  🎯 형식: {format_choice} — {FORMAT_LABELS[format_choice]}')
 
     system_prompt = FORMAT_BUILDERS[format_choice]()

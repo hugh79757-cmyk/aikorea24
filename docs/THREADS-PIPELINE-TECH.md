@@ -597,6 +597,73 @@ Phase 4에서 진행 중인 Strangler Fig 패턴:
 
 ---
 
+## 17. kicker7 인물중심 스레드 파이프라인 (신규, 운영중)
+
+> 인물·르뽀·서사 중심 뉴스 전용 스레드. 기존 `main_v3` D포맷/contrast 와 **완전 별도 경로** (비동기: 선별→드래프트 저장 → 별도 발행기). 2026-08-27 live 전환 완료.
+
+### 17.1 흐름 개요
+
+```
+auto_news_selector.route_person_stories()
+  └─ person_gate.py (신호로만 사용, 통과/탈락 무관 전량 생성)
+  └─ orchestrator.run_contrast_thread(writer_fn=write_kicker7_thread,
+                                       writer_kwargs={'gate_signal': gate})
+       ├─ extractor.extract_af() → af_json (A~F)
+       ├─ background_search: cross5 + bg3 수집 + 크롤
+       └─ kicker7_writer.write_kicker7_thread() → SYSTEM_KICKER7_V3 (v2.5)
+  → 드래프트 저장: scripts/threads/logs/drafts/kicker7_selector/k7_{id}_{ts}.txt
+       (카드간 구분자 '\n---\n', 카드6 = '--- 카드 6 ---' 출처 블록)
+
+[비동기, 별도 launchd]
+publish_kicker7_drafts.py
+  └─ k7_selector/*.txt 글로브 → 파싱(6카드) → 루브릭 게이트
+  └─ 통과 → publish_thread_chain(cards[:5], article, link_url)
+  └─ 미달 → hold/ 이동 / 성공 → published/ 이동 + posted_ids.json 기록
+```
+
+### 17.2 생성 구조 (SYSTEM_KICKER7_V3 v2.5)
+
+* 카드1~5 고정 역할: **장면**(인물+진행동작) → **메커니즘** → **반전(조건)** → **현장목소리(인용)** → **책임지도·인적대가**.
+* **판단(키커) 카드 제거** — v2.5에서 삭제, 대가귀결은 카드5에 흡수.
+* **카드6 = 출처 카드** (시스템 결정적 부착, 모델이 안 씀): `--- 카드 6 ---` + `출처:/발행일:/원문:/추출 사실: B n건 / C n건`.
+* 엄격 규칙: 사실봉쇄(A~F only) / 인용 verbatim+bilingual `(원문: …)` / 수치 한정어 / 카드1 첫 문장 날짜 배제(후처리 `_strip_date_from_first_sentence`) / `[재료 신고: …]` 라인 발행 전 제거(`_strip_material_reports`).
+
+### 17.3 발행 게이트 (루브릭 + 기존 검증)
+
+`publish_kicker7_drafts.py` 순서:
+
+1. **무근거 0**: 카드1~5 각각 사실토큰(수치/인용/인명직함) ≥1 — 없으면 HOLD.
+2. **화자실명**: 카드4(현장목소리)에 이름+직함 ≥1 — 없으면 HOLD.
+3. **출처카드**: 카드6에 `출처:` + `원문:` 존재 — 없으면 HOLD.
+4. **기존 검증 재사용**: `validate_final_cards(cards[:5])` (500자/미완결/중복) — 카드6(출처)은 면제.
+
+### 17.4 발행 세부
+
+* `publish_thread_chain(cards, article, link_url)`: 카드 each = 별도 포스트(연속 답글), `link_url` = **루트 답글**로 별도 발행.
+* **카드6(출처)은 발행 카드에서 제외**하고 `link_url`로만 붙임 (중복 URL 방지).
+* 멱등: `posted_ids.json`(`k7_selector/` 하위)에 발행된 fid 기록, 재실행 시 SKIP.
+* 격리: 미달 → `hold/`(사유 접미사), 성공 → `published/`.
+
+### 17.5 스케줄링 (launchd)
+
+* `~/Library/LaunchAgents/kr.aikorea24.kicker7-publisher.plist`
+* 2시간마다 `:30` (main_v3 `:00`와 30분 어긋남).
+* `CLOUDFLARE_API_TOKEN` unset (`env -u`, AGENTS.md 규정), `.venv/bin/python3` 사용, WorkingDirectory=repo root.
+* 점진 배포: 초기 `--dry-run` → 2026-08-27 live 전환(플리스트 `--dry-run` 제거 + unload/load).
+
+### 17.6 운영 상태 (2026-08-27 기준)
+
+* **운영중(live)**. 첫 발행: `k7_46941` (Meta AI 인력 감축 계획 무산, The Decoder) — 5카드+링크답글, root `17866975854642583`.
+* 동 사이클 4건은 루브릭 `무근거 카드N` 으로 HOLD (해당 카드 사실토큰 부재 → 보수적 차단, 의도된 동작).
+* 드래프트 포맷 버그 이력: 초기 저장이 `\n\n` 구분자여서 카드내부 절구분과 충돌·복구불가 → `auto_news_selector.py:461` 을 `\n---\n` 으로 수정, 파서도 `---` 전용 분리로 교정.
+
+### 17.7 관련 문서
+
+* 비교표/버전 차이: `docs/TECH-thread-writing-versions.md` (kicker7 v3 행 — "미배선" → 본 파이프라인으로 **운영중** 갱신됨).
+* person_gate 패치 이력: `docs/person_gate_patch.md`.
+
+---
+
 ## 부록 A: 핵심 프롬프트 조각
 
 ### A.1 SYSTEM_PROMPT (pitch.py)

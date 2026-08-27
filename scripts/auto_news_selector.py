@@ -387,6 +387,92 @@ def print_report(articles, selected):
         log(f"  {s}: {c}건")
 
 
+def route_person_stories(selected):
+    """인물 게이트 분기 (운영 투입).
+
+    선별된 기사 각각에 대해:
+      - 본문 확보 (이미 크롤된 body 우선, 없으면 crawl_article_body)
+      - person_gate 호출 → 카드 구성 분기용 신호(통과/탈락 무관, 생성은 전량)
+      - run_contrast_thread(writer_fn=write_kicker7_thread) 6카드+출처 구조 생성
+    person_gate는 제거하지 않고 신호로만 사용. 전 과정 try-except 격리.
+    """
+    try:
+        from pipeline.threads.person_gate import person_gate
+    except Exception as ex:
+        logger.warning("person_gate import 실패 → 게이트 분기 생략: %s", ex)
+        return
+
+    generated = 0
+    for art in selected:
+        title = art.get("title") or ""
+        link = art.get("link") or ""
+        if not link:
+            continue
+        body = art.get("body") or ""
+        if not body:
+            try:
+                from briefing_scorer import crawl_article_body
+                body = crawl_article_body(link) or ""
+            except Exception as ex:
+                logger.warning("person_gate: crawl 실패 %s (%s)", link, ex)
+                continue
+        if not body:
+            logger.warning("person_gate: 본문 없음 → 탈락 %s", link)
+            continue
+        # person_gate: 신호로만 사용 (통과/탈락과 무관하게 전량 생성)
+        try:
+            gate = person_gate(title, body)
+        except Exception as ex:
+            logger.warning("person_gate: 호출 예외 %s (%s)", title, ex)
+            gate = {"pass": False, "person": None, "reason": f"gate_error: {ex}"}
+        logger.info("person_gate: signal pass=%s — %s | %s", gate.get("pass"), title, gate.get("reason"))
+        try:
+            from pipeline.threads.contrast.orchestrator import run_contrast_thread
+            from pipeline.threads.contrast.kicker7_writer import write_kicker7_thread
+            seed = {
+                "id": f"person-{art.get('id', '')}",
+                "title": title,
+                "link": link,
+                "url": link,
+                "body": body,
+                "crawled_body": body,
+                "pub_date": art.get("pub_date", "") or "",
+                "source": art.get("source", ""),
+                "description": (art.get("description") or "")[:200],
+            }
+            # gate_signal 전달 → write_kicker7_thread 내 중복 person_gate 호출 방지
+            result = run_contrast_thread(
+                seed, [seed], writer_fn=write_kicker7_thread,
+                writer_kwargs={"gate_signal": gate},
+            )
+            if result and result.get("cards"):
+                cards = result["cards"]
+                # 생성 스레드 파일 저장 (운영 핸드오프 + 검증 로그용)
+                try:
+                    import os as _os, datetime as _dt, pathlib as _pl
+                    _k7dir = _pl.Path("scripts/threads/logs/drafts/kicker7_selector")
+                    try:
+                        _k7dir.mkdir(parents=True, exist_ok=True)
+                    except Exception:
+                        _k7dir = _pl.Path("/tmp/kicker7_selector")
+                        _k7dir.mkdir(parents=True, exist_ok=True)
+                    _ts = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
+                    _fname = _k7dir / f"k7_{art.get('id','')}_{_ts}.txt"
+                    # ponytail: 카드 내부 절구분(\n\n, 규칙 필수)과 카드간 구분 충돌 방지 → '---' 로만 카드간 구분
+                    _fname.write_text("\n---\n".join(cards), encoding="utf-8")
+                    _fpath = str(_fname)
+                except Exception as _fex:
+                    _fpath = f"(저장실패: {_fex})"
+                logger.info("person_gate: kicker7 %d카드 생성 — %s | file=%s", len(cards), title, _fpath)
+                generated += 1
+            else:
+                logger.warning("person_gate: kicker7 생성 실패 — %s", title)
+        except Exception as ex:
+            logger.warning("person_gate: kicker7 예외 %s (%s)", title, ex)
+            continue
+    logger.info("person_gate: 생성 %d / 전체 %d", generated, len(selected))
+
+
 def main(dedup=True):
     mode = _BRIEFING_SCORER_MODE
     log("=== aikorea24 자동 뉴스 선정 ===\n")
@@ -472,6 +558,12 @@ def main(dedup=True):
         a["score_breakdown"] = a.get("score_breakdown") or a.get("score_breakdown_light") or {}
         if a.get("pass_source") is None:
             a["pass_source"] = "legacy"
+
+    # 6. 인물 게이트 분기 (운영 투입) — 기존 브리핑 흐름에 영향 없이 격리 실행
+    try:
+        route_person_stories(selected)
+    except Exception as ex:
+        logger.warning("person_gate 분기 예외(무시·기존 경로 유지): %s", ex)
 
     log(f"\n선정 완료: {len(selected)}개 기사")
     print_report(articles, selected)

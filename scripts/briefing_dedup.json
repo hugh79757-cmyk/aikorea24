@@ -1,140 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-27",
-      "briefing_id": 196,
-      "articles": [
-        {
-          "id": "42431",
-          "title": "중국 AI에 대한 공황의 의미",
-          "original_title": "",
-          "description": "최근 Equity 에피소드에서는 Moonshot AI의 Kimi가 실리콘 밸리와 월스트리트를 공황에 빠트린 이유에 대해 논의했습니다.",
-          "link": "https://techcrunch.com/2026/07/26/making-sense-of-the-panic-over-chinese-ai/",
-          "entities": [
-            "Moonshot",
-            "Equity"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42437",
-          "title": "AI 거품이 터지면 호주는 그동안 만든 도구로 무엇을 할까? 한 남자는 답을 가지고 있다고",
-          "original_title": "",
-          "description": "기자이자 작가인 코리 닥토로우가 호주에 방문하여 그의 메시지를 전파하고 있습니다. 인간들은 그들의 일자리를 되찾을 것이라는 주장을 하고 있습니다.",
-          "link": "https://www.theguardian.com/australia-news/2026/jul/27/when-the-ai-bubble-bursts-what-will-australia-do-with-the-tools-it-built-one-man-thinks-he-has-the-answer",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42443",
-          "title": "Roku, 스트리밍 장치 가격을 60%까지 인상하며 메모리 부족 사태가 거실에 도달",
-          "original_title": "",
-          "description": "Roku는 미국의 모든 스트리밍 하드웨어 라인업의 가격을 인상했습니다. 인상폭은 기기당 10달러에서 50달러까지 다양하며, AI 데이터 센터 수요로 인한 글로벌 메모리 부족이 저렴한 소비자 기술의 마지막 보루 중 하나에 영향을 미치고 있습니다.",
-          "link": "https://thenextweb.com/news/roku-streaming-device-prices-rise-60-percent-memory-shortage",
-          "entities": [
-            "AI",
-            "Roku"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42451",
-          "title": "구글이 제미니 4에 대해 공개한 내용",
-          "original_title": "",
-          "description": "지난주 동안 구글은 제미니 4에 대해 많은 정보들을 공개했습니다. 이는 이전에 예정된 3.5 Pro의 출시가 연기된 후의 소식입니다.",
-          "link": "https://9to5google.com/2026/07/26/google-gemini-4-teases/",
-          "entities": [],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42442",
-          "title": "Anthropic의 Claude Cowork가 로컬 VM을 탈출하고 Mac에서 자격 증명을",
-          "original_title": "",
-          "description": "Accomplish AI의 보안 연구자들이 Anthropic의 Claude Cowork가 로컬 가상 머신 샌드박스를 탈출하고 기본 Mac에서 SSH 키와 클라우드 자격 증명을 포함한 파일을 읽을 수 있음을 보여주었습니다. 이 공격은 리눅스 커널 권한 상승 취약점을 이용했습니다.",
-          "link": "https://thenextweb.com/news/claude-cowork-sandbox-escape-mac-files-sharedroot",
-          "entities": [
-            "Accomplish",
-            "SSH",
-            "Claude"
-          ],
-          "date": "2026-07-27"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-27",
-      "briefing_id": 197,
-      "articles": [
-        {
-          "id": "42466",
-          "title": "인공지능 초지능으로 가는 길",
-          "original_title": "",
-          "description": "여러 AI 에이전트로 구성된 의료 시스템을 상상해보세요: 증상 평가를 관리하는 에이전트, 일정을 조정하는 에이전트, 보험을 담당하는 에이전트, 약국을 운영하는 에이전트. 각각의 영역에서 전문가입니다. 하지만 그들은 저마다의 지식과 목표가 있습니다. 오늘날 그들은 데이터를 교환할 수 있지만, 아직 그렇지 않습니다.",
-          "link": "https://www.technologyreview.com/2026/07/27/1140724/the-path-to-artificial-superintelligence/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42476",
-          "title": "오도하는 AI 생성 의사들이 '국민 안전에 큰 위험'을 초래",
-          "original_title": "",
-          "description": "연구에 따르면 AI 계정이 의심스러운 건강 조언을 퍼뜨리며 TikTok에서 수백만 조회수를 얻고 있다고 합니다. 전문가들은 온라인에서의 오도된 건강 주장이 “국민 안전에 큰 위험”이 된다고 경고하고 있습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/27/misleading-ai-generated-doctors-public-safety-danger-tiktok",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42490",
-          "title": "샘 알트먼, 앤트로픽이 더 강경한 입장을 취함에 따라 ‘민주적 AI’ 주장을 재개",
-          "original_title": "",
-          "description": "샘 알트먼은 인공지능을 둘러싼 경쟁을 표현하는 선호하는 방식을 가지고 있으며, 이는 명확하다. 그는 미국과 동맹국들이 이 기술을 개발하고 그 혜택을 퍼뜨리거나, 권위주의 정부가 이를 이용해 자신의 권력을 강화하고 확장할 것이라고 주장하고 있다.",
-          "link": "https://thenextweb.com/news/sam-altman-renews-his-democratic-ai-pitch-as-anthropic-holds-a-harder-line",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42470",
-          "title": "공유된 클로드 대화가 검색 엔진에 나타난 것으로 보고됨",
-          "original_title": "",
-          "description": "앤트로픽의 클로드 챗봇과의 공유 대화들이 구글 검색 결과에 잠시 나타났습니다. 이 페이지들이 noindex 태그가 없었기 때문입니다. 사용자들은 일부 대화에 암호 키와 법적 질문이 포함되어 있다고 밝혔습니다. OpenAI는 작년에도 같은 실수를 저질렀습니다.",
-          "link": "https://the-decoder.com/shared-claude-chats-were-reportedly-showing-up-in-search-engines/",
-          "entities": [],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42471",
-          "title": "이것은 도널드 트럼프의 AI 브레인 트러스트입니다",
-          "original_title": "",
-          "description": "한 고위 행정관은 WIRED와의 인터뷰에서 미국의 AI 정책이 어떻게 형성되고 있는지를 설명하며 \"이것은 양측의 주장으로 나뉘지 않고 10개의 측면이 있는 논쟁이다\"라고 말했습니다.",
-          "link": "https://www.wired.com/story/this-is-donald-trumps-ai-brain-trust/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-27"
-        },
-        {
-          "id": "42465",
-          "title": "뇌파가 물리적 AI의 다음 열쇠일까?",
-          "original_title": "",
-          "description": "YouTube 영상은 잊어버리세요. 첨단 물리적 AI 모델은 여러 카메라 각도, 밀집된 주석, 그리고 곧 뇌파 측정이 필요합니다.",
-          "link": "https://techcrunch.com/2026/07/26/are-brain-waves-the-next-unlock-for-physical-ai/",
-          "entities": [
-            "AI",
-            "YouTube"
-          ],
-          "date": "2026-07-27"
-        }
-      ]
-    },
-    {
       "date": "2026-07-28",
       "briefing_id": 198,
       "articles": [
@@ -4504,131 +4370,197 @@
           "date": "2026-08-26"
         }
       ]
+    },
+    {
+      "date": "2026-08-26",
+      "briefing_id": 257,
+      "articles": [
+        {
+          "id": "46817",
+          "title": "Runable, AI 에이전트가 비즈니스 구축을 넘어 성장까지 견인할 것이라 확신하며 2,",
+          "original_title": "",
+          "description": "Runable은 지난 90일 동안 자사 플랫폼에서 사용된 1조 개 이상의 토큰 중 60~70%가 유료 고객으로부터 발생했다고 밝혔습니다. 이번 투자를 통해 AI 에이전트가 기업의 단순 구축 단계를 넘어 실질적인 성장을 주도할 수 있음을 증명하고자 합니다.",
+          "link": "https://techcrunch.com/2026/08/26/runable-hits-21m-to-bet-ai-agents-can-go-from-building-businesses-to-growing-them/",
+          "entities": [
+            "Runable",
+            "AI"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46834",
+          "title": "빌 게이츠, AI의 잠식에 맞서 '인간 전용' 일자리 필요성 역설",
+          "original_title": "",
+          "description": "마이크로소프트 공동 창업자인 빌 게이츠는 6,000자 분량의 에세이를 통해 AI가 대체할 수 없는 '인간 전용' 일자리를 지정해야 한다고 주장했습니다. 또한 그는 정부가 AI가 가져올 기술적 영향에 대비하지 못하고 있다는 점에 대해 우려를 표했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai-takeover",
+          "entities": [],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46820",
+          "title": "OpenAI, 핵심 데이터 센터 임원 퇴사… 이어지는 고위급 인력 이탈",
+          "original_title": "",
+          "description": "OpenAI는 말론(Malone)의 퇴사와 관련해 테크크런치(TechCrunch)에 \"업무의 규모와 속도를 지원하기 위해 최근 인프라 조직을 재편했다\"고 밝혔습니다. 최근 OpenAI에서는 주요 인물들의 퇴사가 잇따르고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/25/openai-loses-a-top-data-center-exec-as-stream-of-high-profile-departures-continues/",
+          "entities": [
+            "TechCrunch",
+            "Malone",
+            "OpenAI"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46846",
+          "title": "문샷 AI, '키미 K3'로 미국 클라우드 수익의 30% 요구",
+          "original_title": "",
+          "description": "로이터 통신에 따르면 문샷 AI는 마이크로소프트, 아마존, 구글과 자사의 '키미 K3' 모델을 클라우드 플랫폼에 탑재하는 방안을 논의 중이며, 해당 서비스 수익의 최대 30%를 요구하고 있습니다. 이는 중국 AI 기업과 미국 주요 클라우드 업체 간의 첫 사례가 될 전망입니다.",
+          "link": "https://thenextweb.com/news/moonshot-k3-revenue-sharing-us-clouds",
+          "entities": [
+            "K3",
+            "AI"
+          ],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46828",
+          "title": "빌 게이츠, \"AI는 업계가 인정하는 것보다 훨씬 위험하다\" 경고",
+          "original_title": "",
+          "description": "빌 게이츠는 에세이와 인터뷰를 통해 AI로 인한 대규모 실업과 생물학적 테러 위험을 경고하며, 업계가 투자를 위해 위험을 의도적으로 숨기고 있다고 비판했습니다. 그는 자율 규제보다는 강력한 제도적 장치 마련이 시급하다고 강조했습니다.",
+          "link": "https://the-decoder.com/bill-gates-warns-ai-is-more-dangerous-than-the-tech-industry-will-admit/",
+          "entities": [],
+          "date": "2026-08-26"
+        },
+        {
+          "id": "46821",
+          "title": "AI와 함께 자라는 세대",
+          "original_title": "",
+          "description": "첫째 아이가 태어났을 때, 저는 즉시 아이의 이름으로 이메일과 SNS 계정을 만들었습니다. 온라인에 출생 소식을 알리고 수많은 플랫폼에 아이의 사진을 올리며, 아이가 스스로 서기도 전에 디지털 발자국을 만들기 시작했습니다.",
+          "link": "https://www.technologyreview.com/2026/08/26/1141949/editors-letter-september-2026/",
+          "entities": [
+            "SNS"
+          ],
+          "date": "2026-08-26"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "briefing_id": 258,
+      "articles": [
+        {
+          "id": "46933",
+          "title": "메타 출신 과학자들이 공장 현장에 시각 AI를 도입하려 합니다",
+          "original_title": "",
+          "description": "퍼셉트론(Perceptron)은 기계가 주변 환경을 탐색하도록 돕는 동시에 심층적인 시각 지능을 제공할 수 있는 AI 모델을 선보였습니다. 이 기술은 제조 현장의 자동화 수준을 한 단계 높일 것으로 기대됩니다.",
+          "link": "https://techcrunch.com/2026/08/26/ex-meta-scientists-want-to-bring-visual-ai-to-the-factory-floor/",
+          "entities": [
+            "Perceptron",
+            "AI"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46937",
+          "title": "QueryStory, AI가 제공하는 정보의 신뢰성을 높이려 합니다",
+          "original_title": "",
+          "description": "이 스타트업은 600만 달러의 시드 투자를 유치하며 스텔스 모드를 종료했습니다. LLM과 사이버 보안 노하우를 결합해 AI의 질의응답 과정을 더욱 일관되고 신뢰할 수 있게 만드는 것을 목표로 합니다.",
+          "link": "https://techcrunch.com/2026/08/26/querystory-wants-you-to-believe-what-ai-is-telling-you/",
+          "entities": [
+            "QueryStory"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46936",
+          "title": "로봇 두뇌 개발자들이 'GPT-2 시대'를 넘어서고 있습니다",
+          "original_title": "",
+          "description": "현재 로봇의 하드웨어는 비약적으로 발전했지만, 이를 제어할 AI 두뇌는 여전히 기술적 한계에 머물러 있습니다. 이제 로봇 공학계는 더욱 고도화된 AI를 통해 로봇의 지능을 한 단계 끌어올리려 노력하고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/26/robot-brain-builders-are-pushing-out-of-their-gpt-2-era/",
+          "entities": [
+            "AI",
+            "GPT-2"
+          ],
+          "date": "2026-08-27"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "briefing_id": 259,
+      "articles": [
+        {
+          "id": "46939",
+          "title": "청각 기술 스타트업 Legato, 1,200만 달러 투자 유치 및 AI 청력 보조 안경 공",
+          "original_title": "",
+          "description": "'레가토 프레임(Legato Frames)'이라 불리는 이 안경은 회사가 특허를 보유한 청력 보조 기술을 안경 다리에 통합했습니다. 일상적인 안경 디자인에 최첨단 AI 청각 기술을 접목한 것이 특징입니다.",
+          "link": "https://techcrunch.com/2026/08/26/hearing-tech-startup-legato-emerges-from-stealth-with-12m-and-a-peek-at-its-ai-hearing-glasses/",
+          "entities": [
+            "Legato",
+            "Frames",
+            "AI"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46835",
+          "title": "이스라엘이 자금을 댄 가짜 미국 싱크탱크, AI를 이용한 선전 활동 시도",
+          "original_title": "",
+          "description": "가디언의 분석에 따르면, 챗봇이 친이스라엘 주장을 하도록 유도하기 위해 해당 사이트는 9일 동안 124개의 보고서와 56만 단어 이상의 글을 게시했습니다. 존재하지 않는 싱크탱크의 이름을 내건 이 친이스라엘 메시지 사이트는 AI를 조작하려는 목적으로 운영되었습니다.",
+          "link": "https://www.theguardian.com/world/2026/aug/26/fake-thinktank-israel-ai-propaganda",
+          "entities": [],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46951",
+          "title": "아마존, AI로 포장했던 인력 플랫폼 '메카니컬 터크' 서비스 종료",
+          "original_title": "",
+          "description": "아마존이 21년간 운영해 온 인력 플랫폼 '메카니컬 터크(Mechanical Turk)'를 오는 9월 30일부로 종료합니다. 이 서비스는 컴퓨터가 처리하기 어려운 작업을 사람들에게 아주 적은 비용을 지불하고 맡기는 방식으로, 제프 베이조스는 이를 '인공적인 인공지능'이라고 부르기도 했습니다. 현재 홈페이지 상단 배너를 통해 서비스 종료 결정이 공식화되었습니",
+          "link": "https://thenextweb.com/news/amazon-mechanical-turk-closing-september-2026",
+          "entities": [
+            "Turk",
+            "Mechanical"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46943",
+          "title": "앤드류 응이 말하는 AI 개발 필수 역량 4가지와 전문가들이 지적하는 부족한 점",
+          "original_title": "",
+          "description": "생성형 AI와 에이전트형 AI의 부상은 소프트웨어 개발 과정과 요구되는 기술 역량을 완전히 바꿔놓았습니다.",
+          "link": "https://www.zdnet.com/article/4-ai-development-skills-you-need-according-to-andrew-ng-and-what-experts-say-hes-missing/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46836",
+          "title": "런던 로보택시 도입, 기업을 위한 가이드라인 부재로 연기",
+          "original_title": "",
+          "description": "우버와 웨이브는 '올여름 후반'에 운행을 시작할 것이라고 밝혔으나, 규제 및 기술적 난관으로 인해 올해 내 도입은 어려울 것으로 보입니다. 당초 세웠던 야심 찬 계획이 차질을 빚고 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/26/london-rollout-robotaxis-delayed-uber-wayve",
+          "entities": [],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46935",
+          "title": "놀라운 사실: 베일에 싸였던 'Ox Alpha' 모델의 개발사는 AI 연구소 Z.ai",
+          "original_title": "",
+          "description": "Z.ai는 각종 벤치마크와 리더보드에서 상위권을 차지하며 화제를 모았던 미스터리한 오픈 AI 모델 'Ox Alpha'의 개발사임을 공식 확인했습니다. 곧 해당 모델의 가중치(weights)도 공개될 예정입니다.",
+          "link": "https://techcrunch.com/2026/08/26/surprise-z-ai-is-the-ai-lab-behind-the-mysterious-ox-alpha-model/",
+          "entities": [
+            "Alpha",
+            "Ox",
+            "Z.",
+            "Z.ai",
+            "AI"
+          ],
+          "date": "2026-08-27"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "42431",
-      "title": "중국 AI에 대한 공황의 의미",
-      "original_title": "",
-      "description": "최근 Equity 에피소드에서는 Moonshot AI의 Kimi가 실리콘 밸리와 월스트리트를 공황에 빠트린 이유에 대해 논의했습니다.",
-      "link": "https://techcrunch.com/2026/07/26/making-sense-of-the-panic-over-chinese-ai/",
-      "entities": [
-        "Moonshot",
-        "Equity"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42437",
-      "title": "AI 거품이 터지면 호주는 그동안 만든 도구로 무엇을 할까? 한 남자는 답을 가지고 있다고",
-      "original_title": "",
-      "description": "기자이자 작가인 코리 닥토로우가 호주에 방문하여 그의 메시지를 전파하고 있습니다. 인간들은 그들의 일자리를 되찾을 것이라는 주장을 하고 있습니다.",
-      "link": "https://www.theguardian.com/australia-news/2026/jul/27/when-the-ai-bubble-bursts-what-will-australia-do-with-the-tools-it-built-one-man-thinks-he-has-the-answer",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42443",
-      "title": "Roku, 스트리밍 장치 가격을 60%까지 인상하며 메모리 부족 사태가 거실에 도달",
-      "original_title": "",
-      "description": "Roku는 미국의 모든 스트리밍 하드웨어 라인업의 가격을 인상했습니다. 인상폭은 기기당 10달러에서 50달러까지 다양하며, AI 데이터 센터 수요로 인한 글로벌 메모리 부족이 저렴한 소비자 기술의 마지막 보루 중 하나에 영향을 미치고 있습니다.",
-      "link": "https://thenextweb.com/news/roku-streaming-device-prices-rise-60-percent-memory-shortage",
-      "entities": [
-        "AI",
-        "Roku"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42451",
-      "title": "구글이 제미니 4에 대해 공개한 내용",
-      "original_title": "",
-      "description": "지난주 동안 구글은 제미니 4에 대해 많은 정보들을 공개했습니다. 이는 이전에 예정된 3.5 Pro의 출시가 연기된 후의 소식입니다.",
-      "link": "https://9to5google.com/2026/07/26/google-gemini-4-teases/",
-      "entities": [],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42442",
-      "title": "Anthropic의 Claude Cowork가 로컬 VM을 탈출하고 Mac에서 자격 증명을",
-      "original_title": "",
-      "description": "Accomplish AI의 보안 연구자들이 Anthropic의 Claude Cowork가 로컬 가상 머신 샌드박스를 탈출하고 기본 Mac에서 SSH 키와 클라우드 자격 증명을 포함한 파일을 읽을 수 있음을 보여주었습니다. 이 공격은 리눅스 커널 권한 상승 취약점을 이용했습니다.",
-      "link": "https://thenextweb.com/news/claude-cowork-sandbox-escape-mac-files-sharedroot",
-      "entities": [
-        "Accomplish",
-        "SSH",
-        "Claude"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42466",
-      "title": "인공지능 초지능으로 가는 길",
-      "original_title": "",
-      "description": "여러 AI 에이전트로 구성된 의료 시스템을 상상해보세요: 증상 평가를 관리하는 에이전트, 일정을 조정하는 에이전트, 보험을 담당하는 에이전트, 약국을 운영하는 에이전트. 각각의 영역에서 전문가입니다. 하지만 그들은 저마다의 지식과 목표가 있습니다. 오늘날 그들은 데이터를 교환할 수 있지만, 아직 그렇지 않습니다.",
-      "link": "https://www.technologyreview.com/2026/07/27/1140724/the-path-to-artificial-superintelligence/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42476",
-      "title": "오도하는 AI 생성 의사들이 '국민 안전에 큰 위험'을 초래",
-      "original_title": "",
-      "description": "연구에 따르면 AI 계정이 의심스러운 건강 조언을 퍼뜨리며 TikTok에서 수백만 조회수를 얻고 있다고 합니다. 전문가들은 온라인에서의 오도된 건강 주장이 “국민 안전에 큰 위험”이 된다고 경고하고 있습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/27/misleading-ai-generated-doctors-public-safety-danger-tiktok",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42490",
-      "title": "샘 알트먼, 앤트로픽이 더 강경한 입장을 취함에 따라 ‘민주적 AI’ 주장을 재개",
-      "original_title": "",
-      "description": "샘 알트먼은 인공지능을 둘러싼 경쟁을 표현하는 선호하는 방식을 가지고 있으며, 이는 명확하다. 그는 미국과 동맹국들이 이 기술을 개발하고 그 혜택을 퍼뜨리거나, 권위주의 정부가 이를 이용해 자신의 권력을 강화하고 확장할 것이라고 주장하고 있다.",
-      "link": "https://thenextweb.com/news/sam-altman-renews-his-democratic-ai-pitch-as-anthropic-holds-a-harder-line",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42470",
-      "title": "공유된 클로드 대화가 검색 엔진에 나타난 것으로 보고됨",
-      "original_title": "",
-      "description": "앤트로픽의 클로드 챗봇과의 공유 대화들이 구글 검색 결과에 잠시 나타났습니다. 이 페이지들이 noindex 태그가 없었기 때문입니다. 사용자들은 일부 대화에 암호 키와 법적 질문이 포함되어 있다고 밝혔습니다. OpenAI는 작년에도 같은 실수를 저질렀습니다.",
-      "link": "https://the-decoder.com/shared-claude-chats-were-reportedly-showing-up-in-search-engines/",
-      "entities": [],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42471",
-      "title": "이것은 도널드 트럼프의 AI 브레인 트러스트입니다",
-      "original_title": "",
-      "description": "한 고위 행정관은 WIRED와의 인터뷰에서 미국의 AI 정책이 어떻게 형성되고 있는지를 설명하며 \"이것은 양측의 주장으로 나뉘지 않고 10개의 측면이 있는 논쟁이다\"라고 말했습니다.",
-      "link": "https://www.wired.com/story/this-is-donald-trumps-ai-brain-trust/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-27"
-    },
-    {
-      "id": "42465",
-      "title": "뇌파가 물리적 AI의 다음 열쇠일까?",
-      "original_title": "",
-      "description": "YouTube 영상은 잊어버리세요. 첨단 물리적 AI 모델은 여러 카메라 각도, 밀집된 주석, 그리고 곧 뇌파 측정이 필요합니다.",
-      "link": "https://techcrunch.com/2026/07/26/are-brain-waves-the-next-unlock-for-physical-ai/",
-      "entities": [
-        "AI",
-        "YouTube"
-      ],
-      "date": "2026-07-27"
-    },
     {
       "id": "42571",
       "title": "OpenAI의 허깅 페이스 해킹 사건, 정렬 및 통제에 대한 논쟁 재점화",
@@ -8645,6 +8577,176 @@
         "InferenceX"
       ],
       "date": "2026-08-26"
+    },
+    {
+      "id": "46817",
+      "title": "Runable, AI 에이전트가 비즈니스 구축을 넘어 성장까지 견인할 것이라 확신하며 2,",
+      "original_title": "",
+      "description": "Runable은 지난 90일 동안 자사 플랫폼에서 사용된 1조 개 이상의 토큰 중 60~70%가 유료 고객으로부터 발생했다고 밝혔습니다. 이번 투자를 통해 AI 에이전트가 기업의 단순 구축 단계를 넘어 실질적인 성장을 주도할 수 있음을 증명하고자 합니다.",
+      "link": "https://techcrunch.com/2026/08/26/runable-hits-21m-to-bet-ai-agents-can-go-from-building-businesses-to-growing-them/",
+      "entities": [
+        "Runable",
+        "AI"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46834",
+      "title": "빌 게이츠, AI의 잠식에 맞서 '인간 전용' 일자리 필요성 역설",
+      "original_title": "",
+      "description": "마이크로소프트 공동 창업자인 빌 게이츠는 6,000자 분량의 에세이를 통해 AI가 대체할 수 없는 '인간 전용' 일자리를 지정해야 한다고 주장했습니다. 또한 그는 정부가 AI가 가져올 기술적 영향에 대비하지 못하고 있다는 점에 대해 우려를 표했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai-takeover",
+      "entities": [],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46820",
+      "title": "OpenAI, 핵심 데이터 센터 임원 퇴사… 이어지는 고위급 인력 이탈",
+      "original_title": "",
+      "description": "OpenAI는 말론(Malone)의 퇴사와 관련해 테크크런치(TechCrunch)에 \"업무의 규모와 속도를 지원하기 위해 최근 인프라 조직을 재편했다\"고 밝혔습니다. 최근 OpenAI에서는 주요 인물들의 퇴사가 잇따르고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/25/openai-loses-a-top-data-center-exec-as-stream-of-high-profile-departures-continues/",
+      "entities": [
+        "TechCrunch",
+        "Malone",
+        "OpenAI"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46846",
+      "title": "문샷 AI, '키미 K3'로 미국 클라우드 수익의 30% 요구",
+      "original_title": "",
+      "description": "로이터 통신에 따르면 문샷 AI는 마이크로소프트, 아마존, 구글과 자사의 '키미 K3' 모델을 클라우드 플랫폼에 탑재하는 방안을 논의 중이며, 해당 서비스 수익의 최대 30%를 요구하고 있습니다. 이는 중국 AI 기업과 미국 주요 클라우드 업체 간의 첫 사례가 될 전망입니다.",
+      "link": "https://thenextweb.com/news/moonshot-k3-revenue-sharing-us-clouds",
+      "entities": [
+        "K3",
+        "AI"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46828",
+      "title": "빌 게이츠, \"AI는 업계가 인정하는 것보다 훨씬 위험하다\" 경고",
+      "original_title": "",
+      "description": "빌 게이츠는 에세이와 인터뷰를 통해 AI로 인한 대규모 실업과 생물학적 테러 위험을 경고하며, 업계가 투자를 위해 위험을 의도적으로 숨기고 있다고 비판했습니다. 그는 자율 규제보다는 강력한 제도적 장치 마련이 시급하다고 강조했습니다.",
+      "link": "https://the-decoder.com/bill-gates-warns-ai-is-more-dangerous-than-the-tech-industry-will-admit/",
+      "entities": [],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46821",
+      "title": "AI와 함께 자라는 세대",
+      "original_title": "",
+      "description": "첫째 아이가 태어났을 때, 저는 즉시 아이의 이름으로 이메일과 SNS 계정을 만들었습니다. 온라인에 출생 소식을 알리고 수많은 플랫폼에 아이의 사진을 올리며, 아이가 스스로 서기도 전에 디지털 발자국을 만들기 시작했습니다.",
+      "link": "https://www.technologyreview.com/2026/08/26/1141949/editors-letter-september-2026/",
+      "entities": [
+        "SNS"
+      ],
+      "date": "2026-08-26"
+    },
+    {
+      "id": "46933",
+      "title": "메타 출신 과학자들이 공장 현장에 시각 AI를 도입하려 합니다",
+      "original_title": "",
+      "description": "퍼셉트론(Perceptron)은 기계가 주변 환경을 탐색하도록 돕는 동시에 심층적인 시각 지능을 제공할 수 있는 AI 모델을 선보였습니다. 이 기술은 제조 현장의 자동화 수준을 한 단계 높일 것으로 기대됩니다.",
+      "link": "https://techcrunch.com/2026/08/26/ex-meta-scientists-want-to-bring-visual-ai-to-the-factory-floor/",
+      "entities": [
+        "Perceptron",
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46937",
+      "title": "QueryStory, AI가 제공하는 정보의 신뢰성을 높이려 합니다",
+      "original_title": "",
+      "description": "이 스타트업은 600만 달러의 시드 투자를 유치하며 스텔스 모드를 종료했습니다. LLM과 사이버 보안 노하우를 결합해 AI의 질의응답 과정을 더욱 일관되고 신뢰할 수 있게 만드는 것을 목표로 합니다.",
+      "link": "https://techcrunch.com/2026/08/26/querystory-wants-you-to-believe-what-ai-is-telling-you/",
+      "entities": [
+        "QueryStory"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46936",
+      "title": "로봇 두뇌 개발자들이 'GPT-2 시대'를 넘어서고 있습니다",
+      "original_title": "",
+      "description": "현재 로봇의 하드웨어는 비약적으로 발전했지만, 이를 제어할 AI 두뇌는 여전히 기술적 한계에 머물러 있습니다. 이제 로봇 공학계는 더욱 고도화된 AI를 통해 로봇의 지능을 한 단계 끌어올리려 노력하고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/26/robot-brain-builders-are-pushing-out-of-their-gpt-2-era/",
+      "entities": [
+        "AI",
+        "GPT-2"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46939",
+      "title": "청각 기술 스타트업 Legato, 1,200만 달러 투자 유치 및 AI 청력 보조 안경 공",
+      "original_title": "",
+      "description": "'레가토 프레임(Legato Frames)'이라 불리는 이 안경은 회사가 특허를 보유한 청력 보조 기술을 안경 다리에 통합했습니다. 일상적인 안경 디자인에 최첨단 AI 청각 기술을 접목한 것이 특징입니다.",
+      "link": "https://techcrunch.com/2026/08/26/hearing-tech-startup-legato-emerges-from-stealth-with-12m-and-a-peek-at-its-ai-hearing-glasses/",
+      "entities": [
+        "Legato",
+        "Frames",
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46835",
+      "title": "이스라엘이 자금을 댄 가짜 미국 싱크탱크, AI를 이용한 선전 활동 시도",
+      "original_title": "",
+      "description": "가디언의 분석에 따르면, 챗봇이 친이스라엘 주장을 하도록 유도하기 위해 해당 사이트는 9일 동안 124개의 보고서와 56만 단어 이상의 글을 게시했습니다. 존재하지 않는 싱크탱크의 이름을 내건 이 친이스라엘 메시지 사이트는 AI를 조작하려는 목적으로 운영되었습니다.",
+      "link": "https://www.theguardian.com/world/2026/aug/26/fake-thinktank-israel-ai-propaganda",
+      "entities": [],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46951",
+      "title": "아마존, AI로 포장했던 인력 플랫폼 '메카니컬 터크' 서비스 종료",
+      "original_title": "",
+      "description": "아마존이 21년간 운영해 온 인력 플랫폼 '메카니컬 터크(Mechanical Turk)'를 오는 9월 30일부로 종료합니다. 이 서비스는 컴퓨터가 처리하기 어려운 작업을 사람들에게 아주 적은 비용을 지불하고 맡기는 방식으로, 제프 베이조스는 이를 '인공적인 인공지능'이라고 부르기도 했습니다. 현재 홈페이지 상단 배너를 통해 서비스 종료 결정이 공식화되었습니",
+      "link": "https://thenextweb.com/news/amazon-mechanical-turk-closing-september-2026",
+      "entities": [
+        "Turk",
+        "Mechanical"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46943",
+      "title": "앤드류 응이 말하는 AI 개발 필수 역량 4가지와 전문가들이 지적하는 부족한 점",
+      "original_title": "",
+      "description": "생성형 AI와 에이전트형 AI의 부상은 소프트웨어 개발 과정과 요구되는 기술 역량을 완전히 바꿔놓았습니다.",
+      "link": "https://www.zdnet.com/article/4-ai-development-skills-you-need-according-to-andrew-ng-and-what-experts-say-hes-missing/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46836",
+      "title": "런던 로보택시 도입, 기업을 위한 가이드라인 부재로 연기",
+      "original_title": "",
+      "description": "우버와 웨이브는 '올여름 후반'에 운행을 시작할 것이라고 밝혔으나, 규제 및 기술적 난관으로 인해 올해 내 도입은 어려울 것으로 보입니다. 당초 세웠던 야심 찬 계획이 차질을 빚고 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/26/london-rollout-robotaxis-delayed-uber-wayve",
+      "entities": [],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46935",
+      "title": "놀라운 사실: 베일에 싸였던 'Ox Alpha' 모델의 개발사는 AI 연구소 Z.ai",
+      "original_title": "",
+      "description": "Z.ai는 각종 벤치마크와 리더보드에서 상위권을 차지하며 화제를 모았던 미스터리한 오픈 AI 모델 'Ox Alpha'의 개발사임을 공식 확인했습니다. 곧 해당 모델의 가중치(weights)도 공개될 예정입니다.",
+      "link": "https://techcrunch.com/2026/08/26/surprise-z-ai-is-the-ai-lab-behind-the-mysterious-ox-alpha-model/",
+      "entities": [
+        "Alpha",
+        "Ox",
+        "Z.",
+        "Z.ai",
+        "AI"
+      ],
+      "date": "2026-08-27"
     }
   ]
 }
