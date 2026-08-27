@@ -250,6 +250,7 @@ def main():
         log(f"  ⚠️  에러: {len(summary['errors'])}건")
         for err in summary["errors"]:
             log(f"    - {err}")
+        sys.exit(1)
     else:
         log("  ✅ 에러 없음")
 

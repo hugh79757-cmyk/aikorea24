@@ -642,10 +642,12 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
         p_titles = []
         p_original_titles = []
         p_descriptions = []
-        # Defensive: article_ids can be int or list from LLM
+        # Defensive: article_ids can be int, str, or list from LLM
         article_ids = p.get('article_ids', [])
-        if isinstance(article_ids, int):
+        if isinstance(article_ids, (int, str)):
             article_ids = [article_ids]
+        elif not isinstance(article_ids, (list, tuple)):
+            article_ids = list(article_ids) if article_ids is not None else []
         for aid in article_ids:
             aid_str = str(aid).lstrip('#').strip()
             if aid_str:

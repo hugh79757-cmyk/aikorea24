@@ -148,9 +148,7 @@ def load_today_news() -> tuple[list[dict], str]:
 # STEP 2: OpenAI 기사 클러스터링 (1차 - title only)
 # ============================================
 def cluster_articles(articles: list[dict]) -> list[dict]:
-    """gpt-4o-mini로 title 기반 클러스터링 (최대 10개 클러스터)"""
-    from openai import OpenAI
-    client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+    """무료 LLM 폴백 체인(chat_completion)으로 title 기반 클러스터링 (최대 10개 클러스터)"""
 
     # 기사 목록 문자열 조립 (id + title + source + 해외/국내)
     article_lines = []
@@ -208,25 +206,24 @@ def cluster_articles(articles: list[dict]) -> list[dict]:
   ]
 }}"""
 
-    resp = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
+    content = chat_completion(
+        messages=[{"role": "user", "content": user_prompt}],
+        system_prompt=system_prompt,
         response_format={"type": "json_object"},
-        max_completion_tokens=4000,
+        max_tokens=4000,
         temperature=0.3,
     )
+    if not content:
+        log("  LLM 폴백 체인 응답 없음 (전 tier 실패) → 클러스터 생략")
+        return []
 
-    content = resp.choices[0].message.content.strip()
     try:
         data = json.loads(content)
         clusters = data.get("clusters", [])
         log(f"클러스터링 완료: {len(clusters)}개 클러스터 발견")
         return clusters
     except json.JSONDecodeError:
-        log(f"  OpenAI 응답 파싱 실패: {content[:200]}")
+        log(f"  LLM 응답 파싱 실패: {content[:200]}")
         return []
 
 
@@ -467,7 +464,7 @@ def main() -> None:
 
     # ── STEP 2 ──────────────────────────────────────────
     log("=" * 55)
-    log("STEP 2/6: 기사 클러스터링 (gpt-4o-mini)")
+    log("STEP 2/6: 기사 클러스터링 (LLM 폴백 체인)")
     log("=" * 55)
     clusters = cluster_articles(articles)
     if not clusters:
@@ -490,7 +487,7 @@ def main() -> None:
 
     # ── STEP 4 ──────────────────────────────────────────
     log("=" * 55)
-    log("STEP 4/6: 스레드 아웃라인 생성 (gpt-4o)")
+    log("STEP 4/6: 스레드 아웃라인 생성 (LLM 폴백 체인)")
     log("=" * 55)
     results = []  # (filepath, topic, score, article_count, has_foreign, has_domestic)
     for i, cluster in enumerate(top_clusters, 1):
