@@ -217,6 +217,13 @@ def cluster_articles(articles: list[dict]) -> list[dict]:
         log("  LLM 폴백 체인 응답 없음 (전 tier 실패) → 클러스터 생략")
         return []
 
+    # gemini 등 일부 모델은 ```json 펜스 감싸기 → 제거
+    import re
+    c = content.strip()
+    if c.startswith('```'):
+        c = re.sub(r'^```(?:json)?\s*', '', c)
+        c = re.sub(r'\s*```\s*$', '', c)
+        content = c
     try:
         data = json.loads(content)
         clusters = data.get("clusters", [])
