@@ -1,0 +1,17 @@
+크라우드스트라이크가 발표한 2분기 실적에서 사상 최대 성과를 기록하며 시장의 주목을 받고 있음.
+
+앤스로픽의 '미토스' 모델 출시로 인해 AI 보안 수요가 급증하면서, 해당 기업의 주가는 시간 외 거래에서 11% 급등했음.
+---
+크라우드스트라이크의 2분기 매출은 전년 동기 대비 26% 증가했음. 연간 반복 매출(ARR)은 전년 대비 25% 증가한 58억 4천만 달러를 기록했으며, 이 중 신규 연간 반복 매출은 3억 3천만 달러에 달함. 또한 2분기 동안 935개의 Flex 계정이 신규 추가되었음.
+---
+크라우드스트라이크의 CEO George Kurtz는 이번 실적에 대해 "크라우드스트라이크 역사상 최고의 분기"라고 평가했음. 또한 "미토스 모멘트는 AI 도입에 보안이 필요하다는 대중 시장의 수용으로 이어졌고, 그것이 바로 크라우드스트라이크입니다(원문: The Mythos moment translated into mass-market acceptance that AI adoption needs security, and that's CrowdStrike,)"라고 언급했음.
+---
+George Kurtz CEO는 "모든 기업이 AI를 기반으로 운영될 것이며, 이를 보호하는 것은 우리 역사상 가장 큰 시장 기회입니다(원문: Every enterprise will run on AI, and securing it is the largest market opportunity in our history.)"라고 강조했음.
+---
+Burt Podbere 재무 책임자(Finance chief)는 플랫폼 기반 보안 솔루션 판매 전략에 대해 "결국 핵심은 플랫폼 판매입니다(원문: At the end of the day, it's the platform sale,)"라고 설명했음. 또한 그는 고객들의 요구 사항에 대해 "그들은 더 저렴한 비용으로 더 나은 결과를 원합니다(원문: They want better outcomes at a cheaper cost.)"라고 덧붙였음.
+---
+--- 카드 6 ---
+출처: CNBC Tech
+발행일: Wed, 26 Aug 2026 22:20:20
+원문: https://www.cnbc.com/2026/08/26/crowdstrike-crwd-earnings-q2-2027.html
+추출 사실: B 4건 / C 4건

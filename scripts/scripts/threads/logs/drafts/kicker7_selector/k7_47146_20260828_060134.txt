@@ -1,0 +1,17 @@
+펜실베이니아 대학교 와튼스쿨 연구진이 AI 쇼핑 에이전트의 구매 대행 신뢰도 및 일관성 부족을 연구하기 위해 ACES 시뮬레이터를 사용해 테스트를 진행했음.
+
+연구진은 여섯 가지의 현재 모델들을 대상으로 피트니스 시계 제품 그리드에서 개인 쇼핑 어시스턴트 역할을 하도록 지시했음.
+---
+컨트롤 조건 대비 Wirecutter 리뷰를 보았을 때 Claude Opus 4.8 모델의 Fitbit Inspire 3 선택 확률 증가폭은 90 percentage points였고, Gemini 3.5 Flash 모델은 99 percentage points였음. 또한 Claude Haiku 4.5 모델은 41 to 42 percentage points에서 안정적으로 유지되었음.
+---
+Gemini 3.1 Flash Lite 모델은 소스 순서에 따라 컨트롤 조건 대비 Fitbit Inspire 3 선택 확률이 between 2 and 56 percentage points 범위에서 변동했음. GPT-5.5 모델은 묶음(bundled) 전달 방식 적용 시 53 percentage points의 추가 선택 사례 비율을 보였으나, 순차적(sequential) 전달 방식 적용 시에는 6 percentage points에 그쳤음.
+---
+펜실베이니아 대학교 와튼스쿨 연구진이 수행한 테스트에서는 에이전트가 제품 페이지를 보기 전에 단 하나의 외부 소스만 보았을 때도 일부 경우 추천 결과가 극적으로 바뀌었음. Wirecutter 리뷰는 가장 강한 영향력을 보였으며, 여러 소스를 함께 전달해도 추천 결과가 상쇄되지 않았음.
+---
+연구진은 검색 과정 변화에 따라 AI 쇼핑 에이전트의 상품 추천 일관성을 테스트하기 위해 연구를 수행했으며, 제시 순서 자체가 제품 선택을 유도하는 요인이라는 결론을 내렸음. 프레젠테이션 순서와 소스가 모델에 한 번에 하나씩 전달되는지 혹은 묶여서 전달되는지 여부도 결과에 영향을 미치는 것으로 나타났음.
+---
+--- 카드 6 ---
+출처: The Decoder
+발행일: Thu, 27 Aug 2026 18:24:20
+원문: https://the-decoder.com/ai-shopping-agents-arent-ready-to-buy-on-your-behalf-study-finds/
+추출 사실: B 6건 / C 0건

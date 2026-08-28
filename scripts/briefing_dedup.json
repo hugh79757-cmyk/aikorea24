@@ -1,152 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-28",
-      "briefing_id": 198,
-      "articles": [
-        {
-          "id": "42571",
-          "title": "OpenAI의 허깅 페이스 해킹 사건, 정렬 및 통제에 대한 논쟁 재점화",
-          "original_title": "",
-          "description": "OpenAI의 허깅 페이스 해킹 사건은 AI의 정렬 및 통제에 대한 논쟁을 다시 불러일으켰으며, 점점 능력이 향상되는 AI를 더 잘 정렬해야 하는지, 더 잘 통제해야 하는지에 대한 상반된 견해를 드러냈습니다.",
-          "link": "https://techcrunch.com/2026/07/27/openais-hugging-face-breach-has-reignited-the-debate-over-alignment-and-control/",
-          "entities": [],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42568",
-          "title": "사티아 나델라, 모든 AI에 의존하는 기업은 생존하기 어려울 것",
-          "original_title": "",
-          "description": "나델라는 자체 모델이 없는 기업이나 AI 모델과 프롬프트를 분리하는 AI 게이트웨이라 불리는 AI 인프라 층이 없는 기업들은 어려움에 처할 것이라고 말했습니다.",
-          "link": "https://techcrunch.com/2026/07/27/satya-nadella-says-companies-that-trust-one-ai-for-everything-may-not-survive/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42602",
-          "title": "AI 공급업체들이 구독 모델에서 소비 기반 가격으로 전환 중. AI PC는 헤지 전략이다.",
-          "original_title": "",
-          "description": "AI 가격 모델이 변화하고 있습니다. 주요 소프트웨어 공급업체들이 좌석 기반 구독에서 토큰 소비 또는 결과 기반 가격 모델로 이동하고 있습니다. 초기 사용자를 유치하기 위한 고정 요금 구독은 손실을 초래했지만, 이제 기업들이 도구에 의존하게 되면서 공급업체들은 다양한 전략을 채택하고 있습니다.",
-          "link": "https://thenextweb.com/news/ai-pricing-shift-cloud-costs-local-ai-pcs",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42583",
-          "title": "로컬 AI를 탑재한 새로운 데비안 리눅스를 테스트해봤습니다 - 당신에게 맞는지 확인해보세요",
-          "original_title": "",
-          "description": "섀도우펫치 만나기: AI가 당신의 취향이라면 리눅스가 당신의 운영체제라면, 이 새로운 데비안 기반 배포판을 시도해볼 수 있는 최고의 방법입니다.",
-          "link": "https://www.zdnet.com/article/shadowfetch-debian-linux-with-local-ai/",
-          "entities": [],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42591",
-          "title": "아니다, Centrica; 고객들은 인간보다 봇을 선호하지 않는다 | 편지",
-          "original_title": "",
-          "description": "Charles MacKinnon은 영국 가스 회사의 1,300개 일자리를 감축하는 정당화에 동의하지 않습니다. Centrica의 CEO Chris O’Shea에 따르면, 영국 가스 고객들의 대부분은 인간보다 챗봇과 대화하길 선호한다고 주장합니다.",
-          "link": "https://www.theguardian.com/business/2026/jul/27/no-centrica-customers-dont-prefer-bots-to-humans",
-          "entities": [
-            "Chris",
-            "CEO",
-            "Charles",
-            "Centrica"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42606",
-          "title": "AI, 드론 및 데이터: 방산 거대 기업들이 기술 스타트업에 기록적인 41억 달러 투자",
-          "original_title": "",
-          "description": "올해 방산 기술 스타트업에 대한 투자가 역대 최고치를 기록했습니다. BAE 시스템, 록히드 마틴, 에어버스 등의 방산 계약업체들이 41억 달러(약 3억 파운드)의 벤처 자금에 참여했습니다.",
-          "link": "https://www.cityam.com/ai-drones-and-data-defence-giants-splash-record-4-1bn-on-tech-start-ups/",
-          "entities": [
-            "AI",
-            "BAE"
-          ],
-          "date": "2026-07-28"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-28",
-      "briefing_id": 199,
-      "articles": [
-        {
-          "id": "42651",
-          "title": "안트로픽의 다리오 아모데이, 개방형 모델에 반대하지 않지만 중국의 AI에 대한 우려를 표명",
-          "original_title": "",
-          "description": "안트로픽의 창립자이자 CEO인 다리오 아모데이는 개방형 모델에 대한 자신의 견해를 명확히 하며, 중국의 성장하는 AI 능력에 대한 우려를 드러냈습니다.",
-          "link": "https://techcrunch.com/2026/07/27/anthropics-dario-amodei-responds-doesnt-oppose-open-weight-models-but-fears-chinese-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42672",
-          "title": "대만, 칩 밀수 조사 중 엔비디아 직원 체포",
-          "original_title": "",
-          "description": "대만의 AI 하드웨어 밀수 조사에서 슈퍼 마이크로로 시작된 조사가 이제 엔비디아 내부로까지 확장되었습니다. 7월 28일, 검찰은 제한된 AI 서버에 대한 조사의 일환으로 엔비디아 직원을 체포했습니다.",
-          "link": "https://thenextweb.com/news/taiwan-detains-nvidia-employee-china-chip-smuggling",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42677",
-          "title": "마이크로소프트, 사이버 보안을 위한 비용 절감 AI 모델 홍보",
-          "original_title": "",
-          "description": "마이크로소프트는 오픈AI의 GPT-5.4와 통합될 경우, 새로운 사이버 보안 모델이 앤트로픽의 새로운 미토스 5를 능가할 수 있다고 주장합니다. 이는 보다 안전한 디지털 환경을 위한 새로운 접근법으로 기대됩니다.",
-          "link": "https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html",
-          "entities": [
-            "GPT-5.",
-            "AI"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42676",
-          "title": "의회의 스페이스X 주식 구매가 갈등 우려를 불러일으키다",
-          "original_title": "",
-          "description": "다섯 명의 의원은 스페이스X의 연방 계약, 방위 프로그램, AI, 통신 또는 증권 시장과 관련된 위원회에서 활동하고 있습니다. 이로 인해 이해 충돌의 우려가 커지고 있습니다.",
-          "link": "https://www.cnbc.com/2026/07/28/spacex-stock-congress-lawmakers-ipo-conflict-of-interest.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42655",
-          "title": "뉴욕 타임스가 AI 지배자들로부터 저널리즘을 구할 수 있을까?",
-          "original_title": "",
-          "description": "2023년, 뉴욕 타임스는 오픈AI와 마이크로소프트를 저작권 침해로 고소했습니다. 이들은 사건에 2천만 달러 이상을 지출했으며, 발행인 A.G. 숄츠버거는 싸움을 멈출 계획이 없습니다.",
-          "link": "https://www.wired.com/story/the-big-interview-podcast-a-g-sulzberger-new-york-times/",
-          "entities": [
-            "AI",
-            "A.G"
-          ],
-          "date": "2026-07-28"
-        },
-        {
-          "id": "42659",
-          "title": "AI 요원이 통제를 벗어나지 않도록 하려면? 새로운 측정 방식에서 시작된다 | 브루스 슈나",
-          "original_title": "",
-          "description": "전설 속 지니처럼 AI 요원은 지시를 문자 그대로 받아들여 재앙적인 결과를 초래할 수 있습니다. 우리는 그들이 실제로 우리가 의미하는 바를 수행할 수 있는 능력을 추적해야 합니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/jul/28/rogue-ai-agent-instructions",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-28"
-        }
-      ]
-    },
-    {
       "date": "2026-07-29",
       "briefing_id": 200,
       "articles": [
@@ -4558,143 +4412,153 @@
           "date": "2026-08-27"
         }
       ]
+    },
+    {
+      "date": "2026-08-27",
+      "briefing_id": 260,
+      "articles": [
+        {
+          "id": "47055",
+          "title": "화웨이, 주로 중국 제약사와 AI 제약 파트너십 확대 계획",
+          "original_title": "",
+          "description": "헬스케어 사업부 대표 윌리엄 장이 로이터 통신에 밝힌 바에 따르면, 화웨이는 제약회사들과 더 많은 AI 파트너십을 체결할 계획이며 현재 프로젝트는 주로 중국 국내 제약사들과 진행되고 있습니다. 화웨이는 어센드(Ascend) 칩과 함께 화합물 스크리닝 도구를 판매하고 있습니다.",
+          "link": "https://thenextweb.com/news/huawei-ai-pharma-tie-ups-ascend-kunpeng",
+          "entities": [
+            "Ascend",
+            "AI"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "47029",
+          "title": "엔비디아, 허깅 페이스 인수 임박",
+          "original_title": "",
+          "description": "엔비디아가 인기 오픈소스 AI 허브인 허깅 페이스를 129억 달러에 인수하기로 합의한 것으로 알려졌습니다. 이번 인수를 통해 엔비디아는 자사의 칩 제국을 보호하고 클라우드 사업에 다시 뛰어들 수 있게 될 것입니다.",
+          "link": "https://techcrunch.com/2026/08/26/nvidia-closes-in-on-hugging-face-acquisition/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "47039",
+          "title": "런던 신경외과 의사들, 뇌종양 제거를 위한 최초의 인공지능 보조 수술 성공",
+          "original_title": "",
+          "description": "카메라 영상을 실시간으로 분석해 수술 시 피해야 할 중요한 해부학적 구조를 파악함으로써 집도의를 도왔습니다. 보건 당국에 따르면 런던의 신경외과 의사들이 세계 최초로 인공지능 보조 뇌종양 제거 수술에 성공하여 48세 남성의 시력을 구했다고 합니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/27/london-neurosurgeons-ai-assisted-operation-brain-tumour",
+          "entities": [],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "47060",
+          "title": "AI를 투자에 사용할 때는 본인 책임, 금융 감독원 경고",
+          "original_title": "",
+          "description": "더 많은 사람들이 온라인 챗봇을 찾으면서, 영국의 금융 감독 기관은 AI를 투자 조언에 사용하는 영국인들에게 문제가 생길 경우 보호받지 못할 수 있다고 경고했습니다. 최근 조사에 따르면 경험이 부족한 초보 투자자 5명 중 4명이 투자 결정을 돕기 위해 AI 도구를 사용한다고 인정했습니다.",
+          "link": "https://www.cityam.com/use-ai-for-investing-at-your-own-risk-warns-watchdog/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "47032",
+          "title": "구글 제미나이 3.5 트랜스크라이브, 말실수 자동 교정하며 85개 언어 음성을 텍스트로 변",
+          "original_title": "",
+          "description": "구글의 새로운 제미나이 3.5 트랜스크라이브는 85개 이상의 언어를 인식하며, 실시간으로 군더더기 말을 제거하고 말실수를 교정한다. 스트리밍 모드에서 4.0%의 단어 오류율을 기록하며, 전작인 처프 3 대비 지연 시간이 70% 단축되었다.",
+          "link": "https://the-decoder.com/googles-gemini-3-5-transcribe-turns-speech-to-text-in-85-languages-while-auto-correcting-your-verbal-stumbles/",
+          "entities": [],
+          "date": "2026-08-27"
+        },
+        {
+          "id": "46999",
+          "title": "'미토스 모멘트'가 AI 사이버 보안 물결을 주도하면서, 크라우드스트라이크가 사상 최대 2",
+          "original_title": "",
+          "description": "최첨단 AI로 인한 위협이 고도화된 보안 툴에 대한 수요를 촉진하면서, 크라우드스트라이크의 주가는 올해 61% 폭등하여 최고치를 경신했습니다.",
+          "link": "https://www.cnbc.com/2026/08/26/crowdstrike-crwd-earnings-q2-2027.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-27"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "briefing_id": 261,
+      "articles": [
+        {
+          "id": "47162",
+          "title": "놀라운 AI의 수학적 돌파구, 수학자들에게 던지는 근본적인 질문",
+          "original_title": "",
+          "description": "AI 시대에 수학이 발전할지 퇴보할지는 사회가 인간 지성의 어떤 가치를 중요하게 여기느냐에 달려 있습니다. 전문가들은 최근 AI의 수학적 성과가 새로운 발견이라기보다 기존 아이디어의 영리한 재조합에 가깝다고 지적합니다.",
+          "link": "https://www.theguardian.com/science/2026/aug/27/surprising-ai-breakthroughs-raise-soul-searching-questions-for-mathematicians",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47198",
+          "title": "제미나이 인텔리전스는 제미나이 나노 3가 필요하며, 구글이 첫 제미나이 나노 4 탑재 폰을",
+          "original_title": "",
+          "description": "픽셀 11 시리즈의 출시와 함께 구글이 제미나이 나노 4를 위한 개발자 문서를 업데이트했습니다. 새로운 온디바이스 AI 기능들을 지원하는 기기 정보가 포함되어 있습니다.",
+          "link": "https://9to5google.com/2026/08/27/gemini-intelligence-nano-4/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47137",
+          "title": "오픈AI, 앤스로픽, 구글 등 100여 개 기업, AI 오작동 방지를 위한 공동 대응 촉구",
+          "original_title": "",
+          "description": "세계 최대 기술 기업들과 AI 스타트업들이 모여 현재의 사이버 보안 상태를 비판하고, 차세대 사이버 위협을 막을 수 있는 새로운 해결책을 제시했습니다.",
+          "link": "https://techcrunch.com/2026/08/27/openai-anthropic-google-and-100-other-companies-call-for-action-to-defend-against-rogue-ai/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47146",
+          "title": "\"AI 쇼핑 에이전트, 아직은 시기상조\"… 연구 결과, 구매 대행 신뢰도 낮아",
+          "original_title": "",
+          "description": "AI에게 쇼핑을 맡기는 것이 항상 최선의 결과를 보장하지는 않는 것으로 나타났습니다. 와튼 스쿨 연구진은 AI 쇼핑 에이전트가 외부 정보 소스나 정보 제공 순서에 따라 제품 추천을 극단적으로 바꾸는 등 매우 변덕스럽게 작동한다는 사실을 밝혀냈습니다.",
+          "link": "https://the-decoder.com/ai-shopping-agents-arent-ready-to-buy-on-your-behalf-study-finds/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47179",
+          "title": "AI가 비즈니스를 재편함에 따라 '프랙셔널 CTO(Fractional CTO)'가 주목받고",
+          "original_title": "",
+          "description": "AI 경쟁이 심화되면서 경영상의 공백이 발생하고 있습니다. 딜로이트의 2026년 연구에 따르면 기업의 21%만이 에이전트형 AI에 대한 성숙한 거버넌스를 갖추고 있지만, 74%는 2027년까지 에이전트를 최소한 보통 수준 이상으로 활용할 것으로 예상하고 있습니다. 기술 발전 속도가 이를 통제할 조직적 구조의 변화보다 훨씬 빠르게 진행되고 있습니다.",
+          "link": "https://thenextweb.com/news/fractional-cto-ai-reshapes-business",
+          "entities": [
+            "AI",
+            "Fractional",
+            "CTO"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47151",
+          "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약",
+          "original_title": "",
+          "description": "블룸버그 통신에 따르면 앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다. 이번 소식은 기업 공개(IPO)를 앞두고 앤스로픽이 컴퓨팅 자원을 확보하기 위한 전략적 행보로 풀이됩니다.",
+          "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/",
+          "entities": [
+            "Anthropic",
+            "IPO"
+          ],
+          "date": "2026-08-28"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "42571",
-      "title": "OpenAI의 허깅 페이스 해킹 사건, 정렬 및 통제에 대한 논쟁 재점화",
-      "original_title": "",
-      "description": "OpenAI의 허깅 페이스 해킹 사건은 AI의 정렬 및 통제에 대한 논쟁을 다시 불러일으켰으며, 점점 능력이 향상되는 AI를 더 잘 정렬해야 하는지, 더 잘 통제해야 하는지에 대한 상반된 견해를 드러냈습니다.",
-      "link": "https://techcrunch.com/2026/07/27/openais-hugging-face-breach-has-reignited-the-debate-over-alignment-and-control/",
-      "entities": [],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42568",
-      "title": "사티아 나델라, 모든 AI에 의존하는 기업은 생존하기 어려울 것",
-      "original_title": "",
-      "description": "나델라는 자체 모델이 없는 기업이나 AI 모델과 프롬프트를 분리하는 AI 게이트웨이라 불리는 AI 인프라 층이 없는 기업들은 어려움에 처할 것이라고 말했습니다.",
-      "link": "https://techcrunch.com/2026/07/27/satya-nadella-says-companies-that-trust-one-ai-for-everything-may-not-survive/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42602",
-      "title": "AI 공급업체들이 구독 모델에서 소비 기반 가격으로 전환 중. AI PC는 헤지 전략이다.",
-      "original_title": "",
-      "description": "AI 가격 모델이 변화하고 있습니다. 주요 소프트웨어 공급업체들이 좌석 기반 구독에서 토큰 소비 또는 결과 기반 가격 모델로 이동하고 있습니다. 초기 사용자를 유치하기 위한 고정 요금 구독은 손실을 초래했지만, 이제 기업들이 도구에 의존하게 되면서 공급업체들은 다양한 전략을 채택하고 있습니다.",
-      "link": "https://thenextweb.com/news/ai-pricing-shift-cloud-costs-local-ai-pcs",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42583",
-      "title": "로컬 AI를 탑재한 새로운 데비안 리눅스를 테스트해봤습니다 - 당신에게 맞는지 확인해보세요",
-      "original_title": "",
-      "description": "섀도우펫치 만나기: AI가 당신의 취향이라면 리눅스가 당신의 운영체제라면, 이 새로운 데비안 기반 배포판을 시도해볼 수 있는 최고의 방법입니다.",
-      "link": "https://www.zdnet.com/article/shadowfetch-debian-linux-with-local-ai/",
-      "entities": [],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42591",
-      "title": "아니다, Centrica; 고객들은 인간보다 봇을 선호하지 않는다 | 편지",
-      "original_title": "",
-      "description": "Charles MacKinnon은 영국 가스 회사의 1,300개 일자리를 감축하는 정당화에 동의하지 않습니다. Centrica의 CEO Chris O’Shea에 따르면, 영국 가스 고객들의 대부분은 인간보다 챗봇과 대화하길 선호한다고 주장합니다.",
-      "link": "https://www.theguardian.com/business/2026/jul/27/no-centrica-customers-dont-prefer-bots-to-humans",
-      "entities": [
-        "Chris",
-        "CEO",
-        "Charles",
-        "Centrica"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42606",
-      "title": "AI, 드론 및 데이터: 방산 거대 기업들이 기술 스타트업에 기록적인 41억 달러 투자",
-      "original_title": "",
-      "description": "올해 방산 기술 스타트업에 대한 투자가 역대 최고치를 기록했습니다. BAE 시스템, 록히드 마틴, 에어버스 등의 방산 계약업체들이 41억 달러(약 3억 파운드)의 벤처 자금에 참여했습니다.",
-      "link": "https://www.cityam.com/ai-drones-and-data-defence-giants-splash-record-4-1bn-on-tech-start-ups/",
-      "entities": [
-        "AI",
-        "BAE"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42651",
-      "title": "안트로픽의 다리오 아모데이, 개방형 모델에 반대하지 않지만 중국의 AI에 대한 우려를 표명",
-      "original_title": "",
-      "description": "안트로픽의 창립자이자 CEO인 다리오 아모데이는 개방형 모델에 대한 자신의 견해를 명확히 하며, 중국의 성장하는 AI 능력에 대한 우려를 드러냈습니다.",
-      "link": "https://techcrunch.com/2026/07/27/anthropics-dario-amodei-responds-doesnt-oppose-open-weight-models-but-fears-chinese-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42672",
-      "title": "대만, 칩 밀수 조사 중 엔비디아 직원 체포",
-      "original_title": "",
-      "description": "대만의 AI 하드웨어 밀수 조사에서 슈퍼 마이크로로 시작된 조사가 이제 엔비디아 내부로까지 확장되었습니다. 7월 28일, 검찰은 제한된 AI 서버에 대한 조사의 일환으로 엔비디아 직원을 체포했습니다.",
-      "link": "https://thenextweb.com/news/taiwan-detains-nvidia-employee-china-chip-smuggling",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42677",
-      "title": "마이크로소프트, 사이버 보안을 위한 비용 절감 AI 모델 홍보",
-      "original_title": "",
-      "description": "마이크로소프트는 오픈AI의 GPT-5.4와 통합될 경우, 새로운 사이버 보안 모델이 앤트로픽의 새로운 미토스 5를 능가할 수 있다고 주장합니다. 이는 보다 안전한 디지털 환경을 위한 새로운 접근법으로 기대됩니다.",
-      "link": "https://www.cnbc.com/2026/07/27/microsoft-touts-cost-saving-ai-model-for-cybersecurity.html",
-      "entities": [
-        "GPT-5.",
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42676",
-      "title": "의회의 스페이스X 주식 구매가 갈등 우려를 불러일으키다",
-      "original_title": "",
-      "description": "다섯 명의 의원은 스페이스X의 연방 계약, 방위 프로그램, AI, 통신 또는 증권 시장과 관련된 위원회에서 활동하고 있습니다. 이로 인해 이해 충돌의 우려가 커지고 있습니다.",
-      "link": "https://www.cnbc.com/2026/07/28/spacex-stock-congress-lawmakers-ipo-conflict-of-interest.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42655",
-      "title": "뉴욕 타임스가 AI 지배자들로부터 저널리즘을 구할 수 있을까?",
-      "original_title": "",
-      "description": "2023년, 뉴욕 타임스는 오픈AI와 마이크로소프트를 저작권 침해로 고소했습니다. 이들은 사건에 2천만 달러 이상을 지출했으며, 발행인 A.G. 숄츠버거는 싸움을 멈출 계획이 없습니다.",
-      "link": "https://www.wired.com/story/the-big-interview-podcast-a-g-sulzberger-new-york-times/",
-      "entities": [
-        "AI",
-        "A.G"
-      ],
-      "date": "2026-07-28"
-    },
-    {
-      "id": "42659",
-      "title": "AI 요원이 통제를 벗어나지 않도록 하려면? 새로운 측정 방식에서 시작된다 | 브루스 슈나",
-      "original_title": "",
-      "description": "전설 속 지니처럼 AI 요원은 지시를 문자 그대로 받아들여 재앙적인 결과를 초래할 수 있습니다. 우리는 그들이 실제로 우리가 의미하는 바를 수행할 수 있는 능력을 추적해야 합니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/jul/28/rogue-ai-agent-instructions",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-28"
-    },
     {
       "id": "42790",
       "title": "인공지능이 기업 여행 물류를 간소화하는 데 어떻게 사용되는가",
@@ -8747,6 +8611,138 @@
         "AI"
       ],
       "date": "2026-08-27"
+    },
+    {
+      "id": "47055",
+      "title": "화웨이, 주로 중국 제약사와 AI 제약 파트너십 확대 계획",
+      "original_title": "",
+      "description": "헬스케어 사업부 대표 윌리엄 장이 로이터 통신에 밝힌 바에 따르면, 화웨이는 제약회사들과 더 많은 AI 파트너십을 체결할 계획이며 현재 프로젝트는 주로 중국 국내 제약사들과 진행되고 있습니다. 화웨이는 어센드(Ascend) 칩과 함께 화합물 스크리닝 도구를 판매하고 있습니다.",
+      "link": "https://thenextweb.com/news/huawei-ai-pharma-tie-ups-ascend-kunpeng",
+      "entities": [
+        "Ascend",
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "47029",
+      "title": "엔비디아, 허깅 페이스 인수 임박",
+      "original_title": "",
+      "description": "엔비디아가 인기 오픈소스 AI 허브인 허깅 페이스를 129억 달러에 인수하기로 합의한 것으로 알려졌습니다. 이번 인수를 통해 엔비디아는 자사의 칩 제국을 보호하고 클라우드 사업에 다시 뛰어들 수 있게 될 것입니다.",
+      "link": "https://techcrunch.com/2026/08/26/nvidia-closes-in-on-hugging-face-acquisition/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "47039",
+      "title": "런던 신경외과 의사들, 뇌종양 제거를 위한 최초의 인공지능 보조 수술 성공",
+      "original_title": "",
+      "description": "카메라 영상을 실시간으로 분석해 수술 시 피해야 할 중요한 해부학적 구조를 파악함으로써 집도의를 도왔습니다. 보건 당국에 따르면 런던의 신경외과 의사들이 세계 최초로 인공지능 보조 뇌종양 제거 수술에 성공하여 48세 남성의 시력을 구했다고 합니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/27/london-neurosurgeons-ai-assisted-operation-brain-tumour",
+      "entities": [],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "47060",
+      "title": "AI를 투자에 사용할 때는 본인 책임, 금융 감독원 경고",
+      "original_title": "",
+      "description": "더 많은 사람들이 온라인 챗봇을 찾으면서, 영국의 금융 감독 기관은 AI를 투자 조언에 사용하는 영국인들에게 문제가 생길 경우 보호받지 못할 수 있다고 경고했습니다. 최근 조사에 따르면 경험이 부족한 초보 투자자 5명 중 4명이 투자 결정을 돕기 위해 AI 도구를 사용한다고 인정했습니다.",
+      "link": "https://www.cityam.com/use-ai-for-investing-at-your-own-risk-warns-watchdog/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "47032",
+      "title": "구글 제미나이 3.5 트랜스크라이브, 말실수 자동 교정하며 85개 언어 음성을 텍스트로 변",
+      "original_title": "",
+      "description": "구글의 새로운 제미나이 3.5 트랜스크라이브는 85개 이상의 언어를 인식하며, 실시간으로 군더더기 말을 제거하고 말실수를 교정한다. 스트리밍 모드에서 4.0%의 단어 오류율을 기록하며, 전작인 처프 3 대비 지연 시간이 70% 단축되었다.",
+      "link": "https://the-decoder.com/googles-gemini-3-5-transcribe-turns-speech-to-text-in-85-languages-while-auto-correcting-your-verbal-stumbles/",
+      "entities": [],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "46999",
+      "title": "'미토스 모멘트'가 AI 사이버 보안 물결을 주도하면서, 크라우드스트라이크가 사상 최대 2",
+      "original_title": "",
+      "description": "최첨단 AI로 인한 위협이 고도화된 보안 툴에 대한 수요를 촉진하면서, 크라우드스트라이크의 주가는 올해 61% 폭등하여 최고치를 경신했습니다.",
+      "link": "https://www.cnbc.com/2026/08/26/crowdstrike-crwd-earnings-q2-2027.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-27"
+    },
+    {
+      "id": "47162",
+      "title": "놀라운 AI의 수학적 돌파구, 수학자들에게 던지는 근본적인 질문",
+      "original_title": "",
+      "description": "AI 시대에 수학이 발전할지 퇴보할지는 사회가 인간 지성의 어떤 가치를 중요하게 여기느냐에 달려 있습니다. 전문가들은 최근 AI의 수학적 성과가 새로운 발견이라기보다 기존 아이디어의 영리한 재조합에 가깝다고 지적합니다.",
+      "link": "https://www.theguardian.com/science/2026/aug/27/surprising-ai-breakthroughs-raise-soul-searching-questions-for-mathematicians",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47198",
+      "title": "제미나이 인텔리전스는 제미나이 나노 3가 필요하며, 구글이 첫 제미나이 나노 4 탑재 폰을",
+      "original_title": "",
+      "description": "픽셀 11 시리즈의 출시와 함께 구글이 제미나이 나노 4를 위한 개발자 문서를 업데이트했습니다. 새로운 온디바이스 AI 기능들을 지원하는 기기 정보가 포함되어 있습니다.",
+      "link": "https://9to5google.com/2026/08/27/gemini-intelligence-nano-4/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47137",
+      "title": "오픈AI, 앤스로픽, 구글 등 100여 개 기업, AI 오작동 방지를 위한 공동 대응 촉구",
+      "original_title": "",
+      "description": "세계 최대 기술 기업들과 AI 스타트업들이 모여 현재의 사이버 보안 상태를 비판하고, 차세대 사이버 위협을 막을 수 있는 새로운 해결책을 제시했습니다.",
+      "link": "https://techcrunch.com/2026/08/27/openai-anthropic-google-and-100-other-companies-call-for-action-to-defend-against-rogue-ai/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47146",
+      "title": "\"AI 쇼핑 에이전트, 아직은 시기상조\"… 연구 결과, 구매 대행 신뢰도 낮아",
+      "original_title": "",
+      "description": "AI에게 쇼핑을 맡기는 것이 항상 최선의 결과를 보장하지는 않는 것으로 나타났습니다. 와튼 스쿨 연구진은 AI 쇼핑 에이전트가 외부 정보 소스나 정보 제공 순서에 따라 제품 추천을 극단적으로 바꾸는 등 매우 변덕스럽게 작동한다는 사실을 밝혀냈습니다.",
+      "link": "https://the-decoder.com/ai-shopping-agents-arent-ready-to-buy-on-your-behalf-study-finds/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47179",
+      "title": "AI가 비즈니스를 재편함에 따라 '프랙셔널 CTO(Fractional CTO)'가 주목받고",
+      "original_title": "",
+      "description": "AI 경쟁이 심화되면서 경영상의 공백이 발생하고 있습니다. 딜로이트의 2026년 연구에 따르면 기업의 21%만이 에이전트형 AI에 대한 성숙한 거버넌스를 갖추고 있지만, 74%는 2027년까지 에이전트를 최소한 보통 수준 이상으로 활용할 것으로 예상하고 있습니다. 기술 발전 속도가 이를 통제할 조직적 구조의 변화보다 훨씬 빠르게 진행되고 있습니다.",
+      "link": "https://thenextweb.com/news/fractional-cto-ai-reshapes-business",
+      "entities": [
+        "AI",
+        "Fractional",
+        "CTO"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47151",
+      "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약",
+      "original_title": "",
+      "description": "블룸버그 통신에 따르면 앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다. 이번 소식은 기업 공개(IPO)를 앞두고 앤스로픽이 컴퓨팅 자원을 확보하기 위한 전략적 행보로 풀이됩니다.",
+      "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/",
+      "entities": [
+        "Anthropic",
+        "IPO"
+      ],
+      "date": "2026-08-28"
     }
   ]
 }

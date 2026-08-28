@@ -1,0 +1,66 @@
+{
+  "A": {
+    "사건명": "웨이모(Waymo)의 독일 뮌헨 로보택시 서비스 진출 발표",
+    "시점": "2027-12-31",
+    "장소": "독일 뮌헨",
+    "행위자": "웨이모(Waymo)",
+    "계기": "독일 내 자율주행 차량 운영 허용 및 유럽 시장으로의 사업 확장 전략"
+  },
+  "B": [
+    {
+      "value_text": "11",
+      "metric": "웨이모가 현재 로보택시 서비스를 운영 중인 도시의 수",
+      "condition": null,
+      "evidence_sentence": "It already operates in 11 cities in the United States and has applied for a license in the United Kingdom to launch its robotaxis in London this year."
+    },
+    {
+      "value_text": "2021",
+      "metric": "독일 당국이 특정 지리적 영역 내 자율주행 차량 운영을 승인한 연도",
+      "condition": null,
+      "evidence_sentence": "German authorities gave autonomous vehicles the green light in 2021 to operate in the country in approved geographical areas."
+    },
+    {
+      "value_text": "2026",
+      "metric": "리프트(Lyft)와 바이두(Baidu)가 독일 도로에 자율주행차를 투입하기로 발표한 연도",
+      "condition": null,
+      "evidence_sentence": "Other self-driving taxi companies are also looking to enter Germany, with American ride-hailing company Lyft announcing last year that it would partner with Chinese AI firm Baidu to put autonomous cars on German roads in 2026."
+    }
+  ],
+  "C": [
+    {
+      "text": "Bavaria is determined to live up to its pioneering role and be an international leader in autonomous driving,",
+      "text_translated": "바이에른주는 선구적인 역할을 다하고 자율주행 분야에서 국제적인 리더가 되기로 결심했습니다.",
+      "speakers": [
+        "Florian Herrmann"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "웨이모의 독일 뮌헨 로보택시 진출 및 바이에른주의 자율주행 리더십 전략",
+      "paragraph_hint": "3번째 문단",
+      "speaker": "Florian Herrmann",
+      "speaker_title": "the head of the Bavarian state chancellery"
+    },
+    {
+      "text": "Now we need to move quickly from testing to real-world deployment.",
+      "text_translated": "이제 우리는 테스트 단계에서 실제 현장 배치 단계로 신속하게 나아가야 합니다.",
+      "speakers": [
+        "Florian Herrmann"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "웨이모의 독일 뮌헨 로보택시 진출 및 바이에른주의 자율주행 리더십 전략",
+      "paragraph_hint": "4번째 문단",
+      "speaker": "Florian Herrmann",
+      "speaker_title": "the head of the Bavarian state chancellery"
+    }
+  ],
+  "D": "글로벌 자율주행 기업의 유럽 시장 진출 가속화와 관련 규제 환경의 변화; 표면적으로는 기술 기업의 서비스 확장이나, 근본적으로는 국가별 자율주행 안전 표준 및 운영 허가 체계의 파편화 문제가 존재함.",
+  "E": [
+    "웨이모",
+    "로보택시",
+    "뮌헨"
+  ],
+  "F": [
+    "웨이모의 뮌헨 내 실제 무인 로보택시 서비스 시작을 위한 구체적인 독일 당국 승인 절차",
+    "유럽 연합(EU) 차원의 통합된 자율주행 규제 마련 시점",
+    "뮌헨 현지 고해상도 지도 제작 및 안전 운전자 테스트의 구체적인 완료 일정"
+  ]
+}

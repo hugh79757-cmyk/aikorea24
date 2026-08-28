@@ -1,0 +1,13 @@
+Google이 Docs, Sheets, Drive를 가로질러 작동하는 에이전트 작업, 핸즈프리 Gmail 제어, 음성 받은레터 요약, 개인 지능 기능을 포함한 4가지 새로운 기능을 제미나이 라이브(Gemini Live)에 추가함.
+
+이는 음성 프롬프트가 제미나이로부터 도움을 받는 가장 빠른 방법이라는 디자인 가정과 사용자 요구에 대응하기 위함임.
+---
+이미 제미나이와 대화하는 사용자 비율은 63%임. 제미나이 라이브에 추가된 기능의 개수는 four개이며, EU 지역에서 DMA 합의에 따른 규정 적용 시 경쟁 음성 어시스턴트가 Android에서 유사한 기능을 갖추도록 허용해야 하는 시한은 July 2027임.
+---
+Google의 product director Neel Joshi는 “speaking a prompt out loud is often the quickest way to get help with Gemini.”라고 썼으며, 이를 한국어로 번역하면 "프롬프트를 소리 내어 말하는 것이 종종 제미나이의 도움을 받는 가장 빠른 방법이다."임 (원문: speaking a prompt out loud is often the quickest way to get help with Gemini.)
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Wed, 26 Aug 2026 22:12:21
+원문: https://thenextweb.com/news/gemini-live-spark-voice-agentic-tasks-dma-rival-assistants
+추출 사실: B 4건 / C 1건

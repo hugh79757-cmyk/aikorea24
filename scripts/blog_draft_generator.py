@@ -42,7 +42,7 @@ def remove_chinese(text):
 # model_router (threads/v3)
 # ============================================
 from model_router import chat_completion
-from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, DEEPSEEK_POOL
+from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, is_placeholder_copy, DEEPSEEK_POOL
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
@@ -529,6 +529,12 @@ draft: false
 def _add_image_to_frontmatter(filepath, image_rel_path):
     if not filepath or not image_rel_path:
         return
+    # placeholder 사본 검출: news-keyword-og.webp의 복사본이면 image: 필드 주입 안 함
+    # (기본 OG 이미지가 그대로 노출되는 사고 방지, og:image도 비움)
+    full_path = os.path.join(PROJECT_DIR, "public", image_rel_path.lstrip("/"))
+    if is_placeholder_copy(full_path):
+        log(f"  ⚠️ placeholder 사본 검출(MD5 일치), image 필드 생략: {image_rel_path}")
+        return
     with open(filepath, "r", encoding="utf-8") as f:
         content = f.read()
     if re.search(r'^image:', content, re.MULTILINE):
@@ -747,8 +753,13 @@ def main():
             is_valid, reason = validate_thumbnail_quality(thumb_path)
             file_size = os.path.getsize(thumb_path)
             if is_valid:
-                log(f"  ✅ {slug}: {file_size:,} bytes, 800x800, WebP")
-                quality_passed += 1
+                # placeholder 사본 검출: 품질은 OK지만 image 필드에서 제외했으므로 이슈로 카운트
+                if is_placeholder_copy(thumb_path):
+                    log(f"  ⚠️ {slug}: placeholder 사본 (image 필드 생략됨, {file_size:,} bytes)")
+                    quality_issues.append((slug, "placeholder 사본 (image 필드 생략)"))
+                else:
+                    log(f"  ✅ {slug}: {file_size:,} bytes, 800x800, WebP")
+                    quality_passed += 1
             else:
                 log(f"  ❌ {slug}: {reason} ({file_size:,} bytes)")
                 quality_issues.append((slug, reason))

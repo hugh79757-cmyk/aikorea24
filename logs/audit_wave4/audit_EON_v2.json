@@ -1,0 +1,83 @@
+{
+  "A": {
+    "사건명": "포낙(Phonak)의 신형 보청기 플랫폼 'EON' 출시",
+    "시점": "2026-08-24",
+    "장소": "미국(1차 출시)",
+    "행위자": "포낙(Phonak), 소노바(Sonova)",
+    "계기": "보청기 카테고리의 고질적 문제인 소음 속 말소리 이해도 향상 및 기기 가성비 개선 필요성"
+  },
+  "B": [
+    {
+      "value_text": "37%",
+      "metric": "전력 소비 감소량",
+      "condition": "이전 세대 대비",
+      "evidence_sentence": "Phonak has launched EON, a hearing aid platform built around a newly developed processor the company calls HYPERSONIC, which it says runs two artificial intelligence systems in parallel while drawing 37% less power than the generation before it."
+    },
+    {
+      "value_text": "25%",
+      "metric": "기기 크기 감소량",
+      "condition": "이전 Sphere 세대 대비",
+      "evidence_sentence": "EON is 25% smaller and 20% lighter than the previous Sphere generation, according to Phonak, and runs for up to 38 hours on a charge, which is generous for a device that has to fit behind an ear and process audio continuously."
+    },
+    {
+      "value_text": "20%",
+      "metric": "기기 무게 감소량",
+      "condition": "이전 Sphere 세대 대비",
+      "evidence_sentence": "EON is 25% smaller and 20% lighter than the previous Sphere generation, according to Phonak, and runs for up to 38 hours on a charge, which is generous for a device that has to fit behind an ear and process audio continuously."
+    },
+    {
+      "value_text": "38시간",
+      "metric": "배터리 지속 시간",
+      "condition": "1회 충전 시",
+      "evidence_sentence": "EON is 25% smaller and 20% lighter than the previous Sphere generation, according to Phonak, and runs for up to 38 hours on a charge, which is generous for a device that has to fit behind an ear and process audio continuously."
+    },
+    {
+      "value_text": "50 dB",
+      "metric": "바람 소리 감소량",
+      "condition": "WindBlock 2.0 사용 시",
+      "evidence_sentence": "WindBlock 2.0 reduces wind noise by up to 50 dB and can improve the signal-to-noise ratio by as much as 30 dB, which addresses one of the more consistent complaints from people who wear hearing aids outdoors."
+    },
+    {
+      "value_text": "30 dB",
+      "metric": "신호 대 잡음비(SNR) 개선량",
+      "condition": "WindBlock 2.0 사용 시",
+      "evidence_sentence": "WindBlock 2.0 reduces wind noise by up to 50 dB and can improve the signal-to-noise ratio by as much as 30 dB, which addresses one of the more consistent complaints from people who wear hearing aids outdoors."
+    }
+  ],
+  "C": [
+    {
+      "text": "“With the HYPERSONIC chip, we have engineered a significant step forward in power efficiency without compromising real-time AI performance,”",
+      "text_translated": "“HYPERSONIC 칩을 통해 우리는 실시간 AI 성능을 저하시키지 않으면서 전력 효율성 측면에서 상당한 진전을 이루어냈습니다.”",
+      "speakers": [
+        "Anders Rosengren"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "보청기용 저전력 AI 칩 기술",
+      "paragraph_hint": "4번째 문단",
+      "speaker": "Anders Rosengren",
+      "speaker_title": "Sonova’s chief R&D officer"
+    },
+    {
+      "text": "“EON sets a new benchmark for intelligent hearing,” said Josipa Kern, global head of Phonak. “It brings together the capabilities that matter most in daily life: understanding speech, adapting automatically and staying connected with confidence.”",
+      "text_translated": "“EON은 지능형 청각 기술의 새로운 기준을 제시합니다. 일상생활에서 가장 중요한 기능인 말소리 이해, 자동 적응, 그리고 자신감 있는 연결 상태 유지를 하나로 통합했습니다.”",
+      "speakers": [
+        "Josipa Kern"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "신형 보청기 플랫폼 EON의 가치",
+      "paragraph_hint": "12번째 문단",
+      "speaker": "Josipa Kern",
+      "speaker_title": "global head of Phonak"
+    }
+  ],
+  "D": "의료기기 보청기와 소비자용 오디오 기기 간의 기술적 경계가 허물어지는 가운데, 전문적인 처방 기반 유통 모델과 범용 소비자 시장의 요구 사이에서 발생하는 제품 사양의 수렴 현상.",
+  "E": [
+    "Phonak EON",
+    "HYPERSONIC 칩",
+    "Auracast"
+  ],
+  "F": [
+    "EON 플랫폼의 구체적인 소비자 판매 가격은 얼마인가?",
+    "전문가 처방 모델과 소비자 직접 판매(DTC) 모델 간의 향후 시장 경쟁 구도는 어떻게 변화할 것인가?"
+  ]
+}

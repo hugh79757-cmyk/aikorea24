@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-08-28T14:02:52.363722",
+  "dry_run": true,
+  "days": 7,
+  "s0_articles": 93,
+  "s1_candidates": 6,
+  "s2_dives": 3,
+  "s3_posts": [
+    "(dry-run)"
+  ],
+  "errors": [],
+  "s2_quality": [
+    {
+      "title": "AI 투자 시대, 편의성과 보호의 충돌",
+      "verdict": "추천",
+      "issues": [],
+      "verified_quotes": 3,
+      "unverified_quotes": 0,
+      "source_links_count": 2
+    },
+    {
+      "title": "AI 도입, 비용 절감인가 인력 손실인가",
+      "verdict": "폐기",
+      "issues": [
+        "환각 인용 2건 (원문에 존재하지 않는 인용)"
+      ],
+      "verified_quotes": 0,
+      "unverified_quotes": 2,
+      "source_links_count": 2
+    },
+    {
+      "title": "AI와 로봇 하드웨어의 기술 불균형 분석",
+      "verdict": "폐기",
+      "issues": [
+        "환각 인용 1건 (원문에 존재하지 않는 인용)"
+      ],
+      "verified_quotes": 1,
+      "unverified_quotes": 1,
+      "source_links_count": 2
+    }
+  ],
+  "elapsed_seconds": 102.0
+}

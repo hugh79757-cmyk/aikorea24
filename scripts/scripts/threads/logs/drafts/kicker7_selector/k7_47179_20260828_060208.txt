@@ -1,0 +1,17 @@
+기업 경영진과 창업자들이 상근 임원 고용에 대한 대안으로 파트타임 전문성을 찾기 시작했음.
+
+AI 도입과 기술 복잡성이 증가하면서 상근 CTO 고용 비용이 상승한 가운데, 프랙셔널 CTO 모델이 새로운 경영 대안으로 주목받고 있음.
+---
+GoFractional 데이터 기준, 지난 90일 동안 이전 대비 프랙셔널 CTO 수요는 9% 증가했음. 또한 딜로이트 조사 기준, 2027년까지 AI 에이전트를 사용할 것으로 예상하는 기업의 비율은 74%에 달함. 같은 조사에서 mature agentic AI governance를 갖춘 기업의 비율은 21%에 그쳤음.
+---
+프라임 패스 글로벌 창립자 다니엘 키리찬스키(Daniel Kirichanski)는 기술 분야에서의 프랙셔널 워크 확산에 대해 다음과 같이 말했음. "프랙셔널 워크는, 특히 기술 분야에서 새로운 물결입니다. 쓰나미와 같습니다." (원문: Fractional work, especially in technology, is the new wave. It’s like a tsunami.)
+---
+다니엘 키리찬스키(Daniel Kirichanski, 프라임 패스 글로벌 창립자)는 AI의 본질과 인간 중심의 의사결정 필요성에 대해 다음과 같이 언급했음. "저는 AI의 핵심으로 들어가서 그것이 지능이 아니라고 주장하고 싶습니다. 이것은 여전히 예측 기계일 뿐입니다." (원문: I would go to the core of AI, and I would argue that it’s not an intelligence. This is still a prediction machine.) 그는 또한 "우리는 AI로 사람을 대체하는 것이 아니라 사람을 보강합니다."라고 밝혔음. (원문: We do not replace people with AI; we augment people.)
+---
+다니엘 키리찬스키(Daniel Kirichanski, 프라임 패스 글로벌 창립자)는 성과 기반 보수 구조와 가치 창출에 관해 다음과 같이 설명했음. "고급 기술 전문성은 기록된 시간이 아니라 의사결정을 통해 가치를 창출합니다. 성과 기반 구조는 기업에게 임원급 기술 리더십의 기여도를 측정할 수 있는 더 직접적인 방법을 제공합니다." (원문: Senior technology expertise creates value through decisions rather than hours logged. An outcome-based structure gives companies a more direct way to measure the contribution of executive-level technology leadership.) 딜로이트 조사 기준, 설문 조사된 리더의 75%는 인간과 AI 에이전트의 협업이 단순 자동화보다 더 많은 가치를 창출한다고 믿는 것으로 나타났음.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Thu, 27 Aug 2026 17:45:44
+원문: https://thenextweb.com/news/fractional-cto-ai-reshapes-business
+추출 사실: B 6건 / C 4건

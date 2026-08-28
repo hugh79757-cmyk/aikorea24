@@ -1,0 +1,86 @@
+{
+  "numbers": [
+    {
+      "value": "3",
+      "condition": "generation of real-time AI",
+      "evidence": "EON is Phonak’s 3rd generation of real-time AI"
+    },
+    {
+      "value": "37%",
+      "condition": "less power than the generation before it",
+      "evidence": "runs two artificial intelligence systems in parallel while drawing 37% less power than the generation before it."
+    },
+    {
+      "value": "3.0",
+      "condition": "Spheric Speech Clarity version",
+      "evidence": "The first of the two systems, Spheric Speech Clarity 3.0, uses a deep neural network"
+    },
+    {
+      "value": "8.0",
+      "condition": "AutoSense OS AI version",
+      "evidence": "The second, AutoSense OS AI 8.0, classifies the surrounding sound environment"
+    },
+    {
+      "value": "25%",
+      "condition": "smaller than the previous Sphere generation",
+      "evidence": "EON is 25% smaller and 20% lighter than the previous Sphere generation"
+    },
+    {
+      "value": "20%",
+      "condition": "lighter than the previous Sphere generation",
+      "evidence": "EON is 25% smaller and 20% lighter than the previous Sphere generation"
+    },
+    {
+      "value": "38",
+      "condition": "hours on a charge",
+      "evidence": "runs for up to 38 hours on a charge"
+    },
+    {
+      "value": "twice",
+      "condition": "likely to understand every word spoken",
+      "evidence": "Phonak says wearers using Spheric Speech Clarity 3.0 are twice as likely to understand every word spoken from any direction"
+    },
+    {
+      "value": "2.0",
+      "condition": "WindBlock version",
+      "evidence": "WindBlock 2.0 reduces wind noise"
+    },
+    {
+      "value": "50",
+      "condition": "dB reduction in wind noise",
+      "evidence": "WindBlock 2.0 reduces wind noise by up to 50 dB"
+    },
+    {
+      "value": "30",
+      "condition": "dB improvement in signal-to-noise ratio",
+      "evidence": "can improve the signal-to-noise ratio by as much as 30 dB"
+    },
+    {
+      "value": "three",
+      "condition": "configurations",
+      "evidence": "Phonak is shipping three configurations rather than one."
+    },
+    {
+      "value": "eight",
+      "condition": "colours",
+      "evidence": "the range comes in eight colours."
+    }
+  ],
+  "quotes": [
+    {
+      "speaker": "Anders Rosengren",
+      "text": "With the HYPERSONIC chip, we have engineered a significant step forward in power efficiency without compromising real-time AI performance"
+    },
+    {
+      "speaker": "Josipa Kern",
+      "text": "EON sets a new benchmark for intelligent hearing"
+    },
+    {
+      "speaker": "Josipa Kern",
+      "text": "It brings together the capabilities that matter most in daily life: understanding speech, adapting automatically and staying connected with confidence."
+    }
+  ],
+  "dates": [
+    "Mon, 24 Aug 2026 09:17:50"
+  ]
+}

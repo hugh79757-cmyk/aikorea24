@@ -1,0 +1,37 @@
+{
+  "numbers": [
+    {
+      "value": "2027",
+      "condition": "로보택시 서비스 시작 연도",
+      "evidence": "Waymo will introduce its self-driving taxis in Munich by the end of 2027"
+    },
+    {
+      "value": "11",
+      "condition": "미국 내 운영 도시 수",
+      "evidence": "It already operates in 11 cities in the United States"
+    },
+    {
+      "value": "2026",
+      "condition": "독일 내 자율주행차 도입 예정 연도",
+      "evidence": "announcing last year that it would partner with Chinese AI firm Baidu to put autonomous cars on German roads in 2026."
+    },
+    {
+      "value": "2021",
+      "condition": "독일 당국이 자율주행차 운영을 승인한 연도",
+      "evidence": "German authorities gave autonomous vehicles the green light in 2021 to operate in the country in approved geographical areas."
+    }
+  ],
+  "quotes": [
+    {
+      "speaker": "Florian Herrmann",
+      "text": "Bavaria is determined to live up to its pioneering role and be an international leader in autonomous driving"
+    },
+    {
+      "speaker": "Florian Herrmann",
+      "text": "Now we need to move quickly from testing to real-world deployment."
+    }
+  ],
+  "dates": [
+    "Tue, 25 Aug 2026 14:00:00"
+  ]
+}

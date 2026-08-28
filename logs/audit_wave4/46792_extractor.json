@@ -1,0 +1,49 @@
+{
+  "B": [
+    {
+      "value_text": "11개",
+      "metric": "로보택시 운영 도시 수",
+      "condition": "미국 내 운영 현황",
+      "evidence_sentence": "It already operates in 11 cities in the United States and has applied for a license in the United Kingdom to launch its robotaxis in London this year."
+    }
+  ],
+  "C": [
+    {
+      "text": "Bavaria is determined to live up to its pioneering role and be an international leader in autonomous driving,",
+      "text_translated": "바이에른주는 선구적인 역할을 다하고 자율주행 분야의 국제적인 리더가 되기로 결심했습니다.",
+      "speakers": [
+        "Florian Herrmann"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "웨이모의 독일 뮌헨 로보택시 서비스 진출",
+      "paragraph_hint": "3번째 문단",
+      "speaker": "Florian Herrmann",
+      "speaker_title": "the head of the Bavarian state chancellery"
+    },
+    {
+      "text": "Now we need to move quickly from testing to real-world deployment.",
+      "text_translated": "이제 우리는 테스트 단계에서 실제 현장 배치 단계로 신속하게 나아가야 합니다.",
+      "speakers": [
+        "Florian Herrmann"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "웨이모의 독일 뮌헨 로보택시 서비스 진출",
+      "paragraph_hint": "4번째 문단",
+      "speaker": "Florian Herrmann",
+      "speaker_title": "the head of the Bavarian state chancellery"
+    }
+  ],
+  "A": {
+    "사건명": "웨이모(Waymo)의 독일 뮌헨 로보택시 서비스 진출 발표",
+    "시점": "2027-12-31",
+    "장소": "독일 뮌헨",
+    "행위자": "웨이모(Waymo)",
+    "계기": "기사에 명시되지 않음"
+  },
+  "D": "유럽 자율주행 시장의 확장과 규제 환경 변화; 표면적으로는 기업들의 서비스 진출 경쟁이 가속화되고 있으나, 근본적으로는 국가별/연합체별 자율주행 안전 표준 및 운영 허가 체계의 정립이 시장 진입의 핵심 변수로 작용하고 있음.",
+  "E": [
+    "웨이모",
+    "로보택시",
+    "자율주행"
+  ]
+}

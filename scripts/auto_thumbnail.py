@@ -278,6 +278,34 @@ def _use_default_thumbnail(slug):
         return None
 
 
+# ponytail: placeholder 사본 검출용 lazy MD5. 매 호출 시 파일 1회 읽기 (≤50KB).
+# 글로벌 캐시 — placeholder 파일이 교체되면 프로세스 재시작 필요.
+_PLACEHOLDER_MD5_CACHE = None
+
+
+def is_placeholder_copy(filepath):
+    """주어진 썸네일 파일이 placeholder(news-keyword-og.webp)의 사본인지 MD5 비교.
+
+    Returns:
+        bool: True면 placeholder 사본 (frontmatter image: 필드 주입하면 안 됨)
+    """
+    global _PLACEHOLDER_MD5_CACHE
+    try:
+        ph = PROJECT_DIR / "public" / "images" / "news-keyword-og.webp"
+        if not ph.exists():
+            return False
+        if _PLACEHOLDER_MD5_CACHE is None:
+            import hashlib
+            _PLACEHOLDER_MD5_CACHE = hashlib.md5(ph.read_bytes()).hexdigest()
+        target = Path(filepath)
+        if not target.exists():
+            return False
+        import hashlib
+        return hashlib.md5(target.read_bytes()).hexdigest() == _PLACEHOLDER_MD5_CACHE
+    except OSError:
+        return False
+
+
 def process_thumbnail(url, slug, title="", description=""):
     text = description or title or ""
     if not text:

@@ -523,3 +523,164 @@ Phase 8: 전체 검증 체인 재설계 필요
 - **launchd plist**: 미설치 — 모든 콘텐츠 준비 후 마지막에 활성화 예정
 - **day 0 즉시 발송 hook**: enroll.ts에 미구현 — Phase 22에서 처리 예정
 - **강좌 페이지**: 현재 Coming Soon 상태 (오픈 알림만 등록 가능)
+
+---
+
+## 13. Abbductive Reasoning Pipeline (브리핑 추론 보강)
+
+> 브리핑 코멘트에 "어긋남 탐지 → 가설 생성 → 산문 조합"을 추가하는 모듈.
+> `auto_briefing.py`의 comment 생성 후, `enrich_briefing_items()`가 in-memory로 comment를 보강.
+> 2026-08-28 구현.
+
+### 13.1 처리 흐름
+
+```
+selected_items (뉴스 6건)
+       ↓
+  S1: abductive_finder.py
+  find_abduction_candidates()
+  → 뉴스 간(A), 통념 대비(B), 시점 불일치(C) 탐지
+  → gap_summary + quote 검증
+       ↓
+  select_candidates(max_n=2)     ← briefing_enricher.py
+       ↓
+  S2: hypothesis_generator.py
+  generate_hypotheses()
+  → 10 관점에서 가설 생성
+  → evidence_checker로 환각 검증
+  → 중복 제거 (SequenceMatcher > 0.8)
+       ↓
+  select_hypotheses(max_n=3)     ← briefing_enricher.py
+       ↓
+  S3: briefing_enricher.py
+  _compose_prose()               ← 결정론적 템플릿 (LLM 미사용)
+  → 기존 comment 뒤에 삽입
+       ↓
+  D1 UPDATE (또는 in-memory)
+```
+
+### 13.2 모듈 시그니처
+
+| 모듈 | 주요 함수 | 입출력 |
+|------|----------|--------|
+| `abductive_finder.py` | `find_abduction_candidates(selected_items)` | `list[dict]` (type, source_item_ids, quote_1, quote_2, gap_summary, verification_path) |
+| `hypothesis_generator.py` | `generate_hypotheses(candidate, selected_items)` | `list[dict]` (perspective, one_line, falsifiable_news, confidence, evidence_source) |
+| `briefing_enricher.py` | `enrich_briefing(selected_items, dry_run=True)` | `list[dict]` (기존 item에 comment 보강) |
+| `evidence_checker.py` | `check_evidence(claim, source_text, threshold=0.4)` | `bool` |
+| `evidence_checker.py` | `check_gap_fidelity(gap, q1, q2, source, threshold=0.4)` | `bool` |
+
+### 13.3 환각 방어 3중 레이어
+
+| 레이어 | 위치 | 검증 대상 |
+|--------|------|----------|
+| 1차 | S1 `_verify_and_filter()` | quote_1, quote_2가 원문에 실제 존재하는지 (`verify_quote`) |
+| 2차 | S1 `check_gap_fidelity()` | gap_summary의 핵심 단어가 원문+인용에 매칭되는지 |
+| 3차 | S2 prompt rule 5 + `check_evidence()` | 가설이 추론 마커("~할 수 있다") 사용하고, 구체적 수치/고유명사 없는지 |
+
+### 13.4 환경변수
+
+| 변수 | 기본값 | 설명 |
+|------|--------|------|
+| `ENABLE_ABDUCTION` | `false` | `true`일 때만 enrich 실행 |
+| `ABDUCTION_MODEL` | `gpt-4o-mini` | S1/S2 LLM 모델 |
+
+### 13.5 테스트
+
+| 파일 | 테스트 수 | 비고 |
+|------|----------|------|
+| `tests/test_abductive_finder.py` | 17 | quote 검증, JSON 파싱, 본문 fallback |
+| `tests/test_hypothesis_generator.py` | 16 | 10 관점, 중복 제거, 환각 필터 |
+| `tests/test_briefing_enricher.py` | 18 | 후보 선별, 가설 선별, 산문 조립, 주입 |
+| `tests/test_evidence_checker.py` | 22 | 단어 매칭, 수치 패턴, 고유명사, 절대 표현 |
+
+---
+
+## 14. Weekly Contrast Deep Dive Pipeline (주간 대비 분석)
+
+> 지난 7일 뉴스를 분석해 "대비 쌍"을 탐지하고, 심층 분석 블로그 포스트를 자동 생성.
+> 매주 토요일 09:00 launchd 실행.
+> 2026-08-28 구현.
+
+### 14.1 처리 흐름
+
+```
+S0: weekly_contrast_collector.py
+  D1 JOIN (briefing_items → news → briefings)
+  → 지난 7일 브리핑 선정 기사 수집 (최대 93건)
+  + description 신뢰도 검증 (embedding 유사도)
+       ↓
+S1: contrast_cluster_finder.py
+  LLM 2회:
+    Stage 1: 50건 제목 → 키워드 클러스터링
+    Stage 2: 각 클러스터 → 대비 증거 추출
+  → diversity 필터 (토큰 중복 > 0.4 제외)
+  → 대비 후보 (Type A/B/C)
+       ↓
+S2: deep_dive_writer.py
+  5단락 분석체 블로그 포스트 작성
+  + 환각 인용 검증 (check_evidence)
+  + 품질 판단 (추천/보류/폐기)
+       ↓
+S3: weekly_blog_publisher.py
+  추천 → src/content/blog/ (발행)
+  보류 → src/content/blog/_drafts/ (사람 검토 대기)
+  폐기 → skip
+```
+
+### 14.2 모듈 시그니처
+
+| 모듈 | 주요 함수 | 입출력 |
+|------|----------|--------|
+| `weekly_contrast_collector.py` | `collect_weekly_articles(days=7)` | `list[dict]` (id, title, description, source, category, pub_date, link, description_reliable) |
+| `contrast_cluster_finder.py` | `find_contrast_candidates(articles)` | `list[dict]` (topic, contrast_frame, type, source_articles, quote_1, quote_2, gap_summary, reading_angle) |
+| `deep_dive_writer.py` | `write_deep_dive(candidate)` | `dict` (title, body, tags, source_links, quality_judgment) |
+| `deep_dive_writer.py` | `write_all_deep_dives(candidates, max_writes=2)` | `list[dict]` |
+| `weekly_blog_publisher.py` | `publish_blog_post(dive)` | `str` (저장된 파일 경로) |
+| `weekly_blog_publisher.py` | `publish_all(dives)` | `list[str]` |
+| `run_weekly_contrast.py` | `run_pipeline(dry_run, days, max_writes)` | `dict` (result) |
+
+### 14.3 발행 게이트
+
+| 판단 | 기준 | 결과 |
+|------|------|------|
+| **추천** | verified_quotes ≥ 1 AND unverified_quotes = 0 | `src/content/blog/weekly-contrast-*.md` |
+| **보류** | verified_quotes = 0 (추론만 있음) | `src/content/blog/_drafts/weekly-contrast-*.md` |
+| **폐기** | hallucinated_quotes ≥ 1 | skip (로그만 기록) |
+
+### 14.4 description 신뢰도 검증
+
+`weekly_contrast_collector.py`에서 title↔description 임베딩 유사도 측정:
+- `get_embedding()` (text-embedding-3-small) → cosine similarity
+- 임계값: 0.7 이상이면 `description_reliable=True`
+- API 실패 시: `description_reliable=None` (검증 스킵)
+- S1 클러스터링에서 `description_reliable=False`인 기사는 description 제외
+
+### 14.5 로깅
+
+| 항목 | 기록 위치 |
+|------|----------|
+| 단계별 진행 | `logs/weekly_contrast.log` (launchd stdout/stderr) |
+| 결과 JSON | `tmp_test/weekly_contrast_result.json` |
+| 대비 후보 | `tmp_test/weekly_candidates.json` |
+
+### 14.6 launchd 설정
+
+| 항목 | 값 |
+|------|-----|
+| plist | `~/Library/LaunchAgents/kr.aikorea24.weekly-contrast.plist` |
+| 스케줄 | 매주 토요일 09:00 (Weekday=6) |
+| 환경변수 | `OPENAI_API_KEY` (description 임베딩용) |
+| 로그 | `logs/weekly_contrast.log` |
+
+### 14.7 운영
+
+운영 체크리스트 및 4주 관측 지표는 `docs/weekly-contrast-ops.md` 참조.
+
+### 14.8 테스트
+
+| 파일 | 테스트 수 | 비고 |
+|------|----------|------|
+| `tests/test_weekly_contrast_collector.py` | 10 | SQL 쿼리, 코사인 유사도, 신뢰도 검증 |
+| `tests/test_contrast_cluster_finder.py` | 20 | 클러스터 파싱, 증거 파싱, diversity 필터 |
+| `tests/test_deep_dive_writer.py` | 15 | JSON 파싱, 프롬프트, 품질 판단, 환각 검증 |
+| `tests/test_weekly_blog_publisher.py` | 12 | 슬러그, 발행, 게이트 (추천/보류/폐기) |

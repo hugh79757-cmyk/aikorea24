@@ -97,11 +97,22 @@ def validate_final_cards(cards):
         if len(card) > 500:
             issues.append(f'카드 {i+1}: {len(card)}자 (500자 초과)')
 
+    # 미완결 문장 검증 — 한국어 종결 어미/의문형도 완결로 인정
+    # (validator._validate_last_card_opens_reply 와 동일 기준. 1차 방어가 정상 콘텐츠를
+    #  잘못 거부하는 것을 막는다. 마지막 카드 닫힌 종결은 2차 방어에서 차단)
+    KR_COMPLETE_ENDINGS = (
+        "까", "까?", "나", "다", "요", "임", "음", "네", "지", "데", "랴",
+        "ㄹ까", "일까", "을까", "인데", "일수록", "함", "됨", "남", "봄",
+        "줌", "잡음", "했음", "있음", "됐음", "임.",
+    )
     for i, card in enumerate(cards):
         last_line = card.strip().split('\n')[-1].strip()
         trailing = last_line.rstrip('\'"」』)}')
-        if trailing and trailing[-1] not in '.!?' and not last_line.startswith('🔗'):
-            issues.append(f'카드 {i+1}: 미완결 문장 (끝: "...{last_line[-20:]}")')
+        if not trailing:
+            continue
+        if trailing[-1] in '.!?' or trailing.endswith(KR_COMPLETE_ENDINGS) or last_line.startswith('🔗'):
+            continue
+        issues.append(f'카드 {i+1}: 미완결 문장 (끝: "...{last_line[-20:]}")')
 
     for i in range(1, len(cards)):
         prev_words = set(cards[i-1].split())

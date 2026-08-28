@@ -4,8 +4,8 @@ milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: all_plans_complete
 stopped_at: Phase 37 Threads Contrast Pivot + Kicker7 운영화 (2026-08-27) — impl done, dry-run verified, 18 blog drafts untracked, 미커밋
-last_updated: 2026-08-27T03:52:39.000Z
-last_activity: 2026-08-27
+last_updated: 2026-08-28T14:30:00.000Z
+last_activity: 2026-08-28
 progress:
   total_phases: 37
   completed_phases: 37
@@ -210,6 +210,7 @@ None.
 | 2026-08-13 | fix-stale-skip-deep-docs | run_pipeline.py --skip-deep 제거(9fa7b05) 후 stale 문서화 수정: TECHNICAL.md, SKILLS/01-daily-news-pipeline.md, SKILLS/04-deep-article-generator.md에서 --skip-deep/--no-skip-deep 참조 제거 |
 | 2026-08-13 | decouple-tools-collector-instagram | tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 |
 | 2026-08-26 | verify-publish-isolation | 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) |
+| 2026-08-28 | pipeline-docs | TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 |
 
 ### Deferred Items
 

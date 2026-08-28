@@ -1,0 +1,21 @@
+TITLE: 웨이모(Waymo), 2027년 뮌헨에서 로보택시 서비스 시작
+PUB: Tue, 25 Aug 2026 14:00:00
+LINK: https://www.politico.eu/article/waymo-to-launch-robotaxis-in-munich-in-2027/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication
+
+Waymo will introduce its self-driving taxis in Munich by the end of 2027, the American autonomous driving company announced today.
+The Google subsidiary will start rolling out vehicles in the German city this year, which will be manually driven while the company "starts with high-definition mapping of local street networks" and testing with safety drivers,
+Waymo said in a statement
+.
+"Bavaria is determined to live up to its pioneering role and be an international leader in autonomous driving," Florian Herrmann, the head of the Bavarian state chancellery, said in the statement.
+"Now we need to move quickly from testing to real-world deployment.”
+Advertisement
+The news marks Waymo's first foray into the European Union. It already operates in 11 cities in the United States and has
+applied for a license
+in the United Kingdom to launch its robotaxis in London this year.
+Earlier this month,
+London transport authorities approved
+the licenses of fellow American company Uber and British firm Wayve to start testing a small number of their autonomous vehicles.
+Other self-driving taxi companies are also looking to enter Germany, with American ride-hailing company Lyft
+announcing last year
+that it would partner with Chinese AI firm Baidu to put autonomous cars on German roads in 2026.
+German authorities gave autonomous vehicles the green light in 2021 to operate in the country in approved geographical areas. Other countries are looking at following suit, though the EU's broader autonomous driving rules are set by the U.N.

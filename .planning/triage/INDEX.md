@@ -1,3 +1,5 @@
+- 2026-08-28 | fix | placeholder-og-mixup-and-replacement | Pexels fallback이 placeholder 사본을 그대로 image로 노출하는 사고 — news-keyword-og.webp 교체 + is_placeholder_copy 가드 추가
+- 2026-08-27 | fix | llm-fallback-chain-timeout-and-alert-fix | LLM fallback chain timeout + topic_finder + pipeline alert fix (06:15 hang, 429, exit 0 masking, pitch TypeError)
 - 2026-08-26 | fix | blog-draft-kst-date-fix | blog_draft_generator KST 날짜 불일치 수정 (tz 경계 버그, UTC→KST 통일)
 - 2026-08-22 | feat | add-briefing-source-link-to-blog-posts | 블로그 포스트 첫 문단 뒤 브리핑 페이지 링크 자동 주입 — DB 조회로 briefing URL 생성, 체류시간 확보
 - 2026-08-22 | fix | fix-title-prefix-in-content | TITLE: prefix가 본문에 남는 버그 수정 — _save_file() else 분기 추가로 TITLE: 라인 자동 제거

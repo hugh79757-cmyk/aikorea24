@@ -1,0 +1,61 @@
+{
+  "B": [
+    {
+      "value_text": "37%",
+      "metric": "전력 소비 감소량",
+      "condition": "이전 세대 대비 HYPERSONIC 칩 사용 시",
+      "evidence_sentence": "Phonak has launched EON, a hearing aid platform built around a newly developed processor the company calls HYPERSONIC, which it says runs two artificial intelligence systems in parallel while drawing 37% less power than the generation before it."
+    },
+    {
+      "value_text": "25%",
+      "metric": "기기 크기 감소",
+      "condition": "이전 Sphere 세대 대비",
+      "evidence_sentence": "EON is 25% smaller and 20% lighter than the previous Sphere generation, according to Phonak, and runs for up to 38 hours on a charge, which is generous for a device that has to fit behind an ear and process audio continuously."
+    },
+    {
+      "value_text": "50 dB",
+      "metric": "바람 소리 감소량",
+      "condition": "WindBlock 2.0 기능 사용 시",
+      "evidence_sentence": "WindBlock 2.0 reduces wind noise by up to 50 dB and can improve the signal-to-noise ratio by as much as 30 dB, which addresses one of the more consistent complaints from people who wear hearing aids outdoors."
+    }
+  ],
+  "C": [
+    {
+      "text": "With the HYPERSONIC chip, we have engineered a significant step forward in power efficiency without compromising real-time AI performance,",
+      "text_translated": "HYPERSONIC 칩을 통해 우리는 실시간 AI 성능을 저하시키지 않으면서 전력 효율성 측면에서 상당한 진전을 이루어냈습니다.",
+      "speakers": [
+        "Anders Rosengren"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "보청기용 저전력 AI 칩 기술",
+      "paragraph_hint": "4번째 문단",
+      "speaker": "Anders Rosengren",
+      "speaker_title": "Sonova’s chief R&D officer"
+    },
+    {
+      "text": "EON sets a new benchmark for intelligent hearing,",
+      "text_translated": "EON은 지능형 청각 기기의 새로운 기준을 제시합니다.",
+      "speakers": [
+        "Josipa Kern"
+      ],
+      "speaker_type": "solo",
+      "source_topic_tag": "보청기 플랫폼 EON의 시장 가치",
+      "paragraph_hint": "12번째 문단",
+      "speaker": "Josipa Kern",
+      "speaker_title": "global head of Phonak"
+    }
+  ],
+  "A": {
+    "사건명": "포낙(Phonak), 신형 보청기 플랫폼 'EON' 출시",
+    "시점": "2026-08-24",
+    "장소": "미국(주문 시작), 독일, 프랑스, 영국, 호주 등(9월 예정)",
+    "행위자": "포낙(Phonak, 소노바 그룹 산하 브랜드)",
+    "계기": "기존 보청기 시장의 고질적 문제인 소음 속 말소리 이해도 향상 및 비용 대비 가치 제고"
+  },
+  "D": "[보청기 시장의 기술적 고도화와 유통 채널의 괴리] 보청기 제조사가 소비자 가전 수준의 AI 성능과 연결성을 구현하고 있으나, 여전히 전문가 처방 중심의 폐쇄적 유통 구조에 머물러 있어 일반 소비자 가전 시장과의 경계가 모호해지는 문제 발생.",
+  "E": [
+    "EON",
+    "HYPERSONIC",
+    "Auracast"
+  ]
+}

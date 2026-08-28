@@ -36,7 +36,15 @@
 - blog_draft_generator 신버전 미구현 (Phase 37 scope fence, 의도적)
 - contrast dynamic 3~8 카드: SPEC 5 고정과 divergence — 의도적 확장 (distinct 기반), 문서화됨
 - test_hook_entity_quote STAR 실패: validate_final_output Hook 고유명사 'STAR' body 미등장 — contrast 무관 pre-existing, 별도 triage 필요
-- 18개 블로그 untracked, 37개 전체 untracked — 커밋 전 `git add` 분류 필요 (drafts vs code 분리)
+  - 18개 블로그 untracked, 37개 전체 untracked — 커밋 전 `git add` 분류 필요 (drafts vs code 분리)
+
+### 2026-08-27 Threads 검증 거부 버그 수정 (미완결 문장 `까` 의문형)
+- **증상**: `Threads 검증 실패: 카드 5: 미완결 문장 (끝: "...있을까" / "...안착할 수 있을까")` — 5회 재시도 모두 발행 중단.
+- **근본 원인 (PRODUCTION CODE)**: `scripts/threads/main_v3.py` `validate_final_cards()`(1차 방어)가 모든 카드 마지막 줄이 `.!?`로 끝나지 않으면 "미완결 문장"으로 거부. 카드5는 writer 규정(CARD 5 RULE, writer.py:71-74)상 의도적으로 `까` 의문형으로 끝나야 함 → 1차 방어가 정상 콘텐츠를 잘못 거부. 2차 방어 `validator.py:436-461` `_validate_last_card_opens_reply`는 `까/을까/일까`를 정상(열린질문)으로 인정 → 두 레이어 기준 충돌.
+- **수정**: `main_v3.py` 미완결 검증에 한국어 종결 어미 허용 집합 `KR_COMPLETE_ENDINGS` 추가. `.!?` 또는 해당 어미 또는 `🔗` 시작 시 통과. 2차 방어가 마지막 카드 닫힌 종결(`~했다`/`~이다`)을 여전히 차단하므로 3중 방어 유지.
+- **검증**: `validate_final_cards(["...", "진짜 지역 경제를 살릴 수 있을까"])` 직접 호출 → `ok=True, issues=[]` (posted.json 미변경 방식). 검증 실패 시 `failed_articles` 저장 안 함(라인 333 `continue`) → 5회 실패로 인한 잘못된 failed 기사 누적 없음.
+- **수동발행**: `main_v3.py` 1회 실행 → 5개 콘텐츠 카드 + 링크 답글 발행 성공. 루트 ID `18112723807989830`, 기사 46919(인도 AI 에이전트 Runable). 다음 스케줄 17:52.
+- **잔존 위험**: 없음 (수정은 1차 방어 과도한 거부 완화, 2차 방어가 열린질문 규칙 강제).
 
 ---
 
@@ -1327,3 +1335,34 @@
 1. 2026-07-16 블로그 6건 커밋 + 배포
 2. Phase 22 발송 시스템 활성화 (사용자 요청 시)
 3. Phase 23 SNS 자동화 진행 (Instagram Carousel + Shorts)
+
+---
+
+## 2026-08-28 — Weekly Contrast 운영 안정화 (3가지 수정)
+
+### 1. S1 max_articles 25→50 (추천 0건 빈도 완화)
+- `scripts/contrast_cluster_finder.py`: `find_clusters()` 기본값 25→50
+- 93건 중 50건 분석 → 대비 쌍 탐지 확률 증가
+- E2E: 6 candidates (기존 5건 대비 1건 증가)
+
+### 2. S2 추론만 구성 → 보류 판정
+- `scripts/deep_dive_writer.py`: `_assess_quality()`에 규칙 추가
+- `verified_quotes == 0 and unverified_quotes == 0` → verdict를 "보류"로 변경 (기존: 추천 유지)
+- 추론만으로 구성된 기사는 drafts/에 저장하여 사람 검토
+- E2E: 기존 "추천" → "보류"로 correctly downgraded
+
+### 3. S0 description 신뢰도 검증
+- `scripts/weekly_contrast_collector.py`: `_check_description_reliability()` 추가
+- OpenAI text-embedding-3-small로 title↔description 코사인 유사도 계산
+- 유사도 < 0.7 → `description_reliable=False` 플래그
+- S1 프롬프트에서 신뢰 낮은 description 제외
+- 임베딩 실패 시 graceful fallback (reliable=None → 보수적 처리)
+
+### 테스트
+- 487 passed, 2 pre-existing failures (unrelated)
+- 추가된 테스트: test_inference_only_gets_hold_judgment, TestCosineSimilarity (4), TestDescriptionReliability (6)
+
+### launchd
+- `kr.aikorea24.weekly-contrast.plist` 등록 완료
+- 매주 토요일 09:00 실행
+- OPENAI_API_KEY 환경변수 포함 (description 임베딩용)
