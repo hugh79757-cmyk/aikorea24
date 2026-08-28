@@ -1,3 +1,4 @@
+- 2026-08-28 | config | threads-publish-frequency-halved | 쓰레드 발행 빈도 절반 조정 (12→6회/일, 4시간 간격, 출퇴근 시간대 배치)
 - 2026-08-28 | fix | placeholder-og-mixup-and-replacement | Pexels fallback이 placeholder 사본을 그대로 image로 노출하는 사고 — news-keyword-og.webp 교체 + is_placeholder_copy 가드 추가
 - 2026-08-27 | fix | llm-fallback-chain-timeout-and-alert-fix | LLM fallback chain timeout + topic_finder + pipeline alert fix (06:15 hang, 429, exit 0 masking, pitch TypeError)
 - 2026-08-26 | fix | blog-draft-kst-date-fix | blog_draft_generator KST 날짜 불일치 수정 (tz 경계 버그, UTC→KST 통일)

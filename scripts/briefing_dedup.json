@@ -4556,6 +4556,78 @@
           "date": "2026-08-28"
         }
       ]
+    },
+    {
+      "date": "2026-08-28",
+      "briefing_id": 262,
+      "articles": [
+        {
+          "id": "47230",
+          "title": "앤스로픽과 오픈AI, 테크크런치 디스럽트 2026 AI 무대에 합류",
+          "original_title": "",
+          "description": "테크크런치 디스럽트 2026에서 '구글 포 스타트업'이 후원하는 AI 무대가 다시 열립니다. 지난 몇 년간 업계에서 가장 뜨거운 화두였던 AI 주제를 심도 있게 다룰 예정입니다.",
+          "link": "https://techcrunch.com/2026/08/27/anthropic-and-openai-are-joining-the-ai-stage-at-techcrunch-disrupt-2026/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47243",
+          "title": "호주의 새로운 데이터센터, 실제 혜택은 누구에게 돌아가는가? - 팟캐스트",
+          "original_title": "",
+          "description": "연방 정부의 AI 데이터센터 개발 계획을 논의하기 위해 국가 내각이 회의를 열었습니다. 퀸즐랜드와 노던 준주는 재생 에너지가 아닌 석탄과 가스로 전력을 공급할 수 있는 예외 조항을 얻어냈으며, 이와 관련해 서호주 주총리와의 갈등이 이어지고 있습니다.",
+          "link": "https://www.theguardian.com/australia-news/audio/2026/aug/28/who-actually-benefits-from-new-datacentres-in-australia-australian-politics-podcast",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47234",
+          "title": "AI 학습을 위해 예술 작품을 무단 수집했던 그가, 이제는 예술가를 돕는 도구 개발에 협력",
+          "original_title": "",
+          "description": "AI 학습에 자신의 작품이 사용되는 것을 원치 않는 창작자들을 위해 만들어진 포트폴리오 플랫폼 '카라(Cara)'는 최근 데이터를 탈취하고 유포하려는 트롤들의 공격에 시달리고 있습니다.",
+          "link": "https://www.wired.com/story/he-scraped-art-from-cara-for-ai-now-he-is-collaborating-on-a-tool-to-help-them/",
+          "entities": [
+            "Cara",
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47236",
+          "title": "AI 비용 관리 업체조차 AI 에이전트 지출 통제에 실패할 수 있다",
+          "original_title": "",
+          "description": "한 사례에서는 AI 에이전트가 4일 동안 멈추지 않고 작동하며 4,819번의 호출을 수행해 약 4,000달러의 비용이 발생했습니다. 당시 누구도 이러한 비용을 예산에 반영하지 않았던 상황이었습니다.",
+          "link": "https://www.zdnet.com/article/even-an-ai-cost-management-vendor-can-lose-control-of-its-agent-spending/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47249",
+          "title": "소프트뱅크, 오픈AI 지분을 담보로 100억 달러 추가 대출 추진",
+          "original_title": "",
+          "description": "블룸버그 통신에 따르면 소프트뱅크가 오픈AI 지분을 담보로 100억 달러의 추가 대출을 추진하고 있습니다. 불과 22일 전 같은 자산을 담보로 동일한 규모의 대출을 받은 바 있어 그 배경에 관심이 쏠립니다.",
+          "link": "https://thenextweb.com/news/softbank-another-10bn-loan-openai-stake",
+          "entities": [],
+          "date": "2026-08-28"
+        },
+        {
+          "id": "47256",
+          "title": "세일즈포스의 AI 경쟁력으로 회의론 잠재운 마크 베니오프, 자신감 회복",
+          "original_title": "",
+          "description": "세일즈포스 주가가 실적 발표 이후 역대 두 번째로 높은 상승폭을 기록했습니다. 월스트리트는 CEO 마크 베니오프가 제시한 AI 전략에 대해 다시금 신뢰를 보내고 있습니다.",
+          "link": "https://www.cnbc.com/2026/08/28/marc-benioff-getting-his-mojo-back-as-salesforce-lifts-ai-growth-view.html",
+          "entities": [
+            "CEO",
+            "AI"
+          ],
+          "date": "2026-08-28"
+        }
+      ]
     }
   ],
   "articles": [
@@ -8741,6 +8813,72 @@
       "entities": [
         "Anthropic",
         "IPO"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47230",
+      "title": "앤스로픽과 오픈AI, 테크크런치 디스럽트 2026 AI 무대에 합류",
+      "original_title": "",
+      "description": "테크크런치 디스럽트 2026에서 '구글 포 스타트업'이 후원하는 AI 무대가 다시 열립니다. 지난 몇 년간 업계에서 가장 뜨거운 화두였던 AI 주제를 심도 있게 다룰 예정입니다.",
+      "link": "https://techcrunch.com/2026/08/27/anthropic-and-openai-are-joining-the-ai-stage-at-techcrunch-disrupt-2026/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47243",
+      "title": "호주의 새로운 데이터센터, 실제 혜택은 누구에게 돌아가는가? - 팟캐스트",
+      "original_title": "",
+      "description": "연방 정부의 AI 데이터센터 개발 계획을 논의하기 위해 국가 내각이 회의를 열었습니다. 퀸즐랜드와 노던 준주는 재생 에너지가 아닌 석탄과 가스로 전력을 공급할 수 있는 예외 조항을 얻어냈으며, 이와 관련해 서호주 주총리와의 갈등이 이어지고 있습니다.",
+      "link": "https://www.theguardian.com/australia-news/audio/2026/aug/28/who-actually-benefits-from-new-datacentres-in-australia-australian-politics-podcast",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47234",
+      "title": "AI 학습을 위해 예술 작품을 무단 수집했던 그가, 이제는 예술가를 돕는 도구 개발에 협력",
+      "original_title": "",
+      "description": "AI 학습에 자신의 작품이 사용되는 것을 원치 않는 창작자들을 위해 만들어진 포트폴리오 플랫폼 '카라(Cara)'는 최근 데이터를 탈취하고 유포하려는 트롤들의 공격에 시달리고 있습니다.",
+      "link": "https://www.wired.com/story/he-scraped-art-from-cara-for-ai-now-he-is-collaborating-on-a-tool-to-help-them/",
+      "entities": [
+        "Cara",
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47236",
+      "title": "AI 비용 관리 업체조차 AI 에이전트 지출 통제에 실패할 수 있다",
+      "original_title": "",
+      "description": "한 사례에서는 AI 에이전트가 4일 동안 멈추지 않고 작동하며 4,819번의 호출을 수행해 약 4,000달러의 비용이 발생했습니다. 당시 누구도 이러한 비용을 예산에 반영하지 않았던 상황이었습니다.",
+      "link": "https://www.zdnet.com/article/even-an-ai-cost-management-vendor-can-lose-control-of-its-agent-spending/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47249",
+      "title": "소프트뱅크, 오픈AI 지분을 담보로 100억 달러 추가 대출 추진",
+      "original_title": "",
+      "description": "블룸버그 통신에 따르면 소프트뱅크가 오픈AI 지분을 담보로 100억 달러의 추가 대출을 추진하고 있습니다. 불과 22일 전 같은 자산을 담보로 동일한 규모의 대출을 받은 바 있어 그 배경에 관심이 쏠립니다.",
+      "link": "https://thenextweb.com/news/softbank-another-10bn-loan-openai-stake",
+      "entities": [],
+      "date": "2026-08-28"
+    },
+    {
+      "id": "47256",
+      "title": "세일즈포스의 AI 경쟁력으로 회의론 잠재운 마크 베니오프, 자신감 회복",
+      "original_title": "",
+      "description": "세일즈포스 주가가 실적 발표 이후 역대 두 번째로 높은 상승폭을 기록했습니다. 월스트리트는 CEO 마크 베니오프가 제시한 AI 전략에 대해 다시금 신뢰를 보내고 있습니다.",
+      "link": "https://www.cnbc.com/2026/08/28/marc-benioff-getting-his-mojo-back-as-salesforce-lifts-ai-growth-view.html",
+      "entities": [
+        "CEO",
+        "AI"
       ],
       "date": "2026-08-28"
     }

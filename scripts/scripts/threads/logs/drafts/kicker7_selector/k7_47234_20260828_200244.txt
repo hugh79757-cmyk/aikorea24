@@ -1,0 +1,17 @@
+예술 작품 포트폴리오 플랫폼 'Cara'의 서버가 부터 연이은 데이터 무단 수집으로 몸살을 앓고 있음.
+
+Heft, CaptiveDreamer를 포함한 익명의 제3자들은 AI 학습용 데이터 확보를 목적으로 플랫폼 내 이미지를 대량으로 긁어가는 스크래핑을 감행했음.
+---
+첫 번째 사건에서 Heft는 1,200만 개의 이미지 파일로 구성된 12테라바이트 규모의 아카이브를 r/DefendingAIArt에 게시했음. 이어지는 두 번째 사건에서는 850만 개의 링크와 메타데이터가 Hugging Face에 업로드되었고, 8월 22일 발생한 세 번째 사건에서는 123,000개의 이미지와 사용자 개인정보가 포함된 바이오 정보가 Academic Torrents에 공유되었음.
+---
+무단 수집을 주도했던 Heft는 자신의 행위에 대해 “돌이켜보면, Cara를 의도적으로 표적으로 삼았을 뿐만 아니라 게시물에 제가 했던 방식대로 표현한 것은 잔인하고 경솔했습니다,”라고 밝혔음(원문: “In retrospect, not only deliberately targeting Cara but presenting it the way I did in the post was cruel and thoughtless,”). 그는 과거 자신의 행위를 “재미있는 프로젝트였습니다,”라고 언급한 바 있음(원문: “It was a fun project,”).
+---
+포토그래퍼이자 Cara 운영자인 Jingna Zhang은 이번 사태에 대해 “저는 이것이 표적화되어 있고 매우 상처를 준다고 느낍니다,”라고 심경을 전했음(원문: “I just feel it's targeted and very hurtful,”). Heft는 현재 예술가들을 보호하기 위한 새로운 오픈소스 도구 개발을 위해 Jingna Zhang과 협력하고 있음.
+---
+Jingna Zhang은 플랫폼 방어를 위한 법적 대응 비용으로 120,000달러를 목표로 하는 모금 활동을 시작했음. 해당 자금은 사이버법 및 저작권법을 활용해 Cara를 방어하기 위한 모든 전략을 모색하는 데 사용될 예정임. 현재 예술가들은 기술적으로 완벽한 스크래핑 방지 수단이 부재한 상황에서 법적 규제 공백으로 인한 권리 침해 문제에 직면해 있음.
+---
+--- 카드 6 ---
+출처: Wired AI
+발행일: Fri, 28 Aug 2026 11:00:00
+원문: https://www.wired.com/story/he-scraped-art-from-cara-for-ai-now-he-is-collaborating-on-a-tool-to-help-them/
+추출 사실: B 5건 / C 3건

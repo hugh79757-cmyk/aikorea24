@@ -1,0 +1,17 @@
+마크 베니오프 세일즈포스 CEO와 다리오 아모데이 앤스로픽 CEO가 미국에서 새로운 협력 관계를 공식화했음.
+
+2026년 8월 27일 목요일, 세일즈포스는 앤스로픽과의 파트너십인 '클라우드포스'를 발표하며 시장의 회의론을 정면으로 돌파했음. 이 발표는 세일즈포스의 실적 호조와 맞물려 투자자들의 신뢰를 회복하는 계기가 되었음.
+---
+2026년 8월 27일 목요일, 세일즈포스 주가는 23% 급등하며 2004년 상장 이후 두 번째로 큰 폭의 상승을 기록했음. 실적 개선의 핵심은 '에이전트포스' AI 제품군으로, 해당 제품군의 연간 매출액은 15억 달러를 넘어섰으며 연간 매출 성장률은 1년 전 대비 240%를 기록했음. 또한 '클라우드포스' 플러그인 사용 시 37개의 사전 구축된 영업 기술을 활용해 이메일 작성 및 기록 업데이트 등의 업무를 수행할 수 있음.
+---
+마크 베니오프 세일즈포스 CEO는 AI가 기존 소프트웨어를 대체할 것이라는 'SaaS 종말론(SaaSpocalypse)' 서사를 정면으로 반박했음. 마크 베니오프 세일즈포스 CEO는 "이번이 우리의 첫 번째 'SaaSpocalypse(SaaS 종말론)'는 아닙니다. 우리는 이미 많은 SaaSpocalypse를 겪어왔습니다(원문: This is not our first SaaSpocalypse, We have been through many SaaSpocalypses.)"라고 언급했음. 이어 그는 "이 'SaaSpocalypse'라는 서사는 정말 말도 안 되는 소리입니다. 프론티어 모델은 CRM에 의존합니다. 그것들이 CRM을 대체하는 것이 아닙니다(원문: This SaaSpocalypse narrative has been such nonsense, Frontier models depend on CRM. They don't replace it.)"라고 강조했음.
+---
+데이비드 프리드버그 오할로 CEO는 기업용 소프트웨어의 복잡성을 지적하며 AI 도입의 현실을 설명했음. 데이비드 프리드버그 오할로 CEO는 "유지보수, 계정 관리, 보안을 수행하는 데 얼마나 많은 노력이 필요한지 금방 깨닫게 됩니다. 우리는 이미 슬랙을 사용하고 있습니다. 우리는 슬랙을 직접 코딩(vibe-code)하지 않을 것이며, CRM도 직접 코딩하지 않을 것입니다(원문: You quickly realize just how much it takes to do maintenance, to do accounts, to do security, We're already on Slack. We're not going to go vibe-code Slack. We're not going to vibe-code CRM.)"라고 말했음. 다리오 아모데이 앤스로픽 CEO는 "저는 이것이 미래의 모든 기업용 시스템이 운영될 방식이라고 생각합니다(원문: I think that this is the way all enterprise systems are going to run in the future)"라고 덧붙였음.
+---
+세일즈포스는 실적 발표를 통해 11%의 분기 매출 성장을 기록하며 시장 전망치를 상회했음. 마크 베니오프 세일즈포스 CEO와 다리오 아모데이 앤스로픽 CEO의 협력은 기업용 AI 시장에서 세일즈포스의 입지를 강화하는 전략적 행보로 평가됨. 세일즈포스는 앤스로픽 지분 투자로 인한 26억 달러의 전략적 투자 수익을 거두었으며, 이는 기업 재무 구조에 긍정적인 영향을 미쳤음. 2026년 8월 27일 기준, 세일즈포스는 AI 기술을 자사 제품군에 통합하여 기업 경쟁력을 증명하는 데 집중하고 있음.
+---
+--- 카드 6 ---
+출처: CNBC Tech
+발행일: Fri, 28 Aug 2026 11:00:01
+원문: https://www.cnbc.com/2026/08/28/marc-benioff-getting-his-mojo-back-as-salesforce-lifts-ai-growth-view.html
+추출 사실: B 4건 / C 4건

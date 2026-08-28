@@ -5,6 +5,15 @@
 
 ---
 
+## 2026-08-28 — 쓰레드 발행 빈도 절반 조정
+
+- launchd `StartCalendarInterval` 12→6회로 변경 (2시간→4시간 간격)
+- 스케줄: 00, 04, 08(출근), 12(점심), 16, 20(퇴근)시
+- 파일: `threads-publisher.plist.template` + 배포 plist 동일 적용
+- launchctl 리로드 완료
+
+---
+
 ## 2026-08-27 — Phase 37: Threads Contrast Pivot + Kicker7 운영화
 
 ### Phase 37 Foundation (37-01): extractor / background / prompts / leak guard
