@@ -26,8 +26,8 @@ draft: false
 향후 정부와 국제기구가 '인간 전용' 일자리를 법적으로 명시하는 정책을 도입할 가능성이 있습니다. 이는 특정 서비스나 연구 분야에서 AI의 개입을 제한하는 형태의 규제로 나타날 수 있으며, 이를 통해 인간만이 제공할 수 있는 가치에 대한 경제적 보상이 강화될 것으로 보입니다. 또한, 수학이나 과학 분야에서는 AI를 도구로 활용하면서도 인간의 직관을 결합하는 하이브리드 연구 방식이 표준으로 자리 잡을 것입니다. 독자들은 향후 발표될 국가별 AI 정책 가이드라인과 주요 학술계의 AI 활용 윤리 규정이 실제 산업 현장에서 어떻게 구현되는지를 주목해야 합니다. 이러한 변화는 기술이 인간을 밀어내는 것이 아니라, 인간과 기술이 각자의 고유한 영역을 존중하며 공존하는 새로운 질서를 만드는 시험대가 될 것입니다.
 
 ---
-[기사 1] https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai
-[기사 2] https://www.theguardian.com/technology/2026/aug/25/ai-mathematics-end-of-profession
+[기사 1] https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai-takeover
+[기사 2] https://www.theguardian.com/commentisfree/2026/aug/25/ai-mathematics-careers
 
 ---
 
