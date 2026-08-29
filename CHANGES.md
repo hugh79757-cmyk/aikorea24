@@ -7,6 +7,13 @@
 - `scripts/deep_dive_writer.py` `_build_writing_prompt`에 `URL: {link}` 추가
 - LLM 프롬프트에 실제 기사 URL을 포함시켜 잘못된 URL 하allucination 방지
 - [기사 1] / [기사 2] 형식이 실제 기사 링크로 고정되어 발행글에 올바르게 포함됨
+
+## 2026-08-29 — fix: correct article URLs in published weekly-contrast post
+
+- `src/content/blog/weekly-contrast-20260829-001-ai-시대-인간-고유-영역을-지키는-법.md` 
+  - [기사 1] URL: `-ai` → `-ai-takeover` 수정
+  - [기사 2] URL: `-end-of-profession` → `-careers` 수정
+  - 본문과 `참고 기사` 섹션의 URL이 일치하도록 통일
 > 세션 종료 시 에이전트가 자동 append.
 
 ---
