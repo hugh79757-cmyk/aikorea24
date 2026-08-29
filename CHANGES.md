@@ -1,6 +1,12 @@
 # CHANGES.md — 세션 간 변경 이력
 
 > 기술 문서는 `docs/TECH.md` 참조.
+
+## 2026-08-29 — fix: deep_dive writing prompt URL inclusion
+
+- `scripts/deep_dive_writer.py` `_build_writing_prompt`에 `URL: {link}` 추가
+- LLM 프롬프트에 실제 기사 URL을 포함시켜 잘못된 URL 하allucination 방지
+- [기사 1] / [기사 2] 형식이 실제 기사 링크로 고정되어 발행글에 올바르게 포함됨
 > 세션 종료 시 에이전트가 자동 append.
 
 ---
