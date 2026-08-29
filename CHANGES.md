@@ -8,6 +8,14 @@
 - LLM 프롬프트에 실제 기사 URL을 포함시켜 잘못된 URL 하allucination 방지
 - [기사 1] / [기사 2] 형식이 실제 기사 링크로 고정되어 발행글에 올바르게 포함됨
 
+## 2026-08-29 — feat: enhance deep_dive content length and quality
+
+- `scripts/deep_dive_writer.py` 프롬프트 규칙 강화: H2당 최소 8문장 권고 + 인용 시작 문구 규정 (룰 12-13)
+- `_crawl_article_body()` 본문 크롤링 길이 5000→10000자 확대, 최소 임계치 100→300자 완화
+- `_extract_quote()` 신규 함수 추가: 본문에서 인용구 자동 추출, `quote_1/quote_2` 누락 시 candidate에 주입
+- `write_deep_dive()` 모델 설정 최적화: temperature 0.5→0.3, max_tokens 6000→8000
+- 기대 효과: 더 긴 출력, 구조화된 서술, 인용 기반의 구체적 기사 인용 증가
+
 ## 2026-08-29 — fix: correct article URLs in published weekly-contrast post
 
 - `src/content/blog/weekly-contrast-20260829-001-ai-시대-인간-고유-영역을-지키는-법.md` 
