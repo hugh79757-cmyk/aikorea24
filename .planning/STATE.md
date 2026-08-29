@@ -211,6 +211,7 @@ None.
 | 2026-08-13 | decouple-tools-collector-instagram | tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 |
 | 2026-08-26 | verify-publish-isolation | 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) |
 | 2026-08-28 | pipeline-docs | TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 |
+| 2026-08-29 | weekly-contrast-thumb-leak | 심층분석 2건(weekly-contrast-20260829-001/002) 썸네일 부재 + 프롬프트릭(A측/B측/대비 소제목) 수정. 루트픽스: deep_dive_writer.py 출력형식 금지규칙 추가, weekly_blog_publisher.py에 generate_thumbnails 연동(image frontmatter 자동 삽입). 2건 소제목 자연어화 + 원문기사링크 중복섹션 삭제. 배포 완료 |
 
 ### Deferred Items
 

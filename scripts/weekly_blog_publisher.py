@@ -80,6 +80,16 @@ def publish_blog_post(deep_dive: dict) -> str:
     filename = f"weekly-contrast-{today}-{file_num:03d}-{slug}.md"
     filepath = os.path.join(target_dir, filename)
 
+    # 썸네일 생성 (심층분석 카테고리) — generate_thumbnails.generate_thumbnail 사용
+    post_slug = filename[:-3] if filename.endswith(".md") else filename
+    image_field = ""
+    try:
+        from generate_thumbnails import generate_thumbnail as _gen_thumb
+        _gen_thumb(slug=post_slug, title=deep_dive["title"], category="심층분석")
+        image_field = f'image: "/images/thumbnails/{post_slug}.jpg"\n'
+    except Exception as _e:
+        logger.warning("thumbnail_gen_failed: %s — %s", post_slug, _e)
+
     # frontmatter
     tags_yaml = json.dumps(deep_dive.get("tags", ["weekly-analysis", "contrast"]), ensure_ascii=False)
     title_escaped = deep_dive["title"].replace('"', '\\"')
@@ -98,11 +108,11 @@ def publish_blog_post(deep_dive: dict) -> str:
     frontmatter = f"""---
 title: "{title_escaped}"
 description: "AI 뉴스 심층 분석 — 대비 구조를 통한 인사이트"
-pubDatetime: {datetime.now().strftime("%Y-%m-%dT%H:%M:%S+09:00")}
+date: '{datetime.now().strftime("%Y-%m-%dT%H:%M:%S+09:00")}'
 author: "aikorea24"
 tags: {tags_yaml}
 category: "심층분석"
-draft: {draft_flag}
+{image_field}draft: {draft_flag}
 ---
 
 """
