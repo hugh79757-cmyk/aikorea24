@@ -44,7 +44,8 @@ def _build_writing_prompt(candidate: dict, articles_with_body: list[dict]) -> st
         article_blocks.append(
             f"[기사 {i}] {art['title']}\n"
             f"출처: {art['source']} | 날짜: {art.get('pub_date', '')}\n"
-            f"본문:\n{body}"
+            f"본문:\n{body}\n"
+            f"URL: {art.get('link', '')}"
         )
 
     articles_text = "\n\n---\n\n".join(article_blocks)
