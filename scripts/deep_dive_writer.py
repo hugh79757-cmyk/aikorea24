@@ -71,7 +71,7 @@ def _build_writing_prompt(candidate: dict, articles_with_body: list[dict]) -> st
 {articles_text}
 
 [출력 형식]
-다음 구조로 작성하되, 두 기사를 나란히 요약하는 '병렬 나열'이 아니라 하나의 통합된 분석 논리로 엮어 작성하세요. 각 소제목(H2)은 내용을 자연스러운 한국어 문장/구문으로 요약하고, 'A측', 'B측', '대비', '측:' 같은 기계적 라벨이나 구조 지시어를 절대 사용하지 마세요. 각 본문 섹션은 최소 6문장 이상으로 충분히 전개하세요.
+다음 구조로 작성하되, 두 기사를 나란히 요약하는 '병렬 나열'이 아니라 하나의 통합된 분석 논리로 엮어 작성하세요. 각 소제목(H2)은 내용을 자연스러운 한국어 문장/구문으로 요약하고, 'A측', 'B측', '대비', '측:' 같은 기계적 라벨이나 구조 지시어를 절대 사용하지 마세요. 각 H2 섹션은 최소 8문장 이상으로 충분히 전개하세요. 서론(1문장), 핵심 논점 3~4문장, 구체적 인용 또는 예시 2~3문장, 전환 문장 1문장으로 구성하는 것을 권장합니다.
 
 TITLE: SEO 친화적 제목 (25자 이내)
 
@@ -100,7 +100,9 @@ falsifiable한 전망을 제시하세요. 구체적 future 뉴스 이벤트로 �
 8. 원문 기사 링크를 글 하단에 포함하세요.
 9. 제목은 25자 이내, SEO 친화적으로 작성하세요.
 10. [중요] 모든 인용문은 반드시 위 원문 근거에서 발췌한 것이어야 합니다. 2차 해석, 일반적 지식, 재구성된 문장은 절대 사용하지 마세요. 인용문이 원문에 존재하지 않으면 해당 인용은 따옴표 없이 서술형으로 작성하세요.
-11. 두 기사를 단순히 나열(기사1 요약 → 기사2 요약)하지 마세요. 하나의 분석 주제 아래 교차 대조하고 통합하세요."""
+11. 두 기사를 단순히 나열(기사1 요약 → 기사2 요약)하지 마세요. 하나의 분석 주제 아래 교차 대조하고 통합하세요.
+12. 각 H2(소제목) 아래는 최소 8문장 이상을 작성하세요. 서론(1문장), 핵심 논점 3~4문장, 구체적 인용 또는 예시 2~3문장, 전환 문장 1문장으로 구성하는 것을 권장합니다.
+13. 인용이 필요한 문장은 반드시 "기사에 따르면", "보도에 의하면" 등의 문구로 시작하며, 가능한 한 직접 인용(" ")을 포함하세요.
 
 
 # ---------------------------------------------------------------------------
@@ -182,9 +184,9 @@ def _crawl_article_body(url: str) -> str:
         if article:
             text = article.get_text(separator="\n", strip=True)
             # 너무 짧으면 실패
-            if len(text) < 100:
+            if len(text) < 300:  # 최소 길이 임계치 낮춤
                 return ""
-            return text[:5000]  # 5000자로 제한
+            return text[:10000]  # 10000자로 제한 (이전 5000자 → 확대)
 
         return ""
     except Exception as e:
@@ -223,6 +225,21 @@ def _ensure_bodies(candidate: dict) -> list[dict]:
 # Main entry
 # ---------------------------------------------------------------------------
 
+def _extract_quote(body: str, idx: int) -> str:
+    """본문에서 인용구 추출 (최초 문장 또는 200자 이내 핵심 문장)."""
+    import re
+    # 문장 분할: 한국어 마침표, 물음표, 느낌표로 끝나는 문장
+    sentences = re.split(r'(?<=[.!?])\s+', body.strip())
+    # 첫 문장 또는 의미 있는 문장 2개 선택
+    selected = []
+    for s in sentences:
+        s = s.strip(" .!?")
+        if 20 < len(s) < 300 and not s.startswith(("https", "http", "Outro", "Overview")):
+            selected.append(s)
+        if len(selected) >= 2:
+            break
+    return selected[0] if selected else ""
+
 def write_deep_dive(candidate: dict) -> Optional[dict]:
     """
     대비 쌍을 심층 분석 블로그 포스트로 작성.
@@ -235,6 +252,12 @@ def write_deep_dive(candidate: dict) -> Optional[dict]:
     """
     # 기사 본문 확보
     articles_with_body = _ensure_bodies(candidate)
+
+    # quote_1/quote_2가 없으면 본문에서 자동 추출
+    if not candidate.get("quote_1") and articles_with_body:
+        candidate["quote_1"] = _extract_quote(articles_with_body[0].get("body", "") or "", 1)
+    if not candidate.get("quote_2") and len(articles_with_body) > 1:
+        candidate["quote_2"] = _extract_quote(articles_with_body[1].get("body", "") or "", 2)
 
     # 본문이 있는 기사가 2개 미만이면 불가
     valid = [a for a in articles_with_body if a.get("body")]
@@ -257,8 +280,8 @@ def write_deep_dive(candidate: dict) -> Optional[dict]:
     raw = chat_completion(
         messages=messages,
         system_prompt="당신은 한국어 AI 뉴스 심층 분석 전문기자입니다. 원문 근거에 기반한 분석만 작성하세요.",
-        temperature=0.5,
-        max_tokens=6000,
+        temperature=0.3,
+        max_tokens=8000,
         model_override=None,
     )
 
