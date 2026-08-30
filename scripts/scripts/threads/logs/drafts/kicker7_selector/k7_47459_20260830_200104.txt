@@ -1,0 +1,17 @@
+, 보코니 대학교(Bocconi University)의 경영학 입문 강의실에서 1,053명의 신입생이 과제물 작성 실험에 참여했음.
+
+연구진은 학생들을 네 그룹으로 나누어 AI 활용이 과제 품질과 학습 능력에 미치는 영향을 검증했음. 학생들은 대학 내 매장 운영을 위한 마케팅 제안서를 180단어 이내로 작성해야 했음.
+---
+실험 결과, GPT-4o를 활용한 학생들은 1-to-5 scale 기준 성적이 거의 1점 가까이 향상되었음. 이들의 답안은 평균적으로 두 가지 이상의 아이디어를 더 포함했고, 논리적 일관성이 높았으며 세 명의 주제 전문가가 제시한 권장 사항과 더 밀접하게 일치했음. 반면, AI를 활용해 숙제를 수행한 경우 장기적인 입학 시험 성적은 18%에서 24%까지 하락하는 결과가 나타났음.
+---
+인과 추론 수업을 수강한 학생들은 전통적인 채점 방식에서 오히려 낮은 점수를 받았음. 이들은 제안된 행동이 왜 효과가 있는지, 어떤 조건에서 실패할 수 있는지를 더 자주 설명했음. 또한 동료들과 차별화된 다양한 아이디어를 생성했으나, 현재의 채점 시스템은 독창성보다는 관습적이고 다듬어진 답안에 높은 점수를 부여하는 구조였음.
+---
+연구 저자들은 "단순히 가장 관습적이거나 다듬어진 답안이 아니라, 독창성, 추론, 그리고 다각적인 접근 방식을 반영한 결과물을 내놓는 학생들에게 보상해야 한다"고 주장함(원문: The authors argue for "rewarding students for producing work that reflects originality, reasoning, and consideration of multiple approaches, not just the most conventional or polished answers."). 기사 작성자(The Decoder)는 다양성과 독창성이 평가에 반영되려면 채점 기준에 명시적으로 포함되어야 한다고 결론짓음(원문: The authors conclude that diversity and originality need to be explicitly built into grading criteria if they're supposed to count.).
+---
+현재의 교육 평가 체계는 학습자의 실제 이해도나 지식 습득 여부가 아닌, AI가 모방하기 쉬운 구조인 문장의 다듬어진 정도와 구조적 완결성을 측정하고 있음. 이로 인해 AI가 학생의 사고를 보조하는지 아니면 대체하는지를 구분할 수 있는 평가 방법론이 부재한 상태임. 실제 학생이 지식을 습득했는지에 대한 명확한 증거 또한 확인되지 않았음.
+---
+--- 카드 6 ---
+출처: The Decoder
+발행일: Sun, 30 Aug 2026 10:34:09
+원문: https://the-decoder.com/the-skills-that-earn-top-grades-are-the-ones-ai-can-fake-best/
+추출 사실: B 3건 / C 2건

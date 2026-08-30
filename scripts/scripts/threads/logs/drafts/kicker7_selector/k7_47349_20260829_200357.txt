@@ -1,0 +1,17 @@
+a16z(Andreessen Horowitz)가 , AI 하드웨어 인프라 투자를 위한 11억 달러 규모의 'Machine Age Fund'를 조성했음.
+
+이번 펀드는 AI 모델 개발 자체보다 칩, 데이터 센터, 전력 등 물리적 공급망의 한계가 AI 성장의 병목 현상으로 부상함에 따라 마련되었음.
+---
+컴퓨트 밀도는 Nvidia H100 세대와 Rubin 랙 사이 비교 시 28배 상승했음. 이에 따라 과거 5~10킬로와트였던 랙당 전력 소비량은 현재 100~250킬로와트로 급증했음. 또한, 기존 5대 허브 이외 지역에 건설되는 신규 데이터 센터 용량 비중이 63%에 달하며 물리적 인프라 확장이 가속화되고 있음.
+---
+기사 작성자(TNW 편집장)는 "이 관점에서 볼 때 병목 현상은 모델에서 벗어나 현실 세계로 이동했습니다(원문: The bottleneck, on this reading, has moved out of the models and into the world.)"라고 진단했음. 이는 AI 산업의 핵심이 소프트웨어에서 물리적 인프라로 전환되었음을 의미함.
+---
+기사 작성자(TNW 편집장)는 "지난 10년 동안 가장 중요한 것은 인재와 유통이었지만, a16z는 이제 트랜스포머, 변전소, 열 설계가 핵심이라고 판단하여 11억 달러를 투자하고 있습니다(원문: For most of the past decade, it was talent and distribution, and a16z is now betting $1.1bn that it is transformers, substations, and thermal design.)"라고 설명했음.
+---
+a16z는 하드웨어 투자가 전체 거래 흐름에서 차지하는 비중이 20%를 넘어서자 이번 펀드를 결성했음. 해당 펀드는 칩, 메모리, 네트워킹, 열 설계뿐만 아니라 데이터 센터, 로봇 공학, 가정용 AI 기기 등 물리적 계층 전반을 투자 대상으로 함. 이는 하드웨어가 소프트웨어보다 확장성이 낮고 비용이 많이 든다는 기존 벤처 투자의 관점을 전환한 결과임.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Fri, 28 Aug 2026 14:19:29
+원문: https://thenextweb.com/news/a16z-machine-age-fund-1-1bn-hardware
+추출 사실: B 3건 / C 2건

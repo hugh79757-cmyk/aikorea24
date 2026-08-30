@@ -1,0 +1,17 @@
+앤스로픽 펠로우 연구팀의 첸 위에한과 연구원들이 AI 모델의 정렬 성능을 스스로 개선하는 'Automated Alignment Researcher(AAR)' 연구를 공개했음.
+
+이들은 AI가 스스로 정렬 훈련을 최적화하여 연구 효율성을 높일 수 있는지 확인하기 위해 이번 연구를 수행했음.
+---
+자동화된 시스템은 문헌을 검색하고 방법을 제안한 뒤, 해당 방법으로 모델을 30분 동안 훈련하며 반복을 거쳐 벤치마크를 점진적으로 개선함. 이 과정에서 효과적인 방법은 보존되고 비효율적인 방법은 폐기됨. AAR은 시간당 약 4달러의 API 추론 비용이 소요되는 반면, 인간 연구원에게는 시간당 150달러의 비용이 지불됨.
+---
+앤스로픽 연구팀은 최고의 AAR 방법이 숙련된 인간 연구원이 제안하는 것보다 평균 6시간 이내에 더 나은 성과를 낸다고 밝혔음. 다만, 이 자동화 시스템은 벤치마크가 실제 정렬 목표를 반영하는 범위 내에서만 작동함. 따라서 벤치마크를 설정하고 유지하는 작업, 그리고 자동화된 연구원이 참조하는 문헌을 관리하고 확장하는 작업은 여전히 중요한 과제로 남아있음.
+---
+앤스로픽 연구팀은 공동 성명을 통해 “최고의 AAR 방법은 평균 6시간 이내에 숙련된 인간이 제안하는 것보다 더 나은 성과를 냅니다(원문: “The best AAR method beats what experienced humans propose, on average within six hours,”)”라고 설명했음. 또한 “전반적으로, 이러한 결과는 자동화된 정렬 사후 훈련이 가까운 시일 내에 실용화될 수 있다는 초기 증거를 제공합니다(원문: “Overall, these results provide early evidence that automated alignment post-training could become practical in the near term,”)”라고 덧붙였음.
+---
+앤스로픽 연구팀은 “AAR은 시간당 약 4달러의 API 추론 비용이 드는 반면, 인간 연구원에게는 시간당 150달러를 지불합니다(원문: “An AAR costs roughly $4 per hour in API inference against the $150 per hour we pay our human researchers.”)”라고 비용 효율성을 강조했음. 현재 이 시스템은 10개의 특정 정렬 불일치 행동 벤치마크에서 전체 성능 저하 없이 모든 항목의 성능을 개선하는 결과를 보였음.
+---
+--- 카드 6 ---
+출처: TechCrunch AI
+발행일: Fri, 28 Aug 2026 19:30:38
+원문: https://techcrunch.com/2026/08/28/an-anthropic-researcher-just-gave-us-a-peek-at-self-improving-ai/
+추출 사실: B 4건 / C 3건

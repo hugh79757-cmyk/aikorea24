@@ -1,0 +1,17 @@
+영국 전역의 이동통신사들이 AI 기술 도입 확산에 따른 데이터 트래픽 급증을 앞두고 통신망 업그레이드에 나섰음.
+
+하지만 경직된 인허가 규제와 인프라 고도화 지연으로 인해 국가적 경쟁력이 저하될 수 있다는 우려가 제기됨. 2026년 8월 29일 기준, 영국은 글로벌 네트워크 성능 순위에서 57위, 다운로드 속도 순위에서 70위, 네트워크 신뢰성 품질 순위에서 55위에 머물러 있음.
+---
+영국 주요 이동통신사들은 5G 독립형 기술 업그레이드를 위해 110억 파운드를 투자하고 있음. VodafoneThree는 네트워크 최적화 과정의 일환으로 전국 기지국 수를 30% 감축할 계획임. 또한 VodafoneThree가 추진하는 네트워크 업그레이드 계획 중 96%는 기존 사이트를 대상으로 함. 그러나 이 중 절반 이상이 인허가 절차를 거쳐야 하며, 기업들은 이 과정이 매우 길고 관료적이라고 지적함.
+---
+Andrea Donà VodafoneThree 네트워크 담당 이사는 “오늘날 우리가 사용하는 기술과 서비스로도 [네트워크가] 최적의 상태가 아닌데, 여기에 대규모 AI 사용과 기타 관련 활동이 더해진다고 상상해 보십시오.” (원문: “If with the technology and services we use today [networks] are sub-optimal, imagine when you add mass AI usage and other associated activities,”)라고 언급함.
+---
+Andrea Donà VodafoneThree 네트워크 담당 이사는 “더 나아가겠습니다. 저는 오늘날 우리 네트워크의 품질 수준이 부끄럽습니다. 영국은 EE, O2, VodafoneThree가 제공할 수 있는 수준을 누릴 자격이 있지만, 우리에게는 개혁이 필요합니다.” (원문: “I would go further. I am embarrassed today at the level of quality of our network[s]. The UK is worthy of what EE, O2 and VodafoneThree can offer, but we need reform.”)라고 밝힘.
+---
+익명의 한 고위 임원은 “AI가 모든 것에 통합되는 2~3년 후에는 상황이 엄청나게 바뀔 것입니다.” (원문: “Things are going to change massively in two or three years when AI is integrated into everything,”)라고 경고함. VodafoneThree의 Andrea Donà 네트워크 담당 이사는 단순히 기지국을 더 건설하는 문제가 아니라, 기존 사이트를 업그레이드하는 데 필요한 제한적인 규제가 문제라고 강조함.
+---
+--- 카드 6 ---
+출처: The Guardian AI
+발행일: Sat, 29 Aug 2026 06:00:19
+원문: https://www.theguardian.com/technology/2026/aug/29/uk-risk-falling-behind-ai-telecoms-upgrades
+추출 사실: B 6건 / C 3건

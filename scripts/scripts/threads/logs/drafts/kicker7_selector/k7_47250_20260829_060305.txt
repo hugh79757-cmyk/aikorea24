@@ -1,0 +1,17 @@
+엔비디아가 , 지난 7월 도입했던 AI 칩 수익 공유 금융 프로그램의 일부 거래를 중단했음.
+
+이번 조치는 내부 직원들이 제기한 반독점 우려와 파트너사들의 계약 조건에 대한 반발이 계기가 되었음.
+---
+엔비디아는 AI 클라우드 기업에 칩 구매 자금을 대출하고, 해당 칩으로 발생하는 수익의 일부를 배분받는 구조로 프로그램을 운영해왔음. 2025년 9월에는 CoreWeave의 용량에 대해 63억 달러를 보증하기도 했음. 또한, Sharon AI가 Grace Blackwell GB300 칩 4만 개를, Firmus가 17만 개를 계약하는 등 총 21만 개의 가속기가 이 프로그램과 연계되었음. Firmus는 초기 6년간 250억 달러에서 300억 달러의 고객 오프테이크 수익을 예상했음.
+---
+엔비디아는 프로그램의 중단 사실을 공식 확인하지 않았으나, 해당 모델의 존재 자체를 부정하지도 않았음. 회사는 계약 조건 수정이나 기존 프로그램으로의 통합 방안을 검토 중인 것으로 알려졌음.
+---
+엔비디아 대변인은 "우리가 7월에 도입한, 빠르게 성장하는 AI 생태계에 대한 컴퓨팅 접근성을 열어주는 새로운 비즈니스 모델은 여전히 유지되고 있으며 높은 수요로 인해 계속 진화하고 있습니다(원문: The new business model we introduced in July that opens up compute access to the fast-growing AI ecosystem is still in place and continues to evolve due to high demand)"라고 밝혔음.
+---
+엔비디아는 칩 임대 대상을 제한하고, 특정 대형 고객에게 용량이 집중되는 대신 여러 소규모 AI 기업에 분산되기를 선호하는 등 계약 조건을 설정했음. 이러한 방식이 고객사의 사업 운영에 과도한 통제력을 행사한다는 내부 지적이 제기되었음.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Fri, 28 Aug 2026 11:19:39
+원문: https://thenextweb.com/news/nvidia-pauses-ai-cloud-revenue-sharing-deals
+추출 사실: B 4건 / C 1건

@@ -1,17 +1,18 @@
 {
-  "timestamp": "2026-08-28T14:02:52.363722",
-  "dry_run": true,
+  "timestamp": "2026-08-29T09:00:02.038479",
+  "dry_run": false,
   "days": 7,
   "s0_articles": 93,
-  "s1_candidates": 6,
-  "s2_dives": 3,
+  "s1_candidates": 5,
+  "s2_dives": 2,
   "s3_posts": [
-    "(dry-run)"
+    "/Users/twinssn/Projects/aikorea24/src/content/blog/weekly-contrast-20260829-001-ai-투자-시대-편의성과-보호-사이의-갈등.md",
+    "/Users/twinssn/Projects/aikorea24/src/content/blog/weekly-contrast-20260829-002-ai-시대-인간만의-영역은-어디인가.md"
   ],
   "errors": [],
   "s2_quality": [
     {
-      "title": "AI 투자 시대, 편의성과 보호의 충돌",
+      "title": "AI 투자 시대, 편의성과 보호 사이의 갈등",
       "verdict": "추천",
       "issues": [],
       "verified_quotes": 3,
@@ -19,25 +20,15 @@
       "source_links_count": 2
     },
     {
-      "title": "AI 도입, 비용 절감인가 인력 손실인가",
-      "verdict": "폐기",
+      "title": "AI 시대, 인간만의 영역은 어디인가?",
+      "verdict": "추천",
       "issues": [
-        "환각 인용 2건 (원문에 존재하지 않는 인용)"
-      ],
-      "verified_quotes": 0,
-      "unverified_quotes": 2,
-      "source_links_count": 2
-    },
-    {
-      "title": "AI와 로봇 하드웨어의 기술 불균형 분석",
-      "verdict": "폐기",
-      "issues": [
-        "환각 인용 1건 (원문에 존재하지 않는 인용)"
+        "패러프레이즈 인용 1건 (의미 보존 확인 필요)"
       ],
       "verified_quotes": 1,
       "unverified_quotes": 1,
       "source_links_count": 2
     }
   ],
-  "elapsed_seconds": 102.0
+  "elapsed_seconds": 101.0
 }

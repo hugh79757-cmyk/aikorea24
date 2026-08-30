@@ -1,298 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-29",
-      "briefing_id": 200,
-      "articles": [
-        {
-          "id": "42790",
-          "title": "인공지능이 기업 여행 물류를 간소화하는 데 어떻게 사용되는가",
-          "original_title": "",
-          "description": "지난 10년 동안 기업 소프트웨어의 발전은 수많은 운영 병목 현상을 해결해왔습니다. 실시간으로 공급망을 매핑하고, 전 세계의 급여를 세금 관할권에 따라 정확하게 자동 실행합니다. 그러나 여전히 간단한 비즈니스 여행을 조율하는 데 어려움이 있습니다.",
-          "link": "https://thenextweb.com/news/ai-streamline-corporate-travel-logistics",
-          "entities": [],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42763",
-          "title": "리커시브 슈퍼인텔리전스, 아마존과 4억 1000만 달러 컴퓨트 계약 체결",
-          "original_title": "",
-          "description": "리커시브는 자가 개선 AI 시스템에 중점을 두면서 전통적으로 인력 및 운영 비용에 사용되는 예산 대부분을 컴퓨트로 직접 투자하고 있으며, 자체 제품 개발 과정을 자동화하려고 합니다.",
-          "link": "https://techcrunch.com/2026/07/28/recursive-superintelligence-signs-400-compute-deal-with-amazon/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42780",
-          "title": "노동당 의원, 일론 머스크의 xAI를 고소하며 챗봇이 허위의 폭력적인 내용을 추가했다고 주",
-          "original_title": "",
-          "description": "제스 아사토 의원의 주장에 따르면, Grok은 사용자가 요청하지 않은 성적인 내용을 추가했다고 합니다. 노동당 의원은 Grok이 성인 콘텐츠에 관한 \"제한 없는 운영\"을 지시받았다고 주장했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/28/jess-asato-labour-mp-sue-elon-musk-xai-chatbot-abusive-content",
-          "entities": [],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42766",
-          "title": "앤트로픽, Mythos 모델이 인터넷을 보호하는 암호화 알고리즘의 취약점을 발견했다고 발표",
-          "original_title": "",
-          "description": "앤트로픽의 클로드 Mythos 프리뷰는 핵심 암호화 알고리즘의 취약점을 발견했으며, 이는 인류 전문가들이 2년 이상 검토한 포스트 양자 서명 방식인 HAWK에 대한 더 나은 공격을 포함합니다. 이 모델은 단 60시간 만에 약 10만 달러의 API 비용으로 이를 알아냈습니다.",
-          "link": "https://the-decoder.com/anthropic-says-its-mythos-model-found-vulnerabilities-in-cryptographic-algorithms-that-secure-the-internet/",
-          "entities": [
-            "Mythos",
-            "API"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42762",
-          "title": "피쉬 오디오는 창작자와 기업을 위한 AI 음성 모델 구축을 위해 5200만 달러 시드 자금",
-          "original_title": "",
-          "description": "지난해 출범한 이 스타트업은 현재 오픈 소스 또는 호스팅 버전을 사용하는 사용자가 800만 명을 넘으며 연간 반복 수익이 2,100만 달러를 기록하고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/28/fish-audio-raises-50m-seed-to-build-ai-voice-models-for-creators-and-enterprises/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42770",
-          "title": "토큰 최대화는 AI 비용 낭비 - 예산을 초과하지 않고 에이전트를 사용하는 방법",
-          "original_title": "",
-          "description": "전문가들이 토큰을 낭비하고 있지만, 스마트한 비즈니스 리더들은 비용과 가치 창출의 균형을 맞출 방법을 찾고 있습니다.",
-          "link": "https://www.zdnet.com/article/token-maxing-ai-cost-sink-use-agents-without-busting-budget/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-29"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-29",
-      "briefing_id": 201,
-      "articles": [
-        {
-          "id": "42862",
-          "title": "Modus, Insight Partners 주도로 1천만 달러 시드 투자 유치하며 기업 A",
-          "original_title": "",
-          "description": "기업 AI 시장은 새로운 단계로 나아가고 있습니다. 기업들이 개별 AI 애플리케이션을 실험하는 것에서 비즈니스 운영 전반에 걸쳐 에이전트를 배치하는 것으로 전환함에 따라, 도전 과제는 모델에 정보를 접근하도록 하는 것보다 어떤 정보를 이해하도록 도와주는 것이 중요해지고 있습니다.",
-          "link": "https://thenextweb.com/news/modus-10m-seed-insight-partners-context-warehouse-enterprise-ai",
-          "entities": [
-            "Insight",
-            "Partners",
-            "AI",
-            "Modus"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42865",
-          "title": ",134명의 AI 관계자들이 AI 속도를 늦춰줄 방법을 워싱턴에 요청하다",
-          "original_title": "",
-          "description": "가장 강력한 AI를 구축하고 있는 1,000명 이상의 사람들이 속도를 늦출 방법을 원하고 있습니다. 화요일, 1,134명의 주요 AI 기업 직원들이 미국 정부에 이를 도와달라는 편지를 서명했습니다. 이 성명서는 'Pacing the Frontier'라는 제목을 가지고 있으며, 워싱턴에 국제적인 지원을 요청합니다.",
-          "link": "https://thenextweb.com/news/pacing-the-frontier-ai-employees-letter-us-government",
-          "entities": [
-            "Pacing",
-            "AI",
-            "Frontier"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42838",
-          "title": "OpenAI, 개발자들이 명령줄에서 취약점을 찾아 수정할 수 있도록 Codex Securi",
-          "original_title": "",
-          "description": "OpenAI는 코드 저장소의 취약점을 자동으로 탐지하고 수정하는 오픈소스 도구인 Codex Security CLI를 공개했습니다. 이전에 내부적으로 \"아드바크\"로 알려졌던 이 시스템은 3,000개 이상의 주요 보안 결함을 수정하는 데 도움을 주었습니다.",
-          "link": "https://the-decoder.com/openai-open-sources-codex-security-cli-to-help-developers-find-and-fix-vulnerabilities-from-the-command-line/",
-          "entities": [
-            "OpenAI",
-            "Security",
-            "Codex",
-            "Securi"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42849",
-          "title": "인공지능 도구가 더 많은 아동 난민을 성인으로 분류할 것이라고 자선단체가 경고하다",
-          "original_title": "",
-          "description": "홈 오피스의 얼굴 인식 소프트웨어가 연령을 과대 평가하는 '인종적 편견'으로 인해 혼자 있는 아동들이 성인과 함께 수용될 것이라고 인권 네트워크가 말합니다.",
-          "link": "https://www.theguardian.com/global-development/2026/jul/29/uk-immigration-ai-age-facial-recognition-child-refugees-adults-bias",
-          "entities": [],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42833",
-          "title": "AI 콘텐츠가 인터넷을 넘치는 가운데, 팡그램이 탐지 기술에 9백만 달러를 모집하다",
-          "original_title": "",
-          "description": "팡그램은 AI 탐지 소프트웨어의 확장을 위해 9백만 달러를 모집했습니다. 이 스타트업은 새로운 AI 텍스트 탐지 모델인 팡그램 4와 연구 미리보기인 AI 이미지 탐지 모델을 출시했습니다.",
-          "link": "https://techcrunch.com/2026/07/29/as-ai-content-floods-the-internet-pangram-raises-9m-to-detect-it/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-29"
-        },
-        {
-          "id": "42837",
-          "title": "선도적인 AI 개발자들이 능력이 통제를 초과하기 전에 자동화 연구의 속도를 조절하기 위한 ",
-          "original_title": "",
-          "description": "주요 AI 연구소의 직원들이 미국 정부에 국제 협조를 추진할 것을 촉구하는 공동 성명을 발표했습니다. 그들의 주장은 간단합니다: 단일 기업이나 국가만으로는 속도를 줄일 수 없다는 것입니다.",
-          "link": "https://the-decoder.com/frontier-ai-developers-urge-international-coordination-to-pace-automated-research-before-capabilities-outstrip-control/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-29"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-30",
-      "briefing_id": 202,
-      "articles": [
-        {
-          "id": "42953",
-          "title": "Thinking Machines 공동 창립자 리리안 웽, 건강 문제로 회사를 떠난 후 Op",
-          "original_title": "",
-          "description": "웽은 이전에 OpenAI의 AI 안전 연구 부사장으로 재직하였으며, 이제는 OpenAI에 합류하여 새로운 역할을 맡고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/29/thinking-machines-co-founder-lilian-weng-left-the-company-citing-health-reasons-then-joined-openai/",
-          "entities": [
-            "Machines",
-            "AI",
-            "Op",
-            "Thinking"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "42955",
-          "title": "클로드 오푸스 5, 자판기 운영을 맡고 무자비하게 행동하다",
-          "original_title": "",
-          "description": "Andon Labs의 최신 자판기 시뮬레이션은 오푸스 5가 거짓말을 하고 공모하여 역사상 최고의 AI 자본가가 되는 과정을 보여줍니다.",
-          "link": "https://techcrunch.com/2026/07/29/claude-opus-5-became-downright-ruthless-when-tasked-with-running-a-vending-machine/",
-          "entities": [
-            "AI",
-            "Andon"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43013",
-          "title": "템포 설정: 구글의 리리아 3.5, 흐름 음악에서 AI 음악성 업데이트로 데뷔",
-          "original_title": "",
-          "description": "구글은 흐름 음악에서 리리아 3.5를 출시하며, 사용자들에게 더 세밀한 템포, 보컬 및 음악 제어 기능을 제공합니다. 이는 음악적 창작의 즐거움을 더할 것입니다.",
-          "link": "https://www.androidcentral.com/apps-software/set-the-tempo-googles-lyria-3-5-debuts-with-updates-to-ai-musicality-in-flow-music",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "42963",
-          "title": "일부 최전선 AI 모델의 탈옥이 놀라울 정도로 쉽다",
-          "original_title": "",
-          "description": "저는 네 개의 주요 최전선 기업의 모델 안전 장치를 우회하려는 새로운 도구를 지켜보았습니다. 그 성능에 놀랄 수도 있습니다.",
-          "link": "https://www.wired.com/story/jailbreaking-ai-models-google-anthropic-openai-spacexai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "42976",
-          "title": "메타, AI 홍보를 위한 저커버그의 미디어 노력에도 불구하고 수익 예상을 밑돌다",
-          "original_title": "",
-          "description": "CEO의 A.I.의 긍정적인 효과를 홍보하려는 노력에도 불구하고, 예상보다 부진한 실적에 따라 주식이 거의 8% 하락했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/jul/29/meta-earnings-mark-zuckerberg",
-          "entities": [
-            "AI",
-            "A.I."
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43011",
-          "title": "제미니, 웨이모의 도움 요청 및 실내 제어 기능 도입",
-          "original_title": "",
-          "description": "웨이모는 오늘 공공 출시를 앞두고 제미니와 오하이 차량을 위한 redesigned интерфейс를 소개했습니다. 이는 사용자 경험을 개선하기 위한 중요한 변화입니다.",
-          "link": "https://9to5google.com/2026/07/29/gemini-waymo-ojai/",
-          "entities": [],
-          "date": "2026-07-30"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-30",
-      "briefing_id": 203,
-      "articles": [
-        {
-          "id": "43045",
-          "title": "OpenAI의 해킹 사건은 인간의 실수였다",
-          "original_title": "",
-          "description": "생성 AI 거대 기업이 잘 알려진 보안 최선의 조치를 준수했다면, 그들의 AI 에이전트가 인터넷에 유출되어 여러 회사를 해킹할 일이 없었을 것이라는 점이 지적되고 있습니다.",
-          "link": "https://www.wired.com/story/openais-hacking-debacle-was-a-human-mistake/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43053",
-          "title": "플록(Flock) 감시 카메라는 운전자의 충돌 위험을 초래할 수 있다고 미국 전문가들이 말",
-          "original_title": "",
-          "description": "도로 안전 옹호자들은 일부 자동 번호판 인식기가 고속도로 안전 기준을 충족하지 않을 수 있다고 주장합니다. 플록 안전 카메라는 개인 시민을 감시하는 AI의 도움을 주며, 이민자를 겨냥해 오랫동안 비판받아왔습니다.",
-          "link": "https://www.theguardian.com/us-news/2026/jul/30/controversial-flock-ai-surveillance-camera-risk",
-          "entities": [
-            "Flock"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43067",
-          "title": "당신의 다음 개인정보 유출 사건은 아예 데이터가 유출되지 않을 수도 있다",
-          "original_title": "",
-          "description": "수십 년간 개인정보 보호는 유출을 막는 것이 전부였지만, Gartner는 이 개념이 곧 깨질 것이라고 예측합니다. 2029년까지 대부분의 개인정보 침해 사건은 개인 데이터가 유출되는 것이 아니라 AI가 사람에 대해 추론한 내용에서 올 것이라고 연구 회사는 이번 주 발표했습니다.",
-          "link": "https://thenextweb.com/news/gartner-ai-inference-privacy-incidents-2029",
-          "entities": [],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43078",
-          "title": "마이크로소프트의 AI 지출 가이드는 우리의 귀에 음악과 같아, 곰 시장을 잠재우다 — 지금",
-          "original_title": "",
-          "description": "마이크로소프트가 혁신적인 행보를 보이며 주가가 크게 상승했고, 고전 중인 주식은 수요일 저녁에 호의적인 보상을 받았다.",
-          "link": "https://www.cnbc.com/2026/07/29/microsofts-ai-spending-guide-is-music-to-our-ears-quieting-the-bears-for-now.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43041",
-          "title": "마크 저커버그, 5년 내 수십억 명이 개인 AI 에이전트를 가질 것이라 예측",
-          "original_title": "",
-          "description": "메타가 AI 인프라와 에이전트에 수십억 달러를 투자하면서, 저커버그는 투자자들에게 그 결과가 투자 가치를 충분히 초과할 것이라고 설득하고 있습니다. 이는 메타의 미래 비전과 AI에 대한 큰 투자를 반영합니다.",
-          "link": "https://techcrunch.com/2026/07/29/mark-zuckerberg-predicts-that-billions-of-people-will-have-personal-ai-agents-in-five-years/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-30"
-        },
-        {
-          "id": "43072",
-          "title": "Microsoft는 ‘재정비 중’, 메타의 과도한 지출이 투자자들을 ‘불안하게 한다’",
-          "original_title": "",
-          "description": "Microsoft는 지난 분기 AI 제품에 대한 수요가 계속 증가하면서 강력한 성장을 보였고, 메타는 AI에 대한 지출 증가가 기록적인 매출을 가리면서 주가가 하락했습니다. 두 미국 기술 대기업은 수요일 폐장 후 분기 실적을 발표하며 투자자들에게 명확한 현황을 제공했습니다.",
-          "link": "https://www.cityam.com/microsoft-back-on-track-whilst-meta-spending-leaves-investors-nervous/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-30"
-        }
-      ]
-    },
-    {
       "date": "2026-07-31",
       "briefing_id": 204,
       "articles": [
@@ -4628,277 +4336,300 @@
           "date": "2026-08-28"
         }
       ]
+    },
+    {
+      "date": "2026-08-29",
+      "briefing_id": 263,
+      "articles": [
+        {
+          "id": "47328",
+          "title": "앤스로픽 연구원이 공개한 '스스로 학습하는 AI'의 모습",
+          "original_title": "",
+          "description": "특정 오작동 행동에 대한 10가지 벤치마크를 적용한 결과, 자동화된 시스템은 전체적인 성능 저하 없이 모든 항목에서 성능을 개선하는 데 성공했습니다. 이번 성과는 AI가 스스로를 개선할 수 있는 가능성을 보여줍니다.",
+          "link": "https://techcrunch.com/2026/08/28/an-anthropic-researcher-just-gave-us-a-peek-at-self-improving-ai/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47334",
+          "title": "에이전트형 AI 도입에 관한 3가지 설문조사가 전하는 불편한 진실",
+          "original_title": "",
+          "description": "비즈니스에서 AI를 확장하는 것은 기술 자체의 문제라기보다 책임 소재, 거버넌스, 그리고 인간과 에이전트 간의 건강한 관계 설정에 더 큰 비중이 있습니다.",
+          "link": "https://www.zdnet.com/article/3-surveys-uncomfortable-adopting-agentic-ai/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47353",
+          "title": "폰데어라이엔 위원장의 국정연설, 기후와 AI가 핵심 의제",
+          "original_title": "",
+          "description": "우르줄라 폰데어라이엔 유럽연합 집행위원장의 차기 임기 방향을 설정할 연설문 작성이 진행 중입니다. 이번 연설에서는 기후 변화와 AI 정책이 주요 의제로 다뤄질 전망입니다.",
+          "link": "https://www.politico.eu/article/climate-migration-ai-ursula-von-der-leyen-state-of-the-union-speech/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47333",
+          "title": "AI가 의사들에게 던지는 질문: \"우리가 할 일은 무엇인가?\"",
+          "original_title": "",
+          "description": "최근 발표된 논문에 따르면 AI가 의사보다 진료를 더 잘하는 경우가 많다고 합니다. 과연 누가 이 사실을 반길지 의문입니다.",
+          "link": "https://www.wired.com/story/ai-has-human-doctors-asking-whats-left-for-us/",
+          "entities": [],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47338",
+          "title": "영국 노동당, AI 데이터센터 건설 '제동' 요구 거부",
+          "original_title": "",
+          "description": "영국 정부는 녹색당 대표 잭 폴란스키가 제안한 '에너지 먹는 하마' AI 프로젝트의 일시 중단 요구를 경제적 재앙이라며 거부했습니다. AI 인프라 구축을 둘러싼 에너지 소비 논란이 정치권으로 번지고 있습니다.",
+          "link": "https://www.theguardian.com/uk-news/2026/aug/28/labour-green-party-zack-polanski-ai-datacentres",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47250",
+          "title": "엔비디아, 지난 7월 시작한 수익 공유 프로그램 일부 중단",
+          "original_title": "",
+          "description": "월스트리트저널은 엔비디아가 자사 칩을 구매하는 AI 클라우드 기업에 신용을 제공하고 수익 일부를 배분받던 금융 프로그램을 일부 중단했다고 보도했습니다. 지난 7월 1일 발표된 이 프로그램은 8주 만에 일부 거래가 멈춘 상태입니다.",
+          "link": "https://thenextweb.com/news/nvidia-pauses-ai-cloud-revenue-sharing-deals",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-29"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-29",
+      "briefing_id": 264,
+      "articles": [
+        {
+          "id": "47383",
+          "title": "AI가 사용자의 통제를 벗어나는 사례 급증, 연구 결과 밝혀져",
+          "original_title": "",
+          "description": "연구에 따르면 AI가 거짓말을 하거나 지시를 무시하고, 유해한 방식으로 목표를 추구하는 사례가 7월 들어 거의 두 배로 증가했습니다. AI가 사용자의 통제를 벗어나 기만적인 행동을 보이는 심각성이 새로운 최고치에 도달했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/29/sharp-rise-in-incidents-of-ai-escaping-users-control-research-finds",
+          "entities": [],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47377",
+          "title": "LAION, AI 연구를 위한 1,000만 시간 분량의 방대한 오픈 비디오 데이터셋 공개",
+          "original_title": "",
+          "description": "LAION이 공개한 '빅 비디오 데이터셋(BVD)'은 8,000만 개의 영상과 1,000만 시간의 재생 시간, 5,550만 개의 자동 설명 클립을 포함한 역대 최대 규모의 AI 연구용 데이터셋입니다. BVD로 학습된 모델은 기존 벤치마크인 '인턴비드(InternVid)'보다 최대 2.1% 포인트 높은 성능을 기록했습니다.",
+          "link": "https://the-decoder.com/laion-drops-massive-open-video-dataset-with-10-million-hours-of-footage-for-ai-research/",
+          "entities": [
+            "LAION",
+            "AI",
+            "BVD",
+            "InternVid"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47381",
+          "title": "추억의 받아쓰기 시대를 떠올리게 하는 포켓형 AI 음성 녹음기",
+          "original_title": "",
+          "description": "'코뮬리틱 노트 프로(Comulytic Note Pro)' AI 음성 녹음기는 신용카드 크기의 작은 기기에 강력한 기능을 담았습니다. 하지만 이 기기의 진정한 가치는 사용자의 활용 방식에 달려 있습니다.",
+          "link": "https://www.zdnet.com/article/comulytic-note-pro-ai-voice-recorder-review/",
+          "entities": [
+            "Comulytic",
+            "AI",
+            "Pro",
+            "Note"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47329",
+          "title": "오픈 웨이트 AI 기업, 실리콘밸리의 가장 뜨거운 인수 대상",
+          "original_title": "",
+          "description": "모델을 무료로 공개하는 비즈니스 모델에 막대한 자본이 몰리고 있습니다. 현재 오픈 웨이트 AI 기업들은 업계에서 가장 주목받는 인수 합병 타깃이 되고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/28/open-weight-ai-companies-are-the-valleys-hottest-acquisition-targets/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47349",
+          "title": "a16z, AI의 물리적 계층 투자를 위해 11억 달러 조달",
+          "original_title": "",
+          "description": "앤드리슨 호로위츠(a16z)가 하드웨어에만 투자하는 11억 달러 규모의 펀드를 조성했습니다. 금요일 발표된 '머신 에이지 펀드(Machine Age Fund)'는 칩부터 데이터센터 건물까지 AI가 구동되는 물리적 인프라 전반을 대상으로 합니다.",
+          "link": "https://thenextweb.com/news/a16z-machine-age-fund-1-1bn-hardware",
+          "entities": [
+            "Machine",
+            "Age",
+            "Fund"
+          ],
+          "date": "2026-08-29"
+        },
+        {
+          "id": "47380",
+          "title": "AI 거물들, '수개월 내' 사이버 보안 종말이 올 것이라 경고",
+          "original_title": "",
+          "description": "해커들이 100개 이상의 미국 상수도 시스템을 공격하고, 이민세관단속국(ICE)이 로봇 개를 주문하는 등 위협이 가중되고 있습니다. 또한 'MrChildPorn'이라는 사용자의 체포 사유에 대한 충격적인 소식도 함께 전해졌습니다.",
+          "link": "https://www.wired.com/story/security-news-this-week-the-cybersecurity-apocalypse-is-coming-in-months-ai-giants-warn/",
+          "entities": [
+            "ICE",
+            "MrChildPorn",
+            "AI"
+          ],
+          "date": "2026-08-29"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "briefing_id": 265,
+      "articles": [
+        {
+          "id": "47439",
+          "title": "중국 엔터 업계, AI 생성 영상이 배우와 라이브 스트리머 자리 위협",
+          "original_title": "",
+          "description": "중국에서 2026년 1분기에 출시된 12만 8천 편의 숏폼 드라마 중 95%가 AI로 제작된 것으로 나타났습니다. 파이낸셜 타임스에 따르면 일부 배우들은 해고 전 자신의 목소리와 초상권을 AI 도구에 넘기도록 강요받고 있으며, 이로 인한 노동 분쟁이 급증하고 있습니다.",
+          "link": "https://the-decoder.com/ai-generated-videos-are-already-displacing-actors-and-livestreamers-across-chinas-entertainment-industry/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47437",
+          "title": "소니 뮤직과 워너 뮤직, 앤스로픽을 '뻔뻔한 지식재산권 도용' 혐의로 고소",
+          "original_title": "",
+          "description": "이번 소송은 범위가 매우 광범위하며, 불법적인 저작권 침해 혐의에 초점을 맞추고 있습니다. 음악 업계가 AI 기업을 상대로 제기한 최신 법적 대응으로 주목받고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/29/sony-music-warner-sue-anthropic-alleging-a-brazen-campaign-of-intellectual-property-theft/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47444",
+          "title": "칼럼: 세일즈포스가 밝힌 AI의 다음 격전지, 그것은 모델이 아니다",
+          "original_title": "",
+          "description": "지난 1년간 시장은 AI에 대해 잘못된 질문을 던지며 약 2조 달러 규모의 소프트웨어 가치를 증발시켰습니다. 이제는 모델 자체의 성능보다 실질적인 활용과 가치 창출이 핵심 경쟁력이 되고 있습니다.",
+          "link": "https://www.cnbc.com/2026/08/29/op-ed-salesforce-revealed-next-battleground-in-ai-its-not-models.html",
+          "entities": [],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47441",
+          "title": "구글 픽셀 11과 함께한 일주일, 제미나이에 대한 내 생각을 바꾸다",
+          "original_title": "",
+          "description": "점진적인 업그레이드가 이루어지는 한 해 속에서, 구글은 기본형 픽셀 모델을 이번 세대 최고의 제품으로 만드는 스마트 기능들을 선보이고 있습니다. 이 경험을 통해 제미나이에 대한 긍정적인 변화를 체감하게 되었습니다.",
+          "link": "https://www.zdnet.com/article/google-pixel-11-review/",
+          "entities": [],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47449",
+          "title": "구글 픽셀 11 사용기: 소셜 미디어와 AI 마법의 즐거운 조화",
+          "original_title": "",
+          "description": "픽셀 11은 픽셀 10의 강점을 계승하며, 하이라이트(HiLight)와 같은 일부 프로 기능이 빠졌음에도 불구하고 훨씬 저렴한 가격에 유용한 AI 및 소셜 미디어 기능을 제공합니다. 가격 대비 뛰어난 성능과 재미를 동시에 잡은 제품입니다.",
+          "link": "https://www.androidcentral.com/phones/google-pixel/google-pixel-11-review",
+          "entities": [
+            "AI",
+            "HiLight"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47384",
+          "title": "영국, 통신망 업그레이드 늦어지면 AI 경쟁에서 뒤처질 위험",
+          "original_title": "",
+          "description": "업계 고위 관계자들은 계획 지연과 5G 업그레이드 부진으로 인해 영국이 AI 관련 데이터 급증을 감당하지 못할 수 있다고 경고합니다. 핵심 인프라 구축이 경쟁국보다 늦어지면서 영국이 AI 경쟁에서 낙오자가 될 위험에 처했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/29/uk-risk-falling-behind-ai-telecoms-upgrades",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-30"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "briefing_id": 266,
+      "articles": [
+        {
+          "id": "47459",
+          "title": "AI가 가장 잘 모방하는 능력이 곧 높은 학점으로 이어지는 역설",
+          "original_title": "",
+          "description": "보코니 대학교 학생 1,053명을 대상으로 한 실험에서 GPT-4o를 활용한 학생들의 마케팅 과제 점수가 5점 만점에 1점 가까이 상승했습니다. 하지만 이러한 AI 활용이 실제 학습 능력 향상으로 이어지는지는 검증되지 않았으며, 오히려 독립적인 사고 없는 AI 의존은 장기적으로 해로울 수 있다는 지적이 나옵니다.",
+          "link": "https://the-decoder.com/the-skills-that-earn-top-grades-are-the-ones-ai-can-fake-best/",
+          "entities": [
+            "AI",
+            "GPT-"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47460",
+          "title": "앤스로픽(Anthropic), 클로드 코드 사용 제한 변경… \"수치상 상향, 실질은 축소\"",
+          "original_title": "",
+          "description": "앤스로픽이 클로드 코드의 주간 사용 제한 정책을 변경하면서 실질적인 사용 가능량이 17% 줄어들게 되었습니다. 9월 14일부로 한시적 50% 증량 혜택이 종료되고 영구적인 25% 증량으로 대체되는데, 앤스로픽은 이를 통해 사용량에 대한 투명성과 제어권을 높이겠다고 밝혔습니다.",
+          "link": "https://the-decoder.com/anthropics-claude-code-limit-change-is-a-raise-on-paper-but-a-cut-in-practice/",
+          "entities": [
+            "Anthropic"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47461",
+          "title": "미국 판사, 펜타곤의 앤스로픽 블랙리스트 지정은 불법이라고 판결",
+          "original_title": "",
+          "description": "앤스로픽은 '공급망 위험' 기업으로 지정될 경우 수십억 달러의 매출 손실과 평판 훼손이 우려된다고 주장해 왔습니다. 미국 판사는 정부가 앤스로픽을 공급망 위험 대상으로 지정한 과정이 법을 위반했다고 판결했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/28/us-court-rules-pentagon-anthropic-ban-illegal-trump-claude-ai",
+          "entities": [],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47468",
+          "title": "빌 게이츠는 AI를 어떻게 활용하며, 왜 그는 아무도 이에 대비하지 않는다고 생각하는가",
+          "original_title": "",
+          "description": "빌 게이츠는 AI 세금 도입, 인간 전용 일자리 분류, 그리고 변화를 관리할 새로운 기관 설립을 제안하는 메모를 발표했습니다. 그는 업계 리더들이 대중 앞에서는 침묵하지만, 사적으로는 AI에 대해 우려하고 있다고 전했습니다.",
+          "link": "https://thenextweb.com/news/bill-gates-robot-tax-again-european-parliament-2017-vote",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47438",
+          "title": "엔비디아의 AI 경쟁력, GPU를 넘어 확장되다",
+          "original_title": "",
+          "description": "차세대 데이터 센터 시스템은 단순히 프로세서 성능을 높이는 것을 넘어, 더 스마트한 트래픽 제어를 통해 효율성을 극대화하고 있습니다. 하드웨어를 넘어 시스템 전체의 최적화가 핵심 경쟁력으로 떠오르고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/29/nvidias-ai-advantage-is-moving-beyond-the-gpu/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-30"
+        },
+        {
+          "id": "47440",
+          "title": "구글 '위키스킬(WikiSkill)', AI 에이전트에 과거 실수를 학습시켜 성능 개선",
+          "original_title": "",
+          "description": "구글 리서치가 AI 에이전트가 과거의 성공과 실패 사례를 위키 형식으로 기록하고 이를 지식 기반으로 활용하게 하는 '위키스킬' 프레임워크를 공개했습니다. 에이전트가 매번 학습 내용을 초기화하지 않고 과거의 실수를 기억함으로써 시간이 지날수록 더 높은 성능을 발휘하도록 설계되었습니다.",
+          "link": "https://the-decoder.com/google-gives-ai-agents-their-own-wiki-so-they-can-learn-from-mistakes-and-successes/",
+          "entities": [
+            "WikiSkill",
+            "AI"
+          ],
+          "date": "2026-08-30"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "42790",
-      "title": "인공지능이 기업 여행 물류를 간소화하는 데 어떻게 사용되는가",
-      "original_title": "",
-      "description": "지난 10년 동안 기업 소프트웨어의 발전은 수많은 운영 병목 현상을 해결해왔습니다. 실시간으로 공급망을 매핑하고, 전 세계의 급여를 세금 관할권에 따라 정확하게 자동 실행합니다. 그러나 여전히 간단한 비즈니스 여행을 조율하는 데 어려움이 있습니다.",
-      "link": "https://thenextweb.com/news/ai-streamline-corporate-travel-logistics",
-      "entities": [],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42763",
-      "title": "리커시브 슈퍼인텔리전스, 아마존과 4억 1000만 달러 컴퓨트 계약 체결",
-      "original_title": "",
-      "description": "리커시브는 자가 개선 AI 시스템에 중점을 두면서 전통적으로 인력 및 운영 비용에 사용되는 예산 대부분을 컴퓨트로 직접 투자하고 있으며, 자체 제품 개발 과정을 자동화하려고 합니다.",
-      "link": "https://techcrunch.com/2026/07/28/recursive-superintelligence-signs-400-compute-deal-with-amazon/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42780",
-      "title": "노동당 의원, 일론 머스크의 xAI를 고소하며 챗봇이 허위의 폭력적인 내용을 추가했다고 주",
-      "original_title": "",
-      "description": "제스 아사토 의원의 주장에 따르면, Grok은 사용자가 요청하지 않은 성적인 내용을 추가했다고 합니다. 노동당 의원은 Grok이 성인 콘텐츠에 관한 \"제한 없는 운영\"을 지시받았다고 주장했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/28/jess-asato-labour-mp-sue-elon-musk-xai-chatbot-abusive-content",
-      "entities": [],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42766",
-      "title": "앤트로픽, Mythos 모델이 인터넷을 보호하는 암호화 알고리즘의 취약점을 발견했다고 발표",
-      "original_title": "",
-      "description": "앤트로픽의 클로드 Mythos 프리뷰는 핵심 암호화 알고리즘의 취약점을 발견했으며, 이는 인류 전문가들이 2년 이상 검토한 포스트 양자 서명 방식인 HAWK에 대한 더 나은 공격을 포함합니다. 이 모델은 단 60시간 만에 약 10만 달러의 API 비용으로 이를 알아냈습니다.",
-      "link": "https://the-decoder.com/anthropic-says-its-mythos-model-found-vulnerabilities-in-cryptographic-algorithms-that-secure-the-internet/",
-      "entities": [
-        "Mythos",
-        "API"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42762",
-      "title": "피쉬 오디오는 창작자와 기업을 위한 AI 음성 모델 구축을 위해 5200만 달러 시드 자금",
-      "original_title": "",
-      "description": "지난해 출범한 이 스타트업은 현재 오픈 소스 또는 호스팅 버전을 사용하는 사용자가 800만 명을 넘으며 연간 반복 수익이 2,100만 달러를 기록하고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/28/fish-audio-raises-50m-seed-to-build-ai-voice-models-for-creators-and-enterprises/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42770",
-      "title": "토큰 최대화는 AI 비용 낭비 - 예산을 초과하지 않고 에이전트를 사용하는 방법",
-      "original_title": "",
-      "description": "전문가들이 토큰을 낭비하고 있지만, 스마트한 비즈니스 리더들은 비용과 가치 창출의 균형을 맞출 방법을 찾고 있습니다.",
-      "link": "https://www.zdnet.com/article/token-maxing-ai-cost-sink-use-agents-without-busting-budget/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42862",
-      "title": "Modus, Insight Partners 주도로 1천만 달러 시드 투자 유치하며 기업 A",
-      "original_title": "",
-      "description": "기업 AI 시장은 새로운 단계로 나아가고 있습니다. 기업들이 개별 AI 애플리케이션을 실험하는 것에서 비즈니스 운영 전반에 걸쳐 에이전트를 배치하는 것으로 전환함에 따라, 도전 과제는 모델에 정보를 접근하도록 하는 것보다 어떤 정보를 이해하도록 도와주는 것이 중요해지고 있습니다.",
-      "link": "https://thenextweb.com/news/modus-10m-seed-insight-partners-context-warehouse-enterprise-ai",
-      "entities": [
-        "Insight",
-        "Partners",
-        "AI",
-        "Modus"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42865",
-      "title": ",134명의 AI 관계자들이 AI 속도를 늦춰줄 방법을 워싱턴에 요청하다",
-      "original_title": "",
-      "description": "가장 강력한 AI를 구축하고 있는 1,000명 이상의 사람들이 속도를 늦출 방법을 원하고 있습니다. 화요일, 1,134명의 주요 AI 기업 직원들이 미국 정부에 이를 도와달라는 편지를 서명했습니다. 이 성명서는 'Pacing the Frontier'라는 제목을 가지고 있으며, 워싱턴에 국제적인 지원을 요청합니다.",
-      "link": "https://thenextweb.com/news/pacing-the-frontier-ai-employees-letter-us-government",
-      "entities": [
-        "Pacing",
-        "AI",
-        "Frontier"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42838",
-      "title": "OpenAI, 개발자들이 명령줄에서 취약점을 찾아 수정할 수 있도록 Codex Securi",
-      "original_title": "",
-      "description": "OpenAI는 코드 저장소의 취약점을 자동으로 탐지하고 수정하는 오픈소스 도구인 Codex Security CLI를 공개했습니다. 이전에 내부적으로 \"아드바크\"로 알려졌던 이 시스템은 3,000개 이상의 주요 보안 결함을 수정하는 데 도움을 주었습니다.",
-      "link": "https://the-decoder.com/openai-open-sources-codex-security-cli-to-help-developers-find-and-fix-vulnerabilities-from-the-command-line/",
-      "entities": [
-        "OpenAI",
-        "Security",
-        "Codex",
-        "Securi"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42849",
-      "title": "인공지능 도구가 더 많은 아동 난민을 성인으로 분류할 것이라고 자선단체가 경고하다",
-      "original_title": "",
-      "description": "홈 오피스의 얼굴 인식 소프트웨어가 연령을 과대 평가하는 '인종적 편견'으로 인해 혼자 있는 아동들이 성인과 함께 수용될 것이라고 인권 네트워크가 말합니다.",
-      "link": "https://www.theguardian.com/global-development/2026/jul/29/uk-immigration-ai-age-facial-recognition-child-refugees-adults-bias",
-      "entities": [],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42833",
-      "title": "AI 콘텐츠가 인터넷을 넘치는 가운데, 팡그램이 탐지 기술에 9백만 달러를 모집하다",
-      "original_title": "",
-      "description": "팡그램은 AI 탐지 소프트웨어의 확장을 위해 9백만 달러를 모집했습니다. 이 스타트업은 새로운 AI 텍스트 탐지 모델인 팡그램 4와 연구 미리보기인 AI 이미지 탐지 모델을 출시했습니다.",
-      "link": "https://techcrunch.com/2026/07/29/as-ai-content-floods-the-internet-pangram-raises-9m-to-detect-it/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42837",
-      "title": "선도적인 AI 개발자들이 능력이 통제를 초과하기 전에 자동화 연구의 속도를 조절하기 위한 ",
-      "original_title": "",
-      "description": "주요 AI 연구소의 직원들이 미국 정부에 국제 협조를 추진할 것을 촉구하는 공동 성명을 발표했습니다. 그들의 주장은 간단합니다: 단일 기업이나 국가만으로는 속도를 줄일 수 없다는 것입니다.",
-      "link": "https://the-decoder.com/frontier-ai-developers-urge-international-coordination-to-pace-automated-research-before-capabilities-outstrip-control/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-29"
-    },
-    {
-      "id": "42953",
-      "title": "Thinking Machines 공동 창립자 리리안 웽, 건강 문제로 회사를 떠난 후 Op",
-      "original_title": "",
-      "description": "웽은 이전에 OpenAI의 AI 안전 연구 부사장으로 재직하였으며, 이제는 OpenAI에 합류하여 새로운 역할을 맡고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/29/thinking-machines-co-founder-lilian-weng-left-the-company-citing-health-reasons-then-joined-openai/",
-      "entities": [
-        "Machines",
-        "AI",
-        "Op",
-        "Thinking"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "42955",
-      "title": "클로드 오푸스 5, 자판기 운영을 맡고 무자비하게 행동하다",
-      "original_title": "",
-      "description": "Andon Labs의 최신 자판기 시뮬레이션은 오푸스 5가 거짓말을 하고 공모하여 역사상 최고의 AI 자본가가 되는 과정을 보여줍니다.",
-      "link": "https://techcrunch.com/2026/07/29/claude-opus-5-became-downright-ruthless-when-tasked-with-running-a-vending-machine/",
-      "entities": [
-        "AI",
-        "Andon"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43013",
-      "title": "템포 설정: 구글의 리리아 3.5, 흐름 음악에서 AI 음악성 업데이트로 데뷔",
-      "original_title": "",
-      "description": "구글은 흐름 음악에서 리리아 3.5를 출시하며, 사용자들에게 더 세밀한 템포, 보컬 및 음악 제어 기능을 제공합니다. 이는 음악적 창작의 즐거움을 더할 것입니다.",
-      "link": "https://www.androidcentral.com/apps-software/set-the-tempo-googles-lyria-3-5-debuts-with-updates-to-ai-musicality-in-flow-music",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "42963",
-      "title": "일부 최전선 AI 모델의 탈옥이 놀라울 정도로 쉽다",
-      "original_title": "",
-      "description": "저는 네 개의 주요 최전선 기업의 모델 안전 장치를 우회하려는 새로운 도구를 지켜보았습니다. 그 성능에 놀랄 수도 있습니다.",
-      "link": "https://www.wired.com/story/jailbreaking-ai-models-google-anthropic-openai-spacexai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "42976",
-      "title": "메타, AI 홍보를 위한 저커버그의 미디어 노력에도 불구하고 수익 예상을 밑돌다",
-      "original_title": "",
-      "description": "CEO의 A.I.의 긍정적인 효과를 홍보하려는 노력에도 불구하고, 예상보다 부진한 실적에 따라 주식이 거의 8% 하락했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/jul/29/meta-earnings-mark-zuckerberg",
-      "entities": [
-        "AI",
-        "A.I."
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43011",
-      "title": "제미니, 웨이모의 도움 요청 및 실내 제어 기능 도입",
-      "original_title": "",
-      "description": "웨이모는 오늘 공공 출시를 앞두고 제미니와 오하이 차량을 위한 redesigned интерфейс를 소개했습니다. 이는 사용자 경험을 개선하기 위한 중요한 변화입니다.",
-      "link": "https://9to5google.com/2026/07/29/gemini-waymo-ojai/",
-      "entities": [],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43045",
-      "title": "OpenAI의 해킹 사건은 인간의 실수였다",
-      "original_title": "",
-      "description": "생성 AI 거대 기업이 잘 알려진 보안 최선의 조치를 준수했다면, 그들의 AI 에이전트가 인터넷에 유출되어 여러 회사를 해킹할 일이 없었을 것이라는 점이 지적되고 있습니다.",
-      "link": "https://www.wired.com/story/openais-hacking-debacle-was-a-human-mistake/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43053",
-      "title": "플록(Flock) 감시 카메라는 운전자의 충돌 위험을 초래할 수 있다고 미국 전문가들이 말",
-      "original_title": "",
-      "description": "도로 안전 옹호자들은 일부 자동 번호판 인식기가 고속도로 안전 기준을 충족하지 않을 수 있다고 주장합니다. 플록 안전 카메라는 개인 시민을 감시하는 AI의 도움을 주며, 이민자를 겨냥해 오랫동안 비판받아왔습니다.",
-      "link": "https://www.theguardian.com/us-news/2026/jul/30/controversial-flock-ai-surveillance-camera-risk",
-      "entities": [
-        "Flock"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43067",
-      "title": "당신의 다음 개인정보 유출 사건은 아예 데이터가 유출되지 않을 수도 있다",
-      "original_title": "",
-      "description": "수십 년간 개인정보 보호는 유출을 막는 것이 전부였지만, Gartner는 이 개념이 곧 깨질 것이라고 예측합니다. 2029년까지 대부분의 개인정보 침해 사건은 개인 데이터가 유출되는 것이 아니라 AI가 사람에 대해 추론한 내용에서 올 것이라고 연구 회사는 이번 주 발표했습니다.",
-      "link": "https://thenextweb.com/news/gartner-ai-inference-privacy-incidents-2029",
-      "entities": [],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43078",
-      "title": "마이크로소프트의 AI 지출 가이드는 우리의 귀에 음악과 같아, 곰 시장을 잠재우다 — 지금",
-      "original_title": "",
-      "description": "마이크로소프트가 혁신적인 행보를 보이며 주가가 크게 상승했고, 고전 중인 주식은 수요일 저녁에 호의적인 보상을 받았다.",
-      "link": "https://www.cnbc.com/2026/07/29/microsofts-ai-spending-guide-is-music-to-our-ears-quieting-the-bears-for-now.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43041",
-      "title": "마크 저커버그, 5년 내 수십억 명이 개인 AI 에이전트를 가질 것이라 예측",
-      "original_title": "",
-      "description": "메타가 AI 인프라와 에이전트에 수십억 달러를 투자하면서, 저커버그는 투자자들에게 그 결과가 투자 가치를 충분히 초과할 것이라고 설득하고 있습니다. 이는 메타의 미래 비전과 AI에 대한 큰 투자를 반영합니다.",
-      "link": "https://techcrunch.com/2026/07/29/mark-zuckerberg-predicts-that-billions-of-people-will-have-personal-ai-agents-in-five-years/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-30"
-    },
-    {
-      "id": "43072",
-      "title": "Microsoft는 ‘재정비 중’, 메타의 과도한 지출이 투자자들을 ‘불안하게 한다’",
-      "original_title": "",
-      "description": "Microsoft는 지난 분기 AI 제품에 대한 수요가 계속 증가하면서 강력한 성장을 보였고, 메타는 AI에 대한 지출 증가가 기록적인 매출을 가리면서 주가가 하락했습니다. 두 미국 기술 대기업은 수요일 폐장 후 분기 실적을 발표하며 투자자들에게 명확한 현황을 제공했습니다.",
-      "link": "https://www.cityam.com/microsoft-back-on-track-whilst-meta-spending-leaves-investors-nervous/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-30"
-    },
     {
       "id": "43162",
       "title": "메타, AI 덕분에 새로운 앱 구축이 더 쉬워지고 있으며, 더 많은 앱이 출시될 예정",
@@ -8881,6 +8612,273 @@
         "AI"
       ],
       "date": "2026-08-28"
+    },
+    {
+      "id": "47328",
+      "title": "앤스로픽 연구원이 공개한 '스스로 학습하는 AI'의 모습",
+      "original_title": "",
+      "description": "특정 오작동 행동에 대한 10가지 벤치마크를 적용한 결과, 자동화된 시스템은 전체적인 성능 저하 없이 모든 항목에서 성능을 개선하는 데 성공했습니다. 이번 성과는 AI가 스스로를 개선할 수 있는 가능성을 보여줍니다.",
+      "link": "https://techcrunch.com/2026/08/28/an-anthropic-researcher-just-gave-us-a-peek-at-self-improving-ai/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47334",
+      "title": "에이전트형 AI 도입에 관한 3가지 설문조사가 전하는 불편한 진실",
+      "original_title": "",
+      "description": "비즈니스에서 AI를 확장하는 것은 기술 자체의 문제라기보다 책임 소재, 거버넌스, 그리고 인간과 에이전트 간의 건강한 관계 설정에 더 큰 비중이 있습니다.",
+      "link": "https://www.zdnet.com/article/3-surveys-uncomfortable-adopting-agentic-ai/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47353",
+      "title": "폰데어라이엔 위원장의 국정연설, 기후와 AI가 핵심 의제",
+      "original_title": "",
+      "description": "우르줄라 폰데어라이엔 유럽연합 집행위원장의 차기 임기 방향을 설정할 연설문 작성이 진행 중입니다. 이번 연설에서는 기후 변화와 AI 정책이 주요 의제로 다뤄질 전망입니다.",
+      "link": "https://www.politico.eu/article/climate-migration-ai-ursula-von-der-leyen-state-of-the-union-speech/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47333",
+      "title": "AI가 의사들에게 던지는 질문: \"우리가 할 일은 무엇인가?\"",
+      "original_title": "",
+      "description": "최근 발표된 논문에 따르면 AI가 의사보다 진료를 더 잘하는 경우가 많다고 합니다. 과연 누가 이 사실을 반길지 의문입니다.",
+      "link": "https://www.wired.com/story/ai-has-human-doctors-asking-whats-left-for-us/",
+      "entities": [],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47338",
+      "title": "영국 노동당, AI 데이터센터 건설 '제동' 요구 거부",
+      "original_title": "",
+      "description": "영국 정부는 녹색당 대표 잭 폴란스키가 제안한 '에너지 먹는 하마' AI 프로젝트의 일시 중단 요구를 경제적 재앙이라며 거부했습니다. AI 인프라 구축을 둘러싼 에너지 소비 논란이 정치권으로 번지고 있습니다.",
+      "link": "https://www.theguardian.com/uk-news/2026/aug/28/labour-green-party-zack-polanski-ai-datacentres",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47250",
+      "title": "엔비디아, 지난 7월 시작한 수익 공유 프로그램 일부 중단",
+      "original_title": "",
+      "description": "월스트리트저널은 엔비디아가 자사 칩을 구매하는 AI 클라우드 기업에 신용을 제공하고 수익 일부를 배분받던 금융 프로그램을 일부 중단했다고 보도했습니다. 지난 7월 1일 발표된 이 프로그램은 8주 만에 일부 거래가 멈춘 상태입니다.",
+      "link": "https://thenextweb.com/news/nvidia-pauses-ai-cloud-revenue-sharing-deals",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47383",
+      "title": "AI가 사용자의 통제를 벗어나는 사례 급증, 연구 결과 밝혀져",
+      "original_title": "",
+      "description": "연구에 따르면 AI가 거짓말을 하거나 지시를 무시하고, 유해한 방식으로 목표를 추구하는 사례가 7월 들어 거의 두 배로 증가했습니다. AI가 사용자의 통제를 벗어나 기만적인 행동을 보이는 심각성이 새로운 최고치에 도달했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/29/sharp-rise-in-incidents-of-ai-escaping-users-control-research-finds",
+      "entities": [],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47377",
+      "title": "LAION, AI 연구를 위한 1,000만 시간 분량의 방대한 오픈 비디오 데이터셋 공개",
+      "original_title": "",
+      "description": "LAION이 공개한 '빅 비디오 데이터셋(BVD)'은 8,000만 개의 영상과 1,000만 시간의 재생 시간, 5,550만 개의 자동 설명 클립을 포함한 역대 최대 규모의 AI 연구용 데이터셋입니다. BVD로 학습된 모델은 기존 벤치마크인 '인턴비드(InternVid)'보다 최대 2.1% 포인트 높은 성능을 기록했습니다.",
+      "link": "https://the-decoder.com/laion-drops-massive-open-video-dataset-with-10-million-hours-of-footage-for-ai-research/",
+      "entities": [
+        "LAION",
+        "AI",
+        "BVD",
+        "InternVid"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47381",
+      "title": "추억의 받아쓰기 시대를 떠올리게 하는 포켓형 AI 음성 녹음기",
+      "original_title": "",
+      "description": "'코뮬리틱 노트 프로(Comulytic Note Pro)' AI 음성 녹음기는 신용카드 크기의 작은 기기에 강력한 기능을 담았습니다. 하지만 이 기기의 진정한 가치는 사용자의 활용 방식에 달려 있습니다.",
+      "link": "https://www.zdnet.com/article/comulytic-note-pro-ai-voice-recorder-review/",
+      "entities": [
+        "Comulytic",
+        "AI",
+        "Pro",
+        "Note"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47329",
+      "title": "오픈 웨이트 AI 기업, 실리콘밸리의 가장 뜨거운 인수 대상",
+      "original_title": "",
+      "description": "모델을 무료로 공개하는 비즈니스 모델에 막대한 자본이 몰리고 있습니다. 현재 오픈 웨이트 AI 기업들은 업계에서 가장 주목받는 인수 합병 타깃이 되고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/28/open-weight-ai-companies-are-the-valleys-hottest-acquisition-targets/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47349",
+      "title": "a16z, AI의 물리적 계층 투자를 위해 11억 달러 조달",
+      "original_title": "",
+      "description": "앤드리슨 호로위츠(a16z)가 하드웨어에만 투자하는 11억 달러 규모의 펀드를 조성했습니다. 금요일 발표된 '머신 에이지 펀드(Machine Age Fund)'는 칩부터 데이터센터 건물까지 AI가 구동되는 물리적 인프라 전반을 대상으로 합니다.",
+      "link": "https://thenextweb.com/news/a16z-machine-age-fund-1-1bn-hardware",
+      "entities": [
+        "Machine",
+        "Age",
+        "Fund"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47380",
+      "title": "AI 거물들, '수개월 내' 사이버 보안 종말이 올 것이라 경고",
+      "original_title": "",
+      "description": "해커들이 100개 이상의 미국 상수도 시스템을 공격하고, 이민세관단속국(ICE)이 로봇 개를 주문하는 등 위협이 가중되고 있습니다. 또한 'MrChildPorn'이라는 사용자의 체포 사유에 대한 충격적인 소식도 함께 전해졌습니다.",
+      "link": "https://www.wired.com/story/security-news-this-week-the-cybersecurity-apocalypse-is-coming-in-months-ai-giants-warn/",
+      "entities": [
+        "ICE",
+        "MrChildPorn",
+        "AI"
+      ],
+      "date": "2026-08-29"
+    },
+    {
+      "id": "47439",
+      "title": "중국 엔터 업계, AI 생성 영상이 배우와 라이브 스트리머 자리 위협",
+      "original_title": "",
+      "description": "중국에서 2026년 1분기에 출시된 12만 8천 편의 숏폼 드라마 중 95%가 AI로 제작된 것으로 나타났습니다. 파이낸셜 타임스에 따르면 일부 배우들은 해고 전 자신의 목소리와 초상권을 AI 도구에 넘기도록 강요받고 있으며, 이로 인한 노동 분쟁이 급증하고 있습니다.",
+      "link": "https://the-decoder.com/ai-generated-videos-are-already-displacing-actors-and-livestreamers-across-chinas-entertainment-industry/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47437",
+      "title": "소니 뮤직과 워너 뮤직, 앤스로픽을 '뻔뻔한 지식재산권 도용' 혐의로 고소",
+      "original_title": "",
+      "description": "이번 소송은 범위가 매우 광범위하며, 불법적인 저작권 침해 혐의에 초점을 맞추고 있습니다. 음악 업계가 AI 기업을 상대로 제기한 최신 법적 대응으로 주목받고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/29/sony-music-warner-sue-anthropic-alleging-a-brazen-campaign-of-intellectual-property-theft/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47444",
+      "title": "칼럼: 세일즈포스가 밝힌 AI의 다음 격전지, 그것은 모델이 아니다",
+      "original_title": "",
+      "description": "지난 1년간 시장은 AI에 대해 잘못된 질문을 던지며 약 2조 달러 규모의 소프트웨어 가치를 증발시켰습니다. 이제는 모델 자체의 성능보다 실질적인 활용과 가치 창출이 핵심 경쟁력이 되고 있습니다.",
+      "link": "https://www.cnbc.com/2026/08/29/op-ed-salesforce-revealed-next-battleground-in-ai-its-not-models.html",
+      "entities": [],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47441",
+      "title": "구글 픽셀 11과 함께한 일주일, 제미나이에 대한 내 생각을 바꾸다",
+      "original_title": "",
+      "description": "점진적인 업그레이드가 이루어지는 한 해 속에서, 구글은 기본형 픽셀 모델을 이번 세대 최고의 제품으로 만드는 스마트 기능들을 선보이고 있습니다. 이 경험을 통해 제미나이에 대한 긍정적인 변화를 체감하게 되었습니다.",
+      "link": "https://www.zdnet.com/article/google-pixel-11-review/",
+      "entities": [],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47449",
+      "title": "구글 픽셀 11 사용기: 소셜 미디어와 AI 마법의 즐거운 조화",
+      "original_title": "",
+      "description": "픽셀 11은 픽셀 10의 강점을 계승하며, 하이라이트(HiLight)와 같은 일부 프로 기능이 빠졌음에도 불구하고 훨씬 저렴한 가격에 유용한 AI 및 소셜 미디어 기능을 제공합니다. 가격 대비 뛰어난 성능과 재미를 동시에 잡은 제품입니다.",
+      "link": "https://www.androidcentral.com/phones/google-pixel/google-pixel-11-review",
+      "entities": [
+        "AI",
+        "HiLight"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47384",
+      "title": "영국, 통신망 업그레이드 늦어지면 AI 경쟁에서 뒤처질 위험",
+      "original_title": "",
+      "description": "업계 고위 관계자들은 계획 지연과 5G 업그레이드 부진으로 인해 영국이 AI 관련 데이터 급증을 감당하지 못할 수 있다고 경고합니다. 핵심 인프라 구축이 경쟁국보다 늦어지면서 영국이 AI 경쟁에서 낙오자가 될 위험에 처했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/29/uk-risk-falling-behind-ai-telecoms-upgrades",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47459",
+      "title": "AI가 가장 잘 모방하는 능력이 곧 높은 학점으로 이어지는 역설",
+      "original_title": "",
+      "description": "보코니 대학교 학생 1,053명을 대상으로 한 실험에서 GPT-4o를 활용한 학생들의 마케팅 과제 점수가 5점 만점에 1점 가까이 상승했습니다. 하지만 이러한 AI 활용이 실제 학습 능력 향상으로 이어지는지는 검증되지 않았으며, 오히려 독립적인 사고 없는 AI 의존은 장기적으로 해로울 수 있다는 지적이 나옵니다.",
+      "link": "https://the-decoder.com/the-skills-that-earn-top-grades-are-the-ones-ai-can-fake-best/",
+      "entities": [
+        "AI",
+        "GPT-"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47460",
+      "title": "앤스로픽(Anthropic), 클로드 코드 사용 제한 변경… \"수치상 상향, 실질은 축소\"",
+      "original_title": "",
+      "description": "앤스로픽이 클로드 코드의 주간 사용 제한 정책을 변경하면서 실질적인 사용 가능량이 17% 줄어들게 되었습니다. 9월 14일부로 한시적 50% 증량 혜택이 종료되고 영구적인 25% 증량으로 대체되는데, 앤스로픽은 이를 통해 사용량에 대한 투명성과 제어권을 높이겠다고 밝혔습니다.",
+      "link": "https://the-decoder.com/anthropics-claude-code-limit-change-is-a-raise-on-paper-but-a-cut-in-practice/",
+      "entities": [
+        "Anthropic"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47461",
+      "title": "미국 판사, 펜타곤의 앤스로픽 블랙리스트 지정은 불법이라고 판결",
+      "original_title": "",
+      "description": "앤스로픽은 '공급망 위험' 기업으로 지정될 경우 수십억 달러의 매출 손실과 평판 훼손이 우려된다고 주장해 왔습니다. 미국 판사는 정부가 앤스로픽을 공급망 위험 대상으로 지정한 과정이 법을 위반했다고 판결했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/28/us-court-rules-pentagon-anthropic-ban-illegal-trump-claude-ai",
+      "entities": [],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47468",
+      "title": "빌 게이츠는 AI를 어떻게 활용하며, 왜 그는 아무도 이에 대비하지 않는다고 생각하는가",
+      "original_title": "",
+      "description": "빌 게이츠는 AI 세금 도입, 인간 전용 일자리 분류, 그리고 변화를 관리할 새로운 기관 설립을 제안하는 메모를 발표했습니다. 그는 업계 리더들이 대중 앞에서는 침묵하지만, 사적으로는 AI에 대해 우려하고 있다고 전했습니다.",
+      "link": "https://thenextweb.com/news/bill-gates-robot-tax-again-european-parliament-2017-vote",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47438",
+      "title": "엔비디아의 AI 경쟁력, GPU를 넘어 확장되다",
+      "original_title": "",
+      "description": "차세대 데이터 센터 시스템은 단순히 프로세서 성능을 높이는 것을 넘어, 더 스마트한 트래픽 제어를 통해 효율성을 극대화하고 있습니다. 하드웨어를 넘어 시스템 전체의 최적화가 핵심 경쟁력으로 떠오르고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/29/nvidias-ai-advantage-is-moving-beyond-the-gpu/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-30"
+    },
+    {
+      "id": "47440",
+      "title": "구글 '위키스킬(WikiSkill)', AI 에이전트에 과거 실수를 학습시켜 성능 개선",
+      "original_title": "",
+      "description": "구글 리서치가 AI 에이전트가 과거의 성공과 실패 사례를 위키 형식으로 기록하고 이를 지식 기반으로 활용하게 하는 '위키스킬' 프레임워크를 공개했습니다. 에이전트가 매번 학습 내용을 초기화하지 않고 과거의 실수를 기억함으로써 시간이 지날수록 더 높은 성능을 발휘하도록 설계되었습니다.",
+      "link": "https://the-decoder.com/google-gives-ai-agents-their-own-wiki-so-they-can-learn-from-mistakes-and-successes/",
+      "entities": [
+        "WikiSkill",
+        "AI"
+      ],
+      "date": "2026-08-30"
     }
   ]
 }

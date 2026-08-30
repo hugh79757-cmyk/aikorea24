@@ -1,0 +1,17 @@
+세일즈포스가 미국에서 분기 실적을 발표하며 AI 에이전트 시장에서의 데이터 경쟁력을 입증했음.
+
+이번 분기 기준 세일즈포스의 Data 360은 104조 건의 고객 레코드를 수집했음. 이는 전년 대비 355% 증가한 수치임.
+---
+세일즈포스는 이번 분기 기준 32억 건의 에이전트 작업(agentic work)을 수행했음. 비일반회계기준(non-GAAP) 영업이익률은 34.1%를 기록했음. 또한, Agentforce는 출시 18개월 후 기준 연간 반복 매출(ARR) 15억 달러 이상을 달성했음.
+---
+Marc Benioff Salesforce CEO는 "'SaaSpocalypse(SaaS 종말론)'라는 서사는 완전히 헛소리였습니다"라고 언급했음(원문: The 'SaaSpocalypse' narrative has been such nonsense. ...). 그는 신규 평균 주문 가치 성장이 4년 만에 가장 강력하며, 회의론자들의 주장과 달리 Agentforce 영업 및 서비스와 Slack 모두 전년 대비 좌석 수가 증가했다고 밝혔음.
+---
+Marc Benioff Salesforce CEO는 "세계 1위 AI인 앤스로픽(Anthropic)과 1위 CRM인 세일즈포스가 하나로 합쳐집니다"라고 말했음(원문: The No. 1 AI in the world, Anthropic, and the No. 1 CRM, Salesforce, coming together). 그는 또한 이탈률이 역대 최저 수준에 가깝고, 예약은 전 분기 대비 두 배 이상 증가했으며 계약 기간 조건이 모든 부문에서 개선되었다고 덧붙였음.
+---
+세일즈포스는 에이전트들이 그 어느 때보다 더 많은 세일즈포스를 사용하고 있다고 밝혔음. Marc Benioff Salesforce CEO는 에이전트들이 사용하는 데이터와 업무 맥락이 플랫폼 위에서 연결될 때 실질적인 성과가 창출된다고 강조했음. 앤스로픽과의 협력을 포함한 데이터 중심 전략은 세일즈포스의 AI 시대 핵심 경쟁력으로 제시되었음.
+---
+--- 카드 6 ---
+출처: CNBC Tech
+발행일: Sat, 29 Aug 2026 13:00:01
+원문: https://www.cnbc.com/2026/08/29/op-ed-salesforce-revealed-next-battleground-in-ai-its-not-models.html
+추출 사실: B 5건 / C 2건

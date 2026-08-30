@@ -1,0 +1,17 @@
+구글 리서치(Google Research)가 AI 에이전트의 지속적 학습을 위한 '위키스킬(WikiSkill)' 프레임워크를 발표했음.
+
+AI 에이전트가 매 실행 후 학습 내용을 잃어버리는 문제를 해결하고, 과거의 성공과 실패 경험을 누적하여 성능을 개선하는 것이 목적임.
+---
+WikiSkill 프레임워크 적용 시 Gemini-3.5-Flash 모델의 성능은 평균 49.5%에서 68.1%로 향상되었음. 또한 LiveMath 벤치마크에서 Gemini-3.5-Flash는 33.0%에서 72.6%로, SpreadSheet 벤치마크에서는 50.5%에서 76.6%로 성능이 향상되는 결과를 보였음.
+---
+이 시스템은 에이전트가 학습한 내용을 매번 버리지 않고 위키 형태의 구조로 수집함. 수집된 지식은 '에이전트 스킬'이라는 재사용 가능한 모듈로 패키징되어 에이전트의 행동을 안내함. 훈련 과정에서 학습한 내용을 변경하지 않으면서도 에이전트가 스스로 더 나은 지침을 작성하고 다음 실행 시 이를 활용할 수 있게 함.
+---
+안드레 카파시(Andrej Karpathy)는 이 연구에 대해 경험을 지속적이고 누적된 지식으로 편집해야 한다고 주장하는 'LLM 위키' 개념을 제시했음. 이 연구는 안드레 카파시의 관점을 차용하여 AI 에이전트의 자동화된 스킬 개발에 적용하고 있음. (원문: The work draws on a perspective from Andrej Karpathy about the idea of an "LLM Wiki," which argues for compiling experience into persistent, cumulative knowledge.)
+---
+WikiSkill은 원시 데이터 계층, 위키 계층, 스킬 계층의 3단계로 작업 공간을 구성함. 위키 유지 관리자는 실행 흔적을 분석해 실패 패턴과 성공 전략을 위키에 기록하며, 스킬 제안자는 이를 바탕으로 스킬 변경을 제안함. 제안된 변경 사항은 검증 세트에서 테스트를 거치며, 성능 향상이 확인되지 않으면 스킬은 이전 상태로 되돌려지지만 위키의 기록은 유지됨.
+---
+--- 카드 6 ---
+출처: The Decoder
+발행일: Sat, 29 Aug 2026 12:51:24
+원문: https://the-decoder.com/google-gives-ai-agents-their-own-wiki-so-they-can-learn-from-mistakes-and-successes/
+추출 사실: B 3건 / C 1건

@@ -1,3 +1,4 @@
+- 2026-08-29 | fix | weekly-contrast-thumb-leak-depth-fix | 주간 심층분석 2건 썸네일 생성 + A측/B측/대비 릭 자연어화 + 원문기사링크 중복삭제 + 병렬나열→통합분석 깊이 보강
 - 2026-08-28 | config | threads-publish-frequency-halved | 쓰레드 발행 빈도 절반 조정 (12→6회/일, 4시간 간격, 출퇴근 시간대 배치)
 - 2026-08-28 | fix | placeholder-og-mixup-and-replacement | Pexels fallback이 placeholder 사본을 그대로 image로 노출하는 사고 — news-keyword-og.webp 교체 + is_placeholder_copy 가드 추가
 - 2026-08-27 | fix | llm-fallback-chain-timeout-and-alert-fix | LLM fallback chain timeout + topic_finder + pipeline alert fix (06:15 hang, 429, exit 0 masking, pitch TypeError)
