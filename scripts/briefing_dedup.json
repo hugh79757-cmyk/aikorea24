@@ -1,144 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-07-31",
-      "briefing_id": 204,
-      "articles": [
-        {
-          "id": "43162",
-          "title": "메타, AI 덕분에 새로운 앱 구축이 더 쉬워지고 있으며, 더 많은 앱이 출시될 예정",
-          "original_title": "",
-          "description": "메타는 AI 덕분에 소비자용 앱을 구축하고 출시하는 것이 매우 쉬워지고 있다고 밝혔습니다. 마크 저커버그 CEO는 투자가들에게 회사가 더 많은 새로운 소비자 제품이 준비 중이라고 전했습니다.",
-          "link": "https://techcrunch.com/2026/07/30/meta-says-ai-is-making-it-easier-to-build-new-apps-and-more-are-coming/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43157",
-          "title": "판사가 트럼프 행정부의 앤소로픽 '공급망 위험' 라벨 증거 부족이라 말하다",
-          "original_title": "",
-          "description": "연방 판사는 트럼프 행정부가 앤소로픽을 공급망 위험으로 분류할 충분한 증거를 제시하지 못했다고 밝혔습니다. 이로 인해 정부의 AI 기술 금지 조치에 의구심이 제기되고 있습니다.",
-          "link": "https://techcrunch.com/2026/07/30/judge-says-trump-admin-still-lacks-evidence-for-anthropic-supply-chain-risk-label/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43196",
-          "title": "AI가 당신의 좋아하는 비행 노선의 저가 좌석을 노리고 있다",
-          "original_title": "",
-          "description": "인기 비행편에서 저가 좌석을 우연히 발견하는 행운은 사라지기 시작하고 있습니다. 항공사들은 가격 책정을 인공지능에 맡기고 있으며, 이는 주로 상승하는 요금을 의미합니다.",
-          "link": "https://thenextweb.com/news/ai-airline-dynamic-pricing-fewer-bargain-fares-busy-routes",
-          "entities": [],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43183",
-          "title": "미국의 흑인들: 건강 관련 질문에 AI를 사용해 본 적이 있나요?",
-          "original_title": "",
-          "description": "우리는 인공지능을 통해 건강이나 영적 지도를 받고 있는 흑인 미국인들의 이야기를 듣고 싶습니다. 인공지능은 의료 분야에서 점점 더 영향력을 발휘하고 있으며, 더 많은 사람들이 AI 도구, 포함하여 AI가 생성한 소셜 미디어 인플루언서에게 도움을 요청하고 있습니다.",
-          "link": "https://www.theguardian.com/us-news/2026/jul/30/black-americans-ai-health-inquiries",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43164",
-          "title": "오픈AI, 가장 저렴한 GPT-5.6 모델 가격 80% 인하",
-          "original_title": "",
-          "description": "7월 30일부터 오픈AI는 GPT-5.6 루나의 가격을 80%, 테라의 가격을 20% 인하합니다. 오픈AI는 최고급 솔 모델이 회사의 인프라를 더욱 효율적으로 만들었다고 언급하며, 이러한 가격 인하가 가능했다고 밝혔습니다.",
-          "link": "https://the-decoder.com/openai-goes-full-china-pricing-mode-with-an-80-percent-cut-to-its-most-affordable-gpt-5-6-model/",
-          "entities": [
-            "GPT-5.6"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43202",
-          "title": "넥서스 데이터 센터, 구글 후원 앤트로픽 데이터 센터를 위한 150억 달러 확보를 위한 협",
-          "original_title": "",
-          "description": "모건 스탠리가 넥서스 데이터 센터에 150억 달러를 대출하기 위한 협상에 주도적으로 참여하고 있다는 것이 CNBC에 의해 확인되었습니다.",
-          "link": "https://www.cnbc.com/2026/07/30/nexus-data-centers-in-advanced-talks-to-secure-15b-for-google-backed-anthropic-data-center.html",
-          "entities": [],
-          "date": "2026-07-31"
-        }
-      ]
-    },
-    {
-      "date": "2026-07-31",
-      "briefing_id": 205,
-      "articles": [
-        {
-          "id": "43255",
-          "title": "AI 헤지펀드 ‘상황 인식’, 공개 포트폴리오는 매각했지만 앤트로픽 주식은 여전히 보유",
-          "original_title": "",
-          "description": "전 오픈AI 연구원의 펀드는 레버리지 공공 투자로 인해 손실을 입어 공공 주식을 매각해야 했습니다. 하지만 그에게는 여전히 반전의 카드가 남아 있습니다.",
-          "link": "https://techcrunch.com/2026/07/30/ai-hedge-fund-situational-awareness-may-have-sold-its-public-portfolio-but-it-still-has-its-anthropic-shares/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43254",
-          "title": "앤트로픽, 보안 테스트 중 세 개 회사의 시스템 침입했다고 발표",
-          "original_title": "",
-          "description": "오픈AI의 모델이 허깅 페이스에 침입한 이후, 앤트로픽은 자신의 기록을 점검하고 세 건의 유사한 사건을 발견했습니다.",
-          "link": "https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/",
-          "entities": [],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43274",
-          "title": "영국의 휘발유 가격이 올해 가장 높아져 - 미국, 이란 공격",
-          "original_title": "",
-          "description": "도널드 트럼프가 중동에서의 폭격을 재개하라고 명령함에 따라 AA와 RAC가 리터당 약 £1.60로 가격 상승을 보고하고 있습니다.",
-          "link": "https://www.theguardian.com/business/live/2026/jul/31/bp-sell-north-sea-ai-record-korea-kospi-stock-market-latest-news-updates",
-          "entities": [],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43287",
-          "title": "아마존, AWS 성장에 힘입어 AI 지출에 대한 우려 완화로 주가 상승",
-          "original_title": "",
-          "description": "아마존 주가는 클라우드 사업 부문이 4년 만에 가장 빠른 성장을 기록한 뒤 12% 이상 급등했습니다. AWS는 2분기에 37% 성장하여, 분석가들이 예상한 31%를 초과했습니다.",
-          "link": "https://thenextweb.com/news/amazon-q2-2026-aws-growth-ai-spending",
-          "entities": [
-            "AI",
-            "AWS"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43291",
-          "title": "테크 다운로드: 안두릴 CEO 브라이언 심프, 전쟁과 제조에서 AI에 대해 이야기하다",
-          "original_title": "",
-          "description": "CNBC의 아르준 카르팔이 방산 회사의 CEO와 함께 '테크 다운로드' 팟캐스트에서 대화를 나눕니다.",
-          "link": "https://www.cnbc.com/2026/07/31/the-tech-download-anduril-ceo-brian-schimpf.html",
-          "entities": [
-            "CEO"
-          ],
-          "date": "2026-07-31"
-        },
-        {
-          "id": "43262",
-          "title": "Aschenbrenner의 AI 논문은 맞을 수 있으나 그의 타이밍과 레버리지 선택은 실패",
-          "original_title": "",
-          "description": "레오폴드 아셴브레너의 AI 헤지 펀드인 Situational Awareness는 레버리지AI 주식 포지션에서 큰 손실을 본 후 거의 모든 공개 상장 포트폴리오를 켄 그리핀의 시타델에 매각해야 했습니다. 아셴브레너는 며칠 전만 해도 6개월 수익률이 439%에 달한다고 보고했습니다.",
-          "link": "https://the-decoder.com/aschenbrenners-ai-thesis-could-be-correct-his-timing-and-leverage-were-not/",
-          "entities": [
-            "AI",
-            "Situational"
-          ],
-          "date": "2026-07-31"
-        }
-      ]
-    },
-    {
       "date": "2026-08-01",
       "briefing_id": 206,
       "articles": [
@@ -4627,135 +4489,155 @@
           "date": "2026-08-30"
         }
       ]
+    },
+    {
+      "date": "2026-08-31",
+      "briefing_id": 267,
+      "articles": [
+        {
+          "id": "47520",
+          "title": "AI의 최악의 재앙은 예고 없이 찾아올 것이다 | 독자 투고",
+          "original_title": "",
+          "description": "사이먼 니더 박사는 AI가 초래할 위협을 억제하기 위해 필요한 국제적 노력에 대해 논합니다. 앤서니 해리스 박사와 데이비드 카일러의 의견을 포함하여, AI 위험에 대한 국제적 대응의 필요성과 그 방식에 대한 논의를 다룹니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/30/ais-worst-disasters-will-arrive-unannounced",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47517",
+          "title": "캐터필러, 광산 자동화 경험을 AI 배포에 접목하다",
+          "original_title": "",
+          "description": "캐터필러는 수십 년간 원격 광산 현장에서 자율주행 기계를 운용해 왔습니다. 이제 그간의 노하우를 바탕으로 AI 배포 분야에 본격적으로 뛰어들고 있습니다.",
+          "link": "https://techcrunch.com/2026/08/30/caterpillar-is-bringing-to-ai-deployment-what-it-learned-from-automating-mining/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47518",
+          "title": "직원들의 불만 커지며 AI에 대한 긍정적 여론 악화",
+          "original_title": "",
+          "description": "글래스도어(Glassdoor) 리뷰 분석 결과, AI에 대한 긍정적인 평가가 2019년 81%에서 43%로 급락했습니다. 경영진은 AI를 대체로 긍정적으로 평가하는 반면, 보험 청구 담당자 등 실무자들은 고용 불안, 강제 도입, 감시 등을 이유로 AI에 대해 매우 부정적인 반응을 보이고 있습니다.",
+          "link": "https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/",
+          "entities": [
+            "Glassdoor"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47524",
+          "title": "MIT 보고서, \"AI가 학부 과정의 거의 모든 과제 수행 가능\"",
+          "original_title": "",
+          "description": "MIT 위원회 보고서에 따르면, AI는 학부 커리큘럼 내 거의 모든 작문 과제에 대해 신뢰할 만한 답변을 생성할 수 있으며, 3년도 채 되지 않아 캠퍼스 문화에 측정 가능한 변화를 일으켰습니다. 한편 EU의 AI법에 따르면 시험 중 학생을 감시하는 시스템은 고위험군으로 분류됩니다.",
+          "link": "https://thenextweb.com/news/mit-ai-undergraduate-assignments-eu-ai-act-proctoring-annex-iii",
+          "entities": [
+            "MIT"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47467",
+          "title": "영국 이동통신사들, \"영국 네트워크는 AI 트래픽을 감당할 준비가 되지 않았다\"",
+          "original_title": "",
+          "description": "보다폰-쓰리(VodafoneThree)의 네트워크 디렉터는 영국 이동통신 품질이 AI 트래픽을 수용할 준비가 되어 있지 않으며, 자금보다는 규제가 걸림돌이라고 지적했습니다. 기존 기지국 업그레이드의 절반 이상이 허가를 받아야 하는 등 계획 관련 규제가 발목을 잡고 있습니다.",
+          "link": "https://thenextweb.com/news/uk-mobile-networks-ai-planning-reform-eu-gigabit-infrastructure-act",
+          "entities": [
+            "VodafoneThree",
+            "AI"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47521",
+          "title": "대기업은 중소기업에게 AI를 어떻게 활용해야 할지, 혹은 하지 말아야 할지를 보여주었다 |",
+          "original_title": "",
+          "description": "중소기업 경영자들은 대기업이 AI를 도입하며 겪는 시행착오와 성공 사례를 지켜보며 실질적인 전략을 배우고 있습니다. 인터넷이나 모바일 기술처럼, 기업들이 검증한 첨단 기술은 결국 중소기업에도 혜택으로 돌아오기 마련입니다.",
+          "link": "https://www.theguardian.com/technology/2026/aug/30/ai-small-business",
+          "entities": [],
+          "date": "2026-08-31"
+        }
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "briefing_id": 268,
+      "articles": [
+        {
+          "id": "47542",
+          "title": "AI가 미국 정치를 병들게 하고 있다. 후보들이 이를 선용할 방법은 없을까? | 브루스 슈",
+          "original_title": "",
+          "description": "일본과 스코틀랜드의 사례에서 볼 수 있듯이, AI 기술은 후보자들이 유권자의 목소리를 더 깊이 경청하는 데 도움을 줄 수 있습니다. 현재 미국 중간선거에서 AI 딥페이크가 악용되는 상황 속에서, 기술을 긍정적으로 활용할 방안을 모색합니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/aug/31/ai-politics-voters",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47560",
+          "title": "유럽, 국영 기업에 3억 8,800만 유로 규모의 AI 슈퍼컴퓨터 발주",
+          "original_title": "",
+          "description": "유럽이 핀란드 카야니에 설치될 새로운 AI 슈퍼컴퓨터를 도입합니다. 3억 8,780만 유로 규모의 'LUMI-AI' 시스템은 프랑스 정부가 인수한 슈퍼컴퓨터 제조사 '불(Bull)'이 제작을 맡게 됩니다.",
+          "link": "https://thenextweb.com/news/lumi-ai-supercomputer-bull-finland-eurohpc",
+          "entities": [
+            "LUMI-AI",
+            "Bull",
+            "AI"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47539",
+          "title": "소규모 사업체에서 시간과 비용을 절약하기 위해 ChatGPT Work를 활용하는 5가지 방",
+          "original_title": "",
+          "description": "지메일 스캔부터 불리한 대출 조건 파악까지, ChatGPT Work는 저의 실질적인 소규모 비즈니스 조수가 되었습니다. 에이전트형 AI가 어떻게 실제 생산성 향상을 가져오는지 소개합니다.",
+          "link": "https://www.zdnet.com/article/chatgpt-work-small-business-use-cases/",
+          "entities": [
+            "ChatGPT"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47534",
+          "title": "포켓(Pocket)의 AI로 게임 아이디어를 현실화했지만, 이제 결과물은 메타가 통제한다",
+          "original_title": "",
+          "description": "인터랙티브 모바일 '기즈모'는 제작하기는 쉽지만, 메타 플랫폼 외부에서 공유하기는 어렵습니다. 플랫폼의 제약으로 인해 사용자가 만든 결과물의 소유권과 활용에 한계가 생기고 있습니다.",
+          "link": "https://arstechnica.com/gaming/2026/08/pockets-ai-made-my-game-ideas-real-now-meta-controls-the-results/",
+          "entities": [
+            "Pocket"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47537",
+          "title": "오픈AI 등 AI 기업들, 컴퓨터 제어 에이전트 학습 위해 맥 미니 대량 구매",
+          "original_title": "",
+          "description": "디 인포메이션에 따르면 오픈AI는 컴퓨터 제어 에이전트를 학습시키기 위해 수만 대의 맥 미니와 맥 스튜디오를 구매했습니다. 앤스로픽 또한 애플 하드웨어를 활용하고 있으며, 이로 인해 고성능 모델은 수개월째 품귀 현상을 빚고 있습니다.",
+          "link": "https://the-decoder.com/openai-and-rival-ai-labs-are-buying-tens-of-thousands-of-mac-minis-to-train-computer-use-agents/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-08-31"
+        },
+        {
+          "id": "47538",
+          "title": "AI를 정말 싫어하는 사람들은 누구일까? 바로 보험 손해사정사들이다",
+          "original_title": "",
+          "description": "글래스도어(Glassdoor)에 올라온 손해사정사들의 리뷰 중 AI를 언급한 리뷰의 98%가 부정적인 것으로 나타났습니다. 한 관계자는 와이어드(WIRED)와의 인터뷰에서 \"AI는 그저 도구일 뿐이며, 결코 전권을 맡겨서는 안 된다\"고 강조했습니다.",
+          "link": "https://www.wired.com/story/insurance-claims-adjusters-really-hate-ai/",
+          "entities": [
+            "Glassdoor",
+            "WIRED"
+          ],
+          "date": "2026-08-31"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "43162",
-      "title": "메타, AI 덕분에 새로운 앱 구축이 더 쉬워지고 있으며, 더 많은 앱이 출시될 예정",
-      "original_title": "",
-      "description": "메타는 AI 덕분에 소비자용 앱을 구축하고 출시하는 것이 매우 쉬워지고 있다고 밝혔습니다. 마크 저커버그 CEO는 투자가들에게 회사가 더 많은 새로운 소비자 제품이 준비 중이라고 전했습니다.",
-      "link": "https://techcrunch.com/2026/07/30/meta-says-ai-is-making-it-easier-to-build-new-apps-and-more-are-coming/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43157",
-      "title": "판사가 트럼프 행정부의 앤소로픽 '공급망 위험' 라벨 증거 부족이라 말하다",
-      "original_title": "",
-      "description": "연방 판사는 트럼프 행정부가 앤소로픽을 공급망 위험으로 분류할 충분한 증거를 제시하지 못했다고 밝혔습니다. 이로 인해 정부의 AI 기술 금지 조치에 의구심이 제기되고 있습니다.",
-      "link": "https://techcrunch.com/2026/07/30/judge-says-trump-admin-still-lacks-evidence-for-anthropic-supply-chain-risk-label/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43196",
-      "title": "AI가 당신의 좋아하는 비행 노선의 저가 좌석을 노리고 있다",
-      "original_title": "",
-      "description": "인기 비행편에서 저가 좌석을 우연히 발견하는 행운은 사라지기 시작하고 있습니다. 항공사들은 가격 책정을 인공지능에 맡기고 있으며, 이는 주로 상승하는 요금을 의미합니다.",
-      "link": "https://thenextweb.com/news/ai-airline-dynamic-pricing-fewer-bargain-fares-busy-routes",
-      "entities": [],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43183",
-      "title": "미국의 흑인들: 건강 관련 질문에 AI를 사용해 본 적이 있나요?",
-      "original_title": "",
-      "description": "우리는 인공지능을 통해 건강이나 영적 지도를 받고 있는 흑인 미국인들의 이야기를 듣고 싶습니다. 인공지능은 의료 분야에서 점점 더 영향력을 발휘하고 있으며, 더 많은 사람들이 AI 도구, 포함하여 AI가 생성한 소셜 미디어 인플루언서에게 도움을 요청하고 있습니다.",
-      "link": "https://www.theguardian.com/us-news/2026/jul/30/black-americans-ai-health-inquiries",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43164",
-      "title": "오픈AI, 가장 저렴한 GPT-5.6 모델 가격 80% 인하",
-      "original_title": "",
-      "description": "7월 30일부터 오픈AI는 GPT-5.6 루나의 가격을 80%, 테라의 가격을 20% 인하합니다. 오픈AI는 최고급 솔 모델이 회사의 인프라를 더욱 효율적으로 만들었다고 언급하며, 이러한 가격 인하가 가능했다고 밝혔습니다.",
-      "link": "https://the-decoder.com/openai-goes-full-china-pricing-mode-with-an-80-percent-cut-to-its-most-affordable-gpt-5-6-model/",
-      "entities": [
-        "GPT-5.6"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43202",
-      "title": "넥서스 데이터 센터, 구글 후원 앤트로픽 데이터 센터를 위한 150억 달러 확보를 위한 협",
-      "original_title": "",
-      "description": "모건 스탠리가 넥서스 데이터 센터에 150억 달러를 대출하기 위한 협상에 주도적으로 참여하고 있다는 것이 CNBC에 의해 확인되었습니다.",
-      "link": "https://www.cnbc.com/2026/07/30/nexus-data-centers-in-advanced-talks-to-secure-15b-for-google-backed-anthropic-data-center.html",
-      "entities": [],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43255",
-      "title": "AI 헤지펀드 ‘상황 인식’, 공개 포트폴리오는 매각했지만 앤트로픽 주식은 여전히 보유",
-      "original_title": "",
-      "description": "전 오픈AI 연구원의 펀드는 레버리지 공공 투자로 인해 손실을 입어 공공 주식을 매각해야 했습니다. 하지만 그에게는 여전히 반전의 카드가 남아 있습니다.",
-      "link": "https://techcrunch.com/2026/07/30/ai-hedge-fund-situational-awareness-may-have-sold-its-public-portfolio-but-it-still-has-its-anthropic-shares/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43254",
-      "title": "앤트로픽, 보안 테스트 중 세 개 회사의 시스템 침입했다고 발표",
-      "original_title": "",
-      "description": "오픈AI의 모델이 허깅 페이스에 침입한 이후, 앤트로픽은 자신의 기록을 점검하고 세 건의 유사한 사건을 발견했습니다.",
-      "link": "https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/",
-      "entities": [],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43274",
-      "title": "영국의 휘발유 가격이 올해 가장 높아져 - 미국, 이란 공격",
-      "original_title": "",
-      "description": "도널드 트럼프가 중동에서의 폭격을 재개하라고 명령함에 따라 AA와 RAC가 리터당 약 £1.60로 가격 상승을 보고하고 있습니다.",
-      "link": "https://www.theguardian.com/business/live/2026/jul/31/bp-sell-north-sea-ai-record-korea-kospi-stock-market-latest-news-updates",
-      "entities": [],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43287",
-      "title": "아마존, AWS 성장에 힘입어 AI 지출에 대한 우려 완화로 주가 상승",
-      "original_title": "",
-      "description": "아마존 주가는 클라우드 사업 부문이 4년 만에 가장 빠른 성장을 기록한 뒤 12% 이상 급등했습니다. AWS는 2분기에 37% 성장하여, 분석가들이 예상한 31%를 초과했습니다.",
-      "link": "https://thenextweb.com/news/amazon-q2-2026-aws-growth-ai-spending",
-      "entities": [
-        "AI",
-        "AWS"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43291",
-      "title": "테크 다운로드: 안두릴 CEO 브라이언 심프, 전쟁과 제조에서 AI에 대해 이야기하다",
-      "original_title": "",
-      "description": "CNBC의 아르준 카르팔이 방산 회사의 CEO와 함께 '테크 다운로드' 팟캐스트에서 대화를 나눕니다.",
-      "link": "https://www.cnbc.com/2026/07/31/the-tech-download-anduril-ceo-brian-schimpf.html",
-      "entities": [
-        "CEO"
-      ],
-      "date": "2026-07-31"
-    },
-    {
-      "id": "43262",
-      "title": "Aschenbrenner의 AI 논문은 맞을 수 있으나 그의 타이밍과 레버리지 선택은 실패",
-      "original_title": "",
-      "description": "레오폴드 아셴브레너의 AI 헤지 펀드인 Situational Awareness는 레버리지AI 주식 포지션에서 큰 손실을 본 후 거의 모든 공개 상장 포트폴리오를 켄 그리핀의 시타델에 매각해야 했습니다. 아셴브레너는 며칠 전만 해도 6개월 수익률이 439%에 달한다고 보고했습니다.",
-      "link": "https://the-decoder.com/aschenbrenners-ai-thesis-could-be-correct-his-timing-and-leverage-were-not/",
-      "entities": [
-        "AI",
-        "Situational"
-      ],
-      "date": "2026-07-31"
-    },
     {
       "id": "43369",
       "title": "Smallest.ai, 진짜 인간처럼 들리는 초고속 음성 AI 개발에 1300만 달러 투자",
@@ -8879,6 +8761,140 @@
         "AI"
       ],
       "date": "2026-08-30"
+    },
+    {
+      "id": "47520",
+      "title": "AI의 최악의 재앙은 예고 없이 찾아올 것이다 | 독자 투고",
+      "original_title": "",
+      "description": "사이먼 니더 박사는 AI가 초래할 위협을 억제하기 위해 필요한 국제적 노력에 대해 논합니다. 앤서니 해리스 박사와 데이비드 카일러의 의견을 포함하여, AI 위험에 대한 국제적 대응의 필요성과 그 방식에 대한 논의를 다룹니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/30/ais-worst-disasters-will-arrive-unannounced",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47517",
+      "title": "캐터필러, 광산 자동화 경험을 AI 배포에 접목하다",
+      "original_title": "",
+      "description": "캐터필러는 수십 년간 원격 광산 현장에서 자율주행 기계를 운용해 왔습니다. 이제 그간의 노하우를 바탕으로 AI 배포 분야에 본격적으로 뛰어들고 있습니다.",
+      "link": "https://techcrunch.com/2026/08/30/caterpillar-is-bringing-to-ai-deployment-what-it-learned-from-automating-mining/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47518",
+      "title": "직원들의 불만 커지며 AI에 대한 긍정적 여론 악화",
+      "original_title": "",
+      "description": "글래스도어(Glassdoor) 리뷰 분석 결과, AI에 대한 긍정적인 평가가 2019년 81%에서 43%로 급락했습니다. 경영진은 AI를 대체로 긍정적으로 평가하는 반면, 보험 청구 담당자 등 실무자들은 고용 불안, 강제 도입, 감시 등을 이유로 AI에 대해 매우 부정적인 반응을 보이고 있습니다.",
+      "link": "https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/",
+      "entities": [
+        "Glassdoor"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47524",
+      "title": "MIT 보고서, \"AI가 학부 과정의 거의 모든 과제 수행 가능\"",
+      "original_title": "",
+      "description": "MIT 위원회 보고서에 따르면, AI는 학부 커리큘럼 내 거의 모든 작문 과제에 대해 신뢰할 만한 답변을 생성할 수 있으며, 3년도 채 되지 않아 캠퍼스 문화에 측정 가능한 변화를 일으켰습니다. 한편 EU의 AI법에 따르면 시험 중 학생을 감시하는 시스템은 고위험군으로 분류됩니다.",
+      "link": "https://thenextweb.com/news/mit-ai-undergraduate-assignments-eu-ai-act-proctoring-annex-iii",
+      "entities": [
+        "MIT"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47467",
+      "title": "영국 이동통신사들, \"영국 네트워크는 AI 트래픽을 감당할 준비가 되지 않았다\"",
+      "original_title": "",
+      "description": "보다폰-쓰리(VodafoneThree)의 네트워크 디렉터는 영국 이동통신 품질이 AI 트래픽을 수용할 준비가 되어 있지 않으며, 자금보다는 규제가 걸림돌이라고 지적했습니다. 기존 기지국 업그레이드의 절반 이상이 허가를 받아야 하는 등 계획 관련 규제가 발목을 잡고 있습니다.",
+      "link": "https://thenextweb.com/news/uk-mobile-networks-ai-planning-reform-eu-gigabit-infrastructure-act",
+      "entities": [
+        "VodafoneThree",
+        "AI"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47521",
+      "title": "대기업은 중소기업에게 AI를 어떻게 활용해야 할지, 혹은 하지 말아야 할지를 보여주었다 |",
+      "original_title": "",
+      "description": "중소기업 경영자들은 대기업이 AI를 도입하며 겪는 시행착오와 성공 사례를 지켜보며 실질적인 전략을 배우고 있습니다. 인터넷이나 모바일 기술처럼, 기업들이 검증한 첨단 기술은 결국 중소기업에도 혜택으로 돌아오기 마련입니다.",
+      "link": "https://www.theguardian.com/technology/2026/aug/30/ai-small-business",
+      "entities": [],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47542",
+      "title": "AI가 미국 정치를 병들게 하고 있다. 후보들이 이를 선용할 방법은 없을까? | 브루스 슈",
+      "original_title": "",
+      "description": "일본과 스코틀랜드의 사례에서 볼 수 있듯이, AI 기술은 후보자들이 유권자의 목소리를 더 깊이 경청하는 데 도움을 줄 수 있습니다. 현재 미국 중간선거에서 AI 딥페이크가 악용되는 상황 속에서, 기술을 긍정적으로 활용할 방안을 모색합니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/aug/31/ai-politics-voters",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47560",
+      "title": "유럽, 국영 기업에 3억 8,800만 유로 규모의 AI 슈퍼컴퓨터 발주",
+      "original_title": "",
+      "description": "유럽이 핀란드 카야니에 설치될 새로운 AI 슈퍼컴퓨터를 도입합니다. 3억 8,780만 유로 규모의 'LUMI-AI' 시스템은 프랑스 정부가 인수한 슈퍼컴퓨터 제조사 '불(Bull)'이 제작을 맡게 됩니다.",
+      "link": "https://thenextweb.com/news/lumi-ai-supercomputer-bull-finland-eurohpc",
+      "entities": [
+        "LUMI-AI",
+        "Bull",
+        "AI"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47539",
+      "title": "소규모 사업체에서 시간과 비용을 절약하기 위해 ChatGPT Work를 활용하는 5가지 방",
+      "original_title": "",
+      "description": "지메일 스캔부터 불리한 대출 조건 파악까지, ChatGPT Work는 저의 실질적인 소규모 비즈니스 조수가 되었습니다. 에이전트형 AI가 어떻게 실제 생산성 향상을 가져오는지 소개합니다.",
+      "link": "https://www.zdnet.com/article/chatgpt-work-small-business-use-cases/",
+      "entities": [
+        "ChatGPT"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47534",
+      "title": "포켓(Pocket)의 AI로 게임 아이디어를 현실화했지만, 이제 결과물은 메타가 통제한다",
+      "original_title": "",
+      "description": "인터랙티브 모바일 '기즈모'는 제작하기는 쉽지만, 메타 플랫폼 외부에서 공유하기는 어렵습니다. 플랫폼의 제약으로 인해 사용자가 만든 결과물의 소유권과 활용에 한계가 생기고 있습니다.",
+      "link": "https://arstechnica.com/gaming/2026/08/pockets-ai-made-my-game-ideas-real-now-meta-controls-the-results/",
+      "entities": [
+        "Pocket"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47537",
+      "title": "오픈AI 등 AI 기업들, 컴퓨터 제어 에이전트 학습 위해 맥 미니 대량 구매",
+      "original_title": "",
+      "description": "디 인포메이션에 따르면 오픈AI는 컴퓨터 제어 에이전트를 학습시키기 위해 수만 대의 맥 미니와 맥 스튜디오를 구매했습니다. 앤스로픽 또한 애플 하드웨어를 활용하고 있으며, 이로 인해 고성능 모델은 수개월째 품귀 현상을 빚고 있습니다.",
+      "link": "https://the-decoder.com/openai-and-rival-ai-labs-are-buying-tens-of-thousands-of-mac-minis-to-train-computer-use-agents/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-08-31"
+    },
+    {
+      "id": "47538",
+      "title": "AI를 정말 싫어하는 사람들은 누구일까? 바로 보험 손해사정사들이다",
+      "original_title": "",
+      "description": "글래스도어(Glassdoor)에 올라온 손해사정사들의 리뷰 중 AI를 언급한 리뷰의 98%가 부정적인 것으로 나타났습니다. 한 관계자는 와이어드(WIRED)와의 인터뷰에서 \"AI는 그저 도구일 뿐이며, 결코 전권을 맡겨서는 안 된다\"고 강조했습니다.",
+      "link": "https://www.wired.com/story/insurance-claims-adjusters-really-hate-ai/",
+      "entities": [
+        "Glassdoor",
+        "WIRED"
+      ],
+      "date": "2026-08-31"
     }
   ]
 }

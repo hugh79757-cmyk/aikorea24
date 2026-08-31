@@ -1,0 +1,17 @@
+미국 내 사무실과 작업 현장에서 글래스도어(Glassdoor) 분석가들이 직장 내 AI 도입에 따른 직원들의 불만 증가와 관련 리뷰 데이터 급증을 포착했음.
+
+2026년 5월 30일, 이들은 직장 내 AI에 대한 부정적 여론이 확산하고 있다는 분석 결과를 발표하며 데이터 기반의 현황을 공개했음.
+---
+미국 내 리뷰에서 AI 언급은 2025년 5월 대비 2026년 5월 기준 240% 증가했음. 직군별로 보면 소프트웨어 엔지니어의 경우 전체 코딩 및 검토 업무 비중이 높음에도 불구하고, 이들의 의견 중 57%가 부정적인 것으로 나타났음. 또한 직원 10,000명 이상의 대기업에서는 부정적 의견 비율이 67%까지 상승하는 수치를 보였음.
+---
+기술직 종사자들의 경우 AI에 대한 긍정적 의견과 부정적 의견이 대략 균형을 이루고 있음. 이는 단순히 기술직군 전체가 AI를 부정적으로 인식한다는 일반적인 추측과는 다른 결과임. 산업 전반에서 기술직 종사자들이 AI를 가장 자주 언급하고 있으나, 그 평가의 방향은 특정 직무의 성격에 따라 엇갈리는 양상을 보임.
+---
+글래스도어의 분석가들(Glassdoor's analysts)은 일부 부정적인 정서가 이미 번아웃과 해고에 대한 두려움이 만연한 사무직 업무와 겹친다고 지적함(원문: Glassdoor's analysts point out that some negative sentiment overlaps with office jobs where burnout and layoff fears are already common.). 또한 글래스도어의 분석가들(Glassdoor's analysts)은 산업 수준에서 기술직 종사자들이 AI를 가장 자주 언급하며, 긍정적인 의견과 부정적인 의견이 대략 균형을 이루고 있다고 설명함(원문: At the industry level, tech workers mention AI most often, with positive and negative comments roughly balanced.).
+---
+글래스도어(Glassdoor) 분석가들이 수행한 이번 조사는 미국 내 직장인들의 여론을 반영함. AI 도입을 둘러싼 직원들의 불만은 소프트웨어 엔지니어와 대기업 종사자들 사이에서 특히 높게 나타났음. 이번 분석은 직장 내 AI 도입이라는 환경 변화가 특정 직군과 기업 규모에 따라 어떻게 차별적인 부정적 여론을 형성하고 있는지를 수치로 보여줌.
+---
+--- 카드 6 ---
+출처: The Decoder
+발행일: Sun, 30 Aug 2026 13:12:19
+원문: https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/
+추출 사실: B 3건 / C 2건

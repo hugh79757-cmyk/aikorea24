@@ -1,0 +1,17 @@
+핀란드 카야니의 데이터 센터 부지에 하반기 가동을 목표로 하는 AI 슈퍼컴퓨터 'LUMI-AI'가 들어섬.
+
+이 프로젝트는 유럽의 AI 인프라 역량 강화와 기술 주권 확보를 위한 공동 투자 전략의 일환으로 추진됨.
+---
+LUMI-AI 시스템 구축 비용은 3억 8,780만 유로임. 이 시스템은 기존 LUMI 슈퍼컴퓨터와 비교 시 10배의 AI 처리 용량을 제공할 것으로 예상됨. 하드웨어 구성으로는 sixth-generation EPYC 프로세서의 256개 코어와 AMD Instinct MI430X 가속기가 사용될 예정임.
+---
+표면적으로는 유럽 국가들이 연합하여 AI 슈퍼컴퓨터를 도입하는 것이나, 근본적으로는 미국 기술 의존도를 낮추고 국영 기업을 통해 전략적 자산을 보호하려는 유럽의 산업 정책적 시도임.
+---
+Emmanuel Le Roux chief executive는 “LUMI-AI는 유럽의 AI와 에너지 효율적이고 복잡한 AI 인프라 분야에서 Bull이 가진 리더십에 있어 중요한 이정표를 세웠습니다.”(원문: “LUMI-AI marks an important milestone for European AI and Bull’s leadership in energy-efficient, complex AI infrastructures,”)라고 밝혔음. 또한 EuroHPC를 운영하는 Anders Jensen은 이번 구매를 단발성 프로젝트가 아닌, 더 광범위한 AI 인프라 투자 계획의 여섯 번째 단계로 제시했음.
+---
+EuroHPC Joint Undertaking과 LUMI AI Factory 컨소시엄(핀란드, 체코, 덴마크, 에스토니아, 노르웨이, 폴란드)이 공동으로 비용을 분담함. 프랑스 국영 기업인 Bull이 시스템 구축을 담당하며, Bull의 BullSequana XH3500 아키텍처를 기반으로 설계됨. 핀란드 영토에 설치되지만 컨소시엄에 참여한 국가들의 연구자와 기업들이 공동으로 활용함.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Mon, 31 Aug 2026 09:12:18
+원문: https://thenextweb.com/news/lumi-ai-supercomputer-bull-finland-eurohpc
+추출 사실: B 3건 / C 2건

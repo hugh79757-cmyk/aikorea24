@@ -1,0 +1,17 @@
+영국 전역에서 보다폰쓰리(VodafoneThree)가 AI 트래픽 증가에 대비한 네트워크 품질 개선을 시도하고 있음.
+
+그러나 기존 통신망의 낮은 성능이 문제로 지적되며, AI 시대의 데이터 트래픽을 감당하기 어려운 상황에 직면했음. 2026년 8월 30일 기준, 영국 내 네트워크 성능은 글로벌 57위에 머물러 있음.
+---
+보다폰쓰리(VodafoneThree)는 마스트(기지국) 업그레이드를 위해 110억 파운드(£11B)를 투입하기로 했음. 효율성을 높이기 위해 전체 마스트 수를 30% 감축할 계획임. 현재 진행 중인 업그레이드의 96%는 기존 시설물을 기반으로 수행되고 있으나, 이 중 절반 이상이 여전히 계획 허가를 받아야 하는 상태임.
+---
+보다폰쓰리(VodafoneThree)의 네트워크 디렉터인 안드레아 도나(Andrea Donà)는 현재 상황에 대해 다음과 같이 밝혔음. "오늘 우리 네트워크의 품질 수준에 대해 부끄러움을 느낍니다.(원문: I am embarrassed today at the level of quality of our network)" 이는 AI 트래픽이 유입될 때 발생하는 신호 손실을 염두에 둔 발언임.
+---
+안드레아 도나(Andrea Donà) 보다폰쓰리(VodafoneThree) 네트워크 디렉터는 인프라 개선의 핵심이 재정적 투자가 아닌 절차적 규제 완화에 있음을 강조했음. 그는 "계획 규제 개혁은 가장 비용이 적게 드는 성장 정책이며, 정부 예산이 전혀 필요하지 않습니다.(원문: Planning reform is the lowest possible cost growth policy, it doesn’t require any government money)"라고 언급했음.
+---
+영국은 AI 트래픽을 감당하기 위한 네트워크 인프라 개선 과정에서 경직된 계획 허가 제도라는 장벽에 부딪혀 있음. 보다폰쓰리(VodafoneThree)는 110억 파운드(£11B)의 투자 계획과 30%의 마스트(기지국) 감축을 추진 중이나, 기존 시설물 업그레이드 건의 절반 이상이 허가 대기 상태임. 네트워크 성능은 글로벌 57위 수준으로, AI 서비스 도입을 위한 인프라 경쟁력 확보가 과제로 남아있음.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Sun, 30 Aug 2026 10:41:52
+원문: https://thenextweb.com/news/uk-mobile-networks-ai-planning-reform-eu-gigabit-infrastructure-act
+추출 사실: B 4건 / C 2건
