@@ -156,6 +156,8 @@ def run_v3(dry_run=False, format_choice="D"):
             if attempt < max_retries:
                 log('  네트워크/D1 일시적 장애 의심 → 백오프 후 재시도')
                 continue
+            log(f'  ❌ {max_retries}회 모두 기사 없음 (네트워크/D1 장애 의심) — 2시간 후 재시도')
+            send_telegram(f'❌ [{datetime.now().strftime("%m/%d %H:%M")}] Threads {max_retries}회 모두 기사 없음 (D1/네트워크 장애 의심)')
             return
         log(f'  기사: {len(articles)}개 로드')
 
