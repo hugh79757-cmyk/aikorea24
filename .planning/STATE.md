@@ -212,6 +212,7 @@ None.
 | 2026-08-26 | verify-publish-isolation | 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) |
 | 2026-08-28 | pipeline-docs | TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 |
 | 2026-08-29 | weekly-contrast-thumb-leak | 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 |
+| 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
 
 ### Deferred Items
 
