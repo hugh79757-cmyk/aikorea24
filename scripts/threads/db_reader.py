@@ -148,26 +148,58 @@ def save_posted(data):
     with open(POSTED_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+D1_FALLBACK_URL = os.environ.get('D1_API_FALLBACK_URL', 'https://aikorea24.kr/api/articles/pool')
+
+
+def _is_rest_api_error(stderr: str) -> bool:
+    """REST API 엔드포인트 장애 감지 (7500 / internal error)"""
+    return '7500' in stderr or 'internal error' in stderr
+
+
+def _http_fallback(sql: str) -> list[dict]:
+    """Workers D1 바인딩 경로로 폴백 — REST API 장애 시 사용"""
+    try:
+        today = datetime.now().strftime('%Y-%m-%d')
+        url = f'{D1_FALLBACK_URL}?date={today}'
+        log(f'  🔄 HTTP 폴백 시도: {url}')
+        req = urllib.request.Request(url, headers={'Accept': 'application/json'})
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read())
+        articles = data.get('articles', [])
+        meta = data.get('meta', {})
+        log(f'  ✅ HTTP 폴백 성공: {meta.get("total", len(articles))}개 기사 (P1:{meta.get("p1",0)} P2:{meta.get("p2",0)} P3:{meta.get("p3",0)})')
+        return articles
+    except Exception as e:
+        log(f'  ❌ HTTP 폴백 실패: {e}')
+        return []
+
+
 def d1_query(sql, retries=3):
     cmd = ['/opt/homebrew/bin/wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql]
     env = dict(os.environ)
     env.pop('CLOUDFLARE_API_TOKEN', None)
+    last_stderr = ''
     for attempt in range(retries):
         try:
             r = subprocess.run(cmd, capture_output=True, text=True, timeout=180, cwd=PROJECT_DIR, env=env)
             if r.returncode != 0:
+                last_stderr = r.stderr[:500]
                 if attempt < retries - 1:
                     delay = 5 * (attempt + 1)  # 5s, 10s, 15s 점진적 증가
                     log(f'  ⚠️ D1 반환코드 {r.returncode}, {delay}초 후 재시도 ({attempt+1}/{retries})')
                     time.sleep(delay)
                     continue
                 log(f'  ❌ D1 실패: 반환코드 {r.returncode}, stderr: {r.stderr[:200]}')
+                # REST API 장애 시 HTTP 폴백
+                if _is_rest_api_error(last_stderr):
+                    return _http_fallback(sql)
                 return []
             m = re.search(r'"results"\s*:\s*(\[[\s\S]*?\])\s*,\s*"success"', r.stdout)
             if m:
                 return json.loads(m.group(1))
             return []
         except subprocess.TimeoutExpired:
+            last_stderr = 'timeout'
             if attempt < retries - 1:
                 delay = 10 * (attempt + 1)  # 10s, 20s, 30s
                 log(f'  ⚠️ D1 타임아웃(180s), {delay}초 후 재시도 ({attempt+1}/{retries})')
@@ -176,6 +208,7 @@ def d1_query(sql, retries=3):
             log(f'  ❌ D1 타임아웃: {retries}회 재시도 모두 실패')
             return []
         except Exception as e:
+            last_stderr = str(e)
             if attempt < retries - 1:
                 delay = 5 * (attempt + 1)
                 log(f'  ⚠️ D1 오류: {e}, {delay}초 후 재시도 ({attempt+1}/{retries})')
