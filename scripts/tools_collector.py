@@ -8,7 +8,7 @@ aikorea24 AI 툴 대량 확충기 v2.1
 
 재사용: news_collector.py의 fetch_rss_global 패턴, batch_translate, load_env, send_telegram
 """
-import os, sys, json, re, hashlib, subprocess, urllib.request, urllib.parse, random
+import os, sys, json, re, hashlib, subprocess, urllib.request, urllib.parse, random, time
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
@@ -550,6 +550,82 @@ def collect_topai_tools(limit=20) -> list:
     return tools
 
 
+def collect_theresanaiforthat(limit=10) -> list:
+    """There's An AI For That (TAAFT) 에서 도구 수집 (Playwright)"""
+    tools = []
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        print("  There's An AI For That: Playwright 미설치 → 스킵")
+        return tools
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            context = browser.new_context(
+                user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                viewport={'width': 1280, 'height': 800},
+            )
+            page = context.new_page()
+            page.goto('https://theresanaiforthat.com/tools/', timeout=30000)
+            time.sleep(5)
+
+            # Scroll to trigger lazy-load
+            for _ in range(3):
+                page.evaluate('window.scrollBy(0, 1000)')
+                time.sleep(1)
+
+            rows = page.evaluate('''() => {
+                const results = [];
+                const rows = document.querySelectorAll('.tools-table-row');
+                for (const row of rows) {
+                    const nameLink = row.querySelector('.home-today-name-link') || row.querySelector('.tools-name-main-link');
+                    const nameEl = row.querySelector('.home-today-name-text') || row.querySelector('.tools-name-heading-cluster');
+                    const taskEl = row.querySelector('.home-today-topic-link');
+                    const authorEl = row.querySelector('.home-today-author-name-row');
+                    const savesEl = row.querySelector('.home-today-save');
+                    const viewsEl = row.querySelector('.home-today-views-value');
+                    const descEl = row.querySelector('.tools-name-tagline');
+
+                    const name = nameEl?.innerText?.trim() || '';
+                    const url = nameLink?.href || '';
+                    const task = taskEl?.innerText?.trim() || '';
+                    const author = authorEl?.innerText?.trim() || '';
+                    const saves = savesEl?.innerText?.trim() || viewsEl?.innerText?.trim() || '0';
+                    const desc = descEl?.innerText?.trim() || '';
+
+                    if (name && url && url.includes('/ai/')) {
+                        results.push({ name, url, description: desc, task, author, saves });
+                    }
+                }
+                return results;
+            }''')
+
+            browser.close()
+
+            seen = set()
+            for tool in rows:
+                if len(tools) >= limit:
+                    break
+                url = tool['url'].strip()
+                if url in seen:
+                    continue
+                seen.add(url)
+                tools.append({
+                    'name': tool['name'],
+                    'description': tool['description'][:300],
+                    'url': url,
+                    'price': '',
+                    'source': 'theresanaiforthat',
+                    'pub_date': datetime.now().strftime('%Y-%m-%d'),
+                })
+    except Exception as e:
+        print(f"  There's An AI For That: 수집 실패 ({e})")
+
+    print(f"  There's An AI For That: {len(tools)}개 수집")
+    return tools
+
+
 # ============================================
 # 통합 수집
 # ============================================
@@ -581,6 +657,9 @@ def collect_tools(limit_per_source=15) -> list:
     # 추가 소스
     topai_tools = collect_topai_tools(limit_per_source)
     all_tools.extend(topai_tools)
+
+    taft_tools = collect_theresanaiforthat(limit=min(limit_per_source, 10))
+    all_tools.extend(taft_tools)
 
     # 중복 제거 (URL 기준)
     seen_urls = set()
