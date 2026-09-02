@@ -1,7 +1,7 @@
 ---
 name: "Rytr"
 description: "고품질 콘텐츠를 빠르게 작성할 수 있는 무료 AI 글쓰기 도구입니다."
-category: "글쓰기"
+category: "글쓰기·챗봇"
 price: "무료/월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"

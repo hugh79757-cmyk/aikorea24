@@ -1,7 +1,7 @@
 ---
 name: "Apodex 1.1: Scaling Agentic Intelligence for Compl"
 description: "전 세계 최신 AI 연구 논문을 매일 이메일로 받아보고 트렌드를 빠르게 파악할 수 있는 정보 큐레이션 서비스입니다."
-category: "학습"
+category: "번역·학습"
 price: "무료/월 13,000원"
 koreanSupport: false
 difficulty: "중급"

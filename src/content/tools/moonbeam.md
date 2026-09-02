@@ -1,7 +1,7 @@
 ---
 name: "Moonbeam"
 description: "Moonbeam은 블로그 작성을 지원하는 AI 도구입니다."
-category: "글쓰기"
+category: "글쓰기·챗봇"
 price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"

@@ -1,7 +1,7 @@
 ---
 name: "Bono AI"
 description: "Bono AI는 대화로 블로그, 소셜 콘텐츠 등을 작성해주는 AI 콘텐츠 전략가입니다."
-category: "글쓰기"
+category: "글쓰기·챗봇"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"

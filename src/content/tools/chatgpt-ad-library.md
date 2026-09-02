@@ -1,7 +1,7 @@
 ---
 name: "ChatGPT Ad Library"
 description: "ChatGPT 내에서 노출되는 광고를 실시간으로 확인하고 마케팅 전략을 벤치마킹하는 도구입니다."
-category: "마케팅"
+category: "업무·생산성"
 price: "무료/월 27,000원"
 koreanSupport: false
 difficulty: "초보자 OK"

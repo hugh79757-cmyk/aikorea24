@@ -1,7 +1,7 @@
 ---
 name: "Nexus AI"
 description: "Nexus AI는 글쓰기, 음성 변환, 이미지 생성 등 다양한 작업을 지원하는 AI 플랫폼입니다."
-category: "글쓰기·챗봇 또는 이미지 생성 또는 영상·음성 또는 업무·생산성"
+category: "업무·생산성"
 price: "월 5만원"
 koreanSupport: true
 difficulty: "초보자 OK"

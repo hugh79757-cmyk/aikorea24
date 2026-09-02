@@ -1,7 +1,7 @@
 ---
 name: "뤼튼 (Wrtn)"
 description: "AI 글쓰기 및 이미지 생성 도구로, 다양한 콘텐츠를 무료로 제작할 수 있습니다."
-category: "글쓰기·챗봇 또는 이미지 생성"
+category: "글쓰기·챗봇"
 price: "현재 유료 플랜은 없습니다."
 koreanSupport: true
 difficulty: "초보자 OK"

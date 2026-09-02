@@ -1,7 +1,7 @@
 ---
 name: "ColoringDaily"
 description: "텍스트와 사진을 활용해 인쇄 가능한 색칠 페이지를 생성하는 툴입니다."
-category: "이미지"
+category: "이미지 생성"
 price: "무료/월 8,250원"
 koreanSupport: true
 difficulty: "초보자 OK"

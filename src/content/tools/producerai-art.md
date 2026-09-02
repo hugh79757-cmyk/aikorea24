@@ -1,7 +1,7 @@
 ---
 name: "Producerai.art"
 description: "텍스트로 음악을 생성할 수 있는 AI 음악 생성기입니다."
-category: "음악·음성"
+category: "영상·음성"
 price: "무료/월 13,000원"
 koreanSupport: true
 difficulty: "초보자 OK"

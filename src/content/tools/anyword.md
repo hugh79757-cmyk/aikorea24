@@ -1,7 +1,7 @@
 ---
 name: "Anyword"
 description: "Anyword는 AI 콘텐츠 성과를 76% 향상시키는 마케팅 도구입니다."
-category: "마케팅"
+category: "업무·생산성"
 price: "월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"

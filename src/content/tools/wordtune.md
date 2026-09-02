@@ -1,7 +1,7 @@
 ---
 name: "wordtune"
 description: "영어 작문을 도와주는 무료 AI 툴로, 문장 재구성 및 문법 교정을 지원합니다."
-category: "글쓰기"
+category: "글쓰기·챗봇"
 price: "무료/월 20,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
