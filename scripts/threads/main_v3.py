@@ -428,6 +428,20 @@ def run_v3(dry_run=False, format_choice="D"):
         if result:
             log(f'  ✅ 발행 완료: 루트 ID {result}')
             _log_api_based_publish(pitch, publish_article, root_post_id=result)
+            # Phase 38-01: 발행 성과 측정 기록 (실패해도 발행 흐름 무관)
+            try:
+                from performance_log import record_publish
+                record_publish(
+                    root_id=result,
+                    posted_at=datetime.now().isoformat(),
+                    fmt=_fmt,
+                    article_id=pitch_id or (publish_article.get('id', '') if publish_article else ''),
+                    title=(publish_article.get('title', '') if publish_article else '') or pitch.get('hook', ''),
+                    source=(publish_article.get('source', '') if publish_article else ''),
+                )
+                log('  📊 성과 로그 기록 완료')
+            except Exception as _perf_e:
+                log(f'  ⚠️ 성과 로그 기록 실패 (무시): {_perf_e}')
             # 피치의 모든 article_ids 저장 (보조 기사 중복 방지)
             from db_reader import load_posted, save_posted, normalize_url
             posted = load_posted()

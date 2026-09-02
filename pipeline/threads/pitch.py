@@ -511,6 +511,25 @@ def _pre_filter_candidates(articles, limit=10):
     return [a for _, a in scored[:limit]]
 
 
+def _top_topics_hint():
+    """insights_report.json의 상위 토픽 3개를 '참고용' 힌트로 반환 (Phase 38-03).
+
+    report 없음/데이터 미달(top_topics 빈) → '' (주입 없음, 기존 동작 그대로).
+    """
+    try:
+        report_path = os.path.join(THREADS_DIR, 'logs', 'insights_report.json')
+        if not os.path.exists(report_path):
+            return ''
+        with open(report_path, encoding='utf-8') as f:
+            report = json.load(f)
+        topics = [t.get('topic', '') for t in (report.get('top_topics') or []) if t.get('topic')]
+        if not topics:
+            return ''
+        return f"\n📌 최근 30일 반응 상위 토픽 (참고용, 강제 아님): {', '.join(topics[:3])}"
+    except Exception:
+        return ''
+
+
 def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
     """배치 처리: description 스캔 → 후보 선별 → 단일 기사 크롤링 → 크롤링 본문 기반 피치 생성"""
     from v3.model_router import chat_completion
@@ -577,11 +596,14 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
 링크: {link}""")
 
         all_articles_joined = '\n---\n'.join(articles_text)
+        topics_hint = _top_topics_hint()  # Phase 38-03: 있을 때만 1줄 (배치당 1회 산출)
+        if topics_hint:
+            _log(f'  📌 성과 상위 토픽 주입 (참고용): {topics_hint.strip()[:80]}...')
 
         try:
             resp = chat_completion(
                 system_prompt=SYSTEM_PROMPT,
-                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 PITCH JSON 형식으로 찾아주세요. 단순 정보 전달·제품 발표·데모는 제외.
+                messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 PITCH JSON 형식으로 찾아주세요. 단순 정보 전달·제품 발표·데모는 제외.{topics_hint}
 
 {all_articles_joined}"""}],
                 temperature=0.9,
@@ -603,7 +625,7 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
                 from v3.model_router import chat_completion as _cc
                 resp2 = _cc(
                     system_prompt=SYSTEM_PROMPT,
-                    messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 찾아 PITCH JSON 형식으로 출력해주세요. 단순 정보 전달·제품 발표·데모는 제외.
+                    messages=[{'role': 'user', 'content': f"""아래 {len(batch)}개 기사 전체를 보고, 가장 강한 모순·역설·미해결 질문을 담은 기사 3개를 찾아 PITCH JSON 형식으로 출력해주세요. 단순 정보 전달·제품 발표·데모는 제외.{topics_hint}
 
 {all_articles_joined}"""}],
                     temperature=0.9,
@@ -755,6 +777,7 @@ def _regenerate_pitch_from_crawl(body, article_id, article_url, article_title, o
     ref_narrative = original_pitch.get('narrative', '')
     ref_but_line = original_pitch.get('but_line', '')
     ref_question = original_pitch.get('question', '')
+    topics_hint = _top_topics_hint()  # Phase 38-03: 재생성에도 동일 참고 힌트
 
     user_msg = f"""아래 기사 원문을 읽고 피치를 작성해주세요.
 
@@ -769,7 +792,7 @@ hook: {ref_hook}
 narrative: {ref_narrative}
 but_line: {ref_but_line}
 question: {ref_question}
-→ 위 선별 결과는 참고용이며, 기사 원문과 다를 경우 원문을 우선할 것. but_line/question 각도는 보존할 것."""
+→ 위 선별 결과는 참고용이며, 기사 원문과 다를 경우 원문을 우선할 것. but_line/question 각도는 보존할 것.{topics_hint}"""
 
     try:
         resp = chat_completion(
