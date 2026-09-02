@@ -24,6 +24,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 15: Vectorize + 크롤링 실패 수정 + 카드 분할 JSON 전환** — Vectorize 의미적 중복제거, failed_crawls TTL, 카드 JSON 배열 전환 (completed 2026-07-07)
 - [x] **Phase 16: Writer prompt v2 — jisang-aligned card structure** — 6카드 구조 통념→전환→증거A→증거B→열린질문→링크, but_line/question/gap_source writer 전달, style_examples 업데이트 (completed 2026-07-09)
 - [x] **Phase 26: 브리핑 중국어 완전 차단 + 심층글 비활성화** — generate_comment()에 system prompt + remove_chinese() 후처리 + 탐지 로깅, run_pipeline.py --skip-deep 기본 True, auto_deep_article.py DEPRECATED (completed 2026-07-12)
+- [x] **Phase 38: Threads 자가개선 (Self-Improvement) 루프** — 발행 성과 측정(insights API views/likes/replies) → 일 1회 수집 + net_replies 보정 → 30일 집계 → 피치 프롬프트 상위 토픽 주입 폐쇄 루프 (complete 2026-09-02, 커밋 227bbcc)
 
 ## Phase Details
 
@@ -567,6 +568,27 @@ Plans:
 
 ---
 
+### Phase 38: Threads 자가개선 (Self-Improvement) 루프
+**Goal:** Threads 발행 파이프라인이 자신의 성과(views/likes/net_replies)를 직접 측정하고, 최근 30일 집계로 피치 생성 프롬프트에 상위 토픽을 피드백하는 폐쇄 루프.
+**Mode:** ad-hoc
+**Depends on**: Phase 37 (main_v3 구조), quick 20260901-d1-rest-fallback
+**Success Criteria** (what must be TRUE):
+1. 발행 성공 시 root_id+메타(포맷/기사ID/제목/소스)가 `performance_log.json`에 기록 — API 추가 호출 0건
+2. 일 06:00 launchd가 지난 48h 발행건의 insights 5지표(views/likes/replies/reposts/quotes) 수집, 자기 링크 답글 제외 net_replies 보정 (18:00 포스트 replies 5 → 4 회귀 기준선)
+3. 수집 실패 시 error 기록 후 계속 — 발행/수집 중단 없음
+4. 최근 30일 ≥30 posts 시만 `insights_report.json` 생성 (포맷/토픽/2h슬롯별 평균 views + engagement율), 미만 시 생성 없음
+5. pitch.py가 report 존재 시 상위 토픽 3개 "참고용, 강제 아님" 프롬프트 주입 — dry-run으로 확인 가능
+6. 기존 발행 흐름 회귀 0 (main_v3 append-only ~5줄, run_v3 시그니처 불변)
+7. launchd `kr.aikorea24.threads-insights` 일 06:00 등록
+**Plans**: 3 plans (38-01 Measurement, 38-02 Collector+Analyzer, 38-03 Feedback Injection)
+
+Plans:
+- [x] 38-01 — performance_log.py 신규 + main_v3 발행 성공 블록 기록 삽입 ✅ 2026-09-02
+- [x] 38-02 — collect_insights/analyze + insights_collector.py + launchd plist ✅ 2026-09-02 (net_replies 모델 정정: root 직접 답글 외부 카운트 — 라이브 검증)
+- [x] 38-03 — pitch.py 상위 토픽 주입 ✅ 2026-09-02
+
+**Evidence:** insights API 라이브 프로브 완료 (2026-09-01, 실제 발행 2건: views 311/194 확인). 구현 완료 (커밋 227bbcc): 라이브 수집 3건 views 311/194/77 프로브 일치, test 5/5, 회귀 기준선 동일 (473 passed / 16 failed 기존과 동일). SUMMARY 3종 — `.planning/phases/38-threads-self-improvement/`
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -605,4 +627,5 @@ Plans:
 | 28. 썸네일 DeepSeek API 장애 대응 + 블로그 발행 개선 | 0/4 | 📋 Planned | — |
 | 29. 블로그 description 백필 — 문장 경계 자르기 | 1/1 | ✅ Complete | 2026-07-26 |
 | 30. 블로그 description을 본문 첫 문장으로 변경 | 1/1 | ✅ Complete | 2026-07-26 |
-| **Total** | **58/58** | ✅ All phases complete | |
+| 38. Threads 자가개선 (Self-Improvement) 루프 | 3/3 | ✅ Complete | 2026-09-02 |
+| **Total** | **58/61** | ✅ 1-30 완료, 38 planned | |

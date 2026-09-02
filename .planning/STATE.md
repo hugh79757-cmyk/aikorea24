@@ -2,15 +2,15 @@
 gsd_state_version: 1.1
 milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
-status: all_plans_complete
-stopped_at: Phase 37 Threads Contrast Pivot + Kicker7 운영화 (2026-08-27) — impl done, dry-run verified, 18 blog drafts untracked, 미커밋
-last_updated: 2026-08-28T14:30:00.000Z
-last_activity: 2026-08-28
+status: phase_38_complete
+stopped_at: Phase 38 Threads 자가개선 루프 구현 완료 (2026-09-02) — 3 plans 전부 완료 (커밋 227bbcc). 라이브 검증: 발행 3건 views 311/194/77 프로브 일치. 부트스트랩 기간 (~30 posts 축적, 약 10-14일) 후 주입 시작. 미커밋 잔존: 19개 tool MD 카테고리 수정
+last_updated: 2026-09-02T22:45:00.000Z
+last_activity: 2026-09-02
 progress:
-  total_phases: 37
-  completed_phases: 37
-  total_plans: 61
-  completed_plans: 61
+  total_phases: 38
+  completed_phases: 38
+  total_plans: 64
+  completed_plans: 64
   percent: 100
 ---
 
@@ -25,11 +25,18 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 ## Current Position
 
-Phase: All Phases Complete (1-37)
-Status: ✅ Phase 37 Threads Contrast Pivot + Kicker7 운영화 완료 (dry-run verified, publish blocked, 39 contrast tests pass, 18 blog drafts untracked)
-Last activity: 2026-08-27T03:53
+Phase: 38 — Threads 자가개선 (Self-Improvement) 루프
+Status: ✅ Complete (2026-09-02, 커밋 227bbcc) — 3/3 plans (측정/수집·분석/주입)
+Last activity: 2026-09-02T22:45
 
-Progress: [████████████████████████████████████████████████████] 100%
+Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
+
+### Phase 38 구현 결과 (2026-09-02)
+- **38-01 측정**: `performance_log.py` + main_v3 발행 성공 블록 연결 (append-only, try/except) — API 0 call
+- **38-02 수집/분석**: `collect_insights()` 5지표 + **net_replies 모델 정정** (insights replies는 자기 카드 체인 포함 → root 직접 답글 외부 카운트로 변경, 라이브 검증), `analyze()` 30일 ≥30 posts 문턱, launchd `kr.aikorea24.threads-insights` 일 06:10 등록
+- **38-03 주입**: pitch.py `_top_topics_hint()` — report 존재 시에만 "참고용, 강제 아님" 상위 3토픽 주입 (없으면 기존 동작)
+- **라이브 검증**: 09-01 발행 3건 views 311/194/77 = 프로브값 일치 / test 5/5 / 전체 스위트 기준선 동일 (회귀 0)
+- **다음 관찰 포인트**: ① 09-03 00:00 발행 로그 `📊 성과 로그 기록 완료` ② 09-03 06:10 insights_collector.log ③ ~09-13 30 posts 축적 후 첫 report 생성
 
 ### Blog Deployment Automation
 - **blog_draft_generator.py**에 6단계 배포 추가:
