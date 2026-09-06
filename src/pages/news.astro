@@ -10,6 +10,7 @@ try {
       `SELECT * FROM (
         SELECT *, ROW_NUMBER() OVER (PARTITION BY source ORDER BY created_at DESC) as rn
         FROM news WHERE category NOT IN ('senior', 'benefit')
+        AND created_at >= date('now', '-14 days')
       ) WHERE rn <= 5 ORDER BY created_at DESC LIMIT 50`
     ).all();
     newsList = result.results || [];
