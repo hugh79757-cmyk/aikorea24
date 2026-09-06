@@ -1,0 +1,17 @@
+미국 국방부의 GenAI.mil 포털에 ChatGPT Mil과 Grok for Government가 새롭게 도입되었음.
+
+이는 민감한 정부 데이터를 일반 소비자 채널로 유출하지 않고 상용 최첨단 AI 모델을 안전하게 활용하기 위한 조치임. 기존의 GenAI.mil은 구글 제미나이를 제공해 왔으며, 이번 추가를 통해 국방부 내 생성형 AI 활용 환경이 확장되었음.
+---
+미국 국방부 전체 인원 300만 명 중 170만 명 이상의 고유 사용자가 GenAI.mil에 이미 등록을 마쳤음. 이번에 도입된 ChatGPT Mil은 문서 중심의 행정 업무, 물류, 계획 및 정책 수립을 지원함. 국방부는 이를 통해 업무 효율성을 높이고 보안을 유지하며 상용 AI 모델을 운용하는 구조를 갖추었음.
+---
+미국 국방부는 Grok for Government의 도입 목적을 전투원의 생산성 향상과 지식 연속성 강화로 규정했음. 미 국방부는 "Starshield AI의 Grok for Government는 전투원에게 즉각적인 생산성 향상, 더 강력한 지식 연속성, 그리고 더 안전하고 효율적인 협업을 제공할 것입니다(원문: Starshield AI’s Grok for Government will provide the warfighter with immediate productivity gains, stronger knowledge continuity and more secure and efficient collaboration,)”라고 밝혔음.
+---
+미 국방부는 Grok for Government가 다양한 작전 상황에서 임무 수행 속도와 정확도를 높일 것으로 기대함. 미 국방부는 이 도구가 "획득 전문가를 위한 시장 조사 분석부터 물류 담당자를 위한 공급망 관리에 이르기까지 수많은 작전 상황에서 임무를 더 빠르고 정확하게 수행할 수 있도록 할 것입니다(원문: to execute missions faster and with greater precision across numerous operational contexts, ranging from market research analysis for acquisition professionals to supply-chain management for logisticians.)”라고 설명했음.
+---
+미국 국방부는 300만 명의 민간 및 군 인력에게 '전투원의 필요'에 맞춘 생성형 AI 도구 접근 권한을 부여했음. GenAI.mil 포털은 국방부 전체 인원 300만 명을 대상으로 운영되며, 현재까지 170만 명 이상의 사용자가 확보되었음. 이 시스템은 비기밀 네트워크 내에서 보안 승인을 거쳐 운용됨.
+---
+--- 카드 6 ---
+출처: TechCrunch AI
+발행일: Mon, 31 Aug 2026 20:13:45
+원문: https://techcrunch.com/2026/08/31/the-pentagon-now-has-its-own-version-of-chatgpt-and-grok/
+추출 사실: B 2건 / C 2건

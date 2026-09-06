@@ -37,17 +37,9 @@ _REDUNDANT_ORIGIN_RE = re.compile(r"\(\s*원문:\s*([^)]*)\)")
 
 
 def _strip_redundant_original(cards: list[str]) -> list[str]:
-    """결정적 후처리: (원문: ...) 내용이 순수 한국어(외국어 자체 없음)면 중복이므로 제거.
-    외국어 원문(라틴 문자 포함)은 보존 — 모델 미준수에 대비한 안전망."""
-    import re
-    out = []
-    for c in cards:
-        def _repl(m):
-            inside = m.group(1)
-            if re.search(r"[A-Za-z]", inside):
-                return m.group(0)  # 외국어 원문 → 보존
-            return ""  # 순수 한국어 → 중복 제거
-        out.append(_REDUNDANT_ORIGIN_RE.sub(_repl, c).strip())
+    """결정적 후처리: 인라인 (원문: ...) 병기는 전부 제거 (2026-09-05 사용자 요청).
+    카드6의 '원문: URL' 형태(괄호 없음)는 본 RE가 매칭 안 함 — 영향 없음."""
+    out = [_REDUNDANT_ORIGIN_RE.sub("", c).strip() for c in cards]
     return out
 
 

@@ -1,0 +1,17 @@
+월드랩스(World Labs)와 AI 연구자 페이페이 리(Fei-Fei Li)가 단 몇 장의 사진으로 3D 월드를 생성·재구성·시뮬레이션하는 AI 모델 '아틀라스(Atlas)'를 에 공개함.
+
+AI가 인간처럼 3D 공간을 이해하는 공간 지능을 구현하고 대규모 3D 씬을 생성·재구성·시뮬레이션하기 위한 첫 번째 모델을 출시할 필요성에서 진행된 일임.
+---
+아틀라스는 camera-controlled generation 수행 시 출력 가능한 비디오의 최대 길이가 up to one minute이며 비디오 출력 해상도는 1440p임. 외부 인간 평가자가 camera-controlled generation을 평가했을 때, MiniMax H3와의 비교에서 인간 평가자가 아틀라스를 선호한 비율은 75 percent였고, Gemini Omni Flash와의 비교에서는 81 percent였음. Happy Horse 1.1과의 비교에서는 86 percent였으며, Seedance 2.5와의 비교에서는 94 percent였음.
+---
+월드랩스가 공개한 아틀라스는 텍스트, 이미지, 비디오, 3D 데이터로 처음부터 학습된 옴니 모델이며, 모든 입력이 2차원 시퀀스가 아니라 3D 공간의 특정 위치에 고정되는 방식을 사용함. 월드랩스는 이를 공간 컨텍스트라고 부르며 모델이 각 새로운 프레임이나 시점을 생성하는 데 이 방식을 활용함.
+---
+AI 연구자 페이페이 리(Fei-Fei Li)는 아틀라스 모델 공개 및 공간 지능과 관련해 다음과 같이 주장했음. "그녀는 현재의 멀티모달 언어 모델과 비디오 확산 모델이 데이터를 1차원 또는 2차원 시퀀스로 분할하며, 이로 인해 단순한 공간 작업조차 불필요하게 어려워진다고 주장했다. 필요한 것은 토큰화, 맥락, 메모리를 3차원 또는 4차원 인지 방식으로 조직하는 아키텍처이다." (원문: Current multimodal language models and video diffusion models break data into one- or two-dimensional sequences, she argued, which makes even simple spatial tasks needlessly hard. What's needed are architectures that organize tokenization, context, and memory in a 3D- or 4D-aware way.)
+---
+행위자인 월드랩스와 페이페이 리는 공간 지능 구현을 목표로 아틀라스를 출시함. 모델은 단 한 장의 입력 이미지에서도 대규모 장면을 재구성할 수 있으며, 여러 장의 이미지가 입력될 경우 각각의 이미지가 서로 다른 카메라 위치에서 촬영된 것으로 보고 하나의 일관된 3D 공간으로 연결하는 방식을 지원함.
+---
+--- 카드 6 ---
+출처: The Decoder
+발행일: Wed, 02 Sep 2026 12:28:36
+원문: https://the-decoder.com/world-labs-unveils-atlas-a-single-ai-model-that-generates-reconstructs-and-simulates-3d-worlds-from-just-a-few-photos/
+추출 사실: B 6건 / C 1건

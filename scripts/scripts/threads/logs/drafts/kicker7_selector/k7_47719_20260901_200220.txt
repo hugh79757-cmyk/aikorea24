@@ -1,0 +1,17 @@
+존 터너스가 미국에서 애플의 새로운 최고경영자(CEO)로 공식 취임했음.
+
+팀 쿡은 15년간의 임기를 마치고 이사회 집행의장으로 자리를 옮겼음. 존 터너스는 소프트웨어와 기기부터 재무와 법무까지 기업 운영 전반을 책임지며, 4.7조 달러 규모의 기업 가치를 지닌 애플의 인공지능(AI) 전략을 구체화해야 하는 과제를 안게 되었음.
+---
+애플은 2026년 들어 주가가 17% 상승하며 경쟁사들을 앞서고 있음. 이는 강력한 기기 교체 주기와 안드로이드 경쟁사 대비 메모리 부족난에 효율적으로 대응한 결과임. 다만 존 터너스는 향후 올 가을 출시가 예상되는 폴더블폰의 경우 최대 2,500달러에 달할 것으로 보이는 높은 가격대와 생성형 AI 분야에서의 경쟁력 회복이라는 새로운 시험대에 직면했음.
+---
+팀 쿡은 퇴임을 앞두고 자신의 X(구 트위터) 계정을 통해 "내일 제 직함은 바뀌지만, 애플 커뮤니티를 향한 제 사랑은 절대 변하지 않을 것입니다(원문: My title changes tomorrow, but the love I have for the Apple community never will,)"라고 소회를 밝혔음. 그는 앞으로 이사회 집행의장으로서 전 세계 정책 입안자들과의 관계 조율 등 대외 업무를 지원하며 존 터너스의 조력자 역할을 수행할 예정임.
+---
+존 터너스 애플 CEO는 과거 CNBC 인터뷰에서 "만약 우리가 올바른 구성 요소, 즉 올바른 실리콘과 기타 기술들을 사용하여 올바른 제품을 만든다면, 사람들은 그것을 사랑할 것입니다(원문: If we build the right products with the right components within them, right silicon and other technologies, people love them,)"라고 하드웨어 중심의 철학을 밝힌 바 있음. 최근 실적 발표 컨퍼런스 콜에서도 그는 "이 분야에서 일어나고 있는 모든 일들로 인해 우리에게는 엄청난 기회가 있습니다. 우리는 우리의 계획에 정말 집중하고 있으며 그것에 대해 매우 기대하고 있습니다(원문: There is so much opportunity for us with everything that's happening in this space, We're just really focused on our plans and very excited about it.)"라고 강조했음.
+---
+캐시 거쉬 코터(Kotter) CEO는 애플의 리더십 교체에 대해 "팀 쿡에게 효과적이었던 방식이 존 터너스에게도 똑같이 효과적이지는 않을 것입니다. 회사는 새로운 환경에 처해 있습니다. 계속해서 진화하고 경쟁해야 할 것입니다(원문: What worked for Tim Cook is not going to be the same that works for John Ternus, The company is in a new environment. It's going to have to keep evolving and competing.)"라고 평가했음. 존 터너스는 주주와 직원, 고객들에게 자신의 리더십을 증명해야 하는 책임의 중심에 서게 되었음.
+---
+--- 카드 6 ---
+출처: CNBC Tech
+발행일: Tue, 01 Sep 2026 11:00:01
+원문: https://www.cnbc.com/2026/09/01/apple-enters-ternus-era-as-ai-challenges-and-memory-crunch-intensify.html
+추출 사실: B 3건 / C 4건

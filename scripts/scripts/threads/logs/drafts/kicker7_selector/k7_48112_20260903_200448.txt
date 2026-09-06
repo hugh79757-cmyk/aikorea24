@@ -1,0 +1,17 @@
+, 구글은 미국에서 새로운 AI 모델인 Gemini 3.8 Flash를 출시하며 10년 내 최장기 월간 하락세를 마감하는 모멘텀을 마련했음.
+
+같은 날 연방 판사는 구글의 광고 거래소 매각을 강제하려는 법무부의 시도를 기각하며 반독점 규제 리스크를 완화했음.
+---
+Gemini 3.8 Flash는 백만 토큰당 입력 비용 75센트, 출력 비용 3.75달러로 책정되었음. 이는 이전 모델과 동일한 도입 가격임에도 코딩, 에이전트 작업, 추론 성능이 개선된 수치임. 또한 구글 클라우드 고객의 50%는 기존 약정 대비 AI 제품 지출을 늘리고 있으며, 최근 분기 구글의 광고 사업은 14% 성장했음.
+---
+구글 딥마인드의 제품 관리 수석 이사인 Tulsee Doshi는 최근 플래시 모델들의 성능은 우리를 정말 긍정적인 방식으로 놀라게 했다고 평가했음(원문: really surprised us in positive ways in their performance). 또한 그는 여전히 최첨단 수준의 성능을 보여주면서도 훨씬 빠르고 비용은 훨씬 저렴한 제품을 방어자들에게 제공할 수 있게 되어 매우 기쁘다고 덧붙였음.
+---
+D.A. Davidson의 애널리스트 Gil Luria는 제품 관점에서 이 모델은 구글이 경쟁에 계속 참여하게 해주겠지만, 엔터프라이즈 시장에서 그들이 멀찌감치 떨어진 3위라는 사실을 바꾸지는 못할 것이라고 분석했음(원문: From a product perspective this model seems to keep Google in the race, but probably won't change the fact they are a distant third in the enterprise market).
+---
+버크셔 해서웨이의 CEO Greg Abel은 구글의 AI 활용 방식과 그에 따른 혜택에 대한 가시성을 확보하고 있으며, 이것이 점진적인 관심을 불러일으켜 구글을 중요한 플레이어로 보게 되었다고 밝혔음. 구글은 Gemini 3.8 Flash를 통해 엔터프라이즈 시장에서의 점유율 확대를 꾀하고 있으나, 시장 내 3위라는 입지는 여전히 도전 과제로 남아 있음.
+---
+--- 카드 6 ---
+출처: CNBC Tech
+발행일: Thu, 03 Sep 2026 12:25:59
+원문: https://www.cnbc.com/2026/09/02/google-starts-september-with-ai-momentum-after-long-losing-streak.html
+추출 사실: B 4건 / C 4건

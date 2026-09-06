@@ -1,0 +1,15 @@
+전 세계 46개국을 대상으로 하는 옥스퍼드 이코노믹스의 모델링 위탁에 따라 PwC가 에 전 세계 AI 인프라 투자 규모 전망치를 공개했음.
+---
+현재부터 2050년까지 전 세계 AI 인프라 투자 총액은 31조 6천억 달러에 이를 것으로 전망됨. 연간 자본 지출은 올해 기준 800억 달러에서 2050년 기준 1조 8천억 달러로 상승할 것으로 예측됨.
+---
+전체 31조 6천억 달러의 지출 중 미국이 15조 1천억 달러로 48%를 차지하며, 그다음은 중국과 인도가 주도하는 아시아 태평양 지역이 8조 2천억 달러를 기록함.
+---
+PwC 호주 글로벌 인프라 리더인 클라라 쿠타자르는 “AI 인프라는 차세대 자본 배분의 결정적인 과제 중 하나가 되고 있습니다.”라고 말했음 (원문: “AI infrastructure is becoming one of the defining capital allocation challenges of the next generation,” said Clara Cutajar, PwC Australia’s global infrastructure leader.).
+---
+유럽과 중동은 나머지 지출을 구성하며, PwC가 옥스퍼드 이코노믹스에 위탁한 모델링을 바탕으로 한 2050년까지의 글로벌 AI 인프라 투자 규모 및 자본 지출 전망치가 2026년 9월 2일에 발표되었음.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Wed, 02 Sep 2026 10:01:32
+원문: https://thenextweb.com/news/pwc-ai-infrastructure-31-trillion-2050
+추출 사실: B 6건 / C 1건

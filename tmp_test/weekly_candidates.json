@@ -1,132 +1,158 @@
 [
   {
-    "topic": "AI 투자 활성화 vs 금융 소비자 보호",
-    "contrast_frame": "투자 플랫폼의 AI 비서 도입을 통한 거래 편의성 증대 vs 금융 당국의 AI 투자 조언에 대한 소비자 보호 경고",
+    "topic": "AI 학습 데이터의 저작권 인정 여부",
+    "contrast_frame": "미 법무부의 공정 이용 지지 vs 음악 업계의 지식재산권 침해 소송",
     "type": "A",
     "source_articles": [
       {
-        "id": 46653,
-        "title": "스케일러블 캐피털, 600억 유로 규모 고객 자산을 외부 AI 비서와 연동",
-        "source": "The Next Web",
-        "pub_date": "Tue, 25 Aug 2026 12:06:31",
-        "link": "https://thenextweb.com/news/scalable-capital-chatgpt-claude-trading"
-      },
-      {
-        "id": 47060,
-        "title": "AI를 투자에 사용할 때는 본인 책임, 금융 감독원 경고",
-        "source": "City AM",
-        "pub_date": "Wed, 26 Aug 2026 23:01:00",
-        "link": "https://www.cityam.com/use-ai-for-investing-at-your-own-risk-warns-watchdog/"
-      }
-    ],
-    "quote_1": "스케일러블 캐피털은 자사 투자 플랫폼을 챗GPT와 클로드에 개방하여, 고객들이 브로커 앱을 거치지 않고도 AI 비서를 통해 포트폴리오를 분석하고 거래할 수 있게 했습니다.",
-    "quote_2": "영국의 금융 감독 기관은 AI를 투자 조언에 사용하는 영국인들에게 문제가 생길 경우 보호받지 못할 수 있다고 경고했습니다.",
-    "gap_summary": "금융 플랫폼의 기술적 혁신이 투자 접근성을 높이는 동시에, 규제 사각지대로 인한 투자자 피해 위험을 가중시킬 수 있음을 시사한다.",
-    "reading_angle": "금융 서비스의 디지털 전환 속도와 소비자 안전망 구축 사이의 정책적 괴리",
-    "category": "투자"
-  },
-  {
-    "topic": "AI 기반 자동화의 효율성 vs 인간 고유 영역의 보존",
-    "contrast_frame": "AI가 대체할 수 없는 '인간 전용' 일자리 지정 필요성 vs 수학 등 전문 분야에서 AI가 갖지 못한 인간 고유의 창의적 능력 유지",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 46834,
-        "title": "빌 게이츠, AI의 잠식에 맞서 '인간 전용' 일자리 필요성 역설",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 26 Aug 2026 10:33:43",
-        "link": "https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai-takeover"
-      },
-      {
-        "id": 46641,
-        "title": "AI가 수학의 종말을 의미할까? 아직은 아니다",
-        "source": "The Guardian AI",
-        "pub_date": "Tue, 25 Aug 2026 12:00:35",
-        "link": "https://www.theguardian.com/commentisfree/2026/aug/25/ai-mathematics-careers"
-      }
-    ],
-    "quote_1": "AI가 대체할 수 없는 '인간 전용' 일자리를 지정해야 한다고 주장했습니다.",
-    "quote_2": "인간 수학자에게는 여전히 AI가 갖지 못한 고유한 능력이 남아 있습니다.",
-    "gap_summary": "AI의 급격한 확산 속에서 인간의 노동 영역을 제도적으로 보호하려는 정책적 접근과, 전문 분야 내재적 역량을 통해 기술적 한계를 극복하려는 실무적 대응이 공존하고 있음을 시사할 수 있다.",
-    "reading_angle": "AI 자동화에 대한 대응 전략으로서 '제도적 보호'와 '인간 고유 역량의 재발견'이라는 두 가지 상호보완적 관점",
-    "category": "노동"
-  },
-  {
-    "topic": "AI 모델의 신뢰성 확보 vs AI 생성 정보의 오남용",
-    "contrast_frame": "LLM과 보안 기술을 결합하여 정보의 일관성과 신뢰성을 높이려는 기술적 시도 vs 가짜 싱크탱크를 통해 AI로 선전 활동을 수행하는 악의적 이용",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 46937,
-        "title": "QueryStory, AI가 제공하는 정보의 신뢰성을 높이려 합니다",
-        "source": "TechCrunch AI",
-        "pub_date": "Wed, 26 Aug 2026 13:00:00",
-        "link": "https://techcrunch.com/2026/08/26/querystory-wants-you-to-believe-what-ai-is-telling-you/"
-      },
-      {
-        "id": 46835,
-        "title": "이스라엘이 자금을 댄 가짜 미국 싱크탱크, AI를 이용한 선전 활동 시도",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 26 Aug 2026 11:00:11",
-        "link": "https://www.theguardian.com/world/2026/aug/26/fake-thinktank-israel-ai-propaganda"
-      }
-    ],
-    "quote_1": "LLM과 사이버 보안 노하우를 결합해 AI의 질의응답 과정을 더욱 일관되고 신뢰할 수 있게 만드는 것을 목표로 합니다.",
-    "quote_2": "존재하지 않는 싱크탱크의 이름을 내건 이 친이스라엘 메시지 사이트는 AI를 조작하려는 목적으로 운영되었습니다.",
-    "gap_summary": "AI 기술이 정보의 신뢰성을 강화하는 도구로 활용될 수 있는 반면, 동시에 여론 조작을 위한 악의적 선전 수단으로도 오남용될 수 있음을 시사한다.",
-    "reading_angle": "AI 기술의 발전이 가져오는 양면성, 즉 기술적 보호 장치와 악의적 조작 시도 간의 대립 구도",
-    "category": "보안"
-  },
-  {
-    "topic": "기업의 AI 인프라 확장 vs 핵심 인력의 이탈",
-    "contrast_frame": "앤스로픽의 대규모 컴퓨팅 인프라 계약 체결을 통한 확장 전략 vs OpenAI의 핵심 데이터 센터 임원 퇴사 등 고위급 인력 유출",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 47151,
-        "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약 체결",
+        "id": 48006,
+        "title": "미국 법무부, 역사적인 저작권 소송에서 AI 학습의 공정 이용 지지",
         "source": "The Decoder",
-        "pub_date": "Thu, 27 Aug 2026 10:49:35",
-        "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/"
+        "pub_date": "Wed, 02 Sep 2026 18:24:42",
+        "link": "https://the-decoder.com/us-department-of-justice-backs-fair-use-for-ai-training-in-landmark-copyright-case/"
       },
       {
-        "id": 46820,
-        "title": "OpenAI, 핵심 데이터 센터 임원 퇴사… 이어지는 고위급 인력 이탈",
+        "id": 47437,
+        "title": "소니 뮤직과 워너 뮤직, 앤스로픽을 '뻔뻔한 지식재산권 도용' 혐의로 고소",
         "source": "TechCrunch AI",
-        "pub_date": "Wed, 26 Aug 2026 00:06:20",
-        "link": "https://techcrunch.com/2026/08/25/openai-loses-a-top-data-center-exec-as-stream-of-high-profile-departures-continues/"
+        "pub_date": "Sat, 29 Aug 2026 18:41:59",
+        "link": "https://techcrunch.com/2026/08/29/sony-music-warner-sue-anthropic-alleging-a-brazen-campaign-of-intellectual-property-theft/"
       }
     ],
-    "quote_1": "앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다.",
-    "quote_2": "OpenAI는 말론(Malone)의 퇴사와 관련해 테크크런치(TechCrunch)에 \"업무의 규모와 속도를 지원하기 위해 최근 인프라 조직을 재편했다\"고 밝혔습니다.",
-    "gap_summary": "앤스로픽은 대규모 인프라 확보를 통해 성장 동력을 강화하는 반면, OpenAI는 핵심 인력 이탈로 인해 조직 운영의 불확실성이 커지고 있을 가능성이 있다.",
-    "reading_angle": "AI 기업의 경쟁력 확보 방식(물적 자원 투자 vs 인적 자원 유지)에 따른 성장 전략의 차이",
+    "quote_1": "미국 법무부는 저작권이 있는 텍스트로 AI 모델을 학습시키는 것이 공정 이용에 해당한다고 주장했습니다.",
+    "quote_2": "이번 소송은 범위가 매우 광범위하며, 불법적인 저작권 침해 혐의에 초점을 맞추고 있습니다.",
+    "gap_summary": "정부 기관은 AI 산업 육성을 위해 공정 이용을 폭넓게 해석하려는 반면, 콘텐츠 업계는 강력한 지식재산권 보호를 요구하며 법적 갈등이 심화될 수 있음을 시사한다.",
+    "reading_angle": "AI 학습 데이터의 법적 지위를 둘러싼 국가 정책과 산업계 이해관계의 정면충돌",
+    "category": "규제"
+  },
+  {
+    "topic": "AI 인프라 구축과 지역사회 갈등",
+    "contrast_frame": "PwC의 31조 달러 규모 인프라 투자 전망 vs 전 세계적 데이터센터 반대 여론",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 47918,
+        "title": "PwC, 2050년까지 전 세계 AI 인프라 투자가 31조 6천억 달러에 이를 것으로 전망",
+        "source": "The Next Web",
+        "pub_date": "Wed, 02 Sep 2026 10:01:32",
+        "link": "https://thenextweb.com/news/pwc-ai-infrastructure-31-trillion-2050"
+      },
+      {
+        "id": 47904,
+        "title": "수요일 브리핑: 데이터센터를 향한 전 세계적 반발의 이면은 무엇인가?",
+        "source": "The Guardian AI",
+        "pub_date": "Wed, 02 Sep 2026 05:45:42",
+        "link": "https://www.theguardian.com/world/2026/sep/02/wednesday-briefing-whats-behind-the-global-backlash-against-datacentres"
+      }
+    ],
+    "quote_1": "지금부터 2050년까지 전 세계 AI 인프라 구축에 31조 6천억 달러가 소요될 것으로 예상된다.",
+    "quote_2": "스코틀랜드부터 인도에 이르기까지 지역사회들이 에너지 공급과 기후를 위협하는 데이터센터에 반대하고 있는 상황을 다룹니다.",
+    "gap_summary": "천문학적인 AI 인프라 투자 계획이 지역사회의 환경적·사회적 반발과 충돌하면서, 향후 인프라 구축 속도가 예상보다 늦춰질 가능성이 있다.",
+    "reading_angle": "거시적인 경제적 낙관론과 미시적인 지역사회 저항 사이의 갈등 구조",
     "category": "시장"
   },
   {
-    "topic": "AI 학습의 법적 정당성 vs 저작권 보호의 한계",
-    "contrast_frame": "AI 모델 학습을 위한 저작물 사용의 법적 복잡성 vs AI 도입이 오히려 연구의 질을 저하시킬 수 있다는 이론적 연구 결과",
+    "topic": "AI 모델의 추론 방식과 보안 위험",
+    "contrast_frame": "순환 깊이 기술을 통한 추론 능력 향상 vs 모델의 자율적 보안 결함 탐색 및 공격 위험",
     "type": "A",
     "source_articles": [
       {
-        "id": 46457,
-        "title": "저작권이 있는 도서로 AI 모델을 학습시키는 것은 합법일까? 상황은 복잡하다",
+        "id": 47999,
+        "title": "오픈에이아이의 새로운 추론 기법, AI 안전 전문가들을 긴장시키다",
         "source": "TechCrunch AI",
-        "pub_date": "Sun, 23 Aug 2026 15:00:00",
-        "link": "https://techcrunch.com/2026/08/23/is-it-legal-to-train-ai-models-on-copyrighted-books-its-complicated/"
+        "pub_date": "Wed, 02 Sep 2026 20:19:14",
+        "link": "https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/"
       },
       {
-        "id": 46407,
-        "title": "\"AI가 과학자의 업무 효율을 높이기보다 오히려 질을 떨어뜨릴 수 있다\"는 연구 결과",
-        "source": "The Decoder",
-        "pub_date": "Sun, 23 Aug 2026 09:01:17",
-        "link": "https://the-decoder.com/ai-could-make-scientists-do-more-work-less-well-not-less-work-better-study-argues/"
+        "id": 47919,
+        "title": "오픈AI, 차기 모델이 아무도 찾지 못한 보안 결함을 찾아낸다고 밝혀",
+        "source": "The Next Web",
+        "pub_date": "Wed, 02 Sep 2026 09:28:36",
+        "link": "https://thenextweb.com/news/openai-astra-model-guardrails-cyber"
       }
     ],
-    "quote_1": "언뜻 보기에는 불법처럼 보이지만, 실제로는 매우 복잡한 법적 쟁점이 얽혀 있습니다.",
-    "quote_2": "언어 모델이 완벽하게 작동하더라도 연구의 질을 오히려 저하시킬 수 있다는 이론적 연구가 발표되었습니다.",
-    "gap_summary": "AI 학습의 법적 정당성 논란이 기술적 효용성 이면의 질적 저하 우려와 결합하여, AI 도입이 사회적·학문적 가치에 부정적인 영향을 미칠 가능성이 있음을 시사한다.",
-    "reading_angle": "AI 기술의 확산이 법적·윤리적 갈등을 넘어 지식 생산의 본질적 가치를 훼손할 수 있다는 다각적 위험성 분석",
-    "category": "윤리"
+    "quote_1": "오픈에이아이의 새로운 아스트라 모델은 대부분의 추론 모델을 특징짓는 순차적 사고 방식에서 벗어나 모델이 작동할 수 있게 해주는 '순환 깊이' 기술을 사용합니다.",
+    "quote_2": "적절한 도구와 접근 권한이 있다면 아스트라는 이전에 알려지지 않은 보안 결함을 찾아내고 이를 악용하는 방법을 개발할 수 있다",
+    "gap_summary": "새로운 추론 기술인 '순환 깊이'가 모델의 지능을 비약적으로 향상시킬 수 있지만, 동시에 모델이 스스로 보안 취약점을 악용하는 위험한 자율성을 가질 가능성이 있음을 시사한다.",
+    "reading_angle": "기술적 혁신과 그에 따른 보안적 통제 불능 사이의 딜레마",
+    "category": "보안"
+  },
+  {
+    "topic": "AI 도입에 따른 노동 시장의 변화",
+    "contrast_frame": "경영진의 AI 도입을 통한 생산성 향상 기대 vs 현장 근로자의 고용 불안 및 창의적 가치 훼손 우려",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 47518,
+        "title": "직원들의 불만 커지며 AI에 대한 긍정적 여론 악화",
+        "source": "The Decoder",
+        "pub_date": "Sun, 30 Aug 2026 13:12:19",
+        "link": "https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/"
+      },
+      {
+        "id": 47903,
+        "title": "\"이제 참을 만큼 참았다\": 시드니 대학교 교직원 수천 명, AI와 고용 안정을 요구하며 파업 돌입",
+        "source": "The Guardian AI",
+        "pub_date": "Wed, 02 Sep 2026 05:50:36",
+        "link": "https://www.theguardian.com/australia-news/2026/sep/02/we-have-had-enough-thousands-of-staff-at-the-university-of-sydney-walk-off-the-job-over-ai-job-security"
+      }
+    ],
+    "quote_1": "경영진은 AI를 대체로 긍정적으로 평가하는 반면, 보험 청구 담당자 등 실무자들은 고용 불안, 강제 도입, 감시 등을 이유로 AI에 대해 매우 부정적인 반응을 보이고 있습니다.",
+    "quote_2": "수백 명의 교직원이 피켓 라인에 서서 AI 활용에 대한 더 강력한 보호 조치를 요구했습니다.",
+    "gap_summary": "경영진의 효율성 중심 AI 도입 전략과 현장 근로자의 생존권 보호 요구가 정면으로 충돌하고 있어, 향후 노사 간의 심각한 갈등이 지속될 가능성이 있다.",
+    "reading_angle": "AI 도입을 둘러싼 조직 내 이해관계자 간의 인식 격차와 노동 환경의 구조적 갈등",
+    "category": "노동"
+  },
+  {
+    "topic": "AI 모델 성능 경쟁 vs 실질적 가치 창출",
+    "contrast_frame": "모델 자체의 성능 고도화 경쟁 vs 에이전트 기반의 실질적 업무 활용 및 가치 창출 전략",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 47444,
+        "title": "칼럼: 세일즈포스가 밝힌 AI의 다음 격전지, 그것은 모델이 아니다",
+        "source": "CNBC Tech",
+        "pub_date": "Sat, 29 Aug 2026 13:00:01",
+        "link": "https://www.cnbc.com/2026/08/29/op-ed-salesforce-revealed-next-battleground-in-ai-its-not-models.html"
+      },
+      {
+        "id": 48034,
+        "title": "스노우플레이크, 호실적과 AI 코딩 모멘텀 힘입어 22% 급등",
+        "source": "CNBC Tech",
+        "pub_date": "Wed, 02 Sep 2026 20:28:39",
+        "link": "https://www.cnbc.com/2026/09/02/snowflake-snow-q2-earnings-report-2027.html"
+      }
+    ],
+    "quote_1": "이제는 모델 자체의 성능보다 실질적인 활용과 가치 창출이 핵심 경쟁력이 되고 있습니다.",
+    "quote_2": "스노우플레이크의 사업이 빠르게 성장하고 있으며, 이는 부분적으로 코드 작성용 인공지능 에이전트의 도입 덕분입니다.",
+    "gap_summary": "AI 시장의 무게중심이 단순한 모델 성능 고도화에서 구체적인 비즈니스 성과를 견인하는 에이전트 활용으로 이동하고 있음을 시사할 수 있습니다.",
+    "reading_angle": "AI 기술의 가치 평가 기준이 '기술적 우위'에서 '실질적 수익 창출 능력'으로 변화하고 있다는 관점",
+    "category": "기술"
+  },
+  {
+    "topic": "AI 교육 현장의 도입 격차",
+    "contrast_frame": "AI를 활용한 학업 성취도 향상 및 변화 vs AI 기술 도입을 주저하는 학교 현장의 격차",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 48030,
+        "title": "학교들이 완벽한 해답을 기다리는 동안 AI 기술 격차는 점점 벌어지고 있습니다",
+        "source": "The Next Web",
+        "pub_date": "Wed, 02 Sep 2026 22:14:04",
+        "link": "https://thenextweb.com/news/ai-skills-gap-schools-education"
+      },
+      {
+        "id": 47459,
+        "title": "AI가 가장 잘 모방하는 능력이 곧 높은 학점으로 이어지는 역설",
+        "source": "The Decoder",
+        "pub_date": "Sun, 30 Aug 2026 10:34:09",
+        "link": "https://the-decoder.com/the-skills-that-earn-top-grades-are-the-ones-ai-can-fake-best/"
+      }
+    ],
+    "quote_1": "많은 학교는 AI를 학생들이 악용할 수 있는 지름길 정도로만 취급하고 있습니다.",
+    "quote_2": "GPT-4o를 활용한 학생들의 마케팅 과제 점수가 5점 만점에 1점 가까이 상승했습니다.",
+    "gap_summary": "학교 현장의 보수적인 시각과 달리 실제 AI 활용이 학업 성취도에 실질적인 영향을 미치고 있어, 교육적 가치에 대한 평가가 엇갈릴 수 있습니다.",
+    "reading_angle": "AI의 도구적 유용성과 교육적 정당성 사이의 괴리",
+    "category": "정책"
   }
 ]

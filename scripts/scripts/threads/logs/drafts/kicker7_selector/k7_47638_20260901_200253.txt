@@ -1,0 +1,17 @@
+엔비디아와 대만 칩 제조사 미디어텍이 35억 달러 규모의 투자 및 기술 파트너십을 체결했음.
+
+이번 협력은 아마존, 구글, 마이크로소프트 등 빅테크 기업들이 자체 AI 칩 개발을 가속화하며 엔비디아 GPU에 대한 의존도를 낮추는 상황에서 추진되었음.
+---
+미디어텍은 이번 계약을 통해 엔비디아의 NVLink Fusion 생태계에 접근하게 됨. 이를 통해 미디어텍은 고객사가 설계한 맞춤형 칩을 엔비디아 기반 데이터 센터에 직접 연결할 수 있는 기술을 확보함. 앞서 지난주 발표된 AWS와의 파트너십에서도 AWS 인프라에 엔비디아 GPU 200만 개를 추가 배치하고 NVLink Fusion을 통합하기로 결정했음.
+---
+엔비디아는 맞춤형 실리콘 시장의 성장을 일부 수용하면서도 데이터 센터의 핵심 인프라로서의 지배력을 유지하려 함. 미디어텍은 맞춤형 데이터 센터 ASIC 사업을 통해 2026년 20억 달러의 매출을 예상하고 있음. 엔비디아는 이러한 미디어텍의 사업 확장을 지원함으로써, 자체 칩을 사용하는 고객사들까지 엔비디아의 표준 플랫폼 내에 머물게 하는 전략을 취함.
+---
+엔비디아의 HPC 및 AI 하이퍼스케일러 인프라 솔루션 담당 수석 이사인 디온 해리스는 월요일 기자들과의 통화에서 “엔비디아는 AI 인프라 기업입니다. 우리는 수년 전 순수 컴퓨팅 칩을 넘어 사업을 확장했습니다”라고 말함(원문: “Nvidia is an AI infrastructure company,” Dion Harris, Nvidia’s senior director of HPC and AI hyperscaler infrastructure solutions, said on Monday on a call with reporters. “We expanded beyond pure computing chips years ago.”). 또한 그는 “미디어텍이 고객에게 이러한 확장 기능을 제공함으로써, 고객들은 AI 팩토리 전반에 걸쳐 랙 규모 인프라를 표준화할 수 있고 동일한 표준 플랫폼을 사용하여 그들만의 맞춤형 칩을 바로 옆에 배치할 수 있게 됩니다”라고 설명함(원문: “Basically, every cloud, every model builder is deploying our platform in some shape, form, or fashion,” Harris said. “So by MediaTek being able to offer this extension to its customers, it allows them to standardize on the rack-scale infrastructure across their AI factories… and also deploy their [custom chips] right alongside those using the same standard platform.”).
+---
+엔비디아의 창립자이자 CEO인 젠슨 황은 성명을 통해 “AI는 세계 최대의 AI 팩토리부터 PC, 자동차에 이르기까지 모든 컴퓨팅 플랫폼을 변화시키고 있습니다”라고 밝힘(원문: “AI is transforming every computing platform — from the world’s largest AI factories to the PC and the car,” Jensen Huang, founder and CEO of Nvidia, said in a statement. “Together, we’re building platforms that bring NVIDIA accelerated computing to new markets and give customers the freedom to create differentiated AI systems at enormous scale.”). 이번 파트너십은 엔비디아가 투자한 기업의 기술이 다시 엔비디아의 생태계로 유입되는 순환적 구조를 띠고 있음.
+---
+--- 카드 6 ---
+출처: TechCrunch AI
+발행일: Mon, 31 Aug 2026 15:15:25
+원문: https://techcrunch.com/2026/08/31/nvidias-3-5b-mediatek-bet-reveals-its-plan-for-tackling-big-techs-ai-chip-buildout/
+추출 사실: B 3건 / C 3건

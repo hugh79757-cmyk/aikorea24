@@ -1,0 +1,21 @@
+오픈에이아이의 새 모델 '아스트라(Astra)'가 '재귀적 깊이' 또는 '불투명 재귀'라는 추론 기법을 도입했다는 보도가 나왔음.
+
+이 기법은 기존 추론 모델의 특징인 순차적 사고 방식에서 벗어나, 동일한 질의를 루프 안에서 여러 번 처리하는 비선형적 접근을 취함.
+---
+불투명 재귀를 사용하면 모델의 사고 과정이 잠재 공간에서 처리되어 가독성 있는 흔적이 줄어듦. 이는 기존의 '사고의 연쇄(CoT)' 기록을 우회하는 결과를 낳음. 일반적인 상황에서 사고의 연쇄는 모델이 문제를 해결하는 순차적 단계를 제공하며, 이는 모델의 오작동이나 정렬 오류를 모니터링하는 가치 있는 도구로 활용되어 왔음.
+---
+아스트라 모델의 해당 기법 사용은 제한적인 것으로 알려졌으며, 오픈에이아이는 모델의 사고 연쇄가 여전히 판독 가능할 것이라는 입장을 밝힘. 또한 오픈에이아이는 향후 안전 계획의 일환으로 광범위한 사고의 연쇄 모니터링 시스템 구축을 이미 발표한 상태임.
+---
+Redwood CEO Buck Shlegeris는 "아스트라가 불투명 재귀를 사용한다는 보도에 매우 우려를 표합니다. 아스트라가 이전 모델보다 사고의 연쇄(CoT)를 모니터링하기 훨씬 어려운지는 알 수 없습니다. 하지만 오픈에이아이가 이 기술을 더 밀어붙인다면, 재귀를 대규모로 증가시켜 사고의 연쇄 모니터링 가능성을 완전히 파괴할 수 있는 선택지를 갖게 될 것입니다(원문: I am extremely concerned by the reporting that Astra uses opaque recurrence,” wrote Redwood CEO Buck Shlegeris in a post after the news broke. “I don’t know whether Astra is much less CoT monitorable than previous models. But if OpenAI pushes this technique further, they’ll have the option to massively increase the recurrence and totally destroys CoT monitorability.)"라고 언급함.
+
+AI safety advocate Zvi Mowshowitz는 "이 기술은 불장난과 같으며, 오픈에이아이와 앤스로픽이 확립하기 위해 노력해 온 금기를 위태롭게 합니다. 우리는 사고의 연쇄에 대한 충실도와 모니터링 가능성을 최대한 유지하기 위해 노력해 왔습니다. 이러한 기술을 더 집중적으로 사용하면 모니터링 가능성이 손상될 가능성이 높습니다(원문: The technique is playing with fire, risking a taboo that OpenAI and Anthropic have fought to establish that we work hard to maintain Chain of Thought faithfulness and monitorability for as long as we can,” Mowshowitz wrote. “More intensive use of such techniques would probably damage monitorability.)"라고 지적함.
+---
+오픈에이아이 최고 과학자 Jakub Pachocki는 "오픈에이아이는 우리의 첫 추론 모델부터 사고의 연쇄 모니터링을 보존하고 활용하기 위해 노력해 왔습니다. 이는 우리 현재 연구 프로그램의 핵심 목표입니다(원문: OpenAI has worked to preserve and utilize chain-of-thought monitoring since our very first reasoning models,” Pachocki wrote. “It's a core goal of our current research program.)"라고 강조함.
+
+Redwood Research 최고 과학자 Ryan Greenblatt는 "제 가장 큰 우려는 여기서 자연스럽게 발전하여 모델이 완전히 또는 거의 완전히 잠재 공간(latent space)에서 추론하는 지점까지 불투명한 추론을 확장하는 것입니다. 가장 우려되는 아키텍처를 피하기에 너무 늦지 않았기를 바라며, 오픈에이아이가 여기서 멈추기를 바랍니다(원문: My biggest concern is that a natural progression from here would involve scaling up the opaque reasoning to the point where the model reasons entirely or almost entirely in latent space,” Greenblatt wrote. “I hope it isn't too late to avoid the most concerning architectures and that OpenAI will stop here.)"라고 덧붙임.
+---
+--- 카드 6 ---
+출처: TechCrunch AI
+발행일: Wed, 02 Sep 2026 20:19:14
+원문: https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/
+추출 사실: B 1건 / C 4건

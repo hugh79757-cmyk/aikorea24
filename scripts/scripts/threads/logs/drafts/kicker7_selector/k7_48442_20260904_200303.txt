@@ -1,0 +1,17 @@
+구직자와 기업 채용 담당자, 그리고 ATS 개발사가 얽힌 채용 시장에서 상호 불신이 깊어지고 있음.
+
+구직자는 AI를 활용해 채용 시스템을 공략하려 하고, 기업은 쏟아지는 지원서를 걸러내기 위해 AI 평가 시스템을 도입함. 이 과정에서 채용 과정이 블랙박스화되고 인간적 판단이 소외되면서 'AI 파멸의 굴레'가 심화되는 중임.
+---
+기업이 사용하는 ATS(지원자 추적 시스템)는 지원서를 분류하는 핵심 도구로 작동함. 통상적으로 상위 10 to 20 percent의 지원자만이 고려 대상이 되며, 하위 80에 해당하는 지원자들은 검토조차 되지 않을 가능성이 큼. 구직자들은 이 시스템을 통과하기 위해 월 $30 to $50의 비용을 지불하며 Jobscan과 같은 서비스를 이용해 이력서를 최적화하고 있음.
+---
+AI 채용 시스템에 대한 구직자들의 평가는 극도로 부정적임. 보험 손해사정사들이 작성한 Glassdoor 리뷰 중 AI를 언급한 사례의 98 percent가 부정적인 의견을 보임. 기업 현장에서도 AI의 판단이 실제 채용 결과와 일치하지 않는 사례가 발견됨. Nadia Vatalidis(head of people at the company)는 “우리가 테스트한 두 사례에서, 우리가 채용한 사람은 (AI가 선정한) 최종 후보 명단에 없었습니다.”라고 밝힘.
+---
+현장 전문가들은 이 상황을 비극적인 악순환으로 진단함. Daniel Chait(CEO of an ATS company called Greenhouse)는 “우리는 양쪽 모두가 문제를 안고 있는 비극적인 상황에 처해 있습니다. 그들은 각자의 문제를 해결하기 위해 AI를 사용하지만, 오히려 문제를 악화시키는 방식으로 사용하고 있죠. 그래서 AI 사용이 늘어날수록 더 많은 AI 사용을 낳고, 누구에게도 도움이 되지 않습니다. 이런 일이 반복될수록 상황은 더 나빠집니다.”라고 경고함.
+---
+AI 채용 도구에 대한 의존과 그에 따른 불신은 기업 내부의 채용 방식과도 충돌함. Jodi Beggs(data scientist and job seeker)는 “만약 내 일이 로봇을 만족시키는 것이라면, 내가 AI가 생성한 콘텐츠를 좋아하지 않더라도 기계들은 좋아할지도 모릅니다.”(원문: “If my job is to please the robots,” Beggs says, “then even if I don't like AI-generated content, maybe the machines do.”)라고 언급함. 반면 Kim Jones(vice president of human resources at Toshiba)는 “우리는 모든 지원서를 사람이 직접 검토합니다.”라고 밝히며 자동화된 시스템과는 다른 채용 방식을 고수하고 있음.
+---
+--- 카드 6 ---
+출처: Wired AI
+발행일: Fri, 04 Sep 2026 10:00:00
+원문: https://www.wired.com/story/ai-job-market-infinite-doom-loop/
+추출 사실: B 4건 / C 4건

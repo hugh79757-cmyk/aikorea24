@@ -22,6 +22,7 @@ DRAFT_DIR = HERE / "logs" / "drafts" / "kicker7_selector"
 HOLD_DIR = DRAFT_DIR / "hold"
 PUBLISHED_DIR = DRAFT_DIR / "published"
 POSTED_JSON = DRAFT_DIR / "posted_ids.json"
+V3_POSTED = HERE / "posted.json"  # v3(main_v3) 발행기와 공유 — 이중 발행 방지
 
 _NAME_RE = re.compile(r"[가-힣]{1,4}\s[가-힣]{2,8}|[A-Za-z]+\s[A-Za-z]+")
 _ROLE_RE = re.compile(r"해커|주민|시민|CEO|대표|교수|위원|장관|의원|사장|회장|기자|연구원|의사|변호사|활동가|노조|관계자")
@@ -39,6 +40,40 @@ def load_posted() -> set:
 
 def save_posted(ids: set):
     POSTED_JSON.write_text(json.dumps(sorted(ids), ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _v3_posted_links() -> set:
+    """v3 발행기(posted.json)가 이미 발행한 기사 링크 집합. 이중 발행 방지 공유 dedup."""
+    if not V3_POSTED.exists():
+        return set()
+    try:
+        data = json.loads(V3_POSTED.read_text(encoding="utf-8"))
+    except Exception:
+        return set()
+    links = set(data.get("posted_links", []) if isinstance(data, dict) else [])
+    for h in (data.get("history", []) if isinstance(data, dict) else []):
+        if isinstance(h, dict) and h.get("link"):
+            links.add(h["link"])
+    return links
+
+
+def _record_v3_posted(link: str, fid: str):
+    """k7 발행 성공을 v3 posted.json에도 기록 — v3가 같은 기사 재발행하지 않게."""
+    if not V3_POSTED.exists() or not link:
+        return
+    try:
+        data = json.loads(V3_POSTED.read_text(encoding="utf-8"))
+    except Exception:
+        return
+    if not isinstance(data, dict):
+        return
+    if link not in data.get("posted_links", []):
+        data.setdefault("posted_links", []).append(link)
+    data.setdefault("history", []).append({
+        "link": link, "source": "kicker7", "id": fid,
+        "posted_at": datetime.datetime.now().isoformat(timespec="seconds"),
+    })
+    V3_POSTED.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _clean_card(s: str) -> str:
@@ -114,6 +149,7 @@ def main():
     HOLD_DIR.mkdir(parents=True, exist_ok=True)
     PUBLISHED_DIR.mkdir(parents=True, exist_ok=True)
     posted = load_posted()
+    v3_links = _v3_posted_links()
 
     files = sorted(glob.glob(str(DRAFT_DIR / "k7_*.txt")))
     print(f"[k7-publish] drafts={len(files)} dry_run={dry}")
@@ -133,6 +169,11 @@ def main():
                 move_to(p, HOLD_DIR, f"_{parsed[1]}")
             continue
         d = parsed[0]
+        if d["link"] in v3_links:
+            print(f"  [SKIP] v3 이미 발행한 기사 — {fid} link={d['link']}")
+            if not dry:
+                move_to(p, HOLD_DIR, "_v3_dedup")
+            continue
         passed, reason = rubric_pass(d["content"], d["card6"], p)
         if not passed:
             print(f"  [HOLD] {fid} — 루브릭미달:{reason}")
@@ -149,6 +190,7 @@ def main():
         if root:
             posted.add(fid)
             save_posted(posted)
+            _record_v3_posted(d["link"], fid)
             move_to(p, PUBLISHED_DIR)
             print(f"    [PUBLISHED] {fid} → root={root}")
         else:

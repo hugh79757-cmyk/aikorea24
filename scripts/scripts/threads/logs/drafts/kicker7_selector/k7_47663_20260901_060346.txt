@@ -1,0 +1,17 @@
+폴렌 로보틱스가 북미, 유럽, 영국 시장을 겨냥해 로봇 '마이크로덕'을 공개했음.
+
+이 로봇은 25cm 높이의 이족 보행 기기로, 걷거나 웅크리고 스스로 일어서며 부리로 물건을 집는 동작이 가능함. 물리적 AI와 월드 모델의 대중화를 목표로 개발된 이 플랫폼은 현재 사전 주문을 받고 있음.
+---
+마이크로덕은 399달러의 도입 가격으로 출시되었음. 기기 내부에는 50Hz 정책 루프가 탑재되어 센서와 모델을 연결하며 로봇의 다음 동작을 결정함. 전원은 영상 장비에 흔히 쓰이는 2600mAh 용량의 NP-F550 카메라 배터리를 사용하며, 약 1시간 동안 구동할 수 있음.
+---
+폴렌 로보틱스는 마이크로덕의 소프트웨어 스택 전체를 오픈소스로 공개했음. 그러나 하드웨어는 오픈소스가 아니며, 기계 및 전자 설계 파일 역시 공개 계획이 없음. 로봇의 최대 운반 가능 무게는 약 100그램으로 제한되어 있어, 구매자는 오픈소스 소프트웨어가 탑재된 폐쇄형 하드웨어를 사용하는 구조임.
+---
+클레멘트 델랑그 허깅페이스 최고경영자는 마이크로덕을 "강화학습으로 새로운 기술을 가르칠 수 있는 399달러짜리 작은 오픈소스 로봇(원문: a tiny $399 open-source robot you can teach new tricks with reinforcement learning)"이라 정의했음. 또한 그는 "물리적 AI와 월드 모델을 대중화하기 위한 오픈소스 보급형 로봇의 시대에 오신 것을 환영합니다(원문: Welcome to the era of open-source affordable robots to democratize physical AI and world models)"라고 언급했음.
+---
+산티아고 파본 폴렌 로보틱스 관계자는 로봇의 자율성과 목적 부여 기능에 대해 "로봇에 목적과 자율성을 부여하는 것은 우리가 여전히 작업 중인 부분이며, 커뮤니티가 이를 이어받아 기여해주기를 기대합니다(원문: Adding purpose and autonomy to the robot is something we are still working on, and we expect the community to pick up and contribute)"라고 밝혔음. 폴렌 로보틱스는 허깅페이스의 자회사임.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Mon, 31 Aug 2026 14:14:50
+원문: https://thenextweb.com/news/hugging-face-microduck-399-open-source-robot
+추출 사실: B 4건 / C 3건

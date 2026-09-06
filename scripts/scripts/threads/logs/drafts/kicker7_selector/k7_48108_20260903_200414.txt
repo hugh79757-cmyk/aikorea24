@@ -1,0 +1,17 @@
+미국 루이지애나주 Houma-Terrebonne 공항 상공을 Elroy Air의 무인 화물기 Chaparral이 비행하고 있음.
+
+2026년 8월 24일부터 일주일간 진행된 이 비행은 조종사 없이 의료용품, 예비 부품, 물 등을 운송하며 실제 공항의 관제 시스템 내에서 이루어졌음. 이는 eVTOL 통합 파일럿 프로그램(eIPP)을 통한 자율 비행 항공기의 미국 영공 통합 테스트의 일환임.
+---
+Chaparral은 활주로와 별도의 충전 인프라가 필요 없는 하이브리드 전기 수직 이착륙 설계가 적용되었음. 해당 기체는 500lb 이상의 화물을 적재할 수 있으며, 450 miles의 항속 거리를 보유함. Elroy Air는 1,400 aircraft 이상의 상업적 수요 파이프라인을 확보했으며, 지난 8월 미 육군과 46m 달러 규모의 다년 계약을 체결했음.
+---
+무인 화물기 운항은 Elroy Air와 함께 Bristow Group, LIFTOFF Louisiana가 파트너로 참여했음. Bristow Group은 멕시코만 에너지 플랫폼을 지원하는 헬리콥터 운영사임. 이번 테스트는 단순히 항공기의 성능을 증명하는 것을 넘어, 기존에 헬리콥터와 조종사가 수행하던 반복적인 물류 업무를 자율 비행으로 대체할 수 있는지 확인하는 데 목적이 있음.
+---
+FAA Administrator인 Bryan Bedford는 이번 비행에 대해 "이번 비행은 이러한 항공기가 어떻게 전국 지역사회로 화물 배송을 확대할 수 있는지 보여주었습니다. 또한 물류 인프라를 개선할 것입니다."라고 언급했음. Louisiana Department of Transportation and Development의 Josh Duplantis는 직접 비행을 지켜본 뒤, 이를 "규율 있고 안전한 운영"이라고 평가했음.
+---
+이번 프로젝트는 'Unleashing American Drone Dominance'라는 행정 명령 하에 설정된 eVTOL 통합 파일럿 프로그램(eIPP)을 통해 추진되었음. 제조사와 운영사를 주 및 연방 기관과 연결하여 운영 데이터를 수집하고, 이를 향후 항공 정책에 반영하는 구조임. Elroy Air는 2026년 3월 루이지애나주의 신청을 통해 해당 프로그램에 합류했음.
+---
+--- 카드 6 ---
+출처: The Next Web
+발행일: Thu, 03 Sep 2026 09:55:46
+원문: https://thenextweb.com/news/elroy-air-chaparral-uncrewed-flights-faa-eipp-louisiana
+추출 사실: B 4건 / C 2건

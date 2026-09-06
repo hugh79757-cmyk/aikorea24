@@ -1,0 +1,17 @@
+GPT-6 아스트라가 ARC-AGI-3 벤치마크에서 인간 평균을 상회하는 효율성을 기록하며 인공지능 모델의 성능 평가 기준을 흔들고 있음.
+
+2026년 9월 4일, 이 모델은 인간 평균 대비 효율적인 레벨 해결 비율 96%를 달성하며 기존의 AGI 도래 전망을 앞당기는 계기가 되었음.
+---
+GPT-6 아스트라는 내부 ARC 하네스 사용 시 ARC-AGI-3 벤치마크 점수 62.7%를 기록했음. 해당 테스트 비용은 약 26,000달러가 소요되었음. 또한, AA-Omniscience 환각률은 51%로 이전 대비 감소하는 수치를 보였음.
+---
+ARC 공동 창립자 프랑수아 숄레(François Chollet)는 GPT-6 아스트라에 대해 "각 게임과 레벨에 대한 매우 효율적인 즉석 심볼릭 세계 모델링(원문: highly efficient, on-the-fly symbolic world modeling for each game and level.)"을 수행한다고 평가했음.
+---
+프랑수아 숄레(François Chollet) ARC 공동 창립자는 아스트라의 심볼릭 모델링 행동에 대해 "아스트라는 이전에 정교한 하네스에서만 보았던 심볼릭 모델링 행동을 보여주며, 따라서 하네스의 기능이 점점 모델 자체로 이동하고 있습니다(원문: Astra exhibits symbolic modeling behaviors we had previously only seen with sophisticated harnesses, so harness capabilities are increasingly shifting into the model itself.)"라고 분석했음.
+---
+AGI 도래 시점에 대해 프랑수아 숄레(François Chollet) ARC 공동 창립자는 기존의 2030년 전망을 수정하며 "더 빨리요, 왜냐하면 제가 예상했던 것보다 진전이 더 빠르게 일어나고 있기 때문입니다(원문: Sooner, because progress is happening faster than I expected.)"라고 밝혔음. OpenAI와 ARC Prize는 이번 벤치마크 성능 기록을 바탕으로 AGI 전망을 재평가하고 있음.
+---
+--- 카드 6 ---
+출처: The Decoder
+발행일: Fri, 04 Sep 2026 11:07:36
+원문: https://the-decoder.com/benchmarks-disagree-on-gpt-6-astra-but-its-human-beating-efficiency-on-arc-agi-3-pulls-chollets-agi-forecast-forward/
+추출 사실: B 3건 / C 3건

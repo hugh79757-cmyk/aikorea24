@@ -1,0 +1,17 @@
+런던 시내 도로 위로 Wayve의 자율주행 택시가 모습을 드러냈음.
+
+2026년 9월 3일, 런던에서 Wayve와 Uber는 파트너십을 통해 자율주행 택시 서비스를 시작했음. 이는 런던 내 자율주행 택시 서비스 상용화 및 기술 테스트를 위한 행보임.
+---
+현재 런던에서 운행 허가된 자율주행 택시는 총 15대임. 이는 런던 내 개인 대여 차량 총 대수인 100,000대 이상과 대비되는 규모임. 또한 자율주행 차량 탑승을 등록한 Uber 고객 수는 100,000명에 달함.
+---
+런던 내 로보택시 서비스가 시작되었으나, 모든 차량에는 면허를 소지한 인간 운전자가 조수석에 동승함. 이는 필요시 즉시 제어권을 넘겨받기 위함임. 현재 규제 환경상 안전 운전자가 없는 완전 무인 자율주행 서비스는 별도의 정부 승인 절차가 필요함.
+---
+Alex Kendall Wayve 최고경영자 겸 공동창업자는 자율주행 기술의 성숙도에 대해 "구체적인 일정을 정하고 싶지는 않지만, 우리는 가능한 한 빠르게 추진하고 있습니다.(원문: I don’t want to put a timeline on it, but we’re pushing as fast as we can.)"라고 언급했음. 또한 그는 웨스트민스터에서 진행된 자율주행 테스트 주행을 마친 뒤 "정말 사람 같았어요. 정말 멋지네요.(원문: That was quite human-like – really cool)"라고 평가했음.
+---
+Transport for London은 지난달 Wayve의 개조된 Ford Mustang 차량을 개인 대여 차량으로 승인했음. 해당 차량의 운행 조건은 안전 운전자의 감독을 필수로 함. 완전 무인 자율주행 운영을 위한 승인은 Driver and Vehicle Standards Agency의 별도 프로세스를 거쳐야 함.
+---
+--- 카드 6 ---
+출처: The Guardian AI
+발행일: Thu, 03 Sep 2026 05:00:44
+원문: https://www.theguardian.com/technology/2026/sep/03/london-first-self-driving-taxis-for-hire-wayve-uber
+추출 사실: B 3건 / C 2건

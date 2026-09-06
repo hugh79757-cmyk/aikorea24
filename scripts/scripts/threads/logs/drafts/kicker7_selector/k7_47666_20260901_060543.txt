@@ -1,0 +1,19 @@
+미 하원 정보위원회가 , 인공지능 기술의 급격한 발전이 초래할 '블랙 스완' 위험을 경고하는 보고서를 발표했음.
+
+이번 보고서는 9.11 테러 이후 25년 동안 정보 실패를 해결하기 위해 미국이 기울여온 노력을 평가하는 과정에서 작성됐음. 위원회는 AI 기술이 테러리스트를 비롯한 악의적 행위자들에게 악용될 가능성이 국가 안보에 심각한 위협이 된다고 진단했음.
+---
+보고서에 따르면, 최첨단 거대언어모델은 테러리스트와 같은 불량 행위자가 더 파괴적인 공격을 계획하고 수행하는 것을 현저히 용이하게 만들 가능성이 있음. 실시간 스냅샷 데이터 기준 15분의 데이터 지연 시간이 존재하는 상황에서, 기존의 안전장치들은 기술 발전 속도를 따라가지 못하고 있음. 위원회는 정보 공동체와 정책 입안자들이 이러한 AI 도구의 악용을 방지할 방법을 신중하게 고려해야 한다고 강조했음.
+---
+AI 연구소들은 모델이 생화학 무기 제조와 같은 정보를 제공하지 못하도록 통제하려 노력하고 있음. 그러나 모델의 근본적인 능력은 빠르게 발전하고 있으며, 이러한 사용을 완전히 통제하기는 어려운 실정임. 위원회는 미국이 적대 세력보다 앞서 나가기 위해 정보 공동체가 책임 있는 AI 역량을 가속화하여 도입해야 한다고 권고했음.
+---
+미 하원 정보위원회는 "위원회는 정보 공동체와 정책 입안자들이 테러리스트를 포함한 불량 행위자들이 AI 도구를 악용하지 못하도록 방지하는 방법을 신중하게 고려해야 한다고 믿는다(원문: [T]he Committee believes the [intelligence community] and policymakers more broadly must carefully consider how to prevent AI tools from being leveraged for use by rogue actors, including terrorists,)"라고 공동 성명을 냈음.
+
+또한 Rick Crawford 하원 정보위원장을 포함한 Jim Himes, Elise Stefanik, Josh Gottheimer 의원들은 "AI 연구소들이 모델이 악의적인 행위자가 생화학 무기를 만드는 것과 같은 일을 돕는 정보를 제공하지 못하도록 막으려 노력하고 있지만, 모델의 근본적인 능력은 빠르게 발전하고 있으며 이러한 모델의 사용을 완전히 통제하기는 어렵다(원문: While AI labs seek to prevent models from returning information that could assist a bad actor in, for example, building a bioweapon, the underlying capability of models is developing rapidly and such a use of a model is difficult to fully control,)"라고 경고했음.
+---
+미 하원 정보위원회 소속 Rick Crawford, Jim Himes, Elise Stefanik, Josh Gottheimer 의원들은 현재 미국이 2001년 9월 11일 이후 가장 복잡하고 위험한 위협 환경에 직면해 있다고 평가했음. 이들은 이러한 취약점에 대응하고 직면할 수 있는 능력에 심각한 격차가 남아있음을 지적했음. 위원회는 보안 AI 도구에 대한 투자와 함께 엄격한 테스트, 인간의 감독, 강력한 개인정보 및 시민 자유 보호 조치가 차세대 위협 대응에 필수적이라고 밝혔음.
+---
+--- 카드 6 ---
+출처: CNBC Tech
+발행일: Mon, 31 Aug 2026 21:18:37
+원문: https://www.cnbc.com/2026/08/31/ai-warning-house-intelligence-committee.html
+추출 사실: B 2건 / C 2건
