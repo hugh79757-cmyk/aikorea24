@@ -5,12 +5,15 @@ import time
 from typing import Optional
 
 from pipeline.infra.config import project_root
+from pipeline.infra.logger import get_scrubbed_logger
 
 
 DB_NAME = "aikorea24-db"
 
 
 WANGLER_BIN = "/opt/homebrew/bin/wrangler"
+
+logger = get_scrubbed_logger(__name__)
 
 
 def _build_cmd(sql: str) -> list[str]:
@@ -51,17 +54,24 @@ def d1_query(
                 env=env,
             )
             if r.returncode != 0:
-                last_error = f"exit code {r.returncode}: {r.stderr.strip()}"
+                last_error = f"exit code {r.returncode}: {r.stderr.strip()[:300]}"
+                logger.warning(f"d1_query 실패 (시도 {attempt + 1}/{retries}): {last_error}")
                 if attempt < retries - 1:
                     time.sleep(1.0 * (2.0 ** attempt))
                 continue
-            return _parse_result(r.stdout)
+            results = _parse_result(r.stdout)
+            if not results and '"success"' not in r.stdout:
+                logger.warning(f"d1_query 파싱 실패 (시도 {attempt + 1}): stdout에 results/success 없음 — {r.stdout.strip()[:200]}")
+            return results
         except subprocess.TimeoutExpired:
             last_error = f"timeout (60s)"
+            logger.warning(f"d1_query 타임아웃 (시도 {attempt + 1}/{retries})")
             if attempt < retries - 1:
                 time.sleep(1.0 * (2.0 ** attempt))
         except Exception as e:
             last_error = str(e)
+            logger.warning(f"d1_query 예외 (시도 {attempt + 1}/{retries}): {e}")
             if attempt < retries - 1:
                 time.sleep(1.0 * (2.0 ** attempt))
+    logger.error(f"d1_query 최종 실패, 빈 리스트 반환: {last_error}")
     return []

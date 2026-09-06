@@ -212,14 +212,18 @@ def main():
 
     log("")
 
-    # Step 5: 이메일 발송
+    # Step 5: 이메일 발송 (선정 뉴스 없으면 브리핑도 없음 → 발송 없음)
     if not args.skip_email:
-        try:
-            step_email()
-        except Exception as e:
-            log(f"이메일 발송 에러: {e}")
-            traceback.print_exc()
-            summary["errors"].append(f"이메일 발송: {e}")
+        if not articles and not args.skip_news:
+            log("═══ Step 4: 이메일 발송 ═══")
+            log("  선정된 뉴스가 없어 이메일 발송을 건너뜁니다.")
+        else:
+            try:
+                step_email()
+            except Exception as e:
+                log(f"이메일 발송 에러: {e}")
+                traceback.print_exc()
+                summary["errors"].append(f"이메일 발송: {e}")
     else:
         log("⏭ 이메일 발송 건너뜀")
 

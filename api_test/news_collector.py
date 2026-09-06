@@ -801,13 +801,14 @@ def fetch_rss_kr(url, source, limit=15):
                 continue
             if not is_ai(title, desc):
                 continue
+            dt = parse_pub_date(pub_date_raw)
             results.append({
                 'title': title,
                 'link': item.findtext('link', ''),
                 'description': desc[:200],
                 'source': source,
                 'category': 'news',
-                'pub_date': pub_date_raw or datetime.now().strftime('%Y-%m-%d'),
+                'pub_date': dt.strftime('%Y-%m-%d %H:%M:%S') if dt else (pub_date_raw or datetime.now().strftime('%Y-%m-%d')),
                 'country': 'kr',
             })
             if len(results) >= limit:
@@ -1023,6 +1024,11 @@ def save_to_d1(articles):
         s = a['source'].replace("'", "''")
         c = a['category']
         p = a.get('pub_date', datetime.now().strftime('%Y-%m-%d'))
+        pdt = parse_pub_date(p)
+        if pdt:
+            p = pdt.strftime('%Y-%m-%d %H:%M:%S')  # D1 쿼리 최적화: pub_date ISO 통일
+        else:
+            p = p.replace("'", "''")[:30]
         su = a.get('source_url', '').replace("'", "''")[:500]
         ot = a.get('original_title', '').replace("'", "''")[:200]
         co = a.get('country', 'kr').replace("'", "''")
