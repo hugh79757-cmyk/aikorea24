@@ -11,9 +11,11 @@ if (db) {
   try {
     const bResult = await db.prepare(
       `SELECT b.id, b.date, b.status, b.intro,
-              (SELECT COUNT(*) FROM briefing_items WHERE briefing_id = b.id) as item_count
+              COUNT(bi.id) as item_count
        FROM briefings b
+       LEFT JOIN briefing_items bi ON bi.briefing_id = b.id
        WHERE b.status = 'published'
+       GROUP BY b.id
        ORDER BY b.date DESC
        LIMIT 100`
     ).all();

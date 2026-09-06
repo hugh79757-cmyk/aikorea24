@@ -357,7 +357,7 @@ def get_existing():
     try:
         r = subprocess.run(
             ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
-             '--command', "SELECT title, link FROM news", '--json'],
+             '--command', "SELECT title, link FROM news WHERE created_at >= datetime('now', '-7 days')", '--json'],
             capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
         if r.returncode == 0 and r.stdout.strip():
             data = json.loads(r.stdout)
