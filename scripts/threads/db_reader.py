@@ -341,20 +341,7 @@ def get_articles():
     sql2 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
                       COALESCE(original_title, '') as original_title
                FROM news
-               WHERE 
-                 CASE 
-                   WHEN pub_date LIKE '____-__-__%' THEN substr(pub_date, 1, 10)
-                   WHEN pub_date LIKE '___, __ %' THEN 
-                     substr(pub_date, 13, 4) || '-' || 
-                     CASE substr(pub_date, 9, 3)
-                       WHEN 'Jan' THEN '01' WHEN 'Feb' THEN '02' WHEN 'Mar' THEN '03'
-                       WHEN 'Apr' THEN '04' WHEN 'May' THEN '05' WHEN 'Jun' THEN '06'
-                       WHEN 'Jul' THEN '07' WHEN 'Aug' THEN '08' WHEN 'Sep' THEN '09'
-                       WHEN 'Oct' THEN '10' WHEN 'Nov' THEN '11' WHEN 'Dec' THEN '12'
-                     END || '-' || 
-                     CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
-                   ELSE NULL
-                 END >= date('now', '-7 days')
+               WHERE pub_date >= date('now', '-7 days')
                {source_filter}
               ORDER BY pub_date DESC LIMIT 2000"""
     rows2 = d1_query(sql2)
@@ -382,20 +369,7 @@ def get_articles():
         sql3 = f"""SELECT id, title, link, description, source, pub_date, '' as comment,
                           COALESCE(original_title, '') as original_title
                    FROM news
-                   WHERE 
-                     CASE 
-                       WHEN pub_date LIKE '____-__-__%' THEN substr(pub_date, 1, 10)
-                       WHEN pub_date LIKE '___, __ %' THEN 
-                         substr(pub_date, 13, 4) || '-' || 
-                         CASE substr(pub_date, 9, 3)
-                           WHEN 'Jan' THEN '01' WHEN 'Feb' THEN '02' WHEN 'Mar' THEN '03'
-                           WHEN 'Apr' THEN '04' WHEN 'May' THEN '05' WHEN 'Jun' THEN '06'
-                           WHEN 'Jul' THEN '07' WHEN 'Aug' THEN '08' WHEN 'Sep' THEN '09'
-                           WHEN 'Oct' THEN '10' WHEN 'Nov' THEN '11' WHEN 'Dec' THEN '12'
-                         END || '-' || 
-                         CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
-                       ELSE NULL
-                     END < date('now', '-7 days')
+                   WHERE pub_date < date('now', '-7 days')
                    {source_filter}
               ORDER BY pub_date DESC LIMIT {remaining + 20}"""
         rows3 = d1_query(sql3)
