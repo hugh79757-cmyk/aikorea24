@@ -2,6 +2,49 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-05 — fix: 쓰레드 이중 발행 원인 제거 (수동 발행 전환)
+
+### 배경
+- 18:03 main_v3 발행 → 18:30 kicker7 재발행. 같은 기사 48526(TechCrunch OpenAI 에이전트) 이중 발행
+- 원인: 두 발행 파이프라인 간 dedup 공유 없음 (v3 posted.json ↔ k7 posted_ids.json 분리)
+- 30분 차 발생 원인: k7 크론 2h 간격 30분 오프셋(00:30~22:30) 설계
+
+### 조치 1: 18:30 중복 발행본 삭제 [검증됨]
+- Threads API DELETE로 6개 게시물 삭제 (루트+카드5+링크 답글) — 전부 200 success
+- 라이브 확인: 18107731334159068 → 400 (Object not found, 삭제 확정), 18:03 v3본은 정상 존재
+- k7 posted_ids.json에서 삭제본 제거 (재발행 방지 블록 해제)
+
+### 조치 2: 자동발행 비활성화 [검증됨]
+- `launchctl bootout` + `disable` — threads-publisher, kicker7-publisher 양쪽
+- print-disabled 확인: 재부팅 후에도 재등록 안 됨
+- plist 보존 — 재개 시 enable + bootstrap
+
+### 조치 3: "(원문: …)" 병기 제거 [PRODUCTION CODE]
+- `pipeline/threads/contrast/prompts.py` 3곳 (144/171/216행) — 규칙 12/11 병기 요구 문장을 "번역문만, 병기 금지"로 교체
+- `pipeline/threads/contrast/kicker7_writer.py` `_strip_redundant_original()` — 외국어 포함 모든 인라인 (원문:) 무조건 제거로 변경. 카드6 "원문: URL"(괄호 없음)은 미영향
+- 검증: py_compile OK, assert 4개 (외국어 병기 제거/한국어 병기 제거/URL 보존/영어 잔존 없음)
+
+### 조치 4: v3↔k7 dedup 통합 [PRODUCTION CODE]
+- `scripts/threads/publish_kicker7_drafts.py`:
+  - `_v3_posted_links()` — v3 posted.json의 posted_links+history에서 링크 수집 (실측 1,445 링크)
+  - 발행 전 `link in v3_links` 체크 → SKIP + hold/_v3_dedup 이동
+  - `_record_v3_posted()` — k7 발행 성공 시 v3 posted.json에도 기록 (역방향 차단)
+  - 고장 posted.json → graceful (빈 집합, no-op)
+- 검증: py_compile OK, assert 6개 (링크 수집/신규기록/중복append없음/고장파일 처리)
+- 버그 수정: `datetime.now()` → `datetime.datetime.now()` (모듈 import 방식)
+
+### 조치 5: threadsp(threadforge) 자동발행 무력화 확인 [검증됨]
+- `~/projects2/threadsp/wrangler.jsonc` `"crons": []`
+- `src/index.ts` scheduled 핸들러 이미 no-op ("Disabled: 100% manual URL mode")
+- `wrangler deploy --dry-run` 트리거 0건 — cron 트리거 없음 확인
+- 라이브 대시보드 직접 확인 불가(토큰 권한 부족) — 3중 코드/설정 확인으로 갈음
+
+### 잔존 위험
+- v3가 k7 발행분을 재발행하는 역방향은 _record_v3_posted로 차단되나, **v3가 발행 직후 posted.json 업데이트 실패 시** 재발 가능 (기존 구조)
+- k7 HOLD 이동본(_v3_dedup) 재발행 시 수동 이동 필요
+- 재시도 플로우(run_pipeline_with_notify.py, 이번 세션 이전 작업)는 유지 — 파이프라인 실패 시 1시간 후 자동 재실행+텔레그램
+
+
 ## 2026-08-29 — fix: deep_dive writing prompt URL inclusion
 
 - `scripts/deep_dive_writer.py` `_build_writing_prompt`에 `URL: {link}` 추가
@@ -1396,3 +1439,21 @@
 - `kr.aikorea24.weekly-contrast.plist` 등록 완료
 - 매주 토요일 09:00 실행
 - OPENAI_API_KEY 환경변수 포함 (description 임베딩용)
+
+## 2026-09-06 (야간 세션) — D1 쿼터 최적화 / 이메일 발송 실패 원인 수정
+
+### 원인
+- D1 free tier 일일 row read 한도(500만, 계정 전체 공유) 소진 → 06:00 파이프라인 "D1 조회: 0건" → 브리핑·이메일 스킵 연쇄 (9/2~9/6 아침)
+- 주요 소비자: threads db_reader CASE-parsed pub_date 쿼리 119만, threadsp HITL 폴링 JOIN 156만, news.astro 풀스캔 44만 rows/일
+
+### 변경
+- [threadsp] `src/db/d1.ts` PENDING_TTL 15s→65s (HITL 폴 30s보다 길어야 캐시 히트) — commit 28d13f3, 배포 완료
+- [aikorea24] `api_test/news_collector.py`: RSS 수집·저장 시 pub_date ISO 정규화 — commit 0e2cbc4
+- [aikorea24] `scripts/run_pipeline_with_notify.py` 재시도 기능 커밋 (FAILURE_MARKERS, 1시간 후 재시도)
+- [aikorea24] `pipeline/infra/d1_client.py`: d1_query 실패 warning 로깅 추가
+- [aikorea24] `src/pages/news.astro`: 14일 윈도우 — commit 3aa360b, Pages 배포 완료
+- [데이터] news.pub_date RFC→ISO 백필 6,000/9,293건 완료, 3,039건 잔여
+
+### 보류 (2026-09-07)
+- 07:10 예약 스크립트 (PID 94661): aikeep24lite-db posts/articles purge(사용자 승인, 수동 발행 전용화) + 백필 완료 + 검증 — 로그 /tmp/d1_maintenance_20260907.log
+- 백필 완료 확인 후 `scripts/threads/db_reader.py` CASE 쿼리 제거 + idx_news_pubdate 인덱스 생성
