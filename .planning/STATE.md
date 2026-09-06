@@ -4,8 +4,8 @@ milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: phase_38_complete
 stopped_at: Phase 38 Threads 자가개선 루프 구현 완료 (2026-09-02) — 3 plans 전부 완료 (커밋 227bbcc). 라이브 검증: 발행 3건 views 311/194/77 프로브 일치. 부트스트랩 기간 (~30 posts 축적, 약 10-14일) 후 주입 시작. 미커밋 잔존: 19개 tool MD 카테고리 수정
-last_updated: 2026-09-02T22:45:00.000Z
-last_activity: 2026-09-02
+last_updated: 2026-09-06T22:30:00+07:00
+last_activity: D1 쿼터 최적화 — 재시도 기능 커밋, 백필 예약, 내일 db_reader CASE 제거
 progress:
   total_phases: 38
   completed_phases: 38
