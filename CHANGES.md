@@ -1457,3 +1457,25 @@
 ### 보류 (2026-09-07)
 - 07:10 예약 스크립트 (PID 94661): aikeep24lite-db posts/articles purge(사용자 승인, 수동 발행 전용화) + 백필 완료 + 검증 — 로그 /tmp/d1_maintenance_20260907.log
 - 백필 완료 확인 후 `scripts/threads/db_reader.py` CASE 쿼리 제거 + idx_news_pubdate 인덱스 생성
+
+## 2026-09-07 (오전 세션) — D1 쿼터 최적화 실행 완료
+
+### 실행 결과 (수동 유지보수)
+- aikeep24lite-db posts/articles: 이미 빈 테이블 확인 (어제 사용자 삭제 완료, COUNT 0/0)
+- pub_date 백필 완료: non-ISO 0건 — 23,892행 100% ISO 통일
+- idx_bi_news (briefing_items.news_id) 신규 생성 — 기존 인덱스 전무
+- 90일 purge: 11,120행 삭제 + 537 브리핑 인용행 보존 (아카이브 무손상). news 23,892 → 12,772행
+- 참고: purge DELETE 자체가 1,610만 rows_read 소모 (NOT IN 서브쿼리, 인덱스 생성 전 실행). 1회성
+
+### 검증 (D1 rows_read 실측)
+- db_reader sql2: 풀스캔 ~16,000 → 1,020 rows (94%↓, idx_news_pubdate 작동) — commit f46446e
+- background_search: 키워드당 LIKE 풀스캔 → 30일 풀 1회 조회 3,950 rows + Python 매칭 (99.6%↓) — commit 39d03de
+- threadsp HITL JOIN (1,764회/일): purge 후 소멸 (3h 윈도 0회)
+
+### D1 insights 재조사 (GraphQL d1QueriesAdaptiveGroups)
+- 3h post-fix baseline: 상시 소비 전부 소량 (idx 스캔 3~4천, JOIN 17천/23회 등)
+- 예상 일 사용량 30~50만 rows/일 vs 500만 한도 — 90%+ 여유 [부분검증: 3h 외삽, 저녁 파이프라인 실행 후 확정]
+
+### 남은 최적화 후보 (여유 확보 후 선택)
+- index.astro 메인 브리핑 JOIN 11.4만/일 (트래픽 비례) — SSR 캐시 검토
+- certkorea-db certs 스캔 17.2만/일 (374회) — 인덱스 부족, 별도 프로젝트
