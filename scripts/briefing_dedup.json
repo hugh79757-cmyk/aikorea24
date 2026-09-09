@@ -1,150 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-08-09",
-      "briefing_id": 221,
-      "articles": [
-        {
-          "id": "44453",
-          "title": "OpenAI, 프레젠테이션 스타트업 NextSlide 인수",
-          "original_title": "",
-          "description": "NextSlide는 이제 팀원들이 ChatGPT 작업을 하고 있다고 밝혔습니다.",
-          "link": "https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/",
-          "entities": [
-            "ChatGPT",
-            "OpenAI",
-            "NextSlide"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44459",
-          "title": "축구는 AI에 대응할 수 있을까? 기술 투자자들이 월드컵에 관심을 가진 이유",
-          "original_title": "",
-          "description": "현재 중단된 계획을 지지한 투자자들의 생각은 무엇이었으며, 이러한 제안들이 미래에는 필연적인 것일까요?",
-          "link": "https://www.bbc.co.uk/news/articles/cd7l4e3v238o?at_medium=RSS&at_campaign=rss",
-          "entities": [],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44395",
-          "title": "백플립 AI, 3D 스캔을 몇 분 만에 편집 가능한 CAD 모델로 변환",
-          "original_title": "",
-          "description": "백플립 AI는 3D 스캔을 완전히 편집 가능한 파라메트릭 CAD 모델로 변환하는 AI 모델을 출시했습니다. 이 과정은 보통 상당한 시간과 전문 지식이 필요하지만, 이 스타트업은 효율성을 높이고 있습니다.",
-          "link": "https://the-decoder.com/backflip-ai-turns-3d-scans-into-editable-cad-models-in-minutes-instead-of-hours/",
-          "entities": [
-            "AI",
-            "CAD"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44400",
-          "title": "육아는 힘들다. 우리가 AI에게 그 일을 맡기는 것이 좋을까? | 데이브 쉴링",
-          "original_title": "",
-          "description": "기술 기업들은 눈 움직임 추적기, 개인화된 팟캐스트 및 ‘최적화된 낮잠 예측’을 제공합니다. 실제로 누가 이러한 서비스를 필요로 할까요? 세상에서 육아보다 수익성이 낮은 직업은 무엇일까요? 할리우드 인턴십? 구호 식당 자원봉사? 전문 작가? 육아는 유일하게 돈을 받지 않는 직업입니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/aug/08/ai-optimized-parenting",
-          "entities": [],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44413",
-          "title": "악의적인 AI '기술'이 대규모 자격 증명 도용자로 변신하다",
-          "original_title": "",
-          "description": "제나이티 연구소의 보안 연구원들이 Vercel이 운영하는 AI 에이전트용 추가 기능의 공개 레지스트리인 skills.sh에서 자격 증명 도용 캠페인을 발견했습니다. 이 연구는 블랙햇 회의에서 공개되었습니다. 공격자들은 실제 기술을 유사한 오타로 복제하여 사용했습니다.",
-          "link": "https://thenextweb.com/news/zenity-malicious-ai-skills-1-7m-installs-supply-chain-credential-theft",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44454",
-          "title": "앤트로픽, Claude Code의 자동 모드를 기본값으로 설정하여 개발자를 보호",
-          "original_title": "",
-          "description": "8월 14일부터 앤트로픽은 Claude Code의 자동 모드를 Pro, Max 및 Team 플랜의 기본값으로 설정합니다. 이 회사는 이것이 더 안전하다고 주장하며, 테스트에서 분류기가 위험한 명령의 89%를 감지한 반면, 사람의 리뷰어는 13.6%밖에 감지하지 못했습니다.",
-          "link": "https://the-decoder.com/anthropic-sets-claude-code-to-auto-mode-by-default-to-protect-developers-from-bad-approvals/",
-          "entities": [
-            "Max",
-            "Pro",
-            "Claude",
-            "Team"
-          ],
-          "date": "2026-08-09"
-        }
-      ]
-    },
-    {
-      "date": "2026-08-09",
-      "briefing_id": 222,
-      "articles": [
-        {
-          "id": "44493",
-          "title": "아르메니아, 지역 최대의 AI 공장 개소",
-          "original_title": "",
-          "description": "미국 기반 AI 클라우드 회사인 파이어버드는 아르메니아 흐라즈단에 CIS 지역의 최대 AI 공장을 개소했습니다. 아르메니아 총리 니콜 파시냐니안과 카자흐스탄 부총리 잔슬란 마디예프, 미국 대리대사 데이비드 앨런이 참석했습니다.",
-          "link": "https://thenextweb.com/news/firebird-armenia-ai-factory-export-licence-compute-diplomacy",
-          "entities": [
-            "AI",
-            "CIS"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44478",
-          "title": "AI가 영국 고용 법원에 소송 남발",
-          "original_title": "",
-          "description": "영국의 고용 법원에서는 2026년 3월까지의 연도에 39% 더 많은 청구가 있었습니다. 많은 청구서가 ChatGPT나 Grok로 작성되었으며, 미해결 사건이 64,000건으로 55% 증가했습니다. AI가 생성한 문서들은 종종 수백 페이지에 달하며 허위 법률을 인용하기도 했습니다.",
-          "link": "https://the-decoder.com/ai-is-flooding-britains-employment-courts-with-lawsuits/",
-          "entities": [],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44480",
-          "title": "AI의 에너지 수요 증가로 인해 엔비디아와 아마존, 거대한 전력 인프라에 수십억 달러 투자",
-          "original_title": "",
-          "description": "AI 산업의 전력 욕구는 계속해서 증가하고 있습니다. 엔비디아는 텍사스에서 이미 계약된 4기가와트를 보유한 전력 인프라 개발자인 Lancium에 최대 30억 달러를 투자하고 있습니다. 한편, 아마존은 최대 7.65기가와트 용량의 가스 발전소를 건설 중입니다.",
-          "link": "https://the-decoder.com/ais-energy-appetite-drives-nvidia-and-amazon-to-pour-billions-into-massive-power-infrastructure/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44479",
-          "title": "구글의 DiffusionGemma, 텍스트 확산 모델 훈련을 새로 할 필요 없음을 증명",
-          "original_title": "",
-          "description": "구글 딥마인드는 새로운 모델을 처음부터 훈련시키는 대신 Gemma 4를 수정하여 10% 미만의 원래 훈련 예산으로 확산 모델을 만들었습니다. DiffusionGemma는 병렬로 256개의 토큰을 생성하며, 초당 약 1,500개의 토큰을 생산합니다.",
-          "link": "https://the-decoder.com/googles-diffusiongemma-proves-you-dont-need-to-train-from-scratch-to-build-a-text-diffusion-model/",
-          "entities": [
-            "Gemma",
-            "DiffusionGemma"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44481",
-          "title": "AI 부호들이 자신의 재산을 나누려 하고 있다",
-          "original_title": "",
-          "description": "인공지능으로 부를 축적한 새로운 세대의 자선가들이 거대한 재산을 나누려 하고 있습니다. 여러 십억 달러 규모의 약속을 어떻게 이해해야 할까요?",
-          "link": "https://www.wired.com/story/ai-billionaires-are-pledging-their-wealth-good-or-bad/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-09"
-        },
-        {
-          "id": "44483",
-          "title": "AI가 물과 에너지를 소비하면서 우리는 이미 선택의 기로에 서 있다: 데이터 센터 또는 주",
-          "original_title": "",
-          "description": "화이트홀은 영국에서 데이터 센터의 수를 세 배로 늘리길 원합니다. 하지만 슬라우에서 저는 그들이 지역 사회에 미치고 있는 영향을 목격했습니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/aug/09/slough-famous-the-office-datacentres-locals-hub-europe",
-          "entities": [],
-          "date": "2026-08-09"
-        }
-      ]
-    },
-    {
       "date": "2026-08-10",
       "briefing_id": 223,
       "articles": [
@@ -4486,141 +4342,82 @@
           "date": "2026-09-08"
         }
       ]
+    },
+    {
+      "date": "2026-09-09",
+      "briefing_id": 282,
+      "articles": [
+        {
+          "id": "49249",
+          "title": "수학자들은 검증 가능한 증명을 발표했지만, 오픈AI는 기자회견을 통해 결과를 알렸다",
+          "original_title": "",
+          "description": "오픈AI는 내부 모델이 약 88시간 동안 1만 개의 에이전트를 사용하여 3D 나비에-스토크스 방정식의 특이점 발생 가능성을 증명했다고 발표했습니다. 그러나 이 증명 과정은 학술적 논문이 아닌 기자회견을 통해 공개되어 논란이 되고 있습니다.",
+          "link": "https://thenextweb.com/news/openai-navier-stokes-claim-verification-credit",
+          "entities": [],
+          "date": "2026-09-09"
+        },
+        {
+          "id": "49183",
+          "title": "메타, AI 에이전트 '뮤즈(Muse)' 공개… 소비자는 이를 신뢰할까?",
+          "original_title": "",
+          "description": "메타의 새로운 개인용 AI 에이전트 뮤즈는 사용자의 이메일, 일정, 결제, 건강 서비스 등에 대한 접근 권한을 요구합니다. 이는 메타의 가장 큰 소비자 AI 도전이자, 사용자들이 여전히 메타의 데이터 관리 능력을 신뢰하는지 시험하는 중요한 계기가 될 것입니다.",
+          "link": "https://techcrunch.com/2026/09/08/meta-debuts-its-muse-ai-agent-will-consumers-trust-it/",
+          "entities": [
+            "Muse",
+            "AI"
+          ],
+          "date": "2026-09-09"
+        },
+        {
+          "id": "49250",
+          "title": "로빈후드, 오우라(Oura) IPO 주관사 중 18위 기록, 새로운 유통 채널 구축 중",
+          "original_title": "",
+          "description": "로빈후드가 첫 IPO 주관사 역할을 맡았으나 18개 은행 중 최하위를 기록했습니다. 더 중요한 변화는 개인 투자자 대상 유통 채널의 확대인데, 스페이스X가 물량의 20%를 개인에게 배정하고 피델리티가 최소 주문 금액을 대폭 낮추는 등 시장 환경이 변하고 있습니다.",
+          "link": "https://thenextweb.com/news/robinhood-ipo-underwriting-retail-channel-ai-listings",
+          "entities": [
+            "Oura",
+            "IPO"
+          ],
+          "date": "2026-09-09"
+        },
+        {
+          "id": "49238",
+          "title": "앤드류 가필드, 영화 '아티피셜(Artificial)'의 섬뜩한 첫 티저에서 샘 올트먼과 ",
+          "original_title": "",
+          "description": "루카 구아다니노 감독의 신작 '아티피셜'이 아마존과의 파트너십 결렬 이후 네온(Neon)을 통해 배급될 예정입니다. 빅테크가 할리우드에 진출하는 가운데, 실리콘밸리가 스크린을 통해 심판대에 오를 준비가 되었는지 관심이 쏠립니다.",
+          "link": "https://www.theguardian.com/film/2026/sep/08/andrew-garfield-sam-altman-artificial-movie-openai",
+          "entities": [
+            "Neon",
+            "Artificial"
+          ],
+          "date": "2026-09-09"
+        },
+        {
+          "id": "49256",
+          "title": "한 헤지펀드 매니저가 전적으로 AI 에이전트 기반의 회사를 구축한 방법",
+          "original_title": "",
+          "description": "이는 금융권에서 AI의 이점과 한계를 시험하고 있는 월스트리트의 변화하는 현실을 보여주는 극명한 사례입니다.",
+          "link": "https://www.cnbc.com/2026/09/08/brian-kelly-bracket22-ai-agents.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-09"
+        },
+        {
+          "id": "49198",
+          "title": "오픈AI 연구원, 수학자에게 앤스로픽 공동 저자 제외 압박 의혹",
+          "original_title": "",
+          "description": "수학자 트리스탄 벅마스터는 자신의 AI 기반 나비에-스토크스 방정식 연구 성과가 오픈AI에 알려진 후, 회사 연구원으로부터 압박을 받았다고 주장했습니다. 해당 연구원은 공동 저자가 앤스로픽 소속이라는 이유로 그를 논문에서 제외할 것을 요구했으며, 벅마스터가 이를 거부하자 협박까지 가한 것으로 알려졌습니다.",
+          "link": "https://the-decoder.com/openai-researcher-allegedly-pressured-mathematician-to-drop-anthropic-co-author-from-math-breakthrough-paper/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-09"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "44453",
-      "title": "OpenAI, 프레젠테이션 스타트업 NextSlide 인수",
-      "original_title": "",
-      "description": "NextSlide는 이제 팀원들이 ChatGPT 작업을 하고 있다고 밝혔습니다.",
-      "link": "https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide/",
-      "entities": [
-        "ChatGPT",
-        "OpenAI",
-        "NextSlide"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44459",
-      "title": "축구는 AI에 대응할 수 있을까? 기술 투자자들이 월드컵에 관심을 가진 이유",
-      "original_title": "",
-      "description": "현재 중단된 계획을 지지한 투자자들의 생각은 무엇이었으며, 이러한 제안들이 미래에는 필연적인 것일까요?",
-      "link": "https://www.bbc.co.uk/news/articles/cd7l4e3v238o?at_medium=RSS&at_campaign=rss",
-      "entities": [],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44395",
-      "title": "백플립 AI, 3D 스캔을 몇 분 만에 편집 가능한 CAD 모델로 변환",
-      "original_title": "",
-      "description": "백플립 AI는 3D 스캔을 완전히 편집 가능한 파라메트릭 CAD 모델로 변환하는 AI 모델을 출시했습니다. 이 과정은 보통 상당한 시간과 전문 지식이 필요하지만, 이 스타트업은 효율성을 높이고 있습니다.",
-      "link": "https://the-decoder.com/backflip-ai-turns-3d-scans-into-editable-cad-models-in-minutes-instead-of-hours/",
-      "entities": [
-        "AI",
-        "CAD"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44400",
-      "title": "육아는 힘들다. 우리가 AI에게 그 일을 맡기는 것이 좋을까? | 데이브 쉴링",
-      "original_title": "",
-      "description": "기술 기업들은 눈 움직임 추적기, 개인화된 팟캐스트 및 ‘최적화된 낮잠 예측’을 제공합니다. 실제로 누가 이러한 서비스를 필요로 할까요? 세상에서 육아보다 수익성이 낮은 직업은 무엇일까요? 할리우드 인턴십? 구호 식당 자원봉사? 전문 작가? 육아는 유일하게 돈을 받지 않는 직업입니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/aug/08/ai-optimized-parenting",
-      "entities": [],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44413",
-      "title": "악의적인 AI '기술'이 대규모 자격 증명 도용자로 변신하다",
-      "original_title": "",
-      "description": "제나이티 연구소의 보안 연구원들이 Vercel이 운영하는 AI 에이전트용 추가 기능의 공개 레지스트리인 skills.sh에서 자격 증명 도용 캠페인을 발견했습니다. 이 연구는 블랙햇 회의에서 공개되었습니다. 공격자들은 실제 기술을 유사한 오타로 복제하여 사용했습니다.",
-      "link": "https://thenextweb.com/news/zenity-malicious-ai-skills-1-7m-installs-supply-chain-credential-theft",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44454",
-      "title": "앤트로픽, Claude Code의 자동 모드를 기본값으로 설정하여 개발자를 보호",
-      "original_title": "",
-      "description": "8월 14일부터 앤트로픽은 Claude Code의 자동 모드를 Pro, Max 및 Team 플랜의 기본값으로 설정합니다. 이 회사는 이것이 더 안전하다고 주장하며, 테스트에서 분류기가 위험한 명령의 89%를 감지한 반면, 사람의 리뷰어는 13.6%밖에 감지하지 못했습니다.",
-      "link": "https://the-decoder.com/anthropic-sets-claude-code-to-auto-mode-by-default-to-protect-developers-from-bad-approvals/",
-      "entities": [
-        "Max",
-        "Pro",
-        "Claude",
-        "Team"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44493",
-      "title": "아르메니아, 지역 최대의 AI 공장 개소",
-      "original_title": "",
-      "description": "미국 기반 AI 클라우드 회사인 파이어버드는 아르메니아 흐라즈단에 CIS 지역의 최대 AI 공장을 개소했습니다. 아르메니아 총리 니콜 파시냐니안과 카자흐스탄 부총리 잔슬란 마디예프, 미국 대리대사 데이비드 앨런이 참석했습니다.",
-      "link": "https://thenextweb.com/news/firebird-armenia-ai-factory-export-licence-compute-diplomacy",
-      "entities": [
-        "AI",
-        "CIS"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44478",
-      "title": "AI가 영국 고용 법원에 소송 남발",
-      "original_title": "",
-      "description": "영국의 고용 법원에서는 2026년 3월까지의 연도에 39% 더 많은 청구가 있었습니다. 많은 청구서가 ChatGPT나 Grok로 작성되었으며, 미해결 사건이 64,000건으로 55% 증가했습니다. AI가 생성한 문서들은 종종 수백 페이지에 달하며 허위 법률을 인용하기도 했습니다.",
-      "link": "https://the-decoder.com/ai-is-flooding-britains-employment-courts-with-lawsuits/",
-      "entities": [],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44480",
-      "title": "AI의 에너지 수요 증가로 인해 엔비디아와 아마존, 거대한 전력 인프라에 수십억 달러 투자",
-      "original_title": "",
-      "description": "AI 산업의 전력 욕구는 계속해서 증가하고 있습니다. 엔비디아는 텍사스에서 이미 계약된 4기가와트를 보유한 전력 인프라 개발자인 Lancium에 최대 30억 달러를 투자하고 있습니다. 한편, 아마존은 최대 7.65기가와트 용량의 가스 발전소를 건설 중입니다.",
-      "link": "https://the-decoder.com/ais-energy-appetite-drives-nvidia-and-amazon-to-pour-billions-into-massive-power-infrastructure/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44479",
-      "title": "구글의 DiffusionGemma, 텍스트 확산 모델 훈련을 새로 할 필요 없음을 증명",
-      "original_title": "",
-      "description": "구글 딥마인드는 새로운 모델을 처음부터 훈련시키는 대신 Gemma 4를 수정하여 10% 미만의 원래 훈련 예산으로 확산 모델을 만들었습니다. DiffusionGemma는 병렬로 256개의 토큰을 생성하며, 초당 약 1,500개의 토큰을 생산합니다.",
-      "link": "https://the-decoder.com/googles-diffusiongemma-proves-you-dont-need-to-train-from-scratch-to-build-a-text-diffusion-model/",
-      "entities": [
-        "Gemma",
-        "DiffusionGemma"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44481",
-      "title": "AI 부호들이 자신의 재산을 나누려 하고 있다",
-      "original_title": "",
-      "description": "인공지능으로 부를 축적한 새로운 세대의 자선가들이 거대한 재산을 나누려 하고 있습니다. 여러 십억 달러 규모의 약속을 어떻게 이해해야 할까요?",
-      "link": "https://www.wired.com/story/ai-billionaires-are-pledging-their-wealth-good-or-bad/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-09"
-    },
-    {
-      "id": "44483",
-      "title": "AI가 물과 에너지를 소비하면서 우리는 이미 선택의 기로에 서 있다: 데이터 센터 또는 주",
-      "original_title": "",
-      "description": "화이트홀은 영국에서 데이터 센터의 수를 세 배로 늘리길 원합니다. 하지만 슬라우에서 저는 그들이 지역 사회에 미치고 있는 영향을 목격했습니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/aug/09/slough-famous-the-office-datacentres-locals-hub-europe",
-      "entities": [],
-      "date": "2026-08-09"
-    },
     {
       "id": "44494",
       "title": "채용 담당자들, AI 아바타로 면접 진행 중",
@@ -8609,6 +8406,73 @@
         "EUV"
       ],
       "date": "2026-09-08"
+    },
+    {
+      "id": "49249",
+      "title": "수학자들은 검증 가능한 증명을 발표했지만, 오픈AI는 기자회견을 통해 결과를 알렸다",
+      "original_title": "",
+      "description": "오픈AI는 내부 모델이 약 88시간 동안 1만 개의 에이전트를 사용하여 3D 나비에-스토크스 방정식의 특이점 발생 가능성을 증명했다고 발표했습니다. 그러나 이 증명 과정은 학술적 논문이 아닌 기자회견을 통해 공개되어 논란이 되고 있습니다.",
+      "link": "https://thenextweb.com/news/openai-navier-stokes-claim-verification-credit",
+      "entities": [],
+      "date": "2026-09-09"
+    },
+    {
+      "id": "49183",
+      "title": "메타, AI 에이전트 '뮤즈(Muse)' 공개… 소비자는 이를 신뢰할까?",
+      "original_title": "",
+      "description": "메타의 새로운 개인용 AI 에이전트 뮤즈는 사용자의 이메일, 일정, 결제, 건강 서비스 등에 대한 접근 권한을 요구합니다. 이는 메타의 가장 큰 소비자 AI 도전이자, 사용자들이 여전히 메타의 데이터 관리 능력을 신뢰하는지 시험하는 중요한 계기가 될 것입니다.",
+      "link": "https://techcrunch.com/2026/09/08/meta-debuts-its-muse-ai-agent-will-consumers-trust-it/",
+      "entities": [
+        "Muse",
+        "AI"
+      ],
+      "date": "2026-09-09"
+    },
+    {
+      "id": "49250",
+      "title": "로빈후드, 오우라(Oura) IPO 주관사 중 18위 기록, 새로운 유통 채널 구축 중",
+      "original_title": "",
+      "description": "로빈후드가 첫 IPO 주관사 역할을 맡았으나 18개 은행 중 최하위를 기록했습니다. 더 중요한 변화는 개인 투자자 대상 유통 채널의 확대인데, 스페이스X가 물량의 20%를 개인에게 배정하고 피델리티가 최소 주문 금액을 대폭 낮추는 등 시장 환경이 변하고 있습니다.",
+      "link": "https://thenextweb.com/news/robinhood-ipo-underwriting-retail-channel-ai-listings",
+      "entities": [
+        "Oura",
+        "IPO"
+      ],
+      "date": "2026-09-09"
+    },
+    {
+      "id": "49238",
+      "title": "앤드류 가필드, 영화 '아티피셜(Artificial)'의 섬뜩한 첫 티저에서 샘 올트먼과 ",
+      "original_title": "",
+      "description": "루카 구아다니노 감독의 신작 '아티피셜'이 아마존과의 파트너십 결렬 이후 네온(Neon)을 통해 배급될 예정입니다. 빅테크가 할리우드에 진출하는 가운데, 실리콘밸리가 스크린을 통해 심판대에 오를 준비가 되었는지 관심이 쏠립니다.",
+      "link": "https://www.theguardian.com/film/2026/sep/08/andrew-garfield-sam-altman-artificial-movie-openai",
+      "entities": [
+        "Neon",
+        "Artificial"
+      ],
+      "date": "2026-09-09"
+    },
+    {
+      "id": "49256",
+      "title": "한 헤지펀드 매니저가 전적으로 AI 에이전트 기반의 회사를 구축한 방법",
+      "original_title": "",
+      "description": "이는 금융권에서 AI의 이점과 한계를 시험하고 있는 월스트리트의 변화하는 현실을 보여주는 극명한 사례입니다.",
+      "link": "https://www.cnbc.com/2026/09/08/brian-kelly-bracket22-ai-agents.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-09"
+    },
+    {
+      "id": "49198",
+      "title": "오픈AI 연구원, 수학자에게 앤스로픽 공동 저자 제외 압박 의혹",
+      "original_title": "",
+      "description": "수학자 트리스탄 벅마스터는 자신의 AI 기반 나비에-스토크스 방정식 연구 성과가 오픈AI에 알려진 후, 회사 연구원으로부터 압박을 받았다고 주장했습니다. 해당 연구원은 공동 저자가 앤스로픽 소속이라는 이유로 그를 논문에서 제외할 것을 요구했으며, 벅마스터가 이를 거부하자 협박까지 가한 것으로 알려졌습니다.",
+      "link": "https://the-decoder.com/openai-researcher-allegedly-pressured-mathematician-to-drop-anthropic-co-author-from-math-breakthrough-paper/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-09"
     }
   ]
 }
