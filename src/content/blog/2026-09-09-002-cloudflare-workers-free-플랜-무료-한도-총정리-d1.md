@@ -1,7 +1,7 @@
 ---
 title: "Cloudflare Workers Free 플랜 무료 한도 총정리 D1 R2 KV 서비스별 정리"
 description: "Cloudflare Workers Free 플랜의 서비스별 무료 한도를 정리했습니다. Workers KV D1 R2 Queues Durable Objects의 일일 월간 한도와 초과 시 동작을 확인하세요."
-date: 2026-09-09T14:05:57+09:00
+date: 2026-09-09T14:10:34+09:00
 category: "IT"
 tags:
   - "Cloudflare"
