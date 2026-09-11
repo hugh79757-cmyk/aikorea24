@@ -145,7 +145,16 @@ def wait_and_retry(reason):
     사유는 schedule_retry에서 이미 텔레그램 발송됨 — 여기선 대기부터."""
     print(f"1시간 대기 중... (재시도 사유: {reason})")
     time.sleep(RETRY_DELAY)
-    result, output, error = run_pipeline_subprocess()
+    try:
+        result, output, error = run_pipeline_subprocess()
+    except subprocess.TimeoutExpired:
+        # 9/9 23:13 크래시 재발 방지 — retry에서도 타임아웃은 정상 보고 후 종료
+        send_telegram("⏰ <b>aikorea24 파이프라인 재시도 타임아웃</b> — 추가 재시도 없음. 수동 확인 필요")
+        try:
+            os.remove(RETRY_LOCK)
+        except OSError:
+            pass
+        return
     retry_result = run_pipeline_result(result, output, error, retrying=True)
 
     if retry_result == 'published':
@@ -169,7 +178,7 @@ def run_pipeline_subprocess():
         [sys.executable, pipeline_script, '--skip-thumbnails'],
         capture_output=True,
         text=True,
-        timeout=600,  # 10분 타임아웃
+        timeout=3600,  # 60분 타임아웃 (실측: Step1만 6분+, 전체 15분~2시간 — 600s는 D1 재시도 겹칠 때 초과)
         cwd=_PROJECT_DIR
     )
     return result, result.stdout, result.stderr
