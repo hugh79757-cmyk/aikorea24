@@ -4262,6 +4262,78 @@
           "date": "2026-09-11"
         }
       ]
+    },
+    {
+      "date": "2026-09-11",
+      "briefing_id": 285,
+      "articles": [
+        {
+          "id": "49914",
+          "title": "UAE, $30bn AI 데이터센터 분할 결정",
+          "original_title": "",
+          "description": "아랍에미리트(UAE)는 레우터스 독점 보도에 따르면, 걸프에서 가장 큰 규모의 AI 건설 프로젝트를 재검토하고 있다. 원래 계획은 아부다비 외곽에 있는 사막 10제곱마일(약 26제곱킬로미터) 규모의 단일 캠퍼스로, 대규모 컴퓨팅 인프라를 구축하려는 것이었다.",
+          "link": "https://thenextweb.com/news/uae-stargate-data-centre-redesign-iran-threat-underground",
+          "entities": [
+            "UAE",
+            "AI"
+          ],
+          "date": "2026-09-11"
+        },
+        {
+          "id": "49901",
+          "title": "Anthropic이 AI를 이용한 생물무기 악용 시도를 상세히 설명",
+          "original_title": "",
+          "description": "이 보고서는 Anthropic의 모델들이 미사일과 폭탄을 설계하는 데 사용되려고 시도한 범죄자, 국가 후원 그룹, 스파이웨어 업체, 과학자, 선전가들이 있다는 사실을 두 날 전 전직 직원이 퇴사하며 회사 모델들이 2030년까지 인간을 멸종시킬 수 있다고 주장하며 알려졌습니다.",
+          "link": "https://www.theguardian.com/technology/2026/sep/10/anthropic-report-details-ai-misuse",
+          "entities": [],
+          "date": "2026-09-11"
+        },
+        {
+          "id": "49922",
+          "title": "오라클, AI 클라우드 수요로 30% 매출 성장하며 6% 상승",
+          "original_title": "",
+          "description": "오라클의 클라우드 인프라 매출은 지난해 대비 121% 증가하며 AI 클라우드 서비스 수요가 증가하였다.",
+          "link": "https://www.cnbc.com/2026/09/11/oracle-stock-q1-earnings-ai-cloud.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-11"
+        },
+        {
+          "id": "49731",
+          "title": "앤트로픽, 악성 AI 에이전트도 CAPTCHA를 싫어한다고 공개",
+          "original_title": "",
+          "description": "인터넷에 자신이 인간이라고 설득하려는 봇의 내면으로 들어가보세요.",
+          "link": "https://techcrunch.com/2026/09/10/anthropic-reveals-rogue-ai-agents-hate-captchas-just-like-you/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-11"
+        },
+        {
+          "id": "49919",
+          "title": "시드 캐피탈, €130M 펀드 폐쇄 및 북유럽 진출 확대",
+          "original_title": "",
+          "description": "시드 캐피탈은 €130M 펀드를 폐쇄하고, 북유럽에서 핀테크, AI 기반 B2B, 사이버 보안 분야에 투자할 예정이다. 코펜하겐 기반의 이 회사는 시드 단계에서 €3M에서 €6M 규모의 첫 투자금을 지원할 것이다.",
+          "link": "https://thenextweb.com/news/seed-capital-130m-fund-v-nordics-cybersecurity",
+          "entities": [
+            "AI",
+            "B2B"
+          ],
+          "date": "2026-09-11"
+        },
+        {
+          "id": "49900",
+          "title": "영국 경제가 AI로 인해 7월 예상치 상향 조정",
+          "original_title": "",
+          "description": "AI 서비스 부문의 빠른 성장이 이란 전쟁의 영향력을 상쇄하며 존 히즐리 총재에게 긍정적인 영향을 미쳤습니다. 영국 경제가 7월에도 성장한 것은 AI의 빠른 확장이 이란 전쟁의 경제적 피해를 상쇄했기 때문입니다.",
+          "link": "https://www.theguardian.com/business/2026/sep/11/uk-economy-defies-forecasts-with-surprise-04-growth-in-july",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-11"
+        }
+      ]
     }
   ],
   "articles": [
@@ -8178,6 +8250,72 @@
       "description": "앤트로픽의 내부자들 중 일부는 AI의 발전이 인간의 멸망을 초래할 수 있다고 우려하며, 다른 사람들은 이를 '설정'이라고 부릅니다. 앤트로픽의 전 연구원이 AI에 대한 비극적인 선언을 한 다음 날, 더 많은 연구원과 직원들이 그의 의견에 동의했습니다.",
       "link": "https://www.theguardian.com/technology/2026/sep/10/anthropic-researchers-warn-ai-musk",
       "entities": [],
+      "date": "2026-09-11"
+    },
+    {
+      "id": "49914",
+      "title": "UAE, $30bn AI 데이터센터 분할 결정",
+      "original_title": "",
+      "description": "아랍에미리트(UAE)는 레우터스 독점 보도에 따르면, 걸프에서 가장 큰 규모의 AI 건설 프로젝트를 재검토하고 있다. 원래 계획은 아부다비 외곽에 있는 사막 10제곱마일(약 26제곱킬로미터) 규모의 단일 캠퍼스로, 대규모 컴퓨팅 인프라를 구축하려는 것이었다.",
+      "link": "https://thenextweb.com/news/uae-stargate-data-centre-redesign-iran-threat-underground",
+      "entities": [
+        "UAE",
+        "AI"
+      ],
+      "date": "2026-09-11"
+    },
+    {
+      "id": "49901",
+      "title": "Anthropic이 AI를 이용한 생물무기 악용 시도를 상세히 설명",
+      "original_title": "",
+      "description": "이 보고서는 Anthropic의 모델들이 미사일과 폭탄을 설계하는 데 사용되려고 시도한 범죄자, 국가 후원 그룹, 스파이웨어 업체, 과학자, 선전가들이 있다는 사실을 두 날 전 전직 직원이 퇴사하며 회사 모델들이 2030년까지 인간을 멸종시킬 수 있다고 주장하며 알려졌습니다.",
+      "link": "https://www.theguardian.com/technology/2026/sep/10/anthropic-report-details-ai-misuse",
+      "entities": [],
+      "date": "2026-09-11"
+    },
+    {
+      "id": "49922",
+      "title": "오라클, AI 클라우드 수요로 30% 매출 성장하며 6% 상승",
+      "original_title": "",
+      "description": "오라클의 클라우드 인프라 매출은 지난해 대비 121% 증가하며 AI 클라우드 서비스 수요가 증가하였다.",
+      "link": "https://www.cnbc.com/2026/09/11/oracle-stock-q1-earnings-ai-cloud.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-11"
+    },
+    {
+      "id": "49731",
+      "title": "앤트로픽, 악성 AI 에이전트도 CAPTCHA를 싫어한다고 공개",
+      "original_title": "",
+      "description": "인터넷에 자신이 인간이라고 설득하려는 봇의 내면으로 들어가보세요.",
+      "link": "https://techcrunch.com/2026/09/10/anthropic-reveals-rogue-ai-agents-hate-captchas-just-like-you/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-11"
+    },
+    {
+      "id": "49919",
+      "title": "시드 캐피탈, €130M 펀드 폐쇄 및 북유럽 진출 확대",
+      "original_title": "",
+      "description": "시드 캐피탈은 €130M 펀드를 폐쇄하고, 북유럽에서 핀테크, AI 기반 B2B, 사이버 보안 분야에 투자할 예정이다. 코펜하겐 기반의 이 회사는 시드 단계에서 €3M에서 €6M 규모의 첫 투자금을 지원할 것이다.",
+      "link": "https://thenextweb.com/news/seed-capital-130m-fund-v-nordics-cybersecurity",
+      "entities": [
+        "AI",
+        "B2B"
+      ],
+      "date": "2026-09-11"
+    },
+    {
+      "id": "49900",
+      "title": "영국 경제가 AI로 인해 7월 예상치 상향 조정",
+      "original_title": "",
+      "description": "AI 서비스 부문의 빠른 성장이 이란 전쟁의 영향력을 상쇄하며 존 히즐리 총재에게 긍정적인 영향을 미쳤습니다. 영국 경제가 7월에도 성장한 것은 AI의 빠른 확장이 이란 전쟁의 경제적 피해를 상쇄했기 때문입니다.",
+      "link": "https://www.theguardian.com/business/2026/sep/11/uk-economy-defies-forecasts-with-surprise-04-growth-in-july",
+      "entities": [
+        "AI"
+      ],
       "date": "2026-09-11"
     }
   ]
