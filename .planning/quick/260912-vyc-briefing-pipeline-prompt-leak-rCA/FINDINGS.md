@@ -119,3 +119,59 @@ return text.strip()
 | **C. 프롬프트 구조 (트리거)** | "한국어로만 작성" 지시가 없거나(아웃라인/토픽파인더) 있어도 강제가 없으면(auto_briefing), 모델 기본 언어로 응답한다. | outline_generator L166/L235 system 프롬프트 라인 인용 — 지시 부재 문장 확인. auto_briefing L51-55는 지시 있음 → C는 아웃라인 경로에 국한. |
 | **D. 원문 영어 패스스루 (트리거)** | user_prompt에 영어 title/description이 수백 자 주입되면 모델이 원문을 미러링한다. 반복 루프 릭(1.2표)이 이 경로의 실증 사례다. | D1 news 테이블에서 영어 description 기사 비율 SELECT로 측정 가능: `SELECT COUNT(*) FROM news WHERE description GLOB '*[A-Za-z]*' AND ...` (본 진단에서는 실행 안 함 — A가 통과 조건임이 확정적이어서 트리거 정량화는 후속 과제). |
 
+## 4. 판정
+
+### Primary: 후보 A — 브리핑 체인 검증 부재 (구조적) [검증됨]
+
+**근거:**
+1. [검증됨] grep 재현 (2.2절): `detect_prompt_leak\|validate_korean_output` — 브리핑 경로 import 0건. 기존 검증기가 Threads 파이프라인에만 존재.
+2. [검증됨] model_router.py `_call_tier_once()` L247 `return text.strip()` — 응답 통과 경로에 언어 게이트 없음. 코드 라인으로 입증되는 구조적 사실.
+3. [검증됨] auto_briefing `remove_chinese()` L40-42 — 안전망이 한자 전용, 라틴 문자 무대책.
+4. [검증됨] 아웃라인 2개 함수는 한국어 지시조차 없음 (2.5절 라인 인용).
+
+A가 primary인 이유: A는 릭이 **시스템에 저장·렌더링되는 조건**이다. B/C/D가 발생시키는 어떤 결함 응답도 A가 없으면 (즉 게이트가 있으면) 차단된다. 3중 방어 원칙(AGENTS.md) 관점에서 B/C/D는 예방(1차 방어, 프롬프트) 수준, A는 차단(2·3차 방어) 수준 — 차단 계층 부재가 근본 수용 조건.
+
+### Secondary: 후보 B+D 복합 (트리거) [부분검증]
+
+**근거:**
+1. [부분검증] 유일한 실측 릭 샘플(1.2표, 반복 루프)이 nvidia-nemotron 응답 시각대와 일치 — 추론 특화 모델(B)이 템플릿 원문 미러링(D)을 생성한 조합. 단 로그 content 스니펫 부재로 확증 불가.
+2. [검증불가] 영어 문장 원형 릭의 라이브 샘플이 본 진단 스캔 범위에서 0건 — 트리거 tier 특정은 데이터 부족으로 불가. "구조적 취약은 코드로 입증됨(위 primary), 라이브 트리거 특정 불가"가 정직한 한계 진술이다.
+3. [검증됨] 2.4표 — 회전 큐 17 tier 중 6~7개가 영어 경향 높음. 매 시간 브리핑이 큐 어디에 걸리든 상당 확률로 언어 취약 tier에 할당됨.
+
+### 부판정: C는 경로별로 다름
+
+- 아웃라인/thread_topic_finder 경로: C(한국어 지시 부재) **성립** [검증됨, 라인 인용 2.5절]
+- auto_briefing 경로: C는 **약함** — 지시는 있음. 지시가 있어도 게이트가 없으면(A) 통과한다는 게 실측 릭 샘플(지시 있는 경로에서 발생)의 함의.
+
+## 5. 수정 권고 (구현 아님 — 권고만, 후속 quick task 대상)
+
+### 최소 수정안: 기존 검증기 재사용 — 신규 코드 작성 최소 경로
+
+pipeline/threads/pitch.py의 `detect_prompt_leak()` (L58) / `validate_korean_output()` (L85)을 **import해서 호출**하는 것만으로 1차 방어 수준의 게이트가 즉시 확보된다. `validate_korean_output(hook, narrative)`는 2-문자열 인터페이스이므로 브리핑 코멘트는 `(comment[:100], comment[100:300])` 식으로 분할 전달하거나, 내부 로직(한글 비율 15% 임계 + 영문 문장 패턴 + 한자 검사)을 그대로 적용받도록 짝 지으면 된다.
+
+### 3중 방어 게이트 위치 (AGENTS.md "3중 방어 원칙" 준수)
+
+| 방어 | 게이트 위치 | 적용 검증기 | 실패 시 동작 |
+|---|---|---|---|
+| **1차** (생성 직후) | `auto_briefing.generate_comment()` — `chat_completion` 반환 후 `remove_chinese()` 대체/병행 시점 | `validate_korean_output()` + `detect_prompt_leak()` | 재생성 (최대 2회, 초과 시 해당 아이템 comment="") |
+| **2차** (저장 직전) | `auto_briefing.save_briefing()` — `sql_item` INSERT 직전, 전 items 루프 | `detect_prompt_leak()` | 해당 아이템 저장 스킵 + 로그 |
+| **3차** (발행/렌더링 직전) | `src/pages/briefing/[date].astro` 또는 run_pipeline 저장 완료 직후 배치 검증 | `detect_prompt_leak()` (comment 전수) | 문제 row 제외 처리 + 알림 |
+
+아웃라인 경로 추가 게이트: `outline_generator` 2개 함수 + `thread_topic_finder.generate_thread_outline()` — `chat_completion` 반환 후 저장 전 `detect_prompt_leak()` + 한글 비율 체크. 동시에 system 프롬프트에 `pitch.py _LANG_SECTION` 패턴("[언어 규칙 - 최우선]" 블록, L125-131) 복사 — 이 프롬프트 블록은 Threads 체인에서 이미 검증된 문구다.
+
+### 권고의 3분법 태그
+
+- [부분검증] "기존 검증기 재사용으로 브리핑 게이트 확보 가능" — 검증기 코드 존재와 인터페이스는 검증됨(라인 인용)이지만, 브리핑 코멘트(1~2문장)가 pitch의 hook/narrative(카드 문단)와 동일 분포가 아니므로 임계값 호환성은 구현 시 검증 필요. `validate_korean_output`의 한글 비율 15% 임계는 짧은 코멘트에 민감할 수 있음.
+- [검증불가] "수정 후 라이브 재발 방지" — 본 진단 범위 밖. 후속 quick task에서 게이트 구현 후 최소 14일 D1 row 재스캔으로 방지 효과 측정해야 [검증됨]으로 승격 가능.
+- [검증불가] 반복 루프 릭에 대한 수정 (max_tokens/프롬프트 구조 조정) — 1건 관측이라 원인-효과가 불명확. 게이트가 잡아주는 수준(차단)이 먼저고, 발생 억제는 데이터 더 모은 후 판단.
+
+## 6. 잔존 위험
+
+- [부분검증] **model_router 로그에 content 스니펫 없음** — tier 상관이 시각 추정에 그침. `_log_to_file`에 `content[:80]` 로깅 추가 전까지 tier↔릭 인과 재현 불가. 이 진단의 tier 판정(1.2표, 판정 secondary)은 이 한계를 안고 있음.
+- [검증불가] **영어 원형 릭 라이브 샘플 0건** — 유저가 목격한 릭의 실제 row가 본 스캔 범위 밖일 가능성. 릭 목격 사례(브리핑 페이지 URL/날짜)가 확인되면 해당 row 재스캔 필요. 지금까지의 판정은 "구조적 취약 입증 + 트리거 추정"이지 "특정 릭 사건의 재구성"이 아니다.
+- [부분검증] **D1 과거 데이터 소실 가능성** — briefing_items 전체 1,496 rows 스캔했으나 LIKE 8패턴은 영어 메타 문구만 커버. 패턴 외 영어 삽입(예: 문장 중간 영어 절)은 정규식 비율 스캔을 14일치 150rows에만 적용 — 전체 이력 정규식 재스캔은 쿼터 비용상 생략.
+- [검증불가] **outline_generator가 생성하는 이후 단계(블로그 초안 변환) 미감사** — 아웃라인 MD는 깨끗했으나, 아웃라인을 소비하는 downstream(blog_draft_generator 등)에서 영어가 재유입되는 경로는 본 진단 범위 밖.
+- [부분검증] **신규 tier 4종(or-nexpro/or-nexmini/or-nemotron/or-lingvl, 2026-09-12 추가)** 관측 데이터 0건 — 경향 평가는 모델 계열 추론. 실측 릭이 이 tier에서 나올 가능성 배제 불가.
+
+**진단 무결성 선언**: 본 진단 전체가 read-only로 수행되었다 (코드 수정 0건 — 커밋은 FINDINGS.md 문서만; DB 변경 0건 — SELECT/PRAGMA만 실행, INSERT/UPDATE/DELETE 0건).
+
