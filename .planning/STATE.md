@@ -4,8 +4,8 @@ milestone: v2.0-complete
 milestone_name: Course System + Pipeline Live
 status: phase_38_complete
 stopped_at: Phase 38 Threads 자가개선 루프 구현 완료 (2026-09-02) — 3 plans 전부 완료 (커밋 227bbcc). 라이브 검증: 발행 3건 views 311/194/77 프로브 일치. 부트스트랩 기간 (~30 posts 축적, 약 10-14일) 후 주입 시작. 미커밋 잔존: 19개 tool MD 카테고리 수정
-last_updated: 2026-09-06T22:30:00+07:00
-last_activity: D1 쿼터 최적화 — 재시도 기능 커밋, 백필 예약, 내일 db_reader CASE 제거
+last_updated: 2026-09-12T23:59:00+09:00
+last_activity: 2026-09-12 - Completed quick task 260912-vyc: 브리핑 파이프라인 영어 프롬프트 릭 원인 진단 (검증 부재 판정, FINDINGS.md 산출)
 progress:
   total_phases: 38
   completed_phases: 38
@@ -220,6 +220,7 @@ None.
 | 2026-08-28 | pipeline-docs | TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 |
 | 2026-08-29 | weekly-contrast-thumb-leak | 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 |
 | 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
+| 2026-09-12 | briefing-pipeline-prompt-leak-rCA | 브리핑 파이프라인 영어 프롬프트 릭 원인 진단. 1차 원인[검증됨]: 브리핑 체인에 detect_prompt_leak/validate_korean_output import 0건(Threads 전용) → model_router L247 return text.strip() 언어 게이트 없음. 2차[부분검증]: 17 tier 중 6~7종 영어 경향 + 영어 원문 패스스루. 라이브 영어 릭 0건(D1 150rows+아웃라인 745files). 수정 권고: pitch.py 검증기 재사용 3중 게이트 3곳. FINDINGS.md 참조 |
 
 ### Deferred Items
 
