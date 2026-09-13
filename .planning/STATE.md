@@ -221,6 +221,7 @@ None.
 | 2026-08-29 | weekly-contrast-thumb-leak | 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 |
 | 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
 | 2026-09-12 | briefing-pipeline-prompt-leak-rCA | 브리핑 파이프라인 영어 프롬프트 릭 원인 진단. 1차 원인[검증됨]: 브리핑 체인에 detect_prompt_leak/validate_korean_output import 0건(Threads 전용) → model_router L247 return text.strip() 언어 게이트 없음. 2차[부분검증]: 17 tier 중 6~7종 영어 경향 + 영어 원문 패스스루. 라이브 영어 릭 0건(D1 150rows+아웃라인 745files). 수정 권고: pitch.py 검증기 재사용 3중 게이트 3곳. FINDINGS.md 참조 |
+| 2026-09-13 | threads-llm-audit | 12시간 쓰레드/브리핑 출력 LLM 추적. Threads 초안 12건 writer 판정(로그 model_router stop 기준) + 실발행 4건 루트ID 확정 + blog briefing 6건 전건 groq-qwen. 읽기전용, 코드변경 없음 |
 
 ### Deferred Items
 
