@@ -222,6 +222,8 @@ None.
 | 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
 | 2026-09-12 | briefing-pipeline-prompt-leak-rCA | 브리핑 파이프라인 영어 프롬프트 릭 원인 진단. 1차 원인[검증됨]: 브리핑 체인에 detect_prompt_leak/validate_korean_output import 0건(Threads 전용) → model_router L247 return text.strip() 언어 게이트 없음. 2차[부분검증]: 17 tier 중 6~7종 영어 경향 + 영어 원문 패스스루. 라이브 영어 릭 0건(D1 150rows+아웃라인 745files). 수정 권고: pitch.py 검증기 재사용 3중 게이트 3곳. FINDINGS.md 참조 |
 | 2026-09-13 | threads-llm-audit | 12시간 쓰레드/브리핑 출력 LLM 추적. Threads 초안 12건 writer 판정(로그 model_router stop 기준) + 실발행 4건 루트ID 확정 + blog briefing 6건 전건 groq-qwen. 읽기전용, 코드변경 없음 |
+| 2026-09-13 | triple-defense-gate (260913-0af) | 브리핑 3중 방어 게이트 구현 (auto_briefing.py +137/-16, commit 4afaeb66) + 제목 언어 게이트 + 뉴스 제목 번역 릭 수정. 원인: 게이트 역사상 0건(재확인) + news_collector batch_translate 부분 파싱 실패→영어 title INSERT. 라이브 3건(50155/50235/50269) 한국어 UPDATE+홈페이지 렌더링 확인. 테스트 123→496 passed/16 pre-existing(동일세트). 잔존: batch_translate 근원 미수정 |
+| 2026-09-13 | thread-quality-eval | 스레드 초안 11건 전문 열람 + jisang 규격 품질 평가. groq2-gpt20b 5건 중 4건 F(어미 파열 "있다이이/한다임", 카드당 58~86자, LLM 거부문 초안 저장 1건) → 체인 제외 강력 권장. groq-gpt20b 동일 파열 → 제외 권장. orca-ds4free 유일 A(항공권 1106자). nvidia-nemotron D(~했음 나열체). 읽기전용, models.yaml 미수정 — 소유자 결정 대기 |
 
 ### Deferred Items
 
