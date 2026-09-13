@@ -13,14 +13,12 @@ tier_order:
   - groq-gpt120b
   - groq2-qwen
   - gemini-flash
-  - nvidia-nemotron
   - orca-ds4free
   - orca-hy3
   - mistral-codestral
   - cohere-commanda
   - or-nexpro
   - or-nexmini
-  - or-nemotron
   - or-lingvl
   - zhipu-glm
   - default            # ★ 유료 DeepSeek — 최후 수단
@@ -72,9 +70,6 @@ models:
   gemini-flash:
     provider: gemini
     model: gemini-3.6-flash
-  nvidia-nemotron:
-    provider: nvidia
-    model: nvidia/nemotron-3-super-120b-a12b
   orca-ds4free:
     provider: orca
     model: deepseek/deepseek-v4-flash-free
@@ -93,9 +88,6 @@ models:
   or-nexmini:
     provider: openrouter
     model: "nex-agi/nex-n2.5-mini:free"
-  or-nemotron:
-    provider: openrouter
-    model: "nvidia/nemotron-3-super-120b-a12b:free"
   or-lingvl:
     provider: openrouter
     model: "inclusionai/ling-3.0-flash-vl:free"
