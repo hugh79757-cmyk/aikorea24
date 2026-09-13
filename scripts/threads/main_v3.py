@@ -125,6 +125,33 @@ def validate_final_cards(cards):
 
     # 한글+영어 붙어쓰기 검증 — 비활성화 (고유명사+조사가 지속적으로 검증 실패 유발)
 
+    # ── 할루시네이션 방어 (2026-09-13, groq2-gpt20b 파열 발행 사고 대응) ──
+    # CJK 혼입 / LLM 거부문 / 어미 파열 — validate_final_output(validator.py)과
+    # 독립한 3차 방어. 게이트는 각 단계에 독립 적용 (3중 방어 원칙).
+    import re as _re
+    import unicodedata as _ud
+    _CJK_RE = _re.compile(r'[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff]')
+    _REFUSAL_RE = _re.compile(
+        r'^(죄송합니다|죄송하지만|죄송하|충족할\s*수\s*없|요청하신|제공할\s*수\s*없|'
+        r"I'?m\s+sorry|I\s+cannot|I\s+can't|cannot\s+fulfill|unable\s+to)",
+        _re.IGNORECASE)
+    # 파열 어미: "한다임/왔다임/있다이이" 류 — LLM 토큰 파열. 정상 "~임"(3자+)은 통과.
+    _BURST_RE = _re.compile(r'(?:[가-힣]{1,4})?(?:다임|다이이|이이이|이이임|았다임|었다임|한다임|있다이이|한다이이)$')
+    for i, card in enumerate(cards):
+        # 1) LLM 거부문 — 거부 응답이 초안으로 저장된 경우 (Algorithmicagedcaref 사고)
+        if _REFUSAL_RE.search(card):
+            issues.append(f'카드 {i+1}: LLM 거부문 감지 ("{card.strip()[:40]}")')
+            continue
+        # 2) CJK 혼입 — NFKC 정규화 후 한자/일본어 (大学和 오염 사고)
+        cjk = _CJK_RE.findall(_ud.normalize('NFKC', card))
+        if cjk:
+            issues.append(f'카드 {i+1}: 한자/일본어 혼입 ({len(cjk)}자) — {"".join(cjk[:5])}')
+        # 3) 어미 파열 — 마지막 줄 끝 토큰 파열 (한다임/왔다임/있다이이 사고)
+        last_line = card.strip().split('\n')[-1].strip()
+        tail = last_line.rstrip('\'"」』)}').rstrip()
+        if tail and _BURST_RE.search(tail[-5:]):
+            issues.append(f'카드 {i+1}: 어미 파열 (끝: "...{tail[-20:]}")')
+
     if issues:
         for issue in issues:
             log(f'  ⚠️ [검증] {issue}')

@@ -189,6 +189,25 @@ def write_kicker7_thread(bundle: dict, all_articles=None, gate_signal=None) -> d
     if before != after:
         logger.info("kicker7 writer: 중복 (원문:) 제거 %d→%d", before, after)
 
+    # 2차 방어 (2026-09-13): 생성 직후 카드 오염 검증 — CJK 혼입/LLM 거부문/어미 파열.
+    # validate_final_cards는 발행(3차) 게이트이나 저장 시점(2차)에도 독립 적용 (3중 방어 원칙).
+    # 카드6(출처)은 시스템 부착 전 상태로 검사 — 본문 카드만 대상.
+    try:
+        from scripts.threads.main_v3 import validate_final_cards as _vfc
+    except Exception:
+        try:
+            from main_v3 import validate_final_cards as _vfc
+        except Exception:
+            _vfc = None
+    if _vfc is not None and 3 <= len(cards) <= 8:
+        vf_ok, vf_issues = _vfc(cards)
+        if not vf_ok:
+            bad = [i for i in vf_issues if ('혼입' in i or '거부문' in i or '파열' in i)]
+            if bad:
+                logger.info("kicker7 writer: 카드 오염 감지 → 폐기: %s", '; '.join(bad[:3]))
+                return None
+            # 오염 아닌 기존 게이트 이슈(미완결 등)는 3차 발행 게이트에 맡김 — 저장은 허용
+
     # 카드6 출처 — 시스템이 결정적으로 부착 (LLM이 URL 출력 금지 규칙 준수 보장)
     primary_url = seed.get("link") or seed.get("url") or ""
     b_n = len(af.get("B") or [])

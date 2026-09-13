@@ -224,6 +224,8 @@ None.
 | 2026-09-13 | threads-llm-audit | 12시간 쓰레드/브리핑 출력 LLM 추적. Threads 초안 12건 writer 판정(로그 model_router stop 기준) + 실발행 4건 루트ID 확정 + blog briefing 6건 전건 groq-qwen. 읽기전용, 코드변경 없음 |
 | 2026-09-13 | triple-defense-gate (260913-0af) | 브리핑 3중 방어 게이트 구현 (auto_briefing.py +137/-16, commit 4afaeb66) + 제목 언어 게이트 + 뉴스 제목 번역 릭 수정. 원인: 게이트 역사상 0건(재확인) + news_collector batch_translate 부분 파싱 실패→영어 title INSERT. 라이브 3건(50155/50235/50269) 한국어 UPDATE+홈페이지 렌더링 확인. 테스트 123→496 passed/16 pre-existing(동일세트). 잔존: batch_translate 근원 미수정 |
 | 2026-09-13 | thread-quality-eval | 스레드 초안 11건 전문 열람 + jisang 규격 품질 평가. groq2-gpt20b 5건 중 4건 F(어미 파열 "있다이이/한다임", 카드당 58~86자, LLM 거부문 초안 저장 1건) → 체인 제외 강력 권장. groq-gpt20b 동일 파열 → 제외 권장. orca-ds4free 유일 A(항공권 1106자). nvidia-nemotron D(~했음 나열체). 읽기전용, models.yaml 미수정 — 소유자 결정 대기 |
+| 2026-09-13 | gpt20b-chain-exclusion | config/models.yaml에서 groq-gpt20b/groq2-gpt20b 제외 (commit 91574295). tier 17→15, missing/orphan 0, 유료 default 맨 뒤 유지 |
+| 2026-09-13 | hallucination-gate | 할루시네이션 발행 방어 3종 추가: validate_final_cards에 CJK 혼입/LLM 거부문(카드 시작 prefix 판정)/어미 파열 체크 — v3+kicker7 공용 3차 게이트. kicker7_writer에 2차 방어(저장 직전 오염 폐기). k7 백로그 62개 재검증 → 오염 7건 hold 이동. kicker7-publisher launchd 재개(disabled 해제). 테스트 14 passed(기존 8 green 유지 + 신규 6) |
 
 ### Deferred Items
 
