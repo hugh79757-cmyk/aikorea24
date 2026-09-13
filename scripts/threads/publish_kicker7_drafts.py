@@ -143,8 +143,10 @@ def move_to(src: pathlib.Path, dst_dir: pathlib.Path, suffix: str = ""):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="검증+로그만, 발행/이동 안 함")
+    ap.add_argument("--max", type=int, default=1, help="실행당 최대 발행 건수 (기본 1)")
     args = ap.parse_args()
     dry = args.dry_run
+    max_publish = args.max
 
     HOLD_DIR.mkdir(parents=True, exist_ok=True)
     PUBLISHED_DIR.mkdir(parents=True, exist_ok=True)
@@ -152,10 +154,11 @@ def main():
     v3_links = _v3_posted_links()
 
     files = sorted(glob.glob(str(DRAFT_DIR / "k7_*.txt")))
-    print(f"[k7-publish] drafts={len(files)} dry_run={dry}")
+    print(f"[k7-publish] drafts={len(files)} dry_run={dry} max={max_publish}")
     if not files:
         return
 
+    published_count = 0
     for f in files:
         p = pathlib.Path(f)
         fid = p.stem
@@ -192,7 +195,11 @@ def main():
             save_posted(posted)
             _record_v3_posted(d["link"], fid)
             move_to(p, PUBLISHED_DIR)
-            print(f"    [PUBLISHED] {fid} → root={root}")
+            published_count += 1
+            print(f"    [PUBLISHED] {fid} → root={root} ({published_count}/{max_publish})")
+            if published_count >= max_publish:
+                print(f"  [STOP] 최대 발행 건수({max_publish}) 도달 — 다음 사이클로 대기")
+                break
         else:
             print(f"    [FAIL] {fid} — publish_thread_chain None (토큰/인증/쿼터 확인)")
             # 실패 시 이동 안 함 → 다음 사이클 재시도

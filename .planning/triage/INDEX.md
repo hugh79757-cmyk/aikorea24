@@ -1,3 +1,5 @@
+- 2026-09-13 | fix | kicker7-disable-v3-schedule-blog-deploy-fix | kicker7 비활성화(발행품질 7%) + v3 스케줄 4h→2h(하루12건) + 블로그 배포 node_modules 자동설치 가드
+- 2026-09-12 | config | llm-chain-expansion-openrouter-gemini | LLM 폴백 체인 9→16 tier — OpenRouter 무료 4종(or-nexpro/or-nexmini/or-nemotron/or-lingvl) + gemini-3.6-flash + nvidia nemotron + groq2 계정 분리. 발행 실패(전 tier 동시 소진) 재발 방지
 - 2026-09-05 | fix | threads-dual-publish-dedup-unification | 쓰레드 이중 발행(18:03 v3 + 18:30 k7, 기사 48526) — 중복본 6개 API 삭제 + 원문병기 규칙 제거 + v3↔k7 dedup 통합 + 자동발행 비활성화
 - 2026-09-05 | fix | briefing-silent-fail-logging-retry | 아침 브리핑 0건 침묵 실패 — d1_client 스크러빙 로깅 + 이메일 게이트 + 1시간 후 자동 재시도 플로우(초안 보충 포함)
 - 2026-08-29 | fix | weekly-contrast-thumb-leak-depth-fix | 주간 심층분석 2건 썸네일 생성 + A측/B측/대비 릭 자연어화 + 원문기사링크 중복삭제 + 병렬나열→통합분석 깊이 보강

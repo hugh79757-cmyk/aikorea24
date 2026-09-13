@@ -803,6 +803,20 @@ def main():
                 log(f"    ... 외 {len(untracked_blog_files) - 5}개")
         import subprocess
         try:
+            # npm install 자동 복구 (캐시 비우기 등으로 node_modules 소실 시)
+            astro_bin = os.path.join(PROJECT_DIR, "node_modules", ".bin", "astro")
+            if not os.path.exists(astro_bin):
+                log("  📦 node_modules 없음 → npm install 실행")
+                install_result = subprocess.run(
+                    ["npm", "install"],
+                    capture_output=True, text=True, timeout=120, cwd=PROJECT_DIR
+                )
+                if install_result.returncode != 0:
+                    log(f"  ❌ npm install 실패: {install_result.stderr[:200]}")
+                    send_telegram(f"❌ [{today_str}] npm install 실패")
+                    return
+                log("  ✅ npm install 완료")
+
             # npm run build
             build_result = subprocess.run(
                 ["npm", "run", "build"],

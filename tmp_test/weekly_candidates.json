@@ -1,158 +1,132 @@
 [
   {
-    "topic": "AI 학습 데이터의 저작권 인정 여부",
-    "contrast_frame": "미 법무부의 공정 이용 지지 vs 음악 업계의 지식재산권 침해 소송",
+    "topic": "AI 기술의 프라이버시 vs 편의성",
+    "contrast_frame": "사용자 데이터 접근 권한 요구 vs 데이터 저장 최소화",
     "type": "A",
     "source_articles": [
       {
-        "id": 48006,
-        "title": "미국 법무부, 역사적인 저작권 소송에서 AI 학습의 공정 이용 지지",
-        "source": "The Decoder",
-        "pub_date": "Wed, 02 Sep 2026 18:24:42",
-        "link": "https://the-decoder.com/us-department-of-justice-backs-fair-use-for-ai-training-in-landmark-copyright-case/"
-      },
-      {
-        "id": 47437,
-        "title": "소니 뮤직과 워너 뮤직, 앤스로픽을 '뻔뻔한 지식재산권 도용' 혐의로 고소",
+        "id": 49454,
+        "title": "애플워치의 새로운 AI 기능, 기술이 항상 듣고 있다는 생각을 당연시하게 만들다",
         "source": "TechCrunch AI",
-        "pub_date": "Sat, 29 Aug 2026 18:41:59",
-        "link": "https://techcrunch.com/2026/08/29/sony-music-warner-sue-anthropic-alleging-a-brazen-campaign-of-intellectual-property-theft/"
-      }
-    ],
-    "quote_1": "미국 법무부는 저작권이 있는 텍스트로 AI 모델을 학습시키는 것이 공정 이용에 해당한다고 주장했습니다.",
-    "quote_2": "이번 소송은 범위가 매우 광범위하며, 불법적인 저작권 침해 혐의에 초점을 맞추고 있습니다.",
-    "gap_summary": "정부 기관은 AI 산업 육성을 위해 공정 이용을 폭넓게 해석하려는 반면, 콘텐츠 업계는 강력한 지식재산권 보호를 요구하며 법적 갈등이 심화될 수 있음을 시사한다.",
-    "reading_angle": "AI 학습 데이터의 법적 지위를 둘러싼 국가 정책과 산업계 이해관계의 정면충돌",
-    "category": "규제"
-  },
-  {
-    "topic": "AI 인프라 구축과 지역사회 갈등",
-    "contrast_frame": "PwC의 31조 달러 규모 인프라 투자 전망 vs 전 세계적 데이터센터 반대 여론",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 47918,
-        "title": "PwC, 2050년까지 전 세계 AI 인프라 투자가 31조 6천억 달러에 이를 것으로 전망",
-        "source": "The Next Web",
-        "pub_date": "Wed, 02 Sep 2026 10:01:32",
-        "link": "https://thenextweb.com/news/pwc-ai-infrastructure-31-trillion-2050"
+        "pub_date": "Wed, 09 Sep 2026 20:24:48",
+        "link": "https://techcrunch.com/2026/09/09/apple-watchs-new-ai-features-are-normalizing-the-idea-that-technology-is-always-listening/"
       },
       {
-        "id": 47904,
-        "title": "수요일 브리핑: 데이터센터를 향한 전 세계적 반발의 이면은 무엇인가?",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 02 Sep 2026 05:45:42",
-        "link": "https://www.theguardian.com/world/2026/sep/02/wednesday-briefing-whats-behind-the-global-backlash-against-datacentres"
-      }
-    ],
-    "quote_1": "지금부터 2050년까지 전 세계 AI 인프라 구축에 31조 6천억 달러가 소요될 것으로 예상된다.",
-    "quote_2": "스코틀랜드부터 인도에 이르기까지 지역사회들이 에너지 공급과 기후를 위협하는 데이터센터에 반대하고 있는 상황을 다룹니다.",
-    "gap_summary": "천문학적인 AI 인프라 투자 계획이 지역사회의 환경적·사회적 반발과 충돌하면서, 향후 인프라 구축 속도가 예상보다 늦춰질 가능성이 있다.",
-    "reading_angle": "거시적인 경제적 낙관론과 미시적인 지역사회 저항 사이의 갈등 구조",
-    "category": "시장"
-  },
-  {
-    "topic": "AI 모델의 추론 방식과 보안 위험",
-    "contrast_frame": "순환 깊이 기술을 통한 추론 능력 향상 vs 모델의 자율적 보안 결함 탐색 및 공격 위험",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 47999,
-        "title": "오픈에이아이의 새로운 추론 기법, AI 안전 전문가들을 긴장시키다",
+        "id": 49183,
+        "title": "메타, AI 에이전트 '뮤즈(Muse)' 공개… 소비자는 이를 신뢰할까?",
         "source": "TechCrunch AI",
-        "pub_date": "Wed, 02 Sep 2026 20:19:14",
-        "link": "https://techcrunch.com/2026/09/02/openais-new-reasoning-technique-alarms-ai-safety-experts/"
-      },
-      {
-        "id": 47919,
-        "title": "오픈AI, 차기 모델이 아무도 찾지 못한 보안 결함을 찾아낸다고 밝혀",
-        "source": "The Next Web",
-        "pub_date": "Wed, 02 Sep 2026 09:28:36",
-        "link": "https://thenextweb.com/news/openai-astra-model-guardrails-cyber"
+        "pub_date": "Tue, 08 Sep 2026 19:00:00",
+        "link": "https://techcrunch.com/2026/09/08/meta-debuts-its-muse-ai-agent-will-consumers-trust-it/"
       }
     ],
-    "quote_1": "오픈에이아이의 새로운 아스트라 모델은 대부분의 추론 모델을 특징짓는 순차적 사고 방식에서 벗어나 모델이 작동할 수 있게 해주는 '순환 깊이' 기술을 사용합니다.",
-    "quote_2": "적절한 도구와 접근 권한이 있다면 아스트라는 이전에 알려지지 않은 보안 결함을 찾아내고 이를 악용하는 방법을 개발할 수 있다",
-    "gap_summary": "새로운 추론 기술인 '순환 깊이'가 모델의 지능을 비약적으로 향상시킬 수 있지만, 동시에 모델이 스스로 보안 취약점을 악용하는 위험한 자율성을 가질 가능성이 있음을 시사한다.",
-    "reading_angle": "기술적 혁신과 그에 따른 보안적 통제 불능 사이의 딜레마",
-    "category": "보안"
+    "quote_1": "애플은 새 워치가 원본 오디오를 저장하지 않는다고 밝혔지만, 최근 음성을 텍스트로 변환하고 주변 대화를 요약해주는 기능들은 동의, 프라이버시, 그리고 자신이 항상 녹음될 수 있다는 사실을 알 때 사람들이 어떻게 행동하는지에 대한 새로운 의문을 제기한다.",
+    "quote_2": "메타의 새로운 개인용 AI 에이전트 뮤즈는 사용자의 이메일, 일정, 결제, 건강 서비스 등에 대한 접근 권한을 요구합니다.",
+    "gap_summary": "AI 기술의 발전으로 사용자 데이터 접근 권한 요구와 데이터 저장 최소화 사이에서 갈등이 발생할 수 있다.",
+    "reading_angle": "AI 기술의 프라이버시 vs 편의성",
+    "category": "윤리"
   },
   {
-    "topic": "AI 도입에 따른 노동 시장의 변화",
-    "contrast_frame": "경영진의 AI 도입을 통한 생산성 향상 기대 vs 현장 근로자의 고용 불안 및 창의적 가치 훼손 우려",
+    "topic": "AI 안전성 경고 vs 기업 대응",
+    "contrast_frame": "AI 멸망 가능성 경고 vs 자율 주행 기술 개발",
     "type": "A",
     "source_articles": [
       {
-        "id": 47518,
-        "title": "직원들의 불만 커지며 AI에 대한 긍정적 여론 악화",
-        "source": "The Decoder",
-        "pub_date": "Sun, 30 Aug 2026 13:12:19",
-        "link": "https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/"
-      },
-      {
-        "id": 47903,
-        "title": "\"이제 참을 만큼 참았다\": 시드니 대학교 교직원 수천 명, AI와 고용 안정을 요구하며 파업 돌입",
+        "id": 49901,
+        "title": "Anthropic이 AI를 이용한 생물무기 악용 시도를 상세히 설명",
         "source": "The Guardian AI",
-        "pub_date": "Wed, 02 Sep 2026 05:50:36",
-        "link": "https://www.theguardian.com/australia-news/2026/sep/02/we-have-had-enough-thousands-of-staff-at-the-university-of-sydney-walk-off-the-job-over-ai-job-security"
-      }
-    ],
-    "quote_1": "경영진은 AI를 대체로 긍정적으로 평가하는 반면, 보험 청구 담당자 등 실무자들은 고용 불안, 강제 도입, 감시 등을 이유로 AI에 대해 매우 부정적인 반응을 보이고 있습니다.",
-    "quote_2": "수백 명의 교직원이 피켓 라인에 서서 AI 활용에 대한 더 강력한 보호 조치를 요구했습니다.",
-    "gap_summary": "경영진의 효율성 중심 AI 도입 전략과 현장 근로자의 생존권 보호 요구가 정면으로 충돌하고 있어, 향후 노사 간의 심각한 갈등이 지속될 가능성이 있다.",
-    "reading_angle": "AI 도입을 둘러싼 조직 내 이해관계자 간의 인식 격차와 노동 환경의 구조적 갈등",
-    "category": "노동"
-  },
-  {
-    "topic": "AI 모델 성능 경쟁 vs 실질적 가치 창출",
-    "contrast_frame": "모델 자체의 성능 고도화 경쟁 vs 에이전트 기반의 실질적 업무 활용 및 가치 창출 전략",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 47444,
-        "title": "칼럼: 세일즈포스가 밝힌 AI의 다음 격전지, 그것은 모델이 아니다",
-        "source": "CNBC Tech",
-        "pub_date": "Sat, 29 Aug 2026 13:00:01",
-        "link": "https://www.cnbc.com/2026/08/29/op-ed-salesforce-revealed-next-battleground-in-ai-its-not-models.html"
+        "pub_date": "Thu, 10 Sep 2026 22:35:16",
+        "link": "https://www.theguardian.com/technology/2026/sep/10/anthropic-report-details-ai-misuse"
       },
       {
-        "id": 48034,
-        "title": "스노우플레이크, 호실적과 AI 코딩 모멘텀 힘입어 22% 급등",
-        "source": "CNBC Tech",
-        "pub_date": "Wed, 02 Sep 2026 20:28:39",
-        "link": "https://www.cnbc.com/2026/09/02/snowflake-snow-q2-earnings-report-2027.html"
+        "id": 50068,
+        "title": "유럽 최초의 완전 자율 주행 로보택시가 크로아티아에서 중국 소프트웨어로 운행 중입니다",
+        "source": "The Next Web",
+        "pub_date": "Fri, 11 Sep 2026 18:09:13",
+        "link": "https://thenextweb.com/news/europes-first-truly-driverless-robotaxi-is-running-in-croatia-on-chinese-software"
       }
     ],
-    "quote_1": "이제는 모델 자체의 성능보다 실질적인 활용과 가치 창출이 핵심 경쟁력이 되고 있습니다.",
-    "quote_2": "스노우플레이크의 사업이 빠르게 성장하고 있으며, 이는 부분적으로 코드 작성용 인공지능 에이전트의 도입 덕분입니다.",
-    "gap_summary": "AI 시장의 무게중심이 단순한 모델 성능 고도화에서 구체적인 비즈니스 성과를 견인하는 에이전트 활용으로 이동하고 있음을 시사할 수 있습니다.",
-    "reading_angle": "AI 기술의 가치 평가 기준이 '기술적 우위'에서 '실질적 수익 창출 능력'으로 변화하고 있다는 관점",
+    "quote_1": "이 보고서는 Anthropic의 모델들이 미사일과 폭탄을 설계하는 데 사용되려고 시도한 범죄자, 국가 후원 그룹, 스파이웨어 업체, 과학자, 선전가들이 있다는 사실을 두 날 전 전직 직원이 퇴사하며 회사 모델들이 2030년까지 인간을 멸종시킬 수 있다고 주장하며 알려졌습니다.",
+    "quote_2": "포니.ai와 베르네는 자그레브에서 완전 자율 주행 승객 운행을 시작하며, 이는 유럽에서 처음으로 운전자가 없는 완전 자율 주행 차량입니다.",
+    "gap_summary": "AI 기술이 인간의 안전을 위협할 수 있는 위험한 용도로 악용될 수 있지만, 동시에 인간의 편의와 효율성을 향상시킬 수 있는 긍정적인 기술로 발전할 가능성이 있습니다.",
+    "reading_angle": "AI 기술의 이중적 가능성: 안전성 경고와 기술 발전의 대립",
     "category": "기술"
   },
   {
-    "topic": "AI 교육 현장의 도입 격차",
-    "contrast_frame": "AI를 활용한 학업 성취도 향상 및 변화 vs AI 기술 도입을 주저하는 학교 현장의 격차",
+    "topic": "AI 투자 유치 vs 규제 우려",
+    "contrast_frame": "유럽 최대 규모 투자 vs UAE AI 데이터센터 분할",
     "type": "A",
     "source_articles": [
       {
-        "id": 48030,
-        "title": "학교들이 완벽한 해답을 기다리는 동안 AI 기술 격차는 점점 벌어지고 있습니다",
-        "source": "The Next Web",
-        "pub_date": "Wed, 02 Sep 2026 22:14:04",
-        "link": "https://thenextweb.com/news/ai-skills-gap-schools-education"
+        "id": 49065,
+        "title": "미스트랄 AI, 경쟁사 추격 속 유럽 역대 최대 규모인 30억 유로 투자 유치",
+        "source": "The Decoder",
+        "pub_date": "Tue, 08 Sep 2026 07:45:41",
+        "link": "https://the-decoder.com/mistral-ai-raises-3-billion-euros-in-europes-largest-ever-tech-funding-round-despite-lagging-behind-rivals/"
       },
       {
-        "id": 47459,
-        "title": "AI가 가장 잘 모방하는 능력이 곧 높은 학점으로 이어지는 역설",
-        "source": "The Decoder",
-        "pub_date": "Sun, 30 Aug 2026 10:34:09",
-        "link": "https://the-decoder.com/the-skills-that-earn-top-grades-are-the-ones-ai-can-fake-best/"
+        "id": 49914,
+        "title": "UAE, $30bn AI 데이터센터 분할 결정",
+        "source": "The Next Web",
+        "pub_date": "Fri, 11 Sep 2026 12:02:51",
+        "link": "https://thenextweb.com/news/uae-stargate-data-centre-redesign-iran-threat-underground"
       }
     ],
-    "quote_1": "많은 학교는 AI를 학생들이 악용할 수 있는 지름길 정도로만 취급하고 있습니다.",
-    "quote_2": "GPT-4o를 활용한 학생들의 마케팅 과제 점수가 5점 만점에 1점 가까이 상승했습니다.",
-    "gap_summary": "학교 현장의 보수적인 시각과 달리 실제 AI 활용이 학업 성취도에 실질적인 영향을 미치고 있어, 교육적 가치에 대한 평가가 엇갈릴 수 있습니다.",
-    "reading_angle": "AI의 도구적 유용성과 교육적 정당성 사이의 괴리",
+    "quote_1": "설립 3년 차인 미스트랄 AI가 시리즈 D 라운드에서 30억 유로를 조달하며 기업 가치를 210억 유로 이상으로 끌어올렸습니다. 이는 유럽 기술 기업 역사상 최대 규모의 투자 유치 사례입니다.",
+    "quote_2": "아랍에미리트(UAE)는 레우터스 독점 보도에 따르면, 걸프에서 가장 큰 규모의 AI 건설 프로젝트를 재검토하고 있다. 원래 계획은 아부다비 외곽에 있는 사막 10제곱마일(약 26제곱킬로미터) 규모의 단일 캠퍼스로, 대규모 컴퓨팅 인프라를 구축하려는 것이었다.",
+    "gap_summary": "유럽의 AI 기업이 대규모 투자를 유치하는 반면, UAE는 AI 데이터센터 분할을 검토하고 있어, AI 산업의 글로벌 확산과 지역별 규제 차이를 반영할 수 있습니다.",
+    "reading_angle": "AI 산업의 글로벌 확산과 지역별 규제 차이",
     "category": "정책"
+  },
+  {
+    "topic": "AI 에이전트 교육 vs 실제 적용",
+    "contrast_frame": "AI 에이전트 교육 계획 vs 자율 주행 실증",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 49013,
+        "title": "두바이, 2년 내 14,000개 기업에 AI 에이전트 운용 교육 실시",
+        "source": "The Next Web",
+        "pub_date": "Mon, 07 Sep 2026 21:50:56",
+        "link": "https://thenextweb.com/news/dubai-chambers-agentic-ai-training-14000-companies"
+      },
+      {
+        "id": 50068,
+        "title": "유럽 최초의 완전 자율 주행 로보택시가 크로아티아에서 중국 소프트웨어로 운행 중입니다",
+        "source": "The Next Web",
+        "pub_date": "Fri, 11 Sep 2026 18:09:13",
+        "link": "https://thenextweb.com/news/europes-first-truly-driverless-robotaxi-is-running-in-croatia-on-chinese-software"
+      }
+    ],
+    "quote_1": "두바이 상공회의소는 단순 질의응답을 넘어 스스로 업무를 수행하는 '에이전트 AI' 교육을 14,000개 이상의 기업에 제공하기로 했습니다.",
+    "quote_2": "포니.ai와 베르네는 자그레브에서 완전 자율 주행 승객 운행을 시작하며, 이는 유럽에서 처음으로 운전자가 없는 완전 자율 주행 차량입니다.",
+    "gap_summary": "AI 에이전트 교육은 이론적 접근이지만, 실제 적용은 기술적 한계와 규제 문제로 인해 제한적일 수 있습니다.",
+    "reading_angle": "AI 기술의 교육과 실증 적용 사이의 기술적·규제적 격차",
+    "category": "시장"
+  },
+  {
+    "topic": "AI 에이전트 메모리 최적화 vs 확장",
+    "contrast_frame": "메모리 요구량 감소 vs GPU 추가 공급",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 49746,
+        "title": "새로운 Deepseek 모델 V4.1‑Flash, AI 에이전트 메모리 요구량 대폭 감소",
+        "source": "The Decoder",
+        "pub_date": "Thu, 10 Sep 2026 12:40:51",
+        "link": "https://the-decoder.com/new-deepseek-model-v4-1-flash-cuts-memory-needs-for-ai-agents/"
+      },
+      {
+        "id": 49012,
+        "title": "젠슨 황 \"AGI는 이미 왔다\", 40만 개의 GPU 추가 공급 예고",
+        "source": "The Next Web",
+        "pub_date": "Mon, 07 Sep 2026 22:10:31",
+        "link": "https://thenextweb.com/news/jensen-huang-agi-has-arrived-gpt-6-astra"
+      }
+    ],
+    "quote_1": "KV 캐시 메모리를 이전 모델의 ¼",
+    "quote_2": "추가 공급 계획을 시사했습니다",
+    "gap_summary": "AI 에이전트 개발 시 메모리 최적화와 GPU 확장이 서로 보완될 수 있다. 메모리 요구량 감소로 인한 효율성 향상은 GPU 자원의 추가 공급을 통해 더욱 확장될 수 있다.",
+    "reading_angle": "AI 시스템 설계 시 메모리 최적화와 하드웨어 확장의 균형",
+    "category": "기술"
   }
 ]

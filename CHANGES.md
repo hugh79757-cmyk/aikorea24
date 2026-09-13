@@ -2,6 +2,69 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-13 — fix: kicker7 비활성화 + v3 스케줄 변경 + 블로그 배포 자동 설치
+
+### 배경
+- kicker7-publisher: 55개 초안 중 4개만 발행(7%), 무근거 카드/화자실명누락 빈번
+- v3 threads-publisher: 하루 6건→12건 확대 필요
+- 블로그 배포: node_modules 비어있으면 astro build 실패 반복
+
+### 조치 [PRODUCTION CODE 4건]
+1. `scripts/threads/publish_kicker7_drafts.py` — `--max` 인자 + `published_count` break
+2. `/Users/twinssn/Library/LaunchAgents/kr.aikorea24.threads-publisher.plist` — 4h→2h
+3. `/Users/twinssn/Library/LaunchAgents/kr.aikorea24.kicker7-publisher.plist` → `.disabled`
+4. `scripts/blog_draft_generator.py` — node_modules 자동 설치 가드 (npm install + npm run build)
+
+### 검증
+- kicker7: `launchctl list | grep kicker7` → unloaded
+- v3: `launchctl list | grep threads-publisher` → loaded, 다음 실행 12:00
+- 블로그: `npm run build` → astro 65.59s 성공, wrangler 배포 성공
+
+---
+
+## 2026-09-12 — config: LLM 폴백 체인 9→16 tier 확장 (Threads 발행 실패 해소)
+
+### 배경
+- 14:16-14:22 발행 2연속 실패(5회 재시도 전부 실패): groq 3 tier TPD 소진, orca 2 tier
+  계정 자격 429, zhipu 일일 제한, mistral JSON 실패, cohere 400 TOO_MANY_TOKENS,
+  유료 DeepSeek 401(키 ****5f76 무효) — 9 tier 전부 동시 소진이 근본 원인
+- 체인 로직(순수 회전 큐) 자체는 정상 — tier 수 다각화가 해법
+
+### 조치 [CONFIG 3건]
+1. `.env` — GEMINI_API_KEY(AQ.Ab8R…), GROQ_API_KEY_2(gsk_SBTX…, 별개 계정),
+   OPENROUTER_API_KEY(sk-or-v1-bff…, 2026-09-12 새 발급) 추가
+2. `config/models.yaml` — providers: gemini/groq2/nvidia/openrouter 추가 + tier 7종
+   추가(groq2 2, gemini 1, nvidia 1, openrouter 4) → 16 tier
+3. `scripts/threads/v3/model_router.py` — 수정 0건 (제네릭 provider 처리)
+
+### OpenRouter 무료 모델 선별 [검증됨]
+- 19개 무료 중 4종 체인 추가: or-nexpro(nex-n2.5-pro:free, 6.2s), or-nexmini
+  (nex-n2.5-mini:free, 0.8s 체인 최속), or-nemotron(nemotron-3-super-120b:free,
+  curl 1.0s), or-lingvl(ling-3.0-flash-vl:free, curl 1.6s)
+- 탈락: gemma-4-26b/poolside 429, lfm-2.5 빈 content, nemotron-ultra 35s timeout
+
+### Gemini 키 실체 [검증됨]
+- 1개 고유값이 3곳 등록(쿼터 1개 공유, 전체값 일치 검증):
+  project .env GEMINI_API_KEY == ~/.env.common GOOGLE_API_KEY == ~/.env.common
+  GEMINI_API_KEY. 소진 시 3곳 동시 소진 — 별도 3키 아님
+- gemini-3.6-flash만 사용 가능(2.5-flash/2.5-flash-lite 신규 사용자 단종).
+  thinking 모델 — max_tokens 500+ 필요
+
+### 검증
+- smoke_test_chain.py 8/16 성공 (빈 응답 6종은 mt=200 아티팩트 + orca 429 + 유료 401로
+  실호출과 무관)
+- 16:04 실발행 성공 — 5카드+링크 답글(루트 ID 18122478067876109)으로 체인 가동 확인
+
+### 스킬 업데이트
+- `~/.config/opencode/skills/llm-fallback-chain-management/SKILL.md` — tier 카탈로그
+  2026-09-12판 갱신: 생존 16종/Dead 목록/키 인벤토리(구성 3곳 등록 실태 포함)
+
+### 잔존 위험
+1. 유료 DeepSeek 키 401 무효 — 최후 안전망 고장. 무료 15 tier 동시 소진 시 재발
+2. or-nemotron/or-lingvl 실발행 트래픽 미검증 [부분검증]
+3. orca 2 tier GitHub 연동 전까지 매 패스 1회 요청 낭비
+4. Groq 2계정 동시 소진 시 5 tier 사망 — gemini/nemotron/mistral/cohere가 흡수
+
 ## 2026-09-05 — fix: 쓰레드 이중 발행 원인 제거 (수동 발행 전환)
 
 ### 배경
