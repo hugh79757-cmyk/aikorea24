@@ -42,6 +42,111 @@ def remove_chinese(text):
     return re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', text)
 
 
+# ============================================
+# 언어/릭 게이트 (3중 방어) — pipeline.threads.pitch 기존 검증기 재사용
+# ============================================
+_HANGUL_RE = re.compile(r'[\uAC00-\uD7A3]')
+
+# 브리핑 프롬프트 구조 미러링 패턴 (auto_briefing 고유 — pitch.py 원본에 없음)
+_BRIEFING_LEAK_PATTERNS = [
+    (re.compile(r'^\s*(제목|출처|내용|코멘트)\s*[:：]'), '프롬프트 라벨 미러링'),
+    (re.compile(r'(제목|출처|내용|코멘트)\s*[:：].*\n.*(제목|출처|내용|코멘트)\s*[:：]'), '템플릿 구조 미러링'),
+]
+
+
+def looks_korean(text):
+    """텍스트에 한글(가-힣)이 1자라도 있으면 True"""
+    return bool(text and _HANGUL_RE.search(text))
+
+
+def _detect_prompt_leak(text):
+    """프롬프트 릭 검사 (pitch.py detect_prompt_leak lazy import + 브리핑 라벨 패턴)"""
+    from pipeline.threads.pitch import detect_prompt_leak  # lazy import
+    leaked, reason = detect_prompt_leak(text)
+    if leaked:
+        return True, reason
+    for pattern, label in _BRIEFING_LEAK_PATTERNS:
+        if pattern.search(text):
+            return True, f"브리핑 {label}: {pattern.pattern}"
+    return False, "OK"
+
+
+def validate_briefing_comment(comment):
+    """브리핑 코멘트 언어/릭 순수 검증기 (1차·3차 방어용).
+    Returns: (valid: bool, reason: str)"""
+    if not comment or not comment.strip():
+        return False, "코멘트 비어있음"
+    from pipeline.threads.pitch import validate_korean_output  # lazy import
+    leaked, reason = _detect_prompt_leak(comment)
+    if leaked:
+        return False, reason
+    # 코멘트는 1~2문장으로 짧다 — 첫 100자를 hook, 다음 200자를 narrative로 분할 전달
+    return validate_korean_output(comment[:100], comment[100:300])
+
+
+def ensure_korean_title(article):
+    """제목 언어 게이트 — 한글 부재 시 번역 후 D1 news.title 갱신 (additive).
+    번역 실패 시 원문 유지 (파이프라인 중단 없음), 경고 로그만."""
+    title = (article.get("title") or "").strip()
+    if not title or looks_korean(title):
+        return title
+    news_id = article.get("id")
+    try:
+        translated = chat_completion(
+            messages=[{"role": "user", "content": f"다음 영어 AI/기술 뉴스 제목을 자연스러운 한국어로 번역해줘. 고유명사(GPT-6, CNBC 등)는 유지. 번역된 제목만 출력:\n\n{title}"}],
+            system_prompt="당신은 AI 뉴스 제목 번역 전문가입니다. 반드시 자연스러운 한국어 제목만 출력하세요. 설명, 따옴표, 접두사 금지.",
+            temperature=0.3,
+            max_tokens=150,
+            model_override=None,  # 무료 LLM 폴백 체인 사용
+        )
+        translated = (translated or "").strip().strip('"').strip("'")
+        if not translated or not looks_korean(translated):
+            log(f"    ⚠️ 제목 번역 실패 (한글 없음) — 원문 유지: {title[:50]}")
+            return title
+        translated_esc = translated.replace("'", "''")
+        old_esc = title.replace("'", "''")
+        if news_id:
+            d1_execute(
+                f"UPDATE news SET title='{translated_esc}', "
+                f"original_title=CASE WHEN original_title IS NULL OR original_title='' THEN '{old_esc}' ELSE original_title END "
+                f"WHERE id={news_id}"
+            )
+        article["title"] = translated
+        log(f"    ✅ 제목 번역 적용: {translated[:50]}")
+        return translated
+    except Exception as e:
+        log(f"    ⚠️ 제목 번역 예외 — 원문 유지: {e}")
+        return title
+
+
+def verify_briefing_items(briefing_id):
+    """3차 방어: 저장 후 read-back 검증 — 실패 row는 comment=''로 라이브 렌더링 차단.
+    Returns: 감지/처리된 row 수 (예외 시 0 — 저장 흐름 영향 없음)."""
+    try:
+        rows = d1_query(f"SELECT id, comment FROM briefing_items WHERE briefing_id = {int(briefing_id)}")
+        if not rows:
+            return 0
+        bad = []
+        for row in rows:
+            comment = row.get("comment") or ""
+            if not comment:
+                continue
+            valid, reason = validate_briefing_comment(comment)
+            if not valid:
+                bad.append((row["id"], reason))
+        if not bad:
+            log(f"  3차 게이트: {len(rows)}개 아이템 read-back 검증 통과")
+            return 0
+        log(f"  ⚠️ 3차 게이트: {len(bad)}개 row 검증 실패 → 라이브 렌더링 차단 (UPDATE comment='')")
+        for row_id, reason in bad:
+            log(f"    [id={row_id}] {reason}")
+            d1_execute(f"UPDATE briefing_items SET comment='' WHERE id={int(row_id)}")
+        return len(bad)
+    except Exception as e:
+        log(f"  3차 게이트 예외 (저장 흐름 영향 없음): {e}")
+        return 0
+
+
 def generate_comment(article):
     """무료 LLM 폴백 체인으로 기사 코멘트 생성 (한국어 출력)"""
     title = article.get("title", "")
@@ -62,22 +167,29 @@ def generate_comment(article):
     )
 
     try:
-        comment = chat_completion(
-            messages=[{"role": "user", "content": user_prompt}],
-            system_prompt=system_prompt,
-            temperature=0.3,
-            max_tokens=500,
-            model_override=None,  # 무료 LLM 폴백 체인 사용 (16개 무료 → 최후 수단 DeepSeek)
-        )
-        if not comment:
-            log(f"  코멘트 생성 실패 (LLM 응답 없음)")
-            return None
-        # 중국어 문자 제거 (안전망)
-        cleaned = remove_chinese(comment)
-        if cleaned != comment:
-            removed = len(comment) - len(cleaned)
-            log(f"    ⚠️ 중국어 문자 {removed}개 제거됨 (comment)")
-        return cleaned
+        # 1차 방어: 생성 직후 언어/릭 검증 — 실패 시 재생성 (총 3회 시도)
+        comment = None
+        for attempt in range(1, 4):
+            raw = chat_completion(
+                messages=[{"role": "user", "content": user_prompt}],
+                system_prompt=system_prompt,
+                temperature=0.3,
+                max_tokens=500,
+                model_override=None,  # 무료 LLM 폴백 체인 사용 (16개 무료 → 최후 수단 DeepSeek)
+            )
+            if not raw:
+                log(f"  코멘트 생성 실패 (LLM 응답 없음, 시도 {attempt}/3)")
+                continue
+            # 중국어 문자 제거 (안전망)
+            comment = remove_chinese(raw)
+            if comment != raw:
+                log(f"    ⚠️ 중국어 문자 {len(raw) - len(comment)}개 제거됨 (comment)")
+            valid, reason = validate_briefing_comment(comment)
+            if valid:
+                return comment
+            log(f"    ⚠️ 1차 게이트 실패 (시도 {attempt}/3): {reason}")
+            comment = None
+        return None
     except Exception as e:
         log(f"  LLM 예외: {e}")
         return None
@@ -138,6 +250,12 @@ def save_briefing(data):
         comment_escaped = (item.get("comment") or "").replace("'", "''")
         news_id = item["news_id"]
         sort_order = item["sort_order"]
+        # 2차 방어: INSERT 직전 릭 패턴 재검사 — 릭 감지 시 해당 아이템 저장 스킵
+        comment_raw = item.get("comment") or ""
+        leaked, leak_reason = _detect_prompt_leak(comment_raw)
+        if leaked:
+            log(f"  ⚠️ 2차 게이트: sort_order={sort_order} 릭 감지 → 저장 스킵 ({leak_reason})")
+            continue
         sql_item = (
             f"INSERT INTO briefing_items (briefing_id, news_id, sort_order, comment) "
             f"VALUES ({briefing_id}, {news_id}, {sort_order}, '{comment_escaped}')"
@@ -192,6 +310,7 @@ def main(selected_articles=None):
     # 2. 코멘트 생성
     log("[2/4] 코멘트 생성")
     for art in selected:
+        ensure_korean_title(art)  # 제목 언어 게이트 — 영어 제목 번역 (4b)
         title = (art.get("title") or "")[:50]
         log(f"  → {title}")
         comment = generate_comment(art)
@@ -215,6 +334,8 @@ def main(selected_articles=None):
     briefing_id = save_briefing(briefing_data)
     if briefing_id:
         record_briefing(briefing_id, selected, d1_query)
+        # 3차 방어: 저장 후 read-back 검증 (실패 row 라이브 렌더링 차단)
+        verify_briefing_items(briefing_id)
     print()
 
     log("=== 완료 ===")
