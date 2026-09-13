@@ -2,16 +2,26 @@
 # 순서 = 초기 큐 순서. 성공 tier가 front 고정, 실패는 뒤로 회전.
 # 유료 default(DeepSeek V4 Flash)는 항상 맨 뒤 — 최후 수단.
 # 참고: ~/.config/opencode/skills/llm-fallback-chain-management/SKILL.md
-# 갱신: 2026-09-10 (ultra-550b 93s 제외, Orca/Mistral/Cohere 검증 티어 추가)
+# 갱신: 2026-09-12 (gemini-3.6-flash 추가 — groq/orca/zhipu 일일 소진 대응)
+# 갱신: 2026-09-12 #2 (openrouter 무료 4종 추가 — 새 키 발급)
+# 갱신: 2026-09-13 (gpt-oss-20b 2종 제외 — groq-gpt20b/groq2-gpt20b. 어미 파열
+#   "있다이이/한다임/왔다임" + 카드당 58~86자 미달 + LLM 거부문 초안 저장.
+#   근거: .planning/quick/260913-thread-quality-eval/SUMMARY.md)
 
 tier_order:
   - groq-qwen
   - groq-gpt120b
-  - groq-gpt20b
+  - groq2-qwen
+  - gemini-flash
+  - nvidia-nemotron
   - orca-ds4free
   - orca-hy3
   - mistral-codestral
   - cohere-commanda
+  - or-nexpro
+  - or-nexmini
+  - or-nemotron
+  - or-lingvl
   - zhipu-glm
   - default            # ★ 유료 DeepSeek — 최후 수단
 
@@ -19,6 +29,15 @@ providers:
   groq:
     api_key_env: GROQ_API_KEY
     base_url: "https://api.groq.com/openai/v1"
+  groq2:
+    api_key_env: GROQ_API_KEY_2
+    base_url: "https://api.groq.com/openai/v1"
+  nvidia:
+    api_key_env: NVIDIA_API_KEY
+    base_url: "https://integrate.api.nvidia.com/v1"
+  gemini:
+    api_key_env: GEMINI_API_KEY
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai"
   orca:
     api_key_env: ORCA_API_KEY
     base_url: "https://api.orcarouter.ai/v1"
@@ -28,6 +47,9 @@ providers:
   cohere:
     api_key_env: COHERE_API_KEY
     base_url: "https://api.cohere.com/compatibility/v1"
+  openrouter:
+    api_key_env: OPENROUTER_API_KEY
+    base_url: "https://openrouter.ai/api/v1"
   zhipu:
     api_key_env: ZHIPU_API_KEY
     base_url: "https://open.bigmodel.cn/api/paas/v4"
@@ -43,9 +65,16 @@ models:
   groq-gpt120b:
     provider: groq
     model: openai/gpt-oss-120b
-  groq-gpt20b:
-    provider: groq
-    model: openai/gpt-oss-20b
+  groq2-qwen:
+    provider: groq2
+    model: qwen/qwen3.6-27b
+    reasoning_effort: none
+  gemini-flash:
+    provider: gemini
+    model: gemini-3.6-flash
+  nvidia-nemotron:
+    provider: nvidia
+    model: nvidia/nemotron-3-super-120b-a12b
   orca-ds4free:
     provider: orca
     model: deepseek/deepseek-v4-flash-free
@@ -58,6 +87,18 @@ models:
   cohere-commanda:
     provider: cohere
     model: command-a-03-2025
+  or-nexpro:
+    provider: openrouter
+    model: "nex-agi/nex-n2.5-pro:free"
+  or-nexmini:
+    provider: openrouter
+    model: "nex-agi/nex-n2.5-mini:free"
+  or-nemotron:
+    provider: openrouter
+    model: "nvidia/nemotron-3-super-120b-a12b:free"
+  or-lingvl:
+    provider: openrouter
+    model: "inclusionai/ling-3.0-flash-vl:free"
   zhipu-glm:
     provider: zhipu
     model: glm-4.5-flash
