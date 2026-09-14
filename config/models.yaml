@@ -72,7 +72,14 @@ models:
     model: gemini-3.6-flash
   orca-ds4free:
     provider: orca
-    model: deepseek/deepseek-v4-flash-free
+  nemotron-3:
+    provider: nvidia
+    model: nvidia/nemotron-3-8b
+    reasoning_effort: none
+  nemotron-3.5:
+    provider: nvidia
+    model: nvidia/nemotron-3.5-8b
+    reasoning_effort: none
   orca-hy3:
     provider: orca
     model: tencent/hy3-free

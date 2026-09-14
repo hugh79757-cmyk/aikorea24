@@ -1,165 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-08-14",
-      "briefing_id": 232,
-      "articles": [
-        {
-          "id": "45121",
-          "title": "\"호흡 멈추면 AI가 스스로 구조 요청한다 \"…구글, '픽셀 워치' 호흡 응급 감지 기능 ",
-          "original_title": "",
-          "description": "구글이 사람이 호흡 응급상황으로 의식을 잃고 스스로 도움을 요청하지 못하는 상황을 감지해 자동으로 응급서비스에 연락하는 새로운 안전 기능을 픽셀 워치에 도입했다. 12일(현지시간) 인공지능(AI) 기반 ‘호흡 응급 감지(Breathing Emergency Detection)’ 기능의 작동 원리와 개발 과정을 소개했다.호흡 응급상황은 심각한 폐렴이나 약물 과",
-          "link": "https://www.aitimes.kr/news/articleView.html?idxno=41445",
-          "entities": [
-            "AI",
-            "Emergency",
-            "Breathing",
-            "Detection"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45211",
-          "title": "[8월13일] 클로드 워터마크 도입에 불붙은 논쟁…\"AI가 썼다와 AI가 처리했다는 다르다",
-          "original_title": "",
-          "description": "앤트로픽이 '클로드'가 생성한 텍스트에 보이지 않는 워터마크를 넣기 시작하면서 AI 글쓰기를 둘러싼 사용자들의 반응이 속출하고 있습니다.사실 구글의 '제미나이'도 이미 신스ID를 적용해 AI가 생성한 콘텐츠를 식별할 수 있습니다. 다만 일반 사용자가 이를 직접 활용하기에는 여전히 번거로운 방식입니다. 클로드는 아직 식별 도구는 공개하지 않은 상태입니다.앤트",
-          "link": "https://www.aitimes.com/news/articleView.html?idxno=213884",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45161",
-          "title": "OpenAI, GPT-5.6 Sol의 속도를 14배 높인 ‘울트라패스트(Ultrafast)",
-          "original_title": "",
-          "description": "OpenAI가 기업 고객을 유치하기 위해 자사의 최신 고성능 모델인 GPT-5.6 Sol의 속도를 대폭 개선한 프리뷰 버전을 출시합니다. 이번 업데이트는 복잡한 작업을 빠르게 처리해야 하는 기업 사용자들에게 큰 도움이 될 것으로 보입니다.",
-          "link": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed/",
-          "entities": [
-            "Ultrafast",
-            "OpenAI",
-            "GPT-5.6"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45166",
-          "title": "엔비디아의 5,000억 달러 규모 신규 계획, 노후 GPU 활용을 위한 위험하지만 영리한 ",
-          "original_title": "",
-          "description": "엔비디아는 자사 GPU의 가치가 하락하지 않도록 보장하기 위한 새로운 계획을 세웠습니다. 이들은 새로운 투자자들을 설득하여 AI 인프라 구축을 위한 자금 대출을 지속하도록 유도할 방침입니다.",
-          "link": "https://techcrunch.com/2026/08/13/nvidias-new-500b-plan-is-risky-but-brilliant-especially-for-aging-gpus/",
-          "entities": [
-            "AI",
-            "GPU"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45188",
-          "title": "구글의 저가형 모델, 플래그십 모델보다 두 버전 앞서 나가",
-          "original_title": "",
-          "description": "구글은 코딩 성능이 대폭 향상된 '제미나이 3.7 플래시'를 토큰당 저렴한 가격에 출시했습니다. 반면 플래그십인 '제미나이 3.5 프로'는 출시가 수개월째 지연되고 있으며, 구글은 향후 출시 여부에 대해서도 명확한 답변을 내놓지 않고 있습니다.",
-          "link": "https://thenextweb.com/news/google-gemini-3-7-flash-launch-pro-delay",
-          "entities": [],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45055",
-          "title": "일자리 상실, 불평등, 통제 불능의 에이전트: 우리는 왜 소수 엘리트의 AI 의제를 받아들",
-          "original_title": "",
-          "description": "AI의 위험성은 날이 갈수록 명확해지고 있습니다. 우리는 왜 마치 미래를 선택할 권한이 없는 것처럼 수동적으로 행동하고 있는 것일까요?",
-          "link": "https://www.theguardian.com/commentisfree/2026/aug/13/lost-jobs-inequality-ai-oligarchs",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-14"
-        }
-      ]
-    },
-    {
-      "date": "2026-08-14",
-      "briefing_id": 233,
-      "articles": [
-        {
-          "id": "45247",
-          "title": "월스트리트 거물들, AI 프로젝트 붐을 위해 엔비디아에 5천억 달러 투자",
-          "original_title": "",
-          "description": "이 자금은 AI 데이터와 연산을 처리하는 수많은 컴퓨터 칩을 수용하고 냉각하기 위한 새로운 데이터 센터 구축에 사용될 예정입니다. AI 인프라 확장을 위한 대규모 투자가 본격화되고 있습니다.",
-          "link": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45164",
-          "title": "OpenAI, 경영진 개편 속 신임 최고수익책임자(CRO) 영입",
-          "original_title": "",
-          "description": "OpenAI가 취임 9개월 만에 데니스 드레서(Denise Dresser) 최고수익책임자를 교체하고, 위즈(Wiz)의 사장 겸 최고운영책임자인 달리 라직(Dali Rajic)을 새로운 영업 총괄로 영입했습니다. 이번 인사는 지속적인 경영진 개편의 일환으로 풀이됩니다.",
-          "link": "https://techcrunch.com/2026/08/13/openai-hires-new-cro-as-executive-shake-up-continues/",
-          "entities": [
-            "Rajic",
-            "Denise",
-            "OpenAI",
-            "Dresser",
-            "Wiz",
-            "CRO",
-            "Dali"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45260",
-          "title": "에어비앤비 CEO \"일반인을 위한 AI를 만드는 곳은 없다\"… 그는 Y 콤비네이터 이사회 ",
-          "original_title": "",
-          "description": "에어비앤비 최고경영자는 이번 주 야후 파이낸스 팟캐스트에서 AI에 대한 두 가지 문제를 지적했습니다. 그는 우리가 AI를 올바르게 논의하지 못하는 서사적 문제와, 실제 일반인을 위한 제품 개발이 부족하다는 점을 꼬집었습니다.",
-          "link": "https://thenextweb.com/news/consumer-ai-gap-brian-chesky-y-combinator-enterprise",
-          "entities": [
-            "CEO"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45238",
-          "title": "클로드 코드(Claude Code), 앤스로픽 소프트웨어 일일 유지보수 수행… 병합률 46",
-          "original_title": "",
-          "description": "앤스로픽은 자사 앱의 일일 유지보수 작업에 '클로드 코드'를 투입해 성능을 시험하고 있습니다. 몇 주간 AI가 생성한 388개의 풀 리퀘스트 중 46%가 인간의 검토를 거쳐 실제 코드에 병합되었으며, 개발자들은 이를 AI 자율성의 초기 징후로 보고 있습니다.",
-          "link": "https://the-decoder.com/claude-code-now-runs-daily-maintenance-on-anthropics-software-with-a-46-percent-merge-rate/",
-          "entities": [
-            "AI",
-            "Code",
-            "Claude"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45242",
-          "title": "오픈팩토리(OpenFactory)로 하룻밤 만에 나만의 리눅스 배포판 만들기 - 이 AI ",
-          "original_title": "",
-          "description": "나만의 리눅스 배포판이 필요하지만 만드는 법을 배울 시간이 없으신가요? 오픈팩토리가 그 과정을 도와줄 수 있습니다.",
-          "link": "https://www.zdnet.com/article/openfactory-is-an-impressive-new-service-that-allows-you-to-build-your-own-linux-distribution/",
-          "entities": [
-            "OpenFactory",
-            "AI"
-          ],
-          "date": "2026-08-14"
-        },
-        {
-          "id": "45239",
-          "title": "지푸(Zhipu) AI, 최강의 오픈 웨이트 코딩 모델 'GLM-5.3' 출시",
-          "original_title": "",
-          "description": "지푸 AI가 이전 모델 대비 사후 학습만으로 성능을 50% 향상시킨 'GLM-5.3'을 공개했습니다. 자체 벤치마크 결과 가장 강력한 오픈 웨이트 코딩 모델로 평가받는 이 모델은 사이버 보안 분야에 특화되어 269개 프로젝트에서 2,436개의 취약점을 발견하는 성과를 냈습니다.",
-          "link": "https://the-decoder.com/zhipu-ai-releases-glm-5-3-claims-its-the-strongest-open-weights-coding-model/",
-          "entities": [
-            "AI",
-            "Zhipu",
-            "GLM-5.3"
-          ],
-          "date": "2026-08-14"
-        }
-      ]
-    },
-    {
       "date": "2026-08-15",
       "briefing_id": 234,
       "articles": [
@@ -4246,156 +4087,163 @@
           "date": "2026-09-13"
         }
       ]
+    },
+    {
+      "date": "2026-09-14",
+      "briefing_id": 290,
+      "articles": [
+        {
+          "id": "50457",
+          "title": "샘 알트만이 오픈AI의 2026년 상장 계획 취소",
+          "original_title": "",
+          "description": "오픈AI는 올해 상장을 하지 않을 예정이며, 샘 알트만은 안전 문제 때문이라고 말했습니다. \"2026년은 아닐 것 같다\"며, 포춘과의 인터뷰에서 \"안전 문제로 인해 지금 상장을 하는 것은 현명한 선택이 아닐 것 같다\"고 말했습니다. 알트만은 오픈AI가 AI 안전 분야에서 더 많은 연구를 진행해야 한다고 강조했습니다.",
+          "link": "https://thenextweb.com/news/altman-openai-no-ipo-2026-safety-ill-advised-moment",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50446",
+          "title": "'너무 늦었다' : AI 리더들의 안전 조치에 대한 비판과 의심",
+          "original_title": "",
+          "description": "트럼프 행정부부터 AI 전문가까지, 앤트로픽 CEO의 안전 조치 계획은 대부분 부정적인 반응을 얻었습니다. 오픈AI CEO와 일론 머스크는 '무모한' AI 개발을 늦추는 것을 지지했습니다. 에디토리얼: AI를 통제하는 것은 인간은 생존을 외주화할 수 없다. AI 안전성에 대한 논쟁은 W의 안전 조치 계획이 발표된 이후 시작되었습니다.",
+          "link": "https://www.theguardian.com/technology/2026/sep/13/too-little-too-late-critics-perplexed-and-suspicious-of-ai-leaders-call-for-a-slowdown",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50407",
+          "title": "AI 업계의 최근 멸망 경고 뒤에는 무엇이 있는가?",
+          "original_title": "",
+          "description": "Equity에서 우리는 AI 업계의 최근 논의인 인류에게 실존적 위협이 되는지에 대해 논의했습니다.",
+          "link": "https://techcrunch.com/2026/09/13/whats-behind-the-ai-industrys-latest-warnings-of-doom/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50437",
+          "title": "트럼프, AI 위험 경고 무시하며 중국과의 경쟁 강조",
+          "original_title": "",
+          "description": "미국 대통령은 \"발생하지 않을 것\"이라는 우려를 제기하는 \"부정적인 힘\"이 있다고 말했습니다.",
+          "link": "https://www.bbc.co.uk/news/articles/c7v48vp31mdo?at_medium=RSS&at_campaign=rss",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50458",
+          "title": "워싱턴, AI 규제 논의 속도 늦추는 중",
+          "original_title": "",
+          "description": "하원은 곧 11월 중선거 이후에 귀가할 예정이며, 이는 AI 규제 법안이 통과될 수 있는 좁은 창구를 남겼습니다. 워싱턴은 AI 규제에 대한 논의를 빠르게 진행해야 하지만, 중선거 이후에 귀가할 예정인 하원의 상황으로 인해 논의 속도가 늦춰지고 있습니다.",
+          "link": "https://www.cnbc.com/2026/09/13/ai-congress-anthropic-openai-crisis.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50459",
+          "title": "미국 노동자들의 임금, AI의 잠재적 역할 주목받는 중",
+          "original_title": "",
+          "description": "미국 노동자들의 임금 성장이 둔화되고 있으며, 인플레이션과 비교해도 뒤처지고 있습니다. 이는 AI의 잠재적 역할에 대한 관심이 높아지고 있음을 보여줍니다. 그러나 아직 AI의 역할에 대한 증거는 불완전합니다.",
+          "link": "https://www.cnbc.com/2026/09/13/ai-jobs-pay-inflation.html",
+          "entities": [],
+          "date": "2026-09-14"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-14",
+      "briefing_id": 291,
+      "articles": [
+        {
+          "id": "50590",
+          "title": "아모데이 \"AI 속도 조절 최대 난제는 중국과의 경쟁\"",
+          "original_title": "",
+          "description": "다리오 아모데이 앤트로픽 CEO가 최첨단 AI 개발 속도를 늦추기 위한 가장 큰 난제로 중국과의 경쟁을 꼽았다. 미국과 민주주의 국가들이 일방적으로 AI 개발을 늦출 경우 중국이 기술적·군사적 주도권을 확보할 수 있는 만큼, 안전성을 위해 속도를 조절하면서도 미국의 AI 패권을 지켜야 하는 딜레마가 불가피하다는 지적이다.아모데이 CEO는 13일(현지시간) ",
+          "link": "https://www.aitimes.com/news/articleView.html?idxno=215216",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50549",
+          "title": "BRKZ, AI 기반 건축 자재 조달 확대를 위해 3100만 달러 자금 조달",
+          "original_title": "",
+          "description": "BRKZ is a technology-enabled building materials procurement platform in Saudi Arabia. It has announced $31 million in new capital to fuel its next phase of growth. That includes advancing its AI-power",
+          "link": "https://thenextweb.com/news/brkz-31m-series-b-saudi-building-materials-ai-pricing",
+          "entities": [
+            "That",
+            "Saudi",
+            "It",
+            "AI",
+            "BRKZ",
+            "AI-powered",
+            "Arabia"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50610",
+          "title": "공간AI 기업 메이사, ‘스케일업 팁스 R&D’ 선정… 3D 공간기술로 비GPS 항법 시장",
+          "original_title": "",
+          "description": "공간 인공지능(AI) 기업 메이사(대표 최석원·김동영)가 중소벤처기업부의 ‘스케일업 팁스 R&D’에 최종 선정됐다고 14일 밝혔다. 이를 통해 메이사는 오는 2029년 7월까지 3년간 20억 원의 사업비를 확보해 ‘GPS 두절 및 재밍 환경 대응을 위한 3D 공간모델 기반 비전 위치추정 기술’ 개발에 나선다.스케일업 팁스는 민간 투자를 통해 기술력과 성장성",
+          "link": "https://www.aitimes.kr/news/articleView.html?idxno=41908",
+          "entities": [
+            "R&D",
+            "GPS",
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50613",
+          "title": "LG AI연구원, 제조·금융·과학 ‘전문가 AI’ 공개…자율공장부터 신소재·신약·금융 예측",
+          "original_title": "",
+          "description": "LG AI연구원이 범용 인공지능(AI)을 넘어 제조·금융·과학 등 산업별 전문지식을 갖춘 ‘전문가 AI’를 공개하며 산업 현장 중심의 AI 전환에 속도를 낸다.14일, LG AI연구원은 서울 강서구 마곡 LG사이언스파크에서 ‘LG AI 토크 콘서트 2026’을 열고 제조·금융·과학 분야에서 개발·적용 중인 AI 기술과 성과를 소개했다.이날 임우형 LG AI",
+          "link": "https://www.aitimes.kr/news/articleView.html?idxno=41904",
+          "entities": [
+            "LG",
+            "AI"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50532",
+          "title": "노동조합, AI 데이터센터에 맞서 단결해야 | Tyler Turner",
+          "original_title": "",
+          "description": "Workers should start with a moratorium against building until our livelihoods and communities are protectedFor the surging number of Americans who now live alongside constantly humming computer-filled",
+          "link": "https://www.theguardian.com/commentisfree/2026/sep/14/labor-unions-ai-datacenters",
+          "entities": [
+            "Americans",
+            "AI",
+            "Turner",
+            "Tyler",
+            "Opposition",
+            "Workers"
+          ],
+          "date": "2026-09-14"
+        },
+        {
+          "id": "50522",
+          "title": "AI가 인류를 위협할 수 있다는 우려는 왜 나오며, 얼마나 실재하는가?",
+          "original_title": "",
+          "description": "AI가 인류의 존속을 위협",
+          "link": "https://www.bbc.co.uk/news/articles/c790xvnzgnno?at_medium=RSS&at_campaign=rss",
+          "entities": [],
+          "date": "2026-09-14"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "45121",
-      "title": "\"호흡 멈추면 AI가 스스로 구조 요청한다 \"…구글, '픽셀 워치' 호흡 응급 감지 기능 ",
-      "original_title": "",
-      "description": "구글이 사람이 호흡 응급상황으로 의식을 잃고 스스로 도움을 요청하지 못하는 상황을 감지해 자동으로 응급서비스에 연락하는 새로운 안전 기능을 픽셀 워치에 도입했다. 12일(현지시간) 인공지능(AI) 기반 ‘호흡 응급 감지(Breathing Emergency Detection)’ 기능의 작동 원리와 개발 과정을 소개했다.호흡 응급상황은 심각한 폐렴이나 약물 과",
-      "link": "https://www.aitimes.kr/news/articleView.html?idxno=41445",
-      "entities": [
-        "AI",
-        "Emergency",
-        "Breathing",
-        "Detection"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45211",
-      "title": "[8월13일] 클로드 워터마크 도입에 불붙은 논쟁…\"AI가 썼다와 AI가 처리했다는 다르다",
-      "original_title": "",
-      "description": "앤트로픽이 '클로드'가 생성한 텍스트에 보이지 않는 워터마크를 넣기 시작하면서 AI 글쓰기를 둘러싼 사용자들의 반응이 속출하고 있습니다.사실 구글의 '제미나이'도 이미 신스ID를 적용해 AI가 생성한 콘텐츠를 식별할 수 있습니다. 다만 일반 사용자가 이를 직접 활용하기에는 여전히 번거로운 방식입니다. 클로드는 아직 식별 도구는 공개하지 않은 상태입니다.앤트",
-      "link": "https://www.aitimes.com/news/articleView.html?idxno=213884",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45161",
-      "title": "OpenAI, GPT-5.6 Sol의 속도를 14배 높인 ‘울트라패스트(Ultrafast)",
-      "original_title": "",
-      "description": "OpenAI가 기업 고객을 유치하기 위해 자사의 최신 고성능 모델인 GPT-5.6 Sol의 속도를 대폭 개선한 프리뷰 버전을 출시합니다. 이번 업데이트는 복잡한 작업을 빠르게 처리해야 하는 기업 사용자들에게 큰 도움이 될 것으로 보입니다.",
-      "link": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed/",
-      "entities": [
-        "Ultrafast",
-        "OpenAI",
-        "GPT-5.6"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45166",
-      "title": "엔비디아의 5,000억 달러 규모 신규 계획, 노후 GPU 활용을 위한 위험하지만 영리한 ",
-      "original_title": "",
-      "description": "엔비디아는 자사 GPU의 가치가 하락하지 않도록 보장하기 위한 새로운 계획을 세웠습니다. 이들은 새로운 투자자들을 설득하여 AI 인프라 구축을 위한 자금 대출을 지속하도록 유도할 방침입니다.",
-      "link": "https://techcrunch.com/2026/08/13/nvidias-new-500b-plan-is-risky-but-brilliant-especially-for-aging-gpus/",
-      "entities": [
-        "AI",
-        "GPU"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45188",
-      "title": "구글의 저가형 모델, 플래그십 모델보다 두 버전 앞서 나가",
-      "original_title": "",
-      "description": "구글은 코딩 성능이 대폭 향상된 '제미나이 3.7 플래시'를 토큰당 저렴한 가격에 출시했습니다. 반면 플래그십인 '제미나이 3.5 프로'는 출시가 수개월째 지연되고 있으며, 구글은 향후 출시 여부에 대해서도 명확한 답변을 내놓지 않고 있습니다.",
-      "link": "https://thenextweb.com/news/google-gemini-3-7-flash-launch-pro-delay",
-      "entities": [],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45055",
-      "title": "일자리 상실, 불평등, 통제 불능의 에이전트: 우리는 왜 소수 엘리트의 AI 의제를 받아들",
-      "original_title": "",
-      "description": "AI의 위험성은 날이 갈수록 명확해지고 있습니다. 우리는 왜 마치 미래를 선택할 권한이 없는 것처럼 수동적으로 행동하고 있는 것일까요?",
-      "link": "https://www.theguardian.com/commentisfree/2026/aug/13/lost-jobs-inequality-ai-oligarchs",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45247",
-      "title": "월스트리트 거물들, AI 프로젝트 붐을 위해 엔비디아에 5천억 달러 투자",
-      "original_title": "",
-      "description": "이 자금은 AI 데이터와 연산을 처리하는 수많은 컴퓨터 칩을 수용하고 냉각하기 위한 새로운 데이터 센터 구축에 사용될 예정입니다. AI 인프라 확장을 위한 대규모 투자가 본격화되고 있습니다.",
-      "link": "https://www.bbc.co.uk/news/articles/c78gr0jv0mdo?at_medium=RSS&at_campaign=rss",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45164",
-      "title": "OpenAI, 경영진 개편 속 신임 최고수익책임자(CRO) 영입",
-      "original_title": "",
-      "description": "OpenAI가 취임 9개월 만에 데니스 드레서(Denise Dresser) 최고수익책임자를 교체하고, 위즈(Wiz)의 사장 겸 최고운영책임자인 달리 라직(Dali Rajic)을 새로운 영업 총괄로 영입했습니다. 이번 인사는 지속적인 경영진 개편의 일환으로 풀이됩니다.",
-      "link": "https://techcrunch.com/2026/08/13/openai-hires-new-cro-as-executive-shake-up-continues/",
-      "entities": [
-        "Rajic",
-        "Denise",
-        "OpenAI",
-        "Dresser",
-        "Wiz",
-        "CRO",
-        "Dali"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45260",
-      "title": "에어비앤비 CEO \"일반인을 위한 AI를 만드는 곳은 없다\"… 그는 Y 콤비네이터 이사회 ",
-      "original_title": "",
-      "description": "에어비앤비 최고경영자는 이번 주 야후 파이낸스 팟캐스트에서 AI에 대한 두 가지 문제를 지적했습니다. 그는 우리가 AI를 올바르게 논의하지 못하는 서사적 문제와, 실제 일반인을 위한 제품 개발이 부족하다는 점을 꼬집었습니다.",
-      "link": "https://thenextweb.com/news/consumer-ai-gap-brian-chesky-y-combinator-enterprise",
-      "entities": [
-        "CEO"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45238",
-      "title": "클로드 코드(Claude Code), 앤스로픽 소프트웨어 일일 유지보수 수행… 병합률 46",
-      "original_title": "",
-      "description": "앤스로픽은 자사 앱의 일일 유지보수 작업에 '클로드 코드'를 투입해 성능을 시험하고 있습니다. 몇 주간 AI가 생성한 388개의 풀 리퀘스트 중 46%가 인간의 검토를 거쳐 실제 코드에 병합되었으며, 개발자들은 이를 AI 자율성의 초기 징후로 보고 있습니다.",
-      "link": "https://the-decoder.com/claude-code-now-runs-daily-maintenance-on-anthropics-software-with-a-46-percent-merge-rate/",
-      "entities": [
-        "AI",
-        "Code",
-        "Claude"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45242",
-      "title": "오픈팩토리(OpenFactory)로 하룻밤 만에 나만의 리눅스 배포판 만들기 - 이 AI ",
-      "original_title": "",
-      "description": "나만의 리눅스 배포판이 필요하지만 만드는 법을 배울 시간이 없으신가요? 오픈팩토리가 그 과정을 도와줄 수 있습니다.",
-      "link": "https://www.zdnet.com/article/openfactory-is-an-impressive-new-service-that-allows-you-to-build-your-own-linux-distribution/",
-      "entities": [
-        "OpenFactory",
-        "AI"
-      ],
-      "date": "2026-08-14"
-    },
-    {
-      "id": "45239",
-      "title": "지푸(Zhipu) AI, 최강의 오픈 웨이트 코딩 모델 'GLM-5.3' 출시",
-      "original_title": "",
-      "description": "지푸 AI가 이전 모델 대비 사후 학습만으로 성능을 50% 향상시킨 'GLM-5.3'을 공개했습니다. 자체 벤치마크 결과 가장 강력한 오픈 웨이트 코딩 모델로 평가받는 이 모델은 사이버 보안 분야에 특화되어 269개 프로젝트에서 2,436개의 취약점을 발견하는 성과를 냈습니다.",
-      "link": "https://the-decoder.com/zhipu-ai-releases-glm-5-3-claims-its-the-strongest-open-weights-coding-model/",
-      "entities": [
-        "AI",
-        "Zhipu",
-        "GLM-5.3"
-      ],
-      "date": "2026-08-14"
-    },
     {
       "id": "45350",
       "title": "왜 모든 것이 시시하게 느껴질까? 우리는 즐거움 없는 퇴폐의 시대에 살고 있다 – 카이와 ",
@@ -8147,6 +7995,148 @@
         "EU"
       ],
       "date": "2026-09-13"
+    },
+    {
+      "id": "50457",
+      "title": "샘 알트만이 오픈AI의 2026년 상장 계획 취소",
+      "original_title": "",
+      "description": "오픈AI는 올해 상장을 하지 않을 예정이며, 샘 알트만은 안전 문제 때문이라고 말했습니다. \"2026년은 아닐 것 같다\"며, 포춘과의 인터뷰에서 \"안전 문제로 인해 지금 상장을 하는 것은 현명한 선택이 아닐 것 같다\"고 말했습니다. 알트만은 오픈AI가 AI 안전 분야에서 더 많은 연구를 진행해야 한다고 강조했습니다.",
+      "link": "https://thenextweb.com/news/altman-openai-no-ipo-2026-safety-ill-advised-moment",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50446",
+      "title": "'너무 늦었다' : AI 리더들의 안전 조치에 대한 비판과 의심",
+      "original_title": "",
+      "description": "트럼프 행정부부터 AI 전문가까지, 앤트로픽 CEO의 안전 조치 계획은 대부분 부정적인 반응을 얻었습니다. 오픈AI CEO와 일론 머스크는 '무모한' AI 개발을 늦추는 것을 지지했습니다. 에디토리얼: AI를 통제하는 것은 인간은 생존을 외주화할 수 없다. AI 안전성에 대한 논쟁은 W의 안전 조치 계획이 발표된 이후 시작되었습니다.",
+      "link": "https://www.theguardian.com/technology/2026/sep/13/too-little-too-late-critics-perplexed-and-suspicious-of-ai-leaders-call-for-a-slowdown",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50407",
+      "title": "AI 업계의 최근 멸망 경고 뒤에는 무엇이 있는가?",
+      "original_title": "",
+      "description": "Equity에서 우리는 AI 업계의 최근 논의인 인류에게 실존적 위협이 되는지에 대해 논의했습니다.",
+      "link": "https://techcrunch.com/2026/09/13/whats-behind-the-ai-industrys-latest-warnings-of-doom/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50437",
+      "title": "트럼프, AI 위험 경고 무시하며 중국과의 경쟁 강조",
+      "original_title": "",
+      "description": "미국 대통령은 \"발생하지 않을 것\"이라는 우려를 제기하는 \"부정적인 힘\"이 있다고 말했습니다.",
+      "link": "https://www.bbc.co.uk/news/articles/c7v48vp31mdo?at_medium=RSS&at_campaign=rss",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50458",
+      "title": "워싱턴, AI 규제 논의 속도 늦추는 중",
+      "original_title": "",
+      "description": "하원은 곧 11월 중선거 이후에 귀가할 예정이며, 이는 AI 규제 법안이 통과될 수 있는 좁은 창구를 남겼습니다. 워싱턴은 AI 규제에 대한 논의를 빠르게 진행해야 하지만, 중선거 이후에 귀가할 예정인 하원의 상황으로 인해 논의 속도가 늦춰지고 있습니다.",
+      "link": "https://www.cnbc.com/2026/09/13/ai-congress-anthropic-openai-crisis.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50459",
+      "title": "미국 노동자들의 임금, AI의 잠재적 역할 주목받는 중",
+      "original_title": "",
+      "description": "미국 노동자들의 임금 성장이 둔화되고 있으며, 인플레이션과 비교해도 뒤처지고 있습니다. 이는 AI의 잠재적 역할에 대한 관심이 높아지고 있음을 보여줍니다. 그러나 아직 AI의 역할에 대한 증거는 불완전합니다.",
+      "link": "https://www.cnbc.com/2026/09/13/ai-jobs-pay-inflation.html",
+      "entities": [],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50590",
+      "title": "아모데이 \"AI 속도 조절 최대 난제는 중국과의 경쟁\"",
+      "original_title": "",
+      "description": "다리오 아모데이 앤트로픽 CEO가 최첨단 AI 개발 속도를 늦추기 위한 가장 큰 난제로 중국과의 경쟁을 꼽았다. 미국과 민주주의 국가들이 일방적으로 AI 개발을 늦출 경우 중국이 기술적·군사적 주도권을 확보할 수 있는 만큼, 안전성을 위해 속도를 조절하면서도 미국의 AI 패권을 지켜야 하는 딜레마가 불가피하다는 지적이다.아모데이 CEO는 13일(현지시간) ",
+      "link": "https://www.aitimes.com/news/articleView.html?idxno=215216",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50549",
+      "title": "BRKZ, AI 기반 건축 자재 조달 확대를 위해 3100만 달러 자금 조달",
+      "original_title": "",
+      "description": "BRKZ is a technology-enabled building materials procurement platform in Saudi Arabia. It has announced $31 million in new capital to fuel its next phase of growth. That includes advancing its AI-power",
+      "link": "https://thenextweb.com/news/brkz-31m-series-b-saudi-building-materials-ai-pricing",
+      "entities": [
+        "That",
+        "Saudi",
+        "It",
+        "AI",
+        "BRKZ",
+        "AI-powered",
+        "Arabia"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50610",
+      "title": "공간AI 기업 메이사, ‘스케일업 팁스 R&D’ 선정… 3D 공간기술로 비GPS 항법 시장",
+      "original_title": "",
+      "description": "공간 인공지능(AI) 기업 메이사(대표 최석원·김동영)가 중소벤처기업부의 ‘스케일업 팁스 R&D’에 최종 선정됐다고 14일 밝혔다. 이를 통해 메이사는 오는 2029년 7월까지 3년간 20억 원의 사업비를 확보해 ‘GPS 두절 및 재밍 환경 대응을 위한 3D 공간모델 기반 비전 위치추정 기술’ 개발에 나선다.스케일업 팁스는 민간 투자를 통해 기술력과 성장성",
+      "link": "https://www.aitimes.kr/news/articleView.html?idxno=41908",
+      "entities": [
+        "R&D",
+        "GPS",
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50613",
+      "title": "LG AI연구원, 제조·금융·과학 ‘전문가 AI’ 공개…자율공장부터 신소재·신약·금융 예측",
+      "original_title": "",
+      "description": "LG AI연구원이 범용 인공지능(AI)을 넘어 제조·금융·과학 등 산업별 전문지식을 갖춘 ‘전문가 AI’를 공개하며 산업 현장 중심의 AI 전환에 속도를 낸다.14일, LG AI연구원은 서울 강서구 마곡 LG사이언스파크에서 ‘LG AI 토크 콘서트 2026’을 열고 제조·금융·과학 분야에서 개발·적용 중인 AI 기술과 성과를 소개했다.이날 임우형 LG AI",
+      "link": "https://www.aitimes.kr/news/articleView.html?idxno=41904",
+      "entities": [
+        "LG",
+        "AI"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50532",
+      "title": "노동조합, AI 데이터센터에 맞서 단결해야 | Tyler Turner",
+      "original_title": "",
+      "description": "Workers should start with a moratorium against building until our livelihoods and communities are protectedFor the surging number of Americans who now live alongside constantly humming computer-filled",
+      "link": "https://www.theguardian.com/commentisfree/2026/sep/14/labor-unions-ai-datacenters",
+      "entities": [
+        "Americans",
+        "AI",
+        "Turner",
+        "Tyler",
+        "Opposition",
+        "Workers"
+      ],
+      "date": "2026-09-14"
+    },
+    {
+      "id": "50522",
+      "title": "AI가 인류를 위협할 수 있다는 우려는 왜 나오며, 얼마나 실재하는가?",
+      "original_title": "",
+      "description": "AI가 인류의 존속을 위협",
+      "link": "https://www.bbc.co.uk/news/articles/c790xvnzgnno?at_medium=RSS&at_campaign=rss",
+      "entities": [],
+      "date": "2026-09-14"
     }
   ]
 }
