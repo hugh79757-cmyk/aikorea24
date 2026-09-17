@@ -1,3 +1,5 @@
+- 2026-09-17 | fix | kicker7-drafts-accumulation-disable | kicker7 초안 누적 차단 + 중복 경로 버그 수정 (발행 아닌 생성 경로가 원인, 기본 비활성화)
+- 2026-09-17 | debug | threads-token-refresh-audit | 토큰 자동 갱신 정상 작동 확인 — launchd_error.log 190 에러는 09-14 stale 로그, 조정 불필요
 - 2026-09-17 | fix | threads-publish-failure-3-causes | 쓰레드 발행 급감(12→4~6/일) 3대 원인 — JSON 날것 개행 파싱 실패 124건 + 모델 자기해설 누수 51건 + 고유명사 음차 오탐 26건
 - 2026-09-17 | feat | sitemap-ping-deploy-hook | 배포 후 사이트맵 검색엔진 제출 스크립트 추가 + deploy.sh 연결 (Google/Naver 공식 ping API 폐기 확인 → 도달성 점검 폴백)
 - 2026-09-17 | fix | threads-crawl-min-length-gate | 크롤 본문 500자 미만이면 발행 중단 (네이버 봇차단 15자 껍데기 크롤 → 얇은 카드 + 죽은 링크 발행 사고)
