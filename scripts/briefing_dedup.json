@@ -2546,6 +2546,82 @@
           "date": "2026-09-17"
         }
       ]
+    },
+    {
+      "date": "2026-09-17",
+      "briefing_id": 299,
+      "articles": [
+        {
+          "id": "51354",
+          "title": "미·중 보안 전문가들, 군사 AI를 위한 핵무기급 안전장치 제안",
+          "original_title": "",
+          "description": "로이터통신에 따르면 미국과 중국의 보안 전문가들이 핵무기 관련 규제들을 모델 삼아 AI가 발사 여부를 결정하는 것을 금지하는 조항을 포함한 군사 AI 안전장치를 제안했습니다. 지난주 발표된 이 권고안은 미·중 AI 및 핵 관련 기관에서 나온 것입니다.",
+          "link": "https://thenextweb.com/news/us-china-experts-nuclear-style-ai-safeguards",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-17"
+        },
+        {
+          "id": "51358",
+          "title": "찰스 국왕, 정상회담에서 엔비디아·오픈AI·앤트로픽 최고경영진에게 AI 안전 문제 압박할 ",
+          "original_title": "",
+          "description": "AI 개발에 내재된 위험성을 둘러싼 논란이 고조되는 가운데, 찰스 국왕이 오늘 주요 테크 기업 리더들을 소집합니다.",
+          "link": "https://www.cnbc.com/2026/09/17/king-charles-nvidia-openai-anthropic-ai.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-17"
+        },
+        {
+          "id": "51324",
+          "title": "OpenAI의 GPT-6 아스트라, 83년 동안 풀리지 않았던 나치 무전 메시지를 10시간",
+          "original_title": "",
+          "description": "블룸버그 소속 개발자가 OpenAI의 GPT-6 아스트라를 이용해 1941년 독일 국방군의 83년 된 에니그마 암호 메시지를 해독했다고 주장했습니다. 1941년 작성된 이 82자의 무전에는 행군 경로를 묻는 병사의 내용이 담겨 있습니다. 다만 이 해독 결과는 아직 독립적인 검증이 필요합니다.",
+          "link": "https://the-decoder.com/openais-gpt-6-astra-decrypts-a-nazi-radio-message-in-ten-hours-that-went-unsolved-for-83-years/",
+          "entities": [
+            "GPT-6"
+          ],
+          "date": "2026-09-17"
+        },
+        {
+          "id": "51318",
+          "title": "스타트업의 다음 팀원은 AI 에이전트가 될 수도 있습니다: Gusto, Insight Pa",
+          "original_title": "",
+          "description": "이번 세션에서는 초기 기업들이 인간과 AI 에이전트가 함께 일하는 팀을 어떻게 구축하고 있는지, 그리고 창업자들이 속도, 책임감, 기업 문화를 희생하지 않고 이를 어떻게 달성할 수 있는지 살펴봅니다. 테크크런치 디스럽트 2026에서 자세한 내용을 확인해 보세요. 9월 25일 이전에 등록하면 최대 200달러를 절약할 수 있습니다.",
+          "link": "https://techcrunch.com/2026/09/16/your-startups-next-teammate-might-be-an-ai-agent-gusto-insight-partners-and-leland-explain-what-that-changes-at-techcrunch-disrupt-2026/",
+          "entities": [
+            "AI",
+            "Gusto",
+            "Insight",
+            "Pa"
+          ],
+          "date": "2026-09-17"
+        },
+        {
+          "id": "51351",
+          "title": "모질라, 프랑스 출시와 함께 파이어폭스 스마트 윈도에 미스트랄 스몰 4 추가",
+          "original_title": "",
+          "description": "모질라가 미스트랄 AI와 파트너십을 맺고 프랑스 기업의 모델을 파이어폭스의 베타 버전 AI 브라우징 어시스턴트인 스마트 윈도에 적용합니다. 양사는 수요일 공동 성명을 통해 이 협약과 함께 프랑스 내 기능 출시를 발표했습니다. 지난 8월 모질라가 선보인 스마트 윈도는...",
+          "link": "https://thenextweb.com/news/firefox-smart-window-mistral-mozilla-partnership",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-17"
+        },
+        {
+          "id": "51323",
+          "title": "오픈로터스의 어마어마한 토큰 차트는 AI 버블 논쟁을 보여주는 단 한 장의 사진",
+          "original_title": "",
+          "description": "오픈로터스(OpenRouter)에서 주간 토큰 소비량은 2025년 1월 이후 25,000% 이상 급증하여 0.5조 개에서 126.2조 개로 늘어났다. 이 수치는 인상적으로 보이지만 실제 AI 사용량보다는 토큰을 많이 소모하는 추론 모델과, 토큰을 대량으로 태워버리는 최적화되지 않은 AI 에이전트의 증가를 더 잘 보여준다.",
+          "link": "https://the-decoder.com/openrouters-staggering-token-chart-is-the-ai-bubble-debate-in-a-single-image/",
+          "entities": [
+            "AI",
+            "OpenRouter"
+          ],
+          "date": "2026-09-17"
+        }
+      ]
     }
   ],
   "articles": [
@@ -4883,6 +4959,76 @@
         "Aidan",
         "Gomez",
         "CEO"
+      ],
+      "date": "2026-09-17"
+    },
+    {
+      "id": "51354",
+      "title": "미·중 보안 전문가들, 군사 AI를 위한 핵무기급 안전장치 제안",
+      "original_title": "",
+      "description": "로이터통신에 따르면 미국과 중국의 보안 전문가들이 핵무기 관련 규제들을 모델 삼아 AI가 발사 여부를 결정하는 것을 금지하는 조항을 포함한 군사 AI 안전장치를 제안했습니다. 지난주 발표된 이 권고안은 미·중 AI 및 핵 관련 기관에서 나온 것입니다.",
+      "link": "https://thenextweb.com/news/us-china-experts-nuclear-style-ai-safeguards",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-17"
+    },
+    {
+      "id": "51358",
+      "title": "찰스 국왕, 정상회담에서 엔비디아·오픈AI·앤트로픽 최고경영진에게 AI 안전 문제 압박할 ",
+      "original_title": "",
+      "description": "AI 개발에 내재된 위험성을 둘러싼 논란이 고조되는 가운데, 찰스 국왕이 오늘 주요 테크 기업 리더들을 소집합니다.",
+      "link": "https://www.cnbc.com/2026/09/17/king-charles-nvidia-openai-anthropic-ai.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-17"
+    },
+    {
+      "id": "51324",
+      "title": "OpenAI의 GPT-6 아스트라, 83년 동안 풀리지 않았던 나치 무전 메시지를 10시간",
+      "original_title": "",
+      "description": "블룸버그 소속 개발자가 OpenAI의 GPT-6 아스트라를 이용해 1941년 독일 국방군의 83년 된 에니그마 암호 메시지를 해독했다고 주장했습니다. 1941년 작성된 이 82자의 무전에는 행군 경로를 묻는 병사의 내용이 담겨 있습니다. 다만 이 해독 결과는 아직 독립적인 검증이 필요합니다.",
+      "link": "https://the-decoder.com/openais-gpt-6-astra-decrypts-a-nazi-radio-message-in-ten-hours-that-went-unsolved-for-83-years/",
+      "entities": [
+        "GPT-6"
+      ],
+      "date": "2026-09-17"
+    },
+    {
+      "id": "51318",
+      "title": "스타트업의 다음 팀원은 AI 에이전트가 될 수도 있습니다: Gusto, Insight Pa",
+      "original_title": "",
+      "description": "이번 세션에서는 초기 기업들이 인간과 AI 에이전트가 함께 일하는 팀을 어떻게 구축하고 있는지, 그리고 창업자들이 속도, 책임감, 기업 문화를 희생하지 않고 이를 어떻게 달성할 수 있는지 살펴봅니다. 테크크런치 디스럽트 2026에서 자세한 내용을 확인해 보세요. 9월 25일 이전에 등록하면 최대 200달러를 절약할 수 있습니다.",
+      "link": "https://techcrunch.com/2026/09/16/your-startups-next-teammate-might-be-an-ai-agent-gusto-insight-partners-and-leland-explain-what-that-changes-at-techcrunch-disrupt-2026/",
+      "entities": [
+        "AI",
+        "Gusto",
+        "Insight",
+        "Pa"
+      ],
+      "date": "2026-09-17"
+    },
+    {
+      "id": "51351",
+      "title": "모질라, 프랑스 출시와 함께 파이어폭스 스마트 윈도에 미스트랄 스몰 4 추가",
+      "original_title": "",
+      "description": "모질라가 미스트랄 AI와 파트너십을 맺고 프랑스 기업의 모델을 파이어폭스의 베타 버전 AI 브라우징 어시스턴트인 스마트 윈도에 적용합니다. 양사는 수요일 공동 성명을 통해 이 협약과 함께 프랑스 내 기능 출시를 발표했습니다. 지난 8월 모질라가 선보인 스마트 윈도는...",
+      "link": "https://thenextweb.com/news/firefox-smart-window-mistral-mozilla-partnership",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-17"
+    },
+    {
+      "id": "51323",
+      "title": "오픈로터스의 어마어마한 토큰 차트는 AI 버블 논쟁을 보여주는 단 한 장의 사진",
+      "original_title": "",
+      "description": "오픈로터스(OpenRouter)에서 주간 토큰 소비량은 2025년 1월 이후 25,000% 이상 급증하여 0.5조 개에서 126.2조 개로 늘어났다. 이 수치는 인상적으로 보이지만 실제 AI 사용량보다는 토큰을 많이 소모하는 추론 모델과, 토큰을 대량으로 태워버리는 최적화되지 않은 AI 에이전트의 증가를 더 잘 보여준다.",
+      "link": "https://the-decoder.com/openrouters-staggering-token-chart-is-the-ai-bubble-debate-in-a-single-image/",
+      "entities": [
+        "AI",
+        "OpenRouter"
       ],
       "date": "2026-09-17"
     }

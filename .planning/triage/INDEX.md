@@ -1,3 +1,7 @@
+- 2026-09-17 | fix | threads-publish-failure-3-causes | 쓰레드 발행 급감(12→4~6/일) 3대 원인 — JSON 날것 개행 파싱 실패 124건 + 모델 자기해설 누수 51건 + 고유명사 음차 오탐 26건
+- 2026-09-17 | feat | sitemap-ping-deploy-hook | 배포 후 사이트맵 검색엔진 제출 스크립트 추가 + deploy.sh 연결 (Google/Naver 공식 ping API 폐기 확인 → 도달성 점검 폴백)
+- 2026-09-17 | fix | threads-crawl-min-length-gate | 크롤 본문 500자 미만이면 발행 중단 (네이버 봇차단 15자 껍데기 크롤 → 얇은 카드 + 죽은 링크 발행 사고)
+- 2026-09-17 | chore | restore-aikorea24-to-0905 | aikorea24.kr 09-05 정지 시점 전체 복원 (46커밋/블로그 154파일 롤백) + 파이프라인 수동 실행 + 블로그 6건 발행 + 강제 푸시
 - 2026-08-29 | fix | weekly-contrast-thumb-leak-depth-fix | 주간 심층분석 2건 썸네일 생성 + A측/B측/대비 릭 자연어화 + 원문기사링크 중복삭제 + 병렬나열→통합분석 깊이 보강
 - 2026-08-28 | config | threads-publish-frequency-halved | 쓰레드 발행 빈도 절반 조정 (12→6회/일, 4시간 간격, 출퇴근 시간대 배치)
 - 2026-08-28 | fix | placeholder-og-mixup-and-replacement | Pexels fallback이 placeholder 사본을 그대로 image로 노출하는 사고 — news-keyword-og.webp 교체 + is_placeholder_copy 가드 추가
