@@ -43,6 +43,12 @@ MODEL_MESSAGE_PATTERNS = [
     r'^수정\s+불필요',
     r'^AI\s+티가?\s+나는',
     r'^교정할\s+부분이?\s+없',
+    # 모델 자기해설 누수 (2026-09-17 로그: 구조 검증 실패 21건 원인)
+    r'여운을\s+남기는\s+마무리',
+    r'카드입니다',
+    r'발행되면\s+안\s+됩니다',
+    r'검증\s+단계에서\s+걸러',
+    r'검증\s+단계에서\s+걸러져야',
 ]
 
 ADDITIONAL_MESSAGE_PATTERNS = [
@@ -239,9 +245,11 @@ def validate_output_language(cards: list[str], whitelist: set[str] | None = None
 _KOREAN_PATTERN = re.compile(r'[가-힣]')
 
 
-def validate_final_output(cards: list[str]) -> tuple[bool, str]:
+def validate_final_output(cards: list[str], source_text: str = None) -> tuple[bool, str]:
     """최종 카드 통합 검증 — 발행 전 3차 방어
     검증 순서: 프롬프트 노출 → unicodedata NFKC 정규화 → 외국어 → 한글 비율 → 모델 메시지
+    source_text: 크롤링 원문. 주어지면 Hook 고유명사가 원문에 존재하는지까지 허용
+    (한국어 음차 표기 때문에 본문 카드에 영문명이 없어도 사실 오류는 아님).
     """
     for i, card in enumerate(cards, 1):
         # 1. 프롬프트 노출 검사 (pitch patterns + contrast literals)
@@ -277,7 +285,7 @@ def validate_final_output(cards: list[str]) -> tuple[bool, str]:
                 return False, f"Card {i}: 모델 메시지 탐지"
 
     # 6. Hook↔본문 고유명사 교차 검증 (2026-08-14 추가)
-    ok, reason = _validate_hook_body_entity_consistency(cards)
+    ok, reason = _validate_hook_body_entity_consistency(cards, source_text)
     if not ok:
         return False, reason
 
@@ -303,11 +311,15 @@ def _extract_hook_entities(hook: str) -> set[str]:
     return entities
 
 
-def _validate_hook_body_entity_consistency(cards: list[str]) -> tuple[bool, str]:
+def _validate_hook_body_entity_consistency(cards: list[str], source_text: str = None) -> tuple[bool, str]:
     """Hook(카드1)에 등장하는 주요 고유명사가 본문 카드(2~5)에 최소 1개 이상 등장하는지 검증.
 
     훅이 특정 엔티티(예: Wrtn)를 지목했는데 본문 카드가 다른 엔티티(예: 크랙)만
     언급하면 사실 오류. 최소 1개 고유명사가 본문에서 재현되어야 함.
+
+    source_text가 주어지면, 그 엔티티가 크롤링 원문에 존재하는 경우 통과시킨다.
+    (2026-09-17: OpenAI→오픈AI, NVIDIA→엔비디아 같은 음차 표기 때문에 본문에
+    영문명이 없어 발행이 막히는 오탐이 8일간 26건 발생 → 원문 대조로 해결)
     """
     if len(cards) < 2:
         return True, "OK"
@@ -320,12 +332,16 @@ def _validate_hook_body_entity_consistency(cards: list[str]) -> tuple[bool, str]
         return True, "OK"  # 추출할 고유명사 없음 → 검사 건너뜀
 
     body_lower = body_text.lower()
+    source_lower = (source_text or '').lower()
     matched = False
     for entity in entities:
         # 영문 고유명사는 대소문자 구분 없이 검색
         if entity[0].isalpha() and entity[0].isupper():
             if entity.lower() in body_lower:
                 matched = True
+                break
+            if source_text and entity.lower() in source_lower:
+                matched = True  # 원문에 실재하는 엔티티 (음차 표기 허용)
                 break
         else:
             # 한글 등 따옴표 엔티티는 원문 검색

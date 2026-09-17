@@ -280,6 +280,15 @@ def humanize_cards(cards):
     return fixed
 
 
+MODEL_SELF_COMMENTARY_PATTERNS = [
+    r'여운을\s+남기는\s+마무리',
+    r'카드입니다',
+    r'발행되면\s+안\s+됩니다',
+    r'검증\s+단계에서\s+걸러',
+    r'걸러져야\s+합니다',
+]
+
+
 def _cleanup_source_attribution(cards):
     cleaned = []
     for card in cards:
@@ -287,6 +296,10 @@ def _cleanup_source_attribution(cards):
         clean_lines = [l for l in lines if not re.match(r'^\s*출처\s*[:：]', l)]
         clean_lines = [l for l in clean_lines if '쓰레드 시작' not in l and '쓰레드 끝' not in l]
         clean_lines = [l for l in clean_lines if not re.match(r'^-{3,}\s*$', l)]
+        # 모델 자기해설 누수 라인 제거 (2026-09-17: 카드5에 프롬프트 해설이 붙어
+        # 구조 검증 실패 21건 + 카드5 9자 21건 발생)
+        clean_lines = [l for l in clean_lines if not any(
+            re.search(p, l) for p in MODEL_SELF_COMMENTARY_PATTERNS)]
         if clean_lines:
             cleaned.append('\n'.join(clean_lines).strip())
     cleaned = [re.sub(r'(?<!\d)2000(?!\d)(?!년)', '', card) for card in cleaned]
@@ -340,6 +353,15 @@ def parse_cards_json_first(text: str, format_choice: str = 'D'):
             return result
 
     _log(f'  ⚠️ JSON/델리미터 파싱 실패 — 카드 생성 불가')
+    try:
+        dump_dir = os.path.join(LOGS_DIR, 'raw_parse_fail')
+        os.makedirs(dump_dir, exist_ok=True)
+        fn = os.path.join(dump_dir, datetime.now().strftime('%Y%m%d_%H%M%S_%f') + '.txt')
+        with open(fn, 'w', encoding='utf-8') as f:
+            f.write(text)
+        _log(f'  📝 원본 응답 덤프: {fn} ({len(text)}자)')
+    except Exception as e:
+        _log(f'  ⚠️ 덤프 실패: {e}')
     return []
 
 
@@ -375,7 +397,9 @@ def _parse_by_delimiter(text, start_pat, end_pat, format_choice):
 
 def _try_parse_json(text: str, format_choice: str) -> list:
     try:
-        data = json.loads(text)
+        # strict=False: LLM이 JSON 문자열 안에 날것의 개행/탭을 넣어도 허용
+        # (미허용 시 파싱 실패 124건/8일 — 2026-09-17 확인)
+        data = json.loads(text, strict=False)
         cards = data.get('cards', [])
         if not isinstance(cards, list):
             return []
@@ -595,7 +619,7 @@ Gap source: {pitch.get('gap_source','')}
             _log(f'⚠️ Card {i} 모델 메시지 검증 실패: {mm_reason}')
             return []
 
-    final_ok, final_reason = validate_final_output(cards)
+    final_ok, final_reason = validate_final_output(cards, article_body_text)
     if not final_ok:
         _log(f'⚠️ 최종 검증 실패: {final_reason}')
         for i, card in enumerate(cards, 1):
