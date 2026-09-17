@@ -60,6 +60,15 @@ status: resolved
   카드 5/5 + 링크 답글). 발행 카드에 수치 5개 (220명 감축 / 페이지뷰 46% /
   주가 90% / 매출 1억 2890만 파운드 / 구독자 7만 5천 명) — 저밀도 아님.
 - 커밋: `fbf2367f`
+- launchd 자동 실행 경로 검증: 22:00 슬롯 실행 성공 (루트 ID `17892623610608712`,
+  카드 5/5 + 링크 답글, 09-17 발행 수 5→6). 이전 20:00 슬롯은 수정 전 코드로
+  `JSON/델리미터 파싱 실패` → 5회 모두 실패했음.
+
+## 참고 (진단성)
+
+- launchd `ProgramArguments`에 `-u` 플래그가 없어 Python stdout이 버퍼링됨
+  → `scripts/threads/logs/launchd.log`는 프로세스 종료 시점에야 기록됨.
+  실시간 확인은 `scripts/threads/logs/YYYY-MM-DD.log`를 볼 것 (append 즉시 flush).
 
 ## 잔존 위험
 
