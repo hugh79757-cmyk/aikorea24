@@ -78,3 +78,13 @@ fi
 
 echo ""
 echo "배포 완료: https://aikorea24.kr"
+
+# --- 배포 후 sitemap ping (검색엔진 크롤 요청) ---
+# ping 실패는 배포 실패로 간주하지 않음 (크롤 요청은 best-effort)
+if [ -f "$PROJECT_DIR/scripts/sitemap_ping.py" ]; then
+  echo ""
+  echo "--- sitemap ping ---"
+  python3 "$PROJECT_DIR/scripts/sitemap_ping.py" \
+    --sitemap "https://aikorea24.kr/sitemap-index.xml" \
+    || echo "  ⚠️ sitemap ping 실패 (배포는 성공)"
+fi
