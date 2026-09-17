@@ -25,6 +25,11 @@ def _log(msg):
         f.write(f'[{ts}] [v3] {msg}\n')
 
 
+# 크롤 본문 최소 길이 — 미만이면 데이터 부족으로 발행 중단 (할루시네이션 방지).
+# 정상 크롤 ~2700자, 네이버 스포츠 봇차단 껍데기 ~15자.
+MIN_CRAWL_CHARS = 500
+
+
 LEAKED_PROMPT_PATTERNS = [
     r'상식\s*[\(（]\s*A\s*[\)）]\s*[:：]\s*',
     r'실제\s*[\(（]\s*B\s*[\)）]\s*[:：]\s*',
@@ -721,9 +726,9 @@ def get_pitches(articles, max_articles=600, batch_size=200, exclude_ids=None):
     _log(f'  📰 피치 기사 원문 크롤링: {article_url[:60]}...')
     crawled_body = fetch_article_body(article_url, source='', title=article_title)
 
-    if not crawled_body:
-        _log(f'  ⚠️ 크롤링 실패 → D1 description 기반 원 피치로 발행')
-        return ([top], set())
+    if not crawled_body or len(crawled_body) < MIN_CRAWL_CHARS:
+        _log(f'  🚫 크롤링 본문 부족({len(crawled_body or "")}자) → 발행 중단 (기사 {article_id_str})')
+        return ([], {article_id_str} if article_id_str else set())
 
     _log(f'  📰 크롤링 완료: {len(crawled_body)}자')
 
