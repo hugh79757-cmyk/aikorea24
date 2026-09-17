@@ -450,7 +450,7 @@ def route_person_stories(selected):
                 # 생성 스레드 파일 저장 (운영 핸드오프 + 검증 로그용)
                 try:
                     import os as _os, datetime as _dt, pathlib as _pl
-                    _k7dir = _pl.Path("scripts/threads/logs/drafts/kicker7_selector")
+                    _k7dir = _pl.Path(PROJECT_DIR) / "scripts/threads/logs/drafts/kicker7_selector"
                     try:
                         _k7dir.mkdir(parents=True, exist_ok=True)
                     except Exception:
@@ -559,11 +559,13 @@ def main(dedup=True):
         if a.get("pass_source") is None:
             a["pass_source"] = "legacy"
 
-    # 6. 인물 게이트 분기 (운영 투입) — 기존 브리핑 흐름에 영향 없이 격리 실행
-    try:
-        route_person_stories(selected)
-    except Exception as ex:
-        logger.warning("person_gate 분기 예외(무시·기존 경로 유지): %s", ex)
+    # 6. 인물 게이트 분기 — 기본 비활성 (2026-09-17 사용자 지시).
+    #    kicker7 초안 생성 경로. KICKER7_ENABLED=1 일 때만 동작.
+    if os.environ.get("KICKER7_ENABLED", "0") == "1":
+        try:
+            route_person_stories(selected)
+        except Exception as ex:
+            logger.warning("person_gate 분기 예외(무시·기존 경로 유지): %s", ex)
 
     log(f"\n선정 완료: {len(selected)}개 기사")
     print_report(articles, selected)
