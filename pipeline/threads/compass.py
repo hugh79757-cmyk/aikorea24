@@ -291,7 +291,9 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
     compass["intro_style"] = INTRO_STYLES[rotation % len(INTRO_STYLES)]
     cat = compass.get("category", "tech")
     presets = H2_FLOW_PRESETS.get(cat, H2_FLOW_PRESETS["tech"])
-    compass["h2_flow"] = presets[rotation % len(presets)]
+    # Rotate the h2_flow list so different runs start with different headings
+    offset = rotation % len(presets)
+    compass["h2_flow"] = presets[offset:] + presets[:offset]
 
     _log(f"  category={compass['category']} intro_style={compass['intro_style']}")
 
