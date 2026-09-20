@@ -3,6 +3,7 @@ import pytest
 import json
 import sys
 from pathlib import Path
+from unittest.mock import patch, MagicMock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts" / "threads"))
@@ -39,19 +40,6 @@ def sample_articles():
     ]
 
 
-COMPASS_RESPONSE = json.dumps({
-    "category": "tech",
-    "slot1_fact": "새 AI 평가 방법론이 100만 건 대화 데이터로 검증됨",
-    "slot2_compare": "기존 72% vs 새 시스템 89% 정확도",
-    "slot3_context": "AI 공감 능력 평가는 기존 벤치마크의 한계를 보완하기 위해 시작됨",
-    "slot4_outlook": "상용화 시 5조 원 시장 형성 전망",
-    "intro_style": "number_shock",
-    "h2_flow": ["기술적 배경", "핵심 수치", "적용 분야", "한계", "전망"],
-    "tone": "neutral_careful",
-    "table_plan": None,
-})
-
-# Valid compass JSON (fixed typo above)
 VALID_COMPASS = {
     "category": "tech",
     "slot1_fact": "새 AI 평가 방법론이 100만 건 대화 데이터로 검증됨",
@@ -106,6 +94,12 @@ class TestCompassFields:
 
         mock_chat, _ = _make_mock_chat()
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_compass_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+        )
 
         result = write_compass_article(sample_pitch, sample_articles)
         assert result is not None
@@ -125,6 +119,12 @@ class TestCompassFields:
 
         mock_chat, _ = _make_mock_chat()
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_compass_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+        )
 
         result = write_compass_article(sample_pitch, sample_articles)
         assert result is not None
@@ -135,23 +135,162 @@ class TestCompassFields:
 
 
 class TestRotation:
-    """intro_style must rotate across 5 distinct patterns."""
+    """intro_style must rotate across 5 distinct patterns via persistence."""
 
     @pytest.mark.unit
     def test_5_distinct_intro_styles(self, sample_pitch, sample_articles, monkeypatch):
         import v3.model_router
         from pipeline.threads.compass import write_compass_article, INTRO_STYLES
 
+        saved_counters = []
+
+        def mock_save(counter):
+            saved_counters.append(counter)
+
         styles_seen = []
-        for style in INTRO_STYLES:
-            compass_variant = {**VALID_COMPASS, "intro_style": style}
-            compass_str = json.dumps(compass_variant, ensure_ascii=False)
-            mock_chat, _ = _make_mock_chat(compass_json=compass_str)
+        for i in range(5):
+            monkeypatch.setattr(
+                "pipeline.threads.compass._load_compass_rotation", lambda i=i: i
+            )
+            monkeypatch.setattr(
+                "pipeline.threads.compass._save_compass_rotation", mock_save
+            )
+            monkeypatch.setattr(
+                "pipeline.threads.compass._compass_cache", {}
+            )
+
+            mock_chat, _ = _make_mock_chat()
             monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
 
             result = write_compass_article(sample_pitch, sample_articles)
-            assert result is not None, f"style={style} 인 경우 실패"
+            assert result is not None, f"rotation={i} 인 경우 실패"
             compass, _ = result
             styles_seen.append(compass["intro_style"])
 
         assert len(set(styles_seen)) == 5, f"5개 고유 스타일 필요, got {set(styles_seen)}"
+        assert styles_seen == list(INTRO_STYLES), (
+            f"순서 불일치: {styles_seen} != {list(INTRO_STYLES)}"
+        )
+
+    @pytest.mark.unit
+    def test_counter_persists_across_calls(self, sample_pitch, sample_articles, monkeypatch):
+        import v3.model_router
+        from pipeline.threads.compass import write_compass_article, INTRO_STYLES
+
+        state = {"counter": 0}
+
+        def mock_load():
+            return state["counter"]
+
+        def mock_save(counter):
+            state["counter"] = counter
+
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_compass_rotation", mock_load
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_compass_rotation", mock_save
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+
+        mock_chat, _ = _make_mock_chat()
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+
+        # Run 3 times — counter should increment 0→1→2→3
+        for expected_after in [1, 2, 3]:
+            monkeypatch.setattr(
+                "pipeline.threads.compass._compass_cache", {}
+            )
+            result = write_compass_article(sample_pitch, sample_articles)
+            assert result is not None
+            assert state["counter"] == expected_after
+
+    @pytest.mark.unit
+    def test_rotation_overrides_llm_intro_style(self, sample_pitch, sample_articles, monkeypatch):
+        """Rotation counter overrides whatever intro_style the LLM returns."""
+        import v3.model_router
+        from pipeline.threads.compass import write_compass_article, INTRO_STYLES
+
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_compass_rotation", lambda: 3
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+
+        # LLM returns "number_shock" but rotation 3 → "conflicting_fact"
+        compass_llm = {**VALID_COMPASS, "intro_style": "number_shock"}
+        mock_chat, _ = _make_mock_chat(
+            compass_json=json.dumps(compass_llm, ensure_ascii=False)
+        )
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+
+        result = write_compass_article(sample_pitch, sample_articles)
+        assert result is not None
+        compass, _ = result
+        assert compass["intro_style"] == INTRO_STYLES[3]
+
+
+class TestNaverOutput:
+    """output_target='naver' wraps cards in tag-whitelist HTML."""
+
+    @pytest.mark.unit
+    def test_naver_wraps_cards_in_p_tags(self, sample_pitch, sample_articles, monkeypatch):
+        import v3.model_router
+        from pipeline.threads.compass import write_compass_article
+
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_compass_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+
+        mock_chat, _ = _make_mock_chat()
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+
+        result = write_compass_article(
+            sample_pitch, sample_articles, output_target="naver"
+        )
+        assert result is not None
+        _, output = result
+        cards = output["cards"]
+        assert len(cards) == 5
+        for card in cards:
+            # At least one <p> tag per card
+            assert "<p>" in card, f"Naver HTML 누락: {card[:80]}"
+
+    @pytest.mark.unit
+    def test_threads_returns_plain_cards(self, sample_pitch, sample_articles, monkeypatch):
+        import v3.model_router
+        from pipeline.threads.compass import write_compass_article
+
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_compass_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+
+        mock_chat, _ = _make_mock_chat()
+        monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+
+        result = write_compass_article(
+            sample_pitch, sample_articles, output_target="threads"
+        )
+        assert result is not None
+        _, output = result
+        cards = output["cards"]
+        for card in cards:
+            assert "<p>" not in card, f"threads 모드에서 HTML 태그 잔존: {card[:80]}"

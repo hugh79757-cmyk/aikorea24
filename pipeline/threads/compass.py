@@ -3,6 +3,7 @@ import json
 import re
 import sys
 import os
+from datetime import datetime
 
 from pipeline.infra.config import project_root
 from pipeline.infra.logger import get_scrubbed_logger
@@ -77,11 +78,74 @@ _NAVER_TAG_WHITELIST = (
     "p, h2, h3, strong, b, blockquote, hr, ul, ol, li, table, img, a"
 )
 
+# Disallowed tags for Naver output
+_NAVER_TAG_STRIP_RE = re.compile(
+    r"<(/?)(div|span|style|class|font|center|section|article|aside|nav|header|footer|main|details|summary|dialog|figure|figcaption|time|mark|small|del|ins|sub|sup|abbr|address|cite|code|pre|var|samp|kbd|output)[^>]*>",
+    re.IGNORECASE,
+)
+
+_POSTED_JSON_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "posted.json"
+)
+
+# Module-level cache: (article_id, date_str) -> (compass, output)
+_compass_cache: dict[tuple, tuple] = {}
+
 
 def _log(msg):
     from datetime import datetime
     ts = datetime.now().strftime('%H:%M:%S')
     print(f'[{ts}] [compass] {msg}')
+
+
+def _load_compass_rotation() -> int:
+    """Load compass_intro_rotation counter from posted.json."""
+    try:
+        if os.path.exists(_POSTED_JSON_PATH):
+            with open(_POSTED_JSON_PATH) as f:
+                data = json.load(f)
+            return data.get("compass_intro_rotation", 0)
+    except Exception:
+        pass
+    return 0
+
+
+def _save_compass_rotation(counter: int) -> None:
+    """Save compass_intro_rotation counter to posted.json."""
+    try:
+        data = {}
+        if os.path.exists(_POSTED_JSON_PATH):
+            with open(_POSTED_JSON_PATH) as f:
+                data = json.load(f)
+        data["compass_intro_rotation"] = counter
+        with open(_POSTED_JSON_PATH, "w") as f:
+            json.dump(data, f, ensure_ascii=False, indent=2)
+    except Exception:
+        pass
+
+
+def _wrap_naver_html(cards: list[str]) -> list[str]:
+    """Wrap card text in Naver tag-whitelist HTML, strip disallowed tags."""
+    wrapped = []
+    for card in cards:
+        # Strip disallowed tags
+        clean = _NAVER_TAG_STRIP_RE.sub("", card)
+        # Convert markdown-style headings to <h2>
+        clean = re.sub(
+            r"^#{1,3}\s+(.+)$", r"<h2>\1</h2>", clean, flags=re.MULTILINE
+        )
+        # Wrap non-tag lines in <p>
+        lines = []
+        for line in clean.split("\n"):
+            stripped = line.strip()
+            if not stripped:
+                continue
+            if re.match(r"^<[^>]+>", stripped):
+                lines.append(stripped)
+            else:
+                lines.append(f"<p>{stripped}</p>")
+        wrapped.append("\n".join(lines))
+    return wrapped
 
 
 def build_system_prompt_compass() -> str:
@@ -150,7 +214,7 @@ def _build_pass2_user_prompt(compass: dict, crawled_body: str) -> str:
     )
 
 
-def write_compass_article(pitch: dict, all_articles: list, format_choice=None):
+def write_compass_article(pitch: dict, all_articles: list, format_choice=None, output_target="naver"):
     """Compass 2-pass writing pipeline.
 
     Pass 1: LLM generates compass JSON (9 fields).
@@ -178,6 +242,19 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None):
 
     crawled_body = pitch.get("crawled_body", "")
     crawled_url = pitch.get("crawled_url", "")
+
+    # ── Compass cache key ──
+    article_ids = pitch.get("article_ids", [])
+    aid = article_ids[0] if article_ids else ""
+    today = datetime.now().strftime("%Y-%m-%d")
+    cache_key = (str(aid), today)
+    if cache_key in _compass_cache:
+        _log(f" compass 캐시 히트: {cache_key}")
+        return _compass_cache[cache_key]
+
+    # ── Load rotation counter ──
+    rotation = _load_compass_rotation()
+    _log(f" rotation counter: {rotation}")
 
     # ── Pass 1: compass JSON ──
     _log("Pass 1: compass JSON 생성")
@@ -209,6 +286,12 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None):
     if missing:
         _log(f"Pass 1 실패: 필수 필드 누락 — {missing}")
         return None
+
+    # ── Override intro_style and h2_flow from rotation ──
+    compass["intro_style"] = INTRO_STYLES[rotation % len(INTRO_STYLES)]
+    cat = compass.get("category", "tech")
+    presets = H2_FLOW_PRESETS.get(cat, H2_FLOW_PRESETS["tech"])
+    compass["h2_flow"] = presets[rotation % len(presets)]
 
     _log(f"  category={compass['category']} intro_style={compass['intro_style']}")
 
@@ -273,9 +356,18 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None):
         _log(f"  validate_final_output 실패: {vf_reason}")
         return None
 
+    # ── Increment rotation on success ──
+    _save_compass_rotation(rotation + 1)
+
+    # ── Naver HTML wrapping ──
+    if output_target == "naver":
+        cards = _wrap_naver_html(cards)
+
     primary_url = crawled_url or ""
     _log(f"✅ Compass 쓰레드: {len(cards)}개 카드")
-    return (compass, {"cards": cards, "link": primary_url})
+    result = (compass, {"cards": cards, "link": primary_url})
+    _compass_cache[cache_key] = result
+    return result
 
 
 def _parse_compass_json(text: str) -> dict | None:

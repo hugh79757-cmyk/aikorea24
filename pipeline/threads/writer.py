@@ -443,7 +443,7 @@ def write_thread(pitch, all_articles, format_choice=None):
     # Compass 2-pass delegation
     if format_choice == "compass":
         from pipeline.threads.compass import write_compass_article
-        result = write_compass_article(pitch, all_articles)
+        result = write_compass_article(pitch, all_articles, output_target="naver")
         if result is None:
             return ([], {"cards": [], "link": ""})
         return result

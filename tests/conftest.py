@@ -245,3 +245,12 @@ def disable_telegram_in_tests(monkeypatch):
     """테스트 중 텔레그램 알림 비활성화 - orchestrator 테스트에서 가짜 실패 알림 방지"""
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "")
     monkeypatch.setenv("TELEGRAM_CHAT_ID", "")
+
+
+@pytest.fixture(autouse=True)
+def _clear_compass_cache():
+    """Clear module-level compass cache between tests."""
+    import pipeline.threads.compass as compass_mod
+    compass_mod._compass_cache.clear()
+    yield
+    compass_mod._compass_cache.clear()
