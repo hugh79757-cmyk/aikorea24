@@ -440,6 +440,13 @@ def write_thread(pitch, all_articles, format_choice=None):
         if result is None:
             return []
         return result
+    # Compass 2-pass delegation
+    if format_choice == "compass":
+        from pipeline.threads.compass import write_compass_article
+        result = write_compass_article(pitch, all_articles)
+        if result is None:
+            return ([], {"cards": [], "link": ""})
+        return result
     from v3.model_router import chat_completion
 
     _log(f'  🎯 형식: {format_choice} — {FORMAT_LABELS[format_choice]}')

@@ -43,6 +43,12 @@ LEAKED_PROMPT_PATTERNS = [
     r'영국\s*외\s*미국\s*사례에서도',
     r'730억\s*갤런',
     r'구원투수',
+    r'slot1_fact\s*[:：]',
+    r'slot2_compare\s*[:：]',
+    r'slot3_context\s*[:：]',
+    r'slot4_outlook\s*[:：]',
+    r'h2_flow\s*[:：]',
+    r'intro_style\s*[:：]',
 ]
 
 _SYSTEM_PROMPT_FRAGMENTS = [
