@@ -36,13 +36,30 @@ def _layer1_substring_match(slot3: str, body: str) -> tuple[bool, str]:
     nouns = re.findall(r'[가-힣]{2,8}', slot3)
     eng_words = re.findall(r'[A-Za-z]{3,}', slot3)
 
-    # Filter out common connective words that don't carry factual weight
+    # Filter out common connective words and verb endings that don't carry factual weight
     _connectives = {
         '이번', '이에', '관련', '대한', '위한', '그리고', '하지만', '그러나',
         '때문', '으로', '으로서', '에서', '에게', '은', '는', '이', '가',
         '을', '를', '의', '도', '만', '에서', '까지', '부터',
     }
+    _verb_endings = ('했습니다', '했습니다', '합니다', '입니다', '됩니다', '됩니다',
+                      '됐습니다', '였습니다', '겠습니다', '겠습니다', '합니다',
+                      '했습니다', '합니다', '됩니다', '않습니다', '않았습니다',
+                      '있습니다', '없습니다', '했습니다', '합니다', '됩니다',
+                      '했었다', 'していた', '하고 있었다', '더한다', '한다', '된다')
     nouns = [n for n in nouns if n not in _connectives and len(n) >= 3]
+    # Strip verb endings for stem matching
+    nouns_stem = []
+    for n in nouns:
+        stem = n
+        for ending in _verb_endings:
+            if stem.endswith(ending) and len(stem) - len(ending) >= 2:
+                stem = stem[:-len(ending)]
+                break
+        if stem and len(stem) >= 2:
+            nouns_stem.append((n, stem))
+        else:
+            nouns_stem.append((n, n))
 
     if not numbers and not nouns and not eng_words:
         return True, "검증할 토큰 없음 — 통과"
@@ -61,16 +78,9 @@ def _layer1_substring_match(slot3: str, body: str) -> tuple[bool, str]:
                 missing.append(f"수치 '{num_clean}'")
 
     # Check Korean nouns — strip particles/suffixes for stem matching
-    for noun in nouns:
+    for noun, stem in nouns_stem:
         if noun in body:
             continue
-        # Strip common Korean particles/suffixes for stem match
-        stem = noun
-        for suffix in ('은', '는', '이', '가', '을', '를', '의', '도', '만', '로', '으로',
-                        '에서', '에게', '까지', '부터', '보다', '와', '과', '하고'):
-            if stem.endswith(suffix) and len(stem) - len(suffix) >= 2:
-                stem = stem[:-len(suffix)]
-                break
         if stem and stem in body:
             continue
         # Also try last-2-char truncation as fallback (common for 잘림)

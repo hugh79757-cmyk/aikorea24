@@ -159,7 +159,9 @@ def build_system_prompt_compass() -> str:
         "각 카드는 짧은 절 단위로 줄바꿈 (10~25자), 절 사이 빈 줄 (\\n\\n).\n"
         "문장 하나가 60자를 넘지 않게 절단.\n"
         "종결어미 ~습니다/~합니다 중심.\n"
-        "각 카드 350-450자."
+        "각 카드 350-450자.\n"
+        "마지막 카드는 반드시 답글을 유도하는 열린 형태로 끝낼 것 (질문, 의견 요청, 또는 독자 참여 유도).\n"
+        "닫힌 종결 (~했다, ~이다 등)로 끝내지 말 것."
     )
 
 
@@ -214,7 +216,7 @@ def _build_pass2_user_prompt(compass: dict, crawled_body: str) -> str:
     )
 
 
-def write_compass_article(pitch: dict, all_articles: list, format_choice=None, output_target="naver"):
+def write_compass_article(pitch: dict, all_articles: list, format_choice=None, output_target="naver", skip_g4=False):
     """Compass 2-pass writing pipeline.
 
     Pass 1: LLM generates compass JSON (9 fields).
@@ -296,14 +298,18 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
     compass["h2_flow"] = presets[offset:] + presets[:offset]
 
     _log(f"  category={compass['category']} intro_style={compass['intro_style']}")
+    _log(f"  slot3_context={compass.get('slot3_context', '')[:100]}...")
 
     # ── G4 fact-gate on slot3_context ──
-    _log("G4 fact-gate: slot3_context 검증")
-    g4_ok, g4_reason = check_slot3(compass["slot3_context"], crawled_body)
-    if not g4_ok:
-        _log(f"  G4 차단: {g4_reason}")
-        return None
-    _log(f"  G4 통과: {g4_reason}")
+    if skip_g4:
+        _log("G4 fact-gate: SKIPPED (skip_g4=True)")
+    else:
+        _log("G4 fact-gate: slot3_context 검증")
+        g4_ok, g4_reason = check_slot3(compass["slot3_context"], crawled_body)
+        if not g4_ok:
+            _log(f"  G4 차단: {g4_reason}")
+            return None
+        _log(f"  G4 통과: {g4_reason}")
 
     # ── Pass 2: body draft ──
     _log("Pass 2: 본문 초안 생성")
