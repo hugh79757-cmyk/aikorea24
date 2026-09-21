@@ -5,7 +5,7 @@ milestone_name: Course System + Pipeline Live
 status: phase_38_complete
 stopped_at: Phase 38 Threads 자가개선 루프 구현 완료 (2026-09-02) — 3 plans 전부 완료 (커밋 227bbcc). 라이브 검증: 발행 3건 views 311/194/77 프로브 일치. 부트스트랩 기간 (~30 posts 축적, 약 10-14일) 후 주입 시작. 미커밋 잔존: 19개 tool MD 카테고리 수정
 last_updated: 2026-09-02T22:45:00.000Z
-last_activity: 2026-09-02
+last_activity: 2026-09-22
 progress:
   total_phases: 38
   completed_phases: 38
@@ -230,9 +230,10 @@ None.
 
 ## Session Continuity
 
-Current session: 2026-08-27T03:53:00.000Z
-Stopped at: Phase 37 Threads Contrast Pivot + Kicker7 운영화 — contrast 5모듈(1795L) + person_gate + kicker7_writer, writer/validator/pitch/main_v3 확장, auto_news_selector route_person_stories, 39 contrast tests pass, dry-run graceful drop verified, 18 blog drafts untracked (미커밋)
-Next: untracked 분류 커밋 (code vs drafts), STAR hook test triage, TECH.md Phase37 반영, kicker7 live 배포 :30 launchd 확인
+Last session: 2026-09-21T01:10:00Z
+Stopped at: Phase 40 Compass 글쓰기 모드 다양성 확보 완료 (72 tests pass).
+Resume file: .planning/phases/40-compass-writing-mode-diversification/40-01-SUMMARY.md
+Next: Review working-tree divergence (unstaged src/content/blog/*.md + tools md) before next milestone or ad-hoc task.
 
 ---
 phase_37: 2026-08-26~27 Threads Contrast Pivot + Kicker7 (blog→Threads 7→5 pivot, D untouched)
@@ -241,3 +242,24 @@ phase_37: 2026-08-26~27 Threads Contrast Pivot + Kicker7 (blog→Threads 7→5 p
   tests: 39 new (21 extractor +8 background +10 writer/orch) = 39 pass / 전체 336/338 pass (2 pre-existing: retention_from_env, hook STAR)
   guard: --format contrast only with --dry-run, orchestrator never calls publisher, writer.py D path untouched, kicker7 별도 launchd :30
   artifacts: contrast 5모듈 + person_gate + kicker7_writer (1795L), scripts/threads 3개, phase37 docs 5개, blog drafts 18건
+
+phase_39: 2026-09-21 Compass 2-pass Korean Article Writing Pipeline (replan execution)
+  status: complete (Task 1 prompt fixes + Task 2 expansion applied; plan was previously unexecuted — the 4 most recent commits were the original build, not the replan fixes)
+  plans: 1/1 (39-PLAN.md; 39-01-SUMMARY.md written)
+  tests: 19 pass on target 4 files (-m unit); 175 pass / 2 fail on full -m unit suite — the 2 failures are pre-existing (verified identical on clean tree via git stash), unrelated to this change
+  guard: fact_gate.py / writer.py / pitch.py untouched (git diff --name-only confirms); git check-ignore exit 1 on all 3 modified paths
+  artifacts: pipeline/threads/compass.py (5 prompt fixes + INTRO_STYLE_EXAMPLES + INTRO_STYLE_PREFIXES + slot-aligned business preset), tests/test_compass_slot_h2_alignment.py (4 tests), tests/test_compass_no_repetition.py (4 tests), tests/test_compass_generation.py (+test_intro_style_examples_defined), .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/39-01-SUMMARY.md
+
+phase_40: 2026-09-22 Compass 글쓰기 모드 다양성 확보 (패턴 파괴 강화)
+  status: complete (실행 완료)
+  plans: 1/1 (40-PLAN.md)
+  tests: 72 pass (기존 24 + 신규 48), 0 fail
+  guard: 기존 compass.py / fact_gate.py 동작 보존 (additive only) — 기존 테스트 100% 통과
+  artifacts: .planning/phases/40-compass-writing-mode-diversification/ (CONTEXT.md, 40-PLAN.md, 40-01-SUMMARY.md)
+  key_changes:
+    - _load_compass_rotation → _load_intro_rotation + _load_h2_rotation (독립 2축)
+    - weighted_pick() — 최근 2회 제외 가중 랜덤
+    - INTRO_STYLES 5→8 (quote_lead, reverse_chronology, what_if)
+    - _rearrange_h2() + H2_FLOW_REQUIRED/OPTIONAL (3 required + 2 optional)
+    - build_blog_system_prompt(tone) 3 분기 + _build_summary_block() 4 형식
+    - fact_gate 영어 음차 매칭 + 언어 중립 + 혼합 임계값
