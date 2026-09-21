@@ -29,7 +29,7 @@ LOGS_DIR = os.path.join(PROJECT_DIR, 'logs')
 os.makedirs(LOGS_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOGS_DIR, 'sitemap_ping.log')
 
-DEFAULT_SITEMAP = 'https://aikorea24.kr/sitemap-index.xml'
+DEFAULT_SITEMAP = 'https://aikorea24.kr/sitemap.xml'
 GOOGLE_PING = 'https://www.google.com/ping?sitemap='
 
 # User-Agent: 봇 차단 우회 (bot-wall 재발 방지)

@@ -27,6 +27,7 @@ def d1_execute(sql):
     cmd = ["/opt/homebrew/bin/wrangler", "d1", "execute", "aikorea24-db", "--remote", "--command", sql]
     env = dict(os.environ)
     env.pop("CLOUDFLARE_API_TOKEN", None)
+    env.pop("CLOUDFLARE_ACCOUNT_ID", None)
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=60, cwd=PROJECT_DIR, env=env)
         if r.returncode != 0:

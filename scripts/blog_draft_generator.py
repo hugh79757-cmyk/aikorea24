@@ -92,7 +92,8 @@ def _d1_run(sql):
     import subprocess, json, re
     cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
     env = dict(os.environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)  # profile 우선 사용
+    env.pop("CLOUDFLARE_API_TOKEN", None)  # auth profile 우선
+    env.pop("CLOUDFLARE_ACCOUNT_ID", None)  # OAuth profile 계정 충돌 방지
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env, cwd=PROJECT_DIR)
         if r.returncode != 0:

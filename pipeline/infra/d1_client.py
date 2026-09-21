@@ -21,9 +21,10 @@ def _build_cmd(sql: str) -> list[str]:
 
 
 def _build_env() -> dict:
-    """CLOUDFLARE_API_TOKEN 제거 — auth profile 우선"""
+    """CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID 제거 — auth profile 우선"""
     env = dict(__import__("os").environ)
     env.pop("CLOUDFLARE_API_TOKEN", None)
+    env.pop("CLOUDFLARE_ACCOUNT_ID", None)
     return env
 
 

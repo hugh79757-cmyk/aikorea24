@@ -85,6 +85,6 @@ if [ -f "$PROJECT_DIR/scripts/sitemap_ping.py" ]; then
   echo ""
   echo "--- sitemap ping ---"
   python3 "$PROJECT_DIR/scripts/sitemap_ping.py" \
-    --sitemap "https://aikorea24.kr/sitemap-index.xml" \
+    --sitemap "https://aikorea24.kr/sitemap.xml" \
     || echo "  ⚠️ sitemap ping 실패 (배포는 성공)"
 fi

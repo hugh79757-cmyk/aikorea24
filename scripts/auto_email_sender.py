@@ -36,6 +36,7 @@ def _d1_query(sql: str) -> list[dict]:
     root = Path(__file__).resolve().parent.parent
     env = dict(os.environ)
     env.pop("CLOUDFLARE_API_TOKEN", None)
+    env.pop("CLOUDFLARE_ACCOUNT_ID", None)
     try:
         r = subprocess.run(
             ["/opt/homebrew/bin/wrangler", "d1", "execute", "aikorea24-db", "--remote", "--command", sql],
