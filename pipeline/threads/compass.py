@@ -291,7 +291,7 @@ def _build_pass1_user_prompt(pitch: dict, all_articles: list) -> str:
             for style in INTRO_STYLES
         )
         + "\n"
-        "- h2_flow: category에 맞는 H2 흐름 리스트 (5개)\n"
+        "- h2_flow: category에 맞는 H2 흐름 리스트 (필수 3개 + 선택 2개, 총 3~6개)\n"
         "- tone: neutral_careful/fan_friendly/analytical 중 택1\n"
         "- table_plan: 본문에서 사용할 표 정보 (없으면 null)\n"
     )
@@ -336,6 +336,7 @@ def _build_blog_pass2_user_prompt(compass: dict, crawled_body: str) -> str:
         "소제목은 ## (H2)로 표시하세요.\n"
         "하나의 연속된 마크다운 본문으로 작성하세요. JSON이나 카드 분할 없이.\n"
         "분량: 1200~2500자.\n"
+        "H2 수: 3~6개 (소제목 ##). 컴퍼스에 없는 선택적 H2도 포함 가능.\n"
         "마지막에 📌 **요약** 섹션을 포함하세요.\n"
         "메타 도입문 금지. 기사 핵심 내용으로 바로 시작.\n"
     )
@@ -372,7 +373,7 @@ def build_blog_system_prompt(tone: str = "neutral_careful") -> str:
         "수치는 무엇인지, 결과가 어떻게 변했는지.\n\n"
         "## 블로그 글 형식 규칙\n"
         "- 분량: 1200~2500자\n"
-        "- 소제목(H3, ##) 3개 이상 포함\n"
+        "- 소제목(H3, ##) 3~6개 포함 (필수 3개 + 선택적 H2)\n"
         "- 마지막에 📌 **요약** 섹션 필수\n"
         "- 메타 도입문 금지 (\"이번 글에서는...\", \"살펴보겠습니다\" 등).\n"
         "  기사의 실질적 핵심 내용으로 바로 시작할 것.\n"
