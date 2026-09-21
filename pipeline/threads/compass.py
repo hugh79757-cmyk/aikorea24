@@ -24,6 +24,9 @@ INTRO_STYLES = [
     "reversal",
     "contrast",
     "conflicting_fact",
+    "quote_lead",
+    "reverse_chronology",
+    "what_if",
 ]
 
 # One-line Korean examples per intro_style pattern (REQ-39-10).

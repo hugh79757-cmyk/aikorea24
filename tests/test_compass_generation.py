@@ -173,6 +173,7 @@ class TestRotation:
             styles_seen.append(compass["intro_style"])
 
         assert len(set(styles_seen)) >= 5, f"5개 고유 스타일 필요, got {set(styles_seen)}"
+        # Weighted_pick mock returns INTRO_STYLES[i % len], first 5 are unique
         assert styles_seen == list(INTRO_STYLES)[:5], (
             f"순서 불일치: {styles_seen} != {list(INTRO_STYLES)[:5]}"
         )
@@ -256,7 +257,7 @@ class TestIntroStyleExamples:
     def test_intro_style_examples_defined(self):
         from pipeline.threads.compass import INTRO_STYLES, INTRO_STYLE_EXAMPLES
 
-        assert len(INTRO_STYLES) == 5
+        assert len(INTRO_STYLES) >= 8, f"8개 이상 패턴 필요, got {len(INTRO_STYLES)}"
         for style in INTRO_STYLES:
             assert style in INTRO_STYLE_EXAMPLES, f"예시 누락: {style}"
             assert INTRO_STYLE_EXAMPLES[style], f"빈 예시: {style}"
