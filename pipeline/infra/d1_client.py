@@ -1,10 +1,15 @@
 import json
+import logging
 import re
 import subprocess
 import time
 from typing import Optional
 
+import logging as _logging
+
 from pipeline.infra.config import project_root
+
+logger = _logging.getLogger(__name__)
 
 
 DB_NAME = "aikorea24-db"
@@ -52,7 +57,13 @@ def d1_query(
                 env=env,
             )
             if r.returncode != 0:
-                last_error = f"exit code {r.returncode}: {r.stderr.strip()}"
+                stderr = r.stderr.strip()
+                # 인증 오류 진단
+                if "7403" in stderr:
+                    log(f"  ⚠️ D1 인증 실패 [7403]: CLOUDFLARE_ACCOUNT_ID와 OAuth 프로필 충돌 의심")
+                elif "10000" in stderr:
+                    log(f"  ⚠️ D1 인증 실패 [10000]: CLOUDFLARE_API_TOKEN env var 충돌 의심")
+                last_error = f"exit code {r.returncode}: {stderr[:300]}"
                 if attempt < retries - 1:
                     time.sleep(1.0 * (2.0 ** attempt))
                 continue
@@ -65,4 +76,5 @@ def d1_query(
             last_error = str(e)
             if attempt < retries - 1:
                 time.sleep(1.0 * (2.0 ** attempt))
+    logger.warning("D1 query failed after %d attempts: %s", retries, last_error)
     return []

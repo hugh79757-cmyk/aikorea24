@@ -97,7 +97,15 @@ def _d1_run(sql):
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env, cwd=PROJECT_DIR)
         if r.returncode != 0:
-            log(f"  wrangler 오류 (rc={r.returncode}): {r.stderr[:200]}")
+            stderr = r.stderr.strip()
+            # 인증 오류 진단
+            if "7403" in stderr:
+                log(f"  ⚠️ D1 인증 실패 [7403]: CLOUDFLARE_ACCOUNT_ID와 OAuth 프로필 충돌 의심")
+                log(f"  ⚠️ 원인: env에 CLOUDFLARE_ACCOUNT_ID가 설정되어 있으면 안 됨")
+            elif "10000" in stderr:
+                log(f"  ⚠️ D1 인증 실패 [10000]: CLOUDFLARE_API_TOKEN env var 충돌 의심")
+                log(f"  ⚠️ 원인: env에서 CLOUDFLARE_API_TOKEN/CLOUDFLARE_ACCOUNT_ID 해제 필요")
+            log(f"  wrangler 오류 (rc={r.returncode}): {stderr[:300]}")
             return None
         m = re.search(r'"results"\s*:\s*(\[.*?\])\s*,\s*"success"', r.stdout, re.DOTALL)
         return json.loads(m.group(1)) if m else []
