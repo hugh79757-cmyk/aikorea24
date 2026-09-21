@@ -150,13 +150,18 @@ class TestRotation:
         styles_seen = []
         for i in range(5):
             monkeypatch.setattr(
-                "pipeline.threads.compass._load_compass_rotation", lambda i=i: i
+                "pipeline.threads.compass._load_intro_rotation", lambda i=i: i
             )
             monkeypatch.setattr(
-                "pipeline.threads.compass._save_compass_rotation", mock_save
+                "pipeline.threads.compass._save_intro_rotation", mock_save
             )
             monkeypatch.setattr(
                 "pipeline.threads.compass._compass_cache", {}
+            )
+            # Mock weighted_pick to return INTRO_STYLES[i % len] for determinism
+            monkeypatch.setattr(
+                "pipeline.threads.compass.weighted_pick",
+                lambda items, recent, exclude_count=2, idx=[i]: items[idx[0] % len(items)],
             )
 
             mock_chat, _ = _make_mock_chat()
@@ -167,9 +172,9 @@ class TestRotation:
             compass, _ = result
             styles_seen.append(compass["intro_style"])
 
-        assert len(set(styles_seen)) == 5, f"5개 고유 스타일 필요, got {set(styles_seen)}"
-        assert styles_seen == list(INTRO_STYLES), (
-            f"순서 불일치: {styles_seen} != {list(INTRO_STYLES)}"
+        assert len(set(styles_seen)) >= 5, f"5개 고유 스타일 필요, got {set(styles_seen)}"
+        assert styles_seen == list(INTRO_STYLES)[:5], (
+            f"순서 불일치: {styles_seen} != {list(INTRO_STYLES)[:5]}"
         )
 
     @pytest.mark.unit
@@ -186,13 +191,17 @@ class TestRotation:
             state["counter"] = counter
 
         monkeypatch.setattr(
-            "pipeline.threads.compass._load_compass_rotation", mock_load
+            "pipeline.threads.compass._load_intro_rotation", mock_load
         )
         monkeypatch.setattr(
-            "pipeline.threads.compass._save_compass_rotation", mock_save
+            "pipeline.threads.compass._save_intro_rotation", mock_save
         )
         monkeypatch.setattr(
             "pipeline.threads.compass._compass_cache", {}
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[0],
         )
 
         mock_chat, _ = _make_mock_chat()
@@ -214,16 +223,20 @@ class TestRotation:
         from pipeline.threads.compass import write_compass_article, INTRO_STYLES
 
         monkeypatch.setattr(
-            "pipeline.threads.compass._load_compass_rotation", lambda: 3
+            "pipeline.threads.compass._load_intro_rotation", lambda: 3
         )
         monkeypatch.setattr(
-            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+            "pipeline.threads.compass._save_intro_rotation", lambda c: None
         )
         monkeypatch.setattr(
             "pipeline.threads.compass._compass_cache", {}
         )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[3],
+        )
 
-        # LLM returns "number_shock" but rotation 3 → "conflicting_fact"
+        # LLM returns "number_shock" but rotation 3 → weighted_pick returns INTRO_STYLES[3]
         compass_llm = {**VALID_COMPASS, "intro_style": "number_shock"}
         mock_chat, _ = _make_mock_chat(
             compass_json=json.dumps(compass_llm, ensure_ascii=False)
@@ -236,6 +249,19 @@ class TestRotation:
         assert compass["intro_style"] == INTRO_STYLES[3]
 
 
+class TestIntroStyleExamples:
+    """INTRO_STYLE_EXAMPLES must define a concrete example for every pattern."""
+
+    @pytest.mark.unit
+    def test_intro_style_examples_defined(self):
+        from pipeline.threads.compass import INTRO_STYLES, INTRO_STYLE_EXAMPLES
+
+        assert len(INTRO_STYLES) == 5
+        for style in INTRO_STYLES:
+            assert style in INTRO_STYLE_EXAMPLES, f"예시 누락: {style}"
+            assert INTRO_STYLE_EXAMPLES[style], f"빈 예시: {style}"
+
+
 class TestNaverOutput:
     """output_target='naver' wraps cards in tag-whitelist HTML."""
 
@@ -245,13 +271,17 @@ class TestNaverOutput:
         from pipeline.threads.compass import write_compass_article
 
         monkeypatch.setattr(
-            "pipeline.threads.compass._load_compass_rotation", lambda: 0
+            "pipeline.threads.compass._load_intro_rotation", lambda: 0
         )
         monkeypatch.setattr(
-            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+            "pipeline.threads.compass._save_intro_rotation", lambda c: None
         )
         monkeypatch.setattr(
             "pipeline.threads.compass._compass_cache", {}
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[0],
         )
 
         mock_chat, _ = _make_mock_chat()
@@ -274,13 +304,17 @@ class TestNaverOutput:
         from pipeline.threads.compass import write_compass_article
 
         monkeypatch.setattr(
-            "pipeline.threads.compass._load_compass_rotation", lambda: 0
+            "pipeline.threads.compass._load_intro_rotation", lambda: 0
         )
         monkeypatch.setattr(
-            "pipeline.threads.compass._save_compass_rotation", lambda c: None
+            "pipeline.threads.compass._save_intro_rotation", lambda c: None
         )
         monkeypatch.setattr(
             "pipeline.threads.compass._compass_cache", {}
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[0],
         )
 
         mock_chat, _ = _make_mock_chat()
