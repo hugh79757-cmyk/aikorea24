@@ -1,17 +1,19 @@
 ---
-gsd_state_version: 1.1
+gsd_state_version: "1.0"
 milestone: v2.0-complete
-milestone_name: Course System + Pipeline Live
+current_phase: 38
+current_phase_name: Threads 자가개선   루프
 status: phase_38_complete
-stopped_at: Phase 38 Threads 자가개선 루프 구현 완료 (2026-09-02) — 3 plans 전부 완료 (커밋 227bbcc). 라이브 검증: 발행 3건 views 311/194/77 프로브 일치. 부트스트랩 기간 (~30 posts 축적, 약 10-14일) 후 주입 시작. 미커밋 잔존: 19개 tool MD 카테고리 수정
-last_updated: 2026-09-02T22:45:00.000Z
+stopped_at: Phase 40 Compass 글쓰기 모드 다양성 확보 완료 (72 tests)
+last_updated: "2026-09-21T18:47:08.794Z"
 last_activity: 2026-09-22
+state_head: 7510bbd2feae3f0ccb5b000e914978a866464b05
 progress:
   total_phases: 38
   completed_phases: 38
   total_plans: 64
   completed_plans: 64
-  percent: 100
+milestone_name: Course System + Pipeline Live
 ---
 
 # Project State
@@ -32,6 +34,7 @@ Last activity: 2026-09-02T22:45
 Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
 
 ### Phase 38 구현 결과 (2026-09-02)
+
 - **38-01 측정**: `performance_log.py` + main_v3 발행 성공 블록 연결 (append-only, try/except) — API 0 call
 - **38-02 수집/분석**: `collect_insights()` 5지표 + **net_replies 모델 정정** (insights replies는 자기 카드 체인 포함 → root 직접 답글 외부 카운트로 변경, 라이브 검증), `analyze()` 30일 ≥30 posts 문턱, launchd `kr.aikorea24.threads-insights` 일 06:10 등록
 - **38-03 주입**: pitch.py `_top_topics_hint()` — report 존재 시에만 "참고용, 강제 아님" 상위 3토픽 주입 (없으면 기존 동작)
@@ -39,12 +42,14 @@ Progress: [███████████████████████
 - **다음 관찰 포인트**: ① 09-03 00:00 발행 로그 `📊 성과 로그 기록 완료` ② 09-03 06:10 insights_collector.log ③ ~09-13 30 posts 축적 후 첫 report 생성
 
 ### Blog Deployment Automation
+
 - **blog_draft_generator.py**에 6단계 배포 추가:
   - `npm run build` → 빌드
   - `wrangler pages deploy` → auth profile 사용 (CLOUDFLARE_API_TOKEN 우회)
   - 생성된 블로그가 있을 때만 자동 배포 실행
 
 ### Course System Status
+
 - **프레임**: 오케스트레이터 — "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"
 - **타겟**: AI로 혼자 무언가를 만드는 사람 (개인사업자 + 직장인 부업러 + 프리랜서 + 1인 창작자)
 - **로드맵**: "코드를 쓰는 사람에서, AI를 지휘하는 사람으로. 21일."
@@ -57,6 +62,7 @@ Progress: [███████████████████████
 | 무료 에이전트, 7일 | 7day-agent | 15~21 (7개) | ✅ 시드 완료 |
 
 ### Phase 17-02 Details (HTML → PNG Image Generator)
+
 - **Goal**: HTML 템플릿 기반 Instagram Carousel(1080×1350) + Reels(1080×1920) PNG 생성
 - **Plans**: 1/1 complete
 - **Files created**:
@@ -69,6 +75,7 @@ Progress: [███████████████████████
 - **Decision**: string.Template (stdlib) over Jinja2, Playwright CLI subprocess over Python API
 
 ### Phase 19 Details (MVP-3: 자동 발송) — Coded, Deferred
+
 - **Goal**: 7일 강좌 자동 이메일 발송
 - **Plans**: 3/3 complete (코드 완료)
 - **Files created**:
@@ -82,6 +89,7 @@ Progress: [███████████████████████
 - **NOTE**: launchd plist NOT installed, day 0 immediate send hook NOT implemented — 모든 콘텐츠 준비 후 마지막에 활성화 예정
 
 ### Phase 15 Details (Vectorize + D1 fix + Writer fallback + Hook fix)
+
 - **Goal**: Vectorize 의미적 중복제거 도입, failed_crawls TTL 적용, 카드 JSON 배열 전환, D1 link dedup 버그 수정, Writer fallback 복구, hook 검증 버그 수정.
 - **Key changes**:
   1. `pipeline/infra/vectorize_client.py` — 신규: OpenAI text-embedding-3-small (1536d) + Cloudflare Vectorize REST API 클라이언트
@@ -93,9 +101,11 @@ Progress: [███████████████████████
 - **Verification**: 2회 연속 dry-run 성공 (6카드), 1회 실제 발행 성공
 
 ### Phase 13 Details (Card Separation Fix & Validation Hardening)
+
 - (Previous phase details retained; see git history for full record)
 
 ### Phase 11 Details (Defense Mechanism Hardening)
+
 - **Goal**: Harden defense against prompt injection and foreign characters — improve maintainability, consistency, comprehensiveness
 - **Key changes**: 
   - Pattern consolidation: `MODEL_MESSAGE_PATTERNS` → single source in validator (removed from writer)
@@ -148,6 +158,11 @@ Progress: [███████████████████████
 | Phase 13-card-separation-fix 13-03 | 2min | 6 tasks | 4 files |
 | Phase 17-instagram-carousel 17-02 | 8min | 3 tasks | 5 files |
 | Phase 17-instagram-carousel 17-06 | 5min | 1 task | 4 files |
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 40-compass-writing-mode-diversification P01 | 25min | 11 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -172,6 +187,7 @@ Recent decisions affecting current work:
 - [Phase 28-05]: title 한글 우선 규칙: 영문 비율 40% 초과 시 검수 fail (제품명은 프롬프트 지침으로 한글 번역 유도)
 - [Phase 28-05]: 발행 전 자동 검수 게이트 5종 구현: heuristic 4종(출처 없는 숫자·첫 120자 결론·표 무결성·제목 언어) + LLM 일반론 판정 1종 → validate_draft_quality()로 통합, main() 생성 루프에 연결
 - [Phase 28-05]: auto_deep_article.py 표 사용 금지 규칙 삭제 + 조건 분기·출처·독자행동·관련 허브 섹션 요구 추가 → generate_draft와 프롬프트 일관성 확보
+- [Phase 38]: Independent 2-axis rotation (intro_style + h2_flow) over single sequential counter
 
 ### Key Decisions (Phase 17)
 
@@ -188,6 +204,7 @@ Recent decisions affecting current work:
 - [Phase 17-06] **launchd 스케줄**: 캐러셀 08:00 + 릴스 19:00 KST 별도 에이전트
 
 ### Phase 25 Details (커뮤니티 레슨 순차 해금)
+
 - **Goal**: 커뮤니티에서 강좌 레슨을 이메일 드립 진도(`days_sent`)와 동일하게 하나씩 잠금 해제
 - **Plans**: 1/1 complete (RESEARCH.md + PLAN.md in `.planning/phases/25-community-lesson-unlock/`)
 - **Files changed**:
@@ -230,8 +247,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-09-21T01:10:00Z
-Stopped at: Phase 40 Compass 글쓰기 모드 다양성 확보 완료 (72 tests pass).
+Last session: 2026-09-21T18:46:01.971Z
+Stopped at: Phase 40 Compass 글쓰기 모드 다양성 확보 완료 (72 tests)
 Resume file: .planning/phases/40-compass-writing-mode-diversification/40-01-SUMMARY.md
 Next: Review working-tree divergence (unstaged src/content/blog/*.md + tools md) before next milestone or ad-hoc task.
 

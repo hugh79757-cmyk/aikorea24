@@ -121,6 +121,7 @@ _compass_cache: dict[tuple, tuple] = {}
 # Recent style history for weighted_pick (module-level, persisted via posted.json).
 _recent_intro_styles: list[str] = []
 _recent_h2_flows: list[list[str]] = []
+_recent_summary_formats: list[str] = []
 
 
 def _log(msg):
@@ -281,7 +282,7 @@ def _build_pass1_user_prompt(pitch: dict, all_articles: list) -> str:
         "반드시 다음 9개 필드를 포함한 JSON만 출력하세요:\n"
         "- category: tech/business/society/culture/science\n"
         "- slot1_fact: 핵심 사실 (한 줄)\n"
-        "- slot2_compare: 경쟁사명(KT, SK, 네이버, 카카오 등 해당 산업 주요 플레이어)와 경쟁 구도 + 이 기사 대상 기업의 차별점을 포함한 비교 포인트 (한 줄)\n"
+        "- slot2_compare: 원문 본문에 비교 대상(경쟁사, 유사 제품, 대체 기술 등)이 **명시적으로** 언급된 경우에만 기록한다. 원문에 비교 대상이 없으면 값을 \"없음\"으로 둔다. 원문 밖의 기업·제품·서비스를 임의로 추가하지 않는다.\n"
         "- slot3_context: 배경 맥락 (2~3문장, 출처 기반)\n"
         "- slot4_outlook: 향후 전망 (한 줄)\n"
         "- intro_style: 다음 패턴 중 택1. 반드시 예시와 같은 형태로 시작하세요.\n"
@@ -318,70 +319,93 @@ def _build_pass2_user_prompt(compass: dict, crawled_body: str) -> str:
     )
 
 
-def _build_blog_pass2_user_prompt(compass: dict, crawled_body: str) -> str:
-    """Build user prompt for Pass 2 blog post generation (blog mode)."""
-    compass_header = json.dumps(compass, ensure_ascii=False, indent=2)
-    return (
-        f"[컴퍼스]\n{compass_header}\n\n"
-        f"[출처 본문 (앞 4000자)]\n{crawled_body[:4000]}\n\n"
-        "위 컴퍼스를 참고하여 블로그 본문을 작성하세요.\n"
-        "컴퍼스의 h2_flow 순서를 따르세요.\n"
-        "각 H2 섹션은 compass의 슬롯 순서를 반드시 따르세요. "
-        "h2_flow[0]은 slot1_fact 내용, h2_flow[1]은 slot2_compare 내용, "
-        "h2_flow[2]은 slot3_context 내용, h2_flow[3]은 slot4_outlook 내용을 다루세요. "
-        "절대 순서를 바꾸지 마세요.\n"
-        "섹션별 중복 금지: 각 H2 섹션은 compass의 해당 슬롯 정보만 포함하세요. "
-        "다른 섹션에서 이미 언급한 수치·사실·키워드를 반복하면 안 됩니다. "
-        "예: '2.4GW'가 한 섹션에 나왔으면 다른 섹션에서 다시 언급하지 마세요.\n"
-        "소제목은 ## (H2)로 표시하세요.\n"
-        "하나의 연속된 마크다운 본문으로 작성하세요. JSON이나 카드 분할 없이.\n"
-        "분량: 1200~2500자.\n"
-        "H2 수: 3~6개 (소제목 ##). 컴퍼스에 없는 선택적 H2도 포함 가능.\n"
-        "마지막에 📌 **요약** 섹션을 포함하세요.\n"
-        "메타 도입문 금지. 기사 핵심 내용으로 바로 시작.\n"
-    )
+def _build_blog_pass2_user_prompt(compass_json: dict, crawled_body: str,
+                                    h2_flow: str, intro_style: str,
+                                    summary_format: str) -> str:
+    """Pass 2 유저 프롬프트 — 데이터 전달 전용"""
+
+    return f"""아래 Compass JSON과 원문을 바탕으로 블로그 글을 작성하세요.
+
+[Compass JSON]
+{json.dumps(compass_json, ensure_ascii=False, indent=2)}
+
+[원문 본문]
+{crawled_body[:3000]}
+
+[코드가 결정한 값 — 그대로 따를 것]
+- intro_style: {intro_style}
+- h2_flow: {h2_flow}
+- summary_format: {summary_format}
+  (요약 블록은 시스템이 처리하므로 본문에 넣지 마세요)
+
+위 시스템 프롬프트의 규칙을 지키며 본문만 작성하세요."""
 
 
-def build_blog_system_prompt(tone: str = "neutral_careful") -> str:
-    """System prompt for blog-mode Pass 2 (full markdown article)."""
-    tone_rules = {
-        "neutral_careful": (
-            "톤: 공식적이고 신중한 어조 (~습니다, ~합니다 종결).\n"
-            "문장 길이: 30~80자 범위.\n"
-        ),
-        "fan_friendly": (
-            "톤: 친근하고 쉬운 어조 (~요, ~해요 종결). 독자에게 '여러분' 호칭 사용.\n"
-            "비유와 일상적 표현 허용. 문장 길이: 20~70자 범위.\n"
-        ),
-        "analytical": (
-            "톤: 분석적이고 근거 중심 어조 (~이다, ~다 종결). 수치를 강조.\n"
-            "인용문을 적극 활용. 문장 길이: 25~90자 범위.\n"
-        ),
+import pathlib
+
+_EXAMPLES_PATH = pathlib.Path(__file__).parent / "style_examples_compass.md"
+
+def _load_tone_example(tone: str) -> str:
+    """style_examples_compass.md에서 톤별 예시 블록 추출"""
+    text = _EXAMPLES_PATH.read_text(encoding="utf-8")
+    marker = f"[{tone} 예시]"
+    start = text.find(marker)
+    if start == -1:
+        return ""
+    end = text.find("\n## ", start + 1)
+    block = text[start + len(marker):end] if end != -1 else text[start + len(marker):]
+    return block.strip()
+
+
+def build_blog_system_prompt(tone: str) -> str:
+    """Compass Pass 2 시스템 프롬프트 — 축소 버전 v2"""
+
+    # ── 공통 규칙 (모든 톤 공유) ──
+    common = """당신은 한국어 테크 뉴스 에디터입니다. 아래 규칙만 지킵니다.
+
+[글자수]
+- 본문 1,200자 이상 2,500자 이하 (공백 포함).
+
+[문장 리듬]
+- 한 절(clause)은 10~25자. 25자를 넘기면 마침표나 쉼표로 끊는다.
+- 문단 사이에 빈 줄 하나를 둔다.
+- 같은 주어-서술어 패턴을 연속 2회 사용하지 않는다.
+
+[H2 제목]
+- 15자 이내의 짧은 명사구 또는 의문구로 쓴다.
+- H2는 3~5개 사용한다. 본문을 의미 단위로 나누는 데 쓴다.
+- Compass JSON의 필드값을 그대로 제목에 쓰지 않는다.
+
+[금지]
+- 한자(漢字) 직접 사용 금지. 한글로만 쓴다.
+- "획기적", "혁신적", "놀라운" 등 과장 수식어 금지.
+- 원문에 없는 수치·인용·사실을 추가하지 않는다.
+- 본문은 결론 문단으로 자연스럽게 끝낸다. "📌", "핵심 질문", "요약", "정리하면" 같은 마커를 본문 어디에도 쓰지 않는다.
+- slot2_compare가 "없음"이면 비교 문단을 만들지 않는다.
+
+[참고: 요약 블록은 시스템이 본문 뒤에 자동 첨부합니다. 본문에서는 결론 문단으로 끝내세요.]
+"""
+
+    # ── 톤별 블록 ──
+    tone_blocks = {
+        "neutral_careful": """[톤: neutral_careful]
+종결어미: ~습니다 / ~했습니다 / ~됩니다
+1인칭·감탄사 사용하지 않는다.""",
+
+        "fan_friendly": """[톤: fan_friendly]
+종결어미: ~요 / ~해요 / ~었어요 / ~거예요
+독자에게 말을 거는 듯한 친근한 어조를 쓴다.""",
+
+        "analytical": """[톤: analytical]
+종결어미: ~이다 / ~했다 / ~된다 / ~있다
+분석 보고서처럼 건조한 평서체를 쓴다."""
     }
-    tone_rule = tone_rules.get(tone, tone_rules["neutral_careful"])
 
-    return (
-        "당신은 한국어 AI/테크 뉴스 분석 블로거입니다.\n"
-        f"{tone_rule}"
-        "출력 언어는 한국어만. 영어 원문 인용 그대로 노출 금지.\n"
-        "한자·일본어·히라가나·가타카나 절대 금지.\n"
-        "모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말 절대 금지.\n"
-        "기업 홍보·광고성 표현 절대 금지. 다음 표현 사용 금지: "
-        "'비약적 성장', '도약합니다', '성공적으로 구축합니다', '확보합니다', "
-        "'선도합니다', '추진합니다'. "
-        "대신 팩트를 독자 관점에서 전달하세요: 기업이 무엇을 했는지, "
-        "수치는 무엇인지, 결과가 어떻게 변했는지.\n\n"
-        "## 블로그 글 형식 규칙\n"
-        "- 분량: 1200~2500자\n"
-        "- 소제목(H3, ##) 3~6개 포함 (필수 3개 + 선택적 H2)\n"
-        "- 마지막에 📌 **요약** 섹션 필수\n"
-        "- 메타 도입문 금지 (\"이번 글에서는...\", \"살펴보겠습니다\" 등).\n"
-        "  기사의 실질적 핵심 내용으로 바로 시작할 것.\n"
-        "- 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일\n"
-        "- 중국어(한자) 사용 금지\n"
-        "- 컴퍼스의 h2_flow 순서를 따르세요.\n"
-        "- 카드/섹션 분할 없이 하나의 연속된 마크다운 본문으로 작성하세요.\n"
-    )
+    tone_example = _load_tone_example(tone)
+    result = common + "\n" + tone_blocks.get(tone, tone_blocks["neutral_careful"])
+    if tone_example:
+        result += f"\n\n<완성 글 예시 — 이 분량과 구조를 모방하세요>\n{tone_example}\n</완성 글 예시>"
+    return result
 
 
 def _rearrange_h2(compass: dict, h2_flow: list[str]) -> list[str]:
@@ -419,19 +443,21 @@ def _rearrange_h2(compass: dict, h2_flow: list[str]) -> list[str]:
     return h2
 
 
-def _build_summary_block(summary: str, format: str = "bullet") -> str:
+def _build_summary_block(summary: str, format: str = "bullet", slot4_outlook: str = "") -> str:
     """Build summary block in specified format (Task 3-2).
 
     Formats: bullet (default), narrative, key_question, natural_close.
     """
-    if format == "narrative":
+    if format == "key_question" and slot4_outlook:
+        return f"📌 핵심 질문: {slot4_outlook.rstrip('.')}에서 가장 큰 변수는 무엇일까요?"
+    elif format == "natural_close" and slot4_outlook:
+        return slot4_outlook
+    elif format == "narrative" and summary:
         return f"📌 요약. {summary}"
-    elif format == "key_question":
-        return f"📌 핵심 질문. {summary} 이에 대한 답은?"
-    elif format == "natural_close":
-        return f"📌 마무리. {summary}. 더 궁금한 점은 댓글로 남겨주세요."
-    else:  # bullet (default)
+    elif format == "bullet" and summary:
         return f"📌 **요약**\n{summary}"
+    else:
+        return ""
 
 
 def write_compass_article(pitch: dict, all_articles: list, format_choice=None, output_target="naver", skip_g4=False, mode="thread", tone: str = "neutral_careful"):
@@ -470,7 +496,7 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
     article_ids = pitch.get("article_ids", [])
     aid = article_ids[0] if article_ids else ""
     today = datetime.now().strftime("%Y-%m-%d")
-    cache_key = (str(aid), today)
+    cache_key = (str(aid), today, tone)
     if cache_key in _compass_cache:
         _log(f" compass 캐시 히트: {cache_key}")
         return _compass_cache[cache_key]
@@ -533,6 +559,10 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
     _log(f"  category={compass['category']} intro_style={compass['intro_style']}")
     _log(f"  slot3_context={compass.get('slot3_context', '')[:100]}...")
 
+    # Track recent styles for weighted_pick (Task 1-2)
+    _recent_intro_styles.append(compass["intro_style"])
+    _recent_h2_flows.append(compass["h2_flow"])
+
     # ── G4 fact-gate on slot3_context ──
     if skip_g4:
         _log("G4 fact-gate: SKIPPED (skip_g4=True)")
@@ -548,7 +578,16 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
     if mode == "blog":
         _log("Pass 2: 블로그 본문 초안 생성 (blog mode)")
         blog_sys = build_blog_system_prompt(tone=tone)
-        user_prompt2 = _build_blog_pass2_user_prompt(compass, crawled_body)
+        summary_format = weighted_pick(
+            ["bullet", "narrative", "key_question", "natural_close"],
+            _recent_summary_formats[-2:],
+            exclude_count=2,
+        )
+        _log(f"[compass] summary_format={summary_format}")
+        _recent_summary_formats.append(summary_format)
+        user_prompt2 = _build_blog_pass2_user_prompt(
+            compass, crawled_body, compass["h2_flow"], compass["intro_style"], summary_format,
+        )
 
         draft_raw = chat_completion(
             messages=[{"role": "user", "content": user_prompt2}],
@@ -575,13 +614,23 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
                 _log(f"  블로그 본문 compass 레이블 누출: {label}")
                 return None
 
-        # Summary block variation (Task 3-2)
-        summary_format = weighted_pick(
-            ["bullet", "narrative", "key_question", "natural_close"],
-            _recent_intro_styles[-2:] if _recent_intro_styles else [],
-            exclude_count=2,
-        )
-        body = _build_summary_block(body, summary_format)
+        # LLM 본문에서 📌 블록이 있으면 제거 (잔여 방지)
+        body_clean = re.sub(r'\n*📌.*$', '', body, flags=re.DOTALL).rstrip()
+
+        # compass JSON의 slot1_fact + slot4_outlook로 요약 텍스트 생성
+        slot4_outlook = compass.get("slot4_outlook", "")
+        summary_text_parts = []
+        if compass.get("slot1_fact"):
+            summary_text_parts.append(compass["slot1_fact"])
+        if slot4_outlook:
+            summary_text_parts.append(slot4_outlook)
+        summary_text = " ".join(summary_text_parts) if summary_text_parts else ""
+
+        if summary_text:
+            summary_block = _build_summary_block(summary_text, summary_format, slot4_outlook=slot4_outlook)
+            body = body_clean + "\n\n" + summary_block
+        else:
+            body = body_clean
 
         # Increment rotation on success
         _save_intro_rotation(intro_rotation + 1)
@@ -648,10 +697,6 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
         # ── Increment rotation on success ──
         _save_intro_rotation(intro_rotation + 1)
         _save_h2_rotation(h2_rotation + 1)
-
-        # Track recent styles for weighted_pick (Task 1-2)
-        _recent_intro_styles.append(compass["intro_style"])
-        _recent_h2_flows.append(compass["h2_flow"])
 
         # ── Naver HTML wrapping ──
         if output_target == "naver":

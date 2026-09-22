@@ -2,6 +2,28 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-21 — fix: D1 인증 실패로 블로그 초안 생성 스킵 방지
+
+- **원인**: `CLOUDFLARE_API_TOKEN`만 unset하고 `CLOUDFLARE_ACCOUNT_ID`를 그대로 전달하여 `wrangler d1 execute` 인증 실패 (7403 에러)
+  - 에이전트 세션이 `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`를 설정 → OAuth 프로필과 계정 충돌
+  - `blog_draft_generator.py` `_d1_run()`이 두 env var 중 하나만 해제 → "오늘 브리핑 없음" 오판
+- **수정**: D1 쿼리 함수 7곳 + sitemap_ping.py + deploy.sh 에서 `CLOUDFLARE_ACCOUNT_ID`도 unset
+  - `scripts/blog_draft_generator.py` `_d1_run()`
+  - `pipeline/infra/d1_client.py` `_build_env()`
+  - `scripts/briefing_enricher.py`, `scripts/auto_email_sender.py`, `scripts/auto_briefing.py`, `scripts/threads/db_reader.py`, `scripts/thread_topics/thread_topic_finder.py`
+  - `scripts/sitemap_ping.py`: DEFAULT_SITEMAP `sitemap-index.xml` → `sitemap.xml` (실제 URL)
+  - `scripts/deploy.sh`: sitemap ping URL `sitemap-index.xml` → `sitemap.xml`
+- **검증**: D1 쿼리 성공 (briefings 306/307, 2026-09-21, published), sitemap.xml 200 OK
+- **문제**: 브리핑은 발행됨 (briefing_id=306, 6개 아이템, deep_dive_url 연결 완료). 저녁 blog_draft가 D1 인증 실패로 "브리핑 없음" 처리한 것이었음
+
+## 2026-09-21 — rerun: 파이프라인 + 블로그 전체 재생성
+
+- `python3 scripts/run_pipeline.py` — 선정 뉴스 6건, 썸네일 6건, 배포 성공, sitemap ping ✅/✅ (200)
+- `python3 scripts/blog_draft_generator.py` — 블로그 초안 6건 생성, deep_dive_url 전부 연결, 배포 성공
+- briefings: 308 (2026-09-22-1, published), 6개 아이템 모두 deep_dive_url 연결
+- 블로그: `src/content/blog/2026-09-22-001` ~ `006` 생성·배포 완료
+- 품질 체크리스트: 6/6 통과, 0 이슈
+
 ## 2026-08-29 — fix: deep_dive writing prompt URL inclusion
 
 - `scripts/deep_dive_writer.py` `_build_writing_prompt`에 `URL: {link}` 추가

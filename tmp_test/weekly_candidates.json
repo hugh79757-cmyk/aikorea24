@@ -1,132 +1,132 @@
 [
   {
-    "topic": "AI 투자 활성화 vs 금융 소비자 보호",
-    "contrast_frame": "투자 플랫폼의 AI 비서 도입을 통한 거래 편의성 증대 vs 금융 당국의 AI 투자 조언에 대한 소비자 보호 경고",
+    "topic": "미·중 AI 패권 경쟁 속 국가 안보 대격돌",
+    "contrast_frame": "미중 기술 패권 경쟁 우위 확보 vs 핵무기급 군사 AI 안전장치 도입",
     "type": "A",
     "source_articles": [
       {
-        "id": 46653,
-        "title": "스케일러블 캐피털, 600억 유로 규모 고객 자산을 외부 AI 비서와 연동",
+        "id": 51267,
+        "title": "\"미국은 질 수 없다\": 펜타곤, 경고에도 불구하고 AI 개발에 박차",
+        "source": "Politico EU Tech",
+        "pub_date": "Wed, 16 Sep 2026 20:59:56",
+        "link": "https://www.politico.com/news/2026/09/16/pentagon-ai-congress-worries-defense-01080418?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication"
+      },
+      {
+        "id": 51354,
+        "title": "미·중 보안 전문가들, 군사 AI를 위한 핵무기급 안전장치 제안",
         "source": "The Next Web",
-        "pub_date": "Tue, 25 Aug 2026 12:06:31",
-        "link": "https://thenextweb.com/news/scalable-capital-chatgpt-claude-trading"
+        "pub_date": "Thu, 17 Sep 2026 10:42:29",
+        "link": "https://thenextweb.com/news/us-china-experts-nuclear-style-ai-safeguards"
+      }
+    ],
+    "quote_1": "군 수뇌부는 인공지능 연구에서 적들에게 뒤처질 위험이 기술의 잠재적 위험보다 더 크다고 경고하고 있습니다.",
+    "quote_2": "로이터통신에 따르면 미국과 중국의 보안 전문가들이 핵무기 관련 규제들을 모델 삼아 AI가 발사 여부를 결정하는 것을 금지하는 조항을 포함한 군사 AI 안전장치를 제안했습니다.",
+    "gap_summary": "미국이 AI 패권 경쟁을 위해 개발 속도를 높여야 한다는 입장과 군사 AI에 대한 엄격한 안전장치가 필요하다는 주장이 충돌할 수 있음을 보여준다.",
+    "reading_angle": "국가 안보를 위한 기술 우위 확보와 통제 불능을 막기 위한 규제 도입 사이의 정책적 갈등을 엿볼 수 있다.",
+    "category": "국제정세"
+  },
+  {
+    "topic": "AI 실존적 위협 경고와 규제 강화 vs 공포 마케팅 및 규제 완화",
+    "contrast_frame": "AI 안전성 통제 및 규제 법제화 촉구 vs 공상과학적 공포와 불필요한 과잉 규제 경고",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 51256,
+        "title": "앤스로픽 정책 총괄, \"AI 기업들에 '명예 규율'만 기대할 수는 없다\"",
+        "source": "CNBC Tech",
+        "pub_date": "Wed, 16 Sep 2026 19:56:09",
+        "link": "https://www.cnbc.com/2026/09/16/anthropic-policy-chief-says-ai-companies-cant-operate-on-honor-code.html"
       },
       {
-        "id": 47060,
-        "title": "AI를 투자에 사용할 때는 본인 책임, 금융 감독원 경고",
+        "id": 51254,
+        "title": "영국의 AI 기업 합성시아, '공상과학 영화 같은' 공포가 영국 기술 산업을 질식시킬 수 있다고 경고",
         "source": "City AM",
-        "pub_date": "Wed, 26 Aug 2026 23:01:00",
-        "link": "https://www.cityam.com/use-ai-for-investing-at-your-own-risk-warns-watchdog/"
+        "pub_date": "Wed, 16 Sep 2026 14:22:33",
+        "link": "https://www.cityam.com/british-ai-firm-synthesia-warns-sci-fi-fears-risk-chocking-uk-tech/"
       }
     ],
-    "quote_1": "스케일러블 캐피털은 자사 투자 플랫폼을 챗GPT와 클로드에 개방하여, 고객들이 브로커 앱을 거치지 않고도 AI 비서를 통해 포트폴리오를 분석하고 거래할 수 있게 했습니다.",
-    "quote_2": "영국의 금융 감독 기관은 AI를 투자 조언에 사용하는 영국인들에게 문제가 생길 경우 보호받지 못할 수 있다고 경고했습니다.",
-    "gap_summary": "금융 플랫폼의 기술적 혁신이 투자 접근성을 높이는 동시에, 규제 사각지대로 인한 투자자 피해 위험을 가중시킬 수 있음을 시사한다.",
-    "reading_angle": "금융 서비스의 디지털 전환 속도와 소비자 안전망 구축 사이의 정책적 괴리",
-    "category": "투자"
+    "quote_1": "모델 개발 규제 방안을 둘러싼 논쟁이 격화되는 가운데, 앤스로픽의 공공 정책 총괄인 세라 헥(Sarah Heck)이 AI 안전성에 대한 견해를 밝혔습니다.",
+    "quote_2": "영국의 AI 기업 합성시아(Synthesia)는 AI에 대한 '공상과학 영화 같은' 과도한 공포가 부실한 규제로 이어질 수 있다고 경고하며, 영국 정부를 향해 AI 규제 강화 압박이 커지는 상황에 우려를 표명했다.",
+    "gap_summary": "AI 안전성 확보를 위해 기업들에 명예 규율 이상의 강력한 규제가 필요하다는 시각과, 과도한 공포로 인해 오히려 기술 산업이 질식할 수 있다는 우려가 충돌하고 있음을 보여준다.",
+    "reading_angle": "AI 규제 강도를 둘러싼 산업계 내부의 상반된 위기감을 해석하는 관점",
+    "category": "정책"
   },
   {
-    "topic": "AI 기반 자동화의 효율성 vs 인간 고유 영역의 보존",
-    "contrast_frame": "AI가 대체할 수 없는 '인간 전용' 일자리 지정 필요성 vs 수학 등 전문 분야에서 AI가 갖지 못한 인간 고유의 창의적 능력 유지",
+    "topic": "산업계 자율 규제론 vs 정부의 법적 구속력 있는 감독",
+    "contrast_frame": "기업의 기술적 자율 안전 조치 신뢰 vs 정부 주도의 법제화 및 강력한 감독",
     "type": "A",
     "source_articles": [
       {
-        "id": 46834,
-        "title": "빌 게이츠, AI의 잠식에 맞서 '인간 전용' 일자리 필요성 역설",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 26 Aug 2026 10:33:43",
-        "link": "https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai-takeover"
-      },
-      {
-        "id": 46641,
-        "title": "AI가 수학의 종말을 의미할까? 아직은 아니다",
-        "source": "The Guardian AI",
-        "pub_date": "Tue, 25 Aug 2026 12:00:35",
-        "link": "https://www.theguardian.com/commentisfree/2026/aug/25/ai-mathematics-careers"
-      }
-    ],
-    "quote_1": "AI가 대체할 수 없는 '인간 전용' 일자리를 지정해야 한다고 주장했습니다.",
-    "quote_2": "인간 수학자에게는 여전히 AI가 갖지 못한 고유한 능력이 남아 있습니다.",
-    "gap_summary": "AI의 급격한 확산 속에서 인간의 노동 영역을 제도적으로 보호하려는 정책적 접근과, 전문 분야 내재적 역량을 통해 기술적 한계를 극복하려는 실무적 대응이 공존하고 있음을 시사할 수 있다.",
-    "reading_angle": "AI 자동화에 대한 대응 전략으로서 '제도적 보호'와 '인간 고유 역량의 재발견'이라는 두 가지 상호보완적 관점",
-    "category": "노동"
-  },
-  {
-    "topic": "AI 모델의 신뢰성 확보 vs AI 생성 정보의 오남용",
-    "contrast_frame": "LLM과 보안 기술을 결합하여 정보의 일관성과 신뢰성을 높이려는 기술적 시도 vs 가짜 싱크탱크를 통해 AI로 선전 활동을 수행하는 악의적 이용",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 46937,
-        "title": "QueryStory, AI가 제공하는 정보의 신뢰성을 높이려 합니다",
+        "id": 51035,
+        "title": "\"AI 규제는 필요 없다 — 안전은 우리에게 맡겨달라\" 젠슨 황 엔비디아 CEO의 주장",
         "source": "TechCrunch AI",
-        "pub_date": "Wed, 26 Aug 2026 13:00:00",
-        "link": "https://techcrunch.com/2026/08/26/querystory-wants-you-to-believe-what-ai-is-telling-you/"
+        "pub_date": "Wed, 16 Sep 2026 00:20:39",
+        "link": "https://techcrunch.com/2026/09/15/we-dont-need-ai-regulation-leave-safety-to-us-nvidias-jensen-huang-says/"
       },
       {
-        "id": 46835,
-        "title": "이스라엘이 자금을 댄 가짜 미국 싱크탱크, AI를 이용한 선전 활동 시도",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 26 Aug 2026 11:00:11",
-        "link": "https://www.theguardian.com/world/2026/aug/26/fake-thinktank-israel-ai-propaganda"
+        "id": 50820,
+        "title": "안​전 경고가 늘어나는 가운데 영국 정부, AI 법제화 가능성 열어",
+        "source": "City AM",
+        "pub_date": "Tue, 15 Sep 2026 10:01:39",
+        "link": "https://www.cityam.com/uk-government-opens-door-to-ai-laws-as-safety-warnings-mount/"
       }
     ],
-    "quote_1": "LLM과 사이버 보안 노하우를 결합해 AI의 질의응답 과정을 더욱 일관되고 신뢰할 수 있게 만드는 것을 목표로 합니다.",
-    "quote_2": "존재하지 않는 싱크탱크의 이름을 내건 이 친이스라엘 메시지 사이트는 AI를 조작하려는 목적으로 운영되었습니다.",
-    "gap_summary": "AI 기술이 정보의 신뢰성을 강화하는 도구로 활용될 수 있는 반면, 동시에 여론 조작을 위한 악의적 선전 수단으로도 오남용될 수 있음을 시사한다.",
-    "reading_angle": "AI 기술의 발전이 가져오는 양면성, 즉 기술적 보호 장치와 악의적 조작 시도 간의 대립 구도",
-    "category": "보안"
+    "quote_1": "안전 문제는 각 AI 제품 제조사가 기술적으로 충분히 해결할 수 있다는 설명입니다.",
+    "quote_2": "영국 정부는 세계에서 가장 강력한 모델을 개발하는 기업들이 안전이 뒤처졌다고 우",
+    "gap_summary": "기업의 자율적인 기술적 안전 조치를 신뢰해야 한다는 입장과 정부 차원의 법적 구속력 있는 규제가 시급하다는 시각이 충돌할 수 있음을 보여준다.",
+    "reading_angle": "AI 안전 관리의 주도권을 산업계가 가져야 하는지, 혹은 국가가 법제화를 통해 통제해야 하는지에 대한 정책적 갈등을 엿볼 수 있다.",
+    "category": "윤리"
   },
   {
-    "topic": "기업의 AI 인프라 확장 vs 핵심 인력의 이탈",
-    "contrast_frame": "앤스로픽의 대규모 컴퓨팅 인프라 계약 체결을 통한 확장 전략 vs OpenAI의 핵심 데이터 센터 임원 퇴사 등 고위급 인력 유출",
+    "topic": "초거대 AI 인프라 확장에 따른 자원 확보 vs 지역 사회 및 환경 갈등",
+    "contrast_frame": "데이터센터 및 AI 팩토리 전력·토지 인프라 대규모 확장 vs 환경 영향 평가 의무화 및 지역 사회 반발",
     "type": "A",
     "source_articles": [
       {
-        "id": 47151,
-        "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약 체결",
-        "source": "The Decoder",
-        "pub_date": "Thu, 27 Aug 2026 10:49:35",
-        "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/"
+        "id": 51523,
+        "title": "크루소, 대규모 데이터 센터 및 소형 모듈형 'AI 팩토리' 구축 위해 39억 달러 투자 유치",
+        "source": "TechCrunch AI",
+        "pub_date": "Thu, 17 Sep 2026 23:25:52",
+        "link": "https://techcrunch.com/2026/09/17/crusoe-raises-3-9b-to-build-massive-data-centers-and-small-modular-ai-factories/"
       },
       {
-        "id": 46820,
-        "title": "OpenAI, 핵심 데이터 센터 임원 퇴사… 이어지는 고위급 인력 이탈",
+        "id": 50926,
+        "title": "AI 데이터센터 붐이 대규모 산업으로 상처받은 도시와 충돌한다",
         "source": "TechCrunch AI",
-        "pub_date": "Wed, 26 Aug 2026 00:06:20",
-        "link": "https://techcrunch.com/2026/08/25/openai-loses-a-top-data-center-exec-as-stream-of-high-profile-departures-continues/"
+        "pub_date": "Tue, 15 Sep 2026 21:47:38",
+        "link": "https://techcrunch.com/2026/09/15/the-ai-data-center-boom-is-colliding-with-cities-scarred-by-big-industry/"
       }
     ],
-    "quote_1": "앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다.",
-    "quote_2": "OpenAI는 말론(Malone)의 퇴사와 관련해 테크크런치(TechCrunch)에 \"업무의 규모와 속도를 지원하기 위해 최근 인프라 조직을 재편했다\"고 밝혔습니다.",
-    "gap_summary": "앤스로픽은 대규모 인프라 확보를 통해 성장 동력을 강화하는 반면, OpenAI는 핵심 인력 이탈로 인해 조직 운영의 불확실성이 커지고 있을 가능성이 있다.",
-    "reading_angle": "AI 기업의 경쟁력 확보 방식(물적 자원 투자 vs 인적 자원 유지)에 따른 성장 전략의 차이",
+    "quote_1": "이번 투자 라운드로 이 데이터 센터 거인의 기업 가치는 309억 달러로 평가되었습니다.",
+    "quote_2": "데이터센터 건설에 대한 전국적인 반발이 필라델피아까지 번지고 있다. 관계자들은 이미 폐쇄된 석유 정유공장이 있던 지역에 새로운 데이터센터가 들어설 가능성을 제시했다.",
+    "gap_summary": "대규모 자본 투자를 통한 AI 인프라 확장 추세와 달리, 실제 지역 사회에서는 환경 및 부지 문제를 두고 반발이 발생할 수 있음을 보여준다.",
+    "reading_angle": "AI 인프라 투자 규모의 급증과 지역 사회 갈등 사이의 간극을 분석하는 관점",
     "category": "시장"
   },
   {
-    "topic": "AI 학습의 법적 정당성 vs 저작권 보호의 한계",
-    "contrast_frame": "AI 모델 학습을 위한 저작물 사용의 법적 복잡성 vs AI 도입이 오히려 연구의 질을 저하시킬 수 있다는 이론적 연구 결과",
+    "topic": "AI 에이전트의 자율성 증대와 보안 리스크 관리",
+    "contrast_frame": "과도한 에이전트 권한(Excessive Agency) 보안 위협 증가 vs 자동화 설정을 위한 에이전트 적극 활용",
     "type": "A",
     "source_articles": [
       {
-        "id": 46457,
-        "title": "저작권이 있는 도서로 AI 모델을 학습시키는 것은 합법일까? 상황은 복잡하다",
-        "source": "TechCrunch AI",
-        "pub_date": "Sun, 23 Aug 2026 15:00:00",
-        "link": "https://techcrunch.com/2026/08/23/is-it-legal-to-train-ai-models-on-copyrighted-books-its-complicated/"
+        "id": 51249,
+        "title": "이제 가장 어려운 AI 보안 문제는 에이전트의 권한 범위에 집중되어 있다",
+        "source": "The Next Web",
+        "pub_date": "Wed, 16 Sep 2026 16:18:35",
+        "link": "https://thenextweb.com/news/owasp-llm-2026-agency-cra"
       },
       {
-        "id": 46407,
-        "title": "\"AI가 과학자의 업무 효율을 높이기보다 오히려 질을 떨어뜨릴 수 있다\"는 연구 결과",
-        "source": "The Decoder",
-        "pub_date": "Sun, 23 Aug 2026 09:01:17",
-        "link": "https://the-decoder.com/ai-could-make-scientists-do-more-work-less-well-not-less-work-better-study-argues/"
+        "id": 50927,
+        "title": "Meta, AI 에이전트가 WhatsApp Business 설정의 지루한 작업을 처리하도록 허용",
+        "source": "TechCrunch AI",
+        "pub_date": "Tue, 15 Sep 2026 20:12:53",
+        "link": "https://techcrunch.com/2026/09/15/meta-now-lets-ai-agents-handle-the-boring-parts-of-whatsapp-business-setup/"
       }
     ],
-    "quote_1": "언뜻 보기에는 불법처럼 보이지만, 실제로는 매우 복잡한 법적 쟁점이 얽혀 있습니다.",
-    "quote_2": "언어 모델이 완벽하게 작동하더라도 연구의 질을 오히려 저하시킬 수 있다는 이론적 연구가 발표되었습니다.",
-    "gap_summary": "AI 학습의 법적 정당성 논란이 기술적 효용성 이면의 질적 저하 우려와 결합하여, AI 도입이 사회적·학문적 가치에 부정적인 영향을 미칠 가능성이 있음을 시사한다.",
-    "reading_angle": "AI 기술의 확산이 법적·윤리적 갈등을 넘어 지식 생산의 본질적 가치를 훼손할 수 있다는 다각적 위험성 분석",
-    "category": "윤리"
+    "quote_1": "OWASP의 2026년 LLM 애플리케이션 보안 가이드 10대 항목(Top 10)에서 '과도한 에이전트 권한(Excessive Agency)'은 6위에서 3위로 상승한 반면, '부적절한 출력 처리'는 5위에서 10위로 하락했다.",
+    "quote_2": "새로운 WhatsApp Business MCP 서버를 통해 개발자는 Claude, Cursor, Codex, ChatGPT와 같은 AI 코딩 에이전트를 활용해 설정, 메시지 템플릿, 테스트, 문제 해결 등을 자동화할 수 있다.",
+    "gap_summary": "AI 에이전트의 권한 확대가 보안 리스크로 직접 이어져 관리 필요성이 커질 수 있음을 보여준다.",
+    "reading_angle": "에이전트 자율성 증대에 따른 보안 위협과 실무 활용 확대 간의 양면성",
+    "category": "보안"
   }
 ]

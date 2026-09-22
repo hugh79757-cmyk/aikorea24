@@ -1,28 +1,48 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-30T22:30:00.000Z",
-  "phase": "04",
-  "phase_name": "Monolith Splitting",
-  "phase_dir": ".planning/phases/04-monolith-splitting",
-  "plan": null,
-  "task": null,
-  "total_tasks": 13,
-  "status": "completed",
+  "timestamp": "2026-09-21T02:01:00Z",
+  "phase": 39,
+  "phase_name": "compass-2-pass-korean-article-writing-pipeline",
+  "phase_dir": ".planning/phases/39-compass-2-pass-korean-article-writing-pipeline",
+  "plan": 1,
+  "task": 1,
+  "total_tasks": 1,
+  "status": "blocked",
   "completed_tasks": [
-    {"id": "04-01", "name": "validator + crawler extraction + tests", "status": "completed"},
-    {"id": "04-02", "name": "pitch + pitch_evaluator extraction + tests", "status": "completed"},
-    {"id": "04-03", "name": "writer extraction + tests", "status": "completed"},
-    {"id": "04-04", "name": "orchestrator unit tests", "status": "completed"}
+    {"id": 1, "name": "Task 1: 5 writing-logic prompt fixes (REQ-39-06..10)", "status": "done"},
+    {"id": 2, "name": "Task 2: Expansion — H2 presets + intro_style examples", "status": "done"},
+    {"id": 3, "name": "New test files: slot_h2_alignment + no_repetition", "status": "done"}
   ],
-  "remaining_tasks": [],
-  "blockers": [],
+  "remaining_tasks": [
+    {"id": 4, "name": "Fix G4 fact-gate Layer1 false-positive blocking", "status": "in_progress", "progress": "_suffixes list added (을/습니다/했습니다); still broken — '있습니다' not stripped because _verb_endings runs first and does not match it"}
+  ],
+  "blockers": [
+    {"description": "compass_dryrun.py fails at G4 fact-gate with false '출처 미매칭' tokens (e.g. '역량을', '바탕으로', '추진하고', '있습니다', '행사를'). Root cause: fact_gate.py noun regex [가-힣]{2,8} grabs noun+particle combos that never appear verbatim in the source body.", "type": "technical", "workaround": "--skip-g4 flag exists on the dry-run script"}
+  ],
+  "async_jobs": [],
   "human_actions_pending": [],
   "decisions": [
-    {"decision": "Phase 4 extraction sequence: validator → crawler → pitch/pitch_evaluator → writer", "rationale": "Dependency risk order — validators pure (zero deps), crawler breaks cross-dep, writer depends on both", "phase": "04"},
-    {"decision": "Strangler Fig: old files become re-export wrappers", "rationale": "All old import paths continue working via `from pipeline.threads.X import Y` at bottom of old file", "phase": "04"},
-    {"decision": "Phase 4 plans structured as 2 waves: W1=04-01+04-04, W2=04-02+04-03", "rationale": "04-02 and 04-03 both depend on 04-01's extracted modules; 04-04 is independent", "phase": "04"}
+    {"decision": "Strip trailing particles/descriptive suffixes from noun chunks before matching", "rationale": "The noun regex greedily captures noun+particle combos (행사+를, 준공+할, 그룹+의) that never appear verbatim in the source body, producing false '출처 미매칭' blocks. Stripping the suffix lets the bare noun stem match.", "phase": 39},
+    {"decision": "Render intro_style prompt block from INTRO_STYLE_EXAMPLES + INTRO_STYLE_PREFIXES dicts", "rationale": "Keeps prompt text in sync with the example data; avoids dead/hardcoded data (REQ-39-10).", "phase": 39}
   ],
-  "uncommitted_files": [],
-  "next_action": "Execute Phase 5: /gsd-execute-phase 5",
-  "context_notes": "Phase 4 completed with full verification: 173 tests pass (116 existing + 57 new), all modules extracted to pipeline/threads/, old files are thin Strangler Fig wrappers. Ready for Phase 5."
+  "uncommitted_files": [
+    "D .planning/HANDOFF.json",
+    "M .planning/ROADMAP.md",
+    "M .planning/STATE.md",
+    "M pipeline/threads/compass.py",
+    "M pipeline/threads/fact_gate.py",
+    "M scripts/briefing_dedup.json",
+    "M scripts/threads/compass_dryrun.py",
+    "M tests/test_compass_generation.py",
+    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/39-01-SUMMARY.md",
+    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/39-PLAN.md",
+    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/CONTEXT.md",
+    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/EXECUTION-LEDGER.md",
+    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/TASK-1-REPORT.md",
+    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/.continue-here.md",
+    "?? tests/test_compass_no_repetition.py",
+    "?? tests/test_compass_slot_h2_alignment.py"
+  ],
+  "next_action": "Fix fact_gate.py:_layer1_substring_match so '있습니다'-class tokens reach the suffix strip (the _verb_endings tuple runs first and does not match them), then re-run `python scripts/threads/compass_dryrun.py` and the 4-file unit suite.",
+  "context_notes": "Phase 39 was planned but never executed — the 4 most recent commits (ce1dec4e..de7aae59) were the ORIGINAL Compass build, not the replan fixes. This session applied the plan (5 prompt fixes + 2 test files + SUMMARY). Then user said '고쳐줘' (fix it) about the dry-run failure, which turned out to be a pre-existing G4 fact-gate bug in fact_gate.py, unrelated to the prompt work. The G4 stem-stripping fix is half-done and still broken."
 }
