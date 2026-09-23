@@ -123,12 +123,42 @@ const taskSlugs = Object.keys(TASKS);
       </div>
     </form>
 
-    <!-- 완료 상태 (최소 훅 — 전체 완료화면은 41-03 소유) -->
-    <div id="done-state" class="hidden text-center py-8">
-      <p class="text-2xl mb-2">✅</p>
-      <p class="text-lg font-bold text-gray-900 dark:text-white mb-2">등록되었습니다!</p>
-      <p class="text-sm text-gray-600 dark:text-gray-400">slug: <span id="done-slug" class="font-mono"></span></p>
-      <a id="done-link" href="#" class="inline-block mt-4 text-blue-600 dark:text-blue-400 hover:underline text-sm">내 도구 보러가기 →</a>
+    <!-- 완료화면 (41-03 Task 1: 카드 미리보기 + MAKER + 카페 퍼널) -->
+    <div id="done-state" class="hidden py-8">
+      <div class="text-center mb-6">
+        <p class="text-2xl mb-2">✅</p>
+        <p class="text-lg font-bold text-gray-900 dark:text-white mb-2">등록되었습니다!</p>
+        <p class="text-sm text-gray-600 dark:text-gray-400">slug: <span id="done-slug" class="font-mono"></span></p>
+      </div>
+
+      <!-- 카드 미리보기 (index 카드 클래스 재사용) -->
+      <div class="relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden dark:bg-[#111827]/60 dark:border-white/[0.06] mb-6">
+        <div class="h-0.5 w-full bg-gradient-to-r from-purple-500 to-indigo-600"></div>
+        <div class="p-4 sm:p-5 flex-1 flex flex-col">
+          <div class="flex items-start justify-between mb-2">
+            <h3 id="preview-name" class="text-sm sm:text-base font-bold text-gray-900 dark:text-white leading-snug pr-2"></h3>
+            <div class="flex gap-1 flex-shrink-0">
+              <span class="text-xs font-bold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full border border-purple-200 dark:bg-purple-500/15 dark:text-purple-400 dark:border-purple-500/20">MAKER</span>
+            </div>
+          </div>
+          <p id="preview-desc" class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 flex-1 leading-relaxed"></p>
+          <div class="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 dark:border-white/[0.05]">
+            <span id="preview-cat" class="text-xs text-gray-500 dark:text-gray-500"></span>
+            <span id="preview-price" class="text-[11px] font-medium text-gray-600 dark:text-gray-500 flex-shrink-0"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카페 퍼널 -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <button type="button" id="cafe-copy-btn" class="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors text-sm">📋 카페 공유 문구 복사</button>
+        <a href="https://cafe.naver.com/gptdohye" target="_blank" rel="noopener" class="flex-1 py-3 text-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-xl transition-colors text-sm">☕ 카페 바로가기</a>
+      </div>
+      <p id="copy-ok" class="hidden text-sm text-green-600 dark:text-green-400 text-center mb-4">복사되었습니다! 카페에 붙여넣기 해주세요.</p>
+
+      <div class="text-center">
+        <a id="done-link" href="#" class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-sm">내 도구 보기 →</a>
+      </div>
     </div>
 
     <div class="mt-8 text-center">
@@ -211,6 +241,17 @@ const taskSlugs = Object.keys(TASKS);
     window.scrollTo(0, 0);
   });
 
+  // 카페 공유 문구 복사 (41-03 Task 1 — URL locked)
+  document.getElementById('cafe-copy-btn')?.addEventListener('click', async () => {
+    const text = document.getElementById('cafe-copy-btn')?.dataset.shareText || '';
+    try {
+      await navigator.clipboard.writeText(text);
+      document.getElementById('copy-ok')?.classList.remove('hidden');
+    } catch {
+      showError('클립보드 복사에 실패했습니다. 직접 복사해주세요.');
+    }
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     hideError();
@@ -245,10 +286,22 @@ const taskSlugs = Object.keys(TASKS);
       } else if (!res.ok) {
         showError(data.error || '제출 중 오류가 발생했습니다.');
       } else {
+        const toolName = document.getElementById('f-name').value.trim();
+        const toolUrl = document.getElementById('f-url').value.trim();
+        const toolDesc = document.getElementById('f-description').value.trim();
+        const toolCat = document.getElementById('f-category').value;
+        const toolPrice = document.getElementById('f-price').value;
         form.classList.add('hidden');
         document.getElementById('done-state').classList.remove('hidden');
         document.getElementById('done-slug').textContent = data.slug;
         document.getElementById('done-link').href = '/tools/' + data.slug + '/';
+        document.getElementById('preview-name').textContent = toolName;
+        document.getElementById('preview-desc').textContent = toolDesc;
+        document.getElementById('preview-cat').textContent = toolCat;
+        document.getElementById('preview-price').textContent = toolPrice || '—';
+        document.getElementById('cafe-copy-btn').dataset.shareText =
+          `[${toolName}] ${toolUrl}\n${toolDesc}\nhttps://cafe.naver.com/gptdohye 에서 더 많은 AI 활용법을 확인하세요`;
+        window.scrollTo(0, 0);
       }
     } catch {
       showError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
