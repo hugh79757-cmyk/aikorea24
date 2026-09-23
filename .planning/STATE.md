@@ -4,10 +4,10 @@ milestone: v2.0-complete
 current_phase: 38
 current_phase_name: Threads 자가개선   루프
 status: phase_38_complete
-stopped_at: Completed 41-tools-user-submit-03-PLAN.md
-last_updated: "2026-09-23T03:42:52.461Z"
+stopped_at: Completed 42-tools-phase1-adjust-01-PLAN.md
+last_updated: "2026-09-23T04:58:58.912Z"
 last_activity: 2026-09-22
-state_head: 68f5b4d32db7974886f5f05996f070b45d39bde6
+state_head: 7317345fc5118234c160aca28efc2844edcfc094
 progress:
   total_phases: 38
   completed_phases: 38
@@ -164,6 +164,7 @@ Progress: [███████████████████████
 |------|----------|-------|-------|
 | Phase 40-compass-writing-mode-diversification P01 | 25min | 11 tasks | 6 files |
 | Phase 41-tools-user-submit P03 | 20min | 3 tasks | 4 files |
+| Phase 42-tools-phase1-adjust P01 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -189,6 +190,8 @@ Recent decisions affecting current work:
 - [Phase 28-05]: 발행 전 자동 검수 게이트 5종 구현: heuristic 4종(출처 없는 숫자·첫 120자 결론·표 무결성·제목 언어) + LLM 일반론 판정 1종 → validate_draft_quality()로 통합, main() 생성 루프에 연결
 - [Phase 28-05]: auto_deep_article.py 표 사용 금지 규칙 삭제 + 조건 분기·출처·독자행동·관련 허브 섹션 요구 추가 → generate_draft와 프롬프트 일관성 확보
 - [Phase 38]: Independent 2-axis rotation (intro_style + h2_flow) over single sequential counter
+- [Phase 38]: 42-01: DROP COLUMN price local+remote 성공, fallback 불필요 (0행 무손실)
+- [Phase 38]: 42-01: price_model DB NOT NULL 없이 코드 검증만 (RESEARCH Risk 3 권장)
 
 ### Key Decisions (Phase 17)
 
@@ -248,8 +251,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-09-23T03:42:52.415Z
-Stopped at: Completed 41-tools-user-submit-03-PLAN.md
+Last session: 2026-09-23T04:58:58.861Z
+Stopped at: Completed 42-tools-phase1-adjust-01-PLAN.md
 Resume file: None
 Next: Review working-tree divergence (unstaged src/content/blog/*.md + tools md) before next milestone or ad-hoc task.
 
@@ -281,3 +284,11 @@ phase_40: 2026-09-22 Compass 글쓰기 모드 다양성 확보 (패턴 파괴 �
     - _rearrange_h2() + H2_FLOW_REQUIRED/OPTIONAL (3 required + 2 optional)
     - build_blog_system_prompt(tone) 3 분기 + _build_summary_block() 4 형식
     - fact_gate 영어 음차 매칭 + 언어 중립 + 혼합 임계값
+
+phase_41: 2026-09-23 tools-user-submit (사용자 직접 등록 1차 초벌)
+  status: complete (3/3 plans, waves 1→2→3 sequential)
+  plans: 3/3 (41-01 Phase0 read-only gate GO, 41-02 backbone DDL+API+form, 41-03 MVP completion+list+detail)
+  tests: npm run build 3/3 pass, E2E local curl matrix (401/400/201/slug-suffix/302/404) — browser clipboard click untested
+  guard: src/content/tools/ + scripts/tools_collector.py diff empty, no Phase 3 (R2/my/PUT/DELETE)
+  artifacts: sql/001_tool_submissions.sql (D1 local+remote applied), src/pages/api/tools/submit.ts, src/pages/tools/submit.astro + index.astro + [id].astro, 41-01-REPORT.md, 3 SUMMARY.md
+  notes: user_id INTEGER locked, MAKER badge classes verbatim 3 files, cafe https://cafe.naver.com/gptdohye, .wrangler/state sqlite local-only uncommitted
