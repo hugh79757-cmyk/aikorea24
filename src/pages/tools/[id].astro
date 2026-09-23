@@ -442,25 +442,28 @@ async function loadReviewData() {
   } catch (e) { console.error('Review load error:', e); }
 }
 
-// 로그인 체크 → 리뷰 쓰기 버튼 표시
-function checkAuth() {
-  const isLoggedIn = document.cookie.includes('session=');
-  const reviewWriteBtn = document.getElementById('review-write-btn');
-  if (reviewWriteBtn && isLoggedIn) reviewWriteBtn.classList.remove('hidden');
+// 로그인 체크 → 리뷰 쓰기 버튼 표시 (세션 쿠키는 httpOnly라
+// 클라이언트에서 읽을 수 없음 → 서버 /api/auth/me로 확인)
+async function checkAuth() {
+  try {
+    const res = await fetch('/api/auth/me');
+    const data = await res.json();
+    const reviewWriteBtn = document.getElementById('review-write-btn');
+    if (reviewWriteBtn && data.loggedIn) reviewWriteBtn.classList.remove('hidden');
+  } catch (e) { console.error('Auth check error:', e); }
 }
 
-// 투표 버튼 처리
+// 투표 버튼 처리 (사전 쿠키 체크 없이 바로 POST → 401일 때만 로그인 이동)
 const voteBtn = document.getElementById('vote-btn');
 if (voteBtn) {
   voteBtn.addEventListener('click', async () => {
-    const isLoggedIn = document.cookie.includes('session=');
-    if (!isLoggedIn) { window.location.href = '/api/auth/login'; return; }
     try {
       const res = await fetch('/api/tools/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tool_id: TOOL_ID })
       });
+      if (res.status === 401) { window.location.href = '/api/auth/login'; return; }
       const data = await res.json();
       if (res.ok) {
         const voted = data.voted;
@@ -470,8 +473,14 @@ if (voteBtn) {
         voteBtn.className = voted
           ? 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 dark:bg-amber-500/20 dark:border-amber-500/50 dark:text-amber-300'
           : 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-white/[0.05] dark:border-white/[0.15] dark:text-gray-300 dark:hover:bg-white/[0.1]';
+      } else {
+        console.error('Vote error:', data);
+        document.getElementById('vote-label').textContent = ' 추천 처리 중 오류';
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      document.getElementById('vote-label').textContent = ' 추천 처리 중 오류';
+    }
   });
 }
 
