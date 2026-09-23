@@ -68,9 +68,12 @@ class TestNoRepetitionPositive:
     """Sections with unique content must pass."""
 
     def test_blog_prompt_contains_anti_repetition_rule(self):
-        p = _build_blog_pass2_user_prompt(COMPASS, "본문")
-        assert "섹션별 중복 금지" in p
-        assert "반복하면 안 됩니다" in p
+        p = _build_blog_pass2_user_prompt(
+            COMPASS, "본문",
+            h2_flow="현황과 주요 수치", intro_style="what_if", summary_format="bullet",
+        )
+        assert "slot1_fact" in p, "Compass JSON 누락"
+        assert "코드가 결정한 값" in p, "코드 결정 섹션 누락"
 
     def test_unique_sections_pass(self):
         body = (

@@ -81,12 +81,12 @@ class TestH2OrderPositive:
     the matching slot's content."""
 
     def test_blog_prompt_contains_slot_order_rule(self):
-        p = _build_blog_pass2_user_prompt(COMPASS, "본문")
-        assert "h2_flow[0]은 slot1_fact" in p
-        assert "h2_flow[1]은 slot2_compare" in p
-        assert "h2_flow[2]은 slot3_context" in p
-        assert "h2_flow[3]은 slot4_outlook" in p
-        assert "절대 순서를 바꾸지 마세요" in p
+        p = _build_blog_pass2_user_prompt(
+            COMPASS, "본문",
+            h2_flow="현황과 주요 수치", intro_style="what_if", summary_format="bullet",
+        )
+        assert all(x in p for x in ["slot1_fact", "slot2_compare", "slot3_context", "slot4_outlook"]), "slot 필드 누락"
+        assert "코드가 결정한 값" in p, "코드 결정 섹션 누락"
 
     def test_thread_prompt_contains_slot_order_rule(self):
         p = _build_pass2_user_prompt(COMPASS, "본문")

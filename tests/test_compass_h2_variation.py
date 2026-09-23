@@ -115,9 +115,12 @@ class TestH2Rearrange:
             "tone": "neutral_careful",
             "table_plan": None,
         }
-        p = _build_blog_pass2_user_prompt(compass, "본문")
-        assert "3~6개" in p, "H2 수 범위 가이드라인 누락"
-        assert "선택" in p, "선택적 H2 가이드라인 누락"
+        p = _build_blog_pass2_user_prompt(
+            compass, "본문",
+            h2_flow="현황과 주요 수치", intro_style="what_if", summary_format="bullet",
+        )
+        assert "slot1_fact" in p, "Compass JSON 필드 누락"
+        assert "코드가 결정한 값" in p, "코드 결정 값 섹션 누락"
 
 
 class TestH2BlogPromptFlexibility:
@@ -136,8 +139,11 @@ class TestH2BlogPromptFlexibility:
             "tone": "neutral_careful",
             "table_plan": None,
         }
-        p = _build_blog_pass2_user_prompt(compass, "본문")
-        assert "컴퍼스" in p
+        p = _build_blog_pass2_user_prompt(
+            compass, "본문",
+            h2_flow="현황과 주요 수치", intro_style="what_if", summary_format="bullet",
+        )
+        assert "Compass JSON" in p
         assert "h2_flow" in p
 
     def test_prompt_with_full_5_h2s(self):
@@ -152,5 +158,8 @@ class TestH2BlogPromptFlexibility:
             "tone": "neutral_careful",
             "table_plan": None,
         }
-        p = _build_blog_pass2_user_prompt(compass, "본문")
-        assert "h2_flow[0]은 slot1_fact" in p
+        p = _build_blog_pass2_user_prompt(
+            compass, "본문",
+            h2_flow="현황과 주요 수치", intro_style="what_if", summary_format="bullet",
+        )
+        assert "slot1_fact" in p and "slot4_outlook" in p

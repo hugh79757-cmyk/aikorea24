@@ -90,7 +90,7 @@ class TestToneSentenceLengthRanges:
 
     def test_neutral_has_length_range(self):
         p = build_blog_system_prompt(tone="neutral_careful")
-        assert "1,200자 이상" in p
+        assert "1,000자 이상" in p
 
     def test_fan_friendly_shorter_sentences(self):
         p = build_blog_system_prompt(tone="fan_friendly")

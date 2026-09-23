@@ -364,17 +364,19 @@ def build_blog_system_prompt(tone: str) -> str:
     common = """당신은 한국어 테크 뉴스 에디터입니다. 아래 규칙만 지킵니다.
 
 [글자수]
-- 본문 1,200자 이상 2,500자 이하 (공백 포함).
+- 본문 1,000자 이상 2,500자 이하 (공백 포함).
+
+[H2 — 필수]
+- 본문에 반드시 H2(##)를 3~5개 넣는다. H2가 없으면 글은 폐기된다.
+- 형식: ## 제목 (마크다운 H2)
+- 15자 이내의 짧은 명사구 또는 의문구.
+- Compass JSON의 필드값을 그대로 제목에 쓰지 않는다.
+- 첫 번째 H2는 도입부(2~3문장) 뒤에 배치한다.
 
 [문장 리듬]
-- 한 절(clause)은 10~25자. 25자를 넘기면 마침표나 쉼표로 끊는다.
+- 한 절(clause)은 10~25자. 25자를 넘기면 마침표나 쉼표로 끊한다.
 - 문단 사이에 빈 줄 하나를 둔다.
 - 같은 주어-서술어 패턴을 연속 2회 사용하지 않는다.
-
-[H2 제목]
-- 15자 이내의 짧은 명사구 또는 의문구로 쓴다.
-- H2는 3~5개 사용한다. 본문을 의미 단위로 나누는 데 쓴다.
-- Compass JSON의 필드값을 그대로 제목에 쓰지 않는다.
 
 [금지]
 - 한자(漢字) 직접 사용 금지. 한글로만 쓴다.
@@ -406,7 +408,7 @@ def build_blog_system_prompt(tone: str) -> str:
     result = common + "\n" + tone_blocks.get(tone, tone_blocks["neutral_careful"])
     if tone_example:
         result += f"\n\n<완성 글 예시 — 이 분량과 구조를 모방하세요>\n{tone_example}\n</완성 글 예시>"
-    result += "\n[최종 확인] 작성 완료 후 글자수를 세어 1,200자 이상인지 반드시 확인한다."
+    result += "\n[최종 확인] 작성 완료 후 두 가지를 확인한다: ① 1,000자 이상 ② H2가 3개 이상."
     return result
 
 
@@ -621,14 +623,15 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
         body_clean = re.sub(r'^.*📌.*$', '', body, flags=re.MULTILINE)
         body_clean = re.sub(r'\n{3,}', '\n\n', body_clean).strip()
 
-        # 1,200자 미달 시 확장 재생성 (최대 2회)
+        # 1,000자 미달 또는 H2 3개 미달 시 확장 재생성 (최대 2회)
         revision = 0
-        while len(body_clean) < 1200 and revision < 2:
+        h2_count = len(re.findall(r'^## ', body_clean, re.MULTILINE))
+        while (len(body_clean) < 1000 or h2_count < 3) and revision < 2:
             revision += 1
-            _log(f"[글자수] {len(body_clean)}자 미달 — 확장 재생성 ({revision}/2)")
+            _log(f"[글자수] {len(body_clean)}자/H2 {h2_count}개 미달 — 확장 재생성 ({revision}/2)")
             rev_prompt = (
                 user_prompt2
-                + f"\n\n[길이 강제] 현재 본문은 {len(body_clean)}자입니다. 반드시 1,200자 이상으로 확장하세요."
+                + f"\n\n[길이 강제] 현재 본문은 {len(body_clean)}자, H2 {h2_count}개입니다. 반드시 1,000자 이상으로 확장하고 H2 3개 이상을 확보하세요."
                 " 구체적 사실·세부사항·배경을 추가하고, 문장을 길게 쓰며 절 분할을 최소화하세요."
             )
             draft_raw = chat_completion(
@@ -642,7 +645,8 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
             body = draft_raw.strip()
             body_clean = re.sub(r'^.*📌.*$', '', body, flags=re.MULTILINE)
             body_clean = re.sub(r'\n{3,}', '\n\n', body_clean).strip()
-            _log(f"[글자수] 확장 결과: {len(body_clean)}자")
+            h2_count = len(re.findall(r'^## ', body_clean, re.MULTILINE))
+            _log(f"[글자수] 확장 결과: {len(body_clean)}자/H2 {h2_count}개")
 
         # compass JSON의 slot1_fact + slot4_outlook로 요약 텍스트 생성
         slot4_outlook = compass.get("slot4_outlook", "")
