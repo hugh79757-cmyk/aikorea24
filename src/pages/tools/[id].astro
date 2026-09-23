@@ -1,5 +1,4 @@
 ---
-export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
@@ -12,10 +11,61 @@ export async function getStaticPaths() {
   }));
 }
 
-const { tool } = Astro.props;
+const id = Astro.params.id;
+let tool: any = (Astro.props as any).tool ?? null;
+if (!tool) {
+  const allMd = await getCollection('tools');
+  tool = allMd.find((t: any) => t.id === id) ?? null;
+}
+
+// D1 fallback (41-03 Task 3): md miss → slug 조회, miss → 404
+let isD1 = false;
+if (!tool) {
+  let row: any = null;
+  try {
+    const db = (Astro.locals as any).runtime?.env?.DB;
+    if (db) {
+      row = await db.prepare(
+        'SELECT slug, name, url, category, description, price, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE slug = ?'
+      ).bind(id).first();
+    }
+  } catch {
+    row = null;
+  }
+  if (!row) {
+    return new Response('Not found', { status: 404 });
+  }
+  isD1 = true;
+  const parseArr = (v: any): string[] => {
+    try {
+      const a = typeof v === 'string' ? JSON.parse(v) : v;
+      return Array.isArray(a) ? a.map((x: any) => String(x)) : [];
+    } catch {
+      return [];
+    }
+  };
+  tool = {
+    id: String(row.slug),
+    data: {
+      name: String(row.name ?? ''),
+      description: String(row.description ?? ''),
+      category: String(row.category ?? '기타'),
+      price: row.price ?? '—',
+      koreanSupport: Number(row.korean_support) === 1,
+      difficulty: (row.difficulty && String(row.difficulty).trim()) || '중급',
+      url: String(row.url ?? '#'),
+      useCases: row.use_cases ? String(row.use_cases).split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+      tags: parseArr(row.tags),
+      tasks: parseArr(row.tasks),
+      updated: String(row.created_at ?? '').slice(0, 10),
+    },
+    body: String(row.detail_markdown || row.description || ''),
+  };
+}
+
 const TASK_BASE = '/tools/task/';
 
-const { Content } = await render(tool);
+const { Content } = isD1 ? { Content: null as any } : await render(tool);
 
 const difficultyColor = (d: string) => {
   if (d.includes('초보')) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
@@ -48,6 +98,11 @@ const similarTools = allToolsList
   .sort((a, b) => b.score - a.score)
   .slice(0, 4)
   .map(item => item.tool);
+
+// D1 본문: 단순 단락 렌더 (escape는 Astro 보간이 담당, 줄바꿈 보존)
+const d1BodyParas: string[] = isD1
+  ? String(tool.body || '').split(/\n+/).map((s: string) => s.trim()).filter(Boolean)
+  : [];
 
 // ---- FAQ 구조화 데이터 생성 ----
 const toolBody: string = (tool as any).body || '';
@@ -98,6 +153,9 @@ const faqSchema: string | null = faqEntities.length > 0
       <!-- 카테고리 + 한국어 지원 -->
       <div class="flex items-center gap-2 mb-3">
         <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{tool.data.category}</span>
+        {isD1 && (
+          <span class="text-xs font-bold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full border border-purple-200 dark:bg-purple-500/15 dark:text-purple-400 dark:border-purple-500/20">MAKER</span>
+        )}
         {tool.data.koreanSupport && (
           <span class="text-xs px-2.5 py-1 bg-green-50 text-green-700 rounded-full font-medium border border-green-200 dark:bg-green-500/15 dark:text-green-400 dark:border-green-500/25">🇰🇷 한국어 지원</span>
         )}
@@ -122,9 +180,11 @@ const faqSchema: string | null = faqEntities.length > 0
         <span class:list={["text-xs px-3 py-1.5 rounded-lg font-medium border", difficultyColor(tool.data.difficulty)]}>
           {difficultyLabel(tool.data.difficulty)}
         </span>
+        {!isD1 && (
         <span id="review-badge" class="text-xs px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg font-medium border border-amber-200 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/25">
           ⭐ — (리뷰 로딩 중)
         </span>
+        )}
       </div>
 
       <!-- 액션 버튼 -->
@@ -167,9 +227,17 @@ const faqSchema: string | null = faqEntities.length > 0
     </div>
     )}
 
+    {isD1 ? (
+    <div class="max-w-none mb-8 space-y-4">
+      {d1BodyParas.map((para) => (
+        <p class="text-base text-gray-700 dark:text-gray-300 leading-relaxed">{para}</p>
+      ))}
+    </div>
+    ) : (
     <article class="prose prose-lg dark:prose-invert max-w-none mb-8">
       <Content />
     </article>
+    )}
 
     {taskLinks.length > 0 && (
       <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-8">
@@ -201,7 +269,8 @@ const faqSchema: string | null = faqEntities.length > 0
     </div>
   </div>
 
-  <!-- 리뷰 섹션 (클라이언트 로딩) -->
+  <!-- 리뷰 섹션 (클라이언트 로딩, D1 행은 숨김 — reviews는 INTEGER tool_id 필요) -->
+  {!isD1 && (
   <div id="reviews-section" class="max-w-3xl mx-auto px-4 pb-4 hidden">
     <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
       <div class="flex items-center justify-between mb-4">
@@ -211,14 +280,17 @@ const faqSchema: string | null = faqEntities.length > 0
       <div id="reviews-list"></div>
     </div>
   </div>
+  )}
 
   <!-- 리뷰 작성 버튼 -->
+  {!isD1 && (
   <div id="review-cta" class="max-w-3xl mx-auto px-4 pb-4 text-center hidden">
     <a href={`/community/write?category=review&tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
        class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm">
       ✍️ {tool.data.name} 리뷰 작성하기
     </a>
   </div>
+  )}
 
   <!-- 뉴스레터 구독 CTA -->
   <div class="max-w-3xl mx-auto px-4 pb-4">
@@ -267,10 +339,11 @@ const faqSchema: string | null = faqEntities.length > 0
   </div>
   )}
 
-<script define:vars={{ toolId: tool.id, toolIndex }}>
+<script define:vars={{ toolId: tool.id, toolIndex, isD1Flag: isD1 }}>
 // 투표 + 리뷰 클라이언트 로딩
 const TOOL_ID = toolId;
 const TOOL_INDEX = toolIndex;
+const IS_D1 = isD1Flag;
 
 // 투표 데이터 로드
 async function loadVoteData() {
@@ -406,7 +479,7 @@ document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e)
 
 // 초기 데이터 로드
 loadVoteData();
-loadReviewData();
+if (!IS_D1) loadReviewData();
 checkAuth();
 </script>
   <!-- FAQPage 구조화 데이터 -->
