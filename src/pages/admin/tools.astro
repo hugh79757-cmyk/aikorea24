@@ -35,8 +35,13 @@ type QueueRow = {
 };
 
 let pending: QueueRow[] = [];
+let published: QueueRow[] = [];
+let retired: QueueRow[] = [];
 let counts = { pending: 0, published: 0, retired: 0 };
 let dbError = '';
+const ROW_COLS = `t.slug, t.name, t.url, t.category, t.category_custom, t.description,
+        t.price_model, t.price_detail, t.user_id, t.created_at,
+        (SELECT email FROM users WHERE id = t.user_id) AS owner_email`;
 try {
   const db = (Astro.locals as any).runtime?.env?.DB;
   if (!db) {
@@ -44,13 +49,25 @@ try {
   } else {
     const { results } = await db
       .prepare(
-        `SELECT t.slug, t.name, t.url, t.category, t.category_custom, t.description,
-                t.price_model, t.price_detail, t.user_id, t.created_at,
-                (SELECT email FROM users WHERE id = t.user_id) AS owner_email
+        `SELECT ${ROW_COLS}
            FROM tool_submissions t WHERE t.status = 'pending' ORDER BY t.created_at DESC`
       )
       .all();
     pending = (results as QueueRow[]) || [];
+    const { results: pub } = await db
+      .prepare(
+        `SELECT ${ROW_COLS}
+           FROM tool_submissions t WHERE t.status = 'published' ORDER BY t.created_at DESC`
+      )
+      .all();
+    published = (pub as QueueRow[]) || [];
+    const { results: ret } = await db
+      .prepare(
+        `SELECT ${ROW_COLS}, t.rejection_reason, t.updated_at
+           FROM tool_submissions t WHERE t.status = 'retired' ORDER BY t.updated_at DESC`
+      )
+      .all();
+    retired = (ret as QueueRow[]) || [];
     const { results: agg } = await db
       .prepare(`SELECT status, COUNT(*) AS c FROM tool_submissions GROUP BY status`)
       .all();
@@ -124,6 +141,34 @@ h1{font-size:1.3rem;margin-bottom:4px}
   </div>
 ))}
 </div>
+<h2 style="font-size:1rem;margin:18px 0 10px">🟢 공개됨 ({published.length})</h2>
+{published.length === 0 && !dbError ? (
+  <div class="empty" style="padding:20px">공개된 도구가 없습니다.</div>
+) : null}
+{published.map((t) => (
+  <div class="card" data-slug={t.slug}>
+    <h3>{t.name}</h3>
+    <div class="meta">/{t.slug}/ · {t.category}{t.category_custom ? ` (${t.category_custom})` : ''} · {t.price_detail?.trim() || t.price_model || '—'} · {t.owner_email || `user#${t.user_id}`} · {t.created_at}</div>
+    <p class="desc">{t.description}</p>
+    <a href={`/tools/${t.slug}/`} target="_blank" rel="noopener">상세 페이지 보기 →</a>
+    <div class="row">
+      <button type="button" class="btn reject" data-act="unpublish">공개 취소</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+))}
+<h2 style="font-size:1rem;margin:18px 0 10px">🔴 반려됨 ({retired.length})</h2>
+{retired.length === 0 && !dbError ? (
+  <div class="empty" style="padding:20px">반려된 도구가 없습니다.</div>
+) : null}
+{retired.map((t) => (
+  <div class="card" data-slug={t.slug}>
+    <h3>{t.name}</h3>
+    <div class="meta">/{t.slug}/ · {t.category}{t.category_custom ? ` (${t.category_custom})` : ''} · {t.owner_email || `user#${t.user_id}`} · {(t as any).updated_at}</div>
+    <p class="desc">{t.description}</p>
+    <p class="meta">사유: {(t as any).rejection_reason || '—'}</p>
+  </div>
+))}
 <script>
 document.querySelectorAll('.card').forEach((card) => {
   const slug = card.getAttribute('data-slug');
@@ -131,12 +176,17 @@ document.querySelectorAll('.card').forEach((card) => {
   const reasonInput = card.querySelector('.reason');
   card.querySelectorAll('.btn').forEach((btn) => {
     btn.addEventListener('click', async () => {
-      const action = btn.getAttribute('data-act');
-      const reason = (reasonInput.value || '').trim();
+      const rawAct = btn.getAttribute('data-act');
+      const action = rawAct === 'unpublish' ? 'reject' : rawAct;
+      let reason = ((reasonInput && reasonInput.value) || '').trim();
       if (action === 'reject' && !reason) {
-        msg.textContent = '❌ 반려 사유를 입력해주세요.';
-        msg.className = 'msg err';
-        return;
+        if (rawAct === 'unpublish') {
+          reason = (window.prompt('공개 취소 사유를 입력해주세요.') || '').trim();
+        }
+        if (!reason) {
+          if (msg) { msg.textContent = '❌ 반려 사유를 입력해주세요.'; msg.className = 'msg err'; }
+          return;
+        }
       }
       btn.disabled = true;
       try {
