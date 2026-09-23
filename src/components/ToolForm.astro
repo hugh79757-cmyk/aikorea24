@@ -165,8 +165,26 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
         <input type="text" id="f-tags" value={tagsStr} class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: AI, 글쓰기, 무료" />
       </div>
       <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">스크린샷 URL (선택)</label>
-        <input type="url" id="f-screenshot-url" value={d.screenshot_url} class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="https://example.com/screenshot.png" />
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">스크린샷 (선택)</label>
+        <input type="hidden" id="f-screenshot-url" value={d.screenshot_url} />
+        <div id="screenshot-drop" class="border-2 border-dashed border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-blue-500 transition-colors">
+          <input type="file" id="f-screenshot-file" accept="image/jpeg,image/png,image/webp,image/gif" class="hidden" />
+          <div id="screenshot-prompt">
+            <p class="text-2xl mb-2">📷</p>
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">클릭하여 이미지 업로드</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">또는 파일을 여기로 드래그</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">JPG, PNG, WebP · 최대 2MB</p>
+          </div>
+          <div id="screenshot-uploading" class="hidden">
+            <p class="text-sm text-gray-500 dark:text-gray-400">업로드 중...</p>
+          </div>
+          <div id="screenshot-preview" class="hidden">
+            <img id="screenshot-thumb" src="" alt="스크린샷 미리보기" class="max-h-40 mx-auto rounded-lg mb-2" />
+            <p id="screenshot-meta" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
+            <button type="button" id="screenshot-remove" class="text-xs px-3 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-lg transition-colors">✕ 삭제</button>
+          </div>
+        </div>
+        <p id="screenshot-error" class="hidden text-sm text-red-600 dark:text-red-400 mt-2"></p>
       </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">연관작업 (최대 5개)</label>
@@ -305,6 +323,129 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
         hideError();
       }
     });
+  });
+
+  // 스크린샷 파일 업로드 (3-B-2: click/drag-drop → POST /api/upload)
+  const shotDrop = document.getElementById('screenshot-drop');
+  const shotFile = document.getElementById('f-screenshot-file');
+  const shotUrl = document.getElementById('f-screenshot-url');
+  const shotPrompt = document.getElementById('screenshot-prompt');
+  const shotUploading = document.getElementById('screenshot-uploading');
+  const shotPreview = document.getElementById('screenshot-preview');
+  const shotThumb = document.getElementById('screenshot-thumb');
+  const shotMeta = document.getElementById('screenshot-meta');
+  const shotError = document.getElementById('screenshot-error');
+  const ALLOWED_MIMES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+  const MAX_BYTES = 2 * 1024 * 1024;
+
+  function showShotError(msg) {
+    shotError.textContent = msg;
+    shotError.classList.remove('hidden');
+    shotDrop.classList.add('border-red-500');
+  }
+  function hideShotError() {
+    shotError.classList.add('hidden');
+    shotDrop.classList.remove('border-red-500');
+  }
+  function formatSize(n) {
+    if (n < 1024) return n + ' B';
+    if (n < 1024 * 1024) return (n / 1024).toFixed(1) + ' KB';
+    return (n / 1024 / 1024).toFixed(2) + ' MB';
+  }
+  function showShotPreview(url, name, size) {
+    shotThumb.src = url;
+    shotMeta.textContent = name + (size != null ? ' · ' + formatSize(size) : '');
+    shotPrompt.classList.add('hidden');
+    shotUploading.classList.add('hidden');
+    shotPreview.classList.remove('hidden');
+  }
+  function clearShotPreview() {
+    shotUrl.value = '';
+    shotFile.value = '';
+    shotThumb.removeAttribute('src');
+    shotMeta.textContent = '';
+    shotPreview.classList.add('hidden');
+    shotUploading.classList.add('hidden');
+    shotPrompt.classList.remove('hidden');
+  }
+  function validateShotFile(file) {
+    if (!ALLOWED_MIMES.includes(file.type)) {
+      return '이미지 파일만 업로드할 수 있습니다. (JPG, PNG, WebP)';
+    }
+    if (file.size > MAX_BYTES) {
+      return '파일 크기는 2MB 이하만 가능합니다.';
+    }
+    return null;
+  }
+  async function uploadShotFile(file) {
+    hideShotError();
+    const err = validateShotFile(file);
+    if (err) {
+      showShotError(err);
+      return;
+    }
+    shotPrompt.classList.add('hidden');
+    shotPreview.classList.add('hidden');
+    shotUploading.classList.remove('hidden');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        shotUploading.classList.add('hidden');
+        shotPrompt.classList.remove('hidden');
+        showShotError('세션이 만료되었습니다. 새로고침 후 다시 시도해주세요.');
+        return;
+      }
+      if (!res.ok || !data.url) {
+        shotUploading.classList.add('hidden');
+        shotPrompt.classList.remove('hidden');
+        showShotError(data.error || '업로드 중 오류가 발생했습니다.');
+        return;
+      }
+      shotUrl.value = data.url;
+      showShotPreview(data.url, file.name, file.size);
+    } catch {
+      shotUploading.classList.add('hidden');
+      shotPrompt.classList.remove('hidden');
+      showShotError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+  }
+
+  // 수정 모드: 기존 screenshot_url 프리필
+  if (shotUrl.value) {
+    const parts = shotUrl.value.split('/');
+    showShotPreview(shotUrl.value, parts[parts.length - 1] || 'screenshot', null);
+  }
+
+  shotDrop.addEventListener('click', (e) => {
+    if (e.target.closest('#screenshot-remove')) return;
+    shotFile.click();
+  });
+  shotFile.addEventListener('change', () => {
+    if (shotFile.files && shotFile.files[0]) uploadShotFile(shotFile.files[0]);
+  });
+  ['dragenter', 'dragover'].forEach((ev) => {
+    shotDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      shotDrop.classList.add('border-blue-500', 'bg-blue-500/10');
+    });
+  });
+  ['dragleave', 'drop'].forEach((ev) => {
+    shotDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      shotDrop.classList.remove('border-blue-500', 'bg-blue-500/10');
+    });
+  });
+  shotDrop.addEventListener('drop', (e) => {
+    const f = e.dataTransfer?.files?.[0];
+    if (f) uploadShotFile(f);
+  });
+  document.getElementById('screenshot-remove').addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideShotError();
+    clearShotPreview();
   });
 
   function validateStep1() {
