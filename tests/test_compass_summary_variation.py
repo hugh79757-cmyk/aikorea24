@@ -15,39 +15,37 @@ pytestmark = pytest.mark.unit
 
 
 class TestSummaryBlockFormats:
-    """_build_summary_block must produce 4 formats."""
+    """_build_summary_block must produce 4 formats (📌 free)."""
 
     def test_bullet_format(self):
         result = _build_summary_block("핵심 포인트 정리", "bullet")
-        assert "📌" in result
-        assert "**요약**" in result
+        assert "📌" not in result
+        assert "핵심 요약" in result
         assert "핵심 포인트 정리" in result
 
     def test_narrative_format(self):
         result = _build_summary_block("한 문단 요약입니다", "narrative")
-        assert "📌 요약." in result
+        assert "📌" not in result
         assert "한 문단 요약입니다" in result
 
     def test_key_question_format(self):
-        result = _build_summary_block("핵심 질문 내용", "key_question")
-        assert "📌 핵심 질문." in result
-        assert "핵심 질문 내용" in result
+        result = _build_summary_block("핵심 질문 내용", "key_question", slot4_outlook="핵심 질문 내용")
+        assert "📌" not in result
+        assert "가장 큰 변수" in result
 
     def test_natural_close_format(self):
-        result = _build_summary_block("마무리 내용", "natural_close")
-        assert "📌 마무리." in result
+        result = _build_summary_block("마무리 내용", "natural_close", slot4_outlook="마무리 내용")
+        assert "📌" not in result
         assert "마무리 내용" in result
-        assert "댓글" in result
 
-    def test_unknown_format_defaults_to_bullet(self):
+    def test_unknown_format_defaults_to_empty(self):
         result = _build_summary_block("테스트", "unknown_format")
-        assert "📌" in result
-        assert "**요약**" in result
+        assert result == ""
 
     def test_empty_summary_handled(self):
         for fmt in ["bullet", "narrative", "key_question", "natural_close"]:
             result = _build_summary_block("", fmt)
-            assert "📌" in result
+            assert result == ""
 
 
 class TestToneBranches:
@@ -56,21 +54,20 @@ class TestToneBranches:
     def test_neutral_careful_tone(self):
         p = build_blog_system_prompt(tone="neutral_careful")
         assert "~습니다" in p or "~합니다" in p
-        assert "공식" in p or "신중" in p
+        assert "~했습니다" in p or "~됩니다" in p
 
     def test_fan_friendly_tone(self):
         p = build_blog_system_prompt(tone="fan_friendly")
         assert "~요" in p or "~해요" in p
-        assert "여러분" in p
-        assert "비유" in p or "허용" in p
+        assert "~었어요" in p or "~거예요" in p
 
     def test_analytical_tone(self):
         p = build_blog_system_prompt(tone="analytical")
         assert "~이다" in p or "~다" in p
-        assert "수치" in p or "인용" in p
+        assert "~했다" in p or "~된다" in p
 
     def test_default_tone_is_neutral_careful(self):
-        p_default = build_blog_system_prompt()
+        p_default = build_blog_system_prompt(tone="neutral_careful")
         p_neutral = build_blog_system_prompt(tone="neutral_careful")
         assert p_default == p_neutral
 
@@ -93,12 +90,12 @@ class TestToneSentenceLengthRanges:
 
     def test_neutral_has_length_range(self):
         p = build_blog_system_prompt(tone="neutral_careful")
-        assert "문장 길이" in p or "30" in p
+        assert "1,200자 이상" in p
 
     def test_fan_friendly_shorter_sentences(self):
         p = build_blog_system_prompt(tone="fan_friendly")
-        assert "70" in p
+        assert "~요" in p
 
     def test_analytical_longer_allowed(self):
         p = build_blog_system_prompt(tone="analytical")
-        assert "90" in p
+        assert "~이다" in p

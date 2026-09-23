@@ -64,19 +64,20 @@ def _crawl(url, source, title):
 
 def _detect_summary_format(body):
     """본문에서 사용된 요약 형식 감지."""
-    last_md = body.rfind("📌")
-    if last_md < 0:
-        return "unknown"
-    tail = body[last_md:]
-    if tail.startswith("📌 **요약**"):
+    # 📌 마커 없이 텍스트 패턴으로 감지 (compass v2: summary block에 📌 없음)
+    last_md = body.rfind("핵심 요약")
+    if last_md >= 0 and body[last_md:last_md+8] == "핵심 요약":
         return "bullet"
-    elif tail.startswith("📌 요약."):
-        return "narrative"
-    elif tail.startswith("📌 핵심 질문."):
+    # key_question: "~에서 가장 큰 변수는 무엇일까요?" 패턴
+    if "가장 큰 변수는 무엇일까요" in body:
         return "key_question"
-    elif tail.startswith("📌 마무리."):
+    # natural_close: 마지막 문단이 사실·전망 진술로 끝남 (bullet/key_question 아닌 나머지)
+    # narrative: 일반 서술문 단락
+    last_nl = body.rfind("\n\n")
+    last_para = body[last_nl + 2:] if last_nl >= 0 else body
+    if last_para.strip().endswith("될 전망입니다.") or last_para.strip().endswith("것입니다."):
         return "natural_close"
-    return "unknown"
+    return "narrative"
 
 
 def _extract_summary_block(body):

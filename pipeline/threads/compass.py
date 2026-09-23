@@ -380,7 +380,8 @@ def build_blog_system_prompt(tone: str) -> str:
 - 한자(漢字) 직접 사용 금지. 한글로만 쓴다.
 - "획기적", "혁신적", "놀라운" 등 과장 수식어 금지.
 - 원문에 없는 수치·인용·사실을 추가하지 않는다.
-- 본문은 결론 문단으로 자연스럽게 끝낸다. "📌", "핵심 질문", "요약", "정리하면" 같은 마커를 본문 어디에도 쓰지 않는다.
+- 본문은 결론 문단으로 자연스럽게 끝납니다.
+- 절대 금지: 📌, ✅, ❌, 🔍 등 이모지 마커, "핵심 질문", "요약", "정리하면", "한 줄 요약" — 본문 어디에도 사용하지 않습니다. 이 규칙을 어기면 글 전체가 폐기됩니다.
 - slot2_compare가 "없음"이면 비교 문단을 만들지 않는다.
 
 [참고: 요약 블록은 시스템이 본문 뒤에 자동 첨부합니다. 본문에서는 결론 문단으로 끝내세요.]
@@ -405,6 +406,7 @@ def build_blog_system_prompt(tone: str) -> str:
     result = common + "\n" + tone_blocks.get(tone, tone_blocks["neutral_careful"])
     if tone_example:
         result += f"\n\n<완성 글 예시 — 이 분량과 구조를 모방하세요>\n{tone_example}\n</완성 글 예시>"
+    result += "\n[최종 확인] 작성 완료 후 글자수를 세어 1,200자 이상인지 반드시 확인한다."
     return result
 
 
@@ -449,13 +451,13 @@ def _build_summary_block(summary: str, format: str = "bullet", slot4_outlook: st
     Formats: bullet (default), narrative, key_question, natural_close.
     """
     if format == "key_question" and slot4_outlook:
-        return f"📌 핵심 질문: {slot4_outlook.rstrip('.')}에서 가장 큰 변수는 무엇일까요?"
+        return f"{slot4_outlook.rstrip('.')}에서 가장 큰 변수는 무엇일까요?"
     elif format == "natural_close" and slot4_outlook:
         return slot4_outlook
     elif format == "narrative" and summary:
-        return f"📌 요약. {summary}"
+        return summary
     elif format == "bullet" and summary:
-        return f"📌 **요약**\n{summary}"
+        return f"핵심 요약\n{summary}"
     else:
         return ""
 
@@ -583,6 +585,7 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
             _recent_summary_formats[-2:],
             exclude_count=2,
         )
+        assert summary_format in ["bullet", "narrative", "key_question", "natural_close"], f"summary_format 비정상: {summary_format}"
         _log(f"[compass] summary_format={summary_format}")
         _recent_summary_formats.append(summary_format)
         user_prompt2 = _build_blog_pass2_user_prompt(
@@ -615,7 +618,31 @@ def write_compass_article(pitch: dict, all_articles: list, format_choice=None, o
                 return None
 
         # LLM 본문에서 📌 블록이 있으면 제거 (잔여 방지)
-        body_clean = re.sub(r'\n*📌.*$', '', body, flags=re.DOTALL).rstrip()
+        body_clean = re.sub(r'^.*📌.*$', '', body, flags=re.MULTILINE)
+        body_clean = re.sub(r'\n{3,}', '\n\n', body_clean).strip()
+
+        # 1,200자 미달 시 확장 재생성 (최대 2회)
+        revision = 0
+        while len(body_clean) < 1200 and revision < 2:
+            revision += 1
+            _log(f"[글자수] {len(body_clean)}자 미달 — 확장 재생성 ({revision}/2)")
+            rev_prompt = (
+                user_prompt2
+                + f"\n\n[길이 강제] 현재 본문은 {len(body_clean)}자입니다. 반드시 1,200자 이상으로 확장하세요."
+                " 구체적 사실·세부사항·배경을 추가하고, 문장을 길게 쓰며 절 분할을 최소화하세요."
+            )
+            draft_raw = chat_completion(
+                messages=[{"role": "user", "content": rev_prompt}],
+                system_prompt=blog_sys,
+                temperature=0.5,
+                max_tokens=4000,
+            )
+            if not draft_raw:
+                break
+            body = draft_raw.strip()
+            body_clean = re.sub(r'^.*📌.*$', '', body, flags=re.MULTILINE)
+            body_clean = re.sub(r'\n{3,}', '\n\n', body_clean).strip()
+            _log(f"[글자수] 확장 결과: {len(body_clean)}자")
 
         # compass JSON의 slot1_fact + slot4_outlook로 요약 텍스트 생성
         slot4_outlook = compass.get("slot4_outlook", "")
