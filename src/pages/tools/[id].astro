@@ -26,7 +26,7 @@ if (!tool) {
     const db = (Astro.locals as any).runtime?.env?.DB;
     if (db) {
       row = await db.prepare(
-        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE slug = ?'
+        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE slug = ? AND status = \'published\''
       ).bind(id).first();
     }
   } catch {
@@ -53,7 +53,7 @@ if (!tool) {
       price: (row.price_detail && String(row.price_detail).trim()) || row.price_model || '—',
       screenshotUrl: (row.screenshot_url && String(row.screenshot_url).trim()) || null,
       koreanSupport: Number(row.korean_support) === 1,
-      difficulty: (row.difficulty && String(row.difficulty).trim()) || '중급',
+      difficulty: (row.difficulty && String(row.difficulty).trim()) || '보통',
       url: String(row.url ?? '#'),
       useCases: row.use_cases ? String(row.use_cases).split(',').map((s: string) => s.trim()).filter(Boolean) : [],
       tags: parseArr(row.tags),
@@ -70,13 +70,13 @@ const { Content } = isD1 ? { Content: null as any } : await render(tool);
 
 const difficultyColor = (d: string) => {
   if (d.includes('초보')) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-  if (d.includes('중급')) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+  if (d.includes('중급') || d.includes('보통')) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
   return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
 };
 
 const difficultyLabel = (d: string) => {
   if (d.includes('초보')) return '🌱 초보자 OK';
-  if (d.includes('중급')) return '🔧 중급';
+  if (d.includes('중급') || d.includes('보통')) return '🔧 보통';
   return '⚡ 고급';
 };
 
