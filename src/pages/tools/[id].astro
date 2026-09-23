@@ -43,7 +43,7 @@ if (!tool) {
 
       // 상태 필터 없이 slug로 조회 — owner는 pending/hidden도 열람 가능
       row = await db.prepare(
-        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at FROM tool_submissions WHERE slug = ?'
+        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at, link_type FROM tool_submissions WHERE slug = ?'
       ).bind(id).first();
 
       if (!row) {
@@ -87,6 +87,7 @@ if (!tool) {
       tasks: parseArr(row.tasks),
       updated: String(row.created_at ?? '').slice(0, 10),
       status: String(row.status ?? 'published').trim(),
+      linkType: String(row.link_type || 'nofollow').trim(),
     },
     body: String(row.detail_markdown || row.description || ''),
     isOwner: d1OwnerId > 0,
@@ -219,7 +220,7 @@ const faqSchema: string | null = faqEntities.length > 0
 
       <!-- 액션 버튼 -->
       <div class="flex gap-3 flex-wrap">
-        <a href={tool.data.url} target="_blank" rel="noopener"
+        <a href={tool.data.url} target="_blank" rel={tool.data.linkType === 'dofollow' ? 'dofollow noopener' : 'noopener'}
            class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30">
           🔗 툴 바로가기
         </a>
