@@ -91,17 +91,22 @@ export const PUT: APIRoute = async ({ params, request, locals, cookies }) => {
       return new Response(JSON.stringify({ error: '가격 모델을 선택해주세요. (무료/Freemium/유료)' }), { status: 400 });
     }
 
-    // screenshot_url: 선택, 비어있으면 스킵, 값 있으면 http(s) 검증 (url 필드와 동일 패턴)
+    // screenshot_url: 선택, 비어있으면 스킵, 값 있으면 http(s) 또는 /api/files/ 상대경로 허용
     let screenshotUrl: string | null = null;
     if (screenshot_url !== undefined && screenshot_url !== null && String(screenshot_url).trim() !== '') {
+      const shot = String(screenshot_url).trim();
+      if (shot.startsWith('/api/files/')) {
+        screenshotUrl = shot;
+      } else {
       try {
-        const parsedShot = new URL(String(screenshot_url).trim());
+        const parsedShot = new URL(shot);
         if (parsedShot.protocol !== 'http:' && parsedShot.protocol !== 'https:') {
           return new Response(JSON.stringify({ error: '올바른 스크린샷 URL을 입력해주세요. (http:// 또는 https://)' }), { status: 400 });
         }
         screenshotUrl = String(screenshot_url).trim();
       } catch {
         return new Response(JSON.stringify({ error: '올바른 스크린샷 URL을 입력해주세요.' }), { status: 400 });
+      }
       }
     }
 
