@@ -5,7 +5,7 @@ current_phase: 38
 current_phase_name: Threads 자가개선   루프
 status: phase_38_complete
 stopped_at: Completed 42-tools-phase1-adjust-02-PLAN.md
-last_updated: "2026-09-23T05:16:08.795Z"
+last_updated: "2026-09-24T02:00:00.000Z"
 last_activity: 2026-09-22
 state_head: 5bfb308290dd3ce39668982ed4f70af244106885
 progress:
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 Phase: 38 — Threads 자가개선 (Self-Improvement) 루프
 Status: ✅ Complete (2026-09-02, 커밋 227bbcc) — 3/3 plans (측정/수집·분석/주입)
-Last activity: 2026-09-02T22:45
+Last activity: 2026-09-24T02:26 - Completed quick task 260924-4rx: newsletter-brevo-dynamic-subscribers
 
 Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
 
@@ -245,6 +245,7 @@ None.
 | 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
 | 2026-09-24 | vote-login-redirect-fix | 툴 상세 추천 클릭 시 로그인 페이지로 튕기던 버그 수정 (e7f2b609). 원인: session 쿠키 httpOnly → 클라이언트 쿠키 스니핑 항상 false. 수정: vote 핸들러 POST-first + 401-전용 리다이렉트, /api/auth/me.ts 신규 |
 | 2026-09-24 | cafe-copy-line | 카페 공유 문구 마지막 줄을 카페 URL만으로 정리 (47a1aee7). `에서 더 많은 AI 활용법을 확인하세요` 문구 제거. CAFE_URL(https://cafe.naver.com/aikorea24) 변경 없음 |
+| 2026-09-24 | newsletter-brevo-dynamic-subscribers | 뉴스레터 발송 정상화: get_subscribers_from_brevo() 신규 — Brevo GET /v3/contacts로 list#2 구독자 동적 조회. send_email_via_brevo에서 listIds 제거, to 필드 개별 발송, sample/test 이메일 필터링, SUBSCRIBER_EMAIL 폴백 유지 (37d8f8d1) |
 
 ### Deferred Items
 

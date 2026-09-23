@@ -1431,3 +1431,19 @@
 * `bash scripts/deploy.sh` 성공 (a3279a8a) + sitemap ping Google/Naver ✅
 * 프로덕션 스모크: / → 200, /tools/ → 200, /my/tools/ → 302 (게스트), /admin/ → 401, /admin/tools/ → 401 (게이트 정상; 배포 직후 엣지 전파 중 404 혼재 → 60초 후 401 5/5 안정)
 * 남은 것: twinssn 로그인 후 /admin/tools/ 승인 UAT 1건 (사용자 수동)
+
+## 2026-09-24 02:00 — 도구 등록 승인/반려 이메일 알림 기능
+
+* `src/lib/email-notify.ts` 신규 — Brevo 단일 수신자 발송 (승인/반려 HTML 템플릿 2종)
+* `src/pages/api/admin/tools/review.ts` — 승인/반려 처리 후 JOIN(user_id=users.id)으로 제출자 이메일 확보 → 발송. 실패 시 롤백 없음
+* 커밋 `256be555`, 배포 성공 (sitemap ping Google/Naver true)
+* UAT: submit 201 → pending 1건 → 승인 버튼 클릭 → published (live /tools/uat-notify-tool/ 200). JOIN 경로 검증 완료
+* [부분검증] Brevo API 201 + messageId 확보했으나 Gmail 수신 0건 — Brevo 프리 플랜 샌드박스 수신자 제한으로 추정 (기존 briefing도 2026-06-27 이후 미수신, 코드 결함 아님)
+* 테스트 행 uat-notify-tool DELETE 정리 (사전 1건 → 사후 0건)
+
+## 2026-09-24 02:26 — 뉴스레터 발송 정상화 (quick task 260924-4rx)
+
+* `scripts/auto_email_sender.py` — `get_subscribers_from_brevo(list_id=2)` 신규: Brevo GET /v3/contacts로 list#2 구독자 이메일 목록 동적 조회
+* `send_email_via_brevo` 수정: `listIds` 파라미터 제거, `to` 필드에 각 구독자별 개별 발송, sample/test/verify-test/example 이메일 자동 필터링, `SUBSCRIBER_EMAIL` 폴백 유지
+* 커밋 `37d8f8d1`, verify 5건 모두 통과
+* 배경: listIds 목록 발송이 hugh79757 등 구독자에게 미도달 (Brevo 통계에서 twinssn만 뉴스레터 수신). 개별 `to` 발송으로 해결
