@@ -1,48 +1,133 @@
 {
   "version": "1.0",
-  "timestamp": "2026-09-21T02:01:00Z",
-  "phase": 39,
-  "phase_name": "compass-2-pass-korean-article-writing-pipeline",
-  "phase_dir": ".planning/phases/39-compass-2-pass-korean-article-writing-pipeline",
-  "plan": 1,
-  "task": 1,
-  "total_tasks": 1,
-  "status": "blocked",
+  "timestamp": "2026-09-23T21:06:17+07:00",
+  "phase": "default",
+  "phase_name": "compass-publish-pipeline",
+  "phase_dir": ".planning/triage/20260923--compass-publish-pipeline.md",
+  "plan": {
+    "current_plan_number": 1,
+    "current_task_number": 4,
+    "total_tasks": 4,
+    "status": "completed"
+  },
+  "task": 4,
+  "total_tasks": 4,
+  "status": "completed",
   "completed_tasks": [
-    {"id": 1, "name": "Task 1: 5 writing-logic prompt fixes (REQ-39-06..10)", "status": "done"},
-    {"id": 2, "name": "Task 2: Expansion — H2 presets + intro_style examples", "status": "done"},
-    {"id": 3, "name": "New test files: slot_h2_alignment + no_repetition", "status": "done"}
+    {
+      "id": 1,
+      "name": "Pass 1 category criteria improvement (b4d88440)",
+      "status": "done",
+      "commit": "b4d88440"
+    },
+    {
+      "id": 2,
+      "name": "Compass launchd plist creation + load",
+      "status": "done",
+      "commit": null
+    },
+    {
+      "id": 3,
+      "name": "Publish test (main_v3.py --format compass)",
+      "status": "done",
+      "commit": "839d8a69",
+      "note": "FAILED - D1/network crawling block (29-char bodies)"
+    },
+    {
+      "id": 4,
+      "name": "Final report + handoff",
+      "status": "done",
+      "commit": null
+    }
   ],
   "remaining_tasks": [
-    {"id": 4, "name": "Fix G4 fact-gate Layer1 false-positive blocking", "status": "in_progress", "progress": "_suffixes list added (을/습니다/했습니다); still broken — '있습니다' not stripped because _verb_endings runs first and does not match it"}
+    {
+      "id": 5,
+      "name": "Fix D1/network crawling 29-char body block",
+      "status": "not_started"
+    },
+    {
+      "id": 6,
+      "name": "compass_dryrun.py → blog markdown conversion path",
+      "status": "not_started"
+    },
+    {
+      "id": 7,
+      "name": "Blog publish test via compass output",
+      "status": "not_started"
+    }
   ],
   "blockers": [
-    {"description": "compass_dryrun.py fails at G4 fact-gate with false '출처 미매칭' tokens (e.g. '역량을', '바탕으로', '추진하고', '있습니다', '행사를'). Root cause: fact_gate.py noun regex [가-힣]{2,8} grabs noun+particle combos that never appear verbatim in the source body.", "type": "technical", "workaround": "--skip-g4 flag exists on the dry-run script"}
+    {
+      "description": "main_v3.py article crawling returns 29-char bodies (network/D1 block)",
+      "type": "external",
+      "workaround": "Use compass_dryrun.py for individual URL testing instead of main_v3.py pipeline"
+    },
+    {
+      "description": "*.plist is gitignored — compass plist cannot be committed to git",
+      "type": "technical",
+      "workaround": "Manage plist via launchctl only; project copy at launchd/ for documentation"
+    },
+    {
+      "description": "D-mode plist hardcodes CLOUDFLARE_API_TOKEN in plaintext",
+      "type": "advisory",
+      "workaround": "Known issue across all launchd plists; not compass-specific"
+    }
   ],
-  "async_jobs": [],
-  "human_actions_pending": [],
   "decisions": [
-    {"decision": "Strip trailing particles/descriptive suffixes from noun chunks before matching", "rationale": "The noun regex greedily captures noun+particle combos (행사+를, 준공+할, 그룹+의) that never appear verbatim in the source body, producing false '출처 미매칭' blocks. Stripping the suffix lets the bare noun stem match.", "phase": 39},
-    {"decision": "Render intro_style prompt block from INTRO_STYLE_EXAMPLES + INTRO_STYLE_PREFIXES dicts", "rationale": "Keeps prompt text in sync with the example data; avoids dead/hardcoded data (REQ-39-10).", "phase": 39}
+    {
+      "decision": "Compass plist schedule: 3x daily (09:30, 15:30, 21:30)",
+      "rationale": "Balanced frequency for testing compass mode across time periods",
+      "phase": "40"
+    },
+    {
+      "decision": "Copy CLOUDFLARE_API_TOKEN from D-mode plist",
+      "rationale": "Same Cloudflare env var needed by main_v3.py regardless of format mode",
+      "phase": "40"
+    },
+    {
+      "decision": "output_target='naver' wraps cards in HTML only (not blog publish)",
+      "rationale": "Confirmed via code analysis - compass.py line 739-740 calls _wrap_naver_html when output_target=='naver'",
+      "phase": "40"
+    }
   ],
   "uncommitted_files": [
-    "D .planning/HANDOFF.json",
-    "M .planning/ROADMAP.md",
-    "M .planning/STATE.md",
-    "M pipeline/threads/compass.py",
-    "M pipeline/threads/fact_gate.py",
-    "M scripts/briefing_dedup.json",
-    "M scripts/threads/compass_dryrun.py",
-    "M tests/test_compass_generation.py",
-    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/39-01-SUMMARY.md",
-    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/39-PLAN.md",
-    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/CONTEXT.md",
-    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/EXECUTION-LEDGER.md",
-    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/TASK-1-REPORT.md",
-    "?? .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/.continue-here.md",
-    "?? tests/test_compass_no_repetition.py",
-    "?? tests/test_compass_slot_h2_alignment.py"
+    "scripts/briefing_dedup.json",
+    ".continue-here.md",
+    ".planning/phases/41-tools-user-submit/41-01-PLAN.md",
+    ".planning/phases/41-tools-user-submit/41-02-PLAN.md",
+    ".planning/phases/41-tools-user-submit/41-02-SUMMARY.md",
+    ".planning/phases/41-tools-user-submit/41-03-PLAN.md",
+    ".planning/phases/41-tools-user-submit/CONTEXT.md",
+    ".planning/phases/41-tools-user-submit/RESEARCH.md",
+    ".planning/phases/41-tools-user-submit/SUMMARY.md",
+    ".planning/phases/42-tools-phase1-adjust/42-01-PLAN.md",
+    ".planning/phases/42-tools-phase1-adjust/42-02-PLAN.md",
+    ".planning/phases/42-tools-phase1-adjust/42-UAT.md",
+    ".planning/phases/42-tools-phase1-adjust/CONTEXT.md",
+    ".planning/phases/42-tools-phase1-adjust/RESEARCH.md",
+    ".planning/triage/20260923--d1-row-limit-outage-fix.md",
+    "src/content/blog/2026-09-23-001-경기도-광주-테크밸리-AI-스마트시티-도시-문제-해결-시범사업-지자체-협력-프로젝트-2024-05-23-경기도-광주-미디어-테크밸리-경기도-지자체협력-체험교육-데이터-활용-스마트시티-경기도-협력프로젝트.md",
+    "src/content/blog/2026-09-23-002-서울-도시-재생-프로젝트-마포-상암-디지털-미디어-시티-HAK-5G-5G-활용-스마트-도시-기반-시설-확대-인프라-디지털-전환-도시재생-서울-광장-시장-마포-상암.md",
+    "src/content/blog/2026-09-23-003-한국-전력-핵심-인프라-안보-취약점-원전-송전망-사이버-위협-외국-해킹-전력-망-마비-시나리오-전력-안전-핵심-인프라-사이버-보안-위협-한국-전력-원전-송전망.md",
+    "src/content/blog/2026-09-23-004-AI-반도체-국제-경쟁-미국-중국-일본-Netherlands-ASML-반도체-장비-규제-자국-핵심-기술-반도체-장비-ASML-Hollerith-Netherlands-미국-중국-일본.md",
+    "src/content/blog/2026-09-23-005-트럼프시진핑-정상회담-ai-안전-회담-의제에-올랐으나-양측-모두-속도-늦출-생각-없어.md",
+    "src/content/blog/2026-09-23-006-OpenAI-GPT-5-발표-예상-기능-가격-변화-OpenAI-발표-GPT-5-기능-가격-시장-반응-경쟁-Anthropic-Claude-GPT-5-예상.md",
+    ".dev.vars",
+    "src/pages/api/upload.ts"
   ],
-  "next_action": "Fix fact_gate.py:_layer1_substring_match so '있습니다'-class tokens reach the suffix strip (the _verb_endings tuple runs first and does not match them), then re-run `python scripts/threads/compass_dryrun.py` and the 4-file unit suite.",
-  "context_notes": "Phase 39 was planned but never executed — the 4 most recent commits (ce1dec4e..de7aae59) were the ORIGINAL Compass build, not the replan fixes. This session applied the plan (5 prompt fixes + 2 test files + SUMMARY). Then user said '고쳐줘' (fix it) about the dry-run failure, which turned out to be a pre-existing G4 fact-gate bug in fact_gate.py, unrelated to the prompt work. The G4 stem-stripping fix is half-done and still broken."
+  "next_action": "D1/network crawling issue resolved → retry main_v3.py --format compass for actual publish test; OR continue with compass_dryrun.py batch testing",
+  "context_notes": "Phase 40 compass work complete. All 4 STEPs executed. Compose root cause of D1 29-char block before next session. Branch: agent/phase40-compass-diversification @ 839d8a69",
+  "human_actions_pending": [
+    {
+      "action": "Investigate D1/network cause of 29-char article body responses in main_v3.py pipeline",
+      "context": "main_v3.py compass mode cannot reach write_thread because crawling returns 29-char bodies (bot block or D1 issue)",
+      "blocking": true
+    },
+    {
+      "action": "Implement compass_dryrun.py → blog markdown conversion path",
+      "context": "compass output is in thread format (cards). No existing path converts compass output to blog markdown for Astro deploy",
+      "blocking": false
+    }
+  ]
 }
