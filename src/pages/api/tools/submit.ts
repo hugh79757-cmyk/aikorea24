@@ -56,7 +56,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   try {
     const body = await request.json();
-    const { name, url, category, description, price, korean_support, difficulty, use_cases, tags, tasks, detail_markdown } = body;
+    const { name, url, category, category_custom, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown } = body;
 
     // 필수 4종 검증
     if (!name?.trim() || !url?.trim() || !category?.trim() || !description?.trim()) {
@@ -81,6 +81,26 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     // 카테고리 화이트리스트
     if (!ALLOWED_CATEGORIES.includes(category.trim())) {
       return new Response(JSON.stringify({ error: '올바른 카테고리를 선택해주세요.' }), { status: 400 });
+    }
+
+    // 가격 모델: 필수 3택 (D-02)
+    const PRICE_MODELS = ['무료', 'Freemium', '유료'];
+    if (!price_model?.trim() || !PRICE_MODELS.includes(price_model.trim())) {
+      return new Response(JSON.stringify({ error: '가격 모델을 선택해주세요. (무료/Freemium/유료)' }), { status: 400 });
+    }
+
+    // screenshot_url: 선택, 비어있으면 스킵, 값 있으면 http(s) 검증 (url 필드와 동일 패턴)
+    let screenshotUrl: string | null = null;
+    if (screenshot_url !== undefined && screenshot_url !== null && String(screenshot_url).trim() !== '') {
+      try {
+        const parsedShot = new URL(String(screenshot_url).trim());
+        if (parsedShot.protocol !== 'http:' && parsedShot.protocol !== 'https:') {
+          return new Response(JSON.stringify({ error: '올바른 스크린샷 URL을 입력해주세요. (http:// 또는 https://)' }), { status: 400 });
+        }
+        screenshotUrl = String(screenshot_url).trim();
+      } catch {
+        return new Response(JSON.stringify({ error: '올바른 스크린샷 URL을 입력해주세요.' }), { status: 400 });
+      }
     }
 
     // tasks: 최대 5개 + TASKS 키 존재 검증
@@ -124,16 +144,19 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
     await db.prepare(
       `INSERT INTO tool_submissions
-        (user_id, slug, name, url, category, description, price, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published')`
+        (user_id, slug, name, url, category, category_custom, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published')`
     ).bind(
       userId,
       slug,
       name.trim(),
       url.trim(),
       category.trim(),
+      category_custom?.trim() || null,
       description.trim(),
-      price?.trim() || null,
+      price_model.trim(),
+      price_detail?.trim() || null,
+      screenshotUrl,
       korean_support ? 1 : 0,
       difficulty?.trim() || null,
       use_cases?.trim() || null,
