@@ -1,10 +1,52 @@
 ---
-export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const allTools = (await getCollection('tools'))
+const mdTools: any[] = (await getCollection('tools'))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
+
+// D1 사용자 등록 도구 합성 (41-03 Task 2: status 무관 즉시표시, fail-soft 200)
+let d1Rows: any[] = [];
+try {
+  const db = (Astro.locals as any).runtime?.env?.DB;
+  if (db) {
+    const res = await db.prepare(
+      'SELECT slug, name, url, category, description, price, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions ORDER BY created_at DESC'
+    ).all();
+    d1Rows = res?.results ?? [];
+  }
+} catch {
+  d1Rows = [];
+}
+
+const parseJsonArray = (v: any): string[] => {
+  try {
+    const a = typeof v === 'string' ? JSON.parse(v) : v;
+    return Array.isArray(a) ? a.map((x) => String(x)) : [];
+  } catch {
+    return [];
+  }
+};
+
+const d1Tools: any[] = d1Rows.map((r) => ({
+  id: String(r.slug),
+  isD1: true,
+  data: {
+    name: String(r.name ?? ''),
+    description: String(r.description ?? ''),
+    category: String(r.category ?? '기타'),
+    price: r.price ?? '—',
+    koreanSupport: Number(r.korean_support) === 1,
+    difficulty: (r.difficulty && String(r.difficulty).trim()) || '중급',
+    tags: parseJsonArray(r.tags),
+    useCases: r.use_cases ? String(r.use_cases).split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+    order: -1,
+    updated: String(r.created_at ?? '').slice(0, 10),
+  },
+}));
+
+// D1 최신순 상단 + md 기존 순서
+const allTools: any[] = [...d1Tools, ...mdTools];
 
 const newTools = [...allTools]
   .filter(t => t.data.updated)
@@ -145,6 +187,9 @@ import { TASK_COUNT } from '../../config/tasks';
                   <span class="flex-shrink-0 text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full border border-emerald-200 font-semibold ml-2 dark:bg-emerald-500/15 dark:text-emerald-400 dark:border-emerald-500/20">
                     NEW
                   </span>
+                  {(tool as any).isD1 && (
+                    <span class="flex-shrink-0 text-xs font-bold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full border border-purple-200 dark:bg-purple-500/15 dark:text-purple-400 dark:border-purple-500/20 ml-1">MAKER</span>
+                  )}
                 </div>
                 <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 flex-1">{tool.data.description}</p>
                 <div class="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-white/[0.05]">
@@ -288,6 +333,9 @@ import { TASK_COUNT } from '../../config/tasks';
                 {tool.data.name}
               </h3>
               <div class="flex gap-1 flex-shrink-0">
+                {(tool as any).isD1 && (
+                  <span class="text-xs font-bold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full border border-purple-200 dark:bg-purple-500/15 dark:text-purple-400 dark:border-purple-500/20">MAKER</span>
+                )}
                 {tool.data.koreanSupport && (
                   <span class="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded border border-blue-200 font-medium dark:bg-blue-500/15 dark:text-blue-400 dark:border-blue-500/20" title="한국어 지원">
                     KR
