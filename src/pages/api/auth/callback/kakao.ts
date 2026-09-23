@@ -58,8 +58,8 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
         ).bind(kakaoId, existing.id).run();
       } else {
         await db.prepare(
-          `INSERT INTO users (kakao_id, google_id, email, name, avatar, provider) VALUES (?, '', ?, ?, ?, 'kakao')`
-        ).bind(kakaoId, email, name, avatar).run();
+          `INSERT INTO users (kakao_id, google_id, email, name, avatar, provider) VALUES (?, 'kakao_' || ?, ?, ?, ?, 'kakao')`
+        ).bind(kakaoId, kakaoId, email, name, avatar).run();
       }
       dbUser = await db.prepare(
         `SELECT id, name, email, avatar FROM users WHERE kakao_id = ?`
