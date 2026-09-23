@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../../lib/auth';
+import { sendToolNotification } from '../../../../lib/email-notify';
 
 // Phase 3-C Wave B: 관리자 승인/반려 API (approve → published, reject → retired)
 // Auth gate: grant.ts와 동일 ADMIN_EMAILS 패턴
@@ -85,6 +86,41 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
     )
     .bind(nextStatus, action === 'reject' ? reason!.trim() : null, slug.trim())
     .run();
+
+  // 승인/반려 알림 이메일 발송 — 실패해도 승인/반려 자체는 롤백하지 않음
+  try {
+    const db2 = (locals as any).runtime?.env?.DB;
+    const brevoKey = (locals as any).runtime?.env?.BREVO_API_KEY;
+    if (db2 && brevoKey) {
+      const submitter = await db2
+        .prepare(
+          `SELECT u.email, u.name, t.name AS toolName, t.slug AS toolSlug
+           FROM tool_submissions t
+           JOIN users u ON t.user_id = u.id
+           WHERE t.slug = ?`
+        )
+        .bind(slug.trim())
+        .first() as any;
+
+      if (submitter?.email) {
+        const result = await sendToolNotification(
+          {
+            to: submitter.email,
+            toolName: submitter.toolName || slug.trim(),
+            toolSlug: submitter.toolSlug || slug.trim(),
+            status: action === 'approve' ? 'approved' : 'rejected',
+            reason: action === 'reject' ? reason!.trim() : undefined,
+          },
+          brevoKey
+        );
+        console.log(`[review] notify ${slug.trim()} → ${submitter.email}: ${result.success ? 'sent' : (result.error || 'failed')}`);
+      } else {
+        console.log(`[review] notify skipped for ${slug.trim()}: no submitter email`);
+      }
+    }
+  } catch (notifyErr: any) {
+    console.error(`[review] notify error for ${slug.trim()}:`, notifyErr?.message || notifyErr);
+  }
 
   return new Response(JSON.stringify({ ok: true, slug: slug.trim(), status: nextStatus }), {
     headers: { 'Content-Type': 'application/json' },
