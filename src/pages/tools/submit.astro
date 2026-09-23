@@ -67,13 +67,24 @@ const taskSlugs = Object.keys(TASKS);
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">가격 *</label>
-            <select id="f-price" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none">
-              <option value="무료">무료</option>
-              <option value="무료 / 유료">무료 / 유료</option>
-              <option value="유료">유료</option>
-            </select>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">가격 모델 *</label>
+            <div class="flex gap-4 py-2.5" role="radiogroup" aria-label="가격 모델">
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
+                <input type="radio" name="price_model" value="무료" checked class="rounded text-blue-600" /> 무료
+              </label>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
+                <input type="radio" name="price_model" value="Freemium" class="rounded text-blue-600" /> Freemium
+              </label>
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
+                <input type="radio" name="price_model" value="유료" class="rounded text-blue-600" /> 유료
+              </label>
+            </div>
+            <input type="text" id="f-price-detail" class="mt-2 w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="가격 상세 (선택, 예: 월 9,900원부터)" />
           </div>
+        </div>
+        <div id="category-custom-wrap" class="hidden">
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">희망 카테고리 (기타 선택 시)</label>
+          <input type="text" id="f-category-custom" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="원하는 카테고리를 적어주세요 (선택)" />
         </div>
         <button type="button" id="btn-next" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">다음 →</button>
       </div>
@@ -100,6 +111,10 @@ const taskSlugs = Object.keys(TASKS);
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">태그 (쉼표 구분)</label>
           <input type="text" id="f-tags" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: AI, 글쓰기, 무료" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">스크린샷 URL (선택)</label>
+          <input type="url" id="f-screenshot-url" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="https://example.com/screenshot.png" />
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">연관작업 (최대 5개)</label>
@@ -152,7 +167,7 @@ const taskSlugs = Object.keys(TASKS);
       <!-- 카페 퍼널 -->
       <div class="flex flex-col sm:flex-row gap-3 mb-6">
         <button type="button" id="cafe-copy-btn" class="flex-1 py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl transition-colors text-sm">📋 카페 공유 문구 복사</button>
-        <a href="https://cafe.naver.com/gptdohye" target="_blank" rel="noopener" class="flex-1 py-3 text-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-xl transition-colors text-sm">☕ 카페 바로가기</a>
+        <a id="cafe-link" href="https://cafe.naver.com/gptdohye" target="_blank" rel="noopener" class="flex-1 py-3 text-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-xl transition-colors text-sm">☕ 카페 바로가기</a>
       </div>
       <p id="copy-ok" class="hidden text-sm text-green-600 dark:text-green-400 text-center mb-4">복사되었습니다! 카페에 붙여넣기 해주세요.</p>
 
@@ -168,6 +183,7 @@ const taskSlugs = Object.keys(TASKS);
 </Layout>
 
 <script>
+  const CAFE_URL = 'https://cafe.naver.com/gptdohye';
   const form = document.getElementById('submit-form');
   const step1 = document.getElementById('step-1');
   const step2 = document.getElementById('step-2');
@@ -183,8 +199,30 @@ const taskSlugs = Object.keys(TASKS);
   }
 
   document.getElementById('f-description').addEventListener('input', (e) => {
-    descCount.textContent = e.target.value.length;
+    const n = e.target.value.length;
+    descCount.textContent = n;
+    const btn = document.getElementById('btn-submit');
+    if (n > 200) {
+      descCount.classList.add('text-red-600', 'font-bold');
+      if (btn) btn.disabled = true;
+    } else {
+      descCount.classList.remove('text-red-600', 'font-bold');
+      if (btn) btn.disabled = false;
+    }
   });
+
+  // 기타 선택 시 희망 카테고리 토글 (D-04)
+  document.getElementById('f-category').addEventListener('change', (e) => {
+    const wrap = document.getElementById('category-custom-wrap');
+    if (e.target.value === '기타') {
+      wrap.classList.remove('hidden');
+    } else {
+      wrap.classList.add('hidden');
+    }
+  });
+
+  // 카페 바로가기 href를 상수로 통일 (D-05)
+  document.getElementById('cafe-link')?.setAttribute('href', CAFE_URL);
 
   // 연관작업 최대 5개 제한
   document.querySelectorAll('.task-check').forEach((cb) => {
@@ -260,12 +298,20 @@ const taskSlugs = Object.keys(TASKS);
     btn.textContent = '제출 중...';
 
     const tagsRaw = document.getElementById('f-tags').value.trim();
+    const priceModel = document.querySelector('input[name="price_model"]:checked')?.value || '';
+    const priceDetail = document.getElementById('f-price-detail').value.trim();
+    const catVal = document.getElementById('f-category').value;
+    const catCustom = document.getElementById('f-category-custom').value.trim();
+    const shotRaw = document.getElementById('f-screenshot-url').value.trim();
     const payload = {
       name: document.getElementById('f-name').value.trim(),
       url: document.getElementById('f-url').value.trim(),
-      category: document.getElementById('f-category').value,
+      category: catVal,
+      category_custom: catVal === '기타' ? (catCustom || null) : null,
       description: document.getElementById('f-description').value.trim(),
-      price: document.getElementById('f-price').value,
+      price_model: priceModel,
+      price_detail: priceDetail || null,
+      screenshot_url: shotRaw || null,
       korean_support: document.getElementById('f-korean').checked,
       difficulty: document.getElementById('f-difficulty').value || null,
       use_cases: document.getElementById('f-usecases').value.trim() || null,
@@ -290,7 +336,9 @@ const taskSlugs = Object.keys(TASKS);
         const toolUrl = document.getElementById('f-url').value.trim();
         const toolDesc = document.getElementById('f-description').value.trim();
         const toolCat = document.getElementById('f-category').value;
-        const toolPrice = document.getElementById('f-price').value;
+        const toolModel = document.querySelector('input[name="price_model"]:checked')?.value || '';
+        const toolDetail = document.getElementById('f-price-detail').value.trim();
+        const toolPrice = toolDetail || toolModel || '—';
         form.classList.add('hidden');
         document.getElementById('done-state').classList.remove('hidden');
         document.getElementById('done-slug').textContent = data.slug;
@@ -300,7 +348,7 @@ const taskSlugs = Object.keys(TASKS);
         document.getElementById('preview-cat').textContent = toolCat;
         document.getElementById('preview-price').textContent = toolPrice || '—';
         document.getElementById('cafe-copy-btn').dataset.shareText =
-          `[${toolName}] ${toolUrl}\n${toolDesc}\nhttps://cafe.naver.com/gptdohye 에서 더 많은 AI 활용법을 확인하세요`;
+          `[${toolName}] ${toolUrl}\n${toolDesc}\n${CAFE_URL} 에서 더 많은 AI 활용법을 확인하세요`;
         window.scrollTo(0, 0);
       }
     } catch {
