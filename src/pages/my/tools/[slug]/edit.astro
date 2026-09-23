@@ -1,0 +1,58 @@
+---
+import Layout from '../../../../layouts/Layout.astro';
+import ToolForm from '../../../../components/ToolForm.astro';
+import { verifySession } from '../../../../lib/auth';
+
+const { slug } = Astro.params;
+
+const session = Astro.cookies.get('session')?.value;
+let currentUser: any = null;
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
+if (!currentUser) {
+  return Astro.redirect(`/api/auth/login?redirect_to=/my/tools/${slug}/edit/`);
+}
+
+// users 테이블에서 user_id 역조회 (my/tools/index.astro 패턴)
+let userId = 0;
+let row: any = null;
+try {
+  const db = (Astro.locals as any).runtime?.env?.DB;
+  if (db) {
+    const userRow = await db.prepare('SELECT id FROM users WHERE email = ?').bind(currentUser.email).first();
+    if (userRow) userId = (userRow as any).id;
+    if (userId) {
+      row = await db.prepare(
+        'SELECT * FROM tool_submissions WHERE slug = ? AND user_id = ?'
+      ).bind(slug, userId).first();
+    }
+  }
+} catch {
+  row = null;
+}
+if (!row) {
+  return new Response('Not found', { status: 404 });
+}
+---
+
+<Layout title="AI 툴 수정하기 | AI코리아24" description={`"${row.name}" 정보를 수정하세요.`}>
+  <ToolForm
+    mode="edit"
+    slug={String(slug)}
+    initialData={{
+      name: row.name ?? '',
+      url: row.url ?? '',
+      description: row.description ?? '',
+      category: row.category ?? '',
+      category_custom: row.category_custom ?? '',
+      price_model: row.price_model ?? '무료',
+      price_detail: row.price_detail ?? '',
+      screenshot_url: row.screenshot_url ?? '',
+      korean_support: Number(row.korean_support) === 1,
+      difficulty: row.difficulty ?? '',
+      use_cases: row.use_cases ?? '',
+      tags: row.tags ?? '',
+      tasks: row.tasks ?? '',
+      detail_markdown: row.detail_markdown ?? '',
+    }}
+  />
+</Layout>
