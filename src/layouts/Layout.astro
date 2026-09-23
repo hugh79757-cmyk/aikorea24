@@ -95,7 +95,13 @@ const currentPath = Astro.url.pathname;
       <div class="hidden md:flex items-center ml-4">
         {currentUser ? (
           <div class="flex items-center gap-3">
-            <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+            {currentUser.avatar ? (
+              <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" onerror="this.style.display='none'" />
+            ) : (
+              <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
+                {currentUser.name.charAt(0).toUpperCase()}
+              </div>
+            )}
             <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
             <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">내 도구</a>
             <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
@@ -133,7 +139,13 @@ const currentPath = Astro.url.pathname;
         {currentUser ? (
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" />
+              {currentUser.avatar ? (
+                <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" onerror="this.style.display='none'" />
+              ) : (
+                <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
+                  {currentUser.name.charAt(0).toUpperCase()}
+                </div>
+              )}
               <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
             </div>
             <div class="flex items-center gap-3">
