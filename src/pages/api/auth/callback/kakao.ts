@@ -36,7 +36,8 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   const kakaoId = String(kakaoUser.id);
   const email = kakaoUser.kakao_account?.email || `${kakaoId}@kakao.local`;
   const name = kakaoUser.kakao_account?.profile?.nickname || '카카오 사용자';
-  const avatar = kakaoUser.kakao_account?.profile?.profile_image_url || null;
+  const raw = kakaoUser.kakao_account?.profile?.profile_image_url || null;
+  const avatar = raw ? raw.replace(/^http:\/\//, 'https://') : null;
 
   const db = runtime?.env?.DB;
   if (db) {
