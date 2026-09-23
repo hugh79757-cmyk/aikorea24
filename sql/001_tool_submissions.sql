@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS tool_submissions (
   tags TEXT,
   tasks TEXT,
   detail_markdown TEXT,
-  status TEXT DEFAULT 'published',
+  status TEXT DEFAULT 'pending',
   created_at TEXT DEFAULT (datetime('now')),
   updated_at TEXT DEFAULT (datetime('now'))
 );

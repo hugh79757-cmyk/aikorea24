@@ -150,7 +150,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     await db.prepare(
       `INSERT INTO tool_submissions
         (user_id, slug, name, url, category, category_custom, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published')`
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`
     ).bind(
       userId,
       slug,
@@ -170,7 +170,13 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       detail_markdown?.trim() || null,
     ).run();
 
-    return new Response(JSON.stringify({ ok: true, slug }), {
+    return new Response(JSON.stringify({
+      ok: true,
+      slug,
+      message: '제출 완료! 관리자 검토 후 공개됩니다 (보통 24시간 이내)',
+      cafeUrl: 'https://cafe.naver.com/aikorea24',
+      myToolsUrl: '/my/tools/',
+    }), {
       status: 201,
       headers: { 'Content-Type': 'application/json' },
     });

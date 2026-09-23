@@ -18,19 +18,46 @@ if (!tool) {
   tool = allMd.find((t: any) => t.id === id) ?? null;
 }
 
-// D1 fallback (41-03 Task 3): md miss → slug 조회, miss → 404
+// D1 fallback (Phase 3-C Wave A): md miss → slug 조회 (status 필터 없이 owner preview 허용)
 let isD1 = false;
+let d1OwnerId = 0;
 if (!tool) {
   let row: any = null;
   try {
     const db = (Astro.locals as any).runtime?.env?.DB;
     if (db) {
+      // 현재 세션 사용자 확인 (패턴 B: cookie session → verifySession → users.id 역조회)
+      let currentUser: { email: string; name: string } | null = null;
+      const session = Astro.cookies.get('session')?.value;
+      if (session && (Astro.locals as any).sessionSecret) {
+        try {
+          const { verifySession } = await import('../../lib/auth');
+          currentUser = await verifySession(session, (Astro.locals as any).sessionSecret);
+        } catch {}
+      }
+      let currentUserId = 0;
+      if (currentUser) {
+        const userRow = await db.prepare('SELECT id FROM users WHERE email = ?').bind(currentUser.email).first();
+        if (userRow) currentUserId = (userRow as any).id;
+      }
+
+      // 상태 필터 없이 slug로 조회 — owner는 pending/hidden도 열람 가능
       row = await db.prepare(
-        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE slug = ? AND status = \'published\''
+        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at FROM tool_submissions WHERE slug = ?'
       ).bind(id).first();
+
+      if (!row) {
+        return new Response('Not found', { status: 404 });
+      }
+      // 공개 아니면 소유자만 열람 가능
+      const status = String(row.status ?? '').trim();
+      if (status !== 'published' && (row as any).user_id !== currentUserId) {
+        return new Response('Not found', { status: 404 });
+      }
+      d1OwnerId = (row as any).user_id || 0;
     }
   } catch {
-    row = null;
+    return new Response('Not found', { status: 404 });
   }
   if (!row) {
     return new Response('Not found', { status: 404 });
@@ -59,8 +86,10 @@ if (!tool) {
       tags: parseArr(row.tags),
       tasks: parseArr(row.tasks),
       updated: String(row.created_at ?? '').slice(0, 10),
+      status: String(row.status ?? 'published').trim(),
     },
     body: String(row.detail_markdown || row.description || ''),
+    isOwner: d1OwnerId > 0,
   };
 }
 
