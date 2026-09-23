@@ -5,13 +5,13 @@ import { getCollection } from 'astro:content';
 const mdTools: any[] = (await getCollection('tools'))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));
 
-// D1 사용자 등록 도구 합성 (41-03 Task 2: status 무관 즉시표시, fail-soft 200)
+// D1 사용자 등록 도구 합성 (42-02: published-only, price_detail || price_model, fail-soft 200)
 let d1Rows: any[] = [];
 try {
   const db = (Astro.locals as any).runtime?.env?.DB;
   if (db) {
     const res = await db.prepare(
-      'SELECT slug, name, url, category, description, price, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions ORDER BY created_at DESC'
+      'SELECT slug, name, url, category, description, price_model, price_detail, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE status=\'published\' ORDER BY created_at DESC'
     ).all();
     d1Rows = res?.results ?? [];
   }
@@ -35,7 +35,7 @@ const d1Tools: any[] = d1Rows.map((r) => ({
     name: String(r.name ?? ''),
     description: String(r.description ?? ''),
     category: String(r.category ?? '기타'),
-    price: r.price ?? '—',
+    price: (r.price_detail && String(r.price_detail).trim()) || r.price_model || '—',
     koreanSupport: Number(r.korean_support) === 1,
     difficulty: (r.difficulty && String(r.difficulty).trim()) || '중급',
     tags: parseJsonArray(r.tags),
