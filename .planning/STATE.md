@@ -4,10 +4,10 @@ milestone: v2.0-complete
 current_phase: 38
 current_phase_name: Threads 자가개선   루프
 status: phase_38_complete
-stopped_at: Completed 42-tools-phase1-adjust-01-PLAN.md
-last_updated: "2026-09-23T04:58:58.912Z"
+stopped_at: Completed 42-tools-phase1-adjust-02-PLAN.md
+last_updated: "2026-09-23T05:16:08.795Z"
 last_activity: 2026-09-22
-state_head: 7317345fc5118234c160aca28efc2844edcfc094
+state_head: 5bfb308290dd3ce39668982ed4f70af244106885
 progress:
   total_phases: 38
   completed_phases: 38
@@ -165,6 +165,7 @@ Progress: [███████████████████████
 | Phase 40-compass-writing-mode-diversification P01 | 25min | 11 tasks | 6 files |
 | Phase 41-tools-user-submit P03 | 20min | 3 tasks | 4 files |
 | Phase 42-tools-phase1-adjust P01 | 4min | 2 tasks | 3 files |
+| Phase 42-tools-phase1-adjust P02 | 15min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -192,6 +193,7 @@ Recent decisions affecting current work:
 - [Phase 38]: Independent 2-axis rotation (intro_style + h2_flow) over single sequential counter
 - [Phase 38]: 42-01: DROP COLUMN price local+remote 성공, fallback 불필요 (0행 무손실)
 - [Phase 38]: 42-01: price_model DB NOT NULL 없이 코드 검증만 (RESEARCH Risk 3 권장)
+- [Phase 38]: 42-02: matchFree unchanged (Freemium 무료필터 제외) + [id] hidden 직접접근 허용 — Open Q 2건 senior 확인용 flag
 
 ### Key Decisions (Phase 17)
 
@@ -251,8 +253,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-09-23T04:58:58.861Z
-Stopped at: Completed 42-tools-phase1-adjust-01-PLAN.md
+Last session: 2026-09-23T05:16:08.741Z
+Stopped at: Completed 42-tools-phase1-adjust-02-PLAN.md
 Resume file: None
 Next: Review working-tree divergence (unstaged src/content/blog/*.md + tools md) before next milestone or ad-hoc task.
 
