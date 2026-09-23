@@ -14,6 +14,10 @@ def find_background(keywords: list[str], exclude_id: str | list[str] | tuple[str
     if not keywords:
         return None
     # normalize exclude_id: accept str or list/tuple/set (backward compat)
+    kws = [(k or "").strip() for k in keywords]
+    kws = [k for k in kws if k]
+    if not kws:
+        return None
     if isinstance(exclude_id, (list, tuple, set)):
         exclude_ids = {str(x).strip() for x in exclude_id if str(x).strip()}
     elif exclude_id is None:
@@ -21,34 +25,34 @@ def find_background(keywords: list[str], exclude_id: str | list[str] | tuple[str
     else:
         eid_single = str(exclude_id).strip()
         exclude_ids = {eid_single} if eid_single else set()
-    for kw in keywords:
-        kw = (kw or "").strip()
-        if not kw:
-            continue
-        ekw = _esc(kw)
-        if len(exclude_ids) == 1:
-            eid = _esc(next(iter(exclude_ids)))
-            exclude_clause = f"AND id != '{eid}' "
-        elif len(exclude_ids) > 1:
-            ids_sql = ",".join(f"'{_esc(x)}'" for x in exclude_ids)
-            exclude_clause = f"AND id NOT IN ({ids_sql}) "
-        else:
-            exclude_clause = ""
-        sql = (
-            "SELECT id,title,description,link,pub_date,source FROM news "
-            f"WHERE (title LIKE '%{ekw}%' OR description LIKE '%{ekw}%') "
-            f"{exclude_clause}"
-            "AND pub_date >= date('now','-30 days') "
-            "ORDER BY pub_date DESC LIMIT 1"
-        )
-        try:
-            rows = d1_query(sql)
-        except Exception as e:
-            logger.warning("find_background d1_query error kw=%s: %s", kw, e)
-            continue
-        if rows:
-            logger.info("find_background hit kw=%s id=%s", kw, rows[0].get("id"))
-            return rows[0]
+    if len(exclude_ids) == 1:
+        eid = _esc(next(iter(exclude_ids)))
+        exclude_clause = f"AND id != '{eid}' "
+    elif len(exclude_ids) > 1:
+        ids_sql = ",".join(f"'{_esc(x)}'" for x in exclude_ids)
+        exclude_clause = f"AND id NOT IN ({ids_sql}) "
+    else:
+        exclude_clause = ""
+    like_parts = []
+    for k in kws:
+        ek = _esc(k)
+        like_parts.append(f"(title LIKE '%{ek}%' OR description LIKE '%{ek}%')")
+    like_clause = " OR ".join(like_parts)
+    sql = (
+        "SELECT id,title,description,link,pub_date,source FROM news "
+        f"WHERE ({like_clause}) "
+        f"{exclude_clause}"
+        "AND pub_date >= date('now','-7 days') "
+        "ORDER BY pub_date DESC LIMIT 1"
+    )
+    try:
+        rows = d1_query(sql)
+    except Exception as e:
+        logger.warning("find_background d1_query error kws=%s: %s", kws, e)
+        rows = None
+    if rows:
+        logger.info("find_background hit kws=%s id=%s", kws, rows[0].get("id"))
+        return rows[0]
 
     # Vectorize fallback — lazy import, graceful
     try:
@@ -105,41 +109,41 @@ def find_cross_articles(seed_id: str, keywords: list[str], limit: int = 3) -> li
     seen_ids: set[str] = {seed_id} if seed_id else set()
     seen_sources: set[str] = set()
     out: list[dict] = []
-    for kw in keywords:
-        if len(out) >= limit:
-            break
-        kw = (kw or "").strip()
-        if not kw:
-            continue
-        ekw = _esc(kw)
-        eid = _esc(seed_id)
-        sql = (
-            "SELECT id,title,description,link,pub_date,source FROM news "
-            f"WHERE (title LIKE '%{ekw}%' OR description LIKE '%{ekw}%') "
-            f"AND id != '{eid}' "
-            "ORDER BY pub_date DESC LIMIT 5"
-        )
-        try:
-            rows = d1_query(sql)
-        except Exception as e:
-            logger.warning("find_cross d1_query error: %s", e)
-            continue
-        if rows:
-            for r in rows:
-                if len(out) >= limit:
-                    break
-                rid = str(r.get("id") or "").strip()
-                if not rid or rid in seen_ids:
-                    continue
-                src = str(r.get("source") or "").strip()
-                # distinct source filter (allow empty source once)
-                if src and src in seen_sources:
-                    continue
-                seen_ids.add(rid)
-                if src:
-                    seen_sources.add(src)
-                out.append(r)
-        logger.info("find_cross hit %d/3 kw=%s", len(out), kw)
-        if len(out) >= limit:
-            break
+    kws = [(k or "").strip() for k in keywords]
+    kws = [k for k in kws if k]
+    if not kws:
+        return []
+    like_parts = []
+    for k in kws:
+        ek = _esc(k)
+        like_parts.append(f"(title LIKE '%{ek}%' OR description LIKE '%{ek}%')")
+    eid = _esc(seed_id)
+    sql = (
+        "SELECT id,title,description,link,pub_date,source FROM news "
+        f"WHERE ({' OR '.join(like_parts)}) "
+        f"AND id != '{eid}' "
+        "AND pub_date >= date('now','-7 days') "
+        "ORDER BY pub_date DESC LIMIT 5"
+    )
+    try:
+        rows = d1_query(sql)
+    except Exception as e:
+        logger.warning("find_cross d1_query error: %s", e)
+        return []
+    if rows:
+        for r in rows:
+            if len(out) >= limit:
+                break
+            rid = str(r.get("id") or "").strip()
+            if not rid or rid in seen_ids:
+                continue
+            src = str(r.get("source") or "").strip()
+            # distinct source filter (allow empty source once)
+            if src and src in seen_sources:
+                continue
+            seen_ids.add(rid)
+            if src:
+                seen_sources.add(src)
+            out.append(r)
+        logger.info("find_cross hit %d/%d kws=%s", len(out), limit, kws)
     return out[:limit]

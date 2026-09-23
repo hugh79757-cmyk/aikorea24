@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 """
-aikorea24 블로그 아웃라인(재료) 생성기 v2.0
+[사용안함 - DISABLED 2026-09-23] aikorea24 블로그 아웃라인(재료) 생성기 v2.0
+- 비활성화 사유: 키워드 파이프라인 미사용, 호출자 없음 (plist/cron/run_pipeline import 0건)
+- 실행 트리거 존재하지 않음 확인됨. 수동 실행 금지.
+- 필요시 git history에서 복원할 것. 삭제하지 말고 이 상태 유지.
+- 원본 기능 설명 (참고용, 현재 동작 안 함):
 - scripts/thread_topics/keywords.json 기반 키워드 테이블 로딩
 - 각 키워드의 db_query 항목으로 D1 뉴스 DB 검색 (오늘 + 어제)
 - 매칭 기사 있으면 → 키워드 intent + 기사 내용으로 아웃라인 생성
@@ -340,6 +344,9 @@ from pipeline.infra.telegram import send_telegram
 # 메인
 # ============================================
 def main():
+    # [사용안함 - DISABLED 2026-09-23] 호출자 없음 확인, 실행 차단
+    log("[사용안함] outline_generator는 비활성화됨 (2026-09-23). 실행 중단.")
+    sys.exit(0)
     load_env()
     today_str = date.today().strftime("%Y-%m-%d")
     log(f"아웃라인 생성 시작 ({today_str})")

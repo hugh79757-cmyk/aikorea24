@@ -134,8 +134,8 @@ def get_today_briefing_id():
         )
         return rows[0]["id"] if rows else None
     except Exception as e:
-        log(f"  브리핑 조회 실패: {e}")
-        return None
+        log(f"  브리핑 조회 실패 (D1 오류, 빈 브리핑 아님): {e}")
+        raise
 
 def update_deep_dive_url(news_id, blog_url):
     """briefing_items의 deep_dive_url을 블로그 URL로 업데이트."""

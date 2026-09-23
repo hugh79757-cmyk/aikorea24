@@ -321,9 +321,9 @@ def get_articles():
                FROM news n
                JOIN briefing_items bi ON bi.news_id = n.id
                JOIN briefings b ON b.id = bi.briefing_id
-              WHERE b.date LIKE '{today}%' AND b.status = 'published'
-               {source_filter}
-              GROUP BY n.id ORDER BY bi.sort_order ASC"""
+               WHERE b.date LIKE '{today}%' AND b.status = 'published'
+                {source_filter}
+               GROUP BY n.id ORDER BY bi.sort_order ASC LIMIT 200"""
     rows = d1_query(sql1)
     total_queried += len(rows)
     for r in rows:
@@ -355,9 +355,10 @@ def get_articles():
                      END || '-' || 
                      CASE WHEN length(substr(pub_date, 6, 2)) = 1 THEN '0' || substr(pub_date, 6, 2) ELSE substr(pub_date, 6, 2) END
                    ELSE NULL
-                 END >= date('now', '-7 days')
-               {source_filter}
-              ORDER BY pub_date DESC LIMIT 2000"""
+                END >= date('now', '-7 days')
+                AND pub_date >= date('now', '-3 days')
+                {source_filter}
+               ORDER BY pub_date DESC LIMIT 200"""
     rows2 = d1_query(sql2)
     total_queried += len(rows2)
     for r in rows2:
