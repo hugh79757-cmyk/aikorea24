@@ -1,0 +1,168 @@
+---
+export const prerender = false;
+
+import { verifySession } from '../../lib/auth';
+
+// Phase 3-C Wave B: 관리자 검토 큐 (pending 목록 + 승인/반려)
+// Auth gate: admin/index.astro와 동일 패턴 (비관리자 → 401)
+const ADMIN_EMAILS = ['twinssn@gmail.com'];
+
+let isAuth = false;
+const session = Astro.cookies.get('session')?.value;
+if (session) {
+  const user = await verifySession(session, Astro.locals.sessionSecret);
+  if (user) {
+    isAuth = ADMIN_EMAILS.includes(user.email);
+  }
+}
+
+if (!isAuth) {
+  return new Response('Unauthorized', { status: 401 });
+}
+
+type QueueRow = {
+  slug: string;
+  name: string;
+  url: string;
+  category: string;
+  category_custom: string | null;
+  description: string;
+  price_model: string | null;
+  price_detail: string | null;
+  user_id: number;
+  owner_email: string | null;
+  created_at: string;
+};
+
+let pending: QueueRow[] = [];
+let counts = { pending: 0, published: 0, retired: 0 };
+let dbError = '';
+try {
+  const db = (Astro.locals as any).runtime?.env?.DB;
+  if (!db) {
+    dbError = 'DB 없음';
+  } else {
+    const { results } = await db
+      .prepare(
+        `SELECT t.slug, t.name, t.url, t.category, t.category_custom, t.description,
+                t.price_model, t.price_detail, t.user_id, t.created_at,
+                (SELECT email FROM users WHERE id = t.user_id) AS owner_email
+           FROM tool_submissions t WHERE t.status = 'pending' ORDER BY t.created_at DESC`
+      )
+      .all();
+    pending = (results as QueueRow[]) || [];
+    const { results: agg } = await db
+      .prepare(`SELECT status, COUNT(*) AS c FROM tool_submissions GROUP BY status`)
+      .all();
+    for (const r of (agg as any[]) || []) {
+      const s = String(r.status);
+      if (s === 'pending') counts.pending = r.c;
+      else if (s === 'published') counts.published = r.c;
+      else if (s === 'retired') counts.retired = r.c;
+    }
+  }
+} catch (e: any) {
+  dbError = e?.message || '조회 실패';
+}
+---
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>도구 검토 큐 — AI코리아24 관리자</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0f172a;color:#e2e8f0;font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:20px}
+h1{font-size:1.3rem;margin-bottom:4px}
+.sub{color:#94a3b8;font-size:.85rem;margin-bottom:14px}
+.counts{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.pill{font-size:.8rem;padding:4px 12px;border-radius:999px;border:1px solid #334155;background:#1e293b;color:#94a3b8}
+.pill b{color:#e2e8f0}
+.card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;margin-bottom:10px}
+.card h3{font-size:.95rem;margin-bottom:4px}
+.card .meta{font-size:.75rem;color:#64748b;margin-bottom:6px}
+.card .desc{font-size:.85rem;color:#cbd5e1;line-height:1.5;margin-bottom:8px}
+.card a{color:#93c5fd;font-size:.8rem;word-break:break-all}
+.row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{border:none;padding:8px 18px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600}
+.btn.approve{background:#16a34a;color:#fff}
+.btn.reject{background:#dc2626;color:#fff}
+.btn:disabled{background:#334155;color:#64748b;cursor:not-allowed}
+.reason{flex:1;min-width:200px;background:#0f172a;color:#e2e8f0;border:1px solid #475569;border-radius:6px;padding:8px 10px;font-size:.85rem}
+.msg{font-size:.85rem;margin-top:8px;min-height:1.2em}
+.msg.ok{color:#4ade80}
+.msg.err{color:#f87171}
+.empty{text-align:center;padding:40px;color:#64748b}
+.dberr{background:#7f1d1d;border:1px solid #ef4444;border-radius:8px;padding:12px;margin-bottom:14px;font-size:.85rem}
+</style>
+</head>
+<body>
+<h1>🛠️ 도구 검토 큐</h1>
+<p class="sub">pending 제출을 승인(published) 또는 반려(retired)합니다. Wave B 범위: 큐 + 승인 API만.</p>
+<div class="counts">
+  <span class="pill">🟡 검토중 <b>{counts.pending}</b></span>
+  <span class="pill">🟢 공개 <b>{counts.published}</b></span>
+  <span class="pill">🔴 반려 <b>{counts.retired}</b></span>
+</div>
+{dbError ? <div class="dberr">DB 오류: {dbError}</div> : null}
+{pending.length === 0 && !dbError ? (
+  <div class="empty">검토 대기 중인 도구가 없습니다 🎉</div>
+) : null}
+<div id="list">
+{pending.map((t) => (
+  <div class="card" data-slug={t.slug}>
+    <h3>{t.name}</h3>
+    <div class="meta">/{t.slug}/ · {t.category}{t.category_custom ? ` (${t.category_custom})` : ''} · {t.price_detail?.trim() || t.price_model || '—'} · {t.owner_email || `user#${t.user_id}`} · {t.created_at}</div>
+    <p class="desc">{t.description}</p>
+    <a href={t.url} target="_blank" rel="noopener">{t.url}</a>
+    <div class="row">
+      <button type="button" class="btn approve" data-act="approve">승인 → 공개</button>
+      <input class="reason" type="text" placeholder="반려 사유 (반려 시 필수)" maxlength="200" />
+      <button type="button" class="btn reject" data-act="reject">반려</button>
+    </div>
+    <p class="msg"></p>
+  </div>
+))}
+</div>
+<script>
+document.querySelectorAll('.card').forEach((card) => {
+  const slug = card.getAttribute('data-slug');
+  const msg = card.querySelector('.msg');
+  const reasonInput = card.querySelector('.reason');
+  card.querySelectorAll('.btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const action = btn.getAttribute('data-act');
+      const reason = (reasonInput.value || '').trim();
+      if (action === 'reject' && !reason) {
+        msg.textContent = '❌ 반려 사유를 입력해주세요.';
+        msg.className = 'msg err';
+        return;
+      }
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/admin/tools/review', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug, action, reason: reason || undefined }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          msg.textContent = '❌ ' + (data.error || '실패');
+          msg.className = 'msg err';
+          return;
+        }
+        msg.textContent = action === 'approve' ? '✅ 공개됨 (published)' : '✅ 반려됨 (retired)';
+        msg.className = 'msg ok';
+        card.querySelectorAll('.btn').forEach((b) => (b.disabled = true));
+      } catch {
+        msg.textContent = '❌ 네트워크 오류';
+        msg.className = 'msg err';
+      } finally {
+        if (!msg.classList.contains('ok')) btn.disabled = false;
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
