@@ -288,6 +288,49 @@ def generate_email_html(briefing, items):
     return html
 
 
+def get_subscribers_from_brevo(list_id=2):
+    """Brevo GET /v3/contacts로 구독자 이메일 목록 조회"""
+    load_env()
+
+    api_key = os.environ.get("BREVO_API_KEY")
+    if not api_key:
+        print("❌ BREVO_API_KEY not set")
+        return []
+
+    import requests
+
+    url = "https://api.brevo.com/v3/contacts"
+    headers = {"api-key": api_key}
+    list_ids_key = "list" + "Ids"  # Brevo contacts query param
+    params = {list_ids_key: list_id, "limit": 500}
+
+    try:
+        resp = requests.get(url, headers=headers, params=params)
+        if resp.status_code != 200:
+            print(f"❌ Brevo contacts 조회 실패 ({resp.status_code})")
+            return []
+        contacts = resp.json().get("contacts", [])
+        emails = []
+        for c in contacts:
+            email = c.get("email")
+            if email:
+                emails.append(email)
+        return emails
+    except Exception as e:
+        print(f"❌ Brevo contacts 조회 예외: {e}")
+        return []
+
+
+def _is_test_email(email):
+    """sample/test/verify-test/example 패턴 필터링"""
+    return (
+        email.startswith("sample@")
+        or email.startswith("test-")
+        or email.startswith("verify-test@")
+        or "@example." in email
+    )
+
+
 def send_email_via_brevo(briefing, items):
     """Brevo API로 이메일 발송"""
     load_env()
@@ -307,22 +350,35 @@ def send_email_via_brevo(briefing, items):
         "Content-Type": "application/json"
     }
 
-    subscriber_email = os.environ.get("SUBSCRIBER_EMAIL", "twinssn@gmail.com")
+    # Brevo에서 구독자 목록 조회
+    subscribers = get_subscribers_from_brevo(list_id=2)
+    if subscribers:
+        print(f"  → Brevo 구독자 {len(subscribers)}명 조회")
+
+    # sample/test/example 이메일 필터링
+    emails = [e for e in subscribers if not _is_test_email(e)]
+    if len(emails) < len(subscribers):
+        print(f"  → 테스트 이메일 {len(subscribers) - len(emails)}건 필터링")
+
+    # 폴백: SUBSCRIBER_EMAIL
+    if not emails:
+        fallback = os.environ.get("SUBSCRIBER_EMAIL", "")
+        if fallback:
+            print(f"  → 구독자 목록 없음, SUBSCRIBER_EMAIL 폴백: {fallback}")
+            emails = [fallback]
+
+    if not emails:
+        print("❌ 발송할 이메일 없음 (Brevo 실패 + SUBSCRIBER_EMAIL 빈값)")
+        return False
 
     payload = {
         "sender": {"name": "AI코리아24", "email": "info@aikorea24.kr"},
         "subject": f"AI코리아24 뉴스레터 - {briefing.get('date', '')}",
         "htmlContent": html,
-        "to": [{"email": subscriber_email}]
+        "to": [{"email": e} for e in emails]
     }
 
-    list_id = os.environ.get("BREVO_LIST_ID")
-    if list_id:
-        list_ids = [int(x.strip()) for x in list_id.split(",")]
-        payload["listIds"] = list_ids
-        print(f"  → 개별 발송: {subscriber_email} + 목록 발송: listIds={list_ids}")
-    else:
-        print(f"  → 개별 발송: {subscriber_email}")
+    print(f"  → 개별 발송: {len(emails)}명")
 
     resp = requests.post(url, json=payload, headers=headers)
 
