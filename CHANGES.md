@@ -1418,3 +1418,16 @@
 - `kr.aikorea24.weekly-contrast.plist` 등록 완료
 - 매주 토요일 09:00 실행
 - OPENAI_API_KEY 환경변수 포함 (description 임베딩용)
+
+## 2026-09-23 — Phase 3-C tools 승인 파이프라인 (Wave A+B)
+
+* HOTFIX logout 쿠키 domain 수정 (8b9ca73e) + secure/sameSite 강화 (007518ec) — 배포됨
+* 카카오 로그인 5연쇄 수정 + 배포: UTF-8 세션 코덱 (4de904ee), avatar https 강제 (3b98292f), fallback 2단 (0ec1acab/7a6e4701), google_id placeholder (2bea45ca)
+* Wave A (5fdfa9d5): pending-by-default + owner preview + 상태 배지. Wave B (642d2806): admin 리뷰큐 + 승인/반려 API
+* 미배포 상태 — 다음 세션: deploy.sh → twinssn 승인 UAT 1건
+
+## 2026-09-23 21:15 — Phase 3-C 배포 완료
+
+* `bash scripts/deploy.sh` 성공 (a3279a8a) + sitemap ping Google/Naver ✅
+* 프로덕션 스모크: / → 200, /tools/ → 200, /my/tools/ → 302 (게스트), /admin/ → 401, /admin/tools/ → 401 (게이트 정상; 배포 직후 엣지 전파 중 404 혼재 → 60초 후 401 5/5 안정)
+* 남은 것: twinssn 로그인 후 /admin/tools/ 승인 UAT 1건 (사용자 수동)

@@ -1,162 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-08-23",
-      "briefing_id": 250,
-      "articles": [
-        {
-          "id": "46376",
-          "title": "하버드, 699달러짜리 스타트업 부트캠프에 AI 강사 아바타 도입",
-          "original_title": "",
-          "description": "하버드 비즈니스 스쿨(HBS)의 파운드리(Foundry) 프로그램에서는 AI 아바타가 실전 피칭과 이사회 회의 과정에서 피드백을 제공합니다. 수강생들은 이 기술을 통해 실제와 유사한 환경에서 비즈니스 역량을 훈련할 수 있습니다.",
-          "link": "https://techcrunch.com/2026/08/22/harvards-699-startup-bootcamp-offers-ai-avatars-of-its-instructors/",
-          "entities": [
-            "AI",
-            "Foundry",
-            "HBS"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46385",
-          "title": "엔비디아 AI 서버 가격, 내년 초부터 15% 이상 인상 예정",
-          "original_title": "",
-          "description": "메모리 비용 상승으로 인해 엔비디아의 주요 고객사들은 내년 초부터 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 것이라는 통보를 받았습니다. 엔비디아는 다음 주 분기 실적 발표를 앞두고 있으며, 이번 가격 인상은 공급망 내 메모리 부족 현상이 주된 원인으로 지목됩니다.",
-          "link": "https://thenextweb.com/news/nvidia-ai-server-price-increase-memory-costs",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46388",
-          "title": "엔비디아 고객사들, AI 관련 가격 인상 경고받아",
-          "original_title": "",
-          "description": "블룸버그 통신에 따르면, 엔비디아는 일부 대형 고객사들에게 자사의 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 수 있다고 통보했습니다.",
-          "link": "https://www.cnbc.com/2026/08/22/nvidia-customers-reportedly-warned-about-ai-related-price-hikes-.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46378",
-          "title": "오픈AI, 캘리포니아주에 AI 안전 법안 강화 촉구",
-          "original_title": "",
-          "description": "오픈AI가 과거 반대했던 캘리포니아주의 AI 안전 법안인 'SB 53'을 오히려 강화해야 한다고 주장하고 나섰습니다. 이는 AI 규제에 대한 기업의 입장이 변화하고 있음을 시사합니다.",
-          "link": "https://techcrunch.com/2026/08/22/openai-says-california-should-strengthen-its-ai-safety-bill/",
-          "entities": [
-            "AI",
-            "SB"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46335",
-          "title": "한 달간 살아있는 피부 조직으로 AI 모델을 학습시키는 스타트업",
-          "original_title": "",
-          "description": "아우터 바이오사이언스(Outer Biosciences)가 4년간의 은둔 끝에 모습을 드러냈습니다. 수술 후 폐기되는 인간 피부 조직을 최대 한 달간 생존시켜 얻은 데이터를 AI 모델에 학습시켜 유용한 화합물을 예측하는 기술을 개발했습니다. 이 기업은 현재까지 약 2,300만 달러를 투자받았으며 19명의 직원을 두고 있습니다.",
-          "link": "https://thenextweb.com/news/outer-biosciences-living-human-skin-ai-model",
-          "entities": [
-            "Outer",
-            "Biosciences",
-            "AI"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46381",
-          "title": "\"멈출 수가 없어요\": 개발자 80%, AI 코딩이 도움보다 중독성이 더 강하다고 답해",
-          "original_title": "",
-          "description": "코디(Coddy) 개발자 설문조사에 따르면, AI 코딩 도구의 사용이 새로운 형태의 번아웃을 유발하고 있는 것으로 나타났습니다. 많은 개발자가 AI를 활용하는 과정에서 업무 효율성보다 도구에 대한 의존과 중독을 경험하고 있습니다.",
-          "link": "https://www.zdnet.com/article/i-cant-stop-80-of-developers-find-ai-coding-more-addictive-than-helpful/",
-          "entities": [
-            "AI",
-            "Coddy"
-          ],
-          "date": "2026-08-23"
-        }
-      ]
-    },
-    {
-      "date": "2026-08-23",
-      "briefing_id": 251,
-      "articles": [
-        {
-          "id": "46422",
-          "title": "\"오우라(Oura)의 수면 단계 분석은 동전 던지기 수준의 AI 추측일 뿐\"이라는 소송 제",
-          "original_title": "",
-          "description": "샌프란시스코에서 제기된 집단 소송에 따르면, 오우라의 수면 단계 분석은 실제 측정이 아닌 AI의 추정치에 불과하다고 주장하며 핀란드의 모회사 오우라 헬스(Oura Health Oy)를 피고로 지목했습니다. 오우라는 자사의 과학적 근거와 정확성 주장을 고수하고 있습니다.",
-          "link": "https://thenextweb.com/news/oura-sleep-tracking-accuracy-class-action-lawsuit",
-          "entities": [
-            "Oura",
-            "AI",
-            "Oy",
-            "Health"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46377",
-          "title": "딥마인드 출신들이 설립한 '인헤런트(Inherent)', 자사 AI '팀원'이 연구 재현 ",
-          "original_title": "",
-          "description": "딥마인드 출신들이 설립한 영국 AI 연구소 인헤런트는 과학 논문을 재현하는 능력을 갖춘 AI 에이전트 '패러데이(Faraday)'를 공개했습니다. 이 기술은 향후 과학적 혁신을 가속화하는 중요한 발판이 될 것으로 기대됩니다.",
-          "link": "https://techcrunch.com/2026/08/22/inherent-founded-by-deepmind-alumni-says-its-ai-teammate-just-outperformed-anthropic-and-openai-at-replicating-research/",
-          "entities": [
-            "AI",
-            "Inherent",
-            "Faraday"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46420",
-          "title": "하비(Harvey), 법률 업무를 위한 첫 자체 모델 공개",
-          "original_title": "",
-          "description": "하비는 중국 스타트업 문샷(Moonshot)의 오픈 웨이트 모델인 '키미 K3'를 기반으로 후행 학습시킨 법률 전용 모델 '테넷(Tenet)'을 출시했습니다. 하비는 오픈AI의 투자를 받았음에도 불구하고, 자사 제품 내에서 오픈AI 모델을 대체하기 위해 테넷을 개발했습니다.",
-          "link": "https://thenextweb.com/news/harvey-tenet-legal-model-kimi-k3-chinese-base",
-          "entities": [
-            "Tenet",
-            "Harvey",
-            "K3",
-            "Moonshot"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46407",
-          "title": "\"AI가 과학자의 업무 효율을 높이기보다 오히려 질을 떨어뜨릴 수 있다\"는 연구 결과",
-          "original_title": "",
-          "description": "언어 모델이 완벽하게 작동하더라도 연구의 질을 오히려 저하시킬 수 있다는 이론적 연구가 발표되었습니다. AI가 시간을 절약해주면 연구자들이 기존 연구를 개선하는 대신 새로운 프로젝트를 시작하는 데 시간을 쏟게 되어, 결과적으로 연구의 깊이가 얕아질 수 있다는 지적입니다.",
-          "link": "https://the-decoder.com/ai-could-make-scientists-do-more-work-less-well-not-less-work-better-study-argues/",
-          "entities": [],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46389",
-          "title": "국채 금리 상승이 시장을 흔들었지만, 우리는 여전히 선호하는 AI 및 소매업 주식을 유지할",
-          "original_title": "",
-          "description": "이번 주 주식 시장은 채권 시장의 흐름에 따라 움직였습니다.",
-          "link": "https://www.cnbc.com/2026/08/22/rising-yields-rattled-the-market-but-were-sticking-with-our-favorite-ai-and-retail-stocks.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-23"
-        },
-        {
-          "id": "46394",
-          "title": "픽셀 11 프로를 구매했다면, 이 무료 혜택을 즉시 활성화하세요",
-          "original_title": "",
-          "description": "구글은 모든 픽셀 11 구매자에게 다양한 무료 혜택을 제공하지만, 이를 활성화하는 방법을 알아야 합니다. 6개월간 구글 AI 프로를 무료로 이용하는 방법을 확인해 보세요.",
-          "link": "https://www.androidcentral.com/phones/google-pixel/google-ai-pro-trial-pixel-11-pro",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-23"
-        }
-      ]
-    },
-    {
       "date": "2026-08-24",
       "briefing_id": 252,
       "articles": [
@@ -2654,153 +2498,79 @@
           "date": "2026-09-22"
         }
       ]
+    },
+    {
+      "date": "2026-09-23",
+      "briefing_id": 310,
+      "articles": [
+        {
+          "id": "52305",
+          "title": "시간당 보수 체계에 도전하는 AI 네이티브 특허법인 '페언' 출범",
+          "original_title": "",
+          "description": "전통적인 특허 출원은 변호사의 시간으로 30~40시간이 소요되며 1만 8,000달러에서 4만 달러의 법률 비용이 듭니다. 스타트업들은 매일 바뀌는 기술을 보호하기 위해 몇 달을 기다려야 합니다. 스타트업을 위한 현대적인 특허 대행사인 페언은 전혀 다른 모델을 바탕으로 설립되었습니다.",
+          "link": "https://thenextweb.com/news/fearn-ai-native-patent-firm-launch-flat-fees",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-23"
+        },
+        {
+          "id": "52284",
+          "title": "\"우리는 이미 지난 전쟁을 치르고 있다\": 그리스 총리가 AI에 대해 솔직한 심정을 털어놓",
+          "original_title": "",
+          "description": "무역 사절단을 이끄는 대부분의 지도자들은 보통 판촉 활동에 집중하지만, 이번 주 그리스 총리 키리아코스 미초타키스 인터뷰에서 그는 어떤 정부도 AI가 가져올 파급력에 대비하지 못했다고 솔직히 인정했습니다.",
+          "link": "https://techcrunch.com/2026/09/22/were-already-fighting-yesterdays-battle-greeces-prime-minister-gets-candid-about-ai/",
+          "entities": [],
+          "date": "2026-09-23"
+        },
+        {
+          "id": "52291",
+          "title": "의회가 인공초지능 금지법을 심사하는 가운데 트럼프, 중국 시진핑과 회담 예정 – 미국 정치",
+          "original_title": "",
+          "description": "일부 업계 최고 지도자들이 치명적인 위험을 경고하고 있음에도 불구하고, 미 의회는 지금까지 AI 산업을 통제하기 위해 한 일이 거의 없다. 백악관 출입이 금지된 언론사들을 둘러싼 소송에서 트럼프 행정부의 새로운 법적 문건이 제출되었다.",
+          "link": "https://www.theguardian.com/us-news/live/2026/sep/23/donald-trump-xi-jinping-ai-china-us-politics-latest-news-updates",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-23"
+        },
+        {
+          "id": "52285",
+          "title": "테크크런치 파운더 서밋 일정 공개: 11월 4일 보스턴에서 투자 유치, 채용, AI 인사이",
+          "original_title": "",
+          "description": "창업가들이 가장 혹독한 교훈을 어렵게 배울 필요는 없습니다. 테크크런치 파운더 서밋은 기업 설립의 어려움을 덜어주고 성공의 기쁨을 더욱 크게 누릴 수 있도록 설계되었습니다.",
+          "link": "https://techcrunch.com/2026/09/22/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insights-in-boston-on-november-4/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-23"
+        },
+        {
+          "id": "52313",
+          "title": "트럼프-시진핑 정상회담, AI 안전 회담 의제에 올랐으나 양측 모두 속도 늦출 생각 없어",
+          "original_title": "",
+          "description": "최근 몇 주 동안 AI 안전성에 대한 우려가 최고조에 달했습니다. 분석가들은 이것이 미·중 정상의 핵심 초점이 될 것이라고 CNBC에 전했습니다.",
+          "link": "https://www.cnbc.com/2026/09/23/trump-xi-meeting-ai-safety-chips-us-china-dialogue.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-23"
+        },
+        {
+          "id": "52286",
+          "title": "OpenAI, 새로운 크리에이터 제품 부서의 수장으로 패트리온 공동 창업자 샘 야엠 영입",
+          "original_title": "",
+          "description": "OpenAI가 새로운 '크리에이터 제품' 부서를 이끌 책임자로 패트리온의 공동 창업자 샘 야엠을 영입했습니다. 크리에이터 플랫폼에서 13년 이상 재직한 그는 패트리온 임원 두 명과 함께 합류했으며, 새로운 크리에이터 도구를 개발하여 다음 주 OpenAI 데브데이에서 첫선을 보일 수 있습니다.",
+          "link": "https://the-decoder.com/openai-hires-patreon-co-founder-sam-yam-to-lead-a-new-creator-product-division/",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-09-23"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "46376",
-      "title": "하버드, 699달러짜리 스타트업 부트캠프에 AI 강사 아바타 도입",
-      "original_title": "",
-      "description": "하버드 비즈니스 스쿨(HBS)의 파운드리(Foundry) 프로그램에서는 AI 아바타가 실전 피칭과 이사회 회의 과정에서 피드백을 제공합니다. 수강생들은 이 기술을 통해 실제와 유사한 환경에서 비즈니스 역량을 훈련할 수 있습니다.",
-      "link": "https://techcrunch.com/2026/08/22/harvards-699-startup-bootcamp-offers-ai-avatars-of-its-instructors/",
-      "entities": [
-        "AI",
-        "Foundry",
-        "HBS"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46385",
-      "title": "엔비디아 AI 서버 가격, 내년 초부터 15% 이상 인상 예정",
-      "original_title": "",
-      "description": "메모리 비용 상승으로 인해 엔비디아의 주요 고객사들은 내년 초부터 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 것이라는 통보를 받았습니다. 엔비디아는 다음 주 분기 실적 발표를 앞두고 있으며, 이번 가격 인상은 공급망 내 메모리 부족 현상이 주된 원인으로 지목됩니다.",
-      "link": "https://thenextweb.com/news/nvidia-ai-server-price-increase-memory-costs",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46388",
-      "title": "엔비디아 고객사들, AI 관련 가격 인상 경고받아",
-      "original_title": "",
-      "description": "블룸버그 통신에 따르면, 엔비디아는 일부 대형 고객사들에게 자사의 AI 칩이 탑재된 서버 가격이 15% 이상 인상될 수 있다고 통보했습니다.",
-      "link": "https://www.cnbc.com/2026/08/22/nvidia-customers-reportedly-warned-about-ai-related-price-hikes-.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46378",
-      "title": "오픈AI, 캘리포니아주에 AI 안전 법안 강화 촉구",
-      "original_title": "",
-      "description": "오픈AI가 과거 반대했던 캘리포니아주의 AI 안전 법안인 'SB 53'을 오히려 강화해야 한다고 주장하고 나섰습니다. 이는 AI 규제에 대한 기업의 입장이 변화하고 있음을 시사합니다.",
-      "link": "https://techcrunch.com/2026/08/22/openai-says-california-should-strengthen-its-ai-safety-bill/",
-      "entities": [
-        "AI",
-        "SB"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46335",
-      "title": "한 달간 살아있는 피부 조직으로 AI 모델을 학습시키는 스타트업",
-      "original_title": "",
-      "description": "아우터 바이오사이언스(Outer Biosciences)가 4년간의 은둔 끝에 모습을 드러냈습니다. 수술 후 폐기되는 인간 피부 조직을 최대 한 달간 생존시켜 얻은 데이터를 AI 모델에 학습시켜 유용한 화합물을 예측하는 기술을 개발했습니다. 이 기업은 현재까지 약 2,300만 달러를 투자받았으며 19명의 직원을 두고 있습니다.",
-      "link": "https://thenextweb.com/news/outer-biosciences-living-human-skin-ai-model",
-      "entities": [
-        "Outer",
-        "Biosciences",
-        "AI"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46381",
-      "title": "\"멈출 수가 없어요\": 개발자 80%, AI 코딩이 도움보다 중독성이 더 강하다고 답해",
-      "original_title": "",
-      "description": "코디(Coddy) 개발자 설문조사에 따르면, AI 코딩 도구의 사용이 새로운 형태의 번아웃을 유발하고 있는 것으로 나타났습니다. 많은 개발자가 AI를 활용하는 과정에서 업무 효율성보다 도구에 대한 의존과 중독을 경험하고 있습니다.",
-      "link": "https://www.zdnet.com/article/i-cant-stop-80-of-developers-find-ai-coding-more-addictive-than-helpful/",
-      "entities": [
-        "AI",
-        "Coddy"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46422",
-      "title": "\"오우라(Oura)의 수면 단계 분석은 동전 던지기 수준의 AI 추측일 뿐\"이라는 소송 제",
-      "original_title": "",
-      "description": "샌프란시스코에서 제기된 집단 소송에 따르면, 오우라의 수면 단계 분석은 실제 측정이 아닌 AI의 추정치에 불과하다고 주장하며 핀란드의 모회사 오우라 헬스(Oura Health Oy)를 피고로 지목했습니다. 오우라는 자사의 과학적 근거와 정확성 주장을 고수하고 있습니다.",
-      "link": "https://thenextweb.com/news/oura-sleep-tracking-accuracy-class-action-lawsuit",
-      "entities": [
-        "Oura",
-        "AI",
-        "Oy",
-        "Health"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46377",
-      "title": "딥마인드 출신들이 설립한 '인헤런트(Inherent)', 자사 AI '팀원'이 연구 재현 ",
-      "original_title": "",
-      "description": "딥마인드 출신들이 설립한 영국 AI 연구소 인헤런트는 과학 논문을 재현하는 능력을 갖춘 AI 에이전트 '패러데이(Faraday)'를 공개했습니다. 이 기술은 향후 과학적 혁신을 가속화하는 중요한 발판이 될 것으로 기대됩니다.",
-      "link": "https://techcrunch.com/2026/08/22/inherent-founded-by-deepmind-alumni-says-its-ai-teammate-just-outperformed-anthropic-and-openai-at-replicating-research/",
-      "entities": [
-        "AI",
-        "Inherent",
-        "Faraday"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46420",
-      "title": "하비(Harvey), 법률 업무를 위한 첫 자체 모델 공개",
-      "original_title": "",
-      "description": "하비는 중국 스타트업 문샷(Moonshot)의 오픈 웨이트 모델인 '키미 K3'를 기반으로 후행 학습시킨 법률 전용 모델 '테넷(Tenet)'을 출시했습니다. 하비는 오픈AI의 투자를 받았음에도 불구하고, 자사 제품 내에서 오픈AI 모델을 대체하기 위해 테넷을 개발했습니다.",
-      "link": "https://thenextweb.com/news/harvey-tenet-legal-model-kimi-k3-chinese-base",
-      "entities": [
-        "Tenet",
-        "Harvey",
-        "K3",
-        "Moonshot"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46407",
-      "title": "\"AI가 과학자의 업무 효율을 높이기보다 오히려 질을 떨어뜨릴 수 있다\"는 연구 결과",
-      "original_title": "",
-      "description": "언어 모델이 완벽하게 작동하더라도 연구의 질을 오히려 저하시킬 수 있다는 이론적 연구가 발표되었습니다. AI가 시간을 절약해주면 연구자들이 기존 연구를 개선하는 대신 새로운 프로젝트를 시작하는 데 시간을 쏟게 되어, 결과적으로 연구의 깊이가 얕아질 수 있다는 지적입니다.",
-      "link": "https://the-decoder.com/ai-could-make-scientists-do-more-work-less-well-not-less-work-better-study-argues/",
-      "entities": [],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46389",
-      "title": "국채 금리 상승이 시장을 흔들었지만, 우리는 여전히 선호하는 AI 및 소매업 주식을 유지할",
-      "original_title": "",
-      "description": "이번 주 주식 시장은 채권 시장의 흐름에 따라 움직였습니다.",
-      "link": "https://www.cnbc.com/2026/08/22/rising-yields-rattled-the-market-but-were-sticking-with-our-favorite-ai-and-retail-stocks.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-23"
-    },
-    {
-      "id": "46394",
-      "title": "픽셀 11 프로를 구매했다면, 이 무료 혜택을 즉시 활성화하세요",
-      "original_title": "",
-      "description": "구글은 모든 픽셀 11 구매자에게 다양한 무료 혜택을 제공하지만, 이를 활성화하는 방법을 알아야 합니다. 6개월간 구글 AI 프로를 무료로 이용하는 방법을 확인해 보세요.",
-      "link": "https://www.androidcentral.com/phones/google-pixel/google-ai-pro-trial-pixel-11-pro",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-23"
-    },
     {
       "id": "46459",
       "title": "AI '부채 폭탄' 위기? 아니, 엔론 사태의 재현은 아니다 | 진 마크스",
@@ -5095,6 +4865,70 @@
         "AI"
       ],
       "date": "2026-09-22"
+    },
+    {
+      "id": "52305",
+      "title": "시간당 보수 체계에 도전하는 AI 네이티브 특허법인 '페언' 출범",
+      "original_title": "",
+      "description": "전통적인 특허 출원은 변호사의 시간으로 30~40시간이 소요되며 1만 8,000달러에서 4만 달러의 법률 비용이 듭니다. 스타트업들은 매일 바뀌는 기술을 보호하기 위해 몇 달을 기다려야 합니다. 스타트업을 위한 현대적인 특허 대행사인 페언은 전혀 다른 모델을 바탕으로 설립되었습니다.",
+      "link": "https://thenextweb.com/news/fearn-ai-native-patent-firm-launch-flat-fees",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-23"
+    },
+    {
+      "id": "52284",
+      "title": "\"우리는 이미 지난 전쟁을 치르고 있다\": 그리스 총리가 AI에 대해 솔직한 심정을 털어놓",
+      "original_title": "",
+      "description": "무역 사절단을 이끄는 대부분의 지도자들은 보통 판촉 활동에 집중하지만, 이번 주 그리스 총리 키리아코스 미초타키스 인터뷰에서 그는 어떤 정부도 AI가 가져올 파급력에 대비하지 못했다고 솔직히 인정했습니다.",
+      "link": "https://techcrunch.com/2026/09/22/were-already-fighting-yesterdays-battle-greeces-prime-minister-gets-candid-about-ai/",
+      "entities": [],
+      "date": "2026-09-23"
+    },
+    {
+      "id": "52291",
+      "title": "의회가 인공초지능 금지법을 심사하는 가운데 트럼프, 중국 시진핑과 회담 예정 – 미국 정치",
+      "original_title": "",
+      "description": "일부 업계 최고 지도자들이 치명적인 위험을 경고하고 있음에도 불구하고, 미 의회는 지금까지 AI 산업을 통제하기 위해 한 일이 거의 없다. 백악관 출입이 금지된 언론사들을 둘러싼 소송에서 트럼프 행정부의 새로운 법적 문건이 제출되었다.",
+      "link": "https://www.theguardian.com/us-news/live/2026/sep/23/donald-trump-xi-jinping-ai-china-us-politics-latest-news-updates",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-23"
+    },
+    {
+      "id": "52285",
+      "title": "테크크런치 파운더 서밋 일정 공개: 11월 4일 보스턴에서 투자 유치, 채용, AI 인사이",
+      "original_title": "",
+      "description": "창업가들이 가장 혹독한 교훈을 어렵게 배울 필요는 없습니다. 테크크런치 파운더 서밋은 기업 설립의 어려움을 덜어주고 성공의 기쁨을 더욱 크게 누릴 수 있도록 설계되었습니다.",
+      "link": "https://techcrunch.com/2026/09/22/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insights-in-boston-on-november-4/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-23"
+    },
+    {
+      "id": "52313",
+      "title": "트럼프-시진핑 정상회담, AI 안전 회담 의제에 올랐으나 양측 모두 속도 늦출 생각 없어",
+      "original_title": "",
+      "description": "최근 몇 주 동안 AI 안전성에 대한 우려가 최고조에 달했습니다. 분석가들은 이것이 미·중 정상의 핵심 초점이 될 것이라고 CNBC에 전했습니다.",
+      "link": "https://www.cnbc.com/2026/09/23/trump-xi-meeting-ai-safety-chips-us-china-dialogue.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-23"
+    },
+    {
+      "id": "52286",
+      "title": "OpenAI, 새로운 크리에이터 제품 부서의 수장으로 패트리온 공동 창업자 샘 야엠 영입",
+      "original_title": "",
+      "description": "OpenAI가 새로운 '크리에이터 제품' 부서를 이끌 책임자로 패트리온의 공동 창업자 샘 야엠을 영입했습니다. 크리에이터 플랫폼에서 13년 이상 재직한 그는 패트리온 임원 두 명과 함께 합류했으며, 새로운 크리에이터 도구를 개발하여 다음 주 OpenAI 데브데이에서 첫선을 보일 수 있습니다.",
+      "link": "https://the-decoder.com/openai-hires-patreon-co-founder-sam-yam-to-lead-a-new-creator-product-division/",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-09-23"
     }
   ]
 }

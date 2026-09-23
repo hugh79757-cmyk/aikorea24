@@ -12,5 +12,11 @@ if (!currentUser) {
 ---
 
 <Layout title="AI 툴 등록하기 | AI코리아24" description="AI코리아24에 새로운 AI 툴을 등록하세요.">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 pt-8">
+    <p class="text-sm text-gray-600 dark:text-gray-400 mb-6 p-3 rounded-lg bg-gray-50 border border-gray-200 dark:bg-white/[0.05] dark:border-white/[0.08]">
+      📋 모든 제출은 관리자 검토 후 공개됩니다 (보통 24시간 이내).
+      <a href="/tools/" class="text-blue-600 hover:underline dark:text-blue-400">등록 정책 보기</a>
+    </p>
+  </div>
   <ToolForm mode="create" initialData={{ price_model: '무료' }} />
 </Layout>
