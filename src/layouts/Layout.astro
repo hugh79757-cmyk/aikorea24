@@ -96,7 +96,17 @@ const currentPath = Astro.url.pathname;
         {currentUser ? (
           <div class="flex items-center gap-3">
             {currentUser.avatar ? (
-              <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" onerror="this.style.display='none'" />
+              <div class="relative w-7 h-7">
+                <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
+                  {currentUser.name.charAt(0).toUpperCase()}
+                </div>
+                <img
+                  src={currentUser.avatar}
+                  alt=""
+                  class="absolute inset-0 w-7 h-7 rounded-full overflow-hidden"
+                  onerror="this.remove()"
+                />
+              </div>
             ) : (
               <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
                 {currentUser.name.charAt(0).toUpperCase()}
@@ -140,7 +150,17 @@ const currentPath = Astro.url.pathname;
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               {currentUser.avatar ? (
-                <img src={currentUser.avatar} alt="" class="w-7 h-7 rounded-full" onerror="this.style.display='none'" />
+                <div class="relative w-7 h-7">
+                  <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
+                    {currentUser.name.charAt(0).toUpperCase()}
+                  </div>
+                  <img
+                    src={currentUser.avatar}
+                    alt=""
+                    class="absolute inset-0 w-7 h-7 rounded-full overflow-hidden"
+                    onerror="this.remove()"
+                  />
+                </div>
               ) : (
                 <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300">
                   {currentUser.name.charAt(0).toUpperCase()}
