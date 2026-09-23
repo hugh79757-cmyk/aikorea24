@@ -69,7 +69,7 @@ try {
                 </div>
                 <div class="flex items-center gap-2 mt-3">
                   <a href={`/tools/${tool.slug}/`} class="flex-1 text-center px-3 py-2 text-xs font-medium bg-gray-100 hover:bg-gray-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-gray-700 dark:text-gray-200 rounded-lg transition-colors">보기 →</a>
-                  <span class="flex-1 text-center px-3 py-2 text-xs font-medium bg-gray-50 dark:bg-white/[0.03] text-gray-400 dark:text-gray-500 rounded-lg border border-dashed border-gray-200 dark:border-white/[0.08]" title="Phase 3-B에서 제공 예정">수정 준비 중</span>
+                  <a href={`/my/tools/${tool.slug}/edit/`} class="flex-1 text-center px-3 py-2 text-xs font-medium bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-lg transition-colors">수정 →</a>
                   <button type="button" data-toggle={tool.slug} class="toggle-btn flex-1 px-3 py-2 text-xs font-bold bg-amber-100 hover:bg-amber-200 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 text-amber-700 dark:text-amber-400 rounded-lg transition-colors">
                     {isPub ? '비공개 전환' : '공개 전환'}
                   </button>
