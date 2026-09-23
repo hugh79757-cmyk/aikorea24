@@ -26,7 +26,7 @@ if (!tool) {
     const db = (Astro.locals as any).runtime?.env?.DB;
     if (db) {
       row = await db.prepare(
-        'SELECT slug, name, url, category, description, price, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE slug = ?'
+        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE slug = ?'
       ).bind(id).first();
     }
   } catch {
@@ -50,7 +50,8 @@ if (!tool) {
       name: String(row.name ?? ''),
       description: String(row.description ?? ''),
       category: String(row.category ?? '기타'),
-      price: row.price ?? '—',
+      price: (row.price_detail && String(row.price_detail).trim()) || row.price_model || '—',
+      screenshotUrl: (row.screenshot_url && String(row.screenshot_url).trim()) || null,
       koreanSupport: Number(row.korean_support) === 1,
       difficulty: (row.difficulty && String(row.difficulty).trim()) || '중급',
       url: String(row.url ?? '#'),
@@ -207,6 +208,11 @@ const faqSchema: string | null = faqEntities.length > 0
           ✍️ 리뷰 쓰기
         </a>
       </div>
+      {tool.data.screenshotUrl && (
+        <div class="mt-4 text-sm">
+          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline">🖼️ 스크린샷 보기 →</a>
+        </div>
+      )}
     </div>
 
     <!-- 한국어 활용법 (핵심 차별화!) -->
