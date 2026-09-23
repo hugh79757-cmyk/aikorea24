@@ -1,55 +1,260 @@
 ---
-export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
+import { verifySession } from '../../lib/auth';
+import { TASKS } from '../../config/tasks';
 
-const allTools = await getCollection('tools');
-const categories = [...new Set(allTools.map(t => t.data.category))];
+let currentUser = null;
+const session = Astro.cookies.get('session')?.value;
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
+if (!currentUser) {
+  return Astro.redirect('/auth/consent');
+}
+
+// Phase 1 고정 카테고리: index.astro 8개 중 전체 제외 7개 + 기타
+const categories = [
+  { id: '글쓰기·챗봇', emoji: '✍️' },
+  { id: '이미지 생성', emoji: '🎨' },
+  { id: '영상·음성', emoji: '🎬' },
+  { id: '업무·생산성', emoji: '📊' },
+  { id: '코딩·개발', emoji: '💻' },
+  { id: '디자인', emoji: '🖼️' },
+  { id: '번역·학습', emoji: '🌐' },
+  { id: '기타', emoji: '📦' },
+];
+const taskSlugs = Object.keys(TASKS);
 ---
 
 <Layout title="AI 툴 등록하기 | AI코리아24" description="AI코리아24에 새로운 AI 툴을 등록하세요.">
   <div class="max-w-2xl mx-auto px-4 py-12">
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">🛠️ AI 툴 등록하기</h1>
-    <p class="text-gray-600 dark:text-gray-400 mb-8">아직 등록되지 않은 AI 툴을 추천해주세요. 검토 후 디렉토리에 추가됩니다.</p>
-    <form action="/api/tools/submit" method="POST" class="space-y-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">툴 이름 *</label>
-        <input type="text" name="name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: ChatGPT" />
+    <p class="text-gray-600 dark:text-gray-400 mb-8">아직 등록되지 않은 AI 툴을 추천해주세요. 제출 즉시 디렉토리에 게시됩니다.</p>
+
+    <div id="error-msg" class="hidden bg-red-50 dark:bg-red-500/20 border border-red-200 dark:border-red-500/50 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg mb-6"></div>
+
+    <!-- Step 표시 -->
+    <div class="flex items-center gap-2 mb-8">
+      <div id="step-dot-1" class="flex items-center gap-2">
+        <span class="w-7 h-7 rounded-full bg-blue-600 text-white text-sm flex items-center justify-center font-bold">1</span>
+        <span class="text-sm font-medium text-gray-900 dark:text-white">필수 정보</span>
       </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">공식 URL *</label>
-        <input type="url" name="url" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="https://chat.openai.com" />
+      <div class="flex-1 h-px bg-gray-300 dark:bg-gray-600"></div>
+      <div id="step-dot-2" class="flex items-center gap-2 opacity-50">
+        <span class="w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-600 dark:text-gray-300 text-sm flex items-center justify-center font-bold">2</span>
+        <span class="text-sm font-medium text-gray-500 dark:text-gray-400">추가 정보</span>
       </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">한 줄 설명 *</label>
-        <textarea name="description" required rows="2" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="이 툴을 한 줄로 설명해주세요"></textarea>
-      </div>
-      <div class="grid grid-cols-2 gap-4">
+    </div>
+
+    <form id="submit-form" class="space-y-6">
+      <!-- Step 1: 필수 5필드 -->
+      <div id="step-1" class="space-y-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">카테고리</label>
-          <select name="category" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none">
-            {categories.map(cat => <option value={cat}>{cat}</option>)}
-            <option value="기타">기타</option>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">툴 이름 *</label>
+          <input type="text" id="f-name" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: ChatGPT" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">공식 URL *</label>
+          <input type="url" id="f-url" required class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="https://chat.openai.com" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">한 줄 설명 * (<span id="desc-count">0</span>/200)</label>
+          <textarea id="f-description" required rows="2" maxlength="200" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="이 툴을 한 줄로 설명해주세요 (200자 이내)"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">카테고리 *</label>
+            <select id="f-category" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none">
+              {categories.map(cat => <option value={cat.id}>{cat.emoji} {cat.id}</option>)}
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">가격 *</label>
+            <select id="f-price" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none">
+              <option value="무료">무료</option>
+              <option value="무료 / 유료">무료 / 유료</option>
+              <option value="유료">유료</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" id="btn-next" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">다음 →</button>
+      </div>
+
+      <!-- Step 2: 선택 7필드 -->
+      <div id="step-2" class="space-y-6 hidden">
+        <div class="flex items-center gap-2">
+          <input type="checkbox" id="f-korean" class="rounded text-blue-600" />
+          <label for="f-korean" class="text-sm text-gray-700 dark:text-gray-300">한국어 지원</label>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">난이도</label>
+          <select id="f-difficulty" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none">
+            <option value="">선택 안 함</option>
+            <option value="초보자">초보자 OK</option>
+            <option value="중급">중급</option>
+            <option value="고급">고급</option>
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">가격</label>
-          <select name="price" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none">
-            <option value="무료">무료</option>
-            <option value="무료 / 유료">무료 / 유료</option>
-            <option value="유료">유료</option>
-          </select>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">활용사례</label>
+          <input type="text" id="f-usecases" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: 블로그 글쓰기, 회의 요약" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">태그 (쉼표 구분)</label>
+          <input type="text" id="f-tags" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: AI, 글쓰기, 무료" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">연관작업 (최대 5개)</label>
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto border border-gray-300 dark:border-gray-600 rounded-lg p-3">
+            {taskSlugs.map(slug => (
+              <label class="flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300">
+                <input type="checkbox" name="tasks" value={slug} class="rounded text-blue-600 task-check" />
+                <span>{TASKS[slug].title.replace(' 추천', '')}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">상세 설명</label>
+          <textarea id="f-detail" rows="4" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="이 툴의 자세한 소개를 적어주세요 (선택)"></textarea>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <button type="button" id="btn-back" class="py-3 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-xl transition-colors">← 이전</button>
+          <button type="submit" id="btn-submit" class="py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">등록 제출하기</button>
         </div>
       </div>
-      <div class="flex items-center gap-2">
-        <input type="checkbox" name="koreanSupport" value="true" class="rounded text-blue-600" id="ks" />
-        <label for="ks" class="text-sm">한국어 지원</label>
-      </div>
-      <button type="submit" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors">등록 제출하기</button>
-      <p class="text-xs text-gray-400 text-center">제출 후 운영자가 검토하여 추가합니다 (1-2일 소요).</p>
     </form>
+
+    <!-- 완료 상태 (최소 훅 — 전체 완료화면은 41-03 소유) -->
+    <div id="done-state" class="hidden text-center py-8">
+      <p class="text-2xl mb-2">✅</p>
+      <p class="text-lg font-bold text-gray-900 dark:text-white mb-2">등록되었습니다!</p>
+      <p class="text-sm text-gray-600 dark:text-gray-400">slug: <span id="done-slug" class="font-mono"></span></p>
+      <a id="done-link" href="#" class="inline-block mt-4 text-blue-600 dark:text-blue-400 hover:underline text-sm">내 도구 보러가기 →</a>
+    </div>
+
     <div class="mt-8 text-center">
       <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline text-sm">← 전체 도구 목록으로</a>
     </div>
   </div>
 </Layout>
+
+<script>
+  const form = document.getElementById('submit-form');
+  const step1 = document.getElementById('step-1');
+  const step2 = document.getElementById('step-2');
+  const errBox = document.getElementById('error-msg');
+  const descCount = document.getElementById('desc-count');
+
+  function showError(msg) {
+    errBox.textContent = msg;
+    errBox.classList.remove('hidden');
+  }
+  function hideError() {
+    errBox.classList.add('hidden');
+  }
+
+  document.getElementById('f-description').addEventListener('input', (e) => {
+    descCount.textContent = e.target.value.length;
+  });
+
+  // 연관작업 최대 5개 제한
+  document.querySelectorAll('.task-check').forEach((cb) => {
+    cb.addEventListener('change', () => {
+      const checked = document.querySelectorAll('.task-check:checked');
+      if (checked.length > 5) {
+        cb.checked = false;
+        showError('연관작업은 최대 5개까지 선택할 수 있습니다.');
+      } else {
+        hideError();
+      }
+    });
+  });
+
+  function validateStep1() {
+    const name = document.getElementById('f-name').value.trim();
+    const url = document.getElementById('f-url').value.trim();
+    const desc = document.getElementById('f-description').value.trim();
+    if (!name || !url || !desc) {
+      showError('이름, URL, 설명을 모두 입력해주세요.');
+      return false;
+    }
+    if (desc.length > 200) {
+      showError('설명은 200자 이내로 입력해주세요.');
+      return false;
+    }
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+        showError('올바른 URL을 입력해주세요. (http:// 또는 https://)');
+        return false;
+      }
+    } catch {
+      showError('올바른 URL을 입력해주세요.');
+      return false;
+    }
+    return true;
+  }
+
+  document.getElementById('btn-next').addEventListener('click', () => {
+    hideError();
+    if (!validateStep1()) return;
+    step1.classList.add('hidden');
+    step2.classList.remove('hidden');
+    document.getElementById('step-dot-2').classList.remove('opacity-50');
+    window.scrollTo(0, 0);
+  });
+
+  document.getElementById('btn-back').addEventListener('click', () => {
+    hideError();
+    step2.classList.add('hidden');
+    step1.classList.remove('hidden');
+    document.getElementById('step-dot-2').classList.add('opacity-50');
+    window.scrollTo(0, 0);
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError();
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = '제출 중...';
+
+    const tagsRaw = document.getElementById('f-tags').value.trim();
+    const payload = {
+      name: document.getElementById('f-name').value.trim(),
+      url: document.getElementById('f-url').value.trim(),
+      category: document.getElementById('f-category').value,
+      description: document.getElementById('f-description').value.trim(),
+      price: document.getElementById('f-price').value,
+      korean_support: document.getElementById('f-korean').checked,
+      difficulty: document.getElementById('f-difficulty').value || null,
+      use_cases: document.getElementById('f-usecases').value.trim() || null,
+      tags: tagsRaw ? tagsRaw.split(',').map((t) => t.trim()).filter(Boolean) : [],
+      tasks: [...document.querySelectorAll('.task-check:checked')].map((cb) => cb.value),
+      detail_markdown: document.getElementById('f-detail').value.trim() || null,
+    };
+
+    try {
+      const res = await fetch('/api/tools/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        showError('로그인이 필요합니다.');
+      } else if (!res.ok) {
+        showError(data.error || '제출 중 오류가 발생했습니다.');
+      } else {
+        form.classList.add('hidden');
+        document.getElementById('done-state').classList.remove('hidden');
+        document.getElementById('done-slug').textContent = data.slug;
+        document.getElementById('done-link').href = '/tools/' + data.slug + '/';
+      }
+    } catch {
+      showError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = '등록 제출하기';
+    }
+  });
+</script>
