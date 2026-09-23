@@ -1,3 +1,5 @@
+- 2026-09-23 | feat | compass-publish-pipeline | compass 파이프라인 연결 + Pass 1 카테고리 다양성 개선 (tech 100%→25%) + launchd plist 등록 — 실제 발행은 D1/네트워크 차단으로 실패
+- 2026-09-23 | fix | d1-row-limit-outage-fix | D1 row read 한도초과 원인 규명 + 쿼리 최적화 (db_reader LIMIT 200, background_search OR묶음, blog_draft raise 구분)
 - 2026-09-17 | fix | kicker7-drafts-accumulation-disable | kicker7 초안 누적 차단 + 중복 경로 버그 수정 (발행 아닌 생성 경로가 원인, 기본 비활성화)
 - 2026-09-17 | debug | threads-token-refresh-audit | 토큰 자동 갱신 정상 작동 확인 — launchd_error.log 190 에러는 09-14 stale 로그, 조정 불필요
 - 2026-09-17 | fix | threads-publish-failure-3-causes | 쓰레드 발행 급감(12→4~6/일) 3대 원인 — JSON 날것 개행 파싱 실패 124건 + 모델 자기해설 누수 51건 + 고유명사 음차 오탐 26건
