@@ -35,11 +35,11 @@ export const GET: APIRoute = async ({ url, locals }) => {
       FROM news n
       JOIN briefing_items bi ON bi.news_id = n.id
       JOIN briefings b ON b.id = bi.briefing_id
-      WHERE b.date LIKE ? AND b.status = 'published'
+      WHERE b.date >= ? AND b.date < date(?, '+1 day') AND b.status = 'published'
         AND n.source IN (${placeholders})
       GROUP BY n.id ORDER BY bi.sort_order ASC
     `;
-    const p1Results = await db.prepare(p1Query).bind(`${today}%`, ...SOURCES).all();
+    const p1Results = await db.prepare(p1Query).bind(today, today, ...SOURCES).all();
     for (const r of (p1Results.results || [])) {
       if (!existingIds.has(String(r.id))) {
         r.priority = 1;
@@ -102,6 +102,6 @@ export const GET: APIRoute = async ({ url, locals }) => {
     articles,
     meta: { total: articles.length, p1, p2, p3, date: today },
   }), {
-    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, s-maxage=300, max-age=60' },
   });
 };
