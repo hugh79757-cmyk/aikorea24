@@ -46,6 +46,13 @@ if (!tool) {
         'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at, link_type FROM tool_submissions WHERE slug = ?'
       ).bind(id).first();
 
+      // tool_submissions 미발견 → tools 테이블 폴백
+      if (!row) {
+        row = await db.prepare(
+          'SELECT slug, name, url, category, tagline as description, price, korean_support, difficulty, NULL as use_cases, NULL as tags, NULL as tasks, NULL as detail_markdown, "published" as status, 0 as user_id, created_at, created_at FROM tools WHERE slug = ?'
+        ).bind(id).first();
+      }
+
       if (!row) {
         return new Response('Not found', { status: 404 });
       }
@@ -464,7 +471,7 @@ if (voteBtn) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tool_id: TOOL_ID })
       });
-      if (res.status === 401) { window.location.href = '/api/auth/login'; return; }
+      if (res.status === 401) { window.location.href = `/api/auth/login?redirect_to=${encodeURIComponent(window.location.pathname)}`; return; }
       const data = await res.json();
       if (res.ok) {
         const voted = data.voted;
