@@ -110,7 +110,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
 
     let itemsHtml = '';
     for (const item of displayItems) {
-      const briefingUrl = `https://aikorea24.kr/briefing/${today}${item.sort_order ? `#item-${item.sort_order}` : ''}`;
+      const briefingUrl = `https://aikorea24.kr/briefing/${briefing.id}${item.sort_order ? `#item-${item.sort_order}` : ''}`;
       itemsHtml += `
         <tr>
           <td style="padding:16px 0;border-bottom:1px solid #e5e7eb;">
@@ -135,7 +135,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
       itemsHtml += `
         <tr>
           <td style="padding:16px 0;text-align:center;">
-            <a href="https://aikorea24.kr/briefing/${today}"
+            <a href="https://aikorea24.kr/briefing/${briefing.id}"
                style="display:inline-block;padding:10px 24px;background:#2563eb;color:#ffffff;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">
               👉 오늘의 브리핑 ${totalCount}개 전체 보기 →
             </a>
