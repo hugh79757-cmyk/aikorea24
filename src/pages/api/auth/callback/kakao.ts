@@ -39,6 +39,9 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   const raw = kakaoUser.kakao_account?.profile?.profile_image_url || null;
   const avatar = raw ? raw.replace(/^http:\/\//, 'https://') : null;
 
+  // OAuth state 파라미터 — 로그인 후 리다이렉트할 URL
+  const state = url.searchParams.get('state') || '';
+
   const db = runtime?.env?.DB;
   if (db) {
     // 기존 카카오 계정 확인
@@ -75,6 +78,11 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 7,
     });
+  }
+
+  // state가 유효한 동일 도메인 경로면 해당 URL로, 아니면 홈으로
+  if (state && state.startsWith('/') && !state.includes('//') && !state.includes('\\')) {
+    return redirect(state);
   }
   return redirect('/');
 };
