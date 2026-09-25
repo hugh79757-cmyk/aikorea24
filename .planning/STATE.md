@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 Phase: 38 — Threads 자가개선 (Self-Improvement) 루프
 Status: ✅ Complete (2026-09-02, 커밋 227bbcc) — 3/3 plans (측정/수집·분석/주입)
-Last activity: 2026-09-24T02:26 - Completed quick task 260924-4rx: newsletter-brevo-dynamic-subscribers
+Last activity: 2026-09-25 - Completed quick task 260925-x7r: fix kakao login redirect + vote button redirect_toT02:26 - Completed quick task 260924-4rx: newsletter-brevo-dynamic-subscribers
 
 Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
 
@@ -246,6 +246,7 @@ None.
 | 2026-09-24 | vote-login-redirect-fix | 툴 상세 추천 클릭 시 로그인 페이지로 튕기던 버그 수정 (e7f2b609). 원인: session 쿠키 httpOnly → 클라이언트 쿠키 스니핑 항상 false. 수정: vote 핸들러 POST-first + 401-전용 리다이렉트, /api/auth/me.ts 신규 |
 | 2026-09-24 | cafe-copy-line | 카페 공유 문구 마지막 줄을 카페 URL만으로 정리 (47a1aee7). `에서 더 많은 AI 활용법을 확인하세요` 문구 제거. CAFE_URL(https://cafe.naver.com/aikorea24) 변경 없음 |
 | 2026-09-24 | newsletter-brevo-dynamic-subscribers | 뉴스레터 발송 정상화: get_subscribers_from_brevo() 신규 — Brevo GET /v3/contacts로 list#2 구독자 동적 조회. send_email_via_brevo에서 listIds 제거, to 필드 개별 발송, sample/test 이메일 필터링, SUBSCRIBER_EMAIL 폴백 유지 (37d8f8d1) |
+| 2026-09-25 | fix-kakao-login-redirect-vote-button-red | 카카오 로그인 redirect_to state 파이프라인 + 투표 버그 수정 (213ee74e, 381ff353, 03a65ad6) |
 
 ### Deferred Items
 
