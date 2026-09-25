@@ -563,7 +563,7 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
         document.getElementById('preview-cat').textContent = toolCat;
         document.getElementById('preview-price').textContent = toolPrice || '—';
         document.getElementById('cafe-copy-btn').dataset.shareText =
-          `[${toolName}] ${toolUrl}\n${toolDesc}\n${CAFE_URL}`;
+          `[${toolName}] ${toolUrl}\n${toolDesc}\n${window.location.origin}/tools/${data.slug}/`;
         window.scrollTo(0, 0);
       }
     } catch {
