@@ -15,7 +15,8 @@ try {
     ).all();
     d1Rows = res?.results ?? [];
   }
-} catch {
+} catch (e) {
+  console.error('[tools/index] tool_submissions 조회 실패 (fail-soft):', e);
   d1Rows = [];
 }
 
