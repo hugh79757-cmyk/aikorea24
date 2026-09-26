@@ -5,9 +5,10 @@ current_phase: 38
 current_phase_name: Threads 자가개선   루프
 status: phase_38_complete
 stopped_at: Completed 42-tools-phase1-adjust-02-PLAN.md
-last_updated: "2026-09-24T02:00:00.000Z"
-last_activity: 2026-09-22
-state_head: 5bfb308290dd3ce39668982ed4f70af244106885
+last_updated: "2026-09-26T02:03:33.773Z"
+last_activity: 2026-09-25
+last_activity_desc: "Completed quick task 260925-x7r: fix kakao login redirect + vote button redirect_toT02:26 - Completed quick task 260924-4rx: newsletter-brevo-dynamic-subscribers"
+state_head: 61e639bcdc345fad1106a915e3a59d013e4b0e02
 progress:
   total_phases: 38
   completed_phases: 38
@@ -29,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 Phase: 38 — Threads 자가개선 (Self-Improvement) 루프
 Status: ✅ Complete (2026-09-02, 커밋 227bbcc) — 3/3 plans (측정/수집·분석/주입)
-Last activity: 2026-09-25 - Completed quick task 260925-x7r: fix kakao login redirect + vote button redirect_toT02:26 - Completed quick task 260924-4rx: newsletter-brevo-dynamic-subscribers
+Last activity: 2026-09-26 - Completed quick task 260926-c73: fix tool list missing + tool detail image render
 
 Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
 
@@ -234,19 +235,20 @@ None.
 
 ### Quick Tasks Completed
 
-| Date | Slug | Description |
-|------|------|-------------|
-| 2026-07-26 | fix-blog-deploy-condition | blog_draft_generator.py 배포 조건 수정: `generated`만 체크 → `generated or untracked_blog_files`로 확대. 미커밋 블로그 6건(7/25-007~012) 감지 시 배포 실행 |
-| 2026-08-13 | fix-stale-skip-deep-docs | run_pipeline.py --skip-deep 제거(9fa7b05) 후 stale 문서화 수정: TECHNICAL.md, SKILLS/01-daily-news-pipeline.md, SKILLS/04-deep-article-generator.md에서 --skip-deep/--no-skip-deep 참조 제거 |
-| 2026-08-13 | decouple-tools-collector-instagram | tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 |
-| 2026-08-26 | verify-publish-isolation | 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) |
-| 2026-08-28 | pipeline-docs | TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 |
-| 2026-08-29 | weekly-contrast-thumb-leak | 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 |
-| 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
-| 2026-09-24 | vote-login-redirect-fix | 툴 상세 추천 클릭 시 로그인 페이지로 튕기던 버그 수정 (e7f2b609). 원인: session 쿠키 httpOnly → 클라이언트 쿠키 스니핑 항상 false. 수정: vote 핸들러 POST-first + 401-전용 리다이렉트, /api/auth/me.ts 신규 |
-| 2026-09-24 | cafe-copy-line | 카페 공유 문구 마지막 줄을 카페 URL만으로 정리 (47a1aee7). `에서 더 많은 AI 활용법을 확인하세요` 문구 제거. CAFE_URL(https://cafe.naver.com/aikorea24) 변경 없음 |
-| 2026-09-24 | newsletter-brevo-dynamic-subscribers | 뉴스레터 발송 정상화: get_subscribers_from_brevo() 신규 — Brevo GET /v3/contacts로 list#2 구독자 동적 조회. send_email_via_brevo에서 listIds 제거, to 필드 개별 발송, sample/test 이메일 필터링, SUBSCRIBER_EMAIL 폴백 유지 (37d8f8d1) |
-| 2026-09-25 | fix-kakao-login-redirect-vote-button-red | 카카오 로그인 redirect_to state 파이프라인 + 투표 버그 수정 (213ee74e, 381ff353, 03a65ad6) |
+| # | Description | Date | Commit | Status | Directory |
+| --- | ------------- | ------ | -------- | -------- | ----------- |
+| 1 | fix-blog-deploy-condition · blog_draft_generator.py 배포 조건 수정: `generated`만 체크 → `generated or untracked_blog_files`로 확대. 미커밋 블로그 6건(7/25-007~012) 감지 시 배포 실행 | 2026-07-26 | — | — | — |
+| 2 | fix-stale-skip-deep-docs · run_pipeline.py --skip-deep 제거(9fa7b05) 후 stale 문서화 수정: TECHNICAL.md, SKILLS/01-daily-news-pipeline.md, SKILLS/04-deep-article-generator.md에서 --skip-deep/--no-skip-deep 참조 제거 | 2026-08-13 | — | — | — |
+| 3 | decouple-tools-collector-instagram · tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 | 2026-08-13 | — | — | — |
+| 4 | verify-publish-isolation · 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) | 2026-08-26 | — | — | — |
+| 5 | pipeline-docs · TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 | 2026-08-28 | — | — | — |
+| 6 | weekly-contrast-thumb-leak · 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 | 2026-08-29 | — | — | — |
+| 7 | threads-d1-alert · Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 | 2026-09-01 | — | — | — |
+| 8 | vote-login-redirect-fix · 툴 상세 추천 클릭 시 로그인 페이지로 튕기던 버그 수정 (e7f2b609). 원인: session 쿠키 httpOnly → 클라이언트 쿠키 스니핑 항상 false. 수정: vote 핸들러 POST-first + 401-전용 리다이렉트, /api/auth/me.ts 신규 | 2026-09-24 | — | — | — |
+| 9 | cafe-copy-line · 카페 공유 문구 마지막 줄을 카페 URL만으로 정리 (47a1aee7). `에서 더 많은 AI 활용법을 확인하세요` 문구 제거. CAFE_URL(https://cafe.naver.com/aikorea24) 변경 없음 | 2026-09-24 | — | — | — |
+| 10 | newsletter-brevo-dynamic-subscribers · 뉴스레터 발송 정상화: get_subscribers_from_brevo() 신규 — Brevo GET /v3/contacts로 list#2 구독자 동적 조회. send_email_via_brevo에서 listIds 제거, to 필드 개별 발송, sample/test 이메일 필터링, SUBSCRIBER_EMAIL 폴백 유지 (37d8f8d1) | 2026-09-24 | — | — | — |
+| 11 | fix-kakao-login-redirect-vote-button-red · 카카오 로그인 redirect_to state 파이프라인 + 투표 버그 수정 (213ee74e, 381ff353, 03a65ad6) | 2026-09-25 | — | — | — |
+| 260926-c73 | Fix: registered test tool missing from list + uploaded image not showing on tool page | 2026-09-26 | 61e639bc | — | [260926-c73-fix-registered-test-tool-missing-from-li](./quick/260926-c73-fix-registered-test-tool-missing-from-li/) |
 
 ### Deferred Items
 
