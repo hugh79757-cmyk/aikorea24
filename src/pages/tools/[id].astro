@@ -246,8 +246,12 @@ const faqSchema: string | null = faqEntities.length > 0
         </a>
       </div>
       {tool.data.screenshotUrl && (
-        <div class="mt-4 text-sm">
-          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="text-blue-600 dark:text-blue-400 hover:underline">🖼️ 스크린샷 보기 →</a>
+        <div class="mt-4">
+          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="block">
+            <img src={tool.data.screenshotUrl} alt={`${tool.data.name} 스크린샷`} loading="lazy"
+              class="w-full max-h-80 object-contain rounded-xl border border-gray-200 dark:border-white/[0.15]" />
+          </a>
+          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="mt-1 inline-block text-sm text-blue-600 dark:text-blue-400 hover:underline">🖼️ 스크린샷 원본 보기 →</a>
         </div>
       )}
     </div>
