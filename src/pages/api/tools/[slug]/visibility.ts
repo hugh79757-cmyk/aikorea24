@@ -46,12 +46,21 @@ export const PATCH: APIRoute = async ({ params, request, locals, cookies }) => {
     return new Response(JSON.stringify({ error: '유효하지 않은 세션입니다.' }), { status: 401 });
   }
 
-  const row = await db.prepare('SELECT user_id FROM tool_submissions WHERE slug = ?').bind(slug).first();
+  const row = await db.prepare('SELECT user_id, status FROM tool_submissions WHERE slug = ?').bind(slug).first();
   if (!row) {
     return new Response(JSON.stringify({ error: '도구를 찾을 수 없습니다.' }), { status: 404 });
   }
   if ((row as any).user_id !== userId) {
     return new Response(JSON.stringify({ error: '권한이 없습니다.' }), { status: 403 });
+  }
+
+  // 승인 필수 원칙: pending/retired 상태는 관리자 승인 없이 공개 전환 불가 (클라이언트 가드만으로는 API 직접 호출 우회 가능)
+  const currentStatus = String((row as any).status ?? '');
+  if (currentStatus === 'pending' || currentStatus === 'retired') {
+    return new Response(
+      JSON.stringify({ error: currentStatus === 'pending' ? '관리자 검토 대기 중입니다. 승인 후 상태를 변경할 수 있습니다.' : '반려된 도구는 상태를 변경할 수 없습니다.' }),
+      { status: 403 }
+    );
   }
 
   await db.prepare(
