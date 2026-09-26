@@ -242,7 +242,7 @@ const faqSchema: string | null = faqEntities.length > 0
         <a href={`/community/review?tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
            id="review-write-btn"
            class="hidden inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all text-sm border border-gray-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] dark:text-gray-300 dark:border-white/[0.15]">
-          ✍️ 리뷰 쓰기
+          리뷰 쓰기
         </a>
       </div>
       {tool.data.screenshotUrl && (
@@ -334,7 +334,7 @@ const faqSchema: string | null = faqEntities.length > 0
   <div id="review-cta" class="max-w-3xl mx-auto px-4 pb-4 text-center hidden">
     <a href={`/community/write?category=review&tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
        class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm">
-      ✍️ {tool.data.name} 리뷰 작성하기
+      {tool.data.name} 리뷰 작성하기
     </a>
   </div>
   )}
@@ -343,7 +343,6 @@ const faqSchema: string | null = faqEntities.length > 0
   <div class="max-w-3xl mx-auto px-4 pb-4">
     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-750 rounded-2xl p-6 md:p-8 border border-blue-100 dark:border-gray-700">
       <div class="text-center max-w-xl mx-auto">
-        <div class="text-3xl mb-3">🚀</div>
         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📬 매일 아침 AI 뉴스를 받아보세요</h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
           {tool.data.name} 같은 최신 AI 도구 소식을 이메일로 보내드립니다. 무료입니다.

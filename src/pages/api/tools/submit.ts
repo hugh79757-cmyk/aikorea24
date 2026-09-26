@@ -2,6 +2,7 @@ import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
 import { getCollection } from 'astro:content';
 import { TASKS } from '../../../config/tasks';
+import { sendSubmissionConfirmation } from '../../../lib/email-notify';
 
 // Phase 1 고정 카테고리: index.astro 8개 중 전체 제외 7개 + 기타 (RESEARCH §5.2)
 const ALLOWED_CATEGORIES = [
@@ -169,6 +170,19 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       JSON.stringify(taskList),
       detail_markdown?.trim() || null,
     ).run();
+
+    // 등록 확인 이메일 발송 — 실패해도 등록 자체는 롤백하지 않음
+    try {
+      const brevoKey = (locals as any).runtime?.env?.BREVO_API_KEY;
+      if (brevoKey && user?.email) {
+        await sendSubmissionConfirmation(
+          { to: user.email, toolName: name.trim(), toolSlug: slug },
+          brevoKey
+        );
+      }
+    } catch (e: any) {
+      console.error('[submit] confirmation email error:', e?.message || e);
+    }
 
     return new Response(JSON.stringify({
       ok: true,

@@ -41,7 +41,6 @@ let counts = { pending: 0, published: 0, retired: 0 };
 let dbError = '';
 const ROW_COLS = `t.slug, t.name, t.url, t.category, t.category_custom, t.description,
         t.price_model, t.price_detail, t.user_id, t.created_at,
-        t.link_type,
         (SELECT email FROM users WHERE id = t.user_id) AS owner_email`;
 try {
   const db = (Astro.locals as any).runtime?.env?.DB;
@@ -154,9 +153,6 @@ h1{font-size:1.3rem;margin-bottom:4px}
     <a href={`/tools/${t.slug}/`} target="_blank" rel="noopener">상세 페이지 보기 →</a>
     <div class="row">
       <button type="button" class="btn reject" data-act="unpublish">공개 취소</button>
-      <button type="button" class="btn link-type" data-act="toggle-link-type" data-current-link-type={t.link_type}>
-        {t.link_type === 'dofollow' ? 'dofollow' : 'nofollow'} → {t.link_type === 'dofollow' ? 'nofollow' : 'dofollow'}
-      </button>
     </div>
     <p class="msg"></p>
   </div>
@@ -213,15 +209,20 @@ document.querySelectorAll('.card').forEach((card) => {
         } finally {
           if (!msg.classList.contains('ok')) btn.disabled = false;
         }
-      } else if (rawAct === 'toggle-link-type') {
-        const currentLinkType = btn.getAttribute('data-current-link-type');
-        const newLinkType = currentLinkType === 'dofollow' ? 'nofollow' : 'dofollow';
+      } else if (rawAct === 'approve' || rawAct === 'reject') {
+        // 승인/반려 (24f9f1c9에서 분기 누락으로 버튼 무반응 회귀 → 복구)
+        const action = rawAct;
+        const reason = ((reasonInput && reasonInput.value) || '').trim();
+        if (action === 'reject' && !reason) {
+          if (msg) { msg.textContent = '❌ 반려 사유를 입력해주세요.'; msg.className = 'msg err'; }
+          return;
+        }
         btn.disabled = true;
         try {
-          const res = await fetch(`/api/admin/tools/link-type`, {
-            method: 'PATCH',
+          const res = await fetch('/api/admin/tools/review', {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug, linkType: newLinkType }),
+            body: JSON.stringify({ slug, action, reason: reason || undefined }),
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) {
@@ -229,16 +230,14 @@ document.querySelectorAll('.card').forEach((card) => {
             msg.className = 'msg err';
             return;
           }
-          // Update button
-          btn.setAttribute('data-current-link-type', newLinkType);
-          btn.textContent = `${newLinkType === 'dofollow' ? 'dofollow' : 'nofollow'} → ${newLinkType === 'dofollow' ? 'nofollow' : 'dofollow'}`;
-          msg.textContent = `✅ 링크 타입이 ${newLinkType}으로 변경되었습니다.`;
+          msg.textContent = action === 'approve' ? '✅ 공개됨 (published)' : '✅ 반려됨 (retired)';
           msg.className = 'msg ok';
+          card.querySelectorAll('.btn').forEach((b) => (b.disabled = true));
         } catch {
           msg.textContent = '❌ 네트워크 오류';
           msg.className = 'msg err';
         } finally {
-          btn.disabled = false;
+          if (!msg.classList.contains('ok')) btn.disabled = false;
         }
       }
     });

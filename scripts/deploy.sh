@@ -51,7 +51,7 @@ echo "=== [1/3] 빌드 ==="
 npm run build
 
 echo "=== [2/3] Cloudflare Pages 배포 ==="
-# auth profile(hugh79757) 사용, CLOUDFLARE_API_TOKEN env var 우회 방지
+# auth profile(hugh79757) 사용, CLOUDFLARE_API_TOKEN은 .env에서 로드
 WRANGLER="/opt/homebrew/bin/wrangler"
 if [ ! -x "$WRANGLER" ]; then
   WRANGLER=$(command -v wrangler 2>/dev/null || echo "npx wrangler")
@@ -61,7 +61,7 @@ fi
 deploy_ok=0
 for attempt in 1 2 3; do
   echo "  배포 시도 $attempt/3..."
-  if env -u CLOUDFLARE_API_TOKEN $WRANGLER pages deploy dist \
+  if $WRANGLER pages deploy dist \
     --project-name aikorea24 \
     --branch main \
     --commit-dirty=true; then

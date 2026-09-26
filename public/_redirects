@@ -1,3 +1,7 @@
+# 구독 페이지 trailing slash 리다이렉트
+/unsubscribe  /unsubscribe/  301
+/subscribe  /subscribe/  301
+
 # 404 URL 리다이렉트 규칙 - aikorea24
 
 # /blog/2026/ (연도-only, 불완전 슬러그) → 410 Gone

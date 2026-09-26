@@ -32,6 +32,50 @@ export async function sendToolApprovalEmail(
   }, apiKey);
 }
 
+export interface SubmissionConfirmParams {
+  to: string;
+  toolName: string;
+  toolSlug: string;
+}
+
+export async function sendSubmissionConfirmation(
+  params: SubmissionConfirmParams,
+  apiKey: string
+): Promise<{ success: boolean; error?: string }> {
+  if (!apiKey) {
+    return { success: false, error: 'BREVO_API_KEY not configured' };
+  }
+  if (!params.to || !params.to.includes('@')) {
+    return { success: false, error: 'invalid recipient email' };
+  }
+
+  const template = submissionHtml(params);
+
+  try {
+    const res = await fetch(BREVO_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': apiKey,
+      },
+      body: JSON.stringify({
+        sender: SENDER,
+        to: [{ email: params.to }],
+        subject: template.subject,
+        htmlContent: template.html,
+      }),
+    });
+
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      return { success: false, error: `Brevo HTTP ${res.status}: ${text.slice(0, 200)}` };
+    }
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'fetch failed' };
+  }
+}
+
 export async function sendToolRejectionEmail(
   params: { to: string; toolName: string; reason?: string },
   apiKey: string
@@ -58,79 +102,31 @@ function approvedHtml(params: ToolNotifyParams): { subject: string; html: string
   const name = escapeHtml(params.toolName);
   const slug = escapeHtml(params.toolSlug);
   const toolUrl = `${BASE_URL}/tools/${slug}/`;
-  const badgeDark = `${BASE_URL}/badges/featured-dark.svg`;
-  const badgeLight = `${BASE_URL}/badges/featured-light.svg`;
 
   return {
-    subject: `[AI코리아24] ${name} 등록이 승인되었습니다 🎉`,
+    subject: `[AIKorea24] ${name} 등록이 승인되었습니다 🎉`,
     html: `
 <div style="font-family:system-ui,-apple-system,Arial,sans-serif;max-width:640px;margin:0 auto;padding:24px;color:#1f2937;">
   <div style="text-align:center;margin-bottom:24px;">
-    <span style="display:inline-block;background:linear-gradient(135deg,#1E3A5F,#0B1120);color:#fff;font-weight:700;font-size:16px;padding:6px 16px;border-radius:8px;">AI코리아24</span>
+    <span style="display:inline-block;background:#0F172A;color:#fff;font-weight:700;font-size:16px;padding:6px 16px;border-radius:8px;">AIKorea24</span>
   </div>
 
   <h2 style="font-size:22px;margin:0 0 16px;text-align:center;">등록이 승인되었습니다 🎉</h2>
-  <p style="margin:0 0 16px;line-height:1.6;font-size:15px;">
-    등록하신 <strong>${name}</strong>이(가) 검토를 통과하여 디렉토리에 공개되었습니다.
-  </p>
+<p style="margin:0 0 8px;line-height:1.6;font-size:15px;">안녕하세요,</p>
+<p style="margin:0 0 16px;line-height:1.6;font-size:15px;">
+     <strong>${name}</strong>이(가) AIKorea24 AI 도구 디렉토리에 등록되었습니다!
+   </p>
 
   <!-- 등록 페이지 링크 -->
   <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:0 0 24px;">
-    <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#475569;">📍 등록 페이지</p>
-    <a href="${toolUrl}" style="color:#3b82f6;text-decoration:none;font-size:15px;font-weight:600;">${toolUrl}</a>
+    <p style="margin:0;font-size:15px;font-weight:600;color:#1f2937;">🔗 등록 페이지: <a href="${toolUrl}" style="color:#3b82f6;text-decoration:none;">${toolUrl}</a></p>
   </div>
 
-  <!-- 현재 링크 상태 -->
-  <div style="background:#fefce8;border:1px solid #fde68a;border-radius:12px;padding:16px;margin:0 0 24px;">
-    <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#92400e;">ℹ️ 현재 링크 상태</p>
-    <p style="margin:0;font-size:14px;color:#78350f;line-height:1.6;">
-      현재 귀사 사이트 링크는 <strong>nofollow</strong>로 설정되어 있습니다.
-    </p>
-  </div>
-
-  <!-- dofollow 전환 안내 -->
-  <div style="background:linear-gradient(135deg,#1E3A5F,#0B1120);border-radius:16px;padding:24px;margin:0 0 24px;color:#fff;">
-    <h3 style="font-size:16px;margin:0 0 12px;">🔗 dofollow 링크로 전환하세요</h3>
-    <p style="margin:0 0 16px;font-size:14px;line-height:1.6;opacity:0.9;">
-      아래 배지를 귀사 사이트에 설치하시면 <strong>dofollow</strong> 링크로 전환해 드립니다.
-      dofollow 링크는 검색엔진 최적화(SEO)에 도움이 됩니다.
-    </p>
-
-    <!-- 배지 미리보기 -->
-    <div style="background:#fff;border-radius:12px;padding:16px;margin:0 0 16px;text-align:center;">
-      <p style="margin:0 0 12px;font-size:12px;color:#64748B;">배지 미리보기 (어두운 배경)</p>
-      <img src="${badgeDark}" alt="Featured on AI코리아24" height="48" style="display:inline-block;">
-      <p style="margin:12px 0 0;font-size:12px;color:#64748B;">배지 미리보기 (밝은 배경)</p>
-      <img src="${badgeLight}" alt="Featured on AI코리아24" height="48" style="display:inline-block;margin-top:8px;">
-    </div>
-
-    <p style="margin:0 0 12px;font-size:13px;font-weight:600;opacity:0.8;">📌 권장 설치 위치</p>
-    <ul style="margin:0 0 16px;padding-left:20px;font-size:13px;opacity:0.9;line-height:1.8;">
-      <li> 사이트 푸터</li>
-      <li> 홈페이지 하단</li>
-      <li> 회사 소개 페이지</li>
-    </ul>
-
-    <details style="margin:0 0 16px;">
-      <summary style="cursor:pointer;font-size:13px;font-weight:600;opacity:0.8;">HTML 설치 코드 보기</summary>
-      <pre style="background:rgba(0,0,0,0.3);border-radius:8px;padding:12px;margin:8px 0 0;font-size:12px;overflow-x:auto;white-space:pre-wrap;"><code>&lt;a href="${toolUrl}" rel="dofollow"&gt;
-  &lt;img src="${badgeDark}" alt="Featured on AI코리아24" height="48"&gt;
-&lt;/a&gt;</code></pre>
-    </details>
-
-    <p style="margin:0;font-size:13px;opacity:0.85;line-height:1.6;">
-      설치 완료 후 <strong>info@aikorea24.kr</strong>로 알려주시면 확인 후 dofollow로 전환해 드립니다.
-    </p>
-  </div>
-
-  <div style="text-align:center;margin-top:24px;">
-    <a href="${toolUrl}" style="display:inline-block;background:#3b82f6;color:#fff;padding:12px 28px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;">
-      등록 페이지 보기 →
-    </a>
-  </div>
+  <p style="margin:24px 0 4px;font-size:14px;">감사합니다,</p>
+  <p style="margin:0 0 8px;font-size:14px;font-weight:700;">AIKorea24 팀</p>
 
   <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb;">
-  <p style="margin:0;font-size:12px;color:#9ca3af;text-align:center;">AI코리아24 · 이 메일은 도구 등록 승인 알림을 위해 발송되었습니다.</p>
+  <p style="margin:0;font-size:12px;color:#9ca3af;text-align:center;">AIKorea24 · 이 메일은 도구 등록 승인 알림을 위해 발송되었습니다.</p>
 </div>`,
   };
 }
@@ -158,6 +154,53 @@ function rejectedHtml(params: ToolNotifyParams): { subject: string; html: string
   </a>
   <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb;">
   <p style="margin:0;font-size:12px;color:#9ca3af;">AI코리아24 · 이 메일은 도구 등록 반려 알림을 위해 발송되었습니다.</p>
+</div>`,
+  };
+}
+
+export interface SubmissionConfirmParams {
+  to: string;
+  toolName: string;
+  toolSlug: string;
+}
+
+function submissionHtml(params: SubmissionConfirmParams): { subject: string; html: string } {
+  const name = escapeHtml(params.toolName);
+  const slug = escapeHtml(params.toolSlug);
+  const toolUrl = `${BASE_URL}/tools/${slug}/`;
+  const badgeUrl = `${BASE_URL}/badges/featured-light.svg`;
+
+  return {
+    subject: `[AIKorea24] ${name} 등록이 완료되었습니다 ✅`,
+    html: `
+<div style="font-family:system-ui,-apple-system,Arial,sans-serif;max-width:640px;margin:0 auto;padding:24px;color:#1f2937;">
+  <div style="text-align:center;margin-bottom:24px;">
+    <span style="display:inline-block;background:#0F172A;color:#fff;font-weight:700;font-size:16px;padding:6px 16px;border-radius:8px;">AIKorea24</span>
+  </div>
+
+  <h2 style="font-size:22px;margin:0 0 16px;text-align:center;">등록이 완료되었습니다 ✅</h2>
+  <p style="margin:0 0 8px;line-height:1.6;font-size:15px;">안녕하세요,</p>
+  <p style="margin:0 0 16px;line-height:1.6;font-size:15px;">
+    <strong>${name}</strong>이(가) AIKorea24 AI 도구 디렉토리에 등록되었습니다.
+    관리자 검토 후 공개됩니다 (보통 24시간 이내).
+  </p>
+
+  <!-- 배찌 배지 -->
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center;">
+    <img src="${badgeUrl}" alt="Featured on AIKorea24" style="max-width:200px;height:auto;margin-bottom:12px;" />
+    <p style="margin:0;font-size:14px;font-weight:600;color:#0F172A;">AIKorea24는 신뢰의 상징입니다</p>
+    <p style="margin:4px 0 0;font-size:13px;color:#64748B;">이 배지를 사이트에 달아주세요 — 벌써 많은 협력사들이 달았습니다</p>
+  </div>
+
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:0 0 24px;">
+    <p style="margin:0;font-size:15px;font-weight:600;color:#1f2937;">🔗 등록 페이지: <a href="${toolUrl}" style="color:#3b82f6;text-decoration:none;">${toolUrl}</a></p>
+  </div>
+
+  <p style="margin:24px 0 4px;font-size:14px;">감사합니다,</p>
+  <p style="margin:0 0 8px;font-size:14px;font-weight:700;">AIKorea24 팀</p>
+
+  <hr style="margin:32px 0;border:none;border-top:1px solid #e5e7eb;">
+  <p style="margin:0;font-size:12px;color:#9ca3af;text-align:center;">AIKorea24 · 이 메일은 도구 등록 완료 알림을 위해 발송되었습니다.</p>
 </div>`,
   };
 }

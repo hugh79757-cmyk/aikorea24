@@ -79,10 +79,17 @@ def get_briefing_items(briefing_id):
 
 
 def get_tools():
-    """D1에서 AI 도구 목록 조회 (최신 6개)"""
+    """D1에서 AI 도구 목록 조회 (최신 6개) — md 동기화본(tools) + 사용자 등록본(tool_submissions published) 합산"""
     return _d1_query(
-        "SELECT name, slug, tagline, category, price, korean_support, difficulty "
-        "FROM tools ORDER BY updated_at DESC LIMIT 6"
+        "SELECT name, slug, tagline, category, price, korean_support, difficulty FROM ("
+        "SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at "
+        "FROM tools "
+        "UNION ALL "
+        "SELECT name, slug, description AS tagline, category, "
+        "COALESCE(NULLIF(price_detail, ''), price_model) AS price, korean_support, "
+        "COALESCE(difficulty, '보통') AS difficulty, updated_at "
+        "FROM tool_submissions WHERE status = 'published'"
+        ") ORDER BY updated_at DESC LIMIT 6"
     )
 
 
@@ -278,7 +285,7 @@ def generate_email_html(briefing, items):
           <a href="https://aikorea24.kr/community/" style="color:#3b82f6;text-decoration:underline;">💬 커뮤니티</a>에서 오늘의 브리핑에 대한 의견을 나눠보세요
         </p>
         <p style="margin:4px 0 0 0;">
-          <a href="https://aikorea24.kr/unsubscribe" style="color:#9ca3af;text-decoration:underline;">구독 해지</a>
+          <a href="https://aikorea24.kr/unsubscribe/" style="color:#9ca3af;text-decoration:underline;">구독 해지</a>
         </p>
       </td>
     </tr>
@@ -301,8 +308,7 @@ def get_subscribers_from_brevo(list_id=2):
 
     url = "https://api.brevo.com/v3/contacts"
     headers = {"api-key": api_key}
-    list_ids_key = "list" + "Ids"  # Brevo contacts query param
-    params = {list_ids_key: list_id, "limit": 500}
+    params = {"listIds": list_id, "limit": 500}
 
     try:
         resp = requests.get(url, headers=headers, params=params)
