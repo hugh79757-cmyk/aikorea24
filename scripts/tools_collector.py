@@ -1265,7 +1265,8 @@ def build_body(meta: dict) -> str:
             lines.append(f'{a}')
             lines.append('')
 
-    return '\n'.join(lines)
+    # 일부 LLM 출력이 list를 섞어 넣어 TypeError로 전체 실행이 크래시 → sync_tools_to_d1 도달 불가 방어
+    return '\n'.join(x if isinstance(x, str) else '\n'.join(str(i) for i in x) for x in lines)
 
 
 def save_tool_md(name: str, meta: dict, order: int, tool_url: str = '') -> str:
