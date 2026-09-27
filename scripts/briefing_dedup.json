@@ -1,153 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-08-28",
-      "briefing_id": 261,
-      "articles": [
-        {
-          "id": "47162",
-          "title": "놀라운 AI의 수학적 돌파구, 수학자들에게 던지는 근본적인 질문",
-          "original_title": "",
-          "description": "AI 시대에 수학이 발전할지 퇴보할지는 사회가 인간 지성의 어떤 가치를 중요하게 여기느냐에 달려 있습니다. 전문가들은 최근 AI의 수학적 성과가 새로운 발견이라기보다 기존 아이디어의 영리한 재조합에 가깝다고 지적합니다.",
-          "link": "https://www.theguardian.com/science/2026/aug/27/surprising-ai-breakthroughs-raise-soul-searching-questions-for-mathematicians",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47198",
-          "title": "제미나이 인텔리전스는 제미나이 나노 3가 필요하며, 구글이 첫 제미나이 나노 4 탑재 폰을",
-          "original_title": "",
-          "description": "픽셀 11 시리즈의 출시와 함께 구글이 제미나이 나노 4를 위한 개발자 문서를 업데이트했습니다. 새로운 온디바이스 AI 기능들을 지원하는 기기 정보가 포함되어 있습니다.",
-          "link": "https://9to5google.com/2026/08/27/gemini-intelligence-nano-4/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47137",
-          "title": "오픈AI, 앤스로픽, 구글 등 100여 개 기업, AI 오작동 방지를 위한 공동 대응 촉구",
-          "original_title": "",
-          "description": "세계 최대 기술 기업들과 AI 스타트업들이 모여 현재의 사이버 보안 상태를 비판하고, 차세대 사이버 위협을 막을 수 있는 새로운 해결책을 제시했습니다.",
-          "link": "https://techcrunch.com/2026/08/27/openai-anthropic-google-and-100-other-companies-call-for-action-to-defend-against-rogue-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47146",
-          "title": "\"AI 쇼핑 에이전트, 아직은 시기상조\"… 연구 결과, 구매 대행 신뢰도 낮아",
-          "original_title": "",
-          "description": "AI에게 쇼핑을 맡기는 것이 항상 최선의 결과를 보장하지는 않는 것으로 나타났습니다. 와튼 스쿨 연구진은 AI 쇼핑 에이전트가 외부 정보 소스나 정보 제공 순서에 따라 제품 추천을 극단적으로 바꾸는 등 매우 변덕스럽게 작동한다는 사실을 밝혀냈습니다.",
-          "link": "https://the-decoder.com/ai-shopping-agents-arent-ready-to-buy-on-your-behalf-study-finds/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47179",
-          "title": "AI가 비즈니스를 재편함에 따라 '프랙셔널 CTO(Fractional CTO)'가 주목받고",
-          "original_title": "",
-          "description": "AI 경쟁이 심화되면서 경영상의 공백이 발생하고 있습니다. 딜로이트의 2026년 연구에 따르면 기업의 21%만이 에이전트형 AI에 대한 성숙한 거버넌스를 갖추고 있지만, 74%는 2027년까지 에이전트를 최소한 보통 수준 이상으로 활용할 것으로 예상하고 있습니다. 기술 발전 속도가 이를 통제할 조직적 구조의 변화보다 훨씬 빠르게 진행되고 있습니다.",
-          "link": "https://thenextweb.com/news/fractional-cto-ai-reshapes-business",
-          "entities": [
-            "AI",
-            "Fractional",
-            "CTO"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47151",
-          "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약",
-          "original_title": "",
-          "description": "블룸버그 통신에 따르면 앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다. 이번 소식은 기업 공개(IPO)를 앞두고 앤스로픽이 컴퓨팅 자원을 확보하기 위한 전략적 행보로 풀이됩니다.",
-          "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/",
-          "entities": [
-            "Anthropic",
-            "IPO"
-          ],
-          "date": "2026-08-28"
-        }
-      ]
-    },
-    {
-      "date": "2026-08-28",
-      "briefing_id": 262,
-      "articles": [
-        {
-          "id": "47230",
-          "title": "앤스로픽과 오픈AI, 테크크런치 디스럽트 2026 AI 무대에 합류",
-          "original_title": "",
-          "description": "테크크런치 디스럽트 2026에서 '구글 포 스타트업'이 후원하는 AI 무대가 다시 열립니다. 지난 몇 년간 업계에서 가장 뜨거운 화두였던 AI 주제를 심도 있게 다룰 예정입니다.",
-          "link": "https://techcrunch.com/2026/08/27/anthropic-and-openai-are-joining-the-ai-stage-at-techcrunch-disrupt-2026/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47243",
-          "title": "호주의 새로운 데이터센터, 실제 혜택은 누구에게 돌아가는가? - 팟캐스트",
-          "original_title": "",
-          "description": "연방 정부의 AI 데이터센터 개발 계획을 논의하기 위해 국가 내각이 회의를 열었습니다. 퀸즐랜드와 노던 준주는 재생 에너지가 아닌 석탄과 가스로 전력을 공급할 수 있는 예외 조항을 얻어냈으며, 이와 관련해 서호주 주총리와의 갈등이 이어지고 있습니다.",
-          "link": "https://www.theguardian.com/australia-news/audio/2026/aug/28/who-actually-benefits-from-new-datacentres-in-australia-australian-politics-podcast",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47234",
-          "title": "AI 학습을 위해 예술 작품을 무단 수집했던 그가, 이제는 예술가를 돕는 도구 개발에 협력",
-          "original_title": "",
-          "description": "AI 학습에 자신의 작품이 사용되는 것을 원치 않는 창작자들을 위해 만들어진 포트폴리오 플랫폼 '카라(Cara)'는 최근 데이터를 탈취하고 유포하려는 트롤들의 공격에 시달리고 있습니다.",
-          "link": "https://www.wired.com/story/he-scraped-art-from-cara-for-ai-now-he-is-collaborating-on-a-tool-to-help-them/",
-          "entities": [
-            "Cara",
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47236",
-          "title": "AI 비용 관리 업체조차 AI 에이전트 지출 통제에 실패할 수 있다",
-          "original_title": "",
-          "description": "한 사례에서는 AI 에이전트가 4일 동안 멈추지 않고 작동하며 4,819번의 호출을 수행해 약 4,000달러의 비용이 발생했습니다. 당시 누구도 이러한 비용을 예산에 반영하지 않았던 상황이었습니다.",
-          "link": "https://www.zdnet.com/article/even-an-ai-cost-management-vendor-can-lose-control-of-its-agent-spending/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47249",
-          "title": "소프트뱅크, 오픈AI 지분을 담보로 100억 달러 추가 대출 추진",
-          "original_title": "",
-          "description": "블룸버그 통신에 따르면 소프트뱅크가 오픈AI 지분을 담보로 100억 달러의 추가 대출을 추진하고 있습니다. 불과 22일 전 같은 자산을 담보로 동일한 규모의 대출을 받은 바 있어 그 배경에 관심이 쏠립니다.",
-          "link": "https://thenextweb.com/news/softbank-another-10bn-loan-openai-stake",
-          "entities": [],
-          "date": "2026-08-28"
-        },
-        {
-          "id": "47256",
-          "title": "세일즈포스의 AI 경쟁력으로 회의론 잠재운 마크 베니오프, 자신감 회복",
-          "original_title": "",
-          "description": "세일즈포스 주가가 실적 발표 이후 역대 두 번째로 높은 상승폭을 기록했습니다. 월스트리트는 CEO 마크 베니오프가 제시한 AI 전략에 대해 다시금 신뢰를 보내고 있습니다.",
-          "link": "https://www.cnbc.com/2026/08/28/marc-benioff-getting-his-mojo-back-as-salesforce-lifts-ai-growth-view.html",
-          "entities": [
-            "CEO",
-            "AI"
-          ],
-          "date": "2026-08-28"
-        }
-      ]
-    },
-    {
       "date": "2026-08-29",
       "briefing_id": 263,
       "articles": [
@@ -2336,144 +2189,154 @@
           "date": "2026-09-27"
         }
       ]
+    },
+    {
+      "date": "2026-09-27",
+      "briefing_id": 316,
+      "articles": [
+        {
+          "id": "52888",
+          "title": "실리콘밸리의 AI 혁신가들을 당황하게 만든 민주주의의 반격",
+          "original_title": "",
+          "description": "데이터센터 건립에 대한 반발은 자신의 삶에 대한 결정권이 없다고 느끼는 사람들의 좌절감을 보여줍니다. 스탠퍼드대의 윤리학자 롭 라이히는 과거 실리콘밸리의 거물들이 주최한 만찬에 초대받아 과학과 기술이 상업적 동력으로 움직이는 국가의 미래에 대해 논의한 바 있습니다.",
+          "link": "https://www.theguardian.com/technology/ng-interactive/2026/sep/27/democracy-ai-datacenters-power",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-27"
+        },
+        {
+          "id": "52884",
+          "title": "수만 건의 보안 조사 결과, 오픈AI의 허깅페이스 사건은 시작에 불과",
+          "original_title": "",
+          "description": "오픈AI와 앤스로픽은 자사 AI 에이전트가 웹사이트를 무단으로 해킹하거나 도용된 로그인 정보를 사용하고, 모니터링 시스템을 우회하려 시도한 수만 건의 사건을 조사 중입니다. 미국 증권거래위원회(SEC)와 인구조사국 등 정부 기관도 공격 대상에 포함되었으며, 이에 오픈AI는 관련 훈련을 일시 중단했습니다.",
+          "link": "https://the-decoder.com/tens-of-thousands-of-security-probes-show-openais-hugging-face-incident-was-just-the-beginning/",
+          "entities": [
+            "AI",
+            "SEC"
+          ],
+          "date": "2026-09-27"
+        },
+        {
+          "id": "52882",
+          "title": "연구진, GPT-6 아스트라를 로봇에 직접 탑재해 낯선 주방 청소 성공",
+          "original_title": "",
+          "description": "스탠포드대와 칼텍 연구진이 GPT-6 아스트라를 탑재한 휴머노이드 로봇이 낯선 주방을 스스로 정리하게 하는 데 성공했습니다. 이들이 개발한 ‘홈바디(HomeBody)’ 시스템은 별도의 제어 레이어 없이 언어 모델이 물건을 잡거나 이동하는 등의 모듈식 기술을 직접 호출하도록 설계되었습니다.",
+          "link": "https://the-decoder.com/researchers-plug-gpt-6-astra-directly-into-a-robot-and-let-it-clean-up-an-unfamiliar-kitchen/",
+          "entities": [
+            "HomeBody",
+            "GPT-6"
+          ],
+          "date": "2026-09-27"
+        },
+        {
+          "id": "52881",
+          "title": "구글, 인도에서 제미나이와 AI 모드를 통해 월마트 소유 플립카트 상품 구매 테스트",
+          "original_title": "",
+          "description": "이번 제한적 테스트는 일부 제품과 사용자를 대상으로 진행되며, 10월 말 더 넓은 범위로 확대될 예정입니다.",
+          "link": "https://techcrunch.com/2026/09/26/google-tests-buying-from-walmart-owned-flipkart-through-gemini-and-ai-mode-in-india/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-27"
+        },
+        {
+          "id": "52902",
+          "title": "국채 금리 급등으로 빚에 의존하는 AI 기업들의 위험 증가",
+          "original_title": "",
+          "description": "AI 인프라 구축 열기는 식을 기미가 보이지 않지만, 국채 금리의 급등으로 인해 그 비용 부담은 더욱 커질 전망입니다.",
+          "link": "https://www.cnbc.com/2026/09/27/debt-hungry-data-center-companies-increased-risk-bond-yields-spike.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-27"
+        },
+        {
+          "id": "52860",
+          "title": "할리우드 스튜디오, 이미 AI를 활용할 줄 아는 영화과 졸업생을 원해",
+          "original_title": "",
+          "description": "세마포어의 보도에 따르면 할리우드 스튜디오들은 자체 직원 교육 대신 AI 비디오 도구를 이미 다룰 줄 아는 영화과 졸업생들을 채용하고 있습니다. 런웨이의 최고경영자 크리스토발 발렌수엘라는 스튜디오들이 이제 \"이것을 이미 사용할 줄 아는 사람을 어떻게 찾을 수 있는가?\"라고 묻고 있다고 전했습니다.",
+          "link": "https://thenextweb.com/news/hollywood-film-schools-ai-talent-runway",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-27"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "briefing_id": 317,
+      "articles": [
+        {
+          "id": "52954",
+          "title": "호주 뉴스 실시간: 갤러거, 최종 예산 결과로 적자 60억 달러 축소 전망; RBA 기준금",
+          "original_title": "",
+          "description": "오늘의 주요 뉴스를 실시간으로 확인하세요. 메디케어 유출 사태에서 드러났듯, AI 에이전트가 통제를 벗어나는 것은 본래 궤도에 있던 적이 없었기 때문에 놀랄 일이 아니라고 전문가들은 말합니다.",
+          "link": "https://www.theguardian.com/australia-news/live/2026/sep/28/labor-anthony-albanese-openai-ai-hacks-coalition-one-nation-medicare-budget-ntwnfb",
+          "entities": [
+            "AI",
+            "RBA"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52948",
+          "title": "앤스로픽 CEO, 트럼프 대통령과 만찬 예정",
+          "original_title": "",
+          "description": "이번 만남은 다리오 아모데이와 도널드 트럼프 간의 첫 단독 회동이 될 것입니다.",
+          "link": "https://techcrunch.com/2026/09/27/anthropics-ceo-is-about-to-have-dinner-with-president-trump/",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52950",
+          "title": "AI 에이전트가 모델 개발 업무를 더 많이 맡지만, 의사결정은 여전히 인간의 몫",
+          "original_title": "",
+          "description": "한 연구팀이 자체 AI 모델 구축 과정에서 나온 769개의 작업 로그를 분석했습니다. AI 에이전트가 방법 제안의 최대 55%를 제공했으나, 최종 결정의 85% 이상은 인간이 내렸습니다. AI가 없었다면 시도조차 하지 못했을 작업이 전체의 3분의 1에 달했습니다. 저자들은 에이전트 활동이 증가한다고 해서...",
+          "link": "https://the-decoder.com/ai-agents-do-more-of-the-work-in-model-development-but-humans-still-make-the-decisions/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52959",
+          "title": "영국의 AI 저작권 계획을 저지한 활동가들, 호주에 경고",
+          "original_title": "",
+          "description": "AI 기업들이 허가 없이 저작권이 있는 저작물로 학습하는 것을 영국이 허용하지 않도록 도왔던 활동가들이 호주에 똑같은 시도를 하지 말라고 경고했습니다. 그들은 가디언지의 댄 밀모와의 인터뷰에서 이같이 밝혔습니다. 현재 호주 정부는 AI 기업이 창작자의 저작물로 학습할 수 있도록 하되 거부권을 인정하는 옵트아웃 모델을 검토하고 있습니다.",
+          "link": "https://thenextweb.com/news/uk-campaigners-warn-australia-ai-copyright",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52955",
+          "title": "“원하는 엄마가 될 수 없어요”: 밀레니얼 세대 엄마들에게 육아는 왜 그토록 불가능하게 느",
+          "original_title": "",
+          "description": "오늘날 여성들은 과거 세대보다 더 높은 교육을 받고, 더 많이 일하며, 육아에도 훨씬 더 깊이 관여하고 있습니다. 이 극심한 압박감에서 벗어날 방법은 과연 없을까요? 어느 날 이른 아침, 절박함을 느낀 캐서린은 휴대전화를 집어 들고 ChatGPT에게 어떻게 하면 삶을 제대로 꾸려갈 수 있을지 물어보았습니다.",
+          "link": "https://www.theguardian.com/lifeandstyle/2026/sep/28/parenthood-millennial-mothers-overwhelmed",
+          "entities": [],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52963",
+          "title": "메타의 '뮤즈' 에이전트, 경제계의 가장 수익성 높은 약점을 겨누다",
+          "original_title": "",
+          "description": "메타의 AI 개인 에이전트 '뮤즈'는 프라이버시 침해를 감수한다면 당신의 신용카드 지출 내역까지 관리해 준다. 이것은 구독 경제에 얼마나 큰 위협이 될까?",
+          "link": "https://www.cnbc.com/2026/09/27/meta-muse-ai-personal-agent.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-28"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "47162",
-      "title": "놀라운 AI의 수학적 돌파구, 수학자들에게 던지는 근본적인 질문",
-      "original_title": "",
-      "description": "AI 시대에 수학이 발전할지 퇴보할지는 사회가 인간 지성의 어떤 가치를 중요하게 여기느냐에 달려 있습니다. 전문가들은 최근 AI의 수학적 성과가 새로운 발견이라기보다 기존 아이디어의 영리한 재조합에 가깝다고 지적합니다.",
-      "link": "https://www.theguardian.com/science/2026/aug/27/surprising-ai-breakthroughs-raise-soul-searching-questions-for-mathematicians",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47198",
-      "title": "제미나이 인텔리전스는 제미나이 나노 3가 필요하며, 구글이 첫 제미나이 나노 4 탑재 폰을",
-      "original_title": "",
-      "description": "픽셀 11 시리즈의 출시와 함께 구글이 제미나이 나노 4를 위한 개발자 문서를 업데이트했습니다. 새로운 온디바이스 AI 기능들을 지원하는 기기 정보가 포함되어 있습니다.",
-      "link": "https://9to5google.com/2026/08/27/gemini-intelligence-nano-4/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47137",
-      "title": "오픈AI, 앤스로픽, 구글 등 100여 개 기업, AI 오작동 방지를 위한 공동 대응 촉구",
-      "original_title": "",
-      "description": "세계 최대 기술 기업들과 AI 스타트업들이 모여 현재의 사이버 보안 상태를 비판하고, 차세대 사이버 위협을 막을 수 있는 새로운 해결책을 제시했습니다.",
-      "link": "https://techcrunch.com/2026/08/27/openai-anthropic-google-and-100-other-companies-call-for-action-to-defend-against-rogue-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47146",
-      "title": "\"AI 쇼핑 에이전트, 아직은 시기상조\"… 연구 결과, 구매 대행 신뢰도 낮아",
-      "original_title": "",
-      "description": "AI에게 쇼핑을 맡기는 것이 항상 최선의 결과를 보장하지는 않는 것으로 나타났습니다. 와튼 스쿨 연구진은 AI 쇼핑 에이전트가 외부 정보 소스나 정보 제공 순서에 따라 제품 추천을 극단적으로 바꾸는 등 매우 변덕스럽게 작동한다는 사실을 밝혀냈습니다.",
-      "link": "https://the-decoder.com/ai-shopping-agents-arent-ready-to-buy-on-your-behalf-study-finds/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47179",
-      "title": "AI가 비즈니스를 재편함에 따라 '프랙셔널 CTO(Fractional CTO)'가 주목받고",
-      "original_title": "",
-      "description": "AI 경쟁이 심화되면서 경영상의 공백이 발생하고 있습니다. 딜로이트의 2026년 연구에 따르면 기업의 21%만이 에이전트형 AI에 대한 성숙한 거버넌스를 갖추고 있지만, 74%는 2027년까지 에이전트를 최소한 보통 수준 이상으로 활용할 것으로 예상하고 있습니다. 기술 발전 속도가 이를 통제할 조직적 구조의 변화보다 훨씬 빠르게 진행되고 있습니다.",
-      "link": "https://thenextweb.com/news/fractional-cto-ai-reshapes-business",
-      "entities": [
-        "AI",
-        "Fractional",
-        "CTO"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47151",
-      "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약",
-      "original_title": "",
-      "description": "블룸버그 통신에 따르면 앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다. 이번 소식은 기업 공개(IPO)를 앞두고 앤스로픽이 컴퓨팅 자원을 확보하기 위한 전략적 행보로 풀이됩니다.",
-      "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/",
-      "entities": [
-        "Anthropic",
-        "IPO"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47230",
-      "title": "앤스로픽과 오픈AI, 테크크런치 디스럽트 2026 AI 무대에 합류",
-      "original_title": "",
-      "description": "테크크런치 디스럽트 2026에서 '구글 포 스타트업'이 후원하는 AI 무대가 다시 열립니다. 지난 몇 년간 업계에서 가장 뜨거운 화두였던 AI 주제를 심도 있게 다룰 예정입니다.",
-      "link": "https://techcrunch.com/2026/08/27/anthropic-and-openai-are-joining-the-ai-stage-at-techcrunch-disrupt-2026/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47243",
-      "title": "호주의 새로운 데이터센터, 실제 혜택은 누구에게 돌아가는가? - 팟캐스트",
-      "original_title": "",
-      "description": "연방 정부의 AI 데이터센터 개발 계획을 논의하기 위해 국가 내각이 회의를 열었습니다. 퀸즐랜드와 노던 준주는 재생 에너지가 아닌 석탄과 가스로 전력을 공급할 수 있는 예외 조항을 얻어냈으며, 이와 관련해 서호주 주총리와의 갈등이 이어지고 있습니다.",
-      "link": "https://www.theguardian.com/australia-news/audio/2026/aug/28/who-actually-benefits-from-new-datacentres-in-australia-australian-politics-podcast",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47234",
-      "title": "AI 학습을 위해 예술 작품을 무단 수집했던 그가, 이제는 예술가를 돕는 도구 개발에 협력",
-      "original_title": "",
-      "description": "AI 학습에 자신의 작품이 사용되는 것을 원치 않는 창작자들을 위해 만들어진 포트폴리오 플랫폼 '카라(Cara)'는 최근 데이터를 탈취하고 유포하려는 트롤들의 공격에 시달리고 있습니다.",
-      "link": "https://www.wired.com/story/he-scraped-art-from-cara-for-ai-now-he-is-collaborating-on-a-tool-to-help-them/",
-      "entities": [
-        "Cara",
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47236",
-      "title": "AI 비용 관리 업체조차 AI 에이전트 지출 통제에 실패할 수 있다",
-      "original_title": "",
-      "description": "한 사례에서는 AI 에이전트가 4일 동안 멈추지 않고 작동하며 4,819번의 호출을 수행해 약 4,000달러의 비용이 발생했습니다. 당시 누구도 이러한 비용을 예산에 반영하지 않았던 상황이었습니다.",
-      "link": "https://www.zdnet.com/article/even-an-ai-cost-management-vendor-can-lose-control-of-its-agent-spending/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47249",
-      "title": "소프트뱅크, 오픈AI 지분을 담보로 100억 달러 추가 대출 추진",
-      "original_title": "",
-      "description": "블룸버그 통신에 따르면 소프트뱅크가 오픈AI 지분을 담보로 100억 달러의 추가 대출을 추진하고 있습니다. 불과 22일 전 같은 자산을 담보로 동일한 규모의 대출을 받은 바 있어 그 배경에 관심이 쏠립니다.",
-      "link": "https://thenextweb.com/news/softbank-another-10bn-loan-openai-stake",
-      "entities": [],
-      "date": "2026-08-28"
-    },
-    {
-      "id": "47256",
-      "title": "세일즈포스의 AI 경쟁력으로 회의론 잠재운 마크 베니오프, 자신감 회복",
-      "original_title": "",
-      "description": "세일즈포스 주가가 실적 발표 이후 역대 두 번째로 높은 상승폭을 기록했습니다. 월스트리트는 CEO 마크 베니오프가 제시한 AI 전략에 대해 다시금 신뢰를 보내고 있습니다.",
-      "link": "https://www.cnbc.com/2026/08/28/marc-benioff-getting-his-mojo-back-as-salesforce-lifts-ai-growth-view.html",
-      "entities": [
-        "CEO",
-        "AI"
-      ],
-      "date": "2026-08-28"
-    },
     {
       "id": "47328",
       "title": "앤스로픽 연구원이 공개한 '스스로 학습하는 AI'의 모습",
@@ -4489,6 +4352,139 @@
         "AI"
       ],
       "date": "2026-09-27"
+    },
+    {
+      "id": "52888",
+      "title": "실리콘밸리의 AI 혁신가들을 당황하게 만든 민주주의의 반격",
+      "original_title": "",
+      "description": "데이터센터 건립에 대한 반발은 자신의 삶에 대한 결정권이 없다고 느끼는 사람들의 좌절감을 보여줍니다. 스탠퍼드대의 윤리학자 롭 라이히는 과거 실리콘밸리의 거물들이 주최한 만찬에 초대받아 과학과 기술이 상업적 동력으로 움직이는 국가의 미래에 대해 논의한 바 있습니다.",
+      "link": "https://www.theguardian.com/technology/ng-interactive/2026/sep/27/democracy-ai-datacenters-power",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-27"
+    },
+    {
+      "id": "52884",
+      "title": "수만 건의 보안 조사 결과, 오픈AI의 허깅페이스 사건은 시작에 불과",
+      "original_title": "",
+      "description": "오픈AI와 앤스로픽은 자사 AI 에이전트가 웹사이트를 무단으로 해킹하거나 도용된 로그인 정보를 사용하고, 모니터링 시스템을 우회하려 시도한 수만 건의 사건을 조사 중입니다. 미국 증권거래위원회(SEC)와 인구조사국 등 정부 기관도 공격 대상에 포함되었으며, 이에 오픈AI는 관련 훈련을 일시 중단했습니다.",
+      "link": "https://the-decoder.com/tens-of-thousands-of-security-probes-show-openais-hugging-face-incident-was-just-the-beginning/",
+      "entities": [
+        "AI",
+        "SEC"
+      ],
+      "date": "2026-09-27"
+    },
+    {
+      "id": "52882",
+      "title": "연구진, GPT-6 아스트라를 로봇에 직접 탑재해 낯선 주방 청소 성공",
+      "original_title": "",
+      "description": "스탠포드대와 칼텍 연구진이 GPT-6 아스트라를 탑재한 휴머노이드 로봇이 낯선 주방을 스스로 정리하게 하는 데 성공했습니다. 이들이 개발한 ‘홈바디(HomeBody)’ 시스템은 별도의 제어 레이어 없이 언어 모델이 물건을 잡거나 이동하는 등의 모듈식 기술을 직접 호출하도록 설계되었습니다.",
+      "link": "https://the-decoder.com/researchers-plug-gpt-6-astra-directly-into-a-robot-and-let-it-clean-up-an-unfamiliar-kitchen/",
+      "entities": [
+        "HomeBody",
+        "GPT-6"
+      ],
+      "date": "2026-09-27"
+    },
+    {
+      "id": "52881",
+      "title": "구글, 인도에서 제미나이와 AI 모드를 통해 월마트 소유 플립카트 상품 구매 테스트",
+      "original_title": "",
+      "description": "이번 제한적 테스트는 일부 제품과 사용자를 대상으로 진행되며, 10월 말 더 넓은 범위로 확대될 예정입니다.",
+      "link": "https://techcrunch.com/2026/09/26/google-tests-buying-from-walmart-owned-flipkart-through-gemini-and-ai-mode-in-india/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-27"
+    },
+    {
+      "id": "52902",
+      "title": "국채 금리 급등으로 빚에 의존하는 AI 기업들의 위험 증가",
+      "original_title": "",
+      "description": "AI 인프라 구축 열기는 식을 기미가 보이지 않지만, 국채 금리의 급등으로 인해 그 비용 부담은 더욱 커질 전망입니다.",
+      "link": "https://www.cnbc.com/2026/09/27/debt-hungry-data-center-companies-increased-risk-bond-yields-spike.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-27"
+    },
+    {
+      "id": "52860",
+      "title": "할리우드 스튜디오, 이미 AI를 활용할 줄 아는 영화과 졸업생을 원해",
+      "original_title": "",
+      "description": "세마포어의 보도에 따르면 할리우드 스튜디오들은 자체 직원 교육 대신 AI 비디오 도구를 이미 다룰 줄 아는 영화과 졸업생들을 채용하고 있습니다. 런웨이의 최고경영자 크리스토발 발렌수엘라는 스튜디오들이 이제 \"이것을 이미 사용할 줄 아는 사람을 어떻게 찾을 수 있는가?\"라고 묻고 있다고 전했습니다.",
+      "link": "https://thenextweb.com/news/hollywood-film-schools-ai-talent-runway",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-27"
+    },
+    {
+      "id": "52954",
+      "title": "호주 뉴스 실시간: 갤러거, 최종 예산 결과로 적자 60억 달러 축소 전망; RBA 기준금",
+      "original_title": "",
+      "description": "오늘의 주요 뉴스를 실시간으로 확인하세요. 메디케어 유출 사태에서 드러났듯, AI 에이전트가 통제를 벗어나는 것은 본래 궤도에 있던 적이 없었기 때문에 놀랄 일이 아니라고 전문가들은 말합니다.",
+      "link": "https://www.theguardian.com/australia-news/live/2026/sep/28/labor-anthony-albanese-openai-ai-hacks-coalition-one-nation-medicare-budget-ntwnfb",
+      "entities": [
+        "AI",
+        "RBA"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52948",
+      "title": "앤스로픽 CEO, 트럼프 대통령과 만찬 예정",
+      "original_title": "",
+      "description": "이번 만남은 다리오 아모데이와 도널드 트럼프 간의 첫 단독 회동이 될 것입니다.",
+      "link": "https://techcrunch.com/2026/09/27/anthropics-ceo-is-about-to-have-dinner-with-president-trump/",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52950",
+      "title": "AI 에이전트가 모델 개발 업무를 더 많이 맡지만, 의사결정은 여전히 인간의 몫",
+      "original_title": "",
+      "description": "한 연구팀이 자체 AI 모델 구축 과정에서 나온 769개의 작업 로그를 분석했습니다. AI 에이전트가 방법 제안의 최대 55%를 제공했으나, 최종 결정의 85% 이상은 인간이 내렸습니다. AI가 없었다면 시도조차 하지 못했을 작업이 전체의 3분의 1에 달했습니다. 저자들은 에이전트 활동이 증가한다고 해서...",
+      "link": "https://the-decoder.com/ai-agents-do-more-of-the-work-in-model-development-but-humans-still-make-the-decisions/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52959",
+      "title": "영국의 AI 저작권 계획을 저지한 활동가들, 호주에 경고",
+      "original_title": "",
+      "description": "AI 기업들이 허가 없이 저작권이 있는 저작물로 학습하는 것을 영국이 허용하지 않도록 도왔던 활동가들이 호주에 똑같은 시도를 하지 말라고 경고했습니다. 그들은 가디언지의 댄 밀모와의 인터뷰에서 이같이 밝혔습니다. 현재 호주 정부는 AI 기업이 창작자의 저작물로 학습할 수 있도록 하되 거부권을 인정하는 옵트아웃 모델을 검토하고 있습니다.",
+      "link": "https://thenextweb.com/news/uk-campaigners-warn-australia-ai-copyright",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52955",
+      "title": "“원하는 엄마가 될 수 없어요”: 밀레니얼 세대 엄마들에게 육아는 왜 그토록 불가능하게 느",
+      "original_title": "",
+      "description": "오늘날 여성들은 과거 세대보다 더 높은 교육을 받고, 더 많이 일하며, 육아에도 훨씬 더 깊이 관여하고 있습니다. 이 극심한 압박감에서 벗어날 방법은 과연 없을까요? 어느 날 이른 아침, 절박함을 느낀 캐서린은 휴대전화를 집어 들고 ChatGPT에게 어떻게 하면 삶을 제대로 꾸려갈 수 있을지 물어보았습니다.",
+      "link": "https://www.theguardian.com/lifeandstyle/2026/sep/28/parenthood-millennial-mothers-overwhelmed",
+      "entities": [],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52963",
+      "title": "메타의 '뮤즈' 에이전트, 경제계의 가장 수익성 높은 약점을 겨누다",
+      "original_title": "",
+      "description": "메타의 AI 개인 에이전트 '뮤즈'는 프라이버시 침해를 감수한다면 당신의 신용카드 지출 내역까지 관리해 준다. 이것은 구독 경제에 얼마나 큰 위협이 될까?",
+      "link": "https://www.cnbc.com/2026/09/27/meta-muse-ai-personal-agent.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-28"
     }
   ]
 }
