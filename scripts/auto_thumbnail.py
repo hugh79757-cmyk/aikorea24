@@ -15,6 +15,7 @@ import random
 import re
 import shutil
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.parse import urljoin
@@ -69,19 +70,54 @@ def _load_pexels_key():
     return ""
 
 
+def _load_unsplash_key():
+    common = os.path.expanduser("~/.env.common")
+    if os.path.exists(common):
+        with open(common) as f:
+            for line in f:
+                if line.startswith("UNSPLASH_ACCESS_KEY="):
+                    return line.split("=", 1)[1].strip().strip("\"'")
+    return ""
+
+
+def _get_with_retry(url, headers, params, max_attempts=3):
+    """429/5xx/timeout에만 지수 백오프(1s,2s,4s)로 재시도. 그 외 4xx는 즉시 raise."""
+    last_exc = None
+    for attempt in range(1, max_attempts + 1):
+        try:
+            resp = requests.get(url, headers=headers, params=params, timeout=15)
+            if resp.status_code == 429:
+                last_exc = requests.exceptions.HTTPError(f"429 rate limited: {url}", response=resp)
+                log(f"  재시도 {attempt}/{max_attempts}: 429 (백오프 {2 ** (attempt - 1)}s)")
+            elif resp.status_code >= 500:
+                last_exc = requests.exceptions.HTTPError(f"{resp.status_code} server error: {url}", response=resp)
+                log(f"  재시도 {attempt}/{max_attempts}: {resp.status_code} (백오프 {2 ** (attempt - 1)}s)")
+            else:
+                resp.raise_for_status()
+                return resp
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            last_exc = e
+            log(f"  재시도 {attempt}/{max_attempts}: {type(e).__name__} (백오프 {2 ** (attempt - 1)}s)")
+        if attempt < max_attempts:
+            time.sleep(2 ** (attempt - 1))
+    if last_exc is not None:
+        raise last_exc
+    raise requests.exceptions.RequestException(f"요청 실패: {url}")
+
+
 def _load_used_ids():
     if not PEXELS_USED_FILE.exists():
         return set()
     try:
         data = json.loads(PEXELS_USED_FILE.read_text())
-        return set(data.get("used_ids", []))
+        return {str(x) for x in data.get("used_ids", [])}
     except (json.JSONDecodeError, OSError):
         return set()
 
 
 def _save_used_id(photo_id):
     used = _load_used_ids()
-    used.add(photo_id)
+    used.add(str(photo_id))
     PEXELS_USED_FILE.parent.mkdir(parents=True, exist_ok=True)
     PEXELS_USED_FILE.write_text(
         json.dumps({"used_ids": sorted(used)}, indent=2, ensure_ascii=False)
@@ -125,13 +161,11 @@ def search_pexels(query, per_page=15, max_pages=3):
     for page in range(1, max_pages + 1):
         try:
             url = "https://api.pexels.com/v1/search"
-            resp = requests.get(
+            resp = _get_with_retry(
                 url,
                 headers={"Authorization": api_key},
                 params={"query": query, "per_page": per_page, "page": page},
-                timeout=15,
             )
-            resp.raise_for_status()
             data = resp.json()
             photos = data.get("photos", [])
             if not photos:
@@ -141,8 +175,39 @@ def search_pexels(query, per_page=15, max_pages=3):
         except Exception as e:
             log(f"  Pexels 검색 에러 (page={page}): {e}")
             break
-    
+
     return all_photos
+
+
+def search_unsplash(query, per_page=15):
+    """Unsplash 검색 — Pexels와 동일 shape으로 정규화 (id는 "unsplash:" prefix)."""
+    api_key = _load_unsplash_key()
+    if not api_key:
+        log("  Unsplash API 키 없음")
+        return []
+
+    try:
+        resp = _get_with_retry(
+            "https://api.unsplash.com/search/photos",
+            headers={"Authorization": f"Client-ID {api_key}"},
+            params={"query": query, "per_page": per_page},
+        )
+        data = resp.json()
+        results = data.get("results", [])
+        photos = []
+        for r in results:
+            uid = r.get("id", "")
+            urls = r.get("urls") or {}
+            photos.append({
+                "id": f"unsplash:{uid}",
+                "alt": r.get("description") or r.get("alt_description") or "",
+                "src": {"large": urls.get("regular", ""), "medium": urls.get("small", "")},
+            })
+        log(f"  Unsplash 검색: '{query}' → {len(photos)}장")
+        return photos
+    except Exception as e:
+        log(f"  Unsplash 검색 에러: {e}")
+        return []
 
 
 def download_image(url):
@@ -222,7 +287,7 @@ def _pick_unused_photo(photos, used_ids):
         return None
     for photo in photos:
         pid = photo.get("id")
-        if pid and pid not in used_ids:
+        if pid and str(pid) not in used_ids:
             return photo
     return None
 
