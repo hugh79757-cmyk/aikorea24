@@ -47,6 +47,10 @@ fi
 echo "=== [0/3] 블로그 포스트 검증 ==="
 "$PYTHON_BIN" "$PROJECT_DIR/scripts/validate_blog_posts.py" || exit 1
 
+echo "=== [0.5/3] 승인 툴 submission → md 동기화 (정적 tools 페이지용) ==="
+# 실패 시 md 누락 → 배포된 사이트에서 승인건이 사라지므로 fail-loud
+node "$PROJECT_DIR/scripts/sync_submissions_to_md.mjs" || exit 1
+
 echo "=== [1/3] 빌드 ==="
 npm run build
 
