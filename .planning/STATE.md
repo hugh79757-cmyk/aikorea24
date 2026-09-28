@@ -250,6 +250,7 @@ None.
 | 11 | fix-kakao-login-redirect-vote-button-red · 카카오 로그인 redirect_to state 파이프라인 + 투표 버그 수정 (213ee74e, 381ff353, 03a65ad6) | 2026-09-25 | — | — | — |
 | 260926-c73 | Fix: registered test tool missing from list + uploaded image not showing on tool page | 2026-09-26 | 61e639bc | — | [260926-c73-fix-registered-test-tool-missing-from-li](./quick/260926-c73-fix-registered-test-tool-missing-from-li/) |
 | 260928-t07 | 발행 블로그 썸네일 누락 원인조사 + 승인 툴 게시 상태 확인 (Pexels 429→placeholder→image 생략 high, 금일 툴 실제 2건 정상 — 조사 전용, 코드 0건) | 2026-09-28 | — | complete | [260928-t07-3](./quick/260928-t07-3/) |
+| 260928-ts1 | auto_thumbnail Unsplash 폴백 + 3회 재시도 + 09-28 누락 12건 백필 (검증 6/6 passed, 12/12 REAL) | 2026-09-28 | b9553ca6 | passed | [260928-ts1-auto-thumbnail-unsplash-3](./quick/260928-ts1-auto-thumbnail-unsplash-3/) |
 
 ### Deferred Items
 
