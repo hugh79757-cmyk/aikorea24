@@ -249,6 +249,7 @@ None.
 | 10 | newsletter-brevo-dynamic-subscribers · 뉴스레터 발송 정상화: get_subscribers_from_brevo() 신규 — Brevo GET /v3/contacts로 list#2 구독자 동적 조회. send_email_via_brevo에서 listIds 제거, to 필드 개별 발송, sample/test 이메일 필터링, SUBSCRIBER_EMAIL 폴백 유지 (37d8f8d1) | 2026-09-24 | — | — | — |
 | 11 | fix-kakao-login-redirect-vote-button-red · 카카오 로그인 redirect_to state 파이프라인 + 투표 버그 수정 (213ee74e, 381ff353, 03a65ad6) | 2026-09-25 | — | — | — |
 | 260926-c73 | Fix: registered test tool missing from list + uploaded image not showing on tool page | 2026-09-26 | 61e639bc | — | [260926-c73-fix-registered-test-tool-missing-from-li](./quick/260926-c73-fix-registered-test-tool-missing-from-li/) |
+| 260928-t07 | 발행 블로그 썸네일 누락 원인조사 + 승인 툴 게시 상태 확인 (Pexels 429→placeholder→image 생략 high, 금일 툴 실제 2건 정상 — 조사 전용, 코드 0건) | 2026-09-28 | — | complete | [260928-t07-3](./quick/260928-t07-3/) |
 
 ### Deferred Items
 
