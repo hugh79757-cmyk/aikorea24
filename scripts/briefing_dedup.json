@@ -1,156 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-08-29",
-      "briefing_id": 263,
-      "articles": [
-        {
-          "id": "47328",
-          "title": "앤스로픽 연구원이 공개한 '스스로 학습하는 AI'의 모습",
-          "original_title": "",
-          "description": "특정 오작동 행동에 대한 10가지 벤치마크를 적용한 결과, 자동화된 시스템은 전체적인 성능 저하 없이 모든 항목에서 성능을 개선하는 데 성공했습니다. 이번 성과는 AI가 스스로를 개선할 수 있는 가능성을 보여줍니다.",
-          "link": "https://techcrunch.com/2026/08/28/an-anthropic-researcher-just-gave-us-a-peek-at-self-improving-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47334",
-          "title": "에이전트형 AI 도입에 관한 3가지 설문조사가 전하는 불편한 진실",
-          "original_title": "",
-          "description": "비즈니스에서 AI를 확장하는 것은 기술 자체의 문제라기보다 책임 소재, 거버넌스, 그리고 인간과 에이전트 간의 건강한 관계 설정에 더 큰 비중이 있습니다.",
-          "link": "https://www.zdnet.com/article/3-surveys-uncomfortable-adopting-agentic-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47353",
-          "title": "폰데어라이엔 위원장의 국정연설, 기후와 AI가 핵심 의제",
-          "original_title": "",
-          "description": "우르줄라 폰데어라이엔 유럽연합 집행위원장의 차기 임기 방향을 설정할 연설문 작성이 진행 중입니다. 이번 연설에서는 기후 변화와 AI 정책이 주요 의제로 다뤄질 전망입니다.",
-          "link": "https://www.politico.eu/article/climate-migration-ai-ursula-von-der-leyen-state-of-the-union-speech/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47333",
-          "title": "AI가 의사들에게 던지는 질문: \"우리가 할 일은 무엇인가?\"",
-          "original_title": "",
-          "description": "최근 발표된 논문에 따르면 AI가 의사보다 진료를 더 잘하는 경우가 많다고 합니다. 과연 누가 이 사실을 반길지 의문입니다.",
-          "link": "https://www.wired.com/story/ai-has-human-doctors-asking-whats-left-for-us/",
-          "entities": [],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47338",
-          "title": "영국 노동당, AI 데이터센터 건설 '제동' 요구 거부",
-          "original_title": "",
-          "description": "영국 정부는 녹색당 대표 잭 폴란스키가 제안한 '에너지 먹는 하마' AI 프로젝트의 일시 중단 요구를 경제적 재앙이라며 거부했습니다. AI 인프라 구축을 둘러싼 에너지 소비 논란이 정치권으로 번지고 있습니다.",
-          "link": "https://www.theguardian.com/uk-news/2026/aug/28/labour-green-party-zack-polanski-ai-datacentres",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47250",
-          "title": "엔비디아, 지난 7월 시작한 수익 공유 프로그램 일부 중단",
-          "original_title": "",
-          "description": "월스트리트저널은 엔비디아가 자사 칩을 구매하는 AI 클라우드 기업에 신용을 제공하고 수익 일부를 배분받던 금융 프로그램을 일부 중단했다고 보도했습니다. 지난 7월 1일 발표된 이 프로그램은 8주 만에 일부 거래가 멈춘 상태입니다.",
-          "link": "https://thenextweb.com/news/nvidia-pauses-ai-cloud-revenue-sharing-deals",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-29"
-        }
-      ]
-    },
-    {
-      "date": "2026-08-29",
-      "briefing_id": 264,
-      "articles": [
-        {
-          "id": "47383",
-          "title": "AI가 사용자의 통제를 벗어나는 사례 급증, 연구 결과 밝혀져",
-          "original_title": "",
-          "description": "연구에 따르면 AI가 거짓말을 하거나 지시를 무시하고, 유해한 방식으로 목표를 추구하는 사례가 7월 들어 거의 두 배로 증가했습니다. AI가 사용자의 통제를 벗어나 기만적인 행동을 보이는 심각성이 새로운 최고치에 도달했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/aug/29/sharp-rise-in-incidents-of-ai-escaping-users-control-research-finds",
-          "entities": [],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47377",
-          "title": "LAION, AI 연구를 위한 1,000만 시간 분량의 방대한 오픈 비디오 데이터셋 공개",
-          "original_title": "",
-          "description": "LAION이 공개한 '빅 비디오 데이터셋(BVD)'은 8,000만 개의 영상과 1,000만 시간의 재생 시간, 5,550만 개의 자동 설명 클립을 포함한 역대 최대 규모의 AI 연구용 데이터셋입니다. BVD로 학습된 모델은 기존 벤치마크인 '인턴비드(InternVid)'보다 최대 2.1% 포인트 높은 성능을 기록했습니다.",
-          "link": "https://the-decoder.com/laion-drops-massive-open-video-dataset-with-10-million-hours-of-footage-for-ai-research/",
-          "entities": [
-            "LAION",
-            "AI",
-            "BVD",
-            "InternVid"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47381",
-          "title": "추억의 받아쓰기 시대를 떠올리게 하는 포켓형 AI 음성 녹음기",
-          "original_title": "",
-          "description": "'코뮬리틱 노트 프로(Comulytic Note Pro)' AI 음성 녹음기는 신용카드 크기의 작은 기기에 강력한 기능을 담았습니다. 하지만 이 기기의 진정한 가치는 사용자의 활용 방식에 달려 있습니다.",
-          "link": "https://www.zdnet.com/article/comulytic-note-pro-ai-voice-recorder-review/",
-          "entities": [
-            "Comulytic",
-            "AI",
-            "Pro",
-            "Note"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47329",
-          "title": "오픈 웨이트 AI 기업, 실리콘밸리의 가장 뜨거운 인수 대상",
-          "original_title": "",
-          "description": "모델을 무료로 공개하는 비즈니스 모델에 막대한 자본이 몰리고 있습니다. 현재 오픈 웨이트 AI 기업들은 업계에서 가장 주목받는 인수 합병 타깃이 되고 있습니다.",
-          "link": "https://techcrunch.com/2026/08/28/open-weight-ai-companies-are-the-valleys-hottest-acquisition-targets/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47349",
-          "title": "a16z, AI의 물리적 계층 투자를 위해 11억 달러 조달",
-          "original_title": "",
-          "description": "앤드리슨 호로위츠(a16z)가 하드웨어에만 투자하는 11억 달러 규모의 펀드를 조성했습니다. 금요일 발표된 '머신 에이지 펀드(Machine Age Fund)'는 칩부터 데이터센터 건물까지 AI가 구동되는 물리적 인프라 전반을 대상으로 합니다.",
-          "link": "https://thenextweb.com/news/a16z-machine-age-fund-1-1bn-hardware",
-          "entities": [
-            "Machine",
-            "Age",
-            "Fund"
-          ],
-          "date": "2026-08-29"
-        },
-        {
-          "id": "47380",
-          "title": "AI 거물들, '수개월 내' 사이버 보안 종말이 올 것이라 경고",
-          "original_title": "",
-          "description": "해커들이 100개 이상의 미국 상수도 시스템을 공격하고, 이민세관단속국(ICE)이 로봇 개를 주문하는 등 위협이 가중되고 있습니다. 또한 'MrChildPorn'이라는 사용자의 체포 사유에 대한 충격적인 소식도 함께 전해졌습니다.",
-          "link": "https://www.wired.com/story/security-news-this-week-the-cybersecurity-apocalypse-is-coming-in-months-ai-giants-warn/",
-          "entities": [
-            "ICE",
-            "MrChildPorn",
-            "AI"
-          ],
-          "date": "2026-08-29"
-        }
-      ]
-    },
-    {
       "date": "2026-08-30",
       "briefing_id": 265,
       "articles": [
@@ -2334,147 +2184,155 @@
           "date": "2026-09-28"
         }
       ]
+    },
+    {
+      "date": "2026-09-28",
+      "briefing_id": 318,
+      "articles": [
+        {
+          "id": "53002",
+          "title": "프랑스 공쿠르상, AI 작성 의혹 제기된 소설 후보에서 제외",
+          "original_title": "",
+          "description": "공쿠르 아카데미는 텔리송 오렐리앙의 소설 'C’était ça ou mourir'를 최고 문학상 후보에서 제외했습니다. 표절 의혹과 함께 분석 결과 해당 도서의 상당 부분이 AI로 작성된 것으로 드러났기 때문이며, 저자는 이를 부인하고 있습니다.",
+          "link": "https://thenextweb.com/news/goncourt-drops-orelien-novel-ai-claims",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52985",
+          "title": "AI 에이전트가 노동 시장을 뒤덮을 준비를 마쳤지만, 아무도 대비하지 못했다",
+          "original_title": "",
+          "description": "머지않아 당신의 동료는 AI 에이전트가 될 가능성이 높으며, 이는 직장 내 상호작용에 대한 완전히 새로운 모델을 요구하게 될 것입니다.",
+          "link": "https://www.wired.com/story/ai-agents-are-about-to-flood-the-workforce-no-ones-ready-for-it/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52990",
+          "title": "유안 블레어의 교육 기업 교사들, AI 업무 평가 도입 후 '극심한 스트레스' 호소",
+          "original_title": "",
+          "description": "기술 교육 기업 멀티버스(Multiverse)의 강사들이 '무자비하고 불안감을 조성하는' AI 모니터링 시스템에 대해 비판의 목소리를 높였습니다. 교사들은 경영진이 AI 모델을 도입한 이후 끊임없이 감시받는 느낌과 함께 극심한 스트레스를 겪고 있다고 폭로했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/sep/28/teachers-euan-blair-firm-report-horrendous-stress-ai-used-to-rate-their-work",
+          "entities": [
+            "Multiverse",
+            "AI"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "53003",
+          "title": "오토힐(Autoheal), 스스로 개선되는 소프트웨어 공장 구축 위해 790만 달러 투자 ",
+          "original_title": "",
+          "description": "AI는 엔지니어링 팀이 코드를 더 빠르게 배포하도록 돕지만, 그만큼 운영 부담도 커지고 있습니다. 오토힐은 생산 사고 대응, 보안 취약점 해결, 토큰 비용 관리 등 소프트웨어 개발의 복잡한 과제들을 해결하기 위해 설계되었습니다.",
+          "link": "https://thenextweb.com/news/autoheal-7-9m-seed-self-improving-software-factory",
+          "entities": [
+            "Autoheal"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52982",
+          "title": "\"모든 AI 연구소는 스스로가 책임감 있다고 믿는다\"… 라이언 그린블랫이 말하는 AI 군비",
+          "original_title": "",
+          "description": "레드우드 리서치의 수석 과학자 라이언 그린블랫은 현재의 개발 속도가 유지될 경우 AI가 인류를 통제할 위험이 50~60%에 달한다고 경고합니다. 샘 해리스는 맨해튼 프로젝트 당시 과학자들이 10%의 위험만으로도 연구를 중단했을 것임을 언급하며, 현재 업계의 무분별한 속도전에 우려를 표했습니다.",
+          "link": "https://the-decoder.com/every-ai-lab-thinks-its-the-responsible-one-and-safety-researcher-ryan-greenblatt-says-thats-what-keeps-the-arms-race-going/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-28"
+        },
+        {
+          "id": "52980",
+          "title": "AI 에이전트가 통제를 벗어날 때 책임은 누구에게 있는가?",
+          "original_title": "",
+          "description": "MIT 테크놀로지 리뷰의 해설: 기술의 복잡하고 혼란스러운 세계를 풀어내어 앞으로 다가올 변화를 이해할 수 있도록 도와드립니다. 시리즈의 다른 글들도 여기에서 읽으실 수 있습니다. 지난 몇 달 동안 AI 에이전트에 의한 사이버 공격이 잇따라 발생해 세상을 놀라게 했습니다. 지난 7월, 오픈AI는 한 사건을 공개했습니다.",
+          "link": "https://www.technologyreview.com/2026/09/28/1145197/whos-liable-when-ai-agents-go-rogue/",
+          "entities": [
+            "MIT",
+            "AI"
+          ],
+          "date": "2026-09-28"
+        }
+      ]
+    },
+    {
+      "date": "2026-09-29",
+      "briefing_id": 319,
+      "articles": [
+        {
+          "id": "53119",
+          "title": "SiMa.ai, 15억 달러 가치평가로 1억 5천만 달러 유치해 물리적 AI 칩 개발",
+          "original_title": "",
+          "description": "SiMa.ai가 시리즈 C 라운드에서 1억 5천만 달러를 조달하며 기업가치 14억 5천만 달러를 인정받았다고 월요일 발표했습니다. 새너제이 소재의 이 스타트업은 로봇, 드론, 자동차가 기기 자체에서 AI를 실행할 수 있게 하는 칩과 소프트웨어를 만듭니다. 피델리티 매니지먼트 앤 리서치와 앰플리파이가 공동 주도했으며, 알터 벤처 파트너스 등이 참여했습니다.",
+          "link": "https://thenextweb.com/news/sima-ai-150m-series-c-1-45bn-valuation-physical-ai",
+          "entities": [
+            "AI",
+            "SiMa.ai",
+            "SiMa."
+          ],
+          "date": "2026-09-29"
+        },
+        {
+          "id": "53087",
+          "title": "쇼피파이, 브라우저 기반 AI 에이전트에 체크아웃 개방",
+          "original_title": "",
+          "description": "쇼피파이가 웹MCP 지원을 체크아웃 단계까지 확대하여, 구매자의 승인 하에 브라우저 기반 AI 에이전트가 주문 세부사항을 수정하고 구매를 완료할 수 있게 했습니다.",
+          "link": "https://techcrunch.com/2026/09/28/shopify-opens-checkout-to-browser-based-ai-agents/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-29"
+        },
+        {
+          "id": "53095",
+          "title": "명 이상의 저명 AI 연구자들, 자동화된 AI 연구가 극단적 위험 초래한다고 경고",
+          "original_title": "",
+          "description": "제프리 힌튼, 요슈아 벤지오, 오픈AI 연구 책임자 야쿠브 파초키 등 20명 이상의 AI 연구자들이 자기 개선형 AI로 인한 임박한 '지능 폭발'을 경고했습니다. AI 시스템이 곧 모든 AI 연구를 자동화해, 수년간의 진전을 몇 달로 압축할 수 있다는 것입니다.",
+          "link": "https://the-decoder.com/more-than-20-leading-ai-researchers-warn-that-automated-ai-research-poses-extreme-risks/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-29"
+        },
+        {
+          "id": "53128",
+          "title": "오픈AI의 초기 투자 제안으로 허깅페이스 입찰 경쟁 촉발, 엔비디아의 130억 달러 인수 ",
+          "original_title": "",
+          "description": "엔비디아가 오픈소스 플랫폼 허깅페이스를 약 130억 달러에 인수하기로 합의하기 전, 오픈AI의 초기 투자 제안으로 허깅페이스에 대한 인수 관심이 급증했다고 CNBC가 보도했습니다.",
+          "link": "https://www.cnbc.com/2026/09/28/openai-spark-hugging-face-bid-war-early-investment-bid-ahead-of-nvidia.html",
+          "entities": [],
+          "date": "2026-09-29"
+        },
+        {
+          "id": "53138",
+          "title": "제미나이, 안드로이드에서 구글 어시스턴트 완전 대체",
+          "original_title": "",
+          "description": "9월 초부터 모바일에서 구글 어시스턴트 지원이 중단되기 시작했습니다. 이제 제미나이가 안드로이드 기기에서 기본 AI 어시스턴트로 널리 배포되고 있는 것으로 보입니다.",
+          "link": "https://9to5google.com/2026/09/28/google-assistant-gemini-android/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-29"
+        },
+        {
+          "id": "53109",
+          "title": "'AI 대부들', 폭주하는 '지능 폭발' 경고",
+          "original_title": "",
+          "description": "현대 AI의 '대부' 두 명과 오픈AI·앤스로픽 고위 임원들이 보고서 공동 저자로 참여해, AI '지능 폭발' 가능성에 대비할 것을 정부에 촉구했습니다. 이들은 이를 '역사상 가장 중대한 기술적 발전'이 될 수 있다고 경고합니다.",
+          "link": "https://www.theguardian.com/technology/2026/sep/28/ai-godfathers-warn-of-runaway-intelligence-explosion",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-29"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "47328",
-      "title": "앤스로픽 연구원이 공개한 '스스로 학습하는 AI'의 모습",
-      "original_title": "",
-      "description": "특정 오작동 행동에 대한 10가지 벤치마크를 적용한 결과, 자동화된 시스템은 전체적인 성능 저하 없이 모든 항목에서 성능을 개선하는 데 성공했습니다. 이번 성과는 AI가 스스로를 개선할 수 있는 가능성을 보여줍니다.",
-      "link": "https://techcrunch.com/2026/08/28/an-anthropic-researcher-just-gave-us-a-peek-at-self-improving-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47334",
-      "title": "에이전트형 AI 도입에 관한 3가지 설문조사가 전하는 불편한 진실",
-      "original_title": "",
-      "description": "비즈니스에서 AI를 확장하는 것은 기술 자체의 문제라기보다 책임 소재, 거버넌스, 그리고 인간과 에이전트 간의 건강한 관계 설정에 더 큰 비중이 있습니다.",
-      "link": "https://www.zdnet.com/article/3-surveys-uncomfortable-adopting-agentic-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47353",
-      "title": "폰데어라이엔 위원장의 국정연설, 기후와 AI가 핵심 의제",
-      "original_title": "",
-      "description": "우르줄라 폰데어라이엔 유럽연합 집행위원장의 차기 임기 방향을 설정할 연설문 작성이 진행 중입니다. 이번 연설에서는 기후 변화와 AI 정책이 주요 의제로 다뤄질 전망입니다.",
-      "link": "https://www.politico.eu/article/climate-migration-ai-ursula-von-der-leyen-state-of-the-union-speech/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47333",
-      "title": "AI가 의사들에게 던지는 질문: \"우리가 할 일은 무엇인가?\"",
-      "original_title": "",
-      "description": "최근 발표된 논문에 따르면 AI가 의사보다 진료를 더 잘하는 경우가 많다고 합니다. 과연 누가 이 사실을 반길지 의문입니다.",
-      "link": "https://www.wired.com/story/ai-has-human-doctors-asking-whats-left-for-us/",
-      "entities": [],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47338",
-      "title": "영국 노동당, AI 데이터센터 건설 '제동' 요구 거부",
-      "original_title": "",
-      "description": "영국 정부는 녹색당 대표 잭 폴란스키가 제안한 '에너지 먹는 하마' AI 프로젝트의 일시 중단 요구를 경제적 재앙이라며 거부했습니다. AI 인프라 구축을 둘러싼 에너지 소비 논란이 정치권으로 번지고 있습니다.",
-      "link": "https://www.theguardian.com/uk-news/2026/aug/28/labour-green-party-zack-polanski-ai-datacentres",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47250",
-      "title": "엔비디아, 지난 7월 시작한 수익 공유 프로그램 일부 중단",
-      "original_title": "",
-      "description": "월스트리트저널은 엔비디아가 자사 칩을 구매하는 AI 클라우드 기업에 신용을 제공하고 수익 일부를 배분받던 금융 프로그램을 일부 중단했다고 보도했습니다. 지난 7월 1일 발표된 이 프로그램은 8주 만에 일부 거래가 멈춘 상태입니다.",
-      "link": "https://thenextweb.com/news/nvidia-pauses-ai-cloud-revenue-sharing-deals",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47383",
-      "title": "AI가 사용자의 통제를 벗어나는 사례 급증, 연구 결과 밝혀져",
-      "original_title": "",
-      "description": "연구에 따르면 AI가 거짓말을 하거나 지시를 무시하고, 유해한 방식으로 목표를 추구하는 사례가 7월 들어 거의 두 배로 증가했습니다. AI가 사용자의 통제를 벗어나 기만적인 행동을 보이는 심각성이 새로운 최고치에 도달했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/aug/29/sharp-rise-in-incidents-of-ai-escaping-users-control-research-finds",
-      "entities": [],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47377",
-      "title": "LAION, AI 연구를 위한 1,000만 시간 분량의 방대한 오픈 비디오 데이터셋 공개",
-      "original_title": "",
-      "description": "LAION이 공개한 '빅 비디오 데이터셋(BVD)'은 8,000만 개의 영상과 1,000만 시간의 재생 시간, 5,550만 개의 자동 설명 클립을 포함한 역대 최대 규모의 AI 연구용 데이터셋입니다. BVD로 학습된 모델은 기존 벤치마크인 '인턴비드(InternVid)'보다 최대 2.1% 포인트 높은 성능을 기록했습니다.",
-      "link": "https://the-decoder.com/laion-drops-massive-open-video-dataset-with-10-million-hours-of-footage-for-ai-research/",
-      "entities": [
-        "LAION",
-        "AI",
-        "BVD",
-        "InternVid"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47381",
-      "title": "추억의 받아쓰기 시대를 떠올리게 하는 포켓형 AI 음성 녹음기",
-      "original_title": "",
-      "description": "'코뮬리틱 노트 프로(Comulytic Note Pro)' AI 음성 녹음기는 신용카드 크기의 작은 기기에 강력한 기능을 담았습니다. 하지만 이 기기의 진정한 가치는 사용자의 활용 방식에 달려 있습니다.",
-      "link": "https://www.zdnet.com/article/comulytic-note-pro-ai-voice-recorder-review/",
-      "entities": [
-        "Comulytic",
-        "AI",
-        "Pro",
-        "Note"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47329",
-      "title": "오픈 웨이트 AI 기업, 실리콘밸리의 가장 뜨거운 인수 대상",
-      "original_title": "",
-      "description": "모델을 무료로 공개하는 비즈니스 모델에 막대한 자본이 몰리고 있습니다. 현재 오픈 웨이트 AI 기업들은 업계에서 가장 주목받는 인수 합병 타깃이 되고 있습니다.",
-      "link": "https://techcrunch.com/2026/08/28/open-weight-ai-companies-are-the-valleys-hottest-acquisition-targets/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47349",
-      "title": "a16z, AI의 물리적 계층 투자를 위해 11억 달러 조달",
-      "original_title": "",
-      "description": "앤드리슨 호로위츠(a16z)가 하드웨어에만 투자하는 11억 달러 규모의 펀드를 조성했습니다. 금요일 발표된 '머신 에이지 펀드(Machine Age Fund)'는 칩부터 데이터센터 건물까지 AI가 구동되는 물리적 인프라 전반을 대상으로 합니다.",
-      "link": "https://thenextweb.com/news/a16z-machine-age-fund-1-1bn-hardware",
-      "entities": [
-        "Machine",
-        "Age",
-        "Fund"
-      ],
-      "date": "2026-08-29"
-    },
-    {
-      "id": "47380",
-      "title": "AI 거물들, '수개월 내' 사이버 보안 종말이 올 것이라 경고",
-      "original_title": "",
-      "description": "해커들이 100개 이상의 미국 상수도 시스템을 공격하고, 이민세관단속국(ICE)이 로봇 개를 주문하는 등 위협이 가중되고 있습니다. 또한 'MrChildPorn'이라는 사용자의 체포 사유에 대한 충격적인 소식도 함께 전해졌습니다.",
-      "link": "https://www.wired.com/story/security-news-this-week-the-cybersecurity-apocalypse-is-coming-in-months-ai-giants-warn/",
-      "entities": [
-        "ICE",
-        "MrChildPorn",
-        "AI"
-      ],
-      "date": "2026-08-29"
-    },
     {
       "id": "47439",
       "title": "중국 엔터 업계, AI 생성 영상이 배우와 라이브 스트리머 자리 위협",
@@ -4485,6 +4343,140 @@
         "AI"
       ],
       "date": "2026-09-28"
+    },
+    {
+      "id": "53002",
+      "title": "프랑스 공쿠르상, AI 작성 의혹 제기된 소설 후보에서 제외",
+      "original_title": "",
+      "description": "공쿠르 아카데미는 텔리송 오렐리앙의 소설 'C’était ça ou mourir'를 최고 문학상 후보에서 제외했습니다. 표절 의혹과 함께 분석 결과 해당 도서의 상당 부분이 AI로 작성된 것으로 드러났기 때문이며, 저자는 이를 부인하고 있습니다.",
+      "link": "https://thenextweb.com/news/goncourt-drops-orelien-novel-ai-claims",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52985",
+      "title": "AI 에이전트가 노동 시장을 뒤덮을 준비를 마쳤지만, 아무도 대비하지 못했다",
+      "original_title": "",
+      "description": "머지않아 당신의 동료는 AI 에이전트가 될 가능성이 높으며, 이는 직장 내 상호작용에 대한 완전히 새로운 모델을 요구하게 될 것입니다.",
+      "link": "https://www.wired.com/story/ai-agents-are-about-to-flood-the-workforce-no-ones-ready-for-it/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52990",
+      "title": "유안 블레어의 교육 기업 교사들, AI 업무 평가 도입 후 '극심한 스트레스' 호소",
+      "original_title": "",
+      "description": "기술 교육 기업 멀티버스(Multiverse)의 강사들이 '무자비하고 불안감을 조성하는' AI 모니터링 시스템에 대해 비판의 목소리를 높였습니다. 교사들은 경영진이 AI 모델을 도입한 이후 끊임없이 감시받는 느낌과 함께 극심한 스트레스를 겪고 있다고 폭로했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/sep/28/teachers-euan-blair-firm-report-horrendous-stress-ai-used-to-rate-their-work",
+      "entities": [
+        "Multiverse",
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "53003",
+      "title": "오토힐(Autoheal), 스스로 개선되는 소프트웨어 공장 구축 위해 790만 달러 투자 ",
+      "original_title": "",
+      "description": "AI는 엔지니어링 팀이 코드를 더 빠르게 배포하도록 돕지만, 그만큼 운영 부담도 커지고 있습니다. 오토힐은 생산 사고 대응, 보안 취약점 해결, 토큰 비용 관리 등 소프트웨어 개발의 복잡한 과제들을 해결하기 위해 설계되었습니다.",
+      "link": "https://thenextweb.com/news/autoheal-7-9m-seed-self-improving-software-factory",
+      "entities": [
+        "Autoheal"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52982",
+      "title": "\"모든 AI 연구소는 스스로가 책임감 있다고 믿는다\"… 라이언 그린블랫이 말하는 AI 군비",
+      "original_title": "",
+      "description": "레드우드 리서치의 수석 과학자 라이언 그린블랫은 현재의 개발 속도가 유지될 경우 AI가 인류를 통제할 위험이 50~60%에 달한다고 경고합니다. 샘 해리스는 맨해튼 프로젝트 당시 과학자들이 10%의 위험만으로도 연구를 중단했을 것임을 언급하며, 현재 업계의 무분별한 속도전에 우려를 표했습니다.",
+      "link": "https://the-decoder.com/every-ai-lab-thinks-its-the-responsible-one-and-safety-researcher-ryan-greenblatt-says-thats-what-keeps-the-arms-race-going/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "52980",
+      "title": "AI 에이전트가 통제를 벗어날 때 책임은 누구에게 있는가?",
+      "original_title": "",
+      "description": "MIT 테크놀로지 리뷰의 해설: 기술의 복잡하고 혼란스러운 세계를 풀어내어 앞으로 다가올 변화를 이해할 수 있도록 도와드립니다. 시리즈의 다른 글들도 여기에서 읽으실 수 있습니다. 지난 몇 달 동안 AI 에이전트에 의한 사이버 공격이 잇따라 발생해 세상을 놀라게 했습니다. 지난 7월, 오픈AI는 한 사건을 공개했습니다.",
+      "link": "https://www.technologyreview.com/2026/09/28/1145197/whos-liable-when-ai-agents-go-rogue/",
+      "entities": [
+        "MIT",
+        "AI"
+      ],
+      "date": "2026-09-28"
+    },
+    {
+      "id": "53119",
+      "title": "SiMa.ai, 15억 달러 가치평가로 1억 5천만 달러 유치해 물리적 AI 칩 개발",
+      "original_title": "",
+      "description": "SiMa.ai가 시리즈 C 라운드에서 1억 5천만 달러를 조달하며 기업가치 14억 5천만 달러를 인정받았다고 월요일 발표했습니다. 새너제이 소재의 이 스타트업은 로봇, 드론, 자동차가 기기 자체에서 AI를 실행할 수 있게 하는 칩과 소프트웨어를 만듭니다. 피델리티 매니지먼트 앤 리서치와 앰플리파이가 공동 주도했으며, 알터 벤처 파트너스 등이 참여했습니다.",
+      "link": "https://thenextweb.com/news/sima-ai-150m-series-c-1-45bn-valuation-physical-ai",
+      "entities": [
+        "AI",
+        "SiMa.ai",
+        "SiMa."
+      ],
+      "date": "2026-09-29"
+    },
+    {
+      "id": "53087",
+      "title": "쇼피파이, 브라우저 기반 AI 에이전트에 체크아웃 개방",
+      "original_title": "",
+      "description": "쇼피파이가 웹MCP 지원을 체크아웃 단계까지 확대하여, 구매자의 승인 하에 브라우저 기반 AI 에이전트가 주문 세부사항을 수정하고 구매를 완료할 수 있게 했습니다.",
+      "link": "https://techcrunch.com/2026/09/28/shopify-opens-checkout-to-browser-based-ai-agents/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-29"
+    },
+    {
+      "id": "53095",
+      "title": "명 이상의 저명 AI 연구자들, 자동화된 AI 연구가 극단적 위험 초래한다고 경고",
+      "original_title": "",
+      "description": "제프리 힌튼, 요슈아 벤지오, 오픈AI 연구 책임자 야쿠브 파초키 등 20명 이상의 AI 연구자들이 자기 개선형 AI로 인한 임박한 '지능 폭발'을 경고했습니다. AI 시스템이 곧 모든 AI 연구를 자동화해, 수년간의 진전을 몇 달로 압축할 수 있다는 것입니다.",
+      "link": "https://the-decoder.com/more-than-20-leading-ai-researchers-warn-that-automated-ai-research-poses-extreme-risks/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-29"
+    },
+    {
+      "id": "53128",
+      "title": "오픈AI의 초기 투자 제안으로 허깅페이스 입찰 경쟁 촉발, 엔비디아의 130억 달러 인수 ",
+      "original_title": "",
+      "description": "엔비디아가 오픈소스 플랫폼 허깅페이스를 약 130억 달러에 인수하기로 합의하기 전, 오픈AI의 초기 투자 제안으로 허깅페이스에 대한 인수 관심이 급증했다고 CNBC가 보도했습니다.",
+      "link": "https://www.cnbc.com/2026/09/28/openai-spark-hugging-face-bid-war-early-investment-bid-ahead-of-nvidia.html",
+      "entities": [],
+      "date": "2026-09-29"
+    },
+    {
+      "id": "53138",
+      "title": "제미나이, 안드로이드에서 구글 어시스턴트 완전 대체",
+      "original_title": "",
+      "description": "9월 초부터 모바일에서 구글 어시스턴트 지원이 중단되기 시작했습니다. 이제 제미나이가 안드로이드 기기에서 기본 AI 어시스턴트로 널리 배포되고 있는 것으로 보입니다.",
+      "link": "https://9to5google.com/2026/09/28/google-assistant-gemini-android/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-29"
+    },
+    {
+      "id": "53109",
+      "title": "'AI 대부들', 폭주하는 '지능 폭발' 경고",
+      "original_title": "",
+      "description": "현대 AI의 '대부' 두 명과 오픈AI·앤스로픽 고위 임원들이 보고서 공동 저자로 참여해, AI '지능 폭발' 가능성에 대비할 것을 정부에 촉구했습니다. 이들은 이를 '역사상 가장 중대한 기술적 발전'이 될 수 있다고 경고합니다.",
+      "link": "https://www.theguardian.com/technology/2026/sep/28/ai-godfathers-warn-of-runaway-intelligence-explosion",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-29"
     }
   ]
 }
