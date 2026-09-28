@@ -80,26 +80,37 @@ def _load_unsplash_key():
     return ""
 
 
+class _PexelsRateLimited(Exception):
+    """Pexels 429 rate-limit으로 재시도 소진 — alt-query hammer 없이 Unsplash 전환 신호."""
+    pass
+
+
 def _get_with_retry(url, headers, params, max_attempts=3):
     """429/5xx/timeout에만 지수 백오프(1s,2s,4s)로 재시도. 그 외 4xx는 즉시 raise."""
     last_exc = None
+    last_was_429 = False
     for attempt in range(1, max_attempts + 1):
         try:
             resp = requests.get(url, headers=headers, params=params, timeout=15)
             if resp.status_code == 429:
+                last_was_429 = True
                 last_exc = requests.exceptions.HTTPError(f"429 rate limited: {url}", response=resp)
                 log(f"  재시도 {attempt}/{max_attempts}: 429 (백오프 {2 ** (attempt - 1)}s)")
             elif resp.status_code >= 500:
+                last_was_429 = False
                 last_exc = requests.exceptions.HTTPError(f"{resp.status_code} server error: {url}", response=resp)
                 log(f"  재시도 {attempt}/{max_attempts}: {resp.status_code} (백오프 {2 ** (attempt - 1)}s)")
             else:
                 resp.raise_for_status()
                 return resp
         except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+            last_was_429 = False
             last_exc = e
             log(f"  재시도 {attempt}/{max_attempts}: {type(e).__name__} (백오프 {2 ** (attempt - 1)}s)")
         if attempt < max_attempts:
             time.sleep(2 ** (attempt - 1))
+    if last_was_429:
+        raise _PexelsRateLimited(f"Pexels 429 rate-limit, {max_attempts}회 소진: {url}")
     if last_exc is not None:
         raise last_exc
     raise requests.exceptions.RequestException(f"요청 실패: {url}")
@@ -172,6 +183,8 @@ def search_pexels(query, per_page=15, max_pages=3):
                 break
             all_photos.extend(photos)
             log(f"  Pexels 검색: '{query}' page={page} → {len(photos)}장 (누적 {len(all_photos)})")
+        except _PexelsRateLimited:
+            raise
         except Exception as e:
             log(f"  Pexels 검색 에러 (page={page}): {e}")
             break
@@ -384,19 +397,26 @@ def process_thumbnail(url, slug, title="", description=""):
     log(f"  키워드: '{keyword}'")
 
     used_ids = _load_used_ids()
-    photos = search_pexels(keyword, max_pages=3)
-    if not photos:
-        log("  Pexels 결과 없음, fallback: artificial intelligence")
-        photos = search_pexels("artificial intelligence", max_pages=3)
+    pexels_limited = False
+    try:
+        photos = search_pexels(keyword, max_pages=3)
+        if not photos:
+            log("  Pexels 결과 없음, 대체검색: artificial intelligence")
+            photos = search_pexels("artificial intelligence", max_pages=3)
+    except _PexelsRateLimited:
+        # 429 소진: alt-query hammer 없이 곧바로 Unsplash 분기로 이동
+        log("  Pexels 429 rate-limit 소진 → Unsplash로 전환 (alt 루프 skip)")
+        photos = []
+        pexels_limited = True
 
     chosen = _pick_unused_photo(photos, used_ids)
     fallback_reason = None
-    
-    if not chosen:
+
+    if not chosen and not pexels_limited:
         # 미사용 사진이 없으면 대체 쿼리로 재시도 (원본 키워드 제외)
         alt_queries = [q for q in DEEPSEEK_POOL if q != keyword][:5]
         log(f"  미사용 사진 없음, 대체 쿼리 {len(alt_queries)}개 시도 (원본 '{keyword}' 제외)")
-        
+
         for alt in alt_queries:
             alt_photos = search_pexels(alt, max_pages=3)
             chosen = _pick_unused_photo(alt_photos, used_ids)
@@ -404,6 +424,18 @@ def process_thumbnail(url, slug, title="", description=""):
                 fallback_reason = f"alt_query={alt}"
                 log(f"  대체 쿼리 성공: '{alt}' → ID={chosen.get('id')}")
                 break
+
+    if not chosen:
+        # Unsplash 폴백: 원본 keyword 먼저, 실패 시 generic 1회 (provider 전환 hammer 방지 sleep 2s)
+        time.sleep(2)
+        unsplash_photos = search_unsplash(keyword)
+        if not unsplash_photos:
+            log("  Unsplash 결과 없음, fallback: artificial intelligence")
+            unsplash_photos = search_unsplash("artificial intelligence")
+        chosen = _pick_unused_photo(unsplash_photos, used_ids)
+        if chosen:
+            fallback_reason = f"unsplash:{keyword}"
+            log(f"  Unsplash 성공: '{keyword}' → ID={chosen.get('id')}")
     
     # 최종 폴백: placeholder 사용 (photos[0] 재사용 안 함)
     if not chosen:
