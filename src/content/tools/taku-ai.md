@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://taku.ai/"
 useCases: ["이메일 자동 분류 및 답장", "회의록 요약 및 할 일 관리", "발표 자료 초안 작성"]
 tags: ["AI 에이전트", "업무 자동화", "워크플로우"]
 featured: false

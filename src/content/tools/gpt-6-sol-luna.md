@@ -5,7 +5,7 @@ category: "글쓰기·챗봇"
 price: "사용량 기반"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://openai.com/index/introducing-gpt-6-sol-and-luna/"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["GPT-6", "챗봇", "업무자동화"]
 featured: false

@@ -5,7 +5,7 @@ category: "디자인"
 price: "무료/월 9,900원"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://mojavepaint.app"
 useCases: ["유튜브 썸네일 제작", "로고 디자인", "인포그래픽 제작"]
 tags: ["이미지 편집", "맥 전용", "디자인 툴"]
 featured: false

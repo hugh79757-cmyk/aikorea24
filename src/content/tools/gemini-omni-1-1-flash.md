@@ -5,7 +5,7 @@ category: "글쓰기·챗봇"
 price: "사용량 기반"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://blog.google/innovation-and-ai/technology/developers-tools/build-with-gemini-omni-1-1-flash/"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["구글AI", "영상생성", "콘텐츠제작"]
 featured: false

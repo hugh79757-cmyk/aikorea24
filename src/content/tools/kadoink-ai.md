@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://kadoink.ai"
 useCases: ["회의록 작성", "일정 관리", "프로젝트 관리"]
 tags: ["전화 회의", "즉시 소집", "업무 효율"]
 featured: false

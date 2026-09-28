@@ -5,7 +5,7 @@ category: "글쓰기·챗봇"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://heybono.ai/"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["콘텐츠 제작", "AI 전략가", "블로그 작성"]
 featured: false

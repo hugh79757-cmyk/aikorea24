@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "사용량 기반"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://getcontroller.ai"
 useCases: ["고객 문의 자동 응대", "정기 보고서 취합", "영업 리드 관리"]
 tags: ["업무자동화", "노코드", "AI에이전트", "워크플로우"]
 featured: false

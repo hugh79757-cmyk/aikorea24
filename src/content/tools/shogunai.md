@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://shogunaios.com/"
 useCases: ["이메일 및 업무 정리", "회의록 기반 업무 실행", "프로젝트 맥락 조회"]
 tags: ["맥용AI", "업무자동화", "개인비서"]
 featured: false

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://constellationgate.ai"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["보안", "AI", "업무자동화"]
 featured: false

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://appunbound.com/app/pixelread"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["OCR", "맥용앱", "생산성도구", "텍스트추출"]
 featured: false

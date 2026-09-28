@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 13만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://www.ogment.ai"
 useCases: ["영어 이메일 작성", "회의록 작성", "업무 자동화"]
 tags: ["슬랙", "업무 자동화", "AI 도구"]
 featured: false

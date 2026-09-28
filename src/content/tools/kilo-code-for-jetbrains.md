@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: true
 difficulty: "고급"
-url: ""
+url: "https://kilo.ai"
 useCases: ["코드 리팩토링", "버그 수정", "단위 테스트 작성"]
 tags: ["AI코딩", "JetBrains", "멀티에이전트", "개발생산성"]
 featured: false

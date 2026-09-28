@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 99,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://creatify.ai"
 useCases: ["광고 캠페인 관리", "성과 분석", "예산 관리"]
 tags: ["광고", "AI", "마케팅"]
 featured: false

@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "사용량 기반"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://checksum.ai/product/platform"
 useCases: ["테스트 코드 자동 생성", "오류 자동 수정", "API 테스트 자동화"]
 tags: ["테스트자동화", "QA", "CI/CD", "Playwright", "개발생산성"]
 featured: false

@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "사용량 기반"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://hermai.ai/brand"
 useCases: ["B2B SaaS 온보딩 자동화", "고객 정보 자동 입력", "브랜드 맞춤형 UI 구성"]
 tags: ["API", "브랜딩", "자동화", "SaaS", "UI/UX"]
 featured: false

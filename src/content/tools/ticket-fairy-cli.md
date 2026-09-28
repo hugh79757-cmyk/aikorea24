@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://www.ticketfairy.com/cli"
 useCases: ["이벤트 목록 조회", "티켓 판매 데이터 추출", "행사 상태 업데이트"]
 tags: ["이벤트관리", "자동화", "CLI", "티켓팅", "개발자도구"]
 featured: false

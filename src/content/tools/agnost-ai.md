@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://agnost.ai"
 useCases: ["챗봇 응대 오류 분석", "고객 요구사항 추출", "챗봇 정책 위반 검토"]
 tags: ["챗봇분석", "고객경험", "데이터분석", "운영자동화"]
 featured: false

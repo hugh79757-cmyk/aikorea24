@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 29달러"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://www.expertise.ai/"
 useCases: ["업무 노하우 공유", "마케팅 문구 작성", "반복 업무 자동화"]
 tags: ["AI에이전트", "업무자동화", "노하우공유"]
 featured: false

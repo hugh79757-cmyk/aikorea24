@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://www.howseen.ai/"
 useCases: ["브랜드 노출 확인", "경쟁사 비교 분석", "콘텐츠 최적화"]
 tags: ["AI검색", "GEO최적화", "브랜드추적"]
 featured: false

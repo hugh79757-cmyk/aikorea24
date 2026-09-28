@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://meterless.ai"
 useCases: ["반복 업무 자동화", "업무 워크플로우 저장", "AI 작업 기록 관리"]
 tags: ["업무자동화", "로컬AI", "생산성도구", "워크플로우"]
 featured: false

@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://review.heyeddie.ai/"
 useCases: ["영상 리뷰", "프로젝트 피드백", "AI 피드백 활용"]
 tags: ["비디오 리뷰", "AI 피드백", "팀워크"]
 featured: false

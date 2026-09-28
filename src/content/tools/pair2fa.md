@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 15,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://pair2fa.com"
 useCases: ["팀 계정 2FA 공유", "권한 관리 설정", "부재중 업무 처리"]
 tags: ["보안", "2FA인증", "팀협업"]
 featured: false

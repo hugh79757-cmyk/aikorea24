@@ -5,7 +5,7 @@ category: "번역·학습"
 price: "무료/월 28,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://openai.com/index/chatgpt-for-teens/"
 useCases: ["영어 이메일 작성", "수학 문제 풀이", "역사 공부"]
 tags: ["교육", "안전한AI", "청소년학습"]
 featured: false

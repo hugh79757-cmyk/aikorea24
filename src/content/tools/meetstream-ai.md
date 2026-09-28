@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "사용량 기반"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://www.meetstream.ai"
 useCases: ["회의록 자동 생성", "업무 자동화", "다국어 회의 기록"]
 tags: ["API", "화상회의", "자동화", "녹취", "개발자도구"]
 featured: false

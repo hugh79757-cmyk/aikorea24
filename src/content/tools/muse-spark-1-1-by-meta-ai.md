@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 10,000원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://ai.meta.com/blog/introducing-muse-spark-meta-model-api"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["AI", "멀티모달", "생산성"]
 featured: false

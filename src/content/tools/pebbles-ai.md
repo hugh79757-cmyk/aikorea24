@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 99,000원"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://www.trypebbles.ai/"
 useCases: ["사업계획서 초안", "회의록 작성", "프로젝트 관리"]
 tags: ["GTM", "마케팅", "비즈니스"]
 featured: false

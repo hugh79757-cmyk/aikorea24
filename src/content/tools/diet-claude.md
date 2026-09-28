@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://www.dietclaude.com"
 useCases: ["업무 흐름 관리", "회의록 정리", "학습 계획 수립"]
 tags: ["Claude", "생산성", "크롬확장프로그램", "사용량관리"]
 featured: false

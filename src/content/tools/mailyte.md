@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 39,000원"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://mailyte.com"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["이메일-호스팅", "트랜잭셔널-메일", "자체-도메인", "오픈소스", "셀프호스팅"]
 featured: false

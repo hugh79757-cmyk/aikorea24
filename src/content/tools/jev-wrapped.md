@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://wrapped.ivanhabor.com"
 useCases: ["채널 콘텐츠 분석", "광고 효과 측정", "콘텐츠 전략 수립"]
 tags: ["Telegram", "콘텐츠분석", "마케팅인사이트"]
 featured: false

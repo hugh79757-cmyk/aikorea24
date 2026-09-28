@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://www.lucidtrain.com/"
 useCases: ["코드 구조 시각화", "기능 구현 명세화", "코드 리팩토링"]
 tags: ["코드분석", "오프라인AI", "시스템설계", "개발생산성"]
 featured: false

@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "유료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://www.happyshrimp.ai/"
 useCases: ["유튜브 배경음악 제작", "이벤트 축하 노래", "브랜드 홍보 음악"]
 tags: ["AI음악", "작곡", "보컬생성", "음악제작", "크리에이티브"]
 featured: false

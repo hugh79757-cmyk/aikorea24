@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 50,000원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://adam.new/copilot"
 useCases: ["CAD 모델 수정", "파라메트릭 모델 변환", "기능 트리 정리"]
 tags: ["CAD", "AI", "엔지니어링"]
 featured: false

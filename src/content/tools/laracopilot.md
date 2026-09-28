@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "무료/월 40,000원"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://laracopilot.com"
 useCases: ["SaaS 플랫폼 구축", "관리자 페이지 생성", "쇼핑몰 기능 구현"]
 tags: ["Laravel", "AI코딩", "웹개발", "자동화", "MVP제작"]
 featured: false

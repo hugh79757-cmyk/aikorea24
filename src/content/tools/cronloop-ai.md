@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://cronloop.ai"
 useCases: ["고객 응대 자동화", "시장 조사 자동화", "영업 리드 관리"]
 tags: ["업무자동화", "AI에이전트", "생산성"]
 featured: false

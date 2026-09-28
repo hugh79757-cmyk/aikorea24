@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://mailadept.com"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["이메일", "전달력", "마케팅"]
 featured: false
