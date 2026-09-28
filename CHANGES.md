@@ -2,6 +2,24 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-28 — fix: AI 툴 url 누락 (트래킹 파라미터 오판) + 84건 백필
+
+- **증상**: `/tools/<slug>/` 상당수에 외부 툴 링크 없음. md 306건 중 88건 `url: ""`, D1 tools 400행 중 118건 빈 url
+- **원인 [우리 production 코드 버그]**: `scripts/tools_collector.py` `validate_tool_url()`이 `ref=producthunt`/`utm_*` 포함 URL을 트래킹 URL로 오판해 `False` 반환 → `build_frontmatter()`가 크롤러가 뽑은 진짜 URL을 폐기 → `url: ""`. Product Hunt 소스 툴은 사실상 전부 해당
+- **수정**: `strip_tracking_params()` 신설(ref, utm_* 만 제거·나머지 쿼리 보존), `validate_tool_url()` 재작성(PH 리스팅/리다이렉트·GitHub repo 링크만 거부), `build_frontmatter()`에서 strip 후 검증
+- **백필**: `scripts/backfill_tool_urls_0928.py` — PH post 페이지 `"websiteUrl"`(iPhone UA 필요) + collector 로그 키워드 매칭으로 84건 복구. 4건 미해결(scrimba-explain, threadport, gemini-omni-flash, webbrain)
+- **검증**: `tests/test_tool_url_validate.py` 7 passed. D1 빈 url 118 → 34(잔여 34는 md에 없는 레거시 행). 빌드·배포 후 라이브 `/tools/{aifetchly,orkas,mixdesk,pair2fa,adam-cad-copilot,howseen-ai,gpt-6-sol-luna}/` 외부 링크 200 확인
+- **커밋**: `959a7b9e`(fix+test), `f095a89a`(md 백필 84건)
+
+## 2026-09-28 — fix: 블로그 썸네일 누락 (Pexels 429 → Unsplash 폴백) + 12건 백필
+
+- **증상**: 2026-09-28 블로그 12건 전부 frontmatter `image:` 없음 (썸네일 미표시)
+- **원인**: Pexels API HTTP 429 약 80+회 (08:15:30–08:16) → `auto_thumbnail.py`가 전부 플레이스홀더 복사 → `blog_draft_generator.py:538` `_add_image_to_frontmatter()`가 플레이스홀더면 `image:` 생략
+- **수정**: `auto_thumbnail.py`에 `_get_with_retry()`(최대 3회, backoff 1/2/4s, 429/5xx만 재시도), `_PexelsRateLimited` 예외 + 429 시 alt 쿼리 루프 건너뜀, `search_unsplash()` 폴백(키워드 → "artificial intelligence") 추가
+- **백필**: `scripts/backfill_thumbnails_0928.py` — 12건 실제 썸네일 재생성, `image:` 주입
+- **검증**: 12/12 `image:` 보유, MD5 전부 플레이스홀더와 상이, `is_placeholder_copy` 0건. 배포 후 라이브 썸네일 200/94462 bytes(실제 이미지) 확인
+- **커밋**: `0859fcc5`, `7af7a4ea`, `b9553ca6` + quick 문서
+
 ## 2026-09-21 — fix: D1 인증 실패로 블로그 초안 생성 스킵 방지
 
 - **원인**: `CLOUDFLARE_API_TOKEN`만 unset하고 `CLOUDFLARE_ACCOUNT_ID`를 그대로 전달하여 `wrangler d1 execute` 인증 실패 (7403 에러)
