@@ -1060,18 +1060,31 @@ def slugify(name: str) -> str:
     return title_to_slug(name)
 
 
+def strip_tracking_params(url: str) -> str:
+    """URL에서 트래킹 파라미터(ref, utm_*)만 제거. 나머지 쿼리는 보존."""
+    if not url or '?' not in url:
+        return url
+    from urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
+    parts = urlsplit(url)
+    if not parts.query:
+        return url
+    kept = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True)
+            if not (k == 'ref' or k.startswith('utm_'))]
+    return urlunsplit((parts.scheme, parts.netloc, parts.path,
+                       urlencode(kept), parts.fragment))
+
+
 def validate_tool_url(url: str) -> bool:
-    """툴 URL이 유효한지 검증 (Product Hunt, GitHub 등 아님)"""
+    """툴 URL이 유효한지 검증 (Product Hunt 리스팅/리다이렉트, GitHub 저장소 직접 링크 제외)"""
     if not url:
         return False
-    # Product Hunt URL 제외
-    if 'producthunt.com/products/' in url:
+    # 쿼리스트링(트래킹 파라미터)은 판정에서 무시 — 실제 툴 도메인은 유지되어야 함
+    base = url.split('?', 1)[0]
+    # Product Hunt 리스팅/리다이렉트 URL 제외 (툴 자체 URL이 아님)
+    if 'producthunt.com/products/' in base or 'producthunt.com/r/p/' in base:
         return False
     # GitHub 저장소 직접 링크 제외 (실제 툴이 아님)
-    if url.startswith('https://github.com/') and '/blob/' not in url:
-        return False
-    # 트래킹 URL 제외
-    if 'ref=producthunt' in url or 'utm_' in url:
+    if base.startswith('https://github.com/') and '/blob/' not in base:
         return False
     return True
 
@@ -1121,6 +1134,8 @@ def build_frontmatter(name: str, meta: dict, order: int, tool_url: str = '') -> 
     # URL 검증
     if not validate_tool_url(url):
         url = meta.get('url', '')
+    # 저장 전 트래킹 파라미터 제거 (ref=producthunt, utm_*)
+    url = strip_tracking_params(url)
 
     return f"""---
 name: "{name}"
