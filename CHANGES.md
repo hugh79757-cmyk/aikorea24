@@ -2,6 +2,14 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-28 — chore: 빈 url 툴 4건 정리 (3건 삭제 + 1건 fix)
+
+- **배경**: 84건 백필 후에도 빈 url 4건 잔존 (scrimba-explain, threadport, webbrain, gemini-omni-flash)
+- **조사**: `scrimba-explain` → scrimba.com 실존 제품(200) → url fix. `threadport` → threadport.com은 모자 제조업체(무관), 실존 제품 없음. `webbrain` → webbrain.com은 "TheBrain" 마인드맵 툴(무관), 실존 제품 없음. `gemini-omni-flash` → 실존 제품 없음 + Google 브랜드 도용 위험
+- **조치**: 틀린 링크를 넣는 것보다 삭제가 안전 → 3건 삭제(md `git rm` + D1 DELETE), scrimba-explain url만 fix
+- **검증**: D1 tools 400 → 397, deleted_left=0, scrimba_url 반영. 라이브 `/tools/{threadport,webbrain,gemini-omni-flash}/` 404, `/tools/scrimba-explain/` scrimba.com 링크 200
+- **커밋**: `874a2854`. worklog `WL-20260928-tool-delete.md`, `logs/destructive_2026-09-28.log`
+
 ## 2026-09-28 — fix: AI 툴 url 누락 (트래킹 파라미터 오판) + 84건 백필
 
 - **증상**: `/tools/<slug>/` 상당수에 외부 툴 링크 없음. md 306건 중 88건 `url: ""`, D1 tools 400행 중 118건 빈 url
