@@ -145,7 +145,7 @@ def is_same_topic(title1, original_title1, desc1,
 
     3가지 언어 모드:
       - EN-EN: 모두 original_title 보유
-          → Jaccard ≥ 0.30 OR entity_overlap ≥ 2
+          → Jaccard ≥ 0.30 OR entity_overlap ≥ 4
       - KO-KO: 모두 original_title 미보유, 한글 제목
           → jaccard_ko ≥ 0.25
           → entity_overlap ≥ 2 (영문 capitalized entity가 한글 제목에 있는 경우만)
@@ -169,9 +169,10 @@ def is_same_topic(title1, original_title1, desc1,
             return True
         # entity_overlap alone (>=4) is a weak signal — AI news articles share
         # a tiny entity pool (OpenAI, Meta, Anthropic, AI). Two shared entities
-        # is ~noise; only 4+ shared capitalized entities implies a real overlap.
-        # 2026-09-29: entity_overlap>=2 caused 340 false-positives per 60 sampled
-        # articles, starving the pool to 2 articles and blocking all publishing.
+        # is ~noise; >=4 leaves far fewer false positives than >=2.
+        # 2026-09-29: entity_overlap>=2 caused hundreds of false-positives in a
+        # 60-article sample (422 on re-measure), starving the pool to 2 articles
+        # and blocking all publishing; pool recovered to 164 at >=4.
         if sim['entity_overlap'] >= 4:
             return True
 
