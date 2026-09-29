@@ -1,3 +1,4 @@
+- 2026-09-29 | fix | compass-tuple-return-llm-chain-rotation | compass 튜플 반환 AttributeError(12회 발행 실패 실원인) + LLM 체인 쿨다운→순수 회전 + 죽은 tier 9종 제거
 - 2026-09-29 | fix | threads-dedup-entity-overlap-threshold | EN-EN entity_overlap >=2 → >=4 (pool 2→164, 스레드 발행 5회 연속 실패 원인)
 - 2026-09-29 | chore | cloudflare-infra-load-followup | 장기 과제 — zone 토큰 권한/21.5MB 청크/_routes exclude/SSR 잔여 (TODO 9건 + 실측 조사 기록)
 - 2026-09-26 | fix | tools-approval-guard-collector-crash-email-fix | visibility API 승인 우회 차단 + collector TypeError 크래시로 이메일 툴 9/16 고정 해소 (D1 302행 재동기화)

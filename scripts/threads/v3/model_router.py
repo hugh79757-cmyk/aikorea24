@@ -1,11 +1,11 @@
 """"
 model_router.py - AI 모델 호출 라우터 (무료 LLM 폴백 체인 통합)
-- 무료 체인: config/models.yaml의 tier_order 16개 무료 모델 순차 시도
+- 무료 체인: config/models.yaml의 tier_order 무료 모델 순차 시도 (순수 회전, 쿨다운 없음)
 - 최후 수단: 유료 DeepSeek V4 Flash (default tier)
 - 평가/후처리: 무료 LLM 폴백 체인 (model_override=None) — GPT-4o-mini 2026-08-12 제거
 - .env / ~/.env.common에서 각 프로바이더 API 키 자동 로드
 """
-import os, sys, time, json, tempfile
+import os, sys, time, json
 from datetime import datetime
 from openai import OpenAI
 import httpx
@@ -68,16 +68,15 @@ def get_openai_client():
         return None
     return OpenAI(api_key=api_key)
 
-# 폴백 체인 타이밍 상수 (llm-fallback-chain-management 계약)
-TIER_TIMEOUT_SEC = 90.0      # 단일 tier 호출 타임아웃 (기존 180s → 90s 단축)
+# 폴백 체인 타이밍 상수 (llm-fallback-chain-management 계약: 순수 회전, 쿨다운/배제 없음)
+TIER_TIMEOUT_SEC = 90.0      # 단일 tier 호출 타임아웃
 CONNECT_TIMEOUT_SEC = 10.0   # 연결 타임아웃
 GLOBAL_BUDGET_SEC = 300.0    # 요청 1회당 전체 wall-clock 예산 (초과 시 체인 중단)
-QUOTA_COOLDOWN_SEC = 300     # 429/quota → 해당 tier만 5분 쿨다운
-STRUCTURAL_COOLDOWN_SEC = 86400  # 401/403/404 → 해당 tier만 24h 구조 쿨다운
-# 상태 영속 경로: 환경변수로 오버라이드 가능, 기본은 /tmp 등가 경로
+# 상태 영속 경로: 환경변수로 오버라이드 가능. 기본은 프로젝트 내부 고정 경로.
+# tempfile.gettempdir()은 디스크 포화 시 import 단계에서 예외를 던져 체인 전체를 죽이므로 사용하지 않는다.
 STATE_PATH = os.environ.get(
     'LLM_FALLBACK_STATE_PATH',
-    os.path.join(tempfile.gettempdir(), 'aikorea24_llm_fallback_state.json'),
+    os.path.join(PROJECT_DIR, 'scripts', 'threads', 'logs', 'llm_fallback_state.json'),
 )
 
 
@@ -118,12 +117,12 @@ def _load_chain_config():
 CHAIN_CONFIG = _load_chain_config()
 
 # =====================================================================
-# 영속 폴백 상태 관리 (서킷브레이커 제거 → per-tier 격리 쿨다운)
-# - last_success_tier 승격, quota_until/structural_until 는 tier별 격리
+# 영속 폴백 상태 관리 (순수 회전 — 쿨다운/배제/서킷브레이커 없음)
+# - 유일한 상태 = last_success_tier (다음 pass의 front)
 # - 파일에 원자적(temp + os.replace) 저장 → fresh-process-per-run 에서도 회전 유지
 # =====================================================================
 class _FallbackState:
-    """per-tier 쿨다운 + last_success_tier 를 env-설정 경로에 영속."""
+    """last_success_tier 만 env-설정 경로에 영속."""
 
     def __init__(self, path=STATE_PATH):
         self.path = path
@@ -135,16 +134,10 @@ class _FallbackState:
                 with open(self.path, 'r', encoding='utf-8') as f:
                     d = json.load(f)
                 d.setdefault('last_success_tier', None)
-                d.setdefault('quota_until', {})
-                d.setdefault('structural_until', {})
-                # 기동 시 만료된 쿨다운 정리
-                now = time.time()
-                d['quota_until'] = {k: v for k, v in d['quota_until'].items() if now < v}
-                d['structural_until'] = {k: v for k, v in d['structural_until'].items() if now < v}
                 return d
         except Exception:
             pass
-        return {'last_success_tier': None, 'quota_until': {}, 'structural_until': {}}
+        return {'last_success_tier': None}
 
     def _save(self):
         try:
@@ -158,56 +151,24 @@ class _FallbackState:
         except Exception:
             pass  # 상태 저장 실패가 본 호출을 막지 않음
 
-    def _clear_expired(self):
-        now = time.time()
-        q = self._state.setdefault('quota_until', {})
-        s = self._state.setdefault('structural_until', {})
-        for k in [k for k, v in q.items() if now >= v]:
-            del q[k]
-        for k in [k for k, v in s.items() if now >= v]:
-            del s[k]
-
-    def is_quota(self, tier):
-        return time.time() < self._state.get('quota_until', {}).get(tier, 0)
-
-    def is_structural(self, tier):
-        return time.time() < self._state.get('structural_until', {}).get(tier, 0)
-
     def record_success(self, tier, paid=False):
         """성공 기록. 유료 tier는 맨 뒤 고정이므로 승격 안 함."""
-        self._clear_expired()
         if not paid:
             self._state['last_success_tier'] = tier
-        self._state.setdefault('quota_until', {}).pop(tier, None)
-        self._save()
-
-    def record_quota(self, tier):
-        self._state.setdefault('quota_until', {})[tier] = time.time() + QUOTA_COOLDOWN_SEC
-        self._save()
-
-    def record_structural(self, tier):
-        self._state.setdefault('structural_until', {})[tier] = time.time() + STRUCTURAL_COOLDOWN_SEC
         self._save()
 
     def order(self, free_tiers, paid_tier='default'):
-        """동적 호출 순서:
-        1) 쿼터/구조 쿨다운 아닌 무료 tier (last_success 1순위)
-        2) 전부 쿨다운 중 → 가장 빨리 만료되는 무료 1회
+        """순수 회전 호출 순서:
+        1) last_success tier를 맨 앞 (front)
+        2) 나머지 무료 tier는 models.yaml 순서
         3) 유료 tier 항상 맨 뒤 고정
+        쿨다운/배제 없음 — 실패한 tier도 다음 pass에 다시 순서대로 시도된다.
         """
-        self._clear_expired()
-        usable = [t for t in free_tiers
-                  if not self.is_structural(t) and not self.is_quota(t)]
-        cooling = [t for t in free_tiers
-                   if self.is_quota(t) and not self.is_structural(t)]
-        cooling.sort(key=lambda t: self._state.get('quota_until', {}).get(t, 0))
         last_ok = self._state.get('last_success_tier')
         ordered = []
-        if last_ok in usable:
+        if last_ok in free_tiers:
             ordered.append(last_ok)
-        ordered += [t for t in usable if t != last_ok]
-        if not ordered and cooling:
-            ordered.append(cooling[0])  # 전부 쿨다운 → 가장 빨리 만료되는 1회
+        ordered += [t for t in free_tiers if t != last_ok]
         ordered.append(paid_tier)
         return ordered
 
@@ -314,12 +275,11 @@ def _call_tier_with_retry(tier_name, tier_cfg, full_messages, temperature, max_t
                            response_format, extra_body, model_override_name=None, state=None):
     """tier 1회 호출 + 최소 재시도. 성공 시 (text, True), 실패 시 (None, False).
 
-    재시도/쿨다운 정책 (llm-fallback-chain-management 계약):
-    - 빈 응답        → 재시도 0, 즉시 다음 tier (쿨다운 없음)
-    - timeout/connection → 재시도 0, 즉시 다음 tier
-    - 429(quota)     → 재시도 0, 해당 tier만 300s 쿨다운
-    - 401/403/404    → 재시도 0, 해당 tier만 86400s 구조 쿨다운
-    - 5xx/connection reset → 1회 재시도(유계 백오프) 후 실패
+    순수 회전 정책 (llm-fallback-chain-management 계약):
+    - 빈 응답 / timeout / connection / 429 / 401 / 403 / 404 / unknown
+      → 재시도 0, 즉시 다음 tier
+    - 5xx/connection reset → 1회 재시도(5s 유계 백오프) 후 실패
+    어떤 실패도 tier를 배제하지 않는다 (쿨다운/서킷브레이커 없음).
     """
     for attempt in range(2):  # 1차 시도 + server 에러 한정 1회 재시도
         try:
@@ -334,14 +294,8 @@ def _call_tier_with_retry(tier_name, tier_cfg, full_messages, temperature, max_t
             print(f'  [경고] {tier_name} 실패: HTTP {status} {type(e).__name__}: {e}')
             _log_to_file(f'⚠️ {tier_name} 예외: HTTP {status} {type(e).__name__}: {str(e)[:200]}')
             kind = _classify_error(e)
-            if kind == 'quota':
-                if state:
-                    state.record_quota(tier_name)
-                return None, False
-            if kind == 'structural':
-                if state:
-                    state.record_structural(tier_name)
-                return None, False
+            if kind in ('quota', 'structural'):
+                return None, False  # 429/401/403/404 → 즉시 다음 tier (배제 없음)
             if kind in ('timeout', 'connection', 'unknown'):
                 return None, False  # 즉시 다음 tier, 재시도 0
             if kind == 'server':
@@ -362,7 +316,7 @@ def _chain_completion(full_messages, temperature, max_tokens, response_format, e
     free_tiers = [t for t in tier_order if t != 'default']
     state = _FALLBACK_STATE
 
-    # 동적 순서: last_success 승격 + per-tier 쿨다운 무시 + 유료 맨 뒤 고정
+    # 순수 회전 순서: last_success가 맨 앞 + 나머지 yaml 순서 + 유료 맨 뒤 고정
     ordered = state.order(free_tiers, paid_tier='default')
 
     start = time.time()
@@ -383,7 +337,7 @@ def _chain_completion(full_messages, temperature, max_tokens, response_format, e
             state.record_success(tier, paid=paid)
             print(f'  [체인] 성공: {tier}' + (' (유료)' if paid else ''))
             return text, tier
-        # 실패 시 쿨다운은 _call_tier_with_retry 내부에서 기록됨 (quota/structural)
+        # 실패 시 즉시 다음 tier (쿨다운/배제 없음)
         continue
 
     return None, None
@@ -396,7 +350,7 @@ def chat_completion(messages, system_prompt=None, temperature=0.7, max_tokens=20
     """
     통합 채팅 completions 함수
     - model_override=None 또는 'deepseek': 무료 LLM 폴백 체인 (config/models.yaml)
-      → 무료 16개 순차 → 전부 실패 시 유료 DeepSeek V4 Flash (최후 수단)
+      → 무료 tier 순차(순수 회전) → 전부 실패 시 유료 DeepSeek V4 Flash (최후 수단)
     - model_override='openai': GPT-4o-mini 단독 (평가/후처리)
     - model_override='mimo': MiMo v2.5 단독
     response_format: OpenAI-compatible response format (e.g. {'type': 'json_object'})

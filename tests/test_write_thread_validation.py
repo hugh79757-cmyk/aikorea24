@@ -331,3 +331,33 @@ class TestHookBodyEntityConsistency:
         ok, reason = validate_final_output(cards)
         assert ok is True
         assert reason == "OK"
+
+
+class TestCompassReturnShape:
+    """write_thread(format_choice='compass')는 dict를 반환해야 함.
+
+    회귀 방지: 이전 구현은 write_compass_article의 (compass_dict, output)
+    튜플을 그대로 반환해 호출부 main_v3.py:323의 result.get('cards')가
+    AttributeError로 죽었고, 카드가 생성된 뒤에도 발행이 12회 실패했다.
+    """
+
+    @pytest.mark.unit
+    def test_compass_returns_dict_not_tuple(self, sample_pitch, sample_articles):
+        fake_output = {"cards": ["카드 1", "카드 2"], "link": "https://example.com/x"}
+        with patch(
+            "pipeline.threads.compass.write_compass_article",
+            return_value=({"title": "t"}, fake_output),
+        ):
+            result = write_thread(sample_pitch, sample_articles, format_choice="compass")
+        assert isinstance(result, dict), f"expected dict, got {type(result).__name__}"
+        assert result.get("cards") == fake_output["cards"]
+        assert result.get("link") == fake_output["link"]
+
+    @pytest.mark.unit
+    def test_compass_none_returns_empty_dict(self, sample_pitch, sample_articles):
+        with patch(
+            "pipeline.threads.compass.write_compass_article",
+            return_value=None,
+        ):
+            result = write_thread(sample_pitch, sample_articles, format_choice="compass")
+        assert result == {"cards": [], "link": ""}
