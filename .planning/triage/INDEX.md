@@ -1,3 +1,4 @@
+- 2026-09-29 | chore | cloudflare-infra-load-followup | 장기 과제 — zone 토큰 권한/21.5MB 청크/_routes exclude/SSR 잔여 (TODO 9건 + 실측 조사 기록)
 - 2026-09-26 | fix | tools-approval-guard-collector-crash-email-fix | visibility API 승인 우회 차단 + collector TypeError 크래시로 이메일 툴 9/16 고정 해소 (D1 302행 재동기화)
 - 2026-09-23 | feat | compass-publish-pipeline | compass 파이프라인 연결 + Pass 1 카테고리 다양성 개선 (tech 100%→25%) + launchd plist 등록 — 실제 발행은 D1/네트워크 차단으로 실패
 - 2026-09-23 | fix | d1-row-limit-outage-fix | D1 row read 한도초과 원인 규명 + 쿼리 최적화 (db_reader LIMIT 200, background_search OR묶음, blog_draft raise 구분)

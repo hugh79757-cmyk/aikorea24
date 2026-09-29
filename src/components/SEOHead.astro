@@ -39,7 +39,7 @@ const jsonLdWebsite = JSON.stringify({
   "inLanguage": "ko-KR",
   "publisher": {
     "@type": "Organization",
-    "name": "스타일 팩토리9",
+    "name": "스타일팩토리9",
     "url": siteUrl
   },
   "potentialAction": {
@@ -52,7 +52,7 @@ const jsonLdWebsite = JSON.stringify({
 const jsonLdOrg = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "Organization",
-  "name": "스타일 팩토리9",
+  "name": "스타일팩토리9",
   "url": siteUrl,
   "email": "info@aikorea24.kr",
   "address": {
@@ -75,7 +75,7 @@ const jsonLdArticle = type === 'article' ? JSON.stringify({
   "datePublished": publishedDate,
   "dateModified": modifiedDate || publishedDate,
   "author": { "@type": "Person", "name": "조진연", "url": siteUrl },
-  "publisher": { "@type": "Organization", "name": "스타일 팩토리9" },
+  "publisher": { "@type": "Organization", "name": "스타일팩토리9" },
   "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalURL },
   "keywords": tags.join(', '),
   "articleSection": category,
