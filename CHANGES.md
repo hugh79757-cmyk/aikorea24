@@ -2,6 +2,21 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-29 18:30 — fix: 스레드 발행 실패 — semantic dedup 엔티티 오인 (pool 2 → 164)
+
+- **증상**: 2026-09-29 18:00~18:05 v3 5회 재시도 모두 실패. `scripts/threads/logs/2026-09-29.log` 18:01~18:05 참조. 매 시도 기사 풀 2건 → 모두 크롤링 본문 부족(106자/441자) → 발행 0건. 5회 실패 후 "2시간 후 재시도"로 종료.
+- **원인 [우리 production 코드 버그]**: `scripts/threads/dedup.py:170` EN-EN 분기 `if sim['entity_overlap'] >= 2: return True`. AI 뉴스 기사 공통 고유명사 풀이 극소함(OpenAI, Meta, Anthropic, AI 등) → **서로 다른 기사도 공통 entity 2개만으로 same-topic 으로 오인**. 실제 측정(60기사 × 1217개 published meta):
+  - EN-EN 쌍 38,941개 중 **340개 오인** (99.4%는 entity_overlap==2, jaccard_en==0)
+  - 결과: 1,142개 기사 → **2개**로 폭락, `posted_semantic` 제외 230건
+- **수정 [PRODUCTION CODE]**: `dedup.py:170` `>= 2` → **`>= 4`** (주석 추가). entity_overlap 분포 `{0:16391, 1:22210, 2:333, 3:6, 4:1}` → >=4 조건은 1건만 해당.
+- **검증 [검증됨]**:
+  - 기사 풀 복구: **2 → 164** (P1=3, P2=161). `posted_semantic` 제외 230 → 10.
+  - 크롤링 성공률: 164개 중 무작위 12개 샘플 → **12/12** 본문 >=500자 (MIN_CRAWL_CHARS=500 만족). 예전 2건은 각각 106자(Politico sponsored 광고 컬럼), 441자(Guardian 만평)로 실제 본문 부족.
+  - false-positive 0, ground-truth same-topic(jaccard_en>=0.30) 2건 모두 유지 (true-positive lost 0).
+- **테스트 [TEST CODE]**: `tests/test_dedup_semantic.py` 신규 4건. 4/4 통과. 실제 실패 사례(Politico EU Tech vs The Guardian AI) 직접 검증 포함.
+- **회귀**: `test_dedup_semantic` 4/4, `test_crawler`/`test_pitch`/`test_failed_articles` 59 passed. 2 failed(`test_pitch::TestGetPitchesCrawlFail::test_discards_when_crawl_fails`, `test_failed_articles::TestClearOldEntries::test_retention_from_env`)는 **git stash 후 동일 실패 → 사전 존재 버그**, 본 수정과 무관.
+- **커omit**: 미커밋 (수정만 적용). 다음 세션에서 commit 필요.
+
 ## 2026-09-28 — chore: 빈 url 툴 4건 정리 (3건 삭제 + 1건 fix)
 
 - **배경**: 84건 백필 후에도 빈 url 4건 잔존 (scrimba-explain, threadport, webbrain, gemini-omni-flash)

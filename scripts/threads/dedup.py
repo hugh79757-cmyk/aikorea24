@@ -167,7 +167,12 @@ def is_same_topic(title1, original_title1, desc1,
     if he1 and he2:
         if sim['jaccard_en'] >= 0.30:
             return True
-        if sim['entity_overlap'] >= 2:
+        # entity_overlap alone (>=4) is a weak signal — AI news articles share
+        # a tiny entity pool (OpenAI, Meta, Anthropic, AI). Two shared entities
+        # is ~noise; only 4+ shared capitalized entities implies a real overlap.
+        # 2026-09-29: entity_overlap>=2 caused 340 false-positives per 60 sampled
+        # articles, starving the pool to 2 articles and blocking all publishing.
+        if sim['entity_overlap'] >= 4:
             return True
 
     elif not he1 and not he2 and has_ko:
