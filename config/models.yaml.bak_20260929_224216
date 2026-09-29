@@ -1,0 +1,104 @@
+# config/models.yaml — 쓰레드 파이프라인 무료 LLM 폴백 체인
+# 순서 = 우선순위 (1순위부터). 16개 무료 → 전부 실패 시 default(유료 DeepSeek)
+# 참고: /Users/twinssn/Projects/SKILL.md "LLM Fallback Chain" + 5000 config/models.yaml
+# 갱신: 2026-08-11
+
+tier_order:
+  - gemini-3.1-flash-lite
+  - gemini-3.5-flash-lite
+  - gemini-2.5-flash
+  - gemini-3.5-flash
+  - groq-llama
+  - groq-qwen
+  - groq-gpt120b
+  - groq-gpt20b
+  - cerebras-gemma
+  - cerebras-glm
+  - zen-deepseek-free
+  - nvidia-nemotron
+  - nvidia-step
+  - zen-mimo-free
+  - zen-bigpickle
+  - zhipu-glm
+  - default            # ★ 유료 DeepSeek — 최후 수단
+
+providers:
+  google:
+    api_key_env: GEMINI_API_KEY
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+  groq:
+    api_key_env: GROQ_API_KEY
+    base_url: "https://api.groq.com/openai/v1"
+  cerebras:
+    api_key_env: CEREBRAS_API_KEY
+    base_url: "https://api.cerebras.ai/v1"
+  opencode-zen:
+    api_key_env: OPENCODE_ZEN_API_TOKEN
+    base_url: "https://opencode.ai/zen/v1"
+  nvidia:
+    api_key_env: NVIDIA_API_KEY
+    base_url: "https://integrate.api.nvidia.com/v1"
+  zhipu:
+    api_key_env: ZHIPU_API_KEY
+    base_url: "https://open.bigmodel.cn/api/paas/v4"
+  deepseek:
+    api_key_env: DEEPSEEK_API_TOKEN
+    base_url: "https://api.deepseek.com/v1"
+
+models:
+  gemini-3.1-flash-lite:
+    provider: google
+    model: gemini-3.1-flash-lite
+  gemini-3.5-flash-lite:
+    provider: google
+    model: gemini-3.5-flash-lite
+  gemini-2.5-flash:
+    provider: google
+    model: gemini-2.5-flash
+  gemini-3.5-flash:
+    provider: google
+    model: gemini-3.5-flash
+  groq-llama:
+    provider: groq
+    model: llama-3.3-70b-versatile
+  groq-qwen:
+    provider: groq
+    model: qwen/qwen3.6-27b
+    reasoning_effort: none
+  groq-gpt120b:
+    provider: groq
+    model: openai/gpt-oss-120b
+  groq-gpt20b:
+    provider: groq
+    model: openai/gpt-oss-20b
+  cerebras-gemma:
+    provider: cerebras
+    model: gemma-4-31b
+  cerebras-glm:
+    provider: cerebras
+    model: zai-glm-4.7
+    reasoning_effort: none
+  zen-deepseek-free:
+    provider: opencode-zen
+    model: deepseek-v4-flash-free
+  nvidia-nemotron:
+    provider: nvidia
+    model: nvidia/nemotron-3-ultra-550b-a55b
+  nvidia-step:
+    provider: nvidia
+    model: stepfun-ai/step-3.7-flash
+    extra_body:
+      chat_template_kwargs:
+        thinking: false
+  zen-mimo-free:
+    provider: opencode-zen
+    model: mimo-v2.5-free
+  zen-bigpickle:
+    provider: opencode-zen
+    model: big-pickle
+  zhipu-glm:
+    provider: zhipu
+    model: glm-4.5-flash
+  default:
+    provider: deepseek
+    model: deepseek-v4-flash    # ★ 유료 — 최후 수단
