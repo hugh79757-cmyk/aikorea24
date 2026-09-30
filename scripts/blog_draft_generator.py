@@ -451,23 +451,31 @@ def _extract_first_sentence(text, max_len=300):
     return text[:max_len].strip()
 
 
+def _parse_title_body(gpt_output):
+    """LLM 출력에서 TITLE 라인(및 바로 뒤 구분선)만 제거 → (title, content).
+
+    주의: LLM이 본문 중간에 `---` 구분선을 넣는 경우가 있어 split("---")로
+    자르면 본문 전체가 유실된다. TITLE 라인만 정규식으로 제거한다.
+    """
+    parts = gpt_output.split("TITLE:", 1)
+    title = parts[1].split("\n", 1)[0].strip() if len(parts) > 1 else ""
+    body = re.sub(
+        r"\ATITLE:[^\n]*\n(?:[ \t]*-{3,}[ \t]*\n)?", "", gpt_output, count=1
+    ).strip()
+    return title, body
+
+
 def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
     """GPT 출력 파싱 → .md 파일 저장 (내부)."""
     # TITLE: ... / --- / 본문
     seo_title = keyword
     content = gpt_output
     if "TITLE:" in gpt_output:
-        parts = gpt_output.split("TITLE:", 1)
-        title_line = parts[1].split("\n", 1)[0].strip()
+        title_line, content = _parse_title_body(gpt_output)
         if title_line:
             seo_title = title_line
-        if "---" in gpt_output:
-            body_parts = gpt_output.split("---", 1)
-            if len(body_parts) > 1:
-                content = body_parts[1].strip()
-        else:
-            # --- 구분자 없으면 TITLE: 라인만 본문에서 제거
-            content = re.sub(r"^TITLE:\s*[^\n]+\n*", "", content).strip()
+        if len(content) < 500:
+            logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — LLM 출력 확인 필요")
 
     # 브리핑 페이지 링크 주입 (첫 문단 뒤) — 체류시간 확보
     if articles:

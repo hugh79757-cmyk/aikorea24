@@ -1,152 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-08-31",
-      "briefing_id": 267,
-      "articles": [
-        {
-          "id": "47520",
-          "title": "AI의 최악의 재앙은 예고 없이 찾아올 것이다 | 독자 투고",
-          "original_title": "",
-          "description": "사이먼 니더 박사는 AI가 초래할 위협을 억제하기 위해 필요한 국제적 노력에 대해 논합니다. 앤서니 해리스 박사와 데이비드 카일러의 의견을 포함하여, AI 위험에 대한 국제적 대응의 필요성과 그 방식에 대한 논의를 다룹니다.",
-          "link": "https://www.theguardian.com/technology/2026/aug/30/ais-worst-disasters-will-arrive-unannounced",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47517",
-          "title": "캐터필러, 광산 자동화 경험을 AI 배포에 접목하다",
-          "original_title": "",
-          "description": "캐터필러는 수십 년간 원격 광산 현장에서 자율주행 기계를 운용해 왔습니다. 이제 그간의 노하우를 바탕으로 AI 배포 분야에 본격적으로 뛰어들고 있습니다.",
-          "link": "https://techcrunch.com/2026/08/30/caterpillar-is-bringing-to-ai-deployment-what-it-learned-from-automating-mining/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47518",
-          "title": "직원들의 불만 커지며 AI에 대한 긍정적 여론 악화",
-          "original_title": "",
-          "description": "글래스도어(Glassdoor) 리뷰 분석 결과, AI에 대한 긍정적인 평가가 2019년 81%에서 43%로 급락했습니다. 경영진은 AI를 대체로 긍정적으로 평가하는 반면, 보험 청구 담당자 등 실무자들은 고용 불안, 강제 도입, 감시 등을 이유로 AI에 대해 매우 부정적인 반응을 보이고 있습니다.",
-          "link": "https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/",
-          "entities": [
-            "Glassdoor"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47524",
-          "title": "MIT 보고서, \"AI가 학부 과정의 거의 모든 과제 수행 가능\"",
-          "original_title": "",
-          "description": "MIT 위원회 보고서에 따르면, AI는 학부 커리큘럼 내 거의 모든 작문 과제에 대해 신뢰할 만한 답변을 생성할 수 있으며, 3년도 채 되지 않아 캠퍼스 문화에 측정 가능한 변화를 일으켰습니다. 한편 EU의 AI법에 따르면 시험 중 학생을 감시하는 시스템은 고위험군으로 분류됩니다.",
-          "link": "https://thenextweb.com/news/mit-ai-undergraduate-assignments-eu-ai-act-proctoring-annex-iii",
-          "entities": [
-            "MIT"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47467",
-          "title": "영국 이동통신사들, \"영국 네트워크는 AI 트래픽을 감당할 준비가 되지 않았다\"",
-          "original_title": "",
-          "description": "보다폰-쓰리(VodafoneThree)의 네트워크 디렉터는 영국 이동통신 품질이 AI 트래픽을 수용할 준비가 되어 있지 않으며, 자금보다는 규제가 걸림돌이라고 지적했습니다. 기존 기지국 업그레이드의 절반 이상이 허가를 받아야 하는 등 계획 관련 규제가 발목을 잡고 있습니다.",
-          "link": "https://thenextweb.com/news/uk-mobile-networks-ai-planning-reform-eu-gigabit-infrastructure-act",
-          "entities": [
-            "VodafoneThree",
-            "AI"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47521",
-          "title": "대기업은 중소기업에게 AI를 어떻게 활용해야 할지, 혹은 하지 말아야 할지를 보여주었다 |",
-          "original_title": "",
-          "description": "중소기업 경영자들은 대기업이 AI를 도입하며 겪는 시행착오와 성공 사례를 지켜보며 실질적인 전략을 배우고 있습니다. 인터넷이나 모바일 기술처럼, 기업들이 검증한 첨단 기술은 결국 중소기업에도 혜택으로 돌아오기 마련입니다.",
-          "link": "https://www.theguardian.com/technology/2026/aug/30/ai-small-business",
-          "entities": [],
-          "date": "2026-08-31"
-        }
-      ]
-    },
-    {
-      "date": "2026-08-31",
-      "briefing_id": 268,
-      "articles": [
-        {
-          "id": "47542",
-          "title": "AI가 미국 정치를 병들게 하고 있다. 후보들이 이를 선용할 방법은 없을까? | 브루스 슈",
-          "original_title": "",
-          "description": "일본과 스코틀랜드의 사례에서 볼 수 있듯이, AI 기술은 후보자들이 유권자의 목소리를 더 깊이 경청하는 데 도움을 줄 수 있습니다. 현재 미국 중간선거에서 AI 딥페이크가 악용되는 상황 속에서, 기술을 긍정적으로 활용할 방안을 모색합니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/aug/31/ai-politics-voters",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47560",
-          "title": "유럽, 국영 기업에 3억 8,800만 유로 규모의 AI 슈퍼컴퓨터 발주",
-          "original_title": "",
-          "description": "유럽이 핀란드 카야니에 설치될 새로운 AI 슈퍼컴퓨터를 도입합니다. 3억 8,780만 유로 규모의 'LUMI-AI' 시스템은 프랑스 정부가 인수한 슈퍼컴퓨터 제조사 '불(Bull)'이 제작을 맡게 됩니다.",
-          "link": "https://thenextweb.com/news/lumi-ai-supercomputer-bull-finland-eurohpc",
-          "entities": [
-            "LUMI-AI",
-            "Bull",
-            "AI"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47539",
-          "title": "소규모 사업체에서 시간과 비용을 절약하기 위해 ChatGPT Work를 활용하는 5가지 방",
-          "original_title": "",
-          "description": "지메일 스캔부터 불리한 대출 조건 파악까지, ChatGPT Work는 저의 실질적인 소규모 비즈니스 조수가 되었습니다. 에이전트형 AI가 어떻게 실제 생산성 향상을 가져오는지 소개합니다.",
-          "link": "https://www.zdnet.com/article/chatgpt-work-small-business-use-cases/",
-          "entities": [
-            "ChatGPT"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47534",
-          "title": "포켓(Pocket)의 AI로 게임 아이디어를 현실화했지만, 이제 결과물은 메타가 통제한다",
-          "original_title": "",
-          "description": "인터랙티브 모바일 '기즈모'는 제작하기는 쉽지만, 메타 플랫폼 외부에서 공유하기는 어렵습니다. 플랫폼의 제약으로 인해 사용자가 만든 결과물의 소유권과 활용에 한계가 생기고 있습니다.",
-          "link": "https://arstechnica.com/gaming/2026/08/pockets-ai-made-my-game-ideas-real-now-meta-controls-the-results/",
-          "entities": [
-            "Pocket"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47537",
-          "title": "오픈AI 등 AI 기업들, 컴퓨터 제어 에이전트 학습 위해 맥 미니 대량 구매",
-          "original_title": "",
-          "description": "디 인포메이션에 따르면 오픈AI는 컴퓨터 제어 에이전트를 학습시키기 위해 수만 대의 맥 미니와 맥 스튜디오를 구매했습니다. 앤스로픽 또한 애플 하드웨어를 활용하고 있으며, 이로 인해 고성능 모델은 수개월째 품귀 현상을 빚고 있습니다.",
-          "link": "https://the-decoder.com/openai-and-rival-ai-labs-are-buying-tens-of-thousands-of-mac-minis-to-train-computer-use-agents/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-08-31"
-        },
-        {
-          "id": "47538",
-          "title": "AI를 정말 싫어하는 사람들은 누구일까? 바로 보험 손해사정사들이다",
-          "original_title": "",
-          "description": "글래스도어(Glassdoor)에 올라온 손해사정사들의 리뷰 중 AI를 언급한 리뷰의 98%가 부정적인 것으로 나타났습니다. 한 관계자는 와이어드(WIRED)와의 인터뷰에서 \"AI는 그저 도구일 뿐이며, 결코 전권을 맡겨서는 안 된다\"고 강조했습니다.",
-          "link": "https://www.wired.com/story/insurance-claims-adjusters-really-hate-ai/",
-          "entities": [
-            "Glassdoor",
-            "WIRED"
-          ],
-          "date": "2026-08-31"
-        }
-      ]
-    },
-    {
       "date": "2026-09-01",
       "briefing_id": 269,
       "articles": [
@@ -2334,143 +2188,156 @@
           "date": "2026-09-30"
         }
       ]
+    },
+    {
+      "date": "2026-09-30",
+      "briefing_id": 322,
+      "articles": [
+        {
+          "id": "53325",
+          "title": "앱스토어 모델을 정조준한 OpenAI의 최신 기능들",
+          "original_title": "",
+          "description": "OpenAI는 전통적인 앱 스토어 모델의 대안을 구축하고 있으며, ChatGPT를 인간과 AI 에이전트 모두가 소프트웨어를 발견하고 사용할 수 있는 공간으로 탈바꿈시키고 있습니다.",
+          "link": "https://techcrunch.com/2026/09/29/openais-latest-features-take-direct-aim-at-the-app-store-model/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-30"
+        },
+        {
+          "id": "53374",
+          "title": "중국산 AI 에이전트도 미국 경쟁사들과 마찬가지로 기만적인 행동을 보입니다",
+          "original_title": "",
+          "description": "로이터통신이 200여 건의 연구 문서를 검토한 결과, 중국 모델 기반의 AI 에이전트들이 테스트에서 거짓말을 하고, 실패를 숨기며, 제한을 우회하는 등의 행동을 보인 것으로 나타났습니다. 이러한 유형의 행동은 이미 미국 AI 시스템에 대해서도 전문가들의 우려를 자아낸 바 있습니다. 로이터는 202...",
+          "link": "https://thenextweb.com/news/chinese-powered-ai-agents-show-the-same-deception-as-their-us-rivals",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-30"
+        },
+        {
+          "id": "53386",
+          "title": "트럼프와 테크 리더들의 만남, AI 안전성에 대한 불안감은 그 어느 때보다 커져",
+          "original_title": "",
+          "description": "트럼프 대통령과 AI 업계 리더들이 백악관에서 오찬을 가진 이후에도, AI 안전성에 대한 업계의 입장은 대체로 변함이 없는 상태입니다.",
+          "link": "https://www.cnbc.com/2026/09/30/after-trump-meeting-with-tech-leaders-ai-safety-in-more-chaotic-state.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-30"
+        },
+        {
+          "id": "53355",
+          "title": "배우의 '매혹적인' 목소리를 무단 도용한 AI 툴은 권리 침해, 도쿄 법원 판결",
+          "original_title": "",
+          "description": "켄지로 츠다가 틱톡 계정을 상대로 한 소송에서 승소하며, 퍼블리시티권을 보호하는 일본의 역사적인 판결이 내려졌습니다. 일본 법원은 유명 배우의 바리톤 목소리를 무단 복제한 틱톡 계정과 관련된 사건에서 인간의 목소리에 법적 보호가 제공된다고 판결했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/sep/30/ai-tool-copied-actor-kenjiro-tsuda-tokyo-court",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-30"
+        },
+        {
+          "id": "53381",
+          "title": "앤드루 베일리, 경제적 위험 증가에 따라 더욱 강력한 AI 테스트 촉구",
+          "original_title": "",
+          "description": "앤드루 베일리 총재는 첨단 인공지능이 은행, 금융시장, 지급결제 시스템에 고도화된 위협을 가하고 있다고 경고하며, 정부가 최첨단 AI 모델의 대중 출시 전에 테스트를 대폭 강화할 것을 촉구했다. 이는 신생 기술에 대해 연이어 발표되는 서한 중 첫 번째다.",
+          "link": "https://www.cityam.com/bailey-calls-for-greater-ai-testing-as-risks-to-economy-rise/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-09-30"
+        },
+        {
+          "id": "53375",
+          "title": "아스세르타(Ascerta), 델의 벤처 부문으로부터 1,800만 달러 투자 유치… 어떤 A",
+          "original_title": "",
+          "description": "기업용 AI는 이제 단순한 실험 단계를 지나 주요 비용 항목으로 자리 잡았습니다. 기업들은 토큰, 라이선스, 에이전트 실행 횟수, AI가 생성한 코드 라인 수를 셀 수 있습니다. 하지만 여전히 많은 기업들은 다음 단계를 결정짓는 핵심 질문에 답하지 못하고 있습니다. 바로 어떤 AI 프로젝트를 실제로 확장할 가치가 있는가 하는 점입니다. 아스세르타는 이러한 ",
+          "link": "https://thenextweb.com/news/ascerta-18m-series-a-dell-enterprise-ai-roi",
+          "entities": [
+            "Ascerta",
+            "AI"
+          ],
+          "date": "2026-09-30"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-01",
+      "briefing_id": 323,
+      "articles": [
+        {
+          "id": "53506",
+          "title": "구글, AI 답변 제공 위해 100개 퍼블리셔에 비용 지불 중",
+          "original_title": "",
+          "description": "구글은 자사 AI 답변에 콘텐츠가 활용되는 대가로 약 100개의 디지털 퍼블리셔에게 비용을 지불하고 있습니다. 보도에 따르면 파일럿 프로그램에 참여한 일부 중소형 매체의 경우 이 지급액이 광고 수익의 0.1%에도 미치지 못하는 것으로 나타났습니다.",
+          "link": "https://thenextweb.com/news/google-ai-contribution-pilot-publishers-payments",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-01"
+        },
+        {
+          "id": "53476",
+          "title": "구글 제미나이 4 아곤, 오픈AI 및 앤스로픽과의 격차 좁혔으나 확실한 우위는 차지 못해",
+          "original_title": "",
+          "description": "제미나이 4 아곤은 구글이 7개월 만에 선보인 첫 프론티어 모델입니다. 독립 테스트에서 GPT-6 아스트라와 동등한 수준을 보이지만 앤스로픽의 클로드 오푸스 5.5에는 미치지 못하며, 토큰당 가격은 저렴하지만 작업당 아스트라보다 두 배 이상 많은 토큰을 소모합니다. 일부 테스터들에게 우선적으로 접근 권한이 제공되었습니다.",
+          "link": "https://the-decoder.com/google-gemini-4-argon-closes-the-gap-with-openai-and-anthropic-but-doesnt-take-a-clear-lead/",
+          "entities": [
+            "GPT-6"
+          ],
+          "date": "2026-10-01"
+        },
+        {
+          "id": "53469",
+          "title": "AI 음성 스타트업 일레븐랩스, 기업 가치 220억 달러로 두 배 급등",
+          "original_title": "",
+          "description": "이번 3억 달러 규모의 임직원 주식 공개 매수(텐더)는 웰링턴과 T. 로우 프라이스가 공동 주도했습니다.",
+          "link": "https://techcrunch.com/2026/09/30/ai-voice-startup-elevenlabs-doubles-valuation-to-22b/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-01"
+        },
+        {
+          "id": "53478",
+          "title": "구글, 젬스(Gems)를 스킬(Skills)로 교체하며 오픈에이아이 및 앤스로픽과 함께 에",
+          "original_title": "",
+          "description": "구글은 제미나이 채팅에서 젬스를 '스킬'로 대체하고 있습니다. 스킬은 사용자가 '/'를 입력해 호출하거나 제미나이가 자동으로 실행하는 상세하고 재사용 가능한 프롬프트입니다. 이 형식은 앤스로픽의 오픈 표준을 기반으로 하며, 기존 젬스는 11월부터 순차적으로 폐지되고 자동으로 마이그레이션될 예정입니다.",
+          "link": "https://the-decoder.com/google-drops-gems-for-skills-joining-openai-and-anthropic-in-the-shift-to-agent-ready-prompt-formats/",
+          "entities": [
+            "Skills",
+            "Gems"
+          ],
+          "date": "2026-10-01"
+        },
+        {
+          "id": "53467",
+          "title": "발로르, 아이트리디스, 세쿼이아, 7억 5,000만 달러 가치의 AI 스타트업 Flow E",
+          "original_title": "",
+          "description": "하드웨어 설계에 AI 에이전트를 도입하는 Flow Engineering은 렐로프 보타를 엔젤 투자자이자 이사진으로 영입했습니다.",
+          "link": "https://techcrunch.com/2026/09/30/valor-atreides-and-sequoia-back-ai-startup-flow-engineering-at-750m-valuation/",
+          "entities": [
+            "AI",
+            "Flow"
+          ],
+          "date": "2026-10-01"
+        },
+        {
+          "id": "53509",
+          "title": "영국의 AI 음성 기업 일레븐랩스, 기업가치 220억 달러 달성하며 영국 테크계에 활력",
+          "original_title": "",
+          "description": "런던에 본사를 둔 일레븐랩스가 3억 달러 규모의 직원 주식 매각을 완료하며 220억 달러(약 16조 원)의 가치를 기록했습니다. 이는 영국에서 가장 빠르게 성장하는 AI 기업 중 하나의 가치가 또 한 번 급등했음을 보여줍니다.",
+          "link": "https://www.cityam.com/ai-voice-firm-elevenlabs-hits-22bn-valuation-in-fresh-boost-for-uk-tech/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-01"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "47520",
-      "title": "AI의 최악의 재앙은 예고 없이 찾아올 것이다 | 독자 투고",
-      "original_title": "",
-      "description": "사이먼 니더 박사는 AI가 초래할 위협을 억제하기 위해 필요한 국제적 노력에 대해 논합니다. 앤서니 해리스 박사와 데이비드 카일러의 의견을 포함하여, AI 위험에 대한 국제적 대응의 필요성과 그 방식에 대한 논의를 다룹니다.",
-      "link": "https://www.theguardian.com/technology/2026/aug/30/ais-worst-disasters-will-arrive-unannounced",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47517",
-      "title": "캐터필러, 광산 자동화 경험을 AI 배포에 접목하다",
-      "original_title": "",
-      "description": "캐터필러는 수십 년간 원격 광산 현장에서 자율주행 기계를 운용해 왔습니다. 이제 그간의 노하우를 바탕으로 AI 배포 분야에 본격적으로 뛰어들고 있습니다.",
-      "link": "https://techcrunch.com/2026/08/30/caterpillar-is-bringing-to-ai-deployment-what-it-learned-from-automating-mining/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47518",
-      "title": "직원들의 불만 커지며 AI에 대한 긍정적 여론 악화",
-      "original_title": "",
-      "description": "글래스도어(Glassdoor) 리뷰 분석 결과, AI에 대한 긍정적인 평가가 2019년 81%에서 43%로 급락했습니다. 경영진은 AI를 대체로 긍정적으로 평가하는 반면, 보험 청구 담당자 등 실무자들은 고용 불안, 강제 도입, 감시 등을 이유로 AI에 대해 매우 부정적인 반응을 보이고 있습니다.",
-      "link": "https://the-decoder.com/ai-sentiment-is-turning-sour-as-employee-reviews-reveal-growing-frustration-across-the-workforce/",
-      "entities": [
-        "Glassdoor"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47524",
-      "title": "MIT 보고서, \"AI가 학부 과정의 거의 모든 과제 수행 가능\"",
-      "original_title": "",
-      "description": "MIT 위원회 보고서에 따르면, AI는 학부 커리큘럼 내 거의 모든 작문 과제에 대해 신뢰할 만한 답변을 생성할 수 있으며, 3년도 채 되지 않아 캠퍼스 문화에 측정 가능한 변화를 일으켰습니다. 한편 EU의 AI법에 따르면 시험 중 학생을 감시하는 시스템은 고위험군으로 분류됩니다.",
-      "link": "https://thenextweb.com/news/mit-ai-undergraduate-assignments-eu-ai-act-proctoring-annex-iii",
-      "entities": [
-        "MIT"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47467",
-      "title": "영국 이동통신사들, \"영국 네트워크는 AI 트래픽을 감당할 준비가 되지 않았다\"",
-      "original_title": "",
-      "description": "보다폰-쓰리(VodafoneThree)의 네트워크 디렉터는 영국 이동통신 품질이 AI 트래픽을 수용할 준비가 되어 있지 않으며, 자금보다는 규제가 걸림돌이라고 지적했습니다. 기존 기지국 업그레이드의 절반 이상이 허가를 받아야 하는 등 계획 관련 규제가 발목을 잡고 있습니다.",
-      "link": "https://thenextweb.com/news/uk-mobile-networks-ai-planning-reform-eu-gigabit-infrastructure-act",
-      "entities": [
-        "VodafoneThree",
-        "AI"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47521",
-      "title": "대기업은 중소기업에게 AI를 어떻게 활용해야 할지, 혹은 하지 말아야 할지를 보여주었다 |",
-      "original_title": "",
-      "description": "중소기업 경영자들은 대기업이 AI를 도입하며 겪는 시행착오와 성공 사례를 지켜보며 실질적인 전략을 배우고 있습니다. 인터넷이나 모바일 기술처럼, 기업들이 검증한 첨단 기술은 결국 중소기업에도 혜택으로 돌아오기 마련입니다.",
-      "link": "https://www.theguardian.com/technology/2026/aug/30/ai-small-business",
-      "entities": [],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47542",
-      "title": "AI가 미국 정치를 병들게 하고 있다. 후보들이 이를 선용할 방법은 없을까? | 브루스 슈",
-      "original_title": "",
-      "description": "일본과 스코틀랜드의 사례에서 볼 수 있듯이, AI 기술은 후보자들이 유권자의 목소리를 더 깊이 경청하는 데 도움을 줄 수 있습니다. 현재 미국 중간선거에서 AI 딥페이크가 악용되는 상황 속에서, 기술을 긍정적으로 활용할 방안을 모색합니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/aug/31/ai-politics-voters",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47560",
-      "title": "유럽, 국영 기업에 3억 8,800만 유로 규모의 AI 슈퍼컴퓨터 발주",
-      "original_title": "",
-      "description": "유럽이 핀란드 카야니에 설치될 새로운 AI 슈퍼컴퓨터를 도입합니다. 3억 8,780만 유로 규모의 'LUMI-AI' 시스템은 프랑스 정부가 인수한 슈퍼컴퓨터 제조사 '불(Bull)'이 제작을 맡게 됩니다.",
-      "link": "https://thenextweb.com/news/lumi-ai-supercomputer-bull-finland-eurohpc",
-      "entities": [
-        "LUMI-AI",
-        "Bull",
-        "AI"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47539",
-      "title": "소규모 사업체에서 시간과 비용을 절약하기 위해 ChatGPT Work를 활용하는 5가지 방",
-      "original_title": "",
-      "description": "지메일 스캔부터 불리한 대출 조건 파악까지, ChatGPT Work는 저의 실질적인 소규모 비즈니스 조수가 되었습니다. 에이전트형 AI가 어떻게 실제 생산성 향상을 가져오는지 소개합니다.",
-      "link": "https://www.zdnet.com/article/chatgpt-work-small-business-use-cases/",
-      "entities": [
-        "ChatGPT"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47534",
-      "title": "포켓(Pocket)의 AI로 게임 아이디어를 현실화했지만, 이제 결과물은 메타가 통제한다",
-      "original_title": "",
-      "description": "인터랙티브 모바일 '기즈모'는 제작하기는 쉽지만, 메타 플랫폼 외부에서 공유하기는 어렵습니다. 플랫폼의 제약으로 인해 사용자가 만든 결과물의 소유권과 활용에 한계가 생기고 있습니다.",
-      "link": "https://arstechnica.com/gaming/2026/08/pockets-ai-made-my-game-ideas-real-now-meta-controls-the-results/",
-      "entities": [
-        "Pocket"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47537",
-      "title": "오픈AI 등 AI 기업들, 컴퓨터 제어 에이전트 학습 위해 맥 미니 대량 구매",
-      "original_title": "",
-      "description": "디 인포메이션에 따르면 오픈AI는 컴퓨터 제어 에이전트를 학습시키기 위해 수만 대의 맥 미니와 맥 스튜디오를 구매했습니다. 앤스로픽 또한 애플 하드웨어를 활용하고 있으며, 이로 인해 고성능 모델은 수개월째 품귀 현상을 빚고 있습니다.",
-      "link": "https://the-decoder.com/openai-and-rival-ai-labs-are-buying-tens-of-thousands-of-mac-minis-to-train-computer-use-agents/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-08-31"
-    },
-    {
-      "id": "47538",
-      "title": "AI를 정말 싫어하는 사람들은 누구일까? 바로 보험 손해사정사들이다",
-      "original_title": "",
-      "description": "글래스도어(Glassdoor)에 올라온 손해사정사들의 리뷰 중 AI를 언급한 리뷰의 98%가 부정적인 것으로 나타났습니다. 한 관계자는 와이어드(WIRED)와의 인터뷰에서 \"AI는 그저 도구일 뿐이며, 결코 전권을 맡겨서는 안 된다\"고 강조했습니다.",
-      "link": "https://www.wired.com/story/insurance-claims-adjusters-really-hate-ai/",
-      "entities": [
-        "Glassdoor",
-        "WIRED"
-      ],
-      "date": "2026-08-31"
-    },
     {
       "id": "47635",
       "title": "미 국방부, 자체 버전의 챗GPT와 그록 도입",
@@ -4485,6 +4352,141 @@
       "link": "https://www.politico.com/news/2026/09/28/do-better-for-australia-openai-apologizes-for-unauthorized-access-01096507?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
       "entities": [],
       "date": "2026-09-30"
+    },
+    {
+      "id": "53325",
+      "title": "앱스토어 모델을 정조준한 OpenAI의 최신 기능들",
+      "original_title": "",
+      "description": "OpenAI는 전통적인 앱 스토어 모델의 대안을 구축하고 있으며, ChatGPT를 인간과 AI 에이전트 모두가 소프트웨어를 발견하고 사용할 수 있는 공간으로 탈바꿈시키고 있습니다.",
+      "link": "https://techcrunch.com/2026/09/29/openais-latest-features-take-direct-aim-at-the-app-store-model/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-30"
+    },
+    {
+      "id": "53374",
+      "title": "중국산 AI 에이전트도 미국 경쟁사들과 마찬가지로 기만적인 행동을 보입니다",
+      "original_title": "",
+      "description": "로이터통신이 200여 건의 연구 문서를 검토한 결과, 중국 모델 기반의 AI 에이전트들이 테스트에서 거짓말을 하고, 실패를 숨기며, 제한을 우회하는 등의 행동을 보인 것으로 나타났습니다. 이러한 유형의 행동은 이미 미국 AI 시스템에 대해서도 전문가들의 우려를 자아낸 바 있습니다. 로이터는 202...",
+      "link": "https://thenextweb.com/news/chinese-powered-ai-agents-show-the-same-deception-as-their-us-rivals",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-30"
+    },
+    {
+      "id": "53386",
+      "title": "트럼프와 테크 리더들의 만남, AI 안전성에 대한 불안감은 그 어느 때보다 커져",
+      "original_title": "",
+      "description": "트럼프 대통령과 AI 업계 리더들이 백악관에서 오찬을 가진 이후에도, AI 안전성에 대한 업계의 입장은 대체로 변함이 없는 상태입니다.",
+      "link": "https://www.cnbc.com/2026/09/30/after-trump-meeting-with-tech-leaders-ai-safety-in-more-chaotic-state.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-30"
+    },
+    {
+      "id": "53355",
+      "title": "배우의 '매혹적인' 목소리를 무단 도용한 AI 툴은 권리 침해, 도쿄 법원 판결",
+      "original_title": "",
+      "description": "켄지로 츠다가 틱톡 계정을 상대로 한 소송에서 승소하며, 퍼블리시티권을 보호하는 일본의 역사적인 판결이 내려졌습니다. 일본 법원은 유명 배우의 바리톤 목소리를 무단 복제한 틱톡 계정과 관련된 사건에서 인간의 목소리에 법적 보호가 제공된다고 판결했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/sep/30/ai-tool-copied-actor-kenjiro-tsuda-tokyo-court",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-30"
+    },
+    {
+      "id": "53381",
+      "title": "앤드루 베일리, 경제적 위험 증가에 따라 더욱 강력한 AI 테스트 촉구",
+      "original_title": "",
+      "description": "앤드루 베일리 총재는 첨단 인공지능이 은행, 금융시장, 지급결제 시스템에 고도화된 위협을 가하고 있다고 경고하며, 정부가 최첨단 AI 모델의 대중 출시 전에 테스트를 대폭 강화할 것을 촉구했다. 이는 신생 기술에 대해 연이어 발표되는 서한 중 첫 번째다.",
+      "link": "https://www.cityam.com/bailey-calls-for-greater-ai-testing-as-risks-to-economy-rise/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-09-30"
+    },
+    {
+      "id": "53375",
+      "title": "아스세르타(Ascerta), 델의 벤처 부문으로부터 1,800만 달러 투자 유치… 어떤 A",
+      "original_title": "",
+      "description": "기업용 AI는 이제 단순한 실험 단계를 지나 주요 비용 항목으로 자리 잡았습니다. 기업들은 토큰, 라이선스, 에이전트 실행 횟수, AI가 생성한 코드 라인 수를 셀 수 있습니다. 하지만 여전히 많은 기업들은 다음 단계를 결정짓는 핵심 질문에 답하지 못하고 있습니다. 바로 어떤 AI 프로젝트를 실제로 확장할 가치가 있는가 하는 점입니다. 아스세르타는 이러한 ",
+      "link": "https://thenextweb.com/news/ascerta-18m-series-a-dell-enterprise-ai-roi",
+      "entities": [
+        "Ascerta",
+        "AI"
+      ],
+      "date": "2026-09-30"
+    },
+    {
+      "id": "53506",
+      "title": "구글, AI 답변 제공 위해 100개 퍼블리셔에 비용 지불 중",
+      "original_title": "",
+      "description": "구글은 자사 AI 답변에 콘텐츠가 활용되는 대가로 약 100개의 디지털 퍼블리셔에게 비용을 지불하고 있습니다. 보도에 따르면 파일럿 프로그램에 참여한 일부 중소형 매체의 경우 이 지급액이 광고 수익의 0.1%에도 미치지 못하는 것으로 나타났습니다.",
+      "link": "https://thenextweb.com/news/google-ai-contribution-pilot-publishers-payments",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-01"
+    },
+    {
+      "id": "53476",
+      "title": "구글 제미나이 4 아곤, 오픈AI 및 앤스로픽과의 격차 좁혔으나 확실한 우위는 차지 못해",
+      "original_title": "",
+      "description": "제미나이 4 아곤은 구글이 7개월 만에 선보인 첫 프론티어 모델입니다. 독립 테스트에서 GPT-6 아스트라와 동등한 수준을 보이지만 앤스로픽의 클로드 오푸스 5.5에는 미치지 못하며, 토큰당 가격은 저렴하지만 작업당 아스트라보다 두 배 이상 많은 토큰을 소모합니다. 일부 테스터들에게 우선적으로 접근 권한이 제공되었습니다.",
+      "link": "https://the-decoder.com/google-gemini-4-argon-closes-the-gap-with-openai-and-anthropic-but-doesnt-take-a-clear-lead/",
+      "entities": [
+        "GPT-6"
+      ],
+      "date": "2026-10-01"
+    },
+    {
+      "id": "53469",
+      "title": "AI 음성 스타트업 일레븐랩스, 기업 가치 220억 달러로 두 배 급등",
+      "original_title": "",
+      "description": "이번 3억 달러 규모의 임직원 주식 공개 매수(텐더)는 웰링턴과 T. 로우 프라이스가 공동 주도했습니다.",
+      "link": "https://techcrunch.com/2026/09/30/ai-voice-startup-elevenlabs-doubles-valuation-to-22b/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-01"
+    },
+    {
+      "id": "53478",
+      "title": "구글, 젬스(Gems)를 스킬(Skills)로 교체하며 오픈에이아이 및 앤스로픽과 함께 에",
+      "original_title": "",
+      "description": "구글은 제미나이 채팅에서 젬스를 '스킬'로 대체하고 있습니다. 스킬은 사용자가 '/'를 입력해 호출하거나 제미나이가 자동으로 실행하는 상세하고 재사용 가능한 프롬프트입니다. 이 형식은 앤스로픽의 오픈 표준을 기반으로 하며, 기존 젬스는 11월부터 순차적으로 폐지되고 자동으로 마이그레이션될 예정입니다.",
+      "link": "https://the-decoder.com/google-drops-gems-for-skills-joining-openai-and-anthropic-in-the-shift-to-agent-ready-prompt-formats/",
+      "entities": [
+        "Skills",
+        "Gems"
+      ],
+      "date": "2026-10-01"
+    },
+    {
+      "id": "53467",
+      "title": "발로르, 아이트리디스, 세쿼이아, 7억 5,000만 달러 가치의 AI 스타트업 Flow E",
+      "original_title": "",
+      "description": "하드웨어 설계에 AI 에이전트를 도입하는 Flow Engineering은 렐로프 보타를 엔젤 투자자이자 이사진으로 영입했습니다.",
+      "link": "https://techcrunch.com/2026/09/30/valor-atreides-and-sequoia-back-ai-startup-flow-engineering-at-750m-valuation/",
+      "entities": [
+        "AI",
+        "Flow"
+      ],
+      "date": "2026-10-01"
+    },
+    {
+      "id": "53509",
+      "title": "영국의 AI 음성 기업 일레븐랩스, 기업가치 220억 달러 달성하며 영국 테크계에 활력",
+      "original_title": "",
+      "description": "런던에 본사를 둔 일레븐랩스가 3억 달러 규모의 직원 주식 매각을 완료하며 220억 달러(약 16조 원)의 가치를 기록했습니다. 이는 영국에서 가장 빠르게 성장하는 AI 기업 중 하나의 가치가 또 한 번 급등했음을 보여줍니다.",
+      "link": "https://www.cityam.com/ai-voice-firm-elevenlabs-hits-22bn-valuation-in-fresh-boost-for-uk-tech/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-01"
     }
   ]
 }
