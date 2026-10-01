@@ -6,7 +6,7 @@ import remarkGfm from 'remark-gfm';
 
 export default defineConfig({
   site: 'https://aikorea24.kr',
-  output: 'server',
+  output: 'hybrid',
   adapter: cloudflare({
     platformProxy: { enabled: true },
   }),
