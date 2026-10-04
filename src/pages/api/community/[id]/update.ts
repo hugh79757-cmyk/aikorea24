@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { verifySession, isOwner } from '../../../../lib/auth';
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ params, request, cookies, locals }) => {
   const { id } = params;
   if (!id) {

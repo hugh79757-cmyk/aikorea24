@@ -1,5 +1,7 @@
 import type { APIRoute } from 'astro';
 
+export const prerender = false;
+
 export const GET: APIRoute = async ({ params, locals }) => {
   const r2 = (locals as any).runtime?.env?.R2;
   if (!r2) return new Response('스토리지 설정 오류입니다.', { status: 500 });

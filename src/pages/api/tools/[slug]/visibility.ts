@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../../lib/auth';
 
+export const prerender = false;
+
 export const PATCH: APIRoute = async ({ params, request, locals, cookies }) => {
   const db = (locals as any).runtime?.env?.DB;
   if (!db) return new Response(JSON.stringify({ error: 'DB 없음' }), { status: 500 });

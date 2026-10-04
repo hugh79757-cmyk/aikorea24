@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { verifySession } from '../../../../lib/auth';
 import { TASKS } from '../../../../config/tasks';
 
+export const prerender = false;
+
 // submit.ts와 동일한 화이트리스트 (validation parity)
 const ALLOWED_CATEGORIES = [
   '글쓰기·챗봇',
