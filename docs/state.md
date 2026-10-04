@@ -1,3 +1,174 @@
+## 2026-10-04 09:05 — AIK24-LOGIN-404 수정: 옵션 A 적용 + 전수 확인 (배포 5880ab04)
+
+### 한 일
+`3eb21e03` — API 라우트 핸들러 30개에 `export const prerender = false` 추가 → 빌드 시점 정적 스텁 제거 → 재배포. 08:00 진단의 옵션 A. 앞 절(08:00) 참조.
+
+### 수정 [검증됨]
+- 대상 = `src/pages/api/**` 중 라우트 핸들러(`export const GET|POST|...`)를_export_하면서 `export const prerender`가 없던 파일. `find src/pages -name '*.ts'` = 50개, 그중 `api/courses/templates/lesson-email.ts`는 핸들러 0개(라이브러리 모듈)라 제외 → **30개**.
+- 기계적 전처리: 30개 파일 선두에 `export const prerender = false;` 삽입. 이중 삽입 검사 = 0건.
+- 어댑터(`@astrojs/cloudflare/dist/utils/generate-routes-json.js`)가 `_routes.json`을 자동 재생성. include에 신규 진입: `/api/auth/*`, `/api/news/*`, `/api/subscribe`, `/api/unsubscribe`, `/api/admin/*`, `/api/briefing/*`, `/api/courses/enroll|send-daily|track`, `/api/posts`, `/api/upload`, `/api/articles/*`.
+
+### 검증 [검증됨]
+| 검사 | 결과 |
+|---|---|
+| `npm run build` | exit 0, `dist/api` 확장자 없는 스텁 = 2건(`search`, `home-content` — 둘 다 `prerender = true` 명시) |
+| `scripts/deploy.sh` | exit 0, 배포 `5880ab04` |
+| `GET /api/auth/login/` | **302 → `https://accounts.google.com/o/oauth2/v2/auth?client_id=...`** (사용자 증상 해소) |
+| `GET /api/news/latest/` | 200 `application/json`, D1 실데이터(`id:53959`…) |
+| `GET /api/briefing/latest/` | 200 `application/json` (`briefing id 329`, date 2026-10-04-1) |
+| `GET /api/posts/` | 200 `application/json` (게시물 45번까지) |
+| `GET /api/tools/reviews/` | 200 (`{"reviews":[],"avgRating":0}`) |
+| `GET /api/auth/me/` | 200 (`{"loggedIn":false}` — 세션 판정이 이제 실시간) |
+| `POST /api/subscribe/` 잘못된 이메일 | 400 `{"error":"유효한 이메일을 입력해주세요."}` — 검증 분기 살아 있음, DB 미삽입 |
+| `POST /api/admin/tools/review/` 인증 없음 | 403 `{"error":"unauthorized"}` |
+
+주의: 슬바더 링크 `href="/api/auth/login"`(슬래시 없음)은 301 → `/api/auth/login/` → 302 → Google 2홉. 동작함. 슬래시 추가로 1홉 줄일 수 있으나 [검증됨]currently-200 흐름이므로 미변경.
+
+### 전수 확인 — 남은 .astro 페이지 15건 [부분검증]
+`.astro` 중 `prerender` 미선언 = 15개 → 지금은 전부 정식 static prerender.
+- 데이터 정지 위험(RUNTIME=빌드 시 D1 조회): `news.astro`, `global.astro`, `pricing.astro`, `community/index.astro`, `courses/7day-starter.astro`, `my/tools/index.astro`
+- 요청 헤더 의존(REQ): `community/review.astro`, `community/write.astro`, `event/index.astro`, `event/download.astro`, `payments/success.astro`, `payments/fail.astro`, `tools/submit.astro`, 위 6개 중 겹치는 것
+- 이상 없음: `auth/consent.astro`, `unsubscribe.astro`
+- 빌드 경고로 `Astro.request.headers` 사용이 확인된 페이지: `404`, `about`, `aikeep24/index`, `blog/category/[cat]/[...page]`, `blog/[...id]`, `blog/[...page]`, `terms`, `privacy`, `contact`, `subscribe`, `tools/*`, `glossary/*`, `chronicle/*`, `community/[id]`, `community/[id]/edit`, `admin/*`, `network/index`, `compare/index`, `briefing/*` — 이 31개는 `prerender = true`가 **명시**되어 있어 의도된 정적화. 공유 레이아웃/UA 판별 로직이 빌드 시점 값으로 굳는 문제는 이번 변경이 만든 것이 아니라 기존부터 잠재来着. [부분검증] 각 페이지가 헤더로 분기하는 로직의 실제 사용자 영향은 미조사.
+
+### 잔존 위험
+1. `.astro` 15건 중 D1 조회 6개는 배포 시점 데이터로 동결 — 다음 배포까지 갱신 안 됨. SSR 복귀 여부 사용자 결정 필요.
+2. `api/search.ts`·`home-content.ts`는 `prerender = true` 의도 유지 — 검색 인덱스(748KB)와 홈 콘텐츠가 빌드 시점 스냅샷. 매 배포 갱신은 되나 배포 사이엔 정지.
+3. 워치dog(`9e22d6a9`)은 이 재발을 못 잡음(exit 0). 업그레이드안: 빌드 후 `dist/api/**` 확장자 없는 스텁 검사 — 미구현.
+4. `.astro` 15건은 복귀시키지 않음 — `output: 'server'` 복귀(B)는 미채택. 각 페이지 SSR化 시 Worker 비용·런타임 증가.
+5. Brevo 클릭 통계 오염 ~77건(앞 절) + 오늘 08:00 발송분은 구독 API 정상화 **이후**라 데이터 손실 없음.
+
+### 다음 행동
+1. (사용자 결정) `.astro` 15건 중 D1 조회 6건을 SSR 복귀할지, 정적 유지할지.
+2. 워치독에 `dist/api` 스텁 검사 1줄 추가 → 이 재발 자동 차단.
+3. `OPENAI_API_KEY` 평문 plist 회전(앞 절 잔존).
+
+---
+
+## 2026-10-04 09:50 — AIK24-AUTH-UI-01: 로그인 후에도 로그인 버튼이 계속 보이는 근본 원인 수정 (배포 fe7c586b)
+
+### 한 일
+Google 로그인은 정상인데 사이트 헤더가 계속 로그인 버튼을 보여주던 문제(사용자 보고: "로그인이 안되")의 근본 원인을 규명하고, 프리렌더 페이지에서도 로그인 상태가 보이게 고침. 진단 로그 임시 배포(38e4b286) → 원인 규명 → 수정 배포(fe7c586b).
+
+### 진단 경로 [검증됨]
+1. **우회 가설 폐기 — OAuth는 정상.** `wrangler pages deployment tail`로 실제 로그인 2회 포착:
+   ```
+   (error) [auth:google] userinfo 200 107908468092318898018
+   (error) [auth:google] bindings { db: 'present', secret: 'present' }
+   (error) [auth:google] session cookie set, dbUser id= 1
+   ```
+   `token_failed` 로그 없음 = 토큰 교환 성공, userinfo 200, D1 바인딩 존재, 세션 쿠키 서버 정상 심음. client secret 불일치·redirect_uri 불일치 가설 **기각**.
+2. **진짜 원인 = `src/layouts/Layout.astro:31-32`**
+   ```astro
+   const session = Astro.cookies.get('session')?.value;
+   if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
+   ```
+   Layout은 전 페이지 공통 헤더(`Layout` 사용 페이지 36개). 프리렌더 페이지에서는 이 코드가 **빌드 시점**에 실행되어 쿠키가 없음 → 항상 로그인 버튼. `src/pages/index.astro:2`가 `export const prerender = true` → 홈이 정적. 라이브 `curl https://aikorea24.kr/ | grep -c auth/login` = 1(HTML에 박혀 있음)이 증명.
+   → **내 커밋 `12f71446`(output 'hybrid'→'static')이 유발.** hybrid는 "기본 SSR"라서 이 코드가 런타임에 돌았고, static으로 바꾸면서 프리렌더가 기본이 됨.
+3. 참고: `/api/auth/me` 원래는 `name`을 반환하지 않았음 → 클라이언트 스왑 전에 확장 필요.
+
+### 수정 내역 [PRODUCTION CODE] 3개 파일
+- `src/layouts/Layout.astro`
+  - 로그인 앵커 2곳(데스크톱 121행, 모바일 178행)에 `js-login-btn` 클래스 추가.
+  - 각 위치에 숨김 상태 로그인 박스 `.js-user-box` 추가(기존 SSR 로그인 UI와 동일 마크업 스타일, 초기 `hidden`).
+  - `</body>` 직전에 인라인 스크립트 추가: `/api/auth/me` fetch → `loggedIn`이면 로그인 앵커 숨기고 박스 표시. 사용자 이름은 `textContent`로만 주입(innerHTML 미사용 = XSS 방지).
+- `src/pages/api/auth/me.ts`: 응답에 `name: user.name` 추가(하위 호환 — 필드 추가만).
+- `src/pages/api/auth/callback/google.ts`: 진단 로그 3개 추가 후 **2개는 제거**(정상 로그인 시마다 찍히던 `userinfo`/`bindings`), 실패 시만 찍히는 `token_failed` 1개만 유지.
+
+### 검증
+- [검증됨] 빌드: `npm run build` exit 0. 산출물 확인 `dist/index.html`에 `js-login-btn` 2회, `js-user-box` 5회, `api/auth/me` 1회.
+- [검증됨] 워커 번들: `dist/_worker.js/pages/api/auth/me.astro.mjs`에 `loggedIn: true, email: user.email, name: user.name` 확인.
+- [검증됨] 배포 `fe7c586b-86a2-4af9-bc22-bae20d576b14`. 라이브 `curl https://aikorea24.kr/` = `js-user-box` 5회 / `js-login-btn` 2회 → 새 코드 반영.
+- [검증됨] `curl https://aikorea24.kr/api/auth/me/` = `{"loggedIn":false}` (쿠키 없는 요청이라 정상).
+- [검증됨] 실제 로그인 후 헤더 전환 — **사용자 확인 완료**(2026-10-04 09:5x, "로그인 완료" 보고). 쿠키가 httpOnly라 CLI 재현은 불가 → 사용자 확인이 유일한 검증 수단.
+- [검증됨] 표시 상태 — 사용자 화면에서 로그인 후 헤더 정상 동작 확인(예정 아이니셜 + 이름 + 내 도구 + 로그아웃).
+
+### 부수 발견
+- **`wrangler 4.110.0`의 `pages deployment tail`가 깨짐.** 배포 ID가明明 존재하는데 `The deployment ID you have specified does not exist [code: 8000009]`. `npx wrangler@4.147.0`으로 동일 명령 성공. 로컬 wrangler 업그레이드 필요(업데이트 알림 4.147.0).
+- `npx tsc --noEmit` 오류 5건 전부 `pipeline/instagram/prototypes/generate-all-cards.mjs`, `generate-cards.ts` — 이번 작업과 무관한 기존 오염 파일.
+
+### 미커밋 → 커밋됨
+`Layout.astro`, `me.ts`, `google.ts`, `docs/state.md` 4건 커밋 (사용자 승인 후).
+
+### 잔존 위험
+1. `prerender = true`인 **21개 `.astro` 페이지**: 헤더 로그인 표시는 동작(클라이언트 스왑). 서버측 인증 게이트가 필요한 로직(`Astro.redirect('/api/auth/login')` 패턴: `my/tools/index`, `event/download`)이 정적 페이지에 남아 있으면 빌드 시점 실행되어 무의미 — [검증불가] 실제 영향 미조사.
+3. 클라이언트 스왑이므로 로그인 전 잠깐 로그인 버튼이 보인다(FOUC). 서버 렌더 요구 시 해당 페이지를 `prerender = false`로 바꾸는 편이 정확함 — 성능과 트레이드오프.
+4. `token_failed` 진단 로그 1줄이 프로덕션에 남아 있음(실패 시에만 발생). 유지 여부 판단 필요.
+5. oauth 콜백은 무-slash URI → slash로 301 리다이렉트 후 실행(쿼리 보존 확인됨). 동작하지만 왕복 1회 낭비.
+6. 앞선 [위반 감지] `OPENAI_API_KEY` 평문 plist — 키 회전 미실시.
+7. 워치독은 빌드 exit 코드만 감지 — 이 类 "조용히 성공하지만 의미 틀림" 사고는 못 잡음.
+
+### 다음 행동
+1. 사용자 확인: 로그인 후 헤더에 이름/내 도구/로그아웃 표시되는지.
+2. 커밋 (승인 대기).
+3. (선택) 로컬 wrangler 4.147.0+ 업그레이드.
+4. (선택) 정적 페이지 21개의 서버측 인증 로직 점검.
+
+---
+
+## 2026-10-04 08:00 — AIK24-LOGIN-404: 로그인 클릭 시 다운로드 현상 진단 (원인 특정, 수정 대기)
+
+### 한 일
+aikorea24.kr 로그인 버튼 클릭 시 Google 동의 화면으로 안 가고 파일이 다운로드되는 현상의 원인 파악. **진단만 — 코드 수정 없음.** systematic-debugging Phase 1~3 수행.
+
+### 재현 [검증됨]
+`curl -sD - https://aikorea24.kr/api/auth/login` (Mozilla UA):
+- `HTTP/2 200` (302 아님)
+- `content-type: application/octet-stream`, `x-content-type-options: nosniff`, `content-length: 1654`
+- body = `<!doctype html><title>Redirecting to: https://accounts.google.com/o/oauth2/v2/auth?client_id=...&redirect_uri=https%3A%2F%2Faikorea24.kr%2Fapi%2Fauth%2Fcallback%2Fgoogle&scope=openid+email+profile...`
+- `curl -L` 추적: `redirects=0`, 최종 URL 여전히 `/api/auth/login`
+
+→ `nosniff` + 확장자 없는 HTML = 브라우저가 **다운로드** 처리. 사용자 증상과 정확히 일치.
+
+### 원인 [검증됨]
+`12f71446`(2026-10-04 06:35 배포, b66bc14f)의 `output: 'hybrid'` → `'static'` 전환이 원인. 실체는 그 커밋의 **prerender 플래그 누락**:
+1. `output: 'static'`에서는 모든 라우트가 기본 prerender. SSR이 필요한 라우트는 `export const prerender = false`로 명시해야 한다.
+2. `src/pages/api/auth/*.ts` 6개(login·me·logout·kakao·callback/google·callback/kakao)에 플래그 없음 → `astro build`가 이路由들을 **빌드 시점에 실행**해 정적 스텁으로 굽는다.
+3. 산출물 실측: `dist/api/auth/login` = "HTML document text, ASCII text (1654 bytes), no line terminators", mtime 10/4 07:33. `dist/api/auth/me` = 18바이트, `logout` = 275바이트.
+4. `@astrojs/cloudflare` 어댑터가 `dist/_routes.json`을 **prerender=false 라우트 기준으로 자동 생성**(`node_modules/@astrojs/cloudflare/dist/utils/generate-routes-json.js`). `/api/auth/*`는 플래그가 없어 include에 없음 → **Worker가 이 경로를 전혀 받지 않음** → Pages 정적 에셋 서버가 확장자 없는 스텁 파일을 octet-stream으로 반환.
+
+즉 `login.ts:28`의 `redirect()`는 **런타임에 한 번도 실행된 적 없다.** body에 Google URL이 박혀 있는 것은 빌드 시점 실행 결과물.
+
+### 피해 범위 — 로그인 외 31개 API [검증됨]
+`find src/pages/api -name '*.ts'` = **41개**, `export const prerender` 보유 = **10개** → 31개가 정적 스텁. 라이브 스팟 체크:
+
+| 경로 | code | content-type | size | 판정 |
+|---|---|---|---|---|
+| `/api/auth/login` | 200 | octet-stream | 1654 | 사용자 증상 |
+| `/api/briefing/latest` | 200 | octet-stream | 4 | 빌드 시점 빈 응답 굽힘 |
+| `/api/news/latest` | 200 | octet-stream | 2 | 동일 |
+| `/api/tools/reviews` | 200 | octet-stream | 28 | 동일 |
+| `/api/subscribe` | 404 | text/html | 19648 | 정적 산출물 없음(POST 전용) |
+| `/api/search` | 200 | octet-stream | 748801 | 검색 인덱스가 정적으로 굳음(동작은 하나 데이터 정지) |
+
+추정 피해 도메인: 뉴스레터 구독·수신확인(`/api/subscribe`, `/api/unsubscribe`), 뉴스 API 6종, 브리핑 API 6종, 코스 API 4종, 관리자 API 2종(`/api/admin/*` — include에 `/admin/*`만 있고 `/api/admin/*`는 없음), 업로드(`/api/upload`), 검색, 글 목록(`/api/posts`), 로그인 세션 판정(`/api/auth/me` — 18바이트라 항상 "로그인 안 됨"으로 보임).
+
+### 회귀 구간 [부분검증]
+- 10/01 20:30 배포 b3309304는 `output: 'server'` 상태로 빌드됨(`logs/deploy_2026-10-01.log` 마지막 항목, 커밋 0323c7c6 직전). `output: 'server'`는 SSR 라우트를 prerender하지 않으므로 그 시점엔 API가 정상 동작했다.
+- 10/01 20:36 ~ 10/04 06:35는 빌드 자체가 실패해 아무것도 배포되지 않음 → 기존 SSR 배포본이 그대로 서비스됨.
+- 따라서 파손 시작점은 10/04 06:35의 b66bc14f. [부분검증] 근거 = 커밋 diff + 배포 로그이며, Brevo/Analytics에 10/04 이전 `/api/auth/me` 응답 원본이 없어 실측 대조 불가.
+
+### [위반 감지] — 이번 진단이 드러낸 자기 결함
+`12f71446`은 **빌드를 통과시키는 것**을 목표로 했고 달성했지만, "빌드 성공"만 검증하고 "라우트가 런타임에 살아 있는지"는 검증하지 않았다. GetStaticPathsRequired로 **에러를 내는** 라우트만 골라 플래그를 붙였고, **조용히 성공하는** 31개는 놓쳤다. 빌드 워치dog(`9e22d6a9`)도 exit 0만 확인하므로 이 재발을 못 잡는다 — 워치독의 사각지대를 명시적으로 기록.
+
+### 수정 옵션 (아직 미실행 — 선택 대기)
+- **A. 정적 유지 + 플래그 31개 추가** (astro 5 hybrid 완전 이관): `output: 'static'` 유지, 플래그 없는 API 라우트 31개에 `export const prerender = false;` 1줄씩. 어댑터가 `_routes.json`을 자동 갱신하므로 수동 편집 불필요. diff = +31줄. 10/01의 "정적 전환" 의도 유지. 주의: SSR 전환 시 `import.meta.env`는 빌드 시점 값으로 인라인되므로 `locals.runtime.env` 경로가 필요(`login.ts`는 이미 `runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env...` 폴백 보유).
+- **B. `output: 'server'` 복귀** (1줄): 10/01 이전 동작 그대로. diff 1줄. 단 "hybrid 정적 전환"(0323c7c6)의 의도 포기 — 페이지 전부 SSR로 비용·SEO 부담 증가.
+
+권고: A(의도 보존,機械적). B는 되돌리기만 하고 "정적 전환" 요구는 그대로 남음.
+
+### 잔존 위험
+1. 옵션 A/B 미실행 상태 — 현재 라이브는 로그인·구독·뉴스·브리핑 API가 정적 스텁 상태(사용자 트래픽 대상).
+2. `runtime.env` 미사용 라우트가 A 적용 후 D1/R2에 못 닿을 가능성 — 해당 라우트의 `locals` 사용 여부는 A 실행 시 전수 확인 필요.
+3. 워치dog 사각지대: exit 0이어도 라우트가 정적으로 굳는 실패는 못 감지. 업그레이드 경로 = 빌드 후 `dist/api/**` 산출물 존재 여부 검사(파일에 content-type이 붙는 정적 스텁) — 아직 미구현.
+4. Brevo 클릭 이벤트에 10/04 이후 구독/뉴스 API 실패 implicate 안 됨(수신 newsletters는 08:00 발송, breakage 시작 06:35 → 오늘 08:01 발송분부터 리스크). 다음 발송 전 수정 필요.
+
+### 다음 행동
+1. 옵션 A/B 선택 → 즉시 수정 → `bash scripts/deploy.sh` → 검증: `/api/auth/login` 302 + `Location: accounts.google.com`, `/api/news/latest` 200 JSON, `/api/subscribe` 405/400(200 아님), `dist/api/**` 정적 스텁 0건.
+2. 워치독에 "빌드 후 dist/api 정적 스텁 검사" 1줄 추가(옵션 A 적용 후).
+
+---
+
 ## 2026-10-04 07:36 — AIK24-404FIX-02: 빌드 파손 수정 커밋 + 빌드 워치독(조용한 실패 감시) 설치
 
 ### 한 일

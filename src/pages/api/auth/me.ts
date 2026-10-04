@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ locals, cookies }) => {
       return new Response(JSON.stringify({ loggedIn: false }), { status: 200 });
     }
     return new Response(
-      JSON.stringify({ loggedIn: true, email: user.email }),
+      JSON.stringify({ loggedIn: true, email: user.email, name: user.name }),
       { status: 200 }
     );
   } catch {

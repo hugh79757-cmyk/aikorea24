@@ -118,8 +118,15 @@ const currentPath = Astro.url.pathname;
             <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
           </div>
         ) : (
-          <a href="/api/auth/login" class="text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
+          <a href="/api/auth/login" class="js-login-btn text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
         )}
+        <!-- 정적 프리렌더 페이지용 로그인 상태 박스 (아래 인라인 스크립트가 채움) -->
+        <div class="js-user-box hidden items-center gap-3">
+          <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300"><span class="js-user-initial"></span></div>
+          <span class="js-user-name text-sm text-gray-700 dark:text-gray-300"></span>
+          <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">내 도구</a>
+          <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
+        </div>
       </div>
 
       <button id="search-btn" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="검색">
@@ -175,10 +182,16 @@ const currentPath = Astro.url.pathname;
             </div>
           </div>
         ) : (
-          <a href="/api/auth/login" class="block text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-all">
+          <a href="/api/auth/login" class="js-login-btn block text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-all">
             Google로 로그인
           </a>
         )}
+        <div class="js-user-box hidden items-center justify-center gap-3 py-1">
+          <span class="js-user-initial w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300"></span>
+          <span class="js-user-name text-sm text-gray-700 dark:text-gray-300"></span>
+          <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400">내 도구</a>
+          <a href="/api/auth/logout" class="text-xs text-red-400 hover:text-red-300">로그아웃</a>
+        </div>
       </div>
     </div>
   </header>
@@ -380,6 +393,24 @@ const currentPath = Astro.url.pathname;
     </button>
   </div>
   <div id="copy-toast" style="position:fixed;bottom:80px;right:16px;z-index:10000;padding:10px 20px;background:#10b981;color:#fff;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;">링크가 복사되었습니다!</div>
+
+  <script is:inline>
+    // 정적 프리렌더 페이지는 빌드 시점에 쿠키가 없어 Layout의 세션 판정이 항상 로그아웃으로 끝난다.
+    // → 로그인 여부를 클라이언트에서 확인해 헤더를 갱신한다 (user 데이터는 textContent로만 주입).
+    (async () => {
+      if (!document.querySelector('.js-user-box')) return;
+      const res = await fetch('/api/auth/me').catch(() => null);
+      if (!res || !res.ok) return;
+      const me = await res.json();
+      if (!me.loggedIn) return;
+      const name = me.name || (me.email || '').split('@')[0] || '회원';
+      document.querySelectorAll('.js-login-btn').forEach((el) => el.classList.add('hidden'));
+      document.querySelectorAll('.js-user-name').forEach((el) => (el.textContent = name));
+      document.querySelectorAll('.js-user-initial').forEach((el) => (el.textContent = name.charAt(0).toUpperCase()));
+      document.querySelectorAll('.js-user-box').forEach((el) => el.classList.remove('hidden'));
+      document.querySelectorAll('.js-user-box').forEach((el) => el.classList.add('flex'));
+    })();
+  </script>
 
 </body>
 </html>

@@ -28,7 +28,13 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
     }),
   });
   const tokenData = await tokenRes.json();
-  if (!tokenData.access_token) return redirect('/?error=token_failed');
+  if (!tokenData.access_token) {
+    // 진단 로그(임시) — 원인 확정 후 제거. 예: invalid_client=시크릿 불일치, redirect_uri_mismatch, invalid_grant=code 재사용
+    console.error('[auth:google] token_failed', tokenRes.status, JSON.stringify(tokenData), {
+      hasClientId: !!clientId, hasSecret: !!clientSecret, redirectUri,
+    });
+    return redirect('/?error=token_failed');
+  }
 
   const userRes = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
     headers: { Authorization: `Bearer ${tokenData.access_token}` },
@@ -50,6 +56,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
       path: '/', httpOnly: true, secure: import.meta.env.PROD, domain: import.meta.env.PROD ? '.aikorea24.kr' : undefined,
       sameSite: 'lax', maxAge: 60 * 60 * 24 * 7,
     });
+    console.error('[auth:google] session cookie set, dbUser id=', dbUser?.id ?? 'none');
   }
 
   // state가 유효한 동일 도메인 경로면 해당 URL로, 아니면 홈으로
