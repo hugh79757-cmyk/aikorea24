@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import type { APIRoute } from 'astro';
 export const GET: APIRoute = async ({ request, redirect, locals }) => {
   const runtime = (locals as any).runtime;

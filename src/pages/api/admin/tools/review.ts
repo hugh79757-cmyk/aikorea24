@@ -1,3 +1,5 @@
+export const prerender = false;
+
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../../lib/auth';
 import { sendToolNotification } from '../../../../lib/email-notify';
