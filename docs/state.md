@@ -1,3 +1,51 @@
+## 2026-10-05 15:40 — [정정] gemini-3.1-flash-lite 체인 제외 되돌림 (오존재 오귀속)
+
+### 한 일
+사용자 지적: "gemini-3.1-flash-lite 이걸 왜 삭제하나? 제미나이에서 구글에서 더이상 이 llm 모델을 서빙하지 않나? 리타이어 됐어?"
+직전 작업(15:25 스테이트먼트)의 모델 제외 결정을 live probe로 재검증한 결과 **오존재**로 판명되어 되돌림.
+
+### 결과
+
+**[검증됨] gemini-3.1-flash-lite는 정상 서빙 중 — 리타이어/404 아님**
+- live probe (OpenAI SDK, 프로젝트 실제 GEMINI_API_KEY, `base_url=https://generativelanguage.googleapis.com/v1beta/openai/`):
+  ```
+  model=gemini-3.1-flash-lite, temperature=0.3, max_tokens=100
+  → HTTP OK
+  → '또 한 명의 오픈AI 안전 전문가 퇴사, 연구원들의 잇따른 공개 경고와 퇴사 패턴 이어져'
+  ```
+  "OpenAI" → "오픈AI" 정상 번역. 루트 인용: `scripts/threads/v3/model_router.py:196-202` `_call_tier_once`가 OpenAI SDK 사용.
+
+**[검증됨] 로그상 실패 0건**
+- `rg -o "  \[경고\] [a-z0-9.\-]+ 실패: HTTP [0-9]+" scripts/blog_draft.log` → 0건 (전 tier 합계).
+- `rg -c "gemini-3.1-flash-lite" scripts/blog_draft.log` = 48건 전부 성공 로그.
+
+**[위반 감지] 오존재 — 모델 귀속 잘못됨**
+잘못한 추论的 두 지점:
+1. `scripts/blog_draft.log:1383`의 `[5/5] ... [모델] google gemini-3.1-flash-lite`는 **번호역(번역) 단계가 아니라 블로그 본문 작성 단계** 로그. 이미 오역된 제목을 입력받아 그대로 옮긴 것이지, 허칭을 만든 주체가 아님.
+2. 실제 번역 단계는 `api_test/news_collector.py:423` `translate_to_korean()` → `model_router.chat_completion()`. 2026-10-04 19:30 수집 실행 로그(`api_test/cron_unified.log:44199` 구간)에서 `[번역] 해외 뉴스 한국어 번역... 번역 대상: 196건 → 20배치` 전 배치 `[체인] 성공: gemini-3.5-flash-lite` — 즉 번역 담당 tier는 gemini-3.5-flash-lite.
+
+**[검증불가] 허칭 발생 주체 미확정**
+- 원 tier(8개 전부)에 `translate_to_korean` 동일 system prompt + 동일 원문 english title로 재현 프로브 수행 → **'오픈에어하이' 재현 tier 없음**(gemini-3.1-flash-lite '또 한 명의 오픈AI 안전 전문가 퇴사...', gemini-3.5-flash-lite '공개 경고와 함께 떠나는 연구원들: 오픈AI 안전 부서 퇴사 행렬에...' 등 전부 정상).
+- batch_translate 프롬프트(TITLE+DESC 20배치)로도 동일 프로브 → 재현 실패.
+- 따라서 "특정 모델이 일관적으로 이 허칭을 만든다"는 결론은 성립하지 않음. 단발 또는 프롬프트 배치 효과 가능성 열림. 복구 계획: 다음 동일 오류 발생 시 해당 시점의 tier 로그(`[모델]` 직전 `[체인]` 기록)와 프롬프트 전문을 캡처해 동일 프로브로 격리 재현.
+
+### 처리
+- `config/models.yaml` → `config/models.yaml.bak_20261005_151503`로 복원. 8개 tier 원복(`gemini-3.1-flash-lite` 재등재), 삭제 이력 주석 모두 제거. 검증: `yaml.safe_load` → tier 8개, `default`(유료) 마지막 고정.
+- 커밋 `87e5d3e8`.
+- **포스트 오타 교정 및 배포는 유지** (15:25 작업 — 교정 자체는 올바른 판단).
+
+### 잔존 위험
+- **근본 원인 미해결** — 번역 단계 엔티티명 정확성 게이트 부재. 허칭이 어떤 tier/어떤 프롬프트 조건에서 발생했는지 특정되지 않아 재발 가능. 단발 발생 가정 하에 재발 시 즉시 프로브 가능하도록 로그 라인 확보 필요.
+- **`gemini-3.1-flash-lite` 실사용 정상** — front tier가 될 경우 매번 호출됨. 리타이어 우려 없음.
+- **`nvidia-nemotron` 체인 잔존 (미해결)** — 스킬 §Dead/excluded "nemotron 계열은 한국어 콘텐츠 생성 부적합"(2026-09-13 소유자 결정)이나 현재 `tier_order`에 포함됨. 이번 live 프로브 결과 `1. TITLE: OpenAI 안전 담당자 또 이탈...` 정상 번역(저품질 아님). 소유자 판단 대기.
+- **JSON gate / billing-text gate 미구현** — 15:25 스테이트먼트 §위반 감지 항목 그대로 미해결.
+
+### 다음 행동
+1. `nvidia-nemotron` 체인 제외 여부 소유자 결정.
+2. (선택) 번역 단계 엔티티명 검증 게이트 구현 — 알려진 고유명사 목록(OpenAI/Anthropic/Google/Meta 등)을 번역 결과에서 대조하고 불일치 시 tier 회전.
+
+---
+
 ## 2026-10-05 15:25 — aikorea24 "오픈에어하이" 오타 교정 + gemini-3.1-flash-lite 체인 제외 (배포 37ad1204)
 
 ### 한 일
