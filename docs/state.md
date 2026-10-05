@@ -1,3 +1,43 @@
+## 2026-10-05 15:47 — nvidia-nemotron 체인 제외 (7 tier)
+
+### 한 일
+사용자 지시 "응 빼자" — `nvidia-nemotron`을 aikorea24 폴백 체인에서 제외. 스킬 `llm-fallback-chain-management` §Dead/excluded의2026-09-13 소유자 결정("nemotron 계열은 한국어 콘텐츠 생성 부적합")이 이 프로젝트 config에 미반영 상태였음.
+
+### 결과
+
+**[검증됨] tier 8→7, 제외 완료**
+```
+1. gemini-3.1-flash-lite
+2. gemini-3.5-flash-lite
+3. gemini-3.5-flash
+4. groq-gpt120b
+5. groq-gpt20b
+6. zhipu-glm
+7. default (★ 유료, 최후)
+```
+- 검증: `yaml.safe_load` → tier 7개, 모든 tier가 `models`에 존재, 고아 model 키 0건, 전 tier의 provider가 `providers`에 정의됨, `default` 마지막 고정.
+
+**[검증됨] 프로덕션 라우터 실로드 확인**
+- `model_router` 직접 import 후: `chain loaded: True`, tier 7개 일치.
+- 회전 순서 산출: `['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-3.5-flash', 'groq-gpt120b', 'groq-gpt20b', 'zhipu-glm', 'default']` — front는 `llm_fallback_state.json`의 `last_success_tier`(gemini-3.5-flash-lite)이며 유료 `default`는 순수 회전 + 맨뒤 고정 유지.
+
+**[검증됨] 키/프로바이더 보존**
+- `providers.nvidia`(base_url `https://integrate.api.nvidia.com/v1`) 항목 유지. `NVIDIA_API_KEY` 유지. 사유: 제외 사유는 모델 품질이지 키/접근성 문제가 아님. 향후 NVIDIA NIM 한국어 적합 모델 등장 시 즉시 재편입 가능하도록 배선은 남김.
+
+- 백업: `config/models.yaml.bak_20261005_154630`. 커밋 `864e8f79`.
+
+### 잔존 위험
+- **남은 free tier 품질 미검증** — groq-gpt120b / groq-gpt20b / zhipu-glm은 이번 프로브에서 제목 출력 공백(빈 content)이거나 미검증 상태. `zhipu-glm`은 스킬 catalog상 "일일 제한 429 잦음, 40s 지연 사례". 순수 회전이라 429 시 다음 tier로 즉시 회전하므로 파이프라인 중단은 없음.
+- **nemotron 2종 tier 잔존 (다른 프로젝트)** — 본 작업은 aikorea24 config/models.yaml만 해당. `pipeline/threads/contrast/` 하위 writer가 별도 chain을 참조하는지는 미확인.
+- **번역 단계 엔티티명 게이트 미구현** (15:40 스테이트먼트 잔존 위험 이월) — "오픈에어하이" 허칭 근본 미해결.
+- **JSON gate / billing-text gate 미구현** — 스킬 계약 위반 상태 유지.
+
+### 다음 행동
+1. groq 2종 / zhipu-glm 실호출 품질 확인 필요 시 동일 live probe 방식 적용.
+2. (선택) 번역 단계 엔티티명 검증 게이트 구현 — 알려진 고유명사 목록 대조 + 불일치 시 tier 회전.
+
+---
+
 ## 2026-10-05 15:40 — [정정] gemini-3.1-flash-lite 체인 제외 되돌림 (오존재 오귀속)
 
 ### 한 일
