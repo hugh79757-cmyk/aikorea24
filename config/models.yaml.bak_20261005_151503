@@ -1,0 +1,70 @@
+# config/models.yaml — 쓰레드 파이프라인 무료 LLM 폴백 체인
+# 순서 = 우선순위 (1순위부터). 7개 무료 → 전부 실패 시 default(유료 DeepSeek)
+# 참고: /Users/twinssn/Projects/SKILL.md "LLM Fallback Chain"
+# 갱신: 2026-09-29 (죽은 tier 9개 제거 — 아래 삭제 이력 참조)
+#
+# 삭제 이력 (2026-09-29 직접 curl 실측):
+#   gemini-2.5-flash   : 404 "no longer available to new users"
+#   groq-llama         : 404 model_not_found (llama-3.3-70b-versatile)
+#   groq-qwen          : 404 model_not_found (qwen/qwen3.6-27b)
+#   cerebras-gemma     : 404 model_archived (gemma-4-31b)
+#   cerebras-glm       : 404 model_archived (zai-glm-4.7)
+#   zen-deepseek-free  : 400 "Upstream request failed: Model is unavailable"
+#   zen-mimo-free      : 403 FreeTierError (OpenCode 내부에서만 사용 가능)
+#   zen-bigpickle      : 403 FreeTierError (동일)
+#   nvidia-step        : 410 Gone (stepfun-ai/step-3.7-flash EOL)
+# 살아있음 확인: gemini-3.1-flash-lite(429 일일쿼터 500), gemini-3.5-flash-lite,
+#   gemini-3.5-flash(503 일시), groq-gpt120b, groq-gpt20b, nvidia-nemotron, zhipu-glm
+
+tier_order:
+  - gemini-3.1-flash-lite
+  - gemini-3.5-flash-lite
+  - gemini-3.5-flash
+  - groq-gpt120b
+  - groq-gpt20b
+  - nvidia-nemotron
+  - zhipu-glm
+  - default            # ★ 유료 DeepSeek — 최후 수단
+
+providers:
+  google:
+    api_key_env: GEMINI_API_KEY
+    base_url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+  groq:
+    api_key_env: GROQ_API_KEY
+    base_url: "https://api.groq.com/openai/v1"
+  nvidia:
+    api_key_env: NVIDIA_API_KEY
+    base_url: "https://integrate.api.nvidia.com/v1"
+  zhipu:
+    api_key_env: ZHIPU_API_KEY
+    base_url: "https://open.bigmodel.cn/api/paas/v4"
+  deepseek:
+    api_key_env: DEEPSEEK_API_TOKEN
+    base_url: "https://api.deepseek.com/v1"
+
+models:
+  gemini-3.1-flash-lite:
+    provider: google
+    model: gemini-3.1-flash-lite
+  gemini-3.5-flash-lite:
+    provider: google
+    model: gemini-3.5-flash-lite
+  gemini-3.5-flash:
+    provider: google
+    model: gemini-3.5-flash
+  groq-gpt120b:
+    provider: groq
+    model: openai/gpt-oss-120b
+  groq-gpt20b:
+    provider: groq
+    model: openai/gpt-oss-20b
+  nvidia-nemotron:
+    provider: nvidia
+    model: nvidia/nemotron-3-ultra-550b-a55b
+  zhipu-glm:
+    provider: zhipu
+    model: glm-4.5-flash
+  default:
+    provider: deepseek
+    model: deepseek-v4-flash    # ★ 유료 — 최후 수단

@@ -2616,6 +2616,153 @@
           "date": "2026-10-04"
         }
       ]
+    },
+    {
+      "date": "2026-10-05",
+      "briefing_id": 331,
+      "articles": [
+        {
+          "id": "54042",
+          "title": "샘 올트먼, 미국 정계에 투입되는 AI 자금은 명백히 효과가 없다고 밝혀",
+          "original_title": "",
+          "description": "폴리티코의 팟캐스트 '디코디드(Decoded)' 첫 회에서 오픈에이아이 최고경영자 샘 올트먼은 AI 기업들이 미국의 정계에 쏟아붓는 자금이 사람들의 기술 인식을 개선하는 데 실패했다고 말했습니다. 그는 \"무언가 분명히 잘못 돌아가고 있다\"고 팟캐스트에서 밝혔습니다.",
+          "link": "https://thenextweb.com/news/sam-altman-ai-money-politics-not-working",
+          "entities": [
+            "Decoded",
+            "AI"
+          ],
+          "date": "2026-10-05"
+        },
+        {
+          "id": "54012",
+          "title": "세이프월드는 생성형 AI 로봇이 인간을 해치지 않을 것이라고 사람들을 설득할 수 있을까요?",
+          "original_title": "",
+          "description": "세이프월드는 로봇이 실제 인간을 다치게 하지 않도록 보장하기 위해 디지털 휴먼을 구축하고 있습니다.",
+          "link": "https://techcrunch.com/2026/10/05/can-safeworld-convince-people-that-gen-ai-robots-wont-hurt-them/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-05"
+        },
+        {
+          "id": "54024",
+          "title": "인터넷감시재단(IWF), AI 아동 성적 학대물 급증 보고",
+          "original_title": "",
+          "description": "학대물 모니터링 기관에 따르면, 올해 평가된 AI 이미지의 수는 이미 작년 전체 수치보다 40% 이상 높다고 합니다. AI가 생성한 아동 성적 학대물이 온라인상에서 확산되고 있으며, 올해 조사된 불법 자료의 양은 이미 작년 전체 총합을 넘어섰습니다. 인터넷감시재단 분석가들은 이러한 현상의 심각성을 경고하고 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/05/internet-watch-foundation-huge-rise-ai-child-sexual-abuse-material",
+          "entities": [
+            "IWF",
+            "AI"
+          ],
+          "date": "2026-10-05"
+        },
+        {
+          "id": "54050",
+          "title": "사티아 나델라는 한 차례 마이크로소프트를 혁신했다. AI 시대에 다시 한번 해낼 수 있을까",
+          "original_title": "",
+          "description": "2014년 스티브 발머의 뒤를 이어 취임한 사티아 나델라는 마이크로소프트를 클라우드 거물로 탈바꿈시켰다. 이제 그는 회사를 AI 분야의 강력한 주어로 만들어야 하는 임무를 맡고 있다.",
+          "link": "https://www.cnbc.com/2026/10/05/satya-nadella-reinvented-microsoft-once-can-he-do-it-in-the-ai-era.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-05"
+        },
+        {
+          "id": "54017",
+          "title": "트럼프, 실제 초지능과는 전혀 무관한 \"슈퍼 인텔리전스 포스\" 출범",
+          "original_title": "",
+          "description": "도널드 트럼프가 \"슈퍼 인텔리전스 포스\"를 창설했습니다. 여기서 \"슈퍼인텔리전스\"는 그가 인공지능을 지칭하는 용어이며, 이 부대는 제이 클레이튼 국가정보국(DNI) 국장과 기타 정부 관료들이 이끌며 AI 기업, 핵심 인프라 운영자, 이익 단체들과 협력합니다.",
+          "link": "https://the-decoder.com/trump-launches-super-intelligence-force-that-has-nothing-to-do-with-actual-superintelligence/",
+          "entities": [
+            "DNI",
+            "AI"
+          ],
+          "date": "2026-10-05"
+        },
+        {
+          "id": "54025",
+          "title": "샘 올트먼, AI의 혜택을 위해 '나쁜 일들'도 감수해야 한다고 발언",
+          "original_title": "",
+          "description": "OpenAI 최고경영자(CEO)가 기술이 가져다줄 '좋은 점들'을 위해 규제의 손길을 가볍게 유지할 것을 촉구했습니다. 샘 올트먼은 세계가 AI로 인한 해킹, 사기 및 \"기타 나쁜 일들\"을 기술의 혜택을 얻는 대가로 받아들여야 한다고 믿는다고 밝혔습니다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/05/sam-altman-open-ai-chatgpt-benefits-risks",
+          "entities": [
+            "CEO",
+            "OpenAI"
+          ],
+          "date": "2026-10-05"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-06",
+      "briefing_id": 332,
+      "articles": [
+        {
+          "id": "54121",
+          "title": "릴플렉션, 더 적은 연산 비용으로 중국 모델과 경쟁할 오픈웨이트 AI 모델 ‘빔’ 선보여",
+          "original_title": "",
+          "description": "릴플렉션은 기업과 주권 국가를 타겟으로 ‘빔’ 및 향후 모델을 선보이고 있습니다. 이들의 핵심 전략은 기관들이 자체 독점 데이터를 활용해 맞춤형 로컬 AI 시스템을 구축할 수 있도록 돕는 ‘AI 팩토리’ 제품군을 제공하는 것입니다.",
+          "link": "https://techcrunch.com/2026/10/05/reflection-debuts-beam-a-open-weight-ai-model-to-rival-chinese-models-at-lower-compute-cost/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54120",
+          "title": "OpenAI, 유럽연합(EU)에서 ChatGPT 텍스트 워터마킹 도입",
+          "original_title": "",
+          "description": "OpenAI는 AI법을 준수하기 위해 EU 지역 내에서 ChatGPT 및 Codex 텍스트에 워터마크를 도입할 예정입니다. 다만 텍스트를 수정하면 이러한 보이지 않는 워터마크를 감지하기 더 어려워질 수 있다고 밝혔습니다.",
+          "link": "https://techcrunch.com/2026/10/05/openai-will-start-watermarking-chatgpts-text-in-the-eu/",
+          "entities": [
+            "OpenAI",
+            "EU",
+            "Codex",
+            "ChatGPT"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54043",
+          "title": "딜리버루, 영국 5개 지역 인도에 배달 로봇 도입",
+          "original_title": "",
+          "description": "딜리버루가 미국 기업 코코 로보틱스와 제휴하여 이번 달 카나리 워프를 시작으로 영국 5개 지역에서 4륜 인도 배달 로봇을 운영할 예정이며, 대다수의 주문은 여전히 인간 라이더를 통해 처리될 것이라고 밝혔다. 로봇 배달을 도입하는 5개 지역 중 하나인 밀턴 케인스는 2018년 4월부터 스타십을 통한 로봇 배달을 이용해 왔다.",
+          "link": "https://thenextweb.com/news/deliveroo-coco-robots-uk-cities",
+          "entities": [],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54127",
+          "title": "AI 에이전트를 기업 지식과 연결하기",
+          "original_title": "",
+          "description": "AI 시스템이 지속적으로 수집하고 분석하는 엄청난 데이터에도 불구하고, 기업용 AI 에이전트는 종종 ‘지식의 부족’이라는 기묘한 결함을 겪습니다. 데이터 그 이상인 ‘지식’이란 개별 조직의 맥락 속에서 데이터가 갖는 의미를 이해하는 것이며, AI 에이전트에게는 이러한 이해가 필수적입니다.",
+          "link": "https://www.technologyreview.com/2026/10/05/1145580/connecting-ai-agents-to-enterprise-knowledge/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54154",
+          "title": "노키아 CEO, 공급 제약만 없다면 데이터센터가 '2배 더 빨리' 지어질 것이라 언급",
+          "original_title": "",
+          "description": "노키아 CEO의 이러한 발언은 최고경영진들이 개발 속도 조절을 논의하는 상황에서도 AI에 대한 지속적인 수요가 여전히 존재함을 강조합니다.",
+          "link": "https://www.cnbc.com/2026/10/05/nokia-ai-data-center-buildout.html",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54133",
+          "title": "앤스로픽, 대형 IPO를 앞두고 조용히 미국의 최대 기업 기부자로 부상 중",
+          "original_title": "",
+          "description": "회사가 모든 주식 기부에 추가 주식을 얹어주고 초기 직원들의 기부금을 세 배로 늘려주는 사내 프로그램을 운영한 덕분에, 앤스로픽 직원들은 2025년에만 5억 4,000만 달러를 기부했습니다. 이는 포춘 500대 기업 중 두 번째로 큰 기부자들의 거의 5배에 달하는 수치입니다.",
+          "link": "https://the-decoder.com/anthropic-is-quietly-becoming-americas-biggest-corporate-donor-ahead-of-its-mega-ipo/",
+          "entities": [],
+          "date": "2026-10-06"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5025,6 +5172,141 @@
         "AI"
       ],
       "date": "2026-10-04"
+    },
+    {
+      "id": "54042",
+      "title": "샘 올트먼, 미국 정계에 투입되는 AI 자금은 명백히 효과가 없다고 밝혀",
+      "original_title": "",
+      "description": "폴리티코의 팟캐스트 '디코디드(Decoded)' 첫 회에서 오픈에이아이 최고경영자 샘 올트먼은 AI 기업들이 미국의 정계에 쏟아붓는 자금이 사람들의 기술 인식을 개선하는 데 실패했다고 말했습니다. 그는 \"무언가 분명히 잘못 돌아가고 있다\"고 팟캐스트에서 밝혔습니다.",
+      "link": "https://thenextweb.com/news/sam-altman-ai-money-politics-not-working",
+      "entities": [
+        "Decoded",
+        "AI"
+      ],
+      "date": "2026-10-05"
+    },
+    {
+      "id": "54012",
+      "title": "세이프월드는 생성형 AI 로봇이 인간을 해치지 않을 것이라고 사람들을 설득할 수 있을까요?",
+      "original_title": "",
+      "description": "세이프월드는 로봇이 실제 인간을 다치게 하지 않도록 보장하기 위해 디지털 휴먼을 구축하고 있습니다.",
+      "link": "https://techcrunch.com/2026/10/05/can-safeworld-convince-people-that-gen-ai-robots-wont-hurt-them/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-05"
+    },
+    {
+      "id": "54024",
+      "title": "인터넷감시재단(IWF), AI 아동 성적 학대물 급증 보고",
+      "original_title": "",
+      "description": "학대물 모니터링 기관에 따르면, 올해 평가된 AI 이미지의 수는 이미 작년 전체 수치보다 40% 이상 높다고 합니다. AI가 생성한 아동 성적 학대물이 온라인상에서 확산되고 있으며, 올해 조사된 불법 자료의 양은 이미 작년 전체 총합을 넘어섰습니다. 인터넷감시재단 분석가들은 이러한 현상의 심각성을 경고하고 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/05/internet-watch-foundation-huge-rise-ai-child-sexual-abuse-material",
+      "entities": [
+        "IWF",
+        "AI"
+      ],
+      "date": "2026-10-05"
+    },
+    {
+      "id": "54050",
+      "title": "사티아 나델라는 한 차례 마이크로소프트를 혁신했다. AI 시대에 다시 한번 해낼 수 있을까",
+      "original_title": "",
+      "description": "2014년 스티브 발머의 뒤를 이어 취임한 사티아 나델라는 마이크로소프트를 클라우드 거물로 탈바꿈시켰다. 이제 그는 회사를 AI 분야의 강력한 주어로 만들어야 하는 임무를 맡고 있다.",
+      "link": "https://www.cnbc.com/2026/10/05/satya-nadella-reinvented-microsoft-once-can-he-do-it-in-the-ai-era.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-05"
+    },
+    {
+      "id": "54017",
+      "title": "트럼프, 실제 초지능과는 전혀 무관한 \"슈퍼 인텔리전스 포스\" 출범",
+      "original_title": "",
+      "description": "도널드 트럼프가 \"슈퍼 인텔리전스 포스\"를 창설했습니다. 여기서 \"슈퍼인텔리전스\"는 그가 인공지능을 지칭하는 용어이며, 이 부대는 제이 클레이튼 국가정보국(DNI) 국장과 기타 정부 관료들이 이끌며 AI 기업, 핵심 인프라 운영자, 이익 단체들과 협력합니다.",
+      "link": "https://the-decoder.com/trump-launches-super-intelligence-force-that-has-nothing-to-do-with-actual-superintelligence/",
+      "entities": [
+        "DNI",
+        "AI"
+      ],
+      "date": "2026-10-05"
+    },
+    {
+      "id": "54025",
+      "title": "샘 올트먼, AI의 혜택을 위해 '나쁜 일들'도 감수해야 한다고 발언",
+      "original_title": "",
+      "description": "OpenAI 최고경영자(CEO)가 기술이 가져다줄 '좋은 점들'을 위해 규제의 손길을 가볍게 유지할 것을 촉구했습니다. 샘 올트먼은 세계가 AI로 인한 해킹, 사기 및 \"기타 나쁜 일들\"을 기술의 혜택을 얻는 대가로 받아들여야 한다고 믿는다고 밝혔습니다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/05/sam-altman-open-ai-chatgpt-benefits-risks",
+      "entities": [
+        "CEO",
+        "OpenAI"
+      ],
+      "date": "2026-10-05"
+    },
+    {
+      "id": "54121",
+      "title": "릴플렉션, 더 적은 연산 비용으로 중국 모델과 경쟁할 오픈웨이트 AI 모델 ‘빔’ 선보여",
+      "original_title": "",
+      "description": "릴플렉션은 기업과 주권 국가를 타겟으로 ‘빔’ 및 향후 모델을 선보이고 있습니다. 이들의 핵심 전략은 기관들이 자체 독점 데이터를 활용해 맞춤형 로컬 AI 시스템을 구축할 수 있도록 돕는 ‘AI 팩토리’ 제품군을 제공하는 것입니다.",
+      "link": "https://techcrunch.com/2026/10/05/reflection-debuts-beam-a-open-weight-ai-model-to-rival-chinese-models-at-lower-compute-cost/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54120",
+      "title": "OpenAI, 유럽연합(EU)에서 ChatGPT 텍스트 워터마킹 도입",
+      "original_title": "",
+      "description": "OpenAI는 AI법을 준수하기 위해 EU 지역 내에서 ChatGPT 및 Codex 텍스트에 워터마크를 도입할 예정입니다. 다만 텍스트를 수정하면 이러한 보이지 않는 워터마크를 감지하기 더 어려워질 수 있다고 밝혔습니다.",
+      "link": "https://techcrunch.com/2026/10/05/openai-will-start-watermarking-chatgpts-text-in-the-eu/",
+      "entities": [
+        "OpenAI",
+        "EU",
+        "Codex",
+        "ChatGPT"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54043",
+      "title": "딜리버루, 영국 5개 지역 인도에 배달 로봇 도입",
+      "original_title": "",
+      "description": "딜리버루가 미국 기업 코코 로보틱스와 제휴하여 이번 달 카나리 워프를 시작으로 영국 5개 지역에서 4륜 인도 배달 로봇을 운영할 예정이며, 대다수의 주문은 여전히 인간 라이더를 통해 처리될 것이라고 밝혔다. 로봇 배달을 도입하는 5개 지역 중 하나인 밀턴 케인스는 2018년 4월부터 스타십을 통한 로봇 배달을 이용해 왔다.",
+      "link": "https://thenextweb.com/news/deliveroo-coco-robots-uk-cities",
+      "entities": [],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54127",
+      "title": "AI 에이전트를 기업 지식과 연결하기",
+      "original_title": "",
+      "description": "AI 시스템이 지속적으로 수집하고 분석하는 엄청난 데이터에도 불구하고, 기업용 AI 에이전트는 종종 ‘지식의 부족’이라는 기묘한 결함을 겪습니다. 데이터 그 이상인 ‘지식’이란 개별 조직의 맥락 속에서 데이터가 갖는 의미를 이해하는 것이며, AI 에이전트에게는 이러한 이해가 필수적입니다.",
+      "link": "https://www.technologyreview.com/2026/10/05/1145580/connecting-ai-agents-to-enterprise-knowledge/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54154",
+      "title": "노키아 CEO, 공급 제약만 없다면 데이터센터가 '2배 더 빨리' 지어질 것이라 언급",
+      "original_title": "",
+      "description": "노키아 CEO의 이러한 발언은 최고경영진들이 개발 속도 조절을 논의하는 상황에서도 AI에 대한 지속적인 수요가 여전히 존재함을 강조합니다.",
+      "link": "https://www.cnbc.com/2026/10/05/nokia-ai-data-center-buildout.html",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54133",
+      "title": "앤스로픽, 대형 IPO를 앞두고 조용히 미국의 최대 기업 기부자로 부상 중",
+      "original_title": "",
+      "description": "회사가 모든 주식 기부에 추가 주식을 얹어주고 초기 직원들의 기부금을 세 배로 늘려주는 사내 프로그램을 운영한 덕분에, 앤스로픽 직원들은 2025년에만 5억 4,000만 달러를 기부했습니다. 이는 포춘 500대 기업 중 두 번째로 큰 기부자들의 거의 5배에 달하는 수치입니다.",
+      "link": "https://the-decoder.com/anthropic-is-quietly-becoming-americas-biggest-corporate-donor-ahead-of-its-mega-ipo/",
+      "entities": [],
+      "date": "2026-10-06"
     }
   ]
 }
