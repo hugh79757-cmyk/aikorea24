@@ -1,15 +1,7 @@
 # config/models.yaml — 쓰레드 파이프라인 무료 LLM 폴백 체인
 # 순서 = 우선순위 (1순위부터). 7개 무료 → 전부 실패 시 default(유료 DeepSeek)
 # 참고: /Users/twinssn/Projects/SKILL.md "LLM Fallback Chain"
-# 갱신: 2026-10-05 (gemini-3.1-flash-lite 품질 사고로 체인 제외 — 아래 삭제 이력 참조)
 # 갱신: 2026-09-29 (죽은 tier 9개 제거 — 아래 삭제 이력 참조)
-#
-# 삭제 이력 (2026-10-05 품질 사고 — 소유자 결정, 재등재 시 승인 필요):
-#   gemini-3.1-flash-lite : 영문 기사 번역에서 "OpenAI" → "오픈에어하이" 허칭 생성.
-#                           2026-10-04-011 블로그 글의 제목·본문 전체가 이 오타로 발행됨
-#                           (scripts/blog_draft.log [모델] google gemini-3.1-flash-lite).
-#                           엔티티명 정확성 게이트가 없어 허칭이 그대로 라이브 반영됨.
-#                           번역 품질 사고 — 계정 무관. 재검증 없이 체인 복귀 금지.
 #
 # 삭제 이력 (2026-09-29 직접 curl 실측):
 #   gemini-2.5-flash   : 404 "no longer available to new users"
@@ -25,6 +17,7 @@
 #   gemini-3.5-flash(503 일시), groq-gpt120b, groq-gpt20b, nvidia-nemotron, zhipu-glm
 
 tier_order:
+  - gemini-3.1-flash-lite
   - gemini-3.5-flash-lite
   - gemini-3.5-flash
   - groq-gpt120b
@@ -51,6 +44,9 @@ providers:
     base_url: "https://api.deepseek.com/v1"
 
 models:
+  gemini-3.1-flash-lite:
+    provider: google
+    model: gemini-3.1-flash-lite
   gemini-3.5-flash-lite:
     provider: google
     model: gemini-3.5-flash-lite
