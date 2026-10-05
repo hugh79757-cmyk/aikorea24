@@ -1,7 +1,16 @@
 # config/models.yaml — 쓰레드 파이프라인 무료 LLM 폴백 체인
 # 순서 = 우선순위 (1순위부터). 7개 무료 → 전부 실패 시 default(유료 DeepSeek)
 # 참고: /Users/twinssn/Projects/SKILL.md "LLM Fallback Chain"
+# 갱신: 2026-10-05 (nvidia-nemotron 품질 사고로 체인 제외 — 아래 삭제 이력 참조)
 # 갱신: 2026-09-29 (죽은 tier 9개 제거 — 아래 삭제 이력 참조)
+#
+# 삭제 이력 (2026-10-05 품질 사고 — 소유자 결정, 재등재 시 승인 필요):
+#   nvidia-nemotron : nvidia/nemotron-3-ultra-550b-a55b.
+#                     스킬 llm-fallback-chain-management §Dead/excluded 2026-09-13
+#                     "nemotron 계열은 한국어 콘텐츠 생성 부적합" 소유자 결정의 대상이나
+#                     이 프로젝트 tier_order에 잔존해 있었음. 2026-10-05 제외 확정.
+#                     한국어 번역/문장 생성 품질 부적합 — 계정 무관. 재검증 없이 복귀 금지.
+#                     (NVIDIA_API_KEY 자체는 키 문제 아님 — 모델 문제. 키는 다른 tier 용도 대비 보존.)
 #
 # 삭제 이력 (2026-09-29 직접 curl 실측):
 #   gemini-2.5-flash   : 404 "no longer available to new users"
@@ -22,7 +31,6 @@ tier_order:
   - gemini-3.5-flash
   - groq-gpt120b
   - groq-gpt20b
-  - nvidia-nemotron
   - zhipu-glm
   - default            # ★ 유료 DeepSeek — 최후 수단
 
@@ -59,9 +67,6 @@ models:
   groq-gpt20b:
     provider: groq
     model: openai/gpt-oss-20b
-  nvidia-nemotron:
-    provider: nvidia
-    model: nvidia/nemotron-3-ultra-550b-a55b
   zhipu-glm:
     provider: zhipu
     model: glm-4.5-flash
