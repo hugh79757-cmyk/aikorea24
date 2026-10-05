@@ -1,3 +1,70 @@
+## 2026-10-05 15:25 — aikorea24 "오픈에어하이" 오타 교정 + gemini-3.1-flash-lite 체인 제외 (배포 37ad1204)
+
+### 한 일
+사용자 지시 3건: (1) `aikorea24.kr/blog/2026-10-04-011-...오프에어하이...` 글의 "오프에어하이" 존재 확인, (2) 오픈AI(OpenAI) 의미면 해당 글을 쓴 LLM을 체인에서 삭제, (3) 전체 fallback chain 스킬을 보고 최신 스킬 적용. 후속 지시: "그리고 오픈에어하이 는 수정해주고."
+
+### 결과
+
+**[검증됨] "오프에어하이" 문자열 존재 안 함**
+- `rg "오프에어하이" /Users/twinssn/Projects/aikorea24` → 0건.
+- 실제 존재한 것은 **"오픈에어하이"**(OpenAI의 오타). 라이브 URL은 사용자가 붙여넣은 오타 slug가 아니라 정상 slug였음(사용자 URL 404, 실제 슬러그 200).
+
+**[검증됨] "오픈에어하이" = OpenAI 맞음**
+- 근거: 원문 링크 `https://the-decoder.com/another-openai-safety-departure-adds-to-a-pattern-of-researchers-leaving-with-public-warnings/` — 링크 경로에 `another-openai-safety-departure`. 인물 데이비드 로빈슨(OpenAI safety 담당). `scripts/briefing_dedup.json` articles[208]의 link 필드 동일.
+
+**[검증됨] 해당 글 작성 LLM = `google gemini-3.1-flash-lite`**
+- 근거: `scripts/blog_draft.log:1383-1385`
+  ```
+  [22:16:05]   [5/5] '오픈에어하이의 또 다른 안전 관련 퇴사...' 생성 중...
+    [모델] google gemini-3.1-flash-lite
+    [체인] 성공: gemini-3.1-flash-lite
+  ```
+- 오타 발생 지점 = 브리핑 번역 단계. `api_test/news_collector.py:423` `translate_to_korean()` → `model_router.chat_completion()` (동일 폴백 체인). 영문 "OpenAI" → 한국어 번역 중 "오픈에어하이" 허칭 생성.
+
+**[검증됨] 오타 교정 — 라이브 반영 완료**
+| 항목 | 사전 | 사후 | 검증 |
+|---|---|---|---|
+| 블로그 title/tags/본문 | 6건 | 0건 | 라이브 HTML `rg -c` 0 |
+| 파일명 슬러그 | `...-오픈에어하이의-...` | `...-오픈ai의-...` | 신규 슬러그 200 |
+| briefing_dedup.json | 4건 | 0건 | JSON parse OK |
+| `_redirects` | 18행 | 19행 (301 1행 추가) | 구슬러그 301→신규 확인 |
+
+- 라이브 검증: 신규 URL `HTTP 200`, `<title>오픈AI의 또 다른 안전 관련 퇴사, 공개 경고와 함께 이탈 패턴 이어져: 인공지능 안전의 위기 | AI코리아24</title>`, 라이브 HTML에 "오픈에어하이" 0건. 구슬러그 `HTTP 301` → 신규 URL로 리다이렉트.
+- 배포: `wrangler pages deploy dist --project-name aikorea24 --branch main` → `37ad1204.aikorea24.pages.dev`.
+- 사전 검증: `python3 scripts/validate_blog_posts.py` → "✅ 모든 블로그 포스트 정상", `npm run build` → "Complete!" (5.89s).
+- 백업: `config/models.yaml.bak_20261005_151503`, `backups/content_blog/2026-10-04-011-....md.bak_20261005_151734`, git 커밋 `c218e0a9`.
+
+**[검증됨] `gemini-3.1-flash-lite` 체인 제외**
+- `config/models.yaml`: `tier_order` 8→7, `models` 8→7. 삭제 이력 주석에 스킬 §Dead/excluded 형식으로 사유 기록(품질 사고 — 재검증 없이 체인 복귀 금지).
+- 사후 검증: `yaml.safe_load` → `tier_order = ['gemini-3.5-flash-lite','gemini-3.5-flash','groq-gpt120b','groq-gpt20b','nvidia-nemotron','zhipu-glm','default']`, 고아 model 키 0건, 전 tier의 provider가 `providers`에 존재, `default`(유료) 마지막 고정.
+
+**[검증됨] fallback chain 스킬 대조 감사 — `scripts/threads/v3/model_router.py`**
+스킬 `llm-fallback-chain-management` 계약 항목별:
+- 쿨다운/서킷브레이커/배제 상태 없음 — `rg "cooldown|quota_until|blocked"` `model_router.py` 0건.
+- 실패 즉시 다음 tier — `_chain_completion:315-341`, 실패 시 `continue`, sleep 없음. 5xx만 `_call_tier_with_retry:246`에서 1회 5초 재시도.
+- 유료 tier 마지막 고정 — `_FallbackState.order():167` `ordered.append(paid_tier)`.
+- 상태 영속 + 원자적 — `STATE_PATH=scripts/threads/logs/llm_fallback_state.json`, `_save():145` temp 파일 + `os.replace`. 현재 내용 `{"front":"gemini-3preview","last_success_tier":"gemini-3.5-flash-lite"}`.
+- timeout — `TIER_TIMEOUT_SEC=90`, `CONNECT_TIMEOUT_SEC=10`, `GLOBAL_BUDGET_SEC=300` (`:70-72`).
+
+**[위반 감지] JSON gate / billing-text gate 미구현**
+- `rg "json.loads|billing|reached its|insufficient|credits" model_router.py` → 0건. 스킬 §JSON gate(L175-180), §200-OK-with-billing-body(L163-173) 미적용.
+- 부분 무해 근거: `_call_tier_once:206`이 `response_format`을 무료 tier에 보내지 않고 `provider == 'deepseek'`일 때만 전달. 따라서 무료 tier의 JSON 파싱 실패는 체인이 아니라 downstream 파서에서 잡힘. 부수 증상: `scripts/threads/logs/raw_parse_fail/` 105개 디렉터리 누적.
+
+**[부분검증] 엔티티명 정확성 게이트 없음**
+- "오픈에어하이"가 그대로 라이브에 반영된 경위를 막을 proper-noun 검증 코드를 aikorea24 chain 경로에서 찾지 못함. 제한 사유: `blog_draft` 생성 후 quality gate 위치는 미탐색(시간 제약). 원천은 브리핑 번역 단계이므로 그쪽 게이트 부재가 직접 원인.
+
+### 잔존 위험
+- **JSON gate / billing-text gate 미구현** — 스킬 계약 위반 상태가 유지됨. HTTP 200 + 과금 본문 응답이 유료 deepseek 경로에서 성공으로 통과될 수 있음. 복구 계획: `_call_tier_once` 반환 직전에 첫 200자 regex 스캔 추가.
+- **번역 단계 엔티티명 게이트 부재** — 다른 체인 tier(`gemini-3.5-flash-lite`, `gemini-3.5-flash`, `groq-*`, `nvidia-nemotron`, `zhipu-glm`)도 같은 허칭 재현 가능. 체인에서 한 모델만 빼는 것은 완화일 뿐 근본 제거 아님.
+- **`gemini-3.1-flash-lite` 제외 후 최상위 tier가 `gemini-3.5-flash-lite`** — 스킬 §2026-09-28 스냅샷에 gemini 6종이 429 "quota exceeded"(과금 필요)로 제거된 이력이 있음. 이 프로젝트 config에는 남아 있었으나 실제 호출 가능 여부는 미검증. 429면 순수 회전으로 즉시 다음 tier로 넘어가므로 파이프라인 중단은 없음.
+- **슬러그 변경에 따른 기존 인덱스 손실** — 신규 URL은 새 주소. `_redirects` 301로 기존 URL 유입은 보존되나 검색엔진 재수집은 지연.
+- **`nvidia-nemotron` 체인 잔존** — 스킬 §Dead/excluded에 "nemotron 계열은 한국어 콘텐츠 생성 부적합"(2026-09-13 소유자 결정)으로 기재. 현재 aikorea24 `tier_order`에 여전히 포함됨(`nvidia/nemotron-3-ultra-550b-a55b`). 소유자 확인 필요.
+
+### 다음 행동
+1. `gemini-3.5-flash-lite` 실제 호출 가능 여부 확인 (chain front가 이동했으므로 다음 발행에서 `[체인] 성공:` 로그 tier로 관찰 가능).
+2. `nvidia-nemotron` 제외 여부 소유자 판단.
+3. (선택) JSON/billing gate + 번역 엔티티명 게이트 구현.
+
 ## 2026-10-04 09:05 — AIK24-LOGIN-404 수정: 옵션 A 적용 + 전수 확인 (배포 5880ab04)
 
 ### 한 일
