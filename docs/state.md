@@ -1,3 +1,41 @@
+## 2026-10-07 02:10 — 10-06 블로그/수정분 커밋 + 재배포
+
+### 한 일
+사용자 지시 "오늘자 블로그 배포해줘." → 옵션 확인 후 "10-06 커밋 + 재배포" 선택.
+미커밋 상태였던 원인1·2 수정분 + 10-06 블로그 10건을 커밋하고 재빌드·재배포.
+
+### 커밋
+- 커밋 `8187d201` "fix: 홈·뉴스 빌드시점 D1 공백 복구 (prerender false) + 10-06 블로그 10건".
+- 포함: `src/pages/index.astro`, `src/pages/news.astro`, `src/content/blog/2026-10-06-001~010.md`(10건 신규), `docs/state.md`, `scripts/briefing_dedup.json`.
+- 제외: `.wrangler/state/.../miniflare-*.sqlite` (로컬 빌드 임시 상태, 커밋 노이즈).
+
+### 결과 (라이브 검증)
+- [검증됨] validate — `python3 scripts/validate_blog_posts.py` → `✅ 모든 블로그 포스트 정상`.
+- [검증됨] 빌드 — `npm run build` → `Server built in 22.23s` / `Complete!`.
+- [검증됨] 배포 — env.common 토큰 export 후 `wrangler pages deploy dist --project-name aikorea24 --branch main --commit-dirty=true` → `✨ Deployment complete!` (126 modules, `5b506c65.aikorea24.pages.dev`).
+- [검증됨] 홈 — HTTP 200 / 59183 bytes, `브리핑 준비 중` 0건, 브리핑 아이템 링크 6건(`/briefing/2026-10-06-2/#item-*`). 근거: `curl "https://aikorea24.kr/?v=<cachebust>"`.
+- [검증됨] /news — HTTP 200 / 78252 bytes, 빈 상태 문구 0건, 기사 h2 3건+ 렌더, 외부링크 46건.
+- [검증됨] /blog 아카이브 — `2026-10-06-002`~`010` 표시(페이지1), `2026-10-06-001` 상세 HTTP 200.
+- [검증됨] /briefing — HTTP 200 (회귀 없음).
+- [부분검증] 첫 curl 캐시로 옛 응답 가능 → cachebust 병행. Worker 에러율·응답시간 미측정.
+
+### 잔존 위험
+- `description` 보일러플레이트: 10-06 `004`·`005`·`010` 3건이 `"원문기사는 아래의 링크를 통해 확인할 수 있습니다"` 로 저장(생성기 LLM이 실제 요약 미출력 → fallback). 메타/SEO 품질 저하. 커밋은 사용자 지시대로 진행.
+- `2026-10-06-010` frontmatter 뒤 stray `---` 1줄 → 본문 상단에 `<hr>` 렌더. 004·005에는 없음.
+- 홈/뉴스 런타임 SSR → 요청마다 D1 조회.
+- 원인3 Brevo 401(미등록 IP) 미해결.
+- 2026-10-06 20:16 재부팅 원인 미확인.
+- `blog_draft_generator.py` log = `print()`(stdout) → launchd 블록버퍼, SIGKILL 시 로그 유실(flush 미적용).
+- `kr.aikorea24.blog-draft.plist`에 `OPENAI_API_KEY` 평문(키 이름만 기록).
+
+### 다음 행동
+- 06:00 KST 파이프라인 / 06:15 KST blog-draft 자동 런 정상 여부 확인.
+- 004·005·010 `description` 재생성 + 010 stray `---` 제거 (원하면 실행).
+- Brevo 콘솔에 IPv6 `2001:fb1:...` 등록 후 이메일 재시도.
+- 재부팅 원인 로그 점검.
+
+---
+
 ## 2026-10-07 00:02 — 원인 1·2 수정 (홈/뉴스 SSR 복원 + 007–010 배포)
 
 ### 한 일
