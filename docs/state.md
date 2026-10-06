@@ -1,3 +1,85 @@
+## 2026-10-07 00:02 — 원인 1·2 수정 (홈/뉴스 SSR 복원 + 007–010 배포)
+
+### 한 일
+사용자 지시 "123 실행해줘. 하나씩." — 원인1(홈/뉴스 빌드시점 D1 공백), 원인2(007–010 미배포) 수정. 원인3(Brevo)은 사용자가 IP 직접 등록 예정이라 미실행.
+
+### 수정 파일
+- [PRODUCTION CODE] `src/pages/index.astro`: `export const prerender = true;` → `false;` (런타임 SSR 환원, /briefing와 동일 패턴).
+- [PRODUCTION CODE] `src/pages/news.astro`: `export const prerender = false;` 추가.
+
+### 결과 (라이브 검증)
+- [검증됨] 홈 브리핑 복원 — `https://aikorea24.kr/` 에서 `오늘의 브리핑 준비 중` 0건(수정 전 1건), 브리핑 아이템 실제 렌더(외부링크 7건, 예: "새로운 조사에 따르면 AI 오용이 브랜드 평판에…"). 근거: `curl "https://aikorea24.kr/?v=<cachebust>" | grep -c "오늘의 브리핑 준비 중"` → 0.
+- [검증됨] /news/ 복원 — 라이브 뉴스 아이템 53건 렌더(수정 전 `아직 수집된 뉴스가 없습니다` 빈 상태). 근거: `grep -oE 'target="_blank"' /tmp/p_news2.html | wc -l` → 53.
+- [검증됨] 블로그 007–010 배포 — 라이브 `/blog/` 에 `2026-10-06-007`~`010` 표시(수정 전 001–006만). 빌드가 `src/content/blog` 전체를 포함하므로 원인2도 이 배포로 해소.
+- [검증됨] 빌드·배포 경로 성공 — `python3 scripts/validate_blog_posts.py` → `✅ 모든 블로그 포스트 정상`; `npm run build` → `Server built in 13.76s`, `Complete!`; `wrangler pages deploy dist` → `✨ Deployment complete!`(126 modules, `d1763e51.aikorea24.pages.dev`), env.common 토큰 export 사용(글로벌 섹션 3).
+- [검증됨] 회귀 없음 — `/briefing/` HTTP 200 유지, 홈에 최신 블로그(007–010) 제목 렌더.
+- [검증됨] dist 구조 변경 확인 — `dist/index.html`·`dist/news/index.html` 삭제됨(정적 파일 아님, Worker `_worker.js/` + `_routes.json` 이 서빙). 기존 `dist/_worker.js/` 존재.
+
+### [부분검증]
+- 홈/뉴스 SSR 동작은 라이브 HTTP 응답으로 확인했으나 Cloudflare Worker 에러율·응답시간 로그는 미확인.
+
+### [검증불가]
+- 배포 직후 첫 curl이 CDN 캐시로 옛 빈 페이지를 반환했다가(동일 URL·캐시버스트로 재요청 시 정상) → 캐시 무효화 지연을 정량 실측하지 못함.
+
+### 잔존 위험
+- **미커밋**: 두 페이지 수정 + 007–010 untracked. deploy.sh/blog_draft는 워킹트리를 사용하므로 일시 동작하나 `git reset`/`clean` 시 소실. 커밋 필요(사용자 미지시).
+- 홈이 이제 런타임 SSR → 매 요청 D1 조회(지연·비용 소폭 증가). /briefing와 동일 부하 특성.
+- 원인3 Brevo 401 미해결(사용자 IP 등록 예정).
+- 2026-10-06 20:16 재부팅의 원인 미확인(재발 시 저녁 파이프라인 재차단).
+- `blog_draft_generator`의 stdout이 launchd 파일로 블록 버퍼링 → 재부팅/SIGKILL 시 로그 유실(진단 가림). flush 도입 미적용.
+- `kr.aikorea24.blog-draft.plist`에 `OPENAI_API_KEY` 평문 저장(값 미기록).
+
+### 다음 행동
+1. 커밋 여부 결정(index.astro/news.astro + 007–010).
+2. Brevo IP 등록 후 이메일 재시도.
+3. 재부팅 원인 점검 + blog_draft stdout line-buffering(flush) 도입 검토.
+
+---
+
+## 2026-10-06 23:55 — 발행 정지 원인 진단 (홈 브리핑/뉴스 공백 + 저녁 블로그 미배포)
+
+### 한 일
+사용자 보고 "블로그 발행, 뉴스브리핑. 모두 멈췄어. 원인파악." 진단. 코드 수정 없음(진단 전용). 재부팅·빌드·launchd 상태·로컬/원격 D1 대조.
+
+### 결과 — 독립 원인 3건
+
+**[검증됨] 원인 1 — 홈/뉴스 페이지가 "빌드 시점 로컬 D1(빈 DB)" 조회로 공백**
+- 라이브 홈(`https://aikorea24.kr/`) HTML에 브리핑 빈 상태 `📡 오늘의 브리핑 준비 중` 1건, 브리핑 아이템 0건. 근거: `grep -c "오늘의 브리핑 준비 중" dist/index.html` → 1, `grep -c "briefing" dist/index.html` → 0.
+- 라이브 `/news/` HTML에 `뉴스가 없습니다` 1건. 근거: `/tmp/aik_news.html` grep.
+- 두 페이지 모두 frontmatter에서 빌드 시점 `Astro.locals.runtime.env.DB`로 D1 질의 (`src/pages/index.astro:2` `prerender=true`, `src/pages/news.astro`, `output:'static'`).
+- 빌드가 조회하는 로컬 miniflare D1 `.wrangler/state/v3/d1/miniflare-D1DatabaseObject/6ba36e…sqlite`(mtime 9월 26)의 테이블은 `users`, `tool_submissions`, `sqlite_sequence`, `_cf_METADATA`뿐. `briefings`/`news` 테이블 **없음**(sqlite3 → `no such table: briefings`).
+- 회귀 커밋: `0323c7c6 feat: hybrid 정적 전환 + 홈 개편` (2026-10-01 20:36 +07) — `astro.config.mjs` 변경 + `prerender=true` + 빌드 시점 스냅샷 코드를 동시 도입. 이전(hybrid/런타임 SSR)에는 프로덕션 D1을 읽어 표시됨.
+- 대조: `/briefing/`는 `prerender=false` 런타임 SSR이라 프로덕션 D1을 읽어 표시(HTTP 200 / 104967 bytes / `2026-10-06-2` 존재). 프로덕션 D1 자체는 정상, 빌드 시점 페이지만 파손.
+
+**[검증됨] 원인 2 — 저녁 블로그 007–010 미배포 = 20:16:23 재부팅이 실행 중 프로세스 SIGKILL**
+- `sysctl -n kern.boottime` → `Tue Oct  6 20:16:23 2026`; `last reboot` → `화 10월 6 20:16`.
+- 저녁 blog-draft 글 007–010 mtime 20:15:11–20:15:59 → 생성 직후 약 15초 만에 재부팅.
+- `scripts/blog_draft.log` mtime 06:17(아침 런만 기록), 저녁 런 기록 0줄. `log()`는 `print()`(stdout)이고 launchd가 파일로 리다이렉트(블록 버퍼) → SIGKILL 시 버퍼 유실.
+- `launchctl print kr.aikorea24.blog-draft` → `runs=0`, `last exit code=(never exited)`, `job state=uninitialized` = 재부팅으로 상태 초기화.
+- 라이브 `/blog/` 목록에 `2026-10-06-001`–`006`만, 007–010 없음. 배포 단계 미도달.
+
+**[검증됨] 원인 3 — Brevo 이메일 401 (부차, 조용히 실패)**
+- `scripts/pipeline_runner.log` 20:03:33: `❌ Brevo contacts 조회 실패 (401)` + `{"message":"We have detected you are using an unrecognised IP address 2001:fb1:…"}`.
+- `auto_email_sender.main()`이 예외를 내부에서 삼키고 run_pipeline summary에 올리지 않음 → 최종 알림 `✅ 에러 없음`과 모순. 그 "에러 없음"은 이메일 성공을 보증하지 않음.
+
+**[부분검증] "재부팅이 007–010 미배포의 직접 원인"이라는 단정**
+- 제한: 재부팅 시각(20:16:23)과 파일 mtime(20:15:59)이 15초 차로 부합하고 launchd 상태 초기화가 일치하나, 커널 로그에서 해당 PID 종료 이벤트를 직접 확인하진 않음. 대안(프로세스 자체 예외)은 로그 부재·exit 미기록과 상충.
+
+### 잔존 위험
+- 원인1(빌드 시점 D1 회귀)은 10-01 이후 모든 배포에 적용 → 홈/뉴스 공백이 계속 재생성됨. 미수정.
+- 007–010은 워킹트리 untracked → 재배포 전까지 라이브 미반영.
+- Brevo 401 지속 → 아침 브리핑 메일 미발송 가능.
+- `kr.aikorea24.blog-draft.plist`에 `OPENAI_API_KEY` 평문 저장(값 미기록). 보안 위험.
+- 배포 경로가 wrangler auth 프로필(hugh79757) 의존 — 글로벌 섹션 3(env.common 토큰 export)과 불일치. 프로필 만료 시 배포 실패 위험.
+
+### 다음 행동 (사용자 결정 대기)
+1. 원인1: (a) 홈/뉴스도 `prerender=false` 런타임 SSR로 환원(/briefing와 동일 패턴, 최소 변경) 또는 (b) 빌드 시 원격 D1 바인딩(remoteBindings). 권장 (a).
+2. 원인2: 007–010 커밋 후 deploy.sh 재배포. 배포 전 destructive-operations-protocol.
+3. 원인3: Brevo IP 화이트리스트/토큰 점검.
+4. plist 평문 키 제거(환경변수/키체인 이전).
+
+---
+
 ## 2026-10-05 15:47 — nvidia-nemotron 체인 제외 (7 tier)
 
 ### 한 일

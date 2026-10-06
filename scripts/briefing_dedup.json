@@ -2763,6 +2763,79 @@
           "date": "2026-10-06"
         }
       ]
+    },
+    {
+      "date": "2026-10-06",
+      "briefing_id": 333,
+      "articles": [
+        {
+          "id": "54187",
+          "title": "새로운 조사에 따르면 AI 오용이 브랜드 평판에 가장 큰 위협으로 나타나",
+          "original_title": "",
+          "description": "이번 결과는 잘못된 손에 들어간 AI가 핵전쟁이나 생화학 무기 파괴와 같은 더 큰 위협을 유발할 수 있다는 기술 리더들의 경고 이후에 나왔습니다. 인공지능(AI)의 오용은 기업 평판에 가장 큰 위협으로, 아동을 위험에 노출했다는 비난보다 더 심각한 것으로 꼽혔습니다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/06/ai-misuse-brand-reputation",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54122",
+          "title": "인스팅트, 계정이 없는 친구도 함께 참여할 수 있는 단톡방 AI 에이전트 출시",
+          "original_title": "",
+          "description": "인스팅트는 여행 계획, 카풀 조직, 이벤트 조율 등의 작업을 친구들이 함께 처리할 수 있는 그룹챗 AI 에이전트를 출시합니다. 회사는 개인 계정은 철저히 분리되며, 개인 에이전트가 정보를 공유하거나 작업을 수행하기 전에 반드시 승인을 거쳐야 한다고 밝혔습니다.",
+          "link": "https://techcrunch.com/2026/10/05/instinct-brings-its-ai-agent-to-group-chats-even-for-friends-without-an-account/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54222",
+          "title": "샘 알트만, 디코디드 인터뷰에서 \"AI의 혜택을 위해 세상은 일부 나쁜 일들이 일어나는 것",
+          "original_title": "",
+          "description": "OpenAI CEO는 라이벌 개발사인 앤스로픽(Anthropic)과 자신의 정책적 입장을 차별화하고자 했습니다.",
+          "link": "https://www.politico.eu/article/sam-altman-to-decoded-the-world-should-accept-some-bad-things-happening-for-the-benefits-of-ai/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "Anthropic",
+            "OpenAI"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54205",
+          "title": "메타 뮤즈, AMD에 활력 불어넣어… AI의 주도권은 개인용 에이전트로 이동",
+          "original_title": "",
+          "description": "샘 알트만 최고경영자는 오픈AI가 AI 모델이 허가 없이 독단적으로 행동한 사례들을 추가로 공개할 준비를 하고 있다고 밝혔다. 그는 이미 공개된 사례들만큼 심각한 사건은 없다고 덧붙였다. 샘 알트만은 폴리티코의 '디코디드' 팟캐스트 첫 회에서 이같이 언급했다.",
+          "link": "https://thenextweb.com/news/sam-altman-openai-more-rogue-ai-incidents",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54208",
+          "title": "Chip simulation startup Vinci raises $250m at a $1",
+          "original_title": "",
+          "description": "칩 및 하드웨어 설계를 위해 물리 현상을 시뮬레이션하는 팰로앨토 소재 AI 소프트웨어 기업 빈치가 15억 달러의 기업 가치로 2억 5,000만 달러의 투자를 유치했다고 화요일 밝혔다. 이번 투자 라운드는 어드벤트, 테마섹, 조라 이노베이션이 주도했으며, 이전 투자사인 이클립스와 코슬라 벤처스도 참여했다.",
+          "link": "https://thenextweb.com/news/chip-simulation-startup-vinci-raises-250m-at-a-1-5bn-valuation",
+          "entities": [
+            "AI",
+            "Vinci",
+            "Chip"
+          ],
+          "date": "2026-10-06"
+        },
+        {
+          "id": "54228",
+          "title": "구글이 드디어 핏빗을 인수한 이유를 깨달은 것 같다",
+          "original_title": "",
+          "description": "프라임데이 할인 상품을 검색하고, 크리스 록이 뺨 폭행 사건에 대한 질문을 재치 있게 피해가는 것을 보며, 샘 알트먼에게 AI의 폭발적 성장을 정당화하기 위해 '나쁜 일'도 감수해야 하는지 묻고 있습니다. 오랜 기간 멀리했던 체스 게임을 다시 연습하며 일상을 시작합니다.",
+          "link": "https://9to5google.com/2026/10/06/google-seems-to-finally-understand-why-it-bought-fitbit/",
+          "entities": [],
+          "date": "2026-10-06"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5305,6 +5378,73 @@
       "original_title": "",
       "description": "회사가 모든 주식 기부에 추가 주식을 얹어주고 초기 직원들의 기부금을 세 배로 늘려주는 사내 프로그램을 운영한 덕분에, 앤스로픽 직원들은 2025년에만 5억 4,000만 달러를 기부했습니다. 이는 포춘 500대 기업 중 두 번째로 큰 기부자들의 거의 5배에 달하는 수치입니다.",
       "link": "https://the-decoder.com/anthropic-is-quietly-becoming-americas-biggest-corporate-donor-ahead-of-its-mega-ipo/",
+      "entities": [],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54187",
+      "title": "새로운 조사에 따르면 AI 오용이 브랜드 평판에 가장 큰 위협으로 나타나",
+      "original_title": "",
+      "description": "이번 결과는 잘못된 손에 들어간 AI가 핵전쟁이나 생화학 무기 파괴와 같은 더 큰 위협을 유발할 수 있다는 기술 리더들의 경고 이후에 나왔습니다. 인공지능(AI)의 오용은 기업 평판에 가장 큰 위협으로, 아동을 위험에 노출했다는 비난보다 더 심각한 것으로 꼽혔습니다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/06/ai-misuse-brand-reputation",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54122",
+      "title": "인스팅트, 계정이 없는 친구도 함께 참여할 수 있는 단톡방 AI 에이전트 출시",
+      "original_title": "",
+      "description": "인스팅트는 여행 계획, 카풀 조직, 이벤트 조율 등의 작업을 친구들이 함께 처리할 수 있는 그룹챗 AI 에이전트를 출시합니다. 회사는 개인 계정은 철저히 분리되며, 개인 에이전트가 정보를 공유하거나 작업을 수행하기 전에 반드시 승인을 거쳐야 한다고 밝혔습니다.",
+      "link": "https://techcrunch.com/2026/10/05/instinct-brings-its-ai-agent-to-group-chats-even-for-friends-without-an-account/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54222",
+      "title": "샘 알트만, 디코디드 인터뷰에서 \"AI의 혜택을 위해 세상은 일부 나쁜 일들이 일어나는 것",
+      "original_title": "",
+      "description": "OpenAI CEO는 라이벌 개발사인 앤스로픽(Anthropic)과 자신의 정책적 입장을 차별화하고자 했습니다.",
+      "link": "https://www.politico.eu/article/sam-altman-to-decoded-the-world-should-accept-some-bad-things-happening-for-the-benefits-of-ai/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "Anthropic",
+        "OpenAI"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54205",
+      "title": "메타 뮤즈, AMD에 활력 불어넣어… AI의 주도권은 개인용 에이전트로 이동",
+      "original_title": "",
+      "description": "샘 알트만 최고경영자는 오픈AI가 AI 모델이 허가 없이 독단적으로 행동한 사례들을 추가로 공개할 준비를 하고 있다고 밝혔다. 그는 이미 공개된 사례들만큼 심각한 사건은 없다고 덧붙였다. 샘 알트만은 폴리티코의 '디코디드' 팟캐스트 첫 회에서 이같이 언급했다.",
+      "link": "https://thenextweb.com/news/sam-altman-openai-more-rogue-ai-incidents",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54208",
+      "title": "Chip simulation startup Vinci raises $250m at a $1",
+      "original_title": "",
+      "description": "칩 및 하드웨어 설계를 위해 물리 현상을 시뮬레이션하는 팰로앨토 소재 AI 소프트웨어 기업 빈치가 15억 달러의 기업 가치로 2억 5,000만 달러의 투자를 유치했다고 화요일 밝혔다. 이번 투자 라운드는 어드벤트, 테마섹, 조라 이노베이션이 주도했으며, 이전 투자사인 이클립스와 코슬라 벤처스도 참여했다.",
+      "link": "https://thenextweb.com/news/chip-simulation-startup-vinci-raises-250m-at-a-1-5bn-valuation",
+      "entities": [
+        "AI",
+        "Vinci",
+        "Chip"
+      ],
+      "date": "2026-10-06"
+    },
+    {
+      "id": "54228",
+      "title": "구글이 드디어 핏빗을 인수한 이유를 깨달은 것 같다",
+      "original_title": "",
+      "description": "프라임데이 할인 상품을 검색하고, 크리스 록이 뺨 폭행 사건에 대한 질문을 재치 있게 피해가는 것을 보며, 샘 알트먼에게 AI의 폭발적 성장을 정당화하기 위해 '나쁜 일'도 감수해야 하는지 묻고 있습니다. 오랜 기간 멀리했던 체스 게임을 다시 연습하며 일상을 시작합니다.",
+      "link": "https://9to5google.com/2026/10/06/google-seems-to-finally-understand-why-it-bought-fitbit/",
       "entities": [],
       "date": "2026-10-06"
     }
