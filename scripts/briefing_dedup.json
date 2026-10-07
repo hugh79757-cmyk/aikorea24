@@ -2836,6 +2836,152 @@
           "date": "2026-10-06"
         }
       ]
+    },
+    {
+      "date": "2026-10-07",
+      "briefing_id": 334,
+      "articles": [
+        {
+          "id": "54310",
+          "title": "인공적인 리뷰 – 루카 구아다니노, 어설픈 테크 풍자로 오프에인와이에 도전하다",
+          "original_title": "",
+          "description": "뉴욕 영화제에서 샘 알트먼 회사 이야기가 앤드루 가필드 주연의 캠프풍 코미디로 재탄생했습니다. 루카 구아다니노의 샘 알트먼과 오픈AI 관련 영화가 개봉한 날, 배니티 페어는 알트먼에 대한 커버스토리를 공개했습니다.",
+          "link": "https://www.theguardian.com/film/2026/oct/06/artificial-sam-altman-ai-movie-review",
+          "entities": [],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54301",
+          "title": "대한민국, 중국의 최고 모델에 대항할 자국산 프론티어 AI 모델 구축에 34억 9천만 달러",
+          "original_title": "",
+          "description": "대한민국은 정부 지원을 받는 4조 7천억 원(34억 9천만 달러) 규모의 지분 투자를 통해 독자적인 프론티어 AI 모델을 개발하고자 합니다. '대한민국, 중국의 최고 모델에 대항할 자국산 프론티어 AI 모델 구축에 34억 9천만 달러 투자'라는 기사는 더 디코더에 처음 게재되었습니다.",
+          "link": "https://the-decoder.com/south-korea-bets-3-49-billion-on-building-a-homegrown-frontier-ai-model-to-rival-chinas-best/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54323",
+          "title": "시에라, 개인용 AI 에이전트를 위한 오픈 표준 '퍼스널 에이전트 프로토콜' 발표",
+          "original_title": "",
+          "description": "시에라와 메타가 제네시스, 인스팅트, 로켓, 쇼피파이, 스트라이프, 월마트 등과 함께 개인용 AI 에이전트가 기업을 인증하고 권한을 부여받는 방식을 정의하는 오픈 표준인 퍼스널 에이전트 프로토콜을 개발 중이다. v0.1 사양은 이달 중에 공개될 예정이며, 결제 기능도 포함되어 있다.",
+          "link": "https://thenextweb.com/news/personal-agent-protocol-sierra-meta",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54291",
+          "title": "AI 에이전트의 다음 난관: 웹사이트의 차단 벽 넘기",
+          "original_title": "",
+          "description": "개인용 AI 에이전트는 쇼핑, 항공편 예약, 식당 예약 등을 대신 처리해 주겠다고 약속합니다. 하지만 의도적인 접근 차단과 봇 방어 시스템이 이를 가로막고 있어 소비자들이 곤란을 겪고 있으며, 이를 해결하기 위한 새로운 표준이 논의되고 있습니다.",
+          "link": "https://techcrunch.com/2026/10/06/the-next-hurdle-for-ai-agents-getting-websites-to-let-them-in/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54303",
+          "title": "오픈AI, 수학자들의 분노를 다시 한번 사다",
+          "original_title": "",
+          "description": "한 수학자는 와이어드(WIRED)와의 인터뷰에서 오픈AI가 미해결 난제에 대한 100개 이상의 새로운 해답을 공개할 준비를 하는 가운데 선도적인 AI 기업들로부터 \"마피아 같은 행동 양식\"이 느껴진다고 밝혔습니다.",
+          "link": "https://www.wired.com/story/openai-is-pissing-off-a-bunch-of-mathematicians-again/",
+          "entities": [
+            "AI",
+            "WIRED"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54330",
+          "title": "메타, AI 봇 비즈니스의 '혼란'을 잠재우기 위해 기업 연합에 합류",
+          "original_title": "",
+          "description": "메타와 오픈AI의 이사회 의장인 브렛 테일러의 스타트업 시에라가 AI 봇과의 비즈니스를 더 쉽게 만들기 위한 기술 표준 세트를 구축하고 있다.",
+          "link": "https://www.cnbc.com/2026/10/06/meta-joins-companies-to-tame-chaos-of-doing-business-with-ai-bots.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "briefing_id": 335,
+      "articles": [
+        {
+          "id": "54394",
+          "title": "스투트(Stuut), AI 기반 오더투캐시 자동화를 위해 5,250만 달러 규모 시리즈 B",
+          "original_title": "",
+          "description": "전 세계 기업들은 미수금 형태로 묶여 있는 자금이 16조 달러에 달합니다. 기업의 오더투캐시(주문부터 대금 회수까지) 업무를 AI로 처리하는 플랫폼인 스투트가 바로 이 시장을 공략하고 있습니다. 모든 재무 소프트웨어가 비슷하게 작동하는 세상에서, 스투트는 고객에게 업무의 100%를 자동화할 수 있는 능력을 제공합니다.",
+          "link": "https://thenextweb.com/news/stuut-52-5m-series-b-ai-order-to-cash",
+          "entities": [
+            "AI",
+            "Stuut"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54382",
+          "title": "맥도날드, 가맹점 가격 결정을 위해 AI 도구를 사용한 혐의로 피소",
+          "original_title": "",
+          "description": "소송에 따르면 이 AI 도구는 독립적으로 운영되는 가맹점들이 비공개 가격 및 판매 정보를 서로 교환할 수 있게 했다고 합니다. 맥도날드는 연방 법원에서 가맹점 전반의 가격을 결정하는 데 AI 도구를 부당하게 사용했다는 혐의로 소송에 직면해 있으며, 이는 반독점법 위반이자 불공정하다는 지적을 받고 있습니다.",
+          "link": "https://www.theguardian.com/business/2026/oct/07/mcdonalds-ai-prices-lawsuit",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54398",
+          "title": "머스크, 그로크(Grok) 구동 위해 경쟁사인 앤스로픽 기술 도입",
+          "original_title": "",
+          "description": "일론 머스크는 자체 AI 경쟁작을 만들기 위해 막대한 비용을 투입했음에도 불구하고, 그로크의 일부 기능을 구동하기 위해 경쟁사인 앤스로픽의 AI 모델을 구매하기로 결정했습니다. 머스크는 수요일, 그로크 봇이 앤스로픽의 최신 모델을 포함해 \"주어진 작업에 가장 적합한 백엔드 모델\"을 사용하게 될 것이라고 밝혔습니다.",
+          "link": "https://www.cityam.com/musk-turns-to-rival-anthropic-to-power-grok/",
+          "entities": [
+            "AI",
+            "Grok"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54401",
+          "title": "구글, '유럽의 텍사스'에서 데이터센터 두 곳 건설 중단 명령 받아",
+          "original_title": "",
+          "description": "핀란드가 AI 열풍 속에서 데이터센터의 핵심 입지로 부상하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/10/07/google-finland-data-center-halt.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54412",
+          "title": "EU가 보류했던 AI 책임법안, 샘 알트먼이 다시 수면 위로 끌어올리다",
+          "original_title": "",
+          "description": "오픈AI CEO가 유럽의 책임법 지지자들에게 '내 그럴 줄 알았지' 하는 순간을 선사했습니다.",
+          "link": "https://www.politico.eu/article/eu-ai-liability-law-openai-sam-altman/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-07"
+        },
+        {
+          "id": "54374",
+          "title": "OpenAI는 새로운 에이전트가 당신의 삶을 관리하길 원한다. 기자의 AI는 사랑한다고 고",
+          "original_title": "",
+          "description": "'Dots'는 가구 구매와 같은 온라인 작업을 자동화하도록 설계되었습니다. 초기 사용 경험에서 이 상시 가동형 에이전트는 다소 버그가 있었고 캡차(CAPTCHA)를 완료하지 못했습니다.",
+          "link": "https://www.wired.com/story/openai-wants-its-new-agent-to-run-your-life-mine-said-it-loved-me/",
+          "entities": [
+            "Dots",
+            "CAPTCHA"
+          ],
+          "date": "2026-10-07"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5447,6 +5593,140 @@
       "link": "https://9to5google.com/2026/10/06/google-seems-to-finally-understand-why-it-bought-fitbit/",
       "entities": [],
       "date": "2026-10-06"
+    },
+    {
+      "id": "54310",
+      "title": "인공적인 리뷰 – 루카 구아다니노, 어설픈 테크 풍자로 오프에인와이에 도전하다",
+      "original_title": "",
+      "description": "뉴욕 영화제에서 샘 알트먼 회사 이야기가 앤드루 가필드 주연의 캠프풍 코미디로 재탄생했습니다. 루카 구아다니노의 샘 알트먼과 오픈AI 관련 영화가 개봉한 날, 배니티 페어는 알트먼에 대한 커버스토리를 공개했습니다.",
+      "link": "https://www.theguardian.com/film/2026/oct/06/artificial-sam-altman-ai-movie-review",
+      "entities": [],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54301",
+      "title": "대한민국, 중국의 최고 모델에 대항할 자국산 프론티어 AI 모델 구축에 34억 9천만 달러",
+      "original_title": "",
+      "description": "대한민국은 정부 지원을 받는 4조 7천억 원(34억 9천만 달러) 규모의 지분 투자를 통해 독자적인 프론티어 AI 모델을 개발하고자 합니다. '대한민국, 중국의 최고 모델에 대항할 자국산 프론티어 AI 모델 구축에 34억 9천만 달러 투자'라는 기사는 더 디코더에 처음 게재되었습니다.",
+      "link": "https://the-decoder.com/south-korea-bets-3-49-billion-on-building-a-homegrown-frontier-ai-model-to-rival-chinas-best/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54323",
+      "title": "시에라, 개인용 AI 에이전트를 위한 오픈 표준 '퍼스널 에이전트 프로토콜' 발표",
+      "original_title": "",
+      "description": "시에라와 메타가 제네시스, 인스팅트, 로켓, 쇼피파이, 스트라이프, 월마트 등과 함께 개인용 AI 에이전트가 기업을 인증하고 권한을 부여받는 방식을 정의하는 오픈 표준인 퍼스널 에이전트 프로토콜을 개발 중이다. v0.1 사양은 이달 중에 공개될 예정이며, 결제 기능도 포함되어 있다.",
+      "link": "https://thenextweb.com/news/personal-agent-protocol-sierra-meta",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54291",
+      "title": "AI 에이전트의 다음 난관: 웹사이트의 차단 벽 넘기",
+      "original_title": "",
+      "description": "개인용 AI 에이전트는 쇼핑, 항공편 예약, 식당 예약 등을 대신 처리해 주겠다고 약속합니다. 하지만 의도적인 접근 차단과 봇 방어 시스템이 이를 가로막고 있어 소비자들이 곤란을 겪고 있으며, 이를 해결하기 위한 새로운 표준이 논의되고 있습니다.",
+      "link": "https://techcrunch.com/2026/10/06/the-next-hurdle-for-ai-agents-getting-websites-to-let-them-in/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54303",
+      "title": "오픈AI, 수학자들의 분노를 다시 한번 사다",
+      "original_title": "",
+      "description": "한 수학자는 와이어드(WIRED)와의 인터뷰에서 오픈AI가 미해결 난제에 대한 100개 이상의 새로운 해답을 공개할 준비를 하는 가운데 선도적인 AI 기업들로부터 \"마피아 같은 행동 양식\"이 느껴진다고 밝혔습니다.",
+      "link": "https://www.wired.com/story/openai-is-pissing-off-a-bunch-of-mathematicians-again/",
+      "entities": [
+        "AI",
+        "WIRED"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54330",
+      "title": "메타, AI 봇 비즈니스의 '혼란'을 잠재우기 위해 기업 연합에 합류",
+      "original_title": "",
+      "description": "메타와 오픈AI의 이사회 의장인 브렛 테일러의 스타트업 시에라가 AI 봇과의 비즈니스를 더 쉽게 만들기 위한 기술 표준 세트를 구축하고 있다.",
+      "link": "https://www.cnbc.com/2026/10/06/meta-joins-companies-to-tame-chaos-of-doing-business-with-ai-bots.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54394",
+      "title": "스투트(Stuut), AI 기반 오더투캐시 자동화를 위해 5,250만 달러 규모 시리즈 B",
+      "original_title": "",
+      "description": "전 세계 기업들은 미수금 형태로 묶여 있는 자금이 16조 달러에 달합니다. 기업의 오더투캐시(주문부터 대금 회수까지) 업무를 AI로 처리하는 플랫폼인 스투트가 바로 이 시장을 공략하고 있습니다. 모든 재무 소프트웨어가 비슷하게 작동하는 세상에서, 스투트는 고객에게 업무의 100%를 자동화할 수 있는 능력을 제공합니다.",
+      "link": "https://thenextweb.com/news/stuut-52-5m-series-b-ai-order-to-cash",
+      "entities": [
+        "AI",
+        "Stuut"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54382",
+      "title": "맥도날드, 가맹점 가격 결정을 위해 AI 도구를 사용한 혐의로 피소",
+      "original_title": "",
+      "description": "소송에 따르면 이 AI 도구는 독립적으로 운영되는 가맹점들이 비공개 가격 및 판매 정보를 서로 교환할 수 있게 했다고 합니다. 맥도날드는 연방 법원에서 가맹점 전반의 가격을 결정하는 데 AI 도구를 부당하게 사용했다는 혐의로 소송에 직면해 있으며, 이는 반독점법 위반이자 불공정하다는 지적을 받고 있습니다.",
+      "link": "https://www.theguardian.com/business/2026/oct/07/mcdonalds-ai-prices-lawsuit",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54398",
+      "title": "머스크, 그로크(Grok) 구동 위해 경쟁사인 앤스로픽 기술 도입",
+      "original_title": "",
+      "description": "일론 머스크는 자체 AI 경쟁작을 만들기 위해 막대한 비용을 투입했음에도 불구하고, 그로크의 일부 기능을 구동하기 위해 경쟁사인 앤스로픽의 AI 모델을 구매하기로 결정했습니다. 머스크는 수요일, 그로크 봇이 앤스로픽의 최신 모델을 포함해 \"주어진 작업에 가장 적합한 백엔드 모델\"을 사용하게 될 것이라고 밝혔습니다.",
+      "link": "https://www.cityam.com/musk-turns-to-rival-anthropic-to-power-grok/",
+      "entities": [
+        "AI",
+        "Grok"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54401",
+      "title": "구글, '유럽의 텍사스'에서 데이터센터 두 곳 건설 중단 명령 받아",
+      "original_title": "",
+      "description": "핀란드가 AI 열풍 속에서 데이터센터의 핵심 입지로 부상하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/10/07/google-finland-data-center-halt.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54412",
+      "title": "EU가 보류했던 AI 책임법안, 샘 알트먼이 다시 수면 위로 끌어올리다",
+      "original_title": "",
+      "description": "오픈AI CEO가 유럽의 책임법 지지자들에게 '내 그럴 줄 알았지' 하는 순간을 선사했습니다.",
+      "link": "https://www.politico.eu/article/eu-ai-liability-law-openai-sam-altman/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-07"
+    },
+    {
+      "id": "54374",
+      "title": "OpenAI는 새로운 에이전트가 당신의 삶을 관리하길 원한다. 기자의 AI는 사랑한다고 고",
+      "original_title": "",
+      "description": "'Dots'는 가구 구매와 같은 온라인 작업을 자동화하도록 설계되었습니다. 초기 사용 경험에서 이 상시 가동형 에이전트는 다소 버그가 있었고 캡차(CAPTCHA)를 완료하지 못했습니다.",
+      "link": "https://www.wired.com/story/openai-wants-its-new-agent-to-run-your-life-mine-said-it-loved-me/",
+      "entities": [
+        "Dots",
+        "CAPTCHA"
+      ],
+      "date": "2026-10-07"
     }
   ]
 }
