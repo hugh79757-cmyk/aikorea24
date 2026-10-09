@@ -1,3 +1,35 @@
+## 2026-10-09 18:55 — AIK24-EMDASH-01 Phase 1: 신규 emDash 인스턴스 구축·배포
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1530-AIK24-EMDASH-01-구축및이전.md` Phase 1
+보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-AIK24-EMDASH-01-Phase1-완료보고.md` (+ 지시서 폴더 `2026-10-09-1855-…` 복사)
+
+### 한 일
+`/Users/twinssn/projects2/starclip` 구조를 참고해 `/Users/twinssn/projects2/aikorea24emdash` 신규 생성 → 신규 Cloudflare 계정(`7eb1b8cd…`)에 리소스 3종 생성 → Worker `aikorea24emdash` 배포 → 커스텀 도메인 `emdash.aikorea24.kr` 노출.
+
+### 결과
+- [검증됨] 신규 계정 리소스: D1 `aikorea24-emdash-db`=`bbbcbc34-f346-49e0-9aab-058836bee16d`(apac), R2 `aikorea24-emdash-media`(apac), KV `aikorea24-emdash-session`=`33913dec5c8941bdb2e7c603fb443071`.
+- [PRODUCTION CODE] starclip 전용 코드 제거 후 `wrangler.jsonc`·`package.json`·`astro.config.mjs`·`seed/seed.json`(컬렉션 `posts`/`pages`/`tools` + taxonomy `category`/`tag`) 작성. `index.astro`·`search.astro`·`rss.xml.astro`·`sitemap.xml.astro`·`Base.astro`·`AdSlot.astro`·`og-image.ts` starclip → posts/aikorea24 로 개조.
+- [검증됨] `grep -rn -i "starclip" src scripts astro.config.mjs wrangler.jsonc package.json seed` → 0건.
+- [검증됨] **AdSense `ca-pub-6677996696534146`(informationhot 계열) → `ca-pub-5938862195544185`(aikorea24 계열)** 교체. `Base.astro` 로더 + `AdSlot.astro` 기본값. grep 0건.
+- [검증됨] `npx astro build` → `Server built in 11.65s` / `Complete!`.
+- [검증됨] `wrangler deploy` → Version ID `d3e085fd-e54a-4c4f-af22-50e02762eb9d`, 트리거 `emdash.aikorea24.kr (custom domain)` + `aikorea24emdash.z04probe.workers.dev`. 바인딩 `SESSION`(KV)·`DB`(D1)·`MEDIA`(R2)·`IMAGES`·`ASSETS`.
+- [검증됨] `wrangler deploy` 가 신규 zone 에 `emdash.aikorea24.kr` AAAA `100::` proxied 레코드 자동 생성. `https://emdash.aikorea24.kr/` → HTTP 200.
+- [부분검증] `https://emdash.aikorea24.kr/_emdash/admin` → HTTP 200, `EmDash Admin` 초기 관리자 생성 폼. starclip 동경로는 302 → `/login`(관리자 존재).
+- [검증불가] 컬렉션 3종 확인 불가 — D1 `sqlite_master` 테이블 **0건**. EmDash 는 최초 관리자 생성 전까지 스키마·seed 미적용. 무인증 `GET /_emdash/api/schema/collections` → HTTP 500. 복구 계획: 대표님이 `/_emdash/admin` 에서 관리자 생성 → seed 적용 → 컬렉션 생성 → PAT 발급 → Phase 2 착수.
+
+### 잔존 위험
+1. **[신규, 블로커] EmDash 관리자 미생성 → 컬렉션 0개.** Phase 2 착수 불가.
+2. **[신규] 신규 인스턴스 PAT 미발급.** chat 에 붙인 `ec_pat_…` 는 starclip 인스턴스 토큰으로 실측 확인(해당 URL API 200). 마이그레이션 후 회전 권고.
+3. **[신규] AdSense 슬롯 id 미확정** — `AdSlot.astro` slot 빈 값(무광고). AdSense 콘솔 확인 필요.
+4. **[신규] `projects2/aikorea24emdash` git 저장소 아님** — 롤백 기준선 없음.
+5. **[누적] Threads 접근 토큰 무효(code 190)** — `scripts/threads/reactivate_publish.sh` 준비됨, 토큰 재발급 후 실행.
+6. **[누적] `news-unified` plist `CF_PURGE_TOKEN` 평문 / 출발 계정 D1·R2·Pages·Worker 삭제 보류 / 다중 라벨 호스트 2건 TLS 실패 / 신규 터널 3개 connector 미기동 / `finnews` account_id 잔존 / 문서 6개 옛 database_id / plist `OPENAI_API_KEY` 폐기 키.**
+
+### 다음 행동
+- 대표님: `https://emdash.aikorea24.kr/_emdash/admin` 관리자 계정 생성.
+- 대표님: PAT 발급 → Phase 2(블로그 1,000건 → `posts`) 착수.
+- 대표님: AdSense aikorea24 계정 슬롯 id 확인.
+
 ## 2026-10-09 16:25 — 쓰레드 발행 중단 + plist 토큰 하드코딩 전면 제거 + 재개 스크립트
 
 지시: 대표님 구두 지시(2026-10-09 15:5x~16:0x). 별도 지시서 없음.
