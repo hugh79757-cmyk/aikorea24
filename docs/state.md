@@ -1,3 +1,27 @@
+## 2026-10-09 12:30 — 카카오 로그인 제거 + Brevo 401 원인 확정 (CF-MIGRATE-02 후속)
+
+대표님 지시: 카카오 로그인 미사용 → 제거 결정. Brevo 키 재발급 여부 문의에 대한 진단.
+
+### 한 일
+카카오 로그인 라우트 2개와 consent 페이지 버튼을 삭제해 신규 계정 Pages에 배포했다. Brevo 401의 원인이 키가 아님을 실측 확정했다.
+
+### 결과
+- [검증됨] **카카오 로그인 제거 및 배포.** 삭제 = `src/pages/api/auth/kakao.ts`, `src/pages/api/auth/callback/kakao.ts`(git rm), `src/pages/auth/consent.astro` 카카오 버튼 9줄 제거. 빌드 `Server built in 10.24s` / `Complete!`, 배포 `wrangler pages deploy dist --project-name aikorea24 --branch main` → `bdf5305f.aikorea24-4nk.pages.dev`(1차 시도 `521` 로 실패했으나 5초 후 재시도로 성공).
+- [검증됨] **제거 확인.** `https://aikorea24.kr/api/auth/kakao/` 404, `https://aikorea24.kr/api/auth/callback/kakao/` 404, `/auth/consent` HTML 내 `kakao` 문자열 0건. `src/pages`·`src/lib`·`src/middleware.ts` grep 결과 `KAKAO`·`kakao` 런타임 참조 0건.
+- [검증됨] **기존 기능 무결.** `/` 200, `/news/` 200, `/api/posts/` 200, `GET /api/auth/login/` 302 → `accounts.google.com/o/oauth2/v2/auth`(`redirect_uri=https%3A%2F%2Faikorea24.kr%2Fapi%2Fauth%2Fcallback%2Fgoogle`).
+- [검증됨] **Brevo 401 원인은 키가 아니라 IP 화이트리스트.** `aikorea24/.env`·`~/.env.common` 의 `BREVO_API_KEY` 는 동일하며 사용자가 제시한 키와 일치. IPv4 강제(`curl -4`) 후에도 `GET /v3/account` → 401 `"unrecognised IP address 110.168.249.241"`. 현재 공인 IPv4(`curl -4 ifconfig.me`) = `110.168.249.241` 로 화이트리스트 미등록 상태. **키 재발급으로는 해결되지 않음** — 동일 IP에서 동일 401 발생.
+- 커밋 `99f78843`.
+
+### 잔존 위험
+- **Brevo 발송 여전히 미검증.** 복구 계획: 대표님이 `https://app.brevo.com/security/authorised_ips` 에 `110.168.249.241` 추가 → `curl -4 https://api.brevo.com/v3/account` 200 확인 후 재검증. 참고: Pages Worker egress 는 Cloudflare IP 이므로 실 발송(`/api/briefing/send-email`, `twinssn@gmail.com` 세션 필요) 시 별도 차단 가능.
+- **D1 `users.kakao_id` 컬럼과 `idx_users_kakao` 유니크 인덱스 잔존.** 스키마 변경 없이 롤백 대비로 유지. 사용자 20행 중 kakao_id 값 보유 건 미확인. 정리하려면 별도 마이그레이션 필요 — 현재 필요 없음(YAGNI).
+- **`news-unified` launchd job 이 출발 계정 옛 DB 에 씀** — CF-MIGRATE-02 보고서 §10-2 참조(미해결).
+- **`projects2/finnews/wrangler.toml:6` `account_id` 출발 계정 잔존** — CF-MIGRATE-02 보고서 §10-3 참조(미해결).
+
+### 다음 행동
+1. 대표님: Brevo `authorized_ips` 에 `110.168.249.241` 등록.
+2. 대표님: `news-unified` plist 토큰 교체 승인 여부 결정.
+
 ## 2026-10-09 12:08 — CF-MIGRATE-02: Cloudflare 계정 이전 1차 (D1+R2+Pages+도메인) 결과 요약
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-0850-CF-MIGRATE-02.md` (개정본)
