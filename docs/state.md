@@ -1,3 +1,47 @@
+## 2026-10-09 13:38 — CF-ZONE-03 신규 zone DNS 정합화 (37건 일치 / NS 교체 대기)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1335-CF-ZONE-03-DNS정합화.md`
+
+### 한 일
+대표님이 신규 계정 대시보드에서 만든 zone `71a21534380f096809ef7b97165e3bc7`
+(NS `lara`·`mike`) 에 DNS 를 백업값으로 정합화. 자동 스캔이 넣은 엣지 IP 16건을
+삭제하고 백업 30건을 POST 로 등록. **출발 계정 변경 0건 (조회만).**
+
+### 결과
+- [검증됨] 정합화 후 `GET /zones/71a21534…/dns_records` = 37건, 백업(NS 제외 37건)과
+  멀티셋 대조 **누락 0 / 잔존 0**. 구성 AAAA 4 / CNAME 23 / MX 3 / TXT 7.
+  근거: `/tmp/z03_verify.py` Counter 비교 출력 `MATCH`.
+- [검증됨] DELETE 19건 + POST 30건 전부 `success=true`. 근거: `/tmp/z03_reconcile.py` 로그.
+  (권한 확인용 DELETE 1건이 사전 probe 로 이미 삭제되어 404 `81044` 1건 발생 — 목표 달성에는 영향 없음)
+- [검증됨] `dig @lara.ns.cloudflare.com` — `www`→`aikorea24-4nk.pages.dev`,
+  `status`→`d677e31c-….cfargotunnel.com`. 부가 4건(img·cert·keyword·mbti) + MX 3 + apex TXT 4 정상.
+- [부분검증] apex `aikorea24.kr` 는 proxied 루트 CNAME 이라 Cloudflare 가 A/AAAA 로 flatting →
+  `dig CNAME` ANSWER 0건, `dig A` → `172.66.44.181`·`172.66.47.75`. 제한 사유: dig 로 CNAME 값
+  직접 확인 불가, 등록 자체는 API 대조로 확인.
+- [검증됨] 출발 zone 변경 0건, 공개 NS 위임은 아직 `alberto`·`sonia`(registrar 미변경),
+  라이브 `curl https://aikorea24.kr/` 200.
+
+### 대표님 조치 필요 (Phase 2 NS 교체 전)
+1. Workers 3건(`api.barnmate`·`heritage`·`mbti`) 이전 여부 — 이전 안 하면 NS 교체 시 끊김
+2. `cert`·`barnmate` 소유 계정(제3 계정 추정) 이전 계획
+3. `threadforge.aikorea24.kr` Worker 매핑 미확인
+4. Tunnel 4개 실체 미확인(Zero Trust 읽기 토큰 필요) — UUID CNAME 9건 등록했으나 출발 계정 Tunnel 이면 이전 후 동작 안 함
+5. Email Routing 포워딩 룰 2건(`hugh_cho@`·`info@`) 신규 계정 이전
+6. 레지스트라(`ns1~4.hosting.co.kr`) NS 를 `lara`·`mike` 로 교체 — 유일한 실효 컷오버 지점
+
+### 잔존 위험
+Workers 3건 미이전 / `cert`·`barnmate` 소유 계정 미확인 / `threadforge` Worker 매핑 미확인 /
+Tunnel 4개 미확인 / DNS 전파 최대 48시간 / 신규 계정 Vectorize 403 / 출발 D1·R2·Pages 삭제 보류 /
+`CF_PURGE_TOKEN` plist 평문 / plist `OPENAI_API_KEY` 폐기 키.
+
+### 산출물
+- 보고서 `SSOT/프로젝트/aikorea24/보고서/2026-10-09-CF-ZONE-03-완료보고.md`
+  (지시서 폴더에 `2026-10-09-1338-CF-ZONE-03-완료보고.md` 복사)
+- 스크립트 `/tmp/z03_{step1,step2,diff,diff2,step3,reconcile,verify}.py`
+- 스냅샷 `/tmp/cfzone_backup_20261009/new_zone_dns_{before,after}.json`
+
+---
+
 ## 2026-10-09 13:25 — CF-ZONE-02 2차 zone 이전 실행 (Phase 0 완결 / Phase 1 권한 차단)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1315-CF-ZONE-02-실행.md`
