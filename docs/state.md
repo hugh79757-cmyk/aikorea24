@@ -1,3 +1,42 @@
+## 2026-10-09 16:25 — 쓰레드 발행 중단 + plist 토큰 하드코딩 전면 제거 + 재개 스크립트
+
+지시: 대표님 구두 지시(2026-10-09 15:5x~16:0x). 별도 지시서 없음.
+
+### 한 일
+1. `kr.aikorea24.threads-publisher` 비활성화 (bootout) + plist `CLOUDFLARE_API_TOKEN` 제거
+2. `kr.aikorea24.threads-token-refresh` 비활성화 (bootout)
+3. `kr.aikorea24.threads-compass.plist` XML 손상 복구 + `CLOUDFLARE_API_TOKEN` 제거
+4. `kr.aikorea24.news-unified.plist` `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID` 제거
+5. `scripts/threads/reactivate_publish.sh` 신규 작성 — 발행 재개 4단계 자동 점검
+
+### 결과
+- [검증됨] 3개 plist `EnvironmentVariables` 에 `CLOUDFLARE_API_TOKEN` 잔존 0건.
+  - `threads-publisher` `['PATH']` / `threads-compass` `['PATH']` / `threads-token-refresh` `['PATH']`
+  - `news-unified` `['CF_PURGE_TOKEN','CLOUDFLARE_ZONE_ID','OPENAI_API_KEY','PATH']` — `CF_PURGE_TOKEN` 은 출발 계정 토큰이라 `.env` 에 없음, `purge_cloudflare_cache()` 필수 → 유지.
+  - 제거된 값 중 `news-unified` 의 `cfut_Jk9`(신규 계정 정답값)·`threads-*` 의 `cfut_o36`(계정 미상, 기능 영향 0).
+- [검증됨] `threads-compass.plist` XML 복구. 손상 원인 2개: ① 주석 내 `--format` 의 `--` ② DOCTYPE public ID `"-//Apple//DTD PLIST 1.0//EN "` 후행 공백(따옴표 사이 공백까지 제거돼 2차 실패 후 재패치). `plutil -lint` OK + `plistlib.load` 성공. Label·Program(main_v3.py --format compass)·Calendar 09:30/15:30/21:30 확인. 백업 `…plist.bak.20261009`. **비활성 유지**(compass 는 D1 쓰기).
+- [검증됨] `news-unified` 재적용 후 동작. `/tmp/z06_probe.py` — plist 와 동일하게 `CLOUDFLARE_*` 제거 상태에서 `news_collector` import → `load_env()` 후 토큰 prefix `cfut_Jk9`·`wrangler d1 execute aikorea24-db --remote` rc 0, 대상 `3f4cedde-eabc-4d7c-b459-f6abe8733767`(신규 DB). `load_env()` 은 모듈 레벨(57-58행)에서 실행 → main() 이전에 env 구성됨.
+- [검증됨] `launchctl list` — threads 3종 없음, `kr.aikorea24.news-unified` LOADED.
+- [PRODUCTION CODE] `scripts/threads/reactivate_publish.sh` 신규. `bash -n` OK. 실제 실행으로 1단계(`.env` 5키 OK)·2단계(토큰 검증)까지 도달 확인. `set -euo pipefail` 에서 heredoc 실패가 안내 메시지 전에 스크립트를 죽이던 결함은 `|| tok_rc=$?` 패턴으로 수정.
+
+### ⚠️ 발행 재개는 현재 불가 — Threads 토큰 무효
+- [검증됨] `graph.threads.net/v1.0/{user_id}?fields=id,username` 를 `access_token` 쿼리·`Authorization: Bearer` 두 방식으로 호출 → 각각 **HTTP 400 / 401, `code=190 OAuthException`**, 메시지 `"You cannot access the app till you log in to www.threads.com and follow the instructions given."`
+- [검증됨] 15:5x 동일 토큰으로 같은 엔드포인트가 `{'id':'27538818229088576','username':'aikorea24'}` 를 반환했으나 16:04 부터 위 오류. 토큰 문자열 변경 없음(prefix `THAAd2Fk`·len 189 동일).
+- `.token_refresh_state.json` 은 `status: token_valid`, `expires_at: 2026-10-17T08:34:45` 로 기록돼 있어 실제와 불일치.
+- **해결 경로**: `python3 scripts/threads/token_refresh.py daily`(desktop 셸 경유, `THREADS_APP_SECRET` 필요) 또는 `www.threads.com` 로그인 후 앱 접근 동의. 그 다음 `bash scripts/threads/reactivate_publish.sh` 재실행하면 4단계까지 자동 진행.
+- 위 오류 메시지는 단순 만료가 아니라 "앱에 로그인해야 사용 가능" 형태 → Meta 측 앱 권한 상태 확인 필요.
+
+### 잔존 위험
+1. **[신규] Threads 접근 토큰 무효** — 위 참조. 재발행의 유일 블로커. `reactivate_publish.sh` 2단계가 이를 정확히 잡아낸다.
+2. **[누적] `news-unified` plist `CF_PURGE_TOKEN` 평문 하드코딩** — 출발 계정 토큰이라 이관 불가(출발 계정은 롤백 보류 중). 회전 시 purge 실패, 상한 `Cache-Control: public, max-age=300` 5분 지연.
+3. **[누적] plist `OPENAI_API_KEY` 폐기 키**(401 `Incorrect API key provided`). `load_env()` 이 프로젝트 `.env` 로 덮어쓰므로 실행 시점엔 유효 값 사용.
+4. **[누적] 출발 계정 D1·R2·Pages·Worker 삭제 보류.** 롤백 시 zone NS 를 `alberto`·`sonia` 로 복원 + `/tmp/cfzone_backup_20261009/dns_records.json` 41건 복원.
+5. **[누적] `projects2/mbti` git 아님**(롤백 `/tmp/z04/mbti-wrangler.toml.bak`) / `Projects/heritage` `dist` 2026-09-18 dirty / `finnews/wrangler.toml:6` account_id 출발 잔존 / 문서 6개 옛 database_id(`SOP.md:21`, `docs/TECHNICAL.md:523`, `docs/SKILLS/08-cloudflare-deploy.md:106`, `.planning/codebase/CONCERNS.md:119`, `.planning/codebase/INTEGRATIONS.md:24`, `.backup_brandname_20260929_150132/docs/TECHNICAL.md:523`) / 신규 계정 Vectorize 403.
+6. **[누적] 다중 라벨 호스트 2건 TLS 실패**(`m1.informationhot.kr.aikorea24.kr`·`dev.link2threads.com.aikorea24.kr`) / 신규 터널 3개 connector 미기동(`m1ssh`·`mde2` 530).
+
+### 다음 행동
+- 대표님: Threads 토큰 재발급(또는 `www.threads.com` 로그인) → `reactivate_publish.sh` 재실행으로 3·4단계 자동 진행.
+
 ## 2026-10-09 16:35 — Threads 발행 중단 (job 비활성화) + plist 토큰 제거
 
 지시: 대표님 직접 지시(2026-10-09 16:3x) — "aikorea24 쓰레드 발행 멈출 것. 비활성화. 다음지시까지 멈춰줘." + "threads-publisher.plist 하드코딩된 CLOUDFLARE_API_TOKEN 제거"
