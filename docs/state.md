@@ -1,3 +1,62 @@
+## 2026-10-09 13:25 — CF-ZONE-02 2차 zone 이전 실행 (Phase 0 완결 / Phase 1 권한 차단)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1315-CF-ZONE-02-실행.md`
+
+### 한 일
+`aikorea24.kr` zone 을 출발 계정(`fac9808c…`)에서 신규 계정(`7eb1b8cd…`)으로 이전하기 위한
+Phase 0 백업 6건 확보 + Phase 1 착수 시도. **출발 계정 변경 0건 (GET 전용).**
+
+### 결과
+- [검증됨] **Phase 0 백업 6건 파싱 성공** — `/tmp/cfzone_backup_20261009/`
+  `dns_records.json` 19,676B 41건 / `email_routing_rules.json` 1,489B 3건 /
+  `email_routing_dns.json` 1,201B 5건 / `email_routing_settings.json` 437B /
+  `workers_domains.json` 12,228B 31건 / `pages_aliases.json` 1,492B 프로젝트 10건.
+  근거: 스크립트 `json.load` 재파싱 `PARSE_OK`, `success=True`.
+- [검증됨] **DNS 41건 분류 확정** — CNAME 23 / TXT 7 / AAAA 4 / MX 3 / NS 4.
+  복사 대상은 **37건**(NS 4 = `ns1~4.hosting.co.kr` 제외, 신규 zone 이 자동 발급).
+  Tunnel CNAME 12건의 UUID 4개(`d677e31c…`·`258b8410…`·`be1802ac…`·`27b26132…`) 동일 값 유지 필요.
+- [검증됨] **컷오버 전 베이스라인 12개 호스트 측정** — `aikorea24.kr` 200 / `www` 200 /
+  `keyword` 200 / `cert` 200 / `barnmate` 200 / `persona` 200 / `api.barnmate` 404(Worker 응답) /
+  `mbti` 200 / `heritage` 200 / `threadforge` 401(Worker 응답) / `status` 200 / `img` 404(기존 상태).
+  Phase 2 판정표의 "기대" 열과 대조용.
+- [검증됨] **토큰별 권한 분리 실측** — `CF_DNS_TOKEN` = 출발 zone DNS 읽기만(Email Routing·Pages 403),
+  `CLOUDFLARE_API_TOKEN`(출발) = Email Routing·Pages·Workers 읽기 가능.
+  백업 4건이 단일 토큰으로 불가 → 토큰별 분리 수집. 스크립트 `/tmp/zone_phase0_backup2.py`.
+- [검증됨] **[위반 감지] CF-ZONE-01 오류 정정** — Pages `barnmate-web`·`certkorea` 를 출발 계정
+  프로젝트로 보고했으나 실측 결과 출발 계정(10개)·신규 계정(1개) 어디에도 없음. 제3 계정으로 추정.
+  `https://certkorea.pages.dev` 200 / `https://barnmate-web.pages.dev` 200 으로 실재 확인.
+- [검증불가] **Phase 1-6 zone 생성 — `POST /zones` 4회 전부 실패.**
+  `CF_MIGRATE_TOKEN` 403 `Requires permission "com.cloudflare.api.account.zone.create"` (verify `active`),
+  `CF_DNS_TOKEN` 400 code 1068 `Permission denied` (verify `active`),
+  `D1_API_TOKEN` `Invalid API Token` code 1000, wrangler OAuth 6종 2026-09-24 만료.
+  복구 계획: 대표님이 신규 계정 대시보드에서 `aikorea24.kr` zone 추가(30초) 후 새 NS 2개 전달.
+- [검증불가] **Phase 1-7~11, Phase 2 착수 불가** — zone `id` 부재로 DNS 등록·Workers 바인딩·
+  Email Routing 활성화·NS 배포가 전부 연쇄 차단.
+
+### 대표님 조치 필요 (2건)
+1. **zone 생성** — 신규 계정 대시보드 Add a domain(`aikorea24.kr`, Free) 또는
+   `Zone:Edit` + `Email Routing Rules:Edit` 권한 토큰 발급. → 이후 새 NS 2개 전달 요망.
+2. **Workers 3개 이전 여부 결정** — Workers 커스텀 도메인은 zone 과 같은 계정에만 바인딩된다.
+   `barnmate-api`(`api.barnmate`)·`mbti`·`heritage` 가 출발 계정에 있어 NS 변경 시 끊길 수 있다.
+   출발 계정 변경 금지 + Worker 미이전이라 지시서 Phase 1-8 "바인딩 3건 재생성" 은 그대로는 실행 불가.
+   **권고: NS 변경 전에 Worker 3개 이전을 별도 지시로 선행.**
+
+### 잔존 위험
+1. [검증불가] Phase 1 전체 미착수(토큰 권한). 대표님 조치 대기.
+2. [검증불가] Workers 3개 hostname 이전 후 동작 여부 — 계정 간 바인딩 제약.
+3. [부분검증] `certkorea`·`barnmate-web` Pages 소유 계정 미확인(제3 계정 추정). 현재 200 서빙 중.
+4. [부분검증] `threadforge.aikorea24.kr` Worker 매핑 미확인 — `workers/domains` 31건에 없음. 판단 보류.
+5. DNS 전파 지연 — NS 변경 후 최대 48시간, `dig NS aikorea24.kr` 로 확인.
+6. 출발 계정 변경 0건 유지(GET 전용).
+7. 기존 잔존: 출발 D1·R2·Pages 삭제 보류 / `finnews/wrangler.toml:6` account_id /
+   문서 6개 옛 `database_id` / `CF_PURGE_TOKEN` plist 평문 / plist `OPENAI_API_KEY` 폐기 키 /
+   신규 계정 Vectorize 403.
+
+### 다음 행동
+1. 대표님: 신규 계정에 `aikorea24.kr` zone 생성 → 새 NS 2개 전달.
+2. 대표님: Worker 3개(`barnmate-api`·`mbti`·`heritage`) 이전 지시 여부 결정.
+3. 후속: Phase 1-7 DNS 37건 등록 → Phase 1-10 Email Routing 활성화·룰 2건 → Phase 1-11 GET 검증.
+
 ## 2026-10-09 12:05 — CF-MIGRATE-06 임베딩 폴백 체인 (get_embedding 단일 경로 → 2티어 순수 회전)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1140-CF-MIGRATE-06-임베딩-폴백체인.md`
