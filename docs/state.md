@@ -1,3 +1,38 @@
+## 2026-10-09 11:51 — CF-ZONE-01 2차 zone 이전 조사 (읽기 전용, 변경 0건)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1150-CF-ZONE-01-조사.md`
+상세 보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-CF-ZONE-01-조사.md`
+
+### 한 일
+출발 계정 zone `aikorea24.kr`(`a6d9e75032c8cefe316b06d46a90a431`)을 **GET 전용으로 전수 조사**했다.
+POST/PATCH/PUT/DELETE 호출 0건, 토큰 값 출력 0건. 코드·설정·DNS 미변경.
+
+### 결과 — 지시서 완료 기준 4/5 충족
+- [검증됨] **DNS 41건 전수 확보**. 유형 집계 CNAME 23 / AAAA 4 / MX 3 / NS 4 / TXT 7 = 41. 근거: `GET /zones/{id}/dns_records?per_page=100` 1페이지 전량.
+- [검증됨] **Workers hostname 바인딩 3건 확인** — `api.barnmate.aikorea24.kr`→`barnmate-api`, `mbti.aikorea24.kr`→`mbti`, `heritage.aikorea24.kr`→`heritage`. `workers/scripts/{name}/routes` 는 전건 0건 → 라우팅이 hostname 바인딩 방식. `workers/domains` 응답에서 `zone_id` 종속 확인.
+- [검증됨] **Email Routing 설정** — 규칙 3건, 활성 forward 2건(`hugh_cho@`, `info@`), catch-all disabled. MX 3건 + SPF + Cloudflare DKIM TXT 존재.
+- [검증불가] **Tunnel 4개** — 3개 토큰 × 4개 엔드포인트 전부 실패. `GET /accounts/{id}/tunnels` 가 **HTTP 403 code 10000 Authentication error**(Zero Trust 권한 없음), `cfd/tunnel` 경로는 code 7000 `No route for that URI`. id·name·ingress·zone 종속 여부 전부 미확인. 복구 계획: 대표님이 대시보드 Zero Trust → Tunnels 화면에서 확인하거나 Zero Trust Read 권한 토큰 발급.
+- [검증불가] **Email Routing 이전 절차** — 공식 문서 URL 2건 404. zone 이동 시 자동 이관/재구성 필요 여부 판정 근거 없음.
+- [검증됨] **이전 순서·롤백 계획 초안 작성**(보고서 §6) — Phase 0 무영향 준비(백업·신규 zone 생성·DNS 사전 등록) → Phase 1 자원 재바인딩(Workers/Pages/Email, 여전히 무영향) → Phase 2 NS 교체(유일한 컷오버 지점) → Phase 3 정리(지시 없이는 실행 금지). Phase 0~1 동안 출발 계정 zone 은 한 건도 건드리지 않으므로 롤백 불필요. Phase 2 실패 시 레지스트라 NS를 `alberto`·`sonia` 로 복원.
+- ⚠️ **파급 범위 발견**: `m1.informationhot.kr.aikorea24.kr` · `mde2.rotcha.kr.aikorea24.kr` · `dev.link2threads.com.aikorea24.kr` 3개 호스트가 aikorea24 zone 안에 있어 **타 도메인 프록시용으로 보임**. NS 변경 시 informationhot·rotcha·link2threads 까지 영향 갈 수 있음.
+- **zone 이동 API 엔드포인트는 실측되지 않음.** 실무 경로는 신규 계정에 동일 이름 zone 생성 후 NS 교체이며, NS 변경이 유일한 실효 컷오버 변수.
+
+### 대표님 조치 필요 (에이전트 권한으로 해결 불가)
+1. Tunnel 4개 확인 (대시보드 또는 Zero Trust Read 토큰 발급)
+2. `aikorea24.kr` 는 `ns1~4.hosting.co.kr` 등록이므로 레지스트라 NS 교체 가능 여부 확인
+3. Tunnel 3개 호스트의 타 도메인 파급 동의 (informationhot·rotcha·link2threads 담당 확인)
+
+### 잔존 위험
+- [검증불가] Tunnel 실체 미확인 → **NS 변경 후 12개 호스트 동작 여부를 예측할 수 없음.** 이 상태에서 Phase 2 진입 금지.
+- [검증불가] Email Routing 이전 시 자동 이동 여부 미확인.
+- [검증불가] Workers hostname 바인딩의 zone 이전 자동 추종 여부 미확인.
+- [부분검증] `threadforge.aikorea24.kr` 의 Worker 매핑 — `workers/domains` 응답에 직접 매칭 없음(AAAA `100::` 패턴상 Worker 추정).
+- [부분검증] `certkorea`·`barnmate-web` Pages alias — DNS CNAME 으로는 존재 확인, Pages alias 목록에는 미확인.
+- R2 버킷 17개(전체 20개) 용도 미확인.
+- **본 조사로 트래픽·설정에 변경 없음.** 출발 계정 D1·R2·Pages 삭제 보류 상태 유지(롤백 검증 전).
+
+---
+
 ## 2026-10-09 13:25 — CF-MIGRATE-05 news-unified 전체 파이프라인 수동 검증
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1110-CF-MIGRATE-05-파이프라인-수동검증.md`
