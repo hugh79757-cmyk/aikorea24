@@ -1,3 +1,33 @@
+## 2026-10-09 15:45 — CF-ZONE-04 Workers·Tunnel 이전 + NS 전환 (zone 이전 완료)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1350-CF-ZONE-04-Workers이전.md`
+보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-CF-ZONE-04-완료보고.md`
+
+### 한 일
+신규 계정 `7eb1b8cd178de269758ec94b2e03330b`으로 Worker 3종(`mbti`·`heritage`·`threadforge-do`),
+Cloudflare Tunnel 1종(`mac-dashboard`), threadforge-do 부속 리소스 6종(R2·Queue×2·KV×2·Vectorize)을 이전.
+대표님이 NS를 `lara`·`mike`로 교체한 후 15개 호스트 재검증.
+
+### 결과
+- [검증됨] D1 `mbti-db`(3테이블 1/0/3)·`heritage-db`(6테이블, `heritage_index` 3,632) 카운트 1:1. 근거: `/tmp/z04/verify_d1.py` → `ALL MATCH`.
+- [검증됨] Worker 3종 배포 성공. `mbti` version `f63ebbe1-…`(65 assets), `heritage` version `5bd73b4f-…`(154 assets), `threadforge-do` version `65daa71e-…`(DO·KV2·Queue2·Vectorize·R2 바인딩 10개 출력 확인).
+- [검증됨] mac-dashboard 터널 신규 계정 재생성 `9667fb14-cb03-49d1-8682-322d57f3087c`, `status healthy connections 4`. connector 는 이 Mac 의 launchd `com.twinssn.cloudflared.plist` 가 실행 중이라 로컬 관리 방식(credentials 파일 + `config.yml`)으로 전환. DNS CNAME 6건 PATCH 완료. `status`·`wiki` 200, `ops`·`1`·`blogdex` 401(앱 레벨 응답).
+- [부분검증] R2 `threadforge-media` 34/34 객체 복사, KV 564/589 키 복사. **Vectorize는 출발 계정 인덱스가 벡터 0건(`created_on == modified_on == 2026-07-06`)이라 이전 대상 없었음.** 25키 실패는 Cloudflare `code 10030`(키 UTF-8 512B 제한) 로 개별 get·put 모두 414, `POST /bulk` 는 토큰 권한 부족으로 405 → 경로 무관 이전 불가.
+- [검증됨] 출발 계정 Worker 522/530 의 원인은 Cloudflare 전역 장애(`cloudflarestatus.com` → `partialoutage`, `Cloudflare Sites and Services: degraded_performance`, 다수 지역 `major_outage`). Pages 는 정상. 조치 불필요.
+- [검증됨] NS 전환 후 최종 15호스트: `aikorea24.kr`·`www`·`keyword`·`cert`·`barnmate`·`persona`·`mbti`·`heritage`·`threadforge`·`status`·`wiki` = 200, `ops`·`1`·`blogdex` = 401(앱 인증), `api.barnmate` = 530/1016(대표님 삭제 결정분), `img` = 404(마이그레이션 이전부터 동일).
+
+### 잔존 위험
+1. `api.barnmate.aikorea24.kr` 530/1016 — 대표님 결정에 따라 레코드 없음. placeholder 추가 여부 미답.
+2. KV 25키 이전 불가 — `KV_POSTED_URLS` 게시 URL 25건이 출발 계정에만 존재, 신규 Worker 가 중복 오판 가능. 복구 계획: 대표님이 `CF_MIGRATE_TOKEN` 에 KV bulk write 권한 추가.
+3. down 터널 3개(`m1-ssh`·`mde2`·`l2t-dev`, connector 0개) 이전 안 함 — 4호스트 `error 1033` 지속.
+4. 출발 계정 D1·R2·Pages·Worker 삭제 보류(롤백 검증 전).
+5. `projects2/mbti` git 아님 / `Projects/heritage` working tree dirty.
+6. `finnews/wrangler.toml:6` account_id 출발 잔존 / 문서 6개 옛 database_id / `CF_PURGE_TOKEN` plist 평문 / plist `OPENAI_API_KEY` 폐기 키.
+
+### 다음 행동
+- 대표님 결정 대기: (a) `api.barnmate` placeholder 추가 여부 (b) KV bulk write 권한 추가 여부 (c) down 터널 3개 처리 방식.
+- 외부 저장소 커밋: `~/Projects/heritage/wrangler.jsonc`, `~/projects2/threadsp-do/wrangler.jsonc`.
+
 ## 2026-10-09 13:38 — CF-ZONE-03 신규 zone DNS 정합화 (37건 일치 / NS 교체 대기)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1335-CF-ZONE-03-DNS정합화.md`
