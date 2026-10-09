@@ -1,3 +1,73 @@
+## 2026-10-09 08:45 — D1-NEWS-FIX-01 완료: /news 풀스캔 제거 + 배포
+
+지시서: `SSOT/프로젝트/공통/지시서/2026-10-09-0830-D1-NEWS-FIX-01.md`
+보고서: `SSOT/프로젝트/공통/보고서/2026-10-09-D1-NEWS-FIX-01-완료보고.md`
+수정 파일: `src/pages/news.astro` 1개 + D1 인덱스 SQL 1건. 배포 커밋 `570ea8c70cc5ce28242ba8ff7067b7e3be238efc`.
+
+### 한 일
+`aikorea24.kr/news` 의 D1 `news` 테이블 풀스캔 쿼리(윈드함수 `ROW_NUMBER() OVER (PARTITION BY source ...)`)를
+후보 500행 단순 SELECT + JS 소스별 상한 5건 방식으로 교체하고 `Cache-Control: public, max-age=300` 적용. 프로덕션 배포.
+
+### 결과 (검증 근거)
+- [검증됨] rows_read **70,962 → 1,075** (66배 감소). 근거: `wrangler d1 execute aikorea24-db --remote` 의 `meta.rows_read`.
+- [부분검증] 2-1(인덱스) 실패 — `SCAN news` → `SCAN news USING INDEX idx_news_source_created` 로 바뀌었으나 53,387행(24.8% 감소)에 그침. 윈드함수는 전체 행 분할 정렬이 필요해 인덱스로 스캔 자체 제거 불가. → 2-2 대신 동치 쿼리 채택.
+- [검증됨] 기능 보존 3조건 — 라이브 `curl -sL https://aikorea24.kr/news` HTTP 200 / 73,942 bytes. `<a class="block bg-white` 50건, 소스 배지 50건, `<h2>` 50건, distinct source 19개 / max 5건, 후보 500행 category `grant 34 / news 187 / global 279` (senior·benefit 0건), 후보 created_at 내림차순 True.
+- [검증됨] 캐시 헤더 — `curl -sIL https://aikorea24.kr/news` → `cache-control: public, max-age=300`.
+- [검증됨] 빌드·배포 — `npm run deploy` → `✨ Deployment complete!` (`3b5bd842.aikorea24.pages.dev`).
+- [부분검증] 결과 집합이 원 쿼리와 40/50 일치, 10건 상이. 상이 10건 전부 `created_at = 2026-10-08 22:33:19` 동률 행(47행 몰림)에서 발생 — 원 쿼리도 동률 순서가 임의라 스캔 방식이 바뀌면 승자가 바뀐다. 기능 3조건은 양쪽 모두 충족.
+- [부분검증] `SCAN news` 완전 제거는 미충족(인덱스 스캔 잔존). rows_read 66배 감소로 실질 효과는 달성했으나 지시서 완료 기준 1번 문면 미달.
+
+### 잔존 위험
+- `idx_news_source_created` 인덱스가 최종 쿼리에서 미사용. DB 잔류 상태. `DROP INDEX idx_news_source_created` 로 삭제 가능 — 대표님 판단 대기.
+- 지시서 2-2(소스별 분할 조회) 미수행 — `COUNT(DISTINCT source)` = 89개로 지시서 "20개 초과 시 중단" 조건에 해당. 동치 쿼리(후보 500행)로 대체했고 동치성 증명은 보고서 §2.
+- 후보 500행 상한이 미래에 부족할 가능성 (특정 소스가 최신 500행 독점 시 노출량 50건 미만으로 감소). 코드 `ponytail:` 주석에 상한 근거·상향 조건 기재.
+- `cf-cache-status: DYNAMIC` — `Cache-Control` 적용됐으나 Cloudflare CDN 엣지 캐시의 실효화 여부 미검증. 필요 시 `Cache Everything` 규칙 별도 설정.
+- `/news` 호출자 미특정 (322회/시간) — rows_read 감소로 호출 빈도 자체는 그대로. Cloudflare Analytics 필요.
+- `index.astro`(홈)도 D1 조회 — 동일 패턴 풀스캔 잔존 가능성 미조사.
+
+### 다음 행동
+- `idx_news_source_created` 삭제 여부 결정.
+- Cloudflare 캐시 규칙으로 `/news` 엣지 캐시 실효화 여부 확인.
+- 홈 페이지 D1 쿼리 패턴 조사 (D1-NEWS-FIX-02 후보).
+- `/news` 호출자 특정 (Cloudflare Analytics 로그).
+
+## 2026-10-09 — CF-MIGRATE-01 완료: Cloudflare 계정 이전 조사
+
+지시서: `SSOT/프로젝트/공통/지시서/2026-10-09-0835-CF-MIGRATE-01-조사.md`
+읽기 전용 조사. 계정 생성·리소스 이동·DNS 변경 0건, 배포 0건, 시크릿 값 기록 0건.
+보고서: `SSOT/프로젝트/공통/보고서/2026-10-09-CF-MIGRATE-01-조사.md` (완료보고 사본: `SSOT/프로젝트/공통/지시서/2026-10-09-0836-CF-MIGRATE-01-완료보고.md`)
+
+**한 일**
+- hugh79757 계정(`fac9808c757df31d797190c529aaa71a`)의 aikorea24 관련 리소스를 Cloudflare REST 읽기 전용으로 전수 조사 → 이전 절차·위험·롤백·작업량 산정.
+
+**결과**
+- [검증됨] Tier A(aikorea24 직접 사용) = D1 `aikorea24-db`(`bec650ce-f732-46bc-87c0-bd76ed17e42a`) / R2 `aikorea24-files` / Pages `aikorea24`(project_id `6024af53-e322-4941-b65c-fd46c865b1ba`, 호스트 `aikorea24.kr`·`www.aikorea24.kr`, GitHub `hugh79757-cmyk/aikorea24`). KV·DO·Queue·Workers AI 미사용. Pages 시크릿 7개(`AUTH_SECRET` `SESSION_SECRET` `BREVO_API_KEY` `GOOGLE_CLIENT_ID` `GOOGLE_CLIENT_SECRET` `KAKAO_CLIENT_ID` `KAKAO_CLIENT_SECRET`) + plain `account_id` 1개 — 키 이름만 기록.
+- [검증됨] Worker `finnews` 는 **미배포**. `workers/scripts` 72건에 없음, DNS 레코드 없음, `dig fin.aikorea24.kr` 결과 없음. `wrangler.toml` 정의만 존재.
+- [검증됨] Tier B(zone 공용) = `aikorea24.kr` zone(`a6d9e75032c8cefe316b06d46a90a431`) 레코드 41개. Pages 3종(`news-keyword-pro`→keyword. / `money-aikorea24`→persona. / `certkorea`→cert.) + Worker 4종(`barnmate-api` `heritage` `mbti` `threadforge-do`) + R2 3종(`persona-cards` `heritage-images` `barnmate-uploads`) + Tunnel 4개(`mac-dashboard` `l2t-dev` `m1-ssh` `mde2`). MX 3건 = Cloudflare Email Routing(계정 종속). DNSSEC `disabled`.
+- [검증됨] 실사용 네임서버 = `alberto.ns.cloudflare.com` / `sonia.ns.cloudflare.com` (API `name_servers` + `dig NS @1.1.1.1` 일치). zone `type=full`, `original_name_servers`=hosting.co.kr(비활성 잔존 레코드).
+- [검증됨] 계정 전량 인벤토리 — D1 10 / Workers 72 / Pages 10 / KV 5 / R2 20 / Queue 2 / DO 1 / Tunnel 4 / **Cron Trigger 0건**(Workers 72건 `schedules` 전수 조회 결과 전부 빈 배열).
+- [검증됨] 이전 절차 8종 문서화 — D1 `wrangler d1 export/import`(계정 간 복사 API 없음) / Pages 재생성+GitHub 재연결 / DNS zone transfer→NS 변경 2경로 / R2 동일명 버킷 `aws s3 sync` / KV 이전 대상 없음 / Tunnel 4개 재생성 / OAuth·Brevo·Email Routing 재설정.
+- [검증됨] 위험 8건 + 검증 체크리스트 10항목 + 롤백 3단계 정리. 핵심: **출발 계정 리소스를 롤백 검증 완료 전 삭제 금지**(이동이지 복제가 아님 → 출발 쪽이 온전하면 되돌리기가 가능).
+- [검증됨] 작업량 = 9단계, 약 6~9h(직접 수행). **분할 권고: 1차(D1+R2+Pages, DNS zone 유지, 4h) → 안정화 1~2주 → 2차(zone+Tunnel+Email Routing, 3~5h).**
+
+**잔존 위험**
+- **[검증불가] zone transfer 의 Free 플랜 가용성.** `POST /zones/{id}/account` 제공 여부를 이 토큰으로 확인 못 함. 불가 시 NS 변경 필수 → 다운타임 구간 발생. 1차 실행 전 Cloudflare 문서/지원팀 확인 필요.
+- **[부분검증] `img.aikorea24.kr` → R2 버킷 매핑 미확정.** R2 목록 API 가 공개 URL 미반환. 실제 응답 헤더로 확인 필요. 버킷명 변경 시 전 이미지 링크 파손.
+- **[부분검증] Pages 를 다른 계정에 둘 때의 쿼리 격리 수준.** 1차 분할 권고의 핵심 가정. 이전 후 실측 필요.
+- **[검증불가] Tier B 13개 호스트의 운영 트래픽·SLA.** 서브 프로젝트 소유 미확인 → 동시 장애 영향 범위 수치화 못 함.
+- **[부분검증] `.env` 29개 키와 Pages 런타임 secret 의 공유 범위.** 키 이름만 비교(값 미확인 지시 준수).
+- `finnews` 과거 배포 후 삭제되었을 가능성 있어 이전 전 확인 요망.
+- 신규 계정(`Stylefactory9ai@gmail.com`)은 대표님 직접 생성 예정 — 본 작업에서 생성 0건. 계정 ID·Workers.dev 서브도메인 미확정(신규 계정 생성 후 확인).
+
+**다음 행동**
+- 대표님: (1) 신규 계정 생성 및 계정 ID 전달, (2) zone transfer Free 플랜 가용성 확인, (3) 1차(분할 1단계)만 먼저 승인할지 전체 승인할지 결정.
+- 승인 시 착수 순서: D1 export(파이프라인 `kr.aikorea24.pipeline-runner` unload 후) → 신규 D1 create/import → R2 sync → Pages 재생성 → Pages 커스텀 도메인만 재연결(zone 은 출발 계정 유지).
+
+## 2026-10-09 — 진행 중 (2026-10-09, CF-MIGRATE-01): Cloudflare 계정 이전 조사
+
+지시서: `SSOT/프로젝트/공통/지시서/2026-10-09-0835-CF-MIGRATE-01-조사.md`
+읽기 전용 조사. 계정 생성·리소스 이동·DNS 변경 금지. 배포 없음.
+
 ## 2026-10-07 02:10 — 10-06 블로그/수정분 커밋 + 재배포
 
 ### 한 일
