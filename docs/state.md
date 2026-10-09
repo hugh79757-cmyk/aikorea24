@@ -1,3 +1,29 @@
+## 2026-10-09 19:55 — CF-ZONE-06 불필요 터널·DNS 정리 (mde2·m1-ssh 삭제)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1830-CF-ZONE-06-터널정리.md`
+보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-CF-ZONE-06-완료보고.md` (+ 지시서 폴더 `2026-10-09-1955-…` 복사)
+
+### 한 일
+대표님 확인(18:25) — `mde2` 는 로컬 전용 도구(127.0.0.1:5111), `m1-ssh` 는 m1 서버 미사용 → 신규 계정에서 두 터널과 그 DNS 레코드 3건을 삭제. `l2t-dev`·`mac-dashboard` 는 유지.
+
+### 결과
+- [검증됨] 터널 2개 DELETE — `mde2`(`15dde64e-…`)·`m1-ssh`(`33989366-…`) 각각 **HTTP 200** + 결과 id 일치. 삭제 후 `GET /accounts/7eb1b8cd…/tunnels` → `l2t-dev`(16a09033) + `mac-dashboard`(9667fb14, healthy) **2개만 남음**. 시크릿·토큰 미출력.
+- [검증됨] 신규 zone `71a21534…` DNS 3건 DELETE — `m1.informationhot.kr.aikorea24.kr`(`c44208c4…`), `m1ssh.aikorea24.kr`(`189af869…`), `mde2.aikorea24.kr`(`66b43521…`) 전부 **HTTP 200 success=true**. 전체 37건 → **34건**, 재조회 대상 잔존 0건.
+- [검증됨] 유지 대상 무결성 — 터널 CNAME 7건 잔존(`1`·`blogdex`·`mde2.rotcha.kr.aikorea24.kr`·`ops`·`status`·`wiki` → `9667fb14`, `dev.link2threads.com.aikorea24.kr` → `16a09033`). 라이브 `status` 200 / `wiki` 200.
+- [부분검증] `dig @1.1.1.1` 삭제 3개 호스트 = 엣지 IP 반환 = **공개 리졸버 캐시 전파 지연**. Cloudflare DNS 에 레코드는 없음. 복구 계획: TTL 경과 후 재확인.
+- [부분검증] `dev.link2threads.com.aikorea24.kr` → 000(TLS handshake 실패). CF-ZONE-05 에서 보고한 preexisting 다중 라벨 호스트 인증서 부재. 이번 삭제와 무관(`l2t-dev` 유지).
+- [검증됨] 출발 계정 변경 0건 — 신규 계정 토큰만 사용.
+
+### 잔존 위험
+1. **[신규] DNS 전파 지연** — 삭제 3개 호스트가 TTL 만료 전까지 엣지 IP 응답. 자동 해소.
+2. **[누적] `dev.link2threads.com.aikorea24.kr` TLS 실패** — Advanced Certificate Manager 필요.
+3. **[누적] 신규 계정 D1 row write 한도 초과(180,740/100,000)** — emDash 초기화 블로커. 2026-10-10 09:00 KST 리셋 대기 또는 유료 플랜.
+4. **[누적] AdSense 슬롯 id 미확정 / `projects2/aikorea24emdash` git 아님 / 신규 emDash PAT 미발급 / Threads 토큰 code 190 무효 / `news-unified` plist `CF_PURGE_TOKEN` 평문 / 출발 계정 리소스 삭제 보류.**
+5. **[누적] `finnews/wrangler.toml:6` account_id 출발 잔존 / 문서 6개 옛 database_id / 신규 계정 Vectorize 403 / `projects2/mbti` git 아님 / `Projects/heritage` `dist` 2026-09-18 dirty.**
+
+### 다음 행동
+- AIK24-IDX-01(인덱스 점검) 실행 — D1 읽기 전용이라 한도 상태와 무관.
+
 ## 2026-10-09 19:35 — AIK24-D1-LIMIT-01: D1 한도 초과 실측 검증 (180,740행)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1910-AIK24-D1-LIMIT-01-검증.md`
