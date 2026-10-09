@@ -1,3 +1,28 @@
+## 2026-10-09 09:05 — CF-MIGRATE-02 중단: 사전 조건 미충족 (작업 미시작)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-0850-CF-MIGRATE-02.md`
+**작업 시작 전 사전 조건 검사에서 중단.** 코드·인프라 변경 0건, launchd 상태 변경 0건, D1·R2·Pages·DNS 무변경.
+
+### 한 일
+Cloudflare 신규 계정(`7eb1b8cd178de269758ec94b2e03330b`) 으로 D1·R2·Pages 이전 지시서(CF-MIGRATE-02)의 사전 조건 검증만 수행.
+
+### 결과
+- [검증됨] 신규 계정 API 토큰 부재 — 치명적 블로커. `~/.env.common` `CLOUDFLARE_API_TOKEN` (계정 `fac9808c757df31d797190c529aaa71a`) 으로 신규 계정 API 호출 시 `Unauthorized to access requested resource`. `aikorea24/.env`·`finnews/.env` 토큰도 동일하게 출발 계정만 접근. `GET /accounts` 조회 결과 접근 가능 계정 = 출발 계정 1개뿐. `~/.wrangler/config/*.toml` OAuth 프로필 6종은 2026-09-24 만료 상태(비interactive 셸에서 갱신 불가). → §2 D1·§3 R2·§4 Pages·§5 DNS 전부 실행 불가.
+- [검증됨] Pages 시크릿 7개 중 3개 부재 — `AUTH_SECRET`, `KAKAO_CLIENT_ID`, `KAKAO_CLIENT_SECRET` 이 `~/.env.common`·`aikorea24/.env` 양쪽에 없음. 존재하는 것: `SESSION_SECRET`(project .env), `BREVO_API_KEY`(양쪽), `GOOGLE_CLIENT_ID`·`GOOGLE_CLIENT_SECRET`(project .env) = 4개. 지시서 §16 은 "5개 확인됨"으로 기술하나 실제 4개. → §4 시크릿 입력 및 §7 로그인 라운드트립 검증 불가.
+- [검증됨] 시각 조건 충족 — 현재 08:59 KST. `kr.aikorea24.pipeline-runner` 실행 시각 06:00·20:00 KST(`StartCalendarInterval` plist 실측), 다음 실행까지 11시간 1분.
+- [검증됨] 출발 계정 리소스 ID 지시서와 일치 — D1 `bec650ce-f732-46bc-87c0-bd76ed17e42a`, Pages `6024af53-e322-4941-b65c-fd46c865b1ba`.
+
+### 잔존 위험
+- 계정 이전 미완료. D1 row read 초과(D1-NEWS-FIX-01 해결로 66배 감소했으나 blast radius 격리는 미달) 상태가 현재 계정에 그대로 유지된다.
+- 신규 계정에는 D1·R2·Pages 리소스가 아직 생성되지 않았다. 지시서 §15 는 "R2 활성화 확인" 만 기재돼 있어 D1·Pages 활성화 여부는 미검증(접근 불가).
+- D1-NEWS-FIX-01 잔재 인덱스 `idx_news_source_created` 가 출발 계정 DB에 미사용 상태로 잔존. 지시서 §28 이 §2 진입 시 DROP 을 요구하나 진입하지 못해 실행되지 않음.
+- R2 출발 버킷 `aikorea24-files` 용량 미확인 (§3 비용 게이트 10GB 규칙). 접근 불가 사유로 측정하지 못함. 용량 초과 상태일 경우 §3 착수 시 즉시 중단 필요.
+
+### 다음 행동 (대표님 조치 필요)
+1. 신규 계정 API 토큰 발급 — Cloudflare 신규 계정 → My Profile → API Tokens. 필요 권한: D1 Read/Write, R2 Read/Write, Pages Edit, Workers Scripts Edit, Zone DNS Edit(`aikorea24.kr`). 발급 후 `~/.env.common` 에 **신규 키명으로** 추가 (기존 `CLOUDFLARE_API_TOKEN` 덮어쓰면 출발 계정 작업이 차단됨). 권장 키명: `CF_MIGRATE_TOKEN` / `CF_MIGRATE_ACCOUNT_ID=7eb1b8cd178de269758ec94b2e03330b`.
+2. 시크릿 3개(`AUTH_SECRET`, `KAKAO_CLIENT_ID`, `KAKAO_CLIENT_SECRET`) 확보 후 `~/.env.common` 에 추가. 출처 후보: 출발 계정 Pages 프로젝트 `6024af53-e322-4941-b65c-fd46c865b1ba` 의 시크릿 목록, 또는 Kakao Developers 콘솔. **값을 채팅·보고서에 기록하지 않는다.**
+3. 두 조치 완료 시 CF-MIGRATE-02 §1 사전 확인부터 순차 재개.
+
 ## 2026-10-09 08:45 — D1-NEWS-FIX-01 완료: /news 풀스캔 제거 + 배포
 
 지시서: `SSOT/프로젝트/공통/지시서/2026-10-09-0830-D1-NEWS-FIX-01.md`
