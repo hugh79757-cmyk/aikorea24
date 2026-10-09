@@ -1,3 +1,26 @@
+## 2026-10-09 16:35 — Threads 발행 중단 (job 비활성화) + plist 토큰 제거
+
+지시: 대표님 직접 지시(2026-10-09 16:3x) — "aikorea24 쓰레드 발행 멈출 것. 비활성화. 다음지시까지 멈춰줘." + "threads-publisher.plist 하드코딩된 CLOUDFLARE_API_TOKEN 제거"
+
+### 한 일
+1. `kr.aikorea24.threads-publisher` launchd job **비활성화** (`bootout`).
+2. `~/Library/LaunchAgents/kr.aikorea24.threads-publisher.plist` 의 `EnvironmentVariables.CLOUDFLARE_API_TOKEN` **제거**.
+
+### 결과
+- [검증됨] job 비활성화. `launchctl bootout gui/$(id -u)/kr.aikorea24.threads-publisher` rc=0. `launchctl list | grep aikorea24.threads` → `kr.aikorea24.threads-token-refresh` 만 남음(publisher 항목 없음). `pgrep -fl main_v3.py` → 프로세스 없음.
+- [검증됨] plist 토큰 제거. 제거 전 EnvKeys `['CLOUDFLARE_API_TOKEN','PATH']` → 제거 후 `['PATH']`. `plutil -lint` → OK. 백업 `~/Library/LaunchAgents/kr.aikorea24.threads-publisher.plist.bak.20261009`.
+- 제거 대상 토큰은 prefix `cfut_o36…` 로, `~/.env.common` 의 출발 계정(`cfut_275`)·신규 계정(`cfut_Jk9`) **어느 쪽과도 일치하지 않는 제3 토큰**이었다. 기능 영향은 0 이었음 — `main_v3.py:17-18` 의 `_config.load_to_environ()` 이 프로젝트 `.env`(신규 계정 `cfut_Jk9`) 를 무조건 덮어써서 이미 신규 계정으로 D1 조회 중이었다. `news-unified`(CF-MIGRATE-04)의 미해결 항목과 동일 유형.
+- [검증됨] 다른 LOADED job 중 Threads 발행 경로 없음. `com.aikorea24.manual-publisher` 는 `Projects/money-aikorea24` 블로그 발행(30분 주기)이며 Threads 대상 아님. `kr.aikorea24.thread-topic-finder`(06:10)와 `kr.aikorea24.threads-insights` 는 이전부터 `.disabled`.
+
+### 잔존 위험
+1. **[신규] `kr.aikorea24.threads-token-refresh`(매일 00:30)는 LOADED 유지.** 쓰레드를 발행하지 않으므로 기능 영향 없으나, 재개 시 필요 없는 API 호출 1회/일 발생. 비활성화 원하면 지시 요망.
+2. **[누적] `kr.aikorea24.threads-compass.plist` XML 손상** — `plistlib.load` → `ExpatError: line 2, column 72`. 이 job 은 이전부터 미로드 상태였으므로 동작 영향 0.
+3. **[미해소] `news-unified` plist 의 `CLOUDFLARE_API_TOKEN` 하드코딩**(CF-MIGRATE-04 잔존). 이 job 은 D1 쓰기를 하므로 실제 영향 있음. 별도 지시 대기.
+4. **[누적]** 출발 계정 D1·R2·Pages·Worker 삭제 보류. `projects2/mbti` git 아님. `Projects/heritage` `dist` dirty. `finnews/wrangler.toml:6` account_id 출발 잔존. 문서 6개 옛 database_id 잔존. `CF_PURGE_TOKEN` plist 평문. plist `OPENAI_API_KEY` 폐기 키(401).
+
+### 다음 행동
+- 재개 지시 시: `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/kr.aikorea24.threads-publisher.plist`. `.env` 로드 확인 후 1회 수동 실행(`main_v3.py --once`류)으로 D1 조회 계정 확인 권장.
+
 ## 2026-10-09 16:20 — CF-ZONE-05 잔존 3건 처리 (KV 해시 이전 · 터널 3개 재생성)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1540-CF-ZONE-05-잔존처리.md`
