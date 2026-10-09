@@ -1,3 +1,29 @@
+## 2026-10-09 19:10 — emDash 관리자 초기화 상태 확인 (아직 미초기화, 원인 확정)
+
+### 한 일
+대표님 질문 "관리자 계정 초기화 됐나?" 에 대해 `/_emdash/api/setup/status` · D1 `sqlite_master` · `wrangler tail` 로 상태 재확인.
+
+### 결과
+- [검증됨] **아직 초기화 안 됨.** `GET /_emdash/api/setup/status` → `{"success":false,"error":{"code":"NOT_CONFIGURED","message":"EmDash is not initialized"}}`. D1 `aikorea24-emdash-db` 테이블 = `_cf_KV`·임시 프로브뿐, EmDash 스키마 0건.
+- [검증됨] `wrangler tail aikorea24emdash` 로 서버측 원인 확보:
+  `EmDash middleware error: Error: Migration failed: D1_ERROR: Your account has exceeded D1's free tier daily row write limit. Upgrade to a paid plan or wait until tomorrow (midnight UTC) to continue.`
+- [검증됨] 신규 계정(`7eb1b8cd…`)의 **D1 무료 티어 일일 row write 한도 초과**가 원인. EmDash 초기화는 스키마 생성 + seed INSERT = 대량 write → 거절 → `locals.emdash.db` 미생성 → 어드민이 "not initialized" 표시.
+- [검증됨] 단발 DDL(`CREATE TABLE`/`DROP TABLE`)은 통과 — 마이그레이션이 대량 write 라서 실패하는 것. 임시 프로브 테이블 `_probe` 는 생성 후 삭제 완료.
+- [검증됨] `GET /_emdash/api/auth/mode` → `{"authMode":"passkey","signupEnabled":false,"providers":[]}`. 초기 관리자 생성 경로는 passkey(`/_emdash/api/setup/admin` + `/verify`, nonce 쿠키 `emdash_setup_nonce` 유효 1시간). `_emdash/api/auth/dev-bypass` 는 프로덕션 403 고정.
+- [부분검증] magic-link 이메일 경로는 `send_email` 바인딩과 `cloudflareEmail` 플러그인을 제거했으므로 현재 불가. 초기화는 passkey 라서 영향 없음.
+
+### 잔존 위험
+1. **[블로커] D1 row write 한도 초과 → emDash 초기화 불가.** 해법 2개: ① **2026-10-10 09:00 KST(UTC 자정)까지 대기**(무료) ② 신규 계정 유료 플랜 업그레이드(즉시, 과금).
+2. **[누적] AdSense 슬롯 id 미확정** — `AdSlot` slot 빈 값(무광고).
+3. **[누적] `projects2/aikorea24emdash` git 저장소 아님** — 롤백 기준선 없음.
+4. **[누적] 신규 인스턴스 PAT 미발급** — chat 에 붙인 `ec_pat_…` 는 starclip 인스턴스 토큰으로 실측 확인. 마이그레이션 후 회전 권고.
+5. **[누적] Threads 접근 토큰 무효(code 190)** — `scripts/threads/reactivate_publish.sh` 준비됨.
+6. **[누적] `news-unified` plist `CF_PURGE_TOKEN` 평문 / 출발 계정 리소스 삭제 보류 / 다중 라벨 호스트 2건 TLS 실패 / 신규 터널 3개 connector 미기동 / `finnews` account_id 잔존 / 문서 6개 옛 database_id / plist `OPENAI_API_KEY` 폐기 키.**
+
+### 다음 행동
+- 대표님: 유료 플랜 업그레이드 또는 2026-10-10 09:00 KST 대기.
+- 이후 `https://emdash.aikorea24.kr/_emdash/admin/setup` → passkey 로 관리자 생성 → seed 적용 → `posts`/`pages`/`tools` 생성 → PAT 발급 → Phase 2 착수.
+
 ## 2026-10-09 18:55 — AIK24-EMDASH-01 Phase 1: 신규 emDash 인스턴스 구축·배포
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1530-AIK24-EMDASH-01-구축및이전.md` Phase 1
