@@ -1,3 +1,33 @@
+## 2026-10-09 16:20 — CF-ZONE-05 잔존 3건 처리 (KV 해시 이전 · 터널 3개 재생성)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1540-CF-ZONE-05-잔존처리.md`
+보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-CF-ZONE-05-완료보고.md` (+ 지시서 폴더 `2026-10-09-1620-…` 복사)
+
+### 한 일
+1. **§1 `api.barnmate`** — 조치 없음. 대표님 결정대로 삭제 확정으로 종결. 현재 530.
+2. **§2 KV 25키** — 출발 계정 초과 키 25건을 `SHA-256(원본키)` → `sha256:<64hex>` 로 신규 계정 `KV_POSTED_URLS`(`7d969ac3…`)에 기록. `projects2/threadsp-do/src/kv.ts` 의 `UrlDedupStore` 에 원본 키 우선 → 해시 키 폴백 추가 후 재배포.
+3. **§3 Down 터널 3개** — 신규 계정에 `m1-ssh`·`mde2`·`l2t-dev` 재생성 + 신규 zone CNAME 4건 갱신.
+
+### 결과
+- [검증됨] KV 25/25 기록 성공 · 0 실패. 신규 KV 396키 = `posted:` 371 + `sha256:` 25. 해시 키 길이 71자 전건. 매핑 25건 해시 일치. 근거: `/tmp/z05_kv_hash.py` · `/tmp/z05_kv_verify.py`.
+- [PRODUCTION CODE] `projects2/threadsp-do/src/kv.ts` — `sha256Hex()` · `hashedKey()` 추가, `markPosted()` 예외 시 폴백, `isPosted()` 미게시 판정 2단계. `DedupCache` 무변경. `npx tsc --noEmit` 오류 0건. 커밋 `79a90be`.
+- [검증됨] `threadforge-do` 재배포 성공 — Current Version ID `7b137144-c752-41b6-ab67-4e306102f648` (이전 `65daa71e-…`). 바인딩 10개 전부 신규 계정 리소스.
+- [검증됨] 신규 터널 3개 UUID: `m1-ssh`=`33989366-47b3-4c70-8b80-d9324e45244a`, `mde2`=`15dde64e-c89f-4bca-824b-cd342bf0d01d`, `l2t-dev`=`16a09033-e4fe-42bc-afe3-0c2b2790c3a7`. `status=inactive`·`connections=0` (출발 계정과 동일 = connector 없음).
+- [검증됨] 신규 zone CNAME 4건 PATCH HTTP 200·content 일치. 전수 재조회에서 터널 CNAME 10건 전부 매핑 확인(mac-dashboard 6 + 신규 3터널 4). `proxied=True` 전건.
+- [검증됨] 출발 계정 변경 0건 — zone `a6d9e750…` status `moved`, DNS 41건(CF-ZONE-02 백업과 동일 수량).
+- [부분검증] `m1ssh`·`mde2` → HTTP 530 (connector 없음). connector 재기동 시 동작 예상하나 이번 작업에서 기동하지 않음.
+- [검증불가] 해시 키 25건의 Worker 측 실제 읽기. 복구 계획: 실제 게시 URL 1건으로 중복 판정 테스트.
+
+### 잔존 위험
+1. **[신규]** `m1.informationhot.kr.aikorea24.kr` · `dev.link2threads.com.aikorea24.kr` → TLS handshake 실패(curl `000`, `SSLV3 alert handshake failure`). CNAME 을 옛 UUID 로 되돌려도 동일 → **본 작업 회귀 아님**. 신규 계정 zone 에 다중 라벨 호스트용 엣지 인증서 없음(Universal SSL 이 apex + `*.aikorea24.kr` 만 커버). 복구 계획: Advanced Certificate Manager 로 두 호스트 인증서 발급, 또는 참조하는 외부 도메인 zone 쪽으로 CNAME 이전.
+2. **[신규]** 신규 터널 3개 connector 미기동 — 기동 대상 장비·프로세스 미확정.
+3. **[미해소]** 출발 계정 D1·R2·Pages·Worker 삭제 보류(롤백 검증 전).
+4. **[누적]** `projects2/mbti` git 아님(롤백은 `/tmp/z04/mbti-wrangler.toml.bak`). `Projects/heritage` `dist` 2026-09-18 빌드본 dirty. `finnews/wrangler.toml:6` account_id 출발 잔존. 문서 6개 옛 database_id 잔존. `CF_PURGE_TOKEN` plist 평문. plist `OPENAI_API_KEY` 폐기 키(401).
+
+### 다음 행동
+- 대표님: 다중 라벨 호스트 2건 인증서 발급 여부 결정.
+- 대표님: 신규 터널 3개 connector 기동 대상 장비 확인.
+
 ## 2026-10-09 15:45 — CF-ZONE-04 Workers·Tunnel 이전 + NS 전환 (zone 이전 완료)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1350-CF-ZONE-04-Workers이전.md`
