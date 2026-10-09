@@ -7,17 +7,36 @@ try {
   const runtime = (Astro.locals as any).runtime;
   const db = runtime?.env?.DB;
   if (db) {
+    // ponytail: 인덱스 idx_news_created 로 최신분만 읽는다 (LIMIT 500).
+    // 상한 근거: 소스별로 최대 5건만 노출되므로 50건을 채우려면 최대 10개 소스의
+    // 50건 + 나머지 소스당 최대 4건 스킵 = 약 450행이면 충분. 500 여유 확보.
+    // 상한을 넘겨야 할 정도로 특정 소스가 몰리면 후보 부족 → 500으로 늘린다.
+    const CANDIDATE_LIMIT = 500;
     const result = await db.prepare(
-      `SELECT * FROM (
-        SELECT *, ROW_NUMBER() OVER (PARTITION BY source ORDER BY created_at DESC) as rn
-        FROM news WHERE category NOT IN ('senior', 'benefit')
-      ) WHERE rn <= 5 ORDER BY created_at DESC LIMIT 50`
-    ).all();
-    newsList = result.results || [];
+      `SELECT * FROM news
+       WHERE category NOT IN ('senior','benefit')
+       ORDER BY created_at DESC, id DESC
+       LIMIT ?`
+    ).bind(CANDIDATE_LIMIT).all();
+
+    // 소스별 최대 5건 제한을 JS에서 적용 (SQL ROW_NUMBER()는 후보 500행을
+    // 전부 스캔해 rows_read 를 3배로 늘린다).
+    const perSource: Record<string, number> = {};
+    const picked: any[] = [];
+    for (const n of (result.results || [])) {
+      const c = perSource[n.source] || 0;
+      if (c >= 5) continue;
+      perSource[n.source] = c + 1;
+      picked.push(n);
+      if (picked.length >= 50) break;
+    }
+    newsList = picked;
   }
 } catch (e) {
   console.error('News fetch error:', e);
 }
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=300');
 ---
 <Layout title="AI 뉴스 - AI코리아24" description="AI 관련 최신 뉴스와 지원사업 소식">
   <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen transition-colors">
