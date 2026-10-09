@@ -1,3 +1,28 @@
+## 2026-10-09 20:20 — Email Routing `info@aikorea24.kr` 확인 + CF-ZONE-06 인수인계
+
+대표님 지시: `CF-ZONE-06 지시서 전달 + Email Routing 이메일 라우팅 완료info@aikorea24.kr`
+
+### 한 일
+1. 신규 계정(`7eb1b8cd…`) Email Routing 상태 확인(DNS 전수 + API 접근).
+2. CF-ZONE-06 인수인계 요약 작성.
+
+### 결과
+- [검증됨] **Email Routing requisite DNS 는 신규 zone 에 전부 존재.** MX `route1/2/3.mx.cloudflare.net`(priority 95/28/33), SPF `v=spf1 include:_spf.mx.cloudflare.net ~all`, DMARC `_dmarc` `p=none; rua=mailto:rua@dmarc.brevo.com`, DKIM `cf2024-1._domainkey`. `dig @lara…` MX 3건 정상.
+- [검증불가] **룰 생성·조회 API 403.** `GET /zones/71a21534…/email/routing/rules` 를 `CF_MIGRATE_TOKEN`·`CLOUDFLARE_API_TOKEN`·`CF_DNS_TOKEN` 3종으로 시도 → 전부 HTTP 403 `Authentication error`. 이 프로젝트의 어떤 토큰으로도 Email Routing API 접근 불가. 복구 계획: 대표님이 신규 계정 대시보드 → Email → Routing Rules 에서 직접 룰 생성.
+- [검증됨] 출발 계정 룰 3건 확인(이관 대상): `hugh_cho@aikorea24.kr`→forward `hugh79757@gmail.com`(enabled), `info@aikorea24.kr`→forward `stylefactory9ai@gmail.com`(enabled), catch-all drop(disabled).
+- [검증됨] CF-ZONE-06 이미 완료 상태 — 커밋 `dc4961b4`, 터널 2개(`mde2`·`m1-ssh`)·DNS 3건 삭제, zone 37건→34건, 출발 계정 무변경. 인수인계 요약을 위 보고서 부록에 작성.
+
+### 잔존 위험
+1. **[신규] DKIM selector 소유 계정 불일치** — 현재 `cf2024-1._domainkey` 는 출발 계정 발급분. 신규 계정 Email Routing 은 별도 selector 를 발급하므로, 신규 룰 생성 시 Cloudflare 가 제시하는 DKIM 레코드를 신규 zone 에 등록해야 발신자 검증 통과. inbound 수신 라우팅에는 영향 없음.
+2. **[신규] 신규 계정 Email Routing 룰 미생성(추정)** — API 403 으로 부재 확인 불가. 대표님 대시보드 수동 생성 필요.
+3. **[신규] 수신 실측 미수행** — 대표님이 `info@aikorea24.kr` 로 시험 발송 1회 필요.
+4. **[누적] D1 row write 한도 초과(180,740/100,000)** — emDash 초기화 블로커. 2026-10-10 09:00 KST 리셋 대기 또는 유료.
+5. **[누적] 인덱스 삭제 미실행** (권고 5건) / `dev.link2threads.com.aikorea24.kr` TLS 실패 / AdSense 슬롯 id 미확정 / `aikorea24emdash` git 아님 / 신규 emDash PAT 미발급 / Threads 토큰 code 190 / `news-unified` plist `CF_PURGE_TOKEN` 평문 / 출발 계정 리소스 삭제 보류 / `finnews` account_id 잔존 / 문서 6개 옛 database_id.
+
+### 다음 행동
+- 대표님: 신규 계정 대시보드 → Email → Routing Rules 에서 `info@aikorea24.kr` → `stylefactory9ai@gmail.com` forward 룰 생성 + Cloudflare 제시 DKIM 레코드를 신규 zone 에 등록.
+- 대표님: 생성 후 시험 발송 1회로 수신 확인.
+
 ## 2026-10-09 20:10 — AIK24-IDX-01: 뉴스 DB 미사용 인덱스 점검 (27개 중 9건 삭제후보)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1920-AIK24-IDX-01-인덱스점검.md`
