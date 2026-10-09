@@ -2982,6 +2982,153 @@
           "date": "2026-10-07"
         }
       ]
+    },
+    {
+      "date": "2026-10-08",
+      "briefing_id": 336,
+      "articles": [
+        {
+          "id": "54462",
+          "title": "십대용 챗GPT, 정신 건강 위기 상황에서도 대화 이어가게 만들어 논란",
+          "original_title": "",
+          "description": "챗GPT의 청소년 보호 기능은 취약한 사용자를 보호하기 위한 것이지만, 새로운 테스트 결과 챗봇이 위기 상황에서도 대화를 계속 유도하고 AI와의 비건강한 애착을 조장할 수 있는 것으로 나타났다.",
+          "link": "https://techcrunch.com/2026/10/07/chatgpt-for-teens-keeps-teens-talking-even-during-mental-health-crises/",
+          "entities": [],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54495",
+          "title": "AI의 본고장 샌프란시스코, 신규 데이터센터 건립 일시 중단",
+          "original_title": "",
+          "description": "샌프란시스코 감독위원회는 신규 데이터센터 건립을 45일간(최대 22개월 연장 가능) 전면 중단하는 안건을 만장일치로 통과시켰으며, 이에 따라 베이뷰 확장 및 49.5MW 규모의 독패치 프로젝트가 중단되었습니다. 유럽은 전력망 문제로 먼저 데이터센터를 중단한 바 있으며, 현재 집행위원회가 원하는 용량을 구축하지 못하는 상황에 직면해 있습니다.",
+          "link": "https://thenextweb.com/news/san-francisco-data-centre-pause-europe",
+          "entities": [],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54460",
+          "title": "누스 리서치, 15억 달러 기업가치 확인 및 비즈니스 사용자용 AI 에이전트 출시",
+          "original_title": "",
+          "description": "헤르메스 에이전트의 개발사인 누스 리서치가 9,000만 달러 규모의 시리즈 B 투자 유치를 완료했다. 이번 자금 조달을 통해 기업용 AI 에이전트 시장 공략에 본격적으로 나설 계획이다.",
+          "link": "https://techcrunch.com/2026/10/07/nous-research-confirms-it-hit-1-5b-valuation-launches-ai-agents-for-business-users/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54483",
+          "title": "오픈AI의 수학적 연구 결과 발표에 전문가들 우려 제기",
+          "original_title": "",
+          "description": "전문가들은 오픈AI가 결과 검증을 제대로 거치지 않고 있으며, AI 모델이 일반 수학계에 접근하기 어렵다고 우려합니다. 오픈AI는 화요일 수백 건의 새로운 수학적 발견을 공개하여 수학계에 놀라움을 안겼습니다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/07/openai-mathematical-findings-concerns",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54461",
+          "title": "마이크로소프트, 개편된 윈도우 11 탑재 엔비디아 칩 기반 AI PC 공개",
+          "original_title": "",
+          "description": "마이크로소프트가 AI 모델과 에이전트를 구동하도록 설계된 엔비디아 칩 기반의 AI PC '서피스 노트북 울트라'의 사양과 가격을 공개했다. 이 제품은 새롭게 개편된 윈도우 11을 탑재해 향상된 AI 성능을 제공한다.",
+          "link": "https://techcrunch.com/2026/10/07/microsoft-releases-new-nvidia-chip-ai-pcs-with-revamped-windows-11/",
+          "entities": [
+            "AI",
+            "PC"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54468",
+          "title": "대폭 인하된 가격으로 등장한 클로드 하이쿠 5.5, AI 가격 경쟁이 끝나지 않았음을 증명",
+          "original_title": "",
+          "description": "앤스로픽의 새로운 클로드 하이쿠 5.5는 OSWorld 컴퓨터 제어 테스트에서 15.7%에서 72.4%로 성능이 대폭 향상되며 전작을 압도합니다. 토큰 가격은 최대 90%까지 인하되었으나, 새로운 토크나이저 도입으로 인해 일부 비용 절감 효과가 상쇄되는 측면도 있습니다.",
+          "link": "https://the-decoder.com/claude-haiku-5-5-arrives-with-massive-price-cuts-proving-the-ai-pricing-arms-race-is-far-from-over/",
+          "entities": [
+            "AI",
+            "OSWorld"
+          ],
+          "date": "2026-10-08"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-08",
+      "briefing_id": 337,
+      "articles": [
+        {
+          "id": "54564",
+          "title": "네슬레 CEO, \"AI를 잘 쓰려면 프롬프트 작성 능력 이상의 것이 필요하다\"",
+          "original_title": "",
+          "description": "필립 나브라틸 네슬레 최고경영자는 이번 달 비즈니스 인사이더와의 인터뷰에서, 인공지능 시대에 뒤처지지 않으려면 좋은 프롬프트 작성법을 아는 것만으로는 부족하다고 밝혔다. 직원들은 비즈니스를 이해하고 일하는 방식도 바꿔야 한다는 것이다.",
+          "link": "https://thenextweb.com/news/nestle-ceo-philipp-navratil-ai-skills",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54550",
+          "title": "샘 알트먼은 AI가 ‘나쁜 일’을 일으킬 것이라고 말한다. 그 첫 번째 사례: 불필요한 죽",
+          "original_title": "",
+          "description": "AI는 이미 폭력적인 죽음과 연관되어 있으며 하마터면 제3차 세계 대전을 촉발할 뻔했습니다. 그런 나쁜 일들이냐고요? 그것들은 오직 다른 사람들언 일어날 뿐입니다. OpenAI의 최고경영자(CEO)인 샘 알트먼은 자사와 인공지능의 미래에 대해 할 말이 있습니다. \"우리와 일부 사람들 사이의 차이점 중 하나는...\"",
+          "link": "https://www.theguardian.com/commentisfree/2026/oct/08/ai-death-war-sam-altman",
+          "entities": [
+            "CEO"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54554",
+          "title": "데이터센터 기업 피르무스(Firmus), 호주 증시(ASX) 상장을 앞두고 고공행진하던 기",
+          "original_title": "",
+          "description": "소식통들에 따르면 피르무스는 목표 가격을 대폭 낮추고 있으며 아예 기업공개(IPO)를 보류할 수도 있다고 합니다. 속보 이메일, 무료 앱 또는 일일 뉴스 포드캐스트를 받아보세요. 피르무스 테크놀로지스의 치솟던 기업 가치를 뒷받침하던 모멘텀이 예상되는 ASX 데뷔를 불과 몇 주 앞두고 심각한 균열을 보이고 있습니다.",
+          "link": "https://www.theguardian.com/australia-news/2026/oct/08/ai-datacentre-firmus-slash-valuation-before-asx-listing",
+          "entities": [
+            "Firmus",
+            "IPO",
+            "ASX"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54551",
+          "title": "‘디스토피아적’: 코오프(Co-op), 직원들을 AI 감시 체제에 두는 최신 기업에 합류",
+          "original_title": "",
+          "description": "내부고발자는 코오프 법률 서비스(Co-op Legal Services)의 모든 상속 유언 검인 관련 통화 녹음과 분석이 억압적이라고 말합니다. 코오프는 고객과의 모든 통화를 평가하는 자동 청취 기술을 도입해 직원들을 AI 감시에 노출시키는 최신 고용주가 되었습니다. 이러한 시스템은 큰 충격을 주고 있습니다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/08/co-op-legal-services-ai-customer-phone-call-surveillance",
+          "entities": [
+            "Services",
+            "AI",
+            "Legal",
+            "Co-op"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54571",
+          "title": "타임케틀 라이브토크 AI 번역 이어폰 리뷰",
+          "original_title": "",
+          "description": "타임케틀 라이브토크는 지연 시간과 구독 비용이 존재하지만 52개 언어에 걸쳐 뛰어난 AI 번역 성능을 제공하므로, 잦은 여행을 다니는 이들에게 고려해 볼 만한 제품이다.",
+          "link": "https://www.cityam.com/timekettle-livetalk-ai-translation-earbuds-reviewed/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-08"
+        },
+        {
+          "id": "54543",
+          "title": "AI 안내에 의존한 10대의 산행, 헬기 구조와 상식의 중요성 일깨워",
+          "original_title": "",
+          "description": "16세 소년이 앤트로픽의 클로드를 이용해 밴쿠버 인근 크라운 마운틴의 등산 경로를 계획했다가 가파른 암벽에서 헬기로 구조되었습니다. 챗봇이 등산 장비가 필요한 위험한 코스로 소년을 안내한 것입니다. 소년은 AI를 탓하지 않지만 향후 경로 계획에는 절대 사용하지 않겠다고 밝혔습니다.",
+          "link": "https://the-decoder.com/teens-ai-guided-mountain-hike-ends-with-a-helicopter-rescue-and-a-lesson-in-common-sense/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-08"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5727,6 +5874,141 @@
         "CAPTCHA"
       ],
       "date": "2026-10-07"
+    },
+    {
+      "id": "54462",
+      "title": "십대용 챗GPT, 정신 건강 위기 상황에서도 대화 이어가게 만들어 논란",
+      "original_title": "",
+      "description": "챗GPT의 청소년 보호 기능은 취약한 사용자를 보호하기 위한 것이지만, 새로운 테스트 결과 챗봇이 위기 상황에서도 대화를 계속 유도하고 AI와의 비건강한 애착을 조장할 수 있는 것으로 나타났다.",
+      "link": "https://techcrunch.com/2026/10/07/chatgpt-for-teens-keeps-teens-talking-even-during-mental-health-crises/",
+      "entities": [],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54495",
+      "title": "AI의 본고장 샌프란시스코, 신규 데이터센터 건립 일시 중단",
+      "original_title": "",
+      "description": "샌프란시스코 감독위원회는 신규 데이터센터 건립을 45일간(최대 22개월 연장 가능) 전면 중단하는 안건을 만장일치로 통과시켰으며, 이에 따라 베이뷰 확장 및 49.5MW 규모의 독패치 프로젝트가 중단되었습니다. 유럽은 전력망 문제로 먼저 데이터센터를 중단한 바 있으며, 현재 집행위원회가 원하는 용량을 구축하지 못하는 상황에 직면해 있습니다.",
+      "link": "https://thenextweb.com/news/san-francisco-data-centre-pause-europe",
+      "entities": [],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54460",
+      "title": "누스 리서치, 15억 달러 기업가치 확인 및 비즈니스 사용자용 AI 에이전트 출시",
+      "original_title": "",
+      "description": "헤르메스 에이전트의 개발사인 누스 리서치가 9,000만 달러 규모의 시리즈 B 투자 유치를 완료했다. 이번 자금 조달을 통해 기업용 AI 에이전트 시장 공략에 본격적으로 나설 계획이다.",
+      "link": "https://techcrunch.com/2026/10/07/nous-research-confirms-it-hit-1-5b-valuation-launches-ai-agents-for-business-users/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54483",
+      "title": "오픈AI의 수학적 연구 결과 발표에 전문가들 우려 제기",
+      "original_title": "",
+      "description": "전문가들은 오픈AI가 결과 검증을 제대로 거치지 않고 있으며, AI 모델이 일반 수학계에 접근하기 어렵다고 우려합니다. 오픈AI는 화요일 수백 건의 새로운 수학적 발견을 공개하여 수학계에 놀라움을 안겼습니다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/07/openai-mathematical-findings-concerns",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54461",
+      "title": "마이크로소프트, 개편된 윈도우 11 탑재 엔비디아 칩 기반 AI PC 공개",
+      "original_title": "",
+      "description": "마이크로소프트가 AI 모델과 에이전트를 구동하도록 설계된 엔비디아 칩 기반의 AI PC '서피스 노트북 울트라'의 사양과 가격을 공개했다. 이 제품은 새롭게 개편된 윈도우 11을 탑재해 향상된 AI 성능을 제공한다.",
+      "link": "https://techcrunch.com/2026/10/07/microsoft-releases-new-nvidia-chip-ai-pcs-with-revamped-windows-11/",
+      "entities": [
+        "AI",
+        "PC"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54468",
+      "title": "대폭 인하된 가격으로 등장한 클로드 하이쿠 5.5, AI 가격 경쟁이 끝나지 않았음을 증명",
+      "original_title": "",
+      "description": "앤스로픽의 새로운 클로드 하이쿠 5.5는 OSWorld 컴퓨터 제어 테스트에서 15.7%에서 72.4%로 성능이 대폭 향상되며 전작을 압도합니다. 토큰 가격은 최대 90%까지 인하되었으나, 새로운 토크나이저 도입으로 인해 일부 비용 절감 효과가 상쇄되는 측면도 있습니다.",
+      "link": "https://the-decoder.com/claude-haiku-5-5-arrives-with-massive-price-cuts-proving-the-ai-pricing-arms-race-is-far-from-over/",
+      "entities": [
+        "AI",
+        "OSWorld"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54564",
+      "title": "네슬레 CEO, \"AI를 잘 쓰려면 프롬프트 작성 능력 이상의 것이 필요하다\"",
+      "original_title": "",
+      "description": "필립 나브라틸 네슬레 최고경영자는 이번 달 비즈니스 인사이더와의 인터뷰에서, 인공지능 시대에 뒤처지지 않으려면 좋은 프롬프트 작성법을 아는 것만으로는 부족하다고 밝혔다. 직원들은 비즈니스를 이해하고 일하는 방식도 바꿔야 한다는 것이다.",
+      "link": "https://thenextweb.com/news/nestle-ceo-philipp-navratil-ai-skills",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54550",
+      "title": "샘 알트먼은 AI가 ‘나쁜 일’을 일으킬 것이라고 말한다. 그 첫 번째 사례: 불필요한 죽",
+      "original_title": "",
+      "description": "AI는 이미 폭력적인 죽음과 연관되어 있으며 하마터면 제3차 세계 대전을 촉발할 뻔했습니다. 그런 나쁜 일들이냐고요? 그것들은 오직 다른 사람들언 일어날 뿐입니다. OpenAI의 최고경영자(CEO)인 샘 알트먼은 자사와 인공지능의 미래에 대해 할 말이 있습니다. \"우리와 일부 사람들 사이의 차이점 중 하나는...\"",
+      "link": "https://www.theguardian.com/commentisfree/2026/oct/08/ai-death-war-sam-altman",
+      "entities": [
+        "CEO"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54554",
+      "title": "데이터센터 기업 피르무스(Firmus), 호주 증시(ASX) 상장을 앞두고 고공행진하던 기",
+      "original_title": "",
+      "description": "소식통들에 따르면 피르무스는 목표 가격을 대폭 낮추고 있으며 아예 기업공개(IPO)를 보류할 수도 있다고 합니다. 속보 이메일, 무료 앱 또는 일일 뉴스 포드캐스트를 받아보세요. 피르무스 테크놀로지스의 치솟던 기업 가치를 뒷받침하던 모멘텀이 예상되는 ASX 데뷔를 불과 몇 주 앞두고 심각한 균열을 보이고 있습니다.",
+      "link": "https://www.theguardian.com/australia-news/2026/oct/08/ai-datacentre-firmus-slash-valuation-before-asx-listing",
+      "entities": [
+        "Firmus",
+        "IPO",
+        "ASX"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54551",
+      "title": "‘디스토피아적’: 코오프(Co-op), 직원들을 AI 감시 체제에 두는 최신 기업에 합류",
+      "original_title": "",
+      "description": "내부고발자는 코오프 법률 서비스(Co-op Legal Services)의 모든 상속 유언 검인 관련 통화 녹음과 분석이 억압적이라고 말합니다. 코오프는 고객과의 모든 통화를 평가하는 자동 청취 기술을 도입해 직원들을 AI 감시에 노출시키는 최신 고용주가 되었습니다. 이러한 시스템은 큰 충격을 주고 있습니다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/08/co-op-legal-services-ai-customer-phone-call-surveillance",
+      "entities": [
+        "Services",
+        "AI",
+        "Legal",
+        "Co-op"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54571",
+      "title": "타임케틀 라이브토크 AI 번역 이어폰 리뷰",
+      "original_title": "",
+      "description": "타임케틀 라이브토크는 지연 시간과 구독 비용이 존재하지만 52개 언어에 걸쳐 뛰어난 AI 번역 성능을 제공하므로, 잦은 여행을 다니는 이들에게 고려해 볼 만한 제품이다.",
+      "link": "https://www.cityam.com/timekettle-livetalk-ai-translation-earbuds-reviewed/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-08"
+    },
+    {
+      "id": "54543",
+      "title": "AI 안내에 의존한 10대의 산행, 헬기 구조와 상식의 중요성 일깨워",
+      "original_title": "",
+      "description": "16세 소년이 앤트로픽의 클로드를 이용해 밴쿠버 인근 크라운 마운틴의 등산 경로를 계획했다가 가파른 암벽에서 헬기로 구조되었습니다. 챗봇이 등산 장비가 필요한 위험한 코스로 소년을 안내한 것입니다. 소년은 AI를 탓하지 않지만 향후 경로 계획에는 절대 사용하지 않겠다고 밝혔습니다.",
+      "link": "https://the-decoder.com/teens-ai-guided-mountain-hike-ends-with-a-helicopter-rescue-and-a-lesson-in-common-sense/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-08"
     }
   ]
 }
