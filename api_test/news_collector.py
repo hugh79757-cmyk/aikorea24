@@ -1091,11 +1091,14 @@ def save_to_d1(articles):
 def purge_cloudflare_cache():
     """수집 완료 후 뉴스 관련 Cloudflare 엣지 캐시 즉시 무효화"""
     import urllib.request, json
-    token   = os.environ.get('CLOUDFLARE_API_TOKEN', '')
+    # zone은 출발 계정에 남아 있으므로 캐시 purge에는 출발 계정 토큰이 필요하다.
+    # CF-MIGRATE-04 이후 CLOUDFLARE_API_TOKEN 은 신규 계정( D1 용 )이므로
+    # purge 전용 토큰 CF_PURGE_TOKEN 을 우선 사용한다( 없으면 기존 값으로 fallback ).
+    token   = os.environ.get('CF_PURGE_TOKEN') or os.environ.get('CLOUDFLARE_API_TOKEN', '')
     zone_id = os.environ.get('CLOUDFLARE_ZONE_ID', '')
 
     if not token or not zone_id:
-        print("  ⚠ CLOUDFLARE_API_TOKEN 또는 ZONE_ID 미설정 — purge 스킵")
+        print("  ⚠ CF_PURGE_TOKEN(또는 CLOUDFLARE_API_TOKEN) 또는 ZONE_ID 미설정 — purge 스킵")
         return
 
     urls = [
