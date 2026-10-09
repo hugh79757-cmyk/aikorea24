@@ -1,3 +1,45 @@
+## 2026-10-09 19:35 — AIK24-D1-LIMIT-01: D1 한도 초과 실측 검증 (180,740행)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1910-AIK24-D1-LIMIT-01-검증.md`
+보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-AIK24-D1-LIMIT-01-완료보고.md` (+ 지시서 폴더 `2026-10-09-1935-…` 복사)
+
+### 한 일
+대표님 지적("주니어가 집계한 43,840행이 한도 100,000 미달이라 숫자가 안 맞음")에 대해 신규 계정 D1 analytics 를 GraphQL 로 직접 조회해 실측 검증.
+
+### 결과 — 가설 "실제로 100,000행 초과" 채택
+- [검증됨] 신규 계정(`7eb1b8cd…`) 2026-10-09 UTC `rowsWritten` 합계 **180,740행** = 무료 티어 한도(100,000)의 **1.81배**. `rowsRead` 743,043행.
+- [검증됨] DB별: `aikorea24-db`(`3f4cedde…`) **158,892** / `heritage-db`(`22e7e7b0…`) 21,820 / `mbti-db`(`8a07a626…`) 23 / `aikorea24-emdash-db`(`bbbcbc34…`) 5.
+- [검증됨] 주니어 집계 43,794행 대비 **4.13배** 차이. `aikorea24-db` 만 7.24배(21,951 → 158,892).
+- [검증됨] **원인은 인덱스 쓰기 계상.** D1 `rowsWritten` 은 행뿐 아니라 인덱스 엔트리 쓰기도 센다. `aikorea24-db` 는 테이블 24 + 인덱스 27 → 행당 6~7회 계상. `heritage-db` 는 테이블 6 + 인덱스 적음 → 배수 1.00(관측과 일치).
+- [부분검증] 배수 7.24 를 테이블당 인덱스 개수로 정확히 역산 불가(카운팅 규칙 비공개). 두 DB 의 인덱스 밀도 차이와 관측 배수 순서의 정합성 근거만 확보.
+- [검증됨] 158,512행(전체 87.7%)이 **02:00Z 한 시간**에 집중 = CF-MIGRATE-02 `aikorea24-db` import 구간.
+- [검증됨] 무료 티어 확정 — `GET /accounts/{id}/subscriptions` → 200 `[]`.
+- [검증됨] **REST 사용량 엔드포인트 없음.** `/d1/analytics`·`/d1/usage`·`/d1/analytics/metrics`·`/d1/database/analytics`·`/d1/database/{id}/usage` 전부 404/7000. **`POST /client/v4/graphql/analytics`**(계정 경로 없음) + `d1AnalyticsAdaptiveGroups` + `filter` 를 GraphQL variables 로 전달해야 동작. 인라인 `{}` → `filter: not an object`.
+- [검증됨] §4 1행 INSERT 재현: `aikorea24-emdash-db` 임시 테이블 CREATE + 1행 INSERT → **success, rows_written 3**. DROP 정리 완료. **그러나 동일 시점** emDash Worker 트리거 → `wrangler tail` 로 `D1_ERROR: Your account has exceeded D1's free tier daily row write limit` 확인.
+- [검증됨] 판정 함정 기록: **1행 INSERT 성공은 한도 미초과 증거가 아니다.** 같은 계정·같은 DB·같은 시각에 단건 쓰기 통과 + 대량 마이그레이션 거절. Cloudflare 한도 거부는 요청 단위 판정이며 소규모 쓰기는 경계를 통과할 수 있다. 판정 근거는 analytics 실측 수치.
+
+### 완료 기준 대조
+| 기준 | 판정 | 근거 |
+|---|---|---|
+| §1 당일 쓰기량 재집계 | 충족 | 180,740행, 인덱스 계상 원인 규명 |
+| §2 대시보드 Metrics 확인 | 충족 | GraphQL analytics 로 실측 (REST 없음 확인) |
+| §3 API 엔드포인트 확인 | 충족 | REST 6종 404 + GraphQL 1종 동작 |
+| §4 1행 INSERT 재현 | 충족 | 성공 — 단 한도 미초과 증거 아님을 병기 |
+| §5 4개 가설 판정 | 충족 | 가설 1 채택, 2·3 기각, 4 부분(진단 방향 옳음/숫자 4.13배 오류) |
+
+### 잔존 위험
+1. **[블로커] 신규 계정 D1 row write 한도 초과(180,740/100,000).** emDash 초기화 불가. 해법 = 2026-10-10 09:00 KST 리셋 대기(무료) 또는 유료 플랜.
+2. **[신규] 동일 import 재실 시 즉시 재초과** — `aikorea24-db` import 1회 158,892행. 리셋일 당일 D1 대량 작업은 11:00 KST 이후로 미룰 것.
+3. **[신규] AdSense 슬롯 id 미확정** — `AdSlot.astro` slot 빈 값(무광고). AdSense 콘솔 확인 필요.
+4. **[신규] `projects2/aikorea24emdash` git 저장소 아님** — 롤백 기준선 없음.
+5. **[신규] 신규 emDash 인스턴스 PAT 미발급** — chat 에 붙인 `ec_pat_…` 는 starclip 인스턴스 토큰으로 실측 확인. 마이그레이션 후 회전 권고.
+6. **[누적] Threads 접근 토큰 무효(code 190)** — `scripts/threads/reactivate_publish.sh` 준비됨.
+7. **[누적] `news-unified` plist `CF_PURGE_TOKEN` 평문 / 출발 계정 리소스 삭제 보류 / 다중 라벨 호스트 2건 TLS 실패 / 신규 터널 3개 connector 미기동 / `finnews` account_id 잔존 / 문서 6개 옛 database_id / plist `OPENAI_API_KEY` 폐기 키.**
+
+### 다음 행동
+- 대표님: 유료 플랜 업그레이드 또는 2026-10-10 09:00 KST 리셋 대기 결정.
+- 리셋 후 `https://emdash.aikorea24.kr/_emdash/admin/setup` → passkey 관리자 생성 → seed 적용 → 컬렉션 3종 생성 → PAT 발급 → Phase 2 착수(당일 소량만, 나머지 다음 날 분산).
+
 ## 2026-10-09 19:10 — emDash 관리자 초기화 상태 확인 (아직 미초기화, 원인 확정)
 
 ### 한 일
