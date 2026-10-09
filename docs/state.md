@@ -1,3 +1,65 @@
+## 2026-10-09 13:25 — CF-MIGRATE-05 news-unified 전체 파이프라인 수동 검증
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1110-CF-MIGRATE-05-파이프라인-수동검증.md`
+
+### 한 일
+plist 환경과 동일하게 `news_collector.py` 를 1회 수동 실행해 수집·번역·D1 저장·purge 전 구간을
+실측했다. 코드·plist·launchd 는 수정하지 않았다(지시서 허용 범위 밖).
+
+### 결과 — 7개 항목별 판정
+실행: 2026-10-09 11:16 시작 / 약 3분 소요 / 로그 `/tmp/manual_news_run.log` (9,026 bytes).
+`/tmp/run_manual_pipeline.sh` 로 plist `EnvironmentVariables` 를 인젝트해 실행. 토큰 값 미출력.
+
+| # | 항목 | 판정 | 근거 |
+|---|---|---|---|
+| 1 | 수집 단계 | **통과(부분 소스 실패)** | `[해외 뉴스 수집]` 45개 소스 → `해외 중복제거 후: 201건`, `[국내 뉴스 수집]` 7개 소스 → `국내 중복제거 후: 61건`, `[비율] 해외: 201건(77%) | 국내: 61건(23%)`, `[최종] 통합 중복제거 후: 262건`. 소스 단위 실패 6건은 있고도 파이프라인은 중단되지 않음: VentureBeat AI `HTTP 429`, NVIDIA Newsroom `syntax error: line 5, column 0`, IT조선 RSS `nodename nor servname provided`(DNS 실패), 과기부 사업공고·보도자료 `HTTP 403`. **모두 수집 시작 전부터 존재하던 외부 소스/권한 문제이며 마이그레이션과 무관** — 동일 실패는 05:33 정기 실행 로그에도 기록됨. |
+| 2 | 번역 단계 | **통과** | `[번역] 번역 대상: 201건 → 21배치` → `번역 완료: 201건 (21배치 처리)`. 무료 LLM 체인에서 gemini-3.1-flash-lite 일일 free-tier 500회 소진(429, 재시도 19h40m)·gemini-3.5-flash-lite 분당 15회 소진(429)이 발생했으나 체인이 `gemini-3.5-flash-lite` 로 폴백해 21개 배치 전부 성공. |
+| 3 | enrich 단계 | **해당 없음** | `grep -in "enrich" /tmp/manual_news_run.log` → 0건. `grep -c "enrich" api_test/news_collector.py` → **0**. `news_collector.py` 에 enrich 단계가 존재하지 않음(지시서가 가정한 단계가 코드에 없음). 브리핑 enrich 는 별도 launchd job(`scripts/briefing_enricher.py`)의职责. |
+| 4 | D1 저장 (신규 증가) | **통과** | `[저장] D1 저장 중...` / `기존 D1 항목: 제목 17716개, 링크 17731개` / `제목 중복: 57건, 링크 중복: 156건` / `배치 1: 49건 시도 → 47건 실제 저장` / `신규: 47건 | 중복 스킵: 213건` / `완료! 총 47건 저장`. D1 REST 실측 신규 DB `news` 카운트 **17,731 → 17,777 (+46)**, `MAX(id)` 54,722 → 54,772. 신규 46행 전부 `created_at = 2026-10-09 04:19:41`, category 분포 `global 18 / news 27 / grant 1`. (로그의 "47건"은 wrangler `meta.changes` 추정치이며 실제 반영은 46행 — ID 54723 공백 발생. INSERT OR IGNORE 중복 1건이 반영된 것으로 보이나 로그로는 확정 불가.) |
+| 5 | **옛 D1 무변경 (핵심)** | **통과** | 출발 계정 `bec650ce-f732-46bc-87c0-bd76ed17e42a` 조회 결과 `news` 카운트 **17,731 그대로(Δ0)**, `MAX(id)` 54,722 그대로. 신규 46행이 옛 DB 에 들어가지 않음. |
+| 6 | purge 완료 | **통과** | 로그 `✅ Cloudflare 캐시 purge 완료 (7개 URL)`. CF-MIGRATE-04 에서 추가한 `CF_PURGE_TOKEN` 경로로 실제 성공. |
+| 7 | `cron_unified.log` 새 에러 없음 | **해당 없음** | 수동 실행은 stdout 을 `/tmp/manual_news_run.log` 로 리다이렉트하므로 `api_test/cron_unified.log` 는 건드리지 않음. mtime 이 `10월 9 05:33` 으로 05:33 정기 실행 이후 변경 없음. |
+
+- [검증됨] **라이브 반영 확인.** `curl -sL https://aikorea24.kr/news` → HTTP 200 / 76,354 bytes, 카드 50건.
+  최신 카드가 이번 실행분이면 마이그레이션 후 파이프라인이 라이브까지 도달함을 뜻한다. 1순위 카드
+  `2026년 3차 소공인 클린제조환경조성 사업 모집 공고`(category `grant`, 이번 신규 1건 grant 과 일치),
+  2순위 `AI가 터뜨린 '보안 인력난'…상반기 채용 수요 2배 껑충`. `Cache-Control: public, max-age=300` 유지.
+- **종합 판정: 검증 완료.** 지시서 §3 의 전 항목이 통과거나 "해당 없음"으로 확정되었고, 핵심 목표
+  (신규 D1 에만 기록, 옛 D1 무변경)가 로그와 D1 실측 양쪽으로 확인되었다.
+
+### 잔존 위험
+- **[검증불가] Vectorize 인덱싱 46건 실패 — 파이프라인 무관한 별도 결함.** 로그
+  `[Vectorize] 오늘 신규 기사 46건 인덱싱...` → `⚠ Vectorize: 임베딩 생성 실패 (전체 46건)`.
+  원인 2개叠加: (1) **OpenAI 크레딧 소진** — `POST /v1/embeddings` (model `text-embedding-3-small`,
+  dimensions 1536) → HTTP 429 `insufficient_quota` `"You have no credits remaining"`.
+  `pipeline/infra/vectorize_client.py:124-145` 의 `get_embedding()` 이 `except Exception: return None`
+  이라 조용히 실패. (2) **신규 계정 Vectorize 접근 불가** — `GET /accounts/{신규}/vectorize/v2/indexes`
+  → HTTP 403 `Authentication error`. 출발 계정에는 `aikorea24-dedup` 등 4개 인덱스가 있으나 신규
+  계정에는 없음(토큰 권한 또는 인덱스 미생성). → **CF-MIGRATE-02 가 Vectorize 를 이전하지 않은
+  결과이며, 지시서 §2~§6 어디에도 Vectorize 이전이 없었다.** 복구 계획: 대표님이 OpenAI 크레딧
+  충전 + 신규 계정 `aikorea24-dedup` 인덱스 생성(또는 Vectorize 이전 지시) 후 재검증. 그 전까지
+  Vectorize 기반 중복 판정은 항상 `False` 로 통과 — 중복 증가 위험.
+- **plist 의 `OPENAI_API_KEY` 가 폐기 키.** plist 값은 `POST /v1/embeddings` → HTTP 401
+  `Incorrect API key provided`(= 계정 자체가 없음). 프로젝트 `.env`·`~/.env.common` 값은 HTTP 429
+  (크레딧 소진이라 키는 유효). `load_env()` 가 `.env` 로 덮어쓰므로 실행 시점엔 `.env` 값이 쓰여
+  401 과 429 중 429 가 관측됨. plist 키는 죽은 값이며 교체 대상. CF-MIGRATE-04 §4 는 `OPENAI_API_KEY`
+  변경 금지 지시였으므로 손대지 않음.
+- **[부분 검증] 소스 6건 실패 중 4건은 파이프라인 시작 전부터 있던 문제**(VentureBeat 429,
+  NVIDIA RSS 파싱, IT조선 RSS DNS, 과기부 403). 마이그레이션과 무관하며 이번 작업에서 수정하지
+  않음(지시서 "코드·plist·launchd 수정 금지"). 복구 계획: 소스별 후속 지시서.
+- **19:30 정기 실행은 오늘 수동 실행분을 dedup 하므로 적게 수집될 수 있다.** 지시서 § 참고에 따라
+  정상 동작. 중복 스킵 213건이 이미 이번 실행에서 발생했으므로 19:30 실행 분량이 크게 줄어들 수 있음.
+- **`CF_PURGE_TOKEN` 이 출발 계정 토큰이며 plist 평문 하드코딩** (CF-MIGRATE-04 잔존 위험 그대로).
+  출발 토큰 회전 시 purge 만 조용히 실패. 영향 상한 = CDN 캐시 5분 TTL 지연.
+- **출발 계정 D1·R2·Pages 삭제 보류** — 지시 금지. `finnews/wrangler.toml:6` `account_id` 출발 잔존.
+  문서 6개에 옛 database_id 잔존(런타임 아님).
+
+### 다음 행동
+- 대표님 보고 후 "검증 완료" 판정 확인.
+- 후속 지시서 후보: ① Vectorize 이전(`aikorea24-dedup` + `aikorea24-wiki` + `threadforge-articles`),
+  ② OpenAI 크레딧 충전, ③ 소스 4건 복구.
+
+
 ## 2026-10-09 12:55 — CF-MIGRATE-04 news-unified 토큰 교체 (신규 계정 D1 전환)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1045-CF-MIGRATE-04-news-unified-토큰교체.md`
