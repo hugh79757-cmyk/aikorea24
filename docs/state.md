@@ -1,3 +1,33 @@
+## 2026-10-09 20:10 — AIK24-IDX-01: 뉴스 DB 미사용 인덱스 점검 (27개 중 9건 삭제후보)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1920-AIK24-IDX-01-인덱스점검.md`
+보고서: `SSOT/프로젝트/aikorea24/보고서/2026-10-09-AIK24-IDX-01-완료보고.md` (+ 지시서 폴더 `2026-10-09-2010-…` 복사)
+
+### 한 일
+신규 계정 `aikorea24-db` 의 명시적 인덱스 27개를 조회하고 각 컬럼이 실제 SQL WHERE/ORDER BY/JOIN 에 쓰이는지 대조해 유지·삭제후보 판정. **쓰기 0건.**
+
+### 결과
+- [검증됨] 인덱스 27건(`sqlite_master type='index' AND sql IS NOT NULL`) + autoindex 15건 = 총 42. 스크립트 `/tmp/idx01.py` → `/tmp/idx01_indexes.json`.
+- [검증됨] 판정 집계: **유지 18 · 삭제후보 9 · 보류 0.**
+- [검증됨] **중복 정의 발견** — `idx_news_created` 와 `idx_news_created_at` 이 동일 컬럼(`created_at DESC`) 인덱스 2개. D1-NEWS-FIX-01 이전부터 존재.
+- [검증됨] 삭제후보 9건: `idx_lesson_clicks_enrollment`(INSERT 만 있고 SELECT 없음), `idx_news_created`/`idx_news_created_at` 중 1개(중복), `idx_payments_order`/`idx_payments_user`(API 라우트 부재), `idx_posts_access`(INSERT 만), `idx_posts_visibility`(UPDATE SET 만), `idx_tools_featured`(INSERT 만), `idx_users_kakao`(카카오 라우트 2026-10-09 삭제 → grep 0건).
+- [검증됨] 유지 18건 근거 예: `news.category` 8곳 이상(`news.astro:17`, `global.astro:11`, `api/news/*`), `news.pub_date`(`api/articles/pool.ts:61,82` ORDER BY DESC LIMIT 2000), `tools.updated_at`(`api/briefing/send-email.ts:153`, `scripts/auto_email_sender.py:84`), `pipeline_runs.run_id`+`started_at`(`pipeline/__main__.py:36,38,41`).
+- [검증됨] 절감량 — news 하루 INSERT 약 46행(CF-MIGRATE-05 실측). 중복 1개 제거 시 news 인덱스 쓰기 6→5로 **약 23행/일 감소**(무료 한도 100,000행 대비 0.02%). AIK24-D1-LIMIT-01 의 7.24배 배수는 import 1회성 작업이라 삭제로 되돌아오지 않음 — 절감은 앞으로의 INSERT 에만 적용.
+- [검증됨] 읽기 전용 준수 — D1 호출은 `sqlite_master` SELECT 2회뿐. CREATE/DROP/INSERT/UPDATE/DELETE 0건. 출발 계정 접근 0건.
+
+### 잔존 위험
+1. **[신규] 인덱스 삭제 미실행** — 지시서가 조사만 허용. 그리고 현재 계정 D1 write 한도 초과 상태라 DROP 도 실패 가능. 삭제 지시서 발급은 **2026-10-10 09:00 KST 리셋 이후** 권장.
+2. **[신규] 제 권고 보류 2건** — `payments` 2건(행수 0·API 부재이나 유료강의 Phase 4 대상), `users.kakao_id`(카카오 로그인 롤백 경로. `99f78843` 이 스키마 변경 없이 되돌릴 수 있게 남겨둔 것).
+3. **[누적] 신규 계정 D1 row write 한도 초과(180,740/100,000)** — emDash 초기화 불가. 2026-10-10 09:00 KST 리셋 대기 또는 유료 플랜.
+4. **[누적] CF-ZONE-06 삭제 DNS 3건 공개 리졸버 캐시 전파 지연 / `dev.link2threads.com.aikorea24.kr` TLS 실패 / AdSense 슬롯 id 미확정 / `projects2/aikorea24emdash` git 아님 / 신규 emDash PAT 미발급 / Threads 토큰 무효(code 190) / `news-unified` plist `CF_PURGE_TOKEN` 평문 / plist `OPENAI_API_KEY` 폐기 키.**
+5. **[누적] 출발 계정 D1·R2·Pages·Worker 삭제 보류.** 롤백 시 zone NS `alberto`·`sonia` 복원 + `/tmp/cfzone_backup_20261009/dns_records.json` 41건 복원.
+6. **[누적] `finnews/wrangler.toml:6` account_id 출발 잔존 / 문서 6개 옛 database_id / 신규 계정 Vectorize 403 / `projects2/mbti` git 아님 / `Projects/heritage` `dist` 2026-09-18 dirty.**
+
+### 다음 행동
+- 대표님: 삭제 대상 확정. 제 권고는 5건(`idx_lesson_clicks_enrollment`, news 중복 1개, `idx_posts_access`, `idx_posts_visibility`, `idx_tools_featured`).
+- 삭제 지시서 발급 시점 = 2026-10-10 09:00 KST 이후.
+- `2026-10-10-0700-AIK24-EMDASH-02-초기화.md` 미실행 — D1 리셋 후 대상.
+
 ## 2026-10-09 19:55 — CF-ZONE-06 불필요 터널·DNS 정리 (mde2·m1-ssh 삭제)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1830-CF-ZONE-06-터널정리.md`
