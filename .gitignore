@@ -81,3 +81,6 @@ filter.txt
 
 # Playwright session artifacts
 .playwright-mcp/
+
+# CF-MIGRATE-06 임베딩 회전 상태 (런타임)
+pipeline/infra/.embedding_rotation.json

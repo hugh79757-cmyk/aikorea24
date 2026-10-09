@@ -1,3 +1,80 @@
+## 2026-10-09 12:05 — CF-MIGRATE-06 임베딩 폴백 체인 (get_embedding 단일 경로 → 2티어 순수 회전)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1140-CF-MIGRATE-06-임베딩-폴백체인.md`
+
+### 한 일
+`pipeline/infra/vectorize_client.py` 의 `get_embedding()` 이 OpenAI 단일 경로라 429(크레딧 소진) 시
+회전 없이 `None` 을 반환해 **CF-MIGRATE-05 신규 기사 46건의 Vectorize 임베딩이 전멸**했다.
+1536차원 벡터 공간이 같은 2티어 순수 회전 체인으로 교체했다. (`src/`·`wrangler.toml` 무변경, D1 무변경)
+
+### 결과
+- [PRODUCTION CODE] `pipeline/infra/vectorize_client.py` — `EMBEDDING_TIERS`(openai → openrouter),
+  `EMBEDDING_TIER_TIMEOUT_SEC=30` / `EMBEDDING_CHAIN_BUDGET_SEC=90` / `EMBEDDING_TIER_RETRY_5XX=1` /
+  `EMBEDDING_TIER_RETRY_DELAY=5`, `_load_tier_order()`(front 우선) / `_persist_tier_success()`(
+  `.embedding_rotation.json` tmp+`os.replace` 원자 기록) / `_embed_once()`(차원·type 검증).
+  근거: `git diff --stat pipeline/infra/vectorize_client.py` — docstring 교체 + 신규 함수 6개 + 기존
+  `get_embedding`(236~257행, `except Exception: return None`) 삭제. 미사용 `_get_openai_key()` 삭제,
+  중복 정의된 `_cf_base_url()` 1개 정리. `python3 -c "import ast; ast.parse(open(...).read())"` OK.
+- [TEST CODE] `pipeline/infra/test_embedding_chain.py` 신규 — `python3 pipeline/infra/test_embedding_chain.py`
+  → **`PASS 32 / FAIL 0`**(`ALL CHECKS PASSED`). live provider 호출 0건(전부 mock).
+  분해: 성공 티어가 다음 요청 front 1건 / 429=회전신호(벡터 반환·sleep 0회) 2건 / 전 티어 실패 6종×3=18건 /
+  균등 회전 4건 / 상태 영속 1건 / 체인 예산 1건 / 정적 검사 2건 = 29건 + 서브체크 3건.
+- [검증됨] **live 임베딩 46/46 성공.** 근거: `python3 /tmp/live_emb_46.py` → 신규 D1 `created_at >= '2026-10-09 04:00:00'`
+  기사 46건 제목 전량 임베딩 → `성공 46 / 실패 0 (61.6s)`, 각 1536차원. 1건 spot check L2 norm 0.9995.
+- [검증됨] OpenAI 429 가 회전 신호로 동작. 근거: §1 프로브 `/tmp/emb_probe.py` → OpenAI
+  `HTTP 429 insufficient_quota "You have no credits remaining"`, OpenRouter `openai/text-embedding-3-small`
+  `HTTP 200` 1536차원 L2 1.0002 = 동일 모델 동일 벡터 공간.
+- [검증됨] 대기·제외 로직 0건. 근거: 테스트 7-1 이 주석 제외 소스 대상으로 `cooldown`·`quota_until`·
+  `structural_until`·`circuit`·`blocked` 0건, 7-2 가 `time.sleep` 인자가 `EMBEDDING_TIER_RETRY_DELAY`
+  (5xx 1회 재시도)과 `_request_with_retry`의 `1.0 * (2.0 ** attempt)` 뿐임을 확인.
+
+### §1 임베딩 제공자 실측 (차원 확인 완료)
+| 제공자 | 모델 | 차원 | 판정 |
+|---|---|---|---|
+| OpenAI | text-embedding-3-small | 1536 | 채택(티어1, 현재 크레딧 소진) |
+| OpenRouter | openai/text-embedding-3-small | 1536 | **채택(티어2, 정상)** |
+| Gemini | gemini-embedding-001 (outputDimensionality 1536) | 1536 | 제외 — 벡터 공간이 OpenAI 와 다름 |
+| Cohere | embed-v4.0 (output_dimension 1536) | 1536 | 제외 — 동일 사유 (v3 系列는 output_dimension 400) |
+| Workers AI | bge-base-en-v1.5 / bge-large-en-v1.5 | 768 / 1024 | 제외 — 1536 미지원 (신규 계정 401) |
+| Kilo gateway | openai/text-embedding-3-small | — | 제외 — 404 임베딩 미지원 |
+
+기존 `aikorea24-dedup` 인덱스에 OpenAI 벡터 435개(dimensions 1536, metric cosine, 마지막 처리
+2026-07-14T02:27:49Z)가 들어 있으므로 **동일 모델 2티어만** 채택했다. Gemini·Cohere 는 차원이 같아도
+벡터 공간이 달라 섞으면 유사도 검색이 무의미해진다.
+
+### [검증불가] Vectorize 인덱싱 — 대표님 조치 필요
+- [검증불가] 신규 계정 `GET /accounts/7eb1b8cd…/vectorize/v2/indexes` → **HTTP 403 code 10000 Authentication error**.
+  `CF_MIGRATE_TOKEN` 에 Vectorize 권한이 없다. 복구 계획: 대표님이 토큰 권한에 Vectorize 를 추가하면
+  `upsert_vectors` 재실행으로 즉시 해소.
+- [검증불가] 신규 계정에 `aikorea24-dedup` 인덱스 실체 존재 여부 — GET 이 403이라 조회 불가.
+  `wrangler vectorize` CLI 도 동일한 토큰으로 실패. 임의 인덱스 생성·기존 출발 계정 인덱스 재사용은 하지 않았다.
+- [검증됨] `upsert_vectors()` 반환값 `False`(1건 프로브). 근거: `/tmp/upsert_probe2.py` 출력.
+  `upsert_vectors` 는 예외를 던지지 않고 bool 을 반환하므로 호출부는 조용히 실패한다.
+
+### 잔존 위험
+1. **[검증불가] 신규 계정 Vectorize 인덱싱 전체 차단** — 토큰 403. 임베딩은 정상 생성되지만
+   `aikorea24-dedup` 에는 계속 아무것도 못 쌓는다. **대표님 조치 필요.**
+2. **[부분검증] 중복 판정 게이트 약화** — `is_duplicate_with_vectorize()` 가 0건 벡터 상태에서
+   호출되면 중복 판정을 못 한다(카운트 0 → 전부 신규로 통과). 게이트 역할이 약화 상태.
+3. **[부분검증] 출발 계정 `aikorea24-dedup` 은 435벡터에서 2.7개월 stale** — 신규 기사가 쌓이지 않아
+   중복 판정 품질 저하. 지시서 범위 밖.
+4. **체인 예산 90초** — 티어 2개 × 30초 + 5xx 재시도 5초 × 2 = 최대 70초로 예산 내. 타임아웃 시
+   `None` 반환 후 상위 호출부가 스킵(기존 동작 유지).
+5. `.embedding_rotation.json` 은 gitignore 등록(런타임 상태). 인덱스 교체 시 상태 파일 삭제해야 front 가 초기화됨.
+6. **CF-MIGRATE-03 계약 위반 기재**: 첫 curl 의 `echo` 구문에 `BREVO_API_KEY` 변수가 실려 터미널에 출력됨.
+   파일·state.md 에는 값 미기록.
+7. **[위반 감지] 본 작업 중 잘못된 중간 주장 1건**: 최초 upsert 프로브가 `upsert_vectors()` 의
+   bool 반환값을 무시하고 try/except 없음만 확인해 `UPSERT: OK` 를 출력했다. 실제로는 `False`.
+   즉시 반환값을 확인하는 프로브(`/tmp/upsert_probe2.py`)로 재검증해 정정했다. production 코드는 무관.
+8. 기존 잔존: 출발 계정 D1·R2·Pages 삭제 보류 / `projects2/finnews/wrangler.toml:6` account_id 출발 잔존 /
+   문서 6개 옛 database_id 잔존 / `CF_PURGE_TOKEN` plist 평문 / plist `OPENAI_API_KEY` 폐기 키(401).
+
+### 다음 행동
+1. 대표님: `CF_MIGRATE_TOKEN` 에 **Vectorize Read/Write** 권한 추가 → `/tmp/upsert_probe2.py` 재실행.
+2. 대표님: 신규 계정 `aikorea24-dedup`(1536, cosine) 생성 여부 확인.
+3. 이후: `api_test/news_collector.py` 1회 수동 실행으로 46건 인덱싱 반영 확인.
+4. `.gitignore` 에 `pipeline/infra/.embedding_rotation.json` 등록 — **이번 세션 반영함**.
+
 ## 2026-10-09 11:51 — CF-ZONE-01 2차 zone 이전 조사 (읽기 전용, 변경 0건)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-1150-CF-ZONE-01-조사.md`
