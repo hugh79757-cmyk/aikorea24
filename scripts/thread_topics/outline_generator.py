@@ -29,7 +29,7 @@ from model_router import chat_completion
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
 OUTLINES_DIR = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "outlines")
-DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
+DB_ID = "3f4cedde-eabc-4d7c-b459-f6abe8733767"
 
 # ============================================
 # 로깅

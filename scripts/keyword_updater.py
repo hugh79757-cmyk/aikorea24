@@ -18,7 +18,7 @@ from pipeline.infra import project_root; PROJECT_DIR = project_root()
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 SEEDS_PATH = os.path.join(PROJECT_DIR, "scripts", "seeds.json")
 KEYWORDS_PATH = os.path.join(PROJECT_DIR, "scripts", "thread_topics", "keywords.json")
-DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
+DB_ID = "3f4cedde-eabc-4d7c-b459-f6abe8733767"
 NAVER_BASE_URL = "https://api.searchad.naver.com"
 
 

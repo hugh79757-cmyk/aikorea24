@@ -40,8 +40,6 @@ def _d1_run(sql: str) -> Optional[list]:
     """wrangler d1 execute 실행, results 반환."""
     cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
     env = dict(os.environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)
-    env.pop("CLOUDFLARE_ACCOUNT_ID", None)
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
                            env=env, cwd=_PROJECT_ROOT)

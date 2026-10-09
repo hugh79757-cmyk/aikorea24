@@ -45,7 +45,7 @@ from model_router import chat_completion
 from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, is_placeholder_copy, DEEPSEEK_POOL
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
-DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
+DB_ID = "3f4cedde-eabc-4d7c-b459-f6abe8733767"
 
 # ============================================
 # 로깅
@@ -92,8 +92,6 @@ def _d1_run(sql):
     import subprocess, json, re
     cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
     env = dict(os.environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)  # auth profile 우선
-    env.pop("CLOUDFLARE_ACCOUNT_ID", None)  # OAuth profile 계정 충돌 방지
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env, cwd=PROJECT_DIR)
         if r.returncode != 0:
@@ -842,8 +840,7 @@ def main():
                            "--project-name", "aikorea24", "--branch", "main", "--commit-dirty=true"]
 
                 deploy_env = dict(os.environ)
-                deploy_env.pop("CLOUDFLARE_API_TOKEN", None)  # auth profile 우선
-
+                deploy_
                 deploy_result = subprocess.run(
                     cmd, capture_output=True, text=True, timeout=180,
                     cwd=PROJECT_DIR, env=deploy_env

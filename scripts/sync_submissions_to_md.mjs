@@ -22,9 +22,8 @@ function querySubmissions() {
   const sql = `SELECT slug, name, url, category, description, price_model, price_detail,
     korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at, updated_at
     FROM tool_submissions WHERE status='published' ORDER BY created_at DESC;`;
-  // CLOUDFLARE_API_TOKEN은 D1 권한이 없는 스코프(7403) → OAuth 프로필 사용
+  // 2026-10-09 CF-MIGRATE-02: OAuth 프로필은 출발 계정 → env 토큰 사용
   const env = { ...process.env };
-  delete env.CLOUDFLARE_API_TOKEN;
   const out = execFileSync(
     wrangler,
     ['d1', 'execute', 'aikorea24-db', '--remote', `--command=${sql}`, '--json'],

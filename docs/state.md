@@ -1,3 +1,48 @@
+## 2026-10-09 12:08 — CF-MIGRATE-02: Cloudflare 계정 이전 1차 (D1+R2+Pages+도메인) 결과 요약
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-0850-CF-MIGRATE-02.md` (개정본)
+신규 계정 `Stylefactory9ai@gmail.com` = `7eb1b8cd178de269758ec94b2e03330b`
+`aikorea24.kr` 트래픽이 신규 계정 Pages로 서빙 중. DNS zone 자체는 출발 계정에 그대로 유지(지시 금지 준수).
+
+### 한 일
+D1 `aikorea24-db` · R2 `aikorea24-files` · Pages `aikorea24` 를 출발 계정(`fac9808c…`)에서 신규 계정(`7eb1b8cd…`)으로 복제하고, `aikorea24.kr`·`www.aikorea24.kr` CNAME 을 신규 Pages 프로젝트로 전환했다. 함께 D1 접근 경로 전수(파이썬 파이프라인 11개 파일 + R2 갱신 경로)에 새 계정 ID 를 적용했다.
+
+### 결과
+- [검증됨] **D1 이전 (§2)** — 신규 DB `3f4cedde-eabc-4d7c-b459-f6abe8733767` 생성 후 import. 24개 테이블 카운트 합계 **21,919 = 출발 21,919**, 불일치 0건. `sqlite_master` 객체 51개(테이블 24 + 인덱스 27) 완전 일치(텍스트 차이 1건은 SQLite 가 `CREATE TABLE IF NOT EXISTS` 의 `IF NOT EXISTS` 를 제거하는 정규화 때문, 확인함). 근거: D1 REST `POST /accounts/{acct}/d1/database/{db}/query` 응답 `meta`.
+- [검증됨] **R2 이전 (§3)** — 비용 게이트 통과(출발 버킷 **8 객체 / 1,727,247 B = 1.6MB**, 10GB 게이트 미달). 신규 버킷 `aikorea24-files`(APAC) 동일 이름 생성, R2 REST `GET/PUT .../objects` 로 8개 복사. 신규 버킷 8 객체 / 1,727,247 B, **누락 0 · 추가 0 · 크기불일치 0 · etag 불일치 0**. 스크립트 `/tmp/r2_copy.py`, 리포트 `/tmp/r2_copy_report.json`.
+- [검증됨] **Pages 재생성 (§4)** — 신규 계정 `aikorea24` project_id `24f70480-44dc-40de-af31-37bd39ff3173`, 서브도메인 `aikorea24-4nk.pages.dev`. 빌드 `npm run build` → `Server built in 10.51s` / `Complete!`, 배포 `wrangler pages deploy dist --project-name aikorea24 --branch main` → deployment `068ffc52-68d5-433a-bb84-087098b689fa`(env=production). 시크릿 4개(`SESSION_SECRET` `BREVO_API_KEY` `GOOGLE_CLIENT_ID` `GOOGLE_CLIENT_SECRET`) 설정, plain 변수 `account_id=7eb1b8cd…`, compat date `2024-12-01`.
+- [검증됨] **도메인 전환 (§5)** — `POST /pages/projects/aikorea24/domains` 로 `aikorea24.kr`·`www.aikorea24.kr` 추가 성공(각 `success=True`). DNS 는 출발 계정 zone(`a6d9e75032c8cefe316b06d46a90a431`)에 그대로 두고, CNAME content 만 `aikorea24.pages.dev` → `aikorea24-4nk.pages.dev` 로 PATCH(레코드 id `2bb370e6d859bf4bad95dc2130dabf22` / `879a3e1f5ba8b33c44a10514038ede7b`, 백업 `/tmp/dns_backup_aikorea.txt`). **롤백 = 백업 content 2건 복원.**
+- [검증됨] **§7-1 도메인 200** — `https://aikorea24.kr/` 200 (59,286B), `https://www.aikorea24.kr/` 200.
+- [검증됨] **§7-2 D1/R2 바인딩** — `https://aikorea24.kr/news/` 200 (73,942B, 카드 50건), `https://aikorea24.kr/api/posts/` 200 (54,976B, `{"posts":[{"id":45,…}]}` 실제 행), `https://aikorea24.kr/api/files/tools/1/1790357830715-pcvr.webp` 200 `image/webp` 103,084B(R2 객체 원본과 크기 동일).
+- [검증됨] **§7-4 Google 로그인 라운드트립** — `GET https://aikorea24.kr/api/auth/login/` 302 → `accounts.google.com/o/oauth2/v2/auth`(`client_id=683559975627-e8rq6vbvgq3j2dmafekq8uk2ji13q90h.apps.googleusercontent.com`, `redirect_uri=https%3A%2F%2Faikorea24.kr%2Fapi%2Fauth%2Fcallback%2Fgoogle`) → `-L` 최종 200 `accounts.google.com/v3/signin/identifier` (896,134B, `invalid_request` 없음). 도메인 불변이라 Google Cloud Console 재등록 불필요.
+- [검증됨] **파이프라인 실동작** — `EnvConfig().load_to_environ()` 후 `d1_client.d1_query("SELECT COUNT(*) FROM news")` → `[{'c': 17731}]`, `tools` → `[{'c': 455}]`(신규 DB 실조회). `node scripts/sync_submissions_to_md.mjs` → rc 0, `published=11 created=0 skipped=11`.
+- [검증됨] **옛 ID 잔존 0건** — `bec650ce…`(옛 D1)·`fac9808c…`(옛 계정) grep 결과 aikorea24 저장소 런타임 파일(`.toml`/`.py`/`.mjs`/`.js`/`.ts`/`.astro`)에서 0건.
+- [부분검증] **§7-3 `img.aikorea24.kr`** — 마이그레이션 이전부터 404 상태였다(출발 계정에서도 동일). R2 바인딩 경유 `/api/files/` 경로는 신규 계정에서 정상 200. img 별도 도메인 재연결은 수행하지 않음.
+- [검증불가] **§7-5 Brevo 발송** — `GET https://api.brevo.com/v3/account` 401 `"unrecognised IP address 110.168.249.241"`. `curl -4` 강제해도 동일(스킬 `brevo-email-healthcheck` 절차 기준 IPv4 강제 적용). 복구 계획: 대표님이 `https://app.brevo.com/security/authorised_ips` 에 `110.168.249.241` 추가 후 재검증. 참고 — Worker egress 는 Cloudflare IP 이므로 실 발송 검증은 관리자 세션 필요(`/api/briefing/send-email` 은 `twinssn@gmail.com` 세션 요구).
+
+### 지시서 대비 deviate (5건)
+1. **`AUTH_SECRET` 미입력 — 블로커가 아님.** `src/`·`scripts/` 전체 grep 결과 `AUTH_SECRET` 참조 **0건**. `.planning/phases/01-security-hardening/02-SUMMARY.md:115` 에 "Legacy session → `SESSION_SECRET` 으로 교체" 기록. 죽은 변수라 미입력해도 로그인 동작(§7-4 로 실측 확인). 지시서는 이를 "유일 블로커" 로 지목했으나 실측 결과 블록 아님.
+2. **GitHub 연동 스킵.** GitHub source 지정 POST → `8000011 There is an internal issue with your Cloudflare Pages Git installation` (신규 계정 GitHub App 미설치. API 토큰으로는 설치 불가). 소스 없이 프로젝트 생성 후 기존 경로인 direct upload(`wrangler pages deploy`)로 배포 — 동일 산출물. **기존 배포 파이프라인(`scripts/deploy.sh`)은 GitHub 연동에 의존하지 않으므로 기능 영향 없음.**
+3. **Pages 바인딩은 API PATCH 대신 배포 시 주입.** `PATCH deployment_configs` 에서 D1(`type:"d1"`)은 성공하나 **R2(`type:"r2"`)는 HTTP 500 code 8000000** 로 항상 실패(preview/production 단독·양쪽 모두 동일). 출발 계정 프로젝트 GET 응답에도 바인딩이 없어, Pages 바인딩은 `wrangler pages deploy` 가 `wrangler.toml` 에서 읽어 배포 메타데이터로 주입하는 구조임을 확인. → API PATCH 결과는 무시했고 배포 경로가 정상 주입함을 §7-2 로 확인.
+4. **`env.pop` 제거 (지시서 미기재, 미수행 시 파이프라인 전량 실패).** `pipeline/infra/d1_client.py::_build_env()` 와 6개 스크립트가 `CLOUDFLARE_API_TOKEN`·`CLOUDFLARE_ACCOUNT_ID` 를 `env.pop` 후 wrangler 를 호출 → wrangler OAuth 프로필(`~/.wrangler/config/default.toml`, 만료 2026-10-08T21:06Z) 로 fallback → **출발 계정으로 신규 DB 조회 시 7404** 실측. 지시서대로 DB_ID 만 바꾸면 파이프라인 전체가 신규 DB 를 못 봄. 7개 py + 1개 mjs 에서 `env.pop` 제거, 프로젝트 `.env` 의 토큰/계정 ID 를 신규 계정 값으로 교체(백업 `.env.bak.20261009_cfmigrate`).
+5. **§6 대상 파일 5개 추가 발견.** 지시서가 나열한 5개 외에 aikorea24 저장소 안에서 `scripts/keyword_updater.py:21`, `scripts/dynamic_seed_generator.py:24`, `scripts/blog_draft_generator.py:48`, `scripts/thread_topics/outline_generator.py:32`, `scripts/thread_topics/thread_topic_finder.py:24` 의 `DB_ID` 하드코딩을 grep 으로 찾아 함께 교체.
+
+### 잔존 위험
+- **카카오 로그인 불가 (기능 퇴화).** 지시서 지시대로 `KAKAO_CLIENT_ID`·`KAKAO_CLIENT_SECRET` 미입력. 출발 계정 Pages 에는 설정돼 있었으나 값이 프로젝트 `.env`·`~/.env.common` 양쪽에 없음(읽기 불가 — Cloudflare 시크릿 write-only). 신규 계정에서 카카오 로그인 시도 시 실패. 복구 계획: Kakao Developers 콘솔에서 앱 비밀키 재발급 후 신규 Pages 에 설정.
+- **`news-unified` launchd job 이 출발 계정 옛 DB 에 씀.** `~/Library/LaunchAgents/kr.aikorea24.news-unified.plist` 의 `EnvironmentVariables` 에 출발 계정 `CLOUDFLARE_ACCOUNT_ID`·`CLOUDFLARE_API_TOKEN` 이 하드코딩돼 있고, 실행 대상 `api_test/news_collector.py` 의 D1 쓰기 3곳은 `env` 미전달 → 프로세스 환경(출발 계정) 사용. 결과적으로 수집 기사가 **출발 계정의 옛 `aikorea24-db` 에 기록되고 신규 DB 에는 반영되지 않음.** 함께 `purge_cloudflare_cache()` 도 출발 토큰이 필요(zone 은 출발 계정 유지)하므로 단일 토큰 교체로는 해결되지 않는다. 지시서 §6 스코프 밖이라 미수행 — 대표님 승인 시 `CF_DNS_TOKEN` 기반 purge 분기 추가 후 신규 계정으로 교체 필요.
+- **`projects2/finnews/wrangler.toml:6` 의 `account_id` 가 출발 계정 `fac9808c…` 로 잔존.** §6 은 finnews `database_id` 만 명시했다. D1 ID 는 신규 값으로 교체됐으므로 finnews 를 배포하면 `account_id` 불일치로 7404 발생. 지시서가 finnews 배포를 금지했으므로 이번 세션 영향 없음. 복구 계획: finnews 배포 시 `account_id` 를 `7eb1b8cd…` 로 교체.
+- **문서 6개에 옛 ID/계정 ID 잔존 (런타임 아님).** `SOP.md:21`, `docs/TECHNICAL.md:523`, `docs/SKILLS/08-cloudflare-deploy.md:106`, `.planning/codebase/CONCERNS.md:119`, `.planning/codebase/INTEGRATIONS.md:24`, `.backup_brandname_20260929_150132/docs/TECHNICAL.md:523`. 지시서 §6 스코프 밖.
+- **출발 계정 D1·R2·Pages 리소스 삭제 보류 (지시 금지).** 롤백 검증 전까지 유지. 신규 계정 롤백 시 이전 CNAME content(`aikorea24.pages.dev`) 복원 + 출발 Pages 로 DNS 전파 대기 필요.
+- **Brevo 발송 미검증** — 위 3분법 [검증불가] 참조. IP 화이트리스트 등록 전까지 브리핑 이메일 발송 경로 신뢰도 미확인.
+- **`scripts/briefing_dedup.json` 이 작업 중 변경됨**(2026-10-08 브리핑 336번 기준 항목 282행 추가). `auto_briefing` 실동작 경로가 새 DB 를 읽으며 재생성한 산출물이며 의도된 변경. 이번 커밋 대상에서 제외함.
+
+### 다음 행동
+1. 대표님: Brevo `authorized_ips` 에 `110.168.249.241` 등록 (7월 IP 변경분).
+2. 대표님: `news-unified` plist 토큰 교체 승인 여부 결정 (위 잔존 위험 2번째).
+3. 대표님: 카카오 앱 키 확보 후 신규 Pages 시크릿 설정 (위 잔존 위험 1번째).
+4. 선택: 출발 계정 D1·R2·Pages 삭제 — 신규 계정 안정 구주(7일) 경과 후.
+5. 선택: D1 row read 알람 재기준선 설정 — D1-NEWS-FIX-01 후 rows_read 1,075/요청 이므로 여유 큼.
+
 ## 2026-10-09 09:05 — CF-MIGRATE-02 중단: 사전 조건 미충족 (작업 미시작)
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-09-0850-CF-MIGRATE-02.md`

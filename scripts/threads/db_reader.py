@@ -177,8 +177,6 @@ def _http_fallback(sql: str) -> list[dict]:
 def d1_query(sql, retries=3):
     cmd = ['/opt/homebrew/bin/wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--command', sql]
     env = dict(os.environ)
-    env.pop('CLOUDFLARE_API_TOKEN', None)
-    env.pop('CLOUDFLARE_ACCOUNT_ID', None)
     last_stderr = ''
     for attempt in range(retries):
         try:
