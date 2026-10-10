@@ -1,9 +1,9 @@
 {
-  "timestamp": "2026-10-03T09:00:05.089138",
+  "timestamp": "2026-10-10T09:00:05.285802",
   "dry_run": false,
   "days": 7,
-  "s0_articles": 90,
-  "s1_candidates": 5,
+  "s0_articles": 65,
+  "s1_candidates": 4,
   "s2_dives": 0,
   "s3_posts": [],
   "errors": [
