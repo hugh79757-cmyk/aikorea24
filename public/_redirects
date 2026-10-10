@@ -19,3 +19,12 @@
 /blog/walkthrough-1-2  /410  410
 /blog/walkthrough-1-1  /410  410
 /blog/openai-1220  /410  410
+
+# 2026-10-10: 블로그를 emDash로 이전 - /blog/* → emdash.aikorea24.kr
+/blog/  https://emdash.aikorea24.kr/posts/  301
+/blog/*  https://emdash.aikorea24.kr/posts/  301
+
+# 2026-10-10 (AIK24-FIX-01): 커뮤니티 제거 → 홈으로
+/community    /  301
+/community/   /  301
+/community/*  /  301
