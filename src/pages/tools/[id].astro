@@ -240,11 +240,6 @@ const faqSchema: string | null = faqEntities.length > 0
           <span id="vote-label"> 추천</span>
           <span id="vote-count" class="text-xs opacity-70">0</span>
         </button>
-        <a href={`/community/review?tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
-           id="review-write-btn"
-           class="hidden inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all text-sm border border-gray-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] dark:text-gray-300 dark:border-white/[0.15]">
-          리뷰 쓰기
-        </a>
       </div>
       {tool.data.screenshotUrl && (
         <div class="mt-4">
@@ -327,16 +322,6 @@ const faqSchema: string | null = faqEntities.length > 0
       </div>
       <div id="reviews-list"></div>
     </div>
-  </div>
-  )}
-
-  <!-- 리뷰 작성 버튼 -->
-  {!isD1 && (
-  <div id="review-cta" class="max-w-3xl mx-auto px-4 pb-4 text-center hidden">
-    <a href={`/community/write?category=review&tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
-       class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm">
-      {tool.data.name} 리뷰 작성하기
-    </a>
   </div>
   )}
 
@@ -442,27 +427,12 @@ async function loadReviewData() {
               <span class="text-yellow-500 text-sm">${'★'.repeat(r.rating || 5)}</span>
             </div>
             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${(r.content || '').substring(0, 200)}</p>
-            <a href="/community/${r.id}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">전체 보기 →</a>
           </div>
         `).join('');
       }
       
-      // 리뷰 작성 CTA
-      const cta = document.getElementById('review-cta');
-      if (cta) cta.classList.remove('hidden');
     }
   } catch (e) { console.error('Review load error:', e); }
-}
-
-// 로그인 체크 → 리뷰 쓰기 버튼 표시 (세션 쿠키는 httpOnly라
-// 클라이언트에서 읽을 수 없음 → 서버 /api/auth/me로 확인)
-async function checkAuth() {
-  try {
-    const res = await fetch('/api/auth/me');
-    const data = await res.json();
-    const reviewWriteBtn = document.getElementById('review-write-btn');
-    if (reviewWriteBtn && data.loggedIn) reviewWriteBtn.classList.remove('hidden');
-  } catch (e) { console.error('Auth check error:', e); }
 }
 
 // 투표 버튼 처리 (사전 쿠키 체크 없이 바로 POST → 401일 때만 로그인 이동)
@@ -536,7 +506,6 @@ document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e)
 // 초기 데이터 로드
 loadVoteData();
 if (!IS_D1) loadReviewData();
-checkAuth();
 </script>
   <!-- FAQPage 구조화 데이터 -->
   {faqSchema && (

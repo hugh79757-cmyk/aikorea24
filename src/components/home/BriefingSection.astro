@@ -12,24 +12,24 @@ function formatDate(dateStr: string) {
 }
 ---
 
-<section class="relative z-10 px-4 py-16">
+<section class="relative z-10 px-4 py-16 bg-white">
   <div class="max-w-3xl mx-auto">
 
     {hasData ? (
       <div>
-        <div class="text-center mb-10">
-          <div class="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 mb-4">
-            <span class="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></span>
-            <span class="text-sm text-blue-400">오늘의 AI 브리핑</span>
+        <div class="mb-10">
+          <div class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 mb-4">
+            <span class="w-2 h-2 bg-[#E63B2E] rounded-full"></span>
+            <span class="text-sm text-gray-600">오늘의 AI 브리핑</span>
           </div>
-          <h2 class="text-3xl md:text-4xl font-bold mb-3">
+          <h2 class="text-3xl md:text-4xl font-bold mb-3 text-[#111111]" style="font-family: var(--font-sans); border-left: 4px solid #E63B2E; padding-left: 12px;">
             {formatDate(briefing.date)}
           </h2>
         </div>
 
         {briefing.intro && (
-          <div class="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl p-6 mb-10">
-            <p class="text-lg leading-relaxed text-gray-700 dark:text-gray-200 italic">
+          <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-10">
+            <p class="text-lg leading-relaxed text-gray-700 italic">
               "{briefing.intro}"
             </p>
           </div>
@@ -37,34 +37,28 @@ function formatDate(dateStr: string) {
 
         <div class="space-y-6">
           {items.map((item: any, idx: number) => (
-            <article class="group bg-gray-50 dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.06] rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300">
+            <article class="group bg-white border border-gray-200 rounded-xl p-6 hover:border-[#E63B2E] transition-all duration-300">
               <div class="flex items-start gap-4">
-                <span class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                <span class="flex-shrink-0 w-8 h-8 bg-[#111111] rounded-lg flex items-center justify-center text-white font-bold text-sm">
                   {idx + 1}
                 </span>
                 <div class="flex-1 min-w-0">
                   <a href={`/briefing/${briefing.date}/#item-${idx+1}`} class="block">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+                    <h3 class="text-lg font-semibold text-[#111111] mb-2 group-hover:text-[#E63B2E] transition-colors leading-snug">
                       {item.title}
                     </h3>
                   </a>
                    {item.comment && (
-                    <p class="text-base text-blue-600 dark:text-blue-300 mb-2 leading-relaxed">
+                    <p class="text-base text-gray-700 mb-2 leading-relaxed">
                       {item.comment}
                     </p>
                   )}
-                  <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400">
+                  <div class="flex items-center gap-3 text-xs text-gray-500">
                     <span>{item.source}</span>
                     {item.country && item.country !== 'kr' && (
-                      <span class="bg-blue-500/10 text-blue-400 px-2 py-0.5 rounded">해외</span>
+                      <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded">해외</span>
                     )}
-                    {item.category === 'policy' && (
-                      <span class="bg-orange-500/10 text-orange-400 px-2 py-0.5 rounded">정책</span>
-                    )}
-                    {item.category === 'benefit' && (
-                      <span class="bg-purple-500/10 text-purple-400 px-2 py-0.5 rounded">혜택</span>
-                    )}
-                    <a href={`/briefing/${briefing.date}/#item-${idx+1}`} class="ml-auto text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                    <a href={`/briefing/${briefing.date}/#item-${idx+1}`} class="ml-auto text-gray-500 hover:text-[#E63B2E] transition-colors">
                       자세히 보기 &rarr;
                     </a>
                   </div>
@@ -75,28 +69,15 @@ function formatDate(dateStr: string) {
         </div>
 
         <div class="text-center mt-10">
-          <a href="/briefing/" class="text-sm text-gray-500 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+          <a href="/briefing/" class="text-sm text-gray-500 hover:text-[#E63B2E] transition-colors">
             이전 브리핑 보기 &rarr;
           </a>
         </div>
-
-        <script is:inline>
-          document.addEventListener('DOMContentLoaded', function() {
-            var articles = document.querySelectorAll('.space-y-6 > article');
-            if (articles.length >= 3) {
-              var adDiv = document.createElement('div');
-              adDiv.className = 'my-6';
-              adDiv.innerHTML = '<ins class="adsbygoogle" style="display:block;text-align:center" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709"></ins>';
-              articles[2].insertAdjacentElement('afterend', adDiv);
-              try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch(e) {}
-            }
-          });
-        </script>
       </div>
     ) : (
       <div class="text-center py-20">
         <div class="text-6xl mb-4">📡</div>
-        <h2 class="text-2xl font-bold mb-2">오늘의 브리핑 준비 중</h2>
+        <h2 class="text-2xl font-bold mb-2 text-[#111111]" style="font-family: var(--font-sans);">오늘의 브리핑 준비 중</h2>
         <p class="text-gray-500">매일 아침 AI 뉴스를 직접 선별하여 발행합니다</p>
       </div>
     )}

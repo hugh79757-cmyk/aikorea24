@@ -2,92 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 시안 A 디자인 (2026-10-10): 클린 미니멀 - 흰 배경 + 검은 텍스트 + 빨간 버티컬 라인 */
+
 @layer base {
-  /* 라이트 모드 기본 */
   :root {
     --bg-primary: #ffffff;
-    --bg-secondary: #f8fafc;
-    --bg-header: rgba(255, 255, 255, 0.85);
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --text-muted: #94a3b8;
-    --border-color: #e2e8f0;
+    --bg-secondary: #ffffff;
+    --bg-header: rgba(255, 255, 255, 0.95);
+    --text-primary: #111111;
+    --text-secondary: #555555;
+    --text-muted: #888888;
+    --border-color: #e5e5e5;
     --card-bg: #ffffff;
-    --card-border: #e2e8f0;
+    --card-border: #e5e5e5;
+    --accent-red: #E63B2E;
+    color-scheme: light;
   }
 
-  /* 다크 모드 */
-  .dark {
-    --bg-primary: #0A0E1A;
-    --bg-secondary: #111827;
-    --bg-header: rgba(10, 14, 26, 0.85);
-    --text-primary: #e2e8f0;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
-    --border-color: rgba(255, 255, 255, 0.06);
-    --card-bg: rgba(30, 41, 59, 0.7);
-    --card-border: rgba(148, 163, 184, 0.1);
-  }
-
-  /* CSS 변수를 body에 적용 — 모든 상속 요소에 자동 적용 */
   html, body {
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
+    background-color: #ffffff !important;
+    color: #111111 !important;
   }
 
-  /* prose 다크 모드 */
-  .dark .prose {
-    --tw-prose-body: #d1d5db;
-    --tw-prose-headings: #f9fafb;
-    --tw-prose-lead: #9ca3af;
-    --tw-prose-links: #60a5fa;
-    --tw-prose-bold: #f9fafb;
-    --tw-prose-counters: #9ca3af;
-    --tw-prose-bullets: #6b7280;
-    --tw-prose-hr: #374151;
-    --tw-prose-quotes: #d1d5db;
-    --tw-prose-quote-borders: #4b5563;
-    --tw-prose-captions: #9ca3af;
-    --tw-prose-code: #f472b6;
-    --tw-prose-pre-code: #d1d5db;
-    --tw-prose-pre-bg: rgba(31, 41, 55, 0.5);
-    --tw-prose-th-borders: #4b5563;
-    --tw-prose-td-borders: #374151;
+  /* 다크모드 비활성화 */
+  .dark {
+    --bg-primary: #ffffff;
+    --bg-secondary: #ffffff;
+    --text-primary: #111111;
+    --text-secondary: #555555;
+    --border-color: #e5e5e5;
+    --card-bg: #ffffff;
   }
 
-  /* prose 라이트 모드 */
+  /* 헤드라인 - Pretendard로 통일 (2026-10-10, Georgia 제거: 한글 글리프가 없어 기기별 세리프로 폴백됐음) */
+  h1, h2 {
+    font-family: var(--font-sans) !important;
+    color: #111111 !important;
+  }
+
+  /* 섹션 타이틀 빨간 버티컬 라인 */
+  .section-title {
+    border-left: 4px solid #E63B2E;
+    padding-left: 12px;
+  }
+
+  /* prose */
   .prose {
-    --tw-prose-body: #374151;
-    --tw-prose-headings: #111827;
-    --tw-prose-links: #2563eb;
-    --tw-prose-bold: #111827;
-    --tw-prose-counters: #6b7280;
-    --tw-prose-bullets: #9ca3af;
-    --tw-prose-hr: #e5e7eb;
-    --tw-prose-quotes: #374151;
-    --tw-prose-quote-borders: #d1d5db;
-    --tw-prose-captions: #6b7280;
-    --tw-prose-code: #be185d;
-    --tw-prose-pre-code: #1f2937;
-    --tw-prose-pre-bg: #f3f4f6;
-    --tw-prose-th-borders: #d1d5db;
-    --tw-prose-td-borders: #e5e7eb;
-  }
-
-  /* theme-aware glass utility */
-  .glass {
-    background: rgba(30, 41, 59, 0.7);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(148, 163, 184, 0.1);
-  }
-  :root .glass {
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(0, 0, 0, 0.08);
-  }
-
-  /* 테마 전환 애니메이션 */
-  html, body, .glass, header, footer, main, section, div, nav, a, p, h1, h2, h3, h4, h5, h6, span, button, input, textarea, select {
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    --tw-prose-body: #333333;
+    --tw-prose-headings: #111111;
+    --tw-prose-links: #111111;
+    --tw-prose-bold: #111111;
+    --tw-prose-hr: #e5e5e5;
+    --tw-prose-quotes: #555555;
+    --tw-prose-quote-borders: #E63B2E;
   }
 }
 
@@ -101,112 +68,66 @@ html, body {
   box-sizing: border-box;
 }
 
-/* 커뮤니티 게시글 markdown 렌더링 스타일 */
+/* 커뮤니티 게시글 markdown 렌더링 */
 .prose-container h2 {
   font-size: 1.375rem;
   font-weight: 700;
-  color: var(--text-primary);
+  font-family: var(--font-sans);
+  color: #111111;
   margin: 1.5em 0 0.75em 0;
   padding-bottom: 0.375rem;
-  border-bottom: 1px solid var(--border-color);
+  padding-left: 12px;
+  border-left: 4px solid #E63B2E;
+  border-bottom: 1px solid #e5e5e5;
 }
 .prose-container h3 {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #111111;
   margin: 1.25em 0 0.5em 0;
 }
 .prose-container p {
   margin: 0.75em 0;
   line-height: 1.8;
-  color: var(--text-primary);
-}
-.prose-container strong {
-  font-weight: 700;
-  color: var(--text-primary);
-}
-.prose-container em {
-  font-style: italic;
-}
-.prose-container ul, .prose-container ol {
-  margin: 0.5em 0;
-  padding-left: 1.5em;
-}
-.prose-container li {
-  margin: 0.25em 0;
-  line-height: 1.7;
-  color: var(--text-primary);
-}
-.prose-container code {
-  font-family: 'SF Mono', 'Fira Code', monospace;
-  font-size: 0.875em;
-  background: rgba(255,255,255,0.06);
-  padding: 0.125em 0.375em;
-  border-radius: 4px;
-  color: #f472b6;
-}
-:root .prose-container code {
-  background: rgba(0,0,0,0.06);
-  color: #be185d;
-}
-.prose-container pre {
-  background: rgba(0,0,0,0.3);
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 1em;
-  overflow-x: auto;
-  margin: 1em 0;
-}
-:root .prose-container pre {
-  background: #f8fafc;
-}
-.prose-container pre code {
-  background: none;
-  padding: 0;
-  border-radius: 0;
-  color: inherit;
+  color: #333333;
 }
 .prose-container blockquote {
-  border-left: 3px solid #3b82f6;
+  border-left: 4px solid #E63B2E;
   padding: 0.5em 1em;
   margin: 1em 0;
-  background: rgba(59,130,246,0.06);
-  border-radius: 0 6px 6px 0;
-  color: var(--text-secondary);
+  background: #fafafa;
+  color: #555555;
 }
 .prose-container a {
-  color: #3b82f6;
+  color: #111111;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .prose-container a:hover {
-  color: #2563eb;
+  color: #E63B2E;
 }
 .prose-container hr {
   border: none;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #e5e5e5;
   margin: 1.5em 0;
 }
-.prose-container img {
-  max-width: 100%;
-  border-radius: 8px;
-  margin: 1em 0;
+
+/* 버튼 */
+.btn-primary {
+  background: #111111 !important;
+  color: #ffffff !important;
 }
-.prose-container table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1em 0;
+.btn-primary:hover {
+  background: #333333 !important;
 }
-.prose-container th, .prose-container td {
-  border: 1px solid var(--border-color);
-  padding: 0.5em 0.75em;
-  text-align: left;
+
+/* 검은 배경 제거 */
+.bg-black, .bg-neutral-900, .bg-gray-900, .bg-slate-900 {
+  background-color: #ffffff !important;
+  color: #111111 !important;
 }
-.prose-container th {
-  background: rgba(255,255,255,0.05);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-:root .prose-container th {
-  background: rgba(0,0,0,0.03);
+
+/* 컬러 글로우 제거 */
+[class*="glow"], [class*="ambient"], [class*="gradient"] {
+  display: none !important;
 }

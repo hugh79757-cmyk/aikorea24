@@ -49,7 +49,7 @@ const d = new Date(date.substring(0,10) + 'T00:00:00');
 const weekday = ['일','월','화','수','목','금','토'][d.getDay()];
 const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 (${weekday})`;
 ---
-<html lang="ko" class="dark">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,99 +63,67 @@ const display = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ($
 <meta name="description" content={`${display} AI 뉴스 브리핑 - ${items.length}건의 주요 AI 뉴스를 큐레이션했습니다.`} />
 <style is:global>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#0a0a0f;color:#e2e8f0}
+body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#ffffff;color:#111111}
 .container{max-width:720px;margin:0 auto;padding:20px 16px 80px}
-.back{display:inline-block;color:#60a5fa;text-decoration:none;font-size:14px;margin-bottom:20px}
+.back{display:inline-block;color:#E63B2E;text-decoration:none;font-size:14px;margin-bottom:20px}
 .back:hover{text-decoration:underline}
 .header{text-align:center;margin-bottom:28px}
 .header h1{font-size:28px;font-weight:800;margin-bottom:4px}
-.header .sub{font-size:14px;color:#94a3b8}
-.intro{font-size:15px;color:#cbd5e1;line-height:1.7;margin-bottom:28px;padding:16px;background:linear-gradient(135deg,rgba(59,130,246,0.08),rgba(139,92,246,0.08));border-radius:12px;border-left:3px solid #60a5fa}
-.count{font-size:13px;color:#64748b;margin-bottom:16px}
-.article{background:#161b22;border:1px solid #30363d;border-radius:14px;padding:20px;margin-bottom:16px;scroll-margin-top:20px;transition:border-color .2s}
-.article:hover{border-color:rgba(96,165,250,0.3)}
-.article-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-radius:8px;color:#fff;font-size:13px;font-weight:700;margin-right:10px;flex-shrink:0}
+.header .sub{font-size:14px;color:#555555}
+.intro{font-size:15px;color:#111111;line-height:1.7;margin-bottom:28px;padding:16px;background:#f7f7f7;border-radius:12px;border-left:4px solid #E63B2E}
+.count{font-size:13px;color:#6b7280;margin-bottom:16px}
+.article{background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:16px;scroll-margin-top:20px;transition:border-color .2s}
+.article:hover{border-color:#E63B2E}
+.article-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:#111111;border-radius:8px;color:#fff;font-size:13px;font-weight:700;margin-right:10px;flex-shrink:0}
 .article-top{display:flex;align-items:flex-start;margin-bottom:10px}
-.article-title{font-size:18px;font-weight:700;color:#f0f6fc;line-height:1.5}
-.article-comment{font-size:14px;color:#93c5fd;line-height:1.6;margin-bottom:10px;padding:10px 14px;background:rgba(59,130,246,0.08);border-radius:8px}
-.article-desc{font-size:13px;color:#9ca3b0;line-height:1.6;margin-bottom:12px}
+.article-title{font-size:18px;font-weight:700;color:#111111;line-height:1.5}
+.article-comment{font-size:14px;color:#111111;line-height:1.6;margin-bottom:10px;padding:10px 14px;background:#f7f7f7;border-radius:8px;border-left:3px solid #E63B2E}
+.article-desc{font-size:13px;color:#555555;line-height:1.6;margin-bottom:12px}
 .article-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .article-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px}
-.tag{padding:3px 8px;border-radius:4px;background:#1e293b;color:#64748b}
-.tag.kr{background:#1e3a2f;color:#4ade80}
-.tag.global{background:#1e293b;color:#60a5fa}
-.tag.policy{background:#3b2e1a;color:#fb923c}
-.tag.benefit{background:#2e1a3b;color:#c084fc}
-.source-link{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;background:#1e293b;color:#60a5fa;border:1px solid #30363d;border-radius:6px;font-size:12px;text-decoration:none;transition:all .2s}
-.source-link:hover{background:#263548;border-color:#60a5fa}
-.divider{border:none;border-top:1px solid #21262d;margin:32px 0}
-.related-title{font-size:18px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.tag{padding:3px 8px;border-radius:4px;background:#f7f7f7;color:#555555}
+.tag.kr{background:#fdeaea;color:#E63B2E}
+.tag.global{background:#f7f7f7;color:#555555}
+.tag.policy{background:#fef3e2;color:#b45309}
+.tag.benefit{background:#f5effe;color:#7c3aed}
+.source-link{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;background:#111111;color:#fff;border:1px solid #111111;border-radius:6px;font-size:12px;text-decoration:none;transition:all .2s}
+.source-link:hover{background:#333333;border-color:#333333}
+.divider{border:none;border-top:1px solid #e5e7eb;margin:32px 0}
+.related-title{font-size:18px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px;border-left:4px solid #E63B2E;padding-left:12px}
 .related-title .icon{font-size:20px}
-.r-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px;margin-bottom:10px;text-decoration:none;color:#e2e8f0;display:block;transition:border-color .2s}
-.r-card:hover{border-color:#60a5fa}
-.r-title{font-size:14px;font-weight:600;color:#c9d1d9;line-height:1.4;margin-bottom:4px}
-.r-desc{font-size:12px;color:#8b949e;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.r-meta{font-size:11px;color:#64748b;margin-top:6px}
-.deep-dive{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;background:linear-gradient(135deg,rgba(59,130,246,0.12),rgba(139,92,246,0.12));border:1px solid rgba(96,165,250,0.3);border-radius:8px;text-decoration:none;transition:all .2s}
-.deep-dive:hover{border-color:rgba(96,165,250,0.6);background:linear-gradient(135deg,rgba(59,130,246,0.18),rgba(139,92,246,0.18))}
+.r-card{background:#ffffff;border:1px solid #e5e7eb;border-radius:10px;padding:14px;margin-bottom:10px;text-decoration:none;color:#111111;display:block;transition:border-color .2s}
+.r-card:hover{border-color:#E63B2E}
+.r-title{font-size:14px;font-weight:600;color:#111111;line-height:1.4;margin-bottom:4px}
+.r-desc{font-size:12px;color:#555555;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.r-meta{font-size:11px;color:#6b7280;margin-top:6px}
+.deep-dive{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;background:#f7f7f7;border:1px solid #e5e7eb;border-radius:8px;text-decoration:none;transition:all .2s}
+.deep-dive:hover{border-color:#E63B2E}
 .deep-dive .dd-icon{font-size:16px;flex-shrink:0}
 .deep-dive .dd-text{display:flex;flex-direction:column;gap:2px}
-.deep-dive .dd-label{font-size:10px;font-weight:700;color:#93c5fd;letter-spacing:.05em;text-transform:uppercase}
-.deep-dive .dd-title{font-size:13px;font-weight:600;color:#e2e8f0;line-height:1.4}
-html.light .deep-dive{background:linear-gradient(135deg,rgba(37,99,235,0.07),rgba(139,92,246,0.07));border-color:rgba(37,99,235,0.25)}
-html.light .deep-dive:hover{border-color:rgba(37,99,235,0.5)}
-html.light .deep-dive .dd-label{color:#2563eb}
-html.light .deep-dive .dd-title{color:#111827}
+.deep-dive .dd-label{font-size:10px;font-weight:700;color:#E63B2E;letter-spacing:.05em;text-transform:uppercase}
+.deep-dive .dd-title{font-size:13px;font-weight:600;color:#111111;line-height:1.4}
 .nav-bar{display:flex;justify-content:center;gap:12px;margin-top:28px}
-.nav-btn{padding:10px 20px;background:#161b22;border:1px solid #30363d;border-radius:8px;color:#60a5fa;text-decoration:none;font-size:13px;transition:all .2s}
-.nav-btn:hover{border-color:#60a5fa;background:#1a2332}
+.nav-btn{padding:10px 20px;background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;color:#111111;text-decoration:none;font-size:13px;transition:all .2s}
+.nav-btn:hover{border-color:#E63B2E;background:#f7f7f7}
 /* 통합 네비게이션 */
-.site-nav{position:sticky;top:0;z-index:50;background:rgba(10,10,15,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,0.06)}
+.site-nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,0.08)}
 .nav-inner{max-width:1152px;margin:0 auto;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.nav-logo{font-size:18px;font-weight:800;background:linear-gradient(135deg,#3b82f6,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;text-decoration:none}
+.nav-logo{font-size:18px;font-weight:800;color:#111111;text-decoration:none}
 .nav-links{display:flex;align-items:center;gap:24px}
-.nav-link{font-size:14px;font-weight:500;color:#9ca3af;text-decoration:none;transition:color .2s}
-.nav-link:hover{color:#60a5fa}
-.nav-link.active{color:#60a5fa}
+.nav-link{font-size:14px;font-weight:500;color:#555555;text-decoration:none;transition:color .2s}
+.nav-link:hover{color:#E63B2E}
+.nav-link.active{color:#E63B2E}
 .nav-right{display:flex;align-items:center;gap:8px}
-.icon-btn{background:none;border:none;padding:8px;border-radius:8px;color:#9ca3af;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
-.icon-btn:hover{background:rgba(255,255,255,0.1);color:#e2e8f0}
+.icon-btn{background:none;border:none;padding:8px;border-radius:8px;color:#555555;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center}
+.icon-btn:hover{background:rgba(0,0,0,0.05);color:#111111}
 .mobile-only{display:none}
-.mobile-menu{display:none;padding:8px 16px 12px;border-top:1px solid rgba(255,255,255,0.06)}
+.mobile-menu{display:none;padding:8px 16px 12px;border-top:1px solid rgba(0,0,0,0.06)}
 .mobile-menu.open{display:block}
-.mobile-link{display:block;padding:10px 0;font-size:14px;color:#9ca3af;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.04)}
+.mobile-link{display:block;padding:10px 0;font-size:14px;color:#555555;text-decoration:none;border-bottom:1px solid rgba(0,0,0,0.04)}
 .mobile-link:last-child{border-bottom:none}
-.mobile-link.active{color:#60a5fa}
-.mobile-link:hover{color:#60a5fa}
+.mobile-link.active{color:#E63B2E}
+.mobile-link:hover{color:#E63B2E}
 @media(max-width:768px){.nav-links{display:none}.mobile-only{display:flex}}
-
-/* 다크/라이트 모드 */
-html.light body{background:#ffffff;color:#1a1a2e}
-html.light .site-nav{background:rgba(255,255,255,0.85);border-bottom-color:rgba(0,0,0,0.08)}
-html.light .nav-link{color:#4b5563}
-html.light .nav-link:hover,html.light .nav-link.active{color:#2563eb}
-html.light .icon-btn{color:#4b5563}
-html.light .icon-btn:hover{background:rgba(0,0,0,0.05);color:#111827}
-html.light .article{background:#fff;border-color:#e5e7eb;color:#1a1a2e}
-html.light .article:hover{border-color:rgba(37,99,235,0.3)}
-html.light .article-title{color:#111827}
-html.light .article-comment{color:#2563eb;background:rgba(37,99,235,0.05)}
-html.light .article-desc{color:#4b5563}
-html.light .tag{background:#f3f4f6;color:#6b7280}
-html.light .tag.kr{background:#ecfdf5;color:#059669}
-html.light .tag.global{background:#eff6ff;color:#2563eb}
-html.light .source-link{background:#f9fafb;color:#2563eb;border-color:#e5e7eb}
-html.light .intro{background:linear-gradient(135deg,rgba(37,99,235,0.05),rgba(139,92,246,0.05));border-left-color:#2563eb;color:#374151}
-html.light .header .sub{color:#6b7280}
-html.light .back{color:#2563eb}
-html.light .r-card{background:#fff;border-color:#e5e7eb;color:#1a1a2e}
-html.light .r-title{color:#111827}
-html.light .r-desc{color:#4b5563}
-html.light .divider{border-top-color:#e5e7eb}
-html.light .nav-btn{background:#fff;border-color:#e5e7eb;color:#2563eb}
-html.light .mobile-menu{border-top-color:rgba(0,0,0,0.06)}
-html.light .mobile-link{color:#4b5563;border-bottom-color:rgba(0,0,0,0.04)}
-html.light .mobile-link.active{color:#2563eb}
 
 </style>
 </head>
@@ -171,10 +139,6 @@ html.light .mobile-link.active{color:#2563eb}
       <a href="/news" class="nav-link">뉴스</a>
     </div>
     <div class="nav-right">
-      <button id="theme-toggle" class="icon-btn" aria-label="테마 전환">
-        <svg id="icon-sun" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-        <svg id="icon-moon" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-      </button>
       <button id="mobile-menu-btn" class="icon-btn mobile-only" aria-label="메뉴">
         <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
       </button>
@@ -272,35 +236,11 @@ html.light .mobile-link.active{color:#2563eb}
   <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 <script is:inline>
-(function(){
-  var t = localStorage.getItem('theme');
-  if (t === 'light') document.documentElement.classList.add('light');
-  else document.documentElement.classList.remove('light');
-})();
-</script>
-<script is:inline>
 document.addEventListener('DOMContentLoaded', function() {
-  var toggle = document.getElementById('theme-toggle');
-  var sun = document.getElementById('icon-sun');
-  var moon = document.getElementById('icon-moon');
+  // 시안 A는 라이트 전용 — 테마 토글 제거됨(2026-10-10, AIK24-RENEWAL-01)
   var mobileBtn = document.getElementById('mobile-menu-btn');
   var mobileMenu = document.getElementById('mobile-menu');
 
-  function updateIcons() {
-    var isLight = document.documentElement.classList.contains('light');
-    sun.style.display = isLight ? 'none' : 'block';
-    moon.style.display = isLight ? 'block' : 'none';
-  }
-  updateIcons();
-
-  if (toggle) {
-    toggle.addEventListener('click', function() {
-      document.documentElement.classList.toggle('light');
-      var isLight = document.documentElement.classList.contains('light');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-      updateIcons();
-    });
-  }
   if (mobileBtn && mobileMenu) {
     mobileBtn.addEventListener('click', function() {
       mobileMenu.classList.toggle('open');

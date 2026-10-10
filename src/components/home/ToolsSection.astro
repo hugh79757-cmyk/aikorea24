@@ -1,0 +1,46 @@
+---
+import { getCollection } from 'astro:content';
+
+// 선정 기준: /tools/ 페이지의 popularTools 로직과 동일 (koreanSupport 도구를 order 오름차순).
+// 임의 창작 금지 — 실제 컬렉션 데이터에서만 골라낸다.
+const tools = (await getCollection('tools', ({ data }) => Boolean(data.koreanSupport)))
+  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99))
+  .slice(0, 4)
+  .map((t) => ({
+    slug: t.id,
+    name: t.data.name,
+    description: (t.data.description || '').split('\n')[0].trim(),
+    category: t.data.category || '',
+  }));
+---
+<section class="py-16 px-4 bg-white">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="text-2xl md:text-3xl font-bold mb-2" style="font-family: var(--font-sans); border-left: 6px solid #E63B2E; padding-left: 24px;">
+      AI 툴
+    </h2>
+    <p class="text-sm text-gray-500 mb-8" style="padding-left: 30px;">
+      한국어도 바로 쓰는 실전 도구를 모았습니다.
+    </p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {tools.map((t) => (
+        <a href={`/tools/${t.slug}/`}
+           class="group block bg-white border border-gray-200 rounded-xl p-5 h-full hover:border-[#E63B2E] hover:shadow-md transition-all duration-300">
+          {t.category && (
+            <span class="inline-block text-xs text-[#E63B2E] mb-2">{t.category}</span>
+          )}
+          <h3 class="text-base font-bold mb-2 group-hover:text-[#E63B2E] transition-colors" style="font-family: var(--font-sans);">
+            {t.name}
+          </h3>
+          <p class="text-sm text-gray-600 leading-relaxed">{t.description}</p>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-8" style="padding-left: 30px;">
+      <a href="/tools/" class="inline-flex items-center gap-1 text-sm font-semibold text-[#111111] hover:text-[#E63B2E] transition-colors">
+        전체 툴 보기 <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+      </a>
+    </div>
+  </div>
+</section>

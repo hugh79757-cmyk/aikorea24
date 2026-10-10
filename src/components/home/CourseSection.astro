@@ -2,8 +2,6 @@
 interface Props { posts: any[] }
 const { posts } = Astro.props;
 
-const glowColors = ['from-blue-500/20', 'from-purple-500/20', 'from-cyan-500/20'];
-
 function getCourseLevel(tags: string[]): string {
   if (!tags) return '강좌';
   const step = tags.find(t => t.startsWith('강좌'));
@@ -14,38 +12,33 @@ function getCourseLevel(tags: string[]): string {
   return '강좌';
 }
 ---
-<section class="relative z-10 px-4 pb-20">
+<section class="relative z-10 px-4 pb-20 bg-white">
   <div class="max-w-6xl mx-auto">
     <div class="flex justify-between items-center mb-8">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-sm">📚</div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white">AI 강좌</h2>
-        <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4 hidden md:block"></div>
-      </div>
-      <a href="/blog" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors hidden md:block">전체 강좌 →</a>
+      <h2 class="text-xl font-bold text-[#111111]" style="font-family: var(--font-sans); border-left: 4px solid #E63B2E; padding-left: 12px;">AI 강좌</h2>
+      <a href="/blog" class="text-sm text-gray-600 hover:text-[#E63B2E] font-medium transition-colors hidden md:block">전체 강좌 →</a>
     </div>
     <div id="course-posts" class="grid grid-cols-1 md:grid-cols-3 gap-4">
       {posts.length === 0 && (
-        <div class="col-span-3 bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl p-8 text-center">
+        <div class="col-span-3 bg-gray-50 border border-gray-200 rounded-xl p-8 text-center">
           <div class="text-4xl mb-4">📚</div>
-          <p class="text-gray-500 dark:text-gray-400 font-medium">로딩 중...</p>
+          <p class="text-gray-500 font-medium">로딩 중...</p>
         </div>
       )}
-      {posts.map((post: any, idx: number) => (
-          <a href={`/blog/${post.id}/`} class="group relative block bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
-            <div class={`absolute inset-0 bg-gradient-to-br ${glowColors[idx % 3]} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+      {posts.map((post: any) => (
+          <a href={`/blog/${post.id}/`} class="group relative block bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#E63B2E] hover:shadow-md transition-all duration-300">
             {post.data.image && (
               <div class="relative w-full aspect-video overflow-hidden">
                 <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
               </div>
             )}
             <div class="relative p-5">
-              <span class="text-[10px] font-semibold bg-white/[0.1] text-gray-500 dark:text-gray-300 px-3 py-1 rounded-full border border-gray-200 dark:border-white/[0.1]">
+              <span class="text-[10px] font-semibold bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
                 {getCourseLevel(post.data.tags || [])}
               </span>
-              <h3 class="font-bold text-lg mt-3 text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-2">{post.data.title}</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed line-clamp-2">{post.data.description}</p>
-              <div class="mt-3 text-sm text-blue-600 dark:text-blue-400 font-medium opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300">자세히 보기 →</div>
+              <h3 class="font-bold text-lg mt-3 text-[#111111] group-hover:text-[#E63B2E] transition-colors line-clamp-2" style="font-family: var(--font-sans);">{post.data.title}</h3>
+              <p class="text-sm text-gray-600 mt-2 leading-relaxed line-clamp-2">{post.data.description}</p>
+              <div class="mt-3 text-sm text-[#E63B2E] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">자세히 보기 →</div>
             </div>
           </a>
         ))}

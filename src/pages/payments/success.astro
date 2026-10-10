@@ -48,8 +48,8 @@ if (paymentKey && orderId && amount) {
         <div class="text-5xl mb-4">❌</div>
         <h1 class="text-2xl font-bold text-red-400 mb-4">결제 실패</h1>
         <p class="text-gray-400 mb-6">{error}</p>
-        <a href="/community" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition">
-          돌아가기
+        <a href="/" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition">
+          홈으로 돌아가기
         </a>
       </div>
     ) : (
@@ -60,8 +60,8 @@ if (paymentKey && orderId && amount) {
           {result?.type === 'subscription' ? '멤버십이 활성화되었습니다.' : '콘텐츠를 이용할 수 있습니다.'}
         </p>
         <p class="text-gray-500 text-sm mb-6">주문번호: {orderId}</p>
-        <a href="/community" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition">
-          커뮤니티로 가기
+        <a href="/" class="inline-block bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-lg font-medium transition">
+          홈으로 돌아가기
         </a>
       </div>
     )}

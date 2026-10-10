@@ -4,6 +4,7 @@ import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import HeroSection from '../components/home/HeroSection.astro';
 import BriefingSection from '../components/home/BriefingSection.astro';
+import ToolsSection from '../components/home/ToolsSection.astro';
 import CourseSection from '../components/home/CourseSection.astro';
 import LatestBlog from '../components/home/LatestBlog.astro';
 import CtaSection from '../components/home/CtaSection.astro';
@@ -57,6 +58,7 @@ try {
 
     <HeroSection />
     <BriefingSection briefing={briefing} items={briefingItems} />
+    <ToolsSection />
     <SubscribeBanner />
     <LatestBlog posts={recentPosts} />
     <CourseSection posts={coursePosts} />

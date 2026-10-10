@@ -217,17 +217,8 @@ export const GET: APIRoute = async (context) => {
       // (이전 실행에서 성공했으나 아직 커밋 안 된 경우 방지)
 
       // Community post URL 조회
-      let postUrl = `${baseUrl}/courses/${enrollment.course_slug}/`;
-      if (lesson.community_post_id) {
-        let post = posts.get(lesson.community_post_id);
-        if (!post) {
-          post = await db.prepare('SELECT id, title FROM posts WHERE id = ?').bind(lesson.community_post_id).first() as CommunityPost | null;
-          if (post) posts.set(lesson.community_post_id, post);
-        }
-        if (post) {
-          postUrl = `${baseUrl}/community/${post.id}/`;
-        }
-      }
+      // 커뮤니티 제거(2026-10-10, AIK24-FIX-01): 레슨별 커뮤니티 글 링크 대신 강좌 페이지로 연결.
+      const postUrl = `${baseUrl}/courses/${enrollment.course_slug}/`;
 
       // Brevo 이메일 발송
       if (!brevoKey) {

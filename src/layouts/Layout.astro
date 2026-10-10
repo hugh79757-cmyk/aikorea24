@@ -32,7 +32,7 @@ const session = Astro.cookies.get('session')?.value;
 if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
 
 const navItems = [
-  { label: '홈', href: '/' },
+  // '홈' 제거 (2026-10-10, AIK24-PIPE-02): 로고가 이미 / 로 연결됨
   { label: '블로그', href: '/blog' },
   { label: 'AI 도구', href: '/tools' },
   { label: '용어사전', href: '/glossary' },
@@ -45,12 +45,12 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 <!DOCTYPE html>
-<html lang="ko" class="scroll-smooth dark">
+<html lang="ko" class="scroll-smooth">
 <head>
   <script is:inline>
-    const t = localStorage.getItem('theme');
-    if (t === 'light') document.documentElement.classList.remove('dark');
-    else document.documentElement.classList.add('dark');
+    // 시안 A: 라이트 모드 고정 (다크모드 비활성화)
+    document.documentElement.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
   </script>
   <SEOHead
     title={title}
@@ -72,21 +72,21 @@ const currentPath = Astro.url.pathname;
     body { font-family: var(--font-sans); }
   </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col" data-ssr-user={currentUser ? "1" : undefined}>
 
   <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06]">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-        AI코리아24
+      <a href="/" class="flex items-center">
+        <img src="/logo-final.webp" alt="AI KOREA 24" class="h-8 w-auto" />
       </a>
       <div class="hidden md:flex items-center gap-8">
         {navItems.map(item => (
           <a
             href={item.href}
             class:list={[
-              'text-sm font-medium transition-colors hover:text-blue-600 dark:hover:text-blue-400',
+              'text-sm font-medium transition-colors hover:text-[#E63B2E]',
               currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href))
-                ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
+                ? 'text-[#E63B2E]' : 'text-gray-600 dark:text-gray-400'
             ]}
           >
             {item.label}
@@ -113,8 +113,7 @@ const currentPath = Astro.url.pathname;
                 {currentUser.name.charAt(0).toUpperCase()}
               </div>
             )}
-            <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
-            <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">내 도구</a>
+            <a href="/my/tools/" class="text-xs font-medium text-[#E63B2E] hover:underline">내 도구</a>
             <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
           </div>
         ) : (
@@ -123,8 +122,7 @@ const currentPath = Astro.url.pathname;
         <!-- 정적 프리렌더 페이지용 로그인 상태 박스 (아래 인라인 스크립트가 채움) -->
         <div class="js-user-box hidden items-center gap-3">
           <div class="w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300"><span class="js-user-initial"></span></div>
-          <span class="js-user-name text-sm text-gray-700 dark:text-gray-300"></span>
-          <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">내 도구</a>
+          <a href="/my/tools/" class="text-xs font-medium text-[#E63B2E] hover:underline">내 도구</a>
           <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
         </div>
       </div>
@@ -133,14 +131,6 @@ const currentPath = Astro.url.pathname;
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </button>
 
-      <button id="theme-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-white/10 transition-colors" aria-label="테마 전환">
-        <svg id="theme-icon-light" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-        </svg>
-        <svg id="theme-icon-dark" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-        </svg>
-      </button>
       <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 dark:text-gray-200" aria-label="메뉴 열기">
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -174,22 +164,20 @@ const currentPath = Astro.url.pathname;
                   {currentUser.name.charAt(0).toUpperCase()}
                 </div>
               )}
-              <span class="text-sm text-gray-700 dark:text-gray-300">{currentUser.name}</span>
             </div>
             <div class="flex items-center gap-3">
-              <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400">내 도구</a>
+              <a href="/my/tools/" class="text-xs font-medium text-[#E63B2E]">내 도구</a>
               <a href="/api/auth/logout" class="text-xs text-red-400 hover:text-red-300">로그아웃</a>
             </div>
           </div>
         ) : (
-          <a href="/api/auth/login" class="js-login-btn block text-center text-sm font-medium bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-lg transition-all">
+          <a href="/api/auth/login" class="js-login-btn block text-center text-sm font-medium bg-[#111111] hover:bg-[#333333] text-white px-4 py-2.5 rounded-lg transition-all">
             Google로 로그인
           </a>
         )}
         <div class="js-user-box hidden items-center justify-center gap-3 py-1">
           <span class="js-user-initial w-7 h-7 rounded-full bg-gray-200 dark:bg-gray-600 flex items-center justify-center text-xs font-medium text-gray-600 dark:text-gray-300"></span>
-          <span class="js-user-name text-sm text-gray-700 dark:text-gray-300"></span>
-          <a href="/my/tools/" class="text-xs font-medium text-blue-600 dark:text-blue-400">내 도구</a>
+          <a href="/my/tools/" class="text-xs font-medium text-[#E63B2E]">내 도구</a>
           <a href="/api/auth/logout" class="text-xs text-red-400 hover:text-red-300">로그아웃</a>
         </div>
       </div>
@@ -269,7 +257,7 @@ const currentPath = Astro.url.pathname;
         </div>
       </div>
       <div class="border-t border-gray-300 dark:border-gray-800 pt-4 text-xs leading-relaxed">
-        <p>스타일팩토리9 (Style Factory 9) | 대표: 조진연 | 사업자등록번호: 672-43-00632</p>
+        <p>스타일팩토리9 (Style Factory 9) | 대표: 조진연 | 사업자등록번호: 672-43-00632 | 통신판매업 신고번호: 제 2026-의정부흥선-0694호 | 호스팅 제공자: Cloudflare, Inc.</p>
         <p>경기도 의정부시 호암로 256, 107-1804 (우 11638) | info@aikorea24.kr | 전화(Tel): +82 10-7416-5705</p>
         <p class="mt-2">본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다.</p>
         <p class="mt-1">&copy; 2026 AI코리아24. All rights reserved. <a href="/network/" class="text-gray-400 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-500 transition-colors">네트워크</a></p>
@@ -283,31 +271,8 @@ const currentPath = Astro.url.pathname;
       document.getElementById('mobile-menu')?.classList.toggle('hidden');
     });
 
-    // 테마 토글
-    function updateThemeIcon() {
-      const isDark = document.documentElement.classList.contains('dark');
-      const lightIcon = document.getElementById('theme-icon-light');
-      const darkIcon = document.getElementById('theme-icon-dark');
-      if (lightIcon && darkIcon) {
-        lightIcon.classList.toggle('hidden', !isDark);
-        darkIcon.classList.toggle('hidden', isDark);
-      }
-    }
-
-    updateThemeIcon();
-
-    document.getElementById('theme-toggle')?.addEventListener('click', () => {
-      const html = document.documentElement;
-      const isDark = html.classList.contains('dark');
-      if (isDark) {
-        html.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-      } else {
-        html.classList.add('dark');
-        localStorage.setItem('theme', 'dark');
-      }
-      updateThemeIcon();
-    });
+    // 테마 토글: 시안 A는 라이트 전용 — 토글 UI·핸들러 제거됨(2026-10-10, AIK24-RENEWAL-01)
+    // head 인라인 스크립트가 `dark` 클래스를 제거하므로 마크업의 `dark:` 변수는 활성화되지 않는다.
 
     // 검색 기능
     let searchData = null;
@@ -377,7 +342,7 @@ const currentPath = Astro.url.pathname;
       results.innerHTML = filtered.slice(0, 10).map((post: any) => `
         <a href="/blog/${post.slug}/" class="block px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
           <div class="flex items-center gap-2 mb-1">
-            <span class="text-xs px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">${post.category}</span>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-[#f7f7f7] text-[#555555]">${post.category}</span>
           </div>
           <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${post.title}</p>
           <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">${post.description}</p>
@@ -398,6 +363,9 @@ const currentPath = Astro.url.pathname;
     // 정적 프리렌더 페이지는 빌드 시점에 쿠키가 없어 Layout의 세션 판정이 항상 로그아웃으로 끝난다.
     // → 로그인 여부를 클라이언트에서 확인해 헤더를 갱신한다 (user 데이터는 textContent로만 주입).
     (async () => {
+      // SSR에서 이미 로그인 상태로 렌더된 페이지면 손대지 않는다 (2026-10-10, AIK24-PIPE-02)
+      // → 이 가드가 없으면 SSR 박스와 js-user-box 가 동시에 보여 '내 도구·로그아웃'이 2개씩 렌더됨
+      if (document.body.dataset.ssrUser) return;
       if (!document.querySelector('.js-user-box')) return;
       const res = await fetch('/api/auth/me').catch(() => null);
       if (!res || !res.ok) return;
@@ -405,7 +373,6 @@ const currentPath = Astro.url.pathname;
       if (!me.loggedIn) return;
       const name = me.name || (me.email || '').split('@')[0] || '회원';
       document.querySelectorAll('.js-login-btn').forEach((el) => el.classList.add('hidden'));
-      document.querySelectorAll('.js-user-name').forEach((el) => (el.textContent = name));
       document.querySelectorAll('.js-user-initial').forEach((el) => (el.textContent = name.charAt(0).toUpperCase()));
       document.querySelectorAll('.js-user-box').forEach((el) => el.classList.remove('hidden'));
       document.querySelectorAll('.js-user-box').forEach((el) => el.classList.add('flex'));

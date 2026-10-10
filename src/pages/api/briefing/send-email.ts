@@ -253,7 +253,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
             <td style="padding:24px;text-align:center;color:#9ca3af;font-size:12px;">
               <p style="margin:0;">AI코리아24 · 매일 아침 AI 소식을 전해드립니다</p>
               <p style="margin:4px 0 0 0;">
-                <a href="https://aikorea24.kr/community/" style="color:#3b82f6;text-decoration:underline;">💬 커뮤니티</a>에서 오늘의 브리핑에 대한 의견을 나눠보세요
+                <a href="https://aikorea24.kr/blog/" style="color:#3b82f6;text-decoration:underline;">📝 블로그</a>에서 더 많은 AI 소식을 읽어보세요
               </p>
               <p style="margin:4px 0 0 0;">
                 <a href="https://aikorea24.kr/unsubscribe" style="color:#9ca3af;text-decoration:underline;">구독 해지</a>

@@ -5,7 +5,6 @@ import type { APIRoute } from 'astro';
 export const POST: APIRoute = async ({ request, locals }) => {
   const runtime = (locals as any).runtime;
   const BREVO_API_KEY = runtime?.env?.BREVO_API_KEY;
-  const BREVO_LIST_ID = runtime?.env?.BREVO_LIST_ID;
 
   if (!BREVO_API_KEY) {
     return new Response(JSON.stringify({ error: 'BREVO_API_KEY not set' }), {
@@ -24,17 +23,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Brevo에서 구독자 제거: listIds를 빈 배열로 설정하여 리스트에서 제거
+    // Brevo 구독 해지.
+    // PUT listIds:[] 는 204 를 반환하면서 실제 리스트에서 제거하지 않는다(실측).
+    // 문서상 정답인 DELETE /contacts/{id}/lists/{listId} 는 이 계정에서 404 라
+    // 사용 불가 → 컨택트 자체 삭제가 유일하게 확실히 동작하는 방법(204 확인).
     const response = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
-      method: 'PUT',
+      method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
         'api-key': BREVO_API_KEY
-      },
-      body: JSON.stringify({
-        listIds: [],
-        updateEnabled: true
-      })
+      }
     });
 
     if (!response.ok) {

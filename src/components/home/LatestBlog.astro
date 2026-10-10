@@ -10,15 +10,11 @@ function getCategoryEmoji(category: string): string {
   return map[category] || '✍️';
 }
 ---
-<section class="relative z-10 px-4 pb-20">
+<section class="relative z-10 px-4 pb-20 bg-white">
   <div class="max-w-6xl mx-auto">
     <div class="flex justify-between items-center mb-8">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 bg-green-500/20 rounded-lg flex items-center justify-center text-sm">📝</div>
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white">최신 블로그</h2>
-        <div class="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent ml-4 hidden md:block"></div>
-      </div>
-      <a href="/blog" class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium transition-colors hidden md:block">전체 보기 →</a>
+      <h2 class="text-xl font-bold text-[#111111]" style="font-family: var(--font-sans); border-left: 4px solid #E63B2E; padding-left: 12px;">최신 블로그</h2>
+      <a href="/blog" class="text-sm text-gray-600 hover:text-[#E63B2E] font-medium transition-colors hidden md:block">전체 보기 →</a>
     </div>
     <div id="latest-blog-posts" class="grid grid-cols-1 md:grid-cols-3 gap-5">
       {posts.length === 0 && <div class="col-span-3 text-center text-gray-400 py-8">로딩 중...</div>}
@@ -29,30 +25,30 @@ function getCategoryEmoji(category: string): string {
         const [y, m, d] = rawDate.substring(0, 10).split('-').map(Number);
         const dateFormatted = `${y}년 ${m}월 ${d}일`;
         return (
-          <a href={`/blog/${post.id}/`} class="group block bg-gray-100 dark:bg-white/[0.05] backdrop-blur-md border border-gray-200 dark:border-white/[0.08] rounded-2xl overflow-hidden hover:bg-white/[0.1] hover:border-white/[0.2] hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500">
+          <a href={`/blog/${post.id}/`} class="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:border-[#E63B2E] hover:shadow-md transition-all duration-300">
             {post.data.image ? (
               <div class="aspect-square overflow-hidden">
-                <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-80 group-hover:opacity-100" loading="lazy" width="400" height="300" />
+                <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" width="400" height="300" />
               </div>
             ) : (
-              <div class="aspect-square bg-gradient-to-br from-white/[0.03] to-white/[0.01] flex items-center justify-center">
-                <span class="text-4xl opacity-50 group-hover:opacity-80 group-hover:scale-110 transition-all duration-300">{getCategoryEmoji(post.data.category)}</span>
+              <div class="aspect-square bg-gray-50 flex items-center justify-center">
+                <span class="text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">{getCategoryEmoji(post.data.category)}</span>
               </div>
             )}
             <div class="p-5">
               <div class="flex items-center gap-2 mb-2">
-                <span class="text-[10px] font-semibold text-blue-600 dark:text-blue-400">{post.data.category}</span>
-                <span class="text-[10px] text-gray-500 dark:text-gray-400">{dateFormatted}</span>
+                <span class="text-[10px] font-semibold text-[#E63B2E]">{post.data.category}</span>
+                <span class="text-[10px] text-gray-500">{dateFormatted}</span>
               </div>
-              <h2 class="font-bold text-gray-900 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-300 transition-colors line-clamp-2">{post.data.title}</h2>
-              <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">{post.data.description}</p>
+              <h2 class="font-bold text-[#111111] group-hover:text-[#E63B2E] transition-colors line-clamp-2" style="font-family: var(--font-sans);">{post.data.title}</h2>
+              <p class="text-sm text-gray-600 mt-2 line-clamp-2">{post.data.description}</p>
             </div>
           </a>
         );
       })}
     </div>
     <div class="text-center mt-6 md:hidden">
-      <a href="/blog" class="text-sm text-blue-600 dark:text-blue-400 font-medium">전체 보기 →</a>
+      <a href="/blog" class="text-sm text-gray-600 hover:text-[#E63B2E] font-medium">전체 보기 →</a>
     </div>
   </div>
 </section>
