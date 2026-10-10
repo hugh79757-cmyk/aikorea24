@@ -84,3 +84,6 @@ filter.txt
 
 # CF-MIGRATE-06 임베딩 회전 상태 (런타임)
 pipeline/infra/.embedding_rotation.json
+
+# state.md 작업 전 백업 (날짜 붙은 사본)
+docs/state.md.bak.*
