@@ -151,6 +151,36 @@ def _parse_amounts(text):
     return found, {"usd_max": max(usd_values) if usd_values else 0, "krw_max": max(krw_values) if krw_values else 0}
 
 
+def _score_free_usability(text, weights):
+    """v2: '한국인 초보자가 오늘 무료로 쓸 수 있는 것인가?' 기준 점수 (2026-10-10, AIK24-PIPE-02)"""
+    cfg = weights.get("free_usability", {})
+    kw = cfg.get("keywords", {})
+    t = text.lower()
+    matched = [k for k in kw if k in t]
+    score = sum(kw[k] for k in matched)
+    return min(cfg.get("cap", 25), score), matched
+
+
+def _penalty_excluded_topic(text, weights, free_hits):
+    """v2 제외 규칙 (2026-10-10, AIK24-PIPE-02): 펀딩·기업 전략·'출시했대'로 끝나는 소식 = 0점.
+
+    지시서 원문: "펀딩 뉴스·기업 전략·'출시했대'로 끝나는 소식은 0점".
+    penalty 를 total_max(95) 이상으로 잡아 total 이 0 으로 바닥나게 한다.
+
+    '출시'는 한국어 AI 뉴스에서 무료 도구 소개에도 붙으므로 단독으론 제외하지 않는다.
+    무료 사용 신호가 하나도 없으면서 출시/펀딩 어휘에만 걸린 경우에만 적용한다.
+    """
+    cfg = weights.get("excluded_topic", {})
+    t = text.lower()
+    hard = [k for k in cfg.get("hard_exclude", []) if k in t]
+    if hard:
+        return cfg.get("penalty", -100), hard
+    soft = [k for k in cfg.get("launch_soft", []) if k in t]
+    if soft and not free_hits:
+        return cfg.get("penalty", -100), soft
+    return 0, []
+
+
 def _score_financial_impact(amounts_by_currency, weights):
     """금액 기반 점수 — USD와 KRW 각각 자체 맵 사용, 환율 환산 안 함"""
     usd_map = weights["financial_impact"]["usd"]
@@ -353,8 +383,13 @@ def score_article(article, weights, entity_tiers, recent_briefings=None, mode="l
     # financial_impact (mode 무관, 항상 title+description 기반)
     fi_score = _score_financial_impact(amounts_full, weights)
 
+    # v2 (AIK24-PIPE-02): 무료 사용 가능성 + 제외 주제
+    fu_score, fu_matched = _score_free_usability(text_full if body else text_light, weights)
+    ex_penalty, ex_matched = _penalty_excluded_topic(text_full if body else text_light, weights, fu_matched)
+
     breakdown = {
         "financial_impact": fi_score,
+        "free_usability": fu_score,
         "entity_tier": 0,
         "freshness": freshness_score,
         "source_authority": source_score,
@@ -362,12 +397,15 @@ def score_article(article, weights, entity_tiers, recent_briefings=None, mode="l
         "conflict_drama": 0,
         "penalty_low_tier_entity": 0,
         "penalty_duplicate_theme": 0,
+        "penalty_excluded_topic": ex_penalty,
     }
 
     evidence = {
         "matched_amounts": [_f["raw"] for _f in found_list] if found_list else [],
         "matched_entities": matched_entities,
         "matched_keywords": [],
+        "free_usability_hits": fu_matched,
+        "excluded_topic_hits": ex_matched,
         "hours_since_publish": round(hours_since, 2) if hours_since >= 0 else -1,
         "crawl_failed": crawl_failed,
     }
@@ -408,6 +446,7 @@ def score_article(article, weights, entity_tiers, recent_briefings=None, mode="l
     total = sum(v for k, v in breakdown.items() if not k.startswith("penalty"))
     total += breakdown.get("penalty_low_tier_entity", 0)
     total += breakdown.get("penalty_duplicate_theme", 0)
+    total += breakdown.get("penalty_excluded_topic", 0)
     total = max(0, min(weights.get("thresholds", {}).get("total_max", 95), total))
 
     usd_max_val = amounts_full.get("usd_max", 0) if amounts_full else 0

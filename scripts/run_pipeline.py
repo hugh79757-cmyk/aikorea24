@@ -164,6 +164,24 @@ def main():
             log(f"  → {s}")
         return
 
+    # Step 0: v2 소스 수집 (AIK24-PIPE-02 Step 2/4)
+    # 선택 방식: v2 수집기를 파이프라인에 편입. 별도 launchd 잡을 만들면 스케줄이 3벌로
+    # 갈라져 "무엇이 먼저 도는지" 추적이 어려워진다. 기존 news-unified 잡(05:30/19:30,
+    # 구 수집기)은 그대로 둬서 레거시 매체를 계속 누적시키고, v2 가 무료·오픈소스 축을 공급한다.
+    if not args.dry_run:
+        try:
+            log("Step 0: v2 소스 수집 (OpenRouter free / HF trending / 공식 RSS)")
+            r = subprocess.run(
+                [sys.executable, str(Path(__file__).resolve().parent / "news_collector_v2.py")],
+                capture_output=True, text=True, timeout=300,
+            )
+            for line in (r.stdout or "").splitlines()[-4:]:
+                log(f"  {line}")
+            if r.returncode != 0:
+                log(f"  v2 수집기 실패 rc={r.returncode}: {(r.stderr or '')[:200]}")
+        except Exception as e:
+            log(f"v2 수집 에러(무시하고 계속): {e}")
+
     # Step 1: 뉴스 선정
     articles = []
     if not args.skip_news:

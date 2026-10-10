@@ -97,6 +97,12 @@ def cluster_by_topic(articles):
     """주제별 클러스터링 (키워드 기반) + 각 article에 cluster 라벨 부착"""
     clusters = {}
     keywords_map = {
+        # v2 (AIK24-PIPE-02): 무료 LLM · 오픈소스 클러스터를 최우선으로 매칭
+        "free-llm": ["free llm", "무료 llm", "무료 모델", "free model", "free tier",
+                     "무료 티어", "openrouter", "open weights", "무료 api", "free api"],
+        "opensource": ["open source", "opensource", "open-source", "hugging face",
+                       "huggingface", "github", "ollama", "opencode", "무료 실행"],
+        "trending": ["trending", "인기", "rising", "급상승", "순위", "ranking"],
         "openai": ["openai", "chatgpt", "gpt", "o1", "o3", "sora"],
         "google": ["google", "gemini", "deepmind"],
         "anthropic": ["anthropic", "claude"],
@@ -104,8 +110,7 @@ def cluster_by_topic(articles):
         "microsoft": ["microsoft", "copilot", "azure"],
         "nvidia": ["nvidia", "h100", "b200", "cuda"],
         "ai-regulation": ["regulation", "regulations", "규제", "정책", "policy", "ai act"],
-        "investment": ["investment", "funding", "투자", "fundraise", "ipo", "valuation"],
-        "opensource": ["open source", "opensource", "hugging face"],
+        # v2: investment(펀딩·투자·IPO·valuation) 클러스터 제거 (AIK24-PIPE-02 Step 3-1)
     }
 
     for article in articles:
@@ -138,7 +143,7 @@ def _expand_misc_for_legacy(clusters):
     return result
 
 
-def select_top_articles(clusters, max_count=6):
+def select_top_articles(clusters, max_count=4):  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
     """클러스터별 대표 기사 선정 (round-robin) — 레거시"""
     selected = []
     cluster_items = list(clusters.items())
@@ -196,7 +201,7 @@ def _crawl_and_full_score(top_n_articles, weights, entity_tiers, recent_briefing
         log(f"    full_score={result['total']} ({result['tier_reasoning']})")
 
 
-def _two_pass_selection(clusters, max_count=6):
+def _two_pass_selection(clusters, max_count=4):  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
     """
     2-Pass 선택 알고리즘 (shadow/live 모드).
     각 article에 impact_score, score_breakdown, light_score, full_score가 이미 있어야 함.
@@ -542,7 +547,7 @@ def main(dedup=True):
     else:
         # 레거시 round-robin (dry_run, shadow 모두 동일) — misc를 출처별로 확장하여 원래 동작 회귀 유지
         legacy_clusters = _expand_misc_for_legacy(clusters)
-        selected = select_top_articles(legacy_clusters, max_count=6)
+        selected = select_top_articles(legacy_clusters, max_count=4)  # v2
 
         if mode == "shadow" and weights:
             # shadow: 2-Pass 계산 후 diff 로깅

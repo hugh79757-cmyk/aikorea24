@@ -25,7 +25,10 @@
     {"name": "SamMobile", "rss_url": "https://www.sammobile.com/feed/", "avg_content_length": 4000},
     {"name": "AI타임스", "rss_url": "https://www.aitimes.com/rss/allArticle.xml", "avg_content_length": 3500},
     {"name": "인공지능신문", "rss_url": "https://www.aitimes.kr/rss/allArticle.xml", "avg_content_length": 3600},
-    {"name": "The Hacker News", "rss_url": "https://www.thehackernews.com/feeds/posts/default", "avg_content_length": 7500}
+    {"name": "The Hacker News", "rss_url": "https://www.thehackernews.com/feeds/posts/default", "avg_content_length": 7500},
+    {"name": "Anthropic Claude Blog", "rss_url": "https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/claude_blog_rss.xml", "avg_content_length": 5000},
+    {"name": "OpenAI Blog", "rss_url": "https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/openai_blog_rss.xml", "avg_content_length": 5000},
+    {"name": "Anthropic Engineering", "rss_url": "https://raw.githubusercontent.com/SebastianLavertheDe/blog-rss-feed/main/rss/anthropic_engineering_rss.xml", "avg_content_length": 8000}
   ],
   "rss_only": [
     {"name": "Hacker News", "rss_url": "https://hnrss.org/newest?q=AI", "reason": "본문 553자 (댓글 위주)"},

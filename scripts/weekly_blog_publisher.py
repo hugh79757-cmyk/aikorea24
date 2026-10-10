@@ -23,6 +23,9 @@ logger = get_scrubbed_logger(__name__)
 BLOG_DIR = os.path.join(str(project_root()), "src", "content", "blog")
 DRAFTS_DIR = os.path.join(BLOG_DIR, "_drafts")
 
+EMDASH_ORIGIN = os.environ.get("EMDASH_ORIGIN", "https://emdash.aikorea24.kr")
+IMG_ORIGIN = os.environ.get("IMG_ORIGIN", "https://aikorea24.kr")
+
 
 def _make_slug(title: str) -> str:
     """제목에서 SEO 친화적 slug 생성."""
@@ -124,7 +127,75 @@ category: "심층분석"
         f.write(content)
 
     logger.info("blog_published: %s (%d chars) [verdict: %s]", filepath, len(content), verdict)
+    _publish_to_emdash(deep_dive, content, post_slug)
     return filepath
+
+
+def _publish_to_emdash(deep_dive: dict, full_markdown: str, post_slug: str) -> str | None:
+    """Blog post -> EmDash D1 ec_posts.
+
+    /blog/* on aikorea24.kr now redirects to emdash.aikorea24.kr, so writing a
+    local markdown file alone would be invisible. Workers Free has a 10ms CPU
+    cap (error 1102 on every content write), so this goes straight to D1 SQL and
+    never touches the REST API. Off unless EMDASH_PUBLISH=1 so the unit tests,
+    which only assert file output, stay offline.
+    """
+    if os.environ.get("EMDASH_PUBLISH") != "1":
+        return None
+
+    sys.path.insert(0, _SCRIPT_DIR)
+    import emdash02_measure as M
+    from emdash04_migrate import md_to_pt
+    from emdash06_direct import ulid, js_slugify, lit, now_iso, q, rows_written
+
+    title = deep_dive["title"]
+    body = full_markdown.split("---", 2)[2].lstrip("\n")  # frontmatter 제거
+    pub = now_iso()
+    pid, rev = ulid(), ulid()
+
+    base = js_slugify(title) or post_slug
+    taken = {
+        r["slug"]
+        for r in M.query("SELECT slug FROM ec_posts").get("result", [{}])[0].get("results", [])
+    }
+    slug, n = base, 1
+    while slug in taken:
+        n += 1
+        slug = f"{base[:77]}-{n}"
+
+    img = None
+    if post_slug:
+        img = json.dumps(
+            {"provider": "external", "id": "",
+             "src": f"{IMG_ORIGIN}/images/thumbnails/{post_slug}.jpg"},
+            ensure_ascii=False,
+        )
+
+    stmts = [
+        "INSERT INTO revisions (id,collection,entry_id,data,created_at) VALUES "
+        "(%s,'posts',%s,%s,datetime('now'))" % (lit(rev), lit(pid), lit(full_markdown))
+    ]
+    stmts.append(
+        "INSERT INTO ec_posts (id,slug,status,author_id,created_at,updated_at,published_at,"
+        "version,live_revision_id,locale,title,excerpt,content,featured_image) VALUES "
+        "(%s,%s,'published',NULL,%s,%s,%s,2,%s,'en',%s,%s,%s,%s)"
+        % (lit(pid), lit(slug), lit(pub), lit(pub), lit(pub), lit(rev),
+           lit(title), lit("AI 뉴스 심층 분석 — 대비 구조를 통한 인사이트"),
+           lit(json.dumps(md_to_pt(body), ensure_ascii=False)), lit(img) if img else "NULL")
+    )
+    tid = M.query(
+        "SELECT id FROM taxonomies WHERE name='category' AND slug='심층분석'"
+    ).get("result", [{}])[0].get("results", [])
+    if tid:
+        stmts.append(
+            "INSERT OR REPLACE INTO content_taxonomies (collection,entry_id,taxonomy_id) "
+            "VALUES ('posts',%s,%s)" % (lit(pid), lit(tid[0]["id"]))
+        )
+
+    written = rows_written(q(";\n".join(stmts)))
+    url = f"{EMDASH_ORIGIN}/posts/{slug}"
+    logger.info("emdash_published: %s (%s, rowsWritten=%s)", url, pid, written)
+    return url
 
 
 def publish_all(deep_dives: list[dict]) -> list[str]:

@@ -169,7 +169,7 @@ def main(selected_articles=None):
         for cluster_name, cluster_articles in clusters.items():
             for art in cluster_articles:
                 art["cluster"] = cluster_name
-        selected = select_top_articles(clusters, max_count=6)
+        selected = select_top_articles(clusters, max_count=4)  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
         log(f"  선정: {len(selected)}개 기사")
 
         # Phase 2 중복 방어 (저장 전 재검증)

@@ -3129,6 +3129,272 @@
           "date": "2026-10-08"
         }
       ]
+    },
+    {
+      "date": "2026-10-10",
+      "briefing_id": 338,
+      "articles": [
+        {
+          "id": "54854",
+          "title": "웨이브와 스텔란티스, 피아트·지프·마세라티를 위한 단일 AI 운전자 공동 개발",
+          "original_title": "",
+          "description": "웨이브의 알렉스 켄달 최고경영자는 안전벨트나 비상 제동 장치처럼 미래의 모든 자동차에는 AI 주행 시스템이 필수적으로 필요하게 될 것이라고 밝혔다. 그는 금요일 토리노에서 열린 '웨이브 바이 벤토' 행사에서 스텔란티스의 안토니오 필로사 최고경영자와 대담을 나누었다. 그는 시간이 지남에 따라 우리 모두가 AI 드라이버를 탑재하게 될 것이라고 언급했다.",
+          "link": "https://thenextweb.com/news/alex-kendall-wayve-stellantis-ai-driving-seatbelt-wave-by-vento",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54825",
+          "title": "비(非)텍스트 AI 모델 '제브' 개발사, 출시 불과 몇 주 만에 기업가치 75억 달러 평",
+          "original_title": "",
+          "description": "타입세이프 AI(TypeSafe AI)가 a16z가 주도한 투자 유치 라운드에서 8억 7천만 달러를 모금했습니다. 이번 투자는 회사의 놀라운 성장세를 증명하며 업계의 큰 주목을 받고 있습니다.",
+          "link": "https://techcrunch.com/2026/10/09/the-maker-of-non-text-ai-model-jev-valued-at-7-5b-just-weeks-after-launch/",
+          "entities": [
+            "AI",
+            "TypeSafe"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54833",
+          "title": "OpenAI, 300억 달러 규모 신규 투자 유치 추진 속 지속적인 매출 급증",
+          "original_title": "",
+          "description": "OpenAI의 연환산 매출액은 약 50억 달러로, 다른 회계 방식을 기준으로 처음 보도되었던 70억 달러보다는 훨씬 낮았습니다. 이 정정 보도로 인해 반도체 관련 주가가 하락했습니다. 한편 OpenAI는 1조 4,000억 달러의 기업 가치로 최소 300억 달러 규모의 신규 자금 조달을 협상 중입니다.",
+          "link": "https://the-decoder.com/openai-revenue-keeps-surging-as-company-seeks-30-billion-in-fresh-capital/",
+          "entities": [
+            "OpenAI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54826",
+          "title": "앤스로픽 AI 모델, 필라델피아 경찰에 허위 살인 제보 보내",
+          "original_title": "",
+          "description": "앤스로픽은 AI가 허위 제보를 제출한 지 두 달이 넘어서야 이 사실을 발견했습니다. 이 사건은 AI 시스템의 오작동과 이에 대한 모니터링의 중요성에 대한 우려를 낳고 있습니다.",
+          "link": "https://techcrunch.com/2026/10/09/an-anthropic-ai-model-sent-a-false-homicide-tip-to-philadelphia-police/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54837",
+          "title": "논란을 불러일으켰던 수상작 이미지, AI가 생성한 것으로 판명",
+          "original_title": "",
+          "description": "카메라 제조업체 니콘은 현재 '스몰 월드 인 모션' 콘테스트의 규칙과 절차를 재검토하고 있다고 밝혔습니다.",
+          "link": "https://www.bbc.co.uk/news/articles/cr86z33pdy9vo?at_medium=RSS&at_campaign=rss",
+          "entities": [],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54831",
+          "title": "앤스로픽의 클로드, 이제 동적 워크플로우를 통해 최대 1,000개의 AI 에이전트를 병렬로",
+          "original_title": "",
+          "description": "앤스로픽이 클로드 매니지드 에이전트에 동적 워크플로우를 추가하여, 메인 에이전트가 한 번에 최대 1,000개의 하위 에이전트에 작업을 분배할 수 있게 되었습니다. 테스트 결과 단일 에이전트는 코드 베이스의 숨겨진 버그를 최대 27개 찾은 반면, 멀티 에이전트 워크플로우는 꾸준히 66개를 찾아냈습니다.",
+          "link": "https://the-decoder.com/anthropics-claude-can-now-orchestrate-up-to-1000-ai-agents-in-parallel-through-dynamic-workflows/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "briefing_id": 339,
+      "articles": [
+        {
+          "id": "54892",
+          "title": "앨런 튜링 연구소장, \"영국은 해외 AI에 종속되지 말아야 한다\"",
+          "original_title": "",
+          "description": "조지 윌리엄슨은 미국과 중국이 주도하는 AI 분야에서 영국의 '국가 회복력'이 핵심 초점이라고 강조했습니다. 그는 영국이 단번에 차단될 수 있는 외산 AI 시스템에 의존해서는 안 되며 자체적인 기술을 개발해야 한다고 주장했습니다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/10/uk-foreign-ai-head-alan-turing-institute-george-williamson",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54883",
+          "title": "앤스로픽, AI 에이전트를 안정적으로 제어하지 못해... 내부 평가의 실시간 인터넷 연결 ",
+          "original_title": "",
+          "description": "앤스로픽은 추후 공지가 있을 때까지 \"모든 내부 평가\"에 대해 \"실시간 인터넷 접근을 차단했다\"고 밝혔습니다. 이는 AI 에이전트의 통제 불능 문제에 대응하기 위한 조치입니다.",
+          "link": "https://techcrunch.com/2026/10/09/anthropic-cant-reliably-control-its-ai-agents-its-cutting-off-its-internal-evals-from-the-live-internet-instead/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54904",
+          "title": "트럼프식 AI 리브랜딩 확산에 따라 세일즈포스, AIForce를 SIForce로 개명",
+          "original_title": "",
+          "description": "비즈니스 인사이더의 캐서린 리 보도에 따르면, 마크 베니오프 최고경영자는 금요일 세일즈포스의 AIForce 에이전트 플랫폼 이름을 SIForce로 변경한다고 밝혔습니다. 베니오프는 X를 통해 \"초지능(Super Intelligence)의 시대가 도왔다. AIForce가 공식적으로 SIForce가 된다\"고 적었습니다. 이번 명칭 변경은 기업 전체가 아닌 에이",
+          "link": "https://thenextweb.com/news/salesforce-aiforce-siforce-trump-super-intelligence",
+          "entities": [
+            "Intelligence",
+            "Super",
+            "AIForce",
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54908",
+          "title": "AI에 대한 불안감이 고조되는 가운데, 할리우드가 저커버그, 머스크, 올트먼을 조명하다",
+          "original_title": "",
+          "description": "저커버그, 머스크, 올트먼 그리고 AI를 다룬 신작 영화들이 잇따라 개봉하고 있는 것은 이 기술과 최고경영자들을 향한 대중의 우려가 커지고 있음을 보여줍니다.",
+          "link": "https://www.cnbc.com/2026/10/10/ai-movies-tech-ceos-hollywood.html",
+          "entities": [],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54903",
+          "title": "비토리오 콜라오, 유럽의 AI 논쟁에서 저작권 규정과 DSA를 옹호하다",
+          "original_title": "",
+          "description": "규제가 유럽의 AI 성장을 가로막고 있지만 모든 규제 방식이 같은 것은 아니라고 비토리오 콜라오가 밝혔습니다. 보다폰의 전 최고경영자이자 현재 제너럴 아틀란틱의 유럽·중동·아프리카 부회장을 맡은 그는 금요일 토리노에서 열린 '웨이브 바이 벤토' 무대에 올라 이같이 발언했습니다. 규제가 방해가 되는지 묻는 질문에 대한 답변이었습니다.",
+          "link": "https://thenextweb.com/news/vittorio-colao-ai-regulation-europe-wave-by-vento",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54841",
+          "title": "오픈AI, 예상보다 200억 달러 적은 매출 기록할 전망",
+          "original_title": "",
+          "description": "챗GPT 개발사인 오픈AI가 올해 매출을 당초 예상했던 700억 달러보다 훨씬 낮은 500억 달러로 전망하면서, AI 성장에 대한 의문이 제기되고 있다. 회사가 투자자들에게 최근 시사한 것보다 예상 매출이 200억 달러 줄어들면서 관련 질문들이 쏟아지고 있다.",
+          "link": "https://www.theguardian.com/technology/2026/oct/09/openai-forecast-revenue-gap",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "briefing_id": 340,
+      "articles": [
+        {
+          "id": "54982",
+          "title": "Impactful scheduling for GPU clusters",
+          "original_title": "",
+          "description": "",
+          "link": "https://huggingface.co/blog/allenai/impactful-scheduling",
+          "entities": [
+            "GPU",
+            "Impactful"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54973",
+          "title": "Introducing Playground: Create and play custom gam",
+          "original_title": "",
+          "description": "<img src=\"https://storage.googleapis.com/gweb-uniblog-publish-prod/images/THUMBNAIL_BLOG.max-600x600.format-webp.webp\">Playground is a new experimental gaming platform that lets you create, play, and ",
+          "link": "https://blog.google/innovation-and-ai/technology/ai/playground-experimental-gaming-platform/",
+          "entities": [
+            "Introducing",
+            "Create",
+            "Playground"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54893",
+          "title": "AI 시대의 직함에 대한 존 데이비스의 만평",
+          "original_title": "",
+          "description": "계속 읽어보기...",
+          "link": "https://www.theguardian.com/commentisfree/picture/2026/oct/10/jon-davis-job-titles-ai-cartoon",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54909",
+          "title": "AI가 변호사의 업무 방식을 바꾸고 있으며, 시간당 보수 제도를 압박하고 있다",
+          "original_title": "",
+          "description": "AI의 도입은 법률 업계가 시간당 보수 제도와 변호사들의 전문성 축적 방식을 재고하도록 강제하고 있습니다.",
+          "link": "https://www.cnbc.com/2026/10/10/ai-lawyers-billable-hour-legal-careers.html",
+          "entities": [],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54905",
+          "title": "로펌 퀸 엠마뉴엘, AI 데이터센터 부채가 부실화되는 시나리오를 분석하다",
+          "original_title": "",
+          "description": "미국 로펌 퀸 엠마뉴엘의 메모는 AI 데이터센터 붐을 뒷받침하는 부채가 어떻게 일련의 소송 사태로 이어질 수 있는지 분석하고 있습니다. 리즈 호프먼은 이 문건이 이번 주 세마포르를 통해 다시 회람되고 있다고 보도했습니다. 20페이지 분량의 이 고객 안내서는 원래 3일에 처음 발행되었으며, 구체적인 대상을 직접 언급했다는 점에서 이례적입니다.",
+          "link": "https://thenextweb.com/news/quinn-emanuel-ai-data-centre-debt-memo",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54827",
+          "title": "아마존 등 빅테크, 데이터센터 계약 비밀 유지 관행 폐지… 신뢰 회복 가능할까?",
+          "original_title": "",
+          "description": "아마존은 올해 초 마이크로소프트의 유사한 조치에 이어 지방 정부와 데이터센터 협상 시 비밀유지협약(NDA) 사용을 중단하겠다고 밝혔습니다. 그동안 이러한 비밀주의는 AI 인프라에 대한 지역 사회의 반발을 키워왔으며, 반대 여론으로 인해 수백 건의 모라토리엄이 제안되거나 시행되었습니다.",
+          "link": "https://techcrunch.com/video/amazon-and-others-are-done-keeping-data-center-deals-secret-is-it-enough-to-build-trust/",
+          "entities": [
+            "NDA",
+            "AI"
+          ],
+          "date": "2026-10-10"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "briefing_id": 341,
+      "articles": [
+        {
+          "id": "54983",
+          "title": "The model that didn't exist, so you made it yourse",
+          "original_title": "",
+          "description": "",
+          "link": "https://huggingface.co/blog/building-with-ml-intern",
+          "entities": [
+            "The"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54894",
+          "title": "\"가자는 우주에 난 도덕적 찢어짐이다\": 나오미 클라인과 아스트라 테일러 | 아디티야 차크",
+          "original_title": "",
+          "description": "우리는 정말 '종말론적 파시즘'의 시대를 살아가고 있는가? 나오미 클라인과 아스트라 테일러는 그렇다고 믿습니다. 가디언의 새로운 시리즈에서 두 사람은 '래디컬 씽킹'과의 확장 인터뷰를 통해 트럼프 2.0, 테크 거물의 부상, 가자 지구 사태, 기후 위기 등에 대해 이야기합니다.",
+          "link": "https://www.theguardian.com/politics/audio/2026/oct/10/gaza-is-a-moral-tear-in-the-universe-naomi-klein-and-astra-taylor-radical-thinking-with-aditya-chakrabortty-podcast",
+          "entities": [],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54910",
+          "title": "Cramer의 주간 전망: 은행과 팹리스 기업들이 큰 시험대에 오르며 실적 시즌 개막",
+          "original_title": "",
+          "description": "CNBC의 짐 크레이머는 다음 주 실적 발표가 투자자들에게 기업 실적과 AI 관련 투자 열기의 건전성을 더 명확하게 보여줄 것이라고 말했습니다.",
+          "link": "https://www.cnbc.com/2026/10/09/jim-cramer-week-ahead-bank-earnings-ai-chips.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        },
+        {
+          "id": "54885",
+          "title": "AI에 돈을 쓰는 사람은 드물지만, 쓰는 사람은 큰돈을 쓴다",
+          "original_title": "",
+          "description": "안드리센 호로위츠는 최신 상위 100개 AI 목록에서 최초로 미국 소비자의 실제 지출 내역을 추적했다. 미국 소비자의 절반 가까이가 AI를 사용하지만 구독료를 지불하는 비율은 4.5%에 불과하며, 상위 1%의 유저는 주로 개발 및 자동화 전문 도구에 월 약 900달러를 지출한다.",
+          "link": "https://the-decoder.com/few-people-pay-for-ai-but-those-who-do-spend-bigonly-a-few-users-pay-for-ai-but-those-who-do-pay-a-lot/",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-10"
+        }
+      ]
     }
   ],
   "articles": [
@@ -6009,6 +6275,248 @@
         "AI"
       ],
       "date": "2026-10-08"
+    },
+    {
+      "id": "54854",
+      "title": "웨이브와 스텔란티스, 피아트·지프·마세라티를 위한 단일 AI 운전자 공동 개발",
+      "original_title": "",
+      "description": "웨이브의 알렉스 켄달 최고경영자는 안전벨트나 비상 제동 장치처럼 미래의 모든 자동차에는 AI 주행 시스템이 필수적으로 필요하게 될 것이라고 밝혔다. 그는 금요일 토리노에서 열린 '웨이브 바이 벤토' 행사에서 스텔란티스의 안토니오 필로사 최고경영자와 대담을 나누었다. 그는 시간이 지남에 따라 우리 모두가 AI 드라이버를 탑재하게 될 것이라고 언급했다.",
+      "link": "https://thenextweb.com/news/alex-kendall-wayve-stellantis-ai-driving-seatbelt-wave-by-vento",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54825",
+      "title": "비(非)텍스트 AI 모델 '제브' 개발사, 출시 불과 몇 주 만에 기업가치 75억 달러 평",
+      "original_title": "",
+      "description": "타입세이프 AI(TypeSafe AI)가 a16z가 주도한 투자 유치 라운드에서 8억 7천만 달러를 모금했습니다. 이번 투자는 회사의 놀라운 성장세를 증명하며 업계의 큰 주목을 받고 있습니다.",
+      "link": "https://techcrunch.com/2026/10/09/the-maker-of-non-text-ai-model-jev-valued-at-7-5b-just-weeks-after-launch/",
+      "entities": [
+        "AI",
+        "TypeSafe"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54833",
+      "title": "OpenAI, 300억 달러 규모 신규 투자 유치 추진 속 지속적인 매출 급증",
+      "original_title": "",
+      "description": "OpenAI의 연환산 매출액은 약 50억 달러로, 다른 회계 방식을 기준으로 처음 보도되었던 70억 달러보다는 훨씬 낮았습니다. 이 정정 보도로 인해 반도체 관련 주가가 하락했습니다. 한편 OpenAI는 1조 4,000억 달러의 기업 가치로 최소 300억 달러 규모의 신규 자금 조달을 협상 중입니다.",
+      "link": "https://the-decoder.com/openai-revenue-keeps-surging-as-company-seeks-30-billion-in-fresh-capital/",
+      "entities": [
+        "OpenAI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54826",
+      "title": "앤스로픽 AI 모델, 필라델피아 경찰에 허위 살인 제보 보내",
+      "original_title": "",
+      "description": "앤스로픽은 AI가 허위 제보를 제출한 지 두 달이 넘어서야 이 사실을 발견했습니다. 이 사건은 AI 시스템의 오작동과 이에 대한 모니터링의 중요성에 대한 우려를 낳고 있습니다.",
+      "link": "https://techcrunch.com/2026/10/09/an-anthropic-ai-model-sent-a-false-homicide-tip-to-philadelphia-police/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54837",
+      "title": "논란을 불러일으켰던 수상작 이미지, AI가 생성한 것으로 판명",
+      "original_title": "",
+      "description": "카메라 제조업체 니콘은 현재 '스몰 월드 인 모션' 콘테스트의 규칙과 절차를 재검토하고 있다고 밝혔습니다.",
+      "link": "https://www.bbc.co.uk/news/articles/cr86z33pdy9vo?at_medium=RSS&at_campaign=rss",
+      "entities": [],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54831",
+      "title": "앤스로픽의 클로드, 이제 동적 워크플로우를 통해 최대 1,000개의 AI 에이전트를 병렬로",
+      "original_title": "",
+      "description": "앤스로픽이 클로드 매니지드 에이전트에 동적 워크플로우를 추가하여, 메인 에이전트가 한 번에 최대 1,000개의 하위 에이전트에 작업을 분배할 수 있게 되었습니다. 테스트 결과 단일 에이전트는 코드 베이스의 숨겨진 버그를 최대 27개 찾은 반면, 멀티 에이전트 워크플로우는 꾸준히 66개를 찾아냈습니다.",
+      "link": "https://the-decoder.com/anthropics-claude-can-now-orchestrate-up-to-1000-ai-agents-in-parallel-through-dynamic-workflows/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54892",
+      "title": "앨런 튜링 연구소장, \"영국은 해외 AI에 종속되지 말아야 한다\"",
+      "original_title": "",
+      "description": "조지 윌리엄슨은 미국과 중국이 주도하는 AI 분야에서 영국의 '국가 회복력'이 핵심 초점이라고 강조했습니다. 그는 영국이 단번에 차단될 수 있는 외산 AI 시스템에 의존해서는 안 되며 자체적인 기술을 개발해야 한다고 주장했습니다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/10/uk-foreign-ai-head-alan-turing-institute-george-williamson",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54883",
+      "title": "앤스로픽, AI 에이전트를 안정적으로 제어하지 못해... 내부 평가의 실시간 인터넷 연결 ",
+      "original_title": "",
+      "description": "앤스로픽은 추후 공지가 있을 때까지 \"모든 내부 평가\"에 대해 \"실시간 인터넷 접근을 차단했다\"고 밝혔습니다. 이는 AI 에이전트의 통제 불능 문제에 대응하기 위한 조치입니다.",
+      "link": "https://techcrunch.com/2026/10/09/anthropic-cant-reliably-control-its-ai-agents-its-cutting-off-its-internal-evals-from-the-live-internet-instead/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54904",
+      "title": "트럼프식 AI 리브랜딩 확산에 따라 세일즈포스, AIForce를 SIForce로 개명",
+      "original_title": "",
+      "description": "비즈니스 인사이더의 캐서린 리 보도에 따르면, 마크 베니오프 최고경영자는 금요일 세일즈포스의 AIForce 에이전트 플랫폼 이름을 SIForce로 변경한다고 밝혔습니다. 베니오프는 X를 통해 \"초지능(Super Intelligence)의 시대가 도왔다. AIForce가 공식적으로 SIForce가 된다\"고 적었습니다. 이번 명칭 변경은 기업 전체가 아닌 에이",
+      "link": "https://thenextweb.com/news/salesforce-aiforce-siforce-trump-super-intelligence",
+      "entities": [
+        "Intelligence",
+        "Super",
+        "AIForce",
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54908",
+      "title": "AI에 대한 불안감이 고조되는 가운데, 할리우드가 저커버그, 머스크, 올트먼을 조명하다",
+      "original_title": "",
+      "description": "저커버그, 머스크, 올트먼 그리고 AI를 다룬 신작 영화들이 잇따라 개봉하고 있는 것은 이 기술과 최고경영자들을 향한 대중의 우려가 커지고 있음을 보여줍니다.",
+      "link": "https://www.cnbc.com/2026/10/10/ai-movies-tech-ceos-hollywood.html",
+      "entities": [],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54903",
+      "title": "비토리오 콜라오, 유럽의 AI 논쟁에서 저작권 규정과 DSA를 옹호하다",
+      "original_title": "",
+      "description": "규제가 유럽의 AI 성장을 가로막고 있지만 모든 규제 방식이 같은 것은 아니라고 비토리오 콜라오가 밝혔습니다. 보다폰의 전 최고경영자이자 현재 제너럴 아틀란틱의 유럽·중동·아프리카 부회장을 맡은 그는 금요일 토리노에서 열린 '웨이브 바이 벤토' 무대에 올라 이같이 발언했습니다. 규제가 방해가 되는지 묻는 질문에 대한 답변이었습니다.",
+      "link": "https://thenextweb.com/news/vittorio-colao-ai-regulation-europe-wave-by-vento",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54841",
+      "title": "오픈AI, 예상보다 200억 달러 적은 매출 기록할 전망",
+      "original_title": "",
+      "description": "챗GPT 개발사인 오픈AI가 올해 매출을 당초 예상했던 700억 달러보다 훨씬 낮은 500억 달러로 전망하면서, AI 성장에 대한 의문이 제기되고 있다. 회사가 투자자들에게 최근 시사한 것보다 예상 매출이 200억 달러 줄어들면서 관련 질문들이 쏟아지고 있다.",
+      "link": "https://www.theguardian.com/technology/2026/oct/09/openai-forecast-revenue-gap",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54982",
+      "title": "Impactful scheduling for GPU clusters",
+      "original_title": "",
+      "description": "",
+      "link": "https://huggingface.co/blog/allenai/impactful-scheduling",
+      "entities": [
+        "GPU",
+        "Impactful"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54973",
+      "title": "Introducing Playground: Create and play custom gam",
+      "original_title": "",
+      "description": "<img src=\"https://storage.googleapis.com/gweb-uniblog-publish-prod/images/THUMBNAIL_BLOG.max-600x600.format-webp.webp\">Playground is a new experimental gaming platform that lets you create, play, and ",
+      "link": "https://blog.google/innovation-and-ai/technology/ai/playground-experimental-gaming-platform/",
+      "entities": [
+        "Introducing",
+        "Create",
+        "Playground"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54893",
+      "title": "AI 시대의 직함에 대한 존 데이비스의 만평",
+      "original_title": "",
+      "description": "계속 읽어보기...",
+      "link": "https://www.theguardian.com/commentisfree/picture/2026/oct/10/jon-davis-job-titles-ai-cartoon",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54909",
+      "title": "AI가 변호사의 업무 방식을 바꾸고 있으며, 시간당 보수 제도를 압박하고 있다",
+      "original_title": "",
+      "description": "AI의 도입은 법률 업계가 시간당 보수 제도와 변호사들의 전문성 축적 방식을 재고하도록 강제하고 있습니다.",
+      "link": "https://www.cnbc.com/2026/10/10/ai-lawyers-billable-hour-legal-careers.html",
+      "entities": [],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54905",
+      "title": "로펌 퀸 엠마뉴엘, AI 데이터센터 부채가 부실화되는 시나리오를 분석하다",
+      "original_title": "",
+      "description": "미국 로펌 퀸 엠마뉴엘의 메모는 AI 데이터센터 붐을 뒷받침하는 부채가 어떻게 일련의 소송 사태로 이어질 수 있는지 분석하고 있습니다. 리즈 호프먼은 이 문건이 이번 주 세마포르를 통해 다시 회람되고 있다고 보도했습니다. 20페이지 분량의 이 고객 안내서는 원래 3일에 처음 발행되었으며, 구체적인 대상을 직접 언급했다는 점에서 이례적입니다.",
+      "link": "https://thenextweb.com/news/quinn-emanuel-ai-data-centre-debt-memo",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54827",
+      "title": "아마존 등 빅테크, 데이터센터 계약 비밀 유지 관행 폐지… 신뢰 회복 가능할까?",
+      "original_title": "",
+      "description": "아마존은 올해 초 마이크로소프트의 유사한 조치에 이어 지방 정부와 데이터센터 협상 시 비밀유지협약(NDA) 사용을 중단하겠다고 밝혔습니다. 그동안 이러한 비밀주의는 AI 인프라에 대한 지역 사회의 반발을 키워왔으며, 반대 여론으로 인해 수백 건의 모라토리엄이 제안되거나 시행되었습니다.",
+      "link": "https://techcrunch.com/video/amazon-and-others-are-done-keeping-data-center-deals-secret-is-it-enough-to-build-trust/",
+      "entities": [
+        "NDA",
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54983",
+      "title": "The model that didn't exist, so you made it yourse",
+      "original_title": "",
+      "description": "",
+      "link": "https://huggingface.co/blog/building-with-ml-intern",
+      "entities": [
+        "The"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54894",
+      "title": "\"가자는 우주에 난 도덕적 찢어짐이다\": 나오미 클라인과 아스트라 테일러 | 아디티야 차크",
+      "original_title": "",
+      "description": "우리는 정말 '종말론적 파시즘'의 시대를 살아가고 있는가? 나오미 클라인과 아스트라 테일러는 그렇다고 믿습니다. 가디언의 새로운 시리즈에서 두 사람은 '래디컬 씽킹'과의 확장 인터뷰를 통해 트럼프 2.0, 테크 거물의 부상, 가자 지구 사태, 기후 위기 등에 대해 이야기합니다.",
+      "link": "https://www.theguardian.com/politics/audio/2026/oct/10/gaza-is-a-moral-tear-in-the-universe-naomi-klein-and-astra-taylor-radical-thinking-with-aditya-chakrabortty-podcast",
+      "entities": [],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54910",
+      "title": "Cramer의 주간 전망: 은행과 팹리스 기업들이 큰 시험대에 오르며 실적 시즌 개막",
+      "original_title": "",
+      "description": "CNBC의 짐 크레이머는 다음 주 실적 발표가 투자자들에게 기업 실적과 AI 관련 투자 열기의 건전성을 더 명확하게 보여줄 것이라고 말했습니다.",
+      "link": "https://www.cnbc.com/2026/10/09/jim-cramer-week-ahead-bank-earnings-ai-chips.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
+    },
+    {
+      "id": "54885",
+      "title": "AI에 돈을 쓰는 사람은 드물지만, 쓰는 사람은 큰돈을 쓴다",
+      "original_title": "",
+      "description": "안드리센 호로위츠는 최신 상위 100개 AI 목록에서 최초로 미국 소비자의 실제 지출 내역을 추적했다. 미국 소비자의 절반 가까이가 AI를 사용하지만 구독료를 지불하는 비율은 4.5%에 불과하며, 상위 1%의 유저는 주로 개발 및 자동화 전문 도구에 월 약 900달러를 지출한다.",
+      "link": "https://the-decoder.com/few-people-pay-for-ai-but-those-who-do-spend-bigonly-a-few-users-pay-for-ai-but-those-who-do-pay-a-lot/",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-10"
     }
   ]
 }

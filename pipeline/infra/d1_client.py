@@ -58,9 +58,9 @@ def d1_query(
                 stderr = r.stderr.strip()
                 # 인증 오류 진단
                 if "7403" in stderr:
-                    log(f"  ⚠️ D1 인증 실패 [7403]: CLOUDFLARE_ACCOUNT_ID와 OAuth 프로필 충돌 의심")
+                    logger.warning("  ⚠️ D1 인증 실패 [7403]: CLOUDFLARE_ACCOUNT_ID와 OAuth 프로필 충돌 의심")
                 elif "10000" in stderr:
-                    log(f"  ⚠️ D1 인증 실패 [10000]: CLOUDFLARE_API_TOKEN env var 충돌 의심")
+                    logger.warning("  ⚠️ D1 인증 실패 [10000]: CLOUDFLARE_API_TOKEN env var 충돌 의심")
                 last_error = f"exit code {r.returncode}: {stderr[:300]}"
                 if attempt < retries - 1:
                     time.sleep(1.0 * (2.0 ** attempt))

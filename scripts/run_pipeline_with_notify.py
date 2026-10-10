@@ -39,7 +39,7 @@ def load_env(path):
                     k, v = line.split('=', 1)
                     os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
-load_env(os.path.join(PROJECT_DIR, '.env'))
+load_env(os.path.join(_PROJECT_DIR, '.env'))  # 2026-10-10 BRIEF-01: PROJECT_DIR은 scripts/로 재할당돼 루트 .env를 못 읽었다
 
 
 def main():
@@ -57,6 +57,9 @@ def main():
             sys.executable, pipeline_script,
             "--skip-thumbnails",
         ]
+        # v2 (AIK24-PIPE-02 Step 6): 인자 전달. launchd 는 인자 없이 호출하므로 기본 동작은 동일.
+        # 수동 실행 시 `--dry-run` 등을 그대로 run_pipeline.py 로 넘긴다.
+        pipeline_args.extend(sys.argv[1:])
         result = subprocess.run(
             pipeline_args,
             capture_output=True,

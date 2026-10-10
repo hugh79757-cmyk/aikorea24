@@ -25,6 +25,10 @@ from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
 from html import unescape
 
+# AIK24-NEWS-01: v2 큐레이션 판정 모듈 (scripts/v2_filter.py)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
+import v2_filter  # noqa: E402
+
 
 # ============================================
 # 환경 설정
@@ -1026,9 +1030,12 @@ def save_to_d1(articles):
         su = a.get('source_url', '').replace("'", "''")[:500]
         ot = a.get('original_title', '').replace("'", "''")[:200]
         co = a.get('country', 'kr').replace("'", "''")
+        # AIK24-NEWS-01: v2 판정(무료 사용 가능 여부 + 태그)을 저장 시점에 함께 기록.
+        _pass, _tag = v2_filter.classify(a['title'], a.get('description', ''), a['source'])
+        vt = (_tag or '').replace("'", "''")
         sql_lines.append(
-            f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date, source_url, original_title, country) "
-            f"VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}', '{su}', '{ot}', '{co}');")
+            f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
+            f"VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}', '{su}', '{ot}', '{co}', {1 if _pass else 0}, '{vt}');")
     skipped = skipped_title + skipped_link
     if skipped_link:
         print(f"  제목 중복: {skipped_title}건, 링크 중복: {skipped_link}건")

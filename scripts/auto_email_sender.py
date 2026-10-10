@@ -129,9 +129,8 @@ def generate_email_html(briefing, items):
             </table>
           </td>
         </tr>"""
-
-    # Items (상위 3개만 상세 표시)
-    display_items = items[:3] if len(items) > 3 else items
+    # Items (v2: 상위 4개만 상세 표시 — AIK24-PIPE-02 Step 4, 선택지 (b) 스코어 상위 N개만 발송)
+    display_items = items[:4] if len(items) > 4 else items
     total_count = len(items)
 
     items_html = ""

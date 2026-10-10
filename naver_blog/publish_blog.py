@@ -21,6 +21,8 @@ from publish import publish, load_cookies, get_token, BLOG_ID
 
 BLOG_DIR = os.path.join(os.path.dirname(__file__), "..", "src", "content", "blog")
 SITE_URL = "https://aikorea24.kr"
+# PIPE-01: 원문 글은 emDash D1이 서빙한다 (aikorea24.kr/blog/* 는 목록 리다이렉트만).
+POST_URL = os.environ.get("EMDASH_ORIGIN", "https://emdash.aikorea24.kr")
 PUBLISHED_FILE = os.path.join(os.path.dirname(__file__), "published_slugs.json")
 
 
@@ -130,7 +132,7 @@ def format_naver_html(fm, paragraphs, slug, image_path=None):
     lines.append("📌 이 글은 요약본입니다.")
     lines.append(f"전체 내용은 AI코리아24에서 확인하세요.")
     lines.append("")
-    lines.append(f"👉 원문 보기: {SITE_URL}/blog/{slug}/")
+    lines.append(f"👉 원문 보기: {POST_URL}/posts/{slug}")
     lines.append(f"👉 AI코리아24: {SITE_URL}")
     lines.append("")
 
@@ -245,7 +247,7 @@ def publish_one(slug, dry_run=False):
 
     # Playwright 방식 발행 (이미지 + OG 카드 지원)
     from publish import publish_with_playwright
-    link_url = f"{SITE_URL}/blog/{slug}/"
+    link_url = f"{POST_URL}/posts/{slug}"
     body_lines = [l for l in body_html.split("<br>") if l.strip()]
     # 원문 링크는 본문에서 제거 (OG 카드로 대체)
     body_lines = [l for l in body_lines if "원문 보기:" not in l]
