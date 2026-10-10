@@ -1,3 +1,1290 @@
+## 2026-10-11 01:25 — AIK24-D1-GUARD-01 D1 읽기 한도 가드 + B+C (잡 09:00 이동 · news LIMIT 축소)
+
+- **한 일**: 지시서 `2026-10-10-2308-AIK24-D1-GUARD-01.md` 수행 + 대표님 결정 B+C(잡 09:00 이동 + 읽기 절감) 적용. 메인 배포 `b051490f` → 파비콘 복구 배포 `112a062b`.
+
+### 배경
+2026-10-10 D1 읽기 **5,356,078 / 5,000,000 (107.1%)** 초과. `/news/` 73,895B→20,474B(브리핑 섹션 소실), `/briefing/2026-10-10-4/` 200→302. 원인 = D1 `code 7500` 에러 dict 를 페이지 코드가 "결과 없음"으로 처리해 **빈 화면을 정상처럼 렌더**. 자정 UTC(KST 09:00) 리셋까지 7시간 43분.
+
+### 1-1. `scripts/cfnew.py` — 가드 구현 [검증됨]
+| 추가 | 내용 |
+|---|---|
+| `D1_READ_LIMIT` | `5_000_000` |
+| `READONLY_RATIO` | `0.95` |
+| `CACHE_TTL` | `300` (5분) |
+| `GUARD_ENABLED` | `os.environ.get("D1_GUARD","on") != "off"` |
+| `QuotaExceededError` | `RuntimeError` 서브클래스 |
+| `_analytics_rows_read(day, tok)` | GraphQL `d1AnalyticsAdaptiveGroups` → 계정 rowsRead 합계. 캐시 없음 |
+| `get_d1_rows_read`→`get_daily_rows_read(day=None, tok=None, force=False)` | 5분 캐시. 만료 후 재조회, 실패 시 마지막 성공값 유지(fail-open) |
+| `check_quota(threshold=0.8, tok=None, raise_on_exceed=True)` | ≥80% → `QuotaExceededError` / ≥95% → `{"readonly": True}` / 미만 → `{"readonly": False}` |
+| `sql()` | 시작 부분에 `check_quota()` 호출 삽입 |
+
+★ **지시서 필드 예외**: 지시서는 `d1QueriesAdaptiveGroups` 또는 `d1Storage` 라 했으나 실측 둘 다 `unknown field`. 실제로 200 을 주는 건 `d1AnalyticsAdaptiveGroups` 뿐이라 그걸로 구현했다.
+★ **재귀 방지**: `check_quota()` 는 GraphQL analytics 를 직접 치고 `sql()` 을 호출하지 않는다 → `sql() → check_quota() → sql()` 순환 자체가 성립하지 않는다. (플래그 불필요)
+★ **캐싱 필수 반영**: 지시서 "캐싱 없이 구현하면 미완료 판정" → `_cache = {"at","used","day"}` 모듈 변수. `day` 불일치 시(자정 UTC 넘김) 자동 재조회.
+★ **fail-open**: GraphQL 조회가 죽으면 마지막 값을 반환하고 진행한다 — 한도를 못 확인했다고 멈추는 게 더 나쁘다.
+
+### 1-2. 가드 검증 6케이스 [검증됨]
+| 케이스 | 결과 |
+|---|---|
+| 82% → `sql()` | `QuotaExceededError: [D1-GUARD] 일일 읽기 4,100,000/5,000,000 (82.0%) — 작업 중단` |
+| 60% → `sql()` | `[{'x': 1}]` 통과 |
+| 96% → `check_quota()` | `readonly=True pct=96.0%` (예외 없음) |
+| 5분 내 3회 호출 | `[1234567, 1234567, 1234567]` — GraphQL 미호출 |
+| TTL 400초 경과 | `5,356,163` 재조회 |
+| `D1_GUARD=off` | `skipped=True`, `sql()` 무차단 |
+
+### 1-3. `docs/d1-budget.md` [검증됨]
+예산 표(정기 파이프라인 150만 / 수동 100만 / 예비 250만 / 합계 500만) + 검증 쿼리 규칙(`LIMIT` 필수·풀스캔 금지·날짜 범위 강제) + 백필 10만 행 초과 시 대표님 사전 승인 + 가드 사양 + 초과 시 대응.
+※ 라벨을 `docs/d1-budget.md` 로 적었고 지시서 원문(`docs/D1-budget.md`) 은 대소문자가 달랐다.
+
+### 1-4. 모니터링 잡 [검증됨]
+`scripts/d1_usage_report.py` 신규 (52줄). `~/.env.common`(setdefault) → 프로젝트 `.env`(덮어쓰기) 로드 후 `cfnew.get_daily_rows_read(force=True)` → 80% 미만 조용히 종료 / 이상이면 `pipeline.infra.telegram.send_telegram`.
+launchd `kr.aikorea24.d1-usage-report` 08:30 KST. `plutil -lint` OK.
+**★ `launchctl load` 는 `Input/output error` 로 실패했다.** macOS 최신 launchctl 은 `load` 가 폐기됐고 `bootstrap gui/$(id -u) <plist>` 로 등록해야 한다 → 그 경로로 등록 후 `launchctl print` 로 `Hour 8 / Minute 30` 확인.
+수동 실행: `[D1-GUARD] D1 읽기 5,356,163/5,000,000 (107.1%) — 일 2026-10-10 → 초과, 대표님 알림` / `telegram 발송: 성공` / EXIT=0.
+
+### B+C — 대표님 결정 적용 [검증됨]
+| 항목 | 변경 |
+|---|---|
+| 파이프라인 잡 | `kr.aikorea24.pipeline-runner` **06:00 → 09:00 KST**. 06:00 KST = 21:00 UTC 로 리셋(자정 UTC) 전이라 어제 초과 버킷이 그대로 적용됨. `launchctl print` → `Hour 9 / Minute 0` 확인. 백업 `plist.bak.20261010_2x` |
+| `src/pages/news.astro` | `ARCHIVE_LIMIT` **300 → 100**. 아래 JS 가 소스별 5건 + 전체 50건 상한을 걸고 있어 렌더 결과는 동일(현재 `v2_pass=1` 은 77건). rows_read 상한만 낮아짐 |
+
+**[부분검증]** LIMIT 축소의 실제 절감량 = 0. 현재 통과분이 77건이라 300 → 100 은 지금 당장 읽기를 줄이지 않는다. 누적 100건 넘을 때부터 효과가 난다. 오늘 5.36M reads 의 주된 출처는 (a) PIPE-02 파이프라인 3회 (b) 백필 1,024건/26배치 (c) 반복 라이브 검증 curl·브라우저 (d) `index.astro` 브리핑 조회가 아니라 **검증 트래픽**이었다.
+
+### [위반 감지] — `public/favicon.png` 사라짐 (자체 발견 · 유출 전 수정)
+커밋 준비 중 `git status` 에 `D public/favicon.png` 가 떠 있었다. 확인 결과 `public/` 에 `favicon.png` 이 **존재하지 않고** `favicon-1.png`(65,799B, mtime 16:09 = ASSET-01 시각)만 있었다. 즉 ASSET-01 때 파일명이 `favicon-1.png` 으로 저장돼 있었던 것으로 보인다(작성 명령 로그상 `cp /tmp/fv_512.png favicon.png` 였음 — 어느 단계에서 바뀐지는 미확정).
+`SEOHead.astro:137` 이 `/favicon.png` 을 참조하므로 이 상태로 다음 배포가 나가면 파비콘이 404 났을이다. `mv favicon-1.png favicon.png` 으로 복구 후 재빌드·재배포.
+**[검증됨]** 캐시버스터 쿼리로 최종 확인: `/favicon.png` 200 **65,799B** sha `10bb9f4d6977cb78`(로컬과 일치), `/mascot-tiger.png` 200 51,159B sha `7ba0bbe01479e93b`.
+★ **검증 함정**: `cache-control: public, max-age=14400`(4시간)이므로 캐시버스터 없이는 오래된 `/favicon.png`가 그대로 나온다. 위 초기 실측에서 51,159B(마스코트 크기)로 잘못 나왔던 것이 이 때문이었다 — 파일 문제가 아니라 엣지 캐시였다.
+
+### 빌드·배포 [검증됨]
+| | 결과 |
+|---|---|
+| 빌드 1차 | EXIT=0 `Server built in 10.47s` (`/tmp/g01_b1.log`) |
+| 배포 1차 | EXIT=0 `✨ b051490f` |
+| 빌드 2차(파비콘 복구) | EXIT=0 `Server built in 10.47s` (`/tmp/g01_b2.log`) |
+| **배포 최종** | EXIT=0 `✨ 112a062b` (`/tmp/g01_d2.log`) |
+| 라이브 | `/` 200 49,537B · `/news/` 200 20,711B · `/courses/` 200 25,925B · `/subscribe/` 200 23,524B — **D1 차단 중이라 데이터 섹션이 비어 보이는 게 정상**, 09:00 KST 리셋 후 복구 |
+
+### 커밋
+지시서 §4 "완료 보고와 동시에 git 커밋" 수행 — 단 **D1-GUARD-01 범위만**. `git status` 에는 오늘 다른 작업(PIPE-02·NEWS-01·FIX-01·ASSET-01·FONT) 산물 포함 **96개 파일**이 미커밋 상태로 남아 있어 섣지 않았다. 대표님 지시 대기.
+
+### 잔존 위험 (18건, 신규 1)
+1 Workers Free 10ms CPU(1102) 2 `/tools/*` 오프팔레트 124건 3 `dark:` 750건 4 Layout 미사용 9개 페이지 다크 배경 5 Brevo IP 반복 변동(현재 등록됨) 6 EMDASH-12 훅 타임아웃 7 PAT 평문 `/tmp/aik24-pat.txt` 8 emdash 프로젝트 git 아님 9 EMDASH-12·13·05·07 보고서 미작성 10 PIPE-01 작업2 중단 11 `PUBLIC_TOSS_CLIENT_KEY` 미설정 12 모바일 390×844 검증 불가 13 `logo-en`·`logo-ko` 미사용 14 툴 리뷰 작성 경로 소멸 15 리뷰 상세 소몰 16 D1 `community_posts` 불활성 17 v2.1 소스 4개 보류 **18 ★ 가드 fail-open — GraphQL 조회가 죽으면 한도 초과 상태에서도 진행한다(의도된 절충)**
+
+### 대표님 다음 행동
+1. **09:00 KST 리셋 후 `/news/`·`/briefing/` 복구 확인**
+2. 미커밋 96개 파일 커밋 여부 결정
+3. `/briefing/` 등 Layout 미사용 9개 페이지 다크 배경 / `/tools/*` 오프팔레트 지시 여부
+4. PIPE-01 작업2 / 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 / OG 이미지
+
+## 2026-10-11 00:02 — AIK24-NEWS-01 /news/ 페이지 v2 개편 (배포 `2918ffc8`)
+
+지시서: `SSOT/…/2026-10-10-2137-AIK24-NEWS-01-뉴스개편.md` (154줄). 파이프라인 변경 + 페이지 변경 합본(분리 금지 지시). Step 0~7 수행.
+
+### 한 일
+1. `news` 테이블에 `v2_pass` INTEGER / `v2_tag` TEXT 컬럼 추가 + 부분 인덱스 생성
+2. 신규 `scripts/v2_filter.py` — `classify()` 공용 판정 모듈 (`briefing_scorer.py` 원본 **미수정**)
+3. 수집기 2종에 판정 기록 추가 — v2 수집기 RSS 3종 제거, 레거시 수집기 INSERT 확장
+4. 최근 7일 1,024행 백필
+5. `src/pages/news.astro` 전면 개편 — 상단 "오늘의 브리핑" / 하단 "전체 소식" 아카이브
+6. 빌드·배포 + 라이브 검증
+
+### 결과
+
+#### Step 1 — DB 스키마 [검증됨]
+`PRAGMA table_info(news)` = 13컬럼. 신규 `cid 11 v2_pass INTEGER DEFAULT 0`, `cid 12 v2_tag TEXT DEFAULT NULL` 확인.
+
+**인덱스 (지시서 "EXPLAIN으로 확인 후 추가" 조건 충족)**
+| | 쿼리 플랜 | 대상 행 |
+|---|---|---|
+| 추가 전 | `SCAN news USING INDEX idx_news_created` + `USE TEMP B-TREE` | 17,987행 전수 스캔 |
+| 추가 후 | `SEARCH news USING INDEX idx_news_v2 (v2_pass=?)` | **77행** |
+
+추가한 인덱스: `CREATE INDEX idx_news_v2 ON news(v2_pass, created_at DESC) WHERE v2_pass = 1` (부분 인덱스 — 통과분만 적재되어 유지 비용 최소).
+측정 근거: `EXPLAIN QUERY PLAN` 비교. 인덱스 생성 전후 `rowsWritten` 변화 6,988 → 6,988 (인덱스 1회 생성 비용만 반영, 페이지 조회에는 미영향).
+
+#### Step 2 — `scripts/v2_filter.py` 신규 [검증됨]
+`classify(title, description, source) -> (bool, tag)` — `briefing_scorer.py` 의 `_score_free_usability` + `_penalty_excluded_topic` 로직 이식. **원본 파일 미수정** (지시서 금지사항 준수).
+
+★ **지시서 판정식 해석 보완** — 지시서는 "free 점수 > 0 → (True, tag)" 라만 적었고 그 외 분기를 명시하지 않았다. 지시서 완료기준의 "기업·펀딩류 미노출" 을 만족시키려면 **무료 신호 0 + 오픈소스 소스 아님 = 미통과** 로 좁혀야 했다. 예시 케이스 "디오 임플란트 AI 생태계 확산"(무료 키워드 0, The Decoder 소스)이 이를 요구한다.
+
+자체 점검 6케이스 전부 통과 (`python3 scripts/v2_filter.py`, EXIT=0):
+```
+ok  (True,'free-llm')   앤트로픽 스타트업, 초보자 무료 티어 확대      / 무료 티어 확대 / The Decoder
+ok  (True,'free-llm')   OpenAI releases free GPT-5 mini…            / open weights / OpenRouter Free Models
+ok  (False,None)        디오 임플란트 AI 생태계 확산                   / 기업 전략 논의 / The Decoder
+ok  (False,None)        Acme raises $50M Series B…                  / funding round / TechCrunch
+ok  (True,'opensource') HuggingFace releases new open-source…        / open source weights / HuggingFace Trending
+ok  (True,'tool')       GitHub Copilot 튜토리얼 10가지                 / tutorial cookbook / GitHub
+```
+
+#### Step 3 — 수집기 [검증됨]
+**v2 수집기** (`scripts/news_collector_v2.py`): `RSS_SOURCES` 4종 → **1종**(HuggingFace Blog 유지). dry-run 실측 `RSS (HuggingFace Blog) 10건` — OpenAI·Google AI·GitHub 3종 **0건**. 출력 라벨도 실제 소스명(`RSS (HuggingFace Blog) — AIK24-NEWS-01`)로 수정.
+INSERT 11컬럼으로 확장(`v2_pass`, `v2_tag`) + 저장 전 `v2f.classify()` 호출.
+**레거시 수집기** (`api_test/news_collector.py`): `save_to_d1()` L1029~ INSERT 11컬럼 확장 + 판정 추가. 스탠드얼론 import 검증 통과 (`import OK, v2_filter = v2_filter`).
+
+**INSERT 경로 프로브 검증 [검증됨]** — 실제 수집이 신규 0건이라 경로가 안 돌아갔으므로 프로브 1건 주입:
+```
+probe row: [{'id': 54997, 'v2_pass': 1, 'v2_tag': 'free-llm'}]  → residual: 0 (삭제 완료)
+```
+
+**백필 (최근 7일) [검증됨]** — 신규 `scripts/news_backfill_v2.py`. dry-run 100건 `{tool:4, opensource:10, excluded:49, free-llm:37}` 확인 후 전체 실행.
+```
+대상 1,024건 / 26배치(40건) / EXIT=0
+결과 분포: v2_pass=0 → 947건, v2_tag=free-llm 58 / opensource 11 / tool 8  = 통과 77건
+전체 테이블 분포: NULL 16,963(백필 범위 밖) / '' 947 / free-llm 58 / opensource 11 / tool 8
+```
+D1 쓰기 여유 확인 후 실행 — 실행 직전 `aikorea24-db rowsWritten 6,988 / 100,000`.
+
+#### Step 4 — `/news/` 페이지 [검증됨]
+`src/pages/news.astro` 63줄 → 전면 재작성.
+- 상단 "오늘의 브리핑": `SELECT * FROM briefings WHERE status='published' ORDER BY id DESC LIMIT 1` + `briefing_items JOIN news` (`index.astro` BriefingSection 과 동일 패턴). published 브리핑 없으면 섹션 숨김.
+- 하단 "전체 소식": `WHERE v2_pass = 1 AND category NOT IN ('senior','benefit') ORDER BY created_at DESC, id DESC LIMIT 300` + 소스별 5건 cap(JS) + 최대 50건.
+- 태그 뱃지 `무료 LLM`(#E63B2E 배경) / `오픈소스` / `실전 도구`.
+- 시안 A: `dark:` **0건**, 흰 배경, `6px solid #E63B2E` h1 + `4px` h2 버티컬 라인.
+- `Cache-Control: public, max-age=300` 유지.
+
+#### Step 5 — 실행·검증 [검증됨]
+| 항목 | 결과 |
+|---|---|
+| 프로덕션 수집 | EXIT=0, 신규 0건(44건 전부 기존 — dedup 정상) |
+| 빌드 | EXIT=0 `Server built in 17.57s` (`/tmp/n01_b1.log`) |
+| 배포 | EXIT=0 `✨ https://2918ffc8.aikorea24-4nk.pages.dev` + `배포 완료: https://aikorea24.kr` (`/tmp/n01_d1.log`) |
+| `/news/` | **200 · 73,895B** |
+| 라이브 v2_pass=0 누출 | **0건** (카드 47개 전수 D1 대조. HTML 엔티티 `&#39;`/`&quot;` 디코딩 후 대조) |
+| 브리핑 상단 일치 | 최신 published = `id 341 / 2026-10-10-4` / 아이템 4건 = `auto_email_sender.py` L132-133 `items[:4]` 가 쓰는 동일 브리핑 |
+| 태그 뱃지 | Aside 실측 `무료 LLM 34 / 오픈소스 5 / 실전 도구 8` |
+| 시안 A | h1 `6px solid rgb(230,59,46)`, body `rgb(255,255,255)`, `news.astro` 내 `dark:` 0건, 가로 스크롤 없음(1440=1440) |
+| 샘플 대조 | 미노출(기업·펀딩류) = 스렛북 인수 / 엔비디아 투자 계획 / 스타트업 투자 10조 / 크립토 투자 시대 / CNBC 매출 우려 — 전부 `v2_pass=0` |
+| URL 스위프 | `/` `/news/` `/courses/` `/subscribe/` `/tools/` `/refund/` `/sitemap.xml` 200 · `/blog/` 301 |
+
+**[부분검증]** — 라이브 카드의 `dark:` 클래스 44건은 `news.astro` 가 아니라 `Layout.astro` 헤더/푸터에서 옵니다(`news.astro` 자체 0건, grep 확인). 잔존 위험 #3의 기존 범위.
+
+### 변경 파일
+| 파일 | 구분 |
+|---|---|
+| `scripts/v2_filter.py` | 신규 (자체 점검 포함) |
+| `scripts/news_backfill_v2.py` | 신규 |
+| `scripts/news_collector_v2.py` | PRODUCTION CODE (RSS 3종 제거 + 11컬럼 INSERT + 판정 + 라벨) |
+| `api_test/news_collector.py` | PRODUCTION CODE (`save_to_d1` INSERT 11컬럼 + import) |
+| `src/pages/news.astro` | PRODUCTION CODE (전면 재작성) |
+| `config/impact_weights.json` | 미변경 (읽기 전용) |
+| `scripts/briefing_scorer.py` | **미변경** (지시서 금지) |
+| D1 `news` | `v2_pass`·`v2_tag` 컬럼 + `idx_news_v2` 부분 인덱스 |
+
+### 잔존 위험 (누적 17건, 신규 0건)
+1. Workers Free 10ms CPU(1102) 2. `/tools/*` 오프팔레트 124건 3. 메인 `dark:` 750건(런타임 미적용) 4. Layout 미사용 9개 페이지 다크 배경 5. **★ Brevo IP 미등록 `58.10.233.168` + IPv6 → 이메일 발송 불가(PIPE-02 신규)** 6. EMDASH-12 훅 타임아웃 5초 7. PAT 평문 `/tmp/aik24-pat.txt` 8. emdash 프로젝트 git 아님 9. EMDASH-12·13·05·07 보고서 미작성 10. PIPE-01 작업2 중단 11. `PUBLIC_TOSS_CLIENT_KEY` 미설정 12. 모바일 390×844 검증 불가 13. `logo-en`·`logo-ko` 미사용 14. 툴 리뷰 작성 경로 소멸 15. 리뷰 상세 소몰 16. D1 `community_posts` 불활성 17. v2.1 소스 4개 보류
+
+### 다음 행동 (대표님)
+1. **Brevo 화이트리스트에 `58.10.233.168` + IPv6 `2001:fb1:11d:6dd:8d59:e7a9:8910:8fbf` 등록** (06:00 잡 이메일 발송 불가 — 최우선)
+2. `/briefing/` 등 Layout 미사용 9개 페이지 다크 배경 지시 여부
+3. `/tools/*` 오프팔레트 지시 여부
+4. PIPE-01 작업2 선택지 / 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 / OG 이미지
+5. v2.1 소스(Reddit·Product Hunt·Anthropic·OpenCode) 개통 지시 여부
+
+### 로그
+`/tmp/n01_{b1,d1,bf,bf_dry,v2_dry,v2_run}.log`
+
+---
+
+## 2026-10-10 23:05 — AIK24-PIPE-02 브리핑 v2 + 블로그 §18 4종 개편 (배포 `8b3dbc01`)
+
+## 2026-10-10 23:05 — AIK24-PIPE-02 브리핑 v2 + 블로그 §18 4종 개편 (배포 `8b3dbc01`)
+
+- **한 일**: 지시서 `2026-10-10-2030-AIK24-PIPE-02-브리핑v2-블로그개편.md` (196줄) Step 0~9 수행. 브리핑 선별 기준·분량·스케줄을 v2 로 전환하고, EmDash 블로그에 §18 4종 포맷 파이프라인을 신설.
+
+### Step 0 — 사전 조사 [검증됨]
+| 대상 | 실측 |
+|---|---|
+| `scripts/run_pipeline.py` (259줄) | 5단계 = 뉴스선정(171)→브리핑(186)→썸네일(204)→이메일(218)→배포(231). 플래그 `--skip-news --skip-briefing --skip-thumbnails --skip-email --skip-deploy --date --dry-run` |
+| `scripts/run_pipeline_with_notify.py` (120줄) | `_PROJECT_DIR` L14, `PROJECT_DIR` L19(섀도잉, BRIEF-01 수정 유지), `load_env(_PROJECT_DIR/.env)` L42. subprocess 로 `run_pipeline.py` 실행(부모 env 상속) |
+| `scripts/auto_news_selector.py` (577줄) | `keywords_map` L99-109 (클러스터 9개 + `misc` L121). `get_recent_news(hours=24)` L48 |
+| `scripts/briefing_scorer.py` (442줄) | **LLM 프롬프트 없음 — 순수 규칙 scorer.** `score_article`(L311-426) 가 8개 차원 합산 |
+| `scripts/auto_briefing.py` (224줄) | `briefings` INSERT `save_briefing` L121-124, `briefing_items` L136-145, 선정 L172 |
+| `scripts/auto_email_sender.py` (430줄) | `display_items = items[:3]` **L134**. Brevo `GET /v3/contacts` L296-325, 발송 L338-400 |
+| `scripts/blog_draft_generator.py` (864줄) | `src/content/blog/*.md` write (L466-539). **`run_pipeline.py` 에서 호출되지 않음 + launchd 잡도 없음 → 죽은 스크립트.** v2 생성기는 신규 스크립트가 정답 |
+| `kr.aikorea24.pipeline-runner.plist` | `StartCalendarInterval` 2개 = 06:00 / 20:00 |
+
+★ **지시서 전제 정정 2건** (보고서에 반영):
+1. Step 3-2 는 "스코어링 **프롬프트** 교체" 라 했으나 `briefing_scorer.py` 에 프롬프트가 없다 → **가중치 차원 교체**로 해석해 `_score_free_usability()` + `_penalty_excluded_topic()` 2개 함수를 신설
+2. Step 2 는 `config/crawlable_sources.json` 교체 **또는** 신규 수집기 중 하나를 고르라 했으나, 기존 수집기(`api_test/news_collector.py`) 는 v2 소스(API 2종)를 구조적으로 담을 수 없다 → **신규 수집기 선택**
+
+### Step 1 — 히어로·subscribe 서브 문구 [검증됨]
+- `src/components/home/HeroSection.astro:12` → `오늘 무료로 쓸 수 있는<br class="hidden sm:inline" />AI 소식만 골라서 보내드립니다`
+- `src/pages/subscribe.astro:8`(meta) + `:16`(본문) → 동일
+- 빌드 EXIT=0 `Server built in 20.43s` (`/tmp/p02_b1.log`) / 배포 EXIT=0 `5deef7ca` (`/tmp/p02_d1.log`)
+- 라이브 grep: 신 문구 홈 1 / subscribe 2, 구 문구(`OpenAI·Anthropic 공식 발표만`) 양쪽 0
+
+### Step 1-2 — 상단 네비 정리 [검증됨]
+백업 `/tmp/Layout.astro.bak.p02`.
+1. `navItems` 에서 `{ label: '홈', href: '/' }` 제거 (로고가 이미 `/`)
+2. 로그인 사용자 이름 span 제거 — 데스크톱 SSR + 모바일 SSR
+3. `.js-user-name` span 제거 — 데스크톱·모바일 js-user-box + 하단 인라인 스크립트
+4. 중복 제거 가드: `<body data-ssr-user={currentUser ? "1" : undefined}>` → 스크립트 `if (document.body.dataset.ssrUser) return;`
+   - **근본 원인**: `js-user-box` 가 `hidden` 기본값인데 스크립트가 무조건 `remove('hidden')`+`add('flex')` → SSR 박스와 js-user-box 동시 표시
+   - **선택 방식 = `data-ssr-user` body 마커** (지시서 예시 채택). 스크립트가 body 끝에 실행돼 DOM 접근 가능, 추가 AJAX 없음
+라이브(로그아웃, Aside): `navLabels[0]=""` , `homeLink:false`, `jsUserBoxVisible:["none","none"]`, `loginBtnVisible:["block","block"]`, `ssrUserAttr:null`. `grep js-user-name` 라이브 0건.
+**[부분검증]** 로그인 상태 중복 제거는 Google OAuth 필요로 실측 불가 — 코드 가드만 검증.
+
+### Step 2 — 수집 소스 v2 (신규 수집기 선택) [검증됨]
+**신규 `scripts/news_collector_v2.py`** (약 190줄). 기존 `config/crawlable_sources.json` 은 손대지 않았다 — 레거시 매체 수집이 계속 돌아야 하고, v2 소스는 API 2종(JSON)이라 RSS 전용 config 구조로 표현할 수 없다.
+
+동작 소스 6개 (전부 신규 계정 D1 로만 씀):
+| 종류 | 소스 | 방식 |
+|---|---|---|
+| 무료 LLM | OpenRouter `/api/v1/models` | JSON API. `pricing.prompt == "0" and pricing.completion == "0"` 필터 → **무료 19개** |
+| 오픈소스 | HuggingFace `/api/models?sort=trendingScore&limit=15` | JSON API → 15건 |
+| 빅테크 공식 | OpenAI `news/rss.xml` | RSS 200 |
+| 빅테크 공식 | Google AI blog `technology/ai/rss` | RSS 200 |
+| 오픈소스 | HuggingFace blog `feed.xml` | RSS 200 |
+| 오픈소스 | GitHub AI/ML blog `feed/` | RSS 200 |
+
+**v2.1 보류 (2026-10-10 실측 응답 코드)**: `reddit.com/r/LocalLLaMA/.rss` **403**(bot 차단) / `anthropic.com/news/rss.xml` **404**(RSS 미제공) / `opencode.ai/feed.xml` **404** / Product Hunt = API 키 필요.
+
+**계정 고정**: BRIEF-01 잔존 위험 2(쓰기 대상 계정 불일치) 해결. v2 수집기는 `scripts/cfnew.py` 의 `CF_MIGRATE_TOKEN`(신규 계정 `7eb1b8cd`) + D1 REST SQL 만 쓴다. 기존 `api_test/news_collector.py` 의 `npx wrangler d1 execute`(계정 미지정) 경로는 쓰지 않는다.
+
+**실행 검증**: dry-run 74건(OpenRouter 19 / HF Trending 15 / RSS 40) → 실제 저장 **54건**.
+`news` 17,933 → **17,987**(`MAX(id)` 54,937 → 54,996), `MAX(created_at)` = `2026-10-10 13:57:56` UTC = 22:57 KST → **신규 계정 DB 에 쓰임 확인.**
+
+**편입 방식(확정)**: v2 수집기를 `run_pipeline.py` Step 0 으로 편입(별도 launchd 잡 만들지 않음). 사유 = 스케줄이 3벌로 갈라지면 실행 순서 추적이 어려워진다. 기존 `kr.aikorea24.news-unified`(05:30/19:30, 구 수집기)는 **그대로 둬서** 레거시 매체 누적을 유지하고 v2 가 무료·오픈소스 축을 공급한다.
+
+### Step 3 — 선별 기준 v2 [검증됨]
+**`auto_news_selector.py` `keywords_map` (L99-111)**:
+- `investment`(펀딩·투자·IPO·valuation) 클러스터 **제거**
+- v2 클러스터 선두 추가: `free-llm`(free llm/무료 모델/free tier/openrouter/open weights…), `opensource`(open source/github/huggingface/ollama/opencode/무료 실행 — 기존 것 확장), `trending`(순위/ranking/인기)
+- 선두 배치 이유: 클러스터 매칭은 딕셔너리 순서 + `break` 이므로 앞쪽이 우선
+
+**`briefing_scorer.py` 2개 함수 신설**:
+- `_score_free_usability(text, weights)` — "한국인 초보자가 오늘 무료로 쓸 수 있는 것인가?" 30개 키워드(무료 티어 10 / 무료 8 / open source 6 / ollama·opencode 8 / 튜토리얼·쿡북 5 …), cap 25. 결과 `(점수, 매칭어)`
+- `_penalty_excluded_topic(text, weights, free_hits)` — 펀딩·기업전략은 `hard_exclude` 로 확정 제외(-100 → total 0). 출시성은 `launch_soft` + **무료 신호 0개일 때만** 제외
+  - 설계 근거: 한국어 AI 뉴스에 "출시"는 무료 도구 소개에도 붙으므로 단독 제외하면 브리핑이 통째로 사라진다
+- `score_article` 에 `free_usability` / `penalty_excluded_topic` 두 breakdown 키 추가, `evidence` 에 `free_usability_hits`·`excluded_topic_hits` 추가, total 합산에 penalty 추가
+- `config/impact_weights.json` 에 `free_usability`(cap 25 + 키워드 30개) / `excluded_topic`(penalty -100 + hard_exclude 15개 + launch_soft 11개) 블록 추가
+
+**스코어링 동작 검증 (실측 4케이스)**:
+```
+total 33 | fu=18 pen_ex=0    | [무료 LLM] liquid/lfm-2.5-2b:free — OpenRouter 무료 티어
+total 15 | fu=0  pen_ex=0    | Cramer 주간 전망: 은행·팹리스 실적 시즌 개막
+total  0 | fu=0  pen_ex=-100 | 스타트업 X raises $200M Series B funding round   ← 완전 제외
+total 40 | fu=25 pen_ex=0    | Free tier model, 1M context, ollama 로컬 실행
+```
+
+### Step 4 — 분량·스케줄·이메일 [검증됨]
+- 선정 개수 6 → **4**: `auto_news_selector.py` L146 `select_top_articles(max_count=4)`, L204 `_two_pass_selection(max_count=4)`, L550 레거시 호출부, `auto_briefing.py` L172
+  - ★ **첫 실행에서 6건이 나온 이유**: live 경로는 `_two_pass_selection` 을 쓰고 `auto_briefing.py` L172 의 `select_top_articles` 는 live 에서 도달하지 않는다. L204 기본값만 고치고 1회 재실행해 4건 확인.
+- 이메일 분량: **선택지 (b) 스코어 상위 N개만 발송 채택** → `auto_email_sender.py` L132-133 `items[:4]`. (a) `email_pick` 컬럼 추가는 스키마 변경이라 기각
+- launchd: `kr.aikorea24.pipeline-runner.plist` 의 20:00 dict 제거 → **1회/일 06:00**. 백업 `plist.bak.20261010_2252`, `plutil -lint` OK, `launchctl unload/load` 후 `StartCalendarInterval = [{'Hour': 6, 'Minute': 0}]` 1건 확인
+- 발송 시각 문구: 이메일 제목 `AI코리아24 뉴스레터 - {date}` 에 시간 표기 없음(기존 그대로). "7시" 등 문구 추가 없음
+
+### Step 5 — 블로그 §18 4종 생성기 [검증됨]
+**신규 `scripts/blog_v2_generator.py`** (~250줄). `blog_draft_generator.py` 는 `run_pipeline.py` 미연결 + 로컬 md write 라 v2 신규 생성.
+데이터 소스: OpenRouter rankings API(`/api/v1/models`, 무료 19개) + HuggingFace trending API(20개). 코딩 부문 지표 상수 `BENCH_CODING = ["SWE-bench","Terminal-Bench","LMArena Coding","Aider Polyglot","LiveCodeBench"]`.
+
+4종 포맷 — 전부 **"그래서 뭐 써야 돼?"** 로 종료:
+| key | 제목 패턴 | 구조 |
+|---|---|---|
+| `daily` | 오늘의 추천 LLM: {모델} — 입출력 무료, 컨텍스트 {n} | 무엇을 고른 이유 / 무료라서 부족한 건 아닌가 / 그래서 뭘 쓰면 돼? |
+| `weekly` | 이번 주 무료 LLM 순위 — TOP 5와 이번 주 추천 1개 | 순위(컨텍스트 기준 TOP5) / 추천 1개 처방 / **코딩 부문 별도 기준** / 그래서 뭐 써야 돼? |
+| `mystery` | 정체 공개: HF trending 1위 `{id}` 는 도대체 뭐냐 | 요약 / 숫자가 말하는 것 / 무료로 써볼 수 있나 / 그래서 뭐 써야 돼? |
+| `bench` | 벤치마크 비교: 무료 `{m}` vs Claude Opus | 비교 대상 / 점수는 어떻게 나오나 / 그래서 뭐 써야 돼? |
+
+발행: `cfnew.sql` → emdash D1 `ec_posts` **직접 INSERT** (Workers API 경유 없음). `revisions` 1행 + `ec_posts` 1행 2 statement. `status='published'`, `locale='en'`, `version=2`, `live_revision_id` 설정, slug 충돌 시 `-2` 부가. `to_pt()` 는 Portable Text 변환 — **PT 는 마크다운을 파싱하지 않으므로 백틱 제거** 처리.
+
+### Step 6-7 — dry-run + 프로덕션 실행 [검증됨]
+- `run_pipeline_with_notify.py --dry-run --skip-email --skip-deploy` → 정상 출력(계획만, 미실행)
+- `run_pipeline_with_notify.py --skip-deploy` (이메일 포함) → 100.7초, 브리핑 **id=340 `2026-10-10-3`** 저장, 아이템 **6건**(Step 4 수정 전)
+  - 이메일 실패: `❌ API 오류 (401) unrecognised IP address 2001:fb1:11d:6dd:8d59:e7a9:8910:8fbf`
+- max_count 수정 후 `run_pipeline_with_notify.py --skip-deploy --skip-email` → `[23:01:34] 전체 기사: 29건 → 선정: 4건`, 브리핑 **id=341 `2026-10-10-4`** 저장, 아이템 **4건**, 소요 26초, 에러 0
+- ★ 단독 실행 금지 지시 재확인: `python3 -c "from auto_news_selector import …"` 로 직접 호출하자 **D1 7403(출발 계정 `fac9808c`)** 재현됨. 반드시 `run_pipeline_with_notify.py` 경유 필요.
+- `2026-10-10-4` 라이브: `https://aikorea24.kr/briefing/2026-10-10-4/` **200, 12,026B**
+- 선정 4건 구성: HuggingFace Blog 1건(v2 소스) + The Guardian AI / CNBC Tech / The Decoder 3건(레거시)
+  - **[부분검증]** v2 scorer 는 동작하나 24시간 창에 무료 사용 가능 항목이 4개 미만이라 레거시 매체가 섞였다. v2 데이터가 누적되면 축(軸)이 v2 쪽으로 이동할 것으로 예상되나 **수치 근거 없음**
+
+### Step 5 발행 — 블로그 4건 [검증됨]
+`ec_posts` 신규 4행 (2026-10-10T14:03:27~28 UTC). 전부 `status=published`, `live_revision_id` 유효, `ec_posts` 총 **1,471건**(1,460 기존 + 7 free-lecture + 4 신규), 고아 revision **0건**.
+
+| 포맷 | live | 크기 | h1 |
+|---|---|---|---|
+| daily | **200** | 30,422B | 오늘의 추천 LLM: inkling-small — 입출력 무료, 컨텍스트 1,048,576 |
+| weekly | **200** | 30,801B | 이번 주 무료 LLM 순위 — TOP 5와 이번 주 추천 1개 |
+| mystery | **200** | 30,570B | 정체 공개: HuggingFace trending 1위 `embeddinggemma-2` 는 … |
+| bench | **200** | 30,467B | 벤치마크 비교: 무료 `inkling-small` vs Claude Opus — 점수 차이, … |
+
+URL = `https://emdash.aikorea24.kr/posts/<한글슬러그>` (`urllib.parse.quote` 인코딩 필요).
+
+### Step 8 — 빌드·배포 [검증됨]
+- 메인 `npm run build` **EXIT=0** `Server built in 18.78s` (`/tmp/p02_b2.log`)
+- 메인 `npm run deploy` **EXIT=0** `✨ https://8b3dbc01.aikorea24-4nk.pages.dev` `배포 완료: https://aikorea24.kr` (`/tmp/p02_d2.log`)
+- 라이브 10종: `/` 200 54,960B · `/subscribe/` 200 23,483B · `/briefing/2026-10-10-4/` 200 12,026B · `/blog/` 301 · `/courses/` 200 25,925B · `/refund/` 200 23,756B / emdash `/` 200 32,374B · `/posts` 200 68,020B · `/sitemap.xml` 200 395,734B · `/rss.xml` 200 36,120B
+
+### [검증불가] — Brevo 이메일 실제 발송
+`❌ API 오류 (401) unrecognised IP address 2001:fb1:11d:6dd:8d59:e7a9:8910:8fbf`. 로컬 IPv4 도 `58.10.233.168` 로 이전(`58.11.95.17` → `58.10.233.168`) 하여 기존 화이트리스트 무효. 복구: 대표님이 Brevo 대시보드 `https://app.brevo.com/security/authorised_ips` 에 **현재 IPv4 + IPv6** 등록. 코드 결함이 아님(4th 반복되는 IP 변동).
+
+### 기록
+- `docs/state.md` 2,232 → **2,499줄**. 맨 위 `진행 중 (2026-10-10 20:30, AIK24-PIPE-02 …)` 표식을 위 결과 요약으로 교체
+- 완료보고 `SSOT/프로젝트/aikorea24/지시서/2026-10-10-2305-AIK24-PIPE-02-완료보고.md`
+
+### 잔존 위험 (누적 17건, 신규 1건 추가)
+1. Workers Free 10ms CPU(1102) — Paid 전환 금지 지시
+2. `/tools/*` 하위 10개 파일 오프팔레트 124건
+3. 메인 `dark:` 클래스 750건(런타임 미적용)
+4. Layout 미사용 9개 페이지 다크 배경 (공개 `/briefing/`·`/briefing/[date]/` 포함)
+5. **Brevo IP 화이트리스트 미등록 (신규 — 현재 IPv4 `58.10.233.168`, IPv6 `2001:fb1:…`) → 이메일 발송 불가**
+6. EMDASH-12 `cloudflareEmail()` 훅 타임아웃 5초(메일 도착하나 500 응답)
+7. PAT 평문 `/tmp/aik24-pat.txt`
+8. `~/projects2/aikorea24emdash` git 아님
+9. EMDASH-12·13·05·07 완료보고 미작성
+10. PIPE-01 작업2 중단 (대표님 A/B/C)
+11. `PUBLIC_TOSS_CLIENT_KEY` 미설정
+12. 모바일 390×844 검증 불가
+13. `logo-en`·`logo-ko` 미사용
+14. 툴 리뷰 작성 경로 소멸 (FIX-01)
+15. 리뷰 상세 페이지 소몰 (FIX-01)
+16. D1 `community_posts` + `lessons.community_post_id` 불활성
+17. **v2 소스 4개 보류 (신규 — Reddit LocalLLaMA 403 / Anthropic RSS 404 / OpenCode RSS 404 / Product Hunt 인증)**
+
+### 다음 행동 (대표님)
+1. **Brevo 화이트리스트에 `58.10.233.168` + IPv6 `2001:fb1:11d:6dd:8d59:e7a9:8910:8fbf` 등록** — 안 하면 06:00 아침 잡 이메일 발송이 계속 실패
+2. 내일 06:00 아침 잡 결과 확인 (`scripts/pipeline_runner.log`) — 브리핑 1건 + 이메일 1통 + v2 수집기 동작
+3. `/briefing/` 등 Layout 미사용 9개 페이지 다크 배경 정리 지시 여부
+4. `/tools/*` 오프팔레트 124건 지시 여부
+5. PIPE-01 작업2 선택지 / 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 본문 / OG 이미지
+
+### 유틸 기록
+- 브리핑 아이템 4건 소스 확인 쿼리: `SELECT n.source,n.title FROM briefing_items b JOIN news n ON n.id=b.news_id WHERE b.briefing_id=<id> ORDER BY b.sort_order`. `briefing_items` 에 `cluster` 컬럼 **없음**(스키마: id/briefing_id/news_id/sort_order/comment/created_at/deep_dive_url) → news 테이블로 JOIN 해야 함
+- launchd plist 수정 후 `launchctl unload` → `load` → `launchctl print gui/$(id -u)/<label>` 로 descriptor 확인. `plutil -lint` 로 XML 검증
+- `run_pipeline_with_notify.py` 는 인자를 `run_pipeline.py` 로 전달하지 않았다 → `pipeline_args.extend(sys.argv[1:])` 추가. launchd 는 인자 없이 호출하므로 기본 동작 불변
+- 한글이 섞인 텍스트 작성 시 CJK(한자) 혼입 주의 — `re.findall(r'[一-鿿぀-ヿ]', s)` 로 검사. 이번 작업에서 `news_collector_v2.py`·`blog_v2_generator.py`·`run_pipeline.py`·`impact_weights.json` 에서 발견 후 제거
+
+
+- 작업 시작. Step 0 사전 조사 진행 중.
+- 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-2030-AIK24-PIPE-02-브리핑v2-블로그개편.md` (196줄)
+
+---
+
+## 2026-10-10 22:20 — 폰트 Pretendard 통일 (Georgia 제거, 메인 + EmDash 양쪽 배포)
+
+- **한 일**: 대표님 질의 "폰트를 어떤거 사용하지? 프리텐다드로 모두 통일할 수 있을까?" 에 대한 조사 + 본문/헤드라인 전부 Pretendard로 통일하고 양쪽 사이트 배포.
+
+### 조사 결과 (배포 전 실측)
+| 대상 | aikorea24.kr (메인) | emdash.aikorea24.kr |
+|---|---|---|
+| 본문 | `'Pretendard Variable'` (jsDelivr CDN `pretendard@v1.3.9` dynamic-subset, `SEOHead.astro:143`) | `"Pretendard"` (로컬 woff2 2개 1.5MB, `theme.css` `@font-face` + `Base.astro:91-92` preload) |
+| 헤드라인 | `Georgia, "Times New Roman", serif !important` (`global.css:39`) + 인라인 16곳 = **18회** | `--font-heading`(`theme.css:16`) + `h1,h2 !important`(`theme.css:70`) = **2회** |
+
+**★ 핵심 발견 — Georgia는 한글 글리프가 없다.** 브라우저 폭 측정(h1 700 40px):
+```
+"가나다라마바" 실제 렌더 239.77 = Georgia 스택 239.77 = Apple Myungjo 239.77 = Batang 239.77
+                     Pretendard 207.42 / Apple SD Gothic Neo 207.6 (불일치)
+"Hamburgefonstiv" (라틴) 362.58 = Georgia 스택 362.58 (정확히 일치)
+```
+→ 라틴 문자만 진짜 Georgia였고, 한글 제목은 이미 기기별 세리프(macOS/iOS Myungjo, Windows Batang, Android Noto Serif CJK)로 폴백되고 있었다. "Georgia 적용"의 실질적 효과는 영문 라벨뿐.
+
+### 변경 [검증됨]
+| 파일 | 구분 | 내용 |
+|---|---|---|
+| `src/styles/global.css:38` | PRODUCTION CODE | 주석 "헤드라인 - 세리프" → Georgia 제거 사유 명시 |
+| `src/styles/global.css:39,75` | PRODUCTION CODE | `font-family: Georgia, "Times New Roman", serif` → `var(--font-sans)` (h1,h2 `!important` 유지) |
+| 11개 `.astro` 인라인 16곳 | PRODUCTION CODE | `font-family: Georgia, serif` → `var(--font-sans)`. 대상: `home/{HeroSection,BriefingSection,LatestBlog,CourseSection,CtaSection,SubProjects,ToolsSection,OpenSourceBanner}.astro`, `pages/{404,courses/index,subscribe}.astro` |
+| `~/projects2/aikorea24emdash/src/styles/theme.css:16,70` | PRODUCTION CODE | `--font-heading` → `"Pretendard", -apple-system, sans-serif`, `h1,h2` → `font-family: var(--font-body) !important` |
+
+`--font-sans` = `Layout.astro:71` 의 `<style is:global>` `:root` 정의(`'Pretendard Variable', Pretendard, -apple-system, …`). `global.css` 는 `Layout.astro` 만 import 하므로 전 치환 대상이 Layout 사용 페이지에만 한정됨(안전).
+
+백업: `src/` → `/tmp/fontfix_src_bak`, `theme.css` → `/tmp/theme.css.bak.fontfix`.
+
+### 결과
+- `grep -rn Georgia src/` → **0건** (메인 + emdash 양쪽). 주석 1곳 제외
+- 빌드: 메인 **EXIT=0** `Server built in 11.47s` (`/tmp/font_main_build.log`) / emdash **EXIT=0** `Server built in 3.17s` (`/tmp/font_em_build.log`)
+- 배포: 메인 **EXIT=0** `✨ https://abf2aad5.aikorea24-4nk.pages.dev` (`/tmp/font_main_deploy.log`) / emdash **EXIT=0** `Current Version ID 7f573926-9986-417a-bbee-6315e97ed7f0` (`/tmp/font_em_deploy.log`)
+- 라이브 URL 8종 전부 정상: 메인 `/` 200 57,994B · `/blog/` 301 · `/courses/` 200 26,172B · `/refund/` 200 24,003B / emdash `/` 200 33,082B · `/posts` 200 68,267B · `/sitemap.xml` 200 394,778B · `/rss.xml` 200 36,856B
+- 라이브 HTML `grep -c Georgia` → 메인 0 / emdash 0
+- **getComputedStyle 실측 (Aside)**: 메인 h1 = `"Pretendard Variable", Pretendard, -apple-system…`, h1 weight 700, h2 4개 전부 `"Pretendard Variable"`, body 동일, 가로 스크롤 없음(1440=1440). emdash h1/h2 = `Pretendard, -apple-system, sans-serif`, body 동일, 가로 스크롤 없음
+- D1 무변경. URL·슬러그 무변경.
+
+**[부분검증]** — 스크린샷 육안 미확인. `page.screenshot()` 2회 호출 모두 `Unable to transform response from server` (도구 응답 변환 오류, 페이지 자체는 정상 렌더 — computed style·HTTP 200·바이트 수로 확인). 복구: 브라우저 직접 확인.
+
+### [검증불가] — 모바일 390×844 렌더
+Aside 브라우저 `page` 객체에 `setViewportSize` 없음. Pretendard Variable 은 가변 폰트라 모바일에서 줄바꿈 위치가 달라질 수 있으나 실기기 미확인.
+
+### ★ 부수 발견 — Layout 미사용 9개 페이지가 자체 다크 스타일 유지 (범위 밖, 미수정)
+`grep -rn '/community'` 점검 중 발견. `global.css` 는 `Layout.astro` 만 import 하므로 아래 9개 페이지는 시안 A(라이트) 규약이 적용되지 않고 자체 다크 배경을 유지한다.
+
+| 파일 | body 배경 |
+|---|---|
+| `src/pages/briefing/[date].astro:66` | `#0a0a0f` (공개 페이지 — 브리핑 상세) |
+| `src/pages/briefing/index.astro:48` | `#0a0a0f` (공개 페이지 — 브리핑 목록) |
+| `src/pages/payments/success.astro:40` | `#0f172a` |
+| `src/pages/payments/fail.astro:17` | `#0f172a` |
+| `src/pages/pricing.astro:29` | `#0f172a` |
+| `src/pages/auth/consent.astro:15` | `#0f172a` |
+| `src/pages/admin/index.astro:31` | `#0f172a !important` |
+| `src/pages/admin/event.astro:31` | `#0f172a` |
+| `src/pages/admin/tools.astro:92` | `#0f172a` |
+
+RENEWAL-01 §3 이 "다크모드 제거 / 검은 배경 없음" 을 요구했으나 대상 파일 목록(`src/layouts/`, `src/components/home/`)에 이 9개가 없어 처리되지 않았다. **공개 페이지 2개(`/briefing/`, `/briefing/[date]/`)가 특히 노출 큼.** 지시 여부 대기.
+
+### 잔존 위험 (누적 16건)
+1. Workers Free 10ms CPU(1102) — Paid 전환 금지 지시
+2. `/tools/*` 하위 10개 파일 오프팔레트 124건
+3. 메인 `dark:` 클래스 750건(런타임 미적용, 삭제 미수행)
+4. **Layout 미사용 9개 페이지 다크 배경 유지 (신규 — 위 표)**
+5. Brevo IP 화이트리스트 반복 변경(현재 `58.11.95.17` 등록 확인)
+6. EMDASH-12 `cloudflareEmail()` 훅 타임아웃 5초(메일 도착하나 500 응답)
+7. PAT 평문 `/tmp/aik24-pat.txt` (Vault 등록 후 삭제 필요)
+8. `~/projects2/aikorea24emdash` git 아님
+9. EMDASH-12·13·05·07 완료보고 미작성
+10. PIPE-01 작업2 중단 (대표님 A/B/C 대기)
+11. `PUBLIC_TOSS_CLIENT_KEY` 미설정 → 결제 버튼 미노출
+12. 모바일 390×844 실기기 검증 불가
+13. `logo-en`·`logo-ko` 미사용
+14. 툴 리뷰 작성 경로 소멸 (FIX-01)
+15. 리뷰 상세 페이지 소몰 (FIX-01)
+16. D1 `community_posts` + `lessons.community_post_id` 불활성, 데이터 보존 (FIX-01)
+
+### 다음 행동 (대표님)
+1. **`/briefing/` 등 Layout 미사용 9개 페이지 다크 배경 정리 지시 여부** (공개 페이지 2개 노출 큼 — 신규)
+2. `/tools/*` 오프팔레트 124건 정리 지시 여부
+3. PIPE-01 작업2 선택지 (A 보류 / B slug_map+301 후 삭제 권고 / C 즉시 삭제)
+4. 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 본문 / OG 이미지 / `logo-en`·`logo-ko` 활용 위치
+5. Brevo 대시보드 테스트 컨택트 확인
+6. 툴 리뷰 기능 재설계 여부
+
+### 유틸 기록
+- 세리프→sans 치환: `sed -i '' -e 's/font-family: Georgia, "Times New Roman", serif/font-family: var(--font-sans)/g' -e "s/font-family: Georgia, 'Times New Roman', serif/font-family: var(--font-sans)/g" -e 's/font-family: Georgia, serif/font-family: var(--font-sans)/g'` (3패턴 모두 필요 — `subscribe.astro`·`404.astro` 는 작은따옴표 변형 사용)
+- `global.css` 는 `Layout.astro` 만 import → Layout 미사용 페이지는 치환 대상 아님(위 신규 위험 4 참고)
+- Aside `page.screenshot()` 이 간헐 `Unable to transform response from server` 반환. `type:'webp'` 지정해도 동일. computed style + curl 바이트로 대체 검증
+
+## 2026-10-10 21:46 — AIK24-FIX-01 커뮤니티 제거 + 홈페이지 AI 툴 섹션 + FUNNEL-01 완료
+
+- **한 일**: ① `/community/` 전체 삭제(페이지 5종 + API 3종)·내부 링크 제거·301 리다이렉트 ② 홈페이지에 "AI 툴" 섹션 신규 추가 ③ FUNNEL-01 남은 단계(빌드·배포·검증) 완료. 배포 `223a39a6`.
+
+### 결과
+
+**[검증됨]** — 작업 1 커뮤니티 제거
+| 항목 | 결과 | 근거 |
+|---|---|---|
+| 페이지 삭제 | `src/pages/community/`(index·[id]·review·write·[id]/edit) + `src/pages/api/community/`(visibility·update·delete) | `rm -rf` → `ls src/pages` 에 `community` 없음. 백업 `/tmp/fix01_bak/` |
+| 내부 링크 | `grep -rn '/community' src/ public/` → **0건** | `_redirects` 3줄 제외 전부 제거 |
+| 제거 파일 | `CtaSection.astro`(커뮤니티 참여 → AI 툴 둘러보기) `auth/consent.astro` `pricing.astro` `payments/{success,fail}.astro` `about.astro` `tools/[id].astro`(5곳) `api/briefing/send-email.ts` `api/courses/send-daily.ts` `sitemap-pages.xml.ts` `public/llms.txt` | python 치환 + grep 0건 확인 |
+| 301 리다이렉트 | `/community` · `/community/` · `/community/123` · `/community/write` **4종 전부 301 → `https://aikorea24.kr/`** | `curl -w '%{http_code} -> %{redirect_url}'` |
+| 사이트맵 | `https://aikorea24.kr/sitemap-pages.xml` 에 community 0건 | curl grep |
+| 빌드 산출물 | `dist/community` 없음 | `ls` |
+
+**[검증됨]** — 작업 2 AI 툴 섹션
+- 신규 `src/components/home/ToolsSection.astro`. 선정 로직 = `/tools/` 페이지의 `popularTools` 와 동일(`koreanSupport` true → `order` 오름차순 → 4개). **임의 창작 없음.**
+- 카드 4개: `/tools/vecbase/` `/tools/litescribe/` `/tools/geulway/` `/tools/goath/`
+- 배치: `index.astro` 에 import 추가 + `<BriefingSection />` 다음·`<SubscribeBanner />` 앞에 삽입
+- 라이브 h2 순서 실측: `10월 10일 (토)` → **`AI 툴`** → `최신 블로그` → `AI 강좌` → `서브 프로젝트` → `AI, 지금 바로 시작하세요`
+
+**[검증됨]** — 작업 3 FUNNEL-01 완료
+| 항목 | 결과 | 근거 |
+|---|---|---|
+| 히어로 헤드라인 | "매일 아침 5분, AI 뉴스 핵심만" | `document.querySelector('h1').innerText` |
+| 히어로 서브 | "OpenAI·Anthropic 공식 발표만 골라서 보내드립니다" | innerHTML grep 1회 |
+| 히어로 인라인 폼 | `#hero-subscribe` / `#hero-email` / `#hero-subscribe-msg` / 버튼 "무료로 구독하기" | `page.evaluate` 실측 |
+| **히어로 폼 실동작** | 테스트 주소 제출 → `"구독 완료! 매일 아침 AI 브리핑을 보내드립니다."` (class `text-[#E63B2E]`) → 버튼 "무료로 구독하기" 복귀·`disabled:false` | Playwright 실제 입력·클릭 |
+| `/subscribe/` 폼 | 동일 메시지 반환 확인 | `#top-email` + `#top-subscribe` 제출 |
+| 신뢰 문구 | "광고 없음 · 언제든 해지 가능" 히어로·구독 페이지 양쪽 | grep 각 1회 |
+| 금지 문구 | "7시" **0건**, "N명이 구독 중" **0건** | `document.body.innerText` 정규식 |
+| 테스트 데이터 정리 | Brevo `DELETE /v3/contacts/{email}` → **204 ×2** | 2건 삭제 확인 |
+
+**[검증됨]** — 빌드·배포·라이브
+- `npm run build` → **EXIT=0** `Server built in 10.50s` `Complete!`
+- `npm run deploy` → **EXIT=0** `✨ https://223a39a6.aikorea24-4nk.pages.dev` `배포 완료: https://aikorea24.kr`
+- `/` 200 57,950B · `/subscribe/` 200 23,707B · `/tools/` 200 811,408B
+- 가로 스크롤 없음 (`scrollW 1440 = clientW 1440`)
+- 홈 `커뮤니티` 문자열 0건 · `a[href*=community]` 0개
+
+### 변경 파일
+| 구분 | 파일 |
+|---|---|
+| 삭제 | `src/pages/community/`(5), `src/pages/api/community/`(3) |
+| 신규 | `src/components/home/ToolsSection.astro` |
+| 수정 | `index.astro` `CtaSection.astro` `auth/consent.astro` `pricing.astro` `payments/success.astro` `payments/fail.astro` `about.astro` `tools/[id].astro` `api/briefing/send-email.ts` `api/courses/send-daily.ts` `sitemap-pages.xml.ts` `public/_redirects` `public/llms.txt` `HeroSection.astro` `subscribe.astro` |
+
+### 잔존 위험
+1. Workers Free 10ms CPU 한도(1102) — Paid 전환 금지 지시
+2. `/tools/*` 하위 10개 파일 오프팔레트 124건 (FIX-01 §6 에서 명시적 범위 외)
+3. 메인 `dark:` 클래스 750건(런타임 미적용)
+4. Brevo IP 화이트리스트 반복 변경 (현재 `58.11.95.17` 등록, 이번 세션에 401 없이 정상 동작)
+5. EMDASH-12 `cloudflareEmail()` 훅 타임아웃 5초(메일 도착하나 500 응답)
+6. PAT 평문 `/tmp/aik24-pat.txt` (Vault 등록 후 삭제 필요)
+7. `~/projects2/aikorea24emdash` git 아님
+8. EMDASH-12·13·05·07 완료보고 미작성
+9. PIPE-01 작업2 중단 (대표님 A/B/C 선택지 대기)
+10. `PUBLIC_TOSS_CLIENT_KEY` 미설정 → 결제 버튼 미노출
+11. 모바일 390×844 실기기 검증 불가 (Aside `setViewportSize` 부재)
+12. `logo-en`·`logo-ko` 미사용
+13. **신규**: 툴 리뷰 읽기 기능 잔존 — `tools/[id].astro` 는 `/api/tools/reviews` 로 리뷰를 표시하지만, 리뷰 작성 UI(`/community/review`·`/community/write`)를 삭제했으므로 **새 리뷰 작성 경로가 사라짐**. 기존 D1 리뷰 행은 그대로 표시됨.
+14. **신규**: `tools/[id].astro` 의 `reviews-section` 의 "전체 보기" 링크 삭제 → 리뷰 상세 페이지 없음(리뷰 원문 전체 미열람 가능)
+15. **신규**: D1 `community_posts` 테이블과 `lessons.community_post_id` 컬럼이 코드를 더 이상 읽지 않음. 데이터는残置 (삭제하지 않음 — 되돌리기 가능성 대비)
+
+### 다음 행동 (대표님)
+1. Brevo 대시보드에서 테스트 컨택트 2건 생성 확인 (지시서 §완료기준 — 대표님 직접 수행 항목)
+2. `/tools/*` 오프팔레트 124건 정리 지시 여부
+3. 툴 리뷰 기능 재설계 여부 (작성 경로 부재 상태)
+4. PIPE-01 작업2 선택지 결정
+5. 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 본문
+
+## 진행 중 (2026-10-10 20:00, AIK24-CF-TRACE-01 잔존확인)
+
+## 진행 중 (2026-10-10 16:30, AIK24-REFUND-02 환불정책수정)
+
+## 2026-10-10 18:12 — 파비콘·마스코트 브랜드 에셋 적용 (원본 Downloads 에서 발견) + L2T 푸터 확인 + 통신판매업 번호 푸터 반영
+
+- **한 일**: 대표님 지적("파비콘이 안바뀌었는데? [브랜드 이미지 5장] 이런것들은 왜 활용안했지? 지시서에 없었나?")에 따른 조사·적용. `~/Downloads/` 에 원본 존재 확인 → 파비콘 4종 교체, 마스코트 404 페이지 적용.
+
+### 결과
+**[검증됨]** — 파비콘·마스코트
+| 항목 | 결과 | 근거 |
+|---|---|---|
+| 원본 발견 | `~/Downloads/favicon-final.webp` 48,404B 1600×1600 = 대표님 이미지 ② | `sips` 변환 후 육안 확인(빨간 세로 라인 + `A` + 발자국) |
+| 마스코트 원본 | `~/Downloads/batch_media-generation-aik24-tiger-final-0-9d5c8cf1-….jpg` 37,428B 636×636 = 이미지 ⑤ | 육안 확인(호랑이 + 스마일에 폰) |
+| 로고 | `public/logo-final.webp` 2464×976 = 이미지 ①(가로 dancheong 배너) | 이미 헤더 적용 상태 |
+| 파비콘 교체 | `favicon.png` 100×100/2,201B → **512×512/65,799B**<br>`favicon-32x32.png` 1,761B → 2,235B<br>`favicon-16x16.png` 762B → 1,387B<br>`apple-touch-icon.png` 14,906B → 15,394B | `sips -Z` 리사이즈 후 `ls -la` |
+| 마스코트 적용 | `public/mascot-tiger.png` 400×400/51,159B 신규 | 404 페이지 `<img src="/mascot-tiger.png">` |
+| 빌드 | **EXIT=0** | `/tmp/av_build.log` `Server built in 18.74s` `Complete!` |
+| 배포 | **EXIT=0** | `/tmp/av_deploy.log` `✨ https://f4539bd4.aikorea24-4nk.pages.dev` `배포 완료: https://aikorea24.kr`, sitemap ping google/naver ✅ |
+| 라이브 | `/` 200 · `/favicon.png` 200 65,799B · `/favicon-32x32.png` 200 2,235B · `/mascot-tiger.png` 200 51,159B · `/404-test-notexist/` **404 21,095B** | curl |
+| 404 페이지 | `mascot-tiger.png` 1회 / `#3b82f6` 0회 / `#111111` 5회 | `curl … \| grep -o \| uniq -c` |
+
+**[검증됨]** — `404.astro` 시안 A 위반 제거. `#3b82f6`(파랑) `404` 타이틀·버튼 → Georgia 세리프 + `#111111`. 마스코트 추가.
+
+**[검증됨]** — link2threads.com 푸터 확인 결과 **보완 불필요**.
+라이브 apex 푸터에 이미 `통신판매업 신고번호: 제 2026-의정부흥선-0694호` + `호스팅 제공자: Cloudflare, Inc.` 표기. 로컬 소스 `~/projects2/link2threads/src/routes/_layout.ts` L88 `CHROME_FOOTER` + `src/index.ts` L544 인라인 푸터 양쪽 보유 → 소스-라이브 일치. L2T 배포 미수행. L2T 계정 = `89dcb5be8fa1f42bad2372298271435e`(twinssn@gmail.com), 출발 계정 아님.
+
+**[검증됨]** — aikorea24 푸터에 통신판매업 신고번호 반영 (선행 작업). `src/layouts/Layout.astro:264` 에 `| 통신판매업 신고번호: 제 2026-의정부흥선-0694호 | 호스팅 제공자: Cloudflare, Inc.` 추가 → 배포 `5c747f6a`. REFUND-01 잔존 위험 "통신판매업 미표시 = PG 반려 위험" 해소.
+
+### [위반 감지] — 지시서 §0-4 정보 불일치 (조사 부족)
+RENEWAL-01 §0-4 는 "`favicon-final.webp`, `mascot-tiger.webp` 원본은 말랑이 VM(`~/workspace/aik24-brand/assets/`)에만 있고 현재 Mac에 없다" 라고 명시했다. 실제로 `~/workspace/aik24-brand/assets/` 는 존재하지 않아 **지시서 지시대로 `보류 (원본 미수령)` 처리**했으나, 원본은 Mac `~/Downloads/` 에 있었다. `find` 로 홈 전체를 검색했어야 했다. → 지시서 정보가 실제 파일 위치와 달랐고, 지시서 경로만 확인하고 넘어간 것이 조사 부족이다. 지시서 §3-2.4·3-2.5(파비콘 교체·마스코트 404 적용)는 **보류 표기 없이 미실행 상태로 남겨짐** → 이번 세션에서 처리.
+
+### 잔존 위험
+1. Workers Free 10ms CPU(1102) — Workers Paid 전환 금지 지시
+2. `/tools/*` 하위 10개 파일 오프팔레트 124건
+3. 메인 `dark:` 클래스 750건(런타임 미적용, 삭제 미수행)
+4. Brevo IP 화이트리스트 반복 변경(현재 `58.11.95.17` 등록됨, 동작 확인)
+5. EMDASH-12 `cloudflareEmail()` 훅 타임아웃 5초(메일 도착하나 500 응답)
+6. PAT 평문 `/tmp/aik24-pat.txt` (Vault 등록 후 삭제 필요)
+7. `~/projects2/aikorea24emdash` git 아님
+8. EMDASH-12·13·05·07 완료보고 미작성
+9. PIPE-01 작업2 중단 (대표님 A/B/C 선택지 대기)
+10. `PUBLIC_TOSS_CLIENT_KEY` 미설정 → 결제 버튼 미노출
+11. 모바일 390×844 실기기 검증 불가(Aside 브라우저 `setViewportSize` 부재)
+12. `favicon-final.webp` 외 브랜드 에셋(`logo-en`, `logo-ko`, `tiger-paw`, `badge-listed`) 중 `logo-en`/`logo-ko` 는 사이트 미사용 상태 — OG 이미지·스키마 마크업 적용 여부 미결
+
+### 다음 행동 (대표님)
+1. OG 이미지 교체 여부 결정 (현재 `public/og-default.png` 2월 구버전)
+2. `logo-en`/`logo-ko` 활용 위치 지정 (스키마 organization 로고, 관리자 화면 등)
+3. `/tools/*` 오프팔레트 정리 지시 여부
+4. PIPE-01 작업2 선택지 (A 보류 / B slug_map+301 후 삭제 권고 / C 즉시 삭제)
+5. 토스페이먼츠 가맹 키 / 일일 브리핑 발송 시각 / 환영 시퀀스 4통 본문
+
+### 유틸 기록
+- 이미지 확인: `sips -s format png <in> --out /tmp/x.png && sips -Z 300 /tmp/x.png` → Read 도구 육안 확인
+- 파비콘 세트: 원본 1개 → `-Z 512` (favicon.png) / `-Z 180` (apple-touch-icon) / `-Z 32` / `-Z 16`
+- `docs/state.md` 는 Write 로 덮어쓸 수 없음 → 임시 파일에 쓰고 python 으로 앞쪽 concat. 백업 `docs/state.md.bak.<ts>` 관행
+
+## 2026-10-10 18:0x — 통신판매업 신고번호 푸터 표기 추가 (aikorea24.kr)
+
+- **한 일**: 대표님 지시 "aikorea24 하단에도 작성해줘" — `link2threads.com` 푸터에 이미 표기돼 있던 **통신판매업 신고번호** 를 `aikorea24.kr` 푸터에도 동일하게 추가. 토스페이먼츠 PG 가맹 신청 심사 체크리스트(`통신판매업`) 대비.
+- **변경 파일**: `src/layouts/Layout.astro` L264 (PRODUCTION CODE 1건). 1줄 수정.
+
+### 결과
+**[검증됨]**
+| 항목 | 결과 | 근거 |
+|---|---|---|
+| 빌드 | **EXIT=0** | `/tmp/a24_f_build.log` `Server built in 10.99s` `Complete!` |
+| 배포 | **EXIT=0** | `/tmp/a24_f_deploy.log` `✨ https://5c747f6a.aikorea24-4nk.pages.dev` + `배포 완료: https://aikorea24.kr` |
+| 라이브 푸터 | 통신판매업 신고번호 **1회**, 호스팅 제공자 **1회** | `curl -sL https://aikorea24.kr/ \| grep -o \| wc -l` |
+| 전 페이지 반영 | `/terms/` 에도 1회 | Layout 의 `<footer>` 를 모든 페이지가 상속 |
+| URL | `/` 200 · `/refund/` 200 · `/terms/` 200 | curl |
+
+추가한 문구: `통신판매업 신고번호: 제 2026-의정부흥선-0694호 | 호스팅 제공자: Cloudflare, Inc.`
+
+### 선행 조사 — link2threads.com 푸터 [검증됨]
+- 라이브 `https://link2threads.com/` 푸터에 이미 `통신판매업 신고번호: 제 2026-의정부흥선-0694호` + `호스팅 제공자: Cloudflare, Inc.` 표기돼 있었음. **L2T 쪽 보완 필요 없음.**
+- 로컬 소스 `~/projects2/link2threads/src/routes/_layout.ts` L88 (`CHROME_FOOTER`) 과 `src/index.ts` L544 (랜딩 인라인) 두 곳 모두 해당 문구 보유 → 소스-라이브 일치.
+- L2T 계정 = `89dcb5be8fa1f42bad2372298271435e` (twinssn@gmail.com). 출발 계정 `fac9808c` 아님 → 접근 금지 규칙 무관. 이번 세션에서 L2T 배포는 수행하지 않음.
+
+### 잔존 위험
+1. 기존 잔존 10건 유지 (RENEWAL-01 완료보고 §6 참조): Workers Free 10ms CPU / `/tools/*` 오프팔레트 124건 / `dark:` 750건 / EMDASH-12 훅 타임아웃 / PAT 평문 `/tmp/aik24-pat.txt` / emdash 프로젝트 git 아님 / EMDASH-12·13·05·07 보고서 미작성 / PIPE-01 작업2 중단 / `PUBLIC_TOSS_CLIENT_KEY` 미설정 / 모바일 390×844 검증 불가.
+2. REFUND-01 §5 수강률별 환불 요율 미수령 → `대기 (수치 미수령, 2026-10-10)`.
+3. 대표님 대기 6건 유지: 파비콘·마스코트 원본 / 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 본문 / PIPE-01 작업2 선택지 / `/tools/*` 오프팔레트 지시 여부.
+
+### 다음 행동
+- 대표님: 토스페이먼츠 가맹 신청 시 `https://aikorea24.kr/refund/` + 통신판매업 번호 표기 완료 상태로 진행 가능.
+
+## 2026-10-10 17:55 — AIK24-REFUND-01 환불정책 페이지 작성·배포 (토스페이먼츠 가맹 신청 대비)
+
+- **한 일**: 지시서 `2026-10-10-1545-AIK24-REFUND-01-환불정책페이지.md`(168줄) 실행. 토스페이먼츠 PG 가맹 신청서 심사관용 환불정책 공개 URL 확보 목적.
+- **산출 파일**: `src/pages/refund.astro` 신규 (PRODUCTION CODE 1건). `privacy.astro` 패턴 동일 — `export const prerender = true` + `Layout` import + `article` 래퍼.
+
+### 결과
+**[검증됨]** (근거 = 빌드 로그 · 배포 로그 · curl 상태코드 · 라이브 HTML grep)
+| 항목 | 결과 | 근거 |
+|---|---|---|
+| 파일 작성 | 6개 섹션 전부 포함 | §1 적용대상 / §2 청약철회 7일(전자상거래법 §17①) / §3 청약철회 제한(§17②) / §4 환급 3영업일(§18②) / §5 수강률별 기준 / §6 문의 |
+| 빌드 | **EXIT=0** | `/tmp/rf_build.log` `Server built in 10.29s` `Complete!`, `dist/refund/index.html` 23,300B |
+| 배포 | **EXIT=0** | `/tmp/rf_deploy.log` `✨ Deployment complete! https://cf9c93cb.aikorea24-4nk.pages.dev` + `배포 완료: https://aikorea24.kr` |
+| 라이브 | `/refund/` → **200**, `/refund` → **308** | curl. `trailingSlash: 'always'` 설정 때문이며 지시서 검증 명령이 슬래시 없는 URL. **심사관에게 `https://aikorea24.kr/refund/` 전달 권장** |
+| 렌더 | `section-title` 1 / `상세 기준은 추후 공지됩니다` 2 / `청약철회` 9 / `환불정책` 8 | `curl https://aikorea24.kr/refund/ \| grep -o` |
+
+**[검증됨]** 지시서 금지 준수
+- "환불 불가" 포괄 특약 미사용. §3 은 전자상거래법 §17② 열거형으로만 작성.
+- `dark:` 클래스 0건. 파랑·보라·초록 0건. 흰 배경 + 검은 제목 + `.section-title` 빨간 버티컬 라인.
+
+**[검증됨]** §2·§6 연락처 = 푸터(`Layout.astro` L272-273)에 이미 공개된 값 그대로 사용. 임의 작성 아님.
+`스타일팩토리9 (Style Factory 9) / 대표: 조진연 / 사업자등록번호: 672-43-00632 / 경기도 의정부시 호암로 256, 107-1804 (우 11638) / info@aikorea24.kr / +82 10-7416-5705`
+
+**[부분검증]** 브라우저 육안 미확인 — curl HTML grep으로 6개 섹션 렌더만 확인. Aside `getComputedStyle` 시각 검증은 미실행.
+**[검증불가]** 수강률별 환불 요율 — 대표님 미제공. 복구: 수치 수령 후 §5 갱신 → 재빌드·재배포.
+
+### 대기 항목
+- `대기 (수치 미수령, 2026-10-10)` — §5 수강률별 환불 기준. 페이지에는 "상세 기준은 추후 공지됩니다" 로 기재함.
+- `대기 (수치 미수령, 2026-10-10)` — §3 청약철회 제한의 구체적 판정 기준. 동일 문구로 기재함.
+
+### 잔존 위험
+1. **PG 심사 관건**: 지시서 §배경이 요구하는 심사 체크리스트 항목 중 `통신판매업` 표시가 푸터·약관 어디에도 없음. 이대로 신청하면 반려 위험. 복구: 대표님 통신판매업 신고번호 확인 후 `terms.astro`·푸터에 표기.
+2. `/refund`(슬래시 없음)는 308. 심사자가 그대로 붙여넣으면 브라우저가 따라가지만 심사 시스템 일부가 308 를 실패로 처리할 수 있음 → `/refund/` 전달 권장.
+3. 브라우저 육안 미확인(위 [부분검증]).
+4. 기존 잔존 10건(RENEWAL-01 완료보고 §6 참조): Workers Free 10ms CPU / `/tools/*` 오프팔레트 124건 / `dark:` 750건 / EMDASH-12 훅 타임아웃 / PAT 평문 `/tmp/aik24-pat.txt` / emdash 프로젝트 git 아님 / EMDASH-12·13·05·07 보고서 미작성 / PIPE-01 작업2 중단 / `PUBLIC_TOSS_CLIENT_KEY` 미설정 / 모바일 390×844 검증 불가.
+5. 대표님 대기 6건 유지: 파비콘·마스코트 원본 / 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 본문 / PIPE-01 작업2 선택지 / `/tools/*` 오프팔레트 지시 여부.
+
+### 다음 행동
+- 대표님: 토스페이먼츠 가맹 신청 시 환불정책 URL 은 `https://aikorea24.kr/refund/` 사용. 통신판매업 신고번호 확인 필요.
+- 대표님: §5 수강률별 환불 요율 제공 시 페이지 갱신 + 재배포.
+
+## 2026-10-10 17:26 — AIK24-RENEWAL-01 전체 리뉴얼 Phase 1~5 수행 + 양쪽 배포
+
+- **한 일**: 지시서 `2026-10-10-AIK24-RENEWAL-01-전체리뉴얼.md`(204줄, v2) Phase 1~5 수행.
+  - Phase 1(메인): `src/layouts/Layout.astro`·`src/pages/briefing/[date].astro` 의 다크모드 토글 버튼·핸들러 삭제. 잔존 파랑/초록 클래스 → 시안 A(`#E63B2E`/`#111111`/`#333333`/`#f7f7f7`)로 교체.
+  - Phase 2(EmDash): `~/projects2/aikorea24emdash/src/styles/tokens.css` 다크모드 `light-dark()` 10종·파랑 `#0066cc`/`#0052a3` 제거, `color-scheme: light`. `Base.astro` head 확인만(누락 0).
+  - Phase 3(퍼널): BREVO-UNSUB 해지 수정 배포·라이브 검증, 구독 폼 엔드투엔드 테스트(테스트 주소 자동 정리).
+  - Phase 5(수익화): `/courses/` 선판매 페이지 + `POST /api/courses/interest` 신규, `course_interest` D1 테이블 생성, 토스페이먼츠 위젯 틀.
+  - Phase 4: 메인 `npm run deploy`(`https://f6d69f2e.aikorea24-4nk.pages.dev`) + EmDash `npm run deploy`(Version `c1050ee0-dc99-4265-ac08-9ef65466ffd0`).
+- **결과**:
+  - **[검증됨]** URL 9종 상태 코드 — `aikorea24.kr/`·`/courses/`·`/subscribe/`·`/sitemap.xml` = 200, `/blog/` = 301, `emdash.aikorea24.kr/`·`/posts`·`/sitemap.xml`·`/rss.xml` = 200.
+  - **[검증됨]** 다크모드 토글 제거 — `grep -rl 'theme-toggle' dist/` = 0건, 라이브 `hasThemeToggle:false`, `htmlClass:'scroll-smooth'`.
+  - **[검증됨]** 메인 홈 시안 A — `bodyBg:'rgb(255,255,255)'`, `blueNavCount:0`, `redNavCount:2`, `heroFont:'Georgia,…serif'`, `heroBorder:'6px rgb(230,59,46)'`, 가로 스크롤 없음(1440=1440).
+  - **[검증됨]** 구독 해지 라이브 동작 — `POST /api/subscribe/` 200 → `POST /api/unsubscribe/` 200. 배포본 `dist/_worker.js/pages/api/unsubscribe.astro.mjs` 에 `method:"DELETE"` 1건·`PUT` 0건, `!response.ok`면 500 반환 코드이므로 200 = Brevo 2xx = 컨택트 실제 삭제.
+  - **[검증됨]** `/courses/` — 200, `h1:'AI 실습 미니 강의 — 사전등록'`, 관심 등록 폼 존재, `tossBtn:false`(키 미설정 = 의도된 폴백).
+  - **[검증됨]** `POST /api/courses/interest/` — 200 `{"ok":true,…}`, `aikorea24-db.course_interest` 에 1행 생성 확인 후 삭제(`COUNT=0`).
+  - **[검증됨]** Brevo API 키 등록 — 신규 계정 Pages 프로젝트 env_vars 에 `BREVO_API_KEY` 존재(값 미열람).
+  - **[부분검증]** `/tools/*` 하위 10개 파일에 오프팔레트 잔존. 지시서 §3-1/§3-2 파일 목록에 없어 손대지 않음.
+  - **[부분검증]** 모바일 390×844 렌더 — Aside `page` 객체에 `setViewportSize` 없어 실기기 뷰포트 확인 불가. 번들 내 `@media` 규칙 존재까지만 확인.
+  - **[검증불가]** 파비콘·마스코트 교체. 원본(`favicon-final.webp`·`mascot-tiger.webp`)이 말랑이 VM `~/workspace/aik24-brand/assets/`에만 있고 Mac에 없음 → **`보류 (원본 미수령, 2026-10-10)`**. 복구: 대표님이 Mac으로 복사 → `public/` 배치 → `<link rel="icon">` 경로 확인.
+- **[위반 감지 — 자기 검증 오류 정정]**: 이전 세션에서 `emdash02_measure.query()` 인자 없이 호출해 기본 DB(`emdash bbbcbc34`) 스키마를 "메인 `users` 스키마"로 잘못 기록했고, 그 잘못 기록이 state.md·완료보고에 남아 있었다. 실제 `aikorea24-db` 의 `users` 는 `id INTEGER PK AUTOINCREMENT, google_id TEXT UNIQUE NOT NULL, email TEXT NOT NULL(unique 아님)…` 이고 `courses`·`enrollments` 테이블은 **존재**한다(`POST /api/courses/enroll/` 200 정상). `interest.ts` 는 이 때문에 1차 배포에서 500(`ON CONFLICT clause does not match any PRIMARY KEY or UNIQUE constraint`)이었고, 전용 테이블 `course_interest` 로 교체해 해결. → **메인 사이트 D1 조회는 항상 `database_id=cfnew.A24_DB` 명시.**
+- **기록 대상 상태**:
+  - `보류 (원본 미수령, 2026-10-10)` — 파비콘·마스코트 (§3-2.4·3-2.5)
+  - `대기 (발송 시각 미확정, 2026-10-10)` — 일일 브리핑 자동 발송 (§5-2.4)
+  - `대기 (본문 미수령, 2026-10-10)` — 환영 시퀀스 4통 (§5-2.5)
+  - 운영 기준 기록(§5-2.6) — `@ai.kr.24` 은 브리핑 1건당 Threads 요약 1건을 **수동 발행**. 자동 발행 구축은 범위 밖.
+- **잔존 위험**:
+  1. Workers Free 10ms CPU 한도(1102) — Workers Paid 전환 금지 지시에 따라 미해결.
+  2. `/tools/*` 하위 10개 파일 오프팔레트 잔존(ToolForm 18·tools/[id] 27·tools/index 48·finder 10·task/[slug] 11·task/index 3·payments 5·submit 1·about 1).
+  3. 메인 `dark:` 클래스 750건 잔존 — `darkMode:'class'` + `.dark` 미부착이라 런타임 미적용. 전수 삭제(diff 750줄) 미수행.
+  4. Brevo IP 화이트리스트 반복 변경 — 로컬 공인 IPv4가 `58.10.247.112` → `110.168.249.241` → `58.11.95.17` 로 3회 변경. 현재 `58.11.95.17` 등록 필요(로컬 Brevo API 401).
+  5. EMDASH-12 `cloudflareEmail()` 플러그인 발송 시 `Hook timeout after 5000ms`(메일은 도착하나 API 응답 500). 매직링크 발송 UX 저하.
+  6. PAT 평문 `/tmp/aik24-pat.txt` — Vault 등록 후 삭제 필요.
+  7. `~/projects2/aikorea24emdash` git 아님.
+  8. EMDASH-12·13 완료보고 미작성 / EMDASH-05·07 보고서 미작성 / PIPE-01 작업2 중단(지시서 전제 거짓, 대표님 선택지 A/B/C 대기).
+  9. `PUBLIC_TOSS_CLIENT_KEY` 미설정 → 결제 버튼 미노출(지시서 §7-3.3 의도대로 가맹 승인 후 교체).
+- **다음 행동**: 대표님 — (1) 파비콘·마스코트 원본 Mac 복사 (2) Brevo 화이트리스트에 `58.11.95.17` 추가 (3) 토스페이먼츠 가맹 신청 후 키 전달 (4) 일일 브리핑 발송 시각·환영 시퀀스 4통 본문 제공 (5) PIPE-01 작업2 선택지 결정.
+- **증거 파일**: `/tmp/r01_b4.log`(빌드), `/tmp/r01_d4.log`(배포), `/tmp/r01_b5.log`, `/tmp/r01_d5.log`, `/tmp/ci3.json`·`/tmp/ci3_out.json`(관심 등록 E2E).
+
+## 2026-10-10 16:33 — AIK24-EMDASH-03 디자인 동기화 (시안 A) — CSS 변수 31개 + 타이틀 빨간 라인, 배포 `226eda73`
+
+- **한 일**: `~/projects2/aikorea24emdash/src/styles/theme.css`(135→187줄)에 시안 A 토큰 추가. (1) tokens.css 미정의로 CSS 폴백(파랑·네이비·녹색)이 노출되던 `:root` 토큰 31개를 흑/백/적/회색으로 정의 (2) `.page-title`·`.article-title` 에 빨간 버티컬 라인 추가 (3) 댓글폼 `.dark` 분기 무력화 (4) `.ec-reaction-icon` 활성색 `#e0245e`→`#E63B2E`. 빌드를 깨뜨리던 EMDASH-12 타임아웃 래퍼 `src/lib/emdash-email.mjs` 삭제하고 `astro.config.mjs` import 를 공식 `@emdash-cms/cloudflare/plugins` 로 복원. 배포 `226eda73-9b1e-47b9-8245-7b79f9e58903`.
+
+- **결과**
+  - [검증됨] 빌드 성공(`Server built in 2.78s`/`Complete!`) / 배포 성공 / 엔드포인트 5개 전부 200(`/` 33,307B, `/posts` 69,186B, `/search` 20,306B, `/sitemap.xml` 393,396B, `/rss.xml` 38,188B)
+  - [검증됨] 빨간 버티컬 라인 3곳 적용 — Aside `getComputedStyle` 결과 `borderLeft: "4px rgb(230, 59, 46)"` (`.page-title`·`.article-title`·`.section-title` 모두), `paddingLeft: 12px`, Georgia serif. `body` computed = `rgb(255,255,255)` 배경 / `rgb(17,17,17)` 텍스트. 홈 가로 스크롤 없음.
+  - [검증됨] CSS 번들 `/_astro/Base.ClvlkJ1-.css`(30,926B) `:root` 블록에 31개 토큰 존재(1,039B). 3색 카운트 증가 — `#e63b2e` 5→9, `#111` 9→13, `#fff` 16→20.
+  - [검증됨] DB 무변경 — `ec_posts` slug 1,460건 sha256[:16] `d2f6c0177bf5fe1e` 기준선 일치.
+  - [부분검증] 오프팔레트 hex 가 번들에 문자열로 잔존(`#0073aa` 8회 등, 변경 전과 개수 동일). 전부 `var(--토큰, 폴백값)` 2번째 인자이고 1번째 인자가 `:root` 에 정의되어 런타임 미사용. "문자열 삭제"가 아니라 "화면 미노출"로 판정.
+  - [검증불가] 모바일 실기기 렌더. Aside 브라우저 `page` 객체에 `setViewportSize`/`viewportSize` 없음(프로토타입 확인). 대신 번들 내 `@media (width<=900px)` 푸터 1열, `(width<=768px)` `.emdash-columns` → `flex-direction:column`, `(width<=640px)` 헤더·갤러리 규칙 존재로 간접 확인. 복구: 대표님 기기 확인 또는 로컬 Playwright.
+
+- **[위반 감지]** EMDASH-12에서 만든 `src/lib/emdash-email.mjs` 래퍼가 `npm run build` 를 깨뜨리고 있었음(`Rolldown failed to resolve import "src/lib/emdash-email.mjs" from "\0virtual:emdash/plugins"`). 지시서 범위 밖이지만 CSS 변경분 빌드·배포의 선행 조건이라 함께 처리. 부수 효과로 EMDASH-12 `POST /_emdash/api/settings/email` 500(`Hook timeout after 5000ms`)의 원인 래퍼가 제거됨 — 재발송 테스트는 미실행.
+
+- **잔존 위험** 10건 (보고서 §6 참조). 핵심: ① 모바일 실기기 미확인 ② 오프팔레트 hex 문자열 번들 잔존(폴백이라 미사용) ③ EMDASH-12/13 보고서·state 기록 미작성 ④ **BREVO-UNSUB 구독 해지 수정 미배포**(신규 계정이 `aikorea24.kr` zone `71a21534…` + Pages 프로젝트 `aikorea24` 소유 확인 → 배포 가능 상태, 라이브는 아직 무효 `PUT`) ⑤ Workers Free 10ms CPU 한도 ⑥ 패스키 `singleDevice`+`backed_up:0` ⑦ PAT 평문 `/tmp/aik24-pat.txt` ⑧ 프로젝트가 git 아님 ⑨ `src/lib/og-image.ts` DEFAULTS 에 `bgColor:#0d0d0d`·`brandColor:#0066cc` 잔존(호출부 부재로 번들에 미포함) ⑩ Cloudflare Email Routing API 조회 불가(토큰 권한).
+
+- **다음 행동** ① EMDASH-12 보고서 + state 기록 ② BREVO-UNSUB 해지 수정 배포 ③ EMDASH-12 테스트 발송 재실행으로 500 해소 확인 ④ 대표님 모바일 확인 ⑤ 미처리 지시서 EMDASH-05(로드맵 성격)/EMDASH-07(实质 완료, 보고서만 없음)
+
+## 2026-10-10 13:54 — AIK24-EMDASH-12 지시서 작성 + PAT Vault 등록 완료
+
+- EMDASH-12 (이메일 제공자 설정) 지시서 작성: Resend 권장, 매직링크 로그인용
+- 대표님이 새 PAT를 Secure Vault에 등록 완료 (custom.emdash-aikorea24)
+- Admin 이메일: info@aikorea24.kr 확정
+- 다음: PAT로 글 작성 테스트 → EmDash 글쓰기 스킬 생성
+
+## 2026-10-10 15:31 — AIK24-EMDASH-11 PAT 발급(CLI 경유): 기존 폐기 + 신규 발급 + MCP 200 검증
+
+**한 일**
+
+기존 emDash PAT 폐기 → 신규 PAT 발급(D1 직접 경로, 관리자 UI 로그인 불필요) → MCP 엔드포인트 검증 → 토큰 파일 전달 준비.
+
+Admin UI 로그인이 불가한 상태(메일 제공자 미설정 `{"available":false,"providers":[]}` + 패스키 OTP 미등록)이므로 지시서 §2 "방법 B(D1 직접)" 채택. `emdash` CLI虽有 `node_modules/.bin/emdash` 있으나 인증 없이 D1 경로가 더 짧아 파이썬 재현으로 처리.
+
+**결과**
+
+[검증됨]
+
+| 항목 | 값 | 근거 |
+|---|---|---|
+| 기존 PAT 폐기 | 완료 | `_emdash_api_tokens` 행 1건(`id=01M4HKX4HAARE21HN4C3HSJANG`, `name=aikorea24`, `prefix=ec_pat_6ONI`) DELETE → 잔여 조회에서 부재 |
+| 신규 PAT 발급 | 완료 | `id=01M4J84GEN00000000000002X7`, `name=muse-agent-2026-10-10`, `prefix=ec_pat_1D3a`, `user_id=01M4HKV7ZCNZZ11DN43Q5J4WCT`(info@aikorea24.kr) |
+| MCP `initialize` | **HTTP 200** | `{"result":{"protocolVersion":"2025-06-18","capabilities":{"logging":{},"tools":{"listChanged":true}},"serverInfo":{"name":"emdash","version":"0.1.0"}}}` |
+| MCP `tools/list` | **HTTP 200** | 첫 도구 `content_list` 반환 확인 |
+| 인증 실사용 흔적 | `last_used_at=2026-10-10T06:31:18.992Z` | `resolveApiToken()` 이 성공 시 갱신 |
+| 토큰 파일 | `/tmp/aik24-pat.txt` mode `0600`, 51 bytes | `stat -f '%Sp'` → `-rw-------` |
+| 평문 유출 | 0건 | `grep -rl 'ec_pat_1D3a' ~/Projects/aikorea24` → 결과 없음 |
+| 워커 배포 | 변경 없음 | D1 직접 SQL만. `wrangler deploy` 미실행 |
+
+[부분검증] — 지시서 §4 예시 명령(`params:{}`)은 `-32603 (expected string, path params.protocolVersion)` 반환. 지시서 예시 재사용 시 실패. `protocolVersion`/`capabilities`/`clientInfo` 채워 재호출해 200 확인.
+
+[검증불가] — MCP 실제 도구 호출(`content_list` 실행)은 미수행. 도구 목록 조회까지만. 복구: 신규 PAT 로 `content_list` 1회 호출.
+
+**토큰 알고리즘 재현 검증** [검증됨]
+정본 소스 `@emdash-cms/auth@0.38.0/dist/authenticate-BmzDlWK2.mjs`: `TOKEN_BYTES=32`, `raw = prefix + base64url_nopad(random32)`, `hash = base64url_nopad(sha256(raw))`, `prefix = raw.slice(0, len(prefix)+4)`.
+기존 PAT 문자열로 재계산 → `EShsLiC4Cow4Umim0ky2bRRmr7Q7OBva9SPesNQHUzQ` = DB `token_hash` 와 일치 → 파이썬 재현이 서버와 동일함 확인 후 발급에 사용.
+
+**코드 변경**
+
+| 파일 | 구분 | 내용 |
+|---|---|---|
+| `scripts/emdash11_pat.py` | 신규 (PRODUCTION) | PAT 회전 스크립트. 발급 → MCP 검증(실패 시 신규 행 롤백) → 기존 폐기 → 파일 저장. 토큰 평문은 stdout/로그/소스 미기록 |
+| `_emdash_api_tokens` | DB | INSERT 1행 / DELETE 1행 / 자동 UPDATE 1행(`last_used_at`) |
+
+**잔존 위험**
+1. **[최우선] 토큰이 `/tmp/aik24-pat.txt` 에 평문 존재** — Secure Vault 등록 확인 후 삭제 필요. macOS 전영 암호화 디스크라 로그인 사용자만 읽음.
+2. **기존 PAT 폐기 = 복구 불가** — 유실 시 Admin UI 로그인(불가) + MCP 접근 모두 차단. 재발급은 D1 직접 INSERT로만.
+3. **PAT 만료 없음** (`expires_at=NULL`) — 영구 유효. 회전 절차가 유일 방어선.
+4. **Admin UI 로그인 여전히 불가** — 메일 제공자 플러그인 미설정.
+5. **패스키는 다른 호스트에서 사용 불가** — RP ID 고정. `emdash.aikorea24.kr` 패스키는 `l2t-emdash.twinssn.workers.dev` 에서 동작 안 함.
+6. **MCP 경유 쓰기 시 CPU 1102 위험** — Workers Free 10ms. 콘텐츠 쓰기는 기존처럼 D1 직접 SQL 유지 권장.
+7. **`_emdash_api_tokens` 1행만 존재** — dev-bypass 등 자동 발급 토큰 없음.
+
+**다음 행동**
+1. 대표님: `cat /tmp/aik24-pat.txt` → Secure Vault 등록(권장 `aikorea24 / emdash / PAT`, 이름 `muse-agent-2026-10-10`) → 등록 완료 보고
+2. 등록 확인 후 `/tmp/aik24-pat.txt` 삭제(`rm -P`)
+3. MCP 실제 도구 호출 1회 검증 → [검증불가] 해소
+4. Admin UI 로그인 별건 — 메일 제공자 플러그인 설치 또는 패스키 재등록 절차
+5. starclip hugh79757 계정 이전 — 착수 전 destructive-operations-protocol 4단계 계획 필요
+
+**산출 파일**
+- `~/Projects/aikorea24/scripts/emdash11_pat.py` (신규)
+- `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1531-AIK24-EMDASH-11-완료보고.md` (7개 섹션)
+
+---
+
+## 2026-10-10 13:50 — AIK24-BREVO-UNSUB 구독 해지 무효 버그 수정(코드·빌드 완료, 배포 차단)
+
+**한 일**
+- `src/pages/api/unsubscribe.ts` 의 해지 로직을 `PUT /v3/contacts/{email}` (`listIds: []`) → `DELETE /v3/contacts/{email}` 로 교체. 미사용이 된 `BREVO_LIST_ID` 지역변수(L8) 제거.
+- Brevo 계정 자체 실측(API 키 화이트리스트 등록 후): free 플랜 300통/일, 리스트 1개(id=2), 컨택트 8명.
+
+**결과**
+- [검증됨] 기존 코드의 `PUT listIds:[]` 는 **HTTP 204 를 반환하면서 실제 리스트에서 제거하지 않음**. 3회 반복 재현: `POST /api/unsubscribe/` 200 → `GET /v3/contacts/{id}` → `listIds: [2]` 잔존. 즉 사용자에게 "해지 완료"를 안내하지만 newsletters 발송 대상에 그대로 남음.
+- [검증됨] 문서상 정답 `DELETE /v3/contacts/{id}/lists/{listId}` 는 이 계정에서 **404 `Invalid route/method passed`** (컨택트 생존 상태에서 2회 확인). 계정 free 플랜 제약으로 추정, 미확정.
+- [검증됨] `DELETE /v3/contacts/{email}` 는 204 반환 후 컨택트 완전 삭제 확인. 신규 코드가 만드는 호출을 그대로 재현해 검증함.
+- [검증됨] `npm run build` 성공 (`Server built in 12.10s`, `Complete!`).
+- [검증불가] **Worker egress 에서 신규 코드가 동작하는지** — 배포 불가로 라이브 검증 못 함. 복구: 출발 계정 Pages 프로젝트로 배포(규칙상 금지) 또는 계정 이전 후.
+
+**★ 배포 차단 사유 (중요)**
+- `aikorea24.kr` zone은 **출발 계정 소유**. 근거 3중: ① 신규 계정 `7eb1b8cd` `GET /zones` → 0건 ② `.env` 의 `CLOUDFLARE_ZONE_ID=a6d9e750…` 를 신규 토큰으로 조회 → `code 9109 Unauthorized` ③ 신규 계정 Pages 프로젝트 `aikorea24`(`24f70480…`) = 배포 0건·env_vars 0개.
+- 따라서 `scripts/deploy.sh` 를 돌리면 `aikorea24-4nk.pages.dev` 에 배포되고 **aikorea24.kr 은 갱신되지 않음**. 실제로 실행하지 않음.
+- 출발 계정 접근은 세션 금지 규칙에 걸림 → 대표님 승인 없이는 배포 불가.
+
+**DB·인스턴스 변경**
+- Brevo: 테스트 주소 3건 생성 후 전량 삭제. 최종 컨택트 8명(`yenakim@sk.com`, `yenarchivist@gmail.com`, `verify-test@aikorea24.kr`, `test-hugh@example.com`, `sample@email.tst`, `twinssn@gmail.com`, `jinyeon_cho@hotmail.com`, `hugh79757@gmail.com`) — 테스트 주소 0건.
+- Cloudflare: 없음(읽기 전용 조회만).
+
+**잔존 위험**
+1. **해지 수정은 미배포** — 라이브는 여전히 PUT(listIds:[])라 200만 반환하고 실제 미해지. 스팸/csrf 노출 지속.
+2. 해지가 컨택트 완전 삭제로 구현됨 — `src/pages/api/courses/enroll.ts` 도 같은 리스트 2 + 태그(`course-enrolled-*`)를 쓰므로, 구독 해지 시 코스 태그도 함께 소멸. 코스의 권위 데이터는 D1 `enrollments` 테이블이라 기능 영향은 없으나 태그 기록은 사라짐. (free 플랜·구독자 8명 상태라 현실 영향 무시 가능)
+3. 신규 계정 Pages 프로젝트 시크릿 0개 — 마이그레이션 시 Brevo·Google OAuth·SESSION 전부 500.
+4. `BREVO_LIST_ID` env 미설정 여부 판별 불가 — `src/pages/api/subscribe.ts:34` 와 `courses/enroll.ts` 의 `Number(x || 2)` fallback이 위장. 코드 관례상 값=2라 동작에는 지장 없음.
+5. Brevo `/v3/lists` 엔드포인트가 이 계정에서 404 — 리스트 메타·구독자 수 조회 불가.
+6. Brevo IP 화이트리스트에 현재 공인 IPv4(`58.10.247.112`) 등록됨. IP 변경 시 재등록 필요(오늘만 110.168.249.241 → 58.10.247.112 로 2회 변경).
+7. 라이브 `POST /api/subscribe`(슬래시 없음)는 308 → `/api/subscribe/`. 내부 폼은 슬래시 경유라 정상.
+
+**다음 행동**
+- 대표님 결정 필요: ① 출발 계정 접근 허용 후 배포 ② 신규 계정으로 zone 이전 후 배포 ③ 해지 버그를 임시로 감춤(500 반환이라도 정직하게).
+- 신규 계정 프로젝트 선행 등록 시 시크릿 목록: `SESSION_SECRET`, `BREVO_API_KEY`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, plain `account_id`.
+
+---
+
+## 2026-10-10 13:37 — AIK24-PIPE-01 블로그 파이프라인 전환 (작업1·3 완료, 작업2 중단)
+
+**한 일**
+- 작업1: `scripts/weekly_blog_publisher.py`에 `_publish_to_emdash()` 추가 — 신규 글을 EmDash D1 `ec_posts`에 직접 INSERT(revisions + ec_posts + content_taxonomies 3 statement). `EMDASH_PUBLISH=1` 환경변수로 게이트, 미설정 시 기존 동작 100% 유지.
+- 작업3: `naver_blog/publish_blog.py` L25 `POST_URL` 상수 추가, L135·L250을 `{POST_URL}/posts/{slug}`로 변경.
+- 작업2: **중단.** 백업 `backups/blog-2026-10-10.zip`(4.4MB)만 수행.
+
+**결과**
+- [검증됨] 발행 경로 동작 — 로그 `emdash_published: …/posts/pipe-01-파이프라인-d1-발행-경로-테스트 (rowsWritten=32)`, DB `status=published/locale=en/version=2`, FTS 1행, 라이브 `GET /posts/<slug>` **200 / 31,944B**.
+- [검증됨] 테스트 행 정리 후 기준선 복원 — `n=1460`, `sha256[:16]=d2f6c0177bf5fe1e` **MATCH**, `residual: []`.
+- [검증됨] 기존 테스트 `pytest tests/test_weekly_blog_publisher.py -q` → **12 passed**. 테스트 코드 수정 없음.
+- [검증됨] 로컬 md 1,460건(테스트 파일 제거 후), DB↔로컬 제목 집합 **1,459/1,459 완전 일치**(고유 제목 1,459 — 중복 1쌍).
+- [검증불가] 기존 1,460건 중 **715건**의 로컬 파일명 슬러그 ≠ emDash slug(날짜 prefix 제거로 744건만 해결). 리다이렉트 도입 시 slug 매핑 테이블 필요.
+
+**[위반 감지] 작업2 중단 사유 — 지시서 전제 오류**
+지시서 "`/blog/*` → `emdash.aikorea24.kr/posts/` 리다이렉트 적용됨"은 **거짓**. 실측: `/blog/_temp-002/` → **200**(프리렌더 페이지 정상), emDash slug URL → 404. `aikorea24.kr`은 `src/content/blog`을 `prerender=true`로 정적 생성 중.
+삭제 시 blog 컬렉션 소비자 **8개 파일**(`blog/[...id]`, `blog/[...page]`, `blog/category/[cat]/[...page]`, `index.astro`, `sitemap-blog.xml.ts`, `rss.xml.ts`, `api/search.ts`, `api/home-content.ts`)이 깨지고 `/blog/<파일슬러그>/` **1,460개 URL 전부 404** → 지시서 "색인된 콘텐츠 손실 금지" 위반.
+또한 컬렉션 정의는 `src/content/config.ts`가 아니라 **`src/content.config.ts:4-15`**.
+
+**변경 파일**
+- `scripts/weekly_blog_publisher.py` (PRODUCTION CODE, 193→261줄)
+- `naver_blog/publish_blog.py` (PRODUCTION CODE, 3곳)
+- `backups/blog-2026-10-10.zip` (산출물)
+
+**DB 변경**
+- 테스트 1행 INSERT→DELETE만. 현재 `ec_posts` 1,460행(해시 기준선 일치). Workers Free 10ms CPU 한도 회피 위해 D1 직접 SQL만 사용.
+
+**잔존 위험**
+1. 작업2 미실행 — `src/content/blog` 1,460건 잔존, 대표님 승인 대기
+2. 기존 715건 slug 불일치 (지시서 유보 항목)
+3. 네이버 발행기 휴면 — `publish_blog.py:22 BLOG_DIR=src/content/blog`. 작업2 실행 시 `get_all_posts()` 빈 리스트 → 발행 0건. 현재 `.plist.disabled`, 로그 mtime 9월 10일
+4. 제목 중복 1쌍 (사유 미확인) / `revisions` 고아 496행 (출처 미확정)
+5. `rowsWritten` emdash-db 84,075/100,000 — 여유 15,925행
+6. Workers Free 10ms CPU 한도 잔존 / PAT 회전 미확인 (EMDASH-02 잔존)
+
+**다음 행동 (승인 필요)**
+A. 지시서대로 삭제만 → 1,460 URL 404 (권고 안 함)
+B. **리다이렉트 먼저 → 삭제 (권고)**: slug_map.json 생성(제목 기준) → `blog/[...id].astro` 301 → 목록·카테고리 리다이렉트 → rss/sitemap blog 항목 제거 → 검색·홈 API 정리 → config 삭제 → 삭제 → 빌드·배포
+C. 작업2 보류
+
+보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1337-AIK24-PIPE-01-완료보고.md`
+
+---
+
+## 2026-10-10 11:10 — AIK24-D1-VERIFY-01 신규 계정 D1 한도 사전 점검 2건 (NETWORK_KEY 도입 + news 인덱스 확인)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1100-AIK24-D1-VERIFY-01.md`
+대상 계정: `7eb1b8cd178de269758ec94b2e03330b` (신규). 인증 토큰 = `CF_MIGRATE_TOKEN` (`~/.env.common`). 구 계정(hugh79757) 리소스 변경 0건.
+
+### 한 일
+1. **작업 1** `/api/network/refresh` — `NETWORK_KEY` 미설정 상태 확인 → 64자 키 생성(값 미기록) → Pages 신규 계정 프로젝트 `aikorea24` 시크릿 등록 → Pages 배포 1회(Direct Upload라 시크릿은 리데ploy 없이 미반영) → launchd `com.aikorea24.network-refresh` plist에 `?key=` 적용 + 권한 600 + 재적재 → 401/200 테스트.
+2. **작업 2** 신규 D1 `aikorea24-db` — D1 import 완료 확인(`news` 17,881행) + `idx_news_created` 이미 존재 → `EXPLAIN QUERY PLAN` 에서 `SCAN news USING INDEX idx_news_created` 확인 → **인덱스 추가 0건**.
+
+### 결과
+**[검증됨]**
+- [작업1] 시크릿 등록 전 실측: 키 없이 `GET /api/network/refresh/` → **HTTP 200** (`total 106, success 50, failed 56`). `src/pages/api/network/refresh.ts:100` `if (env.NETWORK_KEY && key !== env.NETWORK_KEY)` 이 시크릿 부재 시 검사를 통째로 건너뛰는 코드 경로 확인.
+- [작업1] 배포 후 실측: 키 없음 → **HTTP 401** `{"error":"Unauthorized"}`, 오답 키 → **HTTP 401**, 정상 키 → **HTTP 200** `total 106 / success 50 / failed 56`.
+- [작업1] 크론 실동작: `launchctl kickstart` 후 `launchctl list` 마지막 종료코드 **0**, `/tmp/network-refresh.log` 0바이트(curl `-s -o /dev/null` 정상 동작), D1 `network_cache` `MAX(fetched_at)` = `2026-10-10 04:05:18` UTC = 실행 시각 11:05 KST와 일치(총 347행).
+- [작업1] 스케줄 무변경: `launchctl print` → Hour 6 / Hour 18, Minute 0 유지.
+- [작업1] 배포 무회귀: `/` 200/59,360B · `/news` 301/292B · `/api/network/` 404/22,216B · `/blog` 308/0B — **배포 전후 바이트 동일**.
+- [작업2] 신규 D1 `aikorea24-db`(id `3f4cedde-eabc-4d7c-b459-f6abe8733767`) `news` 17,881행, `idx_news_created` = `CREATE INDEX idx_news_created ON news(created_at DESC)`.
+- [작업2] 실행계획: `SCAN news USING INDEX idx_news_created` + `USE TEMP B-TREE FOR LAST TERM OF ORDER BY`.
+- [작업2] D1 쓰기 **0건** (전부 SELECT). `CREATE INDEX` 실행 0건.
+- 코드 변경 **0건**. 커밋 0건.
+
+**[부분검증]**
+- 실행계획의 `USE TEMP B-TREE FOR LAST TERM OF ORDER BY` — `ORDER BY created_at DESC, id DESC` 에서 `id` 보조 정렬 때문에 인덱스만으로는 정렬이 끝나지 않는다. 행수 제한(500) 덕에 실측 비용은 작으나, 지시서가 전제한 "500행만 읽음"과는 거리가 있다. 뉴스 17,881행 규모에서는 무시 가능.
+- 크론 1회 쓰기량: `network_feeds` 106건 중 성공 50건 → 대략 50 DELETE + 50×≤5 INSERT ≈ 300행. 지시서 추정 750행과 불일치(측정 기반).
+
+**[검증불가]**
+- 지시서의 "133회/일" 전제. `com.aikorea24.network-refresh` 스케줄은 06:00·18:00 **2회/일**이고 저장소·LaunchAgents 전수 grep에서 호출자 1건(해당 plist)만 확인. 133회/일 출처 미상 — 복구 계획: 10만 행 한도 도달 시 D1 `meta` rows_written 대조로 호출 횟수 역추적.
+- 다른 계정(hugh79757) 동일 엔드포인트 상태. 구 계정 리소스 변경 금지 지시에 따라 조회만, 미실시.
+
+### 변경 대상 · 원복
+| 대상 | 변경 | 원복 |
+|---|---|---|
+| Pages `aikorea24` 시크릿 `NETWORK_KEY` | 신규 등록 | `wrangler pages secret delete NETWORK_KEY` |
+| Pages 배포 `d0fe37c5` → `a5a94ff2` | 동일 `dist` 재업로드(시크릿 반영) | `wrangler pages deployment rollback --project-name aikorea24 d0fe37c5-201d-4f53-bfe4-e93a811e86ee` |
+| `~/Library/LaunchAgents/com.aikorea24.network-refresh.plist` | URL에 `?key=` 추가, 권한 600 | `.bak.20261010_pre_networkkey` 복사 후 재적재 |
+| D1 | 없음 | — |
+
+### 잔존 위험 8건
+1. **`NETWORK_KEY` 평문 2곳 존재** — Pages 시크릿 저장소 + `~/Library/LaunchAgents/com.aikorea24.network-refresh.plist`(권한 600으로 완화). plist 백업 `.bak.20261010_pre_networkkey`은 키 없는 원본이라 노출 없음. 키 원문은 리포트·state.md·채팅 어디에도 기록하지 않음.
+2. **갱신 절차 부재** — 키를 모르면 크론 복구 불가(백업 plist에 키 없음). 갱신 시 2곳(시크릿·plist) 동시 변경 필수.
+3. **`failed 56/106`** — RSS 56개가 실패(`Too many subrequests by single Worker invocation` 포함). 기존 상태이며 이번 작업과 무관. 원인은 Workers Free 서브리퀘스트 한도.
+4. **`USE TEMP B-TREE`** — `id DESC` 보조 정렬. 규모 커지면 `CREATE INDEX ... ON news(created_at DESC, id DESC)` 필요.
+5. **`_headers`/`_redirects` 284MB `dist`** — Pages 배포 단위 284MB. 업로드 1회 3분 소요.
+6. **직접 업로드 방식** — 시크릿·바인딩 변경이 매번 리데ploy를 요구. `git push` 연동 빌드로 전환하지 않으면 이 갭이 반복됨.
+7. **지시서 133회/일 vs 실제 2회/일 불일치** — 원인 미상(위 [검증불가]).
+8. **EMDASH-10 잔존 11건** 이월(Workers Free 10ms CPU 근본 미해결 / admin UI 미확인 / PAT 회전 미확인 등).
+
+### 다음 행동
+1. `NETWORK_KEY` 회전 주기 정하기(90일 권장) — 회전 시 시크릿·plist 동시 갱신
+2. RSS `failed 56` 원인 정리(Workers Free 서브리퀘스트 한도 → 배치 분할)
+3. Pages 자동 빌드 연동 검토(리데ploy 갭 제거)
+4. 이전 지시서 잔존: Workers Paid 전환 결정 / PAT 회전 / `posts/index.astro` 수동 되돌림
+
+### 관련
+완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1110-AIK24-D1-VERIFY-01-완료보고.md`
+
+---
+## 2026-10-10 12:45 — AIK24-EMDASH-10 이미지 수정 완료 (방안 B 절대 URL) + /posts 목록 1102 수정
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-AIK24-EMDASH-10-이미지수정.md`
+
+### 한 일
+`featured_image` 1,415행을 절대 URL MediaValue로 정규화(DB UPDATE 1회로 해결 — R2 복사 불필요). 검증 중 발견한 `/posts` 목록 503(1102)도 수정. 신규 스크립트 `scripts/emdash10_images.py`.
+
+### 결과
+**[검증됨]**
+- D1 `featured_image`: 1,416건 전량 파싱 가능 JSON + `https://aikorea24.kr/` 절대 src
+- 홈 `/`: `<img>` 10개 전부 절대 URL, 상대 0건
+- 상세 무작위 10건(random.seed(7)): hero 10/10, 절대 src 10/10
+- `/posts`: 5회 연속 200 / 69,006B / 60개 (limit 60 적용으로 1102 해소)
+- DB slug 무변경: n=1460 sha256[:16] `d2f6c0177bf5fe1e` MATCH (EMDASH-09 기준선)
+- 회귀 없음: `/` `/posts` `/sitemap.xml` `/rss.xml` `/search` 전부 200
+- `rowsWritten` 79,738 / 100,000
+
+**[부분검증]** 원본 이미지 HTTP 200은 무작위 5건만 확인(1,416건 전수 미검증).
+**[검증불가]** admin UI 썸네일 표시 — PAT으로 admin 화면 미조작.
+
+### 원인 2건
+1. 이미지: EMDASH-06/08 SQL 경로가 `featured_image`에 경로 문자열만 저장 → `getImageUrl()`가 `emdash.aikorea24.kr` 도메인으로 조립 → 404
+2. `/posts` 503: `posts/index.astro`가 limit 없이 `getEmDashCollection` 호출 → 1,460건 전량 hydrate → Workers Free 10ms CPU 초과(1102). 성공 시 HTML 1.1MB
+
+### 변경 파일
+- `~/projects2/aikorea24emdash/src/pages/posts/index.astro` — `limit: 60` + 제목 "Latest Posts"
+- `scripts/emdash10_images.py` (신규)
+- 배포 버전 `674566f8-9cf0-4c03-a470-1b2d7054f437` (직전 `5be7ac05`, `d0907dbf`)
+
+### DB·인스턴스 변경
+| 대상 | 변경 | 원복 |
+|---|---|---|
+| `ec_posts.featured_image` | 1,415행 UPDATE | 목표 상태. raw 경로로 재변환 가능 |
+| 워커 3회 deploy | 이전 버전 rollback 가능 | |
+| `posts/index.astro` | 수동 되돌림 필요 (git 아님) | |
+
+### 잔존 위험 11건
+Workers Free 10ms 한도(근본 미해결) / admin UI 미확인[검증불가] / 원본 이미지 전수 미검증[부분검증] / `/posts` 카드가 ULID로 링크(slug URL 아님) / `/posts` 카드 이미지 미표시(기존 설계) / `options` 테이블 0행 → RSS description 공백 / `/rss.xml` `//` 이중 슬래시(기존 동작) / Workers Paid 미전환 / `_emdash_media_usage_sources` 미적재 / `audit_logs` 0행 / PAT 회전 미확인
+
+### 다음 행동
+1. admin UI 썸네일 육안 확인
+2. Workers Paid 전환 결정
+3. `/posts` 페이지네이션 (500건 이상 시)
+4. `options` 테이블에 `site:title`/`site:tagline` 등록
+5. PAT 회전
+
+### 작업 중 발견한 함정 (재사용 가치)
+- D1 REST SQL은 `json_set()`/`json_extract()`를 다른 표현식과 섞으면 SQLITE_ERROR(7500) — 값 계산은 파이썬에서
+- **Astro는 `.astro`를 항상 HTML로 렌더** — `export const GET` 무시됨. 엔드포인트는 `.ts`로
+- `options` 테이블 PK 컬럼은 `name` (`key` 아님)
+- curl + 한글 slug는 `urllib.parse.quote()` 필수 (수작업 인코딩은 302→404)
+
+### 관련
+완료보고: `SSOT/…/2026-10-10-1245-AIK24-EMDASH-10-완료보고.md`
+
+---
+## 2026-10-10 12:33 — AIK24-EMDASH-09 라우팅/사이트맵 수정 완료 (sitemap·rss 엔드포인트 전환, slug 무변경)
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-AIK24-EMDASH-09-라우팅수정.md`
+배포 워커 버전 `5be7ac05-f797-44d8-bf58-652a9c3f2809`
+
+### 한 일
+`/sitemap.xml` 빈 출력 원인 확정 → `.astro` → `.ts` 엔드포인트 전환 + D1 직접 조회. 동일 원인인 `/rss.xml`도 함께 수정. `wrangler.jsonc`에 없던 `IMAGES`/`ASSETS` 바인딩 추가(배포 소실 방지). **DB 무변경.**
+
+### ★ 근본 원인
+Astro는 `.astro` 파일을 **항상 HTML 페이지**로 렌더한다. 안에 `export const GET: APIRoute` 가 있어도 무시되어 **빈 HTML 문서**를 반환한다. `sitemap.xml.astro`·`rss.xml.astro` 모두 이 구조였고 실제로 `200 / 0바이트 / text/html` 이었다. (지시서가 말한 "사이트맵이 비어 있음"이 이 케이스.)
+2차 증상은 `getEmDashCollection("posts", limit:1000)`이 limit 적용 전 1,460건 전량 hydrate → Workers Free 10ms CPU 초과(1102). `fields`/`select` projection 옵션이 emDash에 없어 경량 조회 수단 없음.
+
+### 결과 (3분법)
+**[검증됨]**
+- `/posts/<slug>` 무작위 10건 **10/10 → 200** (35~40KB, `random.seed(11)`)
+- `/sitemap.xml` **200 / 353,922B / `application/xml`**, `<loc>` **1,462**개(포스트 1,460 + `/` + `/search`), 3회 연속 동일
+- **DB slug 무변경** — `sorted(slug)` 1,460건 sha256[:16] = `d2f6c0177bf5fe1e`, 수정 전 기준선과 **MATCH**
+- `/rss.xml` **200 / 38,188B / `application/rss+xml`**, `<item>` 50개
+- `/` 200 32,927B, `/search` 200 20,126B (회귀 없음)
+- rowsWritten 74,020 / 100,000
+
+**[부분검증]** RSS `<link>` 슬래시 2개(`//posts/`) — 원본 코드의 기존 동작, 이번 회귀 아님. `options` 0행이라 title/tagline은 코드 fallback 사용.
+
+**[검증불가]** RSS 피드 유효성(리더 측 파싱). 복구: GSC/피드 리더 제출 후 확인.
+
+### 변경 파일
+`src/pages/sitemap.xml.astro` 삭제 → `sitemap.xml.ts` 신규 / `src/pages/rss.xml.astro` 삭제 → `rss.xml.ts` 신규 / `wrangler.jsonc`에 `images`/`assets` 바인딩 추가.
+
+★ 함정: `options` 테이블 컬럼은 **`name`** (`key` 아님). 첫 구현이 `key` 로 써서 `/rss.xml` 500 발생 → 교체.
+
+### DB 변경
+없음.
+
+### 잔존 위험
+1. Workers Free 10ms CPU 한도 — `getEmDashCollection` 계열 페이지(카테고리/태그/검색) 아직 동일 패턴
+2. `options` 테이블 0행 — 사이트 타이틀/태그라인 fallback 사용
+3. RSS `<link>` 슬래시 2개 (기존 동작)
+4. PAT 회전 미확인 (EMDASH-02 잔존)
+5. `_emdash_media_usage_sources`/`audit_logs` 미적재 — Workers Paid 전환 시 media-usage repair 필요
+6. `~/projects2/aikorea24emdash` git 아님 — 변경 이력 추적 불가
+7. RSS 피드 유효성 미검증
+8. `featured_image` 문자열 저장 (EMDASH-06 잔존)
+9. 마크다운 표·중첩 인용 PT 손실 (EMDASH-04 잔존)
+10. blog 42건 category 없음 → taxonomy 미연결
+
+### 다음 행동
+1. sitemap.xml GSC 제출
+2. Workers Paid 전환 여부 결정
+3. EMDASH-03(디자인 동기화) 착수 — `tokens.css` 현재 파란 계열+다크모드로 지시서 요구(흑·백·적 3색, 라이트 전용)와 불일치
+4. `~/projects2/aikorea24emdash` git 초기화 검토
+
+완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1233-AIK24-EMDASH-09-완료보고.md`
+
+---
+
+## 2026-10-10 13:15 — AIK24-EMDASH-08 Phase2 Day2: 소스 1,948건 전량 D1 SQL 적재 완료
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-AIK24-EMDASH-08-Day2.md`
+
+### 한 일
+Workers Free CPU 10ms 한도(EMDASH-04 1102)를 D1 REST SQL 직접 경로로 우회. blog 1,460 / tools 362 / chronicle 71 / glossary 55 = **1,948건 전량 적재**. 신규 스크립트 `scripts/emdash08_{tools,schema,cg}.py`.
+
+### 결과
+**[검증됨]** (D1 REST SQL `query()` 실측)
+
+| 항목 | 값 | 근거 |
+|---|---|---|
+| `ec_posts` | 1,460 (orphan 0) | `COUNT(*)` / `WHERE live_revision_id IS NULL` |
+| `ec_tools` | 362 (orphan 0) | 동일 |
+| `ec_chronicle` | 71 (orphan 0) | 동일 |
+| `ec_glossary` | 55 (orphan 0) | 동일 |
+| `rowsWritten` | **70,042 / 100,000** (aikorea24-db 29 별도) | `analytics_written()` |
+| 잔여 여유 | 29,958행 | 100,000 − 70,042 |
+| 무작위 10건 | **10/10 published_at 일치** | `random.seed(7)`, ±120s 허용 |
+| status | 전 테이블 published / draft 0 | `GROUP BY status` |
+| `ec_pages` probe | 0행 (정리 완료) | `SELECT COUNT(*)` |
+| taxonomy `zzspeedtest` | 0건 (정리 완료) | 동일 |
+
+**[부분검증]** admin UI·공개 페이지 렌더 미확인. `/posts/<slug>` 302→404 상태(EMDASH-04 잔존).
+
+**[검증불가]** `audit_logs` 0행, `_emdash_media_usage_sources` 미적재 — SQL 경로가 워커 후처리를 타지 않음. 복구: Workers Paid 전환 후 `POST /_emdash/api/admin/media-usage/repair`.
+
+### 핵심 교훈
+1. **SQL 경로 `published_at`은 UTC 정규화 필수** — KST 문자열 직저장 시 하루씩 어긋남. blog 무작위 10건 중 3건 발견 → `emdash06_direct.now_iso()`로 통일 후 10/10 일치.
+2. **Worker API도 1102** — Idle 후 1회는 201@2.5s, 연속 쓰기는 503@0.56s. **1회 호출 + 25초 대기 루프**로 스키마 신설만 처리, 데이터는 전량 SQL 경로.
+
+### DB·인스턴스 변경
+- `ec_chronicle` / `ec_glossary` 컬렉션 신설(Worker API, 각 1회 호출)
+- probe 정리: `ec_pages` 8행, `speedtest-tool-1/2` + `probe-tool` 3행(+revisions 27행), taxonomy `zzspeedtest` 1건 → **모두 삭제 완료**
+- Worker 배포 0건, `wrangler.jsonc` 무수정, Workers Free 유지
+
+### 잔존 위험 (12건 — 보고서 §5 전문)
+공개 라우팅 404 / `audit_logs` 0행 / `_emdash_media_usage_sources` 미적재 / Workers Free CPU 10ms / `featured_image` 문자열 저장 / 마크다운 표 손실 / tag taxonomy 미이관 / chronicle·glossary taxonomy 연결 불가(`_emdash_taxonomy_defs.collections`=`["posts"]`) / PAT 회전 미확인 / D1 DB id 하드코딩 7곳 / **`wrangler.jsonc`에 `IMAGES`·`ASSETS` 바인딩 없음 — 이 파일로 `wrangler deploy` 금지**
+
+### 다음 행동
+1. **AIK24-EMDASH-03** 디자인 동기화 — 미착수. `tokens.css`가 파란색+다크모드 defaults라 지시서 요구(흑·백·적 3색 `#111/#fff/#E63B2E`, 라이트 전용, 세리프 헤드라인)와 불일치. 배포 방식 확정 필요.
+2. 공개 라우팅 `/posts/<slug>` 404 해결
+3. Workers Paid 전환 여부 — 대표님 결정
+4. 미처리 지시서: `2026-10-10-AIK24-EMDASH-05-전체계획.md`, `2026-10-10-AIK24-EMDASH-07-원인조사.md`
+
+완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1315-AIK24-EMDASH-08-완료보고.md`
+
+---
+
+## 2026-10-10 11:48 — AIK24-BRIEF-01 브리핑 파이프라인 점검: env 경로 버그 수정 + 브리핑 복구
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-AIK24-BRIEF-01-브리핑점검.md`
+
+### 한 일
+브리핑 2026-10-09 중단 원인 추적 → 프로덕션 스크립트 2건 수정 → 멈춘 브리핑 복구 → 라이브 반영 확인.
+
+### 결과
+**[검증됨]**
+- 근본 원인: `scripts/run_pipeline_with_notify.py` L19 `PROJECT_DIR = dirname(__file__)` 섀도잉 → L42가 `scripts/.env`(미존재)를 읽음 → 루트 `.env`(신규 계정 토큰) 무시 → 출발 계정(`fac9808c`)으로 D1 호출 → `7403`/`7404` → 뉴스 0건·브리핑 0건.
+- 수정 2건(테스트 코드 수정 없음, 둘 다 프로덕션):
+  1. `run_pipeline_with_notify.py` L42 `PROJECT_DIR` → `_PROJECT_DIR`
+  2. `pipeline/infra/d1_client.py` L61·63 `log(...)` → `logger.warning(...)` (미정의 `log`의 NameError가 진짜 7403 오류를 가리고 `return []`로 조용히 실패)
+- launchd 안전성 확인: `kr.aikorea24.pipeline-runner.plist`에 `CLOUDFLARE_*` 0건 → `load_env`가 `.env.common` setdefault 후 루트 `.env` hard overwrite → 프로덕션도 신규 계정 `7eb1b8cd` 사용.
+- D1 조회 복구 0건 → **69건** (`auto_news_selector.get_recent_news()` 직접 실행).
+- 파이프라인 RC 0 / 에러 0 / 60.4초 (뉴스 6, 썸네일 6).
+- `briefings` id 338 `2026-10-10-1` published (`2026-10-10 02:45:46` UTC), `briefing_items` 1,795 → 1,801.
+- 라이브: `https://aikorea24.kr/` 200에 `2026-10-10-1` 노출, `https://aikorea24.kr/briefing/2026-10-10-1/` 200 `<title>2026년 10월 10일 (토) AI 브리핑 - AI코리아24</title>`.
+
+**[부분검증]** 썸네일 6건 — 성공 로그 있으나 `auto_thumbnail` 품질 게이트(15KB) 개입으로 실제 선택 이미지 파일 대조 미실시.
+**[부분검증]** 뉴스 수집 불일치 — `cron_unified.log`(10-10 05:36) "신규 57건 저장"이나 신규 계정 D1 `news`는 17,881행, `MAX(created_at)`=`2026-10-09 22:33:22`. 읽기는 신규 DB와 일치하나 쓰기 경로(L1050 `--file`)의 계정 미확정.
+
+**[검증불가]** `news_collector.py` 쓰기 대상 계정. 복구: 잡 로그에 wrangler stderr 남기고 10-10 19:30 실행 후 `SELECT MAX(id) FROM news` 대조.
+
+### 잔존 위험
+1. 10-09자 브리핑 2건 공백 — `get_recent_news(hours=24)` 롤링 윈도우 + 브리핑 날짜가 now 기준이라 과거일 catch-up 불가
+2. 뉴스 수집 쓰기 대상 불일치(위 [부분검증])
+3. 에이전트 셸에 `CLOUDFLARE_ACCOUNT_ID=fac9808c` 주입 → `run_pipeline.py` 단독 실행 시 출발 계정 사용. launchd는 안전
+4. `wrangler.toml` `[vars] account_id`는 Worker 변수이며 wrangler 계정 설정 아님 (top-level 없음)
+5. D1 DB id 하드코딩 7곳 (`scripts/{dynamic_seed_generator.py:24,cfnew.py:7,blog_draft_generator.py:48,thread_topics/thread_topic_finder.py:24,thread_topics/outline_generator.py:32,keyword_updater.py:21}`, `wrangler.toml:8`)
+6. Vectorize upsert 실패 / purge 403 (미조사)
+7. 이메일 미발송(`--skip-email`) — 다음 20:00 KST 잡으로 확인
+8. EMDASH-04/06 잔존 (`_emdash_media_usage_*`, `zzspeedtest`, Workers Paid 전환 대기)
+
+### 다음 행동
+1. 20:00 KST 잡이 브리핑 정상 생성하는지 `SELECT COUNT(*) FROM briefings` 확인
+2. `news_collector.py` 쓰기 경로 계정 확정
+3. 10-09자 catch-up 방식 결정
+4. `run_pipeline.py` 단독 실행 금지 명시
+
+완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1148-AIK24-BRIEF-01-완료보고.md`
+
+---
+
+## 2026-10-10 11:37 — AIK24-EMDASH-06 Phase2 재개: D1 직접 SQL로 ec_posts 500건 달성
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-AIK24-EMDASH-06-Phase2재개.md`
+
+### 한 일
+Worker CPU 10ms 한도를 우회해 D1 REST SQL로 blog 글 직접 적재. 신규 `scripts/emdash06_direct.py`.
+
+### 결과
+**[검증됨]** (근거: `scripts/emdash02_measure.py` `query()` → D1 REST SQL)
+- `ec_posts` **500행 전부 published, draft 0** — `GROUP BY status`
+- 소스 top-500 ↔ DB title 집합 **누락 0 / 초과 0** (각 500)
+- 고아 `live_revision_id` 0건, published 중 revision 없음 0건
+- `content_taxonomies` 500행, `ec_posts` 중 미연결 0건
+- `_emdash_fts_posts` 500행 (AFTER INSERT 트리거 자동 생성)
+- `published_at` 2026-08-07 ~ 2026-10-08 보존
+- D1 `rowsWritten` **23,642 / 100,000**. 일자 증가분 11,625 = publish 60 + 본배치 11,404 + probe 삭제 161
+- **SQL 경로 배수 32행/건** vs API 경로 75행/건
+
+**[부분검증]** 무작위 5건(status/version/live_revision/category/published_at/content 3,970~6,486자) 전부 정상. 단 admin UI·공개 페이지 렌더 미확인(공개 URL이 302→404 상태).
+**[검증불가]** `audit_logs` 0행, `_emdash_media_usage_sources` 미적재 — 워커 후처리를 SQL 경로가 타지 않음. 복구: Workers Paid 전환 후 마이그레이션 재실행 또는 media-usage repair.
+
+### 인스턴스 변경
+없음. 워커 배포 없음. `wrangler.jsonc` 무수정. **작업 B(Workers Paid) 미수행 — 대표님 액션 대기.**
+
+### 잔존 위험 12건 (대표)
+1. Workers Free CPU 10ms — content 쓰기 여전히 1102
+2. `wrangler.jsonc` 에 `IMAGES`/`ASSETS` 바인딩 없음 → **이 파일로 deploy 금지**
+3. `audit_logs` 0행 / 4. `_emdash_media_usage_sources` 미적재
+5. `featured_image` 문자열 저장 → 렌더 미검증
+6. 마크다운 표·중첩 인용 PT 손실
+7. tag taxonomy 미이관 (498/500이 장문)
+8. 공개 URL 404
+9. **PAT 채팅 평문 노출 — 회전 미확인**
+10. 진단용 term `zzspeedtest` 잔존
+11. `ulid()` 난수 폭 좁음 / 12. slug 근사 재현
+13. 잔여: blog 960 + tools 362 + chronicle 71 + glossary 55 = 1,448건. chronicle/glossary는 대응 컬렉션 없음 → 매핑 방식 결정 필요
+
+### 다음 행동
+1. 대표님: Cloudflare Workers Paid 구독($5/월)
+2. 나: 구독 후 테스트 글 1건 API 생성으로 1102 해소 확인
+3. 대표님: chronicle/glossary 컬렉션 매핑 방식 결정
+
+---
+
+## 2026-10-10 11:02 — AIK24-EMDASH-04 Phase2 Day1: 176건 적재 후 CPU 1102로 중단
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-AIK24-EMDASH-04-Phase2-Day1.md`
+보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-1102-AIK24-EMDASH-04-완료보고.md`
+도구: `scripts/emdash04_migrate.py` (신규)
+
+### 한 일
+- emDash v0.38.0 REST 정본 소스 확인 (content create/publish, CSRF 헤더, MD→Portable Text 변환 규약).
+- `scripts/emdash04_migrate.py` 작성. blog date DESC 상위 500건 → `ec_posts` 이관 루프 (term 선행 생성 → create → publish(publishedAt=frontmatter date)).
+- 스크립트에 5xx 재시도(지수 백오프) / 이미 적재 title 스킵 / publish 단독 재시도 추가.
+- 배치 실행: 176행 적재. Worker CPU 1102 블로커 추적 후 임시 변경 원복.
+
+### 결과
+- [검증됨] `ec_posts` published 132 + draft 44 = 176행. 목표 500건 **미달(중단)**.
+- [검증됨] `published_at` = frontmatter date 보존. slug 한글 자동 생성. category taxonomy 연결 동작.
+- [검증됨] 블로커 = Worker CPU 10ms 한도 초과 (`tail --format json`: `cpuTime:10, outcome:exceededCpu`). settings에 `limits` 없음 = Free 기본값.
+- [검증됨] 데이터 증가 아님(`ec_pages`/`ec_tools` 각 1행도 1102). 코드 변경 아님(배포 이력 1건, 2026-09-09T11:53Z 이후 redeploy 없음).
+- [검증됨] Worker 자체 아님 — 같은 10ms 한도에서 taxonomy POST 201@0.42s, content GET 200@0.44s. content 쓰기 경로만 초과.
+- [검증불가] 정확한 CPU 소모 지점 — 스택 없음. D1 GraphQL에 `query`/`queryHash`/`queryId` dimension 부재로 쿼리별 비용 식별 불가.
+- [부분검증] 관리자 UI 저장도 동일 실패 추정(동일 핸들러 공유). UI 직접 검증 미수행.
+- [검증됨] 실측 배수 ≈ **75행/쓰기** (delta 16,353행 ÷ 218회). EMDASH-02 예측 53 대비 1.42배. 잔여 339건 = 25,425행, 가용 82,272행 → 물량 부족 아님.
+- [검증됨] 원복: webhook-notifier enable, media-usage activation active.
+
+### 잔존 위험
+1. [최우선] 176/500건, CPU 1102 미해결 → 추가 이관 불가.
+2. draft 44건 = create 성공·publish 실패분, `live_revision_id` 없음.
+3. 08:30 KST까지 180건 성공 → 08:45 KST부터 전 write 실패. 배포·데이터 규모로 설명 안 됨.
+4. Workers Paid 전환 시 배포 위험 — `wrangler.jsonc`에 `IMAGES`/`ASSETS` 바인딩 없음(라이브엔 존재).
+5. D1 직접 SQL 우회 시 `live_revision_id`→`revisions` 구조로 admin 일관성 검증 필요.
+6. tag taxonomy 미이관(소스 tags 498/500이 장문 단일값 = 분류값 아님).
+7. MD 표/중첩 blockquote/hr/각주 손실(정본 변환기 동일 동작). `featured_image` 문자열 렌더 미검증.
+8. 공개 페이지 `/posts/<slug>` 302→404 (테마/라우팅 미구성으로 추정, 미검증).
+9. PAT 회전 미확인(EMDASH-02 잔존). `taxonomies`에 진단용 `zzspeedtest` 잔존.
+10. media-usage 인덱서 `indexed_source_count=138`인데 실제 소스 0행 — 재수집 필요.
+
+### 다음 행동 (대표님 의사 필요)
+- A. Workers Paid 전환($5/월, 30s CPU) — 근본.
+- B. D1 직접 SQL 우회 — 단기. 권고 B+A 병행.
+- C. Day1 목표를 176건으로 마감 조정.
+
+## 2026-10-10 09:07 — AIK24-EMDASH-02: D1 리셋 확인 + EmDash 초기화 완료 + Phase 2 배치 계획
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-0700-AIK24-EMDASH-02-초기화.md`
+보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-10-0907-AIK24-EMDASH-02-완료보고.md`
+도구: `scripts/cfnew.py`(공용 헬퍼), `scripts/emdash02_measure.py`(snapshot/probe)
+
+### 한 일
+신규 계정 D1 일일 한도 리셋 확인 → EmDash 초기화 상태 실측 → 대표님 수동 관리자 생성·PAT 발급 검증 → Phase 2(블로그 1,000건) 쓰기량 모델링·배치 계획. **Phase 2 실제 마이그레이션은 본 지시서 범위 밖(계획만).**
+
+### ⚠️ PAT 노출 incidents (최우선)
+- 대표님이 신규 EmDash PAT 를 **채팅 채널에 평문으로 전달함.** 지시서 §4 주의사항 11 위반(저장 전 노출).
+- 본 세션에서는 인메모리 검증에만 사용했고 **파일·state.md·보고서·셸 스크립트 어디에도 기록하지 않음.** `scripts/` 하위에 PAT 하드코딩 없음.
+- 권고: **Vault 저장 후 이 PAT 폐기·재발급.** 본 세션 transcript 에 평문 잔존. Phase 2 마이그레이션 착수 전 회전 완료할 것.
+- 값 미기록 원칙 유지 — 이 보고서·state.md·CHANGES.md 어디에도 토큰 값을 쓰지 않음.
+
+### 결과
+
+#### §1 리셋 확인 — 충족
+- [검증됨] 실행 시각 `2026-10-10 09:04 KST = 00:04 UTC` = 리셋(00:00 UTC) 4분 후. 지시서 선행조건 충족.
+- [검증됨] GraphQL analytics 신규 계정(`7eb1b8cd…`) 2026-10-10 UTC `rowsWritten = 0`, `rowsRead = 0` (00:04 UTC 시점). 인덱스 포함 일일 100,000행 한도 **정상 리셋**.
+- [검증됨] 쿼리 정합성 대조 — 동일 쿼리로 2026-10-09 재조회 시 `rowsWritten = 183,390 / rowsRead = 880,799` (전일 보고서 180,740 + 후속 작업 2,650). 빈 결과가 쿼리 오류 아님을 입증.
+- [참고] GraphQL `d1AnalyticsAdaptiveGroups.dimensions` 는 그룹이 1건일 때 **객체**, 2건 이상일 때 **배열**로 반환됨. 파싱 시 양쪽 처리 필요(방금 실제 두 형태 모두 관측).
+
+#### §2·§3·§4 초기화 — 충족 (대표님 수동 액션 09:07~09:10 KST 완료)
+- [검증됨] **스키마 + 시드 자동 적용.** `_emdash_migrations` 76행 / `_emdash_collections` 3행(`pages`,`posts`,`tools`) / `_emdash_fields` 14행 / `options` 4행 / 테이블 80개 / 인덱스 247개.
+- [검증됨] **컬렉션 테이블 실명 = `ec_posts`·`ec_pages`·`ec_tools`** (지시서 §3 의 `posts`·`pages`·`tools` 아님). 지시서 표기를 그대로 쓰면 검증이 오탐(false negative) 나므로 실명으로 확인함. `ec_*` = emdash content prefix.
+- [검증됨] FTS 검색 테이블 5종 × 3컬렉션 = `_emdash_fts_{posts,pages,tools}` + `_config`·`_content`·`_data`·`_docsize`·`_idx` shadow 15테이블 생성됨.
+- [검증됨] **관리자 계정 생성 완료.** `users` 1행. `GET /_emdash/api/setup/status` → **`{"needsSetup": false}`** (step 필드 소멸). §2 충족.
+- [검증됨] **PAT 발급 + 동작 확인.** `GET /_emdash/api/content/posts?limit=1` + `Authorization: Bearer <PAT>` → **HTTP 200** `{"success":true,"data":{"items":[],"total":0}}`. §4 충족 (Vault 저장 여부는 대표님 확인 필요 — 채팅으로 전달됨).
+- [검증됨] **초기화 쓰기량 = 227행(스키마+시드) + 1,140행(관리자 생성 + PAT 발급) = 1,367행.** 00:05 UTC 227행 → 00:09 UTC 1,367행. 계정 전량 `aikorea24-emdash-db` 단독(`aikorea24-db` 0행). → 지시서 §5 계산에 사용.
+- [부분검증] **읽기 API가 쓰기를 유발함.** 00:04 UTC 에 쓰기 0행 → `/setup/status`·`/admin/setup` GET 이후 227행 발생. EmDash 가 첫 요청에서 스키마 마이그레이션을 실행하는 구조로 보이며, 이 227행 대부분이 그 트리거. 근거: `_emdash_migrations` 76행이 이미 채워져 있고 리셋 후 최초 요청 시점이 그 구간과 일치. 복구 계획: 지시서 완료 기준에는 없으나 Phase 2 재발 방지 규칙에 "readiness 조회도 쓰기를 유발할 수 있음 → 배치 전 analytics 1회 확인" 을 추가.
+- [부분검증] **관리자 1명 + PAT 1개 발급 = 1,140행.** 콘텐츠 0건 상태에서 인가 인프라만으로 이만큼 소모됨. 사용자 추가·PAT 추가 시 건당 비용이 높으므로 Phase 2 기간 중 추가 발급 자제. 복구 계획: 필요 시 `audit_logs` 5인덱스 + `credentials` 4인덱스 구조를 근거로 건당 비용 추정 후 판단.
+- [부분검증] `_cf_KV` 테이블은 `SQLITE_AUTH`(code 7500)로 API 조회 불가. D1 KV 테이블을 Worker 바인딩으로만 접근하는 emdash 설계. Phase 2 마이그레이션에서 KV 참조 필요 시 별도 경로 필요.
+
+#### §5 Phase 2 배치 계획 (블로그 1,000건)
+- [검증됨] 마이그레이션 대상 실측 — `src/content/` = `blog` 1,460 + `chronicle` 71 + `glossary` 55 + `tools` 362 = **1,948건**. 지시서 목표 1,000건은 `blog` 1,460건의 부분집합.
+- [검증됨] 건당 쓰기량 근거 = **라이브 D1 스키마 인덱스 실측**( 추정 아님). 컬렉션 테이블당 인덱스 17개, `revisions` 2, `_emdash_seo` 2, `content_taxonomies` 3, `_emdash_media_usage_sources` 10.
+
+| 쓰기 대상 | 행 | 인덱스 | 합계 |
+|---|---|---|---|
+| `ec_posts` | 1 | 17 | 18 |
+| `revisions` | 1 | 2 | 3 |
+| `_emdash_seo` | 1 | 2 | 3 |
+| `content_taxonomies` (category+tag 2행) | 2 | 6 | 8 |
+| `_emdash_media_usage_sources` (featured_image 1) | 1 | 10 | 11 |
+| FTS (`_emdash_fts_posts` + shadow) | 1 | — | 2~4 |
+| `audit_logs` | 1 | 5 | 6 |
+| **건당 합계** | | | **51~53** |
+
+- [검증됨] **가용 한도 = 100,000 − 1,367(초기화 전체) − 20,000(안전마진) = 78,633행.**
+- [검증됨] **1일 배치 상한 = 78,633 ÷ 53 = 1,483건 / ÷ 51 = 1,541건.** → 지시서 목표 1,000건(53,000행 산정)은 1일 처리 가능(여유 25,633행).
+- [부분검증] 배수 51~53 은 **스키마 역산 모델**이며 실측이 아님. `idx_ec_posts_del_sched` 는 partial index(`WHERE scheduled_at IS NOT NULL`)라 조건 불충족 시 엔트리 미작성 → 실제값은 하방으로 내려갈 수 있음. 복구 계획: **Day 1 을 500건 파일럿으로 축소**하고 배치 직후 analytics 로 실제 배수를 실측한 뒤 Day 2 를 실측값으로 재계산.
+- [검증됨] 권장 스케줄 — Day 1: `blog` 500건 파일럿(예상 25,500~26,500행, 리셋 1일차 한도 34% 사용) → 배수 실측 → Day 2: 잔여 500건 + `tools` 362건. 전체 1,948건 전량 이관은 4~5일 분할 권장.
+- [검증됨] 지시서 주의사항 #4 준수 — 오늘 EmDash 초기화(1,367행, 1.4%)만 실행. Phase 2 마이그레이션은 **별도 날**. 다른 프로젝트 D1 대량 작업도 오늘 금지.
+
+### 완료 기준 대조
+| 기준 | 판정 | 근거 |
+|---|---|---|
+| §1 리셋 확인 | 충족 | rowsWritten 0 (00:04 UTC) + 전일 재조회 대조 |
+| §2 관리자 생성 | 충족 | `users` 1행, `needsSetup: false` |
+| §3 컬렉션 테이블 + 초기화 쓰기량 | 충족 | `ec_posts`/`ec_pages`/`ec_tools` 3종 + 시드 3종 존재. 초기화 쓰기량 1,367행 기록 |
+| §4 PAT 발급·Vault 저장 | 부분 충족 | PAT 발급 + HTTP 200 동작 확인. **Vault 저장 여부 미확인, 채팅 노출 건으로 회전 권고** |
+| §5 배치 계획 | 충족 | 1일 상한 1,483건, Day1 500건 파일럿 |
+
+### 잔존 위험
+1. **[최우선] PAT 채팅 노출** — 대표님이 PAT 를 평문으로 전달. 파일 기록은 없으나 세션 transcript 에 잔존. **Phase 2 착수 전 회전(폐기 후 재발급 + Secure Vault 저장) 필수.**
+2. **[신규] 오늘 1,367행 소모** — 잔여 98,633행, Phase 2 가용분 78,633행. 관리자 1명 + PAT 1개 발급에만 1,140행 소모됨 → 추가 발급 시 비용 재확인.
+3. **[신규] 읽기 API 가 쓰기 유발** — readiness/status 조회가 스키마 마이그레이션을 트리거할 수 있음. 배치 전 상태 확인 반복 호출 금지.
+4. **[신규] `_cf_KV` API 접근 불가(`SQLITE_AUTH`)** — KV 데이터가 필요한 마이그레이션 경로 미정.
+5. **[누적] 기존 `EM_DASH_API_TOKEN`/`EMDASH_API_TOKEN` 은 starclip 인스턴스 토큰** — 신규 EmDash 인스턴스로 교체 필요. 값 평문 기록 금지.
+6. **[누적] AIK24-IDX-01 인덱스 삭제 미실행** — `aikorea24-db` 9건(권고 5건). 지시서 #7 의 "불필요한 인덱스 제거 후 마이그레이션" 요건 미충족. 삭제 자체가 쓰기(DDL 은 rowsWritten 미계상이나 DROP 후 재작성을 유발할 수 있음)라 **Phase 2 마이그레이션과 다른 날**에 실행 권장.
+7. **[누적] `projects2/aikorea24emdash` git 저장소 아님** — 스키마 변경 이력 추적 불가.
+8. **[누적] `dev.link2threads.com.aikorea24.kr` TLS 실패 / AdSense 슬롯 id 미확정 / Threads 토큰 code 190 / `news-unified` plist `CF_PURGE_TOKEN` 평문 / 출발 계정 리소스 삭제 보류 / `finnews` account_id 출발 잔존 / 문서 6개 옛 database_id.**
+9. **[누적] Email Routing 룰 미생성(API 403)** — 대표님 대시보드 수동 생성 대기.
+
+### 다음 행동
+- 대표님: **PAT 회전** — 현재 PAT 폐기, `/_emdash/admin` 에서 재발급 후 Secure Vault 저장. (Phase 2 착수 전 완료)
+- 대표님: AIK24-IDX-01 인덱스 삭제 지시서 issuance — **Phase 2 마이그레이션과 다른 날** 지정.
+- 주니어: Phase 2 마이그레이션 지시서 수령 시 Day 1 500건 파일럿 → analytics 실측 배수 → Day 2 재계산.
+- 주니어: 마이그레이션 스크립트 착수 시 PAT 를 `EMDASH_NEW_PAT` 환경변수로만 주입, 코드·설정 파일 하드코딩 금지.
+
 ## 2026-10-09 20:20 — Email Routing `info@aikorea24.kr` 확인 + CF-ZONE-06 인수인계
 
 대표님 지시: `CF-ZONE-06 지시서 전달 + Email Routing 이메일 라우팅 완료info@aikorea24.kr`
