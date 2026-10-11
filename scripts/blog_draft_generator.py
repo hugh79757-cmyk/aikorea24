@@ -216,7 +216,8 @@ def generate_draft(keyword, articles, grade):
             out = generate_model_eval_draft(keyword, articles[0], model_id)
             if out:
                 return out
-            log("  ⚠️ 모델 심층 분석 생성 실패 → 일반 심층 분석으로 폴백")
+            log("  ⚠️ 모델 심층 분석 생성 실패 → 스킵 (일반 뉴스 분석 폴백 금지, AIK24-BLOGPIPE-FIX-01)")
+            return ""
 
     # 기사 텍스트 조립
     article_lines = []
@@ -239,7 +240,11 @@ def generate_draft(keyword, articles, grade):
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
             f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
+            f"- 제목에 마크다운 백틱(`) 사용 금지\n"
             f"- 본문: 1500자 이상, 소제목(##) 3개 이상 포함\n"
+            f"- [필수] 구체적인 수치·데이터·비교표 중 하나 이상 포함. "
+            f"제목이 '비교'·'점수'·'순위'를 약속하면 반드시 실제 숫자를 넣을 것. "
+            f"숫자가 없으면 해당 표현을 제목에서 빼세요.\n"
             f"- 기사의 배경/의미/전망을 분석, 독자가 쉽게 이해할 수 있도록\n"
             f"- 마지막에 📌 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
@@ -314,6 +319,10 @@ def _eval_block(model_id):
 def generate_model_eval_draft(keyword, article, model_id):
     """무료 LLM 전용 5단 구조 블로그 글 생성. 실패 시 빈 문자열(폴백)."""
     ev = _eval_block(model_id)
+    # 전 문항 실패 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
+    if ev.get("failed", 0) >= ev.get("max_score", 9):
+        log(f"  전 문항 실패 → 모델 심층 분석 생략: {model_id}")
+        return ""
     guide = model_eval.get_access_guide(model_id)
 
     # 우리 테스트 결과 — 9문항 실측 점수 + 상세 답변 (LLM이 지어내지 못하게 원문 주입)
@@ -588,6 +597,8 @@ def _parse_title_body(gpt_output):
     """
     parts = gpt_output.split("TITLE:", 1)
     title = parts[1].split("\n", 1)[0].strip() if len(parts) > 1 else ""
+    # 제목의 마크다운 백틱 제거 (제목에 `code` 형식 노출 방지)
+    title = re.sub(r"`([^`]+)`", r"\1", title)
     body = re.sub(
         r"\ATITLE:[^\n]*\n(?:[ \t]*-{3,}[ \t]*\n)?", "", gpt_output, count=1
     ).strip()
@@ -603,8 +614,10 @@ def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
         title_line, content = _parse_title_body(gpt_output)
         if title_line:
             seo_title = title_line
-        if len(content) < 500:
-            logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — LLM 출력 확인 필요")
+        # 본문 길이 검증: 1000자 미만이면 저장 거부 (품질 게이트)
+        if len(content) < 1000:
+            logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — 저장 거부")
+            return None, None
 
     # 브리핑 페이지 링크 주입 (첫 문단 뒤) — 체류시간 확보
     if articles:
@@ -708,131 +721,79 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
 from pipeline.infra.telegram import send_telegram
 import model_eval
 
-
 # ============================================
-# LLM 무료모델 평가 블로그 (AIK24-MODELEVAL-01)
+# EmDash 푸시 (단일 목적지 통일)
 # ============================================
-def generate_model_eval_post(article, model_id, eval_result):
-    # ponytail: L314 generate_model_eval_draft와 5단 구조 구현이 중복됨.
-    # 이름이 같으면 뒤 정의가 앞 정의를 덮어써 generate_draft()가 깨진다.
-    # 중복 정리 여부는 대표님 결정 — 우선은 이름을 분리해 충돌만 없앤다.
-    """무료 모델 심층 분석 블로그 초안 생성 (5단 구조).
-
-    1. 벤치마크 점수 — 공개 데이터로 개념 제시
-    2. 우리 테스트 결과 — 9문항 실측
-    3. 신뢰 메시지 — "이 점수 믿을만하다"
-    4. 써보세요 — OpenCode 설정 가이드
-    5. 누가 쓰면 좋은가 — 용도별 추천
+def _push_to_emdash(filepath, title, excerpt=""):
+    """생성된 마크다운을 EmDash D1(ec_posts)에 직접 삽입.
+    반환: 성공 시 True, 실패 시 False.
     """
-    title = article.get("title", "")
-    label = eval_result.get("label", "")
-    tier = eval_result.get("tier", "")
-    score = eval_result.get("score", 0)
-    max_score = eval_result.get("max_score", 9)
-    details = eval_result.get("details", [])
-    guide = model_eval.get_access_guide(model_id)
-    # 9문항 상세 결과 텍스트화
-    detail_lines = []
-    for d in details:
-        cat = d.get("cat", "")
-        pts = d.get("score", 0)
-        ans = (d.get("answer") or "")[:200]
-        detail_lines.append(f"- [{cat}] {pts}점: {ans}")
-    detail_text = "\n".join(detail_lines) if detail_lines else "(상세 결과 없음)"
-    system_prompt = (
-        "당신은 AI 모델 리뷰 전문 블로거입니다. 한국인 독자를 대상으로 쉽고 실용적으로 씁니다.\n"
-        "중국어(한자)를 절대 사용하지 마세요. 순수 한국어로만 작성하세요.\n"
-        "벤치마크 수치를 모르면 지어내지 말고 '공개 벤치마크 미확인'이라고 쓰세요."
-    )
-    user_prompt = (
-        f"다음 무료 AI 모델에 대한 심층 분석 블로그 글을 작성해줘.\n\n"
-        f"모델: {model_id}\n"
-        f"평가: {label} ({score}/{max_score}점)\n"
-        f"티어: {tier}\n\n"
-        f"9문항 테스트 상세:\n{detail_text}\n\n"
-        f"다음 5단 구조로 작성해:\n"
-        f"1. 벤치마크 점수 — LMArena 등 공개 점수가 있으면 소개, 없으면 '공개 벤치마크 미확인'\n"
-        f"2. 우리 테스트 결과 — 위 9문항 결과를 카테고리별로 설명\n"
-        f"3. 신뢰 메시지 — '이 점수는 우리가 직접 테스트한 결과라 믿을만하다'는 취지\n"
-        f"4. 써보세요 — '{guide}'를 포함하고 OpenCode 설정 방법을 단계별로 안내\n"
-        f"5. 누가 쓰면 좋은가 — 코딩용/글쓰기용/가벼운 작업용 등 용도별 추천\n\n"
-        f"마지막에 '👉 이 모델을 브리핑에서 보기' 링크 문구를 넣지 마세요."
-    )
     try:
-        content = chat_completion(
-            messages=[{"role": "user", "content": user_prompt}],
-            system_prompt=system_prompt,
-            temperature=0.3,
-            max_tokens=3000,
-            model_override=None,
-        )
-        if not content:
-            log(f"  모델 분석 생성 실패 (LLM 응답 없음): {model_id}")
-            return None
-        # 중국어 제거
-        content = re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', content)
-        return content
+        sys.path.insert(0, os.path.join(_script_dir))
+        from emdash04_migrate import md_to_pt
+        import emdash02_measure as M
     except Exception as e:
-        log(f"  모델 분석 생성 예외: {type(e).__name__}: {e}")
-        return None
-
-
-def generate_model_eval_blogs(articles):
-    """오늘 브리핑의 free-llm 항목에 대해 모델 평가 블로그 생성.
-
-    반환: [(filepath, title, model_id), ...]
-    """
-    results = []
-    today_str = datetime.now(KST).strftime("%Y-%m-%d")
-    for art in articles:
-        if art.get("v2_tag") != "free-llm":
-            continue
-        model_id = model_eval.extract_model_id(art)
-        if not model_id:
-            log(f"  모델 ID 판별 실패 → 건너뜀: {art.get('title', '')[:40]}")
-            continue
-        log(f"  모델 평가 블로그 생성: {model_id}")
-        try:
-            ev = model_eval.eval_model_cached(model_id)
-        except Exception as e:
-            log(f"    평가 실패: {e}")
-            continue
-        # 전 문항 실패 시 블로그 생성 생략
-        if ev.get("failed", 0) >= ev.get("max_score", 9):
-            log(f"    전 문항 실패 → 블로그 생략: {model_id}")
-            continue
-        content = generate_model_eval_post(art, model_id, ev)
-        if not content:
-            continue
-        # 파일 저장
-        safe_model = re.sub(r"[^a-z0-9가-힣]+", "-", model_id.lower()).strip("-")[:50]
-        slug = f"{today_str}-model-{safe_model}"
-        fp = os.path.join(PROJECT_DIR, "src", "content", "blog", f"{slug}.md")
-        # 중복 방지
-        if os.path.exists(fp):
-            log(f"    이미 존재 → 건너뜀: {slug}")
-            continue
-        frontmatter = (
-            f"---\n"
-            f"title: \"[모델 분석] {model_id} — {ev.get('tier', '')}\"\n"
-            # description/category는 blog 컬렉션 스키마 필수 필드. 빠지면 빌드가 깨진다.
-            f"description: \"{model_id} 무료 모델을 9문항으로 직접 실측한 결과와 활용 가이드\"\n"
-            f"date: \"{today_str}\"\n"
-            f"category: \"모델 분석\"\n"
-            f"tags:\n  - \"무료 LLM\"\n  - \"모델 평가\"\n"
-            f"model_id: \"{model_id}\"\n"
-            f"tier: \"{ev.get('tier', '')}\"\n"
-            f"score: \"{ev.get('score', 0)}/{ev.get('max_score', 9)}\"\n"
-            f"---\n\n"
-        )
-        try:
-            with open(fp, "w", encoding="utf-8") as f:
-                f.write(frontmatter + content)
-            log(f"    ✅ 저장: {fp}")
-            results.append((fp, f"[모델 분석] {model_id}", model_id))
-        except Exception as e:
-            log(f"    저장 실패: {e}")
-    return results
+        log(f"  ⚠️ EmDash 모듈 로드 실패: {e}")
+        return False
+    try:
+        with open(filepath, "r", encoding="utf-8") as f:
+            raw = f.read()
+        # frontmatter 분리
+        parts = raw.split("---", 2)
+        body = parts[2] if len(parts) > 2 else raw
+        fm = parts[1] if len(parts) > 1 else ""
+        # frontmatter에서 image 추출
+        img_m = re.search(r'^image:\s*"([^"]+)"', fm, re.MULTILINE)
+        img = img_m.group(1) if img_m else None
+        desc_m = re.search(r'^description:\s*"([^"]+)"', fm, re.MULTILINE)
+        desc = desc_m.group(1) if desc_m else excerpt
+        pt = json.dumps(md_to_pt(body), ensure_ascii=False)
+        # ULID 생성
+        import random, time as _t
+        CROCK = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
+        ms = int(_t.time() * 1000)
+        rand = random.randrange(1 << 16)
+        bits = [(ms >> (i * 5)) & 31 for i in range(9, -1, -1)] + \
+               [(rand >> (i * 5)) & 31 for i in range(15, -1, -1)]
+        pid = "".join(CROCK[b] for b in bits)
+        rev = pid  # revision도 ULID 사용
+        # slug 생성
+        slug = make_slug(title)
+        # D1 삽입
+        def lit(v):
+            if v is None:
+                return "NULL"
+            if isinstance(v, (int, float)):
+                return str(v)
+            return "'" + str(v).replace("'", "''") + "'"
+        import datetime as _dt
+        now_iso = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.") + "%03dZ" % (
+            _dt.datetime.now(_dt.timezone.utc).microsecond // 1000)
+        pub = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00")
+        rev_data = json.dumps({"title": title, "excerpt": desc, "content": json.loads(pt),
+                               **({"featured_image": str(img)} if img else {})}, ensure_ascii=False)
+        # author 조회
+        author_res = M.query("SELECT id FROM users LIMIT 1")
+        author = author_res["result"][0]["results"][0]["id"]
+        stmts = [
+            "INSERT INTO revisions (id,collection,entry_id,data,created_at) VALUES "
+            "(%s,'posts',%s,%s,datetime('now'))" % (lit(rev), lit(pid), lit(rev_data)),
+            "INSERT INTO ec_posts (id,slug,status,author_id,created_at,updated_at,published_at,version,"
+            "live_revision_id,locale,title,excerpt,content,featured_image) VALUES "
+            "(%s,%s,'published',%s,%s,%s,%s,2,%s,'en',%s,%s,%s,%s)"
+            % (lit(pid), lit(slug), lit(author), lit(now_iso), lit(now_iso), lit(pub), lit(rev),
+               lit(title), lit(desc), lit(pt), lit(str(img)) if img else "NULL")
+        ]
+        res = M.query(";\n".join(stmts))
+        for st in res.get("result", []):
+            if not st.get("success", True):
+                log(f"  ⚠️ EmDash 삽입 실패: {json.dumps(st)[:200]}")
+                return False
+        log(f"  ✅ EmDash 푸시 완료: {title[:40]}")
+        return True
+    except Exception as e:
+        log(f"  ⚠️ EmDash 푸시 예외: {type(e).__name__}: {e}")
+        return False
 
 
 # ============================================
@@ -845,7 +806,7 @@ def main():
     print()
 
     # 1. 오늘 브리핑 기사 조회
-    log("[1/5] 브리핑 기사 조회 중...")
+    log("[1/4] 브리핑 기사 조회 중...")
     try:
         articles = get_briefing_articles()
     except Exception as e:
@@ -859,18 +820,8 @@ def main():
         return
     print()
 
-    # 2a. LLM 무료모델 평가 블로그 생성 (모델 심층 분석)
-    log("[2a/5] 모델 평가 블로그 생성 중...")
-    try:
-        model_blogs = generate_model_eval_blogs(articles)
-        log(f"  모델 분석 블로그 {len(model_blogs)}건 생성")
-    except Exception as e:
-        log(f"  모델 블로그 생성 실패 (무시): {e}")
-        model_blogs = []
-    print()
-
-    # 2b. 일반 뉴스 블로그 글 생성 (브리핑 기사별 1개씩)
-    log("[2b/5] 일반 뉴스 블로그 초안 생성 중...")
+    # 2. 무료 모델 블로그 글 생성 (브리핑의 free-llm 항목만)
+    log("[2/4] 무료 모델 블로그 초안 생성 중...")
     file_num = next_file_number(today_str)
     created = []
 
@@ -880,6 +831,11 @@ def main():
         link = art.get("link", "")
         deep_dive = art.get("deep_dive_url")
         sort_order = art.get("sort_order", i)
+
+        # AIK24-BLOGPIPE-FIX-01: 무료 모델 항목만 블로그 생성 (뉴스 분석 블로그 중단)
+        if art.get("v2_tag") != "free-llm":
+            log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 무료 모델 아님, 스킵")
+            continue
 
         if deep_dive:
             log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 이미 연결됨, 스킵")
@@ -894,6 +850,9 @@ def main():
                 continue
 
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
+            if not filepath:
+                log(f"    ❌ 품질 미달로 저장 거부: '{title[:40]}'")
+                continue
             created.append((filepath, seo_title or title, sort_order, 1))
             file_num += 1
 
@@ -909,6 +868,9 @@ def main():
                     _add_image_to_frontmatter(filepath, thumb_rel)
             except Exception as thumb_e:
                 log(f"  ⚠️ '{title[:40]}' 썸네일 생성 실패: {thumb_e}")
+
+            # EmDash 푸시 (단일 목적지 통일)
+            _push_to_emdash(filepath, seo_title or title)
         except Exception as e:
             log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
 
@@ -986,7 +948,7 @@ def main():
     print()
 
     # 3. 텔레그램 알림
-    log("[3/5] 텔레그램 알림...")
+    log("[3/4] 텔레그램 알림...")
     if generated:
         msg_lines = [f"🤖 <b>[{today_str}] 블로그 발행 완료</b>"]
         msg_lines.append(f"\n📝 생성: {len(generated)}건")

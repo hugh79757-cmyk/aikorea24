@@ -112,8 +112,8 @@ def build_briefing(articles):
     today = datetime.now(KST).strftime("%Y-%m-%d")
 
     intro = (
-        f"오늘의 AI 뉴스 브리핑 ({today})\n\n"
-        f"{len(articles)}건의 주요 AI 뉴스를 선정했습니다."
+        f"오늘의 AI 브리핑 ({today})\n\n"
+        f"{len(articles)}건의 AI 소식을 선정했습니다."
     )
 
     items = []
