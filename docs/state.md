@@ -1,3 +1,245 @@
+## 2026-10-11 17:50 — AIK24-THUMB-BACKFILL-01: EmDash 블로그 썸네일 백필 48건
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 커밋: `feat: AIK24-THUMB-BACKFILL-01 EmDash 블로그 썸네일 백필 48건` (6 files, +695/-0. HEAD = `origin/agent/phase40-compass-diversification`, 일치 확인)
+* D1 반영: `aikorea24-emdash-db` / `ec_posts` 48행 UPDATE
+* 배포: `npm run build` + `npm run deploy` 성공 (신규 이미지 12건 선행 배포)
+* 요지: 지시서는 "약 1,460건"으로 예상했으나 D1 실측 결과 `featured_image IS NULL` 은 **48건**뿐이었다. 36건은 기존 Astro 썸네일 절대 URL 재사용, 12건은 Pexels 신규 생성 후 동일 URL 형태로 설정. ec_posts 전수 이미지 커버리지 100%.
+
+### 지시서 전제 정정 (실측 근거)
+
+| 항목 | 지시서 전제 | 실측 |
+|---|---|---|
+| 대상 | 약 1,460건 | **48건** (전체 1,471건 중 NULL) |
+| 원인 | 마이그레이션 시 필드 미이전 | 필드 이관은 96.7% 정상 동작. 48건 전부 `created_at=2026-10-10` 단일 배치 누락 |
+
+대표님에게 3개 질문 확인받음: ① 48건만 백필 ② 기존 URL 재사용(신규 R2 업로드 없음) ③ 12건은 Pexels 생성. 모두 추천안 승인.
+
+### 처리 결과
+
+- 기존 재사용 **36건** — `emdash12_thumb_backfill.py::norm()` 이 `YYYY-MM-DD-NNN-` 접두사 제거 후 비교. 전건 HTTP 200 사전 확인.
+- Pexels 신규 생성 **12건** — house 컴포넌트 `auto_thumbnail.process_thumbnail()` 재사용.
+- 합계 **48건** 반영.
+
+### 신규 생성 중 placeholder 폴백 4건 처리 (핵정리)
+
+`process_thumbnail()` 1회 실행 결과 4건이 공용 placeholder(`public/images/news-keyword-og.webp` 사본)로 폴백.
+원인: `auto_thumbnail` 이 Pexels `src.large`(1200px)를 쓰는데 일부 사진이 800×800 WebP 변환 후
+`validate_thumbnail_quality(min_size_kb=15)` 게이트를 통과 못 함.
+
+→ `scripts/emdash12_thumb_retry.py` 신규 작성. 같은 검색 결과의 `src.large2x`(2배 해상도)로 재시도.
+1차 재시도에서 **4건이 동일 이미지(id=12696432)로 중복** — `emdash12_thumb_retry.py` 가 `_save_used_id()` 로
+파일만 기록하고 메모리 `used` 집합을 갱신하지 않은 버그. `used.add(p["id"])` 추가 후 재실행 →
+4건 모두 서로 다른 이미지 확정 (12696432 / 12939552 / 25630341 / 12627677).
+
+### 완료 기준 검증
+
+| 기준 | 결과 | 근거 |
+|---|---|---|
+| 대상 건수 확정 | ✅ | D1 `SELECT COUNT(*), SUM(featured_image IS NULL) ... FROM ec_posts` → `{'total':1471,'nulls':0,'has':1471}` |
+| 36건 기존 이미지 재사용 | ✅ | dry-run "Astro 썸네일 재사용: 36건", 전건 HEAD 200 확인 후 UPDATE |
+| 12건 신규 생성 | ✅ | 800×800 WEBP, 15KB 이상, placeholder 0건, md5 중복 0건 (4건은 large2x 재시도로 해소) |
+| 신규 12건 라이브 노출 | ✅ | `https://aikorea24.kr/images/<12개>/thumbnail.webp` → **12/12 HTTP 200** (배포 선행 필요) |
+| D1 반영 | ✅ | `--apply` 1회 실행, `UPDATE 48/48`, 청크 50 |
+| 목록 페이지 이미지 완전 노출 | ✅ | `emdash.aikorea24.kr/posts/` 카드 60개 중 **이미지 60개 / 없음 0개** (작업 전 11개 누락). 카드 이미지 src **60/60 실 GET 200** |
+| 백필본/기존본 응답 동일성 | ✅ | 양쪽 모두 `Content-Type: image/webp` + 실제 바이트 수 확인 |
+| 산출물 문서 | ✅ | `docs/thumbnail-backfill-list.csv` (48행+헤더), `docs/thumbnail-backfill-result.md` |
+
+### 잔존 위험
+
+1. `scripts/weekly_blog_publisher.py` 의 `_publish_to_emdash` 미확인 (기본 off, `EMDASH_PUBLISH=1` 일 때만 동작). 켜져 있으면 EmDash 중복 적재 재개 — 이번 범위 밖.
+2. 기존 EmDash 중복 데이터(`ec_posts`/`revisions` 과거 행) 미정리 — aikorea24.kr/blog 가 정식 위치로 확정됐으므로 별건 정리 필요.
+3. 신규 이미지 12건은 `.gitignore:67` `public/images/` 규칙으로 git 미추적 (기존 1,567 디렉터리와 동일 규칙). 백업 시 별도 보관 필요.
+4. 이미지 관련성은 Pexels 검색어 자동 매칭이라 카드 이미지가 글 내용과 무관할 수 있음 — 전수 육안 검수 미실시.
+5. `scripts/logs/` 여전히 untracked & gitignore 미설정 (본 작업과 무관, 前 작업부터 잔존).
+
+완료 — 시니어 2 verify 요청
+
+## 2026-10-11 17:30 — AIK24-BLOG-CLEANUP-01: EmDash 이중 발행 중단 + 410 규칙 정리
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 커밋: `a21d25fc` (로컬 HEAD = `origin/agent/phase40-compass-diversification`, 일치 확인)
+* 수정 파일: `/Users/twinssn/Projects/aikorea24/scripts/blog_draft_generator.py`, `/Users/twinssn/Projects/aikorea24/public/_redirects`
+* 요지: 블로그 정식 위치를 `aikorea24.kr/blog/`로 확정한 만큼 EmDash D1(`ec_posts`)로의 이중 발행 경로를 제거하고, Cloudflare Pages가 무시하던 410 규칙 9줄을 정리해 자연 404로 폴스루시킴.
+
+### 변경 내역
+
+- `scripts/blog_draft_generator.py` 78줄 삭제 (순수 삭제, 추가 0)
+  - `main()` `[2/4]` 루프의 `_push_to_emdash(filepath, seo_title or title)` 호출 2줄 (썸네일 try/except 바로 아래)
+  - `# EmDash 푸시 (단일 목적지 통일)` 섹션 전체: `# ===` 헤더 3줄 + `_push_to_emdash` 정의 ~72줄 + 뒤따라오는 빈 줄
+  - `make_slug`(415행 정의, 642행 `_save_file` 호출)는 지시서대로 유지
+- `public/_redirects` 13줄 삭제 (주석 2줄 + 규칙 9줄 + 분리용 빈 줄 2줄)
+- 유지: 구독 trailing slash 2줄, "오픈에어하이" 오타 교정 301 1줄, `/community` 3줄
+
+### 완료 기준 검증
+
+- [x] Step 4 검증 5항목 전부 통과
+      근거: ① `python3 -c "import ast; ast.parse(...)"` → `syntax OK` ② `grep -c "_push_to_emdash"` → 0 ③ `grep -in "emdash" | wc -l` → 0 ④ `grep -c " 410" public/_redirects` → 0 ⑤ `grep -c "^/community" public/_redirects` → 3
+- [x] `npm run build` 성공
+      근거: `✓ Completed in 3.35s` / `Server built in 12.89s` / `[build] Complete!` (WARN은 기존 `/tools/[id].astro` prerender headers 경고, 본 변경과 무관). 배포 산출물 `dist/_redirects`에 410 0건 반영, `dist/blog/` 1,635개 유지
+- [x] `npm run deploy` 성공
+      근거: `✨ Deployment complete!` preview `https://6d447330.aikorea24-4nk.pages.dev`, sitemap ping `{"google": true, "naver": true}`
+- [x] Step 5 라이브 검증 3항목 전부 통과
+      근거: ① `https://aikorea24.kr/blog/` → 200, `<title>블로그 | AI코리아24</title>` ② 오늘 글 `/blog/2026-10-11-001-무료-llm-분석-인클루전아이-링-31-플래시…-가이드` → 200, `<title>[무료 LLM 분석] 인클루전아이 링 3.1 플래시(inclusionai/ling-3.1-flash) 실측 성능과 활용 가이드 | AI코리아24</title>` ③ `/blog/293` → 404 (410 규칙 없이도 자연 404 — 전 작업에서 관측된 동작과 동일)
+- [x] `git push` 성공
+      근거: `dd1a2e38..a21d25fc`, `git rev-parse HEAD` == `git rev-parse origin/...` == `a21d25fc8fa58c03f6a40b7ca3dd5f7c731e5e34`, 커밋은 `public/_redirects` + `scripts/blog_draft_generator.py` 2개 파일 / 91 deletions
+
+### 잔존 위험
+
+1. **이전 EmDash D1 데이터는 남아 있음** — `ec_posts`/`revisions`의 기존 레코드는 지시서 범위 밖이라 삭제하지 않았다.今后 신규 발행은 Astro(`src/content/blog/`)에만 쌓인다. 과거 고아 레코드 정리 필요 시 별도 지시 필요.
+2. **`scripts/logs/`가 git 미무시 상태** — `?? scripts/logs/`로 추적되지 않은 채 남아 있다. 이번 작업에서 만들지 않았고 `.gitignore` 규칙 추가도 수정 금지 파일 밖이라 손대지 않았다. 다음 지시에서 처리 권장.
+3. **`docs/state.md` 미커밋** — 지시서 스테이징 목록(2개 파일)에 포함되지 않아 커밋 대상이 아니었다. 작업 트리에 계속 미커밋 상태로 남는다.
+4. **410 규칙 삭제는 상태코드 차이 손실** — 9개 URL에 대해 404를 반환한다. SEO 관점 차이는 무시 가능 수준이나, 실제로 410을 원하면 Pages Functions가 필요하며 이는 범위 밖.
+5. **[부분검증] `_push_to_emdash` 삭제의 실행 시 효과 미실측** — 코드·구문 수준에서 호출·정의가 0건임을 확인했으나, 파이프라인을 실제 실행해 EmDash 미삽입을 관찰하지는 않았다. 근거: grep 0건 + `make_slug` 잔존 확인. 다음 블로그 생성 실행 시 로그에 `✅ EmDash 푸시 완료`가 없음을 확인하면 확정.
+
+완료 — 시니어 2 verify 요청
+
+## 2026-10-11 17:20 — AIK24-BLOG-REDIRECT-01: /blog/* blanket redirect 제거 (Astro 블로그 복원)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 커밋: `dd1a2e38` (로컬 HEAD = `origin/agent/phase40-compass-diversification`, 일치 확인)
+* 수정 파일: `public/_redirects` (1개, 4줄 삭제)
+* 요지: 2026-10-10에 추가된 `/blog/`·`/blog/*` → `emdash.aikorea24.kr/posts/` 301 blanket 규칙 2줄 + 주석 1줄을 삭제해, 홈 블로그 카드 6개가 슬러그를 버리고 "Latest Posts" 목록으로 떨어지던 결함을 복구함. 개별 410 규칙 9줄·`/community` 규칙 3줄은 유지.
+
+### 변경 내역 (spec 3줄 → 실제 4줄 삭제)
+
+삭제한 4줄 = 지시서가 명시한 3줄(`# 2026-10-10: 블로그를 emDash로 이전` 주석 + `/blog/` 301 + `/blog/*` 301) + 그 아래 빈 줄 1개. 주석 없이 규칙만 남기면 `# 2026-10-10 (AIK24-FIX-01): 커뮤니티 제거` 주석과 블록이 합쳐져 의미가 깨지므로 빈 줄까지 제거함.
+
+### 완료 기준 검증
+
+- [x] `public/_redirects`에 `emdash.aikorea24.kr/posts` 규칙 0건, 개별 410 규칙 유지
+      근거: `grep -c "emdash.aikorea24.kr/posts" public/_redirects` → 0 / `grep -c "/410  410"` → 9 / `grep -c "^/community"` → 3. 배포 산출물 `dist/_redirects`도 동일(0 / 9)
+- [x] `npm run build` 성공
+      근거: `✓ Completed in 3.09s` + `Server built in 10.72s` + `[build] Complete!`. `dist/blog/` 하위 1,635개 페이지 정적 생성 확인, 오늘 슬러그 `2026-10-11-001-…-실측-성능과-활용-가이드` 디렉터리 존재 확인
+- [x] `npm run deploy` 성공
+      근거: `✨ Deployment complete!` + 배포 URL `https://7ce661c9.aikorea24-4nk.pages.dev`, 후속 sitemap ping `{"google": true, "naver": true}`
+- [x] Step 4 라이브 검증 4항목 — 3항목 통과, 1항목 미달(아래 별도 기재)
+      * 1. 오늘 브리핑 슬러그 → **200**, `<title>[무료 LLM 분석] 인클루전아이 링 3.1 플래시(inclusionai/ling-3.1-flash) 실측 성능과 활용 가이드 | AI코리아24</title>` [검증됨]
+      * 2. `https://aikorea24.kr/blog/` → **200**, `<title>블로그 | AI코리아24</title>` (Redirect 체인 없음) [검증됨]
+      * 3. 홈 카드 6개 → **6/6 = 200**, 전부 개별 글 페이지(`<title>`이 해당 포스트 제목). "Latest Posts" 목록 착지 0건 [검증됨]
+      * 4. `/blog/293` → **404 (기대 410, 미달)** — 아래 "미달 항목" 참조 [검증됨]
+- [x] `git push` 성공
+      근거: `63ce24fd..dd1a2e38 agent/phase40-compass-diversification`推送 확인. `git rev-parse HEAD` = `git rev-parse origin/…` = `dd1a2e38b4191920613eee8132991d900e258086` 일치
+
+### 미달 항목 — `/blog/293` 410 규칙이 404로 동작 (본 작업이 만든 결함 아님)
+
+* **현상**: 개별 410 규칙 9개(`/blog/2026/`, `/blog/293`, `/blog/ai`, `/blog/openai`, `/blog/lg`, `/blog/agi-5`, `/blog/walkthrough-1-2`, `/blog/walkthrough-1-1`, `/blog/openai-1220`) 전부 410이 아니라 **404** 반환.
+* **원인 가설**: Cloudflare Pages `_redirects`가 410(Gone) 상태코드를 지원하지 않아 해당 규칙을 무시하고 기본 404로 폴스루됨.
+* **근거**: 410 규칙 6개를 직접 프로브 → 전부 404. `/blog/definitely-not-a-real-slug-xyz`(규칙에 없던 슬러그)도 404이며 `<title>페이지를 찾을 수 없습니다 - AI코리아24 | AI코리아24</title>`로 `/blog/293`과 **동일** — 규칙이 적용되지 않아 통상 404 경로를 탄다는 뜻.
+* **본 작업과의 무관성 확인**: 410 규칙은 `f6914b4c`에서 최초 추가되어 emdash 커밋(`bb828eac`)보다 **먼저** 존재했고, HEAD 버전에 9줄 그대로 남아 있음(`git show HEAD:public/_redirects | grep -c "/410  410"` → 9). 이번 커밋은 이 줄을 건드리지 않았음. → **[부분검증]**: Cloudflare Pages의 410 미지원이라는 가설을 공식 문서로 확인하지 않음. curl 관측(규칙 존재 + 동일 404 바디)까지만 검증함.
+* **조치**: 지시서가 "수정 파일 = `public/_redirects` 3줄 삭제만"으로 범위를 한정하고 있어 **코드 수정하지 않음**. 410을 살리려면 Cloudflare Pages Worker(functions) 레벨 처리 또는 404 유지가 필요 — 별도 지시서 필요.
+* **영향**: 410 Gone은 "의도적으로 제거된 URL"이라는 SEO 신호라 404로 대체되면 검색엔진이 약간의 신호 손실을 받지만, **이번 작업이 만든 회귀는 아님**(배포 전에도 동일).
+
+### 산출물 경로
+
+* 커밋 `dd1a2e38` 변경 파일 5개: `public/_redirects`, `scripts/blog_draft_generator.py`, `scripts/model_eval.py`, `scripts/auto_briefing.py`, `src/pages/briefing/[date].astro` (동행 커밋 AIK24-BLOGPIPE-FIX-01분 포함, 지시서대로 한 커밋으로 묶음)
+
+### 잔존 위험
+
+1. **410 규칙 9개가 실제로는 404로 동작** — 위 "미달 항목" 참조. Cloudflare Pages가 410을 무시하는 것으로 보이나 공식 문서 미확인([부분검증]). SEO 신호 측면의 소폭 손실 상태이며 이번 작업의 회귀 아님.
+2. **파이프라인의 `_push_to_emdash`는 그대로 남아 있음** — 지시서 "참고"에 따라 유지. 블로그 정식 위치는 `aikorea24.kr/blog/`로 통일됐지만, 스크립트가 여전히 emdash로도 푸시하므로 **이중 발행 상태가 계속됨**. 후속 지시서 필요.
+3. **`scripts/logs/`가 untracked** — `.gitignore`에 `scripts/logs/` 규칙이 없어(`naver_blog/logs/`, `scripts/threads/logs/`만 존재) 로그 파일이 추적 대상이 될 수 있음. 이번 커밋에는 지시서 목록에 없어 스테이징하지 않았으나, `.gitignore` 보강을 권장.
+4. **`docs/state.md` 자체는 이번 커밋에 미포함** — 지시서가 스테이징 목록을 5개로 한정해 명시적으로 제외함. 현재 워킹트리에 미커밋 상태로 남음.
+
+완료 — 시니어 2 verify 요청
+
+## 2026-10-11 17:5x — aikorea24.kr 링크·동작 감사 (ego-browser + HTTP 전수 스캔)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24 (감사만 — 코드 수정 없음)
+* 범위: 시드 8개 페이지(`/`, `/blog`, `/tools`, `/glossary`, `/chronicle`, `/news`, `/subscribe`, `/contact`)에서 수집한 링크 657건 전수 상태코드 확인 + 首页 이미지 13건 + 주요 위젯 동작 확인
+* 결과: 성공 — 실제 결함 4건 확정, 허위 양성 3군 반박
+
+### 실제 결함 (수정 필요)
+
+1. **홈페이지 블로그 카드 6개 전부 개별 글 404** — [ 심각 ]
+   * 경로: `https://aikorea24.kr/blog/<slug>/` → 301 → `https://emdash.aikorea24.kr/posts/`
+   * `public/_redirects:24-25`가 `/blog/*` 를 슬러그를 버리고 목록 주소로 보냄
+   * [검증됨] 6/6 카드 모두 최종 도착지 `<title>Latest Posts — aikorea24</title>` (개별 글 아님)
+   * [검증됨] 해당 6개 슬러그는 `emdash.aikorea24.kr/posts/<slug>` 에도 존재하지 않음 (302 → `/404`)
+   * 영향: 홈 첫 화면 5개 카드 = 읽을 수 없는 링크. 게스트 첫 진입 경험 최대 손실 지점
+
+2. **홈페이지 AIKeep24 카드 썸네일 404** — [ 보통 ]
+   * `https://aikorea24.kr/ID5dRLRf.jpeg` → 404, `content-type: text/html` (404 페이지 HTML을 img로 렌더)
+   * [검증됨] 홈 `<img>` 13건 전수 확인 → 유일한 실패. 나머지 12건(로고·마스코트·블로그 thumb 5·OG 3·heritage 이미지) 전부 200
+
+3. **`/network/` 외부 링크 404** — [ 경미 ]
+   * `https://65.informationhot.kr/2025/08/Dental implants covered by national health insurance.html` (공백 포함 URL) → 404
+   * [검증됨] `/network/` HTML에서 3건 중 1건만 깨짐. `/subscribe` 는 같은 링크 200
+
+4. **리다이렉트 19건** — [ 경미·SEO ]
+   * [검증됨] 308×8 (`/blog`, `/tools`, `/glossary`, `/chronicle`, `/contact`, `/about`, `/privacy`, `/terms`) + 301×11 (전부 슬래그 유실 후 유효 목적지)
+   * `/blog`·`/blog/` 도 `/chronicle` 등도 trailing slash 없으면 308 → 링크 equity 분산
+
+### 반박된 허위 양성 (보고서에 미포함)
+
+* 60건 `aikorea24.kr/posts/*` 404 → **스캐너 prefixes 오류**. `emdash.aikorea24.kr/posts/` 페이지의 상대 링크를 aikorea24.kr로 붙여서 생김. 동일 슬러그 emdash 직접 시 200
+* 9건 `/chronicle/*` 404 → **재현 불가**. 3회 반복 + 18건 병렬 + `?cb=1` 캐시바이스트 전부 200. 16:30 배포 직후 CDN 전파 타이밍으로 추정. [부분검증]
+* `https://aikorea24.krmailto:info@aikorea24.kr` → **스캐너 조립 버그**. 실제 href는 `mailto:info@aikorea24.kr` 정상
+* `${n.slug}` 미치환 템플릿 → **오탐**. 홈 인라인 `<script>` 내부 JS 백틱 템플릿이라 정상 동작
+* `openai.com` 403 → 봇 차단. 사용자 클릭은 정상 가능
+
+### 정상 확인
+
+* [검증됨] 검색 버튼 → "블로그 검색... (제목, 설명, 태그)" 입력창 정상 표시
+* [검증됨] 로그인 → `/api/auth/login` 301 → 302 → Google OAuth 정상 체인
+* [검증됨] 구독 폼 email 필드 존재, 버튼 "무료로 구독하기"
+* [검증됨] 서브사이트 4개 (heritage/cert/keyword/persona.aikorea24.kr) 전부 200
+* [검증됨] 외부 링크 57건 중 49건 200
+* [검증됨] 시드 8개 페이지 전부 `cssSheets` 4~7개 로드, JS 콘솔 예외 0건, broken img 0건
+
+### 잔존 위험
+
+1. `/posts/*` 60건은 emdash 도메인에서만 유효 — 검색엔진이 aikorea24.kr 경로로 색인 시도할 수 있음
+2. 감사 스코프가 시드 8개 페이지의 1홉 링크에 한정 — 위키 내부 링크·글 본문 인라인 링크는 미커버
+3. 결함 1의 실제 수정은 emdash 스텁 확인 후 `/blog/*` 리다이렉트 규칙 변경 필요 — 본 세션은 감사만 수행
+4. 16:30 배포 직후 감사라 CDN 상태가 안정화 전 — 재감사 권장
+
+### 다음 행동
+
+* 결함 1: `public/_redirects` `/blog/*` 규칙을 슬러그 보존 형태로 변경 (emdash 스텁 경로 확인 선행)
+* 결함 2: `/ID5dRLRf.jpeg` 실제 파일 배치 또는 경로 수정
+* 결함 3: `/network/` 링크 URL 공백 인코딩
+
+---
+
+## 2026-10-11 16:30 — AIK24-BLOGPIPE-FIX-01 브리핑↔블로그 정합성 5개 결함 수정
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-11-1619-AIK24-BLOGPIPE-FIX-01-브리핑블로그정합성.md`
+* 결과: 성공 — Step 7 검증 5항목 전부 통과, 빌드·배포 완료
+* 기준 커밋: `6233d9a0` (직전 세션 푸시 커밋). 본 작업은 **커밋하지 않음** — 지시서에 커밋 단계 없음, 워킹트리에 그대로
+* 수정 파일 (4)
+  1. `scripts/blog_draft_generator.py` — [2a/5] 경로 삭제, `generate_model_eval_post`·`generate_model_eval_blogs` 함수 전체 삭제, 단계 로그 `[1/4]`·`[2/4]`·`[3/4]` renumber, `generate_model_eval_draft`에 전 문항 실패 가드 추가, `generate_draft` 폴백→스킵, `main()` 루프에 non-free-llm 스킵 가드
+  2. `scripts/model_eval.py` — `score_response` judge 프롬프트에 ①②③ '0' 판정 규칙 추가 (TIERS 미변경)
+  3. `scripts/auto_briefing.py` — `build_briefing()` intro 문구 교체
+  4. `src/pages/briefing/[date].astro` — meta description 문구 교체
+* 한 줄 요지: 무료 모델 심층 분석 단일 경로만 남기고 뉴스 분석 블로그 생성을 차단하며 채점 기준을 강화
+* 결과 (검증 근거)
+  - [검증됨] Step 7-1 `ast.parse` 3파일 통과 → `syntax OK`
+  - [검증됨] Step 7-2 `rg "generate_model_eval_blogs|generate_model_eval_post" scripts/blog_draft_generator.py` → 매칭 0건 (rc=1)
+  - [검증됨] Step 7-3 `rg "일반 심층 분석으로 폴백"` → 매칭 0건 (rc=1)
+  - [검증됨] Step 7-4 `rg 'v2_tag"\) != "free-llm"'` → L836 1건 (deep_dive 체크보다 앞)
+  - [검증됨] Step 7-5 `rg "오늘의 AI 뉴스 브리핑|주요 AI 뉴스"` → `auto_briefing.py`·`[date].astro` 매칭 0건 (rc=1)
+  - [검증됨] renumber 결과 `rg '\[1/5\]|\[2a/5\]|\[2b/5\]|\[3/5\]|model_blogs'` → 0건. 신규 로그 L809 `[1/4]` L824 `[2/4]` L951 `[3/4]`
+  - [검증됨] `npm run build` 성공 (`Server built in 10.72s`, `[build] Complete!`)
+  - [검증됨] `npm run deploy` 성공 — Pages 배포 `https://6923876f.aikorea24-4nk.pages.dev`, `✨ Deployment complete!`, sitemap ping `google=true naver=true`
+  - [검증됨] 인증: `scripts/deploy.sh`가 프로젝트 `.env`의 토큰(`CLOUDFLARE_ACCOUNT_ID=7eb1b8cd…`, `CLOUDFLARE_API_TOKEN=cfut_J…`)을 source — 신 계정이라 정상. 세션 주입 토큰 사용 안 함
+  - [검증됨] 라이브 `/briefing/2026-10-11-6/` HTTP 200, meta description = `2026년 10월 11일 (일) AI 브리핑 - 3건의 AI 소식을 큐레이션했습니다.` (신 문구)
+  - [부분검증] 파이프라인 동작(E2E) 미실행 — 오늘 06:00 스케줄이 이미 꺼진 상태(`launchctl bootout`, 2026-10-11 15:45 보고)에서 다음 실행은 수동/재등록 대기. 따라서 가드 로직은 **코드·grep 검증까지만**. 복구: 스케줄 재등록 후 다음 브리핑 실행 로그에서 `[2/4] 무료 모델 아님, 스킵` 로그 실측
+  - [부분검증] judge 프롬프트 강화 효과 미실측 — 새 채점 규칙이 실제 점수를 낮추는지 확인하려면 모델 재평가 실행 필요(OpenRouter 무료 티어 소진 상태). 복구: 24시간 후 1회 평가
+* 잔존 위험
+  1. 기존 브리핑 D1 행의 intro에는 옛 문구(`N건의 주요 AI 뉴스를 선정했습니다.`)가 저장돼 있어 라이브 페이지에 그대로 노출됨 — 신규 브리핑부터 신 문구 적용. DB 마이그레이션은 지시서 범위 밖
+  2. `[date].astro` L199 사이드바 `오늘의 다른 AI 뉴스`는 지시서 변경 대상에 없어 영문 뉴스가 그대로 남음(Step 7-5 grep 패턴 밖)
+  3. 고아 파일 `src/content/blog/2026-10-11-model-inclusionai-ling-3-1-flash.md` 삭제 미수행 — EmDash에도 푸시된 상태(지시서 참고절: 삭제는 별도 결정)
+  4. 오늘 생성된 일반 뉴스 블로그 002·003(카테고리 "뉴스")이 이미 생성·배포됨 — 회수 없음
+  5. 변경 미커밋 — 워킹트리에 남은 채 배포됨. 커밋 지시 전까지 롤백 수단 없음
+  6. 이전 보고(15:45) 잔존 위험 유효: `_redirects` blanket 301로 `/blog/*` 링크 사망, 중복 생성 경로, `step_link_blogs` 매칭 실패, `nohup` 백그라운드 사망
+* 다음 행동
+  - 시니어 2 verify 요청
+  - (대표님 결정) 고아 파일·기존 뉴스 블로그 회수 여부, `/blog/*` 301 정합화, 스케줄 재등록 여부
+
+---
+
 ## 2026-10-11 15:45 — 블로그 크론 비활성화 + 파이프라인 수동 실행 + 모델분석 글 빌드 수정
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
