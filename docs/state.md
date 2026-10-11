@@ -1,3 +1,30 @@
+## 2026-10-11 14:40 — 수동 파이프라인 재실행 + Brevo IPv4/D1 토큰 버그 2건 수정
+
+**한 일**: 대표님 지시로 미커밋 전 작업 전량 커밋·푸시(`cc532c90`) 후 `run_pipeline.py` 수동 실행. 실행 중 발견된 Brevo 이메일 401 실패 2건을 PRODUCTION CODE로 수정하고 이메일 재발송 성공.
+
+**결과**
+- [검증됨] 커밋·푸시 — `15b7e92d..cc532c90` `agent/phase40-compass-diversification`. 시크릿 스캔(diff + 신규 파일) 0건 통과.
+- [검증됨] 파이프라인 완주 — `logs/pipeline_manual_20261011_1429.log`, 소요 201.2초, exit 0. 선정 3건 / 썸네일 3건 / D1 브리핑 id=346 `date=2026-10-11-5` / 배포 `https://aikorea24.kr`(CDN `cd7c1d57.aikorea24-4nk.pages.dev`) / sitemap ping google·naver `true`.
+- [검증됨] 라이브 반영 — `GET /briefing/` 200, `GET /briefing/2026-10-11-5/` 200, 선정 3건 제목 HTML 존재.
+- [검증됨] **Brevo 버그 1 (401 unrecognised IP)** — 원인: `scripts/auto_email_sender.py`가 `requests`로 호출 시 로컬 IPv6(`2001:fb1:…`)로 접속, Brevo 화이트리스트엔 공인 IPv4(`58.11.95.17`)만 등록. `curl -4`로 `/v3/account` 200 확인(키 이상 없음), 기본(IPv6)은 401 재현. 수정: 모듈 상단에 `socket.getaddrinfo` IPv4 고정 패치 10줄. 재현 확인 `get_subscribers_from_brevo(2)` → 8명 반환.
+- [검증됨] **D1 토큰 버그 2 (7403)** — 원인: `_d1_query()`가 `load_env()` 없이 `env=dict(os.environ)`를 넘겨 셸 주입 토큰(`fac9808c` 옛 계정)을 사용 → 7403 → `return []`. `get_today_briefing()`/`get_briefing_items()`/`get_tools()` 모두 영향. 파이프라인 안에서는 앞단 호출이 `load_env()`를 먼저 실행한 우연히 동작했고, 스탠드얼론 실행은 항상 실패(`오늘 발행된 브리핑 없음`) 재현. 수정: `_d1_query()` 첫 줄에 `load_env()` 1줄 추가(공유 함수를 거치는 모든 호출자 일괄 해결).
+- [검증됨] 이메일 실제 발송 — 재실행 결과 `브리핑 날짜: 2026-10-11-5`, 아이템 3건, 구독자 8명 중 테스트 3건 필터 → **5명 발송 성공 (HTTP 201)**, Message ID `<202610110735.65762250823@smtp-relay.mailin.fr>`.
+
+**잔존 위험**
+- [부분검증] `model_eval`이 `inclusionai/ling-3.1-flash:free`에 9문항 전부 HTTP 404 → `티어 미확인 (응답 실패 과대) (0/0점)`. 원인은 해당 모델이 OpenRouter에 존재하지 않아서(무료 목록 14종에 미포함)이며 404 판정은 코드상 올바름. 다만 오류 난 모델에도 브리핑 코멘트 블록이 찍혀 읽는 사람에게 혼란 → 미완료 모델이면 블록 미출력하는 분기 필요.
+- [검증불가] 썸네일 품질 검증 실패 3건 중 2건(4KB, 10KB/10KB → placeholder)이 `logs/pipeline_manual_20261011_1429.log` L127·149·171·180에 기록. 1건은 placeholder로 대체되어 발행됨.
+- [검증됨] `run_pipeline.py`는 이메일 발송이 401로 실패해도 요약에 `✅ 에러 없음`을 출력(로그 L197~203 실패, L~ 최종 `에러 없음`). 요약 판정 로직이 `step_email()` 예외만 삼키는 구조.
+- [잔존] MODELEVAL 잔존 위험 6건(무료 티어 일일 한도 소진 / eval 최대 20분 소요 / 판관 LLM 재시도 미구현 / 외부 벤치마크 환각 / 점수 사후 검증 없음 / D1 쓰기 미검증)은 이전 보고(15:36) 그대로 유효. `👉 자세한 분석` 링크의 D1 UPDATE는 오늘 free-llm 항목이 id=346에 있으므로 오늘은 실제 UPDATE 경로가 실행됨(브랜핑 코멘트에 링크 없음은 09:30 블로그 생성 전이라 정상).
+- [잔존] 이전 보고의 나머지 미해결 항목 12건(Brevo 환영메일 문구 수동 확인, `community_post_id` 스키마, token-refresh 잡 190 로그, launchd.log 9.1MB, 저녁 22:15 잡, `d1_client.py` 주석, `v2_filter.py` 분류, 브리핑 3건 한정 등) 그대로.
+
+**다음 행동**
+- 대표님: Brevo 대시보드 보안 설정에서 IPv4(`58.11.95.17`)가 화이트리스트에 유지되는지 확인(IPv6 패치로 우회했으나 모바일 등 다른 IPv4 경로 대비).
+- 개발: `model_eval` 존재하지 않는 모델은 코멘트 블록 미출력 분기 추가.
+- 개발: `run_pipeline.py` 요약에 이메일 단계 성공 여부 반영.
+- 2026-10-12 09:30 KST: 블로그 잡 최초 실증(`blog_draft_generator.py` 배포 구간 미검증 + `append_comment_link` D1 UPDATE 실증).
+
+---
+
 ## 2026-10-11 15:36 — AIK24-MODELEVAL-01 무료 모델 능력 자동 평가 (9문항 반영)
 
 **한 일**: 지시서 `2026-10-11-1140-AIK24-MODELEVAL-01-무료모델-능력자동평가.md` (11:51 개정본) 구현. 무료 LLM 모델을 9문항으로 실측해 브리핑 코멘트와 블로그 심층 분석에 자동 반영.

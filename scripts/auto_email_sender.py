@@ -4,10 +4,23 @@
 import json
 import os
 import re
+import socket
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+
+# Brevo 인증 IP 화이트리스트에는 공인 IPv4(58.11.95.17)만 등록돼 있다.
+# requests는 IPv6 주소(2001:fb1::)로 먼저 접속하면 전부 401로 실패하므로 IPv4로 고정한다.
+_gai = socket.getaddrinfo
+
+
+def _ipv4_only(host, port, *a, **kw):
+    hits = [r for r in _gai(host, port, 0, socket.SOCK_STREAM) if r[0] == socket.AF_INET]
+    return hits or _gai(host, port, *a, **kw)
+
+
+socket.getaddrinfo = _ipv4_only
 
 
 def load_env():
@@ -33,6 +46,7 @@ def load_env():
 
 def _d1_query(sql: str) -> list[dict]:
     """wrangler d1 execute JSON 출력에서 results 배열 추출"""
+    load_env()  # 셸 주입 토큰(옛 계정) 대신 프로젝트 .env 토큰을 쓰지 않으면 7403으로 전부 실패
     root = Path(__file__).resolve().parent.parent
     env = dict(os.environ)
     try:
