@@ -1,3 +1,26 @@
+## 2026-10-11 15:05 — 커밋 푸시 (model_eval 미존재 처리 + 이메일 실패 중단)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 결과: 성공 — 커밋 `59d819ac` push 완료, 워킹트리 clean
+* 한 일
+  1. `model_eval.extract_model_id()` — free 표기 변형(`:free`/`(free)`/`-free`) 정규화 후 OpenRouter 실제 목록 조회로 존재 확인. 미존재 시 `None` 반환(평가 생략).
+  2. `model_eval.eval_comment_block()` — 전 문항 응답 실패(`failed >= max_score`) 시 블록 미출력. "티어 미확인" 오해를 유발하던 경로 차단.
+  3. `auto_email_sender.main()` — 발송 실패 시 `RuntimeError` raise → `run_pipeline.py` 요약이 `✅ 에러 없음`으로 오표시되던 결함 해소.
+* 결과 (검증 근거)
+  - [검증됨] AST 파싱 `auto_email_sender.py`·`model_eval.py` 2건 통과 (`ast.parse`)
+  - [검증됨] `extract_model_id` 4케이스 실측: `inclusionai/ling-3.1-flash` → base ID, `liquid/lfm-2.5-2.6b:free` → `:free` 유지, `apodex/apodex-1.1-mini` → `:free` 부착, HF 일반 기사 → `None`
+  - [검증됨] 시크릿 스캔 diff 0건, `briefing_dedup.json` JSON 파싱 정상
+  - [검증불가] 실제 브리핑 실행에서의 404 모델 처리 — OpenRouter 무료 티어 소진 상태라 재실측 불가. 복구: 24시간 후 실행
+* 잔존 위험
+  1. `inclusionai/ling-3.1-flash`는 OpenRouter에 유료 변형만 존재 → 유료 ID로 평가 시도 후 전 문항 실패 → 블록 생략됨(자체 복구). 무료 티어 한도 소진 시 동일.
+  2. 실행 시 `.venv/bin/python3 -u` 필수 (stdout 버퍼링으로 tee 진행 출력 안 보임)
+  3. 이전 보고 잔존 위험 8건 + `briefing_items` 누적/`created_at` UTC 항목 그대로 유효
+* 다음 행동
+  - 대표님 결정 대기: 브리핑 4건 채우려면 `CANDIDATE_LIMIT` 상향 필요
+  - 2026-10-12 09:30 KST 블로그 잡 최초 실증 (`blog_draft_generator.py` 배포 구간)
+
+---
+
 ## 2026-10-11 14:40 — 수동 파이프라인 재실행 + Brevo IPv4/D1 토큰 버그 2건 수정
 
 **한 일**: 대표님 지시로 미커밋 전 작업 전량 커밋·푸시(`cc532c90`) 후 `run_pipeline.py` 수동 실행. 실행 중 발견된 Brevo 이메일 401 실패 2건을 PRODUCTION CODE로 수정하고 이메일 재발송 성공.
