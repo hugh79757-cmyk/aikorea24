@@ -1,3 +1,32 @@
+## 2026-10-11 16:58 — AIK24-CF-TRACE-01 구 Cloudflare 계정 잔존 확인 (조사 전용)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 결과: 성공 — 조사 6항목 중 3항목 완전, 2항목 부분, 1항목 불가. **삭제/변경 0건.**
+* 한 일
+  - Cloudflare REST API로 구 계정(`fac9808c…` hugh79757@gmail.com) Workers/Pages/D1/R2/KV/Zones 전수 조회 → 신 계정(`7eb1b8cd…`)과 대조
+* 결과 (검증 근거)
+  - [검증됨] **DNS**: 구 zone `aikorea24.kr` status=`moved`. `dig NS` → mike/lara (신 계정). 실서비스 영향 0
+  - [검증됨] **Workers**: 구 계정 72개 중 aikorea24 관련 없음 (`aikeep24-web`는 다른 제품)
+  - [검증됨] **Pages**: 구 `aikorea24` 잔존. Git 연동 `production_deployments_enabled=false` + `preview_deployment_setting=all` → **매 git push가 preview 빌드**. 오늘 push 3건(14:29/14:36/14:48 KST) ↔ preview 배포 3건(07:29:51/07:36:10/07:48:10·26 UTC) 1:1 일치. 사용자 트래픽 없음, 빌드 분만 소모
+  - [검증됨] **D1**: 구 `aikorea24-db`(19MB) `news` 17,731행 / `briefings` 317행 / 최신 `2026-10-08 22:33:30` → 이전 완료 후 정지. 신 계정 DB가 18,011행 / 326행으로 실사용
+  - [검증됨] **R2 목록**: 구 `aikorea24-files`(2026-03-04, APAC) 잔존
+  - [검증됨] **KV 목록**: aikorea24 고유명 네임스페이스 없음. 공용명 `KV_DEDUP`/`KV_POSTED_URLS`/`SUBSCRIBERS` 3건은 사용처 미확정
+  - [부분검증] R2 객체 수·용량 — `r2/buckets` API가 통계 미제공. [확인 불가]. 복구: 승인 시 `wrangler r2 object list --bucket aikorea24-files`
+  - [검증불가] Images — `GET /images/v1/images` HTTP 404. 복구: 대시보드 UI 확인
+  - [검증됨] 스크린샷 미촬영 — API 원본 조회로 대체
+* 잔존 위험
+  1. 구 계정 Pages가 조치 전까지 매 push마다 preview 빌드 실행
+  2. `money-aikorea24`(구 계정, latest 2026-10-10) 판별 미완
+  3. 공용명 KV 3건의 aikorea24 사용 여부 미확정
+  4. 구 D1 19MB가 유일한 과거 데이터 사본일 수 있음 → 삭제 전 백업
+  5. 구 계정 나머지(Workers 72개/Pages 9개/D1 9개/R2 19개/Zones 3개) 당일에도 활동 중(`tour-deals` 2026-10-11 07:52 UTC 배포) → **계정 단위 정리 금지**
+* 다음 행동 (대표님 결정 대기)
+  - 구 Pages `aikorea24` Git 연동 해제/삭제 승인
+  - `money-aikorea24` 판별, KV 3건 사용처 확인, R2 용량 확인
+  - 삭제 작업은 별도 지시서로 진행
+
+---
+
 ## 2026-10-11 15:05 — 커밋 푸시 (model_eval 미존재 처리 + 이메일 실패 중단)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
