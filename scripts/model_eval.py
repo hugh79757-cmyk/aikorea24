@@ -477,16 +477,39 @@ def get_access_guide(model_id):
 def extract_model_id(article):
     """브리핑 기사 dict → OpenRouter 모델 ID. 판별 불가하면 None.
 
-    news_collector_v2가 link를 `https://openrouter.ai/{id}`(':free' 접미사 제거)로
-    넣으므로 link를 우선 사용하고, 없으면 제목의 `[무료 LLM] {id}:free` 패턴으로 폴백.
+    표기 변형 ((free), -free, :free 등)을 정규화한 뒤 OpenRouter 실제 목록에서
+    존재 여부를 확인한다. 존재하지 않으면 None (평가 생략).
     """
+    # 1. link 또는 제목에서 base ID 추출
+    base_id = None
     link = article.get("link") or ""
     m = re.search(r"openrouter\.ai/([^?#\s]+)", link)
     if m:
-        mid = m.group(1).rstrip("/")
-        return mid if ":" in mid else mid + ":free"
-    m = re.search(r"\[무료 (?:LLM|모델)\]\s*([\w\-./]+:free)", article.get("title") or "")
-    return m.group(1) if m else None
+        base_id = m.group(1).rstrip("/")
+    if not base_id:
+        # 제목 변형: [무료 LLM] id:free / [무료 모델] id (free) / id-free 등
+        title = article.get("title") or ""
+        m = re.search(r"\[무료 (?:LLM|모델)\]\s*([\w\-./]+)", title)
+        if m:
+            base_id = m.group(1)
+    if not base_id:
+        return None
+    # 2. free 표기 변형 정규화 (:free, (free), -free, [free] 제거)
+    base_id = re.sub(r"[:\-\s]*[\(\[]?free[\)\]]?\s*$", "", base_id, flags=re.IGNORECASE).strip()
+    if not base_id:
+        return None
+    # 3. OpenRouter 실제 목록에서 존재 확인 (:free 우선, 없으면 base)
+    models = _fetch_openrouter_models()
+    if models is None:
+        # 목록 조회 실패 시 기존 동작 유지 (호출 시 404로 자연스럽게 실패)
+        return base_id + ":free"
+    if base_id + ":free" in models:
+        return base_id + ":free"
+    if base_id in models:
+        return base_id
+    # 4. 둘 다 없으면 None (평가 생략)
+    log(f"모델 미존재 → 평가 생략: {base_id}")
+    return None
 
 
 def eval_comment_block(model_id, deep_dive_url=None, result=None):
@@ -507,6 +530,11 @@ def eval_comment_block(model_id, deep_dive_url=None, result=None):
         return ""
     if not r.get("details"):
         log("평가 결과 없음 → 블록 생략")
+        return ""
+    # 모델이 OpenRouter에 없으면(전 문항 http 실패) 블록 자체를 생략한다.
+    # "티어 미확인" 표기는 오해를 유발하므로 출력하지 않는다. (2026-10-11)
+    if r.get("failed", 0) >= r.get("max_score", 9):
+        log(f"전 문항 응답 실패({r['failed']}/{r['max_score']}) → 블록 생략 (모델 미존재 가능)")
         return ""
     lines = [f"[{model_id}] — {r['label']}"]
     if deep_dive_url:

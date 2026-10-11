@@ -437,6 +437,7 @@ def main():
         print("\n=== 이메일 발송 완료 ===")
     else:
         print("\n=== 이메일 발송 실패 ===")
+        raise RuntimeError("이메일 발송 실패 (Brevo API 오류)")
 
 
 if __name__ == "__main__":
