@@ -3634,6 +3634,48 @@
           "date": "2026-10-11"
         }
       ]
+    },
+    {
+      "date": "2026-10-11",
+      "briefing_id": 347,
+      "articles": [
+        {
+          "id": "54938",
+          "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
+          "original_title": "",
+          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
+          "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
+          "entities": [
+            "OpenRouter",
+            "LLM"
+          ],
+          "date": "2026-10-11"
+        },
+        {
+          "id": "54983",
+          "title": "존재하지 않아서 직접 만든 모델",
+          "original_title": "",
+          "description": "",
+          "link": "https://huggingface.co/blog/building-with-ml-intern",
+          "entities": [],
+          "date": "2026-10-11"
+        },
+        {
+          "id": "54992",
+          "title": "보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다",
+          "original_title": "",
+          "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
+          "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
+          "entities": [
+            "Blog",
+            "Secret",
+            "GitHub",
+            "The",
+            "Developers"
+          ],
+          "date": "2026-10-11"
+        }
+      ]
     }
   ],
   "articles": [
@@ -6927,6 +6969,42 @@
         "GitHub",
         "Here",
         "If"
+      ],
+      "date": "2026-10-11"
+    },
+    {
+      "id": "54938",
+      "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
+      "original_title": "",
+      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
+      "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
+      "entities": [
+        "OpenRouter",
+        "LLM"
+      ],
+      "date": "2026-10-11"
+    },
+    {
+      "id": "54983",
+      "title": "존재하지 않아서 직접 만든 모델",
+      "original_title": "",
+      "description": "",
+      "link": "https://huggingface.co/blog/building-with-ml-intern",
+      "entities": [],
+      "date": "2026-10-11"
+    },
+    {
+      "id": "54992",
+      "title": "보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다",
+      "original_title": "",
+      "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
+      "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
+      "entities": [
+        "Blog",
+        "Secret",
+        "GitHub",
+        "The",
+        "Developers"
       ],
       "date": "2026-10-11"
     },

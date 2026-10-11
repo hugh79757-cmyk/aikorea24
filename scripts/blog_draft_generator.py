@@ -815,7 +815,11 @@ def generate_model_eval_blogs(articles):
         frontmatter = (
             f"---\n"
             f"title: \"[모델 분석] {model_id} — {ev.get('tier', '')}\"\n"
+            # description/category는 blog 컬렉션 스키마 필수 필드. 빠지면 빌드가 깨진다.
+            f"description: \"{model_id} 무료 모델을 9문항으로 직접 실측한 결과와 활용 가이드\"\n"
             f"date: \"{today_str}\"\n"
+            f"category: \"모델 분석\"\n"
+            f"tags:\n  - \"무료 LLM\"\n  - \"모델 평가\"\n"
             f"model_id: \"{model_id}\"\n"
             f"tier: \"{ev.get('tier', '')}\"\n"
             f"score: \"{ev.get('score', 0)}/{ev.get('max_score', 9)}\"\n"
