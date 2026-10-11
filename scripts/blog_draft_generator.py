@@ -710,6 +710,128 @@ import model_eval
 
 
 # ============================================
+# LLM 무료모델 평가 블로그 (AIK24-MODELEVAL-01)
+# ============================================
+def generate_model_eval_post(article, model_id, eval_result):
+    # ponytail: L314 generate_model_eval_draft와 5단 구조 구현이 중복됨.
+    # 이름이 같으면 뒤 정의가 앞 정의를 덮어써 generate_draft()가 깨진다.
+    # 중복 정리 여부는 대표님 결정 — 우선은 이름을 분리해 충돌만 없앤다.
+    """무료 모델 심층 분석 블로그 초안 생성 (5단 구조).
+
+    1. 벤치마크 점수 — 공개 데이터로 개념 제시
+    2. 우리 테스트 결과 — 9문항 실측
+    3. 신뢰 메시지 — "이 점수 믿을만하다"
+    4. 써보세요 — OpenCode 설정 가이드
+    5. 누가 쓰면 좋은가 — 용도별 추천
+    """
+    title = article.get("title", "")
+    label = eval_result.get("label", "")
+    tier = eval_result.get("tier", "")
+    score = eval_result.get("score", 0)
+    max_score = eval_result.get("max_score", 9)
+    details = eval_result.get("details", [])
+    guide = model_eval.get_access_guide(model_id)
+    # 9문항 상세 결과 텍스트화
+    detail_lines = []
+    for d in details:
+        cat = d.get("cat", "")
+        pts = d.get("score", 0)
+        ans = (d.get("answer") or "")[:200]
+        detail_lines.append(f"- [{cat}] {pts}점: {ans}")
+    detail_text = "\n".join(detail_lines) if detail_lines else "(상세 결과 없음)"
+    system_prompt = (
+        "당신은 AI 모델 리뷰 전문 블로거입니다. 한국인 독자를 대상으로 쉽고 실용적으로 씁니다.\n"
+        "중국어(한자)를 절대 사용하지 마세요. 순수 한국어로만 작성하세요.\n"
+        "벤치마크 수치를 모르면 지어내지 말고 '공개 벤치마크 미확인'이라고 쓰세요."
+    )
+    user_prompt = (
+        f"다음 무료 AI 모델에 대한 심층 분석 블로그 글을 작성해줘.\n\n"
+        f"모델: {model_id}\n"
+        f"평가: {label} ({score}/{max_score}점)\n"
+        f"티어: {tier}\n\n"
+        f"9문항 테스트 상세:\n{detail_text}\n\n"
+        f"다음 5단 구조로 작성해:\n"
+        f"1. 벤치마크 점수 — LMArena 등 공개 점수가 있으면 소개, 없으면 '공개 벤치마크 미확인'\n"
+        f"2. 우리 테스트 결과 — 위 9문항 결과를 카테고리별로 설명\n"
+        f"3. 신뢰 메시지 — '이 점수는 우리가 직접 테스트한 결과라 믿을만하다'는 취지\n"
+        f"4. 써보세요 — '{guide}'를 포함하고 OpenCode 설정 방법을 단계별로 안내\n"
+        f"5. 누가 쓰면 좋은가 — 코딩용/글쓰기용/가벼운 작업용 등 용도별 추천\n\n"
+        f"마지막에 '👉 이 모델을 브리핑에서 보기' 링크 문구를 넣지 마세요."
+    )
+    try:
+        content = chat_completion(
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=system_prompt,
+            temperature=0.3,
+            max_tokens=3000,
+            model_override=None,
+        )
+        if not content:
+            log(f"  모델 분석 생성 실패 (LLM 응답 없음): {model_id}")
+            return None
+        # 중국어 제거
+        content = re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', content)
+        return content
+    except Exception as e:
+        log(f"  모델 분석 생성 예외: {type(e).__name__}: {e}")
+        return None
+
+
+def generate_model_eval_blogs(articles):
+    """오늘 브리핑의 free-llm 항목에 대해 모델 평가 블로그 생성.
+
+    반환: [(filepath, title, model_id), ...]
+    """
+    results = []
+    today_str = datetime.now(KST).strftime("%Y-%m-%d")
+    for art in articles:
+        if art.get("v2_tag") != "free-llm":
+            continue
+        model_id = model_eval.extract_model_id(art)
+        if not model_id:
+            log(f"  모델 ID 판별 실패 → 건너뜀: {art.get('title', '')[:40]}")
+            continue
+        log(f"  모델 평가 블로그 생성: {model_id}")
+        try:
+            ev = model_eval.eval_model_cached(model_id)
+        except Exception as e:
+            log(f"    평가 실패: {e}")
+            continue
+        # 전 문항 실패 시 블로그 생성 생략
+        if ev.get("failed", 0) >= ev.get("max_score", 9):
+            log(f"    전 문항 실패 → 블로그 생략: {model_id}")
+            continue
+        content = generate_model_eval_post(art, model_id, ev)
+        if not content:
+            continue
+        # 파일 저장
+        safe_model = re.sub(r"[^a-z0-9가-힣]+", "-", model_id.lower()).strip("-")[:50]
+        slug = f"{today_str}-model-{safe_model}"
+        fp = os.path.join(PROJECT_DIR, "src", "content", "blog", f"{slug}.md")
+        # 중복 방지
+        if os.path.exists(fp):
+            log(f"    이미 존재 → 건너뜀: {slug}")
+            continue
+        frontmatter = (
+            f"---\n"
+            f"title: \"[모델 분석] {model_id} — {ev.get('tier', '')}\"\n"
+            f"date: \"{today_str}\"\n"
+            f"model_id: \"{model_id}\"\n"
+            f"tier: \"{ev.get('tier', '')}\"\n"
+            f"score: \"{ev.get('score', 0)}/{ev.get('max_score', 9)}\"\n"
+            f"---\n\n"
+        )
+        try:
+            with open(fp, "w", encoding="utf-8") as f:
+                f.write(frontmatter + content)
+            log(f"    ✅ 저장: {fp}")
+            results.append((fp, f"[모델 분석] {model_id}", model_id))
+        except Exception as e:
+            log(f"    저장 실패: {e}")
+    return results
+
+
+# ============================================
 # 메인
 # ============================================
 def main():
@@ -733,8 +855,18 @@ def main():
         return
     print()
 
-    # 2. 블로그 글 생성 (브리핑 기사별 1개씩)
-    log("[2/5] 블로그 초안 생성 중...")
+    # 2a. LLM 무료모델 평가 블로그 생성 (모델 심층 분석)
+    log("[2a/5] 모델 평가 블로그 생성 중...")
+    try:
+        model_blogs = generate_model_eval_blogs(articles)
+        log(f"  모델 분석 블로그 {len(model_blogs)}건 생성")
+    except Exception as e:
+        log(f"  모델 블로그 생성 실패 (무시): {e}")
+        model_blogs = []
+    print()
+
+    # 2b. 일반 뉴스 블로그 글 생성 (브리핑 기사별 1개씩)
+    log("[2b/5] 일반 뉴스 블로그 초안 생성 중...")
     file_num = next_file_number(today_str)
     created = []
 
