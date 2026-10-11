@@ -722,81 +722,6 @@ from pipeline.infra.telegram import send_telegram
 import model_eval
 
 # ============================================
-# EmDash 푸시 (단일 목적지 통일)
-# ============================================
-def _push_to_emdash(filepath, title, excerpt=""):
-    """생성된 마크다운을 EmDash D1(ec_posts)에 직접 삽입.
-    반환: 성공 시 True, 실패 시 False.
-    """
-    try:
-        sys.path.insert(0, os.path.join(_script_dir))
-        from emdash04_migrate import md_to_pt
-        import emdash02_measure as M
-    except Exception as e:
-        log(f"  ⚠️ EmDash 모듈 로드 실패: {e}")
-        return False
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            raw = f.read()
-        # frontmatter 분리
-        parts = raw.split("---", 2)
-        body = parts[2] if len(parts) > 2 else raw
-        fm = parts[1] if len(parts) > 1 else ""
-        # frontmatter에서 image 추출
-        img_m = re.search(r'^image:\s*"([^"]+)"', fm, re.MULTILINE)
-        img = img_m.group(1) if img_m else None
-        desc_m = re.search(r'^description:\s*"([^"]+)"', fm, re.MULTILINE)
-        desc = desc_m.group(1) if desc_m else excerpt
-        pt = json.dumps(md_to_pt(body), ensure_ascii=False)
-        # ULID 생성
-        import random, time as _t
-        CROCK = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
-        ms = int(_t.time() * 1000)
-        rand = random.randrange(1 << 16)
-        bits = [(ms >> (i * 5)) & 31 for i in range(9, -1, -1)] + \
-               [(rand >> (i * 5)) & 31 for i in range(15, -1, -1)]
-        pid = "".join(CROCK[b] for b in bits)
-        rev = pid  # revision도 ULID 사용
-        # slug 생성
-        slug = make_slug(title)
-        # D1 삽입
-        def lit(v):
-            if v is None:
-                return "NULL"
-            if isinstance(v, (int, float)):
-                return str(v)
-            return "'" + str(v).replace("'", "''") + "'"
-        import datetime as _dt
-        now_iso = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.") + "%03dZ" % (
-            _dt.datetime.now(_dt.timezone.utc).microsecond // 1000)
-        pub = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S+00:00")
-        rev_data = json.dumps({"title": title, "excerpt": desc, "content": json.loads(pt),
-                               **({"featured_image": str(img)} if img else {})}, ensure_ascii=False)
-        # author 조회
-        author_res = M.query("SELECT id FROM users LIMIT 1")
-        author = author_res["result"][0]["results"][0]["id"]
-        stmts = [
-            "INSERT INTO revisions (id,collection,entry_id,data,created_at) VALUES "
-            "(%s,'posts',%s,%s,datetime('now'))" % (lit(rev), lit(pid), lit(rev_data)),
-            "INSERT INTO ec_posts (id,slug,status,author_id,created_at,updated_at,published_at,version,"
-            "live_revision_id,locale,title,excerpt,content,featured_image) VALUES "
-            "(%s,%s,'published',%s,%s,%s,%s,2,%s,'en',%s,%s,%s,%s)"
-            % (lit(pid), lit(slug), lit(author), lit(now_iso), lit(now_iso), lit(pub), lit(rev),
-               lit(title), lit(desc), lit(pt), lit(str(img)) if img else "NULL")
-        ]
-        res = M.query(";\n".join(stmts))
-        for st in res.get("result", []):
-            if not st.get("success", True):
-                log(f"  ⚠️ EmDash 삽입 실패: {json.dumps(st)[:200]}")
-                return False
-        log(f"  ✅ EmDash 푸시 완료: {title[:40]}")
-        return True
-    except Exception as e:
-        log(f"  ⚠️ EmDash 푸시 예외: {type(e).__name__}: {e}")
-        return False
-
-
-# ============================================
 # 메인
 # ============================================
 def main():
@@ -868,9 +793,6 @@ def main():
                     _add_image_to_frontmatter(filepath, thumb_rel)
             except Exception as thumb_e:
                 log(f"  ⚠️ '{title[:40]}' 썸네일 생성 실패: {thumb_e}")
-
-            # EmDash 푸시 (단일 목적지 통일)
-            _push_to_emdash(filepath, seo_title or title)
         except Exception as e:
             log(f"    ❌ '{title[:40]}' 생성 실패: {e}")
 
