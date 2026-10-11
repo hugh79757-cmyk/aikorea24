@@ -100,10 +100,25 @@ SELECT COUNT(*) total, SUM(featured_image IS NULL) nulls, SUM(featured_image IS 
 | `scripts/emdash12_thumb_gen.py` | Pexels 신규 생성 12건 (house `process_thumbnail` 재사용) |
 | `scripts/emdash12_thumb_retry.py` | placeholder 폴백 건 `src.large2x` 재시도 |
 
-## 7. 잔존 위험
+## 7. 잔존 위험 (후속 작업으로 갱신, 2026-10-11 18:0x)
 
-1. **`scripts/weekly_blog_publisher.py` 의 `_publish_to_emdash`** (기본 off, `EMDASH_PUBLISH=1` 일 때만 동작) 미확인. 이번 작업 범위 밖이며, 켜져 있으면 EmDash 경유 발행으로 계속 중복 적재될 수 있음.
-2. **기존 EmDash 중복 데이터 미정리** — EmDash `ec_posts`/`revisions` 의 과거 행은 그대로 남김. 대표님이 aikorea24.kr/blog 를 정식 위치로 확정한 만큼 중복 수집본 제거는 별건으로 필요.
-3. **신규 생성 12건 이미지는 git 미추적** — `.gitignore:67` `public/images/` 규칙에 의해 커밋되지 않음(기존 1,567 디렉터리와 동일한 house 규칙). 백업 시 `public/images/` 별도 보관 필요.
-4. **백필 대상이 2026-10-10 배치 한 건뿐** — 같은 배치에서 `featured_image` 미설정 원인은 D1 기록만으로 특정 불가. 동일 증상 재발 시 동일 절차 재사용 가능.
-5. **이미지 관련성 일부는 수동 확인 필요** — Pexels 검색어 기반 자동 매칭이므로 카드 이미지가 글 내용과 무관할 수 있음 (예: "삼성 브로드컴 칩 계약" 카드에 추상 기술 이미지). 전수 육안 검수는 하지 않음.
+초기 보고 시 5건이resid로 남아 있었으나, 후속 작업에서 ①③④ 을 처리했고 ②는 대표님 판단 대기 중이다.
+
+1. ~~`weekly_blog_publisher.py` 의 `_publish_to_emdash` 미확인~~ → **해소 (삭제 완료)**
+   `EMDASH_PUBLISH` 가 어디에서도 설정되지 않음을 확인 (`.env`, `~/.env.common`, `~/Library/LaunchAgents/*.plist` 전부 부재). 도달 가능한 스케줄러 `kr.aikorea24.weekly-contrast.plist` 의 `EnvironmentVariables` 에는 `OPENAI_API_KEY`/`PATH`/`WEEKLY_CONTRAST_ENABLED` 만 있어 게이트가 항상 조기 반환한다. 도큐스트링이 주장하던 "`/blog/*` → emdash 리다이렉트" 전제도 앞선 작업에서 철회된 상태였다. 호출부(130행) + 함수 전체(134–199행) + 미사용 상수 `EMDASH_ORIGIN`(26행)/`IMG_ORIGIN`(27행) 삭제. 회귀 검증: `pytest tests/test_weekly_blog_publisher.py -q` **수정 전 12 passed / 수정 후 12 passed**.
+2. **기존 EmDash 중복 데이터 — 조사 완료, 대표님 판단 대기** (조치 안 함)
+   정정: **EmDash 내부 중복은 없다.** `ec_posts` 1,471행 = 고유 슬러그 1,471개, 정규화 키 충돌 0건. Astro `src/content/blog` 는 1,470개로 사실상 1:1 미러(차이 1행). 즉 중복은 *플랫폼 간* 문제이며, 그래서 행 삭제가 정답이 아니다.
+   실제 문제는 SEO 이중화다 — `emdash.aikorea24.kr/posts/<slug>` 가 자기 자신을 가리키는 `canonical` 을 선언하고 `robots` meta 가 없어 aikorea24.kr 과 검색 결과를 경쟁한다.
+   선택지: (a)现状 유지 (b) EmDash 측 `noindex` 또는 aikorea24.kr 로의 크로스도메인 canonical (c) `/posts/*` → `aikorea24.kr/blog/*` 301 (d) 행 삭제(라이브 사이트 파괴).
+   **추천: (b) 또는 (c). (d) 는 대 unilaterally 실행 금지.**
+3. ~~신규 생성 12건 이미지는 git 미추적~~ → **해소**
+   `.gitignore:67` `public/images/` 규칙은 기존 1,567 디렉터리 전부에 적용되는 house 규칙이나, 이번 12건은 `git add -f` 로 예외적으로 커밋했다(백필 산출물 보존 목적).
+4. ~~백필 대상이 2026-10-10 배치 한 건뿐 / 원인 특정 불가~~ → **해소 (원인 규명)**
+   `scripts/emdash06_direct.py` 143–147 행이 `featured_image` 를 `lit(str(img)) if img else "NULL"` 로 기록하는데, 원본 마크다운 frontmatter 에 이미지가 없으면 NULL 이 된다. 일회성 마이그레이션 경로(EMDASH-06)의 동작이며 라이브 경로가 아니다.
+   재발 방지 확인 — 현재 NULL 을 만들 수 있는 스케줄러 경로는 3개뿐이고 2개가 제거됐다: `blog_draft_generator.py::_push_to_emdash` (앞선 작업에서 삭제), `weekly_blog_publisher.py::_publish_to_emdash` (이번 작업에서 삭제), `blog_v2_generator.py::publish()` (수동 실행 전용, `--publish` 플래그만 존재하고 env 킬스위치 없음).
+5. **이미지 관련성 — 육안 검수 완료, 12건 중 11 OK / 1 WEAK**
+   Read 도구로 실제 이미지를 4라운드 육안 검수했다. 1라운드 **2 OK / 7 WEAK / 3 BAD** (주제 불일치 3건: LLM 추천 카드에 "CYBER AWARENESS" 간판, 유전자편집 단백질 카드에 **주식 캔들 차트**, 스마트홈 카드에 주제 없는 추상 블록). `emdash12_thumb_retry.py` 에 `slug::query` 인자 지원을 추가하고 주제 일치 키워드로 재생성 → 2라운드 **8 OK / 2 WEAK / 0 BAD**, 3라운드 **10 OK / 1 WEAK / 0 BAD**.
+   최종 잔여 1건(WEAK): `오늘의-추천-llm-inkling-small…` — ChatGPT 로고를 제거하려 했으나 후속 검색어에서 **DeepSeek 로고**가 등장(추천 대상과 다른 모델의 로고이므로 오도). 4라운드(`text on computer screen macro`)에서 브랜드 없는 이미지를 얻었으나 주제 강도는 회귀(범용 코드 화면).
+   **판단: 브랜딩 없는 이미지를 채택하고 반복 생성을 중단.** 경쟁사 로고가 붙으면 독자가 오인할 수 있는 반면( actively misleading ), 범용 기술 이미지는 그저 기억에 남지 않을 뿐이기 때문이다. 무료 AI 인터페이스 스톡 사진은 대부분 브랜드를 포함하므로 4라운드면 충분하다고 봤다.
+6. **`scripts/blog_v2_generator.py::publish()` 는 env 킬스위치가 없다** — 252–271 행에서 `ec_posts`+`revisions` 에 직접 INSERT 하며, 보호 장치는 `--publish` CLI 플래그(278행) 뿐이다. 어떤 plist/crontab 에도 등록되어 있지 않아 수동 실행 전용이다. ① 과 달리 env 변수 하나로 되살릴 수 없어 위험도가 낮아 조치하지 않았다. EmDash 자체를 살려 둘지는 대표님 제품 결정 사항이다.
+7. `scripts/logs/` 가 여전히 untracked & gitignore 미설정 (본 작업과 무관, 前 작업부터 잔존).

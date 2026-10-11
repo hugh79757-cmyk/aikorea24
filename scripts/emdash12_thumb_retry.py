@@ -5,7 +5,7 @@ auto_thumbnail은 Pexels src.large(1200px)를 쓰는데, 일부 사진은 800x80
 품질 게이트(15KB)를 통과하지 못해 공용 placeholder로 폴백한다. 같은 검색 결과의
 src.large2x(2x 해상도)를 쓰면 게이트를 통과한다.
 
-사용: python3 scripts/emdash12_thumb_retry.py <slug> [<slug> ...]
+사용: python3 scripts/emdash12_thumb_retry.py <slug|slug::query> [<slug|query> ...]
 """
 import os
 import sys
@@ -25,10 +25,18 @@ QUERIES = ["abstract technology", "artificial intelligence", "data center",
 
 
 def main():
-    slugs = sys.argv[1:]
-    if not slugs:
+    targets = []
+    for a in sys.argv[1:]:
+        if "::" in a:  # slug::query — 육안 검수에서 부적합 판정된 건의 검색어 지정
+            s, q = a.split("::", 1)
+            targets.append((s, [q]))
+        else:
+            targets.append((a, QUERIES))
+    if not targets:
         print("slug 1개 이상 필요")
         sys.exit(2)
+    slugs = [s for s, _ in targets]
+    qmap = dict(targets)
 
     inlist = ",".join("'" + s.replace("'", "''") + "'" for s in slugs)
     rows = d1_query("SELECT slug, title, excerpt FROM ec_posts WHERE slug IN (%s)" % inlist)["result"][0]["results"]
@@ -39,10 +47,9 @@ def main():
     for slug in slugs:
         out = PUBLIC_IMAGES_DIR / slug / "thumbnail.webp"
         r = meta.get(slug, {})
-        text = (r.get("excerpt") or "").strip() or (r.get("title") or "").strip()
         print(f"\n=== {slug[:60]}")
         done = False
-        for q in QUERIES:
+        for q in qmap[slug]:
             photos = [p for p in search_pexels(q, max_pages=2) if p.get("id") not in used]
             for p in photos[:6]:
                 src = p.get("src", {})

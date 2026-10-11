@@ -1,3 +1,54 @@
+## 2026-10-11 18:05 — AIK24-THUMB-BACKFILL-01 후속: 잔존 위험 ①③④ 해소
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 커밋: `fix: weekly_blog_publisher EmDash 잔존 경로 제거 + 썸네일 12건 관련성 개선` (14 files)
+* 요지: 앞선 백필 작업의 잔존 위험 4건 중 3건을 처리. ②(EmDash↔Astro SEO 이중화)는 파괴적 조치라 대표님 판단 대기.
+* 배포: `npm run build` + `npm run deploy` 성공. **D1 쓰기 없음** — 슬러그/URL이 그대로라 `featured_image` 값 변경 불필요.
+
+### ① `weekly_blog_publisher.py::_publish_to_emdash` 삭제 (사망 코드 확정)
+
+`EMDASH_PUBLISH` 가 어디에서도 설정되지 않음을 실측: `.env` 없음, `~/.env.common` 없음, `~/Library/LaunchAgents/*.plist` 전건 검색 0건, 셸 환경변수 미설정.
+도달 가능한 스케줄러는 `kr.aikorea24.weekly-contrast.plist`(토요일 09:00, `run_weekly_contrast.py` → `publish_all` import) 하나이고, 그 plist 의 `EnvironmentVariables` 는 `OPENAI_API_KEY`, `PATH`, `WEEKLY_CONTRAST_ENABLED` 뿐이다 → 게이트 `if os.environ.get("EMDASH_PUBLISH") != "1": return None` 이 항상 조기 반환한다. **자동 경로로는 도달 불가.**
+도큐스트링이 주장 "`/blog/*` → emdash 리다이렉트" 는 AIK24-BLOG-REDIRECT-01 에서 철회된 상태 → 코드 자체가 낡았음.
+
+삭제: 호출부(130행), 함수 전체(134–199행), 미사용 상수 `EMDASH_ORIGIN`(26행)·`IMG_ORIGIN`(27행). 두 상수를 다른 모듈이 import 하지 않음을 확인(`naver_blog/publish_blog.py`, `scripts/emdash10_images.py` 는各自 env 변수로 직접 읽음).
+
+회귀 검증: `python3 -m pytest tests/test_weekly_blog_publisher.py -q` → **수정 전 12 passed / 수정 후 12 passed** (AGENTS.md 규칙에 따라 수정 전 baseline 먼저 확보). `ast.parse` syntax OK. `_publish_to_emdash|EMDASH_PUBLISH|EMDASH_ORIGIN|IMG_ORIGIN|emdash` grep → 전부 0. diff = 1 file 71 deletions.
+
+### ③ 신규 이미지 12건 git 추적
+
+`.gitignore:67` `public/images/` 는 기존 1,567 디렉터리 전부에 적용되는 house 규칙이지만, 이번 12건은 백필 산출물 보존을 위해 `git add -f` 로 예외 커밋.
+
+### ④ 이미지 관련성 육안 검수 (Read 도구, 4라운드)
+
+1라운드 **2 OK / 7 WEAK / 3 BAD**. 주제 불일치 3건: LLM 추천 카드에 "CYBER AWARENESS" 간판, **유전자편집 단백질 카드에 주식 캔들 차트**, 스마트홈 카드에 주제 없는 추상 블록.
+→ `emdash12_thumb_retry.py` 에 `slug::query` 인자 지원 추가(기본값은 기존 `QUERIES` 폴백), 주제 일치 키워드로 재생성.
+2라운드 **8 OK / 2 WEAK / 0 BAD**, 3라운드 **10 OK / 1 WEAK / 0 BAD**, 4라운드 **11 OK / 1 WEAK / 0 BAD**.
+
+잔여 1건은 WEAK 는 WEAK 체제 유지 — `오늘의-추천-llm-inkling-small…`: ChatGPT 로고 제거 후 **DeepSeek 로고**가 등장(추천 대상과 다른 모델이라 오도). 4라운드에서 브랜드 없는 이미지를 얻었으나 주제 강도는 회귀(범용 코드 화면).
+**판단: 브랜딩 없는 이미지를 채택하고 반복 중단.** 경쟁사 로고는 독자를 actively mislead 하고, 범용 기술 이미지는 그저 기억에 남지 않을 뿐이다.
+
+### 완료 기준 검증
+
+| 기준 | 결과 | 근거 |
+|---|---|---|
+| `_publish_to_emdash` 도달 불가 | ✅ | plist 전건 grep 0건, `EnvironmentVariables` 3개 확인, 게이트 조기 반환 |
+| 삭제 후 회귀 없음 | ✅ | pytest 12 passed → 12 passed (전/후 동일) |
+| 이미지 육안 검수 | ✅ | 4라운드, 최종 11 OK / 1 WEAK / 0 BAD |
+| 이미지 기계 검증 | ✅ | 12/12 ≥15KB, placeholder 0, md5 중복 0, 800×800 WEBP |
+| 이미지 라이브 반영 | ✅ | `npm run deploy` 완료 (preview `119ef061`), 신규 12건 `aikorea24.kr` **12/12 HTTP 200** |
+| 목록 페이지 | ✅ | `emdash.aikorea24.kr/posts/` 카드 60개 중 이미지 60개 / 없음 0개 |
+| D1 | — | 변경 불필요 (슬러그·URL 동일). `ec_posts` NULL 0건 유지 |
+
+### 잔존 위험
+
+1. **② EmDash↔Astro SEO 이중화 — 대표님 판단 대기.** EmDash 내부 중복은 없음(1,471행 = 고유 슬러그 1,471, 충돌 0). 문제는 `emdash.aikorea24.kr/posts/<slug>` 가 자기 자신을 가리키는 canonical 을 선언하고 `robots` meta 도 없어 aikorea24.kr 과 검색 결과를 경쟁하는 것. 선택지 (a) 유지 (b) `noindex` 또는 크로스도메인 canonical (c) `/posts/*` → `aikorea24.kr/blog/*` 301 (d) 행 삭제(라이브 파괴). **추천 (b)/(c), (d) 는 단독 실행 금지.** 이번 작업에서 조치 안 함.
+2. `scripts/blog_v2_generator.py::publish()` 는 env 킬스위치 없이 `ec_posts` 에 INSERT (252–271행), `--publish` 플래그만 존재. 수동 실행 전용이며 조치하지 않음 — EmDash 유지 여부는 대표님 제품 결정.
+3. `오늘의-추천-llm-inkling-small…` 카드 이미지 WEAK (주제 약함, 브랜드 오도 아님). 의도적으로 반복 생성 중단.
+4. `scripts/logs/` untracked & gitignore 미설정 (前 작업부터 잔존, 본 작업 무관).
+
+완료 — 시니어 2 verify 요청
+
 ## 2026-10-11 17:50 — AIK24-THUMB-BACKFILL-01: EmDash 블로그 썸네일 백필 48건
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
