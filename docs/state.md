@@ -1,3 +1,37 @@
+## 2026-10-11 15:45 — 블로그 크론 비활성화 + 파이프라인 수동 실행 + 모델분석 글 빌드 수정
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 결과: 부분 성공 — 파이프라인 1차는 배포 실패(rc=1), 원인 수정 후 재실행 성공
+* 한 일
+  1. **커밋 3건 푸시**: `6ae44339`(CF-TRACE 기록), `70368f16`(Step 3/3b 추가 + 중복 정의 해소), `6233d9a0`(모델분석 frontmatter + 생성본)
+  2. **크론 비활성화**: `launchctl bootout gui/501 ~/Library/LaunchAgents/kr.aikorea24.blog-draft.plist` → rc=0, `launchctl print` "Could not find service" 확인
+  3. **수동 파이프라인 실행**: `logs/pipeline_manual_20261011_1728.log`
+* 결과 (검증 근거)
+  - [검증됨] 선정 3건(free-llm `inclusionai/ling-3.1-flash` 13점, `존재하지 않아서 직접 만든 모델` 9점, `채팅이 잘못된 사용자 인터페이스일 때` 9점)
+  - [검증됨] 브리핑 id=347 `2026-10-11-6` published, rowid 1909/1910/1911
+  - [검증됨] `model_eval` 9문항 **전 문항 정상 응답**(content/reasoning 혼합), `inclusionai/ling-3.1-flash` **9/9 = Claude Opus급**. Q5 reasoning 잘림 → 2000토큰 재시도로 회수 (기존 장치 정상 동작)
+  - [검증됨] 코멘트 블록 3요소 생성 + `👉 자세한 분석` 링크 D1 삽입(rowid 1909)
+  - [검증됨] 이메일 발송 HTTP 201, 5명 (IPv4 패치 정상)
+  - [검증됨] **배포 실패 원인 특정**: `generate_model_eval_post()` frontmatter에 `description`/`category` 없음 → Astro `InvalidContentEntryDataError` → `deploy.sh` rc=1. 동일 건의 `❌ 배포 실패 (rc=1)` 요약 표시 확인(내 RuntimeError 수정 효과)
+  - [검증됨] 수정 후 `npm run build` 통과(10.18s) → 재실행(`--skip-*`) 배포 성공 `e7a096b8.aikorea24-4nk.pages.dev`, `✅ 에러 없음`, sitemap ping google=true naver=true
+  - [검증됨] 라이브: `/briefing/` 200, `/briefing/2026-10-11-6/` 200
+  - [검증됨] **중복 정의 버그 수정**: `generate_model_eval_draft`가 L314·L715 두 번 정의돼 뒤 정의를 덮어쓰며 `generate_draft()`를 깨뜨리던 문제 → 이름을 분리(`generate_model_eval_post`)
+* ⚠️ 잔존 위험 (신규 발견, 구조적)
+  1. **`public/_redirects` L24-25가 `/blog/*` → `emdash.aikorea24.kr/posts/` 301 blanket 리다이렉트**(2026-10-10 추가). 그런데 `blog_draft_generator`는 계속 `src/content/blog/`에 글을 만들고 D1 코멘트·이메일에 `https://aikorea24.kr/blog/{slug}/` 링크를 넣는다 → **생성된 모든 블로그 글 링크가 죽음**. 오늘 생성 4건 전부 301.
+  2. 같은 기사에 두 경로가 중복 생성됨 — `2026-10-11-001-…`(generate_draft 경로)과 `2026-10-11-model-inclusionai-…`(generate_model_eval_blogs 경로). 내용 중복.
+  3. `step_link_blogs()`는 2회 실행 모두 `완료: 0건 연결` — slug 매칭이 `model_id.split('/')[-1]`(`ling-3.1-flash`)을 코멘트에서 찾는데 코멘트의 `👉 자세한 분석`은 이미 채워 있어 `continue`로 건너뜀. 신규 링크 미생성.
+  4. `generate_model_eval_blogs()`는 `D1`을 직접 호출하지 않고 `save_draft()` 경로와 별개로 파일만 기록 → 링크 연결 경로 불일치.
+  5. 썸네일 품질 검증 실패 후 재시도 성공 동작 확인(`saas` 폴백). 15KB 미달 자체는 미해결.
+  6. 첫 실행이 `nohup ... &` 로 셸 종료와 함께 죽음(6/14 지점에서 중단). `subprocess.Popen(start_new_session=True)` 필요.
+* 다음 행동 (대표님 결정 필요)
+  - **블로그 이전 결정 정합화**: (a) 자동 생성 블로그를 emdash로 이관 + 링크 경로 변경, (b) `_redirects` blanket 규칙 제거/예외 추가, (c) 자동 블로그 생성 중단. 지금 상태는 "생성만 하고 링크는 죽음" 최악 상태.
+  - `generate_model_eval_blogs` 중복 경로 정리(한쪽 제거)
+  - `step_link_blogs` 매칭 로직 수정
+* 잔존 위험 (이전 보고서 유효)
+  - 브리핑 3건 한계(`MAX_PER_TAG=2` + 저점수 탈락), Brevo 공인 IPv4 변경 시 재발, Brevo 환영 이메일 문구 수동 확인, `community_post_id` 스키마 잔존, 외부 벤치마크 환각 방어 미검증, 판관 LLM 재시도 미구현
+
+---
+
 ## 2026-10-11 16:58 — AIK24-CF-TRACE-01 구 Cloudflare 계정 잔존 확인 (조사 전용)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
