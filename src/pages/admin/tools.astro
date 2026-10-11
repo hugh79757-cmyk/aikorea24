@@ -1,6 +1,7 @@
 ---
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import { verifySession } from '../../lib/auth';
 
 // Phase 3-C Wave B: 관리자 검토 큐 (pending 목록 + 승인/반려)
@@ -43,7 +44,7 @@ const ROW_COLS = `t.slug, t.name, t.url, t.category, t.category_custom, t.descri
         t.price_model, t.price_detail, t.user_id, t.created_at,
         (SELECT email FROM users WHERE id = t.user_id) AS owner_email`;
 try {
-  const db = (Astro.locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) {
     dbError = 'DB 없음';
   } else {

@@ -1,0 +1,86 @@
+{
+ "inclusionai/ling-3.1-flash": {
+  "model_id": "inclusionai/ling-3.1-flash",
+  "score": 9,
+  "max_score": 9,
+  "tier": "Claude Opus급",
+  "details": [
+   {
+    "idx": 1,
+    "cat": "코딩",
+    "score": 1,
+    "source": "content",
+    "answer": "```python\nimport csv\n\ndef average_price(filename):\n    with open(filename, newline='') as f:\n        reader = csv.DictReader(f)\n        prices = [float(row['price']) for row in reader]\n    return sum(prices) / len(prices) if prices else 0\n```"
+   },
+   {
+    "idx": 2,
+    "cat": "코딩",
+    "score": 1,
+    "source": "content",
+    "answer": "```python\ndef add(a, b):\n    return a + b\n```"
+   },
+   {
+    "idx": 3,
+    "cat": "맥락정리",
+    "score": 1,
+    "source": "content",
+    "answer": "RAG는 질문의 임베딩 벡터로 벡터 DB에서 유사 문서를 검색해 프롬프트에 넣고, 대규모 언어 모델이 그 문서만 근거로 답변하게 하는 방식이다. 이 덕분에 최신 정보 반영과 출처 추적이 쉬워지지만, 청크 분할이나 검색 정확도가 낮으면 근거 없는 그럴듯한 답변이 나올 수 있어 청크 크기와 검색 개수 튜닝이 핵심이다. 같은 질문 반복 시에는 캐시를 활용해 지연과 비용을 줄이는 것이 좋다."
+   },
+   {
+    "idx": 4,
+    "cat": "맥락정리",
+    "score": 1,
+    "source": "content",
+    "answer": "1. 파이썬을 처음 시작할 때 무엇부터 해야 하는지\n2. 변수 이름을 지을 때의 규칙 3가지\n3. 프로그램이 안 돌아갈 때 처음에 할 일"
+   },
+   {
+    "idx": 5,
+    "cat": "압축",
+    "score": 1,
+    "source": "reasoning",
+    "answer": "The user wants me to condense the given Korean text to 200 characters while maintaining key information. Let me identify the key points:\n\n1. LLM service costs - input/output token pricing, scales with requests\n2. Four cost reduction methods:\n   - Cache for repeated questions\n   - Route by model size (small for simple, large for complex)\n   - Filter irrelevant documents in retrieval to reduce input tokens\n   - Only include necessary parts of conversation history\n3. Track cost and accuracy together to avoid quality degradation\n4. Use streaming for time-sensitive screens to reduce first-byte time and user churn\n\nLet me draft a condensed version in Korean and count characters:\n\nDraft 1:\n\"LLM 서비스 비용은 입출력 토큰 단가에 따라 요청 증가 시 급증한다. 절감 방법은 ①반복 질문 캐싱 ②요청 난이도에 따른 모델 분기(쉬운 건 소형, 복잡한 건 대형) ③검색 단계에서 무관 문서 제거로 입력 토큰 축소 ④대화 기록 중 필요한 부분만 전달. 단, 비용만 줄이면 품질 저하 위험이 있어 비용과 정확도를 함께 기록·비교해야 한다. 속도 민감 화면엔 스트리밍으로 첫 글자 지연을 줄여 이탈률을 낮추자.\"\n\nLet me count: \n\"LLM 서비스 비용은 입출력 토큰 단가에 따라 요청 증가 시 급증한다. 절감 방법은 ①반복 질문 캐싱 ②요"
+   },
+   {
+    "idx": 6,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "## 코드 설명\n\n```python\ndef add(a, b):\n    return a + b\n```\n\n### 각 부분의 의미\n\n| 요소 | 설명 |\n|------|------|\n| `def` | 함수를 정의할 때 사용하는 키워드 (definition의 약자) |\n| `add` | 함수의 이름. 호출할 때 사용하는 이름입니다 |\n| `(a, b)` | 매개변수(parameter). 함수가 받는 입력값 두 개 |\n| `:` | 함수 본문이 시작됨을 나타냄 |\n| `return` | 계산 결과를 호출한 곳으로 돌려줌 |\n| `a + b` | 두 매개변수를 더한 값 |\n\n### 동작 방식\n\n이 함수는 **두 수를 받아서 더한 값을 반환**합니다.\n\n```python\nresult = add(3, 5)\nprint(result)  # 8 출력\n\nprint(add(10, 20))  # 30 출력\n```\n\n### 참고 사항\n\n- 파이썬은 동적 타입 언어이므로 `a`, `b`에 숫자뿐 아니라 문자열도 들어갈 수 있습니다.\n  ```python\n  print(add(\"안녕\", \"하세요\"))  # \"안녕하세요\" 출력\n  ```\n- `return`이 없으면 함수는 `None`을 반환합니다.\n- 타입 힌트를 붙이면 더 명확해집니다:\n  ```python\n  def add(a: int, b: int) -> int:\n      return a + b\n  ```"
+   },
+   {
+    "idx": 7,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "안녕하세요, [수신자명]님.\n\n다름이 아니오니, 회의 시간을 변경하고자 연락드립니다.\n\n현재 [기존 시간]으로 예정되어 있는 회의를 [변경 희망 시간]으로 옮길 수 있을지 여쭙습니다. 일정에 어려움이 있으시면 편하신 시간을 알려주시면 조정하겠습니다.\n\n혼선이 없도록 확인 부탁드리며, 감사합니다.\n\n[본인"
+   },
+   {
+    "idx": 8,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "'인공지능'의 영어 번역은 **Artificial Intelligence** (약어: **AI**)입니다."
+   },
+   {
+    "idx": 9,
+    "cat": "추론",
+    "score": 1,
+    "source": "content",
+    "answer": "Yes"
+   }
+  ],
+  "errors": [
+   "Q2 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q5 reasoning 재시도 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q5 reasoning 재시도 HTTP 429 (재시도 2/3, 30초 대기)",
+   "Q5 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q6 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q7 finish_reason=length(잘림 가능)",
+   "Q9 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q9 HTTP 429 (재시도 2/3, 30초 대기)"
+  ],
+  "failed": 0,
+  "label": "AI 추정: Claude Opus급 (9/9점)",
+  "ts": 1791707621.658327
+ }
+}

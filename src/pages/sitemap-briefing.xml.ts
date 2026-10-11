@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { buildUrlset } from '../lib/sitemap';
 
@@ -5,8 +6,8 @@ export const prerender = false;
 
 export const GET: APIRoute = async ({ locals }) => {
   const base = 'https://aikorea24.kr';
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
 
   let entries: any[] = [];
 

@@ -9,6 +9,7 @@ tags:
 model_id: "inclusionai/ling-3.1-flash"
 tier: "Claude Opus급"
 score: "9/9"
+image: /images/news-keyword-og.webp
 ---
 
 안녕하세요! AI 모델의 숨겨진 보석을 찾아내어 알기 쉽게 리뷰해 드리는 블로거입니다. 

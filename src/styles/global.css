@@ -1,6 +1,19 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* AIK24-MIGRATE-01 Phase 1: Tailwind v3 → v4 마이그레이션
+   - v3: @tailwind base/components/utilities 3줄 → v4: @import "tailwindcss" 1줄
+   - v3 tailwind.config.mjs의 darkMode:'class' → CSS @custom-variant (v4는 JS 설정을 자동 로드하지 않음)
+   - v3 plugins: [@tailwindcss/typography] → @plugin
+   - v3 theme.extend.fontFamily.sans → @theme의 --font-sans (기존 코드가 var(--font-sans)를 참조) */
+
+/* darkMode: 'class' 대체 — .dark 클래스가 붙은 요소와 그 자손에 적용 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
 
 /* 시안 A 디자인 (2026-10-10): 클린 미니멀 - 흰 배경 + 검은 텍스트 + 빨간 버티컬 라인 */
 

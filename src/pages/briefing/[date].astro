@@ -1,8 +1,9 @@
 ---
+import { env } from 'cloudflare:workers';
 export const prerender = false;
 const { date } = Astro.params;
-const runtime = (Astro.locals as any).runtime;
-const db = runtime?.env?.DB;
+
+const db = env.DB;
 
 let briefing: any = null;
 let items: any[] = [];
@@ -134,7 +135,6 @@ body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#f
     <div class="nav-links">
       <a href="/blog" class="nav-link">블로그</a>
       <a href="/tools" class="nav-link">AI 도구</a>
-      <a href="/glossary" class="nav-link">용어사전</a>
       <a href="/briefing/" class="nav-link active">브리핑</a>
       <a href="/news" class="nav-link">뉴스</a>
     </div>
@@ -147,7 +147,6 @@ body{font-family:-apple-system,system-ui,'Noto Sans KR',sans-serif;background:#f
   <div id="mobile-menu" class="mobile-menu">
     <a href="/blog" class="mobile-link">블로그</a>
     <a href="/tools" class="mobile-link">AI 도구</a>
-    <a href="/glossary" class="mobile-link">용어사전</a>
     <a href="/briefing/" class="mobile-link active">브리핑</a>
     <a href="/news" class="mobile-link">뉴스</a>
   </div>

@@ -1,5 +1,6 @@
 ---
 export const prerender = false;
+import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
 
 // AIK24-NEWS-01: /news/ v2 개편
@@ -19,6 +20,23 @@ const TAG_LABELS: Record<string, string> = {
   tool: '실전 도구',
 };
 
+// AIK24-RENEWAL-01 C-3: RSS description 에 들어있는 HTML 태그를 벗긴다.
+// Astro 는 {expr} 을 이스케이프해서 '<p>If you...' 가 글자 그대로 노출됐다.
+// set:html 로 렌더하지 않고 태그만 제거한다 — 원문은 외부 피드라 신뢰 불가.
+function stripTags(s: any) {
+  if (!s) return '';
+  return String(s)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 function formatDate(dateStr: string) {
   const d = new Date(dateStr.split('-').slice(0, 3).join('-'));
   const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
@@ -26,8 +44,8 @@ function formatDate(dateStr: string) {
 }
 
 try {
-  const runtime = (Astro.locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
   if (db) {
     briefing = await db.prepare(
       "SELECT * FROM briefings WHERE status = 'published' ORDER BY id DESC LIMIT 1"
@@ -131,7 +149,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300');
                   <span class="text-xs text-gray-600">{(n.pub_date || n.created_at || '').slice(0, 10)}</span>
                 </div>
                 <h3 class="font-medium text-[#111111] mb-1 leading-snug">{n.title}</h3>
-                <p class="text-sm text-gray-500 line-clamp-2">{n.description}</p>
+                <p class="text-sm text-gray-500 line-clamp-2">{stripTags(n.description)}</p>
               </a>
             ))}
           </div>

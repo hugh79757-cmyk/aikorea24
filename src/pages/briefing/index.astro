@@ -1,8 +1,8 @@
 ---
+import { env } from 'cloudflare:workers';
 export const prerender = false;
 
-const runtime = (Astro.locals as any).runtime;
-const db = runtime?.env?.DB;
+const db = env.DB;
 
 let briefings: any[] = [];
 let news: any[] = [];
@@ -95,7 +95,6 @@ if (db) {
     <div style="display:flex;gap:16px;font-size:13px;">
       <a href="/blog" style="color:#555555;text-decoration:none;">블로그</a>
       <a href="/tools" style="color:#555555;text-decoration:none;">AI 도구</a>
-      <a href="/glossary" style="color:#555555;text-decoration:none;">용어사전</a>
       <a href="/briefing/" style="color:#E63B2E;text-decoration:none;">브리핑</a>
       <a href="/news" style="color:#555555;text-decoration:none;">뉴스</a>
     </div>

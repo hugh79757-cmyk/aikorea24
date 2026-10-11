@@ -1,11 +1,12 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const runtime = (locals as any).runtime;
-  const BREVO_API_KEY = runtime?.env?.BREVO_API_KEY;
-  const BREVO_LIST_ID = runtime?.env?.BREVO_LIST_ID;
+
+  const BREVO_API_KEY = env.BREVO_API_KEY;
+  const BREVO_LIST_ID = env.BREVO_LIST_ID;
 
   if (!BREVO_API_KEY) {
     return new Response(JSON.stringify({ error: 'BREVO_API_KEY not set' }), {

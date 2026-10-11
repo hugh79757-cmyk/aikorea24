@@ -53,19 +53,4 @@ const chronicle = defineCollection({
 });
 
 
-const glossary = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/glossary' }),
-  schema: z.object({
-    term: z.string(),
-    en: z.string(),
-    category: z.string(),
-    level: z.number(),
-    short: z.string(),
-    detail: z.string(),
-    example: z.string(),
-    related: z.array(z.string()),
-    date: z.string(),
-  }),
-});
-
-export const collections = { blog, tools, chronicle, glossary };
+export const collections = { blog, tools, chronicle };

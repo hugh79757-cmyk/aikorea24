@@ -1,6 +1,7 @@
 ---
-export const prerender = false;
+export const prerender = false; // C-1: 인증 리다이렉트 페이지는 SSR — 요청 시 쿠키 필요 → 정적 빌드 시 리다이렉트가 구워짐
 
+import { env } from 'cloudflare:workers';
 import Layout from '../../../../layouts/Layout.astro';
 import ToolForm from '../../../../components/ToolForm.astro';
 import { verifySession } from '../../../../lib/auth';
@@ -18,7 +19,7 @@ if (!currentUser) {
 let userId = 0;
 let row: any = null;
 try {
-  const db = (Astro.locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (db) {
     const userRow = await db.prepare('SELECT id FROM users WHERE email = ?').bind(currentUser.email).first();
     if (userRow) userId = (userRow as any).id;

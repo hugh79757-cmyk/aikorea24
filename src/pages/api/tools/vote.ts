@@ -1,10 +1,11 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
-  const db = (locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ error: 'DB 없음' }), { status: 500 });
 
   const session = cookies.get('session')?.value;
@@ -56,7 +57,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 };
 
 export const GET: APIRoute = async ({ request, locals, cookies }) => {
-  const db = (locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ count: 0, voted: false }), { status: 200 });
 
   const url = new URL(request.url);

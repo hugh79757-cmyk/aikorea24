@@ -1,10 +1,11 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ url, locals }) => {
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
   if (!db) {
     return new Response(JSON.stringify({ articles: [], meta: { total: 0, error: 'DB not available' } }), {
       headers: { 'Content-Type': 'application/json' },

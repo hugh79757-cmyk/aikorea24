@@ -1,10 +1,11 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ request, redirect, locals }) => {
-  const runtime = (locals as any).runtime;
-  const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+
+  const clientId = env.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
   
   const redirectUri = import.meta.env.PROD
     ? 'https://aikorea24.kr/api/auth/callback/google'

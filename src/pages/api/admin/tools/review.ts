@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../../lib/auth';
 import { sendToolNotification } from '../../../../lib/email-notify';
@@ -28,7 +29,7 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
     });
   }
 
-  const db = (locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) {
     return new Response(JSON.stringify({ error: 'db_unavailable' }), {
       status: 500,
@@ -91,8 +92,8 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
 
   // 승인/반려 알림 이메일 발송 — 실패해도 승인/반려 자체는 롤백하지 않음
   try {
-    const db2 = (locals as any).runtime?.env?.DB;
-    const brevoKey = (locals as any).runtime?.env?.BREVO_API_KEY;
+    const db2 = env.DB;
+    const brevoKey = env.BREVO_API_KEY;
     if (db2 && brevoKey) {
       const submitter = await db2
         .prepare(

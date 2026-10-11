@@ -12,10 +12,11 @@ export const prerender = false;
  *
  * 응답: 302 redirect to url (또는 url이 없으면 400)
  */
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async (context) => {
-  const db = (context.locals as any).runtime?.env?.DB;
+  const db = env.DB;
 
   if (!db) {
     return new Response(null, { status: 302, headers: { Location: '/' } });

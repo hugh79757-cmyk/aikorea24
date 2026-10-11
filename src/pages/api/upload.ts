@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { getSessionUser } from '../../lib/auth';
 
@@ -13,8 +14,8 @@ const ALLOWED_TYPES: Record<string, string> = {
 const MAX_SIZE = 2 * 1024 * 1024;
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
-  const r2 = (locals as any).runtime?.env?.R2;
-  const db = (locals as any).runtime?.env?.DB;
+  const r2 = env.R2;
+  const db = env.DB;
   if (!r2 || !db) return new Response(JSON.stringify({ error: '스토리지 설정 오류입니다.' }), { status: 500 });
 
   const user = await getSessionUser(cookies, (locals as any).sessionSecret);

@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
 import { getCollection } from 'astro:content';
@@ -29,7 +30,7 @@ function makeBaseSlug(name: string): string {
 }
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
-  const db = (locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ error: 'DB 없음' }), { status: 500 });
 
   const session = cookies.get('session')?.value;
@@ -175,7 +176,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
     // 등록 확인 이메일 발송 — 실패해도 등록 자체는 롤백하지 않음
     try {
-      const brevoKey = (locals as any).runtime?.env?.BREVO_API_KEY;
+      const brevoKey = env.BREVO_API_KEY;
       if (brevoKey && user?.email) {
         await sendSubmissionConfirmation(
           { to: user.email, toolName: name.trim(), toolSlug: slug },

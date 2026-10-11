@@ -1,3 +1,4 @@
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../../lib/auth';
 import { TASKS } from '../../../../config/tasks';
@@ -18,7 +19,7 @@ const ALLOWED_CATEGORIES = [
 const PRICE_MODELS = ['무료', 'Freemium', '유료'];
 
 export const PUT: APIRoute = async ({ params, request, locals, cookies }) => {
-  const db = (locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ error: 'DB 없음' }), { status: 500 });
 
   const session = cookies.get('session')?.value;

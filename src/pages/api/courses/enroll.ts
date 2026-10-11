@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 /**
@@ -12,9 +13,9 @@ import type { APIRoute } from 'astro';
  * Body: { email: string, course_slug?: string }
  */
 export const POST: APIRoute = async ({ request, locals }) => {
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
-  const BREVO_API_KEY = runtime?.env?.BREVO_API_KEY;
+
+  const db = env.DB;
+  const BREVO_API_KEY = env.BREVO_API_KEY;
 
   if (!db) {
     return new Response(JSON.stringify({ ok: false, reason: 'server_error', error: 'DB not available' }), {
@@ -132,7 +133,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             body: JSON.stringify({
               email,
               tags,
-              listIds: [Number(runtime?.env?.BREVO_LIST_ID || 2)],
+              listIds: [Number(env.BREVO_LIST_ID || 2)],
               updateEnabled: true,
             })
           });
@@ -144,7 +145,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             body: JSON.stringify({
               email,
               tags: [brevoTag],
-              listIds: [Number(runtime?.env?.BREVO_LIST_ID || 2)],
+              listIds: [Number(env.BREVO_LIST_ID || 2)],
             })
           });
         }

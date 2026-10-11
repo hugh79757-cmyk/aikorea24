@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { signSession } from '../../../../lib/auth';
 
@@ -11,9 +12,8 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   // OAuth state 파라미터 — 로그인 후 리다이렉트할 URL
   const state = url.searchParams.get('state') || '';
 
-  const runtime = (locals as any).runtime;
-  const clientId = runtime?.env?.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
-  const clientSecret = runtime?.env?.GOOGLE_CLIENT_SECRET || import.meta.env.GOOGLE_CLIENT_SECRET;
+  const clientId = env.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+  const clientSecret = env.GOOGLE_CLIENT_SECRET || import.meta.env.GOOGLE_CLIENT_SECRET;
 
   const redirectUri = import.meta.env.PROD
     ? 'https://aikorea24.kr/api/auth/callback/google'
@@ -41,7 +41,7 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   });
   const user = await userRes.json();
 
-  const db = runtime?.env?.DB;
+  const db = env.DB;
   if (db) {
     await db.prepare(
       `INSERT OR IGNORE INTO users (google_id, email, name, avatar) VALUES (?, ?, ?, ?)`

@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
@@ -9,7 +10,7 @@ const mdTools: any[] = (await getCollection('tools'))
 // D1 사용자 등록 도구 합성 (42-02: published-only, price_detail || price_model, fail-soft 200)
 let d1Rows: any[] = [];
 try {
-  const db = (Astro.locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (db) {
     const res = await db.prepare(
       'SELECT slug, name, url, category, description, price_model, price_detail, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE status=\'published\' ORDER BY created_at DESC'

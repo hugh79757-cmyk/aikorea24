@@ -1,5 +1,6 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 /**
@@ -17,10 +18,10 @@ const json = (body: unknown, status: number) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
 export const POST: APIRoute = async ({ request, locals }) => {
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
-  const BREVO_API_KEY = runtime?.env?.BREVO_API_KEY;
-  const BREVO_LIST_ID = runtime?.env?.BREVO_LIST_ID;
+
+  const db = env.DB;
+  const BREVO_API_KEY = env.BREVO_API_KEY;
+  const BREVO_LIST_ID = env.BREVO_LIST_ID;
 
   if (!db) return json({ ok: false, error: '서버 오류가 발생했습니다.' }, 500);
 

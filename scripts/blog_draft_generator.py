@@ -619,22 +619,9 @@ def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
             logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — 저장 거부")
             return None, None
 
-    # 브리핑 페이지 링크 주입 (첫 문단 뒤) — 체류시간 확보
-    if articles:
-        briefing_urls = []
-        for art in articles:
-            briefing_url = art.get("_briefing_url", "")
-            if briefing_url:
-                briefing_urls.append(briefing_url)
-        if briefing_urls:
-            source_url = briefing_urls[0]
-            source_block = f"\n\n원문기사는 아래의 링크를 통해 확인할 수 있습니다. [기사원문보기]({source_url})"
-            # 첫 문단 뒤에 삽입 (빈 줄 기준 분리)
-            parts = content.split("\n\n", 1)
-            if len(parts) > 1:
-                content = parts[0] + source_block + "\n\n" + parts[1]
-            else:
-                content = content + source_block
+    # AIK24-RENEWAL-01 C-2: 브리핑 원문 링크 주입 제거.
+    # 브리핑 페이지(D-1 폐기)가 더 이상 생성되지 않아 /briefing/{date}/ 가 302로 죽는다.
+    # 577개 기존 글은 대상 페이지가 살아 있어 유지하고, 새 글에는 주입하지 않는다.
 
     # title에서 따옴표 이스케이프 (YAML frontmatter 안전성)
     seo_title_escaped = seo_title.replace('"', "'")

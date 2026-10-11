@@ -1,8 +1,8 @@
 ---
+import { env } from 'cloudflare:workers';
 import { getSessionUser, getUserMembership, PLANS } from '../lib/auth';
 
-const runtime = (Astro.locals as any).runtime;
-const db = runtime?.env?.DB;
+const db = env.DB;
 const user = getSessionUser(Astro.cookies, Astro.locals.sessionSecret);
 
 let currentLevel = 'free';
@@ -13,7 +13,7 @@ if (user && db) {
   } catch {}
 }
 
-const TOSS_CLIENT_KEY = runtime?.env?.TOSS_CLIENT_KEY || '';
+const TOSS_CLIENT_KEY = env.TOSS_CLIENT_KEY || '';
 ---
 
 <html lang="ko">

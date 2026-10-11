@@ -1,10 +1,11 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
 
 export const GET: APIRoute = async ({ request, locals }) => {
-  const db = (locals as any).runtime.env.DB;
+  const db = env.DB;
   const url = new URL(request.url);
   const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
   const limit = Math.min(50, parseInt(url.searchParams.get('limit') || '20'));
@@ -47,7 +48,7 @@ export const GET: APIRoute = async ({ request, locals }) => {
 };
 
 export const POST: APIRoute = async ({ request, locals, cookies }) => {
-  const db = (locals as any).runtime.env.DB;
+  const db = env.DB;
   const sessionSecret = (locals as any).sessionSecret;
 
   const session = cookies.get('session')?.value;

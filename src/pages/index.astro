@@ -1,30 +1,26 @@
 ---
 export const prerender = false;
+import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import HeroSection from '../components/home/HeroSection.astro';
 import BriefingSection from '../components/home/BriefingSection.astro';
 import ToolsSection from '../components/home/ToolsSection.astro';
-import CourseSection from '../components/home/CourseSection.astro';
-import LatestBlog from '../components/home/LatestBlog.astro';
 import CtaSection from '../components/home/CtaSection.astro';
 import SubProjects from '../components/home/SubProjects.astro';
-import OpenSourceBanner from '../components/home/OpenSourceBanner.astro';
 import SubscribeBanner from '../components/home/SubscribeBanner.astro';
 
 // --- 블로그 데이터: 빌드 시점에 SSR (SEO 개선, P0 #3) ---
 const allPosts = (await getCollection('blog', ({ data }) => !data.draft))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-const recentPosts = allPosts.filter(p => p.data.category !== 'AI 강좌').slice(0, 3);
-const coursePosts = allPosts.filter(p => (p.data.tags || []).includes('바이브코딩')).slice(0, 3);
 
 // --- 브리핑 데이터 (빌드 시점 스냅샷) ---
 let briefing: any = null;
 let briefingItems: any[] = [];
 
 try {
-  const runtime = (Astro.locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
   if (db) {
     briefing = await db.prepare(
       "SELECT * FROM briefings WHERE status = 'published' ORDER BY id DESC LIMIT 1"
@@ -60,9 +56,6 @@ try {
     <BriefingSection briefing={briefing} items={briefingItems} />
     <ToolsSection />
     <SubscribeBanner />
-    <LatestBlog posts={recentPosts} />
-    <CourseSection posts={coursePosts} />
-    <OpenSourceBanner />
     <SubProjects />
     <CtaSection />
 

@@ -1,5 +1,6 @@
 ---
 export const prerender = true;
+import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
@@ -25,7 +26,7 @@ let d1OwnerId = 0;
 if (!tool) {
   let row: any = null;
   try {
-    const db = (Astro.locals as any).runtime?.env?.DB;
+    const db = env.DB;
     if (db) {
       // 현재 세션 사용자 확인 (패턴 B: cookie session → verifySession → users.id 역조회)
       let currentUser: { email: string; name: string } | null = null;

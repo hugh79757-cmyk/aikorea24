@@ -1,9 +1,10 @@
 export const prerender = false;
 
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ request, locals }) => {
-  const db = (locals as any).runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ reviews: [], avgRating: 0 }), { status: 200 });
 
   const url = new URL(request.url);
