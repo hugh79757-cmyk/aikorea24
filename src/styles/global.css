@@ -68,7 +68,7 @@ html, body {
   box-sizing: border-box;
 }
 
-/* 커뮤니티 게시글 markdown 렌더링 */
+/* 게시글 markdown 렌더링 */
 .prose-container h2 {
   font-size: 1.375rem;
   font-weight: 700;

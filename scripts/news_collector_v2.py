@@ -21,14 +21,19 @@
 import argparse
 import json
 import os
+import re
 import sys
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree as ET
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "threads", "v3"))
 import cfnew  # noqa: E402  (ACCT / A24_DB / token / sql)
 import v2_filter as v2f  # noqa: E402  (AIK24-NEWS-01 v2 판정)
+from model_router import chat_completion  # noqa: E402  (무료 LLM 폴백 체인)
+from auto_briefing import remove_chinese  # noqa: E402  (한자 제거 재사용)
 
 UA = {"User-Agent": "curl/8.7.1", "Accept": "*/*"}
 NOW = datetime.now(timezone.utc)
@@ -134,6 +139,40 @@ def _text(el):
     return "".join(el.itertext()).strip()
 
 
+_HAN = re.compile(r"[가-힣]")
+
+
+def translate_ko(text, max_len=None):
+    """영문 기술문 → 자연스러운 한국어. 실패/비영문이면 원문 그대로 반환."""
+    text = (text or "").strip()
+    if not text or _HAN.search(text) or not re.search(r"[A-Za-z]", text):
+        return text  # 이미 한국어거나 영어 아님 → 번역 불필요
+    try:
+        # 번역문은 원문보다 길어진다 — 토큰 부족하면 중간에 잘린 반쪽 번역이 나온다.
+        out = chat_completion(
+            messages=[{"role": "user", "content":
+                       f"다음 영어 제목을 한국어로 번역해줘. 제목만 출력해.\n\n{text}"}],
+            system_prompt=("당신은 영어 기술 뉴스 제목을 한국어로 번역하는 전문가입니다. "
+                           "자연스러운 한국어 제목으로 번역하세요. 중국어(한자)를 사용하지 마세요. "
+                           "설명·따옴표·마크다운 없이 제목 한 줄만 출력하세요."),
+            temperature=0.2, max_tokens=min(800, max(200, len(text) * 2)),
+            model_override=None,
+        )
+    except Exception as e:  # noqa: BLE001 — 번역 실패가 수집을 막지 않게
+        print(f"  [warn] 번역 실패(LLM): {e}")
+        return text
+    if not out:
+        print(f"  [warn] 번역 실패(응답 없음): {text[:50]}")
+        return text
+    out = remove_chinese(out).strip().strip('"\'')
+    # 제목이 줄바꿈으로 접힌 응답이면 첫 줄만 뽑으면 반쪽이 된다 → 가장 긴 줄 채택
+    out = max(out.splitlines(), key=len).strip().strip('"\'')
+    if not out or not _HAN.search(out) or out.startswith("/") or "마크다운" in out:
+        print(f"  [warn] 번역 결과 한국어 아님 → 원문 유지: {text[:50]}")
+        return text
+    return out[:max_len] if max_len else out
+
+
 def collect_rss():
     out = []
     for name, url, country in RSS_SOURCES:
@@ -151,16 +190,20 @@ def collect_rss():
                 continue
             desc = _text(it.find("description"))[:400]
             pub = _text(it.find("pubDate"))
+            ko_title = translate_ko(title)
+            ko_desc = translate_ko(desc, max_len=400)
+            if ko_title != title:
+                print(f"  [번역] {title[:55]} → {ko_title[:55]}")
             out.append(
                 {
-                    "title": title,
+                    "title": ko_title,
                     "link": link,
-                    "description": desc,
+                    "description": ko_desc,
                     "source": name,
                     "category": "AI",
                     "pub_date": _pub_date(),
                     "source_url": url,
-                    "original_title": title,
+                    "original_title": title,  # 영어 원문 보존
                     "country": country,
                     "_rss_pub": pub,
                 }

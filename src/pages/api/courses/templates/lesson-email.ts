@@ -92,7 +92,7 @@ export function buildLessonEmailHtml(data: LessonEmailData): string {
                 전체 내용 보기 →
               </a>
               <p style="margin:8px 0 0;font-size:12px;color:#9ca3af;">
-                커뮤니티에서 전체 강의 내용을 확인하세요
+                전체 강의 내용을 확인하세요
               </p>
             </td>
           </tr>
@@ -101,8 +101,7 @@ export function buildLessonEmailHtml(data: LessonEmailData): string {
           <tr>
             <td style="background-color:#f9fafb;padding:24px;border-radius:0 0 12px 12px;text-align:center;">
               <p style="margin:0;font-size:12px;color:#9ca3af;line-height:1.6;">
-                AI코리아24 · 7일 AI 입문 강좌<br>
-                질문이 있다면 커뮤니티에 남겨주세요
+                AI코리아24 · 7일 AI 입문 강좌
               </p>
               <p style="margin:12px 0 0;font-size:11px;color:#d1d5db;">
                 <a href="${esc(unsubscribeUrl)}" style="color:#9ca3af;text-decoration:underline;">수신 거부</a>

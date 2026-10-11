@@ -152,7 +152,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
         `SELECT name, slug, tagline, category, price, korean_support, difficulty
          FROM tools
          ORDER BY updated_at DESC
-         LIMIT 6`
+         LIMIT 4`
       ).all();
 
       if (tools.results && tools.results.length > 0) {

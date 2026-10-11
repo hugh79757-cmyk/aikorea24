@@ -1,580 +1,200 @@
 #!/usr/bin/env python3
-"""aikorea24 자동 뉴스 선정기 — 2-Pass 임팩트 평가 (cascade)
+"""aikorea24 브리핑 선정기 v2 (AIK24-SELECTOR-01) + 도움 점수 (AIK24-HELPFUL-01)
 
-Shadow diff log format (logs/briefing_shadow_diff.log):
-    3-layer JSONL:
-    Layer 1: {"ts":..., "layer":1, "mode":"dry_run|shadow", "data":{"diff":"NO_CHANGE|CHANGED", ...}}
-    Layer 2: {"ts":..., "layer":2, "mode":"dry_run|shadow", "data":{"light_histogram":..., "full_histogram":...}}
-    Layer 3: {"ts":..., "layer":3, "mode":"shadow", "data":{"borderline_count":N, "borderline_articles":[...]}}  (shadow only)
+v2_filter.py가 "오늘 무료로 쓸 수 있는 AI 소식" 큐레이션을 끝냈으므로 여기서는
+DB 조회 + LLM 도움 점수(실용성·이해도·유용성) + 태그 다양성만 한다.
+크롤링·엔티티 스코어링·2-pass 없음. 점수는 DB에 저장하지 않는다(선정 시점 한정).
+
+旧 v1 (2-pass 임팩트 스코어러) → scripts/archive/auto_news_selector_v1_20261011.py
 """
 
-import json
-import os
 import re
-import subprocess
 import sys
+import time
 from datetime import datetime, timedelta, timezone
+from itertools import zip_longest
 from pathlib import Path
 
 _project_root = str(Path(__file__).resolve().parent.parent)
 if _project_root not in sys.path:
     sys.path.insert(0, _project_root)
+sys.path.insert(0, str(Path(__file__).resolve().parent / "threads" / "v3"))
 
-from pipeline.infra.d1_client import d1_query
-from pipeline.infra import project_root; PROJECT_DIR = project_root()
+from pipeline.infra.d1_client import d1_query  # noqa: E402  (auto_briefing이 재사용)
+from model_router import chat_completion  # noqa: E402  (무료 LLM 폴백 체인)
 
-from pipeline.infra.logger import get_scrubbed_logger
-logger = get_scrubbed_logger(__name__)
+# auto_briefing.remove_chinese()를 재사용하면 auto_briefing ↔ auto_news_selector
+# 순환 import가 생긴다(서로 상대에서 import). 한 줄짜리 정규식이므로 인라인.
+def remove_chinese(text):
+    return re.sub(r'[一-鿿㐀-䶿]', '', text)  # auto_briefing.py:41과 동일
 
-CONFIG_PATH = os.path.join(PROJECT_DIR, "config", "crawlable_sources.json")
+WINDOW_HOURS = 36
+MAX_COUNT = 4
+PER_TAG_LIMIT = 5
+POOL_LIMIT = 50
+CANDIDATE_LIMIT = 20  # LLM 평가 대상
+SCORE_MIN = 6  # 3개 기준 평균 2점 미만 탈락
+MAX_PER_TAG = 2  # 태그 다양성 상한
+TAG_ORDER = ("free-llm", "opensource", "tool")
 KST = timezone(timedelta(hours=9))
-SHADOW_LOG_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "briefing_shadow_diff.log")
+SCORE_RE = re.compile(r"실용성\s*[:=]\s*(\d)|이해도\s*[:=]\s*(\d)|유용성\s*[:=]\s*(\d)")
 
-_BRIEFING_SCORER_MODE = os.environ.get("BRIEFING_SCORER_MODE", "dry_run")
+_COLS = "id, title, link, description, source, category, pub_date, v2_tag, created_at"
 
 
-# Strangler Fig: replace with logger.info() in Phase 3
 def log(msg):
-    ts = datetime.now(KST).strftime("%H:%M:%S")
-    print(f"[{ts}] {msg}")
+    print(f"[{datetime.now(KST).strftime('%H:%M:%S')}] [selector] {msg}")
 
 
-def load_crawlable_sources():
-    with open(CONFIG_PATH) as f:
-        data = json.load(f)
-    return [s["name"] for s in data.get("crawlable", [])]
-
-
-def get_recent_news(hours=24):
-    """D1에서 최근 뉴스 조회 (크롤링 가능 매체만 필터)"""
-    crawlable = load_crawlable_sources()
-    quoted = [f"'{s}'" for s in crawlable]
-    sources_filter = ", ".join(quoted)
-    cutoff = (datetime.now(timezone.utc) - timedelta(hours=hours)).strftime("%Y-%m-%d %H:%M:%S")
-    sql = f"""
-        SELECT id, title, link, description, source, category, pub_date
-        FROM news
-        WHERE source IN ({sources_filter})
-          AND created_at >= '{cutoff}'
+def get_recent_news(hours=WINDOW_HOURS, v2_tag=None):
+    """v2_pass=1 중 최근 hours시간 뉴스. v2_tag 지정 시 해당 태그만."""
+    cutoff = datetime.now(timezone.utc) - timedelta(hours=hours)
+    return d1_query(f"""
+        SELECT {_COLS} FROM news
+        WHERE v2_pass = 1
+          AND created_at >= '{cutoff.strftime("%Y-%m-%d %H:%M:%S")}'
+          {"AND v2_tag = '" + v2_tag + "'" if v2_tag else ""}
         ORDER BY created_at DESC
-        LIMIT 100
-    """
-    rows = d1_query(sql)
-    log(f"D1 조회: {len(rows)}건 (필터: 크롤링 가능 {len(crawlable)}개 매체)")
-    return rows
-
-
-def get_recent_briefings_7d():
-    """최근 7일 브리핑 기사 조회 (penalty_duplicate_theme_7d용)"""
-    cutoff = (datetime.now(KST) - timedelta(days=7)).strftime("%Y-%m-%d")
-    sql = f"""
-        SELECT DISTINCT n.id, n.title, n.original_title, n.description, n.link, b.date
-        FROM briefings b
-        JOIN briefing_items bi ON b.id = bi.briefing_id
-        JOIN news n ON bi.news_id = n.id
-        WHERE b.status = 'published'
-          AND b.date >= '{cutoff}'
-        ORDER BY b.date DESC
-    """
-    rows = d1_query(sql) or []
-    # 엔티티 전처리해서 반환
-    from briefing_scorer import _ENG_ENTITY_RE
-    result = []
-    for r in rows:
-        text = f"{r.get('title', '')} {r.get('description', '')} {r.get('original_title', '')}"
-        entities = list(set(_ENG_ENTITY_RE.findall(text)))
-        result.append({
-            "cluster": "",  # auto_briefing의 to_scorer_recent_briefing에서 채움
-            "entities": entities,
-            "impact_amount": 0,  # auto_briefing에서 채움
-            "title": r.get("title", ""),
-            "link": r.get("link", ""),
-        })
-    return result
+        LIMIT {PER_TAG_LIMIT if v2_tag else POOL_LIMIT}
+    """)
 
 
 def cluster_by_topic(articles):
-    """주제별 클러스터링 (키워드 기반) + 각 article에 cluster 라벨 부착"""
-    clusters = {}
-    keywords_map = {
-        # v2 (AIK24-PIPE-02): 무료 LLM · 오픈소스 클러스터를 최우선으로 매칭
-        "free-llm": ["free llm", "무료 llm", "무료 모델", "free model", "free tier",
-                     "무료 티어", "openrouter", "open weights", "무료 api", "free api"],
-        "opensource": ["open source", "opensource", "open-source", "hugging face",
-                       "huggingface", "github", "ollama", "opencode", "무료 실행"],
-        "trending": ["trending", "인기", "rising", "급상승", "순위", "ranking"],
-        "openai": ["openai", "chatgpt", "gpt", "o1", "o3", "sora"],
-        "google": ["google", "gemini", "deepmind"],
-        "anthropic": ["anthropic", "claude"],
-        "meta": ["meta", "llama"],
-        "microsoft": ["microsoft", "copilot", "azure"],
-        "nvidia": ["nvidia", "h100", "b200", "cuda"],
-        "ai-regulation": ["regulation", "regulations", "규제", "정책", "policy", "ai act"],
-        # v2: investment(펀딩·투자·IPO·valuation) 클러스터 제거 (AIK24-PIPE-02 Step 3-1)
-    }
-
-    for article in articles:
-        title = (article.get("title") or "").lower()
-        desc = (article.get("description") or "").lower()
-        text = title + " " + desc
-        matched = None
-        for cluster_name, kws in keywords_map.items():
-            if any(kw in text for kw in kws):
-                matched = cluster_name
-                break
-        if not matched:
-            matched = "misc"
-        article["cluster"] = matched
-        clusters.setdefault(matched, []).append(article)
-
-    return clusters
+    """호환 shim. v2는 클러스터링하지 않는다 — 모든 기사를 단일 그룹으로."""
+    return {"v2": list(articles)}
 
 
-def _expand_misc_for_legacy(clusters):
-    """레거시 round-robin용: misc를 출처별 서브클러스터로 확장"""
-    result = {}
-    for k, v in clusters.items():
-        if k == "misc":
-            for a in v:
-                source = a.get("source", "unknown")
-                result.setdefault(source, []).append(a)
-        else:
-            result[k] = v
-    return result
 
 
-def select_top_articles(clusters, max_count=4):  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
-    """클러스터별 대표 기사 선정 (round-robin) — 레거시"""
-    selected = []
-    cluster_items = list(clusters.items())
-    cluster_items.sort(key=lambda x: len(x[1]), reverse=True)
-    idx = 0
-    used_ids = set()
-    while len(selected) < max_count:
-        taken = 0
-        for keyword, articles in cluster_items:
-            if len(selected) >= max_count:
-                break
-            if idx < len(articles):
-                art = articles[idx]
-                aid = str(art.get("id", ""))
-                if aid not in used_ids:
-                    selected.append(art)
-                    used_ids.add(aid)
-                    taken += 1
-        if taken == 0:
-            break
-        idx += 1
-    return selected
 
-
-def _compute_light_scores(articles, weights, entity_tiers, recent_briefings):
-    """Phase A: 모든 후보에 light score 산출"""
-    from briefing_scorer import score_article
-    scored = []
-    for a in articles:
-        result = score_article(a, weights, entity_tiers, recent_briefings, mode="light")
-        a["light_score"] = result["total"]
-        a["score_breakdown_light"] = result["breakdown"]
-        a["score_evidence_light"] = result["evidence"]
-        a["light_score_max_amount_usd"] = result.get("max_amount_usd", 0)
-        a["light_score_max_amount_krw"] = result.get("max_amount_krw", 0)
-        scored.append((result["total"], a))
-    scored.sort(key=lambda x: -x[0])
-    return scored
-
-
-def _crawl_and_full_score(top_n_articles, weights, entity_tiers, recent_briefings):
-    """Phase B: Top-N 크롤링 + full score"""
-    from briefing_scorer import crawl_article_body, score_article
-    for a in top_n_articles:
-        url = a.get("link", "")
-        log(f"  [crawl] {url[:70]}...")
-        body = crawl_article_body(url)
-        a["body"] = body or ""
-        result = score_article(a, weights, entity_tiers, recent_briefings, mode="full")
-        a["full_score"] = result["total"]
-        a["score_breakdown"] = result["breakdown"]
-        a["score_evidence"] = result["evidence"]
-        a["full_score_max_amount_usd"] = result.get("max_amount_usd", 0)
-        a["full_score_max_amount_krw"] = result.get("max_amount_krw", 0)
-        log(f"    full_score={result['total']} ({result['tier_reasoning']})")
-
-
-def _two_pass_selection(clusters, max_count=4):  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
-    """
-    2-Pass 선택 알고리즘 (shadow/live 모드).
-    각 article에 impact_score, score_breakdown, light_score, full_score가 이미 있어야 함.
-    """
-    impact_pass_min = 70
-    impact_pass_max_slots = 3
-    light_min_misc = 20
-
-    all_articles = []
-    for ca in clusters.values():
-        all_articles.extend(ca)
-
-    pass1 = []
-    pass1_clusters = set()
-    pass1_ids = set()
-
-    scored = [(a.get("full_score") or 0, a) for a in all_articles if a.get("full_score") is not None]
-    scored.sort(key=lambda x: -x[0])
-    for score, a in scored:
-        if len(pass1) >= impact_pass_max_slots:
-            break
-        if str(a.get("id", "")) in pass1_ids:
-            continue
-        if score >= impact_pass_min:
-            pass1.append(a)
-            pass1_ids.add(str(a.get("id", "")))
-            pass1_clusters.add(a.get("cluster", ""))
-
-    pass2 = []
-    pass2_ids = set(pass1_ids)
-    remaining_slots = max_count - len(pass1)
-
-    if remaining_slots > 0:
-        cluster_items = [(k, v) for k, v in clusters.items() if k not in pass1_clusters]
-        cluster_items.sort(key=lambda x: -len(x[1]))
-
-        # round-robin 잔여 slot 채움
-        idx = 0
-        while len(pass2) < remaining_slots:
-            taken = 0
-            for keyword, articles in cluster_items:
-                if len(pass2) >= remaining_slots:
-                    break
-                if idx < len(articles):
-                    art = articles[idx]
-                    aid = str(art.get("id", ""))
-                    if aid not in pass2_ids:
-                        # misc cluster: light_score 하한 체크
-                        if keyword == "misc":
-                            ls = art.get("light_score", 0)
-                            if ls < light_min_misc:
-                                continue
-                        pass2.append(art)
-                        pass2_ids.add(aid)
-                        taken += 1
-            if taken == 0:
-                break
-            idx += 1
-
-        # misc slot 하한 미달로 빈 경우, 다른 cluster에서 차순위 인출
-        if len(pass2) < remaining_slots:
-            deficit = remaining_slots - len(pass2)
-            for keyword, articles in cluster_items:
-                if deficit <= 0:
-                    break
-                if keyword == "misc":
-                    continue
-                for art in articles:
-                    if deficit <= 0:
-                        break
-                    aid = str(art.get("id", ""))
-                    if aid not in pass2_ids:
-                        pass2.append(art)
-                        pass2_ids.add(aid)
-                        deficit -= 1
-
-        # 최종 fallback: deficit가 남으면 misc에서 full_score 순으로 인출 (light_score 하한 무시)
-        if len(pass2) < remaining_slots:
-            deficit = remaining_slots - len(pass2)
-            misc_articles = sorted(
-                clusters.get("misc", []),
-                key=lambda a: -(a.get("full_score") or 0)
-            )
-            for art in misc_articles:
-                if deficit <= 0:
-                    break
-                aid = str(art.get("id", ""))
-                if aid not in pass2_ids:
-                    pass2.append(art)
-                    pass2_ids.add(aid)
-                    deficit -= 1
-
-    return pass1, pass2
-
-
-def _log_shadow_diff(legacy_selected, pass1, pass2, all_articles, mode):
-    """3층 shadow diff 로그 기록"""
-    os.makedirs(os.path.dirname(SHADOW_LOG_PATH), exist_ok=True)
-    ts = datetime.now().isoformat()
-
-    legacy_ids = {str(a.get("id", "")) for a in legacy_selected}
-    shadow_selected = pass1 + pass2
-    shadow_ids = {str(a.get("id", "")) for a in shadow_selected}
-
-    # Layer 1: Selection diff
-    added = shadow_ids - legacy_ids
-    removed = legacy_ids - shadow_ids
-    if not added and not removed:
-        layer1 = {"diff": "NO_CHANGE", "legacy_ids": list(legacy_ids), "shadow_ids": list(shadow_ids)}
-    else:
-        layer1 = {
-            "diff": "CHANGED",
-            "added": list(added),
-            "removed": list(removed),
-            "added_titles": [a.get("title", "")[:60] for a in shadow_selected if str(a.get("id", "")) in added],
-            "removed_titles": [a.get("title", "")[:60] for a in legacy_selected if str(a.get("id", "")) in removed],
-        }
-
-    # Layer 2: Score distribution
-    light_scores = [a.get("light_score", 0) for a in all_articles if a.get("light_score") is not None]
-    full_scores = [a.get("full_score", 0) for a in all_articles if a.get("full_score") is not None]
-    def _histogram(scores):
-        bins = {}
-        for s in scores:
-            b = (s // 10) * 10
-            bins[b] = bins.get(b, 0) + 1
-        return bins
-    layer2 = {
-        "light_histogram": _histogram(light_scores),
-        "full_histogram": _histogram(full_scores),
-        "light_count": len(light_scores),
-        "full_count": len(full_scores),
-    }
-
-    with open(SHADOW_LOG_PATH, "a") as f:
-        f.write(f"{json.dumps({'ts': ts, 'layer': 1, 'mode': mode, 'data': layer1}, ensure_ascii=False)}\n")
-        f.write(f"{json.dumps({'ts': ts, 'layer': 2, 'mode': mode, 'data': layer2}, ensure_ascii=False)}\n")
-
-    # Layer 3: shadow 전용 — Pass 1 경계역 분석
-    if mode == "shadow":
-        borderline = []
-        for a in all_articles:
-            fs = a.get("full_score")
-            if fs is not None and 65 <= fs <= 75:
-                borderline.append({
-                    "id": a.get("id", ""),
-                    "title": (a.get("title") or "")[:60],
-                    "full_score": fs,
-                    "light_score": a.get("light_score"),
-                    "breakdown": a.get("score_breakdown"),
-                    "evidence": a.get("score_evidence"),
-                    "cluster": a.get("cluster"),
-                    "in_pass1": str(a.get("id", "")) in {str(x.get("id", "")) for x in pass1},
-                    "reason": "통과" if str(a.get("id", "")) in {str(x.get("id", "")) for x in pass1} else "탈락",
-                })
-        layer3 = {"borderline_count": len(borderline), "borderline_articles": borderline}
-        with open(SHADOW_LOG_PATH, "a") as f:
-            f.write(f"{json.dumps({'ts': ts, 'layer': 3, 'mode': mode, 'data': layer3}, ensure_ascii=False)}\n")
-
-    log(f"[shadow diff] Layer 1: {layer1['diff']} ({len(added)} added, {len(removed)} removed)")
-    log(f"[shadow diff] Layer 2: light={layer2['light_count']}, full={layer2['full_count']}")
-    if mode == "shadow":
-        log(f"[shadow diff] Layer 3: borderline {len(borderline)}건")
-
-
-def print_report(articles, selected):
-    log(f"\n{'='*50}")
-    log(f"뉴스 선정 리포트")
-    log(f"{'='*50}")
-    log(f"전체 기사: {len(articles)}건 → 선정: {len(selected)}건\n")
-    for i, art in enumerate(selected, 1):
-        title = art.get("title", "(제목 없음)")
-        source = art.get("source", "(출처 없음)")
-        link = art.get("link", "(링크 없음)")
-        fs = art.get("full_score")
-        ls = art.get("light_score")
-        score_tag = f" [full={fs}]" if fs is not None else f" [light={ls}]" if ls is not None else ""
-        log(f"{i}.{score_tag} {title}")
-        log(f"   출처: {source}")
-        log(f"   URL:  {link}")
-        log("")
-    source_counts = {}
-    for art in articles:
-        s = art.get("source", "unknown")
-        source_counts[s] = source_counts.get(s, 0) + 1
-    log("[소스별 기사 수]")
-    for s, c in sorted(source_counts.items(), key=lambda x: -x[1]):
-        log(f"  {s}: {c}건")
-
-
-def route_person_stories(selected):
-    """인물 게이트 분기 (운영 투입).
-
-    선별된 기사 각각에 대해:
-      - 본문 확보 (이미 크롤된 body 우선, 없으면 crawl_article_body)
-      - person_gate 호출 → 카드 구성 분기용 신호(통과/탈락 무관, 생성은 전량)
-      - run_contrast_thread(writer_fn=write_kicker7_thread) 6카드+출처 구조 생성
-    person_gate는 제거하지 않고 신호로만 사용. 전 과정 try-except 격리.
-    """
+def score_helpfulness(article):
+    """LLM 도움 점수 — 실용성·이해도·유용성 각 1~5점. 실패 시 0점(탈락)."""
+    title = (article.get("title") or "")[:200]
+    desc = (article.get("description") or "")[:300]
+    user_prompt = (
+        f"제목: {title}\n내용: {desc}\n\n"
+        "위 기사를 아래 3개 기준으로 각각 1~5점 평가하세요.\n"
+        "실용성: 독자가 직접 해볼 수 있는가? (무료 도구 체험·따라하기·활용법)\n"
+        "이해도: 비전문가도 읽고 이해할 수 있는가? (전문 용어 과다·인프라 기술은 감점)\n"
+        "유용성: 일이나 학습에 도움이 되는가? (시사점·인사이트)\n\n"
+        "'실용성:X,이해도:Y,유용성:Z' 형식으로만 출력하세요."
+    )
     try:
-        from pipeline.threads.person_gate import person_gate
-    except Exception as ex:
-        logger.warning("person_gate import 실패 → 게이트 분기 생략: %s", ex)
-        return
+        out = chat_completion(
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt="당신은 뉴스 큐레이터입니다. 아래 기사를 구독자 관점에서 평가하세요. "
+                          "설명 없이 지정된 형식으로만 답하세요.",
+            temperature=0.1, max_tokens=60, model_override=None,
+        )
+    except Exception as e:  # noqa: BLE001 — 평가 실패가 선정 전체를 막지 않게
+        log(f"  점수 실패: {type(e).__name__}")
+        return 0
+    if not out:
+        log(f"  점수 실패(응답 없음): {title[:40]}")
+        return 0
+    # 정규식 3그룹 → findall은 튜플 반환. (실용성,이해도,유용성) 순서로 뽑는다.
+    nums = []
+    for tup in SCORE_RE.findall(remove_chinese(out)):
+        for g in tup:
+            if g:
+                nums.append(int(g))
+    if len(nums) < 3:
+        log(f"  점수 파싱 실패 → 0점: {title[:40]} ({out[:40]})")
+        return 0
+    total = sum(nums[:3])
+    article["_score"] = total
+    article["_detail"] = tuple(nums[:3])
+    return total
 
-    generated = 0
-    for art in selected:
-        title = art.get("title") or ""
-        link = art.get("link") or ""
-        if not link:
-            continue
-        body = art.get("body") or ""
-        if not body:
-            try:
-                from briefing_scorer import crawl_article_body
-                body = crawl_article_body(link) or ""
-            except Exception as ex:
-                logger.warning("person_gate: crawl 실패 %s (%s)", link, ex)
+
+def _pick_by_tag_pool(pools_by_tag, pool, max_count):
+    """태그별 1건씩 먼저 확보 → 남은 슬롯은 전체 풀 최신순. 태그는 MAX_PER_TAG 초과 금지."""
+    picked, used_sources, tag_count = [], set(), {t: 0 for t in TAG_ORDER}
+
+    def over(tag):
+        return tag_count.get(tag, 0) >= MAX_PER_TAG
+
+    def take(candidates):
+        for art in candidates:
+            if len(picked) >= max_count:
+                break
+            src, tag = art.get("source"), art.get("v2_tag")
+            if src in used_sources or over(tag):
                 continue
-        if not body:
-            logger.warning("person_gate: 본문 없음 → 탈락 %s", link)
-            continue
-        # person_gate: 신호로만 사용 (통과/탈락과 무관하게 전량 생성)
-        try:
-            gate = person_gate(title, body)
-        except Exception as ex:
-            logger.warning("person_gate: 호출 예외 %s (%s)", title, ex)
-            gate = {"pass": False, "person": None, "reason": f"gate_error: {ex}"}
-        logger.info("person_gate: signal pass=%s — %s | %s", gate.get("pass"), title, gate.get("reason"))
-        try:
-            from pipeline.threads.contrast.orchestrator import run_contrast_thread
-            from pipeline.threads.contrast.kicker7_writer import write_kicker7_thread
-            seed = {
-                "id": f"person-{art.get('id', '')}",
-                "title": title,
-                "link": link,
-                "url": link,
-                "body": body,
-                "crawled_body": body,
-                "pub_date": art.get("pub_date", "") or "",
-                "source": art.get("source", ""),
-                "description": (art.get("description") or "")[:200],
-            }
-            # gate_signal 전달 → write_kicker7_thread 내 중복 person_gate 호출 방지
-            result = run_contrast_thread(
-                seed, [seed], writer_fn=write_kicker7_thread,
-                writer_kwargs={"gate_signal": gate},
-            )
-            if result and result.get("cards"):
-                cards = result["cards"]
-                # 생성 스레드 파일 저장 (운영 핸드오프 + 검증 로그용)
-                try:
-                    import os as _os, datetime as _dt, pathlib as _pl
-                    _k7dir = _pl.Path(PROJECT_DIR) / "scripts/threads/logs/drafts/kicker7_selector"
-                    try:
-                        _k7dir.mkdir(parents=True, exist_ok=True)
-                    except Exception:
-                        _k7dir = _pl.Path("/tmp/kicker7_selector")
-                        _k7dir.mkdir(parents=True, exist_ok=True)
-                    _ts = _dt.datetime.now().strftime("%Y%m%d_%H%M%S")
-                    _fname = _k7dir / f"k7_{art.get('id','')}_{_ts}.txt"
-                    # ponytail: 카드 내부 절구분(\n\n, 규칙 필수)과 카드간 구분 충돌 방지 → '---' 로만 카드간 구분
-                    _fname.write_text("\n---\n".join(cards), encoding="utf-8")
-                    _fpath = str(_fname)
-                except Exception as _fex:
-                    _fpath = f"(저장실패: {_fex})"
-                logger.info("person_gate: kicker7 %d카드 생성 — %s | file=%s", len(cards), title, _fpath)
-                generated += 1
-            else:
-                logger.warning("person_gate: kicker7 생성 실패 — %s", title)
-        except Exception as ex:
-            logger.warning("person_gate: kicker7 예외 %s (%s)", title, ex)
-            continue
-    logger.info("person_gate: 생성 %d / 전체 %d", generated, len(selected))
+            used_sources.add(src)
+            tag_count[tag] = tag_count.get(tag, 0) + 1
+            picked.append(art)
+
+    for tag in TAG_ORDER:
+        take(pools_by_tag.get(tag, []))
+    take(pool)
+    return picked
+
+
+def select_top_articles(clusters, max_count=MAX_COUNT):
+    """호환 shim. 클러스터 dict → 점수순 + 태그/출처 다양성 보장 후 max_count건."""
+    articles = [a for group in (clusters or {}).values() for a in group]
+    ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _newest_first(a)))
+    by_tag = {t: [a for a in ranked if a.get("v2_tag") == t] for t in TAG_ORDER}
+    return _pick_by_tag_pool(by_tag, ranked, max_count)
+
+
+def _newest_first(article):
+    return str(article.get("created_at") or "")
+
+
+def _interleave_candidates(limit):
+    """태그별 라운드로빈으로 후보를 섞는다.
+
+    단순 created_at DESC LIMIT은 한 매체 배치가 후보를 통째로 차지해
+    MAX_PER_TAG 상한이 붙으면 브리핑이 2건으로 줄어든다(2026-10-11 실측).
+    """
+    per_tag = {t: get_recent_news(v2_tag=t) for t in TAG_ORDER}
+    mixed = []
+    for row in zip_longest(*(per_tag[t] for t in TAG_ORDER)):
+        for art in row:
+            if art is not None:
+                mixed.append(art)
+    return mixed[:limit], {t: len(per_tag[t]) for t in TAG_ORDER}
 
 
 def main(dedup=True):
-    mode = _BRIEFING_SCORER_MODE
-    log("=== aikorea24 자동 뉴스 선정 ===\n")
-    log(f"[mode] BRIEFING_SCORER_MODE={mode}")
-
-    # 0. 환경변수에 따라 weights/entity_tiers 로드
-    weights = None
-    entity_tiers = None
-    recent_briefings = []
-    if mode != "dry_run" or mode == "shadow":
-        from briefing_scorer import load_weights, load_entity_tiers
-        weights = load_weights()
-        entity_tiers = load_entity_tiers()
-        recent_briefings = get_recent_briefings_7d()
-    else:
-        # dry_run에서도 shadow 들어갈 수 있으니 로드
-        try:
-            from briefing_scorer import load_weights, load_entity_tiers
-            weights = load_weights()
-            entity_tiers = load_entity_tiers()
-            recent_briefings = get_recent_briefings_7d()
-        except Exception:
-            pass
-
-    # 1. 뉴스 조회
-    articles = get_recent_news(hours=24)
-    if not articles:
-        log("수집된 뉴스가 없습니다.")
+    _ = dedup  # v1의 브리핑 중복 제거는 briefing_dedup.filter_duplicates가 담당
+    pool, tag_counts = _interleave_candidates(CANDIDATE_LIMIT)
+    log(f"v2_pass=1 후보: {len(pool)}건 (태그별 " +
+        ", ".join(f"{t}={tag_counts[t]}" for t in TAG_ORDER) + ") — LLM 도움 점수 평가 시작")
+    if not pool:
+        log("선정 대상 없음 — 브리핑 건너뜀")
         return []
 
-    # 2. 클러스터링
-    clusters = cluster_by_topic(articles)
-    log(f"주제 클러스터: {len(clusters)}개")
-    for k, v in sorted(clusters.items(), key=lambda x: -len(x[1])):
-        log(f"  {k}: {len(v)}건")
+    # 2. 평가 (429 보호 위해 직렬 + 간격)
+    for i, art in enumerate(pool, 1):
+        s = score_helpfulness(art)
+        d = art.get("_detail")
+        log(f"  [{i}/{len(pool)}] {s}점 {'(실용성·이해도·유용성=%s)' % (d,) if d else '(파싱 실패)'} "
+            f"{(art.get('title') or '')[:55]}")
+        if i < len(pool):
+            time.sleep(2)
 
-    # 3. Phase 1 dedup (후보 풀에 대해 먼저 수행)
-    if dedup:
-        from briefing_dedup import filter_duplicates
-        articles, removed = filter_duplicates(articles, d1_query)
-        if removed:
-            log(f"\n⚠️ Phase 1 중복 제거: {len(removed)}건")
-            for art, reason in removed:
-                title = (art.get('title') or '')[:50]
-                log(f"  [{reason}] {title}")
-        # 제거 후 클러스터 재구성
-        clusters = cluster_by_topic(articles)
+    # 3. 탈락 제거 (6점 미만 = 평균 2점 미만)
+    passed = [a for a in pool if (a.get("_score") or 0) >= SCORE_MIN]
+    dropped = len(pool) - len(passed)
+    log(f"탈락 {dropped}건 (점수 < {SCORE_MIN}) → 통과 {len(passed)}건")
+    if not passed:
+        log("통과 후보 없음 — 브리핑 건너뜀")
+        return []
 
-    # 4. Phase A + B scoring
-    if weights and entity_tiers:
-        all_flat = [a for ca in clusters.values() for a in ca]
-        log(f"\n[Phase A] light score 산출 ({len(all_flat)}개)...")
-        scored = _compute_light_scores(all_flat, weights, entity_tiers, recent_briefings)
-        top_n_count = weights.get("thresholds", {}).get("top_n_crawl", 20)
-        top_n = [a for _, a in scored[:top_n_count]]
-        log(f"[Top-N] 상위 {len(top_n)}개 크롤링 + full score...")
-        _crawl_and_full_score(top_n, weights, entity_tiers, recent_briefings)
-        log("")
+    # 4. 점수순(동점 최신) + 태그 다양성 상한
+    ranked = sorted(passed, key=lambda a: _newest_first(a), reverse=True)  # 최신순 먼저
+    ranked.sort(key=lambda a: -a["_score"])  # stable → 동점은 최신 유지
+    by_tag = {t: [a for a in ranked if a.get("v2_tag") == t] for t in TAG_ORDER}
+    selected = _pick_by_tag_pool(by_tag, ranked, MAX_COUNT)
 
-    # 5. 선택
-    if mode == "live":
-        # 2-Pass 선택
-        pass1, pass2 = _two_pass_selection(clusters)
-        selected = pass1 + pass2
-        for a in selected:
-            a["pass_source"] = "pass1" if a in pass1 else "pass2"
-    else:
-        # 레거시 round-robin (dry_run, shadow 모두 동일) — misc를 출처별로 확장하여 원래 동작 회귀 유지
-        legacy_clusters = _expand_misc_for_legacy(clusters)
-        selected = select_top_articles(legacy_clusters, max_count=4)  # v2
-
-        if mode == "shadow" and weights:
-            # shadow: 2-Pass 계산 후 diff 로깅
-            pass1_shadow, pass2_shadow = _two_pass_selection(clusters)
-            _log_shadow_diff(selected, pass1_shadow, pass2_shadow, [a for ca in clusters.values() for a in ca], mode)
-            # shadow log Layer 1,2도 dry_run에 출력
-        elif mode == "dry_run" and weights:
-            pass1_shadow, pass2_shadow = _two_pass_selection(clusters)
-            _log_shadow_diff(selected, pass1_shadow, pass2_shadow, [a for ca in clusters.values() for a in ca], "dry_run")
-
-    for a in selected:
-        a["impact_score"] = a.get("full_score") or a.get("light_score") or 0
-        a["score_breakdown"] = a.get("score_breakdown") or a.get("score_breakdown_light") or {}
-        if a.get("pass_source") is None:
-            a["pass_source"] = "legacy"
-
-    # 6. 인물 게이트 분기 — 기본 비활성 (2026-09-17 사용자 지시).
-    #    kicker7 초안 생성 경로. KICKER7_ENABLED=1 일 때만 동작.
-    if os.environ.get("KICKER7_ENABLED", "0") == "1":
-        try:
-            route_person_stories(selected)
-        except Exception as ex:
-            logger.warning("person_gate 분기 예외(무시·기존 경로 유지): %s", ex)
-
-    log(f"\n선정 완료: {len(selected)}개 기사")
-    print_report(articles, selected)
-
+    log(f"선정 {len(selected)}건" + ("" if len(selected) == MAX_COUNT
+                                    else f" (요청 {MAX_COUNT}건, 데이터 부족 — 강제 선정 없음)"))
+    for art in selected:
+        log(f"  [{art['_score']}점 {art.get('_detail')}] [{art.get('v2_tag')}] "
+            f"{(art.get('title') or '')[:60]} ({art.get('source')})")
     return selected
 
 

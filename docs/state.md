@@ -1,3 +1,530 @@
+## 2026-10-11 15:36 — AIK24-MODELEVAL-01 무료 모델 능력 자동 평가 (9문항 반영)
+
+**한 일**: 지시서 `2026-10-11-1140-AIK24-MODELEVAL-01-무료모델-능력자동평가.md` (11:51 개정본) 구현. 무료 LLM 모델을 9문항으로 실측해 브리핑 코멘트와 블로그 심층 분석에 자동 반영.
+
+### 지시서 개정 반영 내역
+| 항목 | 개정 전(11:40) | 개정 후(11:51) | 반영 |
+|---|---|---|---|
+| 문항 수 | 8문항 | **9문항** (코딩2·맥락정리2·압축1·한국어3·추론1) | ✅ |
+| 티어 규칙 | 8=Opus, 6-7=Sonnet, 4-5=GPT-mini, 2-3=입문, 0-1=미확인 | **9=Opus, 7-8=Sonnet, 5-6=GPT-mini, 3-4=입문, 0-2=미확인** | ✅ |
+| 코멘트 | 모델명 + 기존 코멘트 + 접근법 | 모델명 + 접근법 + 분석링크 (기존 코멘트 제거) | ✅ (링크는 §별도) |
+| 블로그 | 없음 | **"모델 심층 분석" 5단 구조 생성기** | ✅ |
+
+### 생성·수정 파일
+- `scripts/model_eval.py` (신규 529줄) — 9문항 평가 + 채점 + 티어 산정 + 평가 캐시
+- `scripts/auto_briefing.py` (수정) — `generate_comment()` free-llm 분기 → `eval_model_cached` → 3요소 블록
+- `scripts/blog_draft_generator.py` (수정) — `generate_model_eval_draft()` 5단 구조 생성기 + `append_comment_link()`
+
+### 결과 — [검증됨]
+1. **티어 경계가 지시서와 일치.** 근거: `score_to_tier` 9→Claude Opus급 / 8,7→Sonnet 4.5급 / 6,5→GPT-4o mini급 / 4,3→입문용 / 2,1,0→티어 미확인. 실행 로그 기준.
+2. **9문항 구성 정확.** 근거: `TEST_QUESTIONS` 9개 dict 실측 출력 = 코딩2 / 맥락정리2 / 압축1 / 한국어3 / 추론1. Q4만 seed(6턴 사전 대화) 보유.
+3. **블로그 5단 구조 프롬프트 조립 확인.** 근거: `generate_draft("[무료 LLM] liquid", [free-llm 기사], "A")` 실행 시 chat_completion 1차 호출 프롬프트에 ①외부 벤치마크(수치 지어내기 금지 규칙 포함) ②9문항 실측 원문 인용 ③신뢰 메시지 ④OpenCode 접근 가이드 ⑤용도별 추천 5단 + 톤 규칙이 모두 들어감. 캐시 적중 로그 `📊 모델 평가 캐시 사용` 확인.
+4. **폴백 2단 확인.** 근거: stub으로 chat_completion을 빈 문자열로 대체 → `❌ 모델 심층 분석 생성 실패` → `⚠️ → 일반 심층 분석으로 폴백` → 2차 호출 발생 → `❌ 블로그 초안 생성 실패`. free-llm이 아닌 태그(opensource)나 모델 ID 미판별(HF trending) 항목은 model_eval 분기에 들어가지 않음 [검증됨].
+5. **코멘트 링크 SQL 문법.** 근거: `UPDATE briefing_items SET comment = comment || char(10) || '👉 자세한 분석: <url>' WHERE briefing_id = 344 AND news_id = 54941 AND comment NOT LIKE '%👉 자세한 분석%'` — 실제 실행 문자열 확인. 중복 삽입 방지 조건 포함.
+6. **평가 전멸 시 캐시 거부.** 근거: `cache_put({failed:9, max_score:9})` → `캐시 저장 생략 (응답 실패 9/9 — 전멸 판정)` → `cache_get` = None. 정상 판정(`failed:1`)은 저장 성공.
+
+### 결과 — [부분검증]
+7. **liquid/lfm-2.5-2.6b:free 9문항 실측.** **개정 전 8문항 기준 8/8(Claude Opus급)** [검증됨]. 개정 후 9문항 재실측은 **OpenRouter 무료 티어 429 소진으로 실패** — 첫 시도에서 7/9(Claude Sonnet 4.5급)까지는 도달했으나, 이후 재실행 2회는 전 문항 429. 제한 사유: 9문항 전환으로 문항이 2개 늘면서 호출 수가 늘어当日 3회 실행이 한도를 초과함.
+
+### 결과 — [검증불가]
+8. **D1 실제 UPDATE 실행.** `append_comment_link()`는 SQL 문자열 생성까지 확인했으나 실DB 쓰기는 수행하지 않음(브리핑 344에 free-llm 항목이 없어 대상 행도 없음). 복구 계획: 2026-10-12 09:30 KST 블로그 자동 실행이 실제 경로를 최초 실행.
+
+### 수정 중 발견한 버그 4건 (모두 PRODUCTION CODE)
+| 버그 | 증상 | 수정 |
+|---|---|---|
+| `score_to_tier` clamp 하드코딩 | `min(8, ...)` → 9점 만점이 Sonnet으로 판정됨(9문항 전환 후 치명적) | `min(len(TEST_QUESTIONS), ...)` |
+| 채점관이 멀티턴 대사를 못 봄 | Q4가 "위 대화"를 검증할 수 없어 **전부 맞았는데 0점** | judge_q에 대화 기록 전체 주입 |
+| 상세답변 120자 절단 | 채점관과 블로그가 잘린 답변을 봄 → 멀티턴 판정 오류 | `ANSWER_STORE_CHARS=1000` |
+| SQLite `\\n` 미해석 | 코멘트에 리터럴 `\n`이 들어감 | `char(10)` 사용 |
+
+### 설계 판단 2건 (대표님 확인 필요)
+1. **`👉 자세한 분석` 링크**: 09:00 브리핑 시점에는 09:30에 생성될 블로그가 아직 없어 URL을 알 수 없습니다. 두 가지로 처리했습니다 — (a) 프론트 `briefing/[date].astro` L185-193의 기존 "📖 AI코리아24 심층 분석" 카드가 같은 링크를 이미 보여줌, (b) 블로그 생성 직후 `save_draft()`가 `briefing_items.comment`에 링크를 1회 추가(중복 방지 조건 포함). 결과적으로 페이지에는 링크가 뜹니다. **단, 09:00에 발송되는 이메일에는 링크가 없습니다** — 이메일 발송이 블로그 생성보다 먼저라 구조적으로 불가능합니다.
+2. **429는 능력 실패가 아님**: 응답 실패 문항은 분모에서 제외하고 `failed >= 5`이면 "티어 미확인"으로 표기합니다. 지시서 §3 "신뢰 메시지"가 요구하는 정직한 표기와 일치합니다.
+
+### 지시서 대비 확인 필요 (보고만, 수정 안 함)
+- 지시서 1-5의 "([점수]/8점)" 표기와 완료기준 2번의 "8문항"은 9문항 개정으로 stale. `max_score`를 `len(TEST_QUESTIONS)`에서 동적으로 뽑아 코드상 무해하나 문서 수정이 필요합니다.
+- 지시서가 지목한 `~/workspace/skills/llm-eval/` 경로는 존재하지 않고 `eval_call.py`도 없습니다. 인증은 프로젝트 공통 `model_router.load_env()` + `OPENROUTER_API_KEY`로 대체했습니다.
+- 지시서 §1-5 "블로그 글은 blog_draft_generator.py의 §18 4종 생성기에 추가" → 이 파일에는 2종 분기만 있어 3번째 분기(`model_eval`)로 추가했습니다.
+
+### 잔존 위험
+1. **OpenRouter 무료 티어 일일 한도 소진** — 오늘 9문항 재실측 불가. 24시간 뒤 회복. 회복 후 단독 실행 1회 필요.
+2. **eval 실행 시간 최대 ~20분** — 429 만회 시 문항당 105초 백오프 × 9. 09:00 브리핑 잡의 실행 시간이 늘어날 수 있음(launchd 타임아웃 미설정이라 동작하나 지연 위험).
+3. **Gemini 무료 티어 500/day 소진**(이전 세션 잔존) — 채점 판관(`score_response`)이 같은 폴백 체인을 쓴다. 소진 시 채점 자체가 0점이 된다. 경고: 판관 LLM도 재시도 미구현.
+4. **`briefing_items` 누적 미해결** (이전 세션 잔존) — `comment` 갱신은 오늘 브리핑(344) 기준으로 `get_today_briefing_id()`를 쓰므로 안전하나, 과거 브리핑에 링크가 생기지 않음.
+5. **외부 벤치마크 수치 신뢰성** — 프롬프트로 "모르면 지어내지 말라"고만 막음. LLM이 LMArena Elo 수치를 hallucinatory하게 쓸 가능성 잔존. 정적 검증 불가.
+6. **블로그 프롬프트에 원문 인용**은 동작하나 LLM이 점수를 바꾸어 쓰면 탐지 장치 없음(사후 검증 미구현).
+7. **D1 쓰기 미검증** — `append_comment_link` 실제 UPDATE 경로.
+
+### 다음 행동
+- 2026-10-12 OpenRouter 한도 회복 후 `python3 scripts/model_eval.py liquid/lfm-2.5-2.6b:free` 1회 실행 → 9문항 점수 확정.
+- 2026-10-12 09:30 KST 블로그 잡 실행 후 브리핑 페이지에서 `👉 자세한 분석` 링크 렌더 확인.
+- 지시서 문서의 "8문항"/"/8점" 표기를 9문항 기준으로 정정 (대표님 승인 필요).
+
+# 2026-10-11 11:15 — run_pipeline.py 수동 실행
+
+## 한 일
+대표님 지시로 `.venv/bin/python3 scripts/run_pipeline.py` 1회 수동 실행 (Step 0 v2 수집 → 선정 → 브리핑 → 썸네일 → 이메일 → 빌드/배포). 코드 변경 없음.
+
+## 결과
+- [검증됨] 파이프라인 종료 — 소요 177.1초, `✅ 에러 없음`, exit 0. 근거: 실행 로그 마지막 요약 블록.
+- [검증됨] Cloudflare Pages 배포 완료 — `✨ Deployment complete! / 1994ca04.aikorea24-4nk.pages.dev`, 프로덕션 도메인 `https://aikorea24.kr`. sitemap ping google=true naver=true (status=200).
+- [검증됨] 브리핑 3건 생성 — D1 `briefings` id=344 `date=2026-10-11-3` `status=published`. `briefing_items` rowid 1900/1901/1902 (sort_order 1/2/3), news_id 54941/54983/54996. 근거: `wrangler d1 execute --remote --json` SELECT 결과 (env -u 프리픽스 필수).
+- [검증됨] 선정 3건 (태그 1건씩) — free-llm `[무료 LLM] liquid/lfm-2.5-2.6b:free`(OpenRouter Free Models) / opensource `존재하지 않아서 직접 만든 모델`(HuggingFace Blog) / tool `코드 기반 마케팅 운영: 깃허브에서 기획부터 사후 관리까지 행사 자동화`(GitHub AI/ML Blog). 제목 전부 한글 = TRANSLATE-01 번역 경로 산존.
+- [검증됨] 라이브 반영 — `GET https://aikorea24.kr/briefing/` HTTP 200, 위 3건 제목 HTML에 모두 존재.
+- [검증됨] 썸네일 3건 — 요약 `썸네일: 3건`.
+- [검증됨] 신규 뉴스 INSERT 0건 — Step 0 수집 결과 전부 기존 row(link dedup). `news` 테이블 최신 created_at = `2026-10-10 22:33:05`(id 55023), 2026-10-11자 row 0개. 선정은 기존 row 재사용.
+- [검증불가] 이메일 발송 여부 — 실행 출력을 `tail -80` 으로만 캡처해 Step 4(자동 이메일 발송) stdout 유실. 복구 계획: 다음 실행 시 `2>&1 | tee logs/pipeline_run.log`로 전체 로그 보존 후 확인. Brevo 이벤트 API 엔드포인트 3종(`smtp/events`, `smtp/email/statistics`, `emailEventReport`) 모두 `not_found` 반환으로 우회 불가.
+
+## 잔존 위험
+- 브리핑 3건만 채워짐(기존 잔존 위험 #10 재현) — `MAX_PER_TAG=2` + 저점수 탈락이 겹쳐 4건 미달. CANDIDATE_LIMIT 상향 여부는 대표님 결정 대기.
+- `briefings.created_at`(id 344 = `2026-10-11 04:12:12`)이 UTC로 기록되어 KST 기준 로그와 7시간 어긋남. `auto_briefing.py` 타임존 확인 필요 — 이번 작업 범위 밖.
+- 이전 실행의 `briefing_items`가 DELETE 없이 누적(rowid 1896~1902 = 7행, sort_order 중복 1~4). 사이트 질의가 sort_order 상위만 취하는지 라이브 확인 필요 — 이번 `/briefing/` 3건 노출로 보아 동작하나 중복 노출 위험 잔존.
+- 이메일 발송 미검증(위 참조).
+
+## 다음 행동
+1. 대표님: 브리핑 4건 채울지(`CANDIDATE_LIMIT` 상향) 결정.
+2. 다음 파이프라인 실행 시 전체 stdout를 `logs/pipeline_run.log`로 teeing — 이메일 단계 검증 수단 확보.
+3. 10-12 09:30 KST blog-draft 자동 실행이 `blog_draft_generator.py` 배포 구간 최초 실증 (기존 잔존 위험 #5).
+
+# 2026-10-11 08:28 — AIK24-FIX-02 + AIK24-THREADS-01 완료보고
+
+지시서 2건 처리 완료. AIK24-FIX-02(구독 이메일 커뮤니티 문구) / AIK24-THREADS-01(Threads 발행 실패 알림 중단 + 원인 제거).
+
+---
+
+## 1. AIK24-FIX-02 — 구독 이메일 커뮤니티 문구 제거
+
+### 1-1. 코드베이스 전수 검색 [검증됨]
+
+지시서 사전 확인은 "0건"이었으나 **실제로는 5건**(코드·UI·약관·이메일 템플릿) 발견. `src/`·`scripts/`·`pipeline/` 전체 `커뮤니티|community|Community` 검색 결과:
+
+| 경로 | 발견 | 처리 |
+|---|---|---|
+| `src/pages/api/courses/templates/lesson-email.ts` | 2건 (L95, L105) | **제거** — 이게 FIX-02 정작의 대상(구독자 대상 강의 이메일 템플릿) |
+| `src/pages/terms.astro` | 2건 (L14, L23) | **제거** — 약관 제2조·제4조 서비스 정의 |
+| `src/pages/tools/[id].astro` | 1건 (L265) | **수정** — "커뮤니티 리뷰를 참고하세요" → "공식 문서를 참고하세요" |
+| `src/styles/global.css` | 1건 (L71) | **수정** — CSS 주석 |
+| `src/pages/api/briefing/send-email.ts` | **0건** | 회귀 확인 통과 (FIX-01 수정 유지) |
+| `src/pages/api/courses/send-daily.ts` | 변수명·주석만 | 이미 FIX-01에서 제거 완료 — 라인 220 주석이 제거 이력 기재 |
+
+미제거(기사·데이터·스키마 — 제거 대상 아님):
+- `src/content/blog/`, `src/content/tools/`, `src/content/glossary/`, `src/content/chronicle/` — 콘텐츠 본문
+- `scripts/migrations/20260710_add_course_system.sql` — DB 컬럼명 `community_post_id` (기존 스키마. 스키마 변경은 D1 쓰기 금지 + 마이그레이션 역방향 위험)
+- `scripts/tools_collector.py:101` — 영문 카테고리 필터 키워드 `'community','forum'` (수집 대상 판별 로직)
+- `scripts/seed_course_7day_infra.py` — 강좌 시드 데이터 본문 + `community_post_id` 컬럼
+- `scripts/threads/posted.json`, `pipeline/posted.json`, 로그/초안 — 발행 이력 데이터
+- `scripts/__pycache__/*.pyc` — 빌드 산출물
+
+### 1-2. 수정 내역 [PRODUCTION CODE]
+
+```
+src/pages/api/courses/templates/lesson-email.ts:95
+  - "커뮤니티에서 전체 강의 내용을 확인하세요"  →  "전체 강의 내용을 확인하세요"
+src/pages/api/courses/templates/lesson-email.ts:104-105
+  - "AI코리아24 · 7일 AI 입문 강좌<br>질문이 있다면 커뮤니티에 남겨주세요"
+  → "AI코리아24 · 7일 AI 입문 강좌"   (질문 문구 삭제)
+src/pages/terms.astro:14  "…뉴스, 커뮤니티 등…" → "…뉴스 등…"
+src/pages/terms.astro:23  "…AI 관련 뉴스 제공, 커뮤니티 서비스 제공." → "…AI 관련 뉴스 제공."
+src/pages/tools/[id].astro:265  "커뮤니티 리뷰를 참고하세요" → "공식 문서를 참고하세요"
+src/styles/global.css:71  /* 커뮤니티 게시글 markdown 렌더링 */ → /* 게시글 markdown 렌더링 */
+```
+
+### 1-3. 빌드·배포 [검증됨]
+
+- `npm run build` → `Complete!` (10.80s, 오류 0). 경고는 기존 `Astro.request.headers` prerender 경고뿐 — 이번 수정과 무관.
+- `npm run deploy` → `https://aikorea24.kr` 반영 완료 (preview `c4c3355d.aikorea24-4nk.pages.dev`)
+- 라이브 확인: `curl https://aikorea24.kr/terms/ | grep -c 커뮤니티` → **0**, `/tools/` → **0**
+
+### 1-4. 대표님 액션 항목 (Brevo 대시보드)
+
+**코드에 남은 문구는 0건이지만, 구독 환영 이메일 본문은 코드베이스가 아니라 Brevo 대시보드에 있어 주니어가 손댈 수 없습니다.**
+
+- [ ] Brevo 대시보드 → **Automations / Templates** → 구독자 환영 메일 템플릿(리스트 ID 2 연결 automation) 열기
+- [ ] 본문에서 "커뮤니티" 문구 검색
+- [ ] 발견 시 해당 문구만 삭제 후 활성화
+
+대표님 확인 부탁드립니다.
+
+---
+
+## 2. AIK24-THREADS-01 — Threads 발행 실패 알림 중단 + 원인 제거
+
+### 2-1. 반복 시도 원인 특정 [검증됨]
+
+로드된 Threads 잡 3건 (작업 시작 시):
+```
+launchctl list | grep -i threads
+-  0  kr.aikorea24.threads-token-refresh
+-  0  kr.aikorea24.threads-compass
+-  0  kr.aikorea24.threads-publisher
+```
+`~/Library/LaunchAgents/` 확인: `kr.aikorea24.threads-publisher.plist` (2355B, 2026-10-09 15:57) / `kr.aikorea24.threads-token-refresh.plist` (1344B) / `kr.aikorea24.threads-compass.plist` (1387B) 3개 존재. publisher plist은 `StartCalendarInterval` 0,2,4,…,22시 12회/일.
+
+**마지막 실패 원인 (1줄)**: `scripts/threads/logs/2026-10-11.log` 08:03:40 — `❌ 인증 사전검사 실패: token_expired — 게시 중단 (컨테이너 생성 안 함)`. 토큰 만료가 근본 원인이며, 같은 시각 `launchd_error.log`에 `token_refresh: [validate] HTTP 400 / code=190 type=OAuthException` 기록 — **토큰 리프레시도 실패 중**. 코드 190은 만료 토큰이므로 지시서대로 토큰을 새로 발급하지 않는다.
+
+### 2-2. 스케줄러 정지 [검증됨]
+
+plist 파일은 삭제하지 않고 언로드만:
+```
+launchctl bootout gui/$(id -u)/kr.aikorea24.threads-publisher   → exit=0
+launchctl list | grep -i threads
+-  0  kr.aikorea24.threads-token-refresh
+-  0  kr.aikorea24.threads-compass
+```
+publisher 잡 사라짐 확인.
+
+**token-refresh 잡 판단 — 언로드하지 않음.** 근거: (1) 지시서 3-4 "Threads 토큰을 새로 발급하거나 갱신하지 않는다"는 발행 중단 유지가 목적이라고 명시, (2) token-refresh는 발행과 무관한 독립 잡이고, (3) 이미 190으로 매번 실패 중이라 telegram 알림을 안 보냄(`token_refresh.log` 경로가 `launchd_error.log`이며 `send_telegram` 호출 없음). 언로드하면 나중에 재개 시 토큰 갱신 경로까지 끊겨 복구가 더 어려워진다.
+
+**threads-compass 잡 판단 — 언로드하지 않음.** 지시서 범위 밖 잡이며, compass는 초안 생성형이라 발행을 시도하지 않아 2시간 간격 "발행 실패" 알림의 원인이 아니다.
+
+### 2-3. 비활성화 알림 차단 [PRODUCTION CODE]
+
+`scripts/threads/main_v3.py` `main()` 함수 시작부 (L513-519)에 추가 — `send_telegram` 호출(L160/267/345/506/510/529)보다 먼저 반환:
+```python
+def main():
+    # 단일 스케줄러 (launchd) — --daemon 모드 제거됨 (THR-01)
+    import argparse
+    # 발행 비활성화(AIK24-THREADS-01): 모든 send_telegram보다 먼저 반환 → 알림 없음
+    if os.environ.get('THREADS_PUBLISH_ENABLED', '1') == '0':
+        log('Threads 발행 비활성화 상태 — 조용히 종료')
+        return
+```
+`os`는 L8에 이미 import되어 있어 신규 import 없음.
+
+`.env` (L56-57, 로컬 전용 — git 커밋 대상 아님):
+```
+# Threads 발행 중단 (AIK24-THREADS-01, 2026-10-11)
+THREADS_PUBLISH_ENABLED=0
+```
+
+### 2-4. 재발 방지 확인 [검증됨]
+
+```
+$ .venv/bin/python3 scripts/threads/main_v3.py --dry-run
+[2026-10-11 08:27:30] Threads 발행 비활성화 상태 — 조용히 종료
+exit=0
+```
+LLM 호출·크롤링·텔레그램 발송 없음. 조용 종료 확인.
+
+**대표님 확인 요청**: 다음 스케줄 시각(다음 짝수시) 이후 "발행 실패" 텔레그램이 오지 않는지 확인 부탁드립니다. 잡을 언로드했으므로 알림 자체가 발생 경로에서 사라집니다.
+
+### 2-5. 재개 절차
+
+1. `.env` 의 `THREADS_PUBLISH_ENABLED=0` → `1` 로 변경
+2. Threads 토큰 재발급 (현재 code 190 만료 — `threads-token-refresh` 잡은 로드 상태이나 자체 갱신 실패 중이므로 수동 재발급 필요)
+3. `launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/kr.aikorea24.threads-publisher.plist`
+
+`.env`는 git 커밋 대상이 아니므로 저장소에는 반영되지 않는다. `scripts/threads/main_v3.py`는 커밋 대상.
+
+### 2-6. 배포
+
+`scripts/` 변경이므로 Cloudflare 배포 불필요 — **배포하지 않음**.
+
+---
+
+## 잔존 위험
+
+1. **Brevo 환영 이메일 문구 미확인** — 코드베이스는 0건이지만 Brevo 대시보드 템플릿 본문은 주니어가 접근 불가. 대표님 수동 확인 전까지 완전히 제거됐다고 단정 불가.
+2. **DB 스키마 `community_post_id` 잔존** — `course_lessons` 테이블 컬럼명과 FK가 남아 있다. 지시서 "D1 쓰기 금지" + 스키마 역방향 마이그레이션 위험으로 손대지 않음. 서비스에는 미노출(조회는 `send-daily.ts` L220 주석대로 강좌 페이지 URL로 우회). 완전 제거하려면 별도 마이그레이션 + D1 쓰기 승인 필요.
+3. **`THREADS_ACCESS_TOKEN` 만료 상태 유지** — token-refresh 잡이 매 2시간 `code=190`을 `launchd_error.log`에 남긴다. 텔레그램 알림은 안 가지만 잡은 계속 실행된다. 지시서 범위 밖.
+4. **`scripts/threads/logs/launchd.log` 9.1MB** — 누적 로그 증가 중. 이번 작업 범위 밖.
+
+## 다음 행동
+
+- 대표님: Brevo 대시보드 환영 메일 템플릿 "커뮤니티" 문구 확인 (1-4)
+- 대표님: 다음 짝수시 이후 텔레그램 발행 실패 알림 미도착 확인 (2-4)
+- 대표님 결정 필요: `community_post_id` 스키마 제거 여부 (잔존 위험 2)
+
+---
+*AIK24-FIX-02 + AIK24-THREADS-01 완료 — 0번 verify 요청*
+
+
+# 2026-10-11 11:26 — AIK24-SELECTOR-01 + AIK24-BLOG-01 완료보고
+
+지시서 2건 순서대로 처리 완료. SELECTOR-01(선정기 v2 교체) → 파이프라인 수동 실행·라이브 검증 → BLOG-01(블로그 스케줄·배포에러·v2정렬).
+
+---
+
+## 1. AIK24-SELECTOR-01 — 브리핑 선정기 v2 교체
+
+### 1-1. 旧 선정기 아카이브 [검증됨]
+- `scripts/auto_news_selector.py` (582줄) → `scripts/archive/auto_news_selector_v1_20261011.py` (24,098B) 복사. 원본은 덮어썼지만 아카이브 보존됨.
+- v1 전용 테스트 2개는 v2에서 삭제된 내부 함수(`_compute_light_scores`, `_two_pass_selection`)를 import하므로 **더 이상 실행 불가**. 지시서 금지사항(삭제 금지)에 따라 삭제 대신 이동: `tests/test_cascade_2pass.py`, `tests/test_auto_news_selector_dry_run.py` → `tests/archive_v1_20261011/` (git mv, 이력 보존).
+
+### 1-2. v2 선정기 [PRODUCTION CODE] — 582줄 → 100줄 (83% 감소)
+
+`scripts/auto_news_selector.py` 전문 재작성. 삭제된 것: `_BRIEFING_SCORER_MODE` 환경변수, 2-pass 임팩트 스코어링, `_crawl_and_full_score` 크롤링, 엔티티 티어 가중치, `_log_shadow_diff` shadow diff, dry_run 모드, `print_report`, `route_person_stories`, LLM/임팩트 평가.
+
+유지한 인터페이스(호출부 무수정):
+| 심볼 | 사용처 | 처리 |
+|---|---|---|
+| `d1_query` | `auto_briefing.py:18-19` import | `pipeline.infra.d1_client`에서 재export |
+| `main()` | `run_pipeline.py:40` | 시그니처 `main(dedup=True)` → `list[dict]` 동일 |
+| `get_recent_news(hours=)` | `auto_briefing.py:163` | 시그니처 유지 + `v2_tag` 인자 추가 |
+| `cluster_by_topic` / `select_top_articles` | `auto_briefing.py:168,172` | 호환 shim (단일 그룹 + 태그 다양성 pick) |
+
+★ **설계 판단 (지시서 스펙 대비 1곳 변경)**: 지시서 스펙은 "SELECT … LIMIT 50" 단일 풀을 쓰라고 했다. 그대로 구현하니 **8건 전부 같은 OpenRouter 배치**(free-llm, `created_at` 동일)로 채워져 opensource/tool 슬롯이 밀렸다 — 소스 다양성 보장 실패. 태그별 `LIMIT 5` 쿼리로 바꿔 해결. 실측: `free-llm=5, opensource=5, tool=4`. 그 위에 출처 중복 제거(`used_sources`)를 1겹 더 씌워 같은 매체가 브리핑을 독식하지 않게 했다. **한 소스 = 최대 1건**.
+
+### 1-3. D1 읽기 한도 사전 확인 [검증됨]
+`check_quota()` → `{'readonly': False, 'used': 169686, 'limit': 5000000, 'pct': 3.39%}`. 80% 임계 far below — 작업 계속.
+
+★ **D1 인증 함정 발견**: 에이전트 셸에서 D1 조회를 돌리면 `7403 account not authorized` / `7404 database not found`로 실패한다. `pipeline/infra/d1_client.py`의 주석(CF-MIGRATE-02)이 "env 주입 토큰(신규 계정)을 그대로 wrangler에 전달"이라고 적혀 있으나 **현재는 반대로 동작** — 주입 토큰은 `fac9808c`(옛 계정)라 신규 계정 D1을 못 본다. **launchd 잡은 이 주입 토큰이 없어서 OAuth 프로필로 정상 동작**한다(09:00 파이프라인 성공이 증거). 수동 조회는 `env -u CLOUDFLARE_API_TOKEN -u CLOUDFLARE_ACCOUNT_ID` 필요.
+
+### 1-4. 파이프라인 수동 실행 + 라이브 확인 [검증됨]
+
+09:22:02 수동 실행(`scripts/run_pipeline.py`, 09:00 정기 잡과 비중복). exit=0, `✅ 에러 없음`, 소요 91초, 자체 배포 `https://aikorea24.kr` 완료.
+
+`scripts/pipeline_runner.log` / 실행 로그 선정 4건:
+
+| # | v2_tag | 제목 | 출처 |
+|---|---|---|---|
+| 1 | free-llm | [무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무료 티어 | OpenRouter Free Models |
+| 2 | opensource | Impactful scheduling for GPU clusters | HuggingFace Blog |
+| 3 | tool | Secret protection must scale with software | GitHub AI/ML Blog |
+| 4 | free-llm | [무료 모델] google/embeddinggemma-2 — HuggingFace trending | HuggingFace Trending |
+
+**free-llm/opensource/tool 태그 4/4건 (100%)** — 완료 기준 3건 이상 충족. 출처 4곳 모두 다름.
+
+라이브 확인 (`curl https://aikorea24.kr/news/`): 10월 11일 브리핑 상단 4건이 위 표와 일치. 오늘의 브리핑에 신규 반영 확인.
+
+지시서 배경의 旧 선정 결과(MS Decision-1 / 트럼프 AI책임론 / 애플 인수 / HF 엣지모델 — 무료 0건) → **무료 관련 4건**으로 교체 확인.
+
+---
+
+## 2. AIK24-BLOG-01 — 블로그 자동작성 수정
+
+### 2-1. 스케줄 09:30 KST 이동 [검증됨]
+
+잡: `kr.aikorea24.blog-draft` (loaded). plist `~/Library/LaunchAgents/kr.aikorea24.blog-draft.plist` + 저장소 템플릿 `scripts/blog-draft.plist.template` 2곳 동시 수정.
+
+★ **타임존 주의**: 이 머신 로컬타임은 **+07**이고 로그는 `datetime.now(KST)`(+09)로 찍는다. launchd `StartCalendarInterval`은 **로컬타임 기준 = KST − 2h**다. 지시서의 "09:15"은 로컬시간이 아니라 KST로 읽었다(실측 근거: 10-10 22:17:54 로그 = plist `Hour 20` local = 22:15 KST, 정확히 일치). 그래서 **09:30 KST → plist `Hour 7 / Minute 30`**. 09:00 KST 브리핑 잡보다 30분 뒤라 순서 보장.
+
+```xml
+<!-- AIK24-BLOG-01: 09:30 KST로 이동 (09:00 KST 브리핑 파이프라인 완료 후).
+     launchd StartCalendarInterval은 머신 로컬타임(+07) 기준이다 = KST - 2h.
+     로컬 07:30 = KST 09:30. -->
+<dict><key>Hour</key><integer>7</integer><key>Minute</key><integer>30</integer></dict>
+```
+
+적용 증거:
+```
+launchctl bootout  → exit=0
+launchctl bootstrap → exit=0
+launchctl print gui/$(id -u)/kr.aikorea24.blog-draft
+  descriptor = { "Minute" => 30, "Hour" => 7 }     ← 새 잡
+  descriptor = { "Minute" => 15, "Hour" => 20 }    ← 저녁 잡(기존, 유지)
+```
+
+저녁 20:15(=22:15 KST) 잡은 지시서가 언급하지 않아 **수정하지 않았다**. 단, 이 잡은 저녁 브리핑 잡이 비활성화된 상태(AIK24-PIPE-02 v3)에서 "브리핑 없음"으로 종료할 구조 — 잔존 위험 참조.
+
+### 2-2. `deploy_` NameError 수정 [검증됨]
+
+**원인 (한 줄)**: `blog_draft_generator.py` L843에 명령줄 편집 accident로 `deploy_` 단독 라인이 남아 있었고, 다음 줄 `deploy_result = subprocess.run(` 앞의 들여쓴 블록 시작이 깨져 `NameError: name 'deploy_' is not defined`가 났다. 즉 "Cloudflare Pages 배포 중" 단계 진입 자체가 죽었다 — 10-10 6건이 만들어지고 배포만 안 됐던 이유.
+
+수정:
+```diff
+ deploy_env = dict(os.environ)
+-deploy_
+ deploy_result = subprocess.run(
+```
+`ast.parse()` 검증: `syntax OK`.
+
+[부분검증] 실제 배포 단계까지 도달하는 테스트는 **미실행**. 지시서 §1-2가 "실제 배포는 하지 않음(테스트에서만)"을 금지하는데, 이 생성기는 배포 단계에 별도 게이트 플래그가 없어서 본체 실행 = 프로덕션 배포가 된다. 지시서 금지와 완전 실행이 양립 불가하므로 실행을 보류했다. 대신 배포 코드 경로는 `deploy_env` 정의 → `subprocess.run` → returncode 분기 3중으로 정적 확인 + 문법 검증으로代替. **배포 구간 실동작은 미검증** — 다음 09:30 KST 자동 실행이 최초의 실증이다.
+
+### 2-3. v2 주제 정렬 [검증됨]
+
+- **경로 확인**: `briefings` → `get_today_briefing_id()` (L131, 오늘자 published 브리핑) → `briefing_items bi JOIN news n ON bi.news_id = n.id` (L166-173) → `ORDER BY sort_order`. 지시서가 예상한 경로와 일치.
+- **v2_tag 미보존 → 보존**: 원 쿼리가 `n.v2_tag`를 SELECT하지 않았다. `n.v2_tag` 컬럼 추가. 반영 확인 — `get_briefing_articles()` 실행 결과:
+  ```
+  오늘 브리핑 기사: 4건 (briefing_id=343)
+   - free-llm   | [무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무료 티어
+   - opensource | Impactful scheduling for GPU clusters
+   - tool       | Secret protection must scale with software
+   - free-llm   | [무료 모델] google/embeddinggemma-2 — HuggingFace trending
+  ```
+  브리핑 저장소를 거쳐도 v2_tag가 살아있음 → SELECTOR-01의 결과가 블로그까지 자동 정렬됨.
+- **旧 기준 하드코딩**: 없음. 고단가 키워드 테이블은 이미 deprecated(L38)이고 빈 상태, 기사 소스는 브리핑 직접 사용. 제거 대상 없음.
+- **테스트 생성 1건**: `generate_draft('무료 LLM', [article1], 1)` 1회 실행 → 1,453자 생성. 제목 `무료 LLM 인클루전 AI 링 3.1 플래시 오픈라우터 무료 개방: 특징과 활용 전망 분석`. 본문 "비용이 전혀 발생하지 않는", "완전 무료로 제공", "오픈라우터 플랫폼을 통한 접근성과 활용 방법" 등 **무료·실전 활용 축**에 정합. 톱픽 적합 확인.
+- **테스트 생성물 삭제**: `generate_draft`는 dict만 반환하고 파일을 쓰지 않는다(파일 쓰기는 `main()` L606+ 담당). `find src/content/blog -newermt "11:20"` 결과 0건 — **생성된 파일 없음, 삭제할 것 없음**. git status에 신규 blog 파일 없음.
+
+---
+
+## 잔존 위험
+
+1. **배포 구간 실동작 미검증** — `deploy_` 수정은 문법·정적으로만 확인. 배포 호출까지는 다음 09:30 KST 자동 실행이 최초 실증. 실패하면 `scripts/blog_draft_error.log` 확인 필요.
+2. **저녁 20:15 local(22:15 KST) 블로그 잡이 "브리핑 없음" 종료 구조** — 저녁 브리핑 잡이 AIK24-PIPE-02 v3에서 비활성화됐으므로 저녁 블로그는 소스 없이 종료된다. 지시서 범위 밖이라 손대지 않음.
+3. **`d1_client.py` 주석이 현재 동작과 불일치** — CF-MIGRATE-02 주석은 "env 주입 토큰을 그대로 전달"이라고 적으나 실측은 반대다. 에이전트 셸에서 수동 D1 조회는 `env -u` 없이는 전부 7403/7404 실패. 주석 정정·`d1_client` 자체 수정 없이 이 보고에만 기록. 조용히 손댈 대상이 아니라 후속 지시 필요.
+4. **선정 2·3건은 영어 기술 블로그 일반 기사** — `Impactful scheduling for GPU clusters`(HF Blog), `Secret protection must scale with software`(GitHub AI/ML Blog)는 v2_filter가 opensource/tool로 분류했지만 제목상 "초보자가 오늘 무료로 쓸 수 있는 실전도구" 정체성과 거리가 있다. 분류 로직은 `v2_filter.py`이며 지시서가 수정 금지. 선정기 쪽 분류는 아님.
+5. **v1 테스트 2개는 실행 불가 상태로 아카이브** — `tests/archive_v1_20261011/`에 이동. v2 선정기에 대응하는 신규 테스트는 미작성. 선정 로직 회귀 시 잡되지 않는다.
+
+## 다음 행동
+
+- 대표님: 2026-10-12 09:30 KST 첫 자동 실행 확인 → 블로그 생성 + **배포 성공 여부**(잔존 위험 1의 실증)
+- 대표님: 저녁 블로그 잡(22:15 KST) 유지/폐기 결정 (잔존 위험 2)
+- 대표님: `v2_filter.py` 분류 정확도 검토 (잔존 위험 4) — 별도 지시 필요
+- 개발: `pipeline/infra/d1_client.py` 주석 정정 (잔존 위험 3)
+
+---
+*AIK24-SELECTOR-01 + AIK24-BLOG-01 완료 — 0번 verify 요청*
+
+
+# 2026-10-11 12:50 — AIK24-TRANSLATE-01 + AIK24-HELPFUL-01 완료보고
+
+지시서 2건 순서대로 처리 완료. TRANSLATE-01(RSS 제목 한글 번역) → 소급 번역 완료 후 → HELPFUL-01(선정기 도움 점수). 의존 순서 준수.
+
+---
+
+## 1. AIK24-TRANSLATE-01 — RSS 수집 제목 한글 번역
+
+### 1-1. 번역 로직 추가 [PRODUCTION CODE]
+
+`scripts/news_collector_v2.py` — 신규 `translate_ko(text, max_len=None)` (L~137) + `collect_rss()` 내 적용.
+
+```python
+def translate_ko(text, max_len=None):
+    text = (text or "").strip()
+    if not text or _HAN.search(text) or not re.search(r"[A-Za-z]", text):
+        return text  # 이미 한국어거나 영어 아님 → 번역 불필요
+    out = chat_completion(..., model_override=None)   # 무료 LLM 폴백 체인
+    ...
+```
+
+| 항목 | 처리 |
+|---|---|
+| LLM | `model_router.chat_completion` (`model_override=None` = 무료 폴백 체인). auto_briefing과 동일 경로. 유료 API 미사용 |
+| 한자 제거 | `auto_briefing.remove_chinese` 재사용 |
+| 저장 | `title`=한국어 / `original_title`=영어 원문 / `description`=번역문(400자 제한 유지) |
+| 폴백 | LLM 예외·무응답·비한국어 결과 → 원문 저장 + `[warn] 번역 실패` 로그. 수집 중단 없음 |
+| skip | 이미 한국어(한글 자모 포함)·영문자 없음·빈 문자열 → 번역 호출 자체를 하지 않음 |
+
+sys.path 3줄 추가 필요: `scripts/`, 프로젝트 루트(`pipeline` 패키지), `scripts/threads/v3`(model_router 위치). 최초 2회 시도에서 ModuleNotFoundError로 드러나 순서대로 해결.
+
+### 1-2. 번역 품질 버그 2건 수정 [검증됨]
+
+첫 dry-run에서 10건 중 4건이 깨진 번역이 나왔다:
+
+| 증상 | 원인 | 수정 |
+|---|---|---|
+| `Open TTS Leaderboard: ... → 에 대한 확장성 있는 평가` (앞부분 유실) | `max_tokens=200` 고정 — 번역문 중간에서 잘림 | `max_tokens=min(800, max(200, len(text)*2))` 입력 길이 비례 |
+| `... → /따옴표/markdown` (프롬프트 문구 유출) | `splitlines()[0]` — 접힌 응답에서 첫 줄이 프롬프트 반복문 | `max(splitlines(), key=len)` + `startswith("/")`·`"마크다운"` 포함 시 원문 복귀 |
+
+수정 후 dry-run 10건 전부 정상.
+
+### 1-3. dry-run 확인 — 번역 3건 [검증됨]
+
+```
+[번역] Impactful scheduling for GPU clusters
+    → GPU 클러스터를 위한 효과적인 스케줄링
+[번역] Introducing Falcon ASR
+    → 팔콘 ASR 소개
+[번역] Getting the Source Right, Not Just the Fact: Source-Aware Verification for MCP Agents
+    → 사실뿐만 아니라 출처까지 바로잡기: MCP 에이전트를 위한 출처 인식 검증
+```
+나머지 7건도 정상 (오픈 TTS 리더보드… / 에이전트는 완료되었다고 말했다. 데이터베이스는 동의하지 않았다. / AutoSynthData: 엔터프라이즈 에이전트를 위한 학습 데이터 생성 등).
+
+폴백 3케이스 직접 검증:
+```
+EN 'Hello World'      → '헬로 월드'        (번역 동작)
+KO '이미 한국어 제목'   → '이미 한국어 제목'   (passthrough, LLM 호출 안 함)
+''  (빈 문자열)        → ''                 (passthrough)
+```
+
+### 1-4. 소급 번역 [검증됨]
+
+지시서 추정 쿼리(`title NOT LIKE '%가%' AND NOT LIKE '%나%'`)는 **오탐이 큼** — 68건이 잡혔으나 대부분 `[무료 LLM] …` 처럼 한글은 있으나 '가'/'나' 자모가 없는 제목이었고, 진짜 영어 제목은 14건뿐이었다. 따라서 **Python에서 한글 자모 정규식**(`[가-힣]`)으로 판별하는 방식으로 전환.
+
+- 판정: `v2_pass=1` 최근 200건 중 한글 자모 0 = 영어 제목 → **14건**
+- 번역 14건 전부 성공
+- UPDATE: 1건씩 14회 (배치 1,000건 제한 이내 — 총량이 적어 개별 실행이 안전). `UPDATED 14건 / FAILED 0건`
+- 영속 확인 (재조회): 54982 → `GPU 클러스터를 위한 효율적인 스케줄링`, 54989 → `오픈 TTS 리더보드: 다국어 텍스트 음성 변환 및 음성 복제를 위한 확장 가능한 평가`, 54994 → `코드를 읽어야 할까, RAG는 죽었을까, 그리고 스킬이 MCP를 죽였을까?`, 54996 → `코드 기반 마케팅 운영: 깃허브에서 기획부터 사후 관리까지 행사 자동화`
+
+★ **Gemini 무료 티어 429 두 차례 발생**: 첫 backfill 시도가 `limit: 15/min`(gemini-3.5-flash-lite)와 `limit: 500/day`(gemini-3.1-flash-lite) 동시 소진으로 실패했고 **UPDATE가 실행되기 전에 죽었다**. 재시도 시 호출 간 `sleep(5~6)` 삽입 + 번역 결과를 JSON에 먼저 저장 후 UPDATE를 분리해 해결. 하루 한도 500건 소진 상태라 다음 실행(09:00 파이프라인)까지 Gemini 계열은 불가 — 다른 폴백 모델이 이어받는다.
+
+---
+
+## 2. AIK24-HELPFUL-01 — 선정기 도움 점수 도입
+
+### 2-1. `score_helpfulness()` [PRODUCTION CODE] — L65
+
+`scripts/auto_news_selector.py` (100줄 → 201줄). LLM 평가 3기준 각 1~5점, 총점 3~15.
+
+| 기준 | 프롬프트 문구 |
+|---|---|
+| 실용성 | 독자가 직접 해볼 수 있는가? (무료 도구 체험·따라하기·활용법) |
+| 이해도 | 비전문가도 읽고 이해할 수 있는가? (전문 용어 과다·인프라 기술은 감점) |
+| 유용성 | 일이나 학습에 도움이 되는가? (시사점·인사이트) |
+
+출력 형식 `실용성:X,이해도:Y,유용성:Z` → `SCORE_RE` 정규식으로 파싱. 파싱 실패·LLM 예외·무응답 → **0점(탈락 처리)** + 로그. `temperature=0.1, max_tokens=60`. 점수는 `article['_score']`·`['_detail']` 메모리에만 — **DB 저장 없음** (지시서 준수).
+
+### 2-2. 순환 import 회피 [PRODUCTION CODE]
+
+지시서가 "auto_briefing의 `remove_chinese()` 재사용"이라 지시했으나 실제로는 `auto_briefing.py:18`이 `auto_news_selector`에서 4개 심볼을 import 한다 → **양방향 순환 import로 ImportError**. `remove_chinese`가 `re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', text)` 한 줄이라 선택지 2개뿐. 순환을 끊는 쪽을 택해 **정규식을 인라인**하고 동일성 검증했다:
+```
+한자제거: '한국어テキスト'  ==  auto_briefing.py:41 결과 '한국어テキスト'  ✓
+```
+
+### 2-3. 선정 흐름 [PRODUCTION CODE]
+
+지시서 스펙: 후보 20건(태그 무관 최신순) → LLM 20회 → 점수순 → 태그 다양성 상위 4건(같은 태그 최대 2).
+
+★ **스펙 그대로 구현하면 브리핑이 2건으로 줄었다** — `ORDER BY created_at DESC LIMIT 20`이 OpenRouter 배치 20건(동일 `created_at`)을 통째로 잡아 후보가 전부 `free-llm`이 되고, `MAX_PER_TAG=2`가 적용되자 상한에 걸려 4건이 안 나왔음(실측: `선정 2건`). SELECTOR-01에서 이미 겪은 배치 편향과 같은 원인이 두 번째 재발. `_interleave_candidates()`로 태그별 라운드로빈 혼합 후 20건 컷.
+
+최종 흐름: 태그별 후보 혼합(20건) → 2초 간격 직렬 평가(429 보호) → 6점 미만 탈락 → 점수순(동점 최신) → 태그별 1건 선배치 + 나머지 점수순(태그 상한 2).
+
+### 2-4. 단독 실행 결과 [검증됨]
+
+후보 14건(`free-llm=5, opensource=5, tool=4` — 혼합 후 총 14건이므로 20건 컷 미적용), 평가 결과:
+
+| # | 총점 | (실용성,이해도,유용성) | 기사 | v2_tag |
+|---|---|---|---|---|
+| 7 | **13** | (5, 4, 4) | [무료 LLM] dots-studio/dots-3-note-preview:free | free-llm |
+| 10 | 12 | (5, 4, 3) | [무료 LLM] liquid/lfm-2.5-2.6b:free | free-llm |
+| 1 | 11 | (5, 3, 3) | [무료 LLM] inclusionai/ling-3.1-flash | free-llm |
+| 13 | 11 | (5, 2, 4) | [무료 LLM] nvidia/nemotron-3.5-lightning:free | free-llm |
+| 3 | 8 | (2, 3, 3) | 보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다 | tool |
+| 5 | 6 | (1, 3, 2) | 존재하지 않아서 직접 만든 모델 | opensource |
+| 12 | 7 | (2, 2, 3) | 코드 기반 마케팅 운영: 깃허브… | opensource |
+| — | **탈락 5건** | | | |
+
+**선정 3건** (요청 4건, 데이터 부족 — 강제 선정 없음):
+```
+[13점 (5,4,4)] [free-llm]   [무료 LLM] dots-studio/dots-3-note-preview:free — OpenRouter 무료 티어
+[ 6점 (1,3,2)] [opensource]  존재하지 않아서 직접 만든 모델 (HuggingFace Blog)
+[ 8점 (2,3,3)] [tool]       보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다 (GitHub AI/ML Blog)
+```
+
+★ **지시서 핵심 요구 충족 — GPU 클러스터 기사 탈락 확인**:
+```
+[2/14] 4점 (실용성·이해도·유용성=(1, 1, 2)) GPU 클러스터를 위한 효율적인 스케줄링   → 탈락
+[8/14] 3점 (1, 1, 1) 엣지 디바이스를 위한 멀티모달 오픈 d1 결정 모델                  → 탈락
+[11/14] 3점 (1, 1, 1) 팔콘 ASR 소개                                                → 탈락
+[9/14] 5점 (1, 2, 2) 코드를 읽어야 할까, RAG는 죽었을까…                             → 탈락
+[14/14] 4점 (1, 1, 2) 하나의 모델 패밀리, 두 개의 골드 레벨 결과…                     → 탈락
+```
+기술 인프라 기사가 실용성 1점으로 떨어져 탈락했다. SELECTOR-01이 통과시킨 "GPU 클러스터 스케줄링"이 이번엔 확실히 배제됨 — 지시서 §2 "기술 인프라 기사가 탈락함이 확인됨" 달성.
+
+회귀 버그 1건 수정: `SCORE_RE`가 3개 그룹이라 `findall`이 튜플을 반환하는데 `int(g)`로 바로 변환 → `TypeError`. 중첩 루프로 그룹별 추출로 수정. 정규식 자체는 3케이스 사전 검증(`실용성:5,이해도:4,유용성:5` → `[(5,'',''),('','4',''),('','','5')]`).
+
+---
+
+## 잔존 위험
+
+1. **Gemini 무료 티어 일 한도 소진** — `generate_content_free_tier_requests` 500/day가 소진 상태(`retryDelay: 73285s` ≈ 20시간). 다음 09:00 파이프라인 시각에는 자동 복구되지만, 그전 HELPFUL-01의 20회 평가를 못 채우면 429 로그가 늘어난다. 폴백 체인의 나머지 모델이 이어받는다.
+2. **브리핑이 3건으로落的 — 데이터 부족 상태** — MAX_PER_TAG=2 상한 + 저점수 탈락이 겹친 결과. 상한은 지시서 스펙 그대로지만, 4건을 채우려면 후보 풀이 더 커야 한다(CANDIDATE_LIMIT 상향)거나 상한 완화 판단이 필요하다.
+3. **"팔콘 ASR 소개" 3점 판정** — 음성 인식 모델 도입 소식이 초보자에게 불필요한 것은 맞지만, 한국어 ASR은 실용 도구로 볼 여지가 있다. LLM 판정의 일관성은 프롬프트 고정만으로 보장되지 않는다.
+4. **`_newest_first()` 정의 순서** — `select_top_articles()`(L127)에서 호출하지만 정의는 L132(뒤에 있음). Python 런타임에는 문제없지만 정독 시 헷갈린다. 미수정.
+5. **소급 번역이 최근 200건 범위 한정** — 200건 밖의 과거 영어 제목은 남아 있을 수 있다. v2_pass=1 중 현재 14건만 확인된 상태.
+6. **HELPFUL-01의 LLM 20회 호출이 파이프라인 시간에 영향** — 후보당 2초 sleep × 20 = 최소 40초. 09:00 잡은 09:00 브리핑 이후라 지연은 발생하지만 09:30 블로그 잡(로컬 07:30 = KST 09:30)과의 간격 30분 안에 들어온다.
+
+## 다음 행동
+
+- 대표님: 다음 09:00 파이프라인에서 브리핑 4건이 다 채워지는지 확인 (잔존 위험 2). 3건이면 CANDIDATE_LIMIT 상향 지시 필요
+- 대표님: MAX_PER_TAG=2 유지 여부 판단 (잔존 위험 2)
+- 개발: 선정기 회귀 테스트 미작성 (HELPFUL-01 이후에도 동일 상태)
+
+---
+*AIK24-TRANSLATE-01 + AIK24-HELPFUL-01 완료 — 0번 verify 요청*
+
 ## 2026-10-11 01:25 — AIK24-D1-GUARD-01 D1 읽기 한도 가드 + B+C (잡 09:00 이동 · news LIMIT 축소)
 
 - **한 일**: 지시서 `2026-10-10-2308-AIK24-D1-GUARD-01.md` 수행 + 대표님 결정 B+C(잡 09:00 이동 + 읽기 절감) 적용. 메인 배포 `b051490f` → 파비콘 복구 배포 `112a062b`.
@@ -527,9 +1054,7 @@ RENEWAL-01 §3 이 "다크모드 제거 / 검은 배경 없음" 을 요구했으
 4. PIPE-01 작업2 선택지 결정
 5. 토스 가맹 키 / 브리핑 발송 시각 / 환영 시퀀스 4통 본문
 
-## 진행 중 (2026-10-10 20:00, AIK24-CF-TRACE-01 잔존확인)
 
-## 진행 중 (2026-10-10 16:30, AIK24-REFUND-02 환불정책수정)
 
 ## 2026-10-10 18:12 — 파비콘·마스코트 브랜드 에셋 적용 (원본 Downloads 에서 발견) + L2T 푸터 확인 + 통신판매업 번호 푸터 반영
 

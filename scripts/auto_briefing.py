@@ -17,6 +17,7 @@ from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
 from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
 from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
+import model_eval
 
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
@@ -76,6 +77,30 @@ def generate_comment(article):
         if cleaned != comment:
             removed = len(comment) - len(cleaned)
             log(f"    ⚠️ 중국어 문자 {removed}개 제거됨 (comment)")
+
+        # v2 free-llm 항목에 능력 티어 + 접근법 자동 부착 (AIK24-MODELEVAL-01)
+        # 평가 실패 시 기존 코멘트만 — 브리핑을 절대 막지 않는다.
+        if article.get("v2_tag") == "free-llm":
+            model_id = model_eval.extract_model_id(article)
+            if not model_id:
+                log("    ⚠️ 모델 ID 판별 실패 → 평가 생략")
+                return cleaned
+            try:
+                ev = model_eval.eval_model_cached(model_id)
+                log(f"    📊 모델 평가: {model_id} → {ev['label']} "
+                    f"(실패 {ev.get('failed', 0)}/{ev['max_score']}문항, 채널 {sorted({d['source'] for d in ev['details']})})")
+                for d in ev["details"]:
+                    log(f"       Q{d['idx']}[{d['cat']}] {d['score']}점 "
+                        f"({d['source']}) {(d.get('answer') or '')[:50]!r}")
+                # deep_dive_url은 09:30 블로그 생성 뒤에야 채워진다.
+                # 09:00 브리핑 시점엔 None → 해당 줄 생략(프론트 deep-dive 카드가 대신 보여준다)
+                block = model_eval.eval_comment_block(
+                    model_id, article.get("deep_dive_url"), result=ev)
+                if block:
+                    return block
+                log("    ⚠️ 평가 블록 생성 실패 → 기존 코멘트 유지")
+            except Exception as e:
+                log(f"    ⚠️ 모델 평가 예외: {type(e).__name__}: {str(e)[:100]}")
         return cleaned
     except Exception as e:
         log(f"  LLM 예외: {e}")
