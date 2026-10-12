@@ -22,15 +22,24 @@ class TestFindBackground:
             assert mock_q.call_count == 1
 
     def test_second_kw_fallback(self):
-        def side_effect(sql):
-            if "AI 규제" in sql:
-                return []
-            if "신뢰 붕괴" in sql:
-                return [{"id": "3", "title": "신뢰 붕괴 기사"}]
-            return []
-        with patch("pipeline.threads.contrast.background_search.d1_query", side_effect=side_effect):
+        """2026-10-13: 구현이 '키워드별 순차 쿼리(첫 히트 우선)'에서
+        '키워드를 OR 로 묶은 단일 쿼리 + ORDER BY pub_date DESC LIMIT 1(최신 우선)'로 바뀌었다.
+        두 번째 키워드도 같은 쿼리로 조회되고, 반환된 최신 기사가 채택된다는 계약을 검증한다."""
+        captured = {}
+        rows = [{"id": "3", "title": "신뢰 붕괴 기사", "description": "d",
+                 "link": "http://b", "pub_date": "2026-08-21", "source": "src"}]
+
+        def capture(sql):
+            captured["sql"] = sql
+            return rows
+
+        with patch("pipeline.threads.contrast.background_search.d1_query",
+                   side_effect=capture) as mock_q:
             result = find_background(["AI 규제", "신뢰 붕괴"], "1")
             assert result["id"] == "3"
+            assert mock_q.call_count == 1                                       # 단일 쿼리
+            assert "AI 규제" in captured["sql"] and "신뢰 붕괴" in captured["sql"]  # OR 결합
+            assert "ORDER BY pub_date DESC LIMIT 1" in captured["sql"]           # 최신 우선
 
     def test_zero_result_none(self):
         with patch("pipeline.threads.contrast.background_search.d1_query", return_value=[]):
