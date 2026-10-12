@@ -1,4 +1,30 @@
-## 진행 중 (2026-10-13, AIK24-L2T-BADGE-02)
+## 2026-10-13 01:05 — AIK24-L2T-BADGE-02 완료: 배지 이미지 다크바 제거 + 도구 중복 등록 정리 + 카드/상세 이미지 영역 추가 (Version `8d36ae42`)
+
+### 한 일
+- [ASSET] `public/badges/listed-on-aikorea24.webp` 크롭: 636×254(20618B) → **630×210(34700B)**, content 영역만 남김.
+- [PRODUCTION CODE] `src/pages/tools/index.astro`: D1 SELECT 에 `screenshot_url` 추가 + `d1Tools.screenshotUrl` 매핑 + **중복 슬러그 제거**(`mdSlugs`/`d1Only`) + 최신 등록·전체 목록 카드에 조건부 썸네일.
+- [PRODUCTION CODE] `src/pages/tools/[id].astro`: 이미지 블록을 `screenshotUrl || image` 로 확장(md 컬렉션 `image` 필드 지원).
+- [PRODUCTION CODE] `src/content/tools/link2threads-l2t.md`: `image: "/badges/listed-on-aikorea24.webp"` 추가.
+- [CONFIG] 배포: `npm run deploy` → Version `8d36ae42-d3dd-4b03-9611-1f9fe8b6fe33`, DEPLOY_EXIT=0.
+
+### 결과 (검증 근거)
+- [검증됨] 로컬 배지 픽셀 top-center 254 / bottom-center 212(교체 전 86·91) · 어두운 픽셀 상단행 4/630 · 하단행 4/630(모서리 안티앨리어싱).
+- [검증됨] 라이브 `/badges/listed-on-aikorea24.webp` = 34700B · md5 `13393b70eac596d7bbc6838e9b1b1d3f`(로컬 일치) · (630,210) · `cf-cache-status: MISS`. 첫 조회 20618B 는 전파 스테일, 3초 후 전환.
+- [검증됨] 중복 소멸: 라이브 `/tools/` 에서 `MAKER` 0건(MAKER=D1 카드 전용) · `href="/tools/<slug>/"` 총 388회/유일 373개(차이 15=섹션 중복 렌더).
+- [검증됨] `/tools/` 에 배지 썸네일 1건 · `/tools/link2threads-l2t/` 배지 1건·`이미지 원본 보기` 1건.
+- [검증됨] 중복 12건 해소 근거: md 370 ↔ D1 published 12 교집합 12, md 본문 676~1659자 vs D1 detail_markdown 0~381자 → md 우선(옵션 B).
+- [부분검증] link2threads.com 푸터 4곳 렌더(동일 URL 참조·이미지 자체 해결). 브라우저 육안 미실시.
+
+### 잔존 위험
+- [중간] 이미지 보유 도구가 L2T 1건뿐 → 썸네일이 1개 카드에만 표시.
+- [중간] 12개 도구의 MAKER 배지가 목록에서 사라짐(옵션 B 결과).
+- [낮음] 상세 페이지 캐시 헤더 부재로 엣지 캐시 여부 미확정 · CDN 전파 타이밍 의존 · 인기 도구 섹션 썸네일 미적용(의도).
+
+### 다음 행동
+- 커밋 `72135a82` 푸시 · 나머지 도구 이미지 등록 결정 · MAKER 노출 정책 재확인.
+
+**완료 — 0번 verify 요청**
+
 
 ## 2026-10-13 00:34 — AIK24-CONTRAST-DISABLE-01 커밋·푸시·배포 완료 (Version `df7bc19e`)
 
