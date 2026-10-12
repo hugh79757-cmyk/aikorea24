@@ -1,4 +1,44 @@
-## 진행 중 (2026-10-11, AIK24-TOOLS-TIP-01)
+## 2026-10-13 00:0x — DEPLOY-01 후속: 푸터 서브프로젝트 링크 정리 (배포 완료)
+
+* 작업: DEPLOY-01 잔존 위험 4번 — 푸터 "서브 프로젝트" 칼럼의 미운영 3개 링크(heritage/cert/keyword) 정리
+* 파일: `src/layouts/Layout.astro` 1개 (푸터 ul 교체). 홈 `SubProjects.astro`의 현재 운영 2개와 동일 구성으로 통일: Link2Threads(https://link2threads.com) + 한국인 AI 페르소나(https://persona.aikorea24.kr), `rel="noopener"` 추가
+* 배포: `npm run build` 성공 → `npm run deploy` → Version ID **0a7b5dd6-f3b5-4b1c-8a6f-cab8f6c16443** (2026-10-13 00:02 KST), sitemap ping Google/Naver ✅
+
+### 결과 (3분법)
+* [검증됨] 신규 링크 2개 사전 curl 200 (link2threads.com, persona.aikorea24.kr)
+* [검증됨] 라이브 https://aikorea24.kr/ 푸터: `heritage`·`cert.aikorea24`·`keyword.aikorea24` = 0건, `link2threads.com`·`persona.aikorea24` = 각 2건(푸터 li + 홈 카드)
+* [검증됨] "서브 프로젝트" 표기 2건(푸터 h3 + 홈 섹션 h2) — 4컬럼 그리드 구조 유지
+* [부분검증] 서브도메인(heritage/cert/keyword) 자체 서비스 종료 여부는 미확인 — 푸터 링크 제거만 수행, DNS·워커 삭제는 하지 않음
+* [검증불가] 없음
+
+### 잔존 위험
+1. [낮음] heritage/cert/keyword 서브도메인 자체는 그대로 존재 — 완전 폐기는 워커·DNS 삭제 별도 지시 필요
+2. [정보] `src/pages/event/index.astro`·`blog/[...id].astro`·블로그 본문에 keyword/cert 링크 잔존(본문 콘텐츠 — 정리 대상 아님, 방치)
+
+---
+
+## 2026-10-13 00:02 — AIK24-TOOLS-TIP-01 완료: 도구 상세 '한국어 활용 꿀팁' 서브문구 1줄 삭제 + 빌드·배포 (Version `6f371e1c`)
+
+### 한 일
+- [PRODUCTION CODE] `src/pages/tools/[id].astro` L256 한 줄 삭제: `<p class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">한국어 프롬프트 예시는 공식 문서를 참고하세요</p>` (리포 전체에서 이 문구 유일 매치, 삭제 후 grep 0건). 섹션 제목 `🇰🇷 한국어 활용 꿀팁`(L249) · `{tool.data.useCases.map(uc => (`(L251) · `<p class="text-sm ...">{uc}</p>`(L253) 은 유지. 파일 456→455행.
+- [CONFIG] 배포: `npm run deploy` (scripts/deploy.sh) → `Current Version ID: 6f371e1c-c509-4d3c-a23b-1205a4e06b40`, DEPLOY_EXIT=0, 기준 커밋 `57f4de0a`.
+
+### 결과 (검증 근거)
+- [검증됨] 라이브 서브문구 0건 — `/tools/geulway/` · `/tools/chatgpt-space/` · `/tools/goath/` · `/tools/notion-ai/` · `/tools/canva-magic/` 각각 `grep -c "한국어 프롬프트 예시는 공식 문서를 참고하세요"` = 0 (`?cb=<epoch>` 캐시버스터 사용). 수정 전 baseline 은 geulway 3건이었음.
+- [검증됨] 유지 항목 — 3개 페이지 모두 `한국어 활용 꿀팁` 제목=1, `text-sm text-gray-700` 목록 항목=1, 💬 사용자 리뷰 섹션=1 (손대지 않음).
+- [검증됨] `npm run build` exit 0 (`[build] ✓ Completed in 19.46s`, `Server built in 22.68s`).
+- [검증됨] 배포 후 메인 페이지 스타일 회귀 없음 (`https://aikorea24.kr/` 에서 `bg-[#111111]/20`=1).
+
+### 잔존 위험
+- [중간] 배포 시 워킹트리의 779건 수정(전 사이트 모노톤 디자인 통일 대량 리팩터 + 대표님 직접 편집)이 함께 업로드됨. 단 동시 에이전트가 23:57 에 배포한 Version `881a97a8` 로 이미 같은 트리가 라이브였음을 실측 확인(`bg-[#111111]/20`=1, `bg-blue-600/20`=0) → 이번 배포가 만든 신규 노출은 없음.
+- [낮음] 수정 파일 `src/pages/tools/[id].astro` 는 커밋하지 않음 — 같은 파일에 대표님 직접 편집(WIP)이 함께 있어 단독 커밋 판단을 회피.
+- [낮음] 루트에 `wrangler.jsonc` + `wrangler.toml` 공존(이번 작업 범위 아님).
+
+### 다음 행동
+- 필요 시 `src/pages/tools/[id].astro` 단독 커밋.
+- 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-13-0002-AIK24-TOOLS-TIP-01-완료보고.md`
+
+**완료 — 시니어 2 verify 요청**
 
 ## 2026-10-12 23:57 — AIK24-L2T-BADGE-01 + AIK24-OG-01 완료: 도구 등록 로고 판정 + AIK24 빌드·배포 (`881a97a8`)
 
@@ -33,6 +73,8 @@
 6. 본 파일 line 49 부근에 동일 헤더의 중복 엔트리(이전 세션 산출, 본문은 버전 9ff7e444 쪽과 d2b5f7eb 쪽으로 상이) — 정리 필요.
 
 ## 2026-10-12 AIK24-DEPLOY-01 완료 — 직접 수정분 배포 + EmDash 인프라 확인 → SSOT/프로젝트/aikorea24/지시서/2026-10-12-2335-AIK24-DEPLOY-01-완료보고.md (완료 — verify 요청)
+
+> ⚠️ **중복 엔트리 주석 (2026-10-13 00:1x 추가)**: 아래 본문(Version `d2b5f7eb…`)과 동일 지시서의 병렬 세션 기록(바로 아래, Version `9ff7e444…`)이 같은 파일에 2건 존재한다. 두 배포 모두 동일 워킹 트리를 빌드해 산출물은 동일하며, 본 세션(9ff7e444 쪽)이 위반 감지·교차 검증을 포함한 후속 기록이다. 이 쪽 항목은 삭제 대신 주석으로 상호참조만 한다(AGENTS.md 섹션6 삭제 금지). 푸터 링크 3개 잔존(본문 6번 항목)은 2026-10-13 00:0x 항목에서 해소됨.
 
 * 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-12-2335-AIK24-DEPLOY-01-직접수정분배포-EmDash인프라확인.md`
 * 상세 보고서: 위 완료보고 파일 (219줄, 7절)

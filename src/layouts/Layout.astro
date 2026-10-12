@@ -62,8 +62,7 @@ const currentPath = Astro.url.pathname;
     category={category}
     noindex={noindex}
   />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185"
-     crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
   <meta name="p:domain_verify" content="a2f1f9d5f2c18d423c1d99f6c2d0247b"/>
   <meta name="facebook-domain-verification" content="78ii97o27tz0jckp14cjh76vh4om2e" />
   <style is:global>
@@ -73,7 +72,7 @@ const currentPath = Astro.url.pathname;
 </head>
 <body class="min-h-screen flex flex-col" data-ssr-user={currentUser ? "1" : undefined}>
 
-  <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80 backdrop-blur-md border-b border-gray-200 dark:border-white/[0.06]">
+  <header class="sticky top-0 z-50 bg-white/85 dark:bg-[#0A0E1A]/80  border-b border-gray-200 ">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
       <a href="/" class="flex items-center">
         <img src="/logo-final.webp" alt="AI KOREA 24" class="h-8 w-auto" />
@@ -101,10 +100,7 @@ const currentPath = Astro.url.pathname;
                   {currentUser.name.charAt(0).toUpperCase()}
                 </div>
                 <img
-                  src={currentUser.avatar}
-                  alt=""
-                  class="absolute inset-0 w-7 h-7 rounded-full overflow-hidden"
-                  onerror="this.remove()"
+                  src={currentUser.avatar} alt="" class="absolute inset-0 w-7 h-7 rounded-full overflow-hidden" onerror="this.remove()"
                 />
               </div>
             ) : (
@@ -116,7 +112,7 @@ const currentPath = Astro.url.pathname;
             <a href="/api/auth/logout" class="text-xs text-gray-500 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">로그아웃</a>
           </div>
         ) : (
-          <a href="/api/auth/login" class="js-login-btn text-sm font-medium bg-gray-100 dark:bg-white/[0.1] border border-gray-300 dark:border-white/[0.15] px-4 py-2 rounded-lg hover:bg-gray-200 dark:hover:bg-white/[0.2] text-gray-700 dark:text-gray-200 transition-all">로그인</a>
+          <a href="/api/auth/login" class="js-login-btn text-sm font-medium bg-gray-100  border border-gray-300  px-4 py-2 rounded-lg hover:bg-gray-200  text-gray-700 dark:text-gray-200 transition-all">로그인</a>
         )}
         <!-- 정적 프리렌더 페이지용 로그인 상태 박스 (아래 인라인 스크립트가 채움) -->
         <div class="js-user-box hidden items-center gap-3">
@@ -136,13 +132,13 @@ const currentPath = Astro.url.pathname;
         </svg>
       </button>
     </nav>
-    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 dark:border-white/[0.06] bg-white/95 dark:bg-[#0A0E1A]/95 backdrop-blur-md">
+    <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200  bg-white/95 dark:bg-[#0A0E1A]/95 ">
       {navItems.map(item => (
-        <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.05] border-b border-gray-100 dark:border-white/[0.06]">
+        <a href={item.href} class="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100  border-b border-gray-100 ">
           {item.label}
         </a>
       ))}
-      <div class="px-4 py-3 border-t border-gray-200 dark:border-white/[0.06]">
+      <div class="px-4 py-3 border-t border-gray-200 ">
         {currentUser ? (
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -152,10 +148,7 @@ const currentPath = Astro.url.pathname;
                     {currentUser.name.charAt(0).toUpperCase()}
                   </div>
                   <img
-                    src={currentUser.avatar}
-                    alt=""
-                    class="absolute inset-0 w-7 h-7 rounded-full overflow-hidden"
-                    onerror="this.remove()"
+                    src={currentUser.avatar} alt="" class="absolute inset-0 w-7 h-7 rounded-full overflow-hidden" onerror="this.remove()"
                   />
                 </div>
               ) : (
@@ -184,7 +177,7 @@ const currentPath = Astro.url.pathname;
   </header>
 
   <!-- 검색 모달 -->
-  <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm">
+  <div id="search-modal" class="hidden fixed inset-0 z-[60] bg-black/50 ">
     <div class="max-w-xl mx-auto mt-20 px-4 bg-white dark:bg-[#111827] rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden">
       <div class="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-white/10">
         <svg class="w-5 h-5 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
@@ -200,61 +193,50 @@ const currentPath = Astro.url.pathname;
   <main class="flex-1">
     <!-- 콘텐츠 상단 광고 -->
     <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
-      <ins class="adsbygoogle"
-           style="display:block;width:100%;"
-           data-ad-client="ca-pub-5938862195544185"
-           data-ad-slot="3350911709"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
+      <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
       <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
     <slot />
     <!-- 콘텐츠 하단 광고 -->
     <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
-      <ins class="adsbygoogle"
-           style="display:block;width:100%;"
-           data-ad-client="ca-pub-5938862195544185"
-           data-ad-slot="3350911709"
-           data-ad-format="auto"
-           data-full-width-responsive="true"></ins>
+      <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
       <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   </main>
 
-  <footer class="bg-gray-100 dark:bg-gray-900 text-gray-500 dark:text-gray-400 mt-auto transition-colors">
+  <footer class="bg-white text-[#555555] mt-auto transition-colors border-t-2 border-[#E63B2E]">
     <div class="max-w-6xl mx-auto px-4 py-6">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-4">
         <div>
-          <h3 class="text-gray-900 dark:text-white font-bold text-lg mb-3">AI코리아24</h3>
+          <h3 class="text-[#111111] font-bold text-lg mb-3 section-title">AI코리아24</h3>
           <p class="text-sm leading-relaxed">AI, 누구나 쓸 수 있습니다.<br/>AI 도구, 강좌, 지원사업, 뉴스를 한국어로 큐레이션합니다.</p>
         </div>
         <div>
-          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">바로가기</h3>
+          <h3 class="text-[#111111] font-semibold mb-3 section-title">바로가기</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="/blog" class="hover:text-gray-900 dark:hover:text-white transition-colors">블로그</a></li>
-            <li><a href="/tools" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 도구</a></li>
-            <li><a href="/chronicle" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 타임라인</a></li>
-            <li><a href="/tools/finder/" class="hover:text-gray-900 dark:hover:text-white transition-colors">도구 추천 퀴즈</a></li>
-            <li><a href="/contact" class="hover:text-gray-900 dark:hover:text-white transition-colors">문의</a></li>
+            <li><a href="/blog" class="hover:text-[#E63B2E] transition-colors">블로그</a></li>
+            <li><a href="/tools" class="hover:text-[#E63B2E] transition-colors">AI 도구</a></li>
+            <li><a href="/chronicle" class="hover:text-[#E63B2E] transition-colors">AI 타임라인</a></li>
+            <li><a href="/tools/finder/" class="hover:text-[#E63B2E] transition-colors">도구 추천 퀴즈</a></li>
+            <li><a href="/contact" class="hover:text-[#E63B2E] transition-colors">문의</a></li>
           </ul>
         </div>
         <div>
-          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">법적 고지</h3>
+          <h3 class="text-[#111111] font-semibold mb-3 section-title">법적 고지</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="/privacy" class="hover:text-gray-900 dark:hover:text-white transition-colors">개인정보처리방침</a></li>
-            <li><a href="/terms" class="hover:text-gray-900 dark:hover:text-white transition-colors">이용약관</a></li>
+            <li><a href="/privacy" class="hover:text-[#E63B2E] transition-colors">개인정보처리방침</a></li>
+            <li><a href="/terms" class="hover:text-[#E63B2E] transition-colors">이용약관</a></li>
           </ul>
         </div>
         <div>
-          <h3 class="text-gray-900 dark:text-white font-semibold mb-3">서브 프로젝트</h3>
+          <h3 class="text-[#111111] font-semibold mb-3 section-title">서브 프로젝트</h3>
           <ul class="space-y-2 text-sm">
-            <li><a href="https://heritage.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">AI 문화유산 가이드 프로젝트</a></li>
-            <li><a href="https://cert.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">자격증 소개 프로젝트</a></li>
-            <li><a href="https://keyword.aikorea24.kr" target="_blank" class="hover:text-gray-900 dark:hover:text-white transition-colors">뉴스 키워드 인사이트 Pro</a></li>
+            <li><a href="https://link2threads.com" target="_blank" rel="noopener" class="hover:text-[#E63B2E] transition-colors">Link2Threads</a></li>
+            <li><a href="https://persona.aikorea24.kr" target="_blank" rel="noopener" class="hover:text-[#E63B2E] transition-colors">한국인 AI 페르소나</a></li>
           </ul>
         </div>
       </div>
-      <div class="border-t border-gray-300 dark:border-gray-800 pt-4 text-xs leading-relaxed">
+      <div class="border-t border-gray-200 dark:border-gray-800 pt-4 text-xs leading-relaxed">
         <p>스타일팩토리9 (Style Factory 9) | 대표: 조진연 | 사업자등록번호: 672-43-00632 | 통신판매업 신고번호: 제 2026-의정부흥선-0694호 | 호스팅 제공자: Cloudflare, Inc.</p>
         <p>경기도 의정부시 호암로 256, 107-1804 (우 11638) | info@aikorea24.kr | 전화(Tel): +82 10-7416-5705</p>
         <p class="mt-2">본 사이트에서 제공하는 정보는 참고용이며, 정확한 내용은 해당 기관에서 확인하시기 바랍니다.</p>
@@ -338,7 +320,7 @@ const currentPath = Astro.url.pathname;
       }
 
       results.innerHTML = filtered.slice(0, 10).map((post: any) => `
-        <a href="/blog/${post.slug}/" class="block px-3 py-3 rounded-lg hover:bg-gray-100 dark:hover:bg-white/[0.05] transition-colors">
+        <a href="/blog/${post.slug}/" class="block px-3 py-3 rounded-lg hover:bg-gray-100  transition-colors">
           <div class="flex items-center gap-2 mb-1">
             <span class="text-xs px-2 py-0.5 rounded-full bg-[#f7f7f7] text-[#555555]">${post.category}</span>
           </div>
@@ -355,7 +337,7 @@ const currentPath = Astro.url.pathname;
       공유하기
     </button>
   </div>
-  <div id="copy-toast" style="position:fixed;bottom:80px;right:16px;z-index:10000;padding:10px 20px;background:#10b981;color:#fff;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;">링크가 복사되었습니다!</div>
+  <div id="copy-toast" style="position:fixed;bottom:80px;right:16px;z-index:10000;padding:10px 20px;background:#111111;color:#fff;border-radius:8px;font-size:14px;opacity:0;transition:opacity 0.3s;pointer-events:none;">링크가 복사되었습니다!</div>
 
   <script is:inline>
     // 정적 프리렌더 페이지는 빌드 시점에 쿠키가 없어 Layout의 세션 판정이 항상 로그아웃으로 끝난다.
