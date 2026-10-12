@@ -233,12 +233,12 @@ const faqSchema: string | null = faqEntities.length > 0
           <span id="vote-count" class="text-xs opacity-70">0</span>
         </button>
       </div>
-      {tool.data.screenshotUrl && (
+      {(tool.data.screenshotUrl || tool.data.image) && (
         <div class="mt-4">
-          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="block">
-            <img src={tool.data.screenshotUrl} alt={`${tool.data.name} 스크린샷`} loading="lazy" class="w-full max-h-80 object-contain rounded-xl border border-gray-200 " />
+          <a href={tool.data.screenshotUrl || tool.data.image} target="_blank" rel="noopener" class="block">
+            <img src={tool.data.screenshotUrl || tool.data.image} alt={`${tool.data.name} 미리보기`} loading="lazy" class="w-full max-h-80 object-contain rounded-xl border border-gray-200 " />
           </a>
-          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="mt-1 inline-block text-sm text-[#111111] dark:text-[#555555] hover:underline">🖼️ 스크린샷 원본 보기 →</a>
+          <a href={tool.data.screenshotUrl || tool.data.image} target="_blank" rel="noopener" class="mt-1 inline-block text-sm text-[#111111] dark:text-[#555555] hover:underline">🖼️ 이미지 원본 보기 →</a>
         </div>
       )}
     </div>

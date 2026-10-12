@@ -1,3 +1,5 @@
+## 진행 중 (2026-10-13, AIK24-L2T-BADGE-02)
+
 ## 2026-10-13 00:34 — AIK24-CONTRAST-DISABLE-01 커밋·푸시·배포 완료 (Version `df7bc19e`)
 
 ### 한 일

@@ -13,7 +13,7 @@ try {
   const db = env.DB;
   if (db) {
     const res = await db.prepare(
-      'SELECT slug, name, url, category, description, price_model, price_detail, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE status=\'published\' ORDER BY created_at DESC'
+      'SELECT slug, name, url, category, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at FROM tool_submissions WHERE status=\'published\' ORDER BY created_at DESC'
     ).all();
     d1Rows = res?.results ?? [];
   }
@@ -45,11 +45,17 @@ const d1Tools: any[] = d1Rows.map((r) => ({
     useCases: r.use_cases ? String(r.use_cases).split(',').map((s: string) => s.trim()).filter(Boolean) : [],
     order: -1,
     updated: String(r.created_at ?? '').slice(0, 10),
+    screenshotUrl: (r.screenshot_url && String(r.screenshot_url).trim()) || null,
   },
 }));
 
 // D1 최신순 상단 + md 기존 순서
-const allTools: any[] = [...d1Tools, ...mdTools];
+// 2026-10-13 중복 정리: D1 published 건과 md 슬러그가 같으면 목록에 카드가 2장 뜬다.
+// 상세 페이지([id].astro)는 md 엔트리가 존재하면 md 를 렌더하므로, 카드도 md 만 남겨 카드↔상세를 일치시킨다.
+// (md 짝이 없는 신규 제작자 제출 건은 D1 카드가 그대로 MAKER 배지로 노출된다.)
+const mdSlugs = new Set(mdTools.map((t) => t.id));
+const d1Only = d1Tools.filter((t) => !mdSlugs.has(t.id));
+const allTools: any[] = [...d1Only, ...mdTools];
 
 const newTools = [...allTools]
   .filter(t => t.data.updated)
@@ -215,6 +221,11 @@ import { TASK_COUNT } from '../../config/tasks';
           return (
             <a href={`/tools/${tool.id}/`} class="group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#e5e5e5] transition-all duration-300 hover:shadow-xl hover:shadow-[#e5e5e5]/5 hover:-translate-y-0.5 dark:bg-[#111827]/80  dark:hover:border-[#e5e5e5]">
               <div class={`h-1 w-full bg-[#111111] ${accent}`}></div>
+              {(tool.data.image || tool.data.screenshotUrl) && (
+                <div class="w-full aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-[#111827]/40 border-b border-gray-100 dark:border-[#e5e5e5]/10">
+                  <img src={tool.data.image || tool.data.screenshotUrl} alt={`${tool.data.name} 미리보기`} loading="lazy" decoding="async" class="w-full h-full object-cover" />
+                </div>
+              )}
               <div class="p-5 flex-1 flex flex-col">
                 <div class="flex items-start justify-between mb-2">
                   <div class="flex items-center gap-2 min-w-0">
@@ -365,6 +376,11 @@ import { TASK_COUNT } from '../../config/tasks';
           data-review={0} class="tool-card group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#e5e5e5] transition-all duration-300 hover:shadow-xl hover:shadow-[#e5e5e5]/5 hover:-translate-y-0.5 dark:bg-[#111827]/60  dark:hover:border-[#e5e5e5]"
         >
           <div class={`h-0.5 w-full bg-[#111111] ${accent}`}></div>
+          {(tool.data.image || tool.data.screenshotUrl) && (
+            <div class="w-full aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-[#111827]/40 border-b border-gray-100 dark:border-[#e5e5e5]/10">
+              <img src={tool.data.image || tool.data.screenshotUrl} alt={`${tool.data.name} 미리보기`} loading="lazy" decoding="async" class="w-full h-full object-cover" />
+            </div>
+          )}
           <div class="p-4 sm:p-5 flex-1 flex flex-col">
             <div class="flex items-start justify-between mb-2">
               <h3 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white group-hover:text-[#111111] dark:group-hover:text-[#555555] transition-colors leading-snug pr-2">
