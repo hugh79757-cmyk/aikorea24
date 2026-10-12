@@ -1,3 +1,25 @@
+## 2026-10-13 01:13 — AIK24-L2T-BADGE-02 보완: 배지 이미지를 대표님 정리본(621×207)으로 교체 + 재배포 (Version `1cb767a7`)
+
+### 한 일
+- 지시서가 01:09 에 수정됨 (작업 1-3: Python PIL 크롭 → `~/Downloads/listed-on-aikorea24 (1).webp` 를 `cp` 로 덮어쓰기). 수정본 기준으로 재작업.
+- `cp "/Users/twinssn/Downloads/listed-on-aikorea24 (1).webp" public/badges/listed-on-aikorea24.webp` → 34700 B(직전 크롭본 630×210) → **20078 B (621×207)**.
+- `npm run deploy` → **Current Version ID `1cb767a7-e29f-4b88-bf51-cea8af69b2ff`**, `DEPLOY_EXIT=0`.
+
+### 결과 (검증 근거)
+- [검증됨] 로컬: `md5 -q public/badges/listed-on-aikorea24.webp` = `f5351dce0bc9ef0421fc2ab697725d96` (Downloads 원본과 동일) · PIL `size (621, 207)` · 네 모서리 (255,255,255)/(254,254,254) 흰색 · 어두운 픽셀 상단 2행 **0/1242** · 하단 2행 **0/1242**.
+- [검증됨] 라이브 `https://aikorea24.kr/badges/listed-on-aikorea24.webp` = **20078 bytes** · md5 로컬과 일치 · **621×207** · 모서리 흰색 · 다크픽셀 0.
+- [검증됨] 페이지 유지: `/tools/` 배지 썸네일 1건 · MAKER 0건 · `/tools/link2threads-l2t/` 배지 1건.
+- [부분검증] link2threads.com 푸터는 같은 이미지 URL 참조(HTML 참조 1건 확인) — 브라우저 육안 확인은 미실시.
+
+### 잔존 위험
+- [낮음] 지시서 내부 불일치: 라이브 확인 문구가 L23 에 630×210 로 남아 있음 — 실제 값은 621×207 (L21·L41).
+- [중간] 도구 목록 MAKER 배지 0건 (published 12건 전부 md 와 중복 → md 카드 채택).
+
+### 다음 행동
+- MAKER 배지 정책 결정 (md 우선 유지 vs D1 상세 우선 전환).
+
+**완료 — 0번 verify 요청**
+
 ## 2026-10-13 01:05 — AIK24-L2T-BADGE-02 완료: 배지 이미지 다크바 제거 + 도구 중복 등록 정리 + 카드/상세 이미지 영역 추가 (Version `8d36ae42`)
 
 ### 한 일
