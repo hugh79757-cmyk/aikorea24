@@ -4,7 +4,7 @@ description: "OpenAI가 프레젠테이션 자동 제작 스타트업인 NextSli
 date: 2026-08-09T08:15:32+09:00
 category: "뉴스"
 tags:
-  - "OpenAI, 프레젠테이션 스타트업 NextSlide 인수"
+ - "OpenAI, 프레젠테이션 스타트업 NextSlide 인수"
 draft: false
 
 image: "/images/2026-08-09-001-openai-프레젠테이션-스타트업-nextslide-인수-ai-슬라이드-제작-시장의-판도가-바뀌고-있습니다/thumbnail.webp"
@@ -60,7 +60,7 @@ NextSlide 기술이 ChatGPT에 완전히 통합될 경우, 사용자는 프롬�
 
 그러나 콘텐츠의 '결정'과 '승인'을 사람이 직접 수행해야 한다는 원칙은 여전히 유효합니다. AI가 만든 프레젠테이션을 무비판적으로 사용하는 것이 아니라, 핵심 메시지를 검토하고 개선하는 과정을 통해 완성도 있는 결과물을 만들어내는 것이 중요합니다. AI는 도구이며, 올바른 방향성을 설정하는 것은 결국 사용자의 몫입니다.
 
-📌 **요약**
+**요약**
 
 - OpenAI가 프레젠테이션 자동 생성 스타트업 NextSlide를 인수했습니다.
 - NextSlide 팀은 현재 ChatGPT 관련 작업에 투입되었습니다.

@@ -4,7 +4,7 @@ description: "현재 전 세계는 끊이지 않는 전쟁과 걷잡을 수 없�
 date: 2026-09-21T08:16:12+09:00
 category: "뉴스"
 tags:
-  - "In a world of wars and climate crisis, a new leader could save the UN. But would Trump allow it? | Steve Bloomfield"
+ - "In a world of wars and climate crisis, a new leader could save the UN. But would Trump allow it? | Steve Bloomfield"
 draft: false
 
 image: "/images/2026-09-21-006-전쟁과-기후-위기-속-유엔을-구할-새로운-지도자-그리고-트럼프의-선택-in-a-world-of-wars-and-climate-crisis-a-n/thumbnail.webp"
@@ -34,7 +34,7 @@ image: "/images/2026-09-21-006-전쟁과-기후-위기-속-유엔을-구할-새�
 
 ---
 
-📌 **요약**
+**요약**
 
 - **배경:** 전쟁과 기후 위기가 동시에 덮친 현재, 기존의 무력한 유엔 체제를 개혁할 새로운 리더십의 필요성이 그 어느 때보다 대두되고 있습니다.
 - **의미:** 유엔의 새로운 수장 선출은 낡은 국제기구의 기능을 회복할 기회이지만, 미국의 재정적·정치적 지원 없이는 실현 불가능한 과제입니다.
