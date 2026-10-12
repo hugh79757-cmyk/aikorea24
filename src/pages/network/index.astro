@@ -15,18 +15,18 @@ interface CacheRow {
 }
 
 const categoryMeta: Record<string, { icon: string; color: string; gradient: string }> = {
-  '스포츠': { icon: '⚽', color: 'border-green-500/30', gradient: 'from-green-500/20 to-emerald-500/20' },
-  '여행': { icon: '✈️', color: 'border-sky-500/30', gradient: 'from-sky-500/20 to-blue-500/20' },
-  '자동차': { icon: '🚗', color: 'border-red-500/30', gradient: 'from-red-500/20 to-rose-500/20' },
-  '부동산': { icon: '🏠', color: 'border-amber-500/30', gradient: 'from-amber-500/20 to-yellow-500/20' },
-  '생활정보': { icon: '💡', color: 'border-orange-500/30', gradient: 'from-orange-500/20 to-amber-500/20' },
-  '심리·테스트': { icon: '🧠', color: 'border-fuchsia-500/30', gradient: 'from-fuchsia-500/20 to-purple-500/20' },
-  '금융·투자': { icon: '📈', color: 'border-indigo-500/30', gradient: 'from-indigo-500/20 to-blue-500/20' },
-  '노인복지': { icon: '🤝', color: 'border-pink-500/30', gradient: 'from-pink-500/20 to-rose-500/20' },
-  '맛집·레시피': { icon: '🍽️', color: 'border-yellow-500/30', gradient: 'from-yellow-500/20 to-orange-500/20' },
-  '시사·이슈': { icon: '🔥', color: 'border-purple-500/30', gradient: 'from-purple-500/20 to-violet-500/20' },
-  'AI·테크': { icon: '🤖', color: 'border-blue-500/30', gradient: 'from-blue-500/20 to-indigo-500/20' },
-  '쿠팡': { icon: '🛒', color: 'border-orange-500/30', gradient: 'from-orange-500/20 to-red-500/20' },
+  '스포츠': { icon: '⚽', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '여행': { icon: '✈️', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '자동차': { icon: '🚗', color: 'border-red-500/30', gradient: 'from-red-500/20/20' },
+  '부동산': { icon: '🏠', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '생활정보': { icon: '💡', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '심리·테스트': { icon: '🧠', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '금융·투자': { icon: '📈', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '노인복지': { icon: '🤝', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '맛집·레시피': { icon: '🍽️', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '시사·이슈': { icon: '🔥', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  'AI·테크': { icon: '🤖', color: 'border-[#e5e5e5]/30', gradient: '/20/20' },
+  '쿠팡': { icon: '🛒', color: 'border-[#e5e5e5]/30', gradient: '/20 to-red-500/20' },
 };
 
 const categoryOrder = ['AI·테크', '스포츠', '여행', '자동차', '금융·투자', '부동산', '생활정보', '심리·테스트', '노인복지', '맛집·레시피', '쿠팡', '시사·이슈'];
@@ -86,16 +86,16 @@ import Layout from '../../layouts/Layout.astro';
 
     <!-- 앰비언트 배경 -->
     <div class="fixed inset-0 pointer-events-none z-0">
-      <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[150px] animate-pulse"></div>
-      <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[150px]"></div>
+      <div class="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-[#111111]/20 rounded-full blur-[150px] animate-pulse"></div>
+      <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#111111]/15 rounded-full blur-[150px]"></div>
     </div>
 
     <section class="relative z-10 px-4 py-16 max-w-6xl mx-auto">
       <!-- 헤더 -->
       <div class="text-center mb-12">
-        <p class="text-sm text-blue-500 dark:text-blue-400 font-medium mb-2">AI코리아24 콘텐츠 네트워크</p>
+        <p class="text-sm text-[#555555] dark:text-[#555555] font-medium mb-2">AI코리아24 콘텐츠 네트워크</p>
         <h1 class="text-3xl md:text-4xl font-bold mb-3">
-          <span class="bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 bg-clip-text text-transparent">107개 전문 사이트</span>
+          <span class="bg-[#111111] bg-clip-text text-transparent">107개 전문 사이트</span>
           <br class="md:hidden" /> 최신 콘텐츠
         </h1>
         <p class="text-gray-500 dark:text-gray-400 text-sm max-w-xl mx-auto leading-relaxed">
@@ -130,14 +130,12 @@ import Layout from '../../layouts/Layout.astro';
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                   {feedEntries.map(([domain, data]) => (
-                    <div class={`bg-gradient-to-br ${meta.gradient} backdrop-blur-sm border border-white/[0.06] ${meta.color} rounded-2xl p-5 transition-all duration-300 hover:scale-[1.02]`}>
+                    <div class={` ${meta.gradient}  border border-gray-200 ${meta.color} rounded-2xl p-5 transition-all duration-300 hover:scale-[1.02]`}>
                       <div class="flex items-center justify-between mb-3">
-                        <a href={`https://${domain}`} target="_blank" rel="noopener"
-                           class="text-sm font-bold text-gray-900 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 transition-colors">
+                        <a href={`https://${domain}`} target="_blank" rel="noopener" class="text-sm font-bold text-gray-900 dark:text-white hover:text-[#555555] dark:hover:text-[#555555] transition-colors">
                           {data.label}
                         </a>
-                        <a href={`https://${domain}`} target="_blank" rel="noopener"
-                           class="text-[10px] text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-white/[0.05] px-2 py-0.5 rounded-full hover:bg-blue-100 dark:hover:bg-blue-500/20 hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-pointer">
+                        <a href={`https://${domain}`} target="_blank" rel="noopener" class="text-[10px] text-gray-400 dark:text-gray-500 bg-gray-100  px-2 py-0.5 rounded-full hover:bg-gray-100 dark:hover:bg-[#333333]/20 hover:text-[#111111] dark:hover:text-[#555555] transition-colors cursor-pointer">
                           {domain.split('.')[0]}
                         </a>
                       </div>
@@ -145,8 +143,7 @@ import Layout from '../../layouts/Layout.astro';
                         <ul class="space-y-2">
                           {data.items.map(item => (
                             <li>
-                              <a href={item.link} target="_blank" rel="noopener"
-                                 class="text-sm text-gray-600 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition-colors line-clamp-2 leading-snug block">
+                              <a href={item.link} target="_blank" rel="noopener" class="text-sm text-gray-600 dark:text-gray-300 hover:text-[#555555] dark:hover:text-[#555555] transition-colors line-clamp-2 leading-snug block">
                                 · {item.title}
                               </a>
                             </li>
@@ -166,9 +163,9 @@ import Layout from '../../layouts/Layout.astro';
 
       <!-- 하단 CTA -->
       <div class="mt-16 text-center">
-        <div class="inline-block bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-2xl px-8 py-6">
+        <div class="inline-block bg-[#111111]/10 border border-[#e5e5e5]/20 rounded-2xl px-8 py-6">
           <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">AI코리아24가 운영하는 콘텐츠 네트워크입니다</p>
-          <a href="/" class="text-blue-500 dark:text-blue-400 font-medium text-sm hover:underline">
+          <a href="/" class="text-[#555555] dark:text-[#555555] font-medium text-sm hover:underline">
             AI코리아24 메인으로 &rarr;
           </a>
         </div>

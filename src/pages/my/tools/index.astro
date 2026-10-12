@@ -38,17 +38,17 @@ try {
         <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">내 도구</h1>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">총 {myTools.length}개 등록</p>
       </div>
-      <a href="/tools/submit/" class="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-blue-500/20">
+      <a href="/tools/submit/" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#111111] text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-[#e5e5e5]/20">
         + 새 도구 등록하기
       </a>
     </div>
 
     {myTools.length === 0 ? (
-      <div class="text-center py-16 bg-white dark:bg-[#111827]/60 border border-gray-200 dark:border-white/[0.06] rounded-2xl">
+      <div class="text-center py-16 bg-white dark:bg-[#111827]/60 border border-gray-200  rounded-2xl">
         <p class="text-4xl mb-4">🛠️</p>
         <p class="text-lg font-bold text-gray-900 dark:text-white mb-2">아직 등록한 도구가 없습니다</p>
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">첫 AI 도구를 등록해보세요. 관리자 검토 후 공개됩니다 (보통 24시간 이내).</p>
-        <a href="/tools/submit/" class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-colors text-sm">새 도구 등록하기 →</a>
+        <a href="/tools/submit/" class="inline-block px-6 py-3 bg-[#111111] hover:bg-[#111111] text-white font-bold rounded-xl transition-colors text-sm">새 도구 등록하기 →</a>
       </div>
     ) : (
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="my-tools-grid">
@@ -59,13 +59,13 @@ try {
           const isRetired = status === 'retired';
           const isDrafted = status === 'hidden';
           const badgeText = isPub ? '🟢공개' : isPending ? '🟡검토중' : isDrafted ? '⚫비공개' : isRetired ? '🔴반려' : '⚫비공개';
-          const badgeClass = isPub ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400 border-green-200 dark:border-green-500/20' : isPending ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20' : isDrafted ? 'bg-gray-200 text-gray-600 dark:bg-white/[0.06] dark:text-gray-400 border-gray-300 dark:border-white/[0.1]' : isRetired ? 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400 border-red-200 dark:border-red-500/20' : 'bg-gray-200 text-gray-600 dark:bg-white/[0.06] dark:text-gray-400 border-gray-300 dark:border-white/[0.1]';
+          const badgeClass = isPub ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : isPending ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : isDrafted ? 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ' : isRetired ? 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400 border-red-200 dark:border-red-500/20' : 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ';
           const canToggle = !isPending && !isRetired;
           const toggleDisabled = !canToggle;
           const toggleLabel = isPub ? '비공개 전환' : isDrafted ? '공개 전환' : '상태 변경 불가';
           return (
-            <div data-slug={tool.slug} data-status={tool.status} class="tool-card relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden dark:bg-[#111827]/60 dark:border-white/[0.06]">
-              <div class="h-0.5 w-full bg-gradient-to-r from-purple-500 to-indigo-600"></div>
+            <div data-slug={tool.slug} data-status={tool.status} class="tool-card relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden dark:bg-[#111827]/60 ">
+              <div class="h-0.5 w-full bg-[#111111]"></div>
               <div class="p-4 sm:p-5 flex-1 flex flex-col">
                 <div class="flex items-start justify-between mb-2">
                   <h3 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white leading-snug pr-2">{tool.name}</h3>
@@ -77,16 +77,16 @@ try {
                 {isRetired && tool.rejection_reason ? (
                   <p class="text-xs text-red-600 dark:text-red-400 mb-2">반려 사유: {tool.rejection_reason}</p>
                 ) : null}
-                <div class="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 dark:border-white/[0.05]">
+                <div class="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 ">
                   <span class="text-xs text-gray-500 dark:text-gray-500">{tool.category}</span>
                   <span class="text-xs text-gray-400 dark:text-gray-500 font-mono">/{tool.slug}/</span>
                 </div>
                 <div class="flex items-center gap-2 mt-3">
-                  <a href={`/tools/${tool.slug}/`} class={`flex-1 text-center px-3 py-2 text-xs font-medium rounded-lg transition-colors ${isPub ? 'bg-gray-100 hover:bg-gray-200 dark:bg-white/[0.06] dark:hover:bg-white/[0.1] text-gray-700 dark:text-gray-200' : 'bg-gray-100 cursor-not-allowed dark:bg-white/[0.06] text-gray-400 dark:text-gray-500'}`}>
+                  <a href={`/tools/${tool.slug}/`} class={`flex-1 text-center px-3 py-2 text-xs font-medium rounded-lg transition-colors ${isPub ? 'bg-gray-100 hover:bg-gray-200   text-gray-700 dark:text-gray-200' : 'bg-gray-100 cursor-not-allowed  text-gray-400 dark:text-gray-500'}`}>
                     보기 →
                   </a>
-                  <a href={`/my/tools/${tool.slug}/edit/`} class="flex-1 text-center px-3 py-2 text-xs font-medium bg-blue-50 hover:bg-blue-100 dark:bg-blue-500/10 dark:hover:bg-blue-500/20 text-blue-700 dark:text-blue-400 rounded-lg transition-colors">수정 →</a>
-                  <button type="button" data-toggle={tool.slug} disabled={toggleDisabled} class={`toggle-btn flex-1 px-3 py-2 text-xs font-bold rounded-lg transition-colors ${isPub ? 'bg-amber-100 hover:bg-amber-200 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 text-amber-700 dark:text-amber-400' : isDrafted ? 'bg-blue-100 hover:bg-blue-200 dark:bg-blue-500/15 dark:hover:bg-blue-500/25 text-blue-700 dark:text-blue-400' : 'bg-gray-100 text-gray-400 dark:bg-white/[0.06] dark:text-gray-500 dark:border dark:border-white/[0.06] cursor-not-allowed'}`}>
+                  <a href={`/my/tools/${tool.slug}/edit/`} class="flex-1 text-center px-3 py-2 text-xs font-medium bg-gray-100 hover:bg-gray-100 dark:bg-[#333333]/10 dark:hover:bg-[#333333]/20 text-[#111111] dark:text-[#555555] rounded-lg transition-colors">수정 →</a>
+                  <button type="button" data-toggle={tool.slug} disabled={toggleDisabled} class={`toggle-btn flex-1 px-3 py-2 text-xs font-bold rounded-lg transition-colors ${isPub ? 'bg-gray-100 hover:bg-gray-100 dark:bg-[#333333]/15 dark:hover:bg-[#333333]/25 text-[#111111] dark:text-[#555555]' : isDrafted ? 'bg-gray-100 hover:bg-gray-100 dark:bg-[#333333]/15 dark:hover:bg-[#333333]/25 text-[#111111] dark:text-[#555555]' : 'bg-gray-100 text-gray-400  dark:text-gray-500 dark:border  cursor-not-allowed'}`}>
                     {toggleLabel}
                   </button>
                 </div>
@@ -129,7 +129,7 @@ try {
         const newStatus = String(data.status ?? '').trim();
         const badge = card?.querySelector('.status-badge');
         if (badge) badge.textContent = newStatus === 'published' ? '🟢공개' : newStatus === 'hidden' ? '⚫비공개' : newStatus === 'pending' ? '🟡검토중' : newStatus === 'retired' ? '🔴반려' : '⚫비공개';
-        const newBadgeClass = newStatus === 'published' ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400 border-green-200 dark:border-green-500/20' : newStatus === 'hidden' ? 'bg-gray-200 text-gray-600 dark:bg-white/[0.06] dark:text-gray-400 border-gray-300 dark:border-white/[0.1]' : newStatus === 'pending' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400 border-yellow-200 dark:border-yellow-500/20' : newStatus === 'retired' ? 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400 border-red-200 dark:border-red-500/20' : 'bg-gray-200 text-gray-600 dark:bg-white/[0.06] dark:text-gray-400 border-gray-300 dark:border-white/[0.1]';
+        const newBadgeClass = newStatus === 'published' ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : newStatus === 'hidden' ? 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ' : newStatus === 'pending' ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : newStatus === 'retired' ? 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400 border-red-200 dark:border-red-500/20' : 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ';
         if (badge) badge.className = `status-badge flex-shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full border ${newBadgeClass}`;
         btn.textContent = newStatus === 'published' ? '비공개 전환' : newStatus === 'hidden' ? '공개 전환' : newStatus === 'pending' ? '검토중' : newStatus === 'retired' ? '반려됨' : '상태 변경 불가';
       } catch {

@@ -18,12 +18,12 @@ if (!currentUser) {
       <div class="text-center mb-10">
         <h1 class="text-2xl md:text-3xl font-bold text-[var(--text-primary)] mb-2">이벤트 다운로드</h1>
         <p class="text-[var(--text-secondary)] text-sm">
-          <span class="text-blue-400">{currentUser.name || currentUser.email}</span>님, 환영합니다!
+          <span class="text-[#555555]">{currentUser.name || currentUser.email}</span>님, 환영합니다!
         </p>
       </div>
 
       <div id="loading" class="text-center py-12">
-        <div class="inline-block w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+        <div class="inline-block w-8 h-8 border-2 border-[#e5e5e5] border-t-transparent rounded-full animate-spin"></div>
         <p class="text-[var(--text-muted)] text-sm mt-3">권한 확인 중...</p>
       </div>
 
@@ -37,7 +37,7 @@ if (!currentUser) {
             피드백을 보내주시면 다운로드 권한을 드립니다.<br/>
             이미 보내셨다면 권한 부여까지 잠시만 기다려주세요.
           </p>
-          <a href="/event/" class="inline-block bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm">
+          <a href="/event/" class="inline-block bg-[#111111] hover:bg-[#333333] text-white font-semibold px-6 py-2.5 rounded-xl transition-colors text-sm">
             이벤트 안내 보기
           </a>
         </div>
@@ -83,7 +83,7 @@ if (!currentUser) {
             + downloaded
             + '</div>'
             + '</div>'
-            + '<a href="/api/resources/download/?id=' + r.id + '" class="flex-shrink-0 bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-colors">'
+            + '<a href="/api/resources/download/?id=' + r.id + '" class="flex-shrink-0 bg-[#111111] hover:bg-[#333333] text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-colors">'
             + '다운로드'
             + '</a>'
             + '</div>'

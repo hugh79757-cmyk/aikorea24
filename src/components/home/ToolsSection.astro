@@ -1,17 +1,53 @@
 ---
-import { getCollection } from 'astro:content';
+import { env } from 'cloudflare:workers';
 
-// 선정 기준: /tools/ 페이지의 popularTools 로직과 동일 (koreanSupport 도구를 order 오름차순).
-// 임의 창작 금지 — 실제 컬렉션 데이터에서만 골라낸다.
-const tools = (await getCollection('tools', ({ data }) => Boolean(data.koreanSupport)))
-  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99))
-  .slice(0, 4)
-  .map((t) => ({
-    slug: t.id,
-    name: t.data.name,
-    description: (t.data.description || '').split('\n')[0].trim(),
-    category: t.data.category || '',
-  }));
+// AIK24-TOOLS-ROLLING-01: 이메일 뉴스레터와 같은 도구 컬렉션에서 최신순으로 가져온다.
+// 소스 오브 트루스: scripts/auto_email_sender.py:95-105 get_tools() 와 동일한 UNION 쿼리
+//   (md 동기화본 tools ∪ 사용자 등록본 tool_submissions(published)) ORDER BY updated_at DESC
+// 기존: koreanSupport + order 오름차순 4개 정적 그리드 → 수집 최신이 홈에 안 뜨는 문제.
+// 롤링 표시 개수: 8개 (4개 초과 + 좌우 스크롤로 추가 열람). 이메일은 6개라 홈이 이메일분을 포함한다.
+
+const ROLLING_COUNT = 8;
+
+type ToolRow = {
+  name: string;
+  slug: string;
+  tagline?: string;
+  category?: string;
+  price?: string;
+  difficulty?: string;
+};
+
+let tools: ToolRow[] = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const res = await db.prepare(
+      `SELECT name, slug, tagline, category, price, korean_support, difficulty FROM (
+         SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at
+         FROM tools
+         UNION ALL
+         SELECT name, slug, description AS tagline, category,
+                COALESCE(NULLIF(price_detail, ''), price_model) AS price, korean_support,
+                COALESCE(difficulty, '초보자') AS difficulty, updated_at
+         FROM tool_submissions WHERE status = 'published'
+       ) ORDER BY updated_at DESC LIMIT ?`
+    ).bind(ROLLING_COUNT).all();
+    tools = (res.results || []) as ToolRow[];
+  }
+} catch (e) {
+  // D1 장애 시 홈 전체가 죽지 않도록 섹션만 비운다.
+  console.error('ToolsSection D1 error:', e);
+}
+
+const visible = tools.map((t) => ({
+  slug: t.slug,
+  name: t.name || '',
+  description: (t.tagline || '').split('\n')[0].trim(),
+  category: t.category || '',
+  price: t.price || '',
+  difficulty: t.difficulty || '',
+}));
 ---
 <section class="py-16 px-4 bg-white">
   <div class="max-w-5xl mx-auto">
@@ -19,28 +55,97 @@ const tools = (await getCollection('tools', ({ data }) => Boolean(data.koreanSup
       AI 툴
     </h2>
     <p class="text-sm text-gray-500 mb-8" style="padding-left: 30px;">
-      한국어도 바로 쓰는 실전 도구를 모았습니다.
+      {visible.length > 0 ? `최신 수집 도구 ${visible.length}개 — 좌우로 넘겨서 더 보세요.` : '한국어도 바로 쓰는 실전 도구를 모았습니다.'}
     </p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {tools.map((t) => (
-        <a href={`/tools/${t.slug}/`}
-           class="group block bg-white border border-gray-200 rounded-xl p-5 h-full hover:border-[#E63B2E] hover:shadow-md transition-all duration-300">
-          {t.category && (
-            <span class="inline-block text-xs text-[#E63B2E] mb-2">{t.category}</span>
-          )}
-          <h3 class="text-base font-bold mb-2 group-hover:text-[#E63B2E] transition-colors" style="font-family: var(--font-sans);">
-            {t.name}
-          </h3>
-          <p class="text-sm text-gray-600 leading-relaxed">{t.description}</p>
-        </a>
-      ))}
-    </div>
+    {visible.length > 0 ? (
+      <>
+        <!-- AIK24-TOOLS-ROLLING-01: 롤링 캐러셀. CSS scroll-snap + 버튼만으로 구현(의존성 추가 없음).
+             모바일은 스와이프, 데스크톱은 버튼/트랙패드. 흑백 + 빨강 유지. -->
+        <div class="relative">
+          <div id="tools-roll"
+               class="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2 -mx-1 px-1 scrollbar-hide">
+            {visible.map((t) => (
+              <a href={`/tools/${t.slug}/`}
+                 class="group snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[23.5%] bg-white border border-gray-200 rounded-xl p-5 hover:border-[#E63B2E] hover:shadow-md transition-all duration-300">
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  {t.category && <span class="text-xs text-[#E63B2E]">{t.category}</span>}
+                  {t.price && <span class="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full whitespace-nowrap">{t.price}</span>}
+                </div>
+                <h3 class="text-base font-bold mb-2 group-hover:text-[#E63B2E] transition-colors" style="font-family: var(--font-sans);">
+                  {t.name}
+                </h3>
+                <p class="text-sm text-gray-600 leading-relaxed line-clamp-2">{t.description}</p>
+                <div class="mt-3 flex items-center justify-between text-xs text-gray-500">
+                  <span>{t.difficulty}</span>
+                  <span class="text-[#E63B2E] font-semibold">자세히 보기 →</span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <!-- 좌우 버튼 (모바일에서는 숨김) -->
+          <button id="tools-roll-prev" aria-label="이전 도구"
+            class="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-9 h-9 items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm hover:border-[#E63B2E] transition-colors">
+            <svg class="w-4 h-4 text-[#111111]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button id="tools-roll-next" aria-label="다음 도구"
+            class="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-9 h-9 items-center justify-center rounded-full bg-white border border-gray-200 shadow-sm hover:border-[#E63B2E] transition-colors">
+            <svg class="w-4 h-4 text-[#111111]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <!-- 진행 바 -->
+        <div class="mt-3 h-0.5 w-full bg-gray-100 rounded overflow-hidden">
+          <div id="tools-roll-bar" class="h-full bg-[#E63B2E] w-1/4 transition-all duration-200"></div>
+        </div>
+      </>
+    ) : (
+      <div class="text-center py-12">
+        <img src="/mascot-tiger.png" alt="AI코리아24 마스코트" width="120" height="120"
+          class="mx-auto mb-4" loading="lazy" decoding="async"
+          onerror="this.onerror=null;this.src='/logo-final.webp';" />
+        <p class="text-gray-500">아직 표시할 도구가 없습니다.</p>
+      </div>
+    )}
 
     <div class="mt-8" style="padding-left: 30px;">
       <a href="/tools/" class="inline-flex items-center gap-1 text-sm font-semibold text-[#111111] hover:text-[#E63B2E] transition-colors">
-        전체 툴 보기 <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        전체 툴 보기 <span class="inline-block">→</span>
       </a>
     </div>
   </div>
 </section>
+
+<style>
+  /* 스크롤바 숨김 (캐러셀을 깔끔하게) */
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
+<script>
+  const track = document.getElementById('tools-roll');
+  const prev = document.getElementById('tools-roll-prev');
+  const next = document.getElementById('tools-roll-next');
+  const bar = document.getElementById('tools-roll-bar');
+
+  if (track && prev && next) {
+    const step = () => Math.max(200, track.clientWidth * 0.8);
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+
+    if (bar) {
+      const sync = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        const ratio = max > 0 ? track.scrollLeft / max : 0;
+        bar.style.width = (20 + ratio * 80) + '%';
+        // 끝에 닿으면 반대편 버튼을 흐리게
+        prev.style.opacity = track.scrollLeft <= 2 ? '0.35' : '1';
+        next.style.opacity = ratio >= 0.99 ? '0.35' : '1';
+      };
+      track.addEventListener('scroll', sync, { passive: true });
+      addEventListener('resize', sync);
+      sync();
+    }
+  }
+</script>

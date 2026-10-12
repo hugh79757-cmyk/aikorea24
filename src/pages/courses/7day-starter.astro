@@ -22,31 +22,31 @@ const pageDesc = course.description;
 ---
 
 <Layout title={pageTitle} description={pageDesc}>
-  <div class="bg-[#0A0E1A] text-white min-h-screen">
+  <div class="bg-white text-[#111111] min-h-screen">
 
     {/* HERO */}
     <section class="relative overflow-hidden">
-      <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 via-purple-900/30 to-transparent pointer-events-none" />
+      <div class="absolute inset-0 /40/30 to-transparent pointer-events-none" />
       <div class="max-w-4xl mx-auto px-4 py-20 md:py-28 relative">
         <div class="text-center mb-6">
-          <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 mb-4">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#333333]/20 text-gray-500 mb-4">
             🎯 곧 오픈 · 알림 신청 중
           </span>
         </div>
-        <h1 class="text-3xl md:text-5xl font-bold text-center leading-snug mb-4">
+        <h1 class="inline-block text-3xl md:text-5xl font-bold text-center leading-snug mb-4 section-title">
           AI, 처음이세요?
-          <span class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mt-2">
+          <span class="block text-transparent bg-clip-text bg-[#111111] mt-2">
             7일면 충분합니다
           </span>
         </h1>
-        <p class="text-lg text-gray-400 text-center max-w-2xl mx-auto mb-8 leading-relaxed">
+        <p class="text-lg text-gray-600 text-center max-w-2xl mx-auto mb-8 leading-relaxed">
           매일 저녁 5분, 7일 동안 AI 기초를 완성하세요.
           ChatGPT 사용법부터 프롬프트 작성, 이미지 생성, 업무 활용까지.
           커뮤니티에서 질문하며 함께 학습합니다.
         </p>
 
         {/* Coming Soon Notice */}
-        <div class="max-w-md mx-auto mb-4 px-3 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-sm text-amber-300 text-center">
+        <div class="max-w-md mx-auto mb-4 px-3 py-3 rounded-xl bg-[#333333]/10 border border-[#e5e5e5]/20 text-sm text-gray-500 text-center">
           📢 강좌가 곧 오픈됩니다. 준비되면 이메일로 알려드리겠습니다.
         </div>
 
@@ -58,34 +58,34 @@ const pageDesc = course.description;
               id="email-input"
               placeholder="이메일을 입력하세요"
               required
-              class="flex-1 bg-white/10 border border-white/20 rounded-xl px-5 py-3.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition"
+              class="flex-1 bg-white border border-gray-200 rounded-xl px-5 py-3.5 text-sm text-[#111111] placeholder-gray-500 focus:outline-none focus:border-[#111111] transition"
             />
             <button
               type="submit"
               id="enroll-btn"
-              class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3.5 rounded-xl text-sm font-semibold hover:from-blue-500 hover:to-purple-500 transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+              class="bg-[#111111] text-white px-8 py-3.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
             >
               오픈 알림 신청
             </button>
           </form>
           <div id="enroll-message" class="mt-4 text-sm text-center"></div>
-          <p class="text-xs text-gray-400 text-center mt-3">구독 해지는 언제든 가능합니다. 스팸 메일은 없습니다.</p>
+          <p class="text-xs text-gray-600 text-center mt-3">구독 해지는 언제든 가능합니다. 스팸 메일은 없습니다.</p>
         </div>
 
         {/* Social proof — full-bleed */}
-        <div class="-mx-4 mt-10 py-5 px-4 bg-white/[0.02] border-y border-white/[0.06]">
+        <div class="-mx-4 mt-10 py-5 px-4 bg-gray-50 border-y border-gray-200">
           <div class="flex justify-center gap-6 md:gap-8 text-center">
             <div>
-              <div class="text-xl md:text-3xl font-bold text-white">7일</div>
-              <div class="text-xs text-gray-400">총 학습 기간</div>
+              <div class="text-xl md:text-3xl font-bold text-[#111111]">7일</div>
+              <div class="text-xs text-gray-600">총 학습 기간</div>
             </div>
             <div>
-              <div class="text-xl md:text-3xl font-bold text-white">5분</div>
-              <div class="text-xs text-gray-400">일일 학습 시간</div>
+              <div class="text-xl md:text-3xl font-bold text-[#111111]">5분</div>
+              <div class="text-xs text-gray-600">일일 학습 시간</div>
             </div>
             <div>
-              <div class="text-xl md:text-3xl font-bold text-white">무료</div>
-              <div class="text-xs text-gray-400">평생 무료</div>
+              <div class="text-xl md:text-3xl font-bold text-[#111111]">무료</div>
+              <div class="text-xs text-gray-600">평생 무료</div>
             </div>
           </div>
         </div>
@@ -94,11 +94,11 @@ const pageDesc = course.description;
 
     {/* HOW IT WORKS */}
     <section class="max-w-4xl mx-auto px-4 py-12 md:py-16">
-      <h2 class="text-xl md:text-2xl font-bold text-center mb-8 md:mb-12">이렇게 진행됩니다</h2>
+      <h2 class="inline-block text-xl md:text-2xl font-bold text-center mb-8 md:mb-12 section-title">이렇게 진행됩니다</h2>
       <div class="grid md:grid-cols-3 gap-6 md:gap-8 text-center">
         <div>
-          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
-            <svg class="w-6 h-6 md:w-8 md:h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-[#333333]/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-[#555555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </div>
@@ -106,8 +106,8 @@ const pageDesc = course.description;
           <p class="text-sm text-gray-300 leading-relaxed">이메일 하나로 바로 시작합니다. 복잡한 가입 절차 없음.</p>
         </div>
         <div>
-          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-purple-500/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
-            <svg class="w-6 h-6 md:w-8 md:h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-[#333333]/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-[#555555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
           </div>
@@ -115,8 +115,8 @@ const pageDesc = course.description;
           <p class="text-sm text-gray-300 leading-relaxed">18시에 오늘의 레슨이 담긴 이메일이 도착합니다. 티저를 읽고 커뮤니티에서 전체 내용을 확인하세요.</p>
         </div>
         <div>
-          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-green-500/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
-            <svg class="w-6 h-6 md:w-8 md:h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-[#333333]/20 flex items-center justify-center mx-auto mb-3 md:mb-4">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-[#555555]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
@@ -128,11 +128,11 @@ const pageDesc = course.description;
 
     {/* CTA */}
     <section class="max-w-4xl mx-auto px-4 pb-20 md:pb-24">
-      <div class="text-center bg-gradient-to-r from-blue-900/30 to-purple-900/30 border border-white/[0.08] rounded-2xl p-6 md:p-12">
-        <h2 class="text-xl md:text-2xl font-bold mb-4">곧 오픈됩니다</h2>
+      <div class="text-center bg-gray-50 border border-gray-200 rounded-2xl p-6 md:p-12">
+        <h2 class="text-xl md:text-2xl font-bold mb-4 section-title">곧 오픈됩니다</h2>
         <p class="text-gray-300 mb-6 md:mb-8">알림을 신청하고 가장 먼저 시작하세요.</p>
         <a href="#signup-section"
-           class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white w-full sm:w-auto px-8 md:px-10 py-4 rounded-xl text-sm md:text-base font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
+           class="inline-block bg-[#111111] text-white w-full sm:w-auto px-8 md:px-10 py-4 rounded-xl text-sm md:text-base font-semibold transition-all">
           오픈 알림 신청
         </a>
       </div>
@@ -167,19 +167,19 @@ const pageDesc = course.description;
         const data = await res.json();
 
         if (data.ok) {
-          msg.className = 'mt-4 text-sm text-center text-green-400';
+          msg.className = 'mt-4 text-sm text-center text-[#555555]';
           msg.innerHTML = `
             <p class="font-semibold">🎉 오픈 알림이 등록되었습니다!</p>
-            <p class="text-gray-400 mt-1">준비가 완료되면 ${data.first_lesson_at}에 첫 레슨을 보내드립니다.</p>
+            <p class="text-gray-600 mt-1">준비가 완료되면 ${data.first_lesson_at}에 첫 레슨을 보내드립니다.</p>
           `;
           emailInput.value = '';
           btn.textContent = '✅ 알림 등록 완료';
         } else if (data.reason === 'already_enrolled') {
           const day = data.current_day || 0;
-          msg.className = 'mt-4 text-sm text-center text-yellow-400';
+          msg.className = 'mt-4 text-sm text-center text-[#555555]';
           msg.innerHTML = `
             <p>이미 등록된 이메일입니다. (${day}/${data.total_days || 7}일차 진행 중)</p>
-            <p class="text-gray-400 mt-1">다음 레슨: ${data.next_lesson_at ?? '곧 발송 예정'}</p>
+            <p class="text-gray-600 mt-1">다음 레슨: ${data.next_lesson_at ?? '곧 발송 예정'}</p>
           `;
           btn.textContent = '🔄 이미 등록됨';
         } else {

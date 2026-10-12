@@ -63,9 +63,9 @@ const formattedDate = post.data.date instanceof Date
     <!-- 브레드크럼 -->
     <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6" aria-label="breadcrumb">
       <ol class="flex items-center gap-1">
-        <li><a href="/" class="hover:text-blue-600 dark:hover:text-blue-400">홈</a></li>
+        <li><a href="/" class="hover:text-[#111111] dark:hover:text-[#555555]">홈</a></li>
         <li class="before:content-['/'] before:mx-1">
-          <a href="/blog" class="hover:text-blue-600 dark:hover:text-blue-400">블로그</a>
+          <a href="/blog" class="hover:text-[#111111] dark:hover:text-[#555555]">블로그</a>
         </li>
         <li class="before:content-['/'] before:mx-1 text-gray-900 dark:text-gray-100 font-medium truncate max-w-[200px]">
           {post.data.title}
@@ -76,11 +76,11 @@ const formattedDate = post.data.date instanceof Date
     <!-- 헤더 -->
     <header class="mb-8">
       {post.data.category && (
-        <span class="inline-block bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-semibold px-3 py-1 rounded-full mb-4">
+        <span class="inline-block bg-gray-100 dark:bg-[#111111]/40 text-[#111111] dark:text-gray-500 text-xs font-semibold px-3 py-1 rounded-full mb-4">
           {post.data.category}
         </span>
       )}
-      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight mb-4">
+      <h1 class="text-3xl md:text-4xl font-bold text-[#111111] leading-tight mb-4" style="border-left: 6px solid #E63B2E; padding-left: 24px;">
         {post.data.title}
       </h1>
       <div class="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
@@ -121,21 +121,22 @@ const formattedDate = post.data.date instanceof Date
     </div>
 
     <!-- 본문 -->
-    <div id="prose-body" class="prose prose-lg max-w-none
-      prose-headings:text-gray-900 dark:prose-headings:text-white
-      prose-p:text-gray-700 dark:prose-p:text-gray-300
-      prose-strong:text-gray-900 dark:prose-strong:text-white
-      prose-a:text-blue-600 dark:prose-a:text-blue-400
-      prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
-      prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600
-      prose-code:text-pink-600 dark:prose-code:text-pink-400
-      prose-pre:bg-gray-50 dark:prose-pre:bg-gray-800/50
-      prose-li:text-gray-700 dark:prose-li:text-gray-300
-      prose-img:rounded-xl
-      prose-hr:border-gray-200 dark:prose-hr:border-gray-700
-      prose-th:text-gray-900 dark:prose-th:text-gray-100
-      prose-td:text-gray-700 dark:prose-td:text-gray-300
-    ">
+    <div id="prose-body" class="prose prose-container prose-xl max-w-none
+        prose-headings:text-[#111111]
+        prose-p:text-[#333333]
+        prose-strong:text-[#111111]
+        prose-a:text-[#111111] prose-a:underline prose-a:underline-offset-2 hover:prose-a:text-[#E63B2E]
+        prose-blockquote:text-[#555555] prose-blockquote:border-[#E63B2E]
+        prose-code:text-[#111111]
+        prose-pre:bg-[#fafafa]
+        prose-li:text-[#333333]
+        prose-img:rounded-xl
+        prose-hr:border-[#e5e5e5]
+        prose-th:text-[#111111]
+        prose-td:text-[#333333]
+        prose-table:w-full prose-table:my-8 prose-table:text-base prose-table:border-collapse
+        prose-th:border prose-th:border-[#e5e5e5] prose-th:bg-[#fafafa] prose-th:px-4 prose-th:py-2.5
+        prose-td:border prose-td:border-[#e5e5e5] prose-td:px-4 prose-td:py-2.5">
       <Content />
     </div>
 
@@ -190,13 +191,12 @@ const formattedDate = post.data.date instanceof Date
               const title = item.dataset.title;
               const category = item.dataset.category;
               const banner = document.createElement('div');
-              banner.className = 'not-prose my-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl';
+              banner.className = 'not-prose my-6 p-4 bg-gray-100 dark:bg-[#111111]/20 border border-[#e5e5e5] dark:border-[#e5e5e5] rounded-xl';
               banner.innerHTML = `
                 <a href="${url}" class="flex items-start gap-3 no-underline group">
-                  <span class="text-blue-500 text-lg mt-0.5">📎</span>
                   <span>
-                    ${category ? `<span class="text-xs font-semibold text-blue-600 dark:text-blue-400">${category}</span><br/>` : ''}
-                    <span class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">${title}</span>
+                    ${category ? `<span class="text-xs font-semibold text-[#555555] mr-2">${category}</span>` : ''}
+                    <span class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#E63B2E] dark:group-hover:text-[#E63B2E]">${title}</span>
                   </span>
                 </a>
               `;
@@ -210,21 +210,19 @@ const formattedDate = post.data.date instanceof Date
     <!-- 본문 하단 CTA -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-10 mb-6">
       <!-- CTA 1: 강좌 -->
-      <div class="p-5 rounded-xl bg-gradient-to-br from-emerald-900/30 to-teal-900/20 border border-emerald-700/30 text-center">
-        <div class="text-2xl mb-2">📚</div>
+      <div class="p-5 rounded-xl bg-[#111111]r/30/20 border border-[#e5e5e5]/30 text-center">
         <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-1">7일 강좌 무료 신청</h3>
         <p class="text-xs text-gray-400 mb-3">AI, 어디서부터 시작할지 모르겠다면?</p>
-        <a href="/courses/7day-starter/" class="inline-block bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:from-emerald-500 hover:to-teal-500 transition-all">
+        <a href="/courses/7day-starter/" class="inline-block bg-[#111111] text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all">
           강좌 신청하기 →
         </a>
       </div>
 
       <!-- CTA 2: 브리핑 구독 -->
-      <div class="p-5 rounded-xl bg-gradient-to-br from-blue-900/30 to-purple-900/20 border border-blue-700/30 text-center">
-        <div class="text-2xl mb-2">📬</div>
+      <div class="p-5 rounded-xl bg-[#111111]r/30/20 border border-[#e5e5e5]/30 text-center">
         <h3 class="text-sm font-bold text-gray-900 dark:text-white mb-1">매일 아침 AI 브리핑</h3>
         <p class="text-xs text-gray-400 mb-3">선별된 AI 뉴스를 이메일로 받아보세요</p>
-        <a href="/subscribe/" class="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg text-xs font-semibold hover:from-blue-500 hover:to-purple-500 transition-all">
+        <a href="/subscribe/" class="inline-block bg-[#111111] text-white px-4 py-2 rounded-lg text-xs font-semibold transition-all">
           구독하기 →
         </a>
       </div>
@@ -237,11 +235,11 @@ const formattedDate = post.data.date instanceof Date
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {bottomPosts.map(rp => (
             <a href={`/blog/${rp.id}/`}
-               class="block p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-md transition-all group">
+               class="block p-4 rounded-xl border border-gray-200 dark:border-gray-700 hover:border-[#e5e5e5] dark:hover:border-[#e5e5e5] hover:shadow-md transition-all group">
               {rp.data.category && (
-                <span class="text-xs font-semibold text-blue-600 dark:text-blue-400">{rp.data.category}</span>
+                <span class="text-xs font-semibold text-[#111111] dark:text-[#555555]">{rp.data.category}</span>
               )}
-              <h3 class="text-sm font-semibold text-gray-900 dark:text-white mt-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 line-clamp-2">
+              <h3 class="text-sm font-semibold text-gray-900 dark:text-white mt-1 group-hover:text-[#111111] dark:group-hover:text-[#555555] line-clamp-2">
                 {rp.data.title}
               </h3>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">{rp.data.description}</p>
@@ -255,31 +253,29 @@ const formattedDate = post.data.date instanceof Date
     <div class="mt-10 flex flex-col gap-4">
 
       <!-- cert 배너 -->
-      <div class="p-6 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 border border-emerald-200 dark:border-emerald-800 rounded-2xl">
+      <div class="p-6 bg-[#111111]/20 border border-[#e5e5e5] dark:border-[#e5e5e5] rounded-2xl">
         <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">📋</span>
-          <span class="text-base font-bold text-emerald-700 dark:text-emerald-400">CertKorea</span>
+          <span class="text-base font-bold text-[#111111] dark:text-[#555555]">CertKorea</span>
         </div>
         <p class="text-gray-700 dark:text-gray-300 text-base mb-4 leading-relaxed">
           2026년 국가자격증 시험일정을 한눈에 확인하세요. 613개 자격증의 필기·실기 D-day 카운트다운.
         </p>
         <a href="https://cert.aikorea24.kr" target="_blank" rel="noopener"
-           class="inline-flex items-center text-sm font-semibold text-emerald-600 dark:text-emerald-400 hover:text-emerald-800 dark:hover:text-emerald-300">
+           class="inline-flex items-center text-sm font-semibold text-[#111111] dark:text-[#555555] hover:text-[#111111] dark:hover:text-gray-500">
           자격증 시험일정 확인하기 →
         </a>
       </div>
 
       <!-- persona 배너 -->
-      <div class="p-6 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border border-purple-200 dark:border-purple-800 rounded-2xl">
+      <div class="p-6 bg-[#111111]/20 border border-[#e5e5e5] dark:border-[#e5e5e5] rounded-2xl">
         <div class="flex items-center gap-3 mb-3">
-          <span class="text-3xl">📊</span>
-          <span class="text-base font-bold text-purple-700 dark:text-purple-400">한국인 AI 페르소나</span>
+          <span class="text-base font-bold text-[#111111] dark:text-[#555555]">한국인 AI 페르소나</span>
         </div>
         <p class="text-gray-700 dark:text-gray-300 text-base mb-4 leading-relaxed">
           나와 비슷한 한국인은 어떻게 살까? 나이·성별·지역만 입력하면 주거·직업·소득을 통계로 분석해드려요.
         </p>
         <a href="https://persona.aikorea24.kr" target="_blank" rel="noopener"
-           class="inline-flex items-center text-sm font-semibold text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300">
+           class="inline-flex items-center text-sm font-semibold text-[#111111] dark:text-[#555555] hover:text-[#111111] dark:hover:text-gray-500">
           내 페르소나 분석하기 →
         </a>
       </div>
@@ -288,7 +284,7 @@ const formattedDate = post.data.date instanceof Date
 
     <!-- 하단 네비게이션 -->
     <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
-      <a id="back-to-list" href="/blog/" class="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
+      <a id="back-to-list" href="/blog/" class="inline-flex items-center text-[#111111] dark:text-[#555555] hover:text-[#111111] dark:hover:text-gray-500 font-medium">
         ← 블로그 목록으로
       </a>
       <script is:inline>
