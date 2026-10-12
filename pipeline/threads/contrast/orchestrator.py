@@ -112,6 +112,7 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None,
         cross_articles: list[dict] = []
         try:
             from pipeline.threads.contrast.background_search import find_background, find_cross_articles
+            # DISABLED 2026-10-13: 미사용 기능 (대표님 지시) — find_background 호출 전면 비활성화
 
             def _collect_backgrounds(kws: list[str], exclude: list[str], want: int) -> None:
                 """find_background는 1건 반환 → 누적 id 제외하며 want개까지 반복."""
@@ -122,7 +123,9 @@ def run_contrast_thread(seed_article: dict, all_articles: list | None = None,
                         break
                     got_ids = [str(b.get("id", "")).strip() for b in backgrounds if str(b.get("id", "")).strip()]
                     try:
-                        bg = find_background(kws, exclude + got_ids)
+                        # DISABLED 2026-10-13: 미사용 기능 (대표님 지시) — 호출만 끊고 코드는 보존
+                        # bg = find_background(kws, exclude + got_ids)
+                        bg = None
                     except Exception as be:
                         logger.info("contrast orchestrator: find_background error: %s", be)
                         break

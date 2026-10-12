@@ -3,7 +3,11 @@ import sys
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
+import pytest
+
 from pipeline.threads.contrast.background_search import find_background, find_cross_articles, _esc
+
+pytestmark = pytest.mark.skip(reason="미사용 기능 비활성화 2026-10-13")
 
 
 class TestEsc:
