@@ -1,3 +1,11 @@
+## 2026-10-13 AIK24-CONTRAST-DISABLE-01 완료 — 미사용 contrast background 기능 비활성화 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-0030-AIK24-CONTRAST-DISABLE-01-완료보고.md (완료 — verify 요청)
+
+- 한 일: `pipeline/threads/contrast/orchestrator.py` 125행 `bg = find_background(...)` 호출 1줄을 주석 처리(+`bg = None`, DISABLED 2026-10-13 주석) — 유일한 호출 지점이라 두 호출 경로 모두 차단. `tests/test_contrast_background.py` 모듈 상단에 `pytestmark = pytest.mark.skip(...)` 추가. 코드 삭제 없음.
+- 결과(검증 근거): `grep -n find_background orchestrator.py` → 주석 아닌 호출 0건(import·주석·docstring·로그 문자열만) / `pytest tests/test_contrast_background.py -q` → `10 skipped` / `pytest tests -q --ignore=tests/archive_v1_20261011` → `17 failed, 508 passed, 10 skipped` (failed 17→17 동일, passed 감소 10 = skip 10과 일치 → 새 실패 0) / `npm run build` → BUILD_EXIT=0.
+- 잔존 위험: ①[중간] 파일 전체 skip으로 `TestFindCross`(3건, 살아있는 find_cross_articles 기능)까지 커버리지 0 ②[부분검증] 런타임 실실행으로 background=None 미확인 ③[검증불가] "미사용" 판단은 대표님 지시 근거 ④워킹트리 2파일 미커밋(지시서 §6).
+- 다음 행동: 커밋 지시 시 2파일 단독 커밋 / 기능 완전 폐기 여부 결정.
+- [PRODUCTION CODE] orchestrator.py · [TEST CODE] test_contrast_background.py · 커밋·푸시·배포 없음(지시서 §6).
+
 ## 2026-10-13 00:15 — AIK24-REPO-CLEANUP 완료: 워킹트리 781건 → 논리 단위 커밋 5건 정리 (트리 clean)
 
 ### 한 일
