@@ -102,6 +102,11 @@ function approvedHtml(params: ToolNotifyParams): { subject: string; html: string
   const name = escapeHtml(params.toolName);
   const slug = escapeHtml(params.toolSlug);
   const toolUrl = `${BASE_URL}/tools/${slug}/`;
+  // 배지 안내용 임베드 코드는 <a>/<img> 태그를 그대로 메일 HTML에 넣으면 메일 클라이언트가
+  // 태그로 렌더링해 받는 사람이 코드를 볼 수 없으므로 escapeHtml 로 문자화한다.
+  const embedCode = escapeHtml(
+    `<a href="${toolUrl}">\n  <img src="${BASE_URL}/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" width="240" style="max-width:240px;height:auto;border:0;" loading="lazy" />\n</a>`
+  );
 
   return {
     subject: `[AIKorea24] ${name} 등록이 승인되었습니다 🎉`,
@@ -121,6 +126,17 @@ function approvedHtml(params: ToolNotifyParams): { subject: string; html: string
   <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:0 0 24px;">
     <p style="margin:0;font-size:15px;font-weight:600;color:#1f2937;">🔗 등록 페이지: <a href="${toolUrl}" style="color:#3b82f6;text-decoration:none;">${toolUrl}</a></p>
   </div>
+
+  <!-- 배지 게재 안내 -->
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center;">
+  <img src="${BASE_URL}/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" style="max-width:240px;height:auto;margin:0 auto 16px;display:block;" />
+  <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#0F172A;">사이트에 이 배지를 달아보세요</p>
+  <p style="margin:0 0 16px;font-size:13px;color:#64748B;line-height:1.6;">
+    아래 코드를 복사해서 사이트에 붙여넣으면 됩니다.<br />
+    배지를 클릭하면 AIKorea24 등록 페이지로 연결됩니다.
+  </p>
+  <div style="background:#1e293b;color:#e2e8f0;border-radius:8px;padding:12px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.6;overflow-x:auto;white-space:pre-wrap;word-break:break-all;">${embedCode}</div>
+</div>
 
   <p style="margin:24px 0 4px;font-size:14px;">감사합니다,</p>
   <p style="margin:0 0 8px;font-size:14px;font-weight:700;">AIKorea24 팀</p>
@@ -168,7 +184,6 @@ function submissionHtml(params: SubmissionConfirmParams): { subject: string; htm
   const name = escapeHtml(params.toolName);
   const slug = escapeHtml(params.toolSlug);
   const toolUrl = `${BASE_URL}/tools/${slug}/`;
-  const badgeUrl = `${BASE_URL}/badges/featured-light.svg`;
 
   return {
     subject: `[AIKorea24] ${name} 등록이 완료되었습니다 ✅`,
@@ -185,12 +200,9 @@ function submissionHtml(params: SubmissionConfirmParams): { subject: string; htm
     관리자 검토 후 공개됩니다 (보통 24시간 이내).
   </p>
 
-  <!-- 배찌 배지 -->
-  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center;">
-    <img src="${badgeUrl}" alt="Featured on AIKorea24" style="max-width:200px;height:auto;margin-bottom:12px;" />
-    <p style="margin:0;font-size:14px;font-weight:600;color:#0F172A;">AIKorea24는 신뢰의 상징입니다</p>
-    <p style="margin:4px 0 0;font-size:13px;color:#64748B;">이 배지를 사이트에 달아주세요 — 벌써 많은 협력사들이 달았습니다</p>
-  </div>
+  <p style="margin:0 0 24px;line-height:1.6;font-size:14px;color:#64748B;">
+    승인이 완료되면 사이트에 게재할 수 있는 <strong>등록 배지</strong>를 이메일로 보내드립니다.
+  </p>
 
   <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:0 0 24px;">
     <p style="margin:0;font-size:15px;font-weight:600;color:#1f2937;">🔗 등록 페이지: <a href="${toolUrl}" style="color:#3b82f6;text-decoration:none;">${toolUrl}</a></p>

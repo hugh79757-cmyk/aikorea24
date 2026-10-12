@@ -1,3 +1,91 @@
+## 2026-10-12 20:42 — AIK24-BADGE-02 CareOps 404 수정 + 승인 이메일 배지 안내 구현 (배포 완료)
+
+* 작업: `/Users/twinssn/Desktop/메모 Hugh-v2/SSOT/프로젝트/aikorea24/지시서/2026-10-12-2045-AIK24-BADGE-02-404수정및배지안내구현.md`
+
+### 한 일 (PRODUCTION CODE 3건 + 신규 파일 2건)
+
+1. `src/pages/tools/[id].astro:2` `prerender = true` → `false`
+2. `src/pages/tools/index.astro:2` `prerender = true` → `false`
+   * 근거: 두 파일 모두 2행 1줄 변경. `grep -n prerender` 결과 2행 = `false` 확인. `git diff` 상 `index.astro`의 나머지 diff는 **선행 미커밋 디자인 변경**(내 작업 아님).
+   * getStaticPaths()·D1 폴백 코드는 손대지 않음(지시서 금지 준수). SSR 선례 14건 존재(`grep -rln "prerender = false" src/pages/` = 14, tools/submit.astro·index.astro·admin/* 등).
+3. `src/lib/email-notify.ts` `approvedHtml`에 배지 게재 안내 섹션 삽입 + `embedCode` (`escapeHtml` 1회 적용)
+4. `src/lib/email-notify.ts` `submissionHtml` 배지 블록 제거 + `badgeUrl` 상수 삭제, "승인이 완료되면 … 등록 배지를 이메일로 보내드립니다" 한 줄로 교체 (1-4 판단)
+5. 신규 `public/badges/listed-on-aikorea24.webp` (20,618 B, md5 `84ca0e08…` = 원본 webp_최적화본과 동일)
+6. 신규 `src/content/tools/careops.md` — deploy.sh [0.5/3] `sync_submissions_to_md.mjs`가 생성 (기존 369 → 370건)
+
+### 결과 (검증 근거 포함)
+
+* [검증됨] **빌드**: `npm run build` 성공, 에러 0. `dist/client/tools/`에 `finder`·`task`만 남고 정적 도구 페이지 369개 소멸 → SSR 전환 확인.
+* [검증됨] **배포**: `npm run deploy` 성공. Worker `aikorea24` Version ID `8fd728b2-a60b-4ff9-a255-85a16fd55d7b`, assets 1926건 업로드, Total 26,155.21 KiB. deploy.sh 계정 사전검증(`EXPECTED_ACCOUNT_ID=7eb1b8cd…`) 통과.
+* [검증됨] **라이브 404 해결**: `https://aikorea24.kr/tools/careops/` → **200**, `<title>CareOps 마음이 사용법과 가격, 한국어 지원 여부 총정리</title>`. 근거: `curl -s -L … | grep -o "<title>…"`.
+* [검증됨] **목록 반영**: `https://aikorea24.kr/tools/` 에 `href="/tools/careops/"` + "CareOps 마음이" 카드 표시 (grep 3회 = 데스크톱/모바일 중복 렌더). 목록 내 고유 도구 링크 379건.
+* [검증됨] **배지 라이브**: `/badges/listed-on-aikorea24.webp` → **200**, `content-length: 20618`, `content-type: image/webp`.
+* [검증됨] **이메일 HTML (코드 경로 실행 검증)**: esbuild로 `email-notify.ts` 번들 후 `globalThis.fetch` 스텁 → `sendToolNotification(approved)` / `sendSubmissionConfirmation` 호출. 11개 단언 전부 PASS:
+  * 배지 webp 참조 / 임베드 코드 `&lt;a href=&quot;…&quot;&gt;` 이스케이프 / **이중 이스케이프(`&amp;lt;`) 없음** / 이미지 태그 이스케이프 / slug `careops` 치환 / 안내 문구 / 기존 SVG 미참조
+  * submission: `featured-light.svg` 제거 / `/badges/` 참조 0 / "등록 배지" 안내 존재 / "신뢰의 상징" 제거
+  * 두 건 모두 `send` 반환값 `{success:true}`
+* [검증됨] **회귀 없음**: 미존재 slug `/tools/zzz-nonexistent-999/` → **404**(정확한 상태코드). md 도구 `mixdesk`·`notion-ai` → **200**.
+* [부분검증] **"404가 캐시되어 재발" 위험을 실측했다**: 배포 직후 커스텀 도메인에서 `cf-cache-status: HIT`로 **캐시된 404 본문 + 200/404 혼재**가 관측됐다(농부: workers.dev는 즉시 정상 200). 퍼지는 실패(`Authentication error 10000`, .env 토큰에 cache purge 권한 없음). 이후 CF의 `cache-control: public, max-age=0, must-revalidate` 재검증으로 **자력 회복**되어 현재는 정상. 검증력 제한: 퍼지를 내가 못 하므로 회복이 재검증 타이밍에 의존.
+* [검증불가] **실제 이메일 배송(수신 확인)**: 로컬에서 Brevo API 직접 호출 = **HTTP 401**, `unrecognised IP address 2001:fb1:11d:6dd:61ac:b355:4b9f:775d` (이 머신 IP 차단). 모든 발송 엔드포인트(`review.ts`·`briefing/send-email.ts`·`subscribe.ts`)가 관리자 세션 인증 필수 → 로컬 대체 경로 없음.
+  * 복구 계획: (a) Brevo 대시보드 → SMTP 발신 IP 허용목록에 로컬 IP 추가 후 재시도, 또는 (b) Worker(Cloudflare IP, 차단 안 됨)를 경유해 대표님 이메일로 자가 발송, 또는 (c) Brevo Transactional Logs로 실제 발송 이력 확인.
+
+### 1-4 판단 근거 (주니어 판단 항목)
+
+`submissionHtml` 배지 블록을 **삭제하고 한 줄 안내로 교체**했다. 이유:
+* 제출 확인 메일은 "관리자 검토 후 공개됩니다" = **미승인** 상태 안내인데, "Featured on" 배지 + "이미 많은 협력사들이 달았습니다" + "AIKorea24는 신뢰의 상징입니다"는 승인 사실을 전제 → 사실과 어긋남.
+* 문구 불일치: 기존 = "Featured on"(추천), 신규 배지 = "LISTED ON"(단순 등록).
+* 그렇다고 블록을 완전 삭제하면 제출자가 배지 존재를 모름 → **한 줄 전방 안내**로 대체("승인이 완료되면 … 등록 배지를 이메일로 보내드립니다"). 미사용이 된 `badgeUrl` 상수도 함께 제거(미사용 변수 방지). 기존 `featured-*.svg` 파일 자체는 삭제하지 않음(지시 범위 밖, 외부 참조 가능성).
+
+### 잔존 위험 (해결되지 않은 항목)
+
+1. **[높음] 캐시된 404의 재발 가능성** — Cloudflare 엣지가 404를 캐시하면 승인 후에도 404가 보일 수 있고, 이 토큰으로는 퍼지 권한이 없다. 자력 재검증으로 회복됨을 실측했으나 시간차가 존재. 근본 대책(SSR HTML 응답에 `Cache-Control: no-store`)은 이번 범위 밖이며 미구현.
+2. **[중간] md 경로가 D1 상태 게이트를 우회** — `sync_submissions_to_md.mjs`가 만든 md가 있으면 `[id].astro`는 md를 먼저 사용하므로, 이후 도구가 반려·철회되어도 md가 남아 페이지가 계속 200을 반환한다. 링크백 도용 방지(철회 도구 → 404)는 D1 전용 도구에만 적용된다. **이번 변경으로 생긴 회귀는 아님**(변경 전에도 md 존재 시 정적 페이지가 200). md 삭제 로직은 미구현.
+3. **[중간] `deploy.sh` [0.5/3] md 동기화 단계가 목적을 상실** — `prerender=false`가 되면서 도구 페이지는 D1을 실시간 조회하므로 md 동기화가 도구 페이지에는 불필요해졌다(harmless하지만 중복). 제거는 하지 않았다(지시 범위 밖, 블로그·다른 소비처 영향 미확인).
+4. **[낮음] 배포가 선행 미커밋 변경 778건을 함께 배포** — 워킹 트리에 다른 작업의 미커밋 변경(블로그 콘텐츠·컴포넌트·스크립트)이 778건 존재한 상태로 배포가 진행됐다. 이번 배포물에 그 내용이 포함됐다. 내가 만든 상태는 아니나 사실 기록.
+5. **[낮음] WebP 단일 포맷** — 배지 이미지를 WebP 1종만 제공한다. 아주 오래된 메일 클라이언트는 WebP를 표시하지 못할 수 있음(대표님 확정본 사용 지시에 따라 PNG/JPEG 폴백 미추가).
+6. **[낮음] 워터마크 부재** — BADGE-01 조사 결론대로 워터마크 미적용(실효성 없음 판단). 도용 방지는 링크백에 의존.
+
+### 다음 행동
+
+1. 대표님: 테스트 이메일 수신 확인(Brevo IP 허용목록 추가 또는 Worker 경유 발송 필요). 위 잔존 위험 2(실제 배송 [검증불가])의 복구 절차.
+2. 대표님: `https://aikorea24.kr/tools/careops/` 육안 확인 + 배지 이미지 게재 여부 결정.
+3. (선택, 후속 지시서) 잔존 위험 1·2의 근본 대책: SSR HTML `no-store` 헤더, md 삭제 로직.
+4. 배지 사용 약관 게재 여부 결정 (BADGE-01 보고서 섹션 1-6 초안 7조).
+
+## 2026-10-12 20:40 — AIK24-BADGE-01 승인이메일 배지안내 + CareOps 404 조사 (코드 변경·배포 없음)
+
+* 작업: `/Users/twinssn/Desktop/메모 Hugh-v2/SSOT/프로젝트/aikorea24/지시서/2026-10-12-2010-AIK24-BADGE-01-승인이메일배지안내-조사.md`
+* 보고서: `/Users/twinssn/Desktop/메모 Hugh-v2/SSOT/프로젝트/aikorea24/보고서/2026-10-12-2010-AIK24-BADGE-01-조사보고.md`
+* **결과: 조사 완료. 코드 변경 0건, 배포 0건(지시서 금지 범위 준수).**
+
+### 핵심 발견 — CareOps 404 원인이 DB/승인API/이메일이 아니다
+D1 `careops` = `status: published`, `updated_at 2026-10-12 13:02:22` (승인 정상 반영). **원인은 `src/pages/tools/[id].astro` 2행 `prerender = true` + 11~16행 md-only `getStaticPaths()`** — D1 전용 slug는 정적 HTML이 생성되지 않아 라우트 자체가 없어서 404. (동일 파일 내 D1 폴백 코드(28~100행)는 빌드에 미포함되는 죽은 경로.) `/tools/` 목록도 같은 병 — `index.astro` 도 `prerender=true`이고 D1 쿼리가 빌드 시점에 굽힘(`dist/client/tools/index.html` 내 careops 0건, 배포시각 11:44 < 승인시각 13:02).
+* 검증: live `careops` 404 / `mixdesk`(md 보유) 200. `dist/client/tools/` 372개 중 careops 없음. published 12건 중 md 없는 건 **careops 1건뿐** → 다음 승인부터 매번 재발.
+* 수정 방향: `[id].astro`·`index.astro` 의 `prerender` → `false` (기존 D1 폴백 코드가 살아나므로 로직 추가 0줄). 404 수정은 배지 작업과 분리 배포 권장.
+
+### 배지 조사 결과
+| 항목 | 결과 |
+|---|---|
+| 원본 | `/Users/twinssn/Downloads/batch_media-generation-aik24-badge-listed.jpg` · JPEG 636×254 · 43,850 B |
+| WebP | **이미 변환 완료** — `~/Downloads/webp_최적화/batch_media-generation-aik24-badge-listed.webp` 20,618 B (-53%). 추가 변환 불필요 |
+| 기존 `featured-light.svg` | `public/badges/` 실재, 라이브 200(787 B) — **깨진 이미지 아님**. 단 "Featured on" 문구가 신규 단청 배지("LISTED ON")와 불일치 |
+| 호스팅 제안 | `public/badges/listed-on-aikorea24.webp` → `https://aikorea24.kr/badges/...` (public 루트 매핑 실증됨) |
+| BREVO_API_KEY | Worker secret 에 **설정되어 있음** (6종 중 1) |
+| 승인 이메일 삽입 위치 | `approvedHtml` 의 "등록 페이지 링크 박스" 바로 다음 (email-notify.ts 121~123행 기준) |
+| 임베드 이스케이프 | 기존 `escapeHtml()` (email-notify.ts 92~99행) 재용용 — 신규 작성 금지, 이중 이스케이프 주의 |
+| 도용 방지 | ① 링크백(비용 0, 채택)·② 고유배지(보류)·④ 워터마크(불필요). 링크백은 `[id].astro` 68~72행의 상태 기반 404 로 **이미 작동 중**. 한계: 배지 단 사이트 소유자 정체는 증명 불가 |
+
+### 잔존 위험
+1. **CareOps 승인 이메일 발송 여부 [검증불가]** — DB published 는 이메일 성공 증명 불가(`review.ts` 가 이메일 실패를 DB 롤백 없이 격리). 복구: Brevo 대시디 Transactional Logs / `wrangler tail`. 로컬 Brevo REST API 는 이 머신 IP 가 차단돼 조회 불가.
+2. **현재 `/tools/careops/` 가 404 이므로 배지 링크(`href`)가 깨진다** — 404 수정 선행 필수.
+3. WebP 단일 배치 — 일부 메일 클라이언트 미지원. png 폴백 미배치는 의도적 생략.
+4. JPEG 원본이 `~/Downloads` (프로젝트 외부) — 후속에서 public 복사하므로 안전, 별도 백업 권장.
+5. 배포 안 함 — 조사만. 후속 지시서(BADGE-02) 필요.
+
+### 다음 행동
+후속 지시서(BADGE-02) 작성: (1) `[id].astro`·`index.astro` prerender=false + 배포 → (2) `public/badges/listed-on-aikorea24.webp` 배치 → (3) `approvedHtml` 배지 블록 삽입 → (4) `submissionHtml` 배지 문구 분리/제거 → (5) 배포 + 자가 발송 테스트.
+
+
 ## 2026-10-12 02:0x — AIK24-RENEWAL-01 C: 버그 수정 5건 완료 (B는 다음)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
