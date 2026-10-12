@@ -5,7 +5,7 @@ category: "번역·학습"
 price: "유료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://scrimba.com"
 useCases: ["코딩 개념 학습", "기술 용어 이해", "학습 자료 요약"]
 tags: ["AI튜터", "영상학습", "개념설명", "코딩교육"]
 featured: false

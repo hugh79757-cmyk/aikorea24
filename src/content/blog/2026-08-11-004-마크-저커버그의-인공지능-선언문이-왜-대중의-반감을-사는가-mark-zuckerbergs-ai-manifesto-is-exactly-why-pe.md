@@ -4,7 +4,7 @@ description: "마크 저커버그 메타 최고 경영자가 최근 발표한 �
 date: 2026-08-12T05:47:16+09:00
 category: "뉴스"
 tags:
-  - "Mark Zuckerberg’s AI manifesto is exactly why people don’t like AI"
+ - "Mark Zuckerberg’s AI manifesto is exactly why people don’t like AI"
 draft: false
 
 image: "/images/2026-08-11-004-마크-저커버그의-인공지능-선언문이-왜-대중의-반감을-사는가-mark-zuckerbergs-ai-manifesto-is-exactly-why-pe/thumbnail.webp"
@@ -30,7 +30,7 @@ image: "/images/2026-08-11-004-마크-저커버그의-인공지능-선언문이-
 
 진정한 혁신은 기술의 화려함이 아니라 사용자와의 유대감에서 나옵니다. 만약 메타가 진정으로 인공지능의 대중화를 원한다면, 육천오백 단어의 선언문보다 더 중요한 것은 어떻게 사용자의 프라이버시를 완벽하게 보호할 것인지, 그리고 인공지능이 내린 결정에 대해 기업이 어떤 책임을 질 것인지에 대한 명확한 답변입니다. 지금처럼 일방적인 비전 제시만으로는 대중의 마음을 돌릴 수 없습니다.
 
-📌 **요약**
+**요약**
 
 1. 마크 저커버그는 개인용 초지능을 중심으로 한 인공지능 미래상을 제시했으나, 대중은 이를 신뢰하지 않고 있습니다.
 2. 메타의 과거 개인정보 관련 논란이 이번 혁신적 비전에 대한 불신으로 이어지고 있으며, 이는 기술적 안전성에 대한 의구심을 키우고 있습니다.

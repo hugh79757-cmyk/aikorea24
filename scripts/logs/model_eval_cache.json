@@ -1,0 +1,167 @@
+{
+ "inclusionai/ling-3.1-flash": {
+  "model_id": "inclusionai/ling-3.1-flash",
+  "score": 9,
+  "max_score": 9,
+  "tier": "Claude Opus급",
+  "details": [
+   {
+    "idx": 1,
+    "cat": "코딩",
+    "score": 1,
+    "source": "content",
+    "answer": "```python\nimport csv\n\ndef average_price(filename):\n    with open(filename, newline='') as f:\n        reader = csv.DictReader(f)\n        prices = [float(row['price']) for row in reader]\n    return sum(prices) / len(prices) if prices else 0\n```"
+   },
+   {
+    "idx": 2,
+    "cat": "코딩",
+    "score": 1,
+    "source": "content",
+    "answer": "```python\ndef add(a, b):\n    return a + b\n```"
+   },
+   {
+    "idx": 3,
+    "cat": "맥락정리",
+    "score": 1,
+    "source": "content",
+    "answer": "RAG는 질문의 임베딩 벡터로 벡터 DB에서 유사 문서를 검색해 프롬프트에 넣고, 대규모 언어 모델이 그 문서만 근거로 답변하게 하는 방식이다. 이 덕분에 최신 정보 반영과 출처 추적이 쉬워지지만, 청크 분할이나 검색 정확도가 낮으면 근거 없는 그럴듯한 답변이 나올 수 있어 청크 크기와 검색 개수 튜닝이 핵심이다. 같은 질문 반복 시에는 캐시를 활용해 지연과 비용을 줄이는 것이 좋다."
+   },
+   {
+    "idx": 4,
+    "cat": "맥락정리",
+    "score": 1,
+    "source": "content",
+    "answer": "1. 파이썬을 처음 시작할 때 무엇부터 해야 하는지\n2. 변수 이름을 지을 때의 규칙 3가지\n3. 프로그램이 안 돌아갈 때 처음에 할 일"
+   },
+   {
+    "idx": 5,
+    "cat": "압축",
+    "score": 1,
+    "source": "reasoning",
+    "answer": "The user wants me to condense the given Korean text to 200 characters while maintaining key information. Let me identify the key points:\n\n1. LLM service costs - input/output token pricing, scales with requests\n2. Four cost reduction methods:\n   - Cache for repeated questions\n   - Route by model size (small for simple, large for complex)\n   - Filter irrelevant documents in retrieval to reduce input tokens\n   - Only include necessary parts of conversation history\n3. Track cost and accuracy together to avoid quality degradation\n4. Use streaming for time-sensitive screens to reduce first-byte time and user churn\n\nLet me draft a condensed version in Korean and count characters:\n\nDraft 1:\n\"LLM 서비스 비용은 입출력 토큰 단가에 따라 요청 증가 시 급증한다. 절감 방법은 ①반복 질문 캐싱 ②요청 난이도에 따른 모델 분기(쉬운 건 소형, 복잡한 건 대형) ③검색 단계에서 무관 문서 제거로 입력 토큰 축소 ④대화 기록 중 필요한 부분만 전달. 단, 비용만 줄이면 품질 저하 위험이 있어 비용과 정확도를 함께 기록·비교해야 한다. 속도 민감 화면엔 스트리밍으로 첫 글자 지연을 줄여 이탈률을 낮추자.\"\n\nLet me count: \n\"LLM 서비스 비용은 입출력 토큰 단가에 따라 요청 증가 시 급증한다. 절감 방법은 ①반복 질문 캐싱 ②요"
+   },
+   {
+    "idx": 6,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "## 코드 설명\n\n```python\ndef add(a, b):\n    return a + b\n```\n\n### 각 부분의 의미\n\n| 요소 | 설명 |\n|------|------|\n| `def` | 함수를 정의할 때 사용하는 키워드 (definition의 약자) |\n| `add` | 함수의 이름. 호출할 때 사용하는 이름입니다 |\n| `(a, b)` | 매개변수(parameter). 함수가 받는 입력값 두 개 |\n| `:` | 함수 본문이 시작됨을 나타냄 |\n| `return` | 계산 결과를 호출한 곳으로 돌려줌 |\n| `a + b` | 두 매개변수를 더한 값 |\n\n### 동작 방식\n\n이 함수는 **두 수를 받아서 더한 값을 반환**합니다.\n\n```python\nresult = add(3, 5)\nprint(result)  # 8 출력\n\nprint(add(10, 20))  # 30 출력\n```\n\n### 참고 사항\n\n- 파이썬은 동적 타입 언어이므로 `a`, `b`에 숫자뿐 아니라 문자열도 들어갈 수 있습니다.\n  ```python\n  print(add(\"안녕\", \"하세요\"))  # \"안녕하세요\" 출력\n  ```\n- `return`이 없으면 함수는 `None`을 반환합니다.\n- 타입 힌트를 붙이면 더 명확해집니다:\n  ```python\n  def add(a: int, b: int) -> int:\n      return a + b\n  ```"
+   },
+   {
+    "idx": 7,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "안녕하세요, [수신자명]님.\n\n다름이 아니오니, 회의 시간을 변경하고자 연락드립니다.\n\n현재 [기존 시간]으로 예정되어 있는 회의를 [변경 희망 시간]으로 옮길 수 있을지 여쭙습니다. 일정에 어려움이 있으시면 편하신 시간을 알려주시면 조정하겠습니다.\n\n혼선이 없도록 확인 부탁드리며, 감사합니다.\n\n[본인"
+   },
+   {
+    "idx": 8,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "'인공지능'의 영어 번역은 **Artificial Intelligence** (약어: **AI**)입니다."
+   },
+   {
+    "idx": 9,
+    "cat": "추론",
+    "score": 1,
+    "source": "content",
+    "answer": "Yes"
+   }
+  ],
+  "errors": [
+   "Q2 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q5 reasoning 재시도 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q5 reasoning 재시도 HTTP 429 (재시도 2/3, 30초 대기)",
+   "Q5 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q6 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q7 finish_reason=length(잘림 가능)",
+   "Q9 HTTP 429 (재시도 1/3, 15초 대기)",
+   "Q9 HTTP 429 (재시도 2/3, 30초 대기)"
+  ],
+  "failed": 0,
+  "label": "AI 추정: Claude Opus급 (9/9점)",
+  "ts": 1791707621.658327
+ },
+ "liquid/lfm-2.5-2.6b:free": {
+  "model_id": "liquid/lfm-2.5-2.6b:free",
+  "score": 8,
+  "max_score": 9,
+  "tier": "Claude Sonnet 4.5급",
+  "details": [
+   {
+    "idx": 1,
+    "cat": "코딩",
+    "score": 1,
+    "source": "content",
+    "answer": "```python\nimport csv\n\ndef get_average_price(filename):\n    \"\"\"\n    Reads a CSV file and returns the average of the 'price' column.\n    \n    Args:\n        filename (str): Path to the CSV file.\n        \n    Returns:\n        float: The average price, or 0.0 if the column is missing or empty.\n    \"\"\"\n    with open(filename, mode='r', newline='') as file:\n        reader = csv.DictReader(file)\n        \n        if 'price' not in reader.fieldnames:\n            raise ValueError(\"The column 'price' was not found in the CSV file.\")\n            \n        total = 0.0\n        count = 0\n        \n        for row in reader:\n            try:\n                total += float(row['price'])\n                count += 1\n            except (ValueError, TypeError):\n                # Skip rows where price is not a valid number\n                continue\n                \n        return total / count if count > 0 else 0.0\n```"
+   },
+   {
+    "idx": 2,
+    "cat": "코딩",
+    "score": 1,
+    "source": "content",
+    "answer": "```python\ndef add(a, b):\n    return a + b\n```"
+   },
+   {
+    "idx": 3,
+    "cat": "맥락정리",
+    "score": 1,
+    "source": "content",
+    "answer": "RAG는 검색 단계를 앞단에 배치하여 대규모 언어 모델의 답변 정확도를 높이고 최신 정보 반영을 가능하게 합니다. 그러나 청크 자르기 및 검색 정확도 문제는 근거 없는 내용을 생성할 위험이 있으므로, 이 부분을 튜닝하는 것이 핵심입니다. 또한 반복 쿼리에 대한 캐싱을 도입하면 지연 시간과 비용을 줄여 효율성을 높일 수 있습니다."
+   },
+   {
+    "idx": 4,
+    "cat": "맥락정리",
+    "score": 1,
+    "source": "content",
+    "answer": "1. **파이썬 초기 설정** – 공식 사이트에서 설치 프로그램을 받았고, 터미널에서 `python --version`으로 설치를 확인했습니다.\n\n2. **변수 이름 규칙 3가지**  \n   - 의미를 명확하게 나타내는 이름을 씁니다.  \n   - 카멜케이스(CamelCase)를 사용합니다.  \n   - 한 글자 이름은 피합니다.\n\n3. **프로그램 오류 시 첫 번째 대응** – 에러 메시지를 끝까지 읽고, 문제를 최소 재현 코드로 줄여 본 뒤, 변수 값을 하나씩 출력해 확인합니다."
+   },
+   {
+    "idx": 5,
+    "cat": "압축",
+    "score": 1,
+    "source": "reasoning",
+    "answer": "1.  **Analyze the Request:**\n    *   **Task:** Reduce the given text to approximately 200 characters (Korean).\n    *   **Constraint:** Maintain core information.\n    *   **Original Text:** A paragraph discussing cost reduction methods for large language models (LLMs) in services and a warning about quality vs. cost trade-offs.\n\n2.  **Identify Key Information (Core Points):**\n    *   Cost is the primary concern when deploying LLMs (input/output token costs increase exponentially with requests).\n    *   Method 1: Caching (for repeated questions) -> saves cost.\n    *   Method 2: Model routing (short/easy -> small model; complex -> big model).\n    *   Method 3: Retrieval optimization (filter irrelevant docs to reduce input tokens).\n    *   Method 4: Context compression (use only necessary parts of history instead of full context).\n    *   Warning: Must balance cost and quality (track metrics for similar queries).\n    *   Additional point: Streaming improves speed/user retention on fast int"
+   },
+   {
+    "idx": 6,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "제시해주신 코드는 **두 개의 숫자를 더하는 간단한 함수**를 정의하는 것입니다.\n\n### 전체 설명\n이 함수는 `add`라는 이름을 가지고 있으며, 두 개의 인자(`a`, `b`)를 받아 그 합계를 반환합니다.\n\n---\n\n### 상세 분석\n\n1. **`def`**: 파이썬에서 함수를 정의할 때 사용하는 키워드입니다.\n2. **`add`**: 함수의 이름으로, 영어 'add'의 약자로 '더하기'라는 의미를 담고 있습니다.\n3. **`(a, b)`**: 함수에 전달받을 **매개변수(입력값)**입니다. 여기서는 두 개의 값을 받을 수 있도록 설계되었습니다.\n4. **`:`**: 함수 정의가 끝나고 실제 구현이 시작된다는 것을 나타냅니다.\n5. **`return`**: 함수가 실행될 때 **결과값을 반환**하는 키워드입니다.\n6. **`a + b`**: 전달받은 두 값(`a`와 `b`)을 더한 결과를 계산하고"
+   },
+   {
+    "idx": 7,
+    "cat": "한국어",
+    "score": 0,
+    "source": "content",
+    "answer": "상황과 상대방(상사, 동료, 고객사 등)에 따라 적절한 톤을 선택하여 선택하실 수 있도록 세 가지 버전으로 준비했습니다.\n\n---\n\n### 옵션 1. 표준 비즈니스 스타일 (가장 추천)\n**적합한 상황:** 상사나 동료에게 정중하게 요청할 때\n\n**제목:** [회의 이름] 일정 조정 요청\n\n[담당자 성함] 님,\n\n안녕하세요. [회의 이름]에 대해 다시 한번 일정을 확인해 보았습니다.\n\n현재 [기존 시간]에 예정되어 있었으나, **[새로운 시간/날짜]**로 변경하여 진행하고 싶습니다.\n\n혹시 다른 시간대가 더 편하실 경우, 언제든지 말씀해 주시면 조절해 드리겠습니다.\n\n확인 부탁드립니다.\n\n감사합니다.\n\n---\n\n### 옵션 2. 부드럽고 배려하는 스타일\n**적합한 상황:** 상사가 아니거나, 상대방의 의견을 존중하며 유연하게 대처해야 할 때\n\n**제목:** [회의 이름] 일정 관련 문의\n\n[담당자 성함] 님,\n\n안녕하세요. [회의 이름]의 일정을 다시 잡아드릴 수 있는지 여쭙고자 연락드렸습니다.\n\n혹시 **[새로운 시간/날짜]**로 진행하는 것이 더 편하실까요?\n\n원하시는 시간에 맞춰 일정을 조정해 드릴 수 있다면 정말 감사하겠습니다. 다른 제안 사항도 언제든 말씀해 주세요.\n\n편하게 말씀해 주시면 감사하겠습니다.\n\n감사합니다.\n\n---\n\n### 옵션 3. 공식적이고 격식 있는 스타일\n**적합한 상황:** 고객사나 공식적인 기관과의 소통 시\n\n**제목:** [회의 이름] 일정 변경 요청\n\n[회사의 이름] 팀장님께,\n\n안녕하십니까? [제출자 성함]입니다.\n\n[회의 이름]의 일정에 대해 조정하여 진행할 수 있도록 요청드립니다.\n\n[새로운 시간/날짜]로 변경하는 것을 고려하고 있습니다. 이 일정이 가능하시다면 알려주시면 감사하겠습니다. 만약 다른 날짜나 시간이 필요하시면 언제든지 말씀해 주시기 바랍니다.\n\n협조 부탁드립니다.\n\n감사합니다.\n\n---\n\n**💡 작성 팁:**\n*   **제목**에 회의를 명확히 적어주면 수신자가 내용을 파악하기 쉽습니다.\n*   단순히 "
+   },
+   {
+    "idx": 8,
+    "cat": "한국어",
+    "score": 1,
+    "source": "content",
+    "answer": "**인공지능**은 영어로 **Artificial Intelligence** 또는 줄여서 **AI**라고 합니다."
+   },
+   {
+    "idx": 9,
+    "cat": "추론",
+    "score": 1,
+    "source": "content",
+    "answer": "Yes"
+   }
+  ],
+  "errors": [
+   "Q1 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q3 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q5 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q6 finish_reason=length(잘림 가능)",
+   "Q7 reasoning 잘림 → max_tokens=2000 재시도로 회수"
+  ],
+  "failed": 0,
+  "label": "AI 추정: Claude Sonnet 4.5급 (8/9점)",
+  "ts": 1791770921.7158039
+ }
+}

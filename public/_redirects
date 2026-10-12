@@ -1,14 +1,16 @@
+# 구독 페이지 trailing slash 리다이렉트
+/unsubscribe  /unsubscribe/  301
+/subscribe  /subscribe/  301
+
 # 404 URL 리다이렉트 규칙 - aikorea24
 
-# /blog/2026/ (연도-only, 불완전 슬러그) → 410 Gone
-/blog/2026/  /410  410
+# 2026-10-05: "오픈에어하이"(OpenAI 오타) 슬러그 → 교정 슬러그 301
+/blog/2026-10-04-011-오픈에어하이의-또-다른-안전-관련-퇴사-공개-경고와-함께-이탈-패턴-이어져-인공지능-안전의-위기/  /blog/2026-10-04-011-오픈ai의-또-다른-안전-관련-퇴사-공개-경고와-함께-이탈-패턴-이어져-인공지능-안전의-위기/  301
 
-# 짧은/숫자 슬러그 → 410 Gone (D1 매핑 없음)
-/blog/293  /410  410
-/blog/ai  /410  410
-/blog/openai  /410  410
-/blog/lg  /410  410
-/blog/agi-5  /410  410
-/blog/walkthrough-1-2  /410  410
-/blog/walkthrough-1-1  /410  410
-/blog/openai-1220  /410  410
+# 2026-10-10 (AIK24-FIX-01): 커뮤니티 제거 → 홈으로
+/community    /  301
+/community/   /  301
+/community/*  /  301
+
+# 2026-10-12: 구 파비콘(.ico, 2026-02 구버전) → 신 파비콘으로 리다이렉트
+/favicon.ico  /favicon.png  301

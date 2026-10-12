@@ -45,7 +45,7 @@ from model_router import chat_completion
 from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, is_placeholder_copy, DEEPSEEK_POOL
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
-DB_ID = "bec650ce-f732-46bc-87c0-bd76ed17e42a"
+DB_ID = "3f4cedde-eabc-4d7c-b459-f6abe8733767"
 
 # ============================================
 # 로깅
@@ -92,8 +92,6 @@ def _d1_run(sql):
     import subprocess, json, re
     cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
     env = dict(os.environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)  # auth profile 우선
-    env.pop("CLOUDFLARE_ACCOUNT_ID", None)  # OAuth profile 계정 충돌 방지
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=30, env=env, cwd=PROJECT_DIR)
         if r.returncode != 0:
@@ -125,6 +123,29 @@ def execute_d1(sql):
     results = _d1_run(sql)
     return results is not None
 
+def append_comment_link(news_id, blog_url):
+    """무료 LLM 코멘트에 '👉 자세한 분석' 링크를 덧붙인다 (중복 삽입 방지).
+
+    09:00 브리핑 시점에는 블로그가 아직 없어 링크를 넣을 수 없다.
+    글이 생성된 지금(09:30) D1 코멘트를 한 번 갱신한다.
+    """
+    if not news_id or not blog_url:
+        return False
+    briefing_id = get_today_briefing_id()
+    if not briefing_id:
+        log("  ⚠️ 오늘 브리핑 없음, 코멘트 링크 추가 불가")
+        return False
+    sql = (
+        f"UPDATE briefing_items SET comment = comment || char(10) || "  # char(10)=줄바꿈, SQLite는 \n을 해석 안 한다
+        f"'👉 자세한 분석: {blog_url}' "
+        f"WHERE briefing_id = {briefing_id} AND news_id = {news_id} "
+        f"AND comment NOT LIKE '%👉 자세한 분석%'"
+    )
+    ok = execute_d1(sql)
+    log(f"  🔗 코멘트 분석 링크 추가: {'ok' if ok else '실패'} (news_id={news_id})")
+    return bool(ok)
+
+
 def get_today_briefing_id():
     """오늘 발행된 브리핑 ID 조회 (없으면 None)."""
     today = datetime.now(KST).strftime("%Y-%m-%d")
@@ -134,8 +155,8 @@ def get_today_briefing_id():
         )
         return rows[0]["id"] if rows else None
     except Exception as e:
-        log(f"  브리핑 조회 실패: {e}")
-        return None
+        log(f"  브리핑 조회 실패 (D1 오류, 빈 브리핑 아님): {e}")
+        raise
 
 def update_deep_dive_url(news_id, blog_url):
     """briefing_items의 deep_dive_url을 블로그 URL로 업데이트."""
@@ -167,7 +188,7 @@ def get_briefing_articles():
         return []
     sql = f"""
         SELECT n.id, n.title, n.description, n.source, n.category, n.link,
-               bi.sort_order, bi.comment, bi.deep_dive_url
+               n.v2_tag, bi.sort_order, bi.comment, bi.deep_dive_url
         FROM briefing_items bi
         JOIN news n ON bi.news_id = n.id
         WHERE bi.briefing_id = {briefing_id}
@@ -182,6 +203,26 @@ def get_briefing_articles():
 # ============================================
 def generate_draft(keyword, articles, grade):
     is_deep = len(articles) == 1
+
+    # 무료 LLM 항목은 전용 "모델 심층 분석" 구조로 생성한다 (AIK24-MODELEVAL-01).
+    # 호출부를 바꾸지 않고 여기서 판별한다 — 모든 호출이 generate_draft를 거친다.
+    model_id = None
+    if is_deep and articles[0].get("v2_tag") == "free-llm":
+        try:
+            model_id = model_eval.extract_model_id(articles[0])
+        except Exception as e:
+            log(f"  ⚠️ 모델 ID 판별 예외: {type(e).__name__}: {e}")
+        if not model_id:
+            # AIK24-MODELEVAL-02 1-4: 추출 실패를 조용히 일반 뉴스 분석으로 넘기면
+            # "왜 평가 데이터가 없었는지" 흔적이 남지 않는다. 명시적으로 스킵한다.
+            log(f"  ⚠️ 모델 ID 추출 실패 → 일반 뉴스 분석 폴백 금지, 스킵: '{keyword[:40]}'")
+            return ""
+        out = generate_model_eval_draft(keyword, articles[0], model_id)
+        if out:
+            return out
+        # AIK24-MODELEVAL-02 1-4: 실패 이유를 남기고 스킵한다(일반 뉴스 폴백 금지).
+        log("  ⚠️ 모델 심층 분석 생성 실패 → 스킵 (원인은 위 📊/❌ 로그 참고, 일반 뉴스 분석 폴백 금지, AIK24-BLOGPIPE-FIX-01)")
+        return ""
 
     # 기사 텍스트 조립
     article_lines = []
@@ -204,9 +245,13 @@ def generate_draft(keyword, articles, grade):
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
             f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
+            f"- 제목에 마크다운 백틱(`) 사용 금지\n"
             f"- 본문: 1500자 이상, 소제목(##) 3개 이상 포함\n"
+            f"- [필수] 구체적인 수치·데이터·비교표 중 하나 이상 포함. "
+            f"제목이 '비교'·'점수'·'순위'를 약속하면 반드시 실제 숫자를 넣을 것. "
+            f"숫자가 없으면 해당 표현을 제목에서 빼세요.\n"
             f"- 기사의 배경/의미/전망을 분석, 독자가 쉽게 이해할 수 있도록\n"
-            f"- 마지막에 📌 **요약** 섹션 포함\n"
+            f"- 마지막에 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
@@ -231,7 +276,7 @@ def generate_draft(keyword, articles, grade):
             f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목\n"
             f"- 본문: 2000자 이상, 소제목(##) 3개 이상 포함\n"
             f"- 각 기사의 핵심 내용을 비교/종합하여 트렌드 분석\n"
-            f"- 마지막에 📌 **요약** 섹션 포함\n"
+            f"- 마지막에 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
@@ -262,6 +307,119 @@ def generate_draft(keyword, articles, grade):
     content = cleaned
     log(f"  생성 완료: {len(content)}자")
     return content
+
+# ============================================
+# 모델 심층 분석 생성기 (AIK24-MODELEVAL-01)
+# ============================================
+def _eval_block(model_id):
+    """캐시 우선 모델 평가. 캐시 없으면 지금 평가한다(최대 ~1분).
+
+    AIK24-MODELEVAL-02 1-4: 모든 단계에 명시적 로그를 남긴다.
+    - 캐시 히트 / 미스
+    - 평가 시작 / 완료 / 실패(실패 이유 포함)
+    평가가 조용히 실패하면 "왜 글에 평가 데이터가 없는지" 추적이 불가능하다.
+    """
+    r = model_eval.cache_get(model_id)
+    if r:
+        log(f"  📊 모델 평가 캐시 사용: {r.get('label')} "
+            f"(score={r.get('score')}/{r.get('max_score')}, failed={r.get('failed')})")
+        return r
+    log(f"  📊 모델 평가 실행 시작 (캐시 없음): {model_id}")
+    try:
+        result = model_eval.eval_model_cached(model_id)
+        failed = result.get("failed", 0)
+        max_score = result.get("max_score", 9)
+        if failed >= max_score and max_score > 0:
+            log(f"  ❌ 모델 평가 전 문항 실패 → 블로그 생성 생략: {model_id} "
+                f"(failed={failed}/{max_score}) — 모델 미존재·접근제한·레이트리밋 가능")
+        else:
+            log(f"  ✅ 모델 평가 완료: {result.get('label')} "
+                f"(failed={failed}/{max_score})")
+        return result
+    except Exception as e:
+        log(f"  ❌ 모델 평가 예외 발생: {model_id} — {type(e).__name__}: {e}")
+        return {"failed": 9, "max_score": 9, "label": "평가 실패", "details": []}
+
+
+def generate_model_eval_draft(keyword, article, model_id):
+    """무료 LLM 전용 5단 구조 블로그 글 생성. 실패 시 빈 문자열(폴백)."""
+    ev = _eval_block(model_id)
+    # 전 문항 실패 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
+    if ev.get("failed", 0) >= ev.get("max_score", 9):
+        log(f"  전 문항 실패 → 모델 심층 분석 생략: {model_id}")
+        return ""
+    guide = model_eval.get_access_guide(model_id)
+
+    # 우리 테스트 결과 — 9문항 실측 점수 + 상세 답변 (LLM이 지어내지 못하게 원문 주입)
+    FAIL_SOURCES = ("http_error", "exception", "empty", "no_choices")
+    q_lines = []
+    for d in ev.get("details", []):
+        ans = (d.get("answer") or "").replace("\n", " ")[:220]
+        if d["source"] in FAIL_SOURCES:
+            mark = "응답 실패(레이트리밋 등)"
+        else:
+            mark = "정답" if d["score"] else "오답"
+        q_lines.append(f"Q{d['idx']} [{d['cat']}] {mark} — 모델 답변: {ans or '(응답 없음)'}")
+    test_block = "\n".join(q_lines) or "(평가 결과 없음)"
+
+    system_prompt = (
+        "당신은 AI 모델을 정직하게 평가하는 한국어 테크 블로거입니다. "
+        "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
+    )
+    user_prompt = (
+        f"무료 LLM '{model_id}'에 대한 심층 분석 블로그 글을 작성해주세요.\n\n"
+        f"## 반드시 지킬 구조 (5단, 이 순서 그대로)\n"
+        f"## 1. 외부 벤치마크에서 알려진 성능\n"
+        f"- LMArena(arena.ai) Elo, Artificial Analysis의 지표 등 외부 벤치마크 언급\n"
+        f"- [절대 규칙] **알고 있는 수치만 쓰세요. 기억이 없거나 확신이 없으면 수치를 지어내지 말고 "
+        f"'외부 벤치마크 수치는 별도 확인이 필요합니다'라고 쓰세요.** 없는 벤치마크 이름을 지어내지 마세요.\n\n"
+        f"## 2. 우리 테스트 결과 (9문항 실측)\n"
+        f"- 아래는 AI코리아24가 직접 API로 실측한 결과입니다. **이 데이터는 그대로 인용하세요. "
+        f"점수를 바꾸거나 해석을 지어내지 마세요.**\n"
+        f"- 총점: {ev.get('label', '').replace('AI 추정: ', '')}\n"
+        f"- 응답 실패 문항: {ev.get('failed', 0)}/{ev.get('max_score', 9)}건\n"
+        f"- 문항 구성: 코딩 실용성, 맥락 정리, 압축 효율, 한국어 품질, 추론\n"
+        f"```\n{test_block}\n```\n\n"
+        f"## 3. 이 결과를 어떻게 읽어야 하는가 (신뢰 메시지)\n"
+        f"- 9문항은 절대 벤치마크가 아니므로 '이 수치만으로 우열을 단정할 수 없다'고 명시\n"
+        f"- 무료 티어의 응답 실패(rate limit)가 점수에 영향을 준다는 점도 정직하게 언급\n\n"
+        f"## 4. 써보세요 (접근 가이드)\n"
+        f"- 다음 문장을 자연스럽게 포함하세요: {guide}\n"
+        f"- OpenCode 등 개발 도구에서 프로바이더를 OpenRouter로 바꾸는 절차를 간결하게 안내\n\n"
+        f"## 5. 누가 쓰면 좋은가\n"
+        f"- 용도별(학습용/사소한 자동화/프로토타이핑/업무 전문 작업)로 이 모델이 맞는지 구분\n\n"
+        f"## 톤 규칙 (기존 블로그 규칙과 동일)\n"
+        f"- 본문 1800자 이상, 소제목(##) 5개 이상\n"
+        f"- 순한국어, ~습니다/~입니다 정중 비즈니스 톤. 반말('~다/~했다/~임') 절대 금지\n"
+        f"- 중국어(한자) 사용 금지\n"
+        f"- **본문 첫 단락에서 '이번 글에서는', '살펴보겠습니다', '다루겠습니다' 등 메타 도입문 절대 금지.** "
+        f"모델의 실측 결과처럼 실질 내용으로 바로 시작할 것\n"
+        f"- 마지막에 **요약** 섹션 포함\n\n"
+        f"## 참고 기사\n"
+        f"제목: {article.get('title', '')}\n"
+        f"출처: {article.get('source', '')}\n"
+        f"내용: {(article.get('description') or '')[:400]}\n\n"
+        f"## 출력 형식\n"
+        f"TITLE: [SEO에 최적화된 제목 — 모델 ID와 실측 점수를 포함]\n"
+        f"---\n"
+        f"[마크다운 본문]"
+    )
+
+    content = chat_completion(
+        messages=[{"role": "user", "content": user_prompt}],
+        system_prompt=system_prompt,
+        max_tokens=4000,
+        temperature=0.7,
+    )
+    if not content:
+        log("  ❌ 모델 심층 분석 생성 실패")
+        return ""
+    cleaned = remove_chinese(content)
+    if cleaned != content:
+        log(f"  ⚠️ 중국어 문자 {len(content) - len(cleaned)}개 제거됨")
+    log(f"  생성 완료(모델 심층 분석): {len(cleaned)}자")
+    return cleaned
+
 
 # ============================================
 # 파일 번호 결정
@@ -323,6 +481,11 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
                         time.sleep(2)
                 else:
                     log(f"  ⚠️ deep_dive_url 연결 최종 실패 (news_id={news_id}, 3회 모두 실패)")
+    # 무료 LLM 항목은 코멘트에 분석 링크를 직접 박아넣는다 (프론트 deep-dive 카드와 별개)
+    if articles and filepath:
+        for art in articles:
+            if art.get("v2_tag") == "free-llm" and art.get("id"):
+                append_comment_link(art["id"], f"https://aikorea24.kr/blog/{slug}/")
     return filepath, seo_title
 
 # ============================================
@@ -451,40 +614,39 @@ def _extract_first_sentence(text, max_len=300):
     return text[:max_len].strip()
 
 
+def _parse_title_body(gpt_output):
+    """LLM 출력에서 TITLE 라인(및 바로 뒤 구분선)만 제거 → (title, content).
+
+    주의: LLM이 본문 중간에 `---` 구분선을 넣는 경우가 있어 split("---")로
+    자르면 본문 전체가 유실된다. TITLE 라인만 정규식으로 제거한다.
+    """
+    parts = gpt_output.split("TITLE:", 1)
+    title = parts[1].split("\n", 1)[0].strip() if len(parts) > 1 else ""
+    # 제목의 마크다운 백틱 제거 (제목에 `code` 형식 노출 방지)
+    title = re.sub(r"`([^`]+)`", r"\1", title)
+    body = re.sub(
+        r"\ATITLE:[^\n]*\n(?:[ \t]*-{3,}[ \t]*\n)?", "", gpt_output, count=1
+    ).strip()
+    return title, body
+
+
 def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
     """GPT 출력 파싱 → .md 파일 저장 (내부)."""
     # TITLE: ... / --- / 본문
     seo_title = keyword
     content = gpt_output
     if "TITLE:" in gpt_output:
-        parts = gpt_output.split("TITLE:", 1)
-        title_line = parts[1].split("\n", 1)[0].strip()
+        title_line, content = _parse_title_body(gpt_output)
         if title_line:
             seo_title = title_line
-        if "---" in gpt_output:
-            body_parts = gpt_output.split("---", 1)
-            if len(body_parts) > 1:
-                content = body_parts[1].strip()
-        else:
-            # --- 구분자 없으면 TITLE: 라인만 본문에서 제거
-            content = re.sub(r"^TITLE:\s*[^\n]+\n*", "", content).strip()
+        # 본문 길이 검증: 1000자 미만이면 저장 거부 (품질 게이트)
+        if len(content) < 1000:
+            logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — 저장 거부")
+            return None, None
 
-    # 브리핑 페이지 링크 주입 (첫 문단 뒤) — 체류시간 확보
-    if articles:
-        briefing_urls = []
-        for art in articles:
-            briefing_url = art.get("_briefing_url", "")
-            if briefing_url:
-                briefing_urls.append(briefing_url)
-        if briefing_urls:
-            source_url = briefing_urls[0]
-            source_block = f"\n\n원문기사는 아래의 링크를 통해 확인할 수 있습니다. [기사원문보기]({source_url})"
-            # 첫 문단 뒤에 삽입 (빈 줄 기준 분리)
-            parts = content.split("\n\n", 1)
-            if len(parts) > 1:
-                content = parts[0] + source_block + "\n\n" + parts[1]
-            else:
-                content = content + source_block
+    # AIK24-RENEWAL-01 C-2: 브리핑 원문 링크 주입 제거.
+    # 브리핑 페이지(D-1 폐기)가 더 이상 생성되지 않아 /briefing/{date}/ 가 302로 죽는다.
+    # 577개 기존 글은 대상 페이지가 살아 있어 유지하고, 새 글에는 주입하지 않는다.
 
     # title에서 따옴표 이스케이프 (YAML frontmatter 안전성)
     seo_title_escaped = seo_title.replace('"', "'")
@@ -569,7 +731,7 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
         log(f"  ⚠️ image 필드 저장 실패: {e}")
 
 from pipeline.infra.telegram import send_telegram
-
+import model_eval
 
 # ============================================
 # 메인
@@ -581,7 +743,7 @@ def main():
     print()
 
     # 1. 오늘 브리핑 기사 조회
-    log("[1/5] 브리핑 기사 조회 중...")
+    log("[1/4] 브리핑 기사 조회 중...")
     try:
         articles = get_briefing_articles()
     except Exception as e:
@@ -595,8 +757,8 @@ def main():
         return
     print()
 
-    # 2. 블로그 글 생성 (브리핑 기사별 1개씩)
-    log("[2/5] 블로그 초안 생성 중...")
+    # 2. 무료 모델 블로그 글 생성 (브리핑의 free-llm 항목만)
+    log("[2/4] 무료 모델 블로그 초안 생성 중...")
     file_num = next_file_number(today_str)
     created = []
 
@@ -606,6 +768,11 @@ def main():
         link = art.get("link", "")
         deep_dive = art.get("deep_dive_url")
         sort_order = art.get("sort_order", i)
+
+        # AIK24-BLOGPIPE-FIX-01: 무료 모델 항목만 블로그 생성 (뉴스 분석 블로그 중단)
+        if art.get("v2_tag") != "free-llm":
+            log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 무료 모델 아님, 스킵")
+            continue
 
         if deep_dive:
             log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 이미 연결됨, 스킵")
@@ -620,6 +787,9 @@ def main():
                 continue
 
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
+            if not filepath:
+                log(f"    ❌ 품질 미달로 저장 거부: '{title[:40]}'")
+                continue
             created.append((filepath, seo_title or title, sort_order, 1))
             file_num += 1
 
@@ -712,7 +882,7 @@ def main():
     print()
 
     # 3. 텔레그램 알림
-    log("[3/5] 텔레그램 알림...")
+    log("[3/4] 텔레그램 알림...")
     if generated:
         msg_lines = [f"🤖 <b>[{today_str}] 블로그 발행 완료</b>"]
         msg_lines.append(f"\n📝 생성: {len(generated)}건")
@@ -834,8 +1004,6 @@ def main():
                            "--project-name", "aikorea24", "--branch", "main", "--commit-dirty=true"]
 
                 deploy_env = dict(os.environ)
-                deploy_env.pop("CLOUDFLARE_API_TOKEN", None)  # auth profile 우선
-
                 deploy_result = subprocess.run(
                     cmd, capture_output=True, text=True, timeout=180,
                     cwd=PROJECT_DIR, env=deploy_env

@@ -1,43 +1,161 @@
 ---
+export const prerender = false;
+import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
 
+// AIK24-NEWS-01: /news/ v2 개편
+//   상단 "오늘의 브리핑"  — 최신 published 브리핑(= 이메일 발송분과 동일 아이템)
+//   하단 "전체 소식"     — v2_pass = 1 통과분만 + 태그 뱃지
+//
+// ponytail: v2_pass 부분 인덱스(idx_news_v2)로 18k 행 스캔을 77 행으로 줄인다.
+//          category NOT IN 필터는 인덱스 밖이라 행 수가 적어 무시 가능.
+
+let briefing: any = null;
+let briefingItems: any[] = [];
 let newsList: any[] = [];
+
+const TAG_LABELS: Record<string, string> = {
+  'free-llm': '무료 LLM',
+  opensource: '오픈소스',
+  tool: '실전 도구',
+};
+
+// AIK24-RENEWAL-01 C-3: RSS description 에 들어있는 HTML 태그를 벗긴다.
+// Astro 는 {expr} 을 이스케이프해서 '<p>If you...' 가 글자 그대로 노출됐다.
+// set:html 로 렌더하지 않고 태그만 제거한다 — 원문은 외부 피드라 신뢰 불가.
+function stripTags(s: any) {
+  if (!s) return '';
+  return String(s)
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function formatDate(dateStr: string) {
+  const d = new Date(dateStr.split('-').slice(0, 3).join('-'));
+  const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${d.getMonth() + 1}월 ${d.getDate()}일 (${weekdays[d.getDay()]})`;
+}
+
 try {
-  const runtime = (Astro.locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
   if (db) {
+    briefing = await db.prepare(
+      "SELECT * FROM briefings WHERE status = 'published' ORDER BY id DESC LIMIT 1"
+    ).first();
+
+    if (briefing) {
+      const { results } = await db.prepare(
+        `SELECT bi.sort_order, bi.comment,
+                n.id as news_id, n.title, n.link, n.description, n.source, n.pub_date
+         FROM briefing_items bi
+         JOIN news n ON bi.news_id = n.id
+         WHERE bi.briefing_id = ?
+         ORDER BY bi.sort_order`
+      ).bind(briefing.id).all();
+      briefingItems = results || [];
+    }
+
+    // 전체 소식 아카이브 — v2 통과분만. 부분 인덱스로 seek 하므로 상한을 넉넉히 둔다.
+    // AIK24-D1-GUARD-01: 300 → 100. 아래 JS 가 소스별 5건 + 전체 50건 상한을 걸고 있어
+    // 실제 렌더는 100건으로도 동일하다(현재 v2_pass=1 은 77건). rows_read 상한만 낮아진다.
+    const ARCHIVE_LIMIT = 100;
     const result = await db.prepare(
-      `SELECT * FROM (
-        SELECT *, ROW_NUMBER() OVER (PARTITION BY source ORDER BY created_at DESC) as rn
-        FROM news WHERE category NOT IN ('senior', 'benefit')
-      ) WHERE rn <= 5 ORDER BY created_at DESC LIMIT 50`
-    ).all();
-    newsList = result.results || [];
+      `SELECT id, title, link, description, source, pub_date, created_at, v2_tag
+       FROM news
+       WHERE v2_pass = 1 AND category NOT IN ('senior','benefit')
+       ORDER BY created_at DESC, id DESC
+       LIMIT ?`
+    ).bind(ARCHIVE_LIMIT).all();
+
+    // 소스별 최대 5건 제한 (특정 소스 독점 방지) — JS에서 적용해 rows_read 를 늘리지 않는다.
+    const perSource: Record<string, number> = {};
+    const picked: any[] = [];
+    for (const n of (result.results || [])) {
+      const c = perSource[n.source] || 0;
+      if (c >= 5) continue;
+      perSource[n.source] = c + 1;
+      picked.push(n);
+      if (picked.length >= 50) break;
+    }
+    newsList = picked;
   }
 } catch (e) {
   console.error('News fetch error:', e);
 }
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=300');
 ---
-<Layout title="AI 뉴스 - AI코리아24" description="AI 관련 최신 뉴스와 지원사업 소식">
-  <div class="bg-white dark:bg-[#0A0E1A] text-gray-900 dark:text-white min-h-screen transition-colors">
+<Layout title="AI 뉴스 - AI코리아24" description="한국인 초보자가 오늘 무료로 쓸 수 있는 AI 소식만 골랐습니다">
+  <div class="bg-white text-[#111111] min-h-screen">
     <div class="max-w-4xl mx-auto px-4 py-12">
-      <h1 class="text-3xl font-bold mb-8">AI 뉴스</h1>
-      {newsList.length === 0 ? (
-        <p class="text-gray-500">아직 수집된 뉴스가 없습니다.</p>
-      ) : (
-        <div class="space-y-4">
-          {newsList.map((n: any) => (
-            <a href={n.link} target="_blank" rel="noopener" class="block bg-white/[0.05] border border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="text-[10px] bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded-full">{n.source}</span>
-                <span class="text-xs text-gray-600 dark:text-gray-400">{n.pub_date || n.created_at?.slice(0, 10)}</span>
-              </div>
-              <h2 class="font-medium text-gray-900 dark:text-white mb-1">{n.title}</h2>
-              <p class="text-sm text-gray-500 line-clamp-2">{n.description}</p>
-            </a>
-          ))}
-        </div>
+
+      <h1 class="text-3xl md:text-4xl font-bold mb-3 text-[#111111]" style="border-left: 6px solid #E63B2E; padding-left: 24px;">AI 뉴스</h1>
+      <p class="text-gray-600 mb-12 ml-8">한국인 초보자가 오늘 무료로 쓸 수 있는 소식만 골랐습니다.</p>
+
+      {/* 오늘의 브리핑 — 이메일 발송분과 동일 아이템 */}
+      {briefing && briefingItems.length > 0 && (
+        <section class="mb-16">
+          <div class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-full px-4 py-1.5 mb-4">
+            <span class="w-2 h-2 bg-[#E63B2E] rounded-full"></span>
+            <span class="text-sm text-gray-600">오늘의 AI 브리핑</span>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold mb-6 text-[#111111]" style="border-left: 4px solid #E63B2E; padding-left: 12px;">
+            {formatDate(briefing.date)}
+          </h2>
+          <div class="space-y-6">
+            {briefingItems.map((item: any, idx: number) => (
+              <article class="group bg-white border border-gray-200 rounded-xl p-6 hover:border-[#E63B2E] transition-all duration-300">
+                <div class="flex items-start gap-4">
+                  <span class="flex-shrink-0 w-8 h-8 bg-[#111111] rounded-lg flex items-center justify-center text-white font-bold text-sm">{idx + 1}</span>
+                  <div class="flex-1 min-w-0">
+                    <a href={`/briefing/${briefing.date}/#item-${idx + 1}`} class="block">
+                      <h3 class="text-lg font-semibold text-[#111111] mb-2 group-hover:text-[#E63B2E] transition-colors leading-snug">{item.title}</h3>
+                    </a>
+                    {item.comment && <p class="text-base text-gray-700 mb-3 leading-relaxed">{item.comment}</p>}
+                    <a href={item.link} target="_blank" rel="noopener" class="text-sm text-[#E63B2E] hover:underline">원문 보기 →</a>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
       )}
+
+      {/* 전체 소식 아카이브 — v2 통과분만 */}
+      <section>
+        <h2 class="text-2xl md:text-3xl font-bold mb-6 text-[#111111]" style="border-left: 4px solid #E63B2E; padding-left: 12px;">전체 소식</h2>
+        {newsList.length === 0 ? (
+          <div class="text-center py-12">
+            <img src="/mascot-tiger.png" alt="AI코리아24 마스코트" width="120" height="120"
+              class="mx-auto mb-4" loading="lazy" decoding="async"
+              onerror="this.onerror=null;this.src='/logo-final.webp';" />
+            <p class="text-gray-500">아직 수집된 뉴스가 없습니다.</p>
+          </div>
+        ) : (
+          <div class="space-y-4">
+            {newsList.map((n: any) => (
+              <a href={n.link} target="_blank" rel="noopener" class="block bg-white border border-gray-200 rounded-xl p-5 hover:border-[#E63B2E] transition-all">
+                <div class="flex items-center gap-2 mb-2 flex-wrap">
+                  <span class="text-[10px] bg-[#E63B2E] text-white px-2 py-0.5 rounded-full">{TAG_LABELS[n.v2_tag] || '실전 도구'}</span>
+                  <span class="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full">{n.source}</span>
+                  <span class="text-xs text-gray-600">{(n.pub_date || n.created_at || '').slice(0, 10)}</span>
+                </div>
+                <h3 class="font-medium text-[#111111] mb-1 leading-snug">{n.title}</h3>
+                <p class="text-sm text-gray-500 line-clamp-2">{stripTags(n.description)}</p>
+              </a>
+            ))}
+          </div>
+        )}
+      </section>
+
     </div>
   </div>
 </Layout>

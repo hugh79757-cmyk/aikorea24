@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 99달러"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://www.aiogeoprotocol.com"
 useCases: ["AI 검색 최적화", "경쟁사 비교 분석", "기술적 오류 수정"]
 tags: ["SEO", "AI검색", "웹최적화", "데이터분석"]
 featured: false

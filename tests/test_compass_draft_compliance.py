@@ -97,12 +97,25 @@ class TestToneFormal:
         cards_json = json.dumps({"cards": FORMAL_CARDS}, ensure_ascii=False)
         mock_chat, _ = _make_mock_chat(cards_json)
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_intro_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_intro_rotation", lambda c: None
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[0],
+        )
 
         result = write_compass_article(sample_pitch, sample_articles)
         assert result is not None
         _, output = result
         all_text = " ".join(output["cards"])
-        # At least 3 cards should end with formal ~습니다/~합니다/~입니다/~입니다/~でした/~ㅂ니다
+        # At least 3 cards should end with formal ~습니다/~합니다/~입니다/~입니다/~였습니다/~ㅂ니다
         formal_endings = re.findall(r'[가-힣]+(?:습니다|합니다|입니다|였습니다|하겠습니다|ㅂ니다)', all_text)
         assert len(formal_endings) >= 3, f"공식 종결어미 부족: {len(formal_endings)}개"
 
@@ -118,6 +131,19 @@ class TestNoLeak:
         cards_json = json.dumps({"cards": FORMAL_CARDS}, ensure_ascii=False)
         mock_chat, _ = _make_mock_chat(cards_json)
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_intro_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_intro_rotation", lambda c: None
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[0],
+        )
 
         result = write_compass_article(sample_pitch, sample_articles)
         assert result is not None
@@ -141,6 +167,19 @@ class TestNoLeak:
         cards_json = json.dumps({"cards": LEAKED_CARDS}, ensure_ascii=False)
         mock_chat, _ = _make_mock_chat(cards_json)
         monkeypatch.setattr(v3.model_router, "chat_completion", mock_chat)
+        monkeypatch.setattr(
+            "pipeline.threads.compass._load_intro_rotation", lambda: 0
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._save_intro_rotation", lambda c: None
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass._compass_cache", {}
+        )
+        monkeypatch.setattr(
+            "pipeline.threads.compass.weighted_pick",
+            lambda items, recent, exclude_count=2: items[0],
+        )
 
         result = write_compass_article(sample_pitch, sample_articles)
         assert result is None, "누출된 카드가 통과하면 안 됨"

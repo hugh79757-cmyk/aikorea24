@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://www.edgee.ai"
 useCases: ["코드 최적화", "API 호출 비용 절감", "코드 리뷰"]
 tags: ["코드 압축", "비용 절감", "개발 도구"]
 featured: false

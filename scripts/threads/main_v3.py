@@ -136,7 +136,7 @@ def run_v3(dry_run=False, format_choice="D"):
     retry_delays = [60, 60, 60, 60]  # 전부 1분
     failed_article_ids = failed_articles.load_failed_articles()
     _fmt = str(format_choice or "D").strip() or "D"
-    if _fmt not in ("D", "contrast"):
+    if _fmt not in ("D", "contrast", "compass"):
         _fmt = "D"
     log(f'  📌 format: {_fmt}')
 
@@ -318,7 +318,7 @@ def run_v3(dry_run=False, format_choice="D"):
         # 3. 쓰레드 작성
         from v3.writer_v3 import write_thread, save_draft
         log('  쓰레드 작성...')
-        result = write_thread(pitch, articles)
+        result = write_thread(pitch, articles, format_choice=_fmt)
 
         if not result or not result.get('cards'):
             log(f' ❌ 쓰레드 작성 실패 (시도 {attempt}/{max_retries})')
@@ -513,9 +513,13 @@ def run_v3(dry_run=False, format_choice="D"):
 def main():
     # 단일 스케줄러 (launchd) — --daemon 모드 제거됨 (THR-01)
     import argparse
+    # 발행 비활성화(AIK24-THREADS-01): 모든 send_telegram보다 먼저 반환 → 알림 없음
+    if os.environ.get('THREADS_PUBLISH_ENABLED', '1') == '0':
+        log('Threads 발행 비활성화 상태 — 조용히 종료')
+        return
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true', help='발행 없이 글만 생성')
-    parser.add_argument('--format', choices=['D', 'contrast'], default='D', help='Threads format: D(기본 5카드 브리핑) vs contrast(대비 스토리텔링 7→5)')
+    parser.add_argument('--format', choices=['D', 'contrast', 'compass'], default='D', help='Threads format: D(기본 5카드 브리핑) vs contrast(대비 스토리텔링 7→5) vs compass(Compass 2-pass)')
     args = parser.parse_args()
 
     run_v3(dry_run=args.dry_run, format_choice=args.format)

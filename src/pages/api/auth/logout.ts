@@ -1,6 +1,8 @@
+export const prerender = false;
+
 import type { APIRoute } from 'astro';
 
 export const GET: APIRoute = async ({ cookies, redirect }) => {
-  cookies.delete('session', { path: '/' });
+  cookies.delete('session', { path: '/', domain: import.meta.env.PROD ? '.aikorea24.kr' : undefined, secure: import.meta.env.PROD, sameSite: 'lax' });
   return redirect('/');
 };

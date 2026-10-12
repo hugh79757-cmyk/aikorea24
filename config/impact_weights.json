@@ -4,6 +4,33 @@
     "krw": { "1조_plus": 25, "1000억_1조": 15, "100억_1000억": 8, "lt_100억": 0 },
     "_comment_fx": "fx_assumption_usd_krw는 참고용 only. 실제 환산에는 사용하지 않음. KRW/USD 각각 자체 구간 맵 사용."
   },
+  "free_usability": {
+    "_comment": "AIK24-PIPE-02 v2: '한국인 초보자가 오늘 무료로 쓸 수 있는 것인가?' 기준",
+    "cap": 25,
+    "keywords": {
+      "무료 티어": 10, "free tier": 10, "무료로": 8, "무료": 8, "무료 사용": 8,
+      "무료 제공": 8, "opencode": 8, "ollama": 8, "open weights": 6,
+      "open source": 6, "open-source": 6, "opensource": 6, "무료로 쓸": 8,
+      "api 가격 인하": 8, "가격 인하": 6, "가격을 내지": 6, "free of charge": 6,
+      "without cost": 6, "무료 쿼터": 8, "local": 4, "로컬 실행": 6, "로컬에서": 4,
+      "huggingface": 4, "hugging face": 4, "github": 3, "tutorial": 5, "튜토리얼": 5,
+      "cookbook": 5, "쿡북": 5, "비용 없이": 8, "credit card": 3
+    }
+  },
+  "excluded_topic": {
+    "_comment": "AIK24-PIPE-02 v2: 펀딩·기업 전략은 확정 제외. 출시성은 무료 신호 없을 때만 제외(오탐 방지)",
+    "penalty": -100,
+    "hard_exclude": [
+      "funding round", "seed round", "series a", "series b", "series c",
+      "ipo filing", "goes public", "valuation of", "acquires", "acquisition of",
+      "merger", "raises $", "raised $", "투자 유치", "인수 완료", "인수합"
+    ],
+    "launch_soft": [
+      "press release", "announced a partnership", "strategic partnership",
+      "enterprise deal", "b2b deal", "unveils", "just launched",
+      "출시했습니다", "공개했습니다", "발표했습니다", "런칭"
+    ]
+  },
   "entity_tier": { "weight": 20, "tier1": 20, "tier2": 10, "tier3": 0 },
   "freshness": { "weight": 15, "lt_1h": 15, "lt_3h": 10, "lt_6h": 5, "gt_6h": 0 },
   "source_authority": {

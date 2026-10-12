@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "사용량 기반"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://claude.ai/directory/elevenlabs"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI음성", "Claude", "ElevenLabs", "텍스트음성변환", "업무자동화"]
 featured: false

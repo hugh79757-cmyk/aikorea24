@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "사용량 기반"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-3-7-flash/"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["구글AI", "코딩보조", "데이터분석", "업무자동화"]
 featured: false

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://tovel.ai/"
 useCases: ["회의록 정리", "일정 관리", "고객 관리"]
 tags: ["회의록", "업무자동화", "생산성"]
 featured: false

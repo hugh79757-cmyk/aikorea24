@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 100,000원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://timbal.ai/"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["AI 플랫폼", "업무 자동화", "기업 솔루션"]
 featured: false

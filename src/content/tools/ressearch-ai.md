@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://ressearchai.app/"
 useCases: ["논문 자료 조사", "데이터 분석", "학술 보고서 작성"]
 tags: ["연구", "데이터분석", "논문작성", "과학기술"]
 featured: false

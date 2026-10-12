@@ -9,6 +9,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
+# v1 선정기 테스트 아카이브 — v2(선정기 v2)로 대체되어 더 이상 수집하지 않는다.
+# (구 심볼 _compute_light_scores 를 임포트해 collection error 를 유발했음)
+collect_ignore = ["archive_v1_20261011"]
+
 
 @pytest.fixture
 def sample_weights():

@@ -1,3 +1,6 @@
+export const prerender = false;
+
+import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
 
@@ -15,8 +18,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ error: 'DB not available' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
 
   try {
@@ -68,8 +70,7 @@ export const DELETE: APIRoute = async ({ request, locals, cookies }) => {
     return new Response(JSON.stringify({ ok: false, error: 'Unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
+  const db = env.DB;
   if (!db) return new Response(JSON.stringify({ ok: false, error: 'no db' }), { headers: { 'Content-Type': 'application/json' } });
 
   try {

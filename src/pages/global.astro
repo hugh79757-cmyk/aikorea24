@@ -1,10 +1,11 @@
 ---
+import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
 
 let globalList: any[] = [];
 try {
-  const runtime = (Astro.locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
   if (db) {
     const result = await db.prepare(
       `SELECT id, title, link, description, source, category, pub_date, original_title, country
@@ -19,10 +20,10 @@ try {
 
 function getSourceColor(source: string): string {
   const map: Record<string, string> = {
-    'TechCrunch AI': 'text-green-700 dark:text-green-400',
-    'MIT Tech Review': 'text-purple-700 dark:text-purple-400',
+    'TechCrunch AI': 'text-[#111111] dark:text-[#555555]',
+    'MIT Tech Review': 'text-[#111111] dark:text-[#555555]',
     'SCMP China Tech': 'text-red-700 dark:text-red-400',
-    'Hacker News': 'text-orange-700 dark:text-orange-400',
+    'Hacker News': 'text-[#111111] dark:text-[#555555]',
   };
   return map[source] || 'text-gray-600 dark:text-gray-400';
 }
@@ -41,13 +42,16 @@ function getFlag(country: string): string {
       </div>
       <p class="text-gray-500 mb-8">TechCrunch, MIT Technology Review, SCMP, Hacker News 등 해외 주요 AI 매체의 뉴스를 한국어로 번역하여 제공합니다.</p>
       {globalList.length === 0 ? (
-        <p class="text-gray-500">아직 수집된 글로벌 뉴스가 없습니다.</p>
+        <div class="text-center py-12">
+          <img src="/mascot-tiger.png" alt="AI코리아24 마스코트" width="120" height="120" class="mx-auto mb-4" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/logo-final.webp';" />
+          <p class="text-gray-500">아직 수집된 글로벌 뉴스가 없습니다.</p>
+        </div>
       ) : (
         <div class="space-y-4">
           {globalList.map((n: any) => (
-            <a href={n.link} target="_blank" rel="noopener" class="block bg-gray-100 dark:bg-white/[0.05] border border-gray-200 dark:border-white/[0.08] rounded-xl p-5 hover:bg-white/[0.1] hover:border-white/[0.2] transition-all">
+            <a href={n.link} target="_blank" rel="noopener" class="block bg-gray-100  border border-gray-200  rounded-xl p-5 hover:bg-gray-100 hover:border-[#e5e5e5] transition-all">
               <div class="flex items-center gap-2 mb-2">
-                <span class={`text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-500/10 ${getSourceColor(n.source)}`}>{getFlag(n.country)} {n.source}</span>
+                <span class={`text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#333333]/10 ${getSourceColor(n.source)}`}>{getFlag(n.country)} {n.source}</span>
                 <span class="text-xs text-gray-600 dark:text-gray-400">{n.pub_date}</span>
               </div>
               <h2 class="font-medium text-gray-900 dark:text-white mb-1">{n.title}</h2>

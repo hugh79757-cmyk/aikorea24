@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 15,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://v3.airbuddy.app/"
 useCases: ["기기 연결 관리", "오디오 제어", "워크플로우 최적화"]
 tags: ["맥", "애플기기", "생산성", "유틸리티", "데스크테리어"]
 featured: false

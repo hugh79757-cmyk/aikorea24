@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 40,000원"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://www.ninjo.ai/"
 useCases: ["고객 응대 자동화", "판매 전략 수립", "영업 이메일 작성"]
 tags: ["영업 자동화", "크리에이터", "CRM", "수익화"]
 featured: false

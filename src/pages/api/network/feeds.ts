@@ -1,10 +1,11 @@
+import { env } from 'cloudflare:workers';
 export const prerender = false;
 
 const ALLOWED_ORIGIN = 'https://aikorea24.kr';
 
 export async function GET({ locals, request }: { locals: any; request: Request }) {
-  const runtime = (locals as any).runtime;
-  const db = runtime?.env?.DB;
+
+  const db = env.DB;
 
   const origin = new URL(request.url).origin;
   const allowedOrigin = origin === ALLOWED_ORIGIN ? ALLOWED_ORIGIN : ALLOWED_ORIGIN;

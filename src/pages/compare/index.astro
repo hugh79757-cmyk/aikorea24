@@ -50,14 +50,14 @@ const toolsJson = JSON.stringify(sorted.map(t => ({
     <div class="mb-10">
       <h2 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">인기 비교 조합</h2>
       <div class="flex flex-wrap gap-2">
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="chatgpt" data-b="claude">ChatGPT vs Claude</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="midjourney" data-b="dalle">Midjourney vs DALL-E</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="cursor" data-b="github-copilot">Cursor vs Copilot</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="deepl" data-b="papago">DeepL vs 파파고</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="lovable" data-b="bolt">Lovable vs Bolt</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="capcut" data-b="vrew">CapCut vs Vrew</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="suno" data-b="udio">Suno vs Udio</button>
-        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-100 dark:hover:bg-blue-900 transition-colors" data-a="perplexity" data-b="genspark">Perplexity vs Genspark</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="chatgpt" data-b="claude">ChatGPT vs Claude</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="midjourney" data-b="dalle">Midjourney vs DALL-E</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="cursor" data-b="github-copilot">Cursor vs Copilot</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="deepl" data-b="papago">DeepL vs 파파고</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="lovable" data-b="bolt">Lovable vs Bolt</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="capcut" data-b="vrew">CapCut vs Vrew</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="suno" data-b="udio">Suno vs Udio</button>
+        <button class="pop-btn text-xs px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#111111] transition-colors" data-a="perplexity" data-b="genspark">Perplexity vs Genspark</button>
       </div>
     </div>
 
@@ -76,8 +76,8 @@ const toolsJson = JSON.stringify(sorted.map(t => ({
         </table>
       </div>
       <div class="mt-6 flex gap-4">
-        <a id="link-a" href="#" class="flex-1 text-center py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">도구 A 상세보기</a>
-        <a id="link-b" href="#" class="flex-1 text-center py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors font-medium">도구 B 상세보기</a>
+        <a id="link-a" href="#" class="flex-1 text-center py-3 bg-[#111111] text-white rounded-xl hover:bg-[#111111] transition-colors font-medium">도구 A 상세보기</a>
+        <a id="link-b" href="#" class="flex-1 text-center py-3 bg-[#111111] text-white rounded-xl hover:bg-[#111111] transition-colors font-medium">도구 B 상세보기</a>
       </div>
     </div>
 
@@ -101,10 +101,9 @@ const toolsJson = JSON.stringify(sorted.map(t => ({
     </section>
 
     <nav class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-4">
-      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline">🛠️ 전체 도구 목록</a>
-      <a href="/tools/finder/" class="text-blue-600 dark:text-blue-400 hover:underline">🎯 도구 추천 퀴즈</a>
-      <a href="/glossary/" class="text-blue-600 dark:text-blue-400 hover:underline">🔤 AI 용어사전</a>
-      <a href="/chronicle/" class="text-blue-600 dark:text-blue-400 hover:underline">📅 AI 타임라인</a>
+      <a href="/tools/" class="text-[#111111] dark:text-[#555555] hover:underline">🛠️ 전체 도구 목록</a>
+      <a href="/tools/finder/" class="text-[#111111] dark:text-[#555555] hover:underline">🎯 도구 추천 퀴즈</a>
+      <a href="/chronicle/" class="text-[#111111] dark:text-[#555555] hover:underline">📅 AI 타임라인</a>
     </nav>
   </main>
 

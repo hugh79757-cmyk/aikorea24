@@ -1,0 +1,193 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// 유료 강의 틀 (AIK24-RENEWAL-01 §7-3). 선판매용 — 강의 개요·커리큘럼 자리·관심 등록 폼.
+// 결제(토스페이먼츠)는 가맹 승인 후 PUBLIC_TOSS_CLIENT_KEY만 넣으면 동작한다.
+// English course page is out of scope (지시서 §7-3).
+
+const tossClientKey = import.meta.env.PUBLIC_TOSS_CLIENT_KEY ?? '';
+const previewPrice = '19,000';
+---
+
+<Layout
+  title="무료 AI 실습 강의 — AI코리아24 유료 강의 사전등록"
+  description="한국인 초보자를 위한 1~2만원대 미니 강의 선판매. 관심 등록 10명이 모이면 제작을 시작합니다."
+>
+  <main class="mx-auto max-w-3xl px-4 py-12">
+    <h1 class="section-title">AI 실습 미니 강의 — 사전등록</h1>
+
+    <p class="mt-6 text-base leading-relaxed text-gray-700">
+      AI를 "알아는" 수준에서 "직접 써먹는" 수준으로. 영문Docs 대신 한국어로, 유료 도구 대신
+      무료 도구만으로 따라할 수 있는 강의를 준비하고 있습니다.
+    </p>
+
+    <section class="mt-10">
+      <h2 class="section-title text-xl">이런 분을 위한 강의입니다</h2>
+      <ul class="mt-4 list-disc space-y-2 pl-6 text-gray-700">
+        <li>ChatGPT·Claude를 쓰긴 하는데 "어디서부터" 막막한 분</li>
+        <li>유료 도구를 쓰고 싶지만 아직 지출을 최소화하고 싶은 분</li>
+        <li>AI로 실무를 자동화하고 싶은데 코딩은 몰라도 되는 분</li>
+      </ul>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="section-title text-xl">강의 개요</h2>
+      <dl class="mt-4 space-y-3 text-gray-700">
+        <div class="flex gap-3">
+          <dt class="w-24 shrink-0 font-semibold">형태</dt>
+          <dd>1시간 내외 미니 강의 또는 PDF 가이드</dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-24 shrink-0 font-semibold">가격</dt>
+          <dd>1~2만원대 (선판매 가격 확정 전)</dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-24 shrink-0 font-semibold">언어</dt>
+          <dd>한국어</dd>
+        </div>
+        <div class="flex gap-3">
+          <dt class="w-24 shrink-0 font-semibold">도구</dt>
+          <dd>무료 도구만 사용</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="mt-10">
+      <h2 class="section-title text-xl">커리큘럼</h2>
+      <p class="mt-4 text-gray-700">아래는 자리표입니다. 관심 등록자feedback 후 확정됩니다.</p>
+      <ol class="mt-4 space-y-3 text-gray-700">
+        <li class="border-l-4 border-gray-200 pl-4">
+          <strong>1장. 무료 AI 도구 세팅</strong>
+          <p class="text-sm text-gray-600">계정 만들기부터 첫 대답까지, 10분 컷</p>
+        </li>
+        <li class="border-l-4 border-gray-200 pl-4">
+          <strong>2장. 질문 잘 하는 법</strong>
+          <p class="text-sm text-gray-600">프롬프트 4요소 + 실패 예시 3개</p>
+        </li>
+        <li class="border-l-4 border-gray-200 pl-4">
+          <strong>3장. 실전 자동화</strong>
+          <p class="text-sm text-gray-600">번역·요약·정리 반복 업무 자동화 (진행 중)</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="mt-12 rounded-xl border border-[#E63B2E] bg-white p-6">
+      <h2 class="text-xl" style="font-family: var(--font-sans); border-left: 4px solid #E63B2E; padding-left: 12px;">
+        관심 등록
+      </h2>
+      <p class="mt-3 text-sm text-gray-600">
+        관심 등록 10명이 모이면 제작에 착수합니다. 등록하시면 준비 완료 알림을 먼저 보내드립니다.
+      </p>
+
+      <form id="interest-form" class="mt-4 grid gap-3 sm:grid-cols-2" novalidate>
+        <label class="block">
+          <span class="text-sm font-medium">이름</span>
+          <input
+            type="text"
+            name="name"
+            required
+            maxlength="50"
+            class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-[#E63B2E] focus:outline-none"
+          />
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium">이메일</span>
+          <input
+            type="email"
+            name="email"
+            required
+            class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-[#E63B2E] focus:outline-none"
+          />
+        </label>
+        <button
+          type="submit"
+          class="rounded-lg bg-[#111111] px-4 py-2 text-white transition-colors hover:bg-[#333333] sm:col-span-2"
+        >
+          관심 등록하기
+        </button>
+      </form>
+      <p id="interest-msg" class="mt-3 hidden text-sm" role="status"></p>
+    </section>
+
+    <section class="mt-10" id="checkout">
+      <h2 class="section-title text-xl">결제</h2>
+      {
+        tossClientKey ? (
+          <div class="mt-4">
+            <button
+              id="toss-pay"
+              class="rounded-lg bg-[#E63B2E] px-4 py-2 text-white"
+              data-price={previewPrice}
+            >
+              {previewPrice}원 결제하기
+            </button>
+            <p class="mt-2 text-xs text-gray-500">
+              결제창은 토스페이먼츠 위젯이 연결되면 표시됩니다.
+            </p>
+          </div>
+        ) : (
+          <p class="mt-4 text-gray-600">
+            아직 사전등록 단계입니다. 결제는 강의 준비 완료 후 열립니다.
+          </p>
+        )
+      }
+    </section>
+  </main>
+
+  <script is:inline define:vars={{ tossClientKey }}>
+    const form = document.getElementById('interest-form');
+    const msg = document.getElementById('interest-msg');
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      msg.classList.remove('hidden', 'text-[#E63B2E]', 'text-gray-600');
+      msg.classList.add('text-gray-600');
+      msg.textContent = '등록 중...';
+
+      try {
+        const res = await fetch('/api/courses/interest/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: fd.get('name'), email: fd.get('email') })
+        });
+        const data = await res.json();
+        if (data.ok) {
+          msg.classList.add('text-[#E63B2E]');
+          msg.textContent = data.message;
+          form.reset();
+        } else {
+          msg.textContent = data.error || '등록에 실패했습니다.';
+        }
+      } catch {
+        msg.textContent = '네트워크 오류가 발생했습니다.';
+      }
+    });
+
+    // 토스페이먼츠 위젯 — 가맹 승인 후 PUBLIC_TOSS_CLIENT_KEY 만 설정하면 활성화된다.
+    if (tossClientKey) {
+      const s = document.createElement('script');
+      s.src = 'https://js.tosspayments.com/v1';
+      s.onload = async () => {
+        const amount = Number(
+          document.getElementById('toss-pay')?.dataset.price?.replace(/[^0-9]/g, '') || 0
+        );
+        const toss = window.Toss?.Widgets?.payment({
+          clientKey: tossClientKey,
+          widgets: [{ selector: '#toss-pay', type: 'button' }]
+        });
+        toss?.on('click', function () {
+          // orderId/orderName 은 가맹 승인 후 서버에서 발급 (지시서 §7-3.3)
+          toss.pay({
+            amount,
+            orderId: 'REPLACE_WITH_SERVER_ORDER_ID',
+            orderName: 'AI 실습 미니 강의',
+            successUrl: `${window.location.origin}/courses/?paid=1`,
+            failUrl: `${window.location.origin}/courses/?fail=1`
+          });
+        });
+      };
+      document.head.appendChild(s);
+    }
+  </script>
+</Layout>

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://aiemaily.com"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["이메일", "업무자동화", "AI"]
 featured: false

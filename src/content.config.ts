@@ -38,31 +38,6 @@ const tools = defineCollection({
 });
 
 
-const keywords = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/keywords' }),
-  schema: z.object({
-    keyword: z.string(),
-    category: z.string(),
-    categoryName: z.string(),
-    monthlySearch: z.number(),
-    blogCount: z.number(),
-    saturation: z.number(),
-    grade: z.string(),
-    summary: z.string(),
-    analysis: z.string(),
-    writingGuide: z.string(),
-    titles: z.array(z.string()).default([]),
-    relatedKeywords: z.array(z.object({
-      keyword: z.string(),
-      monthlySearch: z.number(),
-      saturation: z.number(),
-      slug: z.string().optional(),
-    })).default([]),
-    date: z.coerce.date().default(new Date()),
-  }),
-});
-
-
 const chronicle = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/chronicle' }),
   schema: z.object({
@@ -78,19 +53,4 @@ const chronicle = defineCollection({
 });
 
 
-const glossary = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/glossary' }),
-  schema: z.object({
-    term: z.string(),
-    en: z.string(),
-    category: z.string(),
-    level: z.number(),
-    short: z.string(),
-    detail: z.string(),
-    example: z.string(),
-    related: z.array(z.string()),
-    date: z.string(),
-  }),
-});
-
-export const collections = { blog, tools, keywords, chronicle, glossary };
+export const collections = { blog, tools, chronicle };

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://airkaren.com"
 useCases: ["영어 이메일 작성", "사업계획서 초안"]
 tags: ["항공사", "고객 서비스", "AI"]
 featured: false

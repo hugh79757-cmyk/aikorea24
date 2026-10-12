@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://omlx.ai"
 useCases: ["코드 자동 완성", "코드 오류 수정", "코드 설명"]
 tags: ["Mac", "AI", "코딩", "로컬LLM", "개발자도구"]
 featured: false

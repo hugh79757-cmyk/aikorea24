@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "무료/월 10,000원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://www.anthropic.com/claude"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI", "코딩", "업무자동화"]
 featured: false

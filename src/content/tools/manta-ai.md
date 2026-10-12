@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 9,900원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://mantaai.co"
 useCases: ["웹 애플리케이션 테스트", "버그 탐지", "사용자 흐름 분석"]
 tags: ["테스트", "자동화", "웹 애플리케이션"]
 featured: false

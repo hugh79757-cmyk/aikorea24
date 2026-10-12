@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 45,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "http://www.jotform.com"
 useCases: ["설문 결과 분석", "데이터 시각화", "업무 보고서 초안"]
 tags: ["데이터분석", "설문조사", "업무자동화"]
 featured: false

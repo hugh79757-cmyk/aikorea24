@@ -4,10 +4,23 @@
 import json
 import os
 import re
+import socket
 import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
+
+# Brevo 인증 IP 화이트리스트에는 공인 IPv4(58.11.95.17)만 등록돼 있다.
+# requests는 IPv6 주소(2001:fb1::)로 먼저 접속하면 전부 401로 실패하므로 IPv4로 고정한다.
+_gai = socket.getaddrinfo
+
+
+def _ipv4_only(host, port, *a, **kw):
+    hits = [r for r in _gai(host, port, 0, socket.SOCK_STREAM) if r[0] == socket.AF_INET]
+    return hits or _gai(host, port, *a, **kw)
+
+
+socket.getaddrinfo = _ipv4_only
 
 
 def load_env():
@@ -33,10 +46,9 @@ def load_env():
 
 def _d1_query(sql: str) -> list[dict]:
     """wrangler d1 execute JSON 출력에서 results 배열 추출"""
+    load_env()  # 셸 주입 토큰(옛 계정) 대신 프로젝트 .env 토큰을 쓰지 않으면 7403으로 전부 실패
     root = Path(__file__).resolve().parent.parent
     env = dict(os.environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)
-    env.pop("CLOUDFLARE_ACCOUNT_ID", None)
     try:
         r = subprocess.run(
             ["/opt/homebrew/bin/wrangler", "d1", "execute", "aikorea24-db", "--remote", "--command", sql],
@@ -79,10 +91,17 @@ def get_briefing_items(briefing_id):
 
 
 def get_tools():
-    """D1에서 AI 도구 목록 조회 (최신 6개)"""
+    """D1에서 AI 도구 목록 조회 (최신 6개) — md 동기화본(tools) + 사용자 등록본(tool_submissions published) 합산"""
     return _d1_query(
-        "SELECT name, slug, tagline, category, price, korean_support, difficulty "
-        "FROM tools ORDER BY updated_at DESC LIMIT 6"
+        "SELECT name, slug, tagline, category, price, korean_support, difficulty FROM ("
+        "SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at "
+        "FROM tools "
+        "UNION ALL "
+        "SELECT name, slug, description AS tagline, category, "
+        "COALESCE(NULLIF(price_detail, ''), price_model) AS price, korean_support, "
+        "COALESCE(difficulty, '보통') AS difficulty, updated_at "
+        "FROM tool_submissions WHERE status = 'published'"
+        ") ORDER BY updated_at DESC LIMIT 6"
     )
 
 
@@ -124,9 +143,8 @@ def generate_email_html(briefing, items):
             </table>
           </td>
         </tr>"""
-
-    # Items (상위 3개만 상세 표시)
-    display_items = items[:3] if len(items) > 3 else items
+    # Items (v2: 상위 4개만 상세 표시 — AIK24-PIPE-02 Step 4, 선택지 (b) 스코어 상위 N개만 발송)
+    display_items = items[:4] if len(items) > 4 else items
     total_count = len(items)
 
     items_html = ""
@@ -275,10 +293,7 @@ def generate_email_html(briefing, items):
       <td style="padding:24px;text-align:center;color:#9ca3af;font-size:12px;">
         <p style="margin:0;">AI코리아24 · 매일 아침 AI 소식을 전해드립니다</p>
         <p style="margin:4px 0 0 0;">
-          <a href="https://aikorea24.kr/community/" style="color:#3b82f6;text-decoration:underline;">💬 커뮤니티</a>에서 오늘의 브리핑에 대한 의견을 나눠보세요
-        </p>
-        <p style="margin:4px 0 0 0;">
-          <a href="https://aikorea24.kr/unsubscribe" style="color:#9ca3af;text-decoration:underline;">구독 해지</a>
+          <a href="https://aikorea24.kr/unsubscribe/" style="color:#9ca3af;text-decoration:underline;">구독 해지</a>
         </p>
       </td>
     </tr>
@@ -286,6 +301,48 @@ def generate_email_html(briefing, items):
 </body>
 </html>"""
     return html
+
+
+def get_subscribers_from_brevo(list_id=2):
+    """Brevo GET /v3/contacts로 구독자 이메일 목록 조회"""
+    load_env()
+
+    api_key = os.environ.get("BREVO_API_KEY")
+    if not api_key:
+        print("❌ BREVO_API_KEY not set")
+        return []
+
+    import requests
+
+    url = "https://api.brevo.com/v3/contacts"
+    headers = {"api-key": api_key}
+    params = {"listIds": list_id, "limit": 500}
+
+    try:
+        resp = requests.get(url, headers=headers, params=params)
+        if resp.status_code != 200:
+            print(f"❌ Brevo contacts 조회 실패 ({resp.status_code})")
+            return []
+        contacts = resp.json().get("contacts", [])
+        emails = []
+        for c in contacts:
+            email = c.get("email")
+            if email:
+                emails.append(email)
+        return emails
+    except Exception as e:
+        print(f"❌ Brevo contacts 조회 예외: {e}")
+        return []
+
+
+def _is_test_email(email):
+    """sample/test/verify-test/example 패턴 필터링"""
+    return (
+        email.startswith("sample@")
+        or email.startswith("test-")
+        or email.startswith("verify-test@")
+        or "@example." in email
+    )
 
 
 def send_email_via_brevo(briefing, items):
@@ -307,22 +364,35 @@ def send_email_via_brevo(briefing, items):
         "Content-Type": "application/json"
     }
 
-    subscriber_email = os.environ.get("SUBSCRIBER_EMAIL", "twinssn@gmail.com")
+    # Brevo에서 구독자 목록 조회
+    subscribers = get_subscribers_from_brevo(list_id=2)
+    if subscribers:
+        print(f"  → Brevo 구독자 {len(subscribers)}명 조회")
+
+    # sample/test/example 이메일 필터링
+    emails = [e for e in subscribers if not _is_test_email(e)]
+    if len(emails) < len(subscribers):
+        print(f"  → 테스트 이메일 {len(subscribers) - len(emails)}건 필터링")
+
+    # 폴백: SUBSCRIBER_EMAIL
+    if not emails:
+        fallback = os.environ.get("SUBSCRIBER_EMAIL", "")
+        if fallback:
+            print(f"  → 구독자 목록 없음, SUBSCRIBER_EMAIL 폴백: {fallback}")
+            emails = [fallback]
+
+    if not emails:
+        print("❌ 발송할 이메일 없음 (Brevo 실패 + SUBSCRIBER_EMAIL 빈값)")
+        return False
 
     payload = {
         "sender": {"name": "AI코리아24", "email": "info@aikorea24.kr"},
         "subject": f"AI코리아24 뉴스레터 - {briefing.get('date', '')}",
         "htmlContent": html,
-        "to": [{"email": subscriber_email}]
+        "to": [{"email": e} for e in emails]
     }
 
-    list_id = os.environ.get("BREVO_LIST_ID")
-    if list_id:
-        list_ids = [int(x.strip()) for x in list_id.split(",")]
-        payload["listIds"] = list_ids
-        print(f"  → 개별 발송: {subscriber_email} + 목록 발송: listIds={list_ids}")
-    else:
-        print(f"  → 개별 발송: {subscriber_email}")
+    print(f"  → 개별 발송: {len(emails)}명")
 
     resp = requests.post(url, json=payload, headers=headers)
 
@@ -364,6 +434,7 @@ def main():
         print("\n=== 이메일 발송 완료 ===")
     else:
         print("\n=== 이메일 발송 실패 ===")
+        raise RuntimeError("이메일 발송 실패 (Brevo API 오류)")
 
 
 if __name__ == "__main__":

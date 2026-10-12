@@ -2,6 +2,69 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-09-29 18:30 — fix: 스레드 발행 실패 — semantic dedup 엔티티 오인 (pool 2 → 164)
+
+- **증상**: 2026-09-29 18:00~18:05 v3 5회 재시도 모두 실패. `scripts/threads/logs/2026-09-29.log` 18:01~18:05 참조. 매 시도 기사 풀 2건 → 모두 크롤링 본문 부족(106자/441자) → 발행 0건. 5회 실패 후 "2시간 후 재시도"로 종료.
+- **원인 [우리 production 코드 버그]**: `scripts/threads/dedup.py:170` EN-EN 분기 `if sim['entity_overlap'] >= 2: return True`. AI 뉴스 기사 공통 고유명사 풀이 극소함(OpenAI, Meta, Anthropic, AI 등) → **서로 다른 기사도 공통 entity 2개만으로 same-topic 으로 오인**. 실제 측정(60기사 × 1217개 published meta):
+  - EN-EN 쌍 38,941개 중 **340개 오인** (99.4%는 entity_overlap==2, jaccard_en==0)
+  - 결과: 1,142개 기사 → **2개**로 폭락, `posted_semantic` 제외 230건
+- **수정 [PRODUCTION CODE]**: `dedup.py:170` `>= 2` → **`>= 4`** (주석 추가). entity_overlap 분포 `{0:16391, 1:22210, 2:333, 3:6, 4:1}` → >=4 조건은 1건만 해당.
+- **검증 [검증됨]**:
+  - 기사 풀 복구: **2 → 164** (P1=3, P2=161). `posted_semantic` 제외 230 → 10.
+  - 크롤링 성공률: 164개 중 무작위 12개 샘플 → **12/12** 본문 >=500자 (MIN_CRAWL_CHARS=500 만족). 예전 2건은 각각 106자(Politico sponsored 광고 컬럼), 441자(Guardian 만평)로 실제 본문 부족.
+  - false-positive 0, ground-truth same-topic(jaccard_en>=0.30) 2건 모두 유지 (true-positive lost 0).
+- **테스트 [TEST CODE]**: `tests/test_dedup_semantic.py` 신규 4건. 4/4 통과. 실제 실패 사례(Politico EU Tech vs The Guardian AI) 직접 검증 포함.
+- **회귀**: `test_dedup_semantic` 4/4, `test_crawler`/`test_pitch`/`test_failed_articles` 59 passed. 2 failed(`test_pitch::TestGetPitchesCrawlFail::test_discards_when_crawl_fails`, `test_failed_articles::TestClearOldEntries::test_retention_from_env`)는 **git stash 후 동일 실패 → 사전 존재 버그**, 본 수정과 무관.
+- **커omit**: 미커밋 (수정만 적용). 다음 세션에서 commit 필요.
+
+## 2026-09-28 — chore: 빈 url 툴 4건 정리 (3건 삭제 + 1건 fix)
+
+- **배경**: 84건 백필 후에도 빈 url 4건 잔존 (scrimba-explain, threadport, webbrain, gemini-omni-flash)
+- **조사**: `scrimba-explain` → scrimba.com 실존 제품(200) → url fix. `threadport` → threadport.com은 모자 제조업체(무관), 실존 제품 없음. `webbrain` → webbrain.com은 "TheBrain" 마인드맵 툴(무관), 실존 제품 없음. `gemini-omni-flash` → 실존 제품 없음 + Google 브랜드 도용 위험
+- **조치**: 틀린 링크를 넣는 것보다 삭제가 안전 → 3건 삭제(md `git rm` + D1 DELETE), scrimba-explain url만 fix
+- **검증**: D1 tools 400 → 397, deleted_left=0, scrimba_url 반영. 라이브 `/tools/{threadport,webbrain,gemini-omni-flash}/` 404, `/tools/scrimba-explain/` scrimba.com 링크 200
+- **커밋**: `874a2854`. worklog `WL-20260928-tool-delete.md`, `logs/destructive_2026-09-28.log`
+
+## 2026-09-28 — fix: AI 툴 url 누락 (트래킹 파라미터 오판) + 84건 백필
+
+- **증상**: `/tools/<slug>/` 상당수에 외부 툴 링크 없음. md 306건 중 88건 `url: ""`, D1 tools 400행 중 118건 빈 url
+- **원인 [우리 production 코드 버그]**: `scripts/tools_collector.py` `validate_tool_url()`이 `ref=producthunt`/`utm_*` 포함 URL을 트래킹 URL로 오판해 `False` 반환 → `build_frontmatter()`가 크롤러가 뽑은 진짜 URL을 폐기 → `url: ""`. Product Hunt 소스 툴은 사실상 전부 해당
+- **수정**: `strip_tracking_params()` 신설(ref, utm_* 만 제거·나머지 쿼리 보존), `validate_tool_url()` 재작성(PH 리스팅/리다이렉트·GitHub repo 링크만 거부), `build_frontmatter()`에서 strip 후 검증
+- **백필**: `scripts/backfill_tool_urls_0928.py` — PH post 페이지 `"websiteUrl"`(iPhone UA 필요) + collector 로그 키워드 매칭으로 84건 복구. 4건 미해결(scrimba-explain, threadport, gemini-omni-flash, webbrain)
+- **검증**: `tests/test_tool_url_validate.py` 7 passed. D1 빈 url 118 → 34(잔여 34는 md에 없는 레거시 행). 빌드·배포 후 라이브 `/tools/{aifetchly,orkas,mixdesk,pair2fa,adam-cad-copilot,howseen-ai,gpt-6-sol-luna}/` 외부 링크 200 확인
+- **커밋**: `959a7b9e`(fix+test), `f095a89a`(md 백필 84건)
+
+## 2026-09-28 — fix: 블로그 썸네일 누락 (Pexels 429 → Unsplash 폴백) + 12건 백필
+
+- **증상**: 2026-09-28 블로그 12건 전부 frontmatter `image:` 없음 (썸네일 미표시)
+- **원인**: Pexels API HTTP 429 약 80+회 (08:15:30–08:16) → `auto_thumbnail.py`가 전부 플레이스홀더 복사 → `blog_draft_generator.py:538` `_add_image_to_frontmatter()`가 플레이스홀더면 `image:` 생략
+- **수정**: `auto_thumbnail.py`에 `_get_with_retry()`(최대 3회, backoff 1/2/4s, 429/5xx만 재시도), `_PexelsRateLimited` 예외 + 429 시 alt 쿼리 루프 건너뜀, `search_unsplash()` 폴백(키워드 → "artificial intelligence") 추가
+- **백필**: `scripts/backfill_thumbnails_0928.py` — 12건 실제 썸네일 재생성, `image:` 주입
+- **검증**: 12/12 `image:` 보유, MD5 전부 플레이스홀더와 상이, `is_placeholder_copy` 0건. 배포 후 라이브 썸네일 200/94462 bytes(실제 이미지) 확인
+- **커밋**: `0859fcc5`, `7af7a4ea`, `b9553ca6` + quick 문서
+
+## 2026-09-21 — fix: D1 인증 실패로 블로그 초안 생성 스킵 방지
+
+- **원인**: `CLOUDFLARE_API_TOKEN`만 unset하고 `CLOUDFLARE_ACCOUNT_ID`를 그대로 전달하여 `wrangler d1 execute` 인증 실패 (7403 에러)
+  - 에이전트 세션이 `CLOUDFLARE_API_TOKEN` + `CLOUDFLARE_ACCOUNT_ID`를 설정 → OAuth 프로필과 계정 충돌
+  - `blog_draft_generator.py` `_d1_run()`이 두 env var 중 하나만 해제 → "오늘 브리핑 없음" 오판
+- **수정**: D1 쿼리 함수 7곳 + sitemap_ping.py + deploy.sh 에서 `CLOUDFLARE_ACCOUNT_ID`도 unset
+  - `scripts/blog_draft_generator.py` `_d1_run()`
+  - `pipeline/infra/d1_client.py` `_build_env()`
+  - `scripts/briefing_enricher.py`, `scripts/auto_email_sender.py`, `scripts/auto_briefing.py`, `scripts/threads/db_reader.py`, `scripts/thread_topics/thread_topic_finder.py`
+  - `scripts/sitemap_ping.py`: DEFAULT_SITEMAP `sitemap-index.xml` → `sitemap.xml` (실제 URL)
+  - `scripts/deploy.sh`: sitemap ping URL `sitemap-index.xml` → `sitemap.xml`
+- **검증**: D1 쿼리 성공 (briefings 306/307, 2026-09-21, published), sitemap.xml 200 OK
+- **문제**: 브리핑은 발행됨 (briefing_id=306, 6개 아이템, deep_dive_url 연결 완료). 저녁 blog_draft가 D1 인증 실패로 "브리핑 없음" 처리한 것이었음
+
+## 2026-09-21 — rerun: 파이프라인 + 블로그 전체 재생성
+
+- `python3 scripts/run_pipeline.py` — 선정 뉴스 6건, 썸네일 6건, 배포 성공, sitemap ping ✅/✅ (200)
+- `python3 scripts/blog_draft_generator.py` — 블로그 초안 6건 생성, deep_dive_url 전부 연결, 배포 성공
+- briefings: 308 (2026-09-22-1, published), 6개 아이템 모두 deep_dive_url 연결
+- 블로그: `src/content/blog/2026-09-22-001` ~ `006` 생성·배포 완료
+- 품질 체크리스트: 6/6 통과, 0 이슈
+
 ## 2026-08-29 — fix: deep_dive writing prompt URL inclusion
 
 - `scripts/deep_dive_writer.py` `_build_writing_prompt`에 `URL: {link}` 추가
@@ -1396,3 +1459,32 @@
 - `kr.aikorea24.weekly-contrast.plist` 등록 완료
 - 매주 토요일 09:00 실행
 - OPENAI_API_KEY 환경변수 포함 (description 임베딩용)
+
+## 2026-09-23 — Phase 3-C tools 승인 파이프라인 (Wave A+B)
+
+* HOTFIX logout 쿠키 domain 수정 (8b9ca73e) + secure/sameSite 강화 (007518ec) — 배포됨
+* 카카오 로그인 5연쇄 수정 + 배포: UTF-8 세션 코덱 (4de904ee), avatar https 강제 (3b98292f), fallback 2단 (0ec1acab/7a6e4701), google_id placeholder (2bea45ca)
+* Wave A (5fdfa9d5): pending-by-default + owner preview + 상태 배지. Wave B (642d2806): admin 리뷰큐 + 승인/반려 API
+* 미배포 상태 — 다음 세션: deploy.sh → twinssn 승인 UAT 1건
+
+## 2026-09-23 21:15 — Phase 3-C 배포 완료
+
+* `bash scripts/deploy.sh` 성공 (a3279a8a) + sitemap ping Google/Naver ✅
+* 프로덕션 스모크: / → 200, /tools/ → 200, /my/tools/ → 302 (게스트), /admin/ → 401, /admin/tools/ → 401 (게이트 정상; 배포 직후 엣지 전파 중 404 혼재 → 60초 후 401 5/5 안정)
+* 남은 것: twinssn 로그인 후 /admin/tools/ 승인 UAT 1건 (사용자 수동)
+
+## 2026-09-24 02:00 — 도구 등록 승인/반려 이메일 알림 기능
+
+* `src/lib/email-notify.ts` 신규 — Brevo 단일 수신자 발송 (승인/반려 HTML 템플릿 2종)
+* `src/pages/api/admin/tools/review.ts` — 승인/반려 처리 후 JOIN(user_id=users.id)으로 제출자 이메일 확보 → 발송. 실패 시 롤백 없음
+* 커밋 `256be555`, 배포 성공 (sitemap ping Google/Naver true)
+* UAT: submit 201 → pending 1건 → 승인 버튼 클릭 → published (live /tools/uat-notify-tool/ 200). JOIN 경로 검증 완료
+* [부분검증] Brevo API 201 + messageId 확보했으나 Gmail 수신 0건 — Brevo 프리 플랜 샌드박스 수신자 제한으로 추정 (기존 briefing도 2026-06-27 이후 미수신, 코드 결함 아님)
+* 테스트 행 uat-notify-tool DELETE 정리 (사전 1건 → 사후 0건)
+
+## 2026-09-24 02:26 — 뉴스레터 발송 정상화 (quick task 260924-4rx)
+
+* `scripts/auto_email_sender.py` — `get_subscribers_from_brevo(list_id=2)` 신규: Brevo GET /v3/contacts로 list#2 구독자 이메일 목록 동적 조회
+* `send_email_via_brevo` 수정: `listIds` 파라미터 제거, `to` 필드에 각 구독자별 개별 발송, sample/test/verify-test/example 이메일 자동 필터링, `SUBSCRIBER_EMAIL` 폴백 유지
+* 커밋 `37d8f8d1`, verify 5건 모두 통과
+* 배경: listIds 목록 발송이 hugh79757 등 구독자에게 미도달 (Brevo 통계에서 twinssn만 뉴스레터 수신). 개별 `to` 발송으로 해결

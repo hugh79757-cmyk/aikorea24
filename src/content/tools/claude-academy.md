@@ -5,7 +5,7 @@ category: "번역·학습"
 price: "무료/월 20달러"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://academy.claude.com/"
 useCases: ["영어 이메일 작성", "업무 데이터 분석", "사업계획서 초안"]
 tags: ["AI학습", "클로드활용법", "업무효율화", "공식가이드"]
 featured: false

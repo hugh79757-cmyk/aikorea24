@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://bitdrift.io"
 useCases: ["앱 오류 분석", "성능 최적화", "사용자 경험 개선"]
 tags: ["앱개발", "데이터분석", "디버깅", "AI에이전트", "성능모니터링"]
 featured: false

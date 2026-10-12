@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://tiptap.dev/blog/release-notes/ai-toolkit-now-in-beta"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["AI", "문서편집", "협업"]
 featured: false

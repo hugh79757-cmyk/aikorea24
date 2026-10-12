@@ -32,7 +32,7 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
     <div id="quiz-area">
       <!-- Q1 -->
       <div class="quiz-step" data-step="0">
-        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 1/4</div>
+        <div class="mb-2 text-sm text-[#111111] dark:text-[#555555] font-medium">질문 1/4</div>
         <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">주로 어떤 작업을 하고 싶으세요?</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
           <button class="quiz-btn" data-q="0" data-v="writing">📝 글쓰기·문서</button>
@@ -45,7 +45,7 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
       </div>
       <!-- Q2 -->
       <div class="quiz-step hidden" data-step="1">
-        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 2/4</div>
+        <div class="mb-2 text-sm text-[#111111] dark:text-[#555555] font-medium">질문 2/4</div>
         <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">예산은 어느 정도 생각하세요?</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <button class="quiz-btn" data-q="1" data-v="free">🆓 무료만 쓸래요</button>
@@ -55,7 +55,7 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
       </div>
       <!-- Q3 -->
       <div class="quiz-step hidden" data-step="2">
-        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 3/4</div>
+        <div class="mb-2 text-sm text-[#111111] dark:text-[#555555] font-medium">질문 3/4</div>
         <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">한국어 지원이 중요한가요?</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <button class="quiz-btn" data-q="2" data-v="must">🇰🇷 필수! 한국어로 써야 해요</button>
@@ -65,7 +65,7 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
       </div>
       <!-- Q4 -->
       <div class="quiz-step hidden" data-step="3">
-        <div class="mb-2 text-sm text-blue-600 dark:text-blue-400 font-medium">질문 4/4</div>
+        <div class="mb-2 text-sm text-[#111111] dark:text-[#555555] font-medium">질문 4/4</div>
         <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">AI 사용 경험이 있으세요?</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
           <button class="quiz-btn" data-q="3" data-v="beginner">🌱 처음이에요</button>
@@ -79,7 +79,7 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
     <div id="result-area" class="hidden mt-8">
       <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">🎉 추천 결과</h2>
       <div id="result-cards" class="space-y-4"></div>
-      <button id="retry-btn" class="mt-8 px-6 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium">
+      <button id="retry-btn" class="mt-8 px-6 py-3 bg-[#111111] text-white rounded-xl hover:bg-[#111111] transition-colors font-medium">
         다시 해보기
       </button>
     </div>
@@ -101,9 +101,8 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
     </section>
 
     <nav class="mt-10 pt-6 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-4">
-      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline">🛠️ 전체 도구 목록</a>
-      <a href="/glossary/" class="text-blue-600 dark:text-blue-400 hover:underline">🔤 AI 용어사전</a>
-      <a href="/chronicle/" class="text-blue-600 dark:text-blue-400 hover:underline">📅 AI 타임라인</a>
+      <a href="/tools/" class="text-[#111111] dark:text-[#555555] hover:underline">🛠️ 전체 도구 목록</a>
+      <a href="/chronicle/" class="text-[#111111] dark:text-[#555555] hover:underline">📅 AI 타임라인</a>
     </nav>
   </main>
 
@@ -188,12 +187,12 @@ const toolsJson = JSON.stringify(allTools.map(t => ({
       container.innerHTML = top3.map((item, i) => {
         const t = item.tool;
         const medal = ['🥇', '🥈', '🥉'][i];
-        return `<a href="/tools/${t.id}/" class="block p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-400 transition-all">
+        return `<a href="/tools/${t.id}/" class="block p-6 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-[#e5e5e5] transition-all">
           <div class="flex items-start gap-4">
             <span class="text-3xl">${medal}</span>
             <div class="flex-1">
               <h3 class="text-xl font-bold text-gray-900 dark:text-white">${t.name}</h3>
-              <p class="text-sm text-blue-600 dark:text-blue-400 mb-1">${t.category}</p>
+              <p class="text-sm text-[#111111] dark:text-[#555555] mb-1">${t.category}</p>
               <p class="text-gray-600 dark:text-gray-300">${t.description}</p>
               <div class="mt-3 flex flex-wrap gap-2">
                 <span class="text-xs px-2 py-1 rounded bg-gray-100 dark:bg-gray-700">${t.price}</span>

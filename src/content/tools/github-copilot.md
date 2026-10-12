@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "월 1만원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://github.com"
 useCases: ["코드 작성", "코드 리뷰", "디버깅"]
 tags: ["코딩", "AI", "개발"]
 featured: false

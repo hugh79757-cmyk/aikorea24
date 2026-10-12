@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "유료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://outpaint.com/ad-reframe"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["영상 편집", "광고 제작", "마케팅"]
 featured: false

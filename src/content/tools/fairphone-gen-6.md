@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://fairphone.com"
 useCases: ["환경 보호 실천", "기기 수리 문의", "지속 가능한 소비"]
 tags: ["친환경", "스마트폰", "지속가능성", "수리용이성", "가치소비"]
 featured: false

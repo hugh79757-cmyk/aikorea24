@@ -25,6 +25,10 @@ from datetime import datetime, timedelta
 from xml.etree import ElementTree as ET
 from html import unescape
 
+# AIK24-NEWS-01: v2 큐레이션 판정 모듈 (scripts/v2_filter.py)
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts'))
+import v2_filter  # noqa: E402
+
 
 # ============================================
 # 환경 설정
@@ -1026,9 +1030,12 @@ def save_to_d1(articles):
         su = a.get('source_url', '').replace("'", "''")[:500]
         ot = a.get('original_title', '').replace("'", "''")[:200]
         co = a.get('country', 'kr').replace("'", "''")
+        # AIK24-NEWS-01: v2 판정(무료 사용 가능 여부 + 태그)을 저장 시점에 함께 기록.
+        _pass, _tag = v2_filter.classify(a['title'], a.get('description', ''), a['source'])
+        vt = (_tag or '').replace("'", "''")
         sql_lines.append(
-            f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date, source_url, original_title, country) "
-            f"VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}', '{su}', '{ot}', '{co}');")
+            f"INSERT OR IGNORE INTO news (title, link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
+            f"VALUES ('{t}', '{l}', '{d}', '{s}', '{c}', '{p}', '{su}', '{ot}', '{co}', {1 if _pass else 0}, '{vt}');")
     skipped = skipped_title + skipped_link
     if skipped_link:
         print(f"  제목 중복: {skipped_title}건, 링크 중복: {skipped_link}건")
@@ -1091,11 +1098,14 @@ def save_to_d1(articles):
 def purge_cloudflare_cache():
     """수집 완료 후 뉴스 관련 Cloudflare 엣지 캐시 즉시 무효화"""
     import urllib.request, json
-    token   = os.environ.get('CLOUDFLARE_API_TOKEN', '')
+    # zone은 출발 계정에 남아 있으므로 캐시 purge에는 출발 계정 토큰이 필요하다.
+    # CF-MIGRATE-04 이후 CLOUDFLARE_API_TOKEN 은 신규 계정( D1 용 )이므로
+    # purge 전용 토큰 CF_PURGE_TOKEN 을 우선 사용한다( 없으면 기존 값으로 fallback ).
+    token   = os.environ.get('CF_PURGE_TOKEN') or os.environ.get('CLOUDFLARE_API_TOKEN', '')
     zone_id = os.environ.get('CLOUDFLARE_ZONE_ID', '')
 
     if not token or not zone_id:
-        print("  ⚠ CLOUDFLARE_API_TOKEN 또는 ZONE_ID 미설정 — purge 스킵")
+        print("  ⚠ CF_PURGE_TOKEN(또는 CLOUDFLARE_API_TOKEN) 또는 ZONE_ID 미설정 — purge 스킵")
         return
 
     urls = [

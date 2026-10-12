@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "무료/월 99,000원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://perfai.ai"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록 작성"]
 tags: ["보안", "AI", "자동화"]
 featured: false

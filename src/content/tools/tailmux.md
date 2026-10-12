@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 5,999원"
 koreanSupport: false
 difficulty: "중급"
-url: ""
+url: "https://tailmux.app/"
 useCases: ["영어 이메일 작성", "사업계획서 초안", "회의록"]
 tags: ["네트워크", "Tailscale", "접근성"]
 featured: false

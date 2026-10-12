@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-3-5-transcribe/"
 useCases: ["회의록 작성", "강의 내용 정리", "인터뷰 녹취록"]
 tags: ["음성인식", "회의록", "자동받아쓰기"]
 featured: false

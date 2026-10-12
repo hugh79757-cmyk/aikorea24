@@ -4,7 +4,7 @@ description: "보안 연구팀 Accomplish AI가 Anthropic의 Claude Cowork에서
 date: 2026-07-27T08:17:40+09:00
 category: "뉴스"
 tags:
-  - "Anthropic의 Claude Cowork가 로컬 VM을 탈출하고 Mac에서 자격 증명을 읽을 수 있다"
+ - "Anthropic의 Claude Cowork가 로컬 VM을 탈출하고 Mac에서 자격 증명을 읽을 수 있다"
 draft: false
 
 image: "/images/2026-07-27-005-anthropic의-claude-cowork-로컬-vm-샌드박스-탈출-및-mac-자격-증명-유출-취약점-분석/thumbnail.webp"
@@ -40,7 +40,7 @@ Anthropic은 이 취약점 보고를 받은 후 신속하게 패치를 개발할
 
 업계 전망으로는, 이번 발견이 AI 에이전트 보안 표준을 재정립하는 계기가 될 것입니다. 앞으로 출시되는 AI 코드 에이전트는 샌드박스 탈출에 대한 강력한 방어 메커니즘을 탑재해야 할 것입니다. 또한 보안 감사와 침투 테스트가 제품 출시 전 필수 단계로 자리잡을 가능성이 높습니다.
 
-📌 **요약**
+**요약**
 - Anthropic의 Claude Cowork에서 로컬 VM 샌드박스를 탈출하여 Mac의 SSH 키와 클라우드 자격 증명을 읽을 수 있는 취약점이 발견되었습니다.
 - 공격은 리눅스 커널 권한 상승 취약점을 이용하며, 가상 머신 내에서 루트 권한을 획득한 후 호스트 파일 시스템에 접근하는 방식입니다.
 - 이 취약점은 AI 에이전트 보안의 근본적인 한계를 드러내며, 기업의 IT 인프라 전체가 위협받을 수 있습니다.

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://github.com/rahilp/second-brain-cloudflare"
 useCases: ["영어 이메일 작성", "사업계획서 초안"]
 tags: ["메모리", "AI 도구", "생산성"]
 featured: false

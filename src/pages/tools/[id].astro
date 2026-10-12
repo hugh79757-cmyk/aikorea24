@@ -1,5 +1,6 @@
 ---
-export const prerender = true;
+export const prerender = false;
+import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
@@ -12,20 +13,109 @@ export async function getStaticPaths() {
   }));
 }
 
-const { tool } = Astro.props;
+const id = Astro.params.id;
+let tool: any = (Astro.props as any).tool ?? null;
+if (!tool) {
+  const allMd = await getCollection('tools');
+  tool = allMd.find((t: any) => t.id === id) ?? null;
+}
+
+// D1 fallback (Phase 3-C Wave A): md miss → slug 조회 (status 필터 없이 owner preview 허용)
+let isD1 = false;
+let d1OwnerId = 0;
+if (!tool) {
+  let row: any = null;
+  try {
+    const db = env.DB;
+    if (db) {
+      // 현재 세션 사용자 확인 (패턴 B: cookie session → verifySession → users.id 역조회)
+      let currentUser: { email: string; name: string } | null = null;
+      const session = Astro.cookies.get('session')?.value;
+      if (session && (Astro.locals as any).sessionSecret) {
+        try {
+          const { verifySession } = await import('../../lib/auth');
+          currentUser = await verifySession(session, (Astro.locals as any).sessionSecret);
+        } catch {}
+      }
+      let currentUserId = 0;
+      if (currentUser) {
+        const userRow = await db.prepare('SELECT id FROM users WHERE email = ?').bind(currentUser.email).first();
+        if (userRow) currentUserId = (userRow as any).id;
+      }
+
+      // 상태 필터 없이 slug로 조회 — owner는 pending/hidden도 열람 가능
+      row = await db.prepare(
+        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at, link_type FROM tool_submissions WHERE slug = ?'
+      ).bind(id).first();
+
+      // tool_submissions 미발견 → tools 테이블 폴백
+      if (!row) {
+        row = await db.prepare(
+          'SELECT slug, name, url, category, tagline as description, price, korean_support, difficulty, NULL as use_cases, NULL as tags, NULL as tasks, NULL as detail_markdown, "published" as status, 0 as user_id, created_at, created_at FROM tools WHERE slug = ?'
+        ).bind(id).first();
+      }
+
+      if (!row) {
+        return new Response('Not found', { status: 404 });
+      }
+      // 공개 아니면 소유자만 열람 가능
+      const status = String(row.status ?? '').trim();
+      if (status !== 'published' && (row as any).user_id !== currentUserId) {
+        return new Response('Not found', { status: 404 });
+      }
+      d1OwnerId = (row as any).user_id || 0;
+    }
+  } catch {
+    return new Response('Not found', { status: 404 });
+  }
+  if (!row) {
+    return new Response('Not found', { status: 404 });
+  }
+  isD1 = true;
+  const parseArr = (v: any): string[] => {
+    try {
+      const a = typeof v === 'string' ? JSON.parse(v) : v;
+      return Array.isArray(a) ? a.map((x: any) => String(x)) : [];
+    } catch {
+      return [];
+    }
+  };
+  tool = {
+    id: String(row.slug),
+    data: {
+      name: String(row.name ?? ''),
+      description: String(row.description ?? ''),
+      category: String(row.category ?? '기타'),
+      price: (row.price_detail && String(row.price_detail).trim()) || row.price_model || '—',
+      screenshotUrl: (row.screenshot_url && String(row.screenshot_url).trim()) || null,
+      koreanSupport: Number(row.korean_support) === 1,
+      difficulty: (row.difficulty && String(row.difficulty).trim()) || '보통',
+      url: String(row.url ?? '#'),
+      useCases: row.use_cases ? String(row.use_cases).split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+      tags: parseArr(row.tags),
+      tasks: parseArr(row.tasks),
+      updated: String(row.created_at ?? '').slice(0, 10),
+      status: String(row.status ?? 'published').trim(),
+      linkType: String(row.link_type || 'nofollow').trim(),
+    },
+    body: String(row.detail_markdown || row.description || ''),
+    isOwner: d1OwnerId > 0,
+  };
+}
+
 const TASK_BASE = '/tools/task/';
 
-const { Content } = await render(tool);
+const { Content } = isD1 ? { Content: null as any } : await render(tool);
 
 const difficultyColor = (d: string) => {
-  if (d.includes('초보')) return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-  if (d.includes('중급')) return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+  if (d.includes('초보')) return 'bg-gray-100 text-[#111111] dark:bg-[#111111] dark:text-gray-500';
+  if (d.includes('중급') || d.includes('보통')) return 'bg-gray-100 text-[#111111] dark:bg-[#111111] dark:text-gray-500';
   return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
 };
 
 const difficultyLabel = (d: string) => {
   if (d.includes('초보')) return '🌱 초보자 OK';
-  if (d.includes('중급')) return '🔧 중급';
+  if (d.includes('중급') || d.includes('보통')) return '🔧 보통';
   return '⚡ 고급';
 };
 
@@ -48,6 +138,11 @@ const similarTools = allToolsList
   .sort((a, b) => b.score - a.score)
   .slice(0, 4)
   .map(item => item.tool);
+
+// D1 본문: 단순 단락 렌더 (escape는 Astro 보간이 담당, 줄바꿈 보존)
+const d1BodyParas: string[] = isD1
+  ? String(tool.body || '').split(/\n+/).map((s: string) => s.trim()).filter(Boolean)
+  : [];
 
 // ---- FAQ 구조화 데이터 생성 ----
 const toolBody: string = (tool as any).body || '';
@@ -78,28 +173,30 @@ const faqSchema: string | null = faqEntities.length > 0
 
 <Layout
   title={`${tool.data.name} 사용법과 가격, 한국어 지원 여부 총정리 | AI코리아24`}
-  description={`${tool.data.name}: ${tool.data.description} 가격(${tool.data.price}), 한국어 지원 여부, 난이도, 추천 대상을 한눈에 확인하세요.`}
-  type="article"
+  description={`${tool.data.name}: ${tool.data.description} 가격(${tool.data.price}), 한국어 지원 여부, 난이도, 추천 대상을 한눈에 확인하세요.`} type="article"
 >
   <div class="max-w-3xl mx-auto px-4 py-12">
     <nav class="text-sm text-gray-500 dark:text-gray-400 mb-6">
-      <a href="/" class="hover:text-blue-600">홈</a>
+      <a href="/" class="hover:text-[#111111]">홈</a>
       <span class="mx-1">/</span>
-      <a href="/tools/" class="hover:text-blue-600">AI 도구</a>
+      <a href="/tools/" class="hover:text-[#111111]">AI 도구</a>
       <span class="mx-1">/</span>
       <span class="text-gray-900 dark:text-white">{tool.data.name}</span>
     </nav>
 
     <!-- 히어로 섹션 -->
-    <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-6 md:p-8 mb-6 dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 dark:border-gray-700/50">
+    <div class="relative overflow-hidden rounded-2xl bg-white border border-gray-200 p-6 md:p-8 mb-6  dark:from-gray-800 dark:to-gray-900 dark:border-gray-700/50">
       <!-- 라이트모드 상단 액센트 -->
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 dark:from-blue-600 dark:via-indigo-600 dark:to-purple-600"></div>
+      <div class="absolute top-0 left-0 right-0 h-1 bg-[#111111]"></div>
 
       <!-- 카테고리 + 한국어 지원 -->
       <div class="flex items-center gap-2 mb-3">
         <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{tool.data.category}</span>
+        {isD1 && (
+          <span class="text-xs font-bold px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">MAKER</span>
+        )}
         {tool.data.koreanSupport && (
-          <span class="text-xs px-2.5 py-1 bg-green-50 text-green-700 rounded-full font-medium border border-green-200 dark:bg-green-500/15 dark:text-green-400 dark:border-green-500/25">🇰🇷 한국어 지원</span>
+          <span class="text-xs px-2.5 py-1 bg-gray-100 text-[#111111] rounded-full font-medium border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/25">🇰🇷 한국어 지원</span>
         )}
       </div>
 
@@ -112,54 +209,50 @@ const faqSchema: string | null = faqEntities.length > 0
       <!-- 메타 정보 뱃지 -->
       <div class="flex flex-wrap items-center gap-2 mb-5">
         {tool.data.updated && (
-          <span class="text-xs px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg font-medium dark:bg-white/[0.06] dark:text-gray-400">
+          <span class="text-xs px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg font-medium  dark:text-gray-400">
             🗓 {tool.data.updated}
           </span>
         )}
-        <span class="text-xs px-3 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-semibold border border-blue-200 dark:bg-blue-500/15 dark:text-blue-400 dark:border-blue-500/25">
+        <span class="text-xs px-3 py-1.5 bg-gray-100 text-[#111111] rounded-lg font-semibold border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/25">
           💰 {tool.data.price}
         </span>
         <span class:list={["text-xs px-3 py-1.5 rounded-lg font-medium border", difficultyColor(tool.data.difficulty)]}>
           {difficultyLabel(tool.data.difficulty)}
         </span>
-        <span id="review-badge" class="text-xs px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg font-medium border border-amber-200 dark:bg-amber-500/15 dark:text-amber-400 dark:border-amber-500/25">
-          ⭐ — (리뷰 로딩 중)
-        </span>
       </div>
 
       <!-- 액션 버튼 -->
       <div class="flex gap-3 flex-wrap">
-        <a href={tool.data.url} target="_blank" rel="noopener"
-           class="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30">
+        <a href={tool.data.url} target="_blank" rel={tool.data.linkType === 'dofollow' ? 'dofollow noopener' : 'noopener'} class="inline-flex items-center gap-2 px-6 py-2.5 bg-[#111111] hover:bg-[#111111] text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-[#e5e5e5]/20 hover:shadow-[#e5e5e5]/30">
           🔗 툴 바로가기
         </a>
         <button id="vote-btn"
-          data-tool-id={tool.id}
-          data-voted="false"
-          class="inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-white/[0.05] dark:border-white/[0.15] dark:text-gray-300 dark:hover:bg-white/[0.1]">
+          data-tool-id={tool.id} data-voted="false" class="inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100   dark:text-gray-300 ">
           <span id="vote-icon">👍</span>
           <span id="vote-label"> 추천</span>
           <span id="vote-count" class="text-xs opacity-70">0</span>
         </button>
-        <a href={`/community/review?tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
-           id="review-write-btn"
-           class="hidden inline-flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl transition-all text-sm border border-gray-200 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] dark:text-gray-300 dark:border-white/[0.15]">
-          ✍️ 리뷰 쓰기
-        </a>
       </div>
+      {tool.data.screenshotUrl && (
+        <div class="mt-4">
+          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="block">
+            <img src={tool.data.screenshotUrl} alt={`${tool.data.name} 스크린샷`} loading="lazy" class="w-full max-h-80 object-contain rounded-xl border border-gray-200 " />
+          </a>
+          <a href={tool.data.screenshotUrl} target="_blank" rel="noopener" class="mt-1 inline-block text-sm text-[#111111] dark:text-[#555555] hover:underline">🖼️ 스크린샷 원본 보기 →</a>
+        </div>
+      )}
     </div>
 
     <!-- 한국어 활용법 (핵심 차별화!) -->
     {tool.data.koreanSupport && tool.data.useCases && tool.data.useCases.length > 0 && (
-    <div class="mb-6 p-5 bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-700/30 rounded-xl">
+    <div class="mb-6 p-5 bg-gray-100 dark:bg-[#111111]/10 border border-[#e5e5e5] dark:border-[#e5e5e5]/30 rounded-xl">
       <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-3">🇰🇷 한국어 활용 꿀팁</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
         {tool.data.useCases.map(uc => (
           <div class="flex items-start gap-2 p-3 bg-white dark:bg-gray-800/50 rounded-lg border border-gray-100 dark:border-gray-700/30">
-            <span class="text-blue-500 mt-0.5">💡</span>
+            <span class="text-[#555555] mt-0.5">💡</span>
             <div>
               <p class="text-sm text-gray-800 dark:text-gray-200 font-medium">{uc}</p>
-              <p class="text-xs text-gray-500 dark:text-gray-500 mt-0.5">한국어 프롬프트 예시는 커뮤니티 리뷰를 참고하세요</p>
             </div>
           </div>
         ))}
@@ -167,16 +260,24 @@ const faqSchema: string | null = faqEntities.length > 0
     </div>
     )}
 
+    {isD1 ? (
+    <div class="max-w-none mb-8 space-y-4">
+      {d1BodyParas.map((para) => (
+        <p class="text-base text-gray-700 dark:text-gray-300 leading-relaxed">{para}</p>
+      ))}
+    </div>
+    ) : (
     <article class="prose prose-lg dark:prose-invert max-w-none mb-8">
       <Content />
     </article>
+    )}
 
     {taskLinks.length > 0 && (
       <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-8">
         <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">🔗 이 툴이 사용되는 태스크</h3>
         <div class="flex flex-wrap gap-2">
           {taskLinks.map((tl: { slug: string; title: string }) => (
-            <a href={TASK_BASE + tl.slug + '/'} class="text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/50 px-3 py-1.5 rounded-full transition-colors">
+            <a href={TASK_BASE + tl.slug + '/'} class="text-sm bg-gray-100 dark:bg-[#111111]/30 text-[#111111] dark:text-gray-500 hover:bg-gray-100 dark:hover:bg-[#111111]/50 px-3 py-1.5 rounded-full transition-colors">
               {tl.title} →
             </a>
           ))}
@@ -187,7 +288,7 @@ const faqSchema: string | null = faqEntities.length > 0
     {tool.data.relatedPost && (
       <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl p-6 mb-8">
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">📖 관련 블로그 글</p>
-        <a href={tool.data.relatedPost} class="text-blue-600 dark:text-blue-400 hover:underline font-medium">자세한 사용법 보러 가기 →</a>
+        <a href={tool.data.relatedPost} class="text-[#111111] dark:text-[#555555] hover:underline font-medium">자세한 사용법 보러 가기 →</a>
       </div>
     )}
 
@@ -197,49 +298,36 @@ const faqSchema: string | null = faqEntities.length > 0
           <p class="text-xs text-gray-400 dark:text-gray-500">최종 업데이트: {tool.data.updated}</p>
         )}
       </div>
-      <a href="/tools/" class="text-blue-600 dark:text-blue-400 hover:underline font-medium">← 전체 도구 목록</a>
+      <a href="/tools/" class="text-[#111111] dark:text-[#555555] hover:underline font-medium">← 전체 도구 목록</a>
     </div>
   </div>
 
-  <!-- 리뷰 섹션 (클라이언트 로딩) -->
+  <!-- 리뷰 섹션 (클라이언트 로딩, D1 행은 숨김 — reviews는 INTEGER tool_id 필요) -->
+  {!isD1 && (
   <div id="reviews-section" class="max-w-3xl mx-auto px-4 pb-4 hidden">
     <div class="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white">💬 사용자 리뷰</h3>
-        <span id="reviews-summary" class="text-sm text-yellow-500"></span>
+        <span id="reviews-summary" class="text-sm text-[#555555]"></span>
       </div>
       <div id="reviews-list"></div>
     </div>
   </div>
-
-  <!-- 리뷰 작성 버튼 -->
-  <div id="review-cta" class="max-w-3xl mx-auto px-4 pb-4 text-center hidden">
-    <a href={`/community/write?category=review&tool_id=${toolIndex}&tool_name=${encodeURIComponent(tool.data.name)}`}
-       class="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm">
-      ✍️ {tool.data.name} 리뷰 작성하기
-    </a>
-  </div>
+  )}
 
   <!-- 뉴스레터 구독 CTA -->
   <div class="max-w-3xl mx-auto px-4 pb-4">
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-750 rounded-2xl p-6 md:p-8 border border-blue-100 dark:border-gray-700">
+    <div class="bg-[#111111] dark:from-gray-800 dark:to-gray-750 rounded-2xl p-6 md:p-8 border border-[#e5e5e5] dark:border-gray-700">
       <div class="text-center max-w-xl mx-auto">
-        <div class="text-3xl mb-3">🚀</div>
         <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📬 매일 아침 AI 뉴스를 받아보세요</h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
           {tool.data.name} 같은 최신 AI 도구 소식을 이메일로 보내드립니다. 무료입니다.
         </p>
         <form id="brevo-subscribe" class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-          <input
-            type="email"
-            id="subscribe-email"
-            placeholder="이메일 주소를 입력하세요"
-            required
-            class="flex-1 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+          <input type="email" id="subscribe-email" placeholder="이메일 주소를 입력하세요"
+            required class="flex-1 px-4 py-3 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#111111] focus:border-transparent outline-none text-sm"
           />
-          <button
-            type="submit"
-            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-xl transition-colors text-sm whitespace-nowrap"
+          <button type="submit" class="px-6 py-3 bg-[#111111] hover:bg-[#111111] text-white font-medium rounded-xl transition-colors text-sm whitespace-nowrap"
           >
             무료 구독하기
           </button>
@@ -256,8 +344,7 @@ const faqSchema: string | null = faqEntities.length > 0
     <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">🔍 비슷한 툴 비교</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
       {similarTools.map(st => (
-        <a href={`/tools/${st.id}/`}
-           class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700/50 hover:border-blue-400 dark:hover:border-blue-500/50 transition-all">
+        <a href={`/tools/${st.id}/`} class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700/50 hover:border-[#e5e5e5] dark:hover:border-[#e5e5e5]/50 transition-all">
           <div class="text-sm font-medium text-gray-900 dark:text-white mb-1">{st.data.name}</div>
           <div class="text-xs text-gray-500 dark:text-gray-400">{st.data.category}</div>
           <div class="text-xs text-gray-400 dark:text-gray-500 mt-1">{st.data.price}</div>
@@ -267,10 +354,11 @@ const faqSchema: string | null = faqEntities.length > 0
   </div>
   )}
 
-<script define:vars={{ toolId: tool.id, toolIndex }}>
+<script define:vars={{ toolId: tool.id, toolIndex, isD1Flag: isD1 }}>
 // 투표 + 리뷰 클라이언트 로딩
 const TOOL_ID = toolId;
 const TOOL_INDEX = toolIndex;
+const IS_D1 = isD1Flag;
 
 // 투표 데이터 로드
 async function loadVoteData() {
@@ -283,76 +371,23 @@ async function loadVoteData() {
       document.getElementById('vote-label').textContent = data.voted ? " 추천함" : " 추천";
       document.getElementById('vote-count').textContent = String(data.count);
       if (data.voted) {
-        voteBtn.className = 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 dark:bg-amber-500/20 dark:border-amber-500/50 dark:text-amber-300';
+        voteBtn.className = 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-100 border-[#e5e5e5] text-[#111111] hover:bg-gray-100 dark:bg-[#333333]/20 dark:border-[#e5e5e5]/50 dark:text-gray-500';
       }
     }
   } catch (e) { console.error('Vote load error:', e); }
 }
 
-// 리뷰 데이터 로드
-async function loadReviewData() {
-  try {
-    const res = await fetch(`/api/tools/reviews?tool_index=${TOOL_INDEX}`);
-    const data = await res.json();
-    const { reviews, avgRating } = data;
-    
-    if (reviews.length > 0) {
-      // 리뷰 뱃지 업데이트
-      const badge = document.getElementById('review-badge');
-      if (badge) {
-        badge.textContent = `⭐ ${avgRating} (${reviews.length}개 리뷰)`;
-      }
-      
-      // 리뷰 섹션 표시
-      const section = document.getElementById('reviews-section');
-      if (section) section.classList.remove('hidden');
-      
-      const summary = document.getElementById('reviews-summary');
-      if (summary) summary.textContent = `${'★'.repeat(Math.round(avgRating))} ${avgRating} (${reviews.length}개)`;
-      
-      const list = document.getElementById('reviews-list');
-      if (list) {
-        list.innerHTML = reviews.map(r => `
-          <div class="border-b border-gray-200 dark:border-gray-700/30 py-3 last:border-0">
-            <div class="flex items-center justify-between mb-1">
-              <div class="flex items-center gap-2">
-                ${r.avatar ? `<img src="${r.avatar}" class="w-5 h-5 rounded-full" />` : ''}
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-200">${r.author || '익명'}</span>
-              </div>
-              <span class="text-yellow-500 text-sm">${'★'.repeat(r.rating || 5)}</span>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">${(r.content || '').substring(0, 200)}</p>
-            <a href="/community/${r.id}" class="text-xs text-blue-600 dark:text-blue-400 hover:underline mt-1 inline-block">전체 보기 →</a>
-          </div>
-        `).join('');
-      }
-      
-      // 리뷰 작성 CTA
-      const cta = document.getElementById('review-cta');
-      if (cta) cta.classList.remove('hidden');
-    }
-  } catch (e) { console.error('Review load error:', e); }
-}
-
-// 로그인 체크 → 리뷰 쓰기 버튼 표시
-function checkAuth() {
-  const isLoggedIn = document.cookie.includes('session=');
-  const reviewWriteBtn = document.getElementById('review-write-btn');
-  if (reviewWriteBtn && isLoggedIn) reviewWriteBtn.classList.remove('hidden');
-}
-
-// 투표 버튼 처리
+// 투표 버튼 처리 (사전 쿠키 체크 없이 바로 POST → 401일 때만 로그인 이동)
 const voteBtn = document.getElementById('vote-btn');
 if (voteBtn) {
   voteBtn.addEventListener('click', async () => {
-    const isLoggedIn = document.cookie.includes('session=');
-    if (!isLoggedIn) { window.location.href = '/api/auth/login'; return; }
     try {
       const res = await fetch('/api/tools/vote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tool_id: TOOL_ID })
       });
+      if (res.status === 401) { window.location.href = `/api/auth/login?redirect_to=${encodeURIComponent(window.location.pathname)}`; return; }
       const data = await res.json();
       if (res.ok) {
         const voted = data.voted;
@@ -360,10 +395,16 @@ if (voteBtn) {
         document.getElementById('vote-label').textContent = voted ? ' 추천함' : ' 추천';
         document.getElementById('vote-count').textContent = String(data.count);
         voteBtn.className = voted
-          ? 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 dark:bg-amber-500/20 dark:border-amber-500/50 dark:text-amber-300'
-          : 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-white/[0.05] dark:border-white/[0.15] dark:text-gray-300 dark:hover:bg-white/[0.1]';
+          ? 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-100 border-[#e5e5e5] text-[#111111] hover:bg-gray-100 dark:bg-[#333333]/20 dark:border-[#e5e5e5]/50 dark:text-gray-500'
+          : 'inline-flex items-center gap-2 px-5 py-2.5 font-medium rounded-xl transition-all text-sm border bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100   dark:text-gray-300 ';
+      } else {
+        console.error('Vote error:', data);
+        document.getElementById('vote-label').textContent = ' 추천 처리 중 오류';
       }
-    } catch (e) { console.error(e); }
+    } catch (e) {
+      console.error(e);
+      document.getElementById('vote-label').textContent = ' 추천 처리 중 오류';
+    }
   });
 }
 
@@ -387,7 +428,7 @@ document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e)
     const data = await res.json();
 
     if (res.ok) {
-      msg.className = 'mt-3 text-sm text-green-600 dark:text-green-400';
+      msg.className = 'mt-3 text-sm text-[#111111] dark:text-[#555555]';
       msg.textContent = '✅ 구독 완료! 매일 아침 AI 브리핑을 보내드립니다.';
       e.target.querySelector('input').value = '';
     } else {
@@ -406,8 +447,6 @@ document.getElementById('brevo-subscribe')?.addEventListener('submit', async (e)
 
 // 초기 데이터 로드
 loadVoteData();
-loadReviewData();
-checkAuth();
 </script>
   <!-- FAQPage 구조화 데이터 -->
   {faqSchema && (

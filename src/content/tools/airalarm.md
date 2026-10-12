@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: ""
+url: "https://kaedeeeeeeeeee.github.io/AirAlarm/"
 useCases: ["아침 기상 루틴", "수면 환경 조성", "개인정보 보호"]
 tags: ["수면관리", "에어팟", "스마트알람", "건강관리", "개인정보보호"]
 featured: false

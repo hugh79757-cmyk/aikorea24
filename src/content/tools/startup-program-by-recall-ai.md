@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "무료/월 350원"
 koreanSupport: false
 difficulty: "고급"
-url: ""
+url: "https://www.recall.ai/startups"
 useCases: ["회의록 자동 생성 서비스 개발", "고객 상담 데이터 분석", "회의 일정 연동 기능"]
 tags: ["API", "회의록", "스타트업", "데이터연동", "개발자도구"]
 featured: false

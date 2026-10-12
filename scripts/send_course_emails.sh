@@ -33,7 +33,7 @@ fi
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting course email send..."
 RESPONSE=$(curl -s -o - -w "\n%{http_code}" \
   -H "Authorization: Bearer $CRON_SECRET" \
-  "${SITE_URL}/api/courses/send-daily")
+  "${SITE_URL}/api/courses/send-daily/")
 
 HTTP_CODE=$(echo "$RESPONSE" | tail -1)
 BODY=$(echo "$RESPONSE" | sed '$d')

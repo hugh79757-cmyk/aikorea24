@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://chatcut.io/"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["영상편집", "AI", "브라우저기반"]
 featured: false

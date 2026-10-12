@@ -1,0 +1,142 @@
+---
+export const prerender = false; // C-1: 인증 리다이렉트 페이지는 SSR — 요청 시 쿠키 필요 → 정적 빌드 시 리다이렉트가 구워짐
+import { env } from 'cloudflare:workers';
+import Layout from '../../../layouts/Layout.astro';
+import { verifySession } from '../../../lib/auth';
+
+let currentUser = null;
+const session = Astro.cookies.get('session')?.value;
+if (session) currentUser = await verifySession(session, Astro.locals.sessionSecret);
+if (!currentUser) {
+  return Astro.redirect('/api/auth/login?redirect_to=/my/tools/');
+}
+
+// users 테이블에서 user_id 역조회 (posts/index.ts 패턴)
+let userId = 0;
+let myTools: any[] = [];
+try {
+  const db = env.DB;
+  if (db) {
+    const userRow = await db.prepare('SELECT id FROM users WHERE email = ?').bind(currentUser.email).first();
+    if (userRow) userId = (userRow as any).id;
+    if (userId) {
+      const res = await db.prepare(
+        'SELECT * FROM tool_submissions WHERE user_id = ? ORDER BY created_at DESC'
+      ).bind(userId).all();
+      myTools = res?.results ?? [];
+    }
+  }
+} catch {
+  myTools = [];
+}
+---
+
+<Layout title="내 도구 | AI코리아24" description="내가 등록한 AI 도구를 관리하세요.">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">내 도구</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">총 {myTools.length}개 등록</p>
+      </div>
+      <a href="/tools/submit/" class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#111111] text-white text-sm font-medium rounded-xl transition-all shadow-lg shadow-[#e5e5e5]/20">
+        + 새 도구 등록하기
+      </a>
+    </div>
+
+    {myTools.length === 0 ? (
+      <div class="text-center py-16 bg-white dark:bg-[#111827]/60 border border-gray-200  rounded-2xl">
+        <p class="text-4xl mb-4">🛠️</p>
+        <p class="text-lg font-bold text-gray-900 dark:text-white mb-2">아직 등록한 도구가 없습니다</p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">첫 AI 도구를 등록해보세요. 관리자 검토 후 공개됩니다 (보통 24시간 이내).</p>
+        <a href="/tools/submit/" class="inline-block px-6 py-3 bg-[#111111] hover:bg-[#111111] text-white font-bold rounded-xl transition-colors text-sm">새 도구 등록하기 →</a>
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="my-tools-grid">
+        {myTools.map((tool) => {
+          const status = String(tool.status ?? '').trim();
+          const isPub = status === 'published';
+          const isPending = status === 'pending';
+          const isRetired = status === 'retired';
+          const isDrafted = status === 'hidden';
+          const badgeText = isPub ? '🟢공개' : isPending ? '🟡검토중' : isDrafted ? '⚫비공개' : isRetired ? '🔴반려' : '⚫비공개';
+          const badgeClass = isPub ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : isPending ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : isDrafted ? 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ' : isRetired ? 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400 border-red-200 dark:border-red-500/20' : 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ';
+          const canToggle = !isPending && !isRetired;
+          const toggleDisabled = !canToggle;
+          const toggleLabel = isPub ? '비공개 전환' : isDrafted ? '공개 전환' : '상태 변경 불가';
+          return (
+            <div data-slug={tool.slug} data-status={tool.status} class="tool-card relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden dark:bg-[#111827]/60 ">
+              <div class="h-0.5 w-full bg-[#111111]"></div>
+              <div class="p-4 sm:p-5 flex-1 flex flex-col">
+                <div class="flex items-start justify-between mb-2">
+                  <h3 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white leading-snug pr-2">{tool.name}</h3>
+                  <span class={`status-badge flex-shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full border ${badgeClass}`}>
+                    {badgeText}
+                  </span>
+                </div>
+                <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 flex-1 leading-relaxed">{tool.description}</p>
+                {isRetired && tool.rejection_reason ? (
+                  <p class="text-xs text-red-600 dark:text-red-400 mb-2">반려 사유: {tool.rejection_reason}</p>
+                ) : null}
+                <div class="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 ">
+                  <span class="text-xs text-gray-500 dark:text-gray-500">{tool.category}</span>
+                  <span class="text-xs text-gray-400 dark:text-gray-500 font-mono">/{tool.slug}/</span>
+                </div>
+                <div class="flex items-center gap-2 mt-3">
+                  <a href={`/tools/${tool.slug}/`} class={`flex-1 text-center px-3 py-2 text-xs font-medium rounded-lg transition-colors ${isPub ? 'bg-gray-100 hover:bg-gray-200   text-gray-700 dark:text-gray-200' : 'bg-gray-100 cursor-not-allowed  text-gray-400 dark:text-gray-500'}`}>
+                    보기 →
+                  </a>
+                  <a href={`/my/tools/${tool.slug}/edit/`} class="flex-1 text-center px-3 py-2 text-xs font-medium bg-gray-100 hover:bg-gray-100 dark:bg-[#333333]/10 dark:hover:bg-[#333333]/20 text-[#111111] dark:text-[#555555] rounded-lg transition-colors">수정 →</a>
+                  <button type="button" data-toggle={tool.slug} disabled={toggleDisabled} class={`toggle-btn flex-1 px-3 py-2 text-xs font-bold rounded-lg transition-colors ${isPub ? 'bg-gray-100 hover:bg-gray-100 dark:bg-[#333333]/15 dark:hover:bg-[#333333]/25 text-[#111111] dark:text-[#555555]' : isDrafted ? 'bg-gray-100 hover:bg-gray-100 dark:bg-[#333333]/15 dark:hover:bg-[#333333]/25 text-[#111111] dark:text-[#555555]' : 'bg-gray-100 text-gray-400  dark:text-gray-500 dark:border  cursor-not-allowed'}`}>
+                    {toggleLabel}
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</Layout>
+
+<script>
+  document.querySelectorAll('.toggle-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const slug = btn.getAttribute('data-toggle');
+      const card = document.querySelector(`[data-slug="${slug}"]`);
+      const cur = card?.getAttribute('data-status') || 'published';
+      const isPending = cur === 'pending';
+      const isRetired = cur === 'retired';
+      if (isPending || isRetired) {
+        alert(isRetired ? '반려된 도구는 상태 변경이 불가능합니다.' : '검토 중인 도구는 공개 여부를 변경할 수 없습니다.');
+        return;
+      }
+      const next = cur === 'published' ? 'hidden' : 'published';
+      btn.disabled = true;
+      try {
+        const res = await fetch(`/api/tools/${slug}/visibility`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: next }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          alert(data.error || '상태 변경에 실패했습니다.');
+          return;
+        }
+        card?.setAttribute('data-status', data.status);
+        // badge + 버튼 텍스트는 서버 응답 상태에 따라 업데이트 (확장성: 향후 pending/retired도 처리)
+        const newStatus = String(data.status ?? '').trim();
+        const badge = card?.querySelector('.status-badge');
+        if (badge) badge.textContent = newStatus === 'published' ? '🟢공개' : newStatus === 'hidden' ? '⚫비공개' : newStatus === 'pending' ? '🟡검토중' : newStatus === 'retired' ? '🔴반려' : '⚫비공개';
+        const newBadgeClass = newStatus === 'published' ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : newStatus === 'hidden' ? 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ' : newStatus === 'pending' ? 'bg-gray-100 text-[#111111] dark:bg-[#333333]/15 dark:text-[#555555] border-[#e5e5e5] dark:border-[#e5e5e5]/20' : newStatus === 'retired' ? 'bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400 border-red-200 dark:border-red-500/20' : 'bg-gray-200 text-gray-600  dark:text-gray-400 border-gray-300 ';
+        if (badge) badge.className = `status-badge flex-shrink-0 text-[11px] font-bold px-2 py-0.5 rounded-full border ${newBadgeClass}`;
+        btn.textContent = newStatus === 'published' ? '비공개 전환' : newStatus === 'hidden' ? '공개 전환' : newStatus === 'pending' ? '검토중' : newStatus === 'retired' ? '반려됨' : '상태 변경 불가';
+      } catch {
+        alert('네트워크 오류가 발생했습니다.');
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  });
+</script>

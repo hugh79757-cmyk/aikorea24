@@ -1,9 +1,14 @@
 """
+⛔ 수동로그인 전용 — 자동 실행 절대 금지 (AGENTS.md §0 위반 시 계정 잠금)
+이 파일을 에이전트가 실행하면 안 됩니다. 반드시 사용자가 직접 수동으로 실행하세요.
+위반 시: 네이버 보안 시스템 도용 의심 태그 → 블로그 저품질 → 트래픽 2000→100 급락
+
 네이버 블로그 로그인 → 쿠키 저장 (Playwright)
-사용법: python login.py
+사용법: MANUAL_CONFIRM=1 python login.py (사용자 직접 실행 필수)
 """
 import json
 import os
+import sys
 import time
 from playwright.sync_api import sync_playwright
 
@@ -42,4 +47,7 @@ def login():
         browser.close()
 
 if __name__ == "__main__":
+    if os.environ.get("MANUAL_CONFIRM") != "1":
+        print("⛔ 수동로그인 전용 — 자동 실행 절대 금지 (AGENTS.md §0). MANUAL_CONFIRM=1 + 사용자 직접 확인 필요", file=sys.stderr)
+        sys.exit(1)
     login()

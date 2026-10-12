@@ -1,0 +1,8 @@
+<svg width="200" height="48" viewBox="0 0 200 48" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="199" height="47" rx="8" fill="#FFFFFF" stroke="#E2E8F0"/>
+  <path d="M28 10 L40 14 V24 C40 32 34 37 28 39 C22 37 16 32 16 24 V14 Z" fill="#2563EB"/>
+  <path d="M23 24 L27 28 L34 20" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="50" y="19" font-family="Arial,Helvetica,sans-serif" font-size="11" fill="#64748B">Featured on</text>
+  <text x="50" y="35" font-family="Arial,Helvetica,sans-serif" font-size="15" font-weight="bold" fill="#0F172A">AIKorea24</text>
+  <polygon points="182,17.5 183.9,22.1 188.8,22.4 184.9,25.5 186.1,30.3 182,27.6 177.9,30.3 179.1,25.5 175.2,22.4 180.1,22.1" fill="#F59E0B"/>
+</svg>

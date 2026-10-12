@@ -25,6 +25,7 @@ Brownfield refactoring of the Python automation pipeline from a monolithic, secu
 - [x] **Phase 16: Writer prompt v2 — jisang-aligned card structure** — 6카드 구조 통념→전환→증거A→증거B→열린질문→링크, but_line/question/gap_source writer 전달, style_examples 업데이트 (completed 2026-07-09)
 - [x] **Phase 26: 브리핑 중국어 완전 차단 + 심층글 비활성화** — generate_comment()에 system prompt + remove_chinese() 후처리 + 탐지 로깅, run_pipeline.py --skip-deep 기본 True, auto_deep_article.py DEPRECATED (completed 2026-07-12)
 - [x] **Phase 38: Threads 자가개선 (Self-Improvement) 루프** — 발행 성과 측정(insights API views/likes/replies) → 일 1회 수집 + net_replies 보정 → 30일 집계 → 피치 프롬프트 상위 토픽 주입 폐쇄 루프 (complete 2026-09-02, 커밋 227bbcc)
+- [x] **Phase 39: Compass 2-pass Korean Article Writing Pipeline** — Pass 1/Pass 2 prompt fixes for 5 dry-run issues (REQ-39-06..10): H2 slot-order mapping, per-section anti-repetition, competitor names in slot2_compare, banned promotional tone, intro_style pattern examples. H2 business preset slot-aligned. 2 new test files (slot_h2_alignment, no_repetition). 19/19 target unit tests pass; full suite 175 pass / 2 pre-existing fails (unrelated). (executed 2026-09-21) — Pass 1 emits a JSON compass (category, slot1_fact, slot2_compare, slot3_context, slot4_outlook, intro_style 5-pattern rotation, h2_flow category presets, tone, table_plan); Pass 2 drafts the body from that compass. G4 fact-gate blocks slot3 claims unsupported by sources. writeArticle execution + compass/body inspection. Goal: verify structure fills all 4 slots, follows h2_flow, rotates intro_style, diversifies writing patterns.
 
 ## Phase Details
 
@@ -589,6 +590,25 @@ Plans:
 
 **Evidence:** insights API 라이브 프로브 완료 (2026-09-01, 실제 발행 2건: views 311/194 확인). 구현 완료 (커밋 227bbcc): 라이브 수집 3건 views 311/194/77 프로브 일치, test 5/5, 회귀 기준선 동일 (473 passed / 16 failed 기존과 동일). SUMMARY 3종 — `.planning/phases/38-threads-self-improvement/`
 
+### Phase 39: Compass 2-pass Korean Article Writing Pipeline
+**Goal:** Structure Korean article writing into two explicit passes: Pass 1 emits a JSON `compass` (category, slot1_fact, slot2_compare, slot3_context, slot4_outlook, intro_style 5-pattern rotation, h2_flow category presets, tone, table_plan); Pass 2 drafts the body strictly from that compass. A G4 fact-gate blocks any slot3 claim not supported by sources. Supports `writeArticle` execution plus inspection of compass + body. Goal: verify the structure actually fills all 4 slots, follows h2_flow, rotates intro_style, and diversifies writing patterns.
+**Mode:** ad-hoc
+**Depends on:** Phase 38 (main_v3 structure), Phase 14 (JSON-first parsing), Phase 28-05 (fact-gate / source-citation patterns)
+**Requirements:**
+  - REQ-39-01: Pass 1 emits a JSON compass with all 9 fields (category, slot1_fact, slot2_compare, slot3_context, slot4_outlook, intro_style, h2_flow, tone, table_plan)
+  - REQ-39-02: G4 fact-gate blocks slot3_context claims whose key nouns and numbers do not appear in the crawled source body
+  - REQ-39-03: writeArticle executes end-to-end (compass → draft) and exposes both compass and body for inspection
+  - REQ-39-04: intro_style rotates across 5 consecutive compass generations (5 distinct values); h2_flow selected from category presets
+  - REQ-39-05: Draft body uses formal Korean tone (~습니다/~합니다); no compass field labels leak into draft
+**Success Criteria** (what must be TRUE):
+  1. Pass 1 emits a JSON compass with all required fields: category, slot1_fact, slot2_compare, slot3_context, slot4_outlook, intro_style, h2_flow, tone, table_plan
+  2. `intro_style` rotates through 5 patterns — no consecutive identical style in a run
+  3. `h2_flow` is selected from category presets and the drafted body follows it
+  4. G4 fact-gate: every slot3 claim is traceable to a source; unsupported claims block drafting
+  5. `writeArticle` executes end-to-end (compass → draft) and exposes both compass and body for inspection
+  6. Verification: structure fills all 4 slots, follows h2_flow, rotates intro_style, pattern diversity confirmed
+**Plans:** TBD
+
 ## Progress
 
 **Execution Order:** Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
@@ -628,4 +648,6 @@ Plans:
 | 29. 블로그 description 백필 — 문장 경계 자르기 | 1/1 | ✅ Complete | 2026-07-26 |
 | 30. 블로그 description을 본문 첫 문장으로 변경 | 1/1 | ✅ Complete | 2026-07-26 |
 | 38. Threads 자가개선 (Self-Improvement) 루프 | 3/3 | ✅ Complete | 2026-09-02 |
-| **Total** | **58/61** | ✅ 1-30 완료, 38 planned | |
+| 39. Compass 2-pass Korean Article Writing Pipeline | 2/2 | ✅ Complete | — |
+| 40. Compass 글쓰기 모드 다양성 확보 | 7/7 | ✅ Complete (72 tests) | 2026-09-22 |
+| **Total** | **59/63** | ✅ 1-40 완료 | |

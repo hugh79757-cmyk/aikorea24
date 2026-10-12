@@ -10,7 +10,7 @@ async function getSessionSecret(secret: string): Promise<CryptoKey> {
 }
 
 export async function signSession(data: Record<string, any>, secret: string): Promise<string> {
-  const payload = btoa(JSON.stringify(data));
+  const payload = btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(data))));
   const key = await getSessionSecret(secret);
   const encoder = new TextEncoder();
   const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(payload));
@@ -32,7 +32,7 @@ export async function verifySession(signedSession: string, secret: string): Prom
     const sigData = Uint8Array.from(atob(sigB64), c => c.charCodeAt(0));
     const valid = await crypto.subtle.verify('HMAC', key, sigData, encoder.encode(payload));
     if (!valid) return null;
-    return JSON.parse(atob(payload));
+    return JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(payload), c => c.charCodeAt(0))));
   } catch {
     return null;
   }

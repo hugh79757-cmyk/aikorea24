@@ -1,17 +1,20 @@
 ---
-gsd_state_version: 1.1
+gsd_state_version: "1.0"
 milestone: v2.0-complete
-milestone_name: Course System + Pipeline Live
+current_phase: 38
+current_phase_name: Threads 자가개선   루프
 status: phase_38_complete
-stopped_at: Phase 38 Threads 자가개선 루프 구현 완료 (2026-09-02) — 3 plans 전부 완료 (커밋 227bbcc). 라이브 검증: 발행 3건 views 311/194/77 프로브 일치. 부트스트랩 기간 (~30 posts 축적, 약 10-14일) 후 주입 시작. 미커밋 잔존: 19개 tool MD 카테고리 수정
-last_updated: 2026-09-02T22:45:00.000Z
-last_activity: 2026-09-02
+stopped_at: Completed 42-tools-phase1-adjust-02-PLAN.md
+last_updated: "2026-09-28T14:55:00.000Z"
+last_activity: 2026-09-28
+last_activity_desc: "2026-09-28 - tool URL bug fix + 84 backfill + 4 empty-url cleanup + thumbnail Unsplash fallback (quick 260928-t07/ts1)"
+state_head: 61e639bcdc345fad1106a915e3a59d013e4b0e02
 progress:
   total_phases: 38
   completed_phases: 38
   total_plans: 64
   completed_plans: 64
-  percent: 100
+milestone_name: Course System + Pipeline Live
 ---
 
 # Project State
@@ -27,11 +30,12 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 Phase: 38 — Threads 자가개선 (Self-Improvement) 루프
 Status: ✅ Complete (2026-09-02, 커밋 227bbcc) — 3/3 plans (측정/수집·분석/주입)
-Last activity: 2026-09-02T22:45
+Last activity: 2026-09-26 - Completed quick task 260926-c73: fix tool list missing + tool detail image render
 
 Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
 
 ### Phase 38 구현 결과 (2026-09-02)
+
 - **38-01 측정**: `performance_log.py` + main_v3 발행 성공 블록 연결 (append-only, try/except) — API 0 call
 - **38-02 수집/분석**: `collect_insights()` 5지표 + **net_replies 모델 정정** (insights replies는 자기 카드 체인 포함 → root 직접 답글 외부 카운트로 변경, 라이브 검증), `analyze()` 30일 ≥30 posts 문턱, launchd `kr.aikorea24.threads-insights` 일 06:10 등록
 - **38-03 주입**: pitch.py `_top_topics_hint()` — report 존재 시에만 "참고용, 강제 아님" 상위 3토픽 주입 (없으면 기존 동작)
@@ -39,12 +43,14 @@ Progress: [███████████████████████
 - **다음 관찰 포인트**: ① 09-03 00:00 발행 로그 `📊 성과 로그 기록 완료` ② 09-03 06:10 insights_collector.log ③ ~09-13 30 posts 축적 후 첫 report 생성
 
 ### Blog Deployment Automation
+
 - **blog_draft_generator.py**에 6단계 배포 추가:
   - `npm run build` → 빌드
   - `wrangler pages deploy` → auth profile 사용 (CLOUDFLARE_API_TOKEN 우회)
   - 생성된 블로그가 있을 때만 자동 배포 실행
 
 ### Course System Status
+
 - **프레임**: 오케스트레이터 — "코드를 쓰는 사람에서, AI를 지휘하는 사람으로"
 - **타겟**: AI로 혼자 무언가를 만드는 사람 (개인사업자 + 직장인 부업러 + 프리랜서 + 1인 창작자)
 - **로드맵**: "코드를 쓰는 사람에서, AI를 지휘하는 사람으로. 21일."
@@ -57,6 +63,7 @@ Progress: [███████████████████████
 | 무료 에이전트, 7일 | 7day-agent | 15~21 (7개) | ✅ 시드 완료 |
 
 ### Phase 17-02 Details (HTML → PNG Image Generator)
+
 - **Goal**: HTML 템플릿 기반 Instagram Carousel(1080×1350) + Reels(1080×1920) PNG 생성
 - **Plans**: 1/1 complete
 - **Files created**:
@@ -69,6 +76,7 @@ Progress: [███████████████████████
 - **Decision**: string.Template (stdlib) over Jinja2, Playwright CLI subprocess over Python API
 
 ### Phase 19 Details (MVP-3: 자동 발송) — Coded, Deferred
+
 - **Goal**: 7일 강좌 자동 이메일 발송
 - **Plans**: 3/3 complete (코드 완료)
 - **Files created**:
@@ -82,6 +90,7 @@ Progress: [███████████████████████
 - **NOTE**: launchd plist NOT installed, day 0 immediate send hook NOT implemented — 모든 콘텐츠 준비 후 마지막에 활성화 예정
 
 ### Phase 15 Details (Vectorize + D1 fix + Writer fallback + Hook fix)
+
 - **Goal**: Vectorize 의미적 중복제거 도입, failed_crawls TTL 적용, 카드 JSON 배열 전환, D1 link dedup 버그 수정, Writer fallback 복구, hook 검증 버그 수정.
 - **Key changes**:
   1. `pipeline/infra/vectorize_client.py` — 신규: OpenAI text-embedding-3-small (1536d) + Cloudflare Vectorize REST API 클라이언트
@@ -93,9 +102,11 @@ Progress: [███████████████████████
 - **Verification**: 2회 연속 dry-run 성공 (6카드), 1회 실제 발행 성공
 
 ### Phase 13 Details (Card Separation Fix & Validation Hardening)
+
 - (Previous phase details retained; see git history for full record)
 
 ### Phase 11 Details (Defense Mechanism Hardening)
+
 - **Goal**: Harden defense against prompt injection and foreign characters — improve maintainability, consistency, comprehensiveness
 - **Key changes**: 
   - Pattern consolidation: `MODEL_MESSAGE_PATTERNS` → single source in validator (removed from writer)
@@ -148,6 +159,14 @@ Progress: [███████████████████████
 | Phase 13-card-separation-fix 13-03 | 2min | 6 tasks | 4 files |
 | Phase 17-instagram-carousel 17-02 | 8min | 3 tasks | 5 files |
 | Phase 17-instagram-carousel 17-06 | 5min | 1 task | 4 files |
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 40-compass-writing-mode-diversification P01 | 25min | 11 tasks | 6 files |
+| Phase 41-tools-user-submit P03 | 20min | 3 tasks | 4 files |
+| Phase 42-tools-phase1-adjust P01 | 4min | 2 tasks | 3 files |
+| Phase 42-tools-phase1-adjust P02 | 15min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -172,6 +191,10 @@ Recent decisions affecting current work:
 - [Phase 28-05]: title 한글 우선 규칙: 영문 비율 40% 초과 시 검수 fail (제품명은 프롬프트 지침으로 한글 번역 유도)
 - [Phase 28-05]: 발행 전 자동 검수 게이트 5종 구현: heuristic 4종(출처 없는 숫자·첫 120자 결론·표 무결성·제목 언어) + LLM 일반론 판정 1종 → validate_draft_quality()로 통합, main() 생성 루프에 연결
 - [Phase 28-05]: auto_deep_article.py 표 사용 금지 규칙 삭제 + 조건 분기·출처·독자행동·관련 허브 섹션 요구 추가 → generate_draft와 프롬프트 일관성 확보
+- [Phase 38]: Independent 2-axis rotation (intro_style + h2_flow) over single sequential counter
+- [Phase 38]: 42-01: DROP COLUMN price local+remote 성공, fallback 불필요 (0행 무손실)
+- [Phase 38]: 42-01: price_model DB NOT NULL 없이 코드 검증만 (RESEARCH Risk 3 권장)
+- [Phase 38]: 42-02: matchFree unchanged (Freemium 무료필터 제외) + [id] hidden 직접접근 허용 — Open Q 2건 senior 확인용 flag
 
 ### Key Decisions (Phase 17)
 
@@ -188,6 +211,7 @@ Recent decisions affecting current work:
 - [Phase 17-06] **launchd 스케줄**: 캐러셀 08:00 + 릴스 19:00 KST 별도 에이전트
 
 ### Phase 25 Details (커뮤니티 레슨 순차 해금)
+
 - **Goal**: 커뮤니티에서 강좌 레슨을 이메일 드립 진도(`days_sent`)와 동일하게 하나씩 잠금 해제
 - **Plans**: 1/1 complete (RESEARCH.md + PLAN.md in `.planning/phases/25-community-lesson-unlock/`)
 - **Files changed**:
@@ -211,15 +235,22 @@ None.
 
 ### Quick Tasks Completed
 
-| Date | Slug | Description |
-|------|------|-------------|
-| 2026-07-26 | fix-blog-deploy-condition | blog_draft_generator.py 배포 조건 수정: `generated`만 체크 → `generated or untracked_blog_files`로 확대. 미커밋 블로그 6건(7/25-007~012) 감지 시 배포 실행 |
-| 2026-08-13 | fix-stale-skip-deep-docs | run_pipeline.py --skip-deep 제거(9fa7b05) 후 stale 문서화 수정: TECHNICAL.md, SKILLS/01-daily-news-pipeline.md, SKILLS/04-deep-article-generator.md에서 --skip-deep/--no-skip-deep 참조 제거 |
-| 2026-08-13 | decouple-tools-collector-instagram | tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 |
-| 2026-08-26 | verify-publish-isolation | 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) |
-| 2026-08-28 | pipeline-docs | TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 |
-| 2026-08-29 | weekly-contrast-thumb-leak | 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 |
-| 2026-09-01 | threads-d1-alert | Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 |
+| # | Description | Date | Commit | Status | Directory |
+| --- | ------------- | ------ | -------- | -------- | ----------- |
+| 1 | fix-blog-deploy-condition · blog_draft_generator.py 배포 조건 수정: `generated`만 체크 → `generated or untracked_blog_files`로 확대. 미커밋 블로그 6건(7/25-007~012) 감지 시 배포 실행 | 2026-07-26 | — | — | — |
+| 2 | fix-stale-skip-deep-docs · run_pipeline.py --skip-deep 제거(9fa7b05) 후 stale 문서화 수정: TECHNICAL.md, SKILLS/01-daily-news-pipeline.md, SKILLS/04-deep-article-generator.md에서 --skip-deep/--no-skip-deep 참조 제거 | 2026-08-13 | — | — | — |
+| 3 | decouple-tools-collector-instagram · tools_collector.py에서 pipeline.instagram.utils.slugify → pipeline.infra.utils.slugify로 변경. edge_tts import 연쇄 문제 해결, 인스타그램 의존성 분리. pipeline/infra/utils.py 신규 생성 | 2026-08-13 | — | — | — |
+| 4 | verify-publish-isolation · 실발행 2시간 검증 + 테스트 발행 차단 검증 — launchd 12슬롯(홀수시) PASS, 11:01 실발행 6ID 성공, contrast dry-run posted 미터치 + drafts/contrast 분리 PASS (880 vs 15) | 2026-08-26 | — | — | — |
+| 5 | pipeline-docs · TECH.md에 Section 13 (Abbductive Reasoning Pipeline) + Section 14 (Weekly Contrast Deep Dive Pipeline) 추가. 12개 모듈 시그니처, 환각 방어 3중 레이어, 발행 게이트, 4주 관측 지표 문서화 | 2026-08-28 | — | — | — |
+| 6 | weekly-contrast-thumb-leak · 심층분석 2건 썸네일/릭/중복섹션 수정 + 깊이 보강. 루트픽스: deep_dive_writer.py 출력형식을 병렬나열→통합분석 4섹션으로 개편, max_tokens 4000→6000, A측/B측/대비 금지. weekly_blog_publisher.py에 generate_thumbnails 연동. 2건 재생성(001 LLM, 002 수동복원-폐기회피) + 썸네일 + 배포 완료 | 2026-08-29 | — | — | — |
+| 7 | threads-d1-alert · Threads 파이프라인 D1 장애(HTTP 500/7500, 12:00~) 시 빈 기사 5회 재시도 소진 경로에 send_telegram 추가 (84850ac). 기존에는 조용히 return → 수 시간 무알림 스킵. 토큰 유효 확인, 할당량 아님(403 아님) 판정 | 2026-09-01 | — | — | — |
+| 8 | vote-login-redirect-fix · 툴 상세 추천 클릭 시 로그인 페이지로 튕기던 버그 수정 (e7f2b609). 원인: session 쿠키 httpOnly → 클라이언트 쿠키 스니핑 항상 false. 수정: vote 핸들러 POST-first + 401-전용 리다이렉트, /api/auth/me.ts 신규 | 2026-09-24 | — | — | — |
+| 9 | cafe-copy-line · 카페 공유 문구 마지막 줄을 카페 URL만으로 정리 (47a1aee7). `에서 더 많은 AI 활용법을 확인하세요` 문구 제거. CAFE_URL(https://cafe.naver.com/aikorea24) 변경 없음 | 2026-09-24 | — | — | — |
+| 10 | newsletter-brevo-dynamic-subscribers · 뉴스레터 발송 정상화: get_subscribers_from_brevo() 신규 — Brevo GET /v3/contacts로 list#2 구독자 동적 조회. send_email_via_brevo에서 listIds 제거, to 필드 개별 발송, sample/test 이메일 필터링, SUBSCRIBER_EMAIL 폴백 유지 (37d8f8d1) | 2026-09-24 | — | — | — |
+| 11 | fix-kakao-login-redirect-vote-button-red · 카카오 로그인 redirect_to state 파이프라인 + 투표 버그 수정 (213ee74e, 381ff353, 03a65ad6) | 2026-09-25 | — | — | — |
+| 260926-c73 | Fix: registered test tool missing from list + uploaded image not showing on tool page | 2026-09-26 | 61e639bc | — | [260926-c73-fix-registered-test-tool-missing-from-li](./quick/260926-c73-fix-registered-test-tool-missing-from-li/) |
+| 260928-t07 | 발행 블로그 썸네일 누락 원인조사 + 승인 툴 게시 상태 확인 (Pexels 429→placeholder→image 생략 high, 금일 툴 실제 2건 정상 — 조사 전용, 코드 0건) | 2026-09-28 | — | complete | [260928-t07-3](./quick/260928-t07-3/) |
+| 260928-ts1 | auto_thumbnail Unsplash 폴백 + 3회 재시도 + 09-28 누락 12건 백필 (검증 6/6 passed, 12/12 REAL) | 2026-09-28 | b9553ca6 | passed | [260928-ts1-auto-thumbnail-unsplash-3](./quick/260928-ts1-auto-thumbnail-unsplash-3/) |
 
 ### Deferred Items
 
@@ -230,9 +261,10 @@ None.
 
 ## Session Continuity
 
-Current session: 2026-08-27T03:53:00.000Z
-Stopped at: Phase 37 Threads Contrast Pivot + Kicker7 운영화 — contrast 5모듈(1795L) + person_gate + kicker7_writer, writer/validator/pitch/main_v3 확장, auto_news_selector route_person_stories, 39 contrast tests pass, dry-run graceful drop verified, 18 blog drafts untracked (미커밋)
-Next: untracked 분류 커밋 (code vs drafts), STAR hook test triage, TECH.md Phase37 반영, kicker7 live 배포 :30 launchd 확인
+Last session: 2026-09-23T16:00Z
+Stopped at: Phase 3-C Wave A+B complete (5fdfa9d5 + 642d2806), deploy pending
+Resume file: .continue-here.md (Phase 3-C 핸드오프 섹션)
+Next: bash scripts/deploy.sh → twinssn 로그인 후 /admin/tools/ 승인 UAT 1건
 
 ---
 phase_37: 2026-08-26~27 Threads Contrast Pivot + Kicker7 (blog→Threads 7→5 pivot, D untouched)
@@ -241,3 +273,32 @@ phase_37: 2026-08-26~27 Threads Contrast Pivot + Kicker7 (blog→Threads 7→5 p
   tests: 39 new (21 extractor +8 background +10 writer/orch) = 39 pass / 전체 336/338 pass (2 pre-existing: retention_from_env, hook STAR)
   guard: --format contrast only with --dry-run, orchestrator never calls publisher, writer.py D path untouched, kicker7 별도 launchd :30
   artifacts: contrast 5모듈 + person_gate + kicker7_writer (1795L), scripts/threads 3개, phase37 docs 5개, blog drafts 18건
+
+phase_39: 2026-09-21 Compass 2-pass Korean Article Writing Pipeline (replan execution)
+  status: complete (Task 1 prompt fixes + Task 2 expansion applied; plan was previously unexecuted — the 4 most recent commits were the original build, not the replan fixes)
+  plans: 1/1 (39-PLAN.md; 39-01-SUMMARY.md written)
+  tests: 19 pass on target 4 files (-m unit); 175 pass / 2 fail on full -m unit suite — the 2 failures are pre-existing (verified identical on clean tree via git stash), unrelated to this change
+  guard: fact_gate.py / writer.py / pitch.py untouched (git diff --name-only confirms); git check-ignore exit 1 on all 3 modified paths
+  artifacts: pipeline/threads/compass.py (5 prompt fixes + INTRO_STYLE_EXAMPLES + INTRO_STYLE_PREFIXES + slot-aligned business preset), tests/test_compass_slot_h2_alignment.py (4 tests), tests/test_compass_no_repetition.py (4 tests), tests/test_compass_generation.py (+test_intro_style_examples_defined), .planning/phases/39-compass-2-pass-korean-article-writing-pipeline/39-01-SUMMARY.md
+
+phase_40: 2026-09-22 Compass 글쓰기 모드 다양성 확보 (패턴 파괴 강화)
+  status: complete (실행 완료)
+  plans: 1/1 (40-PLAN.md)
+  tests: 72 pass (기존 24 + 신규 48), 0 fail
+  guard: 기존 compass.py / fact_gate.py 동작 보존 (additive only) — 기존 테스트 100% 통과
+  artifacts: .planning/phases/40-compass-writing-mode-diversification/ (CONTEXT.md, 40-PLAN.md, 40-01-SUMMARY.md)
+  key_changes:
+    - _load_compass_rotation → _load_intro_rotation + _load_h2_rotation (독립 2축)
+    - weighted_pick() — 최근 2회 제외 가중 랜덤
+    - INTRO_STYLES 5→8 (quote_lead, reverse_chronology, what_if)
+    - _rearrange_h2() + H2_FLOW_REQUIRED/OPTIONAL (3 required + 2 optional)
+    - build_blog_system_prompt(tone) 3 분기 + _build_summary_block() 4 형식
+    - fact_gate 영어 음차 매칭 + 언어 중립 + 혼합 임계값
+
+phase_41: 2026-09-23 tools-user-submit (사용자 직접 등록 1차 초벌)
+  status: complete (3/3 plans, waves 1→2→3 sequential)
+  plans: 3/3 (41-01 Phase0 read-only gate GO, 41-02 backbone DDL+API+form, 41-03 MVP completion+list+detail)
+  tests: npm run build 3/3 pass, E2E local curl matrix (401/400/201/slug-suffix/302/404) — browser clipboard click untested
+  guard: src/content/tools/ + scripts/tools_collector.py diff empty, no Phase 3 (R2/my/PUT/DELETE)
+  artifacts: sql/001_tool_submissions.sql (D1 local+remote applied), src/pages/api/tools/submit.ts, src/pages/tools/submit.astro + index.astro + [id].astro, 41-01-REPORT.md, 3 SUMMARY.md
+  notes: user_id INTEGER locked, MAKER badge classes verbatim 3 files, cafe https://cafe.naver.com/gptdohye, .wrangler/state sqlite local-only uncommitted

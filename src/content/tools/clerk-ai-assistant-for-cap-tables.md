@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://withmantle.com/"
 useCases: ["사업계획서 초안", "회의록", "이메일 작성"]
 tags: ["주식", "문서관리", "AI 도우미"]
 featured: false

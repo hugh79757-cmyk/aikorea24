@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://unabyss.com/"
 useCases: ["영어 이메일 작성", "회의록 작성", "프로젝트 관리"]
 tags: ["AI연동", "업무효율", "자동화"]
 featured: false

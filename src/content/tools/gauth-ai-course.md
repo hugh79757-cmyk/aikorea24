@@ -5,7 +5,7 @@ category: "번역·학습"
 price: "무료/월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://www.gauth.com/"
 useCases: ["수학 문제 풀이", "개념 이해하기", "시험 대비 연습"]
 tags: ["수학공부", "AI튜터", "자기주도학습"]
 featured: false

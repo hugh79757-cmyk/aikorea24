@@ -26,11 +26,9 @@ def _build_cmd(sql: str) -> list[str]:
 
 
 def _build_env() -> dict:
-    """CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID 제거 — auth profile 우선"""
-    env = dict(__import__("os").environ)
-    env.pop("CLOUDFLARE_API_TOKEN", None)
-    env.pop("CLOUDFLARE_ACCOUNT_ID", None)
-    return env
+    # 2026-10-09 CF-MIGRATE-02: OAuth 프로필은 출발 계정(fac9808c)이라
+    # 신규 계정 D1에 7404. env 주입 토큰(신규 계정)을 그대로 wrangler에 전달.
+    return dict(__import__("os").environ)
 
 
 def _parse_result(stdout: str) -> list[dict]:
@@ -60,9 +58,9 @@ def d1_query(
                 stderr = r.stderr.strip()
                 # 인증 오류 진단
                 if "7403" in stderr:
-                    log(f"  ⚠️ D1 인증 실패 [7403]: CLOUDFLARE_ACCOUNT_ID와 OAuth 프로필 충돌 의심")
+                    logger.warning("  ⚠️ D1 인증 실패 [7403]: CLOUDFLARE_ACCOUNT_ID와 OAuth 프로필 충돌 의심")
                 elif "10000" in stderr:
-                    log(f"  ⚠️ D1 인증 실패 [10000]: CLOUDFLARE_API_TOKEN env var 충돌 의심")
+                    logger.warning("  ⚠️ D1 인증 실패 [10000]: CLOUDFLARE_API_TOKEN env var 충돌 의심")
                 last_error = f"exit code {r.returncode}: {stderr[:300]}"
                 if attempt < retries - 1:
                     time.sleep(1.0 * (2.0 ** attempt))

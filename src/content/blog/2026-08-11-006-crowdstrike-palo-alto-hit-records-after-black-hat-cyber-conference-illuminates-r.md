@@ -4,7 +4,7 @@ description: "세계 최대의 사이버 보안 행사인 블랙 해트 컨퍼�
 date: 2026-08-12T05:47:54+09:00
 category: "뉴스"
 tags:
-  - "CrowdStrike, Palo Alto hit records after Black Hat cyber conference illuminates rising AI threat"
+ - "CrowdStrike, Palo Alto hit records after Black Hat cyber conference illuminates rising AI threat"
 draft: false
 
 image: "/images/2026-08-11-006-crowdstrike-palo-alto-hit-records-after-black-hat-cyber-conference-illuminates-r/thumbnail.webp"
@@ -30,7 +30,7 @@ image: "/images/2026-08-11-006-crowdstrike-palo-alto-hit-records-after-black-hat
 
 향후 보안 업계는 누가 더 정확하고 빠르게 인공지능 모델을 학습시켜 위협을 탐지하느냐에 따라 승자가 결정될 것입니다. 이는 단순한 기술 경쟁을 넘어 데이터 확보 능력과 클라우드 인프라 운용 능력이 결합된 종합적인 지능형 서비스 경쟁으로 이어질 전망입니다. 보안 기업들에 대한 시장의 뜨거운 관심은 앞으로도 당분간 지속될 것으로 보이며, 이는 기술 혁신을 선도하는 기업들에게 더 많은 기회를 제공할 것입니다.
 
-📌 **요약**
+**요약**
 
 1. 블랙 해트 컨퍼런스 이후 인공지능 기반 보안 수요가 폭발하며 크라우드스트라이크와 팔로알토 네트웍스가 사상 최고 주가를 기록했습니다.
 2. 인공지능을 활용한 지능형 사이버 공격이 증가함에 따라, 이를 방어하기 위한 자동화된 인공지능 보안 플랫폼의 가치가 급등하고 있습니다.

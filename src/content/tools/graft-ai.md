@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 1,950,000원"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://graft.axcelner.com"
 useCases: ["업무 자동화", "데이터 분석", "프로젝트 관리"]
 tags: ["AI", "업무자동화", "레거시소프트웨어"]
 featured: false

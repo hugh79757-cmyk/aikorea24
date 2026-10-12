@@ -21,12 +21,15 @@
 	<key>StandardOutPath</key>
 	<string>/Users/twinssn/Projects/aikorea24/scripts/blog_draft.log</string>
 	<key>StartCalendarInterval</key>
+	<!-- AIK24-BLOG-01: 09:30 KST로 이동 (09:00 KST 브리핑 파이프라인 완료 후).
+	     launchd StartCalendarInterval은 머신 로컬타임(+07) 기준이다 = KST - 2h.
+	     로컬 07:30 = KST 09:30. -->
 	<array>
 		<dict>
 			<key>Hour</key>
-			<integer>6</integer>
+			<integer>7</integer>
 			<key>Minute</key>
-			<integer>15</integer>
+			<integer>30</integer>
 		</dict>
 		<dict>
 			<key>Hour</key>

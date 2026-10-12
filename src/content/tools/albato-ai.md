@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://albato.com"
 useCases: ["업무 자동화", "마케팅 자동화", "프로젝트 관리"]
 tags: ["자동화", "노코드", "통합 플랫폼"]
 featured: false

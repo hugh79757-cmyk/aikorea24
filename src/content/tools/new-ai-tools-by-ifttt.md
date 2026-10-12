@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 9,900원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: ""
+url: "https://ifttt.com"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["자동화", "AI 도구", "업무 효율"]
 featured: false

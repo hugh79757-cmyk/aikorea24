@@ -1,132 +1,106 @@
 [
   {
-    "topic": "AI 투자 활성화 vs 금융 소비자 보호",
-    "contrast_frame": "투자 플랫폼의 AI 비서 도입을 통한 거래 편의성 증대 vs 금융 당국의 AI 투자 조언에 대한 소비자 보호 경고",
+    "topic": "데이터센터 인프라 확장 vs 지역사회 및 환경적 건립 중단",
+    "contrast_frame": "AI 구동을 위한 고성능 데이터센터 공급 확대 추진 vs 인프라 붐으로 인한 비용 상승 및 환경 갈등으로 인한 건설 중단",
     "type": "A",
     "source_articles": [
       {
-        "id": 46653,
-        "title": "스케일러블 캐피털, 600억 유로 규모 고객 자산을 외부 AI 비서와 연동",
+        "id": 54154,
+        "title": "노키아 CEO, 공급 제약만 없다면 데이터센터가 '2배 더 빨리' 지어질 것이라 언급",
+        "source": "CNBC Tech",
+        "pub_date": "Mon, 05 Oct 2026 22:00:01",
+        "link": "https://www.cnbc.com/2026/10/05/nokia-ai-data-center-buildout.html"
+      },
+      {
+        "id": 54495,
+        "title": "AI의 본고장 샌프란시스코, 신규 데이터센터 건립 일시 중단",
         "source": "The Next Web",
-        "pub_date": "Tue, 25 Aug 2026 12:06:31",
-        "link": "https://thenextweb.com/news/scalable-capital-chatgpt-claude-trading"
-      },
-      {
-        "id": 47060,
-        "title": "AI를 투자에 사용할 때는 본인 책임, 금융 감독원 경고",
-        "source": "City AM",
-        "pub_date": "Wed, 26 Aug 2026 23:01:00",
-        "link": "https://www.cityam.com/use-ai-for-investing-at-your-own-risk-warns-watchdog/"
+        "pub_date": "Wed, 07 Oct 2026 18:23:21",
+        "link": "https://thenextweb.com/news/san-francisco-data-centre-pause-europe"
       }
     ],
-    "quote_1": "스케일러블 캐피털은 자사 투자 플랫폼을 챗GPT와 클로드에 개방하여, 고객들이 브로커 앱을 거치지 않고도 AI 비서를 통해 포트폴리오를 분석하고 거래할 수 있게 했습니다.",
-    "quote_2": "영국의 금융 감독 기관은 AI를 투자 조언에 사용하는 영국인들에게 문제가 생길 경우 보호받지 못할 수 있다고 경고했습니다.",
-    "gap_summary": "금융 플랫폼의 기술적 혁신이 투자 접근성을 높이는 동시에, 규제 사각지대로 인한 투자자 피해 위험을 가중시킬 수 있음을 시사한다.",
-    "reading_angle": "금융 서비스의 디지털 전환 속도와 소비자 안전망 구축 사이의 정책적 괴리",
-    "category": "투자"
+    "quote_1": "노키아 CEO의 이러한 발언은 최고경영진들이 개발 속도 조절을 논의하는 상황에서도 AI에 대한 지속적인 수요가 여전히 존재함을 강조합니다.",
+    "quote_2": "샌프란시스코 감독위원회는 신규 데이터센터 건립을 45일간(최대 22개월 연장 가능) 전면 중단하는 안건을 만장일치로 통과시켰으며, 이에 따라 베이뷰 확장 및 49.5MW 규모의 독패치 프로젝트가 중단되었습니다.",
+    "gap_summary": "AI에 대한 지속적인 수요로 인해 인프라 확장을 가속화하려는 시도가 존재할 수 있으나, 지역사회의 갈등과 규제로 인해 실제 건립은 일시 중단될 가능성이 있음을 보여준다.",
+    "reading_angle": "AI 기술의 폭발적 수요와 물리적 인프라 수용 한계 사이의 충돌을 해석하는 관점",
+    "category": "정책"
   },
   {
-    "topic": "AI 기반 자동화의 효율성 vs 인간 고유 영역의 보존",
-    "contrast_frame": "AI가 대체할 수 없는 '인간 전용' 일자리 지정 필요성 vs 수학 등 전문 분야에서 AI가 갖지 못한 인간 고유의 창의적 능력 유지",
+    "topic": "오픈소스 및 저비용 AI 모델 개발 vs 거대 빅테크의 유료화 및 구독 모델 강화",
+    "contrast_frame": "토큰 가격 인하 및 오픈웨이트 기반의 저비용 모델 공략 vs 수익성 확보를 위한 구글 등 빅테크의 등급별 유료 구독 차등화",
     "type": "A",
     "source_articles": [
       {
-        "id": 46834,
-        "title": "빌 게이츠, AI의 잠식에 맞서 '인간 전용' 일자리 필요성 역설",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 26 Aug 2026 10:33:43",
-        "link": "https://www.theguardian.com/technology/2026/aug/26/bill-gates-human-reserved-jobs-ai-takeover"
-      },
-      {
-        "id": 46641,
-        "title": "AI가 수학의 종말을 의미할까? 아직은 아니다",
-        "source": "The Guardian AI",
-        "pub_date": "Tue, 25 Aug 2026 12:00:35",
-        "link": "https://www.theguardian.com/commentisfree/2026/aug/25/ai-mathematics-careers"
-      }
-    ],
-    "quote_1": "AI가 대체할 수 없는 '인간 전용' 일자리를 지정해야 한다고 주장했습니다.",
-    "quote_2": "인간 수학자에게는 여전히 AI가 갖지 못한 고유한 능력이 남아 있습니다.",
-    "gap_summary": "AI의 급격한 확산 속에서 인간의 노동 영역을 제도적으로 보호하려는 정책적 접근과, 전문 분야 내재적 역량을 통해 기술적 한계를 극복하려는 실무적 대응이 공존하고 있음을 시사할 수 있다.",
-    "reading_angle": "AI 자동화에 대한 대응 전략으로서 '제도적 보호'와 '인간 고유 역량의 재발견'이라는 두 가지 상호보완적 관점",
-    "category": "노동"
-  },
-  {
-    "topic": "AI 모델의 신뢰성 확보 vs AI 생성 정보의 오남용",
-    "contrast_frame": "LLM과 보안 기술을 결합하여 정보의 일관성과 신뢰성을 높이려는 기술적 시도 vs 가짜 싱크탱크를 통해 AI로 선전 활동을 수행하는 악의적 이용",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 46937,
-        "title": "QueryStory, AI가 제공하는 정보의 신뢰성을 높이려 합니다",
-        "source": "TechCrunch AI",
-        "pub_date": "Wed, 26 Aug 2026 13:00:00",
-        "link": "https://techcrunch.com/2026/08/26/querystory-wants-you-to-believe-what-ai-is-telling-you/"
-      },
-      {
-        "id": 46835,
-        "title": "이스라엘이 자금을 댄 가짜 미국 싱크탱크, AI를 이용한 선전 활동 시도",
-        "source": "The Guardian AI",
-        "pub_date": "Wed, 26 Aug 2026 11:00:11",
-        "link": "https://www.theguardian.com/world/2026/aug/26/fake-thinktank-israel-ai-propaganda"
-      }
-    ],
-    "quote_1": "LLM과 사이버 보안 노하우를 결합해 AI의 질의응답 과정을 더욱 일관되고 신뢰할 수 있게 만드는 것을 목표로 합니다.",
-    "quote_2": "존재하지 않는 싱크탱크의 이름을 내건 이 친이스라엘 메시지 사이트는 AI를 조작하려는 목적으로 운영되었습니다.",
-    "gap_summary": "AI 기술이 정보의 신뢰성을 강화하는 도구로 활용될 수 있는 반면, 동시에 여론 조작을 위한 악의적 선전 수단으로도 오남용될 수 있음을 시사한다.",
-    "reading_angle": "AI 기술의 발전이 가져오는 양면성, 즉 기술적 보호 장치와 악의적 조작 시도 간의 대립 구도",
-    "category": "보안"
-  },
-  {
-    "topic": "기업의 AI 인프라 확장 vs 핵심 인력의 이탈",
-    "contrast_frame": "앤스로픽의 대규모 컴퓨팅 인프라 계약 체결을 통한 확장 전략 vs OpenAI의 핵심 데이터 센터 임원 퇴사 등 고위급 인력 유출",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 47151,
-        "title": "앤스로픽(Anthropic), IPO 앞두고 Nscale과 450억 달러 규모 컴퓨팅 계약 체결",
+        "id": 54468,
+        "title": "대폭 인하된 가격으로 등장한 클로드 하이쿠 5.5, AI 가격 경쟁이 끝나지 않았음을 증명",
         "source": "The Decoder",
-        "pub_date": "Thu, 27 Aug 2026 10:49:35",
-        "link": "https://the-decoder.com/anthropic-locks-in-45-billion-dollar-compute-deal-with-nscale-ahead-of-ipo/"
+        "pub_date": "Wed, 07 Oct 2026 18:49:23",
+        "link": "https://the-decoder.com/claude-haiku-5-5-arrives-with-massive-price-cuts-proving-the-ai-pricing-arms-race-is-far-from-over/"
       },
       {
-        "id": 46820,
-        "title": "OpenAI, 핵심 데이터 센터 임원 퇴사… 이어지는 고위급 인력 이탈",
-        "source": "TechCrunch AI",
-        "pub_date": "Wed, 26 Aug 2026 00:06:20",
-        "link": "https://techcrunch.com/2026/08/25/openai-loses-a-top-data-center-exec-as-stream-of-high-profile-departures-continues/"
+        "id": 53971,
+        "title": "구글의 새로운 제미나이 등급, 무료 사용자는 가장 약한 모델로 제한하고 월 5달러 구독자는 프로 이용 차단",
+        "source": "The Decoder",
+        "pub_date": "Sun, 04 Oct 2026 07:28:54",
+        "link": "https://the-decoder.com/googles-new-gemini-tiers-cut-free-users-to-its-weakest-model-and-lock-5-month-subscribers-out-of-pro/"
       }
     ],
-    "quote_1": "앤스로픽이 영국 클라우드 스타트업 Nscale과 약 450억 달러 규모의 계약을 체결했습니다.",
-    "quote_2": "OpenAI는 말론(Malone)의 퇴사와 관련해 테크크런치(TechCrunch)에 \"업무의 규모와 속도를 지원하기 위해 최근 인프라 조직을 재편했다\"고 밝혔습니다.",
-    "gap_summary": "앤스로픽은 대규모 인프라 확보를 통해 성장 동력을 강화하는 반면, OpenAI는 핵심 인력 이탈로 인해 조직 운영의 불확실성이 커지고 있을 가능성이 있다.",
-    "reading_angle": "AI 기업의 경쟁력 확보 방식(물적 자원 투자 vs 인적 자원 유지)에 따른 성장 전략의 차이",
+    "quote_1": "토큰 가격은 최대 90%까지 인하되었으나, 새로운 토크나이저 도입으로 인해 일부 비용 절감 효과가 상쇄되는 측면도 있습니다.",
+    "quote_2": "구독하지 않은 사용자는 가장 작은 모델인 플래시 라이트만 이용할 수 있으며, 플래시와 프로는 유료 고객 전용으로 제공됩니다.",
+    "gap_summary": "일부 AI 기업들이 가격 인하와 저비용 공세를 펼치는 동안, 구글 같은 빅테크는 무료 이용을 축소하고 구독 모델을 차등화하여 수익성 확보에 집중할 수 있음을 보여준다.",
+    "reading_angle": "AI 시장이 가격 경쟁을 통한 보급 확대와 수익성 중심의 유료화라는 두 가지 갈래로 나뉘어 전개되고 있음을 보여주는 관점",
     "category": "시장"
   },
   {
-    "topic": "AI 학습의 법적 정당성 vs 저작권 보호의 한계",
-    "contrast_frame": "AI 모델 학습을 위한 저작물 사용의 법적 복잡성 vs AI 도입이 오히려 연구의 질을 저하시킬 수 있다는 이론적 연구 결과",
+    "topic": "기업용 AI 에이전트 및 자동화 도입 열풍 vs 노동 감시 및 일자리 대체 우려",
+    "contrast_frame": "비즈니스 효율성과 업무 자동화를 위한 AI 에이전트 도입 vs 노동자 감시 체제 강화 및 일자리 탈취에 대한 규제 갈등",
     "type": "A",
     "source_articles": [
       {
-        "id": 46457,
-        "title": "저작권이 있는 도서로 AI 모델을 학습시키는 것은 합법일까? 상황은 복잡하다",
+        "id": 54460,
+        "title": "누스 리서치, 15억 달러 기업가치 확인 및 비즈니스 사용자용 AI 에이전트 출시",
         "source": "TechCrunch AI",
-        "pub_date": "Sun, 23 Aug 2026 15:00:00",
-        "link": "https://techcrunch.com/2026/08/23/is-it-legal-to-train-ai-models-on-copyrighted-books-its-complicated/"
+        "pub_date": "Wed, 07 Oct 2026 20:48:45",
+        "link": "https://techcrunch.com/2026/10/07/nous-research-confirms-it-hit-1-5b-valuation-launches-ai-agents-for-business-users/"
       },
       {
-        "id": 46407,
-        "title": "\"AI가 과학자의 업무 효율을 높이기보다 오히려 질을 떨어뜨릴 수 있다\"는 연구 결과",
-        "source": "The Decoder",
-        "pub_date": "Sun, 23 Aug 2026 09:01:17",
-        "link": "https://the-decoder.com/ai-could-make-scientists-do-more-work-less-well-not-less-work-better-study-argues/"
+        "id": 54551,
+        "title": "‘디스토피아적’: 코오프(Co-op), 직원들을 AI 감시 체제에 두는 최신 기업에 합류",
+        "source": "The Guardian AI",
+        "pub_date": "Thu, 08 Oct 2026 09:00:16",
+        "link": "https://www.theguardian.com/technology/2026/oct/08/co-op-legal-services-ai-customer-phone-call-surveillance"
       }
     ],
-    "quote_1": "언뜻 보기에는 불법처럼 보이지만, 실제로는 매우 복잡한 법적 쟁점이 얽혀 있습니다.",
-    "quote_2": "언어 모델이 완벽하게 작동하더라도 연구의 질을 오히려 저하시킬 수 있다는 이론적 연구가 발표되었습니다.",
-    "gap_summary": "AI 학습의 법적 정당성 논란이 기술적 효용성 이면의 질적 저하 우려와 결합하여, AI 도입이 사회적·학문적 가치에 부정적인 영향을 미칠 가능성이 있음을 시사한다.",
-    "reading_angle": "AI 기술의 확산이 법적·윤리적 갈등을 넘어 지식 생산의 본질적 가치를 훼손할 수 있다는 다각적 위험성 분석",
+    "quote_1": "이번 자금 조달을 통해 기업용 AI 에이전트 시장 공략에 본격적으로 나설 계획이다.",
+    "quote_2": "코오프는 고객과의 모든 통화를 평가하는 자동 청취 기술을 도입해 직원들을 AI 감시에 노출시키는 최신 고용주가 되었습니다.",
+    "gap_summary": "기업들은 업무 효율성과 생산성 향상을 위해 AI 에이전트 도입을 가속화하고 있으나, 이로 인해 노동자들이 억압적인 감시 체제에 놓이게 될 가능성이 있음을 보여준다.",
+    "reading_angle": "AI 기술의 기업 내 확산이 생산성 증대라는 긍정적 측면과 노동자 인권 침해라는 부정적 측면을 동시에 내포하고 있음을 해석하는 관점",
+    "category": "노동"
+  },
+  {
+    "topic": "AI 기업의 과도한 리스크 수용 및 실용주의 vs 안전 중심 이탈 및 내부 윤리 갈등",
+    "contrast_frame": "사회적 혜택을 위해 일부 나쁜 결과나 위험을 감수하겠다는 경영진의 태도 vs 안전 기준 준수와 리스크 경고를 이유로 한 핵심 인력들의 잇따른 이탈",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 54222,
+        "title": "샘 알트만, 디코디드 인터뷰에서 \"AI의 혜택을 위해 세상은 일부 나쁜 일들이 일어나는 것을 받아들여야 한다\"고 밝혀",
+        "source": "Politico EU Tech",
+        "pub_date": "Sun, 04 Oct 2026 21:46:57",
+        "link": "https://www.politico.eu/article/sam-altman-to-decoded-the-world-should-accept-some-bad-things-happening-for-the-benefits-of-ai/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication"
+      },
+      {
+        "id": 53942,
+        "title": "오픈에어하이의 또 다른 안전 관련 퇴사, 공개 경고와 함께 이탈 패턴 이어져",
+        "source": "The Decoder",
+        "pub_date": "Sat, 03 Oct 2026 14:01:14",
+        "link": "https://the-decoder.com/another-openai-safety-departure-adds-to-a-pattern-of-researchers-leaving-with-public-warnings/"
+      }
+    ],
+    "quote_1": "OpenAI CEO는 라이벌 개발사인 앤스로픽(Anthropic)과 자신의 정책적 입장을 차별화하고자 했습니다.",
+    "quote_2": "오픈에어하이에서 안전 시스템을 담당했던 데이비드 로빈슨이 회사를 떠나며 회사의 안전 문화를 강하게 비판했습니다.",
+    "gap_summary": "경영진이 기술 발전을 위해 위험을 감수하려는 태도가 내부 안전 전문가들의 반발과 이탈을 초래할 수 있음을 보여준다.",
+    "reading_angle": "AI 산업 내에서 성장의 가속화와 안전 통제 사이의 근본적인 철학적 갈등을 엿볼 수 있다.",
     "category": "윤리"
   }
 ]
