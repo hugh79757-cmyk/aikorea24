@@ -211,13 +211,18 @@ def generate_draft(keyword, articles, grade):
         try:
             model_id = model_eval.extract_model_id(articles[0])
         except Exception as e:
-            log(f"  ⚠️ 모델 ID 판별 예외: {e}")
-        if model_id:
-            out = generate_model_eval_draft(keyword, articles[0], model_id)
-            if out:
-                return out
-            log("  ⚠️ 모델 심층 분석 생성 실패 → 스킵 (일반 뉴스 분석 폴백 금지, AIK24-BLOGPIPE-FIX-01)")
+            log(f"  ⚠️ 모델 ID 판별 예외: {type(e).__name__}: {e}")
+        if not model_id:
+            # AIK24-MODELEVAL-02 1-4: 추출 실패를 조용히 일반 뉴스 분석으로 넘기면
+            # "왜 평가 데이터가 없었는지" 흔적이 남지 않는다. 명시적으로 스킵한다.
+            log(f"  ⚠️ 모델 ID 추출 실패 → 일반 뉴스 분석 폴백 금지, 스킵: '{keyword[:40]}'")
             return ""
+        out = generate_model_eval_draft(keyword, articles[0], model_id)
+        if out:
+            return out
+        # AIK24-MODELEVAL-02 1-4: 실패 이유를 남기고 스킵한다(일반 뉴스 폴백 금지).
+        log("  ⚠️ 모델 심층 분석 생성 실패 → 스킵 (원인은 위 📊/❌ 로그 참고, 일반 뉴스 분석 폴백 금지, AIK24-BLOGPIPE-FIX-01)")
+        return ""
 
     # 기사 텍스트 조립
     article_lines = []
@@ -246,7 +251,7 @@ def generate_draft(keyword, articles, grade):
             f"제목이 '비교'·'점수'·'순위'를 약속하면 반드시 실제 숫자를 넣을 것. "
             f"숫자가 없으면 해당 표현을 제목에서 빼세요.\n"
             f"- 기사의 배경/의미/전망을 분석, 독자가 쉽게 이해할 수 있도록\n"
-            f"- 마지막에 📌 **요약** 섹션 포함\n"
+            f"- 마지막에 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
@@ -271,7 +276,7 @@ def generate_draft(keyword, articles, grade):
             f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목\n"
             f"- 본문: 2000자 이상, 소제목(##) 3개 이상 포함\n"
             f"- 각 기사의 핵심 내용을 비교/종합하여 트렌드 분석\n"
-            f"- 마지막에 📌 **요약** 섹션 포함\n"
+            f"- 마지막에 **요약** 섹션 포함\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
@@ -307,13 +312,33 @@ def generate_draft(keyword, articles, grade):
 # 모델 심층 분석 생성기 (AIK24-MODELEVAL-01)
 # ============================================
 def _eval_block(model_id):
-    """캐시 우선 모델 평가. 캐시 없으면 지금 평가한다(최대 ~1분)."""
+    """캐시 우선 모델 평가. 캐시 없으면 지금 평가한다(최대 ~1분).
+
+    AIK24-MODELEVAL-02 1-4: 모든 단계에 명시적 로그를 남긴다.
+    - 캐시 히트 / 미스
+    - 평가 시작 / 완료 / 실패(실패 이유 포함)
+    평가가 조용히 실패하면 "왜 글에 평가 데이터가 없는지" 추적이 불가능하다.
+    """
     r = model_eval.cache_get(model_id)
     if r:
-        log(f"  📊 모델 평가 캐시 사용: {r.get('label')}")
+        log(f"  📊 모델 평가 캐시 사용: {r.get('label')} "
+            f"(score={r.get('score')}/{r.get('max_score')}, failed={r.get('failed')})")
         return r
-    log(f"  📊 모델 평가 실행 (캐시 없음): {model_id}")
-    return model_eval.eval_model_cached(model_id)
+    log(f"  📊 모델 평가 실행 시작 (캐시 없음): {model_id}")
+    try:
+        result = model_eval.eval_model_cached(model_id)
+        failed = result.get("failed", 0)
+        max_score = result.get("max_score", 9)
+        if failed >= max_score and max_score > 0:
+            log(f"  ❌ 모델 평가 전 문항 실패 → 블로그 생성 생략: {model_id} "
+                f"(failed={failed}/{max_score}) — 모델 미존재·접근제한·레이트리밋 가능")
+        else:
+            log(f"  ✅ 모델 평가 완료: {result.get('label')} "
+                f"(failed={failed}/{max_score})")
+        return result
+    except Exception as e:
+        log(f"  ❌ 모델 평가 예외 발생: {model_id} — {type(e).__name__}: {e}")
+        return {"failed": 9, "max_score": 9, "label": "평가 실패", "details": []}
 
 
 def generate_model_eval_draft(keyword, article, model_id):
@@ -331,9 +356,9 @@ def generate_model_eval_draft(keyword, article, model_id):
     for d in ev.get("details", []):
         ans = (d.get("answer") or "").replace("\n", " ")[:220]
         if d["source"] in FAIL_SOURCES:
-            mark = "⏭ 응답 실패(레이트리밋 등)"
+            mark = "응답 실패(레이트리밋 등)"
         else:
-            mark = "✅ 정답" if d["score"] else "❌ 오답"
+            mark = "정답" if d["score"] else "오답"
         q_lines.append(f"Q{d['idx']} [{d['cat']}] {mark} — 모델 답변: {ans or '(응답 없음)'}")
     test_block = "\n".join(q_lines) or "(평가 결과 없음)"
 
@@ -369,7 +394,7 @@ def generate_model_eval_draft(keyword, article, model_id):
         f"- 중국어(한자) 사용 금지\n"
         f"- **본문 첫 단락에서 '이번 글에서는', '살펴보겠습니다', '다루겠습니다' 등 메타 도입문 절대 금지.** "
         f"모델의 실측 결과처럼 실질 내용으로 바로 시작할 것\n"
-        f"- 마지막에 📌 **요약** 섹션 포함\n\n"
+        f"- 마지막에 **요약** 섹션 포함\n\n"
         f"## 참고 기사\n"
         f"제목: {article.get('title', '')}\n"
         f"출처: {article.get('source', '')}\n"

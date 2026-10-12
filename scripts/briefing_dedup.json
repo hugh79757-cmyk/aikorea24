@@ -3676,6 +3676,35 @@
           "date": "2026-10-11"
         }
       ]
+    },
+    {
+      "date": "2026-10-12",
+      "briefing_id": 348,
+      "articles": [
+        {
+          "id": "55104",
+          "title": "어도비 복제한 개발자, 이번엔 클로드로 엑셀·워드·파워포인트 대체 앱 공개",
+          "original_title": "",
+          "description": "[디지털투데이 황치규 기자]어도비 앱을 무료로 쓸 수 있도록 한 오픈소스 도구 모음 '아트크래프트(ArtCraft)' 개발자가 이번에는 마이크로소프트 오피스를 대체하는 앱들을 공개했다고 톰스하드웨어가 11일(현지시간) 보도했다.보도에 따르면 개발자 브랜든 토마스는 엑셀, 파워포인트, 워드를 대체하는 '그리드크래프트', '덱크래프트', '워드크래프트'를 내놨",
+          "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706239",
+          "entities": [
+            "ArtCraft"
+          ],
+          "date": "2026-10-12"
+        },
+        {
+          "id": "55109",
+          "title": "[무료 모델] AtomicChat/Qwen-Image-2.1-Turbo-Uncensored",
+          "original_title": "",
+          "description": "트렌딩 상위 오픈소스 모델. task=text-to-image, 좋아요 328, 다운로드 100,530. 라이선스 확인 후 무료로 로컬 실행 가능.",
+          "link": "https://huggingface.co/AtomicChat/Qwen-Image-2.1-Turbo-Uncensored-GGUF",
+          "entities": [
+            "Qwen-Image-2.1-Turbo-Uncensored",
+            "AtomicChat"
+          ],
+          "date": "2026-10-12"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7043,6 +7072,29 @@
         "Developers"
       ],
       "date": "2026-10-11"
+    },
+    {
+      "id": "55104",
+      "title": "어도비 복제한 개발자, 이번엔 클로드로 엑셀·워드·파워포인트 대체 앱 공개",
+      "original_title": "",
+      "description": "[디지털투데이 황치규 기자]어도비 앱을 무료로 쓸 수 있도록 한 오픈소스 도구 모음 '아트크래프트(ArtCraft)' 개발자가 이번에는 마이크로소프트 오피스를 대체하는 앱들을 공개했다고 톰스하드웨어가 11일(현지시간) 보도했다.보도에 따르면 개발자 브랜든 토마스는 엑셀, 파워포인트, 워드를 대체하는 '그리드크래프트', '덱크래프트', '워드크래프트'를 내놨",
+      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706239",
+      "entities": [
+        "ArtCraft"
+      ],
+      "date": "2026-10-12"
+    },
+    {
+      "id": "55109",
+      "title": "[무료 모델] AtomicChat/Qwen-Image-2.1-Turbo-Uncensored",
+      "original_title": "",
+      "description": "트렌딩 상위 오픈소스 모델. task=text-to-image, 좋아요 328, 다운로드 100,530. 라이선스 확인 후 무료로 로컬 실행 가능.",
+      "link": "https://huggingface.co/AtomicChat/Qwen-Image-2.1-Turbo-Uncensored-GGUF",
+      "entities": [
+        "Qwen-Image-2.1-Turbo-Uncensored",
+        "AtomicChat"
+      ],
+      "date": "2026-10-12"
     }
   ]
 }
