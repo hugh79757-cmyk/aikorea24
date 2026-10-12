@@ -1,3 +1,25 @@
+## 2026-10-13 00:34 — AIK24-CONTRAST-DISABLE-01 커밋·푸시·배포 완료 (Version `df7bc19e`)
+
+### 한 일
+- [PRODUCTION CODE] 커밋 `6be2ca6f` — `pipeline/threads/contrast/orchestrator.py`(find_background 호출 비활성화) + `tests/test_contrast_background.py`(전체 skip).
+- [CONFIG] 커밋 `285486e6` — docs/state.md 기록.
+- 푸시 `335ac2e4..285486e6 main -> main` (pre-push YAML 훅 통과). 이후 미푸시 0건.
+- 배포 `npm run deploy` → **Current Version ID `df7bc19e-165e-492f-97c2-516e12d848d7`**, DEPLOY_EXIT=0.
+
+### 결과 (검증 근거)
+- [검증됨] 로그 `/tmp/aik24-deploy-contrast.log`: `Uploaded aikorea24 (23.23 sec)` · `Deployed aikorea24 triggers (4.05 sec)` · `배포 완료: https://aikorea24.kr` · `DEPLOY_EXIT=0`.
+- [검증됨] 라이브 HTTP: `/` 200 · `/tools/geulway/` 200 · `/briefing/` 200 (캐시버스터 `?cb=` 사용). sitemap ping `{"google": true, "naver": true}`.
+- [검증됨] 회귀 없음: `/tools/geulway/` 서브문구 0건 유지(AIK24-TOOLS-TIP-01 결과 보존).
+- [검증불가] 이번 변경은 `pipeline/`(파이썬 스크립트)이라 Astro Worker 번들에 포함되지 않음 → 배포로 달라지는 런타임 동작은 없음(배포는 저장소-라이브 정합 목적).
+
+### 잔존 위험
+- [중간] `tests/test_contrast_background.py` 전체 skip으로 `TestFindCross` 3건 커버리지 0.
+- [낮음] `find_background` import 잔존(unused), `_collect_backgrounds` except 분기 도달 불가(의도적 보존).
+- [검증불가] "미사용 기능" 판단 근거는 대표님 지시.
+
+### 다음 행동
+- 불필요 시 `TestFindBackground` 로만 skip 범위 축소.
+
 ## 2026-10-13 AIK24-CONTRAST-DISABLE-01 완료 — 미사용 contrast background 기능 비활성화 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-0030-AIK24-CONTRAST-DISABLE-01-완료보고.md (완료 — verify 요청)
 
 - 한 일: `pipeline/threads/contrast/orchestrator.py` 125행 `bg = find_background(...)` 호출 1줄을 주석 처리(+`bg = None`, DISABLED 2026-10-13 주석) — 유일한 호출 지점이라 두 호출 경로 모두 차단. `tests/test_contrast_background.py` 모듈 상단에 `pytestmark = pytest.mark.skip(...)` 추가. 코드 삭제 없음.
