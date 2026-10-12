@@ -1,3 +1,37 @@
+## 2026-10-13 00:15 — AIK24-REPO-CLEANUP 완료: 워킹트리 781건 → 논리 단위 커밋 5건 정리 (트리 clean)
+
+### 한 일
+- [PRODUCTION CODE] 워킹트리에 남아 있던 781건 변경을 **논리 단위 5개 커밋**으로 분리:
+  - `fe7b6f7a` (1개) `fix(aik24): 도구 상세 '한국어 활용 꿀팁' 서브문구 삭제 (AIK24-TOOLS-TIP-01) + 모노톤 색상 통일`
+  - `bafc07e8` (746개) `chore(aik24): 블로그 본문 타이포그래피 정규화 (745건) — 이모지·중복 빈 줄 정리`
+  - `e8f04e0e` (29개) `refactor(aik24): 전 사이트 모노톤 색상 통일 (blue/indigo/purple → #111111)`
+  - `91d4eee8` (2개) `chore(aik24): 구 파비콘(/favicon.ico) → /favicon.png 301 + 미사용 favicon.svg 제거`
+  - `7bd655a3` (3개) `chore(aik24): 파이프라인 스크립트·캐시 갱신`
+- 빈 잔여 파일 `test`(0 바이트) 디스크 삭제. 커밋 전 `npm run build` 로 트리 정상 확인.
+
+### 결과 (검증 근거)
+- [검증됨] `git diff --shortstat 8402255d..HEAD` = **781 files changed, 3212 insertions(+), 2892 deletions(−)** — 정리 전 dirty 수 781 과 일치.
+- [검증됨] 커밋별 파일 수 합 = 1 + 746 + 29 + 2 + 3 = **781** (`git show --name-only` 각 커밋).
+- [검증됨] 서브문구 커밋 전/후: `8402255d` = 1 → HEAD = 0 (`git show <rev>:src/pages/tools/[id].astro | grep -c`).
+- [검증됨] `git status --short` 빈 출력(untracked·modified 없음) · `git diff HEAD --stat` 빈 출력.
+- [검증됨] 시크릿 경로 커밋 0건 (`git diff --name-only … | grep -Ei '.env|.vars|.db|secret|credential|.pem|token'` = 0).
+- [검증됨] 커밋 전 `npm run build` exit 0 (`00:08:10 [build] ✓ Completed in 17.57s`, `[build] Complete!`).
+- [부분검증] 라이브 정합: 라이브 Version `0a7b5dd6`(00:02)에 대상 변경분이 이미 반영(도구 3개 페이지 서브문구 0건). 단 이 저장소엔 커밋 해시를 라이브에 바인딩하는 라우트가 없어 해시 단위 대조는 불가.
+
+### 잔존 위험
+- [중간] 블로그 745건 편집이 **본문 장식 기호까지 제거**(예 `'엔비디아♥네이버클라우드'` → `'엔비디아네이버클라우드'`). 의도 범위 미확인 → 되돌리려면 `git revert bafc07e8`.
+- [중간] 정리 전까지 `src/pages/tools/[id].astro` 가 미커밋인 채 라이브에 반영된 상태였음(C1 로 해소).
+- [낮음] `scripts/logs/model_eval_cache.json` 런타임 캐시가 추적 중 → 다음 정리 노이즈 가능.
+- [검증불가] 대표님 직접 편집분(`[id].astro` 리뷰 섹션)의 완결성 — 편집 상태 그대로 커밋함.
+- [낮음] `wrangler.jsonc` + `wrangler.toml` 공존(미정리).
+
+### 다음 행동
+- 블로그 기호 제거 범위가 의도와 다르면 `git revert bafc07e8`.
+- 원격 반영 필요 시 `git push` (pre-push 훅 존재).
+- 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-13-0015-AIK24-REPO-CLEANUP-완료보고.md`
+
+**완료 — verify 요청**
+
 ## 2026-10-13 00:0x — DEPLOY-01 후속: 푸터 서브프로젝트 링크 정리 (배포 완료)
 
 * 작업: DEPLOY-01 잔존 위험 4번 — 푸터 "서브 프로젝트" 칼럼의 미운영 3개 링크(heritage/cert/keyword) 정리
