@@ -180,19 +180,24 @@ _FALLBACK_STATE = _FallbackState()
 _client_cache = {}
 
 def get_provider_client(provider_name, base_url, api_key_env):
-    """프로바이더별 OpenAI 호환 클라이언트 (연결 풀 캐시)"""
-    if provider_name in _client_cache:
-        return _client_cache[provider_name]
+    """프로바이더별 OpenAI 호환 클라이언트 (연결 풀 캐시).
+
+    캐시 키에 api_key_env 를 포함한다 — 같은 프로바이더에 계정이 여러 개면
+    (groq1~groq4) 키만 다른 캐시 키가 아니면 서로 덮어써 계정 이관이 무의미해진다.
+    """
+    cache_key = (provider_name, api_key_env)
+    if cache_key in _client_cache:
+        return _client_cache[cache_key]
     api_key = os.environ.get(api_key_env, '')
     if not api_key:
-        _client_cache[provider_name] = None
+        _client_cache[cache_key] = None
         return None
     client = OpenAI(
         base_url=base_url,
         api_key=api_key,
         timeout=httpx.Timeout(TIER_TIMEOUT_SEC, connect=CONNECT_TIMEOUT_SEC),
     )
-    _client_cache[provider_name] = client
+    _client_cache[cache_key] = client
     return client
 
 
