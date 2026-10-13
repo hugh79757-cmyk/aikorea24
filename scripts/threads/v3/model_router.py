@@ -1,7 +1,8 @@
 """"
 model_router.py - AI 모델 호출 라우터 (무료 LLM 폴백 체인 통합)
 - 무료 체인: config/models.yaml의 tier_order 무료 모델 순차 시도 (순수 회전, 쿨다운 없음)
-- 최후 수단: 유료 DeepSeek V4 Flash (default tier)
+- 유료 tier 없음 (2026-10-13 제거 — 스킬 llm-fallback-chain-management §Rotation contract
+  "Removing from config is an owner decision". config 부재 시에만 아래 deepseek 단독 경로가 발동)
 - 평가/후처리: 무료 LLM 폴백 체인 (model_override=None) — GPT-4o-mini 2026-08-12 제거
 - .env / ~/.env.common에서 각 프로바이더 API 키 자동 로드
 """
@@ -157,11 +158,11 @@ class _FallbackState:
             self._state['last_success_tier'] = tier
         self._save()
 
-    def order(self, free_tiers, paid_tier='default'):
+    def order(self, free_tiers, paid_tier=None):
         """순수 회전 호출 순서:
         1) last_success tier를 맨 앞 (front)
         2) 나머지 무료 tier는 models.yaml 순서
-        3) 유료 tier 항상 맨 뒤 고정
+        3) 유료 tier 항상 맨 뒤 고정 (2026-10-13 유료 tier 제거로 paid_tier=None 일 수 있음)
         쿨다운/배제 없음 — 실패한 tier도 다음 pass에 다시 순서대로 시도된다.
         """
         last_ok = self._state.get('last_success_tier')
@@ -169,7 +170,8 @@ class _FallbackState:
         if last_ok in free_tiers:
             ordered.append(last_ok)
         ordered += [t for t in free_tiers if t != last_ok]
-        ordered.append(paid_tier)
+        if paid_tier:
+            ordered.append(paid_tier)
         return ordered
 
 
@@ -309,15 +311,17 @@ def _call_tier_with_retry(tier_name, tier_cfg, full_messages, temperature, max_t
 
 
 def _chain_completion(full_messages, temperature, max_tokens, response_format, extra_body, deepseek_model=None):
-    """무료 체인 순차 시도 → 전부 실패 시 유료 DeepSeek (최후 수단).
+    """무료 체인 순차 시도 → 전부 실패 시 실패 반환.
+    유료 tier 는 2026-10-13 에 config 에서 제거됐다(paid_tier=None 이면 유료 시도 없음).
     성공 시 (text, tier_name), 실패 시 (None, None)"""
     tier_order = CHAIN_CONFIG['tier_order']
     models_cfg = CHAIN_CONFIG['models']
     free_tiers = [t for t in tier_order if t != 'default']
+    paid_tier = 'default' if 'default' in tier_order else None
     state = _FALLBACK_STATE
 
-    # 순수 회전 순서: last_success가 맨 앞 + 나머지 yaml 순서 + 유료 맨 뒤 고정
-    ordered = state.order(free_tiers, paid_tier='default')
+    # 순수 회전 순서: last_success가 맨 앞 + 나머지 yaml 순서 + 유료 맨 뒤 고정(있을 때만)
+    ordered = state.order(free_tiers, paid_tier=paid_tier)
 
     start = time.time()
     for tier in ordered:

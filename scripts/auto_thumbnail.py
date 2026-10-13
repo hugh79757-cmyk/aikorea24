@@ -145,7 +145,9 @@ def _extract_deepseek_keyword(description):
             ],
             system_prompt=None,
             temperature=0.3,
-            max_tokens=20,
+            # 20이면 reasoning 모델(gpt-oss, glm-4.5)이 추론 토큰에 다 쓰고 content 가 빈
+            # 채로 finish_reason=length 로 끝나 체인 6개 중 4개가 매번 실패했다(2026-10-13 실측).
+            max_tokens=500,
             model_override=None,  # 무료 LLM 폴백 체인 사용
         )
         if keyword:

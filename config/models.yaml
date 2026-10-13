@@ -1,8 +1,18 @@
 # config/models.yaml — 쓰레드 파이프라인 무료 LLM 폴백 체인
-# 순서 = 우선순위 (1순위부터). 7개 무료 → 전부 실패 시 default(유료 DeepSeek)
+# 순서 = 우선순위 (1순위부터). 전부 실패하면 체인 실패(유료 tier 없음)
 # 참고: /Users/twinssn/Projects/SKILL.md "LLM Fallback Chain"
+# 갱신: 2026-10-13 (유료 deepseek tier 제거 — 아래 삭제 이력 참조)
 # 갱신: 2026-10-05 (nvidia-nemotron 품질 사고로 체인 제외 — 아래 삭제 이력 참조)
 # 갱신: 2026-09-29 (죽은 tier 9개 제거 — 아래 삭제 이력 참조)
+#
+# 삭제 이력 (2026-10-13 소유자 결정 — 대표님 지시 "유료모델 deepseek는 제거하라"):
+#   default (deepseek-v4-flash) : 유료 tier. 2026-10-13 실행에서 HTTP 401
+#                     "Your api key: ****5f76 is invalid" 로 매 pass 실패.
+#                     돈을 쓰지도 못하면서 요청 1회를 낭비하고 있었다.
+#                     스킬 llm-fallback-chain-management §Rotation contract
+#                     "Removing from config is an owner decision" 에 따라 제거.
+#                     재등재 시 소유자 승인 필요.
+#                     (model_router 의 deepseek 단독 경로는 config 부재 시에만 발동하므로 무영향)
 #
 # 삭제 이력 (2026-10-05 품질 사고 — 소유자 결정, 재등재 시 승인 필요):
 #   nvidia-nemotron : nvidia/nemotron-3-ultra-550b-a55b.
@@ -32,7 +42,7 @@ tier_order:
   - groq-gpt120b
   - groq-gpt20b
   - zhipu-glm
-  - default            # ★ 유료 DeepSeek — 최후 수단
+  # 유료 tier 없음 (2026-10-13 제거). 전부 실패하면 체인 실패 — 배제·쿨다운 없음.
 
 providers:
   google:
@@ -47,9 +57,7 @@ providers:
   zhipu:
     api_key_env: ZHIPU_API_KEY
     base_url: "https://open.bigmodel.cn/api/paas/v4"
-  deepseek:
-    api_key_env: DEEPSEEK_API_TOKEN
-    base_url: "https://api.deepseek.com/v1"
+  # deepseek provider 제거 (2026-10-13 — 유료 tier 삭제 이력 참조)
 
 models:
   gemini-3.1-flash-lite:
@@ -70,6 +78,4 @@ models:
   zhipu-glm:
     provider: zhipu
     model: glm-4.5-flash
-  default:
-    provider: deepseek
-    model: deepseek-v4-flash    # ★ 유료 — 최후 수단
+  # default(deepseek-v4-flash) 항목 제거 (2026-10-13 — 유료 tier 삭제 이력 참조)
