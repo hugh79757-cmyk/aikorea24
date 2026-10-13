@@ -21,7 +21,8 @@ _WEIGHTS_PATH = os.path.join(
 _TAG_LABELS = {"free-llm": "무료 LLM", "opensource": "오픈소스", "tool": "실전 도구"}
 
 # 소스 기반 태그 힌트 (지시서 Step 2-2)
-_FREE_SOURCES = {"openrouter free models", "openrouter"}
+_FREE_SOURCES = {"openrouter free models", "openrouter",
+                 "opencode zen", "kilo free models", "nvidia nim free"}
 _OSS_SOURCES = {"huggingface trending", "huggingface blog"}
 
 

@@ -49,6 +49,17 @@ RSS_SOURCES = [
     ("HuggingFace Blog", "https://huggingface.co/blog/feed.xml", "us"),
 ]
 
+# --- PIPE-03: CLI 프로바이더 무료 모델 ---------------------------------------
+# models.dev 는 OpenCode 가 실제로 읽는 모델 카탈로그다. 1회 호출로 3개 프로바이더를
+# 모두 얻을 수 있어 API 3개를 따로 두지 않는다 (input/output cost 0 = 완전 무료).
+MODELS_DEV_API = "https://models.dev/api.json"
+CLI_PROVIDERS = [
+    # (models.dev provider id, news.source, OpenCode 설정 접두어)
+    ("opencode", "OpenCode Zen", "opencode"),
+    ("kilo", "Kilo Free Models", "kilo"),
+    ("nvidia", "NVIDIA NIM Free", "nvidia"),
+]
+
 # v2.1 보류: 2026-10-10 실측 응답 코드
 #   https://www.reddit.com/r/LocalLLaMA/.rss        → 403 (bot 차단)
 #   https://www.anthropic.com/news/rss.xml          → 404 (RSS 미제공)
@@ -85,6 +96,9 @@ def collect_openrouter_free():
             continue  # 완전 무료(입출력 모두 0원)만
         mid = m.get("id", "")
         ctx = m.get("context_length") or 0
+        # PIPE-03: pub_date 를 OpenRouter 등장에 일시로 — 선정 정렬이 "최신 추가순"이라
+        # 수집 시각(now)으로 두면 프로바이더 간 최신성을 구분할 수 없다.
+        created = m.get("created") or 0
         out.append(
             {
                 "title": f"[무료 LLM] {mid} — OpenRouter 무료 티어",
@@ -95,12 +109,51 @@ def collect_openrouter_free():
                 ),
                 "source": "OpenRouter Free Models",
                 "category": "AI",
-                "pub_date": _pub_date(),
+                "pub_date": (datetime.fromtimestamp(created, timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+                             if created else _pub_date()),
                 "source_url": OPENROUTER_API,
                 "original_title": mid,
                 "country": "us",
             }
         )
+    return out
+
+
+def collect_cli_free():
+    """OpenCode Zen · Kilo · NVIDIA NIM 의 입출력 0원 모델.
+
+    pub_date 를 프로바이더 갱신일로 채운다 — 선정 정렬이 "최신 추가/업데이트 순"
+    이므로 수집 시각(now)으로는 구분되지 않는다 (지시서 §4-1·§4-3).
+    """
+    data = json.loads(fetch(MODELS_DEV_API, timeout=45))
+    out = []
+    for pid, source, cli in CLI_PROVIDERS:
+        models = (data.get(pid) or {}).get("models") or {}
+        for mid, m in models.items():
+            cost = m.get("cost") or {}
+            if cost.get("input") != 0 or cost.get("output") != 0:
+                continue
+            updated = (m.get("last_updated") or m.get("release_date") or "")[:10]
+            ctx = (m.get("limit") or {}).get("context") or 0
+            desc = (
+                f"{m.get('name') or mid} — CLI에서 입출력 모두 무료. 컨텍스트 {ctx:,} 토큰. "
+                f'OpenCode 설정: {{"model": "{cli}/{mid}"}}'
+            )
+            if updated:
+                desc += f" 프로바이더 갱신일 {updated}."
+            out.append(
+                {
+                    "title": f"[무료 LLM] {mid} — {source} 무료 티어",
+                    "link": f"https://models.dev/{pid}/{mid}",
+                    "description": desc,
+                    "source": source,
+                    "category": "AI",
+                    "pub_date": f"{updated} 00:00:00" if updated else _pub_date(),
+                    "source_url": MODELS_DEV_API,
+                    "original_title": mid,
+                    "country": "us",
+                }
+            )
     return out
 
 
@@ -215,6 +268,7 @@ def collect_all():
     rows = []
     for fn, label in (
         (collect_openrouter_free, "OpenRouter free models"),
+        (collect_cli_free, "CLI 무료 모델 (OpenCode Zen·Kilo·NVIDIA NIM)"),
         (collect_hf_trending, "HuggingFace trending"),
         (collect_rss, "RSS (HuggingFace Blog) — AIK24-NEWS-01"),
     ):

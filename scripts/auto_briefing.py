@@ -15,9 +15,41 @@ sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 sys.path.insert(0, PROJECT_DIR)
 from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
-from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
-from auto_news_selector import get_recent_news, cluster_by_topic, select_top_articles, d1_query
+from auto_news_selector import (CANDIDATE_LIMIT, cluster_by_topic, d1_query,
+                                 interleave_candidates, select_top_articles)
+import community_signals
 import model_eval
+
+# PIPE-03 §4-4: news.source → OpenCode 설정 접두어
+CLI_PROVIDER_PREFIX = {
+    "OpenCode Zen": "opencode",
+    "OpenRouter Free Models": "openrouter",
+    "Kilo Free Models": "kilo",
+    "NVIDIA NIM Free": "nvidia",
+}
+# 오픈 웨이트(GGUF/양자화) — OpenCode 가 직접 받아 쓰진 못하지만 Ollama·LM Studio 를
+# 경유해 무료 로컬 실행된다. 존재하지 않는 모델 문자열을 만들지 않고 링크로만 안내.
+OPEN_WEIGHT_SOURCES = {"HuggingFace Trending"}
+
+
+def cli_free_block(article):
+    """'이 LLM을 OpenCode 같은 CLI에서 무료로 쓸 수 있는가?' 의 답을 코멘트에 붙인다."""
+    mid = article.get("original_title") or ""
+    if not mid:
+        return ""
+    if article.get("source") in OPEN_WEIGHT_SOURCES:
+        return ("✅ OpenCode에서 무료로 사용 가능 (오픈 웨이트·로컬 실행)\n"
+                f"모델: {article.get('link') or 'https://huggingface.co/' + mid}\n"
+                "사용법: Ollama 또는 LM Studio 로 먼저 띄운 뒤 OpenCode 의 "
+                f'"ollama" 프로바이더에서 {{"model": "ollama/<로컬 모델명>"}} 으로 연결')
+    prefix = CLI_PROVIDER_PREFIX.get(article.get("source"))
+    if not prefix:
+        return ""
+    lines = ["✅ OpenCode에서 무료로 사용 가능", f'설정: {{"model": "{prefix}/{mid}"}}']
+    quote = community_signals.quote_line(article.get("_sig"))
+    if quote:
+        lines.append(quote)
+    return "\n".join(lines)
 
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
@@ -185,10 +217,12 @@ def main(selected_articles=None):
         selected = selected_articles
         log(f"  외부 선정 사용: {len(selected)}개 기사")
     else:
-        articles = get_recent_news(hours=48)
+        # PIPE-03: 모델이 161건으로 풀을 덮으면 뉴스 1건 슬롯이 비므로 태그 교차로 섞는다.
+        articles, tag_counts = interleave_candidates(CANDIDATE_LIMIT)
         if not articles:
             log("  수집된 뉴스 없음")
             return
+        log(f"  후보 {len(articles)}건 (태그별 " + ", ".join(f"{t}={n}" for t, n in tag_counts.items()) + ")")
 
         clusters = cluster_by_topic(articles)
         for cluster_name, cluster_articles in clusters.items():
@@ -219,6 +253,9 @@ def main(selected_articles=None):
         title = (art.get("title") or "")[:50]
         log(f"  → {title}")
         comment = generate_comment(art)
+        block = cli_free_block(art)
+        if block:
+            comment = f"{comment}\n\n{block}".strip()
         if comment:
             art["comment"] = comment
             log(f"    ✅ {comment[:60]}...")

@@ -1,3 +1,49 @@
+## 2026-10-13 13:55 — AIK24-PIPE-03 브리핑 소스(커뮤니티) 추가 + 무료 모델 4개 프로바이더 수집
+
+### 한 일
+- [PRODUCTION CODE] `scripts/community_signals.py` (신규 131줄) — GitHub `anomalyco/opencode` 이슈 19건 + Reddit `r/opencodeCLI` Atom 25건 수집, 모델명 부분 문자열 매칭, 가산점(GitHub +2 / Reddit upvote 50+ +3).
+- [PRODUCTION CODE] `scripts/news_collector_v2.py` — `collect_cli_free()` 추가(models.dev API → OpenCode Zen 38 / Kilo 21 / NVIDIA NIM 102). `collect_openrouter_free()` 는 `created`(등장 일시)를 `pub_date` 에 반영.
+- [PRODUCTION CODE] `scripts/v2_filter.py` — `_FREE_SOURCES` 에 3개 CLI 소스 추가.
+- [PRODUCTION CODE] `scripts/auto_news_selector.py` — 선정 기준을 "CLI 서비스에서 무료로 쓸 수 있는가?" 로 변경. 모델 3건(커뮤니티 가산점 → 갱신일 순, 프로바이더당 1건) + 뉴스 1건. 슬롯 판정 기준을 `v2_tag` → `source in MODEL_SOURCES` 로 변경. `get_model_news()` / `interleave_candidates()` 신규.
+- [PRODUCTION CODE] `scripts/auto_briefing.py` — `cli_free_block()` 으로 `✅ OpenCode에서 무료로 사용 가능` + `설정: {"model": "<prefix>/<모델>"}` + 커뮤니티 인용 부착. 오픈 웨이트(HF Trending)는 실재하지 않는 모델 문자열 대신 링크 안내.
+- [PRODUCTION CODE] `src/pages/briefing/[date].astro` · `src/pages/news.astro` — `item.comment` 가 plain text 로 렌더되며 `\n` 이 뭉개지던 문제 수정(`white-space:pre-line`). 기존 model_eval 3줄 블록도 함께 정상 표시.
+- [CONFIG] `kr.aikorea24.news-unified` launchd — 19:30 트리거 제거, 05:30 1회만. bootout/bootstrap 재등록.
+
+### 결과
+| 항목 | 상태 | 근거 |
+|---|---|---|
+| launchd 05:30 단일 트리거 | [검증됨] | `launchctl print` → `"Hour" => 5` 1건. 19:30 소멸 |
+| D1 무료 모델 적재 | [검증됨] | 161건 (205 수집 − 44 기존 링크 중복). 프로바이더별 갱신일 최대값 Zen 2026-10-06 / OpenRouter·Kilo 2026-10-02 / NIM 2026-09-10 |
+| 프로바이더 4곳 모두 등장 | [검증됨] | D1 GROUP BY — Zen 38 / Kilo 21 / NIM 102 / OpenRouter 19 |
+| v2_filter self-test | [검증됨] | 6/6 통과 |
+| 모델 슬롯 로테이션 | [검증됨] | 실제 D1 선정 → Zen / OpenRouter / Kilo 각 1건 + 뉴스 1건 = 4건 |
+| GitHub 가산점 발동 | [검증됨] | `mimo-v2.6-flash-free: GitHub 1건 → +2` 로 0점 → 2점 상승 |
+| Reddit upvote 가산점 | [검증불가] | JSON API 403, RSS 스킴에 점수 필드 없음 → `rd_up` 항상 None. 코드만 존재 |
+| 파이프라인 1회 완주 | [부분검증] | `auto_briefing.main()` 5분 25초 완주, 4 아이템. 저장은 스텁 — 오늘 06:00 브리핑(briefing_id 349)이 동일 모델 커버로 dedup 가 4건 제거. 저장 후 사이트 반영 경로 미검증 |
+| Reddit 실패 시 폴백 | [검증됨] | `[warn] Reddit 수집 실패: HTTP Error 429` 후 빈 리스트로 진행, 브리핑 차단 없음 |
+| CSS 반영 | [검증됨] | 라이브 `/_astro/_date_.Cjt89Pvl.css` 에 `white-space:pre-line` / `/news/` HTML 1건 |
+| 빌드 · 배포 | [검증됨] | `npm run deploy` → `Uploaded 1924 files`, `Worker Startup Time: 38 ms`, Version `0dc81903-e09c-4662-9ea8-5bcfa6743cb7` |
+| D1 스키마 변경 | [검증됨] | 없음. 데이터 UPDATE 1회(OpenRouter 19행 `pub_date`)만 |
+
+산출물: `SSOT/프로젝트/aikorea24/지시서/2026-10-13-1010-AIK24-PIPE-03-완료보고.md`
+세션 기록: `/Users/twinssn/Desktop/메모 Hugh/logs/20261013.md`
+
+### 잔존 위험
+1. Reddit upvote 50+ 가산점(+3) 발동 불가 — API 키 없이는 해결 안 됨.
+2. `anomalyco/opencode` 의 `has_discussions = false` — GitHub Discussions 수집 불가.
+3. 지시서 "GitHub 분당 60회" 전제와 무인증 search 한도 10회/분 불일치. issues REST 직접 호출로 우회, 일일 1회라 영향 없음.
+4. NVIDIA NIM 102건은 models.dev `cost 0` 판정 — 실제는 API 키 발급 + 쿼터 제한이 있음.
+5. `models.dev/{provider}/{model}` 링크가 SPA catch-all이라 모델별 고유 URL 아님.
+6. OpenRouter 19행은 일회성 UPDATE 로만 정정됨(신규 `created` 는 코드 경로로 정상 반영).
+7. 동일 모델이 OpenRouter·Kilo 양쪽으로 2건 선정될 수 있음 — 프로바이더 로테이션은 동작하나 모델 중복 제거는 안 함. 지시서 슬롯 3 = 프로바이더 3곳 요구에 맞춘 의도된 동작.
+8. 오늘 06:00 브리핑(briefing_id 349)에는 ✅ 블록이 없음 — 변경 전 산출물.
+9. `mimo-v2.6-flash` 는 OpenRouter 미존재로 model_eval 평가 생략. 기존 동작.
+
+### 다음 행동
+- 2026-10-14 06:00 브리핑 후 `https://aikorea24.kr/briefing/` 에서 ✅ 블록 렌더링 육안 확인.
+- Reddit upvote 가산점 살리려면 Reddit API 키 발급 — 후속 과제로 분리.
+- NVIDIA NIM 항목 각주("API 키 발급 필요") 필요 여부 결정.
+
 ## 2026-10-13 11:45 — /tools/ 중복 등록 정책 블록 통합 (레거시 상단 삭제, 하단 내용을 상단으로)
 
 ### 한 일
