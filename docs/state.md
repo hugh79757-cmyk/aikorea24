@@ -1,3 +1,23 @@
+## 2026-10-13 23:40 — LLM 폴백 체인에서 유료 deepseek tier 제거 (max_tokens 20→500 동반)
+
+**한 일**
+스킬 `llm-fallback-chain-management` 확인 후 체인 갱신. `config/models.yaml` · `scripts/threads/v3/model_router.py` · `scripts/auto_thumbnail.py` 3파일. 커밋 `c2575811`. 대표님 지시: *"llm fallback chain 스킬 확인하고 참고해서 업데이트해줘. 유료모델 deepseek는 제거하라."*
+
+**결과**
+- [검증됨] 유료 tier `default`(deepseek-v4-flash) 제거 — `tier_order` 7→6, `models.default` 삭제, `providers.deepseek` 삭제. yaml 파싱 확인 `default_present=False`, 체인 6tier 정상 로드.
+- [검증됨] 제거 사유 실측 — 2026-10-13 파이프라인 로그에서 `deepseek deepseek-v4-flash` 가 `HTTP 401 AuthenticationError: Your api key: ****5f76 is invalid` 로 매 호출 실패. 돈을 쓰지 못하면서 회전 요청 1회만 낭비하던 상태.
+- [검증됨] 체인 실동작 — deepseek 제거 후 호출이 `gemini-3.5-flash-lite` 1순위에서 즉시 성공(`[체인] 성공`), 유료 시도·401 발생 0회. `model_router.order()` 를 `paid_tier=None` 허용으로 변경해 유료 tier 부재에서도 회전 순서 유지(배제·쿨다운 없음 — 스킬 계약 준수).
+- [부분검증] `auto_thumbnail.py` 키워드 추출 `max_tokens` 20→500. 근거: 20이면 reasoning 모델(gpt-oss, glm-4.5)이 추론 토큰에 다 쓰고 content 가 빈 채 `finish_reason=length` 로 끝나 체인 6개 중 4개가 매번 실패했다. **다만 효과는 미확인** — 20 vs 500 비교 2회가 모두 1순위 gemini-3.5-flash-lite 에서 성공해 n=1 비교였다. 정상 동작 중인 `auto_briefing.py`(500)와 동일 값으로 맞춘 것이 유일한 근거.
+
+**잔존 위험**
+- [부분검증] 썸네일 685초 문제의 실제 주범은 여전히 미해결. 실측에서 단일 tier 호출 자체가 60~85초 걸린다(1순위 성공 기준). 체인에서 모델을 빼는 것으로는 이 지연을 줄일 수 없다. `GLOBAL_BUDGET_SEC=300` 은 pass 전체 상한이라 단일 호출 지연에는作用하지 않는다.
+- [부분검증] `max_tokens` 변경은 검증 실패다. 되돌릴지 유지할지 대표님 판단 필요. 되돌려도 무해(기존 동작으로 복귀).
+- [검증불가] Gemini free tier 일일쿼터 500 소진 상태(로그상 "9시간 후 재시도"). 키 상태는 소유자만 확인 가능.
+- [검증불가] `config/models.yaml` 부재 시 발동하는 deepseek 단독 경로(`model_router.py` 하단 레거시 분기)는 이번에 손대지 않았다. 평소에는 도달 불가 경로다.
+
+**다음 행동**
+- 대표님 결정: ① `max_tokens` 변경 유지/되돌림 ② 썸네일 LLM 지연(60~85초/호출) 별도 지시 — 후보: 키워드 추출을 LLM 없이 소스별 고정값으로 대체.
+
 ## 2026-10-13 22:18 — AIK24-EMAIL-02 완료 — 이메일 모델·도구 중복 버그 수정 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-2215-AIK24-EMAIL-02-완료보고.md (완료 — verify 요청)
 
 **한 일**
