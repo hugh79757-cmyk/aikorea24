@@ -351,7 +351,7 @@ def _eval_block(model_id):
 
 
 def generate_model_eval_draft(keyword, article, model_id):
-    """무료 LLM 전용 5단 구조 블로그 글 생성. 실패 시 빈 문자열(폴백)."""
+    """무료 LLM 전용 6단 구조 블로그 글 생성. 실패 시 빈 문자열(폴백)."""
     ev = _eval_block(model_id)
     # 전 문항 실패 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
     if ev.get("failed", 0) >= ev.get("max_score", 9):
@@ -383,24 +383,40 @@ def generate_model_eval_draft(keyword, article, model_id):
         sig_block, sig_sources = "공개된 외부 평가 없음", 0
         log(f"  ⚠️ 외부 지표 수집 예외: {type(e).__name__}")
 
+    # EVAL-03 §4-1 호출 안정성 — 실패를 숨기지 않고 그대로 쓴다. 원인은 로그 문자열 그대로.
+    st = model_eval.call_stability(ev)
+    reason_line = ", ".join(f"{k} {v}건" for k, v in st["by_reason"].items()) or "없음"
+    axis_line = ", ".join(
+        f"{model_eval.AXIS_LABELS.get(a, a)} {v}문항" for a, v in st["by_axis"].items()
+    ) or "없음"
+    st_block = (
+        f"- 전체 문항 {st['total']}개 중 실제 실행 {st['ran']}개, 호출 실패 {st['failed']}개 "
+        f"(실패율 {st['rate']:.0%})\n"
+        f"- 실패 원인: {reason_line}\n"
+        f"- 실패가 몰린 축: {axis_line}\n"
+        f"- 판정: {st['verdict']}"
+    )
+
     system_prompt = (
         "당신은 AI 모델을 정직하게 평가하는 한국어 테크 블로거입니다. "
         "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
     )
     user_prompt = (
         f"무료 LLM '{model_id}'에 대한 실무 투입 판단 블로그 글을 작성해주세요.\n\n"
-        f"## 반드시 지킬 구조 (5단, 이 순서 그대로)\n"
+        f"## 반드시 지킬 구조 (6단, 이 순서 그대로)\n"
         f"### 1. 한 줄 판단\n"
         f"- 첫 줄에 결론을 박습니다. 예: '지금 당장 손발 작업에 투입해도 됩니다' / "
         f"'아직 검증이 부족해 파일럿으로만 쓰세요'.\n"
         f"- 판단 근거는 2절의 실측 결과와 연결되게 한 문장만 덧붙이세요.\n"
+        f"- **6절의 호출 안정성이 나쁘면 반드시 첫 줄 판단에 반영하세요.** "
+        f"예: '능력은 괜찮지만 무료 티어 호출 제한이 심해 지금은 쓰기 어렵다'.\n"
         f"- [절대 규칙] 다른 유료 모델과 급수를 비교하는 표현(예: '어떤 모델급')은 쓰지 마세요. "
         f"이 글은 이 모델 하나를 독립적으로 판단합니다.\n\n"
         f"### 2. 실무 축별 결과 (4축)\n"
         f"- 아래는 AI코리아24가 오늘 직접 API로 실측한 결과입니다. "
         f"**숫자와 모델 답변은 그대로 인용하세요. 해석을 지어내지 마세요.**\n"
         f"- 원시 결과: {ev.get('label', '')}\n"
-        f"- 응답 실패 문항: {ev.get('failed', 0)}/{ev.get('max_score', 0)}건\n"
+        f"- 응답 실패 문항: {ev.get('failed', 0)}/{ev.get('max_score', 0)}건 (사유는 6절에서 다룬다)\n"
         f"```\n{test_block}\n```\n"
         f"- 축마다 소제목을 달고 **구체적 관찰 1~2줄**을 쓰세요. [절대 규칙] "
         f"'지시를 잘 따름', '맥락 유지가 좋음' 같은 추상 평가는 금지입니다. "
@@ -420,6 +436,16 @@ def generate_model_eval_draft(keyword, article, model_id):
         f"- 이 글이 답하지 못하는 것을 정직하게 적으세요: 문항 {ev.get('max_score', 0)}개로 커버하지 못한 영역, "
         f"응답 실패(rate limit)가 점수에 미친 영향, 오늘 하루치 관찰이라 일반화할 수 없는 부분.\n"
         f"- 이 모델을 쓰지 말아야 할 상황도 1~2줄.\n\n"
+        f"### 6. 호출 안정성\n"
+        f"- 아래는 오늘 실측 중 실제로 실패한 호출 기록입니다. **숫자를 고치거나 실패를 숨기지 마세요.**\n"
+        f"- [절대 규칙] 아래 값을 그대로 인용하세요. 원인을 추측해서('모델이 긴 입력을 못 처리해서' 등) "
+        f"새로운 사유를 만들어내지 마세요.\n"
+        f"- 원인은 실패 원인별로 분류하고, 특정 축에 몰렸는지 밝히세요.\n"
+        f"```\n{st_block}\n```\n"
+        f"- 마지막에 독자를 위한 해석을 1~2줄: 긴 입력이 실패에 몰렸다면 '긴 문서는 나눠서 호출하세요', "
+        f"429 가 많다면 '무료 티어 한도를 고려해 호출 간격을 두세요'처럼 실제로 쓸 수 있는 조언으로.\n"
+        f"- [절대 규칙] 실패율이 25% 이상이면 '성능과 무관하게 현 시점 무료로는 실무 투입이 어렵다'고 "
+        f"명확히 쓰세요. 점수와 별개로 호출 실패도 '이 모델을 못 쓰는 상황'으로 이어지는 정보라는 점입니다.\n\n"
         f"## 톤 규칙\n"
         f"- 분량 제한 없음. 필요한 만큼 길게 씁니다.\n"
         f"- 순한국어, ~습니다/~입니다 정중 비즈니스 톤. 반말('~다/~했다/~임') 절대 금지\n"
@@ -440,7 +466,7 @@ def generate_model_eval_draft(keyword, article, model_id):
     content = chat_completion(
         messages=[{"role": "user", "content": user_prompt}],
         system_prompt=system_prompt,
-        max_tokens=6000,
+        max_tokens=7000,
         temperature=0.7,
     )
     if not content:

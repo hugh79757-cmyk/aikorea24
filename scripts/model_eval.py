@@ -43,6 +43,10 @@ JUDGE_MAX_TOKENS = 10
 # "0점 처리"가 모델 능력 실패와 구분되지 않는다. 문항 간 간격을 두고, 429는
 # Retry-After(또는 백오프)를 존중해 재시도한 뒤에도 실패하면 0점 처리한다.
 RATE_GAP_SEC = 4
+# EVAL-03 §4-2: "429 재시도 1회" 지시. 이미 _post_question() 안에
+# Retry-After/지수 백오프 재시도가 HTTP_429_RETRIES 회 들어 있다(15→30→60초).
+# 지시서의 1회보다 관대하고 무한 대기도 아니므로 값을 늘리지 않는다.
+# EVAL-03 가 새로 더한 것은 문항별 실패 사유(structured) 기록 — 기존엔 errors 문자열뿐이었다.
 HTTP_429_RETRIES = 3
 REASONING_RETRY_TOKENS = 2000  # reasoning만으로 끝나 잘린 문항의 재시도 예산
 ANSWER_STORE_CHARS = 1000  # 채점관과 블로그가 볼 상세 답변 보관 길이
@@ -52,7 +56,7 @@ ANSWER_STORE_CHARS = 1000  # 채점관과 블로그가 볼 상세 답변 보관 
 # 파일 하나면 충분하다 — 캐시 DB는 과하다.
 CACHE_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_eval_cache.json")
 CACHE_TTL_HOURS = 20  # 하루 브리핑 안에서는 재평가 금지
-CACHE_SCHEMA = 2  # EVAL-02: 축별 결과 신설. 이전 스키마(tier 라벨)는 폐기
+CACHE_SCHEMA = 3  # EVAL-03: 문항별 실패 사유(failures) 신설. v2(EVAL-02, tier 없음)도 폐기
 
 # ============================================
 # 평가 문항 (AIK24-EVAL-02 §4-3 / §4-7)
@@ -445,6 +449,7 @@ def eval_model(model_id, with_judge=True):
         "max_score": len(TEST_QUESTIONS),
         "details": [],
         "errors": [],
+        "failures": [],  # EVAL-03: 문항별 호출 실패 사유 — 블로그 '호출 안정성' 섹션 원자료
         "by_axis": {a: {"score": 0, "max_score": 0, "failed": 0} for a in AXES},
     }
     try:
@@ -461,6 +466,16 @@ def eval_model(model_id, with_judge=True):
         "temperature": 0.2,
         "max_tokens": QUESTION_MAX_TOKENS,
     }
+
+    def _reason(resp, warns):
+        """문항 실패 사유 — 로그에 남은 문자열 그대로. 추측해서 만들지 않는다(§4-1)."""
+        for w in reversed(warns):
+            if "429" in w:
+                return w
+        for w in reversed(warns):
+            if "호출 예외" in w:
+                return w
+        return f"HTTP {resp.status_code}" if resp is not None else "호출 실패"
 
     total = len(TEST_QUESTIONS)
     for idx, spec in enumerate(TEST_QUESTIONS, 1):
@@ -488,17 +503,20 @@ def eval_model(model_id, with_judge=True):
             result["errors"].append(f"Q{idx} 호출 실패(예외)")
             log(f"  [{idx}/{total}] {axis} 호출 예외 → 0점")
             result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception"})
+            result["failures"].append({"idx": idx, "axis": axis, "reason": _reason(None, warns)})
             continue
         if resp.status_code != 200:
             result["errors"].append(f"Q{idx} HTTP {resp.status_code}")
             log(f"  [{idx}/{total}] {axis} HTTP {resp.status_code} → 0점")
             result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "http_error"})
+            result["failures"].append({"idx": idx, "axis": axis, "reason": _reason(resp, warns)})
             continue
         data = resp.json()
         choices = data.get("choices") or []
         if not choices:
             result["errors"].append(f"Q{idx} choices 비어있음")
             result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "no_choices"})
+            result["failures"].append({"idx": idx, "axis": axis, "reason": "응답 없음(choices 비어있음)"})
             continue
         msg = choices[0].get("message") or {}
         actual, source = _extract_answer(msg)
@@ -540,6 +558,7 @@ def eval_model(model_id, with_judge=True):
         if not actual:
             result["errors"].append(f"Q{idx} 빈 응답")
             result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "empty"})
+            result["failures"].append({"idx": idx, "axis": axis, "reason": "빈 응답"})
             log(f"  [{idx}/{total}] {axis} 빈 응답 → 0점")
             continue
 
@@ -579,6 +598,7 @@ def eval_model(model_id, with_judge=True):
             f"  ⚠️ 응답 실패 {result['failed']}/{result['max_score']}문항 — "
             f"분모에서 제외했다 (능력 실패 아님)"
         )
+        log(f"  호출 안정성: {call_stability(result)['verdict']}")
     return result
 
 
@@ -722,6 +742,38 @@ def external_signals(model_id):
     return {"lines": lines, "sources": sources}
 
 
+def call_stability(result):
+    """§4-1 호출 안정성 — 실패를 숨기지 않고 그대로 독자에게 보여줄 요약.
+
+    반환: {total, ran, failed, rate, by_reason, by_axis, verdict}
+    실패 원인은 로그에 기록된 문자열 그대로 쓴다(추측 금지).
+    """
+    total = result.get("max_score") or len(TEST_QUESTIONS)
+    fails = result.get("failures") or []
+    by_reason, by_axis = {}, {}
+    for f in fails:
+        by_reason[f["reason"]] = by_reason.get(f["reason"], 0) + 1
+        by_axis[f["axis"]] = by_axis.get(f["axis"], 0) + 1
+    rate = (len(fails) / total) if total else 0.0
+    if not fails:
+        verdict = f"{total}문항 전부 정상 응답 — 호출 안정성 문제 없음"
+    elif rate >= 0.25:
+        # 429는 성능 문제가 아니지만 무료 티어에서 못 쓰면 독자에게는 못 쓰는 모델이다.
+        verdict = (
+            f"{total}문항 중 {len(fails)}문항({rate:.0%})이 호출 실패. 성능과 무관하게 "
+            f"현 시점 무료 티어로는 실무 투입이 어렵다"
+        )
+    else:
+        verdict = (
+            f"{total}문항 중 {len(fails)}문항({rate:.0%})이 호출 실패. "
+            f"간헐적 제한이며 재시도로 대부분 회수될 여지가 있다"
+        )
+    return {
+        "total": total, "ran": total - len(fails), "failed": len(fails), "rate": rate,
+        "by_reason": by_reason, "by_axis": by_axis, "verdict": verdict,
+    }
+
+
 def eval_comment_block(model_id, deep_dive_url=None, result=None):
     """브리핑 코멘트용 3요소 티저 블록. 실패 시 빈 문자열(폴백 → 기존 코멘트 유지).
 
@@ -747,6 +799,11 @@ def eval_comment_block(model_id, deep_dive_url=None, result=None):
         log(f"전 문항 응답 실패({r['failed']}/{r['max_score']}) → 블록 생략 (모델 미존재 가능)")
         return ""
     lines = [f"[{model_id}] — {r['label']}"]
+    # EVAL-03 §4-3: 호출 실패가 있었다면 점수와 분리해 한 줄로 남긴다.
+    st = call_stability(r)
+    if st["failed"]:
+        reasons = ", ".join(f"{k} {v}건" for k, v in st["by_reason"].items())
+        lines.insert(1, f"호출 실패 {st['failed']}/{st['total']}문항 ({reasons}) — 점수에서 제외")
     if deep_dive_url:
         lines.append(f"👉 자세한 분석: {deep_dive_url}")
     lines.append(guide)  # EVAL-02 §4-1: 📍 이모티콘 제거, 문구는 텍스트로 유지
