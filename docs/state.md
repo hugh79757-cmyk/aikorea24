@@ -1,38 +1,38 @@
-## 2026-10-13 AIK24-PIPE-03-FIX 완료 — Reddit upvote 가산점 삭제, GitHub +2만 유지 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1335-AIK24-PIPE-03-FIX-완료보고.md (완료 — verify 요청)
+## 2026-10-13 AIK24-PIPE-03-FIX 완료 — 커뮤니티 수집 전체 취소 (GitHub Issues + Reddit Atom, 가산점 전부 제거). 선정은 최신성 + 프로바이더 로테이션만. → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1335-AIK24-PIPE-03-FIX-완료보고.md (완료 — verify 요청)
+
+> 지시서 §6 지정 문구는 "Reddit upvote 가산점 삭제, GitHub +2만 유지" 였으나, 같은 파일명이 "커뮤니티 수집 전체 취소" 로 덮어써지면서 §0~§5 가 전부 변경되고 §6 만 갱신되지 않았다. 실제 작업은 §0~§5 기준(전체 취소)이다.
 
 ### 한 일
-- [PRODUCTION CODE] `scripts/community_signals.py` 8개 지점 수정(7 insertions / 17 deletions) — 지시서 §4-1/4-2.
-  1. 모듈 docstring Reddit 블록에서 업보트 설명 제거 → `수집(제목·링크)은 유지하되 가산점은 GitHub 이슈 언급(+2)만 준다.`
-  2. `RD_UPVOTE_BONUS = 3` / `RD_UPVOTE_THRESHOLD = 50` 삭제, `GH_BONUS = 2` 주석을 `유일한 가산점` 으로 변경
-  3. `reddit_posts()` 반환 dict 의 `"upvotes": None` 키 삭제
-  4. `build_signal_map()` docstring·sig 초기 dict 의 `rd_up` 키 삭제
-  5. `build_signal_map()` 집계 루프의 업보트 max 계산 3줄 삭제
-  6. `bonus()` → `return GH_BONUS if sig.get("gh") else 0` 한 줄로 축약
-  7. `quote_line()` Reddit 줄의 `(최고 업보트 N)` 꼬리표 제거
-- Reddit 수집 자체(Atom RSS 25건)와 브리핑 코멘트의 `💬 r/opencodeCLI N건 언급` 표시는 유지.
-- 호출부(`auto_news_selector.py` / `auto_briefing.py`)는 수정하지 않음 — 지시서 §7 허용 범위.
+- [PRODUCTION CODE] `scripts/community_signals.py` **파일 삭제** (137행 → 0). GitHub Issues 수집 + Reddit Atom 수집 + 가산점(GitHub +2) 전부 제거.
+- [PRODUCTION CODE] `scripts/auto_news_selector.py` — `import community_signals` · `_apply_community_bonus()` 함수(16행) · `select_top_articles()` 안 호출 1줄 제거. docstring 2곳 정리.
+- [PRODUCTION CODE] `scripts/auto_briefing.py` — `import community_signals` · `cli_free_block()` 안 `quote_line()` 호출 제거 → 2줄짜리 블록으로 축약.
+- 유지: `news_collector_v2.py` 무수정(`collect_cli_free` + 4개 프로바이더), D1 스키마 무변경, `✅ OpenCode에서 무료로 사용 가능` + `설정: {"model": …}` 블록 유지.
+
+### 지시서 내부 충돌 (대표님 확인 필요)
+§4-1 "참조하는 코드가 있다면 함께 정리" ↔ §7 "다른 파일 수정 금지". 파일만 지우면 `import community_signals` 때문에 파이프라인이 `ImportError` 로 죽으므로 **§4-1 우선 적용**해 참조 제거만 했다. 다른 변경은 없음.
 
 ### 결과
 | 항목 | 상태 | 근거 |
 |---|---|---|
-| ① Reddit upvote 가산점 코드 제거 | [검증됨] | `grep -rn "rd_up\|RD_UPVOTE\|upvote\|업보트" scripts/community_signals.py` → 0건. `python3 -m py_compile` → COMPILE_OK |
-| ② Reddit 수집 정상 | [검증됨] | 실측 `reddit_posts()` 25건, 첫 항목 `Operation Cheepseek Phase 3 🔥`, dict 키 `['title','url']` |
-| ③ GitHub 가산점 +2 유지 | [검증됨] | 합성 4케이스 `{gh:0,rd:2}`→0 / `{gh:1,rd:0}`→2 / `{gh:3,rd:5}`→2 / `None`→0 |
-| ④ `npm run build` | [검증됨] | `[build] Complete!` — 페이지 14.00s, 전체 19.90s, 에러 0건 |
+| ① 커뮤니티 수집 코드 제거 | [검증됨] | `git rm scripts/community_signals.py` (137행 → 0). `grep -rn "community_signals\|build_signal_map\|quote_line\|_apply_community_bonus\|_sig" scripts/ src/ --include="*.py" --include="*.astro"` → 실 참조 0건 (남은 6건은 `naver_signature`·`gate_signal` 부분문자열 오탐) |
+| ② `collect_cli_free` 정상 | [검증됨] | `hasattr(news_collector_v2, "collect_cli_free")` → True. `CLI_PROVIDERS` = opencode/OpenCode Zen, kilo/Kilo Free Models, nvidia/NVIDIA NIM. `news_collector_v2.py` `git diff` 0건 |
+| ③ 최신성 + 로테이션만으로 선정 | [검증됨] | 실제 D1 — 후보 22건(model 12 / free-llm 8 / opensource 0 / tool 2) → 4건. 모델 슬롯 `exo-free`(10-06) · OpenRouter `ling-3.1-flash`(10-02 14:07) · Kilo(10-02) = **3개 서로 다른 프로바이더, 출처 중복 0, pub_date 내림차순**. 뉴스 1건 디지털투데이(10-13). 후보 중 `_score` 0건·`_sig` 0건 |
+| ④ `npm run build` | [검증됨] | `[build] Complete!` — 페이지 16.07s, 서버 19.20s, 에러 0건 |
 | ⑤ 완료보고 + state.md | [검증됨] | `SSOT/…/2026-10-13-1335-AIK24-PIPE-03-FIX-완료보고.md` + 본 항목 |
-| 호출부 호환성 | [검증됨] | `_apply_community_bonus` → `💬 mimo-v2.6-flash-free: GitHub 2건 / Reddit 1건 → 0 +2 = 2점`, `_sig` 키 `['gh','gh_url','rd','rd_url']`. `cli_free_block` → `✅ OpenCode에서 무료로 사용 가능` + `설정: {"model": "opencode/mimo-v2.6-flash-free"}` + 인용 줄 정상 |
-| 배포 | [검증됨] | Version `098bfdaf-7da5-4fac-b878-0d73439981a1`, Worker Startup 14 ms, sitemap ping google/naver true |
-| 라이브 반영 확인 | [부분검증] | 변경이 `scripts/*.py` 전용이라 Astro 산출물은 이전과 동일. 브리핑 코멘트는 D1 저장 값이라 HTTP 응답으로 구분이 불가 → 다음 06:00 자동 브리핑에서 실제 반영 |
+| 배포 | [검증됨] | Version `9b73f8a2-2b59-4103-b5de-85e9de059bd7`, Worker Startup 26 ms, sitemap ping google/naver true |
+| `cli_free_block` 출력 | [검증됨] | 2줄 — `✅ OpenCode에서 무료로 사용 가능` / `설정: {"model": "opencode/exo-free"}`. 인용 줄 없음 |
+| 라이브 반영 | [부분검증] | Astro 산출물은 이전과 동일(파이프라인 런타임 전용 변경). 기존 브리핑 코멘트는 D1 저장 값이라 regenerate 전까지 인용이 남음 |
 
 ### 잔존 위험
-1. [부분검증] Reddit Atom `entry` 의 `url` 이 항상 빈 문자열 — `reddit_posts()` 가 `rel="alternate"` 인 `<link>` 를 찾으나 해당 `rel` 이 없어 실측 `URL 있는 항목: 0 / 25`. `rd_url` 키가 항상 `""` 이나 `quote_line()` 이 이 값을 출력에 쓰지 않아 사용자 노출 없음. 복구 계획: `rel` 조건을 빼고 `href` 만 읽으면 1줄 (이번 지시서 범위 밖이라 미수정).
-2. [부분검증] Reddit RSS 재요청 시 429 → `reddit_posts()` 가 빈 리스트로 폴백(가산점 0). 예외가 밖으로 흘러나지 않아 브리핑은 계속 돌아감.
-3. [부분검증] 가산점이 GitHub 단일 출처로 좁혀져, 이슈에 모델명이 없으면 3개 프로바이더 모델 순위가 순수 갱신일로 결정됨(지시서 §4-3 "최신성 위주" 와 일치).
-4. [검증불가] 이미 저장된 기존 D1 `briefing_items.comment` 의 업보트 꼬리표는 정적 문자열이라 이번 수정의 영향 없음. 복구 계획: 브리핑 regenerate 절차 필요 (이번 지시서 범위 밖).
-5. [부분검증] PIPE-03 잔여 위험(NIM `cost 0` 판정 / models.dev SPA catch-all / 동일 모델 2건 선정 가능)은 이번 변경과 무관하게 여전히 존재.
+1. [부분검증] 이미 저장된 D1 `briefing_items.comment` 의 커뮤니티 인용이 그대로 남음 — 정적 문자열이라 삭제의 영향 없음. 복구 계획: 브리핑 regenerate(지시서 범위 밖) → 다음 06:00 브리핑부터 자동 해소.
+2. [검증불가] 오늘 06:00 브리핑 1건과 `/briefing/` 목록에 인용이 노출되는 상태. 복구 계획: 위와 동일.
+3. [부분검증] 가산점 제거로 모델 슬롯이 순수 `pub_date` 내림차순이 됨. 세 프로바이더 최대 갱신일이 10-02 로 겹쳐(Kilo 는 `releaseDate` 일 단위), 적재 상태가 그대로면 2·3위 순서가 정밀도에 의존. 복구 계획: Kilo 정밀도를 시간 단위로 확보(지시서 범위 밖).
+4. [부분검증] PIPE-03 잔여 위험(NIM `cost 0` 판정 / models.dev SPA catch-all / 동일 모델 2건 선정 가능) 무관하게 잔존.
+5. [부분검증] GitHub Issues 수집 삭제로 PIPE-03 원 지시서(2026-10-13-1010) §4-2 완료 기준 ①·②가 더 이상 충족되지 않음(대표님 결정에 따른 의도된 방향). 복구 계획: PIPE-03 원 보고서에 supersede 표기.
 
 ### 다음 행동
-- 2026-10-14 06:00 자동 브리핑 실행 후 `/briefing/<날짜>/` 에서 Reddit 업보트 꼬리표가 사라지고 GitHub 인용만 남는지 1회 육안 확인.
+- 2026-10-14 06:00 브리핑 후 `/briefing/<날짜>/` 에서 `💬 GitHub` · `💬 r/opencodeCLI` 인용 줄이 사라졌는지 1회 확인.
+- PIPE-03 완료보고(2026-10-13-1010)에 "커뮤니티 수집 2026-10-13 13:45 취소" supersede 표기 추가 여부 확인 요청.
 
 ---
 

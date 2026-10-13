@@ -26,7 +26,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "threads" / "v3"))
 
 from pipeline.infra.d1_client import d1_query  # noqa: E402  (auto_briefing이 재사용)
 from model_router import chat_completion  # noqa: E402  (무료 LLM 폴백 체인)
-import community_signals  # noqa: E402  (PIPE-03 §4-2 커뮤니티 가산점)
 
 # auto_briefing.remove_chinese()를 재사용하면 auto_briefing ↔ auto_news_selector
 # 순환 import가 생긴다(서로 상대에서 import). 한 줄짜리 정규식이므로 인라인.
@@ -140,25 +139,6 @@ def score_helpfulness(article):
     return total
 
 
-def _apply_community_bonus(articles):
-    """GitHub 이슈 언급 +2 / Reddit 업보트 50+ +3 (지시서 §4-2). 신호는 _sig 에 남긴다.
-
-    슬롯 판정 기준은 v2_tag 가 아니라 source 다 — 레거시 RSS 행도 v2_tag=free-llm 이다."""
-    ids = [(a.get("original_title") or "") for a in articles if a.get("source") in MODEL_SOURCES]
-    sigs = community_signals.build_signal_map(ids) if ids else {}
-    for a in articles:
-        sig = sigs.get((a.get("original_title") or "").lower())
-        if not sig:
-            continue
-        a["_sig"] = sig
-        add = community_signals.bonus(sig)
-        if add:
-            before = a.get("_score") or 0
-            a["_score"] = before + add
-            log(f"  💬 {a.get('original_title')}: GitHub {sig['gh']}건 / Reddit {sig['rd']}건 "
-                f"→ {before} +{add} = {a['_score']}점")
-
-
 def _take(ranked, limit):
     """정렬된 목록에서 출처 중복 없이 limit 건. 같은 프로바이더가 3슬롯을 다 먹으면
     최신성·로테이션 의미가 사라지므로 프로바이더당 1건으로 막는다."""
@@ -175,10 +155,9 @@ def _take(ranked, limit):
 
 
 def select_top_articles(clusters, max_count=MAX_COUNT):
-    """호환 shim. 클러스터 dict → 모델 3건(최신·로테이션) + 뉴스 1건."""
+    """클러스터 dict → 모델 3건(최신성·프로바이더 로테이션) + 뉴스 1건."""
     articles = [a for group in (clusters or {}).values() for a in group]
-    _apply_community_bonus(articles)
-    # 점수 → 최신 갱신일(pub_date) 순. 갱신일 없는 항목은 최후.
+    # 최신 갱신일(pub_date) 순. 갱신일 없는 항목은 최후.
     ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
 
     picked = _take([a for a in ranked if a.get("source") in MODEL_SOURCES], MODEL_SLOTS)

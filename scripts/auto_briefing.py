@@ -17,7 +17,6 @@ from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
 from auto_news_selector import (CANDIDATE_LIMIT, cluster_by_topic, d1_query,
                                  interleave_candidates, select_top_articles)
-import community_signals
 import model_eval
 
 # PIPE-03 §4-4: news.source → OpenCode 설정 접두어
@@ -45,11 +44,8 @@ def cli_free_block(article):
     prefix = CLI_PROVIDER_PREFIX.get(article.get("source"))
     if not prefix:
         return ""
-    lines = ["✅ OpenCode에서 무료로 사용 가능", f'설정: {{"model": "{prefix}/{mid}"}}']
-    quote = community_signals.quote_line(article.get("_sig"))
-    if quote:
-        lines.append(quote)
-    return "\n".join(lines)
+    return ("✅ OpenCode에서 무료로 사용 가능\n"
+            f'설정: {{"model": "{prefix}/{mid}"}}')
 
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
