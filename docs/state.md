@@ -44,7 +44,60 @@
 - Reddit upvote 가산점 살리려면 Reddit API 키 발급 — 후속 과제로 분리.
 - NVIDIA NIM 항목 각주("API 키 발급 필요") 필요 여부 결정.
 
-## 2026-10-13 11:45 — /tools/ 중복 등록 정책 블록 통합 (레거시 상단 삭제, 하단 내용을 상단으로)
+## 2026-10-13 11:50 — AIK24-TOOLS-01: /tools/ 비정상 여백 원인 조사 (코드 아님 — AdSense Auto Ads)
+
+### 한 일
+- [PRODUCTION CODE 변경 없음] 조사만 수행. `/tools/` 등록 정책 카드 내부의 수백 px 빈 여백의 원인을 실측 확정.
+
+### 결론
+**원인은 Astro/CSS 코드가 아니다. Google AdSense Auto Ads 가 페이지에 삽입한 광고 컨테이너다.**
+정책 카드의 `<h2>`와 `<p>` 사이에 `class="google-auto-placed ap_container"` 빈 DIV(height 280px)가 런타임 주입되어 있었음.
+
+### 실측 근거
+```
+h2 "AI 툴 등록 정책"   top= 969  bottom= 997
+빈 DIV (주입됨)        top=1005  bottom=1285  height=280px   ← 여백의 정체
+p "AI코리아24 도구…"   top=1285  bottom=1305
+```
+주입된 DOM:
+```html
+<div class="google-auto-placed ap_container">
+  <ins data-ad-format="auto" class="adsbygoogle adsbygoogle-noablate"
+       data-ad-client="ca-pub-5938862195544185"
+       data-adsbygoogle-status="done" style="display:block;height:280px">
+    <div id="aswift_3_host" style="height:280px;width:606px"></div>
+  </ins>
+</div>
+```
+`data-adsbygoogle-status="done"` 이지만 내부 `iframe` 없음 = **미채움(Unfilled)**. 크레티티브가 없어 280px가 그냥 백색으로 렌더됨.
+
+### 페이지별 피해 (5초 대기 후 실측)
+| 페이지 | Auto 광고 수 | 미채움 | 빈 높이 합 |
+|---|---|---|---|
+| `/` | 0 | 0 | 0px |
+| `/tools/` | **3** | **3** | **840px** |
+| `/blog/` | 0 | 0 | 0px |
+| `/briefing/` | **1** | **1** | **280px** |
+
+### 배제된 가설
+- **Publisher ID 오배치 아님** — 전역 규칙상 aikorea24 계열 = `ca-pub-5938862195544185`. 실제 주입값과 일치.
+- **ads.txt 이상 없음** — `google.com, pub-5938862195544185, DIRECT, f08c47fec0942fa0` HTTP 200 정상.
+- **코드상 Auto Ads 설정 없음** — `Layout.astro:65` 가 `adsbygoogle.js?client=ca-pub-5938862195544185` 를 파라미터 없이 평범히 로드. Auto Ads ON/OFF는 **AdSense 콘솔 설정**이며 코드에서 제어 불가.
+- **CSS/`global.css` 여백 규칙 아님** — `h1,h2` 는 font-family·color 만 지정. 마크업에도 이상 마진 없음.
+
+### 부수 발견 (별건)
+- `src/layouts/Layout.astro:195` 과 `:201` 이 동일 슬롯 `3350911709` 를 상단·하단에 각 1회 사용. 설계상 의도된 재사용으로 보이나 단일 슬롯이므로 채워지면 동일한 크리에티브가 2회 노출될 수 있음.
+
+### 잔존 위험
+- **여백은 아직 그대로다.** 조사는 완료됐으나 수정은 하지 않음(지시 범위 = 조사). 아래 조치 필요.
+- **원인 제거는 콘솔 작업이라 에이전트가 수행 불가.** AdSense 로그인/콘솔 접근은 프로젝트 규칙상 시도하지 않음.
+
+### 다음 행동 (대표님 선택 필요)
+1. **AdSense 콘솔 → 설정 → 자동 광고 OFF** — 수동 배치만 운영. 가장 확실.
+2. **광고 배치 → 페이지 제외** 에 `/tools/`, `/briefing/` 추가 — 자동 광고 유지하되 해당 페이지 제외.
+3. 코드侧 완화 — 정책 카드를 자동 광고 탐지에서 회피시키는 래퍼 추가. Google 스크립트가 결정하는 배치라 신뢰도 낮음. 비권장.
+
+---
 
 ### 한 일
 - [PRODUCTION CODE] `src/pages/tools/index.astro` — 등록 정책 카드가 2개 존재하던 것을 1개로 통합.
