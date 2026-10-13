@@ -34,6 +34,16 @@ def remove_chinese(text):
     """CJK 통합 한자 블록(U+4E00–U+9FFF, U+3400–U+4DBF) 제거"""
     return re.sub(r'[\u4e00-\u9fff\u3400-\u4dbf]', '', text)
 
+# 대표님 지시(2026-10-13): 블로그 본문 이모티콘 금지. 프롬프트로 막혀도 LLM이
+# 종종 섞어 쓰므로 저장 직전 한 번 더 긁어낸다(remove_chinese와 같은 안전망).
+_EMOJI_RE = re.compile(
+    '[\U0001F000-\U0001FAFF⌀-⏿①-⓿■-➿⬀-⯿️‍\U000020E3]'
+)
+
+def remove_emoji(text):
+    """이모티콘/이모지 블록 제거"""
+    return _EMOJI_RE.sub('', text)
+
 # ============================================
 # 고단가 키워드 테이블 (deprecated: 브리핑 기사 직접 사용)
 # ============================================
@@ -206,23 +216,22 @@ def generate_draft(keyword, articles, grade):
 
     # 무료 LLM 항목은 전용 "모델 심층 분석" 구조로 생성한다 (AIK24-MODELEVAL-01).
     # 호출부를 바꾸지 않고 여기서 판별한다 — 모든 호출이 generate_draft를 거친다.
+    # AIK24-BLOG-01 (2026-10-13 대표님 지시): 평가할 OpenRouter 모델이 없는 free-llm
+    # 항목(HF Trending GGUF, free-llm로 분류된 일반 뉴스 등)은 뉴스 블로그로 생성한다.
+    # routing 규칙 1가지: free-llm + OpenRouter 모델 확인됨 → 모델 평가글, 그 외 → 뉴스글.
     model_id = None
     if is_deep and articles[0].get("v2_tag") == "free-llm":
         try:
             model_id = model_eval.extract_model_id(articles[0])
         except Exception as e:
             log(f"  ⚠️ 모델 ID 판별 예외: {type(e).__name__}: {e}")
-        if not model_id:
-            # AIK24-MODELEVAL-02 1-4: 추출 실패를 조용히 일반 뉴스 분석으로 넘기면
-            # "왜 평가 데이터가 없었는지" 흔적이 남지 않는다. 명시적으로 스킵한다.
-            log(f"  ⚠️ 모델 ID 추출 실패 → 일반 뉴스 분석 폴백 금지, 스킵: '{keyword[:40]}'")
-            return ""
-        out = generate_model_eval_draft(keyword, articles[0], model_id)
-        if out:
-            return out
-        # AIK24-MODELEVAL-02 1-4: 실패 이유를 남기고 스킵한다(일반 뉴스 폴백 금지).
-        log("  ⚠️ 모델 심층 분석 생성 실패 → 스킵 (원인은 위 📊/❌ 로그 참고, 일반 뉴스 분석 폴백 금지, AIK24-BLOGPIPE-FIX-01)")
-        return ""
+        if model_id:
+            out = generate_model_eval_draft(keyword, articles[0], model_id)
+            if out:
+                return out
+            log("  ⚠️ 모델 심층 분석 생성 실패 → 뉴스 블로그 경로로 대체")
+        else:
+            log(f"  ℹ️ OpenRouter 모델 ID 미확인 → 뉴스 블로그 경로: '{keyword[:40]}'")
 
     # 기사 텍스트 조립
     article_lines = []
@@ -449,6 +458,11 @@ def make_slug(title):
 # ============================================
 def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
     """GPT 출력 파싱 → .md 파일 저장. articles 전달 시 deep_dive_url 연결."""
+    # 이모티콘 제거 (대표님 지시) — 저장 직전 유일한 통과 지점이라 여기서 한 번만
+    stripped = remove_emoji(gpt_output)
+    if stripped != gpt_output:
+        log(f"  ✂️ 이모티콘 {len(gpt_output) - len(stripped)}자 제거됨")
+        gpt_output = stripped
     # 브리핑 페이지 URL 조회 (체류시간 확보 — 자기 자신 링크 방지)
     if articles:
         for art in articles:
@@ -769,10 +783,9 @@ def main():
         deep_dive = art.get("deep_dive_url")
         sort_order = art.get("sort_order", i)
 
-        # AIK24-BLOGPIPE-FIX-01: 무료 모델 항목만 블로그 생성 (뉴스 분석 블로그 중단)
-        if art.get("v2_tag") != "free-llm":
-            log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 무료 모델 아님, 스킵")
-            continue
+        # AIK24-BLOG-01 (2026-10-13 대표님 지시): v2_tag 스킵 제거.
+        # 브리핑에 담긴 모든 항목이 블로그 후보 — free-llm + OpenRouter 모델 확인됨은
+        # generate_draft()가 모델 평가글, 나머지는 뉴스글로 라우팅한다.
 
         if deep_dive:
             log(f"  [{i}/{len(articles)}] '{title[:50]}...' — 이미 연결됨, 스킵")
@@ -973,7 +986,7 @@ def main():
         log(f"  ⚠️ git status 확인 실패: {e}")
 
     if generated or untracked_blog_files:
-        log("[6] Cloudflare Pages 배포 중...")
+        log("[6] Cloudflare 배포 중...")
         if untracked_blog_files:
             log(f"  📦 미커밋 블로그 파일 {len(untracked_blog_files)}개 감지 → 배포 실행")
             for f in untracked_blog_files[:5]:  # 최대 5개만 로그
@@ -982,42 +995,24 @@ def main():
                 log(f"    ... 외 {len(untracked_blog_files) - 5}개")
         import subprocess
         try:
-            # npm run build
-            build_result = subprocess.run(
-                ["npm", "run", "build"],
-                capture_output=True, text=True, timeout=300, cwd=PROJECT_DIR
+            # AIK24-BLOG-01: Pages → Workers 이전으로 wrangler pages deploy 대상이 사라졌다
+            # (실측 오류: The Pages project "aikorea24" does not exist).
+            # scripts/deploy.sh = 빌드 + Workers 배포 + sitemap ping 가 유일한 배포 경로.
+            deploy_env = dict(os.environ)
+            deploy_result = subprocess.run(
+                ["npm", "run", "deploy"], capture_output=True, text=True,
+                timeout=900, cwd=PROJECT_DIR, env=deploy_env
             )
-            if build_result.returncode != 0:
-                log(f"  ❌ 빌드 실패: {build_result.stderr[:200]}")
-                send_telegram(f"❌ [{today_str}] 블로그 빌드 실패")
+            if deploy_result.returncode == 0:
+                log("  ✅ 배포 완료: https://aikorea24.kr")
+                # 실제로 생성된 글이 있을 때만 배포 완료 알림 (미커밋 재배포 시 중복 방지)
+                if generated:
+                    send_telegram(f"🚀 [{today_str}] 블로그 {len(generated)}건 배포 완료")
+                else:
+                    log("  ℹ️ 신규 생성 글 없음 → 배포 알림 생략 (미커밋 파일 재배포)")
             else:
-                log("  ✅ 빌드 완료")
-
-                # wrangler pages deploy (auth profile 사용)
-                wrangler = "/opt/homebrew/bin/wrangler"
-                if not os.path.exists(wrangler):
-                    wrangler = "npx"
-                    cmd = [wrangler, "pages", "deploy", "dist",
-                           "--project-name", "aikorea24", "--branch", "main", "--commit-dirty=true"]
-                else:
-                    cmd = [wrangler, "pages", "deploy", "dist",
-                           "--project-name", "aikorea24", "--branch", "main", "--commit-dirty=true"]
-
-                deploy_env = dict(os.environ)
-                deploy_result = subprocess.run(
-                    cmd, capture_output=True, text=True, timeout=180,
-                    cwd=PROJECT_DIR, env=deploy_env
-                )
-                if deploy_result.returncode == 0:
-                    log("  ✅ 배포 완료: https://aikorea24.kr")
-                    # 실제로 생성된 글이 있을 때만 배포 완료 알림 (미커밋 재배포 시 중복 방지)
-                    if generated:
-                        send_telegram(f"🚀 [{today_str}] 블로그 {len(generated)}건 배포 완료")
-                    else:
-                        log("  ℹ️ 신규 생성 글 없음 → 배포 알림 생략 (미커밋 파일 재배포)")
-                else:
-                    log(f"  ❌ 배포 실패: {deploy_result.stderr[:200]}")
-                    send_telegram(f"❌ [{today_str}] 블로그 배포 실패")
+                log(f"  ❌ 배포 실패: {deploy_result.stderr[:200]}")
+                send_telegram(f"❌ [{today_str}] 블로그 배포 실패")
         except Exception as deploy_e:
             log(f"  ⚠️ 배포 예외: {deploy_e}")
             send_telegram(f"⚠️ [{today_str}] 블로그 배포 예외: {str(deploy_e)[:100]}")
