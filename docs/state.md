@@ -1,3 +1,26 @@
+## 2026-10-13 22:18 — AIK24-EMAIL-02 완료 — 이메일 모델·도구 중복 버그 수정 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-2215-AIK24-EMAIL-02-완료보고.md (완료 — verify 요청)
+
+**한 일**
+`scripts/auto_briefing.py` 에 `merge_same_models()` 추가 — 같은 모델 ID가 여러 프로바이더로 수집되면 1건으로 합치고 접근 가능한 프로바이더·설정을 모두 표기(대표님 옵션 A). `scripts/auto_email_sender.py` 의 `get_tools()` 를 name 기준 dedup 으로 변경 — 같은 이름이면 사용자 등록본(`tool_submissions`) 우선, 갱신일 내림차순 6건 유지. 실제 이메일 발송 없음.
+
+**결과**
+- [검증됨] 모델 중복 — 4건(ling-3.1-flash OpenRouter 행 + Kilo 행 + cat-jam-free + 뉴스) → **3건**, 로그 `모델 통합: inclusionai/ling-3.1-flash → OpenRouter Free Models·Kilo Free Models`. 통합 항목 코멘트가 `프로바이더: openrouter·kilo` + 설정 2개를 표기.
+- [검증됨] 도구 중복 — 수정 전 쿼리 실행 결과 `CareOps 마음이` 2회 중복 확인(수정 전 버그 실증), 수정 후 6건 중복 0건. D1 `tool_submissions(published)` 12 / `tools` 466 / `UNION ALL` 478행 / `UNION` 465행 → 중복 13건.
+- [검증됨] 테스트 HTML 15,941 bytes 생성(`/tmp/email_test.html`) — 도구 카드 1개(카드 안 제목·설명 셀 2곳 문자열), 마스코트 `mascot-tiger.png` 렌더 유지, `🤖` 0건.
+- [검증됨] `npm run deploy` 성공 — Version `20367554-52e7-4ec8-b830-22526ada4794`, sitemap ping `{"google": true, "naver": true}`. Brevo API 호출 없음.
+- [검증됨] 커밋 `e08b309c` — 2파일 +52 / −7.
+
+**잔존 위험**
+1. [부분검증] 이미 발송된 이메일과 브리핑 350 의 중복은 소급 제거하지 않음 — 별도 지시 필요.
+2. [부분검증] 모델 통합이 `auto_briefing` 경로에만 있음. 선정 단계로 옮기면 근본 해결이나 §7 허용 범위 밖.
+3. [부분검증] 도구 dedup 키는 `name`. md 표기와 사용자 등록본 표기가 다르면 중복이 남을 수 있음(`slug` 기준이 견고하지만 `tool_submissions` 에 `slug` 없음).
+4. [검증불가] 실제 발송 경로 시각 확인 미수행(발송 금지 지시). HTML 생성까지만 확인.
+
+**다음 행동**
+- 다음 브리핑 생성부터 모델 통합 로그(`모델 통합: …`) 확인.
+
+---
+
 ## 2026-10-13 22:55 — AIK24-EFFICIENCY-02 완료 (파이프라인 3개 병목 제거, 단 총시간 목표는 미달) → SSOT/프로젝트/aikorea24/지시서/2026-10-13-2100-AIK24-EFFICIENCY-02-완료보고.md
 
 **한 일**
