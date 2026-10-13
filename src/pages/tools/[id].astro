@@ -20,6 +20,20 @@ if (!tool) {
   tool = allMd.find((t: any) => t.id === id) ?? null;
 }
 
+// md 카드가 D1 행을 대체하면서 screenshot_url 이 함께 사라져, 이미지가 있는 도구도
+// 상세 페이지에서 썸네일이 안 보였다(2026-10-13). 목록(index.astro)과 같은 규칙으로
+// md 에 image 가 없을 때만 D1 스크린샷을 물려받는다 — md 우선 원칙은 유지.
+if (tool && !(tool as any).data.image) {
+  try {
+    const shot: any = await env.DB?.prepare(
+      'SELECT screenshot_url FROM tool_submissions WHERE slug = ? AND screenshot_url IS NOT NULL AND TRIM(screenshot_url) <> ""'
+    ).bind(id).first();
+    if (shot) {
+      tool = { ...tool, data: { ...(tool as any).data, screenshotUrl: String(shot.screenshot_url) } } as any;
+    }
+  } catch {}
+}
+
 // D1 fallback (Phase 3-C Wave A): md miss → slug 조회 (status 필터 없이 owner preview 허용)
 let isD1 = false;
 let d1OwnerId = 0;

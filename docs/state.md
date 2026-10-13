@@ -1,3 +1,65 @@
+## 2026-10-13 10:25 — /tools/ 썸네일 수정: Link2Threads 카드가 배지 대신 실제 스크린샷 노출 + 4-mbti 썸네일 복구
+
+### 한 일
+- [PRODUCTION CODE] `src/pages/tools/index.astro` — md 중복 제거가 D1 `screenshot_url` 을 통째로 버리던 것을 보정. `mdWithShot` 매핑 추가 (md 에 `image` 가 없을 때만 D1 스크린샷 물려받음, md 우선 원칙 유지).
+- [PRODUCTION CODE] `src/pages/tools/[id].astro` — 상세 페이지도 동일 규칙 적용. md 엔트리에 `image` 가 없으면 `tool_submissions.screenshot_url` 을 1회 조회해 병합.
+- [CONFIG] `src/content/tools/link2threads-l2t.md` — `image: "/badges/listed-on-aikorea24.webp"` **삭제**. 이 필드가 썸네일용인데 승인 이메일용 배지(621×207 배너)를 넣어서 카드가 엉뚱한 이미지로 떴다.
+
+### 대표님 보고 계기 (2건) 와 조치
+1. *"썸네일 안 보인다"* — 근본 원인: `allTools = [...d1Only, ...mdTools]` 에서 md 엔트리가 D1 행을 대체. 실측 **D1 published 12건 전부 md 에 짝이 존재 → `d1Only = 0` → D1 이미지 유실률 100%**. `d1Only=0` 이라 카드에서 사라졌고, 상세는 md 우선이라 D1 fallback 미실행.
+2. *"Link2Threads 는 실제 스크린샷이 등록돼 있는데 엉뚱한 배지가 나온다"* — 카드 렌더가 `tool.data.image || tool.data.screenshotUrl` 이라 md 의 배지가 D1 실제 스크린샷을 덮었다. 배지 필드를 제거해 실제 스크린샷이 드러나게 함.
+
+### 결과 (배포 후 실측)
+- 배포: `Current Version ID: 77a2b6cf-b30f-400b-9aa6-6bfdb7118534` (2026-10-13 10:22)
+- [검증됨] 라이브 `GET /tools/` HTML 에 썸네일 `src` 2건 확인: `/api/files/tools/1/1790357830715-pcvr.webp` (L2T 실제 스크린샷), `/api/files/tools/1/1790183761152-2n17.jpg/` (4-mbti). 근거: `curl -s https://aikorea24.kr/tools/ | grep -o 'src="/api/files/tools/[^"]*"'`
+- [검증됨] 라이브 `GET /tools/` 에 `badges/listed-on-aikorea24` 0건 — 배지가 더 이상 썸네일로 쓰이지 않음.
+- [검증됨] `GET /tools/link2threads-l2t/` 상세 이미지 = `1790357830715-pcvr.webp` (배지 아님).
+- [검증됨] `GET /tools/4-mbti/` 상세 이미지 = `1790183761152-2n17.jpg/` — 이전엔 0건이었다.
+- [검증됨] 승인 이메일 배지 유지: `email-notify.ts` 는 URL 을 직접 참조하므로 md `image` 제거와 무관. `GET /badges/listed-on-aikorea24.webp` → `200 image/webp 20078B`.
+- 산출 근거: 썸네일 2 = md 372개 중 `image` 보유 0개(link2threads 제거 후) + D1 `screenshot_url` 보유 2개, 전부 목록·상세 반영.
+
+### 잔존 위험
+- **370개 도구는 여전히 이미지 없음.** 자동 썸네일 생성 파이프라인이 없다(`run_pipeline.py` Step 4 는 브리핑/뉴스용이고 `--skip-thumbnails` 로 항상 건너뜀). 도구 스크린샷은 제작자 제출/승인 시 수동 업로드만 가능. 대표님 지시 전까지 미구현 — 본 작업 범위 밖.
+- **D1 read 1회 증가**: md 에 `image` 가 없는 상세 페이지(370/372) 방문마다 `screenshot_url` 조회 1회 추가. 무료 티어 한도 대비 무시 가능 수준으로 판단하나, D1 요청량이 급증하면 재검토 필요.
+- [검증불가] 실 브라우저 렌더(배지 삭제 후 카드 여백/높이 정합)는 서버 HTML 만으로 확인. 대표님 화면에서 육안 확인 필요.
+
+### 다음 행동
+1. 대표님 화면에서 `/tools/` 리로드 후 L2T 카드 = 실제 스크린샷, 4-mbti 카드 = 스크린샷인지 확인 요청.
+2. 썸네일 자동 생성 필요 시 별도 지시 대기.
+
+---
+
+## 2026-10-13 09:55 — AIK24-PIPE-SCHEDULE-01 완료: 브리핑 스케줄을 로컬 06:00(한국 08:00/태국 06:00)으로 변경 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-0950-AIK24-PIPE-SCHEDULE-01-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [CONFIG] `~/Library/LaunchAgents/kr.aikorea24.pipeline-runner.plist` 의 `StartCalendarInterval` `Hour 9 → 6` (Minute 0 유지). 백업 `kr.aikorea24.pipeline-runner.plist.bak.20261013_095141` 생성 → `plutil -lint` OK → `launchctl bootout`/`bootstrap` reload.
+- **지시서 전제 반증**: 브리핑은 Cloudflare cron 이 아니라 **macOS launchd** 로 돈다. `wrangler.jsonc` 에 `triggers` 블록 없음 · `git log -S'trigers'` 0커밋 · `src/` 에 `scheduled` 핸들러 0건 → 핸들러 없는 dead trigger 가 되므로 `triggers` 를 **추가하지 않았다**.
+- **"미실행" 아님**: 10-13 09:00 에 정상 실행(`launchctl runs=1 / last exit code=0`), `브리핑 id=349 저장 (date=2026-10-13-1)`, 09:02:18 배포 완료.
+
+### 결과 (검증 근거)
+- [검증됨] 스케줄 반영: `launchctl print gui/501/kr.aikorea24.pipeline-runner` → `stream = com.apple.launchd.calendarinterval / "Minute" => 0 / "Hour" => 6`. `plutil -extract StartCalendarInterval json -o -` → `[{"Hour":6,"Minute":0}]`.
+- [검증됨] 환산: `date` → `2026년 10월 13일 09시 49분 +07` (이 머신 TZ = ICT UTC+7, KST 아님). 로컬 06:00 = 전날 23:00 UTC = 한국 08:00.
+- [검증됨] 부수 영향 없음: `launchctl list | grep -c aikorea24` = 21 (reload 전후 동일).
+- [검증됨] 10-13 브리핑 라이브 반영: `curl https://aikorea24.kr/briefing/` 본문에 `오늘의 AI 브리핑 (2026-10-13)` 노출(목록 최상단) · `/briefing/2026-10-13-1/` → 200.
+- [검증됨] 뉴스 수집 정상: `api_test/cron_unified.log`(mtime 10-13 05:36) → 05:30 실행, `완료! 총 70건 저장`.
+- [검증됨] 중복 실행 아님: `브리핑 id=` 3건은 연속 3일치(342/10-11-1 → 348/10-12-1 → 349/10-13-1, id 차이 342→348 = 6). 같은 날 3회였다면 연속 id 였을 것. `runs = 1` 로 교차 확인.
+- [부분검증] 대표님이 10-12 로 보신 사유 — `/briefing/2026-10-13/`(시퀀스 접미사 없음)는 302 → `/briefing/` 리다이렉트됨(`curl -w "%{redirect_url}"` 확인). 조회 시점·URL 미확인 → 추측이며 확인된 사실 아님.
+- [검증불가] 다음 실행(2026-10-14 06:00 로컬) 실물 발화 — launchd 가 다음 실행 시각 조회 명령을 제공하지 않고 대기 불가. plist 값·launchd 등록까지만 검증.
+- 미수행: `npm run build`/`npm run deploy` — 변경 대상이 Worker 코드가 아닌 macOS plist 이고 Worker 번들에 포함되지 않음. 불필요한 배포 강행 회피.
+
+### 잔존 위험
+- [중간] **D1 읽기 가드 여유 1시간 감소.** plist v3 주석(`AIK24-D1-GUARD-01`)이 09:00 실행을 "자정 UTC D1 초기화 직후"로 선택한 근거다. 06:00 ICT = 23:00 UTC 로 초기화 1시간 전. 실행 후 D1 `Too Many Requests` 발생 시 이 스케줄이 원인 → 10-14 실행 로그 D1 에러 확인 필요.
+- [낮음] 다음 실행 미실측(위 [검증불가]).
+- [낮음] 지시서의 Cloudflare cron 전제가 사실과 달랐음 — 동일 계열 지시서 재발 시 동일 오독 가능.
+- [낮음] `/briefing/YYYY-MM-DD/`(시퀸스 없음) 302 → 목록. 깨끗한 날짜 URL 진입 시 없는 브리핑으로 보일 수 있음.
+
+### 다음 행동
+- 10-14 06:00 실행 후 `scripts/pipeline_runner.log` 에서 D1 에러 유무 + `2026-10-14-1` 생성 여부 확인(중간 위험 확정 검증).
+- 대표님 확인: D1 가드가 00:00 UTC 정각 근접이 목적이었으면 09:00 KST 원복 여부 결정.
+- `/briefing/<날짜>/` 302 문제는 별도 지시 시 착수.
+
+**완료 — 0번 verify 요청**
+
 ## 2026-10-13 01:13 — AIK24-L2T-BADGE-02 보완: 배지 이미지를 대표님 정리본(621×207)으로 교체 + 재배포 (Version `1cb767a7`)
 
 ### 한 일

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "$9"
 koreanSupport: false
 difficulty: "초보자"
-image: "/badges/listed-on-aikorea24.webp"
+
 url: "https://link2threads.com"
 useCases: ["쓰레드 마케팅 / 쓰레드 쿠팡파트너스 / 스레드 수익화"]
 tags: ["스레드", "멀티 카드", "시간 단축", "생산성", "보름동안 390만 달성", "유튜브 요약", "뉴스"]
