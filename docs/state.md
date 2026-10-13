@@ -1,3 +1,52 @@
+## 2026-10-13 AIK24-EMAIL-01 완료 — 구독레터 로봇 이모티콘을 마스코트로 교체 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1530-AIK24-EMAIL-01-완료보고.md (완료 — verify 요청)
+
+### 한 일
+`scripts/auto_email_sender.py` 268행 `generate_email_html()` 헤더의 `🤖` 이모티콘 div 를 `https://aikorea24.kr/mascot-tiger.png` 이미지 태그로 교체. 지시서 §4-1 코드 그대로. [PRODUCTION CODE] 1파일 +1 −1, 커밋 `9562272b`. 다른 이메일 내용·D1 스키마 무변경.
+
+### 결과
+- [검증됨] 🤖 제거 — `grep -c "🤖" scripts/auto_email_sender.py` → `0` (교체 전 원 occurrences 1건이 268행 그 1건).
+- [검증됨] 마스코트 img 포함 — 268행에 `src="https://aikorea24.kr/mascot-tiger.png"` · `alt="AI코리아24 마스코트"` · 인라인 `width/height:80px`.
+- [검증됨] HTML 생성 테스트 — `generate_email_html({...}, [기사 1건])` 직접 호출 → `mascot img: 1` / `robot emoji: 0` / `alt text: True`. [TEST CODE] 일회 호출, 테스트 파일 미추가(지시서 §4-2 요구사항).
+- [검증됨] `npm run build` — `✓ Completed in 12.66s`(페이지) / `[build] Complete!` 서버 21.39s, 에러 0.
+- [검증됨] `npm run deploy` — Version `6db31696-d025-471a-a1f1-27e72f724cea`, sitemap ping google/naver true.
+- [검증됨] 마스코트 실물 — `curl https://aikorea24.kr/mascot-tiger.png` → 200, 51,159 bytes, `image/png`.
+
+### 잔존 위험
+1. [검증불가] 실발송 메일의 마스코트 렌더링 — 함수 출력 HTML 문자열까지만 확인. Gmail/Outlook이 외부 이미지·`aikorea24.kr` 이미지를 막으면 빈 칸. 복구: 06:00 발송 메일 확인 후 필요 시 base64 인라인 이미지 전환.
+2. [부분검증] Outlook 호환 — 인라인 `width/height`·`alt` 적용했으나 Outlook은 `display:block` 요구 시 좌우 여백 발생 가능.
+3. [검증불가] `main()` 종단 경로(브리핑 조회 → 발송) 미실행. 복구: 06:00 자동 발송이 실제 검증.
+4. [부분검증] `scripts/` 내 다른 🤖 2건(`tools_collector.py:1610`, `blog_draft_generator.py:887`)은 텔레그램 알림 문자열이며 이메일 아님 → §7 허용 범위 밖이라 미변경.
+5. [검증불가] 다크 배경(#1e3a5f) 위 투명 PNG 대비 — 실발송 메일 육안 확인 필요.
+
+### 다음 행동
+1. 2026-10-14 06:00 KST 발송 브리핑 이메일에서 마스코트 육안 확인(위 위험 1·2·5 대응).
+2. **AIK24-BLOG-01 중단 상태(아래 항목) 재개** — 대표님 선택 대기.
+
+---
+
+## 2026-10-13 진행 중단 — AIK24-BLOG-01 블로그 초안 생성기 복구 (진단 완료, 방향 미결)
+
+> 지시서 `2026-10-13-1400-AIK24-BLOG-01-블로그생성기복구.md`. 15:0x 진단 완료 후 대표님 선택지 질문에서 중단.
+
+### 진단 결과
+- [검증됨] 지시서 §4-1 지목된 `ModuleNotFoundError: No module named 'pipeline'` 는 **오래된 로그**다. `scripts/blog_draft_error.log` mtime 10/08 06:15, 스크립트 mtime 10/13 00:24. 11~12행에 `sys.path.insert(0, 프로젝트루트)` 있고 `pipeline/` 은 루트에 존재. 수동 실행 시 import 정상(exit 0).
+- [검증됨] 진짜 원인은 코드 2곳: ① `blog_draft_generator.py:773` `if art.get("v2_tag") != "free-llm": skip` 필터 (커밋 `dd1a2e38` AIK24-BLOGPIPE-FIX-01, 10/11 17:19 "뉴스블로그 생성 중단") ② `model_eval.extract_model_id()` 가 OpenRouter 미등록 모델을 None 처리(MODELEVAL-02 "폴백 금지" 규칙).
+- [검증됨] 오늘 브리핑 349 의 free-llm 2건 = HF Trending `unsloth/embeddinggemma-2-GGUF`(OpenRouter 미존재 → `모델 미존재 → 평가 생략`) + 디지털투데이 일반 뉴스 → 수동 1회 실행 결과 **생성 0건, exit 0**. 지시서 §5-② "1건 이상 생성" 오늘은 데이터 구조상 충족 불가.
+- [부분검증] launchd 미실행 정황 — `scripts/blog_draft.log` 마지막 항목 10/11 06:15 local(=08:15 KST). 10/12·10/13 브리핑에는 free-llm 각 2건이 있었으나 실행 흔적 0. launchd는 stdout 로그를 append 하므로 기록이 없다는 것은 실행이 없었다는 뜻. 단 `launchctl print` 의 `runs = 0` 은 `news-unified`·`tools-collector` 에도 동일하게 나와 신뢰 불가(재부트스트副作用로 판단).
+- [검증됨] D1 기준 — briefing 349(2026-10-13-1) free-llm 2 / tool 2, 전부 `deep_dive_url` NULL. 10/12-1 은 free-llm 2건 전부 미연결(0건 생성). 10/11-6 은 3건 전부 연결(정상 동작 확인).
+
+### 미결 사항 (대표님 선택 필요)
+오늘 블로그 0건 해소 방향 3택:
+1. 뉴스 블로그 재개 — 773행 필터 3라인 되돌림 (BLOGPIPE-FIX-01 부분 해제). 오늘 2건 생성. 단 뉴스 분석 글 증가.
+2. 무료 모델만 유지 (권장: 코드 변경 0) — BLOGPIPE-FIX-01·MODELEVAL-02 의사결정 유지. 내일 06:00 브리핑부터 PIPE-03 모델 카드(OpenCode Zen/Kilo/OpenRouter/NIM)가 free-llm으로 들어가 정상 생성 예상. §5-②는 오늘 충족 불가로 보고.
+3. OpenRouter 미등록 free-llm만 일반 경로 — 오늘 1건. MODELEVAL-02 "폴백 금지" 예외화. eval 없는 모델을 평가글처럼 쓰는 리스크.
+
+### 잔존 위험
+1. [검증불가] plist 스케줄 — `~/Library/LaunchAgents/kr.aikorea24.blog-draft.plist` 는 07:30·20:15 local(mtime 10/11 09:24). 오늘 부팅 시각 08:58 local 로 07:30 은 기동 이전. 20:15 도 미도달. `launchctl print` 에 두 interval 등록되어 있으나 `runs=0`. §7 허용 범위가 `blog_draft_generator.py` 한정이므로 plist 은 손대지 않음.
+2. [부분검증] `blog_draft_generator.py` 1019행 `deploy_result.stderr[:200]` 은 `subprocess.run(capture_output=True)` 와 짝이라 정상이나, 스크립트 내부 배포는 `wrangler pages deploy dist` (Pages) 이고 현 프로젝트는 Workers(`npm run deploy`). 이번 실행은 생성 0건이라 배포 단계 미진입 — 실제 생성 시 Pages/Workers 불일치 재현 가능. 복구: 생성 발생 시 배포 실패 로그 확인 후 판단.
+
+---
+
 ## 2026-10-13 AIK24-PIPE-03-FIX 완료 — 커뮤니티 수집 전체 취소 (GitHub Issues + Reddit Atom, 가산점 전부 제거). 선정은 최신성 + 프로바이더 로테이션만. → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1335-AIK24-PIPE-03-FIX-완료보고.md (완료 — verify 요청)
 
 > 지시서 §6 지정 문구는 "Reddit upvote 가산점 삭제, GitHub +2만 유지" 였으나, 같은 파일명이 "커뮤니티 수집 전체 취소" 로 덮어써지면서 §0~§5 가 전부 변경되고 §6 만 갱신되지 않았다. 실제 작업은 §0~§5 기준(전체 취소)이다.
