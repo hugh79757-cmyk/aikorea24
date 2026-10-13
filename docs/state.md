@@ -1,3 +1,35 @@
+## 2026-10-13 AIK24-UI-01 완료 — 이메일 구독 박스 가독성 수정 + 아이콘 제거 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-2335-AIK24-UI-01-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE] `src/pages/tools/index.astro` 9줄, `src/pages/tools/[id].astro` 7줄 수정 (8 insertions / 8 deletions). 커밋 `09ee2706`. 다른 UI 변경 없음.
+- 지시서 §3 "동일한 구독 박스를 쓰는 다른 페이지가 있으면 함께" 에 따라 도구 상세 페이지도 수정.
+
+### 결과
+- [검증됨] 원인 = 컨테이너 배경과 텍스트 색이 어긋난 채 남아 있었음. 라이브 computed style 실측(수정 전):
+  - `/tools/` 제목 `rgb(255,255,255)` / 컨테이너 `rgb(255,255,255)` → 안 보임. 다크 배경 클래스가 사라졌는데 `text-white`·`text-gray-300` 이 잔존.
+  - `/tools/abliteration-ai/` 제목 `oklch(0.21…)`(near-black) / 컨테이너 `rgb(17,17,17)` → 안 보임. 같은 유형의 반대 방향 버그.
+- [검증됨] 수정 — 지시서 §4-1 우선순위(흰 배경+검은 텍스트)대로 통일:
+  - index.astro: `📬` div 삭제 · 제목 `text-white`→`text-gray-900` · 부제목 `text-gray-300`→`text-gray-600` · 입력창 `text-white`→`text-gray-900` · 부정확한 주석("항상 다크") 교체.
+  - [id].astro: 제목의 `📬` 제거 · 컨테이너 `bg-[#111111] dark:from-gray-800 dark:to-gray-750` → `bg-white dark:bg-gray-800`(무의미한 gradient 클래스도 함께 정리).
+- [검증됨] 완료 기준 ① 제목 가독성 — 수정 후 제목 `oklch(0.21 0.034 264.665)`(=gray-900) / 배경 `rgb(255,255,255)`, 두 페이지 스크린샷(`/tmp/ui01_tools.png`, `/tmp/ui01_tools_abliteration-ai.png`)에서 선명 확인.
+- [검증됨] 완료 기준 ② 아이콘 제거 — `grep -rn "📮\|📬" src/` → `src/content/` 외 **0건**. 라이브 DOM `h3_text` 도 "매" 로 시작.
+- [검증됨] 완료 기준 ③ 부제목 — `/tools/` `text-gray-600`(실측 `oklch(0.446 0.03 256.802)`), `[id].astro` 는 기존 `text-gray-600 dark:text-gray-400` 유지.
+- [검증됨] 완료 기준 ④ 배포 — `npm run build` `[build] Complete!`(페이지 12.94s / 서버 22.03s) → Version `d85bc969-252d-459f-91c7-a0f39d3557d0`, sitemap ping `{"google": true, "naver": true}`.
+- 측정 팁: Playwright `wait_until="networkidle"` 은 AdSense 때문에 60초 타임아웃 → `"domcontentloaded"` + 고정 대기로 대체.
+
+### 잔존 위험
+1. [검증불가] 다크 모드 미확인 — 측정은 라이트 모드 1440x1200 뿐. 두 박스 모두 `dark:` 변형(`dark:bg-gray-800`, `dark:text-white`)이 있어 라이트/다크 반전 구조로 맞췄으나 실 화면 확인 안 함.
+2. [부분검증] 모바일·좁은 뷰포트 미측정 — `sm:` 브레이크포인트로 레이아웃이 달라진다.
+3. [부분검증] `/subscribe/` 페이지 미조사·미수정 — 지시서 대상이 CTA 구독 박스이고 전용 페이지는 범위 밖으로 봤다. 동일 컴포넌트가 있으면 색이 어긋날 수 있다.
+4. [부분검증] 다크 모드에서 버튼 `bg-[#111111]` 과 컨테이너 `gray-800` 의 대비가 줄어든다. 지시서 범위 밖이라 손대지 않음.
+5. [검증불가] 실 구독 폼 제출 미실시 — 색·아이콘만 대상이라 주소 사용 안 함.
+
+### 다음 행동
+- 대표님 화면(다크 모드·모바일 포함)에서 확인.
+- `/subscribe/` 에 동일 구독 박스가 있으면 별도 지시 대기.
+
+---
+
 ## 2026-10-13 AIK24-TOOLS-01 완료 — /tools/ 비정상 여백 원인 조사 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1215-AIK24-TOOLS-01-완료보고.md (완료 — 대표님 판단 대기)
 
 ### 한 일
