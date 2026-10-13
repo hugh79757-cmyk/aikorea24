@@ -1,3 +1,41 @@
+## 2026-10-13 AIK24-BLOG-01 완료 — 블로그 초안 생성기 복구, 브리핑 라우팅 검증 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1400-AIK24-BLOG-01-완료보고.md (완료 — verify 요청)
+
+> 지시서 `2026-10-13-1400-AIK24-BLOG-01-블로그생성기복구.md`. 대표님 결정: > "뉴스 블로그 생성해. 파이프라인이 돌면 자연스럽게 브리핑결과에 따라 뉴스블로그와 무료모델 평가 사항 글이 나와야 한다." → 선택지 1번(뉴스 블로그 재개) 채택. 아래에 있던 같은 지시서의 "진행 중단" 항목은 이 완료 항목으로 대체했다.
+
+### 한 일
+[PRODUCTION CODE] `scripts/blog_draft_generator.py` 한 파일만 수정(커밋 `1c665f68`, md 4개 동봉). D1 스키마 변경 없음.
+1. `main()` 771~774 — `if art.get("v2_tag") != "free-llm": continue` 4줄 → 주석 3줄. 이제 `deep_dive_url` 이 있을 때만 스킵. (원인: 커밋 `dd1a2e38` AIK24-BLOGPIPE-FIX-01 이 뉴스 분석 블로그를 중단시킨 필터)
+2. `generate_draft()` 207~225 — `if not model_id: return ""` 2곳 제거. **라우팅 1가지**: `v2_tag == 'free-llm'` 이고 OpenRouter 등록 모델이면 모델 평가글, 그 외(뉴스·도구·미등록 free-llm)는 뉴스글.
+3. 이모티콘 금지(§7 대표님 지시) — `_EMOJI_RE` + `remove_emoji()` 추가(keycap U+20E3 포함, 화살표 U+2190-21FF 보존), `save_draft()` 진입부에서 1회 적용.
+4. 배포 경로 — `npm run build` + `wrangler pages deploy dist --project-name aikorea24` 17줄 → `npm run deploy` 4줄(timeout 900s). Pages→Workers 이전으로 `The Pages project "aikorea24" does not exist.` 가 나던 것을 해결.
+
+### 결과
+| 항목 | 상태 | 근거 |
+|---|---|---|
+| 지시서 §1 원인(`ModuleNotFoundError`) | [검증됨] **오래된 로그** | `scripts/blog_draft_error.log` mtime 10/08 06:15 vs 스크립트 mtime 10/13 00:24. 11~12행 `sys.path.insert(0, 프로젝트루트)` 있고 `pipeline/` 은 루트에 존재. 수동 실행 import 정상 |
+| ① 에러 없이 수동 1회 실행 | [검증됨] | `./.venv/bin/python3 scripts/blog_draft_generator.py` → EXIT=0. 배포 수정본 재실행도 EXIT=0 + `✅ 배포 완료` |
+| ② 오늘 브리핑으로 초안 1건 이상 | [검증됨] | 브리핑 349(`2026-10-13-1`) 4건 → **생성 4건 / 스킵 0건**. LLM `google gemini-3.5-flash-lite` |
+| ③ md 저장 | [검증됨] | `src/content/blog/2026-10-13-001~004-*.md` 4개(5,046~5,656 bytes). `validate_blog_posts.validate_all()` → "모든 블로그 포스트 정상". 썸네일 품질 4/4 통과(29,412~42,452 bytes, 800x800 WebP), 중복검증 고유 4/4 |
+| ④ `briefing_items.comment` 블로그 URL | [부분검증] | free-llm 2건(news_id 55266·55250)에 `👉 자세한 분석` 링크 추가 확인. tool 2건(55205·55232)은 `링크없음` — `save_draft()` 가 `v2_tag == 'free-llm'` 일 때만 `append_comment_link()` 호출(기존 동작, 미변경). **4건 전부 아님** |
+| ⑤ `npm run build` | [검증됨] | `npm run deploy` 내부 `[1/3] 빌드` 성공 = `npm run build`. 배포 수정 전 스크립트 내부 빌드도 통과 |
+| ⑥ 완료보고 + state.md | [검증됨] | `SSOT/…/2026-10-13-1400-AIK24-BLOG-01-완료보고.md` + 본 항목 |
+| 배포 | [검증됨] | 수정 후 실행 로그 `[6] Cloudflare 배포 중...` → `✅ 배포 완료` (19:37:53 → 19:39:07 KST). 수정 전 동일 지점은 `❌ The Pages project "aikorea24" does not exist.` |
+| 라이브 반영 | [검증됨] 4건 모두 `https://aikorea24.kr/blog/<slug>/` HTTP 200, `페이지를 찾을 수 없습니다` 0건, `<title>` = md 제목과 일치, `thumbnail.webp` 참조 확인. `https://aikorea24.kr/briefing/2026-10-13-1/` 에 블로그 링크 4개 노출 |
+| 이모티콘 제거 | [검증됨] | `remove_emoji()` 5케이스 ALL_PASS(🤖/✅ 제거, `→` 보존, keycap `1️⃣`→`1`). 생성된 md 4개 스캔 → 0건 |
+| 라우팅 규칙 | [검증됨](스텁) | `model_eval.extract_model_id`·`generate_model_eval_draft`·`chat_completion` monkeypatch 후 3케이스: free-llm+모델확인→EVAL / free-llm+미확인→NEWS / tool→NEWS. 결과 `['EVAL','NEWS','NEWS']` |
+
+### 잔존 위험
+1. [부분검증] **모델 평가글(EVAL) 실물 미생성.** 오늘 브리핑 free-llm 2건이 HF Trending `unsloth/embeddinggemma-2-GGUF`(OpenRouter 미존재)와 디지털투데이 일반 뉴스라 EVAL 조건 충족 항목이 없었다. EVAL 경로는 스텁 검증뿐이다. 복구: PIPE-03 모델 카드(Zen·OpenRouter·Kilo·NIM)가 브리핑에 들어가는 다음 브리핑(2026-10-14 06:00 KST) 결과 확인.
+2. [검증불가] launchd 미실행 정황. `scripts/blog_draft.log` 마지막 기록 10/11 06:15 local. launchd 는 stdout 로그를 append 하므로 기록 없음 = 실행 없음. 단 `launchctl print` 의 `runs = 0` 은 `news-unified`·`tools-collector` 에도 동일하게 나와 카운터로 판정 불가(재부트스트 부작용). plist 은 07:30·20:15 local(UTC+07 = KST-2h, mtime 10/11 09:24), 오늘 부팅 08:58 local. **plist 수정은 §7 허용 범위 밖이라 미수정 — 대표님 승인 필요.**
+3. [부분검증] `deep_dive_url` 이 있으면 그 브리핑 아이템은 영구 스킵. 재실행 로그 4건 전부 "이미 연결됨, 스킵". 재생성하려면 D1 `deep_dive_url` 을 NULL 로 되돌려야 한다.
+4. [부분검증] 썸네일 `.webp` 는 git 미커밋(`.gitignore:67 public/images/`). 저장소의 1,175개 이미지는 ignore 규칙 이전 추적분이고 10-08 이후분은 미추적이다. 배포는 로컬 `public/` → `dist/` 경로라 현재는 정상이나 클론 후 빌드하면 오늘 썸네일 4개가 없다.
+5. [부분검증] 스크립트 내부 배포가 `npm run deploy` 를 호출하므로 `scripts/deploy.sh` 의 검증·청크 확인·20MB 검사·3회 재시도·sitemap ping 를 모두 탄다. `timeout=900` 이며 이를 넘기면 타임아웃으로 끊긴다.
+
+### 다음 행동
+1. 2026-10-14 06:00 KST 브리핑 후 `scripts/blog_draft.log` 확인 — PIPE-03 모델 카드가 EVAL(모델 평가글) 경로로 실제 생성되는지 (잔존 위험 1).
+2. 대표님 결정 대기 — `~/Library/LaunchAgents/kr.aikorea24.blog-draft.plist` 시각 조정 여부 (잔존 위험 2). 부팅 시각이 08:58 local 인데 트리거는 07:30 local.
+
+---
 ## 2026-10-13 AIK24-EMAIL-01 완료 — 구독레터 로봇 이모티콘을 마스코트로 교체 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1530-AIK24-EMAIL-01-완료보고.md (완료 — verify 요청)
 
 ### 한 일
@@ -20,30 +58,7 @@
 
 ### 다음 행동
 1. 2026-10-14 06:00 KST 발송 브리핑 이메일에서 마스코트 육안 확인(위 위험 1·2·5 대응).
-2. **AIK24-BLOG-01 중단 상태(아래 항목) 재개** — 대표님 선택 대기.
-
----
-
-## 2026-10-13 진행 중단 — AIK24-BLOG-01 블로그 초안 생성기 복구 (진단 완료, 방향 미결)
-
-> 지시서 `2026-10-13-1400-AIK24-BLOG-01-블로그생성기복구.md`. 15:0x 진단 완료 후 대표님 선택지 질문에서 중단.
-
-### 진단 결과
-- [검증됨] 지시서 §4-1 지목된 `ModuleNotFoundError: No module named 'pipeline'` 는 **오래된 로그**다. `scripts/blog_draft_error.log` mtime 10/08 06:15, 스크립트 mtime 10/13 00:24. 11~12행에 `sys.path.insert(0, 프로젝트루트)` 있고 `pipeline/` 은 루트에 존재. 수동 실행 시 import 정상(exit 0).
-- [검증됨] 진짜 원인은 코드 2곳: ① `blog_draft_generator.py:773` `if art.get("v2_tag") != "free-llm": skip` 필터 (커밋 `dd1a2e38` AIK24-BLOGPIPE-FIX-01, 10/11 17:19 "뉴스블로그 생성 중단") ② `model_eval.extract_model_id()` 가 OpenRouter 미등록 모델을 None 처리(MODELEVAL-02 "폴백 금지" 규칙).
-- [검증됨] 오늘 브리핑 349 의 free-llm 2건 = HF Trending `unsloth/embeddinggemma-2-GGUF`(OpenRouter 미존재 → `모델 미존재 → 평가 생략`) + 디지털투데이 일반 뉴스 → 수동 1회 실행 결과 **생성 0건, exit 0**. 지시서 §5-② "1건 이상 생성" 오늘은 데이터 구조상 충족 불가.
-- [부분검증] launchd 미실행 정황 — `scripts/blog_draft.log` 마지막 항목 10/11 06:15 local(=08:15 KST). 10/12·10/13 브리핑에는 free-llm 각 2건이 있었으나 실행 흔적 0. launchd는 stdout 로그를 append 하므로 기록이 없다는 것은 실행이 없었다는 뜻. 단 `launchctl print` 의 `runs = 0` 은 `news-unified`·`tools-collector` 에도 동일하게 나와 신뢰 불가(재부트스트副作用로 판단).
-- [검증됨] D1 기준 — briefing 349(2026-10-13-1) free-llm 2 / tool 2, 전부 `deep_dive_url` NULL. 10/12-1 은 free-llm 2건 전부 미연결(0건 생성). 10/11-6 은 3건 전부 연결(정상 동작 확인).
-
-### 미결 사항 (대표님 선택 필요)
-오늘 블로그 0건 해소 방향 3택:
-1. 뉴스 블로그 재개 — 773행 필터 3라인 되돌림 (BLOGPIPE-FIX-01 부분 해제). 오늘 2건 생성. 단 뉴스 분석 글 증가.
-2. 무료 모델만 유지 (권장: 코드 변경 0) — BLOGPIPE-FIX-01·MODELEVAL-02 의사결정 유지. 내일 06:00 브리핑부터 PIPE-03 모델 카드(OpenCode Zen/Kilo/OpenRouter/NIM)가 free-llm으로 들어가 정상 생성 예상. §5-②는 오늘 충족 불가로 보고.
-3. OpenRouter 미등록 free-llm만 일반 경로 — 오늘 1건. MODELEVAL-02 "폴백 금지" 예외화. eval 없는 모델을 평가글처럼 쓰는 리스크.
-
-### 잔존 위험
-1. [검증불가] plist 스케줄 — `~/Library/LaunchAgents/kr.aikorea24.blog-draft.plist` 는 07:30·20:15 local(mtime 10/11 09:24). 오늘 부팅 시각 08:58 local 로 07:30 은 기동 이전. 20:15 도 미도달. `launchctl print` 에 두 interval 등록되어 있으나 `runs=0`. §7 허용 범위가 `blog_draft_generator.py` 한정이므로 plist 은 손대지 않음.
-2. [부분검증] `blog_draft_generator.py` 1019행 `deploy_result.stderr[:200]` 은 `subprocess.run(capture_output=True)` 와 짝이라 정상이나, 스크립트 내부 배포는 `wrangler pages deploy dist` (Pages) 이고 현 프로젝트는 Workers(`npm run deploy`). 이번 실행은 생성 0건이라 배포 단계 미진입 — 실제 생성 시 Pages/Workers 불일치 재현 가능. 복구: 생성 발생 시 배포 실패 로그 확인 후 판단.
+2. AIK24-BLOG-01 은 뉴스 블로그 재개로 완료(위 맨 위 항목 참조).
 
 ---
 
