@@ -1,3 +1,41 @@
+## 2026-10-13 11:40 — /tools/ 썸네일 260건 자동 백필 (배포 완료)
+
+### 한 일
+- [SCRIPT] `scripts/backfill_tool_thumbs.py` 신규 — 도구 `url` 로 Playwright 첫 화면을 캡쳐해 800x450 webp 저장, md frontmatter 에 `image:` 추가. 동시 6개 병렬.
+- [SCRIPT] `scripts/purge_blank_thumbs.py` 신규 — 백필 결과 품질 검증. stddev<5 빈 화면 + 페이지 텍스트 기반 `Access Denied`/403/404 판정 후 md `image:` 필드와 webp 동시 제거.
+
+### 결과
+| 항목 | 수치 | 근거 |
+|---|---|---|
+| 백필 대상 | 366건 | md 372 − url없음 4 − D1기보유 2 |
+| 캡쳐 성공 | 263건 | 기존 59 + 재실행 204 (`backfill_tool_thumbs.log` 최종 집계행) |
+| 불량 제거 | 3건 | `lium-ai`(빈 화면 stddev 0.02), `mozaik`·`airbrush-studio`(Access Denied) |
+| 최종 반영 | **260건** | `ls public/images/tools/*.webp` = 260, `grep -l '^image:'` = 260 (일치) |
+| 실패(스킵) | 103건 | 전부 `BOT_CHALLENGE` 101 + `TimeoutError` 2 |
+| 라이브 노출 | 267개 태그 | `/images/tools/` 265 + `/api/files/` 2 (`curl https://aikorea24.kr/tools/`) |
+
+- 배포: `Current Version ID: 42b74e79-05de-4582-b766-32f45e983d6e` (11:36). 커밋 `627f6339`.
+- [검증됨] 제거 3건 `lium-ai`/`mozaik`/`airbrush-studio` 라이브 미노출(grep 0건). 샘플 5건 HTTP 200.
+
+### 도메인별 실패 분포 (수동 처리 필요)
+`topai.tools` 73건(봇 차단 — 최대 단일 원인), `topai.tools#` 7건(md 의 `url: "https://topai.tools#"` 로 URL 자체가 잘림, 데이터 오류), `theresanaiforthat.com` 6건, `openai.com` 4건, `producthunt.com` 3건, `claude.ai`/`chatgpt.com` 각 2건 등.
+
+### 작업 중 잡은 버그 3건 (재발 방지)
+1. `is_challenge()` 의 `await` 누락 — `page.title()`/`inner_text()` 는 코루틴 반환. `coroutine[:800]` 에서 TypeError → `except` 가 삼켜 **챌린지 판정이 무조건 False**. 366건 전부 "성공"으로 기록되고 챌린지 화면이 썸네일이 된 원인. 수정 후 4/4 케이스 재검증.
+2. 병렬화 시 공유 임시파일 `scripts/.thumb_tmp.jpg` 덮어쓰기 → slug 로 고유화(`.thumb_tmp_{out.stem}.jpg`).
+3. `strip_image_field()` 정규식 `^image\s*:.*\n` 이 마지막 줄을 못 지움 — `split_frontmatter()` 가 닫는 `---` 앞 개행을 fm 에 포함하지 않는데 `\n` 을 요구함. `.*$` 로 수정.
+
+### 잔존 위험
+- **로그인 화면 캡처**: `careops`, `happy-shrimp` 등 일부 카드가 로그인 폼 그대로 노출됨. 에러 마커에 걸리지 않아 자동 제거 불가 — 육안 확인 필요.
+- **URL 데이터 오류**: `https://topai.tools#` 7건(ai-ad-generator-media-io, freebeat-ai, getimg-ai, imagvio-ai, manyface-ai, melodai, tastegpt). 상세 페이지 URL로 교정 필요하나 topai.tools 가 봇 차단이라 캡쳐는 여전히 불가.
+- **`scripts/briefing_dedup.json` 미커밋** — 09:00 파이프라인 부수효과. 이번 커밋에서 의도적으로 제외함.
+
+### 다음 행동
+- 로그인 화면 카드 육안 확인 후 필요 시 `purge_blank_thumbs.py` 에 로그인 마커 보강.
+- topai.tools 73건은 소셜 og:image API 또는 도메인별 화이트리스트 방식으로 별도 처리 검토.
+
+---
+
 ## 2026-10-13 10:25 — /tools/ 썸네일 수정: Link2Threads 카드가 배지 대신 실제 스크린샷 노출 + 4-mbti 썸네일 복구
 
 ### 한 일
