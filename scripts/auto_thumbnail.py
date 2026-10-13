@@ -29,10 +29,6 @@ PROJECT_DIR = Path(__file__).resolve().parent.parent
 PUBLIC_IMAGES_DIR = PROJECT_DIR / "public" / "images"
 PEXELS_USED_FILE = PROJECT_DIR / "config" / "pexels_used_ids.json"
 
-# model_router (무료 LLM 폴백 체인) import
-sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
-from model_router import chat_completion
-
 THUMBNAIL_SIZE = (800, 800)
 USER_AGENT = (
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -135,32 +131,16 @@ def _save_used_id(photo_id):
     )
 
 
-def _extract_deepseek_keyword(description):
-    """무료 LLM 폴백 체인으로 썸네일 키워드 추출"""
-    try:
-        keyword = chat_completion(
-            messages=[
-                {"role": "system", "content": f"Pick the best stock photo keyword for this news from: {', '.join(DEEPSEEK_POOL)}. Or create a 1-2 word similar visual keyword. Return ONLY the keyword, lowercase, max 3 words."},
-                {"role": "user", "content": (description or "")[:400]},
-            ],
-            system_prompt=None,
-            temperature=0.3,
-            # 20이면 reasoning 모델(gpt-oss, glm-4.5)이 추론 토큰에 다 쓰고 content 가 빈
-            # 채로 finish_reason=length 로 끝나 체인 6개 중 4개가 매번 실패했다(2026-10-13 실측).
-            max_tokens=500,
-            model_override=None,  # 무료 LLM 폴백 체인 사용
-        )
-        if keyword:
-            kw = keyword.strip().lower()
-            if kw:
-                log(f"  LLM 키워드 추출 성공: '{kw}'")
-                return kw
-    except Exception as e:
-        log(f"  LLM 키워드 추출 실패: {e}")
-    # LLM 실패 시 랜덤 fallback
-    fallback = random.choice(DEEPSEEK_POOL)
-    log(f"  LLM 실패 → 랜덤 fallback: '{fallback}'")
-    return fallback
+def _pick_keyword():
+    """썸네일 키워드 — LLM 제거(2026-10-13).
+
+    썸네일은 Pexels/Unsplash 스톡 사진이라 LLM 이 필요 없다. LLM 키워드 추출은
+    호출당 60~85초(단일 tier 실측)를 쓰면서 체인 실패를 반복했고, 4건=665초로
+    파이프라인 Step 4 를 지배했다. 고정 풀에서 랜덤 선택으로 대체한다.
+    """
+    keyword = random.choice(DEEPSEEK_POOL)
+    log(f"  키워드: '{keyword}' (고정 풀 선택 — LLM 제거)")
+    return keyword
 
 
 def search_pexels(query, per_page=15, max_pages=3):
@@ -392,11 +372,7 @@ def process_thumbnail(url, slug, title="", description=""):
         log("  설명/제목 없음, 썸네일 생성 불가")
         return None
 
-    log(f"  LLM 키워드 추출 중...")
-    keyword = _extract_deepseek_keyword(text)
-    # _extract_deepseek_keyword now always returns a keyword (random fallback if API fails)
-    
-    log(f"  키워드: '{keyword}'")
+    keyword = _pick_keyword()
 
     used_ids = _load_used_ids()
     pexels_limited = False
