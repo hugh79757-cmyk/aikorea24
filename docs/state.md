@@ -1,3 +1,25 @@
+## 2026-10-14 01:15 — 썸네일 LLM 제거 (Pexels/Unsplash 스톡 사진만) + LLM 체인 유료 deepseek 제거
+
+**한 일**
+대표님 지시 2건: *"llm fallback chain 스킬 확인하고 참고해서 업데이트해줘. 유료모델 deepseek는 제거하라."* / *"썸네일 llm을 삭제하낟. 모든 썸네일은 pexels unsplash에서 가져온다."*
+파일: `scripts/auto_thumbnail.py` · `scripts/threads/v3/model_router.py` · `config/models.yaml`
+커밋: `c2575811`(체인) · `c2575811` 후속 썸네일 커밋 · `f08fe7c0`/`9b3c89fc`(state)
+
+**결과**
+- [검증됨] 썸네일 LLM 완전 제거 — `from model_router import chat_completion` import 삭제, `_extract_deepseek_keyword(description)` → `_pick_keyword()` 로 교체(고정 키워드 풀 `DEEPSEEK_POOL` 38개에서 랜덤 선택). py_compile OK, 잔여 LLM 참조 0건(문서 문자열 1곳 제외).
+- [검증됨] 소요시간 10배 개선 — 썸네일 1건 5.6~9.8초(4회 실측 평균 7.7초). 이전 LLM 경로는 단일 tier 호출만으로 60~85초. 파이프라인 Step 4 685초 → 약 30초 예상.
+- [검증됨] Unsplash 경로 이미 존재 — `search_unsplash()` + `_load_unsplash_key()`, `UNSPLASH_ACCESS_KEY`(~/.env.common). 실측 검색 3건 반환 확인. Pexels 429 시 폴백으로 계속 동작.
+- [검증됨] 유료 deepseek tier 제거 — `config/models.yaml` `tier_order` 7→6, `models.default`·`providers.deepseek` 삭제. `model_router.order()` 가 `paid_tier=None` 허용. 체인 실동작 확인(`gemini-3.5-flash-lite` 1순위 성공, 유료 시도 0회).
+- [부분검증] `max_tokens` 20→500 변경은 효과 미확인(n=1, 두 호출 모두 1순위 성공). 되돌려도 무해.
+
+**잔존 위험**
+- [부분검증] 샘플 4건 중 3건이 webp 15KB 품질 임계값 미달로 placeholder 로 퇴행. 품질 검증은 LLM 제거와 무관한 기존 동작이고 LLM 은 키워드 관련성만 제공했다. 카드 이미지가 placeholder 로 나가는 비율이 실제로 늘었는지는 다음 파이프라인 실행에서 확인 필요.
+- [검증불가] 대표님 보유 API 키 인벤토리 — Groq 은 `GROQ_API_KEY`/`_2`/`_3`/`_4` 4개 확인(3계정 가능). **Gemini 은 `GEMINI_API_KEY` 1개만 확인되어 3계정 주장과 불일치.** 18티어(groq 3계정×3모델=9 + gemini 3계정×3모델=9) 확장에는 Gemini 키 2개 추가가 선행돼야 한다.
+- [검증불가] 다중 키 지원 전제 — `model_router.get_provider_client()` 의 캐시 키가 `provider_name` 단일 문자열이라, 같은 provider 에 키 2개를 두면 두 번째 키가 첫 번째 키로 덮어써진다. 18티어 확장 시 캐시 키에 `api_key_env` 를 포함해야 한다.
+
+**다음 행동**
+- 대표님 확인 필요: ① Gemini 추가 키 2개의 환경변수 이름 ② 다중 키 지원(cache 키에 api_key_env 포함) 선행 작업 여부 ③ 썸네일 placeholder 비율 확인 후 품질 임계값(15KB) 조정 여부.
+
 ## 2026-10-13 23:40 — LLM 폴백 체인에서 유료 deepseek tier 제거 (max_tokens 20→500 동반)
 
 **한 일**
