@@ -1,4 +1,5 @@
 ---
+
 name: "New AI tools by IFTTT"
 description: "IFTTT에 새로 추가된 10개의 AI 도구로 자동화로 업무 효율을 높입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "회의-요약", "일정-관리"]
 updated: "2026-07-16"
+image: "/images/tools/new-ai-tools-by-ifttt.webp"
 ---
 
 ## 한줄 요약

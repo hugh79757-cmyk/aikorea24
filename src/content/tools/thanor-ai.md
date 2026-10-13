@@ -1,4 +1,5 @@
 ---
+
 name: "Thanor AI"
 description: "인공지능 코딩 툴에 바로 입력하여 전문가 수준의 디자인 결과물을 만들어주는 디자인 지시서 라이브러리입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["웹디자인", "노코드"]
 updated: "2026-10-04"
+image: "/images/tools/thanor-ai.webp"
 ---
 
 ## 한줄 요약

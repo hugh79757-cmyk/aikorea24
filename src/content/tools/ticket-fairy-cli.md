@@ -1,4 +1,5 @@
 ---
+
 name: "Ticket Fairy CLI"
 description: "이벤트 티켓팅 업무를 터미널 명령어로 자동화하여 반복적인 행사 관리 시간을 획기적으로 줄여주는 개발자용 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "코딩"]
 updated: "2026-08-29"
+image: "/images/tools/ticket-fairy-cli.webp"
 ---
 
 ## 한줄 요약

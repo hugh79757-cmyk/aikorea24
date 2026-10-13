@@ -1,4 +1,5 @@
 ---
+
 name: "Hermai Brand API"
 description: "고객의 이메일 주소만으로 로고, 브랜드 색상, 기업 정보를 자동 추출해 웹 서비스에 적용하는 API 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["API-개발", "업무-자동화", "웹디자인"]
 updated: "2026-08-21"
+image: "/images/tools/hermai-brand-api.webp"
 ---
 
 ## 한줄 요약

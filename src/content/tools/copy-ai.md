@@ -1,4 +1,5 @@
 ---
+
 name: "copy.ai"
 description: "반복 작업을 자동화하여 팀의 생산성을 높이는 GTM AI 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "회의록", "이메일-작성"]
 updated: "2026-06-28"
+image: "/images/tools/copy-ai.webp"
 ---
 
 ## 한줄 요약

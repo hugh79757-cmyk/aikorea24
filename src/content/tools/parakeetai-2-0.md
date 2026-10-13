@@ -1,4 +1,5 @@
 ---
+
 name: "ParakeetAI 2.0"
 description: "실시간 면접과 화상 미팅에서 AI가 즉시 답변을 코칭해 주는 스마트한 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["면접-준비", "이력서"]
 updated: "2026-10-08"
+image: "/images/tools/parakeetai-2-0.webp"
 ---
 
 ## 한줄 요약

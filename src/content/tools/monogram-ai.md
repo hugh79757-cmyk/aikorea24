@@ -1,4 +1,5 @@
 ---
+
 name: "Monogram AI"
 description: "Monogram AI는 질문에 대한 시각적이고 인터랙티브한 답변을 제공합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["이메일-작성", "글쓰기", "회의-요약"]
 updated: "2026-07-10"
+image: "/images/tools/monogram-ai.webp"
 ---
 
 ## 한줄 요약

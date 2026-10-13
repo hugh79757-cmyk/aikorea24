@@ -1,4 +1,5 @@
 ---
+
 name: "Self-Evolving Coding Agents: From Digital Programs"
 description: "AI 기반 코딩 에이전트가 자동으로 코드를 생성·수정해 개발 생산성을 높여 줍니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["코딩", "코드-리뷰", "디버깅"]
 updated: "2026-09-30"
+image: "/images/tools/self-evolving-coding-agents-from-digital-programs.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "WhisperBrain"
 description: "줌, 미트, 팀즈 화상회의 내용을 봇 없이 맥(Mac)에 안전하게 기록하고 요약해 주는 AI 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의-요약", "메모-정리", "보고서-작성"]
 updated: "2026-10-01"
+image: "/images/tools/whisperbrain.webp"
 ---
 
 ## 한줄 요약

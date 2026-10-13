@@ -1,4 +1,5 @@
 ---
+
 name: "Controller AI"
 description: "복잡한 업무 과정을 AI 에이전트가 규칙대로 정확히 수행하도록 제어하는 노코드 자동화 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 108
 tasks: ["업무-자동화", "자동화-워크플로우", "챗봇-구축"]
 updated: "2026-08-20"
+image: "/images/tools/controller-ai.webp"
 ---
 
 ## 한줄 요약

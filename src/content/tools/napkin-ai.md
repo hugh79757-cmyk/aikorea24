@@ -1,4 +1,5 @@
 ---
+
 name: "Napkin AI"
 description: "텍스트를 시각적으로 변환하여 효과적인 커뮤니케이션을 지원합니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 33
 tasks: ["글쓰기", "프레젠테이션", "인포그래픽"]
 updated: "2026-06-28"
+image: "/images/tools/napkin-ai.webp"
 ---
 
 ## 한줄 요약

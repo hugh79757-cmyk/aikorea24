@@ -1,4 +1,5 @@
 ---
+
 name: "TRACE: Rollout-Guided Quantization-Aware Training "
 description: "최신 인공지능 연구 논문과 트렌드 동향을 매일 빠르게 확인할 수 있는 플랫폼입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["논문-요약", "리서치"]
 updated: "2026-10-08"
+image: "/images/tools/trace-rollout-guided-quantization-aware-training.webp"
 ---
 
 ## 한줄 요약

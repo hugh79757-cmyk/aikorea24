@@ -1,4 +1,5 @@
 ---
+
 name: "AI Emaily"
 description: "AI가 이메일을 관리하고 답장을 작성해주는 스마트한 이메일 클라이언트입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["이메일-작성", "회의-요약", "일정-관리"]
 updated: "2026-07-08"
+image: "/images/tools/ai-emaily.webp"
 ---
 
 ## 한줄 요약

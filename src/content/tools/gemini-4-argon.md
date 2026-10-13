@@ -1,4 +1,5 @@
 ---
+
 name: "Gemini 4 Argon"
 description: "복잡한 실무 코딩과 대규모 문서 분석을 완벽하게 처리하는 구글의 차세대 AI 모델입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["코딩", "보고서-작성", "데이터-분석"]
 updated: "2026-10-06"
+image: "/images/tools/gemini-4-argon.webp"
 ---
 
 ## 한줄 요약

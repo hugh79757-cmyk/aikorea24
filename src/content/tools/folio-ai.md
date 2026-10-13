@@ -1,4 +1,5 @@
 ---
+
 name: "Folio AI"
 description: "프레젠테이션 작업을 간편하게 도와주는 AI 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["프레젠테이션", "보고서-작성", "회의-요약"]
 updated: "2026-06-28"
+image: "/images/tools/folio-ai.webp"
 ---
 
 ## 한줄 요약

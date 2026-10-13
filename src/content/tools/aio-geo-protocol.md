@@ -1,4 +1,5 @@
 ---
+
 name: "AIO.GEO Protocol"
 description: "내 웹사이트가 챗GPT 등 AI 검색 엔진에 어떻게 노출되는지 진단하고 AI가 내 정보를 정확히 읽도록 최적화하는 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["seo-최적화", "데이터-분석"]
 updated: "2026-08-13"
+image: "/images/tools/aio-geo-protocol.webp"
 ---
 
 ## 한줄 요약

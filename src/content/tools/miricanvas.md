@@ -1,4 +1,5 @@
 ---
+
 name: "미리캔버스"
 description: "미리캔버스는 쉽게 사용하는 온라인 디자인 툴로, 다양한 템플릿과 그래픽을 제공합니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 51
 tasks: ["프레젠테이션", "썸네일-제작", "영상-제작"]
 updated: "2026-06-28"
+image: "/images/tools/miricanvas.webp"
 ---
 
 ## 한줄 요약

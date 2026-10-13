@@ -1,4 +1,5 @@
 ---
+
 name: "Zapier AI"
 description: "9,000개 이상의 앱과 연결하여 AI 워크플로우를 자동화하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 62
 tasks: ["업무-자동화", "회의-요약", "프로젝트-관리"]
 updated: "2026-06-28"
+image: "/images/tools/zapier-ai.webp"
 ---
 
 ## 한줄 요약

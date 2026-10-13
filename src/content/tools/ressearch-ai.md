@@ -1,4 +1,5 @@
 ---
+
 name: "Ressearch AI"
 description: "과학적 연구 데이터를 수집하고 파이썬 분석부터 논문 작성까지 한곳에서 해결하는 전문 연구용 AI 워크스페이스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["리서치", "데이터-분석", "보고서-작성"]
 updated: "2026-08-20"
+image: "/images/tools/ressearch-ai.webp"
 ---
 
 ## 한줄 요약

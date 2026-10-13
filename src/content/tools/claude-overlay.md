@@ -1,4 +1,5 @@
 ---
+
 name: "Claude Overlay"
 description: "윈도우에서 화면을 인식하여 질문에 답하는 Claude Code 챗봇입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "회의-요약", "업무-자동화"]
 updated: "2026-07-15"
+image: "/images/tools/claude-overlay.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Speak"
 description: "Speak는 실시간 튜터 없이 대화 연습을 할 수 있는 언어 학습 앱입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 62
 tasks: ["영어-학습", "문서-작성", "회의록"]
 updated: "2026-06-28"
+image: "/images/tools/speak.webp"
 ---
 
 ## 한줄 요약

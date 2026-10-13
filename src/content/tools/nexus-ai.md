@@ -1,4 +1,5 @@
 ---
+
 name: "Nexus AI"
 description: "Nexus AI는 글쓰기, 음성 변환, 이미지 생성 등 다양한 작업을 지원하는 AI 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 110
 tasks: ["글쓰기", "영상-음성", "이미지-생성"]
 updated: "2026-06-28"
+image: "/images/tools/nexus-ai.webp"
 ---
 
 ## 한줄 요약

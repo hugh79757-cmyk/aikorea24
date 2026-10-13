@@ -1,4 +1,5 @@
 ---
+
 name: "Keyboard Copilot"
 description: "AI 타입 키보드로 빠르고 스마트하게 글쓰기를 도와줍니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["이메일-작성", "글쓰기", "맞춤법-교정"]
 updated: "2026-06-28"
+image: "/images/tools/keyboard-copilot.webp"
 ---
 
 ## 한줄 요약

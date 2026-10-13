@@ -1,4 +1,5 @@
 ---
+
 name: "Dual Latent Memory in Vision-Language-Action Model"
 description: "로봇 조작을 위한 비전-언어-행동 모델의 메모리 기능을 제공합니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["논문-요약", "코딩", "데이터-분석"]
 updated: "2026-07-10"
+image: "/images/tools/dual-latent-memory-in-vision-language-action-model.webp"
 ---
 
 ## 한줄 요약

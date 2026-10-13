@@ -1,4 +1,5 @@
 ---
+
 name: "ShogunAI"
 description: "내 맥(Mac) 속 업무 맥락을 기억하고 흩어진 툴을 연결해 자동으로 일을 처리하는 개인용 AI 비서입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "회의-요약", "메모-정리"]
 updated: "2026-08-22"
+image: "/images/tools/shogunai.webp"
 ---
 
 ## 한줄 요약

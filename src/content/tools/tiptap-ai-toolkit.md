@@ -1,4 +1,5 @@
 ---
+
 name: "Tiptap AI Toolkit"
 description: "문서 편집을 실시간으로 지원하는 AI 툴킷으로, 협업에 최적화되어 있습니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의록", "사업계획서", "이메일-작성"]
 updated: "2026-07-16"
+image: "/images/tools/tiptap-ai-toolkit.webp"
 ---
 
 ## 한줄 요약

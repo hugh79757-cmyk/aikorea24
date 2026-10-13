@@ -1,4 +1,5 @@
 ---
+
 name: "Ninjō AI"
 description: "크리에이터와 1인 기업가를 위한 AI 영업 비서로, 고객 관리와 판매 전략을 자동화하여 수익 창출을 돕습니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["마케팅-자동화", "고객-상담", "카피라이팅"]
 updated: "2026-08-26"
+image: "/images/tools/ninj-ai.webp"
 ---
 
 ## 한줄 요약

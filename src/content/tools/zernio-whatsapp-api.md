@@ -1,4 +1,5 @@
 ---
+
 name: "Zernio WhatsApp API"
 description: "15개 소셜 미디어와 메신저를 하나의 API로 관리할 수 있는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["업무-자동화", "데이터-분석", "sns-콘텐츠"]
 updated: "2026-06-28"
+image: "/images/tools/zernio-whatsapp-api.webp"
 ---
 
 ## 한줄 요약

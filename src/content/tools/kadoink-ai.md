@@ -1,4 +1,5 @@
 ---
+
 name: "Kadoink AI"
 description: "Kadoink AI는 전화로 사람들을 즉시 모을 수 있는 새로운 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의-요약", "일정-관리", "프로젝트-관리"]
 updated: "2026-07-08"
+image: "/images/tools/kadoink-ai.webp"
 ---
 
 ## 한줄 요약

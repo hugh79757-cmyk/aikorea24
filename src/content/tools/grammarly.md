@@ -1,4 +1,5 @@
 ---
+
 name: "Grammarly"
 description: "영어 글쓰기 오류를 교정하고 표현을 개선해주는 툴입니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 60
 tasks: ["맞춤법-교정", "글쓰기", "이메일-작성"]
 updated: "2026-06-28"
+image: "/images/tools/grammarly.webp"
 ---
 
 ## 한줄 요약

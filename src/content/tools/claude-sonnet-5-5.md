@@ -1,4 +1,5 @@
 ---
+
 name: "Claude Sonnet 5.5"
 description: "빠르고 저렴한 AI 문서·보고서 작성 도우미, 한국어도 자연스럽게 지원합니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["글쓰기", "이메일-작성", "보고서-작성"]
 updated: "2026-09-30"
+image: "/images/tools/claude-sonnet-5-5.webp"
 ---
 
 ## 한줄 요약

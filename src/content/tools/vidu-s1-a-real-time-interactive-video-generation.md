@@ -1,4 +1,5 @@
 ---
+
 name: "Vidu S1: A Real-Time Interactive Video Generation "
 description: "실시간으로 인터랙티브한 영상을 생성하여 콘텐츠 제작을 돕는 툴입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["영상-제작", "영상-편집", "프레젠테이션"]
 updated: "2026-07-11"
+image: "/images/tools/vidu-s1-a-real-time-interactive-video-generation.webp"
 ---
 
 ## 한줄 요약

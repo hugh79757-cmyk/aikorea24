@@ -1,4 +1,5 @@
 ---
+
 name: "RRSI: Regularized Recursive Self-Improvement of Ag"
 description: "AI 연구 논문을 매일 이메일로 받아볼 수 있는 서비스입니다."
 category: "학습"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["논문-요약", "리서치", "업무-자동화"]
 updated: "2026-09-23"
+image: "/images/tools/rrsi-regularized-recursive-self-improvement-of-ag.webp"
 ---
 
 ## 한줄 요약

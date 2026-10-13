@@ -1,4 +1,5 @@
 ---
+
 name: "CentryAI"
 description: "CentryAI는 이메일을 스캔하여 구독 목록을 관리하고 사용하지 않는 구독을 쉽게 취소할 수 있도록 도와줍니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의-요약", "업무-자동화", "일정-관리"]
 updated: "2026-07-05"
+image: "/images/tools/centryai.webp"
 ---
 
 ## 한줄 요약

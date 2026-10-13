@@ -1,4 +1,5 @@
 ---
+
 name: "Suno"
 description: "AI를 이용해 쉽고 빠르게 음악을 만들 수 있는 툴입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 22
 tasks: ["음악-생성", "음성-변환"]
 updated: "2026-06-28"
+image: "/images/tools/suno.webp"
 ---
 
 ## 한줄 요약

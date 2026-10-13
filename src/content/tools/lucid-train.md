@@ -1,4 +1,5 @@
 ---
+
 name: "Lucid Train"
 description: "복잡한 코드 구조를 시각적인 아키텍처 도면으로 자동 변환하고 이를 바탕으로 코딩 작업까지 수행하는 오프라인 AI 개발 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["코딩", "코드-리뷰", "디버깅"]
 updated: "2026-08-25"
+image: "/images/tools/lucid-train.webp"
 ---
 
 ## 한줄 요약

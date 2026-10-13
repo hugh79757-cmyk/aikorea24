@@ -1,4 +1,5 @@
 ---
+
 name: "Oxlo.ai"
 description: "OpenAI 호환 API에서 다양한 AI 모델을 활용하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["이메일-작성", "보고서-작성", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/oxlo-ai.webp"
 ---
 
 ## 한줄 요약

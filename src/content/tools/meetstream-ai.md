@@ -1,4 +1,5 @@
 ---
+
 name: "MeetStream AI"
 description: "줌, 구글 미트 등 화상회의 내용을 자동으로 기록하고 실시간으로 텍스트화하는 개발자용 API 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["회의록", "업무-자동화", "API-개발"]
 updated: "2026-08-22"
+image: "/images/tools/meetstream-ai.webp"
 ---
 
 ## 한줄 요약

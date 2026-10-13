@@ -1,4 +1,5 @@
 ---
+
 name: "PixelRead AI OCR"
 description: "화면 속 글자를 드래그 한 번으로 복사, 번역, 요약까지 해결하는 맥 전용 OCR 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["문서-번역", "요약", "업무-자동화"]
 updated: "2026-08-22"
+image: "/images/tools/pixelread-ai-ocr.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Never Boring AI"
 description: "링크드인 콘텐츠 캘린더 작성부터 게시글 작성, 자동 발행까지 도와주는 AI 에이전트입니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["sns-콘텐츠", "콘텐츠-기획", "글쓰기"]
 updated: "2026-10-03"
+image: "/images/tools/never-boring-ai.webp"
 ---
 
 ## 한줄 요약

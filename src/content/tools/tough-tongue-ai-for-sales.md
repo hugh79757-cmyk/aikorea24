@@ -1,4 +1,5 @@
 ---
+
 name: "Tough Tongue AI for Sales"
 description: "영업, 인터뷰 및 교육을 위한 음성 AI 에이전트를 제공합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의록", "이력서", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/tough-tongue-ai-for-sales.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "AGIRAILS"
 description: "AI 에이전트 간의 신뢰 기반 거래를 위한 프로토콜입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["업무-자동화", "회의-요약", "프로젝트-관리"]
 updated: "2026-06-28"
+image: "/images/tools/agirails.webp"
 ---
 
 ## 한줄 요약

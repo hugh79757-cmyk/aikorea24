@@ -1,4 +1,5 @@
 ---
+
 name: "SaneBox"
 description: "SaneBox는 이메일 관리 시간을 절반으로 줄여주는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["이메일-작성", "회의록", "일정-관리"]
 updated: "2026-06-28"
+image: "/images/tools/sanebox.webp"
 ---
 
 ## 한줄 요약

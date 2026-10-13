@@ -1,4 +1,5 @@
 ---
+
 name: "CakewordAI"
 description: "주변 사물을 가리키면 다양한 언어로 이름을 알아낼 수 있는 툴."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["번역"]
 updated: "2026-06-17"
+image: "/images/tools/cakewordai.webp"
 ---
 
 ## 한줄 요약

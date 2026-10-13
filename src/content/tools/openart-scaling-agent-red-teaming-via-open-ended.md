@@ -1,4 +1,5 @@
 ---
+
 name: "OpenART: Scaling Agent Red Teaming via Open-Ended "
 description: "최신 AI 연구 논문을 매일 메일로 받아보고 트렌드를 빠르게 파악할 수 있는 정보 큐레이션 서비스입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["논문-요약", "리서치"]
 updated: "2026-08-13"
+image: "/images/tools/openart-scaling-agent-red-teaming-via-open-ended.webp"
 ---
 
 ## 한줄 요약

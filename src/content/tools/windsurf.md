@@ -1,4 +1,5 @@
 ---
+
 name: "Windsurf"
 description: "로컬 및 클라우드 에이전트를 한 곳에서 관리할 수 있는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 22
 tasks: ["업무-자동화", "프로젝트-관리", "회의-요약"]
 updated: "2026-06-28"
+image: "/images/tools/windsurf.webp"
 ---
 
 ## 한줄 요약

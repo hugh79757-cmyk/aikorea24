@@ -1,4 +1,5 @@
 ---
+
 name: "Mojave Paint"
 description: "Mojave Paint는 맥에서 정적인 이미지를 직접 수정할 수 있는 이미지 편집기입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["이미지-생성", "로고-디자인", "인포그래픽"]
 updated: "2026-07-15"
+image: "/images/tools/mojave-paint.webp"
 ---
 
 ## 한줄 요약

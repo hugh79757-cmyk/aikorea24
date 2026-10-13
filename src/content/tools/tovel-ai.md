@@ -1,4 +1,5 @@
 ---
+
 name: "Tovel AI"
 description: "회의 내용을 자동으로 기록하고 요약하여 할 일과 일정까지 정리해 주는 스마트한 업무 비서 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의록", "회의-요약", "일정-관리"]
 updated: "2026-09-02"
+image: "/images/tools/tovel-ai.webp"
 ---
 
 ## 한줄 요약

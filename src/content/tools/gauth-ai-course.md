@@ -1,4 +1,5 @@
 ---
+
 name: "Gauth AI Course"
 description: "AI가 수학 문제를 단계별로 설명해주어 기초부터 심화까지 탄탄하게 학습할 수 있는 맞춤형 수학 학습 플랫폼입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["학습"]
 updated: "2026-09-02"
+image: "/images/tools/gauth-ai-course.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Graph Engineering in the Era of LLM Agents: From I"
 description: "최신 AI 연구 논문을 매일 메일로 받아보고, 기술 트렌드를 빠르게 파악하는 정보 큐레이션 서비스입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["리서치", "논문-요약", "요약"]
 updated: "2026-08-25"
+image: "/images/tools/graph-engineering-in-the-era-of-llm-agents-from-i.webp"
 ---
 
 ## 한줄 요약

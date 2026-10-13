@@ -1,4 +1,5 @@
 ---
+
 name: "bitdrift.ai"
 description: "AI 에이전트가 고객 기기의 데이터를 실시간으로 분석하여 앱 오류와 성능 문제를 즉시 해결하도록 돕는 개발자용 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["코딩", "디버깅", "데이터-분석"]
 updated: "2026-08-22"
+image: "/images/tools/bitdrift-ai.webp"
 ---
 
 ## 한줄 요약

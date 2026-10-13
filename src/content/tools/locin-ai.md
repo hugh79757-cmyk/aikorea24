@@ -1,4 +1,5 @@
 ---
+
 name: "LocIn AI"
 description: "브랜드 목소리를 유지하며 다국어로 앱을 번역하는 AI 툴입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["문서-번역", "회의록", "기획서"]
 updated: "2026-06-28"
+image: "/images/tools/locin-ai.webp"
 ---
 
 ## 한줄 요약

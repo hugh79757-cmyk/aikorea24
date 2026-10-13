@@ -1,4 +1,5 @@
 ---
+
 name: "Expertise AI"
 description: "전문가의 노하우를 AI 에이전트로 쉽게 만들고 공유하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "챗봇-구축", "프로젝트-관리"]
 updated: "2026-08-27"
+image: "/images/tools/expertise-ai.webp"
 ---
 
 ## 한줄 요약

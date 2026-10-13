@@ -1,4 +1,5 @@
 ---
+
 name: "HAQQ Legal AI on Mobile"
 description: "모바일에서 법률 연구와 문서 분석을 지원하는 AI 앱입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["문서-작성", "문서-요약", "법률-검토"]
 updated: "2026-06-28"
+image: "/images/tools/haqq-legal-ai-on-mobile.webp"
 ---
 
 ## 한줄 요약

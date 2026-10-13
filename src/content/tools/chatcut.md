@@ -1,4 +1,5 @@
 ---
+
 name: "ChatCut"
 description: "브라우저에서 쉽게 사용하는 AI 영상 편집 도구입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["영상-편집", "유튜브-편집", "음성-변환"]
 updated: "2026-07-11"
+image: "/images/tools/chatcut.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Yedric.ai"
 description: "쇼핑몰 앱에 고객 문의 응대와 실제 주문 처리가 가능한 AI 비서를 간편하게 탑재합니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["챗봇-구축", "고객-상담", "업무-자동화"]
 updated: "2026-10-02"
+image: "/images/tools/yedric-ai.webp"
 ---
 
 ## 한줄 요약

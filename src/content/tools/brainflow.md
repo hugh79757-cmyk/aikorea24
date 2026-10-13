@@ -1,4 +1,5 @@
 ---
+
 name: "BrainFlow"
 description: "BrainFlow는 음성을 기록해 자동으로 깔끔한 메모로 변환하는 앱입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의록", "이메일-작성", "기획서"]
 updated: "2026-06-28"
+image: "/images/tools/brainflow.webp"
 ---
 
 ## 한줄 요약

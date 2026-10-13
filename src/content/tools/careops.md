@@ -1,4 +1,5 @@
 ---
+
 name: "CareOps 마음이"
 description: "세이프옵스의 심리치료 기법(CBT·ACT) 기반 AI 문자·음성 상담 앱입니다. 한국어·영어로 마음을 돌아보고 기록을 이어갈 수 있습니다. iOS·Android 지원. 첫 AI 회기 무료, 이후 유료."
 category: "글쓰기·챗봇"
@@ -13,6 +14,7 @@ order: -1
 featured: false
 updated: "2026-10-12"
 priceModel: "유료"
+image: "/images/tools/careops.webp"
 ---
 
 세이프옵스가 운영하는 CareOps 마음이를 소개합니다.

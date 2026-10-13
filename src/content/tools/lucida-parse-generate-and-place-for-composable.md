@@ -1,4 +1,5 @@
 ---
+
 name: "Lucida: Parse, Generate, and Place for Composable "
 description: "최신 AI 연구 논문을 매일 받아보고, 복잡한 기술 트렌드를 빠르게 파악할 수 있는 정보 큐레이션 서비스입니다."
 category: "학습"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["논문-요약", "리서치"]
 updated: "2026-09-02"
+image: "/images/tools/lucida-parse-generate-and-place-for-composable.webp"
 ---
 
 ## 한줄 요약

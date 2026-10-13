@@ -1,4 +1,5 @@
 ---
+
 name: "Tychi AI"
 description: "Tychi AI는 개인 및 AI 에이전트를 위한 자산 관리 지갑입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["회의록", "사업계획서", "이메일-작성"]
 updated: "2026-06-28"
+image: "/images/tools/tychi-ai.webp"
 ---
 
 ## 한줄 요약

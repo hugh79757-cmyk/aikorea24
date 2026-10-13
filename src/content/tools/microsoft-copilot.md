@@ -1,4 +1,5 @@
 ---
+
 name: "Microsoft Copilot"
 description: "마이크로소프트 365 앱에 내장된 업무용 AI로 문서·데이터·메일을 한 번에 처리합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["이메일-작성", "엑셀-자동화", "회의록"]
 updated: "2026-09-29"
+image: "/images/tools/microsoft-copilot.webp"
 ---
 
 ## 한줄 요약

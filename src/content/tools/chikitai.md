@@ -1,4 +1,5 @@
 ---
+
 name: "ChikitAI"
 description: "의료 분야에서 환자 분류 및 관리 자동화를 지원하는 인공지능 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "데이터-분석", "의료-상담"]
 updated: "2026-07-17"
+image: "/images/tools/chikitai.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "AlgoFly AI"
 description: "AI 솔루션을 구축하고 배포하는 데 도움을 주는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의-요약", "데이터-분석", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/algofly-ai.webp"
 ---
 
 ## 한줄 요약

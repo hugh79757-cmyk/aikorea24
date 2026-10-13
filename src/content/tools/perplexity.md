@@ -1,4 +1,5 @@
 ---
+
 name: "Perplexity"
 description: "실시간 웹 검색로 출처가 명시된 정보를 제공하는 AI 검색엔진입니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 5
 tasks: ["리서치"]
 updated: "2026-06-20"
+image: "/images/tools/perplexity.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Kilo Code for JetBrains"
 description: "JetBrains IDE에서 여러 AI 에이전트를 동시에 실행하여 복잡한 코딩 작업을 효율적으로 자동화하는 개발 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "코드-리뷰", "디버깅"]
 updated: "2026-09-02"
+image: "/images/tools/kilo-code-for-jetbrains.webp"
 ---
 
 ## 한줄 요약

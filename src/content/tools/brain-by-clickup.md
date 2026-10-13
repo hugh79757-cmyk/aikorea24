@@ -1,4 +1,5 @@
 ---
+
 name: "Brain² by ClickUp"
 description: "프로젝트, 문서, 사람을 연결하여 지식을 관리하는 AI 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의-요약", "프로젝트-관리", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/brain-by-clickup.webp"
 ---
 
 ## 한줄 요약

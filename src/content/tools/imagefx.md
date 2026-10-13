@@ -1,4 +1,5 @@
 ---
+
 name: "ImageFX"
 description: "텍스트를 이미지로 변환하여 창의적 작업을 지원하는 툴입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 12
 tasks: ["이미지-생성", "썸네일-제작", "로고-디자인"]
 updated: "2026-06-28"
+image: "/images/tools/imagefx.webp"
 ---
 
 ## 한줄 요약

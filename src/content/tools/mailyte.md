@@ -1,4 +1,5 @@
 ---
+
 name: "Mailyte"
 description: "자체 도메인으로 팀 메일함, 마케팅 캠페인, 앱 자동 발송 메일을 한 곳에서 관리하는 이메일 인프라 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이메일-작성", "마케팅-자동화", "CRM"]
 updated: "2026-09-18"
+image: "/images/tools/mailyte.webp"
 ---
 
 ## 한줄 요약

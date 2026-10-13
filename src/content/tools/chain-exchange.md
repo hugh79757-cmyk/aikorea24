@@ -1,4 +1,5 @@
 ---
+
 name: "Chain Exchange"
 description: "여러 블록체인 네트워크 간 코인을 쉽게 교환하고 예치할 수 있는 크로스체인 거래소입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["투자-분석", "데이터-분석"]
 updated: "2026-10-06"
+image: "/images/tools/chain-exchange.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Cronloop AI"
 description: "반복적인 업무를 AI가 정해진 시간에 자동으로 수행하게 돕는 업무 자동화 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "이메일-작성", "데이터-분석"]
 updated: "2026-08-20"
+image: "/images/tools/cronloop-ai.webp"
 ---
 
 ## 한줄 요약

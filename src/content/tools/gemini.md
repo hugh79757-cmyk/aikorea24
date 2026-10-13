@@ -1,4 +1,5 @@
 ---
+
 name: "Gemini"
 description: "구글의 AI 비서로, 글쓰기와 기획, 브레인스토밍을 지원합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 3
 tasks: ["이메일-작성", "글쓰기", "기획서"]
 updated: "2026-06-28"
+image: "/images/tools/gemini.webp"
 ---
 
 ## 한줄 요약

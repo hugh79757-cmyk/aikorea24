@@ -1,4 +1,5 @@
 ---
+
 name: "Kit For AI"
 description: "AI 문서 변환 및 지식 관리 도구로, 사용자가 쉽게 활용할 수 있습니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["문서-번역", "회의록", "보고서-작성"]
 updated: "2026-07-17"
+image: "/images/tools/kit-for-ai.webp"
 ---
 
 ## 한줄 요약

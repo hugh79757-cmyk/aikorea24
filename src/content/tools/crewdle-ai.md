@@ -1,4 +1,5 @@
 ---
+
 name: "Crewdle AI"
 description: "비즈니스에 필요한 다양한 AI 기능을 제공하는 통합 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["이메일-작성", "사업계획서", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/crewdle-ai.webp"
 ---
 
 ## 한줄 요약

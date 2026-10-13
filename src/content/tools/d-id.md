@@ -1,4 +1,5 @@
 ---
+
 name: "D-ID"
 description: "AI를 활용한 인터랙티브한 비디오 및 아바타 제작 툴입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 54
 tasks: ["영상-제작", "영상-편집", "회의-요약"]
 updated: "2026-06-28"
+image: "/images/tools/d-id.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Read It Back: Pretrained MLLMs Are Zero-Shot Rewar"
 description: "최신 AI 연구 논문을 매일 받아볼 수 있는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["문서-요약", "리서치", "회의록"]
 updated: "2026-07-16"
+image: "/images/tools/read-it-back-pretrained-mllms-are-zero-shot-rewar.webp"
 ---
 
 ## 한줄 요약

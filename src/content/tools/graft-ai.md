@@ -1,4 +1,5 @@
 ---
+
 name: "Graft AI"
 description: "레거시 소프트웨어를 AI가 사용할 수 있도록 변환하는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "데이터-분석", "프로젝트-관리"]
 updated: "2026-07-17"
+image: "/images/tools/graft-ai.webp"
 ---
 
 ## 한줄 요약

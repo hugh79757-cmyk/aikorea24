@@ -1,4 +1,5 @@
 ---
+
 name: "Parano.ai"
 description: "경쟁사 동향을 자동으로 추적하여 분석하는 AI 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의록", "보고서-작성", "데이터-분석"]
 updated: "2026-06-28"
+image: "/images/tools/parano-ai.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Google AI Studio"
 description: "Google AI Studio는 빠른 AI 모델 개발을 지원하는 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 20
 tasks: ["글쓰기", "이메일-작성", "기획서"]
 updated: "2026-06-28"
+image: "/images/tools/google-ai-studio.webp"
 ---
 
 ## 한줄 요약

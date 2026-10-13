@@ -1,4 +1,5 @@
 ---
+
 name: "Maildun for Mac"
 description: "Mac에서 오픈소스로 이메일 마케팅 캠페인과 수신자 자동화를 관리하는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["이메일-작성", "마케팅-자동화", "업무-자동화"]
 updated: "2026-10-11"
+image: "/images/tools/maildun-for-mac.webp"
 ---
 
 ## 한줄 요약

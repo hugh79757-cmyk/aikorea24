@@ -1,4 +1,5 @@
 ---
+
 name: "DualCam AI"
 description: "DualCam AI는 전후면 카메라를 동시에 활용해 다양한 각도의 영상을 제공합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["영상-제작", "영상-편집", "sns-콘텐츠"]
 updated: "2026-06-28"
+image: "/images/tools/dualcam-ai.webp"
 ---
 
 ## 한줄 요약

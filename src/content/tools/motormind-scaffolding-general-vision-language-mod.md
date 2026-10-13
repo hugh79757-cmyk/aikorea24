@@ -1,4 +1,5 @@
 ---
+
 name: "MotorMind: Scaffolding General Vision Language Mod"
 description: "최신 AI 연구 논문과 트렌드 동향을 매일 빠르게 확인하는 글로벌 연구 플랫폼입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 107
 tasks: ["논문-요약", "리서치"]
 updated: "2026-10-06"
+image: "/images/tools/motormind-scaffolding-general-vision-language-mod.webp"
 ---
 
 ## 한줄 요약

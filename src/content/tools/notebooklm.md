@@ -1,4 +1,5 @@
 ---
+
 name: "NotebookLM"
 description: "구글의 무료 문서 분석 AI로, 자료를 쉽게 분석하고 질문에 답변합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 6
 tasks: ["요약", "보고서-작성", "회의록"]
 updated: "2026-06-28"
+image: "/images/tools/notebooklm.webp"
 ---
 
 ## 한줄 요약

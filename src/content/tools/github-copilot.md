@@ -1,4 +1,5 @@
 ---
+
 name: "GitHub Copilot"
 description: "AI와 함께 코딩을 도와주는 툴로, 효율적인 개발이 가능합니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 41
 tasks: ["코딩", "코드-리뷰", "디버깅"]
 updated: "2026-06-28"
+image: "/images/tools/github-copilot.webp"
 ---
 
 ## 한줄 요약

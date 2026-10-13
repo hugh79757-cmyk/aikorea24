@@ -1,4 +1,5 @@
 ---
+
 name: "In-Context World Modeling for Robotic Control"
 description: "로봇 제어를 위한 상황 인식 모델링 툴로, 연구자에게 유용합니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "리서치", "보고서-작성"]
 updated: "2026-06-29"
+image: "/images/tools/in-context-world-modeling-for-robotic-control.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "DiffusionART: Efficient, Stable and Scalable Reinf"
 description: "최신 AI 논문과 연구 트렌드를 매일 빠르게 파악할 수 있는 인공지능 연구 리서치 플랫폼입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["논문-요약", "리서치"]
 updated: "2026-10-13"
+image: "/images/tools/diffusionart-efficient-stable-and-scalable-reinf.webp"
 ---
 
 ## 한줄 요약

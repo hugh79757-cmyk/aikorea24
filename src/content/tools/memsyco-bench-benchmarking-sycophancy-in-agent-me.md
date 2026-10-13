@@ -1,4 +1,5 @@
 ---
+
 name: "MemSyco-Bench: Benchmarking Sycophancy in Agent Me"
 description: "AI 연구 논문을 매일 받아보며 최신 정보를 확인할 수 있는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["논문-요약", "리서치", "영어-학습"]
 updated: "2026-07-02"
+image: "/images/tools/memsyco-bench-benchmarking-sycophancy-in-agent-me.webp"
 ---
 
 ## 한줄 요약

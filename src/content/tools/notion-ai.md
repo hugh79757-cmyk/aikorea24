@@ -1,4 +1,5 @@
 ---
+
 name: "Notion AI"
 description: "팀의 작업을 자동화하고 효율적으로 관리할 수 있는 AI 기반 워크스페이스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 30
 tasks: ["회의록", "이메일-작성", "기획서"]
 updated: "2026-06-28"
+image: "/images/tools/notion-ai.webp"
 ---
 
 ## 한줄 요약

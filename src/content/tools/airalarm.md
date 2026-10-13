@@ -1,4 +1,5 @@
 ---
+
 name: "AirAlarm"
 description: "에어팟을 착용하고 자면 수면 상태를 감지해 가장 개운한 타이밍에 깨워주는 스마트 알람 앱입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["업무-자동화", "메모-정리"]
 updated: "2026-08-17"
+image: "/images/tools/airalarm.webp"
 ---
 
 ## 한줄 요약

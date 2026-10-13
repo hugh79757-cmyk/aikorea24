@@ -1,4 +1,5 @@
 ---
+
 name: "Opper AI"
 description: "300개 이상의 AI 모델에 접근할 수 있는 유럽 기반 API입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["코딩", "API-개발", "업무-자동화"]
 updated: "2026-07-10"
+image: "/images/tools/opper-ai.webp"
 ---
 
 ## 한줄 요약

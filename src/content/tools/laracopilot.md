@@ -1,4 +1,5 @@
 ---
+
 name: "LaraCopilot"
 description: "Laravel 기반 웹 서비스를 명령어 한 줄로 빠르게 개발하고 배포까지 돕는 AI 코딩 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "API-개발", "디버깅"]
 updated: "2026-08-13"
+image: "/images/tools/laracopilot.webp"
 ---
 
 ## 한줄 요약

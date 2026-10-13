@@ -1,4 +1,5 @@
 ---
+
 name: "Muse Spark 1.1 by Meta AI"
 description: "다양한 작업을 지원하는 멀티모달 AI 모델로, 효율적인 목표 달성을 돕습니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의-요약", "업무-자동화", "글쓰기"]
 updated: "2026-07-11"
+image: "/images/tools/muse-spark-1-1-by-meta-ai.webp"
 ---
 
 ## 한줄 요약

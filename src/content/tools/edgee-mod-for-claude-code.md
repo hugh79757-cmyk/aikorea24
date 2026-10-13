@@ -1,4 +1,5 @@
 ---
+
 name: "Edgee Mod for Claude Code"
 description: "Claude Code 개발 환경에서 AI 모델 선택과 토큰 비용 절감 현황을 한눈에 확인하는 스마트 사이드바 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["코딩", "디버깅", "코드-리뷰"]
 updated: "2026-10-12"
+image: "/images/tools/edgee-mod-for-claude-code.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "claudebill"
 description: "클로드 코드(Claude Code) 사용 요금을 오프라인에서 간편하게 계산하고 관리하는 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "데이터-분석", "업무-자동화"]
 updated: "2026-09-21"
+image: "/images/tools/claudebill.webp"
 ---
 
 ## 한줄 요약

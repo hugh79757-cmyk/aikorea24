@@ -1,4 +1,5 @@
 ---
+
 name: "AgenticSTS: A Bounded-Memory Testbed for Long-Hori"
 description: "AI 연구 논문을 매일 이메일로 받아볼 수 있는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["논문-요약", "보고서-작성", "리서치"]
 updated: "2026-07-04"
+image: "/images/tools/agenticsts-a-bounded-memory-testbed-for-long-hori.webp"
 ---
 
 ## 한줄 요약

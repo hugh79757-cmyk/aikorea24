@@ -1,4 +1,5 @@
 ---
+
 name: "Edgee Claude Code Compressor V2"
 description: "코드 작업 시 토큰 비용을 줄여주는 압축 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "코드-리뷰", "디버깅"]
 updated: "2026-07-07"
+image: "/images/tools/edgee-claude-code-compressor-v2.webp"
 ---
 
 ## 한줄 요약

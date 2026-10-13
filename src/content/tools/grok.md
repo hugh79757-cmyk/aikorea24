@@ -1,4 +1,5 @@
 ---
+
 name: "Grok"
 description: "Grok은 채팅, 이미지 생성, 코드 작성 등 다양한 기능을 제공하는 AI 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 4
 tasks: ["이메일-작성", "글쓰기", "회의록"]
 updated: "2026-06-28"
+image: "/images/tools/grok.webp"
 ---
 
 ## 한줄 요약

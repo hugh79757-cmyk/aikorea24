@@ -1,4 +1,5 @@
 ---
+
 name: "Bluerails Discovery"
 description: "AI 도구의 가시성을 측정하여 기업의 성과를 평가합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["보고서-작성", "회의록", "데이터-분석"]
 updated: "2026-06-28"
+image: "/images/tools/bluerails-discovery.webp"
 ---
 
 ## 한줄 요약

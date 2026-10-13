@@ -1,4 +1,5 @@
 ---
+
 name: "ABot-N1: Toward a General Visual Language Navigati"
 description: "AI 연구 논문을 매일 이메일로 받아볼 수 있는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["논문-요약", "회의-요약", "리서치"]
 updated: "2026-07-15"
+image: "/images/tools/abot-n1-toward-a-general-visual-language-navigati.webp"
 ---
 
 ## 한줄 요약

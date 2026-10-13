@@ -1,4 +1,5 @@
 ---
+
 name: "Veo 3"
 description: "Veo 3는 영상 생성 모델로, 사용자 맞춤형 영상을 쉽게 제작할 수 있습니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 8
 tasks: ["영상-제작", "영상-편집", "자막-생성"]
 updated: "2026-06-28"
+image: "/images/tools/veo3.webp"
 ---
 
 ## 한줄 요약

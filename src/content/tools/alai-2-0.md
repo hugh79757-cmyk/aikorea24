@@ -1,4 +1,5 @@
 ---
+
 name: "Alai 2.0"
 description: "AI를 활용해 손쉽게 아름다운 프레젠테이션을 만들 수 있는 툴입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["프레젠테이션", "인포그래픽", "sns-콘텐츠"]
 updated: "2026-06-28"
+image: "/images/tools/alai-2-0.webp"
 ---
 
 ## 한줄 요약

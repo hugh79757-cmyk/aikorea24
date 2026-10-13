@@ -1,4 +1,5 @@
 ---
+
 name: "HyperWrite"
 description: "HyperWrite는 AI를 활용한 글쓰기 도구로, 빠르고 스마트한 작업을 도와줍니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 109
 tasks: ["글쓰기", "이메일-작성", "보고서-작성"]
 updated: "2026-06-28"
+image: "/images/tools/hyperwrite.webp"
 ---
 
 ## 한줄 요약

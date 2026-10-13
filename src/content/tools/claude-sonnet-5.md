@@ -1,4 +1,5 @@
 ---
+
 name: "Claude Sonnet 5"
 description: "코딩과 일상 업무에 최적화된 AI 도구로, 효율적인 작업을 지원합니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "업무-자동화", "글쓰기"]
 updated: "2026-07-02"
+image: "/images/tools/claude-sonnet-5.webp"
 ---
 
 ## 한줄 요약

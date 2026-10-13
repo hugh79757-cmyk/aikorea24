@@ -1,4 +1,5 @@
 ---
+
 name: "Agentic Game Development as a Verifiable Trajector"
 description: "전 세계 최신 AI 연구 논문을 매일 받아보고 기술 트렌드를 빠르게 파악할 수 있는 정보 서비스입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["논문-요약", "리서치"]
 updated: "2026-08-29"
+image: "/images/tools/agentic-game-development-as-a-verifiable-trajector.webp"
 ---
 
 ## 한줄 요약

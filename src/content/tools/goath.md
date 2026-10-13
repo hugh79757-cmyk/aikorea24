@@ -1,4 +1,5 @@
 ---
+
 name: "GOATH (고뜨)"
 description: "예산과 상황을 자연어로 입력하면 AI가 남성 의류를 검색·추천하는 쇼핑 서비스"
 category: "기타"
@@ -13,6 +14,7 @@ order: -1
 featured: false
 updated: "2026-09-23"
 priceModel: "Freemium"
+image: "/images/tools/goath.webp"
 ---
 
 한국 남성을 위한 AI 의류 검색·쇼핑 서비스입니다. 예산과 상황을 자연어로 입력하면 조건에 맞는 상품을 찾아줍니다. 전 상품 최소 구매 금액 없이 무료배송이며, 사이즈·재고·옵션은 상품 상세에서 확인할 수 있습니다.

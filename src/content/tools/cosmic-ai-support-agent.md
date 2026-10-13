@@ -1,4 +1,5 @@
 ---
+
 name: "Cosmic AI Support Agent"
 description: "웹사이트 콘텐츠를 학습해 고객 응대를 자동으로 처리하는 AI 챗봇 빌더입니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["챗봇-구축", "고객-상담", "업무-자동화"]
 updated: "2026-10-07"
+image: "/images/tools/cosmic-ai-support-agent.webp"
 ---
 
 ## 한줄 요약

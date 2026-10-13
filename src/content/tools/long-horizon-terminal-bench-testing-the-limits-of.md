@@ -1,4 +1,5 @@
 ---
+
 name: "Long-Horizon-Terminal-Bench: Testing the Limits of"
 description: "AI 연구 동향을 매일 받아볼 수 있는 유료 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["논문-요약", "리서치", "영어-학습"]
 updated: "2026-07-14"
+image: "/images/tools/long-horizon-terminal-bench-testing-the-limits-of.webp"
 ---
 
 ## 한줄 요약

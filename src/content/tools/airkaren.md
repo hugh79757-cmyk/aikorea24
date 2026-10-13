@@ -1,4 +1,5 @@
 ---
+
 name: "AirKaren"
 description: "항공사 고객 서비스를 대신 싸워주는 AI로, 한국 사용자에게 유용합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이메일-작성", "보고서-작성", "회의록"]
 updated: "2026-07-07"
+image: "/images/tools/airkaren.webp"
 ---
 
 ## 한줄 요약

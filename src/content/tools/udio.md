@@ -1,4 +1,5 @@
 ---
+
 name: "Udio"
 description: "Udio는 AI를 활용해 음악을 빠르게 생성하고 공유할 수 있는 플랫폼입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 56
 tasks: ["음악-생성", "영상-제작"]
 updated: "2026-06-28"
+image: "/images/tools/udio.webp"
 ---
 
 ## 한줄 요약

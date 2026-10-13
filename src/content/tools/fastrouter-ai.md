@@ -1,4 +1,5 @@
 ---
+
 name: "FastRouter.ai"
 description: "200개 이상의 AI 모델을 하나의 API로 연결하여 비용과 성능을 최적화합니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["API-개발", "업무-자동화", "데이터-분석"]
 updated: "2026-10-06"
+image: "/images/tools/fastrouter-ai.webp"
 ---
 
 ## 한줄 요약

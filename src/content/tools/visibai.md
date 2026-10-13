@@ -1,4 +1,5 @@
 ---
+
 name: "VisibAI"
 description: "AI 가시성 점검 툴로, 비즈니스의 온라인 존재감을 평가합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["보고서-작성", "회의록", "데이터-분석"]
 updated: "2026-06-30"
+image: "/images/tools/visibai.webp"
 ---
 
 ## 한줄 요약

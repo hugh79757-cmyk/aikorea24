@@ -1,4 +1,5 @@
 ---
+
 name: "Toolaby"
 description: "크롬 확장 프로그램에 결제 시스템을 단 두 줄의 코드로 쉽게 연동하는 수익화 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["코딩", "API-개발"]
 updated: "2026-10-11"
+image: "/images/tools/toolaby.webp"
 ---
 
 ## 한줄 요약

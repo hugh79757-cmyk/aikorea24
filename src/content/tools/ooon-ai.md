@@ -1,4 +1,5 @@
 ---
+
 name: "ooon.ai"
 description: "WhatsApp 기반 AI 직원이 고객 문의를 자동 응답하고 예약을 잡아주며, 이탈 고객을 재유치합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["챗봇-구축", "업무-자동화", "CRM"]
 updated: "2026-09-30"
+image: "/images/tools/ooon-ai.webp"
 ---
 
 ## 한줄 요약

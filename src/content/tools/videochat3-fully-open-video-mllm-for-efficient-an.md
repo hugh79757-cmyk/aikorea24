@@ -1,4 +1,5 @@
 ---
+
 name: "VideoChat3: Fully Open Video MLLM for Efficient an"
 description: "효율적인 비디오 이해를 위한 오픈 AI 모델입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["영상-제작", "영상-편집", "논문-요약"]
 updated: "2026-07-18"
+image: "/images/tools/videochat3-fully-open-video-mllm-for-efficient-an.webp"
 ---
 
 ## 한줄 요약

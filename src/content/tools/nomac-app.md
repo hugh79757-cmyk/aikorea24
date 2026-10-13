@@ -1,4 +1,5 @@
 ---
+
 name: "NoMac.app"
 description: "Mac 없이도 iOS 앱을 쉽게 배포할 수 있는 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["문서-작성", "코딩", "업무-자동화"]
 updated: "2026-07-14"
+image: "/images/tools/nomac-app.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Claude Science"
 description: "과학 연구를 지원하는 AI 툴로, 분석과정을 자동화하여 시간을 절약합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["데이터-분석", "보고서-작성", "논문-요약"]
 updated: "2026-07-02"
+image: "/images/tools/claude-science.webp"
 ---
 
 ## 한줄 요약

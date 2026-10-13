@@ -1,4 +1,5 @@
 ---
+
 name: "Gemini 3.5 Transcribe"
 description: "구글의 최신 AI 모델을 활용하여 음성을 텍스트로 정확하게 변환하고 요약까지 지원하는 지능형 받아쓰기 도구입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["회의록", "요약", "음성-변환"]
 updated: "2026-08-29"
+image: "/images/tools/gemini-3-5-transcribe.webp"
 ---
 
 ## 한줄 요약

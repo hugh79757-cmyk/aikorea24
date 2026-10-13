@@ -1,4 +1,5 @@
 ---
+
 name: "Murf AI"
 description: "Murf AI는 자연스러운 음성을 생성하여 팟캐스트와 오디오북 제작에 유용합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["음성-변환", "더빙", "팟캐스트"]
 updated: "2026-06-28"
+image: "/images/tools/murf-ai.webp"
 ---
 
 ## 한줄 요약

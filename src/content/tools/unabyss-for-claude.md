@@ -1,4 +1,5 @@
 ---
+
 name: "Unabyss for Claude"
 description: "여러 AI 툴을 연결하여 정보를 공유하고 효율성을 높이는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["회의록", "이메일-작성", "프로젝트-관리"]
 updated: "2026-07-18"
+image: "/images/tools/unabyss-for-claude.webp"
 ---
 
 ## 한줄 요약

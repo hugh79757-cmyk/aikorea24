@@ -1,4 +1,5 @@
 ---
+
 name: "TRELLIS"
 description: "스마트폰 사진으로 3D 모델을 자동 생성하는 무료 도구입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 18
 tasks: ["이미지-생성", "보고서-작성", "프레젠테이션"]
 updated: "2026-06-28"
+image: "/images/tools/trellis.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Checksum AI"
 description: "웹 서비스 개발 시 테스트 코드를 자동으로 생성하고 오류 발생 시 스스로 수정해 주는 AI 품질 관리 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["코딩", "디버깅", "테스트"]
 updated: "2026-08-21"
+image: "/images/tools/checksum-ai.webp"
 ---
 
 ## 한줄 요약

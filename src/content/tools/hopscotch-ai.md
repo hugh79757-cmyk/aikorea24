@@ -1,4 +1,5 @@
 ---
+
 name: "Hopscotch AI"
 description: "여러 AI 모델을 하나의 API로 통합하고 비용과 사용량을 관리하는 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["API-개발", "업무-자동화", "코딩"]
 updated: "2026-09-30"
+image: "/images/tools/hopscotch-ai.webp"
 ---
 
 ## 한줄 요약

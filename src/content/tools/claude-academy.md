@@ -1,4 +1,5 @@
 ---
+
 name: "Claude Academy"
 description: "클로드(Claude)를 200% 활용하는 방법을 알려주는 공식 교육 플랫폼으로, AI 실무 역량을 높여줍니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["글쓰기", "보고서-작성", "데이터-분석"]
 updated: "2026-08-24"
+image: "/images/tools/claude-academy.webp"
 ---
 
 ## 한줄 요약

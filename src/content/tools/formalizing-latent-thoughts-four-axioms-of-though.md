@@ -1,4 +1,5 @@
 ---
+
 name: "Formalizing Latent Thoughts: Four Axioms of Though"
 description: "AI 연구 논문을 매일 받아볼 수 있는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["문서-요약", "리서치", "회의-요약"]
 updated: "2026-06-30"
+image: "/images/tools/formalizing-latent-thoughts-four-axioms-of-though.webp"
 ---
 
 ## 한줄 요약

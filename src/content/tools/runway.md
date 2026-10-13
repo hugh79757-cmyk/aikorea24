@@ -1,4 +1,5 @@
 ---
+
 name: "Runway"
 description: "Runway는 다양한 세상을 시뮬레이션할 수 있는 AI 툴입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 52
 tasks: ["영상-제작", "영상-편집", "회의-요약"]
 updated: "2026-06-28"
+image: "/images/tools/runway.webp"
 ---
 
 ## 한줄 요약

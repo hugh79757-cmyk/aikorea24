@@ -1,4 +1,5 @@
 ---
+
 name: "Clerk | AI Assistant for Cap Tables"
 description: "주식 관련 질문에 즉시 답변하고 문서를 관리하는 AI 도우미입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["문서-작성", "회의록", "이메일-작성"]
 updated: "2026-07-16"
+image: "/images/tools/clerk-ai-assistant-for-cap-tables.webp"
 ---
 
 ## 한줄 요약

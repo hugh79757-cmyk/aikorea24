@@ -1,4 +1,5 @@
 ---
+
 name: "oMLX"
 description: "Mac에서 AI 모델을 훨씬 빠르게 실행하는 도구로, 코딩 작업 시 응답 속도를 획기적으로 높여줍니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["코딩", "코드-리뷰"]
 updated: "2026-08-31"
+image: "/images/tools/omlx.webp"
 ---
 
 ## 한줄 요약

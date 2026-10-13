@@ -1,4 +1,5 @@
 ---
+
 name: "EmailFlow.AI"
 description: "AI를 활용하여 브랜드에 맞는 이메일 캠페인을 쉽게 설계하고 발송합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["이메일-작성", "기획서", "보고서-작성"]
 updated: "2026-06-28"
+image: "/images/tools/emailflow-ai.webp"
 ---
 
 ## 한줄 요약

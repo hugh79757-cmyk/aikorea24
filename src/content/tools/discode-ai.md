@@ -1,4 +1,5 @@
 ---
+
 name: "discode.ai"
 description: "다양한 AI 모델을 활용해 사용자 맞춤형 답변을 제공하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["이메일-작성", "보고서-작성", "회의-요약"]
 updated: "2026-06-29"
+image: "/images/tools/discode-ai.webp"
 ---
 
 ## 한줄 요약

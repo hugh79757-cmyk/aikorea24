@@ -1,4 +1,5 @@
 ---
+
 name: "ChainSnip"
 description: "가상화폐 지갑 잔고를 월말마다 자동으로 캡처하고 증명해주는 회계 전문 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["회계-경리", "데이터-분석"]
 updated: "2026-10-02"
+image: "/images/tools/chainsnip.webp"
 ---
 
 ## 한줄 요약

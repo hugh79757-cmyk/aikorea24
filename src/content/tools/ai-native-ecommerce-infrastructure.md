@@ -1,4 +1,5 @@
 ---
+
 name: "AI‑Native eCommerce Infrastructure"
 description: "Magento 기반의 통합 전자상거래 인프라로 실시간 관리가 가능합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "데이터-분석", "프로젝트-관리"]
 updated: "2026-06-28"
+image: "/images/tools/ai-native-ecommerce-infrastructure.webp"
 ---
 
 ## 한줄 요약

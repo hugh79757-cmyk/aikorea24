@@ -1,4 +1,5 @@
 ---
+
 name: "Atomic Mail Agentic"
 description: "AI 에이전트가 독립적으로 이메일을 관리할 수 있는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이메일-작성", "회의록", "프로젝트-관리"]
 updated: "2026-06-28"
+image: "/images/tools/atomic-mail-agentic.webp"
 ---
 
 ## 한줄 요약

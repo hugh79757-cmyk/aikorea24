@@ -1,4 +1,5 @@
 ---
+
 name: "Jasper"
 description: "Jasper는 마케팅 워크플로우를 자동화하여 효율성과 성과를 높이는 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["업무-자동화", "마케팅-자동화", "글쓰기"]
 updated: "2026-06-28"
+image: "/images/tools/jasper.webp"
 ---
 
 ## 한줄 요약

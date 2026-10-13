@@ -1,4 +1,5 @@
 ---
+
 name: "Eat Train Feel"
 description: "식단 기록과 맞춤형 운동 루틴, 건강 상태를 한곳에서 관리하고 트레이너와 공유하는 웰니스 앱입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["일정-관리", "프로젝트-관리"]
 updated: "2026-10-06"
+image: "/images/tools/eat-train-feel.webp"
 ---
 
 ## 한줄 요약

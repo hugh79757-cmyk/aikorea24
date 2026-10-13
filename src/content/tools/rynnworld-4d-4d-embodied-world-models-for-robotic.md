@@ -1,4 +1,5 @@
 ---
+
 name: "RynnWorld-4D: 4D Embodied World Models for Robotic"
 description: "로봇 조작을 위한 4D 세계 모델을 제공하는 AI 연구 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["논문-요약", "보고서-작성", "기획서"]
 updated: "2026-07-09"
+image: "/images/tools/rynnworld-4d-4d-embodied-world-models-for-robotic.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Agent Mode by Receiptor AI"
 description: "이메일과 WhatsApp에서 영수증을 자동으로 추출하고 정리합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["문서-작성", "업무-자동화", "데이터-분석"]
 updated: "2026-06-30"
+image: "/images/tools/agent-mode-by-receiptor-ai.webp"
 ---
 
 ## 한줄 요약

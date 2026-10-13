@@ -1,4 +1,5 @@
 ---
+
 name: "Constellation Gate AI"
 description: "AI 에이전트를 안전하게 보호하는 도구로, 한국 사용자에게 유용합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의록", "이메일-작성", "기획서"]
 updated: "2026-07-10"
+image: "/images/tools/constellation-gate-ai.webp"
 ---
 
 ## 한줄 요약

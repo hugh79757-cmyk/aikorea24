@@ -1,4 +1,5 @@
 ---
+
 name: "CapCut"
 description: "AI 기반의 영상 편집 툴로, 유튜브와 인스타그램에 적합한 영상 제작을 지원합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 21
 tasks: ["영상-편집", "자막-생성", "sns-콘텐츠"]
 updated: "2026-06-28"
+image: "/images/tools/capcut.webp"
 ---
 
 ## 한줄 요약

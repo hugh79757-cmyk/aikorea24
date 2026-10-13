@@ -1,4 +1,5 @@
 ---
+
 name: "Vitra.ai"
 description: "영상 제작부터 번역, 개인화 마케팅까지 12가지 콘텐츠 작업을 하나로 해결하는 올인원 AI 플랫폼입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["영상-제작", "자막-생성", "번역"]
 updated: "2026-10-02"
+image: "/images/tools/vitra-ai.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Kling AI"
 description: "Kling AI는 창의적인 이미지와 영상을 생성하는 AI 툴입니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 16
 tasks: ["이미지-생성", "영상-제작"]
 updated: "2026-06-28"
+image: "/images/tools/kling.webp"
 ---
 
 ## 한줄 요약

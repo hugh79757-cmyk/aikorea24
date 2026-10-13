@@ -1,4 +1,5 @@
 ---
+
 name: "Adam CAD Copilot"
 description: "AI CAD 도우미로, 엔지니어들이 CAD 작업을 효율적으로 지원합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["업무-자동화", "데이터-분석", "프로젝트-관리"]
 updated: "2026-07-02"
+image: "/images/tools/adam-cad-copilot.webp"
 ---
 
 ## 한줄 요약

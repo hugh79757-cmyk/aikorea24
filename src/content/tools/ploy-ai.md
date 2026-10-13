@@ -1,4 +1,5 @@
 ---
+
 name: "Ploy.ai"
 description: "웹사이트를 자동으로 관리하여 비즈니스 성장을 지원하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["업무-자동화", "데이터-분석", "마케팅-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/ploy-ai.webp"
 ---
 
 ## 한줄 요약

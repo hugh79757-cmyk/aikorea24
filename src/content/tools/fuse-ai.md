@@ -1,4 +1,5 @@
 ---
+
 name: "Fuse AI"
 description: "AI 에이전트로 영업 타겟을 찾고 이메일 발송을 자동화하는 B2B 세일즈 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["업무-자동화", "CRM", "마케팅-자동화"]
 updated: "2026-10-07"
+image: "/images/tools/fuse-ai.webp"
 ---
 
 ## 한줄 요약

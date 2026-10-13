@@ -1,4 +1,5 @@
 ---
+
 name: "Ogment AI"
 description: "슬랙에서 팀원처럼 일상 업무를 자동화하는 AI 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "회의-요약", "이메일-작성"]
 updated: "2026-07-08"
+image: "/images/tools/ogment-ai.webp"
 ---
 
 ## 한줄 요약

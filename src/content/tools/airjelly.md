@@ -1,4 +1,5 @@
 ---
+
 name: "AirJelly"
 description: "AirJelly는 사용자의 작업 흐름을 모니터링하고 기억하여 자동으로 도움을 주는 AI 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의-요약", "일정-관리", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/airjelly.webp"
 ---
 
 ## 한줄 요약

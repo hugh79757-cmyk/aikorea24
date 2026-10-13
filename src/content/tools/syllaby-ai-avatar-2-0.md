@@ -1,4 +1,5 @@
 ---
+
 name: "Syllaby AI Avatar 2.0"
 description: "대본이나 아이디어를 입력하면 AI 아바타가 출연하는 유튜브 쇼츠 영상을 자동 완성합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["영상-제작", "자막-생성", "sns-콘텐츠"]
 updated: "2026-10-03"
+image: "/images/tools/syllaby-ai-avatar-2-0.webp"
 ---
 
 ## 한줄 요약

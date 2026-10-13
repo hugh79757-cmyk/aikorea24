@@ -1,4 +1,5 @@
 ---
+
 name: "ElevenLabs"
 description: "자연스러운 음성을 생성하여 다양한 콘텐츠에 활용하는 AI 음성 생성기입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 23
 tasks: ["음성-변환", "더빙", "텍스트-음성"]
 updated: "2026-06-28"
+image: "/images/tools/elevenlabs.webp"
 ---
 
 ## 한줄 요약

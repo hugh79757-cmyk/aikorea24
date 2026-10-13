@@ -1,4 +1,5 @@
 ---
+
 name: "Figma AI"
 description: "Figma는 협업 디자인 플랫폼으로, 제품 디자인과 프로토타입 제작을 지원합니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 61
 tasks: ["프레젠테이션", "UI-디자인", "웹디자인"]
 updated: "2026-06-28"
+image: "/images/tools/figma-ai.webp"
 ---
 
 ## 한줄 요약

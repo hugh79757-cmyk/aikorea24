@@ -1,4 +1,5 @@
 ---
+
 name: "AgentGarten: Code Worlds for Evolving Agents"
 description: "최신 AI 연구 논문과 트렌드 동향을 매일 빠르게 확인하는 글로벌 연구 큐레이션 플랫폼입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["리서치", "코딩"]
 updated: "2026-10-11"
+image: "/images/tools/agentgarten-code-worlds-for-evolving-agents.webp"
 ---
 
 ## 한줄 요약

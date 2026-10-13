@@ -1,4 +1,5 @@
 ---
+
 name: "uwait"
 description: "AI 사용 중 대기 시간을 돈으로 환급받는 유용한 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["업무-자동화", "회의-요약", "글쓰기"]
 updated: "2026-06-28"
+image: "/images/tools/uwait.webp"
 ---
 
 ## 한줄 요약

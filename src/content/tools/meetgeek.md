@@ -1,4 +1,5 @@
 ---
+
 name: "MeetGeek"
 description: "회의를 자동으로 기록하고 요약해주는 스마트한 도우미입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["회의록", "요약", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/meetgeek.webp"
 ---
 
 ## 한줄 요약

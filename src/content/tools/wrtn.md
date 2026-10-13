@@ -1,4 +1,5 @@
 ---
+
 name: "뤼튼 (Wrtn)"
 description: "AI 글쓰기 및 이미지 생성 도구로, 다양한 콘텐츠를 무료로 제작할 수 있습니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 4
 tasks: ["글쓰기", "이미지-생성", "자기소개서"]
 updated: "2026-06-28"
+image: "/images/tools/wrtn.webp"
 ---
 
 ## 한줄 요약

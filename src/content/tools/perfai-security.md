@@ -1,4 +1,5 @@
 ---
+
 name: "Perfai Security"
 description: "AI로 만들어진 앱의 보안을 자동으로 관리하는 플랫폼입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["문서-작성", "코딩", "업무-자동화"]
 updated: "2026-07-10"
+image: "/images/tools/perfai-security.webp"
 ---
 
 ## 한줄 요약

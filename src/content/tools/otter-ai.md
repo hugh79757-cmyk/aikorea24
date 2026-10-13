@@ -1,4 +1,5 @@
 ---
+
 name: "Otter.ai"
 description: "Otter.ai는 회의록 작성과 실시간 전사 기능을 제공하는 생산성 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 59
 tasks: ["회의록", "메모-정리", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/otter-ai.webp"
 ---
 
 ## 한줄 요약

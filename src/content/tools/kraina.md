@@ -1,4 +1,5 @@
 ---
+
 name: "Kraina"
 description: "GPS 경로로 새로운 지역을 탐험할 수 있는 지도 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["회의-요약", "데이터-분석", "프로젝트-관리"]
 updated: "2026-06-28"
+image: "/images/tools/kraina.webp"
 ---
 
 ## 한줄 요약

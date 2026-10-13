@@ -1,4 +1,5 @@
 ---
+
 name: "Fluxmail"
 description: "Fluxmail은 중요한 이메일을 우선적으로 정리해주는 AI 이메일 클라이언트입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["이메일-작성", "회의록", "문서-요약"]
 updated: "2026-06-28"
+image: "/images/tools/fluxmail.webp"
 ---
 
 ## 한줄 요약

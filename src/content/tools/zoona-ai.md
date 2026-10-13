@@ -1,4 +1,5 @@
 ---
+
 name: "Zoona AI"
 description: "AI 고객 지원 소프트웨어로 60%의 티켓을 자동 해결합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["업무-자동화", "회의-요약", "챗봇-구축"]
 updated: "2026-06-28"
+image: "/images/tools/zoona-ai.webp"
 ---
 
 ## 한줄 요약

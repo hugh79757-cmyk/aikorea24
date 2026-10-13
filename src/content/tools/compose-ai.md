@@ -1,4 +1,5 @@
 ---
+
 name: "Compose AI"
 description: "Compose AI는 글쓰기 시간을 40% 단축해주는 무료 크롬 확장 프로그램입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["이메일-작성", "보고서-작성", "글쓰기"]
 updated: "2026-06-28"
+image: "/images/tools/compose-ai.webp"
 ---
 
 ## 한줄 요약

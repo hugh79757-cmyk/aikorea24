@@ -1,4 +1,5 @@
 ---
+
 name: "DailyHub"
 description: "프로젝트와 할 일, 매일의 습관을 한곳에서 관리하는 개인용 업무 공간입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["프로젝트-관리", "일정-관리", "메모-정리"]
 updated: "2026-10-08"
+image: "/images/tools/dailyhub.webp"
 ---
 
 ## 한줄 요약

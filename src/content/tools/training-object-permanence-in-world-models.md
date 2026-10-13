@@ -1,4 +1,5 @@
 ---
+
 name: "Training Object Permanence in World Models"
 description: "최신 AI 논문과 연구 트렌드를 매일 빠르게 확인하는 학술 리서치 플랫폼입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["논문-요약", "리서치"]
 updated: "2026-09-27"
+image: "/images/tools/training-object-permanence-in-world-models.webp"
 ---
 
 ## 한줄 요약

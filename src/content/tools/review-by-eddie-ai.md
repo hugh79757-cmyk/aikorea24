@@ -1,4 +1,5 @@
 ---
+
 name: "Review by Eddie AI"
 description: "프레임별 코멘트와 AI 피드백으로 비디오 리뷰를 간편하게 진행합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["영상-편집", "회의-요약", "프로젝트-관리"]
 updated: "2026-07-16"
+image: "/images/tools/review-by-eddie-ai.webp"
 ---
 
 ## 한줄 요약

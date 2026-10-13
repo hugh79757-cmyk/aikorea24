@@ -1,4 +1,5 @@
 ---
+
 name: "Harness Handbook: Making Evolving Agent Harnesses "
 description: "AI 연구 자료를 매일 제공하여 최신 정보를 쉽게 접할 수 있게 합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["논문-요약", "리서치", "회의-요약"]
 updated: "2026-07-17"
+image: "/images/tools/harness-handbook-making-evolving-agent-harnesses.webp"
 ---
 
 ## 한줄 요약

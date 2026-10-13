@@ -1,4 +1,5 @@
 ---
+
 name: "Hailuo AI"
 description: "Hailuo AI는 텍스트나 사진으로 AI 비디오와 이미지를 생성하는 도구입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 15
 tasks: ["영상-제작", "영상-편집", "sns-콘텐츠"]
 updated: "2026-06-28"
+image: "/images/tools/hailuo.webp"
 ---
 
 ## 한줄 요약

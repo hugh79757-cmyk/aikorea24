@@ -1,4 +1,5 @@
 ---
+
 name: "MailAdept by mailwarm"
 description: "이메일 전달력 문제를 해결하고 수신함 배치를 개선하는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["이메일-작성", "회의록", "보고서-작성"]
 updated: "2026-07-02"
+image: "/images/tools/mailadept-by-mailwarm.webp"
 ---
 
 ## 한줄 요약

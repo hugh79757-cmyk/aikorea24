@@ -1,4 +1,5 @@
 ---
+
 name: "Labs AI"
 description: "텍스트를 자연스러운 음성으로 변환하여 콘텐츠 제작에 유용합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["음성-변환", "더빙", "영상-제작"]
 updated: "2026-06-28"
+image: "/images/tools/labs-ai.webp"
 ---
 
 ## 한줄 요약

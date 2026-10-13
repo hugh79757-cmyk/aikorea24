@@ -1,4 +1,5 @@
 ---
+
 name: "Taku AI"
 description: "다양한 AI 에이전트와 워크플로우를 하나로 연결하여 복잡한 업무를 자동화하는 생산성 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 107
 tasks: ["업무-자동화", "회의-요약", "이메일-작성"]
 updated: "2026-08-20"
+image: "/images/tools/taku-ai.webp"
 ---
 
 ## 한줄 요약

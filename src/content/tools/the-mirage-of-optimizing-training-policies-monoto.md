@@ -1,4 +1,5 @@
 ---
+
 name: "The Mirage of Optimizing Training Policies: Monoto"
 description: "AI 연구 논문을 매일 이메일로 받아보는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["문서-요약", "회의록", "보고서-작성"]
 updated: "2026-07-07"
+image: "/images/tools/the-mirage-of-optimizing-training-policies-monoto.webp"
 ---
 
 ## 한줄 요약

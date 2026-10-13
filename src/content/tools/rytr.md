@@ -1,4 +1,5 @@
 ---
+
 name: "Rytr"
 description: "고품질 콘텐츠를 빠르게 작성할 수 있는 무료 AI 글쓰기 도구입니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 107
 tasks: ["글쓰기", "이메일-작성", "카피라이팅"]
 updated: "2026-06-28"
+image: "/images/tools/rytr.webp"
 ---
 
 ## 한줄 요약

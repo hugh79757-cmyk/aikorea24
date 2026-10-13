@@ -1,4 +1,5 @@
 ---
+
 name: "Tyto by ai-coustics"
 description: "실시간 음성 향상로 보다 정확한 음성 인식과 안정적인 오디오를 제공합니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["회의-요약", "음성-변환", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/tyto-by-ai-coustics.webp"
 ---
 
 ## 한줄 요약

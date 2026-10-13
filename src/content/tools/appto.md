@@ -1,4 +1,5 @@
 ---
+
 name: "Appto"
 description: "아이폰 앱 개발부터 출시, 마케팅까지 혼자서 끝내는 맥(Mac) 전용 AI 앱 제작 공장입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["코딩", "업무-자동화"]
 updated: "2026-10-07"
+image: "/images/tools/appto.webp"
 ---
 
 ## 한줄 요약

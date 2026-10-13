@@ -1,4 +1,5 @@
 ---
+
 name: "Manta AI"
 description: "Manta AI는 웹 애플리케이션의 동작을 실시간으로 분석하여 문제를 자동으로 감지합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["업무-자동화", "데이터-분석", "코딩"]
 updated: "2026-07-17"
+image: "/images/tools/manta-ai.webp"
 ---
 
 ## 한줄 요약

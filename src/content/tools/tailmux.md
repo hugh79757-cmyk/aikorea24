@@ -1,4 +1,5 @@
 ---
+
 name: "TailMux"
 description: "TailMux는 macOS와 Linux에서 여러 Tailscale 네트워크에 동시에 접근할 수 있게 해주는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["문서-작성", "회의록", "프로젝트-관리"]
 updated: "2026-07-14"
+image: "/images/tools/tailmux.webp"
 ---
 
 ## 한줄 요약

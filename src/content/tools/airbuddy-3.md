@@ -1,4 +1,5 @@
 ---
+
 name: "AirBuddy 3"
 description: "맥과 에어팟 등 주변 기기를 한눈에 연결하고 상태를 관리하는 맥 전용 생산성 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["업무-자동화", "일정-관리"]
 updated: "2026-08-20"
+image: "/images/tools/airbuddy-3.webp"
 ---
 
 ## 한줄 요약

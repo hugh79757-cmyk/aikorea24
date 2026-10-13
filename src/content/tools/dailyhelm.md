@@ -1,4 +1,5 @@
 ---
+
 name: "DailyHelm"
 description: "쇼핑몰 데이터와 광고 성과를 밤새 분석하여 개선할 점을 아침마다 알려주는 AI 비즈니스 리뷰어입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["데이터-분석", "seo-최적화", "마케팅-자동화"]
 updated: "2026-10-06"
+image: "/images/tools/dailyhelm.webp"
 ---
 
 ## 한줄 요약

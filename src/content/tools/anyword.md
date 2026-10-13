@@ -1,4 +1,5 @@
 ---
+
 name: "Anyword"
 description: "Anyword는 AI 콘텐츠 성과를 76% 향상시키는 마케팅 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["카피라이팅", "sns-콘텐츠", "광고-카피"]
 updated: "2026-06-28"
+image: "/images/tools/anyword.webp"
 ---
 
 ## 한줄 요약
