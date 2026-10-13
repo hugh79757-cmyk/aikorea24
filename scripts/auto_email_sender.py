@@ -265,7 +265,7 @@ def generate_email_html(briefing, items):
   <table width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;">
     <tr>
       <td style="padding:32px 24px 16px 24px;background:#1e3a5f;text-align:center;">
-        <div style="font-size:40px;line-height:1;margin-bottom:8px;">🤖</div>
+        <div style="margin-bottom:8px;"><img src="https://aikorea24.kr/mascot-tiger.png" alt="AI코리아24 마스코트" style="width:80px;height:80px;" /></div>
         <h1 style="color:#fff;font-size:26px;margin:0;letter-spacing:2px;">AI코리아24</h1>
         <p style="color:#94a3b8;font-size:13px;margin:4px 0 0 0;">오늘의 AI 브리핑 — {date}</p>
         <p style="color:#64748b;font-size:12px;margin:6px 0 0 0;">매일 아침 7시, 국내외 AI 소식 큐레이션</p>
