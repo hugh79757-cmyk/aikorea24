@@ -10,7 +10,7 @@
 6. 빌드 + 배포 (scripts/deploy.sh)
 
 Usage:
-    python3 scripts/run_pipeline.py [--skip-news] [--skip-briefing]
+    python3 scripts/run_pipeline.py [--collect] [--skip-news] [--skip-briefing]
     python3 scripts/run_pipeline.py [--skip-blog] [--skip-email] [--skip-thumbnails] [--skip-deploy]
     python3 scripts/run_pipeline.py [--date YYYY-MM-DD] [--dry-run]
 """
@@ -64,10 +64,13 @@ def step_briefing(articles):
 def step_blog():
     """Step 3: 블로그 초안 생성 (브리핑 기반)"""
     log("═══ Step 3: 블로그 초안 생성 ═══")
+    # AIK24-EFFICIENCY-02: 생성기 내부의 자체 배포(62초)를 끈다. 이 경로에선
+    # Step 6(deploy.sh)이 1분 뒤에 한 번 더 배포하므로 중복이었다.
+    blog_env = dict(os.environ, PIPELINE_MODE="1")
     result = subprocess.run(
         [sys.executable, str(Path(__file__).resolve().parent / "blog_draft_generator.py")],
         capture_output=True, text=True, timeout=600,
-        cwd=str(Path(__file__).resolve().parent.parent)
+        cwd=str(Path(__file__).resolve().parent.parent), env=blog_env
     )
     for line in (result.stdout or "").splitlines()[-10:]:
         log(f"  {line}")
@@ -238,6 +241,8 @@ def main():
         description="aikorea24 데일리 파이프라인",
         epilog="전체 워크플로우: 뉴스선정 → 브리핑 → 썸네일 → 이메일 → 빌드/배포",
     )
+    parser.add_argument("--collect", action="store_true",
+                        help="Step 0 v2 소스 수집 실행 (기본: 05:30 수집기에 이관되어 스킵)")
     parser.add_argument("--skip-news", action="store_true", help="뉴스 선정 단계 건너뜀")
     parser.add_argument("--skip-briefing", action="store_true", help="브리핑 생성 단계 건너뜀")
     parser.add_argument("--skip-blog", action="store_true", help="블로그 초안 생성 단계 건너뜀")
@@ -278,10 +283,13 @@ def main():
         return
 
     # Step 0: v2 소스 수집 (AIK24-PIPE-02 Step 2/4)
-    # 선택 방식: v2 수집기를 파이프라인에 편입. 별도 launchd 잡을 만들면 스케줄이 3벌로
-    # 갈라져 "무엇이 먼저 도는지" 추적이 어려워진다. 기존 news-unified 잡(05:30/19:30,
-    # 구 수집기)은 그대로 둬서 레거시 매체를 계속 누적시키고, v2 가 무료·오픈소스 축을 공급한다.
-    if not args.dry_run:
+    # AIK24-EFFICIENCY-02: 05:30 launchd 수집기(kr.aikorea24.news-unified)가 같은 소스를
+    # 수집한다. Step 0 은 205건 중 신규 2건(99% 중복)에 228초를 썼다.
+    # → 기본 스킵. 수집기 실패 시 `run_pipeline.py --collect` 로 수동 복구한다.
+    #   (호출부와 수집기 코드는 지시서 §4-2 에 따라 남겨둔다)
+    if not args.collect:
+        log("⏭ Step 0 수집 스킵 (05:30 수집기에 이관) — 수동 실행 시 --collect")
+    else:
         try:
             log("Step 0: v2 소스 수집 (OpenRouter free / HF trending / 공식 RSS)")
             r = subprocess.run(

@@ -37,7 +37,13 @@ MAX_COUNT = 4
 MODEL_SLOTS = 3  # CLI 무료 모델 3건 (지시서 §4-3)
 PER_TAG_LIMIT = 10
 POOL_LIMIT = 50
-CANDIDATE_LIMIT = 30  # LLM 평가 대상
+# AIK24-EFFICIENCY-02: LLM 평가 대상 30 → 8. 1건당 16.4초가 걸려 30건=345초였다.
+# 선택 규칙(모델 슬롯 3 + 뉴스 슬롯 1)이 실제로 경쟁하는 건 프로바이더별 최신 1건과
+# 태그별 상위 몇 건뿐이라, 나머지는 평가해도 select_top_articles() 의 출처 중복
+# 제약에 걸려 버려졌다(2026-10-13 실행: 후보 21건 중 탈락 0건, 최종 4건 전부 11점).
+CANDIDATE_LIMIT = 8  # LLM 평가 대상
+PER_TAG_CANDIDATES = 3  # 태그별 상위 3건만 후보로
+NEWS_CANDIDATES = 4  # 뉴스 슬롯 최대 4건 (태그별 상위 3건 중 라운드로빈)
 SCORE_MIN = 6  # 3개 기준 평균 2점 미만 탈락
 TAG_ORDER = ("free-llm", "opensource", "tool")
 KST = timezone(timedelta(hours=9))
@@ -51,7 +57,8 @@ def log(msg):
 
 
 MODEL_SOURCES = ("OpenCode Zen", "OpenRouter Free Models", "Kilo Free Models", "NVIDIA NIM Free")
-MODEL_POOL = 12  # 모델 후보 (LLM 점수 평가 대상)
+MODEL_POOL = 12  # 모델 후보 fetch 깊이 (아래 MODEL_PER_SOURCE 로 추린다)
+MODEL_PER_SOURCE = 1  # 프로바이더별 최신 1건씩 → 모델 슬롯 후보 최대 4건
 
 
 def _sql_in(values):
@@ -174,23 +181,32 @@ def _date_key(article):
     return -int(p) if p.isdigit() and len(p) >= 8 else 0
 
 
+def _latest_per_source(rows):
+    """rows 는 pub_date DESC 로 정렬돼 오므로 프로바이더별 첫 등장이 그 프로바이더 최신 1건."""
+    seen, out = set(), []
+    for a in rows:
+        src = a.get("source")
+        if src not in seen:
+            seen.add(src)
+            out.append(a)
+    return out
+
+
 def interleave_candidates(limit):
     """CLI 무료 모델 후보 + 일반 뉴스 후보(태그 교차)를 합친다.
 
-    모델은 프로바이더 4곳에서만 뽑고(지시서 §4-3), 일반 뉴스는 태그별 라운드로빈.
-    단일 ORDER BY LIMIT은 한 매체 배치가 후보를 통째로 차지해 브리핑이 2건으로
-    줄어든다(2026-10-11 실측).
+    AIK24-EFFICIENCY-02: 평가 대상을 30건 → 8건으로 축소.
+    모델 슬롯 = 프로바이더별 최신 1건씩(최대 4건), 뉴스 슬롯 = 태그별 상위 3건 중
+    라운드로빈 최대 4건. 데이터가 적으면 있는 만큼만 반환한다(에러 아님).
     """
-    models = get_model_news(MODEL_POOL)
-    per_tag = {t: get_recent_news(v2_tag=t, exclude_models=True) for t in TAG_ORDER}
-    mixed = []
-    for row in zip_longest(models, *(per_tag[t] for t in TAG_ORDER)):
-        for art in row:
-            if art is not None:
-                mixed.append(art)
+    models = _latest_per_source(get_model_news(MODEL_POOL))[:MODEL_PER_SOURCE * len(MODEL_SOURCES)]
+    per_tag = {t: get_recent_news(v2_tag=t, exclude_models=True)[:PER_TAG_CANDIDATES]
+               for t in TAG_ORDER}
+    news = [art for row in zip_longest(*(per_tag[t] for t in TAG_ORDER))
+            for art in row if art is not None][:NEWS_CANDIDATES]
     counts = {"model": len(models)}
     counts.update({t: len(per_tag[t]) for t in TAG_ORDER})
-    return mixed[:limit], counts
+    return (models + news)[:limit], counts
 
 
 def main(dedup=True):
