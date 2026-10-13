@@ -3821,6 +3821,41 @@
           "date": "2026-10-13"
         }
       ]
+    },
+    {
+      "date": "2026-10-13",
+      "briefing_id": 999999,
+      "articles": [
+        {
+          "id": "999999",
+          "title": "완전히 새로운 기사 제목 12345",
+          "original_title": "",
+          "description": "d",
+          "link": "",
+          "entities": [],
+          "date": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "briefing_id": 351,
+      "articles": [
+        {
+          "id": "55484",
+          "title": "구글, 누구나 플레이 스토어에 앱을 무료로 게시할 수 있도록 허용",
+          "original_title": "Google will let anyone publish an app to the Play Store, for free",
+          "description": "구글은 유료 개발자 계정 없이도, 구글 계정을 가진 18세 이상의 성인이라면 누구나 AI 스튜디오로 제작한 비공개 안드로이드 앱을 게시할 수 있도록 허용할 예정입니다. 애플은 올해 유사한 유형의 소프트웨어로부터 자체 앱스토어를 단속하는 데 주력해 왔습니다.",
+          "link": "https://thenextweb.com/news/google-play-vibe-coded-apps",
+          "entities": [
+            "Store",
+            "Play",
+            "AI",
+            "Google"
+          ],
+          "date": "2026-10-14"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7315,6 +7350,29 @@
         "AI"
       ],
       "date": "2026-10-13"
+    },
+    {
+      "id": "999999",
+      "title": "완전히 새로운 기사 제목 12345",
+      "original_title": "",
+      "description": "d",
+      "link": "",
+      "entities": [],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55484",
+      "title": "구글, 누구나 플레이 스토어에 앱을 무료로 게시할 수 있도록 허용",
+      "original_title": "Google will let anyone publish an app to the Play Store, for free",
+      "description": "구글은 유료 개발자 계정 없이도, 구글 계정을 가진 18세 이상의 성인이라면 누구나 AI 스튜디오로 제작한 비공개 안드로이드 앱을 게시할 수 있도록 허용할 예정입니다. 애플은 올해 유사한 유형의 소프트웨어로부터 자체 앱스토어를 단속하는 데 주력해 왔습니다.",
+      "link": "https://thenextweb.com/news/google-play-vibe-coded-apps",
+      "entities": [
+        "Store",
+        "Play",
+        "AI",
+        "Google"
+      ],
+      "date": "2026-10-14"
     }
   ]
 }
