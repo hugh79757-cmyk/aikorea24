@@ -91,18 +91,29 @@ def get_briefing_items(briefing_id):
 
 
 def get_tools():
-    """D1에서 AI 도구 목록 조회 (최신 6개) — md 동기화본(tools) + 사용자 등록본(tool_submissions published) 합산"""
-    return _d1_query(
-        "SELECT name, slug, tagline, category, price, korean_support, difficulty FROM ("
-        "SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at "
+    """D1에서 AI 도구 목록 조회 (최신 6개) — md 동기화본(tools) + 사용자 등록본(tool_submissions published) 합산.
+    같은 이름이 양쪽에 있으면 사용자 등록본을 우선한다 (AIK24-EMAIL-02)."""
+    rows = _d1_query(
+        "SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at, prio FROM ("
+        "SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at, 1 AS prio "
         "FROM tools "
         "UNION ALL "
         "SELECT name, slug, description AS tagline, category, "
         "COALESCE(NULLIF(price_detail, ''), price_model) AS price, korean_support, "
-        "COALESCE(difficulty, '보통') AS difficulty, updated_at "
+        "COALESCE(difficulty, '보통') AS difficulty, updated_at, 2 AS prio "
         "FROM tool_submissions WHERE status = 'published'"
-        ") ORDER BY updated_at DESC LIMIT 6"
+        ") ORDER BY updated_at DESC"
     )
+    # EMAIL-02 §4-2: 같은 name 이 양쪽에 있으면 사용자 등록본(prio 2) 을 남기고 1건만 쓴다.
+    best = {}
+    for r in rows:
+        cur = best.get(r["name"])
+        if cur is None or r["prio"] > cur["prio"]:
+            best[r["name"]] = r
+    ranked = sorted(best.values(), key=lambda r: r["updated_at"], reverse=True)
+    return [
+        {k: v for k, v in r.items() if k != "prio"} for r in ranked[:6]
+    ]
 
 
 def esc(s):

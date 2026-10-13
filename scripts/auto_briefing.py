@@ -44,8 +44,41 @@ def cli_free_block(article):
     prefix = CLI_PROVIDER_PREFIX.get(article.get("source"))
     if not prefix:
         return ""
+    # 같은 모델이 여러 프로바이더로 수집되면 하나로 합쳐 표기한다 (EMAIL-02 §4-1).
+    providers = article.get("_providers") or [article.get("source")]
+    settings = " 또는 ".join(
+        f'{{"model": "{CLI_PROVIDER_PREFIX[p]}/{mid}"}}' for p in providers
+    )
+    names = "·".join(CLI_PROVIDER_PREFIX[p] for p in providers)
     return ("OpenCode에서 무료로 사용 가능\n"  # EVAL-02 §4-1: 이모티콘 제거
-            f'설정: {{"model": "{prefix}/{mid}"}}')
+            + (f"프로바이더: {names}\n" if len(providers) > 1 else "")
+            + f"설정: {settings}")
+
+
+def merge_same_models(articles):
+    """같은 모델 ID가 여러 프로바이더로 들어온 항목을 1건으로 합친다 (EMAIL-02 §4-1).
+    대표님 결정 옵션 A — 같은 모델을 두 번 소개하면 독자에게 혼란이다.
+    """
+    merged, index = [], {}
+    for art in articles:
+        mid = art.get("original_title") or ""
+        if not mid or art.get("source") not in CLI_PROVIDER_PREFIX:
+            merged.append(art)
+            continue
+        key = mid.lower()
+        if key in index:
+            first = index[key]
+            srcs = first.setdefault("_providers", [first.get("source")])
+            if art.get("source") not in srcs:
+                srcs.append(art.get("source"))
+        else:
+            index[key] = art
+            merged.append(art)
+    for art in merged:
+        srcs = art.get("_providers") or []
+        if len(srcs) > 1:
+            log(f"  모델 통합: {art.get('original_title')} → {'·'.join(srcs)}")
+    return merged
 
 def log(msg):
     ts = datetime.now(KST).strftime("%H:%M:%S")
@@ -236,6 +269,7 @@ def main(selected_articles=None):
             title = (art.get("title") or "")[:50]
             log(f"    [{reason}] {title}")
     selected = cutoff
+    selected = merge_same_models(selected)
 
     if not selected:
         log("  ⚠️ 선정된 기사 없음")
