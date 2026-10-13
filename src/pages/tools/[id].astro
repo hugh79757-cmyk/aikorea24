@@ -329,11 +329,12 @@ const faqSchema: string | null = faqEntities.length > 0
   </div>
   )}
 
-  <!-- 뉴스레터 구독 CTA -->
+  <!-- 뉴스레터 구독 CTA (UI-01: 컨테이너가 bg-[#111111] 인데 제목이 text-gray-900 → 라이트 모드에서 안 보임.
+       사이트 규칙(흰 배경 + 검은 텍스트)으로 통일) -->
   <div class="max-w-3xl mx-auto px-4 pb-4">
-    <div class="bg-[#111111] dark:from-gray-800 dark:to-gray-750 rounded-2xl p-6 md:p-8 border border-[#e5e5e5] dark:border-gray-700">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 md:p-8 border border-[#e5e5e5] dark:border-gray-700">
       <div class="text-center max-w-xl mx-auto">
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">📬 매일 아침 AI 뉴스를 받아보세요</h3>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">매일 아침 AI 뉴스를 받아보세요</h3>
         <p class="text-gray-600 dark:text-gray-400 text-sm mb-6">
           {tool.data.name} 같은 최신 AI 도구 소식을 이메일로 보내드립니다. 무료입니다.
         </p>
