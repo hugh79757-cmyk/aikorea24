@@ -1,3 +1,26 @@
+## 2026-10-13 22:55 — AIK24-EFFICIENCY-02 완료 (파이프라인 3개 병목 제거, 단 총시간 목표는 미달) → SSOT/프로젝트/aikorea24/지시서/2026-10-13-2100-AIK24-EFFICIENCY-02-완료보고.md
+
+**한 일**
+파이프라인 3개 병목 제거. `scripts/auto_news_selector.py` · `scripts/run_pipeline.py` · `scripts/blog_draft_generator.py`. 커밋 `372c746d`(2파일) + 가드는 `f0c72789` 에 포함. 배포 Version `c773550e-06d5-4c64-b7ee-36be1dc9b9f8`.
+
+**결과**
+- [검증됨] Step 0 스킵 — 로그 `⏭ Step 0 수집 스킵 (05:30 수집기에 이관)`. D1 실측으로 `api_test/news_collector.py:1035-1038`(05:30 launchd 잡)이 `v2_pass`/`v2_tag` 를 저장함 확인, 36h 윈도우 내 v2_pass=1 170건 유지 중 → 공급 중단 없음. `--collect` 로 수동 복구 가능.
+- [검증됨] 후보 8건 — 로그 `후보: 8건 (free-llm=3, opensource=0, tool=2)`, LLM 평가 [1/8]~[8/8] 전부 수행, 탈락 0건, 선정 4건. 모델 슬롯 4 = OpenCode Zen/OpenRouter/Kilo/NVIDIA NIM(프로바이더별 최신 1건씩).
+- [검증됨] 선정 결과 보존 — 신규 8건 풀과 기존 20건 풀이 **동일 출처 4건**选出(OpenCode Zen/OpenRouter/Kilo/HuggingFace Trending).
+- [검증됨] 내부 배포 스킵 — 로그 `[6] Cloudflare 배포 스킵 (파이프라인 모드 — Step 6에서 1회 배포)`. 파이프라인 전체에서 `npm run deploy` 1회만 실행됨.
+- [검증됨] 파이프라인 1회 완주 EXIT_CODE=0, 브리핑 4건 생성, 썸네일 4건, `✅ 에러 없음`, sitemap ping google/naver 모두 true.
+- [부분검증] **절감량 290초(Step 0 228s + 배포 62s)는 코드상 성립하나 총시간은 1,497.5초(24분 58초) — 13분 목표 미달.** 원인은 LLM·썸네일 응답 지연: Step 1 이 349s→741s, Step 4 가 186s→685s 로 각각 +392s/+499s 증가해 절감분을 상쇄함. 후보 8건 평가에 건당 평균 92초(과거 16.4초)가 걸렸다. 지연은 코드 밖(LLM 프로바이더·외부 API)이라 이번 지시 범위에서 통제 불가.
+- [부분검증] Step 3 이 2초 — 이번 실행은 생성이력 있는 블로그 3건이 전부 "이미 연결됨"으로 dedup 되어 실제 LLM 생성이 없었다. 62초 절감분이 이번 실행에서 실측된 것은 아니고, 코드 경로 확인으로만 검증됨.
+
+**잔존 위험**
+- [부분검증] 총시간 13분 목표는 **미달성**. 다음 실행에서 LLM 지연이 회복되면 예상 1,207초(20분)로도 기존 1,156초 대비 느릴 수 있다(Step 4 썸네일 685s 가 변수). 썸네일 병목은 별도 지시 필요.
+- [검증불가] launchd `kr.aikorea24.pipeline-runner` 경로 검증 — 실제 잡은 `run_pipeline_with_notify.py` 를 호출하는데 이 래퍼의 `subprocess.run(timeout=600)` 이 10분 제한이라 목표 시간 760초를 **넘을 수 없다**. 수동 실행으로만 검증했고 잡 경로는 건드리지 않았다. 복구 계획: 래퍼 timeout 상향 여부 대표님 결정 후 별도 지시.
+- `opensource` 태그가 36h 윈도우에 0건 — 뉴스 슬롯이 free-llm·tool 로만 채워진다. 이번 변경과 무관한 기존 수집 상태.
+- `scripts/blog_draft_generator.py` 의 `PIPELINE_MODE` 가드 6줄은 EVAL-02 커밋 `f0c72789` 에 포함됨(동시 작업으로 선행 커밋에 편입). 커밋 귀속만 불완전하며 코드 동작에는 영향 없음.
+
+**다음 행동**
+- 대표님 결정 필요: ① 썸네일(Step 4) 병목 별도 지시 ② `run_pipeline_with_notify.py` timeout 600초 상향 여부.
+
 ## 2026-10-13 22:40 — AIK24-EVAL-02 완료 (모델 평가 실무축 개편 + 브리핑 이모티콘 제거)
 
 **한 일**
