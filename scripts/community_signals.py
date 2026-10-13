@@ -11,7 +11,7 @@
   Reddit : r/opencodeCLI/.json 은 이 IP 에서 403 차단. /.rss 는 200 이나
            재요청 시 429 가 난다. → 실패해도 브리핑은 계속 돌아야 하므로
            예외를 밖으로 흘리지 않는다.
-           업보트 점수는 RSS 응답에 없어 항상 None → 점수 산출 불가.
+           수집(제목·링크)은 유지하되 가산점은 GitHub 이슈 언급(+2)만 준다.
 """
 
 import json
@@ -27,9 +27,7 @@ GH_ISSUES = (
 REDDIT_RSS = "https://www.reddit.com/r/opencodeCLI/.rss"
 ATOM = "{http://www.w3.org/2005/Atom}"
 
-GH_BONUS = 2  # GitHub 이슈 1건 이상 언급
-RD_UPVOTE_BONUS = 3  # Reddit 업보트 50+ (RSS 에 점수 없어 현재 미발동)
-RD_UPVOTE_THRESHOLD = 50
+GH_BONUS = 2  # GitHub 이슈 1건 이상 언급 (유일한 가산점)
 
 
 def _get(url, timeout=25):
@@ -75,18 +73,18 @@ def reddit_posts():
         for link in entry.findall(f"{ATOM}link"):
             if link.get("rel") == "alternate":
                 url = link.get("href") or ""
-        out.append({"title": title, "url": url, "upvotes": None})
+        out.append({"title": title, "url": url})
     return out
 
 
 def build_signal_map(model_ids):
-    """{모델id.lower(): {"gh": n, "rd": n, "rd_up": None}} — 언급 있는 것만 반환."""
+    """{모델id.lower(): {"gh": n, "rd": n}} — 언급 있는 것만 반환."""
     keys = {str(m).lower() for m in model_ids if m}
     if not keys:
         return {}
     gh, rd = github_posts(), reddit_posts()
     print(f"  [community] GitHub 이슈 {len(gh)}건 · Reddit 글 {len(rd)}건 · 검사 모델 {len(keys)}개")
-    sig = {k: {"gh": 0, "rd": 0, "rd_up": None, "gh_url": "", "rd_url": ""} for k in keys}
+    sig = {k: {"gh": 0, "rd": 0, "gh_url": "", "rd_url": ""} for k in keys}
     for k in sig:
         for p in gh:
             if k in (p["title"] + " " + p["body"]).lower():
@@ -96,9 +94,6 @@ def build_signal_map(model_ids):
             if k in p["title"].lower():
                 sig[k]["rd"] += 1
                 sig[k]["rd_url"] = sig[k]["rd_url"] or p["url"]
-        up = [p["upvotes"] for p in rd if sig[k]["rd"] and p["upvotes"]]
-        if up:
-            sig[k]["rd_up"] = max(up)
     return {k: v for k, v in sig.items() if v["gh"] or v["rd"]}
 
 
@@ -106,10 +101,7 @@ def bonus(sig):
     """신호 dict → 가산점."""
     if not sig:
         return 0
-    b = GH_BONUS if sig.get("gh") else 0
-    if (sig.get("rd_up") or 0) >= RD_UPVOTE_THRESHOLD:
-        b += RD_UPVOTE_BONUS
-    return b
+    return GH_BONUS if sig.get("gh") else 0
 
 
 def quote_line(sig):
@@ -120,9 +112,7 @@ def quote_line(sig):
     if sig.get("gh"):
         parts.append(f"💬 GitHub {GH_REPO} 이슈 {sig['gh']}건 언급 — 실사용 검증")
     if sig.get("rd"):
-        up = sig.get("rd_up")
-        tail = f" (최고 업보트 {up})" if up else ""
-        parts.append(f"💬 r/opencodeCLI {sig['rd']}건 언급{tail}")
+        parts.append(f"💬 r/opencodeCLI {sig['rd']}건 언급")
     return " · ".join(parts)
 
 

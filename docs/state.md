@@ -1,3 +1,41 @@
+## 2026-10-13 AIK24-PIPE-03-FIX 완료 — Reddit upvote 가산점 삭제, GitHub +2만 유지 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-1335-AIK24-PIPE-03-FIX-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/community_signals.py` 8개 지점 수정(7 insertions / 17 deletions) — 지시서 §4-1/4-2.
+  1. 모듈 docstring Reddit 블록에서 업보트 설명 제거 → `수집(제목·링크)은 유지하되 가산점은 GitHub 이슈 언급(+2)만 준다.`
+  2. `RD_UPVOTE_BONUS = 3` / `RD_UPVOTE_THRESHOLD = 50` 삭제, `GH_BONUS = 2` 주석을 `유일한 가산점` 으로 변경
+  3. `reddit_posts()` 반환 dict 의 `"upvotes": None` 키 삭제
+  4. `build_signal_map()` docstring·sig 초기 dict 의 `rd_up` 키 삭제
+  5. `build_signal_map()` 집계 루프의 업보트 max 계산 3줄 삭제
+  6. `bonus()` → `return GH_BONUS if sig.get("gh") else 0` 한 줄로 축약
+  7. `quote_line()` Reddit 줄의 `(최고 업보트 N)` 꼬리표 제거
+- Reddit 수집 자체(Atom RSS 25건)와 브리핑 코멘트의 `💬 r/opencodeCLI N건 언급` 표시는 유지.
+- 호출부(`auto_news_selector.py` / `auto_briefing.py`)는 수정하지 않음 — 지시서 §7 허용 범위.
+
+### 결과
+| 항목 | 상태 | 근거 |
+|---|---|---|
+| ① Reddit upvote 가산점 코드 제거 | [검증됨] | `grep -rn "rd_up\|RD_UPVOTE\|upvote\|업보트" scripts/community_signals.py` → 0건. `python3 -m py_compile` → COMPILE_OK |
+| ② Reddit 수집 정상 | [검증됨] | 실측 `reddit_posts()` 25건, 첫 항목 `Operation Cheepseek Phase 3 🔥`, dict 키 `['title','url']` |
+| ③ GitHub 가산점 +2 유지 | [검증됨] | 합성 4케이스 `{gh:0,rd:2}`→0 / `{gh:1,rd:0}`→2 / `{gh:3,rd:5}`→2 / `None`→0 |
+| ④ `npm run build` | [검증됨] | `[build] Complete!` — 페이지 14.00s, 전체 19.90s, 에러 0건 |
+| ⑤ 완료보고 + state.md | [검증됨] | `SSOT/…/2026-10-13-1335-AIK24-PIPE-03-FIX-완료보고.md` + 본 항목 |
+| 호출부 호환성 | [검증됨] | `_apply_community_bonus` → `💬 mimo-v2.6-flash-free: GitHub 2건 / Reddit 1건 → 0 +2 = 2점`, `_sig` 키 `['gh','gh_url','rd','rd_url']`. `cli_free_block` → `✅ OpenCode에서 무료로 사용 가능` + `설정: {"model": "opencode/mimo-v2.6-flash-free"}` + 인용 줄 정상 |
+| 배포 | [검증됨] | Version `098bfdaf-7da5-4fac-b878-0d73439981a1`, Worker Startup 14 ms, sitemap ping google/naver true |
+| 라이브 반영 확인 | [부분검증] | 변경이 `scripts/*.py` 전용이라 Astro 산출물은 이전과 동일. 브리핑 코멘트는 D1 저장 값이라 HTTP 응답으로 구분이 불가 → 다음 06:00 자동 브리핑에서 실제 반영 |
+
+### 잔존 위험
+1. [부분검증] Reddit Atom `entry` 의 `url` 이 항상 빈 문자열 — `reddit_posts()` 가 `rel="alternate"` 인 `<link>` 를 찾으나 해당 `rel` 이 없어 실측 `URL 있는 항목: 0 / 25`. `rd_url` 키가 항상 `""` 이나 `quote_line()` 이 이 값을 출력에 쓰지 않아 사용자 노출 없음. 복구 계획: `rel` 조건을 빼고 `href` 만 읽으면 1줄 (이번 지시서 범위 밖이라 미수정).
+2. [부분검증] Reddit RSS 재요청 시 429 → `reddit_posts()` 가 빈 리스트로 폴백(가산점 0). 예외가 밖으로 흘러나지 않아 브리핑은 계속 돌아감.
+3. [부분검증] 가산점이 GitHub 단일 출처로 좁혀져, 이슈에 모델명이 없으면 3개 프로바이더 모델 순위가 순수 갱신일로 결정됨(지시서 §4-3 "최신성 위주" 와 일치).
+4. [검증불가] 이미 저장된 기존 D1 `briefing_items.comment` 의 업보트 꼬리표는 정적 문자열이라 이번 수정의 영향 없음. 복구 계획: 브리핑 regenerate 절차 필요 (이번 지시서 범위 밖).
+5. [부분검증] PIPE-03 잔여 위험(NIM `cost 0` 판정 / models.dev SPA catch-all / 동일 모델 2건 선정 가능)은 이번 변경과 무관하게 여전히 존재.
+
+### 다음 행동
+- 2026-10-14 06:00 자동 브리핑 실행 후 `/briefing/<날짜>/` 에서 Reddit 업보트 꼬리표가 사라지고 GitHub 인용만 남는지 1회 육안 확인.
+
+---
+
 ## 2026-10-13 13:55 — AIK24-PIPE-03 브리핑 소스(커뮤니티) 추가 + 무료 모델 4개 프로바이더 수집
 
 ### 한 일
