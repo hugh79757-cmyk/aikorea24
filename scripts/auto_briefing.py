@@ -227,14 +227,15 @@ def main(selected_articles=None):
         selected = select_top_articles(clusters, max_count=4)  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
         log(f"  선정: {len(selected)}개 기사")
 
-        # Phase 2 중복 방어 (저장 전 재검증)
-        cutoff, removed = filter_duplicates(selected, d1_query)
-        if removed:
-            log(f"  ⚠️ 중복 제거: {len(removed)}건")
-            for art, reason in removed:
-                title = (art.get("title") or "")[:50]
-                log(f"    [{reason}] {title}")
-        selected = cutoff
+    # Phase 2 중복 방어 (저장 전 재검증). AIK24-BLOG-01: run_pipeline가 기사를 넘기는
+    # 파이프라인 경로에서도 반드시 걸어야 한다 — 이전엔 else 분기에만 있어 중복이 그대로 저장됐다.
+    cutoff, removed = filter_duplicates(selected, d1_query)
+    if removed:
+        log(f"  ⚠️ 중복 제거: {len(removed)}건")
+        for art, reason in removed:
+            title = (art.get("title") or "")[:50]
+            log(f"    [{reason}] {title}")
+    selected = cutoff
 
     if not selected:
         log("  ⚠️ 선정된 기사 없음")

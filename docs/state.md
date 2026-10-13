@@ -1,3 +1,25 @@
+## 2026-10-13 22:18 — dedup 버그 수정 (대표님 승인)
+
+**한 일**
+`scripts/auto_briefing.py` 의 `main()` 에서 중복 검사 블록(7줄)을 `else` 분기 밖으로 dedent. 파이프라인 경로(`run_pipeline.step_briefing()` 이 기사 전달)에서도 `filter_duplicates()` 가 실행된다. 커밋 대상은 이 파일 하나.
+
+**결과**
+- [검증됨] 회귀 후보 없음 — standalone 경로도 그대로 중복 검사 실행(`⚠️ 중복 제거: 2건` 로그 후 `⚠️ 선정된 기사 없음` 조기 종료).
+- [검증됨] 파이프라인 경로 실동작 — `main(selected_articles=[55250, 999999])` → `[exact_id] 바이낸스…` 1건 제거, 신규 기사만 저장. 저장 함수를 스텁으로 바꿔 D1 쓰기 없음.
+- [검증됨] 오탐 없음 — 실제 히스토리 40건 대비 판정: 무관한 금융 뉴스 `(False, None)` / 가변 제목 `(False, None)` / 오늘 이미 브리핑에 실린 모델카드 `cat-jam-free` `(True, 'exact_link')` / 링크까지 같은 바이낸스 `(True, 'semantic')`.
+- [검증됨] `python3 -m py_compile scripts/auto_briefing.py` → COMPILE_OK. diff = 9 insertions / 8 deletions 1파일.
+
+**잔존 위험**
+1. [부분검증] 이미 저장된 중복(브리핑 349·350 의 news_id 55250)은 소급 제거하지 않음. 오늘 브리핑 2건이 계속 중복 노출되며, 다음 브리핑부터는 걸러진다.
+2. [부분검증] dedup 이 3일 lookback(`DEDUP_LOOKBACK_DAYS = 3`) 안의 published 브리핑만 본다. 그보다 오래된 동일 기사는 다시入选될 수 있다.
+3. [검증불가] launchd `kr.aikorea24.blog-draft` — 대표님 지시로 내일 07:30 스케줄에서 확인 예정. 이번 수정은 그 실행 경로의 코드를 건드렸으므로 첫 자동 실행 결과를 봐야 최종 확인된다.
+
+**다음 행동**
+- 내일 07:30 실행 후 `scripts/blog_draft.log` 에 `⚠️ 중복 제거:` 로그가 찍히는지 확인.
+- 브리핑 349·350 중복 노출을 지우려면 대표님 지시 필요(삭제 작업이라 대기).
+
+---
+
 ## 2026-10-13 22:20 — 파이프라인 수동 실행 검증 (대표님 지시 "파이프라인 돌려줘")
 
 **한 일**
