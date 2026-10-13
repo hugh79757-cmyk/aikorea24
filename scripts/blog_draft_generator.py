@@ -359,57 +359,80 @@ def generate_model_eval_draft(keyword, article, model_id):
         return ""
     guide = model_eval.get_access_guide(model_id)
 
-    # 우리 테스트 결과 — 9문항 실측 점수 + 상세 답변 (LLM이 지어내지 못하게 원문 주입)
+    # 우리 테스트 결과 — 축별 원시 결과 + 문항별 실제 답변(LLM이 지어내지 못하게 원문 주입)
     FAIL_SOURCES = ("http_error", "exception", "empty", "no_choices")
-    q_lines = []
+    axis_block = {}
     for d in ev.get("details", []):
-        ans = (d.get("answer") or "").replace("\n", " ")[:220]
+        ans = (d.get("answer") or "").replace("\n", " ")[:400]
         if d["source"] in FAIL_SOURCES:
             mark = "응답 실패(레이트리밋 등)"
         else:
             mark = "정답" if d["score"] else "오답"
-        q_lines.append(f"Q{d['idx']} [{d['cat']}] {mark} — 모델 답변: {ans or '(응답 없음)'}")
-    test_block = "\n".join(q_lines) or "(평가 결과 없음)"
+        axis_block.setdefault(d["axis"], []).append(f"Q{d['idx']} {mark} — 답변: {ans or '(응답 없음)'}")
+    test_block = "\n".join(
+        f"### {model_eval.AXIS_LABELS.get(a, a)} ({model_eval._AXIS_DIFFICULTY.get(a, '')}, "
+        f"{sum(1 for x in v if x.startswith('Q') and '정답 —' in x)}/{len(v)} 정답)\n" + "\n".join(v)
+        for a, v in axis_block.items()
+    ) or "(평가 결과 없음)"
+
+    # §4-4 남들의 의견 — OpenRouter / HuggingFace 공개 지표. 없는 값은 지어내지 않는다.
+    try:
+        sig = model_eval.external_signals(model_id)
+        sig_block, sig_sources = "\n".join(sig["lines"]), sig["sources"]
+    except Exception as e:
+        sig_block, sig_sources = "공개된 외부 평가 없음", 0
+        log(f"  ⚠️ 외부 지표 수집 예외: {type(e).__name__}")
 
     system_prompt = (
         "당신은 AI 모델을 정직하게 평가하는 한국어 테크 블로거입니다. "
         "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
     )
     user_prompt = (
-        f"무료 LLM '{model_id}'에 대한 심층 분석 블로그 글을 작성해주세요.\n\n"
+        f"무료 LLM '{model_id}'에 대한 실무 투입 판단 블로그 글을 작성해주세요.\n\n"
         f"## 반드시 지킬 구조 (5단, 이 순서 그대로)\n"
-        f"## 1. 외부 벤치마크에서 알려진 성능\n"
-        f"- LMArena(arena.ai) Elo, Artificial Analysis의 지표 등 외부 벤치마크 언급\n"
-        f"- [절대 규칙] **알고 있는 수치만 쓰세요. 기억이 없거나 확신이 없으면 수치를 지어내지 말고 "
-        f"'외부 벤치마크 수치는 별도 확인이 필요합니다'라고 쓰세요.** 없는 벤치마크 이름을 지어내지 마세요.\n\n"
-        f"## 2. 우리 테스트 결과 (9문항 실측)\n"
-        f"- 아래는 AI코리아24가 직접 API로 실측한 결과입니다. **이 데이터는 그대로 인용하세요. "
-        f"점수를 바꾸거나 해석을 지어내지 마세요.**\n"
-        f"- 총점: {ev.get('label', '').replace('AI 추정: ', '')}\n"
-        f"- 응답 실패 문항: {ev.get('failed', 0)}/{ev.get('max_score', 9)}건\n"
-        f"- 문항 구성: 코딩 실용성, 맥락 정리, 압축 효율, 한국어 품질, 추론\n"
-        f"```\n{test_block}\n```\n\n"
-        f"## 3. 이 결과를 어떻게 읽어야 하는가 (신뢰 메시지)\n"
-        f"- 9문항은 절대 벤치마크가 아니므로 '이 수치만으로 우열을 단정할 수 없다'고 명시\n"
-        f"- 무료 티어의 응답 실패(rate limit)가 점수에 영향을 준다는 점도 정직하게 언급\n\n"
-        f"## 4. 써보세요 (접근 가이드)\n"
-        f"- 다음 문장을 자연스럽게 포함하세요: {guide}\n"
-        f"- OpenCode 등 개발 도구에서 프로바이더를 OpenRouter로 바꾸는 절차를 간결하게 안내\n\n"
-        f"## 5. 누가 쓰면 좋은가\n"
-        f"- 용도별(학습용/사소한 자동화/프로토타이핑/업무 전문 작업)로 이 모델이 맞는지 구분\n\n"
-        f"## 톤 규칙 (기존 블로그 규칙과 동일)\n"
-        f"- 본문 1800자 이상, 소제목(##) 5개 이상\n"
+        f"### 1. 한 줄 판단\n"
+        f"- 첫 줄에 결론을 박습니다. 예: '지금 당장 손발 작업에 투입해도 됩니다' / "
+        f"'아직 검증이 부족해 파일럿으로만 쓰세요'.\n"
+        f"- 판단 근거는 2절의 실측 결과와 연결되게 한 문장만 덧붙이세요.\n"
+        f"- [절대 규칙] 다른 유료 모델과 급수를 비교하는 표현(예: '어떤 모델급')은 쓰지 마세요. "
+        f"이 글은 이 모델 하나를 독립적으로 판단합니다.\n\n"
+        f"### 2. 실무 축별 결과 (4축)\n"
+        f"- 아래는 AI코리아24가 오늘 직접 API로 실측한 결과입니다. "
+        f"**숫자와 모델 답변은 그대로 인용하세요. 해석을 지어내지 마세요.**\n"
+        f"- 원시 결과: {ev.get('label', '')}\n"
+        f"- 응답 실패 문항: {ev.get('failed', 0)}/{ev.get('max_score', 0)}건\n"
+        f"```\n{test_block}\n```\n"
+        f"- 축마다 소제목을 달고 **구체적 관찰 1~2줄**을 쓰세요. [절대 규칙] "
+        f"'지시를 잘 따름', '맥락 유지가 좋음' 같은 추상 평가는 금지입니다. "
+        f"답변 원문에 있는 구체적 사실(예: '12,484자 문서에서 1,226자 지점의 함수명을 정확히 참조함', "
+        f"'순수 JSON 요구에 코드블록 없이 출력함', '0으로 나누기 테스트를 빠뜨림')을 그대로 적으세요.\n"
+        f"- **오답은 숨기지 말고** 왜 틀렸는지 1~2줄로 적으세요. 실패가 독자에게 가장 쓸모있습니다.\n"
+        f"- 문항 난이도가 축마다 다르므로 '문항 난이도: 기초 수준' 같은 단서를 축 제목 옆에 붙이세요.\n\n"
+        f"### 3. 남들의 의견\n"
+        f"- 아래는 공개 API에서 직접 조회한 값입니다. **수치를 바꾸거나 없는 수치를 지어내지 마세요.**\n"
+        f"- 조회한 출처 수: {sig_sources}곳\n"
+        f"```\n{sig_block}\n```\n"
+        f"- 출처가 2곳 미만이면 그 사실을 본문에 명시하세요. 공개 지표가 없는 모델이라는 뜻입니다.\n\n"
+        f"### 4. 접근 방법\n"
+        f"- 간결하게. 모델 ID와 설정 한 줄이면 충분합니다.\n"
+        f"- 다음 문장을 자연스럽게 포함하세요: {guide}\n\n"
+        f"### 5. 한계\n"
+        f"- 이 글이 답하지 못하는 것을 정직하게 적으세요: 문항 {ev.get('max_score', 0)}개로 커버하지 못한 영역, "
+        f"응답 실패(rate limit)가 점수에 미친 영향, 오늘 하루치 관찰이라 일반화할 수 없는 부분.\n"
+        f"- 이 모델을 쓰지 말아야 할 상황도 1~2줄.\n\n"
+        f"## 톤 규칙\n"
+        f"- 분량 제한 없음. 필요한 만큼 길게 씁니다.\n"
         f"- 순한국어, ~습니다/~입니다 정중 비즈니스 톤. 반말('~다/~했다/~임') 절대 금지\n"
         f"- 중국어(한자) 사용 금지\n"
+        f"- 이모티콘 사용 금지\n"
         f"- **본문 첫 단락에서 '이번 글에서는', '살펴보겠습니다', '다루겠습니다' 등 메타 도입문 절대 금지.** "
-        f"모델의 실측 결과처럼 실질 내용으로 바로 시작할 것\n"
-        f"- 마지막에 **요약** 섹션 포함\n\n"
+        f"한 줄 판단으로 바로 시작할 것\n\n"
         f"## 참고 기사\n"
         f"제목: {article.get('title', '')}\n"
         f"출처: {article.get('source', '')}\n"
         f"내용: {(article.get('description') or '')[:400]}\n\n"
         f"## 출력 형식\n"
-        f"TITLE: [SEO에 최적화된 제목 — 모델 ID와 실측 점수를 포함]\n"
+        f"TITLE: [SEO에 최적화된 제목 — 모델 ID와 실측 결과를 포함]\n"
         f"---\n"
         f"[마크다운 본문]"
     )
@@ -417,7 +440,7 @@ def generate_model_eval_draft(keyword, article, model_id):
     content = chat_completion(
         messages=[{"role": "user", "content": user_prompt}],
         system_prompt=system_prompt,
-        max_tokens=4000,
+        max_tokens=6000,
         temperature=0.7,
     )
     if not content:
@@ -970,6 +993,12 @@ def main():
         return
 
     # 6. 자동 배포 (새 블로그 포스트가 생성되었거나 미커밋 파일이 있으면)
+    # AIK24-EFFICIENCY-02: 파이프라인 경로에서는 run_pipeline.py 의 Step 6(deploy.sh)이
+    # 1분 뒤에 배포한다. 여기서 또 배포해 62초를 중복으로 썼다. standalone 실행은 그대로.
+    if os.environ.get("PIPELINE_MODE") == "1":
+        log("[6] Cloudflare 배포 스킵 (파이프라인 모드 — Step 6에서 1회 배포)")
+        return
+
     # 미커밋 블로그 파일 감지 (git status --porcelain)
     untracked_blog_files = []
     try:

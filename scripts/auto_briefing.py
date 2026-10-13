@@ -37,14 +37,14 @@ def cli_free_block(article):
     if not mid:
         return ""
     if article.get("source") in OPEN_WEIGHT_SOURCES:
-        return ("✅ OpenCode에서 무료로 사용 가능 (오픈 웨이트·로컬 실행)\n"
+        return ("OpenCode에서 무료로 사용 가능 (오픈 웨이트·로컬 실행)\n"  # EVAL-02 §4-1: 이모티콘 제거
                 f"모델: {article.get('link') or 'https://huggingface.co/' + mid}\n"
                 "사용법: Ollama 또는 LM Studio 로 먼저 띄운 뒤 OpenCode 의 "
                 f'"ollama" 프로바이더에서 {{"model": "ollama/<로컬 모델명>"}} 으로 연결')
     prefix = CLI_PROVIDER_PREFIX.get(article.get("source"))
     if not prefix:
         return ""
-    return ("✅ OpenCode에서 무료로 사용 가능\n"
+    return ("OpenCode에서 무료로 사용 가능\n"  # EVAL-02 §4-1: 이모티콘 제거
             f'설정: {{"model": "{prefix}/{mid}"}}')
 
 def log(msg):
