@@ -3705,6 +3705,122 @@
           "date": "2026-10-12"
         }
       ]
+    },
+    {
+      "date": "2026-10-13",
+      "briefing_id": 349,
+      "articles": [
+        {
+          "id": "55266",
+          "title": "[무료 모델] unsloth/embeddinggemma-2-GGUF — HuggingFac",
+          "original_title": "",
+          "description": "트렌딩 상위 오픈소스 모델. task=feature-extraction, 좋아요 284, 다운로드 71,914. 라이선스 확인 후 무료로 로컬 실행 가능.",
+          "link": "https://huggingface.co/unsloth/embeddinggemma-2-GGUF",
+          "entities": [
+            "HuggingFac",
+            "GGUF"
+          ],
+          "date": "2026-10-13"
+        },
+        {
+          "id": "55250",
+          "title": "바이낸스, AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI' 출시...영어권 사용자부터",
+          "original_title": "",
+          "description": "[디지털투데이 황치규 기자]바이낸스가 AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI'를 전 세계 영어 사용자들을 대상으로 선보였다고 더블록이 12일(현지시간) 보도했다.더블록에 따르면 바이낸스 AI는 무료 서비스로 생성형 UI를 활용해 사용자 관심사와 경험 수준에 맞춘 시장 정보, 포트폴리오 추적, 거래 도구를 보여준다. 생성형 UI는 AI가 사용자 화",
+          "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706585",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-13"
+        },
+        {
+          "id": "55205",
+          "title": "초보자를 위한 GitHub Copilot 앱: Copilot에게 코드베이스를 가르치는 방법",
+          "original_title": "",
+          "description": "저장소에 커스텀 지침과 스킬을 추가하고, 커스텀 에이전트를 사용하며, Playwright 같은 MCP 서버를 연결하는 방법을 배워보세요. 이 게시물은 GitHub 블로그에 처음 게시되었습니다.",
+          "link": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-teach-copilot-about-your-codebase/",
+          "entities": [
+            "Copilot",
+            "GitHub",
+            "Playwright",
+            "MCP"
+          ],
+          "date": "2026-10-13"
+        },
+        {
+          "id": "55232",
+          "title": "Private, offline and yours: how to search the lite",
+          "original_title": "",
+          "description": "",
+          "link": "https://www.nature.com/articles/d41586-026-03227-4",
+          "entities": [
+            "Private"
+          ],
+          "date": "2026-10-13"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "briefing_id": 350,
+      "articles": [
+        {
+          "id": "55428",
+          "title": "[무료 LLM] cat-jam-free — OpenCode Zen 무료 티어",
+          "original_title": "cat-jam-free",
+          "description": "Cat Jam Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/cat-jam-free\"} 프로바이더 갱신일 2026-10-12.",
+          "link": "https://models.dev/opencode/cat-jam-free",
+          "entities": [
+            "Free",
+            "Jam",
+            "Cat",
+            "LLM",
+            "OpenCode",
+            "Zen"
+          ],
+          "date": "2026-10-13"
+        },
+        {
+          "id": "54938",
+          "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
+          "original_title": "inclusionai/ling-3.1-flash",
+          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
+          "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
+          "entities": [
+            "OpenRouter",
+            "LLM"
+          ],
+          "date": "2026-10-13"
+        },
+        {
+          "id": "55317",
+          "title": "[무료 LLM] inclusionai/ling-3.1-flash — Kilo Free Mo",
+          "original_title": "inclusionai/ling-3.1-flash",
+          "description": "inclusionAI: Ling 3.1 Flash — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"kilo/inclusionai/ling-3.1-flash\"} 프로바이더 갱신일 2026-10-02.",
+          "link": "https://models.dev/kilo/inclusionai/ling-3.1-flash",
+          "entities": [
+            "Kilo",
+            "Free",
+            "Ling",
+            "LLM",
+            "Flash",
+            "Mo",
+            "OpenCode"
+          ],
+          "date": "2026-10-13"
+        },
+        {
+          "id": "55250",
+          "title": "바이낸스, AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI' 출시...영어권 사용자부터",
+          "original_title": "",
+          "description": "[디지털투데이 황치규 기자]바이낸스가 AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI'를 전 세계 영어 사용자들을 대상으로 선보였다고 더블록이 12일(현지시간) 보도했다.더블록에 따르면 바이낸스 AI는 무료 서비스로 생성형 UI를 활용해 사용자 관심사와 경험 수준에 맞춘 시장 정보, 포트폴리오 추적, 거래 도구를 보여준다. 생성형 UI는 AI가 사용자 화",
+          "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706585",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-13"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7095,6 +7211,110 @@
         "AtomicChat"
       ],
       "date": "2026-10-12"
+    },
+    {
+      "id": "55266",
+      "title": "[무료 모델] unsloth/embeddinggemma-2-GGUF — HuggingFac",
+      "original_title": "",
+      "description": "트렌딩 상위 오픈소스 모델. task=feature-extraction, 좋아요 284, 다운로드 71,914. 라이선스 확인 후 무료로 로컬 실행 가능.",
+      "link": "https://huggingface.co/unsloth/embeddinggemma-2-GGUF",
+      "entities": [
+        "HuggingFac",
+        "GGUF"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55250",
+      "title": "바이낸스, AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI' 출시...영어권 사용자부터",
+      "original_title": "",
+      "description": "[디지털투데이 황치규 기자]바이낸스가 AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI'를 전 세계 영어 사용자들을 대상으로 선보였다고 더블록이 12일(현지시간) 보도했다.더블록에 따르면 바이낸스 AI는 무료 서비스로 생성형 UI를 활용해 사용자 관심사와 경험 수준에 맞춘 시장 정보, 포트폴리오 추적, 거래 도구를 보여준다. 생성형 UI는 AI가 사용자 화",
+      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706585",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55205",
+      "title": "초보자를 위한 GitHub Copilot 앱: Copilot에게 코드베이스를 가르치는 방법",
+      "original_title": "",
+      "description": "저장소에 커스텀 지침과 스킬을 추가하고, 커스텀 에이전트를 사용하며, Playwright 같은 MCP 서버를 연결하는 방법을 배워보세요. 이 게시물은 GitHub 블로그에 처음 게시되었습니다.",
+      "link": "https://github.blog/ai-and-ml/github-copilot/github-copilot-app-for-beginners-how-to-teach-copilot-about-your-codebase/",
+      "entities": [
+        "Copilot",
+        "GitHub",
+        "Playwright",
+        "MCP"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55232",
+      "title": "Private, offline and yours: how to search the lite",
+      "original_title": "",
+      "description": "",
+      "link": "https://www.nature.com/articles/d41586-026-03227-4",
+      "entities": [
+        "Private"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55428",
+      "title": "[무료 LLM] cat-jam-free — OpenCode Zen 무료 티어",
+      "original_title": "cat-jam-free",
+      "description": "Cat Jam Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/cat-jam-free\"} 프로바이더 갱신일 2026-10-12.",
+      "link": "https://models.dev/opencode/cat-jam-free",
+      "entities": [
+        "Free",
+        "Jam",
+        "Cat",
+        "LLM",
+        "OpenCode",
+        "Zen"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "54938",
+      "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
+      "original_title": "inclusionai/ling-3.1-flash",
+      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
+      "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
+      "entities": [
+        "OpenRouter",
+        "LLM"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55317",
+      "title": "[무료 LLM] inclusionai/ling-3.1-flash — Kilo Free Mo",
+      "original_title": "inclusionai/ling-3.1-flash",
+      "description": "inclusionAI: Ling 3.1 Flash — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"kilo/inclusionai/ling-3.1-flash\"} 프로바이더 갱신일 2026-10-02.",
+      "link": "https://models.dev/kilo/inclusionai/ling-3.1-flash",
+      "entities": [
+        "Kilo",
+        "Free",
+        "Ling",
+        "LLM",
+        "Flash",
+        "Mo",
+        "OpenCode"
+      ],
+      "date": "2026-10-13"
+    },
+    {
+      "id": "55250",
+      "title": "바이낸스, AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI' 출시...영어권 사용자부터",
+      "original_title": "",
+      "description": "[디지털투데이 황치규 기자]바이낸스가 AI 기반 맞춤형 거래 인터페이스 '바이낸스 AI'를 전 세계 영어 사용자들을 대상으로 선보였다고 더블록이 12일(현지시간) 보도했다.더블록에 따르면 바이낸스 AI는 무료 서비스로 생성형 UI를 활용해 사용자 관심사와 경험 수준에 맞춘 시장 정보, 포트폴리오 추적, 거래 도구를 보여준다. 생성형 UI는 AI가 사용자 화",
+      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706585",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-13"
     }
   ]
 }
