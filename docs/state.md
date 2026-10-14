@@ -24,6 +24,9 @@
 - [검증됨] 완료기준 ③ 테스트. `pytest test_blog_draft_generator test_emdash_publish test_emdash_only
   test_compass_draft_compliance test_weekly_blog_publisher -q` → **33 passed**.
   산출 근거: 33 = 29(작업 시작 시점 기준선) + 4(신규). 기준선 29건 전부 그대로 통과(회귀 없음).
+- [검증됨] 완료기준 ④ `npm run deploy` 성공 — Version `80457138-4b75-4b1e-83ec-fe4f94c1001e`, EXIT 0,
+  `Uploaded aikorea24 (25.05 sec)` / aikorea24.kr + www.aikorea24.kr, Worker Startup 35ms,
+  sitemap ping `{"google": true, "naver": true}`.
 - [검증됨] 폴백 제거. 실패 로그 `⚠️ → Astro 유지` → `❌ 글 유실 — 폴백 없음`. 단위 테스트로 실패 시
   `update_deep_dive_url` 호출 자체가 안 일어나고 파일도 안 생김을 확인.
 - [부분검증] 지시서 §2-4 "최소 1회 파이프라인이 EmDash에 정상 발행" — launchd 스케줄 경로는 1회도 실행되지 않음
