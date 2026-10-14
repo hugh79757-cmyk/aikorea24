@@ -18,6 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from threads.dedup import is_same_topic, extract_entities
+from auto_news_selector import MODEL_SOURCES
 
 DEDUP_LOOKBACK_DAYS = 3
 ENTITY_OVERLAP_THRESHOLD = 2
@@ -60,6 +61,17 @@ def is_duplicate_article(article, history_articles):
     title = (article.get('title', '') or '')[:50]
     orig = (article.get('original_title', '') or '')[:30]
     desc = article.get('description', '') or ''
+
+    # AIK24-EFFICIENCY-04 §4-1: 모델 카드는 exact_id 만으로 중복 판정한다.
+    # 같은 모델이 여러 프로바이더로 수집되면 original_title(=모델ID)이 같아서
+    # exact_original_title 이 걸리고, 제목이 비슷해 semantic·entity 까지 같이 걸린다
+    # (2026-10-14 실측: Kilo/OpenRouter ling 이 semantic·exact_original_title 로 탈락).
+    # id 가 없는 항목은 통과시킨다 — 판정 근거가 없으면 막지 않는 쪽이 낫다.
+    if article.get('source') in MODEL_SOURCES:
+        if any(aid and aid == (str(h.get('id', '')) or str(h.get('news_id', '')))
+               for h in history_articles):
+            return True, 'exact_id'
+        return False, None
 
     for h in history_articles:
         hid = str(h.get('id', '')) or str(h.get('news_id', ''))

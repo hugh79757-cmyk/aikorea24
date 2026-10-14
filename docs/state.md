@@ -1,3 +1,57 @@
+## 2026-10-14 09:15 — AIK24-EFFICIENCY-04 모델 중복 판정 완화 + 폴백 (완료)
+
+### 한 일
+- [PRODUCTION CODE] 3파일 51줄.
+  - `scripts/briefing_dedup.py` +12: `is_duplicate_article()` 안에 모델 카드 전용 분기 —
+    `source in MODEL_SOURCES` 면 `exact_id`(news id 동일)만 중복으로 판정하고, 나머지 판정 불문. id 없는 항목은 통과.
+  - `scripts/auto_news_selector.py` +18/-1: `MODEL_STALE_DAYS = 3`, `has_fresh_model()` 신설,
+    `select_top_articles()` 에서 최근 3일 갱신된 모델이 없으면 모델 슬롯 3칸을 비우고 뉴스로 채움(§4-2).
+  - `scripts/auto_briefing.py` +23/-1: 중복 제거 후 빈 모델 슬롯을 평가가 끝난 풀의 남은 모델 카드로 재충전
+    (중복 검사 후 슬롯 수만큼 절단), 로그 `모델 슬롯 재충전: N건`.
+- 뉴스 중복 판정 변경 0줄. D1 스키마 변경 0건. 이메일 발송 0건. 테스트 코드 변경 0건.
+
+### 결과
+- [검증됨] 모델 카드 1건이 브리핑에 들어간다. 근거: 하네스 로그 `/tmp/aik24_eff04_harness2.log`
+  `중복 제거: 4건(모델 3건 전부 [exact_id])` → `모델 슬롯 재충전: 1건 — deepseek-ai/deepseek-v4.1-flas` →
+  `[3/4] 날짜: 2026-10-14 / 아이템: 1개`, 코멘트에 모델카드 블록 `OpenCode에서 무료로 사용 가능 |
+  설정: {"model": "nvidia/deepseek-ai/deepseek-v4.1-flash"}` 포함. D1 쓰기 0건(하네스가 save_briefing 차단).
+- [검증됨] §4-2 폴백. 근거: `/tmp/aik24_eff04_fallback_probe.py` 실측 —
+  실측 `has_fresh_model(원본)=True` / 합성(pub_date=2026-10-01) `False` →
+  `⚠ 최근 3일 신규 무료 모델 없음 — 모델 슬롯 3칸을 뉴스로 채움` → 선정 4건 전부 뉴스(모델 슬롯 0칸).
+  대조군(신선한 모델 4건 + 오래된 뉴스 4건) → 모델 슬롯 3칸 + 뉴스 1칸.
+- [검증됨] exact_id 분기가 모델 카드에만 적용됨. 근거: 하네스 로그에서 뉴스 1건
+  (`[무료 모델] openbmb/MiniCPM-V-4.7-35B-A3B — HuggingFace Trending`)은 `[semantic]` 으로 제거됨 —
+  HuggingFace Trending 은 MODEL_SOURCES 에 없어 기존 판정 경로를 그대로 탔고, 모델 3건은 전부 `[exact_id]`.
+- [검증됨] 배포 성공(완료기준 ④). 근거: `npm run deploy` EXIT=0, `/tmp/aik24_eff04_deploy.log` —
+  `Uploaded aikorea24 (34.52 sec)`, Version ID `a42e249b-2514-4c32-9215-5b0f6de11a95`,
+  sitemap ping `{"google": true, "naver": true}`.
+- [검증됨] 지시서 §4-1 효과 예상(2~3건)과 실측(1건) 차이의 원인 확정. 프로브
+  `/tmp/aik24_eff04_probe.py`: 풀 8건 중 모델 후보는 4건뿐(`MODEL_PER_SOURCE = 1` → 프로바이더별 1건).
+  그 4건 중 3건은 어제(2026-10-13-2) 발행분이라 exact_id 로 탈락, 미발행분은 NVIDIA `deepseek-v4.1-flash`(id 55362) 1건뿐.
+- [부분검증] 실제 06:00 스케줄 파이프라인에서의 반영. 근거: 하네스가 `auto_briefing.main()` 을
+  실제 코드 그대로 실행(저장·발송만 차단)했으나 스케줄 경유는 아님. 복구 계획: 2026-10-15 06:00 실행 후
+  `scripts/pipeline_runner.log` 에서 `모델 슬롯 재충전` / `아이템:` 확인.
+- [부분검증] `model_eval` 가 `deepseek-ai/deepseek-v4.1-flash` 를 `모델 미존재` 로 처리
+  (`⚠️ 모델 ID 판별 실패 → 평가 생략`, LLM 호출 24초 소요). 근거: 하네스 로그. 이번 변경으로 생긴 것이
+  아니며 이 카드가 평가 DB 에 없기 때문. 효과는 코멘트/블로그에서 모델 평가 메타가 빠지는 것.
+
+### 잔존 위험
+- [높음] 모델 후보가 4건으로 고정(`MODEL_PER_SOURCE = 1`)이어서 재충전으로 채울 수 있는 건 최대 1건이다.
+  `deepseek-v4.1-flash`(55362)를 2026-10-15 에 발행하면 10-16 은 후보 4건이 모두 exact_id 또는 3일 신선도
+  폴백에 걸려 모델 0건이 된다. 지속 공급이 필요하면 `MODEL_PER_SOURCE` 상향(예: 3) 지시서가 필요하다.
+  본 작업은 지시서 완료기준(①~④)까지만 구현했고 후보 풀 확장은 범위 밖으로 두었다.
+- [중간] `cat-jam-free`·`ling-3.1-flash` 3건은 `DEDUP_LOOKBACK_DAYS = 3` 때문에 2026-10-17(cutoff 10-14)부터
+  다시 후보가 된다. 그전까지는 위 재충전 1건이 모델 슬롯을 대신한다.
+- [중간] 스케줄 경유 실행 미검증(위 [부분검증]).
+- [낮음] 모델 카드의 중복 판정이 news id 동일성만 보므로, 같은 모델이 회차당 1회만 나온다는 보장은 없다.
+  이번 완화의 의도(여러 판정으로 같은 모델이 몰리게 탈락하던 것 제거)에 부합하나 발행 이력 상 유니크성 약화.
+
+### 다음 행동
+- 2026-10-15 06:00 실행 후 `scripts/pipeline_runner.log` 에서 `모델 슬롯 재충전` / `아이템:` 확인.
+- `MODEL_PER_SOURCE` 상향 지시서 요청 여부 결정(위 [높음] 잔존 위험).
+- `model_eval` 에 `deepseek-ai/deepseek-v4.1-flash` 미등록 — 모델 평가 DB 등록 별건.
+- 보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-14-0910-AIK24-EFFICIENCY-04-완료보고.md`
+
 ## 2026-10-14 08:17 — AIK24-EFFICIENCY-03 모델 카드 수집 05:30 수집기 이관 (완료)
 
 ### 한 일

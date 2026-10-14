@@ -15,7 +15,8 @@ sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 sys.path.insert(0, PROJECT_DIR)
 from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
-from auto_news_selector import (CANDIDATE_LIMIT, cluster_by_topic, d1_query,
+from auto_news_selector import (CANDIDATE_LIMIT, MAX_COUNT, MODEL_SOURCES, MODEL_SLOTS,
+                                 cluster_by_topic, d1_query,
                                  interleave_candidates, select_top_articles)
 import model_eval
 
@@ -244,6 +245,7 @@ def main(selected_articles=None):
 
     if selected_articles is not None:
         selected = selected_articles
+        pool = None
         log(f"  외부 선정 사용: {len(selected)}개 기사")
     else:
         # PIPE-03: 모델이 161건으로 풀을 덮으면 뉴스 1건 슬롯이 비므로 태그 교차로 섞는다.
@@ -258,6 +260,7 @@ def main(selected_articles=None):
             for art in cluster_articles:
                 art["cluster"] = cluster_name
         selected = select_top_articles(clusters, max_count=4)  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
+        pool = articles
         log(f"  선정: {len(selected)}개 기사")
 
     # Phase 2 중복 방어 (저장 전 재검증). AIK24-BLOG-01: run_pipeline가 기사를 넘기는
@@ -269,6 +272,24 @@ def main(selected_articles=None):
             title = (art.get("title") or "")[:50]
             log(f"    [{reason}] {title}")
     selected = cutoff
+    # AIK24-EFFICIENCY-04: 모델 카드는 exact_id 만 남으므로 슬롯이 빈 채로 끝날 수 있다
+    # (어제 발행분을 오늘 후보가 되풀이하는 상황). 평가가 끝난 풀의 남은 모델 카드로
+    # 중복 검사만 다시 하고 채운다. 그래도 모자라면 §4-2 폴백이 적용된 상태 그대로 둔다.
+    if pool:
+        used = {a.get('id') for a in selected}
+        short = min(MODEL_SLOTS - sum(1 for a in selected if a.get('source') in MODEL_SOURCES),
+                    MAX_COUNT - len(selected))
+        refill = [a for a in pool
+                  if a.get('source') in MODEL_SOURCES and a.get('id') not in used]
+        if refill:
+            # 중복 검사 후 슬롯 수만큼 자른다. 반대로 하면 이미 발행된 후보가
+            # 앞을 채워 미발행 모델 카드가 잘려 나간다 (2026-10-14 하네스에서 확인).
+            refill, _ = filter_duplicates(refill, d1_query)
+            refill = refill[:short]
+            if refill:
+                log(f"  모델 슬롯 재충전: {len(refill)}건 — "
+                    + ", ".join((a.get('original_title') or a.get('title') or '')[:30] for a in refill))
+            selected += refill
     selected = merge_same_models(selected)
 
     if not selected:

@@ -59,6 +59,7 @@ def log(msg):
 MODEL_SOURCES = ("OpenCode Zen", "OpenRouter Free Models", "Kilo Free Models", "NVIDIA NIM Free")
 MODEL_POOL = 12  # 모델 후보 fetch 깊이 (아래 MODEL_PER_SOURCE 로 추린다)
 MODEL_PER_SOURCE = 1  # 프로바이더별 최신 1건씩 → 모델 슬롯 후보 최대 4건
+MODEL_STALE_DAYS = 3  # AIK24-EFFICIENCY-04 §4-2: 이 기간 안에 갱신된 무료 모델이 없으면 모델 슬롯을 비운다
 
 
 def _sql_in(values):
@@ -161,13 +162,28 @@ def _take(ranked, limit):
     return out
 
 
+def has_fresh_model(models):
+    """AIK24-EFFICIENCY-04 §4-2: 최근 3일 안에 갱신된 모델 카드가 하나라도 있는가.
+
+    프로바이더가 새 무료 모델을 내놓지 않으면 후보가 며칠 전 카드로 남아 반복 출력이
+    되므로, 그 경우 모델 슬롯을 비우고 뉴스로 채운다.
+    """
+    cutoff = (datetime.now(KST) - timedelta(days=MODEL_STALE_DAYS)).strftime('%Y-%m-%d')
+    return any((a.get('pub_date') or '')[:10] >= cutoff for a in models)
+
+
 def select_top_articles(clusters, max_count=MAX_COUNT):
     """클러스터 dict → 모델 3건(최신성·프로바이더 로테이션) + 뉴스 1건."""
     articles = [a for group in (clusters or {}).values() for a in group]
     # 최신 갱신일(pub_date) 순. 갱신일 없는 항목은 최후.
     ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
 
-    picked = _take([a for a in ranked if a.get("source") in MODEL_SOURCES], MODEL_SLOTS)
+    models = [a for a in ranked if a.get("source") in MODEL_SOURCES]
+    if models and not has_fresh_model(models):
+        log(f"  ⚠ 최근 {MODEL_STALE_DAYS}일 신규 무료 모델 없음 — 모델 슬롯 {MODEL_SLOTS}칸을 뉴스로 채움")
+        picked = []
+    else:
+        picked = _take(models, MODEL_SLOTS)
     # 뉴스 슬롯은 free-llm 을 받지 않는다 (지시서 §4-3 — 뉴스는 정보성이 기준).
     used = {p["id"] for p in picked}
     rest = [a for a in ranked if a["id"] not in used and a.get("source") not in MODEL_SOURCES]
