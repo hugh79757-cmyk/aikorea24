@@ -264,13 +264,21 @@ def collect_rss():
     return out
 
 
-def collect_all():
+# AIK24-EFFICIENCY-03: 05:30 수집기가 `--models-only` 로 이 두 개만 가져간다.
+# collect_rss() 는 번역에 LLM 을 호출해 Step 0 을 228초 먹였으므로 제외한다.
+MODEL_COLLECTORS = (
+    (collect_openrouter_free, "OpenRouter free models"),
+    (collect_cli_free, "CLI 무료 모델 (OpenCode Zen·Kilo·NVIDIA NIM)"),
+)
+
+
+def collect_all(models_only=False):
     rows = []
     for fn, label in (
-        (collect_openrouter_free, "OpenRouter free models"),
-        (collect_cli_free, "CLI 무료 모델 (OpenCode Zen·Kilo·NVIDIA NIM)"),
-        (collect_hf_trending, "HuggingFace trending"),
-        (collect_rss, "RSS (HuggingFace Blog) — AIK24-NEWS-01"),
+        MODEL_COLLECTORS if models_only else MODEL_COLLECTORS + (
+            (collect_hf_trending, "HuggingFace trending"),
+            (collect_rss, "RSS (HuggingFace Blog) — AIK24-NEWS-01"),
+        )
     ):
         try:
             got = fn()
@@ -331,10 +339,14 @@ def save(rows):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true", help="수집만 하고 D1 미쓰기")
+    # AIK24-EFFICIENCY-03: 05:30 수집기(kr.aikorea24.news-unified)가 이 플래그로
+    # 4개 CLI 프로바이더 무료 모델 카드만 수집한다 (Step 0 이관분).
+    ap.add_argument("--models-only", action="store_true",
+                    help="모델 카드 4종만 수집 (HF trending·RSS 제외)")
     a = ap.parse_args()
 
     print(f"aikorea24 뉴스 수집기 v2 (AIK24-PIPE-02) — account={cfnew.ACCT[:8]}…")
-    rows = collect_all()
+    rows = collect_all(models_only=a.models_only)
     by_src = {}
     for r in rows:
         by_src[r["source"]] = by_src.get(r["source"], 0) + 1

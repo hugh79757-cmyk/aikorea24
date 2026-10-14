@@ -1232,6 +1232,22 @@ def main():
     saved, skipped = save_to_d1(all_items)
     print(f"  신규: {saved}건 | 중복 스킵: {skipped}건")
 
+    # === 모델 카드 수집 (AIK24-EFFICIENCY-03) ===
+    # EFFICIENCY-02 가 Step 0 을 끄면서 사라진 4개 CLI 프로바이더 무료 모델 카드다.
+    # 같은 news 테이블·같은 중복 제거 로직을 재사용하되, 별도 프로세스로 돌려
+    # 뉴스 수집이 실패해도 모델 카드 수집은 되고 그 반대도 성립하게 한다.
+    print('\n[모델 카드] 4개 CLI 프로바이더 무료 모델 수집...')
+    try:
+        r = subprocess.run(
+            [sys.executable, os.path.join(PROJECT_DIR, 'scripts', 'news_collector_v2.py'), '--models-only'],
+            capture_output=True, text=True, cwd=PROJECT_DIR, timeout=300)
+        for line in (r.stdout or '').splitlines():
+            print('  ' + line)
+        if r.returncode != 0:
+            print(f"  ⚠ 모델 카드 수집 실패 rc={r.returncode}: {(r.stderr or '')[-300:]}")
+    except Exception as e:
+        print(f"  ⚠ 모델 카드 수집 에러(무시하고 계속): {e}")
+
     print('\n' + '=' * 60)
     print(f"완료! 총 {saved}건 저장")
 
