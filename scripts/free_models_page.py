@@ -35,6 +35,12 @@ CARD_LIMIT = 4
 REVIEWS_PATH = mc.CATALOG_DIR / "model_reviews.json"
 FAILED_PATH = mc.CATALOG_DIR / "model_eval_failed.json"
 ZEN_PENDING_PATH = mc.CATALOG_DIR / "zen_pending.json"
+
+# AIK24-PIPE-01(2026-10-14, 대표님 확정): 무료 모델 자동 평가를 끈다. CLI 라 평가가
+# 주니어 머신에 묶여 서버 자동화가 불가해진 현실 + "수동 테스트 → 블로그 업데이트" 정책.
+# 수동 평가 경로는 그대로 살아 있다: `python3 scripts/free_models_page.py evaluate --force`
+# 또는 `python3 scripts/model_eval.py evaluate --model <id>`.
+AUTO_EVAL_ENABLED = False
 # 403/401/404 는 키로 접근이 안 되는 상태라 내일도 같다 → 영구 스킵 목록에 적는다.
 # 429/타임아웃은 일시적이므로 적지 않는다(내일 다시 시도해야 한다).
 PERMANENT_FAIL = ("401", "403", "404")
@@ -424,10 +430,16 @@ def cmd_daily(day=None, limit=1):
     except Exception as e:
         steps.append(f"리스트 페이지 실패: {type(e).__name__}: {e}")
 
-    try:
-        steps.append(f"평가·발행 rc={cmd_evaluate(day, limit)}")
-    except Exception as e:
-        steps.append(f"평가 실패: {type(e).__name__}: {e}")
+    # AIK24-PIPE-01: 자동 평가를 비활성화했다. CLI 특성상(주니어 Mac 필요) 서버 자동화가 불가해
+    # 수동 평가로 전환. 여기서 True 로 되돌리면 다시 자동 평가가 돌아간다.
+    # 수집(mc.run)과 리스트 페이지 갱신(cmd_page)은 계속 돈다 — 모델 리스트 파악은 하루 1회 유지.
+    if AUTO_EVAL_ENABLED:
+        try:
+            steps.append(f"평가·발행 rc={cmd_evaluate(day, limit)}")
+        except Exception as e:
+            steps.append(f"평가 실패: {type(e).__name__}: {e}")
+    else:
+        steps.append("평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환)")
 
     revs = reviews()
     steps.append(f"심층 리뷰 {len(revs)}건 (리스트 카드 링크 {sum(1 for u in revs.values())}건)")
