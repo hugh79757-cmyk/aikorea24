@@ -1,33 +1,27 @@
-## 2026-10-14 13:12 AIK24-EMDASH-05 완료 — EmDash CMS git 저장소화 + /posts 페이지네이션 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1312-AIK24-EMDASH-05-완료보고.md (완료 — verify 요청)
+## 2026-10-14 13:45 AIK24-RENEWAL-01 B그룹(디자인 7건)현황 감사 — B-1/B-2 이미 적용됨 확인, 잔여 1건 + 스펙 확인 대기
 
 ### 한 일
-- 작업 1 [PRODUCTION CODE 밖 / 저장소]: `~/projects2/aikorea24emdash` git 저장소화. `.gitignore` 6줄 → 커밋 `5aa38bd`(83개 파일 추적, node_modules 0) → GitHub private `hugh79757-cmyk/aikorea24-emdash` 생성·푸시.
-- 작업 2 [PRODUCTION CODE]: `src/pages/posts/index.astro` 단독 — `?page=N` 페이지네이션(12편/페이지), 카운트 쿼리, 404 판정, 페이지네이션 UI, canonical, 그리고 canonical 절대 URL 수정.
-- 커밋 `36f9aa5`, `origin/main` 푸시 완료.
+- 지시(원문): "10-11 백로그(B디자인·C버그·D프롬프트·E이관) … 다해줘 / 마무리 하자."
+- [PRODUCTION CODE] **없음.** 감사만. 이유 하단.
 
-### 결과
-- [검증됨] 완료기준 1: `/posts`·`?page=1` → 200 / 12편 / `전체 1481편 · 1/124페이지`.
-- [검증됨] 완료기준 2: `?page=2` → 200 / 12편, **page1∩page2 카드 href 교집합 0건**.
-- [검증됨] 완료기준 3: `?page=124` → 200 / **5편** (123×12+5=1481 일치).
-- [검증됨] 완료기준 4: `?page=125` → **404** / 0편.
-- [검증됨] 완료기준 5: `?page=abc`·`?page=0` → 200 / 12편 / 1/124페이지(page=1 동일).
-- [검증됨] 완료기준 6: `<nav class="pagination" aria-label="페이지네이션">` 렌더. page=1 → 「« 이전」이 `<span class="pg disabled" aria-disabled="true">`, page=124 → 「다음 »」동일. 현재 페이지 `<span class="pg current" aria-current="page">`. 간격 생략은 `<span class="pg-gap">…`.
-- [검증됨] 완료기준 7: `/posts` **5회 연속 200**.
-- [검증됨] 완료기준 8: `npm run typecheck` 6 errors — 전부 기존 파일(`og-image.ts` 3, `sanitize.ts` 1, `src/pages/index.astro` 2). `posts/index.astro` 신규 0건.
-- [검증됨] 지시서 §7 canonical: `/posts` → `https://emdash.aikorea24.kr/posts`, `?page=2` → `…/posts?page=2`, `?page=124` → `…?page=124`. `robots="noindex, follow"` 유지.
-- [검증됨] 배포 Version ID: 1차 `75124e5a-7c5f-49ca-be13-178939797363`, canonical 수정 후 **`361bacea-a1dc-4eb8-bf20-d0d17d6ea41c`**.
+### 결과 — B그룹 7건 실측
+| 항목 | 상태 | 근거 |
+|---|---|---|
+| B-1 7일강의 배경(검정→흰/검정텍스트) | **[완료]** | `courses/7day-starter.astro:25` `class="bg-white text-[#111111] min-h-screen"`. 검정 배경 아님. |
+| B-2 초록/핑크 제거(전제 "25개 파일") | **[사실과 불일치 — 잔여 1건]** | `global.css` 토큰은 이미 흑백+빨강(`--bg-primary:#ffffff`, `--text-primary:#111111`, `--accent-red:#E63B2E`). `grep -rniE "green\|pink" src/` → 웹 UI 에 **2건만**. Tailwind 초록/핑크 21건은 전부 `src/auto_poster/`(Threads 카드, 웹 아님). |
+| B-3 타임라인 통일 | **[감사 불가]** | 대상 4파일(`tools/finder`, `compare`, `chronicle/[...id]`) 확인. "통일" 기준이 스펙에 없어 판정 불가. |
+| B-4 푸터 통일 | **[감사 불가]** | `src/components/` 에 Footer 컴포넌트 없음 — `layouts/Layout.astro` 인라인. 비교 대상 부재. |
+| B-5 EmDash 헤더/푸터 | **[감사 불가]** | EmDash CMS 소스(`~/projects2/aikorea24emdash`) 대상. aikorea24 사이트와 디자인 기준 공유 여부 불명. |
+| B-6 블로그 타이포(글자크기·대칭·표→단락·여백) | **[대상 이동]** | Astro 블로그 소스 삭제 완료(EMDASH-04) → 대상이 `~/projects2/aikorea24emdash/src/pages/posts/[slug].astro` 로 옮겨감. |
+| B-7 마스코트 배치 | **[감사 불가]** | `mascot` 참조 5파일(`home/HeroSection`, `home/ToolsSection`, `404`, `global`, `unsubscribe`). "배치" 기준 미정의. |
 
-### 지시서 대비 차이 / 버그
-- canonical 이 첫 배포에서 **미출력** → 원인 확정: `emdash/dist/page/index.mjs` `resolvePageMetadata()` 의 `if (!isSafeHref(c.href)) continue;` 가 **상대 href 를 link contribution 에서 버린다**. `robots` 는 meta 라 살아남었던 것. → 절대 URL 로 변경해 해소.
-- 카드 "N분 소요" 복원 안 함(지시서 범위 밖 준수).
+- [검증됨] B-2 잔존 2곳: `src/pages/chronicle/index.astro:17` `color: "green"` — **죽은 필드**(91행에서 `.emoji` 만 사용, `.color` 미사용) / `:37` `border-l-green-500` — `borderColorClass()` 에서 실제 사용됨.
+- [검증됨] E그룹(블로그 이관)은 EMDASH-01~05 로 완료. D그룹도 D-1/D-2/D-3 완료. C그룹 5건 완료.
 
 ### 잔존 위험
-1. **목록 12편 + 124페이지 구성** — UI 진입은 `/?page=N` 이며 카드에서 다른 페이지로 가는 링크는 없다(뒤로/앞으로만). 1,481편 전체 도달 가능하나 탐색성 약함.
-2. `/posts` 는 `robots="noindex, follow"` 이므로 검색 노출 대상이 아님(기존 정책 유지).
-3. `/category/{term}` 은 여전히 404(Astro 카테고리 페이지 삭제 후 대체 없음).
-4. 콘솔 엣지 캐시 규칙 미적용 — 에이전트 토큰에 `Zone Rulesets:Edit` 스코프 없음([검증불가], 대표님 직접).
-5. typecheck 6건은 기존부터 있던 문제(이번 작업 무관).
+1. **B그룹 잔여 5건(B-3/B-4/B-5/B-6/B-7)을 임의 스펙으로 수정하지 않음** — RENEWAL-01 의 서술은 "통일/대칭/여백" 처럼 정량 기준이 없어 재작업하면 대표님 의도와 어긋날 수 있음.
+2. chronicle 의 5개 카테고리는 blue/green/red/purple/amber 색 구분|border-left)이라 "green 만 제거" 하면 5색 중 1개만 빠진 비대칭 상태가 됨.
+3. `border-l-green-500` 는 실제 렌더에 영향. 미수정 상태.
 
 ### 다음 행동
-- 대표님: 콘솔 캐시 규칙 생성(`/tmp/cache_ruleset.json`), 카테고리 페이지 대체안 결정.
-
+- 대표님: (a) chronicle 초록 border 색 결정(검정/회색/유지) (b) B-3~B-7 정량 스펙(또는 대상 화면 스크린샷) 제공 시 그 기준으로 재작업.
