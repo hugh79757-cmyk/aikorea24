@@ -1,0 +1,541 @@
+{
+ "fetchedAt": "2026-10-14T21:59:22+0700",
+ "sources": {
+  "opencode_data": {
+   "url": "https://opencode.ai/data/index.json",
+   "updatedAt": "2026-10-14T13:24:19.000Z",
+   "temporalCoverage": "2026-08-20/2026-10-14",
+   "retention": [
+    {
+     "model": "mimo-v2.6-flash",
+     "name": "MiMo-V2.6-Flash",
+     "page": "https://opencode.ai/data/xiaomi/mimo-v2-6-flash",
+     "retentionPercent": 80.3,
+     "eligibleUserWeeks": 2803,
+     "retainedUserWeeks": 2251
+    },
+    {
+     "model": "space-bunny",
+     "name": "space-bunny",
+     "page": "https://opencode.ai/data/unknown/space-bunny",
+     "retentionPercent": 80,
+     "eligibleUserWeeks": 8232,
+     "retainedUserWeeks": 6583
+    },
+    {
+     "model": "muse-spark-1.2-contributor",
+     "name": "Muse Spark 1.2 Contributor",
+     "page": "https://opencode.ai/data/meta/muse-spark-1-2-contributor",
+     "retentionPercent": 78.3,
+     "eligibleUserWeeks": 9072,
+     "retainedUserWeeks": 7102
+    },
+    {
+     "model": "kimi-k2.5",
+     "name": "Kimi K2.5",
+     "page": "https://opencode.ai/data/moonshotai/kimi-k2-5",
+     "retentionPercent": 77.1,
+     "eligibleUserWeeks": 214,
+     "retainedUserWeeks": 165
+    },
+    {
+     "model": "mimo-v2.5",
+     "name": "MiMo-V2.5",
+     "page": "https://opencode.ai/data/xiaomi/mimo-v2-5",
+     "retentionPercent": 72.1,
+     "eligibleUserWeeks": 26400,
+     "retainedUserWeeks": 19039
+    },
+    {
+     "model": "qwen3.5-plus",
+     "name": "Qwen3.5 Plus",
+     "page": "https://opencode.ai/data/alibaba/qwen3-5-plus",
+     "retentionPercent": 71.9,
+     "eligibleUserWeeks": 139,
+     "retainedUserWeeks": 100
+    },
+    {
+     "model": "hy3",
+     "name": "Hy3",
+     "page": "https://opencode.ai/data/tencent/hy3",
+     "retentionPercent": 71.5,
+     "eligibleUserWeeks": 3375,
+     "retainedUserWeeks": 2414
+    },
+    {
+     "model": "minimax-m2.5",
+     "name": "MiniMax-M2.5",
+     "page": "https://opencode.ai/data/minimax/minimax-m2-5",
+     "retentionPercent": 69.4,
+     "eligibleUserWeeks": 245,
+     "retainedUserWeeks": 170
+    },
+    {
+     "model": "deepseek-v4-flash",
+     "name": "DeepSeek V4 Flash",
+     "page": "https://opencode.ai/data/deepseek/deepseek-v4-flash",
+     "retentionPercent": 69.3,
+     "eligibleUserWeeks": 272483,
+     "retainedUserWeeks": 188732
+    },
+    {
+     "model": "qwen3.7-plus",
+     "name": "Qwen3.7 Plus",
+     "page": "https://opencode.ai/data/alibaba/qwen3-7-plus",
+     "retentionPercent": 67.1,
+     "eligibleUserWeeks": 8393,
+     "retainedUserWeeks": 5629
+    },
+    {
+     "model": "muse-spark-1.3-contributor",
+     "name": "Muse Spark 1.3 Contributor",
+     "page": "https://opencode.ai/data/meta/muse-spark-1-3-contributor",
+     "retentionPercent": 67,
+     "eligibleUserWeeks": 41215,
+     "retainedUserWeeks": 27615
+    },
+    {
+     "model": "glm-5",
+     "name": "GLM-5",
+     "page": "https://opencode.ai/data/zhipuai/glm-5",
+     "retentionPercent": 66.7,
+     "eligibleUserWeeks": 384,
+     "retainedUserWeeks": 256
+    },
+    {
+     "model": "minimax-m2.7",
+     "name": "MiniMax-M2.7",
+     "page": "https://opencode.ai/data/minimax/minimax-m2-7",
+     "retentionPercent": 66.1,
+     "eligibleUserWeeks": 2237,
+     "retainedUserWeeks": 1479
+    },
+    {
+     "model": "mimo-v2.5-pro",
+     "name": "MiMo-V2.5-Pro",
+     "page": "https://opencode.ai/data/xiaomi/mimo-v2-5-pro",
+     "retentionPercent": 65.7,
+     "eligibleUserWeeks": 5061,
+     "retainedUserWeeks": 3323
+    },
+    {
+     "model": "gpt-6-luna",
+     "name": "GPT-6 Luna",
+     "page": "https://opencode.ai/data/openai/gpt-6-luna",
+     "retentionPercent": 65.2,
+     "eligibleUserWeeks": 3454,
+     "retainedUserWeeks": 2251
+    }
+   ],
+   "excluded": "dailyTokens·dailyUniqueUsers·marketShare·countries — 토큰 점유율은 '무료라서 많이 씀'과 '좋아서 많이 씀'이 섞여 해석 불가(대표님 원칙)"
+  },
+  "kilobench": {
+   "url": "https://kilo.ai/kilobench",
+   "free": [
+    {
+     "model": "Hy3",
+     "rawName": "Hy3 (free)",
+     "completionPercent": 47.6,
+     "costUsdPerAttempt": 0.0
+    },
+    {
+     "model": "Nemotron 3 Super",
+     "rawName": "Nemotron 3 Super (free)",
+     "completionPercent": 15.5,
+     "costUsdPerAttempt": 0.0
+    }
+   ]
+  },
+  "zen_policy": {
+   "url": "https://opencode.ai/v2/docs/console/models/",
+   "freeModels": [
+    {
+     "model_id": "jev-1.13-free",
+     "name": "Jev 1.13 Free",
+     "endpoint": "https://opencode.ai/inference/v1/systemone",
+     "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+     "trainsOnPrompts": false
+    },
+    {
+     "model_id": "big-pickle",
+     "name": "Big Pickle",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+     "trainsOnPrompts": true
+    },
+    {
+     "model_id": "space-bunny-free",
+     "name": "openai-compatible Space Bunny Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+     "trainsOnPrompts": false
+    },
+    {
+     "model_id": "cat-jam-free",
+     "name": "openai-compatible Cat Jam Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "학습 미사용. 안전 목적으로 30일 보관",
+     "trainsOnPrompts": false
+    },
+    {
+     "model_id": "longcat-2.5-preview-free",
+     "name": "penai-compatible LongCat 2.5 Preview Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+     "trainsOnPrompts": false
+    },
+    {
+     "model_id": "step-5-preview-free",
+     "name": "openai-compatible Step 5 Preview Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+     "trainsOnPrompts": false
+    },
+    {
+     "model_id": "exo-free",
+     "name": "openai-compatible Exo Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+     "trainsOnPrompts": true
+    },
+    {
+     "model_id": "mimo-v2.6-flash-free",
+     "name": "openai-compatible MiMo-V2.6-Flash Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+     "trainsOnPrompts": true
+    },
+    {
+     "model_id": "mimo-v2.5-free",
+     "name": "openai-compatible MiMo-V2.5 Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+     "trainsOnPrompts": true
+    },
+    {
+     "model_id": "nemotron-3-ultra-free",
+     "name": "openai-compatible Nemotron 3 Ultra Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "NVIDIA 무료 엔드포인트 — 시험용. 로그가 NVIDIA 제품 개선에 사용됨",
+     "trainsOnPrompts": true
+    },
+    {
+     "model_id": "nemotron-3.5-lightning-free",
+     "name": "ai-compatible Nemotron 3.5 Lightning Free",
+     "endpoint": "https://opencode.ai/inference/v1/chat/completions",
+     "dataPolicy": "NVIDIA 무료 엔드포인트 — 시험용. 로그가 NVIDIA 제품 개선에 사용됨",
+     "trainsOnPrompts": true
+    },
+    {
+     "model_id": "muse-spark-1.3-contributor-free",
+     "name": "ompatible Muse Spark 1.3 Contributor Free",
+     "endpoint": "https://opencode.ai/inference/v1/responses",
+     "dataPolicy": "프롬프트·완성을 Meta 미래 모델 학습에 사용하는 조건의 할인",
+     "trainsOnPrompts": true
+    }
+   ]
+  }
+ },
+ "combined": {
+  "thresholds": {
+   "evalRatioMin": 0.6,
+   "retentionMin": 50.0,
+   "kilobenchMin": 40.0
+  },
+  "models": [
+   {
+    "model": "big-pickle",
+    "signals": {
+     "zen": {
+      "model_id": "big-pickle",
+      "name": "Big Pickle",
+      "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+      "trainsOnPrompts": true
+     }
+    }
+   },
+   {
+    "model": "cat-jam",
+    "signals": {
+     "zen": {
+      "model_id": "cat-jam-free",
+      "name": "openai-compatible Cat Jam Free",
+      "dataPolicy": "학습 미사용. 안전 목적으로 30일 보관",
+      "trainsOnPrompts": false
+     }
+    }
+   },
+   {
+    "model": "deepseek-v4-flash",
+    "signals": {
+     "retention": {
+      "percent": 69.3,
+      "name": "DeepSeek V4 Flash",
+      "eligibleUserWeeks": 272483
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "exo",
+    "signals": {
+     "zen": {
+      "model_id": "exo-free",
+      "name": "openai-compatible Exo Free",
+      "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+      "trainsOnPrompts": true
+     }
+    }
+   },
+   {
+    "model": "glm-5",
+    "signals": {
+     "retention": {
+      "percent": 66.7,
+      "name": "GLM-5",
+      "eligibleUserWeeks": 384
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "gpt-6-luna",
+    "signals": {
+     "retention": {
+      "percent": 65.2,
+      "name": "GPT-6 Luna",
+      "eligibleUserWeeks": 3454
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "hy3",
+    "signals": {
+     "retention": {
+      "percent": 71.5,
+      "name": "Hy3",
+      "eligibleUserWeeks": 3375
+     },
+     "kilobench": {
+      "completionPercent": 47.6,
+      "costUsdPerAttempt": 0.0,
+      "name": "Hy3 (free)"
+     }
+    },
+    "verdict": "강한 추천"
+   },
+   {
+    "model": "jev-1.13",
+    "signals": {
+     "zen": {
+      "model_id": "jev-1.13-free",
+      "name": "Jev 1.13 Free",
+      "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+      "trainsOnPrompts": false
+     }
+    }
+   },
+   {
+    "model": "kimi-k2.5",
+    "signals": {
+     "retention": {
+      "percent": 77.1,
+      "name": "Kimi K2.5",
+      "eligibleUserWeeks": 214
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "longcat-2.5-preview",
+    "signals": {
+     "zen": {
+      "model_id": "longcat-2.5-preview-free",
+      "name": "penai-compatible LongCat 2.5 Preview Free",
+      "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+      "trainsOnPrompts": false
+     }
+    }
+   },
+   {
+    "model": "mimo-v2.5",
+    "signals": {
+     "retention": {
+      "percent": 72.1,
+      "name": "MiMo-V2.5",
+      "eligibleUserWeeks": 26400
+     },
+     "zen": {
+      "model_id": "mimo-v2.5-free",
+      "name": "openai-compatible MiMo-V2.5 Free",
+      "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+      "trainsOnPrompts": true
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "mimo-v2.5-pro",
+    "signals": {
+     "retention": {
+      "percent": 65.7,
+      "name": "MiMo-V2.5-Pro",
+      "eligibleUserWeeks": 5061
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "mimo-v2.6-flash",
+    "signals": {
+     "retention": {
+      "percent": 80.3,
+      "name": "MiMo-V2.6-Flash",
+      "eligibleUserWeeks": 2803
+     },
+     "zen": {
+      "model_id": "mimo-v2.6-flash-free",
+      "name": "openai-compatible MiMo-V2.6-Flash Free",
+      "dataPolicy": "무료 기간 중 수집 데이터를 모델 개선에 사용",
+      "trainsOnPrompts": true
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "minimax-m2.5",
+    "signals": {
+     "retention": {
+      "percent": 69.4,
+      "name": "MiniMax-M2.5",
+      "eligibleUserWeeks": 245
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "minimax-m2.7",
+    "signals": {
+     "retention": {
+      "percent": 66.1,
+      "name": "MiniMax-M2.7",
+      "eligibleUserWeeks": 2237
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "muse-spark-1.2-contributor",
+    "signals": {
+     "retention": {
+      "percent": 78.3,
+      "name": "Muse Spark 1.2 Contributor",
+      "eligibleUserWeeks": 9072
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "muse-spark-1.3-contributor",
+    "signals": {
+     "retention": {
+      "percent": 67,
+      "name": "Muse Spark 1.3 Contributor",
+      "eligibleUserWeeks": 41215
+     },
+     "zen": {
+      "model_id": "muse-spark-1.3-contributor-free",
+      "name": "ompatible Muse Spark 1.3 Contributor Free",
+      "dataPolicy": "프롬프트·완성을 Meta 미래 모델 학습에 사용하는 조건의 할인",
+      "trainsOnPrompts": true
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "nemotron-3-super",
+    "signals": {
+     "kilobench": {
+      "completionPercent": 15.5,
+      "costUsdPerAttempt": 0.0,
+      "name": "Nemotron 3 Super (free)"
+     }
+    },
+    "verdict": "비추천"
+   },
+   {
+    "model": "nemotron-3-ultra",
+    "signals": {
+     "zen": {
+      "model_id": "nemotron-3-ultra-free",
+      "name": "openai-compatible Nemotron 3 Ultra Free",
+      "dataPolicy": "NVIDIA 무료 엔드포인트 — 시험용. 로그가 NVIDIA 제품 개선에 사용됨",
+      "trainsOnPrompts": true
+     }
+    }
+   },
+   {
+    "model": "nemotron-3.5-lightning",
+    "signals": {
+     "zen": {
+      "model_id": "nemotron-3.5-lightning-free",
+      "name": "ai-compatible Nemotron 3.5 Lightning Free",
+      "dataPolicy": "NVIDIA 무료 엔드포인트 — 시험용. 로그가 NVIDIA 제품 개선에 사용됨",
+      "trainsOnPrompts": true
+     }
+    }
+   },
+   {
+    "model": "qwen3.5-plus",
+    "signals": {
+     "retention": {
+      "percent": 71.9,
+      "name": "Qwen3.5 Plus",
+      "eligibleUserWeeks": 139
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "qwen3.7-plus",
+    "signals": {
+     "retention": {
+      "percent": 67.1,
+      "name": "Qwen3.7 Plus",
+      "eligibleUserWeeks": 8393
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "space-bunny",
+    "signals": {
+     "retention": {
+      "percent": 80,
+      "name": "space-bunny",
+      "eligibleUserWeeks": 8232
+     },
+     "zen": {
+      "model_id": "space-bunny-free",
+      "name": "openai-compatible Space Bunny Free",
+      "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+      "trainsOnPrompts": false
+     }
+    },
+    "verdict": "추천 (retention 단일 신호)"
+   },
+   {
+    "model": "step-5-preview",
+    "signals": {
+     "zen": {
+      "model_id": "step-5-preview-free",
+      "name": "openai-compatible Step 5 Preview Free",
+      "dataPolicy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+      "trainsOnPrompts": false
+     }
+    }
+   }
+  ]
+ }
+}
