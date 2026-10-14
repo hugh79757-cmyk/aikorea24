@@ -1,3 +1,86 @@
+## 2026-10-14 AIK24-EMDASH-03 완료 — Astro 저장 제거, EmDash 단독 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1035-AIK24-EMDASH-03-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` +64/-55줄 (커밋 `cde4dfdb`). 9곳 변경:
+  docstring(6-7행) / `next_file_number()` / 신규 모듈변수 `_EMDASH_PENDING` / `save_draft()` / `_save_file()` /
+  `_add_image_to_frontmatter()` / 신규 `_link_d1()` / `_publish_generated_to_emdash()` / `main()` [5c] 주석.
+- 핵심: `_save_file` 의 `open(filepath,"w")` 삭제 → 마크다운을 `_EMDASH_PENDING[filepath]={"md":...,"links":[...]}` 인메모리에 보관.
+  `_add_image_to_frontmatter` 도 파일 read/write → 인메모리 문자열 수정.
+  filepath 문자열은 더 이상 디스크 경로가 아니라 썸네일 디렉터리명(=slug) 을 만드는 식별자로만 사용.
+- `_publish_generated_to_emdash()` 폴백 제거 — 실패 시 `❌ 글 유실 — 폴백 없음` 로그 후 `continue`(다음 글로 진행).
+  성공 시 신규 `_link_d1(url, links)` 로 deep_dive_url(3회 재시도) + 무료 LLM 코멘트 링크를 **EmDash URL** 로 연결.
+- `next_file_number()` 디스크 glob 스캔 제거 → `int(datetime.now(KST).strftime("%H%M%S"))`.
+- [TEST CODE] `tests/test_emdash_only.py` 신규 98줄 4건 (네트워크·D1 전부 monkeypatch).
+- Astro 파일 삭제 0건 · D1 스키마 변경 0건 · 이메일 발송 0건. 검증용 임시 글 1건 발행 후 DELETE(404 확인).
+
+### 결과
+- [검증됨] 완료기준 ① Astro 저장 제거. 근거: `grep "open(.*\"w\"|makedirs|shutil|os.remove" scripts/blog_draft_generator.py` → 0건.
+  실실행 `save_draft()` 후 `os.path.exists(filepath)` = False, `src/content/blog/*.md` 개수 **1,479 → 1,479** (불변).
+- [검증됨] 완료기준 ② EmDash 단독 발행. 실제 파이프라인 경로(save_draft → _publish_generated_to_emdash)로 실발행 →
+  `https://emdash.aikorea24.kr/posts/aik24-emdash-03-검증-emdash-단독-발행-확인`, id `01M4W7TSW9NH8Y0366D8DCQ58Z`,
+  status `published`, 라이브 HTTP **200 / 33,631 bytes**, 본문·목록·인용문·코드블록 4/4 확인.
+  같은 실행에서 `next_file_number("2026-10-14")` → `123824`(HHMMSS) 동작 확인.
+  정리: `DELETE .../posts/01M4W7TSW9NH8Y0366D8DCQ58Z` → `{"deleted":true}`, 재요청 HTTP **404**.
+- [검증됨] 완료기준 ③ 테스트. `pytest test_blog_draft_generator test_emdash_publish test_emdash_only
+  test_compass_draft_compliance test_weekly_blog_publisher -q` → **33 passed**.
+  산출 근거: 33 = 29(작업 시작 시점 기준선) + 4(신규). 기준선 29건 전부 그대로 통과(회귀 없음).
+- [검증됨] 폴백 제거. 실패 로그 `⚠️ → Astro 유지` → `❌ 글 유실 — 폴백 없음`. 단위 테스트로 실패 시
+  `update_deep_dive_url` 호출 자체가 안 일어나고 파일도 안 생김을 확인.
+- [부분검증] 지시서 §2-4 "최소 1회 파이프라인이 EmDash에 정상 발행" — launchd 스케줄 경로는 1회도 실행되지 않음
+  (`logs/`, `scripts/logs/` 내 `[5c]` 로그 grep 0건). 동일 코드를 직접 호출하는 실발행으로 코드 경로 전체를 검증함.
+  판정법: 다음 스케줄 실행 로그의 `[5c] EmDash 발행 결과: 성공 N / 전체 M`.
+
+### 잔존 위험
+1. launchd 스케줄 경로 미실행 ([부분검증] — 위 판정법).
+2. 단일 source of truth 유실 위험 — 폴백이 없어 EmDash create 실패 시 그 글은 로그 문자열 외 복구 수단 없음.
+   create 4xx/5xx 최종 실패 시 `publish_post` 가 `None` 을 반환한다(재시도는 `emdash04_migrate.api` 내부의 5xx 한정).
+3. 본문 이미지 URL 미검증 — `featured_image` 가 `/images/{slug}/thumbnail.webp` 상대경로(aikorea24.kr Astro 산출물)인데,
+   이번 검증 글에 이미지 블록이 없어 EmDash 도메인 로드 여부를 확인하지 못했다. EMDASH-02 잔존 위험 4에서 이관.
+4. 301 리다이렉트 미설정 — 기존 Astro 글 1,479건은 `aikorea24.kr/blog/...` 그대로, 새 글은 EmDash 전용. `docs/emdash_url_map.csv` 준비됨.
+5. Astro 소스 미삭제 — 지시서 §4-1 준수(삭제 금지). 별도 지시서.
+6. `scripts/weekly_blog_publisher.py`(주간 대비 글)는 자체 Astro 저장 경로 유지 — 지시서가 blog_draft_generator.py 만 지정. 미결정.
+7. `main()` [6] 자동 배포가 `generated` 비어있지 않으면 계속 실행 — Astro 산출물 변화가 없어 무해하나 무의미한 빌드 반복. 지시서에 제거 지시 없어 유지.
+8. `scripts/regenerate_blog_0811.py` 가 `save_draft`/`_add_image_to_frontmatter` 를 import 하나 2026-08-11 대상 1회성 스크립트 —
+   import 는 정상이나 이제 산출 파일이 없다. 대상 날짜가 과거라 영향 없음, 미수정.
+
+### 다음 행동
+- 대표님 verify 후 승인.
+- 다음 스케줄 실행 후 `[5c]` 로그 성공 건수 확인(잔존 위험 1).
+- 잔존 위험 3: 다음 실제 발행 글의 EmDash 페이지 OG 이미지 확인.
+- 별도 지시서: 301 리다이렉트 · Astro 소스 삭제 · 발행 실패 재시도 정책 · weekly_blog_publisher EmDash 전환 여부.
+
+---
+
+## 2026-10-14 AIK24-BLOG-02 완료 — ling-3.1-flash 글 전면 개편 (12문항 재평가 → 10/12, 같은 URL 교체, 배포) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1005-AIK24-BLOG-02-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/model_eval.py` 4줄 — `__main__` 이 `d['cat']` 참조해 KeyError로 죽던 버그 수정(EVAL-02 가 details 키를 `cat`→`axis` 로 바꾼 잔여). 중복 출력 루프 제거 + `call_stability` 1줄 출력 추가.
+- 재평가 실행: `python3 scripts/model_eval.py "inclusionai/ling-3.1-flash" --force` EXIT 0.
+- [CONTENT] `src/content/blog/2026-10-13-007-...md` 전면 재작성(91행 → 145행). 파일명·date·image 유지 = URL 불변.
+- 배포 `npm run deploy` → Version `bdf5fcfa-f074-42cc-84fb-f3b56bb30d89`.
+
+### 결과
+- [검증됨] 재평가 12문항 중 10문항 정답. 근거: 12 − 2(실패) = 10, 실패 2건 = Q4 실제 오답(시간방향 반대 설명) + Q10 판관 파싱 실패. 축별 3+2+3+2 = 10 (지시이행 3/3, 코딩실무 2/3, 맥락유지 3/3, 역할판단 2/3).
+- [검증됨] 호출 실패 0/12 (429·타임아웃 0건). errors 3건 = Q5/Q10/Q12 length 잘림 후 2,000토큰 재시도로 회수(실패 아님).
+- [검증됨] 급수(티어) 표현 0건. 소스 `grep -cE '소네트|클로드|Claude|Opus|[0-9].5급|써보세요|준수한 성능|접근 가이드'` = 0, 라이브 HTML 동일 패턴 = 0건.
+- [검증됨] 라이브 반영: HTTP 200 / 47,470 bytes / h2 8개(①한 줄 판단 ②테스트 개요 ③축별 결과 ④실패 사례 상세 ⑤호출 안정성 ⑥외부 의견 ⑦활용 판단 + 자동 모듈 1개) / 신규 title 반영.
+- [검증됨] 요금 정정 반영 — OpenRouter 실측 입력 $0.075·출력 $0.225/1M토큰(25% 할인), 컨텍스트 262,144. 최초 글의 "무료 티어" 서술을 본문에서 정정.
+- [부분검증] 출처 2(외부 평판 지표) 확보 실패 — HF API 401, HF 검색 0건, Artificial Analysis 본문 없음. 글 안에 실패 사실과 "독립 출처 지표 없음"을 명시했고 추정치는 쓰지 않음.
+- [검증불가] 로그의 `[모델] google gemini-3.5-flash-lite` 가 채점 폴백 체인 판관 호출임은 코드 확인으로 판단했으나(문항 호출은 `_post_question()` 이 payload `"model": model_id` 그대로 전송), 실행 로그만으로 요청 payload 검증은 불가. 복구: 문항 호출부 프록시 로그 1회 후 재실행.
+
+### 잔존 위험
+1. 동일 모델의 구 체계 글 3건 잔존 — `2026-10-13-006-무료-llm-inclusionailing31flash-...`, `2026-10-11-model-inclusionai-ling-3-1-flash.md`(제목에 다른 모델 등급 표현), `2026-10-11-001-무료-llm-분석-인클루전아이-...`. 이번 지시서 범위(007 1건) 밖이라 미수정 → 별도 지시서 필요.
+2. 태그에 "무료 티어" 문자열 잔존(수집기 원문 라벨). 본문에 라벨 출처 명시만 함. 태그 변경은 토픽 페이지 필터에 영향 가능해 미변경.
+3. `score_response()` 가 판관 출력에서 1/0 추출 실패 시 0점 처리 — 측정 오류와 모델 오답이 구분되지 않음. 12문항 점수 전체에 영향 가는 구조적 위험.
+4. `scripts/logs/model_eval_cache.json` 에 미커밋 평가값 잔존. 커밋은 지시서 범위 밖이라 미수행.
+5. 프로덕트 변경은 `model_eval.py` 4줄뿐이고 테스트는 추가하지 않음(콘텐츠 작업). CLI 버그 수정은 재실행 EXIT 0으로만 확인.
+
+### 다음 행동
+- 대표님 verify 후 동일 모델 나머지 3건 개편 지시서 issued.
+- 채점 파이프라인 파싱 실패 처리(Q10 유형) 개선 필요 시 별도 지시서.
+
+---
+
 ## 2026-10-14 AIK24-EMDASH-01/02 완료 — 파이프라인 EmDash 전환 + 기존 1,479건 이관 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1010-AIK24-EMDASH-01-완료보고.md, SSOT/프로젝트/aikorea24/지시서/2026-10-14-1015-AIK24-EMDASH-02-완료보고.md (완료 — verify 요청)
 
 ### 한 일
