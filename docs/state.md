@@ -1,3 +1,99 @@
+## 2026-10-14 AIK24-EVAL-CLI-01 완료 — CLI 경유 모델 평가(cat-jam-free 8/12) + 실효 컨텍스트 프로브 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2120-AIK24-EVAL-CLI-01-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/model_eval.py` +228줄 — 작업2 `eval_model_cli()`·`cli_prompt()`·`cli_call()`·`CLI_MODEL_MAP`, 작업6 `probe_context_length()`·`_probe_doc()`·`_probe_hit()`·상수 4개. `subprocess` import 추가.
+- [PRODUCTION CODE] `scripts/free_models_page.py` — 작업4 `split_zen()` CLI 예외 + `cmd_evaluate()` CLI 분기, 작업5 `pick_cards()`/`render()` source·measured_context 표시. **이 파일은 이전까지 git 미추적이었고(FREE-PIPE-01 세션 산출) 이번 커밋 `245901ad` 로 처음 버전관리됨.**
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` `_cost_block()` 앞부분에 `source=="cli"` 분기 1줄 추가.
+- [TEST CODE] `tests/test_eval_cli.py` 신규 11 tests. `tests/test_zen_pending.py` 3 tests 를 새 계약으로 갱신 + 1 test 추가.
+- 커밋 `245901ad`.
+
+### 결과 (완료기준 6항목)
+1. [검증됨] **작업1 `opencode run` 인터페이스 5항목 문서화** — 도구 비활성화 `--agent <이름>` 지정(=`opencode agent list` 없음), temperature/max_tokens **CLI 플래그 없음**(설정 불가), 멀티턴 `-s <sessionID>` 가능이나 프롬프트 주입 방식 채택, 출력 `--format json` **NDJSON**(실측), 타임아웃 `subprocess.run(timeout=)`+`TimeoutExpired`, 에러 `{"type":"error","error":{"type":"provider.no-route"}}`+exit 1.
+2. [검증됨] **작업2 `cat-jam-free` 12문항 CLI 평가** — `BLOCKED: None` / `score=8/12 failed=0 judge_failed=1 source=cli provider=zen`. LABEL: `11문항 중 8문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 1문항 측정 결함.` 리��보드 기록 `cat-jam-free 8/12 (qv=1)`, 캐시 저장 확인.
+3. [검증됨] **작업3 매핑 테이블** — `CLI_MODEL_MAP = {"cat-jam-free": "opencode/cat-jam-free", "space-bunny-free": "opencode/space-bunny-free"}`. `jev-1.13-free` 미등록(테스트로 고정).
+4. [검증됨] **작업4 파이프라인 분기** — `pick_cards()` 실측 출력에 `cat-jam-free | cli | 컨텍스트 길이 미공개` 노출 확인. CLI 실패 시 zen_pending 사유만 갱신하는 분기 테스트로 고정.
+5. [검증됨] **작업5 API/CLI 구분** — `pick_cards()` 실측으로 `nvidia/nemotron-3-ultra-550b-a55b: | api |` vs `cat-jam-free | cli |` 구분 확인. 기존 API 엔트리 backfill 안 함(캐시 조회 구조).
+6. [검증됨] **작업6 `space-bunny-free` 실측 컨텍스트** — 8K·16K·32K·64K·128K·256K·512K·**1,048,576 전부 OK** → 상한 도달, 하한 `1,048,576` 을 `measured_context` 로 캐시 기록(`CACHE OK`). 즉 **실효 컨텍스트 ≥ 1M** (공칭값이 아니라 니들 테스트 실측).
+
+### 테스트
+- `pytest tests/test_eval_cli.py tests/test_zen_pending.py` → **24 passed** (신규 11 + 갱신 후 13).
+- `pytest tests/` 전체 → **566 passed / 17 failed / 10 skipped**. 실패 17건은 **모두 이번 작업과 무관**: `scripts/deep_dive_writer.py` 434행 세일arius따옴표 SyntaxError 로 14건(HEAD 커밋에서도 동일 — `git show HEAD:scripts/deep_dive_writer.py` 로 확인), 나머지 `test_failed_articles`(1)·`test_pitch`(1)·`test_write_thread_validation`(1). 실패 테스트 4개 파일은 `model_eval`/`free_models_page`/`blog_draft_generator` 를 import 하지 않는다.
+
+### 잔존 위험
+1. **[부분검증] `tests/test_zen_pending.py` 3건은 [TEST CODE] 와 [PRODUCTION CODE] 를 같이 고쳐 통과시킴** — EVAL-ZEN-01 의 "Zen 은 아예 평가 대상이 아니다" 계약이 EVAL-CLI-01 로 "CLI 등록 Zen 만 평가 대상" 으로 바뀐 것이라 갱신이 맞지만, 순환 검증 위험이 있어 별도 표기한다.
+2. **`scripts/deep_dive_writer.py` SyntaxError 미해결** — 14개 테스트가 이 때문에 죽어 있다. 이번 작업 범위 밖. 대표님 지시 필요.
+3. **컨텍스트 실측값은 문자 수 기준 근사**(한국어 1자≈1토큰 가정). 실제 토크나이저 기준보다 클 수 있어 "≈1M" 으로 표기되어야 한다. 상한(1M)에 닿아 경계값이 아니라 **하한** 임에도 `measured_context` 에 하한을 넣었다 — 재측정 금지 규칙 때문에 의도된 선택.
+4. **`record_leaderboard()` 행에 `source` 가 없다** — 지시서 §범위 밖이라 미수정. 소스는 캐시에서 읽는 구조. 리더보드 JSON 만 단독 보면 API/CLI 구분이 안 보인다.
+5. `cat-jam-free` 12번 문항(역할판단)은 판관 파싱 실패(`judge_failed`) — 지시서 §범위 밖이라 판관 로직 미수정.
+
+### 다음 행동
+- 대표님: `scripts/deep_dive_writer.py` SyntaxError 수리 지시 여부.
+- 대표님: free-models 페이지에 `≈N (실측)` 이 실제 반영됐는지 라이브 확인(`cmd_page`/`cmd_daily` 실행).
+## 2026-10-14 19:00 AIK24-EVAL-ZEN-01 완료 — Zen 신규 모델 2종 + context_length null 규칙 확정 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1900-AIK24-EVAL-ZEN-01-완료보고.md (완료 — verify는 시니어 2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/free_models_page.py` 2건.
+  - 작업 3: `ctx_key(row)` 헬퍼 신설 — 미공개 컨텍스트(null·누락)는 0 으로 정렬해 숫자 모델 뒤로 보낸다. 카드 선정·전체 목록·평가 대상 정렬 3곳 통일.
+  - 작업 4: `ZEN_PENDING_PATH` + `zen_pending()` / `mark_zen_pending()` / `split_zen()` 신설. **Zen 모델은 평가 시도 자체를 하지 않고** `zen_pending.json` 에 대기 기록한다(`model_eval_failed.json` = 영구 차단 아님).
+- [TEST CODE] 신규 `tests/test_zen_pending.py` — 12 passed.
+- [CONFIGURED ARTIFACT] `scripts/logs/zen_pending.json` 신규 2건.
+
+### 결과
+- [검증됨] 완료기준 3: `context_length` null 모델이 맨 뒤 + `미공개` 표시. 근거: 라이브 `free-models` 표를 파싱해 숫자 모델 내림차순 8개 뒤 **맨 뒤 10행이 Zen 전부**, HTML 내 `미공개` 문자 10개 = zen 10개와 1:1.
+- [검증됨] 규칙 ①②③: 카드 점수 순서 `11/12 → 7/12`(점수 내림차순). 규칙 3(점수는 컨텍스트 무관)은 `model_leaderboard.json` 엔트리에 컨텍스트 필드가 아예 없음으로 확인.
+- [검증됨] 완료기준 4: zen 2건이 `zen_pending.json` 에 사유와 함께 기록되고 `model_eval_failed.json` 에는 **0건** — 영구 차단되지 않음. `split_zen` 단위 테스트와 실제 함수 호출 양쪽으로 확인.
+- [검증됨] 카드 표기: zen 카드의 스펙은 `컨텍스트 길이 미공개`, 가격은 `가격 미공개`(테스트가 실제 문자열을 비교).
+- [검증됨] **작업 1 — Zen 호출 경로 = 부분 가능** (조사 서브에이전트 실측, 문서 2·3 근거 있음):
+  - `cat-jam-free` — HTTP 직접 호출 **불가**: `POST https://opencode.ai/inference/v1/chat/completions` → **403 `FreeTierError`** "무료 티어는 OpenCode 앱 내부 전용". `x-opencode-session` 헤더·Bearer 토큰 조합 3종 모두 동일. **CLI 경유는 가능** — `opencode run -m opencode/cat-jam-free` → `PONG` (1.8초).
+  - `jev-1.13-free` — HTTP 는 되나 **채팅 경로가 없다**: `/inference/v1/systemone` 이 판정 모델용(systemone, `state`+`questions` 스키마)이라 `messages` 를 받는 12문항 평가에 쓸 수 없다. CLI 는 미등록(`provider.no-route`).
+  - 대조군: 같은 라우트에 유료 모델 `glm-5` 는 **402 잔액 부족** — 인증은 통과했고 라우트는 살아 있다. `~/.config/opencode/models/deepseek-v4-flash.json` 의 `baseURL: https://api.opencode.ai/v1` 은 **죽은 엔드포인트**(200 + body `Not Found`).
+  - Kilo·OpenRouter 에 동일 모델 없음(카탈로그 39행 전수 grep, zen 항목 8건이 전부). models.dev `opencode` 122모델 중 `cat-jam-free` 1건, `jev-1.13` 0건.
+- [검증불가] **작업 2(Zen 2종 12문항 평가) 미실행** — 조사 결과로 실행 불가 확정. `jev-1.13-free` 는 채팅 경로 부재, `cat-jam-free` 는 HTTP 403 + CLI 경유는 `model_eval.py` 에 호출 경로 신설이 필요하나 지시서 **범위 밖**. 0점 기록 안 하고 [검증불가] 처리(지시서 요구 충족).
+
+### 잔존 위험
+1. **Zen 10개는 계속 평가 0점** — OpenRouter 경로가 없는 모델을 OpenRouter 로 부르면 404(모델 부재)다. 지금은 대기 기록으로 막아뒀지만, Zen 호출 경로가 없이는 평가는 영원히 불가능하다. → 조사 결과로 해소: zen HTTP 는 앱 내부 전용(403), `jev-1.13-free` 는 채팅 경로 부재. **CLI(`opencode run`) 경유가 유일한 우회**이고, 그건 별도 지시서가 필요하다.
+2. **Zen 카드의 컨텍스트·가격이 항상 미공개** — Zen 목록 API(`/zen/v1/models`)에 두 필드가 없다. 카드 정렬에서 zen 은 항상 꼴찌다(규칙대로지만 정보가 없는 상태).
+3. **`~/.config/opencode/models/deepseek-v4-flash.json` 의 baseURL 이 죽었다** — `https://api.opencode.ai/v1` 은 200 + body `Not Found`. 올바른 채팅 base 는 `https://opencode.ai/inference/v1`. 이 파일을 읽는 경로가 있으면 zen 호출이 조용히 실패한다(참조는 grep 0건 — 미확인).
+4. **`scripts/model_catalog.py` 의 `ZEN_MODELS` base 재사용 금지** — 목록 전용 `/zen/v1`. 채팅으로 재사용하면 403 `FreeTierError` 만난다.
+3. **`zen_pending.json` 은 사람이 지워야 재시도된다** — 호출 경로가 확보돼도 자동 해제 없다.
+4. **UA 스푸핑 미시험** — Go 문서는 "자체 UA 로 식별"을 요구하지만 `FreeTierError` 는 의도적 액세스 게이트로 읽혀 우회를 시도하지 않았다.
+
+### 다음 행동
+- `cat-jam-free` 만 CLI(`opencode run -m opencode/cat-jam-free`)로 평가 가능. 12문항 자동 주입하려면 `model_eval.py` 에 CLI 호출 경로 신설이 필요 — **지시서 범위 밖이므로 별도 지시서 요청**.
+- `~/.config/opencode/models/deepseek-v4-flash.json` 의 죽은 baseURL 정정(참조 경로 grep 0건이라 실제 영향 미확인).
+- `opencode Zen` 신규 모델이 늘면 `zen_pending.json` 이 늘어난다 — 카드 선정에서 zen 이 정확히 4개가 될 때까지는 빈칸이 뜬다.
+
+---
+
+## 진행 중 (2026-10-14, AIK24-EVAL-ZEN-01) — Zen 신규 모델 2종 평가 + context_length null 규칙 확정
+
+## 2026-10-14 16:20 AIK24-EMDASH-09 완료 — md_to_pt 표 변환 근본 수정 (표가 만드는 곳에서 고침) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1620-AIK24-EMDASH-09-완료보고.md (완료 — verify는 시니어 2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/emdash04_migrate.py` — `md_to_pt()` while 루프에 표 감지·변환 추가 + 헬퍼 5개(`_split_row`/`_is_delim`/`_align`/`_cell`/`_table`) + `DELIM_CELL`. 파싱 로직은 `~/projects2/aikorea24emdash/scripts/fix_tables.py`(EMDASH-06)에서 포팅 — **저장소가 달라 import 할 수 없어 포팅했다**(중복 구현 아님, 같은 판단).
+- [TEST CODE 신규] `tests/test_md_to_pt_tables.py` — 10건.
+- Worker 재배포 없음(지시서대로 Python 스크립트라 불필요). free-models 재생성은 `page` 1회 실행으로 수행.
+
+### 결과
+- [검증됨] **완료기준 1** — 단위 테스트 **10 passed**. 표 2개 → table 블록 2개, `hasHeaderRow:true` 양쪽, 정렬 left/center/right 정확, 셀 텍스트 정확, 파이프 나열 `GitHub | Pages | Vercel` 은 일반 문단 유지. 구분선만 있고 헤더가 없으면 표로 인정하지 않음.
+- [검증됨] **완료기준 2** — 라이브 `https://emdash.aikorea24.kr/posts/free-models`: `<table>` **2개**, `<tr>` 42개, `<th>` 9개, `<td>` 121개. 파이프 텍스트 문단 **0건**(남은 `|` 6건은 `<title>free-models | aikorea24</title>` 1건 + JS 템플릿 리터럴 5건). 저장된 PT read-back 으로 `tables 2 / hasHeaderRow [True, True]` 확인.
+- [검증됨] **완료기준 3** — 기존 발행 경로 정상. `md_to_pt` 을 표 없는 글(제목+본문+목록+코드블록)에 돌려 `['block','block','block','code']` + style `['h2','normal','normal',None]` 정상, `publish_post` 호출 가능 확인.
+- [검증됨] 셀 안 인라인 마크 유지 — `thinkingmachines/inkling-small:free` 셀이 `marks:[["code"]]` 로 저장됨(백틱이 그대로 노출되지 않음).
+- [부분검증] 전체 테스트 스위트: **17 failed, 542 passed, 10 skipped**. 근거: 내 변경을 `git stash` 로 빼고 같은 4개 파일을 돌려도 **17 failed 동일** — 기존 실패(test_deep_dive_writer 14 / test_failed_articles 1 / test_pitch 1 / test_write_thread_validation 1)이며 이번 변경과 무관.
+
+### 잔존 위험
+1. **정렬(`textAlign`)이 CMS 에서 버려짐** — 변환기는 구분선에서 정렬을 뽑아 셀에 넣지만(지시서 스펙 준수), 저장 후 셀 키는 `_key/_type/content/isHeader` 뿐이고 `textAlign` 는 남아 있지 않다. 렌더 HTML 에도 `text-align` 규칙이 없다 → **정렬 요구는 실효 없음**. 별도 CMS 스키마 확인 필요.
+2. **`markDefs` 도 버려짐** — 셀 안에 링크가 들어가면 mark 참조가 끊긴다. 현재 생성되는 표에는 링크 셀이 없다(코드·굵게 마크만 사용). 링크 셀 등장 시 재확인 필요.
+3. **이미 발행된 다른 글의 깨진 표는 그대로** — 이번 수정은 앞으로 발행되는 글만 고친다. 기존 글은 `fix_tables.py --apply` 로 별도 변환해야 한다.
+4. **테스트 파일을 새로 만들었다** — 지시서 허용 파일은 `emdash04_migrate.py` 1개였지만 작업 2가 단위 테스트를 요구해 `tests/test_md_to_pt_tables.py` 를 추가했다.
+5. **기존 17건 테스트 실패 미해결** — threads/deep_dive 계열. 본 작업 범위 밖.
+
+### 다음 행동
+- 기존 발행 글의 깨진 표 일괄 변환 여부 결정(`fix_tables.py --apply`).
+- `textAlign` 이 CMS 스키마 어디에 있는지 확인 후 필요 시 필드명 변경.
+
+---
+
 ## 2026-10-14 14:42 AIK24-NAV-01 완료 — 랜딩 내비 무료 모델 진입점 추가 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1442-AIK24-NAV-01-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
