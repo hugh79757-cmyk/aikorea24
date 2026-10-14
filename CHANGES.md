@@ -2,6 +2,22 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-14 09:15 — feat: 모델 카드 중복 판정 exact_id 제한 + 3일 신선도 폴백 (AIK24-EFFICIENCY-04)
+
+모델 카드가 브리핑에서 0건이던 원인(같은 모델이 여러 프로바이더로 잡혀 `exact_original_title`·
+`semantic` 에 연쇄 탈락)을 완화하고, 후보가 오래됐을 때 슬롯을 비우는 폴백을 넣었다. 커밋 `06e62af4`.
+
+- `scripts/briefing_dedup.py` +12: `is_duplicate_article()` 에 모델 전용 분기(`exact_id` 만 중복).
+- `scripts/auto_news_selector.py` +18/-1: `MODEL_STALE_DAYS=3`, `has_fresh_model()`,
+  `select_top_articles()` 의 3일 신선도 폴백.
+- `scripts/auto_briefing.py` +23/-1: 빈 모델 슬롯 재충전(중복 검사 후 절단).
+- 뉴스 중복 판정·D1 스키마 변경 없음, 이메일 발송 0건.
+- 검증: 하네스(저장·발송 차단)로 모델 카드 1건 반영 확인, 폴백 합성 케이스 확인,
+  `npm run deploy` 성공(Version a42e249b, sitemap google/naver true).
+- 잔존 위험: `MODEL_PER_SOURCE=1` 로 후보가 4건 고정이므로 재충전은 최대 1건,
+  NVIDIA 카드가 발행되면 다음 날 모델 0건 가능. 모델 평가 DB에 `deepseek-v4.1-flash` 미등록.
+- 보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-14-0910-AIK24-EFFICIENCY-04-완료보고.md`
+
 ## 2026-10-14 08:17 — feat: 05:30 수집기에 모델 카드 수집 이관 (AIK24-EFFICIENCY-03)
 
 EFFICIENCY-02가 Step 0을 제거하면서 사라진 4개 CLI 프로바이더 무료 모델 카드 수집을
