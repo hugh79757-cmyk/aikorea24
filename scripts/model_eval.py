@@ -58,6 +58,13 @@ CACHE_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_eval_cache.json
 CACHE_TTL_HOURS = 20  # 하루 브리핑 안에서는 재평가 금지
 CACHE_SCHEMA = 3  # EVAL-03: 문항별 실패 사유(failures) 신설. v2(EVAL-02, tier 없음)도 폐기
 
+# BLOG-03: 문항 세트 버전. 문항·채점 기준이 바뀌면 이 값을 올린다.
+# 리더보드는 qv가 같은 결과끼리만 순위를 매긴다(문항이 다르면 점수를 비교하는 것 자체가 거짓말).
+EVAL_QUESTIONS_VERSION = 1
+
+# BLOG-03: 모델 평가 리더보드. append-only — 실행할 때마다 1건씩 쌓인다.
+LEADERBOARD_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_leaderboard.json")
+
 # ============================================
 # 평가 문항 (AIK24-EVAL-02 §4-3 / §4-7)
 #
@@ -327,11 +334,47 @@ def cache_get(model_id):
     return entry
 
 
+def record_leaderboard(model_id, result):
+    """BLOG-03 §1-4: 평가 1건을 리더보드에 append. 실패해도 조용히 넘긴다.
+
+    전멸 판정(응답 실패가 절반 초과)은 올리지 않는다 — 점수 0이 순위를 오염시킨다.
+    """
+    max_score = result.get("max_score", 0)
+    if result.get("failed", 0) * 2 > max_score:
+        log(f"리더보드 기록 생략 (응답 실패 {result.get('failed')}/{max_score} — 전멸 판정)")
+        return
+    try:
+        os.makedirs(os.path.dirname(LEADERBOARD_PATH), exist_ok=True)
+        try:
+            with open(LEADERBOARD_PATH, "r", encoding="utf-8") as f:
+                rows = json.load(f)
+        except Exception:
+            rows = []
+        if not isinstance(rows, list):
+            rows = []
+        rows.append({
+            "model_id": model_id,
+            "qv": result.get("qv", EVAL_QUESTIONS_VERSION),
+            "score": result.get("score", 0),
+            "max_score": max_score,
+            "judge_failed_n": result.get("judge_failed", 0),
+            "ts": time.time(),
+        })
+        tmp = LEADERBOARD_PATH + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(rows, f, ensure_ascii=False, indent=1)
+        os.replace(tmp, LEADERBOARD_PATH)  # 원자적
+        log(f"리더보드 기록: {model_id} {result.get('score')}/{max_score} (qv={result.get('qv')}, {len(rows)}건)")
+    except Exception as e:
+        log(f"리더보드 기록 실패(무시): {type(e).__name__}")
+
+
 def cache_put(model_id, result):
     """평가 결과 저장. 실패해도 조용히 넘긴다(캐시가 본 작업을 막지 않음).
 
     응답 실패가 절반을 넘으면 캐시하지 않는다. 레이트리밋에 의한
     전멸 판정이 20시간 캐시에 박히면 내일 브리핑이 그걸 advertise한다.
+    BLOG-03: 저장은 성공했지만 리더보드는 별도로 append한다(전멸 판정은 여기서도 배제).
     """
     if result.get("failed", 0) * 2 > result.get("max_score", 9):
         log(f"캐시 저장 생략 (응답 실패 {result['failed']}/{result['max_score']} — 전멸 판정)")
@@ -342,11 +385,13 @@ def cache_put(model_id, result):
         entry = dict(result)
         entry["ts"] = time.time()
         entry["schema"] = CACHE_SCHEMA
+        entry["qv"] = EVAL_QUESTIONS_VERSION
         data[model_id] = entry
         tmp = CACHE_PATH + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=1)
         os.replace(tmp, CACHE_PATH)  # 원자적
+        record_leaderboard(model_id, entry)
     except Exception as e:
         log(f"캐시 저장 실패(무시): {type(e).__name__}")
 
@@ -405,7 +450,12 @@ def _difficulty_note(by_axis):
 
 
 def score_response(question, expected, actual):
-    """무료 LLM 폴백 체인을 판관으로 사용해 1/0 채점. 판독 불가 시 0점."""
+    """무료 LLM 폴백 체인을 판관으로 사용해 1/0 채점.
+
+    BLOG-03 §1-3: 판관이 0/1을 말하지 못하면 0점을 주지 않고 None(=judge_failed)을
+    돌려준다. 0점은 '모델이 틀렸다'는 사실이고, None은 '우리가 못 쟀다'다. 둘을
+    섞으면 측정 결함이 모델 실패로 기록돼 순위가 오염된다.
+    """
     if not actual or not actual.strip():
         return 0
     from model_router import chat_completion
@@ -428,12 +478,12 @@ def score_response(question, expected, actual):
         model_override=None,  # 무료 폴백 체인만
     )
     if not verdict:
-        log(f"  채점 실패(응답 없음) → 0점: {question[:40]}")
-        return 0
+        log(f"  채점 실패(응답 없음) → 측정 결함: {question[:40]}")
+        return None
     m = re.search(r"[01]", verdict)
     if not m:
-        log(f"  채점 파싱 실패({verdict[:30]!r}) → 0점: {question[:40]}")
-        return 0
+        log(f"  채점 파싱 실패({verdict[:30]!r}) → 측정 결함: {question[:40]}")
+        return None
     return int(m.group(0))
 
 
@@ -445,11 +495,14 @@ def eval_model(model_id, with_judge=True):
     """
     result = {
         "model_id": model_id,
+        "qv": EVAL_QUESTIONS_VERSION,  # BLOG-03: 이 결과가 어느 문항 세트에서 나왔는지
         "score": 0,
         "max_score": len(TEST_QUESTIONS),
         "details": [],
         "errors": [],
         "failures": [],  # EVAL-03: 문항별 호출 실패 사유 — 블로그 '호출 안정성' 섹션 원자료
+        "token_usage": {"prompt": 0, "completion": 0},  # BLOG-03 §1-2: 실측 비용 계산 원자료
+        "judge_failed": 0,  # BLOG-03 §1-3: 판관이 0/1을 말하지 못한 문항 (모델 실패 아님)
         "by_axis": {a: {"score": 0, "max_score": 0, "failed": 0} for a in AXES},
     }
     try:
@@ -477,6 +530,15 @@ def eval_model(model_id, with_judge=True):
                 return w
         return f"HTTP {resp.status_code}" if resp is not None else "호출 실패"
 
+    def _usage(data):
+        """응답의 usage에서 prompt/completion 토큰 수만 뽑는다. 없는 값은 0."""
+        u = data.get("usage") or {}
+        try:
+            return {"prompt_tokens": int(u.get("prompt_tokens") or 0),
+                    "completion_tokens": int(u.get("completion_tokens") or 0)}
+        except (TypeError, ValueError):
+            return {"prompt_tokens": 0, "completion_tokens": 0}
+
     total = len(TEST_QUESTIONS)
     for idx, spec in enumerate(TEST_QUESTIONS, 1):
         axis, question, expected = spec["axis"], spec["q"], spec["expected"]
@@ -496,26 +558,28 @@ def eval_model(model_id, with_judge=True):
             )
         payload = dict(body_tpl, messages=messages)
         actual, source = "", "error"
+        usage = {"prompt_tokens": 0, "completion_tokens": 0}
         resp, warns = _post_question(headers, payload)
         for w in warns:
             result["errors"].append(f"Q{idx} {w}")
         if resp is None:
             result["errors"].append(f"Q{idx} 호출 실패(예외)")
             log(f"  [{idx}/{total}] {axis} 호출 예외 → 0점")
-            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception"})
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception", **usage})
             result["failures"].append({"idx": idx, "axis": axis, "reason": _reason(None, warns)})
             continue
         if resp.status_code != 200:
             result["errors"].append(f"Q{idx} HTTP {resp.status_code}")
             log(f"  [{idx}/{total}] {axis} HTTP {resp.status_code} → 0점")
-            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "http_error"})
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "http_error", **usage})
             result["failures"].append({"idx": idx, "axis": axis, "reason": _reason(resp, warns)})
             continue
         data = resp.json()
+        usage = _usage(data)  # BLOG-03 §1-2: 잘림 재시도로 바꾸면 그 응답 usage로 덮어쓴다
         choices = data.get("choices") or []
         if not choices:
             result["errors"].append(f"Q{idx} choices 비어있음")
-            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "no_choices"})
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "no_choices", **usage})
             result["failures"].append({"idx": idx, "axis": axis, "reason": "응답 없음(choices 비어있음)"})
             continue
         msg = choices[0].get("message") or {}
@@ -530,10 +594,12 @@ def eval_model(model_id, with_judge=True):
             for w in rwarns:
                 result["errors"].append(f"Q{idx} reasoning 재시도 {w}")
             if rresp is not None and rresp.status_code == 200:
-                rmsg = ((rresp.json().get("choices") or [{}])[0].get("message")) or {}
+                rdata = rresp.json()
+                rmsg = ((rdata.get("choices") or [{}])[0].get("message")) or {}
                 ractual, rsource = _extract_answer(rmsg)
                 if ractual:
                     actual, source = ractual, rsource
+                    usage = _usage(rdata)  # BLOG-03 §1-2: 재시도가 실제 과금이다
                     result["errors"].append(f"Q{idx} reasoning 잘림 → max_tokens={REASONING_RETRY_TOKENS} 재시도로 회수")
                     log(f"  [{idx}/{total}] {axis} reasoning 잘림 → {REASONING_RETRY_TOKENS}토큰 재시도로 회수 (via {source})")
         elif finish == "length" and actual:
@@ -545,10 +611,12 @@ def eval_model(model_id, with_judge=True):
             for w in rwarns:
                 result["errors"].append(f"Q{idx} 길이 초과 재시도 {w}")
             if rresp is not None and rresp.status_code == 200:
-                rmsg = ((rresp.json().get("choices") or [{}])[0].get("message")) or {}
+                rdata = rresp.json()
+                rmsg = ((rdata.get("choices") or [{}])[0].get("message")) or {}
                 ractual, rsource = _extract_answer(rmsg)
                 if ractual:
                     actual, source = ractual, rsource
+                    usage = _usage(rdata)  # BLOG-03 §1-2: 재시도가 실제 과금이다
                     result["errors"].append(f"Q{idx} length 잘림 → {REASONING_RETRY_TOKENS}토큰 재시도로 회수")
                     log(f"  [{idx}/{total}] {axis} length 잘림 → {REASONING_RETRY_TOKENS}토큰 재시도로 회수 (via {source})")
         elif finish == "length":
@@ -557,22 +625,37 @@ def eval_model(model_id, with_judge=True):
 
         if not actual:
             result["errors"].append(f"Q{idx} 빈 응답")
-            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "empty"})
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "empty", **usage})
             result["failures"].append({"idx": idx, "axis": axis, "reason": "빈 응답"})
             log(f"  [{idx}/{total}] {axis} 빈 응답 → 0점")
             continue
 
         pts = score_response(judge_q, expected, actual) if with_judge else (1 if actual.strip() else 0)
-        result["score"] += pts
+        judge_failed = pts is None
+        if judge_failed:
+            pts = 0  # 점수 집계·축별 집계에서는 제외된다. failures[]에도 넣지 않는다(호출은 성공).
+            result["judge_failed"] += 1
+            log(f"  [{idx}/{total}] {axis} 측정 결함(판관 파싱 실패) — 점수에서 제외")
+        else:
+            result["score"] += pts
+        result["token_usage"]["prompt"] += usage["prompt_tokens"]
+        result["token_usage"]["completion"] += usage["completion_tokens"]
         # 상세 답변은 블로그 심층 분석에 그대로 인용된다. 잘라내지 말고 원문을 쓴다.
-        result["details"].append({"idx": idx, "axis": axis, "score": pts, "source": source, "answer": actual[:ANSWER_STORE_CHARS]})
+        result["details"].append({
+            "idx": idx, "axis": axis, "score": pts, "source": source,
+            "answer": actual[:ANSWER_STORE_CHARS],
+            **usage, "judge_failed": judge_failed,
+        })
         log(f"  [{idx}/{total}] {axis} {pts}점 (via {source}) ← {actual[:60]!r}")
 
     result["failed"] = sum(
         1 for d in result["details"] if d["source"] in ("http_error", "exception", "empty", "no_choices")
     )
     # 축별 집계 (EVAL-02 §4-3: 축마다 원시 결과를 그대로 보여준다)
+    # BLOG-03 §1-3: 판관이 0/1을 못 한 문항은 분자·분모에서 모두 뺀다.
     for d in result["details"]:
+        if d.get("judge_failed"):
+            continue
         b = result["by_axis"].setdefault(d["axis"], {"score": 0, "max_score": 0, "failed": 0})
         b["max_score"] += 1
         b["score"] += d["score"]
@@ -581,12 +664,14 @@ def eval_model(model_id, with_judge=True):
     result["role"] = judge_role(result["by_axis"] or {})
     # 429·타임아웃은 모델 능력 실패가 아니다. 분모에서 빼야 한다.
     # 단, 시도한 문항이 5개 미만이면 "모르겠다"가 정직한 답이다.
-    scored = result["max_score"] - result["failed"]
+    jf = result["judge_failed"]
+    scored = result["max_score"] - result["failed"] - jf
     if scored >= 5:
         result["label"] = (
             f"{scored}문항 중 {result['score']}문항 정답 "
             f"(문항 난이도: {_difficulty_note(result['by_axis'])} 기준)"
             + (f", {result['failed']}문항 응답 실패 제외" if result["failed"] else "")
+            + (f", {jf}문항 측정 결함" if jf else "")
             + f". {result['role']}."
         )
     else:
@@ -633,6 +718,49 @@ def _search_term(model_id):
     base = model_id.split(":")[0]
     vendor = base.split("/")[0].strip()
     return vendor or base
+
+
+def _model_entry(model_id):
+    """OpenRouter 목록에서 모델 엔트리. ':free' 접미사를 벗겨 base도 본다."""
+    models = _fetch_openrouter_models()
+    if not models:
+        return None
+    for key in (model_id, model_id.split(":")[0]):
+        if key in models:
+            return models[key]
+    return None
+
+
+def pricing(model_id):
+    """토큰당 단가 {"prompt": float, "completion": float}. 모르는 모델이면 None."""
+    m = _model_entry(model_id)
+    if not m:
+        return None
+    p = m.get("pricing") or {}
+    try:
+        return {"prompt": float(p.get("prompt") or 0.0), "completion": float(p.get("completion") or 0.0)}
+    except (TypeError, ValueError):
+        return None
+
+
+def free_paths(model_id):
+    """BLOG-03 §1-5: 실제로 확인된 접근 경로만 돌려준다.
+
+    반환: [{"path": ..., "note": ...}]
+    - '{base}:free' 가 OpenRouter 목록에 있으면 무료 경로가 있다고 보고 '무료'를 쓴다.
+    - 유료만 있으면 실측 단가를 적는다. 목록 조회가 실패했으면 확인 불가라고 적는다.
+      (확인 못 한 것을 '무료'라고 쓰지 않는 것이 이 함수의 존재 이유)
+    """
+    models = _fetch_openrouter_models()
+    if models is None:
+        return [{"path": "OpenRouter 접근 경로 확인 불가", "note": "OpenRouter 모델 목록 조회 실패 — 무료 여부를 확인하지 못했습니다"}]
+    free_id = model_id.split(":")[0] + ":free"
+    if free_id in models or model_id.endswith(":free"):
+        return [{"path": "OpenRouter 무료", "note": "무료 변형 모델 ID — 일일 한도 확인 필요"}]
+    if model_id in models or model_id.split(":")[0] in models:
+        pr = pricing(model_id) or {}
+        return [{"path": "OpenRouter 유료", "note": f"입력 ${pr.get('prompt', 0) * 1e6:.6f} / 출력 ${pr.get('completion', 0) * 1e6:.6f} (1M토큰당)"}]
+    return [{"path": "OpenRouter 경로 미확인", "note": f"'{model_id}'가 OpenRouter 목록에 없습니다"}]
 
 
 def get_access_guide(model_id):
@@ -815,8 +943,6 @@ if __name__ == "__main__":
     log(f"평가 시작: {target}")
     r = eval_model_cached(target, force="--force" in sys.argv)
     log(f"결과: {r['label']} (실패 {r.get('failed', 0)}/{r['max_score']}문항)")
-    for d in r["details"]:
-        log(f"  Q{d['idx']}[{d['cat']}] {d['score']}점 src={d['source']}")
     if r["errors"]:
         log(f"  경고 {len(r['errors'])}건: {r['errors'][:5]}")
     log(f"접근법: {get_access_guide(target)}")
@@ -825,5 +951,7 @@ if __name__ == "__main__":
     ))
     for d in r["details"]:
         log(f"  Q{d['idx']}[{d['axis']}] {d['score']}점 src={d['source']}")
+    st = call_stability(r)
+    log(f"호출 안정성: 실패 {st['failed']}/{st['total']} — {st['verdict']}")
     sig = external_signals(target)
     log(f"외부 지표 ({sig['sources']}개 출처): " + " | ".join(sig["lines"]))

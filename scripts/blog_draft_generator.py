@@ -351,38 +351,128 @@ def _eval_block(model_id):
         return {"failed": 9, "max_score": 9, "label": "평가 실패", "details": []}
 
 
+# BLOG-03: 응답 실패로 0점 처리된 문항의 source 값들 (호출 자체가 실패한 것)
+_FAIL_SOURCES = ("http_error", "exception", "empty", "no_choices")
+
+
+def _leaderboard_block(model_id):
+    """BLOG-03 §2-1: 같은 문항 세트(qv)의 실측 결과만 모아 순위를 만든다.
+
+    추가 API 호출 없이 scripts/logs/model_leaderboard.json 파일만 읽는다.
+    같은 모델이 여러 번 평가됐으면 최신 기록 1개만 남긴다(리더보드는 모델 단위).
+    """
+    rows = []
+    try:
+        with open(model_eval.LEADERBOARD_PATH, "r", encoding="utf-8") as f:
+            rows = json.load(f)
+    except Exception:
+        rows = []
+    latest = {}
+    for r in rows if isinstance(rows, list) else []:
+        if isinstance(r, dict) and r.get("qv") == model_eval.EVAL_QUESTIONS_VERSION and r.get("model_id"):
+            latest[r["model_id"]] = r  # append-only 파일이므로 마지막 쓰기가 최신
+    # 분모(측정된 문항 수)가 다를 수 있어 비율로 정렬한다. 측정 결함 문항은 이미 빠졌다.
+    ranked = sorted(latest.values(), key=lambda r: -(r.get("score", 0) / max(1, r.get("max_score", 1))))
+    mine = [i for i, r in enumerate(ranked, 1) if r["model_id"] == model_id]
+    if len(ranked) < 2 or not mine:
+        return f"비교 데이터 축적 중 — 단독 평가 (누적 {len(ranked)}개 모델)"
+    rank, me = mine[0], ranked[mine[0] - 1]
+    lines = [f"누적 {len(ranked)}개 모델 중 이 모델 {rank}위 ({me.get('score')}/{me.get('max_score')})"]
+    for i in (rank - 2, rank, rank + 1):  # 바로 위·자신·바로 아래
+        if 0 <= i < len(ranked):
+            r = ranked[i]
+            when = time.strftime("%Y-%m-%d", time.localtime(r.get("ts") or 0))
+            lines.append(f"{i + 1}위 {r['model_id']} {r.get('score')}/{r.get('max_score')} (측정일 {when})")
+    return "\n".join(lines)
+
+
+def _cost_block(model_id, ev):
+    """BLOG-03 §2-2: 오늘 실측한 토큰 사용량 x OpenRouter 단가. 추정이 아니라 계산.
+
+    '무료' 표현은 free_paths()가 실제로 무료 변형을 확인했을 때만 나온다.
+    """
+    u = ev.get("token_usage") or {}
+    p, c = int(u.get("prompt") or 0), int(u.get("completion") or 0)
+    if not p and not c:
+        return "비용 실측 데이터 없음 (문항별 토큰 사용량 미기록 — 구 캐시)"
+    pr = model_eval.pricing(model_id)
+    n = ev.get("max_score") or 0
+    if not pr:
+        lines = [f"- 오늘 실측 문항 {n}개의 토큰 사용량: 입력 {p:,} / 출력 {c:,}",
+                 "- OpenRouter 단가를 조회하지 못해 비용을 계산하지 않았습니다"]
+    else:
+        cost = p * pr["prompt"] + c * pr["completion"]
+        lines = [
+            f"- 오늘 실측 문항 {n}개의 토큰 사용량: 입력 {p:,} / 출력 {c:,}",
+            f"- OpenRouter 단가: 입력 ${pr['prompt'] * 1e6:.6f} / 출력 ${pr['completion'] * 1e6:.6f} (1M토큰당)",
+            f"- {n}문항 실측 비용: ${cost:.6f}",
+        ]
+        if n:
+            per = cost / n
+            lines.append(f"- 같은 비율로 하루 100문항: ${per * 100:.6f} / 하루 1,000문항: ${per * 1000:.6f}")
+    for pth in model_eval.free_paths(model_id):
+        lines.append(f"- 접근 경로: {pth['path']} — {pth['note']}")
+    return "\n".join(lines)
+
+
+def _fail_block(ev):
+    """BLOG-03 §2-3: 0점 문항의 모델 원문 전문(최대 2,000자) — 원문 공개용.
+
+    축별 요약의 400자 축약본과 목적이 다르니 별개로 만든다.
+    """
+    out = []
+    for d in ev.get("details", []):
+        if d.get("score"):
+            continue
+        if d.get("judge_failed"):
+            kind = "측정 결함 — 판관이 점수를 말하지 못함 (모델 실패 아님)"
+        elif d.get("source") in _FAIL_SOURCES:
+            kind = f"호출 실패 ({d.get('source')})"
+        else:
+            kind = "모델 오답"
+        out.append(f"--- Q{d['idx']} [{d['axis']}] {kind} / 점수 {d.get('score', 0)} ---")
+        out.append((d.get("answer") or "").strip()[:2000] or "(응답 없음)")
+    return "\n\n".join(out) or "(0점 문항 없음)"
+
+
 def generate_model_eval_draft(keyword, article, model_id):
-    """무료 LLM 전용 6단 구조 블로그 글 생성. 실패 시 빈 문자열(폴백)."""
+    """무료 LLM 전용 7단 구조 블로그 글 생성(BLOG-03 §2-4). 실패 시 빈 문자열(폴백)."""
     ev = _eval_block(model_id)
     # 전 문항 실패 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
     if ev.get("failed", 0) >= ev.get("max_score", 9):
         log(f"  전 문항 실패 → 모델 심층 분석 생략: {model_id}")
         return ""
     guide = model_eval.get_access_guide(model_id)
+    leaderboard_block = _leaderboard_block(model_id)
+    cost_block = _cost_block(model_id, ev)
+    fail_block = _fail_block(ev)
+    access_block = "\n".join(
+        f"- {pth['path']}: {pth['note']}" for pth in model_eval.free_paths(model_id)
+    )
 
     # 우리 테스트 결과 — 축별 원시 결과 + 문항별 실제 답변(LLM이 지어내지 못하게 원문 주입)
-    FAIL_SOURCES = ("http_error", "exception", "empty", "no_choices")
     axis_block = {}
     for d in ev.get("details", []):
         ans = (d.get("answer") or "").replace("\n", " ")[:400]
-        if d["source"] in FAIL_SOURCES:
+        if d.get("judge_failed"):
+            mark = "측정 결함(판관 파싱 실패)"
+        elif d["source"] in _FAIL_SOURCES:
             mark = "응답 실패(레이트리밋 등)"
         else:
             mark = "정답" if d["score"] else "오답"
         axis_block.setdefault(d["axis"], []).append(f"Q{d['idx']} {mark} — 답변: {ans or '(응답 없음)'}")
-    test_block = "\n".join(
-        f"### {model_eval.AXIS_LABELS.get(a, a)} ({model_eval._AXIS_DIFFICULTY.get(a, '')}, "
-        f"{sum(1 for x in v if x.startswith('Q') and '정답 —' in x)}/{len(v)} 정답)\n" + "\n".join(v)
-        for a, v in axis_block.items()
-    ) or "(평가 결과 없음)"
+    # BLOG-03 §1-3: 측정 결함 문항은 점수 분모에서도 빠진다. 축 제목 N/M도 같이 뺀다.
+    axis_sections = []
+    for a, v in axis_block.items():
+        graded = [x for x in v if "측정 결함" not in x]
+        correct = sum(1 for x in graded if x.split(" — 답변: ")[0].endswith(" 정답"))
+        axis_sections.append(
+            f"### {model_eval.AXIS_LABELS.get(a, a)} ({model_eval._AXIS_DIFFICULTY.get(a, '')}, "
+            f"{correct}/{len(graded)} 정답)\n" + "\n".join(v)
+        )
+    test_block = "\n".join(axis_sections) or "(평가 결과 없음)"
 
-    # §4-4 남들의 의견 — OpenRouter / HuggingFace 공개 지표. 없는 값은 지어내지 않는다.
-    try:
-        sig = model_eval.external_signals(model_id)
-        sig_block, sig_sources = "\n".join(sig["lines"]), sig["sources"]
-    except Exception as e:
-        sig_block, sig_sources = "공개된 외부 평가 없음", 0
-        log(f"  ⚠️ 외부 지표 수집 예외: {type(e).__name__}")
+    # BLOG-03 §2-4: 기존 §3 '남들의 의견'(sig_block)은 §4 '돈'으로 통합했다 — 코드는 삭제.
 
     # EVAL-03 §4-1 호출 안정성 — 실패를 숨기지 않고 그대로 쓴다. 원인은 로그 문자열 그대로.
     st = model_eval.call_stability(ev)
@@ -404,62 +494,77 @@ def generate_model_eval_draft(keyword, article, model_id):
     )
     user_prompt = (
         f"무료 LLM '{model_id}'에 대한 실무 투입 판단 블로그 글을 작성해주세요.\n\n"
-        f"## 반드시 지킬 구조 (6단, 이 순서 그대로)\n"
-        f"### 1. 한 줄 판단\n"
-        f"- 첫 줄에 결론을 박습니다. 예: '지금 당장 손발 작업에 투입해도 됩니다' / "
+        f"이 글의 독자는 돈을 쓰기 싫어하고, 성능 좋은 무료 코딩 LLM이 뭔지 항상 찾는 사람입니다.\n"
+        f"독자가 이 글을 읽고 '그래서 이 모델을 쓸까 말까'를 결정할 수 있게 쓰세요.\n\n"
+        f"## 반드시 지킬 구조 (8단, 이 순서 그대로)\n"
+        f"### 1. 한 줄 판단 + 순위\n"
+        f"- 첫 줄에 결론을 박습니다. 예: '지금 당장 서브에이전트로 투입해도 됩니다' / "
         f"'아직 검증이 부족해 파일럿으로만 쓰세요'.\n"
-        f"- 판단 근거는 2절의 실측 결과와 연결되게 한 문장만 덧붙이세요.\n"
-        f"- **6절의 호출 안정성이 나쁘면 반드시 첫 줄 판단에 반영하세요.** "
-        f"예: '능력은 괜찮지만 무료 티어 호출 제한이 심해 지금은 쓰기 어렵다'.\n"
-        f"- [절대 규칙] 다른 유료 모델과 급수를 비교하는 표현(예: '어떤 모델급')은 쓰지 마세요. "
-        f"이 글은 이 모델 하나를 독립적으로 판단합니다.\n\n"
-        f"### 2. 실무 축별 결과 (4축)\n"
+        f"- 바로 다음 줄에 리더보드 순위를 적습니다. 예: 'AI코리아24 실측 리더보드: 무료 코딩 모델 5개 중 2위'.\n"
+        f"- 비교 데이터가 2개 미만이면 순위를 매기지 말고 '비교 데이터 축적 중 — 단독 평가'라고 명시하세요.\n"
+        f"- [절대 규칙] 리더보드에 없는 모델(유료 모델 포함)과의 급수 비교 표현(예: '○○급', '○○ 수준')은 쓰지 마세요.\n"
+        f"  비교는 아래 리더보드 안의 모델끼리 점수 차이로만 서술합니다.\n"
+        f"- [절대 규칙] 6절의 호출 안정성이 나쁘면 반드시 첫 줄 판단에 반영하세요.\n\n"
+        f"### 2. 왜 이 순위인가 — 실무 축별 결과 (4축)\n"
         f"- 아래는 AI코리아24가 오늘 직접 API로 실측한 결과입니다. "
         f"**숫자와 모델 답변은 그대로 인용하세요. 해석을 지어내지 마세요.**\n"
         f"- 원시 결과: {ev.get('label', '')}\n"
-        f"- 응답 실패 문항: {ev.get('failed', 0)}/{ev.get('max_score', 0)}건 (사유는 6절에서 다룬다)\n"
         f"```\n{test_block}\n```\n"
         f"- 축마다 소제목을 달고 **구체적 관찰 1~2줄**을 쓰세요. [절대 규칙] "
-        f"'지시를 잘 따름', '맥락 유지가 좋음' 같은 추상 평가는 금지입니다. "
-        f"답변 원문에 있는 구체적 사실(예: '12,484자 문서에서 1,226자 지점의 함수명을 정확히 참조함', "
-        f"'순수 JSON 요구에 코드블록 없이 출력함', '0으로 나누기 테스트를 빠뜨림')을 그대로 적으세요.\n"
-        f"- **오답은 숨기지 말고** 왜 틀렸는지 1~2줄로 적으세요. 실패가 독자에게 가장 쓸모있습니다.\n"
-        f"- 문항 난이도가 축마다 다르므로 '문항 난이도: 기초 수준' 같은 단서를 축 제목 옆에 붙이세요.\n\n"
-        f"### 3. 남들의 의견\n"
-        f"- 아래는 공개 API에서 직접 조회한 값입니다. **수치를 바꾸거나 없는 수치를 지어내지 마세요.**\n"
-        f"- 조회한 출처 수: {sig_sources}곳\n"
-        f"```\n{sig_block}\n```\n"
-        f"- 출처가 2곳 미만이면 그 사실을 본문에 명시하세요. 공개 지표가 없는 모델이라는 뜻입니다.\n\n"
-        f"### 4. 접근 방법\n"
-        f"- 간결하게. 모델 ID와 설정 한 줄이면 충분합니다.\n"
-        f"- 다음 문장을 자연스럽게 포함하세요: {guide}\n\n"
-        f"### 5. 한계\n"
-        f"- 이 글이 답하지 못하는 것을 정직하게 적으세요: 문항 {ev.get('max_score', 0)}개로 커버하지 못한 영역, "
-        f"응답 실패(rate limit)가 점수에 미친 영향, 오늘 하루치 관찰이라 일반화할 수 없는 부분.\n"
-        f"- 이 모델을 쓰지 말아야 할 상황도 1~2줄.\n\n"
+        f"'지시를 잘 따름' 같은 추상 평가는 금지. "
+        f"답변 원문의 구체적 사실만 적으세요.\n"
+        f"- **오답은 숨기지 말고** 왜 틀렸는지 1~2줄로 적으세요. 실패가 독자에게 가장 쓸모있습니다.\n\n"
+        f"### 3. 실패 사례 상세 — 원문 공개\n"
+        f"- 점수를 깎은 문항의 **모델 답변 원문을 코드블록으로 그대로** 싣고, 어디서 빗나갔는지 짚으세요.\n"
+        f"- 원문은 아래 데이터를 그대로 씁니다. 요약·수정을 하지 마세요.\n"
+        f"```\n{fail_block}\n```\n"
+        f"- 채점 결함(판관 파싱 실패)으로 0점이 된 문항이 있으면 '모델 실패가 아니라 측정 실패'임을 분명히 하세요.\n\n"
+        f"### 4. 비용 — 무료인가, 유료면 얼마인가\n"
+        f"- 아래는 오늘 실측으로 확인한 값입니다. **수치를 바꾸지 마세요.**\n"
+        f"```\n{cost_block}\n```\n"
+        f"- 유료면 '12문항 실측 비용 $0.00X'를 기준으로 하루 100문항·1,000문항 사용 시 예상 비용을 "
+        f"**단순 비례로만** 계산해 적으세요.\n"
+        f"  '~정도 들 것 같다'는 추정은 금지. 계산식만 씁니다.\n"
+        f"- [절대 규칙] '무료'라는 말은 무료 경로가 실제로 확인될 때만 쓰세요.\n\n"
+        f"### 5. 어디서, 어떻게 쓰나\n"
+        f"- 무료 경로를 유료보다 먼저 안내하세요. 아래 정보를 그대로 쓰세요.\n"
+        f"```\n{access_block}\n```\n"
+        f"- 다음 문장을 자연스럽게 포함하세요: {guide}\n"
+        f"- OpenCode 설정 한 줄(프로바이더·모델 ID 검색어)을 반드시 포함하세요. 독자는 OpenCode 사용자입니다.\n\n"
         f"### 6. 호출 안정성\n"
-        f"- 아래는 오늘 실측 중 실제로 실패한 호출 기록입니다. **숫자를 고치거나 실패를 숨기지 마세요.**\n"
-        f"- [절대 규칙] 아래 값을 그대로 인용하세요. 원인을 추측해서('모델이 긴 입력을 못 처리해서' 등) "
-        f"새로운 사유를 만들어내지 마세요.\n"
-        f"- 원인은 실패 원인별로 분류하고, 특정 축에 몰렸는지 밝히세요.\n"
+        f"- 아래는 오늘 실측 중 실제 실패 기록입니다. **숫자를 고치거나 실패를 숨기지 마세요.**\n"
         f"```\n{st_block}\n```\n"
-        f"- 마지막에 독자를 위한 해석을 1~2줄: 긴 입력이 실패에 몰렸다면 '긴 문서는 나눠서 호출하세요', "
-        f"429 가 많다면 '무료 티어 한도를 고려해 호출 간격을 두세요'처럼 실제로 쓸 수 있는 조언으로.\n"
+        f"- 마지막에 독자를 위한 해석 1~2줄: 실제로 쓸 수 있는 조언으로.\n"
         f"- [절대 규칙] 실패율이 25% 이상이면 '성능과 무관하게 현 시점 무료로는 실무 투입이 어렵다'고 "
-        f"명확히 쓰세요. 점수와 별개로 호출 실패도 '이 모델을 못 쓰는 상황'으로 이어지는 정보라는 점입니다.\n\n"
+        f"명확히 쓰세요.\n\n"
+        f"### 7. 한계\n"
+        f"- 이 글이 답하지 못하는 것을 정직하게 적으세요: 문항 수로 커버하지 못한 영역, 1회 실측의 한계, 측정 결함의 영향.\n"
+        f"- 마지막 줄에 이 한 줄을 넣으세요: '이 순위는 리더보드에 새 모델이 들어오면 바뀔 수 있습니다.'\n\n"
+        f"### 8. 정리 — 이런 때 쓰세요\n"
+        f"- 위 1~7절을 5~6문장으로 요약하세요. 언제 쓰면 좋은지, OpenCode에서 쓸 수 있다는 점을 반드시 포함하세요.\n"
+        f"- 마지막 문장은 총평 한 줄: 이 모델이 좋은 모델인지, 아니면 아직인지를 분명히 하세요.\n"
+        f"- 제조사의 공개 발표 등 확인할 수 있는 출시·회사 정보가 있으면 1~2문장으로 덧붙이세요. 없으면 쓰지 마세요. 지어내지 마세요.\n\n"
+        f"## 리더보드 (같은 문항세트 v{model_eval.EVAL_QUESTIONS_VERSION}·같은 채점 기준)\n"
+        f"```\n{leaderboard_block}\n```\n\n"
         f"## 톤 규칙\n"
         f"- 분량 제한 없음. 필요한 만큼 길게 씁니다.\n"
-        f"- 순한국어, ~습니다/~입니다 정중 비즈니스 톤. 반말('~다/~했다/~임') 절대 금지\n"
-        f"- 중국어(한자) 사용 금지\n"
-        f"- 이모티콘 사용 금지\n"
-        f"- **본문 첫 단락에서 '이번 글에서는', '살펴보겠습니다', '다루겠습니다' 등 메타 도입문 절대 금지.** "
-        f"한 줄 판단으로 바로 시작할 것\n\n"
+        f"- 순한국어, ~습니다/~입니다 정중 비즈니스 톤. 반말 절대 금지\n"
+        f"- 중국어(한자) 사용 금지, 이모티콘 사용 금지\n"
+        f"- **본문 첫 단락에서 '이번 글에서는', '살펴보겠습니다' 등 메타 도입문 절대 금지.** "
+        f"한 줄 판단으로 바로 시작할 것\n"
+        f"- 순위·비용 숫자는 주입된 데이터 그대로. 리더보드에 없는 모델과의 비교 표현 금지\n"
+        f"- [절대 규칙] 본문 맨 앞에 `# 제목`을 반복하지 마세요. 제목은 TITLE: 줄에 한 번만 씁니다. "
+        f"본문은 한 줄 판단으로 바로 시작합니다.\n"
+        f"- [절대 규칙] 제목에 '[정직한 AI 평가]' 같은 대괄호 수식어를 붙이지 마세요.\n"
+        f"- 브랜드명의 'AI'는 '아이'로 음역하지 말고 'AI'로 그대로 씁니다 (예: 인클루전AI).\n"
+        f"- 구어체·은어를 쓰지 마세요. '손발 작업' 대신 '서브에이전트'처럼 정확한 역할 용어를 씁니다.\n"
+        f"- '돈' 대신 '비용'이라 씁니다.\n\n"
         f"## 참고 기사\n"
         f"제목: {article.get('title', '')}\n"
         f"출처: {article.get('source', '')}\n"
         f"내용: {(article.get('description') or '')[:400]}\n\n"
         f"## 출력 형식\n"
-        f"TITLE: [SEO에 최적화된 제목 — 모델 ID와 실측 결과를 포함]\n"
+        f"TITLE: [SEO에 최적화된 제목 — 형식: '{{브랜드 한글명}} {{모델명}}({{영문 모델 ID}}) {{N}}문항 실측 — {{판단 한 줄}}']\n"
         f"---\n"
         f"[마크다운 본문]"
     )
@@ -682,6 +787,9 @@ def _parse_title_body(gpt_output):
     body = re.sub(
         r"\ATITLE:[^\n]*\n(?:[ \t]*-{3,}[ \t]*\n)?", "", gpt_output, count=1
     ).strip()
+    # BLOG-04 작업 2: EmDash가 title 필드를 별도 H1로 렌더링하므로 본문 H1은 중복이다.
+    # 프롬프트에도 금지 규칙이 있지만 LLM이 습관적으로 붙이는 경우를 막는 안전망.
+    body = re.sub(r"\A#\s+[^\n]*\n", "", body, count=1).strip()
     return title, body
 
 
