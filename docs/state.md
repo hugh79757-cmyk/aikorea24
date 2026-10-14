@@ -1,3 +1,52 @@
+## 2026-10-14 AIK24-EMDASH-01/02/03 실검증(브라우저) 완료 — 오류 4건 발견, 수정 대기 → 이 문서 하단 「실검증 오류 목록」 참조 (검증 — 대표님 조치 대기)
+
+### 한 일
+기존 3개 지시서(EMDASH-01 파이프라인 전환 / -02 기존 1,479건 이관 / -03 Astro 저장 제거)의 산출물을 ego-browser(Chromium)로 실제 렌더 검증 + curl/REST API로 데이터 정합 확인. **[VERIFY CODE] 작업 / [PRODUCTION CODE] 미변경 (코드 수정 없음 — 오류 4건은 미수정 상태로 보고)**
+
+### 결과
+
+**[검증됨] 정상 항목 9건**
+- [검증됨] EmDash 글 1,482건 전부 `status=published` (캐시 `/tmp/emdash_audit.json`, 커서 15페이지 1회 수집)
+- [검증됨] 절대 URL featured_image 표본 20건 → HTTP 200/20 (`image/webp`·`image/jpeg`)
+- [검증됨] 본문 절대 이미지 199건 — emdash 글 페이지에서 로드됨 (스크린샷 육안 확인)
+- [검증됨] canonical = `https://emdash.aikorea24.kr/posts/{slug}` 3건 확인
+- [검증됨] 목록 페이지 `emdash.aikorea24.kr/posts` 카드 60개 중 **50개 썸네일 정상, 10개 깨짐**
+- [검증됨] h1/h2/ul/blockquote/code 블록 렌더 정상 (스크린샷)
+- [검증됨] Astro `src/content/blog/*.md` 1,479개 그대로 존재 (EMDASH-03이 삭제 안 함 — 지시서 준수)
+- [검증됨] CF D1 rowsWritten 3,130/100,000 = **3.1%**
+- [부분검증] CF D1 rowsRead 932,732/5,000,000 = **18.7%** — 검증 중 posts API 15페이지 전수 조회가 대부분 소모. 이후 재조회 금지, 캐시 재사용
+
+**[검증됨] 오류 4건 (미수정 — 대표님 조치 대기)**
+
+1. **상대경로 썸네일 16건 전부 404** — 목록 1페이지에서 10/60 = 16.7% 육안 확인 (`/tmp/emdash03_index.png`)
+   - 원인: Astro frontmatter `image: "/images/{slug}/thumbnail.webp"` 를 `emdash04_migrate.load_posts()` 가 절대 URL로 변환하지 않고 `featured_image.src` 에 그대로 저장
+   - 영향: `og:image` 도 404 → 네이버/카카오/구글 공유 카드 깨짐. 후속 EMDASH-01/03 신규글도 계속 같은 결함
+2. **상대경로 본문 이미지 79건 전부 404** — `md_to_pt()` 의 IMAGE 정규식이 `/images/{slug}/{hash}.webp` 상대경로 생성. 실측 상대 자산 95건 중 **emdash 도메인 200 = 0/95**, aikorea24.kr = 94/95
+3. **프론트매터 닫는 구분선 `---` 가 본문 잔존 149건** (그 중 **55건은 본문 첫 줄** → 최상단에 노출)
+   - 원인: `scripts/emdash04_migrate.py:208` `_, fm, body = txt.split("---", 2)` → `body.lstrip("\n")` 만 하고 닫는 `---` 미제거
+   - 근거: `2026-10-10-001-앨런-튜링-연구소장…` 글 스크린샷 `/tmp/emdash03_relfeat.png` 최상단 `---` 표시
+4. **301 리다이렉트 미설정 — 중복 콘텐츠** — `aikorea24.kr/blog/{slug}/` → **HTTP 200** (Astro 카피가 그대로 서비스됨, `redirect_url` 빈값)
+   - D1 `briefing_items.deep_dive_url` 분포 집계: **astro 1,326 / emdash 0**
+   - EMDASH-01 의 `_link_d1()` 는 launchd 스케줄 미실행으로 아직 미발동 (잔존 위험 1과 동일 증상)
+   - 지시서 01/02/03 모두 "301 리다이렉트 설정은 범위 밖"으로 명시했으나, EMDASH-03으로 Astro 저장을 끊은 현재 시점에는 **같은 글이 2개 URL에 중복 노출**되어 SEO·캐노니컬 리스크
+
+**[부분검증] 경미 1건**
+5. 마크다운 링크 리터럴 3건 — span `text` 에 `[기사원문보기](https://aikorea24.kr/briefing/…)` 가 평문으로 출력됨 (예: `금융-ai-감시-강화-미국-은행-규제당국-전수조사와`, `aikeep24-로컬-llm-…`, `ai-실생활에서-사용하기-유튜브-1시간-30분-…`)
+
+### 잔존 위험
+- 위 오류 4건은 **수정하지 않은 상태** — 지시서 범위(완료보고) 밖이라 대표님 지시 없이는 손대지 않음
+- 오류 1·2 수정 시 95개 자산의 절대 URL 치환 필요 (`https://aikorea24.kr` prefix). Astro 파일 삭제 전까지 aikorea24.kr 이 이미지 호스트로 살아있음 → Astro 삭제 시一并 필요
+- 오류 3 수정은 글 본문 재저장 149건 → D1 rowsWrite 174건 est. (`emdash_publish` 경유 또는 `emdash04_migrate` 재실행)
+- D1 rowsRead 이미 18.7% 사용. 전수 재조회·샘플링 반복 금지, `/tmp/emdash_audit.json` 캐시 재사용
+- D1 `deep_dive_url` 1,326건이 astro 라 EmDash 카피로 넘어가지 않음. 스케줄이 resume 되면 자동 전환되나, 그동안 외부 유입은 Astro 카피에 머묾
+
+### 다음 행동
+- 대표님: 오류 1~3 수정 지시 여부 결정 (수정 시 별도 지시서 권장)
+- 대표님: 오류 4(301) — EMDASH-03 으로 Astro 저장을 껐으므로 중복 콘텐츠 해소가 시급. `_redirects` 또는 Cloudflare 규칙 + `docs/emdash_url_map.csv`(1,479행) 사용
+- 대표님: 스케줄 resume 후 `[5c]` 로그와 `deep_dive_url` emdash 전환 확인
+
+---
+
 ## 2026-10-14 AIK24-EMDASH-03 완료 — Astro 저장 제거, EmDash 단독 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1035-AIK24-EMDASH-03-완료보고.md (완료 — verify 요청)
 
 ### 한 일
@@ -53,6 +102,8 @@
 - 별도 지시서: 301 리다이렉트 · Astro 소스 삭제 · 발행 실패 재시도 정책 · weekly_blog_publisher EmDash 전환 여부.
 
 ---
+
+## 진행 중 (2026-10-14, AIK24-BLOG-03) — 리더보드·프롬프트 개편 (model_eval.py 5건 + blog_draft_generator.py 4건 + 프롬프트 7단)
 
 ## 2026-10-14 AIK24-BLOG-02 완료 — ling-3.1-flash 글 전면 개편 (12문항 재평가 → 10/12, 같은 URL 교체, 배포) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1005-AIK24-BLOG-02-완료보고.md (완료 — verify 요청)
 
