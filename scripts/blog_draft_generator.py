@@ -3,8 +3,8 @@
 aikorea24 블로그 초안 자동 생성기
 - D1 DB에서 오늘 수집된 뉴스 중 고단가 키워드 포함 기사 조회
 - 키워드별 기사 그룹핑 → OpenAI 블로그 초안 생성
-- src/content/blog/ 에 마크다운 파일 저장 (전환 기간 이중 저장 — EmDash 도 함께 발행)
-- scripts/emdash_publish.py 로 EmDash 즉시 발행
+- EmDash 단독 발행 (AIK24-EMDASH-03: src/content/blog/ 저장 없음 — Astro 는 source of truth 아님)
+- scripts/emdash_publish.py 로 EmDash 즉시 발행. 실패 시 폴백 없음, 로그만 남기고 다음 글로 진행
 - 텔레그램 알림
 """
 # launchd 환경 방어: 가장 먼저 sys.path 설정 (모든 import보다 앞)
@@ -484,14 +484,10 @@ def generate_model_eval_draft(keyword, article, model_id):
 # 파일 번호 결정
 # ============================================
 def next_file_number(today_str):
-    pattern = os.path.join(PROJECT_DIR, "src", "content", "blog", f"{today_str}-*.md")
-    existing = glob.glob(pattern)
-    nums = []
-    for f in existing:
-        m = re.search(r"\d{4}-\d{2}-\d{2}-(\d+)-", f)
-        if m:
-            nums.append(int(m.group(1)))
-    return max(nums) + 1 if nums else 1
+    """AIK24-EMDASH-03: Astro 파일을 만들지 않으므로 디스크 스캔이 무의미하다.
+    실행 시각(HHMMSS)을 시작번호로 써서 같은 날 재실행해도 썸네일 디렉터리명이 겹치지 않게 한다.
+    (호출부가 실행마다 1씩 더하므로 한 실행 안에서는 계속 증가한다)"""
+    return int(datetime.now(KST).strftime("%H%M%S"))
 
 # ============================================
 # 슬러그 생성
@@ -504,10 +500,18 @@ def make_slug(title):
     return slug.lower()
 
 # ============================================
-# 블로그 파일 저장
+# EmDash 단독 발행용 인메모리 초안 (AIK24-EMDASH-03)
+# ============================================
+# Astro 저장 제거로 src/content/blog/ 에 파일이 생기지 않는다. 아래 dict 가 곧 초안이다.
+# 키로 쓰는 filepath 문자열(= "{today}-{num}-{slug}.md")은 더 이상 디스크 경로가 아니라
+# 썸네일 디렉터리명(=slug) 을 만들어 내기 위한 식별자일 뿐이다.
+_EMDASH_PENDING = {}  # filepath -> {"md": str, "links": [(news_id, comment_link)]}
+
+# ============================================
+# 블로그 초안 생성
 # ============================================
 def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
-    """GPT 출력 파싱 → .md 파일 저장. articles 전달 시 deep_dive_url 연결."""
+    """GPT 출력 파싱 → EmDash 발행 대기 초안 생성. articles 전달 시 발행 후 D1 연결 목록 등록."""
     # 이모티콘 제거 (대표님 지시) — 저장 직전 유일한 통과 지점이라 여기서 한 번만
     stripped = remove_emoji(gpt_output)
     if stripped != gpt_output:
@@ -528,28 +532,15 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
                     sort_order = rows[0].get("sort_order", 1)
                     art["_briefing_url"] = f"https://aikorea24.kr/briefing/{briefing_date}/#item-{sort_order}"
     filepath, seo_title = _save_file(gpt_output, keyword, file_num, today_str, articles)
-    # deep_dive_url 연결 (slug 소문자: Astro가 content collection ID를 lowercase로 정규화)
-    if articles and filepath:
-        slug = filepath.stem if hasattr(filepath, 'stem') else os.path.basename(filepath).replace('.md', '')
-        slug = slug.lower()
-        blog_url = f"https://aikorea24.kr/blog/{slug}/"
-        for art in articles:
+    # deep_dive_url / 무료 LLM 코멘트 링크는 발행 후 실제 EmDash URL 로 연결한다.
+    # (AIK24-EMDASH-03: Astro 저장 이 없어 발행 전에는 최종 URL 을 알 수 없다)
+    if filepath:
+        for art in articles or []:
             news_id = art.get("id")
             if news_id:
-                # retry: 일시적 D1 네트워크 오류 대응 (2회 재시도)
-                for attempt in range(3):
-                    if update_deep_dive_url(news_id, blog_url):
-                        break
-                    if attempt < 2:
-                        log(f"  🔄 deep_dive_url 재시도 {attempt+1}/2...")
-                        time.sleep(2)
-                else:
-                    log(f"  ⚠️ deep_dive_url 연결 최종 실패 (news_id={news_id}, 3회 모두 실패)")
-    # 무료 LLM 항목은 코멘트에 분석 링크를 직접 박아넣는다 (프론트 deep-dive 카드와 별개)
-    if articles and filepath:
-        for art in articles:
-            if art.get("v2_tag") == "free-llm" and art.get("id"):
-                append_comment_link(art["id"], f"https://aikorea24.kr/blog/{slug}/")
+                _EMDASH_PENDING[filepath]["links"].append(
+                    (news_id, art.get("v2_tag") == "free-llm")
+                )
     return filepath, seo_title
 
 # ============================================
@@ -695,7 +686,7 @@ def _parse_title_body(gpt_output):
 
 
 def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
-    """GPT 출력 파싱 → .md 파일 저장 (내부)."""
+    """GPT 출력 파싱 → EmDash 발행 대기 마크다운 생성 (디스크 저장 없음, 내부)."""
     # TITLE: ... / --- / 본문
     seo_title = keyword
     content = gpt_output
@@ -705,7 +696,7 @@ def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
             seo_title = title_line
         # 본문 길이 검증: 1000자 미만이면 저장 거부 (품질 게이트)
         if len(content) < 1000:
-            logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — 저장 거부")
+            logger.warning(f"본문 짧음: {len(content)}자 (title={seo_title[:40]}) — 발행 거부")
             return None, None
 
     # AIK24-RENEWAL-01 C-2: 브리핑 원문 링크 주입 제거.
@@ -753,15 +744,15 @@ draft: false
 
 {content}
 """
-    with open(filepath, "w", encoding="utf-8") as f:
-        f.write(md)
-    log(f"  저장: {filename}")
+    _EMDASH_PENDING[filepath] = {"md": md, "links": []}
+    log(f"  EmDash 발행 대기: {filename}")
     return filepath, seo_title
 
 # ============================================
 # 썸네일 삽입 (frontmatter image 필드)
 # ============================================
 def _add_image_to_frontmatter(filepath, image_rel_path):
+    """발행 대기 마크다운의 frontmatter 에 image: 주입 (디스크 쓰기 없음)."""
     if not filepath or not image_rel_path:
         return
     # placeholder 사본 검출: news-keyword-og.webp의 복사본이면 image: 필드 주입 안 함
@@ -770,8 +761,11 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
     if is_placeholder_copy(full_path):
         log(f"  ⚠️ placeholder 사본 검출(MD5 일치), image 필드 생략: {image_rel_path}")
         return
-    with open(filepath, "r", encoding="utf-8") as f:
-        content = f.read()
+    draft = _EMDASH_PENDING.get(filepath)
+    if not draft:
+        log(f"  ⚠️ image 필드 삽입 실패 (발행 대기 초안 없음): {image_rel_path}")
+        return
+    content = draft["md"]
     if re.search(r'^image:', content, re.MULTILINE):
         return
     # 모든 frontmatter 구조 대응: 첫 번째 --- 내부, 두 번째 --- 앞에 image: 필드 삽입
@@ -783,32 +777,46 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
     # parts[0] = before first --- (empty or whitespace)
     # parts[1] = frontmatter content (between the two ---)
     # parts[2] = body content (after the second ---)
-    fm_content = parts[1]
     image_line = f'image: "{image_rel_path}"'
     # Insert image: right before the closing --- (inside frontmatter)
-    updated = f"---{fm_content}{image_line}\n---{parts[2] if len(parts) > 2 else ''}"
-    try:
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(updated)
-        log(f"  🖼️ image 필드 추가: {image_rel_path}")
-    except Exception as e:
-        log(f"  ⚠️ image 필드 저장 실패: {e}")
+    draft["md"] = f"---{parts[1]}{image_line}\n---{parts[2] if len(parts) > 2 else ''}"
+    log(f"  🖼️ image 필드 추가: {image_rel_path}")
 
 from pipeline.infra.telegram import send_telegram
 import model_eval
 
 # ============================================
-# EmDash 발행 (AIK24-EMDASH-01)
+# EmDash 발행 (AIK24-EMDASH-01 단독화 — AIK24-EMDASH-03)
 # ============================================
+def _link_d1(url, links):
+    """발행 성공 후 브리핑 deep_dive_url / 무료 LLM 코멘트 링크를 EmDash URL 로 연결."""
+    for news_id, want_comment in links:
+        # retry: 일시적 D1 네트워크 오류 대응 (2회 재시도)
+        for attempt in range(3):
+            if update_deep_dive_url(news_id, url):
+                break
+            if attempt < 2:
+                log(f"  🔄 deep_dive_url 재시도 {attempt+1}/2...")
+                time.sleep(2)
+        else:
+            log(f"  ⚠️ deep_dive_url 연결 최종 실패 (news_id={news_id}, 3회 모두 실패)")
+        if want_comment:
+            append_comment_link(news_id, url)
+
+
 def _publish_generated_to_emdash(generated):
-    """생성된 .md 를 EmDash 에 publish. 실패하면 Astro 사본이 그대로 남는다(이중 저장)."""
+    """생성된 초안을 EmDash 에 publish. Astro 저장 이 없어 폴백이 없다 —
+    실패한 글은 로그에만 남고 다음 글로 진행한다."""
     import yaml
     from emdash_publish import publish_post
     ok = 0
     for fp, title, _so, _ in generated:
+        draft = _EMDASH_PENDING.get(fp)
+        if not draft:
+            log(f"  ⚠️ EmDash 발행 skip (초안 없음): {os.path.basename(fp)}")
+            continue
         try:
-            with open(fp, encoding="utf-8") as f:
-                _, fm, body = f.read().split("---", 2)
+            _, fm, body = draft["md"].split("---", 2)
             meta = yaml.safe_load(fm) or {}
         except Exception as e:
             log(f"  ⚠️ EmDash 발행 skip ({os.path.basename(fp)}): {e}")
@@ -822,8 +830,9 @@ def _publish_generated_to_emdash(generated):
         if url:
             ok += 1
             log(f"  🚀 EmDash 발행: {url}")
+            _link_d1(url, draft["links"])
         else:
-            log(f"  ⚠️ EmDash 발행 실패 → Astro 유지: {os.path.basename(fp)}")
+            log(f"  ❌ EmDash 발행 실패 (글 유실 — 폴백 없음): {os.path.basename(fp)}")
     log(f"  EmDash 발행 결과: 성공 {ok} / 전체 {len(generated)}")
 
 # ============================================
@@ -880,7 +889,7 @@ def main():
 
             filepath, seo_title = save_draft(gpt_output, title, file_num, today_str, articles=[art])
             if not filepath:
-                log(f"    ❌ 품질 미달로 저장 거부: '{title[:40]}'")
+                log(f"    ❌ 품질 미달로 발행 거부: '{title[:40]}'")
                 continue
             created.append((filepath, seo_title or title, sort_order, 1))
             file_num += 1
@@ -1048,8 +1057,8 @@ def main():
         send_telegram(f"❌ [{today_str}] 썸네일 전면 실패: {len(quality_issues)}건 — 배포 차단됨")
         return
 
-    # 5c. EmDash 발행 (AIK24-EMDASH-01). Astro 이중 저장은 이미 끝났으므로
-    # 여기서 실패해도 Astro 글은 살아 있고, 배포는 계속된다.
+    # 5c. EmDash 단독 발행 (AIK24-EMDASH-03). Astro 저장 이 없으므로 여기서 실패한 글은
+    # 유실된다 — 실패는 로그로만 남기고 다음 글로 진행한다(파이프라인은 계속된다).
     if generated:
         log("[5c] EmDash 발행 중...")
         _publish_generated_to_emdash(generated)
