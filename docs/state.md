@@ -1,3 +1,24 @@
+## 2026-10-14 14:10 AIK24-EMDASH-07 완료 — 모바일 헤더 겹침 수정 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1410-AIK24-EMDASH-07-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `~/projects2/aikorea24emdash/src/styles/theme.css` 맨 아래 5줄 추가(허용 파일 1개). 커밋 `453bf1b1`, GitHub 푸시 완료.
+- 지시서 확정 코드 그대로: `@media (max-width: 640px) { .site-header { height: auto !important; } }` + 사유 주석. `!important` 유지, range syntax 미사용(지시서 §주의 준수).
+
+### 결과
+- [검증됨] **배포**: `bash scripts/deploy.sh` → **Current Version ID `35feeb84-9fff-43bc-ad9e-21d7294beaa5`**(assets 1개 변경 업로드, Uploaded 23.39sec, triggers 4.11sec).
+- [검증됨] **완료기준 1 — 360px `/posts` 겹침 없음**: 헤더 `getBoundingClientRect().bottom = 123`, `h1("최신 글").top = 147` → 24px 간격. nav 링크 6개(로고/Home/Blog/News/Tools/Courses) 모두 `bottom ≤ 111 < 123` → 헤더 밖으로 넘치지 않음. `anyLinkBelowHeader=false`, `h1Overlaps=false`.
+- [검증됨] **모바일 스크린샷 확보** `/tmp/emdash07_mobile.png` (PNG 360×800, 142,028B). 육안 확인: 로고·검색창·메뉴 5개가 "최신 글" 상단에 정상 배치, 겹침 없음.
+- [검증됨] **완료기준 2 — 데스크톱 정상**: 1280px에서 `.site-header` height **65px 유지**, `position: sticky` 유지, `h1.top=97 > 65`.
+- [검증됨] **완료기준 3 — `/`·글 상세 페이지**: 360px에서 `/posts/free-models` `h1.top=228`(헤더 bottom 123 아래), `/` 도 nav 링크 전부 헤더 내부. 두 페이지 모두 겹침 없음.
+- [검증됨] 라이브 CSS(`/_astro/*.css`)에 `@media (max-width:640px){.site-header{height:auto!important}}` 반영, 데스크톱 구간 미영향.
+
+### 잔존 위험
+1. **`/` 페이지에 `h1` 이 0개** — 헤더와 무관한 기존 문제. 첫 머리말이 `h2:Posts` 로 시작(measured). SEO 측면 결함이며 이번 지시서 범위 밖 → 별도 지시서 필요.
+2. `/posts` 첫 카드(`free-models`) 썸네일이 빈 회색 상자로 보임 — EMDASH-04 잔존 위험(썸네일 미지정 글)의 재확인. 이번 작업과 무관.
+3. [검증불가] 실제 iOS/Android 브라우저 주소창 높이 고려에서의 겹침 — 에뮬레이션 뷰포트(360×800) 실측만 함. 에뮬레이션이라 주소바 가변 높이는 반영 안 됨.
+
+### 다음 행동
+- 대표님: `/` 페이지 h1 부재(위 1번) 별도 지시서 필요 시 Issu.
 ## 2026-10-14 14:05 AIK24-EMDASH-06 완료 — 블로그 표 렌더링 근본 해결(10+1건/19표/147행) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1405-AIK24-EMDASH-06-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
