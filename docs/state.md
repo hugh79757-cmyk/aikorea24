@@ -1,3 +1,85 @@
+## 2026-10-14 14:42 AIK24-NAV-01 완료 — 랜딩 내비 무료 모델 진입점 추가 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1442-AIK24-NAV-01-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `src/layouts/Layout.astro` 1줄 추가(허용 파일 1개). 커밋 `f2b57d17`.
+- `navItems` 배열의 `{ label: '블로그', href: '/blog' },` 바로 다음에 `{ label: '무료 모델', href: 'https://emdash.aikorea24.kr/posts/free-models' },` 삽입.
+- 지시서 §주의 준수: 절대 URL 그대로(상대경로 미사용), 라벨·순서(블로그 바로 뒤) 변경 없음.
+
+### 결과
+- [검증됨] **배포**: `npm run deploy` 성공, sitemap ping `{"google": true, "naver": true}`. Version ID **`476d3965-a5a7-4f35-81f4-1e438631605b`**(workers versions API 실측, created_on 2026-10-14T07:39:06Z).
+- [검증됨] **완료기준 1**: 라이브 `https://aikorea24.kr/` HTML 에 `href="https://emdash.aikorea24.kr/posts/free-models"` **정확히 2회**, 라벨 `무료 모델` 2개. 라벨·순서 정상.
+- [검증됨] **완료기준 2**: 출현 위치 2곳 = 5102 / 7580. 첫 `<nav>` 시작 4741, `#mobile-menu` 시작 7336 → 첫 번째는 **데스크톱 내비**, 두 번째는 **`#mobile-menu` 내부**. 양쪽 모두 노출.
+- [검증됨] **완료기준 3**: `GET https://emdash.aikorea24.kr/posts/free-models` → **HTTP 200**, `redirect_url` **빈값**(리다이렉트 없이 직접 연결).
+
+### 잔존 위험
+1. 새 메뉴 항목 추가로 데스크톱 내비 6→7개. 1024~1280px 구간에서 내비 줄바꿈 여부는 미측정 — 기존 6개가 이미 같은 배열로 배치돼 있던 구조라 1개 추가는 유사 동작으로 보이나 실측하지 않음.
+2. [검증불가] 실제 기기에서 메뉴 줄바꿈/오버플로 — 서버 HTML 구조 확인까지만 함.
+
+### 다음 행동
+- 대표님: 데스크톱 중간 폭(1024~1280px)에서 내비 7개가 한 줄에 들어가는지 육안 확인 권장.
+## 2026-10-14 14:40 AIK24-EMDASH-08 완료 — 홈페이지 h1 부재 수정 (눈에 안 보이는 h1 1줄 + visually-hidden CSS) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1440-AIK24-EMDASH-08-완료보고.md (완료 — verify는 시니어 2)
+
+### 한 일
+- [PRODUCTION CODE] `/Users/twinssn/projects2/aikorea24emdash/src/pages/index.astro` 1개, +16행.
+  - `<Base …>` 바로 다음 줄에 `<h1 class="visually-hidden">{siteTitle} — {siteTagline}</h1>` 추가.
+  - `<style>` 맨 아래에 `.visually-hidden` 11행 추가.
+- 커밋 `5d5b325` (pathspec 한정 — 다른 세션 산출물 미포함). 푸시 안 함.
+
+### 결과
+- [검증됨] 완료기준 1: `/` 에 `<h1>` **정확히 1개**, 텍스트 `aikorea24 — AI·테크·정보를 한곳에`. 근거: 라이브 HTML grep `grep -c "<h1"` = 1 (수정 전 0).
+- [검증됨] 완료기준 2: 시각 변화 없음. 근거: Playwright computed style — `position:absolute`, `clip:rect(0px,0px,0px,0px)`, `overflow:hidden`, bounding box **1×1px @ (-1, 64)**. 1280×900 스크린샷(`/tmp/h1_home_after.png`)에서 레이아웃 변화 없음 확인. 빌드된 CSS 에 `.visually-hidden[data-astro-cid-lcdefpme]{…}` 실려 있음.
+- [검증됨] 완료기준 3: 다른 페이지 h1 유지. `/posts` → `<h1 class="page-title">최신 글</h1>`, 글 상세 → `<h1 class="article-title">엔비디아 네모트론 3 울트라 550B…</h1>`. 근거: 라이브 HTML grep.
+- [검증됨] 배포 성공. Version ID **`c1b40f03-4142-4a67-93c1-4f70ed9d9090`**, `Uploaded aikorea24emdash (20.91 sec)`, EXIT 0.
+
+### 잔존 위험
+1. **배포 계정이 다름** — 이 프로젝트는 `~/.env.common` 의 `CLOUDFLARE_API_TOKEN` 이 아니라 `CF_MIGRATE_TOKEN` (계정 `7eb1b8cd…`) 으로 배포한다(`scripts/deploy.sh` 가 강제). 일반 규칙을 그대로 쓰면 엉뚱한 계정에 배포된다.
+2. **푸시 안 함** — 커밋 `5d5b325` 는 로컬에만 있다. 원격 반영이 필요하면 지시 필요.
+3. **h1 이 1×1px 요소를 남긴다** — 지시서가 지정한 표준 visually-hidden CSS 를 그대로 쓴 결과다. 레이아웃 영향은 없어 보이는 1px 이지만 완전한 제거는 `clip-path: inset(50%)` 가 추가로 필요하다.
+4. **emdash 저장소에 테스트가 없다** — `npm run test` = "No test files found, exiting with code 1". 기존 상태이며 이번 변경과 무관. 회귀 자동 확인手段이 없다.
+5. **작업 트리에 다른 세션 산출물 잔존** — `src/version.gen.ts`(배포 스크립트가 매번 갱신), `scripts/logs/table_fix_backup_2026-10-14/` 백업, `scripts/__pycache__/`. 커밋하지 않고 그대로 뒀다.
+
+### 다음 행동
+- 대표님 verify 후 원격 푸시 여부 결정.
+- 홈 이외에 h1 이 없는 페이지가 더 있는지(카드 그리드·태그·카테고리) 별도 점검 필요.
+
+---
+
+## 2026-10-14 AIK24-FREE-PIPE-01 완료 — 무료 모델 수집·평가·발행 일일 파이프라인
+
+## 2026-10-14 AIK24-FREE-PIPE-01 완료 — 무료 모델 수집·평가·발행 일일 파이프라인 (3프로바이더 수집 39건 + diff + 고정 리스트 페이지 + launchd 방콕 10:00) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1430-AIK24-FREE-PIPE-01-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE 신규] `scripts/model_catalog.py` — 4프로바이더 수집(OpenRouter/Kilo/zen) + 스냅샷 `model_catalog_YYYY-MM-DD.json` + diff `model_diff_YYYY-MM-DD.json`.
+- [PRODUCTION CODE 신규] `scripts/free_models_page.py` — 고정 리스트 페이지(슬러그 `free-models`) 갱신 / 신규 모델 평가·심층 리뷰 발행 / 상호 연결 / `daily` 서브커맨드.
+- [PRODUCTION CODE] `scripts/emdash_publish.py` — `upsert_post()` 신설(고정 슬러그 갱신). posts 컬렉션은 slug 필드가 없어 title 이 slug 가 되어야 고정 URL 이 된다.
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` 1줄 — `article=None` 이면 `.get()` 이 죽는 버그 수정 (`{}` 전달).
+- [TEST CODE 신규] `tests/test_model_catalog.py` 7건, `tests/test_free_models_page.py` 7건.
+- [CONFIG 신규] `scripts/free-model-pipe.plist.template` + `~/Library/LaunchAgents/kr.aikorea24.free-model-pipe.plist` 등록. 스케줄 KST 06:00 → **방콕 10:00**(대표님 지정).
+
+### 결과
+- [검증됨] 완료기준 1: 수집 39건 = openrouter 14 + kilo 15 + zen 10. 근거: `/tmp/fp_daily.log` 로그 라인 + `model_catalog_2026-10-14.json` 원소 5개 키(`provider/model_id/name/pricing/context_length`) 일치. **nvidia 1건은 [검증불가]** — `/v1/models` 에 가격·무료 플래그 필드가 없어 무료 티어 판별 불가(2026-10-14 실측).
+- [검증됨] 완료기준 2: diff added/removed/changed 동작. 근거: `tests/test_model_catalog.py` 7 passed(추가 1 / 삭제 1 + 사유 / 변경 1 정확히 포착), 실수행 added 39 · removed 0 · changed 0.
+- [부분검증] 완료기준 3: 리스트 페이지 `https://emdash.aikorea24.kr/posts/free-models` 생성·갱신 동작, HTTP 200, 스냅샷 시각 머리글 반영(13시 → 14시). **2일 연속 갱신은 오늘 안에 불가** — 내일 방콕 10:00 launchd 실행 때 날짜가 바뀌는지 확인 필요.
+- [검증됨] 완료기준 4: `nvidia/nemotron-3-ultra-550b-a55b:free` **11/12 정답 · 호출 실패 1/12** → 리더보드 기록(qv=1) → 심층 리뷰 발행 `https://emdash.aikorea24.kr/posts/nvidianemotron-3-ultra-550b-a55bfree`(HTTP 200, `<title>` 정상).
+- [검증됨] 완료기준 5: 양방향 링크. 리스트 카드 → `href="/posts/nvidianemotron-3-ultra-550b-a55bfree"`, 리뷰 말미 → `href="https://emdash.aikorea24.kr/posts/free-models"` 1건. 둘 다 라이브 HTML grep 확인.
+- [검증됨] 완료기준 6: `launchctl list` 등록 확인, 스케줄 변경 확인(`launchctl print` = `"Hour" => 10`), `daily` 수동 1회 EXIT 0.
+
+### 잔존 위험
+1. **NVIDIA NIM 수집 불가** — 무료 티어 판별 필드가 공개 API에 없음. 별도 조사/지시서 필요.
+2. **2일 연속 갱신 미검증** — 완료기준 3의 절반. 내일 방콕 10:00 실행 결과로 확인해야 함.
+3. **`thinkingmachines/*` 403** — 카탈로그에는 "무료"로 떠도 이 API 키로는 접근 불가. `model_eval_failed.json` 에 영구 스킵 기록해 매일 낭비되는 것을 막았으나, 다른 키로 접근 가능해지면 그때 해제 필요.
+4. **스케줄이 브리핑 이후** — 방콕 10:00 = KST 12:00 이라 지시서 원문 목적(브리핑 09:00 KST 발행 전)과 어긋남. 대표님 지정이 우선이라 그대로 뒀다.
+5. **카드가 1개뿐** — 규칙상 무조건 4개로 채우지 않는다(미평가 모델 제외). 평가가 쌓이면 늘어난다.
+6. **EmDash posts 컬렉션에 slug 필드 없음** — 고정 URL 을 만들려면 title 을 slug 로 써야 한다. 리스트 페이지는 그래서 화면 제목이 `free-models` 이고 한국어 제목은 본문 H1 에 나온다.
+
+### 다음 행동
+- 내일 방콤 10:00 launchd 실행 후 리스트 페이지 스냅샷 날짜 변경 + state.md 로그 1줄 자동 추가 확인.
+- NVIDIA NIM 무료 티어 판별 방식 별도 조사.
+
+---
+
+## 2026-10-14 AIK24-FREE-PIPE-01 일일 실행 — 수집 39건 / 실패 프로바이더 1 / added 39 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 rc=0 / 심층 리뷰 1건 (리스트 카드 링크 1건)
+
 ## 2026-10-14 14:10 AIK24-EMDASH-07 완료 — 모바일 헤더 겹침 수정 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1410-AIK24-EMDASH-07-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
@@ -104,7 +186,7 @@
 - 대표님: D1 `courses` 테이블 2행 정리 여부 결정.
 - 별도 지시서 대기: B-3/B-4/B-5/B-7(디자인 스펙), A안 콘솔 캐시 규칙.
 
-## 진행 중 (2026-10-14, AIK24-FREE-PIPE-01) — 무료 모델 수집·평가·발행 일일 파이프라인 (model_catalog.py 신규 + diff + 리스트 페이지 + launchd)
+
 
 ## 2026-10-14 13:45 AIK24-RENEWAL-01 B그룹(디자인 7건)현황 감사 — B-1/B-2 이미 적용됨 확인, 잔여 1건 + 스펙 확인 대기
 
