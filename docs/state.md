@@ -1,3 +1,45 @@
+## 2026-10-14 AIK24-PIPE-01 완료 — 무료 모델 자동 평가 비활성화 + 신규 모델 감지 스케줄 등록 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2101-AIK24-PIPE-01-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/free_models_page.py` — `AUTO_EVAL_ENABLED = False` 상수 신설(삭제 아닌 플래그), `cmd_daily()` 의 `cmd_evaluate` 호출을 그 플래그로 감쌄다. else 분기 로그는 `"평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환)"`. 수집(`mc.run`)과 리스트 페이지 갱신(`cmd_page`)은 계속 돈다.
+- [PRODUCTION CODE] `scripts/detect_new_models.py` 신규(106줄). D1 미사용 — 외부 API 만이라 CF 자원 소모 없음.
+- [CONFIG] `scripts/detect-new-models.plist.template` 신규 + `~/Library/LaunchAgents/kr.aikorea24.detect-new-models.plist` 설치·로드.
+- 커밋 `d4917661`.
+
+### 결과
+- [검증됨] **작업1 자동 평가 미실행** — `grep -n AUTO_EVAL_ENABLED scripts/free_models_page.py` → 43행 정의, 436행 분기. 삭제 없이 플래그로만 끈다. 수동 경로(`free_models_page.py evaluate --force`, `model_eval.py evaluate --model <id>`)는 살아 있다.
+- [검증됨] **작업2 신규 감지 동작** — `python3 scripts/detect_new_models.py` 3회 실행:
+  - 1회차: `베이스라인 없음 — 오늘 스냅샷을 베이스라인으로 기록한다` + `첫 실행 — 신규/제외 비교를 건너뛴다` → `신규 모델 없음 (전체 38건)`.
+  - 2·3회차: `신규 모델 없음 (전체 38건)` — 반복 실행 시 오탐 0.
+  - `scripts/logs/new_models_alert.json`(28KB) · `scripts/logs/model_catalog_baseline.json`(26KB) 생성 확인.
+- [검증됨] **작업3 스케줄 등록** — `plutil -lint` OK, `launchctl bootstrap` OK, `launchctl list` 에 `kr.aikorea24.detect-new-models` 표시(exit status 0). `StartCalendarInterval` = **머신 로컬 04:00**.
+  - 슬롯 회피 근거(실측): news-unified 05:30 · tools-collector 06:00 · network-refresh 06:00 · wiki-batch-embed 07:05 · blog-draft 07:30 · threads-compass 09:30 · free-model-pipe 10:00 → 04:00 은 비어 있음.
+  - 스케줄과 동일한 인터프리터/인자(`.venv/bin/python3 scripts/detect_new_models.py`)로 수동 실행해 종료코드 0 확인.
+- [검증됨] **브리핑·툴 파이프라인 무영향** — `launchctl list` 에 `news-unified`·`tools-collector`·`blog-draft`·`free-model-pipe` 4개 모두 그대로 로드(exit 0). 해당 plist 는 수정하지 않았다.
+- [검증됨] 회귀 테스트 `pytest tests/test_eval_cli.py tests/test_zen_pending.py -q` → **24 passed**.
+
+### 지시서 전제 대비 차이
+- 지시서는 비교 기준을 `scripts/logs/known_models.json` 이라 지시하나 그 파일은 실존하지 않았다. 일회성 스냅샷(`model_catalog_YYYY-MM-DD.json`)과 섞이지 않도록 영속 베이스라인 파일을 `scripts/logs/model_catalog_baseline.json` 로 분리했다.
+- 지시서는 4개 프로바이더를 감지 대상으로 적었으나 **NVIDIA NIM 은 `model_catalog.fetch_nvidia()` 가 `NotImplementedError` 를 던진다** — `/v1/models` 응답에 가격·무료 플래그 필드가 없어 무료 티어 판별 불가(2026-10-14 실측). 이 때문에 감지 대상은 실측 3개(OpenRouter·Kilo·Zen)다.
+
+### 잔존 위험
+1. **NVIDIA NIM 은 감지 대상에서 빠짐** — `fetch_nvidia()` 가 계속 `NotImplementedError`. `nvidia` 프로바이더는 베이스라인에 없으므로 diff 에도 안 잡힌다. NVIDIA 공식 카탈로그 API 를 따로 붙이거나, 무료 티어 판별 근거를 정해야 해���.
+2. **수집 결과에 편차가 큼** — 1회차 콘솔에는 openrouter 462 · kilo 394 · zen 85 가 나왔으나 `total_rows=38`. `all_ids` 는 모델 ID 전체 목록이고 `rows` 는 필터링(무료 판별) 후 행이라 숫자가 다르다. 신규 감지에는 `all_ids` 기준이 쓰이므로 실제로는 총 941 ID 를 비교한다.
+3. `AUTO_EVAL_ENABLED = False` 인 채로 `free-model-pipe`(매일 10:00)는 계속 돌지만 평가 단계만 SKIP 된다 — 수집+페이지 갱신 비용은 그대로 발생.
+4. [검증불가] 04:00 실제 기동 — plist 로드까지만 확인했고 정해진 시각에 자동 실행되는 것은 다음 날 로그로 확인해야 한다.
+
+### 다음 행동
+- 대표님: NVIDIA NIM 감지 포함 여부 결정(위 1번).
+- 대표님: `scripts/deep_dive_writer.py` SyntaxError 수리 지시 여부(EVAL-CLI-01 잔존).
+## 진행 중 (2026-10-14, AIK24-PIPE-01) — 무료 모델 자동 평가 비활성화 + 일일 신규 모델 감지
+
+## 2026-10-14 20:45 CLI 피봇 확정 (대표님 결정) — 모든 평가는 OpenCode CLI 기준, 기존 API 데이터 전부 폐기
+- `model_leaderboard.json` → `[]` (백업: `model_leaderboard.json.bak-20261014-cli-pivot`)
+- `model_eval_cache.json` → `{}`
+- OpenCode에 openrouter·kilo·zen 프로바이더 등록済 — 프로바이더별 모델 선택 가능, 커버리지 손실 없음
+- OpenCode에서 선택 불가한 모델은 테스트 명단 제외
+- CLI는 토큰량 미제공 → 블로그 비용 섹션 "미측정" 처리
+
 ## 2026-10-14 AIK24-EVAL-CLI-01 완료 — CLI 경유 모델 평가(cat-jam-free 8/12) + 실효 컨텍스트 프로브 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2120-AIK24-EVAL-CLI-01-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
