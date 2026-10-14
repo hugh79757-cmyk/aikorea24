@@ -1,25 +1,24 @@
-## 2026-10-14 12:50 AIK24-EMDASH-04 후속 — /posts 엣지 캐시 적용 시도 + 쿼리 프로파일링 (에지캐시 [검증불가], 원인 특정)
+## 2026-10-14 13:00 AIK24-EMDASH-04 해결 — B안(limit 12 + getReadingTime 제거) 배포로 /posts 503 해소 [검증됨] / A안 캐시 규칙은 여전히 [검증불가]
 
 ### 한 일
-- 지시: 대표님 "EmDash는 200으로 살아있고 1102는 간헐적. 1·2번 하지 말고 3번으로 — /posts* 엣지 캐시 적용 후 /posts 쿼리 프로파일링".
-- [PRODUCTION CODE] 없음(이번 항목은 조사만).
+- 대표님 지시: "zone 이전 확인됨. B안 먼저 배포하고, A안 캐시 규칙은 /tmp/cache_ruleset.json으로 API 재시도."
+- [PRODUCTION CODE] `~/projects2/aikorea24emdash/src/pages/posts/index.astro` 3줄 — `limit: 60 → 12`, `readingTime={getReadingTime(post.data.content)}` 삭제, `getReadingTime` import 삭제. 주석에 프로파일링 수치 근거 기입.
+- **주의: 이 프로젝트는 git 저장소가 아니다**(`git stash` → "not a git repository"). 되돌리려면 파일 수동 수정.
 
 ### 결과
-- **[검증불가] 엣지 캐시 적용 실패 — 토큰 권한 부족.** 존 `aikorea24.kr`(zone_id `76d0599a7e05203168fd8fe1cfae4bd4`) 소유 계정은 `fac9808c757df31d797190c529aaa71a`(Hugh79757). rulesets GET 은 성공하나 POST(Cache Rules, phase `http_request_cache_settings`) 는 `10000 Authentication error`, classic pagerules POST 는 `9109 Unauthorized`. `CF_MIGRATE_TOKEN`/`CF_DNS_TOKEN`/`CLOUDFLARE_EMDASH_D1_TOKEN` 모두 rulesets 읽기부터 실패. 복구 계획: 콘솔에서 Cache Rule 1건 수동 생성(페이로드 `/tmp/cache_ruleset.json` 준비됨) 또는 토큰에 `Zone Rulesets:Edit` 추가.
-- [검증됨] /posts 쿼리 프로파일링(EmDash D1, 3회 반복 median):
-  - `SELECT * LIMIT 61` = **281 ms / 509.7 KB**
-  - `SELECT * LIMIT 12` = 203 ms / 120.2 KB
-  - `LIMIT 61` content 컬럼 제외 = **154–162 ms / 43.8 KB**
-  - `SELECT COUNT(*)` = 122–146 ms
-  - **원인 확정: `SELECT *` 가 `ec_posts.content`(본문 전체 JSON)를 61건 끌어와 509.7 KB. content 제외 시 43.8 KB(11.6배). 목록 카드가 `content` 를 쓰는 곳은 `getReadingTime()` 뿐 → Workers Free CPU 한계 초과(1102)의 원인.**
-- [검증됨] 라이브: `/posts` 3/3 = 503(결정적). `/posts?page=2` 3/3 = 503. `/` 간헐(200/503/200). 개별 글·`/rss.xml`·`/sitemap.xml` 3/3 = 200.
-- [검증됨] 코멘트 정정: `posts/index.astro` 의 "limit 적용 전 전체 hydrate" 주석은 틀림. `loader-*.mjs:1104` 에서 `LIMIT ${fetchLimit}` 적용됨.
+- [검증됨] **존 이전 확인 — zone_id가 바뀜.** `aikorea24.kr` 신규 zone_id = `71a21534380f096809ef7b97165e3bc7`, 계정 `7eb1b8cd178de269758ec94b2e03330b`(Stylefactory9ai), status `active`. 구 zone `a6d9e75032c8cefe316b06d46a90a431` status `moved`. 기존에 쓰던 `76d0599a7e05203168fd8fe1cfae4bd4` 는 `informationhot.kr`. **`CF_MIGRATE_TOKEN`으로 새 zone 읽기 성공.**
+- [검증됨] 배포 성공 — Version `9a0f78e6-b020-4b29-b065-a995c94daa3e`, Worker Startup 22ms, 113 assets.
+- [검증됨] **`/posts` 8/8 = 200**(0.34–0.54s, 38,762B, "12 articles"). 홈페이지 **8/8 = 200**. `/rss.xml` 200.
+- [검증됨] ego-browser 육안: `title="Latest Posts — aikorea24"`, `h1="최신 글"`, `desc="12 articles"`, 카드 12개, `broken images 0/14`. 스크린샷 `/tmp/posts_after.png` — 썸네일 전부 정상 렌더.
+- [검증됨] typecheck 신규 에러 0건 (기존 6건은 `og-image.ts`·`sanitize.ts`·`index.astro` 의 기존 문제).
+- **[검증불가] A안 캐시 규칙 — 여전히 스코프 부족.** 새 zone `71a21534380f096809ef7b97165e3bc7` 에 `/tmp/cache_ruleset.json` POST → `CF_MIGRATE_TOKEN`/`CF_DNS_TOKEN`/`D1_API_TOKEN`/`CLOUDFLARE_EMDASH_D1_TOKEN`/`CLOUDFLARE_API_TOKEN` **5개 전부 `10000 Authentication error`**. GET rulesets 도 10000. → 이전은 계정 문제였지만 **지금은 토큰 스코프(Zone Rulesets:Edit) 문제**. 복구 계획: 콘솔 수동 생성 또는 토큰 재생성.
 
 ### 잔존 위험
-1. EmDash `/posts` 목록 503 지속 — Astro SSR 301 은 정상 동작하나 도착지가 죽어 있어 `aikorea24.kr/blog/` 구간 사실상 중단.
-2. 코드를 건드리지 않았으므로 원인(SELECT * )은 그대로. `~/projects2/aikorea24emdash` 소스는 배포 가능한 상태(`CF_MIGRATE_TOKEN` + account `7eb1b8cd178de269758ec94b2e03330b`).
-3. Astro 7.3.2 의 `Astro.cache` 는 `astro.config.mjs` 에 `cache` 키가 없어 **죽은 코드**. `@astrojs/cloudflare` 가 cache provider 미제공 → 커스텀 provider 모듈 작성 필요.
+1. `/posts` 가 항상 최신 12편만 표시 — `?page=N` 파라미터 미구현(이번 변경 이전에도 페이지네이션 없었음). 1,481편 중 1,469편은 목록에서 도달 불가.
+2. 카드에서 "N분 소요" 표시 사라짐(`readingTime` 미전달).
+3. 캐시 미적용 — 트래픽 급증 시 `/posts` 는 여전히 CPU 한계에 노출.
+4. `~/projects2/aikorea24emdash` 미커밋(저장소 아님) — 수동 백업 필요.
 
 ### 다음 행동
-- 대표님: (a) 콘솔 캐시 규칙 수동 생성, (b) `posts/index.astro` `limit: 60 → 12` + `getReadingTime` 제거 후 `npm run deploy`, (c) 커스텀 Astro cache provider 구현 — 중 택 1.
+- 대표님: 콘솔에서 Cache Rule 1건 생성(페이로드 `/tmp/cache_ruleset.json`), `/posts` 페이지네이션 지시 여부.
 
