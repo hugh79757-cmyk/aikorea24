@@ -1,3 +1,38 @@
+## 2026-10-14 AIK24-PIPE-02 완료 — NVIDIA NIM 신규 모델 감지 포함 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2128-AIK24-PIPE-02-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/model_catalog.py` — `NVIDIA_MODELS` 상수 신설(34행 다음), `fetch_nvidia()` 를 `NotImplementedError` → 실구현으로 교체. `rows` 는 빈 리스트, `all_ids` 는 실측 전체 id 집합을 반환. 커밋 `2755441c`.
+- 범위 밖 준수: 브리핑·툴 파이프라인 미변경, `AUTO_EVAL_ENABLED` 미변경, launchd 스케줄 미변경.
+
+### 결과
+- [검증됨] **작업1 — 무료 판별 방법 조사(결론: 불가)**. 실측 근거:
+  - `GET https://integrate.api.nvidia.com/v1/models` → 200, **80개 모델**, 응답 키가 `created/id/object/owned_by` **4개뿐**. `free` 문자열 들어간 id 0건.
+  - `?include=pricing`·`?free=true`·`?tier=free` → 모두 200 이나 **응답 완전 동일**(쿼리 무시).
+  - `GET /v1/models/{id}` → **404**(`Model does not exist by the name of ...`).
+  - `api.nvcf.nvidia.com/v2/functions` → 401. `api.ngc.nvidia.com/v2/models/search` → 404. `integrate.api.nvidia.com/v1/credits` → 404. `api.nvidia.com/v1/models` → ConnectError.
+  - `docs.api.nvidia.com/nim/reference/llm-apis` → 문서 존재하나 엔드포인트는 `POST /v1/chat/completions` 하나뿐이고 **가격·티어 정보 없음**(갱신일 2026-10-05).
+  - `build.nvidia.com/explore/discover` → SPA 셸. `build.nvidia.com/pricing` → **404**. `docs.nvidia.com/nim/large-language-models/latest/getting-started.html` → 페이지 없음.
+  - → **API 도 공식 목록 URL 도 없음 = 무료 티어 판별 불가 [검증됨]**
+- [검증됨] **작업2 — NVIDIA 가 감지 대상에 포함** — `python3 scripts/detect_new_models.py` 실행 결과:
+  - 1회차: `신규 모델 80건`(전부 nvidia) → `new_by_provider = {"nvidia": 80}`, **`failed_providers` 빈 dict**(NIM 이 더 이상 실패하지 않음), `total_rows 38`(무료 목록 변화 없음).
+  - 2회차: `신규 모델 없음 (전체 38건)` — 반복 실행 오탐 0.
+  - **기존 3개 프로바이더 무영향 [검증됨]** — openrouter·kilo·zen 은 신규 0건, `total_rows` 38 그대로.
+- [검증됨] 대표님 원칙("검증 불가한 항목은 억지로 넣지 않는다") 준수 — `rows`(무료 모델 페이지에 advertise 되는 목록)는 **빈 리스트로 유지**. 검증되지 않은 "무료" 표시는 하지 않는다. 신규 감지만 `all_ids` 로 수행.
+- [검증됨] 회귀 테스트 `pytest tests/test_eval_cli.py tests/test_zen_pending.py -q` → **24 passed**.
+
+### 지시서 대비 판단 (대표님 확인 필요)
+- 지시서 작업2 후안은 `NVIDIA_FREE_MODELS` 상수 하드코딩이었으나, **공식 무료 목록이 존재하지 않아 하드코딩할 근거가 없다.** 지시서 본문에도 "API 로 불가하면 … 공식 무료 모델 목록을 하드코딩한 상수"라고 되어 있으므로, 근거 없는 목록을 만드는 대신 `rows` 를 비우고 `all_ids` 로만 감지하는 쪽을 택했다. 지시서 완료기준("NVIDIA 모델이 감지 대상에 포함되고 기존 3개 무영향")은 그대로 충족된다.
+
+### 잔존 위험
+1. **NVIDIA NIM 모델은 무료 여부 미검증 상태로 알림만 온다** — 신규 NIM 모델이 잡히면 그것이 실제로 무료 티어로 호출되는지는 대표님 수동 테스트로만 확인된다. 자동 판별은 여전히 불가.
+2. NIM 감지 대상에 **임베딩·비전·음성 모델이 섞여 있다**(예: `nvidia/nemotron-3-embed-1b`, `nvidia/neva-22b`, `nvidia/riva-translate-4b-instruct`). LLM 이 아니므로 수동 테스트 시 걸러야 한다. 무료라고 advertise 하지 않으므로 페이지 오염은 없지만 알림噪音가 된다.
+3. [검증불가] NVIDIA 가 추후 무료 목록을 공개하면 이 구현을 손봐야 한다 — docstring 에 `shortcut:` 주석으로 남겨 두었다.
+4. NIM 80개는 **베이스라인 1회 등록** 상태다. `all_ids` 가 줄면 `removed_by_provider` 로 잡히지만, NIM 은 목록 정리를 자주 안 해 이 경고는噪音가 될 수 있다.
+
+### 다음 행동
+- 대표님: NIM 신규 알림 도착 시 수동 테스트 후, 실제 무료 티어로 확인된 것만 별도 상수로 승격할지 결정.
+## 진행 중 (2026-10-14, AIK24-PIPE-02) — NVIDIA NIM 신규 모델 감지 포함
+
 ## 2026-10-14 AIK24-PIPE-01 완료 — 무료 모델 자동 평가 비활성화 + 신규 모델 감지 스케줄 등록 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2101-AIK24-PIPE-01-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
@@ -31,6 +66,8 @@
 ### 다음 행동
 - 대표님: NVIDIA NIM 감지 포함 여부 결정(위 1번).
 - 대표님: `scripts/deep_dive_writer.py` SyntaxError 수리 지시 여부(EVAL-CLI-01 잔존).
+## 진행 중 (2026-10-14, AIK24-EVAL-02) — CLI 기준 무료 모델 전수 리스트 (free_models_cli.json)
+
 ## 진행 중 (2026-10-14, AIK24-PIPE-01) — 무료 모델 자동 평가 비활성화 + 일일 신규 모델 감지
 
 ## 2026-10-14 20:45 CLI 피봇 확정 (대표님 결정) — 모든 평가는 OpenCode CLI 기준, 기존 API 데이터 전부 폐기
