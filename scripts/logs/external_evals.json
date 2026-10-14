@@ -1,9 +1,9 @@
 {
- "fetchedAt": "2026-10-14T21:59:22+0700",
+ "fetchedAt": "2026-10-15T01:04:17+0700",
  "sources": {
   "opencode_data": {
    "url": "https://opencode.ai/data/index.json",
-   "updatedAt": "2026-10-14T13:24:19.000Z",
+   "updatedAt": "2026-10-14T17:20:17.000Z",
    "temporalCoverage": "2026-08-20/2026-10-14",
    "retention": [
     {

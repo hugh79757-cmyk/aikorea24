@@ -118,3 +118,28 @@ def check_quota(threshold=0.8, tok=None, raise_on_exceed=True):
         raise QuotaExceededError(
             f"[D1-GUARD] 일일 읽기 {used:,}/{D1_READ_LIMIT:,} ({pct:.1%}) — 작업 중단")
     return {"readonly": False, "used": used, "limit": D1_READ_LIMIT, "pct": pct}
+
+
+def require_d1_headroom(script, threshold=None):
+    """스크립트 진입부 가드. 여유가 없으면 SystemExit(3).
+
+    왜 필요한가: check_quota() 는 cfnew.sql() 안에서만 돈다. EmDash **HTTP API** 를 때리는
+    스크립트(emdash13_repair / emdash04_migrate / fix_tables)는 그 가드를 우회해서, 2026-10-14
+    한도 초과 사고 때 244건 × 재시도 폭풍을 그대로 질렀다. 초과하면 D1 을 읽는 모든 경로
+    (EmDash 관리자 로그인·게시물 렌더 포함)가 죽으므로, 폭주 가능성이 있는 스크립트는
+    시작 전에 스스로 멈춰야 한다.
+
+    임계 기본 0.7 (env D1_HEADROOM). 처음엔 0.5 로 뒀으나 2026-10-14 실측 baseline 이
+    이미 220~270만행(한도의 44~54%)이라 평상일 후반 작업까지 막았다 — 0.7 로 올렸다.
+    초과 직전에 멈추면 늦다는 건 그대로다(여유 150만행).
+    조회 실패는 fail-open(_cache 마지막 값). 한도를 못 보는 것과 작업을 막는 것은 다르다.
+    """
+    th = D1_READ_LIMIT * (threshold if threshold is not None else float(os.environ.get("D1_HEADROOM", "0.7")))
+    used = get_daily_rows_read(force=True)
+    if used >= th:
+        print(f"[D1-GUARD] {script} 중단 — D1 읽기 {used:,}/{D1_READ_LIMIT:,} "
+              f"({used / D1_READ_LIMIT:.1%}) >= 임계 {th:,.0f}. "
+              f"이대로 돌리면 계정 전체 D1 이 죽는다(자정 UTC 초기화).", flush=True)
+        raise SystemExit(3)
+    print(f"[D1-GUARD] D1 읽기 {used:,}/{D1_READ_LIMIT:,} ({used / D1_READ_LIMIT:.1%}) — {script} 진행", flush=True)
+    return used

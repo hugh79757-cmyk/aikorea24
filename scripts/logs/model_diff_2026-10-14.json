@@ -1,0 +1,369 @@
+{
+  "added": [
+    {
+      "provider": "openrouter",
+      "model_id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 512000
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "liquid/lfm-2.5-2.6b:free",
+      "name": "LiquidAI: LFM2.5-2.6B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 65536
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3.5-lightning:free",
+      "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "thinkingmachines/inkling-small:free",
+      "name": "Thinking Machines: Inkling Small (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "poolside/laguna-s-2.1:free",
+      "name": "Poolside: Laguna S 2.1 (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "thinkingmachines/inkling:free",
+      "name": "Thinking Machines: Inkling (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "poolside/laguna-xs-2.1:free",
+      "name": "Poolside: Laguna XS 2.1 (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini Code (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 256000
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3.5-content-safety:free",
+      "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 128000
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "name": "NVIDIA: Nemotron 3 Ultra (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 256000
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "google/gemma-4-26b-a4b-it:free",
+      "name": "Google: Gemma 4 26B A4B  (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "google/gemma-4-31b-it:free",
+      "name": "Google: Gemma 4 31B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b:free",
+      "name": "NVIDIA: Nemotron 3 Super (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "kilo",
+      "model_id": "kilo-auto/free",
+      "name": "Auto Free",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 256000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "name": "NVIDIA: Nemotron 3 Ultra (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "stealth/glyph-cluster",
+      "name": "Stealth: Glyph Cluster (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 256000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 512000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "liquid/lfm-2.5-2.6b:free",
+      "name": "LiquidAI: LFM2.5-2.6B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 65536
+    },
+    {
+      "provider": "kilo",
+      "model_id": "nvidia/nemotron-3.5-lightning:free",
+      "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "thinkingmachines/inkling-small:free",
+      "name": "Thinking Machines: Inkling Small (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576
+    },
+    {
+      "provider": "kilo",
+      "model_id": "poolside/laguna-s-2.1:free",
+      "name": "Poolside: Laguna S 2.1 (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "kilo",
+      "model_id": "poolside/laguna-xs-2.1:free",
+      "name": "Poolside: Laguna XS 2.1 (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "kilo",
+      "model_id": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini Code (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 256000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "nvidia/nemotron-3.5-content-safety:free",
+      "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 128000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 256000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "nvidia/nemotron-3-super-120b-a12b:free",
+      "name": "NVIDIA: Nemotron 3 Super (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "kilo",
+      "model_id": "openrouter/free",
+      "name": "OpenRouter Free Models Router",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 200000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "stepfun/step-5-preview-free",
+      "name": "StepFun: Step 5 Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    },
+    {
+      "provider": "zen",
+      "model_id": "ling-3.1-flash-free",
+      "name": "ling-3.1-flash-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "cat-jam-free",
+      "name": "cat-jam-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "mimo-v2.6-flash-free",
+      "name": "mimo-v2.6-flash-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "muse-spark-1.2-contributor-free",
+      "name": "muse-spark-1.2-contributor-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "muse-spark-1.3-contributor-free",
+      "name": "muse-spark-1.3-contributor-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "nemotron-3.5-lightning-free",
+      "name": "nemotron-3.5-lightning-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "jev-1.13-free",
+      "name": "jev-1.13-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "step-5-preview-free",
+      "name": "step-5-preview-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "longcat-2.5-preview-free",
+      "name": "longcat-2.5-preview-free",
+      "pricing": null,
+      "context_length": null
+    },
+    {
+      "provider": "zen",
+      "model_id": "space-bunny-free",
+      "name": "space-bunny-free",
+      "pricing": null,
+      "context_length": null
+    }
+  ],
+  "removed": [],
+  "changed": [],
+  "failed_providers": {
+    "nvidia": "NotImplementedError: NVIDIA NIM: /v1/models 에 가격·무료 플래그 필드가 없어 무료 티어 판별 불가 (2026-10-14 실측: 키 4개뿐, ?include=pricing 무시, build.nvidia.com 은 SPA 셸)"
+  }
+}

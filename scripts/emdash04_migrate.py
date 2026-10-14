@@ -24,6 +24,10 @@ LIMIT = int(os.environ.get("LIMIT", "500"))
 SKIP = int(os.environ.get("SKIP", "0"))
 BATCH = int(os.environ.get("BATCH", "50"))
 BATCH_SLEEP = float(os.environ.get("BATCH_SLEEP", "5"))
+# D1-03: N+1 완화 — 기존 제목 조회 페이지 크기 확대(기본 100 → 500) 및 로컬 캐시
+EXISTING_TITLES_LIMIT = int(os.environ.get("EXISTING_TITLES_LIMIT", "500"))
+EXISTING_TITLES_CACHE = "/tmp/emdash_existing_titles.json"
+EXISTING_TITLES_CACHE_TTL = int(os.environ.get("EXISTING_TITLES_CACHE_TTL", "3600"))  # 1시간
 UTC = datetime.timezone.utc
 
 # ---------- markdown -> Portable Text (node_modules/emdash/dist/portable-text-*.mjs 재현) ----------
@@ -79,6 +83,65 @@ def _li(text, list_item, level):
             "level": level, "markDefs": mark_defs, "children": children}
 
 
+# ---------- 마크다운 표 -> EmDash table 블록 (AIK24-EMDASH-09) ----------
+# 파싱 로직은 AIK24-EMDASH-06 의 scripts/fix_tables.py 를 그대로 가져왔다.
+# 저장소만 다를 뿐 같은 알고리즘이므로 중복 구현 대신 같은 판단을 쓴다.
+
+DELIM_CELL = re.compile(r"^:?-{3,}:?$")
+
+
+def _split_row(text):
+    """`| a | b |` → ['a', 'b']. 파이프 행이 아니면 None."""
+    t = text.strip()
+    if "|" not in t:
+        return None
+    if t.startswith("|"):
+        t = t[1:]
+    if t.endswith("|"):
+        t = t[:-1]
+    cells = [c.strip() for c in t.split("|")]
+    return cells or None
+
+
+def _is_delim(cells):
+    return bool(cells) and all(DELIM_CELL.match(c.replace(" ", "")) for c in cells)
+
+
+def _align(c):
+    """구분선 셀 → 열 정렬 (`:---:`→center, `---:`→right, `:---`→left)."""
+    c = c.replace(" ", "")
+    if c.startswith(":") and c.endswith(":"):
+        return "center"
+    if c.endswith(":"):
+        return "right"
+    if c.startswith(":"):
+        return "left"
+    return None
+
+
+def _cell(text, is_header, align):
+    children, mark_defs = _spans(text)
+    c = {"_type": "tableCell", "_key": k(), "content": children, "isHeader": is_header}
+    if align:
+        c["textAlign"] = align
+    if mark_defs:
+        c["markDefs"] = mark_defs
+    return c
+
+
+def _table(rows, aligns):
+    """헤더행(rows[0]) + 데이터행 → table 블록 1개."""
+    width = max(len(r) for r in rows)
+    trows = []
+    for idx, r in enumerate(rows):
+        header = idx == 0
+        trows.append({"_type": "tableRow", "_key": k(),
+                      "cells": [_cell(r[c] if c < len(r) else "", header,
+                                      aligns[c] if c < len(aligns) else None)
+                                for c in range(width)]})
+    return {"_type": "table", "_key": k(), "rows": trows, "hasHeaderRow": True}
+
+
 def md_to_pt(md):
     global _ctr
     _ctr = 0
@@ -132,6 +195,22 @@ def md_to_pt(md):
         if m:
             blocks.append({"_type": "image", "_key": k(), "alt": m.group(1), "asset": {"url": m.group(2)}})
             i += 1
+            continue
+        # 표: 헤더행 + 구분선행이 같이 있어야 인정한다. `GitHub | Pages | Vercel` 같은
+        # 구분선 없는 파이프 나열은 그대로 일반 문단이다 (AIK24-EMDASH-06 원칙).
+        row = _split_row(line)
+        delim = _split_row(lines[i + 1]) if i + 1 < len(lines) else None
+        if row and delim and _is_delim(delim):
+            aligns = [_align(c) for c in delim]
+            rows = [row]
+            i += 2
+            while i < len(lines):
+                nxt = _split_row(lines[i])
+                if not nxt:
+                    break
+                rows.append(nxt)
+                i += 1
+            blocks.append(_table(rows, aligns))
             continue
         blocks.append(_block(line, "normal"))
         i += 1
@@ -241,11 +320,27 @@ def ensure_terms(posts):
 
 
 def existing_titles():
-    """이미 이관된 (title -> (id, status)) 수집 (재개용)."""
+    """이미 이관된 (title -> (id, status)) 수집 (재개용). 캐시 지원으로 N+1 완화."""
+    import os
+    import time
+    cache_path = EXISTING_TITLES_CACHE
+    # 캐시 유효성 검사
+    if os.path.exists(cache_path):
+        try:
+            with open(cache_path, encoding="utf-8") as f:
+                cached = json.load(f)
+            if time.time() - cached.get("ts", 0) < EXISTING_TITLES_CACHE_TTL:
+                print(f"  [캐시] 기존 제목 {len(cached['data'])}건 로드 (age={int(time.time()-cached['ts'])}s)")
+                return cached["data"]
+        except Exception:
+            pass
+
     seen = {}
     cursor = None
-    for _ in range(300):
-        path = "/_emdash/api/content/posts?limit=100&orderBy=createdAt&order=desc"
+    page_limit = EXISTING_TITLES_LIMIT
+    max_pages = max(1, (1500 + page_limit - 1) // page_limit)  # 최대 예상 건수 기준 페이지 수
+    for page_num in range(max_pages):
+        path = f"/_emdash/api/content/posts?limit={page_limit}&orderBy=createdAt&order=desc"
         if cursor:
             path += "&cursor=" + urllib.parse.quote(cursor)
         st, d = api(path)
@@ -253,13 +348,25 @@ def existing_titles():
             print("  ! existing 조회 실패 http=%s" % st)
             break
         data = d.get("data") or {}
-        for it in data.get("items", []):
+        items = data.get("items", [])
+        if not items:
+            break
+        for it in items:
             t = (it.get("data") or {}).get("title") or it.get("title")
             if t:
                 seen[t] = (it.get("id"), it.get("status"))
         cursor = data.get("nextCursor") or data.get("cursor") or (data.get("pagination") or {}).get("nextCursor")
         if not cursor:
             break
+        if len(items) < page_limit:
+            break
+
+    # 캐시 저장
+    try:
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump({"ts": time.time(), "data": seen}, f, ensure_ascii=False)
+    except Exception:
+        pass
     return seen
 
 
@@ -278,6 +385,12 @@ def main():
         b = md_to_pt(posts[0]["body"])
         print("PT 블록 %d개, head=%s" % (len(b), json.dumps(b[0], ensure_ascii=False)[:300]))
         return
+
+    # 2026-10-14 사고 후속: existing_titles() 가 ?limit=100 을 최대 300회 돌며 1,479건 본문을
+    # hydrate 한다. D1 한도를 태우면 EmDash 관리자 로그인까지 죽는다 → 시작 전에 스스로 멈춘다.
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import cfnew
+    cfnew.require_d1_headroom("emdash04_migrate")
 
     terms = ensure_terms(posts)
     print("terms:", terms)

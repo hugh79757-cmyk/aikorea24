@@ -26,6 +26,9 @@ PROJECT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CACHE = "/tmp/emdash_audit.json"
 URLMAP = os.path.join(PROJECT, "docs", "emdash_url_map.csv")
 SITE = "https://aikorea24.kr"
+# 연속 실패 서킷브레이커 (2026-10-14 D1 한도 초과 사고 후속). 503/1102 폭풍에서 남은 건을
+# 계속 두드려도 성공하지 못하고 D1 읽기와 Worker CPU 만 태운다.
+MAX_CONSEC_FAIL = 5
 MD_LINK = re.compile(r"\[[^\]]{0,80}\]\((https?://[^)]{1,200})\)")
 
 
@@ -191,8 +194,22 @@ def main():
     if dry:
         return
 
+    # 2026-10-14 사고: 이 스크립트의 재시도 폭풍이 D1 무료 한도를 태워 EmDash 관리자 로그인까지
+    # 죽였다(cfnew.check_quota 는 cfnew.sql() 안에서만 돌아 HTTP API 호출을 못 막는다).
+    sys.path.insert(0, PROJECT)
+    import cfnew
+    cfnew.require_d1_headroom("emdash13_repair")
+
     tally = {"dash": 0, "img": 0, "link": 0, "md": 0}
     done = fail = skip = 0
+    consec = 0
+
+    def _gate(note):
+        nonlocal consec
+        consec += 1
+        if consec >= MAX_CONSEC_FAIL:
+            raise SystemExit("  [repair] 연속 실패 %d건 — 중단 (%s). 서버 회복 전 재실행 금지." % (consec, note))
+
     for n, it in enumerate(items, 1):
         pid = it["id"]
         try:
@@ -203,28 +220,33 @@ def main():
             new, log = transform(data, urlmap)
             if not any(log.values()):
                 skip += 1
+                consec = 0
                 continue
             st, body = rest("PUT", "/_emdash/api/content/posts/" + pid,
                             {"collection": "posts", "id": pid, "data": new, "_rev": rev})
             if st not in (200, 201):
                 print("  [%d/%d] PUT 실패 %s %s" % (n, len(items), st, str(body)[:110]), flush=True)
                 fail += 1
+                _gate("PUT %s" % st)
                 continue
             # PUT 은 draft revision 을 만든다 — status 가 published 여도 publish 필수
             st2, b2 = rest("POST", "/_emdash/api/content/posts/%s/publish" % pid, {})
             if st2 not in (200, 201):
                 print("  [%d/%d] publish 실패 %s %s" % (n, len(items), st2, str(b2)[:110]), flush=True)
                 fail += 1
+                _gate("publish %s" % st2)
                 continue
             for k in tally:
                 tally[k] += log[k]
             done += 1
+            consec = 0
             if done % 25 == 0 or log["dash"] or log["link"]:
                 print("  [%d/%d] 완료 %d (---:%d img:%d link:%d md:%d)"
                       % (n, len(items), done, log["dash"], log["img"], log["link"], log["md"]), flush=True)
         except Exception as e:
             print("  [%d/%d] 예외 %s" % (n, len(items), str(e)[:110]), flush=True)
             fail += 1
+            _gate(str(e)[:40])
         time.sleep(2.0)  # EmDash 인스턴스가 503/1102 로 쓰러지지 않게 넉넉히
     print("=== 수정 %d / 무변경 %d / 실패 %d ===" % (done, skip, fail))
     print("누적 제거·치환:", tally, flush=True)

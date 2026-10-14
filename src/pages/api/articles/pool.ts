@@ -57,7 +57,7 @@ export const GET: APIRoute = async ({ url, locals }) => {
         SELECT id, title, link, description, source, pub_date, '' as comment,
                COALESCE(original_title, '') as original_title
         FROM news
-        WHERE date(pub_date) >= date(?, '-7 days')
+        WHERE pub_date >= datetime(?, '-7 days')
           AND source IN (${placeholders})
         ORDER BY pub_date DESC LIMIT 2000
       `;
@@ -78,7 +78,7 @@ export const GET: APIRoute = async ({ url, locals }) => {
         SELECT id, title, link, description, source, pub_date, '' as comment,
                COALESCE(original_title, '') as original_title
         FROM news
-        WHERE date(pub_date) < date(?, '-7 days')
+        WHERE pub_date < datetime(?, '-7 days')
           AND source IN (${placeholders})
         ORDER BY pub_date DESC LIMIT ?
       `;

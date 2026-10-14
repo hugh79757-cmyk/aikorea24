@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AIK24-FREE-PIPE-01: 무료 모델 수집·평가·발행 일일 파이프라인.
+     설치: cp scripts/free-model-pipe.plist.template ~/Library/LaunchAgents/kr.aikorea24.free-model-pipe.plist
+     키는 이 파일에 넣지 않는다 — free_models_page.py 가 model_router.load_env() 로
+     프로젝트 .env / ~/.env.common 에서 직접 읽는다. -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>kr.aikorea24.free-model-pipe</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/twinssn/Projects/aikorea24/.venv/bin/python3</string>
+		<string>/Users/twinssn/Projects/aikorea24/scripts/free_models_page.py</string>
+		<string>daily</string>
+	</array>
+	<key>StartCalendarInterval</key>
+	<!-- 방콕(+07) 오전 10:00 = 머신 로컬 10:00 = KST 12:00 (2026-10-14 대표님 지정). -->
+	<dict>
+		<key>Hour</key>
+		<integer>10</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>/Users/twinssn/Projects/aikorea24</string>
+	<key>StandardOutPath</key>
+	<string>/Users/twinssn/Projects/aikorea24/scripts/logs/free-model-pipe.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/twinssn/Projects/aikorea24/scripts/logs/free-model-pipe.err.log</string>
+	<key>RunAtLoad</key>
+	<false/>
+</dict>
+</plist>

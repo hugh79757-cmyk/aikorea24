@@ -12,12 +12,13 @@ const events = allEvents.sort((a, b) => {
 
 const years = [...new Set(events.map(e => e.data.year))].sort((a, b) => b - a);
 
-const categoryConfig: Record<string, { emoji: string; color: string }> = {
-  "모델 출시": { emoji: "🤖", color: "blue" },
-  "기업·투자": { emoji: "🏢", color: "green" },
-  "정책·규제": { emoji: "📜", color: "red" },
-  "한국": { emoji: "🇰🇷", color: "purple" },
-  "사건·이슈": { emoji: "💥", color: "amber" },
+// AIK24-RENEWAL-02: 색상은 흑백 + 상징 빨강(#E63B2E)만. 구분은 이모지+텍스트가 담당.
+const categoryConfig: Record<string, { emoji: string }> = {
+  "모델 출시": { emoji: "🤖" },
+  "기업·투자": { emoji: "🏢" },
+  "정책·규제": { emoji: "📜" },
+  "한국": { emoji: "🇰🇷" },
+  "사건·이슈": { emoji: "💥" },
 };
 
 const catColorClass = (cat: string) => {
@@ -33,11 +34,11 @@ const catColorClass = (cat: string) => {
 
 const borderColorClass = (cat: string) => {
   const map: Record<string, string> = {
-    "모델 출시": "border-l-blue-500",
-    "기업·투자": "border-l-green-500",
-    "정책·규제": "border-l-red-500",
-    "한국": "border-l-purple-500",
-    "사건·이슈": "border-l-amber-500",
+    "모델 출시": "border-l-[#E63B2E]",
+    "기업·투자": "border-l-[#E63B2E]",
+    "정책·규제": "border-l-[#E63B2E]",
+    "한국": "border-l-[#E63B2E]",
+    "사건·이슈": "border-l-[#E63B2E]",
   };
   return map[cat] || "border-l-gray-500";
 };

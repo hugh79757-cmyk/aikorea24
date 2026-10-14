@@ -393,26 +393,34 @@ def _cost_block(model_id, ev):
     """
     u = ev.get("token_usage") or {}
     p, c = int(u.get("prompt") or 0), int(u.get("completion") or 0)
+    if ev.get("source") == "cli":
+        return "CLI 경유 — 토큰 사용량 미측정 (OpenCode Zen 경유, 단가·사용량 모두 집계 불가)"
     if not p and not c:
         return "비용 실측 데이터 없음 (문항별 토큰 사용량 미기록 — 구 캐시)"
     pr = model_eval.pricing(model_id)
     n = ev.get("max_score") or 0
+    paths = [f"- 접근 경로: {pth['path']} — {pth['note']}" for pth in model_eval.free_paths(model_id)]
     if not pr:
         lines = [f"- 오늘 실측 문항 {n}개의 토큰 사용량: 입력 {p:,} / 출력 {c:,}",
                  "- OpenRouter 단가를 조회하지 못해 비용을 계산하지 않았습니다"]
-    else:
-        cost = p * pr["prompt"] + c * pr["completion"]
+        return "\n".join(lines + paths)
+    cost = p * pr["prompt"] + c * pr["completion"]
+    # 완전 무료면 $0 나열을 반복하지 않고 2줄 요약 + 일일 한도 안내 (2026-10-14 대표님 지시)
+    if cost == 0:
         lines = [
             f"- 오늘 실측 문항 {n}개의 토큰 사용량: 입력 {p:,} / 출력 {c:,}",
-            f"- OpenRouter 단가: 입력 ${pr['prompt'] * 1e6:.6f} / 출력 ${pr['completion'] * 1e6:.6f} (1M토큰당)",
-            f"- {n}문항 실측 비용: ${cost:.6f}",
+            "- 비용: 무료 (OpenRouter 무료 티어) — 일일 한도·레이트리밋 확인 필요",
         ]
-        if n:
-            per = cost / n
-            lines.append(f"- 같은 비율로 하루 100문항: ${per * 100:.6f} / 하루 1,000문항: ${per * 1000:.6f}")
-    for pth in model_eval.free_paths(model_id):
-        lines.append(f"- 접근 경로: {pth['path']} — {pth['note']}")
-    return "\n".join(lines)
+        return "\n".join(lines + paths)
+    lines = [
+        f"- 오늘 실측 문항 {n}개의 토큰 사용량: 입력 {p:,} / 출력 {c:,}",
+        f"- OpenRouter 단가: 입력 ${pr['prompt'] * 1e6:.6f} / 출력 ${pr['completion'] * 1e6:.6f} (1M토큰당)",
+        f"- {n}문항 실측 비용: ${cost:.6f}",
+    ]
+    if n:
+        per = cost / n
+        lines.append(f"- 같은 비율로 하루 100문항: ${per * 100:.6f} / 하루 1,000문항: ${per * 1000:.6f}")
+    return "\n".join(lines + paths)
 
 
 def _fail_block(ev):
@@ -522,6 +530,7 @@ def generate_model_eval_draft(keyword, article, model_id):
         f"### 4. 비용 — 무료인가, 유료면 얼마인가\n"
         f"- 아래는 오늘 실측으로 확인한 값입니다. **수치를 바꾸지 마세요.**\n"
         f"```\n{cost_block}\n```\n"
+        f"- 비용이 $0(무료)이면 '$0.000000' 나열을 반복하지 마세요. 무료 확인 1줄 + 일일 한도·레이트리밋 안내 1줄로 씁니다.\n"
         f"- 유료면 '12문항 실측 비용 $0.00X'를 기준으로 하루 100문항·1,000문항 사용 시 예상 비용을 "
         f"**단순 비례로만** 계산해 적으세요.\n"
         f"  '~정도 들 것 같다'는 추정은 금지. 계산식만 씁니다.\n"
@@ -827,6 +836,10 @@ def _save_file(gpt_output, keyword, file_num, today_str, articles=None):
     desc_raw = re.sub(r"^##?\s*(서론|들어가며|시작하며|개요)\s*[:：]?\s*|^(서론|들어가며|시작하며|개요)\s*[:：]?\s*", "", desc_raw)
     # 4. 일반 마크다운 헤딩 제거 (## 텍스트\n 또는 # 텍스트\n, 뒤따르는 공백 포함)
     desc_raw = re.sub(r"^##?\s+[^\n]+\n\s*", "", desc_raw)
+    # 4b. 모델 평가글 삼중 중복 방지 (2026-10-14 대표님 지시): 제목이 "... N문항 실측 — 판단 한 줄"
+    # 형식이고 본문 첫 줄도 같은 판단이라 description이 세 번째 중복이 된다. 첫 줄을 제외하고 추출한다.
+    if "문항 실측 —" in seo_title:
+        desc_raw = re.sub(r"^[^\n]+\n\s*", "", desc_raw, count=1)
     # 5. 남은 마크다운 문법 제거
     desc_raw = re.sub(r"[#*>\n\s]+", " ", desc_raw).strip()
     # 6. 첫 번째 완전한 문장 추출

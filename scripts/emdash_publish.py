@@ -27,6 +27,65 @@ def get_pat():
     return None
 
 
+def get_post(identifier):
+    """글 1건 조회. 없으면 None. id 또는 slug 를 받는다 (EmDash 가 둘 다 받는다)."""
+    pat = get_pat()
+    if not pat:
+        return None
+    os.environ["EMDASH_PAT"] = pat
+    from emdash04_migrate import api
+
+    st, d = api("/_emdash/api/content/posts/%s" % identifier, "GET")
+    if st != 200:
+        return None
+    item = d.get("data") or d.get("item") or d
+    if not isinstance(item, dict):
+        return None
+    item.setdefault("_rev", d.get("_rev"))
+    return item
+
+
+def upsert_post(slug, title, body_md, excerpt=None):
+    """고정 슬러그 페이지 생성 또는 **본문만 교체**. slug 는 끝까지 그대로 유지된다.
+
+    AIK24-FREE-PIPE-01 작업 3용. EmDash 는 published 항목에 PUT 하면 draft revision 으로
+    스테이징되므로 publish 후행이 없으면 라이브에 반영되지 않는다
+    (emdash13_repair.py 가 1,479건 수리에서 사용한 그 순서).
+    성공하면 공개 URL, 실패하면 None.
+    """
+    pat = get_pat()
+    if not pat:
+        print("  ! EmDash PAT 없음 (%s)" % "/".join(PAT_KEYS))
+        return None
+    os.environ["EMDASH_PAT"] = pat
+    from emdash04_migrate import md_to_pt, api
+
+    data = {"title": title, "excerpt": excerpt or "", "content": md_to_pt(body_md)}
+    existing = get_post(slug)
+    if existing is None:
+        # slug 필드는 posts 컬렉션에 없다(400 unknown field). EmDash 는 title 을 slugify 해
+        # slug 를 만든다 — 고정 URL 을 만들려면 title 자체가 slug 가 되어야 한다.
+        st, d = api("/_emdash/api/content/posts", "POST", {"data": data})
+        item = (d.get("data") or {}).get("item") or {}
+        if st in (200, 201) and item.get("slug") != slug:
+            print("  ! 생성됐지만 slug 가 '%s' 가 아니다 (요청 %s) — 고정 URL 깨짐"
+                  % (item.get("slug"), slug))
+            return None
+    else:
+        st, d = api("/_emdash/api/content/posts/%s" % (existing.get("id") or slug), "PUT",
+                    {"collection": "posts", "id": existing.get("id") or slug,
+                     "data": data, "_rev": existing.get("_rev")})
+        item = existing
+    if st not in (200, 201):
+        print("  ! EmDash upsert 실패 http=%s %s" % (st, json.dumps(d, ensure_ascii=False)[:200]))
+        return None
+    st2, d2 = api("/_emdash/api/content/posts/%s/publish" % (item.get("id") or slug), "POST", {})
+    if st2 not in (200, 201):
+        print("  ! EmDash publish 실패 http=%s %s" % (st2, json.dumps(d2, ensure_ascii=False)[:200]))
+        return None
+    return "%s/posts/%s" % (BASE, item.get("slug") or slug)
+
+
 def publish_post(title, body_md, excerpt=None, featured_image=None, published_at=None):
     """글 1건 생성 후 publish. 성공하면 공개 URL, 실패하면 None(호출측이 폴백)."""
     pat = get_pat()

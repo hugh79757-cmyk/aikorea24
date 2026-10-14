@@ -49,12 +49,93 @@ PROVIDER_LABEL = {"openrouter": "OpenRouter", "kilo": "Kilo", "zen": "OpenCode Z
 # 작업 5: 블로그 리뷰 글 말미에 리스트 페이지로 돌아가는 1줄.
 BACKLINK = f"\n\n---\n\n[오늘의 무료 모델 목록 보기]({PAGE_URL})\n"
 
+# EVAL-06: 새로운 데이터 소스 경로
+CLI_MODELS_PATH = mc.CATALOG_DIR / "free_models_cli.json"
+EXTERNAL_EVALS_PATH = mc.CATALOG_DIR / "external_evals.json"
+
 
 def log(msg):
     print(f"[{time.strftime('%H:%M:%S')}] [free_models] {msg}", flush=True)
 
 
-# --------------------------------------------------------------- 데이터 읽기
+# --------------------------------------------------------------- 데이터 읽기 (EVAL-06 신규)
+
+
+def load_cli_models():
+    """EVAL-02 검증 모델 18개 로드 (free_models_cli.json)."""
+    return _read_json(CLI_MODELS_PATH, [])
+
+
+def load_external_evals():
+    """EVAL-03 외부 평가 데이터 로드 (external_evals.json)."""
+    return _read_json(EXTERNAL_EVALS_PATH, {})
+
+
+def match_external_data(cli_models, external_evals):
+    """CLI 모델에 외부 평가 데이터 결합.
+    
+    매칭 키:
+    - retention: model name 기준 (mimo-v2.6-flash, space-bunny 등)
+    - kilobench: rawName 기준 (Hy3, Nemotron 3 Super)
+    - zen_policy: model_id 기준 (cat-jam-free, space-bunny-free 등)
+    """
+    retention_data = {}
+    for item in external_evals.get("sources", {}).get("opencode_data", {}).get("retention", []):
+        key = item.get("model")
+        if key:
+            retention_data[key] = item
+    
+    kilobench_data = {}
+    for item in external_evals.get("sources", {}).get("kilobench", {}).get("free", []):
+        key = item.get("model")
+        if key:
+            kilobench_data[key] = item
+    
+    zen_policy = {}
+    for item in external_evals.get("sources", {}).get("zen_policy", {}).get("freeModels", []):
+        key = item.get("model_id")
+        if key:
+            zen_policy[key] = item
+    
+    # CLI 모델에 매칭
+    enriched = []
+    for m in cli_models:
+        mid = m.get("model_id", "")
+        provider = m.get("provider", "")
+        cli_id = m.get("cli_id", "")
+        
+        # retention 매칭용 키 생성
+        retention_key = mid.replace(":free", "").replace("-free", "")
+        # zen 모델은 opencode/ prefix 제거 후 -free 제거
+        if provider == "zen":
+            retention_key = mid.replace("-free", "")
+        
+        enriched_m = dict(m)
+        
+        # retention 데이터
+        if retention_key in retention_data:
+            r = retention_data[retention_key]
+            enriched_m["retention_percent"] = r.get("retentionPercent")
+            enriched_m["retention_eligible_weeks"] = r.get("eligibleUserWeeks")
+        
+        # kilobench 데이터
+        if retention_key in kilobench_data:
+            k = kilobench_data[retention_key]
+            enriched_m["kilobench_completion"] = k.get("completionPercent")
+            enriched_m["kilobench_cost"] = k.get("costUsdPerAttempt")
+        
+        # zen policy 데이터
+        if mid in zen_policy:
+            z = zen_policy[mid]
+            enriched_m["zen_data_policy"] = z.get("dataPolicy")
+            enriched_m["zen_trains_on_prompts"] = z.get("trainsOnPrompts")
+        
+        enriched.append(enriched_m)
+    
+    return enriched
+
+
+# --------------------------------------------------------------- 기존 데이터 읽기
 
 
 def _read_json(path, default):
@@ -207,9 +288,196 @@ def week_changes(days=7):
             "changed": changes, "total": total, "days": days}
 
 
-# --------------------------------------------------------------- 렌더링
+# --------------------------------------------------------------- 렌더링 (EVAL-06 신규)
 
 
+def render_eval06(day, cli_models, wk, failed):
+    """EVAL-06 지시서에 따른 새 페이지 구조 렌더링.
+    
+    구조:
+    1. 헤더: "무료 AI 모델" + 날짜 + 한 줄 설명
+    2. 추천 모델 (Top 3): CLI 평가 점수 + 재사용률 결합
+    3. 전체 리스트 (18개): 표 - 모델명, 프로바이더, 컨텍스트, 재사용률, KiloBench, 데이터 정책, 상태
+    4. 제외된 모델: Hy3, Groq, Cerebras, NVIDIA NIM
+    5. 방법론
+    """
+    ts = datetime.strptime(day, "%Y-%m-%d")
+    today_str = f"{ts.year}년 {ts.month}월 {ts.day}일"
+    
+    out = [
+        f"# 무료 AI 모델 — {today_str}",
+        "",
+        "> OpenCode에서 실제 동작 확인된 무료 모델만 싣습니다.",
+        "",
+    ]
+    
+    # 2. 추천 모델 (Top 3) - retention_percent 높은 순으로 정렬, 평가 점수 있는 모델 우선
+    scored_models = []
+    for m in cli_models:
+        mid = m.get("model_id", "")
+        # 리더보드 점수 확인
+        scores = leaderboard_scores(model_eval.EVAL_QUESTIONS_VERSION)
+        score_info = scores.get(mid)
+        retention = m.get("retention_percent")
+        
+        # 추천 점수 계산: retention(가중치 0.7) + 평가점수 정규화(가중치 0.3)
+        rec_score = 0
+        if retention is not None:
+            rec_score += retention * 0.7
+        if score_info and score_info.get("max_score", 0) > 0:
+            rec_score += (score_info.get("score", 0) / score_info.get("max_score", 1)) * 100 * 0.3
+        
+        if retention is not None or score_info:
+            m["_rec_score"] = rec_score
+            scored_models.append(m)
+    
+    scored_models.sort(key=lambda x: -x.get("_rec_score", 0))
+    top3 = scored_models[:3]
+    
+    if top3:
+        out += ["## 추천 모델 (Top 3)", ""]
+        for i, m in enumerate(top3, 1):
+            mid = m.get("model_id", "")
+            provider = m.get("provider", "")
+            cli_id = m.get("cli_id", "")
+            ctx = m.get("context_length")
+            retention = m.get("retention_percent")
+            kilobench = m.get("kilobench_completion")
+            zen_policy = m.get("zen_data_policy")
+            zen_trains = m.get("zen_trains_on_prompts")
+            
+            scores = leaderboard_scores(model_eval.EVAL_QUESTIONS_VERSION)
+            score_info = scores.get(mid)
+            
+            # 추천 이유 생성
+            reason_parts = []
+            if score_info:
+                s = score_info.get("score", 0)
+                ms = score_info.get("max_score", 0)
+                reason_parts.append(f"CLI 평가 {s}/{ms}문항")
+            if retention is not None:
+                reason_parts.append(f"재사용률 {retention:.1f}%")
+            if kilobench is not None:
+                reason_parts.append(f"KiloBench {kilobench:.1f}%")
+            
+            reason = " · ".join(reason_parts) if reason_parts else "데이터 부족"
+            
+            # 데이터 정책 경고
+            warning = ""
+            if zen_policy:
+                if zen_trains:
+                    warning = " ⚠️ **프롬프트가 학습에 사용됨**"
+                else:
+                    warning = " ✅ 제로-retention (프롬프트 학습 미사용)"
+            elif provider in ("kilo", "openrouter"):
+                warning = " ℹ️ provider 정책 확인 필요"
+            
+            out += [
+                f"### {i}. {mid} ({PROVIDER_LABEL.get(provider, provider)})",
+                "",
+                f"- **추천 이유**: {reason}{warning}",
+                f"- **컨텍스트**: {f'{ctx:,} 토큰' if ctx else '미공개'}",
+                f"- **OpenCode 모델 ID**: `{cli_id}`",
+                "",
+            ]
+    
+    # 3. 전체 리스트 (18개) - 표
+    out += ["## 전체 리스트 (18개 검증 모델)", ""]
+    
+    # 헤더: 컨텍스트 있는 것만 표시하라는 지시서에 따라 컬럼 동적 구성
+    # 하지만 지시서: "없는 모델은 컬럼 값 비우지 말고 행에서 제외하거나 '—' 대신 아예 표시 안 함"
+    # 해석: 컨텍스트가 없는 모델은 컨텍스트 컬럼을 아예 표시하지 않음
+    # 전체 표에서는 모든 행 표시, 단 컨텍스트 없는 행은 빈 값 대신 "—" 금지, 아예 표시 안 함
+    
+    # 표 헤더 구성
+    has_context = any(m.get("context_length") for m in cli_models)
+    has_retention = any(m.get("retention_percent") is not None for m in cli_models)
+    has_kilobench = any(m.get("kilobench_completion") is not None for m in cli_models)
+    has_zen_policy = any(m.get("zen_data_policy") for m in cli_models)
+    
+    headers = ["모델명", "프로바이더"]
+    if has_context:
+        headers.append("컨텍스트 길이")
+    if has_retention:
+        headers.append("재사용률")
+    if has_kilobench:
+        headers.append("KiloBench")
+    if has_zen_policy:
+        headers.append("데이터 정책")
+    headers.append("상태")
+    
+    out += ["| " + " | ".join(headers) + " |", "|" + "|".join(["---"] * len(headers)) + "|"]
+    
+    # 정렬: 컨텍스트 있는 것 먼저, 그 다음 재사용률 높은 순
+    def sort_key(m):
+        ctx = m.get("context_length") or 0
+        ret = m.get("retention_percent") or 0
+        return (-ctx, -ret)
+    
+    for m in sorted(cli_models, key=sort_key):
+        mid = m.get("model_id", "")
+        provider = m.get("provider", "")
+        ctx = m.get("context_length")
+        retention = m.get("retention_percent")
+        kilobench = m.get("kilobench_completion")
+        zen_policy = m.get("zen_data_policy")
+        zen_trains = m.get("zen_trains_on_prompts")
+        
+        row = [f"`{mid}`", PROVIDER_LABEL.get(provider, provider)]
+        if has_context:
+            row.append(f"{ctx:,}" if ctx else "")
+        if has_retention:
+            row.append(f"{retention:.1f}%" if retention is not None else "")
+        if has_kilobench:
+            row.append(f"{kilobench:.1f}%" if kilobench is not None else "")
+        if has_zen_policy:
+            if zen_policy:
+                policy_short = zen_policy[:60] + ("..." if len(zen_policy) > 60 else "")
+                row.append(policy_short)
+            else:
+                row.append("")
+        # 상태
+        status_parts = ["현재 무료"]
+        if zen_trains is True:
+            status_parts.append("학습 사용")
+        elif zen_trains is False:
+            status_parts.append("학습 미사용")
+        row.append(" · ".join(status_parts))
+        
+        out.append("| " + " | ".join(row) + " |")
+    
+    out.append("")
+    
+    # 4. 제외된 모델
+    out += ["## 제외된 모델", ""]
+    out += [
+        "- **Hy3 (Tencent)**: KiloBench 47.6%로 점수는 좋으나 실제 서비스 안 됨 (Hy3는 무료 티어에서 사용 불가)",
+        "- **Groq**: TPM 한도(8,000/min)로 opencode CLI에서 평가 불가 — `gpt-oss` 계열은 직접 API로는 작동하나 opencode 경유 시 요청 크기 초과",
+        "- **Cerebras**: 카드 필수로 제외 확정",
+        "- **NVIDIA NIM**: 무료 티어 없음 확인 (`GET /v1/models` 80개 중 `-free` 0개)",
+        "- **openrouter 직접 경로 8종**: 21:24 이후 4회 연속 전량 타임아웃 — 경로 사용 불가 (kilo 경유로는 동일 모델 정상)",
+        "",
+        "> 제외 이유: 검증 불가한 항목은 억지로 넣지 않는다 (대표님 원칙 2). 빈 칸·'미확인'·추측 금지.",
+        "",
+    ]
+    
+    # 5. 방법론
+    out += ["## 방법론", ""]
+    out += [
+        "- 모든 모델은 OpenCode CLI로 실제 호출해 동작을 확인했습니다 (`opencode run -m <model_id> \"한 단어로 대답: PONG\"`).",
+        "- API 문서상 무료라도 실제 동작하지 않으면 제외합니다.",
+        f"- 평가: 12문항 4축(지시이행·코딩실무·맥락유지·역할판단) CLI 평가, 리더보드 문항 세트 v{model_eval.EVAL_QUESTIONS_VERSION} 기준.",
+        "- 재사용률: OpenCode Data (opencode.ai/data) — eligible user weeks 대비 retained user weeks 비율.",
+        "- KiloBench: kilo.ai/kilobench 무료 모델 완주율.",
+        "- 데이터 정책: OpenCode Zen 공식 문서 (opencode.ai/v2/docs/console/models/) — 제로-retention 여부.",
+        "- 수집 시각: " + datetime.now().strftime('%Y-%m-%d %H:%M') + " · 수집 실패 프로바이더: " + (", ".join(failed) if failed else "없음"),
+        "",
+    ]
+    
+    return "\n".join(out)
+
+
+# 기존 render 함수 (하위 호환용 유지)
 def render(day, rows, cards, wk, scores, failed):
     ts = datetime.strptime(day, "%Y-%m-%d")
     out = [
@@ -286,16 +554,23 @@ def render(day, rows, cards, wk, scores, failed):
 def cmd_page(day=None, dry_run=False):
     load_env()
     day = day or time.strftime("%Y-%m-%d")
-    snap = _read_json(mc.snapshot_path(day), None)
-    if snap is None:
-        log(f"스냅샷 없음: {mc.snapshot_path(day)} — model_catalog.py 를 먼저 실행하세요")
+    
+    # EVAL-06: 새로운 데이터 소스 사용
+    cli_models = load_cli_models()
+    if not cli_models:
+        log(f"CLI 검증 모델 없음: {CLI_MODELS_PATH} — free_models_cli.py 를 먼저 실행하세요")
         return 1
+    
+    external_evals = load_external_evals()
+    cli_models = match_external_data(cli_models, external_evals)
+    
     d = _read_json(mc.diff_path(day), {}) or {}
-    scores = leaderboard_scores(model_eval.EVAL_QUESTIONS_VERSION)
-    cards = pick_cards(snap, scores, eval_labels(), reviews())
     wk = week_changes()
-    md = render(day, snap, cards, wk, scores, list(d.get("failed_providers") or {}))
-    log(f"카드 {len(cards)}개 / 무료 모델 {len(snap)}개 / 이번 주 변경 {wk['total']}건")
+    
+    # EVAL-06 새 렌더 함수 사용
+    md = render_eval06(day, cli_models, wk, list(d.get("failed_providers") or {}))
+    
+    log(f"무료 모델 {len(cli_models)}개 / 이번 주 변경 {wk['total']}건")
     if dry_run:
         print(md)
         return 0
@@ -304,7 +579,7 @@ def cmd_page(day=None, dry_run=False):
     # title 을 slug 로 쓴다 — EmDash 는 title 을 slugify 해 slug 를 만들고 slug 필드를 받지 않는다.
     # 그래서 제목 대신 한국어 H1 은 본문 첫 줄(# …)이 화면에 뜬다.
     url = emdash_publish.upsert_post(PAGE_SLUG, PAGE_SLUG, md,
-                                     excerpt=f"{day} 기준 무료 모델 {len(snap)}개 · 카드 {len(cards)}개")
+                                     excerpt=f"{day} 기준 무료 모델 {len(cli_models)}개")
     if not url:
         log("리스트 페이지 갱신 실패")
         return 1

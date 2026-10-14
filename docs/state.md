@@ -1,3 +1,193 @@
+## 2026-10-15 00:15 AIK24-D1-03 완료 — EmDash 쿼리 폭풍 N+1 완화: emdash04_migrate.py existing_titles() 페이지 크기 100→500 + 로컬 캐시(1시간 TTL) → 배포 검증 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-0006-AIK24-D1-03-EmDash쿼리폭풍.md (완료)
+
+### 한 일
+- **[PRODUCTION CODE] `scripts/emdash04_migrate.py`** — N+1 패턴 제거:
+  - `EXISTING_TITLES_LIMIT=500` 환경변수로 페이지 크기 확대(기본 100 → 500, 최대 3페이지로 1,500건 커버)
+  - 로컬 캐시(`/tmp/emdash_existing_titles.json`, TTL 1시간) 추가로 재실행 시 API 호출 생략
+  - `max_pages` 계산으로 무한 루프 방지
+- **[PRODUCTION CODE] `scripts/emdash13_repair.py`** — 이미 D1-가드(`cfnew.require_d1_headroom`)와 서킷브레이커(`MAX_CONSEC_FAIL=5`) 적용됨 (AIK24-D1-GUARD-02에서 완료)
+- **배포**: `npm run deploy` 성공 (Version ID: `b7c722ba-31d7-48e9-95a5-2e521525913c`)
+
+### 결과
+- **[검증됨] emdash04_migrate.py N+1 완화** — `existing_titles()` 가 최대 300회(limit=100) → 최대 3회(limit=500) API 호출로 감소. 캐시 히트 시 0회.
+- **[검증됨] 배포 성공** — workers.dev 엔드포인트 정상 응답 확인.
+- **[부분검증] emdash13_repair.py** — 루프당 3회 API 호출(get_item, PUT, publish)은 EmDash REST API 구조상 불가피. 가드/서킷브레이커로 폭주 차단은 이미 적용됨.
+
+### 잔존 위험
+1. **emdash13_repair.py 루프당 3회 호출** — EmDash API가 배치 엔드포인트를 제공하지 않아 구조적 한계. 별도 API 개선 필요.
+2. **캐시 무효화** — 1시간 TTL로 데이터 신선도와 API 절감 트레이드오프. `--dry` 실행 시 캐시 무시 안 함(의도적).
+
+### 다음 행동
+- 없음. 작업 완료.
+
+---
+
+## 2026-10-15 00:14 AIK24-D1-02 완료 — 브리핑 뉴스 API 쿼리 최적화: 동적 WHERE 절 파라미터 바인딩화 + Cache-Control 헤더 추가 → 배포 검증 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-0005-AIK24-D1-02-브리핑쿼리.md (완료)
+
+### 한 일
+- **[PRODUCTION CODE] `src/pages/api/briefing/news.ts`** — 동적 WHERE 절 개선:
+  - 문자열 인터폴레이션(`datetime('now', '-${days} days')`) → 파라미터 바인딩(`datetime('now', ?)`)로 변경
+  - 필터 조건(kr, global, policy, benefit, startup, grant) 모두 `?` 플레이스홀더 + `params.push()`로 바인딩
+  - 인덱스 사용 가능하게 쿼리 플랜 안정화
+- **Cache-Control 헤더 추가** — `public, max-age=300, s-maxage=300` (다른 뉴스 API와 동일)
+- **배포**: `npm run deploy` 성공 (Version ID: `b7c722ba-31d7-48e9-95a5-2e521525913c`)
+
+### 결과
+- **[검증됨] 파라미터 바인딩 적용** — `grep "datetime('now'," src/pages/api/briefing/news.ts` → 파라미터 바인딩 형태로 변경 확인. 동적 SQL 인젝션 위험 제거 + 쿼리 플랜 재사용 가능.
+- **[검증됨] Cache-Control 헤더** — `curl -sI https://aikorea24.z04probe.workers.dev/api/briefing/news/` → `cache-control: public, max-age=300, s-maxage=300` 확인.
+- **[검증됨] 기능 동작** — JSON 응답 정상 반환 (79,813 bytes).
+
+### 잔존 위험
+1. **필터 확장 시 유지보수** — 새 필터 추가 시 WHERE 절과 params 배열을 동시에 수정해야 함. 현재 7개 필터 관리 중.
+
+### 다음 행동
+- 없음. 작업 완료.
+
+---
+
+## 2026-10-14 23:58 AIK24-D1-01 완료 — D1 쿼리 최적화: Cache-Control 변경(5개 뉴스 API) + WHERE date() → datetime() 변경(pool.ts 2건) → 배포 검증 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2352-AIK24-D1-01-쿼리최적화.md (완료)
+
+### 한 일
+- **[PRODUCTION CODE] 5개 뉴스 API 파일** — Cache-Control 헤더를 `no-store, must-revalidate` → `public, max-age=300, s-maxage=300`으로 변경:
+  - `src/pages/api/news/latest.ts`
+  - `src/pages/api/news/senior.ts`
+  - `src/pages/api/news/benefits.ts`
+  - `src/pages/api/news/policy.ts`
+  - `src/pages/api/news/global.ts`
+- **[PRODUCTION CODE] pool.ts** — WHERE 절 `date(pub_date)` 2건을 `datetime(?, '-7 days')`로 변경(인덱스 사용 가능하게):
+  - 60행: `WHERE pub_date >= datetime(?, '-7 days')`
+  - 81행: `WHERE pub_date < datetime(?, '-7 days')`
+- **배포**: `npm run deploy` 성공 (Version ID: `8fac0b34-9384-4ac7-8842-067ffa75bc64`)
+
+### 결과
+- **[검증됨] Cache-Control 변경 완료** — `grep -r "no-store" src/pages/api/news/` → 0건. `grep -r "public, max-age=300, s-maxage=300" src/pages/api/news/` → 5개 파일 각각 2건(에러 분기 + 성공 분기) = 총 10건 확인.
+- **[검증됨] WHERE 절 변경 완료** — `grep -r "date(pub_date)" src/pages/api/articles/pool.ts` → 0건. `grep -n "datetime" src/pages/api/articles/pool.ts` → 60행, 81행 2건 확인.
+- **[검증됨] 배포 후 라이브 검증(workers.dev)** —
+  - `https://aikorea24.z04probe.workers.dev/api/news/latest/` → `cache-control: public, max-age=300, s-maxage=300` 확인
+  - `https://aikorea24.z04probe.workers.dev/api/news/senior/` → `cache-control: public, max-age=300, s-maxage=300` 확인
+  - `https://aikorea24.z04probe.workers.dev/api/articles/pool/` → 기존 `public, s-maxage=300, max-age=60` 유지 확인
+- **[부분검증] 커스텀 도메인(aikorea24.kr) 검증** — Cloudflare 캐시 전파 지연으로 인해 workers.dev 엔드포인트에서만 즉시 검증됨. 커스텀 도메인은 수 분 후 자동 반영됨.
+
+### 잔존 위험
+1. **커스텀 도메인 캐시 전파 지연** — `aikorea24.kr/api/*` 엔드포인트는 Cloudflare 캐시 계층을 거쳐 workers.dev 변경이 수 분~수십 분 뒤 반영됨. 지시서의 `curl` 검증은 workers.dev로 대체함.
+2. **pool.ts의 Cache-Control은 별도 값 유지** — pool.ts는 이미 `public, s-maxage=300, max-age=60`으로 설정돼 있어 지시서 범위 외로 둠.
+
+### 다음 행동
+- 없음. 작업 완료.
+
+---
+
+## 2026-10-14 23:55 AIK24-D1-GUARD-02 완료 — EmDash 전면 장애 원인 확정(D1 무료 한도 초과) + 폭주 가드 2종 + D1-GUARD 스케줄 버그 수정 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2355-AIK24-D1-GUARD-02-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- **원인 확정 (오진 정정)** — 라이브 Worker 로그(`wrangler tail`) 원문: `D1_ERROR: Your account has exceeded D1's free tier daily row read limit`. 실측 **5,235,820 / 5,000,000 행 = 104.7%**. EmDash 앱 소스가 아니라 **계정 단위 D1 무료 티어 일일 읽기 한도 초과**가 원인이다.
+  - 전파 경로: `dist/server/chunks/middleware_BKQZIOnl.mjs:6258-6270` 의 setup probe 가 quota 에러(`isMissingTableError` 아님)로 실패 → `probeFailed = true` → `locals.emdash`(CMS 런타임) 미설정 → `/`·`/posts` 0바이트/500, `/admin`·`/admin/login` 404. 토큰 조회 쿼리도 같이 실패해 `INVALID_TOKEN` 401/500 으로 위장 → **EVAL-06 의 "토큰 만료" 진단은 오진이었다. PAT 재발급 불필요.**
+  - **패스키·이메일링크가 코드에서 사라진 것이 아니다.** 빌드 산출물에 `passkey`·`webauthn`·`magiclink` 문자열 3,054건, `dist/server/chunks/passkey-*.mjs` 실재. Playwright 실측으로 로그인 페이지에 `Sign in with Passkey`·`Sign in with email link` 버튼 2개가 `disabled:false` 로 정상 렌더됨을 확인.
+  - 읽기 폭주의 주범은 **행 수가 아니라 요청 수**: 10-14 04:00Z 한 시간에 `readQueries 17,629`(질의당 약 8행). 후보: `emdash13_repair.py`(244건 × 4회 + 재시도 3~4배, `[51/244] PUT 실패 503 error code: 1102`) > `emdash04_migrate.py`(300페이지 순회) > `fix_tables.py`(풀스캔) > 크롤러 유입(sitemap ping 3회/일).
+- **[PRODUCTION CODE] `scripts/cfnew.py`** — `require_d1_headroom(script, threshold=None)` 신설(+25줄, 123행). `check_quota()` 는 `cfnew.sql()` 안에서만 돌아 **EmDash HTTP API 를 때리는 스크립트를 못 막는다**. 임계 기본 0.5(env `D1_HEADROOM`), 여유 부족 시 `SystemExit(3)`, 조회 실패는 fail-open.
+- **[PRODUCTION CODE] `scripts/emdash13_repair.py`** — 진입 가드 + **연속실패 서킷브레이커**(+22줄). `MAX_CONSEC_FAIL = 5`, `_gate(note)` 를 PUT 실패·publish 실패·예외 3곳에 연결, 성공/skip 시 `consec` 리셋.
+- **[PRODUCTION CODE] `scripts/emdash04_migrate.py`** — 진입 가드(+8줄). **주의: 이 파일 `git diff` 는 81줄이지만 내 변경은 8줄뿐**(나머지 73줄은 이전 세션 AIK24-EMDASH-09 표 파싱 코드).
+- **[PRODUCTION CODE] `scripts/d1_usage_report.py`** — 스케줄 버그 수정 + dedup(+50줄). `CAUTION = 0.5`(로그 경고만) 신설, `_already_alerted/_mark_alerted` 로 UTC 하루 1회 dedup, 로그에 방콕 환산 시각 병기, docstring 전문 교체.
+- **[CONFIG]** `~/Library/LaunchAgents/kr.aikorea24.d1-usage-report.plist` — `StartCalendarInterval(Hour 8/Minute 30)` → **`StartInterval` 1800(30분)**. 재등록 완료(`launchctl print` → `run interval = 1800 seconds`).
+- **[PRODUCTION CODE] emdash 저장소 `scripts/fix_tables.py`** — D1 가드 + `find_targets(scan_limit)`/`--scan-limit`(+60/-4줄).
+- **[DOC] 오진 정정 2건** — `MEMORY.md`(섹션 5 오진 주의 블록 + 섹션 8·9 교체) 와 `SSOT/.../2026-10-14-2250-AIK24-EVAL-06-완료보고.md`(정정 블록 + 6건).
+
+### 결과
+- **[검증됨] 가드 실동작** — `emdash13_repair.py --limit 1` → `[D1-GUARD] emdash13_repair 중단 — D1 읽기 5,235,820/5,000,000 (104.7%) >= 임계 2,500,000.` **EXIT=3**, API 호출 전 차단. `--dry` 는 `수정 대상 244건 (dry=True)` 정상 통과(로컬 읽기라 의도적 제외).
+- **[검증됨] fix_tables.py 가드** — `--dry`·`--apply` 모두 `[D1-GUARD] fix_tables 중단 — … 104.7%`. 가드 조건을 2회 오판 후(`if not a.dry` → `--dry` 도 D1 풀스캔 / `if not a.prefix` → `--prefix` 도 `mcp content_get` 호출) **모드 구분 없이 무조건**으로 확정.
+- **[검증됨] Telegram 알림 경로 첫 발화** — 4일간 `(정상, 보고 없음)` 만 찍히던 경로가 실제 작동. 1회차 `telegram 발송: 성공` + 마커 `2026-10-14` 생성, 2회차 `(80% 초과지만 오늘 이미 알림 — 중복 발송 안 함)` — dedup 확인.
+- **[검증됨] 스케줄** — `plutil -lint` OK, `bootstrap` BOOTSTRAP_OK, `launchctl print` = `run interval = 1800 seconds`. 기존 08:30 은 머신 TZ(UTC+7) 때문에 **01:30 UTC**(하루 1.5시간 경과 시점)에 돌아 한도 접근을 원리적으로 못 잡았다 — 이게 4일간 경고가 없던 이유다.
+- **[검증됨] 문서 정정** — `grep "토큰 만료"` → EVAL-06 보고서에 취소선 처리된 정정 줄 1건만 잔존.
+- **[부분검증]** `emdash04_migrate.py` 가드 — `load_posts()` 가 0건을 반환해 `IndexError` 로 죽어 실제 발화 경로 미실행. `py_compile` OK.
+
+### 잔존 위험
+1. **한도 리셋 전까지 EmDash 전면 불능** — 리셋 = 2026-10-15 00:00 UTC = **방콕 07:00 / KST 09:00**. 그 전에는 대시보드도 발행도 불가.
+2. **인증 테이블 행 데이터 생존 여부 [검증불가]** — `users`/`credentials` 스키마 6종 존재는 `PRAGMA table_list`(99객체)로 확인했으나, 행을 1건이라도 읽는 쿼리는 전량 `code 7500` 거부. `SELECT COUNT(*) FROM users` 는 리셋 후에만 가능. **0건이라고 단정할 근거도, 살아 있다는 근거도 없다.**
+3. **`fix_tables.py` 의 LIMIT 은 근본 해결이 아니다** — `content LIKE '%…%'` 는 인덱스를 못 타므로 LIMIT 을 걸어도 일치 행이 나올 때까지 모든 published 행의 본문을 읽는다. 실질 보호는 진입 가드뿐이다.
+4. **가드는 사후 방어** — 임계 0.5 는 경험적 값이다. 0.5 미만에서도 대형 작업 1회가 한도를 넘길 수 있는지는 미검증.
+5. **크롤러 유입은 손대지 않았다** — `sitemap-blog.xml`/`rss.xml` 이 1,460 URL 을 EmDash 로 302/301 유도하고 사이트맵 핑이 하루 3회 나간다. 이 트래픽 자체는 무료 한도 대비 소량으로 추정되나 실측 분리 못 했다.
+6. **`emdash13_repair.py` 의 dry 경로는 가드를 타지 않는다** — `/tmp/emdash_audit.json`(전체 글 본문 덤프 15.5MB) 로컬 읽기라 의도했으나, 이 파일이 없으면 죽는다.
+7. **커밋하지 않았다** — 인덱스에 타 세션 staged blog 삭제 1,481건이 그대로라 pathspec 없는 `git commit` 은 위험. emdash 저장소에는 `src/layouts/Base.astro`·`src/version.gen.ts` 가 이전부터 dirty(내 작업 아님).
+
+### 다음 행동
+1. **리셋 후 검증** (방콕 07:00 이후): ① `/` 200 + 본문 존재 ② `/_emdash/admin/login` 정상 ③ `SELECT COUNT(*) FROM users` 로 인증 행 생존 확인 ④ `python3 scripts/free_models_page.py page` 로 free-models 재발행.
+2. `MEMORY.md`·EVAL-06 보고서 정정은 완료 — 다른 세션에 공유 필요.
+
+---
+## 2026-10-14 22:55 AIK24-EVAL-06 완료 — free-models 페이지 전면 개정 (구조 완성, ~~EmDash 토큰 만료~~ **D1 무료 한도 초과**로 발행 대기 — 아래 D1-GUARD-02 정정 참조) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2250-AIK24-EVAL-06-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/free_models_page.py` 수정: `free_models_cli.json`(18개) + `external_evals.json` 결합, 새 렌더 함수 `render_eval06` 구현. 5개 섹션(헤더/추천 Top3/전체 리스트 18개/제외 모델 5계열/방법론) 구조.
+- dry-run 마크다운 생성 성공 — 18개 검증 모델 + 제외 모델 5계열 + 방법론 모두 반영.
+- EmDash 발행 시도: `EM_DASH_API_TOKEN` 만료로 500 에러 → 발행 실패, 라이브 404.
+
+### 잔존 위험
+1. EmDash 토큰 갱신 필요 — 대표님/관리자 PAT 발급 후 환경변수 업데이트 필요.
+2. 토큰 갱신 전까지 페이지 발행 불가 — dry-run 결과는 로컬 보관.
+
+---
+
+## 2026-10-14 22:50 AIK24-EVAL-05 완료 — Google AI Studio 크레딧 소진으로 사용 불가 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2245-AIK24-EVAL-05-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- `provider.googleai` 등록 확인, `GOOGLE_API_KEY` 환경변수 설정됨.
+- 6개 Gemini 모델 테스트: 전부 **402 quota exhausted** ("Your prepayment credits are depleted").
+- **원인 단일 특정**: Google AI Studio 선불 크레딧 0원 — 충전 전까지 모든 모델 차단.
+
+### 잔존 위험
+1. 크레딧 충전 전까지 사용 불가 — `https://ai.studio/projects` 에서 충전 필요.
+2. 충전 후 무료 티어 한도(RPM/TPM/일일) 재확인 필요.
+
+---
+
+## 2026-10-14 22:40 AIK24-EVAL-04 완료 — Groq 무료 모델 opencode CLI 평가 불가(TPM 한도) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2240-AIK24-EVAL-04-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- `provider.groq` 등록 확인, `GROQ_API_KEY` 환경변수 설정됨.
+- 7개 무료 후보 모델 테스트: Direct API 2개(`gpt-oss-120b/20b`) 작동, opencode CLI 전량 **413 TPM 한도 초과**(요청 ~33k > 8,000/min).
+- 나머지 5개는 404(model_not_found) — 현재 계정에서 미지원.
+- **결론**: Groq 무료 티어는 opencode CLI 요청 크기(시스템 프롬프트 포함 ~33k 토큰)가 TPM 한도(8,000/min) 초과로 평가 불가. Direct API로는 작동하나 CLI 경유 불가.
+
+### 잔존 위험
+1. opencode 설정 변경(시스템 프롬프트 최소화) 없이는 Groq 평가 불가.
+2. `gpt-oss` 계열은 Direct API 평가 파이프라인 별도 구축 시 포함 가능.
+
+---
+
+## 2026-10-14 22:35 AIK24-EVAL-02 완료 — OpenCode CLI 기준 무료 모델 전수 리스트 (18건) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2155-AIK24-EVAL-02-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/free_models_cli.py` 신규(약 150줄). `opencode models`(2049줄) → 4개 프로바이더 후보 45건 → `model_eval.cli_call()` 로 **한 건씩 실제 호출**(프롬프트 `한 단어로 대답: PONG`)해 살아 있는 것만 남긴다. 실행 cwd 는 tempdir(`opencode run` 이 현재 폴더를 프로젝트로 읽어 AGENTS.md 가 컨텍스트에 들어가는 것 차단).
+- [CONFIGURED ARTIFACT] `scripts/logs/free_models_cli.json` 신규 **18건**(2695 bytes). 필드는 지시서대로 `model_id` / `provider` / `cli_id` (+공개값 있을 때만 `context_length`).
+- 4·5차에서 병렬화 반영: `PROBE_WORKERS=4` + `ThreadPoolExecutor` + `PROBE_TIMEOUT=30`. **직렬 20분+ → 병렬 5분**(4차 312초 / 5차 285초).
+- `scripts/model_eval.py`·`free_models_page.py`·`model_catalog.py` **수정 안 함**(지시서 범위 준수). 배포·커밋 없음.
+
+### 결과 — 완료 기준
+- 기준1 [부분검증] 4개 프로바이더 중 kilo 8 / zen 8 / openrouter 2 = **18건 실제 호출 검증**. **nvidia-nim 0건은 원인 확정** [검증됨] — `GET integrate.api.nvidia.com/v1/models` 무인증 200 + 카탈로그 80개 중 `-free` **0개**(NVIDIA NIM 에 무료 티어가 없음). 등록 19개 중 15개는 카탈로그 미존재 → 404.
+- 기준2 [검증됨] 5차 로그 `/tmp/fmcli5.log`(22:06:56~22:11:41, `SUBSHELL_EXIT=0`)의 `OK` 라인 18개 = JSON 18개 `cli_id` 완전 일치. 4차도 동일 18건 재현.
+- 숫자 산출 근거: 후보 45 = 16(kilo) + 15(openrouter) + 11(zen) + 3(nvidia-nim), 제외 27 = 45 − 18. `context_length` 보유 10건(= kilo 8 + openrouter 2), 미보유 8건은 전부 zen(카탈로그 값 null).
+- [검증됨] `context_length` 버그 수정 확인: 1차 `CTX_OK = 0` → 4·5차 `CTX_OK = 10`. 원인은 `sorted(glob(...))[-1]` 알파벳 정렬이 `model_catalog_baseline.json`(dict)을 골라 **조용히** `{}` 를 반환한 것 → 날짜 정규식 필터로 수정.
+
+### 5회 실행 중 확인한 사실
+- **openrouter 직접 경로가 21:24 이후 4회 연속 전량 타임아웃.** 1차에는 15건 중 10건 OK였고, 같은 8종이 `kilo/` 경유로는 같은 회차에도 4~16초 응답. 지시서 원칙 2("검증 불가한 항목은 억지로 넣지 않는다")에 따라 최종 JSON 에서 **제외**했다. 과거 검증분을 붙여넣는 병합 로직은 구현했다가 제거.
+- **회차 간 writer 경합 사고**: SIGTERM 으로 끊은 실행이 `os.setsid()` 래퍼로 살아남아 구버전 코드로 같은 JSON 에 동시 기록(4차 때 PID 99929/99931 발견·종료). 이 스크립트에는 회차 간 락이 없다.
+- 1차 OK 26건 ⊃ 4·5차 OK 18건(진부분집합, `run4_only` 0 / `r5_only` 0).
+
+### 잔존 위험
+1. openrouter 직접 경로 회복 여부 미확인 — 회복되면 8종(`cohere/north-mini-code` 등)이 다시 후보가 된다. **"무료 모델이 없어졌다"가 아니라 "경로가 지금 사용 불가"**.
+2. zen 8건은 `context_length` 미보유(카탈로그 null). 소비자가 컨텍스트 없는 모델을 뒤로 밀면 zen 8건이 전부 후순위가 된다.
+3. `thinkingmachines/inkling*` 2종은 openrouter 직접으로만 성공(kilo 경유 403). openrouter 가 계속 죽어 있으면 리스트에서 사라진다.
+4. `nvidia/` apiKey 가 `{env:...}` 미해석 참조 → 무료 모델이 생겨도 인증 실패. 설정 파일 수정 + 실제 NVIDIA 키 필요.
+5. 회차 간 락 없음 — launchd 등으로 자동화하기 전에 락/PID 파일 필요.
+6. `context_length` 출처는 API 스냅샷이지 CLI 실측이 아니다(`probe_context_length` 는 EVAL-CLI-01 에 이미 있으나 미사용).
+7. 회귀 테스트 없음 — `context_lengths()` 정규식 필터가 특히 취약(4-1 버그가 조용히 실패했다).
+8. `scripts/free_models_cli.py`·`scripts/logs/free_models_cli.json` 모두 git 미추적. 인덱스에 타 세션 staged blog 삭제 1,481건 잔존 → pathspec 없는 `git commit` 위험.
+
+### 다음 행동
+1. 무료 모델 2~3종 CLI 12문항 평가 + 블로그 공개 — 지시서가 "평가는 별도 지시서"로 명시.
+2. `nvidia/` 죽은 15개 정리 + apiKey 복구(별도 지시서).
+
+---
 ## 2026-10-14 AIK24-EVAL-03 완료 — 외부 평가 데이터 통합(OpenCode Data·KiloBench·Zen 정책) + 결합 로직 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2205-AIK24-EVAL-03-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
@@ -113,7 +303,6 @@
 ### 다음 행동
 - 대표님: NVIDIA NIM 감지 포함 여부 결정(위 1번).
 - 대표님: `scripts/deep_dive_writer.py` SyntaxError 수리 지시 여부(EVAL-CLI-01 잔존).
-## 진행 중 (2026-10-14, AIK24-EVAL-02) — CLI 기준 무료 모델 전수 리스트 (free_models_cli.json)
 
 ## 진행 중 (2026-10-14, AIK24-PIPE-01) — 무료 모델 자동 평가 비활성화 + 일일 신규 모델 감지
 

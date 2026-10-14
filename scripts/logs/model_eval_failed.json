@@ -1,0 +1,10 @@
+{
+  "thinkingmachines/inkling-small:free": {
+    "reason": "HTTP 403 (12/12문항, 2026-10-14 실측 2회)",
+    "ts": "2026-10-14"
+  },
+  "thinkingmachines/inkling:free": {
+    "reason": "HTTP 403 (12/12문항 + 1토큰 probe, 2026-10-14 실측)",
+    "ts": "2026-10-14"
+  }
+}
