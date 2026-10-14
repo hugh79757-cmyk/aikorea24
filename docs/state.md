@@ -1,3 +1,32 @@
+## 2026-10-14 11:23 AIK24-BLOG-04 완료 — 평가 프롬프트 8단·톤 규칙 5건·H1 안전망 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1123-AIK24-BLOG-04-완료보고.md (완료 — 커밋 103ba5d2 push 완료)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` 단독 (지시서 허용 파일 1개만).
+  - 작업 1: BLOG-03 지시서(11:25 수정본) 8단 프롬프트 전문을 `user_prompt`에 반영. §1 "서브에이전트", §4 "### 4. 비용 — 무료인가, 유료면 얼마인가", §8 "정리 — 이런 때 쓰세요" 신설, TITLE 형식 지정, 톤 규칙 5건(본문 `# 제목` 반복 금지 / 제목 대괄호 수식어 금지 / 브랜드 'AI' 음역 금지 / 구어체 금지 / '돈'→'비용').
+  - 작업 2: `_parse_title_body()`에 `re.sub(r"\A#\s+[^\n]*\n", "", body, count=1)` H1 스트립 안전망 추가 (EmDash가 title을 별도 H1로 렌더링하므로 본문 H1은 중복).
+- 커밋 `103ba5d2` → `origin/main` push 완료 (fast-forward `d4fc6faf..103ba5d2`).
+
+### 결과
+- [검증됨] 완료 기준 ① `grep "### 8. 정리"` = 1건. ② `grep "# 제목.*반복하지"` = 1건, `grep "### 4. 비용"` = 1건, 나머지 톤 규칙 3건(대괄호 수식어 / 음역하지 말고 / 서브에이전트 2건 / '돈' 대신 '비용') = 각 1건 이상.
+- [검증됨] 프롬프트 8단 순서 = 499~546행에서 1→8 단조 증가, 이후 547 리더보드 → 549 톤 규칙 → 566 출력 형식.
+- [검증됨] H1 스트립 동작 3케이스: `TITLE:...\n---\n# H1\n\n본문` → `'본문 첫 줄입니다.'`(H1 제거). H1 없는 입력 → 변경 없음. `## H2` 입력 → `'## H2부터 시작\n\n본문'` 보존.
+- [검증됨] `py_compile` EXIT 0, `pytest` 5종 `33 passed in 0.55s`.
+- [검증됨] `npm run deploy` EXIT 0, Version ID `c0e14a82-ccab-49dd-850a-c1c45bafef52`. 1차 시도는 EXIT 1(타 세션의 동시 `wrangler deploy`가 9229 포트 선점 + 로컬 D1 SQLITE_BUSY) → 프로세스 종료 후 재시도로 성공.
+- [부분검증] 배포 산출물 반영: `No updated asset files to upload`(정적 에셋 무변경, 정상) + `Uploaded aikorea24 (19.24 sec)` 워커 번들 업로드. 프롬프트 문자열이 청크에 실렸는지는 파일 내용 확인 불가.
+- [검증불가] `scripts/deploy.sh`가 내부에서 프로젝트 `.env`를 source 하므로 지시한 `~/.env.common` 토큰 export가 덮어써짐(계정 `7eb1b8cd…`). 배포는 성공했으나 인증 경로가 지시와 다름.
+
+### 잔존 위험
+1. **다른 세션의 staged 삭제 1,481건(`src/content/blog/**`)이 인덱스에 남아 있음.** 내 커밋은 pathspec 제한 커밋이라 타 세션 산출물이 섞이지 않았고 인덱스 상태도 보존됨. 단, 이후 누군가 `git commit -m` (pathspec 없는 일반 커밋)을 하면 그 삭제가 함께 커밋된다 — EmDash 전환 작업의 중간 상태.
+2. 미커밋 잔존: `scripts/logs/model_eval_cache.json`(재평가 산출물), `src/pages/*.astro` 3건 + `src/data/`(타 세션), `scripts/emdash13_repair.py`·`emdash14_relink_d1.py`(타 세션 미추적).
+3. H1 스트립 정규식은 `\A#\s+` 이므로 `## H2`를 건드리지 않지만, 본문 첫 줄이 `#태그` 형태(스페이스 없음)면 미매칭되어 보존된다. LLM 본문 H1은 항상 `# ` + 텍스트라 현재 규칙으로 충분.
+4. 프롬프트 8단은 문자열 상수 교체라 실전 출력 품질은 미검증(다음 모델 평가 초안 생성 시 확인 필요).
+
+### 다음 행동
+- 다음 모델 평가 실행 시 생성되는 초안에서 §8 정리·TITLE 형식·H1 중복 없음 육안 확인.
+- 타 세션 EmDash 전환 정리 시 인덱스 staged 삭제 정리 필요.
+
+---
+
 ## 2026-10-14 AIK24-EMDASH-01/02/03 실검증(브라우저) 완료 — 오류 4건 발견, 수정 대기 → 이 문서 하단 「실검증 오류 목록」 참조 (검증 — 대표님 조치 대기)
 
 ### 한 일
@@ -103,7 +132,34 @@
 
 ---
 
-## 진행 중 (2026-10-14, AIK24-BLOG-03) — 리더보드·프롬프트 개편 (model_eval.py 5건 + blog_draft_generator.py 4건 + 프롬프트 7단)
+## 2026-10-14 AIK24-BLOG-03 완료 — 실측 리더보드 도입 + 모델 평가 프롬프트 7단 개편 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1115-AIK24-BLOG-03-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/model_eval.py` +160줄 — `EVAL_QUESTIONS_VERSION=1`(+qv 기록), 문항별 `prompt_tokens/completion_tokens`→`token_usage`, 판관 파싱 실패 시 0점 대신 `judge_failed` 분리, `record_leaderboard()` 신설, `pricing()`/`free_paths()` 신설.
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` +176줄 — `_leaderboard_block`/`_cost_block`/`_fail_block` 신설, user_prompt 6단→7단 교체, sig_block(§3 남들의 의견) 코드 삭제(§4 '돈'으로 통합).
+- [CONFIGURED ARTIFACT] `scripts/logs/model_leaderboard.json` 신규(1건).
+- 재평가 `python3 scripts/model_eval.py "inclusionai/ling-3.1-flash" --force` EXIT 0 / 배포 EXIT 0.
+
+### 결과
+- [검증됨] 완료기준 7개 중 6개 충족. 근거: ① 캐시 `qv= 1` ② `detail0_keys`에 `prompt_tokens`(74)/`completion_tokens`(226) ③ `grep judge_failed` 11건 + --force EXIT 0 ⑤ `_leaderboard_block` 358행·`_cost_block` 389행·`_fail_block` 418행·`### 4. 돈` 525행 ⑥ pytest 5종 `33 passed in 0.50s` ⑦ Version ID `d32e2aa8-f1ed-40f3-8d0c-e3f897e8567b`.
+- [검증됨] §1-3 동작 확인 — 채점 불가능 문항이 0점이 아니라 측정 결함으로 분리됨. 로그: `[3/12] 지시이행 측정 결함(판관 파싱 실패) — 점수에서 제외`, `[9/12] 맥락유지 측정 결함(...)`. 판관 출력이 `'- 위원회 분기'`, `'학생의 답안은 답변'`으로 원문 반환 → 0/1 추출 실패.
+- [검증됨] 재평가 수치: 문항 12 = 채점성공 10 + 측정결함 2 + 호출실패 0. 점수 8 = 10문항 중 8문항 정답. 축별 2+2+2+2 = 8. 호출 실패 0/12. 토큰 입력 10,154 / 출력 12,580.
+- [검증됨] 리더보드 파일 1건 전문 확인 — `{"model_id":"inclusionai/ling-3.1-flash","qv":1,"score":8,"max_score":12,"judge_failed_n":2,"ts":1791951058.287543}`.
+- [검증됨] `python3 -m py_compile` 두 파일 EXIT 0.
+- [부분검증] 완료기준 ④의 '전멸 시 미기록'은 실행 검증 대신 `record_leaderboard()` 선두 가드 코드 확인으로 대체. 전멸은 API 호출 실패를 유발해 지시서의 '소스 수정 금지'와 충돌해 실행하지 않음.
+- [검증불가] 새 프롬프트의 실제 산출물 품질. 단위 테스트가 프롬프트 문자열을 단정하지 않아(grep 0건), 다음 브리핑 파이프라인 1회 실행이 최초의 검증이다.
+
+### 잔존 위험
+1. 판관 파싱 실패가 문항마다 이동 — 이번엔 Q3·Q9(BLOG-02 때는 Q10). 구조적 결함이라 어떤 문항이 빠질지 사전 예측 불가. `judge_failed_n`을 항상 같이 봐야 점수 해석이 됨.
+2. 리더보드 `max_score`가 항상 12 — 측정 결함 발생 시 `score/max_score` 비율이 실제보다 낮게 잡힘(오늘 8/12=67% vs 채점된 10문항 기준 80%). 지시서 §1-4가 문항 수를 `max_score`로 지정한 것을 그대로 따랐기 때문, 보정 없음.
+3. 캐시 구 포맷 엔트리 혼재 — `liquid/lfm-2.5-2.6b:free`는 `qv`/`token_usage`/`axis` 키가 없고 `cat` 키만 보유(`label`에 "Claude Sonnet 4.5급" 구 문구 잔존). 리더보드에서는 qv 필터로 제외되나 `cache_get`이 그대로 돌려주면 `axis_block`의 `d["axis"]`에서 KeyError 가능. 지시서 범위 밖.
+4. 미커밋 — `model_eval.py`(+160) `blog_draft_generator.py`(+176) `model_eval_cache.json` 신규 `model_leaderboard.json`. 커밋은 지시서 허용 범위 밖이라 미수행.
+5. 배포는 성공했으나 업로드 에셋 0건("No updated asset files to upload") — 이번 변경은 파이썬 실행 스크립트라 사이트 번들에 포함되지 않는다. 배포 성공 ≠ 사이트 반영.
+6. `git status`의 `src/content/blog/2026-10-13-007-...md` 수정은 BLOG-02 개편본의 커밋되지 않은 잔여분이며 이번 세션 write/edit 0회. `scripts/emdash13_repair.py`는 병행 세션 산출물.
+
+### 다음 행동
+- 대표님 verify 후 커밋 여부 결정.
+- 판관 파싱 실패 축소(잔존 위험 1·3)는 별도 지시서 필요.
 
 ## 2026-10-14 AIK24-BLOG-02 완료 — ling-3.1-flash 글 전면 개편 (12문항 재평가 → 10/12, 같은 URL 교체, 배포) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1005-AIK24-BLOG-02-완료보고.md (완료 — verify 요청)
 
