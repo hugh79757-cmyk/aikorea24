@@ -1,3 +1,43 @@
+## 2026-10-14 08:17 — AIK24-EFFICIENCY-03 모델 카드 수집 05:30 수집기 이관 (완료)
+
+### 한 일
+- [PRODUCTION CODE] `api_test/news_collector.py` +16줄 (뉴스 저장 직후 `--models-only` 서브프로세스 호출, try/except+timeout 300),
+  `scripts/news_collector_v2.py` +24/−6줄 (`MODEL_COLLECTORS` 상수, `collect_all(models_only=False)` 분기, `--models-only` 플래그).
+  커밋 `c69913bf` (main, 2 files changed, 34 insertions(+), 6 deletions(-)).
+- 파이프라인 코드 변경 없음, D1 스키마 변경 없음(기존 `news` 테이블), 이메일 발송 0건.
+- launchd plist 변경 없음 — 잡이 이미 돌리는 `api_test/news_collector.py` 안에서 호출.
+
+### 결과
+- [검증됨] 수동 실행에서 뉴스와 모델 카드 둘 다 수집됨. 근거: `/tmp/aik24_eff03_collector.log` 170~182행
+  `신규: 46건 | 중복 스킵: 219건` → `[모델 카드] ...` → `OpenRouter free models: 17건` / `CLI 무료 모델: 161건`
+  → `합계 178건 / 소스 4개: {'OpenRouter Free Models': 17, 'OpenCode Zen': 39, 'Kilo Free Models': 20, 'NVIDIA NIM Free': 102}`,
+  프로세스 종료 코드 EXIT=0.
+- [검증됨] 컴파일 OK (`py_compile` 2파일 → COMPILE_OK), `--help` 에 `--models-only` 노출.
+- [검증됨] 지시서 §4-1 지정 4개 프로바이더와 소스명 일치(위 로그의 소스 4개).
+- [부분검증] D1 당일 모델 신규 행 = 0. 근거: `wrangler d1 execute aikorea24-db --remote` 결과
+  NVIDIA 102(mx 2026-10-13 04:37:12) · OpenCode Zen 39(mx 2026-10-13 12:54:20) · Kilo 21(mx 2026-10-13 04:37:11) ·
+  OpenRouter 19(mx 2026-10-10 13:57:56), `created_at >= '2026-10-14'` 행 `today_model_rows = 0`.
+  제한 사유: 수집 178건이 전량 기존 행과 중복 → INSERT 경로 오늘 미실행. 같은 `save()` 가 만든
+  기존 행(OpenCode Zen 39건, mx 2026-10-13)이 쓰기 경로 동작의 간접 증거.
+- [부분검증] §4-3③ "다음날 06:00 모델 카드 3건 선정" 은 당일 불가(지시서 자체가 잔존 위험 이관 명시).
+- [검증불가] launchd 스케줄 경유 실행. 복구 계획: 2026-10-15 05:40 `grep -n "\[모델 카드\]" api_test/cron_unified.log` 1회 확인.
+- 조사 결론(수정 전 사실): 오늘 06:00 브리핑의 모델 카드 0건 직접 원인은 수집 단절이 아니라
+  **브리핑 중복 제거 3건**(후보 8건 free-llm=3 → 선정 4건 → 중복 제거 3건 → 아이템 1건, briefing id=351).
+
+### 잔존 위험
+- [높음] 프로바이더 무료 모델 목록이 멈춰 있으면 모델 슬롯 3칸이 이미 발행분으로 채워지고 중복 제거가 반복된다.
+  이번 변경은 공급선 복구이며 신선도/중복 문제는 해결하지 않음 → 지시서 필요(파이프라인 코드 변경 금지 범위 밖).
+- [중간] HF Trending / HF Blog RSS 수집 공백 잔존(EFFICIENCY-02가 지운 Step 0 담당분 중 4개 프로바이더만 복구).
+- [중간] 스케줄 경유 실행 미검증(위 [검증불가]).
+- [낮음] 수동 실행이 뉴스 46건을 D1 에 선행 삽입(05:30 잡이 수집할 분). 06:00 파이프라인은 이미 끝나 브리핑 소요 없음.
+- [낮음] `❌ Vectorize: upsert 실패`, `❌ purge 요청 실패 HTTP 401(수동)/403(잡)` — 기존 결함, 이번 범위 밖.
+
+### 다음 행동
+- 2026-10-15 05:40 cron_unified.log 에서 `[모델 카드]` 확인 → 06:10 pipeline_runner.log 에서 `free-llm=` / `⚠️ 중복 제거` 확인.
+- 모델 카드 신선도·중복 제거 정책 지시서 요청. HF Trending 이관 여부 지시서 요청.
+- Vectorize/purge 401·403 별도 지시서 요청.
+- 보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-14-0810-AIK24-EFFICIENCY-03-완료보고.md`
+
 ## 2026-10-13 AIK24-UI-01 완료 — 이메일 구독 박스 가독성 수정 + 아이콘 제거 → SSOT/프로젝트/aikorea24/지시서/2026-10-13-2335-AIK24-UI-01-완료보고.md (완료 — verify 요청)
 
 ### 한 일

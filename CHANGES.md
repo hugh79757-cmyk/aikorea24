@@ -2,6 +2,21 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-14 08:17 — feat: 05:30 수집기에 모델 카드 수집 이관 (AIK24-EFFICIENCY-03)
+
+EFFICIENCY-02가 Step 0을 제거하면서 사라진 4개 CLI 프로바이더 무료 모델 카드 수집을
+05:30 수집기(`api_test/news_collector.py`)에 되돌렸다. 커밋 `c69913bf`.
+
+- `scripts/news_collector_v2.py`: `MODEL_COLLECTORS` 상수 신설, `collect_all(models_only=False)`
+  분기(기본 = 기존 4개 그대로), `--models-only` 플래그 추가. RSS(LLM 번역)는 제외.
+- `api_test/news_collector.py`: 뉴스 저장 직후 `--models-only` 를 서브프로세스로 호출.
+  try/except + timeout 300 으로 감싸 뉴스/모델 어느 쪽 실패든 서로를 막지 않음.
+- 파이프라인 코드 무변경(Step 0 스킵 유지). D1 스키마 무변경(`news` 테이블 재사용).
+- 수동 실행 검증: 뉴스 `신규 46건` + 모델 카드 `178건 수집 / 신규 0건(전량 중복)`, EXIT=0.
+- 잔존 위험: 모델 슬롯 중복 제거 미해결(파이프라인 범위 밖), HF Trending·RSS 공백 잔존,
+  스케줄 경유 실행 미검증(2026-10-15 확인), Vectorize/purge 401·403 기존 결함.
+- 보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-14-0810-AIK24-EFFICIENCY-03-완료보고.md`
+
 ## 2026-09-29 18:30 — fix: 스레드 발행 실패 — semantic dedup 엔티티 오인 (pool 2 → 164)
 
 - **증상**: 2026-09-29 18:00~18:05 v3 5회 재시도 모두 실패. `scripts/threads/logs/2026-09-29.log` 18:01~18:05 참조. 매 시도 기사 풀 2건 → 모두 크롤링 본문 부족(106자/441자) → 발행 0건. 5회 실패 후 "2시간 후 재시도"로 종료.
