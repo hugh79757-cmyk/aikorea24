@@ -1,3 +1,50 @@
+## 2026-10-14 AIK24-EMDASH-01/02 완료 — 파이프라인 EmDash 전환 + 기존 1,479건 이관 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1010-AIK24-EMDASH-01-완료보고.md, SSOT/프로젝트/aikorea24/지시서/2026-10-14-1015-AIK24-EMDASH-02-완료보고.md (완료 — verify 요청)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/emdash_publish.py` 신규 64줄 — `get_pat()`(환경변수 전용, `EMDASH_AIKOREA24_API_TOKEN`→`EMDASH_PAT`) +
+  `publish_post()` = `POST /_emdash/api/content/posts` → `POST /{id}/publish`. HTTP 헬퍼는 `emdash04_migrate.api()` 재사용(중복 없음).
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` +30줄 — `_publish_generated_to_emdash()` 신설, `main()` 에 `[5c]` 단계 추가.
+  위치 = 썸네일 품질 게이트 `return` 직후 / 자동 배포 직전(featured_image 반영 + 게이트 통과 보장). 실패해도 `return` 안 함 = Astro 이중 저장 유지.
+- [PRODUCTION CODE] `scripts/emdash02_urlmap.py` 신규 105줄 — Astro 1,479 ↔ EmDash 제목 매칭 CSV 생성기(정규화 보조매칭 포함).
+- [PRODUCTION CODE] `docs/emdash_url_map.csv` 신규 — 1,479 데이터 행(`astro_slug,astro_url,emdash_slug,emdash_url,title`).
+- [TEST CODE] `tests/test_emdash_publish.py` 신규 6건(네트워크 전부 monkeypatch).
+- [PRODUCTION CODE] EMDASH-02 이관 실행: `emdash04_migrate.py` `LIMIT=2000 BATCH=100` — 신규 18건 published.
+- D1 스키마 변경 0건. 이메일 발송 0건. Astro 소스 삭제 0건. 301 리다이렉트 설정 0건(지시서 범위 밖). 커밋 `a288581d`.
+
+### 결과
+- [검증됨] EMDASH-01 §4-1 필드 매핑. 근거: 실발행 → 라이브 URL HTTP 200(33,128B), HTML에서 본문·`<ul>`·`<blockquote>` 확인.
+  코드블록도 `<pre class="language-python"><code class="language-python">print(&quot;ok&quot;)</code></pre>` 로 정상 렌더(`&quot;` 엔티티 이스케이프 때문이지 누락 아님).
+- [검증됨] EMDASH-01 §4-3 폴백 4분기 단위 테스트 고정: PAT 없음 / create 500 / publish 500 / frontmatter 파싱 실패 → 모두 `None` 반환 후 Astro 유지.
+  파일을 읽기만 하고 지우는 코드 0건(`git show a288581d` 확인).
+- [검증됨] 기준선 회귀 없음. `pytest test_blog_draft_generator test_emdash_publish test_compass_draft_compliance test_weekly_blog_publisher -q` → 29 passed.
+  산출 근거: 29 = 8(기존 blog_draft_generator, 작업 시작 시점 8 passed 와 동일) + 6(신규) + 15(기존 2파일).
+- [검증됨] EMDASH-02 §4-1 CF 한도. `scripts/emdash02_measure.py snapshot` 2회 — 사전 `total=394`(aikorea24 D1 363 + EmDash D1 31)
+  → 사후 `total=2504`(363 + 2141). delta 2,110행/18건 ≈ 117행/건. 2.5% / 중단선(80,000) 대비 32배 여유.
+- [검증됨] EMDASH-02 §4-4 글 수 + URL 매핑. `python3 scripts/emdash02_urlmap.py` → `Astro 1479건 / EmDash 1481건`,
+  `매칭 1479건 (정규화 보조매칭 2건) / 미매칭 0건`, 종료코드 0. CSV 1,480줄(헤더 1 + 데이터 1,479).
+- [검증됨] EMDASH-02 §4-4 샘플 5개 대조(seed 20261014). 제목 5/5 일치, EmDash 블록 12/22/29/20/16개,
+  본문 40자 샘플 13/88/11/14/11 전부 일치, 라이브 URL HTTP 200 5/5(36.7~38.3KB).
+- [검증됨] EMDASH-02 §4-3 전제 무효. 지시서는 "EmDash 50개"였으나 접수 시점 이미 published 1,464건이 조회됐다.
+  1,464건 시점에 컬렉션당 60건 제한이 있었다면 문제가 나타났어야 한다 → 월별 분할/제한 해제 요청 대상 아님.
+- [검증됨] 검증용 임시 글 정리. 발행 확인 후 `DELETE /_emdash/api/content/posts/01M4W6XAY3TGG5B5TXQZG7YVGX` → `{"deleted":true}`,
+  재요청 HTTP 404 확인.
+- [부분검증] EMDASH-01 launchd 스케줄 실행 경로 미확인. 제한 사유: 실제 실행이 LLM 호출 + D1 쓰기를 유발.
+  판정 방법: 다음 실행 로그의 `[5c] EmDash 발행 결과: 성공 N / 전체 M` 줄.
+
+### 잔존 위험
+1. EMDASH-01 스케줄 경로 미실행(위 [부분검증]). 첫 실운영에서 예상 밖 상태코드(예 429)가 오면 그날 글은 Astro 에만 남는다.
+2. EMDASH-01 Astro/EmDash 이중 발행 불일치 추적 장치 없음 — Astro 파일이 source of truth 라 자동 복구됨.
+3. EMDASH-02 슬러그 충돌 시 `500 CONTENT_CREATE_ERROR` (중복 생성은 안 되나 성공 집계도 안 됨). 2차 실행 `fail=7` 중 6건은 이미 published 였음.
+4. EMDASH-02 본문 이미지 `asset.url` 이 Astro 상대경로면 EmDash 도메인에서 404 가능. 샘플 5건에 이미지 블록이 없어 미검증.
+5. 제목 미세 불일치 2건(`바이낸스 AI 기반…`, `AI 안전이라는 게…` — 쉼표/콜론 차이). 내용 중복 아님.
+6. `scripts/model_eval.py`(+`logs/model_eval_cache.json`) 미커밋 변경이 세션 중 생김(mtime 10:14:17/10:18:19, `call_stability()` 호출 추가 diff).
+   **내 작업 아님** — 커밋 `a288581d` 에 포함하지 않고 working tree 에 남김. 원인 미확인.
+
+### 다음 행동
+- 대표님: 다음 스케줄 실행 후 `[5c] EmDash 발행 결과` 로그 확인. `model_eval.py` 미커밋 변경 확인.
+- 별도 지시서: 301 리다이렉트(`docs/emdash_url_map.csv`), Astro 소스 삭제, 잔존 위험 4(이미지) 처리.
+
+
 ## 2026-10-14 AIK24-EFFICIENCY-04 완료 — 모델 중복 판정 완화 + 폴백 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-0910-AIK24-EFFICIENCY-04-완료보고.md (완료 — verify 요청)
 
 ### 한 일
