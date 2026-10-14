@@ -3,7 +3,8 @@
 aikorea24 블로그 초안 자동 생성기
 - D1 DB에서 오늘 수집된 뉴스 중 고단가 키워드 포함 기사 조회
 - 키워드별 기사 그룹핑 → OpenAI 블로그 초안 생성
-- src/content/blog/ 에 마크다운 파일 저장
+- src/content/blog/ 에 마크다운 파일 저장 (전환 기간 이중 저장 — EmDash 도 함께 발행)
+- scripts/emdash_publish.py 로 EmDash 즉시 발행
 - 텔레그램 알림
 """
 # launchd 환경 방어: 가장 먼저 sys.path 설정 (모든 import보다 앞)
@@ -797,6 +798,35 @@ from pipeline.infra.telegram import send_telegram
 import model_eval
 
 # ============================================
+# EmDash 발행 (AIK24-EMDASH-01)
+# ============================================
+def _publish_generated_to_emdash(generated):
+    """생성된 .md 를 EmDash 에 publish. 실패하면 Astro 사본이 그대로 남는다(이중 저장)."""
+    import yaml
+    from emdash_publish import publish_post
+    ok = 0
+    for fp, title, _so, _ in generated:
+        try:
+            with open(fp, encoding="utf-8") as f:
+                _, fm, body = f.read().split("---", 2)
+            meta = yaml.safe_load(fm) or {}
+        except Exception as e:
+            log(f"  ⚠️ EmDash 발행 skip ({os.path.basename(fp)}): {e}")
+            continue
+        url = publish_post(
+            meta.get("title") or title, body.strip(),
+            excerpt=meta.get("description"),
+            featured_image=meta.get("image"),
+            published_at=meta.get("date"),
+        )
+        if url:
+            ok += 1
+            log(f"  🚀 EmDash 발행: {url}")
+        else:
+            log(f"  ⚠️ EmDash 발행 실패 → Astro 유지: {os.path.basename(fp)}")
+    log(f"  EmDash 발행 결과: 성공 {ok} / 전체 {len(generated)}")
+
+# ============================================
 # 메인
 # ============================================
 def main():
@@ -1017,6 +1047,12 @@ def main():
         log("  ❌ 모든 썸네일 품질 검증 실패 — 배포 차단")
         send_telegram(f"❌ [{today_str}] 썸네일 전면 실패: {len(quality_issues)}건 — 배포 차단됨")
         return
+
+    # 5c. EmDash 발행 (AIK24-EMDASH-01). Astro 이중 저장은 이미 끝났으므로
+    # 여기서 실패해도 Astro 글은 살아 있고, 배포는 계속된다.
+    if generated:
+        log("[5c] EmDash 발행 중...")
+        _publish_generated_to_emdash(generated)
 
     # 6. 자동 배포 (새 블로그 포스트가 생성되었거나 미커밋 파일이 있으면)
     # AIK24-EFFICIENCY-02: 파이프라인 경로에서는 run_pipeline.py 의 Step 6(deploy.sh)이
