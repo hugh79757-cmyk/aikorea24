@@ -23,7 +23,7 @@
 - 지시서는 4개 프로바이더를 감지 대상으로 적었으나 **NVIDIA NIM 은 `model_catalog.fetch_nvidia()` 가 `NotImplementedError` 를 던진다** — `/v1/models` 응답에 가격·무료 플래그 필드가 없어 무료 티어 판별 불가(2026-10-14 실측). 이 때문에 감지 대상은 실측 3개(OpenRouter·Kilo·Zen)다.
 
 ### 잔존 위험
-1. **NVIDIA NIM 은 감지 대상에서 빠짐** — `fetch_nvidia()` 가 계속 `NotImplementedError`. `nvidia` 프로바이더는 베이스라인에 없으므로 diff 에도 안 잡힌다. NVIDIA 공식 카탈로그 API 를 따로 붙이거나, 무료 티어 판별 근거를 정해야 해���.
+1. **NVIDIA NIM 은 감지 대상에서 빠짐** — `fetch_nvidia()` 가 계속 `NotImplementedError`. `nvidia` 프로바이더는 베이스라인에 없으므로 diff 에도 안 잡힌다. NVIDIA 공식 카탈로그 API 를 따로 붙이거나, 무료 티어 판별 근거를 정해야 한다.
 2. **수집 결과에 편차가 큼** — 1회차 콘솔에는 openrouter 462 · kilo 394 · zen 85 가 나왔으나 `total_rows=38`. `all_ids` 는 모델 ID 전체 목록이고 `rows` 는 필터링(무료 판별) 후 행이라 숫자가 다르다. 신규 감지에는 `all_ids` 기준이 쓰이므로 실제로는 총 941 ID 를 비교한다.
 3. `AUTO_EVAL_ENABLED = False` 인 채로 `free-model-pipe`(매일 10:00)는 계속 돌지만 평가 단계만 SKIP 된다 — 수집+페이지 갱신 비용은 그대로 발생.
 4. [검증불가] 04:00 실제 기동 — plist 로드까지만 확인했고 정해진 시각에 자동 실행되는 것은 다음 날 로그로 확인해야 한다.
@@ -51,7 +51,7 @@
 
 ### 결과 (완료기준 6항목)
 1. [검증됨] **작업1 `opencode run` 인터페이스 5항목 문서화** — 도구 비활성화 `--agent <이름>` 지정(=`opencode agent list` 없음), temperature/max_tokens **CLI 플래그 없음**(설정 불가), 멀티턴 `-s <sessionID>` 가능이나 프롬프트 주입 방식 채택, 출력 `--format json` **NDJSON**(실측), 타임아웃 `subprocess.run(timeout=)`+`TimeoutExpired`, 에러 `{"type":"error","error":{"type":"provider.no-route"}}`+exit 1.
-2. [검증됨] **작업2 `cat-jam-free` 12문항 CLI 평가** — `BLOCKED: None` / `score=8/12 failed=0 judge_failed=1 source=cli provider=zen`. LABEL: `11문항 중 8문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 1문항 측정 결함.` 리��보드 기록 `cat-jam-free 8/12 (qv=1)`, 캐시 저장 확인.
+2. [검증됨] **작업2 `cat-jam-free` 12문항 CLI 평가** — `BLOCKED: None` / `score=8/12 failed=0 judge_failed=1 source=cli provider=zen`. LABEL: `11문항 중 8문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 1문항 측정 결함.` 리더보드 기록 `cat-jam-free 8/12 (qv=1)`, 캐시 저장 확인.
 3. [검증됨] **작업3 매핑 테이블** — `CLI_MODEL_MAP = {"cat-jam-free": "opencode/cat-jam-free", "space-bunny-free": "opencode/space-bunny-free"}`. `jev-1.13-free` 미등록(테스트로 고정).
 4. [검증됨] **작업4 파이프라인 분기** — `pick_cards()` 실측 출력에 `cat-jam-free | cli | 컨텍스트 길이 미공개` 노출 확인. CLI 실패 시 zen_pending 사유만 갱신하는 분기 테스트로 고정.
 5. [검증됨] **작업5 API/CLI 구분** — `pick_cards()` 실측으로 `nvidia/nemotron-3-ultra-550b-a55b: | api |` vs `cat-jam-free | cli |` 구분 확인. 기존 API 엔트리 backfill 안 함(캐시 조회 구조).
