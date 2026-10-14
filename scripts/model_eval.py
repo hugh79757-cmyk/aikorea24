@@ -20,6 +20,7 @@ os.environ 만 읽는다 (지시서가 참조한 ~/workspace/skills/llm-eval/ �
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -687,6 +688,155 @@ def eval_model(model_id, with_judge=True):
     return result
 
 
+# ── EVAL-CLI-01: OpenCode CLI 경유 평가 ──────────────────────────────────────
+# 카탈로그 ID → `opencode run -m` 모델명. 분기문 대신 표로 관리한다(모델 추가 = 1줄).
+# jev-1.13-free 는 OpenCode CLI 에 미등록이라 넣지 않는다.
+CLI_MODEL_MAP = {
+    "cat-jam-free": "opencode/cat-jam-free",
+    "space-bunny-free": "opencode/space-bunny-free",
+}
+
+
+def cli_prompt(spec):
+    """CLI 는 한 번의 프롬프트만 받으므로 멀티턴 대화 기록을 본문에 못 박는다."""
+    q = spec["q"]
+    seed = spec.get("seed") or []
+    if not seed:
+        return q
+    return (
+        "다음은 대화 기록입니다:\n"
+        + "\n".join(f"{m['role']}: {m['content']}" for m in seed)
+        + "\n\n위 대화를 바탕으로 다음 질문에 답하세요:\n" + q
+    )
+
+
+def cli_call(cli_model, prompt, timeout=QUESTION_TIMEOUT):
+    """`opencode run` 1회 호출. (텍스트, "") 또는 ("", 사유)."""
+    try:
+        p = subprocess.run(
+            ["opencode", "run", "-m", cli_model, "--format", "json"],
+            input=prompt, capture_output=True, text=True, timeout=timeout,
+        )
+    except subprocess.TimeoutExpired:
+        return "", f"CLI 타임아웃 {timeout}초"
+    except FileNotFoundError:
+        return "", "opencode CLI 없음"
+    except Exception as e:
+        return "", f"CLI 예외 {type(e).__name__}"
+    texts, err = [], ""
+    for line in p.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            obj = json.loads(line)
+        except ValueError:
+            continue
+        kind = obj.get("type")
+        if kind == "text":
+            texts.append((obj.get("part") or {}).get("text") or "")
+        elif kind == "error":
+            err = (obj.get("error") or {}).get("message") or "CLI 오류"
+    if err:
+        return "", err
+    out = "".join(texts).strip()
+    return (out, "") if out else ("", "CLI 빈 응답")
+
+
+def eval_model_cli(model_id, with_judge=True, cli_model=None):
+    """OpenCode CLI 경유 12문항 평가. 반환 (result, blocked).
+
+    blocked 가 문자열이면 모델에 아예 도달하지 못한 상태다. 이때 점수 0을 기록하면
+    측정 실패가 모델 실패로 남으므로, 호출자가 zen_pending 사유 갱신에 쓴다.
+    판관(score_response)은 API 경로와 같은 것으로 재사용한다.
+    """
+    cli_model = cli_model or CLI_MODEL_MAP.get(model_id)
+    result = {
+        "model_id": model_id,
+        "source": "cli",            # API 경로와 구분 (EVAL-CLI-01 §작업5)
+        "provider": "zen",
+        "cli_model": cli_model,
+        "qv": EVAL_QUESTIONS_VERSION,
+        "score": 0,
+        "max_score": len(TEST_QUESTIONS),
+        "details": [],
+        "errors": [],
+        "failures": [],
+        # CLI 는 토큰 수를 알려주지 않는다 — 미측정임을 명시하고 0으로 둔다.
+        "token_usage": {"prompt": 0, "completion": 0},
+        "notes": "CLI 경유 — 토큰 사용량 미측정",
+        "judge_failed": 0,
+        "by_axis": {a: {"score": 0, "max_score": 0, "failed": 0} for a in AXES},
+    }
+    if not cli_model:
+        return result, f"CLI 미등록 모델 ({model_id})"
+
+    total = len(TEST_QUESTIONS)
+    for idx, spec in enumerate(TEST_QUESTIONS, 1):
+        axis, question, expected = spec["axis"], spec["q"], spec["expected"]
+        if idx > 1:
+            time.sleep(RATE_GAP_SEC)
+        judge_q = question
+        if spec.get("seed"):
+            judge_q = (
+                "=== 대화 기록 ===\n"
+                + "\n".join(f"{m['role']}: {m['content']}" for m in
+                            list(spec.get("seed") or []) + [{"role": "user", "content": question}])
+                + "\n=== 질문 ==="
+            )
+        actual, reason = cli_call(cli_model, cli_prompt(spec))
+        if not actual:
+            if idx == 1:
+                # 첫 문항부터 CLI 레벨 실패 = 모델 도달 불가. 0점 기록 없이 중단.
+                log(f"  CLI 호출 실패({reason}) — 모델 도달 불가, 중단")
+                return result, reason
+            result["errors"].append(f"Q{idx} {reason}")
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception",
+                                      "judge_failed": False})
+            result["failures"].append({"idx": idx, "axis": axis, "reason": reason})
+            log(f"  [{idx}/{total}] {axis} {reason} → 0점")
+            continue
+        pts = score_response(judge_q, expected, actual) if with_judge else 1
+        judge_failed = pts is None
+        if judge_failed:
+            pts = 0
+            result["judge_failed"] += 1
+            log(f"  [{idx}/{total}] {axis} 측정 결함(판관 파싱 실패) — 점수에서 제외")
+        else:
+            result["score"] += pts
+        result["details"].append({
+            "idx": idx, "axis": axis, "score": pts, "source": "cli",
+            "answer": actual[:ANSWER_STORE_CHARS], "judge_failed": judge_failed,
+        })
+        log(f"  [{idx}/{total}] {axis} {pts}점 (via cli) ← {actual[:60]!r}")
+
+    result["failed"] = sum(1 for d in result["details"] if d["source"] == "exception")
+    for d in result["details"]:
+        if d.get("judge_failed"):
+            continue
+        b = result["by_axis"].setdefault(d["axis"], {"score": 0, "max_score": 0, "failed": 0})
+        b["max_score"] += 1
+        b["score"] += d["score"]
+        if d["source"] == "exception":
+            b["failed"] += 1
+    result["role"] = judge_role(result["by_axis"] or {})
+    jf = result["judge_failed"]
+    scored = result["max_score"] - result["failed"] - jf
+    if scored >= 5:
+        result["label"] = (
+            f"{scored}문항 중 {result['score']}문항 정답 "
+            f"(문항 난이도: {_difficulty_note(result['by_axis'])} 기준, CLI 경유)"
+            + (f", {result['failed']}문항 응답 실패 제외" if result["failed"] else "")
+            + (f", {jf}문항 측정 결함" if jf else "")
+            + f". {result['role']}."
+        )
+    else:
+        result["label"] = f"{scored}문항 중 {result['score']}문항 정답 (응답 실패 과다 — 판단 보류)"
+    if result["failed"]:
+        log(f"  ⚠️ 응답 실패 {result['failed']}/{result['max_score']}문항 — 분모에서 제외했다 (능력 실패 아님)")
+    return result, None
+
+
 def _fetch_openrouter_models():
     """OpenRouter 모델 목록 캐시 조회.
 
@@ -955,3 +1105,79 @@ if __name__ == "__main__":
     log(f"호출 안정성: 실패 {st['failed']}/{st['total']} — {st['verdict']}")
     sig = external_signals(target)
     log(f"외부 지표 ({sig['sources']}개 출처): " + " | ".join(sig["lines"]))
+
+# ── EVAL-CLI-01 작업 6: 실효 컨텍스트 길이 실측 ────────────────────────────
+# 공칭 스펙이 아니라 "그만큼 넣어도 앞부분을 아직 기억하고 있나"를 잰다.
+# 잊기 시작하는 지점이 실효 컨텍스트라 브리핑에 advertise할 값이다.
+PROBE_SECRET = "7392"
+PROBE_QUESTION = "위 문서의 첫 문장에 나왔던 비밀번호는 무엇입니까? 숫자만 답하세요."
+PROBE_STEPS = (8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576)
+PROBE_TIMEOUT_SEC = 240  # 큰 문서 수신용 — cli_call 기본 60초면 128K 부터 잘린다
+PROBE_GAP_SEC = 4  # 무료 티어 보호 — 지시서 작업 6 주의
+
+
+def _probe_doc(target_tokens):
+    """대략 target_tokens 짜리 문서. 첫 문장에 비밀번호를 두고 나머지는 filler."""
+    parts = [f"이 문서의 첫 문장에 비밀번호가 있습니다. 비밀번호는 {PROBE_SECRET}입니다.\n\n"]
+    size, i = 0, 0
+    while size < target_tokens:
+        s = f"문장 {i}: 데이터 기록 번호 {i * 7 + 3} 은 검증 항목 {i % 13} 에 대응하며 요약값은 {i * 3 + 1} 입니다.\n"
+        parts.append(s)
+        size += len(s)
+        i += 1
+    return "".join(parts)
+
+
+def _probe_hit(model_id, cli_model, target_tokens):
+    """target_tokens 짜리 문서를 넣고 비밀번호를 되받았는지. (성답, 사유)"""
+    prompt = _probe_doc(target_tokens) + "\n" + PROBE_QUESTION
+    if cli_model:
+        # 문서가 크다 — 문항당 60초 기본값이면 128K 부터 잘려 "컨텍스트 부족"으로 오판된다
+        return cli_call(cli_model, prompt, timeout=PROBE_TIMEOUT_SEC)
+    from model_router import chat_completion
+
+    ans = chat_completion(
+        messages=[{"role": "user", "content": prompt}],
+        system_prompt="문서에 있는 사실만 답하세요.",
+        temperature=0.2, max_tokens=32, model_override=model_id,
+    )
+    return (ans or ""), ("" if ans else "빈 응답")
+
+
+def probe_context_length(model_id, cache=None):
+    """실효 컨텍스트 길이(토큰) 탐색. 모델당 1회만 — 캐시에 있으면 돌리지 않는다.
+
+    두 배씩 올려서 첫 실패 지점을 찾고, 앞 구간을 이분 탐색으로 좁힌다.
+    """
+    cache = cache if cache is not None else cache_load()
+    if model_id in cache and cache[model_id].get("measured_context"):
+        log(f"{model_id}: 실측 컨텍스트 이미 있음 ({cache[model_id]['measured_context']:,}) — 재측정 안 함")
+        return cache[model_id]["measured_context"]
+    cli_model = CLI_MODEL_MAP.get(model_id)
+    ok_sizes = []
+    for n in PROBE_STEPS:
+        time.sleep(PROBE_GAP_SEC)
+        ans, err = _probe_hit(model_id, cli_model, n)
+        hit = PROBE_SECRET in (ans or "")
+        log(f"{model_id}: {n:,} 토큰 → {'OK' if hit else '실패'}")
+        if not hit:
+            break
+        ok_sizes.append(n)
+    if not ok_sizes:
+        log(f"{model_id}: {PROBE_STEPS[0]:,} 토큰도 못 받음 — 실측 실패")
+        return None
+    best = ok_sizes[-1]
+    if best == PROBE_STEPS[-1]:
+        log(f"{model_id}: {best:,} 토큰까지 통과 (상한 도달 — 실측 하한)")
+        return best
+    lo, hi = ok_sizes[-2] if len(ok_sizes) >= 2 else 0, best  # lo 는 실패 확정, hi 는 성공 확정
+    while hi - lo > 1:
+        mid = (lo + hi) // 2
+        time.sleep(PROBE_GAP_SEC)
+        ans, _ = _probe_hit(model_id, cli_model, mid)
+        if PROBE_SECRET in (ans or ""):
+            hi = mid
+        else:
+            lo = mid
+    log(f"{model_id}: 실효 컨텍스트 ≈ {hi:,} 토큰")
+    return hi
