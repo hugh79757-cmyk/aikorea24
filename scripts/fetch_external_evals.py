@@ -46,6 +46,7 @@ import time
 from pathlib import Path
 
 import httpx
+import model_eval
 
 LOG_DIR = Path(__file__).resolve().parent / "logs"
 OUT_PATH = LOG_DIR / "external_evals.json"
@@ -226,21 +227,22 @@ def combine(sources):
             "trainsOnPrompts": z.get("trainsOnPrompts"),
         }
 
-    cache = {}
+    # Load raw cache to get list of model IDs, then validate each via cache_get
     try:
-        cache = json.loads(EVAL_CACHE_PATH.read_text(encoding="utf-8"))
+        raw_cache = json.loads(EVAL_CACHE_PATH.read_text(encoding="utf-8"))
     except Exception:
-        cache = {}  # 캐시가 없으면 eval 신호만 빠진다 — 나머지 신호는 그대로 쓴다
-    for mid, ev in (cache or {}).items():
-        if not isinstance(ev, dict) or not ev.get("max_score"):
-            continue
-        by.setdefault(normalize_model(mid), {})["eval"] = {
-            "model_id": mid,
-            "score": ev.get("score"),
-            "max_score": ev.get("max_score"),
-            "source": ev.get("source") or "api",
-            "provider": ev.get("provider"),
-        }
+        raw_cache = {}
+    for mid in raw_cache.keys():
+        entry = model_eval.cache_get(mid)
+        if entry is not None:
+            # entry is a dict with keys: model_id, score, max_score, source, provider, etc.
+            by.setdefault(normalize_model(mid), {})["eval"] = {
+                "model_id": entry.get("model_id"),
+                "score": entry.get("score"),
+                "max_score": entry.get("max_score"),
+                "source": entry.get("source") or "api",
+                "provider": entry.get("provider"),
+            }
 
     models = []
     for key in sorted(by):

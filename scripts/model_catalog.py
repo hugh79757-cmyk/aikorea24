@@ -106,19 +106,34 @@ def fetch_kilo():
 def fetch_zen():
     """OpenCode Zen 사용 가능 모델 중 무료.
 
-    URL `https://opencode.ai/zen/v1/models`, 키 불필요. 응답에 가격 필드가 없어
-    id 의 `-free` 접미사로만 걸러낸다 — 관측된 패턴이지 계약이 아니다.
-    shortcut: Zen 은 가격 정보를 주지 않아 서버 측 무료 플래그로 교차검증할 수 없다.
-    접미사 규칙이 깨지면 무료 목록이 조용히 줄어든다. 규칙이 바뀌면 이 함수를 손봐라.
+    공식 문서 https://opencode.ai/docs/zen/ (리다이렉트 후 /v2/docs/console/models/) 에서
+    무료 모델 12종을 확인하고, API 응답(`/v1/models`)에 존재하는 것만 포함한다.
+    이는 접미사 규칙이 깨져도(예: big-pickle) 무료 목록을 정확히 반영하기 위함이다.
+    대표님 원칙: 검증 불가한 항목은 억지로 넣지 않는다.
     """
+    # API 응답에서 전체 ID 집합 가져오기
     r = httpx.get(ZEN_MODELS, timeout=HTTP_TIMEOUT)
     r.raise_for_status()
-    data = r.json().get("data", [])
-    rows = [_row("zen", m.get("id"), m.get("id")) for m in data
-            if (m.get("id") or "").endswith("-free")]
-    return rows, {m.get("id") for m in data if m.get("id")}
-
-
+    api_ids = {m.get("id") for m in r.json().get("data", []) if m.get("id")}
+    # 공식 무료 12종 (화이트리스트)
+    ZEN_OFFICIAL_FREE = frozenset([
+        "jev-1.13-free",
+        "big-pickle",
+        "space-bunny-free",
+        "cat-jam-free",
+        "longcat-2.5-preview-free",
+        "step-5-preview-free",
+        "exo-free",
+        "mimo-v2.6-flash-free",
+        "mimo-v2.5-free",
+        "nemotron-3-ultra-free",
+        "nemotron-3.5-lightning-free",
+        "muse-spark-1.3-contributor-free",
+    ])
+    # 교집합: 공식 목록에 있고 API에 존재하는 모델만
+    selected_ids = ZEN_OFFICIAL_FREE & api_ids
+    rows = [_row("zen", model_id, model_id) for model_id in selected_ids]
+    return rows, api_ids
 def fetch_nvidia():
     """NVIDIA NIM — 신규 **감지만** 한다. 무료로 advertise 하지 않는다.
 
