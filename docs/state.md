@@ -1,11 +1,11 @@
 ## 2026-10-14 AIK24-EMDASH-01/02 완료 — 파이프라인 EmDash 전환 + 기존 1,479건 이관 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1010-AIK24-EMDASH-01-완료보고.md, SSOT/프로젝트/aikorea24/지시서/2026-10-14-1015-AIK24-EMDASH-02-완료보고.md (완료 — verify 요청)
 
 ### 한 일
-- [PRODUCTION CODE] `scripts/emdash_publish.py` 신규 64줄 — `get_pat()`(환경변수 전용, `EMDASH_AIKOREA24_API_TOKEN`→`EMDASH_PAT`) +
+- [PRODUCTION CODE] `scripts/emdash_publish.py` 신규 54줄 — `get_pat()`(환경변수 전용, `EMDASH_AIKOREA24_API_TOKEN`→`EMDASH_PAT`) +
   `publish_post()` = `POST /_emdash/api/content/posts` → `POST /{id}/publish`. HTTP 헬퍼는 `emdash04_migrate.api()` 재사용(중복 없음).
-- [PRODUCTION CODE] `scripts/blog_draft_generator.py` +30줄 — `_publish_generated_to_emdash()` 신설, `main()` 에 `[5c]` 단계 추가.
+- [PRODUCTION CODE] `scripts/blog_draft_generator.py` +38/-2줄 — `_publish_generated_to_emdash()` 신설, `main()` 에 `[5c]` 단계 추가.
   위치 = 썸네일 품질 게이트 `return` 직후 / 자동 배포 직전(featured_image 반영 + 게이트 통과 보장). 실패해도 `return` 안 함 = Astro 이중 저장 유지.
-- [PRODUCTION CODE] `scripts/emdash02_urlmap.py` 신규 105줄 — Astro 1,479 ↔ EmDash 제목 매칭 CSV 생성기(정규화 보조매칭 포함).
+- [PRODUCTION CODE] `scripts/emdash02_urlmap.py` 신규 110줄 — Astro 1,479 ↔ EmDash 제목 매칭 CSV 생성기(정규화 보조매칭 포함).
 - [PRODUCTION CODE] `docs/emdash_url_map.csv` 신규 — 1,479 데이터 행(`astro_slug,astro_url,emdash_slug,emdash_url,title`).
 - [TEST CODE] `tests/test_emdash_publish.py` 신규 6건(네트워크 전부 monkeypatch).
 - [PRODUCTION CODE] EMDASH-02 이관 실행: `emdash04_migrate.py` `LIMIT=2000 BATCH=100` — 신규 18건 published.
