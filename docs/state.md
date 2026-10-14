@@ -1,3 +1,50 @@
+## 2026-10-14 AIK24-EVAL-03 완료 — 외부 평가 데이터 통합(OpenCode Data·KiloBench·Zen 정책) + 결합 로직 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2205-AIK24-EVAL-03-완료보고.md (완료 — verify는 시니어2)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/fetch_external_evals.py` 신규(약 190줄). D1 미사용 — 외부 HTTP 만. 소스 3개 수집 + `combine()` 결합. 커밋 `b93c9833`.
+- [CONFIG/데이터] `scripts/logs/external_evals.json` 신규(78,17 bytes). 이전까지 두 파일 모두 git 미추적이었고 이번에 처음 버전관리됨.
+- 범위 밖 준수: free-models 페이지 미수정, CLI 평가 로직 미변경, 브리핑·툴 파이프라인 미변경.
+
+### 결과
+- [검증됨] **작업1-1 OpenCode Data — 공개 JSON API 확정(스크래핑 불필요)**
+  - `https://opencode.ai/data` 의 JSON-LD `Dataset.distribution` 이 공개 다운로드 URL 을 알려준다.
+  - **`GET https://opencode.ai/data/index.json` → 200, 148,249 bytes**(UA `Mozilla/5.0` 필요 — 없으면 403).
+  - 최상위 키: `page, updatedAt, summary, leaderboard, dailyTokens, dailyUniqueUsers, weeklyRetention, sessionCost, tokenPricesUsdPer1M, cacheRatio, marketShare, countries`.
+  - ★ **지시서 최우선 항목(주간 재사용률)이 `weeklyRetention` list[15] 로 그대로 제공** — 요소 `{rank, model, name, page, retentionPercent, eligibleUserWeeks, retainedUserWeeks}`.
+  - `updatedAt` = `2026-10-14T13:24:19Z`(매일 갱신), `temporalCoverage` = `2026-08-20/2026-10-14`.
+- [검증됨] **작업1-2 KiloBench — 별도 페이지에서 파싱 가능**
+  - `kilo.ai/leaderboard` 의 `#kilo-bench` 섹션은 642 bytes 로 lazy-load 라 점수가 없다(표 8개는 전부 Rank/Model/Usage 중복).
+  - ★ 실제 점수표는 **`https://kilo.ai/kilobench`**(590,281 bytes), 표 헤더 `# | Model | Completion | Cost / attempt`, **38 모델 행**.
+  - 무료 식별 = 모델명 `(free)` 마커 **AND** `$0.00` → 실측 2행: `Hy3 (free) 47.6% $0.00`, `Nemotron 3 Super (free) 15.5% $0.00`.
+- [검증됨] **작업1-3 Zen 무료 목록·데이터 정책 확보**
+  - `https://opencode.ai/docs/zen/` → **302 → `https://opencode.ai/v2/docs/console/models/`**(200, 53,344 bytes).
+  - **공식 무료 12종**: `jev-1.13-free`, `big-pickle`, `space-bunny-free`, `cat-jam-free`, `longcat-2.5-preview-free`, `step-5-preview-free`, `exo-free`, `mimo-v2.6-flash-free`, `mimo-v2.5-free`, `nemotron-3-ultra-free`, `nemotron-3.5-lightning-free`, `muse-spark-1.3-contributor-free`.
+  - **데이터 정책**: 기본 = 제로-retention·학습 미사용. 예외 — 학습 사용: `big-pickle`·`exo-free`·`mimo-v2.6-flash-free`·`mimo-v2.5-free` / NVIDIA 시험용(사용 로그 기록): `nemotron-3-ultra-free`·`nemotron-3.5-lightning-free` / Meta 학습 조건 할인: `muse-spark-1.3-contributor-free` / 학습 미사용·30일 보관: `cat-jam-free`.
+- [검증됨] **작업2 스크립트 실행** — `opencode_data: 15건` / `kilobench: 2건` / `zen_policy: 12건` / **`combined: 24건`** → `scripts/logs/external_evals.json`. 소스 하나가 죽어도 나머지는 진행(try/except), 저장은 `os.replace` 원자적.
+- [검증됨] **작업3 결합 로직** — 임계값 고정: **eval ≥0.6 / retention ≥50% / kilobench ≥40%**. `zen` 은 품질 신호가 아니라 **판정 투표에서 제외**.
+  - 판정 분포: **강한 추천 1 / 추천(단일 신호) 14 / 비추천 1 / 판정 없음(zen 단독) 8**.
+  - 신호 조합: `(retention,)` 10 / `(zen,)` 8 / `(retention,zen)` 4 / `(kilobench,retention)` 1 / `(kilobench,)` 1.
+  - 매칭 검증: `space-bunny-free`→`space-bunny`(retention+zen), `mimo-v2.6-flash-free`→`mimo-v2.6-flash`(retention+zen), `hy3`(retention+kilobench → **강한 추천**), `nemotron-3-super`(kilobench 단독 → 비추천).
+- [검증됨] 대표님 원칙 준수 — ① 검증 가능한 것만: 3소스 전부 공개 HTTP 로 실측 확인 ② 토큰 점유율 지표 배제: `dailyTokens`·`dailyUniqueUsers`·`marketShare`·`countries` 를 `excluded` 에 사유와 함께 기록하고 채택하지 않음 ③ 데이터 없는 항목 미표시: 신호 0개 모델은 `combined.models[]` 에서 제외, zen 단독 항목은 `verdict` 키 자체를 만들지 않음(빈 칸·"미확인" 금지).
+- [검증됨] 회귀 테스트 `pytest tests/test_eval_cli.py tests/test_zen_pending.py -q` → **24 passed**.
+
+### 위반 감지 / 발견한 결함 (해결하지 않고 보고)
+1. **[검증됨] `model_catalog.fetch_zen()` 의 `-free` 접미사 규칙이 무료 모델을 놓친다** — Zen 공식 무료 12종 중 **`big-pickle` 은 무료인데 `-free` 접미사가 없어 `fetch_zen()` 이 걸러내지 못한다**(공식 12종 vs `-free` 접미사 9개 불일치). `fetch_zen()` docstring 의 `shortcut: 접미사 규칙이 깨지면 무료 목록이 조용히 줄어든다` 경고가 현실화된 상태다. **수정하지 않았다** — 지시서 §범위밖(CLI 평가 로직·free-models 페이지)과 저촉 소지가 있어 별도 지시서 대상으로 남긴다.
+2. **[검증됨] 우리 eval 캐시가 비어 있다** — `scripts/logs/model_eval_cache.json` = `{}`(2 bytes), `model_leaderboard.json` = `[]`. EVAL-CLI-01 에서 만든 `cat-jam-free 8/12`·`space-bunny-free measured_context=1048576` 이 사라졌다. **동시 실행된 다른 세션의 리셋으로 추정(내 작업 아님)**. 이 때문에 결합 결과의 `eval` 신호가 현재 전부 부재하고, 유일한 `강한 추천`(`hy3`)은 retention+kilobench 조합이다.
+
+### 잔존 위험
+1. **`eval` 신호 부재로 결합 로직의 핵심(3신호 교차)이 미검증** — 캐시가 복구되어야 "CLI 점수 + 외부 신호 일치/불일치" 판정이 실제로 동작하는지 확인된다. 현재는 2신호 조합까지만 실증됐다. [부분검증]
+2. **표기 불일치로 매칭 실패가 남는다** — KiloBench 표기(`Hy3`, `Nemotron 3 Super`)는 Zen/retention 표기와 정확 일치로 붙지 않는다. `normalize_model()` 로 맞췄으나 모든 표기를 커버하지는 못한다(외부 신호 단독 항목 8건 중 상당수).
+3. **임계값(0.6/50/40)은 내가 정한 값이다** — 실측 근거가 아니라 직관이다. 대표님 확인이 필요하다.
+4. **KiloBench 파싱은 HTML 구조에 의존** — `<tr>`/`<td>` 정규식 기반이라 페이지 구조가 바뀌면 조용히 0건이 된다. 현재는 예외 없이 2건이지만 회귀 감지 장치는 없다.
+5. **OpenCode Data `index.json` 도 스키마 고정이 아니다** — `weeklyRetention` 키 이름이 바뀌면 조용히 빈 결과가 된다.
+6. 3소스 중 **NVIDIA NIM 무료 목록은 여전히 판별 불가**(PIPE-02 [검증됨]) — 이번 통합에도 NVIDIA 무료 신호는 없다.
+
+### 다음 행동
+- 대표님: `fetch_zen()` 의 `-free` 접미사 규칙 수정(위 결함 1) 별도 지시서 필요 여부.
+- 대표님: eval 캐시 소실(위 결함 2)의 원인 — 동시 세션이 왜 리셋했는지 확인 필요.
+- 대표님: 임계값 0.6/50/40 승인 여부.
+- 별도 지시서: free-models 페이지에 `external_evals.json` 반영(이번 범위 밖).
 ## 2026-10-14 AIK24-PIPE-02 완료 — NVIDIA NIM 신규 모델 감지 포함 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2128-AIK24-PIPE-02-완료보고.md (완료 — verify는 시니어2)
 
 ### 한 일
