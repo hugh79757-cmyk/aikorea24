@@ -1,3 +1,24 @@
+## 2026-10-15 13:45 — AIK24-PIPE-02 --no-email 플래그 + 수동 실행 스킬 저장
+
+### 한 일
+- [PRODUCTION CODE] `scripts/run_pipeline.py` — `--no-email` 인자 추가(`--skip-email`과 동일 효과). dry-run 계획 표시에서 이메일 단계 제외. Step 5 가드를 `no_email → "[pipeline] --no-email: 이메일 발송 건너뜀" 로그 / elif not skip_email → 발송` 구조로 변경. 기존 `--skip-email`·자동 실행 경로(인자 없음 → 발송) 무변경.
+- [PRODUCTION CODE] `scripts/run_pipeline_with_notify.py` — `--no-email` argparse 추가(parse_known_args, 나머지 인자는 그대로 내부 전달). 실행 시 건너뜀 로그 1줄 출력. 부수 효과: wrapper `--help`가 내부로 전달되지 않고 즉시 종료됨(기존에는 내부 help 출력 후 텔레그램까지 발송).
+- [CONFIG] `.claude/skills/aik24-manual-pipeline/SKILL.md` 신규 — 수동 실행 시 `--no-email` 필수, 금지 명령 목록, 실행 후 확인 절차.
+
+### 결과
+- [검증됨] `run_pipeline.py --help` → `--no-email` 설명 표시. 근거: 위 실측 출력.
+- [검증됨] `run_pipeline_with_notify.py --help` → `--no-email` 표시 + 텔레그램 미발송(즉시 종료). 근거: 위 실측 출력.
+- [검증됨] `run_pipeline.py --dry-run --no-email` → 계획 목록에 "4. 이메일 발송" 없음(기존 `--skip-email` 없을 땐 표시됨). 근거: 위 실측 출력.
+- [부분검증] `--no-email` 실제 실행 시 이메일 미발송. 제한 사유: 전체 실행은 뉴스~배포 부작용이 있어 미실행. 근거: dry-run 조기 반환 + Step 5 가드 코드 대조(`grep -n "no_email" scripts/run_pipeline.py` → 인자 정의·dry-run 표시·Step 5 가드 3곳).
+- [부분검증] 자동 실행 경로 무변경. 제한 사유: 실제 스케줄 실행을 트리거하지 않음. 근거: 인자 없을 때 `args.no_email=False` → 기존 분기와 동일한 `step_email()` 호출 코드 대조.
+
+### 잔존 위험
+- 다음 실제 수동 실행 때 `[pipeline] --no-email: 이메일 발송 건너뜀` 로그 2회(wrapper 1 + 내부 1) 출력 확인 필요.
+- `auto_email_sender.py` 직접 실행은 이 스킬·플래그의 보호 밖에 있음 — 수동 실행은 반드시 스킬의 명령만 사용.
+
+### 다음 행동
+- 지시서 완료기준 1-3 확인 후 커밋·푸시.
+
 ## 2026-10-15 11:13 AIK24-FAVICON-01 추가 항목 — favicon.ico 직접 URL 교체 + 301 규칙 해제
 
 ### 한 일

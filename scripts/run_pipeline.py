@@ -248,6 +248,8 @@ def main():
     parser.add_argument("--skip-blog", action="store_true", help="블로그 초안 생성 단계 건너뜀")
     parser.add_argument("--skip-thumbnails", action="store_true", help="썸네일 생성 단계 건너뜀")
     parser.add_argument("--skip-email", action="store_true", help="이메일 발송 단계 건너뜀")
+    parser.add_argument("--no-email", action="store_true",
+                        help="이메일 발송 안 함 (수동 실행용, --skip-email과 동일. 자동 스케줄 실행에는 사용 금지)")
     parser.add_argument("--skip-deploy", action="store_true", help="빌드/배포 단계 건너뜀")
     parser.add_argument("--date", help="날짜 지정 (YYYY-MM-DD 형식, 기본값: 오늘)")
     parser.add_argument("--dry-run", action="store_true", help="실행하지 않고 계획만 출력")
@@ -274,7 +276,7 @@ def main():
             steps.append("2. 브리핑 생성")
         if not args.skip_thumbnails:
             steps.append("3. 썸네일 생성")
-        if not args.skip_email:
+        if not args.skip_email and not args.no_email:
             steps.append("4. 이메일 발송")
         if not args.skip_deploy:
             steps.append("5. 빌드/배포")
@@ -371,8 +373,10 @@ def main():
 
     log("")
 
-    # Step 5: 이메일 발송
-    if not args.skip_email:
+    # Step 5: 이메일 발송 (--no-email이면 절대 발송 금지: 수동 실행용)
+    if args.no_email:
+        log("[pipeline] --no-email: 이메일 발송 건너뜀")
+    elif not args.skip_email:
         try:
             step_email()
         except Exception as e:

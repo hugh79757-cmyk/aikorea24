@@ -4,6 +4,7 @@ aikorea24 파이프라인 실행기 + 텔레그램 알림
 - run_pipeline.py 실행
 - 결과를 텔레그램으로 발송
 """
+import argparse
 import os
 import sys
 import subprocess
@@ -43,6 +44,13 @@ load_env(os.path.join(_PROJECT_DIR, '.env'))  # 2026-10-10 BRIEF-01: PROJECT_DIR
 
 
 def main():
+    parser = argparse.ArgumentParser(description="aikorea24 파이프라인 실행기 + 텔레그램 알림 (나머지 인자는 run_pipeline.py로 전달)")
+    parser.add_argument("--no-email", action="store_true",
+                        help="이메일 발송 안 함 (수동 실행용. 자동 스케줄 실행에는 사용 금지)")
+    args, _ = parser.parse_known_args()
+    if args.no_email:
+        print("[pipeline] --no-email: 이메일 발송 건너뜀")
+
     now = datetime.now().strftime('%Y-%m-%d %H:%M')
     print(f"=" * 60)
     print(f"aikorea24 파이프라인 실행 - {now}")
