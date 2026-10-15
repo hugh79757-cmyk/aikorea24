@@ -694,6 +694,9 @@ def eval_model(model_id, with_judge=True):
 CLI_MODEL_MAP = {
     "cat-jam-free": "opencode/cat-jam-free",
     "space-bunny-free": "opencode/space-bunny-free",
+    # AIK24-EVAL-CLI-02: 2026-10-15 프리모델 페이지 추천 Top 3
+    "mimo-v2.6-flash-free": "opencode/mimo-v2.6-flash-free",
+    "muse-spark-1.3-contributor-free": "opencode/muse-spark-1.3-contributor-free",
 }
 
 

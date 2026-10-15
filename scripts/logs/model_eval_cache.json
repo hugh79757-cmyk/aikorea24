@@ -1,5 +1,455 @@
 {
-  "space-bunny-free": {
-    "measured_context": 1048576
-  }
+ "space-bunny-free": {
+  "model_id": "space-bunny-free",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/space-bunny-free",
+  "qv": 1,
+  "score": 10,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "`add`는 두 값을 더하는 함수입니다.\n\n- `a`, `b`: 더할 두 값 (숫자면 덧셈, 문자열이면 이어 붙이기)\n- 반환값: `a + b`의 결과\n\n```python\nadd(2, 3)        # 5\nadd(\"안\", \"녕\")   # \"안녕\"\n```\n\n한 줄짜리 `def`로 정의되어 있고, 설명 없이 바로 반환하므로 반환형에 대한 힌트도 없습니다.\n\n---끝---",
+    "judge_failed": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "judge_failed": false
+   },
+   {
+    "idx": 3,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "- 분기별 위원회 검토\n- 검색 증강 생성은 정확도 향상\n- 다음 주 수요일 오후 3시 회의",
+    "judge_failed": false
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "cli",
+    "answer": "```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n**왜 버그인가:** 만료 판정 기준이 30일 *전*으로 밀려 있어, 가장 시급한 \"어제 만료된\" 토큰이 전부 제외되고30일 이상 지난 낡은 토큰만 반환한다.\n\n두 가지 해석 중 하나를 골라야 합니다:\n\n| 의도 | 코드 | 함수명 |\n|---|---|---|\n| 만료된 것 전부 (이름과 일치) | `< now` ← 위 수정 | `get_expired_tokens` ✓ |\n| 30일 유예기간 경과분 | `now - timedelta(days=30)` (현 코드) | `get_stale_tokens`로 바꿔야 함 |\n\n`timedelta(days=30)`은 이 함수에서 아무 근거 없이 붙은 상수입니다 — 호출자에 유예기간 정책이 없다면 삭제했습니다(유예가 필요하면 인자로 받으세요).\n\n**건너뛴 것 / 위험:** `datetime.fromisoformat` 결과와 `now`의 naive/aware 불일치 시 `TypeError`가 납니다. `now`가 tz-aware면 `expires_at`도 aware 문자열이어야 합니다 — 이번 수정 범위 밖이라 안 건드렸습니다.",
+    "judge_failed": false
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\n# tests/test_safe_div.py\nimport pytest\n\nfrom your_module import safe_div  # ← 실제 모듈 경로로 변경\n\n\n@pytest.mark.parametrize(\n    \"a, b, expected\",\n    [\n        (10, 2, 5.0),        # 정상\n        (7, 2, 3.5),         # 나누어떨어지지 않음\n        (0, 5, 0.0),         # 분자 0\n        (-6, 3, -2.0),       # 음수 결과\n        (6, -3, -2.0),       # 음수 제수\n        (-6, -3, 2.0),       # 양쪽 음수\n        (-1.5, 0.5, -3.0),   # 실수\n    ],\n)\ndef test_safe_div_normal(a, b, expected):\n    assert safe_div(a, b) == expected\n\n\n@pytest.mark.parametrize(\"b\", [0, 0.0, -0, -0.0])\ndef test_safe_div_zero_returns_none(b):\n    assert safe_div(10, b) is None\n    assert safe_div(-10, b) is None\n\n\ndef test_safe_div_zero_with_zero_numerator():\n    # 0/0 은 예외 대신 None\n    assert safe_div(0, 0) is None\n```\n\n- 실행: `pytest tests/test_safe_div.py -v`\n- 검증 근거: 11개 케이스 = 7(정상/부호/실수) + 4(0 계열) + 0/0 1건. `-0`와 `-0.0`은 `b == 0`이 True라 None 경로로 가는 것을 고정.\n\n프로젝트 파일은 건드리지 않고 답변만 했습니다. `safe_div`가 있는 실제 경로를 알려주시면 이 파일을 그 tests 디렉터리에 저장하고 `p",
+    "judge_failed": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "Functions don't exist in this repo — they're an eval question in `scripts/model_eval.py:186`. So nothing to edit; here's the dedup plus a behavior-equivalence check.Harness bug (I consumed the generator twice) — fixing the check, not the code.```python\ndef _select(users, key, value):\n    return [{'id': u['id'], 'name': u['name'], 'email': u['email']}\n            for u in users if u[key] == value]\n\n\ndef get_active_user(users):\n    return _select(users, 'status', 'active')\n\n\ndef get_admin_user(users):\n    return _select(users, 'role', 'admin')\n```\n\n공통화한 건 두 가지뿐: 조건 비교(`u[key] == value`)와 3필드 프로젝션. 공개 함수 시그니처·반환 형태·필드 순서 모두 그대로입니다.\n\n## 결과\n\n- [검증됨] 동작 동일. 근거: 원본 2함수 vs 신규 2함수를 11개 케이스 × 2함수 = **22 비교, diff 0건** (`_eq.py` 실행 결과). 케이스 구성: 빈 리스트 / 단일 일치 / 혼합(순서 보존) / 불일치 / `status` 키 누락 / `role` 키 누락 / 초과 키 / **제너레이터 입력** / 튜플 입력 / 빈 문자열 값. `u[key]` 직접 인덱스를 유지했으므로 `status`·`role` 키가 없으면 `u.get()` 대신 원본과 동일하게 `KeyError`가 납니다 (케이스 5·6에서 확인).\n- [검증불가] 실제 파일 적용 — 해당 함수들은 이 저장소에 없습니다. `grep get_ac",
+    "judge_failed": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "`normalize_ledger_entries`",
+    "judge_failed": false
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "1. 파이썬을 처음 시작하려면 뭘부터 해야 하는지 (설치 → `python --version` 확인)\n2. 변수 이름 짓는 규칙 3개\n3. 프로그램이 안 돌아갈 때 처음에 할 일 (에러 메시지 읽기 → 최소 재현으로 축소 → 변수 값 하나씩 확인)\n\n각 답변은 해당 주제의 \"처음 단계\"만 다룬 것으로, 오히려 말할 시간이 나면 갈라지는 지점(패키지 매니저, camelCase가 snake_case보다 비추인 이유, 디버거 활용 등)은 다루지 않았습니다.",
+    "judge_failed": false
+   },
+   {
+    "idx": 9,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "현재 서버 월 비용은 1,250,000원입니다.\n\nGPU 증설 이후 다음 분부터는 3,400,000원입니다.\n\n증설 전후 차액은 2,150,000원이며, 비용은 약 2.72배로 증가합니다.\n\n---\n스킵한 것: 증설에 필요한 GPU 모델·구성, 계약 기간, 추가 운영비 등 나머지 상세 내역은 요청하지 않으셨으므로 다루지 않았습니다.\n\n확인이 필요한 위험: 다음 분 부터 비용이 바뀌는 조건(예: 특정 시점 이후 해지, 할부, 추가带宽 과금)이 있다면 3,400,000원이라는 단일 수치만으로는 실제 청구액이 달라질 수 있습니다.",
+    "judge_failed": false
+   },
+   {
+    "idx": 10,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 순서 결정의 기준 (이게 계획의 전부)\n\n1. **위험한 것부터, 근데 vertical slice로.** PG 승인 기간은 리스크 1순위지만2주만 쓰면 된다. 동시에 \"주문1건이 끝까지 도는\" 얇은 수직 슬라이스를 먼저 만들어 배운 걸로 나머지를 채운다.\n2. **자동화는 수동이 통증 뒤에.** 결제·환불·재고 차감·CS 알림은 처음엔 수동(메뉴/CSV/전화)으로 돌리고, 수동이 한 달 이상 굴러간 것만 코드로 바꾼다.\n3. **완료 = 비개발자가 혼자 끝까지 성공.** 개발자 QA 통과는 완료가 아니다.\n4. **한 단계에 실패하면 다음 단계 안 건드린다.** 결제 실패를 발견했을 때 환불까지 손대지 말고, 실패 재현 테스트를 먼저 쓴다.\n\n---\n\n## 6개월 단계별 계획\n\n| 단계 | 기간 | 목표 | 산출물 | 검증 방법 / 통과 기준 |\n|---|---|---|---|---|\n| **P0**<br>스펙 + 리크 스파이크 | M1 (10월) | 범위 확정 + PG 계약 | 1-page 스펙(결제수단·취소규칙·재고모델), PG 승인 완료, 결제/환불 스파이크 노트 | **문서 리뷰 게이트**: 결제 실패·환불·부분취소 3가지를 의사코드와 분기표로 적었는지. **스파이크**: PG 샌드박스에서 결제성공/실패/타임아웃 3케이스를 실제로 돌려 캡처 첨부. 미승인 시 M1 내 처리 못 하면 재협상 트리거 |\n| **P1**<br>카탈로그 (읽기 전용) | M1 후반 ~ M2 (11월) | 상품/메뉴 열람 | 목록·상세·검색, 카테고리, 이미지 CDN | **비개발자 5인 UAT 스크립트**5개 시나리오 전부 통과(결제 직전까지). **정량**: 카테고리 100개·상품 1000개에서도 목록 P95 < 300ms(측정 스크린샷). **모바일 실기기 2대**(구형1대 포함) 수동 확인 |\n| **P2**<br>장바구니 + 주문 생성 (결제 없음) | M3 (12월) | 주문 데이터가 서버에 정상 쌓임 | 서버측 장바구니, 주문 생성 API, 주문번호 발급 | *",
+    "judge_failed": false
+   },
+   {
+    "idx": 11,
+    "axis": "역할판단",
+    "score": 0,
+    "source": "cli",
+    "answer": "```\n2026-01-02T03:04:05Z\n2026-01-02T03:04:06Z\n2026-01-02T03:05:00Z\n```",
+    "judge_failed": false
+   },
+   {
+    "idx": 12,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "세 건은 판단 근거가 서로 다르니 먼저 분리 기준을 세우겠습니다. **\"기다릴수록 비용이 늘어나는가\"** — 이게 유일한 기준입니다.\n\n---\n\n## 지금 처리\n\n**3번 — 고객 메일 (작성 지금, 발송은 팩트 확인 후)**\n\n세 건 중 유일하게 **기다리는 비용이 내 통제 밖에서 쌓이는** 항목입니다. 엔지니어링 항목은 내부 페이즈로 돌아오지만, 고객 신뢰는 그 직후로 돌아오지 않습니다. 장애 후 침묵은 불완전한 설명보다 나쁩니다.\n\n다만 발송이 아니라 **초안 작성**이 지금 할 일입니다. RCA가 끝나기 전에 확정적 원인을 적으면 나중에 철회해야 하고, 그게 신뢰를 더 깎습니다. 루트코인이 아직이면 \"조사 중\"만 담은 임시 고지를 오늘 보내고, 상세 RCA는 뒤따르게 하세요. 이게 지금 vs 내일의 실제 결정점입니다.\n\n**1번 — 느린 쿼리 (조치는 오늘, 지금은 5분 확인만)**\n\n3초는 장애가 아니라 신호입니다. 다만 이건 지연 비용이 유일하게 복리로 갈수록 올라가는 항목이라 버리면 안 됩니다 — 락을 잡고 있으면 다른 쓰기를 블로킹하고, 누적되면 다음엔 3초가 아니니까요.\n\n그래도 지금 바로 고치라고는 아닙니다. 지금 필요한 건 결정이 아니라 **판별**입니다: 재현되는가, 락을 잡는가, 호출량이 많은가, 유저 경로인가. 여기서 갈립니다.\n\n---\n\n## 오늘은 미뤄도 됨\n\n**2번 — 버튼 색상·문구**\n\n지연 비용 0. 내부 도구이고 사용자-facing이 아니며, 정확성·데이터·안전 어느 쪽도 건드리지 않으므로 지금 처리할 이유가 없습니다. 백로그에 던져두고 지금 하고 있는 일에 집중하세요.\n\n**단, 예외 하나**: 그 버튼이 파괴적 액션(삭제·발행·과금)이라면 문구 모호성은 클릭 오류를 부릅니다. 그 경우에만 오늘로 끌어올리세요. \"색상\"이라는 표현이 가리키는 게 아마 이 갈림일 겁니다.\n\n---\n\n## 각 판단이 뒤집히는 조건 (확인할 사실 1개씩)\n\n| | 지금이 되는 조건 | 지금이 아닌 조건 |\n|---|---|---|\n| **1번",
+    "judge_failed": false
+   }
+  ],
+  "errors": [],
+  "failures": [],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "judge_failed": 0,
+  "by_axis": {
+   "지시이행": {
+    "score": 3,
+    "max_score": 3,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 3,
+    "max_score": 3,
+    "failed": 0
+   },
+   "역할판단": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 0
+   }
+  },
+  "failed": 0,
+  "role": "컨트롤(계획·오케스트레이션)에는 검증 부족, 손발 작업으로 보자",
+  "label": "12문항 중 10문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유). 컨트롤(계획·오케스트레이션)에는 검증 부족, 손발 작업으로 보자.",
+  "ts": 1792057587.922633,
+  "schema": 3,
+  "measured_context": 1048576
+ },
+ "mimo-v2.6-flash-free": {
+  "model_id": "mimo-v2.6-flash-free",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/mimo-v2.6-flash-free",
+  "qv": 1,
+  "score": 9,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "이 함수는 `add(a, b)`로 두 값을 받아 더한 결과를 반환합니다.\n\n- 매개변수 `a`와 `b`를 입력받습니다.\n- `a + b`의 합을 돌려줍니다.\n- 예: `add(2, 3)` → `5`\n\n---끝---",
+    "judge_failed": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "judge_failed": false
+   },
+   {
+    "idx": 3,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "cli",
+    "answer": "- 이후 위원회는 분기 검토\n- RAG로 정확도 높이는 방식\n- 차주 수요 오후 3시 회의",
+    "judge_failed": true
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "**수정 코드:**\n```python\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n**버그 설명:** 비교 기준이 `now - 30일`로 30일 뒤처져 있어, 최근 30일 안에 만료된 토큰이 결과에서 빠진다 (만료 여부는 `expires_at < now`면 충분).\n\n skipped: `now` 이전에 이미 만료된 토큰이 30일 기준으로 한 번 더 걸러지는 것 외의 이상은 없음. 다만 혹시 \"최근 30일 내 만료된 토큰\"만 찾으려는 의도였다면 조건이 `now - timedelta(days=30) < expires_at < now`가 되어야 함 — 의도 확인 바람.",
+    "judge_failed": false
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "exception",
+    "judge_failed": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "코드베이스에 해당 함수는 없고(model_eval.py의 평가 문항일 뿐), 파일 수정 대상이 아니므로 리팩터링 결과만 제시합니다.\n\n```python\ndef _select(users, key, value):\n    return [\n        {'id': u['id'], 'name': u['name'], 'email': u['email']}\n        for u in users\n        if u[key] == value\n    ]\n\ndef get_active_user(users):\n    return _select(users, 'status', 'active')\n\ndef get_admin_user(users):\n    return _select(users, 'role', 'admin')\n```\n\n조건 비교(`u[key] == value`)와 프로젝션(3필드 dict) 두 부분만 공통화했고, 반환 형태·필드·순서는 그대로입니다.\n\n건너뜀: 테스트 작성(파일·호출부가 없어 대상 부재), 키/값 하드코딩 외 확장 옵션 추가 안 함. 위험 요소 없음 — 순수 함수라 동작 동일.\n\n@2@",
+    "judge_failed": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "normalize_ledger_entries",
+    "judge_failed": false
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "1. 파이썬 처음 시작하는 방법 안내 (설치 프로그램 받기, `python --version`으로 설치 확인)\n2. 변수 이름 지을 때 규칙 3개 안내 (의미 있는 이름, 카멜케이스 사용, 한 글자 이름 지양)\n3. 프로그램이 안 돌아갈 때 처음 할 일 안내 (에러 메시지 끝까지 읽기, 최소 재현 코드로 줄이기, 변수 값 출력 확인)",
+    "judge_failed": false
+   },
+   {
+    "idx": 9,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "이번 서버 월 비용: 1,250,000원\n다음 분부터 월 비용: 3,400,000원\n\n아래는 참고로 계산한 내용입니다.\n- 월 증가액: 3,400,000원 - 1,250,000원 = 2,150,000원\n- 증가율: 2,150,000원 / 1,250,000원 = 172% 증가\n\n잔존 위험: 세금, 환율, 일시 할인 반영 여부는 확인하지 않았습니다.\n\n@dpo0@",
+    "judge_failed": false
+   },
+   {
+    "idx": 10,
+    "axis": "역할판단",
+    "score": 0,
+    "source": "exception",
+    "judge_failed": false
+   },
+   {
+    "idx": 11,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "timestamp\n2026-01-02T03:04:05Z\n2026-01-02T03:04:06Z\n2026-01-02T03:05:00Z",
+    "judge_failed": false
+   },
+   {
+    "idx": 12,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 지금 바로 처리\n\n**1. 운영 DB 느린 쿼리 (3초)**\n- 판단 근거: 유일하게 **현재 진행 중인 장애 확산 요인**입니다. 3초 쿼리는 사용자 체감 지연 → 타임아웃/커넥션 풀 고갈 → 다른 기능까지 연쇄 영향을 줄 수 있습니다. 장애 후속 조치와 직결되므로 방치하면 범위가 커집니다.\n- 할 일: `EXPLAIN`으로 실행계획 확인 → 인덱스/느린 조인 원인 특정. 즉시 수정이 어려워도 스로틀링이나 인덱스 추가로 우선 억제.\n\n**2. 장애 후속 고객 메일 발송**\n- 판단 근거: **시간 민감 + 신뢰 회복 창구**입니다. 장애가 끝난 뒤 메일이 늦어지면 \"왜 아직 연락이 없나\"라는 2차 불만이 생깁니다. 내용 확정만 되면 발송 자체는 금방 끝나는 작업입니다.\n- 할 일: 초안 확정 → 담당자 1명 빠른 검수 → 오늘 중 발송.\n\n## 오늘 미뤄도 됨\n\n**3. 내부 도구 버튼 색상·문구 수정**\n- 판단 근거: **영향 범위가 내부 도구 한정이고, 장애/수익/고객 커뮤니케이션과 무관**합니다. 사용자 수가 적고 릴리스 강제가 없어 하루·이틀 미뤄도 손실이 0에 가깝습니다.\n- 할 일: 요청 접수만 남겨두고 내일 또는 이번 주 스프린트에 배치.\n\n**우선순위 기준 요약:** ① 장애 확산 가능성 → ② 외부(고객) 영향·시간 민감도 → ③ 영향 범위와 되돌릴 수 있는지.\n\n---\n느린 쿼리의 실제 실행계획이나 메일 문안은 확인하지 않았습니다 — 요청은 트리아지였으니 필요하면 이어서 봐 드리겠습니다.",
+    "judge_failed": false
+   }
+  ],
+  "errors": [
+   "Q5 CLI 타임아웃 60초",
+   "Q10 CLI 타임아웃 60초"
+  ],
+  "failures": [
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "reason": "CLI 타임아웃 60초"
+   },
+   {
+    "idx": 10,
+    "axis": "역할판단",
+    "reason": "CLI 타임아웃 60초"
+   }
+  ],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "judge_failed": 1,
+  "by_axis": {
+   "지시이행": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 1
+   },
+   "맥락유지": {
+    "score": 3,
+    "max_score": 3,
+    "failed": 0
+   },
+   "역할판단": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 1
+   }
+  },
+  "failed": 2,
+  "role": "컨트롤(계획·오케스트레이션)에는 검증 부족, 손발 작업으로 보자",
+  "label": "9문항 중 9문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 2문항 응답 실패 제외, 1문항 측정 결함. 컨트롤(계획·오케스트레이션)에는 검증 부족, 손발 작업으로 보자.",
+  "ts": 1792056964.23223,
+  "schema": 3,
+  "measured_context": 1048576
+ },
+ "muse-spark-1.3-contributor-free": {
+  "model_id": "muse-spark-1.3-contributor-free",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/muse-spark-1.3-contributor-free",
+  "qv": 1,
+  "score": 8,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "이 코드는 두 개의 값을 입력받아 합한 결과를 돌려주는 함수 정의이다.\n입력이 숫자이면 산술 덧셈을 하고, 문자인 경우 이어 붙이기를 한다.\n\n건너뛴 점: 입력 값의 형태 확인이나 오류 처리는 살펴보지 않았다.\n알아야 할 위험: 숫자가 아닌 값을 넣으면 의도와 다른 결과가 나올 수 있다.\n---끝---",
+    "judge_failed": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "judge_failed": false
+   },
+   {
+    "idx": 3,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "exception",
+    "judge_failed": false
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "cli",
+    "answer": "수정 코드:\n```python\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n버그 이유 한 줄: 만료 조건은 `expires_at < now`인데 `now - 30일`과 비교해서 최근 30일 내 만료된 토큰을 누락함.\n\nSkipped: timezone aware/naive 혼용 여부는 확인 안 함. Risk: `expires_at`에 `Z` 포함 시 `fromisoformat`이 실패할 수 있음.",
+    "judge_failed": true
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "cli",
+    "answer": "정상·0·음수 케이스를 담은 pytest를 추가합니다.`test_safe_div.py`가 이미 요구 범위를 커버하고 있어 새로 작성하지 않았습니다.\n\n- [검증됨] 정상 입력/0 나누기/음수/경계값 20개 케이스 통과. 근거: `python3 -m pytest test_safe_div.py -v` 결과 `20 passed` (parametrize 12 + `is None` 2 + large/precision/edge 6)\n- [검증됨] 0 나누기 `None` 반환 확인. 근거: `test_division_by_zero_returns_none`, `test_none_check_exact` (`0`/`0.0` 모두) 통과\n- [검증됨] 음수 조합 커버 확인. 근거: `(-10,2)`, `(10,-2)`, `(-10,-2)` 케이스 통과\n\n파일: `test_safe_div.py:9-60`\n\n스킵: `tests/` 이동·import 구조 정리 안 함 (스니펫 원문 그대로 둔 기존 구조 유지).\n잔존 위험: `pytest.ini`의 `testpaths = tests`라 기본 `pytest` 실행 시 루트 파일 미수집 — `pytest test_safe_div.py` 명시 실행 필요.",
+    "judge_failed": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\ndef _summarize(users, field, value):\n    return [{'id': u['id'], 'name': u['name'], 'email': u['email']}\n            for u in users if u[field] == value]\n\ndef get_active_user(users):\n    return _summarize(users, 'status', 'active')\n\ndef get_admin_user(users):\n    return _summarize(users, 'role', 'admin')\n```\n\nSkipped: 호출부·테스트 파일 확인 없음 (스니펫만 있어 원본 동작 동일 KeyError 포함 유지). Risk: 없음 — 공개 함수 시그니처·반환 형태 그대로.",
+    "judge_failed": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "normalize_ledger_entries",
+    "judge_failed": false
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "요청하신 작업 3가지는 다음과 같습니다:\n\n1. 파이썬을 처음 시작할 때 해야 할 일 문의\n2. 변수 이름 지을 때 규칙 3개 요청\n3. 프로그램이 안 돌아갈 때 처음에 할 일 문의\n\n스킵: 원문 외 추가 맥락 확인 안 함. 리스크: 요약 표현이 원문과 다르게 해석될 수 있음.",
+    "judge_failed": false
+   },
+   {
+    "idx": 9,
+    "axis": "맥락유지",
+    "score": 0,
+    "source": "exception",
+    "judge_failed": false
+   },
+   {
+    "idx": 10,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "작은 팀에 맞는 가장 얇은 단계별 계획을 세우겠습니다.## 전제: 가장 얇은 주문 시스템\n\n* 3명 = BE 1 + FE 1 + 풀스택/인프라 1 (역할 고정하지 말고 슬라이스별로 스왑)\n* 6개월 = 2주 스프린트 x 12회\n* 범위: 단일 매장, 웹 먼저(앱 나중에), 배달은 외부 연동 없이 직접 처리로 시작\n\n원칙: 수평 분할(DB→API→UI) 금지. 매 단계 끝마다 실제 주문 1건이 끝까지 돌아가게 만듭니다.\n\n### S01: 0~3주차 — 주문 1건 뚫기 (Tracer Bullet) `risk:high`\n\n> After this: 손님이 메뉴를 보고 가짜결제로 주문하면 사장님 화면에 주문이 뜬다.\n\n만들 것:\n* 메뉴 목록/상세 + 장바구니 + 주문서 + 주문 생성 API + 사장님 주문 목록(읽기만)\n* 결제는 가짜 (버튼 누르면 `PAID`로 표시, PG 연동 없음)\n* 배포 파이프라인 + prod DB 1개 + 로그 1개\n\n안 만드는 것: 회원가입, 로그인, 실결제, 관리자 메뉴편집, 쿠폰, 검색\n\n검증:\n1. 데모: 모바일로 실제 주문 → 다른 PC 사장 화면에 5초 내 표시되는지 시연\n2. 지표: 주문 생성 성공률 100% (테스트 20건 연속), p95 < 1.5s\n3. 자동: 주문 API E2E 1개 (생성→조회→상태변경) 깨지면 배포 차단\n\n### S02: 4~8주차 — 실결제 + 내 주문 상태 `depends:[S01]`\n\n> After this: 진짜 돈이 결제되고 손님이 \"접수됨/조리중/완료\"를 볼 수 있다.\n\n만들 것:\n* PG 1개만 (토스/아임포트 중 하나), 결제 webhook + 멱등키(중복결제 방지)\n* 주문 상태머신: `CREATED → PAID → ACCEPTED → DONE/CANCELLED` 만\n* 비회원 주문조회 (주문번호+전화번호)\n\n안 만드는 것: 회원, 포인트, 환불 자동화(수동 환불로 대체)\n\n검증:\n1. 데모: 1,000원짜리 테스트 상품으로 실결제→취소까지 전 과정\n2. 지표: webhook 유실 0",
+    "judge_failed": false
+   },
+   {
+    "idx": 11,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "timestamp\n2026-01-02T03:04:05Z\n2026-01-02T03:04:06Z\n2026-01-02T03:05:00Z",
+    "judge_failed": false
+   },
+   {
+    "idx": 12,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 지금 바로 처리\n\n**1. 장애 후속 조치 고객 메일 발송**\n- 근거: 외부 신뢰와 직결. 발송 지연 = 2차 불만·클레임 확산으로 이어짐. 되돌리기 어려운 비용.\n- 할 일: 내용 검수 후 즉시 발송만. 문구 다듬기는 최소로.\n\n**2. 운영 DB 느린 쿼리 3초 — 1차 확인만**\n- 근거: 단일 관측이라도 운영 DB는 확산 위험(락, 타임아웃 연쇄, 재장애)이 있음. 방치가 위험.\n- 할 일: 지금은 원인 제거가 아니라 `빈도/지속 여부 + 어떤 쿼리인지 + 장애 연관성`만 5분 확인. 전체 튜닝·인덱스 작업은 오늘 뒤로 미룸.\n\n## 오늘 미뤄도 되는 것\n\n**내부 도구 버튼 색상 문구 수정**\n- 근거: 영향이 내부에만 국한, 데이터 손실·외부 노출·장애 확산 없음. 하루 미뤄도 비용 0에 가까움.\n- 할 일: 나머지 둘 끝난 뒤 처리.\n\n우선순위: 메일 발송 → 쿼리 1차 확인 → 버튼 수정.\n\nSkipped: 실제 쿼리 로그와 메일 초안은 확인 안 함. Risk: 쿼리가 반복성 장애면 1차 확인 후에도 즉시 대응 전환 필요.",
+    "judge_failed": false
+   }
+  ],
+  "errors": [
+   "Q3 CLI 타임아웃 60초",
+   "Q9 CLI 타임아웃 60초"
+  ],
+  "failures": [
+   {
+    "idx": 3,
+    "axis": "지시이행",
+    "reason": "CLI 타임아웃 60초"
+   },
+   {
+    "idx": 9,
+    "axis": "맥락유지",
+    "reason": "CLI 타임아웃 60초"
+   }
+  ],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "judge_failed": 1,
+  "by_axis": {
+   "지시이행": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 1
+   },
+   "코딩실무": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 1
+   },
+   "역할판단": {
+    "score": 3,
+    "max_score": 3,
+    "failed": 0
+   }
+  },
+  "failed": 2,
+  "role": "컨트롤(계획·오케스트레이션)에 적합",
+  "label": "9문항 중 8문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 2문항 응답 실패 제외, 1문항 측정 결함. 컨트롤(계획·오케스트레이션)에 적합.",
+  "ts": 1792057304.8217402,
+  "schema": 3,
+  "measured_context": 1048576
+ }
 }

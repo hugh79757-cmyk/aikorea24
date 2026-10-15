@@ -1,3 +1,50 @@
+## 2026-10-15 16:46 — AIK24-EVAL-CLI-02 신규 추천 3종 CLI 12문항 평가 + 컨텍스트 실측
+
+### 한 일
+- **[PRODUCTION CODE] `scripts/model_eval.py`** — `CLI_MODEL_MAP` 에 2개 추가 (4항목 → 6항목). `mimo-v2.6-flash-free`→`opencode/mimo-v2.6-flash-free`, `muse-spark-1.3-contributor-free`→`opencode/muse-spark-1.3-contributor-free`.
+- **실행** — 3개 모델 12문항 CLI 평가 + 2개 모델 컨텍스트 프로브. `EVAL_QUESTIONS_VERSION`·`score_response()` 미변경(지시 범위 밖 준수).
+- **기록** — `scripts/logs/model_eval_cache.json`(3항목) + `scripts/logs/model_leaderboard.json`(3행 추가).
+
+### 결과
+- **[검증됨]** 완료기준 1: `CLI_MODEL_MAP` 6항목. 3개 모델 모두 `opencode run -m <cli_model>` PONG 응답 확인(작업 0 사전 확인).
+- **[검증됨]** 완료기준 2: 3개 모델 12문항 평가 완료 + 리더보드 기록. 전부 `source="cli"` `provider="zen"`, `token_usage=(0, 0)`, `notes="CLI 경유 — 토큰 사용량 미측정"`.
+
+| 모델 | 점수 | failed | judge_failed | 라벨 요약 |
+|---|---|---|---|---|
+| `space-bunny-free` | **10/12** | 0 | 0 | 손발 작업으로 보자 |
+| `mimo-v2.6-flash-free` | **9/12** | 2 | 1 | 손발 작업으로 보자 |
+| `muse-spark-1.3-contributor-free` | **8/12** | 2 | 1 | **컨트롤(계획·오케스트레이션)에 적합** |
+
+- **[검증됨]** 완료기준 3: 2개 모델 컨텍스트 실측 = **둘 다 1,048,576** (8K→1M 8단계 전부 OK → 상한 도달 = 실측 하한).
+- **[검증됨]** 완료기준 4: `space-bunny-free` `measured_context=1048576` 최종 상태 확인.
+
+### ★ 실행 중 발견한 결함 + 즉시 복구 (주의 필요)
+`eval_model_cli()` 의 result dict 에 `measured_context` 키가 없다. 그래서 12문항 평가가 끝나고 `cache_put()` 이 도는 순간 **같은 항목에 있던 기존 실측값이 wiped** 된다.
+실현: `space-bunny-free` 의 `measured_context` 가 `1048576` → `null` 로 사라짐(완료기준 4 위반 상태).
+→ 작업 0 에서 확인한 기존 값 `1048576` 을 되돌려 복구 완료(캐시 전수 재확인함).
+**이건 3개 모델을 동일 세션에서 평가·프로브 순차 실행할 때마다 재현한다.** `cache_put()` 이 기존 항목의 `measured_context` 를 merge 하도록 고칠 것을 권하지만 지시 범위 밖이라 미수정.
+
+### 잔존 위험
+1. **[검증됨] `cache_put()` 이 `measured_context` 를 덮어씀** — 위 결함. 별도 지시서 필요.
+2. `mimo-v2.6-flash-free`·`muse-spark-1.3-contributor-free` 의 12문항 평가 중 **5번 문항 CLI 타임아웃 60초**(mimo) 및 2문항 judge 파싱 실패가 발생했다. 판관 로직은 지시 범위 밖이라 미수정. → 실효 점수는 12문항 중 9·8문항.
+3. **컨텍스트 3종 전부 1,048,576(상한 도달)** — 실측 하한일 뿐이라 이보다 클 수 있다. 재측정 금지 규칙에 따라 하한으로 기록. `_probe_doc()` 은 문자 수 기준 근사(한국어 1자≈1토큰)라 실제 토크나이저 기준값보다 작게 나올 수 있다.
+4. `probe_context_length()` 는 `CACHE_PATH` 가 `str` 이라 `_read_json`/`.read_text()` 를 쓸 수 없다 — 이번에 별도 스크립트로 우회했다. `model_eval.py` 내부 유틸은 `pathlib.Path` 를 쓰므로 모순이 있다. 지시 범위 밖이라 미수정.
+5. 3개 모델 모두 `score_response()` 판관이 `gemini-3.5-flash-lite` 폴백 체인을 쓴다 — 판관 모델 1종 편향 가능. `score_response()` 는 지시 범위 밖.
+
+### 다음 행동
+- 대표님: 블로그 글에 위 점수(10·9·8)와 컨텍스트 하한(1M)을 근거로 쓰면 됨. 단 "컨텍스트 1M 지원"이 아니라 "**1M까지 검증됨(하한)**"으로 표기할 것.
+- 별도 지시서: `cache_put()` 이 `measured_context` 를 merge 하도록 수정 (재발 방지).
+
+---
+
+## 2026-10-15 16:34 — safe_div pytest 테스트 작성·검증
+
+* 한 일: `test_safe_div.py`(프로젝트 루트)에 safe_div 스니펫 대상 pytest 테스트 작성 — 정상 입력 / 0으로 나누기 / 음수 / 경계값 커버. `grep -n 'def safe_div'` 결과 2건: 이 테스트 파일 + `scripts/model_eval.py:181`(평가 프롬프트 원문) — import 가능한 생산 모듈은 없어 테스트 파일 안에 원문 그대로 정의
+* 결과 [검증됨]: `.venv/bin/python3 -m pytest test_safe_div.py -v` → 20 passed. 산출 근거 20 = 12(파라마터화 `test_safe_div`) + 4(`test_division_by_zero_returns_none`, `test_none_check_exact`, `test_large_values`, `test_float_precision_boundary`) + 4(`test_edge_values`). 커버 범위: 정상 10/2·9/3·1/2·7/4, 0 나눗셈 0/0·5/0·-5/0 → None, 0.0 실수 분모, 음수 세 조합, 0 분자, inf/-inf, 1e308, 부동소수 정밀도(`pytest.approx`)
+* [부분검증] 시스템 `python3`에 pytest가 없어 프로젝트 `.venv/bin/python3`로만 실행됨 — CI/외부 환경에서의 실행 경로는 확인하지 않음
+* 잔존 위험: 테스트가 파일 내 정의한 safe_div 복제본을 검증함 (원본이 별도 모듈로 존재하지 않음 → 원본이 따로 생기면 import 경로로 바꿔야 검증력 유지)
+* 다음 행동: 없음
+
 ## 2026-10-15 15:15 — 스킬 `aik24-free-models-page` 신규 저장
 
 * 위치: `.claude/skills/aik24-free-models-page/SKILL.md` (커밋에 포함). 로드 확인됨 (스킬 목록에 노출)
