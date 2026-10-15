@@ -1,3 +1,37 @@
+## 2026-10-15 10:48 AIK24-TOOLSYNC-03/04 완료 — CareOps 썸네일 교체 + 앱 스토어 링크 텍스트 간결화 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1048-AIK24-TOOLSYNC-03-04-완료보고.md (완료)
+
+## 2026-10-15 10:48 — AIK24-TOOLSYNC-03/04 완료 — CareOps 썸네일 교체 + 앱 스토어 링크 텍스트 간결화
+
+한 일
+- **[BINARY/D1]** `public/images/tools/careops.webp` 교체. muse.ai 서명 URL(202,250B JPEG, 1676x1428) 다운로드 → 800x450 LANCZOS 리사이즈 → WEBP q80. 5,966B → 21,184B. D1 변경 없음(screenshot_url 경로 동일이라 지시대로 미변경). 백업 `/tmp/careops.webp.bak`
+- **[D1]** `tool_submissions` careops `detail_markdown` 의 앱스토어 링크 3행을 1행 마크다운 링크로 교체. `updated_at` = `datetime('now')` 로 갱신(2026-10-15 03:45:39 UTC)
+- **[GENERATED]** `src/content/tools/careops.md` — sync 생성 경로 재생성(`[update]`, diff +2/-4). md 직접 편집 아님
+
+결과
+- [검증됨] 라이브 이미지 바이트 일치 — `curl https://aikorea24.kr/images/tools/careops.webp` → 200, 21,184B, `image/webp`, **md5 `4cf12d84cf9cc0f9b1f2575abcdebd3c`** = 로컬 `/tmp/careops_new.webp` 와 동일
+- [검증됨] 라이브 페이지 `https://aikorea24.kr/tools/careops/` → 200, 35,013B. `src="/images/tools/careops.webp"` 노출, `og:image` 는 `og-default.jpeg` (기존 동작, 본 지시 범위 밖)
+- [검증됨] 링크 텍스트 — `<a href="https://apps.apple.com/kr/app/id6807790541">앱스토어 다운받기</a>` / `<a href="https://play.google.com/store/apps/details?id=kr.careops.app">구글 플레이 다운받기</a>` 렌더. 이전 긴 텍스트(`검증된 상담 기법과 전문 심리상담사와 함께하는 AI 상담`) 잔존 0건
+- [검증됨] sync 판정 로그 `[update] careops.md (D1 updated_at > md mtime, image 보존: "/images/tools/careops.webp")` → TOOLSYNC-01 규칙이 실제로 동작, 이미지 보존 분기도 동작
+- [검증됨] 배포 2건 — TOOLSYNC-03 `80c2ea7d-6feb-4fbe-9cf6-e75d7e0aa79a`, TOOLSYNC-04 `c6fcdd4f-2388-4b82-b8b5-86c3ec23063c`. sitemap ping `{"google": true, "naver": true}`
+
+지시서 대비 차이
+- **"품질 80, 기존 컨벤션 유지"** → `scripts/backfill_tool_thumbs.py:26,87` 의 실제 컨벤션은 `TARGET_W,TARGET_H = 800,450` + `quality=75`. 지시서의 명시 수치(80)를 따랐고 크기(800x450)는 컨벤션 그대로. `public/images/tools/` 260개 전부 800x450 임을 확인
+- **git 커밋 없음** — `.gitignore:66-67` 이 `public/images/` 를 의도적으로 제외("deployed via wrangler pages deploy (local build), not committed to git"). 지시서에 커밋 지시가 없어 따로 `-f` 로 강제 추가하지 않음
+- **`updated_at` 갱신** — TOOLSYNC-02 는 "updated_at 건드리지 말 것" 이었고 본 지시서는 "sync 재생성" 을 요구하므로 상충. `src/pages/api/tools/[slug]/index.ts:138` 이 편집 API 정상 동작이 `updated_at = datetime('now')` 임을 확인하고 동일하게 맞춤(임의 조작 아님)
+
+잔존 위험
+1. [부분검증] 원본이 1676x1428(세로빛) → 800x450(가로)로 **비율 왜곡** resize. `backfill_tool_thumbs.py:85` 도 `resize((800,450))` 로 동일 방식이라 컨벤션 일치이나, 원본 세로 이미지에는 왜곡이 눈에 띔. 컨벤션을 바꿀지 대표님 결정 대기
+2. [부분검증] `og:image` 가 여전히 `og-default.jpeg`. 소셜 공유 카드에는 새 이미지가 안 나옴. 본 지시 범위 밖
+3. 안전 문구는 TOOLSYNC-02 에서 제가 작성한 것 — 소유자(세이프옵스) 승인 미완
+4. `screenshot_url` 에 사이트 절대경로 — 어드민 편집 화면 취급 방식 미확인(TOOLSYNC-02 에서 이관)
+5. sync 스크립트 `process.env` 토큰 미제거 — 세션 환경 직접 실행 시 `code 7403`. `env -u CLOUDFLARE_API_TOKEN -u CLOUDFLARE_ACCOUNT_ID` 필요
+6. 나머지 11건 D1 행은 여전히 `updated_at` 이 오래되어 TOOLSYNC-01 자동 갱신 대상 아님
+
+다음 행동
+- 대표님: CareOps 썸네일 왜곡 허용 여부 / `og:image` 교체 여부 / 안전 문구 최종 승인
+- 별도: 카드 생성 복구용 free LLM 키 1개 secret 추가 (이전 큐 후속, 미해결)
+
+
 ## 2026-10-15 10:31 [AIK24-PIPE-DEDUP-01] 완료 — 브리핑 선정 순서 수정 + 스케줄 07:00 이동 (주니어 C, 대표님 10:15 승인)
 
 ### 한 일

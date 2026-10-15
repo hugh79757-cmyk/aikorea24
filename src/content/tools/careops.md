@@ -11,7 +11,7 @@ tags: ["AI상담", "심리상담", "CBT", "ACT", "마음돌봄", "자기성찰",
 tasks: []
 order: -1
 featured: false
-updated: "2026-10-14"
+updated: "2026-10-15"
 priceModel: "유료"
 image: "/images/tools/careops.webp"
 ---
@@ -24,8 +24,6 @@ CBT(인지행동치료)·ACT(수용전념치료) 등 상담 기법을 바탕으�
 
 세이프옵스에서 운영하며, iOS와 Android에서 이용할 수 있습니다.
 
-앱 받기: [검증된 상담 기법과 전문 심리상담사와 함께하는 AI 상담](https://careops.kr/app?utm_source=aikorea24)
-iOS: https://apps.apple.com/kr/app/id6807790541
-Android: https://play.google.com/store/apps/details?id=kr.careops.app
+앱 받기: [앱스토어 다운받기](https://apps.apple.com/kr/app/id6807790541) / [구글 플레이 다운받기](https://play.google.com/store/apps/details?id=kr.careops.app)
 
 이용 안내: CareOps 마음이는 전문 상담을 대신하지 않습니다. 의료적 진단·처방이나 응급·위기 대응을 하지 않으며, 심각한 고민이나 위기 상황에서는 전문 상담사나 응급 연락망을 이용해 주세요.
