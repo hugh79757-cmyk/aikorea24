@@ -1,3 +1,12 @@
+## 2026-10-15 15:40 — AIK24-EMDASH-11 (emdash.aikorea24.kr 헤더 완전 통일) 완료
+
+* 대상 저장소는 별도: `/Users/twinssn/projects2/aikorea24emdash` — 상세 기록은 그 repo의 `docs/state.md` 최상단
+* 한 일: AIK24-EMDASH-10 잔존 위험 3건 해소 — ① 로그인 버튼 추가(데스크톱 768px 이상, `https://aikorea24.kr/api/auth/login`) ② 모바일(<768px) nav 줄바꿈 → 햄버거 버튼 + 접히는 메뉴 패널 ③ 로고 높이 48px → 32px. 검색 아이콘은 지시서대로 미추가
+* 결과 [검증됨]: 배포 Version `32775c4b-a717-4151-93e2-5a008aeaf415`, 커밋 `3ceaa54` push 완료. 라이브 Playwright 실측 — 데스크톱 1280 로고 32px(메인 32px 동일)/로그인 버튼 70.3px 폭(메인 70.3px 동일)/nav 7개/검색 아이콘 0개, 모바일 375 햄버거 클릭 시 패널 341.6px·링크 7개·다시 클릭 시 접힘. 로그인 URL 체인 301→Google(final 200). `npx astrosync check` Base.astro 오류 0건
+* 완료보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-15-1452-AIK24-EMDASH-11-완료보고.md`
+* 잔존 위험: 로그인 버튼 높이 41.8px vs 메인 38px(line-height 차이) / 로그인 후 메인 사이트로 복귀(return URL 미지원) / 로그인 버튼 데스크톱 전용 / 641~767px 실측 없음 / 이 repo는 테스트 파일 없음
+* 다음 행동: 0번 — 로그인 후 EmDash 복귀(return URL) 필요 여부 결정
+
 ## 2026-10-15 14:50 — AIK24-DOC-01 OpenCode 모델 선택 과정 문서화
 
 ### 한 일
