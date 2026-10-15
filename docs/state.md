@@ -1,3 +1,39 @@
+## 2026-10-15 11:10 AIK24-TOOLSYNC-05 + AIK24-FAVICON-01 완료 — '이미지 원본 보기' 링크 제거 + 파비콘 신버전 교체
+
+### 한 일
+- **[PRODUCTION CODE] `src/pages/tools/[id].astro`** — 255행 `🖼️ 이미지 원본 보기 →` 링크 1줄 제거. 썸네일 `<img>` 와 그 감싸는 `<a>` 는 유지(지시서 "이미지 자체는 유지").
+- **[CONFIG] `public/favicon.png`** 65,799B → 199,726B (1600×1600, muse.ai 서명 URL 다운로드, md5 `58f23ec235da2129fa1845033d41b6f3`)
+- **[CONFIG] `public/favicon-32x32.png`** 2,235B → 1,574B (32×32, 다운로드 원본 그대로)
+- **[CONFIG] `public/favicon-16x16.png`** 1,387B → 636B (32px에서 `sips -z 16 16` LANCZOS 리사이즈)
+- **[CONFIG] `public/favicon.ico`** 655B(2026-02-12) → 2,313B (32px PNG → ICO, 16+32px 2단, Pillow)
+- **[CONFIG] `public/apple-touch-icon.png`** 15,394B → 14,206B (180×180, 다운로드 원본)
+- 백업 `/tmp/fav_backup/` (기존 5파일 전부)
+
+### 결과
+- **[검증됨]** `npm run build` `✓ Completed in 11.05s` / `npm run deploy` Version `a5738e7f-60f6-4d82-bc2d-900bbae7eaa3`, sitemap ping `{"google": true, "naver": true}`
+- **[검증됨]** 라이브 `https://aikorea24.kr/tools/careops/` 200, 34,821B. `'이미지 원본'` 문자열 **0건 (plain 요청 3회 + 캐시버스터 3회 = 6회 전부 0)**
+- **[검증됨]** 썸네일 렌더 유지 — `<img src="/images/tools/careops.webp" alt="CareOps 마음이 미리보기" ...>` 존재, 이미지 URL HTTP **200 / image/webp**
+- **[검증됨]** 파비콘 md5 라이브 = 로컬 바이트 단위 일치 (`favicon.png` `58f23ec…`, `favicon-32x32.png` `e34ef85…`)
+- **[검증됨]** 신 파비콘 육안 = 검은 AI + 호랑이 발바닥 + 왼쪽 빨간 세로 라인 (1600×1600 원본 육안 확인)
+- **[부분검증]** 지시서 FAVICON-01 검증 4번 "브라우저 캐시 지우고 접속" — 대신 curl md5 대조로 대체. 대표님 화면에 구파비콘이 남으면 브라우저 캐시 문제(서버는 6회 재현 확인).
+
+### 지시서 대비 판단
+- FAVICON-01 "favicon.ico는 png에서 변환 (또는 삭제 후 브라우저가 png 사용)" → **변환 채택**. 다만 실측상 `https://aikorea24.kr/favicon.ico` 는 **301 → `/favicon.png`** 로 리다이렉트되어 ICO 는 실제 serve 되지 않는다. 두 방법 모두 결과 동일이라 변환이 무해한 쪽.
+- FAVICON-01 "favicon-16x16.png는 32px 버전을 리사이즈해서 생성" → 그대로 수행.
+
+### 잔존 위험
+1. **[부분검증] 대표님 브라우저 탭 캐시** — 배포 직후 첫 요청이 옛 파비콘을 1회 응답했다(favicon.png 65,799B → 이후 3회 199,726B, 동일 현상이 `/tools/careops/` HTML 에서도 재현). `cache-control: public, max-age=0, must-revalidate` + `cf-cache-status: MISS` 라 엣지 캐시가 아니라 전파 지연. 강력 새로고침 필요.
+2. **`favicon.ico` 는 죽은 파일** — 301 로 png 로 합류. `dist/client/favicon.ico` 만 남아 배포물 크기를 늘린다(2,313B, 무시 가능).
+3. **`SEOHead.astro` apple-touch-icon link 중복** — 135-138행과 141행에 동일 태그 2번. 브라우저는 첫 번째만 사용하므로 동작 문제 없음. 지시 범위 밖이라 미수정.
+4. **`favicon.png` 가 1600×1600 PNG 199,726B** — 탭 아이콘용으로는 과하지만 무해. WEBP/ICO 통일 원하시면 별도 작업.
+5. `scripts/logs/free_models_cli.json.bak-20261015`, `scripts/logs/model_diff_2026-10-15.json` untracked — 내 작업 아님(커밋 안 함).
+
+### 다음 행동
+- 대표님: 브라우저 강력 새로고침 후 파비콘 확인.
+- 별도 지시서: `SEOHead.astro` apple-touch-icon 중복 링크 정리.
+
+---
+
 ## 2026-10-15 11:00 [AIK24-EVAL-07] 완료 — 일일 호출 검증 스크립트 + 페이지 검증시각/점검중 (주니어 C)
 
 ### 한 일
