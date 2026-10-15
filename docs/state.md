@@ -1,3 +1,32 @@
+## 2026-10-15 14:50 — AIK24-DOC-01 OpenCode 모델 선택 과정 문서화
+
+### 한 일
+- `docs/opencode-model-selection.md` (신규, 154줄) — OpenCode TUI 모델 선택 UI + CLI 직접 호출 5건 실측 기록. 블로그 "무료로 사용하는 방법" 섹션 근거 자료.
+
+### 결과
+- **[검증됨]** 2-1 (4질문 전부): `/models` 와 `ctrl+x m` (chord, 단일 조합 아님) 2가지. 키바인딩은 `https://opencode.ai/docs/tui/` Keybind 표에서 확인(HTTP 200, 105,330B). 별도 단축키 없음.
+- **[검증됨]** 표시 항목 구성 = models.dev 카탈로그(`https://models.dev/api.json`, HTTP 200, 5,664,894B)의 `kilo.models`(390건). 필드 = `name`/`cost`/`limit`/`tool_call`/`reasoning`. TUI 가 `step_start` 의 `snapshot` 해시(`4fc3c957…`)로 카탈로그 스냅샷을 고정.
+- **[검증됨]** Kilo 무료 표기 = CLI ID 끝 `:free` + 화면 표시명 끝 `(free)`. `opencode models` 의 kilo 396건 중 `:free` **16건**.
+- **[검증됨]** 선택 즉시 적용(확인 버튼 없음). variants 는 `cycle through model variants` 로 순환(`provider/model#variant`).
+- **[검증됨]** 5개 모델 `opencode run -m <ID> --format json "한 단어로 대답: PONG"` → **5/5 성공, 실패 0건**. 응답 = `PONG`(`dots-3-note-preview` 만 `\n\nPONG` 선행 개행). 소요 0.3~7.4초.
+- **[검증됨]** 2-3 대응표 완성 — `cohere/north-mini-code:free`=`Cohere: North Mini Code (free)` / `dots-studio/dots-3-note-preview:free`=`Dots Studio: Dots3-Note Preview (free)` / `liquid/lfm-2.5-2.6b:free`=`LiquidAI: LFM2.5-2.6B (free)` / `nvidia/nemotron-3-ultra-550b-a55b:free`=`NVIDIA: Nemotron 3 Ultra (free)` / `nvidia/nemotron-3.5-lightning:free`=`NVIDIA: Nemotron 3.5 Lightning (free)`. 전부 `cost.input=0`.
+
+### 실측에서 발견한 함정 (블로그 작성 시 필수 유의)
+1. **`nvidia/nemotron-3-ultra-550b-a55b`(유료 `cost.input=0.5`)와 `...:free`(무료)는 별개 항목** — 접미사를 떼면 과금된다.
+2. **provider 변경 = 다른 경로.** 5개 모델 전부 `openrouter/...` 에도 동시 등록. 같은 모델이어도 계정/과금 경로가 다르다.
+3. **출력 상한이 모델마다 다르다** — `lfm-2.5-2.6b:free` 는 `limit.output=8192` 로 가장 작고, `dots-3-note-preview:free` 는 460,800. 같은 프롬프트가 어떤 모델에선 잘린다.
+4. `opencode run --format json` 출력은 **NDJSON** 다. `type=="text"` 라인의 `part.text` 이어붙여야 응답 텍스트가 나온다.
+
+### 잔존 위험
+- **[부분검증] `/models` 화면의 실제 픽셀 레이아웃**(열 순서, 스크롤 동작, 마우스 지원 여부)은 이 환경이 TUI 를 못 띄워서 미확인. 표시 **데이터**는 models.dev 카탈로그로 확정했지만 화면 배치 자체는 안 봤다. 블로그에 화면 캡처를 넣을 계획이면 대표님 화면을 직접 봐야 한다.
+- `kilo/nvidia/nemotron-3-ultra-550b-a55b:free` 의 `limit.output` 은 카탈로그에 항목이 없어 문서에 "미기재"로 뒀다.
+- Kilo API 키가 `~/.env.common` 에 없어 Kilo 응답 헤더·실요금 과금 내역은 확인 불가(카탈로그 `cost` 값과 실요금의 일치 여부는 미검증).
+
+### 다음 행동
+- 대표님: 블로그 "무료로 사용하는 방법" 섹션은 위 문서 2·3절을 근거로 작성. 화면 캡처가 필요하면 `/models` 화면을 직접 열어 달라.
+
+---
+
 ## 2026-10-15 15:05 — AIK24-EMDASH-10 (emdash.aikorea24.kr 헤더 검색창 제거) 완료
 
 * 대상 저장소는 별도: `/Users/twinssn/projects2/aikorea24emdash` — 상세 기록은 그 repo의 `docs/state.md` 최상단
@@ -29,6 +58,11 @@
 ### 다음 행동
 - [완료 14:40] 대표님 승인으로 `page` 실행 → EmDash 발행 완료.
   라이브 확인: 5컬럼 헤더(모델명·프로바이더·컨텍스트 길이·지표·상태), `:free` 잔존 0건.
+- [추가 15:00] 대표님 모바일 실측 지적(첫 컬럼 독점 + 나머지 세로 찌그러짐) → 원인=EmDash `nowrap`+인라인 min-width.
+  `~/projects2/aikorea24emdash` 수정 후 4회 배포, 최종=모바일 카드형 (커밋 `64e58ed`, Version `7f845b13`).
+  상세: `src/styles/theme.css` (free-models 한정 카드 CSS) + `src/pages/posts/[slug].astro` (`data-slug` 1줄).
+  [검증됨] Playwright 375px: 표 341px(스크롤 없음), 행 `display:block`, 빈 셀 숨김, 라벨(프로바이더/컨텍스트/지표/상태) 표시.
+  데스크톱은 기존 표 유지. 커밋 안 한 파일: `scripts/fix_tables.py`, `src/version.gen.ts` (他人 작업물).
 
 ## 2026-10-15 13:47 — AIK24-UI-01 홈 AI 툴 카드(CareOps) 레이아웃 깨짐 수정
 
