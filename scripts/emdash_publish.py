@@ -45,12 +45,32 @@ def get_post(identifier):
     return item
 
 
-def upsert_post(slug, title, body_md, excerpt=None):
+def _featured_image_data(src):
+    """썸네일 src → EmDash featured_image 값.
+
+    AIK24-EVAL-09: '/' 로 시작하는 상대경로는 emdash.aikorea24.kr 에서 404 난다
+    (실측: 관련글 카드 2건이 404). 이미지는 aikorea24.kr/public 에 있으므로 절대 URL 로 만든다.
+    dict 형식(featured_image 객체)이면 src 만 고쳐 다시 감싼다.
+    """
+    if not src:
+        return None
+    if isinstance(src, dict):
+        inner = _featured_image_data(src.get("src"))
+        return {**src, "src": inner} if inner else None
+    s = str(src)
+    if s.startswith("/"):
+        return "https://aikorea24.kr" + s
+    return s
+
+
+def upsert_post(slug, title, body_md, excerpt=None, featured_image=None):
     """고정 슬러그 페이지 생성 또는 **본문만 교체**. slug 는 끝까지 그대로 유지된다.
 
     AIK24-FREE-PIPE-01 작업 3용. EmDash 는 published 항목에 PUT 하면 draft revision 으로
     스테이징되므로 publish 후행이 없으면 라이브에 반영되지 않는다
     (emdash13_repair.py 가 1,479건 수리에서 사용한 그 순서).
+    AIK24-EVAL-09: featured_image 를 받는다 — 이전엔 없어서 free-models 페이지에
+    썸네일이 설정될 경로가 아예 없었다.
     성공하면 공개 URL, 실패하면 None.
     """
     pat = get_pat()
@@ -61,6 +81,9 @@ def upsert_post(slug, title, body_md, excerpt=None):
     from emdash04_migrate import md_to_pt, api
 
     data = {"title": title, "excerpt": excerpt or "", "content": md_to_pt(body_md)}
+    feat = _featured_image_data(featured_image)
+    if feat:
+        data["featured_image"] = feat
     existing = get_post(slug)
     if existing is None:
         # slug 필드는 posts 컬렉션에 없다(400 unknown field). EmDash 는 title 을 slugify 해
@@ -96,8 +119,9 @@ def publish_post(title, body_md, excerpt=None, featured_image=None, published_at
     from emdash04_migrate import md_to_pt, api
 
     data = {"title": title, "excerpt": excerpt or "", "content": md_to_pt(body_md)}
-    if featured_image:
-        data["featured_image"] = featured_image
+    feat = _featured_image_data(featured_image)
+    if feat:
+        data["featured_image"] = feat
     st, d = api("/_emdash/api/content/posts", "POST", {"data": data})
     if st != 201:
         print("  ! EmDash create 실패 http=%s %s" % (st, json.dumps(d, ensure_ascii=False)[:200]))
