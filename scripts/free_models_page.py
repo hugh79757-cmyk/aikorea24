@@ -52,6 +52,14 @@ BACKLINK = f"\n\n---\n\n[오늘의 무료 모델 목록 보기]({PAGE_URL})\n"
 # EVAL-06: 새로운 데이터 소스 경로
 CLI_MODELS_PATH = mc.CATALOG_DIR / "free_models_cli.json"
 EXTERNAL_EVALS_PATH = mc.CATALOG_DIR / "external_evals.json"
+# EVAL-07: 일일 호출 검증 결과 (호출 검증 시각 + 점검 중 목록)
+VERIFY_PATH = mc.CATALOG_DIR / "free_models_verify.json"
+
+
+def load_verify():
+    """EVAL-07 검증 기록 로드. 없으면 빈 dict (페이지 나머지에는 영향 없음)."""
+    v = _read_json(VERIFY_PATH, {})
+    return v if isinstance(v, dict) else {}
 
 
 def log(msg):
@@ -291,16 +299,17 @@ def week_changes(days=7):
 # --------------------------------------------------------------- 렌더링 (EVAL-06 신규)
 
 
-def render_eval06(day, cli_models, wk, failed):
+def render_eval06(day, cli_models, wk, failed, verify=None):
     """EVAL-06 지시서에 따른 새 페이지 구조 렌더링.
-    
+        
     구조:
     1. 헤더: "무료 AI 모델" + 날짜 + 한 줄 설명
     2. 추천 모델 (Top 3): CLI 평가 점수 + 재사용률 결합
     3. 전체 리스트 (18개): 표 - 모델명, 프로바이더, 컨텍스트, 재사용률, KiloBench, 데이터 정책, 상태
     4. 제외된 모델: Hy3, Groq, Cerebras, NVIDIA NIM
-    5. 방법론
+    5. 방법론 (EVAL-07: 호출 검증 시각 + 점검 중)
     """
+    verify = verify if verify is not None else load_verify()
     ts = datetime.strptime(day, "%Y-%m-%d")
     today_str = f"{ts.year}년 {ts.month}월 {ts.day}일"
     
@@ -471,9 +480,20 @@ def render_eval06(day, cli_models, wk, failed):
         "- KiloBench: kilo.ai/kilobench 무료 모델 완주율.",
         "- 데이터 정책: OpenCode Zen 공식 문서 (opencode.ai/v2/docs/console/models/) — 제로-retention 여부.",
         "- 수집 시각: " + datetime.now().strftime('%Y-%m-%d %H:%M') + " · 수집 실패 프로바이더: " + (", ".join(failed) if failed else "없음"),
-        "",
     ]
-    
+    # EVAL-07: 호출 검증 시각 + 점검 중 (FAIL 모델이 있을 때만)
+    if verify.get("verified_at"):
+        out += [f"- 호출 검증 시각: {verify['verified_at']} (KST)"]
+    out += [""]
+
+    fails = verify.get("fail") or []
+    if fails:
+        out += ["## 점검 중", ""]
+        out += ["당일 호출 검증에 실패해 목록에서 제외된 모델입니다. 복구되면 다음 검증에서 복귀합니다.", ""]
+        for f in fails:
+            out += [f"- `{f.get('model_id') or f.get('cli_id')}` — {f.get('reason') or '호출 실패'}"]
+        out += [""]
+
     return "\n".join(out)
 
 
@@ -567,8 +587,9 @@ def cmd_page(day=None, dry_run=False):
     d = _read_json(mc.diff_path(day), {}) or {}
     wk = week_changes()
     
-    # EVAL-06 새 렌더 함수 사용
-    md = render_eval06(day, cli_models, wk, list(d.get("failed_providers") or {}))
+    # EVAL-06 새 렌더 함수 사용 (EVAL-07: 검증 기록 전달)
+    verify = load_verify()
+    md = render_eval06(day, cli_models, wk, list(d.get("failed_providers") or {}), verify)
     
     log(f"무료 모델 {len(cli_models)}개 / 이번 주 변경 {wk['total']}건")
     if dry_run:

@@ -18,12 +18,6 @@
     "context_length": 65536
   },
   {
-    "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "provider": "kilo",
-    "cli_id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "context_length": 256000
-  },
-  {
     "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -46,18 +40,6 @@
     "provider": "kilo",
     "cli_id": "kilo/poolside/laguna-xs-2.1:free",
     "context_length": 262144
-  },
-  {
-    "model_id": "thinkingmachines/inkling-small:free",
-    "provider": "openrouter",
-    "cli_id": "openrouter/thinkingmachines/inkling-small:free",
-    "context_length": 1048576
-  },
-  {
-    "model_id": "thinkingmachines/inkling:free",
-    "provider": "openrouter",
-    "cli_id": "openrouter/thinkingmachines/inkling:free",
-    "context_length": 1048576
   },
   {
     "model_id": "cat-jam-free",
