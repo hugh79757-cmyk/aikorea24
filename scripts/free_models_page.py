@@ -441,8 +441,7 @@ def render_eval06(day, cli_models, wk, failed, verify=None):
             row.append(" · ".join(parts))
         # 상태: 데이터 정책이 있으면 짧게 합침(정책 문구가 학습 사용 여부를 포함)
         if zen_policy:
-            policy_short = zen_policy[:30] + ("..." if len(zen_policy) > 30 else "")
-            row.append(f"현재 무료 · {policy_short}")
+            row.append(f"현재 무료 · {zen_policy}")
         else:
             status_parts = ["현재 무료"]
             if zen_trains is True:
