@@ -1,3 +1,50 @@
+## 2026-10-15 10:31 [AIK24-PIPE-DEDUP-01] 완료 — 브리핑 선정 순서 수정 + 스케줄 07:00 이동 (주니어 C, 대표님 10:15 승인)
+
+### 한 일
+대표님 승인 2건 적용 — A안(슬롯 배정 전 중복 제거) + 스케줄 06:00→07:00.
+
+| 분류 | 파일 | 내용 |
+|---|---|---|
+| [PRODUCTION CODE] | `scripts/auto_news_selector.py` | `main()` 에 3.5 단계 추가 (11행) |
+| [TEST CODE] | `tests/test_auto_news_selector_dedup_before_slots.py` | 신규 3케이스 |
+| [CONFIG] | `~/Library/LaunchAgents/kr.aikorea24.pipeline-runner.plist` | `Hour` 6 → 7 |
+
+- `select_top_articles()` **직전**에 `briefing_dedup.get_history_articles()` + `is_duplicate_article()` 로 이미 발행된 news_id 를 `passed` 에서 제거. 기존 판정 함수 재사용 → 모델 카드 `exact_id` 예외가 자동으로 따라온다.
+- `briefing_dedup` 이 `auto_news_selector` 를 import 하므로 **지연 import** (main 안).
+- `get_history_articles()` 는 실패 시 `[]` 반환 → **fail-open 유지**. D1 장애가 브리핑을 막지 않는다.
+- `auto_briefing.py` 의 후행 dedup(268행)과 모델 슬롯 재충전(278~292행)은 **삭제 안 함.** 첫 방어선 위에서 한 번 더 도는 구조.
+- 스케줄: 백업 `.bak.20261015_1030` → `plutil -lint` OK → `launchctl bootstrap` 이 `Bootstrap failed: 5: Input/output error` → 구형 `launchctl load -w` rc=0 성공. 수집기 `news-unified`(05:30)는 **이동 안 함**(별도 D1 쓰기 job, 리셋 무관).
+- 커밋 `7f7b8328`. 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-15-1031-AIK24-PIPE-DEDUP-01-완료보고.md`
+
+### 결과 — **오늘 브리핑 생성됨. 목표 달성.**
+- **[검증됨] A안 작동.** 10:27 실행 로그 `/tmp/pipe_a_20261015.log`:
+  `통과 8건` → **`이미 브리핑됨 7건 제외 → 신선 후보 1건`** → `선정 1건` → HiRO-ACEv2 (HuggingFace Blog, 7점).
+  어제와 같은 패턴(상위 4건 전부 과거 브리핑분 → 0건)이 신선 후보가 슬롯을 채우는 방향으로 바뀜.
+- **[검증됨] 파이프라인 정상 종료.** exit 0 · 93.7초 · 선정 뉴스 1건 · 에러 없음 · 배포 `b67063fc-b306-4f73-b310-97d95990fcb1` · sitemap ping google ✅ naver ✅ · 이메일 발송 완료.
+- **[검증됨] D1.** `2026-10-15-2` published 1건(HiRO-ACEv2) / `2026-10-15-1` published 2건(nemotron-3.5-super, LFM2.5-24B).
+- **[검증됨] 라이브.** `https://aikorea24.kr/` → "오늘의 AI 브리핑 (2026-10-15) · 1건의 AI 소식을 선정했습니다" + HiRO-ACEv2 카드 노출.
+- **[검증됨] 회귀 없음 — 신규 테스트가 실제 버그를 잡는다.** `git stash` 로 production code만 제거하고 동일 스위트 실행해 기준선 대조:
+  기준선(수정 전) 실패 **19** / 수정 후 **17**. `diff` 결과는 신규 테스트 2건의 삭제만, 추가 0건.
+  산출 근거: `19 = 17(기존) + 2(신규 테스트가 fix 전 실패)`, `17 = 17(기존)`.
+  남은 17건(test_deep_dive_writer, test_failed_articles, test_pitch, test_write_thread_validation 등)은 기준선과 동일한 기존 실패 — 본 변경과 무관.
+- **[검증됨] 실행 간 중복 방어도 동작.** 10:27 실행이 10:23 실행이 만든 2건을 중복으로 정확히 걸러 HiRO-ACEv2 만 추가했다.
+- [TEST CODE] 와 [PRODUCTION CODE] 동시 수정 없음. 신규 테스트 3건은 fix 전부터 존재했고 판정에 production code 스태시만 개입.
+
+### 잔존 위험
+1. **`2026-10-15-1` 고아.** 10:23 실행이 셸 120초 타임아웃으로 끊기며 브리핑 2건(nemotron 9점, LFM2.5 9점)을 D1 에 쓰고 죽었다. `latest.ts:16` 이 `ORDER BY id DESC LIMIT 1` 이라 **`-2`(HiRO-ACEv2)만 노출**, `-1`의 2건은 도달 불가. **조치 안 함** — live D1 쓰기는 승인 없이 하지 않음. **대표님 결정 필요: 병합/삭제/방치.**
+2. **하루 2회 이상 실행 시 N번째만 보임.** `publish.ts:34` 가 시퀀스를 `ORDER BY date DESC LIMIT 1` 로 매겨 재실행마다 `-2` `-3` 이 늘고 사이트는 마지막 1건만 노출. 재실행하면 이전 분이 사라지는 구조 (A안과 무관한 파이프라인 정책 문제).
+3. **D1 가드 여전히 미연결.** `cfnew.require_d1_headroom()` 는 EmDash DB 기준이라 `aikorea24-db` 대상이 아님. `scripts/threads/db_reader.py:177 d1_query()` 는 3회 재시도 후 `[]` 반환해 실패를 삼킨다. 스케줄 이동은 **07:00(=리셋 직후) 시나리오만 완화**, 가드 공백 자체는 그대로. 하루 중 다른 소비자가 한도를 소진하면 07:00 도 죽는다.
+4. 기존 테스트 실패 17건 미해결 (본 작업 범위 밖, diff 로 무관 확인).
+5. `scripts/pipeline_runner.log` 18.4MB, 06:00 이후 미갱신(mtime 06:00), 회전 없음.
+6. `scripts/logs/model_diff_2026-10-15.json` untracked 잔존, 커밋 안 함.
+
+### 다음 행동 (대표님 결정 대기)
+- [ ] 고아 브리핑 `2026-10-15-1` 처리 — 병합 / 삭제 / 방치
+- [ ] 파이프라인 재실행 시 이전 분이 사라지는 정책 확정
+- [ ] `db_reader.d1_query()` raise 전환 (가드 공백 근본)
+- [ ] 내일 07:00 자동 실행 확인 — `pipeline_runner.log` 새 헤더 + D1 `2026-10-16-1` 생성 여부
+
+---
 ## 2026-10-15 10:30 — AIK24-TOOLSYNC-02 완료 — 앱 스토어 링크 복원 + 안전 문구 복원 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1030-AIK24-TOOLSYNC-02-완료보고.md (완료)
 
 ### 한 일
