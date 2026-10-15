@@ -65,9 +65,10 @@ function toStrArray(v: string | string[] | undefined): string[] {
   return String(v).split(',').map((s) => s.trim()).filter(Boolean);
 }
 
-const tagsStr = Array.isArray(initialData.tags)
-  ? initialData.tags.join(', ')
-  : (initialData.tags ?? '');
+// AIK24-TOOLSYNC-01: D1 tags 는 JSON 문자열이다. Array.isArray 로만 걸면 문자열이 그대로
+// input 에 들어가 저장할 때 split(',') 로 역분해 → JSON 이스케이프가 1단계 깊어졌다(저장 1회당).
+// tasks 와 동일하게 toStrArray(JSON.parse 우선) 로 통일한다.
+const tagsStr = toStrArray(initialData.tags as any).join(', ');
 const taskArr = toStrArray(initialData.tasks as any);
 
 const title = isEdit ? '🛠️ AI 툴 수정하기' : '🛠️ AI 툴 등록하기';

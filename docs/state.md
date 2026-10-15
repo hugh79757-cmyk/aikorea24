@@ -1,3 +1,40 @@
+## 2026-10-15 10:20 — AIK24-TOOLSYNC-01 완료 — tags 이중 인코딩 수정 + D1→md 동기화 규칙 변경 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1020-AIK24-TOOLSYNC-01-완료보고.md (완료)
+
+### 한 일
+- [PRODUCTION CODE] `src/components/ToolForm.astro` — tags 초기값 처리를 `Array.isArray(...)` → `toStrArray(...)` 로 교체(1줄 + 주석 3줄). 동일 파일의 `tasks` 는 이미 `toStrArray` 를 쓰고 있었으나 **tags 만 빠져 있었음** → 이것이 이중 인코딩의 유일한 근본 원인.
+- [PRODUCTION CODE] `scripts/sync_submissions_to_md.mjs` — 5개 지점 변경:
+  1. 헤더 주석을 "D1=정본, md=빌드용 캐시" 규칙으로 갱신
+  2. `existsSync` 무조건 skip → `D1 updated_at > md mtime` 면 재생성으로 변경
+  3. `readField()` 헬퍼 신설(기존 md frontmatter 에서 스칼라 1개 추출)
+  4. `buildMd(row, preservedImage)` — `screenshot_url` NULL 이면 기존 md 의 `image` 물려받음
+  5. import 에 `readFileSync`·`statSync` 추가
+- [CONFIG/D1] `tool_submissions` 2행 UPDATE — `careops`·`link2threads-l2t` 의 `tags` 를 정상 JSON 으로 교체. `updated_at` 은 **의도적으로 건드리지 않음**(sync 판정 입력이라 유지).
+
+### 결과
+- **지시서 검증 ①** [검증됨] `SELECT tags …` → `careops` = list 10개 `['AI상담','심리상담','CBT','ACT','마음돌봄','자기성찰','한국어','영어','iOS','Android']`, `link2threads-l2t` = list 7개. `rows_written: 2`.
+- **지시서 검증 ②** [검증됨] sync 실행 로그 `[update] careops.md (D1 updated_at > md mtime, image 보존: "/images/tools/careops.webp")`. dry-run 에서도 `careops.md` 1건만 후보로 뜸(나머지 11건 스킵). 생성 후 `careops.md` `updated: "2026-10-14"` = D1 값과 일치.
+- **지시서 검증 ③** [검증됨] `npm run build` → `✓ Completed in 6.43s` / `Server built in 12.65s` / `Complete!`.
+- **지시서 검증 ④** [검증됨] `https://aikorea24.kr/tools/careops` → 200, 34,214B. 라이브에서 `careops.kr/?utm_source=aikorea24`(툴 바로가기) + `careops.kr/app?utm_source=aikorea24`(본문 "앱 받기") 노출, 설명문·`🗓 2026-10-14`·`심리상담` 태그 반영 확인.
+- **보존 확인** [검증됨] `image: "/images/tools/careops.webp"` 가 재생성 후에도 살아 있음(썸네일 유실 없음). 백업은 `/tmp/careops.md.bak`, D1 원값은 `/tmp/tool_tags_backup.json`.
+- **배포** [검증됨] `npm run deploy` → Version **`ac261049-a2d0-4710-8816-8c3f7e5a59ef`**, Uploaded 14.67s, Worker Startup 18ms, sitemap ping `{"google": true, "naver": true}`.
+
+### 지시서 범위를 벗어난 판단 (대표님 확인 필요)
+- **_app 스토어 링크 유실**: 재생성으로 `careops.md` 본문의 `apps.apple.com/kr/app/id6807790541`·`play.google.com/.../kr.careops.app` 2개 링크가 사라졌습니다. D1 `detail_markdown`(381자)에 이 링크가 없어서 D1=정본 규칙상 당연한 결과입니다. 복원하려면 **D1 의 detail_markdown 에 스토어 링크를 넣고 저장**해야 합니다(일방향이라 md 직접 편집은 다음 sync 때 또 날아갑니다).
+- **scripting env 선행 문제(미수정)**: `sync_submissions_to_md.mjs` 의 `const env = { ...process.env }` 가 주입된 `CLOUDFLARE_API_TOKEN`/`CLOUDFLARE_ACCOUNT_ID` 를 제거하지 않아, 세션 환경에서 실행하면 계정 `7eb1b8cd` 로 튀어 `code 7403` 이 납니다. `deploy.sh` 경유 deploy 는 정상 동작했으므로 지시서 범위 밖으로 두고 `env -u … node scripts/…` 로만 실행했습니다.
+
+### 잔존 위험
+1. **[부분검증]** 앱 스토어 링크 유실을 지시서 검증에 "누락"으로 적을 수 있으나, 지시서 ④는 "새 URL 표시 확인" 이라 의도된 변경으로 봅니다. 소유자(세이프옵스) 관점에서 링크 유실이 회귀인지 확인 필요.
+2. **일방향 sync 의 대가**: 이제 D1 `updated_at` 이 md mtime 보다 최신이면 md 를 덮어씁니다. 수동으로 md 를 편집하면 다음 deploy 때 무조건 되돌려집니다. md 직접 편집 습관은 끊어야 합니다.
+3. **`updated_at` 이 NULL/비어있는 D1 행**은 `Number.isFinite(d1)` 이 false 라 "신선하지 않음"으로 판정되어 계속 스킵됩니다(안전 쪽). 12건 중 해당 없음은 실측 확인.
+4. **테스트 미추가** — sync 스크립트에 회귀 테스트가 없어서, 규칙 변경이 `careops.md` 외 다른 슬러그에 영향을 주는지는 12건 dry-run + git status 로만 확인했습니다(재생성 1건뿐임을 확인).
+5. **남은 10건 D1 행**의 `use_cases` 는 대부분 쉼표 구분 평문이고 `goath` 만 `"검정 바지에…` 따옴표 조각이 있습니다. 재생성 대상이 될 경우 깨질 수 있어 미수정.
+6. **Tier1 LLM 상태** — 주니어 A 큐 1 이 확인한 DeepSeek chat 무응답 + free 폴백 키 부재 상태는 그대로입니다(이번 작업과 무관, 키 추가 필요).
+
+### 다음 행동
+- 대표님: 앱 스토어 링크를 되살리려면 D1 편집 화면에서 `detail_markdown` 에 스토어 URL 2개를 추가 후 저장 (이후 deploy 1회로 자동 반영).
+- 대표님: sync 스크립트의 `process.env` 토큰 제거 여부(위 "범위 밖" 항목) 지시 여부.
+- 별도: 카드 생성 복구용 free LLM 키 1개 secret 추가 (큐 1 후속).
+
 ## 2026-10-15 10:03 — CareOps 도구 DB 확인 (주니어 A 큐 2, 읽기 전용)
 
 ### 한 일
