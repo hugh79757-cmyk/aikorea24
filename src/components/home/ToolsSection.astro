@@ -45,7 +45,8 @@ const visible = tools.map((t) => ({
   name: t.name || '',
   description: (t.tagline || '').split('\n')[0].trim(),
   category: t.category || '',
-  price: t.price || '',
+  // AIK24-UI-01: price_detail 이 그대로 들어오면 100자대 문구가 카드를 밀어 깨진다.
+  price: (t.price || '').slice(0, 20) + ((t.price || '').length > 20 ? '…' : ''),
   difficulty: t.difficulty || '',
 }));
 ---
@@ -69,8 +70,8 @@ const visible = tools.map((t) => ({
               <a href={`/tools/${t.slug}/`}
                  class="group snap-start shrink-0 w-[78%] sm:w-[46%] lg:w-[23.5%] bg-white border border-gray-200 rounded-xl p-5 hover:border-[#E63B2E] hover:shadow-md transition-all duration-300">
                 <div class="flex items-center justify-between gap-2 mb-2">
-                  {t.category && <span class="text-xs text-[#E63B2E]">{t.category}</span>}
-                  {t.price && <span class="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full whitespace-nowrap">{t.price}</span>}
+                  {t.category && <span class="text-xs text-[#E63B2E] truncate">{t.category}</span>}
+                  {t.price && <span class="text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full whitespace-nowrap max-w-[120px] truncate">{t.price}</span>}
                 </div>
                 <h3 class="text-base font-bold mb-2 group-hover:text-[#E63B2E] transition-colors" style="font-family: var(--font-sans);">
                   {t.name}
