@@ -1,3 +1,36 @@
+## 2026-10-15 13:47 — AIK24-UI-01 홈 AI 툴 카드(CareOps) 레이아웃 깨짐 수정
+
+### 한 일
+- **[PRODUCTION CODE] `src/components/home/ToolsSection.astro`** — 지시서 3항목 그대로 3줄 수정 (커밋 `4bd0b712`, origin/main 푸시 완료)
+  1. `visible` 매핑(48행) `price: (t.price || '').slice(0, 20) + ((t.price || '').length > 20 ? '…' : '')` — D1 `price_detail` 원문이 카드 단위로 유입되는 것 차단
+  2. 74행 price 배지 `whitespace-nowrap` → `whitespace-nowrap max-w-[120px] truncate`
+  3. 73행 category span 에 `truncate` 추가 (긴 price 에 밀려 CJK 세로줄바꿈되던 것 방지)
+- 커밋에 **포함하지 않은 파일**: `scripts/run_pipeline.py`, `scripts/run_pipeline_with_notify.py` (이전 세션 미커밋 변경, 내 것 아님 → 그대로 working tree 에 잔존)
+
+### 결과
+- **[검증됨] 빌드·배포**: `npm run deploy` 성공 — Current Version ID `9c66c833-a194-4d63-9f6d-9fe506dd9cbe`, sitemap ping `{"google": true, "naver": true}`
+- **[검증됨] 라이브 HTML** (`curl https://aikorea24.kr/`): CareOps price = `첫 AI 상담 1회 무료, 이후 유료…` (21자, 배포 전 57자). 홈 전체 price 배지 8개 전부 `max-w-[120px] truncate` 보유, `rounded-full whitespace-nowrap"` 만 남은 배지 **0개**
+- **[검증됨] 빌드 CSS 에 유틸리티 실재**: `dist/client/_astro/Layout.CzSeSb4X.css` (122,372B) 안에 `.truncate{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}` 와 `.max-w-\[120px\]{max-width:120px}` 확인 — Tailwind 퍼지 아님
+- **[검증됨] Playwright 실측 (headless chromium, aikorea24 node_modules)** — CareOps 카드:
+  | 뷰포트 | 카드 폭 | category | price 배지 | 카드 밖 삐침 |
+  |---|---|---|---|---|
+  | 375×900 | 267.5px | 54.9×16px, 1줄(줄수 1.00), nowrap+overflow:hidden+ellipsis | 120×19px, `scrollWidth 141 > clientWidth 120` = 잘림 동작 | `false` |
+  | 1280×900 | 240.6px | 54.9×16px, 1줄 | 120×19px, 잘림 동작 | `false` |
+- **[검증됨] 육안 확인**: 카드 단위 스크린샷(`/tmp/aik24_mobile375_card.png`, `/tmp/aik24_desktop1280_card.png`) — 두 폭 모두 카테고리 가로 1줄 + 가격 "첫 AI 상담 1회 무료, 이…" 로 물림표 표시, 카드 프레임 이탈 없음
+
+### 잔존 위험
+1. **[부분검증] 데스크톱/태블릿 중간 폭(640~1023px)** — `sm:w-[46%]` 구간만 Playwright 실측 대상에서 빠졌다(375·1280만 측정). truncate 규칙은 폭과 무관하게 동일하게 적용되므로 동일 동작 예상이나, 실측 근거 없음.
+2. **데이터 레벨 근본 해결 아님** — `tool_submissions.price_detail` 원문(57자)은 그대로 남아 있음. 홈 카드만 20자로 잘라 보여주고, **도구 상세 페이지 `/tools/careops/` 는 원문 그대로 노출**된다(지시서 범위 밖, 미수정).
+3. **`title` 속성 없음** — 배지 잘림 시 전체 문구를 볼 방법이 없음(hover 툴팁 미추가, 지시서에도 없음).
+4. **[부분검증] Aside MCP 브라우저 unusable** — `tools.aside.repl` 이 계속 `null` 반환(브라우저 제어 불가). Playwright headless 로 대체 검증함.
+5. working tree 에 `scripts/run_pipeline.py`·`scripts/run_pipeline_with_notify.py` 미커밋 변경 잔존(내 변경 아님, 미수정·미커밋).
+
+### 다음 행동
+- 대표님: `https://aikorea24.kr/` 강력 새로고침 후 AI 툴 섹션 CareOps 카드 확인 (캐시 무관 — 빌드 해시 변경됨).
+- (선택) price_detail 원문을 20자 단위로 D1 에 정리하는 데이터 정리 작업 별도 지시 시 진행.
+
+---
+
 ## 2026-10-15 13:45 — AIK24-PIPE-02 --no-email 플래그 + 수동 실행 스킬 저장
 
 ### 한 일
