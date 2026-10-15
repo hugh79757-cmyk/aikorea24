@@ -251,6 +251,21 @@ def main(dedup=True):
         log("통과 후보 없음 — 브리핑 건너뜀")
         return []
 
+    # 3.5 이미 브리핑된 기사 제거 — 슬롯 배정 전에 해야 한다 (AIK24-PIPE-DEDUP-01).
+    # v1은 슬롯을 채운 뒤 auto_briefing 이 dedup 해서 슬롯이 빈 채로 끝났다
+    # (2026-10-15 실측: 상위 4건 전부 과거 브리핑분 → "선정된 기사 없음",
+    #  신선한 4건은 슬롯 밖으로 밀려남). 같은 판정 함수를 여기서 재사용한다.
+    # briefing_dedup 은 auto_news_selector 를 import 하므로 순환 → 지연 import.
+    from briefing_dedup import get_history_articles, is_duplicate_article
+    history = get_history_articles(d1_query)
+    fresh = [a for a in passed if not is_duplicate_article(a, history)[0]]
+    if len(fresh) != len(passed):
+        log(f"이미 브리핑됨 {len(passed) - len(fresh)}건 제외 → 신선 후보 {len(fresh)}건")
+    passed = fresh
+    if not passed:
+        log("신선 후보 없음 — 브리핑 건너뜀")
+        return []
+
     # 4. 점수순(동점 최신 갱신일) + 모델 3 + 뉴스 1
     selected = select_top_articles({"v2": passed}, MAX_COUNT)
 

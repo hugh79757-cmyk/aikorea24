@@ -3856,6 +3856,59 @@
           "date": "2026-10-14"
         }
       ]
+    },
+    {
+      "date": "2026-10-15",
+      "briefing_id": 352,
+      "articles": [
+        {
+          "id": "55909",
+          "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl-120b-a12b — ",
+          "original_title": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+          "description": "Nemotron 3.5 Super VL 120B A12B — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b\"} 프로바이더 갱신일 2026-10-15.",
+          "link": "https://models.dev/nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
+          "entities": [
+            "Nemotron",
+            "LLM",
+            "A12B",
+            "VL",
+            "Super",
+            "OpenCode"
+          ],
+          "date": "2026-10-15"
+        },
+        {
+          "id": "55914",
+          "title": "LFM2.5-24B-A2B로 기기 내에서 빠르고 비공개적인 에이전트 실행하기",
+          "original_title": "Run fast, private agents on-device with LFM2.5-24B-A2B",
+          "description": "",
+          "link": "https://huggingface.co/blog/LiquidAI/lfm25-24b-a2b",
+          "entities": [
+            "LFM2.5-24B-A2B",
+            "Run",
+            "LFM2.5-24B-"
+          ],
+          "date": "2026-10-15"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "briefing_id": 353,
+      "articles": [
+        {
+          "id": "55913",
+          "title": "HiRO-ACEv2: 적은 비용으로 3km 해상도 극한 날씨 시뮬레이션",
+          "original_title": "HiRO-ACEv2: Simulating extreme weather at 3 km resolution for a fraction of the cost",
+          "description": "",
+          "link": "https://huggingface.co/blog/allenai/hiro-acev2",
+          "entities": [
+            "Simulating",
+            "HiRO-ACEv2"
+          ],
+          "date": "2026-10-15"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7373,6 +7426,47 @@
         "Google"
       ],
       "date": "2026-10-14"
+    },
+    {
+      "id": "55909",
+      "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl-120b-a12b — ",
+      "original_title": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "description": "Nemotron 3.5 Super VL 120B A12B — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b\"} 프로바이더 갱신일 2026-10-15.",
+      "link": "https://models.dev/nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
+      "entities": [
+        "Nemotron",
+        "LLM",
+        "A12B",
+        "VL",
+        "Super",
+        "OpenCode"
+      ],
+      "date": "2026-10-15"
+    },
+    {
+      "id": "55914",
+      "title": "LFM2.5-24B-A2B로 기기 내에서 빠르고 비공개적인 에이전트 실행하기",
+      "original_title": "Run fast, private agents on-device with LFM2.5-24B-A2B",
+      "description": "",
+      "link": "https://huggingface.co/blog/LiquidAI/lfm25-24b-a2b",
+      "entities": [
+        "LFM2.5-24B-A2B",
+        "Run",
+        "LFM2.5-24B-"
+      ],
+      "date": "2026-10-15"
+    },
+    {
+      "id": "55913",
+      "title": "HiRO-ACEv2: 적은 비용으로 3km 해상도 극한 날씨 시뮬레이션",
+      "original_title": "HiRO-ACEv2: Simulating extreme weather at 3 km resolution for a fraction of the cost",
+      "description": "",
+      "link": "https://huggingface.co/blog/allenai/hiro-acev2",
+      "entities": [
+        "Simulating",
+        "HiRO-ACEv2"
+      ],
+      "date": "2026-10-15"
     }
   ]
 }
