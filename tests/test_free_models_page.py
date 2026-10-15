@@ -63,3 +63,27 @@ def test_missing_context_is_stated_not_hidden():
     assert card["spec"] == "컨텍스트 길이 미공개"
     assert card["price"] == "가격 미공개"
     assert "OpenCode Zen" in card["usage"]
+
+def test_eval06_table_is_five_columns_with_short_names():
+    """EVAL-08: 전체 리스트 표는 5컬럼(모델명·프로바이더·컨텍스트·지표·상태), 모델명은 접미사 제거."""
+    from free_models_page import render_eval06  # noqa: E402
+    models = [
+        {"model_id": "nvidia/nemotron-3.5-lightning:free", "cli_id": "kilo/x",
+         "provider": "kilo", "context_length": 1000000,
+         "retention_percent": None, "kilobench_completion": None,
+         "zen_data_policy": None, "zen_trains_on_prompts": None},
+        {"model_id": "mimo-v2.6-flash-free", "cli_id": "opencode/y",
+         "provider": "zen", "context_length": None,
+         "retention_percent": 80.3, "kilobench_completion": None,
+         "zen_data_policy": "제로-retention · 프롬프트 학습 미사용(기본 정책)",
+         "zen_trains_on_prompts": False},
+    ]
+    md = render_eval06("2026-10-15", models,
+                       {"total": 0, "rows": [], "added": [], "removed": [],
+                        "changed": []}, [], {"verified_at": None, "fail": []})
+    table = [ln for ln in md.splitlines() if ln.startswith("|")]
+    assert table[0] == "| 모델명 | 프로바이더 | 컨텍스트 길이 | 지표 | 상태 |"
+    assert "`nvidia/nemotron-3.5-lightning`" in table[2]  # org prefix 유지(동명 구분)
+    assert ":free" not in md.split("## 제외된 모델")[0].split("## 전체 리스트")[1]
+    assert "재사용 80.3%" in table[3]
+    assert "현재 무료 · 제로-retention" in table[3]

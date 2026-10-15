@@ -305,7 +305,7 @@ def render_eval06(day, cli_models, wk, failed, verify=None):
     구조:
     1. 헤더: "무료 AI 모델" + 날짜 + 한 줄 설명
     2. 추천 모델 (Top 3): CLI 평가 점수 + 재사용률 결합
-    3. 전체 리스트 (18개): 표 - 모델명, 프로바이더, 컨텍스트, 재사용률, KiloBench, 데이터 정책, 상태
+    3. 전체 리스트 (18개): 표 - 모델명(짧게), 프로바이더, 컨텍스트, 지표, 상태
     4. 제외된 모델: Hy3, Groq, Cerebras, NVIDIA NIM
     5. 방법론 (EVAL-07: 호출 검증 시각 + 점검 중)
     """
@@ -398,21 +398,16 @@ def render_eval06(day, cli_models, wk, failed, verify=None):
     # 해석: 컨텍스트가 없는 모델은 컨텍스트 컬럼을 아예 표시하지 않음
     # 전체 표에서는 모든 행 표시, 단 컨텍스트 없는 행은 빈 값 대신 "—" 금지, 아예 표시 안 함
     
-    # 표 헤더 구성
+    # 표 헤더 구성 (모바일 가독성: 재사용률+KiloBench→지표, 데이터 정책→상태로 합침)
     has_context = any(m.get("context_length") for m in cli_models)
-    has_retention = any(m.get("retention_percent") is not None for m in cli_models)
-    has_kilobench = any(m.get("kilobench_completion") is not None for m in cli_models)
-    has_zen_policy = any(m.get("zen_data_policy") for m in cli_models)
-    
+    has_metric = any(m.get("retention_percent") is not None for m in cli_models) \
+        or any(m.get("kilobench_completion") is not None for m in cli_models)
+
     headers = ["모델명", "프로바이더"]
     if has_context:
         headers.append("컨텍스트 길이")
-    if has_retention:
-        headers.append("재사용률")
-    if has_kilobench:
-        headers.append("KiloBench")
-    if has_zen_policy:
-        headers.append("데이터 정책")
+    if has_metric:
+        headers.append("지표")
     headers.append("상태")
     
     out += ["| " + " | ".join(headers) + " |", "|" + "|".join(["---"] * len(headers)) + "|"]
@@ -432,26 +427,29 @@ def render_eval06(day, cli_models, wk, failed, verify=None):
         zen_policy = m.get("zen_data_policy")
         zen_trains = m.get("zen_trains_on_prompts")
         
-        row = [f"`{mid}`", PROVIDER_LABEL.get(provider, provider)]
+        # 모델명 단축: org prefix는 유지(동명 모델 구분용), :free/-free 접미사만 제거
+        short = mid.replace(":free", "").replace("-free", "")
+        row = [f"`{short}`", PROVIDER_LABEL.get(provider, provider)]
         if has_context:
             row.append(f"{ctx:,}" if ctx else "")
-        if has_retention:
-            row.append(f"{retention:.1f}%" if retention is not None else "")
-        if has_kilobench:
-            row.append(f"{kilobench:.1f}%" if kilobench is not None else "")
-        if has_zen_policy:
-            if zen_policy:
-                policy_short = zen_policy[:60] + ("..." if len(zen_policy) > 60 else "")
-                row.append(policy_short)
-            else:
-                row.append("")
-        # 상태
-        status_parts = ["현재 무료"]
-        if zen_trains is True:
-            status_parts.append("학습 사용")
-        elif zen_trains is False:
-            status_parts.append("학습 미사용")
-        row.append(" · ".join(status_parts))
+        if has_metric:
+            parts = []
+            if retention is not None:
+                parts.append(f"재사용 {retention:.1f}%")
+            if kilobench is not None:
+                parts.append(f"KB {kilobench:.1f}%")
+            row.append(" · ".join(parts))
+        # 상태: 데이터 정책이 있으면 짧게 합침(정책 문구가 학습 사용 여부를 포함)
+        if zen_policy:
+            policy_short = zen_policy[:30] + ("..." if len(zen_policy) > 30 else "")
+            row.append(f"현재 무료 · {policy_short}")
+        else:
+            status_parts = ["현재 무료"]
+            if zen_trains is True:
+                status_parts.append("학습 사용")
+            elif zen_trains is False:
+                status_parts.append("학습 미사용")
+            row.append(" · ".join(status_parts))
         
         out.append("| " + " | ".join(row) + " |")
     
