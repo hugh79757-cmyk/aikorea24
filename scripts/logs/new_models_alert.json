@@ -1,8 +1,39 @@
 {
- "day": "2026-10-15",
- "checked_at": 1792011608.213334,
- "total_rows": 38,
+ "day": "2026-10-16",
+ "checked_at": 1792098002.6564999,
+ "total_rows": 40,
  "failed_providers": {},
- "new_by_provider": {},
- "removed_by_provider": {}
+ "new_by_provider": {
+  "openrouter": [
+   "meta/muse-spark-open",
+   "nvidia/nemotron-3.5-super-vl",
+   "nvidia/nemotron-3.5-super-vl:free"
+  ],
+  "kilo": [
+   "meta/muse-spark-open",
+   "nvidia/nemotron-3.5-super-vl",
+   "nvidia/nemotron-3.5-super-vl:free"
+  ],
+  "nvidia": [
+   "stepfun-ai/step-5-preview",
+   "nvidia/nemotron-3.5-super-vl-120b-a12b"
+  ],
+  "zen": [
+   "nemotron-3.5-super-vl-free",
+   "deepseek-v4.1-flash-free"
+  ]
+ },
+ "removed_by_provider": {
+  "openrouter": [
+   "anthropic/claude-sonnet-4",
+   "unbiased/pareto-26.10-preview"
+  ],
+  "kilo": [
+   "anthropic/claude-sonnet-4",
+   "unbiased/pareto-26.10-preview"
+  ],
+  "nvidia": [
+   "moonshotai/kimi-k3"
+  ]
+ }
 }

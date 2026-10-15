@@ -1,0 +1,23 @@
+{
+  "added": [
+    {
+      "provider": "zen",
+      "model_id": "big-pickle",
+      "name": "big-pickle",
+      "pricing": null,
+      "context_length": null
+    }
+  ],
+  "removed": [
+    {
+      "provider": "zen",
+      "model_id": "muse-spark-1.2-contributor-free",
+      "name": "muse-spark-1.2-contributor-free",
+      "pricing": null,
+      "context_length": null,
+      "reason": "무료→유료 전환"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}
