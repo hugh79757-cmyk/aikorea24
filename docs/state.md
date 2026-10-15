@@ -1,3 +1,110 @@
+## 2026-10-15 10:45 — CareOps 도구 DB 확인 (주니어 A 큐 2, 읽기 전용)
+
+### 한 일
+- [PRODUCTION CODE] 수정 0건. 읽기 전용 지시 준수.
+- D1 `aikorea24-db` 에서 `tool_submissions` careops 레코드(id=22) 조회.
+- `src/content/tools/careops.md` · `src/pages/tools/[id].astro` · `src/pages/api/tools/[slug]/index.ts` · `scripts/sync_submissions_to_md.mjs` · `scripts/deploy.sh` 읽기.
+- 라이브 `https://aikorea24.kr/tools/careops` 확인.
+
+### 결과
+- **[검증됨] D1 저장은 정상.** `updated_at = 2026-10-14 10:34:45`, `status=published`, `user_id=142`. 레코드는 1건뿐.
+- **[검증됨] 미반영 원인 — 공개 페이지가 D1 이 아니라 Astro md 를 읽는다.**
+  - `src/pages/tools/[id].astro:9,19,144` / `tools/index.astro:7` → 전부 `getCollection('tools')`. 실제 소스 = `src/content/tools/careops.md`(mtime 2026-10-13 11:25:29).
+  - 편집 API `src/pages/api/tools/[slug]/index.ts:137` 은 `UPDATE tool_submissions` 만 실행, md 미수정.
+  - `scripts/sync_submissions_to_md.mjs` 가 D1→md 동기화를 담당하고 `scripts/deploy.sh:52` 에서 빌드 전 호출되나, 스크립트 주석 명시 "md가 이미 있으면 건드리지 않음(수동 편집 우선)". `careops.md` 는 이미 존재 → **D1 저장이 반영되지 않는다.**
+- **[검증됨] D1↔md 내용 불일치.** url: D1 `https://careops.kr/?utm_source=aikorea24` vs md `https://careops.kr/app`. description·difficulty(NULL vs "중급")·updated 도 상이.
+- **[검증됨] 라이브 페이지 정상 렌더.** `/tools/careops` 301 → `/tools/careops/` 200, 34,638B. 링크 3개(`careops.kr/app` · `apps.apple.com/kr/app/id6807790541` · `play.google.com/.../kr.careops.app`) 렌더됨. 단 표시 날짜는 `2026-10-12`(md 의 `updated:` 값, 파일 mtime 10-13과도 불일치).
+- **[검증됨] 별도 결함 — D1 `tags` 이중 인코딩.** 실제값 `["[\"[\\\"AI상담\\\"\"","\"\\\"심리상담\\\"\"", … ,"\"\\\"Android\"]\"]"]` = 배열 안에 문자열로 직렬화된 배열이 재삽입되고 이스케이프 중첩. 정상값 `["AI상담","심리상담",…]`.
+- **[부분검증]** 라이브 난이도 배지가 `🔧 보통` 인데 md 는 `difficulty: "중급"` — `[id].astro` 매핑이 "중급" 을 못 읽고 기본값으로 떨어지는 것으로 보이나 **코드 원인 미확인**(읽기 전용 지시라 수정 안 함).
+
+### 잔존 위험
+1. **소유자가 편집 화면에서 저장하면 계속 조용히 실패한다.** 화면상 "저장됨"인데 공개 페이지엔 반영되지 않는 상태가 반복됨.
+2. **동기화 정책 미결정** — (a) D1 편집 시 md 재생성(수동 편집 포기) / (b) `updated_at` 이 md 보다 최신일 때만 재생성 / (c) 현행 유지 + 소유자 안내. 대표님 결정 대기.
+3. **`sync_submissions_to_md.mjs` 를 지금 실행하면 신규 슬러그가 `tags` 이중 인코딩 결함을 물려받을 수 있다.** 실행 전 `parseArr()` 결함 확인 필요.
+4. 난이도 배지 "보통" vs md "중급" 불일치의 코드 원인 미확인.
+
+### 다음 행동
+- 대표님: 동기화 정책 선택 + 태그 이중 인코딩 수리 지시 여부.
+
+---
+## 2026-10-15 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 1 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 1건 (리스트 카드 링크 1건)
+
+## 2026-10-15 09:55 [AIK24-PIPE-RERUN-01] 실행완료·목표미달 — 오늘 브리핑 수동 재실행 (주니어 C, 대표님 09:44 지시)
+
+### 한 일
+- `scripts/run_pipeline_with_notify.py` **2회 실행** (일반 1회 → 0건, `--collect` 1회 → 0건). launchd와 동일 명령.
+- 사전 점검: D1 434,683/5,000,000 (8.7%) → 여유 확인 후 실행.
+- 로그: `/tmp/manual_pipeline_20261015_0945.log`, `/tmp/manual_pipeline_collect_20261015.log`
+
+### 결과 — **오늘 브리핑은 여전히 미생성. 목표 미달.**
+- **[검증됨] 파이프라인 자체는 정상.** 2회 모두 exit 0, `✅ 에러 없음`, `선정 뉴스: 4건`, **배포 성공** (Version `9e78637c` → `f43799a5`, `aikorea24.kr`, sitemap ping google ✅ naver ✅).
+- **[검증됨] D1 장애는 해소됨.** 06:00 자동 run의 `rows_read exceeded` 재현 안 됨. 뉴스 조회·LLM 평가 정상.
+- **[검증됨] 부수 확인 — 어제 [부분검증]으로 남긴 `sync_submissions_to_md.mjs` 런타임 예외도 2회 연속 재현 안 됨.** `published=12 created=0 skipped=12` 통과.
+- **[검증됨] 05:30 수집기도 같은 날 죽어 있었음 (어제 조사에서 빠진 층위).**
+  - `api_test/cron_unified.log` (mtime 05:37): 179건 수집 → 배치 1~5 **전부 `ok=False`**, 본문 = `"Your account has exceeded D1's free tier daily row read limit"`.
+  - D1 실증: `news` 테이블 `DATE(created_at)` 집계 → `2026-10-14 → 193건`, **`2026-10-15 → 행 없음`**. 오늘 신선 뉴스 0개.
+- **[검증됨] 진짜 마지막 블로커 = 선정 순서 결함 (D1 아님).**
+  - 로그: `후보 8건` → LLM 평가 → `선정 4건`(전부 과거 브리핑된 free-LLM 목록형, 14/12/11/11점) → `중복 제거: 4건` `[exact_id]×4` → `선정된 기사 없음`.
+  - 신선한 4건(nemotron-3.5-super 9 / JEV-35B 10 / LFM2.5-24B 9 / HiRO-ACEv2 7)은 **슬롯 4개 밖**이라 밀려남.
+  - 코드: `scripts/auto_news_selector.py:255` `select_top_articles(..., MAX_COUNT=4)`가 **중복 제거 전에** 상위 4건 확정. `auto_news_selector.py:229` `def main(dedup=True): _ = dedup` → 인자를 받기만 하고 버림. `scripts/briefing_dedup.py:38 get_history_articles()`가 나중에 걸러내지만 그때 슬롯은 이미 꽉 참.
+  - 이미 인지된 문제: `scripts/auto_briefing.py:275` 주석 `# AIK24-EFFICIENCY-04: 모델 카드는 exact_id 만 남으므로 슬롯이 빈 채로 끝날 수 있다`.
+
+### 잔존 위험
+1. **오늘(10-15) 브리핑 미생성 상태 유지.** 코드 수정 승인 없이는 내일 06:00 자동 run도 동일 사유로 0건.
+2. **승인 대기 중인 A안** — `auto_news_selector.py` 의 `main()` 에서 `select_top_articles` 직전에 이미 브리핑된 news_id를 `passed`에서 제거(약 5줄, `briefing_dedup.get_history_articles()` 재사용). **승인 안 받고 미적용.** 라이브 일일 콘텐츠 조합이 바뀌므로 승인 필수.
+3. **스케줄 06:00→07:00 이동 미승인** (어제 보고 권장 1). 05:30 수집기가 06:00 파이프라인보다 먼저 죽으므로 이동 시 두 작업 모두 리셋 직후 실행.
+4. **가드 공백** — `cfnew.require_d1_headroom()`는 EmDash DB 기준이라 aikorea24-db를 쓰는 수집기/파이프라인에 적용 안 됨. 두 작업이 D1 한도를 공유.
+5. **커밋 없는 배포 2건 누적** (`9e78637c`, `f43799a5`). 콘텐츠 변경 없이 빌드 산출물 재배포.
+6. 10-14 UTC 급증의 유발 스크립트 미확정(추정).
+
+### 다음 행동 (대표님 지시 대기)
+- A안 승인 → 적용 → 재실행 → 브리핑 1건 이상 생성 확인
+- 스케줄 이동 승인 → plist 수정 → launchctl reload
+- (선택) 오늘 브리핑만 임시 회피하려면 dedup 우회 플래그 — 근데 A안 없이는 내일도 재발
+
+[PRODUCTION CODE]/[TEST CODE]/[CONFIG] 변경 없음. 실행만 2회.
+
+---
+
+## 2026-10-15 09:55 [AIK24-PIPE-D1-01] 완료 — 브리핑 파이프라인 미실행 조사 (주니어 C)
+
+### 한 일
+- **read-only 조사만 수행.** D1 SELECT 1건 + `pipeline_runner.log` / `d1_usage_report.log` / launchctl / crontab 열람 + 코드 경로 확인.
+- 결과 보고서를 `SSOT/주니어-소통/to-mallang.md`에 [C] 태그로 제출, `to-junior.md`의 주니어 C 큐를 [완료] 로 갱신.
+
+### 결과
+- **[검증됨] 결론 = 스케줄러 정상 · 크론 아님 · 원인은 "D1 free tier rows_read 한도 초과 + 실패를 삼키는 코드 2곳".**
+  - `launchctl list | grep aikorea` → `kr.aikorea24.pipeline-runner` 로드됨. `scripts/pipeline_runner.log` mtime = 오늘 06:00 → **06:00에 정상 실행됨.**
+  - `crontab -l` 에 aikorea24 항목 0건 → 크론 아님.
+- **[검증됨] 오늘 브리핑은 미생성.** `scripts/pipeline_runner.log` 마지막 run(`2026-10-15 06:00`, 16.9초) → `Your account has exceeded D1's free tier daily row read limit` → `브리핑 조회 실패 (D1 오류, 빈 브리핑 아님)` → 선정 뉴스 0건.
+  - D1 직접 조회(`SELECT date, COUNT(*) FROM briefings GROUP BY date ...`) 결과 최신 행이 `2026-10-14 → 1건`이고 **10-15 행이 존재하지 않음.** → 사이트가 10-14-1을 보여 "어제와 동일"로 보인 것. 캐시 문제 아님.
+- **[검증됨] 한도 초과 시각** — `scripts/d1_usage_report.log`: 10-14 23:30 ICT(16:30 UTC) 5,235,820 rows (104.7%), 경보 발송. 10-15 07:00 ICT(00:00 UTC) 리셋 → 09:07 기준 171,230 (3.4%). **지금은 D1 정상**(같은 SELECT 방금 정상 응답).
+- **[검증됨] 실패를 삼키는 코드 2곳** —
+  - `scripts/threads/db_reader.py:177 d1_query()`: `wrangler d1 execute` raw subprocess, 3회 재시도 후 **`[]` 반환(raise 없음)** → 조용히 0건 진행.
+  - `scripts/run_pipeline.py` 124~130·164행: `wrangler d1 execute` 직접 subprocess, 가드 없음.
+  - `scripts/cfnew.py` 에 가드는 **이미 구현**(`D1_READ_LIMIT=5_000_000`, `require_d1_headroom()`, 70% 초과 시 `SystemExit(3)`)하나 **파이프라인에 연결돼 있지 않음.**
+- **[검증됨] 재발 패턴** — 23 run 이력에서 한도 초과 2건(10-09 06:00, 10-15 06:00) **모두 06:00 ICT(=23:00 UTC) 슬롯.** 09:00 ICT(=00:00 UTC) 슬롯 3회(10-11~13)는 전건 성공. 스케줄이 10-13에 09:00→06:00으로 바뀐 뒤(AIK24-PIPE-SCHEDULE-01) 첫 실패가 오늘.
+  - 10-14 UTC 급증의 발화점은 git log의 `AIK24-EMDASH-03~07` + `cfnew.require_d1_headroom()` docstring 근거로 **EmDash 복구 작업으로 추정** (실행 증거 아님).
+- **[부분검증] 별건 — 배포 실패(rc=1)는 D1과 무관한 두 번째 블로커.** `scripts/deploy.sh`의 `[0.5/3] 승인 툴 submission → md 동기화` 직후 `sync_submissions_to_md.mjs` 크래시. `node --check` → SYNTAX OK → 런타임 예외. 10-09 06:00 run에서도 동일 실패 → 기존 선행 장애.
+  - 제한 사유: stderr 스택 트레이스를 끝까지 추적하지 않음(`Node.js v25.2.1` 크래시 푸트프린트까지만 확보).
+
+### 잔존 위험
+1. **오늘(10-15) 브리핑이 여전히 미생성** — 다음 자동 run 은 내일 06:00. 조치 없으면 하루 통째 공백.
+2. **10-14 UTC 급증의 정확한 유발 스크립트 미확정** — 문서 근거로만 추정. 추가 급증 시 동일 사고 재발 가능.
+3. `d1_query()` 를 raise 로 바꾸면 정상적인 "빈 브리핑" 경로에서 오발동 위험 있음 → 사전 확인 필요.
+4. 0건 run 5건 중 2건(10-05 06:00, 10-09 20:00)은 D1 한도 외 사유. 10-09 20:00은 "news 테이블 0건"(크롤러)이라 별개 후속 필요.
+5. 배포 실패 런타임 예외 근본 미확정.
+
+### 다음 행동 (대표님 지시 대기 — 코드 변경 안 함)
+1. 스케줄 06:00 → 07:00 ICT(=00:00 UTC) 이동 (1줄, 단 대표님 10-13 지시와 충돌)
+2. `d1_query()` 실패 시 raise 전환 (조용한 0건 제거)
+3. `run_pipeline.py` 입구에 `cfnew.require_d1_headroom()` 연결 (기존 가드 구입)
+4. 오늘 브리핑 재실행 여부 — D1 여유(3.4%)는 있으나 LLM 비용·배포·이메일 부수효과 발생
+
+[PRODUCTION CODE]/[TEST CODE]/[CONFIG] 변경 없음.
+
+---
+
 ## 2026-10-15 00:15 AIK24-D1-03 완료 — EmDash 쿼리 폭풍 N+1 완화: emdash04_migrate.py existing_titles() 페이지 크기 100→500 + 로컬 캐시(1시간 TTL) → 배포 검증 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-0006-AIK24-D1-03-EmDash쿼리폭풍.md (완료)
 
 ### 한 일
