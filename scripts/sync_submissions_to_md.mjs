@@ -24,7 +24,7 @@ const wrangler = existsSync(WRANGLER) ? WRANGLER : 'wrangler';
 
 function querySubmissions() {
   const sql = `SELECT slug, name, url, category, description, price_model, price_detail,
-    korean_support, difficulty, use_cases, tags, tasks, detail_markdown, created_at, updated_at
+    korean_support, difficulty, use_cases, tags, tasks, detail_markdown, screenshot_url, created_at, updated_at
     FROM tool_submissions WHERE status='published' ORDER BY created_at DESC;`;
   // 2026-10-09 CF-MIGRATE-02: OAuth 프로필은 출발 계정 → env 토큰 사용
   const env = { ...process.env };

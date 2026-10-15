@@ -1,3 +1,46 @@
+## 2026-10-15 10:30 — AIK24-TOOLSYNC-02 완료 — 앱 스토어 링크 복원 + 안전 문구 복원 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1030-AIK24-TOOLSYNC-02-완료보고.md (완료)
+
+### 한 일
+- [CONFIG/D1] `tool_submissions` careops 1행 UPDATE (`updated_at` 미변경 — 지시서 주의 준수):
+  1. `detail_markdown` 에 앱 스토어 링크 2개 추가(iOS / Android)
+  2. `detail_markdown` 말미에 안전 문구 1문단 추가 — "CareOps 마음이는 전문 상담을 대신하지 않습니다. 의료적 진단·처방이나 응급·위기 대응을 하지 않으며, 심각한 고민이나 위기 상황에서는 전문 상담사나 응급 연락망을 이용해 주세요." (출처: `/tmp/careops.md.bak` 1차 복원본의 "의료적 진단·치료나 응급·위기 대응을 대체하지 않습니다" 취지 확장)
+  3. `description` 말미에 안전 문구 추가 — "전문 상담을 대신하지 않으며, 진단·처방·응급 지원은 하지 않습니다."
+  4. `screenshot_url` = `/images/tools/careops.webp` — ★ 아래 "자체 결함" 참조
+- [PRODUCTION CODE] `scripts/sync_submissions_to_md.mjs` 1줄 — `querySubmissions()` 의 SELECT 목록에 `screenshot_url` 추가.
+- [GENERATED] `src/content/tools/careops.md` — `rm` 후 sync 재생성(생성 경로). md 직접 편집 아님(지시서 준수).
+
+### ★ 자체 결함 발견·수정 (TOOLSYNC-01 의 내가 놓친 것)
+TOOLSYNC-01 에서 `buildMd()` 에 `image` 방출 분기(`row.screenshot_url ? … : preservedImage ? … : []`)를 넣었는데,
+**`querySubmissions()` 의 SELECT 목록에 `screenshot_url` 이 없어** `row.screenshot_url` 이 항상 `undefined` 였다.
+즉 그 분기는 죽은 코드였고, careops 썸네일이 보존됐던 건 우연히 아래 `preservedImage` 폴백 덕분이었다.
+이번 작업에서 md 를 `rm` 후 생성 경로로 태우자 `preservedImage` 가 없으니 **썸네일이 유실** → SELECT 1줄 추가로 근본 제거.
+
+### 결과 (지시서 완료기준 3항목)
+- **스토어 링크 2개** [검증됨] `https://aikorea24.kr/tools/careops` → 200, 35,207B. HTML 에 `apps.apple.com/kr/app/id6807790541` ✓ / `play.google.com/store/apps/details?id=kr.careops.app` ✓
+- **안전 문구** [검증됨] 본문 "CareOps 마음이는 전문 상담을 대신하지 않습니다 … 응급 연락망을 이용해 주세요." 렌더 확인. 카드 설명 "전문 상담을 대신하지 않으며, 진단·처방·응급 지원은 하지 않습니다." 렌더 확인.
+- **배포 Version** [검증됨] **`b7c84c8f-b0ee-4293-b1a0-bf95b6fdaa30`**, build `✓ Completed in 7.98s`, sitemap ping `{"google": true, "naver": true}`
+- **부가 확인** [검증됨] `image: careops.webp` 라이브 노출 유지(유실 없음). D1 `updated_at` = 2026-10-14 10:34:45 로 **변경 없음**.
+- **sync 결과** [검증됨] `[create] careops.md` 1건 / 나머지 11건 스킵. `git diff --stat` = 5 insertions(+), 1 deletion(-) — 의도한 변경 외 없음.
+
+### 지시서 주의사항과 충돌했던 지점 (대표님 승인 후 진행)
+지시서는 "sync 로 careops.md 재생성 확인"을 요구하면서 동시에 "D1 `updated_at` 은 건드리지 말 것( sync 판정에 사용)"이라 명시했습니다.
+두 지시사항은 동시에 성립하지 않습니다 — D1 `updated_at`(2026-10-14 10:34) 이 md mtime(2026-10-15 10:17)보다 **오래되어** 갱신 판정(`updated_at > mtime`)이 false 가 됩니다.
+**대표님 선택으로 `careops.md` 를 `rm` 후 sync 생성 경로로 태우는 방식**으로 해결했습니다(`updated_at` 미변경, sync 규칙 무변경, md 직접 편집 아님).
+- 부수 발견: 생성 경로는 "물려받을 md" 가 없어 `image` 유실이 발생합니다. → `screenshot_url` 을 D1 에 채워 **D1 자체가 자립**하게 했습니다(향후 어떤 경로로 재생성해도 이미지 보존).
+
+### 잔존 위험
+1. **[부분검증]** `screenshot_url` 에 사이트 절대경로(`/images/...`)를 넣었다. 어드민 편집 화면이 이 필드를 "외부 스크린샷 URL"로 취급할 경우 소유자가 값을 덮어쓰면 이미지가 다시 유실됩니다. 지금은 렌더 정상.
+2. **[부분검증]** 안전 문구는 1차 복원본의 취지를 확장해 제가 문장을 새로 썼습니다(원문 "의료적 진단·치료나 응급·위기 대응을 대체하지 않습니다" → 추가 "심각한 고민이나 위기 상황에서는 전문 상담사나 응급 연락망을 이용해 주세요"). 디렉토리 정책 문구로서 소유자 승인 필요.
+3. `careops.md` 는 이제 완전 D1 파생물입니다. md 를 직접 편집하면 다음 deploy 때 `updated_at > mtime` 판정(또는 rm) 경로로 무조건 되돌려집니다.
+4. 나머지 11건 D1 행은 `screenshot_url` 이 NULL 이라 재생성 시 이미지가 없습니다(현 상태 유지, TOOLSYNC-02 범위 밖).
+5. sync 스크립트의 `process.env` 토큰 미제거는 여전히 미수정(TOOLSYNC-01 잔존 위험에서 이관). 세션 환경 직접 실행 시 `code 7403`, deploy 경유는 정상.
+6. `updated_at` 을 오래된 값으로 남겨 둔 상태라 **TOOLSYNC-01 규칙으로는 앞으로 careops 가 자동 갱신되지 않습니다.** 다음 편집 화면 저장은 `updated_at` 이 올라가므로 그때 자동 반영됩니다.
+
+### 다음 행동
+- 대표님: 안전 문구 문장 최종 승인(2번 항목).
+- 대표님: 어드민 편집 화면에서 `screenshot_url` 이 외부 URL 전용이라면 D1 값을 되돌리고 `buildMd` 폴백 로직을 별도로 검토.
+- 별도: 카드 생성 복구용 free LLM 키 1개 secret 추가(TOOLSYNC-01 이전 큐 후속).
+
 ## 2026-10-15 10:20 — AIK24-TOOLSYNC-01 완료 — tags 이중 인코딩 수정 + D1→md 동기화 규칙 변경 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1020-AIK24-TOOLSYNC-01-완료보고.md (완료)
 
 ### 한 일

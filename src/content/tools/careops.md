@@ -1,6 +1,6 @@
 ---
 name: "CareOps 마음이"
-description: "CareOps 마음이는 검증된 상담 기법과 전문 심리상담사와 함께하는 AI 심리치료·상담 프로그램을 제공하는 앱입니다."
+description: "CareOps 마음이는 검증된 상담 기법과 전문 심리상담사와 함께하는 AI 심리치료·상담 프로그램을 제공하는 앱입니다. 전문 상담을 대신하지 않으며, 진단·처방·응급 지원은 하지 않습니다."
 category: "글쓰기·챗봇"
 price: "첫 AI 상담 1회 무료, 이후 유료. 전문 심리상담사 피드백은 별도 선택형 유료 상담사 플랜으로 제공."
 koreanSupport: true
@@ -25,3 +25,7 @@ CBT(인지행동치료)·ACT(수용전념치료) 등 상담 기법을 바탕으�
 세이프옵스에서 운영하며, iOS와 Android에서 이용할 수 있습니다.
 
 앱 받기: [검증된 상담 기법과 전문 심리상담사와 함께하는 AI 상담](https://careops.kr/app?utm_source=aikorea24)
+iOS: https://apps.apple.com/kr/app/id6807790541
+Android: https://play.google.com/store/apps/details?id=kr.careops.app
+
+이용 안내: CareOps 마음이는 전문 상담을 대신하지 않습니다. 의료적 진단·처방이나 응급·위기 대응을 하지 않으며, 심각한 고민이나 위기 상황에서는 전문 상담사나 응급 연락망을 이용해 주세요.
