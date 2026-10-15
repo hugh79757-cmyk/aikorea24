@@ -1,3 +1,31 @@
+## 2026-10-15 11:13 AIK24-FAVICON-01 추가 항목 — favicon.ico 직접 URL 교체 + 301 규칙 해제
+
+### 한 일
+- **[CONFIG] `public/favicon.ico`** — 내가 앞서 32px PNG 를 Pillow 로 합성한 2,313B ICO 를 버리고, muse.ai 서명 URL 에서 받은 **실제 신버전 ICO** 로 교체. 2,243B, `47d7c215d79b5bd0202695b9fb35b030`. ICO 내부 = 16×16 + 32×32 2단 PNG.
+- **[CONFIG] `public/_redirects`** — `/favicon.ico  /favicon.png  301` 규칙(2026-10-12 추가)을 **해제**. 주석만 남기고 규칙 삭제.
+
+### ★ 왜 301 규칙까지 해제했는가 (지시서와 충돌 지점)
+지시서 추가 항목 4 의 근거는 "직접 이미지 URL 접근 시 브라우저가 이 파일을 읽음" 인데, 실측상 **`https://aikorea24.kr/favicon.ico` 는 `public/_redirects:16` 의 301 때문에 `/favicon.png` 로 튕겼다.** ICO 를 아무리 교체해도 어떤 브라우저도 새 ICO 를 읽지 못하는 상태였다.
+2026-10-12 의 리다이렉트 목적("구버전 .ico 들이밀지 않기")은 ICO 교체로 달성되므로 규칙이 무의미해졌다. → 삭제.
+
+### 결과
+- **[검증됨]** `npm run build` `Server built in 11.57s` / `npm run deploy` Version `843bd1b5-12fd-481b-91bf-630cd4d6e17a`, sitemap ping `{"google": true, "naver": true}`
+- **[검증됨]** `https://aikorea24.kr/favicon.ico` → **HTTP 200** (이전 301) / `content-type: image/vnd.microsoft.icon` / 2,243B / md5 `47d7c215…` = muse.ai 원본과 **바이트 단위 일치**. 301·location 헤더 **없음**
+- **[검증됨]** ICO 내부 2단(16×16, 32×32) 구조 확인, 32px 를 PNG 로 추출해 육안 확인 = 검은 "AI" + 호랑이 발바닥
+- **[검증됨]** 파비콘 5종 라이브 md5 전부 로컬 일치 (`favicon.ico` `47d7c215…` / `favicon.png` `58f23ec…` / `favicon-32x32.png` `e34ef85…` / `favicon-16x16.png` `d48871d…` / `apple-touch-icon.png` `6b72860…`)
+
+### 잔존 위험
+1. **[부분검증] 대표님 브라우저 탭** — `/favicon.ico` 를 과거에 한 번이라도 받아 캐시한 브라우저는 옛 301 목적지(`favicon.png`)를 캐시한다. 이것도 옛 파비콘이므로 **강력 새로고침 + 필요 시 파비콘 캐시 수동 삭제** 필요. 서버는 200 + md5 일치 3회 재현 확인.
+2. **리다이렉트 해제는 되돌릴 수 있음** — 대표님이 구버전 ICO 노출을 다시 걱정하시면 `public/_redirects` 에 한 줄 되돌리면 됨(2분 작업). 지금은 신 ICO 실서비스 상태라 유지 판단.
+3. `favicon.png` 1600×1600 199,726B — `/favicon.ico` 가 이제 정상 serve 되므로 브라우저는 ICO(2,243B) 를 우선 쓸 가능성이 높다. 대용량 PNG 는 링크 태그 fallback 용으로만 남는다.
+4. `SEOHead.astro` apple-touch-icon 중복 링크(135-138행·141행) 미수정 — 지시 범위 밖.
+
+### 다음 행동
+- 대표님: 강력 새로고침 후 탭 파비콘 확인.
+- 별도: `SEOHead.astro` apple-touch-icon 중복 링크 정리.
+
+---
+
 ## 2026-10-15 11:10 AIK24-TOOLSYNC-05 + AIK24-FAVICON-01 완료 — '이미지 원본 보기' 링크 제거 + 파비콘 신버전 교체
 
 ### 한 일
