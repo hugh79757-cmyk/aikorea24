@@ -1,3 +1,64 @@
+## 2026-10-15 10:55 AIK24-EMAIL-01 완료 — 승인 이메일 "원문 그대로" 원인 확정(배지 임베드 코드블록) → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1055-AIK24-EMAIL-01-완료보고.md (완료)
+
+## 2026-10-15 10:55 — AIK24-EMAIL-01 완료 — 승인 이메일 "원문 그대로" 노출 원인 확정 (조사만, 코드 수정 0건)
+
+한 일
+- [INVESTIGATION] 읽기 전용 조사 3항목 수행. `src/lib/email-notify.ts` / `api/admin/tools/review.ts` / `api/tools/submit.ts` / D1 `tool_submissions` 17행 / git 이력 / 라이브 배지 URL.
+- [NONE] 코드·D1·배포 변경 없음(지시서에 코드 수정 지시 없음).
+
+결과 — 완료기준 3항목
+1. **발송 코드 파일 경로** [검증됨] = `src/lib/email-notify.ts` (256줄). 발송 함수 `sendToolNotification()`(220-256행). 호출자 `src/pages/api/admin/tools/review.ts:6`.
+2. **"원문 그대로" 원인** [검증됨] = `approvedHtml()` 의 **배지 임베드 코드 블록**(`src/lib/email-notify.ts:105-109` 생성, 138행 삽입). `escapeHtml()` 로 HTML 소스를 문자화해 `<div style="...monospace...">` 코드 블록에 넣는데, 메일 클라이언트가 텍스트로 렌더 → 소유자는 `<a href="..."><img src="..." ...></a>` 를 그대로 봄.
+3. **수정 방안** — 아래 "수정 방안 3안".
+
+### 실측 근거 — 메일 코드블록에 들어가는 실제 문자열
+`escapeHtml()`(92-99행) 적용 결과(`escapeHtml` 은 `& < > " '` 만 처리):
+```
+<a href="https://aikorea24.kr/tools/careops/">
+  <img src="https://aikorea24.kr/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" width="240" style="max-width:240px;height:auto;border:0;" loading="lazy" />
+</a>
+```
+→ 배지 이미지 `https://aikorea24.kr/badges/listed-on-aikorea24.webp` 는 **200 / image/webp / 20,078B** 로 정상. 코드 문구는 스킬 AIK24-BADGE-02(커밋 `816e309e`)가 넣은 **의도된 기능**이며, 코드 주석도 "복사해서 사이트에 붙여넣으면 됩니다" 라고 명시.
+
+### ★ 지시서 전제 vs 실측의 차이 (중요 — "마크다운" 은 아님)
+지시서 §2 는 `##`, `**` 등 **마크다운** 기호 노출을 전제하나, 실측 결과 **그 기호는 어디에도 없습니다**.
+- 메일 본문에 들어가는 값은 **`toolName` + `toolSlug` 둘뿐** (122·127·132·138행). D1 `tool_submissions` 17행 전수 확인 결과 `name` 에 마크다운 기호 0건 (`글웨이 (GeulWay)`·`GOATH (고뜨)` 는 괄호가 grep 에 걸린 것이지 마크다운 아님)
+- `detail_markdown` / `description` 은 **이메일 경로에서 한 번도 참조되지 않음** (`grep -rn detail_markdown src/` 결과 = ToolForm 입력 · tools/[id].astro 렌더 · tools/index.astro 목록 · api/tools 저장 4곳뿐)
+- 실제 노출되는 것은 **HTML 소스 코드블록** 1개. 소유자가 비전문가 눈에는 마크다운과 똑같이 "원문 그대로" 로 읽힘
+- `sendToolNotification()` 는 `htmlContent` 만 전송하고 `textContent`(평문) 필드가 없음 → 평문 fallback 이 아니라 HTML 단일 경로
+
+### 발송 경로 [검증됨]
+- `BREVO_URL = "https://api.brevo.com/v3/smtp/email"` — **Brevo REST 직접 호출(SMTP 아님)**, 헤더 `api-key`, body `{sender,to,subject,htmlContent}`
+- **외부 템플릿 파일 없음** — TS 템플릿 리터럴 인라인. 템플릿 3종 = `approvedHtml`(101-148) / `rejectedHtml`(150-175) / `submissionHtml`(183-218)
+- 발신 `SENDER = { name:'AI코리아24', email:'info@aikorea24.kr' }` — 지시서 발신과 일치
+- Brevo 호출부는 총 4곳: `src/lib/email-notify.ts`, `api/unsubscribe.ts`, `api/subscribe.ts`, `api/briefing/send-email.ts` (+`scripts/auto_email_sender.py` 브리핑 배치). 도구 메일은 `email-notify.ts` 하나뿐
+
+### 발송 시점 버전 정합 [검증됨]
+- `email-notify.ts` git 이력 = `816e309e`(2026-10-12 20:49 KST / 11:49 UTC, "fix: AIK24-BADGE-02 승인 도구 404 수정 + 승인 이메일 배지 게재 안내") / `2f1924af`(09-27) / `9179b2e1`(09-24) / `256be555`(09-24 최초)
+- 발송 2026-10-12 13:02:23 UTC = 22:02 KST → `816e309e` 배포(20:49 KST) **이후** = 배지 안내 버전이 라이브였음
+- 최초 버전 `256be555` 에도 `description`/`detail_markdown` 참조 0건 → **어느 버전이든 도구 소개 본문이 메일에 들어간 적 없음**
+
+### 수정 방안 3안 (택 1 — 지시서에는 "HTML 변환 추가 or 템플릿 수정" 이라 되어 있으나, HTML 변환은 불필요)
+| 안 | 내용 | 효과 | 비용 |
+|---|---|---|---|
+| **A안 (권장)** | 코드블록을 `<pre>` 로 감싸고 `white-space:pre-wrap` 유지 + **앞에 "아래는 복사용 HTML 코드입니다" 한 줄 추가**. 코드가 코드임이 명시돼 비전문가가 더 이상 "오류"로 오해하지 않음 | 가장 느슨하게 오해 해소. 기존 기능 전부 보존 | 2줄 |
+| B안 | 코드블록을 `<details><summary>배지 코드 보기</summary>` 로 접기 | 시각적 노이즈 제거 | 3줄. 일부 메일 클라이언트가 `details` 미지원 |
+| C안 | 코드블록 통째 제거 | 문제 완전 소멸 | 배지 게재 기능 자체 삭제 — AIK24-BADGE-02 목적 파괴. 비권장 |
+
+**HTML 변환 추가(마크다운→HTML)는 불필요** — 템플릿이 이미 HTML 리터럴이고 `##`/`**` 가 입력되지 않으므로 변환할 마크다운이 없다. 지시서가 지목한 방향은 이 조사 결과로는 근거가 없다.
+
+### 잔존 위험
+1. [검증불가] 실제 수신 메일 원문 미확보. Brevo 대시보드 로그 접근 권한 없음 → "소유자가 정확히 무엇을 불평했는지"(어느 코드블록인지, `##`/`**` 를 실제로 보았는지)는 확정 못 함. 위 원인론은 **코드 실측 + 발송 시각 정합**으로 도출한 것이지 메일 원문 대조가 아니다
+2. [추정] careops 가 해당 승인 건으로 추정(created 2026-10-11 20:16:46, published). D1 `tool_submissions` 에 `approved_at` 컬럼이 없어 승인 시각으로 확정 불가. slug 를 댄 것이 순정 추측
+3. A안 적용 시에도 비전문가 오해는 완전히 0 이 되지 않음(코드는 여전히 코드임)
+4. `rejectedHtml` 의 `reason`(반려 사유)과 `approvedHtml` 의 `name` 은 `escapeHtml()` 만 거치므로 주입은 막혔으나, 소유자가 사유에 `**굵게**` 처럼 쓰면 그대로 나타남 — 마크다운 변환이 필요한 유일한 실제 경로
+5. `badges/listed-on-aikorea24.webp` 는 `public/` 아래라 `.gitignore:66-67` 로 커밋 불가(배포로만 반영). 이번 조사에서 200 확인했으나 재생성 시 유실 위험은 TOOLSYNC 계열과 동일
+
+### 다음 행동
+- 대표님: A/B/C안 택 1 → 지시서로 지시 주시면 구현. C안은 AIK24-BADGE-02 목적 파괴라 비권장
+- 대표님: 실제 수신 메일 원문(스크린샷) 주시면 원인 확정 [검증불가] → [검증됨] 으로 승격
+
+
 ## 2026-10-15 10:48 AIK24-TOOLSYNC-03/04 완료 — CareOps 썸네일 교체 + 앱 스토어 링크 텍스트 간결화 → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1048-AIK24-TOOLSYNC-03-04-완료보고.md (완료)
 
 ## 2026-10-15 10:48 — AIK24-TOOLSYNC-03/04 완료 — CareOps 썸네일 교체 + 앱 스토어 링크 텍스트 간결화
