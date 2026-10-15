@@ -1,3 +1,26 @@
+## 2026-10-15 11:00 [AIK24-EVAL-07] 완료 — 일일 호출 검증 스크립트 + 페이지 검증시각/점검중 (주니어 C)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/verify_models_daily.py` 신규 — `model_eval.cli_call()` 재사용, PASS만 캐시 기록(+`.bak-YYYYMMDD` 백업), 검증 기록 `free_models_verify.json` 별도 저장.
+- [PRODUCTION CODE] `scripts/free_models_page.py` 수정 — 방법론 "호출 검증 시각 (KST)" + FAIL 시 하단 "## 점검 중". 기록 없으면 기존 렌더 그대로.
+- 커밋 `a99ccbbb`. 완료보고 `SSOT/프로젝트/aikorea24/지시서/2026-10-15-1100-AIK24-EVAL-07-완료보고.md`.
+
+### 결과
+- [검증됨] 완료기준 4개 전부 확인. live 18개 → **PASS 15 / FAIL 3** (nano-omni 타임아웃 60초, inkling 2건 openrouter CLI 인증 불가). 캐시 15건, FAIL 제외 확인. dry-run에 검증시각+점검중 3건 표시. 가짜 모델 시뮬레이션 FAIL→제외 확인 (/tmp로 live 미접촉).
+- 근거: `/tmp/verify_live_20261015.log`, `/tmp/page_after_verify.md`, `/tmp/sim_out.json`.
+
+### 잔존 위험
+1. nano-omni 타임아웃은 일시적 혼잡 가능 — 내일 검증에서 복귀 가능 (본 스크립트는 지시서대로 재시도 없음).
+2. openrouter 2건은 내일도 FAIL 가능성 높음.
+3. 다음 `page` 실제 갱신 시 리스트 15개 노출 (스펙 의도).
+4. launchd 매일 06:00 등록은 별도 지시 대기.
+5. `model_diff_2026-10-15.json` untracked 잔존 (범위 밖).
+
+### 다음 행동
+- launchd 등록 지시 대기. 다음 daily `page` 갱신에서 15개 리스트 확인.
+
+---
+
 ## 2026-10-15 10:55 AIK24-EMAIL-01 완료 — 승인 이메일 "원문 그대로" 원인 확정(배지 임베드 코드블록) → SSOT/프로젝트/aikorea24/지시서/2026-10-15-1055-AIK24-EMAIL-01-완료보고.md (완료)
 
 ## 2026-10-15 10:55 — AIK24-EMAIL-01 완료 — 승인 이메일 "원문 그대로" 노출 원인 확정 (조사만, 코드 수정 0건)
