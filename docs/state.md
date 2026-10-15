@@ -1,3 +1,35 @@
+## 2026-10-15 15:05 — AIK24-EMDASH-10 (emdash.aikorea24.kr 헤더 검색창 제거) 완료
+
+* 대상 저장소는 별도: `/Users/twinssn/projects2/aikorea24emdash` — 상세 기록은 그 repo의 `docs/state.md` 최상단
+* 한 일: EmDash 헤더의 인라인 검색창(⌘K 핸들러 포함)을 코드 삭제 → aikorea24.kr 메인 헤더와 통일. 푸터는 라이브 비교 결과 이미 동일(링크 10개·사업자정보 3줄·네트워크 링크)
+* 결과 [검증됨]: 배포 Version `f0ce90b1-5761-4f73-83c0-25fcb392604a`, 라이브 3URL http 200, `site-search`/`Search...`/`emdash-live-search`/`metaKey` 각 0건, Playwright 375·1280 뷰포트에서 헤더 내 검색 노드 0개, 커밋 `2e7087f` push 완료
+* 완료보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-15-1438-AIK24-EMDASH-10-완료보고.md`
+* 잔존 위험: 헤더 구조 차이 3건(로그인 버튼 / 모바일 햄버거 / 로고 크기) — 각각 별도 지시 필요. 중간 뷰포트(640~1023px) 미측정. 이 repo는 테스트 파일 없음
+* 다음 행동: 0번 — 위 3건 반영 여부 결정 (없으면 종료)
+
+## 2026-10-15 14:35 — AIK24-EVAL-08 free-models 표 개선 (지시 변경: HTML 미적용)
+
+### 한 일
+- [PRODUCTION CODE] `scripts/free_models_page.py` `render_eval06()` — 마크다운 표 유지, 7→5컬럼 + 모델명 단축 (커밋 `b6c9342b`). 지시서의 HTML 교체는 미적용 — 사유 아래.
+- [TEST CODE] `tests/test_free_models_page.py`에 `test_eval06_table_is_five_columns_with_short_names` 추가.
+- 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-15-1435-AIK24-EVAL-08-완료보고.md`.
+
+### 결과
+- [검증됨] 지시대로 HTML을 넣으면 회귀: `md_to_pt()`는 HTML 처리 없음 — 실증에서 HTML 3줄 → `block/normal` 3개로 태그 문자열 그대로 노출. 근거: `scripts/emdash04_migrate.py` 코드 + 입력 실증.
+- [검증됨] "반응형 CSS 제어 불가" 전제는 오판: 라이브 table 블록은 이미 `emdash-table-wrapper` + `overflow-x:auto` + `nowrap` 으로 렌더됨 (라이브 HTML 실측).
+- [검증됨] 실데이터 렌더 15행 전부 5컬럼 (`모델명|프로바이더|컨텍스트 길이|지표|상태`), 동명 모델(kilo/zen nemotron-3.5-lightning)은 org prefix 유지로 구분.
+- [검증됨] 테스트 8/8 통과 = 7(기존) + 1(신규). 산출 근거: `pytest tests/test_free_models_page.py` → `8 passed`.
+- [부분검증] 모바일 실측 미실시 — EmDash 발행(`page` 실행) 보류했으므로 라이브 미반영. 제한 사유: 발행=라이브 즉시 변경, 방향 승인 후 발행이 안전.
+
+### 잔존 위험
+1. 라이브는 아직旧 표 — 대표님 불편 해소는 발행 후. 승인 필요: (a) 이 방향으로 `page` 실행+발행, 또는 (b) HTML 고수 시 `md_to_pt()` HTML 처리 별도 작업.
+2. 표 제목 "18개" vs 실제 15개 불일치 (기존 문제, 범위 밖).
+3. `scripts/logs/free_models_cli.json.bak-20261015`, `model_diff_2026-10-15.json` untracked 잔존.
+
+### 다음 행동
+- [완료 14:40] 대표님 승인으로 `page` 실행 → EmDash 발행 완료.
+  라이브 확인: 5컬럼 헤더(모델명·프로바이더·컨텍스트 길이·지표·상태), `:free` 잔존 0건.
+
 ## 2026-10-15 13:47 — AIK24-UI-01 홈 AI 툴 카드(CareOps) 레이아웃 깨짐 수정
 
 ### 한 일
