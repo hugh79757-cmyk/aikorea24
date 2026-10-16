@@ -1,3 +1,26 @@
+## 2026-10-16 18:30 — 미완료 항목 ②: test_emdash_publish 기대값 정리 (테스트 red 1건 해소)
+
+### 한 일
+- 미완료 목록 ②번(state.md 165·169행의 "별도 커밋") — `tests/test_emdash_publish.py::test_create_then_publish` 실패를 정리했다.
+- 순서: 실패 재현 → **테스트가 틀린 것인지 코드가 틀린 것인지 판정** → 기대값 교체 + 계약 테스트 2건 추가.
+
+### 결과 — 검증 근거
+- [검증됨] **판정: production code 결함 아님, 테스트 기대값이 구식.** 근거 2개 — ① 커밋 `8404cd26`(2026-10-15, AIK24-EVAL-09)의 메시지·diff 가 "`/` 로 시작하는 상대경로를 `https://aikorea24.kr` 로 절대화"를 **의도적 변경**으로 명시한다(emdash 도메인에서 `/images/...` 가 404 나던 실측 문제 수정) ② 실패 상세의 실제 값 = `https://aikorea24.kr/images/x/thumbnail.webp`, 기대값 = `/images/x/thumbnail.webp`.
+- [검증됨] 변경은 **[TEST CODE] only** — `tests/test_emdash_publish.py` 1개 파일. `git status` 로 `scripts/emdash_publish.py` 무변경 확인(production code 미수정).
+- [검증됨] `test_create_then_publish` 기대값을 절대 URL 로 교체(+근거 주석).
+- [검증됨] 계약 테스트 2건 신규: `test_featured_image_absolutized`(상대경로만 절대화 · 절대 URL·dict 보존 · 빈 src → None) / `test_no_featured_image_key_when_absent`(미지정 시 키 자체 없음).
+- [검증됨] 실행 결과: `tests/test_emdash_publish.py` **8 passed**(수정 전 1 failed / 5 passed) = 6(기존) + 2(신규).
+- [검증됨] 회귀 확인: `tests/test_free_models_page.py` **8 passed** — 기준선 8 passed 와 동일.
+- [검증됨] 커밋 `cd2b443f` push 완료(`d0711170..cd2b443f`).
+
+### 잔존 위험
+1. **같은 유형(구식 기대값)이 다른 파일에 남아 있을 수 있다.** 전체 스위트 기준선은 state.md 249행 기록 기준 **18 failed / 581 passed / 10 skipped** 이며, 이번에 1건만 정리했다.
+2. [부분검증] **전체 스위트 재측정은 하지 않았다** — 지금 돌리면 동시 세션이 편집 중인 미커밋 소스(`model_eval.py`·`model_catalog.py`·`verify_models_daily.py`)와 섞여 실패 원인이 혼재한다. 관련 2개 파일만 실행해 회귀 없음을 확인한 수준이다.
+3. [검증불가] `featured_image` 절대화의 **실제 라이브 렌더**(관련글 카드 이미지가 404 없이 뜨는지)는 재확인하지 않았다.
+
+### 다음 행동
+- 없음(②번 완료). 다음 후보: 주간 무료 기회 8건 D1 INSERT / 브리핑 `-1`·`-2` 노출 정책.
+
 ## 2026-10-16 18:22 — AIK24-EVAL-07 후속: verify-models 잡 실발화 검증 → launchd PATH 잠복 결함 수정
 
 ### 한 일
@@ -212,7 +235,7 @@
 3. free-models 페이지 `og:image`/`twitter:image` 1건은 지금도 404 — EmDash 프로젝트(`~/projects2/aikorea24emdash`) 소관, 범위 밖.
 
 ### 다음 행동
-- [TEST CODE] `test_emdash_publish.py` 기대값 정리(별도 커밋).
+- ~~[TEST CODE] `test_emdash_publish.py` 기대값 정리(별도 커밋)~~ → **완료(커밋 `cd2b443f`, 최상단 18:30 항목)**.
 - og:image 404 는 EmDash 프로젝트에서 처리 여부 결정.
 
 ## 2026-10-16 14:50 — AIK24-OPENCODE-USAGE-01: OpenCode CLI 실사용 보고 (완료)
