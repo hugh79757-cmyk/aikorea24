@@ -74,6 +74,7 @@ def main():
     cache = me.cache_load()
     total_q = stable_q = unstable_q = skipped = 0
     flipped = []
+    unmeasurable = []
 
     for model_id, entry in sorted(cache.items()):
         if args.model and model_id != args.model:
@@ -86,7 +87,7 @@ def main():
             print(f"[{model_id}] 재채점 대상 0건 (qv={entry.get('qv')}) — 건너뜀")
             continue
         print(f"\n[{model_id}] qv={entry.get('qv')} · 재채점 {len(rows)}문항 × {args.repeats}회")
-        m_stable = m_unstable = 0
+        m_stable = m_unstable = m_unmeasurable = 0
         for d in rows:
             idx = d["idx"]
             spec = specs.get(idx)
@@ -103,31 +104,47 @@ def main():
                     runs.append(None)
                     print(f"   예외 {type(e).__name__}")
             judged = [r for r in runs if r is not None]
-            tally = Counter(judged)
             distinct = set(judged)
-            tag = "안정" if len(distinct) <= 1 else "불안정"
-            if len(distinct) > 1:
+            if not judged:
+                # 판관이 한 번도 0/1 을 말하지 못했다 — 이건 "안정"이 아니라 **판정 불가**다.
+                # (이전 버그: distinct 가 빈 집합이라 len(distinct)<=1 로 떨어져 "안정"으로 집계됐다)
+                m_unmeasurable += 1
+                total_q += 1
+                unmeasurable.append((model_id, idx, spec["axis"], runs, truncated))
+                print(f"   Q{idx:>2}[{spec['axis']}] 측정불가 원채점={d.get('score')} "
+                      f"재채점={runs} {'⚠절단' if truncated else ''}")
+            elif len(distinct) > 1:
                 m_unstable += 1
                 total_q += 1
                 flipped.append((model_id, idx, spec["axis"], d.get("score"), runs, truncated))
-                print(f"   Q{idx:>2}[{spec['axis']}] {tag} 원채점={d.get('score')} "
+                print(f"   Q{idx:>2}[{spec['axis']}] 불안정 원채점={d.get('score')} "
                       f"재채점={runs} {'⚠절단' if truncated else ''}")
             else:
                 m_stable += 1
                 stable_q += 1
                 total_q += 1
-            if truncated and len(distinct) <= 1:
+                if len(judged) < len(runs):
+                    print(f"   Q{idx:>2}[{spec['axis']}] 안정(일부 결함) 재채점={runs}")
+            if truncated:
                 skipped += 1
-        print(f"   → 안정 {m_stable} · 불안정 {m_unstable}")
+        print(f"   → 안정 {m_stable} · 불안정 {m_unstable} · 측정불가 {m_unmeasurable}")
 
     print("\n" + "=" * 64)
-    print(f"재채점 문항 {total_q}건 중 판정 흔들림 {len(flipped)}건 "
-          f"({100.0 * len(flipped) / max(1, total_q):.1f}%)")
+    judged_only = total_q - len(unmeasurable)
+    print(f"재채점 문항 {total_q}건 = 판정가능 {judged_only} · 측정불가 {len(unmeasurable)}")
+    if unmeasurable:
+        print(f"→ **측정불가 {len(unmeasurable)}건.** 판관이 전 회차 0/1 을 내지 못했다. "
+              "이 문항은 '안정'이 아니라 판정 불가로 보고해야 한다 — 분모에서 빼라.")
+        for mid, idx, axis, runs, trunc in unmeasurable:
+            print(f"     {mid} Q{idx}[{axis}] 재채점={runs}{' (절단본)' if trunc else ''}")
     if flipped:
-        print("→ **판관이 흔들린다.** 학생 문제가 아니라 채점 신호가 문항마다 다르고, "
-              "점수 비교의 분모가 흔들린다.")
-    else:
-        print("→ 판정은 안정적이다. 2회 실행 간 플립은 **학생(모델) 출력 변동** 쪽에 있다.")
+        print(f"→ **판정이 흔들린다 {len(flipped)}건** "
+              f"({100.0 * len(flipped) / max(1, judged_only):.1f}% of 판정가능). "
+              "학생 문제가 아니라 채점 신호가 문항마다 다르다.")
+    elif judged_only:
+        print("→ 판정 가능한 문항 전부 안정적이다. 2회 실행 간 플립은 **학생(모델) 출력 변동** 쪽이다.")
+    if not judged_only and not flipped:
+        print("→ **판정가능 문항 0건 — 결론을 낼 수 없다.** (측정 불가를 안정으로 오인하지 말 것)")
     print(f"(참고) 1000자 절단 문항 {skipped}건 — 절단본 재채점은 원래 조건과 동등하지 않다")
     return 0
 

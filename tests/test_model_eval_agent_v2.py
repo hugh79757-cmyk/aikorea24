@@ -320,3 +320,77 @@ def test_judge_never_falls_back_to_fallback_chain(monkeypatch):
     monkeypatch.setattr(me, "_judge_groq", lambda p: "1")
     me.score_response("q", "e", "a")
     assert calls == [], "폴백 체인 경로가 남아 있다"
+
+
+# ── 지시 3건 회귀 (load_env · 상태코드 로그 · 측정불가 집계) ────────────
+
+def _run_variance(monkeypatch, repeats=2, cache=None, judge=None):
+    """eval_variance.main() 을 stdout 캡처로 돌리고 (출력, 모듈) 을 돌려준다."""
+    import importlib.util, io, sys as _s
+    loader = importlib.util.spec_from_file_location(
+        "eval_variance_mod", ROOT / "scripts" / "eval_variance.py")
+    mod = importlib.util.module_from_spec(loader)
+    loader.loader.exec_module(mod)
+    monkeypatch.setattr(me, "cache_load", lambda: cache or {
+        "m": {"qv": 2, "details": [
+            {"idx": 1, "axis": "지시이행", "score": 1, "source": "cli", "answer": "답"},
+            {"idx": 2, "axis": "코딩실무", "score": 0, "source": "cli", "answer": "답2"},
+        ]},
+    })
+    monkeypatch.setattr(me, "TEST_QUESTIONS", [
+        {"axis": "지시이행", "q": "q1", "expected": "e1"},
+        {"axis": "코딩실무", "q": "q2", "expected": "e2"},
+    ])
+    monkeypatch.setattr(mod.time, "sleep", lambda *_: None)
+    monkeypatch.setattr(_s, "argv", ["eval_variance.py", "--repeats", str(repeats)])
+    if judge:
+        monkeypatch.setattr(me, "score_response", judge)
+    buf = io.StringIO()
+    old = _s.stdout
+    _s.stdout = buf
+    try:
+        mod.main()
+    finally:
+        _s.stdout = old
+    return buf.getvalue()
+
+
+def test_all_defects_is_not_reported_as_stable(monkeypatch):
+    """판관이 전 회차 실패하면 '안정'이 아니라 **측정불가**여야 한다.
+
+    이전 버그: distinct 가 빈 집합 → len(distinct)<=1 → '안정' 으로 집계돼
+    판정 불능이 오히려 reassuring 한 숫자로 보였다.
+    """
+    out = _run_variance(monkeypatch, repeats=2, judge=lambda q, e, a: None)
+    assert "측정불가" in out
+    assert "판정가능 문항 0건" in out
+    assert "결론을 낼 수 없다" in out
+
+
+def test_partial_defect_is_flagged_but_counted(monkeypatch):
+    """일부 회차만 실패하면 판정은 안정으로 세되 결함을 함께 드러낸다."""
+    calls = {"n": 0}
+
+    def judge(q, e, a):
+        calls["n"] += 1
+        return None if calls["n"] == 1 else 1
+
+    out = _run_variance(monkeypatch, repeats=2, judge=judge)
+    assert "Q 1[지시이행] 안정(일부 결함)" in out
+    # 그 문항 자체가 '측정불가' 로 분류돼서는 안 된다 (요약 카운터의 '측정불가 0' 은 무관)
+    assert "Q 1[지시이행] 측정불가" not in out
+
+
+def test_unstable_is_reported_with_rate(monkeypatch):
+    """0/1 이 뒤집히면 불안정으로 집계되고 비율이 찍힌다."""
+    seq = iter([1, 0, 1, 1])
+
+    def judge(q, e, a):
+        try:
+            return next(seq)
+        except StopIteration:
+            return 1
+
+    out = _run_variance(monkeypatch, repeats=2, judge=judge)
+    assert "불안정" in out
+    assert "판정이 흔들린다" in out

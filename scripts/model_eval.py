@@ -618,6 +618,12 @@ def _judge_groq(prompt):
     """
     import openai
 
+    # env 적재를 안 하면 os.environ 에 shell 로 주입된 키 3개만 보인다.
+    # 프로젝트 .env 의 GROQ_API_KEY_4 는 load_env() 를 거쳐야 보인다 — 키 용량 1/4 가 조용히
+    # 놀고 있었다. (주의: 이건 Q7 413 을 고치지 않는다. 4개 키가 전부 같은 org 이다.)
+    from model_router import load_env
+    load_env()
+
     for name in JUDGE_KEY_NAMES:
         key = (os.environ.get(name) or "").strip()
         if not key:
@@ -638,7 +644,10 @@ def _judge_groq(prompt):
                 return text
             log(f"  판관 빈 응답({name})")
         except Exception as e:  # 키 실패/429/네트워크 — 다음 키로 즉시
-            log(f"  판관 실패({name}: {type(e).__name__}) → 다음 키")
+            # 상태 코드를 함께 찍는다. 401(키 무효)·413(ITPM 한도)·429(분당 한도)는 원인이
+            # 완전히 다르므로 다음 대응이 달라진다. 예외 타입명만으론 구분이 안 된다.
+            code = getattr(e, "status_code", None) or getattr(getattr(e, "response", None), "status_code", None)
+            log(f"  판관 실패({name}: HTTP {code} {type(e).__name__}) → 다음 키")
             continue
     return None
 
