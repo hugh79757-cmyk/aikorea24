@@ -1,3 +1,51 @@
+## 2026-10-17 02:34 — ⑦ 기존 발행 글 전수 감사: PT-aware 1513건, jargon 345건, 내부 용어 1건, 결함 다수 (보고서: docs/audit/20261016-emdash-posts-audit.md) (완료)
+
+### 한 일
+- EmDash 발행 글 1513건을 Portable Text 형식-aware 로 기계 점검하고 보고서를 docs/audit/에 신설했다(Commit 20ece767). 쓰기 0건.
+
+### 결과 — 검증 근거
+- [검증됨] 모집단 ec_posts 1516건, 발행(published) 1513건. 근거: D1 status GROUP BY, populace print.
+- [검증됨] 1513/1513 이 Portable Text JSON 형식. 근거: is_pt()=1513.
+- [검증됨] 의미 jargon: 345건(22.8%) 가 9종(대표님, 에이전트, 지시서, 파이프라인, 커스텀 프로바이더, OpenCode CLI, CLI 평가, 바우처, LaunchD) 중 1+. 근거: report §5.
+- [검증됨] 내부 용어 4종(firecrawl, dev.vars, .env.common, launchd) 노출: 1건 — free-lecture-ai-briefing-pipeline (launchd + jargon 3). 근거: report §4.
+- [검증됨] 게이트 결함 다수: closing(‘마무리’ 부재) 1249(82.6%), 외부 링크<3 1479(97.8%), 표<1 1486(98.2%), 텍스트<3000자 1232(81.4%).
+  제한: 100%·97%·98% failing 은 보정 게이트(PT-aware) 결과. 사전 markdown 게이트는 그대로 적용할 수 없다(§0). 실제 closing 제목이 ‘정리’/‘Takeaways’ 등일 수 있어 closing 1249건은 과대 추정.
+- [부분검증] [TEST CODE/DOC] docs/audit/20261016-emdash-posts-audit.md 203줄. script: /tmp/audit.py.
+- [검증불가] 전제 오류(실측과 어긋난 단정 — 예: ‘X에서 사용 가능’) — 기계 점검으로 잡지 못함. 최근 25건 excerpt 900자 노출(§3)이 후속 정독 대상.
+
+### 잔존 위험
+- closing/table/link 과대 추정 (PT 변환 한계).
+- jargon 사전 9종으로 한정(탐지 사전 부족) — 다른 내부 용어 잡지 못함.
+- featured_image·OG 404 는 별도 emdash15_media_url_health.py 담당.
+
+### 다음 행동
+- `free-lecture-ai-briefing-pipeline` 포스트 우선 수정(보고서 TOP 10 §6).
+
+## 2026-10-17 02:34 — ⑨ 미검증 후보 검증: NVIDIA 빌드 free endpoints 검증됨 / Groq 8K TPM 공식 표 확인 / 국내 정부지원·해커톤은 개인 대상 무료 LLM 크레딧 미확인 (완료)
+
+### 한 일
+- 무료 기회(weekly_opportunities.json) 미검증 3후보 — NVIDIA build 크레딧, Groq 무료 티어, 국내 정부지원·해커톤 — official source 로 검증.
+
+### 결과 — 검증 근거
+- [검증됨] NVIDIA build (build.nvidia.com/explore/discover, server-rendered, 2026-10-16 curl 200): 'Get API Key — Free serverless APIs for development' + per-model 'Free Endpoint' 태그.
+  ⚠️ free-models 페이지의 'NVIDIA NIM: 무료 티어 없음 (GET /v1/models 80개 중 -free 0개)' 진단은 모델명(-free suffix) 기준이라 NVIDIA build 의 free serverless endpoints availability 와는 다른 측면. (호출 성공은 미확인 = [부분검증]).
+- [부분검증] Groq (console.groq.com/docs/rate-limits.md, 공식 docs, 2026-10-16): `openai/gpt-oss-120b`: RPM 30 / RPD 1000 / TPM 8K (Developer plan base limits).
+  'Upgrade to Developer plan to access higher limits' → 표는 payable plan 기준, 무료 tier limits 는 console account-level 에서만 조회 (curl 검증 불가 = [검증불가]).
+  기존 제외 사유('TPM 8,000/min') 의 수치는 Developer plan 기준임을 문서화. 8K TPM 가 opencode CLI 평가(코딩·맥락)에 부족하다는 결론은 정당.
+- [검증됨] 국내 정부지원·해커톤: agent-browser 로 NIPA 사업공고(nipa.kr) + K-Startup 모집중(14,246자) 판독 가능 — 실재.
+  단, NIPA 항목은 [용역·입주기업·참가기업·AI 특화지구(AHAP)] 등 법인·팀 대상이며, 개인 개발자가 무료로 LLM API 크레딧을 받는 항목은 발견되지 않았다. 데이콘(dacon.io) 해커톤은 403 차단으로 검증 불가.
+  ⇒ 우리 독자(개인, 무료 LLM 사용) 대상 '무료 기회' 항목으로 등록할 근거가 없어 제외 확정.
+
+### 잔존 위험
+- NVIDIA endpoint 호출 토큰/제한 미측정.
+- Groq 무료 tier 8K TPM 직접 측정 불가.
+- 국내 정부지원·해커톤 항목은 추후 agent-browser 정밀 검색으로 개별·개인 대상 프로그램 1개 이상 확인 권장.
+
+### 다음 행동
+- NVIDIA 빌드 free endpoints 를 Free models 페이지 §유료 대비 에 보강 검토(선택).
+- Groq 은 현재 제외 유지.
+
+
 ## 2026-10-16 19:10 — ⑥ EmDash og:image 404 원인 확정·수리 + 미디어 URL 전수 헬스체크 신설 (완료)
 
 ### 한 일
