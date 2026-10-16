@@ -1,3 +1,27 @@
+## 2026-10-16 15:20 — 정합 정리: 소급 완료보고 3건 (D1-02 / D1-03 / EVAL-09)
+
+### 한 일
+- 지시서 폴더 전수 대조(ID 기준) 결과 **완료보고 파일이 없던 지시서 3건**을 찾아 소급 완료보고를 작성했다.
+  - `2026-10-15-0005-AIK24-D1-02-완료보고.md` (브리핑 뉴스 API 쿼리 최적화)
+  - `2026-10-15-0006-AIK24-D1-03-완료보고.md` (EmDash 쿼리 폭풍 N+1 완화)
+  - `2026-10-15-1321-AIK24-EVAL-09-완료보고.md` (free-models 썸네일 404)
+- `AIK24-TOOLSYNC-04`·`AIK24-FAVICON-01` 은 통합 완료보고 파일명(`TOOLSYNC-03-04`, `TOOLSYNC-05-FAVICON-01`) 때문에 누락으로 오탐된 것이며, 실제 보고 파일은 존재했다.
+
+### 결과
+- [검증됨] D1-02: 코드 현존 — `src/pages/api/briefing/news.ts` 17~23행 `params.push` 7건, `datetime('now', ?` 1건, 9행 `Cache-Control`. 당시 배포 Version `b7c722ba-31d7-48e9-95a5-2e521525913c`.
+- [검증됨] D1-03: 코드 현존 — `scripts/emdash04_migrate.py` 28~30행 `EXISTING_TITLES_LIMIT=500`/캐시/TTL(3600), 332·340행 사용부.
+- [검증됨] EVAL-09: 커밋 `8404cd26`(`scripts/emdash_publish.py` +27/-3, `_featured_image_data()` + `upsert_post(featured_image=)`), 라이브 실측 — free-models 본문 카드 썸네일 2건이 `https://aikorea24.kr/images/...` 절대경로로 HTTP 200.
+- [검증됨] `docs/state.md` 상단의 `AIK24-OPENCODE-USAGE-01` 은 작성자가 이미 `(완료)` 로 교체해 둔 상태였고, 완료보고 파일·커밋 `b465683f`·origin/main 일치까지 확인했다. 추가 표시 없음.
+
+### 잔존 위험
+1. **EVAL-09 는 state.md 기록이 아예 없었다** (이번 정합 정리로 최초 기록). 감사 추적은 커밋 `8404cd26` + 완료보고 파일이 유일.
+2. `tests/test_emdash_publish.py::test_create_then_publish` 는 EVAL-09 의 절대경로화 이후 기대값 불일치로 깨져 있다(전체 스위트 18 failed 기준선에 포함). 미수정.
+3. free-models 페이지 `og:image`/`twitter:image` 1건은 지금도 404 — EmDash 프로젝트(`~/projects2/aikorea24emdash`) 소관, 범위 밖.
+
+### 다음 행동
+- [TEST CODE] `test_emdash_publish.py` 기대값 정리(별도 커밋).
+- og:image 404 는 EmDash 프로젝트에서 처리 여부 결정.
+
 ## 2026-10-16 14:50 — AIK24-OPENCODE-USAGE-01: OpenCode CLI 실사용 보고 (완료)
 
 ### 한 일
