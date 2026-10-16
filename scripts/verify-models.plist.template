@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- AIK24-EVAL-07 후속(2단 잡): 무료 모델 호출 검증을 09:30 에 먼저 돌려 캐시를 갱신한다.
-     페이지 발행은 기존 kr.aikorea24.free-model-pipe(10:00)가 담당 — 이 잡은 캐시(free_models_verify.json)만 갱신한다.
+     페이지 발행은 기존 kr.aikorea24.free-model-pipe(10:00)가 담당.
+     주의(2026-10-16 실측): 이 잡은 free_models_verify.json 만 쓰지 않는다 — PASS 만 남긴
+     free_models_cli.json(페이지 데이터 원본)도 함께 재기록한다. 즉 일시적 FAIL 은 목록에서 빠진 채
+     남는다(free_models_cli.json 자동 재생성 경로 없음). 검증 기록만 쓰게 바꿀지는 대표님 결정 대기.
      검증이 오래 걸려도 10:00 페이지 갱신이 밀리지 않는다(2026-10-16 대표님 선택 = (a) 안전한 쪽).
      설치: cp scripts/verify-models.plist.template ~/Library/LaunchAgents/kr.aikorea24.verify-models.plist
      키는 이 파일에 넣지 않는다 — verify_models_daily.py → model_eval → model_router.load_env() 가
@@ -10,6 +13,15 @@
 <dict>
 	<key>Label</key>
 	<string>kr.aikorea24.verify-models</string>
+	<!-- launchd 기본 PATH(/usr/bin:/bin:/usr/sbin:/sbin)에는 opencode 가 없다.
+	     verify_models_daily.py → model_eval.cli_call() 이 bare "opencode" 를 실행하므로
+	     PATH 를 명시하지 않으면 전 항목이 "opencode CLI 없음" FAIL 이 된다.
+	     2026-10-16 확인: 실행 파일 = /Users/twinssn/.opencode/bin/opencode, `launchctl getenv PATH` 비어 있음. -->
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/Users/twinssn/.opencode/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/Users/twinssn/Projects/aikorea24/.venv/bin/python3</string>
