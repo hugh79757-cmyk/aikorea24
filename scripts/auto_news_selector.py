@@ -92,12 +92,26 @@ def get_opportunity_news(limit=1):
 
     2026-10-16 개편 — 대표님이 매주 월요일 큐레이션하는 scripts/weekly_opportunity.py
     입력분이 여기로 들어온다. 있으면 1건, 없으면 빈 슬롯 (강제 충전 금지).
+
+    2026-10-16 (2차) — **이미 브리핑에 실린 행은 SQL 로 영구 제외**한다.
+    왜: 3.5단계 dedup 히스토리(briefing_dedup.get_history_articles)는 최근 3일만 본다
+    (DEDUP_LOOKBACK_DAYS=3). 슬롯은 `LIMIT MAX_COUNT(=3)` 로 후보를 뽑으므로, 주 1회
+    8건을 하루 1건씩 소진하면 4일째에 상위 3건이 전부 3일 창 안에 남아 중복 제외되고
+    → 슬롯 1 이 비고, 5일째부터는 창을 벗어난 1일차 항목이 다시 후보로 살아나 같은
+    안내가 반복된다 (4~8번째 항목 영구 미노출). 큐레이션 항목은 한 번 소개하면 끝이므로
+    공개된 브리핑 이력(briefing_items) 전체로 제외하고, pub_date 동률은 id 오름차순으로
+    고정해 소진 순서를 결정적으로 만든다.
     """
     return d1_query("""
         SELECT %s FROM news
         WHERE v2_pass = 1 AND v2_tag = 'free-opportunity'
           AND created_at >= '%s'
-        ORDER BY pub_date DESC
+          AND id NOT IN (
+              SELECT bi.news_id FROM briefing_items bi
+              JOIN briefings b ON b.id = bi.briefing_id
+              WHERE b.status IN ('published', 'superseded')
+          )
+        ORDER BY pub_date DESC, id ASC
         LIMIT %d
     """ % (_COLS, _opportunity_cutoff(), limit))
 

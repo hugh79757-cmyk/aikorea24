@@ -135,3 +135,54 @@ def test_mechanical_rows_skip_llm_scoring(monkeypatch):
 
     sel.main()
     assert calls == ['g1']
+
+
+# ------------------------------------------- 슬롯 1 소진 (2026-10-16 2차 개편)
+# 배경: 큐레이션 8건은 pub_date 가 동일하고, 3.5단계 dedup 히스토리는 최근 3일만 본다.
+# 슬롯 후보를 LIMIT 3 으로 뽑으면 4일째 슬롯이 비고 1일차 항목이 창을 벗어나 재등장한다
+# (4~8번째 영구 미노출). 그래서 쿼리 자체가 브리핑 이력으로 제외한다.
+
+
+def test_opportunity_query_excludes_briefed_rows(monkeypatch):
+    """슬롯 1 쿼리는 브리핑 이력(briefing_items)으로 제외 + pub_date 동률 시 id 오름차순."""
+    captured = {}
+
+    def _fake_d1(sql):
+        captured['sql'] = sql
+        return []
+
+    monkeypatch.setattr(sel, 'd1_query', _fake_d1)
+    sel.get_opportunity_news(3)
+    sql = captured['sql']
+
+    assert 'id NOT IN (' in sql and 'briefing_items' in sql and 'JOIN briefings' in sql
+    assert "b.status IN ('published', 'superseded')" in sql
+    assert 'ORDER BY pub_date DESC, id ASC' in sql  # 동률 소진 순서 결정적
+    assert 'LIMIT 3' in sql
+    assert sel._opportunity_cutoff() in sql  # 21일 창 (7일이면 8건이 소진되기 전에 만료)
+
+
+def test_opportunity_window_is_21_days_but_zen_stays_7():
+    """슬롯 1 은 21일, Zen 은 7일 — 두 창의 차이는 정확히 14일."""
+    fmt = '%Y-%m-%d %H:%M:%S'
+    zen = datetime.strptime(sel._slot_cutoff(), fmt)
+    opp = datetime.strptime(sel._opportunity_cutoff(), fmt)
+    assert (zen - opp).days == 14
+
+
+def test_opportunity_slot_drains_queue_one_per_day(monkeypatch):
+    """제외가 SQL 로 끝나므로 슬롯은 매일 '아직 안 실린 가장 최신 1건'을 뽑는다.
+
+    day1 → o1, day2(o1 이 SQL 로 제외돼 pool 에 없음) → o2, day3 → o3.
+    """
+    def _run(pool_ids):
+        pool = [_art(i, 0, '무료 기회', v2_tag='free-opportunity') for i in pool_ids]
+        _pool(monkeypatch, pool)
+        _stub_dedup(monkeypatch, set())
+        picked = sel.main()
+        return picked[0]['id'] if picked else None
+
+    assert _run(['o1', 'o2', 'o3']) == 'o1'
+    assert _run(['o2', 'o3']) == 'o2'
+    assert _run(['o3']) == 'o3'
+    assert _run([]) is None  # 큐 소진 → 슬롯 비움 (강제 충전 금지)
