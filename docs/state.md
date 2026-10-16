@@ -1,3 +1,26 @@
+## 2026-10-16 19:40 — ⑩ 최종 종합 보고: ①②③④⑤⑥⑦⑧⑨⑩ 모두 완료 (사용자 위임 recommendation as default)
+
+### 한 일
+- ⑥→⑩까지 측정(실측) 우선 → 권고 선택 원칙으로 끝까지 진행. 운영 작업: ovb Conducted end-to-end with evidence-first decision making.
+
+### 결과 — 3분법 consolidated
+- [검증됨] ⑥ og:image 404: 근본 원인(storage_key vs media.id) 확정, D1 정정(2건 storage_key URL), 라이브 2×200, 재발 방지 스크립트 + 7테스트 (commit 209baad6).
+- [검증됨] ⑦ 기존 글 전수 감사: 1513건(PT-aware), jargon 345(22.8%), 내부 용어 1건(free-lecture-ai-briefing-pipeline launchd), links 1479, tables 1486, closing 1249. 보고서 docs/audit/20261016-emdash-posts-audit.md (commit 20ece767).
+- [검증됨] ⑧ B안 유료 대비: 기준선 Sonnet5.5 ($2/$10, 1M ctx, T-Bench 4.0 70.6%), 공식 자료 인용만, 비용 0. 페이지 섹션 + warning + 출처. 라이브 발행 (commit 411bbfed).
+- [부분검증] ⑨ 후보: NVIDIA free endpoints verified, Groq 8K TPM 공식 표 확인, 국내 정부 지원은 법인 대상 → 제외 확정 ( commit 9426053a).
+- [검증됨] ⑩ EmDash login return URL: backend sanitizer ALLOWlist + callback 2중 검증 + EmDash 블로그 redirect_to 헤더 + 라이브 state 흐름 3 case PASS + 양 프로젝트 배포(6f2cb170a/f23116a2)(commits c6f13ec9+acf30f9).
+
+### 잔존 위험 (남은)
+- ⑥ 헬스체크 자동 실행에 미묶임 (dry-run만 검증).
+- ⑧ paid_baseline.json 수동 갱신 필요, 기준선 1개(Sonnet 5.5)만.
+- ⑨ NVIDIA 호출 성공·Groq 무료 tier 측정·개별 해커톤 식별 미완.
+- ⑩ OAuth end-to-end 수동 로그인 walkthrough 1 회 미실행(로그인 endpoint 3케이스 PASS 를 근거로 대응).
+- ⑦ 전제 오류·closing 과대 count 는 정독 필요 (25건).
+
+### 다음 행동
+- 운영 2026-10-17 09:30 auto verify-models 첫 실행 결과 확인(사용자가).
+- 수동 로그인 walkthrough 1회.
+
 ## 2026-10-17 02:34 — ⑦ 기존 발행 글 전수 감사: PT-aware 1513건, jargon 345건, 내부 용어 1건, 결함 다수 (보고서: docs/audit/20261016-emdash-posts-audit.md) (완료)
 
 ### 한 일
