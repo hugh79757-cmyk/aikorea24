@@ -23,6 +23,7 @@
 ### 다음 행동
 - 대표님 결정: 검증 잡이 페이지 데이터를 prune 할지 / 검증 기록만 쓰게 바꿀지 / 타임아웃을 올릴지.
 - `opencode/step-5-preview-free` 항목 정리(퇴역).
+- **[중복 착수 금지]** 2026-10-16 16:22:47 기준 **다른 세션이 잔존 위험 1(prune 영구 삭제)을 이미 구현 중** — `scripts/verify_models_daily.py` 미커밋 diff 에 `DEAD_MARKERS` 분류 + `free_models_pending.json` 대기 목록 + `merge_candidates()`/`split_results()` 추가, 신규 테스트 `tests/test_verify_models_daily.py`(16:23:09). 그 diff 의 주석이 이번 발화(16:17) 결과를 근거로 인용하고 있다. 이 세션은 그 파일들을 건드리지 않았다.
 
 ## 2026-10-16 18:16 — 질의응: add(a,b) 함수 질문 응답 (읽기 전용)
 
