@@ -1,39 +1,35 @@
 {
- "day": "2026-10-16",
- "checked_at": 1792098002.6564999,
+ "day": "2026-10-17",
+ "checked_at": 1792184405.004215,
  "total_rows": 40,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "meta/muse-spark-open",
-   "nvidia/nemotron-3.5-super-vl",
-   "nvidia/nemotron-3.5-super-vl:free"
+   "moondream/moondream3-preview",
+   "moondream/moondream3.1-9b-a2b",
+   "xingchen-agi/xing4.0-29b-a4b:free",
+   "reflection/beam-1.0-501b-a23b"
   ],
   "kilo": [
-   "meta/muse-spark-open",
-   "nvidia/nemotron-3.5-super-vl",
-   "nvidia/nemotron-3.5-super-vl:free"
-  ],
-  "nvidia": [
-   "stepfun-ai/step-5-preview",
-   "nvidia/nemotron-3.5-super-vl-120b-a12b"
+   "moondream/moondream3-preview",
+   "reflection/beam-free",
+   "moondream/moondream3.1-9b-a2b",
+   "xingchen-agi/xing4.0-29b-a4b:free",
+   "reflection/beam-1.0-501b-a23b"
   ],
   "zen": [
-   "nemotron-3.5-super-vl-free",
-   "deepseek-v4.1-flash-free"
+   "glm-5.3-flash-free",
+   "beam-free",
+   "ll-alpha-free"
   ]
  },
  "removed_by_provider": {
-  "openrouter": [
-   "anthropic/claude-sonnet-4",
-   "unbiased/pareto-26.10-preview"
-  ],
   "kilo": [
-   "anthropic/claude-sonnet-4",
-   "unbiased/pareto-26.10-preview"
+   "stepfun/step-5-preview-free"
   ],
-  "nvidia": [
-   "moonshotai/kimi-k3"
+  "zen": [
+   "cat-jam-free",
+   "step-5-preview-free"
   ]
  }
 }

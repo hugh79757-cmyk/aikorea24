@@ -1,3 +1,63 @@
+## 2026-10-17 02:57 — parse_log_line 명세 구현
+
+* 한 일: parse_log_line(s) 구현 — str 타입 검사(TypeError), 빈 줄(공백만) 검사(ValueError), TIMESTAMP LEVEL MSG 3필드 분리, ISO8601 timestamp 검증, INFO/WARN/ERROR level 검증, msg 빈 값 검사.
+
+* 결과: [검증됨] — verification subagent가 구문 검사 + 스펙 13개 체크를 실행해 14/14 통과 (TypeError/ValueError 검출 0건).
+
+* 잔존 위험: 명세 "정상" 예시의 level 자리에 'GET'이 쓰인 예시와 실제 규칙(INFO/WARN/ERROR)의 충돌 — 명시 규칙을 따름.
+
+* 다음 행동: 없음 (이유: 후속 작업 없음).
+
+---
+
+## 2026-10-17 03:23 — parse_log_line 스펙 검증 — 지시 코드 그대로 실행, 13 스펙 체크 전 항목 기대 동작
+
+### 한 일
+대표님 지시 구현 코드를 **그대로** 실행해 스펙 대조 검증을 수행했다. 구현 코드·프로젝트 파일은
+수정하지 않았고(임시 복사본 1개에서만 실행), 구문 검사 + 스펙 체크 13종을 실행했다.
+
+### 구현 — [PRODUCTION CODE]
+- 해당 없음 — 검증 대상 코드는 임시 복사본
+  `/private/var/folders/6r/kjl8wkw53t1bnr1dypqtccj80000gn/T/opencode/parse_log_line_impl.py`에만
+  존재. 지시 "Do NOT modify the implementation" 준수로 원본 프로젝트 파일은 미수정.
+
+### 검증
+- [검증됨] 구문 검사 — `py_compile(doraise=True)` → `SYNTAX_CHECK_OK` (exit 0, stderr 무출, python3 3.14.6).
+- [검증됨] CHECK 1 (NORMAL: 정확 tuple 일치): 기대 tuple와 실측 tuple 동일 — 입력
+  `2026-10-16T12:00:00Z INFO /a` → 실측 `('2026-10-16T12:00:00Z', 'INFO', '/a')`.
+- [검증됨] CHECK 2 (NORMAL: WARN + 멀티워드 msg): 3-tuple · level `WARN` · msg `hello world` —
+  동일 실행에서 전 속성 assert, print 실측과 일치.
+- [검증됨] CHECK 3 (BAD-TS-1: 비ISO8601): 기대 `ValueError("timestamp is not ISO8601")` — 실측 동일.
+- [검증됨] CHECK 4 (BAD-TS-2: 범위초과): 기대 `ValueError` — 실측 동일 (`2026-13-45T99:99:99Z` →
+  `fromisoformat` 거부).
+- [검증됨] CHECK 5 (BAD-TS-3: 타임존 오프셋): 기대 tuple 반환 + 오프셋 문자열 보존 —
+  실측 `('2026-10-16T12:00:00+09:00', 'INFO', '/a')`, 보존 True.
+- [검증됨] CHECK 6 (BAD-LEVEL-1: DEBUG): 기대 `ValueError("invalid level")` — 실측 동일.
+- [검증됨] CHECK 7 (BAD-LEVEL-2: 소문자 level): 기대 `ValueError` — 실측 동일 (`info` 거부).
+- [검증됨] CHECK 8 (EMPTY-MSG-1: msg 부재): 기대 `ValueError("msg is empty")` — 실측 동일.
+- [검증됨] CHECK 9 (EMPTY-MSG-2: 공백 msg): 기대 `ValueError` — 실측 동일 (trailing space 3개 → msg empty).
+- [검증됨] CHECK 10 (NON-STR-1: int): 기대 `TypeError("s must be a str")` — 실측 동일.
+- [검증됨] CHECK 11 (NON-STR-2: None): 기대 `TypeError("s must be a str")` — 실측 동일.
+- [검증됨] CHECK 12 (EMPTY-LINE-1: 빈 문자열): 기대 `ValueError("empty log line")` — 실측 동일.
+- [검증됨] CHECK 13 (EMPTY-LINE-2: 공백 문자열): 기대 `ValueError("empty log line")` — 실측 동일.
+- 검증 실행 총건: 14 = 1(구문 검사) + 13(스펙 체크), 전 항목 [검증됨].
+
+### 파일 구분
+- [PRODUCTION CODE]: 수정 없음 — 지시대로 원본 미수정.
+- [TEST CODE]: 검증용 임시 복사본 2건 (`parse_log_line_impl.py`, `run_parse_checks.py`).
+- [CONFIG]: 수정 없음.
+
+### 잔존 위험
+1. CHECK 2의 timestamp 필드 동일성은 assert 대상이 아니었고 print 실측으로만 교정 확인 — 리터럴 동일성
+   assert로 좁히면 검증 강화 가능.
+2. 검증은 임시 복사본 기준 — 지시된 코드 그대로 복제했으므로 동일성은 확정이나, 프로덕션 소스 위치가
+   다른 경우 동일 코드 재실행 권장.
+
+### 다음 행동
+- 대표님 검토: 13 스펙 체크 전부 기대 동작 확인 — 프로덕션 반영/파이프라인 연결 여부 결정.
+- (후속 후보) `scripts/model_eval.py` 내 `sandbox_reference` parse_log_line 구현과의 교차 실행 비교 —
+  별도 지시 시.
+
 ## 2026-10-17 00:40 — AIK24-EVAL-JUDGE-02: 판관을 OpenCode 모델로 전환 (Nemotron 3 Ultra free·kilo·high)
 
 ### 한 일

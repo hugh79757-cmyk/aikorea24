@@ -2,6 +2,90 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-17 03:23 — read: parse_log_line 스펙 검증 — 13 스펙 체크 전 항목 기대 동작 (구현 무변경)
+
+- 대표님 지시 구현 코드를 **그대로** 실행해 스펙 대조 검증을 수행했다. 구현 코드·프로젝트 파일은
+  수정하지 않았고(임시 복사본 1개에서만 실행) — 지시 "Do NOT modify the implementation" 준수.
+- 구문 검사(`py_compile doraise=True`) + 스펙 체크 13종 실행 — **14건 전부 [검증됨]**.
+- 검증 수단: 임시 복사본 2건(`/private/.../T/opencode/parse_log_line_impl.py`,
+  `run_parse_checks.py`). 프로덕션 코드·테스트·설정 미수정.
+- CHECK 1~13 전부 기대 동작 확인: 정상 tuple 반환, WARN/멀티워드 msg, 비ISO8601·범위초과·DEBUG·
+  소문자 level·msg 부재/공백 모두 기대 예외, int/None 입력 TypeError, 빈/공백 라인 ValueError.
+- CHECK 2 timestamp 필드 동일성은 assert 대상이 아니었고 print 실측으로만 교정 확인 — 리터럴 assert
+  보강 여지(잔존).
+- 잔존 위험: 임시 복사본 기준 실행(원본 위치 재실행 시 동일 코드 확인 필요), CHECK 2 assert 보강 여지.
+- 실행 결과 상세: docs/state.md 최상단 항목 참조.
+
+## 2026-10-16 20:23 — read: get_active_user/get_admin_user 대상 부재 확인 (읽기 전용, 중복 제거 요청 재확인)
+
+- 사용자 요청(두 함수의 중복 제거)을 재확인했다. grep·읽기 확인 결과, 두 함수의 정의가
+  실행 코드 어디에도 존재하지 않았다(모듈 import 가능한 def 0건).
+- 두 함수는 scripts/model_eval.py의 eval 질문 프롬프트 문자열(`"q"` 214행, 참정안 220~226행)에만
+  등장하며, 유사 필터 패턴 grep도 프로덕션 코드 0건.
+- 이미 기록된 리팩토링 공통화안(`_select_users`)은 프로덕션에 적용할 대상이 없음을 확인했다.
+  eval 질문 프롬프트는 평가 문항이므로 수정하지 않았다(오염 방지).
+- 검증: grep 3종 0건, 정의 0건 확인(근거은 docs/state.md 최상단 항목). 실행 비교는
+  기존 세션 결과(2026-10-16 16:42/16:55) 인용.
+- 실행 미수행(프로덕션 코드): 수정 대상 부재로 무함. 문서 3종(state.md / logs/20261016.md / CHANGES.md)은 기록용으로 갱신.
+- 잔존 위험: eval 질문 프롬프트 안에만 존재(의도적으로 수정하지 않음). 프로덕션에서 패턴 발견 시 공통화 적용 가능.
+- 보고: docs/state.md 최상단 기록 참조.
+## 2026-10-16 20:12 — refactor: get_active_user/get_admin_user 요청 조사 (프로덕션 대상 부재, 무변경)
+
+- 사용자 메시지의 두 함수(get_active_user / get_admin_user)에 대한 중복 제거 요청을 수행. 해당 함수들이 실제 프로덕션 코드에 존재하는지, 그리고 동일한 루프 패턴의 잔여 사본이 있는지 전수 조사했다.
+- [검증됨] grep `get_active_user|get_admin_user` 15건(5+4+6) — scripts/model_eval.py 5건, scripts/logs/model_eval_cache.json 4건, docs/state.md 6건. 이 중 scripts/ 계열 9건은 모두 문자열 리터럴 안에 위치(모듈 정의·호출부가 아님)하며, 프로덕션 스크립트에서 해당 이름을 import하는 파일은 0건.
+- [검증됨] grep `for u in users|_select_users` 11건(3+4+4) — scripts/model_eval.py 3건, scripts/logs/model_eval_cache.json 4건, docs/state.md 4건. 프로덕션 스크립트에서 해당 패턴 0건.
+- 두 함수는 scripts/model_eval.py TEST_QUESTIONS의 `q` 문자열(평가 질문)에만 존재하며, 해당 프롬프트는 학생 모델에게 주는 평가 데이터다. 의도적으로 수정하지 않았다(2026-10-16 16:42 / 16:55 결론과 동일). 프로덕션 파일 미수정.
+- [검증불가] 동작 동일성 비교 — 대상 코드 부재로 본 세션에서 재실행하지 않음(16:42/16:55 세션이 이미 18케이스 비교 [검증됨] 기록).
+- 잔존 위험: (1) 공통화 헬퍼 `_select` 설계가 프로젝트에 반영되지 않음(대표님 결정 필요). (2) 향후 해당 함수가 프로덕션으로 등장하면 공통화 재사용 가능(적용 여부 대표님 결정). (3) TEST_QUESTIONS `q`를 고치면 평가 기록이 무효화됨 — 수정 금지.
+- 다음 행동: 두 함수가 등장하는 파일을 확인하면 공통화 적용. 헬퍼 적용 여부는 대표님 결정.
+
+## 2026-10-16 16:52 — 요청 분류: 운영 DB 느린 쿼리 즉시 / 내부 도구·고객 메일 미뤄도
+
+- 사용자가 전달한 작업 3건(운영 DB 느린 쿼리 / 내부 도구 버튼 문구 / 고객 메일 발송 대기)을
+  우선순위와 함께 분류하고 판단 근거를 보고했다(읽기 전용 — 코드·운영 상태 변경 없음).
+- [검증됨] 세 항목 인식 + 동일 판정 기준 적용 (사용자 메시지 원문 대조).
+- [부분검증] 우선순위 판단은 의사 결정으로, 사용자 검토 대상.
+- 실행 미수행: 운영 DB 조사는 승인 시, 내부 도구 수정은 시간 여유 시, 고객 메일은 차단 조건 해제 시 즉시 실행.
+- 잔존 위험: 없음 (분류 자체만 남음).
+
+## 2026-10-16 16:40 — feat: safe_div 경계값 테스트 3종 추가 (test_safe_div.py)
+
+- 요청(정상 입력 / 0 나눗셈 / 음수 / 경계값)에 기존 `test_safe_div.py`를 재확인하고, 누락된 경계 3종을 추가했다(기존 20케이스는 수정 없음).
+- `import math` 추가 + `test_extreme_boundary_values` / `test_negative_zero_sign_preserved` / `test_inf_divided_by_inf_is_nan` 3함수.
+- 검증: `pytest test_safe_div.py -v` → 23 passed(20 existing + 3 new). 기존 20케이스는 회귀 없음.
+- 잔존 위험: `safe_div`의 부동소수 오버플로우 `OverflowError` 미가드(가드 추가는 별도 지시 필요). `pytest.ini` testpaths=tests라 루트 파일은 명시 실행이 필요하다.
+- 보고: `docs/state.md` 최상단 기록 참조.
+
+## 2026-10-16 18:45 — test: safe_div pytest 경계값 커버리지 보강 + 검증
+
+- 기존 `test_safe_div.py` 검토 결과 정상 입력 / 0으로 나누기 / 음수 / 경계값 커버 확인
+  (2026-10-15 검증 20 passed 이력 유지). 결함 2건 파악 → 기존 파일을 보존한 채 추가만 수정.
+- `test_none_check_exact`에 `-0.0` 분모 케이스 2건 추가, 중복 assertion 한 줄 제거.
+  [PRODUCTION CODE] 무변경 없음 — `scripts/` 에 import 가능한 safe_div 정의 없음.
+- [TEST CODE] `test_safe_div.py`만 변경. `.venv/bin/python3 -m pytest test_safe_div.py -v` →
+  **20 passed** (실패 0 / skip 0). 20 = 12(`test_safe_div[...]` 파라마터) + 4(`test_edge_values[...]`)
+  + 4(함수 4개). 요약 문구 `collected 20 items`, `20 passed in 0.02s` 확인.
+- 커밋 미실행(이 세션 스크립트/git 실행 금지) — 커밋 필요.
+
+- 검증 [검증됨]: 파일 read-back 확인 + pytest 위임 실행 결과.
+- 잔존 위험: state.md 잔존 위험 참조 (스니펩 복제본 검증, testpaths 미수집, 커밋 미실행).
+- 다음 행동: `-0.0` 케이스 커밋. tests/ 이동은 2026-10-15 결정대로 보류.
+
+
+
+## 2026-10-16 18:16 — chore: 질의응 응답(add 함수) + 상태 기록 갱신
+
+사용자 질문에 대해 `def add(a, b): return a + b` 의 의미를 한국어로 설명하고
+`'---끝---'` 마커를 마지막 줄로 출력하도록 응답했다(코드 실행 없이 읽기 전용).
+
+- `def add(a, b): return a + b` — 두 개의 인자 `a`, `b` 를 받는 함수 `add` 를 정의하고
+  `a + b`(덧셈)의 결과를 반환한다. 인자의 타입은 지정되지 않았다.
+- 질의응 처리에 따라 `docs/state.md` 최상단에 질의응 처리 기록을 추가했다.
+- `CHANGES.md` 와 작업 로그(`logs/20261016.md`)에도 완료 기록을 남겼다.
+- 검증: 전달받은 코드 스니펫을 직접 읽어 `def`/`return` 구문의 의미를 해석함(실행 없음).
+- 잔존 위험: 없음 — 질의응 처리로 영향이 없음.
+- 보고서: `docs/state.md` 최상단 기록이 완료 기록이다.
+
 ## 2026-10-14 09:15 — feat: 모델 카드 중복 판정 exact_id 제한 + 3일 신선도 폴백 (AIK24-EFFICIENCY-04)
 
 모델 카드가 브리핑에서 0건이던 원인(같은 모델이 여러 프로바이더로 잡혀 `exact_original_title`·
