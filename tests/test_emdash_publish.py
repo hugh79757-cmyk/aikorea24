@@ -50,7 +50,9 @@ def test_create_then_publish(monkeypatch):
     d = calls[0][2]["data"]
     assert d["title"] == "Hello"
     assert d["excerpt"] == "설명"
-    assert d["featured_image"] == "/images/x/thumbnail.webp"
+    # AIK24-EVAL-09(2026-10-15 커밋 8404cd26): '/' 로 시작하는 상대경로는
+    # https://aikorea24.kr 로 절대화된다 — emdash 도메인에서 /images/... 는 404(실측).
+    assert d["featured_image"] == "https://aikorea24.kr/images/x/thumbnail.webp"
     assert d["content"][0]["_type"] == "block"
     assert calls[1][0] == "/_emdash/api/content/posts/p1/publish"
     assert calls[1][2] == {"publishedAt": "2026-10-14T09:00:00+09:00"}
@@ -90,3 +92,31 @@ def test_publish_failure_returns_none(monkeypatch):
 
     monkeypatch.setattr(em, "api", fake_api)
     assert ep.publish_post("t", "b") is None
+
+
+def test_featured_image_absolutized():
+    """AIK24-EVAL-09 계약 — 상대경로만 절대화하고, 절대 URL·dict 는 그대로 둔다."""
+    assert ep._featured_image_data(None) is None
+    assert ep._featured_image_data("") is None
+    assert ep._featured_image_data("/images/x.webp") == "https://aikorea24.kr/images/x.webp"
+    assert (ep._featured_image_data("https://cdn.example.com/x.webp")
+            == "https://cdn.example.com/x.webp")
+    assert ep._featured_image_data({"src": "/images/x.webp", "alt": "a"}) == {
+        "src": "https://aikorea24.kr/images/x.webp", "alt": "a"}
+    assert ep._featured_image_data({"src": ""}) is None
+
+
+def test_no_featured_image_key_when_absent(monkeypatch):
+    """featured_image 를 주지 않으면 키 자체가 없다(빈 값으로 덮어쓰지 않는다)."""
+    monkeypatch.setenv("EMDASH_AIKOREA24_API_TOKEN", "pat-xyz")
+    calls = []
+
+    def fake_api(path, method="GET", body=None):
+        calls.append((path, method, body))
+        if path.endswith("/publish"):
+            return 200, {"data": {}}
+        return 201, {"data": {"item": {"id": "p1", "slug": "s"}}}
+
+    monkeypatch.setattr(em, "api", fake_api)
+    ep.publish_post("t", "b")
+    assert "featured_image" not in calls[0][2]["data"]
