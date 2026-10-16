@@ -37,6 +37,22 @@ t=html.unescape(re.sub(r'<[^>]+>',' ',s)); print(re.sub(r'\s+',' ',t)[:2000])"
 
 공식 페이지가 JS 렌더·리다이렉트(308)·404 라 본문이 비어 나오면 **그 사실은 쓰지 않는다.** 지어내면 회귀다.
 
+**전제를 먼저 검증한다 — 가이드 글의 생명선.** "이 도구로 저것을 할 수 있다"가 거짓이면 나머지가 전부 무효다.
+키를 등록해 보고 **실호출까지** 해본 뒤에 쓴다. 기억이나 남의 테스트 결과로 쓰지 않는다.
+(실제 사례: `groq-free-api-key-guide` — "OpenCode에서 Groq을 쓴다"는 전제가 실측에서 거짓이었고, 글 전체를 삭제했다.)
+
+```bash
+# 예: OpenRouter — 등록이 아니라 '되는가'를 확인한다
+curl -s -H "Authorization: Bearer $KEY" https://openrouter.ai/api/v1/key
+curl -s -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+  -d '{"model":"<무료 모델 id>","messages":[{"role":"user","content":"ping"}],"max_tokens":64}' \
+  https://openrouter.ai/api/v1/chat/completions
+```
+
+- 실호출이 200이고 `choices[0].message.content` 가 오면 전제가 참이다. 실패하면 **그 글은 쓰지 않는다.**
+- 추론 모델은 `max_tokens` 가 작으면 `content` 가 비고 `reasoning` 만 채워져 온다(실측: 32토큰 → `content=None`). 확인용은 64 이상.
+- 같은 모델이어도 업스트림 과부하로 429 가 온다(실측). 429 를 한도 문제로만 해석하지 않는다.
+
 ## 1. 구조 — 도입 설명문 → 소제목/본문 → 마무리 소제목
 
 - **본문에 `#`(H1)을 쓰지 않는다.** 제목은 `upsert_post` 의 title 하나뿐이다.
@@ -54,6 +70,9 @@ t=html.unescape(re.sub(r'<[^>]+>',' ',s)); print(re.sub(r'\s+',' ',t)[:2000])"
   ("자랑성 팁"은 체류시간을 못 만든다 — 2026-10-16 지적: "점수 30점도 안 된다".)
 - **우리끼리 용어·내부 운영 이야기 금지.** 프로젝트 내부 도구명, 장애 복구, 배포 스크립트, 사내 키 이름 등은
   독자에게 쓸모가 없다. (예: `.dev.vars Firecrawl 키 401` 이야기 → 전부 삭제.)
+- **서술 주체는 독자다.** 내부 분류((a)/(b)), 파이프라인 용어, 스크립트 경로, "커스텀 프로바이더" 같은 내부 개념으로 설명하지 않는다.
+  독자는 UI 로 한다 — 예: 키 등록은 설정 파일 손편집이 아니라 TUI 에서 `/connect` → 제공자 검색 → API key 붙여넣기.
+  (2026-10-16 지적 원문: "글의 주체가 독자가 아니라 에이전트 중심이야", "이런 과정을 거치지 않는다".)
 - **"어떻게 하는가"는 실행 가능한 표로.** 무엇을 위한 정보든 ① 어디서 받는지(URL) ② 어디에 넣는지(환경변수명)
   ③ 예시 코드 3종을 갖춘다. "API 키를 등록해야 합니다"에서 멈추면 지적받는다.
 - **무료/유료를 사실대로 구분한다.** 무료라고 뭉뚱그리지 않는다.
@@ -95,10 +114,16 @@ print(url)"
 ```
 
 - PAT 키 이름: `EMDASH_AIKOREA24_API_TOKEN` / `EMDASH_PAT` — **`~/.env.common` 에만 존재**. 프로젝트 `.env` 에는 없다.
-- `upsert_post(slug, title, body_md, excerpt=None, featured_image=None)` — 같은 slug면 갱신(PUT + publish),
-  없으면 생성. **생성 시 slug 는 title 을 slugify 한 값**이므로 고정 URL 을 원하면 slug/title 을 미리 맞춰라.
+- `upsert_post(slug, title, body_md, excerpt=None, featured_image=None)` — 같은 slug면 갱신(PUT + publish), 없으면 생성.
+- **새 글의 slug 는 title 을 slugify 한 값이다. API 는 slug 필드를 거부한다**
+  (실측: PUT `data.slug`·최상위 `slug` 둘 다 400 `slug: unknown field on collection 'posts'`).
+  영어 slug 로 새 글을 만들려면 **① title 을 영어 slug 와 똑같이 해서 생성 → ② PUT 으로 한국어 제목·본문 반영 → ③ publish**.
+  한 번 만들어진 slug 는 이후 title 을 바꿔도 유지된다(실측). 기존 글 갱신은 `upsert_post(기존slug, 새제목, 본문)` 로 끝난다.
 - **HTML 금지** — `md_to_pt()` 가 HTML 을 처리하지 않아 태그가 텍스트로 노출된다. 마크다운 표만 쓴다.
-- `get_post(slug)` 가 `None` 을 반환해도 발행은 정상일 수 있다(조회 quirk). 발행 결과 URL 로 판단한다.
+- `get_post()` quirk 실원인: EmDash 응답이 `{"success":true,"data":{"item":{id,slug,status,…}}}` 인데 함수가 `data` 를 꺼내서
+  `id/slug/status` 가 비고 `_rev` 만 남는다. 갱신은 `id` 가 없으면 slug 로 PUT 하므로 그대로 동작한다(실측).
+  발행 결과 판단은 공개 URL, 상태·slug 확인은 DB 로:
+  `cfnew.sql("SELECT id, slug, status FROM ec_posts WHERE slug='<slug>'", database_id=cfnew.EMDASH_DB)` → 1행.
 
 ## 4. 발행 후 검증 (건너뛰지 말 것)
 

@@ -1,3 +1,30 @@
+## 2026-10-16 18:40 — AIK24-OPENROUTER-GUIDE: groq 글 삭제 → OpenRouter 글로 교체 발행 + 스킬 4건 보강
+
+### 한 일
+- 대표님 지적: groq 글의 전제("OpenCode에서 Groq을 쓴다")가 실측에서 거짓이고, 서술 주체가 독자가 아니라 에이전트 중심이었다 → 해당 글을 삭제하고 OpenRouter 주제로 재작성·발행.
+- 순서: 전제 실호출 검증 → 사실 수집 → 작성 → 발행 게이트 통과 → 발행 → 발행 후 검증 → 스킬에 이번에 배운 규칙 4건 추가.
+
+### 결과
+- [검증됨] groq 글 삭제: `DELETE /_emdash/api/content/posts/01M51NXRNKVSN1DV7EY5MRHGNV` → 200 `{'deleted': True}`, 사후 GET `None`, 라이브 `posts/groq-free-api-key-guide` = **302**(사라짐).
+- [검증됨] **전제 검증(실호출)** — 추측 0건: `GET openrouter.ai/api/v1/key` → `is_free_tier=true`, `free_model_daily_requests={'used':16,'limit':50,'remaining':34}` / `POST /api/v1/chat/completions` (`nvidia/nemotron-3.5-super-vl:free`) → 200, `content='연결 성공'`, `cost=0` → "OpenRouter는 실제로 된다"를 키 상태 + 실호출 둘로 확인.
+- [검증됨] 실패 유형도 실측해 본문에 수록(독자에게 유용): `google/gemma-4-31b-it:free` → 429(`temporarily rate-limited upstream`), 추론 모델을 `max_tokens=32` 로 호출 → `content=None`·`reasoning` 만 반환.
+- [검증됨] 무료 모델 = 전체 465개 중 `:free` **15개**(공개 API 직접 조회, 문맥 최대 1,048,576).
+- [검증됨] 새 글 발행: slug `openrouter-free-models-opencode` / 라이브 200 · **47,892 bytes** · `<h1>` 1 · `## 마무리` 1 · 고유 외부 링크 5 · 내부용어 0 · 표 1. `ec_posts` **1행**(id `01M51SY82M3VFMP33YNA08NY3T`, published) → 중복 글 없음.
+- [검증됨] 본문 사본 `scripts/logs/openrouter_free_models_opencode_draft.md` — 게이트 `✅ 게이트 통과 — 5372자`(같은 파일이 8,890 bytes = UTF-8 바이트. 문자수와 바이트는 같은 본문).
+- [검증됨] **영어 slug 확보 절차 확립**(API 가 slug 를 거부하는 것을 실측): ① title=영어 slug 로 생성(201) → ② PUT 으로 한국어 제목·본문 반영(200, slug 유지) → ③ publish(200). PUT 에 `slug` 를 넣으면 400 `unknown field on collection 'posts'`.
+- [검증됨] `get_post()` None quirk 원인 규명: 응답이 `{"data":{"item":{…}}}` 중첩인데 함수가 `data` 를 꺼내 `id/slug/status` 가 빈 dict 가 된다(발행에는 영향 없음 — id 없으면 slug 로 PUT 폴백).
+- [검증됨] 스킬 `.claude/skills/aik24-blog-writing/SKILL.md` 4건 보강(grep 각 1건 확인): ① 0절 "전제를 먼저 검증한다"(실호출 curl + `max_tokens` 함정 + 429) ② 2절 "서술 주체는 독자다"(내부 분류·"커스텀 프로바이더" 금지, `/connect` UI 경로) ③ 3절 "API 는 slug 필드를 거부한다" + 생성 3단계 ④ 3절 `get_post()` quirk 실원인.
+- [검증됨] `scripts/emdash_precheck.py` 사용법 가드 추가(인자 없이 `--publish` 를 먼저 주면 traceback → 사용법 출력 + exit 2).
+
+### 잔존 위험
+1. **기존 발행 글 전수 점검은 하지 않았다** — 같은 유형(전제 오류·내부 용어·마무리 누락)이 남아 있을 수 있다.
+2. groq 글은 soft delete 로 DB 행이 남아 있을 수 있다(라이브 302 확인은 완료).
+3. muse 등 외부 에이전트가 스킬·게이트를 실제로 읽고 실행하는지는 여전히 미검증 — 이번 스킬 보강도 그 전제 위에 있다.
+4. OpenRouter 무료 계정 한도(50건/일)는 계정 상태(크레딧 구매 이력)에 따라 달라진다 — 본문에 기준일·출처를 명시했다.
+
+### 다음 행동
+- 없음(대표님 지시 항목 완료). 필요 시: 기존 글 전수 점검(스킬 5절 체크리스트 일괄 적용).
+
 ## 2026-10-16 17:25 — AIK24-BLOG-GATE: 발행 전 게이트 스크립트 + 스킬에 '사실 수집' 단계·정답지 추가
 
 ### 한 일

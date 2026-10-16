@@ -66,6 +66,9 @@ def main(argv):
     if "--selftest" in argv:
         selftest()
         return 0
+    if len(argv) < 2 or argv[1].startswith("--"):
+        print('사용법: emdash_precheck.py <md경로> [--publish <slug> "<제목>" "<excerpt>"] [--selftest]')
+        return 2
     path = argv[1]
     md = _load(path)
     issues = check(md)
