@@ -697,7 +697,14 @@ CLI_MODEL_MAP = {
     # AIK24-EVAL-CLI-02: 2026-10-15 프리모델 페이지 추천 Top 3
     "mimo-v2.6-flash-free": "opencode/mimo-v2.6-flash-free",
     "muse-spark-1.3-contributor-free": "opencode/muse-spark-1.3-contributor-free",
+    # AIK24-EVAL-LLALPHA-01 (2026-10-16): Zen 한시 무료 스텔스 모델. OpenRouter 경로가
+    # 없어 CLI 로만 도달한다 — split_zen 이 zen_pending 으로 밀어 넣던 대상이다.
+    # 추론 variant 를 명시한다(같은 1번 문항: 무지정은 60초 안에 못 끝냈고 low 는 17초에 정답).
+    "ll-alpha-free": "opencode/ll-alpha-free#low",
 }
+
+
+CLI_RETRY_TIMEOUT = 180  # EVAL-LLALPHA-01: 추론 모델은 60초를 넘긴다 — 타임아웃에 한해 재시도 1회
 
 
 def cli_prompt(spec):
@@ -788,6 +795,11 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
                 + "\n=== 질문 ==="
             )
         actual, reason = cli_call(cli_model, cli_prompt(spec))
+        if not actual and "타임아웃" in reason:
+            # 타임아웃은 429 와 같은 성격의 일시 실패다(모델 부재가 아니다).
+            # 재시도 1회 — 그래도 빈 응답이면 아래에서 실패 문항으로 처리한다.
+            log(f"  [{idx}/{total}] {reason} → {CLI_RETRY_TIMEOUT}초로 재시도")
+            actual, reason = cli_call(cli_model, cli_prompt(spec), timeout=CLI_RETRY_TIMEOUT)
         if not actual:
             if idx == 1:
                 # 첫 문항부터 CLI 레벨 실패 = 모델 도달 불가. 0점 기록 없이 중단.
@@ -1094,7 +1106,16 @@ def eval_comment_block(model_id, deep_dive_url=None, result=None):
 if __name__ == "__main__":
     target = sys.argv[1] if len(sys.argv) > 1 else "liquid/lfm-2.5-2.6b:free"
     log(f"평가 시작: {target}")
-    r = eval_model_cached(target, force="--force" in sys.argv)
+    if target in CLI_MODEL_MAP:
+        # EVAL-LLALPHA-01: Zen 스텔스/CLI 전용 모델은 OpenRouter 경로가 없다.
+        # CLI 로 도달하고, 모델에 못 닿으면 점수를 남기지 않는다(측정 실패 ≠ 모델 실패).
+        r, blocked = eval_model_cli(target)
+        if blocked:
+            log(f"CLI 경유 실패 — 점수 기록 안 함: {blocked}")
+            sys.exit(1)
+        cache_put(target, r)  # 캐시 + 리더보드 append
+    else:
+        r = eval_model_cached(target, force="--force" in sys.argv)
     log(f"결과: {r['label']} (실패 {r.get('failed', 0)}/{r['max_score']}문항)")
     if r["errors"]:
         log(f"  경고 {len(r['errors'])}건: {r['errors'][:5]}")

@@ -77,6 +77,25 @@ def test_eval_model_cli_result_shape(monkeypatch):
     assert all(d["source"] == "cli" for d in result["details"])
 
 
+def test_eval_model_cli_retries_timeout_once(monkeypatch):
+    """EVAL-LLALPHA-01: 60초 타임아웃은 모델 부재가 아니다 — 180초로 1회 재시도한 뒤 결과를 쓴다."""
+    seen = []
+
+    def fake(cli_model, prompt, timeout=me.QUESTION_TIMEOUT):
+        seen.append(timeout)
+        return ("", "CLI 타임아웃 60초") if len(seen) == 1 else ("정답", "")
+
+    monkeypatch.setattr(me, "cli_call", fake)
+    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    result, blocked = me.eval_model_cli("cat-jam-free")
+    assert blocked is None                       # 재시도가 성공했으므로 차단하지 않는다
+    assert seen[0] == me.QUESTION_TIMEOUT
+    assert seen[1] == me.CLI_RETRY_TIMEOUT       # 1번 문항만 재시도 — 나머지는 1회 호출
+    assert len(seen) == len(me.TEST_QUESTIONS) + 1
+    assert result["score"] == len(me.TEST_QUESTIONS)
+
+
 def test_probe_doc_puts_secret_first():
     doc = me._probe_doc(4096)
     assert me.PROBE_SECRET in doc[:200]

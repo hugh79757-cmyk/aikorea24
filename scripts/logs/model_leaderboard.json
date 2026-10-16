@@ -30,5 +30,13 @@
   "max_score": 12,
   "judge_failed_n": 1,
   "ts": 1792108997.09343
+ },
+ {
+  "model_id": "ll-alpha-free",
+  "qv": 1,
+  "score": 4,
+  "max_score": 12,
+  "judge_failed_n": 0,
+  "ts": 1792143923.294406
  }
 ]
