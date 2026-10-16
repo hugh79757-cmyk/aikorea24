@@ -1016,7 +1016,9 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
             s_pts, sandbox_reason = sandbox_grade(spec, actual)
             if s_pts is not None:
                 sandbox_verdict = "pass" if s_pts == 1 else "fail"
-            pts = s_pts
+            # 샌드박스는 bool 을 돌려준다 — 점수 필드는 int 로 정규화한다.
+            # (캐시/리더보드 JSON 에 true 가 박히면 downstream 이 타입을 오인한다)
+            pts = None if s_pts is None else int(s_pts)
             if s_pts is None:
                 log(f"  [{idx}/{total}] {axis} 샌드박스 측정 결함({sandbox_reason}) → 판관으로 폴백")
         if pts is None:

@@ -48,5 +48,25 @@
   "max_score": 12,
   "judge_failed_n": 0,
   "ts": 1792158696.843189
+ },
+ {
+  "model_id": "cat-jam-free",
+  "cli_model": "opencode/cat-jam-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 9,
+  "max_score": 12,
+  "judge_failed_n": 0,
+  "ts": 1792162362.700403
+ },
+ {
+  "model_id": "cat-jam-free",
+  "cli_model": "opencode/cat-jam-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 10,
+  "max_score": 12,
+  "judge_failed_n": 1,
+  "ts": 1792162611.9015622
  }
 ]

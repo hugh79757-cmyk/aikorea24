@@ -135,3 +135,23 @@ def test_wrong_exception_type_fails_not_defect():
     )
     pts, reason = me.sandbox_grade(spec, bad)
     assert pts == 0, reason
+
+
+def test_sandbox_points_are_int_not_bool(monkeypatch):
+    """샌드박스는 bool 을 반환한다 — details[].score 에 true 가 박히면 안 된다."""
+    calls = {"n": 0}
+
+    def fake(cli_model, prompt, timeout=60):
+        calls["n"] += 1
+        return ("정답", "")
+
+    monkeypatch.setattr(me, "cli_call", fake)
+    monkeypatch.setattr(me, "sandbox_grade", lambda spec, ans: (True, "stub"))
+    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    res, _ = me.eval_model_cli("cat-jam-free")
+    sb = [d for d in res["details"] if d.get("sandbox")]
+    assert sb, "샌드박스 문항이 하나도 없어 테스트가 무의미"
+    for d in sb:
+        assert type(d["score"]) is int, f'Q{d["idx"]} score={d["score"]!r} ({type(d["score"]).__name__})'
+    assert type(res["sandbox_pass"]) is int
