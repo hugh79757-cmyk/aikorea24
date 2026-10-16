@@ -58,5 +58,9 @@ def test_core_name_and_real_verify_files():
     assert ab._core_name("nvidia/nemotron-3.5-super-vl:free") == "nemotron-3.5-super-vl"
     assert ab._core_name("step-5-preview-free") == "step-5-preview"
     names = ab._verified_running()
-    assert "step-5-preview" in names
+    # 2026-10-16: step-5-preview-free 가 제공 중단(Model unavailable)으로 검증 실패 목록으로
+    # 이동해 pass 에서 빠졌다 — 특정 모델을 기대값으로 박아 두면 실제 데이터와 어긋난다.
+    # 남기는 검증: ① 실제 로그 파일을 읽어 비어 있지 않다 ② 대표 표기가 정규화된다.
+    assert names, "실제 로그 파일에서 읽은 동작 확인 모델이 있어야 한다"
+    assert not [n for n in names if ":" in n], names
     assert "north-mini-code" in names

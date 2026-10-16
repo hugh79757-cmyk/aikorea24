@@ -115,14 +115,16 @@ def fetch_zen():
     r = httpx.get(ZEN_MODELS, timeout=HTTP_TIMEOUT)
     r.raise_for_status()
     api_ids = {m.get("id") for m in r.json().get("data", []) if m.get("id")}
-    # 공식 무료 12종 (화이트리스트)
+    # 공식 무료 목록 (화이트리스트). 2026-10-16: step-5-preview-free 제공 중단으로 12종 → 11종.
     ZEN_OFFICIAL_FREE = frozenset([
         "jev-1.13-free",
         "big-pickle",
         "space-bunny-free",
         "cat-jam-free",
         "longcat-2.5-preview-free",
-        "step-5-preview-free",
+        # "step-5-preview-free" — 2026-10-16 실측: Zen API 모델 목록에 없고, CLI 호출은
+        # provider.no-route("Model unavailable: opencode/step-5-preview-free").
+        # 교집합(아래)에서 이미 빠지지만, 화이트리스트가 실제 제공 목록과 어긋나지 않도록 주석 처리한다.
         "exo-free",
         "mimo-v2.6-flash-free",
         "mimo-v2.5-free",
