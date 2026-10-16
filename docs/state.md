@@ -1,3 +1,111 @@
+## 2026-10-17 00:40 — AIK24-EVAL-JUDGE-02: 판관을 OpenCode 모델로 전환 (Nemotron 3 Ultra free·kilo·high)
+
+### 한 일
+대표님 지시: Groq·Gemini 는 opencode 로 부를 수 없어(토큰 한도) 판관을 **오픈코드의 모델**로
+통일하고, 지정 모델 **NVIDIA: Nemotron 3 Ultra (free) — kilo/nemotron-3-ultra-550b-a55b:free#high**
+을 판관으로 맡겼다. 판관 경로를 전부 교체했다.
+
+### 구현 — [PRODUCTION CODE] scripts/model_eval.py
+- `_judge_groq()` 제거 → `_judge_opencode()` 신설. **학생 모델과 같은 전송 계층**(opencode CLI).
+  직접 API 호출·키 회전이 사라져 키 유출 표면도 0이 됐다.
+- `JUDGE_MODEL = "kilo/nvidia/nemotron-3-ultra-550b-a55b:free#high"`, `JUDGE_TIMEOUT_SEC = 300`.
+- **판관 사전 점검 `judge_precheck()` 신설** — 죽은 판관으로 12문항을 돌리면 전 문항이
+  '측정 결함' 으로 기록돼 점수 0/12 가 **학생 탓**으로 남는다(이번에 실제로 겪은 실패 모드).
+  점검 실패 시 `eval_model_cli` 가 **점수 없이 중단**한다.
+- **판정 파싱 강화** — 예전엔 응답 전체에서 아무 `[01]` 을 뒤질었다. 산문 가운데 숫자 하나가
+  점수가 되는 동전 문제. 이제 **첫 글자** 를 보고, 짧은 응답(≤20자)만 예외적으로 전체 검색.
+  산문 판정은 측정 결함으로 처리한다.
+- `JUDGE_TEMPERATURE`/`JUDGE_MAX_TOKENS` 는 CLI 경로에서 쓸 수 없어 **주석으로 남기고 미사용**
+  표시했다(API 판관 경로 복귀용).
+
+### ⚠️ 지정 모델이 **현재 응답하지 않는다** — [검증됨] 3개 경로 전부 실패
+
+| 경로 | 결과 |
+|---|---|
+| `kilo/...#high` | **HTTP 504 "A Timeout Occurred"** (opencode 3회 재시도 후 실패, 300초 무응답) |
+| `kilo/...#none` | 동일 (300초 무응답) |
+| `nvidia/nvidia/nemotron-3-ultra-550b-a55b-free` | **HTTP 404** 즉시 |
+| `openrouter/nvidia/nemotron-3-ultra-550b-a55b:free` | 200초 무응답 |
+
+원인은 토큰 한도가 아니라 **kilo 상류(Nvidia NIM) 504 타임아웃**이다. 근거: opencode 세션 DB 의
+assistant 메시지에 `retry.attempt=3`, `error.code=504, "A Timeout Occurred", provider=Nvidia` 기록.
+같은 모델이 **16:56 오늘 `free_models_verify.json` 에서는 pass** 였다 → 경로가 그 뒤로 막힌 것.
+
+**지금 실제로 응답하는 kilo free 후보 (실측)**:
+| 모델 | 컨텍스트 | 판관 1회 | 응답 |
+|---|---|---|---|
+| `kilo/nvidia/nemotron-3.5-super-vl:free` | 1,000,000 | **5초** | `"1"` ✅ |
+| `kilo/poolside/laguna-s-2.1:free` | 262,144 | **8초** | `"1"` ✅ |
+| `kilo/nvidia/nemotron-3.5-lightning:free` | 1,000,000 | 150초 무응답 | ❌ |
+| `kilo/cohere/north-mini-code:free` | 256,000 | 46초 (도구 사용) | 동작하나 판관엔 부적합 |
+
+### 검증
+- [검증됨] 사전 점검 실호출: `도달가능=False · CLI 타임아웃 300초` → 현재 이 모델로는 평가가
+  **애초에 시작되지 않는다**(점수 0 기록 없음). 이게 방어장치가 실제로 작동한다는 증거.
+- [검증됨] `test_judge_is_opencode_model_not_groq_or_gemini`, `test_judge_no_longer_touches_api_keys`,
+  `test_judge_calls_cli_with_fixed_model`, `test_judge_never_falls_back`,
+  `test_prose_verdict_with_stray_digit_is_defect`, `test_judge_precheck_blocks_eval_before_any_question`,
+  `test_judge_precheck_passes_then_eval_runs` 통과.
+- [검증됨] 관련 스위트 78건 통과 · 전체 `17 failed / 686 passed` (기존 17건과 동일 케이스, 신규 0).
+- [부분검증] **지정 모델로 실제 12문항 평가는 미수행**(경로가 죽어 있음). 판관 안정성도 미측정.
+
+### 파일 구분
+- [PRODUCTION CODE] scripts/model_eval.py — 판관 경로 교체·사전 점검·파싱 강화
+- [TEST CODE] tests/test_model_eval_agent_v2.py (신규 7건), tests/test_eval_cli.py (사전 점검 스텁 2줄)
+  — 사전 점검이 첫 `cli_call` 을 소비하므로 기존 2개 테스트에 스텁 추가. 원래 테스트 목적
+  (학생 호출 계약)은 그대로다. **Groq 키 관련 테스트 6건은 판관 경로가 바뀌어 삭제했다**
+  (Groq 판관이 더 이상 존재하지 않으므로 테스트도 성립하지 않는다).
+
+### 잔존 위험
+1. **판관이 아직 없다.** 지정 모델이 504 이라 12문항 평가가 시작되지 않는다. 경로 복구를 기다리거나,
+   대표님이 후보를 지정해야 한다.
+2. **Nemotron 3.5 Super VL 은 3 Ultra 와 다른 가중치다.** 같은 네모트론 계열이지만 "한결같은
+   모델"은 아니다 — 대표님 결정으로 바꾸면 그 사실을 점수 기록에 함께 남겨야 한다.
+3. CLI 경로에는 temperature 를 강제할 방법이 없다. 판관 온도 고정(0.0)이 **더 이상 보장되지 않는다.**
+   → 판관 안정성은 `eval_variance.py --repeats 3` 으로 실측해야 한다(모델이 살아난 뒤).
+4. 판관 1회가 opencode 세션 1개를 만든다. 12문항 × 판관 = 세션 24개 증가(공간만, 비용 0).
+
+### 다음 행동
+- 대표님 결정 대기: ① 504 복구를 기다릴지 ② 지금 가동 가능한 `kilo/nvidia/nemotron-3.5-super-vl:free`
+  로 판관을 바꿀지(5초 응답·1M 컨텍스트·동일 네모트론 계열).
+
+## 2026-10-17 00:10 — 「말랑」 38억 년 진화 일지 신규 프로젝트 완성 + mallang.aikorea24.kr 배포
+
+### 한 일
+- 신규 프로젝트 `/Users/twinssn/Projects/aikorea24-mallang` 생성 (caveman 진단 교훈을 설계 전제로 반영).
+- Task 1 데이터(에포크 14 · 선택지 42 · 방산 15변종 · 구원 3 · 엔딩 12) → Task 2 밸런스 검증 9/9 → Task 3~4 파스텔 SVG 블롭 + UI → Task 7 이미지(OG/파비콘) → Task 9 배포까지 완료.
+- 배포 계정: **Stylefactory9ai@gmail.com** (`CF_MIGRATE_TOKEN`, account `7eb1b8cd…`) — `~/.env.common`의 `CLOUDFLARE_API_TOKEN`은 Hugh79757 계정 전용이라 stylefactory9ai 배포 불가 상태였음.
+
+### 결과 — 검증 근거
+
+- [검증됨] **밸런스 검증 9/9 통과** (`node scripts/verify.mjs` + `scripts/verify3.mjs`).
+  근거: 검증4 난이도 12,000회 실행 → perfect **50.3%** / scarred **32.6%** / extinct **17.1%**.
+  검증3 엔딩 **12/12** 실제 도달(정책 8종 혼합 12,000회 플레이, 각 조합 최소 3회 이상 출현).
+- [검증됨] **브라우저 검증 통과** (`scripts/browser-test.cjs`): 데스크톱 1440×900 / 모바일 390×844 모두
+  엔딩 도달, 방산 정확히 **5회**, 재시작 정상, JS 콘솔·pageerror **0건**.
+- [검증됨] **라이브 검증 통과**: `https://mallang.aikorea24.kr/` 실제 플레이 → 방산 5회, 구원 1회,
+  14/14 시대 도달, 평행세계 카드 10개, 오류 0건. `curl`로 index/og.png/favicon.png 모두 HTTP **200**,
+  없는 경로 **404**.
+- [검증됨] 산출물: `public/index.html` **62,692 bytes**(단일 파일, 외부 의존성은 Google Fonts CDN만),
+  `public/og.png` 1200×630, `public/favicon.png` 512, `public/404.html`. 전체 public **320KB**.
+- [검증됨] 커밋 3건: `3f8e1d3`(스펙) → `668d965`(데이터+밸런스) → `ed2f7b6`(UI+이미지+배포).
+- [검증됨] 개발 중 실제 결함 8건 수정: 스탯 포화(에포크 11에 100 도달) / extinct 48% 과다 /
+  구원③ 순증가 / vital 고착 사망(ep12·13 상향 선택지 0개) / agile 편승 / RADIATIONS 배열-객체 추출 오류 /
+  JS 구문 오류(잔여 블록) / 방산 중복 실행(6회→5회, 평행세계 24→10개) / 엔딩 "도달 시대 15/14".
+
+### 잔존 위험
+1. **Playwright 브라우저 바이너리 재설림 필요성** — 로컬 `ms-playwright` 캐시가 정리돼 있어
+   `npx playwright install chromium` 재실행함. 캐시 정리 루틴이 있다면 검증 스크립트 재실행 전 확인 필요.
+2. **밸런스는 "클릭 1번 고정" 기준 확정이 아님** — 실사용자의 선택 분포를 반영한 재튜닝은 실제 트래픽 후 재검토 필요.
+3. **OG 이미지 한글 폰트는 시스템 폰트(AppleGothic) 의존** — 리포지토리에 폰트 미번들. 서버측 재생성 시
+   폰트 부재로 깨질 수 있음(정적 PNG이므로 현재 배포본에는 영향 없음).
+4. **엔딩 12종의 현실적 분포 편중** — perfect/vital 이 시뮬레이션상 압도적(8,919/12,000). 게임플레이로
+   다른 아키타입을 유도할 힌트가 필요할 수 있음.
+
+### 다음 행동
+- 대표님 플레이 후 밸런스 체감 피드백 수령 → 필요 시 `scripts/data.mjs` 임계값 재튜닝 후 `verify.mjs` 재실행.
+- 잔존 위험 4번(perfect/vital 편중) 해소: 방산 변종 설명에 아키타입 유도 문구 보강 검토.
+
 ## 2026-10-16 23:58 — 판관 수정 3건 (load_env · 거짓 안정 수정 · 상태코드 로그)
 
 ### 한 일

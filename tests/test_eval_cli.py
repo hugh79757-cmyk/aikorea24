@@ -59,6 +59,7 @@ def test_eval_model_cli_unregistered_model_is_blocked_not_zero():
 
 def test_eval_model_cli_blocked_on_unreachable_model(monkeypatch):
     """첫 문항에서 CLI 가 죽으면 즉시 중단 — 나머지 11문항을 0으로 채우지 않는다."""
+    monkeypatch.setattr(me, "judge_precheck", lambda: (True, "stub"))  # EVAL-JUDGE-02 사전 점검
     monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("", "Model unavailable"))
     result, blocked = me.eval_model_cli("cat-jam-free")
     assert blocked == "Model unavailable"
@@ -85,6 +86,7 @@ def test_eval_model_cli_retries_timeout_once(monkeypatch):
         seen.append(timeout)
         return ("", "CLI 타임아웃 60초") if len(seen) == 1 else ("정답", "")
 
+    monkeypatch.setattr(me, "judge_precheck", lambda: (True, "stub"))  # 사전 점검이 첫 호출을 소비하므로
     monkeypatch.setattr(me, "cli_call", fake)
     monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
     # AGENT-EVAL-01: 문항 3개가 샌드박스 채점으로 바뀌었으므로, 이 테스트의 목적(타임아웃 재시도)

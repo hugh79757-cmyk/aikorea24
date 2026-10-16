@@ -237,160 +237,75 @@ def test_runs_log_survives_cache_overwrite(tmp_path, monkeypatch):
     assert _j.loads(cache.read_text(encoding="utf-8"))["cat-jam-free"]["score"] == 10
 
 
-# ── AIK24-EVAL-JUDGE-01: 판관 Groq 고정 + JUDGE_MAX_TOKENS 상향 ────────
+# ── AIK24-EVAL-JUDGE-02: 판관을 OpenCode 모델로 통일 ─────────────────────
 
-def test_judge_max_tokens_raised():
-    """판관이 산문으로 시작해도 잘리지 않아야 한다 (10 → 100)."""
-    assert me.JUDGE_MAX_TOKENS == 100
+def test_judge_is_opencode_model_not_groq_or_gemini():
+    """판관은 학생과 같은 전송 계층(OpenCode CLI)이어야 한다.
 
-
-def test_judge_model_and_base_url_are_pinned():
-    """판정 주체가 매번 바뀌면 점수 비교가 동전이다 — Groq 단일 모델로 고정."""
-    assert me.JUDGE_PROVIDER == "groq"
-    assert me.JUDGE_MODEL == "qwen/qwen3.8-27b"
-    assert me.JUDGE_BASE_URL == "https://api.groq.com/openai/v1"
-    assert me.JUDGE_KEY_NAMES == ("GROQ_API_KEY", "GROQ_API_KEY_2",
-                                  "GROQ_API_KEY_3", "GROQ_API_KEY_4")
-
-
-def test_score_response_returns_none_when_no_groq_key(monkeypatch):
-    """Groq 키가 하나도 없으면 폴백 없이 None (측정 결함)."""
-    for name in me.JUDGE_KEY_NAMES:
-        monkeypatch.delenv(name, raising=False)
-
-    class Boom:
-        def __init__(self, *a, **k):
-            raise AssertionError("키가 없는데 클라이언트가 만들어졌다")
-
-    monkeypatch.setitem(__import__("sys").modules, "openai",
-                        type("m", (), {"OpenAI": Boom}))
-    assert me.score_response("문제", "정답", "답안") is None
-
-
-def test_score_response_rotates_to_next_key_on_exception(monkeypatch):
-    """첫 키가 예외를 던지면 다음 키로 넘어간다 (재시도·백오프 없음)."""
-    for name in me.JUDGE_KEY_NAMES:
-        monkeypatch.delenv(name, raising=False)
-    monkeypatch.setenv("GROQ_API_KEY", "k1")
-    monkeypatch.setenv("GROQ_API_KEY_2", "k2")
-
-    used = []
-
-    class FakeCompletions:
-        def create(self, **kw):
-            used.append(kw)
-            msg = type("M", (), {"content": "1"})()
-            return type("R", (), {"choices": [type("C", (), {"message": msg})()]})()
-
-    class FakeOpenAI:
-        def __init__(self, api_key=None, base_url=None):
-            if api_key == "k1":
-                raise RuntimeError("429 rate limited")
-            self.chat = type("Chat", (), {"completions": FakeCompletions()})()
-
-    monkeypatch.setitem(__import__("sys").modules, "openai",
-                        type("m", (), {"OpenAI": FakeOpenAI}))
-    assert me.score_response("문제", "정답", "답안") == 1
-    assert len(used) == 1, "첫 키 실패 후 다음 키로 넘어가 한 번만 성공해야 한다"
-    assert used[0]["model"] == me.JUDGE_MODEL
-    assert used[0]["temperature"] == 0.0
-    assert used[0]["max_tokens"] == 100
-
-
-def test_all_groq_keys_failing_returns_none(monkeypatch):
-    """전멸 시 None — 폴백 체인으로 되돌아가지 않는다."""
-    for name in me.JUDGE_KEY_NAMES:
-        monkeypatch.setenv(name, "k")
-
-    class AllFail:
-        def __init__(self, api_key=None, base_url=None):
-            raise RuntimeError("down")
-
-    monkeypatch.setitem(__import__("sys").modules, "openai",
-                        type("m", (), {"OpenAI": AllFail}))
-    assert me.score_response("문제", "정답", "답안") is None
-
-
-def test_judge_never_falls_back_to_fallback_chain(monkeypatch):
-    """model_router.chat_completion 을 판관이 쓰지 않는다 (grep 0건의 회귀 방지)."""
-    import model_router
-    calls = []
-    monkeypatch.setattr(model_router, "chat_completion",
-                        lambda *a, **k: calls.append(1) or "1")
-    monkeypatch.setattr(me, "_judge_groq", lambda p: "1")
-    me.score_response("q", "e", "a")
-    assert calls == [], "폴백 체인 경로가 남아 있다"
-
-
-# ── 지시 3건 회귀 (load_env · 상태코드 로그 · 측정불가 집계) ────────────
-
-def _run_variance(monkeypatch, repeats=2, cache=None, judge=None):
-    """eval_variance.main() 을 stdout 캡처로 돌리고 (출력, 모듈) 을 돌려준다."""
-    import importlib.util, io, sys as _s
-    loader = importlib.util.spec_from_file_location(
-        "eval_variance_mod", ROOT / "scripts" / "eval_variance.py")
-    mod = importlib.util.module_from_spec(loader)
-    loader.loader.exec_module(mod)
-    monkeypatch.setattr(me, "cache_load", lambda: cache or {
-        "m": {"qv": 2, "details": [
-            {"idx": 1, "axis": "지시이행", "score": 1, "source": "cli", "answer": "답"},
-            {"idx": 2, "axis": "코딩실무", "score": 0, "source": "cli", "answer": "답2"},
-        ]},
-    })
-    monkeypatch.setattr(me, "TEST_QUESTIONS", [
-        {"axis": "지시이행", "q": "q1", "expected": "e1"},
-        {"axis": "코딩실무", "q": "q2", "expected": "e2"},
-    ])
-    monkeypatch.setattr(mod.time, "sleep", lambda *_: None)
-    monkeypatch.setattr(_s, "argv", ["eval_variance.py", "--repeats", str(repeats)])
-    if judge:
-        monkeypatch.setattr(me, "score_response", judge)
-    buf = io.StringIO()
-    old = _s.stdout
-    _s.stdout = buf
-    try:
-        mod.main()
-    finally:
-        _s.stdout = old
-    return buf.getvalue()
-
-
-def test_all_defects_is_not_reported_as_stable(monkeypatch):
-    """판관이 전 회차 실패하면 '안정'이 아니라 **측정불가**여야 한다.
-
-    이전 버그: distinct 가 빈 집합 → len(distinct)<=1 → '안정' 으로 집계돼
-    판정 불능이 오히려 reassuring 한 숫자로 보였다.
+    Groq(무료 티어 ITPM 7,000)·Gemini(일일 500회)는 opencode 로 부를 수 없다.
     """
-    out = _run_variance(monkeypatch, repeats=2, judge=lambda q, e, a: None)
-    assert "측정불가" in out
-    assert "판정가능 문항 0건" in out
-    assert "결론을 낼 수 없다" in out
+    assert me.JUDGE_PROVIDER == "opencode-cli"
+    assert me.JUDGE_MODEL == "kilo/nvidia/nemotron-3-ultra-550b-a55b:free#high"
 
 
-def test_partial_defect_is_flagged_but_counted(monkeypatch):
-    """일부 회차만 실패하면 판정은 안정으로 세되 결함을 함께 드러낸다."""
+def test_judge_no_longer_touches_api_keys():
+    """직접 API 호출이 사라졌으니 키 로테이션 상수도 없어야 한다."""
+    for gone in ("JUDGE_KEY_NAMES", "JUDGE_BASE_URL"):
+        assert not hasattr(me, gone), f"{gone} 은 Groq 판관 잔재다"
+    src = Path(me.__file__).read_text(encoding="utf-8")
+    judge_fn = src[src.index("def _judge_opencode"):src.index("def judge_precheck")]
+    assert "GROQ_API_KEY" not in judge_fn and "api.groq.com" not in judge_fn
+
+
+def test_judge_calls_cli_with_fixed_model(monkeypatch):
+    seen = {}
+
+    def fake(cli_model, prompt, timeout=60):
+        seen["model"] = cli_model
+        seen["timeout"] = timeout
+        return "1", ""
+
+    monkeypatch.setattr(me, "cli_call", fake)
+    assert me.score_response("q", "e", "답안") == 1
+    assert seen["model"] == me.JUDGE_MODEL
+    assert seen["timeout"] == me.JUDGE_TIMEOUT_SEC
+
+
+def test_judge_never_falls_back(monkeypatch):
+    """폴백 없음 — 고정 모델이 죽으면 그 문항은 측정 결함이다."""
+    monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("", "CLI 타임아웃 300초"))
+    assert me.score_response("q", "e", "답안") is None
+
+
+def test_prose_verdict_with_stray_digit_is_defect(monkeypatch):
+    """산문 중에 흩어진 숫자를 점수로 삼지 않는다 (동전 방지)."""
+    monkeypatch.setattr(me, "cli_call", lambda *a, **k: (
+        "학생의 답안은 코드가 3줄이며 올바르므로 정답은 1 입니다.", ""))
+    assert me.score_response("q", "e", "답안") is None
+
+
+def test_judge_precheck_blocks_eval_before_any_question(monkeypatch):
+    """죽은 판관 상태에서 12문항을 돌리지 않는다 — 전 문항 결함 기록을 막는다."""
     calls = {"n": 0}
 
-    def judge(q, e, a):
+    def fake(cli_model, prompt, timeout=60):
         calls["n"] += 1
-        return None if calls["n"] == 1 else 1
+        return ("", "CLI 타임아웃 300초")
 
-    out = _run_variance(monkeypatch, repeats=2, judge=judge)
-    assert "Q 1[지시이행] 안정(일부 결함)" in out
-    # 그 문항 자체가 '측정불가' 로 분류돼서는 안 된다 (요약 카운터의 '측정불가 0' 은 무관)
-    assert "Q 1[지시이행] 측정불가" not in out
+    monkeypatch.setattr(me, "cli_call", fake)
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    res, blocked = me.eval_model_cli("cat-jam-free")
+    assert blocked and "판관 도달 불가" in blocked
+    assert calls["n"] == 1, "사전 점검에서 멈췄어야 한다 (추가 호출은 없어야 한다)"
+    assert res["score"] == 0 and res["details"] == []
 
 
-def test_unstable_is_reported_with_rate(monkeypatch):
-    """0/1 이 뒤집히면 불안정으로 집계되고 비율이 찍힌다."""
-    seq = iter([1, 0, 1, 1])
-
-    def judge(q, e, a):
-        try:
-            return next(seq)
-        except StopIteration:
-            return 1
-
-    out = _run_variance(monkeypatch, repeats=2, judge=judge)
-    assert "불안정" in out
-    assert "판정이 흔들린다" in out
+def test_judge_precheck_passes_then_eval_runs(monkeypatch):
+    """사전 점검을 통과하면 정상 진행한다."""
+    monkeypatch.setattr(me, "judge_precheck", lambda: (True, "1"))
+    monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("정답", ""))
+    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    res, blocked = me.eval_model_cli("cat-jam-free")
+    assert blocked is None
+    assert res["details"], "문항이 실제로 채점됐어야 한다"

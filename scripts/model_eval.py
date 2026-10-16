@@ -47,7 +47,9 @@ OPENROUTER_MODELS = "https://openrouter.ai/api/v1/models"
 
 QUESTION_TIMEOUT = 60
 QUESTION_MAX_TOKENS = 1500  # EVAL-02: 실무 문항(12,000자 문서 참조·테스트 스위트) 답이 500에 잘림
-# AGENT-EVAL-01 4단계 2번: 판관은 0 으로 고정한다. 0.1 에서는 같은 답안에도 0/1 이 흔들렸다.
+# AGENT-EVAL-01 4단계 2번: 판관은 0 으로 고정한다. 0.1 에서 같은 답안에도 0/1 이 흔들렸다.
+# ⚠ AIK24-EVAL-JUDGE-02 부터 판관이 OpenCode CLI 경로로 바뀌면서 **이 두 상자는 쓰이지 않는다**
+# (CLI 에 temperature·max_tokens 를 넘길 방법이 없다). 남겨둔 것은 API 판관 경로 복귀용이다.
 JUDGE_TEMPERATURE = 0.0
 # AIK24-EVAL-JUDGE-01: 판관이 산문으로 시작하면 10토큰에 잘려 파싱 실패했다.
 # 파서는 응답 전체에서 [01] 을 찾으므로 끝까지 받으면 판정 숫자는 읽힌다.
@@ -598,62 +600,46 @@ def _difficulty_note(by_axis):
     return present[0] if len(present) == 1 else f"{present[0]}~{present[-1]}"
 
 
-# ── AIK24-EVAL-JUDGE-01 — 판관을 Groq 단일 모델로 고정 ────────────────
-# 무료 폴백 체인을 쓰면 판정 주체가 매번 바뀐다(gemini→gemini→groq…). 같은 답안의
-# 0/1 이 그 차이로 뒤집히면 점수 비교가 동전이다. 판관은 model_eval 전용이므로
-# model_router(쓰레드 파이프라인 공유)를 거치지 않고 Groq 로 직접 부른다.
-JUDGE_PROVIDER = "groq"
-JUDGE_MODEL = "qwen/qwen3.8-27b"   # reasoning 모델이 아니라 즉시 답을 낸다
-JUDGE_BASE_URL = "https://api.groq.com/openai/v1"
-# 키 회전 순서. 값이 없는 키는 조용히 건너뛴다.
-JUDGE_KEY_NAMES = ("GROQ_API_KEY", "GROQ_API_KEY_2", "GROQ_API_KEY_3", "GROQ_API_KEY_4")
+# ── AIK24-EVAL-JUDGE-02 — 판관을 OpenCode 모델 경로로 통일 ────────────────
+# 왜 바꿨나: Groq(무료 티어 ITPM 7,000)·Gemini(일일 500회)는 **opencode 로 부를 수 없다.**
+# opencode 를 못 쓰는 판관은 학생 모델과 다른 전송 계층·다른 rate limit 을 갖는다.
+# 대표님 지시: 오픈코드의 모델을 판관에 쓴다. 판정 주체를 하나로 고정해 변동원을 없앤다.
+#   지정: NVIDIA: Nemotron 3 Ultra (free) — kilo/nvidia/nemotron-3-ultra-550b-a55b:free#high
+JUDGE_PROVIDER = "opencode-cli"
+JUDGE_MODEL = "kilo/nvidia/nemotron-3-ultra-550b-a55b:free#high"
+JUDGE_TIMEOUT_SEC = 300   # 550B free 는 첫 토큰이 느리다(실측 무응답 300초 사례 있음)
+JUDGE_PROMPT_PROBE = "문제: 1+1 은? 정답: 2. 학생답안: 2. 일치하면 1 아니면 0 으로 숫자 하나만 답하세요."
 
 
-def _judge_groq(prompt):
-    """Groq 판관 호출. 키 실패 시 다음 키로 즉시 넘어가고, 전멸 시 None.
+def _judge_opencode(prompt):
+    """OpenCode CLI 로 판관을 부른다. 학생 모델과 **같은 전송 계층**을 쓴다.
 
-    재시도·백오프를 두지 않는다(지시서 작업 2-3). 폴백 체인으로 되돌아가지 않는다 —
-    Groq 이 죽으면 그 문항은 측정 결함이다(지시서 금지 사항).
-    원시 키는 어떤 경로에도 남기지 않는다.
+    폴백 체인 없음(판정 주체 고정). 실패하면 None(=측정 결함) 을 돌려준다.
+    원시 키를 다루지 않으므로 키 유출 표면이 사라진다.
     """
-    import openai
+    text, reason = cli_call(JUDGE_MODEL, prompt, timeout=JUDGE_TIMEOUT_SEC)
+    if not text:
+        log(f"  판관 실패({JUDGE_MODEL}: {reason})")
+        return None
+    return text
 
-    # env 적재를 안 하면 os.environ 에 shell 로 주입된 키 3개만 보인다.
-    # 프로젝트 .env 의 GROQ_API_KEY_4 는 load_env() 를 거쳐야 보인다 — 키 용량 1/4 가 조용히
-    # 놀고 있었다. (주의: 이건 Q7 413 을 고치지 않는다. 4개 키가 전부 같은 org 이다.)
-    from model_router import load_env
-    load_env()
 
-    for name in JUDGE_KEY_NAMES:
-        key = (os.environ.get(name) or "").strip()
-        if not key:
-            continue
-        try:
-            client = openai.OpenAI(api_key=key, base_url=JUDGE_BASE_URL)
-            resp = client.chat.completions.create(
-                model=JUDGE_MODEL,
-                messages=[
-                    {"role": "system", "content": "당신은 엄격한 시험 채점관입니다."},
-                    {"role": "user", "content": prompt},
-                ],
-                temperature=JUDGE_TEMPERATURE,
-                max_tokens=JUDGE_MAX_TOKENS,
-            )
-            text = (resp.choices[0].message.content or "").strip()
-            if text:
-                return text
-            log(f"  판관 빈 응답({name})")
-        except Exception as e:  # 키 실패/429/네트워크 — 다음 키로 즉시
-            # 상태 코드를 함께 찍는다. 401(키 무효)·413(ITPM 한도)·429(분당 한도)는 원인이
-            # 완전히 다르므로 다음 대응이 달라진다. 예외 타입명만으론 구분이 안 된다.
-            code = getattr(e, "status_code", None) or getattr(getattr(e, "response", None), "status_code", None)
-            log(f"  판관 실패({name}: HTTP {code} {type(e).__name__}) → 다음 키")
-            continue
-    return None
+def judge_precheck():
+    """판관 도달 가능 사전 점검. 죽은 판관은 전체를 '측정 결함' 으로 덮어써 순위를 오염시킨다.
+
+    반환: (ok: bool, detail: str)
+    """
+    try:
+        text, reason = cli_call(JUDGE_MODEL, JUDGE_PROMPT_PROBE, timeout=JUDGE_TIMEOUT_SEC)
+    except Exception as e:
+        return False, f"{type(e).__name__}: {str(e)[:80]}"
+    if not text:
+        return False, reason or "빈 응답"
+    return True, text[:40]
 
 
 def score_response(question, expected, actual):
-    """Groq qwen/qwen3.8-27b 고정 판관으로 1/0 채점 (AIK24-EVAL-JUDGE-01).
+    """OpenCode 고정 모델 판관으로 1/0 채점 (AIK24-EVAL-JUDGE-02).
 
     폴백 체인을 버린 이유: 그 체인은 판정 주체를 매번 바꾼다(gemini→gemini→groq…).
 
@@ -663,18 +649,26 @@ def score_response(question, expected, actual):
     """
     if not actual or not actual.strip():
         return 0
-    verdict = _judge_groq(f"문제: {question}\n정답: {expected}\n학생 답안: {actual}\n\n"
+    verdict = _judge_opencode(f"판관 규칙: 아래 문항의 '학생 답안' 이 '정답' 과 의미적으로 일치하면 1, 아니면 0 을 답하라. "
+                         "반드시 0 으로 판정: ① 질문이 특정 언어로 답을 요구했는데 다른 언어로 답한 경우 "
+                         "② 답안에 포함된 코드에 버그가 있는 경우 ③ 질문에 직접 답하지 않고 둘러댄 경우. "
+                         "출력은 '1' 또는 '0' 숫자 하나뿐이어야 한다. 설명 금지.\n"
+                         f"문제: {question}\n정답: {expected}\n학생 답안: {actual}\n\n"
                          "위 답안이 정답과 의미적으로 일치하면 '1', 아니면 '0'으로만 답하세요.\n"
                          "반드시 '0'으로 판정: ① 질문이 특정 언어로 답을 요구했는데 다른 언어로 답한 경우 "
                          "② 답안에 포함된 코드에 버그가 있는 경우 ③ 질문에 직접 답하지 않고 둘러댄 경우.")
     if not verdict:
         log(f"  채점 실패(응답 없음) → 측정 결함: {question[:40]}")
         return None
-    m = re.search(r"[01]", verdict)
+    # 파싱은 **답의 첫 글자** 를 본다. 예전처럼 응답 전체에서 아무 [01] 을 뒤지면
+    # 산문 가운데 흩어진 숫자 하나가 점수가 되어 동전이 된다.
+    m = re.match(r"\s*([01])", verdict)
+    if not m and len(verdict.strip()) <= 20:
+        m = re.search(r"[01]", verdict)
     if not m:
         log(f"  채점 파싱 실패({verdict[:30]!r}) → 측정 결함: {question[:40]}")
         return None
-    return int(m.group(0))
+    return int(m.group(1))
 
 
 def eval_model(model_id, with_judge=True):
@@ -1069,6 +1063,15 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
     }
     if not cli_model:
         return result, f"CLI 미등록 모델 ({model_id})"
+
+    # 판관 도달 불가 상태에서 12문항을 돌리면 전 문항이 '측정 결함' 으로 기록돼
+    # 점수 0/12 가 학생 탓으로 남는다. 사전 점검으로 중단한다(측정 실패 ≠ 모델 실패).
+    if with_judge:
+        ok, detail = judge_precheck()
+        if not ok:
+            log(f"  판관 사전 점검 실패({JUDGE_MODEL}: {detail}) — 평가 중단")
+            return result, f"판관 도달 불가: {JUDGE_MODEL} ({detail})"
+        log(f"  판관 사전 점검 통과: {JUDGE_MODEL} ({detail})")
 
     total = len(TEST_QUESTIONS)
     for idx, spec in enumerate(TEST_QUESTIONS, 1):
