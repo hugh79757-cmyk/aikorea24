@@ -1,3 +1,42 @@
+## 2026-10-16 19:10 — ⑥ EmDash og:image 404 원인 확정·수리 + 미디어 URL 전수 헬스체크 신설 (완료)
+
+### 한 일
+- free-models 페이지 og:image 404 의 근본 원인을 확정하고 D1 데이터를 정정했다. 재발 방지용 전수 헬스체크를 신설했다. 데이터 정정이라 기존 코드 변경은 없고, 탐지·수리 스크립트만 추가했다.
+
+### 결과 — 검증 근거
+- [검증됨] 근본 원인: EmDash 미디어 URL `/_emdash/api/media/file/<X>.<ext>` 의 <X> 는 media.id 가 아니라 **storage_key** 다. 근거: media.id 로 만든 URL 은 404, storage_key 로 만든 URL 은 200 — curl 실측 2건(free-models, nvidianemotron-3-ultra-550b-a55bfree).
+- [검증됨] 수리: 두 글 `featured_image` 를 storage_key 기반 URL 로 D1 UPDATE. 사전 스냅샷 `/tmp/emdash-featured-image-backup-20261016.json` (되돌리기 SQL 포함). 근거: 라이브 두 페이지 og:image **HTTP 200** + 페이지 HTML 안 신규 URL 5회 반영.
+- [검증됨] 피해 범위: 미디어 URL 을 쓰는 글 19건 중 깨진 것은 2건뿐이었다(17건은 원래 200). 근거: 19개 고유 URL 전수 curl — 수리 후 200 19 / 이상 0.
+- [검증됨] 재발 방지 [PRODUCTION CODE]: `scripts/emdash15_media_url_health.py` 신설 — 전수 탐지 → 404 는 media 표에서 storage_key 조회해 대체 URL 제시 → 대체 URL 도 실측해 200 일 때만 '수리 가능' → `--apply` 로만 D1 UPDATE(백업 파일 선기록), 잔존 이상 시 exit 1. 근거: 실측 실행 `이상 0 / 잔존 0 / exit 0`; `--apply` 교체 대상 0 → 쓰기 0건(기본 경로가 읽기 전용임을 실증).
+- [부분검증] [TEST CODE] `tests/test_emdash_media_url_health.py` 7 passed (키 추출·쿼리스트링 허용·비미디어 URL 무시·대체 URL 생성·분류 4종·SQL 리터럴 이스케이프·D1 응답 언랩). 제한: 판정 로직은 순수 함수 단위로 검증했고, 404→200 전환 실측은 라이브 2건에 한한다 — 결함을 새로 주입해 재현하지는 않았다.
+
+### 잔존 위험
+1. 잘못된 미디어 URL 을 만드는 주체는 이 repo 코드가 아니다(grep 0건) — EmDash 앱 업로드 경로 또는 외부 도구로 보이며 앱 쪽 원인은 미확인. 우리 쪽은 탐지·수리만 가능하다.
+2. 헬스체크가 자동 실행에 묶여 있지 않다 — 잔존 이상을 자동 통보하지 않는다(현재 수동 실행).
+
+### 다음 행동
+- 같은 유형이 재발하는지 주기 확인 필요. 자동 실행 등록 여부는 별도 결정.
+
+## 2026-10-16 19:13 — ⑧ B안(유료 대비) 설계·구현·라이브 발행 (완료)
+
+### 한 일
+- 무료 모델 페이지에 **'유료 모델과 비교 (공식 발표 기준)'** 섹션을 넣고 라이브 발행했다. 기준선 = Claude Sonnet 5.5. 유료 API 를 결제해 평가하지 않고(비용 0) 벤더 공식 발표 수치만 인용한다.
+
+### 결과 — 검증 근거
+- [검증됨] 기준선 결정: **Claude Sonnet 5.5** (Anthropic, 2026-09-28 발표). 근거: 공식 페이지 curl 200 후 추출 — 가격 $2 입력 / $10 출력, 컨텍스트 1,000,000 토큰·최대 출력 128K, 학습 컷오프 2026-06, Terminal-Bench 4.0 **70.6%**(Sonnet 5 는 10.3%). 출처 2개를 데이터 파일에 URL 로 기록.
+- [검증됨] [PRODUCTION CODE] `scripts/free_models_page.py` — `load_paid_baseline()` / `render_paid_baseline()` 추가, `render_eval06(..., baseline=None)` 로 기존 호출부 시그니처 유지(하위 호환). [CONFIG] 데이터 `scripts/logs/paid_baseline.json`.
+- [검증됨] 방법론 경고: 두 숫자가 같은 잣대가 아님을 명시("같은 잣대가 아닙니다" + 우열 단정 금지)하고 출처 URL·확인일을 함께 표기. 근거: 라이브 HTML 에서 키워드 5종 각 1회 확인.
+- [검증됨] 회귀 없음: `tests/test_free_models_page.py` 8 passed(기존), [TEST CODE] `tests/test_paid_baseline_section.py` 6 passed(신규). 미확인 항목은 빈 칸이 아니라 '미확인'으로 표기하는지도 테스트로 고정.
+- [검증됨] 라이브 발행: `free_models_page.py page` → https://emdash.aikorea24.kr/posts/free-models 갱신, 새 섹션 노출. ⑥ 수리도 유지(og:image 가 storage_key URL, 200).
+- [부분검증] 인용 수치의 최신성: 2026-10-16 시점 공식 페이지 1회 확인값이다. 제한: 자동 재수집이 없어 벤더가 가격·수치를 바꾸면 낡은 값을 계속 인용한다.
+
+### 잔존 위험
+1. `paid_baseline.json` 은 수동 갱신이다 — 자동 재수집 없음.
+2. 기준선을 1개만 넣었다. OpenAI 유료 가격표는 배치/장문 컨텍스트 컬럼 구분이 페이지에서 모호해 인용하지 않았다(추측 인용 금지).
+
+### 다음 행동
+- 기준선을 늘리려면 공식 표의 컬럼 의미를 먼저 확정할 것.
+
 ## 2026-10-16 16:52 — 요청 분류: 운영 DB 느린 쿼리 즉시 / 내부 도구·고객 메일 미뤄도
 
 ### 한 일

@@ -1,0 +1,26 @@
+{
+  "fetchedAt": "2026-10-16",
+  "purpose": "B안(유료 대비) — 기준선은 벤더 공식 발표 수치만 인용한다. 유료 API 결제·평가 없음(비용 0).",
+  "baseline": {
+    "name": "Claude Sonnet 5.5",
+    "vendor": "Anthropic",
+    "announced": "2026-09-28",
+    "price": {
+      "input_per_mtok_usd": 2,
+      "output_per_mtok_usd": 10,
+      "cache_read_per_mtok_usd": 0.1
+    },
+    "context_tokens": 1000000,
+    "max_output_tokens": 128000,
+    "training_cutoff": "2026-06",
+    "official_benchmark": {
+      "name": "Terminal-Bench 4.0",
+      "score": "70.6%",
+      "note": "Sonnet 5 는 10.3% (벤더 발표)"
+    },
+    "sources": [
+      "https://www.anthropic.com/news/claude-sonnet-5-5 — 가격($2/$10)·Terminal-Bench 4.0 70.6%·발표일 2026-09-28",
+      "https://docs.claude.com/en/docs/about-claude/models/overview — 컨텍스트 1M 토큰·최대 출력 128K·학습 컷오프 Jun 2026·가격표"
+    ]
+  }
+}

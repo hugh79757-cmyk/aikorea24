@@ -54,6 +54,70 @@ CLI_MODELS_PATH = mc.CATALOG_DIR / "free_models_cli.json"
 EXTERNAL_EVALS_PATH = mc.CATALOG_DIR / "external_evals.json"
 # EVAL-07: 일일 호출 검증 결과 (호출 검증 시각 + 점검 중 목록)
 VERIFY_PATH = mc.CATALOG_DIR / "free_models_verify.json"
+# B안(유료 대비): 유료 기준선 공식 발표 수치. 비용 없이 공식 자료만 인용한다.
+PAID_BASELINE_PATH = mc.CATALOG_DIR / "paid_baseline.json"
+
+
+def load_paid_baseline():
+    """B안 유료 기준선 데이터 로드. 파일이 없거나 형식이 아니면 None (섹션 생략)."""
+    data = _read_json(PAID_BASELINE_PATH, None)
+    if isinstance(data, dict) and isinstance(data.get("baseline"), dict):
+        return data
+    return None
+
+
+def render_paid_baseline(data, cli_models):
+    """B안: 유료 대비 섹션 — 기준선은 **공식 발표 수치만** 인용한다 (우리 실측 아님).
+
+    설계 원칙 (2026-10-16):
+    - 유료 모델 API 를 결제해 평가하지 않는다 (비용 0). 벤더가 공개한 가격·컨텍스트·벤치마크만 옮긴다.
+    - 왼쪽(무료)은 이 페이지가 직접 돌린 12문항 실측이고 오른쪽(유료)은 벤더 발표값이므로
+      **같은 잣대가 아니다**. 그래서 우열을 단정하는 문장을 쓰지 않고 '무엇이 다른지'만 표로 낸다.
+    - 출처 URL 과 확인 날짜를 항상 함께 표기한다 (숫자를 떼어내 인용하지 않는다).
+    """
+    b = data.get("baseline") or {}
+    price = b.get("price") or {}
+    bench = b.get("official_benchmark") or {}
+    fetched = data.get("fetchedAt") or ""
+
+    def _won(v):
+        if v is None:
+            return "미확인"
+        return ("$%g" % v)
+
+    # 무료 쪽 실측값: 검증 완료 모델의 컨텍스트 최대값 (없으면 미확인으로 정직하게)
+    ctxs = [m.get("context_length") for m in (cli_models or []) if m.get("context_length")]
+    free_ctx = f"최대 {max(ctxs):,} 토큰 (검증 완료 {len(cli_models or [])}개 중)" if ctxs else "개별 표기 (아래 전체 리스트)"
+
+    out = ["## 유료 모델과 비교 (공식 발표 기준)", ""]
+    out += [
+        f"기준선: **{b.get('name', '유료 모델')}**"
+        + (f" ({b.get('vendor')}" if b.get("vendor") else "")
+        + (f", {b.get('announced')} 발표)" if b.get("announced") else (")" if b.get("vendor") else "")),
+        "",
+        f"| 항목 | 이 페이지의 무료 모델 (우리 12문항 CLI 실측) | {b.get('name', '유료 기준선')} (벤더 공식 발표) |",
+        "|---|---|---|",
+        f"| 비용 (100만 토큰) | $0 — 무료 티어만 사용 | {_won(price.get('input_per_mtok_usd'))} 입력 / {_won(price.get('output_per_mtok_usd'))} 출력 |",
+        f"| 컨텍스트 창 | {free_ctx} | "
+        + (f"{b.get('context_tokens'):,} 토큰" if b.get("context_tokens") else "미확인")
+        + (f" (최대 출력 {b.get('max_output_tokens'):,})" if b.get("max_output_tokens") else "") + " |",
+        f"| 공식 성능 수치 | 자체 12문항 평가 (제3자 공통 벤치마크 아님) | "
+        + (f"{bench.get('name')} {bench.get('score')}" if bench.get("name") else "미확인")
+        + (f" — {bench.get('note')}" if bench.get("note") else "") + " |",
+        f"| 학습 데이터 컷오프 | 모델별 미공개 | {b.get('training_cutoff') or '미확인'} |",
+        "",
+        "> **두 숫자는 같은 잣대가 아닙니다.** 왼쪽은 이 페이지가 OpenCode CLI 로 직접 호출해 채점한 12문항 실측값이고, "
+        "오른쪽은 벤더가 공개한 발표값(자체 평가 조건)입니다. 그래서 '무료가 유료를 이긴다/진다'고 단정하지 않고, "
+        "유료 모델을 결제하지 않고 판단할 때 참고할 수 있도록 **무엇이 다른지**만 표시합니다.",
+        "> 유료 모델 API 를 결제해 같은 12문항으로 돌리는 방식(원안 A)은 비용이 들어 채택하지 않았습니다.",
+        "",
+    ]
+    srcs = b.get("sources") or []
+    if srcs:
+        out += ["출처 (공식 자료, " + (fetched + " 확인" if fetched else "확인일 미기록") + "):"]
+        out += [f"- {u}" for u in srcs]
+        out += [""]
+    return out
 
 
 def load_verify():
@@ -299,7 +363,7 @@ def week_changes(days=7):
 # --------------------------------------------------------------- 렌더링 (EVAL-06 신규)
 
 
-def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None):
+def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, baseline=None):
     """EVAL-06 지시서에 따른 새 페이지 구조 렌더링.
         
     구조:
@@ -458,6 +522,11 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None):
         out.append("| " + " | ".join(row) + " |")
     
     out.append("")
+    
+    # 3-b. 유료 대비 (B안: 공식 자료 인용 · 비용 0). 데이터 파일이 없으면 섹션 자체를 넣지 않는다.
+    bl = baseline if baseline is not None else load_paid_baseline()
+    if bl:
+        out += render_paid_baseline(bl, cli_models)
     
     # 4. 제외된 모델
     out += ["## 제외된 모델", ""]
