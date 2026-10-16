@@ -6,8 +6,36 @@ description: Use when writing or editing long-form posts for aikorea24 EmDash bl
 # aik24-blog-writing — aikorea24 블로그 글쓰기
 
 대상: EmDash 블로그 `https://emdash.aikorea24.kr/posts/<slug>`.
-기준 사례: `opencode-cli-guide` 전면 재작성 (2026-10-16, 대표님 평가 100/100).
+기준 사례: `opencode-cli-guide` 전면 재작성 (2026-10-16, 대표님 평가 100/100), `groq-free-api-key-guide` 재작성 (표 7행·외부 링크 5개).
 아래 규칙은 그 재작성에서 지적받은 4가지를 뼈대로 만든 것이다. 어기면 재작업이다.
+
+**정답지 사본이 repo 안에 있다** — 쓰기 전에 한 편을 통째로 읽고 밀도를 맞춘다:
+`scripts/logs/opencode_cli_guide_draft.md` (5,362자) · `scripts/logs/groq_free_api_key_guide_draft.md` (3,447자).
+규칙 목록보다 완성된 글 한 편이 더 잘 먹는다. 새 글은 이 밀도에 맞춘다.
+
+## 0. 쓰기 전 — 사실 수집 (건너뛰면 글이 반드시 얇아진다)
+
+순서: **수집 → 작성 → 게이트(3절) → 발행**. 수집을 건너뛰고 바로 쓰면 기억에 의존하게 되고,
+빈 곳을 "한도는 바뀔 수 있으니 확인하세요" 같은 회피 문장으로 채운다.
+(2026-10-16 실측: 수집 없이 쓴 판 = 수치 0개·표 0개·3,054자 / 수집 후 재작성 = 표 7행·외부 링크 5개·3,447자.)
+
+```bash
+curl -s "https://<공식 문서 페이지>" -o /tmp/src.html -w 'status %{http_code}\n'
+python3 -c "
+import re,html
+s=open('/tmp/src.html',encoding='utf-8',errors='ignore').read()
+s=re.sub(r'<script.*?</script>|<style.*?</style>',' ',s,flags=re.S)
+t=html.unescape(re.sub(r'<[^>]+>',' ',s)); print(re.sub(r'\s+',' ',t)[:2000])"
+```
+
+수집 체크리스트 — 이 4개가 안 채워지면 아직 쓸 때가 아니다:
+
+1. **숫자** — 한도·요금·속도·개수. 문서 표를 그대로 전사한다(요약·반올림 금지).
+2. **날짜** — 공개일·버전, 그리고 "YYYY년 M월 D일 기준" 표기.
+3. **URL 3개 이상** — 공식 홈 / 키 발급·설치 / 공식 문서.
+4. **한계 한 줄** — 무료로 안 되는 것, 제한, 주의점.
+
+공식 페이지가 JS 렌더·리다이렉트(308)·404 라 본문이 비어 나오면 **그 사실은 쓰지 않는다.** 지어내면 회귀다.
 
 ## 1. 구조 — 도입 설명문 → 소제목/본문 → 마무리 소제목
 
@@ -37,6 +65,24 @@ description: Use when writing or editing long-form posts for aikorea24 EmDash bl
 - **시점 의존 수치는 "YYYY년 M월 D일 기준"을 명시한다.** 스타 수·버전·세션 수는 계속 변한다.
 
 ## 3. 발행 경로 (repo 에 글 소스가 없다)
+
+**발행은 게이트를 통과한 뒤에만 한다** — 규칙 준수를 작성자에게 맡기지 않고 코드로 막는다(exit 3 = 발행 금지).
+게이트 검사 항목: 본문 H1 없음 / `## 마무리` 있음 / 외부 링크 ≥3 / 표 ≥1 / 코드펜스 짝 / 3,000자 이상 / 내부 용어 0.
+
+```bash
+cd /Users/twinssn/Projects/aikorea24
+python3 scripts/emdash_precheck.py /tmp/my-post.md     # exit 0 확인 (실패 시 사유 출력)
+```
+
+통과 후 이어서 발행한다(게이트 + 발행을 한 명령으로 묶은 형태 — 권장):
+
+```bash
+cd /Users/twinssn/Projects/aikorea24
+set -a && . ./.env && . "$HOME/.env.common" && set +a   # PAT 는 ~/.env.common 에만 있다
+python3 scripts/emdash_precheck.py /tmp/my-post.md --publish <slug> "<제목>" "<excerpt 한 줄>"
+```
+
+또는 직접 호출:
 
 ```bash
 cd /Users/twinssn/Projects/aikorea24
