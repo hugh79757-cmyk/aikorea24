@@ -1,3 +1,30 @@
+## 2026-10-16 14:50 — AIK24-OPENCODE-USAGE-01: OpenCode CLI 실사용 보고 (완료)
+
+### 한 일
+- 지시서 `2026-10-16-1230-AIK24-OPENCODE-USAGE-01-실사용-보고.md`에 따라 OpenCode CLI 실제 사용 경험을 8개 항목으로 보고했다. 지시서 §4에 따라 **읽기 전용** — 코드·설정 변경 없음.
+
+### 결과
+- [검증됨] 보고서 작성 완료: `~/Desktop/메모 Hugh-v2/SSOT/프로젝트/aikorea24/지시서/2026-10-16-1230-AIK24-OPENCODE-USAGE-01-완료보고.md` (324행, 8개 항목 제목 8/8 존재 확인).
+- [검증됨] 수치 산출 근거 = `~/.zsh_history`(185,684 bytes, opencode 포함 222라인), `~/.local/share/opencode/opencode.db`(155,226,112 bytes, `session_v2` 623세션), `~/.config/opencode/opencode.json`, `ps` 프로세스 계층.
+- [검증됨] 실행 방식: TUI `opencode` 210회 대 `opencode run` **0회**. `opencode serve`도 히스토리 0회이나 현재 세션 부모 프로세스는 `opencode serve --service`(PID 1043)임을 `ps`로 확인.
+- [검증됨] 모델: `session_v2`의 `model` 필드가 채워진 세션 623개. 무료(`:free`/`-free` 접미사) **564개**, 유료 59개 → `564/623 = 90.5%`.
+- [검증됨] 자주 쓴 모델 top 3: `opencode/space-bunny-free` 117 / `opencode/mimo-v2.6-flash-free` 41 / `kilo/stepfun/step-5-preview-free` 31. 이 세션은 `opencode/space-bunny-free` variant `xhigh`.
+- [검증됨] providerID별 세션 수 합계 검증: `opencode` 272 + `kilo` 179 + `openrouter` 95 + `upstage` 26 + `nvidia` 26 + `deepseek` 12 + `groq` 10 + `googleai` 3 = **623** (전체 세션 수와 일치).
+- [검증됨] 지시서 §6의 `zen`은 **`zen`이라는 이름으로 등록돼 있지 않다.** `opencode.json`의 25개 provider 키에서 `zen` grep 결과는 `zenmlx`·`zenmux` 2개뿐이며 둘 다 **세션 사용 0건**. 지시서·설정·실사용 간 불일치를 추측으로 메우지 않고 그대로 기록함.
+- [검증됨] "안 해봄" 6건 명시: 설치 명령(히스토리 0건), 첫 실행 명령, `/connect`(auth.json이 `~/.config/opencode/`·`~/.local/share/opencode/` 양쪽 모두 MISSING), `opencode run`, `opencode serve` 직접 실행, `zenmlx`/`zenmux`.
+
+### 잔존 위험
+- `model` 필드가 NULL인 세션은 집계에서 제외됐다. 전체 세션 수와 623은 다를 수 있다.
+- `zen` 불일치(지시서 `zen` / 설정 `zenmlx`·`zenmux` / 실사용 0건)는 **풀지 않고 보고만 했다.** 내장 providerID `opencode`(272세션)가 지시서의 "zen"을 뜻하는 것인지는 확인하지 않았다.
+- free 모델 세션 수(564)는 비용 0을 보증하지 않는다. 이 보고서는 세션 건수만 집계했고 응답 품질·지연 데이터는 갖고 있지 않다. [검증불가]
+- `~/.opencode/bin/`에 `opencode2` 파일이 별도로 있으나 정체를 확인하지 않았다.
+- 현재 세션 부모가 `opencode serve --service`인 것은 이 보고서를 열었던 프로그램이 띄운 것이라 습관적 실행 방식이 아니다.
+
+### 다음 행동
+- 지시서 §5 완료 기준 충족. §7 종료 규칙에 따라 이 기록으로 종료.
+- 위 `진행 중` 마커는 완료 보고로 교체돼 제거됐다.
+- 지시서 §7: 왓츠앱 말랑이가 이 state.md를 읽고 verify 후 시니어2에게 알림.
+
 ## 2026-10-16 14:20 — AIK24-PIPE-04: verdict 3단계 + 주간 무료 기회 초안 8건
 
 ### 한 일
