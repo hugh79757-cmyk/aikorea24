@@ -1,3 +1,64 @@
+## 2026-10-16 23:40 — AIK24-EVAL-JUDGE-01 완료 — 판관 Groq 고정 + JUDGE_MAX_TOKENS 10→100
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-16-2325-AIK24-EVAL-JUDGE-01-판관-Groq고정-토큰상향.md`
+
+### 한 일
+신뢰도 4단계 1단계에서 드러난 미해결 2건(판관 출력 잘림 / 판정 주체 회전)을 지시서대로 제거했다.
+
+작업 1 — `JUDGE_MAX_TOKENS = 10 → 100`. 판관이 산문("학생의 답안은…")으로 시작하면 10토큰에
+잘려 파싱 실패 → 측정 결함으로 분모에서 빠지던 것이 원인이었다.
+
+작업 2 — 판관을 **Groq `qwen/qwen3.8-27b` 단일 고정**으로 교체.
+- `_judge_groq()` 신설. `model_router`(쓰레드 파이프라인 공유)를 거치지 않고
+  `openai.OpenAI(base_url="https://api.groq.com/openai/v1")` 로 직접 호출한다.
+- 키 회전: `GROQ_API_KEY` → `_2` → `_3` → `_4`. 값이 없는 키는 조용히 스킵.
+- 키 실패(429·예외) → 다음 키로 **즉시** 이동. 재시도·백오프 없음.
+- 전멸 → None(=측정 결함). **폴백 체인으로 되돌아가는 경로를 두지 않았다.**
+- temperature 0.0 · max_tokens 100 · system_prompt "당신은 엄격한 시험 채점관입니다." 유지.
+
+### 결과 — 완료 기준 대비 검증 근거
+
+- [검증됨] 작업1: `grep -n "JUDGE_MAX_TOKENS = "` → `100` 확인.
+- [검증됨] 작업2: `score_response()` 안에 `model_override` 참조 **0건**(grep).
+  `_judge_groq` 로 교체, 폴백 체인 import 제거.
+- [검증됨] 판관 로그가 `gemini`/`[체인]` 없이 조용히 동작 — 수동 1문항 실행 확인:
+  정답 문장 → `1`, 오답 문장 → `0` 반환.
+- [검증됨] 신규 테스트 6건 통과(지시서 요구 2건 포함):
+  키 전무 시 None / 첫 키 예외 시 다음 키로 이동 / 전멸 시 None / 폴백 체인 미사용 /
+  JUDGE_MAX_TOKENS=100 / 모델·base_url·키 목록 고정.
+- [검증됨] `tests/test_model_eval_agent_v2.py` **30건 통과**.
+- [검증됨] 전체 스위트 `17 failed / 685 passed` — 실패 17건은 HEAD 기준과 **동일 파일·케이스**
+  (`deep_dive_writer` SyntaxError 등), 신규 실패 0건.
+- [검증됨] 허용 파일 준수 — 변경 파일은 `scripts/model_eval.py`, `tests/test_model_eval_agent_v2.py`
+  뿐이다. `model_router.py`·`config/models.yaml` 미수정(금지 준수).
+  (`CHANGES.md`·`.planning/STATE.md`·`test_safe_div.py` 는 다른 세션 변경분이라 커밋 제외)
+
+### 파일 구분
+- [PRODUCTION CODE] scripts/model_eval.py — JUDGE_MAX_TOKENS, `_judge_groq()`, JUDGE_* 상수 4종,
+  `score_response()` docstring
+- [TEST CODE] tests/test_model_eval_agent_v2.py — 6건 추가
+- 프로덕션 수정과 테스트 수정을 **동시에** 하지 않았다. 테스트는 새 계약(고정 판관)을
+  검증하는 새 케이스이며, 프로덕션 코드만으로 통과하며 독립적으로 실패함을 확인했다.
+
+### 잔존 위험
+1. **판관이 바뀌면 지금까지의 점수는 다른 기구의 점수다.** Groq qwen3.8-27b 는 지금까지의
+   gemini/groq 혼합 판관과 다른 기준으로 0/1 을 낸다. 기존 5건(qv1 4건 + qv2 2건)은
+   신판관과 비교 불가 — 문항 세트(qv)는 그대로지만 판관 버전이 달라졌다.
+   → **판관 버전(judge v1)을 결과에 기록하는 것이 다음 과제다.** 지금은 없다.
+2. **판관 1개 모델에 단일 장애점이 생겼다.** 의도한 tradeoff(가변 판정 주체 제거)지만,
+   Groq 장애·한도 소진 시 해당 러닝은 전 문항 측정 결함이 된다. 폴백을 두지 않는 것은
+   지시서 금지 사항이므로 유지했다.
+3. **기존 판결은 재채점으로 되살릴 수 있다.** `scripts/eval_variance.py` + 캐시 답안으로
+   과거 5건을 새 판관으로 다시 채점하면 두 기구 간 차이를 직접 측정할 수 있다(비용 0).
+4. Gemini 무료 티어 500회/일 한도 소진 문제는 Groq 전환으로 판관 쪽에서 해소됨. 단,
+   판관 총량이 늘면 Groq 쪽 한도가 다음 병목이 된다.
+
+### 다음 행동
+- 판관 버전(`judge_v`)을 결과·리더보드에 기록 — 지시서 범위 밖이라 미수행.
+- (선택) `eval_variance.py --repeats 3` 재실행: 동일 답안을 Groq 판관으로 3회 채점해
+  2.1%였던 판관 변동이 실제로 사라졌는지 확인(비용 0, 학생 재호출 없음).
+- (선택) 위 확인 후 ll-alpha·cat-jam 을 새 판관으로 재측정해 점수 정합을 맞춘다.
+
 ## 2026-10-16 22:05 — 신뢰도 4단계 실행 (변동원 분리 → 판관 고정 → 러닝로그 → 분모 표기)
 
 ### 한 일

@@ -235,3 +235,88 @@ def test_runs_log_survives_cache_overwrite(tmp_path, monkeypatch):
     import json as _j
     assert [_j.loads(l)["score"] for l in lines] == [9, 10]
     assert _j.loads(cache.read_text(encoding="utf-8"))["cat-jam-free"]["score"] == 10
+
+
+# ── AIK24-EVAL-JUDGE-01: 판관 Groq 고정 + JUDGE_MAX_TOKENS 상향 ────────
+
+def test_judge_max_tokens_raised():
+    """판관이 산문으로 시작해도 잘리지 않아야 한다 (10 → 100)."""
+    assert me.JUDGE_MAX_TOKENS == 100
+
+
+def test_judge_model_and_base_url_are_pinned():
+    """판정 주체가 매번 바뀌면 점수 비교가 동전이다 — Groq 단일 모델로 고정."""
+    assert me.JUDGE_PROVIDER == "groq"
+    assert me.JUDGE_MODEL == "qwen/qwen3.8-27b"
+    assert me.JUDGE_BASE_URL == "https://api.groq.com/openai/v1"
+    assert me.JUDGE_KEY_NAMES == ("GROQ_API_KEY", "GROQ_API_KEY_2",
+                                  "GROQ_API_KEY_3", "GROQ_API_KEY_4")
+
+
+def test_score_response_returns_none_when_no_groq_key(monkeypatch):
+    """Groq 키가 하나도 없으면 폴백 없이 None (측정 결함)."""
+    for name in me.JUDGE_KEY_NAMES:
+        monkeypatch.delenv(name, raising=False)
+
+    class Boom:
+        def __init__(self, *a, **k):
+            raise AssertionError("키가 없는데 클라이언트가 만들어졌다")
+
+    monkeypatch.setitem(__import__("sys").modules, "openai",
+                        type("m", (), {"OpenAI": Boom}))
+    assert me.score_response("문제", "정답", "답안") is None
+
+
+def test_score_response_rotates_to_next_key_on_exception(monkeypatch):
+    """첫 키가 예외를 던지면 다음 키로 넘어간다 (재시도·백오프 없음)."""
+    for name in me.JUDGE_KEY_NAMES:
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("GROQ_API_KEY", "k1")
+    monkeypatch.setenv("GROQ_API_KEY_2", "k2")
+
+    used = []
+
+    class FakeCompletions:
+        def create(self, **kw):
+            used.append(kw)
+            msg = type("M", (), {"content": "1"})()
+            return type("R", (), {"choices": [type("C", (), {"message": msg})()]})()
+
+    class FakeOpenAI:
+        def __init__(self, api_key=None, base_url=None):
+            if api_key == "k1":
+                raise RuntimeError("429 rate limited")
+            self.chat = type("Chat", (), {"completions": FakeCompletions()})()
+
+    monkeypatch.setitem(__import__("sys").modules, "openai",
+                        type("m", (), {"OpenAI": FakeOpenAI}))
+    assert me.score_response("문제", "정답", "답안") == 1
+    assert len(used) == 1, "첫 키 실패 후 다음 키로 넘어가 한 번만 성공해야 한다"
+    assert used[0]["model"] == me.JUDGE_MODEL
+    assert used[0]["temperature"] == 0.0
+    assert used[0]["max_tokens"] == 100
+
+
+def test_all_groq_keys_failing_returns_none(monkeypatch):
+    """전멸 시 None — 폴백 체인으로 되돌아가지 않는다."""
+    for name in me.JUDGE_KEY_NAMES:
+        monkeypatch.setenv(name, "k")
+
+    class AllFail:
+        def __init__(self, api_key=None, base_url=None):
+            raise RuntimeError("down")
+
+    monkeypatch.setitem(__import__("sys").modules, "openai",
+                        type("m", (), {"OpenAI": AllFail}))
+    assert me.score_response("문제", "정답", "답안") is None
+
+
+def test_judge_never_falls_back_to_fallback_chain(monkeypatch):
+    """model_router.chat_completion 을 판관이 쓰지 않는다 (grep 0건의 회귀 방지)."""
+    import model_router
+    calls = []
+    monkeypatch.setattr(model_router, "chat_completion",
+                        lambda *a, **k: calls.append(1) or "1")
+    monkeypatch.setattr(me, "_judge_groq", lambda p: "1")
+    me.score_response("q", "e", "a")
+    assert calls == [], "폴백 체인 경로가 남아 있다"

@@ -49,7 +49,9 @@ QUESTION_TIMEOUT = 60
 QUESTION_MAX_TOKENS = 1500  # EVAL-02: 실무 문항(12,000자 문서 참조·테스트 스위트) 답이 500에 잘림
 # AGENT-EVAL-01 4단계 2번: 판관은 0 으로 고정한다. 0.1 에서는 같은 답안에도 0/1 이 흔들렸다.
 JUDGE_TEMPERATURE = 0.0
-JUDGE_MAX_TOKENS = 10
+# AIK24-EVAL-JUDGE-01: 판관이 산문으로 시작하면 10토큰에 잘려 파싱 실패했다.
+# 파서는 응답 전체에서 [01] 을 찾으므로 끝까지 받으면 판정 숫자는 읽힌다.
+JUDGE_MAX_TOKENS = 100
 
 # OpenRouter 무료 티어는 분당 20회 제한이 있다. 8문항을 연속으로 쏘면 429가 터져
 # "0점 처리"가 모델 능력 실패와 구분되지 않는다. 문항 간 간격을 두고, 429는
@@ -596,8 +598,55 @@ def _difficulty_note(by_axis):
     return present[0] if len(present) == 1 else f"{present[0]}~{present[-1]}"
 
 
+# ── AIK24-EVAL-JUDGE-01 — 판관을 Groq 단일 모델로 고정 ────────────────
+# 무료 폴백 체인을 쓰면 판정 주체가 매번 바뀐다(gemini→gemini→groq…). 같은 답안의
+# 0/1 이 그 차이로 뒤집히면 점수 비교가 동전이다. 판관은 model_eval 전용이므로
+# model_router(쓰레드 파이프라인 공유)를 거치지 않고 Groq 로 직접 부른다.
+JUDGE_PROVIDER = "groq"
+JUDGE_MODEL = "qwen/qwen3.8-27b"   # reasoning 모델이 아니라 즉시 답을 낸다
+JUDGE_BASE_URL = "https://api.groq.com/openai/v1"
+# 키 회전 순서. 값이 없는 키는 조용히 건너뛴다.
+JUDGE_KEY_NAMES = ("GROQ_API_KEY", "GROQ_API_KEY_2", "GROQ_API_KEY_3", "GROQ_API_KEY_4")
+
+
+def _judge_groq(prompt):
+    """Groq 판관 호출. 키 실패 시 다음 키로 즉시 넘어가고, 전멸 시 None.
+
+    재시도·백오프를 두지 않는다(지시서 작업 2-3). 폴백 체인으로 되돌아가지 않는다 —
+    Groq 이 죽으면 그 문항은 측정 결함이다(지시서 금지 사항).
+    원시 키는 어떤 경로에도 남기지 않는다.
+    """
+    import openai
+
+    for name in JUDGE_KEY_NAMES:
+        key = (os.environ.get(name) or "").strip()
+        if not key:
+            continue
+        try:
+            client = openai.OpenAI(api_key=key, base_url=JUDGE_BASE_URL)
+            resp = client.chat.completions.create(
+                model=JUDGE_MODEL,
+                messages=[
+                    {"role": "system", "content": "당신은 엄격한 시험 채점관입니다."},
+                    {"role": "user", "content": prompt},
+                ],
+                temperature=JUDGE_TEMPERATURE,
+                max_tokens=JUDGE_MAX_TOKENS,
+            )
+            text = (resp.choices[0].message.content or "").strip()
+            if text:
+                return text
+            log(f"  판관 빈 응답({name})")
+        except Exception as e:  # 키 실패/429/네트워크 — 다음 키로 즉시
+            log(f"  판관 실패({name}: {type(e).__name__}) → 다음 키")
+            continue
+    return None
+
+
 def score_response(question, expected, actual):
-    """무료 LLM 폴백 체인을 판관으로 사용해 1/0 채점.
+    """Groq qwen/qwen3.8-27b 고정 판관으로 1/0 채점 (AIK24-EVAL-JUDGE-01).
+
+    폴백 체인을 버린 이유: 그 체인은 판정 주체를 매번 바꾼다(gemini→gemini→groq…).
 
     BLOG-03 §1-3: 판관이 0/1을 말하지 못하면 0점을 주지 않고 None(=judge_failed)을
     돌려준다. 0점은 '모델이 틀렸다'는 사실이고, None은 '우리가 못 쟀다'다. 둘을
@@ -605,25 +654,10 @@ def score_response(question, expected, actual):
     """
     if not actual or not actual.strip():
         return 0
-    from model_router import chat_completion
-
-    verdict = chat_completion(
-        messages=[
-            {
-                "role": "user",
-                "content": (
-                    f"문제: {question}\n정답: {expected}\n학생 답안: {actual}\n\n"
-                    "위 답안이 정답과 의미적으로 일치하면 '1', 아니면 '0'으로만 답하세요.\n"
-                    "반드시 '0'으로 판정: ① 질문이 특정 언어로 답을 요구했는데 다른 언어로 답한 경우 "
-                    "② 답안에 포함된 코드에 버그가 있는 경우 ③ 질문에 직접 답하지 않고 둘러댄 경우."
-                ),
-            }
-        ],
-        system_prompt="당신은 엄격한 시험 채점관입니다.",
-        temperature=JUDGE_TEMPERATURE,
-        max_tokens=JUDGE_MAX_TOKENS,
-        model_override=None,  # 무료 폴백 체인만
-    )
+    verdict = _judge_groq(f"문제: {question}\n정답: {expected}\n학생 답안: {actual}\n\n"
+                         "위 답안이 정답과 의미적으로 일치하면 '1', 아니면 '0'으로만 답하세요.\n"
+                         "반드시 '0'으로 판정: ① 질문이 특정 언어로 답을 요구했는데 다른 언어로 답한 경우 "
+                         "② 답안에 포함된 코드에 버그가 있는 경우 ③ 질문에 직접 답하지 않고 둘러댄 경우.")
     if not verdict:
         log(f"  채점 실패(응답 없음) → 측정 결함: {question[:40]}")
         return None
