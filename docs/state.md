@@ -1,3 +1,48 @@
+## 2026-10-16 18:22 — AIK24-EVAL-07 후속: verify-models 잡 실발화 검증 → launchd PATH 잠복 결함 수정
+
+### 한 일
+- 미완료 항목(verify-models 잡 첫 발화 미확인 / [검증불가])을 **launchd 실제 환경에서 발화**시켜 검증했다.
+- 발화 전 점검에서 **페이지 데이터를 파괴하는 잠복 결함**을 적발해 plist 수정까지 포함했다.
+
+### 결과 — 검증 근거
+- [검증됨] **결함: launchd PATH 에 opencode 없음.** 근거: `command -v opencode` = `/Users/twinssn/.opencode/bin/opencode`, `launchctl getenv PATH` = 빈 값(시스템 기본 `/usr/bin:/bin:/usr/sbin:/sbin`), `scripts/model_eval.py` 의 `cli_call()` 이 `subprocess.run(["opencode", "run", ...])` 로 bare 명령 실행. 이 상태로 09:30 잡이 돌면 15건 전부 FAIL → 스크립트가 PASS 만 `--out` 에 쓰므로 `scripts/logs/free_models_cli.json`(페이지 데이터 원본)이 **빈 배열로 덮인다**. 10:00 `free-model-pipe` 는 `CLI 검증 모델 없음`으로 1 반환 → 재발행 중단. 자동 재생성 경로 없음(`free_models_cli.py` 를 호출하는 잡·스크립트 0건 — grep 확인).
+- [검증됨] **수정 = 커밋 `e982072c`** — plist 에 `EnvironmentVariables/PATH` 추가(`/Users/twinssn/.opencode/bin` 포함). `plutil -lint` OK → 재설치·재로드 후 `launchctl print` 에 `PATH => /Users/twinssn/.opencode/bin:...` 표시. 주석도 실측대로 정정.
+- [검증됨] **실발화**: `launchctl kickstart -k gui/$UID/kr.aikorea24.verify-models` → `runs = 1` · `last exit code = 0` · `state = not running` · stderr **0바이트** · `scripts/logs/verify-models.log` 15줄 생성(16:16:27~16:17:49 = 90초).
+- [검증됨] 실행 결과 **PASS 10 / FAIL 5**. FAIL 4건 = `CLI 타임아웃 60초`(kilo·opencode 양쪽의 `nvidia/nemotron-3-ultra-550b-a55b`, `nvidia/nemotron-3.5-lightning`), FAIL 1건 = `Model unavailable: opencode/step-5-preview-free`.
+- [검증됨] **실패 원인 분리** — 5건 모두 셸에서 동일 재현(launchd 환경 문제 아님). 대조군: 무효 ID(`openrouter/nope:free`)는 0.3초에 `Model unavailable`, 정상 ID(`opencode/cat-jam-free`)는 2.0초 `PONG`. 즉 60초 타임아웃은 "ID 무효"가 아니라 **모델이 응답하지 않음**이다.
+- [검증됨] `opencode/step-5-preview-free` 는 퇴역: 오늘 스냅샷(`scripts/logs/model_catalog_2026-10-16.json`, 38행)에 `step-5-preview` **0건**. 반면 `nemotron-3-ultra`·`nemotron-3.5-lightning` 은 스냅샷에 존재(무료 목록에 계속 노출).
+- [검증됨] **잡이 페이지 데이터까지 덮어쓴다**: 실행 후 `free_models_cli.json` 15 → **10건**(PASS 만 기록). plist 주석의 "verify 캐시만 갱신" 서술과 불일치 → 정정.
+- [검증됨] 테스트가 만든 데이터 변경은 원복했다: `/tmp/verify-models-kickstart-20261016/` 백업으로 `free_models_cli.json`(15건)·`free_models_verify.json` 복구 → `git status` 에서 두 파일 clean. 실행 산출물(로그·prune 결과)은 같은 폴더 `run-output/` 에 보존.
+
+### 잔존 위험
+1. **단일 60초 타임아웃이 모델을 영구 삭제한다** — 검증 잡이 페이지 데이터를 PASS 목록으로 **교체**하고 재생성 경로가 없기 때문. 오늘 실행에서 실제로 4건이 이 이유로 목록에서 빠졌다(원복함). 내일 09:30 자동 실행에서 재발한다 — 대표님 결정 필요(검증 기록만 쓰기 / 유지 / 타임아웃 상향).
+2. `opencode/step-5-preview-free` 는 퇴역 모델인데 `free_models_cli.json` 에 남아 있다.
+3. nemotron 4건의 무응답(45~60초)이 일시 장애인지 지속 장애인지 미확정 — 카탈로그에는 남아 있다.
+4. 550B 급 모델에 60초는 짧을 수 있으나, 스모크 프롬프트에도 무응답이라 단순 상향으로 해결되는지 미확정.
+
+### 다음 행동
+- 대표님 결정: 검증 잡이 페이지 데이터를 prune 할지 / 검증 기록만 쓰게 바꿀지 / 타임아웃을 올릴지.
+- `opencode/step-5-preview-free` 항목 정리(퇴역).
+
+## 2026-10-16 18:16 — 질의응: add(a,b) 함수 질문 응답 (읽기 전용)
+
+### 한 일
+- 사용자 질문에 대한 응답을 제공했다: `def add(a, b): return a + b` 가
+  - 두 개의 인자 `a`, `b` 를 받는 함수 `add` 를 정의하고,
+  - 그 합(`a + b`)을 반환한다는 것을 설명했다.
+- 질의응 처리에 따른 상태 기록 갱신(state.md / CHANGES.md / 작업 로그)을 수행했다.
+
+### 결과 — 검증 근거
+- [검증됨] 코드 스니펫을 직접 읽어 의미를 해석했다(실행 없음 — 질의응 요청).
+  근거: 전달받은 코드 텍스트 자체가 `def`/`return` 의 Python 구문을 포함하며,
+  인자 2개(타입 미지정)와 반환값(덧셈 결과)만으로 구성된다.
+
+### 잔존 위험
+- 없음 (이유: 읽기 전용 질의응 처리이며 영향이 없는 작업).
+
+### 다음 행동
+- 없음 (사용자 추가 요청이 있으면 처리한다).
+
 ## 2026-10-16 18:00 — AIK24-EMDASH-12 완료: 무료 모델 표 열 폭 확정(단어 중간 쪼개짐 0) + verify-models 2단 잡 커밋
 
 > 시각 기준 = KST(머신 로컬 +07). 위 항목들의 시각은 세션 시계 오차로 실제보다 앞서 있습니다.
@@ -20,13 +65,13 @@
 
 ### 잔존 위험
 1. ~~`fix_tables.py` 미커밋~~ → **해소(커밋 `946ca1c`)**. 2026-10-14 D1 읽기 가드 56줄을 검증 후 커밋했다. 근거: `py_compile` OK · `--help` OK · 가드 실호출 시 Cloudflare GraphQL 조회 성공 → 오늘 rowsRead **1,458,502 / 5,000,000 (29.2%)** 로 임계 50% 미만 `통과` 판정.
-2. **verify-models 잡은 실발화 전** — 첫 자동 실행은 2026-10-17 09:30. `scripts/logs/verify-models.log` 는 아직 없다(설치·등록만 확인). 실제 실행 결과는 미확인이므로 이 잡의 동작은 [검증불가].
+2. ~~verify-models 잡은 실발화 전~~ → **해소(2026-10-16 16:16 발화 검증 · 커밋 `e982072c`)**. 첫 자동 실행 전에 launchd 환경 그대로 발화시켜 `runs=1 / exit 0 / 로그 15줄 / stderr 0바이트` 를 확인했고, 그 과정에서 잠복 결함(launchd PATH 에 opencode 없음 → 전 항목 FAIL → 페이지 데이터가 빈 배열로 덮임)을 적발해 plist 를 수정했다. 상세는 최상단 18:22 항목.
 3. **쪼개짐 대조군은 브라우저 CSS 주입으로 재현**한 것이며 12% 상태로 되돌려 재배포해 재현한 것은 아니다(동일 결함은 이전 배포 상태 스크린샷 `/tmp/fm-1200.png` 에서 육안 확인).
 4. 375px 카드 하단에 사이트 공통 "가입" 플로팅 위젯이 카드 위로 겹쳐 보인다 — 표가 아니라 전역 위젯 문제(범위 밖).
 
 ### 다음 행동
 - ~~`fix_tables.py` 가드를 검증 후 커밋할지 결정~~ → 완료(커밋 `946ca1c`).
-- 2026-10-17 09:30 이후 `scripts/logs/verify-models.log` 로 첫 실행 결과 확인.
+- ~~2026-10-17 09:30 이후 `scripts/logs/verify-models.log` 로 첫 실행 결과 확인~~ → 완료(2026-10-16 16:16 발화, 최상단 18:22 항목).
 
 ## 2026-10-16 18:40 — AIK24-OPENROUTER-GUIDE: groq 글 삭제 → OpenRouter 글로 교체 발행 + 스킬 4건 보강
 
