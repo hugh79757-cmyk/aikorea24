@@ -5,9 +5,11 @@ v2 는 "한국인 초보자가 오늘 무료로 쓸 수 있는가?"를 LLM 도�
 봤고, v3 는 선정 기준을 **"이 LLM을 OpenCode 같은 CLI 서비스에서 무료로 쓸 수 있는가?"**
 로 바꾼다 (지시서 §4-3).
 
-  - 모델 3건 : 4개 CLI 프로바이더 행 중 최신 갱신일(pub_date) 순. 같은 프로바이더는
-               1건만(로테이션). GitHub 이슈 언급 +2, Reddit 업보트 50+ +3.
-  - 뉴스 1건 : HuggingFace trending/blog 등 정보성. "CLI 무료" 기준 미적용.
+브리핑은 뉴스 3건이다 (2026-10-16 개편):
+
+  1. 무료 기회 1건 : v2_tag='free-opportunity' 최신 1건. 없으면 빈 슬롯 (강제 충전 금지).
+  2. Zen 변경   : source='OpenCode Zen' 무료 목록 변경 감지분을 최신순으로. LLM 점수 무관 우선.
+  3. 일반 뉴스  : 나머지 슬롯을 LLM 도움 점수 상위로. 프로바이더 행은 제외.
 
 점수는 DB에 저장하지 않는다(선정 시점 한정).
 """
@@ -33,14 +35,12 @@ def remove_chinese(text):
     return re.sub(r'[一-鿿㐀-䶿]', '', text)  # auto_briefing.py:41과 동일
 
 WINDOW_HOURS = 36
-MAX_COUNT = 4
-MODEL_SLOTS = 3  # CLI 무료 모델 3건 (지시서 §4-3)
+MAX_COUNT = 3  # 브리핑은 뉴스 3건 (2026-10-16 개편 — 모델 3 + 뉴스 1 폐지)
 PER_TAG_LIMIT = 10
 POOL_LIMIT = 50
 # AIK24-EFFICIENCY-02: LLM 평가 대상 30 → 8. 1건당 16.4초가 걸려 30건=345초였다.
-# 선택 규칙(모델 슬롯 3 + 뉴스 슬롯 1)이 실제로 경쟁하는 건 프로바이더별 최신 1건과
-# 태그별 상위 몇 건뿐이라, 나머지는 평가해도 select_top_articles() 의 출처 중복
-# 제약에 걸려 버려졌다(2026-10-13 실행: 후보 21건 중 탈락 0건, 최종 4건 전부 11점).
+# 선택 규칙이 실제로 경쟁하는 건 태그별 상위 몇 건뿐이라, 나머지는 평가해도
+# select_top_articles() 의 출처 중복 제약에 걸려 버려졌다(2026-10-13 실행: 후보 21건, 탈락 0건).
 CANDIDATE_LIMIT = 8  # LLM 평가 대상
 PER_TAG_CANDIDATES = 3  # 태그별 상위 3건만 후보로
 NEWS_CANDIDATES = 4  # 뉴스 슬롯 최대 4건 (태그별 상위 3건 중 라운드로빈)
@@ -56,10 +56,9 @@ def log(msg):
     print(f"[{datetime.now(KST).strftime('%H:%M:%S')}] [selector] {msg}")
 
 
-MODEL_SOURCES = ("OpenCode Zen", "OpenRouter Free Models", "Kilo Free Models", "NVIDIA NIM Free")
-MODEL_POOL = 12  # 모델 후보 fetch 깊이 (아래 MODEL_PER_SOURCE 로 추린다)
-MODEL_PER_SOURCE = 1  # 프로바이더별 최신 1건씩 → 모델 슬롯 후보 최대 4건
-MODEL_STALE_DAYS = 3  # AIK24-EFFICIENCY-04 §4-2: 이 기간 안에 갱신된 무료 모델이 없으면 모델 슬롯을 비운다
+# 4개 CLI 프로바이더 출처. v3 에서는 이 출처를 "일반 뉴스 슬롯에서 제외"하는 용도로만
+# 쓴다 (과거의 "모델 3건 슬롯"은 2026-10-16 개편으로 폐지). Zen 행은 별도 우선 슬롯을 갖는다.
+PROVIDER_SOURCES = ("OpenCode Zen", "OpenRouter Free Models", "Kilo Free Models", "NVIDIA NIM Free")
 
 
 def _sql_in(values):
@@ -77,7 +76,7 @@ def get_recent_news(hours=WINDOW_HOURS, v2_tag=None, exclude_models=False):
     where = [
         "v2_pass = 1",
         "created_at >= '" + cutoff.strftime("%Y-%m-%d %H:%M:%S") + "'",
-        "source NOT IN (" + _sql_in(MODEL_SOURCES) + ")" if exclude_models else "",
+        "source NOT IN (" + _sql_in(PROVIDER_SOURCES) + ")" if exclude_models else "",
         "v2_tag = '" + v2_tag + "'" if v2_tag else "",
     ]
     return d1_query("""
@@ -88,15 +87,40 @@ def get_recent_news(hours=WINDOW_HOURS, v2_tag=None, exclude_models=False):
     """ % (_COLS, " AND ".join(w for w in where if w), PER_TAG_LIMIT if v2_tag else POOL_LIMIT))
 
 
-def get_model_news(limit=MODEL_POOL):
-    """4개 CLI 프로바이더의 무료 모델. pub_date 가 프로바이더 갱신일이므로
-    이 정렬이 곧 "최신 추가/업데이트 순"(지시서 §4-3)이다."""
+def get_opportunity_news(limit=1):
+    """슬롯 1: 무료 기회 (v2_tag='free-opportunity') 최신순.
+
+    2026-10-16 개편 — 대표님이 매주 월요일 큐레이션하는 scripts/weekly_opportunity.py
+    입력분이 여기로 들어온다. 있으면 1건, 없으면 빈 슬롯 (강제 충전 금지).
+    """
     return d1_query("""
         SELECT %s FROM news
-        WHERE v2_pass = 1 AND source IN (%s)
+        WHERE v2_pass = 1 AND v2_tag = 'free-opportunity'
+          AND created_at >= '%s'
         ORDER BY pub_date DESC
         LIMIT %d
-    """ % (_COLS, _sql_in(MODEL_SOURCES), limit))
+    """ % (_COLS, _slot_cutoff(), limit))
+
+
+def get_zen_changes(limit=MAX_COUNT):
+    """슬롯 2: Zen 무료 목록 변경 감지분 (model_catalog.record_diff_to_news 가 넣은 행).
+
+    source='OpenCode Zen' + v2_tag='free-llm'. 기계 감지된 사실이라 LLM 도움 점수와
+    무관하게 pub_date 최신순으로 우선 배정한다 (2026-10-16 개편).
+    """
+    return d1_query("""
+        SELECT %s FROM news
+        WHERE v2_pass = 1 AND source = 'OpenCode Zen' AND v2_tag = 'free-llm'
+          AND created_at >= '%s'
+        ORDER BY pub_date DESC
+        LIMIT %d
+    """ % (_COLS, _slot_cutoff(), limit))
+
+
+def _slot_cutoff():
+    """기회·Zen 슬롯의 조회 하한 (7일). created_at 창이 없으면 아주 오래된 미발행 행이
+    되살아나므로 7일로 끊는다 — dedup 이 이미 브리핑된 행을 걷어내므로 실질 하한은 더 짧다."""
+    return (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def cluster_by_topic(articles):
@@ -162,31 +186,41 @@ def _take(ranked, limit):
     return out
 
 
-def has_fresh_model(models):
-    """AIK24-EFFICIENCY-04 §4-2: 최근 3일 안에 갱신된 모델 카드가 하나라도 있는가.
-
-    프로바이더가 새 무료 모델을 내놓지 않으면 후보가 며칠 전 카드로 남아 반복 출력이
-    되므로, 그 경우 모델 슬롯을 비우고 뉴스로 채운다.
-    """
-    cutoff = (datetime.now(KST) - timedelta(days=MODEL_STALE_DAYS)).strftime('%Y-%m-%d')
-    return any((a.get('pub_date') or '')[:10] >= cutoff for a in models)
-
-
 def select_top_articles(clusters, max_count=MAX_COUNT):
-    """클러스터 dict → 모델 3건(최신성·프로바이더 로테이션) + 뉴스 1건."""
-    articles = [a for group in (clusters or {}).values() for a in group]
-    # 최신 갱신일(pub_date) 순. 갱신일 없는 항목은 최후.
-    ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
+    """클러스터 dict → ① 무료 기회 1 ② Zen 변경(최신순) ③ LLM 점수 상위 일반 뉴스.
 
-    models = [a for a in ranked if a.get("source") in MODEL_SOURCES]
-    if models and not has_fresh_model(models):
-        log(f"  ⚠ 최근 {MODEL_STALE_DAYS}일 신규 무료 모델 없음 — 모델 슬롯 {MODEL_SLOTS}칸을 뉴스로 채움")
-        picked = []
+    ②까지는 LLM 점수와 무관하게 우선하고, ③만 점수순이다. 가치 있는 후보가 3건
+    미만이면 있는 만큼만 선정한다 (물타기 금지 — 2026-10-16 개편).
+    """
+    articles = [a for group in (clusters or {}).values() for a in group]
+    ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
+    used, picked = set(), []
+
+    # 슬롯 1: 무료 기회 1건 (최신). 없으면 빈 슬롯.
+    opp = [a for a in articles if a.get("v2_tag") == "free-opportunity"
+           and a.get("source") not in PROVIDER_SOURCES]
+    opp.sort(key=_date_key)
+    if opp:
+        picked.append(opp[0])
+        used.add(opp[0]["id"])
     else:
-        picked = _take(models, MODEL_SLOTS)
-    # 뉴스 슬롯은 free-llm 을 받지 않는다 (지시서 §4-3 — 뉴스는 정보성이 기준).
-    used = {p["id"] for p in picked}
-    rest = [a for a in ranked if a["id"] not in used and a.get("source") not in MODEL_SOURCES]
+        log("  ⓘ 무료 기회 후보 없음 — 슬롯 1 비움 (강제 충전 없음)")
+
+    # 슬롯 2: Zen 변경 최신순. LLM 점수와 무관하게 우선한다.
+    zen = [a for a in articles if a.get("source") == "OpenCode Zen" and a["id"] not in used]
+    zen.sort(key=_date_key)
+    for a in zen:
+        if len(picked) >= max_count:
+            break
+        picked.append(a)
+        used.add(a["id"])
+    if zen:
+        log(f"  ⓘ Zen 변경 {len(zen)}건 우선 배정")
+
+    # 슬롯 3: 나머지 = LLM 점수 상위 일반 뉴스 (프로바이더 행 제외, 출처 1건씩).
+    rest = [a for a in ranked if a["id"] not in used
+            and a.get("source") not in PROVIDER_SOURCES
+            and a.get("v2_tag") != "free-opportunity"]
     picked += _take(rest, max_count - len(picked))
     return picked
 
@@ -197,45 +231,53 @@ def _date_key(article):
     return -int(p) if p.isdigit() and len(p) >= 8 else 0
 
 
-def _latest_per_source(rows):
-    """rows 는 pub_date DESC 로 정렬돼 오므로 프로바이더별 첫 등장이 그 프로바이더 최신 1건."""
-    seen, out = set(), []
-    for a in rows:
-        src = a.get("source")
-        if src not in seen:
-            seen.add(src)
-            out.append(a)
-    return out
-
-
 def interleave_candidates(limit):
-    """CLI 무료 모델 후보 + 일반 뉴스 후보(태그 교차)를 합친다.
+    """무료 기회 + Zen 변경 + 일반 뉴스 후보(태그 교차)를 합친다.
 
-    AIK24-EFFICIENCY-02: 평가 대상을 30건 → 8건으로 축소.
-    모델 슬롯 = 프로바이더별 최신 1건씩(최대 4건), 뉴스 슬롯 = 태그별 상위 3건 중
-    라운드로빈 최대 4건. 데이터가 적으면 있는 만큼만 반환한다(에러 아님).
+    기회·Zen 행은 LLM 점수 대상이 아니지만 dedup(3.5단계)이 필요하므로 pool 에 함께
+    넣는다. 일반 뉴스 슬롯 = 태그별 상위 3건 중 라운드로빈. 데이터가 적으면 있는 만큼만
+    반환한다(에러 아님).
     """
-    models = _latest_per_source(get_model_news(MODEL_POOL))[:MODEL_PER_SOURCE * len(MODEL_SOURCES)]
+    opp = get_opportunity_news(MAX_COUNT)
+    zen = get_zen_changes(MAX_COUNT)
     per_tag = {t: get_recent_news(v2_tag=t, exclude_models=True)[:PER_TAG_CANDIDATES]
                for t in TAG_ORDER}
     news = [art for row in zip_longest(*(per_tag[t] for t in TAG_ORDER))
             for art in row if art is not None][:NEWS_CANDIDATES]
-    counts = {"model": len(models)}
+    seen, head = set(), []
+    for a in opp + zen:
+        if a["id"] not in seen:
+            seen.add(a["id"])
+            head.append(a)
+    counts = {"opportunity": len(opp), "zen": len(zen)}
     counts.update({t: len(per_tag[t]) for t in TAG_ORDER})
-    return (models + news)[:limit], counts
+    return (head + news)[:limit], counts
+
+
+def _is_mechanical(article):
+    """Zen 변경·무료 기회 등 기계 감지 행 — LLM 도움 점수 대상이 아니다.
+    점수를 매기지 않고(호출 절약) 탈락시키지도 않는다 (2026-10-16 개편).
+    프로바이더 목록 변경(OpenRouter/Kilo/NVIDIA 포함)은 전부 카탈로그 diff 가 만든 행이다."""
+    return (article.get("source") in PROVIDER_SOURCES
+            or article.get("v2_tag") == "free-opportunity")
 
 
 def main(dedup=True):
     _ = dedup  # v1의 브리핑 중복 제거는 briefing_dedup.filter_duplicates가 담당
     pool, tag_counts = interleave_candidates(CANDIDATE_LIMIT)
-    log(f"v2_pass=1 후보: {len(pool)}건 (태그별 " +
+    log(f"v2_pass=1 후보: {len(pool)}건 (기회={tag_counts['opportunity']}, zen={tag_counts['zen']}, " +
         ", ".join(f"{t}={tag_counts[t]}" for t in TAG_ORDER) + ") — LLM 도움 점수 평가 시작")
     if not pool:
         log("선정 대상 없음 — 브리핑 건너뜀")
         return []
 
-    # 2. 평가 (429 보호 위해 직렬 + 간격)
+    # 2. 평가 (429 보호 위해 직렬 + 간격). 기회·Zen 행은 평가 없이 통과시킨다.
     for i, art in enumerate(pool, 1):
+        if _is_mechanical(art):
+            log(f"  [{i}/{len(pool)}] 평가 생략 (기계 감지 행) {(art.get('title') or '')[:55]}")
+            if i < len(pool):
+                time.sleep(2)
+            continue
         s = score_helpfulness(art)
         d = art.get("_detail")
         log(f"  [{i}/{len(pool)}] {s}점 {'(실용성·이해도·유용성=%s)' % (d,) if d else '(파싱 실패)'} "
@@ -243,8 +285,8 @@ def main(dedup=True):
         if i < len(pool):
             time.sleep(2)
 
-    # 3. 탈락 제거 (6점 미만 = 평균 2점 미만)
-    passed = [a for a in pool if (a.get("_score") or 0) >= SCORE_MIN]
+    # 3. 탈락 제거 (6점 미만 = 평균 2점 미만). 기회·Zen 행은 면제.
+    passed = [a for a in pool if _is_mechanical(a) or (a.get("_score") or 0) >= SCORE_MIN]
     dropped = len(pool) - len(passed)
     log(f"탈락 {dropped}건 (점수 < {SCORE_MIN}) → 통과 {len(passed)}건")
     if not passed:
@@ -266,7 +308,7 @@ def main(dedup=True):
         log("신선 후보 없음 — 브리핑 건너뜀")
         return []
 
-    # 4. 점수순(동점 최신 갱신일) + 모델 3 + 뉴스 1
+    # 4. 기회 1 + Zen 변경 + 점수순 일반 뉴스
     selected = select_top_articles({"v2": passed}, MAX_COUNT)
 
     log(f"선정 {len(selected)}건" + ("" if len(selected) == MAX_COUNT

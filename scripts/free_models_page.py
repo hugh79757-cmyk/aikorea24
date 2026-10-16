@@ -299,13 +299,13 @@ def week_changes(days=7):
 # --------------------------------------------------------------- 렌더링 (EVAL-06 신규)
 
 
-def render_eval06(day, cli_models, wk, failed, verify=None):
+def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None):
     """EVAL-06 지시서에 따른 새 페이지 구조 렌더링.
         
     구조:
     1. 헤더: "무료 AI 모델" + 날짜 + 한 줄 설명
     2. 추천 모델 (Top 3): CLI 평가 점수 + 재사용률 결합
-    3. 전체 리스트 (18개): 표 - 모델명(짧게), 프로바이더, 컨텍스트, 지표, 상태
+    3. 전체 리스트 (검증 완료 모델 M개): 표 - 모델명(짧게), 프로바이더, 컨텍스트, 지표, 상태
     4. 제외된 모델: Hy3, Groq, Cerebras, NVIDIA NIM
     5. 방법론 (EVAL-07: 호출 검증 시각 + 점검 중)
     """
@@ -313,10 +313,15 @@ def render_eval06(day, cli_models, wk, failed, verify=None):
     ts = datetime.strptime(day, "%Y-%m-%d")
     today_str = f"{ts.year}년 {ts.month}월 {ts.day}일"
     
+    # AIK24-PIPE-03 §작업6: "현재 무료 N개"(프로바이더 공개 목록)와 "검증 완료 M개"(CLI 호출 검증)는
+    # 정의가 다르다 — 한 문장에 섞지 않고 각각 표기한다.
+    verified_n = len(cli_models)
     out = [
         f"# 무료 AI 모델 — {today_str}",
         "",
-        "> OpenCode에서 실제 동작 확인된 무료 모델만 싣습니다.",
+        f"> 현재 무료 {free_total}개 (프로바이더 공개 목록 기준) · 검증 완료 {verified_n}개"
+        if isinstance(free_total, int) else
+        f"> OpenCode에서 실제 동작 확인된 무료 모델만 싣습니다. (검증 완료 {verified_n}개)",
         "",
     ]
     
@@ -391,7 +396,7 @@ def render_eval06(day, cli_models, wk, failed, verify=None):
             ]
     
     # 3. 전체 리스트 (18개) - 표
-    out += ["## 전체 리스트 (18개 검증 모델)", ""]
+    out += [f"## 전체 리스트 (검증 완료 모델 {len(cli_models)}개)", ""]
     
     # 헤더: 컨텍스트 있는 것만 표시하라는 지시서에 따라 컬럼 동적 구성
     # 하지만 지시서: "없는 모델은 컬럼 값 비우지 말고 행에서 제외하거나 '—' 대신 아예 표시 안 함"
@@ -586,7 +591,13 @@ def cmd_page(day=None, dry_run=False):
     
     # EVAL-06 새 렌더 함수 사용 (EVAL-07: 검증 기록 전달)
     verify = load_verify()
-    md = render_eval06(day, cli_models, wk, list(d.get("failed_providers") or {}), verify)
+    # AIK24-PIPE-03 §작업6: "현재 무료 N개" = 프로바이더 공개 목록(오늘 스냅샷) 행 수. 실패 시 None.
+    try:
+        free_total = len(_read_json(mc.snapshot_path(day), []) or [])
+    except Exception:
+        free_total = None
+    md = render_eval06(day, cli_models, wk, list(d.get("failed_providers") or {}), verify,
+                       free_total=free_total or None)
     
     log(f"무료 모델 {len(cli_models)}개 / 이번 주 변경 {wk['total']}건")
     if dry_run:
@@ -596,8 +607,10 @@ def cmd_page(day=None, dry_run=False):
 
     # title 을 slug 로 쓴다 — EmDash 는 title 을 slugify 해 slug 를 만들고 slug 필드를 받지 않는다.
     # 그래서 제목 대신 한국어 H1 은 본문 첫 줄(# …)이 화면에 뜬다.
-    url = emdash_publish.upsert_post(PAGE_SLUG, PAGE_SLUG, md,
-                                     excerpt=f"{day} 기준 무료 모델 {len(cli_models)}개")
+    # 카드 요약: 두 숫자를 구분 (AIK24-PIPE-03 §작업6)
+    excerpt = (f"{day} 기준 현재 무료 모델 {free_total}개 · 검증 완료 {len(cli_models)}개"
+               if free_total else f"{day} 기준 검증 완료 무료 모델 {len(cli_models)}개")
+    url = emdash_publish.upsert_post(PAGE_SLUG, PAGE_SLUG, md, excerpt=excerpt)
     if not url:
         log("리스트 페이지 갱신 실패")
         return 1

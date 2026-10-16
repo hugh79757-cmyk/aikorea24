@@ -249,6 +249,76 @@ def latest_snapshot_before(day):
     return snaps[-1] if snaps else None
 
 
+# 프로바이더 키 → news 테이블 source / 모델 목록 링크 (PIPE-03 작업 2)
+NEWS_SOURCES = {
+    "zen": ("OpenCode Zen", "https://opencode.ai/v2/docs/console/models/"),
+    "openrouter": ("OpenRouter Free Models", "https://openrouter.ai/models?max_price=0"),
+    "kilo": ("Kilo Free Models", "https://api.kilo.ai/api/gateway/models"),
+    "nvidia": ("NVIDIA NIM Free", ""),
+}
+
+
+def _news_lit(v):
+    """news_collector_v2.save() 의 lit() 과 동일한 이스케이프."""
+    return "'" + str(v or "").replace("'", "''")[:500] + "'"
+
+
+def record_diff_to_news(day, d):
+    """diff 의 added/removed 를 news 테이블에 기록한다 (PIPE-03 작업 2).
+
+    브리핑이 이 행들을 '무료 모델 변경' 슬롯으로 집어간다. 같은 날 이미 기록된
+    model_id 는 건너뛴다. 반환값은 INSERT 한 건수.
+    """
+    rows = [("added", r) for r in (d.get("added") or [])] + [("removed", r) for r in (d.get("removed") or [])]
+    rows = [(kind, r) for kind, r in rows if r.get("provider") in NEWS_SOURCES]
+    if not rows:
+        log("news 기록: added/removed 0건 — 스킵")
+        return 0
+
+    import cfnew  # 지연 import — D1 미접근 환경에서도 카탈로그 수집은 살아 있게
+
+    cfnew.check_quota()
+    sources = [v[0] for v in NEWS_SOURCES.values()]
+    existing = cfnew.sql(
+        "SELECT title FROM news WHERE DATE(created_at) = %s AND source IN (%s);"
+        % (_news_lit(day), ", ".join(_news_lit(s) for s in sources)),
+        database_id=cfnew.A24_DB,
+    )
+    seen = {r.get("title") for r in (existing or [])}
+    now = time.strftime("%Y-%m-%d %H:%M:%S")
+    stmts = []
+    for kind, r in rows:
+        source, link = NEWS_SOURCES[r["provider"]]
+        mid = r.get("model_id") or ""
+        if kind == "added":
+            title = f"[신규 무료] {mid} — {source} 무료 목록에 추가"
+            tail = "추가"
+        else:
+            title = f"[제외] {mid} — {source} 무료 목록에서 제외"
+            tail = "제외"
+        if title in seen:
+            continue
+        seen.add(title)
+        # news.link 는 UNIQUE — 같은 프로바이더의 행이 겹치면 INSERT OR IGNORE 가
+        # 조용히 버린다(2026-10-16 실측: kilo added/removed 동시 발생 시 1건 유실).
+        url = f"{link or 'https://aikorea24.kr/free-models'}#{mid}"
+        stmts.append(
+            "INSERT OR IGNORE INTO news "
+            "(title, link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" % (
+                _news_lit(title[:200]), _news_lit(url),
+                _news_lit(f"{source} 무료 목록에 {tail} · 12문항 평가 전 — 판단 보류"),
+                _news_lit(source), _news_lit("AI"), _news_lit(now), _news_lit(url),
+                _news_lit(mid), _news_lit("us"), 1, _news_lit("free-llm")))
+
+    if not stmts:
+        log("news 기록: 이미 기록된 항목만 — 스킵")
+        return 0
+    cfnew.sql(";\n".join(stmts), database_id=cfnew.A24_DB)
+    log(f"news 기록: {len(stmts)}건 (무료 목록 변경 → free-llm)")
+    return len(stmts)
+
+
 def run(day=None):
     load_env()  # 프로젝트 .env / ~/.env.common 적재
     day = day or time.strftime("%Y-%m-%d")
@@ -261,6 +331,12 @@ def run(day=None):
     d = diff(prev_rows, rows, all_ids)
     d["failed_providers"] = failed  # stdout 로만 남으면 다음 날 어떤 프로바이더가 죽었는지 알 수 없다
     _write_json(diff_path(day), d)
+
+    # PIPE-03 작업 2: 변경 감지를 브리핑으로 잇는다 (실패해도 수집은 계속)
+    try:
+        record_diff_to_news(day, d)
+    except Exception as e:  # noqa: BLE001 — 카탈로그 수집 job 을 죽이지 않는다
+        log(f"[경고] news 기록 실패 (수집은 계속): {type(e).__name__}: {e}")
 
     log(f"스냅샷 {len(rows)}건 → {snapshot_path(day).name}")
     log(f"직전 스냅샷: {prev.name if prev else '없음(첫 실행)'}")

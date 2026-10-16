@@ -451,5 +451,172 @@
   "ts": 1792057304.8217402,
   "schema": 3,
   "measured_context": 1048576
+ },
+ "nvidia/nemotron-3.5-super-vl:free": {
+  "model_id": "nvidia/nemotron-3.5-super-vl:free",
+  "qv": 1,
+  "score": 8,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "content",
+    "answer": "이 코드는 Python에서 두 값을 더하는 간단한 함수를 정의합니다.\n\n- `def add(a, b):` 부분은 `add`라는 이름의 함수를 만들며, 매개변수로 `a`와 `b`를 받습니다.\n- `return a + b`는 전달받은 `a`와 `b`를 더한 결과를 반환합니다.\n- 숫자뿐만 아니라 문자열, 리스트 등 `+` 연산이 가능한 자료형에도 사용할 수 있습니다.\n\n예를 들어 `add(3, 5)`를 호출하면 `8`을 반환합니다.\n\n---끝---",
+    "prompt_tokens": 65,
+    "completion_tokens": 501,
+    "judge_failed": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "content",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "prompt_tokens": 77,
+    "completion_tokens": 166,
+    "judge_failed": false
+   },
+   {
+    "idx": 3,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "reasoning",
+    "answer": "The user wants me to shorten 3 Korean sentences to within 15 characters each. Output must be exactly 3 lines, each starting with '-'. No other explanation.\n\nLet's analyze each sentence:\n\n1. \"henceforth the committee will review quarterly\" - This is English, but the user said \"아래 한국어 문장 3개\" (below 3 Korean sentences), but sentence 1 is English. I need to shorten it to 15 characters or less. Let's translate/shorten: \"앞으로 분기별 검토\" (11 characters including spaces? Let's count: 앞(1)로(2) 분(3)기(4)별(5) 검(6)토(7) = 7 characters without spaces, with spaces: \"앞으로 분기별 검토\" = 13 characters including spaces. Or \"분기별 검토 실시\" = 9 characters. Or \"앞으로 분기별 검토\" is good. Let's count carefully: 앞-로- -분-기-별- -검-토 = 1+1+1+1+1+1+1+1+1+1 = 10? Wait: \"앞으로 분기별 검토\"\nCharacters: 앞(1) 로(2) (space)(3) 분(4) 기(5) 별(6) (space)(7) 검(8) 토(9). That's 9 characters. Well within 15.\n\nActually, maybe keep it closer to English meaning: \"앞으로 분기별 검토\" is fine.\n\n2. \"검색 증강 생성은 답변 정확도를 높이는 방식\" - Shorten to 15 chars. \"RAG는 답변 정확도를 높임\" = R(",
+    "prompt_tokens": 107,
+    "completion_tokens": 2000,
+    "judge_failed": true
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "reasoning",
+    "answer": "The user wants me to find a bug in the provided Python code, present corrected code, and explain why it's a bug in one line (Korean).\n\nLet's analyze the code:\n\n```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now - timedelta(days=30)]\n```\n\nPotential issues:\n1. `datetime.fromisoformat()` returns a naive datetime (no timezone info) if the string doesn't include timezone info. If `now` is timezone-aware, comparing naive and aware datetimes raises `TypeError`.\n2. `now` might be a `datetime` object, but if it's timezone-aware and `expires_at` is naive (or vice versa), comparison fails.\n3. `timedelta(days=30)` assumes exactly 30 days, but \"expired 30 days ago\" might be intended. The logic seems to find tokens expired more than 30 days ago? Wait: `expires_at < now - 30 days` means the token expired before 30 days ago. That seems like \"tokens that expired more than 30 ",
+    "prompt_tokens": 95,
+    "completion_tokens": 2000,
+    "judge_failed": false
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "content",
+    "answer": "아래는 `safe_div` 함수를 pytest로 검증하는 테스트 코드 예시입니다.  \n정상 입력, 0으로 나누기, 음수, 경계값(0, 아주 큰 수/작은 수) 등을 모두 포함하고, 부동소수점 비교에는 `pytest.approx`를 사용했습니다.\n\n```python\n# test_safe_div.py\n\nimport pytest\n\n# 실제 프로젝트 구조에 맞춰 import 경로를 수정하세요.\n# 예: from my_module import safe_div\nfrom my_module import safe_div\n\n\n@pytest.mark.parametrize(\n    \"a, b, expected\",\n    [\n        # --- 정상 입력 ---\n        (10, 2, 5.0),           # 양수 정수 나눗셈\n        (7.5, 2.5, 3.0),        # 부동소수점 나눗셈\n        (1, 3, 1 / 3),          # 나누어 떨어지지 않는 경우\n\n        # --- 경계값: 분자가 0 ---\n        (0, 5, 0.0),            # 0 / 정수\n        (0, 0.0, 0.0),          # 0 / 0.0 (분모가 0.0인 경우도 0.0 반환)\n\n        # --- 음수 ---\n        (-10, 2, -5.0),         # 분자만 음수\n        (10, -2, -5.0),         # 분모만 음수\n        (-10, -2, 5.0),         # 분자와 분모 모두 음수\n\n        # --- 아주 큰 수 / 작은 수 ---\n        (10**15, 10**5, 10**10),   # 큰 수\n        (1e-15, 1e-5, 1e-10),      # 작은 수\n    ],\n)\ndef test_safe_div_normal_and_boundary(a, b, expected):\n    \"\"\"정상 입력 및 경계값에 대한 나눗셈 결과 검증\"",
+    "prompt_tokens": 81,
+    "completion_tokens": 2000,
+    "judge_failed": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "content",
+    "answer": "공통 로직(필터링 및 사용자 정보 추출)을 별도 함수로 빼고, 필터 조건만 파라미터로 전달하는 방식으로 리팩토링할 수 있습니다.\n\n```python\ndef _filter_users(users, key, value):\n    return [\n        {'id': u['id'], 'name': u['name'], 'email': u['email']}\n        for u in users\n        if u[key] == value\n    ]\n\n\ndef get_active_user(users):\n    return _filter_users(users, 'status', 'active')\n\n\ndef get_admin_user(users):\n    return _filter_users(users, 'role', 'admin')\n```\n\n### 주요 변경점\n1. **중복 제거**: 반복문과 딕셔너리 구성 로직을 `_filter_users` 하나로 통합했습니다.\n2. **조건 파라미터화**: `key`와 `value`를 인자로 받아 어떤 필터 조건이든 재사용할 수 있습니다.\n3. **동작 유지**: 입력과 출력 형태, 필터 조건(`status == 'active'`, `role == 'admin'`)은 기존과 동일합니다.\n\n필요하다면 `lambda`를 이용한 프레디케이트 방식(`predicate(u)`)으로도 확장할 수 있지만, 현재 두 함수의 패턴에 가장 잘 맞는 위와 같은 키-값 기반 방식을 제안합니다.",
+    "prompt_tokens": 160,
+    "completion_tokens": 1195,
+    "judge_failed": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "content",
+    "answer": "normalize_ledger_entries",
+    "prompt_tokens": 7425,
+    "completion_tokens": 197,
+    "judge_failed": false
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "content",
+    "answer": "위 대화에서 요청하신 작업 3가지는 다음과 같습니다.\n\n1. 파이썬을 처음 시작할 때 뭘부터 해야 하는지 알려달라\n2. 변수 이름 지을 때 규칙 3개만 알려달라\n3. 프로그램이 안 돌아갈 때 처음에 할 일을 알려달라",
+    "prompt_tokens": 216,
+    "completion_tokens": 340,
+    "judge_failed": false
+   },
+   {
+    "idx": 9,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "content",
+    "answer": "현재 월 비용은 1,250,000원이고 다음 분부터는 3,400,000원입니다.",
+    "prompt_tokens": 224,
+    "completion_tokens": 563,
+    "judge_failed": false
+   },
+   {
+    "idx": 10,
+    "axis": "역할판단",
+    "score": 0,
+    "source": "content",
+    "answer": "소규모 팀(3명)이 6개월(약 24~26주) 안에 **처음부터 온라인 주문 시스템**을 만들려면, “완벽한 플랫폼”보다는 **MVP(최소 실행 가능 제품)**에 집중해야 합니다. 아래는 3명 팀이 역할 분담 없이도 진행할 수 있는 단계별 로드맵과, 각 단계에서 “이 단계가 끝났다고 인정할 수 있는 검증 방법”을 함께 정리한 계획입니다.\n\n---\n\n## 0. 시작 전: 팀 역할 및 기본 합의 (Week 0)\n\n3명 팀이라면 역할 고정보다는 **“누가 무엇을 맡되, 인수인계는 문서화”**하는 것이 중요합니다.\n\n| 역할 | 주요 담당 | 예시 스택 |\n|------|----------|----------|\n| **A (백엔드/인프라)** | API 서버, DB 설계, 인증, 결제 연동, CI/CD, 서버 배포 | Node.js/Python + PostgreSQL + AWS/Docker |\n| **B (프론트엔드/UX)** | 사용자 화면(고객 앱/웹), 디자인 시스템, 상태 관리 | React/Next.js + Tailwind + Zustand/Redux |\n| **C (풀스택/테스트/운영)** | 기획·요구사항 정리, API 연동 보조, 관리자 페이지, 테스트 자동화, 배포 지원 | 위 스택 중 공통 부분 + Playwright/Cypress |\n\n> **합의 사항**: 주 1회 스프린트 회고, 모든 코드는 PR(풀 리퀘스트) + 코드 리뷰 후 병합, 주요 결정은 Notion/위키에 기록.\n\n---\n\n## Phase 1: 요구사항 정의 및 인프라 기초 (Week 1~4)\n\n### 목표\n“무엇을 만들지”를 합의하고, 개발할 수 있는 최소 인프라(서버·DB·배포 파이프라인)를 준비한다.\n\n### 주요 작업\n1. **요구사항 정의**: 고객 주문 흐름(상품 조회 → 장바구니 → 주문 → 결제 → 주문 확인) 및 관리자 흐름(주문 확인·배송 처리) 문서화\n2. **와이어프레임**: 핵심 화면 6~8개 스케치(로그인, 상품 목록, 상품 상세, 장바구니, 주문하기, 주문 ",
+    "prompt_tokens": 66,
+    "completion_tokens": 2000,
+    "judge_failed": false
+   },
+   {
+    "idx": 11,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "content",
+    "answer": "timestamp\n2026-01-02T03:04:05Z\n2026-01-02T03:04:06Z\n2026-01-02T03:05:00Z",
+    "prompt_tokens": 125,
+    "completion_tokens": 716,
+    "judge_failed": false
+   },
+   {
+    "idx": 12,
+    "axis": "역할판단",
+    "score": 1,
+    "source": "content",
+    "answer": "**지금 바로 처리해야 하는 것**\n\n1. **운영 DB에서 느린 쿼리 하나 관측(3초 소요)**  \n   - 이유: 운영 DB는 서비스 핵심 인프라입니다. 3초 지연은 인덱스 누락, 잠금 경합, 테이블 풀 스캔 등 근본적 문제를 시사할 수 있으며, 방치 시 다른 트랜잭션에 연쇄 영향을 미쳐 장애로 발전할 위험이 높습니다. 즉각적인 실행 계획 분석과 튜닝이 필요합니다.\n\n2. **장애 후속 조치로 고객 메일 발송 대기 중**  \n   - 이유: 장애 후속 커뮤니케이션은 고객 신뢰도와 직결됩니다. 발송이 지연될수록 고객 불안과 문의가 증가할 수 있으며, 이미 대기 중인 상태이므로 오늘 중 발송을 완료하는 것이 적절합니다.\n\n---\n\n**오늘은 미뤄도 되는 것**\n\n1. **내부 도구의 버튼 색상 문구 수정 요청**  \n   - 이유: 내부 전용 도구로 고객에게 직접적인 영향을 주지 않으며, 기능적 버그가 아닌 디자인/문구 수준의 요청입니다. 우선순위가 낮아 오늘 미뤄도 서비스 안정성이나 고객 경험에 지장이 없습니다.",
+    "prompt_tokens": 94,
+    "completion_tokens": 1401,
+    "judge_failed": false
+   }
+  ],
+  "errors": [
+   "Q3 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q4 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q5 reasoning 잘림 → max_tokens=2000 재시도로 회수",
+   "Q10 reasoning 잘림 → max_tokens=2000 재시도로 회수"
+  ],
+  "failures": [],
+  "token_usage": {
+   "prompt": 8735,
+   "completion": 13079
+  },
+  "judge_failed": 1,
+  "by_axis": {
+   "지시이행": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 1,
+    "max_score": 3,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 3,
+    "max_score": 3,
+    "failed": 0
+   },
+   "역할판단": {
+    "score": 2,
+    "max_score": 3,
+    "failed": 0
+   }
+  },
+  "failed": 0,
+  "role": "컨트롤(계획·오케스트레이션)에는 검증 부족, 손발 작업으로 보자",
+  "label": "11문항 중 8문항 정답 (문항 난이도: 기초 수준~실무 수준 기준), 1문항 측정 결함. 컨트롤(계획·오케스트레이션)에는 검증 부족, 손발 작업으로 보자.",
+  "ts": 1792108997.0878,
+  "schema": 3
  }
 }

@@ -18,7 +18,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
 from threads.dedup import is_same_topic, extract_entities
-from auto_news_selector import MODEL_SOURCES
+from auto_news_selector import PROVIDER_SOURCES
 
 DEDUP_LOOKBACK_DAYS = 3
 ENTITY_OVERLAP_THRESHOLD = 2
@@ -67,7 +67,7 @@ def is_duplicate_article(article, history_articles):
     # exact_original_title 이 걸리고, 제목이 비슷해 semantic·entity 까지 같이 걸린다
     # (2026-10-14 실측: Kilo/OpenRouter ling 이 semantic·exact_original_title 로 탈락).
     # id 가 없는 항목은 통과시킨다 — 판정 근거가 없으면 막지 않는 쪽이 낫다.
-    if article.get('source') in MODEL_SOURCES:
+    if article.get('source') in PROVIDER_SOURCES:
         if any(aid and aid == (str(h.get('id', '')) or str(h.get('news_id', '')))
                for h in history_articles):
             return True, 'exact_id'

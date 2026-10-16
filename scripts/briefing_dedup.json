@@ -3909,6 +3909,72 @@
           "date": "2026-10-15"
         }
       ]
+    },
+    {
+      "date": "2026-10-16",
+      "briefing_id": 354,
+      "articles": [
+        {
+          "id": "56065",
+          "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl:free — OpenR",
+          "original_title": "nvidia/nemotron-3.5-super-vl:free",
+          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 1,000,000 토큰. 지금 바로 무료로 써볼 수 있다.",
+          "link": "https://openrouter.ai/nvidia/nemotron-3.5-super-vl",
+          "entities": [
+            "OpenR",
+            "LLM"
+          ],
+          "date": "2026-10-16"
+        },
+        {
+          "id": "56066",
+          "title": "[무료 LLM] nemotron-3.5-super-vl-free — OpenCode Zen",
+          "original_title": "nemotron-3.5-super-vl-free",
+          "description": "Nemotron 3.5 Super VL Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/nemotron-3.5-super-vl-free\"} 프로바이더 갱신일 2026-10-15.",
+          "link": "https://models.dev/opencode/nemotron-3.5-super-vl-free",
+          "entities": [
+            "VL",
+            "LLM",
+            "Zen",
+            "Free",
+            "Super",
+            "Nemotron",
+            "OpenCode"
+          ],
+          "date": "2026-10-16"
+        },
+        {
+          "id": "55964",
+          "title": "세일즈포스, 대졸 취업 시장 침체 속 영국 학생들에게 무료 AI 도구 제공",
+          "original_title": "Salesforce offers free AI tools to UK students as graduate job market lags",
+          "description": "영국의 대졸 구인 건수가 2020년 이후 최저치를 기록한 가운데, 세일즈포스는 600만 명의 학생들에게 인공지능 기술에 대한 고용주들의 증가하는 수요를 충족할 수 있도록 무료 AI 도구를 제공하고 있습니다. 이 미국 기술 거대 기업은 대학들이 자사의 플랫폼에 접근할 수 있도록 하는 이 프로그램을 목요일에 발표했습니다.",
+          "link": "https://www.cityam.com/salesforce-offers-free-ai-tools-to-uk-students-as-graduate-job-market-lags/",
+          "entities": [
+            "Salesforce",
+            "UK",
+            "AI"
+          ],
+          "date": "2026-10-16"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "briefing_id": 355,
+      "articles": [
+        {
+          "id": "56072",
+          "title": "[제외] step-5-preview-free — OpenCode Zen 무료 목록에서 제외",
+          "original_title": "step-5-preview-free",
+          "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
+          "link": "https://opencode.ai/v2/docs/console/models/",
+          "entities": [
+            "Zen",
+            "OpenCode"
+          ],
+          "date": "2026-10-16"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7467,6 +7533,60 @@
         "HiRO-ACEv2"
       ],
       "date": "2026-10-15"
+    },
+    {
+      "id": "56065",
+      "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl:free — OpenR",
+      "original_title": "nvidia/nemotron-3.5-super-vl:free",
+      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 1,000,000 토큰. 지금 바로 무료로 써볼 수 있다.",
+      "link": "https://openrouter.ai/nvidia/nemotron-3.5-super-vl",
+      "entities": [
+        "OpenR",
+        "LLM"
+      ],
+      "date": "2026-10-16"
+    },
+    {
+      "id": "56066",
+      "title": "[무료 LLM] nemotron-3.5-super-vl-free — OpenCode Zen",
+      "original_title": "nemotron-3.5-super-vl-free",
+      "description": "Nemotron 3.5 Super VL Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/nemotron-3.5-super-vl-free\"} 프로바이더 갱신일 2026-10-15.",
+      "link": "https://models.dev/opencode/nemotron-3.5-super-vl-free",
+      "entities": [
+        "VL",
+        "LLM",
+        "Zen",
+        "Free",
+        "Super",
+        "Nemotron",
+        "OpenCode"
+      ],
+      "date": "2026-10-16"
+    },
+    {
+      "id": "55964",
+      "title": "세일즈포스, 대졸 취업 시장 침체 속 영국 학생들에게 무료 AI 도구 제공",
+      "original_title": "Salesforce offers free AI tools to UK students as graduate job market lags",
+      "description": "영국의 대졸 구인 건수가 2020년 이후 최저치를 기록한 가운데, 세일즈포스는 600만 명의 학생들에게 인공지능 기술에 대한 고용주들의 증가하는 수요를 충족할 수 있도록 무료 AI 도구를 제공하고 있습니다. 이 미국 기술 거대 기업은 대학들이 자사의 플랫폼에 접근할 수 있도록 하는 이 프로그램을 목요일에 발표했습니다.",
+      "link": "https://www.cityam.com/salesforce-offers-free-ai-tools-to-uk-students-as-graduate-job-market-lags/",
+      "entities": [
+        "Salesforce",
+        "UK",
+        "AI"
+      ],
+      "date": "2026-10-16"
+    },
+    {
+      "id": "56072",
+      "title": "[제외] step-5-preview-free — OpenCode Zen 무료 목록에서 제외",
+      "original_title": "step-5-preview-free",
+      "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
+      "link": "https://opencode.ai/v2/docs/console/models/",
+      "entities": [
+        "Zen",
+        "OpenCode"
+      ],
+      "date": "2026-10-16"
     }
   ]
 }

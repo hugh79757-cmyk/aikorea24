@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """aikorea24 브리핑 자동 생성기"""
 
+import json
 import re
 import subprocess
 import sys
@@ -15,7 +16,7 @@ sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 sys.path.insert(0, PROJECT_DIR)
 from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
-from auto_news_selector import (CANDIDATE_LIMIT, MAX_COUNT, MODEL_SOURCES, MODEL_SLOTS,
+from auto_news_selector import (CANDIDATE_LIMIT, MAX_COUNT, PROVIDER_SOURCES,
                                  cluster_by_topic, d1_query,
                                  interleave_candidates, select_top_articles)
 import model_eval
@@ -33,15 +34,23 @@ OPEN_WEIGHT_SOURCES = {"HuggingFace Trending"}
 
 
 def cli_free_block(article):
-    """'이 LLM을 OpenCode 같은 CLI에서 무료로 쓸 수 있는가?' 의 답을 코멘트에 붙인다."""
+    """'이 LLM을 OpenCode 같은 CLI에서 무료로 쓸 수 있는가?' 의 답을 코멘트에 붙인다.
+
+    2026-10-16 개편 §작업4: (a) OpenCode 모델 선택기에서 바로 선택 가능 / (b) 커스텀
+    프로바이더 연결 필요 — 를 반드시 구분한다. (b)를 (a)처럼 표현하면 안 된다.
+    """
     mid = article.get("original_title") or ""
     if not mid:
         return ""
     if article.get("source") in OPEN_WEIGHT_SOURCES:
-        return ("OpenCode에서 무료로 사용 가능 (오픈 웨이트·로컬 실행)\n"  # EVAL-02 §4-1: 이모티콘 제거
+        return ("OpenCode에서 무료로 사용 가능 (오픈 웨이트·로컬 실행)\n"
+                "로컬 브리지(Ollama 등) 필요\n"
                 f"모델: {article.get('link') or 'https://huggingface.co/' + mid}\n"
                 "사용법: Ollama 또는 LM Studio 로 먼저 띄운 뒤 OpenCode 의 "
                 f'"ollama" 프로바이더에서 {{"model": "ollama/<로컬 모델명>"}} 으로 연결')
+    if article.get("source") == "OpenCode Zen":
+        return ("(a) OpenCode 모델 선택기에서 바로 선택 가능\n"  # EVAL-02 §4-1: 이모티콘 제거
+                f'설정: {{"model": "opencode/{mid}"}}')
     prefix = CLI_PROVIDER_PREFIX.get(article.get("source"))
     if not prefix:
         return ""
@@ -51,9 +60,53 @@ def cli_free_block(article):
         f'{{"model": "{CLI_PROVIDER_PREFIX[p]}/{mid}"}}' for p in providers
     )
     names = "·".join(CLI_PROVIDER_PREFIX[p] for p in providers)
-    return ("OpenCode에서 무료로 사용 가능\n"  # EVAL-02 §4-1: 이모티콘 제거
+    return ("(b) 커스텀 프로바이더 설정 후 연결 가능 (API 키 필요)\n"
             + (f"프로바이더: {names}\n" if len(providers) > 1 else "")
             + f"설정: {settings}")
+
+
+LEADERBOARD_PATH = Path(PROJECT_DIR) / "scripts" / "logs" / "model_leaderboard.json"
+
+
+def _top3_avg():
+    """리더보드 상위 3개(현재 문항 버전) 평균 점수. 실패하면 None → 비교 줄 생략."""
+    try:
+        rows = [r for r in json.loads(LEADERBOARD_PATH.read_text(encoding="utf-8"))
+                if r.get("qv") == model_eval.EVAL_QUESTIONS_VERSION and r.get("score")]
+    except Exception as e:  # noqa: BLE001 — 비교 실패가 브리핑을 막지 않는다
+        log(f"    ⚠️ 리더보드 조회 실패: {type(e).__name__}")
+        return None
+    if not rows:
+        return None
+    rows.sort(key=lambda r: -r["score"])
+    top = rows[:3]
+    return sum(r["score"] for r in top) / len(top)
+
+
+def verdict_block(model_id, source=None):
+    """모델 판단 문구 — 12문항 평가 결과 + 현재 추천 Top 3 대비 (2026-10-16 개편 §작업4).
+
+    평가 전이면 "판단 보류"로 명시한다 (추측 금지). 이 함수는 브리핑을 막지 않는다.
+    """
+    _ = source  # 인터페이스 유지용 (지시서 지정 시그니처)
+    try:
+        # 캐시 전용 조회 — 캐시가 없으면 라이브 평가를 돌리지 않는다.
+        # (2026-10-16 실측: eval_model_cached 는 캐시 미스 시 12문항을 실제로 호출해
+        #  이미 제외된 모델에 48초를 낭비했다. 브리핑은 평가 파이프라인이 아니다.)
+        ev = model_eval.cache_get(model_id)
+    except Exception as e:  # noqa: BLE001
+        log(f"    ⚠️ 모델 평가 예외: {type(e).__name__}: {str(e)[:100]}")
+        ev = None
+    if not ev or ev.get("score") is None:
+        if model_id:
+            log(f"    ⓘ 12문항 평가 전 (캐시 없음): {model_id} → 판단 보류")
+        return "12문항 평가 전 — 판단 보류"
+    lines = [f"12문항 평가: {ev['score']}/{ev['max_score']} — {ev.get('label') or ''}".rstrip()]
+    avg = _top3_avg()
+    if avg is not None:
+        lines.append("현재 추천 Top 3 대비: " + ("추천 모델과 동급" if ev["score"] >= avg
+                                             else f"현재 추천 모델 대비 {avg - ev['score']:g}점 낮음"))
+    return "\n".join(lines)
 
 
 def merge_same_models(articles):
@@ -140,29 +193,15 @@ def generate_comment(article):
             removed = len(comment) - len(cleaned)
             log(f"    ⚠️ 중국어 문자 {removed}개 제거됨 (comment)")
 
-        # v2 free-llm 항목에 능력 티어 + 접근법 자동 부착 (AIK24-MODELEVAL-01)
-        # 평가 실패 시 기존 코멘트만 — 브리핑을 절대 막지 않는다.
+        # free-llm 항목에 verdict 부착 (2026-10-16 개편 §작업4) — eval_comment_block 폐지.
+        # 평가 실패 시에도 "판단 보류"만 붙이고 브리핑을 절대 막지 않는다.
         if article.get("v2_tag") == "free-llm":
-            model_id = model_eval.extract_model_id(article)
+            model_id = model_eval.extract_model_id(article) or (article.get("original_title") or "")
             if not model_id:
-                log("    ⚠️ 모델 ID 판별 실패 → 평가 생략")
-                return cleaned
-            try:
-                ev = model_eval.eval_model_cached(model_id)
-                log(f"    📊 모델 평가: {model_id} → {ev['label']} "
-                    f"(실패 {ev.get('failed', 0)}/{ev['max_score']}문항, 채널 {sorted({d['source'] for d in ev['details']})})")
-                for d in ev["details"]:
-                    log(f"       Q{d['idx']}[{d['cat']}] {d['score']}점 "
-                        f"({d['source']}) {(d.get('answer') or '')[:50]!r}")
-                # deep_dive_url은 09:30 블로그 생성 뒤에야 채워진다.
-                # 09:00 브리핑 시점엔 None → 해당 줄 생략(프론트 deep-dive 카드가 대신 보여준다)
-                block = model_eval.eval_comment_block(
-                    model_id, article.get("deep_dive_url"), result=ev)
-                if block:
-                    return block
-                log("    ⚠️ 평가 블록 생성 실패 → 기존 코멘트 유지")
-            except Exception as e:
-                log(f"    ⚠️ 모델 평가 예외: {type(e).__name__}: {str(e)[:100]}")
+                log("    ⚠️ 모델 ID 판별 실패 → verdict 생략")
+            else:
+                log(f"    📊 verdict 조회: {model_id} ({article.get('source')})")
+                return cleaned + "\n\n" + verdict_block(model_id, article.get("source"))
         return cleaned
     except Exception as e:
         log(f"  LLM 예외: {e}")
@@ -245,7 +284,6 @@ def main(selected_articles=None):
 
     if selected_articles is not None:
         selected = selected_articles
-        pool = None
         log(f"  외부 선정 사용: {len(selected)}개 기사")
     else:
         # PIPE-03: 모델이 161건으로 풀을 덮으면 뉴스 1건 슬롯이 비므로 태그 교차로 섞는다.
@@ -259,8 +297,7 @@ def main(selected_articles=None):
         for cluster_name, cluster_articles in clusters.items():
             for art in cluster_articles:
                 art["cluster"] = cluster_name
-        selected = select_top_articles(clusters, max_count=4)  # v2: 6 -> 4 (AIK24-PIPE-02 Step 4)
-        pool = articles
+        selected = select_top_articles(clusters, max_count=MAX_COUNT)  # PIPE-03: 뉴스 3건
         log(f"  선정: {len(selected)}개 기사")
 
     # Phase 2 중복 방어 (저장 전 재검증). AIK24-BLOG-01: run_pipeline가 기사를 넘기는
@@ -272,24 +309,6 @@ def main(selected_articles=None):
             title = (art.get("title") or "")[:50]
             log(f"    [{reason}] {title}")
     selected = cutoff
-    # AIK24-EFFICIENCY-04: 모델 카드는 exact_id 만 남으므로 슬롯이 빈 채로 끝날 수 있다
-    # (어제 발행분을 오늘 후보가 되풀이하는 상황). 평가가 끝난 풀의 남은 모델 카드로
-    # 중복 검사만 다시 하고 채운다. 그래도 모자라면 §4-2 폴백이 적용된 상태 그대로 둔다.
-    if pool:
-        used = {a.get('id') for a in selected}
-        short = min(MODEL_SLOTS - sum(1 for a in selected if a.get('source') in MODEL_SOURCES),
-                    MAX_COUNT - len(selected))
-        refill = [a for a in pool
-                  if a.get('source') in MODEL_SOURCES and a.get('id') not in used]
-        if refill:
-            # 중복 검사 후 슬롯 수만큼 자른다. 반대로 하면 이미 발행된 후보가
-            # 앞을 채워 미발행 모델 카드가 잘려 나간다 (2026-10-14 하네스에서 확인).
-            refill, _ = filter_duplicates(refill, d1_query)
-            refill = refill[:short]
-            if refill:
-                log(f"  모델 슬롯 재충전: {len(refill)}건 — "
-                    + ", ".join((a.get('original_title') or a.get('title') or '')[:30] for a in refill))
-            selected += refill
     selected = merge_same_models(selected)
 
     if not selected:

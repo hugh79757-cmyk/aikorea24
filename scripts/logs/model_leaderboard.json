@@ -22,5 +22,13 @@
   "max_score": 12,
   "judge_failed_n": 0,
   "ts": 1792057587.92583
+ },
+ {
+  "model_id": "nvidia/nemotron-3.5-super-vl:free",
+  "qv": 1,
+  "score": 8,
+  "max_score": 12,
+  "judge_failed_n": 1,
+  "ts": 1792108997.09343
  }
 ]

@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 """aikorea24 데일리 파이프라인 (Blog Pipeline)
 
-뉴스 → 브리핑 → 블로그 → 썸네일 → 이메일 → 배포:
+뉴스 → 브리핑 → 썸네일 → 이메일 → 배포:
 1. 뉴스 선정 (auto_news_selector)
 2. 브리핑 생성 (auto_briefing)
-3. 블로그 초안 생성 (blog_draft_generator)
-4. 썸네일 생성 (auto_thumbnail)
-5. 이메일 발송 (auto_email_sender)
-6. 빌드 + 배포 (scripts/deploy.sh)
+3. 썸네일 생성
+4. 이메일 발송
+5. 빌드 + 배포
 
 Usage:
     python3 scripts/run_pipeline.py [--collect] [--skip-news] [--skip-briefing]
-    python3 scripts/run_pipeline.py [--skip-blog] [--skip-email] [--skip-thumbnails] [--skip-deploy]
+    python3 scripts/run_pipeline.py [--skip-email] [--skip-thumbnails] [--skip-deploy]
     python3 scripts/run_pipeline.py [--date YYYY-MM-DD] [--dry-run]
 """
 import argparse
 import os
-import re
 import subprocess
 import sys
 import traceback
@@ -59,118 +57,6 @@ def step_briefing(articles):
     else:
         log("  선정된 기사가 없어 브리핑을 건너뜁니다.")
         return None
-
-
-def step_blog():
-    """Step 3: 블로그 초안 생성 (브리핑 기반)"""
-    log("═══ Step 3: 블로그 초안 생성 ═══")
-    # AIK24-EFFICIENCY-02: 생성기 내부의 자체 배포(62초)를 끈다. 이 경로에선
-    # Step 6(deploy.sh)이 1분 뒤에 한 번 더 배포하므로 중복이었다.
-    blog_env = dict(os.environ, PIPELINE_MODE="1")
-    result = subprocess.run(
-        [sys.executable, str(Path(__file__).resolve().parent / "blog_draft_generator.py")],
-        capture_output=True, text=True, timeout=600,
-        cwd=str(Path(__file__).resolve().parent.parent), env=blog_env
-    )
-    for line in (result.stdout or "").splitlines()[-10:]:
-        log(f"  {line}")
-    if result.returncode != 0:
-        log(f"  ⚠️ 블로그 생성 실패 (rc={result.returncode}), 계속 진행")
-        if result.stderr:
-            for line in result.stderr.splitlines()[-3:]:
-                log(f"  ⚠ {line}")
-    else:
-        log("  ✅ 블로그 초안 생성 완료")
-
-
-def step_link_blogs():
-    """Step 3b: 브리핑에 블로그 링크 연결 (모델 심층 분석)
-
-    오늘 생성된 모델 심층 분석 블로그 글을 찾아,
-    오늘 브리핑의 해당 free-llm 항목 코멘트에 블로그 URL을 추가한다.
-    D1 briefing_items.comment에 '👉 자세한 분석: /blog/{slug}/' 형태로 삽입.
-    """
-    import glob
-    import json
-    log("═══ Step 3b: 브리핑-블로그 링크 연결 ═══")
-    try:
-        KST = timezone(timedelta(hours=9))
-        today = datetime.now(KST).strftime("%Y-%m-%d")
-        # 1. 오늘 생성된 블로그 파일에서 모델 심층 분석 글 찾기
-        blog_dir = Path(__file__).resolve().parent.parent / "src" / "content" / "blog"
-        # 모델 심층 분석 글은 frontmatter에 model_id 또는 제목에 [모델 분석] 포함으로 판별
-        candidates = []
-        for fp in glob.glob(str(blog_dir / f"{today}*.md")):
-            try:
-                text = Path(fp).read_text(encoding="utf-8")[:2000]
-                # frontmatter에서 slug와 model_id 추출
-                m_slug = re.search(r"^slug:\s*['\"]?([^'\"\s]+)", text, re.MULTILINE)
-                slug = m_slug.group(1) if m_slug else Path(fp).stem
-                m_model = re.search(r"model_id:\s*['\"]?([^'\"\s]+)", text)
-                model_id = m_model.group(1) if m_model else None
-                # 제목에서 모델명 추출 시도
-                m_title = re.search(r"^title:\s*['\"]?(.+?)['\"]?\s*$", text, re.MULTILINE)
-                title = m_title.group(1) if m_title else ""
-                # 모델 심층 분석 글로 판별: model_id가 있거나 제목에 모델 패턴
-                if model_id or "모델" in title or "LLM" in title:
-                    candidates.append({"slug": slug, "model_id": model_id, "title": title, "file": fp})
-            except Exception:
-                continue
-        if not candidates:
-            log("  모델 분석 블로그 없음 → 건너뜀")
-            return
-        log(f"  모델 분석 블로그 {len(candidates)}건 발견")
-        # 2. D1에서 오늘 브리핑 조회
-        wrangler = "/opt/homebrew/bin/wrangler"
-        proj = str(Path(__file__).resolve().parent.parent)
-        env = dict(os.environ)
-        env.pop("CLOUDFLARE_API_TOKEN", None)
-        env.pop("CLOUDFLARE_ACCOUNT_ID", None)
-        def d1(q):
-            r = subprocess.run([wrangler, "d1", "execute", "aikorea24-db", "--remote",
-                                "--command", q, "--json"],
-                               capture_output=True, text=True, timeout=60, cwd=proj, env=env)
-            if r.returncode != 0:
-                return []
-            try:
-                data = json.loads(r.stdout)
-                return data[0].get("results", []) if data else []
-            except Exception:
-                return []
-        briefings = d1(f"SELECT id FROM briefings WHERE date LIKE '{today}%' AND status='published' ORDER BY id DESC LIMIT 1")
-        if not briefings:
-            log("  오늘 브리핑 없음 → 건너뜀")
-            return
-        bid = briefings[0]["id"]
-        items = d1(f"SELECT rowid, news_id, comment FROM briefing_items WHERE briefing_id={bid}")
-        # 3. 각 블로그 후보에 대해 매칭되는 브리핑 항목에 URL 삽입
-        linked = 0
-        for c in candidates:
-            slug, model_id = c["slug"], c["model_id"]
-            blog_url = f"https://aikorea24.kr/blog/{slug}/"
-            for it in items:
-                comment = it.get("comment") or ""
-                if "👉 자세한 분석" in comment:
-                    continue  # 이미 링크 있음
-                # 매칭: model_id가 코멘트에 있거나 슬러그 관련
-                hit = False
-                if model_id and model_id.split("/")[-1].split(":")[0] in comment:
-                    hit = True
-                if not hit:
-                    continue
-                new_comment = comment + f"\n👉 자세한 분석: {blog_url}"
-                # SQL 이스케이프
-                esc = new_comment.replace("'", "''")
-                r = subprocess.run([wrangler, "d1", "execute", "aikorea24-db", "--remote",
-                                    "--command", f"UPDATE briefing_items SET comment='{esc}' WHERE rowid={it['rowid']} AND comment NOT LIKE '%👉 자세한 분석%'"],
-                                   capture_output=True, text=True, timeout=60, cwd=proj, env=env)
-                if r.returncode == 0:
-                    linked += 1
-                    log(f"  ✅ 링크 추가: {model_id} → {blog_url}")
-        log(f"  완료: {linked}건 연결")
-    except Exception as e:
-        log(f"  ⚠️ 링크 연결 실패 (무시하고 계속): {e}")
-        traceback.print_exc()
 
 
 def step_thumbnails(articles):
@@ -245,7 +131,6 @@ def main():
                         help="Step 0 v2 소스 수집 실행 (기본: 05:30 수집기에 이관되어 스킵)")
     parser.add_argument("--skip-news", action="store_true", help="뉴스 선정 단계 건너뜀")
     parser.add_argument("--skip-briefing", action="store_true", help="브리핑 생성 단계 건너뜀")
-    parser.add_argument("--skip-blog", action="store_true", help="블로그 초안 생성 단계 건너뜀")
     parser.add_argument("--skip-thumbnails", action="store_true", help="썸네일 생성 단계 건너뜀")
     parser.add_argument("--skip-email", action="store_true", help="이메일 발송 단계 건너뜀")
     parser.add_argument("--no-email", action="store_true",
@@ -333,26 +218,6 @@ def main():
         log("⏭ 브리핑 생성 건너뜀")
 
     log("")
-
-    log("")
-
-    # Step 3: 블로그 초안 생성 (브리핑 기반)
-    if not args.skip_blog:
-        try:
-            step_blog()
-        except Exception as e:
-            log(f"블로그 생성 에러 (무시하고 계속): {e}")
-            traceback.print_exc()
-    else:
-        log("⏭ 블로그 초안 생성 건너뜀")
-
-    log("")
-
-    # Step 3b: 브리핑-블로그 링크 연결
-    try:
-        step_link_blogs()
-    except Exception as e:
-        log(f"링크 연결 에러 (무시하고 계속): {e}")
 
     log("")
 

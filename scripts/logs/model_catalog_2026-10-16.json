@@ -141,16 +141,6 @@
   },
   {
     "provider": "kilo",
-    "model_id": "stepfun/step-5-preview-free",
-    "name": "StepFun: Step 5 Preview (free)",
-    "pricing": {
-      "prompt": 0.0,
-      "completion": 0.0
-    },
-    "context_length": 1000000
-  },
-  {
-    "provider": "kilo",
     "model_id": "thinkingmachines/inkling-small:free",
     "name": "Thinking Machines: Inkling Small (free)",
     "pricing": {
@@ -362,13 +352,6 @@
     "provider": "zen",
     "model_id": "space-bunny-free",
     "name": "space-bunny-free",
-    "pricing": null,
-    "context_length": null
-  },
-  {
-    "provider": "zen",
-    "model_id": "step-5-preview-free",
-    "name": "step-5-preview-free",
     "pricing": null,
     "context_length": null
   }

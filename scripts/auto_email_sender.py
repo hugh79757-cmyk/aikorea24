@@ -279,7 +279,6 @@ def generate_email_html(briefing, items):
         <div style="margin-bottom:8px;"><img src="https://aikorea24.kr/mascot-tiger.png" alt="AI코리아24 마스코트" style="width:80px;height:80px;" /></div>
         <h1 style="color:#fff;font-size:26px;margin:0;letter-spacing:2px;">AI코리아24</h1>
         <p style="color:#94a3b8;font-size:13px;margin:4px 0 0 0;">오늘의 AI 브리핑 — {date}</p>
-        <p style="color:#64748b;font-size:12px;margin:6px 0 0 0;">매일 아침 7시, 국내외 AI 소식 큐레이션</p>
       </td>
     </tr>
     <tr>
@@ -296,6 +295,11 @@ def generate_email_html(briefing, items):
       <td style="padding:0 24px;background:#fff;">
         <table width="100%" cellpadding="0" cellspacing="0">
           {items_html}
+          <tr>
+            <td style="padding:20px 24px;background:#fff;border-bottom:1px solid #e5e7eb;">
+              <p style="font-size:14px;color:#374151;line-height:1.6;margin:0;"><a href="https://emdash.aikorea24.kr/posts/free-models" style="color:#2563eb;text-decoration:none;">💡 무료로 쓸 수 있는 AI 모델 목록 보기 →</a></p>
+            </td>
+          </tr>
           {tools_html}
         </table>
       </td>
