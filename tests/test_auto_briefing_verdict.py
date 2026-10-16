@@ -38,3 +38,25 @@ def test_cache_hit_below_top3_states_the_gap(monkeypatch):
                         lambda mid: {"score": 7, "max_score": 12, "label": "12문항 중 7문항 정답"})
     monkeypatch.setattr(ab, "_top3_avg", lambda: 9.5)
     assert "현재 추천 모델 대비 2.5점 낮음" in ab.verdict_block("meh-free")
+
+
+def test_running_but_unscored_is_a_separate_tier(monkeypatch):
+    """2026-10-16 대표님 지시: 동작 확인됨·점수 없음은 '판단 보류'와 구분한다."""
+    monkeypatch.setattr(model_eval, "cache_get", lambda mid: None)
+    monkeypatch.setattr(ab, "_verified_running", lambda: {"step-5-preview"})
+    assert ab.verdict_block("step-5-preview-free") == "OpenCode 동작 확인됨 (12문항 평가 전)"
+
+
+def test_model_outside_verified_list_stays_pending(monkeypatch):
+    monkeypatch.setattr(model_eval, "cache_get", lambda mid: None)
+    monkeypatch.setattr(ab, "_verified_running", lambda: {"step-5-preview"})
+    assert ab.verdict_block("unknown-model-free") == "12문항 평가 전 — 판단 보류"
+
+
+def test_core_name_and_real_verify_files():
+    """실제 로그 파일에서 동작 확인 모델을 읽는다 — 표기 차이(:free / -free)를 넘는다."""
+    assert ab._core_name("nvidia/nemotron-3.5-super-vl:free") == "nemotron-3.5-super-vl"
+    assert ab._core_name("step-5-preview-free") == "step-5-preview"
+    names = ab._verified_running()
+    assert "step-5-preview" in names
+    assert "north-mini-code" in names

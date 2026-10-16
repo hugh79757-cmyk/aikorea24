@@ -1,3 +1,31 @@
+## 2026-10-16 14:20 — AIK24-PIPE-04: verdict 3단계 + 주간 무료 기회 초안 8건
+
+### 한 일
+- **[PRODUCTION CODE] `scripts/auto_briefing.py`** — `verdict_block()` 을 3단계로 분리(대표님 지시). 신규 `_core_name()`(`:free`/`-free` 접미사 제거)·`_verified_running()`(`free_models_verify.json` pass + `free_models_cli.json` → 이름 집합), 상수 `VERIFY_PATH`·`CLI_MODELS_PATH` 추가. ① 점수 있음 → 점수+Top3 대비 ② 동작 확인됨·점수 없음 → `OpenCode 동작 확인됨 (12문항 평가 전)` ③ 미검증 → `12문항 평가 전 — 판단 보류`. (A안 전제 수정 반영 — verify 15개는 점수 리스트가 아니라 동작 확인 리스트였음.)
+- **[TEST CODE] `tests/test_auto_briefing_verdict.py`** — 3건 추가(tier2 분리 / tier3 유지 / 실제 로그 파일 파싱), 총 **6 passed**.
+- **[DATA] `scripts/logs/weekly_opportunities.json`** 신규 — 대표님 검수용 무료 기회 초안 8건(전부 공식 페이지 curl 실측 확인: Google Cloud $300 · Azure $200/30일 · Cloudflare Workers AI 10,000 Neurons/일 · Gemini API 무료 티어 · GitHub Copilot Free · OpenRouter `:free` · GitHub Student Pack · Cerebras $5 프로모). 전부 `access="custom"`(OpenCode에서 바로 선택 가능한 항목은 0건 — 정직 표기).
+- **D1 교정** — `briefing_items` id 1929(briefing 355): `12문항 평가 전 — 판단 보류` → `OpenCode 동작 확인됨 (12문항 평가 전)`.
+
+### 결과
+- [검증됨] pytest `tests/test_auto_briefing_verdict.py` 6 passed. 실측 출력: `space-bunny-free` → `12문항 평가: 10/12 … / 현재 추천 Top 3 대비: 추천 모델과 동급` / `step-5-preview-free` → `OpenCode 동작 확인됨 (12문항 평가 전)` / `never-seen-model:free` → `12문항 평가 전 — 판단 보류`.
+- [검증됨] 라이브 `https://aikorea24.kr/briefing/2026-10-16-2/` 에 `OpenCode 동작 확인됨 (12문항 평가 전)` 1회 노출(grep -c = 1), `판단 보류` 0회.
+- [검증됨] `weekly_opportunity.py --dry-run` → `선별 8건 / 입력 8건`, 8건 모두 `(b) 커스텀 프로바이더 설정 후 연결 가능` 라벨 부착. D1 INSERT는 **하지 않음**(대표님 검수 대기).
+- [검증불가] 무료 기회 항목의 실제 프로모 지속 여부 — 2026-10-16 curl 응답 기준이며 만료 시점은 각 사 정책에 달림. `expires` 는 상시 프로그램 2027-12-31, Cerebras 프로모 2026-12-31 로 보수 설정.
+- websearch 도구는 이번 세션에서 빈 결과(인프라 문제) → 공식 페이지 직접 curl + 본문 추출로 대체.
+
+### 잔존 위험
+1. 무료 기회 8건은 전부 `custom` — "OpenCode에서 바로 선택 가능한 무료 기회"는 아직 0건. (a) 항목을 만들려면 OpenCode Zen 자체 프로모션 같은 재료가 필요.
+2. 지시서 작업6의 상단 숫자(38개)는 카탈로그 스냅샷 기준이고 검증(15개)과 갱신 시점이 다름 — 매일 갱신되지만 서로 다른 시점의 수치다.
+3. `weekly_opportunities.json` 은 아직 D1 에 없으므로 슬롯 1은 내일도 빈 슬롯.
+4. `news.link UNIQUE` 제약: `weekly_opportunity.py` 는 서로 다른 기회가 같은 link 를 쓰면 조용히 1건만 들어간다(현재 초안은 링크 중복 없음).
+
+### 다음 행동
+- B안(유료 대비) 설계: 비용 없이 **공식 자료 인용** 방식으로. 어떤 유료 모델을 기준선으로 삼을지 대표님 결정 필요.
+- 대표님 검수 후 `python3 scripts/weekly_opportunity.py` (실 INSERT) → 슬롯 1 활성화.
+- 미검증으로 남긴 후보: NVIDIA build 크레딧, Groq 무료 티어, 국내 정부지원·해커톤(JS 렌더로 curl 검증 불가).
+
+---
+
 ## 2026-10-16 AIK24-PIPE-03 완료 — 브리핑 v3 개편 (작업 1~9 전부 실행)
 
 ### 한 일

@@ -66,6 +66,8 @@ def cli_free_block(article):
 
 
 LEADERBOARD_PATH = Path(PROJECT_DIR) / "scripts" / "logs" / "model_leaderboard.json"
+VERIFY_PATH = Path(PROJECT_DIR) / "scripts" / "logs" / "free_models_verify.json"
+CLI_MODELS_PATH = Path(PROJECT_DIR) / "scripts" / "logs" / "free_models_cli.json"
 
 
 def _top3_avg():
@@ -83,10 +85,41 @@ def _top3_avg():
     return sum(r["score"] for r in top) / len(top)
 
 
-def verdict_block(model_id, source=None):
-    """모델 판단 문구 — 12문항 평가 결과 + 현재 추천 Top 3 대비 (2026-10-16 개편 §작업4).
+def _core_name(model_id):
+    """`:free`/`-free` 접미사를 떼고 소문자로 — 프로바이더마다 표기가 달라도 같은 모델을 찾는다."""
+    c = (model_id or "").split("/")[-1].lower()
+    for suf in (":free", "-free"):
+        if c.endswith(suf):
+            c = c[: -len(suf)]
+    return c
 
-    평가 전이면 "판단 보류"로 명시한다 (추측 금지). 이 함수는 브리핑을 막지 않는다.
+
+def _verified_running():
+    """OpenCode에서 동작 확인된 모델 이름 집합 — 12문항 점수는 없는 층 (2026-10-16 대표님 지시)."""
+    names = set()
+    for path in (VERIFY_PATH, CLI_MODELS_PATH):
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001 — 파일이 없으면 그 층은 비어 있는 것으로 본다
+            continue
+        if isinstance(data, dict):
+            for cid in (data.get("pass") or []):
+                names.add(_core_name(cid))
+        elif isinstance(data, list):
+            for row in data:
+                if isinstance(row, dict):
+                    names.add(_core_name(row.get("model_id") or row.get("cli_id") or ""))
+    names.discard("")
+    return names
+
+
+def verdict_block(model_id, source=None):
+    """모델 판단 문구 — 3단계 (2026-10-16 대표님 지시로 개편).
+
+    1) 12문항 점수 있음 → 점수 + Top 3 대비
+    2) 동작 확인됨·점수 없음 → "OpenCode 동작 확인됨 (12문항 평가 전)"
+    3) 미검증 → "12문항 평가 전 — 판단 보류"
+    추측하지 않는다. 이 함수는 브리핑을 막지 않는다.
     """
     _ = source  # 인터페이스 유지용 (지시서 지정 시그니처)
     try:
@@ -98,6 +131,13 @@ def verdict_block(model_id, source=None):
         log(f"    ⚠️ 모델 평가 예외: {type(e).__name__}: {str(e)[:100]}")
         ev = None
     if not ev or ev.get("score") is None:
+        try:
+            verified = bool(model_id) and _core_name(model_id) in _verified_running()
+        except Exception:  # noqa: BLE001 — 확인 실패는 미검증으로 본다
+            verified = False
+        if verified:
+            log(f"    ⓘ 12문항 평가 전 (동작 확인됨): {model_id}")
+            return "OpenCode 동작 확인됨 (12문항 평가 전)"
         if model_id:
             log(f"    ⓘ 12문항 평가 전 (캐시 없음): {model_id} → 판단 보류")
         return "12문항 평가 전 — 판단 보류"
