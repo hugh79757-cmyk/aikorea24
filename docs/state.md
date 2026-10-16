@@ -1,3 +1,32 @@
+## 2026-10-16 18:00 — AIK24-EMDASH-12 완료: 무료 모델 표 열 폭 확정(단어 중간 쪼개짐 0) + verify-models 2단 잡 커밋
+
+> 시각 기준 = KST(머신 로컬 +07). 위 항목들의 시각은 세션 시계 오차로 실제보다 앞서 있습니다.
+> 배경: 15:33 서버 재시작으로 중단된 세션(주니어 C)의 미완료분을 이어서 마무리한 건입니다.
+
+### 한 일
+- **[PRODUCTION CODE] `projects2/aikorea24emdash/src/styles/theme.css`** — `article[data-slug="free-models"]` 한정 `@media (min-width:769px)` 블록의 열 폭을 24/12/16/12/36 → **23/15/14/12/36** 으로 확정. 산출 근거를 코드 주석에 고정: 프로바이더 `"OpenCode"` 69.4px + 셀 패딩·보더 26px = 95.4px 필요 → 12%(81px)에서 `OpenCo`/`de Zen` 으로 쪼개짐 → 15%(102px). 컨텍스트 `"1,000,000"` 63.5px + 26 = 89.5px 필요(nowrap 이라 넘치면 잘림) → 14%(95.2px).
+- **[CONFIG] `scripts/verify-models.plist.template`** (untracked → 커밋 `bb5a5b70`) — 09:30 검증 잡. 페이지 발행은 기존 10:00 `kr.aikorea24.free-model-pipe` 유지(검증이 느려도 발행이 밀리지 않음).
+- **[DATA] `scripts/logs/free_models_cli.json.bak-20261016`** — 기존 추적 관례(`.bak-20261015` 이미 추적 중)와 동일하게 커밋.
+- **배포** — `npm run deploy`(신 계정 stylefactory9ai) → Version ID `227f6dd4-ff19-4061-8029-f9b803aa4d4d`. aikorea24emdash 커밋 `c6c0f9b`.
+
+### 결과 — 검증 근거
+- **[검증됨] 라이브 실측 7폭** (Playwright, `https://emdash.aikorea24.kr/posts/free-models`): 1440/1200/1024/900/769 → `docOverflow 0` · `wrapperOverflow 0` · `tableW 680` · 열 폭 `[156, 102, 95, 81, 244]` · 컨텍스트 셀 잘림 0 · 말줄임(`...`) 셀 0. 768/375 → 카드 모드(`thead` 숨김, 행 블록) · `docOverflow 0`.
+- **[검증됨] 단어 중간 쪼개짐 0건 / 양성 대조군 9건 재현**: 문자 단위 `Range` rect 로 줄 경계를 복원해 "공백·하이픈이 아닌 지점에서 같은 문자군(CJK·라틴)이 이어지는" 경우를 검사 → 현재 0건. 대조군(프로바이더 열 12% 강제 주입)에서 9건 재현(`OpenCo ▮ de Zen`, `프로바이 ▮ 더`) → 탐지기가 실제 결함을 잡음을 증명.
+- **[검증됨] 회귀 테스트**: `.venv/bin/python3 -m pytest tests/test_free_models_page.py -q` → `8 passed in 0.28s`(기준선 8 passed → 수정 후 동일).
+- **[검증됨] plist 설치본 일치·등록**: `diff scripts/verify-models.plist.template ~/Library/LaunchAgents/kr.aikorea24.verify-models.plist` → 차이 0. `launchctl list` 에 `kr.aikorea24.verify-models`(exit 0) · `kr.aikorea24.free-model-pipe` 등록 확인.
+- **[검증됨] plist `--timeout` 결정 = 기본 60s 유지**: 엔트리 15개 ÷ 워커 4 = 4배치 × 60s = 최대 4분 ≤ 30분 창(09:30→10:00). 조정이 필요해지는 임계는 엔트리 120개(120÷4×60 = 1800s).
+- **[검증됨] 커밋 상태**: aikorea24emdash `c6c0f9b`(theme.css + version.gen.ts), aikorea24 `bb5a5b70`(plist 템플릿 + 캐시 백업). aikorea24 작업 트리는 clean.
+
+### 잔존 위험
+1. **`projects2/aikorea24emdash/scripts/fix_tables.py` 는 미커밋 수정 상태로 남아 있다** — 2026-10-14 23:33 D1 읽기 가드 56줄(`require_headroom()` 174행 정의 · 338행 호출, `py_compile` OK). 이번 작업 범위 밖이라 의도적으로 커밋하지 않았다. 커밋 여부는 별도 판단 필요.
+2. **verify-models 잡은 실발화 전** — 첫 자동 실행은 2026-10-17 09:30. `scripts/logs/verify-models.log` 는 아직 없다(설치·등록만 확인). 실제 실행 결과는 미확인이므로 이 잡의 동작은 [검증불가].
+3. **쪼개짐 대조군은 브라우저 CSS 주입으로 재현**한 것이며 12% 상태로 되돌려 재배포해 재현한 것은 아니다(동일 결함은 이전 배포 상태 스크린샷 `/tmp/fm-1200.png` 에서 육안 확인).
+4. 375px 카드 하단에 사이트 공통 "가입" 플로팅 위젯이 카드 위로 겹쳐 보인다 — 표가 아니라 전역 위젯 문제(범위 밖).
+
+### 다음 행동
+- `fix_tables.py` 가드를 검증 후 커밋할지 결정.
+- 2026-10-17 09:30 이후 `scripts/logs/verify-models.log` 로 첫 실행 결과 확인.
+
 ## 2026-10-16 18:40 — AIK24-OPENROUTER-GUIDE: groq 글 삭제 → OpenRouter 글로 교체 발행 + 스킬 4건 보강
 
 ### 한 일
