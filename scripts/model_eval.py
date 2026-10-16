@@ -47,7 +47,8 @@ OPENROUTER_MODELS = "https://openrouter.ai/api/v1/models"
 
 QUESTION_TIMEOUT = 60
 QUESTION_MAX_TOKENS = 1500  # EVAL-02: 실무 문항(12,000자 문서 참조·테스트 스위트) 답이 500에 잘림
-JUDGE_TEMPERATURE = 0.1
+# AGENT-EVAL-01 4단계 2번: 판관은 0 으로 고정한다. 0.1 에서는 같은 답안에도 0/1 이 흔들렸다.
+JUDGE_TEMPERATURE = 0.0
 JUDGE_MAX_TOKENS = 10
 
 # OpenRouter 무료 티어는 분당 20회 제한이 있다. 8문항을 연속으로 쏘면 429가 터져
@@ -75,6 +76,9 @@ EVAL_QUESTIONS_VERSION = 2
 
 # BLOG-03: 모델 평가 리더보드. append-only — 실행할 때마다 1건씩 쌓인다.
 LEADERBOARD_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_leaderboard.json")
+# AGENT-EVAL-01 4단계 3번: 캐시 덮어쓰기 중단. 실행마다 전체 스냅샷을 한 줄씩 append 한다.
+# 캐시(최신 1건)만 남으면 "같은 모델을 왜 두 번 돌렸는데 점수가 다르지?" 를 재현할 수 없다.
+RUNS_LOG_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_eval_runs.jsonl")
 
 # ============================================
 # 평가 문항 (AIK24-EVAL-02 §4-3 / §4-7)
@@ -460,6 +464,11 @@ def record_leaderboard(model_id, result):
             "qv": result.get("qv", EVAL_QUESTIONS_VERSION),
             "score": result.get("score", 0),
             "max_score": max_score,
+            "judged_n": result.get("judged_n") or max_score,
+            "defect_n": result.get("defect_n") or 0,
+            "no_response_n": result.get("no_response_n") or 0,
+            "score_display": result.get("score_display")
+            or score_display({**result, "judged_n": max_score}),
             "judge_failed_n": result.get("judge_failed", 0),
             "ts": time.time(),
         })
@@ -467,9 +476,43 @@ def record_leaderboard(model_id, result):
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(rows, f, ensure_ascii=False, indent=1)
         os.replace(tmp, LEADERBOARD_PATH)  # 원자적
-        log(f"리더보드 기록: {model_id} {result.get('score')}/{max_score} (qv={result.get('qv')}, {len(rows)}건)")
+        log(f"리더보드 기록: {model_id} {rows[-1].get('score_display')} "
+            f"(qv={result.get('qv')}, {len(rows)}건)")
     except Exception as e:
         log(f"리더보드 기록 실패(무시): {type(e).__name__}")
+
+
+def append_run_log(entry):
+    """실행 스냅샷을 1줄 append (AGENT-EVAL-01 4단계 3번).
+
+    캐시는 "최신 1건"이라 같은 모델을 두 번 돌린 근거를 잃는다. 변동 분석·재채점의 원본이
+    여기다. 쓰기 실패는 조용히 넘긴다(평가 흐름을 깨지 않기 위해).
+    """
+    try:
+        os.makedirs(os.path.dirname(RUNS_LOG_PATH), exist_ok=True)
+        line = json.dumps(entry, ensure_ascii=False)
+        with open(RUNS_LOG_PATH, "a", encoding="utf-8") as f:
+            f.write(line + "\n")
+        return True
+    except Exception as e:
+        log(f"러닝 로그 append 실패(무시): {type(e).__name__}")
+        return False
+
+
+def score_display(entry):
+    """독자에게 보여줄 점수 표기 — 4단계 4번 (실제 채점 분모를 쓴다).
+
+    "10/12" 는 12문항 전부 채점됐다고 읽힌다. 실제로는 측정 결함·미응답을 뺀 채점 분모여야 한다.
+    """
+    score = entry.get("score") or 0
+    judged = entry.get("judged_n") or entry.get("max_score") or 0
+    bits = []
+    if entry.get("defect_n"):
+        bits.append(f"측정 결함 {entry['defect_n']}")
+    if entry.get("no_response_n"):
+        bits.append(f"미응답 {entry['no_response_n']}")
+    tail = f" ({', '.join(bits)} 제외)" if bits else ""
+    return f"{score}/{judged}{tail}"
 
 
 def cache_put(model_id, result):
@@ -494,6 +537,7 @@ def cache_put(model_id, result):
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=1)
         os.replace(tmp, CACHE_PATH)  # 원자적
+        append_run_log(entry)       # 4단계 3번 — 덮어쓰지 않는다
         record_leaderboard(model_id, entry)
     except Exception as e:
         log(f"캐시 저장 실패(무시): {type(e).__name__}")
@@ -758,6 +802,11 @@ def eval_model(model_id, with_judge=True):
     result["failed"] = sum(
         1 for d in result["details"] if d["source"] in ("http_error", "exception", "empty", "no_choices")
     )
+    # 4단계 4번: 실제 채점 분모를 결과에 명시한다 (API 경로도 동일).
+    result["defect_n"] = result["judge_failed"]
+    result["no_response_n"] = result["failed"]
+    result["judged_n"] = result["max_score"] - result["failed"] - result["judge_failed"]
+    result["score_display"] = score_display(result)
     # 축별 집계 (EVAL-02 §4-3: 축마다 원시 결과를 그대로 보여준다)
     # BLOG-03 §1-3: 판관이 0/1을 못 한 문항은 분자·분모에서 모두 뺀다.
     for d in result["details"]:
@@ -1041,6 +1090,11 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
         log(f"  [{idx}/{total}] {axis} {pts}점 (via cli{tag}) ← {actual[:60]!r}")
 
     result["failed"] = sum(1 for d in result["details"] if d["source"] == "exception")
+    # 4단계 4번: 독자에게 보여줄 "실제 채점 분모" 를 결과에 명시한다.
+    result["defect_n"] = result["judge_failed"]
+    result["no_response_n"] = result["failed"]
+    result["judged_n"] = result["max_score"] - result["failed"] - result["judge_failed"]
+    result["score_display"] = score_display(result)
     for d in result["details"]:
         if d.get("judge_failed"):
             continue

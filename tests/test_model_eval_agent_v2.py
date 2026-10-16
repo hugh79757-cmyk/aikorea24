@@ -155,3 +155,83 @@ def test_sandbox_points_are_int_not_bool(monkeypatch):
     for d in sb:
         assert type(d["score"]) is int, f'Q{d["idx"]} score={d["score"]!r} ({type(d["score"]).__name__})'
     assert type(res["sandbox_pass"]) is int
+
+
+# ── 4. 신뢰도 4단계 (AGENT-EVAL-01 후속) ────────────────────────────────
+
+def test_judge_temperature_is_zero():
+    """판관 온도 고정 — 0.1 로는 같은 답안에 0/1 이 흔들렸다."""
+    assert me.JUDGE_TEMPERATURE == 0.0
+
+
+def _fake_run(monkeypatch, answers, sandbox=None):
+    seq = iter(answers)
+    monkeypatch.setattr(me, "cli_call", lambda *a, **k: (next(seq), ""))
+    if sandbox is not None:
+        monkeypatch.setattr(me, "sandbox_grade", lambda spec, ans: sandbox)
+    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    return me.eval_model_cli("cat-jam-free")
+
+
+def test_judged_denominator_excludes_defects_and_no_response(monkeypatch):
+    """측정 결함·미응답을 뺀 **실제 채점 분모**가 결과에 남는다.
+
+    판관이 전부 결함을 낸다 해도 샌드박스 3문항은 기계 판정이라 분모에 남는다 —
+    즉 분모는 12 가 아니라 9 로 줄고, 결함은 9 로 기록된다.
+    """
+    monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("답", ""))
+    monkeypatch.setattr(me, "score_response", lambda q, e, a: None)   # 판관 전부 결함
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    res, _ = me.eval_model_cli("cat-jam-free")
+    sandbox_n = sum(1 for q in me.TEST_QUESTIONS if q.get("sandbox"))
+    assert sandbox_n == 3
+    assert res["defect_n"] == 12 - sandbox_n
+    assert res["judged_n"] == res["max_score"] - res["failed"] - res["defect_n"]
+    assert res["judged_n"] == sandbox_n
+    assert res["no_response_n"] == 0
+
+
+def test_score_display_uses_judged_not_max(monkeypatch):
+    monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("답", ""))
+    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
+    monkeypatch.setattr(me, "sandbox_grade", lambda spec, ans: (None, "결함"))
+    monkeypatch.setattr(me.time, "sleep", lambda *_: None)
+    res, _ = me.eval_model_cli("cat-jam-free")
+    assert res["judged_n"] == 12
+    assert res["score_display"] == "12/12"
+
+
+def test_score_display_reports_exclusions():
+    d = me.score_display({"score": 10, "judged_n": 11, "defect_n": 1, "max_score": 12})
+    assert d == "10/11 (측정 결함 1 제외)"
+    d2 = me.score_display({"score": 7, "judged_n": 10, "defect_n": 1,
+                           "no_response_n": 1, "max_score": 12})
+    assert "측정 결함 1" in d2 and "미응답 1" in d2 and d2.startswith("7/10")
+
+
+def test_append_run_log_is_append_only(tmp_path, monkeypatch):
+    """캐시는 덮어써도 되지만 러닝 로그는append 되야 변동 재현이 가능하다."""
+    p = tmp_path / "runs.jsonl"
+    monkeypatch.setattr(me, "RUNS_LOG_PATH", str(p))
+    entry = {"model_id": "m", "score": 1}
+    assert me.append_run_log(entry) is True
+    assert me.append_run_log(entry) is True
+    lines = p.read_text(encoding="utf-8").strip().splitlines()
+    assert len(lines) == 2, "두 번째 기록이 덮어써졌다"
+
+
+def test_runs_log_survives_cache_overwrite(tmp_path, monkeypatch):
+    """같은 모델을 두 번 돌려도 러닝 로그에는 두 줄이 남아야 한다."""
+    cache = tmp_path / "cache.json"
+    monkeypatch.setattr(me, "CACHE_PATH", str(cache))
+    monkeypatch.setattr(me, "RUNS_LOG_PATH", str(tmp_path / "runs.jsonl"))
+    monkeypatch.setattr(me, "LEADERBOARD_PATH", str(tmp_path / "lb.json"))
+    for score in (9, 10):
+        me.cache_put("cat-jam-free", {"model_id": "cat-jam-free", "score": score,
+                                      "max_score": 12, "judged_n": 12, "details": [{"idx": 1}]})
+    lines = (tmp_path / "runs.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(lines) == 2
+    import json as _j
+    assert [_j.loads(l)["score"] for l in lines] == [9, 10]
+    assert _j.loads(cache.read_text(encoding="utf-8"))["cat-jam-free"]["score"] == 10

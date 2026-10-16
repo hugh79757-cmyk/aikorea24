@@ -334,6 +334,9 @@ def pick_cards(rows, scores, labels, revs, limit=CARD_LIMIT):
             "review": revs.get(mid),
             "score": scores[mid].get("score"),
             "max_score": scores[mid].get("max_score"),
+            # AGENT-EVAL-01 4단계 4번: "10/12" 대신 실제 채점 분모로 표기한다.
+            "score_display": scores[mid].get("score_display")
+            or model_eval.score_display(scores[mid]),
         })
     return cards
 
@@ -402,8 +405,10 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
         rec_score = 0
         if retention is not None:
             rec_score += retention * 0.7
-        if score_info and score_info.get("max_score", 0) > 0:
-            rec_score += (score_info.get("score", 0) / score_info.get("max_score", 1)) * 100 * 0.3
+        judged = (score_info or {}).get("judged_n") or (score_info or {}).get("max_score") or 0
+        if score_info and judged > 0:
+            # 분모를 max_score(12)로 두면 측정 결함이 많은 모델이 불리해진다 — 실제 채점 분모를 쓴다.
+            rec_score += (score_info.get("score", 0) / judged) * 100 * 0.3
         
         if retention is not None or score_info:
             m["_rec_score"] = rec_score
@@ -430,9 +435,8 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
             # 추천 이유 생성
             reason_parts = []
             if score_info:
-                s = score_info.get("score", 0)
-                ms = score_info.get("max_score", 0)
-                reason_parts.append(f"CLI 평가 {s}/{ms}문항")
+                disp = score_info.get("score_display") or model_eval.score_display(score_info)
+                reason_parts.append(f"CLI 평가 {disp}문항")
             if retention is not None:
                 reason_parts.append(f"재사용률 {retention:.1f}%")
             if kilobench is not None:
@@ -591,7 +595,7 @@ def render(day, rows, cards, wk, scores, failed):
             f"### {i}. {c['name']} (`{c['model_id']}`)",
             "",
             f"- **한 줄 판단** — {c['verdict']}",
-            f"- **점수** — {c['score']}/{c['max_score']}문항 (리더보드 v{model_eval.EVAL_QUESTIONS_VERSION})"
+            f"- **점수** — {c['score_display']}문항 (리더보드 v{model_eval.EVAL_QUESTIONS_VERSION})"
             + (" · CLI 경유 평가" if c.get("source") == "cli" else ""),
             f"- **스펙** — {c['spec']} · 가격 {c['price']}",
             f"- **사용법** — {c['usage']}",
