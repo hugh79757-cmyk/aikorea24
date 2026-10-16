@@ -1,7 +1,16 @@
 #!/usr/bin/env python3
-"""무료 모델 실무 투입 평가 (AIK24-EVAL-02)
+"""무료 모델 실무 투입 평가 (AIK24-EVAL-02 → AGENT-EVAL-01)
 
-OpenRouter 무료 모델을 12문항(4개 실무 축 × 3문항)으로 직접 실측하고
+평가 호출 경로는 **OpenCode CLI 단일 경로**다 (2026-10-14 대표님 결정: "모든 평가는
+OpenCode CLI 기준, 기존 API 데이터 전부 폐기"). OpenRouter 직접 HTTP 호출로 되돌아가는
+경로는 `eval_model()` 에 남아 있으나 기본 경로가 아니다 — 기본 경로는 `resolve_cli_model()`
+이 CLI id 를 찾지 못하면 **점수 없이 제외**한다(정책: "OpenCode에서 선택 불가한 모델은
+테스트 명단 제외").
+
+12문항은 4개 축 × 3문항 균등 배분이 아니다. 의도된 가중치는 아래와 같다:
+  지시이행 2 / 코딩실무 4 / 맥락유지 2 / 에이전트 4 = 12
+  (코딩+에이전트가 8/12 = 67%. 챗봇 글쓰기 항목은 의도적으로 축소)
+
   1) 축별 원시 결과 ("12문항 중 8문항 정답 (기초 수준 문항 포함). 손발 작업에 적합.")
   2) 문항별 실제 답변 (오답도 그대로 보관 — 독자에게 가장 유용한 정보다)
   3) 컨트롤/손발 역할 판정
@@ -22,6 +31,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -57,11 +67,11 @@ ANSWER_STORE_CHARS = 1000  # 채점관과 블로그가 볼 상세 답변 보관 
 # 파일 하나면 충분하다 — 캐시 DB는 과하다.
 CACHE_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_eval_cache.json")
 CACHE_TTL_HOURS = 20  # 하루 브리핑 안에서는 재평가 금지
-CACHE_SCHEMA = 3  # EVAL-03: 문항별 실패 사유(failures) 신설. v2(EVAL-02, tier 없음)도 폐기
+CACHE_SCHEMA = 4  # AGENT-EVAL-01: 12문항 재설계(에이전트 축 신설). v3 캐시 전부 무효
 
 # BLOG-03: 문항 세트 버전. 문항·채점 기준이 바뀌면 이 값을 올린다.
 # 리더보드는 qv가 같은 결과끼리만 순위를 매긴다(문항이 다르면 점수를 비교하는 것 자체가 거짓말).
-EVAL_QUESTIONS_VERSION = 1
+EVAL_QUESTIONS_VERSION = 2
 
 # BLOG-03: 모델 평가 리더보드. append-only — 실행할 때마다 1건씩 쌓인다.
 LEADERBOARD_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_leaderboard.json")
@@ -69,7 +79,8 @@ LEADERBOARD_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_leaderboa
 # ============================================
 # 평가 문항 (AIK24-EVAL-02 §4-3 / §4-7)
 #
-# 4개 실무 축 × 3문항 = 12문항. 축마다 서로 다른 유형을 최소 2개(여기선 3개) 넣는다.
+# 12문항 = 지시이행 2 + 코딩실무 4 + 맥락유지 2 + 에이전트 4 (균등 배분 아님 — 의도된 가중치).
+# 코딩+에이전트가 8/12 = 67%. "축마다 3문항" 같은 균등 배분 주장은 더 이상 사실이 아니다.
 #   지시이행 — 언어를 지키나, 형식을 지키나, 길이 제약을 지키나
 #   코딩실무 — 논리 버그를 찾나, 테스트를 짜나, 중복을 줄이나 (toy 문제 금지)
 #   맥락유지 — 멀티턴에서 초반 지시를 기억하나, 긴 문서 특정 지점을 참조하나,
@@ -154,7 +165,7 @@ _AXIS_DIFFICULTY = {
 }
 
 TEST_QUESTIONS = [
-    # ── 축 1. 지시 이행 (언어 / 형식 / 길이) ───────────────────────────────
+    # ── 축 1. 지시 이행 (형식·경계 — tool/CLI에서 필요한 contract compliance) ─
     {
         "axis": "지시이행",
         "q": "한국어로만 답해 주세요. 아래 코드가 하는 일을 설명하고, 답의 마지막 줄에 반드시 '---끝---' 를 출력하세요.\n```python\ndef add(a, b): return a + b\n```",
@@ -165,16 +176,33 @@ TEST_QUESTIONS = [
         "q": "다음 정보를 JSON으로만 출력해 주세요. 마크다운 코드블록, 설명 문장, 앞뒤 문장은 일절 넣지 마세요.\n{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
         "expected": "이름 김민수, 나이 31, 취미 등산·독서를 담은 순수 JSON. 코드블록 표시나 설명 문장이 붙으면 불합격",
     },
-    {
-        "axis": "지시이행",
-        "q": "아래 한국어 문장 3개를 각각 15자 이내로 줄여 주세요. 출력은 정확히 3줄이어야 하고 각 줄은 '-' 로 시작해야 합니다. 그 밖의 설명은 쓰지 마세요.\n1. henceforth the committee will review quarterly\n2. 검색 증강 생성은 답변 정확도를 높이는 방식\n3. 회의는 다음 주 수요일에 오후 세 시에 열립니다",
-        "expected": "각 줄이 '-' 로 시작하는 정확히 3줄, 각 줄 15자 이내, 한국어 축약. 설명이 덧붙거나 3줄을 초과하면 불합격",
-    },
-    # ── 축 2. 코딩 실무 (버그 수정 / 테스트 작성 / 리팩토링) ───────────────
+    # ── 축 2. 코딩 실무 (버그·테스트·리팩토링·명세 구현·디버깅) ─────────
     {
         "axis": "코딩실무",
         "q": "아래 코드의 버그를 찾아 수정 코드를 제시하고, 왜 버그인지 한 줄로 설명해 주세요.\n```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now - timedelta(days=30)]\n```",
-        "expected": "만료 조건이 뒤집혀 있다 — 지금 코드는 만료된 토큰이 아니라 앞으로 30일 안에 만료될 토큰을 제거한다. 만료된 토큰을 고르려면 `now` 가 아니라 `datetime.fromisoformat(t['expires_at']) < now` 여야 한다는 지적",
+        "expected": "만료 조건이 뒤집혀 있다 — 지금 코드는 만료된 토큰이 아니라 앞으로 30일 안에 만료될 토큰을 제거한다. 만료된 토큰을 고르려면 `datetime.fromisoformat(t['expires_at']) < now` 여야 한다는 지적",
+        # 실행 검증: "말로 설명했나"가 아니라 "고친 코드가 실제로 맞는가"를 본다.
+        "sandbox": True,
+        "sandbox_kind": "get_expired_tokens",
+        "sandbox_reference": (
+            "from datetime import datetime\n\n"
+            "def get_expired_tokens(tokens, now):\n"
+            "    return [t for t in tokens\n"
+            "            if datetime.fromisoformat(t['expires_at']) < now]\n"
+        ),
+        "sandbox_harness": (
+            "from datetime import datetime\n"
+            "now = datetime(2026, 1, 10)\n"
+            "tokens = [\n"
+            "    {'expires_at': '2026-01-09T00:00:00'},\n"
+            "    {'expires_at': '2026-01-11T00:00:00'},\n"
+            "    {'expires_at': '2026-01-05T00:00:00'},\n"
+            "]\n"
+            "got = get_expired_tokens(tokens, now)\n"
+            "want = ['2026-01-09T00:00:00', '2026-01-05T00:00:00']\n"
+            "assert [t['expires_at'] for t in got] == want, got\n"
+            "print('SANDBOX_OK')\n"
+        ),
     },
     {
         "axis": "코딩실무",
@@ -185,8 +213,80 @@ TEST_QUESTIONS = [
         "axis": "코딩실무",
         "q": "아래 두 함수는 같은 로직을 반복합니다. 동작을 바꾸지 않으면서 중복을 제거해 리팩토링하세요.\n```python\ndef get_active_user(users):\n    out = []\n    for u in users:\n        if u['status'] == 'active':\n            out.append({'id': u['id'], 'name': u['name'], 'email': u['email']})\n    return out\n\ndef get_admin_user(users):\n    out = []\n    for u in users:\n        if u['role'] == 'admin':\n            out.append({'id': u['id'], 'name': u['name'], 'email': u['email']})\n    return out\n```",
         "expected": "필드 추출(사전 만들기) 공통 로직을 함수로 뽑아 두 함수가 재사용하게 하는 리팩토링. 필터 조건만 달라야 하고 출력 키(id, name, email)는 그대로여야 함",
+        # 실행 검증은 "동작 보존"(두 함수가 원래와 같은 결과를 내는가)만 기계 판정한다.
+        # "중복을 실제로 줄였는가"(리팩토링 품질)는 판관이 담당한다 — 기계 판정하면 오탐이 된다.
+        "sandbox": True,
+        "sandbox_kind": "user_filter_refactor",
+        "sandbox_reference": (
+            "def _project(u):\n"
+            "    return {'id': u['id'], 'name': u['name'], 'email': u['email']}\n\n"
+            "def get_active_user(users):\n"
+            "    return [_project(u) for u in users if u['status'] == 'active']\n\n"
+            "def get_admin_user(users):\n"
+            "    return [_project(u) for u in users if u['role'] == 'admin']\n"
+        ),
+        "sandbox_harness": (
+            "users = [\n"
+            "    {'id': 1, 'name': 'A', 'email': 'a@x', 'status': 'active', 'role': 'user'},\n"
+            "    {'id': 2, 'name': 'B', 'email': 'b@x', 'status': 'banned', 'role': 'admin'},\n"
+            "    {'id': 3, 'name': 'C', 'email': 'c@x', 'status': 'active', 'role': 'admin'},\n"
+            "]\n"
+            "want_active = [{'id': 1, 'name': 'A', 'email': 'a@x'}, {'id': 3, 'name': 'C', 'email': 'c@x'}]\n"
+            "want_admin = [{'id': 2, 'name': 'B', 'email': 'b@x'}, {'id': 3, 'name': 'C', 'email': 'c@x'}]\n"
+            "assert get_active_user(users) == want_active, get_active_user(users)\n"
+            "assert get_admin_user(users) == want_admin, get_admin_user(users)\n"
+            "print('SANDBOX_OK')\n"
+        ),
     },
-    # ── 축 3. 맥락 유지 (초반 지시 기억 / 긴 문서 특정 지점 / 제약 동시 유지) ─
+    {
+        "axis": "코딩실무",
+        "q": "다음 명세를 파이썬으로 구현하세요. 코드만 출력하고 설명은 쓰지 마세요.\n명세: parse_log_line(s): 문자열 s를 'TIMESTAMP LEVEL MSG' 세 필드로 파싱.\n- 정상: ('2026-...Z', 'GET', '/a') 같은 튜플 반환.\n- timestamp 형식이 ISO8601 이 아니면 ValueError.\n- level 이 INFO/WARN/ERROR 가 아니면 ValueError.\n- msg 가 비어 있으면 ValueError.\n- s 가 str 이 아니면 TypeError.\n- 빈 줄(공백만)도 ValueError.",
+        "expected": "syntactically correct Python implementing parse_log_line with the 5 listed rules, using a function named parse_log_line, raising the right exception classes",
+        "sandbox": True,
+        "sandbox_kind": "parse_log_line",
+        "sandbox_reference": (
+            "from datetime import datetime\n\n"
+            "def parse_log_line(s):\n"
+            "    if not isinstance(s, str):\n"
+            "        raise TypeError('s must be str')\n"
+            "    parts = s.split()\n"
+            "    if len(parts) < 3:\n"
+            "        raise ValueError('malformed log line')\n"
+            "    ts, level, msg = parts[0], parts[1], ' '.join(parts[2:])\n"
+            "    datetime.fromisoformat(ts)\n"
+            "    if level not in ('INFO', 'WARN', 'ERROR'):\n"
+            "        raise ValueError('bad level')\n"
+            "    if not msg:\n"
+            "        raise ValueError('empty message')\n"
+            "    return ts, level, msg\n"
+        ),
+        "sandbox_harness": (
+            "assert parse_log_line('2026-10-16T03:04:05Z INFO started ok') == "
+            "('2026-10-16T03:04:05Z', 'INFO', 'started ok'), 'happy path'\n"
+            "for bad, exc in [\n"
+            "    ('not-a-time INFO ok', ValueError),\n"
+            "    ('2026-10-16T03:04:05Z DEBUG x', ValueError),\n"
+            "    ('2026-10-16T03:04:05Z INFO ', ValueError),\n"
+            "    ('   ', ValueError),\n"
+            "]:\n"
+            "    try:\n"
+            "        parse_log_line(bad)\n"
+            "    except exc:\n"
+            "        pass\n"
+            "    except Exception as e:\n"
+            "        raise AssertionError(f'{bad!r}: expected {exc.__name__}, got {type(e).__name__}')\n"
+            "    else:\n"
+            "        raise AssertionError(f'{bad!r}: no exception raised')\n"
+            "try:\n"
+            "    parse_log_line(None)\n"
+            "except TypeError:\n"
+            "    pass\n"
+            "else:\n"
+            "    raise AssertionError('None input did not raise TypeError')\n"
+            "print('SANDBOX_OK')\n"
+        ),
+    },
+    # ── 축 3. 맥락 유지 (긴 리포 / 문서 / 제약 동시 유지) ───────────────
     {
         "axis": "맥락유지",
         "q": "제1질문에 입력한 문서를 다시 한 번 붙여 드립니다. 이 문서의 약 1,200자 지점에 적힌 내부 정합 함수 이름은 정확히 무엇입니까? 함수 이름만 답하세요.",
@@ -206,31 +306,30 @@ TEST_QUESTIONS = [
             {"role": "assistant", "content": "에러 메시지를 끝까지 읽고, 문제를 최소 재현 코드로 줄여 본 뒤, 변수 값을 하나씩 출력해 확인하세요."},
         ],
     },
+    # ── 축 4. 에이전트 (계획·도구·복구·우선순위·단일 파일 완성) ─────────
     {
-        "axis": "맥락유지",
-        "q": "이번 서버의 월 비용은 1250000원이고 GPU 증설로 다음 분부터 3400000원입니다. 이 숫자만 먼저 답해 주세요.",
-        "expected": "앞선 대화의 세 가지 제약(존댓말 -습니다체, 금액을 원 단위 숫자로 표기, 마크다운 표 금지)을 모두 지킨 답. 존댓말이고 1,250,000원 / 3,400,000원 형태의 원 단위 숫자이며 표가 없어야 함",
-        "seed": PRIOR_TURNS,
-    },
-    # ── 축 4. 역할 판단 (컨트롤 / 손발) ─────────────────────────────────
-    {
-        "axis": "역할판단",
-        "q": "소규모 팀 3명이 6개월 안에 온라인 주문 시스템을 처음부터 만들려고 합니다. 어떤 순서로 무엇을 먼저 만들지 단계별 계획을 세우세요. 각 단계마다 어떻게 검증할지도 함께 답하세요.",
-        "expected": "오케스트레이션·계획 능력에 대한 답. 단계 구분(도메인 모델·결제·재고·주문 흐름·운영), 순서와 근거, 단계별 검증 방법을 포함하는 구조적 계획",
+        "axis": "에이전트",
+        "q": "GitHub 저장소에 아래 PR 이 올라왔습니다. 코드 리뷰 시 봐야 할 항목을 우선순위 순으로 5개만 JSON 배열로 출력하세요 (설명 필드 없이). \n```diff\n+  def pay(user, amount): total += amount; db.insert('tx', total); return total\n-  def pay(user, amount): return amount * TAX_RATE + amount\n```\n설명 없이 compact JSON 배열만 출력.",
+        "expected": "의도적으로 잘못된 결제 로직 변경(diff)을 인지하고 race condition, global state, persistence fault, idempotency, side effects 같은 구체적 검토 항목 5개를 JSON 배열로 나열. 자유 텍스트나 설명이 섞이면 불합격",
     },
     {
-        "axis": "역할판단",
-        "q": "아래 로그에서 timestamp 열만 뽑아서 CSV로 바꿔 주세요. 설명 없이 결과 데이터만 출력하세요.\n2026-01-02T03:04:05Z GET /a 200\n2026-01-02T03:04:06Z GET /b 404\n2026-01-02T03:05:00Z POST /c 500",
-        "expected": "세 줄의 timestamp만 모은 CSV(헤더 유무는 무관, 구분자 쉼표) — 손발형 단순 변환 작업. 원문 그대로 복사하면 가변 변환이 아니고 시간만 추려야 함",
+        "axis": "에이전트",
+        "q": "아래 traceback 을 보고 root cause 를 한 문장으로, 그리고 최소 수정 unified-diff(hunk 1개) 를 답하세요. 한국어 설명은 root cause 한 문장에만 허용됩니다.\nTraceback (most recent call last):\n  File \"app.py\", line 12, in <module>\n    res = fetch('/api/users')\n  File \"app.py\", line 9, in fetch\n    return requests.get(url, timeout=5).json()\nrequests.exceptions.Timeout: HTTPSConnectionPool ... Max retries exceeded.\n```python\n# app.py\nimport requests\ndef fetch(url):\n    return requests.get(url, timeout=5).json()\n```",
+        "expected": "root cause: 외부 API 호출이 timeout/네트워크로 실패했고 .json() 전에 response 검사/예외 처리가 없다. 최소 diff: requests.get 에 대한 try/except Timeout + response.raise_for_status 를 추가한 hunk 1개",
     },
     {
-        "axis": "역할판단",
+        "axis": "에이전트",
+        "q": "다음 작업은 '네안데르탈인 시점 텍스트 게임' 의 새 기능입니다. 단일 HTML 파일 한 개로 만들려면 어떤 순서로 파일을 채워야 하는지, 각 단계별로 (1) 생성할 DOM/스크린 (2) 코어 상태 모델 (3) 검증 방법을 4단계로 JSON으로만 출력하세요. JSON 외에는 출력하지 마세요.",
+        "expected": "4단계 JSON. 각 단계에 screen, state_model, verify 명시. 순서 논리적(구조·데이터·연출·배포). JSON only.",
+    },
+    {
+        "axis": "에이전트",
         "q": "지금 바로 처리해야 하는 것과 오늘은 미뤄도 되는 것을 나눠 주세요. 이유는 판단 근거까지 적어 주세요.\n- 운영 DB에서 느린 쿼리 하나가 관측됨(3초 소요)\n- 내부 도구의 버튼 색상 문구 수정 요청이 옴\n- 장애 후속 조치로 고객 메일 발송 대기 중",
         "expected": "우선순위 판단과 근거. 고객 메일 발송과 느린 쿼리는 즉시, 버튼 문구는 미룸으로 나누는 판단이 요구됨",
     },
 ]
 
-AXES = ("지시이행", "코딩실무", "맥락유지", "역할판단")
+AXES = ("지시이행", "코딩실무", "맥락유지", "에이전트")
 
 # 축별 요약 라벨 — 브리핑·블로그가 그대로 인용한다.
 AXIS_LABELS = {
@@ -238,6 +337,7 @@ AXIS_LABELS = {
     "코딩실무": "코딩 실무",
     "맥락유지": "맥락 유지",
     "역할판단": "역할 판단(컨트롤 vs 손발)",
+    "에이전트": "에이전트(계획·도구·복구·판단)",
 }
 
 _models_cache = {}
@@ -355,6 +455,8 @@ def record_leaderboard(model_id, result):
             rows = []
         rows.append({
             "model_id": model_id,
+            "cli_model": result.get("cli_model"),           # variant 포함 (e.g. #max)
+            "turn_timeout_sec": result.get("turn_timeout_sec"),
             "qv": result.get("qv", EVAL_QUESTIONS_VERSION),
             "score": result.get("score", 0),
             "max_score": max_score,
@@ -489,7 +591,11 @@ def score_response(question, expected, actual):
 
 
 def eval_model(model_id, with_judge=True):
-    """표준 12문항(4개 실무 축 × 3문항) 평가. 반환 dict가 eval_model 결과의 전부.
+    """표준 12문항(지시이행 2·코딩실무 4·맥락유지 2·에이전트 4) API 직접 호출 평가.
+
+    ⚠ 이 경로는 2026-10-14 대표님 결정(전량 CLI 기준)을 우회한다. 기본 경로가 아니며,
+    신규 평가에서는 `resolve_cli_model()` 이 id 를 찾지 못하면 여기를 부르지 않고
+    제외한다. 반환 dict가 eval_model 결과의 전부.
 
     실패(429·타임아웃·빈 응답)는 해당 문항 0점으로 처리하고 계속 진행한다.
     예외를 던지지 않는다 — 브리핑을 깨뜨리지 않기 위함.
@@ -699,12 +805,101 @@ CLI_MODEL_MAP = {
     "muse-spark-1.3-contributor-free": "opencode/muse-spark-1.3-contributor-free",
     # AIK24-EVAL-LLALPHA-01 (2026-10-16): Zen 한시 무료 스텔스 모델. OpenRouter 경로가
     # 없어 CLI 로만 도달한다 — split_zen 이 zen_pending 으로 밀어 넣던 대상이다.
-    # 추론 variant 를 명시한다(같은 1번 문항: 무지정은 60초 안에 못 끝냈고 low 는 17초에 정답).
-    "ll-alpha-free": "opencode/ll-alpha-free#low",
+    # 2026-10-16 hangover fix: #low 는 게임 세션(#max)보다 ~6x 짧은 지연을 보여 조인 조건이었다(4/12).
+    # 출력 속도가 ~24 tok/s 라 60초 컷(≈1,400토큰)이 abilities 를 잘랐다. #max 로 측정한다.
+    "ll-alpha-free": "opencode/ll-alpha-free#max",
 }
 
 
 CLI_RETRY_TIMEOUT = 180  # EVAL-LLALPHA-01: 추론 모델은 60초를 넘긴다 — 타임아웃에 한해 재시도 1회
+# 모델별 턴 타임아웃 override (2026-10-16 hangover fix):
+# ll-alpha-free 실측 출력 속도 ~24 tok/s → 60s 컷은 ≈1,400토큰. 60초를 "제 능력을 못 내는 모델"로
+# 오판하지 않도록 턴당 240s 를 허용(재시도는 180s 이므로 effectively first-attempt only).
+CLI_TIMEOUT_OVERRIDE = {"ll-alpha-free": 240}
+
+CLI_MODELS_CATALOG = Path(os.environ.get(
+    "FREE_MODELS_CLI_JSON",
+    str(Path(__file__).resolve().parent / "logs" / "free_models_cli.json"),
+))
+
+
+def resolve_cli_model(model_id):
+    """model_id → OpenCode CLI 대상 id. 없으면 None (= 정책상 평가 제외).
+
+    2026-10-14 대표님 결정 "모든 평가는 OpenCode CLI 기준" 의 정책 분기점이다.
+    순서: ① CLI_MODEL_MAP 명시 등록(변형 고정용) ② free_models_cli.json 의 cli_id
+    ③ 미등록 → None. None 이면 호출자는 API 로 폴백하지 말고 **제외**한다.
+    """
+    hit = CLI_MODEL_MAP.get(model_id)
+    if hit:
+        return hit
+    try:
+        with open(CLI_MODELS_CATALOG, "r", encoding="utf-8") as f:
+            rows = json.load(f)
+    except Exception:
+        return None
+    if not isinstance(rows, list):
+        return None
+    for r in rows:
+        if isinstance(r, dict) and r.get("model_id") == model_id and r.get("cli_id"):
+            return r["cli_id"]
+    return None
+
+
+# ── 샌드박스 채점 (AGENT-EVAL-01) ─────────────────────────────────────
+# "LLM 판관이 텍스트만 보고 0/1 을 말한다" 는 코딩 평가의 약한 지점이다.
+# 문항에 sandbox_harness 가 있으면 (1) 우리 정답 reference 로 하네스 자가검증 후
+# (2) 모델 코드를 실제로 실행해 통과/실패를 기계 판정한다.
+# 정판 규칙: 통과=1점 / 실행 실패=0점(모델 실패) / 하네스 이상·코드 없음=None(판관으로 폴백).
+SANDBOX_TIMEOUT_SEC = 20
+SANDBOX_MARKER = "SANDBOX_OK"
+_CODE_FENCE_RE = re.compile(r"```(?:python|py|python3)?\s*\n(.*?)```", re.S)
+
+
+def extract_code(text):
+    """응답에서 실행할 코드 블록을 뽑는다. 펜스가 없으면 원문 전체를 후보로 쓴다."""
+    if not text:
+        return ""
+    blocks = [b.strip() for b in _CODE_FENCE_RE.findall(text) if b.strip()]
+    return "\n\n".join(blocks) if blocks else text.strip()
+
+
+def sandbox_exec(code, harness):
+    """(code, harness) 를 한 파일로 실행. (verdict, reason). verdict: True/False/None."""
+    with tempfile.TemporaryDirectory() as d:
+        f = Path(d) / "cand.py"
+        f.write_text(code + "\n\n" + harness, encoding="utf-8")
+        try:
+            pr = subprocess.run(
+                [sys.executable, "-I", "-B", str(f)],
+                capture_output=True, text=True, timeout=SANDBOX_TIMEOUT_SEC, cwd=d,
+            )
+        except subprocess.TimeoutExpired:
+            return None, f"샌드박스 타임아웃 {SANDBOX_TIMEOUT_SEC}초"
+        out = (pr.stdout or "").strip()
+        if pr.returncode != 0:
+            tail = ((pr.stderr or out).strip().splitlines() or ["returncode=" + str(pr.returncode)])
+            return False, tail[-1][:160]
+        if SANDBOX_MARKER in out:
+            return True, "실행 검증 통과"
+        return None, "검증 마커 없음(하네스 미도작)"
+
+
+def sandbox_grade(spec, answer):
+    """문항 spec 의 샌드박스로 모델 답변을 채점. (points|None, reason)."""
+    harness = spec.get("sandbox_harness")
+    if not harness:
+        return None, "샌드박스 미지정"
+    code = extract_code(answer)
+    if not code.strip():
+        return 0, "응답에 코드 없음"
+    ref = spec.get("sandbox_reference")
+    if ref:
+        rv, rreason = sandbox_exec(extract_code(ref), harness)
+        if rv is not True:
+            # 우리 정답이 통과 못 하면 그 문항은 측정 결함이다 — 모델을 0점으로 punish 하지 않는다.
+            return None, f"reference 자체 실패 → 측정 결함: {rreason}"
+    return sandbox_exec(code, harness)
 
 
 def cli_prompt(spec):
@@ -760,12 +955,14 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
     측정 실패가 모델 실패로 남으므로, 호출자가 zen_pending 사유 갱신에 쓴다.
     판관(score_response)은 API 경로와 같은 것으로 재사용한다.
     """
-    cli_model = cli_model or CLI_MODEL_MAP.get(model_id)
+    cli_model = cli_model or resolve_cli_model(model_id)
+    turn_timeout = CLI_TIMEOUT_OVERRIDE.get(model_id, QUESTION_TIMEOUT)
     result = {
         "model_id": model_id,
         "source": "cli",            # API 경로와 구분 (EVAL-CLI-01 §작업5)
         "provider": "zen",
         "cli_model": cli_model,
+        "turn_timeout_sec": turn_timeout,
         "qv": EVAL_QUESTIONS_VERSION,
         "score": 0,
         "max_score": len(TEST_QUESTIONS),
@@ -794,12 +991,13 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
                             list(spec.get("seed") or []) + [{"role": "user", "content": question}])
                 + "\n=== 질문 ==="
             )
-        actual, reason = cli_call(cli_model, cli_prompt(spec))
+        actual, reason = cli_call(cli_model, cli_prompt(spec), timeout=turn_timeout)
         if not actual and "타임아웃" in reason:
             # 타임아웃은 429 와 같은 성격의 일시 실패다(모델 부재가 아니다).
             # 재시도 1회 — 그래도 빈 응답이면 아래에서 실패 문항으로 처리한다.
-            log(f"  [{idx}/{total}] {reason} → {CLI_RETRY_TIMEOUT}초로 재시도")
-            actual, reason = cli_call(cli_model, cli_prompt(spec), timeout=CLI_RETRY_TIMEOUT)
+            retry_to = CLI_TIMEOUT_OVERRIDE.get(model_id, CLI_RETRY_TIMEOUT)
+            log(f"  [{idx}/{total}] {reason} → {retry_to}초로 재시도")
+            actual, reason = cli_call(cli_model, cli_prompt(spec), timeout=retry_to)
         if not actual:
             if idx == 1:
                 # 첫 문항부터 CLI 레벨 실패 = 모델 도달 불가. 0점 기록 없이 중단.
@@ -811,7 +1009,18 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
             result["failures"].append({"idx": idx, "axis": axis, "reason": reason})
             log(f"  [{idx}/{total}] {axis} {reason} → 0점")
             continue
-        pts = score_response(judge_q, expected, actual) if with_judge else 1
+        # 샌드박스 우선: 코드를 실제로 돌려 0/1 을 기계 판정한다.
+        sandbox_verdict, sandbox_reason = None, ""
+        pts = None
+        if spec.get("sandbox"):
+            s_pts, sandbox_reason = sandbox_grade(spec, actual)
+            if s_pts is not None:
+                sandbox_verdict = "pass" if s_pts == 1 else "fail"
+            pts = s_pts
+            if s_pts is None:
+                log(f"  [{idx}/{total}] {axis} 샌드박스 측정 결함({sandbox_reason}) → 판관으로 폴백")
+        if pts is None:
+            pts = score_response(judge_q, expected, actual) if with_judge else 1
         judge_failed = pts is None
         if judge_failed:
             pts = 0
@@ -819,11 +1028,15 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
             log(f"  [{idx}/{total}] {axis} 측정 결함(판관 파싱 실패) — 점수에서 제외")
         else:
             result["score"] += pts
+        if sandbox_verdict == "pass":
+            result["sandbox_pass"] = result.get("sandbox_pass", 0) + 1
         result["details"].append({
             "idx": idx, "axis": axis, "score": pts, "source": "cli",
             "answer": actual[:ANSWER_STORE_CHARS], "judge_failed": judge_failed,
+            "sandbox": sandbox_verdict, "sandbox_reason": sandbox_reason,
         })
-        log(f"  [{idx}/{total}] {axis} {pts}점 (via cli) ← {actual[:60]!r}")
+        tag = f" sandbox={sandbox_verdict}" if sandbox_verdict else ""
+        log(f"  [{idx}/{total}] {axis} {pts}점 (via cli{tag}) ← {actual[:60]!r}")
 
     result["failed"] = sum(1 for d in result["details"] if d["source"] == "exception")
     for d in result["details"]:
@@ -1106,16 +1319,15 @@ def eval_comment_block(model_id, deep_dive_url=None, result=None):
 if __name__ == "__main__":
     target = sys.argv[1] if len(sys.argv) > 1 else "liquid/lfm-2.5-2.6b:free"
     log(f"평가 시작: {target}")
-    if target in CLI_MODEL_MAP:
-        # EVAL-LLALPHA-01: Zen 스텔스/CLI 전용 모델은 OpenRouter 경로가 없다.
-        # CLI 로 도달하고, 모델에 못 닿으면 점수를 남기지 않는다(측정 실패 ≠ 모델 실패).
-        r, blocked = eval_model_cli(target)
-        if blocked:
-            log(f"CLI 경유 실패 — 점수 기록 안 함: {blocked}")
-            sys.exit(1)
-        cache_put(target, r)  # 캐시 + 리더보드 append
-    else:
-        r = eval_model_cached(target, force="--force" in sys.argv)
+    # 2026-10-14 대표님 결정(전량 CLI 기준) — 미등록 모델은 API 폴백 없이 제외한다.
+    if not resolve_cli_model(target):
+        log(f"CLI 대상 미등록 ({target}) — 정책상 제외 (OpenRouter 직접 호출 금지)")
+        sys.exit(2)
+    r, blocked = eval_model_cli(target)
+    if blocked:
+        log(f"CLI 경유 실패 — 점수 기록 안 함: {blocked}")
+        sys.exit(1)
+    cache_put(target, r)  # 캐시 + 리더보드 append
     log(f"결과: {r['label']} (실패 {r.get('failed', 0)}/{r['max_score']}문항)")
     if r["errors"]:
         log(f"  경고 {len(r['errors'])}건: {r['errors'][:5]}")
@@ -1177,7 +1389,7 @@ def probe_context_length(model_id, cache=None):
     if model_id in cache and cache[model_id].get("measured_context"):
         log(f"{model_id}: 실측 컨텍스트 이미 있음 ({cache[model_id]['measured_context']:,}) — 재측정 안 함")
         return cache[model_id]["measured_context"]
-    cli_model = CLI_MODEL_MAP.get(model_id)
+    cli_model = resolve_cli_model(model_id)
     ok_sizes = []
     for n in PROBE_STEPS:
         time.sleep(PROBE_GAP_SEC)

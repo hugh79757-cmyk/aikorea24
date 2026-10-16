@@ -17,16 +17,20 @@ def row(mid, ctx=None):
     return {"provider": "zen", "model_id": mid, "name": mid, "pricing": None, "context_length": ctx}
 
 
-# ---------- EVAL-ZEN-01 작업 4 + EVAL-CLI-01 작업 4 ----------
-# 계약이 바뀌었다: Zen 은 기본적으로 평가 대상이 아니지만, CLI_MODEL_MAP 에 등록된
-# Zen(=호출 경로를 확보한 모델)은 평가 대상으로 올린다. 나머지는 zen_pending.
+# ---------- EVAL-ZEN-01 작업 4 + EVAL-CLI-01 작업 4 + AGENT-EVAL-01 ----------
+# 계약이 또 바뀌었다 (2026-10-14 대표님 결정 "모든 평가는 OpenCode CLI 기준"):
+# 판정 기준은 **provider 가 아니라 CLI 호출 경로의 존재 여부**다.
+# resolve_cli_model() 이 id 를 찾으면 평가 대상, 못 찾으면( zen·kilo·openrouter·구형 포맷
+# 전부 무관 ) 대기. 예전처럼 "zen 만 제외하고 나머지는 OpenRouter 직접 호출로 평가"는
+# 대표님 결정 위반이므로 더 이상 성립하지 않는다.
 
 
-def test_split_zen_returns_zen_ids_separately():
+def test_split_zen_excludes_every_model_without_cli_route():
+    """CLI 경로가 없는 모델은 provider 와 무관하게 대기 — zen 예외 규칙은 폐기됐다."""
     added = [row("jev-1.13-free"), {"provider": "openrouter", "model_id": "a/b:free"}]
-    rest, zen_ids = split_zen(added)
-    assert zen_ids == ["jev-1.13-free"]  # CLI 미등록 → 대기
-    assert [t["model_id"] for t in rest] == ["a/b:free"]
+    rest, unresolved = split_zen(added)
+    assert sorted(unresolved) == ["a/b:free", "jev-1.13-free"]
+    assert rest == []
 
 
 def test_split_zen_routes_cli_registered_zen_to_evaluation():
@@ -45,11 +49,18 @@ def test_split_zen_all_zen_without_cli_route_gives_empty_eval_targets():
     assert zen_ids == ["jev-1.13-free"]
 
 
-def test_split_zen_keeps_unknown_provider_for_evaluation():
-    """provider 가 없는 구 포맷 항목은 평가 대상에 남는다(기존 동작 유지)."""
-    rest, zen_ids = split_zen([{"model_id": "legacy/no-provider"}])
-    assert zen_ids == []
-    assert len(rest) == 1
+def test_split_zen_keeps_model_registered_in_cli_catalog():
+    """CLI 카탈로그(free_models_cli.json)에 있으면 provider 표기 없이도 평가 대상이다."""
+    rest, unresolved = split_zen([{"model_id": "cohere/north-mini-code:free"}])
+    assert [t["model_id"] for t in rest] == ["cohere/north-mini-code:free"]
+    assert unresolved == []
+
+
+def test_split_zen_excludes_legacy_entry_without_cli_route():
+    """provider 가 없는 구 포맷 항목도 CLI 경로가 없으면 대기(옛 '무조건 평가' 동작 폐기)."""
+    rest, unresolved = split_zen([{"model_id": "legacy/no-provider"}])
+    assert unresolved == ["legacy/no-provider"]
+    assert rest == []
 
 
 def test_split_zen_does_not_touch_failed_list():
@@ -60,10 +71,10 @@ def test_split_zen_does_not_touch_failed_list():
     assert zen_ids == ["jev-1.13-free"]  # zen_pending 경로로만 감
 
 
-def test_zen_provider_check_is_exact():
-    """'zenfree' 같은 비슷한 문자열로 오인하지 않는다."""
-    rest, zen_ids = split_zen([{"provider": "zenfree", "model_id": "x"}])
-    assert zen_ids == [] and len(rest) == 1
+def test_provider_label_no_longer_decides():
+    """provider 문자열 판정은 사라졌다 — 'zenfree' 같은 오인 위험 자체가 없게 됐다."""
+    rest, unresolved = split_zen([{"provider": "zenfree", "model_id": "x"}])
+    assert unresolved == ["x"] and rest == []
 
 
 # ---------- 작업 3 — context_length null 정렬 ----------

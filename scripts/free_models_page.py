@@ -546,7 +546,7 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
     out += [
         "- 모든 모델은 OpenCode CLI로 실제 호출해 동작을 확인했습니다 (`opencode run -m <model_id> \"한 단어로 대답: PONG\"`).",
         "- API 문서상 무료라도 실제 동작하지 않으면 제외합니다.",
-        f"- 평가: 12문항 4축(지시이행·코딩실무·맥락유지·역할판단) CLI 평가, 리더보드 문항 세트 v{model_eval.EVAL_QUESTIONS_VERSION} 기준.",
+        f"- 평가: 12문항 4축(지시이행·코딩실무·맥락유지·에이전트) CLI 평가, 리더보드 문항 세트 v{model_eval.EVAL_QUESTIONS_VERSION} 기준.",
         "- 재사용률: OpenCode Data (opencode.ai/data) — eligible user weeks 대비 retained user weeks 비율.",
         "- KiloBench: kilo.ai/kilobench 무료 모델 완주율.",
         "- 데이터 정책: OpenCode Zen 공식 문서 (opencode.ai/v2/docs/console/models/) — 제로-retention 여부.",
@@ -688,20 +688,17 @@ def cmd_page(day=None, dry_run=False):
 
 
 def split_zen(added):
-    """Zen 항목 분리 (AIK24-EVAL-ZEN-01 작업 4).
+    """CLI 호출 경로 기준으로 평가 대상 분리 (AGENT-EVAL-01, 정책 변경).
 
-    model_eval 은 OpenRouter 전용이라 Zen 모델 ID 를 던지면 404 가 난다. 그건 "모델 실패"가
-    아니라 "모델 부재"다. mark_failed 로 영구 차단하면 나중에 경로가 확보돼도 재평가할 수 없다.
-    반환: (OpenRouter 로 평가할 항목들, zen 대기 대상 model_id 목록)
+    과거에는 provider=="zen" 만 제외하고 나머지는 OpenRouter 직접 호출로 평가했으나,
+    2026-10-14 대표님 결정 "모든 평가는 OpenCode CLI 기준" 이 그 경로를 금지한다.
+    경로가 없으면 그건 "모델 실패"가 아니라 "모델 부재"다 — mark_failed 로 영구 차단하지
+    않고 대기 목록에 둔다(경로가 뒤에 생겨도 재평가 가능).
+    반환: (CLI 로 평가할 항목들, 경로 미확보 대기 model_id 목록)
     """
-    zen_ids = [
-        t["model_id"] for t in added
-        if t.get("provider") == "zen" and t["model_id"] not in model_eval.CLI_MODEL_MAP
-    ]
-    return [
-        t for t in added
-        if t.get("provider") != "zen" or t["model_id"] in model_eval.CLI_MODEL_MAP
-    ], zen_ids
+    # 2026-10-14 대표님 결정(전량 CLI 기준): CLI 대상이 없는 모델은 API 폴백 금지 → 제외.
+    unresolved = [t["model_id"] for t in added if not model_eval.resolve_cli_model(t["model_id"])]
+    return [t for t in added if model_eval.resolve_cli_model(t["model_id"])], unresolved
 
 
 def cmd_evaluate(day=None, limit=1, dry_run=False):
@@ -734,16 +731,18 @@ def cmd_evaluate(day=None, limit=1, dry_run=False):
     rc = 0
     for mid in todo:
         try:
-            if mid in model_eval.CLI_MODEL_MAP:
-                # EVAL-CLI-01: CLI 경유 모델. 모델에 아예 도달 못 하면 점수 0을 남기지 않고 대기 사유만 갱신한다.
-                res, blocked_reason = model_eval.eval_model_cli(mid)
-                if blocked_reason:
-                    mark_zen_pending(mid, blocked_reason)
-                    log(f"{mid} — CLI 경유 실패 → 평가 대기: {blocked_reason}")
-                    continue
-                model_eval.cache_put(mid, res)
-            else:
-                res = model_eval.eval_model_cached(mid, force=True) or {}
+            if not model_eval.resolve_cli_model(mid):
+                # 정책(전량 CLI 기준)에 따라 API 직접 호출로 폴백하지 않는다.
+                mark_zen_pending(mid, "CLI 대상 미등록")
+                log(f"{mid} — CLI 대상 미등록 → 정책상 제외 (API 폴백 안 함)")
+                continue
+            # CLI 경유. 모델에 아예 도달 못 하면 점수 0을 남기지 않고 대기 사유만 갱신한다.
+            res, blocked_reason = model_eval.eval_model_cli(mid)
+            if blocked_reason:
+                mark_zen_pending(mid, blocked_reason)
+                log(f"{mid} — CLI 경유 실패 → 평가 대기: {blocked_reason}")
+                continue
+            model_eval.cache_put(mid, res)
             log(f"{mid} — {res.get('score')}/{res.get('max_score')}")
             if _is_permanent_fail(res):
                 mark_failed(mid, _fail_reason(res))

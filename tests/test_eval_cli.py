@@ -87,6 +87,9 @@ def test_eval_model_cli_retries_timeout_once(monkeypatch):
 
     monkeypatch.setattr(me, "cli_call", fake)
     monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
+    # AGENT-EVAL-01: 문항 3개가 샌드박스 채점으로 바뀌었으므로, 이 테스트의 목적(타임아웃 재시도)
+    # 을 흐리지 않도록 샌드박스만 통과로 스텁한다. 본 테스트는 채점 방식이 아니라 재시도 계약이다.
+    monkeypatch.setattr(me, "sandbox_grade", lambda spec, ans: (1, "stub"))
     monkeypatch.setattr(me.time, "sleep", lambda *_: None)
     result, blocked = me.eval_model_cli("cat-jam-free")
     assert blocked is None                       # 재시도가 성공했으므로 차단하지 않는다

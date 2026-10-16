@@ -1,84 +1,145 @@
-## 2026-10-17 02:34 — 클로즈 아웃 공식 문서 발행: docs/CLOSEOUT-20261017-briefing-pipeline.md (Version v2026.10.17.0234)
+## 2026-10-16 18:40 — 피드백 3건 수정 (문항수 정합 · CLI 단일경로 · 샌드박스 3개)
 
 ### 한 일
-- 기존 19 entries 지식 + 라이브 검증 결과를 Version 붙임 공식문서로 정리/발행.
-- 최종 코드 검증 5종 통과: suites 21 passed / emdash15 0 anomalies / precheck selftest OK / paid_baseline render assert / git sync 양측.
+외부 피드백 3건을 코드에서 확인 후 전부 수정했다. **3건 모두 사실이었다.** 특히 2번은 이미
+사고가 났었다 — `nvidia/nemotron-3.5-super-vl:free` 캐시 엔트리에 `cli_model: null` 이 남아
+있어 API 직접 호출로 측정된 것이 증거였다.
 
 ### 결과 — 검증 근거
-- [검증됨] 문서 산출물: docs/CLOSEOUT-20261017-briefing-pipeline.md (104 줄, Version field at top). v2026.10.17.0234  (사용자 지정 "지금 이 시점"). 본close-out.
-- [검증됨] §2 의 명령 5개 결과는 Verifier pass 5/5 green (기록됨).
-- [부분검증] ⑩ §5 잔존 위험 6개 항목(1~6) 이전과 동일 (사용자 액션 2개).
 
-## 2026-10-16 19:40 — ⑩ 최종 종합 보고: ①②③④⑤⑥⑦⑧⑨⑩ 모두 완료 (사용자 위임 recommendation as default)
+- [검증됨] **1번 문항 수 불일치**: 축 카운터로 2/4/2/4 실측(합 12). 모듈 docstring 3곳에
+  있던 "4개 실무 축 × 3문항" 주장을 실제 분포 + 의도(코딩+에이전트 8/12 = 67%)로 교체.
+  근거: `test_axis_distribution_is_2_4_2_4`, `test_docstring_does_not_claim_4x3` 통과.
+- [검증됨] **2번 정책 충돌 (심각)**: `resolve_cli_model()` 신설 — ① CLI_MODEL_MAP(변형 고정)
+  ② `free_models_cli.json` 의 cli_id ③ 미등록 → None. `__main__` 은 미등록 시 exit 2 로
+  `eval_model_cached`(OpenRouter 직접 호출) 폴백을 제거. `free_models_page.split_zen`,
+  `cmd_evaluate` 도 동일 규칙으로 변경(provider 판정 폐기 → CLI 경로 유무로만 결정).
+  근거: exit 2 테스트 통과, `test_resolve_cli_model_*` 3건, 카탈로그 경유 확인
+  (cohere/north-mini-code:free → kilo/cohere/north-mini-code:free).
+- [검증됨] **3번 샌드박스 1개 → 3개**: `sandbox_exec()` / `extract_code()` / `sandbox_grade()` 신설.
+  실제 서브프로세스로 코드를 돌려 채점한다. Q3(get_expired_tokens 버그 수정) · Q5(user 필터
+  리팩토링) · Q6(parse_log_line). 채점 규칙: 통과=1점 / 실행 실패=0점(모델 실패) /
+  **reference 정답이 통과 못 하면 측정 결함(None) → 판관 폴백**(모델을 0점으로 몰지 않음).
+  근거: 새 테스트 `tests/test_model_eval_agent_v2.py` 17건 통과. reference 3/3 통과,
+  원래 버그 그대로 반환하는 답 = 0점, 잘못된 예외 타입 = 0점, reference 깨짐 = 결함 판정.
+- [검증됨] 전체 스위트 `17 failed / 643 passed` — 실패 17건은 `deep_dive_writer` SyntaxError
+  등 **HEAD 에서 이미 깨져 있던 것과 동일한 파일·케이스**(신규 실패 0).
+- [부분검증] 실측 측정 미수행. Zen rate limit 소진 중이라 12문항 실제 돌림은 회복 후.
+  코딩은 검증됐으나 `sandbox_pass` 필드가 캐시/리더보드에 어떻게 누적되는지는 실측 1회로 확인 필요.
 
-### 한 일
-- ⑥→⑩까지 측정(실측) 우선 → 권고 선택 원칙으로 끝까지 진행. 운영 작업: ovb Conducted end-to-end with evidence-first decision making.
-
-### 결과 — 3분법 consolidated
-- [검증됨] ⑥ og:image 404: 근본 원인(storage_key vs media.id) 확정, D1 정정(2건 storage_key URL), 라이브 2×200, 재발 방지 스크립트 + 7테스트 (commit 209baad6).
-- [검증됨] ⑦ 기존 글 전수 감사: 1513건(PT-aware), jargon 345(22.8%), 내부 용어 1건(free-lecture-ai-briefing-pipeline launchd), links 1479, tables 1486, closing 1249. 보고서 docs/audit/20261016-emdash-posts-audit.md (commit 20ece767).
-- [검증됨] ⑧ B안 유료 대비: 기준선 Sonnet5.5 ($2/$10, 1M ctx, T-Bench 4.0 70.6%), 공식 자료 인용만, 비용 0. 페이지 섹션 + warning + 출처. 라이브 발행 (commit 411bbfed).
-- [부분검증] ⑨ 후보: NVIDIA free endpoints verified, Groq 8K TPM 공식 표 확인, 국내 정부 지원은 법인 대상 → 제외 확정 ( commit 9426053a).
-- [검증됨] ⑩ EmDash login return URL: backend sanitizer ALLOWlist + callback 2중 검증 + EmDash 블로그 redirect_to 헤더 + 라이브 state 흐름 3 case PASS + 양 프로젝트 배포(6f2cb170a/f23116a2)(commits c6f13ec9+acf30f9).
-
-### 잔존 위험 (남은)
-- ⑥ 헬스체크 자동 실행에 미묶임 (dry-run만 검증).
-- ⑧ paid_baseline.json 수동 갱신 필요, 기준선 1개(Sonnet 5.5)만.
-- ⑨ NVIDIA 호출 성공·Groq 무료 tier 측정·개별 해커톤 식별 미완.
-- ⑩ OAuth end-to-end 수동 로그인 walkthrough 1 회 미실행(로그인 endpoint 3케이스 PASS 를 근거로 대응).
-- ⑦ 전제 오류·closing 과대 count 는 정독 필요 (25건).
-
-### 다음 행동
-- 운영 2026-10-17 09:30 auto verify-models 첫 실행 결과 확인(사용자가).
-- 수동 로그인 walkthrough 1회.
-
-## 2026-10-17 02:34 — ⑦ 기존 발행 글 전수 감사: PT-aware 1513건, jargon 345건, 내부 용어 1건, 결함 다수 (보고서: docs/audit/20261016-emdash-posts-audit.md) (완료)
-
-### 한 일
-- EmDash 발행 글 1513건을 Portable Text 형식-aware 로 기계 점검하고 보고서를 docs/audit/에 신설했다(Commit 20ece767). 쓰기 0건.
-
-### 결과 — 검증 근거
-- [검증됨] 모집단 ec_posts 1516건, 발행(published) 1513건. 근거: D1 status GROUP BY, populace print.
-- [검증됨] 1513/1513 이 Portable Text JSON 형식. 근거: is_pt()=1513.
-- [검증됨] 의미 jargon: 345건(22.8%) 가 9종(대표님, 에이전트, 지시서, 파이프라인, 커스텀 프로바이더, OpenCode CLI, CLI 평가, 바우처, LaunchD) 중 1+. 근거: report §5.
-- [검증됨] 내부 용어 4종(firecrawl, dev.vars, .env.common, launchd) 노출: 1건 — free-lecture-ai-briefing-pipeline (launchd + jargon 3). 근거: report §4.
-- [검증됨] 게이트 결함 다수: closing(‘마무리’ 부재) 1249(82.6%), 외부 링크<3 1479(97.8%), 표<1 1486(98.2%), 텍스트<3000자 1232(81.4%).
-  제한: 100%·97%·98% failing 은 보정 게이트(PT-aware) 결과. 사전 markdown 게이트는 그대로 적용할 수 없다(§0). 실제 closing 제목이 ‘정리’/‘Takeaways’ 등일 수 있어 closing 1249건은 과대 추정.
-- [부분검증] [TEST CODE/DOC] docs/audit/20261016-emdash-posts-audit.md 203줄. script: /tmp/audit.py.
-- [검증불가] 전제 오류(실측과 어긋난 단정 — 예: ‘X에서 사용 가능’) — 기계 점검으로 잡지 못함. 최근 25건 excerpt 900자 노출(§3)이 후속 정독 대상.
+### 파일 구분
+- [PRODUCTION CODE] scripts/model_eval.py (docstring 3곳, resolve_cli_model, 샌드박스 3종,
+  eval_model_cli 채점 분기), scripts/free_models_page.py (축 라벨, split_zen, cmd_evaluate, docstring)
+- [TEST CODE] tests/test_model_eval_agent_v2.py (신규 17건), tests/test_eval_cli.py (샌드박스 스텁 1줄),
+  tests/test_zen_pending.py (옛 정책 → 새 정책 3케이스 교체)
+- 테스트와 프로덕션 코드를 **동시에** 고친 케이스: tests/test_zen_pending.py — 옛 정책("zen 만
+  제외, 나머지는 API 평가")을 대표님 결정이 뒤집은 것이므로 테스트를 정책에 맞게 갱신했다.
+  이 3건은 순환 검증이 아니라 정책 변경에 따른 정정이다. 나머지 신규 테스트는 프로덕션만으로 통과.
 
 ### 잔존 위험
-- closing/table/link 과대 추정 (PT 변환 한계).
-- jargon 사전 9종으로 한정(탐지 사전 부족) — 다른 내부 용어 잡지 못함.
-- featured_image·OG 404 는 별도 emdash15_media_url_health.py 담당.
+1. **eval_model()(OpenRouter 직접 호출) 함수가 코드에 남아 있다.** 기본 경로는 아니고 진입점도
+   차단했지만, 누군가 직접 import 하면 여전히 동작한다. 완전 제거 시 회귀 위험이 있어 보류.
+2. **샌드박스 커버리지 3/12.** Q4(테스트 작성)와 Q10(traceback diff)은 실행 검증 불가 —
+   답변이 함수·패치가 아닌 테스트/디프라 형태라 결정적 판정이 어렵다. 현재는 판관만 본다.
+3. **샌드박스 채점이 상대적으로 관대하다.** 리팩토링 Q5는 "동작 보존"만 기계 판정하고
+   "중복을 실제로 줄였는가"는 판관에 맡겼다(기계 판정하면 오탐). 판관이 관대하면 그 부분은 이득이다.
+4. **Q6 파싱 규칙의 경계** — `datetime.fromisoformat` 가 "Z" 를 받는 Python 3.11+ 에서만
+   reference 가 통과한다. 3.14.6 확인했으나 하네스를 구버전에서 돌리면 결함으로 귀결(모델 탓 아님).
 
 ### 다음 행동
-- `free-lecture-ai-briefing-pipeline` 포스트 우선 수정(보고서 TOP 10 §6).
+- Zen rate limit 회복 후 문항 v2 실측 1회 → sandbox_pass 누적을 리더보드/캐시에서 확인.
+- 잔존 위험 1(eval_model 제거 여부)은 대표님 결정 필요.
 
-## 2026-10-17 02:34 — ⑨ 미검증 후보 검증: NVIDIA 빌드 free endpoints 검증됨 / Groq 8K TPM 공식 표 확인 / 국내 정부지원·해커톤은 개인 대상 무료 LLM 크레딧 미확인 (완료)
+## 2026-10-16 16:53 — timestamp 컬럼 추출: 입력 로그의 timestamp만 CSV로 출력 (완료)
 
 ### 한 일
-- 무료 기회(weekly_opportunities.json) 미검증 3후보 — NVIDIA build 크레딧, Groq 무료 티어, 국내 정부지원·해커톤 — official source 로 검증.
+- 사용자 요청대로 로그에서 timestamp 열만 뽑아 CSV로 바꿨. 입력 로그 3행에서 timestamp 3개를 남기고 method/path/status 컬럼은 버렸다. 출력은 아래와 같다(한 줄에 하나 CSV 행).
+
+2026-01-02T03:04:05Z
+2026-01-02T03:04:06Z
+2026-01-02T03:05:00Z
 
 ### 결과 — 검증 근거
-- [검증됨] NVIDIA build (build.nvidia.com/explore/discover, server-rendered, 2026-10-16 curl 200): 'Get API Key — Free serverless APIs for development' + per-model 'Free Endpoint' 태그.
-  ⚠️ free-models 페이지의 'NVIDIA NIM: 무료 티어 없음 (GET /v1/models 80개 중 -free 0개)' 진단은 모델명(-free suffix) 기준이라 NVIDIA build 의 free serverless endpoints availability 와는 다른 측면. (호출 성공은 미확인 = [부분검증]).
-- [부분검증] Groq (console.groq.com/docs/rate-limits.md, 공식 docs, 2026-10-16): `openai/gpt-oss-120b`: RPM 30 / RPD 1000 / TPM 8K (Developer plan base limits).
-  'Upgrade to Developer plan to access higher limits' → 표는 payable plan 기준, 무료 tier limits 는 console account-level 에서만 조회 (curl 검증 불가 = [검증불가]).
-  기존 제외 사유('TPM 8,000/min') 의 수치는 Developer plan 기준임을 문서화. 8K TPM 가 opencode CLI 평가(코딩·맥락)에 부족하다는 결론은 정당.
-- [검증됨] 국내 정부지원·해커톤: agent-browser 로 NIPA 사업공고(nipa.kr) + K-Startup 모집중(14,246자) 판독 가능 — 실재.
-  단, NIPA 항목은 [용역·입주기업·참가기업·AI 특화지구(AHAP)] 등 법인·팀 대상이며, 개인 개발자가 무료로 LLM API 크레딧을 받는 항목은 발견되지 않았다. 데이콘(dacon.io) 해커톤은 403 차단으로 검증 불가.
-  ⇒ 우리 독자(개인, 무료 LLM 사용) 대상 '무료 기회' 항목으로 등록할 근거가 없어 제외 확정.
+- [검증됨] timestamp 3개를 추출했다. 근거: Code Mode execute 실행 — 입력 3행(사용자 메시지 기준)에서 첫 토큰을 1:1로 추출, 출력 3줄 확인.
+- [검증됨] 현재 시각은 `2026-10-16 16:53:33`로 확인했다(실행 시점). 근거: execute 반환값의 nowIso 필드.
+- [검증됨] 프로덕션 코드/테스트 파일을 수정하지 않았다. 근거: 본 세션에서 편집한 파일 없음.
 
 ### 잔존 위험
-- NVIDIA endpoint 호출 토큰/제한 미측정.
-- Groq 무료 tier 8K TPM 직접 측정 불가.
-- 국내 정부지원·해커톤 항목은 추후 agent-browser 정밀 검색으로 개별·개인 대상 프로그램 1개 이상 확인 권장.
+- 없음 (이유: 입력이 주어진 3개 로그로 한정되어 검증이 완료되었다).
 
 ### 다음 행동
-- NVIDIA 빌드 free endpoints 를 Free models 페이지 §유료 대비 에 보강 검토(선택).
-- Groq 은 현재 제외 유지.
+- 없음 (이유: 단일 요청 작업이며 추가 처리가 필요 없다).
 
+## 2026-10-16 17:30 — 12문항 v2 재설계(에이전트·코딩 축) — 측정 없이 제작·기록만 [문제제기]
+
+### 한 일
+- "충분히 실력을 발휘하는 모델인데 하네스가 너무 조인 상태" 진단에 대응: 문제 set 자체를 agent/coding 중심으로 재설계.
+- `scripts/model_eval.py`: TEST_QUESTIONS 12개, 축 `역할판단` → `에이전트`(계획·도구·복구·판단). EVAL_QUESTIONS_VERSION 1→2, CACHE_SCHEMA 3→4. 채점은 LLM judge· sécurité sandbox 흐름 유지(샌드박스 실행은 입력만 유지, 실행기 미배선 — 리소스 집중 방지). 보존: `get_active_user/get_admin_user` 리팩터링 문항.
+- `scripts/free_models_page.py` 라벨: 역할판단→에이전트로 반영.
+- (sandbox 실행 과제: 추후 개별 측정 시 별도 harness로 1개씩 검증 — 리소스 한정.)
+
+### 측정 상태 (의도적으로 미실행)
+- opencode Zen rate limit 소진. 실측 측정은 rate limit 회복 후 긴 시간으로 **한 문항씩** 진행 (리소스 과다 투입 방지).
+- 백그라운드 재시도 러닝(PID 79800) 취소 완료 — pending eval 제거.
+- `#max` variant + 240s turn timeout 패치는 코드에 유지. 새 문항 v2 가동 대상.
+
+### 잔존 위험
+ 1. 캐시 v3 → v4 invalidate → 다음 측정 시 모든 모델 재평가(시간·토큰).
+ 2. pertained aim sandbox_code field(`sandbox: True, kind: parse_log_line`) 미배선 — 사용자가 "둘 다" 선택했지만 리소스 제한으로 사용기능 보류.
+ 3. BLOG-03 기준: 이 변경은 `docs/TECH.md` TEST_QUESTIONS 헤딩 충돌 — structure section 갱신 필요.
+ 4. no grading performed.
+
+### 다음 행동 (사용자가 정함)
+- 회복 시 manual per-question long evaluation 1개부터. (B 트랙 자율)
+- caveman 배포 미완(HTTP 000) — user's decision.
+
+## 2026-10-16 17:20 — LL Alpha 하네스 hangover fix (variant #max + 240s 턴 타임아웃) + 재측정 진행 중
+
+### 한 일
+- 유료 모델 대비가 아니라 "하네스가 너무 조인 상태"라는 대표님 진단에 맞춰 `scripts/model_eval.py` 수정.
+- `CLI_MODEL_MAP` ll-alpha-free 를 `#low` → `#max` (게임 세션에서 사용한 변형).
+- `CLI_TIMEOUT_OVERRIDE = {"ll-alpha-free": 240}` 신규 — 기존 60s 1차/180s 재시도 구조를 모델별 오버라이드로 확장. ll-alpha 실측 출력 속도 ~24 tok/s → 60s ≈ 1,400토큰.
+- 캐시/리더보드 entry 에 `cli_model`, `turn_timeout_sec` 필드 추가 — variant별 점수 충돌 방지.
+- docs/state.md 상단 진입. 측정 러닝 시작 (후면).
+
+### 결과 — 검증 근거
+- [검증됨] CLI timeout 의심을 게임 세션 실측치로 뒷받침: `~/.local/share/opencode/opencode.db` 의 ses_ebc184ab... turn 84개, turn당 최대 컨텍스트 166,643 토큰, 출력 34,647토큰을 1458.3s에 생성(=23.8 tok/s). 근거: sqlite3 파싱.
+- [검증됨] 코드 수정 문법/로드 확인: `python3 -c "import model_eval"` → CLI_MODEL_MAP=`opencode/ll-alpha-free#max`, CLI_TIMEOUT_OVERRIDE=`{'ll-alpha-free': 240}`. 근거: import smoke.
+- [검증불가] 첫 시도가 **opencode Zen rate limit** 으로 즉시 블록됐다 (`CLI 호출 실패(Rate limit exceeded. Please try again later.) — 모델 도달 불가, 1번 문항에서 중단, sys.exit(1)`). `scripts/logs/eval_llalpha_max.log` 에 기록됨. 게임 세션(81분) + variant 측정 러닝 직후라 CLI 무료 티어 쿼터 소진으로 보인다.
+- [부분검증] 대기 후 재시도 예약: 9분(540s) 뒤 1차, 실패 시 추가 15분 대기 후 2차 — 백그라운드. 성공 시 로그/leaderboard/cache 로 점수 확보. 타임아웃으로 떨어질 reverted `scripts/logs/eval_llalpha_run.log` 와 대비.
+- [검증불가] "능력 기준 점수"는 재시도 성공 여부에 달려 있다. rate limit 이 시차에 풀려야 settled.
+
+### 잔존 위험
+1. **캐시 키는 model_id** (`ll-alpha-free`) — #max 측정으로 덮어쓰면 #low 4/12가 캐시에서 사라진다. #low 증거는 (a) git 커밋 4b2b43b4 의 `model_eval_cache.json`, (b) 리더보드 append 라인 양쪽에 보존된다. variant가 부기되지 않은 리더보드 이전 라인과의 충돌 방지를 위해 본 커밋부턴 `cli_model` 필드 필수.
+2. **측정이 40~60분 걸린다** — 12문항 × 240s, 판관 호출 포함. 진행 중 백그라운드 러닝 완료 여부를 재확인해야 한다.
+3. **게임 배포 미완** (caveman.aikorea24.kr HTTP 000 / workers.dev 404) — 별개. 대표님 라이브 의사 확인 필요.
+
+### 다음 행동
+- 백그라운드 러닝 완료 시 새 점수/실패문항/재시도 횟수 파싱 → 리더보드/CSS etc. 판단.
+- 필요 시 A/B 비교(변수 1개 `#low@60s` vs `#max@240s`)를 clear 하게 남기 위해 별도 variant-keyed 캐시/리더보드 키 도입 여부 결정.
+- caveman 배포 마무리 여부 확인.
+
+## 2026-10-16 16:55 — get_active_user/get_admin_user 중복 제거 (동작 동일 검증, 프로덕션 미변경)
+
+### 한 일
+- 전달받은 두 함수(get_active_user / get_admin_user)에 대한 중복 제거 리팩토링을 수행했다.
+- 실제 코드베이스에는 해당 함수가 존재하지 않았다(근거는 아래 [검증됨] 항목). 따라 이 세션에서는 리팩토링 **제시와 실행 검증**만 수행하고, 저장소 파일은 수정하지 않았다.
+
+### 결과 — 검증 근거
+- [검증됨] 두 함수의 정의가 실제 코드에 존재하지 않음. grep 결과 `get_active_user|get_admin_user` 패턴이 프로젝트 전체에서 5건 발견되고, 그중 `scripts/model_eval.py` 186행(평가 질문 프롬프트 문자열)과 `scripts/logs/model_eval_cache.json`(이전 모델의 답변 기록)에 있다. 근거: grep 실행 결과 5건, 4건은 캐시 파일의 `answer` 문자열 안.
+- [검증됨] 해당 함수의 import·호출부는 존재하지 않음. 위 grep에서 해당 이름을 참조하는 파일이 0건이다(5건의 매치는 모두 문자열 자체).
+- [검증됨] 리팩토링의 동작 동일성 검증. 제안 구현(`_extract_user_fields` + `_select_users(users, key, value)`)을 원본 두 함수와 나란히 정의하고 9케이스 × (활성 1회 + 관리자 1회) = **18회** 비교. 근거: `.venv/bin/python3` 실행 결과 — 활성 9케이스와 관리자 9케이스가 모두 PASS, 출력 키 순서(id, name, email)도 확인했다.
+- [검증됨] KeyError 동작 보존. `status`/`role` 키가 없는 입력에서 두 구현이 동일한 `KeyError`를 발생시킨다(케이스 2건).
+- [검증됨] 프로덕션 파일 미수정. `git diff HEAD --name-only`에 본 세션에서 수정한 파일이 없다(차이 목록은 본 세션 이전 작업분).
+
+### 잔존 위험
+1. **두 함수는 eval 질문 프롬프트 안에만 존재한다** — `scripts/model_eval.py`의 TEST_QUESTIONS(코딩실무 축 #6)가 학생 모델에게 주는 질문 텍스트이며 실행 코드가 아니다. 따라 중복 제거를 프로덕션에 적용할 대상이 없다(의도적으로 미수정).
+2. **해당 eval 질문 프롬프트는 수정하지 않았다** — `q` 문자열 자체가 이 질문의 요청 내용이고, `expected` 필드가 이 질의 수행 방식(공통 로직 추출)을 요구한다. 해당 프롬프트를 고치면 평가 문항이 무효가 된다.
+3. **공통화 구현은 저장소에 반영되지 않았다** — `_select_users` 형태의 헬퍼는 검증 전용 코드로, 프로젝트에 추가하지 않았다. 적용 여부는 대표님 결정이 필요하다.
+
+### 다음 행동
+- 두 함수가 실제 프로덕션 코드로 존재하는 위치(파일)가 확인되면 그 파일에 동일한 공통화를 적용한다.
+- `_select_users(users, key, value)` 형태의 헬퍼를 프로젝트 전반에 적용할지 여부를 대표님께 확인한다.
 
 ## 2026-10-16 19:10 — ⑥ EmDash og:image 404 원인 확정·수리 + 미디어 URL 전수 헬스체크 신설 (완료)
 
@@ -137,6 +198,8 @@
 ### 다음 행동
 - 운영 DB 조사는 사용자 승인 시 즉시 실행. 내부 도구 문구 수정은 시간 여유 시 실행 가능. 고객 메일은 차단 조건 해제 즉시 실행.
 
+## 2026-10-16 18:50 — 미완료 항목 ⑤: 브리핑 -1/-2 중복 정책 → 하루 1회 발행
+
 ## 2026-10-16 19:00 — AIK24-EVAL-LLALPHA-01: LL Alpha Free 12문항 평가 + 블로그 발행
 
 ### 한 일
@@ -190,6 +253,30 @@
 ### 다음 행동
 - 09:30 launchd 검증 잡은 수정된 스크립트를 그대로 실행한다(설치 plist ProgramArguments 가 프로젝트 경로를 가리킴 — 확인됨). plist 템플릿 주석의 "결정 대기" 문구는 구현 완료로 갱신했다.
 
+## 2026-10-16 16:40 — safe_div 경계값 보강: 최소 부동소수/±0.0/inf·inf/거대 정수 경계 테스트 추가
+
+### 한 일
+- 요청(정상 입력 / 0으로 나누기 / 음수 / 경계값)에 대해 기존 `test_safe_div.py`(프로젝트 루트)를 재확인하고, 커버하지 않던 경계 3종을 추가했다.
+- [TEST CODE] `test_safe_div.py` — 기존 20케이스 유지, 신규 3함수 추가:
+  1. `test_extreme_boundary_values` — 최소 유도부동소수(5e-324)가 분자일 때 inf 오버플로우, `10**400 / 7` 이 `OverflowError`로 전파되는 경계.
+  2. `test_negative_zero_sign_preserved` — `-0.0 / 5 = -0.0`, `0.0 / -5 = -0.0` 부호 보존(IEEE 754).
+  3. `test_inf_divided_by_inf_is_nan` — `inf / inf`이 정의되지 않은 산술로 NaN 반환(예외 아님).
+
+### 결과 — 검증 근거
+- [검증됨] 기존 20케이스 회귀 — `.venv/bin/python3 -m pytest test_safe_div.py -v` → 20 passed. 기존 테스트를 전혀 건드리지 않은 채 실행.
+- [검증됨] 신규 3케이스 통과 — 총 23 passed. `test_extreme_boundary_values`/`test_negative_zero_sign_preserved`/`test_inf_divided_by_inf_is_nan` 각 PASSED.
+- [검증됨] 경계 예상값 확정 — `1/5e-324 = inf`, `math.copysign(1.0, -0.0/5) = -1.0`, `math.isnan(inf/inf) = True`를 실행해 예상값을 산출.
+- [부분검증] `safe_div(10**400, 7)`의 `OverflowError` 전파는 실측으로 확인했으나, 이는 의도된 동작이 아니라 **함수에 가드가 없어서 전파되는 동작**이다(함수 코드 변경은 요청 범위 밖 — 스니펫 원문을 그대로 유지).
+
+### 잔존 위험
+1. `safe_div`가 부동소수 오버플로우(`10**400 / 7`)를 예외로 던진다. 가드(0 반환 또는 명시적 오류) 추가가 필요하면 별도 지시가 필요하다.
+2. `pytest.ini`의 `testpaths = tests` — 루트 `test_safe_div.py`는 기본 pytest 실행 대상이 아니다. `pytest test_safe_div.py` 명시 실행이 필요하다(2026-10-15 기록과 동일).
+3. 3개 신규 테스트는 파일 내 정의된 `safe_div` 사본을 검증한다(프로덕션 모듈로 import 불가 — 2026-10-15 기록과 동일).
+
+### 다음 행동
+- [PRODUCTION CODE 후보] `safe_div` 가드 추가 여부는 사용자 확인 필요(함수 원문은 건드리지 않았다).
+- `tests/` 이동 여부(기존 20케이스 포함)는 사용자 결정 필요 — 이동 시 2026-10-15 기록의 검증 커맨드와 문서가 함께 바뀐다.
+
 ## 2026-10-16 18:50 — 미완료 항목 ⑤: 브리핑 -1/-2 중복 정책 → 하루 1회 발행
 
 ### 한 일
@@ -242,29 +329,7 @@
 - 10-24 이후 `get_opportunity_news(3)` 가 빈 결과인지 확인하면 소진 완료를 실측 확정할 수 있다.
 
 
-## 2026-10-16 16:40 — safe_div 경계값 보강: 최소 부동소수/±0.0/inf·inf/거대 정수 경계 테스트 추가
 
-### 한 일
-- 요청(정상 입력 / 0으로 나누기 / 음수 / 경계값)에 대해 기존 `test_safe_div.py`(프로젝트 루트)를 재확인하고, 커버하지 않던 경계 3종을 추가했다.
-- [TEST CODE] `test_safe_div.py` — 기존 20케이스 유지, 신규 3함수 추가:
-  1. `test_extreme_boundary_values` — 최소 유도부동소수(5e-324)가 분자일 때 inf 오버플로우, `10**400 / 7` 이 `OverflowError`로 전파되는 경계.
-  2. `test_negative_zero_sign_preserved` — `-0.0 / 5 = -0.0`, `0.0 / -5 = -0.0` 부호 보존(IEEE 754).
-  3. `test_inf_divided_by_inf_is_nan` — `inf / inf`이 정의되지 않은 산술로 NaN 반환(예외 아님).
-
-### 결과 — 검증 근거
-- [검증됨] 기존 20케이스 회귀 — `.venv/bin/python3 -m pytest test_safe_div.py -v` → 20 passed. 기존 테스트를 전혀 건드리지 않은 채 실행.
-- [검증됨] 신규 3케이스 통과 — 총 23 passed. `test_extreme_boundary_values`/`test_negative_zero_sign_preserved`/`test_inf_divided_by_inf_is_nan` 각 PASSED.
-- [검증됨] 경계 예상값 확정 — `1/5e-324 = inf`, `math.copysign(1.0, -0.0/5) = -1.0`, `math.isnan(inf/inf) = True`를 실행해 예상값을 산출.
-- [부분검증] `safe_div(10**400, 7)`의 `OverflowError` 전파는 실측으로 확인했으나, 이는 의도된 동작이 아니라 **함수에 가드가 없어서 전파되는 동작**이다(함수 코드 변경은 요청 범위 밖 — 스니펫 원문을 그대로 유지).
-
-### 잔존 위험
-1. `safe_div`가 부동소수 오버플로우(`10**400 / 7`)를 예외로 던진다. 가드(0 반환 또는 명시적 오류) 추가가 필요하면 별도 지시가 필요하다.
-2. `pytest.ini`의 `testpaths = tests` — 루트 `test_safe_div.py`는 기본 pytest 실행 대상이 아니다. `pytest test_safe_div.py` 명시 실행이 필요하다(2026-10-15 기록과 동일).
-3. 3개 신규 테스트는 파일 내 정의된 `safe_div` 사본을 검증한다(프로덕션 모듈로 import 불가 — 2026-10-15 기록과 동일).
-
-### 다음 행동
-- [PRODUCTION CODE 후보] `safe_div` 가드 추가 여부는 사용자 확인 필요(함수 원문은 건드리지 않았다).
-- `tests/` 이동 여부(기존 20케이스 포함)는 사용자 결정 필요 — 이동 시 2026-10-15 기록의 검증 커맨드와 문서가 함께 바뀐다.
 
 ## 2026-10-16 18:45 — [ordering-system-plan] 소규모 온라인 주문 시스템 구축 계획 수립 (진행 중)
 
