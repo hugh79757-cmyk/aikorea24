@@ -1,3 +1,26 @@
+## 2026-10-16 18:36 — 미완료 항목 ③: 주간 무료 기회 8건 D1 INSERT → 브리핑 슬롯 1 활성화
+
+### 한 일
+- 미완료 목록 ③번(브리핑 슬롯 1 이 계속 빈 슬롯) — 대표님 검수 승인 후 `scripts/weekly_opportunity.py` 로 8건을 `news` 에 INSERT 하고 슬롯 1 활성화를 실측했다.
+- 발행 전 사실 점검(링크 8건 + 숫자 2건) → 실행 → 사후 검증. 과정에서 **UNIQUE(link) 로 1건이 조용히 무시되는 결함**을 적발했다.
+
+### 결과 — 검증 근거
+- [검증됨] **사전 카운트 0행 → 사후 8행**. 근거: `SELECT id, title, link, v2_pass, v2_tag FROM news WHERE source='무료 기회'` → id `56074·56075·56076·56077·56078·56080·56081·56082`, 전부 `v2_pass=1` · `v2_tag='free-opportunity'`.
+- [검증됨] **슬롯 1 활성화 실측**: `auto_news_selector.get_opportunity_news(1)` → **1건 반환** = `OpenRouter 무료 모델 (:free 태그)`(pub_date 2026-10-16 18:33:49). 선택기 쿼리 = `v2_pass=1 AND v2_tag='free-opportunity' AND created_at >= 7일` 최신순(`scripts/auto_news_selector.py:91-102`).
+- [검증됨] **사실 점검(오늘 직접 확인)** — 링크 8건 전부 HTTP **200**. 숫자 2건은 공식 문서 원문으로 확인: Cloudflare "*a total of **10,000 Neurons per day** at no charge*"(developers.cloudflare.com/workers-ai/platform/pricing) · Cerebras "*Add a valid payment method to receive a **one-time $5 promotional credit**. The credit expires 30 days after activation*"(cerebras.ai/pricing).
+- [검증됨] **결함: UNIQUE(link) 충돌이 조용히 무시된다.** 첫 실행 로그는 `INSERT 8건 전송 (ok=True)` 였지만 실제 반영은 **7행**(id 56079 결번). 원인: 기존 카탈로그 행 **id=56069**(`source='OpenRouter Free Models'`, `v2_tag='free-llm'`, `link='https://openrouter.ai/models?max_price=0'`)가 같은 link 를 점유 → `INSERT OR IGNORE` 가 8번째(OpenRouter 기회 항목)를 버렸다. 스크립트 자체 dedup 은 **제목 기준**이라(`이미 등록됨 N건 스킵`) link 충돌은 감지하지 못한다 = fail-silent.
+- [검증됨] **복구·완성**: 해당 항목 link 를 충돌 없는 정규 URL(`...?max_price=0&order=newest`, HTTP 200 · 같은 목록 페이지)로 교체 → 재실행 로그 `이미 등록됨 7건 스킵 / INSERT 1건 전송 (ok=True)` → 총 **8행**(신규 id 56082), 슬롯 1 이 그 행을 선택함을 위에서 확인. 교체는 `scripts/logs/weekly_opportunities.json` diff 1줄.
+- [검증됨] 되돌리기 경로: `DELETE FROM news WHERE source='무료 기회'` = 이번 8건(id 56074·56075·56076·56077·56078·56080·56081·56082)만 지운다(사전 카운트 0 근거).
+
+### 잔존 위험
+1. **슬롯 1 이 8건 중 1건만 계속 노출된다** — 첫 7건은 pub_date 가 동일(2026-10-16 18:31:32 KST)이고 선택이 `ORDER BY pub_date DESC LIMIT 1` 이라 최신인 OpenRouter 1건이 고정된다. 나머지 7건은 신규 삽입 전까지 브리핑에 나오지 않는다(시차 삽입 또는 회전 선택 필요) — 미수정.
+2. **link 충돌 fail-silent 미수정** — 스크립트는 여전히 link 중복을 감지하지 않는다. 다음 큐레이션에서 재발하면 또 조용히 빠진다([PRODUCTION CODE] 후보).
+3. 8건 전부 `(b) 커스텀 프로바이더` 라벨 — 슬롯 1 은 "설정 후 연결 가능"으로만 표기된다(지시서 §11 준수, (a) 항목 0건).
+4. Cerebras 항목은 **결제 수단 등록이 조건**인 프로모(크레딧 30일 만료) — 문구에 "결제 수단 등록 시"라고 명시했으나 조건 없는 무료로 오해될 여지는 남는다.
+
+### 다음 행동
+- 대표님 결정: `weekly_opportunity.py` 에 link 충돌 감지·로그 추가([PRODUCTION CODE]) / pub_date 시차 삽입으로 나머지 7건 노출 기회 만들기.
+
 ## 2026-10-16 18:30 — 미완료 항목 ②: test_emdash_publish 기대값 정리 (테스트 red 1건 해소)
 
 ### 한 일

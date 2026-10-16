@@ -42,7 +42,7 @@
   {
     "title": "OpenRouter 무료 모델 (:free 태그)",
     "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다.",
-    "link": "https://openrouter.ai/models?max_price=0",
+    "link": "https://openrouter.ai/models?max_price=0&order=newest",
     "category": "provider_credit",
     "access": "custom",
     "expires": "2027-12-31"
