@@ -114,6 +114,42 @@ def existing_titles():
     return {r.get("title") for r in rows if isinstance(r, dict)}
 
 
+def _link_list(entries):
+    """entries → 중복 제거된 SQL IN 리스트 문자열."""
+    links = [str(e.get("link") or "").strip() for e in (entries or [])]
+    links = [l for l in links if l]
+    uniq = list(dict.fromkeys(links))
+    return ",".join("'" + l.replace("'", "''") + "'" for l in uniq)
+
+
+def link_conflicts(entries):
+    """INSERT 전 링크 충돌 사전 점검.
+
+    news.link 는 UNIQUE 라, 다른 source 가 같은 링크를 이미 점유하고 있으면
+    `INSERT OR IGNORE` 가 그 행을 **소리 없이** 버린다 (2026-10-16 실측: id=56069 가
+    'https://openrouter.ai/models?max_price=0' 을 점유해 8건 중 1건이 로그상
+    '8건 전송'인데 실제로는 7건만 남았다). 점유 행을 미리 찾아 명시적으로 건너뛴다.
+
+    반환: {link: {'id':..,'title':..,'source':..}} — 충돌 없으면 빈 dict.
+    """
+    in_list = _link_list(entries)
+    if not in_list:
+        return {}
+    rows = cfnew.sql("SELECT id, title, source, link FROM news WHERE link IN (%s);" % in_list,
+                     database_id=cfnew.A24_DB) or []
+    return {str(r.get("link")): r for r in rows if isinstance(r, dict)}
+
+
+def landed_count(entries):
+    """INSERT 후 실제 반영 수 — 전송 수와 다르면 조용히 넘기지 않는다 (fail-silent 금지)."""
+    in_list = _link_list(entries)
+    if not in_list:
+        return 0
+    rows = cfnew.sql("SELECT COUNT(*) AS c FROM news WHERE link IN (%s);" % in_list,
+                     database_id=cfnew.A24_DB) or []
+    return int((rows[0] or {}).get("c") or 0) if isinstance(rows[0], dict) else 0
+
+
 def main():
     ap = argparse.ArgumentParser(description="주간 무료 기회 → news INSERT (v2_tag=free-opportunity)")
     ap.add_argument("--dry-run", action="store_true", help="D1 쓰기 없이 선별 결과만 출력")
@@ -144,11 +180,33 @@ def main():
         todo = [e for e in selected if e["title"] not in known]
         if len(todo) != len(selected):
             log(f"이미 등록됨 {len(selected) - len(todo)}건 스킵")
+
+        # 링크 충돌 사전 점검 (2026-10-16: link UNIQUE 점유로 1건이 소리 없이 사라졌다)
+        conflicts = link_conflicts(todo)
+        if conflicts:
+            kept = []
+            for e in todo:
+                held = conflicts.get(str(e.get("link") or "").strip())
+                if held:
+                    log(f"  ⚠️ 링크 충돌: '{e['title']}' → 기존 id={held.get('id')} "
+                        f"(source={held.get('source')}, '{str(held.get('title'))[:40]}') — 건너뜀")
+                    continue
+                kept.append(e)
+            todo = kept
+
         if not todo:
             log("신규 없음")
             return 0
         res = cfnew.sql(";\n".join(build_inserts(todo)), database_id=cfnew.A24_DB)
         log(f"INSERT {len(todo)}건 전송 (ok={isinstance(res, list)})")
+
+        # 사후 검증 — 전송 수 ≠ 실제 반영 수면 성공으로 보고하지 않는다
+        landed = landed_count(todo)
+        if landed != len(todo):
+            missing = ", ".join(f"'{e['title']}'" for e in todo)
+            log(f"⚠️ 등록 건수 불일치: 전송 {len(todo)} / 확인 {landed} — 확인 대상: {missing}")
+            return 1
+        log(f"확인: {landed}건 반영됨")
     except Exception as e:  # noqa: BLE001 — 실패를 조용히 넘기지 않는다
         log(f"D1 쓰기 실패: {type(e).__name__}: {e}")
         return 1

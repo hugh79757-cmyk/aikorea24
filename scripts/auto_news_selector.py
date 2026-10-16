@@ -99,7 +99,7 @@ def get_opportunity_news(limit=1):
           AND created_at >= '%s'
         ORDER BY pub_date DESC
         LIMIT %d
-    """ % (_COLS, _slot_cutoff(), limit))
+    """ % (_COLS, _opportunity_cutoff(), limit))
 
 
 def get_zen_changes(limit=MAX_COUNT):
@@ -118,9 +118,26 @@ def get_zen_changes(limit=MAX_COUNT):
 
 
 def _slot_cutoff():
-    """기회·Zen 슬롯의 조회 하한 (7일). created_at 창이 없으면 아주 오래된 미발행 행이
-    되살아나므로 7일로 끊는다 — dedup 이 이미 브리핑된 행을 걷어내므로 실질 하한은 더 짧다."""
+    """Zen 슬롯의 조회 하한 (7일). created_at 창이 없으면 아주 오래된 미발행 행이
+    되살아나므로 7일로 끊는다 — dedup 이 이미 브리핑된 행을 걷어내므로 실질 하한은 더 짧다.
+
+    2026-10-16: 슬롯 1(무료 기회)은 _opportunity_cutoff() 로 분리됐다 (7일로는 주간 8건이
+    다 소진되지 못해 마지막 1건이 만료로 사라졌다 — 아래 함수 주석 참조).
+    """
     return (datetime.now(timezone.utc) - timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def _opportunity_cutoff():
+    """슬롯 1(무료 기회)의 조회 하한 (21일).
+
+    근거: 무료 기회는 대표님이 주 1회(월) 큐레이션해 8건을 한꺼번에 넣고, 브리핑은
+    하루 1건(MAX_COUNT=3)이라 슬롯 1은 하루 1건씩 소진된다 → 8건이 다 보이려면 8일이
+    필요한데 7일 창에서는 마지막 1건이 창 밖으로 밀려 영구 미노출이 된다 (2026-10-16
+    실측: 8건 중 7건이 같은 pub_date 로 묶여 하루 1건씩 7일 소진 → 8번째는 8일째).
+    21일 = 8일 소진 + 재실행·휴일 여유. 이미 브리핑된 행은 dedup 이 걷어내므로
+    되살아나는 위험은 없다 (미발행으로 남은 큐레이션분만 후보가 된다).
+    """
+    return (datetime.now(timezone.utc) - timedelta(days=21)).strftime("%Y-%m-%d %H:%M:%S")
 
 
 def cluster_by_topic(articles):
