@@ -1,3 +1,44 @@
+## 2026-10-16 AIK24-PIPE-03 완료 — 브리핑 v3 개편 (작업 1~9 전부 실행)
+
+### 한 일
+- **[PRODUCTION CODE] `scripts/run_pipeline.py`** — `step_blog()`/`step_link_blogs()` 정의+호출 삭제(블로그 1:1 자동 확장 중단, §18 포맷 생성도 함께 중단), `--skip-blog`·`import re` 정리.
+- **[PRODUCTION CODE] `scripts/model_catalog.py`** — `record_diff_to_news(day, d)` 신규 + `run()` diff write 직후 호출(fail-soft). added/removed → `news` INSERT(`v2_tag='free-llm'`, `v2_pass=1`, description `… · 12문항 평가 전 — 판단 보류`), `cfnew.check_quota()` 선행, 같은 날 title 중복 스킵.
+- **[PRODUCTION CODE] `scripts/auto_news_selector.py`** — `MAX_COUNT=3`, 모델 슬롯 상수·함수 전부 삭제, `MODEL_SOURCES`→`PROVIDER_SOURCES`, 3단 선정(무료 기회 1 → Zen 변경 → 점수순 일반), `_is_mechanical()` 로 기계 감지 행 평가 면제, PIPE-DEDUP-01 dedup 유지.
+- **[PRODUCTION CODE] `scripts/auto_briefing.py`** — 모델 슬롯 재충전 블록 삭제, `verdict_block()` 신규(캐시 평가 or `12문항 평가 전 — 판단 보류` + Top3 평균 비교), `cli_free_block()` (a)/(b) 구분, `eval_comment_block()` 호출 제거.
+- **[PRODUCTION CODE] `scripts/briefing_dedup.py`** — `MODEL_SOURCES`→`PROVIDER_SOURCES` 2곳.
+- **[PRODUCTION CODE] `scripts/auto_email_sender.py` / `src/pages/briefing/[date].astro`** — "매일 아침 7시" 삭제 + evergreen CTA(무료 모델 목록) 삽입.
+- **[PRODUCTION CODE] `scripts/free_models_page.py`** — "현재 무료 N개(공개 목록 기준)" vs "검증 완료 M개" 분리, 하드코드 18 제거.
+- **[PRODUCTION CODE] `scripts/weekly_opportunity.py`** 신규 — 주간 기회 JSON → `free-opportunity` INSERT, unverified·만료 제외, 접근성 라벨 자동 부착, `--dry-run`.
+- **[TEST CODE]** `tests/test_model_catalog_news_insert.py`(5) · `tests/test_weekly_opportunity.py`(4) · `tests/test_auto_briefing_verdict.py`(3) 신규, `tests/test_auto_news_selector_dedup_before_slots.py` v3 정책으로 갱신.
+
+### 결과
+- **[검증됨]** 작업1: `grep -n "step_blog\|step_link_blogs\|blog_draft" scripts/run_pipeline.py` → 0건(rc=1). `--dry-run` 단계 출력 5개(블로그 소멸), exit 0.
+- **[검증됨]** 작업2: 오늘 diff(added 2/removed 2)로 실행 → `news 기록: 4건`, D1 재조회 4행 = diff 건수 일치. 중간에 발견한 `link UNIQUE` 충돌(4건 중 1건 조용히 유실)은 `#{model_id}` 부여로 수정.
+- **[검증됨]** 작업3: selector 실측 `이미 브리핑됨 6건 제외 → 신선 후보 1건` / `ⓘ 무료 기회 후보 없음 — 슬롯 1 비움 (강제 충전 없음)` / `ⓘ Zen 변경 1건 우선 배정` / `선정 1건 (요청 3건, 데이터 부족 — 강제 선정 없음)`.
+- **[검증됨]** 작업4: D1 `briefing_items`(355) comment 에 `12문항 평가 전 — 판단 보류` + `(a) OpenCode 모델 선택기에서 바로 선택 가능` 포함. 라이브 `/briefing/2026-10-16-2/` 에서도 동일 문자열 노출.
+- **[검증됨]** 작업5: `grep -rn "7시" scripts/auto_email_sender.py` → 0건. 라이브 상세 페이지 CTA 1회 노출. 이메일 HTML 생성물 CTA 포함(발송 안 함 — 수동 실행 규칙 `--no-email`).
+- **[검증됨]** 작업6: 라이브 `현재 무료 38개 (프로바이더 공개 목록 기준) · 검증 완료 15개` / `전체 리스트 (검증 완료 모델 15개)`.
+- **[검증됨]** 작업7: 샘플 2건 dry-run → unverified 제외, direct 1건만 SELECT. 신규 테스트 4 passed.
+- **[검증됨]** 작업9: 파이프라인 배포 Version `39e1d29f…` + `npm run deploy` Version `4d526460…` (둘 다 exit 0, sitemap ping google/naver ✅).
+- **[부분검증]** 기존 스위트: **18 failed / 581 passed / 10 skipped**. 17건은 이번 작업 전 기준선과 동일, 추가된 1건(`test_emdash_publish::test_create_then_publish`)은 커밋 `8404cd26`(2026-10-15 featured_image 절대경로화)에서 유입 — 내 변경 파일 목록에 `emdash_publish.py` 없음(git diff 확인). 검증력 제한: 기존 실패 원인을 고치지 않았으므로 "내 변경이 그 17건을 건드리지 않았다"까지만 확인됨.
+- **[위반 감지]** 첫 파이프라인 실행에서 `verdict_block` 이 `eval_model_cached()` 를 써서 캐시 미스 시 라이브 12문항 평가를 돌렸다(이미 제외된 모델, 12회 HTTP 400, 48초) → 잘못된 verdict(`0/12 … 9점 낮음`)가 D1 에 저장됨. 캐시 전용 `model_eval.cache_get()` 으로 교체(0.00초, `판단 보류`) + 라이브 행 comment REPLACE UPDATE 교정 + 회귀 테스트 3건 추가.
+
+### 잔존 위험
+1. 기존 테스트 실패 18건 미해결(범위 밖). `test_emdash_publish` 는 테스트/코드 불일치로 별도 수정 필요.
+2. `scripts/logs/weekly_opportunities.json` 미생성 — 큐레이션 전까지 무료 기회 슬롯은 항상 빈다.
+3. `weekly_opportunity.py` 는 link 중복 시 `INSERT OR IGNORE` 로 1건 유실 가능(수기 입력 1:1 전제).
+4. Zen 변경 → news 자동 기록은 내일 크론에서 재확인 필요(오늘은 과거 diff 로 수동 검증).
+5. 오늘 브리핑 2건(-1, -2) 공존 — `latest` 는 id 내림차순이라 -2 만 노출(10-15 고아 건과 같은 미해결 정책).
+6. `verdict_block` Top3 비교는 리더보드 4건 표본 기준.
+
+### 다음 행동
+- 대표님: `scripts/logs/weekly_opportunities.json` 주간 큐레이션(스키마는 완료보고 참조).
+- 필요 시: 2026-10-16 브리핑 `-1`/`-2` 중복 정책 정리.
+
+**실행 명령** — `.venv/bin/python3 scripts/run_pipeline_with_notify.py --no-email` (수동 실행 시 `--no-email` 필수, 이메일 발송 안 함) / `.venv/bin/python3 scripts/free_models_page.py page`
+
+## 2026-10-16 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 2 · removed 2 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 1건 (리스트 카드 링크 1건)
+
 ## 2026-10-15 16:46 — AIK24-EVAL-CLI-02 신규 추천 3종 CLI 12문항 평가 + 컨텍스트 실측
 
 ### 한 일
@@ -874,7 +915,6 @@ TOOLSYNC-01 에서 `buildMd()` 에 `image` 방출 분기(`row.screenshot_url ? �
 
 ### 다음 행동
 - 대표님: NIM 신규 알림 도착 시 수동 테스트 후, 실제 무료 티어로 확인된 것만 별도 상수로 승격할지 결정.
-## 진행 중 (2026-10-14, AIK24-PIPE-02) — NVIDIA NIM 신규 모델 감지 포함
 
 ## 2026-10-14 AIK24-PIPE-01 완료 — 무료 모델 자동 평가 비활성화 + 신규 모델 감지 스케줄 등록 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-2101-AIK24-PIPE-01-완료보고.md (완료 — verify는 시니어2)
 
@@ -910,7 +950,6 @@ TOOLSYNC-01 에서 `buildMd()` 에 `image` 방출 분기(`row.screenshot_url ? �
 - 대표님: NVIDIA NIM 감지 포함 여부 결정(위 1번).
 - 대표님: `scripts/deep_dive_writer.py` SyntaxError 수리 지시 여부(EVAL-CLI-01 잔존).
 
-## 진행 중 (2026-10-14, AIK24-PIPE-01) — 무료 모델 자동 평가 비활성화 + 일일 신규 모델 감지
 
 ## 2026-10-14 20:45 CLI 피봇 확정 (대표님 결정) — 모든 평가는 OpenCode CLI 기준, 기존 API 데이터 전부 폐기
 - `model_leaderboard.json` → `[]` (백업: `model_leaderboard.json.bak-20261014-cli-pivot`)
@@ -986,7 +1025,6 @@ TOOLSYNC-01 에서 `buildMd()` 에 `image` 방출 분기(`row.screenshot_url ? �
 
 ---
 
-## 진행 중 (2026-10-14, AIK24-EVAL-ZEN-01) — Zen 신규 모델 2종 평가 + context_length null 규칙 확정
 
 ## 2026-10-14 16:20 AIK24-EMDASH-09 완료 — md_to_pt 표 변환 근본 수정 (표가 만드는 곳에서 고침) → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1620-AIK24-EMDASH-09-완료보고.md (완료 — verify는 시니어 2)
 
@@ -1154,7 +1192,6 @@ TOOLSYNC-01 에서 `buildMd()` 에 `image` 방출 분기(`row.screenshot_url ? �
 
 ### 다음 행동
 - 대표님: 바이브코딩 5건의 파이프 나열을 표로 바꿔야 하는지, 아니면 링크 목록 유지가 맞는지 결정.
-## 진행 중 (2026-10-14, AIK24-EMDASH-06) — EmDash 블로그 마크다운 표 → table 블록 변환
 
 ## 2026-10-14 13:47 AIK24-RENEWAL-02 완료 — 색상 흑백+상징빨강 통일 / 7일 강의 삭제 → SSOT/프로젝트/aikorea24/지시서/2026-10-14-1347-AIK24-RENEWAL-02-완료보고.md (완료 — verify는 시니어2)
 
