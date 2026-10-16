@@ -242,12 +242,18 @@ def main():
     if args.no_email:
         log("[pipeline] --no-email: 이메일 발송 건너뜀")
     elif not args.skip_email:
-        try:
-            step_email()
-        except Exception as e:
-            log(f"이메일 발송 에러: {e}")
-            traceback.print_exc()
-            summary["errors"].append(f"이메일 발송: {e}")
+        if not briefing_id:
+            # 2026-10-16: 새 브리핑이 없으면(이미 오늘 발행됨/후보 없음) 이메일도 보내지 않는다.
+            # 종전에는 브리핑 생성과 무관하게 발송해, 같은 날 재실행마다 같은 브리핑이
+            # 중복 발송됐다 (실측: 10-16 브리핑 2건 → 이메일 2회).
+            log("⏭ 새 브리핑이 없어 이메일 발송 건너뜀 (중복 발송 방지)")
+        else:
+            try:
+                step_email()
+            except Exception as e:
+                log(f"이메일 발송 에러: {e}")
+                traceback.print_exc()
+                summary["errors"].append(f"이메일 발송: {e}")
     else:
         log("⏭ 이메일 발송 건너뜀")
 

@@ -268,9 +268,45 @@ def build_briefing(articles):
     return {"date": today, "intro": intro, "status": "published", "items": items}
 
 
-def save_briefing(data):
-    """D1 DB에 브리핑 저장. 성공 시 briefing_id, 실패 시 None 반환."""
+def _published_briefings_on(base_date):
+    """해당 날짜(YYYY-MM-DD)에 published 상태로 남아 있는 브리핑 — 최신 id 순."""
+    return d1_query(
+        "SELECT id, date FROM briefings WHERE date LIKE '%s%%' AND status = 'published' ORDER BY id DESC"
+        % base_date
+    ) or []
+
+
+def _force_requested():
+    """재발행 강제 여부. 기본은 하루 1회 발행 정책 (2026-10-16)."""
+    return os.environ.get("AIK24_BRIEFING_FORCE") == "1"
+
+
+def save_briefing(data, force=None):
+    """D1 DB에 브리핑 저장. 성공 시 briefing_id, 실패 시 None 반환.
+
+    2026-10-16 정책 — 하루 1회 발행.
+    실측: 07:03 KST 자동 실행이 3건짜리 브리핑(id=354)을 만든 뒤 12:07 에 1건짜리
+    재실행이 '-2'(id=355)로 붙었고, API(latest.ts)는 최신 1건만 서빙하므로 3건짜리가
+    화면에서 가려졌다(이메일도 2회 발송됐다). 그래서 같은 날짜에 published 브리핑이
+    이미 있으면 재실행은 저장을 건너뛴다(None 반환, 호출측이 record_briefing 을 건너뜀).
+    강제 재발행은 env AIK24_BRIEFING_FORCE=1 — 이때 기존 published 는
+    status='superseded' 로 내려 '하루 published 1건' 원칙을 지킨다(행은 보존).
+    """
+    force = _force_requested() if force is None else force
     today_base = data["date"][:10]
+    existing_pub = _published_briefings_on(today_base)
+    if existing_pub:
+        if not force:
+            log(f"  이미 오늘 브리핑이 published 입니다 (id={existing_pub[0]['id']}, "
+                f"date={existing_pub[0]['date']}) — 건너뜀 (하루 1회 발행)")
+            log("  재발행이 필요하면 AIK24_BRIEFING_FORCE=1 로 실행하세요")
+            return None
+        for row in existing_pub:
+            if d1_execute(f"UPDATE briefings SET status = 'superseded' WHERE id = {row['id']}"):
+                log(f"  기존 브리핑 superseded (id={row['id']}, date={row['date']})")
+            else:
+                log(f"  ⚠️ superseded 실패 (id={row['id']}) — published 가 2건 남을 수 있음")
+
     intro_escaped = data["intro"].replace("'", "''")
 
     existing = d1_query(f"SELECT id, date FROM briefings WHERE date LIKE '{today_base}%' ORDER BY date DESC")
@@ -317,6 +353,18 @@ def save_briefing(data):
 def main(selected_articles=None):
     log("=== aikorea24 브리핑 자동 생성 ===")
     print()
+
+    # 2026-10-16 정책 — 하루 1회 발행. 오늘 published 브리핑이 이미 있으면 LLM 비용을
+    # 쓰기 전에 조기 종료한다 (같은 날 재실행이 3건짜리 브리핑을 1건짜리로 가리는 사고 방지).
+    today_base = datetime.now(KST).strftime("%Y-%m-%d")
+    if not _force_requested():
+        already = _published_briefings_on(today_base)
+        if already:
+            log(f"이미 오늘 브리핑 발행됨 (id={already[0]['id']}, date={already[0]['date']}) "
+                "— 건너뜀 (하루 1회 발행)")
+            log("  재발행이 필요하면 AIK24_BRIEFING_FORCE=1 로 실행하세요")
+            log("=== 완료 ===")
+            return None
 
     # 1. 뉴스 선정
     log("[1/4] 뉴스 조회 및 선정")
