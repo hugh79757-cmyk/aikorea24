@@ -1,3 +1,20 @@
+## 2026-10-16 16:20 — aik24-blog-writing 스킬 신규 작성
+
+### 한 일
+- `opencode-cli-guide` 재작성(대표님 평가 100/100)에서 지적받은 4가지를 규칙화해 `.claude/skills/aik24-blog-writing/SKILL.md` 신규 작성.
+- 담긴 내용: 구조 규칙(본문 H1 금지·도입 설명문 3요소·`## N. 동작 — 약속` 소제목·마무리 체크리스트), 내용 규칙(사실 우선·내부 용어 금지·키는 어디서 받고 어디에 넣는지 표로·무료/유료 사실 구분·시점 명시), 발행 경로(`upsert_post` + PAT 는 `~/.env.common`), 발행 후 검증(중복 H1·외부 링크 수·ec_posts 1행·state.md+본문 사본 커밋), 재작성 진단 4항목.
+
+### 결과
+- [검증됨] 파일 생성: `.claude/skills/aik24-blog-writing/SKILL.md` (frontmatter `name`/`description` 포함, description 은 "Use when …" 트리거 문구만 기술).
+- [검증됨] 스킬 목록 노출 확인 — 기존 `aik24-free-models-page`·`aik24-manual-pipeline` 과 동일한 `.claude/skills/<name>/SKILL.md` 구조.
+
+### 잔존 위험
+1. 스킬 본문의 검증 명령은 `opencode-cli-guide` 1건에서 도출한 것이라, 다른 유형(리뷰·비교 글)에는 적용 범위가 좁을 수 있다.
+2. `get_post()` 가 `None` 을 반환하는 EmDash API quirk 는 원인 미확정 상태로 스킬에 "판단 기준은 발행 URL" 로만 기록했다.
+
+### 다음 행동
+- 없음.
+
 ## 2026-10-16 16:05 — AIK24-OPENCODE-GUIDE-REWRITE: opencode-cli-guide 전면 재작성·발행
 
 ### 한 일
