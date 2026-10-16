@@ -1,3 +1,14 @@
+## 2026-10-17 02:34 — 클로즈 아웃 공식 문서 발행: docs/CLOSEOUT-20261017-briefing-pipeline.md (Version v2026.10.17.0234)
+
+### 한 일
+- 기존 19 entries 지식 + 라이브 검증 결과를 Version 붙임 공식문서로 정리/발행.
+- 최종 코드 검증 5종 통과: suites 21 passed / emdash15 0 anomalies / precheck selftest OK / paid_baseline render assert / git sync 양측.
+
+### 결과 — 검증 근거
+- [검증됨] 문서 산출물: docs/CLOSEOUT-20261017-briefing-pipeline.md (104 줄, Version field at top). v2026.10.17.0234  (사용자 지정 "지금 이 시점"). 본close-out.
+- [검증됨] §2 의 명령 5개 결과는 Verifier pass 5/5 green (기록됨).
+- [부분검증] ⑩ §5 잔존 위험 6개 항목(1~6) 이전과 동일 (사용자 액션 2개).
+
 ## 2026-10-16 19:40 — ⑩ 최종 종합 보고: ①②③④⑤⑥⑦⑧⑨⑩ 모두 완료 (사용자 위임 recommendation as default)
 
 ### 한 일
