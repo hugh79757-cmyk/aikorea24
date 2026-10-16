@@ -38,5 +38,15 @@
   "max_score": 12,
   "judge_failed_n": 0,
   "ts": 1792143923.294406
+ },
+ {
+  "model_id": "ll-alpha-free",
+  "cli_model": "opencode/ll-alpha-free#max",
+  "turn_timeout_sec": 240,
+  "qv": 2,
+  "score": 5,
+  "max_score": 12,
+  "judge_failed_n": 0,
+  "ts": 1792158696.843189
  }
 ]
