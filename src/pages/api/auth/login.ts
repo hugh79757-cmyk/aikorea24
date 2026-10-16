@@ -2,6 +2,7 @@ export const prerender = false;
 
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
+import { sanitizeReturnTo } from '../../../lib/redirect';
 
 export const GET: APIRoute = async ({ request, redirect, locals }) => {
 
@@ -11,12 +12,10 @@ export const GET: APIRoute = async ({ request, redirect, locals }) => {
     ? 'https://aikorea24.kr/api/auth/callback/google'
     : 'http://localhost:4321/api/auth/callback/google';
 
-  // redirect_to를 OAuth state 파라미터로 전달 (Google이 그대로 반환)
+  // redirect_to를 OAuth state 파라미터로 전달 (Google이 그대로 반환).
+  // relative 경로와 허용 origin(emdash.aikorea24.kr 등) 의 절대 URL만 통과(개방 리다이렉트 방지).
   const url = new URL(request.url);
-  const redirectTo = url.searchParams.get('redirect_to') || '';
-  const state = redirectTo && redirectTo.startsWith('/')
-    ? redirectTo
-    : '';
+  const state = sanitizeReturnTo(url.searchParams.get('redirect_to') || '');
 
   const params = new URLSearchParams({
     client_id: clientId,

@@ -3,13 +3,14 @@ export const prerender = false;
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { signSession } from '../../../../lib/auth';
+import { sanitizeReturnTo } from '../../../../lib/redirect';
 
 export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
   const url = new URL(request.url);
   const code = url.searchParams.get('code');
   if (!code) return redirect('/?error=no_code');
 
-  // OAuth state 파라미터 — 로그인 후 리다이렉트할 URL
+  // OAuth state 파라미터 — 로그인 후 리다이렉트할 URL (Google이 그대로 반환)
   const state = url.searchParams.get('state') || '';
 
   const clientId = env.GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
@@ -59,9 +60,12 @@ export const GET: APIRoute = async ({ request, redirect, cookies, locals }) => {
     console.error('[auth:google] session cookie set, dbUser id=', dbUser?.id ?? 'none');
   }
 
-  // state가 유효한 동일 도메인 경로면 해당 URL로, 아니면 홈으로
-  if (state && state.startsWith('/') && !state.includes('//') && !state.includes('\\')) {
-    return redirect(state);
+  // 로그인 전에 sanitize 했고, Google을 경유하면서 state가 조작됐을 수 있으므로 한 번 더 검증.
+  const safeState = sanitizeReturnTo(state);
+
+  // 안전한 상대 경로 또는 허용된 절대 URL이면 그곳으로, 아니면 홈으로
+  if (safeState) {
+    return redirect(safeState);
   }
   return redirect('/');
 };
