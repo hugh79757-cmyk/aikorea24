@@ -1,3 +1,46 @@
+## 2026-10-17 18:40 — AIK24-BLOG-01 후속2: 무료 LLM 글 마무리 재작성 + 자사 표기 정정
+
+### 지시 (대표님, 2026-10-17)
+1. "(마무리 체크리스트는) opencode 사용방법에 관한 내용이니까 그렇지. 이거는 무료 llm 소개잖아. **어디에 사용하기 좋다** 라고 나와야지."
+2. "**aik24 라고 하지마. ai.kr.24 로 해줘. 이게 쓰레드 계정이야. 혹은 aikorea24.kr 모두 적어주든지.**"
+
+### 한 일
+1. [콘텐츠] Beam Free 글(`무료-llm-beam-free-opencode-zen-무료-티어-기능과-활용법-분석`) 마무리 교체.
+   - 이전: `## 마무리 — 오늘 30분 안에 할 3단계`(설치·호출 체크리스트) → 게이트만 통과시키는 형식.
+   - 이후: `## 마무리 — Beam Free 를 어디에 쓰면 좋은가` — ① 문서 더미 통째 입력(1,048,576 토큰) ② 긴 출력(131,072 토큰) ③ 도구 호출 자동화(`tools`·`reasoning`) ④ 호출 비용 0 고정 실험 + 넣지 말아야 할 자리(제로 리텐션 미제공·텍스트만) + 미검증 항목(자체 12문항 평가 미포함).
+   - §6 제목 `## 6. AIK24 실측 결과` → `## 6. ai.kr.24 실측 결과`, 본문 귀속 문장도 `ai.kr.24 에서 … 확인한 값입니다`로 교체.
+   - 발행: `upsert_post`(PUT 동일 id) + publish. id `01M53M8NX7HX3X3SFPP5J1TGSQ`, slug·published_at(2026-10-17T00:30:16Z) 보존.
+2. [규칙] `scripts/blog_writing_rules.md` 4곳 (프롬프트에 **전문이 주입**되는 파일).
+   - 마무리 형식 분기: ① 설치·사용법 글 = "30분 3단계" 체크리스트, ② 모델·도구 소개 글 = **어디에 쓰면 좋은가** → 쓰면 안 되는 자리 → 미검증 항목. `## 마무리` 문자 그대로 요건(게이트)은 유지.
+   - 자사 표기: `ai.kr.24`(쓰레드 계정) / `aikorea24.kr`(사이트)만 사용, 축약형 금지.
+   - 실측 섹션명을 `## N. ai.kr.24 실측 결과` 로 변경.
+   - 파일 H1에서 축약형 제거(주입 텍스트라 생성 글로 새는 경로였다).
+3. [신규 도구] `scripts/emdash_text_replace.py`.
+   - Portable Text 의 문자열 키 `text` 값만 치환. `_key`·URL·marks 불변(키를 바꾸면 CMS가 새 블록으로 본다).
+   - 기본 dry-run, `--apply` 시 원본 백업 → PUT+publish → 재조회로 ① 잔존 0건 ② slug 불변 ③ publishedAt 불변 확인.
+4. [콘텐츠] 기존 발행 글 9건 가시 텍스트 17건 치환 (`AIK24 실측 결과` → `ai.kr.24 실측 결과`, `AIK24 프리모델 페이지` → `ai.kr.24 무료 모델 페이지`, `AIK24 무료 모델 리스트` → `aikorea24.kr 무료 모델 리스트`, `AIK24가 …` → `ai.kr.24가 …`, `AIK24 내부 하네스` → `ai.kr.24 자체 하네스`).
+   대상: ll-alpha-free-12-question-eval / space-bunny-free / muse-spark-13-contributor-free-meta / mimo-v26-flash-free / free-model-nvidia-nemotron-3-ultra / free-model-nvidia-nemotron-3-5-lightning / free-model-dots-3-note-preview / free-model-liquid-lfm-2-5 / free-model-cohere-north-mini-code.
+
+### 결과 — 검증 근거
+- [검증됨] 라이브 반영: `curl https://emdash.aikorea24.kr/posts/무료-llm-beam-free-…` → http 200, 소제목 7개(6섹션+마무리), 신규 마무리 문구 노출, 옛 문구 `30분 안에 할 3단계` 0건. 근거: 라이브 HTML 파싱(heading 추출·문자열 카운트).
+- [검증됨] 발행본 보존: DB 조회 `ec_posts id=01M53M8NX7HX3X3SFPP5J1TGSQ` → status published, published_at 2026-10-17T00:30:16.000Z, version 8, updated_at 2026-10-17T11:17:24.126Z(이번 PUT). 신규 행 0(전체 행 1518 = 작업 전 1518).
+- [검증됨] 중복 0: 사이트맵에 해당 slug URL 1건, DB `slug LIKE '%beam-free%'` 2행 = 발행본 1 + 오늘 오전 사고로 소프트 삭제된 draft 1(`deleted_at` 기록, 대표님 보고済).
+- [검증됨] 9건 치환: 각 글 PUT+publish 후 재조회에서 잔존 0건·slug 보존·publishedAt 보존 = 9/9 OK. 사후 D1 스캔에서 `text` 스팬 내 `aik24` 합계 0건, 라이브 3건 표본에서 `AIK24` 0건·`ai.kr.24` 노출 확인.
+- [검증됨] 게이트: `python3 scripts/emdash_precheck.py scripts/logs/reflection_beam_free_draft.md` → `✅ 게이트 통과 — 4813자` rc=0.
+- [부분검증] 신규 도구 `emdash_text_replace.py` 자체는 이번 1회 실행으로만 검증됐다(dry-run 1회 + apply 1회). 단위 테스트 없음. 검증력 제한: 치환 정확성은 사후 재조회·라이브 확인에 의존하며, 되돌리기 리허설은 하지 않았다(백업 JSON은 남겨 둠).
+- [검증됨] 백업: `scripts/logs/backup_text_replace_20261017_1838.json` 9건 272,380 bytes(미커밋, 복구용).
+- [검증불가] 이후 파이프라인이 생성할 글의 표기 준수 여부 — 규칙 파일 수정으로 프롬프트에는 반영되지만, 다음 발행분을 봐야 확인된다. 복구 계획: 다음 정기 발행분 본문에서 `aik24` 0건 확인, 위반 시 해당 글만 `emdash_text_replace.py` 로 정정.
+
+### 잔존 위험
+- 미확인 알림: D1 `content LIKE '%aik24%'` 는 아직 10개 글에 걸린다. 전부 Portable Text `_key` 값(`aik24t00064` 등)으로 **화면에 보이지 않는** 내부 식별자다. 키를 바꾸면 CMS가 블록을 새로 보므로 **고치지 않는 것이 맞다**(실측 근거: 이번 치환에서 `text` 값만 바꿨고 블록 수·렌더 결과는 정상).
+- 라이브 캐시: Cloudflare 엣지 캐시가 남아 있으면 일부 클라이언트에서 이전 HTML이 보일 수 있다(이번 표본 3건은 신규 문구로 확인).
+- 백업 JSON(272KB) 미커밋 상태로 저장소에 남아 있다. 삭제 시점은 다음 날 확인 후 결정.
+- '프리모델 페이지' → '무료 모델 페이지' 문구 변경은 지시 범위를 1단계 넘는다(축약형 정정과 같은 문장 안이라 함께 처리). 되돌리려면 위 백업 JSON으로 복원 가능.
+
+### 다음 행동
+- 다음 정기 발행분(브리핑·모델 리뷰) 본문에서 ① `## 마무리` 형식 ② `aik24` 0건 ③ "어디에 쓰면 좋은가" 구성 준수 확인.
+- 지시서 `AIK24-BLOG-01` 후속 완료보고를 SSOT 폴더에 제출(본 기록과 동일 내용).
+
 ## 2026-10-17 19:25 — AIK24-THREADS-ROLE-01: threads-publisher 역할 분석 + "주범" 정정 (중요)
 
 **한 일** (대표님 질문: "하루 12번 돌면 이 스레드 퍼블리셔가 하는 역할은 뭐지?")

@@ -56,6 +56,9 @@ backup3.py
 # Log directories
 naver_blog/logs/
 
+# Content backups from scripts/emdash_text_replace.py --apply (본문 원본, 복구용)
+scripts/logs/backup_text_replace_*.json
+
 # Runtime state (changes every pipeline run)
 pipeline/posted.json
 config/pexels_used_ids.json
