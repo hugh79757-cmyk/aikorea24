@@ -120,3 +120,47 @@ def test_no_featured_image_key_when_absent(monkeypatch):
     monkeypatch.setattr(em, "api", fake_api)
     ep.publish_post("t", "b")
     assert "featured_image" not in calls[0][2]["data"]
+
+def test_get_post_korean_slug_retries_percent_encoded(monkeypatch):
+    """한글 slug 는 raw 요청이 http=0 으로 실패 → 인코딩 재시도로 id 를 얻는다.
+
+    2026-10-17 실측: raw '무료-llm-beam-free-...' → http 0 / percent-encoding → 200.
+    """
+    monkeypatch.setenv("EMDASH_AIKOREA24_API_TOKEN", "pat-xyz")
+    slug = "무료-llm-beam-free-테스트"
+    calls = []
+
+    def fake_api(path, method="GET", body=None):
+        calls.append(path)
+        if "%" in path:  # 인코딩 경로만 200
+            return 200, {"data": {"item": {"id": "01ABC", "slug": slug}, "_rev": "r1"}}
+        return 0, {"error": "UnicodeEncodeError"}
+
+    monkeypatch.setattr(em, "api", fake_api)
+    it = ep.get_post(slug)
+    assert it is not None
+    assert it.get("id") == "01ABC"      # id 승격
+    assert len(calls) == 2 and "%" in calls[1]
+
+
+def test_upsert_korean_slug_updates_by_id(monkeypatch):
+    """조회가 되면 한글 slug 라도 CREATE 하지 않고 id 경로로 PUT 한다(중복 생성 방지)."""
+    monkeypatch.setenv("EMDASH_AIKOREA24_API_TOKEN", "pat-xyz")
+    slug = "무료-llm-beam-free-테스트"
+    seen = []
+
+    def fake_api(path, method="GET", body=None):
+        seen.append((path, method))
+        if "%" in path:
+            return 200, {"data": {"item": {"id": "01ABC", "slug": slug}, "_rev": "r1"}}
+        if method == "GET":
+            return 0, {"error": "unicode"}
+        if path.endswith("/publish"):
+            return 200, {"data": {}}
+        return 200, {"data": {"item": {"id": "01ABC", "slug": slug}}}
+
+    monkeypatch.setattr(em, "api", fake_api)
+    url = ep.upsert_post(slug, "제목", "본문")
+    assert url == "https://emdash.aikorea24.kr/posts/" + slug
+    assert [p for p, m in seen if m == "PUT"] == ["/_emdash/api/content/posts/01ABC"], seen
+    assert ("/_emdash/api/content/posts", "POST") not in seen, seen

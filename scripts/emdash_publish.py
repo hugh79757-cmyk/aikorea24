@@ -11,6 +11,7 @@ PAT 는 코드에 기록하지 않는다(Secure Vault). 환경변수에서만 �
 import json
 import os
 import sys
+from urllib.parse import quote
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -27,8 +28,8 @@ def get_pat():
     return None
 
 
-def get_post(identifier):
-    """글 1건 조회. 없으면 None. id 또는 slug 를 받는다 (EmDash 가 둘 다 받는다)."""
+def _get_post_raw(identifier):
+    """조회 1회. 실패하면 None — 인코딩 재시도는 get_post 가 담당한다."""
     pat = get_pat()
     if not pat:
         return None
@@ -42,6 +43,29 @@ def get_post(identifier):
     if not isinstance(item, dict):
         return None
     item.setdefault("_rev", d.get("_rev"))
+    return item
+
+
+def get_post(identifier):
+    """글 1건 조회. 없으면 None. id 또는 slug 를 받는다 (EmDash 가 둘 다 받는다).
+
+    AIK24-BLOG-01(2026-10-17 실측): 한글 slug 는 인코딩 없이 요청하면 http=0(예외)로
+    실패한다 — raw '무료-llm-beam-free-...' → http 0, percent-encoding → 200.
+    이 실패를 그대로 두면 upsert_post 가 "글이 없다"로 판단해 같은 글을 하나 더 만든다
+    (실측: 한글 slug 재작성 시도 → 미발행 중복 draft 1건 생성 → 수동 삭제). 그래서
+      ① 조회 실패 시 percent-encoding 으로 1회 재시도하고
+      ② 응답이 {"item": {...}} 로 중첩돼 오면 item 의 id 를 최상위로 올려
+         호출측이 id 경로로 PUT 할 수 있게 한다 (slug 경로 PUT 도 한글에서는 http=0).
+    """
+    item = _get_post_raw(identifier)
+    if item is None and isinstance(identifier, str):
+        enc = quote(identifier, safe="")
+        if enc != identifier:
+            item = _get_post_raw(enc)
+    if isinstance(item, dict):
+        inner = item.get("item")
+        if isinstance(inner, dict) and inner.get("id"):
+            item.setdefault("id", inner["id"])
     return item
 
 
@@ -91,8 +115,9 @@ def upsert_post(slug, title, body_md, excerpt=None, featured_image=None):
         st, d = api("/_emdash/api/content/posts", "POST", {"data": data})
         item = (d.get("data") or {}).get("item") or {}
         if st in (200, 201) and item.get("slug") != slug:
-            print("  ! 생성됐지만 slug 가 '%s' 가 아니다 (요청 %s) — 고정 URL 깨짐"
-                  % (item.get("slug"), slug))
+            print("  ! 생성됐지만 slug 가 '%s' 가 아니다 (요청 %s) — 고정 URL 깨짐. "
+                  "고아 글 id=%s (삭제 필요)"
+                  % (item.get("slug"), slug, item.get("id")))
             return None
     else:
         st, d = api("/_emdash/api/content/posts/%s" % (existing.get("id") or slug), "PUT",
