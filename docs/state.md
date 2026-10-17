@@ -1,3 +1,33 @@
+## 2026-10-17 18:35 — AIK24-DAY-LEDGER-01: 금일 전 작업 총괄 연대기 (감사→오염정리→잔존위험제거)
+
+**한 일 (시각 순 — 유닛별 산출·근거. 상세 본문은 아래 각 개별 엔트리 참조)**
+
+| # | 시각 | 작업ID | 내용 | 산출(커밋/버전) | 검증 근거 | 분류 |
+|---|------|--------|------|----------------|-----------|------|
+| 1 | 14:29 | AIK24-AUDIT-01 | 사이트 5영역 감사 + D1 최적화 검증(초과 109%→15.8%) | fdfc65c6 | state 9,924→9,967 · GraphQL 일별 실측 | [검증됨] |
+| 2 | 14:45 | LAUNCHD-RETIRE-01 | launchd 11잡 중지 | 835d4bd4 | plist 목록 실측 | [검증됨] |
+| 3 | 15:4x | ROT-CLEAN-01#3 | deep_dive f-string 종결 따옴표 복구 | 75996690 | 테스트 16/16 + ast.parse OK | [검증됨][PROD] |
+| 4 | 15:4x | ROT-CLEAN-01#4 | 가드 통합 7종 + 잔존 전수조사 11종(총 18) | 895da92c · ddc27e9e | py_compile 18종 + 미경유 grep 0건 | [검증됨] |
+| 5 | 15:4x | ROT-CLEAN-01#5 | wrangler.toml 삭제 | 08088f55 | 참조 0건 | [검증됨] |
+| 6 | 15:4x | ROT-CLEAN-01#6 | Vectorize 플래그화(기본 스킵) | d31df259 | 스킵 경로 스모크 실측 | [검증됨][PROD] |
+| 7 | 15:4x | ROT-CLEAN-01#7 | 문서·스키마 정합화(README/AGENTS/d1-budget/006) | ba225da1 | Astro 7·Workers 표기, sql/006 신설 | [검증됨] |
+| 8 | 15:4x | ROT-CLEAN-01#8 | disabled plist 3종 물리 삭제 | (git 밖) | launchctl 미로드 확인 후 rm | [검증됨] |
+| 9 | 15:4x | — | 오늘 런타임 산출물 커밋 | 8fd8c0e9 (b1a 후속) | git status 클린 | [검증됨] |
+| 10 | 16:5x | ROT-CLEAN-02#1 | 옛 Pages 옛 D1 바인딩 제거 | (API PATCH) | 사후 GET `d1_databases: null` | [검증됨][DB] |
+| 11 | 16:5x | ROT-CLEAN-02#2 | 중복 인덱스 idx_news_created DROP | (D1 DDL) | 6→5종 + EXPLAIN 정식본 사용 | [검증됨][DB] |
+| 12 | 17:xx | ROT-CLEAN-02#3 | http→https·www→apex 301 + 홈 title | 90969375 | 라이브 curl: 301·301·200 + title 태그 실측 | [검증됨] |
+| 13 | 17:xx | ROT-CLEAN-02#4 | macOS TZ KST(+09) 고정 | 대표님 sudo 실행 | date +%z → +0900 | [검증됨] |
+| 14 | 17:xx | ROT-CLEAN-02#5 | 구계정 핫 DB 소유 매핑 | (조사) | certkorea·blogdex·obsidian 3레포 특정 | [검증됨] |
+| 15 | 17:xx | ROT-CLEAN-02#6~7 | 테스트 실패 3건 종결(retention·validator는 [PROD], pitch는 [TEST갱신]) | 4c07fe2d · a6ebdf24 · 76e9f905 | 전체 스위트 751/0/10 — 734→748→751 | [검증됨] |
+| 16 | 18:2x | — | 배포 2회(리다이렉트·title) | 7d1190c8 → 83974ad9 | deploy.sh 성공 + sitemap OK | [검증됨] |
+
+**기록 사슬 (state.md)**: ROT-CLEAN-01(+28줄) · ROT-CLEAN-02(+19줄) · 본 LEDGER(+현시점) — state_prepend.py 만 사용, 줄감소 0, 백업 4건 자동 생성.
+**푸시 사슬**: fdfc65c6 → 835d4bd4..18e626fb → 18e626fb..1e52b925, 트리 클린 유지.
+
+**결과**: 금일 사이클 16유닛 전부 산출·검증 대응 완료. 남은 3 실패 테스트 0, 오염 정리 0, 위험정지 0.
+**잔존 위험: 없음** (관측 유지 1건: 내일 아침 launchd 전체 발화 — 가드 18종 런타임 실증 시점).
+**다음 행동**: 명일 아침 발화 관측 이상 없으면 사이클 완전 종결.
+
 ## 2026-10-17 18:20 — AIK24-ROT-CLEAN-02: 잔존위험 전면 제거 (대표님 지시 "잔존위험 모두 제거 + 시간은 한국시간")
 
 **한 일 (리스크별 해소 + 근거)**
