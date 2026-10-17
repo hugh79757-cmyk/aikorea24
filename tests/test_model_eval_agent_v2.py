@@ -283,3 +283,46 @@ def test_usage_levels_zero_means_unusable():
     assert lv["코딩실무"] == "코딩 사용 불가"
     assert lv["에이전트"] == "에이전트 사용 불가"
     assert lv["한글"] == "한글 사용 불가"
+
+
+# ═══ 8. EVAL-CLI-03: 실측 컨텍스트 보존 (데이터 손실 방지) ═══════════════
+
+def test_cache_put_preserves_measured_context(tmp_path, monkeypatch):
+    """12문항 재평가가 실측 컨텍스트를 지우면 안 된다.
+
+    result 에는 measured_context 가 없다. 그대로 덮어쓰면 probe_context_length() 의
+    '재측정 안 함' 분기가 죽어 프로브가 두 번 돌아간다.
+    """
+    import json as _j
+    cache = tmp_path / "cache.json"
+    monkeypatch.setattr(me, "CACHE_PATH", str(cache))
+    monkeypatch.setattr(me, "RUNS_LOG_PATH", str(tmp_path / "runs.jsonl"))
+    monkeypatch.setattr(me, "LEADERBOARD_PATH", str(tmp_path / "lb.json"))
+
+    me.cache_put("space-bunny-free", {
+        "model_id": "space-bunny-free", "score": 10, "max_score": 12,
+        "graded_n": 12, "measured_context": 1048576, "details": [{"idx": 1}],
+    })
+    # 두 번째 저장: result 에 measured_context 가 없는 일반 12문항 평가
+    me.cache_put("space-bunny-free", {
+        "model_id": "space-bunny-free", "score": 9, "max_score": 12,
+        "graded_n": 12, "details": [{"idx": 1}],
+    })
+    saved = _j.loads(cache.read_text(encoding="utf-8"))["space-bunny-free"]
+    assert saved["score"] == 9, "점수는 갱신되어야 한다"
+    assert saved["measured_context"] == 1048576, "실측 컨텍스트가 지워졌다"
+
+
+def test_cache_put_new_measured_context_wins(tmp_path, monkeypatch):
+    """새로 측정한 값이 있으면 그 값이 우선한다(오래된 값을 되살리지 않는다)."""
+    import json as _j
+    cache = tmp_path / "cache.json"
+    monkeypatch.setattr(me, "CACHE_PATH", str(cache))
+    monkeypatch.setattr(me, "RUNS_LOG_PATH", str(tmp_path / "runs.jsonl"))
+    monkeypatch.setattr(me, "LEADERBOARD_PATH", str(tmp_path / "lb.json"))
+    me.cache_put("m", {"model_id": "m", "score": 1, "max_score": 12,
+                       "graded_n": 12, "measured_context": 1048576, "details": [{"idx": 1}]})
+    me.cache_put("m", {"model_id": "m", "score": 2, "max_score": 12, "graded_n": 12,
+                       "measured_context": 262144, "details": [{"idx": 1}]})
+    saved = _j.loads(cache.read_text(encoding="utf-8"))["m"]
+    assert saved["measured_context"] == 262144

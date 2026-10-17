@@ -534,6 +534,12 @@ def cache_put(model_id, result):
         os.makedirs(os.path.dirname(CACHE_PATH), exist_ok=True)
         data = cache_load()
         entry = dict(result)
+        # EVAL-CLI-03 (지시 2026-10-15): 기존 항목의 실측 컨텍스트를 보존한다.
+        # result 에는 measured_context 가 없으므로 그대로 덮어쓰면 값이 사라지고,
+        # probe_context_length() 의 "재측정 안 함" 분기가 영구히 죽는다 → 프로브를 두 번 돌게 된다.
+        prev = data.get(model_id) or {}
+        if prev.get("measured_context") and not entry.get("measured_context"):
+            entry["measured_context"] = prev["measured_context"]
         entry["ts"] = time.time()
         entry["schema"] = CACHE_SCHEMA
         entry["qv"] = EVAL_QUESTIONS_VERSION
