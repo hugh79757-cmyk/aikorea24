@@ -1,3 +1,78 @@
+## 2026-10-17 14:29 — AIK24-AUDIT-01: aikorea24.kr 전체 감사 + D1 쿼터 최적화 검증 [검증됨 중심]
+
+지시: aikorea24.kr 전체 감사 + emdash/Astro D1 읽기·쓰기 초과 최적화의 적용 여부 확인.
+방법: 병렬 서브에이전트 5개 (라이브 사이트 / 파이프라인·인프라 / 저장소 정합 / D1 코드 반영 / D1 실측). 전부 읽기 전용, GET만, 수정 0건.
+
+### 목적 (옵시디언 SSOT 판정)
+- [검증됨] 사이트 정의 = 한국어 AI 뉴스 큐레이션 ("매일 아침 5분, AI 뉴스 핵심만") — SSOT 개요.md와 라이브 h1 문구 일치 실측.
+- [검증됨] 비즈니스 퍼널 (퍼널-강의-기획브리프 2026-10-10): SEO·브리핑 유입 → Brevo 구독 → 유료 이메일 강의(토스, 선판매·10명 집결제) → Threads 보조. 라이브 구독 폼 3개 + /api/subscribe 실존.
+
+### D1 최적화 적용 여부 — 핵심 답변: 적용됨·효과 실측됨
+- [검증됨] D1-01 완료기준 충족: news API 5파일×2지점=10건 s-maxage=300 · src/ 내 no-store 0건 · pool.ts date(pub_date) 0건 (L60·L81 바인딩 실코드).
+- [검증됨] D1-02: briefing/news.ts Cache-Control(L9·L34) + params.push 바인딩, f-string 값보간 0건.
+- [검증됨] D1-03: emdash04_migrate.py LIMIT=500·TTL=3600 정의(L28·L30)+실사용(L332·L340). 단 스크립트는 메인 저장소 소재(엠대시 아님).
+- [검증됨] 실측: 초과 10-10 109.2%·10-14 106.4% → 수정 후 10-15 60.6% → 10-16 54.9% → 10-17 15.2%. 최근 3일 초과 0건. 쓰기 최고 34.6% 정상.
+- [검증됨] 가드 실전 작동: 10-14 104.7%에서 emdash13_repair·fix_tables.py 2건 차단(exit=3), 텔레그램 알림 기록.
+- [부분검증] 커스텀 도메인 HIT/MISS 미실측(301 리다이렉트 5건 소진). workers.dev 헤더 s-maxage=300 기록으로 보완.
+
+### 신규 발견 리스크 (우선순위)
+1. [높음/PRODUCTION] deep_dive_writer.py:434 SyntaxError(미종결 docstring) — deep_dive 파이프라인 전체 마비, 정기 실패 17건 중 14건의 근원(커밋 7d068392 유래).
+2. [높음/D1] 가드 우회 경로 7건: auto_briefing·briefing_enricher·blog_draft_generator·dynamic_seed_generator·emdash15·emdash02·keyword_updater — cfnew 경유 아님 → 가드 미적용. N+1 7건 + f-string SQL 보간 3건.
+3. [중/D1] pub_date·source 조합 인덱스 부재 — pool.ts 쿼리 만년 풀스캔(d1-budget §2 규칙 역진).
+4. [중/D1] 스키마 드리프트: 라이브 idx_news_v2(부분인덱스, 10-11 EXPLAIN 17,987→77행)가 schema.sql·migrations 미수록.
+5. [중/계정] 신계정(7eb1b8cd, stylefactory9ai) 전환 입증 + 구계정 옛 aikorea24-db(bec650ce…)을 ~25만행/일로 아직 쿼리하는 주체 미특정.
+6. [중/문서] README 3행 죽은 잡 표기(keyword/outline/thread plist disabled)·Astro 5 표기(실제 7.3.8)·시간대 이중기준(문서 05:30=실제 08:30 KST)·d1-budget "08:30"vs plist StartInterval 1800.
+7. [중/인프라] Vectorize upsert 실패 10회·purge 403 누적(오늘 포함).
+8. [낮] wrangler.toml(Pages 잔재)공존 · briefing_dedup.json 439KB 항상-uncommitted · 광고 슬롯 3350911709 2회 재사용 · HTTP 200 직접 응답(redirect 없음) · home title 5자.
+
+### 긍정 확인
+- [검증됨] 오늘 파이프라인 전부 동작: 수집 119건·도구 3건+D1 동기화 408건·브리핑 발행·이메일 6명 HTTP 201·EmDash 게시+배포.
+- [검증됨] 테스트 기준선 유지: 17 failed(14 deep_dive+1+1+1) / 734 passed / 10 skipped, 신규 회귀 0.
+- [검증됨] AdSense 매핑 규칙 준수: 홈 3건·블로그 4건 전부 ca-pub-5938862195544185.
+- [검증됨] 네이버 SA 로그인/캡차 시도 0건 — 절대규칙 준수.
+- [검증됨] 시크릿 노출 0건(커밋 파일 스캔 기준).
+
+### 잔존 위험
+1. 위 1~8 항목 전부 미수정 상태 — 이 감사는 기록 전용, 수정 지시 대기.
+2. gitleaks 등 전체 시크릿 스캔 미커버(4패턴·JSON 제외 기준).
+3. GraphQL 수치는 샘플링 추정치(±1% 내, 합계 오차 0.07% 실측).
+4. Brevo 발송 이력 재구성 불가(오늘 1건만 상세 로그 존재).
+
+### 다음 행동
+- 대표님 승인 시: (a) deep_dive_writer.py SyntaxError 수정 (b) 가드 우회 7스크립트 cfnew 통합 (c) pub_date 인덱스 설계 (d) README·d1-budget 문서 갱신.
+
+# aimp — aikorea24.kr 라이브 사이트 감사 (서브에이전트)
+
+## 2026-10-17 14:19 (+07) — AIM-1015 aikorea24.kr 라이브 사이트 감사 (GET 전용)
+
+### 한 일
+- aikorea24.kr 라이브 사이트를 curl GET 전용으로 감사 (로그인 시도·POST·데이터 수정 없음, 토큰/시크릿 출력 없음).
+- 가용성 7개 URL + HTTP→HTTPS 리다이렉트 여부, 홈페이지 품질(title/description/h1/AdSense ID/구독 폼), robots.txt·sitemap.xml 구조, 보안 헤더 측정.
+
+### 결과 (검증 근거, 3분법)
+- [검증됨] 가용성: 홈 200 ttfb 0.475s / tools 200 0.342s / briefing 200 0.202s / robots.txt 200 0.253s / sitemap.xml 200 0.080s / api/news/latest 200 0.187s(유효 JSON) / blog 302→emdash.aikorea24.kr/posts 최종 200 ttfb 1.407s. 근거: curl -w 실측값 7건 모두 200.
+- [검증됨] HTTP 평문 직접 응답: http://aikorea24.kr/ 가 200(301/308 없음), http://www도 동일. 근거: curl -w redirect_url 비어있음, 응답 헤더 HTTP/1.1 200 OK.
+- [검증됨] AdSense ID: 홈페이지 로더 1회 + ins 2회 = 3건 전부 ca-pub-5938862195544185, 다른 pub-ID 0건. 블로그(emdash /posts) 4건도 전부 5938. 근거: grep 'ca-pub-[0-9]*' 홈 uniq 3×5938, blog 4×5938.
+- [검증됨] 퍼널 문구·구독 폼: h1 "매일 아침 5분,<br>AI 뉴스 핵심만", 서브 문구 "오늘 무료로 쓸 수 있는<br>AI 소식만 골라서 보내드립니다" 실존, 구독 폼 3개(id hero/top/home) + /api/subscribe 참조 3건 + 버튼 "무료로 구독하기". 근거: grep '매일 아침 5분,' / '<form' 3건 / '/api/subscribe' 3건.
+- [검증됨] robots.txt: User-agent * Allow / + Disallow /api/,/admin/; CCBot·Bytespider 차단; Sitemap 지시 = /sitemap-index.xml. 근거: 본문 19행 전문 확인.
+- [검증됨] sitemap 구조: 인덱스 5개 자식 lastmod 모두 2026-10-17(오늘). 자식 항수 tools 482 / briefing 332 / chronicle 71 / pages 14 = 루트 합계 899, blog는 302→emdash 사이트맵(1,502 URL, lastmod 오늘). 근거: grep -c '<loc>' 합산 899, emdash 1502.
+- [검증됨] 보안 헤더(https 홈): CSP(상세 지시문 존재) / HSTS max-age=31536000 includeSubDomains / X-Frame-Options DENY / X-Content-Type-Options nosniff / Referrer-Policy 존재. Permissions-Policy 헤더는 없음(기록만). 근거: curl -sSI에서 5종 각 1건 존재, permissions-policy 0건.
+- [부분검증] 홈 title·description: title="AI코리아24"(매우 짧음), description 존재. 제한: 정적 HTML 기준이며 검색 노출 문구 최적화 여부는 별도 판단 사항. 근거: grep '<title>' 1건.
+- [부분검증] briefing sitemap lastmod: 332건 중 216건이 "YYYY-MM-DD-1"처럼 URL 슬러그가 lastmod에 그대로 복사된 비표준 형식(W3C 날짜 위반), 116건 정상. 제한: 검색엔진 경고 실제 여부는 Search Console에서만 확인 가능. 근거: 정식 패턴 116 + 비표준 216 = 332 합산 일치.
+- [검증불가] Search Console 색인 상태·AdSense 수익 영향: 에이전트가 로그인 불가(규칙 상 금지). 복구 계획: 사용자가 SC 콘솔·AdSense 콘솔에서 경고 여부 확인.
+
+기타 관찰(기록만, 수정 안 함): 홈 h1 1건·h2 4건, ad slot 3350911709를 홈에서 2회 재사용, tools/pages/chronicle 사이트맵에 lastmod 0건, sitemapindex의 자식(sitemap-blog.xml)이 타 호스트로 302(사이트맵 프로토콜은 동일 호스트 요구), 서브 문구 br 사이 공백 없음(모바일에서 "…쓸 수 있는AI 소식만…"과 같이 합쳐질 가능성). 첫 측정 시 BSD grep 패턴 문제로 h1 0건으로 잘못 세어, [ >] 문자 클래스로 재측정해 1건으로 정정.
+
+### 잔존 위험
+- HTTP 평문이 200으로 직접 서빙됨(HTTPS 강제 리다이렉트 없음). HSTS가 있어 재방문자는 보호되나 첫 방문자는 미보호이며 SEO 중복 URL 가능.
+- briefing sitemap lastmod 216건 비표준 → Search Console "잘못된 날짜" 무효화 처리 가능.
+- tools/pages/chronicle 사이트맵에 lastmod 부재 → 신선도 시그널 없음.
+- /blog 리다이렉트 대상(emdash 서브) ttfb 1.4s로 홈(0.47s) 대비 약 3배 느림.
+- SC 콘솔·AdSense 콘솔은 에이전트 접근 불가로 실제 수익/색인 영향은 미확인 상태로 남음.
+
+### 다음 행동
+- 시정은 이번 지시(감사 전용, 수정 금지) 범위 밖. HTTPS 강제 리다이렉트, briefing lastmod 정규화, lastmod가 빈 자식 사이트맵은 별도 지시서로 처리할 것.
+
 ## 2026-10-17 14:20 — MALLANG2JUNIOR-01/02 말랑이→주니어 전달 경로 실측 + 조직도 §6.7·§6.8
 
 ### 한 일
