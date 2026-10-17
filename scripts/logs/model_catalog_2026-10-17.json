@@ -359,13 +359,6 @@
   },
   {
     "provider": "zen",
-    "model_id": "muse-spark-1.3-contributor-free",
-    "name": "muse-spark-1.3-contributor-free",
-    "pricing": null,
-    "context_length": null
-  },
-  {
-    "provider": "zen",
     "model_id": "nemotron-3.5-lightning-free",
     "name": "nemotron-3.5-lightning-free",
     "pricing": null,

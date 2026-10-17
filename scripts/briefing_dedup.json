@@ -3975,6 +3975,27 @@
           "date": "2026-10-16"
         }
       ]
+    },
+    {
+      "date": "2026-10-17",
+      "briefing_id": 356,
+      "articles": [
+        {
+          "id": "56206",
+          "title": "[무료 LLM] beam-free — OpenCode Zen 무료 티어",
+          "original_title": "beam-free",
+          "description": "Beam Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/beam-free\"} 프로바이더 갱신일 2026-10-16.",
+          "link": "https://models.dev/opencode/beam-free",
+          "entities": [
+            "LLM",
+            "Zen",
+            "OpenCode",
+            "Beam",
+            "Free"
+          ],
+          "date": "2026-10-17"
+        }
+      ]
     }
   ],
   "articles": [
@@ -7587,6 +7608,21 @@
         "OpenCode"
       ],
       "date": "2026-10-16"
+    },
+    {
+      "id": "56206",
+      "title": "[무료 LLM] beam-free — OpenCode Zen 무료 티어",
+      "original_title": "beam-free",
+      "description": "Beam Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/beam-free\"} 프로바이더 갱신일 2026-10-16.",
+      "link": "https://models.dev/opencode/beam-free",
+      "entities": [
+        "LLM",
+        "Zen",
+        "OpenCode",
+        "Beam",
+        "Free"
+      ],
+      "date": "2026-10-17"
     }
   ]
 }

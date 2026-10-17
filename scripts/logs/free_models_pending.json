@@ -1,9 +1,9 @@
 [
   {
-    "model_id": "poolside/laguna-xs-2.1:free",
+    "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
     "provider": "kilo",
-    "cli_id": "kilo/poolside/laguna-xs-2.1:free",
-    "context_length": 262144
+    "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "context_length": 1000000
   },
   {
     "model_id": "nemotron-3-ultra-free",
