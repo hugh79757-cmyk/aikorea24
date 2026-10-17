@@ -1,3 +1,91 @@
+## 2026-10-17 11:40 — 판관 후보 실측 추천: **Nemotron 3.5 Super VL (kilo free)** 24/24
+
+대표님 지시 "어떤 모델을 판정에 사용할지 확인하고 추천해줘" 에 따른 실측. 코드 변경 없음.
+측정 스크립트: `/tmp/judge_candidates.py` (production 판관 프롬프트와 동일 — 드리프트 없음)
+
+### 측정 설계
+판관의 유일한 임무는 (질문·정답·학생답안) → '0' 또는 '1'. 그래서 배터리 8케이스는
+**기대값이 모호하지 않은 경우만** 골랐다: 한국어 정답/영어 오답, JSON 순수/코드펜스,
+버그 유지/버그 수정, 지어 둘러대기, 함수명 정확. 형식을 어기면 파싱 실패가 되어
+그 문항이 측정 결함(점수 밖)이 되므로 **정답률과 형식유지율을 따로** 셌다.
+
+### 1단계 화면 (2케이스 × 12 후보)
+
+| 모델 | 결과 | 평균 |
+|---|---|---|
+| kilo/nvidia/nemotron-3.5-super-vl:free | 2/2 | 6.7s |
+| kilo/poolside/laguna-s-2.1:free | 2/2 | 3.1s |
+| **opencode/space-bunny-free** | 2/2 | 3.8s |
+| opencode/mimo-v2.6-flash-free | 2/2 | 4.8s |
+| opencode/longcat-2.5-preview-free | 2/2 | 10.8s |
+| kilo/dots-studio/dots-3-note-preview:free | 2/2 | 8.2s |
+| kilo/liquid/lfm-2.5-2.6b:free | 1/2 (코드펜스 관대) | 5.2s |
+| kilo/cohere/north-mini-code:free | 1/2 (코드펜스 관대) | 13.7s |
+| kilo/nvidia/nemotron-3.5-lightning:free | 1/2 + 158.8s | 느림 |
+| **opencode/cat-jam-free** | **0/2 — Model unavailable** | 0.3s |
+| **opencode/muse-spark-1.3-contributor-free** | **0/2 — Model unavailable** | 0.3s |
+| opencode/nemotron-3.5-lightning-free | 0/2 — 180초 타임아웃 | — |
+
+### 2단계 전체 배터리 (8케이스) — [검증됨]
+| 모델 | 정답 | 형식 | 평균 |
+|---|---|---|---|
+| kilo/nemotron-3.5-super-vl:free | **8/8** | 8/8 | 6.3s |
+| opencode/space-bunny-free | **8/8** | 8/8 | **3.8s** |
+| opencode/mimo-v2.6-flash-free | 8/8 | 8/8 | 13.1s |
+| opencode/longcat-2.5-preview-free | 8/8 | 8/8 | 8.8s |
+| kilo/laguna-s-2.1:free | 7/8 (지어 둘러대기 케이스에서 규칙 인용으로 시작 → 형식 위반) | 2.8s |
+| kilo/dots-3-note-preview:free | 7/8 (빈 응답 1회) | 11.4s |
+
+### 3단계 안정성 (8케이스 × 3회 = 24회) — [검증됨] ← 결정적 측정
+| 모델 | 정답 | 형식 | 판정 흔들림 | 평균 |
+|---|---|---|---|---|
+| **kilo/nvidia/nemotron-3.5-super-vl:free** | **24/24** | 24/24 | **0건** | 12.2s |
+| **opencode/space-bunny-free** | **24/24** | 24/24 | **0건** | **2.4s** |
+| opencode/longcat-2.5-preview-free | 23/24 | 24/24 | 1건 (bug-fixed 1회 0) | 10.5s |
+| opencode/mimo-v2.6-flash-free | 22/24 | 22/24 | 2건 (빈 응답·타임아웃) | 21.3s |
+
+### 4단계 Q7 긴 프롬프트(12,771자 ≈ 7,256토큰) — [검증됨]
+Groq 가 죽었던 그 지점. 두 후보 모두 **통과**(Groq ITPM 7,000 한도 없음 — 컨텍스트 1M).
+| 모델 | 2회 결과 |
+|---|---|
+| kilo/nemotron-3.5-super-vl:free | 4.1s / 3.5s → 모두 판정 1 (일치) |
+| opencode/space-bunny-free | 3.2s / 1.5s → 모두 판정 1 (일치) |
+
+### 🏆 추천: **`kilo/nvidia/nemotron-3.5-super-vl:free`**
+근거는 정확도 동점일 때의 **충돌 회피**다.
+- **자기 판정 위험**: space-bunny-free 는 우리 평가 **학생 모델이기도 하다**(10/12). 학생과 판관이
+  같은 모델이면 자기 스타일의 답을 유리하게 판정할 위험이 생긴다. Nemotron 계열은 학생 목록에
+  없어 이 충돌이 없다.
+- **지정 의도 보존**: 대표님이 고른 Nemotron 계열을 유지한다. 3 Ultra 가 아니라 **3.5 세대**지만
+  같은 네모트론 계열이고, 3 Ultra 는 Nvidia 상류 과부하(JUDGE-03)로 쓰 불가였다.
+- **속도 차이는 감수 가능**: 12.2초 vs 2.4초. 12문항 기준 판관 호출 12회 → 약 2.5분.
+  전체 러닝 대비 미미하다.
+
+차점(속도 최우선이면): `opencode/space-bunny-free` — 정확도·형식 24/24 동일, 5배 빠르다.
+단 자기 판정 위험을 안는 대가로 표기해야 한다.
+
+### ⚠️ 측정 중 발견한 별개 사실 2건
+1. **Zen 무료 모델이 사라지고 있다.** `opencode/cat-jam-free`(오늘 10/12)와
+   `opencode/muse-spark-1.3-contributor-free`(8/12)가 지금 **Model unavailable** 이다.
+   오늘 16:56 `free_models_verify.json` 에서는 pass 였다. → Zen 경로 전체가 종료 중일 수 있으며,
+   `verify_models_daily.py` 의 dead-drop 이 다음 실행에서 처리한다. **기존 점수의 재현 가능성**이
+   문제된다(같은 모델을 다시 못 부르면 재측정 불가).
+2. kilo free 대역도 응답이 끊긴다(nemotron-3.5-lightning 180초 타임아웃). 어느 경로든
+   **주간 내 변동이 있으므로** 사전 점검(`judge_precheck`)은 계속 살아야 한다.
+
+### 잔존 위험
+1. 배터리 8케이스는 내가 만든 것이다. 「기대값이 명백한」케이스로만 골랐지만, 실제 12문항의
+   코딩·맥락 케이스가 모두 같은 난이도라는 보장은 없다. **첫 실전 러닝에서 판정 결함률을 반드시 확인**해야 한다.
+2. CLI 경로이므로 temperature 를 강제할 수 없다(0.0 보장 없음). 위 24회 결과는 그 상태에서의 실측이다.
+3. 판관이 학생과 같은 opencode 세션을 쓰므로 **rate limit 을 공유**한다. 학생이 12회 소모하면 판관도 느려진다.
+4. Nemotron 3.5 Super VL 은 3 Ultra 와 다른 가중치다 — 점수 기록에 그 사실을 남겨야 한다.
+
+### 다음 행동
+- 대표님 승인 시 `JUDGE_MODEL` 을 `kilo/nvidia/nemotron-3.5-super-vl:free` 로 교체하고
+  첫 12문항 러닝에서 판정 결함률·정답률을 재확인한다. 교체 전까지 평가는 사전 점검에 막혀 있다.
+
+## 진행 중 (2026-10-17, AIK24-PIPE-04)
+
 ## 2026-10-17 10:35 — AIK24-EVAL-JUDGE-03 완료: Nemotron 3 Ultra 프로바이더별 직접 추적 → **3경로 전멸**
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-17-1021-AIK24-EVAL-JUDGE-03-네모트론울트라-프로바이더별-추적.md`
@@ -1067,7 +1155,7 @@ Zen rate limit 회복 확인(프로브 6초 응답) 후 ll-alpha-free 를 문항
 
 
 
-## 2026-10-16 18:45 — [ordering-system-plan] 소규모 온라인 주문 시스템 구축 계획 수립 (진행 중)
+## 2026-10-16 18:45 — [ordering-system-plan] 소규모 온라인 주문 시스템 구축 계획 수립
 
 ### 한 일
 - 사용자 요청(소규모 팀 3명, 6개월)에 따라 "온라인 주문 시스템"을 처음부터 만들 때의 단계별 구축 계획 작성을 시작했다. brainstorming 스킬로 사용자 의도를 먼저 탐색하고, 아래 4개 질문을 사용자에게 전달했다.
