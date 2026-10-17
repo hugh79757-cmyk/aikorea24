@@ -62,8 +62,9 @@ launchd 잡 `kr.aikorea24.d1-usage-report` — **StartInterval 1800 = 30분 주�
 구계정(hugh79757, `fac9808c…`)의 옛 aikorea24-db(`bec650ce…`)는 하루 읽기 133~244행(휴면)으로
 본 예산과 무관하다. 옛 계정의 핫 DB는 타 프로젝트 소속이다 — obsidian-db 약 45만/일,
 certkorea-db 약 25만/일, blogdex_db 약 10만/일(+쓰기 2.8만). 단, 옛 Pages 프로젝트
-"aikorea24" 의 deployment_configs 에 옛 D1 바인딩이 여전히 남아 있어 트래픽이 오면
-읽게 되어 있다(현재 유휴).
+"aikorea24" 의 deployment_configs 에 옛 D1 바인딩(`DB` → bec650ce)은 2026-10-17
+PATCH(deployment_configs 전체 갱신 + DB:null 방식)로 제거했다 — 사후 GET `production.d1_databases: null` 확인.
+롤백 DDL: 동일 PATCH로 `DB: {"id":"bec650ce-f732-46bc-87c0-bd76ed17e42a"}` 재설정.
 
 ## 6. 초과 시 대응
 

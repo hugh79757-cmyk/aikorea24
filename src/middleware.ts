@@ -17,6 +17,20 @@ const SECURITY_HEADERS: Record<string, string> = {
 };
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  const url = new URL(context.request.url);
+
+  // AIK24-ROT-CLEAN-01: http→https 강제 + www→apex canonical 리다이렉트.
+  // http://aikorea24.kr 이 200으로 서브되던 것을 막는다(구글 중복 콘텐츠 방지).
+  // dev 서버(localhost)는 제외. 배포되는 Workers 런타임에서 scheme 은 CF가 그대로 전달한다.
+  const host = url.hostname;
+  const isLocal = host === 'localhost' || host.startsWith('127.') || host.startsWith('192.168.');
+  if (!isLocal && (url.protocol !== 'https:' || host === 'www.aikorea24.kr')) {
+    const to = new URL(context.request.url);
+    to.protocol = 'https:';
+    to.hostname = 'aikorea24.kr';
+    return context.redirect(to.toString(), 301);
+  }
+
   // Astro 6에서 Astro.locals.runtime이 제거됐다. 어댑터의 createLocals()가
   // writable:false로 정의해 두기 때문에(utils/cf-helpers.js) 미들웨어에서 주입도
   // defineProperty 재정의도 불가능하다. 정식 경로인 'cloudflare:workers'의 env를
@@ -26,7 +40,6 @@ export const onRequest = defineMiddleware(async (context, next) => {
     console.warn('[auth] SESSION_SECRET is not configured');
   }
 
-  const url = new URL(context.request.url);
   const path = url.pathname;
   const noSlash = path.endsWith('/') && path !== '/' ? path.slice(0, -1) : path;
 
