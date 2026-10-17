@@ -301,3 +301,109 @@ def test_rotation_archive_prepends_newer_entries(tmp_path):
     assert result["move"] == 1
     archive = archive_path.read_text(encoding="utf-8")
     assert archive.index("## 2026-08-30 09:00") < archive.index("## 2026-08-25 09:00")
+
+
+# ------------------------------------------- state_prepend: 진행 중 표식 제거
+
+MARKER = "## 진행 중 (2026-10-17, AIK24-EMDASH-01)"
+
+STATE_WITH_MARKER = (
+    "# state\n\n"
+    + MARKER
+    + "\n\n## 2026-10-16 10:00 첫 항목 — 요약\n본문 A\n\n## 2026-10-15 09:00 둘째 항목 — 요약\n본문 B\n"
+)
+
+
+def test_remove_headings_drops_marker_and_following_blank():
+    new_text, removed = sp.remove_headings(STATE_WITH_MARKER, [MARKER])
+    assert removed == [MARKER, ""]
+    assert MARKER not in new_text
+    assert sp.headings(new_text) == sp.headings(STATE_WITH_MARKER)[1:]
+    assert "본문 A" in new_text and "본문 B" in new_text
+
+
+def test_remove_headings_requires_exact_line_match():
+    new_text, removed = sp.remove_headings(STATE_WITH_MARKER, ["## 진행 중"])
+    assert removed == []
+    assert new_text == STATE_WITH_MARKER
+
+
+def test_apply_removal_refuses_when_marker_absent(tmp_path):
+    path = _write(tmp_path)  # 표식 없는 OLD
+    with pytest.raises(ValueError):
+        sp.apply_removal(path, [MARKER], backup=False)
+    assert path.read_text(encoding="utf-8") == OLD
+
+
+def test_apply_removal_replaces_marker_with_report_and_keeps_old_headings(tmp_path):
+    path = _write(tmp_path, text=STATE_WITH_MARKER)
+    stats = sp.apply_removal(path, [MARKER], backup=True, report_text=REPORT)
+    result = path.read_text(encoding="utf-8")
+    assert result.startswith("## 2026-10-17 12:30 새 작업 — 요약")
+    assert MARKER not in result
+    assert sp.headings(result) == sp.headings(REPORT) + sp.headings(OLD)
+    assert stats["removed_lines"] == [MARKER, ""]
+    assert stats["backup"] and "본문 A" in open(stats["backup"], encoding="utf-8").read()
+
+
+def test_apply_removal_dry_run_writes_nothing(tmp_path):
+    path = _write(tmp_path, text=STATE_WITH_MARKER)
+    stats = sp.apply_removal(path, [MARKER], dry_run=True)
+    assert stats["dry_run"] is True
+    assert stats["removed_lines"] == [MARKER, ""]
+    assert path.read_text(encoding="utf-8") == STATE_WITH_MARKER
+
+
+def test_apply_removal_restores_backup_when_write_is_broken(tmp_path, monkeypatch):
+    """쓰기가 REPORT 만 남긴 경우 — 디스크 재검사가 잡아 백업으로 복원한다."""
+    path = _write(tmp_path, text=STATE_WITH_MARKER)
+    monkeypatch.setattr(sp, "write_atomic", lambda target, text: _write_report_only(target, REPORT))
+    with pytest.raises(sp.ContentLossError):
+        sp.apply_removal(path, [MARKER], backup=True)
+    assert path.read_text(encoding="utf-8") == STATE_WITH_MARKER
+
+
+def test_apply_removal_refuses_to_empty_the_file(tmp_path):
+    path = _write(tmp_path, name="only_marker.md", text=MARKER + "\n")
+    with pytest.raises(sp.ContentLossError):
+        sp.apply_removal(path, [MARKER], backup=False)
+    assert path.read_text(encoding="utf-8") == MARKER + "\n"
+
+
+def test_apply_removal_removes_every_occurrence(tmp_path):
+    text = STATE_WITH_MARKER + "\n" + MARKER + "\n\n## 2026-10-14 09:00 셋째\n본문 C\n"
+    path = _write(tmp_path, text=text)
+    stats = sp.apply_removal(path, [MARKER], backup=False)
+    result = path.read_text(encoding="utf-8")
+    assert MARKER not in result
+    assert "본문 C" in result
+    assert stats["removed_lines"].count(MARKER) == 2
+
+
+def test_apply_removal_refuses_unexpected_line_loss(tmp_path, monkeypatch):
+    """표식이 아닌 본문 한 줄이 사라져도 거부한다 (multiset 검증)."""
+    path = _write(tmp_path, text=STATE_WITH_MARKER)
+    real_remove = sp.remove_headings
+
+    def sneaky(text, needles):
+        new_text, removed = real_remove(text, needles)
+        return new_text.replace("본문 A\n", ""), removed
+
+    monkeypatch.setattr(sp, "remove_headings", sneaky)
+    with pytest.raises(sp.ContentLossError):
+        sp.apply_removal(path, [MARKER], backup=False)
+    assert "본문 A" in path.read_text(encoding="utf-8")
+
+
+def test_cli_remove_heading_exit_codes(tmp_path):
+    path = _write(tmp_path, text=STATE_WITH_MARKER)
+    assert sp.main(["--target", str(path), "--remove-heading", MARKER, "--no-backup"]) == sp.EXIT_OK
+    assert MARKER not in path.read_text(encoding="utf-8")
+    # 대상이 이미 없으면 거부 (exit 2) — 조용히 성공하지 않는다
+    assert sp.main(["--target", str(path), "--remove-heading", MARKER, "--no-backup"]) == sp.EXIT_REFUSED
+
+
+def test_cli_report_still_requires_report_or_remove(tmp_path):
+    path = _write(tmp_path)
+    with pytest.raises(SystemExit):
+        sp.main(["--target", str(path)])

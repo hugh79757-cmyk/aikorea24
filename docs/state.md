@@ -1,3 +1,62 @@
+## 2026-10-17 12:51 AIK24-EMDASH-01 완료 — emdash 블로그 h1 폰트 조정(데스크톱 42px·모바일 36px·weight 500) / 검증 [검증됨] 소스·배포 CSS 자산·라이브 computed / 잔존 위험 600~640px 구간 미실측·version.gen.ts 미커밋 유지·emdash repo 가드 훅 부재
+
+* 프로젝트: /Users/twinssn/projects2/aikorea24emdash → https://emdash.aikorea24.kr
+* 지시서: SSOT/프로젝트/aikorea24/지시서/2026-10-17-1240-AIK24-EMDASH-01-블로그h1-폰트조정.md
+* 수정 파일 [PRODUCTION CODE]: `src/pages/posts/[slug].astro` 1개 (scoped `<style>` 블록 2곳) — 8 insertions / 4 deletions
+* 커밋: `692bcb8` (emdash repo)
+* 배포: Workers Version `7fb3479a-3b57-4ebd-948e-fcbf9972e12d` / 신규 업로드 자산 1건 `/_astro/_slug_.B-OAQiU2.css`
+* 도구: `scripts/state_prepend.py` 에 `--remove-heading` 추가 (표식 교체용) — 테스트 34개 통과
+
+### 한 일 [PRODUCTION CODE]
+
+파일: `src/pages/posts/[slug].astro` (`<style>` 347~966 블록, `.article-title` = `<h1 class="article-title">` (221줄))
+
+| 항목 | 변경 전 | 변경 후 |
+|---|---|---|
+| 데스크톱 `font-size` | `clamp(2rem, 5vw, var(--font-size-5xl))` = 최대 56px (3.5rem) | `42px` |
+| `font-weight` | `var(--font-weight-display)` = 700 (tokens.css:51) | `500` |
+| 모바일 | `@media (max-width: 600px)` → `var(--font-size-3xl)` = 32px | `@media (max-width: 640px)` → `36px` |
+| `font-family` | 토큰 경유 Pretendard | 변경 없음 |
+
+- `.more-grid` 는 기존 `@media (max-width: 600px)` 블록에 그대로 남겼다. 표식 규칙만 640px 블록으로 분리해 **600~640px 구간에서 `.more-grid` 의 레이아웃 전환점이 바뀌지 않게** 했다 (지시서는 폰트만 규정).
+- 전역 h1 규칙과의 충돌은 우회 코드 없이 해결됐다. 근거: `src/layouts/Base.astro` 의 `h1 { font-weight: var(--font-weight-display) }` (517줄 부근)는 `@layer base` 내부(레이어드 규칙)이고, `src/styles/theme.css` 의 `h1, h2 { font-weight: 700 }` (69줄)는 요소 선택자다. 비레이어 클래스 `.article-title` 이 우선한다.
+
+### 결과 — 검증 근거
+
+* **[검증됨] 소스 CSS 3값 반영**: 근거 — `git show --numstat 692bcb8` → `8 4 src/pages/posts/[slug].astro`, diff 본문에 `font-size: 42px` / `font-weight: 500` / `@media (max-width: 640px)` + `font-size: 36px` 확인.
+* **[검증됨] 배포된 CSS 자산**: 근거 — `curl https://emdash.aikorea24.kr/_astro/_slug_.B-OAQiU2.css` (HTTP 200, 17,455 bytes) 결과 문자열:
+  - `.article-title[data-astro-cid-ruv7hgo6]{font-size:42px;font-weight:500;line-height:var(--leading-tight);...}`
+  - `@media (width<=640px){.article-title[data-astro-cid-ruv7hgo6]{font-size:36px}}`
+  - `@media (width<=600px){.more-grid[data-astro-cid-ruv7hgo6]{...}}` (미수정 확인)
+  - 배포 로그: `Found 1 new or modified static asset` → `_slug_.B-OAQiU2.css` 1건만 업로드.
+* **[검증됨] 라이브 computed style**: 근거 — 로컬 Playwright 1.61.1 + 설치된 Google Chrome(`channel="chrome"`)으로 `https://emdash.aikorea24.kr/posts/ll-alpha-free-12-question-eval` 실측, `getComputedStyle(h1.article-title)`:
+
+  | 뷰포트 | font-size | font-weight | font-family | color |
+  |---|---|---|---|---|
+  | 1440px | **42px** | **500** | Pretendard | rgb(17, 17, 17) |
+  | 700px | **42px** | **500** | Pretendard | rgb(17, 17, 17) |
+  | 390px | **36px** | **500** | Pretendard | rgb(17, 17, 17) |
+
+  동일 요소 텍스트 `LL Alpha Free(opencode/ll-alpha-free) 12…` = 대상 글 h1. 색·폰트는 변경 전 값 유지.
+* **[검증됨] 미수정 범위**: 근거 — `git diff --stat` 결과 변경 파일은 `src/pages/posts/[slug].astro` 와 (미커밋) `src/version.gen.ts` 뿐. `.article-title` 을 쓰는 다른 페이지 없음 (`grep -rn article-title`: 마크업 1 + 스타일 2 = 3건, 모두 이 파일).
+* **[검증됨] 도구 확장(`--remove-heading`)**: 근거 — `python3 -m pytest tests/test_state_tools.py -q` → `34 passed`. 34 = 기존 23 + 신규 11. 신규 11개 = 표식+뒤 빈 줄 제거 / 정확 일치만 제거 / 대상 없음 시 exit 2 거부 / 보고+제거 결합 시 기존 헤딩 전부 보존 / dry-run 무쓰기 / 깨진 쓰기 시 백업 복원 / 빈 파일 결과 거부 / 중복 표식 전부 제거 / 본문 1줄 손실 거부 / CLI 종료 코드 / 인자 없음 오류.
+* **[부분검증] Cascade Layers 판단**: 전역 `@layer base` 규칙보다 비레이어 클래스 규칙이 우선한다는 스펙 근거로 판단했다. 제한: 레이어를 지원하지 않는 구형 브라우저에서는 판단이 다를 수 있으나, 구형 브라우저를 대상으로 한 실측은 하지 않았다. 대신 최신 Chrome 실측에서 500 이 반환됐다.
+* **[검증불가] Aside 브라우저 REPL 경유 측정**: 근거 — `tools.aside.repl` 을 3회 호출(마지막 식 반환 / `return` / 전역 변수 재조회)했으나 모두 `null` 반환. 탭 자체는 열렸다(`Opened a new tab and set it active: tabs[0]`) — 브라우저는 동작하나 측정값을 회수할 수 없었다. 복구 계획: computed style 측정은 로컬 Playwright + 설치 Chrome 경로로 대체했고(위 [검증됨]), REPL 반환 규약은 aside 관련 스킬 갱신 시 함께 확인한다.
+
+### 잔존 위험
+
+1. **600~640px 구간 미실측**: 이 구간은 기존 `clamp(2rem, 5vw, …)` = 56px → 현재 42px 다. 지시서가 지정한 값이지만 실측은 700px·390px 만 했다. 640px 경계(641px → 42px / 640px → 36px)도 별도 실측하지 않았다.
+2. **`src/version.gen.ts` 미커밋**: 배포가 `commit: "692bcb8"` / `builtAt: "2026-10-17T05:42:47.053Z"` 로 갱신했고 여전히 작업 트리에만 있다(2026-10-16 배포 때도 같은 상태). 이번 커밋에 포함하지 않았다.
+3. **emdash repo 에 state.md 가드 없음**: 이 repo 에는 `scripts/hooks/pre-push`·`state_guard.py` 가 설치돼 있지 않다. 이번 `docs/state.md` 기록은 aikorea24 의 도구(`--target`)로 수행했으므로 도구 수준 보호는 적용됐으나 git 레벨 감소 차단은 없다.
+4. **엣지 캐시**: `curl -sI` 응답에 `cf-cache-status` 가 없고 Worker 렌더 경로(server-timing `render;dur=201`)로 응답한다 — HTML 자체가 엣지에 캐시된 흔적은 확인되지 않았다. 다만 "헤더 부재"는 약한 증거이며, CSS 자산은 파일명 해시가 바뀌어 캐시 무효화가 자동이다.
+5. **도구 확장의 잔여 위험**: `--remove-heading` 은 부분 일치를 지우지 않고 정확히 일치하는 줄만 지운다. 따라서 표식 문구가 조금이라도 다르면(공백·날짜 차이) exit 2 로 거부된다 — 조용히 지나가지 않지만, 호출자가 문구를 정확히 알아야 한다.
+
+### 다음 행동
+
+1. 대표님 결정 필요: `src/version.gen.ts` 커밋 여부(배포 스탬프를 저장소에 남길지).
+2. (제안) emdash repo 에 `scripts/state_prepend.py`·`state_guard.py`·pre-push 훅 설치 — 이 repo 의 state.md 도 같은 사고 유형에서 git 레벨로 무방비다.
+3. (제안) 전역 AGENTS.md 에 `--remove-heading` 절차 명문화: "지시서 완료 시 `## 진행 중` 표식을 `--remove-heading` 으로 교체한다".
+
 ## 2026-10-17 12:31 — AIK24-STATE-GUARD-01 완료 — state.md 손실 원인을 실행 기록에서 확정 + 가드 4종 설치 + 6,586줄 복구
 
 계기: 대표님 질문 "위반을 한 이유가 뭐지? 한번도 이런 적이 없었는데. 내가 설계를 실수한 건가?"

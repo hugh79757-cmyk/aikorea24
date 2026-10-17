@@ -2,6 +2,23 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-17 12:51 — fix(AIK24-EMDASH-01): emdash 블로그 글 h1 폰트 조정 (데스크톱 42px·모바일 36px·weight 500)
+
+- 대상: `~/projects2/aikorea24emdash` → emdash.aikorea24.kr. 글 h1(`.article-title`)이 데스크톱 56px·700으로
+  컸다. Cloudflare 블로그 기준(42px·500 / 모바일 36px)으로 맞췄다. 한글이라 폰트는 Pretendard 유지.
+- 수정: `src/pages/posts/[slug].astro` 1개 — 8+/4−. 데스크톱 `clamp(2rem, 5vw, 3.5rem)` → `42px`,
+  `weight 700` → `500`. 모바일은 기존 600px 블록의 `.article-title`(32px)을 떼어내
+  `@media (max-width: 640px){ font-size: 36px }` 로 분리 — 같은 블록의 `.more-grid`(600px)는 유지해
+  목록 레이아웃 전환점이 바뀌지 않게 했다.
+- 배포: 커밋 `692bcb8` → Workers Version `7fb3479a-3b57-4ebd-948e-fcbf9972e12d` (신규 자산 1건).
+- 검증: 배포 CSS 자산 실측(`font-size:42px;font-weight:500`, `width<=640px` 36px) + 라이브 computed style
+  (로컬 Playwright + 설치 Chrome) 1440px 42px·500 / 700px 42px·500 / 390px 36px·500, 폰트 Pretendard 유지.
+- 도구: `scripts/state_prepend.py` 에 `--remove-heading` 추가 — 지시서 종료 규칙의 "진행 중 표식 교체"를
+  도구로 수행하기 위해서다(기존 도구는 헤딩 손실을 이유로 표식 제거를 거부했다). 테스트 34 passed
+  (34 = 기존 23 + 신규 11).
+- 잔존: 600~640px 구간 미실측 · `src/version.gen.ts` 미커밋 유지(배포 스탬프, 10-16 배포 때와 같은 상태) ·
+  emdash repo 에 state.md 가드 훅 없음.
+
 ## 2026-10-17 12:31 — fix(AIK24-STATE-GUARD-01): state.md 손실 원인 확정 + 가드 4종 + 6,586줄 복구
 
 - 원인 확정: 커밋 `02c5da8f` 의 실행 기록(세션 `ses_ebc0f9e51ffes5eQ70JJbU87Qz`, 11:42:37)에서 아래 한 줄을

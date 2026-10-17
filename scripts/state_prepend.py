@@ -22,8 +22,12 @@
   python3 scripts/state_prepend.py --stats
   python3 scripts/state_prepend.py --report x.md --dry-run
 
+  # 진행 중 표식을 완료 보고로 '교체' — 표식 줄만 지우고 보고를 맨 위에 넣는다
+  python3 scripts/state_prepend.py --remove-heading "## 진행 중 (2026-10-17, ID)" \
+      --report docs/report.md
+
 종료 코드
-  0 성공 · 2 손실 위험으로 거부 · 3 입출력/사용 오류
+  0 성공 · 2 손실 위험/제거 대상 없음으로 거부 · 3 입출력/사용 오류
 """
 from __future__ import annotations
 
@@ -33,6 +37,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from collections import Counter
 from datetime import datetime
 from pathlib import Path
 
@@ -89,6 +94,43 @@ def build(current: str, report: str, bottom: bool = False) -> str:
     if bottom:
         return current + "\n" + report + "\n"
     return report + "\n\n" + current
+
+
+def _multiset_diff(a: str, b: str) -> Counter:
+    """a 에는 있는데 b 에 없는 줄 (multiset). 손실 판정의 최종 근거."""
+    return Counter(a.splitlines()) - Counter(b.splitlines())
+
+
+def remove_headings(text: str, needles: list[str]) -> tuple[str, list[str]]:
+    """정확히 일치하는 헤딩 줄과 그 뒤 빈 줄을 제거한다.
+
+    진행 중 표식처럼 '일부러 없애야 하는' 줄 전용이다. 제거한 줄을 그대로 돌려주므로
+    호출자가 '의도한 줄만 사라졌는지' 를 줄 단위로 검증할 수 있다.
+    부분 일치는 지우지 않는다 (needle 은 줄 전체와 정확히 같아야 한다).
+    """
+    targets = {n.strip() for n in needles if n.strip()}
+    if not targets:
+        return text, []
+
+    lines = text.splitlines()
+    kept: list[str] = []
+    removed: list[str] = []
+    index = 0
+    while index < len(lines):
+        if lines[index].strip() in targets:
+            removed.append(lines[index])
+            index += 1
+            while index < len(lines) and not lines[index].strip():
+                removed.append(lines[index])
+                index += 1
+            continue
+        kept.append(lines[index])
+        index += 1
+
+    new_text = "\n".join(kept)
+    if new_text and text.endswith("\n"):
+        new_text += "\n"
+    return new_text, removed
 
 
 def make_backup(target: Path) -> Path:
@@ -174,16 +216,87 @@ def apply_report(
     return stats
 
 
+def apply_removal(
+    target: Path,
+    needles: list[str],
+    backup: bool = True,
+    dry_run: bool = False,
+    report_text: str = "",
+    bottom: bool = False,
+) -> dict:
+    """지정한 헤딩 줄을 제거한다 — 그 외의 줄은 하나도 사라지면 안 된다.
+
+    진행 중 표식을 완료 보고로 '교체'할 때 쓴다. report_text 를 함께 주면 보고서를
+    build() 규칙대로 넣은 뒤 표식을 지운다. 검증은 헤딩 개수가 아니라 줄 단위
+    multiset 으로 한다 — 제거 대상이 아닌 본문 한 줄만 사라져도 거부한다.
+    """
+    old_text = read_text(target)
+    signature = file_signature(target)
+    base = build(old_text, report_text, bottom=bottom) if report_text.strip() else old_text
+
+    new_text, removed = remove_headings(base, needles)
+    if not removed:
+        raise ValueError(f"제거 대상 헤딩을 찾지 못했다: {needles}")
+    if base.strip() and not new_text.strip():
+        raise ContentLossError(["(제거 결과가 빈 파일 — 거부)"])
+
+    expected = Counter(removed)
+    lost = _multiset_diff(base, new_text)
+    if lost != expected:
+        unexpected = sorted((lost - expected).elements())
+        raise ContentLossError([f"(의도하지 않은 줄 {len(unexpected)}개 손실) {unexpected[:3]}"])
+
+    stripped_report = report_text.strip("\n").strip()
+    if stripped_report and stripped_report not in new_text:
+        raise ContentLossError(["(보고서 본문이 결과물에 존재하지 않음 — build 방향 오류)"])
+
+    stats = {
+        "target": str(target),
+        "before_lines": len(old_text.splitlines()),
+        "after_lines": len(new_text.splitlines()),
+        "before_headings": len(headings(old_text)),
+        "after_headings": len(headings(new_text)),
+        "before_bytes": len(old_text.encode("utf-8")),
+        "after_bytes": len(new_text.encode("utf-8")),
+        "duplicate_headings": find_duplicate_headings(old_text, report_text),
+        "removed_lines": removed,
+        "backup": None,
+        "dry_run": dry_run,
+    }
+    if dry_run:
+        return stats
+
+    if file_signature(target) != signature:
+        raise ContentLossError(["(쓰기 직전 파일이 외부에서 변경됨 — 동시 수정 의심)"])
+
+    if backup and target.exists():
+        stats["backup"] = str(make_backup(target))
+
+    write_atomic(target, new_text)
+
+    # 쓰기 후 재검사 — 의도한 줄 외에 사라진 것이 있으면 백업으로 복원
+    on_disk = read_text(target)
+    if _multiset_diff(base, on_disk) != expected:
+        if stats["backup"] and Path(stats["backup"]).exists():
+            shutil.copy2(stats["backup"], target)
+        raise ContentLossError(["(디스크 재검사 실패 — 의도한 줄 외 변화, 백업으로 복원)"])
+    return stats
+
+
 def format_stats(stats: dict) -> str:
     arrow = "→"
+    line_delta = stats["after_lines"] - stats["before_lines"]
+    head_delta = stats["after_headings"] - stats["before_headings"]
     lines = [
         f"대상: {stats['target']}",
         f"줄:   {stats['before_lines']} {arrow} {stats['after_lines']} "
-        f"(+{stats['after_lines'] - stats['before_lines']})",
+        f"({'+' if line_delta >= 0 else ''}{line_delta})",
         f"헤딩: {stats['before_headings']} {arrow} {stats['after_headings']} "
-        f"(+{stats['after_headings'] - stats['before_headings']})",
+        f"({'+' if head_delta >= 0 else ''}{head_delta})",
         f"크기: {stats['before_bytes']:,} {arrow} {stats['after_bytes']:,} bytes",
     ]
+    if stats.get("removed_lines"):
+        lines.append(f"제거: {len(stats['removed_lines'])}줄 — {stats['removed_lines'][0][:60]}")
     if stats["backup"]:
         lines.append(f"백업: {stats['backup']}")
     if stats["dry_run"]:
@@ -212,6 +325,13 @@ def stats_only(target: Path) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="state.md 안전 추가 도구 (기존 내용 삭제 금지)")
     parser.add_argument("--report", "-r", help="추가할 보고서 파일 ( - 이면 stdin )")
+    parser.add_argument(
+        "--remove-heading",
+        action="append",
+        default=[],
+        metavar="TEXT",
+        help="정확히 일치하는 헤딩 줄을 제거 (진행 중 표식 교체용, 여러 번 지정 가능)",
+    )
     parser.add_argument("--target", default=str(DEFAULT_TARGET), help="대상 파일 (기본 docs/state.md)")
     parser.add_argument("--bottom", action="store_true", help="맨 아래에 추가 (과거 기록 복원용)")
     parser.add_argument("--dry-run", action="store_true", help="쓰지 않고 결과만 계산")
@@ -234,13 +354,14 @@ def main(argv: list[str] | None = None) -> int:
         )
         return EXIT_OK
 
-    if not args.report:
-        parser.error("--report 가 필요하다 (또는 --stats)")
+    if not args.report and not args.remove_heading:
+        parser.error("--report 또는 --remove-heading 가 필요하다 (또는 --stats)")
 
+    report_text = ""
     try:
         if args.report == "-":
             report_text = sys.stdin.read()
-        else:
+        elif args.report:
             report_path = Path(args.report).expanduser()
             if not report_path.is_absolute():
                 report_path = (Path.cwd() / report_path).resolve()
@@ -250,13 +371,26 @@ def main(argv: list[str] | None = None) -> int:
         return EXIT_ERROR
 
     try:
-        info = apply_report(
-            target,
-            report_text,
-            bottom=args.bottom,
-            backup=not args.no_backup,
-            dry_run=args.dry_run,
-        )
+        if args.remove_heading:
+            info = apply_removal(
+                target,
+                args.remove_heading,
+                backup=not args.no_backup,
+                dry_run=args.dry_run,
+                report_text=report_text,
+                bottom=args.bottom,
+            )
+        else:
+            info = apply_report(
+                target,
+                report_text,
+                bottom=args.bottom,
+                backup=not args.no_backup,
+                dry_run=args.dry_run,
+            )
+    except ValueError as exc:
+        print(f"🚨 쓰기를 거부했다 — {exc}", file=sys.stderr)
+        return EXIT_REFUSED
     except ContentLossError as exc:
         print(f"🚨 쓰기를 거부했다 — {exc}", file=sys.stderr)
         for item in exc.lost[:10]:
