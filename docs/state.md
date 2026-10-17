@@ -1,3 +1,16 @@
+## 2026-10-17 19:55 — AIK24-THREADS-CFZERO-01: 휴면 기동의 CF 자원 소비 0 검증
+
+**한 일** (대표님 질문: "현행 유지해도 CF 자원 소모 없지?") — 휴면 경로 정적 코드 검증.
+
+**결과 (근거)**
+- [검증됨] main_v3.py 휴면 경로 임포트 전부 로컬 (env_loader=.env 파싱, logger=로컬 파일, failed_articles=로컬 JSON). 네트워크 유일 보유 모듈은 pipeline/infra/telegram 의 send_telegram() — 함수 정의만 존재하고 **조기 반환 앞에 호출 없음**, 런 종료 로그 그 후 로컬 쓰기만.
+- [검증됨] 오늘 10회 기동 exit 0 + 로그 1줄씩 — D1 rows·Workers 요청 증분 없음 (rowsRead 계정 시리즈와 짝시각 스파이크 불일치, d1_usage_report.log).
+- [부분검증] "CF 무료 범위" 참고: 30분 모니터(d1_usage_report)는 GraphQL analytics 무료 엔드포인트를 호출 — CF API 트래픽은 있으나 D1 rows 한도와 무관.
+
+**잔존 위험**: 없음(정적+런타임 이중 확인).
+
+**다음 행동**: 없음.
+
 ## 2026-10-17 21:17 — AIK24-BLOG-02 (사람이 쓰는 경로로 재작성 — 발행 글 8건 + 규칙·도구)
 
 ### 한 일
