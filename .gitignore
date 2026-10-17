@@ -87,3 +87,7 @@ pipeline/infra/.embedding_rotation.json
 
 # state.md 작업 전 백업 (날짜 붙은 사본)
 docs/state.md.bak.*
+scripts/.d1_guard_alert_day
+scripts/.d1_guard_alert_day.tmp
+scripts/.d1_tier_alert_state.json
+scripts/.d1_tier_alert_state.json.tmp

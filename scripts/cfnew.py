@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Shared CF helper for AIK24-EMDASH-02 (new account 7eb1b8cd...)."""
-import datetime, json, os, time, urllib.request, urllib.error
+import datetime, json, os, subprocess, time, urllib.request, urllib.error
 
 ACCT = "7eb1b8cd178de269758ec94b2e03330b"
 EMDASH_DB = "bbbcbc34-f346-49e0-9aab-058836bee16d"
@@ -57,48 +57,165 @@ def schema(database_id=EMDASH_DB, tok=None):
 # (d1QueriesAdaptiveGroups = "unknown field" 실측). day 로 'YYYY-MM-DD' 만 받는다 —
 # D1 어댑터는 datetimeHour 를 쓰므로 datetimeMinute 가 없어 일자 경계가 안 맞는다.
 D1_READ_LIMIT = 5_000_000
+D1_WRITE_LIMIT = 100_000  # 2026-10-17 AIK24-QUOTA-WARN-01: 쓰기 추적 추가 — 10-09 쓰기 183% 초과 실측 (백필)
 READONLY_RATIO = 0.95
 CACHE_TTL = 300  # 5분 — 매 sql() 마다 GraphQL 을 때리면 레이트리밋에 걸린다
+# 3단계 경보 (2026-10-17 대표님 지시): 읽기·쓰기 각각 50/70/90% 돌파 시 muse-cli 기본채팅 알림
+ALERT_TIERS = ((0.50, "1단계(50%)"), (0.70, "2단계(70%)"), (0.90, "3단계(90%)"))
+TIER_STATE_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".d1_tier_alert_state.json")
 
 GUARD_ENABLED = os.environ.get("D1_GUARD", "on").lower() != "off"
-_cache = {"at": 0.0, "used": 0, "day": ""}
+_cache = {"at": 0.0, "used": 0, "written": 0, "day": ""}
 
 
 class QuotaExceededError(RuntimeError):
     """일일 D1 읽기 사용량이 임계값을 넘었을 때 sql() 이 던진다."""
 
 
-def _analytics_rows_read(day, tok=None):
-    """GraphQL analytics 에서 계정 전체 rowsRead 합계. 캐시 없음(하위 함수에서 캐시)."""
+def _analytics_daily_usage(day, tok=None):
+    """GraphQL analytics 에서 계정 전체 rowsRead + rowsWritten 합계. 캐시 없음(하위 함수에서 캐시)."""
     q = """query($f: D1AdaptiveGroupsFilter_InputObject!, $acct: String!) {
       viewer { accounts(filter:{accountTag:$acct}) {
         d1AnalyticsAdaptiveGroups(limit:200, filter:$f) {
-          sum { rowsRead } } } } }"""
+          sum { rowsRead rowsWritten } } } } }"""
     v = {"acct": ACCT, "f": {"datetime_geq": f"{day}T00:00:00Z", "datetime_lt": f"{day}T23:59:59Z"}}
     req = urllib.request.Request(
         GQ, data=json.dumps({"query": q, "variables": v}).encode(),
         headers={"Authorization": f"Bearer {tok or token()}", "Content-Type": "application/json", **UA})
     with urllib.request.urlopen(req, timeout=60) as r:
         groups = json.loads(r.read())["data"]["viewer"]["accounts"][0]["d1AnalyticsAdaptiveGroups"]
-    return sum((g["sum"]["rowsRead"] or 0) for g in groups)
+    used = sum((g["sum"]["rowsRead"] or 0) for g in groups)
+    written = sum((g["sum"]["rowsWritten"] or 0) for g in groups)
+    return used, written
+
+
+def _analytics_rows_read(day, tok=None):
+    """호환 유지: 읽기만. 실제 조회는 _analytics_daily_usage 1회로 읽기·쓰기를 함께 본다."""
+    used, _ = _analytics_daily_usage(day, tok=tok)
+    return used
 
 
 def get_daily_rows_read(day=None, tok=None, force=False):
     """당일(UTC) 계정 전체 D1 rowsRead. 5분 캐시 — 같은 날 반복 조회를 GraphQL 로 때리지 않는다.
 
     캐시가 만료되면 재조회하되, 조회가 실패하면 마지막 성공값을 그대로 쓴다
-    (한도를 확인 못 하느니 작업을 계속시키는 편이 낫다 — ponytail: fail-open).
+    (한도를 확인 못 하느니 작업을 계속시키는 편이 낫다 — fail-open).
     """
     day = day or datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
     now = time.monotonic()
     if not force and _cache["at"] and now - _cache["at"] < CACHE_TTL and _cache["day"] == day:
         return _cache["used"]
     try:
-        used = _analytics_rows_read(day, tok=tok)
+        used, written = _analytics_daily_usage(day, tok=tok)
     except Exception:
         return _cache["used"]
-    _cache.update({"at": now, "used": used, "day": day})
+    _cache.update({"at": now, "used": used, "written": written, "day": day})
     return used
+
+
+def get_daily_rows_written(day=None, tok=None, force=False):
+    """당일(UTC) 계정 전체 D1 rowsWritten (AIK24-QUOTA-WARN-01).
+
+    get_daily_rows_read 와 같은 조회·같은 캐시를 공유한다 — 한 번의 GraphQL 호출로
+    읽기·쓰기가 함께 오므로 별도 조회 비용은 없다.
+    """
+    day = day or datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+    get_daily_rows_read(day=day, tok=tok, force=force)  # 캐시 충전
+    if _cache.get("day") != day:
+        return 0
+    return _cache.get("written", 0)
+
+
+# --- 3단계 경보 (2026-10-17 대표님 지시): muse-cli 기본채팅 -------------------
+
+def muse_send(text):
+    """muse.ai 기본채팅(메인 말랑이)으로 전송. --thread 없이 보내는 것이 기본채팅.
+
+    --wait 0은 ack 누락으로 실발송이 습끼지 않는 실측 사례(2026-10-17)가 있어
+    --wait 15 로 바꿨다. 15초 지켜본 후 stdout에 무언가(발송 JSON)가 돌아와야 성공으로 본다.
+    명령 실패·타임아웃·쿠키 만료 시 False — 이 함수가 예외를 던져 파이프라인이 죽는 일은 없어야 한다.
+    """
+    try:
+        cp = subprocess.run(
+            ["muse-cli", "send", "--wait", "15", text],
+            capture_output=True, timeout=75, text=True)
+        ok = cp.returncode == 0 and bool((cp.stdout or "").strip())
+        if not ok:
+            print(f"[D1-GUARD] muse 응답 부실(rc={cp.returncode}) — "
+                  f"stdout={((cp.stdout or '') + (cp.stderr or ''))[:200]!r}", flush=True)
+        return ok
+    except Exception as e:
+        print(f"[D1-GUARD] muse 전송 실패(무시): {e}", flush=True)
+        return False
+
+
+def _tier_state_load(day):
+    """3단계 경보의 중복발송 방지 상태. UTC 날짜가 바뀌면 자동 리셋(한도 리셋과 동기화)."""
+    try:
+        with open(TIER_STATE_PATH, encoding="utf-8") as f:
+            s = json.load(f)
+        if s.get("day") == day:
+            return s
+    except (OSError, ValueError):
+        pass
+    keys = [str(int(t * 100)) for t, _ in ALERT_TIERS]
+    return {"day": day, "read": {k: False for k in keys}, "write": {k: False for k in keys}}
+
+
+def _tier_state_save(state):
+    tmp = TIER_STATE_PATH + ".tmp"
+    try:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(state, f, ensure_ascii=False)
+        os.replace(tmp, TIER_STATE_PATH)
+    except OSError as e:
+        print(f"[D1-GUARD] 경보 상태 저장 실패(무시): {e}", flush=True)
+
+
+def _tier_message(metric_korean, label, used, limit, pct, day):
+    tier = label.split("(")[0]
+    kst = time.strftime("%H:%M", time.gmtime(time.time() + 9 * 3600))
+    head = {"1단계": "ℹ️ 관측 시작", "2단계": "⚠️ 확인 필요", "3단계": "🚨 즉시 조치"}[tier]
+    extra = ""
+    if metric_korean == "읽기" and tier == "2단계":
+        extra = " — 진입 가드(D1_HEADROOM 70%)가 파이프라인을 차단하기 시작"
+    elif metric_korean == "읽기" and tier == "3단계":
+        extra = " — 80% 차단·95% readonly 작동 중. 리셋(KST 09:00) 대기 권장"
+    elif metric_korean == "쓰기" and tier == "3단계":
+        extra = " — 도달 시 D1 쓰기가 에러 반환. 백필·INSERT 폭주 스크립트 중단 권장"
+    return (f"{head} [D1-GUARD] D1 {metric_korean} {label} 돌파: "
+            f"{used:,}/{limit:,}행 ({pct:.1%}) · UTC {day} KST {kst}{extra}")
+
+
+def maybe_alert_tiers(pct_read, pct_write, day=None, notify=None):
+    """읽기·쓰기 각각 3단계(50/70/90%) 돌파를 판정해 muse-cli 기본채팅으로 알림.
+
+    - 판독 기준: 계정 합산(aikorea24-db + emdash-db) — 한도가 계정 단위이기 때문.
+    - UTC 날짜·임계·지표별 1회만 발송(상태 파일 dedup) → 30분 모니터가 반복 발화 못 함.
+    - 발송에 '성공'했을 때만 발송됨으로 기록 — muse 장애 시 다음 주기가 재시도한다.
+    - notify 를 주면 muse 대신 그 함수로 테스트한다(실측 대상 아님).
+    """
+    day = day or datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+    state = _tier_state_load(day)
+    fired = []
+    for metric_key, metric_name, pct, limit in (
+            ("read", "읽기", pct_read, D1_READ_LIMIT),
+            ("write", "쓰기", pct_write, D1_WRITE_LIMIT)):
+        if pct is None or pct <= 0:
+            continue
+        for thr, label in ALERT_TIERS:
+            key = str(int(thr * 100))
+            if pct >= thr and not state[metric_key].get(key):
+                msg = _tier_message(metric_name, label, int(pct * limit), limit, pct, day)
+                ok = notify(msg) if notify else muse_send(msg)
+                print(f"[D1-GUARD] 경보 {metric_name} {label} — "
+                      f"{'muse 발송 성공' if ok else '발송 실패(다음 주기 재시도)'}", flush=True)
+                if ok:
+                    state[metric_key][key] = True
+                fired.append((metric_key, label, ok))
+    if any(ok for _, _, ok in fired):
+        _tier_state_save(state)
+    return fired
 
 
 def check_quota(threshold=0.8, tok=None, raise_on_exceed=True):
@@ -111,7 +228,14 @@ def check_quota(threshold=0.8, tok=None, raise_on_exceed=True):
     if not GUARD_ENABLED:
         return {"readonly": False, "used": 0, "limit": D1_READ_LIMIT, "pct": 0.0, "skipped": True}
     used = get_daily_rows_read(tok=tok)
+    written = get_daily_rows_written(tok=tok)
     pct = used / D1_READ_LIMIT
+    # 3단계 경보 — 파이프라인 실행 중 임계 돌파도 바로 알린다(된 경보는 상태 dedup).
+    # 경보가 실패해도 이 함수의 차단 판정(read 80/95%)은 유지되어야 한다.
+    try:
+        maybe_alert_tiers(pct, written / D1_WRITE_LIMIT if D1_WRITE_LIMIT else 0.0)
+    except Exception as e:
+        print(f"[D1-GUARD] 경보 처리 실패(무시): {e}", flush=True)
     if pct >= READONLY_RATIO:
         return {"readonly": True, "used": used, "limit": D1_READ_LIMIT, "pct": pct}
     if pct >= threshold and raise_on_exceed:

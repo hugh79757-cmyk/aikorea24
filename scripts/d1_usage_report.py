@@ -10,7 +10,10 @@ EmDash 관리자 로그인·게시물 렌더·API 가 전부 죽었다. 정작 �
 1.5시간밖에 안 지난 시점이라 표본이 거의 항상 0 에 가깝고, 한도 접근을 경고할 수 없다.
 → 그래서 2026-10-14 부터 30분 간격으로 돌며 하루치 추이를 본다(plist StartInterval=1800).
 
-80% 이상이면 대표님께 Telegram. 하루에 한 번만 보낸다(중복 방지 마커).
+80% 이상이면 대표님께 Telegram(기존 경로 유지). 3단계(50/70/90%)는 
+muse-cli 기본채팅으로 간다(2026-10-17 대표님 지시, AIK24-QUOTA-WARN-01). 
+회동 중복발송 방지 상태는 cfnew.TIER_STATE_PATH(.d1_tier_alert_state.json) 가 UTC 날짜 단위로 관리한다.
+읽기·쓰기 모두 추적한다. 읽기 전만 수행하던 시절과 달리 GraphQL 조회 1회에 둘 다 나온다.
 읽기 전용 — D1 에 쓰지 않는다.
 """
 import datetime
@@ -23,8 +26,7 @@ sys.path.insert(0, _ROOT)
 
 import cfnew  # noqa: E402
 
-THRESHOLD = 0.8
-CAUTION = 0.5  # 여기 넘으면 Telegram 없이 로그에 경고만 (아직 여유는 있다)
+THRESHOLD = 0.8  # Telegram 상시 경보(기존 경로 유지) — muse 3단계는 ALERT_TIERS
 TAG = "[D1-GUARD]"
 MARKER = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".d1_guard_alert_day")
 
@@ -61,26 +63,40 @@ def _mark_alerted(day):
 
 def main():
     load_env()
+    if "--test-alert" in sys.argv[1:]:
+        kst = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9)))
+        text = (f"[D1-GUARD] 테스트 경보 — 3단계(50/70/90%) 시스템 연결 확인 "
+                f"(AIK24-QUOTA-WARN-01, KST {kst:%H:%M}). 이 메시지는 발송 테스트이며 임계와 무관합니다.")
+        ok = cfnew.muse_send(text)
+        print(f"{TAG} muse 테스트 발송: {'성공' if ok else '실패'}")
+        return 0
+
     utc = datetime.datetime.now(datetime.timezone.utc)
     day = utc.strftime("%Y-%m-%d")
     used = cfnew.get_daily_rows_read(force=True)
+    written = cfnew.get_daily_rows_written()
     pct = used / cfnew.D1_READ_LIMIT
-    bkk = (utc + datetime.timedelta(hours=7)).strftime("%H:%M")
-    msg = f"{TAG} D1 읽기 {used:,}/{cfnew.D1_READ_LIMIT:,} ({pct:.1%}) — 일 {day} (방콕 {bkk})"
+    wpct = written / cfnew.D1_WRITE_LIMIT if cfnew.D1_WRITE_LIMIT else 0.0
+    kst = (utc + datetime.timedelta(hours=9)).strftime("%H:%M")
+    msg = f"{TAG} D1 읽기 {used:,}/{cfnew.D1_READ_LIMIT:,} ({pct:.1%}) · 쓰기 {written:,}/{cfnew.D1_WRITE_LIMIT:,} ({wpct:.1%}) — UTC 일 {day} (KST {kst})"
 
-    if pct < CAUTION:
+    # 3단계 muse 경보 (50/70/90%) — 낮은 수준이면 조용히 종료
+    if pct < 0.5 and wpct < 0.5:
         print(msg + " (정상, 보고 없음)")
         return 0
 
+    for outcome in cfnew.maybe_alert_tiers(pct, wpct):
+        pass  # 발송 결과 로그는 maybe_alert_tiers 내부에서 출력됨
+
     if pct < THRESHOLD:
-        print(msg + f" (주의 — 아직 여유는 있으나 {CAUTION:.0%} 초과)")
+        print(msg + " (50% 이상 — muse 경보 발송 여부는 위 로그)")
         return 0
 
     if _already_alerted(day):
-        print(msg + " (80% 초과지만 오늘 이미 알림 — 중복 발송 안 함)")
+        print(msg + " (80% 초과지만 오늘 이미 Telegram 발송 — 중복 발송 안 함)")
         return 0
 
-    print(msg + " → 초과, 대표님 알림")
+    print(msg + " → 읽기 80% 초과, Telegram 병행 알림")
     try:
         from pipeline.infra.telegram import send_telegram
         ok = send_telegram(msg + " — 한도 초과 시 EmDash 로그인·게시물이 죽는다. 폭주 스크립트 중단 권장.")

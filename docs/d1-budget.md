@@ -35,9 +35,13 @@
 
 | 함수 | 동작 |
 |---|---|
-| `get_daily_rows_read(day=None, force=False)` | 당일(UTC) 계정 rowsRead. **5분 캐시** — 매 `sql()` 마다 GraphQL 을 때리지 않는다 |
-| `check_quota(threshold=0.8)` | 80% 초과 → `QuotaExceededError` 발생 / 95% 초과 → `{"readonly": True}` 반환 / 미만 → `{"readonly": False}` |
+| `get_daily_rows_read(day=None, tok=None, force=False)` | 당일(UTC) 계정 rowsRead. **5분 캐시** — 매 `sql()` 마다 GraphQL 을 때리지 않는다 |
+| `get_daily_rows_written(...)` | **2026-10-17 신설** — 당일 rowsWritten. 읽기와 같은 조회·캐시 공유(GraphQL 1회에 둘 다), 추가 비용 없음 |
+| `check_quota(threshold=0.8)` | 80% 초과(읽기) → `QuotaExceededError` / 95% 초과 → `{"readonly": True}` / 미만 → `{"readonly": False}`. 기존 차단 동작 그대로 유지 |
+| `maybe_alert_tiers(pct_read, pct_write, ...)` | **3단계 경보(50/70/90%)** — 읽기·쓰기 각각 독립 판정 → muse-cli 기본채팅 알림. UTC 일·지표·임계당 1회만 발송(dedup `.d1_tier_alert_state.json`). muse 실패 시 미기록 → 다음 주기 재시도 |
 | `QuotaExceededError` | `sql()` 이 던지는 예외 |
+
+경보 단계 의미: **50%**=관측 시작(ℹ️, 정상일 기준이 43~61%라 자주 뜰 수 있음) · **70%**=확인 필요(⚠️, 진입 가드 `D1_HEADROOM=70%`와 동기) · **90%**=즉시 조치(🚨, 읽기는 80% 차단·95% readonly 진행 보다 뒤).
 
 로그 형식: `[D1-GUARD] 일일 읽기 {used:,}/{limit:,} ({pct:.1%}) — 작업 중단`
 
@@ -50,13 +54,14 @@
 
 launchd 잡 `kr.aikorea24.d1-usage-report` — **StartInterval 1800 = 30분 주기** (하루 48회).
 
-- `scripts/d1_usage_report.py` 가 직전 UTC 일의 rowsRead 를 조회
+- `scripts/d1_usage_report.py` 가 당일 UTC 일의 rowsRead + rowsWritten 를 조회 (계정 합산 — a24+emdash 합)
 - cfnew 의 5분 캐시 덕에 GraphQL 조회는 하루 수회만 발화
-- 80% 초과 시에만 Telegram(`pipeline.infra.telegram.send_telegram`) 으로 대표님 보고
-- 80% 미만이면 조용히 종료(EXIT 0)
+- **3단계(50/70/90%)** 돌파 시 **muse-cli 기본채팅** 알림 (2026-10-17 대표님 지시 — 발송 주체 `cfnew.maybe_alert_tiers`): 임계당 하루 1회. 50%는 정상일 기준 확인용이므로 자주 뜰 수 있음(정상이 아님·기준선 43~61%).
+- 읽기 80% 초과 시 기존 경로인 Telegram 도 병행 (하루 1회 마커 유지)
+- 50%+ 70% 이하면 조용히 종료(EXIT 0) — 로그만 남긴다
 - 로그: `scripts/d1_usage_report.log`
-
-리셋이 KST 09:00 이라 리셋 직전(08:5x KST) 버킷이 어제 하루치를 정확히 담고 있다.
+- 시각 표기: 2026-10-17 부터 KST (+09) — 이전 doc 표기 "방콕(+07)"은 TZ 고정으로 해소됨
+- plist 수정 불필요 — launchd 가 같은 `scripts/d1_usage_report.py` 를 주기적으로 재실행하므로 코드만 바뀌면 즉시 적용된다
 
 **계정 스코프 메모 (2026-10-17 실측):** 본 예산은 운영 계정(stylefactory9ai, `7eb1b8cd…`) 기준이다.
 구계정(hugh79757, `fac9808c…`)의 옛 aikorea24-db(`bec650ce…`)는 하루 읽기 133~244행(휴면)으로
