@@ -1,3 +1,66 @@
+## 2026-10-17 17:00 — LAUNCHD-FIX-02 plist XML 결함 2건 수정 + fx.cycle 배포 실패 근본 원인 수정
+
+### 한 일
+1. **plist XML 결함 2건 수정** (대표님 지시) — `kr.informationhot.en-tour.cycle.plist` 5행, `com.twinssn.subagent-watchdog.plist` 34행의 **주석 안 이중 하이픈(`--`)** 제거. 저장소 원본 `scripts/kr.informationhot.en-tour.cycle.plist` 도 동일 수정(재설치 시 재발 방지). 백업: `~/.local/share/opencode/plist-backup-20261017_2/`.
+2. **이전 보고의 오판 정정** — "다음 재부팅 시 두 잡이 로드 실패한다"는 이전 보고는 **과장이었다**. 실측(실험용 plist bootstrap) 결과 launchd 는 이중 하이픈 주석을 **받아들인다**(등록 성공, 이후 bootout 정리). 실제 영향은 **엄격 XML 파서가 파일을 거부**하는 것 — python `plistlib`(Expat)이 두 plist 를 파싱 실패해, 자체 점검 스크립트가 이 plist 들을 조용히 건너뛰었다.
+3. **`kr.informationhot.fx.cycle` 실패 원인 특정 + 수정** (대표님 "판단 필요" 질문 대응) — 아래 결과 참조.
+4. **`com.twinssn.subagent-watchdog` 정체 확인** — opencode 서브에이전트 감시 잡. 5분마다 `ssd scan --force`(subagent-stuck-detection 스킬)를 실행해 9분 규칙(5~10분 시점에 messages=2·transcript=0)에 걸린 세션을 취소하고 대체 에이전트를 재디스패치한다. 로그 전수 집계: **1,700줄 전부 `[]` = 검출 0건**(한 번도 발동한 적 없음).
+5. 두 plist 수정 후 각 잡 재적재(bootout→bootstrap) 및 검증.
+
+### 결과 (3분법)
+- **[검증됨] fx.cycle 이 사용되는 잡인가** — 살아있는 영문 사이트 6종의 **유일한 배포 경로**다. `rg -l` 결과 en-tour-mrt·en-hotel·en-calendar·en-weekend·en-nomad·en-travel-goods 의 `wrangler deploy` 를 수행하는 스크립트는 `run_fx_cycle.sh` 뿐(다른 사이클 스크립트는 각자 한국어 사이트만 배포). en-tour-landing 만 `run_en_tour_cycle.sh` 가 함께 배포.
+- **[검증됨] 실제 피해 실측(라이브 HTTP)** — 7종 `data/fx.json` 을 직접 내려받아 비교: en-tour 만 최신(10-17 12:20), **나머지 6종 전부 2026-10-06 19:04 생성본(10일 21시간 전)**, USD 0.0007447266(10-06) vs 현재 0.0007491242 = 0.59% 차이.
+- **[검증됨] 근본 원인** — launchd 가 `/bin/zsh -c "...; /bin/zsh …/run_fx_cycle.sh"` 로 호출 → shebang(`#!/bin/bash`)이 무시되고 zsh 로 해석 → zsh 는 미인용 변수를 단어분리하지 않아 58행 `for s in $SITES` 가 **1회만** 실행되고 `--config "en-tour-landing en-…-landing/wrangler.jsonc"` 라는 잘못된 인자가 됨. 로그 근거: 10-06 이후 실패 로그 11건 전부 `FAIL deploy en-tour-landing en-…-landing`(7개 사이트 이름이 한 줄에 뭉침) · 성공은 `fx_cycle_20261006.log` 1건뿐 · sha 파일 mtime 2026-10-06 17:06. 재현 실측: zsh 에서 `for s in $SITES` = 1회, 수정형 `for s in $(printf …)` = 7회(bash 도 7회).
+- **[검증됨] 수정 3건** — ① `scripts/run_fx_cycle.sh` 반복문을 셸 무관형으로 교체(재발 방지 주석 포함) ② `scripts/kr.informationhot.fx.cycle.plist` + 설치본의 인터프리터 `/bin/zsh` → `/bin/bash`(스크립트 자체 선언과 일치) ③ 잡 재적재.
+- **[검증됨] 수정 검증** — `bash -n`·`zsh -n` 통과 · 반복값 7개 전부 `wrangler.jsonc` 실존 · `npx wrangler deploy --config en-hotel-landing/wrangler.jsonc --dry-run` 실행 성공("Read 15 files from the assets directory … --dry-run: exiting now", 실제 배포 없음) · 재적재 후 잡 등록 확인.
+- **[검증됨] 대기 중인 배포 범위 = 환율 파일뿐** — 6개 사이트의 라이브 vs 로컬 비교에서 `data/fx.json` 외 데이터 파일은 **전부 동일**, `git status` 도 해당 6개 디렉터리 변경이 `data/fx.json` 뿐.
+- **[검증됨] plist 수정 검증** — `plutil -lint` OK + **python plistlib(엄격 파서) 통과** · 주석 내 이중 하이픈 0건(남은 매치는 ProgramArguments 의 정상 인자 `--force`) · `diff <(plutil -p 백업) <(plutil -p 현재)` 무차이 = **설정값 무변경, 주석만 변경**.
+- **[검증됨] 3개 잡 재적재 상태** — `kr.informationhot.fx.cycle`(runs 0) · `kr.informationhot.en-tour.cycle`(runs 0) · `com.twinssn.subagent-watchdog`(runs 1, 재적재 시 스캔 1회) 등록 확인. 실험용 잔재(`com.twinssn.parsetest`, `/tmp/parsetest`) 제거 확인.
+- **[검증불가] 다음 발화의 실제 배포 성공** — fx.cycle 다음 발화는 시스템 18:20 = **KST 20:20(+지터 5분)**. 수정 적용 후 첫 실전 실행이라 결과 미확인. 확인 명령: `grep -E 'OK deploy|FAIL deploy|end \(rc=' ~/projects2/toss-sl/output/fx_cycle_20261017.log | tail -5`.
+
+### 잔존 위험
+- **KST 20:2x 에 영문 6종이 실제로 배포된다**(en-tour 포함 7종). 배포 범위는 환율 파일뿐임을 확인했으나, 원치 않으면 `touch ~/projects2/toss-sl/output/.fx_deploy_hold` 로 보류(스크립트에 구현된 공식 스위치 — 환율 파일만 갱신하고 배포 스킵).
+- fx.cycle 은 6시간마다 발화하지만 환율 제공처가 일 1회 갱신이라 실제 배포는 하루 1~2회 수준(설계 의도, 이상 아님).
+- 로컬 `data/fx.json` 6건은 **미커밋** 상태로 남김(자동 생성 데이터 — 기존 관행대로 누적 커밋 대상).
+- `com.twinssn.subagent-watchdog` 는 `--force` 로 **자동 취소·재디스패치**를 수행한다. 지금까지 검출 0건이라 실질 무동작이나, 향후 발동 시 세션을 취소하므로 로그 감시 필요(로그: `~/.local/share/opencode/subagent-watchdog/daemon.log`).
+- XML 결함과 무관하게 **launchd 는 관대한 파서**를 쓴다는 사실이 확인됨 → 앞으로 "plist XML 깨짐 = 재부팅 시 소실"로 단정하지 말 것. 판정 기준은 ① `plutil -lint` ② 엄격 파서(python plistlib) ③ 실제 bootstrap 실험.
+
+### 다음 행동
+1. KST 20:20 이후 fx.cycle 로그에서 `OK deploy` 7줄 확인(실패 시 plist 인터프리터·토큰 재점검).
+2. 미조치 잔여(대표님 승인 대기): `homebrew.mxcl.cloudflared` 재시작 루프(runs 19,269·로그 58MB), `com.sap.scheduler`(이미 중지됨).
+
+## 2026-10-17 14:45 — LAUNCHD-RETIRE-01 launchd 잡 11건 중지 (wiki-personal 7 + 4개 프로젝트)
+
+### 한 일
+1. 대표님 지시로 launchd 사용자 잡 **11건 중지**: wiki-personal 7건 + SAP 1 + imhero 1 + blog-rank-lab 1 + news-keyword-pro 1.
+2. 사전 집계 → 백업 → `launchctl bootout` + plist 보관 이동 → 사후 검증 순서로 실행 (destructive-operations-protocol 준수).
+3. 되돌리기 스크립트·매니페스트 생성.
+
+### 결과 (3분법)
+- **[검증됨] 11건 전부 해제**: `launchctl print gui/$UID/<라벨>` 11개 모두 실패(미등록) 확인. bootout 성공 11/11, plist 11개 보관 이동.
+  - wiki-personal 7: `com.aikorea24.wiki-batch-embed`·`wiki-embed-continuous`(PID 833)·`wiki-embed-recover`·`wiki-ingest-continuous`(runs 18,562 재시작 루프)→`wiki-ingest-crash-recovery`(PID 858)·`kr.aikorea24.wiki-dashboard`(PID 867, 포트 8788)·`kr.aikorea24.wiki-ingest`
+  - 그 외 4: `com.sap.scheduler`(runs 108, flock 오류로 매번 실패)·`com.imhero.daily`·`com.twinssn.blog-rank-lab`(PID 76938 + 자식 streamlit 76943)·`com.twinssn.news-keyword-pro`
+- **[검증됨] 프로세스·포트 정리**: 관련 경로 프로세스 0건(`pgrep` 결과 없음), 포트 8788 리스너 닫힘(`lsof`). blog-rank-lab 자식 streamlit 프로세스도 종료됨(별도 kill 불필요 확인).
+- **[검증됨] 다른 파이프라인 무사**: `kr.aikorea24.threads-publisher`·`com.toss-sl.site`·`com.tvshow.hourly`·`com.5000.scheduler`·`kr.aikorea24.pipeline-runner`·`com.twinssn.status-dashboard` 6개 등록·생존 확인.
+- **[검증됨] 로그인 항목 셸 잡 25 → 15개** (11건 중 10건이 bash/zsh 기반, wiki-dashboard는 python 기반).
+- **[검증됨] 공개 URL 영향**: `https://wiki.aikorea24.kr` → **HTTP 502** (cloudflared ingress는 유지, 백엔드만 내려감). `status.aikorea24.kr` → 200 정상.
+- **[부분검증] 되돌리기 경로**: `_retired_20261017_1437/restore.sh` 생성·실행권한 확인. **실제 복구 실행은 하지 않음**(원복 테스트 미실시) — 검증력 제한 사유 명시.
+- **[검증불가] 로그인 항목 UI(BTM)에서 11행이 즉시 사라지는지**: `launchctl print-disabled`에 `com.aikorea24.wiki-ingest-crash-recovery => enabled` 1건이 남아 관찰됨. plist 파일은 없으므로 재부팅 후 로드될 수는 없음. 복구 계획: 대표님이 로그인 항목 창을 다시 열어 잔존 행 확인 → 남아 있으면 해당 행 토글 오프.
+
+### 백업 위치
+- `~/Library/LaunchAgents/_retired_20261017_1437/` — plist 11개 + `manifest.tsv`(중지 직전 state/runs/pid/args) + `restore.sh`
+- 실행 전 상태 기록: `com.aikorea24.wiki-ingest-continuous` runs=18,562(재시작 루프), `com.sap.scheduler` runs=108, `com.twinssn.blog-rank-lab` pid=76938 등.
+
+### 잔존 위험
+- **wiki.aikorea24.kr 이 502** — 의도된 결과(대표님 지시)이나 공개 URL이 죽은 상태로 남음. 되살리려면 `restore.sh` 실행 또는 wiki-dashboard만 개별 복구.
+- **BTM 목록 잔존 여부 미확인** — 로그인 항목 창에 11행이 계속 보일 수 있음(토글 오프로 정리 가능).
+- **미조치(이번 지시 범위 밖)**: ① `homebrew.mxcl.cloudflared` 재시작 루프(runs 19,269·로그 58MB) ② XML 깨진 plist 2건(`kr.informationhot.en-tour.cycle`·`com.twinssn.subagent-watchdog`) — 다음 재부팅 시 두 잡 소실 위험 ③ `kr.informationhot.fx.cycle` exit 1 반복.
+- **wiki-personal 중단 시점 데이터 상태**: ingest 프로세스를 중간에 종료했으므로 진행 중이던 색인 작업이 미완으로 남을 수 있음(재개 시 확인 필요).
+
+### 다음 행동
+1. 대표님 — 로그인 항목 창 재확인 후 잔존 행 있으면 토글 오프.
+2. 승인 시 — cloudflared 루프 + XML 2건 + fx.cycle 처리.
+
 ## 2026-10-17 14:29 — AIK24-AUDIT-01: aikorea24.kr 전체 감사 + D1 쿼터 최적화 검증 [검증됨 중심]
 
 지시: aikorea24.kr 전체 감사 + emdash/Astro D1 읽기·쓰기 초과 최적화의 적용 여부 확인.
