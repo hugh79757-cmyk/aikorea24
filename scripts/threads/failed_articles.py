@@ -42,11 +42,17 @@ def _ensure_logs_dir():
 
 def _get_retention_days() -> float:
     """Get retention period from env or default 2 hours (0.083 days).
-    
+
     Changed from 24h to 2h: write_thread failures are often transient
     (model instability), and 24h TTL starves the article pool.
+
+    2026-10-17: FAILED_ARTICLE_RETENTION_DAYS(일 단위) 지원 추가 — DAYS가
+    설정되면 우선, 없으면 기존 FAILED_ARTICLE_RETENTION_HOURS(시간 단위) 경로.
     """
     try:
+        days_env = os.environ.get('FAILED_ARTICLE_RETENTION_DAYS')
+        if days_env is not None:
+            return max(0.083, float(days_env))
         hours = float(os.environ.get('FAILED_ARTICLE_RETENTION_HOURS', '2'))
         return max(0.083, hours / 24)  # convert hours to days, minimum ~2h
     except (ValueError, TypeError):
