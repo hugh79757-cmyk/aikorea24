@@ -1,5 +1,6 @@
 ---
 import { env } from 'cloudflare:workers';
+import { cleanBriefingDescription } from '../../lib/briefing-comment';
 export const prerender = false;
 
 const db = env.DB;
@@ -28,7 +29,11 @@ if (db) {
        ORDER BY created_at DESC
        LIMIT 100`
     ).all();
-    news = nResult.results || [];
+    // AIK24-PIPE-04 §작업2: 목록 카드 설명에서도 verdict·설정 JSON 을 숨긴다
+    news = (nResult.results || []).map((n: any) => ({
+      ...n,
+      description: cleanBriefingDescription(n.description),
+    }));
   } catch (e) {
     console.error(e);
   }

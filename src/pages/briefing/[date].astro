@@ -1,5 +1,6 @@
 ---
 import { env } from 'cloudflare:workers';
+import { cleanBriefingComment, cleanBriefingDescription } from '../../lib/briefing-comment';
 export const prerender = false;
 const { date } = Astro.params;
 
@@ -22,7 +23,8 @@ if (db && date) {
          WHERE bi.briefing_id = ?
          ORDER BY bi.sort_order`
       ).bind(briefing.id).all();
-      items = results || [];
+      // AIK24-PIPE-04 §작업2: verdict·(a)/(b)·설정 JSON·죽은 '자세한 분석' 텍스트 링크를 숨긴다.
+      items = (results || []).map((it: any) => ({ ...it, comment: cleanBriefingComment(it.comment) }));
 
       const itemIds = items.map((i: any) => i.news_id).filter(Boolean);
       const placeholders = itemIds.map(() => '?').join(',');
@@ -34,7 +36,11 @@ if (db && date) {
              AND created_at >= datetime('now', '-3 days')
            ORDER BY created_at DESC LIMIT 8`
         ).bind(...itemIds).all();
-        relatedNews = related || [];
+        // AIK24-PIPE-04 §작업2: 같은 정리 규칙을 '오늘의 다른 AI 뉴스' 카드 설명에도 적용
+        relatedNews = (related || []).map((n: any) => ({
+          ...n,
+          description: cleanBriefingDescription(n.description),
+        }));
       }
     }
   } catch (e) {

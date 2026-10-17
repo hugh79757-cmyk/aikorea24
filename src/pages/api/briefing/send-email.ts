@@ -3,6 +3,7 @@ export const prerender = false;
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
+import { cleanBriefingComment } from '../../../lib/briefing-comment';
 
 const ADMIN_EMAILS = ['twinssn@gmail.com'];
 
@@ -123,7 +124,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
                   <span style="font-size:15px;color:#111827;font-weight:700;vertical-align:middle;">${escapeHtml(item.news_title)}</span>
                 </td>
               </tr>
-              ${item.comment ? `<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">${escapeHtml(item.comment)}</td></tr>` : ''}
+              ${item.comment ? `<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">${escapeHtml(cleanBriefingComment(item.comment))}</td></tr>` : ''}
               <tr><td style="padding-top:8px;">
                 <a href="${briefingUrl}" style="font-size:12px;color:#2563eb;text-decoration:underline;font-weight:600;">
                   AI코리아24에서 자세히 보기 →

@@ -18,7 +18,8 @@ from model_router import chat_completion
 sys.path.insert(0, str(Path(__file__).parent))
 from auto_news_selector import (CANDIDATE_LIMIT, MAX_COUNT, PROVIDER_SOURCES,
                                  cluster_by_topic, d1_query,
-                                 interleave_candidates, select_top_articles)
+                                 interleave_candidates, refill_after_dedup,
+                                 select_top_articles)
 import model_eval
 
 # PIPE-03 §4-4: news.source → OpenCode 설정 접두어
@@ -398,6 +399,15 @@ def main(selected_articles=None):
             log(f"    [{reason}] {title}")
     selected = cutoff
     selected = merge_same_models(selected)
+
+    # AIK24-PIPE-04: 중복 제거·모델 통합으로 빈 슬롯이 생기면 계단식 재충원.
+    # selector 의 3.5단계 dedup 은 D1 이력만 보므로 local history(briefing_dedup.json)
+    # 중복은 여기서 처음 드러난다 — 2026-10-17 실측: 3건 선정 → 2건 탈락 → 1건 발행.
+    # 재충원 후보가 없으면 빈 슬롯으로 남긴다 (물타기 금지 — PIPE-03 원칙 유지).
+    if len(selected) < MAX_COUNT:
+        log(f"  빈 슬롯 {MAX_COUNT - len(selected)}개 — 재충원 시도")
+        selected = refill_after_dedup(selected, removed, max_count=MAX_COUNT,
+                                      d1_query_func=d1_query)
 
     if not selected:
         log("  ⚠️ 선정된 기사 없음")

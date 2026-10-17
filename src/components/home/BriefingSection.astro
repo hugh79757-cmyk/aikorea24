@@ -1,6 +1,11 @@
 ---
+import { cleanBriefingComment } from '../../lib/briefing-comment';
+
 const { briefing, items } = Astro.props;
 const hasData = briefing && items && items.length > 0;
+
+// AIK24-PIPE-04 §작업2: 카드에는 제목 + 설명 코멘트 + "자세히 보기" 만 남긴다.
+const displayItems = (items || []).map((it: any) => ({ ...it, comment: cleanBriefingComment(it.comment) }));
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr.split('-').slice(0, 3).join('-'));
@@ -36,7 +41,7 @@ function formatDate(dateStr: string) {
         )}
 
         <div class="space-y-6">
-          {items.map((item: any, idx: number) => (
+          {displayItems.map((item: any, idx: number) => (
             <article class="group bg-white border border-gray-200 rounded-xl p-6 hover:border-[#E63B2E] transition-all duration-300">
               <div class="flex items-start gap-4">
                 <span class="flex-shrink-0 w-8 h-8 bg-[#111111] rounded-lg flex items-center justify-center text-white font-bold text-sm">

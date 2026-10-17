@@ -44,6 +44,10 @@ POOL_LIMIT = 50
 CANDIDATE_LIMIT = 8  # LLM 평가 대상
 PER_TAG_CANDIDATES = 3  # 태그별 상위 3건만 후보로
 NEWS_CANDIDATES = 4  # 뉴스 슬롯 최대 4건 (태그별 상위 3건 중 라운드로빈)
+# AIK24-PIPE-04: 재충원 후보 상한 = 무료 기회 3 + Zen 3 + 일반 뉴스 9(태그 3종×3건).
+# 선정(CANDIDATE_LIMIT=8)보다 넓게 잡는다 — 중복 제거로 빈 슬롯이 생겼을 때만 쓰이고,
+# 그때는 이미 후보가 소진된 뒤라 더 깊은 풀이 필요하다.
+REFILL_POOL_LIMIT = 15
 SCORE_MIN = 6  # 3개 기준 평균 2점 미만 탈락
 TAG_ORDER = ("free-llm", "opensource", "tool")
 KST = timezone(timedelta(hours=9))
@@ -293,6 +297,167 @@ def _is_mechanical(article):
             or article.get("v2_tag") == "free-opportunity")
 
 
+# ---------------------------------------------------------------------------
+# AIK24-PIPE-04 — 중복 제거 후 재충원
+#
+# 실측(2026-10-17 07:00 실행): selector 는 3건을 선정했는데 auto_briefing 의 Phase 2
+# 중복 제거가 2건(local_semantic · local_exact_id)을 탈락시켜 브리핑이 1건으로 발행됐다.
+# selector 의 3.5단계 dedup 은 D1 이력만 보고 local history(briefing_dedup.json)는
+# 보지 않으므로, local 히스토리 중복은 선정 이후에야 드러난다 → 빈 슬롯을 다시 채우는
+# 로직이 없으면 그대로 빈 채 발행된다. 여기서 그 슬롯을 계단식으로 채운다.
+# ---------------------------------------------------------------------------
+
+# 같은 프로세스의 selector.main() 이 평가를 마친 후보 풀. auto_briefing 이 재충원할 때
+# 재사용해 LLM 점수를 두 번 매기지 않는다 (run_pipeline 은 selector → briefing 을
+# 한 프로세스에서 돌리므로 캐시가 산다). 캐시가 없으면 DB 에서 새로 뽑아 평가한다.
+_LAST_SCORED_POOL = []
+
+
+def remember_scored_pool(pool):
+    """selector.main() 이 평가한 후보 풀을 기억한다 (재충원용 방어적 복사)."""
+    global _LAST_SCORED_POOL
+    _LAST_SCORED_POOL = [dict(a) for a in (pool or []) if isinstance(a, dict)]
+
+
+def get_scored_pool():
+    """기억된 후보 풀 (없으면 빈 리스트)."""
+    return [dict(a) for a in _LAST_SCORED_POOL]
+
+
+def _article_key(article):
+    """후보 동일성 키 — id 가 없으면 link+title 로 대체한다."""
+    aid = article.get("id") or article.get("news_id")
+    if aid not in (None, ""):
+        return "id:" + str(aid)
+    return "lt:" + ((article.get("link") or "") + "|" + (article.get("title") or "")).lower()
+
+
+def _model_key(article):
+    """모델 통합(merge_same_models) 키 — 프로바이더 행에만 존재한다."""
+    if article.get("source") not in PROVIDER_SOURCES:
+        return ""
+    return (article.get("original_title") or "").lower()
+
+
+def _refill_candidates(d1_query_func):
+    """재충원 후보 풀(평가 전)을 DB 에서 만든다 (선택기 실행 캐시가 없을 때의 폴백).
+
+    일반 뉴스의 LLM 평가는 여기서 하지 않는다 — 계단식 3단계까지 내려갔고 중복 검사를
+    통과한 후보에 한해 매긴다 (중복으로 버려질 후보에 호출을 쓰지 않는다).
+    """
+    pool, _ = interleave_candidates(REFILL_POOL_LIMIT)
+    return pool
+
+
+def _score_candidates(articles, scorer):
+    """점수 없는 일반 뉴스 후보에 LLM 도움 점수를 매긴다 (기계 감지 행은 면제)."""
+    for art in articles:
+        if _is_mechanical(art) or art.get("_score") is not None:
+            continue
+        score = scorer(art)
+        log(f"  [재충원 후보] {score}점 {(art.get('title') or '')[:50]}")
+        time.sleep(2)
+    return articles
+
+
+def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
+                       d1_query_func=None, pool=None, scorer=None):
+    """중복 제거로 빈 슬롯이 생기면 계단식으로 재충원한다 (AIK24-PIPE-04 §작업1).
+
+    계단식 순서:
+      1) 남은 free-opportunity 후보 최신순
+      2) 남은 source='OpenCode Zen' AND v2_tag='free-llm' 후보 최신순
+      3) 남은 일반 뉴스 LLM 평가 점수 상위순 (동점은 최신순)
+
+    - 이미 선정된 항목(kept)과 중복 제거로 탈락한 항목(dropped)은 후보에서 제외한다.
+    - 재충원 후보도 중복 검사(2차 방어)를 다시 통과한 것만 쓴다.
+    - 후보가 부족하면 있는 만큼만 채우고, 없으면 빈 슬롯으로 둔다 (강제 충전 금지).
+    - 모델 행은 merge_same_models 와 같은 키(original_title)로 중복 통합을 방어한다.
+    """
+    if d1_query_func is None:
+        d1_query_func = d1_query
+    kept = list(kept or [])
+    needed = (max_count or 0) - len(kept)
+    if needed <= 0:
+        return kept
+
+    excluded = {_article_key(a) for a in kept}
+    for item in (dropped or []):
+        art = item[0] if isinstance(item, (tuple, list)) else item
+        if isinstance(art, dict):
+            excluded.add(_article_key(art))
+    merged_models = {_model_key(a) for a in kept if _model_key(a)}
+
+    candidates = ([dict(a) for a in pool] if pool
+                  else _refill_candidates(d1_query_func))
+
+    # 재충원 후보도 중복 검사(3중 방어 2차)를 그대로 통과해야 한다.
+    # briefing_dedup → auto_news_selector 를 import 하므로 순환 → 지연 import.
+    from briefing_dedup import filter_duplicates
+    fresh, blocked = filter_duplicates(candidates, d1_query_func)
+    if blocked:
+        log(f"  [재충원] 중복 제외 {len(blocked)}건: "
+            + ", ".join(reason for _, reason in blocked))
+
+    def _is_available(art):
+        """아직 안 쓴 후보인가 — 선정분·탈락분·모델 중복을 걸러낸다."""
+        if _article_key(art) in excluded:
+            return False
+        mkey = _model_key(art)
+        if mkey and mkey in merged_models:
+            log(f"  [재충원] 모델 중복 제외: {art.get('original_title')}")
+            return False
+        return True
+
+    picked = []
+
+    def take(rows, want, tier):
+        got = []
+        for art in rows:
+            if len(got) >= want:
+                break
+            if not _is_available(art):
+                continue
+            excluded.add(_article_key(art))
+            mkey = _model_key(art)
+            if mkey:
+                merged_models.add(mkey)
+            got.append(art)
+            log(f"  [재충원 {tier}] [{art.get('_score', 0)}점 {art.get('v2_tag')}] "
+                f"{(art.get('title') or '')[:55]} ({art.get('source')} · {art.get('pub_date')})")
+        return got
+
+    # 1) 무료 기회 최신순
+    opp = sorted([a for a in fresh if a.get("v2_tag") == "free-opportunity"
+                  and a.get("source") not in PROVIDER_SOURCES], key=_date_key)
+    picked += take(opp, needed - len(picked), "1 기회")
+
+    # 2) Zen 변경 최신순
+    if len(picked) < needed:
+        zen = sorted([a for a in fresh if a.get("source") == "OpenCode Zen"
+                      and a.get("v2_tag") == "free-llm"], key=_date_key)
+        picked += take(zen, needed - len(picked), "2 Zen")
+
+    # 3) 일반 뉴스 — LLM 평가 점수 상위순 (동점은 최신순). 3단계까지 왔을 때만 평가한다.
+    if len(picked) < needed:
+        rest = [a for a in fresh
+                if a.get("source") not in PROVIDER_SOURCES
+                and a.get("v2_tag") != "free-opportunity"
+                and _article_key(a) not in excluded
+                and not (_model_key(a) and _model_key(a) in merged_models)]
+        _score_candidates([a for a in rest if a.get("_score") is None],
+                          scorer or score_helpfulness)
+        rest = [a for a in rest if (a.get("_score") or 0) >= SCORE_MIN]
+        rest.sort(key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
+        picked += take(rest, needed - len(picked), "3 뉴스")
+
+    if picked:
+        log(f"  재충원 {len(picked)}건 완료 (빈 슬롯 {needed}개 중 {len(picked)}개 충원)")
+    else:
+        log(f"  ⓘ 재충원 후보 없음 — 빈 슬롯 {needed}개 유지 (강제 충전 없음)")
+    return kept + picked
+
+
 def main(dedup=True):
     _ = dedup  # v1의 브리핑 중복 제거는 briefing_dedup.filter_duplicates가 담당
     pool, tag_counts = interleave_candidates(CANDIDATE_LIMIT)
@@ -320,6 +485,8 @@ def main(dedup=True):
     passed = [a for a in pool if _is_mechanical(a) or (a.get("_score") or 0) >= SCORE_MIN]
     dropped = len(pool) - len(passed)
     log(f"탈락 {dropped}건 (점수 < {SCORE_MIN}) → 통과 {len(passed)}건")
+    # AIK24-PIPE-04: 같은 프로세스의 브리핑 생성기가 중복 제거 후 재충원할 때 쓰는 풀.
+    remember_scored_pool(passed)
     if not passed:
         log("통과 후보 없음 — 브리핑 건너뜀")
         return []

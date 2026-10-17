@@ -127,6 +127,32 @@ def esc(s):
         .replace("'", "&#39;"))
 
 
+# ---- 표시 정리 (AIK24-PIPE-04 §작업2) -------------------------------------
+# briefing_items.comment 에는 LLM 설명 문장과 함께 개발자용 부가정보가 저장된다:
+# 12문항 평가 verdict / (a)·(b) CLI 접근성 문구 / "설정: {...}" JSON /
+# blog_draft_generator 가 덧붙이는 "👉 자세한 분석: https://..." 텍스트 링크.
+# 이메일에는 설명 문장만 남긴다. 규칙은 src/lib/briefing-comment.ts 의
+# cleanBriefingComment() 와 동일하다 — 한쪽만 고치면 웹과 메일 표시가 어긋난다.
+_COMMENT_DROP_RE = re.compile(
+    r"^\s*(?:"
+    r"12문항 평가|OpenCode 동작 확인됨|현재 추천 Top 3 대비|"
+    r"\(a\) OpenCode 모델 선택기|\(b\) 커스텀 프로바이더 설정 후 연결|"
+    r"프로바이더:|설정:\s*\{|👉 자세한 분석:|"
+    r"OpenCode에서 무료로 사용 가능|로컬 브리지|"
+    r"모델:\s*https?://|사용법:\s*Ollama"
+    r")"
+)
+
+
+def clean_comment_for_display(comment):
+    """이메일 본문에 표시할 설명 문장만 남긴다 (AIK24-PIPE-04 §작업2)."""
+    if not comment:
+        return ""
+    kept = [line for line in str(comment).split("\n")
+            if not _COMMENT_DROP_RE.match(line)]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(kept)).strip()
+
+
 def generate_email_html(briefing, items):
     """이메일 HTML 생성 — 브리핑 기사 + AI 도구 추천"""
     today = datetime.now().strftime("%Y-%m-%d")
@@ -162,8 +188,12 @@ def generate_email_html(briefing, items):
     for item in display_items:
         sort_order = item.get("sort_order") or ""
         title = item.get("news_title", "")
-        comment = item.get("comment", "")
-        desc = (item.get("news_desc") or "")[:150]
+        # AIK24-PIPE-04 §작업2: verdict·(a)/(b)·설정 JSON·'자세한 분석' 텍스트 링크를 숨긴다.
+        comment = clean_comment_for_display(item.get("comment", ""))
+        # AIK24-PIPE-04 §작업2: 회색 메타데이터 줄(news_desc)은 표시하지 않는다.
+        # 무료 LLM 행에서는 'Beam Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰.
+        # OpenCode 설정: {...} 프로바이더 갱신일 2026-10-16.' 같은 기계 메타데이터가
+        # 코멘트 박스 아래 그대로 노출됐다.
         briefing_url = f"https://aikorea24.kr/briefing/{date}{'#item-' + str(sort_order) if sort_order else ''}"
 
         items_html += f"""
@@ -177,7 +207,6 @@ def generate_email_html(briefing, items):
                 </td>
               </tr>
               {f'<tr><td style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:8px 12px;font-size:13px;color:#1e40af;line-height:1.5;margin-top:4px;">{esc(comment)}</td></tr>' if comment else ''}
-              {f'<tr><td style="font-size:13px;color:#6b7280;line-height:1.5;padding-top:6px;">{esc(desc)}</td></tr>' if desc else ''}
               <tr><td style="padding-top:8px;">
                 <a href="{briefing_url}" style="font-size:12px;color:#2563eb;text-decoration:underline;font-weight:600;">
                   AI코리아24에서 자세히 보기 →

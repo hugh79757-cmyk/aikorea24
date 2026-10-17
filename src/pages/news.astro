@@ -2,6 +2,7 @@
 export const prerender = false;
 import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
+import { cleanBriefingComment, cleanBriefingDescription } from '../lib/briefing-comment';
 
 // AIK24-NEWS-01: /news/ v2 개편
 //   상단 "오늘의 브리핑"  — 최신 published 브리핑(= 이메일 발송분과 동일 아이템)
@@ -60,7 +61,8 @@ try {
          WHERE bi.briefing_id = ?
          ORDER BY bi.sort_order`
       ).bind(briefing.id).all();
-      briefingItems = results || [];
+      // AIK24-PIPE-04 §작업2: verdict·(a)/(b)·설정 JSON·죽은 '자세한 분석' 텍스트 링크를 숨긴다.
+      briefingItems = (results || []).map((it: any) => ({ ...it, comment: cleanBriefingComment(it.comment) }));
     }
 
     // 전체 소식 아카이브 — v2 통과분만. 부분 인덱스로 seek 하므로 상한을 넉넉히 둔다.
@@ -149,7 +151,7 @@ Astro.response.headers.set('Cache-Control', 'public, max-age=300');
                   <span class="text-xs text-gray-600">{(n.pub_date || n.created_at || '').slice(0, 10)}</span>
                 </div>
                 <h3 class="font-medium text-[#111111] mb-1 leading-snug">{n.title}</h3>
-                <p class="text-sm text-gray-500 line-clamp-2">{stripTags(n.description)}</p>
+                <p class="text-sm text-gray-500 line-clamp-2">{stripTags(cleanBriefingDescription(n.description))}</p>
               </a>
             ))}
           </div>

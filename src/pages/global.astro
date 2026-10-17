@@ -1,5 +1,6 @@
 ---
 import { env } from 'cloudflare:workers';
+import { cleanBriefingDescription } from '../lib/briefing-comment';
 import Layout from '../layouts/Layout.astro';
 
 let globalList: any[] = [];
@@ -12,7 +13,10 @@ try {
        FROM news WHERE category = 'global' AND title != original_title
        ORDER BY created_at DESC LIMIT 50`
     ).all();
-    globalList = result.results || [];
+    globalList = (result.results || []).map((n: any) => ({
+      ...n,
+      description: cleanBriefingDescription(n.description),
+    }));
   }
 } catch (e) {
   console.error('Global news fetch error:', e);
