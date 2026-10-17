@@ -1143,6 +1143,12 @@ def purge_cloudflare_cache():
 # ============================================
 def index_new_to_vectorize():
     """오늘 저장된 기사를 Vectorize에 인덱싱"""
+    # [AIK24-VECTORIZE-01] 읽는 곳(쿼리 소비자)이 없어 실패만 누적되므로 기본 스킵.
+    # 재사용 시 VECTORIZE_ENABLED=1 로 실행 (vectorize_client에 읽기 메소드가
+    #  생기고 사이트/Worker에 바인딩이 붙은 뒤 활성화할 것).
+    if os.environ.get("VECTORIZE_ENABLED", "0") != "1":
+        print("  ℹ Vectorize 인덱싱 스킵 (VECTORIZE_ENABLED 미설정)")
+        return
     try:
         from pipeline.infra.vectorize_client import embed_article, upsert_vectors
     except ImportError:
