@@ -505,6 +505,8 @@ def run_wrangler(sql: str) -> bool:
 
 
 def main():
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     parser = argparse.ArgumentParser(description="0원 인프라 강좌 시드 데이터 생성")
     parser.add_argument("--dry", action="store_true", help="SQL만 출력")
     parser.add_argument("--file", type=str, help="SQL을 파일로 저장")

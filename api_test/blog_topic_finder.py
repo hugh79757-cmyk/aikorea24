@@ -470,6 +470,10 @@ def generate_titles(topic, articles):
 # 메인
 # ============================================
 def main():
+    if "/Users/twinssn/Projects/aikorea24/scripts" not in sys.path:
+        sys.path.insert(0, "/Users/twinssn/Projects/aikorea24/scripts")
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--hours', type=int, default=24, help='최근 N시간 기사')

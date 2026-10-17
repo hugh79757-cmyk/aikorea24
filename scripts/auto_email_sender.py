@@ -455,6 +455,8 @@ def send_email_via_brevo(briefing, items):
 
 
 def main():
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     print("=== aikorea24 이메일 자동 발송 ===\n")
 
     print("[1/3] 오늘 브리핑 조회...")

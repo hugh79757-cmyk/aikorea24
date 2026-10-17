@@ -129,6 +129,10 @@ def insert_to_d1(item):
             pass
 
 def main():
+    if "/Users/twinssn/Projects/aikorea24/scripts" not in sys.path:
+        sys.path.insert(0, "/Users/twinssn/Projects/aikorea24/scripts")
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     print('=' * 60)
     print(f'정부 공문서 AI 학습데이터 수집기')
     print(f'실행 시각: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')

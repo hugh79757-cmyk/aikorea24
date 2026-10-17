@@ -169,6 +169,10 @@ def update_index():
 
 
 def main():
+    if "/Users/twinssn/Projects/aikorea24/scripts" not in sys.path:
+        sys.path.insert(0, "/Users/twinssn/Projects/aikorea24/scripts")
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     today = datetime.now().strftime('%Y-%m-%d')
     print(f"노인복지 뉴스 브리핑 ({today})")
     print("=" * 50)

@@ -1525,6 +1525,8 @@ SAMPLE_TOOLS = [
 # ============================================
 def main():
     import argparse
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     parser = argparse.ArgumentParser(description='AI 툴 대량 확충기')
     parser.add_argument('--batch', type=int, default=5,
                        help='배치 크기 (초기: 50, 유지: 10)')

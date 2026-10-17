@@ -1189,6 +1189,8 @@ def index_new_to_vectorize():
         print(f"  ⚠ Vectorize: 임베딩 생성 실패 (전체 {failed}건)")
 
 def main():
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', choices=['kr', 'global', 'all'], default='all')

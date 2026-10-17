@@ -108,6 +108,11 @@ def draw_cta(draw, y, color=ACCENT):
 # ── DB 뉴스 ──
 def fetch_news(limit=30):
     """브리핑 발행된 뉴스 우선, 없으면 최신 뉴스 폴백"""
+    import sys
+    if "/Users/twinssn/Projects/aikorea24/scripts" not in sys.path:
+        sys.path.insert(0, "/Users/twinssn/Projects/aikorea24/scripts")
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     # 1) 오늘 발행된 브리핑 뉴스
     today = datetime.now().strftime('%Y-%m-%d')
     cmd_briefing = ['npx','wrangler','d1','execute','aikorea24-db','--remote','--json','--command',
