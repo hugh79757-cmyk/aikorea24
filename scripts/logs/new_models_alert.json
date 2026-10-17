@@ -1,35 +1,24 @@
 {
- "day": "2026-10-17",
- "checked_at": 1792184405.004215,
- "total_rows": 40,
+ "day": "2026-10-18",
+ "checked_at": 1792270807.784362,
+ "total_rows": 39,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "moondream/moondream3-preview",
-   "moondream/moondream3.1-9b-a2b",
-   "xingchen-agi/xing4.0-29b-a4b:free",
-   "reflection/beam-1.0-501b-a23b"
+   "elorian/glimpse",
+   "qwen/qwen3.7-plus:batch",
+   "deepseek/deepseek-v4.1-flash-1017"
   ],
   "kilo": [
-   "moondream/moondream3-preview",
-   "reflection/beam-free",
-   "moondream/moondream3.1-9b-a2b",
-   "xingchen-agi/xing4.0-29b-a4b:free",
-   "reflection/beam-1.0-501b-a23b"
-  ],
-  "zen": [
-   "glm-5.3-flash-free",
-   "beam-free",
-   "ll-alpha-free"
+   "elorian/glimpse",
+   "deepseek/deepseek-v4.1-flash-1017"
   ]
  },
  "removed_by_provider": {
-  "kilo": [
-   "stepfun/step-5-preview-free"
-  ],
   "zen": [
-   "cat-jam-free",
-   "step-5-preview-free"
+   "ll-alpha-free",
+   "muse-spark-1.2-contributor-free",
+   "muse-spark-1.3-contributor-free"
   ]
  }
 }
