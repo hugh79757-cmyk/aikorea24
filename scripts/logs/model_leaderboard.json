@@ -68,5 +68,18 @@
   "max_score": 12,
   "judge_failed_n": 1,
   "ts": 1792162611.9015622
+ },
+ {
+  "model_id": "glm-5.3-flash-free",
+  "cli_model": "opencode/glm-5.3-flash-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 6,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "score_display": "6/12",
+  "ts": 1792256431.719736
  }
 ]
