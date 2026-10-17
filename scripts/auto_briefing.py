@@ -181,6 +181,8 @@ def log(msg):
 
 def d1_execute(sql):
     """D1 INSERT/UPDATE/DELETE 실행"""
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     cmd = ["/opt/homebrew/bin/wrangler", "d1", "execute", "aikorea24-db", "--remote", "--command", sql]
     env = dict(os.environ)
     try:

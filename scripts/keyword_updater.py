@@ -62,6 +62,8 @@ def load_env():
 # ============================================
 def query_d1(sql):
     import requests
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     account_id = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
     api_token = os.environ.get("CLOUDFLARE_API_TOKEN", "")
     if not account_id or not api_token:

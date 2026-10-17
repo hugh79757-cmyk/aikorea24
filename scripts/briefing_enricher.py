@@ -38,6 +38,8 @@ _DB = "aikorea24-db"
 
 def _d1_run(sql: str) -> Optional[list]:
     """wrangler d1 execute 실행, results 반환."""
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     cmd = [_WRANGLER, "d1", "execute", _DB, "--remote", "--command", sql]
     env = dict(os.environ)
     try:

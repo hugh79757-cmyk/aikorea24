@@ -99,6 +99,9 @@ def main():
         if k in ("CLOUDFLARE_API_TOKEN", "CLOUDFLARE_ACCOUNT_ID"):
             os.environ[k] = line.split("=", 1)[1].strip().strip('"')
 
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
+
     from emdash02_measure import query  # noqa: E402 — env 로드 후 import
 
     posts = _rows(query("SELECT slug, featured_image FROM ec_posts "

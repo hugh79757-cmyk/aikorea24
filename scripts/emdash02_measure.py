@@ -57,6 +57,8 @@ def analytics_written(database_id=None, day=None):
 
 
 def query(sql, database_id=EMDASH_DB):
+    import cfnew
+    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
     return rest(f"/accounts/{ACCT}/d1/database/{database_id}/query", "POST", {"sql": sql})
 
 
