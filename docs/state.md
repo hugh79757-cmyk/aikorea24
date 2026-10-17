@@ -1,3 +1,19 @@
+## 2026-10-17 19:25 — AIK24-THREADS-ROLE-01: threads-publisher 역할 분석 + "주범" 정정 (중요)
+
+**한 일** (대표님 질문: "하루 12번 돌면 이 스레드 퍼블리셔가 하는 역할은 뭐지?")
+1. kr.aikorea24.threads-publisher.plist + main_v3.py 정독: 설계 역할 = 2시간마다 ① 당일 브리핑 발행 기사 ~200행 SELECT ② GPT-4o-mini 훅 발굴(피치 생성·평가·3단 dedup) ③ GPT-4o 5카드 쓰레드 작성 ④ 3중 방어 검증·humanize ⑤ @aikorea24 Threads API 발행. threads-compass는 동일 스크립트 --format compass(2-pass 포맷) 3회/일.
+2. 로그 실측 정정: .env의 THREADS_PUBLISH_ENABLED=0 (AIK24-THREADS-01 결정) → **오늘 launchd 12회 전원 "발행 비활성화 상태 — 조용히 종료"** = 기사 로드 전 조기 반환 → **D1 읽기 0**. 어제(10-16)도 12+3=15회 전원 동일.
+3. 오늘 로그의 "기사: N개 로드"42건·피치불통60건은 pytest 수행 경로(tests가 로그 파일을 공유, `pytest-of-twinssn` 10건 확인) — 서비스 런 아님.
+
+**결과 (근거)**
+- [검증됨] threads-publisher 현재 D1 소비 0 (12회 전원 조기종료, 로그 마커 12/12)
+- [위반 감지·정정] 이전 턴 보고 "점유 주범 threads-publisher 12회/일" — 스케줄만 근거한 과대판단으로 정정. 실제 서빙 주체는 07:00 정기 파이프라인·사이트 워커·emdash-db 쪽이며 크기 분해는 미계측[부분검증].
+- 커밋 대상 코드 변경 없음.
+
+**잔존 위험**: 읽기 소비의 잡별 크기 분해 미계측 — 티어 경보가 실데이터로 후속 판단 기회 제공.
+
+**다음 행동**: 없음(대기). threads 재활성화는 대표님 결정사항(THREADS_PUBLISH_ENABLED=1).
+
 ## 2026-10-17 19:41 — AIK24-BLOG-01 후속: 오늘 발행 글 규칙 준수 수정 + 한글 slug 중복생성 결함 수정
 
 **한 일**
