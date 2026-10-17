@@ -2,6 +2,21 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-17 11:44 — feat: AIK24-PIPE-04 중복 제거 후 재충원 + 브리핑 카드·이메일 표시 정리 (커밋 f9ba3ba5 / 배포 ddae899f)
+
+- 작업1 재충원: `auto_news_selector.refill_after_dedup()` 신규 — 3계단(남은 free-opportunity 최신순 →
+  OpenCode Zen free-llm 최신순 → 일반 뉴스 LLM 점수순). 후보는 기존 `filter_duplicates` 를 다시 통과시켜
+  3중 방어 2차를 유지한다. `auto_briefing` 이 Phase 2 중복 제거 직후 `len(selected) < MAX_COUNT` 일 때만 호출.
+  점수 풀은 `remember_scored_pool` 로 프로세스 내 재사용(중복 LLM 채점 방지), 폴백은 DB 재조회.
+- 작업2 표시 정리: `src/lib/briefing-comment.ts` 신규(`cleanBriefingComment`·`cleanBriefingDescription`).
+  verdict·(a)/(b)·설정 JSON·죽은 "자세한 분석" 텍스트를 웹 5표면 + 이메일에서 제거. DB 값은 무변경(표시 계층만).
+- 검증: 07:00 상태 재현 하네스 → 빈 슬롯 2/2 충원(Azure·ll-alpha-free), 통합 경로 3건 저장, 폴백 3/3 충원.
+  pytest 관련 21건 통과, 전체 스위트 17 failed/698 passed(HEAD 기준과 동일, 수정 모듈 참조 0건).
+  라이브 5표면(/, /briefing/2026-10-17-1/, /briefing/, /news/, /global/) 대상 토큰 0건 실측.
+- 지시서 완료 기준 미이행 1건: "세일즈포스(12점)·구글(9점) 충원" — 두 건 모두 이미 중복/어제 발행분이라
+  재충원 후보에서 제외된다. 중복 제거를 우회하면 어제 기사를 재발행하게 되므로 우회하지 않았다. 상세: docs/state.md 최상단.
+- [위반 감지] 커밋 02c5da8f 가 `docs/state.md` 2805줄을 삭제했다(이번 작업 무관). 복구 경로: `git show 02c5da8f^:docs/state.md`.
+
 ## 2026-10-17 03:23 — read: parse_log_line 스펙 검증 — 13 스펙 체크 전 항목 기대 동작 (구현 무변경)
 
 - 대표님 지시 구현 코드를 **그대로** 실행해 스펙 대조 검증을 수행했다. 구현 코드·프로젝트 파일은
