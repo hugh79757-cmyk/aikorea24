@@ -2,6 +2,14 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-17 (UTC 16:10 / KST 10-18 01:10) — feat(guard): D1 읽기·쓰기 3단계 경보(50/70/90%) muse-cli 전달 (AIK24-QUOTA-TIER-01)
+
+- `scripts/cfnew.py`: `get_daily_rows_written(신설·읽기와 캐시 공유)` · `maybe_alert_tiers(3단계 판정·UTC 일·지표·임계당 1회 dedup 상태 .d1_tier_alert_state.json)` · `muse_send(--wait 15, --thread 없음=기본채팅)` · check_quota에 경보 연결(기존 80% 차단·95% readonly·Telegram 유지)
+- `scripts/d1_usage_report.py`: 쓰기 병행 표기 · 방콕(+07)→KST 정정 · `--test-alert` 테스트 플래그 · 50/70/90 차단 경보
+- 검증: muse 실전송 2건 수신(seq 41295·41297)+ACK 2건 · dedup 5시나리오·실패→재시도 톝 · pytest 751/0/10 기준선 유지 · 모니터 정상(28.2%/8.2% 조용히 종료)
+- 소비주체 조사: 이메일 발송 무혐의(SELECT 2건/일) · threads-publisher 휴면(`THREADS_PUBLISH_ENABLED=0`, D1·CF 소비 0) · 한도초과 3건 중 이사 연관은 10-09 쓰기 183% 한 건뿐
+- 커밋: `79dece9a`(코드) + state.md 기록 4건(`d92fd392..ef52e4db` 등) · `.continue-here.md` 핸드오프 갱신
+
 ## 2026-10-17 12:51 — fix(AIK24-EMDASH-01): emdash 블로그 글 h1 폰트 조정 (데스크톱 42px·모바일 36px·weight 500)
 
 - 대상: `~/projects2/aikorea24emdash` → emdash.aikorea24.kr. 글 h1(`.article-title`)이 데스크톱 56px·700으로
