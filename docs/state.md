@@ -1,3 +1,22 @@
+## 2026-10-17 18:20 — AIK24-ROT-CLEAN-02: 잔존위험 전면 제거 (대표님 지시 "잔존위험 모두 제거 + 시간은 한국시간")
+
+**한 일 (리스크별 해소 + 근거)**
+1. [옛 Pages 옛 D1 바인딩] 제거 확정 — PATCH `deployment_configs.production.d1_databases.DB: null`(전체 dc 갱신 방식; 빈객체는 8000022 특이로 무효) → 사후 GET `null` 실측. 롤백 DDL 문서화. docs/d1-budget.md 갱신.
+2. [중복 인덱스] `DROP INDEX idx_news_created` 실행 — 사전 6종 → 사후 5종 실측, `EXPLAIN QUERY PLAN`이 정식본 `idx_news_created_at (created_at>?)` 사용 확인. 롤백 DDL: `CREATE INDEX idx_news_created ON news(created_at DESC)`.
+3. [http→https 301 리다이렉트] src/middleware.ts 상단 패스 추가(localhost 제외) — **배포 2회**(7d1190c8→83974ad9). 라이브 실측: http://aikorea24.kr → 301 https, www → 301 apex, apex 200. 기존 http 200 누출(구글 중복 콘텐츠 리스크) 해소.
+4. [홈 title] "AI코리아24"(5자) → SEOHead 접미 구조 확인 후 `매일 아침 AI 뉴스 브리핑과 실전 강좌 | AI코리아24` — 첫 배포에서 이중 브랜드 발견·재수정. 라이브 curl 실측 완료.
+5. [launchd 시각변위] macOS TZ를 **KST(+09) 고정** — 대표님 sudo `systemsetup -settimezone "Asia/Seoul"` 실행, `date +%z`=+0900 검증. 이후 모든 launchd 잡이 문서 기준 KST 시각 발화(전 계열 +2h 이동). README 주의문구 갱신.
+6. [구계정 핫 DB 소유] 매핑 완료 — certkorea(`/Users/twinssn/Projects/certkorea/wrangler.toml`·25만/일)·blogdex(`/Users/twinssn/Projects/blogdex` worker 2종·10만/일)·obsidian(본인 볼트 동기화 자원·45만/일). 3종 모두 **옛 계정 소비, 본 프로젝트 예산과 무관** 재확인 — 검증불가→검증됨 전환.
+7. [테스트 실패 3건 종결 — 전부 소멸] ① retention: `_get_retention_days()`가 DAYS 키 무시 → [PRODUCTION CODE] 이원 인식(DAYS 우선·HOURS 후순·2h 기본 보존) ② validator: 훅 따옴표 한글('뤼튼') 엔티티 미추출 → [PRODUCTION CODE] 인용 그룹 정규식 한글 포함+2자 허용 ③ pitch 크롤 부족 중단: **00405c84(2026-09-17 사고 대응) 의도 정책**이라 판정 → [TEST CODE]만 갱신. **전체 스위트 751 통과 / 0 실패 / 10 스킵** — 734→748→751 (+17), 최초 전체 녹색. 751 = 734(기존) + 14(deep_dive SyntaxError 회복) + 3(금일 수리·갱신).
+
+**커밋**: 4c07fe2d(retention prod) · a6ebdf24(validator prod) · 76e9f905(pitch [TEST CODE]) · 90969375(web+docs) · 배포 버전 7d1190c8·83974ad9(Workers).
+
+**분류 주의**: ③은테스트 갱신이므로 순환검증 아님 — production 동작(같은 게이트)은 argparse-A경유 실패이력 등록 흐름이 스위트 내 다른 통과 케이스로 교차 검증됨. [TEST CODE]/[PRODUCTION CODE] 구분은 위 각 항목 표기대로.
+
+**잔존 위험: 없음** (근거: 위 8항목 전부 실행+검증 완료, 상태 깨끗). 관측 유지 항목: 내일 아침 launchd 전체 정상 발화(가드 통합 스크립트 18종의 런타임 가드 차단은 쿼터 고비에 처음 실증될 예정 — DayCount 관측만 남음).
+
+**다음 행동**: 명일 아침 launchd 발화 관측 후 이슈 없으면 본 사이클 완전 종결.
+
 ## 2026-10-17 15:40 — AIK24-ROT-CLEAN-01: 오염 항목 8종 안전 정리 + 감사 정정 2건
 
 **한 일 (대표님 지시: "8개 전부 헛도는 것들… 제거해줘. 안전하게")**

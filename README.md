@@ -57,8 +57,8 @@ macOS launchd 스케줄러로 전 단계 자동 실행:
 |------|----------|------|
 | 05:30 | `news_collector.py` | D1 news 테이블 뉴스 수집 (28개 RSS + 해외/국내) |
 
-> 스케줄 주의: plist(launchd) 발화는 **macOS 시스템 시간대(+07) 기준**, 코드·문서 표기는
-> KST(+09) 기준으로 평소 2시간 차이가 있다. macOS 시간대가 KST로 돌아오면 실발화 시각이 표기와 일치한다.
+> 스케줄 주의: 2026-10-17 macOS 시스템 시간대를 KST(Asia/Seoul, +09)로 고정.
+> plist(launchd) 발화·코드·문서 표기가 모두 KST 기준으로 일치 (이전 +07 운영 시 2시간 차이가 있었다).
 > 키워드·아웃라인·스레드 글감 야간 파이프라인(keyword_updater / thread_topic_finder / outline_generator)은
 > 2026-10 기준 미스케줄(중단) 상태 — 블로그 콘텐츠는 EmDash 단독 발행으로 대체됨.
 
