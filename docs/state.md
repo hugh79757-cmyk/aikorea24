@@ -1,3 +1,31 @@
+## 2026-10-17 15:40 — AIK24-ROT-CLEAN-01: 오염 항목 8종 안전 정리 + 감사 정정 2건
+
+**한 일 (대표님 지시: "8개 전부 헛도는 것들… 제거해줘. 안전하게")**
+1. deep_dive_writer.py SyntaxError 수리: 원인=`7d068392` 에서 프롬프트 f-string 종료 `"""` 소실(규칙 12·13 추가 시). 종료 따옴표 복구.
+2. 가드 우회 7스크립트(cfnew 미경유)에 `check_quota(0.8)` 통합(auto_briefing·briefing_enricher·blog_draft_generator·dynamic_seed_generator·emdash02·emdash15·keyword_updater) + 재전수조사로 추가 발견된 11스크립트에도 통합(tools_collector·news_collector·auto_email_sender·emdash14·seed_course 3종·blog_topic_finder·card_news_generator·gov_doc_collector·senior_briefing).
+3. wrangler.toml(Pages 잔재) 삭제. deploy.sh 는 주석에 기록된 `.wrangler/deploy/config.json` 체인 사정으로 `--config` 추가 금지 확인 — 건드리지 않음.
+4. Vectorize: 읽는 곳 없음 실측(vectorize_client에 read/query 메소드 부재·사이트 바인딩 부재·주간 수집기는 get_embedding 만 사용) → news_collector 인덱싱을 `VECTORIZE_ENABLED` 플래그화(기본 스킵).
+5. 문서 정리: README(Astro 7·Workers 배포·퇴역 야간 파이프라인 3행 제거·TZ 2시간 주의 문구), AGENTS.md(폐기된 `env -u pages deploy` 절차 현행화), docs/d1-budget.md(모니터링 30분 주기 정정).
+6. 스키마 정합화: sql/006_news_indexes_alignment.sql 신설 + schema.sql idx_news_pubdate·idx_news_v2 수록.
+7. disabled plist 3개(keyword/outline/thread-topic) 물리 삭제(launchctl 목록에 로드 상태 없음 확인 후 rm).
+
+**정정 (원 감사 오류 2건 — 숨기지 않음)**
+- [정정] "구계정 옛 DB ~25만행/일" → 옛 계정 per-DB 재분해 실측: 핫 DB는 obsidian-db(45만)·certkorea-db(25만)·blogdex_db(10만)로 **타 프로젝트** 소속. 옛 aikorea24-db는 하루 133~244행(휴면)으로 실질 무관. d1-budget.md 에 기록.
+- [정정] "pub_date 인덱스 부재·pool.ts 풀스캔" → 라이브 재실측: `idx_news_pubdate ON news(pub_date)` 존재 + EXPLAIN `SEARCH USING INDEX idx_news_pubdate (pub_date>?)` 확인. 라이브 DDL 불필요. 신규 발견: idx_news_created/idx_news_created_at 중복 인덱스(쓰기 이중 비용) — DROP은 미승인으로 보류.
+
+**결과 (3분법)**
+- [검증됨] deep_dive 테스트 16/16 통과 + 전체 스위트 748 통과/3 실패/10 스킵. 748 = 734(기존) + 14(SyntaxError 해제 회복). 남은 3 실패는 기존 미처리(test_failed_articles·test_pitch·test_write_thread_validation) — [TEST CODE] 미수정, [PRODUCTION CODE] 만 수정해 회복.
+- [검증됨] 가드 전수 커버: D1 접근 스크립트에서 cfnew·D1-GUARD 미포함 grep 리 0건. py_compile 18종 전부 통과.
+- [검증됨] Vectorize 스킵 분기 스모크: 미설정 시 "Vectorize 인덱싱 스킵" 출력 확인.
+- [부분검증] 신규 통합 18스크립트의 런타임 가드 차단 동작: 쿼터 고갈일에만 처음 실증됨(cfnew 자체는 10-14 실측 차단 성과). 내일 아침 파이프라인 정상 발화 최종 확인 필요.
+- [검증불가] 구계정 핫 DB 3종의 정체 소유 과제는 타 프로젝트 영역 — 본 리포 스코프 밖(복구 계획: D1 list 페이지·Workers 목록으로 해당 repo 매핑 후 별도 확인).
+
+**커밋**: 75996690(deep_dive) · 895da92c+ddc27e9e(가드 18종) · 08088f55(toml) · d31df259(vectorize) · ba225da1(docs+schema) + 런타임 2건(8fd8c0e9, 후행 산출물).
+
+**잔존 위험**: (a) 옛 Pages "aikorea24" 에 옛 D1 바인딩 잔존(유휴, 트래픽 오면 읽음 — 제거 미진행, 옛 프로젝트 롤백용 조작 회피), (b) 중복 인덱스 idx_news_created 미삭제(승인 대기 DDL), (c) launchd 발화 시각이 Mac TZ(+07)로 KST 의도보다 2시간 빠름 — plist 시각 미수정(문서화만), (d) HTTP→HTTPS 질의 리다이렉트·홈 title 5자 문제는 "제거" 성격이 아니라 추가 작업이라 본건 미처리, (e) state.md 기록은 이 도구(state_prepend)로만 수행 완료.
+
+**다음 행동**: (1) 명일 launchd 전부 정상 발화 관측(가드 통합 건), (2) 중복 인덱스 DROP 승인 시 sql/006 절차대로 실행, (3) HTTP 리다이렉트·title 별도 지시 시 진행.
+
 ## 2026-10-17 17:00 — LAUNCHD-FIX-02 plist XML 결함 2건 수정 + fx.cycle 배포 실패 근본 원인 수정
 
 ### 한 일
