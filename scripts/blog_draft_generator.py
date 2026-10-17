@@ -55,6 +55,24 @@ def remove_emoji(text):
 from model_router import chat_completion
 from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, is_placeholder_copy, DEEPSEEK_POOL
 
+# ============================================
+# 글쓰기 규칙 주입 (AIK24-BLOG-01, 2026-10-17 대표님 지시)
+# ============================================
+# 스킬(aik24-blog-writing) 규칙 파일을 읽어 글 생성 system_prompt 앞에 붙인다.
+# 어떤 LLM이 글을 쓰더라도 같은 규칙이 적용되게 하는 것이 목적 — 아래 3개 생성 경로 모두에 적용한다.
+# 파일이 없으면 빈 문자열을 돌려주고 기존 동작 그대로(폴백) 진행한다.
+def _load_blog_rules():
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "blog_writing_rules.md")
+    try:
+        with open(p, encoding="utf-8") as f:
+            return f.read().strip()
+    except OSError:
+        return ""
+
+
+_BLOG_RULES = _load_blog_rules()
+
+
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
 DB_ID = "3f4cedde-eabc-4d7c-b459-f6abe8733767"
 
@@ -253,6 +271,8 @@ def generate_draft(keyword, articles, grade):
             "주어진 기사 하나를 깊이 분석하여 블로그 초안을 작성해주세요. "
             "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
         )
+        # AIK24-BLOG-01: 규칙 prepend — 심층(단일 기사) 경로
+        system_prompt = (_BLOG_RULES + "\n\n" + system_prompt) if _BLOG_RULES else system_prompt
         user_prompt = (
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
@@ -282,6 +302,8 @@ def generate_draft(keyword, articles, grade):
             "여러 기사를 종합하여 트렌드 분석 블로그 초안을 작성해주세요. "
             "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
         )
+        # AIK24-BLOG-01: 규칙 prepend — 트렌드(복수 기사) 경로
+        system_prompt = (_BLOG_RULES + "\n\n" + system_prompt) if _BLOG_RULES else system_prompt
         user_prompt = (
             f"아래 '{keyword}' 관련 여러 기사를 종합한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
@@ -502,6 +524,8 @@ def generate_model_eval_draft(keyword, article, model_id):
         "당신은 AI 모델을 정직하게 평가하는 한국어 테크 블로거입니다. "
         "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
     )
+    # AIK24-BLOG-01: 규칙 prepend — 모델 심층 분석 경로
+    system_prompt = (_BLOG_RULES + "\n\n" + system_prompt) if _BLOG_RULES else system_prompt
     user_prompt = (
         f"무료 LLM '{model_id}'에 대한 실무 투입 판단 블로그 글을 작성해주세요.\n\n"
         f"이 글의 독자는 돈을 쓰기 싫어하고, 성능 좋은 무료 코딩 LLM이 뭔지 항상 찾는 사람입니다.\n"
