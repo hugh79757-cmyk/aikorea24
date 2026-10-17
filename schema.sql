@@ -117,6 +117,9 @@ CREATE TABLE IF NOT EXISTS lesson_clicks (
 CREATE INDEX IF NOT EXISTS idx_news_created_at ON news(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_news_country ON news(country);
 CREATE INDEX IF NOT EXISTS idx_news_category ON news(category);
+-- 2026-10-17 라이브 정합화: 운영 DB에 이미 존재하는 인덱스를 스키마에 수록 (이전까지 미수록 드리프트).
+CREATE INDEX IF NOT EXISTS idx_news_pubdate ON news(pub_date);
+CREATE INDEX IF NOT EXISTS idx_news_v2 ON news(v2_pass, created_at DESC) WHERE v2_pass = 1;
 CREATE INDEX IF NOT EXISTS idx_enrollments_email ON enrollments(email);
 CREATE INDEX IF NOT EXISTS idx_enrollments_course ON enrollments(course_slug);
 CREATE INDEX IF NOT EXISTS idx_lesson_clicks_enrollment ON lesson_clicks(enrollment_id);

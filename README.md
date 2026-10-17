@@ -13,9 +13,9 @@ AI 관련 국내외 뉴스를 자동 수집, 번역, 큐레이션하여 한국�
 
 | 구분 | 기술 |
 |------|------|
-| 프레임워크 | Astro 5 (SSR) |
+| 프레임워크 | Astro 7 (SSR) |
 | 스타일링 | Tailwind CSS 3 + Typography |
-| 배포 | Cloudflare Pages |
+| 배포 | Cloudflare Workers (Assets) |
 | 데이터베이스 | Cloudflare D1 (SQLite) |
 | 인증 | Google OAuth 2.0 |
 | 뉴스 수집 | Python 3 (네이버 API, RSS, 공공데이터) |
@@ -56,13 +56,11 @@ macOS launchd 스케줄러로 전 단계 자동 실행:
 | 시각 | 스크립트 | 작업 |
 |------|----------|------|
 | 05:30 | `news_collector.py` | D1 news 테이블 뉴스 수집 (28개 RSS + 해외/국내) |
-| 06:00 | `keyword_updater.py` | `keywords.json` 동적 갱신 (씨드 + 뉴스 키워드 → 검색량 → grade) |
-| 06:10 | `thread_topic_finder.py` | `threads/YYYYMMDD/` 스레드 글감 생성 (클러스터링 → 아웃라인) |
-| 06:30 | `outline_generator.py` | `outlines/YYYYMMDD/` 블로그 아웃라인 생성 (키워드 → D1 검색 → GPT) |
 
-- 저장 구조: `scripts/outlines/YYYYMMDD/키워드슬러그_outline.md`, `scripts/threads/YYYYMMDD/소재슬러그_thread.md`
-- 카드뉴스 자동 생성 후 안드로이드 폰 전송 (KDE Connect)
-- 노인복지 브리핑 HTML 자동 생성
+> 스케줄 주의: plist(launchd) 발화는 **macOS 시스템 시간대(+07) 기준**, 코드·문서 표기는
+> KST(+09) 기준으로 평소 2시간 차이가 있다. macOS 시간대가 KST로 돌아오면 실발화 시각이 표기와 일치한다.
+> 키워드·아웃라인·스레드 글감 야간 파이프라인(keyword_updater / thread_topic_finder / outline_generator)은
+> 2026-10 기준 미스케줄(중단) 상태 — 블로그 콘텐츠는 EmDash 단독 발행으로 대체됨.
 
 ## 뉴스 카테고리
 

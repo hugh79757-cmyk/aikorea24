@@ -48,14 +48,22 @@
 
 ## 5. 모니터링
 
-launchd 잡 `kr.aikorea24.d1-usage-report` — 매일 **08:30 KST**.
+launchd 잡 `kr.aikorea24.d1-usage-report` — **StartInterval 1800 = 30분 주기** (하루 48회).
 
 - `scripts/d1_usage_report.py` 가 직전 UTC 일의 rowsRead 를 조회
+- cfnew 의 5분 캐시 덕에 GraphQL 조회는 하루 수회만 발화
 - 80% 초과 시에만 Telegram(`pipeline.infra.telegram.send_telegram`) 으로 대표님 보고
 - 80% 미만이면 조용히 종료(EXIT 0)
 - 로그: `scripts/d1_usage_report.log`
 
-리셋이 KST 09:00 이라 08:30 은 "아직 초기화 전 마지막 버킷" = 어제 하루치를 정확히 본다.
+리셋이 KST 09:00 이라 리셋 직전(08:5x KST) 버킷이 어제 하루치를 정확히 담고 있다.
+
+**계정 스코프 메모 (2026-10-17 실측):** 본 예산은 운영 계정(stylefactory9ai, `7eb1b8cd…`) 기준이다.
+구계정(hugh79757, `fac9808c…`)의 옛 aikorea24-db(`bec650ce…`)는 하루 읽기 133~244행(휴면)으로
+본 예산과 무관하다. 옛 계정의 핫 DB는 타 프로젝트 소속이다 — obsidian-db 약 45만/일,
+certkorea-db 약 25만/일, blogdex_db 약 10만/일(+쓰기 2.8만). 단, 옛 Pages 프로젝트
+"aikorea24" 의 deployment_configs 에 옛 D1 바인딩이 여전히 남아 있어 트래픽이 오면
+읽게 되어 있다(현재 유휴).
 
 ## 6. 초과 시 대응
 

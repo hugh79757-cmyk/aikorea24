@@ -186,31 +186,31 @@ Phase 6가 피치에만 프롬프트 검증 적용 → "해결됨" → 결국 �
 | `hugh79757` | `/Users/twinssn/Projects/aikorea24` | hugh79757@gmail.com |
 | `farmsolution` | `/Users/twinssn/projects2/farmsolution` | farmsolution 계정 |
 
-### 권장: wrangler 실행 시 env var 해제
+### 권장: 배포는 scripts/deploy.sh 하나로 (2026-10-17 현행화)
 
-```bash
-# agent 세션 (OpenCode/Codex)에서 wrangler 호출 시
-env -u CLOUDFLARE_API_TOKEN wrangler pages deploy dist --project-name aikorea24 --branch main
+- 배포는 Pages → Workers 전환 완료. `wrangler pages deploy` 방식은 폐기.
+- `scripts/deploy.sh`가 .env의 신계정 자격(`$EXPECTED_ACCOUNT_ID` 가드)을 검증하고
+  homebrew wrangler 4.110+ 로 `wrangler deploy`를 3회 재시도한다.
+- deploy 대상 설정은 Astro 7 빌드가 등록하는 `.wrangler/deploy/config.json`
+  (dist/server/wrangler.json) 체인으로 확정된다. 루트 wrangler.jsonc 는 main 이 없으므로
+  `--config wrangler.jsonc` 로 지정하면 assets-only Worker 로 오인해 3회 연속 실패 — 지정 금지.
+- wrangler.toml(Pages 잔재)은 2026-10-17 삭제(참조 0건, 커밋 08088f55).
 
-# 또는 글로벌 바이너리 직접 호출 (4.110.0, auth profiles 지원)
-env -u CLOUDFLARE_API_TOKEN /opt/homebrew/bin/wrangler pages deploy dist --project-name aikorea24 --branch main
-```
+### D1 읽기 예산 가드 (2026-10-17)
+
+모든 D1 사용 스크립트는 `scripts/cfnew.py` 의 `check_quota(threshold=0.8)` 를 경유한다 —
+읽기 80% 초과 시 작업 중단. 사양: `docs/d1-budget.md`.
 
 ### .zshrc 함수 (interactive shell 전용)
 
 `.zshrc` lines 84-99에 wrangler 함수 이미 정의 — `CLOUDFLARE_API_TOKEN` 등 4개 env var를 자동 unset/restore.
 
-### deploy.sh (아직 수정 필요)
+### deploy.sh (이전 "수정 필요" 표기는 해제 — 이미 Workers deploy로 정상화됨)
 
-`scripts/deploy.sh`가 `npx wrangler`를 사용 → 로컬 4.50.0 (profiles 미지원) 실행됨. 수정 필요:
-```bash
-# 현재 (실패):
-npx wrangler pages deploy dist ...
-
-# 수정안:
-env -u CLOUDFLARE_API_TOKEN /opt/homebrew/bin/wrangler pages deploy dist \
-  --project-name aikorea24 --branch main --commit-dirty=true
-```
+과거 기록: `scripts/deploy.sh`가 과거 `npx wrangler pages deploy`를 쓴 적이 있으나,
+현재는 `wrangler deploy`(Workers, Assets)로 동작하며 2026-10-17 실측 배포 성공.
+`env -u CLOUDFLARE_API_TOKEN …` 우회 조치는 더 이상 필요하지 않다 —
+deploy.sh 가 .env 의 신계정 자격을 명시 검증한다(위 "권장" 섹션 참조).
 
 ### 참고
 
