@@ -47,13 +47,6 @@ OPENROUTER_MODELS = "https://openrouter.ai/api/v1/models"
 
 QUESTION_TIMEOUT = 60
 QUESTION_MAX_TOKENS = 1500  # EVAL-02: 실무 문항(12,000자 문서 참조·테스트 스위트) 답이 500에 잘림
-# AGENT-EVAL-01 4단계 2번: 판관은 0 으로 고정한다. 0.1 에서 같은 답안에도 0/1 이 흔들렸다.
-# ⚠ AIK24-EVAL-JUDGE-02 부터 판관이 OpenCode CLI 경로로 바뀌면서 **이 두 상자는 쓰이지 않는다**
-# (CLI 에 temperature·max_tokens 를 넘길 방법이 없다). 남겨둔 것은 API 판관 경로 복귀용이다.
-JUDGE_TEMPERATURE = 0.0
-# AIK24-EVAL-JUDGE-01: 판관이 산문으로 시작하면 10토큰에 잘려 파싱 실패했다.
-# 파서는 응답 전체에서 [01] 을 찾으므로 끝까지 받으면 판정 숫자는 읽힌다.
-JUDGE_MAX_TOKENS = 100
 
 # OpenRouter 무료 티어는 분당 20회 제한이 있다. 8문항을 연속으로 쏘면 429가 터져
 # "0점 처리"가 모델 능력 실패와 구분되지 않는다. 문항 간 간격을 두고, 429는
@@ -178,11 +171,13 @@ TEST_QUESTIONS = [
         "axis": "지시이행",
         "q": "한국어로만 답해 주세요. 아래 코드가 하는 일을 설명하고, 답의 마지막 줄에 반드시 '---끝---' 를 출력하세요.\n```python\ndef add(a, b): return a + b\n```",
         "expected": "두 값을 받아 더한 값을 돌려주는 파이썬 함수에 대한 한국어 설명. 그리고 마지막 줄에 '---끝---' 가 나와야 함. 영어로 쓴 사고 과정이 섞이면 불합격",
+        "grade": "grade_q1_korean_sentinel",
     },
     {
         "axis": "지시이행",
         "q": "다음 정보를 JSON으로만 출력해 주세요. 마크다운 코드블록, 설명 문장, 앞뒤 문장은 일절 넣지 마세요.\n{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
         "expected": "이름 김민수, 나이 31, 취미 등산·독서를 담은 순수 JSON. 코드블록 표시나 설명 문장이 붙으면 불합격",
+        "grade": "grade_q2_pure_json",
     },
     # ── 축 2. 코딩 실무 (버그·테스트·리팩토링·명세 구현·디버깅) ─────────
     {
@@ -216,6 +211,7 @@ TEST_QUESTIONS = [
         "axis": "코딩실무",
         "q": "아래 함수를 pytest로 검증하는 테스트를 작성해 주세요. 정상 입력, 0으로 나누기, 음수 등 경계값을 모두 다루세요.\n```python\ndef safe_div(a, b):\n    if b == 0:\n        return None\n    return a / b\n```",
         "expected": "pytest 테스트 코드. b=0 이면 None 을 돌려주는지, 정상 나눗셈 결과가 맞는지, 0 나누기 예외가 나지 않는지, 음수 입력 등을 검증해야 하며 테스트 함수 이름과 assert 가 들어간 실행 가능한 코드",
+        "grade": "grade_q4_pytest_written",
     },
     {
         "axis": "코딩실무",
@@ -299,12 +295,14 @@ TEST_QUESTIONS = [
         "axis": "맥락유지",
         "q": "제1질문에 입력한 문서를 다시 한 번 붙여 드립니다. 이 문서의 약 1,200자 지점에 적힌 내부 정합 함수 이름은 정확히 무엇입니까? 함수 이름만 답하세요.",
         "expected": _MARKER,
+        "grade": "grade_q7_marker_exact",
         "seed": [{"role": "user", "content": _DOC_LONG}],
     },
     {
         "axis": "맥락유지",
         "q": "위 대화에서 내가 요청한 작업 3가지를 나열해 주세요.",
         "expected": "파이썬 설치 방법 확인, 변수 이름 짓는 규칙 3가지, 프로그램이 안 돌아갈 때 처음 할 일",
+        "grade": "grade_q8_three_tasks",
         "seed": [
             {"role": "user", "content": "파이썬을 처음 시작하려면 뭘부터 해야 해?"},
             {"role": "assistant", "content": "먼저 파이썬 공식 사이트에서 설치 프로그램을 받으신 뒤, 터미널에서 python --version으로 설치를 확인하세요."},
@@ -319,21 +317,25 @@ TEST_QUESTIONS = [
         "axis": "에이전트",
         "q": "GitHub 저장소에 아래 PR 이 올라왔습니다. 코드 리뷰 시 봐야 할 항목을 우선순위 순으로 5개만 JSON 배열로 출력하세요 (설명 필드 없이). \n```diff\n+  def pay(user, amount): total += amount; db.insert('tx', total); return total\n-  def pay(user, amount): return amount * TAX_RATE + amount\n```\n설명 없이 compact JSON 배열만 출력.",
         "expected": "의도적으로 잘못된 결제 로직 변경(diff)을 인지하고 race condition, global state, persistence fault, idempotency, side effects 같은 구체적 검토 항목 5개를 JSON 배열로 나열. 자유 텍스트나 설명이 섞이면 불합격",
+        "grade": "grade_q9_json_array5",
     },
     {
         "axis": "에이전트",
         "q": "아래 traceback 을 보고 root cause 를 한 문장으로, 그리고 최소 수정 unified-diff(hunk 1개) 를 답하세요. 한국어 설명은 root cause 한 문장에만 허용됩니다.\nTraceback (most recent call last):\n  File \"app.py\", line 12, in <module>\n    res = fetch('/api/users')\n  File \"app.py\", line 9, in fetch\n    return requests.get(url, timeout=5).json()\nrequests.exceptions.Timeout: HTTPSConnectionPool ... Max retries exceeded.\n```python\n# app.py\nimport requests\ndef fetch(url):\n    return requests.get(url, timeout=5).json()\n```",
         "expected": "root cause: 외부 API 호출이 timeout/네트워크로 실패했고 .json() 전에 response 검사/예외 처리가 없다. 최소 diff: requests.get 에 대한 try/except Timeout + response.raise_for_status 를 추가한 hunk 1개",
+        "grade": "grade_q10_rootcause_diff",
     },
     {
         "axis": "에이전트",
         "q": "다음 작업은 '네안데르탈인 시점 텍스트 게임' 의 새 기능입니다. 단일 HTML 파일 한 개로 만들려면 어떤 순서로 파일을 채워야 하는지, 각 단계별로 (1) 생성할 DOM/스크린 (2) 코어 상태 모델 (3) 검증 방법을 4단계로 JSON으로만 출력하세요. JSON 외에는 출력하지 마세요.",
         "expected": "4단계 JSON. 각 단계에 screen, state_model, verify 명시. 순서 논리적(구조·데이터·연출·배포). JSON only.",
+        "grade": "grade_q11_four_step_plan",
     },
     {
         "axis": "에이전트",
         "q": "지금 바로 처리해야 하는 것과 오늘은 미뤄도 되는 것을 나눠 주세요. 이유는 판단 근거까지 적어 주세요.\n- 운영 DB에서 느린 쿼리 하나가 관측됨(3초 소요)\n- 내부 도구의 버튼 색상 문구 수정 요청이 옴\n- 장애 후속 조치로 고객 메일 발송 대기 중",
         "expected": "우선순위 판단과 근거. 고객 메일 발송과 느린 쿼리는 즉시, 버튼 문구는 미룸으로 나누는 판단이 요구됨",
+        "grade": "grade_q12_priority_split",
     },
 ]
 
@@ -468,13 +470,12 @@ def record_leaderboard(model_id, result):
             "qv": result.get("qv", EVAL_QUESTIONS_VERSION),
             "score": result.get("score", 0),
             "max_score": max_score,
-            "judged_n": result.get("judged_n") or max_score,
+            "graded_n": result.get("graded_n") or max_score,
             "defect_n": result.get("defect_n") or 0,
             "no_response_n": result.get("no_response_n") or 0,
             "score_display": result.get("score_display")
-            or score_display({**result, "judged_n": max_score}),
-            "judge_failed_n": result.get("judge_failed", 0),
-            "ts": time.time(),
+            or score_display({**result, "graded_n": max_score}),
+                        "ts": time.time(),
         })
         tmp = LEADERBOARD_PATH + ".tmp"
         with open(tmp, "w", encoding="utf-8") as f:
@@ -509,14 +510,14 @@ def score_display(entry):
     "10/12" 는 12문항 전부 채점됐다고 읽힌다. 실제로는 측정 결함·미응답을 뺀 채점 분모여야 한다.
     """
     score = entry.get("score") or 0
-    judged = entry.get("judged_n") or entry.get("max_score") or 0
+    graded = entry.get("graded_n") or entry.get("max_score") or 0
     bits = []
     if entry.get("defect_n"):
         bits.append(f"측정 결함 {entry['defect_n']}")
     if entry.get("no_response_n"):
         bits.append(f"미응답 {entry['no_response_n']}")
     tail = f" ({', '.join(bits)} 제외)" if bits else ""
-    return f"{score}/{judged}{tail}"
+    return f"{score}/{graded}{tail}"
 
 
 def cache_put(model_id, result):
@@ -565,7 +566,7 @@ def _axis_ratio(by_axis, axis):
     return b.get("score", 0) / n if n else None
 
 
-def judge_role(by_axis):
+def usage_role(by_axis):
     """축별 원시 점수 → 한 줄 역할 판정(컨트롤 vs 손발).
 
     EVAL-02 §4-3: '단순 변환은 빠르나 아키텍처 판단은 피한다' 같은 구체적 판정을
@@ -600,78 +601,219 @@ def _difficulty_note(by_axis):
     return present[0] if len(present) == 1 else f"{present[0]}~{present[-1]}"
 
 
-# ── AIK24-EVAL-JUDGE-02 — 판관을 OpenCode 모델 경로로 통일 ────────────────
-# 왜 바꿨나: Groq(무료 티어 ITPM 7,000)·Gemini(일일 500회)는 **opencode 로 부를 수 없다.**
-# opencode 를 못 쓰는 판관은 학생 모델과 다른 전송 계층·다른 rate limit 을 갖는다.
-# 대표님 지시: 오픈코드의 모델을 판관에 쓴다. 판정 주체를 하나로 고정해 변동원을 없앤다.
-#   지정: NVIDIA: Nemotron 3 Ultra (free) — kilo/nvidia/nemotron-3-ultra-550b-a55b:free#high
-JUDGE_PROVIDER = "opencode-cli"
-JUDGE_MODEL = "kilo/nvidia/nemotron-3-ultra-550b-a55b:free#high"
-JUDGE_TIMEOUT_SEC = 300   # 550B free 는 첫 토큰이 느리다(실측 무응답 300초 사례 있음)
-JUDGE_PROMPT_PROBE = "문제: 1+1 은? 정답: 2. 학생답안: 2. 일치하면 1 아니면 0 으로 숫자 하나만 답하세요."
+# ── AIK24-EVAL-JUDGE-04 — 판관 폐지, 문항별 결정적 채점 ──────────────────
+# (아래 작업 ID 문자열은 과거 지시 추적용 표기다. 코드에 판관 기능은 남아 있지 않다.)
+# 왜 폐지하나: 판관이 이틀 만에 4번 바뀌고(Groq qwen → opencode Nemotron) 바꿀 때마다
+# 기존 점수와 비교 불가해졌다. 판관은 언제든 0/1 을 안 말하고(형식 위반·파싱 실패) 그 결과가
+# '측정 결함' 이 되어 점수 자체를 신뢰할 수 없게 만든다.
+# 이제 **문항마다 채점 함수를 고정**한다 — 같은 답안은 언제나 같은 점수가 나온다.
+# 측정 결함 개념 자체를 삭제한다. 결정적 채점에는 결함이 없다: 항상 0 또는 1.
+def _strip_code_blocks(text):
+    return re.sub(r"```.*?```", "", text or "", flags=re.S)
 
 
-def _judge_opencode(prompt):
-    """OpenCode CLI 로 판관을 부른다. 학생 모델과 **같은 전송 계층**을 쓴다.
-
-    폴백 체인 없음(판정 주체 고정). 실패하면 None(=측정 결함) 을 돌려준다.
-    원시 키를 다루지 않으므로 키 유출 표면이 사라진다.
-    """
-    text, reason = cli_call(JUDGE_MODEL, prompt, timeout=JUDGE_TIMEOUT_SEC)
-    if not text:
-        log(f"  판관 실패({JUDGE_MODEL}: {reason})")
-        return None
-    return text
+def _code_of(text):
+    """답안에서 실행 후보 코드를 뽑는다(펜스 우선, 없으면 원문)."""
+    return extract_code(text)
 
 
-def judge_precheck():
-    """판관 도달 가능 사전 점검. 죽은 판관은 전체를 '측정 결함' 으로 덮어써 순위를 오염시킨다.
+def grade_q1_korean_sentinel(actual):
+    """지시이행 ① : 한국어 + 마지막 줄 '---끝---' + 영어어휘 3자 이상 없음."""
+    if not actual or not actual.strip():
+        return 0
+    lines = [ln for ln in actual.strip().splitlines() if ln.strip()]
+    if not lines or lines[-1].strip() != "---끝---":
+        return 0
+    if not re.search(r"[가-힣]", actual):
+        return 0
+    if re.search(r"[A-Za-z]{3,}", _strip_code_blocks(actual)):
+        return 0
+    return 1
 
-    반환: (ok: bool, detail: str)
-    """
+
+def grade_q2_pure_json(actual):
+    """지시이행 ② : 코드펜스 없는 순수 JSON + 값 동등."""
+    if not actual or not actual.strip():
+        return 0
+    if "```" in actual:
+        return 0
     try:
-        text, reason = cli_call(JUDGE_MODEL, JUDGE_PROMPT_PROBE, timeout=JUDGE_TIMEOUT_SEC)
-    except Exception as e:
-        return False, f"{type(e).__name__}: {str(e)[:80]}"
-    if not text:
-        return False, reason or "빈 응답"
-    return True, text[:40]
+        got = json.loads(actual.strip())
+    except Exception:
+        return 0
+    want = {"이름": "김민수", "나이": 31, "취미": ["등산", "독서"]}
+    return 1 if got == want else 0
 
 
-def score_response(question, expected, actual):
-    """OpenCode 고정 모델 판관으로 1/0 채점 (AIK24-EVAL-JUDGE-02).
+def grade_q4_pytest_written(actual):
+    """코딩실무 ② : pytest 테스트 작성(테스트함수·assert·safe_div·0/None 케이스)."""
+    code = _code_of(actual)
+    if not code.strip():
+        return 0
+    if "def test_" not in code:
+        return 0
+    if "assert" not in code:
+        return 0
+    if "safe_div" not in code:
+        return 0
+    if not ("0" in code and "None" in code):
+        return 0
+    return 1
 
-    폴백 체인을 버린 이유: 그 체인은 판정 주체를 매번 바꾼다(gemini→gemini→groq…).
 
-    BLOG-03 §1-3: 판관이 0/1을 말하지 못하면 0점을 주지 않고 None(=judge_failed)을
-    돌려준다. 0점은 '모델이 틀렸다'는 사실이고, None은 '우리가 못 쟀다'다. 둘을
-    섞으면 측정 결함이 모델 실패로 기록돼 순위가 오염된다.
+def grade_q7_marker_exact(actual):
+    """맥락유지 ① : 긴 문서 1,200자 지점의 함수명을 정확히."""
+    return 1 if (actual or "").strip() == _MARKER else 0
+
+
+def grade_q8_three_tasks(actual):
+    """맥락유지 ② : 이전 대화의 요청 3가지를 모두 기억."""
+    if not actual:
+        return 0
+    a = actual.lower()
+    if not ("파이썬" in a or "설치" in a):
+        return 0
+    if "변수" not in a:
+        return 0
+    if not ("에러" in a or "안 돌아갈" in a or "안돌아갈" in a):
+        return 0
+    return 1
+
+
+def grade_q9_json_array5(actual):
+    """에이전트 ① : PR 리뷰 5개를 순수 JSON 문자열 배열로."""
+    if not actual or not actual.strip():
+        return 0
+    try:
+        got = json.loads(actual.strip())
+    except Exception:
+        return 0
+    if not isinstance(got, list) or len(got) != 5:
+        return 0
+    return 1 if all(isinstance(x, str) for x in got) else 0
+
+
+def grade_q10_rootcause_diff(actual):
+    """에이전트 ② : root cause(timeout) + unified diff 마커."""
+    if not actual:
+        return 0
+    if "timeout" not in actual.lower():
+        return 0
+    if not all(m in actual for m in ("---", "+++", "@@")):
+        return 0
+    return 1
+
+
+def grade_q11_four_step_plan(actual):
+    """에이전트 ③ : 4단계 JSON, 각 단계 screen/state_model/verify 보유."""
+    if not actual or not actual.strip():
+        return 0
+    try:
+        got = json.loads(actual.strip())
+    except Exception:
+        return 0
+    steps = None
+    if isinstance(got, list) and len(got) == 4:
+        steps = got
+    elif isinstance(got, dict) and len(got) == 4:
+        # dict 형태면 "값 4개" 를 4단계로 본다 (명세의 관용적 해석)
+        steps = list(got.values())
+    if steps is None:
+        return 0
+    need = ("screen", "state_model", "verify")
+    for st in steps:
+        if not isinstance(st, dict):
+            return 0
+        if not all(k in st for k in need):
+            return 0
+    return 1
+
+
+def grade_q12_priority_split(actual):
+    """에이전트 ④ : 즉시(메일·쿼리) / 미룸(버튼) 그룹 구분.
+
+    ⚠ 명세 해석(2026-10-17): 지시서는 "미뤄/미룸/나중/보류 가 들어간 **줄**은 미룸 그룹,
+    나머지는 즉시 그룹" 이라고 적었다. 이를 문자 그대로 줄 단위로만 적용하면
+    "## 나중에" 같은 **머리말이 있는 목록**에서 아래 항목 줄이 키워드가 없어 즉시 그룹으로
+    흘러 '버튼' 이 '미룸' 에서 발견되지 않는다(실측: 본 구현 전 참조 구현이 0점 반환).
+    따라서 **키워드 줄이 섹션을 열고 다음 키워드 줄까지 계속된다** 고 해석한다.
+    이 해석이 다른 결과는 '버튼 이 즉시 그룹에 있는' 답 — 그건 명세 의도와 반대이므로 안전하다.
     """
     if not actual or not actual.strip():
         return 0
-    verdict = _judge_opencode(f"판관 규칙: 아래 문항의 '학생 답안' 이 '정답' 과 의미적으로 일치하면 1, 아니면 0 을 답하라. "
-                         "반드시 0 으로 판정: ① 질문이 특정 언어로 답을 요구했는데 다른 언어로 답한 경우 "
-                         "② 답안에 포함된 코드에 버그가 있는 경우 ③ 질문에 직접 답하지 않고 둘러댄 경우. "
-                         "출력은 '1' 또는 '0' 숫자 하나뿐이어야 한다. 설명 금지.\n"
-                         f"문제: {question}\n정답: {expected}\n학생 답안: {actual}\n\n"
-                         "위 답안이 정답과 의미적으로 일치하면 '1', 아니면 '0'으로만 답하세요.\n"
-                         "반드시 '0'으로 판정: ① 질문이 특정 언어로 답을 요구했는데 다른 언어로 답한 경우 "
-                         "② 답안에 포함된 코드에 버그가 있는 경우 ③ 질문에 직접 답하지 않고 둘러댄 경우.")
-    if not verdict:
-        log(f"  채점 실패(응답 없음) → 측정 결함: {question[:40]}")
-        return None
-    # 파싱은 **답의 첫 글자** 를 본다. 예전처럼 응답 전체에서 아무 [01] 을 뒤지면
-    # 산문 가운데 흩어진 숫자 하나가 점수가 되어 동전이 된다.
-    m = re.match(r"\s*([01])", verdict)
-    if not m and len(verdict.strip()) <= 20:
-        m = re.search(r"[01]", verdict)
-    if not m:
-        log(f"  채점 파싱 실패({verdict[:30]!r}) → 측정 결함: {question[:40]}")
-        return None
-    return int(m.group(1))
+    defer_kw = ("미뤄", "미룸", "나중", "보류")
+    now_lines, defer_lines = [], []
+    group = now_lines          # 기본은 즉시 그룹
+    for ln in actual.splitlines():
+        if any(k in ln for k in defer_kw):
+            group = defer_lines
+        group.append(ln)
+    now = "\n".join(now_lines)
+    defer = "\n".join(defer_lines)
+    if "메일" not in now:
+        return 0
+    if "쿼리" not in now:
+        return 0
+    if "버튼" not in defer:
+        return 0
+    return 1
 
 
-def eval_model(model_id, with_judge=True):
+GRADERS = {
+    "grade_q1_korean_sentinel": grade_q1_korean_sentinel,
+    "grade_q2_pure_json": grade_q2_pure_json,
+    "grade_q4_pytest_written": grade_q4_pytest_written,
+    "grade_q7_marker_exact": grade_q7_marker_exact,
+    "grade_q8_three_tasks": grade_q8_three_tasks,
+    "grade_q9_json_array5": grade_q9_json_array5,
+    "grade_q10_rootcause_diff": grade_q10_rootcause_diff,
+    "grade_q11_four_step_plan": grade_q11_four_step_plan,
+    "grade_q12_priority_split": grade_q12_priority_split,
+}
+
+
+# ── 작업 3: 사용 가능 수준 라벨 ───────────────────────────────────────
+# 점수만으로는 "이 모델을 어디에 써야 하나" 가 안 보인다. 축 점수 → 사용처 라벨로 바꾼다.
+LEVEL_LABELS = {
+    "코딩실무": {0: "코딩 사용 불가", 1: "코딩 기초 수준", 2: "코딩 기초 수준",
+                3: "코딩 실무 가능", 4: "코딩 우수"},
+    "에이전트": {0: "에이전트 사용 불가", 1: "에이전트 기초 수준", 2: "에이전트 기초 수준",
+                3: "에이전트 실무 가능", 4: "에이전트 우수"},
+}
+KOREAN_LEVEL = {0: "한글 사용 불가", 1: "한글 부분 가능", 2: "한글 사용 가능"}
+
+
+def usage_levels(by_axis, korean_score=None):
+    """축별 점수 → 사용 가능 수준 라벨 dict.
+
+    한글 사용 가능 여부는 지시이행 Q1(한국어+센티넬) + 맥락유지 Q2(요약 3가지)로 본다.
+    """
+    out = {}
+    for axis, table in LEVEL_LABELS.items():
+        b = (by_axis or {}).get(axis) or {}
+        n = int(b.get("score", 0))
+        out[axis] = table.get(n, "알 수 없음")
+    if korean_score is not None:
+        out["한글"] = KOREAN_LEVEL.get(int(korean_score), "알 수 없음")
+    return out
+
+
+def grade_answer(spec, actual):
+    """문항 dict 의 "grade" 이름으로 채점 함수를 찾아 0/1 을 돌려준다.
+
+    채점 함수가 없는데 sandbox 도 없으면 명세 오류이므로 예외를 던져 조용히 0점을 만들지 않는다.
+    """
+    name = spec.get("grade")
+    fn = GRADERS.get(name)
+    if fn is None:
+        raise KeyError(f"문항 {spec.get('axis')} 의 grade 함수가 없습니다: {name!r}")
+    try:
+        return 1 if fn(actual) else 0
+    except Exception:
+        return 0
+
+
+def eval_model(model_id):
     """표준 12문항(지시이행 2·코딩실무 4·맥락유지 2·에이전트 4) API 직접 호출 평가.
 
     ⚠ 이 경로는 2026-10-14 대표님 결정(전량 CLI 기준)을 우회한다. 기본 경로가 아니며,
@@ -690,7 +832,6 @@ def eval_model(model_id, with_judge=True):
         "errors": [],
         "failures": [],  # EVAL-03: 문항별 호출 실패 사유 — 블로그 '호출 안정성' 섹션 원자료
         "token_usage": {"prompt": 0, "completion": 0},  # BLOG-03 §1-2: 실측 비용 계산 원자료
-        "judge_failed": 0,  # BLOG-03 §1-3: 판관이 0/1을 말하지 못한 문항 (모델 실패 아님)
         "by_axis": {a: {"score": 0, "max_score": 0, "failed": 0} for a in AXES},
     }
     try:
@@ -735,15 +876,6 @@ def eval_model(model_id, with_judge=True):
         # 멀티턴 문항은 사전 대화를 넣어야 "위 대화"가 의미를 갖는다
         seed = list(spec.get("seed") or [])
         messages = seed + [{"role": "user", "content": question}]
-        # 채점관에게도 전체 대화를 보여준다. 안 그러면 "위 대화"를 검증할 수 없어
-        # 멀티턴 문항이 틀린 답으로 판정된다(실측: 전부 맞았는데 0점).
-        judge_q = question
-        if seed:
-            judge_q = (
-                "=== 대화 기록 ===\n"
-                + "\n".join(f"{m['role']}: {m['content']}" for m in messages)
-                + "\n=== 질문 ==="
-            )
         payload = dict(body_tpl, messages=messages)
         actual, source = "", "error"
         usage = {"prompt_tokens": 0, "completion_tokens": 0}
@@ -818,21 +950,15 @@ def eval_model(model_id, with_judge=True):
             log(f"  [{idx}/{total}] {axis} 빈 응답 → 0점")
             continue
 
-        pts = score_response(judge_q, expected, actual) if with_judge else (1 if actual.strip() else 0)
-        judge_failed = pts is None
-        if judge_failed:
-            pts = 0  # 점수 집계·축별 집계에서는 제외된다. failures[]에도 넣지 않는다(호출은 성공).
-            result["judge_failed"] += 1
-            log(f"  [{idx}/{total}] {axis} 측정 결함(판관 파싱 실패) — 점수에서 제외")
-        else:
-            result["score"] += pts
+        pts = grade_answer(spec, actual)
+        result["score"] += pts
         result["token_usage"]["prompt"] += usage["prompt_tokens"]
         result["token_usage"]["completion"] += usage["completion_tokens"]
         # 상세 답변은 블로그 심층 분석에 그대로 인용된다. 잘라내지 말고 원문을 쓴다.
         result["details"].append({
             "idx": idx, "axis": axis, "score": pts, "source": source,
             "answer": actual[:ANSWER_STORE_CHARS],
-            **usage, "judge_failed": judge_failed,
+            **usage,
         })
         log(f"  [{idx}/{total}] {axis} {pts}점 (via {source}) ← {actual[:60]!r}")
 
@@ -840,31 +966,35 @@ def eval_model(model_id, with_judge=True):
         1 for d in result["details"] if d["source"] in ("http_error", "exception", "empty", "no_choices")
     )
     # 4단계 4번: 실제 채점 분모를 결과에 명시한다 (API 경로도 동일).
-    result["defect_n"] = result["judge_failed"]
+    # 결정적 채점에는 측정 결함이 없다 — 결함 수는 항상 0, 채점 분모는 전체 문항수다.
+    result["defect_n"] = 0
     result["no_response_n"] = result["failed"]
-    result["judged_n"] = result["max_score"] - result["failed"] - result["judge_failed"]
+    result["graded_n"] = result["max_score"]
     result["score_display"] = score_display(result)
     # 축별 집계 (EVAL-02 §4-3: 축마다 원시 결과를 그대로 보여준다)
     # BLOG-03 §1-3: 판관이 0/1을 못 한 문항은 분자·분모에서 모두 뺀다.
     for d in result["details"]:
-        if d.get("judge_failed"):
-            continue
         b = result["by_axis"].setdefault(d["axis"], {"score": 0, "max_score": 0, "failed": 0})
         b["max_score"] += 1
         b["score"] += d["score"]
         if d["source"] in ("http_error", "exception", "empty", "no_choices"):
             b["failed"] += 1
-    result["role"] = judge_role(result["by_axis"] or {})
+    result["role"] = usage_role(result["by_axis"] or {})
+    ko_score = sum(d["score"] for d in result["details"]
+                   if d["idx"] in (1, 8) and d.get("source") == "cli")
+    result["usage_levels"] = usage_levels(result["by_axis"], ko_score)
+    result["coding_level"] = result["usage_levels"].get("코딩실무")
+    result["agent_level"] = result["usage_levels"].get("에이전트")
+    result["korean_level"] = result["usage_levels"].get("한글")
     # 429·타임아웃은 모델 능력 실패가 아니다. 분모에서 빼야 한다.
     # 단, 시도한 문항이 5개 미만이면 "모르겠다"가 정직한 답이다.
-    jf = result["judge_failed"]
-    scored = result["max_score"] - result["failed"] - jf
+    # 결정적 채점: 측정 결함이 없으므로 분모에서 빠지는 것은 미응답뿐이다.
+    scored = result["max_score"] - result["failed"]
     if scored >= 5:
         result["label"] = (
             f"{scored}문항 중 {result['score']}문항 정답 "
             f"(문항 난이도: {_difficulty_note(result['by_axis'])} 기준)"
             + (f", {result['failed']}문항 응답 실패 제외" if result["failed"] else "")
-            + (f", {jf}문항 측정 결함" if jf else "")
             + f". {result['role']}."
         )
     else:
@@ -1034,12 +1164,12 @@ def cli_call(cli_model, prompt, timeout=QUESTION_TIMEOUT):
     return (out, "") if out else ("", "CLI 빈 응답")
 
 
-def eval_model_cli(model_id, with_judge=True, cli_model=None):
+def eval_model_cli(model_id, cli_model=None):
     """OpenCode CLI 경유 12문항 평가. 반환 (result, blocked).
 
     blocked 가 문자열이면 모델에 아예 도달하지 못한 상태다. 이때 점수 0을 기록하면
     측정 실패가 모델 실패로 남으므로, 호출자가 zen_pending 사유 갱신에 쓴다.
-    판관(score_response)은 API 경로와 같은 것으로 재사용한다.
+    채점은 문항별 결정적 채점 함수(grade_answer)다 — 판관 모델을 쓰지 않는다.
     """
     cli_model = cli_model or resolve_cli_model(model_id)
     turn_timeout = CLI_TIMEOUT_OVERRIDE.get(model_id, QUESTION_TIMEOUT)
@@ -1058,34 +1188,17 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
         # CLI 는 토큰 수를 알려주지 않는다 — 미측정임을 명시하고 0으로 둔다.
         "token_usage": {"prompt": 0, "completion": 0},
         "notes": "CLI 경유 — 토큰 사용량 미측정",
-        "judge_failed": 0,
         "by_axis": {a: {"score": 0, "max_score": 0, "failed": 0} for a in AXES},
     }
     if not cli_model:
         return result, f"CLI 미등록 모델 ({model_id})"
 
-    # 판관 도달 불가 상태에서 12문항을 돌리면 전 문항이 '측정 결함' 으로 기록돼
-    # 점수 0/12 가 학생 탓으로 남는다. 사전 점검으로 중단한다(측정 실패 ≠ 모델 실패).
-    if with_judge:
-        ok, detail = judge_precheck()
-        if not ok:
-            log(f"  판관 사전 점검 실패({JUDGE_MODEL}: {detail}) — 평가 중단")
-            return result, f"판관 도달 불가: {JUDGE_MODEL} ({detail})"
-        log(f"  판관 사전 점검 통과: {JUDGE_MODEL} ({detail})")
 
     total = len(TEST_QUESTIONS)
     for idx, spec in enumerate(TEST_QUESTIONS, 1):
         axis, question, expected = spec["axis"], spec["q"], spec["expected"]
         if idx > 1:
             time.sleep(RATE_GAP_SEC)
-        judge_q = question
-        if spec.get("seed"):
-            judge_q = (
-                "=== 대화 기록 ===\n"
-                + "\n".join(f"{m['role']}: {m['content']}" for m in
-                            list(spec.get("seed") or []) + [{"role": "user", "content": question}])
-                + "\n=== 질문 ==="
-            )
         actual, reason = cli_call(cli_model, cli_prompt(spec), timeout=turn_timeout)
         if not actual and "타임아웃" in reason:
             # 타임아웃은 429 와 같은 성격의 일시 실패다(모델 부재가 아니다).
@@ -1099,37 +1212,26 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
                 log(f"  CLI 호출 실패({reason}) — 모델 도달 불가, 중단")
                 return result, reason
             result["errors"].append(f"Q{idx} {reason}")
-            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception",
-                                      "judge_failed": False})
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception"})
             result["failures"].append({"idx": idx, "axis": axis, "reason": reason})
             log(f"  [{idx}/{total}] {axis} {reason} → 0점")
             continue
         # 샌드박스 우선: 코드를 실제로 돌려 0/1 을 기계 판정한다.
+        # sandbox_exec 이 None(타이밍아웃 등)이면 채점 함수로 넘어가되, 그 결과도 항상 0/1 이다 —
+        # 결정적 채점에는 '측정 결함' 이 없다.
         sandbox_verdict, sandbox_reason = None, ""
-        pts = None
         if spec.get("sandbox"):
             s_pts, sandbox_reason = sandbox_grade(spec, actual)
-            if s_pts is not None:
-                sandbox_verdict = "pass" if s_pts == 1 else "fail"
-            # 샌드박스는 bool 을 돌려준다 — 점수 필드는 int 로 정규화한다.
-            # (캐시/리더보드 JSON 에 true 가 박히면 downstream 이 타입을 오인한다)
-            pts = None if s_pts is None else int(s_pts)
-            if s_pts is None:
-                log(f"  [{idx}/{total}] {axis} 샌드박스 측정 결함({sandbox_reason}) → 판관으로 폴백")
-        if pts is None:
-            pts = score_response(judge_q, expected, actual) if with_judge else 1
-        judge_failed = pts is None
-        if judge_failed:
-            pts = 0
-            result["judge_failed"] += 1
-            log(f"  [{idx}/{total}] {axis} 측정 결함(판관 파싱 실패) — 점수에서 제외")
+            pts = grade_answer(spec, actual) if s_pts is None else int(s_pts)
+            sandbox_verdict = "pass" if pts == 1 else "fail"
         else:
-            result["score"] += pts
+            pts = grade_answer(spec, actual)
+        result["score"] += pts
         if sandbox_verdict == "pass":
             result["sandbox_pass"] = result.get("sandbox_pass", 0) + 1
         result["details"].append({
             "idx": idx, "axis": axis, "score": pts, "source": "cli",
-            "answer": actual[:ANSWER_STORE_CHARS], "judge_failed": judge_failed,
+            "answer": actual[:ANSWER_STORE_CHARS],
             "sandbox": sandbox_verdict, "sandbox_reason": sandbox_reason,
         })
         tag = f" sandbox={sandbox_verdict}" if sandbox_verdict else ""
@@ -1137,27 +1239,31 @@ def eval_model_cli(model_id, with_judge=True, cli_model=None):
 
     result["failed"] = sum(1 for d in result["details"] if d["source"] == "exception")
     # 4단계 4번: 독자에게 보여줄 "실제 채점 분모" 를 결과에 명시한다.
-    result["defect_n"] = result["judge_failed"]
+    # 결정적 채점에는 측정 결함이 없다 — 결함 수는 항상 0, 채점 분모는 전체 문항수다.
+    result["defect_n"] = 0
     result["no_response_n"] = result["failed"]
-    result["judged_n"] = result["max_score"] - result["failed"] - result["judge_failed"]
+    result["graded_n"] = result["max_score"]
     result["score_display"] = score_display(result)
     for d in result["details"]:
-        if d.get("judge_failed"):
-            continue
         b = result["by_axis"].setdefault(d["axis"], {"score": 0, "max_score": 0, "failed": 0})
         b["max_score"] += 1
         b["score"] += d["score"]
         if d["source"] == "exception":
             b["failed"] += 1
-    result["role"] = judge_role(result["by_axis"] or {})
-    jf = result["judge_failed"]
-    scored = result["max_score"] - result["failed"] - jf
+    result["role"] = usage_role(result["by_axis"] or {})
+    ko_score = sum(d["score"] for d in result["details"]
+                   if d["idx"] in (1, 8) and d.get("source") == "cli")
+    result["usage_levels"] = usage_levels(result["by_axis"], ko_score)
+    result["coding_level"] = result["usage_levels"].get("코딩실무")
+    result["agent_level"] = result["usage_levels"].get("에이전트")
+    result["korean_level"] = result["usage_levels"].get("한글")
+    # 결정적 채점: 측정 결함이 없으므로 분모에서 빠지는 것은 미응답뿐이다.
+    scored = result["max_score"] - result["failed"]
     if scored >= 5:
         result["label"] = (
             f"{scored}문항 중 {result['score']}문항 정답 "
             f"(문항 난이도: {_difficulty_note(result['by_axis'])} 기준, CLI 경유)"
             + (f", {result['failed']}문항 응답 실패 제외" if result["failed"] else "")
-            + (f", {jf}문항 측정 결함" if jf else "")
             + f". {result['role']}."
         )
     else:

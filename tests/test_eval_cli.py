@@ -59,7 +59,6 @@ def test_eval_model_cli_unregistered_model_is_blocked_not_zero():
 
 def test_eval_model_cli_blocked_on_unreachable_model(monkeypatch):
     """첫 문항에서 CLI 가 죽으면 즉시 중단 — 나머지 11문항을 0으로 채우지 않는다."""
-    monkeypatch.setattr(me, "judge_precheck", lambda: (True, "stub"))  # EVAL-JUDGE-02 사전 점검
     monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("", "Model unavailable"))
     result, blocked = me.eval_model_cli("cat-jam-free")
     assert blocked == "Model unavailable"
@@ -67,7 +66,6 @@ def test_eval_model_cli_blocked_on_unreachable_model(monkeypatch):
 
 
 def test_eval_model_cli_result_shape(monkeypatch):
-    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
     monkeypatch.setattr(me, "cli_call", lambda *a, **k: ("42", ""))
     monkeypatch.setattr(me.time, "sleep", lambda *_: None)
     result, blocked = me.eval_model_cli("cat-jam-free")
@@ -86,11 +84,9 @@ def test_eval_model_cli_retries_timeout_once(monkeypatch):
         seen.append(timeout)
         return ("", "CLI 타임아웃 60초") if len(seen) == 1 else ("정답", "")
 
-    monkeypatch.setattr(me, "judge_precheck", lambda: (True, "stub"))  # 사전 점검이 첫 호출을 소비하므로
     monkeypatch.setattr(me, "cli_call", fake)
-    monkeypatch.setattr(me, "score_response", lambda q, e, a: 1)
-    # AGENT-EVAL-01: 문항 3개가 샌드박스 채점으로 바뀌었으므로, 이 테스트의 목적(타임아웃 재시도)
-    # 을 흐리지 않도록 샌드박스만 통과로 스텁한다. 본 테스트는 채점 방식이 아니라 재시도 계약이다.
+    # AGENT-EVAL-01: 문항 3개가 샌드박스 채점이므로 이 테스트의 목적(타임아웃 재시도)을
+    # 흐리지 않도록 샌드박스만 통과로 스텁한다. 본 테스트는 채점 방식이 아니라 재시도 계약이다.
     monkeypatch.setattr(me, "sandbox_grade", lambda spec, ans: (1, "stub"))
     monkeypatch.setattr(me.time, "sleep", lambda *_: None)
     result, blocked = me.eval_model_cli("cat-jam-free")
@@ -98,7 +94,9 @@ def test_eval_model_cli_retries_timeout_once(monkeypatch):
     assert seen[0] == me.QUESTION_TIMEOUT
     assert seen[1] == me.CLI_RETRY_TIMEOUT       # 1번 문항만 재시도 — 나머지는 1회 호출
     assert len(seen) == len(me.TEST_QUESTIONS) + 1
-    assert result["score"] == len(me.TEST_QUESTIONS)
+    # 점수는 더 이상 이 테스트의 대상이 아니다 (JUDGE-04: 결정적 채점 — 가짜 답안 '정답' 은
+    # 어떤 채점 함수도 통과시키지 못한다). 이 테스트가 지키는 계약은 '재시도 1회 + 차단 없음' 뿐이다.
+    assert result["details"] and all("judge" not in d for d in result["details"])
 
 
 def test_probe_doc_puts_secret_first():
