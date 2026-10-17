@@ -391,6 +391,14 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
         f"> OpenCode에서 실제 동작 확인된 무료 모델만 싣습니다. (검증 완료 {verified_n}개)",
         "",
     ]
+
+    # AIK24-BLOG-02(2026-10-17): 독자는 명령줄이 아니라 화면에서 모델을 고른다.
+    # 목록 글 첫 화면에서 선택 창 경로를 안내한다(이후 발행분에도 그대로 유지된다).
+    out += [
+        "OpenCode 를 실행한 뒤 `/models` 를 입력(또는 `ctrl+x` 를 누른 다음 `m`)해 모델 선택 창을 엽니다. "
+        "Search 칸에 `Free` 를 입력하면 무료 모델만 남고, 오른쪽 열에 `Free` 가 붙은 줄이 무료 경로입니다.",
+        "",
+    ]
     
     # 2. 추천 모델 (Top 3) - retention_percent 높은 순으로 정렬, 평가 점수 있는 모델 우선
     scored_models = []
