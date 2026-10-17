@@ -268,16 +268,15 @@ class TestGetPitchesCrawlFail:
 
     @pytest.mark.unit
     def test_discards_when_crawl_fails(self, mock_deps, monkeypatch):
-        """크롤링 실패 시 원 피치를 유지 (fresh crawl은 품질 향상용, 필수 아님)"""
+        """크롤링 본문 부족 시 발행 중단 (00405c84, 2026-09-17 사고 대응 게이트)"""
         monkeypatch.setattr("pipeline.threads.crawler.fetch_article_body", lambda *a, **kw: "")
         articles = [self._make_article(aid=1)]
 
         result = get_pitches(articles, max_articles=1, batch_size=1)
 
-        # 크롤링 실패해도 원 피치 유지 (빈 결과가 아닌 pitch 반환)
-        assert result != ([], {"1"})
-        pitches, _ = result
-        assert len(pitches) == 1  # 원 피치 유지
+        # 얇은 크롤 본문 → D1 description 폴백 발행 금지 + 실패이력 등록으로 재시도 방지
+        # (네이버 스포츠 봇차단 15자 얇은 카드+죽은링크 발행 사고 대응 의도 정책)
+        assert result == ([], {"1"})
 
     @pytest.mark.unit
     def test_discards_when_regeneration_fails(self, mock_deps, monkeypatch):
