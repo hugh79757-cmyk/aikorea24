@@ -414,9 +414,9 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
         if retention is not None:
             rec_score += retention * 0.7
         graded = (score_info or {}).get("graded_n") or (score_info or {}).get("max_score") or 0
-        if score_info and judged > 0:
+        if score_info and graded > 0:
             # 분모를 max_score(12)로 두면 측정 결함이 많은 모델이 불리해진다 — 실제 채점 분모를 쓴다.
-            rec_score += (score_info.get("score", 0) / judged) * 100 * 0.3
+            rec_score += (score_info.get("score", 0) / graded) * 100 * 0.3
         
         if retention is not None or score_info:
             m["_rec_score"] = rec_score

@@ -87,3 +87,30 @@ def test_eval06_table_is_five_columns_with_short_names():
     assert ":free" not in md.split("## 제외된 모델")[0].split("## 전체 리스트")[1]
     assert "재사용 80.3%" in table[3]
     assert "현재 무료 · 제로-retention" in table[3]
+
+
+def test_render_works_when_catalog_model_has_leaderboard_score(monkeypatch):
+    """회귀(2026-10-18): 리더보드 점수를 가진 모델이 카탈로그에 들어오면 페이지 생성이 죽던 결함.
+
+    원인: 판관 폐지 커밋에서 지역 변수 `judged` 가 `graded` 로 개명됐으나 조건문 두 곳이
+    옛 이름을 그대로 참조했다. 점수 없는 모델만 카탈로그에 있던 동안에는 if 조건이
+    단락평가로 넘어가 잠복했고, 첫 점수 보유 모델(`glm-5.3-flash-free`)이 등록되며
+    `NameError: name 'judged' is not defined` 로 발현했다.
+    """
+    import free_models_page as fmp  # noqa: E402
+
+    monkeypatch.setattr(
+        fmp, "leaderboard_scores",
+        lambda qv: {"glm-5.3-flash-free": {"score": 6, "max_score": 12, "graded_n": 12}},
+    )
+    models = [
+        {"model_id": "glm-5.3-flash-free", "cli_id": "opencode/glm-5.3-flash-free",
+         "provider": "zen", "context_length": 200000,
+         "retention_percent": None, "kilobench_completion": None,
+         "zen_data_policy": None, "zen_trains_on_prompts": None},
+    ]
+    md = fmp.render_eval06("2026-10-18", models,
+                           {"total": 0, "rows": [], "added": [], "removed": [], "changed": []},
+                           [], {"verified_at": None, "fail": []})
+    assert "glm-5.3-flash-free" in md
+    assert "CLI 평가 6/12문항" in md
