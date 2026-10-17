@@ -14,6 +14,32 @@
 | `docs/TECH.md` | **기술 참조 — 고정** | 최초 1회 + 구조 변경 시 | 시스템 아키텍처, 모듈, 프롬프트, DB, 함수 위치 |
 | `CHANGES.md` | **세션 이력 — 변동** | **매 세션 시작 시 먼저 읽을 것** | 직전 세션까지의 변경 내역 요약 |
 | `AGENTS.md` | **작업 규칙 — 고정** | **매 세션 시작 시 먼저 읽을 것** | 작업 절차, 위임 규칙, 중복 방지 규칙 (지금 읽는 파일) |
+| `docs/state.md` | **작업 스테이트먼트 — append-only** | 작업 완료 시 기록 | 프로젝트 전체 작업 기록 (9,597줄). **도구로만 추가한다** |
+
+## state.md 기록 규칙 — 도구로만 추가 (AIK24-STATE-GUARD-01)
+
+`docs/state.md` 는 **append-only** 다. 기존 항목은 삭제하지 않는다.
+
+| 용도 | 명령 |
+|------|------|
+| 보고를 맨 위에 추가 | `python3 scripts/state_prepend.py --report <보고서.md>` |
+| 과거 기록을 맨 아래에 추가 | `python3 scripts/state_prepend.py --report <파일> --bottom` |
+| 현재 통계 확인 | `python3 scripts/state_prepend.py --stats` |
+| 미리보기 (쓰지 않음) | 위 명령에 `--dry-run` |
+| 오래된 항목 아카이브 | `python3 scripts/state_rotate.py --days 30` → 확인 후 `--apply` |
+| 감소 가드 단독 확인 | `python3 scripts/state_guard.py --old origin/main --new HEAD` |
+
+- 도구는 ① 기존 헤딩이 하나라도 사라지면 **쓰기를 거부** ② 쓰기 전 백업(`docs/state.md.bak.YYYYMMDD_HHMM`)
+  ③ 쓰기 후 재검증 실패 시 **자동 복원** ④ 읽기~쓰기 사이 외부 변경 감지 시 중단 을 수행한다.
+- **금지**: `open('docs/state.md','w').write(...)` 로 직접 쓰기. 특히 아래 형태는 기존 기록을 전부 지운다.
+  ```python
+  open(p,'w',encoding='utf-8').write(new + open(p,encoding='utf-8').read())  # ← 금지
+  ```
+  파이썬이 인자를 왼쪽부터 평가해 모드 `w` 가 **먼저** 파일을 0바이트로 자르고, 그 다음 읽어 `''` 를 붙인다.
+  exit 0 + "기록 완료" 가 함께 출력되어 **조용히** 터진다. (2026-10-14 6,550줄 / 2026-10-17 2,805줄)
+- pre-push 훅(정본 `scripts/hooks/pre-push`)이 state.md 가 100줄 이상 줄면 push 를 차단한다.
+  의도적 감소만 `ALLOW_STATE_TRUNCATE=1 git push` 로 우회한다.
+- 사고 복구: `git show <사고커밋>^:docs/state.md` 로 사고 직전 버전을 꺼내 `--bottom` 으로 복원한다.
 
 ## GSD 통합 — CHANGES.md ↔ .planning 연결
 

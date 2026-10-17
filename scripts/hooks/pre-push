@@ -1,0 +1,57 @@
+#!/bin/bash
+# git pre-push 훅 (정본) — AIK24-STATE-GUARD-01
+#
+# .git/hooks/pre-push 는 이 파일을 exec 하는 얇은 래퍼다.
+# 훅은 git 이 추적하지 않으므로 정본을 여기에 두어 리뷰·복구가 가능하게 했다.
+# 설치: ln -sf ../../scripts/hooks/pre-push .git/hooks/pre-push  (또는 래퍼 파일 생성)
+#
+# 검사 2종
+#   1) 블로그 frontmatter YAML — 오류 시 push 중단 (기존 검사)
+#   2) docs/state.md 감소 가드 — 기준선 대비 100줄 이상 줄면 push 중단
+#      우회: ALLOW_STATE_TRUNCATE=1 git push ...
+#      배경: 2026-10-14 f6ed99a8 (6,559→25줄), 2026-10-17 02c5da8f (2,811→53줄)
+
+set -o pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+# ── 1) 블로그 YAML 검증 ────────────────────────────────────────────────
+python3 -c "
+import yaml, re, glob
+
+files = glob.glob('src/content/blog/*.md')
+errors = []
+for f in files:
+    content = open(f).read()
+    match = re.search(r'^---\n(.*?)\n---', content, re.DOTALL)
+    if match:
+        try:
+            yaml.safe_load(match.group(1))
+        except yaml.YAMLError as e:
+            errors.append(f'❌ {f}: {e}')
+
+if errors:
+    print('\n🚨 YAML 오류 발견! 푸시 중단')
+    for err in errors:
+        print(err)
+    exit(1)
+else:
+    print('✅ 모든 파일 YAML 정상')
+" || exit 1
+
+# ── 2) state.md 감소 가드 ──────────────────────────────────────────────
+# stdin 형식: <local_ref> <local_sha> <remote_ref> <remote_sha>
+guard_ran=0
+while read -r local_ref local_sha remote_ref remote_sha; do
+    [ -z "$local_sha" ] && continue
+    case "$local_sha" in 0000000000000000000000000000000000000000) continue ;; esac  # 브랜치 삭제
+    case "$remote_sha" in 0000*) continue ;; esac                                   # 신규 브랜치: 기준선 없음
+    guard_ran=1
+    python3 scripts/state_guard.py --quiet --old "$remote_sha" --new "$local_sha" || exit 1
+done
+
+# refs 가 stdin 으로 오지 않는 환경(수동 실행 등)에서는 origin/main 기준으로 확인
+if [ "$guard_ran" -eq 0 ]; then
+    python3 scripts/state_guard.py --quiet --old origin/main --new HEAD || exit 1
+fi
+
+exit 0

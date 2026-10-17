@@ -2,6 +2,32 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-17 12:31 — fix(AIK24-STATE-GUARD-01): state.md 손실 원인 확정 + 가드 4종 + 6,586줄 복구
+
+- 원인 확정: 커밋 `02c5da8f` 의 실행 기록(세션 `ses_ebc0f9e51ffes5eQ70JJbU87Qz`, 11:42:37)에서 아래 한 줄을
+  원문으로 확보했다. 모드 `w` 가 인자 평가 **전에** 파일을 0바이트로 자르고, 그 다음 같은 파일을 읽어
+  `''` 를 붙인다 → 2,811→53줄. exit 0 + "기록 완료" 출력 때문에 **조용히** 터졌다.
+  `open('docs/state.md','w',encoding='utf-8').write(report + open('docs/state.md',encoding='utf-8').read())`
+  같은 세션이 4분 전(11:38:27)에는 `old = open(...).read()` 로 올바른 순서를 썼다 — 관용구 동전던지기다.
+- 첫 사고 확인: `f6ed99a8`(10-14 12:50:41) state.md **단일 파일 +16/−6,550줄**(6,559→25줄,
+  10-04 06:36~10-14 11:23 157개 항목). 저장소에 아카이브·로테이션 파일 0건 → 의도적 이동이 아니었다.
+  사고 후 25줄에서 다시 자랐고 **복구된 적이 없었다**(금일 복구 전 현재 파일에 그 헤딩 0개).
+- 가드 4종: ① `scripts/state_prepend.py` — append-only 도구(헤딩 손실 시 쓰기 거부, 쓰기 전 백업,
+  쓰기 후 재검증 실패 시 자동 복원, 동시 수정 감지) ② `scripts/state_guard.py` +
+  `scripts/hooks/pre-push`(정본) + `.git/hooks/pre-push`(래퍼) — state.md 가 100줄 이상 줄면 push 차단,
+  `ALLOW_STATE_TRUNCATE=1` 만 우회 ③ `~/.config/opencode/AGENTS.md` 섹션 6 + 프로젝트 `AGENTS.md` —
+  "맨 위에 기록한다"에 도구 강제·금지 패턴·위반 조항 추가 ④ `scripts/state_rotate.py` — 30일 초과 항목을
+  `docs/state-archive/YYYY-MM.md` 로 이동(기본 dry-run, 헤딩 총집합 보존 검사).
+- 복구: 3,011 → 9,699줄(헤딩 104 → 263). 번들 = 사고 커밋이 남긴 25줄(10-14 12:50 EMDASH-04 — 현재
+  파일에 없던 항목) + 6,559줄. 기존 헤딩 사라진 것 **0개**, 번들 6,585줄이 새 파일에 바이트 일치,
+  경계 순서 13:45 → 12:50 → 11:23 → … → 10-04 06:36. 백업 `docs/state.md.bak.20261017_1226`.
+- 검증: 신규 테스트 23건 통과, 전체 스위트 **17 failed / 721 passed / 10 skipped**
+  (baseline 17 failed/698 passed + 신규 23 passed; 기존 17건은 격리 worktree(HEAD) 재현으로 무관 확인).
+  훅 3경로 실측(정상 exit 0 / 사고 재현 exit 1 + 복구 안내 / 우회 exit 0).
+  로테이션 dry-run 30일 이동 0건·7일 이동 35건.
+- 미적용 1건: 로테이션 실제 적용은 대표님 결정 대기(대표님이 "맨 아래에 복구"를 택해 임의 이동하지 않음).
+
+
 ## 2026-10-17 11:44 — feat: AIK24-PIPE-04 중복 제거 후 재충원 + 브리핑 카드·이메일 표시 정리 (커밋 f9ba3ba5 / 배포 ddae899f)
 
 - 작업1 재충원: `auto_news_selector.refill_after_dedup()` 신규 — 3계단(남은 free-opportunity 최신순 →
