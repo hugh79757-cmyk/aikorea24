@@ -1,3 +1,105 @@
+## 2026-10-17 10:35 — AIK24-EVAL-JUDGE-03 완료: Nemotron 3 Ultra 프로바이더별 직접 추적 → **3경로 전멸**
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-10-17-1021-AIK24-EVAL-JUDGE-03-네모트론울트라-프로바이더별-추적.md`
+조사 전용 — **코드 변경 없음**. opencode 경유가 아니라 각 프로바이더 API 로 직접 호출해
+Nemotron 3 Ultra 를 서빙하는 경로가 판관(0/1)으로 도는지 추적했다.
+
+### 사전 확인 — [검증됨]
+- `scripts/logs/model_catalog_2026-10-17.json` (39건) 에서 3 Ultra 서빙 provider = **kilo, openrouter** 2개뿐.
+  nvidia NIM 직접 경로는 카탈로그에 없다(JUDGE-02 에서 opencode 경유로 404 실측).
+- 키 존재(값 미출력): `KILO_API_KEY`(len 268, 환경변수) · `OPENROUTER_API_KEY`(len 73) · `NVIDIA_API_KEY`(len 70).
+- 기준 URL: Kilo `https://api.kilo.ai/api/gateway`(models.dev) · OpenRouter `https://openrouter.ai/api/v1` ·
+  Nvidia NIM `https://integrate.api.nvidia.com/v1`.
+
+### 경로별 결과 — 경로당 6회(케이스 A/B × 3회), temperature 0.0, max_tokens 100
+
+| 경로 | 모델 ID | 결과 | 정답 | 평균 응답 | 판정 흔들림 |
+|---|---|---|---|---|---|
+| **1 Kilo Gateway 직접** | `nvidia/nemotron-3-ultra-550b-a55b:free` | 실패 | **0/6** | 0.8~5.5초 | 해당 없음(판정 자체가 안 나옴) |
+| **2 OpenRouter 직접** | `nvidia/nemotron-3-ultra-550b-a55b:free` | 실패 | **0/6** | 0.5~0.9초 | 해당 없음 |
+| **3 Nvidia NIM 직접** | `nvidia/nemotron-3-ultra-550b-a55b` | 실패 | **0/6** | 0.5초 | 해당 없음 |
+
+**실패 원인(에러 원문, 키 값 제외)**
+1·2경로 — 6회 중 11회 전부 동일:
+   `HTTP 200 (body) error: {"message": "Upstream error from Nvidia: Service temporarily overloaded",
+   "code": 503, "metadata": {"error_type": "provider_overloaded"}}`
+   → Kilo·OpenRouter 는 **같은 Nvidia 상류**를 프록시하므로 504(opencode)·503(직접)이 같은 원인의 두 얼굴이다.
+   **Nvidia 상류 과부하**다. 토큰 한도·키 문제가 아니다.
+3경로 — 6회 전부: `HTTP 403 {'status': 403, 'title': 'Forbidden', 'detail': 'Authorization failed'}`
+   → 과부하와 **별개의 문제**: `NVIDIA_API_KEY` 가 integrate.api.nvidia.com 에서 인가되지 않는다.
+
+**재확인(12분 뒤 3회 추가 호출)**: Kilo 3/3 · OpenRouter 3/3 모두 503 provider_overloaded → **지속 중**.
+
+### ⚠️ 과부하가 풀려도 남는 리스크 1건 (저작 사례)
+Kilo 케이스B#2 한 번만 HTTP 200 으로 통과했는데, 반환값이 판정이 아니라 **영문 추론문**이었다:
+`'The user wants me to act as a strict exam grad…'` → max_tokens 100 에 잘려 **판정불가**.
+즉 이 모델은 판관 지시를 따르지 않고 먼저 사고를 시작하는 성향이 있다(JUDGE-01 에서 max_tokens 를
+100 으로 올린 이유와 같은 계열의 문제). 과부하가 해소되어도 **출력 예산을 더 주거나** 프롬프트를
+강하게 못 박아야 판정 파싱이 가능하다.
+
+### 보조 확인 (지시 범위 밖, 판단 근거용) — [부분검증]
+같은 Nvidia 계열 `nvidia/nemotron-3.5-super-vl:free` 를 직접 API 로 1회씩 호출:
+Kilo 3.8초 · OpenRouter 0.7초 에 HTTP 200 이나 **내용이 빈 문자열**. 단 이 호출은
+`max_tokens=20` 으로 던졌다(내 프로브 설정 오류) — 잘림 가능성 있어 **빈 응답이 곧 실패라고 결론내릴 수 없다**.
+같은 모델이 opencode CLI 경유로는 5초에 `"1"` 을 반환한 실적이 있다(JUDGE-02 보고).
+→ **증거가 엇갈리므로 판정하지 않는다.** 보조 확인은 실패로 집계하지 않았다.
+
+### 1순위 추천 — **없음 (판관으로 쓸 수 있는 경로 0개)**
+추천할 경로가 존재하지 않는다. 과부하 상태에서는 어떤 경로도 0/1 을 내지 않는다.
+
+### 결론
+Nemotron 3 Ultra 를 판관으로 쓰는 계획은 **지금 불가**하다. 원인은 로컬이 아니라 **Nvidia 상류 과부하**다.
+JUDGE-02 의 사전 점검 방어장치가 여기서 값을 했다 — 판관이 죽은 상태로 12문항을 돌렸다면
+전 문항이 '측정 결함' 으로 기록돼 점수 0/12 가 학생 탓으로 남았을 것이다.
+
+### 잔존 위험
+1. **지정 판관이 여전히 없다.** 12문항 평가는 현재 시작할 수 없다.
+2. **Nvidia NIM 403 은 미해결** — 과부하와 별개 문제이며 키 권한 문제로 보인다. 키를 새로 만들지
+   않았으므로(지시) 해결하지 않았다.
+3. 위 보조 확인은 max_tokens 설정 오류로 **결론 불가** 상태다. 재현하려면 출력 예산을 키워 재실행해야 한다.
+4. 과부하가 풀려도 판정 파싱 리스크(추론문 선두)는 남는다.
+
+### 다음 행동
+- Nvidia 상류 복구 후 재확인(503 → 200 전환 감시). 대표님 지시 시 즉시.
+- 그때까지 판관은 JUDGE-02 사전 점검이 평가 시작을 막는다(오염 방지). 12문항 재개는 판관 확보 후.
+- 3경로 NIM 403 은 키 권한 문제로 분리해 후속 지시서로 분리 가능.
+
+## 2026-10-17 AIK24-FREE-PIPE-01 일일 실행 — 수집 39건 / 실패 프로바이더 0 / added 3 · removed 2 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 1건 (리스트 카드 링크 1건)
+
+## 2026-10-17 00:25 — 「말랑」 가중치 조정 커밋·푸시 + GitHub 저장소 생성 + 라이브 재배포
+
+### 한 일
+- 미커밋 변경(밸런스 가중치 조정 + 사이드바 스크롤바 스타일)을 검증 후 커밋.
+- GitHub 저장소 `hugh79757-cmyk/aikorea24-mallang` 생성 후 커밋 5건 푸시.
+- 라이브(mallang.aikorea24.kr)에 최신본 재배포 — 이전 배포본이 가중치 조정 이전 구버전이었음.
+
+### 결과 — 검증 근거
+
+- [검증됨] **커밋 푸시 완료**: `916656d` → `git@github.com:hugh79757-cmyk/aikorea24-mallang.git`.
+  근거: `git fetch origin` 후 `origin/main` HEAD = `916656d` = 로컬 HEAD, `git status -sb` = `## main...origin/main`(동기화).
+  GitHub API `repos/hugh79757-cmyk/aikorea24-mallang/commits` = 5건 전부 일치.
+- [검증됨] **데이터 정합성**: `scripts/data.mjs` 와 `public/index.html` 인라인 가중치 동일.
+  근거: 구버전 패턴 `might: 0.38, agile: 0.32` grep 결과 **0건**, 신형 `might: 0.30 … wise: 0.14` **1건**.
+- [검증됨] **커밋 전 밸런스 재검증 통과**: `verify.mjs` 9/9 (perfect 50.3% / scarred 31.7% / extinct 18.1%,
+  평균 실패 1.01), `verify3.mjs` 엔딩 **12/12** (12,000회 정책 혼합). 조정 전후 티어 분포 차이 ≤1%p.
+- [검증%] → [검증됨] **라이브 재배포 완료**: wrangler 배포 `Version ID e3f7482d`, 커스텀 도메인 트리거 정상.
+  근거: `curl mallang.aikorea24.kr` HTTP **200**, 라이브 HTML에 신형 가중치 1건·구버전 0건,
+  스크롤바 스타일 2건, **로컬/라이브 sha256 앞 12자리 일치(`70284c37d8ec`)**.
+- [검증됨] **라이브 플레이 회귀 없음**: 방산 5회, 구원 1회, 14/14 시대, 종명 `지말랑이`,
+  평행세계 10개(선택 기록 15줄), **JS 오류 0건**.
+
+### 잔존 위험
+1. **배포 워크플로우 분산** — 로컬 커밋 → GitHub 푸시 → Cloudflare 배포 3단계가 수동이라
+   커밋 시점에 라이브가 구버전인 구간이 생김. 이번 사례가 그 증거(푸시 시점 라이브는 구버전).
+   →缓解: 배포 후 `curl` 해시 대조를 커밋 루틴에 포함할 것.
+2. **GitHub 저장소 public** — `public/index.html` 과 `scripts/` 가 공개. 토큰 등 비밀값은 저장소에 없음
+   (`.env` 미포함 확인 필요 — `git ls-files` 로 secret 스캔 권장).
+3. 잔존 위험 4번(perfect/vital 편중)은 가중치 조정으로 일부 완화되었으나 여전히 12,000회 중 8,919회.
+
+### 다음 행동
+- GitHub `main` 브랜치 보호(branch protection) 및 설명서에 라이브 URL 유지.
+- 대표님 플레이 피드백 → 필요 시 `scripts/data.mjs` 재튜닝 후 `verify.mjs` → 커밋 → 배포 루틴 재실행.
+
 ## 2026-10-17 02:57 — parse_log_line 명세 구현
 
 * 한 일: parse_log_line(s) 구현 — str 타입 검사(TypeError), 빈 줄(공백만) 검사(ValueError), TIMESTAMP LEVEL MSG 3필드 분리, ISO8601 timestamp 검증, INFO/WARN/ERROR level 검증, msg 빈 값 검사.
