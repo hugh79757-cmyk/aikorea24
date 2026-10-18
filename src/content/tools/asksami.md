@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "무료/월 30,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/asksami/"
+url: "https://asksami.app"
 useCases: ["SNS 콘텐츠 기획", "광고 카피 작성", "마케팅 전략 수립"]
 tags: ["마케팅", "창업", "초기고객", "콘텐츠기획"]
 featured: false

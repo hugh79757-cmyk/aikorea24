@@ -6,7 +6,7 @@ category: "영상·음성"
 price: "무료/월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/makeaivideo/"
+url: "https://makeaivideo.ai"
 useCases: ["유튜브 썸네일 및 영상 제작", "사업계획서 초안", "영어 이메일 작성"]
 tags: ["영상제작", "AI동영상", "유튜브쇼츠"]
 featured: false

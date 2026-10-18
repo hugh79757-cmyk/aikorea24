@@ -6,7 +6,7 @@ category: "코딩·개발"
 price: "무료/월 30,000원"
 koreanSupport: false
 difficulty: "고급"
-url: "https://theresanaiforthat.com/ai/logimu/"
+url: "https://www.logimu.com/"
 useCases: ["아마존 상품 데이터 조회", "가격 변동 추적", "상품 검색 자동화"]
 tags: ["아마존API", "데이터분석", "이커머스"]
 featured: false

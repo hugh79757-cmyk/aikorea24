@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/k-tl-dr/"
+url: "https://ktldr.com"
 useCases: ["긴 뉴스 기사 읽기", "시장 조사 자료 정리", "학술 자료 요약"]
 tags: ["요약", "크롬확장프로그램", "생산성"]
 featured: false

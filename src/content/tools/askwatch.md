@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "무료/월 49,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/askwatch/"
+url: "https://askwatch.ai"
 useCases: ["경쟁사 분석", "마케팅 전략 수립", "검색 순위 추적"]
 tags: ["AI마케팅", "SEO최적화", "경쟁사분석"]
 featured: false

@@ -6,7 +6,7 @@ category: "영상·음성"
 price: "무료"
 koreanSupport: false
 difficulty: "중급"
-url: "https://theresanaiforthat.com/ai/revaultai/"
+url: "https://www.revaultai.com/"
 useCases: ["유튜브 썸네일 제작", "사업계획서 초안", "영어 이메일 작성"]
 tags: ["AI영화", "영상기획", "스토리보드", "숏플래너"]
 featured: false

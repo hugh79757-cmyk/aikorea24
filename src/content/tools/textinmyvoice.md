@@ -6,7 +6,7 @@ category: "영상·음성"
 price: "무료/월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/textinmyvoice/"
+url: "https://textinmyvoice.com"
 useCases: ["유튜브 썸네일 제작", "사업계획서 초안", "영어 이메일 작성"]
 tags: ["음성변환", "텍스트음성", "내목소리클론", "오디오제작"]
 featured: false

@@ -6,7 +6,7 @@ category: "글쓰기·챗봇"
 price: "무료/월 15,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/kundaly/"
+url: "https://kundaly.com"
 useCases: ["사주 운세 질문", "성향 분석", "인간관계 궁합"]
 tags: ["사주", "점성술", "운세"]
 featured: false

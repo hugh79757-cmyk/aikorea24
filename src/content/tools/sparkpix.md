@@ -6,7 +6,7 @@ category: "디자인"
 price: "무료/월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/sparkpix/"
+url: "https://sparkpix.ai"
 useCases: ["유튜브 썸네일 제작", "인스타그램 사진 보정", "상품 상세페이지 수정"]
 tags: ["사진수정", "이미지편집", "AI보정"]
 featured: false

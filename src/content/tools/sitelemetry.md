@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "무료/월 29달러"
 koreanSupport: false
 difficulty: "중급"
-url: "https://theresanaiforthat.com/ai/sitelemetry/"
+url: "https://sitelemetry.com"
 useCases: ["SEO 최적화 진단", "보안 취약점 점검", "AI 검색 노출 분석"]
 tags: ["SEO최적화", "웹사이트진단", "보안검사"]
 featured: false

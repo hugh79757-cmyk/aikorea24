@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "무료/월 27,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://www.producthunt.com/r/p/1231025?app_id=339"
+url: "https://www.chatgptadlibrary.com/"
 useCases: ["마케팅 광고 기획", "경쟁사 분석", "광고 카피라이팅"]
 tags: ["광고분석", "마케팅전략", "벤치마킹", "콘텐츠기획"]
 featured: false

@@ -6,7 +6,7 @@ category: "디자인"
 price: "무료/월 15,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/caddillo/"
+url: "https://caddillo.com"
 useCases: ["인테리어 도면 제작", "사무실 배치 기획", "상가 인테리어 초안"]
 tags: ["평면도", "인테리어", "건축디자인"]
 featured: false

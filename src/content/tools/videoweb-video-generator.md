@@ -6,7 +6,7 @@ category: "영상·음성"
 price: "무료/월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/videoweb-video-generator/"
+url: "https://videoweb.ai"
 useCases: ["유튜브 쇼츠 제작", "상품 홍보 영상", "스토리보드 시각화"]
 tags: ["영상제작", "AI동영상", "SNS마케팅", "초보자추천"]
 featured: false

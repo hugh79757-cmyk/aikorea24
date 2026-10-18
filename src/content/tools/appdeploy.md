@@ -6,7 +6,7 @@ category: "코딩·개발"
 price: "무료/월 25,000원"
 koreanSupport: false
 difficulty: "중급"
-url: "https://theresanaiforthat.com/ai/appdeploy/"
+url: "https://appdeploy.ai"
 useCases: ["웹 서비스 프로토타입 제작", "사내용 도구 개발", "아이디어 검증"]
 tags: ["노코드", "웹배포", "생산성", "개발자동화"]
 featured: false

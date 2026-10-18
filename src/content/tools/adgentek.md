@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: "https://theresanaiforthat.com/ai/adgentek/"
+url: "https://adgentek.ai"
 useCases: ["광고 카피 작성", "마케팅 자동화", "수익 모델 기획"]
 tags: ["광고수익", "AI챗봇", "수익화"]
 featured: false

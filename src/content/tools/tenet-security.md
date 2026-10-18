@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "고급"
-url: "https://theresanaiforthat.com/ai/tenet-security/"
+url: "https://tenetsecurity.ai"
 useCases: ["보안 정책 설정", "이상 행동 탐지", "위협 대응 보고서"]
 tags: ["AI보안", "에이전트보안", "사이버보안", "기업용솔루션"]
 featured: false

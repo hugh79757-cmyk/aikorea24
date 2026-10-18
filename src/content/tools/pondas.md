@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "무료/월 30,000원"
 koreanSupport: false
 difficulty: "중급"
-url: "https://theresanaiforthat.com/ai/pondas/"
+url: "https://pondas.ai"
 useCases: ["신규 서비스 기획서 작성", "웹사이트 UI 디자인", "코드 개발 및 테스트"]
 tags: ["AI에이전트", "업무자동화", "프로젝트관리"]
 featured: false

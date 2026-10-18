@@ -6,7 +6,7 @@ category: "글쓰기·챗봇"
 price: "무료/월 12,000원"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/portuguesepal/"
+url: "https://www.portuguesepal.com/"
 useCases: ["포르투갈어 회화 연습", "포르투갈어 이메일 작성", "포르투갈어 여행 일정 준비"]
 tags: ["포르투갈어", "언어학습", "AI 대화"]
 featured: false

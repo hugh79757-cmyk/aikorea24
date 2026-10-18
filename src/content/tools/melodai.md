@@ -6,7 +6,7 @@ category: "업무·생산성"
 price: "유료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://topai.tools#"
+url: "https://melodai.ai"
 useCases: ["업무용 AI 도구 찾기", "마케팅 툴 검색", "디자인 툴 비교"]
 tags: ["AI검색", "AI큐레이션", "생산성도구"]
 featured: false

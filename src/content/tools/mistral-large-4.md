@@ -6,7 +6,7 @@ category: "글쓰기·챗봇"
 price: "사용량 기반"
 koreanSupport: true
 difficulty: "중급"
-url: ""
+url: "https://mistral.ai/"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI챗봇", "문서작성", "고성능모델"]
 featured: false
