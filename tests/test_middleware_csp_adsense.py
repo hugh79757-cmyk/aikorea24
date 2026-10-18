@@ -62,3 +62,37 @@ def test_csp_keeps_default_deny_baseline():
     """기존 보안 기준선(default-src 'self')은 유지되어야 한다."""
     csp = _csp()
     assert _directive(csp, "default-src") == "default-src 'self'", "default-src 기준선이 바뀌었다"
+
+
+# ---------------------------------------------------------------------------
+# AIK24-ADCSP-01 (2026-10-18 라이브 콘솔 에러 전수 분석 + 헤더 변형 A/B 실측)
+#   차단 실측된 구글 광고 스택 호스트. 다시 빠지면 광고 스택 초기화가 깨지고
+#   콘솔에 "violates ... blocked" 가 재발한다.
+# ---------------------------------------------------------------------------
+
+
+def test_csp_allows_adsense_quality_sdk():
+    """sodar2.js(광고 트래픽 품질 SDK) — 차단 시 show_ads_impl 이 Uncaught 를 던졌다."""
+    csp = _csp()
+    assert "https://ep2.adtrafficquality.google" in _directive(csp, "script-src")
+    assert "https://ep2.adtrafficquality.google" in _directive(csp, "connect-src")
+
+
+def test_csp_allows_consent_loader_connect():
+    """fundingchoicesmessages /el/ fetch — connect-src 에 없으면 로드당 10회 이상 재시도 폭주."""
+    assert "https://fundingchoicesmessages.google.com" in _directive(_csp(), "connect-src")
+
+
+def test_csp_allows_sodar_beacon_image():
+    """sodar 비콘은 이미지 요청이라 img-src 로 막혔다(connect-src 아님)."""
+    assert "https://ep1.adtrafficquality.google" in _directive(_csp(), "img-src")
+
+
+def test_csp_allows_ad_and_quality_frames():
+    frame_src = _directive(_csp(), "frame-src")
+    for host in (
+        "https://tpc.googlesyndication.com",
+        "https://ep2.adtrafficquality.google",
+        "https://www.google.com",
+    ):
+        assert host in frame_src, f"frame-src 에 {host} 가 없다 — 광고/품질 iframe 이 차단된다"

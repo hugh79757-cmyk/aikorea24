@@ -13,9 +13,22 @@ const SHORT_SLUGS = new Set([
 // 초기화 체인을 끊어 **두 번째 광고 유닛(레이아웃 하단 슬롯)의 /pagead/ads 요청이 아예
 // 발생하지 않는다**. 실측: CSP 현행 = 단위 요청 1건(상단 ady=81), fundingchoicesmessages
 // 허용 = 단위 요청 2건(ady=81 + 하단 ady=4285). 호스트 1개만 추가하는 최소 수정.
-// (ep2.adtrafficquality.google/sodar2.js 는 계속 차단 상태 — 요청 발생과 무관함을 확인했다.)
+//
+// AIK24-ADCSP-01 (2026-10-18 라이브 콘솔 에러 전수 분석 + 헤더 변형 A/B 실측):
+// 구글 광고 스택이 실제로 요구하는 호스트만 추가한다. 아래 4개는 모두 콘솔에서
+// "violates ... blocked" 로 실측된 차단이며, 광고 요청 건수는 현행과 동일하다(3건).
+//   · connect-src += fundingchoicesmessages.google.com : 로드당 10회 이상 재시도하던
+//     /el/AGSKWx.. fetch 차단(로드당 최다 콘솔 에러 10~11건) 해소.
+//   · script-src/connect-src/frame-src += ep2.adtrafficquality.google : sodar2.js
+//     (광고 트래픽 품질 SDK) 차단 → 허용 시 show_ads_impl 의
+//     'Uncaught (in promise) undefined' 가 사라진다(차단 2/2 발생 → 허용 6/6 미발생).
+//   · img-src += ep1.adtrafficquality.google : sodar 비콘은 이미지 요청이라
+//     connect-src 로는 허용되지 않았다(차단 실측).
+//   · frame-src += tpc.googlesyndication.com(구글 문서 기준 광고 iframe 호스트) +
+//     www.google.com(sodar2 가 프레이밍 시도 — 'Framing https://www.google.com/
+//     violates frame-src' 실측). 동의 팝업은 허용 변형 2/2 로드에서 0건이었다.
 const SECURITY_HEADERS: Record<string, string> = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' https://*.aikorea24.kr https://lh3.googleusercontent.com https://img.shields.io https://pagead2.googlesyndication.com https://tpc.googlesyndication.com data:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com",
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://ep2.adtrafficquality.google https://www.googletagmanager.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' https://*.aikorea24.kr https://lh3.googleusercontent.com https://img.shields.io https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://ep1.adtrafficquality.google data:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://fundingchoicesmessages.google.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://ep2.adtrafficquality.google https://www.google.com",
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
