@@ -1,3 +1,70 @@
+## 2026-10-18 09:30 — AIK24-PIPE-05: 아침 브리핑 `[제외]` 카드 2건 규명 + 선정 규칙 수정
+
+대표님 지시: "뉴스브리핑이 이렇게 나오는 이유가 뭔지. 나오지 말아야할 것이 나왔고 나올게 없다면 그 자리를 뉴스가 채워야한다."
+
+수정 파일 구분
+- [PRODUCTION CODE] `scripts/auto_news_selector.py` · `scripts/auto_briefing.py` · `scripts/model_catalog.py` · `scripts/free_models_page.py` · `scripts/prune_zen_pending.py`(신규 도구)
+- [TEST CODE] `tests/test_auto_news_selector_zen_slot_limit.py` · `test_auto_briefing_verdict_leaderboard.py` · `test_model_catalog_news_eval_text.py` · `test_zen_pending_hygiene.py` (신규 26건)
+- [DATA] D1 `news` 56212·56213 description · `scripts/logs/zen_pending.json` · `scripts/briefing_dedup.json`(파이프라인 자체 정리)
+- 커밋: `13543fad`(수정 + 테스트 + gitignore) · `3d206d31`(로그 정리)
+
+### 원인 — 왜 그렇게 나왔는가
+
+슬롯은 3개다. ①무료 기회(없으면 빈 슬롯) ②Zen 변경(LLM 점수 무관 최신순) ③일반 뉴스(점수순).
+
+2026-10-18 09:00 KST 실행 실측(`scripts/logs/pipeline_runner.log`):
+```
+[selector] v2_pass=1 후보: 8건 (기회=3, zen=3, free-llm=3, opensource=0, tool=0)
+[selector]   ⓘ Zen 변경 3건 우선 배정
+[selector] 선정 3건 → ⚠️ 중복 제거 1건 → 빈 슬롯 1개 — 재충원 → [0점 free-opportunity] Azure 무료 계정 $200 크레딧
+```
+카드 3건 = sort1 news 56212(cat-jam `[제외]`) · sort2 56213(muse-spark `[제외]`) · sort3 56075(Azure 재충원).
+
+원인 3가지:
+1. `[제외]` 알림이 후보·배정 단계에서 배제되지 않았다 — `model_catalog.record_diff_to_news` 가 만드는 제공 중단 알림 행(`title = "[제외] …"`)이 `get_zen_changes`(source='OpenCode Zen' + v2_tag='free-llm') 조건에 그대로 걸렸다.
+2. Zen 슬롯 상한이 없었다 — "점수 무관 최신순"이라 3건이 슬롯 3개를 모두 먹었고, 실제 뉴스 3건(The Guardian·9to5Google·The Decoder)이 슬롯을 못 받았다.
+3. 쓸 수 없는 Zen 후보가 후보 좌석을 낭비했다 — `interleave_candidates(CANDIDATE_LIMIT=8)` 이 Zen 을 3건 조회해 좌석 3석을 차지(그중 2석은 슬롯 상한과 무관하게 사용 불가) → 실제 뉴스는 2건만 진입.
+
+"나올 게 없다"의 근거: 36시간 창 208건 중 `v2_pass=1` 16건(프로바이더 11 + 실제 뉴스 5). v2 필터가 192건을 탈락시켰고 그 안에 AI타임스 등 실제 AI 뉴스가 포함됐다 — **미수정(별도 이슈)**.
+
+### 수정 내용
+
+1. `auto_news_selector.py` — `ZEN_SLOT_LIMIT = 1`(슬롯 2 는 최대 1건) · `ZEN_POOL_LIMIT = 2`(Zen 조회를 2건으로 줄여 후보 좌석 1석을 뉴스로 회수) · `EXCLUDED_TITLE_PREFIXES = ("[제외]",)` + `_excluded_titles_sql()`(SQL 1차) + `_is_excluded_notice()`(배정 2차) · `refill_after_dedup` 2티어 상한 동일 적용.
+2. `auto_briefing.py` — `verdict_block` 4단계: 캐시 → 리더보드 폴백(점수 + `측정:` 시각) → 동작 확인 → 판단 보류. 문항 버전(qv)이 다르면 기준을 밝히고 Top 3 비교는 생략.
+3. `model_catalog.py` — 제외 알림 description 에 실제 점수(`직전 12문항 평가 10/12 (문항 v2)`) + `제외 사유는 제공사 미공지(수집 스냅샷 비교)`. 점수 없으면 기존 문구 유지(기존 테스트 계약 보존).
+4. `free_models_page.py` — `mark_zen_pending` 이 첫 사유를 영구히 고정하던 결함 수정(같은 사유만 건너뜀) · "점검 중" 문구 인과 교정("검증에 실패해 목록에서 제외" → "호출이 되지 않아 이 목록에서 뺌").
+5. `prune_zen_pending.py`(신규) — 최신 카탈로그에 없는 모델의 대기 원장 잔재 정리(기본 dry-run, 백업).
+
+### 결과 — 검증 근거
+
+- [검증됨] 전체 테스트 780 passed / 10 skipped / 0 failed. 산출: 754(기준선) + 26(신규 7+7+4+8) = 780, skipped 10 은 기준선과 동일. 근거: `python3 -B -m pytest tests/ -q`.
+- [검증됨] 실데이터 선정 결과 — 후보 8건(기회=3, zen=2, free-llm=3) → 선정 3건 = 기회 1 + Zen 1 + 뉴스 1, 제외 알림 0건. 근거: `scripts/logs/tmp_sections/zen_slot_verify.py` 실행 출력 + assert 통과.
+- [검증됨] SQL 배제 — `get_zen_changes(3)` 가 만든 SQL 에 `title NOT LIKE '[제외]%'` 포함. 근거: 단위 테스트 `test_zen_query_excludes_removed_notices`.
+- [검증됨] 발행 글 2편 교정 — 라이브 http=200(42,556 / 41,692 바이트). 날조 문구 6종 0건(`공식 공지에 따르면`·`404 및 403 오류 코드`·`12문항 평가 전`·`판단 보류`·`리소스 재배치`·`평가를 마친 뒤`), 관측 문구 3종 반영(`공지를 내지 않았습니다`·`12문항 실측`·`Model unavailable`). 근거: `curl` + `grep` 실측 · 원본 백업 `scripts/logs/backup_text_replace_20261018_0905.json`(gitignore).
+- [검증됨] D1 잔존 행 교정 — 56212/56213 description 재조회에서 `12문항 평가 전` 0건, 새 문구 = 코드가 생성할 문구와 동일 문자열. 근거: 교정 전/후 SELECT 출력 · 백업 `backup_news_desc_20261018_091049.json`(gitignore).
+- [검증됨] 무료 모델 페이지 문구 통일 — 재빌드·발행 후 라이브에서 신문구 존재 · 구문구 0건. 근거: `curl https://emdash.aikorea24.kr/posts/free-models` + `grep`, `호출 검증 시각: 2026-10-17 09:31 (KST)`.
+- [검증됨] `zen_pending.json` 잔재 정리 — cat-jam-free 제거 · jev-1.13-free 보존 + 쓰기 후 재조회 검증. 근거: `scripts/prune_zen_pending.py --apply` 출력 · 백업 `backup_zen_pending_20261018_090703.json`.
+- [검증됨] `[제외]` 자동 글 발행 경로 차단 — 발행기는 브리핑 항목만 읽는다(`scripts/blog_draft_generator.py:223-224`: `FROM briefing_items bi JOIN news n ON bi.news_id = n.id`). 브리핑에서 배제되므로 `[제외]` 행으로 새 글이 생성되지 않는다. 근거: 해당 파일 grep.
+- [검증됨] `briefing_dedup.json` 690줄 감소가 사고가 아님 — 파이프라인 30일 창(cutoff 2026-09-18) 적용으로 62 → 59건(62−4(09-17)+1(10-18)). `record_briefing` 호출처는 `auto_briefing.py:502` 뿐이고 테스트 참조 0건. 근거: 파일 브리핑 날짜 목록 대조 + grep.
+- [부분검증] 슬롯 구성 — 단위 테스트와 실데이터 모의(점수 스텁 10)로 확인했으나 실제 LLM 점수·실제 발행 경로는 다음 실행 전까지 미검증. 제한 사유: 점수는 선정 시점에만 계산되고 DB에 저장되지 않아 사후 재현이 불가능하다.
+- [부분검증] 리더보드 폴백 — 캐시/점수/버전 분기 7건을 단위 테스트로 확인. 제한 사유: 실제 캐시 만료 시점의 자동 발행 글 문구는 아직 생성되지 않았다.
+- [검증불가] 제공사가 `[제외]`를 공지한 내용 — 제공사 공지 원문을 확인할 수단이 없다. 복구 계획: 제공사 문서·공지에 해당 항목 문구가 생기면 그 문구로 대체한다.
+
+### 잔존 위험
+
+- 다음 브리핑(2026-10-19 09:00 KST) 실측 전까지 슬롯 구성은 모의 검증만이다.
+- v2 필터 과탈락(36시간 208건 중 192건) 미수정 — "나올 게 없다"의 근거 자체는 그대로 남아 있다.
+- `[제외]` 행은 news 테이블에 계속 기록된다(수집 사실 보존) — 차단 범위는 브리핑·글 경로다.
+- muse-spark 점수는 문항 v1 기준이라 화면·글에 v1 로 표기했다(v2 기준 점수는 없다).
+- `zen_pending.json` 은 화면에 쓰이지 않는다 — 이번 작업은 원장 정리이며 화면 노출은 원래 없다.
+- 이월 결정 대기(변동 없음): 리뷰 링크 노출 · 목록 표 지표 칸 · `model_eval_runs.jsonl` 추적 여부 · free-models 방법론 문구의 CLI 언급 유지 여부.
+
+### 다음 행동
+
+1. 2026-10-19 09:00 KST 브리핑 실측 — 카드에 `[제외]` 0건 · Zen 1건 이하 확인.
+2. v2 필터 탈락률 점검(별도 작업) — 실제 AI 뉴스가 v2 를 통과하지 못하는 이유.
+3. 대표님 결정 대기 항목 처리.
+
 ## 2026-10-18 02:35 — AIK24-GLM53FREE-01: GLM-5.3-Flash Free 리뷰 글 발행 + 12문항 실측 + 목록 페이지 잠복 결함 수정
 
 ### 한 일
