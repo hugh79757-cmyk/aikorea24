@@ -323,8 +323,10 @@ def record_diff_to_news(day, d):
     cfnew.check_quota()
     sources = [v[0] for v in NEWS_SOURCES.values()]
     existing = cfnew.sql(
-        "SELECT title FROM news WHERE DATE(created_at) = %s AND source IN (%s);"
-        % (_news_lit(day), ", ".join(_news_lit(s) for s in sources)),
+        # AIK24-D1-OPT-01(2026-10-18): DATE(created_at) = ? 는 인덱스를 쓰지 못해 매회 전행을 읽었다
+        # (실측 rows_read 19,135 → 1). 등가 범위 조건으로 교체.
+        "SELECT title FROM news WHERE created_at >= %s AND created_at < date(%s, '+1 day') AND source IN (%s);"
+        % (_news_lit(day), _news_lit(day), ", ".join(_news_lit(s) for s in sources)),
         database_id=cfnew.A24_DB,
     )
     seen = {r.get("title") for r in (existing or [])}

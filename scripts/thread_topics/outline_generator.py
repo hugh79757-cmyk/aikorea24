@@ -118,11 +118,17 @@ def search_articles_for_keyword(db_query_terms):
         return []
 
     where_terms = " OR ".join(like_clauses)
-    date_filter = f"DATE(created_at) IN ('{today_str}', '{yesterday_str}')"
+    # AIK24-D1-OPT-01(2026-10-18): DATE() 는 인덱스를 쓰지 못한다(실측 19,135행 → 88행).
+    # 바깥 괄호 필수 — 이 식이 "WHERE ({where_terms}) AND {date_filter} AND category IN (...)" 로 합쳐진다.
+    date_filter = (
+        f"((created_at >= '{today_str}' AND created_at < date('{today_str}', '+1 day'))"
+        f" OR (created_at >= '{yesterday_str}' AND created_at < date('{yesterday_str}', '+1 day')))"
+    )
 
     sql = f"""
         SELECT title, description, source, category, link, pub_date
-        FROM news
+        FROM news INDEXED BY idx_news_created_at
+        -- 위 힌트가 없으면 계획기가 idx_news_category 를 골라 전행을 읽는다(실측 17,679행 → 87행).
         WHERE ({where_terms})
           AND {date_filter}
           AND category IN ('global', 'news')

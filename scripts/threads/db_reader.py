@@ -306,6 +306,9 @@ def get_articles():
     posted = load_posted()
     source_filter = get_source_filter()
     today = datetime.now().strftime('%Y-%m-%d')
+    # AIK24-D1-OPT-01(2026-10-18): `date LIKE 'prefix%'` 는 인덱스를 쓰지 못한다(실측 rows_read 5,580 → 14).
+    # 반환 id 집합이 LIKE 판과 동일함을 실측 확인(3건 일치)하고 범위 조건으로 교체했다.
+    today_next = (datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d')
 
     articles = []
     total_queried = 0
@@ -319,7 +322,7 @@ def get_articles():
                FROM news n
                JOIN briefing_items bi ON bi.news_id = n.id
                JOIN briefings b ON b.id = bi.briefing_id
-               WHERE b.date LIKE '{today}%' AND b.status = 'published'
+               WHERE b.date >= '{today}' AND b.date < '{today_next}' AND b.status = 'published'
                 {source_filter}
                GROUP BY n.id ORDER BY bi.sort_order ASC LIMIT 200"""
     rows = d1_query(sql1)

@@ -11,12 +11,12 @@ let news: any[] = [];
 if (db) {
   try {
     const bResult = await db.prepare(
+      // AIK24-D1-OPT-01(2026-10-18): GROUP BY 제거 → 상관 서브쿼리(item_count 의미 동일).
+      // 실측 rows_read 2,850 → 754 (-73.5%). 조인만 두면 149행인데 GROUP BY 하나가 2,700행을 유발했다.
       `SELECT b.id, b.date, b.status, b.intro,
-              COUNT(bi.id) as item_count
+              (SELECT COUNT(*) FROM briefing_items bi WHERE bi.briefing_id = b.id) as item_count
        FROM briefings b
-       LEFT JOIN briefing_items bi ON bi.briefing_id = b.id
        WHERE b.status = 'published'
-       GROUP BY b.id
        ORDER BY b.date DESC
        LIMIT 100`
     ).all();

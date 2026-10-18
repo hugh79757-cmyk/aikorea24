@@ -93,8 +93,9 @@ def load_today_news():
         date_str = target_date.strftime("%Y-%m-%d")
         sql = f"""
             SELECT title, description
-            FROM news
-            WHERE DATE(created_at) = '{date_str}'
+            FROM news INDEXED BY idx_news_created_at
+            -- 위 힌트가 없으면 계획기가 idx_news_category 를 골라 전행을 읽는다(실측 17,607행 → 87행).
+            WHERE created_at >= '{date_str}' AND created_at < date('{date_str}', '+1 day')
               AND category IN ('global', 'news')
               AND title IS NOT NULL
             ORDER BY created_at DESC

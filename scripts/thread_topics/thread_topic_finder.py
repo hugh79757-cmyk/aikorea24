@@ -123,8 +123,15 @@ def load_today_news() -> tuple[list[dict], str]:
 
     sql = f"""
         SELECT id, title, description, source, link, pub_date
-        FROM news
-        WHERE DATE(created_at) IN ('{today_str}', '{yesterday_str}')
+        FROM news INDEXED BY idx_news_created_at
+        -- AIK24-D1-OPT-01(2026-10-18): DATE() → 범위 조건 + 인덱스 강제.
+        -- 근거: 힌트가 없으면 계획기가 idx_news_category 를 골라 17,684행을 읽는다(강제 시 87행, -99.5%).
+        -- 반환 id+title 집합은 현행 DATE() IN 판과 동일함을 실측 확인(78건).
+        -- 주의: idx_news_created_at 이 없으면 이 쿼리는 hard error 로 실패한다(sql/006 이 이 인덱스를 정의).
+        WHERE (
+                (created_at >= '{today_str}' AND created_at < date('{today_str}', '+1 day'))
+             OR (created_at >= '{yesterday_str}' AND created_at < date('{yesterday_str}', '+1 day'))
+              )
           AND category IN ('global', 'news')
           AND title IS NOT NULL
         ORDER BY created_at DESC

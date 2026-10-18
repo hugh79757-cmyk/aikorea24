@@ -361,7 +361,9 @@ def get_existing():
     try:
         r = subprocess.run(
             ['npx', 'wrangler', 'd1', 'execute', 'aikorea24-db', '--remote', '--yes',
-             '--command', "SELECT title, link FROM news", '--json'],
+             # AIK24-D1-OPT-01(2026-10-18): WHERE/LIMIT 없던 전행 조회 → 60일 창(실측 19,135행 → 8,979행).
+             # 링크 중복은 news.link UNIQUE + INSERT OR IGNORE 로 DB가 보장하므로 창 축소는 안전하다.
+             '--command', "SELECT title, link FROM news WHERE created_at >= datetime('now','-60 days')", '--json'],
             capture_output=True, text=True, cwd=PROJECT_DIR, timeout=120)
         if r.returncode == 0 and r.stdout.strip():
             data = json.loads(r.stdout)
