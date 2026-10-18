@@ -1,5 +1,4 @@
 ---
-
 name: "DailyHub"
 description: "프로젝트와 할 일, 매일의 습관을 한곳에서 관리하는 개인용 업무 공간입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "ScienceIDE: Turning World's Scientific Codebase in"
 description: "과학 코드베이스를 AI 에이전트 학습 환경으로 변환하는 연구 도구입니다."
 category: "코딩·개발"

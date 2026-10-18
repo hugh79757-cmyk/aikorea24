@@ -1,5 +1,4 @@
 ---
-
 name: "Claude"
 description: "긴 문서 분석에 특화된 AI로, 보고서와 논문을 쉽게 분석합니다."
 category: "글쓰기·챗봇"

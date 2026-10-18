@@ -1,5 +1,4 @@
 ---
-
 name: "Cognee AI"
 description: "Cognee AI는 지속적이고 검색 가능한 메모리를 제공하여 정보 관리를 쉽게 합니다."
 category: "업무·생산성"

@@ -1,6 +1,4 @@
 ---
-
-
 name: "Airbrush Studio"
 description: "AI로 사진을 자동 보정하여 전문가처럼 편집할 수 있는 도구입니다."
 category: "디자인"

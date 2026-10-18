@@ -1,5 +1,4 @@
 ---
-
 name: "Playn AI"
 description: "사용자가 원하는 여행 일정을 자동으로 생성해주는 AI 여행 계획 도구입니다."
 category: "업무·생산성"

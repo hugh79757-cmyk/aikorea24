@@ -1,5 +1,4 @@
 ---
-
 name: "Beautiful.ai"
 description: "Beautiful.ai는 기업 팀을 위한 프레젠테이션 플랫폼으로, 브랜드 일관성을 유지합니다."
 category: "업무·생산성"

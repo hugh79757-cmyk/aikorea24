@@ -1,5 +1,4 @@
 ---
-
 name: "Productshot AI"
 description: "AI를 활용해 제품 사진을 자동으로 생성하여 온라인 판매에 최적화합니다."
 category: "이미지 생성"

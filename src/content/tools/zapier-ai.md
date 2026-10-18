@@ -1,5 +1,4 @@
 ---
-
 name: "Zapier AI"
 description: "9,000개 이상의 앱과 연결하여 AI 워크플로우를 자동화하는 플랫폼입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Fairphone Gen 6+"
 description: "부품을 직접 교체해 10년 가까이 오래 쓸 수 있는 친환경 5G 스마트폰입니다."
 category: "업무·생산성"

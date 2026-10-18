@@ -1,5 +1,4 @@
 ---
-
 name: "Runway"
 description: "Runway는 다양한 세상을 시뮬레이션할 수 있는 AI 툴입니다."
 category: "영상·음성"

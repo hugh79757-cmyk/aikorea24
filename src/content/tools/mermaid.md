@@ -1,5 +1,4 @@
 ---
-
 name: "Mermaid"
 description: "스마트폰 문자 메시지로 집이나 사무실에 있는 Mac을 원격 제어하여 업무를 수행하는 AI 에이전트입니다."
 category: "업무·생산성"

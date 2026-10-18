@@ -1,5 +1,4 @@
 ---
-
 name: "Graft AI"
 description: "레거시 소프트웨어를 AI가 사용할 수 있도록 변환하는 툴입니다."
 category: "업무·생산성"

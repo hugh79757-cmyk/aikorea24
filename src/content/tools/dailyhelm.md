@@ -1,5 +1,4 @@
 ---
-
 name: "DailyHelm"
 description: "쇼핑몰 데이터와 광고 성과를 밤새 분석하여 개선할 점을 아침마다 알려주는 AI 비즈니스 리뷰어입니다."
 category: "업무·생산성"

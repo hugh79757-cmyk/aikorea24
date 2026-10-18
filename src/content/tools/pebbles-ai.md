@@ -1,5 +1,4 @@
 ---
-
 name: "Pebbles Ai"
 description: "제품과 서비스를 시장에 성공적으로 출시하는 데 도움이 되는 플랫폼입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Anyword"
 description: "Anyword는 AI 콘텐츠 성과를 76% 향상시키는 마케팅 도구입니다."
 category: "업무·생산성"

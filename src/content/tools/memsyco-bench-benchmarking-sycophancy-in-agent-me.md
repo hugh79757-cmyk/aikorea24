@@ -1,5 +1,4 @@
 ---
-
 name: "MemSyco-Bench: Benchmarking Sycophancy in Agent Me"
 description: "AI 연구 논문을 매일 받아보며 최신 정보를 확인할 수 있는 서비스입니다."
 category: "업무·생산성"

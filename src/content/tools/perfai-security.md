@@ -1,5 +1,4 @@
 ---
-
 name: "Perfai Security"
 description: "AI로 만들어진 앱의 보안을 자동으로 관리하는 플랫폼입니다."
 category: "코딩·개발"

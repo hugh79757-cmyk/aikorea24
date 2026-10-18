@@ -1,5 +1,4 @@
 ---
-
 name: "Chain Exchange"
 description: "여러 블록체인 네트워크 간 코인을 쉽게 교환하고 예치할 수 있는 크로스체인 거래소입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Mellum by JetBrains"
 description: "JetBrains의 Mellum은 소프트웨어 개발을 위한 지능형 도구로, 코드 작성과 관리에 유용합니다."
 category: "코딩·개발"

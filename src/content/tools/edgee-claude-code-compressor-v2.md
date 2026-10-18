@@ -1,5 +1,4 @@
 ---
-
 name: "Edgee Claude Code Compressor V2"
 description: "코드 작업 시 토큰 비용을 줄여주는 압축 도구입니다."
 category: "코딩·개발"

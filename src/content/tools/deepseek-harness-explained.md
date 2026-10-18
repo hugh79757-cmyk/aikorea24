@@ -1,5 +1,4 @@
 ---
-
 name: "DeepSeek Harness Explained"
 description: "복잡한 AI 에이전트 업무 흐름을 플러그인 방식으로 설계하고 관리하는 개발자용 자동화 도구입니다."
 category: "코딩·개발"

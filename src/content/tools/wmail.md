@@ -1,5 +1,4 @@
 ---
-
 name: "WMail"
 description: "아이폰에서 Fastmail을 가장 빠르고 편리하게 사용하는 전용 이메일 앱입니다."
 category: "업무·생산성"

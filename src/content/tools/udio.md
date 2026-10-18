@@ -1,5 +1,4 @@
 ---
-
 name: "Udio"
 description: "Udio는 AI를 활용해 음악을 빠르게 생성하고 공유할 수 있는 플랫폼입니다."
 category: "영상·음성"

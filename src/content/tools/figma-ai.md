@@ -1,5 +1,4 @@
 ---
-
 name: "Figma AI"
 description: "Figma는 협업 디자인 플랫폼으로, 제품 디자인과 프로토타입 제작을 지원합니다."
 category: "디자인"

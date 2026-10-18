@@ -1,5 +1,4 @@
 ---
-
 name: "Expertise AI"
 description: "전문가의 노하우를 AI 에이전트로 쉽게 만들고 공유하는 플랫폼입니다."
 category: "업무·생산성"

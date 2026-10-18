@@ -1,5 +1,4 @@
 ---
-
 name: "AGIRAILS"
 description: "AI 에이전트 간의 신뢰 기반 거래를 위한 프로토콜입니다."
 category: "업무·생산성"

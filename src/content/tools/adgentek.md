@@ -1,5 +1,4 @@
 ---
-
 name: "Adgentek"
 description: "AI 대화 속에서 자연스럽게 광고를 노출하여 새로운 수익을 창출하는 마케팅 툴입니다."
 category: "업무·생산성"

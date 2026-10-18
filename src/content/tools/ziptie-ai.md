@@ -1,5 +1,4 @@
 ---
-
 name: "ZipTie AI"
 description: "고객 여정을 분석하여 콘텐츠 최적화를 지원하는 AI 플랫폼입니다."
 category: "업무·생산성"

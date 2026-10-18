@@ -1,5 +1,4 @@
 ---
-
 name: "Pair2FA"
 description: "팀원들과 2단계 인증(2FA) 코드를 안전하게 공유하고 관리하는 협업 툴입니다."
 category: "업무·생산성"

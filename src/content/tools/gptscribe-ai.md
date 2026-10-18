@@ -1,5 +1,4 @@
 ---
-
 name: "GPTscribe AI"
 description: "음성 및 영상을 텍스트로 변환하여 검색 가능하게 만드는 툴입니다."
 category: "업무·생산성"

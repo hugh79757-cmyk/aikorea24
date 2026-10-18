@@ -1,5 +1,4 @@
 ---
-
 name: "GroundingPI: A Grounding Foundation Model towards "
 description: "시각적 원시 요소와 언어를 연결해 물리 지능 연구를 지원하는 모델입니다."
 category: "코딩·개발"

@@ -1,5 +1,4 @@
 ---
-
 name: "muse-video.ai"
 description: "텍스트를 입력하면 짧은 동영상을 생성하는 AI 툴입니다."
 category: "영상·음성"

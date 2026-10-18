@@ -1,5 +1,4 @@
 ---
-
 name: "Cosmic AI Support Agent"
 description: "웹사이트 콘텐츠를 학습해 고객 응대를 자동으로 처리하는 AI 챗봇 빌더입니다."
 category: "글쓰기·챗봇"

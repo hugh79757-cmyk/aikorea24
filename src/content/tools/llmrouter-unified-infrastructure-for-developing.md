@@ -1,5 +1,4 @@
 ---
-
 name: "LLMRouter: Unified Infrastructure for Developing, "
 description: "최신 AI 논문과 연구 동향을 매일 이메일로 받아보고, 기술적 트렌드를 빠르게 파악할 수 있는 정보 큐레이션 서비스입니다."
 category: "번역·학습"

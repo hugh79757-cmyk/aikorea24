@@ -1,5 +1,4 @@
 ---
-
 name: "Gemini Spark"
 description: "Gemini Spark는 24시간 작동하는 개인 AI 에이전트로, 업무 효율성을 높입니다."
 category: "업무·생산성"

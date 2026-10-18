@@ -1,5 +1,4 @@
 ---
-
 name: "Speak"
 description: "Speak는 실시간 튜터 없이 대화 연습을 할 수 있는 언어 학습 앱입니다."
 category: "번역·학습"

@@ -1,5 +1,4 @@
 ---
-
 name: "DevAlly AI Agent"
 description: "웹사이트의 장애인 접근성 규정 위반을 자동으로 찾아내고 수정 코드를 제안하는 AI 툴입니다."
 category: "코딩·개발"

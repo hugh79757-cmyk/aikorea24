@@ -1,5 +1,4 @@
 ---
-
 name: "Froging AI"
 description: "텍스트와 이미지를 입력하면 고품질 AI 영상으로 변환해 주는 마케팅용 영상 제작 도구입니다."
 category: "영상·음성"

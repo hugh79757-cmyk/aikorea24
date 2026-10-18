@@ -1,5 +1,4 @@
 ---
-
 name: "Kundaly"
 description: "사주명식과 탄생 차트를 무엇이든 물어볼 수 있는 AI 점성술 챗봇 서비스입니다."
 category: "글쓰기·챗봇"

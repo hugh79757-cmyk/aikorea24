@@ -1,5 +1,4 @@
 ---
-
 name: "Alphio AI"
 description: "자연어 명령으로 자동 거래를 수행하는 AI 투자 도구입니다."
 category: "업무·생산성"

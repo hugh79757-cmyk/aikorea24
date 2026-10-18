@@ -1,5 +1,4 @@
 ---
-
 name: "GPT-6 Sol & Luna"
 description: "다양한 업무 환경에 맞춰 성능과 비용을 최적화한 최신 GPT-6 AI 모델입니다."
 category: "글쓰기·챗봇"

@@ -1,5 +1,4 @@
 ---
-
 name: "Howseen AI"
 description: "ChatGPT나 챗봇 검색 결과에 내 브랜드가 추천되는지 추적하고 최적화하는 AI 툴입니다."
 category: "업무·생산성"

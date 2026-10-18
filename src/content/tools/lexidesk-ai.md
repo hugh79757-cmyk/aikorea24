@@ -1,5 +1,4 @@
 ---
-
 name: "LexiDesk AI"
 description: "법률 사무소를 위한 24시간 고객 접수 자동화 툴입니다."
 category: "업무·생산성"

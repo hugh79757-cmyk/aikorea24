@@ -1,5 +1,4 @@
 ---
-
 name: "Unfox AI"
 description: "AI 생성 콘텐츠를 탐지하고 신뢰도 점수를 제공하는 유용한 도구입니다."
 category: "업무·생산성"

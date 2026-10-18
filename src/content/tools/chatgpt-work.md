@@ -1,5 +1,4 @@
 ---
-
 name: "Chatgpt Work"
 description: "문서, 스프레드시트, 프레젠테이션 등을 자동 생성하는 AI 도구입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "AlgoFly AI"
 description: "AI 솔루션을 구축하고 배포하는 데 도움을 주는 플랫폼입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Musicaura AI"
 description: "텍스트를 기반으로 음악을 생성하는 AI 툴로, 다양한 프로젝트에 활용 가능합니다."
 category: "영상·음성"

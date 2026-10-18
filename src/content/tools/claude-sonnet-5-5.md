@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Sonnet 5.5"
 description: "빠르고 저렴한 AI 문서·보고서 작성 도우미, 한국어도 자연스럽게 지원합니다."
 category: "글쓰기·챗봇"

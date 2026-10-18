@@ -1,5 +1,4 @@
 ---
-
 name: "Albato AI"
 description: "AI 기반의 노코드 통합 플랫폼으로, 다양한 앱 간의 자동화를 지원합니다."
 category: "업무·생산성"

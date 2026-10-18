@@ -1,5 +1,4 @@
 ---
-
 name: "Mojave Paint"
 description: "Mojave Paint는 맥에서 정적인 이미지를 직접 수정할 수 있는 이미지 편집기입니다."
 category: "디자인"

@@ -1,5 +1,4 @@
 ---
-
 name: "Perplexity"
 description: "실시간 웹 검색로 출처가 명시된 정보를 제공하는 AI 검색엔진입니다."
 category: "글쓰기·챗봇"

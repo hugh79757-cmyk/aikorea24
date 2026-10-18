@@ -1,5 +1,4 @@
 ---
-
 name: "InterviewCue AI"
 description: "AI와 함께하는 실전 면접 연습과 이력서 최적화로 취업 성공 확률을 높여주는 준비 도구입니다."
 category: "업무·생산성"

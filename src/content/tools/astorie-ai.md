@@ -1,5 +1,4 @@
 ---
-
 name: "Astorie AI"
 description: "다양한 최신 AI 모델을 하나의 캔버스에서 연결하여 고품질 영상과 이미지를 생성하는 전문 제작 툴입니다."
 category: "영상·음성"

@@ -1,6 +1,4 @@
 ---
-
-
 name: "Lium AI"
 description: "업무 자동화로 효율성을 높이는 플랫폼입니다."
 category: "업무·생산성"

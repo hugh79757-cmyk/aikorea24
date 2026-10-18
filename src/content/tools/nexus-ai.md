@@ -1,5 +1,4 @@
 ---
-
 name: "Nexus AI"
 description: "Nexus AI는 글쓰기, 음성 변환, 이미지 생성 등 다양한 작업을 지원하는 AI 플랫폼입니다."
 category: "업무·생산성"

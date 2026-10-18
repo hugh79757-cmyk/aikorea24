@@ -1,5 +1,4 @@
 ---
-
 name: "Fuse AI"
 description: "AI 에이전트로 영업 타겟을 찾고 이메일 발송을 자동화하는 B2B 세일즈 플랫폼입니다."
 category: "업무·생산성"

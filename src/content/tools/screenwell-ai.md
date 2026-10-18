@@ -1,5 +1,4 @@
 ---
-
 name: "Screenwell.ai"
 description: "AI가 지원자와 짧은 영상 인터뷰를 진행해 점수와 인용문을 제공, 순위별 후보 리스트를 자동 생성합니다."
 category: "업무·생산성"

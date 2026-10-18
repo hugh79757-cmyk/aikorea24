@@ -1,5 +1,4 @@
 ---
-
 name: "Saymo AI"
 description: "제품 사진 한 장으로 실제 사람이 광고하는 듯한 고퀄리티 영상 광고를 제작해 주는 AI 툴입니다."
 category: "영상·음성"

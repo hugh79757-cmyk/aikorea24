@@ -1,5 +1,4 @@
 ---
-
 name: "AgentGarten: Code Worlds for Evolving Agents"
 description: "최신 AI 연구 논문과 트렌드 동향을 매일 빠르게 확인하는 글로벌 연구 큐레이션 플랫폼입니다."
 category: "코딩·개발"

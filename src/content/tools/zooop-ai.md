@@ -1,5 +1,4 @@
 ---
-
 name: "Zooop AI"
 description: "Zooop AI는 AI를 활용해 4K 이미지와 1080p 영상을 생성하는 플랫폼입니다."
 category: "영상·음성"

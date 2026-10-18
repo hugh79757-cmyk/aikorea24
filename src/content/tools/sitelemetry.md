@@ -1,5 +1,4 @@
 ---
-
 name: "Sitelemetry"
 description: "웹사이트 보안, 검색엔진 최적화(SEO), AI 검색 노출 상태를 종합적으로 진단하는 AI 분석 툴입니다."
 category: "업무·생산성"

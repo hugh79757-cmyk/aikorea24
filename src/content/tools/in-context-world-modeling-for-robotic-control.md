@@ -1,5 +1,4 @@
 ---
-
 name: "In-Context World Modeling for Robotic Control"
 description: "로봇 제어를 위한 상황 인식 모델링 툴로, 연구자에게 유용합니다."
 category: "코딩·개발"

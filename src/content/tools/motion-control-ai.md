@@ -1,5 +1,4 @@
 ---
-
 name: "Motion Control AI"
 description: "모션 제어 AI는 영상에서 캐릭터의 동작과 표정을 자동으로 생성합니다."
 category: "영상·음성"

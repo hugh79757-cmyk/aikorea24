@@ -1,5 +1,4 @@
 ---
-
 name: "Happy Shrimp"
 description: "한 줄의 아이디어만 입력하면 작사, 작곡, 보컬까지 포함된 완벽한 노래를 만들어주는 AI 음악 생성 플랫폼입니다."
 category: "영상·음성"

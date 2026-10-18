@@ -1,5 +1,4 @@
 ---
-
 name: "Oogwai Beacon"
 description: "챗GPT와 제미나이가 내 브랜드를 얼마나 추천하는지 진단해주는 AEO 분석 툴입니다."
 category: "업무·생산성"

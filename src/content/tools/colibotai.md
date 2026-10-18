@@ -1,5 +1,4 @@
 ---
-
 name: "ColibotAI"
 description: "웹 텍스트를 번역하고 요약하는 무료 크롬 확장 프로그램입니다."
 category: "번역·학습"

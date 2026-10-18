@@ -1,5 +1,4 @@
 ---
-
 name: "Grok"
 description: "Grok은 채팅, 이미지 생성, 코드 작성 등 다양한 기능을 제공하는 AI 도구입니다."
 category: "업무·생산성"

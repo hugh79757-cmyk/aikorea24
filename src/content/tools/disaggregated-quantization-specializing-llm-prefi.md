@@ -1,5 +1,4 @@
 ---
-
 name: "Disaggregated Quantization: Specializing LLM Prefi"
 description: "LLM 프리필과 디코드 단계에 각각 최적화된 양자화 기법을 제안하는 연구 논문입니다."
 category: "코딩·개발"

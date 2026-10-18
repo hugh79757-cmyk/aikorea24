@@ -1,5 +1,4 @@
 ---
-
 name: "Papago"
 description: "언어 장벽을 없애주는 무료 AI 번역기입니다."
 category: "번역·학습"

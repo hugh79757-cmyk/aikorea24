@@ -1,5 +1,4 @@
 ---
-
 name: "Muse Spark 1.1 by Meta AI"
 description: "다양한 작업을 지원하는 멀티모달 AI 모델로, 효율적인 목표 달성을 돕습니다."
 category: "업무·생산성"

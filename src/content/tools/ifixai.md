@@ -1,5 +1,4 @@
 ---
-
 name: "iFixAi"
 description: "AI 에이전트의 숨은 행동과 오류를 검증하여 기업의 리스크를 방지하는 보안 감사 툴입니다."
 category: "코딩·개발"

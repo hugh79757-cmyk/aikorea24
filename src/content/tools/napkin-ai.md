@@ -1,5 +1,4 @@
 ---
-
 name: "Napkin AI"
 description: "텍스트를 시각적으로 변환하여 효과적인 커뮤니케이션을 지원합니다."
 category: "디자인"

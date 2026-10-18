@@ -1,5 +1,4 @@
 ---
-
 name: "ChatCut"
 description: "브라우저에서 쉽게 사용하는 AI 영상 편집 도구입니다."
 category: "영상·음성"

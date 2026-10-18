@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Overlay"
 description: "윈도우에서 화면을 인식하여 질문에 답하는 Claude Code 챗봇입니다."
 category: "코딩·개발"

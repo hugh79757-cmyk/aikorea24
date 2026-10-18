@@ -1,5 +1,4 @@
 ---
-
 name: "HAQQ Legal AI on Mobile"
 description: "모바일에서 법률 연구와 문서 분석을 지원하는 AI 앱입니다."
 category: "업무·생산성"

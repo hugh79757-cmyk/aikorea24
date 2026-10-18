@@ -1,5 +1,4 @@
 ---
-
 name: "Second Brain for AI v2"
 description: "여러 AI 도구에서 기억을 저장하고 호출할 수 있는 메모리 플랫폼입니다."
 category: "업무·생산성"

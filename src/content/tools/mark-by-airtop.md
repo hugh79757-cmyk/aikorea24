@@ -1,5 +1,4 @@
 ---
-
 name: "Mark by Airtop"
 description: "마케팅 자동화로 개인 맞춤형 GTM 계획을 수립합니다."
 category: "업무·생산성"

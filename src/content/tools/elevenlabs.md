@@ -1,5 +1,4 @@
 ---
-
 name: "ElevenLabs"
 description: "자연스러운 음성을 생성하여 다양한 콘텐츠에 활용하는 AI 음성 생성기입니다."
 category: "영상·음성"

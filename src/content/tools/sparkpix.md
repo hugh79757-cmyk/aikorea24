@@ -1,5 +1,4 @@
 ---
-
 name: "SparkPix"
 description: "사진을 올리고 원하는 수정 내용을 말로 설명하면 AI가 척척 고쳐주는 마법 같은 이미지 편집 툴입니다."
 category: "디자인"

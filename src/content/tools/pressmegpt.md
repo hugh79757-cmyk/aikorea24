@@ -1,5 +1,4 @@
 ---
-
 name: "PressMeGPT"
 description: "AI에게 말만 하면 워드프레스 테마를 뚝딱 만들어주는 웹사이트 제작 도구입니다."
 category: "코딩·개발"

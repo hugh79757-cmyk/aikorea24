@@ -1,5 +1,4 @@
 ---
-
 name: "Opper AI"
 description: "300개 이상의 AI 모델에 접근할 수 있는 유럽 기반 API입니다."
 category: "코딩·개발"

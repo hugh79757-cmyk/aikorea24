@@ -1,5 +1,4 @@
 ---
-
 name: "Timbal AI"
 description: "Timbal은 기업 팀이 AI 에이전트와 워크플로우를 구축하고 관리하는 플랫폼입니다."
 category: "업무·생산성"

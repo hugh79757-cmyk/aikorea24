@@ -1,5 +1,4 @@
 ---
-
 name: "Dola AI"
 description: "일상 업무부터 학습, 창의적 작업까지 한 번에 해결하는 올인원 멀티모달 AI 비서입니다."
 category: "업무·생산성"

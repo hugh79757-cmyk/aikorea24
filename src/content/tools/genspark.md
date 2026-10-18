@@ -1,5 +1,4 @@
 ---
-
 name: "Genspark"
 description: "Genspark는 다양한 작업을 하나의 공간에서 처리할 수 있는 AI 툴입니다."
 category: "업무·생산성"

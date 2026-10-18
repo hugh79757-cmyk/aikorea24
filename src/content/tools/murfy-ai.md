@@ -1,5 +1,4 @@
 ---
-
 name: "Murfy AI"
 description: "복잡한 수식과 논문 작성을 돕는 AI 기반 LaTeX 편집기로, 팀원과 실시간으로 협업하며 빠르게 문서를 완성할 수 있습니다."
 category: "글쓰기·챗봇"

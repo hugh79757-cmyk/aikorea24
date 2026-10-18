@@ -1,5 +1,4 @@
 ---
-
 name: "Agnost AI"
 description: "챗봇의 대화 내용을 분석하여 오류와 사용자 불만을 찾아내고 서비스 품질을 높여주는 AI 분석 도구입니다."
 category: "업무·생산성"

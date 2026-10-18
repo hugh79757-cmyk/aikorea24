@@ -1,5 +1,4 @@
 ---
-
 name: "HumanizeAIText"
 description: "AI가 생성한 텍스트를 자연스러운 문장으로 바꿔주는 도구입니다."
 category: "글쓰기·챗봇"

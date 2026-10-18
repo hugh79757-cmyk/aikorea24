@@ -1,5 +1,4 @@
 ---
-
 name: "Cursor"
 description: "Cursor는 코딩 작업을 효율적으로 도와주는 AI 도구입니다."
 category: "코딩·개발"

@@ -1,5 +1,4 @@
 ---
-
 name: "RevaultAI"
 description: "AI 영화 갤러리 감상과 샷 기획 도구를 무료로 제공하는 영상 제작 플랫폼입니다."
 category: "영상·음성"

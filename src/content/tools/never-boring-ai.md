@@ -1,5 +1,4 @@
 ---
-
 name: "Never Boring AI"
 description: "링크드인 콘텐츠 캘린더 작성부터 게시글 작성, 자동 발행까지 도와주는 AI 에이전트입니다."
 category: "글쓰기·챗봇"

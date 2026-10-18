@@ -1,5 +1,4 @@
 ---
-
 name: "Banger Mail"
 description: "팀과 AI 에이전트를 활용해 효율적으로 이메일을 관리하는 툴입니다."
 category: "업무·생산성"

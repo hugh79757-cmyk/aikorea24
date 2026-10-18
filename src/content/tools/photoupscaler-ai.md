@@ -1,5 +1,4 @@
 ---
-
 name: "Photoupscaler AI"
 description: "AI를 활용해 이미지를 4K/8K 해상도로 확대하여 선명도를 높이는 툴입니다."
 category: "디자인"

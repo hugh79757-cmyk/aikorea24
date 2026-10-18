@@ -1,5 +1,4 @@
 ---
-
 name: "Abnormal AI"
 description: "이메일과 신원 보호를 위한 AI 기반 보안 툴입니다."
 category: "업무·생산성"

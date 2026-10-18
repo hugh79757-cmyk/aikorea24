@@ -1,5 +1,4 @@
 ---
-
 name: "Startup Program by Recall.ai"
 description: "화상 회의 데이터를 내 서비스에 연동하는 API를 제공하여, 스타트업이 회의 기록 및 분석 기능을 쉽게 구축하도록 돕습니다."
 category: "코딩·개발"

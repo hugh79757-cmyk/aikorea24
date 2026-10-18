@@ -1,5 +1,4 @@
 ---
-
 name: "Gemini Omni 1.1 Flash"
 description: "구글의 최신 AI 모델로, 영상과 텍스트를 정교하게 제어하여 콘텐츠 제작과 업무 효율을 극대화하는 도구입니다."
 category: "글쓰기·챗봇"

@@ -1,5 +1,4 @@
 ---
-
 name: "TextInMyVoice"
 description: "내 목소리를 학습시켜 입력한 텍스트를 자연스러운 음성으로 변환해주는 AI 툴입니다."
 category: "영상·음성"

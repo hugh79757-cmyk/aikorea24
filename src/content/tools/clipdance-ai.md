@@ -1,5 +1,4 @@
 ---
-
 name: "Clipdance AI"
 description: "텍스트와 이미지를 입력하면 1080p 고화질 영상으로 변환해 주는 AI 영상 생성 도구입니다."
 category: "영상·음성"

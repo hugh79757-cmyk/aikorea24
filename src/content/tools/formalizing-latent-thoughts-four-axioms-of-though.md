@@ -1,5 +1,4 @@
 ---
-
 name: "Formalizing Latent Thoughts: Four Axioms of Though"
 description: "AI 연구 논문을 매일 받아볼 수 있는 서비스입니다."
 category: "업무·생산성"

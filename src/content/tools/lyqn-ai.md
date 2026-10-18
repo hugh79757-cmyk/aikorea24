@@ -1,5 +1,4 @@
 ---
-
 name: "LYQN AI"
 description: "AI 고객 지원 챗봇으로, 비즈니스에 맞춰 학습하며 WhatsApp 연동이 가능합니다."
 category: "업무·생산성"

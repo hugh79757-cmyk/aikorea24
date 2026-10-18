@@ -1,5 +1,4 @@
 ---
-
 name: "Microsoft Copilot"
 description: "마이크로소프트 365 앱에 내장된 업무용 AI로 문서·데이터·메일을 한 번에 처리합니다."
 category: "업무·생산성"

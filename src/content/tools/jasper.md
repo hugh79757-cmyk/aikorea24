@@ -1,5 +1,4 @@
 ---
-
 name: "Jasper"
 description: "Jasper는 마케팅 워크플로우를 자동화하여 효율성과 성과를 높이는 도구입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Midjourney"
 description: "예술적이고 감성적인 이미지를 생성하는 AI 도구입니다."
 category: "이미지 생성"

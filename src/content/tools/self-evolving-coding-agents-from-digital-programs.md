@@ -1,5 +1,4 @@
 ---
-
 name: "Self-Evolving Coding Agents: From Digital Programs"
 description: "AI 기반 코딩 에이전트가 자동으로 코드를 생성·수정해 개발 생산성을 높여 줍니다."
 category: "코딩·개발"

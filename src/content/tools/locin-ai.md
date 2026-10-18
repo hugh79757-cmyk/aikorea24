@@ -1,5 +1,4 @@
 ---
-
 name: "LocIn AI"
 description: "브랜드 목소리를 유지하며 다국어로 앱을 번역하는 AI 툴입니다."
 category: "번역·학습"

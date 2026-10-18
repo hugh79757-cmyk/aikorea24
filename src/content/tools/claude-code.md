@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Code"
 description: "Claude Code는 코드 수정, 실행, 통합을 지원하는 개발 도구입니다."
 category: "코딩·개발"

@@ -1,5 +1,4 @@
 ---
-
 name: "MNKI AI"
 description: "스케치와 평면도를 4K 포토리얼리틱 비주얼로 변환하는 AI 툴입니다."
 category: "디자인"

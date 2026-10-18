@@ -1,5 +1,4 @@
 ---
-
 name: "Bluerails Discovery"
 description: "AI 도구의 가시성을 측정하여 기업의 성과를 평가합니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Adam CAD Copilot"
 description: "AI CAD 도우미로, 엔지니어들이 CAD 작업을 효율적으로 지원합니다."
 category: "업무·생산성"

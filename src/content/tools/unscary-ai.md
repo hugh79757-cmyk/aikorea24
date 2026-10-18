@@ -1,5 +1,4 @@
 ---
-
 name: "Unscary AI"
 description: "어렵게만 느껴지던 AI 기초 개념을 짧고 쉽게 배울 수 있는 학습용 모바일 앱입니다."
 category: "번역·학습"

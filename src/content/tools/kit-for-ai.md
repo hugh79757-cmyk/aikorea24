@@ -1,5 +1,4 @@
 ---
-
 name: "Kit For AI"
 description: "AI 문서 변환 및 지식 관리 도구로, 사용자가 쉽게 활용할 수 있습니다."
 category: "업무·생산성"

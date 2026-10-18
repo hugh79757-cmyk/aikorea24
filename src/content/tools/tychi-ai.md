@@ -1,5 +1,4 @@
 ---
-
 name: "Tychi AI"
 description: "Tychi AI는 개인 및 AI 에이전트를 위한 자산 관리 지갑입니다."
 category: "업무·생산성"

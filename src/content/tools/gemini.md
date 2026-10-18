@@ -1,5 +1,4 @@
 ---
-
 name: "Gemini"
 description: "구글의 AI 비서로, 글쓰기와 기획, 브레인스토밍을 지원합니다."
 category: "업무·생산성"

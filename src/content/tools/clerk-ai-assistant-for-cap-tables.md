@@ -1,5 +1,4 @@
 ---
-
 name: "Clerk | AI Assistant for Cap Tables"
 description: "주식 관련 질문에 즉시 답변하고 문서를 관리하는 AI 도우미입니다."
 category: "업무·생산성"

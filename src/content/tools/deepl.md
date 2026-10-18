@@ -1,5 +1,4 @@
 ---
-
 name: "DeepL"
 description: "DeepL은 고품질 번역 서비스를 제공하여 한국 사용자에게 유용합니다."
 category: "번역·학습"

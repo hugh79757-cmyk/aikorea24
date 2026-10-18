@@ -1,5 +1,4 @@
 ---
-
 name: "Jotform Sign for ChatGPT and Claude"
 description: "ChatGPT와 Claude 대화창에서 바로 전자서명 문서를 만들고 전송하는 업무용 툴입니다."
 category: "업무·생산성"

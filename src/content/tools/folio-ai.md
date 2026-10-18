@@ -1,5 +1,4 @@
 ---
-
 name: "Folio AI"
 description: "프레젠테이션 작업을 간편하게 도와주는 AI 툴입니다."
 category: "업무·생산성"

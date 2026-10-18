@@ -1,5 +1,4 @@
 ---
-
 name: "ArchDiagramAI"
 description: "간단한 영어 프롬프트로 시스템 아키텍처 다이어그램을 생성하는 툴입니다."
 category: "디자인"

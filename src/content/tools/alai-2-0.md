@@ -1,5 +1,4 @@
 ---
-
 name: "Alai 2.0"
 description: "AI를 활용해 손쉽게 아름다운 프레젠테이션을 만들 수 있는 툴입니다."
 category: "디자인"

@@ -1,5 +1,4 @@
 ---
-
 name: "Compose AI"
 description: "Compose AI는 글쓰기 시간을 40% 단축해주는 무료 크롬 확장 프로그램입니다."
 category: "업무·생산성"

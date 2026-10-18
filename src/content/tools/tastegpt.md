@@ -1,5 +1,4 @@
 ---
-
 name: "TasteGPT"
 description: "다양한 AI 도구를 쉽게 찾아주는 플랫폼입니다."
 category: "업무·생산성"

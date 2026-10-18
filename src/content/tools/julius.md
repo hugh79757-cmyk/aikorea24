@@ -1,5 +1,4 @@
 ---
-
 name: "Julius AI"
 description: "사무 작업을 효율적으로 처리하는 AI 도구로, 엑셀 파일 관리와 프레젠테이션 제작이 가능합니다."
 category: "업무·생산성"

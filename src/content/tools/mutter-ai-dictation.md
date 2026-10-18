@@ -1,5 +1,4 @@
 ---
-
 name: "Mutter AI Dictation"
 description: "Mutter는 Mac에서 음성을 텍스트로 변환하여 이메일 및 메모를 빠르게 작성할 수 있는 앱입니다."
 category: "업무·생산성"

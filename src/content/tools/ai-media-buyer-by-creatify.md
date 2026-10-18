@@ -1,5 +1,4 @@
 ---
-
 name: "AI Media Buyer By Creatify"
 description: "Meta, Google, TikTok 광고를 자동으로 관리해주는 AI 툴입니다."
 category: "업무·생산성"

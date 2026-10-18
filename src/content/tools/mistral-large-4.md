@@ -1,5 +1,4 @@
 ---
-
 name: "Mistral Large 4"
 description: "복잡한 글쓰기와 전문적인 문서 작성을 도와주는 고성능 대형 언어 모델입니다."
 category: "글쓰기·챗봇"

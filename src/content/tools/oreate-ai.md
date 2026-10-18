@@ -1,5 +1,4 @@
 ---
-
 name: "Oreate AI"
 description: "프로젝트 파일과 채팅을 통합 관리하는 올인원 AI 작업 공간입니다."
 category: "업무·생산성"

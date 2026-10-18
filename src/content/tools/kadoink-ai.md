@@ -1,5 +1,4 @@
 ---
-
 name: "Kadoink AI"
 description: "Kadoink AI는 전화로 사람들을 즉시 모을 수 있는 새로운 도구입니다."
 category: "업무·생산성"

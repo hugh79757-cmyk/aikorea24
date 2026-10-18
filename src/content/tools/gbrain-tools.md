@@ -1,5 +1,4 @@
 ---
-
 name: "GBrain Tools"
 description: "비밀번호 노출 없이 AI 서비스에 Gmail, GitHub 등 계정을 안전하게 연동하는 AI 전용 패스워드 매니저입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Customer Service AI for Etsy"
 description: "글로벌 핸드메이드 플랫폼  Etsy에서 외국인 구매자의 CS 문의에 AI로 빠르게 답변합니다."
 category: "업무·생산성"

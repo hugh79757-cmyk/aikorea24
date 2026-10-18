@@ -1,5 +1,4 @@
 ---
-
 name: "VisibAI"
 description: "AI 가시성 점검 툴로, 비즈니스의 온라인 존재감을 평가합니다."
 category: "업무·생산성"

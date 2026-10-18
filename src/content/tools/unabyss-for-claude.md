@@ -1,5 +1,4 @@
 ---
-
 name: "Unabyss for Claude"
 description: "여러 AI 툴을 연결하여 정보를 공유하고 효율성을 높이는 서비스입니다."
 category: "업무·생산성"

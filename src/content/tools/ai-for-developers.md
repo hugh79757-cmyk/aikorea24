@@ -1,5 +1,4 @@
 ---
-
 name: "AI For Developers"
 description: "개발자를 위한 AI 코딩 도구를 무료로 제공합니다."
 category: "코딩·개발"

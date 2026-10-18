@@ -1,5 +1,4 @@
 ---
-
 name: "Elicit"
 description: "AI를 활용해 1억 2500만 논문을 검색하고 요약합니다."
 category: "업무·생산성"

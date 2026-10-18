@@ -1,5 +1,4 @@
 ---
-
 name: "Veltrix AI for E-commerce"
 description: "쇼핑몰 데이터를 연동하여 매출 향상과 비용 절감 방안을 진단해주는 AI 솔루션입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Plansera AI"
 description: "E-2 비자 신청을 위한 전문 사업계획서를 자동으로 작성합니다."
 category: "업무·생산성"

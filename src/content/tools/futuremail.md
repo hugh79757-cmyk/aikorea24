@@ -1,5 +1,4 @@
 ---
-
 name: "FutureMail"
 description: "내 도메인으로 나만의 이메일 주소를 만들고 AI 에이전트까지 연동하는 스마트 이메일 서비스입니다."
 category: "업무·생산성"

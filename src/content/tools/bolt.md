@@ -1,5 +1,4 @@
 ---
-
 name: "Bolt.new"
 description: "AI와 대화하여 웹사이트와 앱을 쉽게 만들 수 있는 툴입니다."
 category: "코딩·개발"

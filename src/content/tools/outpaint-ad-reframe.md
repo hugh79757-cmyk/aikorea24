@@ -1,5 +1,4 @@
 ---
-
 name: "Outpaint - Ad Reframe"
 description: "Outpaint는 수직 광고를 TV에 맞게 확장하여 재사용하는 툴입니다."
 category: "영상·음성"

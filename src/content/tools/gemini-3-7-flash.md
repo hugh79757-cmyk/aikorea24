@@ -1,5 +1,4 @@
 ---
-
 name: "Gemini 3.7 Flash"
 description: "구글의 최신 AI 모델로, 복잡한 코딩과 데이터 분석 업무를 빠르고 정확하게 처리하는 실무형 비서입니다."
 category: "코딩·개발"

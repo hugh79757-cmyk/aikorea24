@@ -1,5 +1,4 @@
 ---
-
 name: "UniEvo-VL: An On-policy Self-Distillation Training"
 description: "최신 AI 논문과 트렌드를 매일 이메일로 받아보고 학습할 수 있는 허깅페이스 연구 플랫폼입니다."
 category: "번역·학습"

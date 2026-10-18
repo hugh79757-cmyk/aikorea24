@@ -1,5 +1,4 @@
 ---
-
 name: "CakewordAI"
 description: "주변 사물을 가리키면 다양한 언어로 이름을 알아낼 수 있는 툴."
 category: "번역·학습"

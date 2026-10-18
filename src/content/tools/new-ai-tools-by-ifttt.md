@@ -1,5 +1,4 @@
 ---
-
 name: "New AI tools by IFTTT"
 description: "IFTTT에 새로 추가된 10개의 AI 도구로 자동화로 업무 효율을 높입니다."
 category: "업무·생산성"

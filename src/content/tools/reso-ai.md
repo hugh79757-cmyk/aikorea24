@@ -1,5 +1,4 @@
 ---
-
 name: "ReSO AI"
 description: "챗GPT 같은 AI 검색에서 우리 브랜드가 추천되도록 최적화해 주는 AI 마케팅 툴입니다."
 category: "업무·생산성"

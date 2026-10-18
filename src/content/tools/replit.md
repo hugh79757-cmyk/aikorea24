@@ -1,5 +1,4 @@
 ---
-
 name: "Replit"
 description: "AI와 함께 소프트웨어를 협업하여 빠르게 개발할 수 있는 플랫폼입니다."
 category: "코딩·개발"

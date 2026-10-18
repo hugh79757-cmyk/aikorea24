@@ -1,5 +1,4 @@
 ---
-
 name: "BizMuse AI"
 description: "음악, 가사, 분위기에 맞춰 자동으로 뮤직비디오를 생성해주는 영상 제작 AI 툴입니다."
 category: "영상·음성"

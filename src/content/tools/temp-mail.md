@@ -1,5 +1,4 @@
 ---
-
 name: "Temp Mail"
 description: "가입 없이 1초 만에 일회용 이메일 주소를 만들어 스팸 메일로부터 내 개인 메일을 보호합니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Scrimba Explain"
 description: "질문을 입력하면 즉시 영상으로 개념을 설명해 주는 AI 튜터로, 복잡한 학습 내용을 직관적으로 이해할 수 있습니다."
 category: "번역·학습"

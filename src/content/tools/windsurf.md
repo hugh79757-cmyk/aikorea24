@@ -1,5 +1,4 @@
 ---
-
 name: "Windsurf"
 description: "로컬 및 클라우드 에이전트를 한 곳에서 관리할 수 있는 툴입니다."
 category: "업무·생산성"

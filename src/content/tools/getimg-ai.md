@@ -1,5 +1,4 @@
 ---
-
 name: "Getimg.ai"
 description: "다양한 작업에 적합한 AI 도구를 쉽게 찾을 수 있는 플랫폼입니다."
 category: "업무·생산성"

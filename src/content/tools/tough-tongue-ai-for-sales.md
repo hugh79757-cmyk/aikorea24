@@ -1,5 +1,4 @@
 ---
-
 name: "Tough Tongue AI for Sales"
 description: "영업, 인터뷰 및 교육을 위한 음성 AI 에이전트를 제공합니다."
 category: "업무·생산성"

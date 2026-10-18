@@ -1,5 +1,4 @@
 ---
-
 name: "Crewdle AI"
 description: "비즈니스에 필요한 다양한 AI 기능을 제공하는 통합 플랫폼입니다."
 category: "업무·생산성"

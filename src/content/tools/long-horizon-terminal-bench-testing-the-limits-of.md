@@ -1,5 +1,4 @@
 ---
-
 name: "Long-Horizon-Terminal-Bench: Testing the Limits of"
 description: "AI 연구 동향을 매일 받아볼 수 있는 유료 서비스입니다."
 category: "업무·생산성"

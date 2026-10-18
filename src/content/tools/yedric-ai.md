@@ -1,5 +1,4 @@
 ---
-
 name: "Yedric.ai"
 description: "쇼핑몰 앱에 고객 문의 응대와 실제 주문 처리가 가능한 AI 비서를 간편하게 탑재합니다."
 category: "글쓰기·챗봇"

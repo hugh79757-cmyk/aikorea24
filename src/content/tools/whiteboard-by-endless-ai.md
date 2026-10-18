@@ -1,5 +1,4 @@
 ---
-
 name: "Whiteboard by Endless AI"
 description: "메모·도식·이미지·PDF 주석과 공유를 한 캔버스에서 제공하는 크로스플랫폼 화이트보드 앱"
 category: "업무·생산성"

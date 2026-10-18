@@ -1,5 +1,4 @@
 ---
-
 name: "BrainFlow"
 description: "BrainFlow는 음성을 기록해 자동으로 깔끔한 메모로 변환하는 앱입니다."
 category: "업무·생산성"

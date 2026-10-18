@@ -1,5 +1,4 @@
 ---
-
 name: "Ogment AI"
 description: "슬랙에서 팀원처럼 일상 업무를 자동화하는 AI 도구입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "EnvHarness: Awakening Static Worlds for Agent Lear"
 description: "전 세계 최신 AI 연구 논문을 매일 큐레이션하여 제공하는 정보 플랫폼으로, 최신 기술 트렌드를 빠르게 파악할 수 있습니다."
 category: "번역·학습"

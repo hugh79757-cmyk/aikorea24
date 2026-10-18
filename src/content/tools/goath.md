@@ -1,5 +1,4 @@
 ---
-
 name: "GOATH (고뜨)"
 description: "예산과 상황을 자연어로 입력하면 AI가 남성 의류를 검색·추천하는 쇼핑 서비스"
 category: "기타"

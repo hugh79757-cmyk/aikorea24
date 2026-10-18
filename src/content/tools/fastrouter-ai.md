@@ -1,5 +1,4 @@
 ---
-
 name: "FastRouter.ai"
 description: "200개 이상의 AI 모델을 하나의 API로 연결하여 비용과 성능을 최적화합니다."
 category: "코딩·개발"

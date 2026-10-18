@@ -1,5 +1,4 @@
 ---
-
 name: "Cantina AI"
 description: "다양한 AI 캐릭터를 만들어 소통할 수 있는 플랫폼입니다."
 category: "업무·생산성"

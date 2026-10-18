@@ -1,5 +1,4 @@
 ---
-
 name: "Google AI Studio"
 description: "Google AI Studio는 빠른 AI 모델 개발을 지원하는 도구입니다."
 category: "코딩·개발"

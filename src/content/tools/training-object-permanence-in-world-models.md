@@ -1,5 +1,4 @@
 ---
-
 name: "Training Object Permanence in World Models"
 description: "최신 AI 논문과 연구 트렌드를 매일 빠르게 확인하는 학술 리서치 플랫폼입니다."
 category: "번역·학습"

@@ -1,5 +1,4 @@
 ---
-
 name: "aiFetchly"
 description: "비즈니스 자동화를 위한 오픈소스 데스크톱 AI 에이전트"
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Labs AI"
 description: "텍스트를 자연스러운 음성으로 변환하여 콘텐츠 제작에 유용합니다."
 category: "영상·음성"

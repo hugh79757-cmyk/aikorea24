@@ -1,5 +1,4 @@
 ---
-
 name: "Abliteration.ai"
 description: "보안과 제한 없는 접근성을 보장하는 개발자용 LLM API 서비스로, 기업용 AI 애플리케이션 구축에 최적화되어 있습니다."
 category: "코딩·개발"

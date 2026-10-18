@@ -1,5 +1,4 @@
 ---
-
 name: "SJolt AI"
 description: "이미지 및 영상 생성과 배포를 간편하게 지원하는 API 플랫폼입니다."
 category: "영상·음성"

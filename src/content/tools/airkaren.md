@@ -1,5 +1,4 @@
 ---
-
 name: "AirKaren"
 description: "항공사 고객 서비스를 대신 싸워주는 AI로, 한국 사용자에게 유용합니다."
 category: "업무·생산성"

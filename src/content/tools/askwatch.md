@@ -1,5 +1,4 @@
 ---
-
 name: "AskWatch"
 description: "챗GPT 같은 AI 검색 결과에 우리 회사나 경쟁사가 추천되는지 추적해 주는 마케팅 분석 툴입니다."
 category: "업무·생산성"

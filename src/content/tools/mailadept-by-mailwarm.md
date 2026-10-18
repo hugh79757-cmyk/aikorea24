@@ -1,5 +1,4 @@
 ---
-
 name: "MailAdept by mailwarm"
 description: "이메일 전달력 문제를 해결하고 수신함 배치를 개선하는 툴입니다."
 category: "업무·생산성"

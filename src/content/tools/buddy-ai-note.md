@@ -1,5 +1,4 @@
 ---
-
 name: "Buddy AI Note"
 description: "AI가 메모와 회의록 작성을 도와주는 일상 업무 도구입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "KernelAI"
 description: "인터넷 연결 없이 스마트폰에서 민감한 문서 분석과 대화를 처리하는 온디바이스 AI입니다."
 category: "글쓰기·챗봇"

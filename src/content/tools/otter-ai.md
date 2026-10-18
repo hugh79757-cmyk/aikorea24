@@ -1,5 +1,4 @@
 ---
-
 name: "Otter.ai"
 description: "Otter.ai는 회의록 작성과 실시간 전사 기능을 제공하는 생산성 툴입니다."
 category: "업무·생산성"

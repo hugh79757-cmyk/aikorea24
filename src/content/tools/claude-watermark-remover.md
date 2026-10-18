@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Watermark Remover"
 description: "AI가 작성한 글에 숨겨진 흔적을 찾아 제거하고 사람이 쓴 것처럼 자연스럽게 다듬어주는 도구입니다."
 category: "글쓰기·챗봇"

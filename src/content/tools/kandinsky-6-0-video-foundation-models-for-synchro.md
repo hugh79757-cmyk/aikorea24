@@ -1,5 +1,4 @@
 ---
-
 name: "Kandinsky 6.0 Video: Foundation Models for Synchro"
 description: "최신 인공지능 연구 논문과 트렌드를 매일 이메일로 받아보는 리서치 큐레이션 서비스입니다."
 category: "번역·학습"

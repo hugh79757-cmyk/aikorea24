@@ -1,5 +1,4 @@
 ---
-
 name: "ParakeetAI 2.0"
 description: "실시간 면접과 화상 미팅에서 AI가 즉시 답변을 코칭해 주는 스마트한 도구입니다."
 category: "업무·생산성"

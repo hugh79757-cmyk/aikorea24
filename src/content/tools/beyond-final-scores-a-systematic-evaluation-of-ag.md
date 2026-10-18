@@ -1,5 +1,4 @@
 ---
-
 name: "Beyond Final Scores: A Systematic Evaluation of Ag"
 description: "전 세계 최신 AI 연구 논문을 매일 받아보고 핵심 내용을 빠르게 파악할 수 있는 리서치 플랫폼입니다."
 category: "번역·학습"

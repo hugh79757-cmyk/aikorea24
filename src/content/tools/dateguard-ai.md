@@ -1,5 +1,4 @@
 ---
-
 name: "DateGuard.ai"
 description: "온라인 데이팅 프로필의 진위를 빠르게 확인하는 AI 도구입니다."
 category: "업무·생산성"

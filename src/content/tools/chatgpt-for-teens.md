@@ -1,5 +1,4 @@
 ---
-
 name: "ChatGPT for Teens"
 description: "청소년하려고 안전 장치를 강화하고 학습과 비판적 사고를 돕는 맞춤형 AI 챗봇입니다."
 category: "번역·학습"

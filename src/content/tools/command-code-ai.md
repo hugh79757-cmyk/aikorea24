@@ -1,5 +1,4 @@
 ---
-
 name: "Command Code AI"
 description: "다양한 AI 모델과의 상호작용을 지원하는 개발자 중심의 CLI 도구입니다."
 category: "코딩·개발"

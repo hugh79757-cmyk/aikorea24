@@ -1,5 +1,4 @@
 ---
-
 name: "Veo 3"
 description: "Veo 3는 영상 생성 모델로, 사용자 맞춤형 영상을 쉽게 제작할 수 있습니다."
 category: "영상·음성"

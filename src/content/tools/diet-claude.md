@@ -1,5 +1,4 @@
 ---
-
 name: "Diet Claude"
 description: "Claude 사용량을 시각적으로 확인하여 갑작스러운 사용 제한을 방지해 주는 크롬 확장 프로그램입니다."
 category: "업무·생산성"

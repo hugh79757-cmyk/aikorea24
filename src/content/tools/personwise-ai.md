@@ -1,5 +1,4 @@
 ---
-
 name: "Personwise AI"
 description: "단일 주제를 입력하면 완전한 온라인 강의를 생성하는 툴입니다."
 category: "업무·생산성"

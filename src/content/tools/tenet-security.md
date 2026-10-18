@@ -1,5 +1,4 @@
 ---
-
 name: "Tenet Security"
 description: "AI 에이전트의 행동을 실시간으로 감시하고 보안 위협을 차단하는 기업용 보안 솔루션입니다."
 category: "업무·생산성"

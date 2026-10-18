@@ -1,5 +1,4 @@
 ---
-
 name: "Stable Diffusion"
 description: "Stable Diffusion은 고품질 이미지를 생성하는 AI 도구로, 창작 작업을 지원합니다."
 category: "이미지 생성"

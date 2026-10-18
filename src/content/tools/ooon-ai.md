@@ -1,5 +1,4 @@
 ---
-
 name: "ooon.ai"
 description: "WhatsApp 기반 AI 직원이 고객 문의를 자동 응답하고 예약을 잡아주며, 이탈 고객을 재유치합니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "ChatGPT Ad Library"
 description: "ChatGPT 내에서 노출되는 광고를 실시간으로 확인하고 마케팅 전략을 벤치마킹하는 도구입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Semos.ai Manager Agents"
 description: "AI 매니저 에이전트로 회의 내용 정리·피드백 자동화·팀 현황 파악을 지원해 관리 효율을 높입니다."
 category: "업무·생산성"

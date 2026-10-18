@@ -1,5 +1,4 @@
 ---
-
 name: "Mistral AI (Le Chat)"
 description: "유럽 AI 기업 Mistral이 만든 빠르고 신뢰성 높은 챗봇입니다."
 category: "글쓰기·챗봇"

@@ -1,5 +1,4 @@
 ---
-
 name: "Ideogram"
 description: "텍스트를 정확하게 렌더링하여 로고와 포스터 제작에 유용한 AI입니다."
 category: "디자인"

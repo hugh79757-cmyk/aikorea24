@@ -1,5 +1,4 @@
 ---
-
 name: "Atomic Mail Agentic"
 description: "AI 에이전트가 독립적으로 이메일을 관리할 수 있는 서비스입니다."
 category: "업무·생산성"

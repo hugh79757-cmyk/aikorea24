@@ -1,5 +1,4 @@
 ---
-
 name: "Train with Pasta"
 description: "말 한마디로 나만의 맞춤형 운동 루틴을 짜주고 음성으로 코칭해주는 AI 트레이너입니다."
 category: "업무·생산성"

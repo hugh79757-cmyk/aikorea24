@@ -1,5 +1,4 @@
 ---
-
 name: "Takweem AI"
 description: "구글 캘린더와 연동되어 중요한 업무에 집중할 수 있도록 일정을 자동으로 조율해 주는 비서 AI입니다."
 category: "업무·생산성"

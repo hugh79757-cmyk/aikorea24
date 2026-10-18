@@ -1,5 +1,4 @@
 ---
-
 name: "JevGPT"
 description: "고정된 단어 사전과 확률 분포를 기반으로 단어 단위의 대화를 지원하는 챗봇입니다."
 category: "글쓰기·챗봇"

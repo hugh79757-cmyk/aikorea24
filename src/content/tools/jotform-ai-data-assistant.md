@@ -1,5 +1,4 @@
 ---
-
 name: "Jotform AI Data Assistant"
 description: "설문조사 데이터를 AI가 자동으로 분석하고 표와 차트로 정리해 주는 업무 효율화 도구입니다."
 category: "업무·생산성"

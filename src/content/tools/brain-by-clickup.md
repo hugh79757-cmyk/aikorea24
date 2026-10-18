@@ -1,5 +1,4 @@
 ---
-
 name: "Brain² by ClickUp"
 description: "프로젝트, 문서, 사람을 연결하여 지식을 관리하는 AI 툴입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "D-ID"
 description: "AI를 활용한 인터랙티브한 비디오 및 아바타 제작 툴입니다."
 category: "영상·음성"

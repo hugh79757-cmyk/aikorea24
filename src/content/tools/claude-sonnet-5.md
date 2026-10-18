@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Sonnet 5"
 description: "코딩과 일상 업무에 최적화된 AI 도구로, 효율적인 작업을 지원합니다."
 category: "코딩·개발"

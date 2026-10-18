@@ -1,5 +1,4 @@
 ---
-
 name: "Asmi AI"
 description: "Asmi AI는 사용자를 대신해 실제 전화 통화를 진행하는 새로운 AI입니다."
 category: "업무·생산성"

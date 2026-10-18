@@ -1,5 +1,4 @@
 ---
-
 name: "Gamma"
 description: "주제 입력만으로 자동으로 깔끔한 발표자료를 생성합니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Manyface AI"
 description: "수만 개의 AI 툴을 한곳에서 검색하고 상황에 맞는 최적의 도구를 찾아주는 AI 큐레이션 플랫폼입니다."
 category: "업무·생산성"

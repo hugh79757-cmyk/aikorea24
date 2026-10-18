@@ -1,5 +1,4 @@
 ---
-
 name: "UI-MOPD: Multi-Platform On-Policy Distillation for"
 description: "다양한 플랫폼에서 GUI 에이전트를 지속적으로 학습하는 데 도움이 되는 AI 연구 툴입니다."
 category: "코딩·개발"

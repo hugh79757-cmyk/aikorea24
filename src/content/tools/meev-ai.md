@@ -1,5 +1,4 @@
 ---
-
 name: "Meev AI"
 description: "Meev AI는 브랜드의 AI 검색 가시성을 높여주는 플랫폼입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "AI Slide Editor by CubeOne"
 description: "AI Slide Editor는 사용자가 원하는 슬라이드를 쉽게 만들고 편집할 수 있는 도구입니다."
 category: "디자인"

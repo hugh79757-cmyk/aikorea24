@@ -1,5 +1,4 @@
 ---
-
 name: "GPT-5.6"
 description: "모든 작업을 더 스마트하게 처리하는 AI 도구입니다."
 category: "업무·생산성"

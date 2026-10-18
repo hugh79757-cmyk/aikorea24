@@ -1,5 +1,4 @@
 ---
-
 name: "VideoTranscription AI"
 description: "비디오와 오디오를 텍스트로 변환하여 검색 가능하고 편집 가능한 형식으로 제공합니다."
 category: "영상·음성"

@@ -1,5 +1,4 @@
 ---
-
 name: "PortuguesePal"
 description: "AI 파트너와 대화하며 포르투갈어 회화를 자신 있게 연습할 수 있는 툴입니다."
 category: "글쓰기·챗봇"

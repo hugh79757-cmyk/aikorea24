@@ -1,5 +1,4 @@
 ---
-
 name: "Jotform AI App Builder"
 description: "코딩 없이 빠르게 앱을 만들 수 있는 Jotform AI App Builder입니다."
 category: "업무·생산성"

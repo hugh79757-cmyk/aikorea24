@@ -1,5 +1,4 @@
 ---
-
 name: "Suno"
 description: "AI를 이용해 쉽고 빠르게 음악을 만들 수 있는 툴입니다."
 category: "영상·음성"

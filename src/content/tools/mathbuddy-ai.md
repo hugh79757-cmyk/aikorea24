@@ -1,5 +1,4 @@
 ---
-
 name: "Mathbuddy AI"
 description: "복잡한 수학 문제를 단계별 풀이와 그래프로 시각화하여 쉽게 이해하도록 돕는 AI 학습 도우미입니다."
 category: "번역·학습"

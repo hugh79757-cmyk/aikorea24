@@ -1,5 +1,4 @@
 ---
-
 name: "NotebookLM"
 description: "구글의 무료 문서 분석 AI로, 자료를 쉽게 분석하고 질문에 답변합니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Fluxmail"
 description: "Fluxmail은 중요한 이메일을 우선적으로 정리해주는 AI 이메일 클라이언트입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Raven: The Harness of Harnesses for Composable Age"
 description: "매일 업데이트되는 최신 AI 논문과 연구 트렌드를 이메일로 받아보는 리서치 플랫폼입니다."
 category: "번역·학습"

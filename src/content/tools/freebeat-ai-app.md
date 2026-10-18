@@ -1,5 +1,4 @@
 ---
-
 name: "Freebeat.ai App"
 description: "음악 파일만 올리면 비트에 맞춰 자동으로 영상 효과와 편집을 완성해주는 영상 제작 AI입니다."
 category: "영상·음성"

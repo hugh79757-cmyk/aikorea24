@@ -1,5 +1,4 @@
 ---
-
 name: "VideoWeb | Video Generator"
 description: "사진과 아이디어를 입력하면 단 몇 초 만에 멋진 영상으로 뚝딱 만들어주는 AI 영상 제작 툴입니다."
 category: "영상·음성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Harness Handbook: Making Evolving Agent Harnesses "
 description: "AI 연구 자료를 매일 제공하여 최신 정보를 쉽게 접할 수 있게 합니다."
 category: "업무·생산성"

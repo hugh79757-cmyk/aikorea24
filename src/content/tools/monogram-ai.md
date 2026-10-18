@@ -1,5 +1,4 @@
 ---
-
 name: "Monogram AI"
 description: "Monogram AI는 질문에 대한 시각적이고 인터랙티브한 답변을 제공합니다."
 category: "업무·생산성"

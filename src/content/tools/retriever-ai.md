@@ -1,5 +1,4 @@
 ---
-
 name: "Retriever AI"
 description: "AI 기반 브라우저 에이전트로 웹을 자동 탐색해 원하는 정보를 즉시 반환합니다."
 category: "업무·생산성"

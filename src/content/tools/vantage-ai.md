@@ -1,5 +1,4 @@
 ---
-
 name: "vantage.ai"
 description: "AI 코딩 에이전트 작업을 실시간으로 모니터링하고 제어하는 개발자 도구입니다."
 category: "코딩·개발"

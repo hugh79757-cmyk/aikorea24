@@ -1,5 +1,4 @@
 ---
-
 name: "Arena42 AI"
 description: "AI 에이전트 경쟁 플랫폼으로 개발자와 연구자를 위한 도구입니다."
 category: "코딩·개발"

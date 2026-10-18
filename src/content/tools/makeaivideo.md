@@ -1,5 +1,4 @@
 ---
-
 name: "MakeAIVideo"
 description: "문장, 대본, 이미지만 넣으면 순식간에 멋진 영상으로 만들어주는 AI 툴입니다."
 category: "영상·음성"

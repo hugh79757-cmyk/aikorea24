@@ -1,5 +1,4 @@
 ---
-
 name: "Vidu S1: A Real-Time Interactive Video Generation "
 description: "실시간으로 인터랙티브한 영상을 생성하여 콘텐츠 제작을 돕는 툴입니다."
 category: "영상·음성"

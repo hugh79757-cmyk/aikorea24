@@ -1,5 +1,4 @@
 ---
-
 name: "Tyto by ai-coustics"
 description: "실시간 음성 향상로 보다 정확한 음성 인식과 안정적인 오디오를 제공합니다."
 category: "영상·음성"

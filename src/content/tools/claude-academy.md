@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Academy"
 description: "클로드(Claude)를 200% 활용하는 방법을 알려주는 공식 교육 플랫폼으로, AI 실무 역량을 높여줍니다."
 category: "번역·학습"

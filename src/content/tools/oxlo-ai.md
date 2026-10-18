@@ -1,5 +1,4 @@
 ---
-
 name: "Oxlo.ai"
 description: "OpenAI 호환 API에서 다양한 AI 모델을 활용하는 플랫폼입니다."
 category: "업무·생산성"

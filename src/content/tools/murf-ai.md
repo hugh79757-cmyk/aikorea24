@@ -1,5 +1,4 @@
 ---
-
 name: "Murf AI"
 description: "Murf AI는 자연스러운 음성을 생성하여 팟캐스트와 오디오북 제작에 유용합니다."
 category: "영상·음성"

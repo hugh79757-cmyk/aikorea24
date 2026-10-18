@@ -1,5 +1,4 @@
 ---
-
 name: "Flatkey AI"
 description: "Flatkey AI는 200개 이상의 AI 모델을 하나의 API 키로 사용하는 플랫폼입니다."
 category: "업무·생산성"

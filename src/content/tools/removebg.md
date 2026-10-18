@@ -1,5 +1,4 @@
 ---
-
 name: "Remove.bg"
 description: "5초 만에 이미지 배경을 자동으로 제거하여 전문적인 결과를 제공합니다."
 category: "디자인"

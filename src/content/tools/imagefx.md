@@ -1,5 +1,4 @@
 ---
-
 name: "ImageFX"
 description: "텍스트를 이미지로 변환하여 창의적 작업을 지원하는 툴입니다."
 category: "디자인"

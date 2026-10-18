@@ -1,5 +1,4 @@
 ---
-
 name: "AISHA AI"
 description: "문화적 배경을 고려한 개인화된 AI 챗 어시스턴트입니다."
 category: "업무·생산성"

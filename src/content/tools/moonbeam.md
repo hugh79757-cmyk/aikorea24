@@ -1,5 +1,4 @@
 ---
-
 name: "Moonbeam"
 description: "Moonbeam은 블로그 작성을 지원하는 AI 도구입니다."
 category: "글쓰기·챗봇"

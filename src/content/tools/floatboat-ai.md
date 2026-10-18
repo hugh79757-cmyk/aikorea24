@@ -1,5 +1,4 @@
 ---
-
 name: "FloatBoat AI"
 description: "회의 준비와 후속 작업을 자동화하여 업무 효율성을 높이는 AI 도구입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "AI Sandboxes by Buddy"
 description: "AI가 생성한 코드를 안전하게 테스트하고 실행할 수 있는 격리된 Linux 가상 환경입니다."
 category: "코딩·개발"

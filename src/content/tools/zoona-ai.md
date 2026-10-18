@@ -1,5 +1,4 @@
 ---
-
 name: "Zoona AI"
 description: "AI 고객 지원 소프트웨어로 60%의 티켓을 자동 해결합니다."
 category: "업무·생산성"

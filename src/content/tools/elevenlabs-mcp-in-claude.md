@@ -1,5 +1,4 @@
 ---
-
 name: "ElevenLabs MCP in Claude"
 description: "ElevenLabs의 고품질 음성 기술을 Claude와 결합하여, 텍스트를 자연스러운 목소리로 변환하고 콘텐츠를 제작하는 생산성 도구입니다."
 category: "영상·음성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Vrew"
 description: "Vrew는 문서처럼 쉽게 영상 편집이 가능한 AI 툴입니다."
 category: "영상·음성"

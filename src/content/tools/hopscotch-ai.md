@@ -1,5 +1,4 @@
 ---
-
 name: "Hopscotch AI"
 description: "여러 AI 모델을 하나의 API로 통합하고 비용과 사용량을 관리하는 툴입니다."
 category: "코딩·개발"

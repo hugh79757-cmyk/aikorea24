@@ -1,5 +1,4 @@
 ---
-
 name: "freddy.health"
 description: "스마트워치 건강 데이터를 챗GPT나 클로드에 연동하여 대화하듯 분석하는 AI 툴입니다."
 category: "업무·생산성"

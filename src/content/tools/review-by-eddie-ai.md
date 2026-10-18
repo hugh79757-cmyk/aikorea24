@@ -1,5 +1,4 @@
 ---
-
 name: "Review by Eddie AI"
 description: "프레임별 코멘트와 AI 피드백으로 비디오 리뷰를 간편하게 진행합니다."
 category: "영상·음성"

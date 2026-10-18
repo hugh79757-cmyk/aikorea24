@@ -1,5 +1,4 @@
 ---
-
 name: "AskSami"
 description: "초기 창업자를 위한 맞춤형 마케팅 전략과 실행 계획을 세워주는 AI 마케팅 전문가입니다."
 category: "업무·생산성"

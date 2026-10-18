@@ -1,5 +1,4 @@
 ---
-
 name: "Notion AI"
 description: "팀의 작업을 자동화하고 효율적으로 관리할 수 있는 AI 기반 워크스페이스입니다."
 category: "업무·생산성"

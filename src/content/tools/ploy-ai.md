@@ -1,5 +1,4 @@
 ---
-
 name: "Ploy.ai"
 description: "웹사이트를 자동으로 관리하여 비즈니스 성장을 지원하는 플랫폼입니다."
 category: "업무·생산성"

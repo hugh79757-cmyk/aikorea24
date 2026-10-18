@@ -1,5 +1,4 @@
 ---
-
 name: "Claude Dashboards & Motion"
 description: "데이터 시각화 대시보드와 애니메이션 모션 요소를 텍스트로 쉽게 만드는 Claude의 생산성 기능입니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Adaptive Reward Routing: Dynamic Multi-Reward Opti"
 description: "전 세계 최신 AI 논문과 연구 트렌드를 매일 이메일로 받아보는 큐레이션 서비스입니다."
 category: "번역·학습"

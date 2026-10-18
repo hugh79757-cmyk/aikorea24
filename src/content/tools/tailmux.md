@@ -1,5 +1,4 @@
 ---
-
 name: "TailMux"
 description: "TailMux는 macOS와 Linux에서 여러 Tailscale 네트워크에 동시에 접근할 수 있게 해주는 툴입니다."
 category: "업무·생산성"

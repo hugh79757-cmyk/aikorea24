@@ -1,5 +1,4 @@
 ---
-
 name: "Dual Latent Memory in Vision-Language-Action Model"
 description: "로봇 조작을 위한 비전-언어-행동 모델의 메모리 기능을 제공합니다."
 category: "코딩·개발"

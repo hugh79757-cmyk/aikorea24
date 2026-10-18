@@ -1,5 +1,4 @@
 ---
-
 name: "SparkVid AI"
 description: "글과 사진을 넣으면 고품질 영상으로 바꿔주는 AI 도구로, 카메라 움직임까지 세밀하게 조절할 수 있습니다."
 category: "영상·음성"

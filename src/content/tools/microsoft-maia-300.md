@@ -1,5 +1,4 @@
 ---
-
 name: "Microsoft Maia 300"
 description: "마이크로소프트의 차세대 초고속 AI 추론 인프라, Azure Maia 300을 소개합니다."
 category: "코딩·개발"

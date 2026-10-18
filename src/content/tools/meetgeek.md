@@ -1,5 +1,4 @@
 ---
-
 name: "MeetGeek"
 description: "회의를 자동으로 기록하고 요약해주는 스마트한 도우미입니다."
 category: "업무·생산성"

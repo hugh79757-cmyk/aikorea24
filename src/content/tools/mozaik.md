@@ -1,6 +1,4 @@
 ---
-
-
 name: "Mozaik"
 description: "Mozaik은 AI 에이전트들이 협력하여 작업을 수행하는 플랫폼입니다."
 category: "업무·생산성"

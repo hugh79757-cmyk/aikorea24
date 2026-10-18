@@ -1,5 +1,4 @@
 ---
-
 name: "UGCFY AI"
 description: "UGCFY AI는 제품 페이지를 TikTok 및 Meta 광고로 변환하는 AI 영상 생성기입니다."
 category: "영상·음성"

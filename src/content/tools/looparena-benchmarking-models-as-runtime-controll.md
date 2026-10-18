@@ -1,5 +1,4 @@
 ---
-
 name: "LoopArena: Benchmarking Models as Runtime Controll"
 description: "최신 AI 연구 논문을 매일 받아보고 기술 트렌드를 파악할 수 있는 AI 리서치 플랫폼입니다."
 category: "번역·학습"

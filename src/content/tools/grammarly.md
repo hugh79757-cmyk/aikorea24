@@ -1,5 +1,4 @@
 ---
-
 name: "Grammarly"
 description: "영어 글쓰기 오류를 교정하고 표현을 개선해주는 툴입니다."
 category: "글쓰기·챗봇"

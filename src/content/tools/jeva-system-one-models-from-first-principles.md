@@ -1,5 +1,4 @@
 ---
-
 name: "Jeva: System One Models from First Principles"
 description: "최신 AI 연구 논문 트렌드를 매일 이메일과 웹으로 빠르게 파악하는 정보 플랫폼입니다."
 category: "번역·학습"

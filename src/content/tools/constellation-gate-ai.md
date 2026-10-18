@@ -1,5 +1,4 @@
 ---
-
 name: "Constellation Gate AI"
 description: "AI 에이전트를 안전하게 보호하는 도구로, 한국 사용자에게 유용합니다."
 category: "업무·생산성"

@@ -1,5 +1,4 @@
 ---
-
 name: "Tempmail.bot"
 description: "일회용 이메일 주소를 즉시 생성하여 익명으로 가입할 수 있는 툴입니다."
 category: "업무·생산성"

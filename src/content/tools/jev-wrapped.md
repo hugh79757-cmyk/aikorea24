@@ -1,5 +1,4 @@
 ---
-
 name: "Jev Wrapped"
 description: "텔레그램 채널의 게시물 유형을 자동으로 분석해 광고, 뉴스, 유머, 클릭베이트 비율을 알려줍니다."
 category: "업무·생산성"

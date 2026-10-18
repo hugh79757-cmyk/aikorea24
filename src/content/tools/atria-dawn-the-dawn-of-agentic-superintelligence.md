@@ -1,5 +1,4 @@
 ---
-
 name: "Atria Dawn: The Dawn of Agentic Superintelligence"
 description: "에이전트형 초지능 최신 논문을 한눈에 정리해 연구 동향을 빠르게 파악합니다."
 category: "번역·학습"

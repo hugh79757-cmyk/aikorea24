@@ -1,5 +1,4 @@
 ---
-
 name: "Kling AI"
 description: "Kling AI는 창의적인 이미지와 영상을 생성하는 AI 툴입니다."
 category: "이미지 생성"

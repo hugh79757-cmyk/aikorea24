@@ -1,5 +1,4 @@
 ---
-
 name: "seedance25ai.im"
 description: "텍스트와 이미지를 바탕으로 4K 영상 클립을 생성하는 도구입니다."
 category: "영상·음성"

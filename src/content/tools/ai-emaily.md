@@ -1,5 +1,4 @@
 ---
-
 name: "AI Emaily"
 description: "AI가 이메일을 관리하고 답장을 작성해주는 스마트한 이메일 클라이언트입니다."
 category: "업무·생산성"

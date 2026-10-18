@@ -1,5 +1,4 @@
 ---
-
 name: "Clair"
 description: "자리를 비워도 스마트폰이나 스마트워치로 Claude Code의 승인 요청을 원격 제어하는 개발 도구입니다."
 category: "코딩·개발"

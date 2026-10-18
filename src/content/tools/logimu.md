@@ -1,5 +1,4 @@
 ---
-
 name: "Logimu"
 description: "아마존 상품 데이터와 검색을 하나의 API로 간편하게 활용하는 개발 도구입니다."
 category: "코딩·개발"
