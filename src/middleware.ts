@@ -8,8 +8,14 @@ const SHORT_SLUGS = new Set([
 
 // AIK24-RENEWAL-01 C-4: 서브프로젝트(heritage 등) 이미지는 외부 서브도메인이라
 // img-src 에 *.aikorea24.kr 추가. 없으면 브라우저가 이미지를 차단해 안 보였다.
+// AIK24-ADSBLANK-02 (2026-10-18 실측): script-src 에 fundingchoicesmessages.google.com 이
+// 없으면 adsbygoogle.js 가 부르는 동의 메시지 로더가 CSP 로 차단되고, 그 실패가 광고 스택
+// 초기화 체인을 끊어 **두 번째 광고 유닛(레이아웃 하단 슬롯)의 /pagead/ads 요청이 아예
+// 발생하지 않는다**. 실측: CSP 현행 = 단위 요청 1건(상단 ady=81), fundingchoicesmessages
+// 허용 = 단위 요청 2건(ady=81 + 하단 ady=4285). 호스트 1개만 추가하는 최소 수정.
+// (ep2.adtrafficquality.google/sodar2.js 는 계속 차단 상태 — 요청 발생과 무관함을 확인했다.)
 const SECURITY_HEADERS: Record<string, string> = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' https://*.aikorea24.kr https://lh3.googleusercontent.com https://img.shields.io https://pagead2.googlesyndication.com https://tpc.googlesyndication.com data:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com",
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' https://*.aikorea24.kr https://lh3.googleusercontent.com https://img.shields.io https://pagead2.googlesyndication.com https://tpc.googlesyndication.com data:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com",
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
