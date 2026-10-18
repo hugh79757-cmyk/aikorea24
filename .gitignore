@@ -99,6 +99,6 @@ scripts/.d1_tier_alert_state.json.tmp
 scripts/logs/backup_section_*.json
 scripts/logs/backup_zen_pending_*.json
 scripts/logs/backup_news_desc_*.json
-scripts/logs/backup_briefing_comment_*.json
+scripts/logs/backup_briefing_*.json
 scripts/logs/*.bak-*
 scripts/logs/tmp_sections/
