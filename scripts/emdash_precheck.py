@@ -16,9 +16,36 @@ MIN_LINKS = 3         # 외부 링크
 MIN_TABLES = 1        # 비교·한도·요금은 표로
 INTERNAL_TERMS = ["firecrawl", "dev.vars", ".env.common", "launchd"]  # 독자에게 노출 금지 (실제 누출 사례)
 
+# AIK24-BLOG-02 (2026-10-19): 입력이 EmDash PT JSON 이면 이 게이트는 무의미하다.
+# 2026-10-18 사고: PT JSON(={"_type":"block",...}) 을 그대로 검사하면 마크다운 문법이 하나도
+# 매칭되지 않아 "본문 0자·링크 0개"로만 걸리거나, 역으로 사람이 눈으로 보는 통과와 무관한
+# 결과가 나온다. 게이트는 항상 **마크다운 본문**에 대고 돌린다.
+_PT_JSON_MARKERS = ('"_type"', '"markDefs"', '"tableCell"', '"portabletext"', '"_key"')
+
+
+def strip_frontmatter(text: str) -> str:
+    """frontmatter(--- 로 감싼 머리말)를 제거한 본문을 돌려준다. 없으면 입력 그대로.
+
+    발행 대기 마크다운(_EMDASH_PENDING[*]["md"])이나 .md 파일을 그대로 check() 에 넘기면
+    frontmatter 의 title/description 이 길이에 섞여 통과로 오인된다. 본문만 떼어낸다.
+    """
+    m = re.match(r"\A---[ \t]*\n.*?\n---[ \t]*\n", text, re.S)
+    return text[m.end():] if m else text
+
+
+def looks_like_pt_json(text: str) -> bool:
+    """EmDash Portable Text JSON(또는 그 문자열)인지 판정."""
+    s = text.lstrip()
+    if not s or s[0] not in "{[":
+        return False
+    head = s[:600]
+    return sum(1 for mk in _PT_JSON_MARKERS if mk in head) >= 1
+
 
 def check(md: str) -> list:
     issues = []
+    if looks_like_pt_json(md):
+        return ["입력이 EmDash PT JSON 이다 → 마크다운 본문을 넘겨라 (PT JSON 검사는 통과/실패가 무의미)"]
     if re.search(r"^#\s", md, re.M):
         issues.append("본문에 H1(`# `) 있음 → 제목은 발행 API 의 title 로만 (라이브 <h1> 중복)")
     if not re.search(r"^##\s*마무리", md, re.M):
@@ -59,6 +86,12 @@ def selftest():
     assert not check(good), check(good)
     bad = check(thin)
     assert len(bad) >= 4, bad
+    # AIK24-BLOG-02: PT JSON 입력은 무의미한 검사 대신 즉시 차단
+    pt = check('{"_type":"block","markDefs":[],"children":[]}')
+    assert len(pt) == 1 and "PT JSON" in pt[0], pt
+    # frontmatter 는 길이에 섞이지 않아야 한다 (본문만 검사)
+    fm = '---\ntitle: "%s"\ndraft: false\n---\n\n%s' % ("가" * 3000, thin)
+    assert len(check(strip_frontmatter(fm))) == len(bad), check(strip_frontmatter(fm))
     print("selftest OK —", len(bad), "개 결함 검출:", *bad, sep="\n  ")
 
 

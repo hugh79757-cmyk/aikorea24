@@ -36,3 +36,5 @@
 {"ts": "2026-10-18 18:32:32", "slug": "aisha-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-18 18:32:33", "slug": "alphio-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-18 18:32:33", "slug": "archdiagramai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 06:01:09", "slug": "tomo-for-chatgpt", "step": "enrich", "result": "done", "detail": "+2,644자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-19 06:01:13", "slug": "tomo-for-chatgpt", "step": "thumb", "result": "done", "detail": "✅ tomo-for-chatgpt 18KB", "dry_run": false}

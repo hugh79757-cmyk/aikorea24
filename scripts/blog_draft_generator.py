@@ -54,6 +54,9 @@ def remove_emoji(text):
 # ============================================
 from model_router import chat_completion
 from auto_thumbnail import process_thumbnail, check_thumbnail_duplicates, validate_thumbnail_quality, is_placeholder_copy, DEEPSEEK_POOL
+# AIK24-BLOG-02 (2026-10-19): 발행 게이트 배선. 게이트(emdash_precheck.check)를 실제 발행 경로에
+# 연결하는 얇은 계층 — 미달이면 교정 재생성 1회 → 그래도 미달이면 발행 보류(초안 보존 + 알림).
+import blog_quality_gate as _quality_gate
 
 # ============================================
 # 글쓰기 규칙 주입 (AIK24-BLOG-01, 2026-10-17 대표님 지시)
@@ -71,6 +74,11 @@ def _load_blog_rules():
 
 
 _BLOG_RULES = _load_blog_rules()
+
+# AIK24-BLOG-02 (2026-10-19): 프롬프트의 분량 요구가 게이트 하한과 달라 통과율이 20%였다.
+# 프롬프트는 "1,500자/2,000자 이상", 게이트는 3,000자 — 모델은 프롬프트의 숫자를 따른다.
+# 숫자를 한 곳(게이트)에서 가져와 두 기준이 어긋날 수 없게 한다.
+MIN_BODY_CHARS = _quality_gate.MIN_CHARS
 
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
@@ -232,8 +240,19 @@ def get_briefing_articles():
 # ============================================
 # 블로그 초안 생성 (MiMo v2.5 via model_router)
 # ============================================
-def generate_draft(keyword, articles, grade):
+def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True):
     is_deep = len(articles) == 1
+
+    # AIK24-BLOG-02 (2026-10-19): 게이트를 '실제로' 통과하려면 근거 링크가 있어야 한다.
+    # 기사 원문 + 원문 페이지가 인용한 1차 출처를 모아(HTTP 생존 확인) 프롬프트에 넣는다.
+    # 게이트 미달로 재생성할 때는 fix_note(교정 지시)를 프롬프트 끝에 붙인다.
+    links_str = ""
+    if link_hint and articles:
+        try:
+            links_str = _quality_gate.link_block(_quality_gate.collect_real_links(articles[0]))
+        except Exception as e:
+            log(f"  ⚠️ 인용 링크 수집 실패: {type(e).__name__}: {e}")
+    fix_tail = ("\n\n" + fix_note) if fix_note else ""
 
     # 무료 LLM 항목은 전용 "모델 심층 분석" 구조로 생성한다 (AIK24-MODELEVAL-01).
     # 호출부를 바꾸지 않고 여기서 판별한다 — 모든 호출이 generate_draft를 거친다.
@@ -247,7 +266,8 @@ def generate_draft(keyword, articles, grade):
         except Exception as e:
             log(f"  ⚠️ 모델 ID 판별 예외: {type(e).__name__}: {e}")
         if model_id:
-            out = generate_model_eval_draft(keyword, articles[0], model_id)
+            out = generate_model_eval_draft(keyword, articles[0], model_id,
+                                           fix_note=fix_note, links_str=links_str)
             if out:
                 return out
             log("  ⚠️ 모델 심층 분석 생성 실패 → 뉴스 블로그 경로로 대체")
@@ -278,23 +298,28 @@ def generate_draft(keyword, articles, grade):
             f"## 요구사항\n"
             f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
             f"- 제목에 마크다운 백틱(`) 사용 금지\n"
-            f"- 본문: 1500자 이상, 소제목(##) 3개 이상 포함\n"
-            f"- [필수] 구체적인 수치·데이터·비교표 중 하나 이상 포함. "
+            f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
+            f"- [필수] 마크다운 표(`| 항목 | 값 |`) 최소 1개. "
+            f"구체적인 수치·한도·비교를 표로 넣는다. "
             f"제목이 '비교'·'점수'·'순위'를 약속하면 반드시 실제 숫자를 넣을 것. "
             f"숫자가 없으면 해당 표현을 제목에서 빼세요.\n"
             f"- 기사의 배경/의미/전망을 분석, 독자가 쉽게 이해할 수 있도록\n"
-            f"- 마지막에 **요약** 섹션 포함\n"
+            f"- [필수] 마지막 소제목을 문자 그대로 `## 마무리 — (짧은 말)` 로 달고, "
+            f"그 아래에 오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓴다.\n"
+            f"- [필수] 본문 맨 앞에 `# 제목` 을 반복하지 않는다 (제목은 TITLE: 줄에만 1회)\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
             f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
             f"'살펴보겠습니다', '알아보겠습니다', '다루겠습니다' 등 메타 성격의 도입문(메타 도입문) 절대 금지.** "
             f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n\n"
+            f"{links_str}"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
             f"[마크다운 본문]\n\n"
             f"## 기사\n{articles_str}"
+            f"{fix_tail}"
         )
     else:
         system_prompt = (
@@ -308,26 +333,32 @@ def generate_draft(keyword, articles, grade):
             f"아래 '{keyword}' 관련 여러 기사를 종합한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
             f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목\n"
-            f"- 본문: 2000자 이상, 소제목(##) 3개 이상 포함\n"
+            f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
+            f"- [필수] 마크다운 표(`| 항목 | 값 |`) 최소 1개 (기사별 비교·수치 정리)\n"
             f"- 각 기사의 핵심 내용을 비교/종합하여 트렌드 분석\n"
-            f"- 마지막에 **요약** 섹션 포함\n"
+            f"- [필수] 마지막 소제목을 문자 그대로 `## 마무리 — (짧은 말)` 로 달고, "
+            f"그 아래에 오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓴다.\n"
+            f"- [필수] 본문 맨 앞에 `# 제목` 을 반복하지 않는다 (제목은 TITLE: 줄에만 1회)\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
             f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
             f"'살펴보겠습니다', '알아보겠습니다', '다루겠습니다' 등 메타 성격의 도입문(메타 도입문) 절대 금지.** "
             f"기사의 실질적 핵심 내용(사실, 수치, 인용, 분석 등)으로 바로 시작할 것.\n\n"
+            f"{links_str}"
             f"## 출력 형식\n"
             f"TITLE: [SEO에 최적화된 제목]\n"
             f"---\n"
             f"[마크다운 본문]\n\n"
             f"## 기사들\n{articles_str}"
+            f"{fix_tail}"
         )
 
     content = chat_completion(
         messages=[{"role": "user", "content": user_prompt}],
         system_prompt=system_prompt,
-        max_tokens=3000,
+        # AIK24-BLOG-02: 3,000자 이상 한국어 본문은 3,000 토큰으로는 잘린다(실측: 생성 2,5xx자에서 멈춤).
+        max_tokens=6000,
         temperature=0.7,
     )
     if not content:
@@ -467,8 +498,13 @@ def _fail_block(ev):
     return "\n\n".join(out) or "(0점 문항 없음)"
 
 
-def generate_model_eval_draft(keyword, article, model_id):
-    """무료 LLM 전용 7단 구조 블로그 글 생성(BLOG-03 §2-4). 실패 시 빈 문자열(폴백)."""
+def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_str=""):
+    """무료 LLM 전용 7단 구조 블로그 글 생성(BLOG-03 §2-4). 실패 시 빈 문자열(폴백).
+
+    AIK24-BLOG-02 (2026-10-19): 발행 게이트가 요구하는 두 가지를 이 경로에도 넣는다 —
+    ① H2 `## 마무리 — …` 소제목(모델 평가글은 H3 8단으로 끝나 게이트에서 18건 누락됐다),
+    ② 실제 링크(원문·공식 문서). 재생성 시에는 fix_note 로 교정 지시가 들어온다.
+    """
     ev = _eval_block(model_id)
     # 전 문항 실패 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
     if ev.get("failed", 0) >= ev.get("max_score", 9):
@@ -579,6 +615,12 @@ def generate_model_eval_draft(keyword, article, model_id):
         f"- 위 1~7절을 5~6문장으로 요약하세요. 언제 쓰면 좋은지, OpenCode에서 쓸 수 있다는 점을 반드시 포함하세요.\n"
         f"- 마지막 문장은 총평 한 줄: 이 모델이 좋은 모델인지, 아니면 아직인지를 분명히 하세요.\n"
         f"- 제조사의 공개 발표 등 확인할 수 있는 출시·회사 정보가 있으면 1~2문장으로 덧붙이세요. 없으면 쓰지 마세요. 지어내지 마세요.\n\n"
+        f"### 9. 마무리 — 오늘 바로 할지 결정하는 3단계 (H2 소제목)\n"
+        f"- 8단 뒤에 **H2 소제목**(`##`, `###` 아님)을 정확히 이 형식으로 붙입니다: "
+        f"`## 마무리 — 오늘 바로 할지 결정하는 3단계`\n"
+        f"- 그 아래에 오늘 30분 안에 할 수 있는 실행 3단계를 번호 목록으로 씁니다. "
+        f"1단계는 '무료 경로로 1회 호출해 보기'처럼 바로 실행 가능한 행동이어야 합니다.\n"
+        f"- 아래 '인용 가능한 실제 링크' 블록의 `## 참고 자료` 섹션을 이 `## 마무리` **앞에** 둡니다.\n\n"
         f"## 리더보드 (같은 문항세트 v{model_eval.EVAL_QUESTIONS_VERSION}·같은 채점 기준)\n"
         f"```\n{leaderboard_block}\n```\n\n"
         f"## 톤 규칙\n"
@@ -594,6 +636,7 @@ def generate_model_eval_draft(keyword, article, model_id):
         f"- 브랜드명의 'AI'는 '아이'로 음역하지 말고 'AI'로 그대로 씁니다 (예: 인클루전AI).\n"
         f"- 구어체·은어를 쓰지 마세요. '손발 작업' 대신 '서브에이전트'처럼 정확한 역할 용어를 씁니다.\n"
         f"- '돈' 대신 '비용'이라 씁니다.\n\n"
+        f"{links_str}"
         f"## 참고 기사\n"
         f"제목: {article.get('title', '')}\n"
         f"출처: {article.get('source', '')}\n"
@@ -602,6 +645,7 @@ def generate_model_eval_draft(keyword, article, model_id):
         f"TITLE: [SEO에 최적화된 제목 — 형식: '{{브랜드 한글명}} {{모델명}}({{영문 모델 ID}}) {{N}}문항 실측 — {{판단 한 줄}}']\n"
         f"---\n"
         f"[마크다운 본문]"
+        f"{fix_tail}"
     )
 
     content = chat_completion(
@@ -968,8 +1012,17 @@ def _publish_generated_to_emdash(generated):
         except Exception as e:
             log(f"  ⚠️ EmDash 발행 skip ({os.path.basename(fp)}): {e}")
             continue
+
+        # AIK24-BLOG-02 2차 방어: 발행 직전 재검사. 1차(생성 직후)를 우회해 도착한 글을 여기서 막는다.
+        body = body.strip()
+        gate_issues = _quality_gate.screen_extended(body)
+        if gate_issues:
+            _quality_gate.hold(draft["md"], meta.get("title") or title, gate_issues,
+                               reason="2차 게이트(발행 직전) 미달")
+            continue
+
         url = publish_post(
-            meta.get("title") or title, body.strip(),
+            meta.get("title") or title, body,
             excerpt=meta.get("description"),
             featured_image=meta.get("image"),
             published_at=meta.get("date"),
@@ -978,6 +1031,13 @@ def _publish_generated_to_emdash(generated):
             ok += 1
             log(f"  🚀 EmDash 발행: {url}")
             _link_d1(url, draft["links"])
+            # AIK24-BLOG-02 3차 방어: 발행본 읽기 검증.
+            # 발행 API 가 200 을 돌려줘도 동시 편집자가 낡은 사본을 저장하면 공개본이 되돌아간다
+            # (2026-10-18 실측: 54블록으로 발행 → 6분 뒤 24블록으로 회귀). 그 사고를 감지해 알린다.
+            try:
+                _quality_gate.verify_published(url, expected_body=body, title=meta.get("title") or title)
+            except Exception as _ve:
+                log(f"  ⚠️ 발행본 검증 예외: {type(_ve).__name__}: {_ve}")
         else:
             log(f"  ❌ EmDash 발행 실패 (글 유실 — 폴백 없음): {os.path.basename(fp)}")
     log(f"  EmDash 발행 결과: 성공 {ok} / 전체 {len(generated)}")
@@ -1038,6 +1098,40 @@ def main():
             if not filepath:
                 log(f"    ❌ 품질 미달로 발행 거부: '{title[:40]}'")
                 continue
+
+            # AIK24-BLOG-02 1차 방어 (2026-10-19): 발행 게이트 + 교정 재생성 1회.
+            # 배경: 게이트(emdash_precheck.check)가 어떤 스크립트에서도 호출되지 않아
+            # 최근 발행 30건 중 기준 통과가 6건(20%)이었다 — 외부 링크 0개 22건, 마무리 없음 18건.
+            # 미달이면 그대로 발행하지 않고, 미달 항목을 지시문으로 붙여 한 번 더 쓴다.
+            # 재생성본도 미달이면 이 글만 보류한다(파이프라인은 다음 글로 계속).
+            issues = _quality_gate.screen_extended(
+                _quality_gate.body_of((_EMDASH_PENDING.get(filepath) or {}).get("md", "")))
+            if issues:
+                log(f"    ⚠️ 게이트 미달 {len(issues)}건 — 교정 재생성 1회")
+                for _it in issues:
+                    log(f"       · {_it}")
+                retry_out = generate_draft(title, [art], "A", fix_note=_quality_gate.fix_note(issues))
+                r_fp, r_title, r_issues = None, None, ["재생성 실패(빈 응답)"]
+                if retry_out:
+                    r_fp, r_title = save_draft(retry_out, title, file_num, today_str, articles=[art])
+                    if r_fp:
+                        r_issues = _quality_gate.screen_extended(
+                            _quality_gate.body_of((_EMDASH_PENDING.get(r_fp) or {}).get("md", "")))
+                if r_fp and not r_issues:
+                    _EMDASH_PENDING.pop(filepath, None)   # 미달본은 발행 대기에서 제거
+                    filepath, seo_title = r_fp, r_title
+                    log("    ✅ 교정 재생성본이 게이트를 통과 — 채택")
+                else:
+                    _quality_gate.hold(
+                        (_EMDASH_PENDING.get(filepath) or {}).get("md", ""), title, issues,
+                        retry_md=(_EMDASH_PENDING.get(r_fp) or {}).get("md") if r_fp else None,
+                        retry_issues=r_issues,
+                        reason="1차 게이트 미달(교정 재생성 후에도 미달)")
+                    _EMDASH_PENDING.pop(filepath, None)
+                    if r_fp:
+                        _EMDASH_PENDING.pop(r_fp, None)
+                    continue
+
             created.append((filepath, seo_title or title, sort_order, 1))
             file_num += 1
 
@@ -1209,6 +1303,9 @@ def main():
     if generated:
         log("[5c] EmDash 발행 중...")
         _publish_generated_to_emdash(generated)
+        _gate_summary = _quality_gate.summary_line()
+        if _gate_summary:
+            log("  " + _gate_summary)
 
     # 6. 자동 배포 (새 블로그 포스트가 생성되었거나 미커밋 파일이 있으면)
     # AIK24-EFFICIENCY-02: 파이프라인 경로에서는 run_pipeline.py 의 Step 6(deploy.sh)이

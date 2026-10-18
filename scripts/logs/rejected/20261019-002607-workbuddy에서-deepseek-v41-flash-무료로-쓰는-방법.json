@@ -1,0 +1,9 @@
+{
+ "title": "WorkBuddy에서 DeepSeek V4.1 Flash 무료로 쓰는 방법",
+ "reason": "2차 게이트(발행 직전) 미달",
+ "issues": [
+  "끊긴 링크 1개 (https://api.deepseek.com/v1/chat/completions\") → 살아있는 URL 로 교체"
+ ],
+ "retry_issues": [],
+ "saved_at": "2026-10-19T00:26:07"
+}

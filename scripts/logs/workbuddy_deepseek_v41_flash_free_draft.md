@@ -1,22 +1,22 @@
 DeepSeek가 2026년 10월 17일 공개한 [DeepSeek-V4.1-Flash-1017](https://api-docs.deepseek.com/news/news261017)은 공식 릴리스 노트에서 "이전 버전보다 벤치마크 성능이 좋아지고, 작업 완료가 빨라지고, 출력이 짧아졌다"고 소개된 모델입니다. 공식 API 문서 기준으로 컨텍스트 **1M 토큰**, 최대 출력 **384K 토큰**, 이미지 입력을 지원하고, 모델 가중치까지 공개돼 있습니다([Hugging Face](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) · [ModelScope](https://modelscope.cn/models/deepseek-ai/DeepSeek-V4.1-Flash-1017)).
 
-문제는 이 모델을 API로 직접 부르면 유료라는 점입니다. 100만 토큰당 입력 $0.15, 출력 $0.60(오프피크 기준)이 붙습니다. 결제 수단을 넣지 않고 먼저 써 보고 싶을 때 지금 쓸 수 있는 경로가 텐센트 **WorkBuddy 국제판**입니다. WorkBuddy Intl은 2026년 10월 17일 공식 계정에 "새 DeepSeek이 나왔고 WorkBuddy Intl도 최신으로 올라갔으며 **10월 31일까지 무료**"라고 알렸습니다([@WorkBuddy_AI](https://x.com/WorkBuddy_AI)).
+문제는 이 모델을 API로 직접 부르면 유료라는 점입니다. 100만 토큰당 입력 $0.15, 출력 $0.60(오프피크 기준)이 붙습니다. 결제 수단을 넣지 않고 먼저 써 보고 싶을 때 지금 쓸 수 있는 경로가 텐센트 **WorkBuddy 글로벌 버전**입니다. WorkBuddy Intl은 2026년 10월 17일 공식 계정에 "새 DeepSeek이 나왔고 WorkBuddy Intl도 최신으로 올라갔으며 **10월 31일까지 무료**"라고 알렸습니다([@WorkBuddy_AI](https://x.com/WorkBuddy_AI)).
 
 이 글은 ① 무료와 유료의 경계, ② 설치·로그인·모델 선택까지의 실제 클릭 순서, ③ 실제로 걸리는 한도, ④ 10월 31일 이후를 위한 API 단가표와 직접 연결 방법 순서로 정리했습니다. 기준 시각은 2026년 10월 18일입니다.
 
 ## 1. 무엇이 무료인가 — 무료는 "앱 안의 호출"까지입니다
 
-무료라고 뭉뚱그리면 안 되는 지점이 하나 있습니다. 무료인 것은 **WorkBuddy 국제판 앱 안에서 이 모델로 작업을 돌리는 것**이고, API 키로 호출하는 경로는 프로모션과 무관하게 요금이 붙습니다.
+무료라고 뭉뚱그리면 안 되는 지점이 하나 있습니다. 무료인 것은 **WorkBuddy 글로벌 버전 앱 안에서 이 모델로 작업을 돌리는 것**이고, API 키로 호출하는 경로는 프로모션과 무관하게 요금이 붙습니다.
 
 | 구분 | 요금 | 근거 |
 | --- | --- | --- |
-| WorkBuddy 국제판에서 DeepSeek V4.1 Flash 선택 | 프로모션 기간 **크레딧 차감 0** | [WorkBuddy Intl 공지](https://x.com/WorkBuddy_AI) · 프로모션 안내 |
+| WorkBuddy 글로벌 버전에서 DeepSeek V4.1 Flash 선택 | 프로모션 기간 **크레딧 차감 0** | [WorkBuddy Intl 공지](https://x.com/WorkBuddy_AI) · 프로모션 안내 |
 | WorkBuddy에 내 API 키로 연결 | DeepSeek API 단가 그대로 | [DeepSeek 공식 연동 문서](https://api-docs.deepseek.com/quick_start/agent_integrations/workbuddy) |
 | DeepSeek API 직접 호출 | 100만 토큰당 입력 $0.15 · 출력 $0.60 (오프피크) | [DeepSeek 공식 요금표](https://api-docs.deepseek.com/quick_start/pricing) |
 
-앱 안에서 쓰는 만큼은 API 키 발급도, 제공자 등록도, 결제 정보 입력도 필요하지 않습니다. 공식 릴리스 노트는 이 모델이 DeepSeek 자체 웹사이트·앱·API에 함께 올라갔다고 밝히고 있지만, 이 글에서 확인한 무료 조건은 WorkBuddy 국제판 기준입니다.
+앱 안에서 쓰는 만큼은 API 키 발급도, 제공자 등록도, 결제 정보 입력도 필요하지 않습니다. 공식 릴리스 노트는 이 모델이 DeepSeek 자체 웹사이트·앱·API에 함께 올라갔다고 밝히고 있지만, 이 글에서 확인한 무료 조건은 WorkBuddy 글로벌 버전 기준입니다.
 
-한 가지 더: 프로모션은 **국제판에만** 적용됩니다. 중국판 클라이언트는 별도 규칙을 씁니다.
+한 가지 더: 프로모션은 **글로벌 버전에만** 적용됩니다. 중국 버전 클라이언트는 별도 규칙을 씁니다.
 
 ## 2. 설치 — macOS 12 이상, Windows 10 1809 이상
 
@@ -54,7 +54,7 @@ WorkBuddy는 [공식 문서](https://www.workbuddy.ai/docs/workbuddy/From-Beginn
 
 | 항목 | 값 | 출처 |
 | --- | --- | --- |
-| 앱(국제판)에서의 컨텍스트 | 약 300K 토큰 | 프로모션 안내 페이지 |
+| 앱(글로벌 버전)에서의 컨텍스트 | 약 300K 토큰 | 프로모션 안내 페이지 |
 | DeepSeek API 컨텍스트 | **1M 토큰** | [공식 API 문서](https://api-docs.deepseek.com/quick_start/pricing) |
 | DeepSeek API 최대 출력 | **384K 토큰** | 공식 API 문서 |
 | 무료 사용 상한 | 계정당 약 2억 토큰(캐시 포함) 후 일시 정지 | 프로모션 안내 페이지 |
@@ -112,7 +112,7 @@ WorkBuddy는 [공식 문서](https://www.workbuddy.ai/docs/workbuddy/From-Beginn
 
 ## 7. 주의할 점
 
-- **국제판 한정입니다.** 중국판 클라이언트에는 이 무료 프로모션이 없습니다.
+- **글로벌 버전 한정입니다.** 중국 버전 클라이언트에는 이 무료 프로모션이 없습니다.
 - **종료 시각이 공지되지 않았습니다.** 10월 31일이라는 날짜만 안내돼 있어, 그날 언제까지인지는 앱 안내로 확인해야 합니다.
 - **크레딧이 0이 되면 무료 모델도 멈춘다고 안내돼 있습니다.** 프로모션 안내 페이지는 잔액이 바닥나면 무료 모델 호출도 막히므로 소액 잔액을 유지하라고 적고 있습니다.
 - **캡에 닿으면 다른 모델로 갈아타거나 리셋을 기다려야 합니다.** 무료 구간에서 막혔을 때 앱이 멈추는 게 아니라 해당 모델만 일시 정지됩니다.
@@ -121,7 +121,7 @@ WorkBuddy는 [공식 문서](https://www.workbuddy.ai/docs/workbuddy/From-Beginn
 
 ## 마무리 — 오늘 30분 안에 끝내는 무료 체험
 
-1. **설치 (5분)** — [workbuddy.ai](https://www.workbuddy.ai/)에서 국제판을 받아 로그인합니다. macOS 12 이상 또는 Windows 10 1809 이상이면 됩니다.
+1. **설치 (5분)** — [workbuddy.ai](https://www.workbuddy.ai/)에서 글로벌 버전을 받아 로그인합니다. macOS 12 이상 또는 Windows 10 1809 이상이면 됩니다.
 2. **모델 선택 (5분)** — 새 작업에서 첫 메시지를 한 번 보낸 뒤 입력창의 모델명을 클릭하고 **DeepSeek V4.1 Flash**를 고릅니다. 무료 또는 0 크레딧 표시를 확인합니다.
 3. **한도 확인 (2분)** — 우측 상단 아바타 → Profile → Usage에서 잔액과 소모 내역을 봅니다. 잔액이 0이면 무료 모델도 멈춘다는 안내를 기억해 둡니다.
 4. **10월 31일 대비 (선택)** — [platform.deepseek.com/api_keys](https://platform.deepseek.com/api_keys)에서 키를 발급해 **설정 → 모델**에 등록해 둡니다. 급한 작업이 아니라면 평일 낮 시간대(UTC 피크)를 피해 호출하면 같은 모델을 절반 가격에 씁니다.

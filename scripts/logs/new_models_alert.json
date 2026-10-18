@@ -1,24 +1,15 @@
 {
- "day": "2026-10-18",
- "checked_at": 1792270807.784362,
+ "day": "2026-10-19",
+ "checked_at": 1792357207.135238,
  "total_rows": 39,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "elorian/glimpse",
-   "qwen/qwen3.7-plus:batch",
-   "deepseek/deepseek-v4.1-flash-1017"
+   "unbiased/pareto-26.10"
   ],
   "kilo": [
-   "elorian/glimpse",
-   "deepseek/deepseek-v4.1-flash-1017"
+   "unbiased/pareto-26.10"
   ]
  },
- "removed_by_provider": {
-  "zen": [
-   "ll-alpha-free",
-   "muse-spark-1.2-contributor-free",
-   "muse-spark-1.3-contributor-free"
-  ]
- }
+ "removed_by_provider": {}
 }
