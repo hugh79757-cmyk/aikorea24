@@ -67,15 +67,20 @@ const mdWithShot: any[] = mdTools.map((t) => {
 });
 const allTools: any[] = [...d1Only, ...mdWithShot];
 
-const newTools = [...allTools]
-  .filter(t => t.data.updated)
-  .sort((a, b) => (b.data.updated || '').localeCompare(a.data.updated || ''))
-  .slice(0, 6);
-
-const popularTools = [...allTools]
-  .filter(t => t.data.koreanSupport)
-  .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99))
-  .slice(0, 8);
+// AIK24-TOOLSYNC-06 (2026-10-18 대표님 결정) — '최신 등록'·'인기 도구' 섹션 폐지.
+//   · 최신 등록: md `updated` 상위 6칸 회전 창. 수집기가 매일 06:00 에 2~11개를 자동 등록해
+//     이틀이면 밀려나고, D1 전용(제출 승인) 툴은 updated=created_at 이라 승인해도 상단에 못 올라온다.
+//   · 인기 도구: 투표·조회 데이터가 아니라 koreanSupport + order 정렬이라 인기도가 아니었다.
+//   · 두 섹션 모두 아래 전체 도구 그리드(필터·검색·정렬 보유)의 부분집합이라 중복이었다.
+// 신규 노출은 그리드 카드의 '최근 7일 NEW' 배지가 맡는다.
+const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
+const DAY_MS = 24 * 60 * 60 * 1000;
+const todayKst = new Date(Date.now() + KST_OFFSET_MS).toISOString().slice(0, 10);
+const newCutoffKst = new Date(Date.now() + KST_OFFSET_MS - 7 * DAY_MS).toISOString().slice(0, 10);
+const isNewTool = (t: any): boolean => {
+  const u = String(t?.data?.updated ?? '').slice(0, 10);
+  return u !== '' && u >= newCutoffKst && u <= todayKst;
+};
 
 const categories = [
   { id: 'all', label: '전체', emoji: '🔥' },
@@ -198,105 +203,6 @@ import { TASK_COUNT } from '../../config/tasks';
       </div>
     </section>
 
-    <!-- ========== 🆕 최근 등록 ========== -->
-    {newTools.length > 0 && (
-    <section class="mb-12">
-      <div class="flex items-center justify-between mb-5">
-        <div class="flex items-center gap-3">
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white">최신 등록</h2>
-          <span class="px-2 py-0.5 bg-gray-100 text-[#111111] text-[11px] font-semibold rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/25">NEW</span>
-        </div>
-        <span class="text-xs text-gray-500">매일 업데이트</span>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {newTools.map(tool => {
-          const accent = catAccent[tool.data.category] || defaultAccent;
-          return (
-            <a href={`/tools/${tool.id}/`} class="group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#e5e5e5] transition-all duration-300 hover:shadow-xl hover:shadow-[#e5e5e5]/5 hover:-translate-y-0.5 dark:bg-[#111827]/80  dark:hover:border-[#e5e5e5]">
-              <div class={`h-1 w-full bg-[#111111] ${accent}`}></div>
-              {(tool.data.image || tool.data.screenshotUrl) && (
-                <div class="w-full aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-[#111827]/40 border-b border-gray-100 dark:border-[#e5e5e5]/10">
-                  <img src={tool.data.image || tool.data.screenshotUrl} alt={`${tool.data.name} 미리보기`} loading="lazy" decoding="async" class="w-full h-full object-cover" />
-                </div>
-              )}
-              <div class="p-5 flex-1 flex flex-col">
-                <div class="flex items-start justify-between mb-2">
-                  <div class="flex items-center gap-2 min-w-0">
-                    <h3 class="text-base font-bold text-gray-900 dark:text-white group-hover:text-[#111111] dark:group-hover:text-[#555555] transition-colors truncate">
-                      {tool.data.name}
-                    </h3>
-                    {tool.data.koreanSupport && (
-                      <span class="flex-shrink-0 text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-[#e5e5e5] font-medium dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">KR</span>
-                    )}
-                  </div>
-                  <span class="flex-shrink-0 text-[10px] px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] font-semibold ml-2 dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">
-                    NEW
-                  </span>
-                  {(tool as any).isD1 && (
-                    <span class="flex-shrink-0 text-xs font-bold px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20 ml-1">MAKER</span>
-                  )}
-                </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 flex-1">{tool.data.description}</p>
-                <div class="flex items-center justify-between pt-3 border-t border-gray-100 ">
-                  <span class="text-xs text-gray-500 dark:text-gray-500">{tool.data.category}</span>
-                  <span class="text-xs font-medium text-gray-600 dark:text-gray-400">{tool.data.price || '—'}</span>
-                </div>
-              </div>
-            </a>
-          );
-        })}
-      </div>
-    </section>
-    )}
-
-    <!-- ========== 🔥 인기 도구 ========== -->
-    {popularTools.length > 0 && (
-    <section class="mb-12">
-      <div class="flex items-center gap-3 mb-5">
-        <h2 class="text-xl font-bold text-gray-900 dark:text-white">인기 도구</h2>
-        <span class="px-2 py-0.5 bg-gray-100 text-[#111111] text-[11px] font-semibold rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/25">HOT</span>
-      </div>
-      <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden dark:bg-[#111827]/60 ">
-        <div class="hidden sm:grid grid-cols-[auto_1fr_auto_auto_auto] gap-4 px-5 py-3 border-b border-gray-100 text-[11px] text-gray-500 font-medium uppercase tracking-wider ">
-          <span class="w-8">#</span>
-          <span>도구</span>
-          <span class="w-24 text-center">카테고리</span>
-          <span class="w-40 text-center">가격</span>
-          <span class="w-16 text-center">상태</span>
-        </div>
-        {popularTools.map((tool, i) => (
-          <a href={`/tools/${tool.id}/`} class="group grid grid-cols-[auto_1fr] sm:grid-cols-[auto_1fr_auto_auto_auto] gap-4 items-center px-5 py-3.5 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors  ">
-            <span class:list={[
-              "w-8 h-8 flex items-center justify-center rounded-lg text-sm font-bold",
-              i < 3 ? "bg-gray-100 text-[#111111] border border-[#e5e5e5] /20/20 dark:text-[#555555] dark:border-[#e5e5e5]/20" : "bg-gray-100 text-gray-500  dark:text-gray-500"
-            ]}>
-              {i + 1}
-            </span>
-            <div class="min-w-0">
-              <div class="flex items-center gap-2">
-                <span class="font-semibold text-gray-900 dark:text-white group-hover:text-[#111111] dark:group-hover:text-[#555555] transition-colors truncate text-sm">
-                  {tool.data.name}
-                </span>
-                {tool.data.koreanSupport && (
-                  <span class="flex-shrink-0 text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-[#e5e5e5] font-medium dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">KR</span>
-                )}
-              </div>
-              <p class="text-xs text-gray-500 truncate mt-0.5">{tool.data.description}</p>
-            </div>
-            <span class="hidden sm:block w-24 text-center text-xs text-gray-500">{tool.data.category}</span>
-            <span class="hidden sm:block w-40 text-center text-xs font-medium text-gray-600 dark:text-gray-400 break-keep [overflow-wrap:anywhere]">{tool.data.price || '—'}</span>
-            <span class:list={[
-              "hidden sm:flex w-16 justify-center text-[10px] px-2 py-0.5 rounded-full border font-medium",
-              difficultyColor(tool.data.difficulty)
-            ]}>
-              {difficultyLabel(tool.data.difficulty)}
-            </span>
-          </a>
-        ))}
-      </div>
-    </section>
-    )}
-
     <!-- ========== 구분선 ========== -->
     <div class="flex items-center gap-4 mb-8">
       <div class="flex-1 h-px bg-gray-200 bg-[#111111] dark:from-transparent dark:via-white/[0.08] dark:to-transparent"></div>
@@ -344,7 +250,6 @@ import { TASK_COUNT } from '../../config/tasks';
         <option value="order">추천순</option>
         <option value="name">이름순</option>
         <option value="updated">최신순</option>
-        <option value="review">⭐ 리뷰 순</option>
       </select>
     </div>
 
@@ -366,7 +271,7 @@ import { TASK_COUNT } from '../../config/tasks';
           data-difficulty={tool.data.difficulty}
           data-order={tool.data.order}
           data-updated={tool.data.updated || ''}
-          data-review={0} class="tool-card group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#e5e5e5] transition-all duration-300 hover:shadow-xl hover:shadow-[#e5e5e5]/5 hover:-translate-y-0.5 dark:bg-[#111827]/60  dark:hover:border-[#e5e5e5]"
+          class="tool-card group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#e5e5e5] transition-all duration-300 hover:shadow-xl hover:shadow-[#e5e5e5]/5 hover:-translate-y-0.5 dark:bg-[#111827]/60  dark:hover:border-[#e5e5e5]"
         >
           <div class={`h-0.5 w-full bg-[#111111] ${accent}`}></div>
           {(tool.data.image || tool.data.screenshotUrl) && (
@@ -382,6 +287,9 @@ import { TASK_COUNT } from '../../config/tasks';
               <div class="flex gap-1 flex-shrink-0">
                 {(tool as any).isD1 && (
                   <span class="text-xs font-bold px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">MAKER</span>
+                )}
+                {isNewTool(tool) && (
+                  <span class="text-[10px] px-1.5 py-0.5 bg-[#E63B2E] text-white rounded font-bold" title="최근 7일 내 등록·갱신">NEW</span>
                 )}
                 {tool.data.koreanSupport && (
                   <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-[#e5e5e5] font-medium dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20" title="한국어 지원">
@@ -554,7 +462,6 @@ import { TASK_COUNT } from '../../config/tasks';
       visible.sort((a, b) => {
         if (sort === 'name') return (a.getAttribute('data-name') || '').localeCompare(b.getAttribute('data-name') || '');
         if (sort === 'updated') return (b.getAttribute('data-updated') || '').localeCompare(a.getAttribute('data-updated') || '');
-        if (sort === 'review') return (parseInt(b.getAttribute('data-review') || '0') || 0) - (parseInt(a.getAttribute('data-review') || '0') || 0);
         return (parseInt(a.getAttribute('data-order') || '99') || 99) - (parseInt(b.getAttribute('data-order') || '99') || 99);
       });
 
