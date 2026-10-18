@@ -1,3 +1,116 @@
+## 2026-10-18 20:52 — AIK24-D1-OPT-01 재측정 계획 + 측정 도구 (커밋 45ab440d·b1b9ee82, origin/main=b1b9ee82)
+
+### 한 일
+
+- 재측정을 **명령 2줄**로 만들었다. 기존 가드 스크립트에 읽기 전용 모드 2개를 **추가**했고(기존 경로 불변), 배포 전 기준선 8일치를 실측해 문서로 고정했다.
+  - `python3 scripts/d1_usage_report.py --history 6 --by-db` → 일자별 읽기·쓰기 + 한도% + DB별 분해
+  - `python3 scripts/d1_usage_report.py --unit 6` → 행/요청 단가(D1 읽기 ÷ Worker 요청수)
+  - 계획서: `docs/d1-remeasure-plan-20261021.md` (판정 기준 3단 + 한계 5건 + D+3 체크리스트 + 이후 로드맵)
+- 배포 시각 **2026-10-18 20:20 KST = 11:20 UTC** 을 근거로, 10-18(UTC)은 적용 11.3/24시간인 **부분 적용일 → 비교 창 제외**로 못박았다. 첫 완전 적용일 = 10-19(월).
+- 직전 세션이 남긴 미커밋 파일(`tools_postprocess.py`·`daily.sh`)은 **커밋하지 않았다** — 같은 세션이 20:4x에 자기 이름으로 커밋·푸쉬했다(`0c263a32`, `c7e8bcff`). 중복 커밋 방지.
+
+### 결과
+
+- [검증됨] 기존 경로 회귀 없음. 근거: 인자 없이 3회 실행 → 매번 동일 1줄 `D1 읽기 1,605,799/5,000,000 (32.1%) · 쓰기 6,205/100,000 (6.2%) — UTC 일 2026-10-18 (KST 20:32) (정상, 보고 없음)`, 경보 미발생.
+- [검증됨] 새 모드 동작. 근거: `--history 8 --by-db` = 일자 8행 + DB 18행 출력(계정 합계 1,916,223~5,318,301), `--unit 8` = 16행 출력. DB 이름 5종 해석(`aikorea24-db`·`aikorea24-emdash-db`·`taiwan-news-db`·`heritage-db`·`mbti-db`).
+- [검증됨] 테스트 회귀 0. 근거: `python3 -m pytest tests/ -q` → `807 passed, 10 skipped, 5 warnings in 21.05s` (수정 전 기준선과 동일: 807/10).
+- [검증됨] 푸쉬 완료. 근거: `git push origin main` → `c7e8bcff..b1b9ee82 main -> main`, 푸쉬 후 `origin/main..HEAD` = 0건, pre-push 훅 `✅ 모든 파일 YAML 정상`.
+- [검증됨] 기준선 수치. 근거: GraphQL `d1AnalyticsAdaptiveGroups`(차원 date·databaseId) 8일 조회 — 일자 합계 1,916,223~5,318,301 · 평일 4일 평균 **2,578,895**(사고일 10-14 제외) · 평일 5일 평균 3,126,776.
+- [검증됨] **적용 효과는 아직 측정 불가**. 근거: 같은 날 `datetimeHour` 조회 → 12Z 이후 전부 0행(현재 11:32 UTC, 아직 오지 않은 시간대). 11Z(257,308행)는 배포 20분 전 + 12분 후가 섞여 판정 불가.
+- [부분검증] 요청당 단가 노이즈 실측. 근거: 10-18 시간대 단가 53~889행/요청(계산: 04Z 25,199÷176=143 · 08Z 65,263÷1,228=53 · 10Z 138,738÷156=889). 노이즈의 **원인 귀속은 불가**(차원이 databaseId·date·datetimeHour 뿐).
+- [부분검증] DB 이름 API 조회. 근거: `/accounts/{acct}/d1/database` 1회 조회로 5개 이름 확보. API 실패 시 폴백 경로(`except` 분기)는 **미실행** — 코드 경로만 존재.
+- [검증불가] ①의 서빙 절감을 계정 총량에서 분리 확인하는 것. 이유: zone analytics 권한 없음(per-path 귀속 불가) + D1 차원 3개 한정. 복구 계획: D+3 판정은 총량·단가·잡 단가 3개 축으로만 하고, 확정 판정은 하지 않는다.
+
+### [부분 정정] 직전 AUDIT-01 결론
+
+- 이전 기록의 **"지배 요인 = 서빙"** 은 실측으로 뒷받침되지 않는다. 총량 대비 요청수가 매우 작은 시간대가 존재한다(10-18: 03Z 66,115행/92요청 · 09Z 69,732행/135요청 · 10Z 138,738행/156요청).
+- 다만 이 시간대가 서빙이 아닌 것(**크론·로컬 스크립트의 D1 REST 직접 호출**)이라는 **반대 증명도 없다** — 요청 몇 건이 무거운 페이지를 렌더하면 같은 수치가 나온다(예: 92요청 × 719행).
+- 따라서 정정 범위는: "서빙이 지배" → **"서빙/비서빙 비율을 이 데이터로는 구분할 수 없다"**. AUDIT-01 의 다른 수치(요청당 188행·668행, 페이지 단가, 인덱스 실태)는 변동 없음.
+
+### 잔존 위험
+
+- ①의 절감을 총량에서 분리할 수단이 없다 → D+3 판정 B(절감)는 [부분검증]에 머문다. 트래픽 요일 변동(10-17 토 2,107,481 vs 10-18 일 1,917,929)이 절감을 가린다.
+- **③확장 3곳(`thread_topics/thread_topic_finder.py`·`outline_generator.py`·`keyword_updater.py`)은 launchd 미등록 = 현재 절감 0.** 코드 수정만 있고 실행이 없어, D+3 수치에 이 몫(1회당 17,597행)은 잡히지 않는다.
+- `INDEXED BY idx_news_created_at` 힌트 의존 — 인덱스가 사라지면 hard error, aikorea24 에는 인덱스 존재 보장 장치가 없다.
+- 가드 공백(Worker SSR `env.DB`·`wrangler d1 execute`·빌드 프리렌더)은 이번 조치로 닫히지 않았다.
+- 배포 직후 캐시 콜드로 10-18~10-19 총량이 일시 증가할 수 있다(절감 판정의 교란).
+
+### 다음 행동
+
+1. **2026-10-21(수)**: `--history 6 --by-db` + `--unit 6` 실행 → `docs/d1-remeasure-plan-20261021.md` §3 판정 A(위험 재발)/B(절감)/C(emdash) 로 판단. 판정 A는 10-19~10-21 모두 80% 미만이어야 PASS.
+2. 판정 C 조건(emdash-db 행/요청 > 500) 충족 시 emdash 내부 질의 조사 착수 — **별도 승인 필요**.
+3. 미스케줄 3곳 스케줄 등록 여부 결정(등록해야 ③확장 절감이 실제로 발생).
+4. taiwan-news 19:00 KST 잡 로그(`인덱스 4종 확인`·`[LOCK]`) · 백업 첫 삭제 예정 2026-11-02.
+5. 발행 재개 시 @soojeong9099 토큰 갱신(만료 임박 ≈10/22) 선행 — 발행은 여전히 보류 상태.
+
+## 2026-10-18 20:40 KST — AIK24-TOOLSAUTO-01: 도구 상세페이지 후처리 자동화 (URL 승격·심화 v2·썸네일)
+
+계기: 대표님 지시 "이게 자동 파이프라인으로 돌아야해." — AIK24-TOOLENRICH-02 로 전량(412건) 심화·썸네일을 채운 뒤, 신규·누락분을 사람이 손대지 않아도 채워지게 만든다.
+범위: 자동화 코드 신설 + 일일 잡 등록 + 자동 실행 실증 + 부수 결함 2건 수정 + 포맷 잔재 392건 정리.
+
+### 한 일
+
+1. `scripts/tools_postprocess.py` 신설 — 미완료 항목을 ① 실제 URL 승격 ② 심화 스키마 v2 ③ 썸네일 순서로 처리.
+   - `--slugs/--sweep N/--budget/--dry-run/--list/--no-cooldown`, 실패는 원장에 기록.
+2. 수집 파이프라인 편입 — `tools_collector.main()` 이 신규 저장분을 **커밋·배포 전**에 후처리(비차단, `--no-postprocess` 로 해제).
+3. 일일 따라잡기 잡 신설 — `kr.aikorea24.tools-postprocess` (매일 07:30, `scripts/tools_postprocess_daily.sh`, `--sweep 15`).
+4. 결함 수정 2건 — (a) `backfill_tool_thumbs.write_image_field()` 가 frontmatter 첫 줄 뒤에 빈 줄을 남기던 버그(`fm.rstrip()` → `fm.strip()`) (b) dry-run 이 썸네일 캡처를 실제로 시도하고 원장에 기록하던 결함.
+5. 포맷 잔재 정리 — 빈 줄이 남은 392건 정규화(내용 동등 증명 후).
+
+### 결과
+
+**[검증됨] 후처리 3단계 실동작 (pondas 되돌림 테스트)**
+- 근거: `python3 scripts/tools_postprocess.py --slugs pondas` → 21.4초에 URL `theresanaiforthat.com/ai/pondas/` → `https://pondas.ai`, 심화 +2,895자, 썸네일 13,492바이트. 결과물 H2 14개가 기존 정상본(HEAD)과 개수·순서 동일, YAML 파싱 OK, 첫 줄 뒤 빈 줄 없음.
+- 테스트로 생성된 md 는 되돌렸다(커밋하지 않음). 원장에는 수행 기록이 남아 있다.
+
+**[검증됨] 자동 승격이 실사이트와 일치 (라이브 확인)**
+- 근거: 원장 승격 기록 5건(pondas 테스트 1 + 운영 4). 운영 4건은 md 설명 ↔ 실사이트 title/description 대조 일치:
+  `flowmaps`→flowmaps.app("Plan Your App Visually Before AI Builds It"), `ai-art-create`→aiartcreate.com,
+  `aiboxplot`→aiboxplot.com("Free Box Plot Generator"), `aidesignhouse`→aidesignhouse.io("AI Home Design & Floor Plan Maker").
+- 오탐 차단 실측: `amplify-ai`(amplify.com=음향기기) 승격 안 됨 · `flowmaps.com`(Squarespace·설명 없음) 대신 `flowmaps.app` 채택 · `sol`(라벨 4자 이하) 후보 제외.
+- 라이브 4페이지 CTA href + 썸네일 확인(HTTPS 200).
+
+**[검증됨] launchd 잡 등록**
+- 근거: `plutil -lint` OK / `launchctl list` 에 `kr.aikorea24.tools-postprocess`(runs=0, state=not running) / `launchctl print` calendar interval = Hour 7·Minute 30, stdout·stderr 경로 지정.
+
+**[검증됨] 일일 스크립트 실동작 (커밋·배포 경로 포함)**
+- 근거: `SWEEP=3` → 3건 23.3초 처리, 콘텐츠 1건 커밋 + 배포 완료(커밋 `032be271`). `SWEEP=20` → 20건 82.1초(항목당 평균 4.1초 = 82.1÷20), 콘텐츠 3건 커밋 + 배포(커밋 `b24792ac`).
+- 스크립트의 `git add` 는 `src/content/tools` + 원장으로 한정 → 다른 세션 WIP(`scripts/d1_usage_report.py` +90줄)를 휩쓸지 않았다(실측: 해당 파일은 여전히 미커밋).
+
+**[검증됨] 실패 재시도 억제(7일 쿨다운)**
+- 근거: 오늘 실패한 `amplify-ai`·`freebeat-ai` 는 대상 목록에서 제외(88→86건), 무관한 `freebeat-ai-app` 은 유지, `--no-cooldown` 시 88건으로 복귀.
+
+**[검증됨] frontmatter 빈 줄 392건 정리 (내용 동등)**
+- 근거: 독립 스냅샷(before/after) 비교 — 412건 전부 frontmatter 파싱값 해시·본문 해시 동일(변경 0/0). diff = 추가 0줄 / 삭제 395줄(392파일, 3파일은 2줄씩). 정리 후 `npm run build` 성공(14.2초, 오류 0).
+
+**[부분검증] 수집 파이프라인 연결부**
+- 통과: `import tools_postprocess` + `postprocess(created)` 호출이 수집 잡과 같은 sys.path 문맥에서 동작, 예산 상수(1200)·플래그(`--no-postprocess`) 노출 확인.
+- 제한 사유: 실제 `--collect` 전량 실행은 하지 않았다(외부 소스 수집·텔레그램 발송이 따라붙는 경로). 연결부는 try/except 로 격리 — 실패해도 수집·커밋·배포는 계속된다.
+
+**[검증불가] launchd 잡의 자동 발화(07:30)**
+- 사유: 등록 시각(20:30 KST) 이후라 발화 시점 미도래.
+- 복구 계획: 내일 `scripts/tools_postprocess.log` 첫 줄(`=== YYYY-MM-DD HH:MM:SS 도구 후처리 시작`)과 원장 신규 항목으로 확인.
+
+### 현재 남은 항목
+
+- 대상 66건(쿨다운 적용, 오늘 마지막 확인) — 실제 도메인 미확인 다수 + 썸네일 미확보 17건 중 일부. 일일 15건씩 소진, 실패분은 7일 후 재확인.
+- 오늘 원장 기록 38건 = 승격 5 + 심화 1 + 썸네일 2 + URL 실패 18 + 썸네일 실패 12.
+
+### 잔존 위험
+
+- **자동 승격 오탐**: 가드 4중(도메인 라벨=이름 정규화·제목 토큰 일치·설명에 도구성 키워드·챌린지/판매중 제외)으로 현재 5/5 정확하나, "이름이 같고 설명이 도구성인 다른 제품"은 통과할 수 있다. 원장에 근거(제목)가 남아 사후 감사·원복 가능(md `url` 한 줄 수정 후 커밋·배포).
+- 봇 차단·도메인 미확보 항목은 영구 미완료로 남을 수 있다(주기 재확인만 가능).
+- 수집 잡 `git_commit()` 은 `git add -A` 라서 다른 세션 WIP 를 함께 커밋할 수 있다(기존 동작, 손대지 않음).
+- `public/images/` 는 .gitignore → 썸네일이 로컬 파일시스템에만 있다(다른 머신 배포 시 누락).
+- D1 `tools` 테이블의 url 은 다음 06:00 동기화까지 최대 24시간 지연된다.
+- 요금·한도 문구는 크롤 시점 스냅샷(기존 위험, 자동 갱신 없음).
+
+### 다음 행동
+
+1. 내일 07:30 이후 로그·원장으로 자동 발화 확인.
+2. 남은 66건 소진 경과 확인(하루 15건 기준 약 5일).
+3. 자동 승격분 주기 감사 — 원장의 `step=url, result=done` 목록을 md 설명과 대조.
+
 ## 2026-10-18 20:30 KST — AIK24-D1-OPT-01: D1 절감안 ①~④ 적용 + 실측 검증 (배포 완료)
 
 ### 배경

@@ -317,10 +317,14 @@ TopAI.tools      ─┘                         DeepSeek/GPT 한국어 메타데
                                             MD 파일 저장
                                             src/content/tools/{slug}.md
                                                     ↓
+                                    후처리 (scripts/tools_postprocess.py)
+                                    ① 실제 URL 승격 ② 심화 스키마 v2 ③ 썸네일
+                                    (커밋·배포 **전** 수행 — 비차단, 실패해도 수집분은 배포)
+                                                     ↓
                                             git commit + push
                                                     ↓
-                                            Cloudflare Pages 배포
-                                            (scripts/deploy.sh)
+                                            Cloudflare 배포
+                                            (scripts/deploy.sh — Workers + Assets)
 ```
 
 ### 10.2 실행 주기
@@ -328,9 +332,30 @@ TopAI.tools      ─┘                         DeepSeek/GPT 한국어 메타데
 | 방식 | 실행 명령어 | 시각 |
 |------|-----------|------|
 | **launchd** (`kr.aikorea24.tools-collector`) | `.venv/bin/python3 scripts/tools_collector.py --collect --batch 10` | 매일 **06:00** |
+| **launchd** (`kr.aikorea24.tools-postprocess`) | `bash scripts/tools_postprocess_daily.sh` (`--sweep 15`) | 매일 **07:30** |
 | 수동 (수집+처리) | `python3 scripts/tools_collector.py --collect --batch 5` | — |
 | dry-run | `python3 scripts/tools_collector.py --collect --dry-run` | — |
 | 샘플 테스트 | `python3 scripts/tools_collector.py --sample` | — |
+| 후처리 수동(밀린 항목) | `python3 scripts/tools_postprocess.py --sweep 20` | — |
+| 후처리 대상 확인 | `python3 scripts/tools_postprocess.py --list [--no-cooldown]` | — |
+
+### 10.2.1 후처리 자동화 (2026-10-18 신설, AIK24-TOOLSAUTO-01)
+
+수집 잡은 "새 도구"만 처리하므로 실패·누락분은 아무도 다시 보지 않으면 영구 미완료로 남는다.
+두 경로가 같은 모듈을 호출한다(중복 방어):
+
+1. **수집 잡 내부** — `tools_collector.main()` 이 신규 저장분을 커밋·배포 전에 후처리한다.
+   끄려면 `--no-postprocess`, 예산은 `--postprocess-budget`(기본 1200초).
+2. **일일 따라잡기 잡** — 매일 07:30 `--sweep 15` 로 미완료 항목을 처리하고,
+   콘텐츠가 바뀐 경우에만 커밋·배포한다(`scripts/tools_postprocess_daily.sh`).
+
+| 항목 | 규칙 |
+|------|------|
+| 순서 | URL 승격 → 심화 v2 → 썸네일 (심화 생성기가 md `url` 을 크롤 재료로 쓰므로 URL 을 먼저 확정) |
+| URL 승격 가드 | ① 도메인 라벨 == 이름 정규화(5자 이상) ② 제목/og:site_name 토큰 일치 ③ 설명에 도구성 키워드 ④ 봇 챌린지·판매중 도메인 제외 — 4개 모두 만족할 때만 |
+| 실패 재시도 | 실패는 `scripts/logs/tools_postprocess.jsonl` 원장에 기록, **7일 쿨다운**으로 매일 재시도하지 않는다 |
+| 실행 한계 | 시간 예산 초과 시 새 작업을 시작하지 않는다(멱등 — 다음 실행이 이어받는다) |
+| 감사 | 모든 승격·실패·생성이 원장에 근거(제목 등)와 함께 남는다 |
 
 ### 10.3 수집 소스
 
