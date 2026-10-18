@@ -1,4 +1,5 @@
 ---
+
 name: "The Drive AI"
 description: "AI가 구글드라이브·원드라이브·드롭박스 등 클라우드 파일을 자동으로 정리·검색해 업무 효율을 높여줍니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["보고서-작성", "pdf-요약", "문서-번역"]
 updated: "2026-10-14"
+image: "/images/tools/the-drive-ai.webp"
 ---
 
 ## 한줄 요약

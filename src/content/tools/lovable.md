@@ -1,4 +1,5 @@
 ---
+
 name: "Lovable"
 description: "코딩 지식 없이도 앱과 웹사이트를 쉽게 만들 수 있는 AI 플랫폼입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 42
 tasks: ["회의-요약", "프로젝트-관리", "업무-자동화"]
 updated: "2026-06-28"
+image: "/images/tools/lovable.webp"
 ---
 
 ## 한줄 요약

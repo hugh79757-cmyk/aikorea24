@@ -1,4 +1,5 @@
 ---
+
 name: "Knovari AI"
 description: "문서 속 민감한 개인정보를 자동으로 찾아 지워주는 보안 특화 AI 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["보고서-작성", "업무-자동화"]
 updated: "2026-08-26"
+image: "/images/tools/knovari-ai.webp"
 ---
 
 ## 한줄 요약

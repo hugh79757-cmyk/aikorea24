@@ -1,4 +1,5 @@
 ---
+
 name: "Train with Pasta"
 description: "말 한마디로 나만의 맞춤형 운동 루틴을 짜주고 음성으로 코칭해주는 AI 트레이너입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["일정-관리", "메모-정리"]
 updated: "2026-10-18"
+image: "/images/tools/train-with-pasta.webp"
 ---
 
 ## 한줄 요약

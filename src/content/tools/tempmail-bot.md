@@ -1,4 +1,5 @@
 ---
+
 name: "Tempmail.bot"
 description: "일회용 이메일 주소를 즉시 생성하여 익명으로 가입할 수 있는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이메일-작성", "회의-요약", "업무-자동화"]
 updated: "2026-07-03"
+image: "/images/tools/tempmail-bot.webp"
 ---
 
 ## 한줄 요약

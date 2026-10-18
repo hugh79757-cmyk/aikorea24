@@ -1,4 +1,5 @@
 ---
+
 name: "muse-video.ai"
 description: "텍스트를 입력하면 짧은 동영상을 생성하는 AI 툴입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["영상-제작", "영상-편집", "음성-변환"]
 updated: "2026-07-11"
+image: "/images/tools/muse-video-ai.webp"
 ---
 
 ## 한줄 요약

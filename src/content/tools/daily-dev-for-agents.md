@@ -1,4 +1,5 @@
 ---
+
 name: "daily.dev for agents"
 description: "개발자와 AI 에이전트가 개발 뉴스, 북마크, API 연동 워크플로우를 활용하는 마켓플레이스입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["코딩", "API-개발"]
 updated: "2026-10-15"
+image: "/images/tools/daily-dev-for-agents.webp"
 ---
 
 ## 한줄 요약

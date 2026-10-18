@@ -1,4 +1,5 @@
 ---
+
 name: "Papago"
 description: "언어 장벽을 없애주는 무료 AI 번역기입니다."
 category: "번역·학습"
@@ -12,6 +13,7 @@ featured: false
 order: 61
 tasks: ["번역", "글쓰기", "이메일-작성"]
 updated: "2026-06-28"
+image: "/images/tools/papago.webp"
 ---
 
 ## 한줄 요약

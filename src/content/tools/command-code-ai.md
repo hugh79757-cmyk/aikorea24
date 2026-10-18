@@ -1,4 +1,5 @@
 ---
+
 name: "Command Code AI"
 description: "다양한 AI 모델과의 상호작용을 지원하는 개발자 중심의 CLI 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["코딩", "업무-자동화", "API-개발"]
 updated: "2026-07-14"
+image: "/images/tools/command-code-ai.webp"
 ---
 
 ## 한줄 요약

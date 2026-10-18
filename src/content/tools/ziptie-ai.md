@@ -1,4 +1,5 @@
 ---
+
 name: "ZipTie AI"
 description: "고객 여정을 분석하여 콘텐츠 최적화를 지원하는 AI 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["회의-요약", "사업계획서", "SEO-최적화"]
 updated: "2026-07-04"
+image: "/images/tools/ziptie-ai.webp"
 ---
 
 ## 한줄 요약

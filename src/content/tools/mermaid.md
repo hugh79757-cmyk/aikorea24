@@ -1,4 +1,5 @@
 ---
+
 name: "Mermaid"
 description: "스마트폰 문자 메시지로 집이나 사무실에 있는 Mac을 원격 제어하여 업무를 수행하는 AI 에이전트입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["업무-자동화", "메모-정리", "일정-관리"]
 updated: "2026-10-17"
+image: "/images/tools/mermaid.webp"
 ---
 
 ## 한줄 요약

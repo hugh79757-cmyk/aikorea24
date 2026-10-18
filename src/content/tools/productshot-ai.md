@@ -1,4 +1,5 @@
 ---
+
 name: "Productshot AI"
 description: "AI를 활용해 제품 사진을 자동으로 생성하여 온라인 판매에 최적화합니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이미지-생성", "배경-제거"]
 updated: "2026-07-02"
+image: "/images/tools/productshot-ai.webp"
 ---
 
 ## 한줄 요약

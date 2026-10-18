@@ -1,4 +1,5 @@
 ---
+
 name: "AISHA AI"
 description: "문화적 배경을 고려한 개인화된 AI 챗 어시스턴트입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이메일-작성", "보고서-작성", "회의-요약"]
 updated: "2026-07-05"
+image: "/images/tools/aisha-ai.webp"
 ---
 
 ## 한줄 요약

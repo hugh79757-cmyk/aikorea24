@@ -1,4 +1,5 @@
 ---
+
 name: "ColoringDaily"
 description: "텍스트와 사진을 활용해 인쇄 가능한 색칠 페이지를 생성하는 툴입니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["이미지-생성", "프레젠테이션"]
 updated: "2026-07-18"
+image: "/images/tools/coloringdaily.webp"
 ---
 
 ## 한줄 요약

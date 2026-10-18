@@ -1,4 +1,5 @@
 ---
+
 name: "Lemonade AI"
 description: "Lemonade AI는 텍스트, 이미지, 코드, 음성을 다룰 수 있는 로컬 AI 플랫폼입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["코딩", "업무-자동화", "회의-요약"]
 updated: "2026-07-09"
+image: "/images/tools/lemonade-ai.webp"
 ---
 
 ## 한줄 요약

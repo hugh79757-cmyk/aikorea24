@@ -1,4 +1,5 @@
 ---
+
 name: "Kai"
 description: "Kai는 캘린더·이메일·업무를 자동으로 관리해 주는 AI 비서로, 바쁜 직장인에게 시간과 스트레스를 절감해 줍니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["일정-관리", "이메일-작성", "회의-요약"]
 updated: "2026-10-14"
+image: "/images/tools/kai.webp"
 ---
 
 ## 한줄 요약

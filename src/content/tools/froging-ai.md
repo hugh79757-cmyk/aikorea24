@@ -1,4 +1,5 @@
 ---
+
 name: "Froging AI"
 description: "텍스트와 이미지를 입력하면 고품질 AI 영상으로 변환해 주는 마케팅용 영상 제작 도구입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["영상-제작", "sns-콘텐츠", "유튜브-편집"]
 updated: "2026-08-29"
+image: "/images/tools/froging-ai.webp"
 ---
 
 ## 한줄 요약

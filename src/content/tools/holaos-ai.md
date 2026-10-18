@@ -1,4 +1,5 @@
 ---
+
 name: "holaOS AI"
 description: "여러 앱을 연결해 문서 작성과 업무 자동화를 돕는 AI 비서 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "자동화-워크플로우", "이메일-작성"]
 updated: "2026-08-15"
+image: "/images/tools/holaos-ai.webp"
 ---
 
 ## 한줄 요약

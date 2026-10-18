@@ -1,4 +1,5 @@
 ---
+
 name: "GBrain Tools"
 description: "비밀번호 노출 없이 AI 서비스에 Gmail, GitHub 등 계정을 안전하게 연동하는 AI 전용 패스워드 매니저입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "자동화-워크플로우", "코딩"]
 updated: "2026-10-17"
+image: "/images/tools/gbrain-tools.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Forthwrite AI"
 description: "Gmail과 Outlook에서 사용하는 AI 이메일 작성 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["이메일-작성", "회의록", "보고서-작성"]
 updated: "2026-07-08"
+image: "/images/tools/forthwrite-ai.webp"
 ---
 
 ## 한줄 요약

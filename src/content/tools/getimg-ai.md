@@ -1,4 +1,5 @@
 ---
+
 name: "Getimg.ai"
 description: "다양한 작업에 적합한 AI 도구를 쉽게 찾을 수 있는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["업무-자동화", "데이터-분석", "프로젝트-관리"]
 updated: "2026-07-13"
+image: "/images/tools/getimg-ai.webp"
 ---
 
 ## 한줄 요약

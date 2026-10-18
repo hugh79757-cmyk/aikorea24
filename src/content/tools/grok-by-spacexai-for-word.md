@@ -1,4 +1,5 @@
 ---
+
 name: "Grok by SpaceXAI for Word"
 description: "Grok은 Word에서 메모를 구조화하고 일관성을 유지하는 데 유용한 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["글쓰기", "회의록", "보고서-작성"]
 updated: "2026-06-28"
+image: "/images/tools/grok-by-spacexai-for-word.webp"
 ---
 
 ## 한줄 요약

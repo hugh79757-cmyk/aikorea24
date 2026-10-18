@@ -1,4 +1,5 @@
 ---
+
 name: "Upsolve AI"
 description: "신뢰할 수 있는 데이터 에이전트를 구축하고 평가하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["데이터-분석", "보고서-작성", "회의록"]
 updated: "2026-06-28"
+image: "/images/tools/upsolve-ai.webp"
 ---
 
 ## 한줄 요약

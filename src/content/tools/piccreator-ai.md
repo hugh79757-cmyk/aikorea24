@@ -1,4 +1,5 @@
 ---
+
 name: "PicCreator AI"
 description: "텍스트로 이미지를 생성하고 편집할 수 있는 AI 툴입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이미지-생성", "썸네일-제작", "배경-제거"]
 updated: "2026-07-04"
+image: "/images/tools/piccreator-ai.webp"
 ---
 
 ## 한줄 요약

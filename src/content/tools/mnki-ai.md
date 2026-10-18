@@ -1,4 +1,5 @@
 ---
+
 name: "MNKI AI"
 description: "스케치와 평면도를 4K 포토리얼리틱 비주얼로 변환하는 AI 툴입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이미지-생성", "프레젠테이션", "UI-디자인"]
 updated: "2026-07-13"
+image: "/images/tools/mnki-ai.webp"
 ---
 
 ## 한줄 요약

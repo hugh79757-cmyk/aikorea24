@@ -11,8 +11,12 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import io
+import os
 import re
 import sys
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -45,6 +49,23 @@ CHALLENGE_MARKERS = (
 )
 
 
+def validate_thumb(path: Path) -> tuple[bool, str]:
+    """빈 화면·로고 수준 결과를 걸러낸다. 0~1KB webp = 흰 페이지 스크린샷(실측)."""
+    from PIL import Image, ImageStat
+
+    try:
+        size = path.stat().st_size
+        if size < MIN_THUMB_BYTES:
+            return False, f"SMALL_{size}B"
+        with Image.open(path) as im:
+            std = ImageStat.Stat(im.convert("L")).stddev[0]
+        if std < MIN_THUMB_STD:
+            return False, f"BLANK_std{std:.1f}"
+        return True, f"{size // 1024}KB"
+    except Exception as e:
+        return False, "VERIFY_" + type(e).__name__
+
+
 async def is_challenge(page) -> bool:
     try:
         title = (await page.title() or "").lower()
@@ -69,6 +90,34 @@ def target_url(fm: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
+async def og_from_page(page, out: Path) -> tuple[bool, str]:
+    """브라우저 세션 안에서 og:image 를 읽어 내려받는다(핫링크·403 우회 아님 — 세션 쿠키 사용)."""
+    from PIL import Image, ImageOps
+
+    try:
+        img_url = await page.evaluate(
+            "() => { const m = document.querySelector('meta[property=\"og:image\"]');"
+            " return m ? m.content : null; }"
+        )
+        if not img_url:
+            return False, "NO_OG_IMAGE"
+        if any(k in img_url for k in GENERIC_OG_MARKERS):
+            return False, "OG_GENERIC"
+        resp = await page.request.get(img_url)
+        if not resp.ok:
+            return False, f"OG_HTTP_{resp.status}"
+        with Image.open(io.BytesIO(await resp.body())) as im:
+            if im.size[0] < MIN_OG_W or im.size[1] < MIN_OG_H:
+                return False, f"OG_SMALL_{im.size[0]}x{im.size[1]}"
+            fitted = ImageOps.fit(im.convert("RGB"), (TARGET_W, TARGET_H), Image.LANCZOS)
+            out.parent.mkdir(parents=True, exist_ok=True)
+            fitted.save(out, "WEBP", quality=75)
+        ok, why = validate_thumb(out)
+        return (True, f"og {why}") if ok else (False, "OG_" + why)
+    except Exception as e:
+        return False, "BR_OG_" + type(e).__name__
+
+
 async def capture(browser, url: str, out: Path) -> tuple[bool, str]:
     from PIL import Image
 
@@ -77,7 +126,8 @@ async def capture(browser, url: str, out: Path) -> tuple[bool, str]:
         await page.goto(url, wait_until="domcontentloaded", timeout=TIMEOUT_MS)
         await page.wait_for_timeout(SETTLE_MS)
         if await is_challenge(page):
-            return False, "BOT_CHALLENGE"
+            good, msg = await og_from_page(page, out)
+            return (True, "br-og " + msg) if good else (False, f"BOT_CHALLENGE | {msg}")
         # 병렬 실행 시 공유 tmp 충돌 방지 — slug 로 고유화
         tmp = ROOT / "scripts" / f".thumb_tmp_{out.stem}.jpg"
         await page.screenshot(path=str(tmp), type="jpeg", quality=90)
@@ -85,11 +135,115 @@ async def capture(browser, url: str, out: Path) -> tuple[bool, str]:
             im = im.convert("RGB").resize((TARGET_W, TARGET_H), Image.LANCZOS)
             out.parent.mkdir(parents=True, exist_ok=True)
             im.save(out, "WEBP", quality=75)
-        return True, f"{out.stat().st_size // 1024}KB"
+        ok, why = validate_thumb(out)
+        if ok:
+            return True, why
+        # 흰 화면(JS 미렌더 등) → 같은 세션에서 og:image 로 대체 시도
+        out.unlink(missing_ok=True)
+        good, msg = await og_from_page(page, out)
+        return (True, "br-og " + msg) if good else (False, f"BLANK({why}) | {msg}")
     except Exception as e:
         return False, type(e).__name__ + ": " + str(e).split("\n")[0][:90]
     finally:
         await page.close()
+
+
+async def browser_og_capture(browser, url: str, out: Path) -> tuple[bool, str]:
+    """브라우저로 페이지만 열고 og:image 만 받아온다(--route browser-og)."""
+    page = await browser.new_page(viewport=VIEWPORT)
+    try:
+        await page.goto(url, wait_until="domcontentloaded", timeout=TIMEOUT_MS)
+        await page.wait_for_timeout(SETTLE_MS)
+        return await og_from_page(page, out)
+    except Exception as e:
+        return False, "BR_" + type(e).__name__ + ": " + str(e).split("\n")[0][:70]
+    finally:
+        await page.close()
+
+
+# ── og:image 폴백 (2026-10-18 추가) ────────────────────────────────────────
+# 집계 사이트(topai.tools 등)는 브라우저 캡처가 봇 챌린지로 막히지만, 일반 HTTP
+# 요청에는 원본 사용화면(1920×1080)을 og:image 로 내려준다(실측 12/12 성공).
+UA_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                  "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36",
+}
+AGGREGATOR_HOSTS = ("topai.tools", "theresanaiforthat.com", "futurepedia.io", "producthunt.com")
+# 사이트 자체 홍보 이미지(툴 화면이 아님) — 썸네일로 쓰면 오해를 준다.
+GENERIC_OG_MARKERS = ("/assets/img/splash", "/img/favicon", "apple-touch-icon", "/default-og")
+MIN_OG_W, MIN_OG_H = 600, 300  # 로고 수준의 작은 이미지는 거부
+MIN_THUMB_BYTES = 4096         # 0~1KB webp = 흰 화면 스크린샷
+MIN_THUMB_STD = 8.0            # 휘도 표준편차 — 단색에 가까우면 빈 화면
+
+
+def is_aggregator(url: str) -> bool:
+    host = urllib.parse.urlparse(url).netloc.lower().replace("www.", "")
+    return any(h in host for h in AGGREGATOR_HOSTS)
+
+
+def _http_get(url: str, timeout: int = 20) -> bytes:
+    req = urllib.request.Request(url, headers=UA_HEADERS)
+    with urllib.request.urlopen(req, timeout=timeout) as r:
+        return r.read()
+
+
+def og_page_candidates(md_url: str, slug: str) -> list[str]:
+    """집계 사이트 URL 이면 슬러그 기반 툴 페이지를 먼저 시도(`topai.tools#` 같은 깨진 URL 대응)."""
+    cands: list[str] = []
+    if "topai.tools" in md_url:
+        cands.append(f"https://topai.tools/t/{slug}")
+    cands.append(md_url)
+    seen, uniq = set(), []
+    for u in cands:
+        if u and u not in seen:
+            seen.add(u)
+            uniq.append(u)
+    return uniq
+
+
+def og_capture(md_url: str, slug: str, out: Path) -> tuple[bool, str]:
+    """og:image 를 내려받아 16:9 썸네일로 저장한다(브라우저 불필요)."""
+    from PIL import Image, ImageOps
+
+    last = "NO_OG_IMAGE"
+    for page_url in og_page_candidates(md_url, slug):
+        try:
+            html = _http_get(page_url).decode("utf-8", "ignore")
+        except Exception as e:
+            last = "OG_PAGE_" + type(e).__name__
+            continue
+        m = re.search(r'property=["\']og:image["\'][^>]*?content=["\']([^"\']+)', html) \
+            or re.search(r'content=["\']([^"\']+)["\'][^>]*?property=["\']og:image', html)
+        if not m:
+            last = "NO_OG_IMAGE"
+            continue
+        img_url = urllib.parse.urljoin(page_url, m.group(1))
+        if any(k in img_url for k in GENERIC_OG_MARKERS):
+            last = "OG_GENERIC"
+            continue
+        try:
+            data = _http_get(img_url, timeout=30)
+        except Exception as e:
+            last = "OG_IMG_" + type(e).__name__
+            continue
+        try:
+            with Image.open(io.BytesIO(data)) as im:
+                if im.size[0] < MIN_OG_W or im.size[1] < MIN_OG_H:
+                    last = f"OG_SMALL_{im.size[0]}x{im.size[1]}"
+                    continue
+                fitted = ImageOps.fit(im.convert("RGB"), (TARGET_W, TARGET_H), Image.LANCZOS)
+                out.parent.mkdir(parents=True, exist_ok=True)
+                fitted.save(out, "WEBP", quality=75)
+            ok, why = validate_thumb(out)
+            if ok:
+                return True, f"og {why}"
+            out.unlink(missing_ok=True)
+            last = "OG_" + why
+            continue
+        except Exception as e:
+            last = "OG_DECODE_" + type(e).__name__
+            continue
+    return False, last
 
 
 def write_image_field(path: Path, rel: str) -> None:
@@ -97,20 +251,33 @@ def write_image_field(path: Path, rel: str) -> None:
     fm, body, closing = split_frontmatter(text)
     if fm == "\x00":
         raise RuntimeError(f"frontmatter 없음: {path.name}")
-    line = f'image: "{rel}"\n'
-    path.write_text(f"---\n{fm.rstrip()}\n{line}---{body}", encoding="utf-8")
+    line = f'image: "{rel}"'
+    if re.search(r"^image\s*:", fm, re.M):
+        # 재캡처(품질 교체) — 기존 줄을 교체해 중복 image: 를 만들지 않는다.
+        fm = re.sub(r"^image\s*:.*$", line, fm, count=1, flags=re.M)
+        path.write_text(f"---{fm}---{body}", encoding="utf-8")
+        return
+    path.write_text(f"---\n{fm.rstrip()}\n{line}\n---{body}", encoding="utf-8")
 
 
 async def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--apply", action="store_true", help="실제로 캡쳐 + md 수정")
     ap.add_argument("--limit", type=int, default=0, help="앞 N 개만")
+    ap.add_argument("--route", choices=("auto", "screenshot", "og", "browser-og"), default="auto",
+                    help="auto=스크린샷→og:image 폴백(기본), screenshot=브라우저만, og=og:image만, "
+                         "browser-og=브라우저 세션으로 og:image 만 수집")
+    ap.add_argument("--channel", default="", help="브라우저 채널 (chrome = 시스템 Chrome 사용)")
+    ap.add_argument("--slugs", default="", help="쉼표로 지정한 슬러그만 처리(실패분 재시도용)")
     args = ap.parse_args()
 
     jobs = []
+    want = {s.strip() for s in args.slugs.split(",") if s.strip()} if args.slugs else set()
     for p in sorted(TOOLS_DIR.glob("*.md")):
         fm, _, _ = split_frontmatter(p.read_text(encoding="utf-8"))
-        if fm == "\x00" or re.search(r"^image\s*:", fm, re.M):
+        if fm != "\x00" and re.search(r"^image\s*:", fm, re.M) and p.stem not in want:
+            continue
+        if fm == "\x00":
             continue
         if p.stem in SKIP:
             print(f"  [skip] {p.stem} — D1 스크린샷 보유")
@@ -120,6 +287,9 @@ async def main() -> int:
             print(f"  [skip] {p.stem} — url 없음")
             continue
         jobs.append((p, u))
+
+    if args.slugs:
+        jobs = [(p, u) for p, u in jobs if p.stem in want]
 
     if args.limit:
         jobs = jobs[: args.limit]
@@ -134,12 +304,31 @@ async def main() -> int:
     ok, fail = [], []
     sem = asyncio.Semaphore(CONCURRENCY)
     async with async_playwright() as pw:
-        browser = await pw.chromium.launch(headless=True)
+        # 2026-10-18: 로컬 캐시에 1228 이 없고 1234 만 있는 환경 대응.
+        # 기존 동작 보존 — AIK24_CHROMIUM_PATH 미설정 시 이전과 동일하게 기본 실행파일을 쓴다.
+        exe = os.environ.get("AIK24_CHROMIUM_PATH") or None
+        channel = args.channel or os.environ.get("AIK24_CHROME_CHANNEL") or None
+        if channel:
+            # 시스템 Chrome — 번들 headless shell 이 봇 차단에 걸리는 사이트 대응(2026-10-18 실측)
+            browser = await pw.chromium.launch(headless=True, channel=channel)
+        elif exe:
+            browser = await pw.chromium.launch(headless=True, executable_path=exe)
+        else:
+            browser = await pw.chromium.launch(headless=True)
 
         async def worker(p, u):
             async with sem:
                 rel = f"/images/tools/{p.stem}.webp"
-                good, msg = await capture(browser, u, ROOT / "public" / rel.lstrip("/"))
+                dest = ROOT / "public" / rel.lstrip("/")
+                if args.route == "browser-og":
+                    good, msg = await browser_og_capture(browser, u, dest)
+                elif args.route == "og" or (args.route == "auto" and is_aggregator(u)):
+                    good, msg = await asyncio.to_thread(og_capture, u, p.stem, dest)
+                else:
+                    good, msg = await capture(browser, u, dest)
+                    if not good and args.route == "auto":
+                        good2, msg2 = await asyncio.to_thread(og_capture, u, p.stem, dest)
+                        good, msg = (True, f"{msg}→{msg2}") if good2 else (False, f"{msg} | {msg2}")
                 if good:
                     write_image_field(p, rel)
                     ok.append(p.stem)

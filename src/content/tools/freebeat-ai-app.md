@@ -1,4 +1,5 @@
 ---
+
 name: "Freebeat.ai App"
 description: "음악 파일만 올리면 비트에 맞춰 자동으로 영상 효과와 편집을 완성해주는 영상 제작 AI입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["영상-제작", "영상-편집", "음악-생성"]
 updated: "2026-08-23"
+image: "/images/tools/freebeat-ai-app.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Photoupscaler AI"
 description: "AI를 활용해 이미지를 4K/8K 해상도로 확대하여 선명도를 높이는 툴입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["이미지-생성", "썸네일-제작"]
 updated: "2026-06-30"
+image: "/images/tools/photoupscaler-ai.webp"
 ---
 
 ## 한줄 요약

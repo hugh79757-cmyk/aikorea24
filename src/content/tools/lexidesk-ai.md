@@ -1,4 +1,5 @@
 ---
+
 name: "LexiDesk AI"
 description: "법률 사무소를 위한 24시간 고객 접수 자동화 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["회의-요약", "업무-자동화", "CRM"]
 updated: "2026-06-29"
+image: "/images/tools/lexidesk-ai.webp"
 ---
 
 ## 한줄 요약

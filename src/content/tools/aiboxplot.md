@@ -1,4 +1,5 @@
 ---
+
 name: "aiboxplot"
 description: "복잡한 데이터를 입력하면 논문이나 보고서에 바로 쓸 수 있는 전문적인 그래프로 변환해 주는 시각화 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["데이터-분석", "인포그래픽", "보고서-작성"]
 updated: "2026-08-18"
+image: "/images/tools/aiboxplot.webp"
 ---
 
 ## 한줄 요약

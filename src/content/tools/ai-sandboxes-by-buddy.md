@@ -1,4 +1,5 @@
 ---
+
 name: "AI Sandboxes by Buddy"
 description: "AI가 생성한 코드를 안전하게 테스트하고 실행할 수 있는 격리된 Linux 가상 환경입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["코딩", "테스트", "API-개발"]
 updated: "2026-10-16"
+image: "/images/tools/ai-sandboxes-by-buddy.webp"
 ---
 
 ## 한줄 요약

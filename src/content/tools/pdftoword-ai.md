@@ -1,4 +1,5 @@
 ---
+
 name: "PDFtoword AI"
 description: "PDF 파일을 Word, Excel 등으로 변환하고 편집할 수 있는 온라인 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["문서-번역", "보고서-작성", "회의록"]
 updated: "2026-07-03"
+image: "/images/tools/pdftoword-ai.webp"
 ---
 
 ## 한줄 요약

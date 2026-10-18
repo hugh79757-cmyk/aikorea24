@@ -1,4 +1,5 @@
 ---
+
 name: "Alphio AI"
 description: "자연어 명령으로 자동 거래를 수행하는 AI 투자 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["업무-자동화", "데이터-분석", "프로젝트-관리"]
 updated: "2026-07-18"
+image: "/images/tools/alphio-ai.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "Motiofy AI"
 description: "정지된 사진 한 장을 자연스러운 움직임이 담긴 짧은 영상으로 변환해 주는 AI 영상 생성 도구입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["영상-제작", "영상-편집", "sns-콘텐츠"]
 updated: "2026-08-16"
+image: "/images/tools/motiofy-ai.webp"
 ---
 
 ## 한줄 요약

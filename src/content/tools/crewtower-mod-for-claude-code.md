@@ -1,4 +1,5 @@
 ---
+
 name: "CrewTower Mod for Claude Code"
 description: "맥북의 노치 영역에서 AI 코딩 에우전트의 상태를 확인하고 명령을 승인하는 생산성 툴입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["코딩", "업무-자동화", "프로젝트-관리"]
 updated: "2026-10-18"
+image: "/images/tools/crewtower-mod-for-claude-code.webp"
 ---
 
 ## 한줄 요약

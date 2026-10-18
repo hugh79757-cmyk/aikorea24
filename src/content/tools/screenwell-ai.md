@@ -1,4 +1,5 @@
 ---
+
 name: "Screenwell.ai"
 description: "AI가 지원자와 짧은 영상 인터뷰를 진행해 점수와 인용문을 제공, 순위별 후보 리스트를 자동 생성합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["이력서", "보고서-작성", "프로젝트-관리"]
 updated: "2026-10-15"
+image: "/images/tools/screenwell-ai.webp"
 ---
 
 ## 한줄 요약

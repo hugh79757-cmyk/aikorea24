@@ -1,4 +1,5 @@
 ---
+
 name: "Taim"
 description: "스쳐 지나가는 아이디어와 생각을 음성 및 텍스트로 즉시 기록하고 맥락별로 정리해 주는 AI 메모 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["메모-정리", "일정-관리", "프로젝트-관리"]
 updated: "2026-10-17"
+image: "/images/tools/taim.webp"
 ---
 
 ## 한줄 요약

@@ -1,4 +1,5 @@
 ---
+
 name: "AIImageDetector.info"
 description: "AI 이미지 생성 여부를 분석해주는 도구로, 신뢰성 있는 결과를 제공합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["문서", "이미지", "업무"]
 updated: "2026-07-15"
+image: "/images/tools/aiimagedetector-info.webp"
 ---
 
 ## 한줄 요약

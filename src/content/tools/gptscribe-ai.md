@@ -1,4 +1,5 @@
 ---
+
 name: "GPTscribe AI"
 description: "음성 및 영상을 텍스트로 변환하여 검색 가능하게 만드는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의록", "문서-작성", "자막-생성"]
 updated: "2026-07-02"
+image: "/images/tools/gptscribe-ai.webp"
 ---
 
 ## 한줄 요약

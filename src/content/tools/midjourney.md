@@ -1,4 +1,5 @@
 ---
+
 name: "Midjourney"
 description: "예술적이고 감성적인 이미지를 생성하는 AI 도구입니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 10
 tasks: ["이미지-생성", "썸네일-제작", "로고-디자인"]
 updated: "2026-06-28"
+image: "/images/tools/midjourney.webp"
 ---
 
 ## 한줄 요약

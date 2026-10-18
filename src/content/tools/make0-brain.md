@@ -1,4 +1,5 @@
 ---
+
 name: "Make0 Brain"
 description: "여러 AI 앱에서 기억을 공유해 업무와 학습을 효율화하는 개인 AI 브레인입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["메모-정리", "프로젝트-관리", "보고서-작성"]
 updated: "2026-10-15"
+image: "/images/tools/make0-brain.webp"
 ---
 
 ## 한줄 요약

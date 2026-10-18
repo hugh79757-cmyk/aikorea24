@@ -1,4 +1,5 @@
 ---
+
 name: "Zooop AI"
 description: "Zooop AI는 AI를 활용해 4K 이미지와 1080p 영상을 생성하는 플랫폼입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["영상-제작", "영상-편집", "자막-생성"]
 updated: "2026-07-18"
+image: "/images/tools/zooop-ai.webp"
 ---
 
 ## 한줄 요약

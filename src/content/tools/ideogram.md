@@ -1,4 +1,5 @@
 ---
+
 name: "Ideogram"
 description: "텍스트를 정확하게 렌더링하여 로고와 포스터 제작에 유용한 AI입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 13
 tasks: ["로고-디자인", "썸네일-제작", "인포그래픽"]
 updated: "2026-06-28"
+image: "/images/tools/ideogram.webp"
 ---
 
 ## 한줄 요약

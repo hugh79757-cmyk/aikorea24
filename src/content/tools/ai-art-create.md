@@ -1,4 +1,5 @@
 ---
+
 name: "AI Art Create"
 description: "다양한 AI 모델로 이미지와 영상을 생성할 수 있는 툴입니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["이미지-생성", "영상-제작", "썸네일-제작"]
 updated: "2026-07-16"
+image: "/images/tools/ai-art-create.webp"
 ---
 
 ## 한줄 요약

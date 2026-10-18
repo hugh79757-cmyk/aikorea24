@@ -1,4 +1,5 @@
 ---
+
 name: "SJolt AI"
 description: "이미지 및 영상 생성과 배포를 간편하게 지원하는 API 플랫폼입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["영상-제작", "영상-편집", "이미지-생성"]
 updated: "2026-07-13"
+image: "/images/tools/sjolt-ai.webp"
 ---
 
 ## 한줄 요약

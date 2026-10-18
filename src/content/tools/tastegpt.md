@@ -1,4 +1,5 @@
 ---
+
 name: "TasteGPT"
 description: "다양한 AI 도구를 쉽게 찾아주는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "회의-요약", "문서-작성"]
 updated: "2026-07-02"
+image: "/images/tools/tastegpt.webp"
 ---
 
 ## 한줄 요약

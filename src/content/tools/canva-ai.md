@@ -1,4 +1,5 @@
 ---
+
 name: "Canva AI"
 description: "Canva AI는 손쉽게 디자인할 수 있는 도구로, 한국 사용자에게 유용합니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 14
 tasks: ["썸네일-제작", "프레젠테이션", "로고-디자인"]
 updated: "2026-06-28"
+image: "/images/tools/canva-ai.webp"
 ---
 
 ## 한줄 요약

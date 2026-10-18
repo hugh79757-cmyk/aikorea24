@@ -1,4 +1,5 @@
 ---
+
 name: "Cloudways Managed AI Agents"
 description: "복잡한 서버 설정 없이 나만의 AI 에이전트를 클라우드에 즉시 배포하고 운영할 수 있는 호스팅 서비스입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["업무-자동화", "챗봇-구축", "API-개발"]
 updated: "2026-08-22"
+image: "/images/tools/cloudways-managed-ai-agents.webp"
 ---
 
 ## 한줄 요약

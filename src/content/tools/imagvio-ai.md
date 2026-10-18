@@ -1,4 +1,5 @@
 ---
+
 name: "Imagvio AI"
 description: "AI 도구를 쉽게 찾아주는 플랫폼으로, 다양한 작업에 맞는 AI를 추천합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["업무-자동화", "데이터-분석", "회의-요약"]
 updated: "2026-07-09"
+image: "/images/tools/imagvio-ai.webp"
 ---
 
 ## 한줄 요약

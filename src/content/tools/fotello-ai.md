@@ -1,4 +1,5 @@
 ---
+
 name: "Fotello AI"
 description: "부동산 미디어 자동화로 사진 예약부터 편집까지 지원하는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["업무-자동화", "데이터-분석", "영상-편집"]
 updated: "2026-07-05"
+image: "/images/tools/fotello-ai.webp"
 ---
 
 ## 한줄 요약

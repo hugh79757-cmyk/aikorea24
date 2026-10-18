@@ -1,4 +1,5 @@
 ---
+
 name: "Claude"
 description: "긴 문서 분석에 특화된 AI로, 보고서와 논문을 쉽게 분석합니다."
 category: "글쓰기·챗봇"
@@ -13,6 +14,7 @@ featured: true
 order: 2
 tasks: ["요약", "pdf-요약", "논문-요약"]
 updated: "2026-06-20"
+image: "/images/tools/claude.webp"
 ---
 
 ## 한줄 요약

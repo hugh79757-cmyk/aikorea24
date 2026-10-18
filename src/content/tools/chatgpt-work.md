@@ -1,4 +1,5 @@
 ---
+
 name: "Chatgpt Work"
 description: "문서, 스프레드시트, 프레젠테이션 등을 자동 생성하는 AI 도구입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 108
 tasks: ["문서-작성", "업무-자동화", "프레젠테이션"]
 updated: "2026-07-10"
+image: "/images/tools/chatgpt-work.webp"
 ---
 
 ## 한줄 요약

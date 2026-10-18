@@ -1,4 +1,5 @@
 ---
+
 name: "Spira AI"
 description: "브랜드 소셜 계정을 관리하는 AI 도구로, 콘텐츠 제작과 트렌드 분석을 자동화합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["sns-콘텐츠", "영상-제작", "업무-자동화"]
 updated: "2026-07-03"
+image: "/images/tools/spira-ai.webp"
 ---
 
 ## 한줄 요약

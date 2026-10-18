@@ -1,4 +1,5 @@
 ---
+
 name: "Producerai.art"
 description: "텍스트로 음악을 생성할 수 있는 AI 음악 생성기입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 107
 tasks: ["음악-생성", "음성-변환"]
 updated: "2026-07-04"
+image: "/images/tools/producerai-art.webp"
 ---
 
 ## 한줄 요약

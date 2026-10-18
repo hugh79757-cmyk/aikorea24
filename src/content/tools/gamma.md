@@ -1,4 +1,5 @@
 ---
+
 name: "Gamma"
 description: "주제 입력만으로 자동으로 깔끔한 발표자료를 생성합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: true
 order: 31
 tasks: ["ppt-발표"]
 updated: "2026-06-20"
+image: "/images/tools/gamma.webp"
 ---
 
 ## 한줄 요약

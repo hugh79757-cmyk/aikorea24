@@ -1,4 +1,5 @@
 ---
+
 name: "Microsoft Maia 300"
 description: "마이크로소프트의 차세대 초고속 AI 추론 인프라, Azure Maia 300을 소개합니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["코딩", "API-개발", "자동화-워크플로우"]
 updated: "2026-10-15"
+image: "/images/tools/microsoft-maia-300.webp"
 ---
 
 ## 한줄 요약

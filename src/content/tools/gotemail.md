@@ -1,4 +1,5 @@
 ---
+
 name: "GotEmail"
 description: "macOS 전용 메일 앱으로 Gmail·Outlook·iCloud·IMAP을 한 창에 모아 AI 초안·요약을 지원합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["이메일-작성", "요약", "회의-요약"]
 updated: "2026-10-14"
+image: "/images/tools/gotemail.webp"
 ---
 
 ## 한줄 요약

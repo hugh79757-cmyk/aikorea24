@@ -1,4 +1,5 @@
 ---
+
 name: "HumanizeAIText"
 description: "AI가 생성한 텍스트를 자연스러운 문장으로 바꿔주는 도구입니다."
 category: "글쓰기·챗봇"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["글쓰기", "보고서-작성", "카피라이팅"]
 updated: "2026-06-30"
+image: "/images/tools/humanizeaitext.webp"
 ---
 
 ## 한줄 요약

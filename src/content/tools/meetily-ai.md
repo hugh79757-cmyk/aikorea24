@@ -1,4 +1,5 @@
 ---
+
 name: "Meetily AI"
 description: "프라이버시를 중시하는 회의 보조 도구로, 실시간 음성 기록 및 요약 기능을 제공합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["회의-요약", "문서-작성", "업무-자동화"]
 updated: "2026-07-06"
+image: "/images/tools/meetily-ai.webp"
 ---
 
 ## 한줄 요약

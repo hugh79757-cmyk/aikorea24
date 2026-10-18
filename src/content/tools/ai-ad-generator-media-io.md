@@ -1,4 +1,5 @@
 ---
+
 name: "AI Ad Generator - Media.io"
 description: "각종 작업에 적합한 AI 도구를 쉽게 찾을 수 있는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 106
 tasks: ["업무-자동화", "프로젝트-관리", "데이터-분석"]
 updated: "2026-07-16"
+image: "/images/tools/ai-ad-generator-media-io.webp"
 ---
 
 ## 한줄 요약

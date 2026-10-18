@@ -1,4 +1,5 @@
 ---
+
 name: "Meev AI"
 description: "Meev AI는 브랜드의 AI 검색 가시성을 높여주는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["회의-요약", "데이터-분석", "보고서-작성"]
 updated: "2026-06-29"
+image: "/images/tools/meev-ai.webp"
 ---
 
 ## 한줄 요약

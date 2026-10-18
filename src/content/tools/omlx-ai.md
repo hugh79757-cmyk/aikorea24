@@ -1,4 +1,5 @@
 ---
+
 name: "Omlx AI"
 description: "애플 맥북에서 AI 모델을 직접 실행하여 보안 걱정 없이 빠르게 인공지능을 활용하게 해주는 도구입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["코딩", "데이터-분석", "챗봇-구축"]
 updated: "2026-08-20"
+image: "/images/tools/omlx-ai.webp"
 ---
 
 ## 한줄 요약

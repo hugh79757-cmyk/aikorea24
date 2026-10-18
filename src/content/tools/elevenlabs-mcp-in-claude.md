@@ -1,4 +1,5 @@
 ---
+
 name: "ElevenLabs MCP in Claude"
 description: "ElevenLabs의 고품질 음성 기술을 Claude와 결합하여, 텍스트를 자연스러운 목소리로 변환하고 콘텐츠를 제작하는 생산성 도구입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["텍스트-음성", "더빙", "글쓰기"]
 updated: "2026-08-19"
+image: "/images/tools/elevenlabs-mcp-in-claude.webp"
 ---
 
 ## 한줄 요약

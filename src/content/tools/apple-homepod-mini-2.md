@@ -1,4 +1,5 @@
 ---
+
 name: "Apple HomePod mini 2"
 description: "시리 AI와 생생한 사운드로 스마트한 집을 만들어주는 인공지능 스마트 스피커입니다."
 category: "영상·음성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["텍스트-음성", "음성-변환", "음악-생성"]
 updated: "2026-10-15"
+image: "/images/tools/apple-homepod-mini-2.webp"
 ---
 
 ## 한줄 요약

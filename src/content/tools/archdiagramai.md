@@ -1,4 +1,5 @@
 ---
+
 name: "ArchDiagramAI"
 description: "간단한 영어 프롬프트로 시스템 아키텍처 다이어그램을 생성하는 툴입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 101
 tasks: ["기획서", "프레젠테이션", "보고서-작성"]
 updated: "2026-07-04"
+image: "/images/tools/archdiagramai.webp"
 ---
 
 ## 한줄 요약

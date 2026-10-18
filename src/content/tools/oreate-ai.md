@@ -1,4 +1,5 @@
 ---
+
 name: "Oreate AI"
 description: "프로젝트 파일과 채팅을 통합 관리하는 올인원 AI 작업 공간입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 107
 tasks: ["회의-요약", "프레젠테이션", "프로젝트-관리"]
 updated: "2026-07-10"
+image: "/images/tools/oreate-ai.webp"
 ---
 
 ## 한줄 요약

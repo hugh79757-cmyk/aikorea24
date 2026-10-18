@@ -1,4 +1,5 @@
 ---
+
 name: "Freeflux AI"
 description: "텍스트 프롬프트를 이미지로 변환하는 무료 AI 이미지 생성기입니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 104
 tasks: ["이미지-생성", "썸네일-제작", "로고-디자인"]
 updated: "2026-07-08"
+image: "/images/tools/freeflux-ai.webp"
 ---
 
 ## 한줄 요약

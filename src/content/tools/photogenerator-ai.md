@@ -1,4 +1,5 @@
 ---
+
 name: "PhotoGenerator.ai"
 description: "텍스트와 이미지를 고해상도로 변환하는 이미지 생성 툴입니다."
 category: "이미지 생성"
@@ -12,6 +13,7 @@ featured: false
 order: 105
 tasks: ["이미지-생성", "배경-제거", "썸네일-제작"]
 updated: "2026-07-09"
+image: "/images/tools/photogenerator-ai.webp"
 ---
 
 ## 한줄 요약

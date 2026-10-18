@@ -1,4 +1,5 @@
 ---
+
 name: "Patternful.ai"
 description: "AI로 나만의 독특한 반복 패턴을 생성하여 디자인, 웹 배경, 섬유 제작에 활용하는 도구입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["이미지-생성", "웹디자인"]
 updated: "2026-08-17"
+image: "/images/tools/patternful-ai.webp"
 ---
 
 ## 한줄 요약

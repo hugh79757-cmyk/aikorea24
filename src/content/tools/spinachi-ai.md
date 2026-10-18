@@ -1,4 +1,5 @@
 ---
+
 name: "Spinachi AI"
 description: "왓츠앱으로 건강검진 결과지를 보내면 가족의 건강 기록을 자동으로 정리하고 재검사 일정을 알려주는 서비스입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 102
 tasks: ["일정-관리", "메모-정리", "의료-상담"]
 updated: "2026-10-16"
+image: "/images/tools/spinachi-ai.webp"
 ---
 
 ## 한줄 요약

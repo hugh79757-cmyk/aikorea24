@@ -1,4 +1,5 @@
 ---
+
 name: "Personwise AI"
 description: "단일 주제를 입력하면 완전한 온라인 강의를 생성하는 툴입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 100
 tasks: ["기획서", "보고서-작성", "프레젠테이션"]
 updated: "2026-07-12"
+image: "/images/tools/personwise-ai.webp"
 ---
 
 ## 한줄 요약

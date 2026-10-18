@@ -1,4 +1,5 @@
 ---
+
 name: "GroundingPI: A Grounding Foundation Model towards "
 description: "시각적 원시 요소와 언어를 연결해 물리 지능 연구를 지원하는 모델입니다."
 category: "코딩·개발"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["논문-요약", "데이터-분석", "보고서-작성"]
 updated: "2026-10-14"
+image: "/images/tools/groundingpi-a-grounding-foundation-model-towards.webp"
 ---
 
 ## 한줄 요약

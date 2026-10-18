@@ -1,4 +1,5 @@
 ---
+
 name: "Cantina AI"
 description: "다양한 AI 캐릭터를 만들어 소통할 수 있는 플랫폼입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["챗봇-구축", "영상-제작", "카피라이팅"]
 updated: "2026-06-29"
+image: "/images/tools/cantina-ai.webp"
 ---
 
 ## 한줄 요약

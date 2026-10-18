@@ -1,4 +1,5 @@
 ---
+
 name: "AIDesignHouse"
 description: "사진과 스케치를 2D/3D 평면도로 변환하는 AI 도구입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 103
 tasks: ["기획서", "프레젠테이션", "이미지-생성"]
 updated: "2026-07-04"
+image: "/images/tools/aidesignhouse.webp"
 ---
 
 ## 한줄 요약

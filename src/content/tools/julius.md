@@ -1,4 +1,5 @@
 ---
+
 name: "Julius AI"
 description: "사무 작업을 효율적으로 처리하는 AI 도구로, 엑셀 파일 관리와 프레젠테이션 제작이 가능합니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 32
 tasks: ["엑셀-자동화", "프레젠테이션", "데이터-분석"]
 updated: "2026-06-28"
+image: "/images/tools/julius.webp"
 ---
 
 ## 한줄 요약
