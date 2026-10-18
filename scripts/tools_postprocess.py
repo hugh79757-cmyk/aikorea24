@@ -258,9 +258,12 @@ def needs_thumb(slug: str) -> bool:
     return slug not in _thumb_skip()
 
 
-def ensure_thumb(slug: str, channel: str = "chrome", timeout: int = 300) -> tuple[str, str]:
+def ensure_thumb(slug: str, channel: str = "chrome", timeout: int = 300,
+                 dry_run: bool = False) -> tuple[str, str]:
     if not needs_thumb(slug):
         return "skip", "이미 있음(또는 D1 대체 이미지)"
+    if dry_run:  # dry-run 은 브라우저를 띄우지도, md 를 쓰지도 않는다
+        return "done", "[dry-run] 썸네일 캡처 대상"
     base = [sys.executable, str(SCRIPTS / "backfill_tool_thumbs.py"), "--apply",
             "--slugs", slug]
     plans: list[list[str]] = []
@@ -305,7 +308,7 @@ def postprocess_one(slug: str, *, dry_run: bool = False, channel: str = "chrome"
             continue
         try:
             if label == "thumb":
-                state, msg = fn(slug, channel=channel)
+                state, msg = fn(slug, channel=channel, dry_run=dry_run)
             else:
                 state, msg = fn(slug, dry_run=dry_run)
         except Exception as e:  # 한 단계 실패가 나머지 단계·파이프라인을 막지 않는다
@@ -313,9 +316,11 @@ def postprocess_one(slug: str, *, dry_run: bool = False, channel: str = "chrome"
         icon = {"done": "✅", "skip": "·", "fail": "⚠️"}[state]
         print(f"    [{label}] {icon} {slug} — {msg}", flush=True)
         {"done": done, "skip": skipped, "fail": failed}[state].append(f"{label}:{msg}")
-        if state in ("done", "fail"):  # 실패도 원인 추적을 위해 남긴다
+        # dry-run 은 아무것도 바꾸지 않으므로 원장에도 남기지 않는다(쿨다운·감사 오염 방지).
+        # 실패도 원인 추적을 위해 기록한다.
+        if state in ("done", "fail") and not dry_run:
             ledger({"slug": slug, "step": label, "result": state, "detail": msg,
-                    "dry_run": dry_run})
+                    "dry_run": False})
     return {"slug": slug, "done": done, "skipped": skipped, "failed": failed,
             "changed": bool(done) and not dry_run}
 

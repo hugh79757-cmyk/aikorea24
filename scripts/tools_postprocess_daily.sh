@@ -25,7 +25,7 @@ echo "=== $(date '+%F %T') 도구 후처리 시작 (sweep=$SWEEP, budget=${BUDGE
 "$PY" scripts/tools_postprocess.py --sweep "$SWEEP" --budget "$BUDGET"
 rc=$?
 
-# ── 변경분만 커밋·배포 (다른 작업의 미커밋 변경을 휩쓸지 않도록 경로를 한정한다) ──
+# ── 변경분만 커밋 (다른 작업의 미커밋 변경을 휩쓸지 않도록 경로를 한정한다) ──
 git add -A -- src/content/tools || true
 [ -f scripts/logs/tools_postprocess.jsonl ] && git add -- scripts/logs/tools_postprocess.jsonl
 
@@ -34,11 +34,16 @@ if git diff --cached --quiet; then
 else
   n=$(git diff --cached --numstat -- src/content/tools | wc -l | tr -d ' ')
   git commit -q -m "content(tools): 자동 후처리 — URL 승격·심화·썸네일 갱신 (${n}건)"
-  echo "  커밋 완료 (${n}건)"
-  if bash scripts/deploy.sh >/dev/null 2>&1; then
-    echo "  배포 완료 ✅"
+  echo "  커밋 완료 (콘텐츠 ${n}건)"
+  # 배포는 사이트 콘텐츠(md·이미지)가 바뀐 경우에만 — 원장만 갱신된 날은 재빌드하지 않는다.
+  if [ "$n" -gt 0 ]; then
+    if bash scripts/deploy.sh >/dev/null 2>&1; then
+      echo "  배포 완료 ✅"
+    else
+      echo "  ⚠️ 배포 실패 — 다음 실행에서 재시도(커밋은 유지)"
+    fi
   else
-    echo "  ⚠️ 배포 실패 — 다음 실행에서 재시도(커밋은 유지)"
+    echo "  콘텐츠 변경 없음 — 배포 생략(원장만 커밋)"
   fi
 fi
 
