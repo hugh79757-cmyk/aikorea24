@@ -1,3 +1,25 @@
+## 2026-10-18 14:52 — AIK24-TOOLSORT-01: 상단 고정 대역 정렬을 updated 최신순으로 (대표님 결정)
+
+### 한 일
+1. 대표님 질문("새로 등록된 도구가 왜 중간에 있나")의 원인 규명 — 14장 고정 대역 + 파일명 알파벳순.
+2. 대표님 결정에 따라 `src/pages/tools/index.astro` 2곳에 **updated 최신순 2차 키** 추가(서버 정렬 + 클라이언트 '추천순').
+3. 회귀 테스트 2건 추가(`tests/test_tools_index_sections.py`) — node 실행으로 비교 함수 실제 동작 검증 + 서버 정렬 소스 계약.
+4. 배포 + 라이브 실측.
+
+### 결과 (검증 근거)
+- [검증됨] 원인이 '동점 대역 + 안정 정렬'임을 데이터로 확정. 근거: 라이브 상위 14장 전부 `data-order="-1"` 이고 렌더 순서가 파일명 알파벳순(`4-mbti, aifetchly, aitraining-jobs, careops, geulway, goath, link2threads-l2t, litescribe, mixdesk, orkas, spriteframe, vecbase, waveroom-mastering, whiteboard-by-endless-ai`)과 정확히 일치. `scripts/sync_submissions_to_md.mjs:89` 가 제출 승인 md 에 `order: -1` 을 하드코딩하고, `index.astro:8` 의 sort 는 안정 정렬이라 컬렉션 순서(파일명)가 그대로 노출됐다.
+- [검증됨] 수정 반영. 근거: 배포 Version `b7e40231-1e45-48e8-a76d-336cdb0320c2` 후 라이브 상위 6장 = ① AITraining.jobs(10-18) ② SpriteFrame(10-18) ③ CareOps(10-15) ④ aiFetchly(09-28) ⑤ Mixdesk(09-28) ⑥ Orkas(09-28) — 대역 내 updated 내림차순, updated 동점은 파일명 순 유지.
+- [검증됨] 회귀 없음. 근거: `python3 -m pytest tests/ -q` → **803 passed / 10 skipped**. 산출: 801(직전) + 2(신규 정렬 테스트) = 803. 신규 테스트는 astro 소스에서 비교 함수 본문을 떼어내 node 로 6장 픽스처를 정렬해 기대 순서와 대조한다(서버 코드를 복제하지 않는다).
+- [검증됨] '추천순' 셀렉트 클릭 경로도 서버 렌더와 동일 순서. 근거: 배포 후 브라우저에서 `#sort-order` 를 'updated' → 'order' 로 실제 조작(`check_sort_click.mjs`)했을 때 상위 6장이 `["AITraining.jobs","SpriteFrame","CareOps 마음이","aiFetchly","Mixdesk","Orkas"]` 로 서버 렌더와 문자열 단위로 일치. 테스트는 astro 소스의 비교 함수 본문을 node 로 실행해 검증한다(서버 코드 복제 아님).
+
+### 잔존 위험
+- 대역 안 updated 가 같은 건들은 여전히 파일명 순이다(의도: 새로고침마다 순서가 흔들리지 않게). 같은 날 승인된 2건의 상대 순서는 파일명이 결정한다.
+- `order: -1` 자체는 그대로 두었다 — 대역을 없애는 선택(신규를 최신순 정렬에만 맡김)은 하지 않았다.
+- `parseInt(order) || 99` 특성상 `order: 0` 인 툴이 생기면 99 로 취급되어 뒤로 밀린다(기존 동작, 이번에 건드리지 않음).
+
+### 다음 행동
+- 대표님 육안 확인: /tools/ 첫 6장이 신규·최근 승인 순인지, 하단 광고 블록이 빈 공간 대신 '자세히 알아보기' 블록으로 보이는지.
+
 ## 2026-10-18 14:39 — AIK24-ADSBLANK-02: 하단 광고 슬롯 요청 0건의 원인 = CSP (수정·배포·실측)
 
 ### 한 일

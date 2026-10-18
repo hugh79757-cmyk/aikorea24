@@ -132,3 +132,58 @@ def test_review_sort_removed():
     assert "리뷰 순" not in text, "정렬 셀렉트에 '⭐ 리뷰 순' 이 남아 있다"
     assert "data-review" not in text, "data-review 속성이 남아 있다"
     assert "sort === 'review'" not in text, "review 정렬 분기가 남아 있다"
+
+
+# ── AIK24-TOOLSORT-01: 추천순 동점 처리 (2026-10-18 대표님 결정) ──────────────
+#   order=-1 고정 대역 14장이 파일명 알파벳순으로 굳어 신규 제출 건이 대역 중간에
+#   박혔다(실측: SpriteFrame 11번째). 2차 키로 updated 최신순을 넣어 신규가 맨 앞.
+SORT_FIXTURE = [
+    {"data-name": "Whiteboard", "data-order": "-1", "data-updated": "2026-09-23"},
+    {"data-name": "SpriteFrame", "data-order": "-1", "data-updated": "2026-10-18"},
+    {"data-name": "4초 mbti", "data-order": "-1", "data-updated": "2026-09-23"},
+    {"data-name": "CareOps", "data-order": "-1", "data-updated": "2026-10-15"},
+    {"data-name": "ChatGPT", "data-order": "1", "data-updated": "2026-06-28"},
+    {"data-name": "AITraining.jobs", "data-order": "-1", "data-updated": "2026-10-18"},
+]
+# order 동점 → updated 최신순, updated 까지 동점이면 입력 순서 유지(안정 정렬).
+SORT_EXPECTED = ["SpriteFrame", "AITraining.jobs", "CareOps", "Whiteboard", "4초 mbti", "ChatGPT"]
+
+
+def _extract_client_comparator() -> str:
+    """추천순 클라이언트 비교 함수 본문을 astro 소스에서 그대로 떼어낸다."""
+    text = PAGE.read_text(encoding="utf-8")
+    m = re.search(r"visible\.sort\(\(a, b\) => \{([\s\S]*?)\n      \}\);", text)
+    assert m, "index.astro 에서 추천순 비교 함수(visible.sort)를 찾지 못했다"
+    return m.group(1)
+
+
+@needs_node
+def test_recommended_sort_puts_newest_first_within_pinned_band():
+    """order 동점 대역에서 updated 최신순이 실제로 적용되는지 (node 실행)."""
+    script = (
+        "const mk = (o) => ({ getAttribute: (k) => (o[k] === undefined ? null : o[k]) });\n"
+        "let sort = 'order';\n"
+        "const cmp = (a, b) => {\n"
+        f"{_extract_client_comparator()}\n"
+        "};\n"
+        f"const cards = {json.dumps(SORT_FIXTURE, ensure_ascii=False)}.map(mk);\n"
+        "cards.sort(cmp);\n"
+        "console.log(JSON.stringify(cards.map((c) => c.getAttribute('data-name'))));\n"
+    )
+    proc = subprocess.run(["node", "-e", script], capture_output=True, text=True, cwd=str(REPO), timeout=120)
+    assert proc.returncode == 0, f"node 실행 실패: {proc.stderr.strip()[:500]}"
+    got = json.loads(proc.stdout.strip().splitlines()[-1])
+    assert got == SORT_EXPECTED, f"추천순 동점 처리 결과가 다르다\n  want={SORT_EXPECTED}\n  got ={got}"
+
+
+def test_server_sort_uses_same_updated_tiebreak():
+    """서버 렌더 정렬도 같은 2차 키를 써야 첫 화면과 '추천순' 클릭 결과가 일치한다."""
+    text = PAGE.read_text(encoding="utf-8")
+    start = text.index("const mdTools")
+    block = text[start:start + 700]
+    at = block.index(".sort(")
+    seg = block[at:block.index(");", at) + 2]
+    assert "a.data.order" in seg and "b.data.order" in seg, "1차 키(order)가 바뀌었다"
+    assert "data.updated" in seg and "localeCompare" in seg, (
+        "서버 정렬에 updated 2차 키가 없다 — 신규 제출 건이 상단 고정 대역 중간에 박힌다"
+    )
