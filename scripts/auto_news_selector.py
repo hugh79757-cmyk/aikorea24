@@ -8,7 +8,8 @@ v2 는 "한국인 초보자가 오늘 무료로 쓸 수 있는가?"를 LLM 도�
 브리핑은 뉴스 3건이다 (2026-10-16 개편):
 
   1. 무료 기회 1건 : v2_tag='free-opportunity' 최신 1건. 없으면 빈 슬롯 (강제 충전 금지).
-  2. Zen 변경   : source='OpenCode Zen' 무료 목록 변경 감지분을 최신순으로. LLM 점수 무관 우선.
+  2. Zen 변경   : source='OpenCode Zen' 무료 목록 **추가** 감지분 최신 **1건**까지.
+                  LLM 점수 무관 우선. 제공 중단 알림(`[제외] ...`)은 대상에서 뺀다.
   3. 일반 뉴스  : 나머지 슬롯을 LLM 도움 점수 상위로. 프로바이더 행은 제외.
 
 점수는 DB에 저장하지 않는다(선정 시점 한정).
@@ -44,12 +45,23 @@ POOL_LIMIT = 50
 CANDIDATE_LIMIT = 8  # LLM 평가 대상
 PER_TAG_CANDIDATES = 3  # 태그별 상위 3건만 후보로
 NEWS_CANDIDATES = 4  # 뉴스 슬롯 최대 4건 (태그별 상위 3건 중 라운드로빈)
-# AIK24-PIPE-04: 재충원 후보 상한 = 무료 기회 3 + Zen 3 + 일반 뉴스 9(태그 3종×3건).
+# AIK24-PIPE-04: 재충원 후보 상한 = 무료 기회 3 + Zen 2 + 일반 뉴스 9(태그 3종×3건).
 # 선정(CANDIDATE_LIMIT=8)보다 넓게 잡는다 — 중복 제거로 빈 슬롯이 생겼을 때만 쓰이고,
 # 그때는 이미 후보가 소진된 뒤라 더 깊은 풀이 필요하다.
 REFILL_POOL_LIMIT = 15
 SCORE_MIN = 6  # 3개 기준 평균 2점 미만 탈락
 TAG_ORDER = ("free-llm", "opensource", "tool")
+# 2026-10-18 대표님 지시 — "나오지 말아야 할 것이 나왔고, 나올 게 없다면 그 자리를 뉴스가 채워야 한다".
+# 실측(2026-10-18 09:00 KST 실행): 후보 8건(기회=3, zen=3, free-llm=3) 중 Zen 변경 3건이
+# 슬롯을 우선 독식해, 실제 뉴스 3건이 슬롯을 못 받고 제공 중단 알림 2건이 카드로 나갔다.
+ZEN_SLOT_LIMIT = 1  # 슬롯 2 — Zen 목록 변경은 최신 1건만. 남은 슬롯은 일반 뉴스가 채운다.
+# 제공 중단 알림([제외])은 브리핑 슬롯 대상이 아니다 — 독자가 오늘 할 행동이 없고,
+# 자동 글 생성이 사라진 사유를 추측하게 만든다(2026-10-18: 사유 날조 사고).
+EXCLUDED_TITLE_PREFIXES = ("[제외]",)
+# Zen 후보 조회 상한 — 슬롯 2(1건) + 재충원 여유 1건. 2026-10-18 이전에는 MAX_COUNT(3)건을
+# 조회해 pool 좌석(CANDIDATE_LIMIT=8)을 3석 차지했고, 그중 2석은 쓸 수 없어 실제 뉴스
+# 후보가 그만큼 잘렸다(후보 로그: 기회=3, zen=3, free-llm=2). 슬롯 상한과 맞춘다.
+ZEN_POOL_LIMIT = ZEN_SLOT_LIMIT + 1
 KST = timezone(timedelta(hours=9))
 SCORE_RE = re.compile(r"실용성\s*[:=]\s*(\d)|이해도\s*[:=]\s*(\d)|유용성\s*[:=]\s*(\d)")
 
@@ -120,19 +132,35 @@ def get_opportunity_news(limit=1):
     """ % (_COLS, _opportunity_cutoff(), limit))
 
 
+def _excluded_titles_sql():
+    """슬롯에서 뺄 제목 접두 조건 (제공 중단 알림 등).
+
+    제목 접두만 본다 — 제외 알림은 제목이 `[제외] {모델} — ...` 로 고정돼 있다
+    (model_catalog.record_diff_to_news).
+    """
+    return " AND ".join(
+        "title NOT LIKE '" + p.replace("'", "''").replace("%", "") + "%'"
+        for p in EXCLUDED_TITLE_PREFIXES)
+
+
 def get_zen_changes(limit=MAX_COUNT):
     """슬롯 2: Zen 무료 목록 변경 감지분 (model_catalog.record_diff_to_news 가 넣은 행).
 
     source='OpenCode Zen' + v2_tag='free-llm'. 기계 감지된 사실이라 LLM 도움 점수와
     무관하게 pub_date 최신순으로 우선 배정한다 (2026-10-16 개편).
+
+    2026-10-18 대표님 지시: 제공 중단 알림(`[제외] ...`)은 후보에서 뺀다. 신규 추가
+    (`[신규 무료] ...`)만 슬롯 대상이다. 실제 슬롯 상한은 select_top_articles 의
+    ZEN_SLOT_LIMIT(=1) 이 적용된다.
     """
     return d1_query("""
         SELECT %s FROM news
         WHERE v2_pass = 1 AND source = 'OpenCode Zen' AND v2_tag = 'free-llm'
           AND created_at >= '%s'
+          AND %s
         ORDER BY pub_date DESC
         LIMIT %d
-    """ % (_COLS, _slot_cutoff(), limit))
+    """ % (_COLS, _slot_cutoff(), _excluded_titles_sql(), limit))
 
 
 def _slot_cutoff():
@@ -241,16 +269,22 @@ def select_top_articles(clusters, max_count=MAX_COUNT):
     else:
         log("  ⓘ 무료 기회 후보 없음 — 슬롯 1 비움 (강제 충전 없음)")
 
-    # 슬롯 2: Zen 변경 최신순. LLM 점수와 무관하게 우선한다.
-    zen = [a for a in articles if a.get("source") == "OpenCode Zen" and a["id"] not in used]
+    # 슬롯 2: Zen 변경 최신순. LLM 점수와 무관하게 우선하되 **최대 ZEN_SLOT_LIMIT(=1)건**만.
+    # 2026-10-18 이전에는 max_count 까지 채워 목록 변경 3건이 슬롯을 독식했고, 실제
+    # 뉴스가 밀려났다 (실측 로그: "[selector] ⓘ Zen 변경 3건 우선 배정" → 브리핑 3건 중
+    # 2건이 제공 중단 알림). 남은 슬롯은 아래 일반 뉴스가 점수순으로 채운다.
+    zen = [a for a in articles if a.get("source") == "OpenCode Zen" and a["id"] not in used
+           and not _is_excluded_notice(a)]
     zen.sort(key=_date_key)
+    zen_taken = 0
     for a in zen:
-        if len(picked) >= max_count:
+        if len(picked) >= max_count or zen_taken >= ZEN_SLOT_LIMIT:
             break
         picked.append(a)
         used.add(a["id"])
+        zen_taken += 1
     if zen:
-        log(f"  ⓘ Zen 변경 {len(zen)}건 우선 배정")
+        log(f"  ⓘ Zen 변경 {len(zen)}건 중 {zen_taken}건 배정 (슬롯 상한 {ZEN_SLOT_LIMIT})")
 
     # 슬롯 3: 나머지 = LLM 점수 상위 일반 뉴스 (프로바이더 행 제외, 출처 1건씩).
     rest = [a for a in ranked if a["id"] not in used
@@ -274,7 +308,7 @@ def interleave_candidates(limit):
     반환한다(에러 아님).
     """
     opp = get_opportunity_news(MAX_COUNT)
-    zen = get_zen_changes(MAX_COUNT)
+    zen = get_zen_changes(ZEN_POOL_LIMIT)
     per_tag = {t: get_recent_news(v2_tag=t, exclude_models=True)[:PER_TAG_CANDIDATES]
                for t in TAG_ORDER}
     news = [art for row in zip_longest(*(per_tag[t] for t in TAG_ORDER))
@@ -295,6 +329,16 @@ def _is_mechanical(article):
     프로바이더 목록 변경(OpenRouter/Kilo/NVIDIA 포함)은 전부 카탈로그 diff 가 만든 행이다."""
     return (article.get("source") in PROVIDER_SOURCES
             or article.get("v2_tag") == "free-opportunity")
+
+
+def _is_excluded_notice(article):
+    """슬롯 대상이 아닌 알림 행 (제공 중단 등) — 제목 접두로 판정한다.
+
+    SQL(get_zen_changes)에서 1차로 거르고, 여기서 2차로 거른다. 재충원 풀이나 다른
+    경로로 들어온 같은 행이 슬롯을 먹지 않게 하는 방어선이다 (2026-10-18).
+    """
+    title = article.get("title") or ""
+    return any(title.startswith(p) for p in EXCLUDED_TITLE_PREFIXES)
 
 
 # ---------------------------------------------------------------------------
@@ -432,11 +476,13 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
                   and a.get("source") not in PROVIDER_SOURCES], key=_date_key)
     picked += take(opp, needed - len(picked), "1 기회")
 
-    # 2) Zen 변경 최신순
+    # 2) Zen 변경 최신순 — select_top_articles 와 같은 슬롯 상한(1건)을 지킨다.
+    # (2026-10-18: 재충원 단계에서도 제공 중단 알림이 슬롯을 먹던 경로를 막는다)
     if len(picked) < needed:
         zen = sorted([a for a in fresh if a.get("source") == "OpenCode Zen"
-                      and a.get("v2_tag") == "free-llm"], key=_date_key)
-        picked += take(zen, needed - len(picked), "2 Zen")
+                      and a.get("v2_tag") == "free-llm"
+                      and not _is_excluded_notice(a)], key=_date_key)
+        picked += take(zen, min(needed - len(picked), ZEN_SLOT_LIMIT), "2 Zen")
 
     # 3) 일반 뉴스 — LLM 평가 점수 상위순 (동점은 최신순). 3단계까지 왔을 때만 평가한다.
     if len(picked) < needed:

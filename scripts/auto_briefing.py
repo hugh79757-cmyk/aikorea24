@@ -95,6 +95,54 @@ def _core_name(model_id):
     return c
 
 
+def _leaderboard_best(model_id):
+    """리더보드(영구 기록)에서 이 모델의 최고 점수 행. 없으면 None.
+
+    캐시(model_eval_cache.json)는 schema·TTL(20시간) 조건을 못 넘기면 조용히 비지만
+    리더보드는 남는다. 2026-10-18 실측: cat-jam-free 10/12 가 캐시 만료 때문에 브리핑에서
+    "12문항 평가 전 — 판단 보류"로 표기되어, 점수를 보여 주는 무료 모델 페이지와 정면으로
+    모순됐다(그 문구를 전제로 자동 발행 글이 사라진 사유를 지어내기까지 했다).
+    """
+    if not model_id:
+        return None
+    try:
+        rows = json.loads(LEADERBOARD_PATH.read_text(encoding="utf-8"))
+    except Exception as e:  # noqa: BLE001 — 조회 실패가 브리핑을 막지 않는다
+        log(f"    ⚠️ 리더보드 조회 실패: {type(e).__name__}")
+        return None
+    core = _core_name(model_id)
+    best = None
+    for r in (rows if isinstance(rows, list) else []):
+        if _core_name(r.get("model_id") or "") != core:
+            continue
+        if not r.get("score"):
+            continue
+        if best is None or (r.get("score") or 0) > (best.get("score") or 0):
+            best = r
+    return best
+
+
+def _leaderboard_lines(row, model_id):
+    """리더보드 행 → 판단 문구 줄 목록. 문항 버전이 다르면 그 사실을 밝히고 비교는 생략한다."""
+    qv = row.get("qv")
+    cur = model_eval.EVAL_QUESTIONS_VERSION
+    max_score = row.get("max_score") or 0
+    head = f"12문항 평가: {row['score']}/{max_score}"
+    if qv != cur:
+        head += f" (문항 v{qv} 기준 · 현재 v{cur})"
+    lines = [head]
+    if qv == cur:
+        avg = _top3_avg()
+        if avg is not None:
+            lines.append("현재 추천 Top 3 대비: " + ("추천 모델과 동급" if row["score"] >= avg
+                                                 else f"현재 추천 모델 대비 {avg - row['score']:g}점 낮음"))
+    ts = row.get("ts")
+    if ts:
+        lines.append("측정: " + datetime.fromtimestamp(ts, KST).strftime("%Y-%m-%d %H:%M"))
+    log(f"    📊 리더보드 점수 사용 (캐시 만료): {model_id} {head}")
+    return lines
+
+
 def _verified_running():
     """OpenCode에서 동작 확인된 모델 이름 집합 — 12문항 점수는 없는 층 (2026-10-16 대표님 지시)."""
     names = set()
@@ -115,11 +163,12 @@ def _verified_running():
 
 
 def verdict_block(model_id, source=None):
-    """모델 판단 문구 — 3단계 (2026-10-16 대표님 지시로 개편).
+    """모델 판단 문구 — 4단계 (2026-10-18 개편).
 
-    1) 12문항 점수 있음 → 점수 + Top 3 대비
-    2) 동작 확인됨·점수 없음 → "OpenCode 동작 확인됨 (12문항 평가 전)"
-    3) 미검증 → "12문항 평가 전 — 판단 보류"
+    1) 캐시에 12문항 점수 있음 → 점수 + Top 3 대비
+    2) 캐시 만료·미스지만 리더보드(영구 기록)에 점수 있음 → 점수 + 측정 시각
+    3) 동작 확인됨·점수 없음 → "OpenCode 동작 확인됨 (12문항 평가 전)"
+    4) 미검증 → "12문항 평가 전 — 판단 보류"
     추측하지 않는다. 이 함수는 브리핑을 막지 않는다.
     """
     _ = source  # 인터페이스 유지용 (지시서 지정 시그니처)
@@ -132,6 +181,10 @@ def verdict_block(model_id, source=None):
         log(f"    ⚠️ 모델 평가 예외: {type(e).__name__}: {str(e)[:100]}")
         ev = None
     if not ev or ev.get("score") is None:
+        # 캐시가 비어도 영구 기록에 점수가 있으면 그 점수를 쓴다 (2026-10-18 — 아래 tier 2).
+        row = _leaderboard_best(model_id)
+        if row:
+            return "\n".join(_leaderboard_lines(row, model_id))
         try:
             verified = bool(model_id) and _core_name(model_id) in _verified_running()
         except Exception:  # noqa: BLE001 — 확인 실패는 미검증으로 본다
@@ -140,7 +193,7 @@ def verdict_block(model_id, source=None):
             log(f"    ⓘ 12문항 평가 전 (동작 확인됨): {model_id}")
             return "OpenCode 동작 확인됨 (12문항 평가 전)"
         if model_id:
-            log(f"    ⓘ 12문항 평가 전 (캐시 없음): {model_id} → 판단 보류")
+            log(f"    ⓘ 12문항 평가 전 (캐시 없음 · 리더보드 없음): {model_id} → 판단 보류")
         return "12문항 평가 전 — 판단 보류"
     lines = [f"12문항 평가: {ev['score']}/{ev['max_score']} — {ev.get('label') or ''}".rstrip()]
     avg = _top3_avg()

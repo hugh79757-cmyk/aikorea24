@@ -265,6 +265,47 @@ def _news_lit(v):
     return "'" + str(v or "").replace("'", "''")[:500] + "'"
 
 
+LEADERBOARD_PATH = CATALOG_DIR / "model_leaderboard.json"
+# 제외 알림의 사유는 우리가 관측한 범위까지만 적는다. 2026-10-18: "OpenCode Zen 공식 공지에
+# 따르면 …" 이라는 출처 날조 문장이 자동 발행 글에 들어갔다 — 제공사는 공지를 내지 않았고,
+# 우리가 아는 것은 스냅샷 비교 결과뿐이다.
+REMOVAL_REASON = "제외 사유는 제공사 미공지(수집 스냅샷 비교)"
+
+
+def _core_model_name(model_id):
+    """`:free`/`-free` 접미사를 떼고 소문자로 — 프로바이더 표기 차이를 넘는다."""
+    c = (model_id or "").split("/")[-1].lower()
+    for suf in (":free", "-free"):
+        if c.endswith(suf):
+            c = c[: -len(suf)]
+    return c
+
+
+def _last_eval_text(model_id):
+    """리더보드에 남은 이 모델의 직전 12문항 결과 문자열. 없으면 None.
+
+    2026-10-18 실측: 무료 목록 변경 news 행이 항상 "12문항 평가 전 — 판단 보류"로 박혀
+    이미 10/12 를 받은 모델(cat-jam-free)까지 미평가로 소개됐고, 그 문구를 전제로 자동
+    발행 글이 제외 사유를 지어냈다. 점수가 남아 있으면 점수를 적는다.
+    """
+    if not model_id:
+        return None
+    try:
+        rows = json.loads(LEADERBOARD_PATH.read_text(encoding="utf-8"))
+    except Exception:  # noqa: BLE001 — 점수 조회 실패가 수집을 막지 않는다
+        return None
+    core = _core_model_name(model_id)
+    best = None
+    for r in (rows if isinstance(rows, list) else []):
+        if _core_model_name(r.get("model_id")) != core or not r.get("score"):
+            continue
+        if best is None or (r.get("score") or 0) > (best.get("score") or 0):
+            best = r
+    if not best:
+        return None
+    return f"{best['score']}/{best.get('max_score') or 12} (문항 v{best.get('qv')})"
+
+
 def record_diff_to_news(day, d):
     """diff 의 added/removed 를 news 테이블에 기록한다 (PIPE-03 작업 2).
 
@@ -298,6 +339,13 @@ def record_diff_to_news(day, d):
         else:
             title = f"[제외] {mid} — {source} 무료 목록에서 제외"
             tail = "제외"
+        # 2026-10-18: 점수가 남아 있으면 그 점수를 적고, 제외 알림에는 "제공사가 사유를
+        # 공지하지 않았다"는 관측 사실을 붙인다 — 사유는 우리가 알 수 없다.
+        score_text = _last_eval_text(mid)
+        desc_tail = (f"직전 12문항 평가 {score_text}" if score_text
+                     else "12문항 평가 전 — 판단 보류")
+        if kind != "added":
+            desc_tail += " · " + REMOVAL_REASON
         if title in seen:
             continue
         seen.add(title)
@@ -309,7 +357,7 @@ def record_diff_to_news(day, d):
             "(title, link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
             "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" % (
                 _news_lit(title[:200]), _news_lit(url),
-                _news_lit(f"{source} 무료 목록에 {tail} · 12문항 평가 전 — 판단 보류"),
+                _news_lit(f"{source} 무료 목록에 {tail} · {desc_tail}"),
                 _news_lit(source), _news_lit("AI"), _news_lit(now), _news_lit(url),
                 _news_lit(mid), _news_lit("us"), 1, _news_lit("free-llm")))
 

@@ -97,4 +97,6 @@ scripts/.d1_tier_alert_state.json.tmp
 
 # 구간 교체 도구(emdash_section_replace.py) 백업·원고 (2026-10-17)
 scripts/logs/backup_section_*.json
+scripts/logs/backup_zen_pending_*.json
+scripts/logs/backup_news_desc_*.json
 scripts/logs/tmp_sections/

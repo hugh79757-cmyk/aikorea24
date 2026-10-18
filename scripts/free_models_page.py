@@ -291,8 +291,16 @@ def zen_pending():
 
 
 def mark_zen_pending(mid, reason="OpenCode Zen — OpenRouter 경로 없음 · 호출 경로 미확보"):
+    """{model_id: 사유}. Zen 은 평가 '실패'가 아니라 '경로 미확보'다 (작업 4).
+
+    2026-10-18 수정: 예전에는 `mid in d` 면 무조건 돌아가 **첫 사유가 영구히 박혔다**
+    (cat-jam-free 는 10-14 의 "OpenRouter 경로 없음"으로 남았지만 실제 상태는
+    "Model unavailable → Zen 목록에서 제외"였다). 같은 사유일 때만 건너뛰고, 사유가
+    바뀌면 날짜와 함께 갱신한다.
+    """
     d = zen_pending()
-    if mid in d:
+    cur = d.get(mid) or {}
+    if isinstance(cur, dict) and cur.get("reason") == reason:
         return
     d[mid] = {"reason": reason, "ts": mc.time.strftime("%Y-%m-%d")}
     mc._write_json(ZEN_PENDING_PATH, d)
@@ -572,7 +580,10 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
     fails = verify.get("fail") or []
     if fails:
         out += ["## 점검 중", ""]
-        out += ["당일 호출 검증에 실패해 목록에서 제외된 모델입니다. 복구되면 다음 검증에서 복귀합니다.", ""]
+        # 2026-10-18: "검증에 실패해 목록에서 제외"는 인과가 뒤집힌 문장이었다 — 목록에서
+        # 사라진 것은 제공사 쪽이고(cat-jam-free·muse-spark 실측), 우리 쪽 결과는 "호출이
+        # 되지 않아 이 표에서 뺐다"이다. 관측 사실 그대로 쓴다.
+        out += ["당일 호출 검증에서 응답하지 않아 이 목록에서 뺀 모델입니다. 호출이 다시 되면 다음 검증에서 포함됩니다.", ""]
         for f in fails:
             out += [f"- `{f.get('model_id') or f.get('cli_id')}` — {f.get('reason') or '호출 실패'}"]
         out += [""]
