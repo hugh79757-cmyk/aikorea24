@@ -1,3 +1,164 @@
+## 2026-10-18 13:55 — AIK24-TOOLSYNC-06: 도구 페이지 '최신 등록'·'인기 도구' 섹션 폐지 + 카드 NEW 배지
+
+대표님 지시: "최신 등록이 있고 그 아래 인기도구가 있는데, 둘이 기능이 없다. 두 섹션을 삭제하고 바로 전체 도구를 보여주는 쪽으로 가자."
+대표님 결정(문답): 카드에 '최근 7일 NEW' 배지 추가 · '⭐ 리뷰 순' 정렬 제거 (등록 정책 박스 이동은 선택하지 않음)
+
+### 한 일
+- **두 섹션이 무동작인 이유를 실측으로 규명** (아래 결과 1·2). 삭제 근거 확보.
+- **`src/pages/tools/index.astro` 수정** — '최신 등록'(md `updated` 상위 6) · '인기 도구'(koreanSupport + order 8) 섹션과 그 계산(`newTools`·`popularTools`) 삭제, 카드 NEW 배지 헬퍼(`isNewTool`) 추가, '⭐ 리뷰 순' 옵션·정렬 분기·`data-review` 속성 제거. 610 → 517줄.
+- **회귀 테스트 신규 5건** — `tests/test_tools_index_sections.py` (배지 규칙: astro 안 헬퍼를 node 로 실제 실행해 날짜 경계 10케이스 대조 + 섹션 잔재 0 + 그리드 조작부 보존 + 배지 배선 + 죽은 정렬 제거).
+- **배포** — `bash scripts/deploy.sh`, Version `50ff1e34-7488-48c6-a10b-6472a1580580`.
+- **라이브 검증** — https://aikorea24.kr/tools/ (아래 결과 3).
+- **기록** — 이 항목 + 데스크톱 로그.
+
+### 결과 — 3분법
+
+**[검증됨] 1. '최신 등록'은 6칸 회전 창이라 승인 건이 상단에 못 올라온다**
+- 근거(코드): 삭제 전 계산은 `allTools.filter(t => t.data.updated).sort(updated desc).slice(0,6)`.
+- 근거(D1 + 라이브): `spriteframe`·`aitraining-jobs` 는 md 없음(D1 전용) → 표시용 `updated` = `created_at` = **2026-10-14 / 2026-10-13**(승인 시각 `updated_at` 2026-10-18 06:16:33/34 UTC 는 표시에 미사용). 같은 시각 라이브 상위 6칸은 10-18·10-18·10-17·10-17·10-17·10-16 → **7~8번째로 밀려 노출 0**. 대표님 관측("승인했는데 새로운 서비스 상단에 반영 안 됨")과 일치.
+- 배포 [0.5] `sync_submissions_to_md.mjs` 가 두 건의 md 생성(`order: -1`, `updated: "2026-10-18"`) → 배포 후 기본 정렬 **3번째·11번째**로 앞당겨짐(실측).
+
+**[검증됨] 2. '인기 도구'는 인기도가 아니었다**
+- 근거(코드): `allTools.filter(koreanSupport).sort(order asc).slice(0,8)` — 투표·조회 미사용.
+- 근거(라이브, 삭제 전): 노출 8건 = order=-1 동률 6건(careops·geulway·goath·litescribe·vecbase·whiteboard) + chatgpt(order 1)·claude(order 2). 대표님 지적("중간의 널리 쓰이는 AI는 너무 일반적")과 일치.
+
+**[검증됨] 3. 라이브 결과 (삭제 + 배지)**
+- http=200. 잔재: `최신 등록` 0건 · `인기 도구` 0건 · `HOT</span>` 0건 · `⭐ 리뷰 순` 0건 · `data-review` 0건.
+- 보존: `id="tools-grid"` 1 · `id="tool-search"` 1 · `id="filter-free"` 1 · `id="filter-korean"` 1 · `id="sort-order"` 1 · 구분선 '전체 도구' 1 · 정책 박스 1. 정렬 옵션 = 추천순·이름순·최신순 3개.
+- NEW 배지 50장 / 그리드 카드 412장 = 12.0%. `spriteframe`·`aitraining-jobs`·`crewtower-mod-for-claude-code`·`train-with-pasta`·`careops` 있음, `chatgpt`·`claude` 없음.
+- 카드 수 정합: 화면 표기 412 = 그리드 카드 412. 유니크 `/tools/<slug>/` 링크 415 = 412 + `submit`·`task`·`finder` 3.
+- 배지가 붙은 카드 50건은 7일 창(2026-10-11~10-18) 안의 등록·갱신분이다.
+
+**[검증됨] 4. 회귀 없음**
+- `python3 -m pytest tests/ -q` → **796 passed / 10 skipped / 0 failed** in 24.74s.
+- 산출 근거: 796 = 791(직전 기준선) + 5(신규 `test_tools_index_sections.py`), skipped 10 동일. 이 두 섹션을 검증하던 기존 테스트는 0건이라 삭제로 깨질 계약이 없었다(`grep -rln "최신 등록\|인기 도구" tests/` → 0).
+
+**[부분검증] 5. 흰 공백(스크린샷) 원인**
+- HTML 상 두 섹션 사이에 요소가 없어 코드 원인은 아니다(구간 내 'min-h'·'h-[' 0건). AdSense 자동광고 미충전 등 브라우저 요인 가능성 → **삭제 후 육안 재확인 필요**(대표님 확인 대기). 검증 수단 부재라 [부분검증].
+
+### 잔존 위험
+- NEW 배지가 50/412장(12.0%). 7일 창 + 수집기 다량 등록일(10-15 18개·10-16 11개) 때문 → 필요하면 창을 3일로 좁힐 수 있다(`newCutoffKst` 한 줄).
+- 그리드 기본 정렬은 여전히 추천순(order). 신규 등록 툴(order 100+)은 배지가 눈에 띄어도 목록 뒤쪽에 있다. 다음 레버는 기본 정렬 '최신순' 전환 또는 '신규만 보기' 토글(미실행).
+- '⭐ 리뷰 순' 제거로 리뷰 기반 정렬 경로가 사라졌다(원래 카드 `data-review=0` 고정이라 무동작이었다). 리뷰 데이터가 생기면 재도입 필요.
+- `tool_votes`(3행)는 이제 어느 화면에서도 참조되지 않는다(활용 계획 미정).
+
+### 다음 행동
+- 대표님 육안 확인: /tools/ 에서 두 섹션 없이 바로 전체 도구 + 승인 건(`AITraining.jobs`·`SpriteFrame`)의 NEW 배지.
+- NEW 창 7일 → 3일 조정 여부 결정.
+- (별건 이월) 10-19 09:00 브리핑 실측 — `[제외]` 카드 0건 확인.
+
+## 2026-10-18 11:58 — 발열 진단 후속: Chrome 창 숨김 A/B 인과 검증 (시스템 변경 0건)
+
+직전 기록(11:43)에서 "Chrome GPU 29.9% / WindowServer 23.4% / Terminal 15.4%"를 확인한 뒤, 대표님이 "이것들 비활성화하는 방법이 있나"를 물어 실제 조치 가능성과 인과관계를 실험으로 검증했다. 대표님 선택은 "지금은 보고만" → 이번 라운드에서 시스템 설정 변경 0건.
+
+### 한 일
+- Chrome 창을 System Events로 숨김/표시하며 15초 단위 3회 A/B 측정 (A 기준선 → B 숨김 → C 복귀)
+- `/usr/bin/sample`로 Terminal·Chrome GPU·렌더러 스택 채취 (Homebrew `sample` 패키지가 PATH를 가려 `/usr/bin/sample` 명시 호출 필요)
+- 배경화면 동적 여부, GPU 터미널 설치 여부, 합성 관련 설정값, launchd KeepAlive 전수 확인
+
+### 결과 — 3분법
+
+**[검증됨] 1. Chrome 창을 화면에 두는 것 자체가 1코어의 66%를 추가 소모**
+- A(보임) 140.9% → B(숨김) 74.6% → C(복귀) 141.6% of 1코어. A≈C 재현성 확인.
+- 성분 분해: WindowServer 38.5% → 19.0% (-19.5%p), Chrome GPU 30.6% → 0.0% (-30.6%p), Chrome 기타 16.9% → 0.9%.
+- 산출: 140.9 - 74.6 = 66.3%p. 즉 WindowServer 부하의 약 절반은 Chrome 창이 떠 있어 발생하는 합성 비용이며, WindowServer 자체 결함이 아니다.
+
+**[검증됨] 2. Terminal 부하는 Core Animation 커밋(화면 그리기)이다**
+- 근거: `/usr/bin/sample 1314 2` → Main Thread 샘플 1079개 중 339개가 `UC::DriverCore::continueProcessing` → `stepTransactionFlush` → `CA::Transaction::commit()`. 나머지 662개는 `mach_msg`(대기).
+- 해석: TUI가 CPU로 글자를 그리고 레이어를 커밋하는 경로. GPU 터미널/헤드리스 실행으로 회피 가능.
+
+**[검증됨] 3. 비디오 배경화면 가설은 반증**
+- 근거: `com.apple.wallpaper SystemWallpaperURL`은 `Sequoia Sunrise.mov`를 가리키지만 `ls /System/Library/Desktop Pictures/.wallpapers/`에 해당 디렉터리 없음(Sonoma, Sonoma Horizon만 존재). WallpaperAgent(PID 626) 누적 0.74초 = 20초 측정에서 0.0%, .mov 파일 핸들 보유 프로세스 0건.
+- 실제 배경은 TopNotch 처리 PNG(`~/Library/Application Support/TopNotch/processed/ssnk8o1Cf8.png`) 정지 이미지. → WindowServer 23~38%의 원인이 아니다.
+
+**[검증됨] 4. 부팅 후 74.2분 누적 지속 점유**
+- Chrome 전 계열 1543초 = 34.6% of 1코어, WindowServer 1098초 = 24.6%, Terminal 583초 = 13.1%, opencode 509초 = 11.4%. (합계 83.7%)
+- 산출: 각 값 ÷ (74.2×60초).
+
+**[검증됨] 5. "비활성화" 가능성 판정**
+- WindowServer: 비활성화 불가. `killall` = 즉시 로그아웃 + 미저장 작업 소실, launchd 즉시 재생성.
+- Chrome GPU 프로세스: kill 시 Chrome이 재생성하며 진행 중 렌더 취소→재렌더로 순간 부하 증가. 실질적 0% 달성 경로는 창 숨기기(실측 30.6%→0.0%) 또는 그래픽 가속 ON.
+- Terminal TUI: 교체 가능. 단 GPU 기반 터미널(Ghostty/WezTerm/iTerm/Alacritty/kitty)은 **전부 미설치**로 확인됨.
+
+**[검증됨] 6. 이미 적용된 최적화 1건**
+- `com.apple.universalaccess reduceTransparency = 1` → 투명도 감소 ON 상태(추가 조치 불필요).
+- `reduceMotion` 미설정(기본 off), Stage Manager 0(OFF), Activity Monitor 등 시스템 UI 누적 33초 = 0.7%.
+
+### 이번 라운드에서 변경한 것
+- 없음. 대표님 선택("지금은 보고만")에 따라 시스템 설정·프로세스·파일을 하나도 바꾸지 않았다. A/B 중 변경한 Chrome 창 표시 상태는 실험 직후 원래대로 복원했다(C 단계에서 A와 동일 수치 141.6% 복귀).
+
+### 잔존 위험
+- A/B 실험 자체가 `ps` 델타 측정을 반복해 부하를 만들었다. 다만 A·C가 140.9/141.6으로 근접하고 B만 절반이므로 판정에는 영향이 없다.
+- Chrome 하드웨어 가속 토글 상태는 여전히 검증불가(프로필 디렉터리 TCC 차단). `chrome://gpu` 1회 확인으로 확정 가능.
+- 다이 온도 실측 불가(sudo 필요). 소비전력은 단위 일관성 문제로 대리 지표 수준.
+- Terminal 스택 채취 자체가 Terminal 출력을 유발해 표본에 포함됐다. 다만 339/1079가 CA 커밋이라는 구조적 결론은 이 영향과 무관하다.
+
+### 다음 행동 (대표님 판단 대기)
+1. Chrome `⌘H` — 1코어의 66% 즉시 제거 (실측 근거 있음, 되돌리기 = 다시 표시)
+2. `chrome://settings/system`에서 그래픽 가속 ON → 재시작 → 같은 방식으로 전후 재측정 가능
+3. Terminal 부하를 줄이려면 GPU 터미널 설치 또는 `opencode run` 헤드리스 실행
+4. 시스템 설정: 저전력 모드 ON(현재 `lowpowermode 0`), 디스플레이 끄기 10분→3분, 밝기 하향 (모두 sudo 또는 GUI 경로)
+
+## 2026-10-18 11:43 — macOS 발열 원인 진단 (MacBook Air M4, Mac16,13, 팬리스)
+
+대표님 지시: "맥북 온도가 아주 뜨겁다. 메모리 사용 등을 봐도 이상은 없어보이는데 왜 그런지 원인 파악."
+
+### 한 일
+- 부팅 후 59분(10:44~11:43) 구간을 대상으로 프로세스별 누적/순간 CPU, 앱별 집계, 배터리 방전 전력, launchd 주기 작업을 실측 (sudo 미사용)
+- 진단 도구: `ps -Axo time=` 델타(10초 간격 6회), `ps` 누적 CPU, `ioreg -rn AppleSmartBattery`, `ioreg -rc IOAccelerator`, `lsof -p`, `log show`, `launchctl list`, PlistBuddy
+
+### 결과 — 3분법
+
+**[검증됨] 1. 지속 부하가 약 1코어 — 팬리스 섀시 발열의 직접 원인**
+- 근거(누적, 생존시간 대비): Chrome GPU 프로세스 PID 2203 = 누적 758초 / 생존 42.2분 = **평균 29.9% of 1코어**. WindowServer PID 409 = 누적 825초 / 58.8분 = **평균 23.4%**. Terminal PID 1314 = 누적 537.3초 / 58.0분 = 평균 15.4%. 합계 68.7% of 1코어.
+- 근거(순간, 10초 델타 6회): 총 95% → 97% → 103% → 106% → 107% → 112% of 1코어. 구성: Terminal 24~27% + Chrome 계열 11~20% + opencode --auto 11~12% + 기타 9~14%.
+- 대조: 같은 시각 `top` 시스템 전체 = 9.6% busy(89~90% idle). 10코어 중 약 1코어가 계속 돌고 있다는 뜻.
+- 산출 근거: 758초 ÷ (42.2분×60초) = 0.299. 825 ÷ (58.8×60) = 0.234. 537.3 ÷ (58.0×60) = 0.154.
+
+**[검증됨] 2. Chrome이 CPU 합성 경로로 내려가 있음 (전력 대비 발열 효율 최악 구간)**
+- 근거: 렌더러 16개 인자에 `--disable-gpu-compositing` 존재(`ps -Axo command | grep -c` = 16), GPU 프로세스 인자에 `--use-gl=disabled` 존재.
+- 근거: 동시에 Metal은 살아 있음 — GPU 프로세스가 `AGXMetalG16G_B0.bundle/.../ds.binary.metallib.g16g-b0` 로드(lsof). `Device Utilization %` = 10 / 9 / 8 (10초 간격 3회) = GPU는 대부분 유휴.
+- 해석: GPU가 놀면서 CPU가 픽셀을 합성 → 같은 화면을 3~5배 전력으로 그리는 상태. 발열의 최대 지속 기여분.
+
+**[검증됨] 3. 부팅 직후 15분간 온디바이스 ML 인덱싱 폭주 (10:44~11:00)**
+- 근거: `mediaanalysisd`(PID 703) 88.1% 스파이크 1회 관측, 누적 13.57초 소비 후 0%로 종료. 동시 가동: generativeexperiencesd, photoanalysisd, aned, ModelCatalogAgent, mdbulkimport.
+- 근거: `/System/Library/AssetsV2/com_apple_MobileAsset_ImageCaptionModel` 수정시각 11:00, `~/Pictures/Photos Library.photoslibrary` 10:44.
+- 해석: 부팅 직후 뜨거움의 1차 원인. 11:00 이후 종료된 상태.
+
+**[검증됨] 4. 메모리는 발열 원인이 아님 (대표님 관찰과 일치)**
+- 근거: `memory_pressure` → "System-wide memory free percentage: 71%", `sysctl vm.swapusage` → total/used = 0.00M/0.00M, Pageouts 605.
+- 해석: 메모리 압박·스왑 0. 발열은 메모리 계층이 아니라 그래픽/UI 렌더 경로에서 발생.
+
+**[검증됨] 5. 하드웨어 열 보호는 작동 중 — 열 손상 위험 근거 없음**
+- 근거: `pmset -g therm` → "No thermal warning level has been recorded / No performance warning level has been recorded". thermalmonitord·powerd 로그 5분 구간에 열 이벤트 0건(displayState·assertions 메시지만). kernel_task = 6.5%(발열 대응 점유 낮음).
+
+**[부분검증] 6. 소비전력 5.25W (측정 시점 기준)**
+- 근거: `Amperage=-467` × `Voltage=11.24V` ≈ 5.25W.
+- 제한 사유: 같은 키의 이전 샘플이 -12245로 나와 단위 스케일이 일관되지 않음 → 절대값은 대리 지표로만 사용. BatteryPower 키는 이후 조회에서 값 미반환.
+
+**[검증불가] 7. 다이 온도·배터리 온도 실측, Chrome 가속 토글 상태**
+- 사유: `powermetrics`는 root 필요(sudo 비밀번호 없음), AppleSmartBattery `Temperature` 키 미노출, `~/Library/Application Support/Google/Chrome` 읽기 차단(Operation not permitted) → Local State/Preferences에서 `hardware_acceleration_mode` 확인 불가.
+- 복구 계획: 대표님이 `chrome://gpu`를 열어 Graphics Feature Status 한 줄 확인 + `sudo powermetrics --samplers smc -n 1 | grep -i temp` 1회 실행하면 두 항목이 [검증됨]으로 승격됨.
+
+### 8. 발열을 만드는 상주 요소 (버스트 원인)
+- KeepAlive=true 상시 가동 13개: com.5000.scheduler, com.5000.dashboard, com.twinssn.status-dashboard, kr.aikorea24.blogdex-dashboard, com.twinssn.cloudflared, com.twinssn.subagent-watchdog, com.kdeconnect.keepalive, homebrew.mxcl.ollama 등 (PlistBuddy 전수 조회).
+- 주기 실행: subagent-watchdog 300초, manual-publisher/manual-publisher/d1-usage-report/mde2.bulk_publisher 1800초, tour-deals 3600초.
+- 상주 프로세스: 금융보안 3종(MagicLine4NX·Veraport·INISAFECrossWeb), Python 3.14 4개, kdeconnectd, cloudflared, replayd.
+
+### 잔존 위험
+- 이 진단 자체가 부하를 만들었다: python3/ps/top/ioreg/log show를 수십 회 반복 실행 → 위 순간 델타 수치에는 진단 기여분이 포함됨. 순수 사용자 워크로드는 이보다 낮을 수 있다. 누적 수치(Chrome GPU 758초, WindowServer 825초)는 대부분 진단 이전 구간(11:01~11:27)에 형성된 값이라 이 영향은 작다.
+- 물리 온도(°C) 미측정 — "뜨겁다"의 절대 온도는 미확인. 소비전력·CPU 점유로만 대체 추정.
+- Chrome 가속이 '설정으로 꺼짐'인지 'Chrome 자체 폴백'인지 미확정.
+- 팬리스 모델이라 1코어 지속 부하만으로도 하판이 체온 이상으로 상승한다. 이는 고장이 아니라 구조적 특성이며, 물리 조건(거치 표면·밝기·주변 온도)에 따라 체감이 크게 달라진다.
+
+### 다음 행동
+1. (사용자) `chrome://settings/system` → "사용 가능한 경우 그래픽 가속 사용" ON → Chrome 재시작. 이어서 `chrome://gpu`에서 Graphics Feature Status 확인.
+2. (사용자) threads.com 탭 2개(동영상 자동재생 SPA) 정리 — `osascript` 조회 결과 열린 탭: threads.com ×2, onetab, aikorea24.kr, mail.google.com.
+3. 부팅 후 15~20분 ML 인덱싱 구간은 정상 동작. 이 시간대에만 뜨거우면 조치 불필요.
+4. 배터리 사용 시 저전력 모드 ON + 밝기 하향 (현재 rawBrightness 1539/2047 = 약 75%).
+5. KeepAlive 13개 중 죽은 자동화 정리 검토 (스킬 `scheduler-launchd-management` 경로).
+6. 온도 실측 1회: `sudo powermetrics --samplers smc -n 1 | grep -i temp`
+
 ## 2026-10-18 10:40 — AIK24-PIPE-05 후속2: 오늘 브리핑 카드 1·2번을 실제 뉴스로 교체 (대표님 결정)
 
 직전 기록(10:05)에서 카드 제목을 문장으로 교정했고, 대표님이 "실제 뉴스 2건으로 교체"를 선택했다.
