@@ -1,3 +1,44 @@
+## 2026-10-18 23:20 KST — AIK24-BLOG-02: WorkBuddy/DeepSeek V4.1-Flash 글 전면 재작성 (aik24-blog-writing 스킬 적용)
+
+**대상**: `workbuddy에서-deepseek-v41-flash-무료로-쓰는-방법` (id `01M57VN91VZKNK9NR2D4A3JXWA`) — 구버전이 "왜 이렇게 못 쓰나" 지적받은 글.
+
+### 한 일
+1. 스킬 `aik24-blog-writing` §0(사실 수집) → §1·2(작성) → §3(게이트) → §4(검증) 순서로 전면 재작성. 수집 건너뛰지 않음.
+2. 사실 출처(전부 2026-10-18 실측 fetch):
+   - DeepSeek 공식: 릴리스 노트 `/news/news261017`, 요금표 `/quick_start/pricing`, WorkBuddy/CodeBuddy 연동 `/quick_start/agent_integrations/workbuddy`
+   - WorkBuddy 공식(.ai): 개요·모델 구성·Mac/Win 설치·요금·크레딧 문서
+   - 프로모션 안내 페이지(AI Promo Now) — 공식 문서에 없는 무료 상한 값의 출처로 명시
+3. 발행: `emdash_precheck.py <md> --publish <기존slug> "<제목>" "<excerpt>"` (같은 slug PUT + publish, 중복 생성 없음)
+
+### 결과
+- [검증됨] 게이트 통과 — `✅ 게이트 통과 — 7742자`, exit 0. 근거: `python3 scripts/emdash_precheck.py /tmp/workbuddy_deepseek_v41_flash_free.md --publish …` 실행 출력.
+- [검증됨] 구버전 결함 3건 재현 — 백업 본문에 게이트 `check()` 직접 실행 → `마무리 없음` / `외부 링크 0개(최소 3)` / `표 0개(최소 1)`. 근거: `scripts/logs/backup_workbuddy_post_20261018_231749.json` 1행.
+- [검증됨] 라이브 검증(HTTP 200, 55,595 bytes) — `<h1>` 1개, 외부링크 13개(자사 링크 제외 고유 15), `<table>` 4개, H2 8개(번호 소제목 7 + `마무리 — 오늘 30분 안에 끝내는 무료 체험`), 내부용어(firecrawl/dev.vars/launchd) 0건. 근거: `curl …/posts/<slug>` + grep 실측.
+- [검증됨] DB 1행 유지 — 같은 id, status=published, content 5,232 → 29,258 bytes. 근거: `ec_posts` 조회 1행.
+- [검증됨] 백업/사본 남김 — `scripts/logs/backup_workbuddy_post_20261018_231749.json`(구버전 전문), `scripts/logs/workbuddy_deepseek_v41_flash_free_draft.md`(신버전 마크다운 사본).
+- [부분검증] 사실 중 "무료 상한 계정당 약 2억 토큰 / 앱 300K 컨텍스트"는 공식 문서가 아니라 프로모션 안내 페이지 값. 본문에 출처를 명시하고 "앱 표시가 최종 기준"이라고 적었으나, WorkBuddy 앱 실설치 검증은 하지 않음(로그인 필요).
+- [부분검증] DeepSeek 자체 웹·앱의 무료 여부는 확인하지 않고 본문에서 "이 글에서 확인한 무료 조건은 WorkBuddy 국제판 기준"으로 범위를 한정했다.
+
+### 수정 파일 구분
+- [PRODUCTION CODE] 없음 (수정 0건) / [TEST CODE] 없음 / [CONFIG] 없음 — 이번 작업은 발행된 글 본문 교체 + 로그 사본 2건 추가뿐.
+
+### 루트 원인 — "왜 이렇게 못 쓰지?" (사용자 질문)
+- [검증됨] `emdash_precheck.py` 를 호출하는 스크립트가 repo 전체 0건. 근거: `grep -rln "emdash_precheck" --include=*.py --include=*.sh --include=*.plist* .` → `./scripts/emdash_precheck.py` 자기 자신만.
+- [검증됨] `blog_draft_generator.py` 958·971행이 `publish_post()` 를 게이트 없이 직접 호출. 근거: 같은 파일 grep `upsert_post|publish_post|precheck` → 958·971행 2건.
+- [검증됨] 규칙은 이미 주입돼 있다 — `blog_writing_rules.md`(게이트 항목 부록 포함)를 61~73행에서 읽어 275·306·528행에서 system_prompt 앞에 붙인다. 즉 규칙은 "권고"로만 작동하고 위반해도 그대로 발행된다.
+- [부분검증] 이 글을 만든 실행 로그는 repo에서 찾지 못함 — `scripts/*.log` 전체에서 WorkBuddy 흔적 0건. 파이프라인 경로 자체는 특정 실패.
+
+### 잔존 위험
+- 게이트가 파이프라인에 연결되지 않은 상태이므로, 자동 생성 글에서 같은 유형(마무리·표·출처 링크 없음)이 계속 나올 수 있다. 이번 글만 수동으로 고쳤다.
+- 게이트의 3,000자 검사는 PT(JSON) 문자열에 걸면 JSON 오버헤드로 통과한다(구버전 PT 5,232자 vs 실제 본문 약 2,600자). 게이트는 마크다운에 걸어야 한다.
+- 무료 상한·앱 컨텍스트 수치는 프로모션 안내 페이지 값이라 변경될 수 있다. 10월 31일 이후 본문 수치가 낡는다.
+- 발행 시각 표기(published_at 15:56Z)가 작성 시점 로컬 시각(14:2xZ)보다 앞서 있다 — 발행 경로의 시각 처리 규칙 확인 필요.
+
+### 다음 행동
+1. (권장) `blog_draft_generator.py` 발행 직전에 `emdash_precheck.check(md)` 연결 → 미달 시 재생성 1회 → 그래도 미달이면 발행 보류 + 알림. 근거: 위 루트 원인 3건.
+2. (권장) 게이트에 PT JSON 입력 가드 추가 — 입력이 `[{"_type":"block"` 로 시작하면 fail.
+3. 10월 31일 이후 이 글의 "무료" 부분 갱신(프로모션 종료 반영) 또는 종료 시점에 API 전환 안내로 재작성.
+
 ## 2026-10-18 21:15 KST — AIK24-TOOLSAUTO-01 (릴레이) — 내일 08:00 KST 확인 알람을 muse 기본채팅(말랑이)에 요청
 
 ### 한 일
