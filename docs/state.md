@@ -1,3 +1,69 @@
+## 2026-10-18 19:05 KST — AIK24-D1-AUDIT-01: D1 소비 전수 점검 (실측) — 지배 요인은 잡이 아니라 서빙
+
+계기: 대만 뉴스(taiwan-news) 최적화 중 "계정 공유 최대 소비자(aikorea24) 점검" 지시.
+방법: 계정 GraphQL 실측(일자·시간대·DB) + Worker 요청 수 + 코드 전수 조사(서브에이전트, 파일:줄 근거) + 질의별 `meta.rows_read` 실측 16건.
+
+### 한 일
+
+1. 계정 `7eb1b8cd…` 7일·시간대별·DB별 D1 실측 (`d1AnalyticsAdaptiveGroups`).
+2. Worker 요청 수 실측 (`workersInvocationsAdaptive`, scriptName·datetimeHour).
+3. 코드 전수 조사 — 48개 SSR 라우트·launchd 잡 20개·D1 접근 지점 전체(파일:줄).
+4. 질의별 `rows_read` 실측 16건 + 인덱스 실태 조회 (aikorea24-db·emdash-db).
+
+### 결과 (근거)
+
+**[검증됨] 무료 한도(읽기 5,000,000/일) 초과가 실제로 2회 발생했다**
+- 2026-10-10 **5,356,078행 (107.1%)** — state.md 8442행: `/news/` 73,895B→20,474B(브리핑 섹션 소실), D1 `code 7500` 을 페이지가 "결과 없음"으로 처리해 빈 화면 렌더.
+- 2026-10-14 **5,318,301행 (106.4%)** — state.md 3995행: **EmDash 전면 장애**의 원인으로 확정된 그 초과.
+- 7일 범위 **1,372,313 ~ 5,318,301행 (27.4% ~ 106.4%)** — 여유가 안정적이지 않다.
+- 10-14 단일 시간(13:00 KST)에 aikorea24-db만 **2,415,531행** (그날 총량의 45%).
+
+**[검증됨] 지배 요인은 스케줄 잡이 아니라 서빙(페이지뷰)이다**
+- 일일 Worker 요청: aikorea24 4,599~10,410회 · aikorea24emdash 318~4,525회 (실측).
+- 요청당 환산: aikorea24-db 984,338 ÷ 5,231 = **188행** · emdash 325,763 ÷ 488 = **668행**.
+- 잡 경로 합계는 약 **124,000행/일(2.5%)** 로 추정된다(threads 1순위 5,580×15 + news-unified 19,135 + model_catalog 19,135×2) → 관측된 1~5M를 **설명하지 못한다**.
+
+**[검증됨] 페이지별 단가 실측 (5,000,000 ÷ 단가 = 한도 소진 뷰 수)**
+| 경로 | rows_read/뷰 | 한도 소진 뷰 |
+|---|---:|---:|
+| `/briefing/` (집계 2,850 + 뉴스 100) | **2,950** | **1,694뷰** |
+| `/network/` (network_cache 전행 972) | 975 | 5,128 |
+| `/news/` (v2_pass·LIMIT 100) | 340 | 14,705 |
+| `/` (홈 3쿼리: 1 + 19 + tools) | ~50~100 | — |
+| `/tools/` | 31 | — |
+| emdash `/posts` 목록 (COUNT 1,505 + 목록) | ~1,600 | 3,125 |
+
+**[검증됨] `/briefing/` 2,850행의 원인은 `GROUP BY` 이지 `LEFT JOIN` 이 아니다**
+- 현행(briefings LEFT JOIN items + GROUP BY + LIMIT 100) = **2,850행**
+- 조인 유지 + GROUP BY 제거 = **149행** · 조인·집계 전부 제거 = **104행**
+- → GROUP BY 하나가 2,700행을 유발한다(집계를 위해 조인 결과를 전량 구체화).
+- 규모 실측: `briefings` 337행 · `briefing_items` 1,858행.
+
+**[검증됨] 잡 경로 단가 실측**
+- threads `db_reader` 1순위(브리핑 JOIN + GROUP BY, LIMIT 200) = **5,580행** — 발행 12회 + 컴퍼스 3회/일, 실패 시 최대 3회 재시도(재시도 증폭 위험).
+- news-unified `SELECT title, link FROM news` (**WHERE·LIMIT 전무**) = **19,135행/일** (`news` 실측 19,135행).
+- model_catalog `WHERE DATE(created_at) = '{day}'` (인덱스 불가 함수) = **19,135행**, 하루 2회(04:00·10:00).
+
+**[검증됨] 가드 커버리지 공백 — Worker 서빙 경로에는 가드가 없다**
+- `cfnew.sql()` 경로만 80% 가드가 걸린다. Worker SSR(`env.DB`)·`wrangler d1 execute`·**빌드 prerender**(`astro.config.mjs` `remoteBindings: true`)는 무가드.
+- `/briefing/` **1,694뷰** 또는 emdash `/posts` **3,125뷰** 만으로 일일 한도가 소진된다 → 봇 버스트 1건이면 계정 전체 D1 거부(= 10-10·10-14 재발).
+
+**[검증됨] 인덱스 실태** — news 5종(`idx_news_v2(v2_pass, created_at DESC) WHERE v2_pass=1` 포함), briefings 는 status 인덱스 **없음**(sqlite_autoindex 1개뿐), briefing_items 는 `idx_bi_briefing`·`idx_bi_news` 있음, network_cache 는 pub_date 인덱스 없음. `sql/006` 기록의 `idx_news_created` 중복은 현재 **없음**(해소됨).
+- emdash `ec_posts` 1,505행(약 1,504 published) · 인덱스 20종 보유. DB 파일 크기 aikorea24-db 19.3MB · emdash-db 66MB.
+
+### 잔존 위험
+
+- **per-path 귀속 불가**: 이 토큰에 `com.cloudflare.api.account.zone.analytics.read` 권한이 없어 특정 시간 폭증의 경로별 귀속은 **정황 추정**에 머문다(요청 수 × 단가 정합으로 서빙 지배를 유도).
+- **emdash 프로젝트 내부 질의 미조사** — 다른 프로젝트 경로(`~/projects2/aikorea24emdash`)의 프레임워크 질의 전수는 확인하지 않았다(블로그 목록 COUNT 1,505행만 실측).
+- **클라이언트 팬아웃 미확인** — 페이지 로드 후 JS 가 `/api/news/*` 등을 추가 호출하는지 미특정.
+- **절감안 미적용(점검만)** — 현 상태로는 다음 초과일이 재발할 수 있다(여유 27~106%).
+- 절감 후보(측정 근거 있음, **미적용**): ① `/briefing/` GROUP BY 제거(2,850 → ~400 추정) ② `briefings(date)` 인덱스 ③ model_catalog 범위 조건(19,135 → ~100) ④ news-unified 창 제한(19,135 → ~2,000, 링크 UNIQUE 라 중복 방지는 DB 보장) ⑤ `/briefing/`·`/` 엣지 캐시(현재 `/news` 만 Cache-Control 보유).
+
+### 다음 행동
+
+- 대표님 승인 시 위 ①~④ 적용(각 항목 실측 전후 비교 + 가드 테스트 유지).
+- `/briefing/` 캐시 여부·emdash `Astro.cache` 활성 여부 확인 후 캐시 축 적용 검토.
+
 ## 2026-10-18 16:35 — AIK24-TOOLENRICH-01: 상세페이지 심화 스키마 v2 적용 (초박형 15건 + 대표 30건)
 
 ### 배경
