@@ -1,3 +1,34 @@
+## 2026-10-18 15:30 — AIK24-ADCSP-01: 랜딩페이지 콘솔 CSP 차단 전수 분석 + 광고 스택 호스트 허용
+
+### 한 일
+1. 대표님이 보내온 콘솔 에러를 라이브 헤더 변형 A/B(4변형 × 2로드, 홈)로 각각 원인 특정.
+2. 차단이 실측된 구글 광고 스택 호스트만 CSP 에 추가(script-src·connect-src·img-src·frame-src).
+3. 회귀 테스트 4건 신규 → 전체 테스트 → 배포 → 라이브 재측정(홈 2로드 + /tools/ 2로드).
+
+### 결과 (검증 근거)
+- [검증됨] 에러 5종의 원인 특정(차단 실측 URL):
+  · `connect-src` → `https://fundingchoicesmessages.google.com/el/AGSKWx..` (fetch, 로드당 10~11회 재시도 = 최다 에러)
+  · `script-src` → `https://ep2.adtrafficquality.google/sodar/sodar2.js` (구글 광고 트래픽 품질 SDK)
+  · `frame-src` → `https://ep2.adtrafficquality.google/`, `https://www.google.com/` (sodar2 가 만드는 품질 iframe)
+  · `img-src` → `https://ep1.adtrafficquality.google/pagead/sodar?...` (sodar 비콘은 이미지 요청이라 connect-src 로는 허용 안 됨)
+  · `cdn.jsdelivr.net/sm/*.map` connect-src 차단 = DevTools 열었을 때만 발생하는 소스맵 조회(실사용자 무영향)
+- [검증됨] 콘솔 에러 13~14건/로드 → **0건**. 근거: 배포 Version `509b4601-f4db-4280-b1ad-7ae86804e249` 후 홈 2로드 + /tools/ 2로드 측정, `콘솔 0건 / CSP 차단 0건`. 남은 실패는 GA `collect` 와 `pagead/ping` 의 `net::ERR_ABORTED`(탭 종료 시 정상 중단)뿐.
+- [검증됨] 광고 요청 회귀 없음. 근거: 4로드 전부 `page@-12245933` + `3350911709@81` + 하단(홈 `@3783` / 도구 `@4307`) = 3건.
+- [검증됨] 동의 팝업 0건 유지. 근거: 4로드 전부 `동의팝업요소 0`. connect-src 에 fundingchoicesmessages 를 열어도 팝업이 뜨지 않음을 확인(헤더 변형 단계 포함 허용 2/2 · 배포 후 4/4).
+- [부분검증] `Uncaught (in promise) undefined` 소멸. 근거: sodar2 차단 상태 2/2 발생 → 허용 변형 6/6 미발생, 배포 후 4/4 미발생. 다만 sodar2 허용과 동시에 관측한 상관 근거이며 단독 인과 실험은 하지 않았다.
+- [검증불가] 실제 사용자 브라우저(헤드리스 아님) 콘솔의 완전 동일 재현. 복구 계획: CSP 는 미들웨어 단일 경로라 전 페이지 동일 적용이므로, 대표님 브라우저에서 하드 리프레시 후 에러 재확인 시 same-origin 캐시·확장 프로그램 여부를 먼저 본다.
+- 변경 파일: [PRODUCTION CODE] `src/middleware.ts`, [TEST CODE] `tests/test_middleware_csp_adsense.py`(9 passed; 전체 807 passed/10 skipped = 803 + 신규 4).
+
+### 잔존 위험
+- **빈 상자 상태 재관측**: 배포 후 4로드 중 1로드(홈 load 1)에서 두 유닛이 `unfilled`(대체 콘텐츠 없음) 상태로 728×280 공간만 차지했다. Google 이 미충전을 대체 콘텐츠 없이 반환하는 경우이며 CSP 와 무관. 접기 가드는 광고 정책·CLS 리스크 검토가 선행되어야 한다.
+- **미충전(no-bid) 자체는 미해결**: 광고 응답은 `msg_type:unfill-fb`(200, 대체 콘텐츠 포함) 또는 `resize-me`(미충전)로 정상 수신된다 → 요청 파이프라인 정상, 게재 결정은 Google 측(경매·계정). 자동광고 재개 여부와 별개 축.
+- `frame-src` 에 `https://www.google.com` 이 추가되었다(구글 문서 기준 + sodar2 프레이밍 실측). iframe 삽입 표면이 넓어지는 트레이드오프이며, `default-src 'self'` 와 `X-Frame-Options: DENY` 는 불변.
+
+### 다음 행동
+- 대표님: 브라우저 하드 리프레시(Cmd+Shift+R) 후 콘솔 재확인 — CSP 차단 메시지가 남아 있으면 그 URL 을 알려주면 즉시 추가 판단.
+- 미충전 추적은 애드센스 콘솔 지표(사이트 상태·정책 알림·최근 24시간 노출수)에서만 가능.
+- 자동광고 재개 시 `autoads_phase.mjs --monitor` 로 래퍼 재주입·빈 상자 재발을 감시(대표님 결정 대기).
+
 ## 2026-10-18 15:22 — AIK24-ADBANDS-01: "중간·하단 빈 슬롯" 전수 측정 (내용 없는 밴드 + 여백 공백)
 
 ### 한 일
