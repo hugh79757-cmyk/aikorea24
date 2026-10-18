@@ -45,6 +45,12 @@ else
   else
     echo "  콘텐츠 변경 없음 — 배포 생략(원장만 커밋)"
   fi
+  # 수집 잡(git_commit)과 동일하게 원격에도 올린다. 실패해도 로컬 커밋은 유지된다.
+  if git push -q 2>/dev/null; then
+    echo "  push 완료"
+  else
+    echo "  ⚠️ push 실패 — 로컬 커밋 유지(다음 실행·수집 잡이 재시도)"
+  fi
 fi
 
 echo "=== $(date '+%F %T') 종료 (후처리 rc=$rc) ==="
