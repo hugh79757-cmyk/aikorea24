@@ -201,6 +201,14 @@ def og_page_candidates(md_url: str, slug: str) -> list[str]:
     return uniq
 
 
+def _unescape_url_entities(s: str) -> str:
+    """URL 안에 남은 HTML 엔티티를 푼다(&amp; 등). 모듈 html 과 이름 충돌을 피해 별도 함수로 둔다."""
+    for ent, ch in (("&amp;", "&"), ("&#38;", "&"), ("&#x26;", "&"), ("&#x2F;", "/"),
+                    ("&quot;", '"'), ("&#39;", "'")):
+        s = s.replace(ent, ch)
+    return s
+
+
 def og_capture(md_url: str, slug: str, out: Path) -> tuple[bool, str]:
     """og:image 를 내려받아 16:9 썸네일로 저장한다(브라우저 불필요)."""
     from PIL import Image, ImageOps
@@ -217,7 +225,9 @@ def og_capture(md_url: str, slug: str, out: Path) -> tuple[bool, str]:
         if not m:
             last = "NO_OG_IMAGE"
             continue
-        img_url = urllib.parse.urljoin(page_url, m.group(1))
+        # 2026-10-18: og:image URL 이 &amp; 로 HTML 이스케이프된 사이트(openai.com 등)는
+        # 그대로 요청하면 CDN 이 거부한다(HTTPError). 엔티티를 풀어서 요청한다.
+        img_url = urllib.parse.urljoin(page_url, _unescape_url_entities(m.group(1)))
         if any(k in img_url for k in GENERIC_OG_MARKERS):
             last = "OG_GENERIC"
             continue
@@ -269,7 +279,19 @@ async def main() -> int:
                          "browser-og=브라우저 세션으로 og:image 만 수집")
     ap.add_argument("--channel", default="", help="브라우저 채널 (chrome = 시스템 Chrome 사용)")
     ap.add_argument("--slugs", default="", help="쉼표로 지정한 슬러그만 처리(실패분 재시도용)")
+    ap.add_argument("--url-map", default="",
+                    help="슬러그→URL 오버라이드 TSV(집계 사이트 대신 도구 자체 사이트로 캡처)")
     args = ap.parse_args()
+
+    # 2026-10-18 추가: 집계 사이트 URL 밖에 없던 항목의 도구 실제 사이트를 별도로 확보한 경우,
+    # md 의 url 은 건드리지 않고 캡처 대상 URL 만 바꾼다.
+    url_map: dict[str, str] = {}
+    if args.url_map:
+        for line in Path(args.url_map).read_text(encoding="utf-8").splitlines():
+            parts = line.split("\t")
+            if len(parts) >= 2 and parts[0].strip() and parts[1].strip():
+                url_map[parts[0].strip()] = parts[1].strip()
+        print(f"URL 오버라이드 {len(url_map)}건 로드: {args.url_map}")
 
     jobs = []
     want = {s.strip() for s in args.slugs.split(",") if s.strip()} if args.slugs else set()
@@ -282,7 +304,7 @@ async def main() -> int:
         if p.stem in SKIP:
             print(f"  [skip] {p.stem} — D1 스크린샷 보유")
             continue
-        u = target_url(fm)
+        u = url_map.get(p.stem) or target_url(fm)
         if not u:
             print(f"  [skip] {p.stem} — url 없음")
             continue
@@ -308,13 +330,17 @@ async def main() -> int:
         # 기존 동작 보존 — AIK24_CHROMIUM_PATH 미설정 시 이전과 동일하게 기본 실행파일을 쓴다.
         exe = os.environ.get("AIK24_CHROMIUM_PATH") or None
         channel = args.channel or os.environ.get("AIK24_CHROME_CHANNEL") or None
-        if channel:
-            # 시스템 Chrome — 번들 headless shell 이 봇 차단에 걸리는 사이트 대응(2026-10-18 실측)
-            browser = await pw.chromium.launch(headless=True, channel=channel)
-        elif exe:
-            browser = await pw.chromium.launch(headless=True, executable_path=exe)
-        else:
-            browser = await pw.chromium.launch(headless=True)
+        # 2026-10-18: --route og 는 브라우저를 쓰지 않는다. 로컬 Chromium 미설치 환경에서
+        # og 경로만 돌릴 때 브라우저 실행 단계에서 죽던 문제 방지(동작 변화 없음).
+        browser = None
+        if args.route != "og":
+            if channel:
+                # 시스템 Chrome — 번들 headless shell 이 봇 차단에 걸리는 사이트 대응(2026-10-18 실측)
+                browser = await pw.chromium.launch(headless=True, channel=channel)
+            elif exe:
+                browser = await pw.chromium.launch(headless=True, executable_path=exe)
+            else:
+                browser = await pw.chromium.launch(headless=True)
 
         async def worker(p, u):
             async with sem:
@@ -338,7 +364,8 @@ async def main() -> int:
                     print(f"  ❌ {p.stem} {msg}", flush=True)
 
         await asyncio.gather(*(worker(p, u) for p, u in jobs))
-        await browser.close()
+        if browser:
+            await browser.close()
 
     for f in (ROOT / "scripts").glob(".thumb_tmp_*.jpg"):
         f.unlink(missing_ok=True)
