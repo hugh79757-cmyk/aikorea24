@@ -5,7 +5,7 @@ category: "이미지 생성"
 price: "무료/월 13,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/aiartcreate-com"
+url: "https://aiartcreate.com"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 이미지 생성", "비디오 생성", "디자인 툴"]
 featured: false

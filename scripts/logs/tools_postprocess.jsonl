@@ -7,3 +7,32 @@
 {"ts": "2026-10-18 18:29:21", "slug": "flowmaps", "step": "thumb", "result": "done", "detail": "✅ flowmaps 22KB", "dry_run": false}
 {"ts": "2026-10-18 18:29:23", "slug": "freebeat-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-18 18:29:27", "slug": "freebeat-ai", "step": "thumb", "result": "fail", "detail": "❌ freebeat-ai OG_GENERIC | ❌ freebeat-ai OG_GENERIC", "dry_run": false}
+{"ts": "2026-10-18 18:31:12", "slug": "gemini-agent-for-google-cloud", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:31:13", "slug": "gemini-agent-for-google-cloud", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-18 18:31:31", "slug": "gpt-live", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:31:35", "slug": "gpt-live", "step": "thumb", "result": "fail", "detail": "❌ gpt-live OG_SMALL_3948B | ❌ gpt-live OG_SMALL_3948B", "dry_run": false}
+{"ts": "2026-10-18 18:31:35", "slug": "invited-ai-reminder-scanner", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:31:36", "slug": "invited-ai-reminder-scanner", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-18 18:31:36", "slug": "lim-companions", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:31:37", "slug": "lim-companions", "step": "thumb", "result": "fail", "detail": "❌ lim-companions OG_PAGE_HTTPError | ❌ lim-companions OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:31:41", "slug": "lucer", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:31:42", "slug": "lucer", "step": "thumb", "result": "fail", "detail": "❌ lucer OG_PAGE_HTTPError | ❌ lucer OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:31:42", "slug": "nuclr-commander", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:31:43", "slug": "nuclr-commander", "step": "thumb", "result": "fail", "detail": "❌ nuclr-commander OG_PAGE_HTTPError | ❌ nuclr-commander OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:32:17", "slug": "nueve", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:18", "slug": "nueve", "step": "thumb", "result": "fail", "detail": "❌ nueve OG_PAGE_HTTPError | ❌ nueve OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:32:20", "slug": "snapthumb", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:21", "slug": "snapthumb", "step": "thumb", "result": "fail", "detail": "❌ snapthumb OG_PAGE_HTTPError | ❌ snapthumb OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:32:21", "slug": "sol", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:21", "slug": "sol", "step": "thumb", "result": "fail", "detail": "❌ sol OG_PAGE_HTTPError | ❌ sol OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:32:22", "slug": "abliteration-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:23", "slug": "abnormal-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:23", "slug": "ai-ad-generator-media-io", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:24", "slug": "ai-art-create", "step": "url", "result": "done", "detail": "https://topai.tools/t/aiartcreate-com → https://aiartcreate.com (title='Generate Companion and Character Art with AI')", "dry_run": false}
+{"ts": "2026-10-18 18:32:24", "slug": "aiboxplot", "step": "url", "result": "done", "detail": "https://topai.tools/t/aiboxplot-com → https://aiboxplot.com (title='Free Box Plot Generator – Create Box and Whi')", "dry_run": false}
+{"ts": "2026-10-18 18:32:27", "slug": "aidesignhouse", "step": "url", "result": "done", "detail": "https://topai.tools/t/aidesignhouse-io → https://aidesignhouse.io (title='AI Home Design &amp; Floor Plan Maker for Yo')", "dry_run": false}
+{"ts": "2026-10-18 18:32:27", "slug": "aiimagedetector-info", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:31", "slug": "airbrush-studio", "step": "thumb", "result": "fail", "detail": "❌ airbrush-studio BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ airbrush-studio NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-18 18:32:32", "slug": "aisha-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:33", "slug": "alphio-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:32:33", "slug": "archdiagramai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}

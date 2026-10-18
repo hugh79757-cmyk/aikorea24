@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/aiboxplot-com"
+url: "https://aiboxplot.com"
 useCases: ["데이터 시각화", "보고서 작성", "논문 데이터 분석"]
 tags: ["데이터시각화", "통계그래프", "업무자동화"]
 featured: false

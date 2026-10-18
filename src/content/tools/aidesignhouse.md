@@ -5,7 +5,7 @@ category: "디자인"
 price: "무료/월 29,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/aidesignhouse-io"
+url: "https://aidesignhouse.io"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["인테리어", "평면도", "AI 디자인"]
 featured: false
