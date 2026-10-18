@@ -34,6 +34,9 @@ from pipeline.infra import project_root; PROJECT_DIR = project_root()
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 from model_router import chat_completion
 
+# 신규 도구 후처리(URL 승격·심화 v2·썸네일) 시간 예산 — 초과 시 남은 항목은 다음 실행이 처리
+POSTPROCESS_BUDGET = 1200
+
 # ============================================
 # 환경 설정
 # ============================================
@@ -1544,6 +1547,10 @@ def main():
                        help='batch_translate()로 영문→한국어 번역')
     parser.add_argument('--limit', type=int, default=10,
                        help='소스당 수집 제한 개수')
+    parser.add_argument('--no-postprocess', action='store_true',
+                       help='신규 도구 후처리(URL 승격·심화 v2·썸네일) 건너뛰기')
+    parser.add_argument('--postprocess-budget', type=int, default=POSTPROCESS_BUDGET,
+                       help=f'후처리 시간 예산(초, 기본 {POSTPROCESS_BUDGET})')
     args = parser.parse_args()
 
     # 툴 목록 로드
@@ -1602,6 +1609,19 @@ def main():
     print(f"처리 완료: {len(created)}/{len(tools)}개 생성 ({elapsed:.1f}초)")
     
     if created:
+        # ── 신규 도구 자동 후처리 (URL 승격 → 심화 스키마 v2 → 썸네일) ──────────
+        # 커밋·배포 **전에** 수행한다. 그래야 새 도구가 8섹션 스텁·썸네일 없음 상태로
+        # 배포되지 않는다. 실패해도 수집 결과는 그대로 커밋·배포된다(비차단).
+        try:
+            if args.no_postprocess:
+                print("\n[후처리] --no-postprocess 지정 — 건너뜀")
+            else:
+                import tools_postprocess
+                print("\n[후처리] 신규 도구 상세페이지 심화·썸네일·URL 승격")
+                tools_postprocess.postprocess(created, budget=args.postprocess_budget)
+        except Exception as e:
+            print(f"  후처리 실패(수집 결과는 유지): {type(e).__name__}: {e}")
+
         # Git commit
         msg = f"feat: AI 툴 {len(created)}개 추가 ({datetime.now().strftime('%Y-%m-%d')})"
         git_commit(msg)

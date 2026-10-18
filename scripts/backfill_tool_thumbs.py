@@ -267,7 +267,9 @@ def write_image_field(path: Path, rel: str) -> None:
         fm = re.sub(r"^image\s*:.*$", line, fm, count=1, flags=re.M)
         path.write_text(f"---{fm}---{body}", encoding="utf-8")
         return
-    path.write_text(f"---\n{fm.rstrip()}\n{line}\n---{body}", encoding="utf-8")
+    # `fm` 은 앞뒤에 개행이 붙어 내려온다(split_frontmatter 규약) → strip 으로 정규화하지 않으면
+    # `---` 바로 뒤에 빈 줄이 생긴다(2026-10-18 실측: 썸네일 393건 파일에 이 잔재가 남아 있었다).
+    path.write_text(f"---\n{fm.strip()}\n{line}\n---{body}", encoding="utf-8")
 
 
 async def main() -> int:
