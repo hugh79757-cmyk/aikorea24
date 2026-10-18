@@ -1,3 +1,54 @@
+## 2026-10-18 10:05 — AIK24-PIPE-05 후속: 브리핑 카드 제목의 수집기 내부 표식 노출 교정
+
+대표님 지시: "브리핑에는 여전히 [제외] 무료 목록에서 제외라는 제목이 달려있다. 브리핑으로 적당한 문장이 아니다. 이걸 수정해줘."
+
+### 원인 [검증됨]
+`briefing_items` 에 title 컬럼이 없고, 브리핑 상세는 `bi.*` + `n.title` JOIN 으로 제목을 만든다 → 카드 제목이 수집기 원문 news.title(`[제외] cat-jam-free — OpenCode Zen 무료 목록에서 제외`)이 된다.
+근거: `PRAGMA table_info(briefing_items)` = id·briefing_id·news_id·sort_order·comment·created_at·deep_dive_url (title 없음) · `src/pages/briefing/[date].astro:20` 이 `n.title` SELECT · D1 실측 news 56212·56213 title 원문.
+
+### 수정 [PRODUCTION CODE] [검증됨]
+- `src/lib/briefing-comment.ts` — `cleanBriefingTitle()` 추가. 표식 3종을 문장으로 바꾼다:
+  `[제외] … 무료 목록에서 제외` → `{제공사} 무료 목록에서 {모델} 모델이 제외되었습니다` /
+  `[신규 무료] … 목록에 추가` → `… 모델이 추가되었습니다` /
+  `[무료 LLM] … 무료 티어` → `… 모델이 포함되어 있습니다`.
+  언론사가 붙인 `[게시판]`·`[속보]`·`[전남광주]` 등은 제목의 일부이므로 보존.
+- 표시 경로 7곳 동시 적용. 근거: `grep -n cleanBriefingTitle src/` 9지점 + 배선 테스트 9건 통과.
+  브리핑 상세(카드 22행·오늘의 다른 AI 뉴스 48행) · 홈 카드(`BriefingSection.astro:11`) · `/news`(브리핑 65행·전체 소식 96행) · `/briefing` 뉴스 목록(36행) · 브리핑 이메일(`send-email.ts:85`) · `api/briefing/latest`(37행).
+- DB `news.title` 은 바꾸지 않았다. 선정기 배제 필터 `EXCLUDED_TITLE_PREFIXES = ("[제외]",)`(`auto_news_selector.py:60`)와 수집 로그가 표식을 계속 쓰기 때문이다 — 표시 단계에서만 정리한다.
+
+### 정정 [D1 공개 데이터] [검증됨]
+`briefing_items` 1931·1932 comment 의 거짓 전제("12문항 평가 전 — 판단 보류", "평가가 아직 끝나지 않은 만큼")를 삭제하고 실측 사실 문장으로 교체했다.
+- 백업: `scripts/logs/backup_briefing_comment_20261018.json` (1,532 bytes, 3건 전문)
+- 사후 재조회: `'평가 전' 잔재 0건` · `교정 문장 반영 2건 [1931, 1932]`
+
+### 라이브 검증 [검증됨] — 배포 Version `48527719-f636-4722-815b-fabddb7dd1f2`
+- `/briefing/2026-10-18-1/` http=200 (14,202 bytes) · 표식 잔재 `[제외]=0` `[신규 무료]=0` `[무료 LLM]=0`
+- 카드 제목 3건 = `OpenCode Zen 무료 목록에서 cat-jam-free 모델이 제외되었습니다` / `… muse-spark-1.3-contributor-free …` / `Azure 무료 계정 $200 크레딧 (30일)`
+- 코멘트 첫 문장 = `직전 12문항 평가에서 10/12를 받았습니다. 무료 목록에서 빠진 사유는 제공사가 공지하지 않아 확인할 수 없습니다.` — 옛 문구(`평가가 아직 끝나지 않은`·`평판과 사용자 반응`) 잔재 0건
+- 홈 `/` · `/news/` · `/briefing/` 각 http=200 · 표식 잔재 각 0건
+- `/api/briefing/latest` — title 3건 교정 · comment 의 개발자 줄(`(a) OpenCode 모델 선택기`·`설정: {`·`👉`·verdict) 잔재 0건 · description verdict 잔재 0건
+- `/briefing/` 내장 JSON — `… 모델이 추가되었습니다`(신규 무료 2종) · `… 모델이 포함되어 있습니다`(무료 LLM 6종) 확인
+
+### 테스트 [TEST CODE] [검증됨]
+`tests/test_briefing_title_display.py` 신규 = 규칙 2건(실제 TS 함수를 node 로 실행해 11 케이스 입출력 대조) + 배선 9건 = 11건.
+전체 스위트 `791 passed / 10 skipped / 0 failed in 144.23s`.
+숫자 근거: 791 = 780(직전 기준선) + 11(신규 계약) · skipped 10 = 기준선과 동일(증가 0).
+
+### 커밋 [검증됨]
+`31874aa8` push rc=0 (`.gitignore` 에 `scripts/logs/backup_briefing_comment_*.json`·`scripts/logs/*.bak-*` 추가 포함).
+state.md 는 09:31 free-model-pipe 일일 기록과 함께 별도 커밋으로 정리했다.
+
+### 잔존 위험
+1. [검증됨] 다른 표시 경로: `api/briefing/news.ts`·`api/news/*.ts` 등 뉴스 API 4종은 원문 title 을 그대로 반환한다 — 외부 기계 소비자용이라 이번 범위에서 제외했다. 근거: `grep -rn "n\.title" src/` 결과 중 사람이 보는 화면 7곳은 전부 적용, 남은 것은 API·`auto_poster`(다른 채널)뿐.
+2. [부분검증] 이메일 경로는 코드·배선까지만 확인했다. 오늘 브리핑 메일은 이미 발송되어 재발송하지 않았으므로 실제 수신 본문에서 문장 교체를 확인할 수단이 없다 — 다음 발송분에서 확인해야 한다.
+3. [검증됨] DB title 을 고치는 방식은 택하지 않았다(이유: 선정기 필터·수집 로그가 같은 문자열에 의존). 대신 표시 계층에 규칙을 두었으므로, 앞으로 새 표식 형식이 생기면 `cleanBriefingTitle` 도 같이 확장해야 한다 — 잔여 표식은 fallback 으로 접두어만 떼어낸다.
+
+### 다음 행동
+- 2026-10-19 09:00 KST 브리핑: 카드 제목이 문장인지 + `[제외]` 카드 0건 확인.
+- 대표님 결정 대기: 이미 발행된 오늘 카드 1·2번을 당시 탈락한 실제 뉴스 2건으로 교체할지 (새 정책은 `[제외]` 통보를 슬롯 후보에서 배제하므로, 교체하면 오늘 화면도 정책과 일치한다).
+
+## 2026-10-18 AIK24-FREE-PIPE-01 일일 실행 — 수집 39건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-18 09:30 — AIK24-PIPE-05: 아침 브리핑 `[제외]` 카드 2건 규명 + 선정 규칙 수정
 
 대표님 지시: "뉴스브리핑이 이렇게 나오는 이유가 뭔지. 나오지 말아야할 것이 나왔고 나올게 없다면 그 자리를 뉴스가 채워야한다."
