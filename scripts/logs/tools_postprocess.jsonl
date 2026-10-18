@@ -1,3 +1,9 @@
 {"ts": "2026-10-18 18:23:02", "slug": "pondas", "step": "url", "result": "done", "detail": "https://theresanaiforthat.com/ai/pondas/ → https://pondas.ai (title='pondas - Run AI agents like a game')", "dry_run": false}
 {"ts": "2026-10-18 18:23:11", "slug": "pondas", "step": "enrich", "result": "done", "detail": "+2,895자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-18 18:23:14", "slug": "pondas", "step": "thumb", "result": "done", "detail": "✅ pondas 13KB", "dry_run": false}
+{"ts": "2026-10-18 18:29:14", "slug": "amplify-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:29:15", "slug": "amplify-ai", "step": "thumb", "result": "fail", "detail": "❌ amplify-ai OG_PAGE_HTTPError | ❌ amplify-ai OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-18 18:29:18", "slug": "flowmaps", "step": "url", "result": "done", "detail": "https://theresanaiforthat.com/ai/flowmaps/ → https://flowmaps.app (title='Flowmaps | Plan Your App Visually Before AI ')", "dry_run": false}
+{"ts": "2026-10-18 18:29:21", "slug": "flowmaps", "step": "thumb", "result": "done", "detail": "✅ flowmaps 22KB", "dry_run": false}
+{"ts": "2026-10-18 18:29:23", "slug": "freebeat-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-18 18:29:27", "slug": "freebeat-ai", "step": "thumb", "result": "fail", "detail": "❌ freebeat-ai OG_GENERIC | ❌ freebeat-ai OG_GENERIC", "dry_run": false}

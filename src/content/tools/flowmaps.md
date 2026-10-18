@@ -5,13 +5,14 @@ category: "코딩·개발"
 price: "무료/월 15,000원"
 koreanSupport: false
 difficulty: "중급"
-url: "https://theresanaiforthat.com/ai/flowmaps/"
+url: "https://flowmaps.app"
 useCases: ["모바일 앱 화면 설계", "서비스 기획서 초안", "웹사이트 구조도 작성"]
 tags: ["앱개발", "화면설계", "와이어프레임"]
 featured: false
 order: 100
 tasks: ["기획서", "노코드", "프로젝트-관리"]
 updated: "2026-10-16"
+image: "/images/tools/flowmaps.webp"
 ---
 
 ## 한줄 요약
