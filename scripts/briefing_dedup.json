@@ -1,323 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-17",
-      "briefing_id": 296,
-      "articles": [
-        {
-          "id": "51254",
-          "title": "영국의 AI 기업 합성시아, '공상과학 영화 같은' 공포가 영국 기술 산업을 질식시킬 수 ",
-          "original_title": "",
-          "description": "영국의 AI 기업 합성시아(Synthesia)는 AI에 대한 '공상과학 영화 같은' 과도한 공포가 부실한 규제로 이어질 수 있다고 경고하며, 영국 정부를 향해 AI 규제 강화 압박이 커지는 상황에 우려를 표명했다. 런던에 본사를 둔 AI 비디오 기업의 기업 소셜·정책 총괄인 알렉산드루 보이카(Alexandru Voica)는 시티AM과의 인터뷰에서 이러한 공",
-          "link": "https://www.cityam.com/british-ai-firm-synthesia-warns-sci-fi-fears-risk-chocking-uk-tech/",
-          "entities": [
-            "Alexandru",
-            "Voica",
-            "Synthesia",
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51235",
-          "title": "무인 자동차를 타는 것이 기다려지는 이유 | 독자 투고",
-          "original_title": "",
-          "description": "라스 얀센은 눈 질환이 있어 운전할 수 없는 자신에게 자율주행차가 큰 도움이 될 것이라고 말한다. 이는 아드리안 칠스의 기사에 대한 독자들의 반응이며, 리처드 코넬과 마이클 풀러의 편지도 함께 실렸다.",
-          "link": "https://www.theguardian.com/technology/2026/sep/16/why-i-cant-wait-to-get-into-a-driverless-car",
-          "entities": [],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51267",
-          "title": "\"미국은 질 수 없다\": 펜타곤, 경고에도 불구하고 AI 개발에 박차",
-          "original_title": "",
-          "description": "군 수뇌부는 인공지능 연구에서 적들에게 뒤처질 위험이 기술의 잠재적 위험보다 더 크다고 경고하고 있습니다.",
-          "link": "https://www.politico.com/news/2026/09/16/pentagon-ai-congress-worries-defense-01080418?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51249",
-          "title": "이제 가장 어려운 AI 보안 문제는 에이전트의 권한 범위에 집중되어 있다",
-          "original_title": "",
-          "description": "OWASP의 2026년 LLM 애플리케이션 보안 가이드 10대 항목(Top 10)에서 '과도한 에이전트 권한(Excessive Agency)'은 6위에서 3위로 상승한 반면, '부적절한 출력 처리'는 5위에서 10위로 하락했다. 이는 실제 침해 사고 데이터를 일부 반영한 최초의 개정판이다. 유럽의 사이버 복원력법(Cyber Resilience Act)은 지",
-          "link": "https://thenextweb.com/news/owasp-llm-2026-agency-cra",
-          "entities": [
-            "Agency",
-            "Act",
-            "LLM",
-            "Cyber",
-            "AI",
-            "Resilience",
-            "Top",
-            "Excessive"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51261",
-          "title": "OpenAI 투자자들, 새로운 자금 조달 라운드 논의 위해 회사 측에 접촉",
-          "original_title": "",
-          "description": "OpenAI는 지난 6월 비공개로 투자설명서를 제출한 후, 내년으로 널리 예상되는 대규모 기업공개(IPO)를 준비하고 있습니다.",
-          "link": "https://www.cnbc.com/2026/09/16/open-ai-investors-new-funding-round.html",
-          "entities": [
-            "IPO",
-            "OpenAI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51257",
-          "title": "블루멘탈 상원의원, AI 감독 촉구하며 \"우리는 통제력을 상실하기 직전\"",
-          "original_title": "",
-          "description": "트럼프 행정부는 AI 패권 경쟁에서 중국을 꺾는 것이 무엇보다 중요한 목표라고 주장하고 있습니다.",
-          "link": "https://www.cnbc.com/2026/09/16/blumenthal-ai-regulation-safety-oversight.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-17",
-      "briefing_id": 297,
-      "articles": [
-        {
-          "id": "51256",
-          "title": "앤스로픽 정책 총괄, \"AI 기업들에 '명예 규율'만 기대할 수는 없다\"",
-          "original_title": "",
-          "description": "모델 개발 규제 방안을 둘러싼 논쟁이 격화되는 가운데, 앤스로픽의 공공 정책 총괄인 세라 헥(Sarah Heck)이 AI 안전성에 대한 견해를 밝혔습니다.",
-          "link": "https://www.cnbc.com/2026/09/16/anthropic-policy-chief-says-ai-companies-cant-operate-on-honor-code.html",
-          "entities": [
-            "Heck",
-            "Sarah",
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51236",
-          "title": "AI의 지배력은 피할 수 없는 운명이 아니다. 우리는 더 나은 방향으로 바꿀 수 있다 | ",
-          "original_title": "",
-          "description": "국가들은 실존적 위협에 직면했을 때 국제적 합의를 위해 이미 협력한 전례가 있다. 알고리즘 기반 소셜 미디어부터 AI에 이르기까지 많은 기술 발전 속에서, 우리는 변화를 선택할 수 있다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/sep/17/ai-future-not-inevitable-we-can-choose-better-safety-regulation",
-          "entities": [],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51269",
-          "title": "AI 일시 중지 대화 촉구한 폰데어라이엔, 종말론적 위험 공포 잠재우지 못해",
-          "original_title": "",
-          "description": "EU 집행위원장은 연례 유럽연합 연설을 통해 AI에 대한 고조되는 우려에 대응했습니다. 그러나 그녀의 발언은 권한의 한계를 여실히 드러냈습니다.",
-          "link": "https://www.politico.eu/article/von-der-leyens-call-for-talks-on-pausing-ai-cant-stem-extinction-risk-fears/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-          "entities": [
-            "AI",
-            "EU"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51252",
-          "title": "\"명확하게 표시된 대화\": 오픈이아이, ChatGPT에서 스폰서드 에이전트 테스트 진행",
-          "original_title": "",
-          "description": "오픈에아이는 9월 16일 \"오늘 우리는 광고를 사용자에게 더 유용하게 만들고 기업에는 더 쉽게 광고할 수 있도록 돕는 새로운 AI 기반 경험을 도입한다\"고 밝혔다. 가장 큰 변화는 스폰서드 에이전트(Sponsored Agents) 테스트로, 사용자는 ChatGPT에서 광고를 클릭한 후 해당 에이전트와 대화를 시작할 수 있다.",
-          "link": "https://thenextweb.com/news/openai-chatgpt-sponsored-agents-ads-manager-hubspot-shopify",
-          "entities": [
-            "Agents",
-            "Sponsored",
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51250",
-          "title": "노보, 신약 개발 가속화를 위해 앤스로픽의 클로드 사이언스 도입 테스트 진행",
-          "original_title": "",
-          "description": "노보의 사장 겸 최고경영자(CEO) 마이크 더스타르(Mike Doustdar)는 \"앤스로픽과의 협력은 우리의 연구개발(R&D) 조직에 강력한 추진력을 제공하고, 만성 질환으로 고통받는 사람들에게 혁신적인 건강 솔루션을 제공하는 데 큰 도움이 될 것\"이라고 밝혔다. 과거 노보 노디스크(Novo Nordisk)로 불렸던 덴마크의 이 제약사와 앤스로픽이 손을 잡",
-          "link": "https://thenextweb.com/news/novo-anthropic-claude-science-drug-discovery",
-          "entities": [
-            "Doustdar",
-            "Novo",
-            "Nordisk",
-            "Mike",
-            "R&D",
-            "CEO"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51186",
-          "title": "AI 연구소들이 내부 감사관을 원하지만, 그 전에 정문부터 걸어 잠가야 할지도 모릅니다",
-          "original_title": "",
-          "description": "통제를 벗어난 에이전트를 막기 위한 더 간단하고 효과적인 해결책이 눈앞에 숨겨져 있을 수 있습니다.",
-          "link": "https://techcrunch.com/2026/09/16/ai-labs-want-in-house-auditors-but-maybe-they-should-shut-the-front-door-first/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-17",
-      "briefing_id": 298,
-      "articles": [
-        {
-          "id": "51271",
-          "title": "\"절대 항복할 수 없다\", 공화당 중진 의원이 중국과의 AI 경쟁에 대해 언급",
-          "original_title": "",
-          "description": "켄터키주 공화당 소속 브랫 거스리(Brett Guthrie) 의원은 유럽의 기술 진보를 위축시켰다고 주장하는 것과 같은 엄격한 규제를 채택하는 것에 대해 경고했습니다.",
-          "link": "https://www.politico.com/news/2026/09/16/brett-guthrie-artificial-intelligence-china-race-01078965?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-          "entities": [
-            "Guthrie",
-            "AI",
-            "Brett"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51237",
-          "title": "제안된 새 규정에 따라 호주인이 온라인에 올린 모든 것이 AI 수집 대상이 될 수 있다. ",
-          "original_title": "",
-          "description": "알바니지 정부는 미국 빅테크 기업들에 호주 콘텐츠에 대한 무제한 접근을 허용하는 개혁을 검토하고 있다. AI 기업들은 호주인들이 온라인에 올린 모든 창작물에 제한 없이 접근할 수 있게 될 수 있다.",
-          "link": "https://www.theguardian.com/australia-news/2026/sep/17/everything-australians-put-online-could-be-scraped-for-ai-under-proposed-new-rules-how-will-you-be-affected",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51189",
-          "title": "로봇들은 '챗GPT 모멘트'를 기다리고 있습니다: 테크크런치 디스럽트 2026에서 엔비디아",
-          "original_title": "",
-          "description": "로보틱스 산업은 여전히 일상생활 속으로의 도약을 기다리고 있습니다. 테크크런치 디스럽트 2026에서 엔비디아의 레스 카르파스가 그 이유에 대한 해답을 제시합니다. 9월 25일 전에 등록하여 패스 비용을 최대 200달러까지 절약하세요.",
-          "link": "https://techcrunch.com/2026/09/16/robots-are-waiting-for-a-chatgpt-moment-nvidias-les-karpas-explains-why-at-techcrunch-disrupt-2026/",
-          "entities": [],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51286",
-          "title": "Google Home 앱, 배터리 절약 위젯 제공 및 회색 기기 타일 감소",
-          "original_title": "",
-          "description": "Google은 Home MCP 외에도 홈 화면 위젯을 위한 Home 앱과 Gemini for Home 음성 비서 업데이트를 출시했습니다. 새로운 위젯은 배터리 소모를 최소화하고 회색 기기 타일을 줄여 사용자 경험을 개선합니다.",
-          "link": "https://9to5google.com/2026/09/16/google-home-widget-battery/",
-          "entities": [
-            "MCP",
-            "Home",
-            "Gemini",
-            "Google"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51287",
-          "title": "One UI 9, 드디어 Galaxy S26 스마트폰에 출시",
-          "original_title": "",
-          "description": "삼성은 이제 전 세계 Galaxy S26 시리즈에 정교하고 AI가 탑재된 One UI 9 업데이트를 배포한다. 이 업데이트는 스마트 카메라 기능, 사전 예방 보안, 생산성 향상 등을 제공한다.",
-          "link": "https://www.androidcentral.com/phones/samsung-galaxy/one-ui-9-is-finally-rolling-out-to-galaxy-s26-phones",
-          "entities": [
-            "UI",
-            "One",
-            "S26",
-            "Galaxy"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51251",
-          "title": "코호어와 알레프 알파, 베를린과 토론토에 본사를 두고 합병 계약 체결",
-          "original_title": "",
-          "description": "코호어의 최고경영자(CEO) 에이단 고메즈(Aidan Gomez)는 \"어떤 정부나 기업도 성능이 뛰어난 AI와 기술에 대한 통제권 중 하나를 포기하도록 강요받아서는 안 된다\"고 말했다. 캐나다의 코호어와 독일의 알레프 알파는 지난 9월 16일 발표를 통해 최종 기업 결합 계약을 체결했다고 밝혔다.",
-          "link": "https://thenextweb.com/news/cohere-aleph-alpha-definitive-agreement-transatlantic-sovereign-ai",
-          "entities": [
-            "Aidan",
-            "Gomez",
-            "CEO"
-          ],
-          "date": "2026-09-17"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-17",
-      "briefing_id": 299,
-      "articles": [
-        {
-          "id": "51354",
-          "title": "미·중 보안 전문가들, 군사 AI를 위한 핵무기급 안전장치 제안",
-          "original_title": "",
-          "description": "로이터통신에 따르면 미국과 중국의 보안 전문가들이 핵무기 관련 규제들을 모델 삼아 AI가 발사 여부를 결정하는 것을 금지하는 조항을 포함한 군사 AI 안전장치를 제안했습니다. 지난주 발표된 이 권고안은 미·중 AI 및 핵 관련 기관에서 나온 것입니다.",
-          "link": "https://thenextweb.com/news/us-china-experts-nuclear-style-ai-safeguards",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51358",
-          "title": "찰스 국왕, 정상회담에서 엔비디아·오픈AI·앤트로픽 최고경영진에게 AI 안전 문제 압박할 ",
-          "original_title": "",
-          "description": "AI 개발에 내재된 위험성을 둘러싼 논란이 고조되는 가운데, 찰스 국왕이 오늘 주요 테크 기업 리더들을 소집합니다.",
-          "link": "https://www.cnbc.com/2026/09/17/king-charles-nvidia-openai-anthropic-ai.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51324",
-          "title": "OpenAI의 GPT-6 아스트라, 83년 동안 풀리지 않았던 나치 무전 메시지를 10시간",
-          "original_title": "",
-          "description": "블룸버그 소속 개발자가 OpenAI의 GPT-6 아스트라를 이용해 1941년 독일 국방군의 83년 된 에니그마 암호 메시지를 해독했다고 주장했습니다. 1941년 작성된 이 82자의 무전에는 행군 경로를 묻는 병사의 내용이 담겨 있습니다. 다만 이 해독 결과는 아직 독립적인 검증이 필요합니다.",
-          "link": "https://the-decoder.com/openais-gpt-6-astra-decrypts-a-nazi-radio-message-in-ten-hours-that-went-unsolved-for-83-years/",
-          "entities": [
-            "GPT-6"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51318",
-          "title": "스타트업의 다음 팀원은 AI 에이전트가 될 수도 있습니다: Gusto, Insight Pa",
-          "original_title": "",
-          "description": "이번 세션에서는 초기 기업들이 인간과 AI 에이전트가 함께 일하는 팀을 어떻게 구축하고 있는지, 그리고 창업자들이 속도, 책임감, 기업 문화를 희생하지 않고 이를 어떻게 달성할 수 있는지 살펴봅니다. 테크크런치 디스럽트 2026에서 자세한 내용을 확인해 보세요. 9월 25일 이전에 등록하면 최대 200달러를 절약할 수 있습니다.",
-          "link": "https://techcrunch.com/2026/09/16/your-startups-next-teammate-might-be-an-ai-agent-gusto-insight-partners-and-leland-explain-what-that-changes-at-techcrunch-disrupt-2026/",
-          "entities": [
-            "AI",
-            "Gusto",
-            "Insight",
-            "Pa"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51351",
-          "title": "모질라, 프랑스 출시와 함께 파이어폭스 스마트 윈도에 미스트랄 스몰 4 추가",
-          "original_title": "",
-          "description": "모질라가 미스트랄 AI와 파트너십을 맺고 프랑스 기업의 모델을 파이어폭스의 베타 버전 AI 브라우징 어시스턴트인 스마트 윈도에 적용합니다. 양사는 수요일 공동 성명을 통해 이 협약과 함께 프랑스 내 기능 출시를 발표했습니다. 지난 8월 모질라가 선보인 스마트 윈도는...",
-          "link": "https://thenextweb.com/news/firefox-smart-window-mistral-mozilla-partnership",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-17"
-        },
-        {
-          "id": "51323",
-          "title": "오픈로터스의 어마어마한 토큰 차트는 AI 버블 논쟁을 보여주는 단 한 장의 사진",
-          "original_title": "",
-          "description": "오픈로터스(OpenRouter)에서 주간 토큰 소비량은 2025년 1월 이후 25,000% 이상 급증하여 0.5조 개에서 126.2조 개로 늘어났다. 이 수치는 인상적으로 보이지만 실제 AI 사용량보다는 토큰을 많이 소모하는 추론 모델과, 토큰을 대량으로 태워버리는 최적화되지 않은 AI 에이전트의 증가를 더 잘 보여준다.",
-          "link": "https://the-decoder.com/openrouters-staggering-token-chart-is-the-ai-bubble-debate-in-a-single-image/",
-          "entities": [
-            "AI",
-            "OpenRouter"
-          ],
-          "date": "2026-09-17"
-        }
-      ]
-    },
-    {
       "date": "2026-09-18",
       "briefing_id": 300,
       "articles": [
@@ -3996,302 +3679,52 @@
           "date": "2026-10-17"
         }
       ]
+    },
+    {
+      "date": "2026-10-18",
+      "briefing_id": 357,
+      "articles": [
+        {
+          "id": "56212",
+          "title": "[제외] cat-jam-free — OpenCode Zen 무료 목록에서 제외",
+          "original_title": "cat-jam-free",
+          "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
+          "link": "https://opencode.ai/v2/docs/console/models/#cat-jam-free",
+          "entities": [
+            "OpenCode",
+            "Zen"
+          ],
+          "date": "2026-10-18"
+        },
+        {
+          "id": "56213",
+          "title": "[제외] muse-spark-1.3-contributor-free — OpenCode Ze",
+          "original_title": "muse-spark-1.3-contributor-free",
+          "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
+          "link": "https://opencode.ai/v2/docs/console/models/#muse-spark-1.3-contributor-free",
+          "entities": [
+            "Ze",
+            "OpenCode",
+            "Zen"
+          ],
+          "date": "2026-10-18"
+        },
+        {
+          "id": "56075",
+          "title": "Azure 무료 계정 $200 크레딧 (30일)",
+          "original_title": "Azure 무료 계정 $200 크레딧 (30일)",
+          "description": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스. Azure OpenAI 엔드포인트를 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+          "link": "https://azure.microsoft.com/en-us/free/",
+          "entities": [
+            "OpenAI",
+            "Azure"
+          ],
+          "date": "2026-10-18"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "51254",
-      "title": "영국의 AI 기업 합성시아, '공상과학 영화 같은' 공포가 영국 기술 산업을 질식시킬 수 ",
-      "original_title": "",
-      "description": "영국의 AI 기업 합성시아(Synthesia)는 AI에 대한 '공상과학 영화 같은' 과도한 공포가 부실한 규제로 이어질 수 있다고 경고하며, 영국 정부를 향해 AI 규제 강화 압박이 커지는 상황에 우려를 표명했다. 런던에 본사를 둔 AI 비디오 기업의 기업 소셜·정책 총괄인 알렉산드루 보이카(Alexandru Voica)는 시티AM과의 인터뷰에서 이러한 공",
-      "link": "https://www.cityam.com/british-ai-firm-synthesia-warns-sci-fi-fears-risk-chocking-uk-tech/",
-      "entities": [
-        "Alexandru",
-        "Voica",
-        "Synthesia",
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51235",
-      "title": "무인 자동차를 타는 것이 기다려지는 이유 | 독자 투고",
-      "original_title": "",
-      "description": "라스 얀센은 눈 질환이 있어 운전할 수 없는 자신에게 자율주행차가 큰 도움이 될 것이라고 말한다. 이는 아드리안 칠스의 기사에 대한 독자들의 반응이며, 리처드 코넬과 마이클 풀러의 편지도 함께 실렸다.",
-      "link": "https://www.theguardian.com/technology/2026/sep/16/why-i-cant-wait-to-get-into-a-driverless-car",
-      "entities": [],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51267",
-      "title": "\"미국은 질 수 없다\": 펜타곤, 경고에도 불구하고 AI 개발에 박차",
-      "original_title": "",
-      "description": "군 수뇌부는 인공지능 연구에서 적들에게 뒤처질 위험이 기술의 잠재적 위험보다 더 크다고 경고하고 있습니다.",
-      "link": "https://www.politico.com/news/2026/09/16/pentagon-ai-congress-worries-defense-01080418?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51249",
-      "title": "이제 가장 어려운 AI 보안 문제는 에이전트의 권한 범위에 집중되어 있다",
-      "original_title": "",
-      "description": "OWASP의 2026년 LLM 애플리케이션 보안 가이드 10대 항목(Top 10)에서 '과도한 에이전트 권한(Excessive Agency)'은 6위에서 3위로 상승한 반면, '부적절한 출력 처리'는 5위에서 10위로 하락했다. 이는 실제 침해 사고 데이터를 일부 반영한 최초의 개정판이다. 유럽의 사이버 복원력법(Cyber Resilience Act)은 지",
-      "link": "https://thenextweb.com/news/owasp-llm-2026-agency-cra",
-      "entities": [
-        "Agency",
-        "Act",
-        "LLM",
-        "Cyber",
-        "AI",
-        "Resilience",
-        "Top",
-        "Excessive"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51261",
-      "title": "OpenAI 투자자들, 새로운 자금 조달 라운드 논의 위해 회사 측에 접촉",
-      "original_title": "",
-      "description": "OpenAI는 지난 6월 비공개로 투자설명서를 제출한 후, 내년으로 널리 예상되는 대규모 기업공개(IPO)를 준비하고 있습니다.",
-      "link": "https://www.cnbc.com/2026/09/16/open-ai-investors-new-funding-round.html",
-      "entities": [
-        "IPO",
-        "OpenAI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51257",
-      "title": "블루멘탈 상원의원, AI 감독 촉구하며 \"우리는 통제력을 상실하기 직전\"",
-      "original_title": "",
-      "description": "트럼프 행정부는 AI 패권 경쟁에서 중국을 꺾는 것이 무엇보다 중요한 목표라고 주장하고 있습니다.",
-      "link": "https://www.cnbc.com/2026/09/16/blumenthal-ai-regulation-safety-oversight.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51256",
-      "title": "앤스로픽 정책 총괄, \"AI 기업들에 '명예 규율'만 기대할 수는 없다\"",
-      "original_title": "",
-      "description": "모델 개발 규제 방안을 둘러싼 논쟁이 격화되는 가운데, 앤스로픽의 공공 정책 총괄인 세라 헥(Sarah Heck)이 AI 안전성에 대한 견해를 밝혔습니다.",
-      "link": "https://www.cnbc.com/2026/09/16/anthropic-policy-chief-says-ai-companies-cant-operate-on-honor-code.html",
-      "entities": [
-        "Heck",
-        "Sarah",
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51236",
-      "title": "AI의 지배력은 피할 수 없는 운명이 아니다. 우리는 더 나은 방향으로 바꿀 수 있다 | ",
-      "original_title": "",
-      "description": "국가들은 실존적 위협에 직면했을 때 국제적 합의를 위해 이미 협력한 전례가 있다. 알고리즘 기반 소셜 미디어부터 AI에 이르기까지 많은 기술 발전 속에서, 우리는 변화를 선택할 수 있다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/sep/17/ai-future-not-inevitable-we-can-choose-better-safety-regulation",
-      "entities": [],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51269",
-      "title": "AI 일시 중지 대화 촉구한 폰데어라이엔, 종말론적 위험 공포 잠재우지 못해",
-      "original_title": "",
-      "description": "EU 집행위원장은 연례 유럽연합 연설을 통해 AI에 대한 고조되는 우려에 대응했습니다. 그러나 그녀의 발언은 권한의 한계를 여실히 드러냈습니다.",
-      "link": "https://www.politico.eu/article/von-der-leyens-call-for-talks-on-pausing-ai-cant-stem-extinction-risk-fears/?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-      "entities": [
-        "AI",
-        "EU"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51252",
-      "title": "\"명확하게 표시된 대화\": 오픈이아이, ChatGPT에서 스폰서드 에이전트 테스트 진행",
-      "original_title": "",
-      "description": "오픈에아이는 9월 16일 \"오늘 우리는 광고를 사용자에게 더 유용하게 만들고 기업에는 더 쉽게 광고할 수 있도록 돕는 새로운 AI 기반 경험을 도입한다\"고 밝혔다. 가장 큰 변화는 스폰서드 에이전트(Sponsored Agents) 테스트로, 사용자는 ChatGPT에서 광고를 클릭한 후 해당 에이전트와 대화를 시작할 수 있다.",
-      "link": "https://thenextweb.com/news/openai-chatgpt-sponsored-agents-ads-manager-hubspot-shopify",
-      "entities": [
-        "Agents",
-        "Sponsored",
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51250",
-      "title": "노보, 신약 개발 가속화를 위해 앤스로픽의 클로드 사이언스 도입 테스트 진행",
-      "original_title": "",
-      "description": "노보의 사장 겸 최고경영자(CEO) 마이크 더스타르(Mike Doustdar)는 \"앤스로픽과의 협력은 우리의 연구개발(R&D) 조직에 강력한 추진력을 제공하고, 만성 질환으로 고통받는 사람들에게 혁신적인 건강 솔루션을 제공하는 데 큰 도움이 될 것\"이라고 밝혔다. 과거 노보 노디스크(Novo Nordisk)로 불렸던 덴마크의 이 제약사와 앤스로픽이 손을 잡",
-      "link": "https://thenextweb.com/news/novo-anthropic-claude-science-drug-discovery",
-      "entities": [
-        "Doustdar",
-        "Novo",
-        "Nordisk",
-        "Mike",
-        "R&D",
-        "CEO"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51186",
-      "title": "AI 연구소들이 내부 감사관을 원하지만, 그 전에 정문부터 걸어 잠가야 할지도 모릅니다",
-      "original_title": "",
-      "description": "통제를 벗어난 에이전트를 막기 위한 더 간단하고 효과적인 해결책이 눈앞에 숨겨져 있을 수 있습니다.",
-      "link": "https://techcrunch.com/2026/09/16/ai-labs-want-in-house-auditors-but-maybe-they-should-shut-the-front-door-first/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51271",
-      "title": "\"절대 항복할 수 없다\", 공화당 중진 의원이 중국과의 AI 경쟁에 대해 언급",
-      "original_title": "",
-      "description": "켄터키주 공화당 소속 브랫 거스리(Brett Guthrie) 의원은 유럽의 기술 진보를 위축시켰다고 주장하는 것과 같은 엄격한 규제를 채택하는 것에 대해 경고했습니다.",
-      "link": "https://www.politico.com/news/2026/09/16/brett-guthrie-artificial-intelligence-china-race-01078965?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-      "entities": [
-        "Guthrie",
-        "AI",
-        "Brett"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51237",
-      "title": "제안된 새 규정에 따라 호주인이 온라인에 올린 모든 것이 AI 수집 대상이 될 수 있다. ",
-      "original_title": "",
-      "description": "알바니지 정부는 미국 빅테크 기업들에 호주 콘텐츠에 대한 무제한 접근을 허용하는 개혁을 검토하고 있다. AI 기업들은 호주인들이 온라인에 올린 모든 창작물에 제한 없이 접근할 수 있게 될 수 있다.",
-      "link": "https://www.theguardian.com/australia-news/2026/sep/17/everything-australians-put-online-could-be-scraped-for-ai-under-proposed-new-rules-how-will-you-be-affected",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51189",
-      "title": "로봇들은 '챗GPT 모멘트'를 기다리고 있습니다: 테크크런치 디스럽트 2026에서 엔비디아",
-      "original_title": "",
-      "description": "로보틱스 산업은 여전히 일상생활 속으로의 도약을 기다리고 있습니다. 테크크런치 디스럽트 2026에서 엔비디아의 레스 카르파스가 그 이유에 대한 해답을 제시합니다. 9월 25일 전에 등록하여 패스 비용을 최대 200달러까지 절약하세요.",
-      "link": "https://techcrunch.com/2026/09/16/robots-are-waiting-for-a-chatgpt-moment-nvidias-les-karpas-explains-why-at-techcrunch-disrupt-2026/",
-      "entities": [],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51286",
-      "title": "Google Home 앱, 배터리 절약 위젯 제공 및 회색 기기 타일 감소",
-      "original_title": "",
-      "description": "Google은 Home MCP 외에도 홈 화면 위젯을 위한 Home 앱과 Gemini for Home 음성 비서 업데이트를 출시했습니다. 새로운 위젯은 배터리 소모를 최소화하고 회색 기기 타일을 줄여 사용자 경험을 개선합니다.",
-      "link": "https://9to5google.com/2026/09/16/google-home-widget-battery/",
-      "entities": [
-        "MCP",
-        "Home",
-        "Gemini",
-        "Google"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51287",
-      "title": "One UI 9, 드디어 Galaxy S26 스마트폰에 출시",
-      "original_title": "",
-      "description": "삼성은 이제 전 세계 Galaxy S26 시리즈에 정교하고 AI가 탑재된 One UI 9 업데이트를 배포한다. 이 업데이트는 스마트 카메라 기능, 사전 예방 보안, 생산성 향상 등을 제공한다.",
-      "link": "https://www.androidcentral.com/phones/samsung-galaxy/one-ui-9-is-finally-rolling-out-to-galaxy-s26-phones",
-      "entities": [
-        "UI",
-        "One",
-        "S26",
-        "Galaxy"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51251",
-      "title": "코호어와 알레프 알파, 베를린과 토론토에 본사를 두고 합병 계약 체결",
-      "original_title": "",
-      "description": "코호어의 최고경영자(CEO) 에이단 고메즈(Aidan Gomez)는 \"어떤 정부나 기업도 성능이 뛰어난 AI와 기술에 대한 통제권 중 하나를 포기하도록 강요받아서는 안 된다\"고 말했다. 캐나다의 코호어와 독일의 알레프 알파는 지난 9월 16일 발표를 통해 최종 기업 결합 계약을 체결했다고 밝혔다.",
-      "link": "https://thenextweb.com/news/cohere-aleph-alpha-definitive-agreement-transatlantic-sovereign-ai",
-      "entities": [
-        "Aidan",
-        "Gomez",
-        "CEO"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51354",
-      "title": "미·중 보안 전문가들, 군사 AI를 위한 핵무기급 안전장치 제안",
-      "original_title": "",
-      "description": "로이터통신에 따르면 미국과 중국의 보안 전문가들이 핵무기 관련 규제들을 모델 삼아 AI가 발사 여부를 결정하는 것을 금지하는 조항을 포함한 군사 AI 안전장치를 제안했습니다. 지난주 발표된 이 권고안은 미·중 AI 및 핵 관련 기관에서 나온 것입니다.",
-      "link": "https://thenextweb.com/news/us-china-experts-nuclear-style-ai-safeguards",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51358",
-      "title": "찰스 국왕, 정상회담에서 엔비디아·오픈AI·앤트로픽 최고경영진에게 AI 안전 문제 압박할 ",
-      "original_title": "",
-      "description": "AI 개발에 내재된 위험성을 둘러싼 논란이 고조되는 가운데, 찰스 국왕이 오늘 주요 테크 기업 리더들을 소집합니다.",
-      "link": "https://www.cnbc.com/2026/09/17/king-charles-nvidia-openai-anthropic-ai.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51324",
-      "title": "OpenAI의 GPT-6 아스트라, 83년 동안 풀리지 않았던 나치 무전 메시지를 10시간",
-      "original_title": "",
-      "description": "블룸버그 소속 개발자가 OpenAI의 GPT-6 아스트라를 이용해 1941년 독일 국방군의 83년 된 에니그마 암호 메시지를 해독했다고 주장했습니다. 1941년 작성된 이 82자의 무전에는 행군 경로를 묻는 병사의 내용이 담겨 있습니다. 다만 이 해독 결과는 아직 독립적인 검증이 필요합니다.",
-      "link": "https://the-decoder.com/openais-gpt-6-astra-decrypts-a-nazi-radio-message-in-ten-hours-that-went-unsolved-for-83-years/",
-      "entities": [
-        "GPT-6"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51318",
-      "title": "스타트업의 다음 팀원은 AI 에이전트가 될 수도 있습니다: Gusto, Insight Pa",
-      "original_title": "",
-      "description": "이번 세션에서는 초기 기업들이 인간과 AI 에이전트가 함께 일하는 팀을 어떻게 구축하고 있는지, 그리고 창업자들이 속도, 책임감, 기업 문화를 희생하지 않고 이를 어떻게 달성할 수 있는지 살펴봅니다. 테크크런치 디스럽트 2026에서 자세한 내용을 확인해 보세요. 9월 25일 이전에 등록하면 최대 200달러를 절약할 수 있습니다.",
-      "link": "https://techcrunch.com/2026/09/16/your-startups-next-teammate-might-be-an-ai-agent-gusto-insight-partners-and-leland-explain-what-that-changes-at-techcrunch-disrupt-2026/",
-      "entities": [
-        "AI",
-        "Gusto",
-        "Insight",
-        "Pa"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51351",
-      "title": "모질라, 프랑스 출시와 함께 파이어폭스 스마트 윈도에 미스트랄 스몰 4 추가",
-      "original_title": "",
-      "description": "모질라가 미스트랄 AI와 파트너십을 맺고 프랑스 기업의 모델을 파이어폭스의 베타 버전 AI 브라우징 어시스턴트인 스마트 윈도에 적용합니다. 양사는 수요일 공동 성명을 통해 이 협약과 함께 프랑스 내 기능 출시를 발표했습니다. 지난 8월 모질라가 선보인 스마트 윈도는...",
-      "link": "https://thenextweb.com/news/firefox-smart-window-mistral-mozilla-partnership",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-17"
-    },
-    {
-      "id": "51323",
-      "title": "오픈로터스의 어마어마한 토큰 차트는 AI 버블 논쟁을 보여주는 단 한 장의 사진",
-      "original_title": "",
-      "description": "오픈로터스(OpenRouter)에서 주간 토큰 소비량은 2025년 1월 이후 25,000% 이상 급증하여 0.5조 개에서 126.2조 개로 늘어났다. 이 수치는 인상적으로 보이지만 실제 AI 사용량보다는 토큰을 많이 소모하는 추론 모델과, 토큰을 대량으로 태워버리는 최적화되지 않은 AI 에이전트의 증가를 더 잘 보여준다.",
-      "link": "https://the-decoder.com/openrouters-staggering-token-chart-is-the-ai-bubble-debate-in-a-single-image/",
-      "entities": [
-        "AI",
-        "OpenRouter"
-      ],
-      "date": "2026-09-17"
-    },
     {
       "id": "51419",
       "title": "브릴스, 산업용 로봇 넘어 ‘피지컬 AI’로…RFM·VLA 기반 차세대 로봇 플랫폼 본격화",
@@ -7623,6 +7056,43 @@
         "Free"
       ],
       "date": "2026-10-17"
+    },
+    {
+      "id": "56212",
+      "title": "[제외] cat-jam-free — OpenCode Zen 무료 목록에서 제외",
+      "original_title": "cat-jam-free",
+      "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
+      "link": "https://opencode.ai/v2/docs/console/models/#cat-jam-free",
+      "entities": [
+        "OpenCode",
+        "Zen"
+      ],
+      "date": "2026-10-18"
+    },
+    {
+      "id": "56213",
+      "title": "[제외] muse-spark-1.3-contributor-free — OpenCode Ze",
+      "original_title": "muse-spark-1.3-contributor-free",
+      "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
+      "link": "https://opencode.ai/v2/docs/console/models/#muse-spark-1.3-contributor-free",
+      "entities": [
+        "Ze",
+        "OpenCode",
+        "Zen"
+      ],
+      "date": "2026-10-18"
+    },
+    {
+      "id": "56075",
+      "title": "Azure 무료 계정 $200 크레딧 (30일)",
+      "original_title": "Azure 무료 계정 $200 크레딧 (30일)",
+      "description": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스. Azure OpenAI 엔드포인트를 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+      "link": "https://azure.microsoft.com/en-us/free/",
+      "entities": [
+        "OpenAI",
+        "Azure"
+      ],
+      "date": "2026-10-18"
     }
   ]
 }
