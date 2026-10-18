@@ -1,3 +1,42 @@
+## 2026-10-18 20:50 KST — AIK24-TOOLSAUTO-01 (보강) — 후처리 현황 조회 `--status` 추가 + 세션 마무리
+
+**증분 추가** (앞 20:40 보고의 보강, 작업 1건=기록 1건 규칙에 따라 별도 기록)
+
+### 한 일
+
+1. `scripts/tools_postprocess.py` 에 `--status` 추가 — 대표님이 하루 1회 "파이프라인이 무엇을 했나"를
+   한 명령으로 보는 **읽기 전용** 요약(쓰기·네트워크 호출 없음).
+   출력: 대상 페이지 수 · 심화/썸네일 결손 · 집계/빈 URL · 원장 누적·오늘 건수 ·
+   단계별(url/enrich/thumb) 성공·실패 + 성공 slug 상세 · 남은 대상(쿨다운/전체) · 최근 로그 4줄 · launchd 확인 명령
+2. 세션 마무리 문서 갱신: `CHANGES.md`(맨 위 항목), `.planning/STATE.md`(last_updated/activity),
+   `.continue-here.md`(내일 아침 핸드오프 — 도구 후처리 관측 A + D1 경보 관측 B 병기)
+
+### 결과
+
+- [검증됨] `--status` 실행: `python3 scripts/tools_postprocess.py --status` → 0.295초,
+  출력값 `대상 412건 · 심화 결손 0 · 썸네일 결손 16 · 집계/빈 URL 80 · 원장 38건(오늘) · 남은 66(쿨다운)/85(전체)`.
+  근거: 앞 20:40 보고의 수치와 정합(썸네일 17→16 은 flowmaps 썸네일 생성분, 집계 URL 84→80 은 승격 4건분).
+- [검증됨] 회귀 없음: `python3 -m pytest tests/ -q -k "postprocess or tools"` → `41 passed, 776 deselected` (0.84초).
+  근거: 기존 기준선과 동일, 테스트 코드 수정 0건.
+- [검증됨] 문서 3종 반영: `git show --stat` 로 커밋에 포함 확인(아래 커밋 참조).
+- [검증불가] launchd 07:30 자동 발화 — 등록(20:30) 이후 시각이 아직 오지 않음. 복구 계획: 내일 아침
+  `python3 scripts/tools_postprocess.py --status` + `head -3 scripts/tools_postprocess.log` 로 발화 시각 확인.
+
+### 커밋
+
+`20ff1dc4`(`--status`) + 문서 커밋(이 기록 직후 push). 앞선 구현 커밋: `cf18d2e4`·`08ad1afe`·`032be271`·
+`0c263a32`·`b24792ac`·`c7e8bcff`·`bee2b4d3`.
+
+### 잔존 위험
+
+- 변경 없음(앞 보고와 동일): 썸네일 잔여 16건(봇 차단·실도메인 미확보·JS 전용) · `public/images` 로컬 의존 ·
+  D1 url 동기화 최대 24h 지연 · 수집 잡 `git add -A` 가 타 세션 WIP 를 커밋할 수 있음(기존 동작, 미수정).
+- 신규: 없음 (이번 증분은 읽기 전용 조회 + 문서).
+
+### 다음 행동
+
+내일 07:30 이후 `--status` 한 번 → 자동 발화·승격분 오탐 감사(A) → 이후 D1 경보 관측(B).
+
 ## 2026-10-18 20:52 — AIK24-D1-OPT-01 재측정 계획 + 측정 도구 (커밋 45ab440d·b1b9ee82, origin/main=b1b9ee82)
 
 ### 한 일

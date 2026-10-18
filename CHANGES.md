@@ -2,6 +2,25 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-18 20:44 KST — feat(AIK24-TOOLSAUTO-01): 도구 상세페이지 후처리 자동화(실제 URL 승격·심화 v2·썸네일)
+
+- `scripts/tools_postprocess.py` **신설** — 3단계 상태기계 `ensure_url`/`ensure_enrich`/`ensure_thumb`,
+  실패 원장 `scripts/logs/tools_postprocess.jsonl` + 7일 쿨다운, `postprocess(slugs, budget=900)`,
+  `sweep_targets()`, CLI `--slugs/--sweep/--budget/--dry-run/--list/--status/--no-cooldown/--no-url/--no-enrich/--no-thumb/--channel`
+- URL 승격 4중 가드(자동 채택 조건): ① 도메인 라벨 == 이름 정규화(5자+) ② 제목/og:site_name 토큰 일치
+  ③ 설명 존재 + 도구성 키워드 ④ 챌린지·판매중 도메인 제외 — 수동 실험 30후보 오탐 9건(amplify.com·sol.com·gemini.com 등) 전부 차단 실측
+- `scripts/tools_collector.py` 편입: 수집 잡(06:00)이 커밋·배포 **전** 신규분 후처리(`POSTPROCESS_BUDGET=1200`),
+  `--no-postprocess`/`--postprocess-budget` 추가
+- `scripts/tools_postprocess_daily.sh` **신설** + launchd `kr.aikorea24.tools-postprocess`(07:30): `--sweep 15`,
+  변경 시에만 커밋(`src/content/tools` 경로 한정)·배포·push — 수집 잡 실패·누락분 따라잡기
+- 결함 2건 수정: ① `backfill_tool_thumbs.write_image_field()` `rstrip()`→`strip()`(frontmatter 첫 줄 뒤
+  빈 줄 생성 버그, 392건 정규화: fm·body 해시 412건 동일·빌드 14.2초) ② dry-run이 썸네일 캡처·원장 기록하던 문제
+- 검증 근거: pondas 되돌림 3단계 실동작(URL 승격 + 심화 2,895자 + 썸네일 13,492B, 21.4초) · 운영 자동 승격 5건
+  md↔실사이트 title/desc 일치 · 일일 잡 `SWEEP=3` 23.3초(커밋1·배포) / `SWEEP=20` 82.1초(커밋3·배포) ·
+  쿨다운 실측(88→86건) · `--status` 0.3초 · pytest `-k "postprocess or tools"` 41 passed(기준선 유지)
+- 커밋: `cf18d2e4`·`08ad1afe`·`032be271`·`0c263a32`·`b24792ac`·`c7e8bcff`·`bee2b4d3`·`20ff1dc4` (push 완료)
+- 잔존: launchd 07:30 첫 자동 발화는 등록 당일(20:30) 이후라 미도래 → 내일 관측이 유일한 [검증불가] 항목
+
 ## 2026-10-17 (UTC 16:10 / KST 10-18 01:10) — feat(guard): D1 읽기·쓰기 3단계 경보(50/70/90%) muse-cli 전달 (AIK24-QUOTA-TIER-01)
 
 - `scripts/cfnew.py`: `get_daily_rows_written(신설·읽기와 캐시 공유)` · `maybe_alert_tiers(3단계 판정·UTC 일·지표·임계당 1회 dedup 상태 .d1_tier_alert_state.json)` · `muse_send(--wait 15, --thread 없음=기본채팅)` · check_quota에 경보 연결(기존 80% 차단·95% readonly·Telegram 유지)
