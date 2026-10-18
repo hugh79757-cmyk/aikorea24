@@ -408,6 +408,56 @@ def sweep_targets(limit: int = 0, cooldown_days: int = COOLDOWN_DAYS) -> list[st
     return slugs[:limit] if limit else slugs
 
 
+def status_report() -> int:
+    """파이프라인 현황 요약 — 읽기 전용(쓰기·네트워크 없음).
+
+    대표님이 하루 1회 "어제/오늘 파이프라인이 무엇을 했나"를 한 명령으로 보는 용도:
+      python3 scripts/tools_postprocess.py --status
+    """
+    today = datetime.now().strftime("%Y-%m-%d")
+    recs: list[dict] = []
+    if LEDGER.exists():
+        for line in LEDGER.read_text(encoding="utf-8").splitlines():
+            try:
+                recs.append(json.loads(line))
+            except Exception:
+                continue
+    todays = [r for r in recs if str(r.get("ts", "")).startswith(today)]
+
+    total = len(list(TOOLS.glob("*.md")))
+    no_sec = sum(1 for p in TOOLS.glob("*.md") if needs_enrich(p.stem))
+    no_thumb = sum(1 for p in TOOLS.glob("*.md") if needs_thumb(p.stem))
+    agg = 0
+    for p in TOOLS.glob("*.md"):
+        fm, _ = read_md(p.stem)
+        u = fm_get(fm or "", "url")
+        if not u or is_aggregator(u):
+            agg += 1
+
+    print("=== 도구 상세페이지 후처리 현황 ===")
+    print(f"대상 페이지 {total}건 · 심화 결손 {no_sec}건 · 썸네일 결손 {no_thumb}건 · 집계/빈 URL {agg}건")
+    print(f"원장 누적 {len(recs)}건 / 오늘({today}) {len(todays)}건")
+    for step, label in (("url", "실제 URL 승격"), ("enrich", "심화 v2 생성"), ("thumb", "썸네일 캡처")):
+        d = [r for r in todays if r["step"] == step and r["result"] == "done"]
+        f = [r for r in todays if r["step"] == step and r["result"] == "fail"]
+        if d or f:
+            print(f"  {label:14s} 성공 {len(d)}건 / 실패 {len(f)}건")
+            for r in d:
+                print(f"      ✅ {r['slug']}: {r['detail'][:96]}")
+    pend_cd, pend_all = len(sweep_targets(0)), len(sweep_targets(0, 0))
+    print(f"남은 대상 {pend_cd}건(쿨다운 적용) / {pend_all}건(전체, --no-cooldown)")
+
+    log = SCRIPTS / "tools_postprocess.log"
+    if log.exists():
+        lines = [l for l in log.read_text(encoding="utf-8", errors="ignore").splitlines() if l.strip()]
+        if lines:
+            print("최근 실행 로그:")
+            for l in lines[-4:]:
+                print(f"  {l[:110]}")
+    print("launchd 확인: launchctl list | grep -E 'tools-postprocess|tools-collector'")
+    return 0
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="도구 상세페이지 자동 후처리(URL 승격·심화 v2·썸네일)")
     ap.add_argument("--slugs", default="", help="쉼표 구분 슬러그")
@@ -419,6 +469,8 @@ def main() -> int:
     ap.add_argument("--no-enrich", action="store_true", help="심화 생성 건너뛰기")
     ap.add_argument("--no-thumb", action="store_true", help="썸네일 건너뛰기")
     ap.add_argument("--list", action="store_true", help="대상 목록만 출력")
+    ap.add_argument("--status", action="store_true",
+                    help="현황 요약(읽기 전용) — 오늘 처리·남은 대상·최근 로그")
     ap.add_argument("--no-cooldown", action="store_true",
                     help="스윕 실패 쿨다운 무시(수동 재시도용)")
     args = ap.parse_args()
@@ -429,6 +481,9 @@ def main() -> int:
         _config.load_to_environ()
     except Exception:
         pass
+
+    if args.status:
+        return status_report()
 
     if args.slugs:
         slugs = [s.strip() for s in args.slugs.split(",") if s.strip()]
