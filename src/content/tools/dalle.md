@@ -1,4 +1,5 @@
 ---
+
 name: "DALL-E 3"
 description: "간단한 대화로 원하는 이미지를 생성하고 수정할 수 있는 AI입니다."
 category: "디자인"
@@ -12,6 +13,7 @@ featured: false
 order: 11
 tasks: ["이미지-생성", "썸네일-제작", "인포그래픽"]
 updated: "2026-06-28"
+image: "/images/tools/dalle.webp"
 ---
 
 ## 한줄 요약

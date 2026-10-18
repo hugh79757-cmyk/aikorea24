@@ -1,4 +1,5 @@
 ---
+
 name: "ChatGPT"
 description: "일상에서 아이디어를 탐색하고 문제를 해결하는 AI 챗봇입니다."
 category: "업무·생산성"
@@ -12,6 +13,7 @@ featured: false
 order: 1
 tasks: ["글쓰기", "이메일-작성", "회의-요약"]
 updated: "2026-06-28"
+image: "/images/tools/chatgpt.webp"
 ---
 
 ## 한줄 요약
