@@ -1,3 +1,47 @@
+## 2026-10-18 20:30 KST — AIK24-D1-OPT-01: D1 절감안 ①~④ 적용 + 실측 검증 (배포 완료)
+
+### 배경
+AIK24-D1-AUDIT-01(같은 날 기록)에서 지배 요인이 잡이 아니라 서빙(페이지뷰)임을 실측했다. 대표님 승인("①~④ 전부 적용")에 따라 코드·스키마를 수정하고, 적용 전후 `meta.rows_read` 를 실측했다.
+
+### 한 일 (파일별 · 실측 before → after)
+| # | 대상 | 변경 | 실측 |
+|---|------|------|------|
+| ① | `src/pages/briefing/index.astro` | LEFT JOIN + GROUP BY → 상관 서브쿼리 | 2,850 → **754** 행/뷰 (-73.5%) |
+| ② | `scripts/threads/db_reader.py` | `b.date LIKE 'x%'` → 범위 조건(`today_next` 추가) | 5,580 → **14** 행/실행 |
+| ③ | `scripts/model_catalog.py` | `DATE(created_at)=?` → `created_at >= ? AND < date(?, '+1 day')` | 19,135 → **1** 행/실행 (2회/일) |
+| ④ | `api_test/news_collector.py` | `SELECT title, link FROM news` → 60일 창 | 19,135 → **8,979** 행/일 |
+| ②-보조 | D1 `aikorea24-db` | `CREATE INDEX idx_briefings_status_date ON briefings(status, date DESC)` | 338 entries (②가 인덱스를 타게 함) |
+| ③-확장 | `thread_topics/thread_topic_finder.py` · `outline_generator.py` · `keyword_updater.py` | DATE() → 범위 + `INDEXED BY idx_news_created_at` | 17,684 / 17,679 / 17,607 → **87** 행 |
+
+### 검증 [검증됨]
+- ① 라이브 교차검증: `https://aikorea24.kr/briefing/` HTTP 200 · 99,131 bytes · SSR 인라인 JSON 에 `item_count` 포함. 최신 브리핑(2026-10-18) `item_count=3` = D1 직접 쿼리 반환 id 3건(56152·56229·56075)과 **일치** → GROUP BY 제거 후에도 값 동일.
+- ② 동등성: `LIKE '2026-10-18%'` 판과 범위 판의 반환 id 집합 완전 일치(3건: [56152, 56229, 56075]).
+- ③ 동등성: `DATE(created_at) IN (d, d-1)` 86건 ≡ 범위 OR 판 86건.
+- ③-확장 동등성: `INDEXED BY` 판과 현행 `DATE() IN` 판의 id+title 78건 완전 일치.
+- 테스트: `.venv/bin/python3 -m pytest tests/ -q` → **807 passed, 10 skipped** (19.58초). `py_compile` 6개 파일 OK.
+- 배포: `bash scripts/deploy.sh` → `deploy_exit=0` · `배포 완료: https://aikorea24.kr` (Version ID `825fe694-0649-4738-afbd-a0c60c006662`) · sitemap ping google·naver 도달.
+
+### 계획기 함정 (재현 기록)
+③-확장 3곳은 **범위 조건만으로는 효과가 없었다**. `EXPLAIN QUERY PLAN` 결과 계획기가 `idx_news_category` 를 선택해 17,684행을 읽었다(범위 조건 판도 정확히 동일한 비용). `INDEXED BY idx_news_created_at` 로 강제한 뒤에야 87행이 됐다.
+→ 즉 이 3개 쿼리의 비용 원인은 "DATE() 함수"가 아니라 **계획기의 인덱스 선택**이었다. 함수 교체만으로 끝났다고 판단하면 오진이 된다.
+- 위 3개 스크립트는 현재 launchd 스케줄에 **없다**(`*.plist` 가 `.bak.telegram`/`.bak_20260823` 형태로만 존재) → 이번 변경은 실행 시점에만 효과가 있고 현재 일일 소비에는 영향이 없다. 실제 3회/일 도는 것은 `kr.aikorea24.threads-compass`(09:30·15:30·21:30) → `scripts/threads/main_v3.py` → ② 경로다.
+
+### 절감 추정 (실측 기반 · 산출식 명시)
+- 고정 잡: ③ (19,135-1)×2 = 38,268 + ② (5,580-14)×3 = 16,698 + ④ 19,135-8,979 = 10,156 → **합 65,122행/일 (-1.3%)**
+- 서빙: ① 은 뷰당 -2,096행. 100뷰/일이면 -209,600행/일, 500뷰/일이면 -1,048,000행/일 — **유입에 비례해 가장 큰 항목**(한도 소진 뷰 1,694 → 2,542 로 상향).
+
+### 잔존 위험
+- `INDEXED BY` 힌트는 `idx_news_created_at` 이 제거되면 해당 쿼리가 hard error 로 실패한다(sql/006 이 이 인덱스를 정의, 현재 존재 확인). aikorea24 에는 taiwan-news 같은 인덱스 보장 장치가 없다.
+- ④ 의 60일 창은 그보다 오래된 기사와 제목이 겹치는 재수집을 막지 못한다(링크 중복은 DB UNIQUE + INSERT OR IGNORE 가 차단). 창 비용 8,979행은 실측값이며 추정치가 아니다.
+- ① 은 브리핑 100건 × 서브쿼리 조회 = 754행. 브리핑 수가 늘면 선형 증가하나 GROUP BY(2,850)보다 훨씬 낮다.
+- per-path 귀속 불가(토큰에 `zone.analytics.read` 없음) → ① 의 실제 트래픽 효과는 다음 초과일 또는 다음 측정으로만 확인 가능([부분검증]).
+- **미적용**: emdash `/posts` 목록 ~1,600행/뷰 · `cfnew.sql()` 외 경로(Worker SSR·`wrangler d1 execute`·빌드 prerender) 80% 가드 부재 · `ANALYZE`(계획기 통계) 미실시.
+
+### 다음 행동
+- 3일간 일일 합계 추이 재측정(동일 방법: GraphQL `d1AnalyticsAdaptiveGroups`) → 절감 관측 여부 확인.
+- emdash(`~/projects2/aikorea24emdash`) 내부 질의 조사 — 남은 최대 미지 영역.
+- 가드 공백(Worker SSR 등) 대책은 별도 승인 후 진행.
+
 ## 2026-10-18 19:25 KST — AIK24-TOOLENRICH-02: 상세페이지 심화 전량 확대 + 잔여 썸네일 26건 (실측)
 
 계기: 대표님 승인 2건 — ① 미적용 367건 전체 확대(실측 근거 제시 후 승인) ② 집계 사이트 경유 43건은 실제 도구 사이트 URL 추출 시도.
