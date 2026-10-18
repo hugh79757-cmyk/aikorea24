@@ -1,6 +1,6 @@
 ---
 import { env } from 'cloudflare:workers';
-import { cleanBriefingComment, cleanBriefingDescription } from '../../lib/briefing-comment';
+import { cleanBriefingComment, cleanBriefingDescription, cleanBriefingTitle } from '../../lib/briefing-comment';
 export const prerender = false;
 const { date } = Astro.params;
 
@@ -24,7 +24,12 @@ if (db && date) {
          ORDER BY bi.sort_order`
       ).bind(briefing.id).all();
       // AIK24-PIPE-04 §작업2: verdict·(a)/(b)·설정 JSON·죽은 '자세한 분석' 텍스트 링크를 숨긴다.
-      items = (results || []).map((it: any) => ({ ...it, comment: cleanBriefingComment(it.comment) }));
+      // AIK24-PIPE-05 §제목 표시 교정: 제목 앞 수집기 내부 표식([제외] 등)을 문장으로 바꾼다.
+      items = (results || []).map((it: any) => ({
+        ...it,
+        title: cleanBriefingTitle(it.title),
+        comment: cleanBriefingComment(it.comment),
+      }));
 
       const itemIds = items.map((i: any) => i.news_id).filter(Boolean);
       const placeholders = itemIds.map(() => '?').join(',');
@@ -37,8 +42,10 @@ if (db && date) {
            ORDER BY created_at DESC LIMIT 8`
         ).bind(...itemIds).all();
         // AIK24-PIPE-04 §작업2: 같은 정리 규칙을 '오늘의 다른 AI 뉴스' 카드 설명에도 적용
+        // AIK24-PIPE-05 §제목 표시 교정: 내부 표식 제거를 제목에도 적용
         relatedNews = (related || []).map((n: any) => ({
           ...n,
+          title: cleanBriefingTitle(n.title),
           description: cleanBriefingDescription(n.description),
         }));
       }

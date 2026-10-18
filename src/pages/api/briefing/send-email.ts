@@ -3,7 +3,7 @@ export const prerender = false;
 import { env } from 'cloudflare:workers';
 import type { APIRoute } from 'astro';
 import { verifySession } from '../../../lib/auth';
-import { cleanBriefingComment } from '../../../lib/briefing-comment';
+import { cleanBriefingComment, cleanBriefingTitle } from '../../../lib/briefing-comment';
 
 const ADMIN_EMAILS = ['twinssn@gmail.com'];
 
@@ -78,11 +78,17 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
     }
 
     // 4. HTML 이메일 본문 생성 (3개만 표시 + 더보기)
-    const displayItems = (items.results || []).slice(0, 3);
-    const totalCount = items.results?.length || 0;
+    // AIK24-PIPE-05 §제목 표시 교정: 웹 카드와 같은 규칙으로 제목의 수집기 내부 표식
+    // ([제외]·[신규 무료]·[무료 LLM])을 문장으로 바꾼다. 한쪽만 고치면 웹과 이메일이 어긋난다.
+    const mailItems = (items.results || []).map((it: any) => ({
+      ...it,
+      news_title: cleanBriefingTitle(it.news_title),
+    }));
+    const displayItems = mailItems.slice(0, 3);
+    const totalCount = mailItems.length;
 
     // TOC HTML
-    const allItems = items.results || [];
+    const allItems = mailItems;
     let tocHtml = '';
     if (totalCount > 0) {
       tocHtml = `

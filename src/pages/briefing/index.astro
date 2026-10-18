@@ -1,6 +1,6 @@
 ---
 import { env } from 'cloudflare:workers';
-import { cleanBriefingDescription } from '../../lib/briefing-comment';
+import { cleanBriefingDescription, cleanBriefingTitle } from '../../lib/briefing-comment';
 export const prerender = false;
 
 const db = env.DB;
@@ -30,8 +30,10 @@ if (db) {
        LIMIT 100`
     ).all();
     // AIK24-PIPE-04 §작업2: 목록 카드 설명에서도 verdict·설정 JSON 을 숨긴다
+    // AIK24-PIPE-05 §제목 표시 교정: 제목의 수집기 내부 표식([제외] 등)도 문장으로 바꾼다
     news = (nResult.results || []).map((n: any) => ({
       ...n,
+      title: cleanBriefingTitle(n.title),
       description: cleanBriefingDescription(n.description),
     }));
   } catch (e) {

@@ -2,7 +2,7 @@
 export const prerender = false;
 import { env } from 'cloudflare:workers';
 import Layout from '../layouts/Layout.astro';
-import { cleanBriefingComment, cleanBriefingDescription } from '../lib/briefing-comment';
+import { cleanBriefingComment, cleanBriefingDescription, cleanBriefingTitle } from '../lib/briefing-comment';
 
 // AIK24-NEWS-01: /news/ v2 개편
 //   상단 "오늘의 브리핑"  — 최신 published 브리핑(= 이메일 발송분과 동일 아이템)
@@ -62,7 +62,12 @@ try {
          ORDER BY bi.sort_order`
       ).bind(briefing.id).all();
       // AIK24-PIPE-04 §작업2: verdict·(a)/(b)·설정 JSON·죽은 '자세한 분석' 텍스트 링크를 숨긴다.
-      briefingItems = (results || []).map((it: any) => ({ ...it, comment: cleanBriefingComment(it.comment) }));
+      // AIK24-PIPE-05 §제목 표시 교정: 제목 앞 수집기 내부 표식([제외] 등)을 문장으로 바꾼다.
+      briefingItems = (results || []).map((it: any) => ({
+        ...it,
+        title: cleanBriefingTitle(it.title),
+        comment: cleanBriefingComment(it.comment),
+      }));
     }
 
     // 전체 소식 아카이브 — v2 통과분만. 부분 인덱스로 seek 하므로 상한을 넉넉히 둔다.
@@ -87,7 +92,8 @@ try {
       picked.push(n);
       if (picked.length >= 50) break;
     }
-    newsList = picked;
+    // AIK24-PIPE-05 §제목 표시 교정: 전체 소식 목록도 수집기 내부 표식([제외]·[신규 무료]·[무료 LLM])을 뗀다.
+    newsList = picked.map((n: any) => ({ ...n, title: cleanBriefingTitle(n.title) }));
   }
 } catch (e) {
   console.error('News fetch error:', e);
