@@ -60,5 +60,16 @@
     "provider": "zen",
     "cli_id": "opencode/glm-5.3-flash-free",
     "context_length": 200000
+  },
+  {
+    "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "provider": "kilo",
+    "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "context_length": 1000000
+  },
+  {
+    "model_id": "nemotron-3-ultra-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3-ultra-free"
   }
 ]

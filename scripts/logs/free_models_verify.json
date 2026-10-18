@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-17 09:31",
+  "verified_at": "2026-10-18 09:31",
   "pass": [
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
@@ -10,32 +10,10 @@
     "opencode/mimo-v2.6-flash-free",
     "opencode/nemotron-3.5-lightning-free",
     "opencode/space-bunny-free",
-    "kilo/poolside/laguna-xs-2.1:free"
+    "kilo/poolside/laguna-xs-2.1:free",
+    "opencode/glm-5.3-flash-free",
+    "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "opencode/nemotron-3-ultra-free"
   ],
-  "fail": [
-    {
-      "cli_id": "opencode/cat-jam-free",
-      "model_id": "cat-jam-free",
-      "reason": "Model unavailable: opencode/cat-jam-free",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "opencode/muse-spark-1.3-contributor-free",
-      "model_id": "muse-spark-1.3-contributor-free",
-      "reason": "Model unavailable: opencode/muse-spark-1.3-contributor-free",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
-      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
-      "reason": "CLI 타임아웃 60초",
-      "kind": "transient"
-    },
-    {
-      "cli_id": "opencode/nemotron-3-ultra-free",
-      "model_id": "nemotron-3-ultra-free",
-      "reason": "CLI 타임아웃 60초",
-      "kind": "transient"
-    }
-  ]
+  "fail": []
 }
