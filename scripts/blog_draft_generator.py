@@ -238,14 +238,100 @@ def get_briefing_articles():
     return rows
 
 # ============================================
-# 블로그 초안 생성 (MiMo v2.5 via model_router)
+# AIK24-BLOG-02 (2026-10-19): 발행 게이트 3중 방어
 # ============================================
-def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True):
+# 교정 라운드별 모델 순서. 교정은 '이미 미달 판정을 받은 초안을 고치는' 마지막 관문이라
+# 모델을 지정해 쓴다(1차 생성은 기존 무료 체인 순수 회전 그대로).
+_GATE_FIX_ORDERS = (
+    ("groq1-gpt120b", "groq2-gpt120b", "zhipu-glm", "gemini-3.5-flash"),
+    ("zhipu-glm", "gemini-3.5-flash", "groq3-gpt120b", "groq4-gpt120b"),
+)
+
+
+def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str):
+    """1차 방어 — 게이트 검사 후 미달이면 '초안 수정' 교정을 최대 2회 수행한다.
+
+    처음부터 다시 쓰게 하면 같은 모델은 더 짧게 돌아온다(2026-10-19 실측 3,128→2,902자).
+    그래서 교정은 초안을 살려 고치는 방식(revision_note) + 모델 지정(strong_completion)이다.
+
+    Returns: (채택_fp, 제목, 사용한_file_num_수, None, None)        — 통과
+             (None, None, 사용한_file_num_수, issues, 마지막_fp)   — 교정 후에도 미달(호출측이 보류 처리)
+    """
+    def _body(fp):
+        return _quality_gate.body_of((_EMDASH_PENDING.get(fp) or {}).get("md", ""))
+
+    def _repair(fp):
+        """결정적 수리(표 구분선·앞머리 H1). 내용은 바꾸지 않는다."""
+        cur = (_EMDASH_PENDING.get(fp) or {}).get("md", "")
+        fixed, fixes = _quality_gate.repair_pending(cur)
+        if fixes:
+            _EMDASH_PENDING[fp]["md"] = fixed
+            log("    🛠 자동 수리 — " + ", ".join(fixes))
+        return fixes
+
+    _repair(filepath)
+    issues = _quality_gate.screen_extended(_body(filepath))
+    if not issues:
+        log("    ✅ 게이트 통과 — 본문 %d자 / 인용 링크 %d개"
+            % (len(_body(filepath)), len(_quality_gate.citation_links(_body(filepath)))))
+        return filepath, seo_title, 1, None, None
+
+    log(f"    ⚠️ 게이트 미달 {len(issues)}건 — 초안 수정 교정 {len(_GATE_FIX_ORDERS)}회 시도")
+    for it in issues:
+        log(f"       · {it}")
+
+    created = [filepath]          # 이 함수가 만든 모든 초안 — 채택본 외에는 pending 에서 제거한다
+    best_fp, best_issues, consumed = filepath, issues, 1
+
+    def _drop_except(keep):
+        """미달·미사용 초안이 발행 대기에 남지 않게 한다(남으면 검사를 우회해 발행된다)."""
+        for _f in created:
+            if _f != keep:
+                _EMDASH_PENDING.pop(_f, None)
+
+    for attempt, order in enumerate(_GATE_FIX_ORDERS, 1):
+        log(f"    🔧 교정 {attempt}/{len(_GATE_FIX_ORDERS)} (모델 {order[0]} 우선)")
+        out = generate_draft(title, [art], "A",
+                             fix_note=_quality_gate.revision_note(_body(best_fp), best_issues),
+                             corrective=True, model_order=order)
+        if not out:
+            log("       ↳ 교정 생성 실패(빈 응답)")
+            continue
+        fp2, t2 = save_draft(out, title, file_num + consumed, today_str, articles=[art])
+        consumed += 1
+        if not fp2:
+            log("       ↳ 교정본이 저장 단계에서 거부됨")
+            continue
+        created.append(fp2)
+        _repair(fp2)
+        issues2 = _quality_gate.screen_extended(_body(fp2))
+        if not issues2:
+            _drop_except(fp2)
+            log("    ✅ 교정 %d회차에서 게이트 통과 — 채택 (본문 %d자 / 인용 링크 %d개)"
+                % (attempt, len(_body(fp2)), len(_quality_gate.citation_links(_body(fp2)))))
+            return fp2, t2, consumed, None, None
+        log("       ↳ 교정 %d회차도 미달: %s" % (
+            attempt, " / ".join(re.split(r"[→(]", i)[0].strip()[:34] for i in issues2)))
+        best_fp, best_issues = fp2, issues2
+
+    _drop_except(best_fp)         # 마지막 초안만 호출측에 넘긴다(보류 기록용)
+    return None, None, consumed, best_issues, best_fp
+
+
+# ============================================
+# 블로그 초안 생성 (무료 체인 순수 회전)
+# ============================================
+def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
+                   corrective=False, model_order=None):
     is_deep = len(articles) == 1
 
     # AIK24-BLOG-02 (2026-10-19): 게이트를 '실제로' 통과하려면 근거 링크가 있어야 한다.
     # 기사 원문 + 원문 페이지가 인용한 1차 출처를 모아(HTTP 생존 확인) 프롬프트에 넣는다.
     # 게이트 미달로 재생성할 때는 fix_note(교정 지시)를 프롬프트 끝에 붙인다.
+    #
+    # corrective=True: 교정 전용 경로. 무료 체인 순수 회전 대신 지정 모델(강한 모델)로 고친다.
+    #   근거(2026-10-19 실측): 같은 모델에 같은 프롬프트로 '처음부터 다시' 시키면 길이가 오히려
+    #   줄었다(3,128→2,902자). 교정은 '초안 수정' + 모델 지정으로 해야 목표에 도달한다.
     links_str = ""
     if link_hint and articles:
         try:
@@ -267,7 +353,8 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True):
             log(f"  ⚠️ 모델 ID 판별 예외: {type(e).__name__}: {e}")
         if model_id:
             out = generate_model_eval_draft(keyword, articles[0], model_id,
-                                           fix_note=fix_note, links_str=links_str)
+                                           fix_note=fix_note, links_str=links_str,
+                                           corrective=corrective, model_order=model_order)
             if out:
                 return out
             log("  ⚠️ 모델 심층 분석 생성 실패 → 뉴스 블로그 경로로 대체")
@@ -299,7 +386,8 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True):
             f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
             f"- 제목에 마크다운 백틱(`) 사용 금지\n"
             f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
-            f"- [필수] 마크다운 표(`| 항목 | 값 |`) 최소 1개. "
+            f"- [필수] 마크다운 표 최소 1개. 형식은 정확히 이렇게: `| 항목 | 값 |` 다음 줄에 "
+            f"`| --- | --- |` 구분선, 그 다음 데이터 행. 구분선이 없으면 표로 렌더링되지 않는다. "
             f"구체적인 수치·한도·비교를 표로 넣는다. "
             f"제목이 '비교'·'점수'·'순위'를 약속하면 반드시 실제 숫자를 넣을 것. "
             f"숫자가 없으면 해당 표현을 제목에서 빼세요.\n"
@@ -334,7 +422,8 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True):
             f"## 요구사항\n"
             f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목\n"
             f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
-            f"- [필수] 마크다운 표(`| 항목 | 값 |`) 최소 1개 (기사별 비교·수치 정리)\n"
+            f"- [필수] 마크다운 표 최소 1개 (기사별 비교·수치 정리). 형식: `| 항목 | 값 |` 다음 줄에 "
+            f"`| --- | --- |` 구분선, 그 다음 데이터 행. 구분선이 없으면 표로 렌더링되지 않는다.\n"
             f"- 각 기사의 핵심 내용을 비교/종합하여 트렌드 분석\n"
             f"- [필수] 마지막 소제목을 문자 그대로 `## 마무리 — (짧은 말)` 로 달고, "
             f"그 아래에 오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓴다.\n"
@@ -354,13 +443,19 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True):
             f"{fix_tail}"
         )
 
-    content = chat_completion(
-        messages=[{"role": "user", "content": user_prompt}],
-        system_prompt=system_prompt,
-        # AIK24-BLOG-02: 3,000자 이상 한국어 본문은 3,000 토큰으로는 잘린다(실측: 생성 2,5xx자에서 멈춤).
-        max_tokens=6000,
-        temperature=0.7,
-    )
+    if corrective:
+        # 교정(수정) 단계 — 지정 모델로 고친다. 실패하면 빈 문자열 → 호출측이 다음 시도/보류 판단.
+        content = _quality_gate.strong_completion(
+            user_prompt, system_prompt=system_prompt, max_tokens=7000, temperature=0.5,
+            order=model_order or _quality_gate.STRONG_CANDIDATES)
+    else:
+        content = chat_completion(
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=system_prompt,
+            # AIK24-BLOG-02: 3,000자 이상 한국어 본문은 3,000 토큰으로는 잘린다(실측: 생성 2,5xx자에서 멈춤).
+            max_tokens=6000,
+            temperature=0.7,
+        )
     if not content:
         log("  ❌ 블로그 초안 생성 실패")
         return ""
@@ -489,6 +584,8 @@ def _fail_block(ev):
             continue
         if d.get("judge_failed"):
             kind = "측정 결함 — 판관이 점수를 말하지 못함 (모델 실패 아님)"
+        elif d.get("measurement_defect"):
+            kind = "측정 결함 — 샌드박스 미실행·채점 불가 (모델 실패 아님)"
         elif d.get("source") in _FAIL_SOURCES:
             kind = f"호출 실패 ({d.get('source')})"
         else:
@@ -498,7 +595,8 @@ def _fail_block(ev):
     return "\n\n".join(out) or "(0점 문항 없음)"
 
 
-def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_str=""):
+def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_str="",
+                              corrective=False, model_order=None):
     """무료 LLM 전용 7단 구조 블로그 글 생성(BLOG-03 §2-4). 실패 시 빈 문자열(폴백).
 
     AIK24-BLOG-02 (2026-10-19): 발행 게이트가 요구하는 두 가지를 이 경로에도 넣는다 —
@@ -524,6 +622,8 @@ def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_s
         ans = (d.get("answer") or "").replace("\n", " ")[:400]
         if d.get("judge_failed"):
             mark = "측정 결함(판관 파싱 실패)"
+        elif d.get("measurement_defect"):
+            mark = "측정 결함(샌드박스 미실행·채점 불가)"
         elif d["source"] in _FAIL_SOURCES:
             mark = "응답 실패(레이트리밋 등)"
         else:
@@ -648,12 +748,17 @@ def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_s
         f"{fix_tail}"
     )
 
-    content = chat_completion(
-        messages=[{"role": "user", "content": user_prompt}],
-        system_prompt=system_prompt,
-        max_tokens=7000,
-        temperature=0.7,
-    )
+    if corrective:
+        content = _quality_gate.strong_completion(
+            user_prompt, system_prompt=system_prompt, max_tokens=7000, temperature=0.5,
+            order=model_order or _quality_gate.STRONG_CANDIDATES)
+    else:
+        content = chat_completion(
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=system_prompt,
+            max_tokens=7000,
+            temperature=0.7,
+        )
     if not content:
         log("  ❌ 모델 심층 분석 생성 실패")
         return ""
@@ -1014,7 +1119,11 @@ def _publish_generated_to_emdash(generated):
             continue
 
         # AIK24-BLOG-02 2차 방어: 발행 직전 재검사. 1차(생성 직후)를 우회해 도착한 글을 여기서 막는다.
+        # 검사 전에 결정적 수리(표 구분선·앞머리 H1)를 한 번 더 적용한다 — 발행되는 본문이 곧 수리본이 된다.
         body = body.strip()
+        body, _fixes2 = _quality_gate.repair_markdown(body)
+        if _fixes2:
+            log("  🛠 자동 수리(2차): " + ", ".join(_fixes2))
         gate_issues = _quality_gate.screen_extended(body)
         if gate_issues:
             _quality_gate.hold(draft["md"], meta.get("title") or title, gate_issues,
@@ -1099,41 +1208,23 @@ def main():
                 log(f"    ❌ 품질 미달로 발행 거부: '{title[:40]}'")
                 continue
 
-            # AIK24-BLOG-02 1차 방어 (2026-10-19): 발행 게이트 + 교정 재생성 1회.
+            # AIK24-BLOG-02 1차 방어 (2026-10-19): 발행 게이트 + 초안 수정 교정 최대 2회.
             # 배경: 게이트(emdash_precheck.check)가 어떤 스크립트에서도 호출되지 않아
             # 최근 발행 30건 중 기준 통과가 6건(20%)이었다 — 외부 링크 0개 22건, 마무리 없음 18건.
-            # 미달이면 그대로 발행하지 않고, 미달 항목을 지시문으로 붙여 한 번 더 쓴다.
-            # 재생성본도 미달이면 이 글만 보류한다(파이프라인은 다음 글로 계속).
-            issues = _quality_gate.screen_extended(
-                _quality_gate.body_of((_EMDASH_PENDING.get(filepath) or {}).get("md", "")))
-            if issues:
-                log(f"    ⚠️ 게이트 미달 {len(issues)}건 — 교정 재생성 1회")
-                for _it in issues:
-                    log(f"       · {_it}")
-                retry_out = generate_draft(title, [art], "A", fix_note=_quality_gate.fix_note(issues))
-                r_fp, r_title, r_issues = None, None, ["재생성 실패(빈 응답)"]
-                if retry_out:
-                    r_fp, r_title = save_draft(retry_out, title, file_num, today_str, articles=[art])
-                    if r_fp:
-                        r_issues = _quality_gate.screen_extended(
-                            _quality_gate.body_of((_EMDASH_PENDING.get(r_fp) or {}).get("md", "")))
-                if r_fp and not r_issues:
-                    _EMDASH_PENDING.pop(filepath, None)   # 미달본은 발행 대기에서 제거
-                    filepath, seo_title = r_fp, r_title
-                    log("    ✅ 교정 재생성본이 게이트를 통과 — 채택")
-                else:
-                    _quality_gate.hold(
-                        (_EMDASH_PENDING.get(filepath) or {}).get("md", ""), title, issues,
-                        retry_md=(_EMDASH_PENDING.get(r_fp) or {}).get("md") if r_fp else None,
-                        retry_issues=r_issues,
-                        reason="1차 게이트 미달(교정 재생성 후에도 미달)")
-                    _EMDASH_PENDING.pop(filepath, None)
-                    if r_fp:
-                        _EMDASH_PENDING.pop(r_fp, None)
-                    continue
+            # 미달이면 그대로 발행하지 않는다. 교정 2회 후에도 미달이면 이 글만 보류한다
+            # (파이프라인은 다음 글로 계속 진행 — 볼륨이 0 이 되지 않게 하는 원칙).
+            filepath, seo_title, _consumed, _gate_issues, _best_fp = _gate_and_fix(
+                title, art, filepath, seo_title, file_num, today_str)
+            if filepath is None:
+                _quality_gate.hold(
+                    (_EMDASH_PENDING.get(_best_fp) or {}).get("md", ""), title, _gate_issues or [],
+                    reason="1차 게이트 미달(교정 2회 후에도 미달)")
+                if _best_fp:
+                    _EMDASH_PENDING.pop(_best_fp, None)
+                continue
+            file_num += _consumed
 
             created.append((filepath, seo_title or title, sort_order, 1))
-            file_num += 1
 
             # 썸네일 생성 (Pexels)
             try:
@@ -1306,6 +1397,16 @@ def main():
         _gate_summary = _quality_gate.summary_line()
         if _gate_summary:
             log("  " + _gate_summary)
+
+    # 5d. 보류 글 복구 (AIK24-BLOG-02): 게이트가 보류한 글은 scripts/logs/rejected/ 에 남는다.
+    # 보류 사유의 대부분은 '표 0개' 하나다. 같은 실행 안에서 표만 추가해 복구하면 볼륨이 죽지 않는다
+    # (2026-10-19 실측: 09:30 실행 보류 2건 모두 표 결함 → 표 교정으로 3,700자/3,200자로 복구·발행).
+    try:
+        import republish_held
+        log("[5d] 보류 글 복구 시도...")
+        republish_held.recover_since(today_str, do_publish=True, limit=5)
+    except Exception as e:
+        log(f"  ⚠️ 보류 글 복구 실패(무시하고 계속): {type(e).__name__}: {e}")
 
     # 6. 자동 배포 (새 블로그 포스트가 생성되었거나 미커밋 파일이 있으면)
     # AIK24-EFFICIENCY-02: 파이프라인 경로에서는 run_pipeline.py 의 Step 6(deploy.sh)이

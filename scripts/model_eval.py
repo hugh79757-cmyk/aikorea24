@@ -1226,10 +1226,28 @@ def eval_model_cli(model_id, cli_model=None):
         # sandbox_exec 이 None(타이밍아웃 등)이면 채점 함수로 넘어가되, 그 결과도 항상 0/1 이다 —
         # 결정적 채점에는 '측정 결함' 이 없다.
         sandbox_verdict, sandbox_reason = None, ""
+        measurement_defect = False
         if spec.get("sandbox"):
             s_pts, sandbox_reason = sandbox_grade(spec, actual)
-            pts = grade_answer(spec, actual) if s_pts is None else int(s_pts)
-            sandbox_verdict = "pass" if pts == 1 else "fail"
+            if s_pts is not None:
+                pts = int(s_pts)
+            elif spec.get("grade"):
+                # 샌드박스 미실행(측정 결함) → 결정적 채점 함수로 대체 판정
+                pts = grade_answer(spec, actual)
+                sandbox_reason = (sandbox_reason + " / 채점 함수로 판정").strip(" /")
+            else:
+                # 2026-10-19 수정: 샌드박스가 안 돌고 대체 채점 함수도 없는 문항에서
+                # grade_answer 를 부르면 KeyError('…grade 함수가 없습니다: None')로
+                # **평가 12문항 전체가 중단**됐다(실측: 모델 심층 분석 글이 통째로 생성 취소 →
+                # 일반 뉴스글로 폴백). 측정 결함은 0점으로 두되 '모델 실패'와 구분해 기록한다.
+                pts = 0
+                measurement_defect = True
+                sandbox_reason = (sandbox_reason + " / 대체 채점 불가").strip(" /")
+                result["failures"].append({
+                    "idx": idx, "axis": axis,
+                    "reason": "측정 결함(샌드박스 미실행·채점 함수 없음)",
+                })
+            sandbox_verdict = "measure" if measurement_defect else ("pass" if pts == 1 else "fail")
         else:
             pts = grade_answer(spec, actual)
         result["score"] += pts
@@ -1239,6 +1257,7 @@ def eval_model_cli(model_id, cli_model=None):
             "idx": idx, "axis": axis, "score": pts, "source": "cli",
             "answer": actual[:ANSWER_STORE_CHARS],
             "sandbox": sandbox_verdict, "sandbox_reason": sandbox_reason,
+            "measurement_defect": measurement_defect,
         })
         tag = f" sandbox={sandbox_verdict}" if sandbox_verdict else ""
         log(f"  [{idx}/{total}] {axis} {pts}점 (via cli{tag}) ← {actual[:60]!r}")

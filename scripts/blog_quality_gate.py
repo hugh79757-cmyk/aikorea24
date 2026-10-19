@@ -9,11 +9,16 @@
 실측(2026-10-18): 최근 발행 30건 중 게이트 통과 6건(20%). 결함은 `외부 링크 0개`(22건),
 ``## 마무리`` 없음(18건), 3,000자 미만(14건)에 집중 — 사람 눈이 아니라 **배선**의 문제였다.
 
-3중 방어
---------
-- 1차 (생성 직후, `blog_draft_generator.main` 안): 게이트 미달 → 교정 지시를 붙여 **1회 재생성**.
-  재생성본도 미달이면 그 글은 발행 보류(파이프라인은 다음 글로 계속 진행).
-- 2차 (발행 직전, `_publish_generated_to_emdash` 안): 최종 본문을 다시 검사. 미달이면 그 글만 보류.
+3중 방어 (AIK24-BLOG-02 2026-10-19 실측으로 형태가 굳었다)
+-------------------------------------------------------
+- 0차 (결정적 수리, `repair_markdown`): 모델이 **구분선 없이 쓴 표**를 실제 표로 고치고 본문 앞머리
+  H1 을 제거한다. LLM 재호출 없이 '렌더링 불가' 결함을 없앤다. (실측: glm 이 13줄 표를 썼지만
+  구분선이 없어 게이트가 0개로 세었고, 그 결함 하나로 오늘 발행 2건이 보류됐다)
+- 1차 (생성 직후, `blog_draft_generator._gate_and_fix`): 수리 후 검사. 미달이면 **초안을 살려 고치는**
+  교정을 최대 2회(지정 모델) 수행하고, 그래도 미달이면 그 글만 보류한다(파이프라인은 다음 글로 계속).
+  근거: 같은 모델에 '처음부터 다시' 시키면 길이가 오히려 줄었고(2,211→2,381자), 초안 수정 + 모델
+  지정으로는 3,417~4,026자까지 올라 통과했다.
+- 2차 (발행 직전, `_publish_generated_to_emdash` 안): 수리 + 재검사. 미달이면 그 글만 보류.
 - 3차 (발행 직후): 라이브 HTML 을 읽어 본문·제목이 실제로 반영됐는지 검증한다.
   동시 편집자가 낡은 사본을 저장해 발행본을 되돌리는 사고(2026-10-18 실측)를 잡기 위한 것.
 
@@ -25,6 +30,7 @@ import datetime
 import json
 import os
 import re
+import subprocess
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -84,6 +90,88 @@ _listing_cache: dict = {}
 # 실행 1회 동안 보류된 글 수 (main 이 끝날 때 요약 로그로 쓴다)
 HOLD_COUNT = 0
 HOLDED_TITLES: list = []
+
+
+# ---------------------------------------------------------------- 결정적 수리
+# LLM 초안의 '렌더링 불가' 결함을 내용 변경 없이 고친다. 교정 LLM 호출을 아끼고,
+# 교정으로도 안 고쳐지는 습관적 결함(구분선 없는 표)을 확실히 없앤다.
+_FM_RE = re.compile(r"\A---[ \t]*\n.*?\n---[ \t]*\n", re.S)
+
+
+def _pipe_cols(line: str) -> int:
+    s = line.strip()
+    if s.startswith("|"):
+        s = s[1:]
+    if s.endswith("|"):
+        s = s[:-1]
+    return len(s.split("|"))
+
+
+def _is_pipe_row(line: str) -> bool:
+    s = line.strip()
+    return s.startswith("|") and s.endswith("|") and len(s) > 2
+
+
+def repair_markdown(body: str) -> tuple:
+    """렌더링 불가 결함을 결정적으로 고친다 (문장·수치·사실은 건드리지 않는다).
+
+    ① 구분선 없는 표 → 첫 행 뒤에 `| --- | --- |` 를 넣어 **실제 표로** 만든다.
+       (2026-10-19 실측: glm-4.5-flash 가 13줄짜리 표를 썼지만 구분선이 없어 게이트가 0개로 셌고,
+        EmDash 렌더러에서도 표가 아니라 문단으로 나온다)
+    ② 본문 맨 앞 H1(`# 제목`) 제거 — 제목은 발행 API 의 title 로만 쓴다.
+    ③ 코드펜스 안은 건드리지 않는다.
+
+    Returns: (고친 본문, 고친 항목 설명 리스트)
+    """
+    fixes = []
+    body = body or ""
+
+    # ② 앞머리 H1 제거 (문서 맨 앞의 것만 — 본문 중간 H1 은 사람이 판단할 문제)
+    m = re.match(r"\A\s*(#\s+[^\n]+\n+)+", body)
+    if m:
+        body = body[m.end():]
+        fixes.append("앞머리 H1 제거")
+
+    # ① 구분선 없는 표 보수 (코드펜스 밖만)
+    segs = re.split(r"(```.*?```)", body, flags=re.S)
+    n_fixed = 0
+    for si, seg in enumerate(segs):
+        if seg.startswith("```"):
+            continue
+        lines = seg.split("\n")
+        out, i = [], 0
+        while i < len(lines):
+            if not _is_pipe_row(lines[i]):
+                out.append(lines[i])
+                i += 1
+                continue
+            j = i
+            while j < len(lines) and _is_pipe_row(lines[j]):
+                j += 1
+            block = lines[i:j]
+            cols = _pipe_cols(block[0])
+            has_sep = any(re.fullmatch(r"\|[\s:|-]*-{2,}[\s:|-]*\|?", b.strip()) for b in block)
+            same_cols = cols >= 2 and all(_pipe_cols(b) == cols for b in block)
+            if not has_sep and len(block) >= 2 and same_cols:
+                out.append(block[0])
+                out.append("| " + " | ".join(["---"] * cols) + " |")
+                out.extend(block[1:])
+                n_fixed += 1
+            else:
+                out.extend(block)
+            i = j
+        segs[si] = "\n".join(out)
+    if n_fixed:
+        fixes.append("표 구분선 %d개 삽입" % n_fixed)
+    return "".join(segs), fixes
+
+
+def repair_pending(md: str) -> tuple:
+    """frontmatter + 본문 md 를 받아 본문만 수리한다. Returns: (md, 고친 항목)."""
+    m = _FM_RE.match(md or "")
+    fm, body = (m.group(0), (md or "")[m.end():]) if m else ("", md or "")
+    nb, fixes = repair_markdown(body)
+    return fm + nb, fixes
 
 
 # ---------------------------------------------------------------- 검사
@@ -185,7 +273,9 @@ _FIX_HINTS = (
                  "이 프롬프트의 '인용 가능한 실제 링크' 목록에서 골라라."),
     ("인용 링크", "- 코드블록(curl 예시) 안의 URL 은 출처로 세지 않는다. 본문 문장이나 "
                  "`## 참고 자료` 섹션에 클릭 가능한 링크를 최소 3개 넣어라."),
-    ("표 ", "- 수치·한도·요금·비교는 문장이 아니라 마크다운 표(`| 항목 | 값 |`)로 넣어라. 표 최소 1개."),
+    ("표 ", "- 수치·한도·요금·비교는 문장이 아니라 마크다운 표로 넣어라. 형식은 정확히 이렇게:\n"
+            "  `| 항목 | 값 |` 다음 줄에 `| --- | --- |` 구분선, 그 다음 데이터 행. "
+            "**구분선이 없으면 표로 렌더링되지 않아 검사에서 0개로 센다.**"),
     ("코드펜스", "- 코드펜스(```)를 열었으면 반드시 닫아라. 홀수면 발행 금지다."),
     ("내부 용어", "- 파이프라인 내부 용어(firecrawl, dev.vars, .env.common, launchd)를 본문에서 모두 지워라. "
                  "독자용 표현으로 바꿔라."),
@@ -212,6 +302,91 @@ def fix_note(issues: list) -> str:
     return "\n".join(lines)
 
 
+def revision_note(draft_body: str, issues: list) -> str:
+    """교정 지시문 — **처음부터 다시 쓰지 말고 초안을 고치게** 한다 (AIK24-BLOG-02 실측).
+
+    2026-10-19 A/B 실측: 같은 모델에게 같은 프롬프트로 '처음부터 다시' 시키면 길이가 오히려 줄었다
+    (3,128→2,902자 / 2,211→2,381자). 반면 결함만 지적해 초안을 살려 고치게 하면 통과율이 올라간다.
+    부족한 분량은 추측이 아니라 기사에 있는 사실을 더 세밀하게 풀어 채우게 한다.
+    """
+    short = [re.split(r"[→(]", i)[0].strip() for i in issues]
+    lines = ["", "[교정 지시] 아래 초안은 발행 검사에서 미달했다. **처음부터 새로 쓰지 말고 이 초안을 고쳐라.**",
+             "미달 항목:"] + ["  - " + s for s in short] + ["", "반드시 지킬 것:"]
+    seen = set()
+    for key, hint in _FIX_HINTS:
+        if any(key in it for it in issues) and hint not in seen:
+            lines.append(hint)
+            seen.add(hint)
+    lines += [
+        f"- 분량 하한은 {MIN_CHARS}자(공백 포함, 현재 {len(draft_body)}자). "
+        f"늘릴 때는 문장을 반복하거나 추측을 넣지 말고, 기사에 있는 사실·수치·인용을 더 세밀하게 풀어 쓴다.",
+        f"- 외부 링크 {MIN_LINKS}개 이상, 마크다운 표 {MIN_TABLES}개 이상.",
+        "",
+        "[이미 잘 쓴 부분은 그대로 유지한다. 좋은 문장을 지우고 새로 쓰면 분량과 밀도가 떨어진다.]",
+        "",
+        "[직전 초안]",
+        draft_body.strip(),
+        "",
+        "[출력] TITLE: 줄 하나 + `---` + 고친 **마크다운 본문 전체**(일부만 보내지 말 것).",
+    ]
+    return "\n".join(lines)
+
+
+# ------------------------------------------------- 교정 전용 강한 모델 호출
+# 교정(수정) 단계는 품질이 걸린 마지막 관문이라 모델을 지정해 쓴다.
+# 1차 생성은 기존 무료 체인(순수 회전)을 그대로 두고, 여기서만 지정 모델을 쓴다.
+_STRONG_CANDIDATES = ("groq1-gpt120b", "groq2-gpt120b", "zhipu-glm", "gemini-3.5-flash")
+STRONG_CANDIDATES = _STRONG_CANDIDATES   # 공개 별칭 (생성기가 순서를 지정할 때 사용)
+_MODELS_YAML = os.path.join(os.path.dirname(_HERE), "config", "models.yaml")
+
+
+def _load_chain_config() -> dict:
+    try:
+        import yaml
+        with open(_MODELS_YAML, encoding="utf-8") as f:
+            return yaml.safe_load(f) or {}
+    except Exception as e:
+        print("  ⚠️ models.yaml 로드 실패: %s" % e)
+        return {}
+
+
+def strong_completion(prompt: str, system_prompt: str = None, max_tokens: int = 7000,
+                      temperature: float = 0.5, order=_STRONG_CANDIDATES,
+                      timeout: float = 180.0) -> str:
+    """지정 모델로 1회 생성 (교정 전용). 실패하면 다음 후보 → 전부 실패 시 ''.
+
+    무료 체인의 순수 회전 규약은 1차 생성 경로에서 그대로 유지된다. 이 함수는
+    '이미 미달 판정을 받은 초안을 고치는' 용도로만 쓴다(교정 실패 = 발행 보류).
+    """
+    cfg = _load_chain_config()
+    models = cfg.get("models") or {}
+    providers = cfg.get("providers") or {}
+    for key in order:
+        t = models.get(key)
+        if not t:
+            continue
+        prov = providers.get(t.get("provider")) or {}
+        api_key = os.environ.get(prov.get("api_key_env", ""), "")
+        if not api_key:
+            continue
+        try:
+            from openai import OpenAI
+            client = OpenAI(base_url=prov.get("base_url"), api_key=api_key, timeout=timeout)
+            msgs = ([{"role": "system", "content": system_prompt}] if system_prompt else []) + \
+                   [{"role": "user", "content": prompt}]
+            print("  [교정모델] %s (%s)" % (t.get("model"), t.get("provider")))
+            resp = client.chat.completions.create(
+                model=t.get("model"), messages=msgs, temperature=temperature, max_tokens=max_tokens)
+            text = (resp.choices[0].message.content or "").strip() if resp.choices else ""
+            if text:
+                return text
+            print("  ⚠️ %s 빈 응답 → 다음 후보" % key)
+        except Exception as e:
+            print("  ⚠️ %s 실패: %s: %s" % (key, type(e).__name__, str(e)[:120]))
+    return ""
+
+
+
 # ---------------------------------------------------------------- 실제 링크 수집
 # 401/403/405/406/429 = 접근 제한·봇 차단·메서드 불일치. 링크 자체는 존재하므로 살아있는 것으로 본다.
 # (실측: 유료 매체·API 엔드포인트가 403/405 를 돌려주는데 이를 '끊긴 링크'로 세면 정상 인용이 걸린다)
@@ -230,7 +405,25 @@ def _http_ok(url: str, timeout: float = 8.0) -> bool:
                 return True
         except Exception:
             pass
-    return False
+    # urllib 은 TLS 지문 때문에 봇 차단(Akamai 등)에 걸리는 경우가 있다.
+    # 실측(2026-10-19): https://azure.microsoft.com/... 은 curl 로 200 인데 urllib 은 실패 →
+    # 정상 인용이 '끊긴 링크'로 오판됐다. curl 로 한 번 더 확인한다(있으면).
+    return _http_ok_curl(url, timeout)
+
+
+def _http_ok_curl(url: str, timeout: float = 6.0) -> bool:
+    try:
+        p = subprocess.run(
+            ["curl", "-sL", "-o", "/dev/null", "-w", "%{http_code}",
+             "--max-time", str(max(int(timeout), 3)), "-A", _UA, url],
+            capture_output=True, text=True, timeout=timeout + 3)
+        code = (p.stdout or "").strip()
+        if not code.isdigit():
+            return False
+        c = int(code)
+        return 200 <= c < 400 or c in _SOFT_OK_CODES
+    except Exception:
+        return False
 
 
 def _verify_many(urls, timeout: float = 6.0, workers: int = 6) -> dict:
