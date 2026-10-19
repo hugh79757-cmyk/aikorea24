@@ -1,3 +1,26 @@
+## 2026-10-19 19:xx — AIK24-EVAL-LLALPHA-01 방식: opencode/beam-free 12문항 평가
+
+### 한 일
+- `opencode/beam-free` 모델을 AIK24-EVAL-LLALPHA-01과 동일한 12문항 세트(qv=2)로 평가.
+- `scripts/model_eval.py` CLI 경로(`eval_model_cli`) 사용. `beam-free` → `opencode/beam-free` 카탈로그 등록.
+- 결과: **9/12** (지시이행 1/2 · 코딩실무 3/4 · 맥락유지 2/2 · 에이전트 3/4)
+- `model_leaderboard.json` append (10건째), `model_eval_cache.json` 갱신, `model_eval_runs.jsonl` append.
+- 실패 0/12, no_response 0, defect 0. 호출 안정성 문제 없음.
+
+### 결과
+- [검증됨] 점수: 9/12 (75%). 축별: 지시이행 1/2, 코딩실무 3/4, 맥락유지 2/2, 에이전트 3/4
+- [검증됨] CLI 경유 정상 응답 12/12, 타임아웃/429/빈 응답 0건
+- [검증됨] 리더보드 append: beam-free 9/12 (qv=2), 10건째
+- [검증됨] 캐시 갱신: beam-free → 9/12, ts=1792386820.48
+
+### 잔존 위험
+- OpenRouter 외부 지표 없음 (beam-free 는 OpenCode Zen 모델, OpenRouter 경로 미확인)
+
+### 커밋 해시
+`16e28feee6e36837bfca556ede9429e33b6facd7` (main)
+
+## 2026-10-19 AIK24-FREE-PIPE-01 일일 실행 — 수집 39건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-19 12:05 — 런타임 상태 커밋·푸시 (무료 모델 재검증·디덥 롤링·게이트 보류 기록)
 
 ### 한 일

@@ -81,5 +81,18 @@
   "no_response_n": 0,
   "score_display": "6/12",
   "ts": 1792256431.719736
+ },
+ {
+  "model_id": "beam-free",
+  "cli_model": "opencode/beam-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 9,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "score_display": "9/12",
+  "ts": 1792386820.4835808
  }
 ]
