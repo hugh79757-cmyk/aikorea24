@@ -1,3 +1,43 @@
+## 2026-10-19 12:05 — 런타임 상태 커밋·푸시 (무료 모델 재검증·디덥 롤링·게이트 보류 기록)
+
+### 한 일
+
+파이프라인이 갱신한 런타임 산출물을 저장소에 반영하고 푸시했다(코드 변경 없음).
+
+- `scripts/logs/free_models_verify.json` — 2026-10-19 09:31 재검증 결과 반영.
+  `opencode/nemotron-3.5-lightning-free` 가 pass → fail 로 이동.
+- `scripts/logs/free_models_cli.json` — 검증 실패 모델 항목 제거.
+- `scripts/logs/free_models_pending.json` — 해당 모델을 재검증 대기열에 등록.
+- `scripts/briefing_dedup.json` — 롤링 정리.
+- `scripts/logs/rejected/` — 오늘 게이트가 보류한 2건(ll-alpha-free / AI 로봇)의 원본·재시도본·메타와
+  복구 발행 기록(`_recovered.jsonl`) 편입.
+
+### 결과 (검증 근거 포함)
+
+- [검증됨] 커밋·푸시 완료. 근거: `124c9ccf..42dec15b main -> main`, 이후 `git status -sb` 가
+  `## main...origin/main` — 미커밋 항목 0건, 로컬 HEAD = 원격 main = `42dec15b`.
+- [검증됨] 삭제성 변경 아님(잘림 아님). 근거: `briefing_dedup.json` 을 HEAD 판과 대조 →
+  briefings 59→58 / articles 292→282 로 감소 폭이 1·10건뿐이고 최상위 키(`briefings`/`articles`)는 동일.
+  (2026-10-14·10-17 state.md 사고와 같은 "조용한 전체 잘림" 형태가 아님을 수치로 확인)
+- [검증됨] JSON 파싱 정상. 근거: 커밋 대상 4개 JSON 을 모두 `json.load` 로 읽어 구조 확인.
+- [검증됨] `scripts/logs/rejected/` 는 gitignore 대상이 아님. 근거: `git check-ignore -v` 결과 0건,
+  기존 `20261019-002607-workbuddy…` 기록이 이미 추적 중 → 같은 규칙으로 편입.
+
+### 잔존 위험
+
+- [잔존] `nemotron-3.5-lightning-free` 는 현재 무료 체인에서 제외된 상태다. 재검증 통과 시
+  `free_models_pending.json` → `free_models_cli.json` 로 자동 복귀하는지 다음 수집 실행에서 확인 필요
+  (이번 커밋은 상태 반영일 뿐, 복귀 로직은 변경하지 않았다).
+- [잔존] 보류 원본을 git 에 편입했으므로, 앞으로 실행마다 `scripts/logs/rejected/` 에 새 항목이 생겨
+  워킹 트리에 미커밋 파일이 나타난다(의도된 동작 — 런타임 산출물 추적 규칙과 동일).
+- [잔존] 오늘 20:15 파이프라인 실행 로그 미확인(게이트·수리·보류 복구 줄).
+
+### 다음 행동
+
+1. 20:15 실행 로그에서 `게이트 통과` / `자동 수리` / `보류 글 복구` 줄과 발행 건수 확인.
+2. 무료 모델 수집 실행 후 nemotron 재검증 → 체인 복귀 동작 확인.
+3. 런타임 산출물이 다시 쌓이면 같은 방식으로 커밋(코드 변경과 분리 커밋 유지).
+
 ## 2026-10-19 11:50 — AIK24-BLOG-02 3차: 검증 수단 저장소 편입 + 보류 복구 KST 정규화 + 기존 테스트 회귀 수정
 
 ### 한 일
