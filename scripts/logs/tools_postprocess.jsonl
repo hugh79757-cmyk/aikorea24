@@ -53,3 +53,11 @@
 {"ts": "2026-10-19 07:30:37", "slug": "deepseek-harness-explained", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-19 07:30:38", "slug": "dola-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/dola-com → https://dolaai.app (title='Dola AI Video Generator | Text, Images &amp;')", "dry_run": false}
 {"ts": "2026-10-19 07:30:42", "slug": "dots-by-openai", "step": "thumb", "result": "fail", "detail": "❌ dots-by-openai BLANK(SMALL_1750B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ dots-by-openai NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-20 06:00:46", "slug": "umbra-mail", "step": "enrich", "result": "done", "detail": "+2,655자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-20 06:00:50", "slug": "umbra-mail", "step": "thumb", "result": "done", "detail": "✅ umbra-mail br-og og 7KB", "dry_run": false}
+{"ts": "2026-10-20 06:00:57", "slug": "walkai-talkai", "step": "enrich", "result": "done", "detail": "+2,710자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-20 06:01:01", "slug": "walkai-talkai", "step": "thumb", "result": "done", "detail": "✅ walkai-talkai 15KB", "dry_run": false}
+{"ts": "2026-10-20 06:01:07", "slug": "kai-resolve-by-gleap", "step": "enrich", "result": "done", "detail": "+2,863자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-20 06:01:12", "slug": "kai-resolve-by-gleap", "step": "thumb", "result": "done", "detail": "✅ kai-resolve-by-gleap 14KB", "dry_run": false}
+{"ts": "2026-10-20 06:01:35", "slug": "hexashell-a-thin-harness-for-exploring-the-limits", "step": "enrich", "result": "done", "detail": "+2,941자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-20 06:01:38", "slug": "hexashell-a-thin-harness-for-exploring-the-limits", "step": "thumb", "result": "done", "detail": "✅ hexashell-a-thin-harness-for-exploring-the-limits 20KB", "dry_run": false}

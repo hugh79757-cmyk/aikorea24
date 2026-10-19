@@ -1,15 +1,34 @@
 {
- "day": "2026-10-19",
- "checked_at": 1792357207.135238,
- "total_rows": 39,
+ "day": "2026-10-20",
+ "checked_at": 1792443608.495702,
+ "total_rows": 40,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "unbiased/pareto-26.10"
+   "inception/mercury-3",
+   "minimax/minimax-m3.1-flash:free"
   ],
   "kilo": [
-   "unbiased/pareto-26.10"
+   "inception/mercury-3",
+   "minimax/minimax-m3.1-flash:free"
+  ],
+  "zen": [
+   "minimax-m3.1-flash-free"
   ]
  },
- "removed_by_provider": {}
+ "removed_by_provider": {
+  "openrouter": [
+   "deepseek/deepseek-r1",
+   "microsoft/wizardlm-2-8x22b",
+   "sao10k/l3.3-euryale-70b"
+  ],
+  "kilo": [
+   "deepseek/deepseek-r1",
+   "microsoft/wizardlm-2-8x22b",
+   "sao10k/l3.3-euryale-70b"
+  ],
+  "zen": [
+   "space-bunny-free"
+  ]
+ }
 }
