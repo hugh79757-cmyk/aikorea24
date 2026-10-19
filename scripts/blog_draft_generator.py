@@ -1404,7 +1404,19 @@ def main():
     try:
         import republish_held
         log("[5d] 보류 글 복구 시도...")
-        republish_held.recover_since(today_str, do_publish=True, limit=5)
+        _rec = republish_held.recover_since(today_str, do_publish=True, limit=5)
+        # 복구 발행분은 deep_dive_url 을 **반드시** 연결한다. 연결하지 않으면 다음 실행이 같은
+        # 기사를 후보로 다시 잡아 중복 발행된다(2026-10-19 실측: 복구 2건이 D1 에서 NULL 로 남았다).
+        for _t, _u in _rec.get("urls", []):
+            _want = republish_held.norm_title(_t)
+            for _a in articles:
+                _have = republish_held.norm_title(_a.get("title") or "")
+                if not _want or not _have:
+                    continue
+                if _want == _have or _want in _have or _have in _want:
+                    if not _a.get("deep_dive_url"):
+                        _link_d1(_u, [(_a.get("id"), bool(_a.get("comment")))])
+                    break
     except Exception as e:
         log(f"  ⚠️ 보류 글 복구 실패(무시하고 계속): {type(e).__name__}: {e}")
 

@@ -80,7 +80,7 @@ def _split_md(md: str):
     return meta, (md or "")[m.end():]
 
 
-def _norm_title(t: str) -> str:
+def norm_title(t: str) -> str:
     """제목 비교용 정규화 — 공백·구두점·대소문자 차이를 없앤다."""
     return re.sub(r"[^0-9a-z가-힣]", "", (t or "").casefold())
 
@@ -127,11 +127,11 @@ def _is_duplicate(title: str, live_titles) -> str:
     """이미 발행된 글인가. 정규화 제목의 포함관계까지 본다(제목 뒤에 수식이 붙은 경우)."""
     if not live_titles:
         return ""
-    want = _norm_title(title)
+    want = norm_title(title)
     if not want:
         return ""
     for lt in live_titles:
-        have = _norm_title(lt)
+        have = norm_title(lt)
         if not have:
             continue
         if want == have:
@@ -238,10 +238,12 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
                   force: bool = False) -> dict:
     """`since`(YYYY-MM-DD) 이후 보류건을 복구한다. 파이프라인에서도 호출한다.
 
-    Returns: {"published": n, "clean": n, "fixed": n, "skip": n}
+    Returns: {"published": n, "clean": n, "fixed": n, "skip": n, "urls": [(제목, 발행URL), ...]}
+    `urls` 는 호출측이 D1 `deep_dive_url` 을 연결하는 데 쓴다(연결하지 않으면 다음 실행이
+    같은 기사를 다시 생성해 **중복 발행**된다 — 2026-10-19 실측).
     """
     metas = sorted(glob.glob(os.path.join(REJECTED_DIR, "*.json")))
-    done = {"published": 0, "clean": 0, "fixed": 0, "skip": 0}
+    done = {"published": 0, "clean": 0, "fixed": 0, "skip": 0, "urls": []}
     if not metas:
         return done
     print("모드=%s" % ("PUBLISH" if do_publish else "DRY-RUN"))
@@ -256,7 +258,7 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
         stamp = os.path.basename(jp)[:8]           # YYYYMMDD
         if len(stamp) == 8 and stamp < since.replace("-", ""):
             continue
-        if sum(done.values()) >= limit:
+        if sum(done[k] for k in ("published", "clean", "fixed", "skip")) >= limit:
             break
         title = (rec.get("title") or "").strip()
         base = jp[:-5]
@@ -277,6 +279,7 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
         done[result[0]] = done.get(result[0], 0) + 1
         if result[2]:
             live.add(title)
+            done["urls"].append((title, result[2]))
             with open(os.path.join(REJECTED_DIR, "_recovered.jsonl"), "a", encoding="utf-8") as f:
                 f.write(json.dumps({"title": title, "url": result[2],
                                     "at": datetime.datetime.now().isoformat(timespec="seconds")},
@@ -284,6 +287,10 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
         print()
     print("=== 복구 결과: 발행 %d / 발행가능(드라이런) %d / 교정후가능 %d / 복구불가 %d ==="
           % (done["published"], done["clean"], done["fixed"], done["skip"]))
+    if done["urls"]:
+        print("주의: 복구 발행분은 D1 briefing_items.deep_dive_url 연결이 필요하다(미연결 시 다음 실행이 "
+              "같은 기사를 다시 생성해 중복 발행). 파이프라인 5d 경로는 자동 연결하지만, 수동 실행 시에는 "
+              "연결 여부를 확인할 것.")
     return done
 
 
