@@ -38,3 +38,18 @@
 {"ts": "2026-10-18 18:32:33", "slug": "archdiagramai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-19 06:01:09", "slug": "tomo-for-chatgpt", "step": "enrich", "result": "done", "detail": "+2,644자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-19 06:01:13", "slug": "tomo-for-chatgpt", "step": "thumb", "result": "done", "detail": "✅ tomo-for-chatgpt 18KB", "dry_run": false}
+{"ts": "2026-10-19 07:30:03", "slug": "arena42-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:04", "slug": "astorie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:04", "slug": "bizmuse-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:13", "slug": "cantina-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:18", "slug": "chatgpt-space", "step": "thumb", "result": "done", "detail": "✅ chatgpt-space BLANK(SMALL_1762B) | NO_OG_IMAGE→og 39KB", "dry_run": false}
+{"ts": "2026-10-19 07:30:27", "slug": "chatgpt-work", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:27", "slug": "clipdance-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:27", "slug": "cloudways-managed-ai-agents", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:28", "slug": "cognee-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:32", "slug": "coloringdaily", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:32", "slug": "command-code-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:37", "slug": "dateguard-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:37", "slug": "deepseek-harness-explained", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-19 07:30:38", "slug": "dola-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/dola-com → https://dolaai.app (title='Dola AI Video Generator | Text, Images &amp;')", "dry_run": false}
+{"ts": "2026-10-19 07:30:42", "slug": "dots-by-openai", "step": "thumb", "result": "fail", "detail": "❌ dots-by-openai BLANK(SMALL_1750B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ dots-by-openai NO_OG_IMAGE", "dry_run": false}

@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "사용량 기반"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/dola-com"
+url: "https://dolaai.app"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI비서", "멀티모달", "업무효율"]
 featured: false

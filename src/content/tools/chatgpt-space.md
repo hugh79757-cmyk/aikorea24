@@ -12,6 +12,7 @@ featured: false
 order: 101
 tasks: ["프로젝트-관리", "기획서", "회의-요약"]
 updated: "2026-10-05"
+image: "/images/tools/chatgpt-space.webp"
 ---
 
 ## 한줄 요약
