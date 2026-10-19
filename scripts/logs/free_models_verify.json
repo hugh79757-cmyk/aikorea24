@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-18 09:31",
+  "verified_at": "2026-10-19 09:31",
   "pass": [
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
@@ -8,12 +8,18 @@
     "kilo/poolside/laguna-s-2.1:free",
     "opencode/longcat-2.5-preview-free",
     "opencode/mimo-v2.6-flash-free",
-    "opencode/nemotron-3.5-lightning-free",
     "opencode/space-bunny-free",
     "kilo/poolside/laguna-xs-2.1:free",
     "opencode/glm-5.3-flash-free",
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
     "opencode/nemotron-3-ultra-free"
   ],
-  "fail": []
+  "fail": [
+    {
+      "cli_id": "opencode/nemotron-3.5-lightning-free",
+      "model_id": "nemotron-3.5-lightning-free",
+      "reason": "CLI 타임아웃 60초",
+      "kind": "transient"
+    }
+  ]
 }

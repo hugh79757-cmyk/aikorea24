@@ -40,11 +40,6 @@
     "cli_id": "opencode/mimo-v2.6-flash-free"
   },
   {
-    "model_id": "nemotron-3.5-lightning-free",
-    "provider": "zen",
-    "cli_id": "opencode/nemotron-3.5-lightning-free"
-  },
-  {
     "model_id": "space-bunny-free",
     "provider": "zen",
     "cli_id": "opencode/space-bunny-free"

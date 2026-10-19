@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "model_id": "nemotron-3.5-lightning-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3.5-lightning-free"
+  }
+]

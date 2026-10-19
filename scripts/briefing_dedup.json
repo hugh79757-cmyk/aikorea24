@@ -1,158 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-18",
-      "briefing_id": 300,
-      "articles": [
-        {
-          "id": "51419",
-          "title": "브릴스, 산업용 로봇 넘어 ‘피지컬 AI’로…RFM·VLA 기반 차세대 로봇 플랫폼 본격화",
-          "original_title": "",
-          "description": "로봇 모듈화 플랫폼 솔루션 전문기업 브릴스(대표 전진)가 기존 산업용 로봇 솔루션 사업을 기반으로 로봇 파운데이션 모델(RFM, Robot Foundation Model)과 비전·언어·행동 모델(VLA, Vision-Language-Action) 등 차세대 피지컬 AI 기술을 접목하며 신사업 확장에 나선다.브릴스는 17일 기존 산업용 로봇 사업에서 확보한 ",
-          "link": "https://www.aitimes.kr/news/articleView.html?idxno=41965",
-          "entities": [
-            "Foundation",
-            "VLA",
-            "Robot",
-            "Vision-Language-Action",
-            "Model",
-            "AI",
-            "RFM"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51503",
-          "title": "\"AI가 진료 기록 대신 써준다\"...픽스업헬스, 의료 자동화 솔루션 출시",
-          "original_title": "",
-          "description": "의료 AI 전문 픽스업헬스(대표 임상원)는 원격 재활 치료 모니터링(RTM) 솔루션에 엠비언트 AI 기술을 적용한 ‘RTM 솔루션 2.0’을 선보였다고 17일 밝혔다.픽스업헬스는 의료기관이 원격 모니터링과 처방을 통해 환자의 재활을 효율적으로 관리하고, 보험 청구도 원스톱으로 지원하도록 RTM 솔루션을 개발해 제공 중이다.이번에 탑재된 엠비언트 AI는 진료",
-          "link": "https://www.aitimes.com/news/articleView.html?idxno=215425",
-          "entities": [
-            "AI",
-            "RTM"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51438",
-          "title": "FAA의 항공 T전 교통 통제 해결책은 8억 7,500만 달러 규모의 AI",
-          "original_title": "",
-          "description": "미국의 하늘을 지키는 항공 교통 관제사들이 업무를 더 수월하게 수행할 수 있도록 돕는 새로운 AI 기반 소프트웨어 프로그램이 도입된다.",
-          "link": "https://techcrunch.com/2026/09/17/the-faas-plan-to-fix-air-traffic-875-million-worth-of-ai/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51456",
-          "title": "예술가들이 AI 출품작에 반발해 보이콧했던 초상화상, 이제 맞서 싸우려 돌아왔습니다",
-          "original_title": "",
-          "description": "브리즈번 초상화상(Brisbane portrait prize)을 2년간 외면했던 여러 예술가들이 다시 출품에 나섰으며, 일부 원주민 화가들은 승리를 돕기 위해 또 다른 형태의 AI인 ‘조상의 진정성’에 기대를 걸고 있습니다.",
-          "link": "https://www.theguardian.com/artanddesign/ng-interactive/2026/sep/18/bpp-brisbane-portrait-prize-2026-ai",
-          "entities": [
-            "Brisbane",
-            "AI"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51440",
-          "title": "오픈AI, 모델들이 나쁜 행동을 숨기기 위해 후속 작업에 메모를 남기는 것 적발",
-          "original_title": "",
-          "description": "오픈AI는 GPT-5.6 솔(Sol)이 미래의 문맥에 실수와 정렬되지 않은 행동을 숨기도록 지시한 사례를 공개했다. 이는 점점 더 뛰어난 능력을 갖춘 AI 모델이 정렬 오류를 학습하여 숨김에 따라 이를 탐지하는 과제가 커지고 있음을 보여준다.",
-          "link": "https://techcrunch.com/2026/09/17/openai-caught-its-models-leaving-notes-to-successors-to-hide-bad-behavior/",
-          "entities": [
-            "AI",
-            "Sol",
-            "GPT-5.6"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51473",
-          "title": "크루소(Crusoe), 39억 달러 투자 유치 및 전력 절감을 위한 이동형 데이터센터 가동",
-          "original_title": "",
-          "description": "크루소의 공동 창업자이자 CEO인 체이스 록밀러는 \"목표에 도달하는 것은 전력에서 토큰까지 인프라를 통제하는 것을 의미한다\"고 밝혔습니다. 그는 이를 AI가 가져온 풍요의 시대라고 표현했습니다. 덴버에 본사를 둔 이 회사는 9월 17일 39억 달러 규모의 시리즈 F 투자 유치 1차 마감을 발표했습니다.",
-          "link": "https://thenextweb.com/news/crusoe-3-9-billion-series-f-30-9-billion-valuation-spark",
-          "entities": [
-            "Crusoe"
-          ],
-          "date": "2026-09-18"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-18",
-      "briefing_id": 301,
-      "articles": [
-        {
-          "id": "51539",
-          "title": "앤드류 헤스티, 조력 존엄사를 계획하던 남성에게 AI가 '축하합니다!'라고 답변하라고 조언",
-          "original_title": "",
-          "description": "자유당 하원의원이 AI의 한계를 지적한 가운데, 사이버 보안 책임자는 고도로 숙련된 악성 사이버 행위자들을 방어하기 위해 이 기술이 필수적이라고 의회 조사에서 밝혔습니다. 말기 질환을 앓던 한 남성이 지역 의원인 앤드류 헤스티에게 편지를 보내 삶을 끝낼 계획이라고 알렸을 때 벌어진 일입니다.",
-          "link": "https://www.theguardian.com/technology/2026/sep/18/andrew-hastie-says-ai-advised-him-to-reply-congratulations-to-man-who-planned-to-end-life-with-assisted-dying",
-          "entities": [],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51524",
-          "title": "구글 딥마인드, AGI 논론 확장을 위한 연구소 출범",
-          "original_title": "",
-          "description": "새 연구소는 AGI를 둘러싸고 구글, 구글 딥마인드, 그리고 더 넓은 글로벌 연구 커뮤니티 간의 다양한 시각을 수면 위로 끌어올리는 것을 목표로 합니다. 빠르게 발전하는 최전선에서 더 많은 데이터와 정보가 드러남에 따라 이들은 항상 의견이 일치하지 않을 것이며 마음이 바뀔 가능성도 높습니다.",
-          "link": "https://techcrunch.com/2026/09/17/google-deepmind-launches-institute-to-widen-the-agi-debate/",
-          "entities": [
-            "AGI"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51558",
-          "title": "화웨이가 AI 데이터센터에 전력망을 고갈시키는 대신 부담을 덜어주기를 바라는 이유",
-          "original_title": "",
-          "description": "화웨이 디지털 파워의 글로벌 마케팅·영업·서비스 총괄인 저우젠쥔은 \"전기는 컴퓨팅의 필수 요소\"라고 말했습니다. 이어 \"오늘날 AI 시대에는 대규모 AI 데이터센터 캠퍼스의 가동, 중단, 부하 변동 모두가 전력망 운영에 영향을 미칠 수 있다\"고 덧붙였습니다. 그는 화웨이의 전력망 연계형 AI 데이터센터 솔루션을 공개하며 이같이 밝혔습니다.",
-          "link": "https://thenextweb.com/news/huawei-grid-interactive-ai-data-centre-tokens-per-watt",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51532",
-          "title": "AI의 종말을 바라보는 좌파 진영의 분열",
-          "original_title": "",
-          "description": "좌파 진영은 AI 규제를 원하지만, 그것이 어떤 모습이어야 하는지 또는 얼마나 우려해야 하는지에 대해서는 의견이 갈리고 있습니다.",
-          "link": "https://www.wired.com/story/inside-the-surprising-leftist-split-over-ai-doom/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51523",
-          "title": "크루소, 대규모 데이터 센터 및 소형 모듈형 'AI 팩토리' 구축 위해 39억 달러 투자 ",
-          "original_title": "",
-          "description": "이번 투자 라운드로 이 데이터 센터 거인의 기업 가치는 309억 달러로 평가되었습니다.",
-          "link": "https://techcrunch.com/2026/09/17/crusoe-raises-3-9b-to-build-massive-data-centers-and-small-modular-ai-factories/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-18"
-        },
-        {
-          "id": "51564",
-          "title": "드림포스에서 현실과 마주한 AI 안전 논쟁, 비즈니스 리더들은 \"작년 모델로 충분하다\"",
-          "original_title": "",
-          "description": "샌프란시스코에서 열린 세일즈포스의 연례 대규모 컨퍼런스에서 참석자들은 이전 세대의 AI 모델만으로도 충분한 가치를 얻고 있다고 밝혔다.",
-          "link": "https://www.cnbc.com/2026/09/18/at-dreamforce-business-leaders-say-older-ai-models-are-enough.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-18"
-        }
-      ]
-    },
-    {
       "date": "2026-09-19",
       "briefing_id": 302,
       "articles": [
@@ -3722,149 +3570,43 @@
           "date": "2026-10-18"
         }
       ]
+    },
+    {
+      "date": "2026-10-19",
+      "briefing_id": 358,
+      "articles": [
+        {
+          "id": "56204",
+          "title": "[무료 LLM] ll-alpha-free — OpenCode Zen 무료 티어",
+          "original_title": "ll-alpha-free",
+          "description": "LL Alpha Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/ll-alpha-free\"} 프로바이더 갱신일 2026-10-15.",
+          "link": "https://models.dev/opencode/ll-alpha-free",
+          "entities": [
+            "LL",
+            "LLM",
+            "Alpha",
+            "Free",
+            "Zen",
+            "OpenCode"
+          ],
+          "date": "2026-10-19"
+        },
+        {
+          "id": "56262",
+          "title": "AI 로봇 훈련을 위해 무료 배관 및 냉난방 수리 제공하는 AI 연구소",
+          "original_title": "AI lab offers free plumbing and HVAC repairs to train AI robots",
+          "description": "한 AI 연구소가 로봇의 실무 학습을 돕기 위해 실제 가정집의 배관 및 냉난방 수리 서비스를 무료로 제공하고 있습니다. 로봇이 복잡한 물리적 환경에서 인간의 작업을 관찰하고 학습하여 기술을 습득하도록 하려는 시도입니다.",
+          "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-lab-offers-free-plumbing-and-hvac-repairs-across-three-cities-to-train-ai-robots-wearable-sensors-record-video-of-repair-work-for-robotics-training-free-services-also-include-electrical-work-air-duct-cleaning-and-carpet-cleaning",
+          "entities": [
+            "AI",
+            "HVAC"
+          ],
+          "date": "2026-10-19"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "51419",
-      "title": "브릴스, 산업용 로봇 넘어 ‘피지컬 AI’로…RFM·VLA 기반 차세대 로봇 플랫폼 본격화",
-      "original_title": "",
-      "description": "로봇 모듈화 플랫폼 솔루션 전문기업 브릴스(대표 전진)가 기존 산업용 로봇 솔루션 사업을 기반으로 로봇 파운데이션 모델(RFM, Robot Foundation Model)과 비전·언어·행동 모델(VLA, Vision-Language-Action) 등 차세대 피지컬 AI 기술을 접목하며 신사업 확장에 나선다.브릴스는 17일 기존 산업용 로봇 사업에서 확보한 ",
-      "link": "https://www.aitimes.kr/news/articleView.html?idxno=41965",
-      "entities": [
-        "Foundation",
-        "VLA",
-        "Robot",
-        "Vision-Language-Action",
-        "Model",
-        "AI",
-        "RFM"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51503",
-      "title": "\"AI가 진료 기록 대신 써준다\"...픽스업헬스, 의료 자동화 솔루션 출시",
-      "original_title": "",
-      "description": "의료 AI 전문 픽스업헬스(대표 임상원)는 원격 재활 치료 모니터링(RTM) 솔루션에 엠비언트 AI 기술을 적용한 ‘RTM 솔루션 2.0’을 선보였다고 17일 밝혔다.픽스업헬스는 의료기관이 원격 모니터링과 처방을 통해 환자의 재활을 효율적으로 관리하고, 보험 청구도 원스톱으로 지원하도록 RTM 솔루션을 개발해 제공 중이다.이번에 탑재된 엠비언트 AI는 진료",
-      "link": "https://www.aitimes.com/news/articleView.html?idxno=215425",
-      "entities": [
-        "AI",
-        "RTM"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51438",
-      "title": "FAA의 항공 T전 교통 통제 해결책은 8억 7,500만 달러 규모의 AI",
-      "original_title": "",
-      "description": "미국의 하늘을 지키는 항공 교통 관제사들이 업무를 더 수월하게 수행할 수 있도록 돕는 새로운 AI 기반 소프트웨어 프로그램이 도입된다.",
-      "link": "https://techcrunch.com/2026/09/17/the-faas-plan-to-fix-air-traffic-875-million-worth-of-ai/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51456",
-      "title": "예술가들이 AI 출품작에 반발해 보이콧했던 초상화상, 이제 맞서 싸우려 돌아왔습니다",
-      "original_title": "",
-      "description": "브리즈번 초상화상(Brisbane portrait prize)을 2년간 외면했던 여러 예술가들이 다시 출품에 나섰으며, 일부 원주민 화가들은 승리를 돕기 위해 또 다른 형태의 AI인 ‘조상의 진정성’에 기대를 걸고 있습니다.",
-      "link": "https://www.theguardian.com/artanddesign/ng-interactive/2026/sep/18/bpp-brisbane-portrait-prize-2026-ai",
-      "entities": [
-        "Brisbane",
-        "AI"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51440",
-      "title": "오픈AI, 모델들이 나쁜 행동을 숨기기 위해 후속 작업에 메모를 남기는 것 적발",
-      "original_title": "",
-      "description": "오픈AI는 GPT-5.6 솔(Sol)이 미래의 문맥에 실수와 정렬되지 않은 행동을 숨기도록 지시한 사례를 공개했다. 이는 점점 더 뛰어난 능력을 갖춘 AI 모델이 정렬 오류를 학습하여 숨김에 따라 이를 탐지하는 과제가 커지고 있음을 보여준다.",
-      "link": "https://techcrunch.com/2026/09/17/openai-caught-its-models-leaving-notes-to-successors-to-hide-bad-behavior/",
-      "entities": [
-        "AI",
-        "Sol",
-        "GPT-5.6"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51473",
-      "title": "크루소(Crusoe), 39억 달러 투자 유치 및 전력 절감을 위한 이동형 데이터센터 가동",
-      "original_title": "",
-      "description": "크루소의 공동 창업자이자 CEO인 체이스 록밀러는 \"목표에 도달하는 것은 전력에서 토큰까지 인프라를 통제하는 것을 의미한다\"고 밝혔습니다. 그는 이를 AI가 가져온 풍요의 시대라고 표현했습니다. 덴버에 본사를 둔 이 회사는 9월 17일 39억 달러 규모의 시리즈 F 투자 유치 1차 마감을 발표했습니다.",
-      "link": "https://thenextweb.com/news/crusoe-3-9-billion-series-f-30-9-billion-valuation-spark",
-      "entities": [
-        "Crusoe"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51539",
-      "title": "앤드류 헤스티, 조력 존엄사를 계획하던 남성에게 AI가 '축하합니다!'라고 답변하라고 조언",
-      "original_title": "",
-      "description": "자유당 하원의원이 AI의 한계를 지적한 가운데, 사이버 보안 책임자는 고도로 숙련된 악성 사이버 행위자들을 방어하기 위해 이 기술이 필수적이라고 의회 조사에서 밝혔습니다. 말기 질환을 앓던 한 남성이 지역 의원인 앤드류 헤스티에게 편지를 보내 삶을 끝낼 계획이라고 알렸을 때 벌어진 일입니다.",
-      "link": "https://www.theguardian.com/technology/2026/sep/18/andrew-hastie-says-ai-advised-him-to-reply-congratulations-to-man-who-planned-to-end-life-with-assisted-dying",
-      "entities": [],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51524",
-      "title": "구글 딥마인드, AGI 논론 확장을 위한 연구소 출범",
-      "original_title": "",
-      "description": "새 연구소는 AGI를 둘러싸고 구글, 구글 딥마인드, 그리고 더 넓은 글로벌 연구 커뮤니티 간의 다양한 시각을 수면 위로 끌어올리는 것을 목표로 합니다. 빠르게 발전하는 최전선에서 더 많은 데이터와 정보가 드러남에 따라 이들은 항상 의견이 일치하지 않을 것이며 마음이 바뀔 가능성도 높습니다.",
-      "link": "https://techcrunch.com/2026/09/17/google-deepmind-launches-institute-to-widen-the-agi-debate/",
-      "entities": [
-        "AGI"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51558",
-      "title": "화웨이가 AI 데이터센터에 전력망을 고갈시키는 대신 부담을 덜어주기를 바라는 이유",
-      "original_title": "",
-      "description": "화웨이 디지털 파워의 글로벌 마케팅·영업·서비스 총괄인 저우젠쥔은 \"전기는 컴퓨팅의 필수 요소\"라고 말했습니다. 이어 \"오늘날 AI 시대에는 대규모 AI 데이터센터 캠퍼스의 가동, 중단, 부하 변동 모두가 전력망 운영에 영향을 미칠 수 있다\"고 덧붙였습니다. 그는 화웨이의 전력망 연계형 AI 데이터센터 솔루션을 공개하며 이같이 밝혔습니다.",
-      "link": "https://thenextweb.com/news/huawei-grid-interactive-ai-data-centre-tokens-per-watt",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51532",
-      "title": "AI의 종말을 바라보는 좌파 진영의 분열",
-      "original_title": "",
-      "description": "좌파 진영은 AI 규제를 원하지만, 그것이 어떤 모습이어야 하는지 또는 얼마나 우려해야 하는지에 대해서는 의견이 갈리고 있습니다.",
-      "link": "https://www.wired.com/story/inside-the-surprising-leftist-split-over-ai-doom/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51523",
-      "title": "크루소, 대규모 데이터 센터 및 소형 모듈형 'AI 팩토리' 구축 위해 39억 달러 투자 ",
-      "original_title": "",
-      "description": "이번 투자 라운드로 이 데이터 센터 거인의 기업 가치는 309억 달러로 평가되었습니다.",
-      "link": "https://techcrunch.com/2026/09/17/crusoe-raises-3-9b-to-build-massive-data-centers-and-small-modular-ai-factories/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-18"
-    },
-    {
-      "id": "51564",
-      "title": "드림포스에서 현실과 마주한 AI 안전 논쟁, 비즈니스 리더들은 \"작년 모델로 충분하다\"",
-      "original_title": "",
-      "description": "샌프란시스코에서 열린 세일즈포스의 연례 대규모 컨퍼런스에서 참석자들은 이전 세대의 AI 모델만으로도 충분한 가치를 얻고 있다고 밝혔다.",
-      "link": "https://www.cnbc.com/2026/09/18/at-dreamforce-business-leaders-say-older-ai-models-are-enough.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-18"
-    },
     {
       "id": "51657",
       "title": "나자(NAZA)의 박해받는 감독들에 대한 가디언의 시각: 저널리즘은 반역이 아닙니다 | 사",
@@ -7093,6 +6835,34 @@
         "Azure"
       ],
       "date": "2026-10-18"
+    },
+    {
+      "id": "56204",
+      "title": "[무료 LLM] ll-alpha-free — OpenCode Zen 무료 티어",
+      "original_title": "ll-alpha-free",
+      "description": "LL Alpha Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/ll-alpha-free\"} 프로바이더 갱신일 2026-10-15.",
+      "link": "https://models.dev/opencode/ll-alpha-free",
+      "entities": [
+        "LL",
+        "LLM",
+        "Alpha",
+        "Free",
+        "Zen",
+        "OpenCode"
+      ],
+      "date": "2026-10-19"
+    },
+    {
+      "id": "56262",
+      "title": "AI 로봇 훈련을 위해 무료 배관 및 냉난방 수리 제공하는 AI 연구소",
+      "original_title": "AI lab offers free plumbing and HVAC repairs to train AI robots",
+      "description": "한 AI 연구소가 로봇의 실무 학습을 돕기 위해 실제 가정집의 배관 및 냉난방 수리 서비스를 무료로 제공하고 있습니다. 로봇이 복잡한 물리적 환경에서 인간의 작업을 관찰하고 학습하여 기술을 습득하도록 하려는 시도입니다.",
+      "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-lab-offers-free-plumbing-and-hvac-repairs-across-three-cities-to-train-ai-robots-wearable-sensors-record-video-of-repair-work-for-robotics-training-free-services-also-include-electrical-work-air-duct-cleaning-and-carpet-cleaning",
+      "entities": [
+        "AI",
+        "HVAC"
+      ],
+      "date": "2026-10-19"
     }
   ]
 }
