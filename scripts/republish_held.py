@@ -44,6 +44,28 @@ import blog_quality_gate as g  # noqa: E402
 
 REJECTED_DIR = os.path.join(_HERE, "logs", "rejected")
 
+# hold() 는 파이프라인의 today_str 과 달리 머신 로컬 시각(datetime.now())으로 파일명 스탬프를
+# 찍는다. 이 머신은 +07, 파이프라인 기준은 KST(+09) 라서 두 값의 날짜가 2시간 창에서 어긋난다
+# (2026-10-19 실측: 스탬프 093045 는 KST 11:30). 복구 대상 판정은 KST 날짜로 정규화한다 —
+# 그러지 않으면 예약 시각이 아닌 실행에서 보류 글이 조용히 복구되지 않는다.
+KST = datetime.timezone(datetime.timedelta(hours=9))
+_STAMP_RE = re.compile(r"(\d{8})-(\d{6})")
+
+
+def _kst_date_of(stem: str) -> str:
+    """보류 파일명 스탬프(YYYYMMDD-HHMMSS, 머신 로컬) → KST 날짜(YYYY-MM-DD).
+
+    파싱 실패 시 "" 를 돌려주고 호출측은 그 항목을 제외하지 않는다(복구 시도 우선).
+    """
+    m = _STAMP_RE.match(stem or "")
+    if not m:
+        return ""
+    try:
+        dt = datetime.datetime.strptime(m.group(1) + m.group(2), "%Y%m%d%H%M%S")
+    except ValueError:
+        return ""
+    return dt.astimezone(KST).strftime("%Y-%m-%d")
+
 _TABLE_FIX_PROMPT = """아래는 한국어 기술 블로그 글이다. 발행 검사에서 **표가 없다**는 이유로 미달됐다.
 
 할 일: 본문에 **이미 들어 있는 수치·요금·한도·비교**만 모아서 마크다운 표 1개를 글 중간에 추가하라.
@@ -255,8 +277,8 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
 
     for jp in metas:
         rec = json.load(open(jp, encoding="utf-8"))
-        stamp = os.path.basename(jp)[:8]           # YYYYMMDD
-        if len(stamp) == 8 and stamp < since.replace("-", ""):
+        kst_date = _kst_date_of(os.path.basename(jp))
+        if kst_date and kst_date < since:
             continue
         if sum(done[k] for k in ("published", "clean", "fixed", "skip")) >= limit:
             break
@@ -296,7 +318,8 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--since", default=datetime.date.today().isoformat(), help="이 날짜 이후 보류건만")
+    ap.add_argument("--since", default=datetime.datetime.now(KST).date().isoformat(),
+                    help="이 날짜 이후 보류건만 (KST 기준)")
     ap.add_argument("--limit", type=int, default=10)
     ap.add_argument("--publish", action="store_true", help="실제 발행 (기본은 드라이런)")
     ap.add_argument("--force", action="store_true", help="중복 검사 무시 (권장하지 않음)")

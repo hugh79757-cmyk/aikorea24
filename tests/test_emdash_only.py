@@ -16,13 +16,27 @@ sys.path.insert(0, str(SCRIPT_DIR))
 import blog_draft_generator as b  # noqa: E402
 import emdash04_migrate as em  # noqa: E402
 
-BODY = "본문 문장입니다. " * 120  # 1,000자 품질 게이트 통과용
+# AIK24-BLOG-02(2026-10-19): 발행 직전 2차 게이트가 켜지면서, 발행 경로를 타는 픽스처는
+# 게이트를 실제로 통과해야 한다(3,000자·인용 링크 3개·표 1개·`## 마무리` 소제목).
+BODY = (
+    "## 도입\n\n"
+    + ("이 문단은 테스트용 본문이다. 발행 게이트가 요구하는 분량을 채운다. " * 80)
+    + "\n\n## 무료 한도\n\n| 항목 | 값 |\n| --- | --- |\n| 무료 크레딧 | 200달러 |\n| 기간 | 30일 |\n\n"
+    + "## 마무리 — 지금 할 일\n\n1. 첫 단계\n2. 둘째 단계\n3. 셋째 단계\n\n"
+    + "참고: [원문](https://example.com/a) / [문서](https://example.org/b) / [가이드](https://example.net/c)\n"
+)
 GPT_OUT = "TITLE: 테스트 제목\n---\n\n" + BODY
 
 
 @pytest.fixture(autouse=True)
 def _isolated(monkeypatch, tmp_path):
+    import blog_quality_gate as g
+
     monkeypatch.setattr(b, "PROJECT_DIR", str(tmp_path))
+    # 링크 생존 검사는 네트워크를 쓰므로 스텁(단위 테스트의 결정성 유지).
+    monkeypatch.setattr(g, "dead_links", lambda links, **kw: [])
+    # 게이트가 보류를 기록해도 실제 scripts/logs/rejected/ 를 오염시키지 않는다.
+    monkeypatch.setattr(g, "REJECTED_DIR", str(tmp_path / "rejected"))
     b._EMDASH_PENDING.clear()
     yield
     b._EMDASH_PENDING.clear()
