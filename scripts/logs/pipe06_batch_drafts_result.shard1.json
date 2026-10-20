@@ -1,0 +1,13 @@
+{
+  "started_at": "2026-10-20 14:19:34",
+  "finished_at": "2026-10-20 14:20:36",
+  "elapsed_sec": 62,
+  "limit": 143,
+  "only_in_briefing": false,
+  "shard": 1,
+  "shards": 2,
+  "result": {
+    "created": 4,
+    "skipped": 0
+  }
+}
