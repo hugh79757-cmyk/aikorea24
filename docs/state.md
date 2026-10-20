@@ -1,3 +1,62 @@
+## 2026-10-20 14:55 — AIK24-PIPE-06 실행: 썸네일 게이트 결함 수정 + 큐 143건 전수 draft + 역링크 9건
+
+지시서 `SSOT/프로젝트/aikorea24/지시서/2026-10-20-1110-AIK24-PIPE-06-썸네일게이트-큐전수-역링크.md` 실행. Phase A → B → C 순서 고정 준수.
+
+### 한 일
+
+**Phase A — 썸네일 게이트 결함 수정 (최우선)**
+- `blog_draft_generator.py` 5b 의 "생성된 글 전체의 썸네일이 실패하면 return" 제거. 그 return 이 5c(EmDash 발행) **이전에** 함수를 끝내서 초안이 메모리 상주에서 유실됐다(2026-10-20 09:30 minimax 초안 실증).
+- 판정을 글 단위로 분리: `classify_thumbnails()` / `hold_thumbnail_failures()`. 썸네일 실패 글만 `_quality_gate.hold()` 로 초안을 보존하고 발행 보류, 통과 글은 5c 로 진행. (지시서가 제시한 (선호)안 채택 — 이미지 없이 발행하면 10-19·10-20 의 featured_image 공란 5건이 재현된다)
+- `republish_held.py`: 썸네일 결함 보류는 자동 복구 제외. PIPE-05/06 자동 작성 초안(draft)도 자동 복구 제외 — 5d 가 발행하면 "draft 고정·자동 발행 금지" 규칙이 깨진다.
+- A-3 featured_image 공란 백필: `scripts/emdash_backfill_featured_image.py` 신규 — 5건에 썸네일 생성 + D1 반영(기존 글과 동일한 JSON 형태).
+
+**Phase B — 글 필요 큐 143건 전수 draft**
+- `scripts/models_dev_spec.py` 신규 — models.dev 카탈로그에서 스펙·무료 제공 경로·같은 이름의 유료 모델을 뽑아 **원본 값으로** 프롬프트에 주입(LLM 이 숫자를 지어내지 못하게). 카탈로그는 12시간 TTL 로컬 캐시.
+- `blog_draft_generator.generate_model_guide_draft()` 신규 — PIPE-05 §3-3 구조(스펙 → 제공 경로 → 설정 예시 → 주의사항 → 마무리). 12문항 평가글 경로(`generate_draft`)와 완전히 분리 — 점수 미포함.
+- `blog_link_resolver.create_drafts()` 를 사용안내 생성기로 전환 + 게이트 교정 4회 + 금지 표현 검사(12문항·실측 결과·리더보드 순위) 재생성 3회.
+- `scripts/blog_link_resolver_batch_drafts.py` 신규 — 1회성 전수 배치(4 shard 병렬). **정기 파이프라인 5e 기본값(limit=3, only_in_briefing=True)은 유지.**
+
+**Phase C — 역링크 (관례 방식 확정)**
+- `scripts/emdash_add_briefing_backlink.py` 신규 — 기존 글 관례(도입부 직후 "원문기사는 아래의 링크를 통해 확인할 수 있습니다. 기사원문보기")로 모델 글 9건에 브리핑 앵커 링크 삽입. `_rev` 토큰은 MCP `content_get` 으로 획득(REST GET 은 토큰을 주지 않는다) → PUT → publish → 재조회 검증.
+
+### 결과 (검증 근거 포함)
+
+- [검증됨] **Phase A — 썸네일 게이트 결함 제거 + 유실 없음.** 근거: 신규 테스트 `tests/test_blog_thumbnail_gate.py` 7건 통과. "썸네일 전부 실패" 케이스에서 `_quality_gate.hold()` 가 초안 본문(md_len > 200)을 보존 호출하고, 그 글만 발행 대상에서 제거됨을 검증. 원본 결함(전면 return) 재발 방지 테스트 포함(소스 grep + `main()` 5b~5c 사이 4스페이스 return 없음).
+- [검증됨] **Phase A — featured_image 공란 0건.** 근거: `ec_posts` 조회 `status='published' AND deleted_at IS NULL AND (featured_image IS NULL OR featured_image='')` → **0건**. 백필 5건은 라이브 og:image 로 확인(예: `무료-llm-ll-alpha-free-opencode-zen-무료-티어` → `https://aikorea24.kr/images/무료-llm-ll-alpha-free-opencode-zen-무료-티어/thumbnail.webp`). 썸네일 5개 모두 HTTP 200(라이브 배포 `Version ID 218d08a4-62b9-42cc-b94e-76c9c32a77e0`).
+- [검증됨] **Phase B — 큐 143건 전수 draft 생성.** 근거: 큐 모델 143개 전부에 대해 슬러그 시그니처 대조 → **143/143 일치, 미확인 0건**. 대조표 `scripts/logs/pipe06_model_draft_table.json`.
+- [검증됨] **Phase B — 자동 발행 0건.** 근거: `ec_posts` 조회 `status='published' AND created_at >= '2026-10-20T05:00'`(13:00 KST 이후) → **0건**. 생성 경로는 `create_draft_post()`(publish 엔드포인트 미호출) 뿐이고, `republish_held` 의 5d 자동 복구에서도 PIPE-05/06 보류는 제외됨을 DRY-RUN 로 확인.
+- [검증됨] **Phase B — 12문항/실측 금지 표현 0건.** 근거: 유효 draft 176건 전수 본문 검사(`_forbidden_hits`) → **0건**. 검사闸는 생성 단계에 3회 재생성으로 구현했고, 그 이전 배치에서 나온 위반 3건은 EmDash API 가 동일 슬러그 재생성 시 soft-delete 하는 것으로 자동 처리됐다(`deleted_at` 설정 확인).
+- [검증됨] **Phase C — 역링크 9건 삽입 + 라이브 확인.** 근거: `emdash_add_briefing_backlink.py --apply` → 성공 9 / 실패 0. 각 건 재조회 검증(블록 수 +1, 링크 존재). 라이브 확인 — `무료-llm-minimax-m31-flash-free-…` 페이지에 `https://aikorea24.kr/briefing/2026-10-20-1/#item-1` 링크가 도입부 직후 표시. 역링크 포함 published 글 761건(기존 752 + 신규 9).
+- [검증됨] **회귀 없음.** 근거: `pytest tests/` → **863 passed / 10 skipped / 0 failed**. 863 = 855(PIPE-05 완료 시점 기준선) + 7(신규 썸네일 게이트 테스트) + 1(소스 grep 테스트 교체분). 상세는 아래 [위반 감지] 참고.
+- [검증됨] 정기 파이프라인 동작 유지. 근거: `blog_draft_generator.py` 5e 는 `create_drafts(limit=3, only_in_briefing=True)` 유지(수집기 09:30 배치는 파이프라인 기본값이 아니다 — 지시서 "정기 실행 기본값 유지" 준수). 기존 게이트 교정 횟수도 `GATE_FIX_ROUNDS_DEFAULT = 2` 로 기존 동작 그대로(Phase B 만 4회).
+
+### [위반 감지] — 테스트 코드 수정 (production code 아님)
+
+`tests/test_blog_draft_generator.py` 의 `TestQualityChecklistBlocking` 4건은 **소스 grep 으로 결함 그 자체를 단언**하는 테스트였다("모든 썸네일 품질 검증 실패 — 배포 차단" 문자열과 그 뒤의 `return` 이源码에 존재해야 통과). 결함을 고치면 이 테스트는 반대로 실패한다. 지시서 "기존 테스트 전체 통과 유지"와 충돌하므로, **테스트를 새 계약으로 교체**했다(4건 → `TestQualityChecklistPerPost` 5건: 전면 return 없음 / 글 단위 판정 함수 존재 / 실패 글은 hold 보존 / 텔레그램 알림에 보류 사유 / 발행 대상에서 실패 글 제거). production code 는 건드리지 않았다. 이 4건을 남겼다면 결함을 되살리는 방향으로 코드가 강제될 뻔했다.
+
+### 산출물
+
+- 신규: `scripts/models_dev_spec.py`, `scripts/emdash_backfill_featured_image.py`, `scripts/emdash_add_briefing_backlink.py`, `scripts/emdash_dedupe_model_drafts.py`, `scripts/blog_link_resolver_batch_drafts.py`, `tests/test_blog_thumbnail_gate.py`
+- 수정: `scripts/blog_draft_generator.py`, `scripts/blog_link_resolver.py`, `scripts/republish_held.py`, `scripts/emdash_publish.py`, `tests/test_blog_draft_generator.py`, `.gitignore`
+- 대조표·기록: `scripts/logs/pipe06_model_draft_table.json`, `scripts/logs/pipe06_dedupe_backup.json`, `scripts/logs/pipe06_forbidden_drafts_backup.json`, `scripts/logs/pipe06_batch*_shard*.log`
+
+### 잔존 위험
+
+- [잔존] **EmDash draft 목록에 176행이 있다 — 모델은 143개.** 배치 실행을 5회(단일 → 4 shard → 2 → 1) 돌렸고, 매번 제목이 달라 슬러그도 달라 EmDash 가 soft-delete 하지 못한 잔재다. `emdash_dedupe_model_drafts.py` 로 정리하려 했으나, 느슨한 키 매칭이 `qwen-image` ↔ `qwen-image-edit` 처럼 **다른 모델을 같은 것으로 보는 오인**이 1건 확인돼(삭제는 되돌릴 수 없으므로) 보수적 규칙으로 바꿨고, 그 결과 중복 정리는 사실상 동작하지 않는다. **검수자는 `scripts/logs/pipe06_model_draft_table.json` 대조표를 기준으로 모델당 1건을 고를 것.** 잔재 정리 방법은 대표님 결정 필요.
+- [잔존] **검수 전까지 이 143건은 어디에도 노출되지 않는다.** 자동 발행 0건을 지시서가 요구했으므로 의도된 상태다. 브리핑의 "원문 보기" 링크는 blog_link(발행된 글 기준)만 쓰므로 발행 전까지는 models.dev 로 폴백한다.
+- [잔존] **사용안내 글의 12문항 언급을 생성 단계에서만 막았다.** 검수자가 발행 전에 확인할 질문이 남는다 — "이 모델을 직접 호출해 봤는가"를 요구하는 글은 작성하지 않았으므로, 실측을 원하는 모델은 별도 12문항 평가글을 써야 한다.
+- [잔존] `create_draft_post()` 에 EmDash `CONTENT_CREATE_ERROR`(500) 재시도 3회를 넣었지만, 같은 오류가 연속 3회 나는 모델은 여전히 draft 가 없다(실측 6건 → 재실행으로 해소).
+- [잔존] `blog_link_resolver` 의 모델↔글 매칭 정밀도. org 접두사·점 표기·접미사가 제각각인 LLM 제목이라 완전 일치 판정이 어렵다(2026-10-20 14:25 실측: `kilo-auto/free` 의 꼬리 1토큰 "free" 이 38개 글과 오인 → 2토큰 하한으로 수정). blog_link 는 **발행된 글**만 대상이라 이번 Phase B 와 무관하지만, 발행 후 143건을 일괄 매칭할 때 오인이 생길 수 있다.
+- [잔존] 이 세션의 D1 쓰기는 `cfnew.py`(REST) 로만 했다. 이 셸의 `CLOUDFLARE_API_TOKEN` 은 7403 권한 오류라 `wrangler d1 execute` 가 불가하다. launchd 환경은 OAuth 경로로 동작한다.
+- [잔존] `models.dev/api.json` 캐시(12시간)를 썼다. 그 사이 카탈로그가 바뀌면 스펙이 어긋난다 — 143건 검수 시 카탈로그 갱신 여부를 함께 볼 것.
+
+### 다음 행동
+
+1. 대표님 결정 필요 — 143건 draft 검수(EmDash draft 목록) 후 발행. 발행은 검수 후 별도 실행이며, 지시서 §5대로 자동 발행하지 않는다.
+2. 대표님 결정 필요 — 모델당 1건 기준의 잔여 draft 정리 방법(수동 soft-delete 인지, 생성 스크립트가 제목 정규화를 해 재실행할지).
+3. 2026-10-21 07:00 파이프라인 실행 후 `scripts/pipeline_runner.log` 에서 Step 1.5(링크 매칭)·Step 2(브리핑)·이메일 발송 정상 여부 확인(회귀 확인).
+4. 2026-10-21 09:30 블로그 초안 실행에서 **썸네일 게이트가 글 단위로 동작하는지** 확인(실패 글은 hold 로 보존되고 나머지는 발행되어야 한다).
+
 ## 2026-10-20 12:50 — AIK24-PIPE-05 실행: 무료 모델 브리핑 링크 → AIK24 블로그 연결 (news.blog_link 신설)
 
 지시서 `SSOT/프로젝트/aikorea24/지시서/2026-10-20-1012-AIK24-PIPE-05-브리핑-블로그연결-구현지시서.md` 실행.
