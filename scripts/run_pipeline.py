@@ -59,6 +59,26 @@ def step_briefing(articles):
         return None
 
 
+def step_blog_link():
+    """Step 1.5: AIK24-PIPE-05 — 무료 모델 news 행 ↔ AIK24 블로그 글 매칭.
+
+    무료 모델 브리핑 항목의 "원문 보기" 링크를 AIK24 블로그 글로 연결한다
+    (models.dev 는 제3자 카탈로그라 원문이 아니다 — 지시서 §3-2·§3-4).
+    blog_link 가 없으면 기존 link 로 폴백하며, auto_briefing 이 경고를 로그로 남긴다.
+    """
+    import blog_link_resolver
+
+    log("═══ Step 1.5: 무료 모델 → 블로그 링크 매칭 ═══")
+    try:
+        stats = blog_link_resolver.resolve()
+    except Exception as e:
+        log(f"  ⚠️ blog_link 매칭 실패 (브리핑은 계속): {type(e).__name__}: {str(e)[:160]}")
+        return None
+    log(f"  모델 {stats['models']}개 중 매칭 {stats['matched_models']}개 · "
+        f"연결 {stats['linked_rows']}행 · 글 필요 큐 {stats['queued_models']}개")
+    return stats
+
+
 def step_thumbnails(articles):
     """Step 4: 썸네일 생성"""
     import auto_thumbnail
@@ -131,6 +151,8 @@ def main():
                         help="Step 0 v2 소스 수집 실행 (기본: 05:30 수집기에 이관되어 스킵)")
     parser.add_argument("--skip-news", action="store_true", help="뉴스 선정 단계 건너뜀")
     parser.add_argument("--skip-briefing", action="store_true", help="브리핑 생성 단계 건너뜀")
+    parser.add_argument("--skip-blog-link", action="store_true",
+                        help="무료 모델 → 블로그 링크 매칭 단계 건너뜀 (AIK24-PIPE-05)")
     parser.add_argument("--skip-thumbnails", action="store_true", help="썸네일 생성 단계 건너뜀")
     parser.add_argument("--skip-email", action="store_true", help="이메일 발송 단계 건너뜀")
     parser.add_argument("--no-email", action="store_true",
@@ -216,6 +238,21 @@ def main():
             summary["errors"].append(f"브리핑 생성: {e}")
     else:
         log("⏭ 브리핑 생성 건너뜀")
+
+    log("")
+
+    # Step 1.5: 무료 모델 → 블로그 링크 매칭 (AIK24-PIPE-05)
+    # 브리핑 생성 전에 blog_link 를 채운다 — auto_briefing 이 링크 사용 여부를 로그로 남기고,
+    # 이메일·웹 카드의 "원문 보기" 는 렌더링 시점에 COALESCE(n.blog_link, n.link) 로 연결된다.
+    if not args.skip_blog_link:
+        try:
+            step_blog_link()
+        except Exception as e:
+            log(f"blog_link 매칭 단계 오류(무시하고 계속): {e}")
+            traceback.print_exc()
+            summary["errors"].append(f"blog_link 매칭: {e}")
+    else:
+        log("⏭ Step 1.5 blog_link 매칭 건너뜀")
 
     log("")
 

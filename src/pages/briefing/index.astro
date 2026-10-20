@@ -23,7 +23,8 @@ if (db) {
     briefings = bResult.results || [];
 
     const nResult = await db.prepare(
-      `SELECT id, title, link, description, source, category, country, pub_date, created_at
+      // AIK24-PIPE-05: 무료 모델 카드의 "원문 보기" 는 블로그 글 우선 (blog_link → link 폴백)
+      `SELECT id, title, COALESCE(blog_link, link) as link, description, source, category, country, pub_date, created_at
        FROM news
        WHERE created_at >= datetime('now', '-3 days')
        ORDER BY created_at DESC

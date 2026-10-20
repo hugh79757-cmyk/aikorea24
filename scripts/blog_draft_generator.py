@@ -1398,6 +1398,17 @@ def main():
         if _gate_summary:
             log("  " + _gate_summary)
 
+    # 5e. AIK24-PIPE-05 §3-3: 무료 모델 중 "글이 없는" 모델의 초안 자동 작성.
+    # 지시서 §5 — **자동 발행 금지.** 상태는 draft 고정이고 검수 주체(시니어 2/대표님)를 기다린다.
+    # 브리핑에 실린 모델만 대상으로 한다(독자가 본 모델에 글이 없는 경우를 메우는 것이 목적).
+    try:
+        import blog_link_resolver
+        log("[5e] 무료 모델 글 필요 큐 처리 (draft 자동 작성)...")
+        _d = blog_link_resolver.create_drafts(limit=3, only_in_briefing=True)
+        log(f"  draft 생성: {_d.get('created', 0)}건 / 스킵 {_d.get('skipped', 0)}건")
+    except Exception as e:
+        log(f"  ⚠️ 글 필요 큐 처리 실패(무시하고 계속): {type(e).__name__}: {str(e)[:160]}")
+
     # 5d. 보류 글 복구 (AIK24-BLOG-02): 게이트가 보류한 글은 scripts/logs/rejected/ 에 남는다.
     # 보류 사유의 대부분은 '표 0개' 하나다. 같은 실행 안에서 표만 추가해 복구하면 볼륨이 죽지 않는다
     # (2026-10-19 실측: 09:30 실행 보류 2건 모두 표 결함 → 표 교정으로 3,700자/3,200자로 복구·발행).

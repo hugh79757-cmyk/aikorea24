@@ -161,3 +161,34 @@ def publish_post(title, body_md, excerpt=None, featured_image=None, published_at
         print("  ! EmDash publish 실패 http=%s %s" % (st2, json.dumps(d2, ensure_ascii=False)[:200]))
         return None
     return "%s/posts/%s" % (BASE, item.get("slug") or item.get("id"))
+
+
+def create_draft_post(title, body_md, excerpt=None, featured_image=None):
+    """글 1건을 **draft 상태로** 만든다. publish 하지 않는다.
+
+    AIK24-PIPE-05 §3-3·§5 — 자동 작성 글은 검수 전까지 draft 로만 둔다.
+    검수 주체(시니어 2 / 대표님)는 지시서 §5 에서 결정 대기다. 그래서 여기선
+    publish 를 호출하지 않는다 — 호출하는 순간 "검수 없이 공개" 가 된다.
+    반환값은 draft 로서의 URL (공개 전이므로 링크를 외부에 노출하지 않는다).
+    """
+    pat = get_pat()
+    if not pat:
+        print("  ! EmDash PAT 없음 (%s)" % "/".join(PAT_KEYS))
+        return None
+    os.environ["EMDASH_PAT"] = pat
+    from emdash04_migrate import md_to_pt, api
+
+    data = {"title": title, "excerpt": excerpt or "", "content": md_to_pt(body_md)}
+    feat = _featured_image_data(featured_image)
+    if feat:
+        data["featured_image"] = feat
+    st, d = api("/_emdash/api/content/posts", "POST", {"data": data})
+    if st not in (200, 201):
+        print("  ! EmDash draft create 실패 http=%s %s" % (st, json.dumps(d, ensure_ascii=False)[:200]))
+        return None
+    item = (d.get("data") or {}).get("item") or {}
+    if not item.get("id"):
+        print("  ! EmDash draft create 응답에 id 없음")
+        return None
+    print("  📝 EmDash draft 생성(미발행): id=%s slug=%s" % (item.get("id"), item.get("slug")))
+    return "%s/posts/%s" % (BASE, item.get("slug") or item.get("id"))

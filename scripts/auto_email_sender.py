@@ -81,8 +81,10 @@ def get_today_briefing():
 def get_briefing_items(briefing_id):
     """브리핑 아이템 조회"""
     return _d1_query(
+        # AIK24-PIPE-05: 무료 모델 항목의 링크는 AIK24 블로그 글을 우선한다
+        # (blog_link 없으면 기존 link 로 폴백).
         f"SELECT bi.*, n.title as news_title, n.description as news_desc, "
-        f"n.link as news_link, n.source as news_source "
+        f"COALESCE(n.blog_link, n.link) as news_link, n.source as news_source "
         f"FROM briefing_items bi "
         f"LEFT JOIN news n ON bi.news_id = n.id "
         f"WHERE bi.briefing_id = {briefing_id} "

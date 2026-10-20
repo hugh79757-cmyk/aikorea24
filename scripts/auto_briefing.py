@@ -32,6 +32,13 @@ CLI_PROVIDER_PREFIX = {
 # 오픈 웨이트(GGUF/양자화) — OpenCode 가 직접 받아 쓰진 못하지만 Ollama·LM Studio 를
 # 경유해 무료 로컬 실행된다. 존재하지 않는 모델 문자열을 만들지 않고 링크로만 안내.
 OPEN_WEIGHT_SOURCES = {"HuggingFace Trending"}
+# AIK24-PIPE-05 §3-4: 무료 모델을 담는 news.source 4종 (링크는 AIK24 블로그 글 우선)
+FREE_MODEL_SOURCES = (
+    "OpenRouter Free Models",
+    "OpenCode Zen",
+    "Kilo Free Models",
+    "NVIDIA NIM Free",
+)
 
 
 def cli_free_block(article):
@@ -468,6 +475,20 @@ def main(selected_articles=None):
         log("  ⚠️ 선정된 기사 없음")
         print()
         return
+
+    # AIK24-PIPE-05 §3-4: 무료 모델 항목의 "원문 보기" 링크는 AIK24 블로그 글(blog_link)을 쓴다.
+    # blog_link 가 비면(글 미발행) 기존 link(models.dev 등)를 유지한다.
+    # **news.link 는 dedup 키라 절대 바꾸지 않는다** — briefing_dedup.record_briefing() 이
+    # link 를 이력에 기록하므로 여기서 덮어쓰면 중복 제거가 깨진다. 링크 사용은 렌더링
+    # 경로의 COALESCE(n.blog_link, n.link) 가 담당한다.
+    for art in selected:
+        if art.get("source") not in FREE_MODEL_SOURCES:
+            continue
+        mid = art.get("original_title") or ""
+        if art.get("blog_link"):
+            log(f"  🔗 blog_link 사용: {mid} → {art['blog_link']}")
+        else:
+            log(f"  [경고] blog_link 없음 → 기존 링크 사용: {mid}")
 
     print()
 

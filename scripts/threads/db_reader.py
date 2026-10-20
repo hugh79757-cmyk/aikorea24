@@ -316,7 +316,7 @@ def get_articles():
     field_excludes = {'posted_ids': 0, 'posted_links': 0, 'posted_titles': 0, 'posted_original_titles': 0, 'posted_semantic': 0}
 
     # 1순위: 오늘 브리핑
-    sql1 = f"""SELECT n.id, n.title, n.link, n.description, n.source, n.pub_date,
+    sql1 = f"""SELECT n.id, n.title, COALESCE(n.blog_link, n.link) as link, n.description, n.source, n.pub_date,
                       COALESCE(bi.comment, '') as comment,
                       COALESCE(n.original_title, '') as original_title
                FROM news n
