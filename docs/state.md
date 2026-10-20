@@ -1,3 +1,70 @@
+## 2026-10-20 18:54 — AIK24-PIPE-07: 브리핑 "원문 보기"를 제공사 모델 페이지로 (news.origin_link 신설)
+
+대표님 지적(2026-10-20): 브리핑 1번(OpenCode Zen minimax-m3.1-flash-free) 카드에서
+"원문 보기"를 누르면 "이 뉴스, 더 깊이 읽기"와 같은 AIK24 블로그로 이동한다.
+원문은 이 모델이 브리핑에 오른 출처(OpenCode Zen / OpenRouter / Kilo)의 모델 페이지여야 한다.
+
+### 원인
+- AIK24-PIPE-05 가 렌더 5곳을 `COALESCE(n.blog_link, n.link)` 로 바꿨다. 무료 모델의
+  `news.link` 가 models.dev(제3자 카탈로그)라 원문으로 쓰기 어렵다는 이유였다.
+  그 결과 blog_link(AIK24 블로그)가 "원문 보기" 목적지가 되어 deep_dive_url 과 같아졌다.
+- 실측(배포 전): `/briefing/2026-10-20-1/` 카드1의 source-link href == deep-dive href
+  == `https://emdash.aikorea24.kr/posts/무료-llm-minimax-m31-flash-free-…`
+- `news.link` 는 수집기 dedup 키(`news_collector_v2.save()` 가 최근 3,000 link 로 중복 제외)라
+  값을 바꿀 수 없다. 링크를 담을 별도 컬럼이 필요했다.
+
+### 한 일
+1. `news.origin_link TEXT` 신설 — 마이그레이션 `scripts/migrations/20261020_add_origin_link_to_news.sql`,
+   D1 즉시 적용(14→15컬럼). `news.link`·`blog_link` 값은 그대로.
+2. `scripts/origin_link_resolver.py` 신규 — source + original_title → 제공사 페이지.
+   - OpenCode Zen: https://opencode.ai/v2/docs/console/models/ (모델별 페이지 없음)
+   - OpenRouter: https://openrouter.ai/{org}/{model} (`:free` 제거)
+   - Kilo: https://kilo.ai/models/{slug}
+   - NVIDIA NIM: https://build.nvidia.com/{org}/{model}
+   - 비무료 source → None (렌더는 link 로 폴백)
+   - CLI: `--report` / `--apply` / `--dry-run` / `--verify`
+3. 백필 208행(무료 모델 4종 전체). 백업 `scripts/logs/backup_origin_link_20261020.json`.
+   Kilo per-model 30건 중 20건은 HTTP 404(단종) → 목록 페이지로 내림.
+4. 렌더 5곳을 `COALESCE(n.origin_link, n.link)` 로 교체 — 브리핑 상세·브리핑 목록·뉴스 목록·
+   이메일(TS API·Py 발송기). `blog_link` 는 "원문 보기"에서 제거(심층 분석은 deep_dive_url).
+5. 수집기·카탈로그 diff INSERT 에 origin_link 기록. 빈 값은 `''` 가 아니라 `NULL` —
+   `''` 는 COALESCE 에서 NULL 로 취급되지 않아 비무료 뉴스 링크까지 빈 값이 되는 결함을
+   테스트로 고정했다.
+6. 기존 테스트 1건에 origin_link 단언 추가(기존 단언 유지, 추가만).
+
+### 결과
+- [검증됨] 배포 후 라이브 카드1 — 원문 href `https://opencode.ai/v2/docs/console/models/`,
+  심층 href `https://emdash.aikorea24.kr/posts/무료-llm-minimax-m31-flash-free-…`.
+  근거: `curl -sL https://aikorea24.kr/briefing/2026-10-20-1/` HTML 파싱.
+- [검증됨] 관련 뉴스 카드 — OpenRouter `https://openrouter.ai/minimax/minimax-m3.1-flash`,
+  Kilo `https://kilo.ai/models/minimax-minimax-m3-1-flash-free`,
+  NVIDIA `https://build.nvidia.com/stepfun-ai/step-5-preview`. 같은 curl.
+- [검증됨] `/news/`·`/briefing/` 목록의 `models.dev` 링크 0건. 근거: curl HTML grep.
+- [검증됨] D1 백필 상태 — 무료 모델 208행 전부 origin_link 채움, `origin_link=''` 0건,
+  NULL 19,141건(비무료 → link 폴백). 근거: D1 집계 쿼리.
+- [검증됨] 마이그레이션 — `pragma_table_info('news')` 15컬럼(이전 14). 근거: D1 쿼리.
+- [검증됨] 회귀 없음 — `pytest tests/` 896 passed / 10 skipped / 0 failed.
+  896 = 863(PIPE-06 기준선) + 30(`test_origin_link_resolver.py`) + 2(`test_news_collector_origin_link.py`)
+  + 1(`test_model_catalog_news_insert.py` 추가분).
+- [검증됨] 배포 — Workers Version `b2f9f215-14a0-4737-bc6f-db7c6706833a`. 커밋 `1c71af66`.
+- [부분검증] 이메일 발송 경로 — SQL 을 `COALESCE(origin_link, link)` 로 바꿨고 빌드/배포는 통과했으나,
+  실제 발송은 수신자에게 메일이 가므로 실행하지 않았다. 검증 수단: 배포된 Worker 컴파일 성공 + 코드 리뷰.
+- [부분검증] 다음 수집기 실행의 신규 INSERT — `save()` 를 fake cfnew 로 실행해 origin_link/NULL 기록을
+  단위 테스트로 확인했으나, 실제 cron 실행에서 신규 행이 생기는 것은 아직 관측 전.
+
+### 잔존 위험
+- Kilo per-model 링크는 모델이 단종되면 404 가 될 수 있다. 백필 시 20건을 목록 페이지로 내렸고
+  `--verify` 로 재점검할 수 있으나 자동 재점검은 없다. 브리핑은 최근 행만 쓰므로 노출 창은 짧다.
+- `blog_link` 는 DB 에 계속 쌓이지만 "원문 보기"에는 쓰이지 않는다. 다른 소비처가 생기면
+  같은 혼동이 재발할 수 있어 렌더 규칙은 항상 `origin_link` 우선으로 유지해야 한다.
+- 이메일 템플릿은 여전히 "원문 읽기" 라벨을 쓴다. 목적지는 이제 제공사 페이지다.
+
+### 다음 행동
+1. 다음 파이프라인 실행(수집 → 브리핑) 후 신규 무료 모델 행의 origin_link 가 채워지는지 확인.
+2. Kilo 404 누적 여부는 월 1회 `python3 scripts/origin_link_resolver.py --apply --verify` 로 점검.
+3. 이후 지시서·문서에서 무료 모델 "원문 보기" 규칙은 PIPE-05(블로그)가 아니라 이 PIPE-07
+   (`origin_link` 우선)을 기준으로 한다.
+
 ## 2026-10-20 14:55 — AIK24-PIPE-06 실행: 썸네일 게이트 결함 수정 + 큐 143건 전수 draft + 역링크 9건
 
 지시서 `SSOT/프로젝트/aikorea24/지시서/2026-10-20-1110-AIK24-PIPE-06-썸네일게이트-큐전수-역링크.md` 실행. Phase A → B → C 순서 고정 준수.
