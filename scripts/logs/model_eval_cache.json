@@ -1319,5 +1319,189 @@
   "label": "12문항 중 9문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유). 판단 근거 부족 — 손발 작업으로 한정.",
   "ts": 1792386820.481355,
   "schema": 4
+ },
+ "big-pickle": {
+  "model_id": "big-pickle",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/big-pickle",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 8,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "cli",
+    "answer": "이 코드는 두 개의 값을 받아 더한 결과를 돌려주는 `add` 함수를 정의합니다.\n\n- **매개변수**: `a`와 `b` 두 개를 받습니다.\n- **동작**: `a + b`를 계산해 반환합니다. 숫자뿐 아니라 파이썬의 `+` 연산자가 지원하는 것들(예: 리스트 연결, 문자열 이어붙이기)에도 사용할 수 있습니다.\n\n사용 예시:\n```python\nadd(2, 3)      # 5\nadd(\"가\", \"나\")  # \"가나\"\n```\n\n---끝---",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 3,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "**수정 코드:**\n```python\nfrom datetime import datetime\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n**설명:** 현재 코드는 `now - timedelta(days=30)`을 기준으로 비교하여 30일 이상 전에 만료된 토큰만 반환하므로, 최근에 만료된 실제 만료 토큰들을 누락합니다.",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "exception"
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 리팩토링 결과\n\n```python\ndef _select_users(users, predicate):\n    out = []\n    for u in users:\n        if predicate(u):\n            out.append({'id': u['id'], 'name': u['name'], 'email': u['email']})\n    return out\n\n\ndef get_active_user(users):\n    return _select_users(users, lambda u: u['status'] == 'active')\n\n\ndef get_admin_user(users):\n    return _select_users(users, lambda u: u['role'] == 'admin')\n```\n\n**변경 요약**: 반복문 + 프로젝션(필드 추출) 부분을 `_select_users(users, predicate)` 하나로 추출하고, 두 공개 함수는 각각 **조건(predicate)만** 남겼습니다. 공개 함수의 이름·인자·반환 형태는 그대로입니다.\n\n### 보고\n\n**[검증됨] 동작 동일성** — 근거: 원본 함수와 리팩토링본을 한 스크립트에서 직접 비교 실행한 결과 `6/6 일치`\n- 정상 케이스 2건 (active 필터 / admin 필터 결과 리스트 완전 일치)\n- 빈 리스트 2건 (양쪽 모두 `[]`)\n- 예외 동작 2건 (`status` 키 없는 입력에서 원본·신본 모두 동일한 `KeyError` 발생 — 프로젝션이 조건 통과 후에 실행되는 순서도 유지됨)\n\n**[부분검증] 실제 프로젝트 회귀 없음** — 제한 사유: 해당 함수들이 속한 파일/테스트 스위트를 본 세션에서 실행하지 않았습니다. 지금까지는 스니펫 기준 비교만 수행했습니다. 복구 계획: 실제 코드베이스에 적용 후 기존 테스트 실행으로 확인 (지시 시 수행).\n\n**[검증불가] 없음**\n\n### 잔존 위험\n\n- `_select_users`는 `u['status']`/`u",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nimport re\nfrom datetime import datetime\n\n_VALID_LEVELS = {\"INFO\", \"WARN\", \"ERROR\"}\n_ISO_RE = re.compile(r\"^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:\\d{2})$\")\n\n\ndef parse_log_line(s: str) -> tuple[str, str, str]:\n    if not isinstance(s, str):\n        raise TypeError(f\"expected str, got {type(s).__name__}\")\n\n    if not s.strip():\n        raise ValueError(\"empty log line\")\n\n    parts = s.split(None, 2)\n    if len(parts) < 3:\n        raise ValueError(f\"expected 'TIMESTAMP LEVEL MSG', got {len(parts)} field(s)\")\n\n    timestamp, level, msg = parts\n\n    if not _ISO_RE.match(timestamp):\n        raise ValueError(f\"invalid ISO8601 timestamp: {timestamp!r}\")\n    try:\n        datetime.fromisoformat(timestamp.replace(\"Z\", \"+00:00\"))\n    except ValueError:\n        raise ValueError(f\"invalid ISO8601 timestamp: {timestamp!r}\") from None\n\n    if level not in _VALID_LEVELS:\n        raise ValueError(f\"invalid level: {level!r} (expected INFO/WARN/ERROR)\")\n\n    if not msg.stri",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "normalize_ledger_entries",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "위 대화에서 요청한 작업 3가지입니다:\n\n1. **파이썬 시작 방법 문의** – \"파이썬을 처음 시작하려면 뭘부터 해야 해?\"\n2. **변수 명명 규칙 요청** – \"변수 이름 지을 때 규칙 3개만 알려줘.\"\n3. **디버깅 절차 문의** – \"프로그램이 안 돌아갈 때 처음에 할 일은?\"",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 9,
+    "axis": "에이전트",
+    "score": 0,
+    "source": "cli",
+    "answer": "[{\"priority\":1,\"item\":\"글로벌 가변 상태(total) 의존 — 동시성/경합 조건\"},{\"priority\":2,\"item\":\"amount 입력 검증 부재\"},{\"priority\":3,\"item\":\"DB 쓰기 실패/예외 처리 부재\"},{\"priority\":4,\"item\":\"TAX_RATE 계산 로직 변경 근거 확인(기존 과세 계산 누락)\"},{\"priority\":5,\"item\":\"멱등성/재시도 시 중복 거래 적재 위험\"}]",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 10,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "**Root cause:** `timeout=5` 초 내에 응답이 오지 않아 발생한 `requests.exceptions.Timeout`을 잡는 처리가 없어 예외가 그대로 전파되었다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -6,7 +6,10 @@\n import requests\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    try:\n+        return requests.get(url, timeout=5).json()\n+    except requests.exceptions.RequestException as e:\n+        return {\"error\": str(e)}\n \n if __name__ == \"__main__\":\n     res = fetch('/api/users')\n```",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 11,
+    "axis": "에이전트",
+    "score": 0,
+    "source": "cli",
+    "answer": "```json\n{\n  \"task\": \"네안데르탈인 시점 텍스트 게임 — 단일 HTML 파일 4단계 작성 계획\",\n  \"file\": \"neanderthal-game.html\",\n  \"principles\": [\n    \"한 파일이므로 각 단계는 이전 단계 코드 위에 '추가'만 한다 (기존 동작 파괴 금지)\",\n    \"모델(state) → 렌더(render) → 조작(bind) 순서를 단계마다 반복해 순환 참조를 막는다\",\n    \"각 단계 완료 시 브라우저에서 해당 단계 검증 항목을 수동 확인한 뒤에만 다음 단계로 진행\"\n  ],\n  \"steps\": [\n    {\n      \"step\": 1,\n      \"name\": \"뼈대: 화면 전환 + 상태 코어\",\n      \"goal\": \"HTML 셸, 화면 전환기, 중앙 상태 객체, 자동 저장 기반을 만든다. 게임 로직은 넣지 않는다.\",\n      \"dom_screens\": [\n        \"<div id='app'> 래퍼 — 모든 화면이 이 안에서 토글된다\",\n        \"#screen-title — 타이틀: 게임 제목('얼음의 계곡 — 네안데르탈 연대기'류), [시작] [이어하기] 버튼\",\n        \"#screen-main — 본문 텍스트 영역(#story-text) + 선택지 컨테이너(#choices) — 이 단계에서는 더미 문구만\",\n        \"#screen-hud — 상단 고정 바: 계절/시대 표기 자리(#hud-season) — 아직 빈 값\",\n        \"모든 화면은 class 'screen' + 'active' 토글로 표시 전환\"\n      ],\n      \"state_model\": {\n        \"state\": {\n          \"version\": 1,\n          \"screen\": \"title\",\n          \"day\": 1,\n          \"season\": \"초봄\",\n          \"flags\": {},\n          \"log\": []\n       ",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 12,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 지금 바로 처리\n\n**1. 장애 후속 고객 메일 발송** — 먼저 처리\n- **근거**: ① 발송 준비는 끝났으니 실행만 남아 있어 소요 시간 최소(quick win) ② 장애는 이미 발생했고, 고객의 기다림 시간이 길어질수록 신뢰 손상이 누적되며 이 시간 창은 이후에 되돌릴 수 없다 ③ 발송 후 일정이 확 잡히면 어제 끝났어야 할 일이 된다.\n\n**2. 운영 DB 느린 쿼리 (3초)** — 메일 발송 직후 착수\n- **근거**: ① 영향 대상이 전체 이용자인데다 서버 부하가 몰리는 시간대에 3초 쿼리 → 커넥션 포트 적체·타임아웃 연쇄로 장애로 증폭될 수 있는 구조적 리스크(악화 가능성) ② 지금은 \"관측\" 단계라 원인 파악에만 시간이 걸리고, 고치는 작업은 오늘 안에 착수해도 일정에 무리가 없다. 즉 **진단은 지금, 수정 일정은 오늘 중 확정**이 합리적.\n- 주의: 쿼리 3초 = 증상이며 원인(인덱스 누락, 통계 오래됨, N+1 등) 미확인이므로 \"느려서 인덱스 하나 추가\" 식의 즉흥 수정은 금지.\n\n## 오늘 미뤄도 됨\n\n**3. 내부 도구 버튼 색상·문구 수정**\n- **근거**: ① 영향 범위가 내부 사용자 + 미관/문구 문제로, 장애·데이터·외부 고객과 무관 ② 잘못 고쳐서 생기는 리스크(회귀)가 원래 문제의 가치보다 클 수 있는 저우선순위 작업 ③ 오늘 위 두 건의 처리 결과에 따라 우선순위가 다시 흔들릴 수 있으므로 확정 판단은 그것들 이후가 맞다.\n\n**판단 기준 요약**: 외부 고객 영향 × 시간 창의 되돌릴 수 없음 × 악화 가능성 순으로 우선순위를 매겼습니다. 메일(회복 불가 창) → 쿼리(증폭 리스크) → 버튼(내부·미관) 순입니다.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   }
+  ],
+  "errors": [
+   "Q4 CLI 타임아웃 180초"
+  ],
+  "failures": [
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "reason": "CLI 타임아웃 180초"
+   }
+  ],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "by_axis": {
+   "지시이행": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 3,
+    "max_score": 4,
+    "failed": 1
+   },
+   "맥락유지": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "에이전트": {
+    "score": 2,
+    "max_score": 4,
+    "failed": 0
+   }
+  },
+  "sandbox_pass": 3,
+  "failed": 1,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "graded_n": 12,
+  "score_display": "8/12 (미응답 1 제외)",
+  "role": "판단 근거 부족 — 손발 작업으로 한정",
+  "usage_levels": {
+   "코딩실무": "코딩 실무 가능",
+   "에이전트": "에이전트 기초 수준",
+   "한글": "한글 부분 가능"
+  },
+  "coding_level": "코딩 실무 가능",
+  "agent_level": "에이전트 기초 수준",
+  "korean_level": "한글 부분 가능",
+  "label": "11문항 중 8문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 1문항 응답 실패 제외. 판단 근거 부족 — 손발 작업으로 한정.",
+  "measured_context": 262144,
+  "ts": 1792495104.9027321,
+  "schema": 4
  }
 }

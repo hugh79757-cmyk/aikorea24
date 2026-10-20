@@ -94,5 +94,31 @@
   "no_response_n": 0,
   "score_display": "9/12",
   "ts": 1792386820.4835808
+ },
+ {
+  "model_id": "big-pickle",
+  "cli_model": "opencode/big-pickle",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 8,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "score_display": "8/12 (미응답 1 제외)",
+  "ts": 1792495019.269793
+ },
+ {
+  "model_id": "big-pickle",
+  "cli_model": "opencode/big-pickle",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 8,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "score_display": "8/12 (미응답 1 제외)",
+  "ts": 1792495104.9048839
  }
 ]
