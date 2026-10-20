@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-19 09:31",
+  "verified_at": "2026-10-20 09:30",
   "pass": [
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
@@ -8,18 +8,19 @@
     "kilo/poolside/laguna-s-2.1:free",
     "opencode/longcat-2.5-preview-free",
     "opencode/mimo-v2.6-flash-free",
-    "opencode/space-bunny-free",
     "kilo/poolside/laguna-xs-2.1:free",
     "opencode/glm-5.3-flash-free",
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
-    "opencode/nemotron-3-ultra-free"
+    "opencode/nemotron-3-ultra-free",
+    "opencode/beam-free",
+    "opencode/nemotron-3.5-lightning-free"
   ],
   "fail": [
     {
-      "cli_id": "opencode/nemotron-3.5-lightning-free",
-      "model_id": "nemotron-3.5-lightning-free",
-      "reason": "CLI 타임아웃 60초",
-      "kind": "transient"
+      "cli_id": "opencode/space-bunny-free",
+      "model_id": "space-bunny-free",
+      "reason": "Model unavailable: opencode/space-bunny-free",
+      "kind": "dead"
     }
   ]
 }

@@ -1,0 +1,2342 @@
+{
+  "updated_at": "2026-10-20 12:45",
+  "count": 143,
+  "models": [
+    {
+      "key": "abacusai/dracarys-llama-3.1-70b-instruct",
+      "original_titles": [
+        "abacusai/dracarys-llama-3.1-70b-instruct"
+      ],
+      "news_ids": [
+        55328
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/abacusai/dracarys-llama-3.1-70b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "active-speaker-detection",
+      "original_titles": [
+        "nvidia/active-speaker-detection"
+      ],
+      "news_ids": [
+        55399
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/active-speaker-detection"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "apodex/apodex-1.1-mini",
+      "original_titles": [
+        "apodex/apodex-1.1-mini:free"
+      ],
+      "news_ids": [
+        54939
+      ],
+      "sources": [
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "openrouter/apodex/apodex-1.1-mini:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "baai/bge-m3",
+      "original_titles": [
+        "baai/bge-m3"
+      ],
+      "news_ids": [
+        55326
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/baai/bge-m3"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "big-pickle",
+      "original_titles": [
+        "big-pickle"
+      ],
+      "news_ids": [
+        55300
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/big-pickle"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "black-forest-labs/flux.1-dev",
+      "original_titles": [
+        "black-forest-labs/flux.1-dev"
+      ],
+      "news_ids": [
+        55334
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/black-forest-labs/flux.1-dev"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "black-forest-labs/flux_1-kontext-dev",
+      "original_titles": [
+        "black-forest-labs/flux_1-kontext-dev"
+      ],
+      "news_ids": [
+        55335
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/black-forest-labs/flux_1-kontext-dev"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "black-forest-labs/flux_1-schnell",
+      "original_titles": [
+        "black-forest-labs/flux_1-schnell"
+      ],
+      "news_ids": [
+        55333
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/black-forest-labs/flux_1-schnell"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "black-forest-labs/flux_2-klein-4b",
+      "original_titles": [
+        "black-forest-labs/flux_2-klein-4b"
+      ],
+      "news_ids": [
+        55336
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/black-forest-labs/flux_2-klein-4b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "bytedance/seed-oss-36b-instruct",
+      "original_titles": [
+        "bytedance/seed-oss-36b-instruct"
+      ],
+      "news_ids": [
+        55350
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/bytedance/seed-oss-36b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "cosmos-predict1-5b",
+      "original_titles": [
+        "nvidia/cosmos-predict1-5b"
+      ],
+      "news_ids": [
+        55389
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/cosmos-predict1-5b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "cosmos-reason2-8b",
+      "original_titles": [
+        "nvidia/cosmos-reason2-8b"
+      ],
+      "news_ids": [
+        55403
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/cosmos-reason2-8b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "cosmos-transfer1-7b",
+      "original_titles": [
+        "nvidia/cosmos-transfer1-7b"
+      ],
+      "news_ids": [
+        55388
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/cosmos-transfer1-7b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "cosmos-transfer2_5-2b",
+      "original_titles": [
+        "nvidia/cosmos-transfer2_5-2b"
+      ],
+      "news_ids": [
+        55396
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/cosmos-transfer2_5-2b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "deepseek-ai/deepseek-v4-flash-0731",
+      "original_titles": [
+        "deepseek-ai/deepseek-v4-flash-0731"
+      ],
+      "news_ids": [
+        55361
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/deepseek-ai/deepseek-v4-flash-0731"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "deepseek-ai/deepseek-v4-pro-0813",
+      "original_titles": [
+        "deepseek-ai/deepseek-v4-pro-0813"
+      ],
+      "news_ids": [
+        55363
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/deepseek-ai/deepseek-v4-pro-0813"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "deepseek-v4-flash",
+      "original_titles": [
+        "deepseek-v4-flash-free"
+      ],
+      "news_ids": [
+        55294
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/deepseek-v4-flash-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "exo",
+      "original_titles": [
+        "exo-free"
+      ],
+      "news_ids": [
+        55281
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/exo-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "fledge-alpha",
+      "original_titles": [
+        "fledge-alpha-free"
+      ],
+      "news_ids": [
+        55268
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/fledge-alpha-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "gliner-pii",
+      "original_titles": [
+        "nvidia/gliner-pii"
+      ],
+      "news_ids": [
+        55412
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/gliner-pii"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "glm-4.7",
+      "original_titles": [
+        "glm-4.7-free"
+      ],
+      "news_ids": [
+        55278
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/glm-4.7-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "glm-5",
+      "original_titles": [
+        "glm-5-free"
+      ],
+      "news_ids": [
+        55273
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/glm-5-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/diffusiongemma-26b-a4b-it",
+      "original_titles": [
+        "google/diffusiongemma-26b-a4b-it"
+      ],
+      "news_ids": [
+        55351
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/diffusiongemma-26b-a4b-it"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-2-2b-it",
+      "original_titles": [
+        "google/gemma-2-2b-it"
+      ],
+      "news_ids": [
+        55353
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/gemma-2-2b-it"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-3-12b-it",
+      "original_titles": [
+        "google/gemma-3-12b-it"
+      ],
+      "news_ids": [
+        55354
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/gemma-3-12b-it"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-3-4b-it",
+      "original_titles": [
+        "google/gemma-3-4b-it"
+      ],
+      "news_ids": [
+        55358
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/gemma-3-4b-it"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-3n-e2b-it",
+      "original_titles": [
+        "google/gemma-3n-e2b-it"
+      ],
+      "news_ids": [
+        55355
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/gemma-3n-e2b-it"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-3n-e4b-it",
+      "original_titles": [
+        "google/gemma-3n-e4b-it"
+      ],
+      "news_ids": [
+        55357
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/gemma-3n-e4b-it"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-4-26b-a4b-it",
+      "original_titles": [
+        "google/gemma-4-26b-a4b-it:free"
+      ],
+      "news_ids": [
+        54951
+      ],
+      "sources": [
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "openrouter/google/gemma-4-26b-a4b-it:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/gemma-4-31b-it",
+      "original_titles": [
+        "google/gemma-4-31b-it",
+        "google/gemma-4-31b-it:free"
+      ],
+      "news_ids": [
+        55352,
+        54952
+      ],
+      "sources": [
+        "NVIDIA NIM Free",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "nvidia/google/gemma-4-31b-it",
+        "openrouter/google/gemma-4-31b-it:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/google-paligemma",
+      "original_titles": [
+        "google/google-paligemma"
+      ],
+      "news_ids": [
+        55356
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/google/google-paligemma"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/lyria-3-clip-preview",
+      "original_titles": [
+        "google/lyria-3-clip-preview"
+      ],
+      "news_ids": [
+        55316,
+        54954
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/google/lyria-3-clip-preview",
+        "openrouter/google/lyria-3-clip-preview"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "google/lyria-3-pro-preview",
+      "original_titles": [
+        "google/lyria-3-pro-preview"
+      ],
+      "news_ids": [
+        55315,
+        54953
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/google/lyria-3-pro-preview",
+        "openrouter/google/lyria-3-pro-preview"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "grok-code",
+      "original_titles": [
+        "grok-code"
+      ],
+      "news_ids": [
+        55292
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/grok-code"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "hy3",
+      "original_titles": [
+        "hy3-free"
+      ],
+      "news_ids": [
+        55295
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/hy3-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "hy3-preview",
+      "original_titles": [
+        "hy3-preview-free"
+      ],
+      "news_ids": [
+        55285
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/hy3-preview-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "kilo-auto/free",
+      "original_titles": [
+        "kilo-auto/free"
+      ],
+      "news_ids": [
+        55318
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/kilo-auto/free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "kimi-k2.5",
+      "original_titles": [
+        "kimi-k2.5-free"
+      ],
+      "news_ids": [
+        55277
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/kimi-k2.5-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "laguna-s-2.1",
+      "original_titles": [
+        "laguna-s-2.1-free"
+      ],
+      "news_ids": [
+        55279
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/laguna-s-2.1-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "ling-2.6-flash",
+      "original_titles": [
+        "ling-2.6-flash-free"
+      ],
+      "news_ids": [
+        55293
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/ling-2.6-flash-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "ling-3.0-flash",
+      "original_titles": [
+        "ling-3.0-flash-free"
+      ],
+      "news_ids": [
+        55298
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/ling-3.0-flash-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "ling-3.0-flash-fin",
+      "original_titles": [
+        "ling-3.0-flash-fin-free"
+      ],
+      "news_ids": [
+        55267
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/ling-3.0-flash-fin-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "ling-3.0-tiny",
+      "original_titles": [
+        "ling-3.0-tiny-free"
+      ],
+      "news_ids": [
+        55276
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/ling-3.0-tiny-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.1-nemotron-70b-instruct",
+      "original_titles": [
+        "nvidia/llama-3.1-nemotron-70b-instruct"
+      ],
+      "news_ids": [
+        55415
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.1-nemotron-70b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.1-nemotron-nano-8b-v1",
+      "original_titles": [
+        "nvidia/llama-3.1-nemotron-nano-8b-v1"
+      ],
+      "news_ids": [
+        55398
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.1-nemotron-nano-8b-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.1-nemotron-nano-vl-8b-v1",
+      "original_titles": [
+        "nvidia/llama-3.1-nemotron-nano-vl-8b-v1"
+      ],
+      "news_ids": [
+        55390
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.1-nemotron-nano-vl-8b-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.1-nemotron-safety-guard-8b-v3",
+      "original_titles": [
+        "nvidia/llama-3.1-nemotron-safety-guard-8b-v3"
+      ],
+      "news_ids": [
+        55393
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.1-nemotron-safety-guard-8b-v3"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.1-nemotron-ultra-253b-v1",
+      "original_titles": [
+        "nvidia/llama-3.1-nemotron-ultra-253b-v1"
+      ],
+      "news_ids": [
+        55380
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.1-nemotron-ultra-253b-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.3-nemotron-super-49b-v1",
+      "original_titles": [
+        "nvidia/llama-3.3-nemotron-super-49b-v1"
+      ],
+      "news_ids": [
+        55405
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.3-nemotron-super-49b-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3.3-nemotron-super-49b-v1.5",
+      "original_titles": [
+        "nvidia/llama-3.3-nemotron-super-49b-v1.5"
+      ],
+      "news_ids": [
+        55410
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3.3-nemotron-super-49b-v1.5"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-3_2-nemoretriever-300m-embed-v1",
+      "original_titles": [
+        "nvidia/llama-3_2-nemoretriever-300m-embed-v1"
+      ],
+      "news_ids": [
+        55411
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-3_2-nemoretriever-300m-embed-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-nemotron-embed-vl-1b-v2",
+      "original_titles": [
+        "nvidia/llama-nemotron-embed-vl-1b-v2"
+      ],
+      "news_ids": [
+        55384
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-nemotron-embed-vl-1b-v2"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "llama-nemotron-rerank-vl-1b-v2",
+      "original_titles": [
+        "nvidia/llama-nemotron-rerank-vl-1b-v2"
+      ],
+      "news_ids": [
+        55401
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/llama-nemotron-rerank-vl-1b-v2"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "longcat-2.0",
+      "original_titles": [
+        "longcat-2.0-free"
+      ],
+      "news_ids": [
+        55284
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/longcat-2.0-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "longcat-2.5-preview",
+      "original_titles": [
+        "longcat-2.5-preview-free"
+      ],
+      "news_ids": [
+        55275
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/longcat-2.5-preview-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "magpie-tts-zeroshot",
+      "original_titles": [
+        "nvidia/magpie-tts-zeroshot"
+      ],
+      "news_ids": [
+        55406
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/magpie-tts-zeroshot"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/esm2-650m",
+      "original_titles": [
+        "meta/esm2-650m"
+      ],
+      "news_ids": [
+        55348
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/esm2-650m"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/esmfold",
+      "original_titles": [
+        "meta/esmfold"
+      ],
+      "news_ids": [
+        55339
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/esmfold"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.1-70b-instruct",
+      "original_titles": [
+        "meta/llama-3.1-70b-instruct"
+      ],
+      "news_ids": [
+        55347
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.1-70b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.1-8b-instruct",
+      "original_titles": [
+        "meta/llama-3.1-8b-instruct"
+      ],
+      "news_ids": [
+        55343
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.1-8b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.2-11b-vision-instruct",
+      "original_titles": [
+        "meta/llama-3.2-11b-vision-instruct"
+      ],
+      "news_ids": [
+        55344
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.2-11b-vision-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.2-1b-instruct",
+      "original_titles": [
+        "meta/llama-3.2-1b-instruct"
+      ],
+      "news_ids": [
+        55345
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.2-1b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.2-3b-instruct",
+      "original_titles": [
+        "meta/llama-3.2-3b-instruct"
+      ],
+      "news_ids": [
+        55346
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.2-3b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.2-90b-vision-instruct",
+      "original_titles": [
+        "meta/llama-3.2-90b-vision-instruct"
+      ],
+      "news_ids": [
+        55341
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.2-90b-vision-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-3.3-70b-instruct",
+      "original_titles": [
+        "meta/llama-3.3-70b-instruct"
+      ],
+      "news_ids": [
+        55340
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-3.3-70b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-4-maverick-17b-128e-instruct",
+      "original_titles": [
+        "meta/llama-4-maverick-17b-128e-instruct"
+      ],
+      "news_ids": [
+        55342
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-4-maverick-17b-128e-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/llama-guard-4-12b",
+      "original_titles": [
+        "meta/llama-guard-4-12b"
+      ],
+      "news_ids": [
+        55337
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/llama-guard-4-12b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "meta/muse-glimmer-30b",
+      "original_titles": [
+        "meta/muse-glimmer-30b"
+      ],
+      "news_ids": [
+        55338
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/meta/muse-glimmer-30b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "microsoft/phi-4-mini-instruct",
+      "original_titles": [
+        "microsoft/phi-4-mini-instruct"
+      ],
+      "news_ids": [
+        55426
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/microsoft/phi-4-mini-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "microsoft/phi-4-multimodal-instruct",
+      "original_titles": [
+        "microsoft/phi-4-multimodal-instruct"
+      ],
+      "news_ids": [
+        55427
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/microsoft/phi-4-multimodal-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mimo-v2-flash",
+      "original_titles": [
+        "mimo-v2-flash-free"
+      ],
+      "news_ids": [
+        55301
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/mimo-v2-flash-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mimo-v2-omni",
+      "original_titles": [
+        "mimo-v2-omni-free"
+      ],
+      "news_ids": [
+        55297
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/mimo-v2-omni-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mimo-v2-pro",
+      "original_titles": [
+        "mimo-v2-pro-free"
+      ],
+      "news_ids": [
+        55270
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/mimo-v2-pro-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mimo-v2.5",
+      "original_titles": [
+        "mimo-v2.5-free"
+      ],
+      "news_ids": [
+        55291
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/mimo-v2.5-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "minimax-m2.1",
+      "original_titles": [
+        "minimax-m2.1-free"
+      ],
+      "news_ids": [
+        55288
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/minimax-m2.1-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "minimax-m2.5",
+      "original_titles": [
+        "minimax-m2.5-free"
+      ],
+      "news_ids": [
+        55282
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/minimax-m2.5-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "minimaxai/minimax-m2.7",
+      "original_titles": [
+        "minimaxai/minimax-m2.7"
+      ],
+      "news_ids": [
+        55359
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/minimaxai/minimax-m2.7"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/magistral-small-2506",
+      "original_titles": [
+        "mistralai/magistral-small-2506"
+      ],
+      "news_ids": [
+        55369
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/magistral-small-2506"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/ministral-14b-instruct-2512",
+      "original_titles": [
+        "mistralai/ministral-14b-instruct-2512"
+      ],
+      "news_ids": [
+        55373
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/ministral-14b-instruct-2512"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mistral-7b-instruct-v0.3",
+      "original_titles": [
+        "mistralai/mistral-7b-instruct-v0.3"
+      ],
+      "news_ids": [
+        55367
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mistral-7b-instruct-v0.3"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mistral-large-3-675b-instruct-2512",
+      "original_titles": [
+        "mistralai/mistral-large-3-675b-instruct-2512"
+      ],
+      "news_ids": [
+        55368
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mistral-large-3-675b-instruct-2512"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mistral-medium-3-instruct",
+      "original_titles": [
+        "mistralai/mistral-medium-3-instruct"
+      ],
+      "news_ids": [
+        55375
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mistral-medium-3-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mistral-medium-3.5-128b",
+      "original_titles": [
+        "mistralai/mistral-medium-3.5-128b"
+      ],
+      "news_ids": [
+        55372
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mistral-medium-3.5-128b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mistral-nemotron",
+      "original_titles": [
+        "mistralai/mistral-nemotron"
+      ],
+      "news_ids": [
+        55366
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mistral-nemotron"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mistral-small-4-119b-2603",
+      "original_titles": [
+        "mistralai/mistral-small-4-119b-2603"
+      ],
+      "news_ids": [
+        55370
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mistral-small-4-119b-2603"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mixtral-8x22b-instruct",
+      "original_titles": [
+        "mistralai/mixtral-8x22b-instruct"
+      ],
+      "news_ids": [
+        55374
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mixtral-8x22b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "mistralai/mixtral-8x7b-instruct",
+      "original_titles": [
+        "mistralai/mixtral-8x7b-instruct"
+      ],
+      "news_ids": [
+        55371
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/mistralai/mixtral-8x7b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "moonshotai/kimi-k2.6",
+      "original_titles": [
+        "moonshotai/kimi-k2.6"
+      ],
+      "news_ids": [
+        55377
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/moonshotai/kimi-k2.6"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "moonshotai/kimi-k3",
+      "original_titles": [
+        "moonshotai/kimi-k3"
+      ],
+      "news_ids": [
+        55376
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/moonshotai/kimi-k3"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "muse-spark-1.2-contributor",
+      "original_titles": [
+        "muse-spark-1.2-contributor-free"
+      ],
+      "news_ids": [
+        55271
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/muse-spark-1.2-contributor-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3-content-safety",
+      "original_titles": [
+        "nvidia/nemotron-3-content-safety"
+      ],
+      "news_ids": [
+        55404
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-3-content-safety"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3-nano-30b-a3b",
+      "original_titles": [
+        "nvidia/nemotron-3-nano-30b-a3b"
+      ],
+      "news_ids": [
+        55382
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-3-nano-30b-a3b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3-nano-omni-30b-a3b-reasoning",
+      "original_titles": [
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+      ],
+      "news_ids": [
+        55397,
+        55320,
+        54950
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "NVIDIA NIM Free",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "nvidia/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3-super",
+      "original_titles": [
+        "nemotron-3-super-free"
+      ],
+      "news_ids": [
+        55287
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/nemotron-3-super-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3-super-120b-a12b",
+      "original_titles": [
+        "nvidia/nemotron-3-super-120b-a12b:free"
+      ],
+      "news_ids": [
+        55322,
+        54955
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/nvidia/nemotron-3-super-120b-a12b:free",
+        "openrouter/nvidia/nemotron-3-super-120b-a12b:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3.5-content-safety",
+      "original_titles": [
+        "nvidia/nemotron-3.5-content-safety",
+        "nvidia/nemotron-3.5-content-safety:free"
+      ],
+      "news_ids": [
+        55409,
+        55319,
+        54948
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "NVIDIA NIM Free",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/nvidia/nemotron-3.5-content-safety:free",
+        "nvidia/nvidia/nemotron-3.5-content-safety",
+        "openrouter/nvidia/nemotron-3.5-content-safety:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-3.5-lightning-30b-a3b",
+      "original_titles": [
+        "nvidia/nemotron-3.5-lightning-30b-a3b"
+      ],
+      "news_ids": [
+        55383
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-3.5-lightning-30b-a3b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-content-safety-reasoning-4b",
+      "original_titles": [
+        "nvidia/nemotron-content-safety-reasoning-4b"
+      ],
+      "news_ids": [
+        55392
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-content-safety-reasoning-4b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-mini-4b-instruct",
+      "original_titles": [
+        "nvidia/nemotron-mini-4b-instruct"
+      ],
+      "news_ids": [
+        55402
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-mini-4b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-nano-12b-v2-vl",
+      "original_titles": [
+        "nvidia/nemotron-nano-12b-v2-vl"
+      ],
+      "news_ids": [
+        55408
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-nano-12b-v2-vl"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nemotron-voicechat",
+      "original_titles": [
+        "nvidia/nemotron-voicechat"
+      ],
+      "news_ids": [
+        55386
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nemotron-voicechat"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nv-embed-v1",
+      "original_titles": [
+        "nvidia/nv-embed-v1"
+      ],
+      "news_ids": [
+        55394
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nv-embed-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nv-embedcode-7b-v1",
+      "original_titles": [
+        "nvidia/nv-embedcode-7b-v1"
+      ],
+      "news_ids": [
+        55385
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nv-embedcode-7b-v1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia-nemotron-nano-9b-v2",
+      "original_titles": [
+        "nvidia/nvidia-nemotron-nano-9b-v2"
+      ],
+      "news_ids": [
+        55379
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/nvidia-nemotron-nano-9b-v2"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia/bevformer",
+      "original_titles": [
+        "nvidia/bevformer"
+      ],
+      "news_ids": [
+        55387
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/bevformer"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia/sparsedrive",
+      "original_titles": [
+        "nvidia/sparsedrive"
+      ],
+      "news_ids": [
+        55381
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/sparsedrive"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia/streampetr",
+      "original_titles": [
+        "nvidia/streampetr"
+      ],
+      "news_ids": [
+        55400
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/streampetr"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia/studiovoice",
+      "original_titles": [
+        "nvidia/studiovoice"
+      ],
+      "news_ids": [
+        55391
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/studiovoice"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia/usdcode",
+      "original_titles": [
+        "nvidia/usdcode"
+      ],
+      "news_ids": [
+        55413
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/usdcode"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "nvidia/usdvalidate",
+      "original_titles": [
+        "nvidia/usdvalidate"
+      ],
+      "news_ids": [
+        55414
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/usdvalidate"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "openai/gpt-oss-20b",
+      "original_titles": [
+        "openai/gpt-oss-20b"
+      ],
+      "news_ids": [
+        55425
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/openai/gpt-oss-20b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "openai/whisper-large-v3",
+      "original_titles": [
+        "openai/whisper-large-v3"
+      ],
+      "news_ids": [
+        55424
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/openai/whisper-large-v3"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "openrouter/auto",
+      "original_titles": [
+        "openrouter/auto"
+      ],
+      "news_ids": [
+        55313
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/openrouter/auto"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "openrouter/bodybuilder",
+      "original_titles": [
+        "openrouter/bodybuilder"
+      ],
+      "news_ids": [
+        55310
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/openrouter/bodybuilder"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "pareto-code",
+      "original_titles": [
+        "openrouter/pareto-code"
+      ],
+      "news_ids": [
+        55312
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/openrouter/pareto-code"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "poolside/laguna-s-2.1",
+      "original_titles": [
+        "poolside/laguna-s-2.1:free"
+      ],
+      "news_ids": [
+        55306,
+        54944
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/poolside/laguna-s-2.1:free",
+        "openrouter/poolside/laguna-s-2.1:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "poolside/laguna-xs-2.1",
+      "original_titles": [
+        "poolside/laguna-xs-2.1",
+        "poolside/laguna-xs-2.1:free"
+      ],
+      "news_ids": [
+        55327,
+        55307,
+        54946
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "NVIDIA NIM Free",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/poolside/laguna-xs-2.1:free",
+        "nvidia/poolside/laguna-xs-2.1",
+        "openrouter/poolside/laguna-xs-2.1:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen-image",
+      "original_titles": [
+        "qwen/qwen-image"
+      ],
+      "news_ids": [
+        55423
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen-image"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen-image-edit",
+      "original_titles": [
+        "qwen/qwen-image-edit"
+      ],
+      "news_ids": [
+        55417
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen-image-edit"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen2.5-coder-32b-instruct",
+      "original_titles": [
+        "qwen/qwen2.5-coder-32b-instruct"
+      ],
+      "news_ids": [
+        55422
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen2.5-coder-32b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen3-coder-480b-a35b-instruct",
+      "original_titles": [
+        "qwen/qwen3-coder-480b-a35b-instruct"
+      ],
+      "news_ids": [
+        55418
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen3-coder-480b-a35b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen3-next-80b-a3b-instruct",
+      "original_titles": [
+        "qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "news_ids": [
+        55420
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen3-next-80b-a3b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen3.5-122b-a10b",
+      "original_titles": [
+        "qwen/qwen3.5-122b-a10b"
+      ],
+      "news_ids": [
+        55419
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen3.5-122b-a10b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen/qwen3.5-397b-a17b",
+      "original_titles": [
+        "qwen/qwen3.5-397b-a17b"
+      ],
+      "news_ids": [
+        55421
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/qwen/qwen3.5-397b-a17b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "qwen3.6-plus",
+      "original_titles": [
+        "qwen3.6-plus-free"
+      ],
+      "news_ids": [
+        55269
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/qwen3.6-plus-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "rerank-qa-mistral-4b",
+      "original_titles": [
+        "nvidia/rerank-qa-mistral-4b"
+      ],
+      "news_ids": [
+        55416
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/rerank-qa-mistral-4b"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "ring-2.6-1t",
+      "original_titles": [
+        "ring-2.6-1t-free"
+      ],
+      "news_ids": [
+        55283
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/ring-2.6-1t-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "riva-translate-4b-instruct-v1.1",
+      "original_titles": [
+        "nvidia/riva-translate-4b-instruct-v1.1"
+      ],
+      "news_ids": [
+        55407
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/riva-translate-4b-instruct-v1.1"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "sarvamai/sarvam-m",
+      "original_titles": [
+        "sarvamai/sarvam-m"
+      ],
+      "news_ids": [
+        55378
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/sarvamai/sarvam-m"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "stealth/glyph-cluster",
+      "original_titles": [
+        "stealth/glyph-cluster"
+      ],
+      "news_ids": [
+        55305
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/stealth/glyph-cluster"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "step-5-preview",
+      "original_titles": [
+        "step-5-preview-free"
+      ],
+      "news_ids": [
+        56072,
+        55302
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/step-5-preview-free"
+      ],
+      "in_briefing": true
+    },
+    {
+      "key": "stepfun-ai/step-3.5-flash",
+      "original_titles": [
+        "stepfun-ai/step-3.5-flash"
+      ],
+      "news_ids": [
+        55364
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/stepfun-ai/step-3.5-flash"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "stepfun-ai/step-3.7-flash",
+      "original_titles": [
+        "stepfun-ai/step-3.7-flash"
+      ],
+      "news_ids": [
+        55365
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/stepfun-ai/step-3.7-flash"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "stepfun-ai/step-5-preview",
+      "original_titles": [
+        "stepfun-ai/step-5-preview"
+      ],
+      "news_ids": [
+        56527
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/stepfun-ai/step-5-preview"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "stepfun/step-5-preview",
+      "original_titles": [
+        "stepfun/step-5-preview-free"
+      ],
+      "news_ids": [
+        56073,
+        55324
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/stepfun/step-5-preview-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "synthetic-video-detector",
+      "original_titles": [
+        "nvidia/synthetic-video-detector"
+      ],
+      "news_ids": [
+        55395
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/nvidia/synthetic-video-detector"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "thinkingmachines/inkling",
+      "original_titles": [
+        "thinkingmachines/inkling",
+        "thinkingmachines/inkling:free"
+      ],
+      "news_ids": [
+        55332,
+        54945
+      ],
+      "sources": [
+        "NVIDIA NIM Free",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "nvidia/thinkingmachines/inkling",
+        "openrouter/thinkingmachines/inkling:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "trinity-large-preview",
+      "original_titles": [
+        "trinity-large-preview-free"
+      ],
+      "news_ids": [
+        55274
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/trinity-large-preview-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "upstage/solar-10.7b-instruct",
+      "original_titles": [
+        "upstage/solar-10.7b-instruct"
+      ],
+      "news_ids": [
+        55349
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/upstage/solar-10.7b-instruct"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "x-preview-f",
+      "original_titles": [
+        "x-preview-f-free"
+      ],
+      "news_ids": [
+        55303
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/x-preview-f-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "xingchen-agi/xing4.0-29b-a4b",
+      "original_titles": [
+        "xingchen-agi/xing4.0-29b-a4b:free"
+      ],
+      "news_ids": [
+        56211,
+        56209,
+        56208,
+        56203
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/xingchen-agi/xing4.0-29b-a4b:free",
+        "openrouter/xingchen-agi/xing4.0-29b-a4b:free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "z-ai/glm-5.2",
+      "original_titles": [
+        "z-ai/glm-5.2"
+      ],
+      "news_ids": [
+        55330
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/z-ai/glm-5.2"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "z-ai/glm-5.3",
+      "original_titles": [
+        "z-ai/glm-5.3"
+      ],
+      "news_ids": [
+        55331
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/z-ai/glm-5.3"
+      ],
+      "in_briefing": false
+    }
+  ]
+}

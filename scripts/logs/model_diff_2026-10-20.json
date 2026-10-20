@@ -1,0 +1,36 @@
+{
+  "added": [
+    {
+      "provider": "openrouter",
+      "model_id": "minimax/minimax-m3.1-flash:free",
+      "name": "MiniMax: MiniMax M3.1 Flash (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "minimax/minimax-m3.1-flash:free",
+      "name": "MiniMax: MiniMax M3.1 Flash (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000
+    }
+  ],
+  "removed": [
+    {
+      "provider": "zen",
+      "model_id": "space-bunny-free",
+      "name": "space-bunny-free",
+      "pricing": null,
+      "context_length": null,
+      "reason": "단종/제거"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}
