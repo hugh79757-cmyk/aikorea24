@@ -9,12 +9,18 @@ models.dev 는 출처가 아니라 OpenCode 가 읽는 모델 카탈로그라 "�
 대표님 결정(2026-10-20): **무료 모델 항목의 링크는 항상 AIK24 블로그의 해당 모델 글로.**
 글이 없으면 파이프라인 마지막 단계에서 draft 로 자동 작성 → 검수 → 발행 → 연결.
 
+**2026-10-20 PIPE-07 갱신**: 위 결정은 "원문 보기"에만 적용되던 것이다. 원문 보기와
+심층 분석이 같은 블로그로 가는 문제가 드러나, "원문 보기"는 제공사 모델 페이지
+(`news.origin_link`, `origin_link_resolver.py`)로 돌린다. 이 모듈이 채우는 blog_link 는
+더 이상 원문 링크가 아니다 — 심층 분석·역링크 등 참조용으로 유지한다.
+
 원칙 (지시서 §2·§3-1)
 ---------------------
 1) news.link 는 수집기 dedup 키다
    (news_collector_v2.save(): `SELECT link FROM news … LIMIT 3000`).
    **절대 변경하지 않는다.** 링크는 새 컬럼 news.blog_link 에 따로 담는다.
-2) 렌더링은 COALESCE(n.blog_link, n.link) — blog_link 가 없으면 기존 link 유지.
+2) 렌더링의 "원문 보기"는 COALESCE(n.origin_link, n.link) — AIK24-PIPE-07.
+   blog_link 는 원문 링크로 쓰지 않는다.
 3) 자동 작성 글은 status='draft' 고정. **자동 발행 금지**(지시서 §5 — 검수 주체 미정).
 4) blog_link 는 모델 단위 1개 글에 매칭한다(같은 모델이 여러 제공자에 있으면 1개).
 

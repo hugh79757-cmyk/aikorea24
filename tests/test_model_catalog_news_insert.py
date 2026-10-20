@@ -91,3 +91,17 @@ def test_same_provider_rows_get_unique_links(monkeypatch):
     assert len(links) == 2
     assert links[0] != links[1], links
     assert links[0].startswith("'https://api.kilo.ai/api/gateway/models#")
+
+
+def test_origin_link_for_added_and_removed(monkeypatch):
+    """AIK24-PIPE-07: 추가는 제공사 모델 페이지, 제외는 404 위험이 없도록 목록 페이지."""
+    fake = _install(monkeypatch, _FakeCfnew())
+    assert model_catalog.record_diff_to_news("2026-10-16", _diff()) == 2
+
+    sql = fake.statements[-1]
+    # zen added → OpenCode Zen 모델 표
+    assert "'https://opencode.ai/v2/docs/console/models/'" in sql
+    # kilo removed → per-model 대신 목록 페이지
+    assert "'https://kilo.ai/models'" in sql
+    assert "https://kilo.ai/models/old-model-free" not in sql.replace("'", "")
+

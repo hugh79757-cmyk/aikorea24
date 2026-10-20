@@ -319,6 +319,7 @@ def record_diff_to_news(day, d):
         return 0
 
     import cfnew  # 지연 import — D1 미접근 환경에서도 카탈로그 수집은 살아 있게
+    import origin_link_resolver  # AIK24-PIPE-07: "원문 보기" → 제공사 모델 페이지
 
     cfnew.check_quota()
     sources = [v[0] for v in NEWS_SOURCES.values()]
@@ -335,6 +336,12 @@ def record_diff_to_news(day, d):
     for kind, r in rows:
         source, link = NEWS_SOURCES[r["provider"]]
         mid = r.get("model_id") or ""
+        # AIK24-PIPE-07: "원문 보기" 목적지. 추가된 모델은 per-model 페이지,
+        # 제외된 모델은 이미 404 일 수 있으므로 제공사 목록 페이지로 내린다.
+        origin = origin_link_resolver.resolve_origin_link(source, mid)
+        if kind != "added":
+            provider = origin_link_resolver.provider_for_source(source)
+            origin = origin_link_resolver.PROVIDER_LIST_PAGE.get(provider) or origin
         if kind == "added":
             title = f"[신규 무료] {mid} — {source} 무료 목록에 추가"
             tail = "추가"
@@ -356,9 +363,9 @@ def record_diff_to_news(day, d):
         url = f"{link or 'https://aikorea24.kr/free-models'}#{mid}"
         stmts.append(
             "INSERT OR IGNORE INTO news "
-            "(title, link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
-            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" % (
-                _news_lit(title[:200]), _news_lit(url),
+            "(title, link, origin_link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" % (
+                _news_lit(title[:200]), _news_lit(url), _news_lit(origin) if origin else "NULL",
                 _news_lit(f"{source} 무료 목록에 {tail} · {desc_tail}"),
                 _news_lit(source), _news_lit("AI"), _news_lit(now), _news_lit(url),
                 _news_lit(mid), _news_lit("us"), 1, _news_lit("free-llm")))

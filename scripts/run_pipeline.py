@@ -62,9 +62,10 @@ def step_briefing(articles):
 def step_blog_link():
     """Step 1.5: AIK24-PIPE-05 — 무료 모델 news 행 ↔ AIK24 블로그 글 매칭.
 
-    무료 모델 브리핑 항목의 "원문 보기" 링크를 AIK24 블로그 글로 연결한다
-    (models.dev 는 제3자 카탈로그라 원문이 아니다 — 지시서 §3-2·§3-4).
-    blog_link 가 없으면 기존 link 로 폴백하며, auto_briefing 이 경고를 로그로 남긴다.
+    무료 모델의 AIK24 블로그 글(blog_link)을 채운다. **"원문 보기"에는 더 이상
+    쓰지 않는다** — AIK24-PIPE-07 부터 원문 보기는 제공사 모델 페이지
+    (COALESCE(n.origin_link, n.link))로 연결한다. blog_link 는 심층 분석·역링크
+    등 후속 기능의 참조용으로 유지한다.
     """
     import blog_link_resolver
 
@@ -244,8 +245,8 @@ def main():
     log("")
 
     # Step 1.5: 무료 모델 → 블로그 링크 매칭 (AIK24-PIPE-05)
-    # 브리핑 생성 전에 blog_link 를 채운다 — auto_briefing 이 링크 사용 여부를 로그로 남기고,
-    # 이메일·웹 카드의 "원문 보기" 는 렌더링 시점에 COALESCE(n.blog_link, n.link) 로 연결된다.
+    # 브리핑 생성 전에 blog_link 를 채운다. "원문 보기"는 AIK24-PIPE-07 부터
+    # 렌더링 시점에 COALESCE(n.origin_link, n.link) — 제공사 모델 페이지 — 로 연결된다.
     if not args.skip_blog_link:
         try:
             step_blog_link()

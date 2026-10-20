@@ -65,7 +65,7 @@ ZEN_POOL_LIMIT = ZEN_SLOT_LIMIT + 1
 KST = timezone(timedelta(hours=9))
 SCORE_RE = re.compile(r"실용성\s*[:=]\s*(\d)|이해도\s*[:=]\s*(\d)|유용성\s*[:=]\s*(\d)")
 
-_COLS = "id, title, link, description, source, category, pub_date, v2_tag, original_title, created_at, blog_link"
+_COLS = "id, title, link, description, source, category, pub_date, v2_tag, original_title, created_at, blog_link, origin_link"
 
 
 def log(msg):

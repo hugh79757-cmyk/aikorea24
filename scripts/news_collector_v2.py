@@ -32,6 +32,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "threads", "v3"))
 import cfnew  # noqa: E402  (ACCT / A24_DB / token / sql)
 import v2_filter as v2f  # noqa: E402  (AIK24-NEWS-01 v2 판정)
+import origin_link_resolver  # noqa: E402  (AIK24-PIPE-07 제공사 원문 링크)
 from model_router import chat_completion  # noqa: E402  (무료 LLM 폴백 체인)
 from auto_briefing import remove_chinese  # noqa: E402  (한자 제거 재사용)
 
@@ -103,6 +104,9 @@ def collect_openrouter_free():
             {
                 "title": f"[무료 LLM] {mid} — OpenRouter 무료 티어",
                 "link": f"https://openrouter.ai/{mid.replace('/', '/').split(':')[0]}",
+                "origin_link": origin_link_resolver.resolve_origin_link(
+                    "OpenRouter Free Models", mid
+                ),
                 "description": (
                     f"OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 {ctx:,} 토큰. "
                     f"지금 바로 무료로 써볼 수 있다."
@@ -145,6 +149,7 @@ def collect_cli_free():
                 {
                     "title": f"[무료 LLM] {mid} — {source} 무료 티어",
                     "link": f"https://models.dev/{pid}/{mid}",
+                    "origin_link": origin_link_resolver.resolve_origin_link(source, mid),
                     "description": desc,
                     "source": source,
                     "category": "AI",
@@ -303,6 +308,10 @@ def save(rows):
     def lit(v):
         return "'" + str(v or "").replace("'", "''")[:500] + "'"
 
+    def lit_or_null(v):
+        """빈 값은 '' 가 아니라 NULL — COALESCE(origin_link, link) 가 link 로 폴백해야 한다."""
+        return lit(v) if v else "NULL"
+
     stmts, skipped = [], 0
     for a in rows:
         if a["link"] in existing:
@@ -315,10 +324,11 @@ def save(rows):
         a["_v2"] = (1 if v2_pass else 0, v2_tag)
         stmts.append(
             "INSERT OR IGNORE INTO news "
-            "(title, link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
-            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+            "(title, link, origin_link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
             % (
-                lit(a["title"][:200]), lit(a["link"]), lit(a.get("description", "")),
+                lit(a["title"][:200]), lit(a["link"]), lit_or_null(a.get("origin_link")),
+                lit(a.get("description", "")),
                 lit(a["source"]), lit(a.get("category", "AI")), lit(a["pub_date"]),
                 lit(a.get("source_url", "")), lit(a.get("original_title", "")), lit(a.get("country", "us")),
                 a["_v2"][0], lit(a["_v2"][1]),

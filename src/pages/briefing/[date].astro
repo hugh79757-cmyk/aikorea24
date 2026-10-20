@@ -17,9 +17,9 @@ if (db && date) {
     ).bind(date).first();
     if (briefing) {
       const { results } = await db.prepare(
-        // AIK24-PIPE-05: 무료 모델 항목의 "원문 보기" 는 AIK24 블로그 글로 연결한다
-        // (models.dev 는 제3자 카탈로그라 원문이 아니다). blog_link 가 없으면 기존 link 로 폴백.
-        `SELECT bi.*, n.title, n.description, COALESCE(n.blog_link, n.link) as link,
+        // AIK24-PIPE-07: "원문 보기"는 제공사 모델 페이지(origin_link)를 우선한다.
+        // 비무료 뉴스는 origin_link 가 NULL 이라 link(실제 원문)가 그대로 쓰인다.
+        `SELECT bi.*, n.title, n.description, COALESCE(n.origin_link, n.link) as link,
                 n.source, n.category, n.country, n.pub_date
          FROM briefing_items bi
          LEFT JOIN news n ON bi.news_id = n.id
@@ -38,8 +38,8 @@ if (db && date) {
       const placeholders = itemIds.map(() => '?').join(',');
       if (itemIds.length > 0) {
         const { results: related } = await db.prepare(
-          // AIK24-PIPE-05: 무료 모델 카드의 링크도 블로그 글 우선 (blog_link → link 폴백)
-          `SELECT id, title, COALESCE(blog_link, link) as link, description, source, category, country, pub_date
+          // AIK24-PIPE-07: 관련 뉴스 카드도 제공사 모델 페이지(origin_link) 우선
+          `SELECT id, title, COALESCE(origin_link, link) as link, description, source, category, country, pub_date
            FROM news
            WHERE id NOT IN (${placeholders})
              AND created_at >= datetime('now', '-3 days')

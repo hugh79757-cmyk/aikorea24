@@ -46,7 +46,7 @@ export const POST: APIRoute = async ({ locals, cookies }) => {
 
     // 2. 브리핑 아이템 + 뉴스 조회
     const items = await db.prepare(
-      `SELECT bi.*, n.title as news_title, n.link as news_link, n.source as news_source
+      `SELECT bi.*, n.title as news_title, COALESCE(n.origin_link, n.link) as news_link, n.source as news_source
        FROM briefing_items bi
        LEFT JOIN news n ON bi.news_id = n.id
        WHERE bi.briefing_id = ?

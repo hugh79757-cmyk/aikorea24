@@ -476,19 +476,19 @@ def main(selected_articles=None):
         print()
         return
 
-    # AIK24-PIPE-05 §3-4: 무료 모델 항목의 "원문 보기" 링크는 AIK24 블로그 글(blog_link)을 쓴다.
-    # blog_link 가 비면(글 미발행) 기존 link(models.dev 등)를 유지한다.
+    # AIK24-PIPE-07: 무료 모델 항목의 "원문 보기"는 제공사 모델 페이지
+    # (news.origin_link)로 연결된다. blog_link 는 더 이상 원문 링크가 아니다.
     # **news.link 는 dedup 키라 절대 바꾸지 않는다** — briefing_dedup.record_briefing() 이
     # link 를 이력에 기록하므로 여기서 덮어쓰면 중복 제거가 깨진다. 링크 사용은 렌더링
-    # 경로의 COALESCE(n.blog_link, n.link) 가 담당한다.
+    # 경로의 COALESCE(n.origin_link, n.link) 가 담당한다.
     for art in selected:
         if art.get("source") not in FREE_MODEL_SOURCES:
             continue
         mid = art.get("original_title") or ""
-        if art.get("blog_link"):
-            log(f"  🔗 blog_link 사용: {mid} → {art['blog_link']}")
+        if art.get("origin_link"):
+            log(f"  🔗 원문 링크(제공사): {mid} → {art['origin_link']}")
         else:
-            log(f"  [경고] blog_link 없음 → 기존 링크 사용: {mid}")
+            log(f"  [경고] origin_link 없음 → 수집 링크 사용: {mid}")
 
     print()
 

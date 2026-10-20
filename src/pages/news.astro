@@ -54,10 +54,10 @@ try {
 
     if (briefing) {
       const { results } = await db.prepare(
-        // AIK24-PIPE-05: 무료 모델 항목의 "원문 보기" 는 AIK24 블로그 글로 연결
-        // (models.dev 는 제3자 카탈로그라 원문이 아니다). blog_link 없으면 기존 link 폴백.
+        // AIK24-PIPE-07: "원문 보기"는 제공사 모델 페이지(origin_link) 우선.
+        // 비무료 뉴스는 origin_link 가 NULL 이라 link(실제 원문)가 그대로 쓰인다.
         `SELECT bi.sort_order, bi.comment,
-                n.id as news_id, n.title, COALESCE(n.blog_link, n.link) as link,
+                n.id as news_id, n.title, COALESCE(n.origin_link, n.link) as link,
                 n.description, n.source, n.pub_date
          FROM briefing_items bi
          JOIN news n ON bi.news_id = n.id
@@ -78,8 +78,8 @@ try {
     // 실제 렌더는 100건으로도 동일하다(현재 v2_pass=1 은 77건). rows_read 상한만 낮아진다.
     const ARCHIVE_LIMIT = 100;
     const result = await db.prepare(
-      // AIK24-PIPE-05: 아카이브 카드 링크도 블로그 글 우선 (blog_link → link 폴백)
-      `SELECT id, title, COALESCE(blog_link, link) as link, description, source, pub_date, created_at, v2_tag
+      // AIK24-PIPE-07: 카드 링크도 제공사 모델 페이지(origin_link) 우선
+      `SELECT id, title, COALESCE(origin_link, link) as link, description, source, pub_date, created_at, v2_tag
        FROM news
        WHERE v2_pass = 1 AND category NOT IN ('senior','benefit')
        ORDER BY created_at DESC, id DESC
