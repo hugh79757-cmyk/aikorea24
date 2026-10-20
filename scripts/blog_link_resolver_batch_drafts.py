@@ -29,6 +29,8 @@ def main():
     ap.add_argument("--limit", type=int, default=143)
     ap.add_argument("--all", action="store_true", help="브리핑 노출 제한 해제 (전수)")
     ap.add_argument("--only-briefing", action="store_true", help="브리핑에 실린 모델만")
+    ap.add_argument("--shard", type=int, default=0, help="병렬 분할 번호 (0부터)")
+    ap.add_argument("--shards", type=int, default=1, help="병렬 분할 개수")
     args = ap.parse_args()
 
     import blog_link_resolver as blr
@@ -37,11 +39,13 @@ def main():
     started = datetime.now(KST)
     print("=" * 72)
     print("AIK24-PIPE-06 Phase B — 큐 전수 draft 작성")
-    print("  시작: %s  limit=%d  only_in_briefing=%s" % (
-        started.strftime("%Y-%m-%d %H:%M:%S"), args.limit, only_in_briefing))
+    print("  시작: %s  limit=%d  only_in_briefing=%s  shard=%d/%d" % (
+        started.strftime("%Y-%m-%d %H:%M:%S"), args.limit, only_in_briefing,
+        args.shard, args.shards))
     print("=" * 72, flush=True)
 
-    result = blr.create_drafts(limit=args.limit, only_in_briefing=only_in_briefing)
+    result = blr.create_drafts(limit=args.limit, only_in_briefing=only_in_briefing,
+                                shard=args.shard, shards=args.shards)
 
     finished = datetime.now(KST)
     payload = {
@@ -50,13 +54,17 @@ def main():
         "elapsed_sec": int((finished - started).total_seconds()),
         "limit": args.limit,
         "only_in_briefing": only_in_briefing,
+        "shard": args.shard,
+        "shards": args.shards,
         "result": result,
     }
     RESULT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    RESULT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    suffix = "" if args.shards <= 1 else ".shard%d" % args.shard
+    path = RESULT_PATH.with_suffix(suffix + ".json")
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
     print("\n" + "=" * 72)
     print("완료: %s" % json.dumps(payload, ensure_ascii=False))
-    print("결과 파일: %s" % RESULT_PATH)
+    print("결과 파일: %s" % path)
     print("=" * 72)
 
 

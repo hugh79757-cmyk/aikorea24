@@ -112,6 +112,35 @@ def _strip_free_suffix(s):
     return s
 
 
+# AIK24-PIPE-05 §3-2 / PIPE-06: 후보 시퀀스 (seq, org, spec, rank)
+#   spec 2 = 정확 매칭, spec 1 = 느슨한 매칭(무료 접미사 제거)
+#   rank 0 = 전체 id, rank 1 = org 요구 꼬리, rank 2 = org 무시 꼬리
+# _NO_ORG = "org 를 요구하지 않되 매칭 구간 앞 라틴 토큰은 금지" 모드
+_NO_ORG = ("__NOORG__",)
+# 매칭 구간 바로 앞에 와도 무해한 라틴 토큰 (LLM 이 만든 제목의 관용 접두사)
+_BENIGN_PREV = {"llm", "ai", "free", "code", "coding", "model", "models", "api", "gpt"}
+
+
+def loose_slug_key(text):
+    """제목/슬러그를 느슨한 비교 키로 — 숫자 토큰 병합 + 접미사 제거.
+
+    매칭 정밀도를 떨어뜨리지 않으면서 "표기만 다른" 같은 모델을 묶기 위한 도구다
+    (검증·중복 정리용 — blog_link 매칭에는 쓰지 않는다).
+      "muse-spark-1.2-contributor" → "musespark12contributor"
+      "gemma-4-26b-a4b-it"        → "gemma426ba4b"
+    """
+    toks = _tokens(text)
+    merged = []
+    for t in toks:
+        if t.isdigit() and merged and merged[-1].isdigit():
+            merged[-1] = merged[-1] + t
+        else:
+            merged.append(t)
+    drop = {"it", "instruct", "free", "chat", "preview"}
+    merged = [t for t in merged if t not in drop]
+    return "".join(merged)
+
+
 def _tokens(text):
     """영숫자 밖을 구분자로 보고 토큰 배열로 만든다 (소문자)."""
     return [t for t in re.split(r"[^0-9a-z가-힣]+", (text or "").lower()) if t]
@@ -181,8 +210,14 @@ def model_key_variants(model_id):
     if "/" in base:
         org, tail = base.split("/", 1)
         tail_seq = tuple(_tokens(tail))
-        if tail_seq and tail_seq != full:
+        # 꼬리 시퀀스는 2토큰 이상이어야 한다. 1토큰("kilo-auto/free" → "free",
+        # "openrouter/auto" → "auto")은 수십 개 글과 매칭된다 — 2026-10-20 14:25 실측.
+        if len(tail_seq) >= 2 and tail_seq != full:
+            # org 를 요구하는 후보(우선) + org 없이도 성립하는 후보(차순).
+            # 2026-10-20 14:20 실측: LLM 이 만든 글 제목은 org 접두사(baai/, mistralai/ 등)를
+            # Often 뺀다 → org 를 강제하면 "baai/bge-m3" 글이 매칭되지 않아 미작성으로 남았다.
             out.append((tail_seq, tuple(_tokens(org)), 2, 1))
+            out.append((tail_seq, _NO_ORG, 2, 2))
 
     loose = _strip_free_suffix(base)
     if loose != base:
@@ -194,6 +229,7 @@ def model_key_variants(model_id):
             t = tuple(_tokens(tail))
             if len(t) >= 3 and t != fb:
                 out.append((t, tuple(_tokens(org)), 1, 1))
+                out.append((t, None, 1, 2))
     return out
 
 
@@ -209,14 +245,36 @@ def _contains(seq, haystack):
 
 
 def _seq_matches(seq, org, post_tokens):
-    """후보 시퀀스가 글 토큰에 있는지. org 지정이 있으면 org 토큰도 글 어딘가에 있어야 한다."""
-    if not _contains(seq, post_tokens):
+    """후보 시퀀스가 글 토큰에 있는지. org 지정이 있으면 org 토큰도 글 어딘가에 있어야 한다.
+
+    org = _NO_ORG 일 때는 **매칭 구간 바로 앞의 토큰이 라틴 문자열이면 안 된다.**
+    "meta/llama-3.1-70b-instruct" 의 꼬리("llama 31 70b instruct")는
+    "abacusai/dracarys-llama-3.1-70b-instruct" 글 안에도 연속으로 들어간다 →
+    다른 모델 글로 오인된다(2026-10-20 14:27 실측). 앞 토큰이 라틴이면 더 긴
+    모델명 일부로 보고 거부한다.
+    """
+    if not seq:
         return False
-    if org:
-        org_set = set(org)
-        if not org_set.issubset(set(post_tokens)):
-            return False
-    return True
+    n = len(seq)
+    for i in range(len(post_tokens) - n + 1):
+        if tuple(post_tokens[i:i + n]) != seq:
+            continue
+        if org is None:
+            return True
+        if org == _NO_ORG:
+            if i > 0:
+                prev = post_tokens[i - 1]
+                if re.match(r"^[0-9a-z]+$", prev) and prev not in _BENIGN_PREV:
+                    continue
+            return True
+        if org_set_ok(org, post_tokens):
+            return True
+    return False
+
+
+def org_set_ok(org, post_tokens):
+    """org 토큰이 글 토큰에 모두 포함되는지."""
+    return set(org).issubset(set(post_tokens))
 
 
 # ============================================
@@ -577,7 +635,7 @@ def report():
 # ============================================
 # draft — 큐에 남은 모델의 초안 생성 (자동 발행 금지)
 # ============================================
-def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
+def create_drafts(limit=5, dry_run=False, only_in_briefing=True, shard=0, shards=1):
     """큐에 있는 모델 중 아직 EmDash draft 도 글도 없는 것의 초안을 만든다.
 
     지시서 §3-3: 생성기는 blog_draft_generator.py 를 재사용한다.
@@ -587,6 +645,9 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
     큐에는 NVIDIA NIM 등 브리핑에 한 번도 실리지 않은 모델이 대부분인데, 그쪽까지
     자동 작성하면 하루 볼륨이 폭발한다. 지시서 §3-3 의 의도는 "브리핑에 나온 모델에
     글이 없으면 만든다" 다.
+
+    shard/shards — 전수 1회성 배치(Phase B)를 병렬로 나눌 때 쓴다.
+    큐를 key 정렬 후 인덱스로 분할하므로 프로세스 간 중복이 생기지 않는다.
     """
     q = read_queue()
     entries = q.get("models") or []
@@ -598,6 +659,13 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
         before = len(entries)
         entries = [e for e in entries if e.get("in_briefing")]
         log(f"브리핑 반영된 모델만 대상으로 제한: {before} → {len(entries)}")
+
+    # shard 분할 — key 정렬 후 인덱스 분할이라 프로세스 간 중복이 없다.
+    entries = sorted(entries, key=lambda e: e.get("key") or "")
+    if shards > 1:
+        total = len(entries)
+        entries = entries[shard::shards]
+        log(f"shard {shard}/{shards} 담당: {len(entries)}건 (전체 {total}건 중 인덱스 분할)")
 
     import blog_draft_generator as bdg
 
@@ -658,7 +726,8 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
                 return _generate_free_model_draft(bdg, entry, arts, cat, fix_note=fix_note)
 
             filepath, seo_title, consumed, issues, best = bdg._gate_and_fix(
-                key, articles[0], filepath, seo_title, file_num, today_str, generator=_gen)
+                key, articles[0], filepath, seo_title, file_num, today_str, generator=_gen,
+                max_rounds=4)
             file_num += consumed
             if filepath is None:
                 md = (bdg._EMDASH_PENDING.get(best) or {}).get("md", "")
@@ -685,11 +754,29 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
     return {"created": created, "skipped": skipped}
 
 
+# AIK24-PIPE-05 §3-3 / PIPE-06 Phase B: 자동 작성 초안에 들어가면 안 되는 표현.
+# LLM 은 "이 모델을 직접 호출해 봤다" 같은 사실을 지어내고 12문항 언급을 끌어들인다
+# (2026-10-20 13:44 실측: beam-free 초안이 '6. AIK24 실측 결과' 절을 지어냄).
+FORBIDDEN_PHRASES = (
+    "12문항",
+    "리더보드 순위",
+    "실측 결과",
+    "실측했습니다",
+    "실제 호출로 확인",
+    "검증일은",
+)
+
+
+def _forbidden_hits(text):
+    return [p for p in FORBIDDEN_PHRASES if p and p in (text or "")]
+
+
 def _generate_free_model_draft(bdg, entry, articles, cat, fix_note=None):
     """무료 모델 '사용 안내' 초안 생성 (AIK24-PIPE-05 §3-3 구조).
 
     12문항 실측 점수는 넣지 않는다 — blog_draft_generator.generate_draft() 는 free-llm
     항목을 12문항 평가글 경로로 보내므로, 여기서는 쓰지 않는다.
+    금지 표현(지어낸 실측·12문항)이 들어가면 지시문을 붙여 최대 3회 다시 생성한다.
     """
     import models_dev_spec as mds
 
@@ -714,9 +801,26 @@ def _generate_free_model_draft(bdg, entry, articles, cat, fix_note=None):
         links_str = _gate.link_block(_gate.collect_real_links(art))
     except Exception:  # noqa: BLE001
         links_str = ""
-    return bdg.generate_model_guide_draft(
-        art.get("title") or model_id, art, model_id, spec,
-        routes=routes, paid=paid, links_str=links_str, fix_note=fix_note)
+
+    out = ""
+    for attempt in range(1, 4):
+        out = bdg.generate_model_guide_draft(
+            art.get("title") or model_id, art, model_id, spec,
+            routes=routes, paid=paid, links_str=links_str, fix_note=fix_note)
+        if not out:
+            return ""
+        bad = _forbidden_hits(out)
+        if not bad:
+            if attempt > 1:
+                log(f"  ✅ 금지 표현 정정 완료 (재시도 {attempt - 1}회)")
+            return out
+        log(f"  ⚠️ 금지 표현 포함: {bad} — 재생성 {attempt}/3")
+        fix_note = ((fix_note or "") + "\n\n[교정 지시] 아래 표현은 이 글에 쓰지 마세요: "
+                    + ", ".join(bad) + ". 실제 실행한 실측·평가 결과가 없으므로 그런 절을 "
+                    "만들지 마세요. 카탈로그에 있는 사실(스펙·비용·제공 경로·설정 예시)만 "
+                    "쓰세요.").strip()
+    log("  ❌ 금지 표현이 계속 남아 초안을 만들지 않음")
+    return ""
 
 
 def _load_articles(news_ids):

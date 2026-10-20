@@ -247,10 +247,17 @@ def get_briefing_articles():
 _GATE_FIX_ORDERS = (
     ("groq1-gpt120b", "groq2-gpt120b", "zhipu-glm", "gemini-3.5-flash"),
     ("zhipu-glm", "gemini-3.5-flash", "groq3-gpt120b", "groq4-gpt120b"),
+    # AIK24-PIPE-06 Phase B: 사용안내 글은 분량 하한(3,000자)에 자주 걸린다.
+    # 2라운드로는 10건이 보류됐다 → 라운드를 늘려 분량을 채운다.
+    ("groq2-gpt120b", "zhipu-glm", "gemini-3.5-flash", "groq1-gpt120b"),
+    ("gemini-3.5-flash", "groq3-gpt120b", "zhipu-glm", "groq4-gpt120b"),
 )
+# 기존 파이프라인의 교정 횟수 (2회) — 유지한다. Phase B 사용안내 글만 4회로 올린다.
+GATE_FIX_ROUNDS_DEFAULT = 2
 
 
-def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generator=None):
+def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generator=None,
+                  max_rounds=None):
     """1차 방어 — 게이트 검사 후 미달이면 '초안 수정' 교정을 최대 2회 수행한다.
 
     처음부터 다시 쓰게 하면 같은 모델은 더 짧게 돌아온다(2026-10-19 실측 3,128→2,902자).
@@ -259,6 +266,9 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
     generator 를 주면 그 생성기로 교정본을 만든다(기본은 generate_draft).
     AIK24-PIPE-06 Phase B: 무료 모델 '사용 안내' 글은 12문항 평가글 경로를 쓰면 안 되므로
     전용 생성기를 주입한다.
+
+    max_rounds 를 주면 교정 횟수를 바꾼다(기본은 GATE_FIX_ROUNDS_DEFAULT = 2 —
+    기존 파이프라인 동작 유지). AIK24-PIPE-06 Phase B 사용안내 글은 4회로 올린다.
 
     Returns: (채택_fp, 제목, 사용한_file_num_수, None, None)        — 통과
              (None, None, 사용한_file_num_수, issues, 마지막_fp)   — 교정 후에도 미달(호출측이 보류 처리)
@@ -289,6 +299,9 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
     created = [filepath]          # 이 함수가 만든 모든 초안 — 채택본 외에는 pending 에서 제거한다
     best_fp, best_issues, consumed = filepath, issues, 1
     gen_fn = generator or generate_draft
+    rounds = _GATE_FIX_ORDERS if max_rounds is None else _GATE_FIX_ORDERS[:max_rounds]
+    if max_rounds is None:
+        rounds = _GATE_FIX_ORDERS[:GATE_FIX_ROUNDS_DEFAULT]
 
     def _drop_except(keep):
         """미달·미사용 초안이 발행 대기에 남지 않게 한다(남으면 검사를 우회해 발행된다)."""
@@ -296,8 +309,8 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
             if _f != keep:
                 _EMDASH_PENDING.pop(_f, None)
 
-    for attempt, order in enumerate(_GATE_FIX_ORDERS, 1):
-        log(f"    🔧 교정 {attempt}/{len(_GATE_FIX_ORDERS)} (모델 {order[0]} 우선)")
+    for attempt, order in enumerate(rounds, 1):
+        log(f"    🔧 교정 {attempt}/{len(rounds)} (모델 {order[0]} 우선)")
         out = gen_fn(title, [art], "A",
                      fix_note=_quality_gate.revision_note(_body(best_fp), best_issues),
                      corrective=True, model_order=order)
@@ -721,7 +734,8 @@ def generate_model_guide_draft(keyword, article, model_id, spec, routes=None, pa
         f"- 본문 맨 앞에 `# 제목` 을 쓰지 마세요 (제목은 TITLE: 줄에만 1회).\n"
         f"- 모든 문장은 '~입니다/~합니다/~했습니다' 체. 반말('~다/~했다') 금지.\n"
         f"- 첫 문단에 '이 글에서는' '아래에서 다룹니다' 같은 메타 도입문 금지.\n"
-        f"- 본문 3,000자 이상. 분량을 늘리려고 반복하지 말고 사실 밀도로 채우세요.\n"
+        f"- 본문 3,200자 이상. 각 소제목 아래를 3~4문단 이상으로 채우고, 분량을 늘리려고 "
+        f"반복하지 말고 사실 밀도로 채우세요. (게이트는 3,000자 미만이면 발행 보류합니다)\n"
         f"- 마크다운 표는 최소 3개. 형식은 `| 항목 | 값 |` 다음 줄에 `| --- | --- |` 구분선.\n"
         f"- 아래 표에 없는 수치(파라미터 수, 벤치마크 점수, 응답 속도 등)를 쓰지 마세요.\n\n"
         f"## 인용 가능한 실제 링크 (이 목록의 URL 만 쓰세요)\n"
@@ -1358,6 +1372,7 @@ def hold_thumbnail_failures(failed, today_str):
         _quality_gate.hold(
             md, title, ["썸네일 %s" % issue],
             reason="썸네일 품질 미달(발행 보류·초안 보존)")
+        log(f"  ⏸️ [{today_str}] {slug}: {issue} — 발행 보류, 초안 보존")
         held.append((fp, title, issue))
     return held
 

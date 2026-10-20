@@ -184,8 +184,19 @@ def create_draft_post(title, body_md, excerpt=None, featured_image=None):
         data["featured_image"] = feat
     st, d = api("/_emdash/api/content/posts", "POST", {"data": data})
     if st not in (200, 201):
-        print("  ! EmDash draft create 실패 http=%s %s" % (st, json.dumps(d, ensure_ascii=False)[:200]))
-        return None
+        # CONTENT_CREATE_ERROR(500) 은 일시적 서버 오류가 있다 — 2026-10-20 14:11 실측
+        # (Phase B 전수 배치에서 11건이 이 에러로 실패했다). 3회 재시도한다.
+        import time as _time
+        for attempt in range(1, 4):
+            print("  ! EmDash draft create 실패 http=%s — %d초 후 재시도 (%d/3)"
+                  % (st, attempt * 5, attempt))
+            _time.sleep(attempt * 5)
+            st, d = api("/_emdash/api/content/posts", "POST", {"data": data})
+            if st in (200, 201):
+                break
+        else:
+            print("  ! EmDash draft create 실패 http=%s %s" % (st, json.dumps(d, ensure_ascii=False)[:200]))
+            return None
     item = (d.get("data") or {}).get("item") or {}
     if not item.get("id"):
         print("  ! EmDash draft create 응답에 id 없음")

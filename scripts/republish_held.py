@@ -298,6 +298,13 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
             done["skip"] = done.get("skip", 0) + 1
             print()
             continue
+        # AIK24-PIPE-05/06: 자동 작성 초안(draft)은 검수 주체가 결정되기 전까지
+        # 발행하면 안 된다. 5d 자동 복구가 이들을 발행하면 "draft 고정" 규칙이 깨진다.
+        if "PIPE-05" in reason or "PIPE-06" in reason:
+            print("   [1차초안] 자동 복구 제외: 자동 작성 초안(draft) — 검수 후 별도 발행 필요")
+            done["skip"] = done.get("skip", 0) + 1
+            print()
+            continue
         result = ("skip", "후보 없음", "")
         for p in cands:
             kind, why, url = _try_candidate(p, title, live, do_publish, force, dump_dir)
