@@ -5,7 +5,7 @@ category: "글쓰기·챗봇"
 price: "무료/월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/humanizeaitext-io"
+url: "https://humanizeaitext.com"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["글쓰기", "AI", "텍스트 변환"]
 featured: false
