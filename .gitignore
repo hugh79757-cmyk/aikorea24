@@ -102,3 +102,5 @@ scripts/logs/backup_news_desc_*.json
 scripts/logs/backup_briefing_*.json
 scripts/logs/*.bak-*
 scripts/logs/tmp_sections/
+# AIK24-PIPE-06: models.dev 카탈로그 캐시 (12시간 TTL · 재생성 가능)
+scripts/logs/models_dev_cache.json

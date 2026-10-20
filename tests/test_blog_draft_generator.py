@@ -103,41 +103,46 @@ class TestModuleCompiles:
             pytest.fail(f"py_compile failed: {e}")
 
 
-class TestQualityChecklistBlocking:
-    """Task 28.1-02: Quality checklist blocking logic exists in source."""
+class TestQualityChecklistPerPost:
+    """AIK24-PIPE-06 Phase A: 썸네일 게이트는 글 단위로 처리한다.
+
+    이전 계약(Task 28.1-02)은 "생성된 글 전체의 썸네일이 실패하면 return 해서 배포 차단" 이었다.
+    그 return 이 5c(EmDash 발행) **이전**에 함수를 끝내서, 초안이 메모리에서 유실되게
+    만들었다(2026-10-20 09:30 minimax 초안 실증). 이제 계약은:
+      · 썸네일 판정 = 글 단위 (classify_thumbnails)
+      · 썸네일 실패 글만 hold 로 초안 보존 + 발행 보류 (hold_thumbnail_failures)
+      · 전면 차단 return 없음
+    """
 
     def setup_method(self):
         with open(BLOG_DRAFT_PATH, encoding="utf-8") as f:
             source = f.read()
         self.source = source
 
-    def test_quality_blocker_present(self):
-        """Source contains the quality checklist blocker comment."""
-        assert "모든 썸네일 품질 검증 실패 — 배포 차단" in self.source, (
-            "Quality checklist blocker (hard block) not found in source"
+    def test_no_blanket_blocking_return(self):
+        """전면 차단 return 이 남아있으면 안 된다 (초안 유실 재발 방지)."""
+        assert "모든 썸네일 품질 검증 실패 — 배포 차단" not in self.source, (
+            "블록킹 return 이 되살아나면 5c 이전에 함수가 끝나 초안이 유실된다"
         )
 
-    def test_quality_blocker_sends_telegram(self):
-        """Blocker path sends a Telegram alert."""
-        assert "썸네일 전면 실패" in self.source, (
-            "Telegram alert for total thumbnail failure not found in source"
-        )
+    def test_per_post_classification_exists(self):
+        """글 단위 썸네일 판정 함수가 있어야 한다."""
+        assert "def classify_thumbnails(" in self.source
+        assert "def hold_thumbnail_failures(" in self.source
 
-    def test_quality_blocker_returns_early(self):
-        """Blocker path has a `return` statement to prevent deployment."""
-        # Find the blocker comment and check there's a `return` after it
-        idx = self.source.find("모든 썸네일 품질 검증 실패 — 배포 차단")
-        assert idx != -1, "Blocker comment not found"
-        tail = self.source[idx:]
-        assert "return" in tail, (
-            "No `return` found after quality blocker — deployment will proceed"
-        )
+    def test_failed_post_is_held_not_dropped(self):
+        """실패 글은 hold 로 초안을 보존한다 (초안이 사라지지 않아야 한다)."""
+        assert "_quality_gate.hold(" in self.source
+        idx = self.source.find("def hold_thumbnail_failures(")
+        assert idx != -1
+        body = self.source[idx:idx + 1200]
+        assert "hold(" in body, "보류 글은 hold 로 초안을 보존해야 한다"
 
-    def test_quality_blocker_condition(self):
-        """Blocker condition checks quality_passed == 0 and issues exist."""
-        assert "quality_passed == 0" in self.source, (
-            "Condition `quality_passed == 0` not found"
-        )
-        assert "len(quality_issues) > 0" in self.source, (
-            "Condition `len(quality_issues) > 0` not found"
-        )
+    def test_telegram_alert_mentions_hold_reason(self):
+        """보류 알림에 사유가 포함되어야 한다."""
+        assert "썸네일 미달" in self.source, "보류 알림 문구가 없다"
+        assert "발행 보류" in self.source, "발행 보류 사유 표기가 없다"
+
+    def test_publish_list_filters_failed_posts(self):
+        """실패 글은 발행 대상에서 빠지고 통과 글은 남는다."""
+        assert "generated = [x for x in generated if x[0] not in bad_fps]" in self.source

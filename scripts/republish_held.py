@@ -288,7 +288,16 @@ def recover_since(since: str, do_publish: bool = True, limit: int = 5, dump_dir:
         if not cands:
             continue
         print("· %s" % title[:66])
-        print("   보류 사유: %s" % (rec.get("reason") or ""))
+        reason = (rec.get("reason") or "")
+        print("   보류 사유: %s" % reason)
+        # AIK24-PIPE-06 Phase A: 썸네일 결함 보류는 LLM 교정으로 고쳐지지 않는다.
+        # 본문은 통과 상태라 여기서 발행돼 버리면 "이미지 없는 글"로 공개된다.
+        # 썸네일을 먼저 만든 뒤 수동 발행해야 한다.
+        if "썸네일" in reason:
+            print("   [1차초안] 자동 복구 제외: 썸네일 결함 — 썸네일 재생성 후 수동 발행 필요")
+            done["skip"] = done.get("skip", 0) + 1
+            print()
+            continue
         result = ("skip", "후보 없음", "")
         for p in cands:
             kind, why, url = _try_candidate(p, title, live, do_publish, force, dump_dir)

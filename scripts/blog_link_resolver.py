@@ -619,6 +619,12 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
     created, skipped = 0, 0
     today_str = datetime.now(KST).strftime("%Y-%m-%d")
     file_num = bdg.next_file_number(today_str)
+    cat = None
+    try:
+        import models_dev_spec as mds
+        cat = mds.catalog()
+    except Exception as e:  # noqa: BLE001
+        log(f"  ⚠️ models.dev 카탈로그 조회 실패: {type(e).__name__}: {str(e)[:120]}")
     for entry in todo[:limit]:
         key = entry.get("key") or ""
         if dry_run:
@@ -635,7 +641,7 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
                 log(f"  ⚠️ {key} — news 행 조회 실패, 스킵")
                 skipped += 1
                 continue
-            gpt_output = bdg.generate_draft(key, articles, "A")
+            gpt_output = _generate_free_model_draft(bdg, entry, articles, cat)
             if not gpt_output:
                 log(f"  ❌ {key} — 초안 생성 실패")
                 skipped += 1
@@ -646,6 +652,22 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
                 log(f"  ❌ {key} — 품질 미달 (발행 대기 초안 미생성)")
                 skipped += 1
                 continue
+
+            # 1차 방어 — 게이트 미달이면 교정 최대 2회 (AIK24-BLOG-02 3중 방어)
+            def _gen(title, arts, grade, fix_note=None, corrective=False, model_order=None):
+                return _generate_free_model_draft(bdg, entry, arts, cat, fix_note=fix_note)
+
+            filepath, seo_title, consumed, issues, best = bdg._gate_and_fix(
+                key, articles[0], filepath, seo_title, file_num, today_str, generator=_gen)
+            file_num += consumed
+            if filepath is None:
+                md = (bdg._EMDASH_PENDING.get(best) or {}).get("md", "")
+                bdg._quality_gate.hold(md, key, issues or [],
+                                       reason="PIPE-06 자동 작성 초안 게이트 미달")
+                log(f"  ⛔ {key} — 교정 후에도 게이트 미달 (초안 보존)")
+                skipped += 1
+                continue
+
             draft = bdg._EMDASH_PENDING.get(filepath)
             if not draft:
                 skipped += 1
@@ -661,6 +683,40 @@ def create_drafts(limit=5, dry_run=False, only_in_briefing=True):
             log(f"  ❌ {key} 예외: {type(e).__name__}: {str(e)[:160]}")
             skipped += 1
     return {"created": created, "skipped": skipped}
+
+
+def _generate_free_model_draft(bdg, entry, articles, cat, fix_note=None):
+    """무료 모델 '사용 안내' 초안 생성 (AIK24-PIPE-05 §3-3 구조).
+
+    12문항 실측 점수는 넣지 않는다 — blog_draft_generator.generate_draft() 는 free-llm
+    항목을 12문항 평가글 경로로 보내므로, 여기서는 쓰지 않는다.
+    """
+    import models_dev_spec as mds
+
+    art = articles[0]
+    source = art.get("source") or ""
+    provider = mds.SOURCE_TO_PROVIDER.get(source)
+    model_id = art.get("original_title") or ""
+    if not provider or not model_id or not cat:
+        log(f"  ⚠️ 카탈로그 조회 불가 (provider={provider}, model_id={model_id}) — 스킵")
+        return ""
+    spec = mds.spec_facts(cat, provider, model_id)
+    if not spec:
+        log(f"  ⚠️ 카탈로그에 모델 없음: {provider}/{model_id} — 스킵")
+        return ""
+    if spec.get("model_id") != model_id:
+        log(f"  ℹ️ 표기 변경 매칭: {model_id} → 카탈로그 {spec['model_id']}")
+    routes = mds.free_routes(cat, provider, spec.get("model_id") or model_id)
+    paid = mds.paid_siblings(cat, provider, spec.get("model_id") or model_id)
+    links_str = ""
+    try:
+        import blog_quality_gate as _gate
+        links_str = _gate.link_block(_gate.collect_real_links(art))
+    except Exception:  # noqa: BLE001
+        links_str = ""
+    return bdg.generate_model_guide_draft(
+        art.get("title") or model_id, art, model_id, spec,
+        routes=routes, paid=paid, links_str=links_str, fix_note=fix_note)
 
 
 def _load_articles(news_ids):

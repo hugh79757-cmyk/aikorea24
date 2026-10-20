@@ -79,6 +79,8 @@ _BLOG_RULES = _load_blog_rules()
 # 프롬프트는 "1,500자/2,000자 이상", 게이트는 3,000자 — 모델은 프롬프트의 숫자를 따른다.
 # 숫자를 한 곳(게이트)에서 가져와 두 기준이 어긋날 수 없게 한다.
 MIN_BODY_CHARS = _quality_gate.MIN_CHARS
+# 무료 표기 접미사 (AIK24-PIPE-06: 무료 모델 사용안내 글에서 접미사 유무로 문구를 나눈다)
+FREE_SUFFIXES = (":free", "-free")
 
 
 ENV_PATH = os.path.join(PROJECT_DIR, ".env")
@@ -248,11 +250,15 @@ _GATE_FIX_ORDERS = (
 )
 
 
-def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str):
+def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generator=None):
     """1차 방어 — 게이트 검사 후 미달이면 '초안 수정' 교정을 최대 2회 수행한다.
 
     처음부터 다시 쓰게 하면 같은 모델은 더 짧게 돌아온다(2026-10-19 실측 3,128→2,902자).
     그래서 교정은 초안을 살려 고치는 방식(revision_note) + 모델 지정(strong_completion)이다.
+
+    generator 를 주면 그 생성기로 교정본을 만든다(기본은 generate_draft).
+    AIK24-PIPE-06 Phase B: 무료 모델 '사용 안내' 글은 12문항 평가글 경로를 쓰면 안 되므로
+    전용 생성기를 주입한다.
 
     Returns: (채택_fp, 제목, 사용한_file_num_수, None, None)        — 통과
              (None, None, 사용한_file_num_수, issues, 마지막_fp)   — 교정 후에도 미달(호출측이 보류 처리)
@@ -282,6 +288,7 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str):
 
     created = [filepath]          # 이 함수가 만든 모든 초안 — 채택본 외에는 pending 에서 제거한다
     best_fp, best_issues, consumed = filepath, issues, 1
+    gen_fn = generator or generate_draft
 
     def _drop_except(keep):
         """미달·미사용 초안이 발행 대기에 남지 않게 한다(남으면 검사를 우회해 발행된다)."""
@@ -291,9 +298,9 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str):
 
     for attempt, order in enumerate(_GATE_FIX_ORDERS, 1):
         log(f"    🔧 교정 {attempt}/{len(_GATE_FIX_ORDERS)} (모델 {order[0]} 우선)")
-        out = generate_draft(title, [art], "A",
-                             fix_note=_quality_gate.revision_note(_body(best_fp), best_issues),
-                             corrective=True, model_order=order)
+        out = gen_fn(title, [art], "A",
+                     fix_note=_quality_gate.revision_note(_body(best_fp), best_issues),
+                     corrective=True, model_order=order)
         if not out:
             log("       ↳ 교정 생성 실패(빈 응답)")
             continue
@@ -593,6 +600,157 @@ def _fail_block(ev):
         out.append(f"--- Q{d['idx']} [{d['axis']}] {kind} / 점수 {d.get('score', 0)} ---")
         out.append((d.get("answer") or "").strip()[:2000] or "(응답 없음)")
     return "\n\n".join(out) or "(0점 문항 없음)"
+
+
+def generate_model_guide_draft(keyword, article, model_id, spec, routes=None, paid=None,
+                                links_str="", fix_note=None, corrective=False,
+                                model_order=None):
+    """무료 모델 '사용 안내' 글 생성 (AIK24-PIPE-05 §3-3 구조). 실패 시 빈 문자열(폴백).
+
+    - 스펙·비용·제공 경로는 **models.dev 카탈로그 원본 값**을 그대로 프롬프트에 넣는다.
+      LLM 이 숫자를 지어내지 못하게 하는 것이 목적이다.
+    - **12문항 실측 점수는 넣지 않는다.** 실측 평가는 수동 영역이다(지시서 §3-3).
+      evaluate_model_draft(12문항 평가글) 경로와는 별개다.
+    """
+    routes = routes or []
+    paid = paid or []
+
+    spec_rows = [
+        ("모델 이름", spec.get("name") or model_id),
+        ("모델 ID", model_id),
+        ("컨텍스트", "%s 토큰" % f"{spec['context']:,}" if spec.get("context") else "미확인"),
+        ("최대 출력", "%s 토큰" % f"{spec['output']:,}" if spec.get("output") else "미확인"),
+        ("입력 비용", "무료" if spec.get("input_cost") == 0 else
+         ("%s 달러 (100만 토큰당)" % spec.get("input_cost"))),
+        ("출력 비용", "무료" if spec.get("output_cost") == 0 else
+         ("%s 달러 (100만 토큰당)" % spec.get("output_cost"))),
+        ("입력 모달리티", ", ".join(spec.get("input_modalities") or []) or "텍스트"),
+        ("출력 모달리티", ", ".join(spec.get("output_modalities") or []) or "텍스트"),
+        ("도구 호출", "지원" if spec.get("tool_call") else "미확인"),
+        ("카탈로그 갱신일", spec.get("last_updated") or "미확인"),
+    ]
+    spec_table = "\n".join("| %s | %s |" % (k, v) for k, v in spec_rows)
+
+    if routes:
+        route_rows = ["| 제공 경로 | 설정에 쓸 모델 ID | 컨텍스트 | 최대 출력 | 입력·출력 비용 |",
+                      "| --- | --- | --- | --- | --- |"]
+        for r in routes:
+            route_rows.append("| %s | `%s` | %s | %s | %s / %s |" % (
+                r["provider"], r["cli_id"],
+                f"{r['context']:,}" if r.get("context") else "미확인",
+                f"{r['output']:,}" if r.get("output") else "미확인",
+                "무료" if r.get("input_cost") == 0 else r.get("input_cost"),
+                "무료" if r.get("output_cost") == 0 else r.get("output_cost"),
+            ))
+        route_table = "\n".join(route_rows)
+    else:
+        route_table = "(확인된 추가 경로 없음)"
+
+    if paid:
+        paid_rows = ["| 무료 모델 ID | 같은 이름의 유료 모델 ID | 유료 모델의 입력·출력 비용 (100만 토큰당) |",
+                     "| --- | --- | --- |"]
+        for p in paid:
+            paid_rows.append("| `%s` | `%s` | %s / %s |" % (
+                model_id, p["cli_id"], p.get("input_cost"), p.get("output_cost")))
+        paid_table = "\n".join(paid_rows)
+        paid_note = ("같은 이름의 유료 모델이 함께 있습니다. 무료 접미사를 떼면 그 유료 모델로 "
+                     "연결됩니다.")
+    else:
+        paid_table = ""
+        paid_note = ("이 모델은 접미사를 뗀 식별자가 카탈로그에 없습니다. 그래도 무료 표기는 "
+                     "식별자 일부이므로 그대로 써야 합니다.")
+
+    # 접미사가 없는 모델(예: nvidia/active-speaker-detection)은 "무료 접미사"가 없으므로
+    # 접미사 문구로 안내하면 사실과 어긋난다(2026-10-20 13:19 실측). 문구를 나눠 준다.
+    has_free_suffix = model_id.endswith(FREE_SUFFIXES)
+    if has_free_suffix:
+        caution_body = (
+            "- 무료 표기가 식별자 끝에 붙은 접미사입니다. 접미사를 떼면 같은 이름의 유료 모델로 "
+            "연결되거나 식별자가 없어 호출이 실패합니다.\n"
+            "- 접미사를 **꼭 그대로** 써야 한다는 사실을 분명히 강조하세요.")
+    else:
+        caution_body = (
+            "- 이 모델의 식별자에는 '무료' 접미사가 따로 없습니다. 무료 제공 여부는 **제공 경로**"
+            "(아래 표의 경로)에서 결정되므로, 제공 경로 접두사를 포함한 식별자를 그대로 써야 합니다.\n"
+            "- 식별자의 일부를 임의로 지우면 다른(유료) 모델로 연결되거나 호출이 실패할 수 있습니다.\n"
+            "- 접미사가 없는 이상 '무료 접미사를 그대로 쓰라'고 하지 말고, **식별자 전체를 그대로 "
+            "써야 한다**고 쓰세요.")
+
+    cli_id = spec.get("cli_id") or model_id
+    catalog_url = spec.get("catalog_url") or ""
+
+    system_prompt = (
+        "당신은 AI 모델 사용법을 정리하는 한국어 테크 블로거입니다. "
+        "주어진 카탈로그 값만 사용하고, 없는 값은 지어내지 마세요. "
+        "중국어(한자)는 절대 사용하지 말고 순수 한국어로만 작성하세요."
+    )
+    system_prompt = (_BLOG_RULES + "\n\n" + system_prompt) if _BLOG_RULES else system_prompt
+    user_prompt = (
+        f"무료 LLM '{model_id}' 의 사용 안내 블로그 글을 작성해주세요.\n\n"
+        f"이 글의 독자는 돈 쓰기 싫어하고 무료 코딩 모델을 찾는 사람입니다. "
+        f"독자가 이 글을 읽고 '이 모델을 어떻게 부르고 무엇이 되는지' 판단할 수 있게 쓰세요.\n\n"
+        f"## 반드시 지킬 구조 (이 순서 그대로)\n"
+        f"### 1. 무엇이 다른가 — 스펙\n"
+        f"- 아래 표의 값을 **그대로** 사용하세요. 숫자를 바꾸거나 추정하지 마세요.\n"
+        f"```\n| 항목 | 값 |\n| --- | --- |\n{spec_table}\n```\n"
+        f"- 첫 문단에서 이 모델이 무엇인지(모델명·컨텍스트 규모·입력 가능한 것)를 사실로 "
+        f"설명하세요. 배경 설명은 최소로 줄이고 표로 넘기세요.\n\n"
+        f"### 2. 어디서 무료로 쓰나 — 제공 경로\n"
+        f"- 아래 표를 그대로 쓰세요.\n"
+        f"```\n{route_table}\n```\n"
+        f"- 각 경로의 상세는 카탈로그에서 직접 볼 수 있다는 점을 링크로 알려주세요.\n\n"
+        f"### 3. 쓰는 방법 — 설정 예시\n"
+        f"- OpenCode 설정에 아래 한 줄을 넣는다는 사실을 설명하세요.\n"
+        f"```json\n{{\n  \"model\": \"{cli_id}\"\n}}\n```\n"
+        f"- 설정 파일 위치나 커맨드 사용법이 확실하지 않으면 지어내지 말고 "
+        f"이 한 줄만 안내하세요.\n\n"
+        f"### 4. 주의할 점 — 무료 표기\n"
+        f"- {paid_note}\n"
+        + (f"```\n{paid_table}\n```\n" if paid_table else "")
+        + caution_body + "\n\n"
+        f"### 5. 마무리 — 오늘 바로 확인할 3단계\n"
+        f"- 마지막 소제목을 문자 그대로 `## 마무리 — (짧은 말)` 로 달고, 그 아래에 "
+        f"오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓰세요.\n\n"
+        f"## 금지 사항\n"
+        f"- **12문항 평가 점수·문항별 결과·리더보드 순위는 쓰지 마세요.** 이 글은 실측 평가 글이 아닙니다.\n"
+        f"- **'실측 결과' 섹션을 만들지 마세요.** 실제로 실행한 결과가 없습니다. 확인하지 못한 항목은 "
+        f"표에서 '미확인'이라고 적으세요. 실행한 것처럼 읽히는 문장은 쓰지 마세요.\n"
+        f"- **OpenCode 의 명령어(/models, /connect 등)를 지어내지 마세요.** 설정 안내는 위의 JSON 한 줄만 "
+        f"다루세요. 확실하지 않은 경로·파일을 특정하지 마세요.\n"
+        f"- 실제 실행하지 않은 명령 결과를 쓰지 마세요. 실행했다면 그 결과를 사실로 적으세요.\n"
+        f"- 본문 맨 앞에 `# 제목` 을 쓰지 마세요 (제목은 TITLE: 줄에만 1회).\n"
+        f"- 모든 문장은 '~입니다/~합니다/~했습니다' 체. 반말('~다/~했다') 금지.\n"
+        f"- 첫 문단에 '이 글에서는' '아래에서 다룹니다' 같은 메타 도입문 금지.\n"
+        f"- 본문 3,000자 이상. 분량을 늘리려고 반복하지 말고 사실 밀도로 채우세요.\n"
+        f"- 마크다운 표는 최소 3개. 형식은 `| 항목 | 값 |` 다음 줄에 `| --- | --- |` 구분선.\n"
+        f"- 아래 표에 없는 수치(파라미터 수, 벤치마크 점수, 응답 속도 등)를 쓰지 마세요.\n\n"
+        f"## 인용 가능한 실제 링크 (이 목록의 URL 만 쓰세요)\n"
+        f"- {catalog_url}\n"
+        f"- https://models.dev/{spec.get('provider')}\n"
+        f"- https://models.dev/api.json\n"
+        f"- https://opencode.ai/docs/models/\n"
+        f"- https://opencode.ai/docs/providers/\n"
+        f"위 링크 중 최소 3개를 본문 문장이나 `## 참고 자료` 섹션에 클릭 가능한 링크로 넣으세요.\n\n"
+        f"{links_str}"
+        f"## 출력 형식\n"
+        f"TITLE: [SEO에 최적화된 제목]\n"
+        f"---\n"
+        f"[마크다운 본문]\n"
+        + (("\n\n" + fix_note) if fix_note else "")
+    )
+
+    try:
+        out = chat_completion(
+            messages=[{"role": "user", "content": user_prompt}],
+            system_prompt=system_prompt,
+            temperature=0.3,
+            max_tokens=4000,
+            model_override=None,
+        )
+    except Exception as e:  # noqa: BLE001
+        log(f"  ⚠️ 모델 사용안내 글 생성 예외: {type(e).__name__}: {str(e)[:120]}")
+        return ""
+    return out or ""
 
 
 def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_str="",
@@ -1152,6 +1310,59 @@ def _publish_generated_to_emdash(generated):
     log(f"  EmDash 발행 결과: 성공 {ok} / 전체 {len(generated)}")
 
 # ============================================
+# AIK24-PIPE-06 Phase A: 썸네일 게이트 (글 단위 처리)
+# ============================================
+# 기존 결함: 5b 에서 "전부 실패"면 return 해서 5c(EmDash 발행) 이전에 함수가 끝났다.
+# 초안은 메모리(_EMDASH_PENDING) 상주라 그대로 유실됐다 — 2026-10-20 09:30 실증.
+# 썸네일 문제는 본문 발행과 무관하므로 발행을 막지 않는다.
+# 선택: (선호안) 썸네일 실패 글만 hold 로 초안을 보존하고 발행 보류한다.
+#        이미지 없이 발행하면 최근 published 5건의 featured_image 공란처럼
+#        "이미지 없는 글이 조용히 늘어난다" — 보류가 그걸 막는다.
+def classify_thumbnails(generated):
+    """생성된 글별 썸네일 품질 판정.
+
+    Returns: (통과건수, 이슈목록[(slug, 사유)], 실패목록[(fp, title, sort_order, slug, 사유)])
+    """
+    quality_passed = 0
+    issues = []
+    failed = []
+    for fp, title, sort_order, _ in generated:
+        slug = os.path.basename(fp).replace('.md', '').lower()
+        thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
+        if not os.path.exists(thumb_path):
+            issues.append((slug, "썸네일 파일 없음"))
+            failed.append((fp, title, sort_order, slug, "썸네일 파일 없음"))
+            continue
+        is_valid, reason = validate_thumbnail_quality(thumb_path)
+        if not is_valid:
+            issues.append((slug, reason))
+            failed.append((fp, title, sort_order, slug, reason))
+            continue
+        # placeholder 사본: 품질은 OK지만 image 필드에서 제외되므로 발행하면 이미지 없는 글이 된다
+        if is_placeholder_copy(thumb_path):
+            issues.append((slug, "placeholder 사본 (image 필드 생략)"))
+            failed.append((fp, title, sort_order, slug, "placeholder 사본 (image 필드 생략)"))
+            continue
+        quality_passed += 1
+    return quality_passed, issues, failed
+
+
+def hold_thumbnail_failures(failed, today_str):
+    """썸네일 실패 글의 초안을 보존(hold)하고 발행 대상에서 제외한다.
+
+    Returns: 보류 목록 [(fp, title, issue)]
+    """
+    held = []
+    for fp, title, sort_order, slug, issue in failed:
+        md = (_EMDASH_PENDING.get(fp) or {}).get("md", "")
+        _quality_gate.hold(
+            md, title, ["썸네일 %s" % issue],
+            reason="썸네일 품질 미달(발행 보류·초안 보존)")
+        held.append((fp, title, issue))
+    return held
+
+
+# ============================================
 # 메인
 # ============================================
 def main():
@@ -1355,39 +1566,29 @@ def main():
         log(f"  ⚠️ 검증 예외: {e}")
 
     # 5b. 발행 전 품질 체크리스트 (Plan 28-03)
+    # AIK24-PIPE-06 Phase A: 썸네일 판정을 글 단위로 분리했다.
+    # 이전 코드는 "전부 실패"면 여기서 return 해서 5c(EmDash 발행) 이전에 함수가 끝났다.
+    # 초안은 메모리(_EMDASH_PENDING) 상주라 그대로 유실됐다 — 2026-10-20 09:30 실증(minimax 초안).
+    # 썸네일 문제는 본문 발행과 무관하므로 발행을 막을 이유가 없다.
     log("[5b] 발행 전 썸네일 품질 체크리스트...")
-    quality_issues = []
-    quality_passed = 0
-    for fp, title, sort_order, _ in generated:
-        slug = os.path.basename(fp).replace('.md', '').lower()
-        thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
-        if os.path.exists(thumb_path):
-            is_valid, reason = validate_thumbnail_quality(thumb_path)
-            file_size = os.path.getsize(thumb_path)
-            if is_valid:
-                # placeholder 사본 검출: 품질은 OK지만 image 필드에서 제외했으므로 이슈로 카운트
-                if is_placeholder_copy(thumb_path):
-                    log(f"  ⚠️ {slug}: placeholder 사본 (image 필드 생략됨, {file_size:,} bytes)")
-                    quality_issues.append((slug, "placeholder 사본 (image 필드 생략)"))
-                else:
-                    log(f"  ✅ {slug}: {file_size:,} bytes, 800x800, WebP")
-                    quality_passed += 1
-            else:
-                log(f"  ❌ {slug}: {reason} ({file_size:,} bytes)")
-                quality_issues.append((slug, reason))
-        else:
-            log(f"  ⚠️ {slug}: 썸네일 파일 없음")
-            quality_issues.append((slug, "파일 없음"))
-    
+    quality_passed, quality_issues, thumb_failed = classify_thumbnails(generated)
+    for _slug, _issue in quality_issues:
+        log(f"  ⚠️ {_slug}: {_issue}")
     log(f"  품질 체크리스트: {quality_passed}/{len(generated)} 통과, {len(quality_issues)} 이슈")
     if quality_issues:
         log(f"  ⚠️ 품질 이슈: {quality_issues}")
 
-    # 모든 썸네일 실패 시 배포 차단 (Task 28.1-02)
-    if quality_passed == 0 and len(quality_issues) > 0 and len(generated) > 0:
-        log("  ❌ 모든 썸네일 품질 검증 실패 — 배포 차단")
-        send_telegram(f"❌ [{today_str}] 썸네일 전면 실패: {len(quality_issues)}건 — 배포 차단됨")
-        return
+    # 썸네일 실패 글만 발행 보류 + 초안 보존. 통과 글은 그대로 5c 로 넘어간다.
+    if thumb_failed:
+        held = hold_thumbnail_failures(thumb_failed, today_str)
+        bad_fps = {fp for fp, _t, _i in held}
+        generated = [x for x in generated if x[0] not in bad_fps]
+        log(f"  ⏸️ 썸네일 미달 {len(held)}건 — 발행 보류(초안 보존: scripts/logs/rejected/)")
+        send_telegram(
+            "⏸️ [%s] 썸네일 미달 %d건 발행 보류(초안 보존)\n%s"
+            % (today_str, len(held),
+               "\n".join("  · %s — %s" % (t[:48], iss) for _fp, t, iss in held[:5]))
+        )
 
     # 5c. EmDash 단독 발행 (AIK24-EMDASH-03). Astro 저장 이 없으므로 여기서 실패한 글은
     # 유실된다 — 실패는 로그로만 남기고 다음 글로 진행한다(파이프라인은 계속된다).
