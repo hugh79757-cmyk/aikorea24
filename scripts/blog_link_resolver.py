@@ -454,6 +454,7 @@ def resolve(dry_run=False, verbose=True):
 
     updates = []      # (news_id, url)
     queue_entries = []
+    briefing_ids = _briefing_news_ids()
     for key, group in sorted(by_key.items()):
         # 매칭은 원본 모델 id 로 한다 (그룹 안 프로바이더별 id 를 모두 시도)
         post = None
@@ -482,7 +483,7 @@ def resolve(dry_run=False, verbose=True):
                     _cli_id(r.get("source"), r.get("original_title"))
                     for r in group
                 } - {""}),
-                "in_briefing": bool(_in_briefing(group)),
+                "in_briefing": bool(_in_briefing(group, briefing_ids)),
             })
             if verbose:
                 log(f"  📝 {key} — 블로그 글 없음 (큐 등록)")
@@ -510,22 +511,29 @@ def _cli_id(source, original_title):
     return "%s/%s" % (prefix, original_title)
 
 
-def _in_briefing(group):
-    """해당 news 행이 이미 브리핑에 실렸는지 (D1 조회)."""
-    ids = [int(r["id"]) for r in group if r.get("id")]
-    if not ids:
-        return False
+def _briefing_news_ids():
+    """한 번이라도 브리핑에 실린 news id 집합 (D1 조회 1회).
+
+    모델마다 개별로 조회하면 미매칭 모델 수만큼 D1 요청이 나간다(실측 143회).
+    집합을 한 번에 받아 메모리로 판정한다.
+    """
     try:
         rows = cfnew.sql(
-            "SELECT COUNT(*) c FROM briefing_items WHERE news_id IN (%s)"
-            % ", ".join(str(i) for i in ids),
-            database_id=cfnew.A24_DB,
+            "SELECT DISTINCT news_id FROM briefing_items", database_id=cfnew.A24_DB
         )
-    except Exception:  # noqa: BLE001
-        return False
-    if not isinstance(rows, list) or not rows:
-        return False
-    return (rows[0].get("c") or 0) > 0
+    except Exception as e:  # noqa: BLE001
+        log(f"  ⚠️ 브리핑 news id 조회 실패: {type(e).__name__}: {str(e)[:120]}")
+        return set()
+    if not isinstance(rows, list):
+        return set()
+    return {r.get("news_id") for r in rows if r.get("news_id")}
+
+
+def _in_briefing(group, briefing_ids=None):
+    """해당 news 행이 이미 브리핑에 실렸는지."""
+    if briefing_ids is None:
+        briefing_ids = _briefing_news_ids()
+    return any(int(r.get("id") or 0) in briefing_ids for r in group)
 
 
 # ============================================

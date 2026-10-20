@@ -179,6 +179,8 @@ def main():
         steps = []
         if not args.skip_news:
             steps.append("1. 뉴스 선정")
+        if not args.skip_blog_link:
+            steps.append("1.5. 무료 모델 → 블로그 링크 매칭")
         if not args.skip_briefing:
             steps.append("2. 브리핑 생성")
         if not args.skip_thumbnails:
