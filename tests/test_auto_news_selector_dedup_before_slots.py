@@ -50,9 +50,11 @@ def _pool(monkeypatch, pool):
 
 def _stub_dedup(monkeypatch, dupe_ids):
     monkeypatch.setattr(briefing_dedup, 'get_history_articles', lambda d1_query: [])
-    monkeypatch.setattr(
-        briefing_dedup, 'is_duplicate_article',
-        lambda art, history: (True, 'exact_id') if art['id'] in dupe_ids else (False, None))
+    # AIK24-PIPE-09: filter_duplicates 가 D1 층·local 층 양쪽에서
+    # is_duplicate_article_strict 를 쓴다 → 더블도 두 공개 진입점을 함께 막는다.
+    stub = lambda art, history: (True, 'exact_id') if art['id'] in dupe_ids else (False, None)
+    monkeypatch.setattr(briefing_dedup, 'is_duplicate_article', stub)
+    monkeypatch.setattr(briefing_dedup, 'is_duplicate_article_strict', stub)
 
 
 def test_dupes_do_not_consume_slots(monkeypatch):

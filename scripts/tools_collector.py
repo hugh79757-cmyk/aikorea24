@@ -10,7 +10,7 @@ aikorea24 AI 툴 대량 확충기 v2.1
 """
 import os, sys, json, re, hashlib, subprocess, urllib.request, urllib.parse, random, time
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree as ET
 from html import unescape
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -630,6 +630,228 @@ def collect_theresanaiforthat(limit=10) -> list:
 
 
 # ============================================
+# D1 가드 — 3구간 폴백 + 상태 파일 + 알림 (AIK24-PIPE-09 B-1/B-7)
+#
+# 2026-10-21 실측: 같은 날 06:00 tools-collector 도 D1 가드로 죽었다
+#   scripts/tools_collector_error.log:447
+#   cfnew.QuotaExceededError: [D1-GUARD] 일일 읽기 4,113,239/5,000,000 (82.3%) — 작업 중단
+# → 하루를 통째로 버렸다. 상태 파일도 알림도 없어 **조용히 죽었다**.
+#
+# 뉴스 수집기(api_test/news_collector.py)와 **같은 3구간 정책**을 쓴다:
+#   < 80%      : 정상 수집 (기존 동작과 완전 동일)
+#   80% ~ 95%  : 축소 수집 (핵심 소스만 + 행 상한) + 1회 알림
+#   ≥ 95%      : 전면 중단 + 1회 알림 + 원본 예외 재발
+# 한도를 못 읽으면 fail-open(수집을 죽이지 않는다).
+#
+# 상태 파일은 뉴스 수집기와 **다른 파일**을 쓴다:
+#   scripts/.collector_state.json        ← 뉴스 수집기 (07:00 파이프라인이 읽는다)
+#   scripts/.tools_collector_state.json  ← 이 수집기 (운영자 가시성 전용)
+# ============================================
+
+# --- 상수 ---
+TOOLS_COLLECTOR_STATE_PATH = os.path.join(PROJECT_DIR, 'scripts', '.tools_collector_state.json')
+TOOLS_SOFT_RATIO = 0.80   # 소프트 한계 — 여기부터 축소 수집
+TOOLS_HARD_RATIO = 0.95   # 하드 한계 — 여기부터 전면 중단 (cfnew.READONLY_RATIO 와 동일)
+REDUCED_ROW_CAP = 8       # 축소 수집 행 상한 (정상 1일 수집량 중앙값 6 · 평균 8.5)
+REDUCED_EST_READ_COST = 1_000  # 축소 수집 1회 추정 D1 읽기 비용(행)
+
+# 수집 소스 목록 — 수집 결과 row 의 'source' 필드 값 기준
+TOOL_SOURCES = (
+    'Product Hunt',
+    'GitHub Awesome AI Tools',
+    'futurepedia',
+    'huggingface',
+    'topai.tools',
+    'theresanaiforthat',
+)
+
+# 축소 수집 핵심 소스 — 2026-10-21 기준 로그 19회 실행 실측에서 골랐다.
+#   Product Hunt      : 19/19회 실행 · 2~9건 (매일 실질 기여)      → 유지
+#   huggingface       : 19/19회 실행 · 0~5건 (브라우저 불필요)      → 유지
+#   GitHub Awesome    : 10건이지만 **주 1회(월) 전용**이라 일일 세트가 아님 → 제외
+#   futurepedia       : 19/19회 **0건** (HTML 크롤링 비용 대비 무효) → 제외
+#   topai.tools       : 19/19회 **0건**                              → 제외
+#   theresanaiforthat : Playwright 브라우저 필요 · 현재 미설치로 17/19회 0건
+#                       (가장 느린 소스 — 브라우저 기동 + 스크롤)      → 제외
+REDUCED_SOURCES = ('Product Hunt', 'huggingface')
+
+# 상태 파일 status → 알림 표시 라벨
+_TOOLS_STATUS_LABEL = {
+    'ok': '정상', 'reduced': '축소 수집', 'aborted': '중단', 'error': '오류 종료',
+}
+
+
+def decide_collection_mode(rows_read, limit, soft=TOOLS_SOFT_RATIO, hard=TOOLS_HARD_RATIO,
+                           reduced_read_cost=REDUCED_EST_READ_COST, row_cap=REDUCED_ROW_CAP):
+    """D1 일일 읽기 사용량 → 수집 모드 결정. 순수 함수(D1·네트워크 무관).
+
+    반환 dict: mode(normal|reduced|abort) · used · limit · pct · headroom · reason
+    """
+    limit = int(limit or 0)
+    used = max(int(rows_read or 0), 0)
+    pct = (used / limit) if limit else 1.0
+    headroom = max(limit - used, 0)
+    base = {'used': used, 'limit': limit, 'pct': pct, 'headroom': headroom,
+            'soft': soft, 'hard': hard, 'row_cap': row_cap}
+    if limit <= 0:
+        # 한도를 못 봤으면 fail-open — 수집을 죽이지 않는다.
+        return {**base, 'mode': 'normal', 'reason': 'D1 한도 미확인(fail-open) — 정상 수집'}
+    if pct >= hard:
+        return {**base, 'mode': 'abort',
+                'reason': f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 하드 한계 {hard:.0%} 초과, 수집 중단'}
+    if pct < soft:
+        return {**base, 'mode': 'normal',
+                'reason': f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 정상 수집'}
+    # 소프트 이상 하드 미만 → 축소 수집. 단 축소 수집이 하드 한계를 넘기면 중단.
+    if used + int(reduced_read_cost or 0) >= hard * limit:
+        return {**base, 'mode': 'abort',
+                'reason': (f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 축소 수집 비용'
+                           f'(≈{int(reduced_read_cost or 0):,}행)까지 쓰면 하드 한계 {hard:.0%} 를 넘는다, 수집 중단')}
+    return {**base, 'mode': 'reduced',
+            'reason': (f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 소프트 한계 {soft:.0%} 초과, '
+                       f'축소 수집(핵심 소스만 · {row_cap}행 상한)')}
+
+
+def select_reduced_sources(items, core_sources):
+    """수집 결과 → 축소 수집 핵심 소스만 남긴 부분집합. 순수 함수.
+
+    items: 수집 row(dict) 목록 · core_sources: 유지할 'source' 필드 값.
+    원래 순서를 유지한 부분집합을 돌려준다(전체 목록의 strict subset).
+    """
+    core = set(core_sources or ())
+    return [t for t in (items or []) if t.get('source') in core]
+
+
+def apply_row_cap(items, cap):
+    """행 상한 적용. 순수 함수 — cap 을 넘지 않는 목록을 돌려준다."""
+    items = list(items or [])
+    cap = int(cap or 0)
+    if cap <= 0:
+        return []
+    return items[:cap]
+
+
+def _kst_now_iso():
+    """현재 KST 시각 ISO8601 문자열 (상태 파일 'at' 필드)."""
+    return datetime.now(timezone(timedelta(hours=9))).isoformat(timespec='seconds')
+
+
+def write_tools_collector_state(status, reason, collected=0, path=None, at=None):
+    """툴 수집 상태 파일 기록 — 원자적 쓰기(tmp 파일 → os.replace).
+
+    같은 디렉터리에 tmp 를 쓰고 os.replace 로 교체한다(같은 파일시스템 내 rename 은
+    원자적). 실패 시 tmp 를 지우고 기존 파일은 그대로 둔다.
+    """
+    path = path or TOOLS_COLLECTOR_STATE_PATH
+    payload = {
+        'status': status,
+        'reason': str(reason or '')[:300],
+        'at': at or _kst_now_iso(),
+        'collected': int(collected or 0),
+    }
+    tmp = path + '.tmp'
+    try:
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(payload, f, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    except Exception:
+        # 쓰기 실패 시 tmp 를 지운다 — 대상 파일은 os.replace 전까지 손대지 않았다.
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+    return payload
+
+
+def _default_alert_sender(text):
+    """기본 알림 채널 — cfnew.muse_send (muse.ai 기본채팅).
+
+    D1 가드 경보(3단계 50/70/90%)와 같은 채널(scripts/cfnew.py 관례)이다.
+    muse_send 는 예외를 던지지 않고 bool 을 돌려준다(전달 실패 시 False).
+    """
+    import cfnew
+    return cfnew.muse_send(text)
+
+
+class ToolsCollectorReporter:
+    """툴 수집 상태 기록 + 알림 1회 보장 (AIK24-PIPE-09 B-1).
+
+    · report() 은 첫 호출만 반영 — 가드 중단 뒤 예외 핸들러가 'error' 로 덮어쓰지 않는다.
+    · 알림은 런당 최대 1회만 시도한다. 알림 실패는 원본 예외를 절대 가리지 않는다.
+    """
+
+    def __init__(self, state_path=None, sender=None, state_writer=None):
+        self.state_path = state_path or TOOLS_COLLECTOR_STATE_PATH
+        self.sender = sender or _default_alert_sender
+        self.state_writer = state_writer or write_tools_collector_state
+        self.reported = False
+        self.alert_attempts = 0
+        self.alert_ok = None
+        self.state = None
+
+    def report(self, status, reason, collected=0, alert=True):
+        """상태 파일 기록 + (필요 시) 알림 1회. 첫 호출만 반영된다."""
+        if self.reported:
+            return self.state
+        self.reported = True
+        try:
+            self.state = self.state_writer(status=status, reason=reason,
+                                           collected=collected, path=self.state_path)
+            print(f"  ℹ 툴 수집 상태 기록: {self.state_path} "
+                  f"({status} · {int(collected or 0)}건)", flush=True)
+        except Exception as e:
+            print(f'  ⚠ 툴 수집 상태 파일 기록 실패(무시): {e}', flush=True)
+            self.state = None
+        if alert:
+            self._alert(status, reason, collected)
+        return self.state
+
+    def _alert(self, status, reason, collected):
+        if self.alert_attempts >= 1:
+            return False
+        self.alert_attempts += 1
+        label = _TOOLS_STATUS_LABEL.get(status, status)
+        text = (f'[AIK24-PIPE-09] aikorea24 툴 수집 {label} — {reason} '
+                f'(수집 {int(collected or 0)}건, {_kst_now_iso()})')
+        try:
+            ok = bool(self.sender(text))
+        except Exception as e:
+            # 알림 실패가 원본 예외를 가리면 안 된다 — 예외를 삼키고 로그만 남긴다.
+            print(f'  ⚠ 툴 수집 알림 전송 실패(무시 — 원본 오류 유지): {e}', flush=True)
+            return False
+        self.alert_ok = ok
+        print(f"  {'✅' if ok else '⚠'} 툴 수집 알림 발송 {'성공' if ok else '실패'}", flush=True)
+        return ok
+
+
+def apply_guard(cfnew, reporter, soft=TOOLS_SOFT_RATIO, hard=TOOLS_HARD_RATIO,
+                reduced_read_cost=REDUCED_EST_READ_COST):
+    """수집 진입 가드 — 모드를 결정하고, 중단이면 상태 기록·알림 후 예외를 던진다.
+
+    3구간 판정이 필요하므로 cfnew.check_quota 를 raise_on_exceed=False 로 호출해
+    사용량을 dict 로 받는다. 중단 시 던지는 예외는 cfnew.QuotaExceededError —
+    메시지 형식이 기존과 같아서 tools_collector_error.log 의 오류 줄이 그대로 남는다.
+    """
+    quota = cfnew.check_quota(threshold=soft, raise_on_exceed=False)
+    used = int(quota.get('used') or 0)
+    limit = int(quota.get('limit') or 0)
+    decision = decide_collection_mode(used, limit, soft=soft, hard=hard,
+                                      reduced_read_cost=reduced_read_cost)
+    mode = decision['mode']
+    if mode == 'abort':
+        print(f"[D1-GUARD] {decision['reason']}", flush=True)
+        reporter.report('aborted', decision['reason'], collected=0)
+        raise cfnew.QuotaExceededError(
+            f"[D1-GUARD] 일일 읽기 {used:,}/{limit:,} ({decision['pct']:.1%}) — 작업 중단")
+    if mode == 'reduced':
+        print(f"[D1-GUARD] {decision['reason']}", flush=True)
+    return decision
+
+
+# ============================================
 # 통합 수집
 # ============================================
 def should_run_github_today():
@@ -637,32 +859,48 @@ def should_run_github_today():
     return datetime.now().weekday() == 0
 
 
-def collect_tools(limit_per_source=15) -> list:
-    """모든 소스에서 툴 수집 → 중복 제거된 리스트"""
+def collect_tools(limit_per_source=15, reduced=False) -> list:
+    """모든 소스에서 툴 수집 → 중복 제거된 리스트
+
+    AIK24-PIPE-09: reduced=True 면 핵심 소스(REDUCED_SOURCES)만 수집하고
+    행 상한(REDUCED_ROW_CAP)을 적용한다. 축소 모드의 실질 이득은 D1 읽기 절감이
+    아니라 **하루를 통째로 버리지 않는 연속성**과 쓰기(LLM·후처리·배포) 절감이다.
+    """
     all_tools = []
     all_tools.extend(fetch_product_hunt(limit=limit_per_source))
 
-    if should_run_github_today():
+    if reduced:
+        print("  GitHub Awesome AI Tools: 축소 수집 — 제외")
+    elif should_run_github_today():
         gh_tools = fetch_github_awesome(limit=limit_per_source)
         all_tools.extend(gh_tools)
         print(f"  GitHub Awesome AI Tools: {len(gh_tools)}개 (주간 업데이트)")
     else:
         print(f"  GitHub Awesome AI Tools: 오늘 스킵 (주 1회 실행)")
 
-    fp_tools = collect_futurepedia(limit_per_source)
-    all_tools.extend(fp_tools)
-    print(f"  Futurepedia: {len(fp_tools)}개")
+    if reduced:
+        print("  Futurepedia: 축소 수집 — 제외")
+    else:
+        fp_tools = collect_futurepedia(limit_per_source)
+        all_tools.extend(fp_tools)
+        print(f"  Futurepedia: {len(fp_tools)}개")
 
     hf_tools = collect_huggingface_papers(5)
     all_tools.extend(hf_tools)
     print(f"  Hugging Face Papers: {len(hf_tools)}개")
 
     # 추가 소스
-    topai_tools = collect_topai_tools(limit_per_source)
-    all_tools.extend(topai_tools)
+    if reduced:
+        print("  TopAI.tools: 축소 수집 — 제외")
+    else:
+        topai_tools = collect_topai_tools(limit_per_source)
+        all_tools.extend(topai_tools)
 
-    taft_tools = collect_theresanaiforthat(limit=min(limit_per_source, 10))
-    all_tools.extend(taft_tools)
+    if reduced:
+        print("  There's An AI For That: 축소 수집 — 제외")
+    else:
+        taft_tools = collect_theresanaiforthat(limit=min(limit_per_source, 10))
+        all_tools.extend(taft_tools)
 
     # 중복 제거 (URL 기준)
     seen_urls = set()
@@ -676,6 +914,14 @@ def collect_tools(limit_per_source=15) -> list:
         unique_tools.append(t)
 
     print(f"  총 {len(unique_tools)}개 (중복 제거 후)")
+
+    # 축소 수집 행 상한 — LLM 메타 생성·후처리·배포 비용을 통제한다.
+    if reduced:
+        before = len(unique_tools)
+        unique_tools = apply_row_cap(unique_tools, REDUCED_ROW_CAP)
+        print(f"  [축소 수집] 행 상한 적용: {before}건 → {len(unique_tools)}건 "
+              f"(상한 {REDUCED_ROW_CAP}건)")
+
     return unique_tools
 
 
@@ -1527,9 +1773,26 @@ SAMPLE_TOOLS = [
 # 메인
 # ============================================
 def main():
-    import argparse
+    """엔트리포인트 — 상태 기록·알림 1회 보장을 위해 예외를 감싼다 (AIK24-PIPE-09 B-1)."""
     import cfnew
-    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
+    reporter = ToolsCollectorReporter()
+    try:
+        _run(cfnew, reporter)
+    except Exception as e:
+        # B-1: 예외 종료 — 상태 파일(error) + 알림 1회.
+        # 가드 중단으로 이미 보고했다면 report() 가 덮어쓰지 않는다(알림 1회 보장),
+        # 원본 예외는 그대로 재발시켜 스택 트레이스·exit code 를 보존한다.
+        reporter.report('error', f'{type(e).__name__}: {e}', collected=0)
+        raise
+
+
+def _run(cfnew, reporter):
+    import argparse
+    # [D1-GUARD] 3구간 가드 — 80% 미만 정상 / 80~95% 축소 수집 / 95% 이상 중단.
+    #   기존에는 cfnew.check_quota(threshold=0.8) 한 줄이 80% 에서 곧바로 죽였다.
+    decision = apply_guard(cfnew, reporter)
+    reduced = (decision['mode'] == 'reduced')
+
     parser = argparse.ArgumentParser(description='AI 툴 대량 확충기')
     parser.add_argument('--batch', type=int, default=5,
                        help='배치 크기 (초기: 50, 유지: 10)')
@@ -1556,10 +1819,13 @@ def main():
     # 툴 목록 로드
     tools = []
     if args.collect:
-        print(f"[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 {args.limit}개)")
-        tools = collect_tools(limit_per_source=args.limit)
+        mode_note = ' — [축소 수집] 핵심 소스만' if reduced else ''
+        print(f"[수집 모드] Product Hunt + Futurepedia + HuggingFace (소스당 {args.limit}개){mode_note}")
+        tools = collect_tools(limit_per_source=args.limit, reduced=reduced)
         if not tools:
             print("수집된 툴 없음")
+            reporter.report('reduced' if reduced else 'ok', decision['reason'],
+                            collected=0, alert=reduced)
             sys.exit(0)
         print(f"수집 완료: {len(tools)}개")
     elif args.sample:
@@ -1666,6 +1932,13 @@ def main():
         # D1 tools 테이블 동기화
         print("\n[D1 동기화] tools 테이블 업데이트 중...")
         sync_tools_to_d1()
+
+    # === 수집 상태 기록 (AIK24-PIPE-09 B-1) ===
+    # 운영자 가시성용 상태 파일. 07:00 파이프라인이 읽는 뉴스 수집기의
+    # scripts/.collector_state.json 과는 **다른 파일**이다.
+    # 정상 수집은 알림을 보내지 않는다(하루 1회 성공을 알릴 이유가 없다).
+    reporter.report('reduced' if reduced else 'ok', decision['reason'],
+                    collected=len(created), alert=reduced)
 
 
 if __name__ == '__main__':

@@ -1,3 +1,111 @@
+## 2026-10-21 16:05 — AIK24-PIPE-09: PIPE-08 잔여 2건 종결 (56074 D1층 완화 · tools-collector B-1/B-7)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시: 대표님 결정 — "PIPE-08 잔여 결정 2건(56074 entity 차단 완화, tools-collector 후속 지시)도 남아 있습니다"
+* 결과: 성공 (2/2 구현 · pytest **1009 passed / 10 skipped / 0 failed** · 파이프라인/수집 재실행 0건 · 발행/메일 0건)
+* 선행: AIK24-PIPE-08(커밋 `bf773c10`) 잔여 목록의 2건을 종결
+
+### 한 일
+
+AIK24-PIPE-08 완료 보고가 남긴 잔여 2건을 **둘 다 구현**했다.
+① D1 이력 층의 entity 단독 차단 완화 ② `tools-collector` 에 B-1/B-7(상태 파일·1회 알림·축소 수집 폴백) 적용.
+
+### 결정 1 — 56074 의 D1 층 entity 차단 완화 [PRODUCTION CODE]
+
+`scripts/briefing_dedup.py:173` — `filter_duplicates` 가 **D1 이력과 local 이력 양쪽 모두**
+`is_duplicate_article_strict`(엔티티 단독 차단 금지)로 판정하도록 통일. 1줄 변경.
+`is_duplicate_article`(loose 2인자)는 **시그니처·동작 그대로 남아** "변경 전 규칙 재현"용으로만 사용된다.
+`:98` 에 `history_articles = history_articles or []` fail-open 가드 추가 — strict 경로가 D1 층에도 쓰이면서
+`None` 이력을 순회하면 `TypeError` 로 브리핑 전체가 죽을 수 있어 방어.
+
+**D1 층 판정 전수 (픽스처 D1 이력 7행 × 후보 9건 = 63쌍) [검증됨]**
+
+| 사유 분포 | before | after |
+|---|---|---|
+| 통과 | 60 | **61** |
+| `entity(2)` | **1** | **0** |
+| `exact_id` | 2 | 2 |
+
+- **변경된 유일한 쌍** = `56074 × 56152` — before `(True,'entity(2)')` → after `(False,None)`.
+  근거: 공통 엔티티 `{AI, Google}` · `jaccard_all 0.0408` · `is_same_topic=False` · `is_topic_related=False`
+  → "Google Cloud 신규 가입 $300 크레딧"과 "구글 픽셀 AI Pro 체험 제한"은 **다른 주제**다. 엔티티 단독 오탐 확정.
+- 나머지 62쌍은 **전부 동일**.
+
+**Layer 1/2 불변 증명 [검증됨]**
+1. before 사유가 `exact_*`/`semantic`인 쌍은 after 와 **0쌍 변경** (`test_d1_layer_exact_and_semantic_reasons_unchanged`)
+2. `ENTITY_OVERLAP_THRESHOLD=10^6` 으로 Layer 3 을 완전히 끈 상태에서 63쌍 전부 loose == strict
+   (`test_layer1_layer2_outcomes_identical_when_entity_layer_disabled`) → 두 경로가 Layer 1/2 구현을 공유함을 직접 증명
+3. `entity(2)` 라벨 유지 — EN-EN 합성 쌍(공유 토큰 `free` 1개 → jaccard_en 0.33, 주제어 겹침 있음)에서
+   strict 결과 `(True,'entity(2)')` 유지, `filter_duplicates` D1 층에서도 `local_` 접두 없이 `entity(2)` 로 기록
+
+### 결정 2 — tools-collector 에 B-1/B-7 적용 [PRODUCTION CODE]
+
+`scripts/tools_collector.py` (+291/−15) — 같은 아침 06:00에 82.3%에서 가드로 죽어 조용히 사라지던 그 잡.
+
+| D1 읽기 | % | 모드 | 근거 |
+|---|---:|---|---|
+| 1,106,085 | 22.1% | normal | 2026-10-21 실측 정상 수준 |
+| 3,999,999 | 80.0% 미만 | normal | — |
+| 4,000,000 | 80.0% | **reduced** | 기존 중단선 80% → 축소 수집으로 전환 |
+| **4,113,239** | **82.3%** | **reduced** | **오늘 사고 지점**(`tools_collector_error.log:447`) — 이제 중단이 아니라 축소 |
+| 4,749,000 | 94.98% | **abort** | 축소 비용(1,000행)까지 쓰면 하드 한계 4,750,000 초과 |
+| 4,750,000 | 95.0% | **abort** | `cfnew.READONLY_RATIO` 와 동일 |
+| limit 미확인 | — | normal (fail-open) | 수집을 죽이지 않음 |
+
+- 신규 6종: `decide_collection_mode`(`:684` 순수함수) · `select_reduced_sources`(`:715`) · `apply_row_cap`(`:725`) ·
+  `write_tools_collector_state`(`:739`, tmp→fsync→`os.replace` 원자적) · `_default_alert_sender`(`:769`, `cfnew.muse_send`) ·
+  `ToolsCollectorReporter`(`:779`, 런당 1회 알림) · `apply_guard`(`:830`)
+- 기존 `cfnew.check_quota(threshold=0.8)` 한 줄 → `apply_guard()` 3구간으로 교체(`:1792`). 중단 예외는
+  `cfnew.QuotaExceededError("[D1-GUARD] 일일 읽기 4,900,000/5,000,000 (98.0%) — 작업 중단")` 로 **기존 메시지 형식과 동일** →
+  `tools_collector_error.log` 오류 줄이 그대로 남는다.
+- **축소 소스 = `('Product Hunt', 'huggingface')`** — 수집기 자체 소스 목록에서 도출. `scripts/tools_collector.log` 19회 실행 실측:
+  Product Hunt 19/19회·2~9건 / huggingface 19/19회·0~5건 유지, GitHub Awesome(월간 전용)·futurepedia(19/19회 0건)·
+  topai.tools(19/19회 0건)·theresanaiforthat(17/19회 0건·가장 느림) 제외.
+  **행 상한 8** — 로그 19회 수집량 3~20건의 중앙값 6·평균 8.47 기준.
+- **상태 파일 = `scripts/.tools_collector_state.json`** — 뉴스 수집기의 `scripts/.collector_state.json` 과 **별개**.
+  07:00 파이프라인은 뉴스 것만 읽으므로 `scripts/run_pipeline.py` 는 지시대로 **미변경·미연결**(운영자 수동 확인 전용).
+  `.gitignore:100-102` 에 추가.
+
+### 검증 [검증됨]
+
+- **pytest 1009 passed / 10 skipped / 0 failed** (신규 실패 0건).
+  산출 근거 = 기준선 967 + 결정 1 신규 14 + 결정 2 신규 28 = **1009** ✓
+- 신규 테스트 2파일 42건: `tests/test_pipe09_d1_entity_relaxation.py`(14) · `tests/test_pipe09_tools_collector_guard.py`(28)
+- **[TEST CODE] 기존 테스트 3건 수정** — production 을 통과시키기 위한 수정이 아니라 **기대치가 대표님 결정으로 대체된 것**:
+  - `tests/test_auto_news_selector_dedup_before_slots.py:51-58` · `tests/test_auto_news_selector_zen_slot_limit.py:62-69`
+    — `filter_duplicates` 가 D1 층·local 층 양쪽에서 `is_duplicate_article_strict` 를 참조하므로
+    더블 스텁이 두 공개 진입점을 함께 막도록 확장(기존 판정 로직 동일)
+  - `tests/test_pipe08_dedup_unification.py` — 56074 를 `KEEP_BLOCKED_IDS` → `RELEASE_IDS` 로 이동,
+    `test_genuine_duplicates_stay_blocked`·`test_before_after_reason_table` 기대표 갱신(56074 완화 결정 반영)
+- 금지 파일 전부 미변경 확인: `scripts/run_pipeline.py` · `scripts/run_pipeline_with_notify.py` ·
+  `scripts/auto_news_selector.py` · `scripts/threads/dedup.py` · `api_test/news_collector.py` · `scripts/cfnew.py` ·
+  launchd plist · `scripts/briefing_dedup.json`(379,144 B · mtime 2026-10-20 07:00 · sha256 `975e38f4…` 그대로)
+- `scripts/.tools_collector_state.json` 은 테스트에서 한 번도 생성되지 않았다(전부 `tmp_path` 격리)
+
+### 잔존 위험
+
+1. **축소 모드의 D1 읽기 절감은 ≈0** — 이 수집기는 읽기가 아니라 LLM 메타 생성·후처리(심화·썸네일)·배포 비용이 크다. 실질 이득은 **연속성**(하루를 통째로 버리지 않음) + 쓰기 절감이다.
+2. 축소 모드에서 **GitHub Awesome(월간 주간 갱신) 제외** → 주간 갱신이 최대 1주 늦어질 수 있다.
+3. 축소 소스 선정 근거는 **19회 로그**뿐 — 소스 구조가 바뀌면(예: TAAFT Playwright 복구) 근거가 무효가 된다.
+4. **알림 채널 신뢰성** — `scripts/tools_collector.log` 에 2026-10-20 기준 `muse 전송 실패` 4건이 남아 있다. 2026-10-21 15:45 재확인 결과 경로 해석은 정상(`/Users/twinssn/.local/bin/muse-cli`)이나 **실 발송 성공 여부는 미확인**(실 발송 금지 지시). 상태 파일은 알림 실패와 무관하게 항상 남는다.
+5. **상태 파일은 07:00 파이프라인이 읽지 않는다** — 운영자 수동 확인 전용.
+6. **D1 층 완화 후 56074 가 브리핑 후보로 남는다** — 오늘 선정에는 영향 없음(기회 슬롯 1건, 56082 가 pub_date 더 최근이라 선점). 다른 날에는 56074 "Google Cloud $300 크레딧"이 기회에 선점될 수 있다(내용은 56152 와 다른 주제, 중복 가능성 낮음).
+7. SIGKILL·재부팅으로 수집기가 죽으면 상태 파일이 아예 안 생긴다(PIPE-08 잔여 그대로).
+8. 엔티티 단독 완전 해제는 D1 층에서도 2026-10-21 사고 유형(범용 엔티티 오탐)을 재현 가능하게 만든다. Layer 1/2 는 그대로라 exact·semantic 중복은 계속 막힌다.
+9. `is_duplicate_article`(loose)는 이제 프로덕션에서 호출되지 않는다(테스트 재현용으로만 잔존).
+
+### 검증 불가 (검증 수단 부재)
+
+- 실제 D1 사용량 실측 · 실제 축소 수집 실행(06:00 launchd) · 실제 muse 발송 성공 여부 — 모두 스텁으로 대체했다(지시: 실제 수집·발송 금지).
+- **실제 축소 모드 동작의 최초 실측은 2026-10-22 06:00 실행**이다.
+
+### 다음 행동
+
+- 2026-10-22 06:00 tools-collector 실행 → `scripts/.tools_collector_state.json` 로 축소/normal 판정 확인.
+- 2026-10-22 07:00 파이프라인 실행 → 브리핑 생성 여부와 **알림이 사실대로 나가는지** 확인(0건 자체가 실패가 아니라 조용한 0건이 실패).
+
+완료 — 시니어 2 verify 요청
+
 ## 2026-10-21 15:40 — AIK24-TOOLS-QUEUE-01: 도구 제출 7건 승인/반려 — 관리자 화면에서 직접 실행 완료
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24

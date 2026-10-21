@@ -52,8 +52,10 @@ LOGGED_REFILL_REASONS = [
 SCORES = {56391: 11, 56389: 6, 56500: 13}
 
 # 오탐으로 풀려야 하는 id / 정당 차단을 유지해야 하는 id (AIK24-PIPE-08 지시)
-RELEASE_IDS = [56082, 56500, 56076, 56389]
-KEEP_BLOCKED_IDS = [56074, 56525, 56391, 56206]
+# AIK24-PIPE-09: 56074 의 D1 층 entity(2) 도 오탐으로 풀린다(대표님 결정) →
+#   56074 를 RELEASE_IDS 로 옮기고 KEEP_BLOCKED_IDS 에서 뺀다.
+RELEASE_IDS = [56082, 56500, 56076, 56389, 56074]
+KEEP_BLOCKED_IDS = [56525, 56391, 56206]
 DECIDED_ID = 56406  # local_semantic — 결론은 아래 테스트에서 명시
 
 
@@ -322,12 +324,15 @@ def test_generic_entity_false_positives_are_released(world):
 
 
 def test_genuine_duplicates_stay_blocked(world):
-    """정당한 중복 차단은 유지된다 — 56074·56525·56391·56206."""
+    """정당한 중복 차단은 유지된다 — 56525·56391·56206.
+
+    AIK24-PIPE-09: 56074 는 여기서 빠졌다 — D1 층 entity(2) 가 범용 엔티티
+    오탐으로 판명되어 해제되었다(아래 test_d1_layer_entity_false_positive_released).
+    """
     d1_stub, _ = world
     _kept, removed = briefing_dedup.filter_duplicates(_pool_articles(), d1_stub)
     reasons = {a['id']: r for a, r in removed}
 
-    assert reasons.get(56074) == 'entity(2)'
     assert reasons.get(56525) == 'exact_id'
     assert reasons.get(56391) == 'exact_id'
     assert reasons.get(56206) == 'local_exact_id'
@@ -354,7 +359,11 @@ def test_56406_decision_is_documented_and_stable(world):
 
 
 def test_before_after_reason_table(world):
-    """주요 증거 표 — 9건의 차단 전/후 사유가 지시서 기대와 일치한다."""
+    """주요 증거 표 — 9건의 차단 전/후 사유가 지시서 기대와 일치한다.
+
+    AIK24-PIPE-09: "after" 표에서 56074 가 빠졌다 — D1 층 entity(2) 가 범용
+    엔티티 오탐으로 판명되어 해제되었다(대표님 결정 2026-10-21).
+    """
     d1_stub, _ = world
     _old_kept, old_removed = _old_filter_duplicates(
         _pool_articles(), D1_HISTORY, LOCAL_HISTORY)
@@ -371,7 +380,7 @@ def test_before_after_reason_table(world):
     assert old == expected_before
 
     expected_after = {
-        56074: 'entity(2)', 56525: 'exact_id', 56391: 'exact_id',
+        56525: 'exact_id', 56391: 'exact_id',
         56206: 'local_exact_id', 56406: 'local_semantic',
     }
     assert new == expected_after

@@ -51,10 +51,13 @@ def get_history_articles(d1_query):
 
 
 def is_duplicate_article(article, history_articles):
-    """3단계 중복 판정 — 단일 기사 × 전체 히스토리 (기존 동작 유지)
+    """3단계 중복 판정 — 단일 기사 × 전체 히스토리 (엔티티 단독 판정)
 
-    Layer 3(엔티티 겹침)은 **엔티티 단독**으로도 판정한다. 최근 발행분처럼
-    표본이 작은 이력(D1 3일 창)에 쓰는 fail-safe 경로다.
+    Layer 3(엔티티 겹침)은 **엔티티 단독**으로도 판정한다.
+
+    AIK24-PIPE-09: `filter_duplicates` 는 이 함수를 **더 이상 쓰지 않는다** —
+    D1 이력과 local 이력 양쪽 모두 `is_duplicate_article_strict` 로 판정한다.
+    이 함수는 아래 테스트가 "변경 전 규칙"을 재현할 수 있도록 남겨 둔 경로다.
 
     Returns:
         (True/False, reason_string)
@@ -68,7 +71,12 @@ def is_duplicate_article_strict(article, history_articles):
     AIK24-PIPE-08: 엔티티가 겹치기만 하고 주제어가 겹치지 않으면 차단하지 않는다.
     근거: 2026-10-21 실측 — 30일 local 이력(272행)에 범용 엔티티 {AI, API} 만 겹친
     미발행 기사(56076·56389)가 entity(2) 로 탈락해 브리핑이 0건이 되었다.
-    행이 누적되는 이력(local)에는 이 경로를 쓴다.
+
+    AIK24-PIPE-09: D1 3일 창(최근 발행분)에도 **같은 규칙**을 적용한다.
+    근거: 56074("Google Cloud 신규 가입 $300 크레딧")의 D1 상대는 56152
+    ("구글 … 픽셀 AI Pro")로 공통 엔티티가 {AI, Google} 뿐이고 jaccard_all 0.04 —
+    같은 주제가 아니므로 entity(2) 는 오탐이었다. D1 층을 local 층과 같은
+    기준으로 맞추면 두 이력이 동일하게 동작한다.
 
     Returns:
         (True/False, reason_string)
@@ -83,6 +91,11 @@ def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
     title = (article.get('title', '') or '')[:50]
     orig = (article.get('original_title', '') or '')[:30]
     desc = article.get('description', '') or ''
+
+    # D1 조회가 실패하면 이력은 None 이다 → fail-open (막지 않는다).
+    # AIK24-PIPE-09: strict 경로가 D1 층에도 쓰이게 되면서 None 이력을
+    # 그대로 순회하면 TypeError 로 브리핑 전체가 죽는다 → 여기서 방어한다.
+    history_articles = history_articles or []
 
     # AIK24-EFFICIENCY-04 §4-1: 모델 카드는 exact_id 만으로 중복 판정한다.
     # 같은 모델이 여러 프로바이더로 수집되면 original_title(=모델ID)이 같아서
@@ -119,11 +132,13 @@ def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
             return True, 'semantic'
 
         # Layer 3: Entity overlap (capitalized entity ≥ 2)
-        # AIK24-PIPE-08: strict 경로(= local 30일 이력)에서는 엔티티 **단독** 겹침으로
-        #   탈락시키지 않는다 — 주제어(토큰) 겹침을 동시에 요구한다.
+        # AIK24-PIPE-08: strict 경로에서 엔티티 **단독** 겹침으로는 탈락시키지 않는다
+        #   — 주제어(토큰) 겹침을 동시에 요구한다.
         #   근거: 2026-10-21 실측 — 범용 엔티티 {AI, API} 만 겹친 미발행 기사
         #         (56076·56389)가 entity(2) 로 탈락해 브리핑이 0건이 되었다.
-        #   D1 3일 창(최근 발행분)은 표본이 작아 fail-safe 로 엔티티 단독 판정을 유지한다.
+        # AIK24-PIPE-09: D1 3일 창(최근 발행분)도 strict 경로로 통일했다.
+        #   56074 의 D1 상대 56152 는 공통 엔티티 {AI, Google} 만 겹치고
+        #   jaccard_all 0.04 → 같은 주제가 아닌 범용 엔티티 오탐이었다.
         ent1 = extract_entities(title, orig, desc)
         ent2 = extract_entities(
             h.get('title', ''), h.get('original_title', ''), h.get('description', ''),
@@ -150,7 +165,12 @@ def filter_duplicates(articles, d1_query):
     kept = []
     removed = []
     for art in articles:
-        dup, reason = is_duplicate_article(art, history)
+        # AIK24-PIPE-09: D1 3일 이력도 local 30일 이력과 **같은 기준**으로 판정한다.
+        #   이전에는 D1 층만 엔티티 단독 겹침(entity(2))으로 막았는데, 56074 의 D1 상대
+        #   56152("구글 … 픽셀 AI Pro")는 공통 엔티티 {AI, Google} 만 겹치고
+        #   jaccard_all 0.04 인 **다른 주제**였다 → 범용 엔티티 오탐.
+        #   Layer 1(exact)·Layer 2(semantic)은 두 경로가 동일하므로 영향이 없다.
+        dup, reason = is_duplicate_article_strict(art, history)
         if dup:
             removed.append((art, reason))
             continue
