@@ -17,7 +17,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from threads.dedup import is_same_topic, extract_entities
+from threads.dedup import is_same_topic, extract_entities, is_topic_related
 from auto_news_selector import PROVIDER_SOURCES
 
 DEDUP_LOOKBACK_DAYS = 3
@@ -51,11 +51,33 @@ def get_history_articles(d1_query):
 
 
 def is_duplicate_article(article, history_articles):
-    """3단계 중복 판정 — 단일 기사 × 전체 히스토리
+    """3단계 중복 판정 — 단일 기사 × 전체 히스토리 (기존 동작 유지)
+
+    Layer 3(엔티티 겹침)은 **엔티티 단독**으로도 판정한다. 최근 발행분처럼
+    표본이 작은 이력(D1 3일 창)에 쓰는 fail-safe 경로다.
 
     Returns:
         (True/False, reason_string)
     """
+    return _is_duplicate_article(article, history_articles, entity_needs_topic=False)
+
+
+def is_duplicate_article_strict(article, history_articles):
+    """3단계 중복 판정 — Layer 3(엔티티) 에 **주제어 겹침을 동시 요구**한다.
+
+    AIK24-PIPE-08: 엔티티가 겹치기만 하고 주제어가 겹치지 않으면 차단하지 않는다.
+    근거: 2026-10-21 실측 — 30일 local 이력(272행)에 범용 엔티티 {AI, API} 만 겹친
+    미발행 기사(56076·56389)가 entity(2) 로 탈락해 브리핑이 0건이 되었다.
+    행이 누적되는 이력(local)에는 이 경로를 쓴다.
+
+    Returns:
+        (True/False, reason_string)
+    """
+    return _is_duplicate_article(article, history_articles, entity_needs_topic=True)
+
+
+def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
+    """3단계 중복 판정 구현부 — is_duplicate_article / _strict 가 공유한다."""
     aid = str(article.get('id', '')) or str(article.get('news_id', ''))
     link = normalize_url(article.get('link', ''))
     title = (article.get('title', '') or '')[:50]
@@ -97,12 +119,22 @@ def is_duplicate_article(article, history_articles):
             return True, 'semantic'
 
         # Layer 3: Entity overlap (capitalized entity ≥ 2)
+        # AIK24-PIPE-08: strict 경로(= local 30일 이력)에서는 엔티티 **단독** 겹침으로
+        #   탈락시키지 않는다 — 주제어(토큰) 겹침을 동시에 요구한다.
+        #   근거: 2026-10-21 실측 — 범용 엔티티 {AI, API} 만 겹친 미발행 기사
+        #         (56076·56389)가 entity(2) 로 탈락해 브리핑이 0건이 되었다.
+        #   D1 3일 창(최근 발행분)은 표본이 작아 fail-safe 로 엔티티 단독 판정을 유지한다.
         ent1 = extract_entities(title, orig, desc)
         ent2 = extract_entities(
             h.get('title', ''), h.get('original_title', ''), h.get('description', ''),
         )
         overlap = len(ent1 & ent2)
         if overlap >= ENTITY_OVERLAP_THRESHOLD:
+            if entity_needs_topic and not is_topic_related(
+                title, orig, desc,
+                h.get('title', ''), h.get('original_title', ''), h.get('description', ''),
+            ):
+                continue  # 엔티티 단독 겹침 → 차단하지 않는다 (오탐)
             return True, f'entity({overlap})'
 
     return False, None
@@ -123,7 +155,9 @@ def filter_duplicates(articles, d1_query):
             removed.append((art, reason))
             continue
 
-        dup2, reason2 = is_duplicate_article(art, local)
+        # AIK24-PIPE-08: local 30일 이력은 행이 272개로 누적돼 범용 엔티티 충돌이
+        # 잦다 → 엔티티 단독 겹침으로는 막지 않고 주제어 겹침을 동시 요구한다.
+        dup2, reason2 = is_duplicate_article_strict(art, local)
         if dup2:
             removed.append((art, f'local_{reason2}'))
             continue

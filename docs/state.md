@@ -1,3 +1,162 @@
+## 2026-10-21 15:50 — AIK24-PIPE-08: 브리핑 0건 재발 방지 7건 실행 (Phase A 3·4·5 + Phase B 1·2·6·7)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시서: `2026-10-21-1305-AIK24-PIPE-08-브리핑0건-재발방지.md`
+* 근거: 대표님 결정(2026-10-21 13:01) — 재발 방지안 전체 7건 실행. 직전 조사 = AIK24-PIPE-07(원인 확정, 같은 날 12:50)
+* 결과: 성공 (7/7 구현 · pytest 967 passed / 0 failed · 파이프라인 재실행 0건 · 발행/메일 0건)
+
+### 한 일
+
+AIK24-PIPE-07 이 확정한 원인(선정→Phase 2 dedup 기준 불일치 · 범용 엔티티 오탐 · 재충원 풀 고갈 ·
+수집의 원자적 취약성 · 알림 부재)에 대한 **재발 방지 7건을 모두 구현**했다.
+지시서의 강제 충전 금지 원칙(PIPE-04)은 유지했다 — 후보가 진짜 없으면 빈 슬롯을 유지하고 알림한다.
+
+### Phase A — dedup 계열 [검증됨]
+
+**A-3. dedup 기준 통일** — `scripts/auto_news_selector.py:605-626`
+
+3.5단계가 D1 3일 창만 보던 것을 Phase 2 와 **같은 `briefing_dedup.filter_duplicates`**(D1 3일 + local 30일)로 통일.
+순환 import 회피를 위해 기존과 동일하게 **함수 내부 지연 import** 를 쓴다(`auto_news_selector` → `briefing_dedup` → `auto_news_selector.PROVIDER_SOURCES`).
+주석 2곳(`:134-137`, `:379-392`)을 새 기준으로 갱신 — "선정→Phase 2 탈락"은 구조적으로 발생하지 않는다.
+
+> **완료 기준 충족 [검증됨]** — `tests/test_pipe08_dedup_unification.py::test_selection_survives_phase2_dedup`
+> 변경 전(같은 픽스처): 선정 56082·56206·56500 → **Phase 2 탈락 3건**(= 실제 사고 재현)
+> 변경 후: 선정 56082·56500·56389 → **Phase 2 탈락 0건**
+
+**A-4. local semantic 오탐 수정** — `scripts/threads/dedup.py` (3분기) + `scripts/briefing_dedup.py` (Layer 3)
+
+| 지점 | before | after |
+|---|---|---|
+| `threads/dedup.py` KO-KO | `entity_overlap >= 2` 단독 | `>= 4` **AND 주제어 겹침** (EN-EN 과 동일 임계) |
+| `threads/dedup.py` Mixed | `entity_overlap >= 1 AND jaccard_all >= 0.10` | `entity_overlap >= 2 AND jaccard_all >= 0.10` |
+| `threads/dedup.py` EN-EN | `jaccard_en >= 0.30` | `jaccard_en >= 0.30 AND (en_shared >= 2 OR en_shared == en_union)` |
+| `briefing_dedup.py` Layer 3 | `overlap >= 2` → 엔티티 단독 차단 | 주제어 겹침 동시 요구(`is_topic_related`) — 없으면 차단하지 않음 |
+
+`is_duplicate_article(article, history_articles)` 의 **시그니처는 2인자 그대로 보존**했다.
+주제어 요구 경로는 새 공개 함수 `is_duplicate_article_strict`(`briefing_dedup.py:65`)로 분리하고,
+`filter_duplicates`(`:153`,`:160`)가 **D1 이력은 `is_duplicate_article`(엔티티 단독 유지 = fail-safe)·local 이력(272행 누적)만
+`is_duplicate_article_strict`** 로 판정한다 — 지시서 기대표(56074 `entity(2)` 유지 · 56076·56389 `local_entity(2)` 해제)를
+이력의 성격(최근 발행분 vs 누적 이력)으로만 구분할 수 있어서다. 기존 테스트 스텁(2인자 lambda) 호환 → **기존 테스트 파일 무수정**.
+
+**9건 판정표 [검증됨]** (오늘 실제 사고 데이터 기준)
+
+| id | 차단 전 | 차단 후 | 판정 | 근거 |
+|---|---|---|---|---|
+| 56082 | `local_semantic` | **해제** | 오탐 해제 | `{OpenRouter}` 1개(Mixed) → 엔티티 임계 2 |
+| 56074 | `entity(2)` | `entity(2)` | **유지** | D1 3일 창은 fail-safe 유지(지시서 명시) |
+| 56076 | `local_entity(2)` | **해제** | 오탐 해제 | `{AI, API}` 만 겹침 → 주제어 겹침 0 |
+| 56525 | `exact_id` | `exact_id` | **유지** | D1 이력에 동일 id |
+| 56206 | `local_exact_id` | `local_exact_id` | **유지** | 10-17 실제 발행분 |
+| 56391 | `exact_id` | `exact_id` | **유지** | D1 이력에 동일 id |
+| 56389 | `local_entity(2)` | **해제** | 오탐 해제 | `{AI, API}`·`{AI, Ope}` 만 → 주제어 겹침 ≤0.06 |
+| 56500 | `local_semantic` | **해제** | 오탐 해제 | KO-KO `{AI, IT}` → 임계 2→4 + 주제어 요구 |
+| 56406 | `local_semantic` | `local_semantic` | **유지** | 상대 55205 "초보자를 위한 GitHub Copilot 앱"와 엔티티 `{Copilot, GitHub}` + jaccard_all 0.16 = **같은 제품·같은 주제** → 풀리면 안 됨 |
+
+**진짜 중복 차단력 유지 [검증됨]**
+- local 이력 272행 전수(자기 자신 제외) **73,712쌍 → 판정 변경 0쌍**
+- 오늘 후보 9건 × local 이력 272행 **2,448쌍 → 6쌍만 True→False**(56082↔54938/54941/56206, 56500↔52600 = 의도한 오탐만)
+
+**A-5. 재충원 풀 확장** — `scripts/auto_news_selector.py`
+
+| 항목 | before | after |
+|---|---|---|
+| `REFILL_POOL_LIMIT` | 15 (실제 최대 9행이라 무의미) | **30** (`:54`) |
+| 일반 뉴스 창 | 36h | 재충원만 **72h**(`:58` `REFILL_WINDOW_HOURS`) |
+| 태그별 후보 상한 | `PER_TAG_CANDIDATES=3` | 재충원 **9**(`:59`) |
+| 일반 뉴스 상한 | `NEWS_CANDIDATES=4` | 재충원 **12**(`:60`) |
+| 무료 기회 / Zen 후보 | `MAX_COUNT=3` / `ZEN_POOL_LIMIT=2` | 재충원 **6** / **6** (`:61`,`:62`) |
+| 슬롯 배분 | 기회 = 무제한(슬롯 독식) | **풀별 분리** — 기회 1(`:67`) · Zen 1(`:68`) · 나머지 뉴스 |
+
+`interleave_candidates(limit, refill=False)`(`:323`) — 기본값(선정) 경로는 **전혀 불변**, `refill=True` 일 때만 확장 상한·72h 창 사용.
+**점수 관문(SCORE_MIN=6)·dedup 기준·강제 충전 금지 원칙 불변**(`test_refill_does_not_force_fill`: 후보 0건이면 빈 슬롯 유지).
+
+재충원 풀 크기(동일 입력): 실제 픽스처 9건 → 선정 8행 / 재충원 **9행**(1.13×) · 합성 40건 → 선정 8행 / 재충원 **24행**(3.0×)
+
+### Phase B — 경보·가드 계열 [검증됨]
+
+**B-1. 수집 0건 알림** — `api_test/news_collector.py`
+
+- 가드 중단·예외 종료 시 **1회 알림**(`cfnew.muse_send` — D1 가드 경보의 기존 관례 채널) + `scripts/.collector_state.json` 기록.
+  알림 실패는 예외를 삼키고 로그만 남긴다 → **원본 예외가 가려지지 않는다**(테스트로 증명).
+- 상태 파일 원자적 쓰기: 같은 디렉터리에 `.tmp` → write → `flush()` → `os.fsync()` → **`os.replace()`**(POSIX rename 은 원자적).
+  교체 전까지 대상 파일은 그대로, 실패 시 tmp 삭제 후 재발.
+- 정상 수집 시에도 `status:"ok"` + 수집 건수를 기록 → 07:00 파이프라인이 "오늘 수집했나"를 구분 가능.
+- 07:00 파이프라인 통합(`scripts/run_pipeline.py:207-338`)은 **읽기 전용**(테스트 `test_pipeline_never_writes_the_collector_state_file` 로 고정).
+
+**B-2. 후보 풀 깊이 조기 경보** — `scripts/run_pipeline.py` + `scripts/auto_news_selector.py:554`
+
+- `auto_news_selector.count_fresh_candidates(d1_query_func, pool=None)` 신규 — A-3 와 동일한 `filter_duplicates` 기준, 부작용 0.
+- `scripts/run_pipeline.py:588-597` 에서 **Step 1(LLM 채점) 직전**에 계산 → `MAX_COUNT(3)` 미만이면 **1회 조기 경보** + 요약에 사유.
+- **advisory** — `summary["errors"]` 를 건드리지 않으므로 브리핑 생성을 막지 않고 exit 코드에도 영향 0.
+  0건 자체의 exit 1 은 ALERT-01(`31a32e19`)이 담당.
+- 알림 채널: **Telegram**(`pipeline.infra.telegram.send_telegram`) — 수집기 쪽 알림(muse)과 **중복 발송을 피하기 위해 분리**.
+  `_EARLY_ALERT_STATE["sent"]` 플래그로 성공/실패 무관 1회 보장(테스트로 증명).
+
+**B-6. exit code 전파** — `scripts/run_pipeline_with_notify.py`
+
+- `main()` 이 `result.returncode` 를 반환 → `sys.exit(main())`. 타임아웃 124, 예외 1.
+- **launchd 재시작 루프 없음 [검증됨]** — `~/Library/LaunchAgents/kr.aikorea24.pipeline-runner.plist` 는
+  `StartCalendarInterval`(Hour 7) 단독이고 `KeepAlive`·`SuccessfulExit`·`OnFailure`·`RunAtLoad` **전무**.
+  launchd 는 종료코드를 `launchctl list` 3번째 칸에 기록만 하고 재실행하지 않는다.
+  실증: 동일 구조의 `kr.aikorea24.news-unified` 가 10-21 에 D1 가드로 exit 1 을 남기고도 재루프되지 않았다
+  (`launchctl list` → `kr.aikorea24.news-unified  1`). → 타협안(launchd 잡용 exit 0 유지) 미구현, 지시서대로 전파.
+- 부수: `load_env` 를 `main()` 안으로 이동(테스트 프로세스에 실제 토큰 주입 방지) + 요약의 `⚠️ 경고` 블록을 텔레그램 본문에 반영.
+
+**B-7. 가드 정책 — 수집 폴백** — `api_test/news_collector.py:1258` (순수함수 `decide_collection_mode`)
+
+| 구간 | 동작 | 근거 |
+|---|---|---|
+| `< 80%` | 정상 수집(기존과 완전 동일) | 2026-10-21 실측 **22.1%** 가 정상 수준(READ-01/02 후) |
+| `80% ≤ x < 95%` | **축소 수집** — 핵심 소스만 · 30행 상한 | **오늘 사고 지점 82.1%** 이 정확히 이 구간. 95% 는 `cfnew.READONLY_RATIO`(=0.95)와 같은 선 |
+| `≥ 95%` | 전면 중단 + 1회 알림 + 원본 예외 재발 | 한도 초과 시 사이트가 조용히 빈 화면이 되던 구간 |
+
+- 한도 미확인 시 **fail-open**(수집을 죽이지 않음). 축소 수집 비용(≈15,000행)까지 쓰면 하드 한계를 넘는 구간은 축소도 중단.
+- 축소 소스: **프로바이더·모델 카드(항상 실행)** + 해외(TechCrunch AI·The Decoder·HuggingFace Blog) + 국내(AI타임스·인공지능신문·전자신문·GeekNews).
+  제외: Hacker News(대량 저품질)·Naver 뉴스 API·과기부/기업마당 공고. 행 상한 **30**(정상 1일 ≈130행의 23%, 해외 15/국내 15 분할).
+- 예외 타입(`cfnew.QuotaExceededError`)·메시지 형식·exit code 1 은 기존과 동일(traceback 프레임만 `cfnew.check_quota` → `apply_guard` 로 이동).
+
+### 검증 [검증됨]
+
+- **pytest 전체: 967 passed / 10 skipped / 0 failed** (신규 실패 0건).
+  산출 근거 = 워커A 기준선 899(작업 전) + A 신규 22 = 921, + B 신규 22 = 943, + C 신규 24 = **967**. ✓
+  기존 실패 1건(`test_blog_gate_flow` 의 `env: node: No such file or directory`)은 이 셸 환경에서 재현되지 않음(해당 파일은 run_pipeline 을 import 하지 않음).
+- 신규 테스트 3파일: `tests/test_pipe08_dedup_unification.py`(22) · `tests/test_collector_guard_policy.py`(22) · `tests/test_pipeline_early_warning_exit_code.py`(24)
+- 픽스처 `tests/fixtures/pipe08_20261021.json` — 오늘 사고 데이터(후보 9건 + D1 이력 7건 + local 이력 272행 스냅샷).
+  **변경 전 규칙으로 돌리면 로그(`scripts/pipeline_runner.log:84447`)와 사유 9/9 순서까지 완전 일치** → 사고 재현이 검증됨.
+- `scripts/briefing_dedup.json` 무변경 증명 — 착수 전/후 379,144 B · mtime 2026-10-20 07:00 · sha256 동일. 하네스는 `HISTORY_PATH` 를 `tmp_path` 로 우회.
+- 프로덕션 코드에 케이스 id 하드코딩 없음(grep: 케이스 id 는 주석에만 존재).
+- D1 접근 정상(19,350행), 현재 사용량 1,116,125/5,000,000 = **22.3%**.
+
+### [정정] AIK24-PIPE-07 조사 기록의 오기 정정
+
+PIPE-07 가설 G 4번은 "56082·56500 이 KO-KO `entity_overlap >= 2` 때문에 탈락"이라 적었으나, **재현 결과 56500 만 KO-KO 였고 56082 는 Mixed 분기**(엔티티 1 + jaccard_all 0.11)였으며, 그 규칙을 고친 뒤에는 **EN-EN 분기**(공유 토큰 'free' 1개로 jaccard 0.33)로 계속 걸렸다.
+지시서의 "56082 해제" 요구를 만족하려면 Mixed·EN-EN 두 분기까지 손봐야 했다 — A-4(2)(3) 이 그 부분이다.
+→ PIPE-07 기록은 **기록이 잘못된 상태로 남겨 두지 않는다**. 본 항목이 정정 근거를 담고 있다.
+
+### 잔존 위험
+
+1. **56074 의 D1층 `entity(2)` 는 유지** — 지시서 기대대로 fail-safe 로 남겼다. 내용상으로는 범용 엔티티 오탐(상대 56152, 공통 `{AI, Google}`, jaccard_all 0.04)이다. D1층까지 완화하려면 `filter_duplicates` 의 D1 호출만 `is_duplicate_article_strict` 로 바꾸면 된다(1줄) — 대표님 결정 사항.
+2. **EN-EN "공유 토큰 ≥ 2" 규칙이 Threads 파이프라인(`db_reader.is_already_posted`·pitch)에도 동일 적용**된다. Threads 는 발행 정지 중이고 2026-09-29 선례(2→4)도 같은 방향이었다. **대규모 코퍼스 영향 측정은 못 했다** — 측정은 local 이력 272행(73,712쌍) + 후보 9건(2,448쌍) 범위뿐.
+3. **축소 수집의 D1 읽기 절감은 ≈0** — 수집기 자체 읽기는 12,000행(일한도 0.24%)뿐이라 축소 모드의 실질 이득은 **연속성**(하루를 통째로 버리지 않음)과 쓰기 절감(130행→≤30행)이다. 쿼터 해소가 아니다.
+4. **`tools-collector` 의 동시 가드 중단(`scripts/tools_collector_error.log:447` 82.3%)은 여전히 조용히 죽는다** — 다른 파일이라 범위 밖이며 B-7 폴백도 적용되지 않는다. **후속 지시 필요.**
+5. **SIGKILL·재부팅으로 수집기가 죽으면 상태 파일이 아예 안 생긴다** — 가드 중단·예외 경로만 기록된다. 07:00 파이프라인은 `at` 의 로컬 달력일 + 6시간 창으로 "어제 것"을 구분한다.
+6. **재충원 72h 창** — 최대 3일 지난 뉴스가 후보에 들어올 수 있다(최신성 저하). 점수 관문·dedup 이 그대로라 발송되지는 않는다.
+7. **alert 채널 분리** — 수집기=muse, 파이프라인 조기 경보=Telegram. 한쪽만 안 보면 놓칠 수 있다.
+8. **B-2 는 D1 SELECT 를 1회 더 든다** — 헬퍼가 풀을 다시 조회한다(가드가 80% 에서 지면 fail soft 로 흡수되어 경고만 건너뛴다, 파이프라인은 죽지 않는다).
+9. **상태 파일은 05:30 수집 → 07:00 파이프라인 1.5시간 차이** 기준이다. 워커C의 6시간 신선도 창은 이 경계를 안전하게 넘기 위한 값.
+10. **Zen 슬롯 상한 1은 유지했다** — 지시서 ②는 "완화"를 요청했지만 값 2는 2026-10-18 사고("Zen 3건 독식 → 실제 뉴스 밀림")를 재발시킨다. 풀별 *분리*로 요구를 충족했다.
+11. **`free-opportunity` 행은 축소 소스에 못 넣는다** — 별도 주간 잡(`scripts/weekly_opportunity.py`)이 만든다. 수집기 담당 축(provider/model-card)은 축소 모드에서도 항상 수집한다.
+12. **B-6 후 pipeline-runner 의 launchd exit 코드가 처음으로 실패를 나타낸다** — `launchctl list` 3번째 칸. 단독 재실행은 없음(KeepAlive 없음).
+
+### 다음 행동
+
+- **10-22 07:00 실행에서 판정** — 브리핑 정상 생성 여부. 신규 후보 자체가 없으면 0건일 수 있고, 그 경우에도 **알림이 사실대로 나가는지**가 판정 기준(0건 자체가 실패가 아니라 조용한 0건이 실패).
+- `tools-collector` 가드 중단(82.3%)에 B-1/B-7 적용 — 후속 지시 필요.
+- 56074 D1층 완화 여부 — 대표님 결정.
+- Threads 재개 시 EN-EN 규칙의 코퍼스 영향 전수 측정.
+
+완료 — 시니어 2 verify 요청
+
 ## 2026-10-21 12:50 — AIK24-PIPE-07: 2026-10-21 07:00 브리핑 0건 원인 조사 (조사 전용 · 읽기 전용)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24

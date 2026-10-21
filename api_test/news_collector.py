@@ -21,7 +21,7 @@ aikorea24 뉴스 수집기 v4.0
 - 수집 → 번역 1단계 통합
 """
 import os, json, subprocess, urllib.request, urllib.parse, hashlib, re
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree as ET
 from html import unescape
 
@@ -753,10 +753,17 @@ def fetch_hackernews_ai(limit=15):
     return items
 
 
-def collect_global():
-    """해외 뉴스 전체 수집 (소스별 필터 자동 분기)"""
+def collect_global(reduced=False):
+    """해외 뉴스 전체 수집 (소스별 필터 자동 분기)
+
+    AIK24-PIPE-08 B-7: reduced=True 면 핵심 소스만 수집한다(축소 수집 모드).
+    """
     all_items = []
-    for url, name, country in GLOBAL_RSS_FEEDS:
+    feeds = GLOBAL_RSS_FEEDS
+    if reduced:
+        feeds = select_reduced_sources(GLOBAL_RSS_FEEDS, REDUCED_GLOBAL_SOURCES)
+        print(f"  [축소 수집] 해외 핵심 소스 {len(feeds)}/{len(GLOBAL_RSS_FEEDS)}개")
+    for url, name, country in feeds:
         if url in ENHANCED_FILTER_URLS:
             if url in AI_FEED_URLS:
                 # AI 전용 피드: 1차 키워드만 + REJECT
@@ -767,7 +774,9 @@ def collect_global():
         else:
             # 기존 소스: 기존 is_ai 필터 유지
             all_items.extend(fetch_rss_global(url, name, country, limit=7))
-    all_items.extend(fetch_hackernews_ai(limit=15))
+    if not reduced:
+        # Hacker News 는 대량 저품질 소스다 — 축소 수집에서는 행 상한 목적에 맞게 제외한다.
+        all_items.extend(fetch_hackernews_ai(limit=15))
     return all_items
 
 
@@ -900,9 +909,21 @@ def fetch_msit_press(limit=15):
         return []
 
 
-def collect_kr():
-    """국내 뉴스 전체 수집"""
+def collect_kr(reduced=False):
+    """국내 뉴스 전체 수집
+
+    AIK24-PIPE-08 B-7: reduced=True 면 핵심 소스만 수집한다(축소 수집 모드).
+    """
     all_items = []
+
+    if reduced:
+        # 핵심: 국내 AI 전문 매체 RSS 일부만. 네이버·정부 소스는 v2 통과율이 낮아
+        # 행 상한만 소모하고 일반뉴스 풀에 기여가 적으므로 축소 수집에서는 제외한다.
+        feeds = select_reduced_sources(KR_RSS_FEEDS, REDUCED_KR_SOURCES)
+        print('\n  [KR-1] 국내 AI 매체 RSS (축소: 핵심 소스만)')
+        for url, name in feeds:
+            all_items.extend(fetch_rss_kr(url, name, limit=15))
+        return all_items
 
     # 핵심: 국내 AI 전문 매체 RSS (AI타임스 + 전자신문 + IT조선)
     print('\n  [KR-1] 국내 AI 매체 RSS')
@@ -1190,9 +1211,244 @@ def index_new_to_vectorize():
     else:
         print(f"  ⚠ Vectorize: 임베딩 생성 실패 (전체 {failed}건)")
 
-def main():
+# ============================================
+# AIK24-PIPE-08 B-1/B-7: 수집 가드 정책 · 상태 파일 · 알림
+# ============================================
+# 배경(AIK24-PIPE-07 조사): 2026-10-21 05:30 수집이 D1 가드(82.1%)에 막혀
+# launchd exit 1 로 끝났는데 **아무도 알지 못했다** — 가드가 배너보다 앞에 있어서
+# stdout 에 배너조차 안 찍혔다. 수집은 하루 1회뿐이라 한 번 죽으면 그날 후보 풀이
+# 통째로 0 이 되고 07:00 브리핑이 0건이 된다(2026-10-21 사고).
+#
+# B-7 가드 정책 3구간:
+#   < 80%(soft)  : 정상 수집 (기존과 동일 — 소스·건수·로그 그대로)
+#   80~95%(hard) : 축소 수집 — 핵심 소스만 + 행 상한. 하루를 통째로 버리지 않는다
+#   ≥ 95%(hard)  : 전면 중단 — D1 자체 오류 구간 보호
+#
+# 임계 근거:
+#   · 2026-10-21 실측 22.1%(1,106,085행) — AIK24-D1-READ-01/02 로 SSR 읽기 비용을
+#     낮춘 뒤의 정상 수준(홈 1,733→53행/뷰, /global/ 19,218→50행/뷰, emdash 총계수 1,513→0행).
+#   · 수정 전 피크 83.9%(10-20 UTC 종료) — 기존 가드가 80% 에서 수집을 죽인 바로 그 구간.
+#     그 구간에서 계정 읽기는 SSR 이 이미 대부분 먹고 있었고 수집만 죽었다.
+#   · hard 95% = scripts/cfnew.py 의 READONLY_RATIO(0.95) 와 동일 — 그 지점부터 cfnew 가
+#     계정 전체를 읽기 전용으로 돌린다. 수집기도 그 전에 멈춰야 '읽기 전용' 판정과
+#     어긋나지 않는다(D1 한도 초과 시 sql() 이 7500 을 돌려줘 사이트가 조용히 빈 화면이 된다).
+#   · 축소 수집조차 하드 한계를 넘길 수 있으면 중단한다(decide_collection_mode 참고).
+
+# --- 상수 ---
+COLLECTOR_STATE_PATH = os.path.join(PROJECT_DIR, 'scripts', '.collector_state.json')
+COLLECTOR_SOFT_RATIO = 0.80   # 소프트 한계 — 여기부터 축소 수집 (기존 중단선 80%)
+COLLECTOR_HARD_RATIO = 0.95   # 하드 한계 — 여기부터 전면 중단 (cfnew.READONLY_RATIO 와 동일)
+REDUCED_ROW_CAP = 30          # 축소 수집 행 상한 (정상 1일 ≈ 130건)
+REDUCED_EST_READ_COST = 15_000  # 축소 수집 1회 추정 D1 읽기 비용(행) — 하드 한계 계산용
+
+# 축소 수집 핵심 소스 (B-7) — 브리핑 후보 풀에 필요한 최소 집합.
+#   · 프로바이더·모델 카드 → news_collector_v2.py --models-only
+#     (OpenCode Zen·Kilo Free Models·NVIDIA NIM Free·OpenRouter Free Models)
+#     → 선정 슬롯 2(Zen) 와 일반뉴스 풀(무료 프로바이더 행)의 주력이므로 축소 모드에서도 항상 돈다.
+#   · 일반뉴스 RSS → 아래 소스들 (전체 소스 목록의 strict subset)
+REDUCED_GLOBAL_SOURCES = ('TechCrunch AI', 'The Decoder', 'HuggingFace Blog')
+REDUCED_KR_SOURCES = ('AI타임스', '인공지능신문', '전자신문', 'GeekNews')
+
+# 상태 파일 status → 알림 표시 라벨
+_COLLECTOR_STATUS_LABEL = {
+    'ok': '정상', 'reduced': '축소 수집', 'aborted': '중단', 'error': '오류 종료',
+}
+
+
+def decide_collection_mode(rows_read, limit, soft=COLLECTOR_SOFT_RATIO, hard=COLLECTOR_HARD_RATIO,
+                           reduced_read_cost=REDUCED_EST_READ_COST, row_cap=REDUCED_ROW_CAP):
+    """D1 일일 읽기 사용량 → 수집 모드 결정. 순수 함수(D1·네트워크 무관).
+
+    반환 dict: mode(normal|reduced|abort) · used · limit · pct · headroom · reason
+    """
+    limit = int(limit or 0)
+    used = max(int(rows_read or 0), 0)
+    pct = (used / limit) if limit else 1.0
+    headroom = max(limit - used, 0)
+    base = {'used': used, 'limit': limit, 'pct': pct, 'headroom': headroom,
+            'soft': soft, 'hard': hard, 'row_cap': row_cap}
+    if limit <= 0:
+        # 한도를 못 봤으면 fail-open — 수집을 죽이지 않는다(cfnew.check_quota 와 같은 취지).
+        return {**base, 'mode': 'normal', 'reason': 'D1 한도 미확인(fail-open) — 정상 수집'}
+    if pct >= hard:
+        return {**base, 'mode': 'abort',
+                'reason': f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 하드 한계 {hard:.0%} 초과, 수집 중단'}
+    if pct < soft:
+        return {**base, 'mode': 'normal',
+                'reason': f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 정상 수집'}
+    # 소프트 이상 하드 미만 → 축소 수집. 단 축소 수집이 하드 한계를 넘기면 중단.
+    if used + int(reduced_read_cost or 0) >= hard * limit:
+        return {**base, 'mode': 'abort',
+                'reason': (f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 축소 수집 비용'
+                           f'(≈{int(reduced_read_cost or 0):,}행)까지 쓰면 하드 한계 {hard:.0%} 를 넘는다, 수집 중단')}
+    return {**base, 'mode': 'reduced',
+            'reason': (f'D1 읽기 {used:,}/{limit:,} ({pct:.1%}) — 소프트 한계 {soft:.0%} 초과, '
+                       f'축소 수집(핵심 소스만 · {row_cap}행 상한)')}
+
+
+def select_reduced_sources(feeds, core_names):
+    """전체 소스 목록 → 축소 수집 핵심 소스 목록. 순수 함수.
+
+    feeds: [(url, name[, country])] · core_names: 유지할 소스명.
+    원래 순서를 유지한 부분집합을 돌려준다(전체 목록의 strict subset).
+    """
+    core = set(core_names or ())
+    return [f for f in (feeds or []) if len(f) > 1 and f[1] in core]
+
+
+def apply_row_cap(items, cap):
+    """행 상한 적용. 순수 함수 — cap 을 넘지 않는 목록을 돌려준다."""
+    items = list(items or [])
+    cap = int(cap or 0)
+    if cap <= 0:
+        return []
+    return items[:cap]
+
+
+def split_row_cap(cap):
+    """총 행 상한을 해외/국내로 반씩 나눈다(기존 목표 해외50%:국내50% 유지)."""
+    cap = int(cap or 0)
+    if cap <= 0:
+        return 0, 0
+    half = (cap + 1) // 2
+    return half, cap - half
+
+
+def _kst_now_iso():
+    """현재 KST 시각 ISO8601 문자열 (상태 파일 'at' 필드)."""
+    return datetime.now(timezone(timedelta(hours=9))).isoformat(timespec='seconds')
+
+
+def write_collector_state(status, reason, collected=0, path=None, at=None):
+    """수집 상태 파일 기록 — 원자적 쓰기(tmp 파일 → os.replace).
+
+    읽는 쪽(07:00 파이프라인)이 반만 쓰인 파일을 보지 않도록 같은 디렉터리에 tmp 를
+    쓰고 os.replace 로 교체한다(같은 파일시스템 내 rename 은 원자적).
+    """
+    path = path or COLLECTOR_STATE_PATH
+    payload = {
+        'status': status,
+        'reason': str(reason or '')[:300],
+        'at': at or _kst_now_iso(),
+        'collected': int(collected or 0),
+    }
+    tmp = path + '.tmp'
+    try:
+        with open(tmp, 'w', encoding='utf-8') as f:
+            json.dump(payload, f, ensure_ascii=False)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, path)
+    except Exception:
+        # 쓰기 실패 시 tmp 를 지운다 — 대상 파일은 os.replace 전까지 손대지 않았다.
+        try:
+            os.remove(tmp)
+        except OSError:
+            pass
+        raise
+    return payload
+
+
+def _default_alert_sender(text):
+    """기본 알림 채널 — cfnew.muse_send (muse.ai 기본채팅).
+
+    D1 가드 경보(3단계 50/70/90%)와 같은 채널(scripts/cfnew.py 관례)이다.
+    muse_send 는 예외를 던지지 않고 bool 을 돌려준다(전달 실패 시 False).
+    """
     import cfnew
-    cfnew.check_quota(threshold=0.8)  # [D1-GUARD] 읽기 한도 80% 초과 시 중단
+    return cfnew.muse_send(text)
+
+
+class CollectorReporter:
+    """수집 상태 기록 + 알림 1회 보장 (AIK24-PIPE-08 B-1).
+
+    · report() 은 첫 호출만 반영 — 가드 중단 뒤 예외 핸들러가 'error' 로 덮어쓰지 않는다.
+    · 알림은 런당 최대 1회만 시도한다. 알림 실패는 원본 예외를 절대 가리지 않는다.
+    """
+
+    def __init__(self, state_path=None, sender=None, state_writer=None):
+        self.state_path = state_path or COLLECTOR_STATE_PATH
+        self.sender = sender or _default_alert_sender
+        self.state_writer = state_writer or write_collector_state
+        self.reported = False
+        self.alert_attempts = 0
+        self.alert_ok = None
+        self.state = None
+
+    def report(self, status, reason, collected=0, alert=True):
+        """상태 파일 기록 + (필요 시) 알림 1회. 첫 호출만 반영된다."""
+        if self.reported:
+            return self.state
+        self.reported = True
+        try:
+            self.state = self.state_writer(status=status, reason=reason,
+                                           collected=collected, path=self.state_path)
+            print(f"  ℹ 수집 상태 기록: {self.state_path} "
+                  f"({status} · {int(collected or 0)}건)", flush=True)
+        except Exception as e:
+            print(f'  ⚠ 수집 상태 파일 기록 실패(무시): {e}', flush=True)
+            self.state = None
+        if alert:
+            self._alert(status, reason, collected)
+        return self.state
+
+    def _alert(self, status, reason, collected):
+        if self.alert_attempts >= 1:
+            return False
+        self.alert_attempts += 1
+        label = _COLLECTOR_STATUS_LABEL.get(status, status)
+        text = (f'[AIK24-PIPE-08] aikorea24 뉴스 수집 {label} — {reason} '
+                f'(수집 {int(collected or 0)}건, {_kst_now_iso()})')
+        try:
+            ok = bool(self.sender(text))
+        except Exception as e:
+            # 알림 실패가 원본 예외를 가리면 안 된다 — 예외를 삼키고 로그만 남긴다.
+            print(f'  ⚠ 수집 알림 전송 실패(무시 — 원본 오류 유지): {e}', flush=True)
+            return False
+        self.alert_ok = ok
+        print(f"  {'✅' if ok else '⚠'} 수집 알림 발송 {'성공' if ok else '실패'}", flush=True)
+        return ok
+
+
+def apply_guard(cfnew, reporter, soft=COLLECTOR_SOFT_RATIO, hard=COLLECTOR_HARD_RATIO,
+                reduced_read_cost=REDUCED_EST_READ_COST):
+    """수집 진입 가드 — 모드를 결정하고, 중단이면 상태 기록·알림 후 예외를 던진다.
+
+    3구간 판정이 필요하므로 cfnew.check_quota 를 raise_on_exceed=False 로 호출해
+    사용량을 dict 로 받는다. 중단 시 던지는 예외는 cfnew.QuotaExceededError —
+    메시지 형식이 기존과 같아서 cron_unified_error.log 의 오류 줄이 그대로 남는다.
+    """
+    quota = cfnew.check_quota(threshold=soft, raise_on_exceed=False)
+    used = int(quota.get('used') or 0)
+    limit = int(quota.get('limit') or 0)
+    decision = decide_collection_mode(used, limit, soft=soft, hard=hard,
+                                      reduced_read_cost=reduced_read_cost)
+    mode = decision['mode']
+    if mode == 'abort':
+        print(f"[D1-GUARD] {decision['reason']}", flush=True)
+        reporter.report('aborted', decision['reason'], collected=0)
+        raise cfnew.QuotaExceededError(
+            f"[D1-GUARD] 일일 읽기 {used:,}/{limit:,} ({decision['pct']:.1%}) — 작업 중단")
+    if mode == 'reduced':
+        print(f"[D1-GUARD] {decision['reason']}", flush=True)
+    return decision
+
+
+def parse_model_card_saved(stdout):
+    """news_collector_v2 출력에서 저장 건수 파싱 ('D1 저장: N건'). 순수 함수."""
+    m = re.search(r'D1 저장:\s*(\d+)건', stdout or '')
+    return int(m.group(1)) if m else 0
+
+
+def _collect(cfnew, reporter):
+    """수집 본체 — B-1(상태 파일·알림) / B-7(축소 수집 폴백) 반영.
+
+    예외는 삼키지 않고 그대로 전파한다(main 이 상태 파일·알림을 처리한 뒤 원본을 재발).
+    """
+    decision = apply_guard(cfnew, reporter)
+    mode = decision['mode']
+    reduced = (mode == 'reduced')
+
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', choices=['kr', 'global', 'all'], default='all')
@@ -1209,14 +1465,14 @@ def main():
     # === 해외 수집 ===
     if args.source in ('global', 'all'):
         print('\n[해외 뉴스 수집]')
-        global_items = collect_global()
+        global_items = collect_global(reduced=reduced)
         global_items = dedup_similar(global_items)
         print(f"  해외 중복제거 후: {len(global_items)}건")
 
     # === 국내 수집 ===
     if args.source in ('kr', 'all'):
         print('\n[국내 뉴스 수집]')
-        kr_items = collect_kr()
+        kr_items = collect_kr(reduced=reduced)
         kr_items = dedup_similar(kr_items)
         print(f"  국내 중복제거 후: {len(kr_items)}건")
 
@@ -1232,6 +1488,16 @@ def main():
     all_items = dedup_similar(all_items)
     print(f"\n[최종] 통합 중복제거 후: {len(all_items)}건")
 
+    # === 축소 수집 행 상한 (B-7) — 번역·저장 전에 적용해 건수를 통제한다 ===
+    if reduced:
+        g_cap, k_cap = split_row_cap(REDUCED_ROW_CAP)
+        before = len(all_items)
+        global_items = apply_row_cap(global_items, g_cap)
+        kr_items = apply_row_cap(kr_items, k_cap)
+        all_items = global_items + kr_items
+        print(f"  [축소 수집] 행 상한 적용: {before}건 → {len(all_items)}건 "
+              f"(해외 {g_cap} · 국내 {k_cap} · 총 상한 {REDUCED_ROW_CAP}건)")
+
     # === 해외 뉴스 번역 ===
     if global_items:
         print('\n[번역] 해외 뉴스 한국어 번역...')
@@ -1246,13 +1512,17 @@ def main():
     # EFFICIENCY-02 가 Step 0 을 끄면서 사라진 4개 CLI 프로바이더 무료 모델 카드다.
     # 같은 news 테이블·같은 중복 제거 로직을 재사용하되, 별도 프로세스로 돌려
     # 뉴스 수집이 실패해도 모델 카드 수집은 되고 그 반대도 성립하게 한다.
+    # [AIK24-PIPE-08 B-7] 축소 수집에서도 반드시 돈다 — 프로바이더·모델 카드가
+    # 브리핑 후보 풀(Zen 슬롯·일반뉴스 풀)의 주력이다.
     print('\n[모델 카드] 4개 CLI 프로바이더 무료 모델 수집...')
+    model_saved = 0
     try:
         r = subprocess.run(
             [sys.executable, os.path.join(PROJECT_DIR, 'scripts', 'news_collector_v2.py'), '--models-only'],
             capture_output=True, text=True, cwd=PROJECT_DIR, timeout=300)
         for line in (r.stdout or '').splitlines():
             print('  ' + line)
+        model_saved = parse_model_card_saved(r.stdout)
         if r.returncode != 0:
             print(f"  ⚠ 모델 카드 수집 실패 rc={r.returncode}: {(r.stderr or '')[-300:]}")
     except Exception as e:
@@ -1270,6 +1540,25 @@ def main():
 
     purge_cloudflare_cache()
     print('=' * 60)
+
+    # === 수집 상태 기록 (AIK24-PIPE-08 B-1) ===
+    # 07:00 파이프라인이 이 파일로 '오늘 수집했는지/축소했는지/죽었는지'를 판단한다.
+    # 정상 수집은 알림을 보내지 않는다(하루 1회 성공을 알릴 이유가 없다).
+    reporter.report('reduced' if reduced else 'ok', decision['reason'],
+                    collected=saved + model_saved, alert=reduced)
+
+
+def main():
+    import cfnew
+    reporter = CollectorReporter()
+    try:
+        _collect(cfnew, reporter)
+    except Exception as e:
+        # B-1: 예외 종료 — 상태 파일(error) + 알림 1회.
+        # 가드 중단으로 이미 보고했다면 report() 가 덮어쓰지 않는다(알림 1회 보장),
+        # 원본 예외는 그대로 재발시켜 스택 트레이스·exit code 를 보존한다.
+        reporter.report('error', f'{type(e).__name__}: {e}', collected=0)
+        raise
 
 
 if __name__ == '__main__':

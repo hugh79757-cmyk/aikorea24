@@ -94,6 +94,9 @@ scripts/.d1_guard_alert_day
 scripts/.d1_guard_alert_day.tmp
 scripts/.d1_tier_alert_state.json
 scripts/.d1_tier_alert_state.json.tmp
+# AIK24-PIPE-08 B-1: 수집기 상태 파일 (05:30 수집이 매일 기록 · 07:00 파이프라인이 읽음)
+scripts/.collector_state.json
+scripts/.collector_state.json.tmp
 
 # 구간 교체 도구(emdash_section_replace.py) 백업·원고 (2026-10-17)
 scripts/logs/backup_section_*.json

@@ -48,7 +48,24 @@ NEWS_CANDIDATES = 4  # 뉴스 슬롯 최대 4건 (태그별 상위 3건 중 라�
 # AIK24-PIPE-04: 재충원 후보 상한 = 무료 기회 3 + Zen 2 + 일반 뉴스 9(태그 3종×3건).
 # 선정(CANDIDATE_LIMIT=8)보다 넓게 잡는다 — 중복 제거로 빈 슬롯이 생겼을 때만 쓰이고,
 # 그때는 이미 후보가 소진된 뒤라 더 깊은 풀이 필요하다.
-REFILL_POOL_LIMIT = 15
+# AIK24-PIPE-08: REFILL_POOL_LIMIT=15 였을 때 interleave_candidates 가 만드는 최대 행은
+# opp 3 + zen 2 + news 4 = 9행이었고(= 선정 풀과 동일) 상한 15는 사실상 무의미했다.
+# 재충원 전용 상한을 아래처럼 분리해 풀 자체를 넓힌다.
+REFILL_POOL_LIMIT = 30
+# AIK24-PIPE-08: 재충원 전용 후보 범위 확장 (선정 경로 상한은 그대로).
+# 원칙: **후보 범위만** 넓힌다 — 점수 관문(SCORE_MIN)과 dedup 기준은 바꾸지 않는다.
+# 강제 충전이 아니다: 범위 안에 후보가 없으면 빈 슬롯을 유지하고 알림한다.
+REFILL_WINDOW_HOURS = 72          # 선정 창 36h → 재충원 72h
+REFILL_PER_TAG_CANDIDATES = 9     # 태그별 상위 (선정 3)
+REFILL_NEWS_CANDIDATES = 12       # 일반 뉴스 상위 (선정 4)
+REFILL_OPP_CANDIDATES = 6         # 무료 기회 후보 (선정 3)
+REFILL_ZEN_CANDIDATES = 6         # Zen 변경 후보 (선정 2)
+# AIK24-PIPE-08: 재충원 슬롯을 **풀별로 분리**한다 — 한 풀이(기회·Zen)이 슬롯을 독식해
+# 다른 풀을 막지 않게 한다. 값은 선정 슬롯 구조(기회 1 · Zen 1 · 뉴스 나머지)와 같다.
+# Zen 슬롯을 2건으로 올리지는 않는다 — 2026-10-18 실측(Zen 3건 독식 → 실제 뉴스 밀림)
+# 사고를 재발시키지 않기 위해 상한 1을 유지한다.
+REFILL_OPP_SLOT_CAP = 1
+REFILL_ZEN_SLOT_CAP = 1
 SCORE_MIN = 6  # 3개 기준 평균 2점 미만 탈락
 TAG_ORDER = ("free-llm", "opensource", "tool")
 # 2026-10-18 대표님 지시 — "나오지 말아야 할 것이 나왔고, 나올 게 없다면 그 자리를 뉴스가 채워야 한다".
@@ -117,6 +134,9 @@ def get_opportunity_news(limit=1):
     안내가 반복된다 (4~8번째 항목 영구 미노출). 큐레이션 항목은 한 번 소개하면 끝이므로
     공개된 브리핑 이력(briefing_items) 전체로 제외하고, pub_date 동률은 id 오름차순으로
     고정해 소진 순서를 결정적으로 만든다.
+
+    AIK24-PIPE-08 — 위 근거는 그대로 유효하다. 3.5단계 dedup 이 D1 이력(3일)뿐이든
+    local 이력(30일)까지 보든, 이 SQL 제외는 별개의 1차 방어선이다.
     """
     return d1_query("""
         SELECT %s FROM news
@@ -300,19 +320,34 @@ def _date_key(article):
     return -int(p) if p.isdigit() and len(p) >= 8 else 0
 
 
-def interleave_candidates(limit):
+def interleave_candidates(limit, refill=False):
     """무료 기회 + Zen 변경 + 일반 뉴스 후보(태그 교차)를 합친다.
 
     기회·Zen 행은 LLM 점수 대상이 아니지만 dedup(3.5단계)이 필요하므로 pool 에 함께
     넣는다. 일반 뉴스 슬롯 = 태그별 상위 3건 중 라운드로빈. 데이터가 적으면 있는 만큼만
     반환한다(에러 아님).
+
+    AIK24-PIPE-08 — refill=True 면 **재충원 전용**으로 후보 범위만 넓힌다
+    (창 36h → 72h, 태그별 상한 해제). 점수 관문(SCORE_MIN)과 dedup 기준은 그대로다.
+    선정 경로(기본값)는 아무것도 바뀌지 않는다.
     """
-    opp = get_opportunity_news(MAX_COUNT)
-    zen = get_zen_changes(ZEN_POOL_LIMIT)
-    per_tag = {t: get_recent_news(v2_tag=t, exclude_models=True)[:PER_TAG_CANDIDATES]
-               for t in TAG_ORDER}
+    if refill:
+        opp = get_opportunity_news(REFILL_OPP_CANDIDATES)
+        zen = get_zen_changes(REFILL_ZEN_CANDIDATES)
+        per_tag = {
+            t: get_recent_news(hours=REFILL_WINDOW_HOURS, v2_tag=t,
+                               exclude_models=True)[:REFILL_PER_TAG_CANDIDATES]
+            for t in TAG_ORDER
+        }
+        news_cap = REFILL_NEWS_CANDIDATES
+    else:
+        opp = get_opportunity_news(MAX_COUNT)
+        zen = get_zen_changes(ZEN_POOL_LIMIT)
+        per_tag = {t: get_recent_news(v2_tag=t, exclude_models=True)[:PER_TAG_CANDIDATES]
+                   for t in TAG_ORDER}
+        news_cap = NEWS_CANDIDATES
     news = [art for row in zip_longest(*(per_tag[t] for t in TAG_ORDER))
-            for art in row if art is not None][:NEWS_CANDIDATES]
+            for art in row if art is not None][:news_cap]
     seen, head = set(), []
     for a in opp + zen:
         if a["id"] not in seen:
@@ -346,9 +381,14 @@ def _is_excluded_notice(article):
 #
 # 실측(2026-10-17 07:00 실행): selector 는 3건을 선정했는데 auto_briefing 의 Phase 2
 # 중복 제거가 2건(local_semantic · local_exact_id)을 탈락시켜 브리핑이 1건으로 발행됐다.
-# selector 의 3.5단계 dedup 은 D1 이력만 보고 local history(briefing_dedup.json)는
-# 보지 않으므로, local 히스토리 중복은 선정 이후에야 드러난다 → 빈 슬롯을 다시 채우는
+# 그 원인은 selector 의 3.5단계 dedup 과 Phase 2 의 dedup **기준 불일치**였다 —
+# 3.5단계는 D1 이력만 보고 local history(briefing_dedup.json)를 보지 않아,
+# local 히스토리 중복이 선정 이후에야 드러났다 → 빈 슬롯을 다시 채우는
 # 로직이 없으면 그대로 빈 채 발행된다. 여기서 그 슬롯을 계단식으로 채운다.
+#
+# AIK24-PIPE-08(2026-10-21): 기준 불일치를 없앴다 — 3.5단계가 Phase 2 와 **같은**
+# filter_duplicates(D1 이력 + local 이력)를 쓰므로 이제 "선정→Phase 2 탈락"은
+# 구조적으로 발생하지 않는다(오늘의 56206 케이스). 재충원 풀도 넓혔다(A-5).
 # ---------------------------------------------------------------------------
 
 # 같은 프로세스의 selector.main() 이 평가를 마친 후보 풀. auto_briefing 이 재충원할 때
@@ -388,8 +428,11 @@ def _refill_candidates(d1_query_func):
 
     일반 뉴스의 LLM 평가는 여기서 하지 않는다 — 계단식 3단계까지 내려갔고 중복 검사를
     통과한 후보에 한해 매긴다 (중복으로 버려질 후보에 호출을 쓰지 않는다).
+
+    AIK24-PIPE-08: 재충원 전용 상한(refill=True)으로 만든다 — 선정 풀과 같은 9행이면
+    후보가 고갈됐을 때 재충원이 무의미하다(2026-10-21 실측: 재충원 9/9 탈락).
     """
-    pool, _ = interleave_candidates(REFILL_POOL_LIMIT)
+    pool, _ = interleave_candidates(REFILL_POOL_LIMIT, refill=True)
     return pool
 
 
@@ -417,6 +460,8 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
     - 재충원 후보도 중복 검사(2차 방어)를 다시 통과한 것만 쓴다.
     - 후보가 부족하면 있는 만큼만 채우고, 없으면 빈 슬롯으로 둔다 (강제 충전 금지).
     - 모델 행은 merge_same_models 와 같은 키(original_title)로 중복 통합을 방어한다.
+    - AIK24-PIPE-08: 슬롯을 **풀별로 분리**한다(기회 상한·Zen 상한). 한 풀이 슬롯을
+      독식해 다른 풀을 막지 않게 한다. 남는 슬롯은 일반 뉴스가 채운다.
     """
     if d1_query_func is None:
         d1_query_func = d1_query
@@ -471,18 +516,20 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
                 f"{(art.get('title') or '')[:55]} ({art.get('source')} · {art.get('pub_date')})")
         return got
 
-    # 1) 무료 기회 최신순
+    # 1) 무료 기회 최신순 — AIK24-PIPE-08: 기회 슬롯 상한(1)으로 분리한다.
     opp = sorted([a for a in fresh if a.get("v2_tag") == "free-opportunity"
                   and a.get("source") not in PROVIDER_SOURCES], key=_date_key)
-    picked += take(opp, needed - len(picked), "1 기회")
+    picked += take(opp, min(needed - len(picked), REFILL_OPP_SLOT_CAP), "1 기회")
 
     # 2) Zen 변경 최신순 — select_top_articles 와 같은 슬롯 상한(1건)을 지킨다.
     # (2026-10-18: 재충원 단계에서도 제공 중단 알림이 슬롯을 먹던 경로를 막는다)
+    # AIK24-PIPE-08: Zen 슬롯 상한을 기회 슬롯과 **분리**한다 — 기회가 슬롯을 독식해
+    # Zen 이 못 받는 상황을 없앤다(값 1 은 2026-10-18 사고 방어를 위해 유지).
     if len(picked) < needed:
         zen = sorted([a for a in fresh if a.get("source") == "OpenCode Zen"
                       and a.get("v2_tag") == "free-llm"
                       and not _is_excluded_notice(a)], key=_date_key)
-        picked += take(zen, min(needed - len(picked), ZEN_SLOT_LIMIT), "2 Zen")
+        picked += take(zen, min(needed - len(picked), REFILL_ZEN_SLOT_CAP), "2 Zen")
 
     # 3) 일반 뉴스 — LLM 평가 점수 상위순 (동점은 최신순). 3단계까지 왔을 때만 평가한다.
     if len(picked) < needed:
@@ -502,6 +549,26 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
     else:
         log(f"  ⓘ 재충원 후보 없음 — 빈 슬롯 {needed}개 유지 (강제 충전 없음)")
     return kept + picked
+
+
+def count_fresh_candidates(d1_query_func, pool=None):
+    """LLM 채점 전, 최종 dedup 기준(D1+local)으로 살아남는 후보 수.
+
+    pool 이 None 이면 기존 후보 풀 빌더로 생성한다.
+    채점(Score)·저장 등 어떤 부작용도 없어야 한다.
+
+    AIK24-PIPE-08 §B-2 계약 — run_pipeline 의 "후보 풀 깊이 게이트"(조기 경보)가
+    이 함수를 호출한다. 계약:
+      - 판정 기준은 **3.5단계와 동일한** filter_duplicates(D1 이력 + local 이력)다.
+      - 반환값은 int (살아남는 후보 수).
+      - 부작용 없음: LLM 호출 없음, 파일 쓰기 없음, 저장 없음.
+        D1 조회는 **주입된 d1_query_func 로만** 수행한다(자체 네트워크 호출 없음).
+    """
+    from briefing_dedup import filter_duplicates  # 순환 import → 지연 import
+    if pool is None:
+        pool, _ = interleave_candidates(CANDIDATE_LIMIT)
+    kept, _removed = filter_duplicates(list(pool), d1_query_func)
+    return len(kept)
 
 
 def main(dedup=True):
@@ -541,13 +608,20 @@ def main(dedup=True):
     # v1은 슬롯을 채운 뒤 auto_briefing 이 dedup 해서 슬롯이 빈 채로 끝났다
     # (2026-10-15 실측: 상위 4건 전부 과거 브리핑분 → "선정된 기사 없음",
     #  신선한 4건은 슬롯 밖으로 밀려남). 같은 판정 함수를 여기서 재사용한다.
+    #
+    # AIK24-PIPE-08: **Phase 2 와 동일한 기준**으로 거른다.
+    #   이전에는 D1 이력(3일)만 보고 local 이력(30일)은 보지 않아, 선정 단계에서는
+    #   살아남은 기사가 Phase 2(auto_briefing.filter_duplicates)에서 탈락했다
+    #   ("선정→탈락", 2026-10-21 실측: 56206 이 local_exact_id 로 탈락 → 브리핑 0건).
+    #   이제 양쪽이 같은 filter_duplicates(D1 이력 + local 이력)를 쓰므로
+    #   선정에서 통과한 기사는 Phase 2 에서 추가 탈락하지 않는다.
     # briefing_dedup 은 auto_news_selector 를 import 하므로 순환 → 지연 import.
-    from briefing_dedup import get_history_articles, is_duplicate_article
-    history = get_history_articles(d1_query)
-    fresh = [a for a in passed if not is_duplicate_article(a, history)[0]]
-    if len(fresh) != len(passed):
-        log(f"이미 브리핑됨 {len(passed) - len(fresh)}건 제외 → 신선 후보 {len(fresh)}건")
-    passed = fresh
+    from briefing_dedup import filter_duplicates
+    passed, removed = filter_duplicates(passed, d1_query)
+    if removed:
+        log(f"이미 브리핑됨 {len(removed)}건 제외 → 신선 후보 {len(passed)}건")
+        for art, reason in removed:
+            log(f"    [{reason}] {(art.get('title') or '')[:50]}")
     if not passed:
         log("신선 후보 없음 — 브리핑 건너뜀")
         return []

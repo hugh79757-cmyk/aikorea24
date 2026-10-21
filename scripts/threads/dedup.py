@@ -92,8 +92,14 @@ def compute_similarity(title1, original_title1, desc1,
     # EN-EN Jaccard on original_title
     if en1 and en2:
         result['jaccard_en'] = _set_jaccard(en1, en2)
+        # AIK24-PIPE-08: 공유 토큰 수·합집합 크기도 남긴다.
+        # "토큰 1개만 겹친" 경우는 jaccard 0.33 이어도 근거가 약하다(아래 is_same_topic 참조).
+        result['en_shared'] = len(en1 & en2)
+        result['en_union'] = len(en1 | en2)
     else:
         result['jaccard_en'] = 0.0
+        result['en_shared'] = 0
+        result['en_union'] = 0
 
     # KO-KO Jaccard on combined title keywords
     ko1 = _extract_ko_keywords(title1)
@@ -139,6 +145,35 @@ def compute_similarity(title1, original_title1, desc1,
     return result
 
 
+def has_topic_overlap(sim):
+    """주제어(토큰) 겹침 여부 — **엔티티 규칙을 제외한** 판정.
+
+    is_same_topic 의 주제어 조항만 떼어낸 값이다:
+      - KO-KO: jaccard_ko ≥ 0.25
+      - EN-EN: jaccard_en ≥ 0.30
+      - 공통(fallback): jaccard_all ≥ 0.15
+
+    왜 필요한가 (AIK24-PIPE-08):
+      AI 뉴스 기사는 공통 엔티티 풀(OpenAI · Meta · Anthropic · AI · IT · API)을
+      공유하므로 엔티티 겹침만으로는 "같은 주제" 근거가 되지 못한다.
+      2026-10-21 실측 — 범용 엔티티 {AI, IT} 만 겹친 미발행 기사(56500)가
+      local_semantic 으로 탈락해 브리핑이 0건이 되었다.
+    """
+    return (sim.get('jaccard_ko', 0.0) >= 0.25
+            or sim.get('jaccard_en', 0.0) >= 0.30
+            or sim.get('jaccard_all', 0.0) >= 0.15)
+
+
+def is_topic_related(title1, original_title1, desc1,
+                     title2, original_title2, desc2):
+    """두 기사가 **주제어로** 겹치는지 (엔티티 규칙 제외)."""
+    sim = compute_similarity(
+        title1, original_title1, desc1,
+        title2, original_title2, desc2,
+    )
+    return has_topic_overlap(sim)
+
+
 def is_same_topic(title1, original_title1, desc1,
                   title2, original_title2, desc2):
     """동일 주제 여부 판정 — 언어 통합
@@ -148,11 +183,15 @@ def is_same_topic(title1, original_title1, desc1,
           → Jaccard ≥ 0.30 OR entity_overlap ≥ 4
       - KO-KO: 모두 original_title 미보유, 한글 제목
           → jaccard_ko ≥ 0.25
-          → entity_overlap ≥ 2 (영문 capitalized entity가 한글 제목에 있는 경우만)
+          → entity_overlap ≥ 4 AND 주제어 겹침 (AIK24-PIPE-08)
       - Mixed: 한쪽만 original_title 보유
           → jaccard_all ≥ 0.15 (description 포함 키워드)
-          → entity_overlap ≥ 1 AND jaccard_all ≥ 0.10
+          → entity_overlap ≥ 2 AND jaccard_all ≥ 0.10 (AIK24-PIPE-08)
     + Fallback: jaccard_all ≥ 0.30
+
+    AIK24-PIPE-08(2026-10-21 브리핑 0건): 엔티티 임계와 "엔티티 단독 판정 금지"를
+    세 언어 모드에 통일했다. 근거는 같은 파일의 EN-EN 주석(2026-09-29 실측:
+    entity_overlap ≥ 2 가 수백 건 오탐 → 풀이 2건으로 고갈)이다.
     """
     sim = compute_similarity(
         title1, original_title1, desc1,
@@ -165,7 +204,14 @@ def is_same_topic(title1, original_title1, desc1,
     has_ko = hk1 and hk2
 
     if he1 and he2:
-        if sim['jaccard_en'] >= 0.30:
+        # AIK24-PIPE-08: Jaccard 0.30 은 **공유 토큰 2개 이상**일 때만 근거로 본다.
+        #   토큰 1개만 겹치면 분모가 작아 jaccard 0.33 이 나오지만 근거는 노이즈다.
+        #   근거: 2026-10-21 실측 — "OpenRouter 무료 모델 (:free 태그)"(56082)와
+        #         "[무료 LLM] beam-free"(56206) 가 공유 토큰 'free' 1개(jaccard 0.33)만으로
+        #         local_semantic 이 되어 미발행 기사가 탈락했다.
+        #   예외: 토큰 집합이 완전히 같은 경우(identical)는 중복이 확실하다.
+        if sim['jaccard_en'] >= 0.30 and (sim['en_shared'] >= 2
+                                         or sim['en_shared'] == sim['en_union']):
             return True
         # entity_overlap alone (>=4) is a weak signal — AI news articles share
         # a tiny entity pool (OpenAI, Meta, Anthropic, AI). Two shared entities
@@ -179,13 +225,22 @@ def is_same_topic(title1, original_title1, desc1,
     elif not he1 and not he2 and has_ko:
         if sim['jaccard_ko'] >= 0.25:
             return True
-        if sim['entity_overlap'] >= 2:
+        # AIK24-PIPE-08: KO-KO 도 EN-EN 과 같은 기준을 적용한다.
+        #   ① 엔티티 임계 2 → 4 (EN-EN 과 동일)
+        #   ② 엔티티 단독 판정 금지 — 주제어(토큰) 겹침을 동시 요구
+        # 근거: 2026-10-21 실측 — 범용 엔티티 {AI, IT} 만 겹친 미발행 기사(56500)가
+        #       local_semantic 으로 탈락해 그날 브리핑이 0건이 되었다.
+        if sim['entity_overlap'] >= 4 and has_topic_overlap(sim):
             return True
 
     else:
         if sim['jaccard_all'] >= 0.15:
             return True
-        if sim['entity_overlap'] >= 1 and sim['jaccard_all'] >= 0.10:
+        # AIK24-PIPE-08: 엔티티 1개 겹침은 노이즈다 — EN-EN 전례(2 → 4)를 Mixed 에도
+        # 적용하고, 주제어 겹침(jaccard_all ≥ 0.10)을 동시 요구한다.
+        # 근거: 2026-10-21 실측 — {OpenRouter} 1개만 겹친 미발행 기사(56082)가
+        #       local_semantic 으로 탈락했다.
+        if sim['entity_overlap'] >= 2 and sim['jaccard_all'] >= 0.10:
             return True
 
     if sim['jaccard_all'] >= 0.30:

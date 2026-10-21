@@ -41,7 +41,8 @@ def load_env(path):
                     k, v = line.split('=', 1)
                     os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
-load_env(os.path.join(_PROJECT_DIR, '.env'))  # 2026-10-10 BRIEF-01: PROJECT_DIR은 scripts/로 재할당돼 루트 .env를 못 읽었다
+# AIK24-PIPE-08 B-6: load_env 호출은 main() 안에서 한다 (module import 시점에는 하지 않는다).
+# 2026-10-10 BRIEF-01: PROJECT_DIR 은 scripts/ 로 재할당돼 루트 .env 를 못 읽었다 → _PROJECT_DIR 을 쓴다.
 
 
 # AIK24-PIPE-ALERT-01: run_pipeline.summary 의 실제 건수를 그대로 알림에 싣는다.
@@ -62,6 +63,47 @@ def _counts_text(output):
     return news_txt, brief_txt, brief_n
 
 
+# AIK24-PIPE-08 B-2: run_pipeline 요약의 경고 블록("⚠️  경고: N건" + "    - 사유")을
+# 읽어 알림 본문에 싣는다 — 조기 경보 사유(후보 풀 부족·수집 단계 이상)를 운영자가
+# 텔레그램에서 바로 본다.
+# ⚠ + 선택적 VS16 (U+26A0 U+FE0F) — run_pipeline.py 가 출력하는 경고 헤더와 맞춘다.
+# run_pipeline 의 log() 는 각 줄 앞에 "[HH:MM:SS] " 타임스탬프를 붙이므로 허용한다.
+_LOG_PREFIX_RE = re.compile(r"^\[[^\]\n]*\][ \t]*")
+_WARNING_HEADER_RE = re.compile(
+    r"^(?:\[[^\]\n]*\][ \t]*)?\u26a0\ufe0f?[ \t]+경고:[ \t]*(\d+)건[ \t]*$", re.M)
+
+
+def _strip_log_prefix(line):
+    """run_pipeline.log() 의 '[HH:MM:SS] ' 접두를 벗긴다."""
+    return _LOG_PREFIX_RE.sub("", line)
+
+
+def _warning_lines(output):
+    """요약 경고 블록에서 사유 줄만 뽑는다 (없으면 빈 리스트)."""
+    text = output or ""
+    m = _WARNING_HEADER_RE.search(text)
+    if not m:
+        return []
+    lines = []
+    for raw in text[m.end():].splitlines():
+        stripped = _strip_log_prefix(raw).strip()
+        if not stripped:
+            continue
+        if stripped.startswith("- "):
+            lines.append(stripped[2:].strip())
+            continue
+        break
+    return lines
+
+
+def _warning_block(output):
+    """알림 본문용 경고 블록 (비어 있으면 빈 문자열)."""
+    warns = _warning_lines(output)
+    if not warns:
+        return ""
+    return "\n".join(f"⚠️ {html.escape(w)}" for w in warns)
+
+
 def main():
     parser = argparse.ArgumentParser(description="aikorea24 파이프라인 실행기 + 텔레그램 알림 (나머지 인자는 run_pipeline.py로 전달)")
     parser.add_argument("--no-email", action="store_true",
@@ -69,6 +111,13 @@ def main():
     args, _ = parser.parse_known_args()
     if args.no_email:
         print("[pipeline] --no-email: 이메일 발송 건너뜀")
+
+    # AIK24-PIPE-08 B-6: 환경변수 로드를 모듈 import 시점이 아니라 main() 안으로 옮겼다.
+    # 이유: import 시점에 ~/.env.common·.env 를 읽으면 테스트가 모듈만 import 해도
+    # os.environ 에 실제 토큰이 주입된다. 동작은 동일하다 — send_telegram 은 main() 안에서만
+    # 호출되고, env 는 그 전에 로드된다.
+    # 2026-10-10 BRIEF-01: PROJECT_DIR 은 scripts/ 로 재할당돼 루트 .env 를 못 읽는다 → _PROJECT_DIR.
+    load_env(os.path.join(_PROJECT_DIR, '.env'))
 
     now = datetime.now().strftime('%Y-%m-%d %H:%M')
     print(f"=" * 60)
@@ -107,6 +156,9 @@ def main():
         
         # 결과 메시지 생성 (실제 브리핑 건수를 함께 알림 — AIK24-PIPE-ALERT-01)
         news_txt, brief_txt, brief_n = _counts_text(output)
+        # AIK24-PIPE-08 B-2: 조기 경보 사유(후보 풀 부족·수집 단계 이상)를 알림에 싣는다.
+        warn_block = _warning_block(output)
+        warn_line = f"\n\n{warn_block}" if warn_block else ""
         if result.returncode == 0:
             body = html.escape(output[-1000:] if len(output) > 1000 else output)
             # 0건이면 "발행했다"고 말하지 않는다 (성공/실패 어느 쪽이든 동일).
@@ -115,7 +167,7 @@ def main():
             message = f"""✅ <b>aikorea24 파이프라인 완료</b>
 ⏰ {now}
 
-📰 선정 뉴스: {news_txt} · {brief_line}
+📰 선정 뉴스: {news_txt} · {brief_line}{warn_line}
 
 <pre>{body}</pre>"""
 
@@ -127,7 +179,7 @@ def main():
             message = f"""❌ <b>aikorea24 파이프라인 실패</b>
 ⏰ {now}
 
-📰 선정 뉴스: {news_txt} · 📖 생성 브리핑: {brief_txt}
+📰 선정 뉴스: {news_txt} · 📖 생성 브리핑: {brief_txt}{warn_line}
 
 에러:
 <pre>{err_body}</pre>
@@ -135,8 +187,12 @@ def main():
 출력:
 <pre>{out_body}</pre>"""
 
-        # 텔레그램 발송
+        # 텔레그램 발송 (성공/실패 경로 모두 **1회만** 발송)
         send_telegram(message)
+
+        # AIK24-PIPE-08 B-6: 내부 파이프라인의 종료코드를 그대로 전파한다.
+        # (이전에는 버리고 항상 exit 0 → launchd·모니터링이 실패를 실패로 보지 못함)
+        return result.returncode
 
     except subprocess.TimeoutExpired:
         message = f"""⏰ <b>aikorea24 파이프라인 타임아웃</b>
@@ -144,6 +200,7 @@ def main():
 
 10분 초과"""
         send_telegram(message)
+        return 124  # 타임아웃은 실패 — launchd 가 알아야 한다
     except Exception as e:
         err = html.escape(str(e))
         message = f"""❌ <b>aikorea24 파이프라인 에러</b>
@@ -151,6 +208,8 @@ def main():
 
 {err}"""
         send_telegram(message)
+        return 1
 
 if __name__ == '__main__':
-    main()
+    # AIK24-PIPE-08 B-6: 내부 파이프라인의 returncode 를 그대로 프로세스 종료코드로 쓴다.
+    sys.exit(main())
