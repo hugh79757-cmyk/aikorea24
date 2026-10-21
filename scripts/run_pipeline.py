@@ -33,6 +33,40 @@ def log(msg):
     print(f"[{ts}] {msg}")
 
 
+class _StdoutTee:
+    """표준출력을 그대로 화면에 흘려보내면서 문자열로 모은다.
+
+    왜 필요한가 (AIK24-PIPE-ALERT-01): auto_briefing 은 브리핑을 못 만든 사유를
+    로그 문자열로만 남긴다("이미 오늘 브리핑 발행됨" 등). 파이프라인이 그 사유를
+    알아야 "왜 0건"을 보고할 수 있다. 출력을 삼키지 않고 그대로 보여준다
+    (launchd 로그가 달라지지 않는다).
+    """
+
+    def __init__(self, orig):
+        self._orig = orig
+        self._parts = []
+
+    def write(self, s):
+        self._parts.append(s)
+        self._orig.write(s)
+        return len(s)
+
+    def flush(self):
+        try:
+            self._orig.flush()
+        except Exception:  # noqa: BLE001 — flush 실패로 파이프라인을 죽이지 않는다
+            pass
+
+    def getvalue(self):
+        return "".join(self._parts)
+
+    def __getattr__(self, name):
+        # isatty/encoding/fileno 등 나머지는 원본 stdout 으로 위임한다.
+        if name.startswith("_"):
+            raise AttributeError(name)
+        return getattr(self._orig, name)
+
+
 def step_news_selection():
     """Step 1: 뉴스 선정"""
     import auto_news_selector
@@ -57,6 +91,36 @@ def step_briefing(articles):
     else:
         log("  선정된 기사가 없어 브리핑을 건너뜁니다.")
         return None
+
+
+def step_briefing_with_log(articles):
+    """Step 2 래퍼 — (briefing_id, auto_briefing 로그) 반환.
+
+    원래 stdout 을 그대로 흘려보내므로 화면·launchd 로그는 그대로고, 로그 문자열만
+    추가로 얻는다 (AIK24-PIPE-ALERT-01).
+    """
+    orig = sys.stdout
+    tee = _StdoutTee(orig)
+    sys.stdout = tee
+    try:
+        result = step_briefing(articles)
+    finally:
+        sys.stdout = orig
+    return result, tee.getvalue()
+
+
+def briefing_cause_of(briefing_log, selected_count):
+    """브리핑 0건 원인 추정 (best effort) — auto_briefing 로그 문자열 기준."""
+    log_text = briefing_log or ""
+    if "이미 오늘 브리핑 발행됨" in log_text or "이미 오늘 브리핑이 published 입니다" in log_text:
+        return "오늘 브리핑이 이미 발행됨(하루 1회 정책) — 신규 0건"
+    if "선정된 기사 없음" in log_text or "수집된 뉴스 없음" in log_text:
+        return "선정된 기사 0건"
+    if "브리핑 생성 실패" in log_text or "D1 실행 오류" in log_text:
+        return "D1 저장 실패"
+    if not selected_count:
+        return "선정된 뉴스 0건"
+    return "브리핑 id 미반환 (저장 실패 또는 이미 발행됨)"
 
 
 def step_blog_link():
@@ -171,6 +235,8 @@ def main():
     start_time = datetime.now()
     summary = {
         "news": [],
+        # AIK24-PIPE-ALERT-01: 실제 저장된 브리핑 수 (선정 건수와 반드시 분리한다)
+        "briefings": 0,
         "thumbnails": [],
         "errors": [],
     }
@@ -232,15 +298,38 @@ def main():
 
     # Step 2: 브리핑 생성 (step 1의 기사 목록 전달)
     briefing_id = None
+    briefing_count = 0
+    briefing_cause = ""
+    briefing_exc = False
     if not args.skip_briefing:
         try:
-            briefing_id = step_briefing(articles)
+            briefing_id, briefing_log = step_briefing_with_log(articles)
+            # AIK24-PIPE-ALERT-01: "생성 브리핑" 은 실제 저장된 건수만 센다.
+            # auto_briefing.save_briefing() 이 D1 INSERT 후 새 row id 를 돌려주고,
+            # auto_briefing.main() 은 그 id 를 그대로 반환한다(없으면 None = 저장 실패/건너뜀).
+            briefing_count = 1 if briefing_id else 0
+            if not briefing_count:
+                briefing_cause = briefing_cause_of(briefing_log, len(articles))
+                log(f"  ⚠️ 브리핑 0건 — {briefing_cause}")
         except Exception as e:
+            briefing_exc = True
             log(f"브리핑 생성 에러: {e}")
             traceback.print_exc()
             summary["errors"].append(f"브리핑 생성: {e}")
     else:
         log("⏭ 브리핑 생성 건너뜀")
+        briefing_cause = "단계 건너뜀(--skip-briefing)"
+    summary["briefings"] = briefing_count
+
+    # AIK24-PIPE-ALERT-01: 브리핑 0건 = 실패 (가짜 성공 알림 방지).
+    # 2026-10-21 실측: 뉴스 3건 선정 → 브리핑 0건 저장인데도 errors 가 비어 있어
+    # "✅ 에러 없음"(exit 0)으로 끝나고, 텔레그램은 "Briefing published" 를 알렸다.
+    # 선정 건수와 실제 저장 건수를 분리해, 0건이면 같은 errors 구조에 넣는다.
+    # 제외: --skip-briefing / --skip-news 는 단계 자체를 돌지 않은 의도된 실행이다
+    # (문서화된 "이메일만 단독 실행" 워크플로의 exit 0 을 깨지 않기 위해).
+    if (not args.skip_briefing and not args.skip_news
+            and briefing_count == 0 and not briefing_exc):
+        summary["errors"].append(f"브리핑 미생성: {briefing_cause or '사유 미상'}")
 
     log("")
 
@@ -318,6 +407,7 @@ def main():
     log("╚══════════════════════════════════════╝")
     log(f"  소요 시간: {elapsed:.1f}초")
     log(f"  선정 뉴스: {len(summary['news'])}건")
+    log(f"  생성 브리핑: {summary['briefings']}건")
     log(f"  썸네일:   {len(summary['thumbnails'])}건")
 
     if summary["errors"]:

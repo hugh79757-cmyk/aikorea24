@@ -9,6 +9,7 @@ import os
 import sys
 import subprocess
 import html
+import re
 from datetime import datetime
 
 # 프로젝트 루트 먼저 path에 추가
@@ -41,6 +42,24 @@ def load_env(path):
                     os.environ[k.strip()] = v.strip().strip('"').strip("'")
 
 load_env(os.path.join(_PROJECT_DIR, '.env'))  # 2026-10-10 BRIEF-01: PROJECT_DIR은 scripts/로 재할당돼 루트 .env를 못 읽었다
+
+
+# AIK24-PIPE-ALERT-01: run_pipeline.summary 의 실제 건수를 그대로 알림에 싣는다.
+# "📖 Briefing published" 같은 뭉뚱그린 문구는 0건일 때도 그대로 나가서
+# "없는 것을 발행했다고 알리는" 사고를 만든다 (2026-10-21 실측).
+def _parse_count(output, label):
+    """run_pipeline 출력에서 '<label>: N건' 을 뽑는다. 없으면 None(확인 불가)."""
+    hits = re.findall(rf"{re.escape(label)}\s*:\s*(\d+)\s*건", output or "")
+    return int(hits[-1]) if hits else None
+
+
+def _counts_text(output):
+    """(선정 뉴스 표기, 생성 브리핑 표기) — 파싱 실패 시 '확인 불가'."""
+    news_n = _parse_count(output, "선정 뉴스")
+    brief_n = _parse_count(output, "생성 브리핑")
+    news_txt = f"{news_n}건" if news_n is not None else "확인 불가"
+    brief_txt = f"{brief_n}건" if brief_n is not None else "확인 불가"
+    return news_txt, brief_txt, brief_n
 
 
 def main():
@@ -86,13 +105,17 @@ def main():
             print("=== 에러 ===")
             print(error)
         
-        # 결과 메시지 생성 (브리핑 발행 완료)
+        # 결과 메시지 생성 (실제 브리핑 건수를 함께 알림 — AIK24-PIPE-ALERT-01)
+        news_txt, brief_txt, brief_n = _counts_text(output)
         if result.returncode == 0:
             body = html.escape(output[-1000:] if len(output) > 1000 else output)
+            # 0건이면 "발행했다"고 말하지 않는다 (성공/실패 어느 쪽이든 동일).
+            brief_line = (f"📖 생성 브리핑: {brief_txt} (발행 없음)"
+                          if brief_n == 0 else f"📖 생성 브리핑: {brief_txt}")
             message = f"""✅ <b>aikorea24 파이프라인 완료</b>
 ⏰ {now}
 
-📰 News selection + 📖 Briefing published
+📰 선정 뉴스: {news_txt} · {brief_line}
 
 <pre>{body}</pre>"""
 
@@ -103,6 +126,8 @@ def main():
             out_body = html.escape(output[-500:] if len(output) > 500 else output)
             message = f"""❌ <b>aikorea24 파이프라인 실패</b>
 ⏰ {now}
+
+📰 선정 뉴스: {news_txt} · 📖 생성 브리핑: {brief_txt}
 
 에러:
 <pre>{err_body}</pre>

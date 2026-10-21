@@ -20,6 +20,24 @@ ROOT = Path(__file__).resolve().parent.parent
 NPM = shutil.which("npm") or "/opt/homebrew/bin/npm"
 DEPLOY_LOCK = Path("/tmp/wrangler_deploy.lock")
 
+# AIK24-BW-01: Astro 7 + @astrojs/cloudflare 산출물.
+#   - 워커 진입점: dist/server/entry.mjs  (dist/server/wrangler.json 의 "main")
+#   - 정적 자산:   dist/client/         (같은 wrangler.json 의 assets.directory)
+# 옛 Astro 5 Pages 산출물(dist/index.html)은 이 프로젝트에 없다 → 그걸 보면
+# "빌드 성공"만 보고 아무것도 검증하지 않는다 (2026-10-06~15 회 연속 무의미 통과).
+SERVER_ENTRY = ROOT / "dist" / "server" / "entry.mjs"
+CLIENT_ASSETS = ROOT / "dist" / "client"
+
+
+def build_artifacts_missing():
+    """실제 배포 산출물이 없으면 목록을 돌려준다. 없으면 [] (=정상)."""
+    missing = []
+    if not SERVER_ENTRY.is_file():
+        missing.append("dist/server/entry.mjs (워커 진입점)")
+    if not CLIENT_ASSETS.is_dir() or not any(CLIENT_ASSETS.iterdir()):
+        missing.append("dist/client/ (정적 자산 디렉터리)")
+    return missing
+
 
 def load_env():
     """dotenv 수동 파싱 — bash source 금지(값에 $ 또는 # 있으면 오염)"""
@@ -73,15 +91,21 @@ def main():
 
     r = subprocess.run([NPM, "run", "build"], cwd=ROOT, capture_output=True, text=True)
     if r.returncode == 0:
-        idx = ROOT / "dist" / "index.html"
+        # AIK24-BW-01: exit 0 만으로는 빌드 성공이 아니다 — 배포 가능한 산출물이
+        # 실제로 만들어졌는지 확인한다. 없으면 실패로 본다.
+        missing = build_artifacts_missing()
+        if missing:
+            detail = "빌드 산출물 누락: " + ", ".join(missing)
+            print(f"[FAIL] {detail}")
+            load_env()
+            notify(f"🚨 aikorea24 빌드 산출물 누락\n{detail}")
+            return 1
         stamp = (
-            __import__("datetime").datetime.fromtimestamp(idx.stat().st_mtime).strftime(
+            __import__("datetime").datetime.fromtimestamp(SERVER_ENTRY.stat().st_mtime).strftime(
                 "%Y-%m-%d %H:%M"
             )
-            if idx.exists()
-            else "dist/index.html 없음"
         )
-        print(f"[ok] 빌드 성공 (exit 0) — dist/index.html mtime={stamp}")
+        print(f"[ok] 빌드 성공 (exit 0) — dist/server/entry.mjs mtime={stamp}")
         return 0
 
     detail = build_error_detail(r.stdout, r.stderr)

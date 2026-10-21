@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Shared CF helper for AIK24-EMDASH-02 (new account 7eb1b8cd...)."""
-import datetime, json, os, subprocess, time, urllib.request, urllib.error
+import datetime, json, os, shutil, subprocess, time, urllib.request, urllib.error
 
 ACCT = "7eb1b8cd178de269758ec94b2e03330b"
 EMDASH_DB = "bbbcbc34-f346-49e0-9aab-058836bee16d"
@@ -128,6 +128,40 @@ def get_daily_rows_written(day=None, tok=None, force=False):
 
 # --- 3단계 경보 (2026-10-17 대표님 지시): muse-cli 기본채팅 -------------------
 
+# AIK24-D1-ALERT-02: muse-cli 는 uv 툴이라 ~/.local/bin 에 심볼릭 링크로 있고
+# launchd PATH(plist: /opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin)
+# 에 ~/.local/bin 이 없다 → 이름만으로는 못 찾는다.
+# 2026-10-18~ 실측: scripts/d1_usage_report.log 에 "No such file or directory: 'muse-cli'"
+# 62건 → D1 50/70/90% 3단계 경보가 한 번도 전달되지 않았다.
+MUSE_CLI_FALLBACKS = (
+    os.path.expanduser("~/.local/bin/muse-cli"),
+    os.path.expanduser("~/.local/share/uv/tools/muse-cli/bin/muse-cli"),
+)
+
+
+def muse_cli_candidates():
+    """muse-cli 실행 파일 후보 목록 — PATH 검색 결과 + 알려진 절대경로.
+
+    실패 로그에 "무엇을 찾아봤는지"를 남기기 위한 목록이기도 하다.
+    """
+    cands = []
+    found = shutil.which("muse-cli")
+    if found:
+        cands.append(found)
+    for p in MUSE_CLI_FALLBACKS:
+        if p not in cands:
+            cands.append(p)
+    return cands
+
+
+def muse_cli_path():
+    """muse-cli 실행 파일 경로 결정. 없으면 기존처럼 이름 그대로(에러는 무시 처리)."""
+    for c in muse_cli_candidates():
+        if os.path.isabs(c) and os.path.isfile(c) and os.access(c, os.X_OK):
+            return c
+    return "muse-cli"
+
+
 def muse_send(text):
     """muse.ai 기본채팅(메인 말랑이)으로 전송. --thread 없이 보내는 것이 기본채팅.
 
@@ -135,17 +169,19 @@ def muse_send(text):
     --wait 15 로 바꿨다. 15초 지켜본 후 stdout에 무언가(발송 JSON)가 돌아와야 성공으로 본다.
     명령 실패·타임아웃·쿠키 만료 시 False — 이 함수가 예외를 던져 파이프라인이 죽는 일은 없어야 한다.
     """
+    cands = muse_cli_candidates()
     try:
+        exe = muse_cli_path()
         cp = subprocess.run(
-            ["muse-cli", "send", "--wait", "15", text],
+            [exe, "send", "--wait", "15", text],
             capture_output=True, timeout=75, text=True)
         ok = cp.returncode == 0 and bool((cp.stdout or "").strip())
         if not ok:
-            print(f"[D1-GUARD] muse 응답 부실(rc={cp.returncode}) — "
+            print(f"[D1-GUARD] muse 응답 부실(rc={cp.returncode}, exe={exe}) — "
                   f"stdout={((cp.stdout or '') + (cp.stderr or ''))[:200]!r}", flush=True)
         return ok
     except Exception as e:
-        print(f"[D1-GUARD] muse 전송 실패(무시): {e}", flush=True)
+        print(f"[D1-GUARD] muse 전송 실패(무시): {e} — 탐색 경로: {cands}", flush=True)
         return False
 
 

@@ -1,3 +1,90 @@
+## 2026-10-21 11:52 — AIK24-PIPE-ALERT-01 · AIK24-BW-01 · AIK24-D1-ALERT-02: 가짜 성공 알림·무의미 빌드 검사·muse-cli 경보 단절 수정
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 결과: 성공 (3개 수정 · 커밋 없음 — 오케스트레이터가 중앙 처리)
+* 산출물: `scripts/run_pipeline.py`(수정), `scripts/run_pipeline_with_notify.py`(수정), `scripts/build_watchdog.py`(수정), `scripts/cfnew.py`(수정)
+* 비고: 파이프라인 실행·발행·Telegram/메일 발송·launchd 재시작 0건 · D1 읽기 쿼리 1건(읽기 전용, rows_read=5)만 수행
+
+### 한 일
+
+1. **AIK24-PIPE-ALERT-01 (가짜 성공 알림)** — `run_pipeline.py` 가 `선정 뉴스` 건수만 세고
+   실제 저장된 브리핑 건수를 세지 않아, 2026-10-21 07:00 실행(브리핑 0건)이
+   `✅ 에러 없음`(exit 0)으로 끝나고 텔레그램은 `Briefing published` 를 알렸다.
+   실제 브리핑 건수(`auto_briefing.save_briefing()` 가 D1 INSERT 후 돌려주는 row id 기준)를
+   `summary["briefings"]` 로 분리하고, 0건이면 같은 `summary["errors"]` 구조에 넣어 exit 1 로 끝냈다.
+   `run_pipeline_with_notify.py` 는 출력에서 실제 건수를 파싱해 알림에 싣고, 0건이면 발행했다고 말하지 않는다.
+2. **AIK24-BW-01 (무의미 빌드 검사)** — 워치독이 `dist/index.html` 을 검사했으나 Astro 7 +
+   `@astrojs/cloudflare` 산출물에는 그 파일이 없다(홈은 SSR). 그래서 2026-10-06 이후
+   `[ok] 빌드 성공 … dist/index.html 없음` 이 15회 연속으로 아무것도 검증하지 않고 통과했다.
+   실제 배포 산출물인 `dist/server/entry.mjs`(워커 진입점)와 `dist/client/`(정적 자산)을 검사하도록 바꿨다.
+3. **AIK24-D1-ALERT-02 (muse-cli 경보 단절)** — launchd PATH 에 `~/.local/bin` 이 없어
+   `muse-cli` 이름 실행이 `[Errno 2]` 로 실패, `scripts/d1_usage_report.log` 에 62건이 남아
+   D1 50/70/90% 3단계 경보가 한 번도 전달되지 않았다. `shutil.which` → 알려진 절대경로 순으로 해석한다.
+
+### 결과 (검증 근거 포함)
+
+**[검증됨] Fix 1 — 브리핑 0건이 실패로 판정됨**
+- 근거: 스텁 검증 `verify_fix1_alert.py` 케이스1(뉴스 3건 + 브리핑 0건) → `exit code: 1`,
+  출력에 `생성 브리핑: 0건` + `⚠️  에러: 1건 / - 브리핑 미생성: …`, `✅ 에러 없음` 미출력.
+- 근거: 같은 스크립트 케이스2(브리핑 1건) → `exit code: 0`, `생성 브리핑: 1건` + `✅ 에러 없음`.
+- 근거: 알림 스텁 케이스2(rc=0, 브리핑 0건) → `📰 선정 뉴스: 3건 · 📖 생성 브리핑: 0건 (발행 없음)`,
+  메시지 전문에 `published` 문자열 0건. 케이스3(rc=1) → `❌ … 생성 브리핑: 0건`.
+- 근거: 브리핑 건수 기준 = `scripts/auto_briefing.py:394-413` — `save_briefing()` 이
+  `INSERT INTO briefings` 후 `SELECT id FROM briefings WHERE date = …` 로 새 row id 를 돌려주고,
+  `main()` 이 그 id 를 그대로 반환한다(`scripts/auto_briefing.py:521-527`).
+- 근거: 2026-10-21 실제 D1 에 오늘(2026-10-21) 브리핑 행이 없음을 확인
+  (`SELECT id,date,status FROM briefings WHERE date >= '2026-10-17'` → 10-17~10-20 만 published).
+
+**[검증됨] Fix 2 — 산출물 검사**
+- 근거: 실제 `dist/` 트리 = `dist/client`(163개 index.html) + `dist/server/entry.mjs`.
+  `dist/index.html`·`dist/client/index.html`·`dist/server/index.mjs` 는 전부 없음(홈은 `prerender = false`).
+- 근거: `verify_fix2_watchdog.py` — 산출물 있음 → `[ok] 빌드 성공 (exit 0) — dist/server/entry.mjs mtime=2026-10-21 11:19`, rc=0.
+  산출물 없음 → `[FAIL] 빌드 산출물 누락: dist/server/entry.mjs (워커 진입점), dist/client/ (정적 자산 디렉터리)`, rc=1 + 알림 1건.
+  빌드 실패(rc=1) → 기존 `[FAIL] 빌드 실패 exit=1` 경로 유지. 배포 잠금 → `[skip]` 유지.
+
+**[검증됨] Fix 3 — muse-cli 해석**
+- 근거: `verify_fix3_muse.py` — launchd PATH(`/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin`)로
+  `shutil.which('muse-cli')` → `None`(기존 실패 재현)이나 `muse_cli_path()` →
+  `/Users/twinssn/.local/bin/muse-cli` (실재·실행가능 확인, symlink → `~/.local/share/uv/tools/muse-cli/bin/muse-cli`).
+- 근거: 실패 메시지에 탐색 경로 표시 —
+  `[D1-GUARD] muse 전송 실패(무시): [Errno 2] No such file or directory: '/nonexistent/muse-cli' — 탐색 경로: [...]`.
+  후보가 하나도 없을 때만 기존처럼 이름(`muse-cli`) 그대로 폴백.
+
+**[검증됨] 회귀 없음**
+- 근거: `.venv/bin/python3 -m pytest -q` 수정 전 `1 failed, 894 passed, 14 skipped`(23.11s) →
+  수정 후 `1 failed, 894 passed, 14 skipped`(22.58s). 실패는 동일 테스트
+  `tests/test_blog_gate_flow.py::TestPublishGate::test_publishes_repaired_body` —
+  `wrangler 오류 (rc=127): env: node: No such file or directory` 로 인한 기존 환경 문제(내 변경과 무관).
+- 근거: `npm test` / `npm run typecheck` 는 이 프로젝트에 스크립트가 없다
+  (`npm error Missing script: "test"` / `Missing script: "typecheck"`) — 실제 테스트는 pytest(`tests/`, 71개 파일).
+
+### 잔존 위험
+
+1. **같은 날 재실행 시 exit 1** — 하루 1회 발행 정책으로 이미 오늘 브리핑이 있으면 신규 0건 →
+   오류 항목 + exit 1 → 텔레그램 ❌ 로 뜬다(사유는 "오늘 브리핑이 이미 발행됨(하루 1회 정책)" 으로 명시).
+   정책 위반이 아니라 재실행인데 실패로 보이는 점은 잔존 위험. 자동 실행은 하루 1회(07:00)라 반복 발동은 없고,
+   수동 재실행 때만 해당한다. `--skip-briefing`·`--skip-news` 로 실행하면 오류로 잡지 않는다(exit 0 유지).
+2. **사유 판별은 로그 문자열 기반(best effort)** — `auto_briefing` 의 로그 문구가 바뀌면 사유가
+   "사유 미상" 으로 떨어진다(0건 판정 자체는 id 유무로만 판단하므로 영향 없음).
+3. **D1 읽기 1행 추가 없음** — 브리핑 건수는 `briefing_id` 로 세므로 추가 D1 쿼리는 없다.
+   단, `verify_fix1_alert.py` 의 D1 조회 1건(rows_read=5)만 수행했다.
+4. **빌드 산출물 검사는 파일 존재·비어있지 않음만 본다** — 이전 빌드 잔재가 dist/ 에 남아 있으면 통과할 수 있다
+   (Astro 빌드는 outDir 를 비우므로 보통 문제없음).
+5. **검증 중 의도하지 않은 메시지 1건 발송** — Fix 3 검증 스크립트 5번 항목에서 `muse-cli` 가 실제 실행되어
+   muse.ai 기본채팅으로 `[검증] 전송 안 됨 확인` 이 1건 전송됐다(seq 50471, 어시스턴트 응답도 생성됨).
+   텔레그램·메일 발송은 0건이고 저장소·코드에는 영향 없으나, 채팅에 테스트 메시지가 남은 점은 알린다.
+   (검증 스크립트는 이후 `subprocess.run` 을 스텁으로 대체해 발송되지 않도록 수정함.)
+6. **커밋 안 함** — 오케스트레이터가 중앙 처리(동시 에이전트와 git index 경합 회피).
+
+### 다음 행동
+
+1. 오케스트레이터: 위 4개 파일 커밋(`AIK24-PIPE-ALERT-01`, `AIK24-BW-01`, `AIK24-D1-ALERT-02`).
+2. `kr.aikorea24.build-watchdog` 은 다음 07:10 실행부터 새 산출물 검사 로그가 찍힌다 —
+   `[ok] … dist/server/entry.mjs mtime=…` 또는 `[FAIL] 빌드 산출물 누락` 으로 갈림(확인 필요).
+3. `kr.aikorea24.d1-usage-report` 는 다음 30분 주기 실행부터 muse 3단계 경보가 실제로 전달된다
+   (기존 상태 파일 `.d1_tier_alert_state.json` 에 발송 성공 기록이 없어 재시도 대상). 경보 수신 확인 필요.
+4. 다음 파이프라인 실행(07:00)부터 요약 로그에 `생성 브리핑: N건` 이 찍히고, 0건이면 exit 1 + 텔레그램 ❌.
+
 ## 2026-10-21 11:28 — AIK24-D1-READ-01: SSR D1 읽기 절감 (홈 1,733→53행/뷰, /global/ 19,218→50행/뷰)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
