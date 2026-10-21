@@ -22,6 +22,11 @@ try {
 
   const db = env.DB;
   if (db) {
+    // AIK24-D1-READ-01: 이 쿼리는 이미 LIMIT 1 로 상한이 걸려 있어 SQL 변경이 불필요했다.
+    // 비용이 컸던 이유는 idx_briefings_status_id(status, id) 인덱스 부재였다 —
+    // 기존 idx_briefings_status_date(status, date DESC) 로는 ORDER BY id DESC 를 못 만들어
+    // published 행 339개 전량을 temp b-tree 에 넣었다(671행 → 1행).
+    // 인덱스가 없으면 다시 671행으로 돌아가므로 sql/007_d1_read_reduction.sql 을 건드리지 말 것.
     briefing = await db.prepare(
       "SELECT * FROM briefings WHERE status = 'published' ORDER BY id DESC LIMIT 1"
     ).first();

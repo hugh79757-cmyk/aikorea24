@@ -1,3 +1,207 @@
+## 2026-10-21 11:28 — AIK24-D1-READ-01: SSR D1 읽기 절감 (홈 1,733→53행/뷰, /global/ 19,218→50행/뷰)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 결과: 성공 (인덱스 3건 원격 D1 적용 · 홈/글로벌 SSR 쿼리 재작성 · 빌드/배포 완료 · 커밋 없음)
+* 산출물: `sql/007_d1_read_reduction.sql`(신규), `schema.sql`(수정), `src/components/home/ToolsSection.astro`(수정), `src/pages/index.astro`(수정), `src/pages/global.astro`(수정), `scripts/d1_read_measure.py`(신규 계측 도구)
+* 비고: Worker Version ID `db104a18-057b-4cf1-b478-2325f9fa8538` · 발행/메일/Telegram 0건 · 커밋은 오케스트레이터가 중앙 처리
+
+### 한 일
+
+홈(`/`)과 `/global/` SSR 경로의 D1 과금 행(rows_read)을 줄였다.
+2026-10-20 UTC 4,190,000행(83.9%) 초과 근본 원인(홈 1,733행/뷰 · /global/ 19,218행/뷰)을
+인덱스 3건 + 도구 롤링 쿼리 재작성으로 해소했다. 표시 항목/순서는 변경하지 않았다.
+
+### 결과 (검증 근거 포함)
+
+**1. 변경 파일**
+
+| 파일 | before | after | 이유 |
+|---|---|---|---|
+| `sql/007_d1_read_reduction.sql` (신규) | — | `CREATE INDEX IF NOT EXISTS idx_briefings_status_id ON briefings(status, id)` / `idx_tool_submissions_status_updated ON tool_submissions(status, updated_at)` / `idx_news_category_created ON news(category, created_at DESC)` | 순서 정렬을 인덱스가 맡게 함 |
+| `schema.sql` | — | 위 3개 인덱스 수록 | 기존 규칙(006_news_indexes_alignment)대로 스키마 정합화 |
+| `src/components/home/ToolsSection.astro` | `FROM tools UNION ALL FROM tool_submissions WHERE status='published' ) ORDER BY updated_at DESC LIMIT ?` (전량 스캔) | 각 분기에 `ORDER BY updated_at DESC, id ASC LIMIT ?` 를 거는 bounded UNION + 외곽 `ORDER BY updated_at DESC, src ASC, rid ASC LIMIT ?` | 분기별 상한이 없으면 535행을 전부 읽고 정렬 버퍼에 적재 |
+| `src/pages/index.astro` | SQL 무변경 | SQL 무변경(주석만 추가) | 이미 `LIMIT 1` 로 상한이 걸려 있었음 — 비용 원인은 인덱스 부재 |
+| `src/pages/global.astro` | SQL 무변경 | SQL 무변경(주석만 추가) | 이미 `LIMIT 50` 로 상한이 걸려 있었음 — 비용 원인은 정렬용 인덱스 부재 |
+
+**2. 마이그레이션**
+- 파일: `sql/007_d1_read_reduction.sql` (기존 `sql/00N_*.sql` 관례 준수)
+- 원격 D1 적용: **적용 완료** — `aikorea24-db` / `3f4cedde-eabc-4d7c-b459-f6abe8733767` / 계정 `7eb1b8cd178de269758ec94b2e03330b`
+- 명령: `wrangler d1 execute aikorea24-db --remote --file=sql/007_d1_read_reduction.sql` (토큰 = `~/.env.common` 의 `CF_MIGRATE_TOKEN`, `CLOUDFLARE_API_TOKEN` 으로 주입 — 값 미출력)
+- 소요 시간: **4.94초** (wrangler meta: rows_read 39,752 / rows_written 19,716 / size_after 21,192,704 B)
+- 파괴적 변경 없음 (CREATE INDEX 뿐). 기존 `idx_briefings_status_date` · `idx_news_category` 는 삭제하지 않고 남겼다(읽기 비용 미세, DROP 은 파괴적이라 범위 외).
+
+**3. 측정표** (원격 D1 실제 쿼리, `meta.rows_read` 기준 — 계측 도구 `scripts/d1_read_measure.py`)
+
+| 쿼리 | before rows_read | after rows_read | 절감 | EXPLAIN diff |
+|---|---|---|---|---|
+| 홈 `briefings` (index.astro:26) | **671** | **1** | 670 | before: `SEARCH briefings USING INDEX idx_briefings_status_date` + `USE TEMP B-TREE FOR ORDER BY` → after: `SEARCH briefings USING INDEX idx_briefings_status_id (status=?)` (temp b-tree 소멸) |
+| 홈 `ToolsSection` UNION ALL | **1,062** | **52** | 1,010 | before: `SCAN tools` + `SCAN tool_submissions` + `USE TEMP B-TREE FOR ORDER BY` → after: `SCAN tools USING INDEX idx_tools_updated` + `SEARCH tool_submissions USING INDEX idx_tool_submissions_status_updated (status=?)` + 동률 구간만 `TEMP B-TREE FOR LAST TERM OF ORDER BY` |
+| 홈 `briefing_items` JOIN (변경 없음) | 7 | 7 | 0 | `SEARCH bi USING INDEX idx_bi_briefing` (이미 효율) |
+| **홈 합계** | **1,740** | **60** | **1,680** | 브리핑+툴 합계만 보면 1,733 → 53 |
+| `/global/` news | **19,218** | **50** | 19,168 | before: `SEARCH news USING INDEX idx_news_category` + `USE TEMP B-TREE FOR ORDER BY` → after: `SEARCH news USING INDEX idx_news_category_created (category=?)` (temp b-tree 소멸) |
+
+> 라이브 GraphQL 기준으로는 홈 합계 1,732 → 59행/뷰(브리핑 1 + 브리핑아이템 6 + 툴 52).
+
+**4. 표시 불변성 검증** — [검증됨]
+- 도구 롤링: 변경 전 쿼리 vs 변경 후 쿼리 **결과 8건이 원소 단위로 완전 동일**(이름·slug·tagline·category·price·korean_support·difficulty 전부 일치). 대조 명령: `python3 scripts/d1_read_measure.py --compare`
+- `/global/`: 변경 전 계획(`INDEXED BY idx_news_category` 로 강제 재현) vs 변경 후 쿼리 **결과 50건이 순서까지 완전 동일**. 불일치 0건.
+- 라이브 배포본(https://aikorea24.kr): 홈 도구 카드 8건 이름·slug 순서가 D1 기대값과 100% 일치, `/global/` 50건 제목 순서 불일치 0건.
+- 주의: `tools.updated_at` 은 날짜 단위라 동률이 생긴다. 동률 순서를 재현하지 않으면 **항목 자체가 달라졌다**(첫 시도는 AITraining.jobs 가 밀려나 4건 어긋남). 그래서 분기/외곽 모두에 `(updated_at DESC, id ASC)` 를 명시했다.
+
+**5. 빌드·배포** — [검증됨]
+- `npm run build`: **성공** (Server built in 15.29s / Complete!)
+- 타입체크: 프로젝트에 `npm run typecheck` 스크립트가 없어 `npx astro check` 로 대체. before **963 errors** → after **963 errors** (차분 0). 에러 라인 집합 diff 도 0줄.
+- 배포: `scripts/deploy.sh` 사용(.env 의 신계정 토큰 사용, 계정 검증 통과). **Worker Version ID: `db104a18-057b-4cf1-b478-2325f9fa8538`**
+
+**6. 라이브 실측(선택)** — [부분검증]
+- Cloudflare GraphQL `d1QueriesAdaptiveGroups`(dimensions{ query })로 SQL 문장별 rowsRead 확인.
+  배포 후(UTC 04시) 실측: `briefings` 1행/호출, 도구 롤링 **52행/호출**, `/global/` news **50행/호출**.
+  배포 전 같은 시간대(UTC 01~03시): `briefings` 671행/호출, 도구 롤링 1,055행/호출, `/global/` 19,218행/호출.
+- 한계: 계정 단위 일일 합계(`d1AnalyticsAdaptiveGroups`)는 분석 지연이 있어 배포 직후 값이 반영되지 않았다. 위 수치는 `d1QueriesAdaptiveGroups` 기준.
+
+**7. 예상 일 절감** — [부분검증]
+- 홈 1뷰: 1,740 → 60행 = **1,680행 절감**(브리핑+툴 기준 1,733 → 53 = 1,680행).
+- `/global/` 1뷰: 19,218 → 50행 = **19,168행 절감**.
+- **뷰 수 실측** — Cloudflare GraphQL `d1QueriesAdaptiveGroups`(dimensions{ query }) 24시간 창.
+  이 애널리틱스는 **샘플링**이라 `avg.sampleInterval` 로 보정해야 한다
+  (실측 검증: 구버전 툴 쿼리 `rowsRead/count` = 1,055~1,062행/호출 = 직접 계측값과 일치 → rowsRead는 샘플 합, count는 샘플 건수, 실제값 = ×sampleInterval).
+  - 홈 뷰/일 ≈ **1,336뷰** (툴 롤링 쿼리는 홈 1뷰에 정확히 1회만 실행됨 → 이 쿼리의 실제 호출 수가 곧 홈 뷰 수)
+  - `/global/` 뷰/일 ≈ **30뷰**
+- **일 절감 산정**: 1,336뷰 × 1,680행 = **2,245,000행** + 30뷰 × 19,168행 = **571,000행** = **약 2,816,000행/일**
+  → 2026-10-20 실소모 4,190,000행 대비 **약 67% 감소**. 한도 5,000,000행에서 4,190,000행(83.9%) → 약 1,374,000행(27%) 수준.
+- 한계: 애널리틱스 `limit:200` 절단으로 최소 1개 시간 버킷(UTC 12시)이 누락됨 → 뷰 수는 **하한값**. 실제 절감은 이보다 크다.
+- 뷰 수가 크게 늘면(유입 증가) 절감량도 같이 늘어난다(뷰당 1,680행 / 19,168행).
+
+**8. 이 작업이 소비한 D1 행 수** — [검증됨]
+- 계측(변경 전 실측 포함) 합계 **93,948행** + 인덱스 빌드 **39,752행** = **약 133,700행**.
+- 내림차순: 비교용 변경 전 쿼리 재실행 3회 **61,681행**(20,951+20,355+20,375 — 측정표의 before 근거로 불가피), 인덱스 빌드 **39,752행**, 데이터 분포 프로브 2회 **30,082행**, 라이브 검증 **721행**(D1 102 + 페이지뷰 545 + sqlite_master 74), 나머지 계측 **1,464행**.
+- 계측용 쿼리 `EXPLAIN QUERY PLAN` 은 rows_read 0 (무료).
+- 참고: 비교 재실행 3회의 61,681행은 결과적으로 "변경 전 비용을 증명"하기 위해 쓴 값이며, 이 자체가 절감 대상(19,218행/뷰)이었음.
+
+### 잔존 위험
+
+1. **`idx_briefings_status_date` · `idx_news_category` 를 남겨둠** — news INSERT 마다 인덱스 유지 비용이 1건 늘었다. 쓰기 과금(rowsWritten)보다 읽기 절감(19,168행/뷰)이 훨씬 크므로 판단하면 유리. DROP 은 파괴적이라 승인 없이 하지 않았다. [미해결]
+2. **동률 정렬 가정** — 도구 롤링의 동률 순서는 변경 전 쿼리가 "temp b-tree 안정 정렬"(tools 먼저 + id 오름차순)이었다는 관찰에 기반해 `(updated_at DESC, id ASC)` 로 재현했다. SQLite 정렬 안정성은 명시적 보장이 아니라 구현 세부다. 현재 데이터에서는 검증 완전 일치하나, 향후 동률 데이터가 늘면 순서가 달라질 수 있다. [부분검증]
+3. **새 인덱스 없으면 회귀** — `idx_briefings_status_id` · `idx_news_category_created` 가 사라지면 다시 671행/19,218행으로 돌아간다. 원인이 코드에 드러나지 않아 주석으로만 남겼다(회귀 테스트 없음). [미해결]
+4. **다른 페이지의 D1 읽기는 미감소** — `/briefing/`, `/tools/`, `/tools/[id]/`, `/network/` 등 다른 SSR 페이지는 이번 범위 밖이다. 홈 60행/뷰 기준으로는 충분하나, 트래픽이 그쪽에 몰려 있으면 추가 절감이 가능하다. [미해결]
+5. **일일 합계 대시보드 미갱신 확인 못 함** — 분석 지연으로 배포 직후 `d1AnalyticsAdaptiveGroups` 일일 합계 반영을 확인하지 못했다. 익일 UTC 00:00 이후 `scripts/d1_usage_report.py` 로 2026-10-21 UTC 일일 합계 재확인 필요. [검증불가]
+6. **일일 뷰 수 추정치** — GraphQL 애널리틱스 샘플링(`sampleInterval`) 보정값이며 `limit:200` 절단으로 최소 1개 시간 버킷이 빠졌다. 절감량 2,816,000행/일 은 **하한 추정치**. [부분검증]
+
+### 다음 행동
+
+1. 오케스트레이터가 커밋 (현재 워킹 트리에만 변경 존재).
+2. 익일(2026-10-22 KST 오전) `python3 scripts/d1_usage_report.py` 로 2026-10-21 UTC 일일 rowsRead 확인 — 4,190,000행 대비 감소 여부.
+3. `/briefing/` · `/tools/` 페이지의 D1 읽기 단가 점검(같은 방식의 인덱스 보강 여부 판단).
+
+---
+
+## 2026-10-21 11:10 — AIK24-D1-ROOTCAUSE-01: D1 읽기 일일 400만행 초과 근본원인 진단 (읽기 전용 조사)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 결과: 성공 (진단 완료 · 코드/설정 변경 0건 · 파이프라인 재실행 0건 · 발행/메일/Telegram 0건)
+* 산출물: 본 보고서 (커밋 없음 — 조사만)
+
+### 한 일
+
+D1 일일 읽기 예산 초과(2026-10-20 UTC 4,195,200행 = 83.9%)의 근본원인을 규명했다.
+가드·코드·plist를 고치지 않고, Cloudflare GraphQL analytics + 로컬 로그 + 실제 쿼리 1회 계측
+(meta.rows_read)만으로 소비원을 특정했다.
+
+### 결과 (검증 근거 포함)
+
+**1. 카운터 방식** — `scripts/cfnew.py:75-113`
+- 계측 대상은 **질의 수가 아니라 billed rows read** (`d1AnalyticsAdaptiveGroups.sum.rowsRead`).
+  `SELECT COUNT(*)` 한 건이 읽은 행 수만큼 과금된다.
+- 영속 저장소 없음. 매번 GraphQL(`https://api.cloudflare.com/client/v4/graphql/analytics`) 실조회.
+  영속되는 것은 (a) 프로세스 내 5분 캐시 `cfnew.py:68`, (b) 경보 dedup 파일 `.d1_tier_alert_state.json`.
+- 리셋: `cfnew.py:81` 의 필터가 `{day}T00:00:00Z`~`{day}T23:59:59Z` → **00:00 UTC = 07:00 방콕 로컬(= 09:00 KST)**.
+- **호출자/스크립트/엔드포인트 귀속 기록은 존재하지 않는다**(`cfnew.sql()`이 `check_quota()`만 호출).
+- `limit:200` 절단 위험 없음 확인 — 기본 dimension 집합이 1개 그룹으로 반환됨(실측).
+
+**2. 근본원인 = SSR Worker 서빙 트래픽 (92~99%)** — `datetimeMinute` × `databaseId` × Worker 요청 분 correlation
+
+| UTC 일 | 총 읽기 | Worker 서빙 분에 발생 | 비율 | 스크립트(REST) |
+|---|---:|---:|---:|---:|
+| 10-18 | 2,957,586 | 2,698,321 | 91.2% | 8.8% |
+| 10-19 | 3,494,156 | 3,445,230 | 98.6% | 1.4% |
+| 10-20 | 4,195,200 | 3,868,964 | **92.3%** | 7.7% |
+
+방법: GraphQL `d1AnalyticsAdaptiveGroups(dimensions:{datetimeMinute,databaseId})` 로 분 단위 rowsRead
+구출 → `workersInvocationsAdaptive(dimensions:{scriptName,datetimeMinute})` 요청 수와 같은 분에
+대응 → "요청이 있었던 분"의 읽기 합계 = 서빙 귀속, "요청이 없던 분" = 로컬 스크립트(REST).
+근거: 10-20 aikorea24-db 1,806,713(87.9%) / emdash-db 2,062,251(96.5%) 가 Worker 요청 분에 발생.
+
+**3. 뷰 1회당 읽기 비용이 원인** — 실제 쿼리 실행으로 계측(meta.rows_read, 실측값)
+
+| 소비원 | 파일:행 | 뷰 1회 rows_read | 10-20 기여(정수분해, 허용오차 6%/10% 두 방식) | 신뢰도 |
+|---|---|---:|---|---|
+| **aikorea24 홈 `/`** | `src/pages/index.astro:26` + `src/components/home/ToolsSection.astro:26` | **1,733** | 557~965뷰 → 965,281~1,672,345행 = **a24-db의 47~81%** | [검증됨] |
+| **emdash `/posts`** | `~/projects2/aikorea24emdash/src/pages/posts/index.astro:16` | **1,513** (그 외 ~100) | 793~1,205뷰 → 1,199,809~1,823,165행 = **emdash-db의 56~84%** | [검증됨] |
+| aikorea24 `/briefing/` | `src/pages/briefing/index.astro:16` | 846 | 264~704뷰 → 223,344~595,584행 = a24-db의 11~29% | [부분검증] |
+| aikorea24 `/global/` | `src/pages/global.astro:11` | **19,218** | 6~15뷰 → 115,308~292,859행 = a24-db의 6~14% | [검증됨] |
+| 로컬 스크립트(REST) | 전 프로젝트 | — | 10-20: 323,906행 (7.7%) / 중 229,645행이 03:19·03:39Z **2분 집중** | [검증됨] |
+
+> 경로 간 배분은 "단위비용 × 정수배" 적합 결과이며 허용오차에 따라 갈린다(§확인 불가).
+> **경로와 무관하게 견-solid한 사실은 92.3%(3일 검증) "Worker 서빙 분에서 발생"이다.**
+
+- 홈 1,733행 분해: `SELECT * FROM briefings WHERE status='published' ORDER BY id DESC LIMIT 1` = **671행**
+  (EXPLAIN: `SEARCH briefings USING INDEX idx_briefings_status_date (status=?)` + `USE TEMP B-TREE FOR ORDER BY`
+  → 매칭 671건 전부 읽고 정렬) + ToolsSection `UNION ALL` = **1,062행**
+  (EXPLAIN: `SCAN tools` + `SCAN tool_submissions` + TEMP B-TREE → 두 테이블 전량 스캔).
+- emdash 1,513행 = `SELECT COUNT(*) FROM ec_posts WHERE status='published' AND deleted_at IS NULL`
+  → covering index `idx_ec_posts_deleted_status` 로도 **게시물 수 1,512건 인덱스 엔트리를 전부 읽음**(실측 rows_read=1,513).
+- 1,731/1,733 recurring 서명 일치: 분 단위 rowsRead 히스토그램에서 1,733의 정수배가 aikorea24-db의 47~81%를 설명.
+- **경로 귀속이 없어 페이지 간 배분은 모델 의존** — 허용오차 6% 정수분해: 홈 557뷰(47.0%) / `/briefing/` 704뷰(29.0%) /
+  `/global/` 12뷰(11.2%) / 잔여 1.8%. 허용오차 10% 그리디: 홈 901뷰(76.0%) / `/briefing/` 264뷰(10.9%) / 잔여 2.0%.
+  → **홈 페이지가 aikorea24-db 최대 소비원이라는 결론은 두 방식 모두에서 성립**, `/briefing/` vs `/global/` 비중은
+  모형에 민감하므로 [부분검증].
+
+**4. 스크립트(REST) 7.7%의 정체** — 10-20 03:19Z(로컬 10:19) 단일 분 187,189행은
+PIPE-05 개발 중 N+1 질의(143회→1회, 커밋 `b666d7e7` 10-20 10:53 수정) 때문의 **일회성 개발 작업**이며 매일 반복 아님.
+`kr.aikorea24.threads-publisher` 는 발행 비활성(`THREADS_PUBLISH_ENABLED=0`)으로 즉시 종료 → 소비원 아님(배제).
+
+### 잔존 위험
+
+- **뷰 경로별 귀속 불가 [확인 불가]**: GraphQL D1 어댑터에 `query`/`path` 차원이 존재하지 않음(실측: `unknown field`).
+  Worker 어댑터도 `path`/`httpHost`/`httpStatus` 미제공. → 위 산술은 "단위 비용 × 반올림 배수" 적합이며,
+  실측 경로 분포는 캐시로그(Logpush) 또는 Workers Logs 연동으로만 확정 가능.
+- **가드 공백**: `check_quota()`는 `cfnew.sql()`(=로컬 스크립트)에서만 호출됨. Worker SSR(`env.DB`)·`wrangler d1 execute`·
+  빌드 프리렌더는 가드를 통과하지 않음 → **근본원인 경로가 가드 밖에 있음**(docs/d1-remeasure-plan §4-5 동일).
+- 조회 경로가 `cfnew.sql()`을 거치지 않으면 80% 차단이 발동하지 않는다. 10-20 05:30/06:00에 차단된
+  `news-unified`·`tools-collector` 는 **가해자가 아니라 피해자**다.
+- 이 조사가 소비한 D1 읽기: **26,462행**(아래 §D1 읽기 예산 소모). 본일 누적 383,402행(7.7%) — 한도 무영향.
+
+### 다음 행동 (제안 — 승인 후 착수)
+
+1. 홈 `/` 1,733 → **9행/뷰** (계측 검증 완료: 수정안 쿼리 직접 실행 1+8=9행):
+   `briefings` 에 `CREATE INDEX idx_briefings_status_id ON briefings(status, id)` 추가 → `ORDER BY id DESC LIMIT 1` 이 1행에서 멈춤
+   (현재 `ORDER BY date DESC` 로 바꾸면 무인덱스 1행 — 출력이 달라질 수 있어 인덱스 추가가 안전).
+   `ToolsSection` 의 UNION ALL 각 분기를 `ORDER BY updated_at DESC LIMIT 8` 로 감싸고
+   `tool_submissions(status, updated_at)` 인덱스 추가.
+   → 절감: 뷰당 ~1,724행 × 557~965뷰 = **약 96만~166만행/일** (aikorea24-db의 47~81%).
+2. emdash `/posts` `COUNT(*)` 1,513행 → **0행/뷰**: 카운트를 `options`/별도 카운터 테이블로 사전 집계하고
+   워커 모듈 레벨 TTL 캐시로 대체. → 절감: 뷰당 ~1,500행 × 793~1,205뷰 = **약 120만~182만행/일** (emdash-db의 56~84%).
+   ⚠ 출력 영향: "전체 N편" 표기가 집계 지연만큼lags할 수 있음(발행 시점 트리거로 즉시 반영하면 무영향).
+3. `/global/` 19,218행 → `CREATE INDEX idx_news_category_created ON news(category, created_at DESC)` → 50행/뷰.
+   → 절감: 뷰당 ~19,168행 × 6~15뷰 = **약 12만~29만행/일**.
+   (/global/ 은 내비 미노출·sitemap `changecreq=weekly` → 크롤러 대상 우선 점검 필요)
+4. `/briefing/` 846행 → 746행 부분의 상관 `COUNT(*)` 서브쿼리를 `briefing_items` 집계로 대체 가능(추정 절감 뷰당 ~600행).
+   → 절감: 264~704뷰 기준 **약 16만~42만행/일**. [부분검증] — 목표치 미계측.
+5. 가드 공백 봉합(Worker SSR 경로 진입 가드) — 고위험, 별도 승인 필요.
+6. views-path 귀속 확보: `aikorea24` 워커는 이미 `observability.enabled=true` → Workers Logs(Logpush)로
+   path×rows_read 집계 후 상위 경로 확정. emdash 워커는 observability 미설정 → 동일 적용 필요.
+
+### D1 읽기 예산 소모 (본 조사)
+
+- 실측: GraphQL로 10-21 UTC 누적 전후 비교 → a24 214,237→237,490 / em 141,359→144,568 = **26,462행**
+- 내 직접 실행 쿼리 합계 ≈ 25,301행 (a24 23,319 + em 1,982: sqlite_master 457+98+87, COUNT(*) 1,513,
+  컬렉션 12, 홈 671+1,062, 브리핑 746+100, 뉴스 263, /global/ 19,218, /tools/ 40, /network/ 213+972+1,
+  홈 수정안 탐침 1+8). 잔여 ~1,161행은 조사 시간대 동시 발생 정상 트래픽.
+- GraphQL analytics 조회(무료) 약 20회 — D1 행 소모 0.
+- EXPLAIN QUERY PLAN 10건 — rows_read 0 (실행 안 함).
+
+## 2026-10-21 AIK24-FREE-PIPE-01 일일 실행 — 수집 39건 / 실패 프로바이더 0 / added 0 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-20 20:47 — AIK24-EVAL-BIGPICKLE 정정 — 9·11번은 질문-채점기 불일치
 
 - 20:35 기록의 "9번 형식·11번 스키마" 표현을 정정합니다. 두 질문에는 원소 타입(문자열)과 키 이름(`screen`·`state_model`·`verify`)이 명시되지 않았고, 채점기가 그 형식을 요구했습니다.

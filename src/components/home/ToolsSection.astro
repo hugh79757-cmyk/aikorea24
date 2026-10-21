@@ -22,17 +22,28 @@ let tools: ToolRow[] = [];
 try {
   const db = env.DB;
   if (db) {
+    // AIK24-D1-READ-01: 분기마다 LIMIT 을 거는 bounded UNION.
+    // 이전 형태는 tools 511행 + tool_submissions 24행을 전부 스캔한 뒤
+    // temp b-tree 로 정렬해 1,055행을 읽었다(뷰 1회당 과금 행).
+    // 전체 상위 N개는 반드시 각 분기의 상위 N개 안에 있으므로 결과 집합은 같다.
+    // tools.updated_at 은 날짜 단위라 동률이 생긴다 → 이전 쿼리는 temp b-tree 안정 정렬
+    // (tools 먼저 + id 오름차순)이었다. 동일 순서를 확정적으로 재현하려고
+    // 분기/외곽 모두에 (updated_at DESC, id ASC) 를 명시한다. src: tools=0, tool_submissions=1.
     const res = await db.prepare(
       `SELECT name, slug, tagline, category, price, korean_support, difficulty FROM (
-         SELECT name, slug, tagline, category, price, korean_support, difficulty, updated_at
-         FROM tools
+         SELECT * FROM (
+           SELECT 0 AS src, id AS rid, name, slug, tagline, category, price, korean_support, difficulty, updated_at
+           FROM tools ORDER BY updated_at DESC, id ASC LIMIT ?
+         )
          UNION ALL
-         SELECT name, slug, description AS tagline, category,
-                COALESCE(NULLIF(price_detail, ''), price_model) AS price, korean_support,
-                COALESCE(difficulty, '초보자') AS difficulty, updated_at
-         FROM tool_submissions WHERE status = 'published'
-       ) ORDER BY updated_at DESC LIMIT ?`
-    ).bind(ROLLING_COUNT).all();
+         SELECT * FROM (
+           SELECT 1 AS src, id AS rid, name, slug, description AS tagline, category,
+                  COALESCE(NULLIF(price_detail, ''), price_model) AS price, korean_support,
+                  COALESCE(difficulty, '초보자') AS difficulty, updated_at
+           FROM tool_submissions WHERE status = 'published' ORDER BY updated_at DESC, id ASC LIMIT ?
+         )
+       ) ORDER BY updated_at DESC, src ASC, rid ASC LIMIT ?`
+    ).bind(ROLLING_COUNT, ROLLING_COUNT, ROLLING_COUNT).all();
     tools = (res.results || []) as ToolRow[];
   }
 } catch (e) {

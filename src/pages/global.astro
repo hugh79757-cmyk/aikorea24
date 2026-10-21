@@ -8,6 +8,10 @@ try {
 
   const db = env.DB;
   if (db) {
+    // AIK24-D1-READ-01: idx_news_category_created(category, created_at DESC) 인덱스가
+    // ORDER BY created_at DESC 정렬까지 담당해 temp b-tree 가 사라졌다(19,218행 → 50행).
+    // 인덱스가 없으면 global 9,857행 전량 스캔으로 되돌아가므로
+    // sql/007_d1_read_reduction.sql 을 건드리지 말 것.
     const result = await db.prepare(
       `SELECT id, title, link, description, source, category, pub_date, original_title, country
        FROM news WHERE category = 'global' AND title != original_title
