@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-20 12:53",
-  "count": 143,
+  "updated_at": "2026-10-21 09:00",
+  "count": 140,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -63,22 +63,6 @@
       ],
       "cli_ids": [
         "nvidia/baai/bge-m3"
-      ],
-      "in_briefing": false
-    },
-    {
-      "key": "big-pickle",
-      "original_titles": [
-        "big-pickle"
-      ],
-      "news_ids": [
-        55300
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/big-pickle"
       ],
       "in_briefing": false
     },
@@ -1405,22 +1389,6 @@
       "in_briefing": false
     },
     {
-      "key": "moonshotai/kimi-k2.6",
-      "original_titles": [
-        "moonshotai/kimi-k2.6"
-      ],
-      "news_ids": [
-        55377
-      ],
-      "sources": [
-        "NVIDIA NIM Free"
-      ],
-      "cli_ids": [
-        "nvidia/moonshotai/kimi-k2.6"
-      ],
-      "in_briefing": false
-    },
-    {
       "key": "moonshotai/kimi-k3",
       "original_titles": [
         "moonshotai/kimi-k3"
@@ -2319,22 +2287,6 @@
       ],
       "cli_ids": [
         "nvidia/z-ai/glm-5.2"
-      ],
-      "in_briefing": false
-    },
-    {
-      "key": "z-ai/glm-5.3",
-      "original_titles": [
-        "z-ai/glm-5.3"
-      ],
-      "news_ids": [
-        55331
-      ],
-      "sources": [
-        "NVIDIA NIM Free"
-      ],
-      "cli_ids": [
-        "nvidia/z-ai/glm-5.3"
       ],
       "in_briefing": false
     }

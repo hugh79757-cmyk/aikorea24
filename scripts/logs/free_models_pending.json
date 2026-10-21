@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "model_id": "poolside/laguna-xs-2.1:free",
+    "provider": "kilo",
+    "cli_id": "kilo/poolside/laguna-xs-2.1:free",
+    "context_length": 262144
+  }
+]
