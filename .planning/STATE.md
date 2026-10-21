@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-06-30)
 
 Phase: 38 — Threads 자가개선 (Self-Improvement) 루프
 Status: ✅ Complete (2026-09-02, 커밋 227bbcc) — 3/3 plans (측정/수집·분석/주입)
-Last activity: 2026-09-26 - Completed quick task 260926-c73: fix tool list missing + tool detail image render
+Last activity: 2026-10-21 - Completed quick task 261021-fld: D1 read budget overage root cause + fix (SSR page-view read cost)
 
 Progress: [██████████████████████████████████████] 100% (38/38 phases, 64/64 plans)
 
@@ -251,6 +251,7 @@ None.
 | 260926-c73 | Fix: registered test tool missing from list + uploaded image not showing on tool page | 2026-09-26 | 61e639bc | — | [260926-c73-fix-registered-test-tool-missing-from-li](./quick/260926-c73-fix-registered-test-tool-missing-from-li/) |
 | 260928-t07 | 발행 블로그 썸네일 누락 원인조사 + 승인 툴 게시 상태 확인 (Pexels 429→placeholder→image 생략 high, 금일 툴 실제 2건 정상 — 조사 전용, 코드 0건) | 2026-09-28 | — | complete | [260928-t07-3](./quick/260928-t07-3/) |
 | 260928-ts1 | auto_thumbnail Unsplash 폴백 + 3회 재시도 + 09-28 누락 12건 백필 (검증 6/6 passed, 12/12 REAL) | 2026-09-28 | b9553ca6 | passed | [260928-ts1-auto-thumbnail-unsplash-3](./quick/260928-ts1-auto-thumbnail-unsplash-3/) |
+| 261021-fld | D1 일일 읽기 한도 초과(10-20 UTC 4,195,200행=83.9%) 근본원인 해결 — 파이프라인이 아니라 **SSR Worker가 페이지뷰마다 수천 행을 읽던 것**이 원인(3일 교차검증 91.2/98.6/92.3%). aikorea24 홈 1,733→53행/뷰(`idx_briefings_status_id` + UNION ALL 분기별 LIMIT), `/global/` 19,218→50행/뷰(`idx_news_category_created`) → 예상 일 절감 2,816,000행(67%). 배포 `db104a18`. 부가: 가짜 성공 알림 수정(브리핑 0건이면 exit 1 + 텔레그램 실건수), build-watchdog 산출물 검사(Astro 7), muse-cli 경보 복구(62회 실패 해소) | 2026-10-21 | 24b64ee1, 31a32e19 | complete | [261021-fld-fix-d1-read-budget-overage-4-1m-day-cut-](./quick/261021-fld-fix-d1-read-budget-overage-4-1m-day-cut-/) |
 
 ### Deferred Items
 
