@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "유료"
 koreanSupport: true
 difficulty: "중급"
-url: "https://topai.tools/t/motion-control-ai-net"
+url: "https://motioncontrolai.com"
 useCases: ["유튜브 영상 제작", "애니메이션 제작", "게임 캐릭터 애니메이션"]
 tags: ["AI 영상 생성", "모션 전이", "애니메이션"]
 featured: false

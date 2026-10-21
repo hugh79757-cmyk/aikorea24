@@ -76,3 +76,18 @@
 {"ts": "2026-10-20 07:30:16", "slug": "interviewcue-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-20 07:30:16", "slug": "knovari-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-20 07:30:17", "slug": "lemonade-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:08", "slug": "lexidesk-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:26", "slug": "lium-ai", "step": "thumb", "result": "fail", "detail": "❌ lium-ai BLANK(SMALL_818B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ lium-ai NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-21 07:30:26", "slug": "manyface-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:29", "slug": "mathbuddy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:29", "slug": "meetily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:31", "slug": "meev-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:31", "slug": "mnki-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:31", "slug": "motiofy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:30:33", "slug": "motion-control-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/motion-control-ai-net → https://motioncontrolai.com (title='Motion Control AI: Create Kling Motion Contr')", "dry_run": false}
+{"ts": "2026-10-21 07:30:39", "slug": "mozaik", "step": "thumb", "result": "fail", "detail": "❌ mozaik BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ mozaik NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-21 07:31:19", "slug": "muse-video-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:31:20", "slug": "musicaura-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:31:21", "slug": "omlx-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-21 07:31:22", "slug": "oreate-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/oreate-ai → https://oreateai.com (title='Oreate AI')", "dry_run": false}
+{"ts": "2026-10-21 07:31:22", "slug": "patternful-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}

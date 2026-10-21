@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 15,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/oreate-ai"
+url: "https://oreateai.com"
 useCases: ["영어 이메일 작성", "유튜브 썸네일 제작", "사업계획서 초안"]
 tags: ["AI 작업 공간", "프로젝트 관리", "콘텐츠 생성"]
 featured: false
