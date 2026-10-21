@@ -116,7 +116,9 @@ CREATE TABLE IF NOT EXISTS lesson_clicks (
 -- 성능 인덱스
 CREATE INDEX IF NOT EXISTS idx_news_created_at ON news(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_news_country ON news(country);
-CREATE INDEX IF NOT EXISTS idx_news_category ON news(category);
+-- 2026-10-21 AIK24-D1-READ-01 후속(sql/008_drop_redundant_indexes.sql): 구 인덱스
+--   idx_news_category(category) 는 idx_news_category_created(category, created_at DESC) 가
+--   완전히 대체하므로 제거했다(어떤 쿼리도 쓰지 않음 + news INSERT 유지 비용 절감).
 -- 2026-10-17 라이브 정합화: 운영 DB에 이미 존재하는 인덱스를 스키마에 수록 (이전까지 미수록 드리프트).
 CREATE INDEX IF NOT EXISTS idx_news_pubdate ON news(pub_date);
 CREATE INDEX IF NOT EXISTS idx_news_v2 ON news(v2_pass, created_at DESC) WHERE v2_pass = 1;
@@ -125,6 +127,11 @@ CREATE INDEX IF NOT EXISTS idx_news_v2 ON news(v2_pass, created_at DESC) WHERE v
 CREATE INDEX IF NOT EXISTS idx_news_category_created ON news(category, created_at DESC);
 --   idx_briefings_status_id : 홈의 최신 published 브리핑 1건 조회(status=?, id 역순).
 CREATE INDEX IF NOT EXISTS idx_briefings_status_id ON briefings(status, id);
+--   idx_briefings_status_date : /briefing/ 목록의 ORDER BY date DESC 정렬.
+--   2026-10-21 AIK24-D1-READ-01 후속(sql/008,009): 이 인덱스를 함께 제거하려 했으나
+--   원격 D1 계측에서 목록 쿼리가 746행 → 2,857행(3.8배) 회귀가 확인돼 복구했다.
+--   id 역순과 date 역순은 하나의 인덱스로 동시에 만족시킬 수 없어 별개가 필요하다.
+CREATE INDEX IF NOT EXISTS idx_briefings_status_date ON briefings(status, date DESC);
 --   idx_tool_submissions_status_updated : 홈 도구 롤링의 사용자 등록분(status, updated_at).
 CREATE INDEX IF NOT EXISTS idx_tool_submissions_status_updated ON tool_submissions(status, updated_at);
 CREATE INDEX IF NOT EXISTS idx_enrollments_email ON enrollments(email);

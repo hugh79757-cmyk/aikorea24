@@ -1,0 +1,26 @@
+-- 009: idx_briefings_status_date 복구 (AIK24-D1-READ-01 후속, 2026-10-21)
+--
+-- 배경: 008 로 구 인덱스 2종을 함께 제거했으나, 원격 D1 계측에서
+--   /briefing/ 목록 쿼리의 회귀가 확인돼 이 인덱스만 되돌린다.
+--
+--   대상 쿼리 (src/pages/briefing/index.astro:18)
+--     SELECT b.id, b.date, b.status, b.intro,
+--            (SELECT COUNT(*) FROM briefing_items bi WHERE bi.briefing_id = b.id) as item_count
+--     FROM briefings b
+--     WHERE b.status = 'published'
+--     ORDER BY b.date DESC
+--     LIMIT 100
+--
+-- 계측 (원격 D1 meta.rows_read, 같은 DB·같은 쿼리):
+--   [인덱스 있음]  746행  SEARCH b USING INDEX idx_briefings_status_date (status=?)
+--   [인덱스 없음] 2,857행  SEARCH b USING INDEX idx_briefings_status_id (status=?)
+--                         + USE TEMP B-TREE FOR ORDER BY
+--   → 3.8배 회귀. ORDER BY date DESC 를 만족하는 인덱스가 없으면 published 335행을
+--     정렬 버퍼에 전부 적재해야 한다.
+--
+-- 같은 테이블의 idx_briefings_status_id(status, id) 는 정렬 키가 id 라 date 정렬을 대신할 수 없다.
+-- briefings 는 339행(하루 1회 적재)이라 유지 비용은 무시할 수준이다.
+--
+-- 적용:
+--   wrangler d1 execute aikorea24-db --remote --file=sql/009_restore_briefings_status_date.sql
+CREATE INDEX IF NOT EXISTS idx_briefings_status_date ON briefings(status, date DESC);

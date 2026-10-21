@@ -1,3 +1,81 @@
+## 2026-10-21 12:05 — AIK24-D1-READ-02: 구 인덱스 정리 — idx_news_category 제거, idx_briefings_status_date 계측 후 복구
+
+배경: AIK24-D1-READ-01 완료 보고의 잔존 위험 ① "구 인덱스 2종 잔존"에 대해 대표님 지시 —
+**"구 인덱스 잔존, 지금 비활성화 혹은 삭제하라"**. 2종을 모두 제거한 뒤 **계측으로 회귀를 확인**하고
+문제가 된 것만 되돌렸다.
+
+### 제거 [PRODUCTION CODE]
+
+`sql/008_drop_redundant_indexes.sql` (신규) — `DROP INDEX IF EXISTS idx_news_category;`
+
+`idx_news_category(category)` 는 `idx_news_category_created(category, created_at DESC)` 가 완전히 대체한다
+(동일 선행 컬럼 + 정렬까지 인덱스가 맡음). 제거 전 계측에서 **이 인덱스를 쓰던 쿼리는 하나도 없었다**
+(A_global 은 새 인덱스, E_news_archive 는 idx_news_v2). news 는 19,350행이 매일 적재되는
+고빈도 테이블이라 인덱스 유지 비용 절감이 지속 절감이다.
+
+### 계측 [검증됨] — 원격 D1 동일 DB, meta.rows_read
+
+영향 쿼리 8개 before → after:
+
+| 쿼리 | before | after | 차이 | 사용 인덱스 |
+|---|---:|---:|---:|---|
+| A_global (`/global/` news) | 50 | **50** | +0 | idx_news_category_created |
+| B_briefing_list (`/briefing/` 목록) | 746 | **746** | +0 | idx_briefings_status_date |
+| C_briefing_date (`/briefing/[date]`) | 0 | **0** | +0 | sqlite_autoindex_briefings_1 |
+| D_home (홈 최신 브리핑) | 1 | **1** | +0 | idx_briefings_status_id |
+| E_news_archive (`/news/` 아카이브) | 263 | **263** | +0 | idx_news_v2 |
+| F_sitemap (브리핑 sitemap) | 336 | **336** | +0 | idx_briefings_status_id |
+| G_publish_by_id (발행 API) | 1 | **1** | +0 | SCAN briefings |
+| H_publish_by_date (발행 API) | 1 | **1** | +0 | sqlite_autoindex_briefings_1 |
+| **합계** | **1,398** | **1,398** | **+0** | |
+
+### 회귀 발견과 복구 [검증됨]
+
+처음에는 2종을 함께 제거했다. `idx_briefings_status_date` 를 제거하자
+`/briefing/` 목록 쿼리(`src/pages/briefing/index.astro:18`,
+`WHERE b.status='published' ORDER BY b.date DESC LIMIT 100`)가 **746행 → 2,857행(3.8배)** 로 악화됐다.
+원인은 `idx_briefings_status_id(status, id)` 가 date 정렬을 대신하지 못해
+**정렬용 TEMP B-TREE** 를 타면서 published 335행을 전부 적재하기 때문이었다.
+
+```
+[인덱스 있음]  746행  SEARCH b USING INDEX idx_briefings_status_date (status=?)
+[인덱스 없음] 2,857행  SEARCH b USING INDEX idx_briefings_status_id (status=?)
+                       + USE TEMP B-TREE FOR ORDER BY
+```
+
+→ `sql/009_restore_briefings_status_date.sql` (신규) 로 복구.
+`CREATE INDEX IF NOT EXISTS idx_briefings_status_date ON briefings(status, date DESC);`
+id 역순과 date 역순은 하나의 인덱스로 동시에 만족시킬 수 없어 두 인덱스가 각각 필요하다.
+briefings 는 339행(하루 1회 적재)이라 유지 비용은 무시할 수준.
+
+`schema.sql` 에 `idx_briefings_status_date` 를 신규 수록(이전까지 미수록 드리프트 were)하고
+`idx_news_category` 는 제거 근거 주석과 함께 삭제했다.
+
+### 결과 [검증됨]
+
+- **원격 D1 최종 인덱스** — news: `idx_news_created_at` · `idx_news_country` · `idx_news_pubdate` ·
+  `idx_news_v2` · `idx_news_category_created` / briefings: `idx_briefings_status_id` ·
+  `idx_briefings_status_date`. (**idx_news_category 없음 확인**)
+- **라이브 [검증됨]** — `/` 200 · `/briefing/` 200(아카이브 항목 241개 렌더) · `/global/` 200 ·
+  `/news/` 200 · `/sitemap-briefing.xml` 200. 모든 페이지 HTTP 200.
+- **배포 [검증됨]** — `scripts/deploy.sh` → Workers Version `6e0b39f3-f9f1-40d1-b5f3-d0a9ba3e7c51`.
+  sitemap ping `{"google": true, "naver": true}`.
+
+### 잔존 위험
+
+- `idx_briefings_status_date` 는 제거 대상이었으나 계측 근거로 복구했다. 대표님이 회귀를 감수하고
+  제거를 원하시면 `/briefing/` 목록이 746 → 2,857행(3.8배)로 늘어난다는 점을 고려해야 한다.
+  (대안: `/briefing/` 쿼리 자체에서 상관 서브쿼리(`item_count`)를 먼저 계산한 뒤 조인하는 방식으로
+  인덱스 없이도 100행 이내로 줄일 수 있다 — 별건.)
+- `idx_news_category` 제거로 news 인덱스 개수가 1 줄었다. 동일 category 동시 INSERT 시
+  동시성 충돌 가능성은 낮으나, `news(category)` 단독 조회가 plan 에서 새 인덱스로 바뀌는 것은 확인 완료.
+
+### 다음 행동
+
+- (선택) `/briefing/` 목록 쿼리 리팩터링 — 상관 서브쿼리를 조인/사전집계로 바꾸면
+  `idx_briefings_status_date` 없이도 비용을 낮출 수 있다.
+- (참고) Threads 는 현재 문제로 발행 정지 중이므로 토큰 재발급은 재개 시점에 확인한다(지시 확인).
+
 ## 2026-10-21 11:33 — AIK24-PIPE-ALERT-01 · AIK24-BW-01 · AIK24-D1-ALERT-02: 가짜 성공 알림·무의미 빌드 검사·muse-cli 경보 단절 수정
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24

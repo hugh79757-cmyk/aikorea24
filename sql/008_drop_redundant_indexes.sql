@@ -1,0 +1,44 @@
+-- 008: 중복 구 인덱스 제거 (AIK24-D1-READ-01 후속, 2026-10-21)
+--
+-- 목적: 007 로 새 인덱스를 만든 뒤 남아 있던 구 인덱스 중 **완전히 중복인 것만** 제거한다.
+--   제거 이유 = D1 과금은 rows read 이지만, 인덱스는 매 INSERT 마다 유지 비용을 쓴다.
+--   news 는 19,350행이 매일 적재되는 고빈도 테이블이라 인덱스 하나가 곧 지속 비용이다.
+--
+-- 적용(기존 문서와 동일한 방식):
+--   wrangler d1 execute aikorea24-db --remote --file=sql/008_drop_redundant_indexes.sql
+--   (계정 7eb1b8cd... · 토큰은 ~/.env.common 의 CF_MIGRATE_TOKEN)
+--
+-- 제거 전 계측 (원격 D1, 같은 DB, meta.rows_read 기준):
+--   A_global          50행  SEARCH news USING INDEX idx_news_category_created (category=?)
+--   B_briefing_list  746행  SEARCH b USING INDEX idx_briefings_status_date (status=?)
+--   C_briefing_date    0행  SEARCH briefings USING INDEX sqlite_autoindex_briefings_1 (date=?)
+--   D_home             1행  SEARCH briefings USING INDEX idx_briefings_status_id (status=?)
+--   E_news_archive   263행  SEARCH news USING INDEX idx_news_v2 (v2_pass=?)
+--   F_sitemap        336행  SEARCH briefings USING INDEX idx_briefings_status_id (status=?)
+--   G_publish_by_id    1행  SCAN briefings
+--   H_publish_by_date  1행  SCAN briefings USING COVERING INDEX sqlite_autoindex_briefings_1
+--
+-- 제거 후 계측 (8개 쿼리 전부 변화 0):
+--   A_global          50행  SEARCH news USING INDEX idx_news_category_created (category=?)
+--   B_briefing_list  746행  (idx_briefings_status_date 유지 — 아래 009 참고)
+--   C_briefing_date    0행  SEARCH briefings USING INDEX sqlite_autoindex_briefings_1 (date=?)
+--   D_home             1행  SEARCH briefings USING INDEX idx_briefings_status_id (status=?)
+--   E_news_archive   263행  SEARCH news USING INDEX idx_news_v2 (v2_pass=?)
+--   F_sitemap        336행  SEARCH briefings USING INDEX idx_briefings_status_id (status=?)
+--   G_publish_by_id    1행  SCAN briefings
+--   H_publish_by_date  1행  SCAN briefings USING COVERING INDEX sqlite_autoindex_briefings_1
+--
+-- 1) idx_news_category(category)
+--    idx_news_category_created(category, created_at DESC) 가 완전히 대체한다.
+--    동일 선행 컬럼(category)이라 category 등치 조회는 새 인덱스로도 처리되고,
+--    ORDER BY created_at DESC 정렬까지 인덱스가 맡으므로 더 유리하다.
+--    위 계측에서 이 인덱스를 쓰던 쿼리는 하나도 없다(A_global 은 새 인덱스, E_news_archive 는 idx_news_v2).
+--    → 완전히 중복. 제거.
+DROP INDEX IF EXISTS idx_news_category;
+
+-- 2) idx_briefings_status_date(status, date DESC)
+--    **제거하지 않는다.** 처음 함께 제거했으나 계측에서 회귀가 확인돼 되돌렸다.
+--    근거: /briefing/ 목록 쿼리(briefings WHERE status='published' ORDER BY date DESC LIMIT 100)가
+--    이 인덱스 없이면 정렬용 TEMP B-TREE 를 타면서 **746행 → 2,857행(3.8배)** 로 악화됐다.
+--    같은 테이블의 idx_briefings_status_id(status, id) 는 id 역순 정렬용이라 date 정렬을 대신 못 한다.
+--    → 009_restore_briefings_status_date.sql 에서 복구(계측 근거 포함).
