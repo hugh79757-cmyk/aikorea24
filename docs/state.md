@@ -1,3 +1,115 @@
+## 2026-10-22 11:45 — AIK24-PIPE-10: 자동 글 주제 오인 재발 방지 (모델 ID 강제 · 실측 근거 · 발행 전 일치 검사)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시서: `2026-10-22-1125-AIK24-PIPE-10-자동글-주제오인-재발방지.md` (대표님 지적 2026-10-22 11:25)
+* 결과: 성공 (3규칙 구현 · 재현 테스트 18건 · pytest 1027 passed / 10 skipped / 0 failed · 파이프라인 재실행 0건 · 발행 0건)
+* 산출물: `scripts/model_attribution.py`(신규) · `scripts/blog_draft_generator.py`(수정) · `tests/test_pipe10_model_attribution.py`(신규) · 커밋 아래
+
+### 0단계. 생성 코드 경로 특정 [검증됨]
+
+**사고 글의 실체 (emdash revisions 확인)**
+- 대상: `ec_posts.id=01M5GGA4JRAS61WZ39ZCVRB1XA` (slug `openrouter-무료-모델-free-태그-활용-가이드`)
+- 원본 리비전 `01M5GGA6KWGXBX7VQA6Z4F96JG` (2026-10-22 00:31:26 UTC) 제목 "OpenRouter 무료 모델 (:free 태그) 활용 가이드"
+- 원본 본문 발췌:
+  `## 5. ai.kr.24 실측 결과 — 신뢰도 검증` / "2026년 10월 16일 기준, ai.kr.24 팀은 OpenRouter 무료 모델
+  **`google/gemini-2.0-flash-exp:free`** 에 대해 **100회 연속 호출 테스트**를 수행했습니다."
+
+**생성 경로 확정**
+- 경로: `scripts/blog_draft_generator.py::generate_draft()` → `is_deep=True` 이나
+  **`articles[0].get("v2_tag") == "free-llm"` 조건이 false**(실제 `v2_tag='free-opportunity'`)
+  → `model_eval.extract_model_id()` 는 **호출조차 되지 않았다**
+  → **뉴스 블로그 경로**(일반 GPT 프롬프트)로 직행.
+  (로그에 "OpenRouter 모델 ID 미확인" 줄조차 없음 — 그 줄은 free-llm 분기 안에서만 찍힌다)
+- 프롬프트 실림: `keyword`(제목) · `articles_str`(제목·출처·description 300자) · `links_str`.
+  **원본 모델 ID 는 실리지 않는다.**
+- 원본 항목(news 56082) 실체: title/original_title = "OpenRouter 무료 모델 (:free 태그)",
+  link = `openrouter.ai/models?max_price=0&order=newest`(**목록 페이지** — ID 아님), description = ":free 태그가 붙은 모델을 무료로 호출…".
+  → **추출 가능한 특정 모델 ID 가 없다.**
+- 허위 실측의 출처: `google/gemini-2.0-flash-exp:free` 는 **프로젝트 전체(캐시·리더보드·실행 로그·소스)에 존재하지 않는다**
+  → GPT 가 지어낸 것. 100회 호출 테스트는 실행된 적이 없다.
+
+### 구현 [PRODUCTION CODE]
+
+**신규 `scripts/model_attribution.py`** (네트워크·D1 없음)
+- `source_model_id(article)` — 0단계 반영: `original_title` 우선 → `title` → `description` → `link`.
+  `link` 는 `openrouter.ai/<단일세그먼트>` 만 모델 ID 로 인정(목록·문서 경로 제외).
+  사고 항목(56082)처럼 ID 가 없으면 **None** → 규칙 1·3 은 발동하지 않고 규칙 2 가 잡는다.
+- `model_match_keys()` / `same_model()` — **비대칭 정규화 키의 함정 회피** (아래 사고 기록).
+- `mentioned_model_ids(text)` — **백틱 표기만** 모델 ID 로 인정.
+  링크·경로(`techcrunch.com/2026`, `application/json`)를 모델로 오인하지 않기 위해 필수.
+- `quant_claims(text)` — 정량 실측 주장 탐지(`N회 호출/테스트`, `성공률 N%`, `평균 Nms`, `N/12 문항` 등) + 측정 맥락어 확인.
+- `evaluated_model_ids()` — **실행 기록** 존재 확인(model_eval 캐시 + 리더보드 + runs 로그 3곳).
+  TTL 은 보지 않는다 — 규칙 2 는 "발행된 수치의 근거가 있는가"를 따진다.
+- `check_attribution(title, body, article, used_model_id)` — 규칙 1·2·3 판정.
+
+**`scripts/blog_draft_generator.py` 수정**
+1. **규칙 1 전반부** — 원본 항목이 특정 모델이면 `model_hint` 를 생성 프롬프트의 "## 요구사항" 뒤에 주입
+   (심층 경로·트렌드 경로 **양쪽**): "이 글의 대상 모델은 `X` 입니다. 제목과 본문 어디에도 이 모델 ID 를 반드시 표기할 것".
+2. **규칙 3 데이터** — `save_draft()` 가 `_EMDASH_PENDING[fp]["model_id"]` 에 원본 항목의 모델 ID 를 기록.
+3. **게이트 통합** — `_gate_and_fix()` 안에서 `_attribution_issues()` 를 호출.
+   기존 게이트와 **같은 지점**(게이트를 두 개로 늘리지 않음). 위반 시 **교정 재시도 없이 즉시 hold**
+   + 텔레그램 알림 + 초안 보존(삭제 아님, PIPE-06 원칙). 사유는 기존 rejected/ 기록 경로로 남는다.
+
+### 규칙별 판정 [검증됨]
+
+| 규칙 | 판정 | 근거 |
+|---|---|---|
+| 1. 모델 ID 강제 | 원본이 특정 모델이면 제목·본문에 그 ID 없으면 hold | 사고 케이스는 ID 가 없어 **미발동** — 그건 규칙 2 가 잡는다. 모델 항목(flint-40b-free)에서는 발동 |
+| 2. 실측은 기록이 있을 때만 | 정량 실측 + 실행 기록 없는 모델 → hold | **사고 케이스 재현 ✓** (gemini-2.0-flash-exp:free) |
+| 3. 모델명 일치 | 생성 사용 모델 ≠ 원본 모델 → hold | 정규화 비교(키 집합) |
+
+### 재현 테스트 [검증됨] — `tests/test_pipe10_model_attribution.py` 18건
+
+- **규칙 2 (사고 케이스)**: 56082 + 원본 본문 → `미실측 수치` 사유로 hold ✓
+  · 사고 글의 모델이 실행 기록에 없음도 별도 assert ✓
+  · 모델을 언급하지 않는 일반 뉴스는 정량 수치가 있어도 통과 ✓
+- **규칙 1**: 모델 항목에 모델 ID 가 없으면 hold ✓ / 있으면 통과 ✓ /
+  `original_title` 우선 추출 ✓ / 56082·일반 뉴스는 ID 없음(None) ✓
+- **규칙 3**: 모델 불일치 → hold ✓ / 일치 → 통과 ✓ / 정규화 비교(접두사·접미사 무시) ✓
+- **게이트 통합**: `_attribution_issues()` 가 사고 케이스를 잡음 ✓ / 정상 모델 글 통과 ✓ / 예외 시 리스트 반환(게이트 안 죽음) ✓
+- **프롬프트 주입**: 모델 항목 → 프롬프트에 모델 ID 포함 ✓ / 일반 뉴스 → 미포함 ✓
+- **회귀 없음**: 정상 모델 글·일반 뉴스 글 통과 ✓
+
+### 사고 기록 — 정규화 비교가 비대칭이었다 [검증됨]
+
+첫 구현은 PIPE-05 `normalize_model_key()` **단일 키**로 비교했다. 테스트가 실제 결함을 드러냈다:
+`normalize_model_key("opencode/flint-40b-free")` → `flint-40b` vs `normalize_model_key("flint-40b-free")` → `flint-40b-free`
+→ **같은 모델인데 키가 달라 규칙 1 이 정상 글을 오탐으로 hold 낸다.**
+조치: 비교를 **키 집합의 교집합**(`model_match_keys`/`same_model`)으로 변경 — 원본·프로바이더 접두사 제거·무료 접미사 제거 조합을 모두 넣는다.
+
+### 회귀 검증 [검증됨]
+
+- `pytest -q` 전체: **1027 passed / 10 skipped / 0 failed** (기준선 1009 → 1027, 신규 18 · 실패 0)
+- 블로그 게이트 관련만: `pytest -k "blog or gate or draft or precheck"` → **107 passed**
+- 파이프라인 재실행 0건 · 발행 0건 · 메일 0건 · D1 쓰기 0건
+
+### 잔존 위험
+
+1. **[검증불가] "다음 blog-draft 실행 로그" 로의 실확인** — 지시서 완료 기준은 "다음 blog-draft 실행 로그로 확인"이나
+   다음 실행은 **오늘 20:15 로컬**(plist `Hour 20 Minute 15`). 이번 세션은 실행 전이라 **미확인**이다.
+   규칙 적용이 실제로 발동하는지는 그 로그에서 확인해야 한다.
+2. **규칙 2 는 보수적이다** — 실행 기록이 없는 모델을 **사람이 직접 측정한** 경우에도 hold 된다
+   (예: 왓츠앱 말랑이가 실측해 교체한 글은 D1 기록이 없어 동일 조건에 걸린다).
+   자동 발행 파이프라인에 한정된 안전장치로 이해해야 하며, 수동 발행은 영향 없음.
+3. **free-opportunity 항목의 "실체 모델" 을 여전히 모른다** — 56082 의 link 는 openrouter 모델 **목록 페이지**라
+   특정 모델을 알 수 없다. 이번 규칙은 "허위 실측"을 막지만, **"OpenRouter 무료 모델" 일반론 글이
+   최신 모델을 다루지 못한** 문제(사고의 첫 번째 절반)는 해결하지 않는다.
+   → 후속: 목록 페이지 항목의 link 를 "그 시점의 실제 신규 모델" 로 좁히는 것(수집기 단계) — 별도 지시 필요.
+4. **모델 ID 추출이 원본 텍스트에 의존** — `[무료 LLM]`/`[무료 모델]` 접두어나 provider/model 형태가 아니면
+   추출이 안 된다(그런 항목은 규칙 1·3 미적용, 규칙 2 만 적용).
+5. **게이트는 점 문자열 기반** — 본문이 백틱이 아닌 형태로 모델 ID 를 쓰면 규칙 1 이 오탐할 수 있다
+   (모델 ID 는 관례상 백틱이라 현실 위험 낮음).
+6. **교정 재시도를 하지 않는다** — 규칙 위반은 교정으로 고칠 수 없다는 판단. LLM 이 "수치만 빼고" 통과하는
+   경로가 없도록 보수적으로 잡은 선택이다(비용: LLM 재호출 0회).
+
+### 다음 행동
+
+- **오늘 20:15 blog-draft 실행 로그 확인** — 규칙 발동 여부 + 정상 글 발행 유지(회귀 없음) 확인.
+- 후속 지시 필요: free-opportunity 항목의 link 를 실제 모델로 좁히기(수집기 단계).
+- D1 의 `news` 행에 `model_id` 정식 컬럼을 두면 추출 규칙이 제목 표기에 의존하지 않게 된다(선택).
+
+완료 — 대표님 확인 요청
+
 ## 2026-10-22 11:05 — [경보 채널 장애] muse-cli 인증 만료(401) — D1 3단계 경보가 현재 전달 불가
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24

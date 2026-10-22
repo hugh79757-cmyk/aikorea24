@@ -256,6 +256,21 @@ _GATE_FIX_ORDERS = (
 GATE_FIX_ROUNDS_DEFAULT = 2
 
 
+def _attribution_issues(title, art, filepath):
+    """AIK24-PIPE-10 규칙 1·2·3: 생성된 글의 주제 귀속(모델 ID) 검사.
+
+    예외가 나면 빈 리스트를 돌린다 — 검사기가 게이트를 죽이면 안 된다.
+    """
+    try:
+        pending = _EMDASH_PENDING.get(filepath) or {}
+        used = pending.get("model_id")
+        body = _quality_gate.body_of(pending.get("md", ""))
+        return _attribution.check_attribution(title, body, art, used_model_id=used)
+    except Exception as e:
+        log(f"  ⚠️ 귀속 검사 예외: {type(e).__name__}: {e}")
+        return []
+
+
 def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generator=None,
                   max_rounds=None):
     """1차 방어 — 게이트 검사 후 미달이면 '초안 수정' 교정을 최대 2회 수행한다.
@@ -287,6 +302,24 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
 
     _repair(filepath)
     issues = _quality_gate.screen_extended(_body(filepath))
+
+    # AIK24-PIPE-10 규칙 1·2·3: 주제 귀속(모델 ID) 검사.
+    #   기존 게이트와 **같은 지점**에 통합했다(게이트를 두 개로 늘리지 않는다).
+    #   교정 재시도 없이 즉시 hold 한다 — 규칙 위반의 본질은 "생성 입력" 이라
+    #   LLM 교정으로는 근본을 고칠 수 없고, 재시도만 LLM 비용을 늘린다.
+    #   (PIPE-06 원칙: 삭제가 아니라 초안 보존)
+    attr_issues = _attribution_issues(title, art, filepath)
+    if attr_issues:
+        log(f"    ⛔ AIK24-PIPE-10 귀속 규칙 위반 {len(attr_issues)}건 — 발행 보류(초안 보존)")
+        for it in attr_issues:
+            log(f"       · {it}")
+        try:
+            send_telegram("⛔ [AIK24-PIPE-10] 발행 보류 — 모델 귀속 규칙 위반\n"
+                          f"제목: {title[:80]}\n" + "\n".join("· " + i for i in attr_issues))
+        except Exception as e:
+            log(f"    ⚠️ 텔레그램 알림 실패: {type(e).__name__}: {e}")
+        return None, None, 1, issues + attr_issues, filepath
+
     if not issues:
         log("    ✅ 게이트 통과 — 본문 %d자 / 인용 링크 %d개"
             % (len(_body(filepath)), len(_quality_gate.citation_links(_body(filepath)))))
@@ -381,6 +414,18 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
         else:
             log(f"  ℹ️ OpenRouter 모델 ID 미확인 → 뉴스 블로그 경로: '{keyword[:40]}'")
 
+    # AIK24-PIPE-10 규칙 1: 원본 항목이 특정 모델이면 그 ID 를 생성 입력에 명시한다.
+    #   extract_model_id 는 OpenRouter 목록 대조까지 하므로 "목록에 없는 모델" 에서는 None 이 되고
+    #   그 경우 모델 심층 경로를 타지 않는다. 귀속 판정에는 원본 텍스트에서 추출한 ID 를 쓴다
+    #   (게이트가 같은 값을 쓰므로 서로 어긋나지 않는다).
+    attribution_model_id = _attribution.source_model_id(articles[0]) if articles else None
+    model_hint = (
+        f"- [필수] 이 글의 대상 모델은 `{attribution_model_id}` 입니다. "
+        f"제목과 본문 어디에도 이 모델 ID 를 반드시 표기할 것\n"
+    ) if attribution_model_id else ""
+    if attribution_model_id:
+        log(f"  🏷 대상 모델 ID: {attribution_model_id} — 생성 입력에 명시")
+
     # 기사 텍스트 조립
     article_lines = []
     for i, a in enumerate(articles, 1):
@@ -403,6 +448,7 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
         user_prompt = (
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
+            f"{model_hint}"
             f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
             f"- 제목에 마크다운 백틱(`) 사용 금지\n"
             f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
@@ -440,6 +486,7 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
         user_prompt = (
             f"아래 '{keyword}' 관련 여러 기사를 종합한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
+            f"{model_hint}"
             f"- 제목: '{keyword}' 관련 트렌드가 드러나는 SEO 최적화 제목\n"
             f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
             f"- [필수] 마크다운 표 최소 1개 (기사별 비교·수치 정리). 형식: `| 항목 | 값 |` 다음 줄에 "
@@ -996,6 +1043,11 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
     # deep_dive_url / 무료 LLM 코멘트 링크는 발행 후 실제 EmDash URL 로 연결한다.
     # (AIK24-EMDASH-03: Astro 저장 이 없어 발행 전에는 최종 URL 을 알 수 없다)
     if filepath:
+        # AIK24-PIPE-10 규칙 3: 이 초안을 만들 때 원본 항목의 모델 ID 를 기록한다.
+        #   발행 게이트가 "생성 시 사용한 모델" 과 "원본 항목의 모델" 을 정규화 비교한다.
+        _EMDASH_PENDING[filepath]["model_id"] = (
+            _attribution.source_model_id((articles or [{}])[0]) if articles else None
+        )
         for art in articles or []:
             news_id = art.get("id")
             if news_id:
@@ -1252,6 +1304,7 @@ def _add_image_to_frontmatter(filepath, image_rel_path):
 
 from pipeline.infra.telegram import send_telegram
 import model_eval
+import model_attribution as _attribution
 
 # ============================================
 # EmDash 발행 (AIK24-EMDASH-01 단독화 — AIK24-EMDASH-03)
