@@ -169,7 +169,11 @@ def test_opportunity_window_is_21_days_but_zen_stays_7():
     fmt = '%Y-%m-%d %H:%M:%S'
     zen = datetime.strptime(sel._slot_cutoff(), fmt)
     opp = datetime.strptime(sel._opportunity_cutoff(), fmt)
-    assert (zen - opp).days == 14
+    # 두 now() 호출이 초 경계를 넘으면 차이가 13.999999 일이 되어 .days 가 13 이 된다
+    # (2026-10-22 실측으로 간헐적 실패 확인). 오차 허용으로 판정한다.
+    delta = zen - opp
+    assert 13 <= delta.days <= 14, delta
+    assert abs(delta.total_seconds() - 14 * 86400) < 2, delta
 
 
 def test_opportunity_slot_drains_queue_one_per_day(monkeypatch):

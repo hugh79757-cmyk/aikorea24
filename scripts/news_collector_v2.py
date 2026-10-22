@@ -117,6 +117,8 @@ def collect_openrouter_free():
                              if created else _pub_date()),
                 "source_url": OPENROUTER_API,
                 "original_title": mid,
+                # AIK24-PIPE-11: 구조화 모델 ID (news.model_id) — 귀속 판정의 최우선 소스.
+                "model_id": mid,
                 "country": "us",
             }
         )
@@ -156,6 +158,8 @@ def collect_cli_free():
                     "pub_date": f"{updated} 00:00:00" if updated else _pub_date(),
                     "source_url": MODELS_DEV_API,
                     "original_title": mid,
+                    # AIK24-PIPE-11: 구조화 모델 ID (news.model_id)
+                    "model_id": mid,
                     "country": "us",
                 }
             )
@@ -324,14 +328,17 @@ def save(rows):
         a["_v2"] = (1 if v2_pass else 0, v2_tag)
         stmts.append(
             "INSERT OR IGNORE INTO news "
-            "(title, link, origin_link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
-            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
+            "(title, link, origin_link, description, source, category, pub_date, source_url, original_title, country, "
+            " v2_pass, v2_tag, model_id) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);"
             % (
                 lit(a["title"][:200]), lit(a["link"]), lit_or_null(a.get("origin_link")),
                 lit(a.get("description", "")),
                 lit(a["source"]), lit(a.get("category", "AI")), lit(a["pub_date"]),
                 lit(a.get("source_url", "")), lit(a.get("original_title", "")), lit(a.get("country", "us")),
                 a["_v2"][0], lit(a["_v2"][1]),
+                # AIK24-PIPE-11: 구조화 모델 ID (모델 행만 값이 있고 나머지는 NULL)
+                lit_or_null(a.get("model_id")),
             )
         )
     if not stmts:

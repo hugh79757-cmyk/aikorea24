@@ -363,12 +363,15 @@ def record_diff_to_news(day, d):
         url = f"{link or 'https://aikorea24.kr/free-models'}#{mid}"
         stmts.append(
             "INSERT OR IGNORE INTO news "
-            "(title, link, origin_link, description, source, category, pub_date, source_url, original_title, country, v2_pass, v2_tag) "
-            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" % (
+            "(title, link, origin_link, description, source, category, pub_date, source_url, original_title, country, "
+            " v2_pass, v2_tag, model_id) "
+            "VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" % (
                 _news_lit(title[:200]), _news_lit(url), _news_lit(origin) if origin else "NULL",
                 _news_lit(f"{source} 무료 목록에 {tail} · {desc_tail}"),
                 _news_lit(source), _news_lit("AI"), _news_lit(now), _news_lit(url),
-                _news_lit(mid), _news_lit("us"), 1, _news_lit("free-llm")))
+                _news_lit(mid), _news_lit("us"), 1, _news_lit("free-llm"),
+                # AIK24-PIPE-11: 구조화 모델 ID (news.model_id) — 귀속 판정 최우선 소스
+                _news_lit(mid)))
 
     if not stmts:
         log("news 기록: 이미 기록된 항목만 — 스킵")

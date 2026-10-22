@@ -174,12 +174,18 @@ def _from_link(link: str) -> str | None:
 def source_model_id(article: dict | None) -> str | None:
     """원본 항목(브리핑 news 행)에서 특정 모델 ID 를 추출한다.
 
-    0단계 결과 반영: `original_title` 우선 → `title` → `description` → `link`.
+    AIK24-PIPE-11: `model_id`(수집기가 구조화 저장) 최우선 → `original_title` → `title`
+    → `description` → `link`.
     사고 항목(56082)처럼 **모델 ID 가 없는 항목은 None** 을 돌려준다
     (그 경우 규칙 1·3 은 발동하지 않고, 규칙 2 가 허위 실측을 잡는다).
     """
     if not article:
         return None
+    # AIK24-PIPE-11 최우선: 수집기가 구조화해 저장한 모델 ID (news.model_id).
+    #   원본 텍스트 추출은 폴백으로 내린다.
+    structured = str(article.get("model_id") or "").strip()
+    if structured:
+        return structured
     for key in ("original_title", "title"):
         got = _from_title(article.get(key) or "")
         if got:

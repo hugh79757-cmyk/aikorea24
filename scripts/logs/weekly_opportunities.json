@@ -1,66 +1,67 @@
 [
-  {
-    "title": "Google Cloud 신규 가입 $300 크레딧",
-    "description": "AI 스튜디오·Vertex AI·GPU VM에 쓸 수 있는 신규 고객 크레딧(90일). API 키를 발급해 OpenCode 커스텀 프로바이더로 연결.",
-    "link": "https://cloud.google.com/free",
-    "category": "cloud_compute",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "Azure 무료 계정 $200 크레딧 (30일)",
-    "description": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스. Azure OpenAI 엔드포인트를 커스텀 프로바이더로 연결.",
-    "link": "https://azure.microsoft.com/en-us/free/",
-    "category": "cloud_compute",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "Cloudflare Workers AI — 매일 10,000 Neurons 무료",
-    "description": "서버리스 추론 무료 할당량(계정당 1일 10,000 Neurons). API 토큰만 있으면 별도 결제 없이 시작.",
-    "link": "https://developers.cloudflare.com/workers-ai/platform/pricing/",
-    "category": "cloud_compute",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "Gemini API 무료 티어 (AI Studio 키)",
-    "description": "결제 없이 쓸 수 있는 무료 티어 한도 제공 — 모델별 분당·일일 요청 한도 내에서 무료. 한도 초과 시에만 유료 전환.",
-    "link": "https://ai.google.dev/gemini-api/docs/rate-limits",
-    "category": "provider_credit",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "GitHub Copilot Free (개인 무료 플랜)",
-    "description": "개인 개발자용 무료 플랜 — 월 단위 GitHub AI Credits 사용 한도 내에서 무료. GitHub 계정 인증으로 CLI에서 사용.",
-    "link": "https://docs.github.com/en/copilot/about-github-copilot/plans-for-github-copilot",
-    "category": "provider_credit",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "OpenRouter 무료 모델 (:free 태그)",
-    "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다.",
-    "link": "https://openrouter.ai/models?max_price=0&order=newest",
-    "category": "provider_credit",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "GitHub Student Developer Pack (학생 전용)",
-    "description": "학생 인증 시 Copilot Student 무료 포함 다수 개발 도구 혜택. 학교 이메일·학생증으로 GitHub Education 인증 필요.",
-    "link": "https://education.github.com/pack",
-    "category": "student",
-    "access": "custom",
-    "expires": "2027-12-31"
-  },
-  {
-    "title": "Cerebras 일회성 $5 프로모 크레딧",
-    "description": "결제 수단 등록 시 제공되는 일회성 $5 프로모 크레딧 — 초고속 추론 API를 소액으로 체험. 프로모 종료 시 한도 변경 가능.",
-    "link": "https://www.cerebras.ai/pricing",
-    "category": "provider_credit",
-    "access": "custom",
-    "expires": "2026-12-31"
-  }
+ {
+  "title": "Google Cloud 신규 가입 $300 크레딧",
+  "description": "AI 스튜디오·Vertex AI·GPU VM에 쓸 수 있는 신규 고객 크레딧(90일). API 키를 발급해 OpenCode 커스텀 프로바이더로 연결.",
+  "link": "https://cloud.google.com/free",
+  "category": "cloud_compute",
+  "access": "custom",
+  "expires": "2027-12-31"
+ },
+ {
+  "title": "Azure 무료 계정 $200 크레딧 (30일)",
+  "description": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스. Azure OpenAI 엔드포인트를 커스텀 프로바이더로 연결.",
+  "link": "https://azure.microsoft.com/en-us/free/",
+  "category": "cloud_compute",
+  "access": "custom",
+  "expires": "2027-12-31"
+ },
+ {
+  "title": "Cloudflare Workers AI — 매일 10,000 Neurons 무료",
+  "description": "서버리스 추론 무료 할당량(계정당 1일 10,000 Neurons). API 토큰만 있으면 별도 결제 없이 시작.",
+  "link": "https://developers.cloudflare.com/workers-ai/platform/pricing/",
+  "category": "cloud_compute",
+  "access": "custom",
+  "expires": "2027-12-31"
+ },
+ {
+  "title": "Gemini API 무료 티어 (AI Studio 키)",
+  "description": "결제 없이 쓸 수 있는 무료 티어 한도 제공 — 모델별 분당·일일 요청 한도 내에서 무료. 한도 초과 시에만 유료 전환.",
+  "link": "https://ai.google.dev/gemini-api/docs/rate-limits",
+  "category": "provider_credit",
+  "access": "custom",
+  "expires": "2027-12-31"
+ },
+ {
+  "title": "GitHub Copilot Free (개인 무료 플랜)",
+  "description": "개인 개발자용 무료 플랜 — 월 단위 GitHub AI Credits 사용 한도 내에서 무료. GitHub 계정 인증으로 CLI에서 사용.",
+  "link": "https://docs.github.com/en/copilot/about-github-copilot/plans-for-github-copilot",
+  "category": "provider_credit",
+  "access": "custom",
+  "expires": "2027-12-31"
+ },
+ {
+  "title": "OpenRouter 무료 모델 (:free 태그)",
+  "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다.",
+  "link": "https://openrouter.ai/models?max_price=0&order=newest",
+  "category": "provider_credit",
+  "access": "custom",
+  "expires": "2027-12-31",
+  "expand": "openrouter_free_models"
+ },
+ {
+  "title": "GitHub Student Developer Pack (학생 전용)",
+  "description": "학생 인증 시 Copilot Student 무료 포함 다수 개발 도구 혜택. 학교 이메일·학생증으로 GitHub Education 인증 필요.",
+  "link": "https://education.github.com/pack",
+  "category": "student",
+  "access": "custom",
+  "expires": "2027-12-31"
+ },
+ {
+  "title": "Cerebras 일회성 $5 프로모 크레딧",
+  "description": "결제 수단 등록 시 제공되는 일회성 $5 프로모 크레딧 — 초고속 추론 API를 소액으로 체험. 프로모 종료 시 한도 변경 가능.",
+  "link": "https://www.cerebras.ai/pricing",
+  "category": "provider_credit",
+  "access": "custom",
+  "expires": "2026-12-31"
+ }
 ]
