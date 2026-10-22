@@ -1,3 +1,301 @@
+## 2026-10-22 10:02 — AIK24-D1-EMDASH-01: emdash-db D1 회귀 감시·통계 자동 복구 + [정정] 09:05 항목 오기
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시: 대표님 — "D1 5M/일 한도 문제, 무료 티어 유지 + emdash-db 절감 착수"
+* 결과: 성공 (스크립트·launchd 잡 등록·기동·실행 확인 / pytest 1009 passed / 10 skipped / 0 failed)
+* 산출물: `scripts/emdash_d1_maintain.py`(신규) · `~/Library/LaunchAgents/kr.aikorea24.emdash-d1-maintain.plist`(신규) · 커밋 `f3442838`
+
+### [정정] 직전 항목(2026-10-22 09:05 — AIK24-D1-LIMIT-01)의 오기
+
+직전 기록은 **"emdash-db 는 손대지 않았다 / 어제 최적화가 emdash 를 겨냥하지 않았다"** 고 적었다. **이것은 오기다.**
+
+- 같은 날(2026-10-21) **emdash 프로젝트**에서 이미 D1 절감이 구현·배포돼 있었다:
+  - `dbdbf8b` 11:33 **AIK24-EMDASH-17** — /posts 총계수 `COUNT(*)` 1,513행 → 0행(캐시 + D1 트리거 카운터)
+  - `9b4faaa` 11:47 **AIK24-EMDASH-18** — sqlite_stat1 통계 갱신, 태그 하이드레이션 1,734행 → 25행/뷰
+  - **합계: /posts 뷰당 3,260행 → 39행(절감률 98.8%)**, 배포 `9e6001ce-7d52-4710-b288-599342477697`
+- 직전 조사(10-21 프로젝트)의 시각만 보아 emdash 저장소를 확인하지 않은 것이 원인.
+  **오기가 기록에 남아 있지 않도록 본 항목에서 정정한다.**
+- 정정된 사실: 어제 최적화는 **두 프로젝트**에서 동시에 적용됐다.
+  · aikorea24 프로젝트: AIK24-D1-READ-01/02 (SSR 1,733→53행/뷰, /global/ 19,218→50행/뷰)
+  · emdash 프로젝트: EMDASH-17/18 (3,260→39행/뷰)
+  → UTC 일 합계 10-20 4,195,200행(83.9%) → 10-21 1,461,243행(29.2%) → 10-22 3.0%
+
+### 한 일
+
+어제 절감의 **지속성**을 지키는 장치를 설치했다. 절감 효과는 사라지지 않지만, 되돌아올 위험이 하나 남아 있었다.
+
+### 위험 — sqlite_stat1 무효화 시 비용이 조용히 40배 [검증됨]
+
+- EMDASH-18 의 1,734행 → 25행 절감은 **SQLite 실행 계획이 바뀐 결과**이며, 그 근거는 `sqlite_stat1` 통계다.
+- D1 은 ANALYZE 를 자동 실행하지 않는다(출처: `node_modules/emdash/src/plugins/storage-indexes.ts:77`).
+- 따라서 ① 마이그레이션이 테이블을 재생성하거나 ② 데이터가 늘면 통계가 낡아
+  **비싼 실행 계획으로 조용히 되돌아가며**, ③ 그 사실을 알려주는 장치가 프로젝트에 없었다.
+- 실측: 2026-10-21 05:00 UTC 이후 emdash-db 시간당 rows/query 가 492·137·141 → **13~36** 으로 내려갔다
+  (통계 갱신 반영). 10-22 02:00 UTC 시간대는 117행/쿼리로 다시 올랐다 → **다른 원인(sitemap 풀스캔)이 지배적**임을 드러냄.
+
+### 조치 [PRODUCTION CODE] — scripts/emdash_d1_maintain.py
+
+| 항목 | 내용 |
+|---|---|
+| 대상 DB | `aikorea24-emdash-db` (`cfnew.EMDASH_DB`) — `cfnew.sql()` 기본 대상 |
+| 핫 테이블 | `ec_posts`(1,728행) · `content_taxonomies`(1,381행) · `taxonomies`(27행) |
+| 1) 상태 확인 | `sqlite_stat1` 엔트리 존재 확인 + 실제 행 수 vs 추정치 비교(드리프트) |
+| 2) 저비용 갱신 | `PRAGMA optimize` — **실측 42행**. 통계가 안 틀렸으면 아무 것도 안 건드린다 |
+| 3) 복구 | 핫 테이블 통계 소실 시 대상 테이블만 `ANALYZE`(ec_posts 단독 실측 56,259행) → 재확인 → 여전히 없으면 전체 `ANALYZE` |
+| 4) 사용량 감시 | GraphQL 로 emdash-db 최근 24시간 rowsRead 측정 → **1,200,000 초과 시 muse 1회 알림**(중복 방지 상태 파일) |
+| 5) 로그 | `scripts/logs/emdash_d1_maintain.log` · 상태 `scripts/.emdash_d1_maintain_state.json` |
+| launchd | `kr.aikorea24.emdash-d1-maintain` — 매일 **05:10**, PATH 에 `~/.local/bin` 포함(muse-cli 경로, D1-ALERT-02 교훈 반영) |
+| 자체 비용 | 일 약 2,000행(한도의 0.04%) |
+
+### 검증 [검증됨]
+
+- `--report` 드라이런: 통계 3/3 보유 · **드리프트 +0.0%**(실제 1,728행 = 추정 1,728행) · 최근 24시간 1,006,694행(계정 한도의 20.1%)
+- 실제 모드: `PRAGMA optimize` 정상 실행(예외 0)
+- launchd: `plutil -lint` OK → `bootstrap` OK → `kickstart` 1회 실행 **exit 0**, stderr 0건
+- `muse_cli_path()` 해석 = `/Users/twinssn/.local/bin/muse-cli`(존재·실행가능, 전송 없이 경로만 확인)
+- **회귀 없음**: `pytest -q` = **1009 passed / 10 skipped / 0 failed** (44.39s) — PIPE-09 기준선과 동일. 테스트·프로덕션 코드 미수정(신규 파일 1개만)
+
+### 병행 — emdash 프로젝트 /sitemap.xml 캐시화 [검증됨]
+
+대표님 지시("emdash-db 절감 착수")에 맞춰 emdash 프로젝트에서 가장 큰 단일 소비원을 처리했다.
+자세한 내용은 emdash 프로젝트 `docs/state.md` 항목 `AIK24-EMDASH-19` 참조.
+
+- `/sitemap.xml` 이 published 1,512건을 매 요청 D1 에서 읽고(1,512행/요청), 엣지 캐시도 안 탔다(`cf-cache-status` 없음)
+- Workers Cache API 캐싱 → **캐시 적중 시 D1 0행** (미스→히트 실측: 1.11초 → 0.13초, XML 바이트 동일)
+- 배포 2회 — 1회차 500 발생(Astro 6+ `locals.runtime` 접근이 throw) → 2회차 정상. 최종 버전 `f5cd827f-5120-4558-b430-8d70bffcd8cd`
+- 롤백 기준선: `9e6001ce-7d52-4710-b288-599342477697`
+
+### 잔존 위험
+
+1. **두 저장소 간 결합** — 유지보수 스크립트는 aikorea24 저장소에, 대상 DB 는 emdash 저장소다.
+   emdash 저장소가 사라지면 스크립트는 실패(그리고 그게 곧 경보가 된다). 구조적으로는 감지된다.
+2. **GraphQL 지연** — 1~2시간 지연이 있어 "방금 고친 것"의 수치 효과는 즉시 확인이 안 된다.
+   emdash-db 의 03:00 UTC 이후 시간대 rows/query 비교는 **다음 확인에서 확정**한다. **[검증불가 — 지연]**
+3. **임계값 1,200,000행/24h 는 현재 정상 궤적(1,006,694) 대비 여유가 19%**다.
+   트래픽이 더 오르면 정상 궤적에서도 알림이 울릴 수 있다(오탐 방향의 위험).
+4. **`PRAGMA optimize` 가 stat1 소실을 복구하는지 미실증** — 실측은 "통계가 있을 때 no-op(42행)"까지만 확인.
+   소실 시는 "ANALYZE 로 복구" 경로가 있어 그쪽은 안전하지만, PRAGMA optimize 단독 복구 여부는 [검증불가].
+   (stat1 소실 자체를 만드는 것은 파괴적이라 시험하지 않았다)
+5. **회귀 감지 창은 24시간** — 비용이 40배로 튀어도 24시간 뒤에야 알림이 간다.
+6. **미해결 잔여**: `/category/*`·`/tag/*` 의 `getEmDashCollection` 무제한 조회(분류별 전체 스캔) — 이번 범위 밖.
+   D1 한도가 계정 공유라 emdash 외 DB(taiwan-news-db 등)의 증가도 감시 대상.
+7. **가드는 여전히 80% 에서 실제로 죽었다** (10-21 05:30 수집 82.1%·06:00 tools 82.3%).
+   이번 절감으로 현재 피크는 20~29% 대지만, 가드 설계 자체는 미변경.
+
+### 다음 행동
+
+1. **다음 확인** — 2026-10-22 03:00 UTC 이후 emdash-db 시간대 rows/query 를 확인(위험 2).
+2. `/category/*`·`/tag/*` 페이지네이션 — 별도 지시 시 착수.
+3. `PRAGMA optimize` 소실 복구 실증 — stat1 을 **백업 후**故意로 지우는 방식으로만 (파괴적이라 승인 필요).
+4. 임계값 1,200,000 재조정 — 정상 궤적이 안정되면 24시간 이동평균 기준으로.
+
+완료 — 대표님 확인 요청
+
+## 2026-10-22 09:05 — AIK24-D1-LIMIT-01: D1 rows_read 5M/일 한도 — 알림 실체 확인 + 계정 단위 소비 분해 + 해결안
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시: 대표님 — "어제 밤에도 d1이 문제가 됐다. 최적화가 적용 안된거 같아. [Cloudflare 83% 알림 발신] 이 문제 해결할 수 있는 방법이 없나?"
+* 결과: **알림 실체 확정(최적화 적용 전 잔여 알림) · 최적화 효과 실측 확인(−71%) · 그러나 "해결" 아님(3개 근거) · 해결안 2-tier 제시**
+* 산출물: 본 기록 · 코드/설정 변경 0건 · D1 쓰기 0건 · 읽기 4회(Cloudflare GraphQL analytics) · 파이프라인 재실행 0건
+
+### 한 일
+
+Cloudflare 발신 알림("Your account has used 83% of the daily D1 free tier limit… Reset 2026-10-21 00:00 UTC")의
+발생 시점·소비 주체·어제 최적화 적용 여부를 **Cloudflare D1 GraphQL analytics**(`d1AnalyticsAdaptiveGroups`)로 실측 분해했다.
+
+### 1. 구조 사실 [검증됨]
+
+- **D1 무료 한도 5,000,000 rows_read/day 는 "계정" 단위**이며, 알림의 계정은 `Stylefactory9ai@gmail.com's Account`
+  (account_id `7eb1b8cd178de269758ec94b2e03330b`) — 프로젝트 `.env` 의 `CLOUDFLARE_ACCOUNT_ID` 와 동일.
+- **이 계정에 D1 DB 5개가 함께 붙어 있고 한도를 공유한다** (GET /accounts/{id}/d1/database):
+  `aikorea24-db`(21MB) · `aikorea24-emdash-db`(75MB) · `taiwan-news-db`(901KB, 2026-10-18 신규) · `heritage-db` · `mbti-db`.
+  → **단일 DB의 폭주가 계정 전체를 죽인다.**
+- `aikorea24-emdash-db` 는 별도 Astro SSR Worker(`/Users/twinssn/projects2/aikorea24emdash`, `output:"server"`, `astro.config.mjs`)가 사용.
+  해당 `wrangler.jsonc` 주석: "Sandboxed plugins require Worker Loader, **available on Workers paid plans**" —
+  `sandboxed:[webhookNotifier]` 가 paid 전용 조건으로 주석 처리돼 있다.
+
+### 2. 일별 소비 실측 (UTC 일 기준, Cloudflare GraphQL) [검증됨]
+
+| UTC일 | aikorea24-db | emdash-db | taiwan | 합계 | 5M 대비 |
+|---|---:|---:|---:|---:|---:|
+| 10-13 | 2,151,870 | 228,491 | 0 | 2,380,361 | 47.6% |
+| **10-14** | 3,358,451 | 1,959,850 | 0 | **5,318,301** | **106.4% ← 이미 한도 초과** |
+| 10-15 | 1,420,750 | 1,608,706 | 0 | 3,029,456 | 60.6% |
+| 10-16 | 1,520,624 | 1,224,180 | 0 | 2,744,804 | 54.9% |
+| 10-17 | 1,124,247 | 983,234 | 0 | 2,107,481 | 42.1% |
+| 10-18 | 1,983,996 | 930,592 | 42,998 | 2,957,586 | 59.2% |
+| 10-19 | 1,958,686 | 1,533,620 | 1,850 | 3,494,156 | 69.9% |
+| **10-20 (알림일)** | 2,055,775 | 2,137,095 | 2,330 | 4,195,200 | **83.9%** |
+| **10-21 (최적화 후)** | **596,421** | 862,010 | 2,812 | 1,461,243 | **29.2%** |
+| 10-22 (KST 11:16까지) | 36,710 | 113,629 | 1,583 | 151,922 | 3.0% |
+
+- 쓰기(`rows_written`, 한도 100,000/day) 는 문제 없음: 10-21 최고 31,234 (31.2%).
+- `scripts/d1_usage_report.log` 계열 로그와 GraphQL 값 일치 (10-20 83.6% vs 83.9%, 10-21 29.2% vs 29.2%) → 두 지표互相 검증.
+
+### 3. 판정 [검증됨]
+
+**① 알림은 "최적화 적용 전" 날이다.**
+- 알림의 "Reset time: 2026-10-21 at 00:00:00 UTC" = 알림이 **UTC 2026-10-20 안에** 발생했다는 뜻 (확정).
+- 어제 최적화(D1-READ-01 `24b64ee1` 10-21 11:28 KST / D1-READ-02 `3198ccb0` 12:05 KST = UTC 02:28 / 03:05)는
+  **UTC 10-20 소진 이후**에 들어갔다. 즉 알림일(UTC 10-20)은 이미 소진된 뒤였다.
+- 효과 실측: `aikorea24-db` 2,055,775 → 596,421 = **−71%**. 계정합계 83.9% → 29.2%.
+- → **"최적화가 적용 안 됐다"는 인상은 사실과 반대다. 적용됐고 −71% 효과가 있다.**
+
+**② 그래도 "해결"이 아니다 — 3개 근거**
+1. **10-14에 이미 106.4%로 한도를 초과했다.** (알림(83%)은 2일 뒤에 온 것) — 이때 사이트가 실제로 오류 났는지는 로그 보존기간 밖.
+2. **`emdash-db` 는 손대지 않았다.** 10-20 2,137,095 → 10-21 862,010. 어제 최적화는 `aikorea24-db` SSR
+   (홈 1,733→53행/뷰, `/global/` 19,218→50행/뷰)만 겨냥했다. emdash 는 **HTML 페이지 캐시가 없다**
+   (`src/pages/sitemap.xml.ts`·`rss.xml.ts` 만 `Cache-Control: public, max-age=3600` — 페이지 HTML은 없음)
+   + CMS 내부 부가쿼리(`_emdash_media_usage_*` 28회·`_emdash_collections` 50회·`taxonomies` 20회·`_emdash_bylines` 10회 패턴)가 요청마다 다수 실행.
+3. **증가 추세.** 10-13→10-20 합계 47.6→59.2→69.9→83.9% (하루 평균 +14pp). 29.2%로 내려와도 추세 재개 시 수주 내 재도달.
+
+**③ 가드는 이미 한 번 무너졌다.** 10-21 05:30 수집이 82.1%(`cron_unified_error.log`)·06:00 tools-collector 가 82.3%
+(`tools_collector_error.log:447`) 에서 실제로 죽었다. → 80% 임계는 "조기 경보"가 아니라 "한 번 죽으면 그날 후보 풀이 0"인 구조.
+
+### 4. 해결안 [제안 — 대표님 결정 필요]
+
+**A. Workers Paid $5/월 — 유일한 확실한 해법 (권장)**
+- Free: 5,000,000 rows_read/day (계정 합산) + 100,000 rows_written/day
+- Workers Paid: **25,000,000,000 rows_read/월** (≈833M/day = free 의 **167배**) + 50M rows_written/월, 최소 월 $5
+- 현재 소비 1.5~4.2M/day = 월 45~126M rows → $5 티어에서 **여유 충분**
+- D1 별도 과금 없음. **결제 수단 등록 = 작업 1회**
+- 부수 효과: `aikorea24emdash/wrangler.jsonc` 의 "Workers paid plans 필요" 주석(worker_loader) 조건도 해제 → sandboxed plugin 사용 가능
+- **판단: 5분 걸리는 결정으로 5M/day 상한을 근본 제거. 비용 대비 가장 확실.**
+
+**B. 무료 티어 유지 시 (별도 지시서 필요)**
+1. `aikorea24-emdash-db` SSR HTML에 Cloudflare Cache 적용 (`Cache-Control: public, s-maxage=…`) — 세션 쿠키 경로는 bypass 필요
+2. emdash CMS 부가쿼리(`_emdash_media_usage_*` 등) 요청당 중복 실행 축소 (캐시·주기 갱신)
+3. `aikorea24-db` 는 어제 −71% 완료 → 추가 여지 작음. 타깃은 **emdash-db**
+4. **계정 합산 한도**이므로 `taiwan-news-db`(2026-10-18 신규) 같은 DB 추가·확장 시 한도 재계산 필수
+5. 대시보드 지표를 "DB별"이 아니라 **계정 5개 합산 절대행 수**로 (현재 `d1_usage_report` 는 계정합계지만 소스 1개 기준)
+
+### 잔존 위험
+
+1. **[검증불가] 알림 발송 시각** — Cloudflare 알림 메일 발송 시각 로그 없음. 다만 "Reset 2026-10-21 00:00 UTC" 로 UTC 10-20 발생은 확정.
+2. **[검증불가] 10-14 초과(106.4%) 시점의 사이트 오류** — 로그 보존기간 밖.
+3. **일 피크 29.2%(1.46M) 은 여전히 free 한도의 29%** — 트래픽 재상승 시 수주 내 재도달. paid 전환 전까지 완전 해소 아님.
+4. **5개 DB가 한 계정 공유** — `taiwan-news-db`·`heritage-db`·`mbti-db` 는 이번 측정에서 0~43K 로 작지만, 하나라도 늘면 함께 죽는다.
+5. **축소 수집의 읽기 절감은 ≈0** (연속성·쓰기 130→≤30행만) — D1-READ-01/02의 효과는 SSR 쪽에만 있다.
+6. 이번 작업은 **읽기 전용**(GraphQL 4회) — 코드·설정 변경 0건, D1 쓰기 0건.
+
+### 다음 행동
+
+1. **대표님 결정** — Workers Paid $5/월 전환 여부. 전환 시 D1 한도 문제는 영구 해소(가장 빠름·가장 확실).
+2. 전환하지 않을 경우 — `aikorea24-emdash-db` SSR 캐시 + CMS 부가쿼리 절감 지시서 필요(어제 작업 범위 밖).
+3. `taiwan-news-db` 등 신규 D1 추가 계획 시 한도 영향 사전 산정 절차 추가.
+
+완료 — 대표님 결정 요청
+
+## 2026-10-22 08:56 — 오늘 아침(10-22) 브리핑 실행 결과 — 어제(10-21) 수정 12항목 해결 여부 판정
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시: 대표님 — "오늘 아침 브리핑에 나온 문제점들. 어제 오랫동안 코드 수정해서 나온 결과물 들인데, 문제점이 모두 해결됐는지 파악해줘"
+* 결과: **핵심 장애 1건(브리핑 0건)은 해결 확인** · 12개 수정 항목 중 [검증됨] 6 · [부분검증] 5 · [검증불가] 1
+  · **신규 미해소 문제 1건 발견**(썸네일 게이트 → 블로그 글 1/3 발행 보류) · 기존 미해소 2건 이월 확인
+* 산출물: 본 기록(커밋 없음 — 조사·판정 전용) · 코드/설정 변경 0건 · 파이프라인 재실행 0건 · 발행/메일 0건
+
+### 한 일
+
+2026-10-22 05:30~08:46 사이에 실행된 야간/아침 잡 8종과 브리핑·블로그 산출물을 **읽기 전용으로 전수 확인**하고,
+어제(10-21) 커밋 6건이 겨냥한 문제가 실제로 해소됐는지 항목별로 판정했다.
+
+### 1. 오늘 아침 실제 실행 타임라인 [검증됨]
+
+| 시각(로컬 +07) | 잡 | 결과 | 근거 |
+|---|---|---|---|
+| 05:34 | `kr.aikorea24.news-unified` (05:30 수집) | **exit 0 · 193건 수집** | `api_test/cron_unified.log` "완료! 총 187건 저장" + 모델카드 6건 = 193, `scripts/.collector_state.json` = `{"status":"ok","collected":193,"reason":"D1 읽기 1,379,660/5,000,000 (27.6%) — 정상 수집"}` |
+| 04:10 | `kr.aikorea24.detect-new-models` (04:00) | 신규 모델 6건 탐지 | `scripts/logs/new_models_alert.json` (day 2026-10-22, total_rows 41, failed_providers {}) |
+| 06:04 | `kr.aikorea24.tools-collector` (06:00) | **exit 0 · 6건 수집·반영** | `scripts/.tools_collector_state.json` = `{"status":"ok","collected":6,"reason":"… 28.6% — 정상 수집"}`, 커밋 `8585d6ed` "feat: AI 툴 6개 추가 (2026-10-22)" |
+| 07:02 | `kr.aikorea24.pipeline-runner` (07:00) | **exit 0 · 브리핑 1건(id=360)** | `scripts/pipeline_runner.log:85154-85945` |
+| 07:10 | `kr.aikorea24.build-watchdog` (07:10) | `[ok] 빌드 성공 — dist/server/entry.mjs mtime=2026-10-22 07:10` | `logs/build_watchdog.log` 최종 라인 |
+| 07:32 | `kr.aikorea24.blog-draft` (07:00) | 3건 생성 · **2건 발행 · 1건 보류** | `scripts/blog_draft.log` (끝 09:31:xx = +02:00 오프셋 표기) |
+| 07:32 | `kr.aikorea24.tools-postprocess` (07:30) | 변경 15 / 무변경 0 / **실패 10** / 미처리 0 | `scripts/tools_postprocess.log` "=== 2026-10-22 07:32:17 종료 (후처리 rc=0) ===" |
+| 08:46 | `kr.aikorea24.d1-usage-report` | 정상 (2.3%) | `scripts/d1_usage_report.log` 최종 "UTC 일 2026-10-22 (KST 10:46) … 113,985/5,000,000 (2.3%)" |
+
+**07:00 파이프라인 내부 흐름 [검증됨]** — `scripts/pipeline_runner.log:85161-85945`
+`⏭ Step 0 수집 스킵` → `Step 1 뉴스 선정` → `[selector] v2_pass=1 후보: 8건(기회=3, zen=2, free-llm=1, opensource=2, tool=1)`
+→ `탈락 0건 (점수 < 6) → 통과 8건` → `이미 브리핑됨 1건 제외 → 신선 후보 7건` → `Zen 변경 1건 중 1건 배정 (슬롯 상한 1)` → `선정 3건`
+→ `Step 2 브리핑 생성` → `브리핑 id=360 저장 (date=2026-10-22-1)` → `3개 아이템 저장 완료`
+→ `Step 4 이메일 발송` (구독자 10명 중 테스트 3 필터 → **7명 개별 발송, HTTP 201**, Message ID `<202610220001.94515749136@smtp-relay.mailin.fr>`)
+→ `Step 5 빌드+배포` (Version ID `cdb6eba9-a632-4b37-a17b-e6fa689f7ac9`, sitemap ping google/naver **true/true**)
+→ 요약 `선정 뉴스: 3건 · 생성 브리핑: 1건 · 신선 후보: 7건 · ✅ 에러 없음`
+
+**D1 브리핑 내용 실측 [검증됨]** — 읽기 전용 SELECT 2회(rows_read 10 + 6 + 11)
+- `briefings` id=360 · date=`2026-10-22-1` · status=`published` · 아이템 3건
+- item1 news_id **56082** "OpenRouter 무료 모델 (:free 태그)" / 무료 기회 / origin_link NULL → 렌더는 `COALESCE(origin_link, link)` 폴백
+- item2 news_id **56721** "[무료 LLM] flint-40b-free — OpenCode Zen 무료 티어" / origin_link `https://opencode.ai/v2/docs/console/models/`
+- item3 news_id **56532** "Recursive, 자사가 대부분 AI로 구축한 노트북 코딩 모델 'Flint' 출시" / TechCrunch AI
+- 중복 발행 없음: 3건 모두 이전 브리핑 등장 0회(각 `briefs=1, dates=2026-10-22-1`)
+
+**라이브 확인 [검증됨]**
+- `https://aikorea24.kr/` 홈에 오늘 브리핑 3건 표시, **"12문항" 문자열 0건**(내부 표식 미노출)
+- 발행된 블로그 2건 HTTP **200** / 보류된 3건 URL HTTP **404**(미발행 = fail-safe 정상)
+
+### 2. 어제 수정한 항목별 판정 (12항목)
+
+| # | 항목 | 판정 | 근거 |
+|---|---|---|---|
+| 1 | **A-3** dedup 기준 통일 (selector 3.5 ↔ Phase 2) | **[검증됨]** | `:85179` `이미 브리핑됨 1건 제외 → 신선 후보 7건` — 통합 기준이 selector 단계에서 동작. 어제 같은 지표는 "3건 제외 → 신선 5건"이었고 Phase 2에서 3/3 탈락 → 0건. 오늘은 **선정 3건 → Phase 2 탈락 0건**(탈락 로그 자체가 없음) |
+| 2 | **A-4** local semantic 오탐 해제 | **[검증됨]** | 해제 대상이던 **news_id 56082가 오늘 선정·발행됨**(브리핑 360 / sort_order 1). D1 확인: 56082의 이전 브리핑 0건 → 실제 첫 발행. 어제와 같은 행이 실제로 통과했다 |
+| 3 | **A-5** 재충원 풀 확장 (72h 창·태그별 상한) | **[부분검증]** | 슬롯 풀별 분리 동작: 선정 3건 = 기회 1(OpenRouter 무료 모델) + Zen 1(flint-40b-free) + 뉴스 1(Recursive Flint). **재충원(refill) 경로는 오늘 미발동** → 72h 창·상한 확장은 미검증 |
+| 4 | **B-1** 수집 0건 알림 | **[부분검증]** | 성공 경로 동작: `.collector_state.json` = `status:"ok", collected:193`. **알림 발송 경로(실패)는 오늘 미발동** → 발송 자체는 미검증 |
+| 5 | **B-2** 후보 풀 깊이 조기 경보 | **[부분검증]** | 신선 후보 7 ≥ MAX_COUNT 3 → **경보 미발동이 정답 동작**(오발동 0건). 발동 경로는 오늘 미검증 |
+| 6 | **B-6** exit code 전파 | **[부분검증]** | `launchctl list` = `kr.aikorea24.pipeline-runner 0`(성공). **실패 전파는 오늘 실패 0건이라 미검증** |
+| 7 | **B-7** 가드 정책(수집 폴백) | **[부분검증]** | 27.6% < 80% → 정상 수집 경로. **축소(80~95%)·중단(≥95%) 경로 미실행** |
+| 8 | **PIPE-09** 56074 D1층 entity 완화 | **[검증불가]** | 56074("Google Cloud 신규 가입 $300 크레딧")는 오늘 dedup 이 아니라 **슬롯 경쟁(기회 3→1)** 으로 탈락. 해당 판정 경로 미실행 |
+| 9 | **PIPE-09** tools-collector B-1/B-7 | **[검증됨]** | 06:00 잡이 **exit 0** + 상태 파일 `ok` + 6건 반영(커밋 `8585d6ed`). 어제 같은 시각 82.3% `D1-GUARD` 중단(`tools_collector_error.log:447`)과 대비. 축소 폴백 경로는 미실행 |
+| 10 | **PIPE-ALERT-01** 가짜 성공 알림 | **[검증됨]** | 요약에 `생성 브리핑: 1건` + `✅ 에러 없음` + exit 0 — 실제 브리핑 1건과 일치. 0건→exit 1 경로는 오늘 미실행 |
+| 11 | **BW-01** 무의미 빌드 검사 | **[검증됨]** | `logs/build_watchdog.log` 최종 = `[ok] 빌드 성공 (exit 0) — dist/server/entry.mjs mtime=2026-10-22 07:10`. 어전 15회 연속 `[ok] … dist/index.html 없음`(무의미 통과) 상태 **해소 확인** |
+| 12 | **D1-ALERT-02** muse-cli 경보 단절 | **[검증불가]** | 오늘 경보 미발조(2.3% ≪ 50% 임계). 경로 해석만 확인: `cfnew.muse_cli_path()` → `/Users/twinssn/.local/bin/muse-cli` (존재·실행가능). **실제 전송은 미검증** |
+
+**부수 확인 [검증됨]** — D1 읽기 절감(D1-READ-01/02): 동일 시각 비교 `10-21 KST 10:45 = 1,313,776행` vs `10-22 KST 10:46 = 113,985행` → **91.3% 감소**(같은 로그·같은 지표). 오늘 10:46 시점 113,985/5,000,000 = **2.3%**.
+**회귀 없음 [검증됨]** — `pytest -q` = **1009 passed / 10 skipped / 0 failed** (53.68s, 2026-10-22 실행). PIPE-09 완료 보고의 기준선(1009/10/0)과 동일. 테스트 코드·프로덕션 코드 모두 미수정.
+
+### 3. 오늘 아침 새로 확인된 문제 — **모두 해결됐지 않음**
+
+#### NEW-1 [미해소 — 신규 유형] 썸네일 품질 게이트로 블로그 글 1/3 발행 보류
+
+- **사실 [검증됨]**: `scripts/blog_draft.log` — 3건 중 3번째(Recursive Flint)가 `⛔ 발행 보류`. 사유 `썸네일 placeholder 사본 (image 필드 생략)`.
+  Pexels 생성 11,532B → `⚠️ 품질 검증 실패: 파일 크기 미달: 11KB < 15KB` → 재시도 1/2(키워드 `startup`) 10KB 실패 → 재시도 2/2(`network server`) 실패 → placeholder 사용 → MD5 일치 검출 → 발행 보류.
+  초안 보존: `scripts/logs/rejected/20261022-073121-recursive-…-상세-분석.{json,md}`. EmDash URL **404**(미발행).
+- **발행 손실 [검증됨]**: 3건 중 1건(33%) 미발행. 2건은 200 확인.
+- **원인 [가설 — 확정 아님]**: 임계 15KB는 `scripts/auto_thumbnail.py:240` 의 기존 값(커밋 `0fde6e7c`, 2026-07-26 이후 미변경) → **어제 변경이 만든 결함이 아니다.** 어제 PIPE-06(`e6158cde`)이 "썸네일 실패 글만 hold 로 초안 보존·발행 보류"를 정식화한 것이 **오늘 처음 실제 발화**했다(= fail-safe 가 정상 작동). 낮은 파일 크기는 스톡 사진 위주 전환(커밋 `20eb4c73`, 2026-10-13 LLM 키워드 제거) + webp quality 85 압축 조합에서 반복될 수 있다 — **검증하지 않은 가설**.
+- **판정**: 대표님 결정 필요. (a) 임계 하향 (b) webp quality 상향 (c) 파일크기 대신 해상도/색상분산 기준 — 어느 쪽이든 **게이트를 느슨하게 하면 "이미지 없는 글" 공개 리스크**가 돌아온다(PIPE-06가 보수적으로 판정한 근거).
+
+#### NEW-2 [미해소 — 기존 이월] tools 후처리 10건 실패
+- **사실 [검증됨]**: 07:30 후처리 `변경 15건 / 무변경 0건 / 실패 10건 / 미처리 0건`. 10건 전부 `url: 실제 도메인 미확인 (후보 전부 실패)` (pdftoword-ai·personwise-ai·photogenerator-ai·photoupscaler-ai·piccreator-ai·producerai-art·saymo-ai·seedance25ai-im·sjolt-ai·sparkvid-ai).
+- 어제 작업 범위 밖(.continue-here.md "썸네일 잔여 16건" open thread와 동일 계열). 봇 챌린지 우회 금지 원칙 유지 필요.
+
+#### NEW-3 [미해소 — 기존] news purge 403 + Vectorize 미설정
+- **사실 [검증됨]**: `api_test/cron_unified.log` `❌ purge 요청 실패: HTTP Error 403: Forbidden` — 10-20/10-21/10-22 연속(누적 18회, 2026-10-06 이전 401 → 이후 403). 오래된 뉴스 정리 실패 → `news` 테이블 계속 증가.
+- `ℹ Vectorize 인덱싱 스킵 (VECTORIZE_ENABLED 미설정)` — Vectorize 기반 의미 중복 판정이 비활성. 오늘 dedup은 전부 D1 3일 + local 30일 규칙에 의존.
+
+#### NEW-4 [결함 아님 — 확인만] 브리핑 코멘트 "12문항 평가 전 — 판단 보류"
+- **사실 [검증됨]**: DB item2·item3 코멘트에 `12문항 평가 전 — 판단 보류` 문구가 저장돼 있음(신규 모델 flint-40b-free·Recursive Flint는 12문항 평가 미완료).
+- **독자 노출 없음 [검증됨]**: `scripts/auto_email_sender.py:138` `_COMMENT_DROP_RE` + `src/lib/briefing-comment.ts` `DROP_LINE` 이 양쪽에서 제거. 라이브 `aikorea24.kr` 홈 HTML에 "12문항" 문자열 **0건**.
+- 2026-10-16 대표님 지시로 설계된 동작(`auto_briefing.verdict_block`) → 결함 아님. 기록만 남김.
+
+#### 참고 — 이번 아침 무관한 기존 이상
+`launchctl list` = `kr.aikorea24.threads-token-refresh` **exit 2**(나머지 잡 전부 0). Threads 발행 정지 중의 기존 토큰 문제이며 브리핑과 무관.
+
+### 잔존 위험
+
+1. **D1 가드 80% 선은 그대로다** — 오늘 27.6%는 D1-READ-01/02 + SSR 절감의 효과이지 가드 설계의 해지가 아니다. 일일 사용량이 다시 5,000,000에 근접하면 수집이 축소(80~95%)/중단(≥95%)된다. 축소 수집의 **읽기 절감은 ≈0**(연속성 유지와 쓰기 130행→≤30행만).
+2. **오늘 미실행 경로 5종** — A-5 재충원(72h) · B-2 경보 발동 · B-6 실패 전파 · B-7 축소/중단 수집 · PIPE-09 56074 D1층 완화. 이 5개는 0건/고부하 시나리오에서만 실증된다. 단위 테스트 통과와 "오늘 정상 경로 통과"는 다른 주장이다.
+3. **썸네일 발행 보류율** — 오늘 1/3(33%). 같은 실패가 반복되면 무료 모델 심층 글이 계속 미발행 상태로 남는다(초안 보존은 되므로 데이터 손실 없음).
+4. **기존 장애 2건 미해소** — tools 후처리 10건, news purge 403. Vectorize 미설정 상태.
+5. **D1 읽기 비교는 같은 시각(≈KST 10:45) 기준** — 하루 유입량에 따라 편차 가능. 절대 지표는 오늘 113,985행/2.3%.
+6. **본 기록은 읽기 전용 판정** — 코드·설정 변경 0건, 파이프라인 재실행 0건, 발행/메일 0건. "해결"의 근거는 **오늘 실제 실행 로그·D1·라이브 HTTP 응답**이지 재현 실행이 아니다.
+
+### 다음 행동
+
+1. **대표님 결정 필요** — NEW-1 썸네일 게이트 처치(임계 하향 / webp quality 상향 / 판정 기준 교체). 3번째 글(Recursive Flint)은 초안이 보존돼 있어 "썸네일 재생성 후 수동 발행" 경로가 열려 있다.
+2. **대표님 결정 필요** — tools 후처리 10건(도메인 직접 확보) · news purge 403(Cloudflare 권한) · Vectorize 활성화 여부.
+3. **0건/고부하 시나리오 재현 테스트** 필요 — 미실행 경로 5종(A-5 refill·B-2 발동·B-6 실패·B-7 축소·PIPE-09 56074)을 단위 테스트 밖에서 실증하려면, 실제 실패를 만들어 내야 한다 → 시뮬레이션 하네스 권장.
+4. **다음 07:00 실행에서 재확인 항목** — 브리핑 1건 유지 여부 / 선정 후 Phase 2 탈락 0건 유지 여부 / `생성 브리핑: N건` 요약 계속 노출 여부.
+
+완료 — 대표님 확인 요청
+
 ## 2026-10-21 16:05 — AIK24-PIPE-09: PIPE-08 잔여 2건 종결 (56074 D1층 완화 · tools-collector B-1/B-7)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
