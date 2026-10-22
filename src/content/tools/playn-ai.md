@@ -5,7 +5,7 @@ category: "업무·생산성"
 price: "무료/월 10,000원"
 koreanSupport: true
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/playnai-com"
+url: "https://playnai.com"
 useCases: ["여행 계획 작성", "주말 여행 일정", "신혼여행 일정"]
 tags: ["여행", "일정", "AI"]
 featured: false

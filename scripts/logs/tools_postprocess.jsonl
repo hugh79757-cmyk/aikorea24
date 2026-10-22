@@ -106,3 +106,20 @@
 {"ts": "2026-10-22 06:02:49", "slug": "the-brains", "step": "thumb", "result": "done", "detail": "✅ the-brains 14KB", "dry_run": false}
 {"ts": "2026-10-22 06:03:10", "slug": "focused-omni-modal-gui-agents", "step": "enrich", "result": "done", "detail": "+2,885자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-22 06:03:16", "slug": "focused-omni-modal-gui-agents", "step": "thumb", "result": "done", "detail": "✅ focused-omni-modal-gui-agents 40KB", "dry_run": false}
+{"ts": "2026-10-22 07:30:22", "slug": "hol-guard", "step": "enrich", "result": "done", "detail": "+2,993자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-22 07:30:33", "slug": "hol-guard", "step": "thumb", "result": "done", "detail": "✅ hol-guard 23KB", "dry_run": false}
+{"ts": "2026-10-22 07:30:56", "slug": "multifate", "step": "enrich", "result": "done", "detail": "+2,760자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-22 07:31:04", "slug": "multifate", "step": "thumb", "result": "done", "detail": "✅ multifate 21KB", "dry_run": false}
+{"ts": "2026-10-22 07:31:05", "slug": "pdftoword-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:07", "slug": "personwise-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:23", "slug": "photogenerator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:24", "slug": "photoupscaler-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:24", "slug": "piccreator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:27", "slug": "playn-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/playnai-com → https://playnai.com (title='Playn AI — Plan Your Perfect Trip in Seconds')", "dry_run": false}
+{"ts": "2026-10-22 07:31:29", "slug": "pressmegpt", "step": "url", "result": "done", "detail": "https://topai.tools/t/pressmegpt-com → https://pressmegpt.com (title='Press Me GPT - AI WordPress Theme Generator')", "dry_run": false}
+{"ts": "2026-10-22 07:31:29", "slug": "producerai-art", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:30", "slug": "productshot-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/productshotai-app → https://productshotai.com (title='ProductShotAI – AI Product Photo &amp; Produ')", "dry_run": false}
+{"ts": "2026-10-22 07:31:30", "slug": "saymo-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:31", "slug": "seedance25ai-im", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:31", "slug": "sjolt-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-22 07:31:31", "slug": "sparkvid-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}

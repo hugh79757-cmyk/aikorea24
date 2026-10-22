@@ -5,7 +5,7 @@ category: "코딩·개발"
 price: "유료"
 koreanSupport: false
 difficulty: "중급"
-url: "https://topai.tools/t/pressmegpt-com"
+url: "https://pressmegpt.com"
 useCases: ["회사 홈페이지 제작", "포트폴리오 사이트", "블로그 테마 생성"]
 tags: ["워드프레스", "웹사이트제작", "노코드"]
 featured: false
