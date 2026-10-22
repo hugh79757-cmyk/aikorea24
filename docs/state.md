@@ -1,3 +1,29 @@
+## 2026-10-22 11:05 — [경보 채널 장애] muse-cli 인증 만료(401) — D1 3단계 경보가 현재 전달 불가
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 발견: AIK24-D1-EMDASH-20 실행 중 `scripts/emdash_d1_maintain.py` 가 기준 초과(1,688,107행/24h)로
+  muse 알림을 시도했으나 전송 실패.
+* 결과: **경보 채널 장애 확인 (조치 필요 — 대표님 작업)** · 코드 변경 0건
+
+### 사실 [검증됨]
+
+- `cfnew.muse_send()` → `muse-cli send` 실행 → `auth error: api/session -> 401 (cookies expired? re-export)`
+  (exe 경로 해석은 정상: `/Users/twinssn/.local/bin/muse-cli` — AIK24-D1-ALERT-02 의 경로 문제는 해결됨)
+- `muse-cli status` 도 동일 401. → **쿠키 만료**. `muse-cli auth` 로 재인증 필요(브라우저 로그인 = 사용자 작업).
+- 영향 범위: D1 50/70/90% 3단계 경보(`scripts/d1_usage_report.py`) · `emdash_d1_maintain.py` 사용량 경보 ·
+  그 밖의 muse 경로 알림. **D1 가드 자체(차단 동작)는 영향 없음** — 경보 채널만 죽었다.
+
+### 함께 확인된 사항 [부분검증]
+
+- `emdash_d1_maintain.py` 가 24시간 이동값 1,688,107행 > 임계 1,200,000행으로 **경고를 냈다.**
+  이 수치는 **오늘 진단 작업(백필 21,395행 · 진단 쿼리 약 15만행 · ANALYZE ec_posts 56,259행) 이 포함된 값**이다.
+  → **오탐(진짜 회귀 아님)**. 조용한 시간대 재확인 후 임계값을 24시간 이동 평균 기준으로 조정해야 한다.
+
+### 다음 행동
+
+- 대표님: `muse-cli auth` 로 재인증 (브라우저 로그인). 그 전까지 D1 경보는 발송되지 않는다.
+- 임계값(1,200,000행/24h) 재조정 — 정상 궤적 확정 후.
+
 ## 2026-10-22 11:12 — AIK24-D1-EMDASH-20: emdash D1 잔여 최적화 실행(태그 삭제·분류 정리·HTML 캐시) + 계정 관점 절감
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24 (실행은 emdash 저장소 `/Users/twinssn/projects2/aikorea24emdash`)
