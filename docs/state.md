@@ -1,3 +1,58 @@
+## 2026-10-22 12:15 — AIK24-BRIEF-FLINT-01: 브리핑 1번 항목을 Recursive Flint 로 교체 (실행·라이브 확인)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시: 대표님 — `python3 scripts/logs/tmp_sections/fix_briefing_item1_flint_20261022.py --apply` (스크립트는 왓츠앱 말랑이 작성)
+* 결과: 성공 (D1 쓰기 1건 · 라이브 반영 확인 · exit 0)
+* 산출물: `scripts/logs/backup_briefing_item1_flint_20261022.json`(2,255 B, 롤백용) — 둘 다 프로젝트 gitignore 대상(런타임 산출물)
+* 관련: AIK24-PIPE-10(모델 귀속 규칙) · 왓츠앱 말랑이의 블로그 글 교체(11:42) 직후 본 조치
+
+### 한 일
+
+오늘(2026-10-22) 브리핑 1번 항목이 여전히 일반론("OpenRouter 무료 모델 (:free 태그)", news 56082)이라,
+같은 날 교체된 블로그 글(Recursive Flint 설명글)과 **주제가 어긋난 상태**였다. 대표님 지시로 1번 항목을
+OpenRouter Flint 행(news 56720)으로 교체했다.
+
+### 실행 [PRODUCTION CODE + D1 쓰기]
+
+- 대상: `briefings.id=360`(`2026-10-22-1`, published) 의 `briefing_items` 3건 중 `#1`(item id 1938)
+- 변경: `news_id` 56082 → **56720**(`[무료 LLM] recursive/flint-v1.0:free — OpenRouter 무료 티어`),
+  `comment` → Flint 사실 기반 3문장(400억 파라미터 중 25억 활성 / 컨텍스트 262,144토큰 / 무료 코딩 작업)
+- `deep_dive_url` 은 교체된 블로그 글(`…/posts/openrouter-무료-모델-free-태그-활용-가이드`)을 이미 가리키므로 유지
+- 스크립트 자체 안전장치: 기대값 사전 대조(브리핑 1건·아이템 3건·제목 일치·deep_dive_url 일치·Flint 행 1건) → 백업 → 실행 → 사후 재확인
+
+### 검증 [검증됨]
+
+| 항목 | 결과 |
+|---|---|
+| 사전 확인 | 브리핑 1건 / 아이템 3건 / 대상 제목 일치 / deep_dive_url 일치 / Flint news 행 1건(id 56720) — 모두 통과 |
+| 백업 | `scripts/logs/backup_briefing_item1_flint_20261022.json` 2,255 B (items_before + flint_news 전문) |
+| D1 UPDATE | `briefing_items id=1938` — rows_written 1건 |
+| 사후 재확인(스크립트) | `#1 news=56720 / comment 일치 / deep_dive 유지` → **결과 OK**, exit 0 |
+| D1 직접 쿼리 | sort_order 1 → news_id **56720** + 새 코멘트, 2·3번 항목 불변 |
+| 라이브 브리핑 페이지 | `https://aikorea24.kr/briefing/2026-10-22-1/` 200 · 1번 표시 "OpenRouter 무료 티어에 recursive/flint-v1.0:free 모델이 포함되어 있습니다" + Flint 코멘트 |
+| 링크 대상 글 | `https://emdash.aikorea24.kr/posts/openrouter-무료-모델-free-태그-활용-가이드` **200** · 제목 "Recursive Flint (recursive/flint-v1.0:free) — 무료 코딩 모델 설명" |
+| 주제 일치 | 브리핑 1번과 블로그 글 **양쪽 모두** `recursive/flint-v1.0:free` 포함 ✓ |
+
+### 잔존 위험
+
+1. **오늘 아침 발송된 이메일(07:01, Brevo HTTP 201 · 수신 7명)에는 옛 1번 항목이 그대로 들어 있다.**
+   이메일은 발송 시점 스냅샷이라 소급 교정이 불가하다. 다음 발송(2026-10-23 07:00)부터 반영된다.
+2. **[검증불가] 링크 인코딩** — 한글 슬러그 URL 은 raw UTF-8 과 퍼센트인코딩 **둘 다 200** 을 확인했다
+   (처음 조회에서 404 가 났으나 그건 조회 명령의 **수동 인코딩 오류**("료"→"가") 때문이었고, 사이트 결함이 아니다).
+   실제 브라우저 클릭 경로는 미확인(브라우저 자동 인코딩은 퍼센트형으로 200 확인).
+3. **news 56082 행은 그대로 남아 있다**(news_id 56082 = "OpenRouter 무료 모델 (:free 태그)", source "무료 기회").
+   브리핑에서 빠졌지만 news 행 자체는 삭제하지 않았다 — 다른 참조(백필·리포트)를 보호하기 위함이며,
+   차후 주간 기회 행 갱신 시 재사용될 수 있다.
+4. **AIK24-PIPE-10 규칙 2 관점** — 이번 1번 항목은 이제 특정 모델(56720)을 가리키므로,
+   다음부터 해당 항목이 모델로 생성될 때 규칙 1(모델 ID 명시·게이트)이 적용된다.
+
+### 다음 행동
+
+- 2026-10-23 07:00 발송 이메일이 1번 항목을 Flint 로 표시하는지 확인(발송 후 메일 로그).
+- `news 56082` 행의 향후 처리(유지/정리) 결정 필요.
+
+완료 — 대표님 확인 요청
+
 ## 2026-10-22 11:43 — AIK24-EVAL-FLINT — Recursive Flint 12문항 실측(원점수 7/12, 보정 9/12)
 
 ### 한 일
