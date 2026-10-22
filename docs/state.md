@@ -1,3 +1,91 @@
+## 2026-10-22 15:10 — AIK24-D1-PIPE-11: free-opportunity 목록 페이지 → 실제 모델 전개 + 구조화 model_id (PIPE-10 잔존 위험 1·2·4번)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시서: `2026-10-22-1205-AIK24-PIPE-11-수집전개-잔존위험해소.md` (대표님 결정 2026-10-22)
+* 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-22-1505-AIK24-PIPE-11-완료보고.md`
+* 결과: **구현 완료 / 검수 대기** (pytest 1041 passed / 10 skipped / 0 failed · D1 쓰기 3종)
+* 커밋: `c9b38846` (push 완료) · **상태: 1번 항목(다음 blog-draft 실행) 미확인**
+
+### 한 일
+
+PIPE-10 사고의 근본 원인(브리핑 1번 항목이 "목록 페이지"라 일반론 글이 됨)을 수집 단계에서 해소했다.
+
+### 0단계 — 현황 확인 [검증됨]
+
+- free-opportunity 생성 경로: `scripts/weekly_opportunity.py` (주간 큐레이션)
+  입력 `scripts/logs/weekly_opportunities.json`(8건) → `select_entries()` → `build_inserts()` → `news` INSERT
+- 소비: `scripts/auto_news_selector.py::get_opportunity_news()` — 슬롯 1(21일 창, 이미 실린 행 영구 제외, 하루 1건)
+- **`v2_tag='free-opportunity'` 행 9건 중 목록 페이지 link 은 1건**(news 56082, `openrouter.ai/models?max_price=0`)
+- `news` 에 **model_id 컬럼이 없었음** → 신규 컬럼으로 추가(추가형). free-llm 행은 `original_title` 에 모델 ID 를 담고 있었음.
+
+### 작업 1 — 수집 전개 [PRODUCTION CODE + D1 쓰기]
+
+| 파일 | 함수 | 내용 |
+|---|---|---|
+| `scripts/weekly_opportunity.py` | `_fetch_openrouter_models_all()` / `_fetch_openrouter_free_models()` | 목록 원본 조회 → 무료 판별(접미사·pricing 0) → `created` 최신순 → 상한 20 |
+| | `expand_openrouter_free_models()` | **모델별 개별 항목** 생성 (model_id·모델 페이지 link·pub_date=모델 생성시각) |
+| | `expand_entries()` | `expand` 키로 전개. 목록 페이지인데 키가 없으면 **경고만** |
+| | `build_inserts()` | `origin_link`·`model_id` 컬럼 추가 |
+| | `ensure_model_id_column()` / `existing_model_ids()` | 컬럼 보장(멱등·fail-soft) / 중복 판정 |
+| | `retire_superseded()` | 대체된 목록 페이지 행 `v2_pass=0` soft-disable(삭제 아님) |
+| `scripts/news_collector_v2.py` | 모델 행 빌더 2곳 + `save()` | 수집기 모델 행에 `model_id` 저장 |
+| `scripts/model_catalog.py` | 일 diff news INSERT | `model_id` 저장 |
+| `scripts/model_attribution.py` | `source_model_id()` | **구조화 `model_id` 최우선** → original_title → title → description → link |
+| `scripts/logs/weekly_opportunities.json` | OpenRouter 항목 | `"expand": "openrouter_free_models"` |
+
+**D1 쓰기 3종** (전부 되돌릴 수 있는 형태)
+
+| 대상 | 건수 | 내용 |
+|---|---:|---|
+| `news.model_id` 컬럼 | 1 DDL | ALTER TABLE ADD (news 15 → 16 컬럼, 기존 컬럼·인덱스 무변경) |
+| `news.model_id` 백필 | 167 UPDATE | 기존 자유 모델 행 (`model_id IS NULL` + 프로바이더 4종 + `original_title LIKE '%/%'`, 부적합 0건 확인 후) |
+| `news.v2_pass` | 1 UPDATE | news 56082(목록 페이지 행) 1 → 0 |
+| 신규 news 행 | **0** | 전개 20건이 전부 기존 모델과 중복 → 제외 |
+
+**전개 전후 수집 건수**: 큐레이션 8건 → 전개 27건(모델별 20) → 중복 제외 20 → **실제 INSERT 0건**
+(OpenRouter 자유 모델 18개가 이미 수집기 free-llm 행으로 전부 존재)
+
+**중복 방지 3중 안전망** ① `news.link` UNIQUE ② 전개 전 기존 모델 ID 조회로 제외
+③ 두 트랙에 같은 모델이 생겨도 브리핑 3.5단계 dedup 이 잡음(실측 `is_duplicate_article_strict` → `(True,'exact_title')`)
+
+### 작업 2 — 규칙 2 운영 보완 (문서화만, 코드 변경 없음)
+
+- `docs/model-eval-record.md` 신규 — 사람이 직접 실측한 경우 `model_eval.cache_put()` 으로
+  정본 3종(캐시·리더보드·runs)에 **모델 ID·점수·실측일**을 적재하는 절차 + 통과 확인 방법 + 주의(TTL·문항 버전·오탐 보정).
+- **특정 모델의 정본 적재 실행은 하지 않았다**(지시서: 대표님 결정 사항).
+
+### 검증 [검증됨]
+
+- 드라이런 8 → 27건, 실제 실행 중복 제외 20건·soft-disable 1건
+- `news.model_id` 보유 167행 · `source_model_id()` 구조화 최우선 동작 확인
+- **기회 슬롯이 이제 잡는 항목: news 56074 "Google Cloud 신규가입 $300 크레딧"**(모델 일반론 아님) ✓
+- free-llm 행의 표시 링크 = **모델 페이지**(`origin_link`) ✓
+- 신규 테스트 13건(`tests/test_pipe11_opportunity_expand.py`) · pytest **1041 passed / 10 skipped / 0 failed** (3회 연속)
+- **기존 테스트 회귀 2건을 테스트가 잡아 수정**: ① `category` 는 기존처럼 `'benefit'` 하드코딩 유지
+  ② 새 D1 호출(컬럼 조회·soft-disable) fail-soft화
+- **플레키 테스트 1건 결정화** — `test_opportunity_window_is_21_days_but_zen_stays_7` 가 두 `now()` 호출이
+  초 경계를 넘으면 `.days` 가 13 이 되어 간헐 실패(14:52 전체 실행에서 1회 실측). 테스트 비교 방식 문제이며
+  프로덕션 무관 → 오차 허용 판정으로 변경(테스트 1곳).
+
+### 잔존 위험
+
+1. **[미확인] 다음 blog-draft(2026-10-22 20:15) 실행 로그** — 규칙 1~3 발동 여부 + 정상 글 발행 유지 확인.
+   `scripts/blog_draft.log` 에 "🏷 대상 모델 ID" 표시가 아직 0건(새 코드 실행 없음)이라 **미확인**으로 기재.
+2. **[미해소] 이번 신규 추가는 0건** — 자유 모델 18개가 이미 전부 수집돼 있음. 전개 장치는 동작·검증됐으나
+   **새 모델이 최초 등장했을 때의 end-to-end 확인이 남아 있다.**
+3. **[미해소] news 56082 는 soft-disable 상태로 남음** — 일반론 행 자체를 지우지 않았다(다른 참조 보호).
+4. **Recursive Flint 실측(원점수 7/12·보정 9/12)의 정본 등록 미결** — 1회성 산출물에만 있어
+   PIPE-10 12:10 보정으로 임시 인정되지만 **캐시 TTL(20시간) 이후 사라진다**. (해당 세션의 다음 행동 1)
+5. **잔존 위험 3·5번은 설계 확정(미변경)** — 규칙 2 보수성 유지 · 교정 재시도 안 함 유지.
+
+### 다음 행동
+
+- 2026-10-22 20:15 blog-draft 실행 후 `scripts/blog_draft.log` 로 1번 항목 채우기
+- Recursive Flint 실측의 `cache_put` 정본 등록 (대표님 결정)
+- 새 자유 모델 최초 등장 시 전개 경로 end-to-end 확인
+
+완료 — 대표님 확인 요청
+
 ## 2026-10-22 12:15 — AIK24-BRIEF-FLINT-01: 브리핑 1번 항목을 Recursive Flint 로 교체 (실행·라이브 확인)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
