@@ -1,23 +1,27 @@
 {
- "day": "2026-10-22",
- "checked_at": 1792616410.939831,
- "total_rows": 41,
+ "day": "2026-10-23",
+ "checked_at": 1792702805.984852,
+ "total_rows": 38,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "recursive/flint-v1.0:free"
+   "minimax/minimax-m3.1-flash"
   ],
   "kilo": [
-   "recursive/flint-v1.0:free"
-  ],
-  "nvidia": [
-   "nvidia/nemotron-3.5-embed-1b",
-   "nvidia/nemotron-3.5-embed-8b"
-  ],
-  "zen": [
-   "flint-40b-free",
-   "muse-wonder-1.0"
+   "minimax/minimax-m3.1-flash"
   ]
  },
- "removed_by_provider": {}
+ "removed_by_provider": {
+  "openrouter": [
+   "google/gemini-2.5-flash-lite:batch",
+   "minimax/minimax-m3.1-flash:free"
+  ],
+  "kilo": [
+   "minimax/minimax-m3.1-flash:free"
+  ],
+  "zen": [
+   "longcat-2.5-preview-free",
+   "minimax-m3.1-flash-free"
+  ]
+ }
 }

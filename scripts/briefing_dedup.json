@@ -1,305 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-20",
-      "briefing_id": 304,
-      "articles": [
-        {
-          "id": "51772",
-          "title": "트럼프, AI를 새로운 이름으로 재브랜딩할 때라고 주장하며 'AI 부대' 창설도 예고",
-          "original_title": "",
-          "description": "트럼프는 근거 없이 AI에 대한 반발이 민주당의 사기극이라고 주장했습니다.",
-          "link": "https://techcrunch.com/2026/09/19/trump-suggests-rebranding-ai-with-a-new-name-says-hes-also-creating-an-ai-force/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51782",
-          "title": "AI 종말에 대한 궁금증 해결: \"나 같은 일반인이 이에 대해 할 수 있는 일이 과연 있을",
-          "original_title": "",
-          "description": "인공지능이 우리가 아는 세상을 파괴할 잠재력이 있다는 일주일간의 경고 이후, 기술 전문 기자들이 AI 위협의 현실성에 대한 독자들의 질문에 답변합니다. 인공지능이 실제로 인간을 죽음에 이르게 한다면 과연 어떤 현실적인 방식일까요?",
-          "link": "https://www.theguardian.com/technology/2026/sep/20/your-ai-doomsday-questions-answered-could-ai-technology-really-end-humanity",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51777",
-          "title": "Qwen3.8-Omni-Flash, 구글 제미나이 플래시와 멀티모달 성능은 같으면서 API",
-          "original_title": "",
-          "description": "'Qwen3.8-Omni-Flash'는 AI 에이전트를 위해 설계된 큐웬(Qwen)의 첫 멀티모달 모델입니다. 오디오와 비디오를 동시에 처리하며 독립적으로 도구를 사용해 브이로그를 편집하고, 클립을 번역하며, 영화를 요약할 수 있습니다. 오디오-비디오 벤치마크에서 구글 제미나이 3.8 플래시와 거의 동등한 성능을 보이면서도 훨씬 저렴한 API 비용을 자랑합",
-          "link": "https://the-decoder.com/qwen3-8-omni-flash-undercuts-gemini-flash-pricing-while-matching-its-multimodal-benchmarks/",
-          "entities": [
-            "Qwen3.8-Omni-Flash",
-            "Qwen",
-            "AI",
-            "API"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51727",
-          "title": "이레귤러는 7월 말 4개 AI 연구소에 자사 모델이 테스트 중 시스템을 침해했다고 알렸습니",
-          "original_title": "",
-          "description": "구글은 자사의 제미나이 모델이 5월 사이버 보안 테스트 중 실수로 세 개의 회사 시스템을 침해했음을 확인했습니다. 줄리아 러브와 데이비 알바가 블룸버그를 통해 이 사실을 보도했으며, 구글을 오픈AI, 앤트로픽, 메타와 함께 나란히 언급하도록 기사가 수정되었습니다. 가장 중요한 점은 테스트를 진행한 기업의 내용입니다.",
-          "link": "https://thenextweb.com/news/irregular-four-labs-one-issue-disclosure-timeline-gemini",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51778",
-          "title": "유니티, AI 에이전트가 오래된 튜토리얼을 사용하는 것을 막기 위해 클로드 코드 및 Ope",
-          "original_title": "",
-          "description": "유니티가 클로드 코드와 OpenAI의 코덱스를 위한 공식 플러그인을 출시했습니다. 이 플러그인은 AI 에이전트들이 개발 과정에서 구버전의 유물이나 오래된 튜토리얼을 참조하는 것을 방지하여 최신 개발 표준을 따르도록 돕습니다. 이를 통해 개발 효율성을 높이고 코드 오류를 사전에 예방할 수 있습니다.",
-          "link": "https://the-decoder.com/unity-launches-official-plugins-for-claude-code-and-openai-codex-to-stop-ai-agents-from-using-outdated-tutorials/",
-          "entities": [
-            "Ope",
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51788",
-          "title": "지난주 주식시장을 시험대에 오르게 한 고금리 기조와 AI 안전성에 대한 우려",
-          "original_title": "",
-          "description": "투자자들은 연방준비제도의 새로운 금리 인상 사이클 가능성과 AI 개발 속도를 늦춰야 하는지를 둘러싼 격렬한 논쟁 속에서 고심했습니다.",
-          "link": "https://www.cnbc.com/2026/09/19/higher-interest-rates-and-ai-safety-fears-put-the-stock-market-to-the-test-last-week.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-20",
-      "briefing_id": 305,
-      "articles": [
-        {
-          "id": "51813",
-          "title": "AI 개발 속도 조절론 타당하지만, 거품 붕괴가 더 임박한 위협일 수 있어 | 헤더 스튜어",
-          "original_title": "",
-          "description": "기술 기업들이 급증하는 데이터센터 구축을 자금조달하기 위해 발행하는 부채의 규모는 우려스러운 수준이다. 강력하고 통제되지 않는 AI에 대한 경고가 지난주 헤드라인을 지배했지만, 이러한 종말론적 징조 속에서도 과연 전체 AI 산업 생태계가 안 무사할지 물어볼 가치가 있다.",
-          "link": "https://www.theguardian.com/business/2026/sep/20/ai-slowdown-calls-collapse-of-bubble-datacentre-tech-firms",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51773",
-          "title": "구글의 제미나이, 다른 기업 시스템을 해킹한 최신 AI 모델에 합류",
-          "original_title": "",
-          "description": "구글은 제미나이가 각 해킹을 즉시 중단함으로써 \"적절하게 행동했다\"고 밝혔습니다.",
-          "link": "https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51804",
-          "title": "런웨이, AI 동영상 생성을 실시간으로 제어하는 라이브 스트리밍으로 전환 추진",
-          "original_title": "",
-          "description": "런웨이는 사용자가 완성된 클립을 기다리게 하는 대신 프롬프트를 입력하는 대로 AI 동영상을 스트리밍하고자 한다. 이 접근 방식은 프레임별로 동영상을 생성하는 월드 모델 'GWM-1'을 기반으로 하며, 창의적 도구 외에도 로봇 공학과 자율주행 분야에서의 활용을 기대하고 있다.",
-          "link": "https://the-decoder.com/runway-wants-to-turn-ai-video-generation-into-a-live-stream-you-control-in-real-time/",
-          "entities": [
-            "GWM-1",
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51806",
-          "title": "현실적인 실수를 만들어내는 시뮬레이션 학생들, AI 튜터의 학습 속도 향상시켜",
-          "original_title": "",
-          "description": "마이크로소프트와 일리노이대학교는 제한된 데이터로 개별 학생을 복제하고 AI 튜터에게 빠르고 저렴한 피드백을 제공하기 위해 '스튜던트심(StudentSim)'을 개발했다. 체스, 영어, 수학을 아우르는 60명의 학생을 대상으로 한 테스트에서 이는 GPT-5.4를 능가했으며, 스튜던트심으로 훈련된 체스 튜터는 가장 높은 평가를 기록했다.",
-          "link": "https://the-decoder.com/simulated-students-that-make-realistic-mistakes-help-ai-tutors-learn-faster/",
-          "entities": [
-            "StudentSim",
-            "AI",
-            "GPT-5."
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51811",
-          "title": "모든 AI 종사자들이 이 기술이 인류를멸망시킬 수 있다고 생각하지는 않습니다",
-          "original_title": "",
-          "description": "여러 문자 메시지와 대화에서 드러난 바와 같이, 주요 AI 기업에서 일했던 여러 직원들은 종말론적 경고에 대해 회의적인 시각을 가지고 있습니다.",
-          "link": "https://www.bbc.co.uk/news/articles/cm5y7qj54klpo?at_medium=RSS&at_campaign=rss",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        },
-        {
-          "id": "51828",
-          "title": "글로벌 주식 시장, 폭락으로 향하고 있나?",
-          "original_title": "",
-          "description": "AI 부채, 이란 전쟁, 급등하는 국채 금리로 인해 공포가 확산되면서 경제가 다시 혼란에 빠졌다. 여름의 절정기에 세계 금융 중심지의 분위기는 낙관적이었다.",
-          "link": "https://www.theguardian.com/business/ng-interactive/2026/sep/20/stock-market-crash-government-bond-yields",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-20"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-21",
-      "briefing_id": 306,
-      "articles": [
-        {
-          "id": "51890",
-          "title": "트럼프와 시진핑이 AI 혁명 속에서 인류를 인도하기 위해 협력할 수 있을까? 인류의 운명이",
-          "original_title": "",
-          "description": "기술 기업 CEO들은 4개월마다 AI 능력이 두 배로 증가하는 급격한 변화 속도에 대해 엄중한 경고를 보내고 있습니다. 최근 앤스로픽의 연구원 제이콥 콕슨은 AI가 인류와 충돌할 위험을 우려해 사임했으며, 일련의 헤드라인들이 현재의 위기를 조명하고 있습니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/sep/21/can-trump-and-xi-cooperate-to-guide-humanity-through-the-ai-revolution-humanity-might-depend-on-it",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51901",
-          "title": "트럼프-시진핑 정상회담을 앞두고 베센트와 허리펑 중국 부총리가 회동했다.",
-          "original_title": "",
-          "description": "스콧 베센트와 중국의 허리펑 부총리가 9월 24일 트럼프와 시진핑의 정상회담을 앞두고 무역, AI, 핵심 광물에 관한 회담을 개최했다.",
-          "link": "https://www.cnbc.com/2026/09/20/bessent-he-lifeng-trump-xi-summit.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51893",
-          "title": "‘현실과 떨어진 실리콘밸리의 급진주의자’: 규제 완화를 주도하는 트럼프의 AI 책사 데이비",
-          "original_title": "",
-          "description": "데이비드 삭스는 트럼프에게 AI에 대한 어떠한 규제도 도입하지 않도록 설득했으며, 이로 인해 백악관은 자당의 기조와도 엇갈리는 행보를 보이고 있다. 미국 양당의 의원들이 강력한 인공지능 모델 규제를 촉구하는 가운데, 목소리를 높여 반대하는 드문 인물 중 하나다.",
-          "link": "https://www.theguardian.com/us-news/2026/sep/20/david-sacks-trump-ai-czar",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51896",
-          "title": "Z.ai는 업로드한 작업 공간을 암호화하여 오직 Z.ai만 열 수 있게 했다. 이제 삭제 ",
-          "original_title": "",
-          "description": "'퍼스타(Ferstar)'라는 필명으로 글을 쓰는 한 중국인 개발자는 금요일 ZCode의 로컬 디렉토리 내부를 조사하다가 알리바바의 클라우드 스토리지로 전송되기를 기다리는 313MB의 암호화된 아카이브를 발견했습니다. 이 전송은 564번 실패했으며, 더 작은 파일은 이미 전송된 상태였습니다. 밍샤오 창과 웬시 첸이 사우스차이나모닝포스트에 이를 보도했습니다.",
-          "link": "https://thenextweb.com/news/zai-zcode-encrypted-upload-only-zai-can-verify",
-          "entities": [
-            "Ferstar",
-            "Z."
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51887",
-          "title": "인공지능(AI) 산업은 정말로 속도를 늦출 준비가 되었을까?",
-          "original_title": "",
-          "description": "Equity 팟캐스트에서는 AI 임원들이 개발 속도를 늦추고 싶어 하는 진정성이 있는지에 대해 토론했습니다.",
-          "link": "https://techcrunch.com/2026/09/20/is-the-ai-industry-really-ready-to-slow-down/",
-          "entities": [
-            "AI",
-            "Equity"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51905",
-          "title": "In a world of wars and climate crisis, a new leade",
-          "original_title": "",
-          "description": "전쟁과 기후 위기의 시대에 유엔을 구할 새로운 리더의 필요성이 대두되고 있습니다. 그러나 이 과정에서 미국의 협조와 트럼프 대통령의 태도가 결정적인 변수가 될 것이라는 분석입니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/sep/20/un-new-leader-wars-climate-crisis-donald-trump",
-          "entities": [
-            "In"
-          ],
-          "date": "2026-09-21"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-21",
-      "briefing_id": 307,
-      "articles": [
-        {
-          "id": "51927",
-          "title": "엔비디아 CEO, \"2030년까지 AI가 세상을 파괴할 확률은 0%\"",
-          "original_title": "",
-          "description": "젠슨 황은 전 앤스로픽 연구원 등의 경고를 '파멸의 서사'라며 일축했습니다. 엔비디아 수장은 AI가 몇 년 안에 인류 멸종을 초래할 수준으로 발전하지는 않을 것이라고 선을 그었습니다.",
-          "link": "https://www.theguardian.com/technology/2026/sep/21/nvidia-boss-jensen-huang-dismisses-warnings-ai-destroys-world-anthropic",
-          "entities": [
-            "CEO"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51938",
-          "title": "바티칸, 이번 주 AI 캠페인을 상설 기구로 전환합니다",
-          "original_title": "",
-          "description": "인공지능과 갈등을 다루는 심포지엄 'AI4Peace'가 월요일 로마의 교황청립 라테라노 대학교에서 레오 14세의 메시지와 함께 개막했습니다. 교황은 현장에 참석하지 않았으며, 교황청 생명학술원장인 안드레아 치우치 신부가 메시지를 대독했습니다.",
-          "link": "https://thenextweb.com/news/vatican-ai4peace-association-pope-leo-unesco",
-          "entities": [
-            "AI",
-            "AI4Peace"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51956",
-          "title": "삼성, 비스포크 가전에 타이젠 10 업데이트 글로벌 배포",
-          "original_title": "",
-          "description": "삼성전자는 지난 5월 미국 내 일부 비스포크 AI 냉장고 패밀리 허브에 대규모 펌웨어 업데이트를 배포한 데 이어, 오늘 동일한 타이젠 10.0 기반 업데이트의 글로벌 출시를 발표했습니다. 일부 가전제품들이 2026년에 출시된 삼성의 프리미엄 가전과 동일한 소프트웨어를 탑재하게 됩니다.",
-          "link": "https://www.sammobile.com/news/samsun-pushes-tizen-10-update-to-bespoke-home-appliances-globally/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51943",
-          "title": "토니 블레어, 지도자들에게 거세지는 AI ‘테크래시’에 굴복하지 말 것 경고",
-          "original_title": "",
-          "description": "토니 블레어 전 영국 총리는 AI에 대한 우려가 커지면서 확산을 늦추라는 압박이 거세지는 가운데, 각국 정부가 이러한 ‘테크래시(기술 역풍)’에 굴복하면 국가가 더 가난해지고 안보적으로 취약해질 수 있다고 경고했습니다. 월요일 발표된 토니블레어연구소(TBI)의 보고서에 따르면, 미국 등의 정치 지도자들이 이러한 압력에 주의해야 한다고 지적했습니다.",
-          "link": "https://www.cityam.com/tony-blair-warns-leaders-to-resist-growing-ai-techlash/",
-          "entities": [
-            "AI",
-            "TBI"
-          ],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51902",
-          "title": "미래의 직장에서는 '로봇 노사관계' 부서가 현실화될 수 있다",
-          "original_title": "",
-          "description": "챗봇부터 휴머노이드, 자동화된 관리 시스템에 이르기까지 AI가 기업들에 광범위하게 도입되면서 근로자의 임금과 자율성에 지대한 영향을 미치고 있다.",
-          "link": "https://www.cnbc.com/2026/09/20/ai-jobs-worker-fears.html",
-          "entities": [],
-          "date": "2026-09-21"
-        },
-        {
-          "id": "51941",
-          "title": "백악관, 트럼프의 'AI 부대'가 무엇인지 밝히지 않아",
-          "original_title": "",
-          "description": "도널드 트럼프가 'AI 부대'와 AI 차관(czar) 창설 계획을 발표한지 이틀이 지났지만, 백악관은 이 AI 부대가 군사 조직인지, 규제 기관인지, 혹은 다른 형태인지 명확히 밝히지 않았습니다. 트럼프는 행정명령을 통해서가 아니라 토요일 트루스 소셜(Truth Social)을 통해 이를 발표했습니다.",
-          "link": "https://thenextweb.com/news/white-house-ai-force-no-detail",
-          "entities": [
-            "Social",
-            "Truth",
-            "AI"
-          ],
-          "date": "2026-09-21"
-        }
-      ]
-    },
-    {
       "date": "2026-09-22",
       "briefing_id": 308,
       "articles": [
@@ -3482,284 +3183,55 @@
           "date": "2026-10-20"
         }
       ]
+    },
+    {
+      "date": "2026-10-22",
+      "briefing_id": 360,
+      "articles": [
+        {
+          "id": "56082",
+          "title": "OpenRouter 무료 모델 (:free 태그)",
+          "original_title": "OpenRouter 무료 모델 (:free 태그)",
+          "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+          "link": "https://openrouter.ai/models?max_price=0&order=newest",
+          "entities": [
+            "OpenRouter",
+            "API"
+          ],
+          "date": "2026-10-22"
+        },
+        {
+          "id": "56721",
+          "title": "[무료 LLM] flint-40b-free — OpenCode Zen 무료 티어",
+          "original_title": "flint-40b-free",
+          "description": "Flint 40B Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/flint-40b-free\"} 프로바이더 갱신일 2026-10-21.",
+          "link": "https://models.dev/opencode/flint-40b-free",
+          "entities": [
+            "Zen",
+            "OpenCode",
+            "LLM",
+            "Flint",
+            "Free"
+          ],
+          "date": "2026-10-22"
+        },
+        {
+          "id": "56532",
+          "title": "Recursive, 자사가 대부분 AI로 구축한 노트북 코딩 모델 'Flint' 출시",
+          "original_title": "Recursive launches Flint, a laptop coding model it says was largely built by AI",
+          "description": "스타트업 Recursive가 자체 AI 연구 시스템을 통해 대부분 구축한 무료 노트북 크기의 코딩 모델 'Flint'를 출시했습니다. 이는 스스로 발전하는 AI를 테스트하기 위한 초기 단계의 시도입니다.",
+          "link": "https://techcrunch.com/2026/10/21/recursive-launches-flint-a-laptop-coding-model-it-says-was-largely-built-by-ai/",
+          "entities": [
+            "AI",
+            "Flint",
+            "Recursive"
+          ],
+          "date": "2026-10-22"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "51772",
-      "title": "트럼프, AI를 새로운 이름으로 재브랜딩할 때라고 주장하며 'AI 부대' 창설도 예고",
-      "original_title": "",
-      "description": "트럼프는 근거 없이 AI에 대한 반발이 민주당의 사기극이라고 주장했습니다.",
-      "link": "https://techcrunch.com/2026/09/19/trump-suggests-rebranding-ai-with-a-new-name-says-hes-also-creating-an-ai-force/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51782",
-      "title": "AI 종말에 대한 궁금증 해결: \"나 같은 일반인이 이에 대해 할 수 있는 일이 과연 있을",
-      "original_title": "",
-      "description": "인공지능이 우리가 아는 세상을 파괴할 잠재력이 있다는 일주일간의 경고 이후, 기술 전문 기자들이 AI 위협의 현실성에 대한 독자들의 질문에 답변합니다. 인공지능이 실제로 인간을 죽음에 이르게 한다면 과연 어떤 현실적인 방식일까요?",
-      "link": "https://www.theguardian.com/technology/2026/sep/20/your-ai-doomsday-questions-answered-could-ai-technology-really-end-humanity",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51777",
-      "title": "Qwen3.8-Omni-Flash, 구글 제미나이 플래시와 멀티모달 성능은 같으면서 API",
-      "original_title": "",
-      "description": "'Qwen3.8-Omni-Flash'는 AI 에이전트를 위해 설계된 큐웬(Qwen)의 첫 멀티모달 모델입니다. 오디오와 비디오를 동시에 처리하며 독립적으로 도구를 사용해 브이로그를 편집하고, 클립을 번역하며, 영화를 요약할 수 있습니다. 오디오-비디오 벤치마크에서 구글 제미나이 3.8 플래시와 거의 동등한 성능을 보이면서도 훨씬 저렴한 API 비용을 자랑합",
-      "link": "https://the-decoder.com/qwen3-8-omni-flash-undercuts-gemini-flash-pricing-while-matching-its-multimodal-benchmarks/",
-      "entities": [
-        "Qwen3.8-Omni-Flash",
-        "Qwen",
-        "AI",
-        "API"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51727",
-      "title": "이레귤러는 7월 말 4개 AI 연구소에 자사 모델이 테스트 중 시스템을 침해했다고 알렸습니",
-      "original_title": "",
-      "description": "구글은 자사의 제미나이 모델이 5월 사이버 보안 테스트 중 실수로 세 개의 회사 시스템을 침해했음을 확인했습니다. 줄리아 러브와 데이비 알바가 블룸버그를 통해 이 사실을 보도했으며, 구글을 오픈AI, 앤트로픽, 메타와 함께 나란히 언급하도록 기사가 수정되었습니다. 가장 중요한 점은 테스트를 진행한 기업의 내용입니다.",
-      "link": "https://thenextweb.com/news/irregular-four-labs-one-issue-disclosure-timeline-gemini",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51778",
-      "title": "유니티, AI 에이전트가 오래된 튜토리얼을 사용하는 것을 막기 위해 클로드 코드 및 Ope",
-      "original_title": "",
-      "description": "유니티가 클로드 코드와 OpenAI의 코덱스를 위한 공식 플러그인을 출시했습니다. 이 플러그인은 AI 에이전트들이 개발 과정에서 구버전의 유물이나 오래된 튜토리얼을 참조하는 것을 방지하여 최신 개발 표준을 따르도록 돕습니다. 이를 통해 개발 효율성을 높이고 코드 오류를 사전에 예방할 수 있습니다.",
-      "link": "https://the-decoder.com/unity-launches-official-plugins-for-claude-code-and-openai-codex-to-stop-ai-agents-from-using-outdated-tutorials/",
-      "entities": [
-        "Ope",
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51788",
-      "title": "지난주 주식시장을 시험대에 오르게 한 고금리 기조와 AI 안전성에 대한 우려",
-      "original_title": "",
-      "description": "투자자들은 연방준비제도의 새로운 금리 인상 사이클 가능성과 AI 개발 속도를 늦춰야 하는지를 둘러싼 격렬한 논쟁 속에서 고심했습니다.",
-      "link": "https://www.cnbc.com/2026/09/19/higher-interest-rates-and-ai-safety-fears-put-the-stock-market-to-the-test-last-week.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51813",
-      "title": "AI 개발 속도 조절론 타당하지만, 거품 붕괴가 더 임박한 위협일 수 있어 | 헤더 스튜어",
-      "original_title": "",
-      "description": "기술 기업들이 급증하는 데이터센터 구축을 자금조달하기 위해 발행하는 부채의 규모는 우려스러운 수준이다. 강력하고 통제되지 않는 AI에 대한 경고가 지난주 헤드라인을 지배했지만, 이러한 종말론적 징조 속에서도 과연 전체 AI 산업 생태계가 안 무사할지 물어볼 가치가 있다.",
-      "link": "https://www.theguardian.com/business/2026/sep/20/ai-slowdown-calls-collapse-of-bubble-datacentre-tech-firms",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51773",
-      "title": "구글의 제미나이, 다른 기업 시스템을 해킹한 최신 AI 모델에 합류",
-      "original_title": "",
-      "description": "구글은 제미나이가 각 해킹을 즉시 중단함으로써 \"적절하게 행동했다\"고 밝혔습니다.",
-      "link": "https://techcrunch.com/2026/09/19/googles-gemini-is-the-latest-ai-model-to-hack-other-companies/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51804",
-      "title": "런웨이, AI 동영상 생성을 실시간으로 제어하는 라이브 스트리밍으로 전환 추진",
-      "original_title": "",
-      "description": "런웨이는 사용자가 완성된 클립을 기다리게 하는 대신 프롬프트를 입력하는 대로 AI 동영상을 스트리밍하고자 한다. 이 접근 방식은 프레임별로 동영상을 생성하는 월드 모델 'GWM-1'을 기반으로 하며, 창의적 도구 외에도 로봇 공학과 자율주행 분야에서의 활용을 기대하고 있다.",
-      "link": "https://the-decoder.com/runway-wants-to-turn-ai-video-generation-into-a-live-stream-you-control-in-real-time/",
-      "entities": [
-        "GWM-1",
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51806",
-      "title": "현실적인 실수를 만들어내는 시뮬레이션 학생들, AI 튜터의 학습 속도 향상시켜",
-      "original_title": "",
-      "description": "마이크로소프트와 일리노이대학교는 제한된 데이터로 개별 학생을 복제하고 AI 튜터에게 빠르고 저렴한 피드백을 제공하기 위해 '스튜던트심(StudentSim)'을 개발했다. 체스, 영어, 수학을 아우르는 60명의 학생을 대상으로 한 테스트에서 이는 GPT-5.4를 능가했으며, 스튜던트심으로 훈련된 체스 튜터는 가장 높은 평가를 기록했다.",
-      "link": "https://the-decoder.com/simulated-students-that-make-realistic-mistakes-help-ai-tutors-learn-faster/",
-      "entities": [
-        "StudentSim",
-        "AI",
-        "GPT-5."
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51811",
-      "title": "모든 AI 종사자들이 이 기술이 인류를멸망시킬 수 있다고 생각하지는 않습니다",
-      "original_title": "",
-      "description": "여러 문자 메시지와 대화에서 드러난 바와 같이, 주요 AI 기업에서 일했던 여러 직원들은 종말론적 경고에 대해 회의적인 시각을 가지고 있습니다.",
-      "link": "https://www.bbc.co.uk/news/articles/cm5y7qj54klpo?at_medium=RSS&at_campaign=rss",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51828",
-      "title": "글로벌 주식 시장, 폭락으로 향하고 있나?",
-      "original_title": "",
-      "description": "AI 부채, 이란 전쟁, 급등하는 국채 금리로 인해 공포가 확산되면서 경제가 다시 혼란에 빠졌다. 여름의 절정기에 세계 금융 중심지의 분위기는 낙관적이었다.",
-      "link": "https://www.theguardian.com/business/ng-interactive/2026/sep/20/stock-market-crash-government-bond-yields",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-20"
-    },
-    {
-      "id": "51890",
-      "title": "트럼프와 시진핑이 AI 혁명 속에서 인류를 인도하기 위해 협력할 수 있을까? 인류의 운명이",
-      "original_title": "",
-      "description": "기술 기업 CEO들은 4개월마다 AI 능력이 두 배로 증가하는 급격한 변화 속도에 대해 엄중한 경고를 보내고 있습니다. 최근 앤스로픽의 연구원 제이콥 콕슨은 AI가 인류와 충돌할 위험을 우려해 사임했으며, 일련의 헤드라인들이 현재의 위기를 조명하고 있습니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/sep/21/can-trump-and-xi-cooperate-to-guide-humanity-through-the-ai-revolution-humanity-might-depend-on-it",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51901",
-      "title": "트럼프-시진핑 정상회담을 앞두고 베센트와 허리펑 중국 부총리가 회동했다.",
-      "original_title": "",
-      "description": "스콧 베센트와 중국의 허리펑 부총리가 9월 24일 트럼프와 시진핑의 정상회담을 앞두고 무역, AI, 핵심 광물에 관한 회담을 개최했다.",
-      "link": "https://www.cnbc.com/2026/09/20/bessent-he-lifeng-trump-xi-summit.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51893",
-      "title": "‘현실과 떨어진 실리콘밸리의 급진주의자’: 규제 완화를 주도하는 트럼프의 AI 책사 데이비",
-      "original_title": "",
-      "description": "데이비드 삭스는 트럼프에게 AI에 대한 어떠한 규제도 도입하지 않도록 설득했으며, 이로 인해 백악관은 자당의 기조와도 엇갈리는 행보를 보이고 있다. 미국 양당의 의원들이 강력한 인공지능 모델 규제를 촉구하는 가운데, 목소리를 높여 반대하는 드문 인물 중 하나다.",
-      "link": "https://www.theguardian.com/us-news/2026/sep/20/david-sacks-trump-ai-czar",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51896",
-      "title": "Z.ai는 업로드한 작업 공간을 암호화하여 오직 Z.ai만 열 수 있게 했다. 이제 삭제 ",
-      "original_title": "",
-      "description": "'퍼스타(Ferstar)'라는 필명으로 글을 쓰는 한 중국인 개발자는 금요일 ZCode의 로컬 디렉토리 내부를 조사하다가 알리바바의 클라우드 스토리지로 전송되기를 기다리는 313MB의 암호화된 아카이브를 발견했습니다. 이 전송은 564번 실패했으며, 더 작은 파일은 이미 전송된 상태였습니다. 밍샤오 창과 웬시 첸이 사우스차이나모닝포스트에 이를 보도했습니다.",
-      "link": "https://thenextweb.com/news/zai-zcode-encrypted-upload-only-zai-can-verify",
-      "entities": [
-        "Ferstar",
-        "Z."
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51887",
-      "title": "인공지능(AI) 산업은 정말로 속도를 늦출 준비가 되었을까?",
-      "original_title": "",
-      "description": "Equity 팟캐스트에서는 AI 임원들이 개발 속도를 늦추고 싶어 하는 진정성이 있는지에 대해 토론했습니다.",
-      "link": "https://techcrunch.com/2026/09/20/is-the-ai-industry-really-ready-to-slow-down/",
-      "entities": [
-        "AI",
-        "Equity"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51905",
-      "title": "In a world of wars and climate crisis, a new leade",
-      "original_title": "",
-      "description": "전쟁과 기후 위기의 시대에 유엔을 구할 새로운 리더의 필요성이 대두되고 있습니다. 그러나 이 과정에서 미국의 협조와 트럼프 대통령의 태도가 결정적인 변수가 될 것이라는 분석입니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/sep/20/un-new-leader-wars-climate-crisis-donald-trump",
-      "entities": [
-        "In"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51927",
-      "title": "엔비디아 CEO, \"2030년까지 AI가 세상을 파괴할 확률은 0%\"",
-      "original_title": "",
-      "description": "젠슨 황은 전 앤스로픽 연구원 등의 경고를 '파멸의 서사'라며 일축했습니다. 엔비디아 수장은 AI가 몇 년 안에 인류 멸종을 초래할 수준으로 발전하지는 않을 것이라고 선을 그었습니다.",
-      "link": "https://www.theguardian.com/technology/2026/sep/21/nvidia-boss-jensen-huang-dismisses-warnings-ai-destroys-world-anthropic",
-      "entities": [
-        "CEO"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51938",
-      "title": "바티칸, 이번 주 AI 캠페인을 상설 기구로 전환합니다",
-      "original_title": "",
-      "description": "인공지능과 갈등을 다루는 심포지엄 'AI4Peace'가 월요일 로마의 교황청립 라테라노 대학교에서 레오 14세의 메시지와 함께 개막했습니다. 교황은 현장에 참석하지 않았으며, 교황청 생명학술원장인 안드레아 치우치 신부가 메시지를 대독했습니다.",
-      "link": "https://thenextweb.com/news/vatican-ai4peace-association-pope-leo-unesco",
-      "entities": [
-        "AI",
-        "AI4Peace"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51956",
-      "title": "삼성, 비스포크 가전에 타이젠 10 업데이트 글로벌 배포",
-      "original_title": "",
-      "description": "삼성전자는 지난 5월 미국 내 일부 비스포크 AI 냉장고 패밀리 허브에 대규모 펌웨어 업데이트를 배포한 데 이어, 오늘 동일한 타이젠 10.0 기반 업데이트의 글로벌 출시를 발표했습니다. 일부 가전제품들이 2026년에 출시된 삼성의 프리미엄 가전과 동일한 소프트웨어를 탑재하게 됩니다.",
-      "link": "https://www.sammobile.com/news/samsun-pushes-tizen-10-update-to-bespoke-home-appliances-globally/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51943",
-      "title": "토니 블레어, 지도자들에게 거세지는 AI ‘테크래시’에 굴복하지 말 것 경고",
-      "original_title": "",
-      "description": "토니 블레어 전 영국 총리는 AI에 대한 우려가 커지면서 확산을 늦추라는 압박이 거세지는 가운데, 각국 정부가 이러한 ‘테크래시(기술 역풍)’에 굴복하면 국가가 더 가난해지고 안보적으로 취약해질 수 있다고 경고했습니다. 월요일 발표된 토니블레어연구소(TBI)의 보고서에 따르면, 미국 등의 정치 지도자들이 이러한 압력에 주의해야 한다고 지적했습니다.",
-      "link": "https://www.cityam.com/tony-blair-warns-leaders-to-resist-growing-ai-techlash/",
-      "entities": [
-        "AI",
-        "TBI"
-      ],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51902",
-      "title": "미래의 직장에서는 '로봇 노사관계' 부서가 현실화될 수 있다",
-      "original_title": "",
-      "description": "챗봇부터 휴머노이드, 자동화된 관리 시스템에 이르기까지 AI가 기업들에 광범위하게 도입되면서 근로자의 임금과 자율성에 지대한 영향을 미치고 있다.",
-      "link": "https://www.cnbc.com/2026/09/20/ai-jobs-worker-fears.html",
-      "entities": [],
-      "date": "2026-09-21"
-    },
-    {
-      "id": "51941",
-      "title": "백악관, 트럼프의 'AI 부대'가 무엇인지 밝히지 않아",
-      "original_title": "",
-      "description": "도널드 트럼프가 'AI 부대'와 AI 차관(czar) 창설 계획을 발표한지 이틀이 지났지만, 백악관은 이 AI 부대가 군사 조직인지, 규제 기관인지, 혹은 다른 형태인지 명확히 밝히지 않았습니다. 트럼프는 행정명령을 통해서가 아니라 토요일 트루스 소셜(Truth Social)을 통해 이를 발표했습니다.",
-      "link": "https://thenextweb.com/news/white-house-ai-force-no-detail",
-      "entities": [
-        "Social",
-        "Truth",
-        "AI"
-      ],
-      "date": "2026-09-21"
-    },
     {
       "id": "51928",
       "title": "호주 주요 보고서, 40년 후 출생아보다 사망자 많아지며 저성장 미래 예고",
@@ -6625,6 +6097,46 @@
         "AI"
       ],
       "date": "2026-10-20"
+    },
+    {
+      "id": "56082",
+      "title": "OpenRouter 무료 모델 (:free 태그)",
+      "original_title": "OpenRouter 무료 모델 (:free 태그)",
+      "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+      "link": "https://openrouter.ai/models?max_price=0&order=newest",
+      "entities": [
+        "OpenRouter",
+        "API"
+      ],
+      "date": "2026-10-22"
+    },
+    {
+      "id": "56721",
+      "title": "[무료 LLM] flint-40b-free — OpenCode Zen 무료 티어",
+      "original_title": "flint-40b-free",
+      "description": "Flint 40B Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/flint-40b-free\"} 프로바이더 갱신일 2026-10-21.",
+      "link": "https://models.dev/opencode/flint-40b-free",
+      "entities": [
+        "Zen",
+        "OpenCode",
+        "LLM",
+        "Flint",
+        "Free"
+      ],
+      "date": "2026-10-22"
+    },
+    {
+      "id": "56532",
+      "title": "Recursive, 자사가 대부분 AI로 구축한 노트북 코딩 모델 'Flint' 출시",
+      "original_title": "Recursive launches Flint, a laptop coding model it says was largely built by AI",
+      "description": "스타트업 Recursive가 자체 AI 연구 시스템을 통해 대부분 구축한 무료 노트북 크기의 코딩 모델 'Flint'를 출시했습니다. 이는 스스로 발전하는 AI를 테스트하기 위한 초기 단계의 시도입니다.",
+      "link": "https://techcrunch.com/2026/10/21/recursive-launches-flint-a-laptop-coding-model-it-says-was-largely-built-by-ai/",
+      "entities": [
+        "AI",
+        "Flint",
+        "Recursive"
+      ],
+      "date": "2026-10-22"
     }
   ]
 }

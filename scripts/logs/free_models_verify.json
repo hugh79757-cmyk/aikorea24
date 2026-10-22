@@ -1,24 +1,24 @@
 {
-  "verified_at": "2026-10-21 09:31",
+  "verified_at": "2026-10-22 09:30",
   "pass": [
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
     "kilo/liquid/lfm-2.5-2.6b:free",
     "kilo/nvidia/nemotron-3.5-lightning:free",
     "kilo/poolside/laguna-s-2.1:free",
-    "opencode/longcat-2.5-preview-free",
     "opencode/mimo-v2.6-flash-free",
     "opencode/glm-5.3-flash-free",
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
     "opencode/nemotron-3-ultra-free",
     "opencode/beam-free",
-    "opencode/nemotron-3.5-lightning-free"
+    "opencode/nemotron-3.5-lightning-free",
+    "kilo/poolside/laguna-xs-2.1:free"
   ],
   "fail": [
     {
-      "cli_id": "kilo/poolside/laguna-xs-2.1:free",
-      "model_id": "poolside/laguna-xs-2.1:free",
-      "reason": "CLI 타임아웃 60초",
+      "cli_id": "opencode/longcat-2.5-preview-free",
+      "model_id": "longcat-2.5-preview-free",
+      "reason": "Upstream request failed: Endpoint is unavailable.",
       "kind": "transient"
     }
   ]

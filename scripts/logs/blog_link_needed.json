@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-21 09:00",
-  "count": 140,
+  "updated_at": "2026-10-22 09:01",
+  "count": 144,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -211,6 +211,22 @@
       "in_briefing": false
     },
     {
+      "key": "deepseek-ai/deepseek-v4-flash",
+      "original_titles": [
+        "deepseek-ai/deepseek-v4-flash"
+      ],
+      "news_ids": [
+        56723
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/deepseek-ai/deepseek-v4-flash"
+      ],
+      "in_briefing": false
+    },
+    {
       "key": "deepseek-ai/deepseek-v4-flash-0731",
       "original_titles": [
         "deepseek-ai/deepseek-v4-flash-0731"
@@ -223,6 +239,22 @@
       ],
       "cli_ids": [
         "nvidia/deepseek-ai/deepseek-v4-flash-0731"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "deepseek-ai/deepseek-v4-pro",
+      "original_titles": [
+        "deepseek-ai/deepseek-v4-pro"
+      ],
+      "news_ids": [
+        56724
+      ],
+      "sources": [
+        "NVIDIA NIM Free"
+      ],
+      "cli_ids": [
+        "nvidia/deepseek-ai/deepseek-v4-pro"
       ],
       "in_briefing": false
     },
@@ -289,6 +321,22 @@
         "opencode/fledge-alpha-free"
       ],
       "in_briefing": false
+    },
+    {
+      "key": "flint-40b",
+      "original_titles": [
+        "flint-40b-free"
+      ],
+      "news_ids": [
+        56721
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/flint-40b-free"
+      ],
+      "in_briefing": true
     },
     {
       "key": "gliner-pii",
@@ -2004,6 +2052,25 @@
       ],
       "cli_ids": [
         "opencode/qwen3.6-plus-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "recursive/flint-v1.0",
+      "original_titles": [
+        "recursive/flint-v1.0:free"
+      ],
+      "news_ids": [
+        56722,
+        56720
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/recursive/flint-v1.0:free",
+        "openrouter/recursive/flint-v1.0:free"
       ],
       "in_briefing": false
     },
