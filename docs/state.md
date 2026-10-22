@@ -1,8 +1,50 @@
+## 2026-10-22 11:43 — AIK24-EVAL-FLINT — Recursive Flint 12문항 실측(원점수 7/12, 보정 9/12)
+
+### 한 일
+
+- `recursive/flint-v1.0:free`(OpenCode CLI id `kilo/recursive/flint-v1.0:free`)를 `model_eval.eval_model_cli()` 경유로 12문항 평가했습니다(qv=2).
+- 평가 CWD를 임시 디렉터리(`.../T/opencode/flint-eval-cwd`)로 두어 저장소 오염을 막았습니다.
+- 0점 5건(Q1·Q4·Q7·Q9·Q11)을 문항 스펙·채점 함수와 대조해 실패/오탐을 분리했습니다.
+- 결과 파일: `scripts/logs/flint_eval_result.json` (일회성 산출물, 정본 아님).
+- [CONFIG] `~/.config/opencode/opencode.json` — kilo provider `models` 에 flint 항목 + `limit{context:262144, output:65536}` 1건 추가(백업 `opencode.json.bak-flint-202610221130`).
+
+### 결과 (검증 근거)
+
+- [검증됨] 원점수 **7/12**, 호출 실패 0, qv 2, 소요 691.4초. 축별 지시이행 1/2 · 코딩실무 3/4 · 맥락유지 1/2 · 에이전트 2/4. 근거: `flint_eval_result.json`(`score=7`, `max_score=12`, `failed=0`, `by_axis`, `elapsed_sec=691.4`) · 런 로그 12행 전수 대조.
+- [검증됨] 60초 타임아웃 4건(Q4·Q5·Q6·Q11) → 180초 재시도로 전부 회수, 최종 미응답 0. 근거: 런 로그 `CLI 타임아웃 60초 → 180초로 재시도` 4행, 결과 `failed=0`.
+- [검증됨] **채점기 오탐 2건 → 보정 시 9/12.** Q1은 인라인 백틱 코드 스팬의 `def/add/return`을 영어 어휘로 세어 0점(스팬 치환 후 1점), Q7은 정답 함수명을 백틱으로 감싸 정확일치 실패(백틱 제거 후 1점). 근거: `grade_q1_korean_sentinel`·`grade_q7_marker_exact` 직접 재호출 결과 0→1. 원문 답안은 두 문항 모두 지시를 지켰습니다(한국어+마지막 줄 `---끝---`, 함수명만 응답).
+- [부분검증] Q9 0점은 **내용 충족·형식 위반**. 답안은 문자열 5개 배열이 맞으나 ```json 펜스로 감싸 `json.loads` 실패(펜스 제거 시 1점). 계약(compact JSON만)상 0점 유지. 제한 사유: 내용 정답과 형식 위반을 분리 집계하는 채점기가 없음.
+- [검증됨] Q4 0점은 **하네스 오염**. 근거: 평가 CWD에 `safe_div.py`·`test_safe_div.py`(mtime 11:32 = 1차 시도가 60초에 잘린 시점), `STATEMENT.md`(11:35 = 재시도). 재시도 세션이 1차 산출물을 발견하고 "이미 완료" 로 판단해 **최종 답변에 테스트 코드를 싣지 않음** → `grade_q4_pytest_written` 이 `def test_` 미검출로 0.
+- [부분검증] Q11 0점은 **JSON 계약 위반**. 확인된 앞부분은 dict 7키(`task`/`보고_분류`/`한_일`/`결과`/`steps`…)이고 4단계 계약(`screen`/`state_model`/`verify`)과 불일치. 제한 사유: 보관 답변이 `ANSWER_STORE_CHARS=1000`에서 잘려 전수 파싱 재검증 불가.
+- [검증됨] 저장소 무변경. 근거: 평가 후 `git status --porcelain` 에 `safe_div.py` 부재, `test_safe_div.py` 수정 표시 없음(= HEAD와 동일), 신규 파일은 `scripts/logs/flint_eval_result.json` 1건뿐.
+
+### 발견한 결함
+
+- **높음 (환경 설정)** — kilo provider `models` 목록에 flint 항목이 없어 `opencode run -m kilo/recursive/flint-v1.0:free` 가 `This endpoint's maximum context length is 262144 tokens. However, you requested about 266584 tokens (... 227601 in the output)` 로 실패했습니다. `limit.output` 미지정 시 OpenCode가 남은 컨텍스트 전부를 출력 예산으로 보내 입력+출력이 한도를 넘습니다. 조치: 위 [CONFIG] 1건 추가 → PONG 정상(3.5초).
+- **중간 (측정 설계)** — 전역 `~/.config/opencode/AGENTS.md` 보고 규칙이 평가 답변에 개입합니다. Q11의 `보고_분류/한_일/결과` 래퍼, Q4의 "프로젝트 규칙에 따라 상태 보고서 갱신" 이 그 증거입니다. 이 평가는 모델 단독 성능이 아니라 **모델+하네스 지시**를 측정합니다.
+- **중간 (설정 경로)** — `~/.config/opencode/models/*.json` 별칭 방식은 v2.1.2에서 동작하지 않습니다(`Invalid model reference`). 테스트로 만든 `models/flint-kilo.json` 은 삭제했습니다. 기존 `models/deepseek-v4-flash.json` 도 같은 이유로 무효 상태입니다.
+- **낮음 (관측성)** — `ANSWER_STORE_CHARS=1000` 때문에 오답의 전수 재검증이 불가능합니다(Q11이 해당).
+
+### 잔존 위험
+
+- **9/12는 사후 보정치이며 정본에 기록되지 않았습니다.** `cache_put()` 을 호출하지 않아 `model_eval_cache.json`·`model_leaderboard.json`·`model_eval_runs.jsonl` 모두 무변경입니다. 기록 여부는 대표님 결정이 필요합니다(리더보드는 append-only).
+- 채점기 오탐 2건은 **보고만 하고 코드는 고치지 않았습니다.** 수정하면 과거 전 모델 점수가 재계산 대상이 되므로 별도 판단이 필요합니다.
+- Q11은 답변 절단 때문에 부분 재검증만 가능합니다.
+- flint는 무료 목록(`free_models_cli.json`)에 없어(`:free` 접미사 규칙에는 맞으나 PONG 검증 목록 미갱신) 무료 모델 페이지 표에는 자동 반영되지 않습니다.
+
+### 다음 행동
+
+1. `cache_put` 기록 여부 결정(캐시·리더보드·runs.jsonl).
+2. 채점기 오탐 2건(인라인 백틱·백틱 정확일치) 수정 여부 결정 — 과거 점수 재계산 범위 포함.
+3. 필요 시 flint 12문항 결과로 심층 분석 글 작성(현재 초안은 썸네일 게이트에서 보류 상태).
+
 ## 2026-10-22 11:45 — AIK24-PIPE-10: 자동 글 주제 오인 재발 방지 (모델 ID 강제 · 실측 근거 · 발행 전 일치 검사)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
 * 지시서: `2026-10-22-1125-AIK24-PIPE-10-자동글-주제오인-재발방지.md` (대표님 지적 2026-10-22 11:25)
-* 결과: 성공 (3규칙 구현 · 재현 테스트 18건 · pytest 1027 passed / 10 skipped / 0 failed · 파이프라인 재실행 0건 · 발행 0건)
+* 결과: **구현 완료 / 검수 대기** (3규칙 구현 · 재현 테스트 18건 · pytest 1027 passed / 10 skipped / 0 failed · 파이프라인 재실행 0건 · 발행 0건)
+* 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-22-1200-AIK24-PIPE-10-완료보고.md` (지시서 §완료보고 규격, 필수 6항목 기재)
+* 검수 대기 사유: 지시서 완료 기준 5번 "다음 blog-draft 실행의 회귀 확인" 이 **미확인**(다음 실행 2026-10-22 20:15 로컬) — 검수자가 로그·라이브로 대조하기 전까지 완료로 단정하지 않는다.
 * 산출물: `scripts/model_attribution.py`(신규) · `scripts/blog_draft_generator.py`(수정) · `tests/test_pipe10_model_attribution.py`(신규) · 커밋 아래
 
 ### 0단계. 생성 코드 경로 특정 [검증됨]
