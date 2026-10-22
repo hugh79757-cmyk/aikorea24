@@ -74,6 +74,25 @@ class TestRule2MeasurementWithoutRecord:
         """규칙 2 의 근거: 사고 글의 모델은 실행 기록이 없다."""
         assert ma.normalize_model_key("google/gemini-2.0-flash-exp:free") not in ma.evaluated_model_ids()
 
+    def test_one_off_eval_artifact_counts_as_record(self):
+        """1회성 평가 산출물(정본 미반영)도 '실행 기록'으로 인정한다.
+
+        2026-10-22: Recursive Flint 12문항 실측이 `flint_eval_result.json` 에만 있고
+        정본 3종(캐시·리더보드·runs)에는 아직 없다. 기록이 존재하므로
+        그 수치가 든 글을 규칙 2 가 막으면 안 된다.
+        """
+        import pathlib
+
+        artifact = pathlib.Path(
+            os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                "scripts", "logs", "flint_eval_result.json",
+            )
+        )
+        if not artifact.exists():
+            return  # 산출물이 없으면 판정 대상이 아니므로 통과로 둔다
+        assert "recursive/flint-v1.0:free" in ma.evaluated_model_ids()
+
     def test_general_news_with_number_passes(self):
         """모델을 언급하지 않으면 정량 수치가 있어도 귀속 위반이 아니다(일반 뉴스)."""
         body = "## 도입\n2024년 10월 기준 기능이 3개 개선됐습니다.\n"

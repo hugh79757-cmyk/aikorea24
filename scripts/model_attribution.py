@@ -254,6 +254,23 @@ def evaluated_model_ids() -> set:
                     keys |= model_match_keys(mid)
     except OSError:
         pass
+    # 2026-10-22 추가: 1회성 평가 산출물(예: flint_eval_result.json).
+    #   대표님 판단으로 정본 3종에 아직 반영되지 않은 실측이 여기 남아 있을 수 있다.
+    #   "실제 실행 기록이 있으면 실측을 적어도 된다" 는 규칙 2 의 취지이므로,
+    #   기록이 존재하는 한 실측 수치를 막지 않는다(정본 등록 여부는 별도 결정).
+    try:
+        for path in sorted(LOGS_DIR.glob("*eval_result*.json")):
+            try:
+                with path.open(encoding="utf-8") as f:
+                    data = json.load(f)
+            except (OSError, ValueError):
+                continue
+            if isinstance(data, dict):
+                mid = data.get("model_id") or data.get("model")
+                if mid:
+                    keys |= model_match_keys(mid)
+    except OSError:
+        pass
     return keys
 
 

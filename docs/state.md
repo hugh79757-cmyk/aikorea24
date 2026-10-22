@@ -45,6 +45,12 @@
 * 결과: **구현 완료 / 검수 대기** (3규칙 구현 · 재현 테스트 18건 · pytest 1027 passed / 10 skipped / 0 failed · 파이프라인 재실행 0건 · 발행 0건)
 * 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-22-1200-AIK24-PIPE-10-완료보고.md` (지시서 §완료보고 규격, 필수 6항목 기재)
 * 검수 대기 사유: 지시서 완료 기준 5번 "다음 blog-draft 실행의 회귀 확인" 이 **미확인**(다음 실행 2026-10-22 20:15 로컬) — 검수자가 로그·라이브로 대조하기 전까지 완료로 단정하지 않는다.
+* **12:10 보정** — 같은 날 11:43 별도 세션(`AIK24-EVAL-FLINT`)의 Recursive Flint 실측(원점수 7/12 · 보정 9/12)이
+  `scripts/logs/flint_eval_result.json` 에만 있고 **정본 3종(캐시·리더보드·runs)에는 미기록**인 상태였다.
+  규칙 2 가 "실행 기록 = 정본 3곳" 만 보면 **실측이 실제로 있는 모델을 막는** 오탐이 된다 →
+  `evaluated_model_ids()` 가 `scripts/logs/*eval_result*.json` 도 읽도록 확장(테스트 1건 추가).
+  → flint 계열 4개 키가 기록으로 인식됨 확인. pytest **1028 passed / 10 skipped / 0 failed** (신규 19건).
+  정본 등록 여부는 별건(EVAL-FLINT 세션의 다음 행동 1) — 규칙 2 는 "기록이 존재하는 한"만 본다.
 * 산출물: `scripts/model_attribution.py`(신규) · `scripts/blog_draft_generator.py`(수정) · `tests/test_pipe10_model_attribution.py`(신규) · 커밋 아래
 
 ### 0단계. 생성 코드 경로 특정 [검증됨]
