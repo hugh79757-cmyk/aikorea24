@@ -1,1 +1,1 @@
-{"last_run": "2026-10-23T05:10:13", "last_actions": ["PRAGMA optimize"], "last_usage_24h": 2903031}
+{"last_run": "2026-10-24T05:10:13", "last_actions": ["ANALYZE ec_posts", "ANALYZE content_taxonomies", "ANALYZE taxonomies", "ANALYZE(전체) [복구 실패 후]"], "last_usage_24h": 4253974}

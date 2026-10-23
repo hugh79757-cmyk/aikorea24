@@ -1,0 +1,29 @@
+{
+  "added": [],
+  "removed": [
+    {
+      "provider": "kilo",
+      "model_id": "minimax/minimax-m3.1-flash:free",
+      "name": "MiniMax: MiniMax M3.1 Flash (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "minimax/minimax-m3.1-flash:free",
+      "name": "MiniMax: MiniMax M3.1 Flash (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000,
+      "reason": "무료→유료 전환"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}

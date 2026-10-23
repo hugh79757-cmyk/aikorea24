@@ -12,12 +12,6 @@
     "context_length": 512000
   },
   {
-    "model_id": "liquid/lfm-2.5-2.6b:free",
-    "provider": "kilo",
-    "cli_id": "kilo/liquid/lfm-2.5-2.6b:free",
-    "context_length": 65536
-  },
-  {
     "model_id": "nvidia/nemotron-3.5-lightning:free",
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3.5-lightning:free",

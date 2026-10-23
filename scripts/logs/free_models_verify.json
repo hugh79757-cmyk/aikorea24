@@ -1,9 +1,8 @@
 {
-  "verified_at": "2026-10-22 09:30",
+  "verified_at": "2026-10-23 09:31",
   "pass": [
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
-    "kilo/liquid/lfm-2.5-2.6b:free",
     "kilo/nvidia/nemotron-3.5-lightning:free",
     "kilo/poolside/laguna-s-2.1:free",
     "opencode/mimo-v2.6-flash-free",
@@ -18,7 +17,13 @@
     {
       "cli_id": "opencode/longcat-2.5-preview-free",
       "model_id": "longcat-2.5-preview-free",
-      "reason": "Upstream request failed: Endpoint is unavailable.",
+      "reason": "Model unavailable: opencode/longcat-2.5-preview-free",
+      "kind": "dead"
+    },
+    {
+      "cli_id": "kilo/liquid/lfm-2.5-2.6b:free",
+      "model_id": "liquid/lfm-2.5-2.6b:free",
+      "reason": "CLI 타임아웃 60초",
       "kind": "transient"
     }
   ]

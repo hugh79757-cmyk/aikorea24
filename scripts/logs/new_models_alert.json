@@ -1,27 +1,19 @@
 {
- "day": "2026-10-23",
- "checked_at": 1792702805.984852,
+ "day": "2026-10-24",
+ "checked_at": 1792789207.520552,
  "total_rows": 38,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "minimax/minimax-m3.1-flash"
+   "moonshotai/kimi-k3.1-pro"
   ],
   "kilo": [
-   "minimax/minimax-m3.1-flash"
+   "moonshotai/kimi-k3.1-pro"
+  ],
+  "nvidia": [
+   "nvidia/nemotron-3.5-bolt-e4b",
+   "minimaxai/minimax-m3.1-flash"
   ]
  },
- "removed_by_provider": {
-  "openrouter": [
-   "google/gemini-2.5-flash-lite:batch",
-   "minimax/minimax-m3.1-flash:free"
-  ],
-  "kilo": [
-   "minimax/minimax-m3.1-flash:free"
-  ],
-  "zen": [
-   "longcat-2.5-preview-free",
-   "minimax-m3.1-flash-free"
-  ]
- }
+ "removed_by_provider": {}
 }

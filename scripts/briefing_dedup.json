@@ -1,160 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-22",
-      "briefing_id": 308,
-      "articles": [
-        {
-          "id": "51928",
-          "title": "호주 주요 보고서, 40년 후 출생아보다 사망자 많아지며 저성장 미래 예고",
-          "original_title": "",
-          "description": "제7차 세대 보고서는 또한 호주가 불확실한 인공지능의 시대 직전에 와 있다고 지적합니다. 40년 후에는 호주에서 태어나는 사람보다 사망하는 사람이 더 많아질 전망입니다.",
-          "link": "https://www.theguardian.com/australia-news/2026/sep/21/jim-chalmers-intergenerational-report-2026-deaths-outnumber-births-australia2060s",
-          "entities": [],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "51940",
-          "title": "미국, 중국에 AI 사고 경보 체계 제안",
-          "original_title": "",
-          "description": "스콧 베센트 재무장관이 일요일 맨해튼에서 열린 회담에서 중국 측 인사들에게 제안한 바와 같이, 미국은 워싱턴과 베이징이 국가 안보 사안으로 분류될 만큼 심각한 AI 사고 발생 시 이를 서로 통보할 것을 제안했습니다.",
-          "link": "https://thenextweb.com/news/us-china-ai-incident-alert-bessent-he-lifeng",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "51957",
-          "title": "삼성, 북미 AI 개발 이끌 스탠퍼드대 AI 석학 영입",
-          "original_title": "",
-          "description": "삼성전자는 모든 기기와 비즈니스 운영 전반에 걸쳐 고급 기능을 제공하기 위해 AI 개발에 박차를 가하고 있습니다. 이러한 노력을 다방면으로 이끌기 위해, 테크 거물 삼성은 세일즈포스에서 AI 연구를 총괄했던 스탠퍼드 대학교의 AI 석학 후안 카를로스 니에블레스(Juan Carlos Niebles)를 영입했습니다.",
-          "link": "https://www.sammobile.com/news/samsung-hires-stanford-ai-scholar-lead-ai-development-north-america/",
-          "entities": [
-            "Juan",
-            "Niebles",
-            "AI",
-            "Carlos"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "51942",
-          "title": "소프트뱅크, 차기 OpenAI 투자금 마련 위해 약 110억 달러 규모 회사채 발행 추진",
-          "original_title": "",
-          "description": "로이터와 블룸버그 등 외신에 따르면, 소프트뱅크 그룹은 100억 달러 규모의 선순위 무담보 달러화 채권과 10억 유로어치의 유로화 채권을 합산해 약 110억 달러에 달하는 채권 발행을 시작했습니다. 이번 발행은 총 5개 트랜치로 나누어 진행되며, 달러화 채권의 만기는 3년 반과 5년 등으로 구성되어 있습니다.",
-          "link": "https://thenextweb.com/news/softbank-bond-openai-october-instalment",
-          "entities": [
-            "OpenAI"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "51924",
-          "title": "미국과 중국, AI 국가 안보 위협 상호 통보 방안 논의",
-          "original_title": "",
-          "description": "양국 고위 관료들이 국가 안보를 위협할 수 있는 AI 관련 사고가 발생했을 때 서로에게 이를 알릴 수 있는 통보 메커니즘 구축 방안을 논의했습니다.",
-          "link": "https://www.wired.com/story/us-and-china-discuss-alerting-each-other-to-ai-national-security-threats/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "51944",
-          "title": "GOV.UK 설립자, 영국이 해외 AI에 ‘위험할 정도로 의존하고 있다’고 경고",
-          "original_title": "",
-          "description": "GOV.UK의 설립자는 AI가 기업과 공공 서비스 전반으로 확산됨에 따라 영국이 소수의 해외 기술 기업에 ‘위험할 정도로 의존하게 될’ 위험이 있다고 경고했습니다. 정부 디지털 서비스(GDS)를 설립하고 GOV.UK의 구축을 주도했던 마이크 브라켄은 기관들이 점차 주도권을 넘겨주고 있다고 밝혔습니다.",
-          "link": "https://www.cityam.com/gov-uk-founder-warns-britain-is-dangerously-dependent-on-foreign-ai/",
-          "entities": [
-            "GOV.UK",
-            "GOV.",
-            "GDS"
-          ],
-          "date": "2026-09-22"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-22",
-      "briefing_id": 309,
-      "articles": [
-        {
-          "id": "52098",
-          "title": "샤오미의 가성비 플래그십 AI, 오픈 모델 선두에 서다… 앤트로픽은 클로드가 기여했다고 주",
-          "original_title": "",
-          "description": "샤오미는 'MiMo-V2.6-Pro'를 통해 공개된 AI 모델 중 최상위권에 오르며 경쟁사들을 압도하는 저렴한 가격을 선보였습니다. 이를 가능케 한 것은 262만 달러가 소요된 대규모 강화학습이지만, 앤트로픽이 샤오미의 트레이닝 데이터 무단 도용을 주장하면서 논란도 함께 제기되고 있습니다.",
-          "link": "https://the-decoder.com/xiaomis-affordable-flagship-ai-leads-the-open-models-and-anthropic-says-claude-helped-get-it-there/",
-          "entities": [
-            "AI",
-            "MiMo-V2.6-Pro"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "52110",
-          "title": "Using AI to ‘talk to animals’ might make us feel c",
-          "original_title": "",
-          "description": "동물 행동 학자들이 연구에 AI를 점점 더 많이 활용함에 따라, 이 기술을 어떻게 책임감 있게 다룰지 고심하고 있습니다. 호주 샤크 베이의 작은 보트에 앉아 지구상에서 가장 지능적인 생물들의 대화를 엿듣습니다.",
-          "link": "https://www.theguardian.com/technology/ng-interactive/2026/sep/22/animal-language-recordings-ai",
-          "entities": [
-            "Using",
-            "AI"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "52101",
-          "title": "동료들의 AI 클론을 만들었더니 상황이 기묘해졌다",
-          "original_title": "",
-          "description": "브라이언봇(Brian Bot)은 즉흥 연기에 대해 이야기하는 것을 좋아했고, 소피봇(Sophie Bot)은 나를 \"빅 독(big dog)\"이라고 부르는 것을 멈추지 않았다. 일하는 방식의 미래에 오신 것을 환영합니다.",
-          "link": "https://www.wired.com/story/ai-coworker-bots-loved-improv-and-interstellar-soundtrack/",
-          "entities": [
-            "Bot",
-            "Sophie",
-            "Brian",
-            "AI"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "52126",
-          "title": "앤디 번햄, 영국이 G20 의장국 지위를 이용해 글로벌 AI 협정을 중재하기를 원하다",
-          "original_title": "",
-          "description": "폴리티코 유럽의 보도에 따르면, 앤디 번햄 총리는 뉴욕 유엔 총회를 앞두고 기자들에게 영국이 다가오는 G20 의장국 임기 동안 전 세계적인 AI 합의를 중재하려 할 것이라고 밝혔습니다. 그는 영국이 \"AI 분야에서 리더십을 발휘할 독보적인 위치에 있다\"고 덧붙였습니다.",
-          "link": "https://thenextweb.com/news/andy-burnham-uk-g20-global-ai-agreement",
-          "entities": [
-            "AI",
-            "G20"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "52093",
-          "title": "엔스케일의 IPO, 월스트리트의 집중형 AI 투자 심리 다시 시험대에 올라",
-          "original_title": "",
-          "description": "영국의 AI 데이터센터 개발사인 엔스케일은 매출 대부분을 거대 기술 기업인 마이크로소프트와 앤스로픽에 의존하고 있다.",
-          "link": "https://techcrunch.com/2026/09/22/nscales-ipo-will-test-wall-streets-appetite-for-concentrated-ai-bets-once-again/",
-          "entities": [
-            "AI",
-            "IPO"
-          ],
-          "date": "2026-09-22"
-        },
-        {
-          "id": "52094",
-          "title": "애플 스토어를 만든 인물이 실리콘밸리의 AI 쇼핑 베팅에 의문을 제기하다",
-          "original_title": "",
-          "description": "애플 스토어의 설계자인 론 존슨은 애플의 성공 비결이 언제나 '사람'이었다고 말한다.",
-          "link": "https://techcrunch.com/2026/09/21/the-man-who-built-apples-stores-doesnt-buy-silicon-valleys-bet-on-ai-shopping/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-22"
-        }
-      ]
-    },
-    {
       "date": "2026-09-23",
       "briefing_id": 310,
       "articles": [
@@ -3229,151 +3075,68 @@
           "date": "2026-10-22"
         }
       ]
+    },
+    {
+      "date": "2026-10-23",
+      "briefing_id": 361,
+      "articles": [
+        {
+          "id": "56074",
+          "title": "Google Cloud 신규 가입 $300 크레딧",
+          "original_title": "Google Cloud 신규 가입 $300 크레딧",
+          "description": "AI 스튜디오·Vertex AI·GPU VM에 쓸 수 있는 신규 고객 크레딧(90일). API 키를 발급해 OpenCode 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+          "link": "https://cloud.google.com/free",
+          "entities": [
+            "AI",
+            "API",
+            "GPU",
+            "Vertex",
+            "Google",
+            "OpenCode",
+            "Cloud"
+          ],
+          "date": "2026-10-23"
+        },
+        {
+          "id": "56567",
+          "title": "명의 자바 챔피언이 생산성 향상을 위해 GitHub Copilot을 사용하는 방법",
+          "original_title": "How 3 Java Champions are using GitHub Copilot for increased productivity",
+          "description": "세 명의 자바 챔피언이 문제 해결, 개발 가속화, 그리고 결과물에 대한 인간의 책임 유지하기 위해 GitHub Copilot을 어떻게 활용하는지 공유합니다. 이 게시물은 GitHub 블로그에 처음 게재되었습니다.",
+          "link": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
+          "entities": [
+            "Java",
+            "GitHub",
+            "Copilot",
+            "How",
+            "Champions"
+          ],
+          "date": "2026-10-23"
+        },
+        {
+          "id": "56568",
+          "title": "엔비디아 쿠모렐레이셔널(NVIDIA Kumo Relational), 별도의 학습 없이 관계",
+          "original_title": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
+          "description": "",
+          "link": "https://huggingface.co/blog/nvidia/kumo-relational",
+          "entities": [
+            "Kumo",
+            "Machine",
+            "Supervised",
+            "NVIDIA",
+            "No",
+            "Required",
+            "Learning",
+            "Relational",
+            "Outperforms",
+            "Training",
+            "Data"
+          ],
+          "date": "2026-10-23"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "51928",
-      "title": "호주 주요 보고서, 40년 후 출생아보다 사망자 많아지며 저성장 미래 예고",
-      "original_title": "",
-      "description": "제7차 세대 보고서는 또한 호주가 불확실한 인공지능의 시대 직전에 와 있다고 지적합니다. 40년 후에는 호주에서 태어나는 사람보다 사망하는 사람이 더 많아질 전망입니다.",
-      "link": "https://www.theguardian.com/australia-news/2026/sep/21/jim-chalmers-intergenerational-report-2026-deaths-outnumber-births-australia2060s",
-      "entities": [],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "51940",
-      "title": "미국, 중국에 AI 사고 경보 체계 제안",
-      "original_title": "",
-      "description": "스콧 베센트 재무장관이 일요일 맨해튼에서 열린 회담에서 중국 측 인사들에게 제안한 바와 같이, 미국은 워싱턴과 베이징이 국가 안보 사안으로 분류될 만큼 심각한 AI 사고 발생 시 이를 서로 통보할 것을 제안했습니다.",
-      "link": "https://thenextweb.com/news/us-china-ai-incident-alert-bessent-he-lifeng",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "51957",
-      "title": "삼성, 북미 AI 개발 이끌 스탠퍼드대 AI 석학 영입",
-      "original_title": "",
-      "description": "삼성전자는 모든 기기와 비즈니스 운영 전반에 걸쳐 고급 기능을 제공하기 위해 AI 개발에 박차를 가하고 있습니다. 이러한 노력을 다방면으로 이끌기 위해, 테크 거물 삼성은 세일즈포스에서 AI 연구를 총괄했던 스탠퍼드 대학교의 AI 석학 후안 카를로스 니에블레스(Juan Carlos Niebles)를 영입했습니다.",
-      "link": "https://www.sammobile.com/news/samsung-hires-stanford-ai-scholar-lead-ai-development-north-america/",
-      "entities": [
-        "Juan",
-        "Niebles",
-        "AI",
-        "Carlos"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "51942",
-      "title": "소프트뱅크, 차기 OpenAI 투자금 마련 위해 약 110억 달러 규모 회사채 발행 추진",
-      "original_title": "",
-      "description": "로이터와 블룸버그 등 외신에 따르면, 소프트뱅크 그룹은 100억 달러 규모의 선순위 무담보 달러화 채권과 10억 유로어치의 유로화 채권을 합산해 약 110억 달러에 달하는 채권 발행을 시작했습니다. 이번 발행은 총 5개 트랜치로 나누어 진행되며, 달러화 채권의 만기는 3년 반과 5년 등으로 구성되어 있습니다.",
-      "link": "https://thenextweb.com/news/softbank-bond-openai-october-instalment",
-      "entities": [
-        "OpenAI"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "51924",
-      "title": "미국과 중국, AI 국가 안보 위협 상호 통보 방안 논의",
-      "original_title": "",
-      "description": "양국 고위 관료들이 국가 안보를 위협할 수 있는 AI 관련 사고가 발생했을 때 서로에게 이를 알릴 수 있는 통보 메커니즘 구축 방안을 논의했습니다.",
-      "link": "https://www.wired.com/story/us-and-china-discuss-alerting-each-other-to-ai-national-security-threats/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "51944",
-      "title": "GOV.UK 설립자, 영국이 해외 AI에 ‘위험할 정도로 의존하고 있다’고 경고",
-      "original_title": "",
-      "description": "GOV.UK의 설립자는 AI가 기업과 공공 서비스 전반으로 확산됨에 따라 영국이 소수의 해외 기술 기업에 ‘위험할 정도로 의존하게 될’ 위험이 있다고 경고했습니다. 정부 디지털 서비스(GDS)를 설립하고 GOV.UK의 구축을 주도했던 마이크 브라켄은 기관들이 점차 주도권을 넘겨주고 있다고 밝혔습니다.",
-      "link": "https://www.cityam.com/gov-uk-founder-warns-britain-is-dangerously-dependent-on-foreign-ai/",
-      "entities": [
-        "GOV.UK",
-        "GOV.",
-        "GDS"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "52098",
-      "title": "샤오미의 가성비 플래그십 AI, 오픈 모델 선두에 서다… 앤트로픽은 클로드가 기여했다고 주",
-      "original_title": "",
-      "description": "샤오미는 'MiMo-V2.6-Pro'를 통해 공개된 AI 모델 중 최상위권에 오르며 경쟁사들을 압도하는 저렴한 가격을 선보였습니다. 이를 가능케 한 것은 262만 달러가 소요된 대규모 강화학습이지만, 앤트로픽이 샤오미의 트레이닝 데이터 무단 도용을 주장하면서 논란도 함께 제기되고 있습니다.",
-      "link": "https://the-decoder.com/xiaomis-affordable-flagship-ai-leads-the-open-models-and-anthropic-says-claude-helped-get-it-there/",
-      "entities": [
-        "AI",
-        "MiMo-V2.6-Pro"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "52110",
-      "title": "Using AI to ‘talk to animals’ might make us feel c",
-      "original_title": "",
-      "description": "동물 행동 학자들이 연구에 AI를 점점 더 많이 활용함에 따라, 이 기술을 어떻게 책임감 있게 다룰지 고심하고 있습니다. 호주 샤크 베이의 작은 보트에 앉아 지구상에서 가장 지능적인 생물들의 대화를 엿듣습니다.",
-      "link": "https://www.theguardian.com/technology/ng-interactive/2026/sep/22/animal-language-recordings-ai",
-      "entities": [
-        "Using",
-        "AI"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "52101",
-      "title": "동료들의 AI 클론을 만들었더니 상황이 기묘해졌다",
-      "original_title": "",
-      "description": "브라이언봇(Brian Bot)은 즉흥 연기에 대해 이야기하는 것을 좋아했고, 소피봇(Sophie Bot)은 나를 \"빅 독(big dog)\"이라고 부르는 것을 멈추지 않았다. 일하는 방식의 미래에 오신 것을 환영합니다.",
-      "link": "https://www.wired.com/story/ai-coworker-bots-loved-improv-and-interstellar-soundtrack/",
-      "entities": [
-        "Bot",
-        "Sophie",
-        "Brian",
-        "AI"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "52126",
-      "title": "앤디 번햄, 영국이 G20 의장국 지위를 이용해 글로벌 AI 협정을 중재하기를 원하다",
-      "original_title": "",
-      "description": "폴리티코 유럽의 보도에 따르면, 앤디 번햄 총리는 뉴욕 유엔 총회를 앞두고 기자들에게 영국이 다가오는 G20 의장국 임기 동안 전 세계적인 AI 합의를 중재하려 할 것이라고 밝혔습니다. 그는 영국이 \"AI 분야에서 리더십을 발휘할 독보적인 위치에 있다\"고 덧붙였습니다.",
-      "link": "https://thenextweb.com/news/andy-burnham-uk-g20-global-ai-agreement",
-      "entities": [
-        "AI",
-        "G20"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "52093",
-      "title": "엔스케일의 IPO, 월스트리트의 집중형 AI 투자 심리 다시 시험대에 올라",
-      "original_title": "",
-      "description": "영국의 AI 데이터센터 개발사인 엔스케일은 매출 대부분을 거대 기술 기업인 마이크로소프트와 앤스로픽에 의존하고 있다.",
-      "link": "https://techcrunch.com/2026/09/22/nscales-ipo-will-test-wall-streets-appetite-for-concentrated-ai-bets-once-again/",
-      "entities": [
-        "AI",
-        "IPO"
-      ],
-      "date": "2026-09-22"
-    },
-    {
-      "id": "52094",
-      "title": "애플 스토어를 만든 인물이 실리콘밸리의 AI 쇼핑 베팅에 의문을 제기하다",
-      "original_title": "",
-      "description": "애플 스토어의 설계자인 론 존슨은 애플의 성공 비결이 언제나 '사람'이었다고 말한다.",
-      "link": "https://techcrunch.com/2026/09/21/the-man-who-built-apples-stores-doesnt-buy-silicon-valleys-bet-on-ai-shopping/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-22"
-    },
     {
       "id": "52305",
       "title": "시간당 보수 체계에 도전하는 AI 네이티브 특허법인 '페언' 출범",
@@ -6137,6 +5900,59 @@
         "Recursive"
       ],
       "date": "2026-10-22"
+    },
+    {
+      "id": "56074",
+      "title": "Google Cloud 신규 가입 $300 크레딧",
+      "original_title": "Google Cloud 신규 가입 $300 크레딧",
+      "description": "AI 스튜디오·Vertex AI·GPU VM에 쓸 수 있는 신규 고객 크레딧(90일). API 키를 발급해 OpenCode 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+      "link": "https://cloud.google.com/free",
+      "entities": [
+        "AI",
+        "API",
+        "GPU",
+        "Vertex",
+        "Google",
+        "OpenCode",
+        "Cloud"
+      ],
+      "date": "2026-10-23"
+    },
+    {
+      "id": "56567",
+      "title": "명의 자바 챔피언이 생산성 향상을 위해 GitHub Copilot을 사용하는 방법",
+      "original_title": "How 3 Java Champions are using GitHub Copilot for increased productivity",
+      "description": "세 명의 자바 챔피언이 문제 해결, 개발 가속화, 그리고 결과물에 대한 인간의 책임 유지하기 위해 GitHub Copilot을 어떻게 활용하는지 공유합니다. 이 게시물은 GitHub 블로그에 처음 게재되었습니다.",
+      "link": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
+      "entities": [
+        "Java",
+        "GitHub",
+        "Copilot",
+        "How",
+        "Champions"
+      ],
+      "date": "2026-10-23"
+    },
+    {
+      "id": "56568",
+      "title": "엔비디아 쿠모렐레이셔널(NVIDIA Kumo Relational), 별도의 학습 없이 관계",
+      "original_title": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
+      "description": "",
+      "link": "https://huggingface.co/blog/nvidia/kumo-relational",
+      "entities": [
+        "Kumo",
+        "Machine",
+        "Supervised",
+        "NVIDIA",
+        "No",
+        "Required",
+        "Learning",
+        "Relational",
+        "Outperforms",
+        "Training",
+        "Data"
+      ],
+      "date": "2026-10-23"
     }
   ]
 }

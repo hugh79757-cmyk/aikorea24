@@ -1,7 +1,8 @@
 [
   {
-    "model_id": "longcat-2.5-preview-free",
-    "provider": "zen",
-    "cli_id": "opencode/longcat-2.5-preview-free"
+    "model_id": "liquid/lfm-2.5-2.6b:free",
+    "provider": "kilo",
+    "cli_id": "kilo/liquid/lfm-2.5-2.6b:free",
+    "context_length": 65536
   }
 ]

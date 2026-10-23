@@ -266,24 +266,36 @@ def generate_comment(article):
     description = (article.get("description") or "")[:300]
     source = article.get("source", "")
 
+    # 2026-10-23 대표님 지시: 브리핑 말투를 냉정·팩트형으로 고정한다.
+    # 금지 대상은 "감탄·기대·평가·권유"이며, 사실·수치만 남긴다(사실성 우선).
     system_prompt = (
-        "당신은 한국어 뉴스 코멘트 작성 전문가입니다.\n"
-        "중요: 중국어(한자)를 절대 사용하지 마세요. 모든 내용을 순수 한국어로만 작성하세요.\n"
-        "한자어가 필요한 경우 반드시 순수 한글로 풀어서 표현하세요."
+        "당신은 한국어 기술 뉴스 데스크의 팩트 요약 작성자입니다.\n"
+        "규칙:\n"
+        "1) 감탄·기대·평가·권유 표현을 쓰지 않습니다. 예: 놀랍다, 기대된다, 인상적이다, "
+        "멋지다, 좋은 기회, 놓치지 마세요, 써보세요.\n"
+        "2) 확인된 사실과 수치만 씁니다. 기사에 없는 배경·전망·추측을 만들지 않습니다.\n"
+        "3) 문장은 '~습니다/~합니다' 평서형으로 끝냅니다. '~네요/~해요/~것 같습니다'를 쓰지 않습니다.\n"
+        "4) 중국어(한자) 문자를 쓰지 않습니다. 한자어는 순수 한글로 풀어 씁니다.\n"
+        "5) 영문 고유명사·제품명·약어는 원형을 유지합니다. 예: GitHub Copilot, OpenCode, "
+        "HuggingFace, GPU, API. 한글 음차나 억지 번역을 하지 않습니다"
+        "(예: '깃허브 코파일럿', '응용 프로그램 인터페이스 열쇠' 금지)."
     )
     user_prompt = (
-        f"다음 AI 뉴스에 대해 1~2문장의 간결한 한국어 코멘트를 작성해줘.\n\n"
+        f"다음 AI 뉴스의 핵심을 한국어 2문장으로 요약합니다.\n"
+        f"1문장: 무엇이 바뀌었는지 또는 무엇을 제공하는지 (사실·수치 포함).\n"
+        f"2문장: 누가 어떤 조건에서 쓸 수 있는지, 또는 확인된 제약. "
+        f"이 정보가 기사에 없으면 기사에 있는 다른 사실(수치·기간·대상)을 씁니다.\n\n"
         f"제목: {title}\n"
         f"출처: {source}\n"
         f"내용: {description}\n\n"
-        f"코멘트:"
+        f"요약:"
     )
 
     try:
         comment = chat_completion(
             messages=[{"role": "user", "content": user_prompt}],
             system_prompt=system_prompt,
-            temperature=0.3,
+            temperature=0.2,  # 냉정·팩트형: 표현 변주보다 사실 재현을 우선(2026-10-23)
             max_tokens=500,
             model_override=None,  # 무료 LLM 폴백 체인 사용 (16개 무료 → 최후 수단 DeepSeek)
         )
@@ -317,7 +329,7 @@ def build_briefing(articles):
 
     intro = (
         f"오늘의 AI 브리핑 ({today})\n\n"
-        f"{len(articles)}건의 AI 소식을 선정했습니다."
+        f"AI 소식 {len(articles)}건을 정리했습니다."
     )
 
     items = []

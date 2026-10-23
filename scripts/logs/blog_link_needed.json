@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-22 09:01",
-  "count": 144,
+  "updated_at": "2026-10-23 09:01",
+  "count": 142,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -321,22 +321,6 @@
         "opencode/fledge-alpha-free"
       ],
       "in_briefing": false
-    },
-    {
-      "key": "flint-40b",
-      "original_titles": [
-        "flint-40b-free"
-      ],
-      "news_ids": [
-        56721
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/flint-40b-free"
-      ],
-      "in_briefing": true
     },
     {
       "key": "gliner-pii",
@@ -914,6 +898,7 @@
         "longcat-2.5-preview-free"
       ],
       "news_ids": [
+        56728,
         55275
       ],
       "sources": [
@@ -2052,25 +2037,6 @@
       ],
       "cli_ids": [
         "opencode/qwen3.6-plus-free"
-      ],
-      "in_briefing": false
-    },
-    {
-      "key": "recursive/flint-v1.0",
-      "original_titles": [
-        "recursive/flint-v1.0:free"
-      ],
-      "news_ids": [
-        56722,
-        56720
-      ],
-      "sources": [
-        "Kilo Free Models",
-        "OpenRouter Free Models"
-      ],
-      "cli_ids": [
-        "kilo/recursive/flint-v1.0:free",
-        "openrouter/recursive/flint-v1.0:free"
       ],
       "in_briefing": false
     },
