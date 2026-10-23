@@ -1,69 +1,166 @@
 ---
+// AIK24-CONSENT-02 (2026-10-23) — 로그인·동의 화면 재작성
+//
+// 왜 바꿨나
+//  1) 사이트 전체가 라이트 테마(Pretendard · #111 · 브랜드 레드 #E63B2E)인데
+//     이 페이지만 다크 navy + Tailwind CDN v2 였다 → 폰트·색·여백이 사이트와 따로 놀아 가독성이 떨어졌다.
+//  2) 문구가 실제 동작과 달랐다: 카카오 로그인은 없는데 "Google/카카오 계정" 이라고 적혀 있었다.
+//  3) "로그인하면 동의한 것으로 간주됩니다" 는 명시적 동의가 아니라 PIPA 상 취약한 표현이다
+//     → 항목을 보여주고 체크박스로 직접 동의를 받는다(거부 시 글쓰기·댓글만 제한).
+//  4) 개인정보처리방침(/privacy) 링크가 없었다 → 동의 내용의 전문을 확인할 수 있게 연결.
+//
+// prerender=false 인 이유
+//  이 페이지는 redirect_to 쿼리를 읽어 로그인 후 복귀 경로를 만든다. 정적 프리렌더(output: 'static')
+//  상태에서는 빌드 시점의 쿼리(빈 값)가 HTML 에 박혀 ?redirect_to=/my/tools/ 로 들어와도
+//  로그인 링크가 /api/auth/login 으로만 나갔다(2026-10-23 라이브 실측) → 요청 시 렌더로 전환.
+export const prerender = false;
+
+// 사이트 표준 스타일(Pretendard · 기본 리셋 · 브랜드 토큰). 이전에는 Tailwind CDN v2 를 따로 불러
+// 사이트와 다른 폰트·색이 적용됐다.
+import '../../styles/global.css';
+
 const url = Astro.url;
 const redirectTo = url.searchParams.get('redirect_to') || '';
 const redirectParam = redirectTo && redirectTo.startsWith('/') ? `?redirect_to=${encodeURIComponent(redirectTo)}` : '';
 ---
 
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" href="/favicon.png" />
-  <title>로그인 - AI코리아24</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <style>
-    body { background: #0f172a; color: #e2e8f0; font-family: 'Pretendard', -apple-system, sans-serif; }
-    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(148, 163, 184, 0.1); }
-  </style>
+  <title>로그인 · AI코리아24</title>
+  <meta name="description" content="Google 계정으로 AI코리아24에 로그인합니다. 별도 회원가입 절차는 없습니다." />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
 </head>
-<body class="min-h-screen flex items-center justify-center px-4">
-  <div class="glass rounded-2xl p-8 max-w-lg w-full">
-
-    <div class="text-center mb-6">
-      <div class="text-4xl mb-3">🔒</div>
-      <h1 class="text-xl font-bold text-white">개인정보 수집 및 이용 동의</h1>
-      <p class="text-sm text-gray-400 mt-2">AI코리아24 서비스 이용을 위해 아래 내용을 확인해 주세요.</p>
-    </div>
-
-    <div class="bg-gray-50 rounded-xl p-5 mb-6 text-sm leading-relaxed space-y-4">
-      <div>
-        <h3 class="font-semibold text-[#555555] mb-1">1. 수집 항목</h3>
-        <p class="text-gray-300">이메일 주소, 이름, 프로필 사진 (Google/카카오 계정 제공 정보)</p>
-      </div>
-      <div>
-        <h3 class="font-semibold text-[#555555] mb-1">2. 수집 목적</h3>
-        <p class="text-gray-300">커뮤니티 이용자 식별, 콘텐츠 접근 관리, 서비스 개선</p>
-      </div>
-      <div>
-        <h3 class="font-semibold text-[#555555] mb-1">3. 보관 기간</h3>
-        <p class="text-gray-300">회원 탈퇴 시까지 (탈퇴 요청 시 즉시 파기)</p>
-      </div>
-      <div>
-        <h3 class="font-semibold text-[#555555] mb-1">4. 동의 거부 권리</h3>
-        <p class="text-gray-300">동의를 거부할 수 있으며, 이 경우 글쓰기·댓글 등 일부 기능이 제한됩니다.</p>
-      </div>
-    </div>
-
-    <!-- 로그인 버튼들 -->
-    <div class="flex flex-col gap-3 mb-4">
-      <a href={`/api/auth/login${redirectParam}`} class="flex items-center justify-center gap-3 w-full px-4 py-3 rounded-xl bg-[#111111] hover:bg-[#333333] text-white font-semibold text-base transition">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        Google로 로그인
-      </a>
-    </div>
-
-    <a href="/" class="block text-center w-full px-4 py-2 rounded-xl bg-gray-50 text-gray-400 hover:text-white transition text-sm">
-      동의하지 않고 둘러보기
+<body>
+  <main class="min-h-screen flex flex-col items-center px-5 py-12 sm:py-16">
+    <a href="/" class="mb-9" aria-label="AI코리아24 홈으로">
+      <img src="/logo-final.webp" alt="AI코리아24" class="h-7 w-auto" />
     </a>
 
-    <p class="text-xs text-gray-500 text-center mt-4">
-      로그인하면 개인정보 수집·이용에 동의한 것으로 간주됩니다.
-    </p>
-  </div>
+    <div class="w-full max-w-[440px]">
+      <h1 class="text-[26px] sm:text-[28px] font-bold leading-[1.3] tracking-[-0.015em] text-[#111111]">
+        로그인하고 시작하기
+      </h1>
+      <p class="mt-3 text-[15px] leading-[1.7] text-[#4B4B4B]">
+        별도 회원가입 절차는 없습니다.
+        <strong class="font-semibold text-[#111111]">Google 계정</strong>으로 로그인하면 계정이 만들어지고,
+        글쓰기·댓글 기능을 바로 쓸 수 있습니다.
+      </p>
+
+      <!-- 동의 내용 요약 -->
+      <section class="mt-7 rounded-2xl border border-[#E6E6E6] bg-[#FAFAFA] px-5 py-5" aria-labelledby="consent-title">
+        <div class="flex items-center justify-between gap-3">
+          <h2 id="consent-title" class="text-[15px] font-bold text-[#111111]">개인정보 수집·이용 동의</h2>
+          <span class="shrink-0 rounded-md bg-[#E63B2E]/10 px-2 py-[3px] text-[11px] font-bold tracking-wide text-[#B72519]">필수</span>
+        </div>
+
+        <dl class="mt-4 space-y-3">
+          <div class="flex gap-3">
+            <dt class="w-[64px] shrink-0 text-[13px] font-semibold leading-[1.75] text-[#5F5F5F]">수집 항목</dt>
+            <dd class="text-[13.5px] leading-[1.75] text-[#222222]">이메일, 이름, 프로필 사진 (Google 계정 제공 정보)</dd>
+          </div>
+          <div class="flex gap-3">
+            <dt class="w-[64px] shrink-0 text-[13px] font-semibold leading-[1.75] text-[#5F5F5F]">이용 목적</dt>
+            <dd class="text-[13.5px] leading-[1.75] text-[#222222]">회원 식별, 글쓰기·댓글 등 서비스 제공, 운영 개선</dd>
+          </div>
+          <div class="flex gap-3">
+            <dt class="w-[64px] shrink-0 text-[13px] font-semibold leading-[1.75] text-[#5F5F5F]">보관 기간</dt>
+            <dd class="text-[13.5px] leading-[1.75] text-[#222222]">회원 탈퇴 시까지 (탈퇴 요청 시 지체 없이 파기)</dd>
+          </div>
+          <div class="flex gap-3">
+            <dt class="w-[64px] shrink-0 text-[13px] font-semibold leading-[1.75] text-[#5F5F5F]">거부 권한</dt>
+            <dd class="text-[13.5px] leading-[1.75] text-[#222222]">동의를 거부할 수 있습니다. 이 경우 글쓰기·댓글 등 로그인 기능만 제한되고, 뉴스·블로그 열람은 그대로 가능합니다.</dd>
+          </div>
+        </dl>
+
+        <a
+          href="/privacy"
+          target="_blank"
+          rel="noopener"
+          class="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold text-[#B72519] underline underline-offset-2 hover:text-[#E63B2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E63B2E] rounded"
+        >
+          개인정보처리방침 전문 보기
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M7 17 17 7M9 7h8v8" />
+          </svg>
+        </a>
+      </section>
+
+      <!-- 명시적 동의 -->
+      <label for="consent" class="mt-5 -mx-2 flex cursor-pointer items-start gap-3 rounded-xl px-2 py-2.5 select-none hover:bg-[#FAFAFA]">
+        <input
+          id="consent"
+          name="consent"
+          type="checkbox"
+          class="mt-[2px] h-[19px] w-[19px] shrink-0 cursor-pointer rounded-[5px] border-[#BFBFBF] accent-[#E63B2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E63B2E]"
+        />
+        <span class="text-[14px] leading-[1.6] text-[#333333]">
+          <span class="font-bold text-[#111111]">[필수]</span>
+          위 내용을 확인했고, 개인정보 수집·이용에 동의합니다.
+        </span>
+      </label>
+      <p id="consent-error" role="alert" class="mt-1.5 hidden pl-8 text-[12.5px] font-semibold text-[#B72519]">
+        동의에 체크해야 로그인할 수 있습니다.
+      </p>
+
+      <a
+        id="login-btn"
+        href={`/api/auth/login${redirectParam}`}
+        aria-describedby="consent-error"
+        class="mt-5 flex h-[52px] w-full items-center justify-center gap-2.5 rounded-xl bg-[#111111] text-[16px] font-semibold text-white transition-colors hover:bg-[#2E2E2E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" />
+          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+        </svg>
+        Google로 계속하기
+      </a>
+
+      <a
+        href="/"
+        class="mt-5 block py-2.5 text-center text-[14px] font-medium text-[#555555] underline decoration-[#C9C9C9] underline-offset-4 transition-colors hover:text-[#111111] hover:decoration-[#111111]"
+      >
+        동의하지 않고 둘러보기
+      </a>
+
+      <p class="mt-7 border-t border-[#EDEDED] pt-5 text-center text-[12.5px] leading-[1.75] text-[#767676]">
+        동의는 언제든지 철회할 수 있으며, 철회·문의는
+        <a href="mailto:info@aikorea24.kr" class="font-medium text-[#4B4B4B] underline underline-offset-2 hover:text-[#111111]">info@aikorea24.kr</a>
+        로 연락 주세요.
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // 체크 전에는 로그인 링크를 막는다. 스크립트가 없는 환경에서는 기존처럼 바로 로그인된다
+    // (로그인 자체를 잠그는 것보다 동의 게이트가 없는 편이 낫다 — fail-open).
+    const consent = document.getElementById('consent');
+    const loginBtn = document.getElementById('login-btn');
+    const errorBox = document.getElementById('consent-error');
+
+    if (consent && loginBtn && errorBox) {
+      const sync = () => {
+        errorBox.classList.toggle('hidden', consent.checked);
+      };
+
+      consent.addEventListener('change', sync);
+
+      loginBtn.addEventListener('click', (event) => {
+        if (!consent.checked) {
+          event.preventDefault();
+          errorBox.classList.remove('hidden');
+          consent.focus();
+        }
+      });
+
+      sync();
+    }
+  </script>
 </body>
 </html>
