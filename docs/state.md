@@ -1,3 +1,111 @@
+## 2026-10-23 15:52 — AIK24-CONSENT-02: 로그인·동의 화면 가독성 개선 + 문구 정정 + redirect_to 복귀 경로 수정
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 지시: 대표님 2026-10-23 "회원가입 페이지인거 같은데 가독성이 떨어진다. 문구도 확인하고 가독성도 높여줘." (대상 URL 확인: https://aikorea24.kr/auth/consent/)
+* 결과: **배포 완료 · 라이브 반영 확인** (커밋 `c5469180` · Worker version `7ffc4edd`)
+* 대상 파일: `src/pages/auth/consent.astro` (전면 재작성) · `src/pages/tools/submit.astro` · `src/pages/pricing.astro`
+
+### 0. 원인 진단 (왜 가독성이 떨어졌나)
+
+| # | 원인 | 근거 |
+|---|---|---|
+| 1 | **테마 불일치** — 사이트 전체는 라이트 고정(`Layout.astro` 에서 `classList.remove('dark')`, `--accent-red:#E63B2E`)인데 이 페이지만 다크 navy(#0f172a) 유리 카드 + 그 안의 흰 카드(이중 컨테이너) | `src/pages/auth/consent.astro`(수정 전) 15~20행 vs `src/layouts/Layout.astro` 64~67행 · `src/styles/global.css` 24~40행 |
+| 2 | **Tailwind CDN v2** 로 스타일링 — 프로젝트는 Tailwind v4(`@tailwindcss/vite` 4.3.3, `global.css` = `@import "tailwindcss"`) | 수정 전 13행 · `package.json` 28행 |
+| 3 | **폰트 미로드** — `font-family:'Pretendard'` 라고 선언만 하고 로드하지 않음(사이트는 `SEOHead.astro` 에서 Pretendard Variable CDN 로드) | 수정 전 15행 · `src/components/SEOHead.astro` 143행 |
+| 4 | **타이포 크기** — h1 20px, 본문 15px, 하단 안내 12px, 줄간격 미지정 | 수정 전 24~28행 |
+| 5 | **문구가 사실과 불일치** — "Google/카카오 계정 제공 정보"라고 적었으나 카카오 로그인 경로가 없음 | `src/pages/api/auth/login.ts` = Google OAuth 단일 경로 |
+
+- 대비(contrast)는 원인이 아니었다. 수정 전에도 최저 5.76:1 로 AA 를 넘겼다(실측). 문제는 **테마·폰트·크기·구조·문구**였다.
+
+### 1. 문구 정정 (사실관계 + 동의 요건)
+
+| 구분 | 수정 전 | 수정 후 |
+|---|---|---|
+| 제공자 | "Google/카카오 계정 제공 정보" | "Google 계정 제공 정보" (카카오 로그인 없음) |
+| 동의 방식 | "로그인하면 개인정보 수집·이용에 **동의한 것으로 간주**됩니다" | **[필수] 체크박스** — "위 내용을 확인했고, 개인정보 수집·이용에 동의합니다" + 미체크 시 안내 + 링크 차단 |
+| 방침 링크 | 없음 | "개인정보처리방침 전문 보기" → `/privacy` (새 탭) |
+| 철회·문의 | 없음 | "동의는 언제든지 철회할 수 있으며, 철회·문의는 info@aikorea24.kr" |
+| 정체 혼동 | h1 "개인정보 수집 및 이용 동의" (제목은 "로그인") → 회원가입 화면으로 오해 | h1 "로그인하고 시작하기" + "별도 회원가입 절차는 없습니다. Google 계정으로 로그인하면 계정이 만들어지고, 글쓰기·댓글 기능을 바로 쓸 수 있습니다." |
+| 거부 권한 | "글쓰기·댓글 등 일부 기능이 제한됩니다" | "…로그인 기능만 제한되고, 뉴스·블로그 열람은 그대로 가능합니다" (실제 동작과 일치: 열람은 비로그인 가능) |
+| 보관 기간 | "회원 탈퇴 시까지 (탈퇴 요청 시 즉시 파기)" | "회원 탈퇴 시까지 (탈퇴 요청 시 지체 없이 파기)" — `privacy.astro` 표현과 통일 |
+
+- "별도 회원가입 없음 + 로그인 시 계정 생성" 문구는 실제 동작과 일치한다. 근거: `src/pages/api/auth/callback/google.ts:48` `INSERT OR IGNORE INTO users (google_id, email, name, avatar)`.
+
+### 2. 가독성·접근성 개선
+
+- 사이트 표준 적용: `import '../../styles/global.css'`(Tailwind v4) + Pretendard Variable CDN + 라이트 배경 + 브랜드 레드 강조.
+- 타이포: h1 28px/굵게 → 본문 15px·줄간격 1.7 → 동의 항목 13/13.5px·줄간격 1.75 → 하단 안내 12.5px. 카드 최대폭 440px.
+- 구조: 4개 동의 항목을 `<dl>` 정의 목록으로 바꿔 라벨(수집 항목/이용 목적/보관 기간/거부 권한)과 내용을 시각적으로 분리. "필수" 배지를 제목 우측에 고정.
+- 접근성: `role="alert"` 오류 문구 + `aria-describedby`, `focus-visible` 링/오프셋, 체크박스 19px + 라벨 터치 영역 확대(py-2.5), 주 버튼 52px, `<label for>` 연결, 장식 SVG `aria-hidden`.
+- 대비 실측(수정 후, 전 항목 AA 통과): h1 18.88:1 · 본문 8.72:1 · 동의 라벨 6.12:1 · 동의 내용 15.24:1 · 방침 링크 6.11:1 · 체크 라벨 12.63:1 · 보조 링크 7.46:1 · 하단 안내 4.54:1 · 버튼 글자 18.88:1 · 필수 배지 5.44:1.
+- 미체크 시 동작: 링크 `click` 을 `preventDefault` + 오류 문구 노출 + 체크박스 포커스. **JS 가 없으면 기존처럼 바로 로그인(fail-open)** — 로그인 자체를 잠그지 않는다.
+
+### 3. 함께 고친 실제 버그 — `redirect_to` 가 죽어 있었다
+
+- 증상: `output:'static'` 이라 이 페이지가 **정적 프리렌더**되어, `Astro.url.searchParams` 가 빌드 시점(빈 값)으로 고정. 라이브 실측(수정 전): `?redirect_to=/my/tools/` 로 들어와도 로그인 링크가 `/api/auth/login`(파라미터 없음) → 로그인 후 항상 홈으로 떨어짐.
+- 수정: `export const prerender = false;` 추가 → 요청 시 렌더. 라이브 실측(수정 후): `href="/api/auth/login?redirect_to=%2Fpricing"` ✓
+- 진입점 2곳도 복귀 경로를 넘기도록 변경: `tools/submit.astro` → `/auth/consent?redirect_to=%2Ftools%2Fsubmit`, `pricing.astro` → `/auth/consent?redirect_to=%2Fpricing`.
+- `noindex, nofollow` 추가(로그인 화면 색인 방지). 사이트맵에는 원래 포함되지 않음(확인).
+
+### 4. 검증
+
+- [검증됨] `npm run build` 성공, 빌드 산출물에서 `/auth/consent/index.html` 이 사라짐(= SSR 라우트 전환). 근거: `ls dist/auth` → 없음, 빌드 로그 `Server built in 13.43s`.
+- [검증됨] 라이브 반영. 근거: `curl https://aikorea24.kr/auth/consent/?redirect_to=%2Fpricing` → **HTTP 200 / 6,275 bytes**, `href="/api/auth/login?redirect_to=%2Fpricing"`, `<title>로그인 · AI코리아24</title>`, `로그인하고 시작하기`, `개인정보처리방침 전문 보기`, `noindex` 확인. 카카오·"간주됩니다"·Tailwind CDN v2·#0f172a 문자열 **0건**.
+- [검증됨] 스타일 실제 적용. 근거: 빌드 CSS(`dist/client/_astro/global.ZK7HqwnP.css`)에 `.text-\[13\.5px\]`·`max-w-\[440px\]`·`h-\[52px\]` 생성 확인, 라이브 HTML 이 `pretendardvariable-dynamic-subset.min.css` + `global.*.css` 를 로드.
+- [검증됨] 기존 테스트 회귀 없음: `pytest -q` → **1041 passed / 10 skipped / 0 failed** (43.4초).
+- [부분검증] **화면을 눈으로 보지 못했다.** 이 세션은 이미지 입력을 받지 못해(첨부 스크린샷이 파일명만 전달됨) 최종 시각 QA 는 구조·CSS·대비 수치로만 확인했다. 제한 사유: 렌더 픽셀 검증 수단 부재. → 대표님 육안 확인 필요.
+- [부분검증] 체크박스 동의 게이트는 클라이언트 스크립트다. 서버 측 동의 기록(동의 로그 테이블)은 만들지 않았다. 제한 사유: 스키마 변경 범위 밖.
+- [검증불가] Astro 페이지 렌더에 대한 자동 테스트가 없다(pytest 는 파이프라인 스크립트만 검증). 복구 계획: 페이지 회귀가 반복되면 `dist` 산출물 문자열 단언 스크립트를 추가한다.
+
+### 5. 잔존 위험
+
+1. **`payments/success.astro` · `payments/fail.astro` · `pricing.astro` 는 여전히 Tailwind CDN v2 를 로드**한다(같은 테마 불일치 잔존). 이번 지시 범위 밖이라 손대지 않았다. 근거: `grep -rn "tailwindcss@2" src/` → 3건.
+2. 동의 이력이 DB 에 남지 않는다(누가·언제 동의했는지). 필요 시 `users.consent_at` 같은 컬럼 추가는 별도 지시 필요.
+3. 이 페이지는 상대 경로 `redirect_to` 만 통과시킨다(`startsWith('/')`). `login.ts` 는 허용 origin 의 절대 URL 까지 state 로 넘기므로, 외부에서 `?redirect_to=https://emdash.aikorea24.kr/...` 로 진입하면 복귀 경로가 사라진다(보안상 안전한 쪽으로 실패).
+4. 시각 QA 미실시(위 [부분검증]).
+
+### 6. 다음 행동
+
+- 대표님: https://aikorea24.kr/auth/consent/ 육안 확인(모바일 360px 포함)
+- 필요 시: 나머지 Tailwind CDN v2 페이지 3건 정리(별도 지시)
+- 필요 시: 동의 이력 저장(`users.consent_at`) 설계
+
+## 2026-10-23 11:33 — AIK24-BRIEF-TONE-01 — 브리핑 말투 냉정·팩트형 전환(코멘트+인트로)
+
+### 한 일
+
+- [PRODUCTION CODE] `scripts/auto_briefing.py` — `generate_comment()` 의 시스템·유저 프롬프트를 냉정·팩트형으로 재작성, `temperature` 0.3→0.2, `build_briefing()` 인트로 문구 교체.
+- 대표님 확정 규칙 5개: ① 감탄·기대·평가·권유 금지 ② 확인된 사실·수치만 ③ `~습니다/~합니다` 평서형 ④ 한자(중국어 문자) 금지, 한자어는 순수 한글 ⑤ 영문 고유명사·제품명·약어는 원형 유지.
+- DB 쓰기 없이 오늘 기사 3건으로 드라이런(`generate_comment` 직접 호출) → 신구 문장 비교.
+
+### 결과 (검증 근거)
+
+- [검증됨] 신규 코멘트 3건 모두 **한자 0자 · 금지어 0건 · 2문장 · 평서형 위반 0**. 근거: 드라이런 stdout의 `(신규)` 3행을 파싱 — 한자 `[\u4e00-\u9fff\u3400-\u4dbf]` 0자, 금지어 9종(`놀랍`·`기대되`·`인상적`·`멋지`·`좋은 기회`·`놓치지 마`·`네요`·`것 같습니다`·`삼백`) 0건, 문장 분리 2개, `습니다./합니다./됩니다.` 외 종결 0건.
+- [검증됨] 인트로 교체 확인: `3건의 AI 소식을 선정했습니다.` → `AI 소식 3건을 정리했습니다.` 근거: `build_briefing([{},{},{}])` 실측 출력.
+- [검증됨] 영문 고유명사 원형 유지 규칙이 실제로 작동. 근거: 신규 출력에 `Google Cloud`·`AI Studio`·`Vertex AI`·`GPU VM`·`API 키`·`GitHub Copilot`·`HuggingFace`·`NVIDIA Kumo Relational` 원형 표기. 직전 드라이런(규칙 ④만 있을 때)에서는 `응용 프로그램 인터페이스 열쇠`(API 키)·`깃허브 코파일럿`·`오픈코드 맞춤형 공급자`로 오역됐다.
+- [검증됨] 회귀 없음: `pytest tests/ -k "briefing or email or model_catalog"` → **133 passed, 918 deselected**. 근거: 명령 출력.
+- [부분검증] 위 133건은 **말투를 검증하지 않는다**. 프롬프트 문자열을 단언하는 테스트가 0건이므로(근거: `grep -rn "선정했습니다|generate_comment|build_briefing" tests/` 결과 0행) 톤 회귀는 자동 테스트로 잡히지 않는다. 이번 확인은 드라이런 실측 1회에 의존한다.
+- [부분검증] **오늘 발행된 브리핑(DB `briefings.id=361`, date `2026-10-23-1`)은 여전히 옛 문구**다. 근거: 해당 브리핑 `intro` 조회 결과 옛 문자열 그대로, `briefing_items.comment` 3건 모두 감탄·기대형. 새 말투는 다음 실행부터 적용된다. 제한 사유: 발행 데이터 UPDATE를 수행하지 않았다.
+
+### 발견한 결함
+
+- **중간 (프롬프트 충돌)** — 기존 지시문 `중국어(한자)를 절대 사용하지 말고 모든 내용을 순수 한국어로만`이 "영어 단어 금지"로 확대 해석돼 외래어 억지 번역을 만들었다(API 키 → `응용 프로그램 인터페이스 열쇠`). 규칙을 ④(한자 금지)와 ⑤(영문 고유명사 원형 유지)로 분리해 해결.
+- **낮음 (관측성)** — 브리핑 문체에 대한 자동 게이트가 없다. 대표님이 이번 범위에서 "금지 표현 게이트"를 선택하지 않았으므로, 톤 이탈은 사람이 라이브를 봐야 발견된다.
+
+### 잔존 위험
+
+- 냉정·팩트형 프롬프트는 환각 유인을 줄이지만 **환각 0을 보장하지 않는다**. 생성 모델은 무료 폴백 체인(이번 드라이런 실측: `gemini-3.1-flash-lite`).
+- `무료 기회`·`GitHub Blog` 같은 라벨은 `auto_news_selector`/`news.source` 경로에서 오므로 이번 변경과 무관하게 그대로 남는다.
+- 이메일은 `briefing_items.comment` 를 그대로 렌더링하므로 홈과 동일하게 새 말투가 적용된다. 다만 이미 발송된 메일은 되돌릴 수 없다.
+- 오늘 라이브 브리핑은 옛 말투로 남아 있어, 사이트·메일·DB의 톤이 하루 동안 불일치한다.
+
+### 다음 행동
+
+1. 오늘 브리핑(id=361) 재생성 여부 결정 — D1 UPDATE이므로 사전 백업 + 사후 검증 필요.
+2. 톤 이탈 자동 감지가 필요하면 금지 표현 게이트를 별도 작업으로 추가.
+
+## 2026-10-23 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 2 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-22 15:10 — AIK24-D1-PIPE-11: free-opportunity 목록 페이지 → 실제 모델 전개 + 구조화 model_id (PIPE-10 잔존 위험 1·2·4번)
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
