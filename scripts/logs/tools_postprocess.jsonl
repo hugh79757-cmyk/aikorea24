@@ -145,3 +145,7 @@
 {"ts": "2026-10-24 06:00:54", "slug": "movo-ai", "step": "thumb", "result": "done", "detail": "✅ movo-ai 33KB", "dry_run": false}
 {"ts": "2026-10-24 06:01:10", "slug": "making-mllm-latents-matter-factor-aware-predictiv", "step": "enrich", "result": "done", "detail": "+2,943자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-24 06:01:16", "slug": "making-mllm-latents-matter-factor-aware-predictiv", "step": "thumb", "result": "done", "detail": "✅ making-mllm-latents-matter-factor-aware-predictiv 32KB", "dry_run": false}
+{"ts": "2026-10-24 07:30:30", "slug": "diri-ai", "step": "enrich", "result": "done", "detail": "+2,730자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-24 07:30:36", "slug": "diri-ai", "step": "thumb", "result": "done", "detail": "✅ diri-ai 20KB", "dry_run": false}
+{"ts": "2026-10-24 07:30:44", "slug": "fliptarot", "step": "enrich", "result": "done", "detail": "+2,804자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-24 07:30:50", "slug": "fliptarot", "step": "thumb", "result": "done", "detail": "✅ fliptarot 31KB", "dry_run": false}
