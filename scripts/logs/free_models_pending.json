@@ -1,5 +1,66 @@
 [
   {
+    "model_id": "cohere/north-mini-code:free",
+    "provider": "kilo",
+    "cli_id": "kilo/cohere/north-mini-code:free",
+    "context_length": 256000
+  },
+  {
+    "model_id": "dots-studio/dots-3-note-preview:free",
+    "provider": "kilo",
+    "cli_id": "kilo/dots-studio/dots-3-note-preview:free",
+    "context_length": 512000
+  },
+  {
+    "model_id": "nvidia/nemotron-3.5-lightning:free",
+    "provider": "kilo",
+    "cli_id": "kilo/nvidia/nemotron-3.5-lightning:free",
+    "context_length": 1000000
+  },
+  {
+    "model_id": "poolside/laguna-s-2.1:free",
+    "provider": "kilo",
+    "cli_id": "kilo/poolside/laguna-s-2.1:free",
+    "context_length": 262144
+  },
+  {
+    "model_id": "mimo-v2.6-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/mimo-v2.6-flash-free"
+  },
+  {
+    "model_id": "glm-5.3-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/glm-5.3-flash-free",
+    "context_length": 200000
+  },
+  {
+    "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+    "provider": "kilo",
+    "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "context_length": 1000000
+  },
+  {
+    "model_id": "nemotron-3-ultra-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3-ultra-free"
+  },
+  {
+    "model_id": "beam-free",
+    "cli_id": "opencode/beam-free"
+  },
+  {
+    "model_id": "nemotron-3.5-lightning-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3.5-lightning-free"
+  },
+  {
+    "model_id": "poolside/laguna-xs-2.1:free",
+    "provider": "kilo",
+    "cli_id": "kilo/poolside/laguna-xs-2.1:free",
+    "context_length": 262144
+  },
+  {
     "model_id": "liquid/lfm-2.5-2.6b:free",
     "provider": "kilo",
     "cli_id": "kilo/liquid/lfm-2.5-2.6b:free",

@@ -1,132 +1,106 @@
 [
   {
-    "topic": "빅테크 플랫폼의 AI 도구 무료 개방 vs 실사용 유료 구독 시장의 양극화",
-    "contrast_frame": "개발자 및 학생 대상 AI 접근성 무료 확대 vs 대중의 실제 AI 구독 지출의 극단적 양극화",
+    "topic": "AI 모델의 무료 배포 전략 vs 유료 구독 모델의 기능 제한",
+    "contrast_frame": "오픈소스 및 무료 티어 모델의 전면 무료화 vs 유료 구독자 차별화를 위한 기능 제한 정책",
     "type": "A",
     "source_articles": [
       {
-        "id": 55484,
-        "title": "구글, 누구나 플레이 스토어에 앱을 무료로 게시할 수 있도록 허용",
-        "source": "The Next Web",
-        "pub_date": "Tue, 13 Oct 2026 17:35:09",
-        "link": "https://thenextweb.com/news/google-play-vibe-coded-apps"
+        "id": 56721,
+        "title": "[무료 LLM] flint-40b-free — OpenCode Zen 무료 티어",
+        "source": "OpenCode Zen",
+        "pub_date": "2026-10-21 00:00:00",
+        "link": "https://models.dev/opencode/flint-40b-free"
       },
       {
-        "id": 55964,
-        "title": "세일즈포스, 대졸 취업 시장 침체 속 영국 학생들에게 무료 AI 도구 제공",
-        "source": "City AM",
-        "pub_date": "Thu, 15 Oct 2026 08:26:57",
-        "link": "https://www.cityam.com/salesforce-offers-free-ai-tools-to-uk-students-as-graduate-job-market-lags/"
+        "id": 56152,
+        "title": "구글, 유료 구독자에 비해 픽셀 등 무료 AI Pro 체험 사용자의 기능 제한",
+        "source": "9to5Google",
+        "pub_date": "Fri, 16 Oct 2026 14:40:00",
+        "link": "https://9to5google.com/2026/10/16/google-restricts-every-free-ai-pro-trial-from-pixel-more-compared-to-paid-subscribers/"
       }
     ],
-    "quote_1": "구글은 유료 개발자 계정 없이도, 구글 계정을 가진 18세 이상의 성인이라면 누구나 AI 스튜디오로 제작한 비공개 안드로이드 앱을 게시할 수 있도록 허용할 예정입니다.",
-    "quote_2": "영국의 대졸 구인 건수가 2020년 이후 최저치를 기록한 가운데, 세일즈포스는 600만 명의 학생들에게 인공지능 기술에 대한 고용주들의 증가하는 수요를 충족할 수 있도록 무료 AI 도구를 제공하고 있습니다.",
-    "gap_summary": "빅테크 기업들이 개발자와 학생 등 특정 집단을 대상으로 AI 도구의 접근성을 무료로 대폭 확대하는 경향을 보여줄 수 있다.",
-    "reading_angle": "플랫폼 생태계 확장을 위한 무료 AI 도구 보급 정책",
+    "quote_1": "Flint 40B Free — CLI에서 입출력 모두 무료.",
+    "quote_2": "구글은 신형 스마트폰 구매 시 AI Pro 구독 무료 체험 혜택을 자주 제공하지만 유료 구독자에 비해 픽셀 등 무료 AI Pro 체험 사용자의 기능 제한",
+    "gap_summary": "오픈 생태계의 모델들은 전면 무료화를 통해 사용자 저변을 확대하는 반면, 빅테크 기업은 무료 체험자에게 기능적 제약을 두어 유료 구독으로의 전환을 유도하려는 전략적 차이가 있을 수 있다.",
+    "reading_angle": "AI 서비스의 수익화 모델과 사용자 경험 제공 방식의 양극화",
     "category": "시장"
   },
   {
-    "topic": "AI 에이전트의 대규모 병렬 제어 기술 vs 통제 불능 및 실시간 연결 차단 조치",
-    "contrast_frame": "클로드의 1,000개 에이전트 동적 워크플로우 조종 기술 vs 앤스로픽의 실시간 인터넷 차단 및 통제력 한계 노출",
+    "topic": "서구권의 기술 주권 및 보안 강조 vs 중국산 AI의 무상 보급 전략",
+    "contrast_frame": "서구권의 보안 및 윤리적 투명성 요구 vs 중국산 AI의 저렴한 가격을 앞세운 시장 침투 전략",
     "type": "A",
     "source_articles": [
       {
-        "id": 54831,
-        "title": "앤스로픽의 클로드, 이제 동적 워크플로우를 통해 최대 1,000개의 AI 에이전트를 병렬로 조율 가능",
-        "source": "The Decoder",
-        "pub_date": "Fri, 09 Oct 2026 18:28:25",
-        "link": "https://the-decoder.com/anthropics-claude-can-now-orchestrate-up-to-1000-ai-agents-in-parallel-through-dynamic-workflows/"
-      },
-      {
-        "id": 54883,
-        "title": "앤스로픽, AI 에이전트를 안정적으로 제어하지 못해... 내부 평가의 실시간 인터넷 연결 차단",
-        "source": "TechCrunch AI",
-        "pub_date": "Sat, 10 Oct 2026 00:18:32",
-        "link": "https://techcrunch.com/2026/10/09/anthropic-cant-reliably-control-its-ai-agents-its-cutting-off-its-internal-evals-from-the-live-internet-instead/"
-      }
-    ],
-    "quote_1": "앤스로픽이 클로드 매니지드 에이전트에 동적 워크플로우를 추가하여, 메인 에이전트가 한 번에 최대 1,000개의 하위 에이전트에 작업을 분배할 수 있게 되었습니다.",
-    "quote_2": "앤스로픽은 추후 공지가 있을 때까지 \"모든 내부 평가\"에 대해 \"실시간 인터넷 접근을 차단했다\"고 밝혔습니다.",
-    "gap_summary": "대규모 에이전트 병렬 제어 기술의 발전에도 불구하고, 실제 운영 환경에서는 통제 불능 문제를 겪고 있어 기술적 확장성과 안정성 사이에 심각한 괴리가 존재할 가능성이 있다.",
-    "reading_angle": "AI 에이전트의 처리 능력 향상 이면에 숨겨진 통제력의 한계와 이에 따른 기업의 대응 방식을 조명하는 관점",
-    "category": "보안"
-  },
-  {
-    "topic": "오픈AI의 공격적 투자 유치 vs 기대 이하의 매출 전망 및 실적 우려",
-    "contrast_frame": "300억 달러 규모의 초대형 신규 투자 유치 추진 vs 당초 예상(700억 달러)을 크게 밑도는 500억 달러 매출 전망",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 54833,
-        "title": "OpenAI, 300억 달러 규모 신규 투자 유치 추진 속 지속적인 매출 급증",
-        "source": "The Decoder",
-        "pub_date": "Fri, 09 Oct 2026 17:20:34",
-        "link": "https://the-decoder.com/openai-revenue-keeps-surging-as-company-seeks-30-billion-in-fresh-capital/"
-      },
-      {
-        "id": 54841,
-        "title": "오픈AI, 예상보다 200억 달러 적은 매출 기록할 전망",
+        "id": 56229,
+        "title": "영국이 저렴하고도 무서운 중국산 AI의 유혹을 거부해야 하는 이유",
         "source": "The Guardian AI",
-        "pub_date": "Fri, 09 Oct 2026 08:06:09",
-        "link": "https://www.theguardian.com/technology/2026/oct/09/openai-forecast-revenue-gap"
+        "pub_date": "Sat, 17 Oct 2026 15:00:33",
+        "link": "https://www.theguardian.com/business/2026/oct/17/why-britain-should-reject-the-lure-of-cheap-and-scary-chinese-ai"
+      },
+      {
+        "id": 56569,
+        "title": "페어스트레스(FairStress): LLM 의사결정의 공정성에 대한 심층 평가",
+        "source": "HuggingFace Blog",
+        "pub_date": "Tue, 20 Oct 2026 16:09:19",
+        "link": "https://huggingface.co/blog/allenai/fairstress"
       }
     ],
-    "quote_1": "OpenAI는 1조 4,000억 달러의 기업 가치로 최소 300억 달러 규모의 신규 자금 조달을 협상 중입니다.",
-    "quote_2": "챗GPT 개발사인 오픈AI가 올해 매출을 당초 예상했던 700억 달러보다 훨씬 낮은 500억 달러로 전망하면서, AI 성장에 대한 의문이 제기되고 있다.",
-    "gap_summary": "OpenAI가 대규모 자금 조달을 추진하는 동시에 실제 매출은 기대치에 미치지 못하면서, 향후 AI 산업의 성장성에 대한 시장의 의문이 커질 수 있음을 시사한다.",
-    "reading_angle": "천문학적인 기업 가치와 투자 유치 규모가 실제 실적이나 매출 전망과 괴리가 있을 때 시장이 받는 충격을 해석하는 관점",
-    "category": "투자"
+    "quote_1": "서구의 기술에는 최소한의 보안 확보와 선의의 의도가 담겨 있지만, 중국은 그렇지 않습니다.",
+    "quote_2": "LLM 의사결정의 공정성에 대한 심층 평가",
+    "gap_summary": "서구권은 기술의 보안과 윤리적 의도를 강조하는 반면, 기술적 공정성 평가 모델은 데이터와 알고리즘의 객관적 검증에 집중하고 있어, 향후 AI 주도권을 둘러싼 가치 체계와 기술적 실증 사이의 간극이 커질 수 있다.",
+    "reading_angle": "지정학적 보안 담론과 기술적 공정성 평가 프레임워크 간의 충돌",
+    "category": "국제정세"
   },
   {
-    "topic": "유럽의 엄격한 AI 저작권 및 규제 옹호 vs 미국의 자율적 시장 생태계 및 소송 리스크",
-    "contrast_frame": "유럽연합의 DSA 및 저작권 규제 철저 옹호 vs 미국 트럼프 행정부의 소송 압박 기반 무규제 자율 경쟁 및 부채 리스크",
+    "topic": "AI의 실무적 생산성 도구 활용 vs AI의 물리적 환경 학습을 위한 노동 대체",
+    "contrast_frame": "인간 전문가의 생산성 향상을 돕는 보조 도구로서의 AI vs 물리적 노동 현장에서 인간의 업무를 직접 학습하는 AI",
     "type": "A",
     "source_articles": [
       {
-        "id": 54903,
-        "title": "비토리오 콜라오, 유럽의 AI 논쟁에서 저작권 규정과 DSA를 옹호하다",
-        "source": "The Next Web",
-        "pub_date": "Sat, 10 Oct 2026 11:10:55",
-        "link": "https://thenextweb.com/news/vittorio-colao-ai-regulation-europe-wave-by-vento"
+        "id": 56567,
+        "title": "명의 자바 챔피언이 생산성 향상을 위해 GitHub Copilot을 사용하는 방법",
+        "source": "GitHub Blog",
+        "pub_date": "Tue, 20 Oct 2026 16:05:03",
+        "link": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/"
       },
       {
-        "id": 55009,
-        "title": "트럼프의 AI 책임론 공세, 독단적 행동 시 책임 소재는 모호하다고 블룸버그 보도",
-        "source": "The Next Web",
-        "pub_date": "Sat, 10 Oct 2026 15:34:04",
-        "link": "https://thenextweb.com/news/trump-ai-liability-rogue-agents-blame"
+        "id": 56262,
+        "title": "AI 로봇 훈련을 위해 무료 배관 및 냉난방 수리 제공하는 AI 연구소",
+        "source": "Hacker News",
+        "pub_date": "2026-10-17",
+        "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-lab-offers-free-plumbing-and-hvac-repairs-across-three-cities-to-train-ai-robots-wearable-sensors-record-video-of-repair-work-for-robotics-training-free-services-also-include-electrical-work-air-duct-cleaning-and-carpet-cleaning"
       }
     ],
-    "quote_1": "규제가 유럽의 AI 성장을 가로막고 있지만 모든 규제 방식이 같은 것은 아니라고 비토리오 콜라오가 밝혔습니다.",
-    "quote_2": "트럼프 행정부는 소송의 위협이 AI 기업들을 정직하게 만들 것이라 베팅하고 있습니다.",
-    "gap_summary": "유럽은 명확한 법적 규제와 저작권 보호를 통해 AI 발전의 방향성을 통제하려 하는 반면, 미국은 소송 리스크에 의존하여 기업의 자율적 책임을 유도할 수 있음을 보여준다.",
-    "reading_angle": "AI 거버넌스 구축에 있어 법적 규제 중심의 접근과 시장 기반의 소송 압박 접근 방식 간의 철학적 차이를 시사할 수 있다.",
-    "category": "정책"
-  },
-  {
-    "topic": "AI 도입에 따른 법률 및 오피스 업무 자동화 vs 전통적 업무 구조의 압박",
-    "contrast_frame": "시간당 보수 제도를 압박하는 변호사 업무 방식의 변화 vs 마이크로소프트 오피스를 대체하는 오픈소스 AI 앱의 등장",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 54909,
-        "title": "AI가 변호사의 업무 방식을 바꾸고 있으며, 시간당 보수 제도를 압박하고 있다",
-        "source": "CNBC Tech",
-        "pub_date": "Sat, 10 Oct 2026 05:00:01",
-        "link": "https://www.cnbc.com/2026/10/10/ai-lawyers-billable-hour-legal-careers.html"
-      },
-      {
-        "id": 55104,
-        "title": "어도비 복제한 개발자, 이번엔 클로드로 엑셀·워드·파워포인트 대체 앱 공개",
-        "source": "디지털투데이",
-        "pub_date": "2026-10-12 05:58:26",
-        "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706239"
-      }
-    ],
-    "quote_1": "AI의 도입은 법률 업계가 시간당 보수 제도와 변호사들의 전문성 축적 방식을 재고하도록 강제하고 있습니다.",
-    "quote_2": "개발자 브랜든 토마스는 엑셀, 파워포인트, 워드를 대체하는 '그리드크래프트', '덱크래프트', '워드크래프트'를 내놨",
-    "gap_summary": "법률 및 오피스 소프트웨어 영역에서 AI 기반 자동화가 확산되면서, 기존의 전통적인 업무 수익 구조와 상용 소프트웨어 중심의 생태계가 크게 흔들릴 수 있음을 시사한다.",
-    "reading_angle": "AI 기술이 특정 직군의 보수 체계뿐만 아니라 보편적인 사무용 소프트웨어 시장까지 전면적으로 재편할 가능성을 보여준다.",
+    "quote_1": "세 명의 자바 챔피언이 문제 해결, 개발 가속화, 그리고 결과물에 대한 인간의 책임 유지하기 위해 GitHub Copilot을 어떻게 활용하는지 공유합니다.",
+    "quote_2": "한 AI 연구소가 로봇의 실무 학습을 돕기 위해 실제 가정집의 배관 및 냉난방 수리 서비스를 무료로 제공하고 있습니다.",
+    "gap_summary": "AI가 인간 전문가의 지적 능력을 보조하는 도구로 머물지 않고, 물리적 노동 현장에 직접 침투하여 인간의 업무를 대체할 가능성이 있음을 시사할 수 있다.",
+    "reading_angle": "지식 노동의 효율성 증대와 육체 노동의 자동화라는 AI 기술 발전의 이중적 경로",
     "category": "노동"
+  },
+  {
+    "topic": "기업형 클라우드 크레딧 지원 vs 독립적 오픈소스 모델의 자생적 생태계",
+    "contrast_frame": "빅테크의 클라우드 크레딧을 통한 생태계 종속 vs 별도의 학습 없이도 성과를 내는 독립적 모델의 기술적 자립",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 56075,
+        "title": "Azure 무료 계정 $200 크레딧 (30일)",
+        "source": "무료 기회",
+        "pub_date": "2026-10-16 18:31:32",
+        "link": "https://azure.microsoft.com/en-us/free/"
+      },
+      {
+        "id": 56568,
+        "title": "엔비디아 쿠모렐레이셔널(NVIDIA Kumo Relational), 별도의 학습 없이 관계형 데이터에서 지도 학습을 능가하다",
+        "source": "HuggingFace Blog",
+        "pub_date": "Wed, 21 Oct 2026 18:26:30",
+        "link": "https://huggingface.co/blog/nvidia/kumo-relational"
+      }
+    ],
+    "quote_1": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스.",
+    "quote_2": "별도의 학습 없이 관계형 데이터에서 지도 학습을 능가하다",
+    "gap_summary": "빅테크의 자본력을 앞세운 플랫폼 종속 전략과 기술적 효율성을 극대화한 독립적 모델의 성능이 충돌하고 있으며, 이는 향후 개발자들이 인프라 의존형 모델과 자립형 모델 중 하나를 선택해야 하는 기로에 설 수 있음을 시사한다.",
+    "reading_angle": "자본 기반의 생태계 점유 전략과 기술 혁신을 통한 성능 우위 전략의 대립",
+    "category": "기술"
   }
 ]

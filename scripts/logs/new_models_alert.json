@@ -1,19 +1,18 @@
 {
- "day": "2026-10-24",
- "checked_at": 1792789207.520552,
+ "day": "2026-10-25",
+ "checked_at": 1792875608.423187,
  "total_rows": 38,
  "failed_providers": {},
- "new_by_provider": {
+ "new_by_provider": {},
+ "removed_by_provider": {
   "openrouter": [
-   "moonshotai/kimi-k3.1-pro"
+   "openai/gpt-3.5-turbo",
+   "openai/gpt-3.5-turbo-instruct",
+   "openai/gpt-3.5-turbo:batch"
   ],
   "kilo": [
-   "moonshotai/kimi-k3.1-pro"
-  ],
-  "nvidia": [
-   "nvidia/nemotron-3.5-bolt-e4b",
-   "minimaxai/minimax-m3.1-flash"
+   "openai/gpt-3.5-turbo",
+   "openai/gpt-3.5-turbo-instruct"
   ]
- },
- "removed_by_provider": {}
+ }
 }

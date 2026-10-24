@@ -149,3 +149,7 @@
 {"ts": "2026-10-24 07:30:36", "slug": "diri-ai", "step": "thumb", "result": "done", "detail": "✅ diri-ai 20KB", "dry_run": false}
 {"ts": "2026-10-24 07:30:44", "slug": "fliptarot", "step": "enrich", "result": "done", "detail": "+2,804자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-24 07:30:50", "slug": "fliptarot", "step": "thumb", "result": "done", "detail": "✅ fliptarot 31KB", "dry_run": false}
+{"ts": "2026-10-25 06:00:44", "slug": "sideos-ai", "step": "enrich", "result": "done", "detail": "+2,478자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-25 06:00:48", "slug": "sideos-ai", "step": "thumb", "result": "done", "detail": "✅ sideos-ai 15KB", "dry_run": false}
+{"ts": "2026-10-25 06:00:53", "slug": "zcad-ai", "step": "enrich", "result": "done", "detail": "+2,558자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-25 06:00:56", "slug": "zcad-ai", "step": "thumb", "result": "done", "detail": "✅ zcad-ai 17KB", "dry_run": false}

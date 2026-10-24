@@ -1,76 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-23",
-      "briefing_id": 310,
-      "articles": [
-        {
-          "id": "52305",
-          "title": "시간당 보수 체계에 도전하는 AI 네이티브 특허법인 '페언' 출범",
-          "original_title": "",
-          "description": "전통적인 특허 출원은 변호사의 시간으로 30~40시간이 소요되며 1만 8,000달러에서 4만 달러의 법률 비용이 듭니다. 스타트업들은 매일 바뀌는 기술을 보호하기 위해 몇 달을 기다려야 합니다. 스타트업을 위한 현대적인 특허 대행사인 페언은 전혀 다른 모델을 바탕으로 설립되었습니다.",
-          "link": "https://thenextweb.com/news/fearn-ai-native-patent-firm-launch-flat-fees",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-23"
-        },
-        {
-          "id": "52284",
-          "title": "\"우리는 이미 지난 전쟁을 치르고 있다\": 그리스 총리가 AI에 대해 솔직한 심정을 털어놓",
-          "original_title": "",
-          "description": "무역 사절단을 이끄는 대부분의 지도자들은 보통 판촉 활동에 집중하지만, 이번 주 그리스 총리 키리아코스 미초타키스 인터뷰에서 그는 어떤 정부도 AI가 가져올 파급력에 대비하지 못했다고 솔직히 인정했습니다.",
-          "link": "https://techcrunch.com/2026/09/22/were-already-fighting-yesterdays-battle-greeces-prime-minister-gets-candid-about-ai/",
-          "entities": [],
-          "date": "2026-09-23"
-        },
-        {
-          "id": "52291",
-          "title": "의회가 인공초지능 금지법을 심사하는 가운데 트럼프, 중국 시진핑과 회담 예정 – 미국 정치",
-          "original_title": "",
-          "description": "일부 업계 최고 지도자들이 치명적인 위험을 경고하고 있음에도 불구하고, 미 의회는 지금까지 AI 산업을 통제하기 위해 한 일이 거의 없다. 백악관 출입이 금지된 언론사들을 둘러싼 소송에서 트럼프 행정부의 새로운 법적 문건이 제출되었다.",
-          "link": "https://www.theguardian.com/us-news/live/2026/sep/23/donald-trump-xi-jinping-ai-china-us-politics-latest-news-updates",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-23"
-        },
-        {
-          "id": "52285",
-          "title": "테크크런치 파운더 서밋 일정 공개: 11월 4일 보스턴에서 투자 유치, 채용, AI 인사이",
-          "original_title": "",
-          "description": "창업가들이 가장 혹독한 교훈을 어렵게 배울 필요는 없습니다. 테크크런치 파운더 서밋은 기업 설립의 어려움을 덜어주고 성공의 기쁨을 더욱 크게 누릴 수 있도록 설계되었습니다.",
-          "link": "https://techcrunch.com/2026/09/22/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insights-in-boston-on-november-4/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-23"
-        },
-        {
-          "id": "52313",
-          "title": "트럼프-시진핑 정상회담, AI 안전 회담 의제에 올랐으나 양측 모두 속도 늦출 생각 없어",
-          "original_title": "",
-          "description": "최근 몇 주 동안 AI 안전성에 대한 우려가 최고조에 달했습니다. 분석가들은 이것이 미·중 정상의 핵심 초점이 될 것이라고 CNBC에 전했습니다.",
-          "link": "https://www.cnbc.com/2026/09/23/trump-xi-meeting-ai-safety-chips-us-china-dialogue.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-23"
-        },
-        {
-          "id": "52286",
-          "title": "OpenAI, 새로운 크리에이터 제품 부서의 수장으로 패트리온 공동 창업자 샘 야엠 영입",
-          "original_title": "",
-          "description": "OpenAI가 새로운 '크리에이터 제품' 부서를 이끌 책임자로 패트리온의 공동 창업자 샘 야엠을 영입했습니다. 크리에이터 플랫폼에서 13년 이상 재직한 그는 패트리온 임원 두 명과 함께 합류했으며, 새로운 크리에이터 도구를 개발하여 다음 주 OpenAI 데브데이에서 첫선을 보일 수 있습니다.",
-          "link": "https://the-decoder.com/openai-hires-patreon-co-founder-sam-yam-to-lead-a-new-creator-product-division/",
-          "entities": [
-            "OpenAI"
-          ],
-          "date": "2026-09-23"
-        }
-      ]
-    },
-    {
       "date": "2026-09-25",
       "briefing_id": 311,
       "articles": [
@@ -3134,73 +3064,58 @@
           "date": "2026-10-23"
         }
       ]
+    },
+    {
+      "date": "2026-10-24",
+      "briefing_id": 362,
+      "articles": [
+        {
+          "id": "56078",
+          "title": "GitHub Copilot Free (개인 무료 플랜)",
+          "original_title": "GitHub Copilot Free (개인 무료 플랜)",
+          "description": "개인 개발자용 무료 플랜 — 월 단위 GitHub AI Credits 사용 한도 내에서 무료. GitHub 계정 인증으로 CLI에서 사용. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+          "link": "https://docs.github.com/en/copilot/about-github-copilot/plans-for-github-copilot",
+          "entities": [
+            "AI",
+            "Credits",
+            "Copilot",
+            "GitHub",
+            "Free"
+          ],
+          "date": "2026-10-24"
+        },
+        {
+          "id": "56080",
+          "title": "GitHub Student Developer Pack (학생 전용)",
+          "original_title": "GitHub Student Developer Pack (학생 전용)",
+          "description": "학생 인증 시 Copilot Student 무료 포함 다수 개발 도구 혜택. 학교 이메일·학생증으로 GitHub Education 인증 필요. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+          "link": "https://education.github.com/pack",
+          "entities": [
+            "Student",
+            "Developer",
+            "Pack",
+            "Copilot",
+            "GitHub",
+            "Education"
+          ],
+          "date": "2026-10-24"
+        },
+        {
+          "id": "56569",
+          "title": "페어스트레스(FairStress): LLM 의사결정의 공정성에 대한 심층 평가",
+          "original_title": "FairStress: A deeper evaluation of fairness in LLM decision-making",
+          "description": "",
+          "link": "https://huggingface.co/blog/allenai/fairstress",
+          "entities": [
+            "FairStress",
+            "LLM"
+          ],
+          "date": "2026-10-24"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "52305",
-      "title": "시간당 보수 체계에 도전하는 AI 네이티브 특허법인 '페언' 출범",
-      "original_title": "",
-      "description": "전통적인 특허 출원은 변호사의 시간으로 30~40시간이 소요되며 1만 8,000달러에서 4만 달러의 법률 비용이 듭니다. 스타트업들은 매일 바뀌는 기술을 보호하기 위해 몇 달을 기다려야 합니다. 스타트업을 위한 현대적인 특허 대행사인 페언은 전혀 다른 모델을 바탕으로 설립되었습니다.",
-      "link": "https://thenextweb.com/news/fearn-ai-native-patent-firm-launch-flat-fees",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-23"
-    },
-    {
-      "id": "52284",
-      "title": "\"우리는 이미 지난 전쟁을 치르고 있다\": 그리스 총리가 AI에 대해 솔직한 심정을 털어놓",
-      "original_title": "",
-      "description": "무역 사절단을 이끄는 대부분의 지도자들은 보통 판촉 활동에 집중하지만, 이번 주 그리스 총리 키리아코스 미초타키스 인터뷰에서 그는 어떤 정부도 AI가 가져올 파급력에 대비하지 못했다고 솔직히 인정했습니다.",
-      "link": "https://techcrunch.com/2026/09/22/were-already-fighting-yesterdays-battle-greeces-prime-minister-gets-candid-about-ai/",
-      "entities": [],
-      "date": "2026-09-23"
-    },
-    {
-      "id": "52291",
-      "title": "의회가 인공초지능 금지법을 심사하는 가운데 트럼프, 중국 시진핑과 회담 예정 – 미국 정치",
-      "original_title": "",
-      "description": "일부 업계 최고 지도자들이 치명적인 위험을 경고하고 있음에도 불구하고, 미 의회는 지금까지 AI 산업을 통제하기 위해 한 일이 거의 없다. 백악관 출입이 금지된 언론사들을 둘러싼 소송에서 트럼프 행정부의 새로운 법적 문건이 제출되었다.",
-      "link": "https://www.theguardian.com/us-news/live/2026/sep/23/donald-trump-xi-jinping-ai-china-us-politics-latest-news-updates",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-23"
-    },
-    {
-      "id": "52285",
-      "title": "테크크런치 파운더 서밋 일정 공개: 11월 4일 보스턴에서 투자 유치, 채용, AI 인사이",
-      "original_title": "",
-      "description": "창업가들이 가장 혹독한 교훈을 어렵게 배울 필요는 없습니다. 테크크런치 파운더 서밋은 기업 설립의 어려움을 덜어주고 성공의 기쁨을 더욱 크게 누릴 수 있도록 설계되었습니다.",
-      "link": "https://techcrunch.com/2026/09/22/techcrunch-founder-summits-agenda-revealed-unlock-fundraising-hiring-and-ai-insights-in-boston-on-november-4/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-23"
-    },
-    {
-      "id": "52313",
-      "title": "트럼프-시진핑 정상회담, AI 안전 회담 의제에 올랐으나 양측 모두 속도 늦출 생각 없어",
-      "original_title": "",
-      "description": "최근 몇 주 동안 AI 안전성에 대한 우려가 최고조에 달했습니다. 분석가들은 이것이 미·중 정상의 핵심 초점이 될 것이라고 CNBC에 전했습니다.",
-      "link": "https://www.cnbc.com/2026/09/23/trump-xi-meeting-ai-safety-chips-us-china-dialogue.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-23"
-    },
-    {
-      "id": "52286",
-      "title": "OpenAI, 새로운 크리에이터 제품 부서의 수장으로 패트리온 공동 창업자 샘 야엠 영입",
-      "original_title": "",
-      "description": "OpenAI가 새로운 '크리에이터 제품' 부서를 이끌 책임자로 패트리온의 공동 창업자 샘 야엠을 영입했습니다. 크리에이터 플랫폼에서 13년 이상 재직한 그는 패트리온 임원 두 명과 함께 합류했으며, 새로운 크리에이터 도구를 개발하여 다음 주 OpenAI 데브데이에서 첫선을 보일 수 있습니다.",
-      "link": "https://the-decoder.com/openai-hires-patreon-co-founder-sam-yam-to-lead-a-new-creator-product-division/",
-      "entities": [
-        "OpenAI"
-      ],
-      "date": "2026-09-23"
-    },
     {
       "id": "52580",
       "title": "영국 '최대 규모 AI 슈퍼컴퓨터' 출시, 전력 공급 문제로 지연",
@@ -5953,6 +5868,49 @@
         "Data"
       ],
       "date": "2026-10-23"
+    },
+    {
+      "id": "56078",
+      "title": "GitHub Copilot Free (개인 무료 플랜)",
+      "original_title": "GitHub Copilot Free (개인 무료 플랜)",
+      "description": "개인 개발자용 무료 플랜 — 월 단위 GitHub AI Credits 사용 한도 내에서 무료. GitHub 계정 인증으로 CLI에서 사용. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+      "link": "https://docs.github.com/en/copilot/about-github-copilot/plans-for-github-copilot",
+      "entities": [
+        "AI",
+        "Credits",
+        "Copilot",
+        "GitHub",
+        "Free"
+      ],
+      "date": "2026-10-24"
+    },
+    {
+      "id": "56080",
+      "title": "GitHub Student Developer Pack (학생 전용)",
+      "original_title": "GitHub Student Developer Pack (학생 전용)",
+      "description": "학생 인증 시 Copilot Student 무료 포함 다수 개발 도구 혜택. 학교 이메일·학생증으로 GitHub Education 인증 필요. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+      "link": "https://education.github.com/pack",
+      "entities": [
+        "Student",
+        "Developer",
+        "Pack",
+        "Copilot",
+        "GitHub",
+        "Education"
+      ],
+      "date": "2026-10-24"
+    },
+    {
+      "id": "56569",
+      "title": "페어스트레스(FairStress): LLM 의사결정의 공정성에 대한 심층 평가",
+      "original_title": "FairStress: A deeper evaluation of fairness in LLM decision-making",
+      "description": "",
+      "link": "https://huggingface.co/blog/allenai/fairstress",
+      "entities": [
+        "FairStress",
+        "LLM"
+      ],
+      "date": "2026-10-24"
     }
   ]
 }
