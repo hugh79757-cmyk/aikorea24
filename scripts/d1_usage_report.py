@@ -29,6 +29,8 @@ import cfnew  # noqa: E402
 THRESHOLD = 0.8  # Telegram 상시 경보(기존 경로 유지) — muse 3단계는 ALERT_TIERS
 TAG = "[D1-GUARD]"
 MARKER = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".d1_guard_alert_day")
+# AIK24-D1-READ-03 D-2: 실행계획 회귀 경보는 사용량 경보와 분리된 마커를 쓴다.
+PLAN_MARKER = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".d1_plan_guard_alert_day")
 
 
 def load_env():
@@ -193,6 +195,54 @@ def unit(days=7):
     return 0
 
 
+def _plan_guard_report():
+    """AIK24-D1-READ-03 (D-2): D1 실행계획 회귀 감지 — 30분 주기 리포트에 접어 넣는다.
+
+    왜: 2026-10-24 사고는 "화면은 정상인데 요금만 폭주"였다. emdash 홈이 camelCase
+    `publishedAt` 을 넘겨 `ORDER BY "publishedAt"`(존재하지 않는 컬럼 → 문자열 상수)이
+    되었고, 인덱스를 못 타 TEMP B-TREE 정렬 + 상관 서브쿼리가 1,521행 전체에 평가되어
+    요청당 11,312행(하루 3,393,820행)을 읽었다. 육안으로는 최신순이라 정상으로 보였다.
+    실행계획(EXPLAIN QUERY PLAN)은 행을 읽지 않으므로(0행) 30분마다 검사해도 과금이 없다.
+    """
+    try:
+        import d1_plan_guard
+    except Exception as e:  # noqa: BLE001 — 가드 로드 실패가 본 리포트를 죽이면 안 된다
+        print(f"{TAG} 실행계획 가드 로드 실패(무시): {e}")
+        return
+    try:
+        violations, n = d1_plan_guard.run(verbose=False)
+    except Exception as e:  # noqa: BLE001
+        print(f"{TAG} 실행계획 가드 실행 실패(무시): {e}")
+        return
+    if not violations:
+        print(f"{TAG} 실행계획 정상 — {n}건 검사, 위반 0건")
+        return
+
+    detail = "; ".join(f"{name}: {'/'.join(bad)}" for name, bad in violations)
+    print(f"{TAG} ⚠️ 실행계획 회귀 {len(violations)}건 — {detail[:300]}")
+    day = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d")
+    try:
+        if open(PLAN_MARKER, encoding="utf-8").read().strip() == day:
+            print(f"{TAG} 실행계획 경보 — 오늘 이미 발송, 중복 발송 안 함")
+            return
+    except OSError:
+        pass
+    try:
+        from pipeline.infra.telegram import send_telegram
+        ok = send_telegram(
+            f"[D1-PLAN-GUARD] 실행계획 회귀 {len(violations)}건 — {detail[:400]}"
+            " (인덱스 미사용/TEMP B-TREE 의심, scripts/d1_plan_guard.py)"
+        )
+        print(f"telegram 발송: {'성공' if ok else '실패'}")
+        if ok:
+            try:
+                open(PLAN_MARKER, "w", encoding="utf-8").write(day)
+            except OSError:
+                pass
+    except Exception as e:  # noqa: BLE001 — 알림 실패가 조기 종료를 만들면 안 됨
+        print(f"telegram 실패(무시): {e}")
+
+
 def _already_alerted(day):
     """UTC 하루에 한 번만 Telegram 을 보낸다 (30분 간격 실행이므로)."""
     try:
@@ -228,6 +278,9 @@ def main():
         ok = cfnew.muse_send(text)
         print(f"{TAG} muse 테스트 발송: {'성공' if ok else '실패'}")
         return 0
+
+    # AIK24-D1-READ-03 D-2: 실행계획 회귀 감지(0행 비용) — 사용량 판정보다 먼저 돈다.
+    _plan_guard_report()
 
     utc = datetime.datetime.now(datetime.timezone.utc)
     day = utc.strftime("%Y-%m-%d")

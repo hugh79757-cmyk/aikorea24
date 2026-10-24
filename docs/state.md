@@ -1,3 +1,41 @@
+## 2026-10-24 12:40 KST (03:40 UTC) — AIK24-D1-READ-03: D1 읽기 잔여 최적화 + 재발 방지 (Phase A~D)
+
+### 한 일
+1. **Phase A** — 10-21 일일 총계 확정: 1,461,243행(29.2%) ≤ 40% → **READ-01 절감 확정**. 10-22 3,724,355(74.5%) / 10-23 4,355,220(87.1%) 재급증은 별개 원인.
+2. **Phase B** — `wrangler d1 insights`로 전 쿼리 단가표 작성(D1 행 미소비). emdash 24h 최대 항목 = 홈 목록 쿼리 **11,312행 × 300회 = 3,393,820행(80.5%)**.
+3. **Phase C-1 (근본 수정)** — `aikorea24emdash/src/pages/index.astro:12` `orderBy: { publishedAt }` → `{ published_at }`. camelCase 키가 SQL로 그대로 전달돼 `ORDER BY "publishedAt"`(존재하지 않는 컬럼)이 되고, SQLite가 **문자열 상수**로 처리 → published_at 인덱스 미사용 + `TEMP B-TREE` 정렬 → 상관 서브쿼리(terms/bylines)가 1,521행 전체에 평가됨. 배포 버전 `b782aa33-5e94-49e7-8cdf-1117e4ee0759`.
+4. **Phase D-1** — 기존 `emdash_d1_maintain.py`(launchd 05:10)의 `PRAGMA optimize` 경로 확인(신규 스케줄러 미추가). **결함 발견·수정**: 가드 차단(80.2%)으로 빈 결과가 오면 "통계 없음"으로 오판해 **실행하지 않은 ANALYZE를 수행했다고 기록**하던 문제 → `_GUARD_BLOCKED` 플래그로 판정 보류.
+5. **Phase D-2** — `scripts/d1_plan_guard.py` 신설(EXPLAIN QUERY PLAN 기반, 비용 0행). 감시 4건. `scripts/d1_usage_report.py` 30분 주기에 통합.
+6. **Phase D-3** — SSR 단가 가드 **설계만**(지시서 지시대로 미구현).
+
+### 결과 (검증 근거)
+- [검증됨] 홈 쿼리 단가 **11,312 → 19행**. 근거: `wrangler d1 insights aikorea24-emdash-db --time-period 1h` → `ORDER BY "published_at" DESC` 30회/총 576행/평균 19행, 기존 `"publishedAt"` 쿼리 소멸.
+- [검증됨] 노출 순서 불변. 근거: `id DESC LIMIT 10` 결과 10건 == `published_at DESC, id DESC LIMIT 10` 결과 10건 슬러그 일치 + 배포 전/후 라이브 HTML 상위 10건 동일.
+- [검증됨] 소비 급감. 근거: 03:27~03:34 UTC 8분 버킷 합계 1,205행 = **151행/분 → 일 환산 216,900행(4.3%)** (수정 전 ~2,900행/분).
+- [검증됨] D-2 가드 자기검증: `정상쿼리 위반 0건 · 사고재현 검출 1건 → 통과`. 실검사 4건 위반 0건.
+- [검증됨] D-1 통계 신선도: stat1 추정 1,728 vs 실제 1,738(+0.6%), `PRAGMA optimize` 비용 42행.
+- [부분검증] 일 환산 216,900행은 8분 샘플 외삽(24h 실측 아님).
+- [검증불가] 홈 쿼리를 300회/일 호출한 주체 — tail 30분 캡처에 없음(외부 D1 REST 추정), audit log 권한 없음.
+- [검증불가] muse 50/70/90% 경보 — `auth error: api/session -> 401 (cookies expired?)`.
+- 회귀 테스트: `pytest tests/ -q` = 1038 passed / 10 skipped / 3 failed(내 변경 모듈 미import, 무관·미해결). D1 범위 22 passed.
+- 조사 비용: **≈45,000행** (상한 300k의 15%). insights 호출은 0행.
+
+### 잔존 위험
+1. muse-cli 401 → 3단계 경보 전달 불가(Telegram 80%만 생존). 사용자 `muse-cli auth` 필요.
+2. `emdash_d1_maintain.py` 24h 임계 1,200,000이 새 기준선(~1M/일)에서 매일 초과 → 매일 알림 시도(전달 실패). 임계 재산정 필요.
+3. `SELECT COUNT(*) FROM "_emdash_migrations"` 100,710행/일(2.4%) — 코어 내부 호출, 미수정.
+4. 홈 쿼리 호출 주체 미특정(외부 REST 추정). 단가는 해소.
+5. 테스트 3건 실패(`test_auto_briefing_verdict`, `test_model_eval_agent_v2`, `test_zen_pending`) 미해결.
+
+### 다음 행동
+1. 사용자: `muse-cli auth` 재로그인.
+2. 10-25 UTC 일일 총계 확인 → 목표 ≤1,000,000행(20%).
+3. `USAGE_ALERT_THRESHOLD` 1,200,000 → 2,000,000 재산정.
+4. D-3 SSR 단가 가드 구현 여부 결정.
+5. 완료보고: `SSOT/프로젝트/aikorea24/지시서/2026-10-24-1040-AIK24-D1-READ-03-완료보고.md`
+
+## 2026-10-24 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-23 15:52 — AIK24-CONSENT-02: 로그인·동의 화면 가독성 개선 + 문구 정정 + redirect_to 복귀 경로 수정
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24

@@ -86,11 +86,20 @@ def _save_state(s: dict) -> None:
     os.replace(tmp, STATE_PATH)
 
 
+# AIK24-D1-READ-03 (D-1): D1 가드(80% 초과)로 쿼리가 차단되면 빈 결과가 돌아온다.
+#   빈 결과를 "통계 없음"으로 오판하면 실행하지도 않은 ANALYZE 를 "수행했다"고 기록한다
+#   (2026-10-24 05:10 실측: 80.2% 차단 상태에서 ANALYZE 4건 수행 기록, 실제 실행 0건).
+#   → 차단 사실을 플래그로 남겨 통계 점검 자체를 건너뛴다.
+_GUARD_BLOCKED = False
+
+
 def d1(sql: str) -> list:
     """emdash-db 읽기. cfnew.sql 의 기본 대상이 EMDASH_DB 다."""
+    global _GUARD_BLOCKED
     try:
         rows = cfnew.sql(sql)
     except cfnew.QuotaExceededError as e:
+        _GUARD_BLOCKED = True
         log(f"  ⛔ D1 가드 중단: {e}")
         return []
     except Exception as e:  # noqa: BLE001 — 유지보수 잡은 예외에도 죽지 않는다
@@ -112,6 +121,14 @@ def ensure_stats(report_only: bool = False, force_analyze: bool = False) -> dict
     """통계 건강 상태를 확인하고, 깨졌으면 복구한다."""
     result = {"before": sorted(set(HOT_TABLES) & stat1_tables()),
               "actions": [], "recovered": False}
+
+    # 가드 차단 상태의 빈 결과는 "통계 없음"의 증거가 아니다 → 판정 자체를 보류한다.
+    if _GUARD_BLOCKED:
+        log("  ⏸️ D1 가드 차단으로 통계 확인 불가 — 이번 주기 통계 점검 건너뜀(거짓 복구 기록 방지)")
+        result["blocked"] = True
+        result["after"] = result["before"]
+        result["still_missing"] = []
+        return result
 
     missing = [t for t in HOT_TABLES if t not in set(result["before"])]
 
