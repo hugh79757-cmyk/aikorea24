@@ -1,18 +1,15 @@
 {
- "day": "2026-10-25",
- "checked_at": 1792875608.423187,
+ "day": "2026-10-26",
+ "checked_at": 1792962002.872375,
  "total_rows": 38,
  "failed_providers": {},
- "new_by_provider": {},
- "removed_by_provider": {
+ "new_by_provider": {
   "openrouter": [
-   "openai/gpt-3.5-turbo",
-   "openai/gpt-3.5-turbo-instruct",
-   "openai/gpt-3.5-turbo:batch"
+   "liquid/lfm-2.5-2.6b"
   ],
   "kilo": [
-   "openai/gpt-3.5-turbo",
-   "openai/gpt-3.5-turbo-instruct"
+   "liquid/lfm-2.5-2.6b"
   ]
- }
+ },
+ "removed_by_provider": {}
 }
