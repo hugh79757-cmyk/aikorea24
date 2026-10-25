@@ -3113,6 +3113,23 @@
           "date": "2026-10-24"
         }
       ]
+    },
+    {
+      "date": "2026-10-25",
+      "briefing_id": 363,
+      "articles": [
+        {
+          "id": "56081",
+          "title": "Cerebras 일회성 $5 프로모 크레딧",
+          "original_title": "Cerebras 일회성 $5 프로모 크레딧",
+          "description": "결제 수단 등록 시 제공되는 일회성 $5 프로모 크레딧 — 초고속 추론 API를 소액으로 체험. 프로모 종료 시 한도 변경 가능. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+          "link": "https://www.cerebras.ai/pricing",
+          "entities": [
+            "Cerebras"
+          ],
+          "date": "2026-10-25"
+        }
+      ]
     }
   ],
   "articles": [
@@ -5911,6 +5928,17 @@
         "LLM"
       ],
       "date": "2026-10-24"
+    },
+    {
+      "id": "56081",
+      "title": "Cerebras 일회성 $5 프로모 크레딧",
+      "original_title": "Cerebras 일회성 $5 프로모 크레딧",
+      "description": "결제 수단 등록 시 제공되는 일회성 $5 프로모 크레딧 — 초고속 추론 API를 소액으로 체험. 프로모 종료 시 한도 변경 가능. · (b) 커스텀 프로바이더 설정 후 연결 가능",
+      "link": "https://www.cerebras.ai/pricing",
+      "entities": [
+        "Cerebras"
+      ],
+      "date": "2026-10-25"
     }
   ]
 }
