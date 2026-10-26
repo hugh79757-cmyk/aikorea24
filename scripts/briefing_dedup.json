@@ -1,158 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-25",
-      "briefing_id": 311,
-      "articles": [
-        {
-          "id": "52580",
-          "title": "영국 '최대 규모 AI 슈퍼컴퓨터' 출시, 전력 공급 문제로 지연",
-          "original_title": "",
-          "description": "정부가 대서특필한 이 데이터센터는 내년 가동 예정이었으나 2030년대 중반까지 지연될 수 있게 되었습니다. 에식스주 로우턴에 위치한 이 부지는 한때 국가 최대 규모로 기대를 모았습니다.",
-          "link": "https://www.theguardian.com/technology/2026/sep/24/construction-largest-supercomputer-delayed",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52599",
-          "title": "AI 커머스 시대: 7명의 이더머스 리더들이 말하는 여전히 고쳐지지 않은 문제들",
-          "original_title": "",
-          "description": "AI 에이전트에게 아마존 스토어 운영을 맡기겠습니까? 그러한 미래가 가까워졌을지도 모릅니다. 하지만 진정한 AI 전환에는 단순한 '틈새 메우기'용 AI 도구를 넘어선 발전이 필요하며, AI 에이전트가 스스로 워크플로우를 생성하고 관리할 수 있는 인프라 레이어 구축이 요구됩니다. 이에 7명의 이더머스 업계 베테랑들에게 의견을 물었습니다.",
-          "link": "https://thenextweb.com/news/ai-commerce-gap-ecommerce-leaders-ai-agents",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52566",
-          "title": "호주, OpenAI의 정부 보건 웹사이트 해킹이 법을 위반했는지 조사 착수",
-          "original_title": "",
-          "description": "이번 사건은 정부 기관에 영향을 미친 것으로 알려진 최초의 보안 침해 사고로, 호주 총리는 OpenAI에 책임을 묻겠다고 공언했습니다.",
-          "link": "https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law/",
-          "entities": [],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52563",
-          "title": "구글, 제미니가 사용자 대신 기업에 전화해 주는 기능 테스트 중",
-          "original_title": "",
-          "description": "구글은 이 AI 통화 기능이 미국 내 제미니 유료 구독을 이용하는 픽셀 11 사용자들에게 가장 먼저 제공될 것이라고 밝혔습니다.",
-          "link": "https://techcrunch.com/2026/09/24/google-tests-letting-gemini-make-phone-calls-initially-for-us-pixel-owners/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52567",
-          "title": "최고의 AI 전문가들도 AI 발전 속도를 심각하게 과소평가했다는 연구 결과 나와",
-          "original_title": "",
-          "description": "예측연구소(Forecasting Research Institute)에 따르면 최고의 AI 전문가들은 인공지능의 발전 속도를 지속적으로 과소평가해 왔습니다. AI는 전문가들의 중간 예측보다 5년이나 앞서 국제수학올림피아드에서 금메달 수준에 도달했으며, 앤스로픽의 연환산 매출은 예상치의 약 5배에 달합니다.",
-          "link": "https://the-decoder.com/top-ai-experts-badly-underestimated-how-fast-the-field-is-moving-study-finds/",
-          "entities": [
-            "AI",
-            "Forecasting",
-            "Institute",
-            "Research"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52573",
-          "title": "미국 의회법안, 인공초지능 영구 금지 및 신규 연방 AI 기관 신설 제안",
-          "original_title": "",
-          "description": "버니 샌더스 상원의원과 그레그 카사르 하원의원이 9월 23일 인공초지능(ASI)의 개발과 사용을 영구적으로 금지하는 법안을 발의했습니다. 해당 법안은 또한 새로운 연방 AI 규제 기관의 신설을 포함하고 있어 주목받고 있습니다.",
-          "link": "https://the-decoder.com/u-s-bill-proposes-permanent-ban-on-artificial-superintelligence-and-creation-of-new-federal-ai-agency/",
-          "entities": [
-            "AI",
-            "ASI"
-          ],
-          "date": "2026-09-25"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-25",
-      "briefing_id": 312,
-      "articles": [
-        {
-          "id": "52654",
-          "title": "AI에 대한 불안감을 웃음으로 승화시키는 코미디언들: \"너무 뛰어나서 우리의 현실 인식을 ",
-          "original_title": "",
-          "description": "영상, 스탠드업 코미디, 만화를 통해 유머 작가들은 AI를 어디에나 존재하고 피할 수 없는 것으로 만들려는 빅테크의 시도를 신랄하게 비판한다. \"가장 좋은 시나리오는 우리가 두 다시 행정 업무를 하지 않아도 되는 것이고, 최악의 시나리오는 우리 모두가 죽는 것이다\"라고 한 AI 기업 CEO는 말한다. 한 청년이 아름다운 산 정상에 오르기 위해 사투를 벌이는",
-          "link": "https://www.theguardian.com/technology/2026/sep/25/ai-anxiety-comedy",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52648",
-          "title": "NSA, 병원, 보험사에 AI가 비용 부담 가중시켜... 지능에는 비용이 따른다",
-          "original_title": "",
-          "description": "워싱턴 선에 따르면 NSA는 주로 컴퓨팅 파워를 확보하기 위해 첨단 AI 모델 테스트에 이미 수십억 달러를 지출하고 있다. 의회는 본격적인 AI 감독에 연간 수백억 달러가 소요될 것으로 예상하는 반면, 의회예산국(CBO)의 이전 추산치는 이와 달랐다.",
-          "link": "https://the-decoder.com/intelligence-doesnt-come-cheap-as-ai-drives-up-costs-for-the-nsa-hospitals-and-insurers/",
-          "entities": [
-            "NSA",
-            "AI",
-            "CBO"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52600",
-          "title": "데이터쿠에 따르면 CIO의 81%, IT 부서 외부에 구축된 AI 에이전트에 대한 완전한 ",
-          "original_title": "",
-          "description": "데이터쿠의 설문조사 결과에 따르면, 대부분의 최고정보책임자(CIO)들은 직원들이 승인된 시스템 외부에 구축한 AI 에이전트를 완전히 파악하지 못하고 있는 것으로 나타났습니다. 설문에 응한 685명의 CIO 중 81%가 공식적인 채널 외부에 생성된 AI 에이전트에 대한 완전한 감독 권한이 없다고 답했습니다. 이번 조사는 해리스 폴이 데이터쿠를 위해 9일부터 ",
-          "link": "https://thenextweb.com/news/cio-ai-agent-oversight-dataiku-survey",
-          "entities": [
-            "IT",
-            "AI",
-            "CIO"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52650",
-          "title": "백악관, 오프아이와 앤스로픽에 영국 테스트 팀 공유 전 미국 검토 요구",
-          "original_title": "",
-          "description": "백악관은 오픈AI와 앤스로픽에 새로운 AI 모델을 영국의 AI 안전연구소(AISI)에 넘기기 전에 미국 기관들이 먼저 검토할 것을 요구하고 있다. 이 내용은 영국의 AI 안전 규제 및 미·중 기술 경쟁 맥락에서 주목받고 있다.",
-          "link": "https://the-decoder.com/white-house-tells-openai-and-anthropic-to-let-u-s-review-new-models-before-sharing-them-with-british-testers/",
-          "entities": [
-            "AI",
-            "AISI"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52659",
-          "title": "노동당이 법 개정을 검토하는 가운데, 총리가 OpenAI 메디케어 해킹 은폐 주장은 ‘말도",
-          "original_title": "",
-          "description": "전문가들은 AI 에이전트가 범죄를 저질렀을 때 기업에 책임을 어떻게 물을지 명확히 하기 위해 호주의 형법이 개정되어야 한다고 말합니다. 최신 소식을 확인하려면 호주 뉴스 라이브 블로그를 팔로우하고 새로운 정치 이메일, 무료 앱, 일일 뉴스팟캐스트를 이용해 보세요. 연방 정부는 호주의 법률을 변경할 수 있습니다.",
-          "link": "https://www.theguardian.com/australia-news/2026/sep/25/wake-up-call-labor-considers-changing-australian-laws-after-openai-medicare-hack",
-          "entities": [
-            "OpenAI",
-            "AI"
-          ],
-          "date": "2026-09-25"
-        },
-        {
-          "id": "52674",
-          "title": "트럼프와 시진핑, AI 업계 거물들과 만찬... 지금까지 알려진 기술 회담의 내용",
-          "original_title": "",
-          "description": "최근 몇 주간 안전성 우려가 글로벌 지정학적 의제의 최상위로 떠오른 가운데, 목요일 열린 트럼프와 시진핑의 회담에서 AI는 핵심 논제였습니다.",
-          "link": "https://www.cnbc.com/2026/09/25/the-tech-download-trump-xi-ai-talks.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-25"
-        }
-      ]
-    },
-    {
       "date": "2026-09-26",
       "briefing_id": 313,
       "articles": [
@@ -3130,149 +2978,38 @@
           "date": "2026-10-25"
         }
       ]
+    },
+    {
+      "date": "2026-10-26",
+      "briefing_id": 364,
+      "articles": [
+        {
+          "id": "57117",
+          "title": "엔비디아, 로컬 에이전트·로봇 겨냥 4GB 모델 '네모트론 3.5 볼트' 출시",
+          "original_title": "",
+          "description": "엔비디아가 로컬에서 적은 메모리로 자연스러운 대화와 작업 수행이 가능한 경량 온디바이스 AI 모델을 선보였다. 이번 모델은 음성·비전 모델과 함께 구동되는 기기 내 AI 시스템과 게임, 로봇 분야의 개발자가 성능과 메모리 사용량 사이의 균형을 맞추는 데 초점을 맞췄다.엔비디아는 23일(현지시간) 약 4GB의 메모리 환경에서 실행할 수 있도록 설계한 오픈소스",
+          "link": "https://www.aitimes.com/news/articleView.html?idxno=216625",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-10-26"
+        },
+        {
+          "id": "57111",
+          "title": "레딧의 'r/open source' 커뮤니티, AI 및 비영어권 사용자 등 금지",
+          "original_title": "r/open source just banned AI, non-English speakers and more",
+          "description": "레딧의 오픈소스 커뮤니티가 AI 콘텐츠와 비영어권 사용자의 게시물을 금지하는 등 엄격한 규정을 도입했습니다. 이러한 조치는 커뮤니티의 성격과 운영 방침을 둘러싼 논란을 불러일으키고 있습니다.",
+          "link": "https://www.theverge.com/ai-artificial-intelligence/1018217/reddit-opensource-ai-ban",
+          "entities": [
+            "AI",
+            "English"
+          ],
+          "date": "2026-10-26"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "52580",
-      "title": "영국 '최대 규모 AI 슈퍼컴퓨터' 출시, 전력 공급 문제로 지연",
-      "original_title": "",
-      "description": "정부가 대서특필한 이 데이터센터는 내년 가동 예정이었으나 2030년대 중반까지 지연될 수 있게 되었습니다. 에식스주 로우턴에 위치한 이 부지는 한때 국가 최대 규모로 기대를 모았습니다.",
-      "link": "https://www.theguardian.com/technology/2026/sep/24/construction-largest-supercomputer-delayed",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52599",
-      "title": "AI 커머스 시대: 7명의 이더머스 리더들이 말하는 여전히 고쳐지지 않은 문제들",
-      "original_title": "",
-      "description": "AI 에이전트에게 아마존 스토어 운영을 맡기겠습니까? 그러한 미래가 가까워졌을지도 모릅니다. 하지만 진정한 AI 전환에는 단순한 '틈새 메우기'용 AI 도구를 넘어선 발전이 필요하며, AI 에이전트가 스스로 워크플로우를 생성하고 관리할 수 있는 인프라 레이어 구축이 요구됩니다. 이에 7명의 이더머스 업계 베테랑들에게 의견을 물었습니다.",
-      "link": "https://thenextweb.com/news/ai-commerce-gap-ecommerce-leaders-ai-agents",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52566",
-      "title": "호주, OpenAI의 정부 보건 웹사이트 해킹이 법을 위반했는지 조사 착수",
-      "original_title": "",
-      "description": "이번 사건은 정부 기관에 영향을 미친 것으로 알려진 최초의 보안 침해 사고로, 호주 총리는 OpenAI에 책임을 묻겠다고 공언했습니다.",
-      "link": "https://techcrunch.com/2026/09/24/australia-to-investigate-if-openai-hack-of-government-health-website-broke-the-law/",
-      "entities": [],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52563",
-      "title": "구글, 제미니가 사용자 대신 기업에 전화해 주는 기능 테스트 중",
-      "original_title": "",
-      "description": "구글은 이 AI 통화 기능이 미국 내 제미니 유료 구독을 이용하는 픽셀 11 사용자들에게 가장 먼저 제공될 것이라고 밝혔습니다.",
-      "link": "https://techcrunch.com/2026/09/24/google-tests-letting-gemini-make-phone-calls-initially-for-us-pixel-owners/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52567",
-      "title": "최고의 AI 전문가들도 AI 발전 속도를 심각하게 과소평가했다는 연구 결과 나와",
-      "original_title": "",
-      "description": "예측연구소(Forecasting Research Institute)에 따르면 최고의 AI 전문가들은 인공지능의 발전 속도를 지속적으로 과소평가해 왔습니다. AI는 전문가들의 중간 예측보다 5년이나 앞서 국제수학올림피아드에서 금메달 수준에 도달했으며, 앤스로픽의 연환산 매출은 예상치의 약 5배에 달합니다.",
-      "link": "https://the-decoder.com/top-ai-experts-badly-underestimated-how-fast-the-field-is-moving-study-finds/",
-      "entities": [
-        "AI",
-        "Forecasting",
-        "Institute",
-        "Research"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52573",
-      "title": "미국 의회법안, 인공초지능 영구 금지 및 신규 연방 AI 기관 신설 제안",
-      "original_title": "",
-      "description": "버니 샌더스 상원의원과 그레그 카사르 하원의원이 9월 23일 인공초지능(ASI)의 개발과 사용을 영구적으로 금지하는 법안을 발의했습니다. 해당 법안은 또한 새로운 연방 AI 규제 기관의 신설을 포함하고 있어 주목받고 있습니다.",
-      "link": "https://the-decoder.com/u-s-bill-proposes-permanent-ban-on-artificial-superintelligence-and-creation-of-new-federal-ai-agency/",
-      "entities": [
-        "AI",
-        "ASI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52654",
-      "title": "AI에 대한 불안감을 웃음으로 승화시키는 코미디언들: \"너무 뛰어나서 우리의 현실 인식을 ",
-      "original_title": "",
-      "description": "영상, 스탠드업 코미디, 만화를 통해 유머 작가들은 AI를 어디에나 존재하고 피할 수 없는 것으로 만들려는 빅테크의 시도를 신랄하게 비판한다. \"가장 좋은 시나리오는 우리가 두 다시 행정 업무를 하지 않아도 되는 것이고, 최악의 시나리오는 우리 모두가 죽는 것이다\"라고 한 AI 기업 CEO는 말한다. 한 청년이 아름다운 산 정상에 오르기 위해 사투를 벌이는",
-      "link": "https://www.theguardian.com/technology/2026/sep/25/ai-anxiety-comedy",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52648",
-      "title": "NSA, 병원, 보험사에 AI가 비용 부담 가중시켜... 지능에는 비용이 따른다",
-      "original_title": "",
-      "description": "워싱턴 선에 따르면 NSA는 주로 컴퓨팅 파워를 확보하기 위해 첨단 AI 모델 테스트에 이미 수십억 달러를 지출하고 있다. 의회는 본격적인 AI 감독에 연간 수백억 달러가 소요될 것으로 예상하는 반면, 의회예산국(CBO)의 이전 추산치는 이와 달랐다.",
-      "link": "https://the-decoder.com/intelligence-doesnt-come-cheap-as-ai-drives-up-costs-for-the-nsa-hospitals-and-insurers/",
-      "entities": [
-        "NSA",
-        "AI",
-        "CBO"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52600",
-      "title": "데이터쿠에 따르면 CIO의 81%, IT 부서 외부에 구축된 AI 에이전트에 대한 완전한 ",
-      "original_title": "",
-      "description": "데이터쿠의 설문조사 결과에 따르면, 대부분의 최고정보책임자(CIO)들은 직원들이 승인된 시스템 외부에 구축한 AI 에이전트를 완전히 파악하지 못하고 있는 것으로 나타났습니다. 설문에 응한 685명의 CIO 중 81%가 공식적인 채널 외부에 생성된 AI 에이전트에 대한 완전한 감독 권한이 없다고 답했습니다. 이번 조사는 해리스 폴이 데이터쿠를 위해 9일부터 ",
-      "link": "https://thenextweb.com/news/cio-ai-agent-oversight-dataiku-survey",
-      "entities": [
-        "IT",
-        "AI",
-        "CIO"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52650",
-      "title": "백악관, 오프아이와 앤스로픽에 영국 테스트 팀 공유 전 미국 검토 요구",
-      "original_title": "",
-      "description": "백악관은 오픈AI와 앤스로픽에 새로운 AI 모델을 영국의 AI 안전연구소(AISI)에 넘기기 전에 미국 기관들이 먼저 검토할 것을 요구하고 있다. 이 내용은 영국의 AI 안전 규제 및 미·중 기술 경쟁 맥락에서 주목받고 있다.",
-      "link": "https://the-decoder.com/white-house-tells-openai-and-anthropic-to-let-u-s-review-new-models-before-sharing-them-with-british-testers/",
-      "entities": [
-        "AI",
-        "AISI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52659",
-      "title": "노동당이 법 개정을 검토하는 가운데, 총리가 OpenAI 메디케어 해킹 은폐 주장은 ‘말도",
-      "original_title": "",
-      "description": "전문가들은 AI 에이전트가 범죄를 저질렀을 때 기업에 책임을 어떻게 물을지 명확히 하기 위해 호주의 형법이 개정되어야 한다고 말합니다. 최신 소식을 확인하려면 호주 뉴스 라이브 블로그를 팔로우하고 새로운 정치 이메일, 무료 앱, 일일 뉴스팟캐스트를 이용해 보세요. 연방 정부는 호주의 법률을 변경할 수 있습니다.",
-      "link": "https://www.theguardian.com/australia-news/2026/sep/25/wake-up-call-labor-considers-changing-australian-laws-after-openai-medicare-hack",
-      "entities": [
-        "OpenAI",
-        "AI"
-      ],
-      "date": "2026-09-25"
-    },
-    {
-      "id": "52674",
-      "title": "트럼프와 시진핑, AI 업계 거물들과 만찬... 지금까지 알려진 기술 회담의 내용",
-      "original_title": "",
-      "description": "최근 몇 주간 안전성 우려가 글로벌 지정학적 의제의 최상위로 떠오른 가운데, 목요일 열린 트럼프와 시진핑의 회담에서 AI는 핵심 논제였습니다.",
-      "link": "https://www.cnbc.com/2026/09/25/the-tech-download-trump-xi-ai-talks.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-25"
-    },
     {
       "id": "52730",
       "title": "트럼프와 시진핑 중국 국가주석, AI에 대한 주요 합의 없이 정상회담 종료",
@@ -5939,6 +5676,29 @@
         "Cerebras"
       ],
       "date": "2026-10-25"
+    },
+    {
+      "id": "57117",
+      "title": "엔비디아, 로컬 에이전트·로봇 겨냥 4GB 모델 '네모트론 3.5 볼트' 출시",
+      "original_title": "",
+      "description": "엔비디아가 로컬에서 적은 메모리로 자연스러운 대화와 작업 수행이 가능한 경량 온디바이스 AI 모델을 선보였다. 이번 모델은 음성·비전 모델과 함께 구동되는 기기 내 AI 시스템과 게임, 로봇 분야의 개발자가 성능과 메모리 사용량 사이의 균형을 맞추는 데 초점을 맞췄다.엔비디아는 23일(현지시간) 약 4GB의 메모리 환경에서 실행할 수 있도록 설계한 오픈소스",
+      "link": "https://www.aitimes.com/news/articleView.html?idxno=216625",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-10-26"
+    },
+    {
+      "id": "57111",
+      "title": "레딧의 'r/open source' 커뮤니티, AI 및 비영어권 사용자 등 금지",
+      "original_title": "r/open source just banned AI, non-English speakers and more",
+      "description": "레딧의 오픈소스 커뮤니티가 AI 콘텐츠와 비영어권 사용자의 게시물을 금지하는 등 엄격한 규정을 도입했습니다. 이러한 조치는 커뮤니티의 성격과 운영 방침을 둘러싼 논란을 불러일으키고 있습니다.",
+      "link": "https://www.theverge.com/ai-artificial-intelligence/1018217/reddit-opensource-ai-ban",
+      "entities": [
+        "AI",
+        "English"
+      ],
+      "date": "2026-10-26"
     }
   ]
 }

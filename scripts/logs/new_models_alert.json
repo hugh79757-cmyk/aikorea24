@@ -1,15 +1,26 @@
 {
- "day": "2026-10-26",
- "checked_at": 1792962002.872375,
+ "day": "2026-10-27",
+ "checked_at": 1793048407.175028,
  "total_rows": 38,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "liquid/lfm-2.5-2.6b"
+   "openai/gpt-6.1-terra",
+   "openai/gpt-6.1-terra:batch"
   ],
   "kilo": [
-   "liquid/lfm-2.5-2.6b"
+   "openai/gpt-6.1-terra"
   ]
  },
- "removed_by_provider": {}
+ "removed_by_provider": {
+  "openrouter": [
+   "arcee-ai/trinity-large-thinking"
+  ],
+  "kilo": [
+   "arcee-ai/trinity-large-thinking"
+  ],
+  "zen": [
+   "deepseek-v4-flash"
+  ]
+ }
 }

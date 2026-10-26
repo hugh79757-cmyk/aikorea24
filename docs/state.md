@@ -1,3 +1,5 @@
+## 2026-10-26 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-25 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-10-24 12:40 KST (03:40 UTC) — AIK24-D1-READ-03: D1 읽기 잔여 최적화 + 재발 방지 (Phase A~D)
