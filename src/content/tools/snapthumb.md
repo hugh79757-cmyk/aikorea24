@@ -12,6 +12,7 @@ featured: false
 order: 102
 tasks: ["썸네일-제작", "sns-콘텐츠"]
 updated: "2026-10-15"
+image: "/images/tools/snapthumb.webp"
 ---
 
 ## 한줄 요약

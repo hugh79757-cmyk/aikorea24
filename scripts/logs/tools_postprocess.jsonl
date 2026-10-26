@@ -155,3 +155,30 @@
 {"ts": "2026-10-25 06:00:56", "slug": "zcad-ai", "step": "thumb", "result": "done", "detail": "✅ zcad-ai 17KB", "dry_run": false}
 {"ts": "2026-10-26 06:00:52", "slug": "llama-windows", "step": "enrich", "result": "done", "detail": "+2,500자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-26 06:00:57", "slug": "llama-windows", "step": "thumb", "result": "done", "detail": "✅ llama-windows 12KB", "dry_run": false}
+{"ts": "2026-10-26 07:30:14", "slug": "removehandwriting", "step": "enrich", "result": "done", "detail": "+2,748자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-26 07:30:18", "slug": "removehandwriting", "step": "thumb", "result": "done", "detail": "✅ removehandwriting 15KB", "dry_run": false}
+{"ts": "2026-10-26 07:30:27", "slug": "careops", "step": "enrich", "result": "done", "detail": "+2,977자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-26 07:30:37", "slug": "amplify-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:30:38", "slug": "amplify-ai", "step": "thumb", "result": "fail", "detail": "❌ amplify-ai OG_PAGE_HTTPError | ❌ amplify-ai OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-26 07:30:40", "slug": "freebeat-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:30:44", "slug": "freebeat-ai", "step": "thumb", "result": "fail", "detail": "❌ freebeat-ai OG_GENERIC | ❌ freebeat-ai OG_GENERIC", "dry_run": false}
+{"ts": "2026-10-26 07:30:45", "slug": "gemini-agent-for-google-cloud", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:30:45", "slug": "gemini-agent-for-google-cloud", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-26 07:31:04", "slug": "gpt-live", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:31:10", "slug": "gpt-live", "step": "thumb", "result": "fail", "detail": "❌ gpt-live OG_SMALL_3948B | ❌ gpt-live OG_SMALL_3948B", "dry_run": false}
+{"ts": "2026-10-26 07:31:10", "slug": "invited-ai-reminder-scanner", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:31:11", "slug": "invited-ai-reminder-scanner", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-26 07:31:12", "slug": "lim-companions", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:31:12", "slug": "lim-companions", "step": "thumb", "result": "fail", "detail": "❌ lim-companions OG_PAGE_HTTPError | ❌ lim-companions OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-26 07:31:19", "slug": "lucer", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:31:20", "slug": "lucer", "step": "thumb", "result": "fail", "detail": "❌ lucer OG_PAGE_HTTPError | ❌ lucer OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-26 07:31:20", "slug": "nuclr-commander", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:31:31", "slug": "nuclr-commander", "step": "thumb", "result": "done", "detail": "✅ nuclr-commander og 25KB", "dry_run": false}
+{"ts": "2026-10-26 07:32:07", "slug": "nueve", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:32:08", "slug": "nueve", "step": "thumb", "result": "fail", "detail": "❌ nueve OG_PAGE_HTTPError | ❌ nueve OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-26 07:32:10", "slug": "snapthumb", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:32:16", "slug": "snapthumb", "step": "thumb", "result": "done", "detail": "✅ snapthumb og 10KB", "dry_run": false}
+{"ts": "2026-10-26 07:32:16", "slug": "sol", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:32:17", "slug": "sol", "step": "thumb", "result": "fail", "detail": "❌ sol OG_PAGE_HTTPError | ❌ sol OG_PAGE_HTTPError", "dry_run": false}
+{"ts": "2026-10-26 07:32:18", "slug": "abliteration-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-26 07:32:18", "slug": "abnormal-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}

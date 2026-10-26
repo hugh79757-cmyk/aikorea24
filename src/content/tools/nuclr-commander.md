@@ -12,6 +12,7 @@ featured: false
 order: 108
 tasks: ["업무-자동화", "프로젝트-관리", "문서-요약"]
 updated: "2026-10-15"
+image: "/images/tools/nuclr-commander.webp"
 ---
 
 ## 한줄 요약
