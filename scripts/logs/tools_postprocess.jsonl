@@ -190,3 +190,18 @@
 {"ts": "2026-10-27 06:02:56", "slug": "userarena-benchmarking-interactive-user-simulatio", "step": "thumb", "result": "done", "detail": "✅ userarena-benchmarking-interactive-user-simulatio 38KB", "dry_run": false}
 {"ts": "2026-10-27 06:03:04", "slug": "ai-bridge", "step": "enrich", "result": "done", "detail": "+3,002자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-27 06:03:07", "slug": "ai-bridge", "step": "thumb", "result": "done", "detail": "✅ ai-bridge 22KB", "dry_run": false}
+{"ts": "2026-10-27 07:30:05", "slug": "ai-ad-generator-media-io", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:05", "slug": "aiimagedetector-info", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:14", "slug": "airbrush-studio", "step": "thumb", "result": "fail", "detail": "❌ airbrush-studio BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ airbrush-studio NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-27 07:30:15", "slug": "aisha-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:17", "slug": "alphio-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:17", "slug": "archdiagramai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:17", "slug": "arena42-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:18", "slug": "astorie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:18", "slug": "bizmuse-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:26", "slug": "cantina-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:35", "slug": "chatgpt-work", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:35", "slug": "clipdance-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:37", "slug": "cloudways-managed-ai-agents", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:37", "slug": "cognee-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-27 07:30:41", "slug": "coloringdaily", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
