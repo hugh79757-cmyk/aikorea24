@@ -465,7 +465,10 @@ def main(selected_articles=None):
 
     # Phase 2 중복 방어 (저장 전 재검증). AIK24-BLOG-01: run_pipeline가 기사를 넘기는
     # 파이프라인 경로에서도 반드시 걸어야 한다 — 이전엔 else 분기에만 있어 중복이 그대로 저장됐다.
-    cutoff, removed = filter_duplicates(selected, d1_query)
+    # AIK24-DEDUP-10: 최종 선정 단계에서는 배치 내부 중복까지 본다.
+    #   후보 풀(selector)과 달리 여기는 2~3건뿐이라 같은 사건이 두 슬롯을 먹는 것이
+    #   곧 '브리핑이 어제와 똑같아 보이는' 현상이다 (2026-10-27 id=365 실측).
+    cutoff, removed = filter_duplicates(selected, d1_query, dedupe_within_batch=True)
     if removed:
         log(f"  ⚠️ 중복 제거: {len(removed)}건")
         for art, reason in removed:

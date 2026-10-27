@@ -92,6 +92,17 @@ def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
     orig = (article.get('original_title', '') or '')[:30]
     desc = article.get('description', '') or ''
 
+    # AIK24-DEDUP-10: Layer 3(엔티티·주제어)은 **절단 전 원문**으로 판정한다.
+    #   Layer 1 의 exact 비교는 표기 흔들림을 흡수하려고 50/30자 절단값을 쓰지만,
+    #   같은 절단값으로 엔티티를 뽑으면 문장 뒤쪽의 구별 토큰이 사라진다.
+    #   근거(2026-10-27 실측): 어제 발행분 original_title
+    #   "r/open source just banned AI, non-English speakers and more" 가 30자에서
+    #   잘려 'English' 엔티티가 소멸 → 오늘 같은 사건 기사와의 겹침이 2→1 로 떨어져
+    #   임계값(2) 미달 → 같은 사건(r/opensource AI 금지)이 이틀 연속 발행됐다.
+    #   원문으로 뽑으면 겹침 2({AI, English})로 잡힌다.
+    full_title = article.get('title', '') or ''
+    full_orig = article.get('original_title', '') or ''
+
     # D1 조회가 실패하면 이력은 None 이다 → fail-open (막지 않는다).
     # AIK24-PIPE-09: strict 경로가 D1 층에도 쓰이게 되면서 None 이력을
     # 그대로 순회하면 TypeError 로 브리핑 전체가 죽는다 → 여기서 방어한다.
@@ -125,9 +136,15 @@ def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
             return True, 'exact_original_title'
 
         # Layer 2: Semantic similarity (언어 통합)
+        # AIK24-DEDUP-10: 두 기사를 **같은 기준**으로 비교한다.
+        #   이전에는 1번째 기사만 50/30자로 자르고 2번째는 원문을 넘겨서,
+        #   같은 쌍도 인자 순서에 따라 판정이 달라지는 비대칭이 있었다.
+        #   대칭 절단으로 바꾸면 23,871쌍 중 추가 판정이 2쌍뿐이다
+        #   (2026-10-27 실측: 진짜 중복 1쌍 + 오탐 1쌍). 그 1쌍이
+        #   r/opensource 사건 2건으로, 한 브리핑에 같은 사건이 두 번 들어간 원인이다.
         if is_same_topic(
             title, orig, desc,
-            h.get('title', ''), h.get('original_title', ''), h.get('description', ''),
+            h_title, h_orig, h.get('description', ''),
         ):
             return True, 'semantic'
 
@@ -139,14 +156,14 @@ def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
         # AIK24-PIPE-09: D1 3일 창(최근 발행분)도 strict 경로로 통일했다.
         #   56074 의 D1 상대 56152 는 공통 엔티티 {AI, Google} 만 겹치고
         #   jaccard_all 0.04 → 같은 주제가 아닌 범용 엔티티 오탐이었다.
-        ent1 = extract_entities(title, orig, desc)
+        ent1 = extract_entities(full_title, full_orig, desc)
         ent2 = extract_entities(
             h.get('title', ''), h.get('original_title', ''), h.get('description', ''),
         )
         overlap = len(ent1 & ent2)
         if overlap >= ENTITY_OVERLAP_THRESHOLD:
             if entity_needs_topic and not is_topic_related(
-                title, orig, desc,
+                full_title, full_orig, desc,
                 h.get('title', ''), h.get('original_title', ''), h.get('description', ''),
             ):
                 continue  # 엔티티 단독 겹침 → 차단하지 않는다 (오탐)
@@ -155,8 +172,16 @@ def _is_duplicate_article(article, history_articles, entity_needs_topic=False):
     return False, None
 
 
-def filter_duplicates(articles, d1_query):
-    """기사 목록에서 중복 제거 + local history 추가 검증"""
+def filter_duplicates(articles, d1_query, dedupe_within_batch=False):
+    """기사 목록에서 중복 제거 + local history 추가 검증
+
+    dedupe_within_batch (AIK24-DEDUP-10, 기본 False):
+        True 면 같은 배치 안에서 이미 처리한 기사와도 비교한다. 기본값을 False 로 두는
+        이유는 호출자마다 '배치'의 의미가 다르기 때문이다.
+          - auto_briefing 의 최종 선정(2~3건): 켠다 → 한 브리핑에 같은 사건 2건 방지
+          - selector 의 후보 풀(수십 건): 끈다 → PIPE-08 이 되돌린 범용 엔티티 오탐
+            (56076 이 entity(2) 로 탈락해 브리핑 0건) 이 배치 층에서 재발한다.
+    """
     history = get_history_articles(d1_query)
 
     # local history에도 동일 기사가 있는지 확인
@@ -164,6 +189,10 @@ def filter_duplicates(articles, d1_query):
 
     kept = []
     removed = []
+    # AIK24-DEDUP-10: 이 배치에서 이미 처리한 기사(채택·탈락 **모두**)와도 비교한다.
+    #   탈락분까지 포함하는 이유: A가 과거 이력과 중복이라 탈락했고 B가 A와 중복이면
+    #   B도 그 과거 이력과 중복이다. 채택분만 보면 이 연쇄가 끊긴다.
+    batch_seen = []
     for art in articles:
         # AIK24-PIPE-09: D1 3일 이력도 local 30일 이력과 **같은 기준**으로 판정한다.
         #   이전에는 D1 층만 엔티티 단독 겹침(entity(2))으로 막았는데, 56074 의 D1 상대
@@ -173,6 +202,7 @@ def filter_duplicates(articles, d1_query):
         dup, reason = is_duplicate_article_strict(art, history)
         if dup:
             removed.append((art, reason))
+            batch_seen.append(art)
             continue
 
         # AIK24-PIPE-08: local 30일 이력은 행이 272개로 누적돼 범용 엔티티 충돌이
@@ -180,9 +210,24 @@ def filter_duplicates(articles, d1_query):
         dup2, reason2 = is_duplicate_article_strict(art, local)
         if dup2:
             removed.append((art, f'local_{reason2}'))
+            batch_seen.append(art)
             continue
 
+        # AIK24-DEDUP-10: 같은 배치 안에서 이미 처리한 기사와도 비교한다.
+        #   위 두 검사는 '과거 발행분'만 본다. 배치 내부를 보지 않으면 같은 사건이
+        #   서로 다른 매체로 두 번 수집됐을 때 **한 브리핑에 두 건이 동시에** 들어간다.
+        #   근거(2026-10-27 실측): 브리핑 id=365 가 r/opensource AI 금지 사건을
+        #   Hacker News(Tom's Hardware)·The Decoder 두 건으로 나란히 게재했다.
+        #   이 두 기사는 Layer 2 대칭화 후 semantic 중복으로 잡힌다.
+        if dedupe_within_batch:
+            dup3, reason3 = is_duplicate_article_strict(art, batch_seen)
+            if dup3:
+                removed.append((art, f'batch_{reason3}'))
+                batch_seen.append(art)
+                continue
+
         kept.append(art)
+        batch_seen.append(art)
     return kept, removed
 
 
