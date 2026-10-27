@@ -1,3 +1,5 @@
+## 2026-10-27 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-27 09:58 — AIK24-DEDUP-10: 같은 사건이 이틀 연속 브리핑된 문제 수정 + 오늘 브리핑 재발행
 
 ### 한 일

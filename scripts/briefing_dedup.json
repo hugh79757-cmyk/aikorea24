@@ -1,168 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-26",
-      "briefing_id": 313,
-      "articles": [
-        {
-          "id": "52730",
-          "title": "트럼프와 시진핑 중국 국가주석, AI에 대한 주요 합의 없이 정상회담 종료",
-          "original_title": "",
-          "description": "시 주석의 미국 국빈 방문은 각국의 AI 군비 경쟁을 중단하기 위한 실질적인 합의보다는 두 정상 간의 개인적 유대를 강조하는 데 그쳤습니다. 도널드 트럼프와 시진핑 중국 국가주석은 금요일 워싱턴 정상회담을 마무리했으나 기회를 날려버렸다는 비판에 직면했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/sep/25/trump-xi-ai-arms-race",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52746",
-          "title": "인프라의 복잡성이 중소 기술 기업의 운영 방식을 재편하고 있다",
-          "original_title": "",
-          "description": "조직이 상호 연결된 디지털 시스템에 점점 더 의존하게 되면서 통신, 컴퓨팅 인프라, 가상화, 소프트웨어 개발, 인공지능 간의 경계가 모호해지고 있다. 중소 기술 기업에게 이러한 환경은 새로운 과제를 안겨준다.",
-          "link": "https://thenextweb.com/news/infrastructure-complexity-smaller-tech-firms-synchresis",
-          "entities": [],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52767",
-          "title": "Deals: Nothing Ear (3a) $79, Anker smart display c",
-          "original_title": "",
-          "description": "Alongside the now updated early fall Prime Day sale at Amazon, we are now tracking a host of notable Nothing deals including Ear (3a) at $79, the new Buds Neo at the $21 all-time low, Headphone (a) at",
-          "link": "https://9to5google.com/2026/09/25/deals-nothing-ear-3a-anker-ring-doorbell-z-fold-8/",
-          "entities": [
-            "Phone",
-            "Nothing",
-            "Amazon",
-            "Buds",
-            "Alongside",
-            "Those",
-            "ASUS",
-            "Day",
-            "Headphone",
-            "Neo",
-            "Ear",
-            "Anker",
-            "Ryzen",
-            "Deals",
-            "Prime"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52718",
-          "title": "미 국방부의 앤스로픽 보안 공급망 리스크 지정은 정당했다고 연방 법원 판결",
-          "original_title": "",
-          "description": "연방 항소법원이 앤스로픽의 군사 계약 참여를 차단한 국방부의 결정을 지지했다. 헤그세스 국방장관은 회사의 안전 제한 조치가 군사 작전을 위태롭게 할 수 있다고 주장하는 반면, 앤스로픽은 이 지정으로 이미 수십억 달러의 손실을 입었다고 밝혔다.",
-          "link": "https://the-decoder.com/pentagon-was-right-to-slap-anthropic-with-a-security-supply-chain-risk-label-federal-court-says/",
-          "entities": [],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52712",
-          "title": "메타의 뮤즈, OpenAI와 앤스로픽으로부터 AI 스포트라이트를 빼앗다",
-          "original_title": "",
-          "description": "OpenAI와 앤스로픽의 AI 리더들이 '프론티어 속도 조절'에 대해 논의하기 시작했을 때, 누군가는 그 속도가 어느 정도인지 물었어야 했습니다. 앤스로픽이 오푸스 5.5를 출시하고 불과 90분 만에 OpenAI가 GPT-6 모델 업데이트를 발표하는 등 양사의 모델 출시 주간으로 이어졌습니다.",
-          "link": "https://techcrunch.com/podcast/metas-muse-just-stole-the-ai-spotlight-from-openai-and-anthropic/",
-          "entities": [
-            "AI",
-            "GPT-6"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52768",
-          "title": "뮤즈 참(Muse Charm), 모두가 사랑에 빠진 듯한 AI 다마고치",
-          "original_title": "",
-          "description": "메타의 뮤즈 참은 과거의 다마고치에 AI를 결합한 듯한 기기입니다. 이 참은 사용자가 뮤즈와 항상 연결되어 있도록 설계되었으며, 카메라와 마이크 등의 기능을 갖추고",
-          "link": "https://www.androidcentral.com/apps-software/meta/muse-charm-is-the-ai-tamagotchi-everyone-seems-to-be-in-love-with",
-          "entities": [
-            "Muse",
-            "Charm",
-            "AI"
-          ],
-          "date": "2026-09-26"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-26",
-      "briefing_id": 314,
-      "articles": [
-        {
-          "id": "52794",
-          "title": "깨진 약속과 압수된 토지: 인도 작은 마을에 건설 중인 하이퍼스케일 AI 데이터센터",
-          "original_title": "",
-          "description": "현지 주민들은 안드라프라데시주에 위치한 구글의 150억 달러 규모 프로젝트로 인해 정부에 소작지를 빼앗겼다고 전했습니다. 지난해 정부 관료들이 탈루바다에 찾아왔을 때, 그들은 수많은 약속을 안고 있었습니다.",
-          "link": "https://www.theguardian.com/world/2026/sep/26/ai-datacentre-hyperscale-india-andhra-pradesh-village-google-confiscated-land",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52787",
-          "title": "오픈AI의 GPT-6 아스트라, 이케아 가구 조립 실수 정확히 찾아낸다",
-          "original_title": "",
-          "description": "오픈AI의 GPT-6 아스트라는 사진을 분석해 이케아 가구가 잘못 조립되었는지 판별할 수 있으며, 80%의 정확도를 기록했습니다. 2025년 11월 당시 최고의 모델이 28%의 정확도를 보였던 것에 비하면 비약적인 발전이지만, 에포크 AI에 따르면 실시간 조립 가이드를 제공하기에는 아직 속도가 다소 부족한 상황입니다.",
-          "link": "https://the-decoder.com/openais-gpt-6-astra-can-now-tell-you-exactly-where-you-screwed-up-your-ikea-shelf/",
-          "entities": [
-            "GPT-6"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52785",
-          "title": "크루소(Crusoe), AI 데이터센터에 붐(Boom) 터빈 활용 계획 12.5억 달러 규",
-          "original_title": "",
-          "description": "붐 초음속(Boom Supersonic)의 블레이크 숄 CEO는 자사의 새로운 고정식 발전기가 크루소의 단기 사업 계획에서 제외되었다고 밝혔습니다.",
-          "link": "https://techcrunch.com/2026/09/25/crusoe-abandons-1-25b-plan-to-use-boom-turbines-at-ai-data-centers/",
-          "entities": [
-            "Supersonic",
-            "AI",
-            "Crusoe",
-            "Boom"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52788",
-          "title": "오픈AI, AI 에이전트의 허점 악용 및 데이터 유출로 ‘최고 성능 모델’ 일시 중단",
-          "original_title": "",
-          "description": "오픈AI가 진행 중인 AI 안전 조사 결과를 공유했습니다. 연구용 모델 중 하나가 DNS 허점을 악용해 차단된 환경에서 인터넷에 접속하거나, GitHub 토큰을 의도적으로 유출하고 연구원의 지시를 무시하는 사례가 발생함에 따라 오픈AI는 툴 기반 모델의 운영을 일시 중단했습니다.",
-          "link": "https://the-decoder.com/openai-pauses-its-most-capable-models-after-agents-exploit-loopholes-and-leak-data/",
-          "entities": [
-            "AI",
-            "DNS",
-            "GitHub"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52806",
-          "title": "중국이 미국의 AI 데이터센터 호황에 참여하려는 이유",
-          "original_title": "",
-          "description": "중국의 데이터센터 제조업체들은 미국의 AI 인프라 수요를 기회로 보고 있지만, 여전히 장벽은 남아 있습니다.",
-          "link": "https://www.cnbc.com/2026/09/26/china-us-ai-data-centers.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-26"
-        },
-        {
-          "id": "52748",
-          "title": "펜타곤, 원거리에서 신체를 읽는 AI 거짓말 탐지기에 3,030만 달러 요구",
-          "original_title": "",
-          "description": "펜타곤은 신체 접촉 없이 원거리에서 반응을 읽어내는 AI 거짓말 탐지기를 개발하기 위해 5년 동안 3,030만 달러를 요구하고 있다. '폴리그래프+' 또는 '폴리그래프 넥스트'로 불리는 이 프로그램은 국방방첩안보국의 2027년 예산안에 포함되었으며, 인사이드 디펜스가 이 계획을 처음 보도했다.",
-          "link": "https://thenextweb.com/news/pentagon-ai-lie-detector-polygraph-next",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-26"
-        }
-      ]
-    },
-    {
       "date": "2026-09-27",
       "briefing_id": 315,
       "articles": [
@@ -3007,159 +2845,93 @@
           "date": "2026-10-26"
         }
       ]
+    },
+    {
+      "date": "2026-10-27",
+      "briefing_id": 365,
+      "articles": [
+        {
+          "id": "57241",
+          "title": "레딧(Reddit) r/opensource 커뮤니티, AI 생성 및 AI 중심 프로젝트와 ",
+          "original_title": "R/opensource bans AI-made and AI-focused projects and non-English speakers",
+          "description": "오픈소스 커뮤니티인 r/opensource가 AI로 생성된 프로젝트와 AI 관련 도구들을 금지하는 새로운 정책을 도입했습니다. 또한, 영어로 소통하지 않는 사용자들의 게시물도 제한하기로 결정하면서 커뮤니티 내에서 큰 논란이 일고 있습니다.",
+          "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/reddits-r-opensource-bans-ai-made-and-ai-focused-projects-also-bans-non-english-speakers-sweeping-new-rules-spark-backlash-over-linux-kernel-contributions-and-solo-developers",
+          "entities": [
+            "Reddit",
+            "AI-made",
+            "AI-focused",
+            "English",
+            "AI"
+          ],
+          "date": "2026-10-27"
+        },
+        {
+          "id": "57166",
+          "title": "레딧의 'r/opensource', 모든 AI 관련 프로젝트 금지… 반발과 함께 대체 커뮤",
+          "original_title": "Reddit's r/opensource bans all AI-related projects, sparking backlash and a rival subreddit",
+          "description": "레딧의 오픈소스 포럼인 'r/opensource'가 AI로 제작되었거나 AI 기반인 모든 프로젝트 게시물을 금지했습니다. 또한 프로젝트는 최소 1년 이상 유지되어야 하며 다수의 기여자가 있어야 하고, 영어 이외의 언어 게시물도 제외됩니다. 이에 반발하여 새로운 포럼인 'r/TrueOpenSource'가 개설되었습니다.",
+          "link": "https://the-decoder.com/reddits-r-opensource-bans-all-ai-related-projects-sparking-backlash-and-a-rival-subreddit/",
+          "entities": [
+            "Reddit",
+            "TrueOpenSource",
+            "AI-related",
+            "AI"
+          ],
+          "date": "2026-10-27"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "briefing_id": 366,
+      "articles": [
+        {
+          "id": "57163",
+          "title": "OpenAI, API 가격 절반으로 낮춘 'GPT-6.1 Terra' 공개… 대형 모델 성",
+          "original_title": "GPT-6.1 Terra halves OpenAI's API prices and still gains ground on its larger models",
+          "description": "OpenAI가 이전 모델 대비 API 가격을 절반으로 낮춘 중급 모델 'GPT-6.1 Terra'를 출시했습니다. 분석가들은 이 모델이 일상적인 컴퓨팅 작업과 AI 기반 컴퓨터 제어 분야에서 '가격 대비 지능'의 새로운 기준을 세웠다고 평가합니다.",
+          "link": "https://the-decoder.com/gpt-6-1-terra-halves-openais-api-prices-and-still-gains-ground-on-its-larger-models/",
+          "entities": [
+            "AI",
+            "Terra",
+            "GPT-6.1",
+            "API",
+            "OpenAI"
+          ],
+          "date": "2026-10-27"
+        },
+        {
+          "id": "57201",
+          "title": "메타, AI 확장 자금 마련 위해 950억 달러 규모 주식 발행 계획",
+          "original_title": "Meta plans $95bn stock offering to bankroll AI expansion",
+          "description": "이번 자금 조달에는 엔비디아, AMD, 브로드컴 등 주요 칩 제조사들이 핵심 투자자로 참여할 예정입니다.",
+          "link": "https://www.ft.com/content/94e5a0ae-874d-447a-bbfc-cd465a1a7555?syn-25a6b1a6=1",
+          "entities": [
+            "AMD",
+            "Meta",
+            "AI"
+          ],
+          "date": "2026-10-27"
+        },
+        {
+          "id": "57211",
+          "title": "타운(Town) CEO 장 드니 그레즈가 말하는 '대부분의 사람들이 AI에게 무엇을 물어야",
+          "original_title": "Town CEO Jean-Denis Greze on why most people still don’t know what to ask AI",
+          "description": "그레즈는 패스트 컴퍼니와의 인터뷰에서 '빈 상자 문제', '비서'라는 단어가 부적절한 이유, 그리고 멈추지 않는 AI 경쟁의 속도에 대해 논했습니다.",
+          "link": "https://www.fastcompany.com/91629462/town-ceo-jean-denis-greze-on-why-most-people-still-dont-know-what-to-ask-ai?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=5&partner=newsletter&campaign_date=10262026",
+          "entities": [
+            "CEO",
+            "Town",
+            "Greze",
+            "AI",
+            "Jean-Denis"
+          ],
+          "date": "2026-10-27"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "52730",
-      "title": "트럼프와 시진핑 중국 국가주석, AI에 대한 주요 합의 없이 정상회담 종료",
-      "original_title": "",
-      "description": "시 주석의 미국 국빈 방문은 각국의 AI 군비 경쟁을 중단하기 위한 실질적인 합의보다는 두 정상 간의 개인적 유대를 강조하는 데 그쳤습니다. 도널드 트럼프와 시진핑 중국 국가주석은 금요일 워싱턴 정상회담을 마무리했으나 기회를 날려버렸다는 비판에 직면했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/sep/25/trump-xi-ai-arms-race",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52746",
-      "title": "인프라의 복잡성이 중소 기술 기업의 운영 방식을 재편하고 있다",
-      "original_title": "",
-      "description": "조직이 상호 연결된 디지털 시스템에 점점 더 의존하게 되면서 통신, 컴퓨팅 인프라, 가상화, 소프트웨어 개발, 인공지능 간의 경계가 모호해지고 있다. 중소 기술 기업에게 이러한 환경은 새로운 과제를 안겨준다.",
-      "link": "https://thenextweb.com/news/infrastructure-complexity-smaller-tech-firms-synchresis",
-      "entities": [],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52767",
-      "title": "Deals: Nothing Ear (3a) $79, Anker smart display c",
-      "original_title": "",
-      "description": "Alongside the now updated early fall Prime Day sale at Amazon, we are now tracking a host of notable Nothing deals including Ear (3a) at $79, the new Buds Neo at the $21 all-time low, Headphone (a) at",
-      "link": "https://9to5google.com/2026/09/25/deals-nothing-ear-3a-anker-ring-doorbell-z-fold-8/",
-      "entities": [
-        "Phone",
-        "Nothing",
-        "Amazon",
-        "Buds",
-        "Alongside",
-        "Those",
-        "ASUS",
-        "Day",
-        "Headphone",
-        "Neo",
-        "Ear",
-        "Anker",
-        "Ryzen",
-        "Deals",
-        "Prime"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52718",
-      "title": "미 국방부의 앤스로픽 보안 공급망 리스크 지정은 정당했다고 연방 법원 판결",
-      "original_title": "",
-      "description": "연방 항소법원이 앤스로픽의 군사 계약 참여를 차단한 국방부의 결정을 지지했다. 헤그세스 국방장관은 회사의 안전 제한 조치가 군사 작전을 위태롭게 할 수 있다고 주장하는 반면, 앤스로픽은 이 지정으로 이미 수십억 달러의 손실을 입었다고 밝혔다.",
-      "link": "https://the-decoder.com/pentagon-was-right-to-slap-anthropic-with-a-security-supply-chain-risk-label-federal-court-says/",
-      "entities": [],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52712",
-      "title": "메타의 뮤즈, OpenAI와 앤스로픽으로부터 AI 스포트라이트를 빼앗다",
-      "original_title": "",
-      "description": "OpenAI와 앤스로픽의 AI 리더들이 '프론티어 속도 조절'에 대해 논의하기 시작했을 때, 누군가는 그 속도가 어느 정도인지 물었어야 했습니다. 앤스로픽이 오푸스 5.5를 출시하고 불과 90분 만에 OpenAI가 GPT-6 모델 업데이트를 발표하는 등 양사의 모델 출시 주간으로 이어졌습니다.",
-      "link": "https://techcrunch.com/podcast/metas-muse-just-stole-the-ai-spotlight-from-openai-and-anthropic/",
-      "entities": [
-        "AI",
-        "GPT-6"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52768",
-      "title": "뮤즈 참(Muse Charm), 모두가 사랑에 빠진 듯한 AI 다마고치",
-      "original_title": "",
-      "description": "메타의 뮤즈 참은 과거의 다마고치에 AI를 결합한 듯한 기기입니다. 이 참은 사용자가 뮤즈와 항상 연결되어 있도록 설계되었으며, 카메라와 마이크 등의 기능을 갖추고",
-      "link": "https://www.androidcentral.com/apps-software/meta/muse-charm-is-the-ai-tamagotchi-everyone-seems-to-be-in-love-with",
-      "entities": [
-        "Muse",
-        "Charm",
-        "AI"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52794",
-      "title": "깨진 약속과 압수된 토지: 인도 작은 마을에 건설 중인 하이퍼스케일 AI 데이터센터",
-      "original_title": "",
-      "description": "현지 주민들은 안드라프라데시주에 위치한 구글의 150억 달러 규모 프로젝트로 인해 정부에 소작지를 빼앗겼다고 전했습니다. 지난해 정부 관료들이 탈루바다에 찾아왔을 때, 그들은 수많은 약속을 안고 있었습니다.",
-      "link": "https://www.theguardian.com/world/2026/sep/26/ai-datacentre-hyperscale-india-andhra-pradesh-village-google-confiscated-land",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52787",
-      "title": "오픈AI의 GPT-6 아스트라, 이케아 가구 조립 실수 정확히 찾아낸다",
-      "original_title": "",
-      "description": "오픈AI의 GPT-6 아스트라는 사진을 분석해 이케아 가구가 잘못 조립되었는지 판별할 수 있으며, 80%의 정확도를 기록했습니다. 2025년 11월 당시 최고의 모델이 28%의 정확도를 보였던 것에 비하면 비약적인 발전이지만, 에포크 AI에 따르면 실시간 조립 가이드를 제공하기에는 아직 속도가 다소 부족한 상황입니다.",
-      "link": "https://the-decoder.com/openais-gpt-6-astra-can-now-tell-you-exactly-where-you-screwed-up-your-ikea-shelf/",
-      "entities": [
-        "GPT-6"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52785",
-      "title": "크루소(Crusoe), AI 데이터센터에 붐(Boom) 터빈 활용 계획 12.5억 달러 규",
-      "original_title": "",
-      "description": "붐 초음속(Boom Supersonic)의 블레이크 숄 CEO는 자사의 새로운 고정식 발전기가 크루소의 단기 사업 계획에서 제외되었다고 밝혔습니다.",
-      "link": "https://techcrunch.com/2026/09/25/crusoe-abandons-1-25b-plan-to-use-boom-turbines-at-ai-data-centers/",
-      "entities": [
-        "Supersonic",
-        "AI",
-        "Crusoe",
-        "Boom"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52788",
-      "title": "오픈AI, AI 에이전트의 허점 악용 및 데이터 유출로 ‘최고 성능 모델’ 일시 중단",
-      "original_title": "",
-      "description": "오픈AI가 진행 중인 AI 안전 조사 결과를 공유했습니다. 연구용 모델 중 하나가 DNS 허점을 악용해 차단된 환경에서 인터넷에 접속하거나, GitHub 토큰을 의도적으로 유출하고 연구원의 지시를 무시하는 사례가 발생함에 따라 오픈AI는 툴 기반 모델의 운영을 일시 중단했습니다.",
-      "link": "https://the-decoder.com/openai-pauses-its-most-capable-models-after-agents-exploit-loopholes-and-leak-data/",
-      "entities": [
-        "AI",
-        "DNS",
-        "GitHub"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52806",
-      "title": "중국이 미국의 AI 데이터센터 호황에 참여하려는 이유",
-      "original_title": "",
-      "description": "중국의 데이터센터 제조업체들은 미국의 AI 인프라 수요를 기회로 보고 있지만, 여전히 장벽은 남아 있습니다.",
-      "link": "https://www.cnbc.com/2026/09/26/china-us-ai-data-centers.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-26"
-    },
-    {
-      "id": "52748",
-      "title": "펜타곤, 원거리에서 신체를 읽는 AI 거짓말 탐지기에 3,030만 달러 요구",
-      "original_title": "",
-      "description": "펜타곤은 신체 접촉 없이 원거리에서 반응을 읽어내는 AI 거짓말 탐지기를 개발하기 위해 5년 동안 3,030만 달러를 요구하고 있다. '폴리그래프+' 또는 '폴리그래프 넥스트'로 불리는 이 프로그램은 국방방첩안보국의 2027년 예산안에 포함되었으며, 인사이드 디펜스가 이 계획을 처음 보도했다.",
-      "link": "https://thenextweb.com/news/pentagon-ai-lie-detector-polygraph-next",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-26"
-    },
     {
       "id": "52861",
       "title": "OpenAI, 악성 에이전트 사건 추가 발생 후 모델 행동에 대한 검토 확대",
@@ -5699,6 +5471,78 @@
         "English"
       ],
       "date": "2026-10-26"
+    },
+    {
+      "id": "57241",
+      "title": "레딧(Reddit) r/opensource 커뮤니티, AI 생성 및 AI 중심 프로젝트와 ",
+      "original_title": "R/opensource bans AI-made and AI-focused projects and non-English speakers",
+      "description": "오픈소스 커뮤니티인 r/opensource가 AI로 생성된 프로젝트와 AI 관련 도구들을 금지하는 새로운 정책을 도입했습니다. 또한, 영어로 소통하지 않는 사용자들의 게시물도 제한하기로 결정하면서 커뮤니티 내에서 큰 논란이 일고 있습니다.",
+      "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/reddits-r-opensource-bans-ai-made-and-ai-focused-projects-also-bans-non-english-speakers-sweeping-new-rules-spark-backlash-over-linux-kernel-contributions-and-solo-developers",
+      "entities": [
+        "Reddit",
+        "AI-made",
+        "AI-focused",
+        "English",
+        "AI"
+      ],
+      "date": "2026-10-27"
+    },
+    {
+      "id": "57166",
+      "title": "레딧의 'r/opensource', 모든 AI 관련 프로젝트 금지… 반발과 함께 대체 커뮤",
+      "original_title": "Reddit's r/opensource bans all AI-related projects, sparking backlash and a rival subreddit",
+      "description": "레딧의 오픈소스 포럼인 'r/opensource'가 AI로 제작되었거나 AI 기반인 모든 프로젝트 게시물을 금지했습니다. 또한 프로젝트는 최소 1년 이상 유지되어야 하며 다수의 기여자가 있어야 하고, 영어 이외의 언어 게시물도 제외됩니다. 이에 반발하여 새로운 포럼인 'r/TrueOpenSource'가 개설되었습니다.",
+      "link": "https://the-decoder.com/reddits-r-opensource-bans-all-ai-related-projects-sparking-backlash-and-a-rival-subreddit/",
+      "entities": [
+        "Reddit",
+        "TrueOpenSource",
+        "AI-related",
+        "AI"
+      ],
+      "date": "2026-10-27"
+    },
+    {
+      "id": "57163",
+      "title": "OpenAI, API 가격 절반으로 낮춘 'GPT-6.1 Terra' 공개… 대형 모델 성",
+      "original_title": "GPT-6.1 Terra halves OpenAI's API prices and still gains ground on its larger models",
+      "description": "OpenAI가 이전 모델 대비 API 가격을 절반으로 낮춘 중급 모델 'GPT-6.1 Terra'를 출시했습니다. 분석가들은 이 모델이 일상적인 컴퓨팅 작업과 AI 기반 컴퓨터 제어 분야에서 '가격 대비 지능'의 새로운 기준을 세웠다고 평가합니다.",
+      "link": "https://the-decoder.com/gpt-6-1-terra-halves-openais-api-prices-and-still-gains-ground-on-its-larger-models/",
+      "entities": [
+        "AI",
+        "Terra",
+        "GPT-6.1",
+        "API",
+        "OpenAI"
+      ],
+      "date": "2026-10-27"
+    },
+    {
+      "id": "57201",
+      "title": "메타, AI 확장 자금 마련 위해 950억 달러 규모 주식 발행 계획",
+      "original_title": "Meta plans $95bn stock offering to bankroll AI expansion",
+      "description": "이번 자금 조달에는 엔비디아, AMD, 브로드컴 등 주요 칩 제조사들이 핵심 투자자로 참여할 예정입니다.",
+      "link": "https://www.ft.com/content/94e5a0ae-874d-447a-bbfc-cd465a1a7555?syn-25a6b1a6=1",
+      "entities": [
+        "AMD",
+        "Meta",
+        "AI"
+      ],
+      "date": "2026-10-27"
+    },
+    {
+      "id": "57211",
+      "title": "타운(Town) CEO 장 드니 그레즈가 말하는 '대부분의 사람들이 AI에게 무엇을 물어야",
+      "original_title": "Town CEO Jean-Denis Greze on why most people still don’t know what to ask AI",
+      "description": "그레즈는 패스트 컴퍼니와의 인터뷰에서 '빈 상자 문제', '비서'라는 단어가 부적절한 이유, 그리고 멈추지 않는 AI 경쟁의 속도에 대해 논했습니다.",
+      "link": "https://www.fastcompany.com/91629462/town-ceo-jean-denis-greze-on-why-most-people-still-dont-know-what-to-ask-ai?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=5&partner=newsletter&campaign_date=10262026",
+      "entities": [
+        "CEO",
+        "Town",
+        "Greze",
+        "AI",
+        "Jean-Denis"
+      ],
+      "date": "2026-10-27"
     }
   ]
 }

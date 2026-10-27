@@ -1,26 +1,32 @@
 {
- "day": "2026-10-27",
- "checked_at": 1793048407.175028,
- "total_rows": 38,
+ "day": "2026-10-28",
+ "checked_at": 1793134808.6556642,
+ "total_rows": 36,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "openai/gpt-6.1-terra",
-   "openai/gpt-6.1-terra:batch"
+   "openai/gpt-6.1-terra-pro:batch",
+   "openai/gpt-6.1-terra-pro",
+   "prism-ml/ternary-bonsai-2-9b"
   ],
   "kilo": [
-   "openai/gpt-6.1-terra"
+   "openai/gpt-6.1-terra-pro",
+   "prism-ml/ternary-bonsai-2-9b"
   ]
  },
  "removed_by_provider": {
   "openrouter": [
-   "arcee-ai/trinity-large-thinking"
+   "ibm-granite/granite-4.0-h-micro",
+   "mistralai/codestral-2508:batch",
+   "mistralai/ministral-8b-2512:batch",
+   "mistralai/mistral-large-2512:batch",
+   "mistralai/mistral-medium-3.1:batch",
+   "mistralai/mistral-small-2603:batch",
+   "nvidia/nemotron-3-super-120b-a12b:free"
   ],
   "kilo": [
-   "arcee-ai/trinity-large-thinking"
-  ],
-  "zen": [
-   "deepseek-v4-flash"
+   "ibm-granite/granite-4.0-h-micro",
+   "nvidia/nemotron-3-super-120b-a12b:free"
   ]
  }
 }
