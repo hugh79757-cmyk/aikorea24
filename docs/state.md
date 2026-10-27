@@ -1,3 +1,81 @@
+## 2026-10-27 09:58 — AIK24-DEDUP-10: 같은 사건이 이틀 연속 브리핑된 문제 수정 + 오늘 브리핑 재발행
+
+### 한 일
+
+1. **증상 확정** — 라이브 `aikorea24.kr/briefing/2026-10-27-1/` 2건이 모두 같은 사건이었고,
+   그 사건(r/opensource AI 금지)은 어제(10-26) 브리핑 2번째 항목과 동일 사건이었다.
+2. **원인 3개 규명 후 수정** (`scripts/briefing_dedup.py`, `scripts/auto_briefing.py`)
+   - RC1: Layer 3(엔티티·주제어) 판정을 `title[:50]`·`original_title[:30]` **절단값**으로 수행
+     → 어제 기사의 `non-English speakers` 가 30자에서 잘려 `English` 엔티티 소멸 → 겹침 2→1 →
+     임계값(2) 미달 → 같은 사건 통과. **절단 전 원문으로 판정**하도록 변경.
+   - RC2: `filter_duplicates` 가 '과거 발행분'만 보고 **같은 배치 내부**를 보지 않아 같은 사건 2건이
+     한 브리핑에 동시 게재됨. `dedupe_within_batch` 옵션 추가(기본 `False`, `auto_briefing` 최종 선정에서만 `True`).
+     배치 비교는 채택분(`kept`)이 아니라 **탈락분까지 포함한 `batch_seen`** 과 비교(A≈과거, B≈A → B도 과거 중복).
+   - RC3: Layer 2 비교가 1번째 기사만 절단하고 2번째는 원문을 넘기는 **비대칭**이었음 → 양쪽 동일 기준으로 대칭화.
+3. **회귀 테스트 6건 신설** — `tests/test_dedup10_briefing_same_story.py` (실제 사건 데이터 4건 고정)
+4. **커밋** `e11993ff` (push 안 함)
+5. **오늘 브리핑 재발행** — `AIK24_BRIEFING_FORCE=1` + `main(selected_articles=...)` 수동 선정 경로.
+   기존 id=365 는 `superseded`, 신규 id=366(`2026-10-27-2`) published 3건.
+
+### 결과 (검증 근거)
+
+**[검증됨] 수정이 사고를 실제로 막는다**
+- 오늘 2건 재판정: `57241` → `local_entity(2)`, `57166` → `batch_semantic` → **둘 다 제거**(kept 0).
+  근거: `filter_duplicates(오늘 2건, 이력)` 실행 출력. 어제 2건은 kept 2 / removed 0 으로 **그대로 유지**.
+- 회귀 테스트 6/6 통과: `python3 -m pytest tests/test_dedup10_briefing_same_story.py -q` → `6 passed`.
+- 전체 스위트: **1044 passed / 3 failed**. 3건(`test_auto_briefing_verdict::test_core_name_and_real_verify_files`,
+  `test_model_eval_agent_v2::test_resolve_cli_model_reads_free_models_cli_catalog`,
+  `test_zen_pending::test_split_zen_keeps_model_registered_in_cli_catalog`)은
+  `git stash` 로 수정 전 HEAD 에서도 **동일하게 실패**함을 대조 확인 → 기존 실패(회귀 0건).
+
+**[검증됨] 오탐률 — 20,706쌍 전수 측정**
+- RC1(원문 엔티티) 적용 시 엔티티≥2 판정: 절단 15쌍 → 원문 20쌍(+5). 그중 주제어 겹침까지 충족해
+  **실제로 차단되는 쌍은 1쌍**이며 그것이 사고 쌍(`{AI, English}`)이다. **추가 오탐 0건**.
+- RC3(Layer 2 대칭화): 23,871쌍 비교에서 현재 True 109 → 대칭 True 110 (**+1**, 사고 쌍).
+  별도 측정에서 추가 판정 2쌍 중 1쌍은 오탐(무료 AI 도구 제공 vs 무료 배관 수리 제공) — semantic 층은
+  주제어 게이트가 없어 이 1쌍은 수용 리스크로 남는다(아래 잔존 위험).
+- selector 경로 보존: `dedupe_within_batch=False` 기본값에서 PIPE-08 이 되돌린 56076 류가 다시 차단되지 않음을
+  테스트로 고정(`test_default_keeps_selector_behaviour_for_generic_entities`).
+
+**[검증됨] 재발행 결과 (D1 + 라이브)**
+- D1: `id=365 status=superseded`(items 2건 보존), `id=366 status=published date=2026-10-27-2 items=3`,
+  오늘 published 개수 = 1.
+- 라이브 `https://aikorea24.kr/briefing/2026-10-27-2/` — "데일리 브리핑 · 3건", 항목 3건 모두 신규 사건:
+  ① OpenAI GPT-6.1 Terra API 가격 절반(The Decoder) ② 메타 950억 달러 주식 발행(FT)
+  ③ 타운 CEO 인터뷰(Fast Company). r/opensource 사건 **없음**.
+- `/briefing/` 인덱스 인라인 JSON 첫 항목이 `id=366, date=2026-10-27-2, item_count=3` 으로 갱신,
+  `2026-10-27-1` 은 목록에서 사라짐(superseded 제외). `/briefing/2026-10-27-1/` 은 302.
+- 백업: `scripts/logs/backup_briefing_365_20261027.json` (재발행 전 365 + items 스냅샷)
+
+**[부분검증] 재발행 기사 선정**
+- 이번 1회는 사용자 결정으로 **수동 선정**했다. 오늘 v2 큐레이션 통과 후보 7건이 수정 후 전부 차단(fresh 0)되어
+  파이프라인 경로로는 브리핑이 0건이 되기 때문. 같은 날 수집분 136건 중 dedup 통과 72건을 소스 allowlist 로
+  좁혀 14건에 LLM 도움점수를 매기고, 상위 3건 중 AI 무관 1건(Brotli/.NET 취약점 패치, 12점)을 제외하고
+  11·10·10점 3건을 채택했다. **선정 기준이 파이프라인 정책(v2 큐레이션)과 다르다** — 이번 1회 한정이며
+  코드/설정은 바꾸지 않았다.
+
+**[검증불가] 내일 07:00 자동 실행에서의 재발 여부**
+- 수정 로직이 실제 launchd 실행에서 같은 사건을 막는지는 내일 실행 전까지 관측 불가.
+  복구 계획: 2026-10-28 07:00 실행 후 `pipeline_runner.log` 의 `[batch_...]`/`local_...` 사유와
+  당일 브리핑 아이템을 대조.
+
+### 잔존 위험
+
+1. **선정 풀 고갈(RC3, 미해결)** — `v2_filter` 큐레이션 통과율이 전체 20,082행 중 321행(1.6%)이라
+   하루 선정 풀이 6~7건뿐이다. 그 후보가 대부분 중복이면 **브리핑이 0건**이 된다(오늘 실제 발생).
+   이번엔 수동 선정으로 우회했을 뿐 구조는 그대로다. 대표님 결정으로 "선정 풀 확장"은 이번 범위에서 제외.
+2. **Layer 2(semantic) 오탐 1쌍** — 대칭화로 추가 판정된 2쌍 중 1쌍(무료 AI 도구 제공 vs 무료 배관·냉난방 수리 제공)은
+   실제로 다른 사건이다. semantic 층은 PIPE-08 의 주제어 게이트가 없어 이 쌍은 차단된다. 20,706쌍 중 1쌍.
+3. **`scripts/briefing_dedup.json` 은 커밋하지 않음** — 파이프라인이 갱신하는 런타임 상태이며 기존 관행(일일 chore 커밋)을 따랐다.
+4. **D1 실행 환경 함정** — 세션 주입 `CLOUDFLARE_API_TOKEN` 이 프로젝트 `.env` 토큰을 가려 7403 이 난다.
+   모든 D1 작업은 `env -u CLOUDFLARE_API_TOKEN -u CLOUDFLARE_ACCOUNT_ID` 로 실행해야 한다(이번 작업 전부 그렇게 수행).
+
+### 다음 행동
+
+1. 커밋 `e11993ff` push 여부 결정 (현재 로컬만).
+2. 내일 07:00 실행 관측 → `batch_`/`local_` 차단 사유가 로그에 찍히고 브리핑 아이템이 어제와 겹치지 않는지 확인.
+3. (별건 검토) 선정 풀 고갈 완화 — `interleave_candidates` 에 v2_pass=0 일반 뉴스 + 점수 게이트 도입 여부.
+
 ## 2026-10-26 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-10-25 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)

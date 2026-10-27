@@ -2,6 +2,25 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-10-27 09:58 KST — fix(AIK24-DEDUP-10): 같은 사건이 이틀 연속 브리핑되는 문제 수정 + 오늘 브리핑 재발행
+
+- 증상: `briefing/2026-10-27-1` 2건이 모두 r/opensource AI 금지 사건이었고, 그 사건은 10-26 브리핑에도 나온 동일 사건
+- 원인 3개 수정 (`scripts/briefing_dedup.py`, `scripts/auto_briefing.py`)
+  - RC1 Layer 3(엔티티·주제어) 판정을 `title[:50]`·`original_title[:30]` 절단값으로 수행 → 어제 기사의
+    `non-English speakers` 가 잘려 `English` 엔티티 소멸 → 겹침 2→1 → 임계값(2) 미달로 같은 사건 통과.
+    **절단 전 원문**으로 판정하도록 변경
+  - RC2 `filter_duplicates` 가 배치 내부를 보지 않아 같은 사건 2건이 한 브리핑에 동시 게재.
+    `dedupe_within_batch` 추가(기본 `False`, `auto_briefing` 최종 선정만 `True`) — selector 후보 풀에 켜면
+    PIPE-08 이 되돌린 범용 엔티티 오탐(브리핑 0건)이 재발. 배치 비교는 **탈락분까지 포함한 `batch_seen`** 기준
+  - RC3 Layer 2 비교 비대칭(1번째만 절단, 2번째는 원문) → 양쪽 동일 기준으로 대칭화
+- 회귀 테스트 6건 신설: `tests/test_dedup10_briefing_same_story.py` (실제 사건 데이터 고정, 6 passed)
+- 오탐률 실측: 원문 엔티티 적용 시 엔티티≥2 판정 15→20쌍(+5) 중 주제어 게이트까지 통과해 **실제 차단은 1쌍**
+  (사고 쌍) → 추가 오탐 0. Layer 2 대칭화는 23,871쌍 중 +1쌍(사고 쌍)
+- 오늘 브리핑 재발행: id=365 `superseded`(items 보존), id=366 `2026-10-27-2` published 3건
+  (OpenAI GPT-6.1 Terra / 메타 950억 달러 주식 발행 / 타운 CEO 인터뷰). 라이브 페이지·인덱스 JSON 확인
+- 전체 스위트 1044 passed / 3 failed — 3건은 `git stash` 대조로 수정 전 HEAD 에서도 동일 실패(기존 실패)
+- 커밋: `e11993ff` (push 안 함) · 잔존: 선정 풀 고갈(큐레이션 통과율 1.6%) 미해결 — 이번 재발행은 수동 선정 우회
+
 ## 2026-10-18 20:44 KST — feat(AIK24-TOOLSAUTO-01): 도구 상세페이지 후처리 자동화(실제 URL 승격·심화 v2·썸네일)
 
 - `scripts/tools_postprocess.py` **신설** — 3단계 상태기계 `ensure_url`/`ensure_enrich`/`ensure_thumb`,
