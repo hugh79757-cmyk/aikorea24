@@ -524,8 +524,13 @@ def test_refill_slots_are_capped_per_pool(world, monkeypatch):
     assert 'g1' in ids, ids                    # 남는 슬롯은 뉴스가 채운다
 
 
-def test_refill_does_not_force_fill(world, monkeypatch):
-    """원칙 유지 — 후보가 없으면 빈 슬롯을 유지한다 (강제 충전 없음)."""
+def test_refill_returns_short_when_all_pools_empty(world, monkeypatch):
+    """PIPE-12 — 모든 풀(무료·일반 폴백)이 비면 슬롯은 남는다.
+
+    남은 슬롯은 발행 전 실패 알림으로 처리된다(auto_briefing 의 <3 가드) —
+    빈 브리핑을 저장하지 않는 것이 마지막 방어선이다. 후보가 있는데 빈 슬롯으로
+    끝나는 경우는 이제 없다(4단계 폴백이 채운다).
+    """
     monkeypatch.setattr(briefing_dedup, 'filter_duplicates',
                         lambda articles, d1_query_func: (list(articles), []))
     out = sel.refill_after_dedup([], dropped=(), max_count=3,
