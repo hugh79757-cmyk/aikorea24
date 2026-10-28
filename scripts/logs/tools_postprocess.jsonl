@@ -230,3 +230,19 @@
 {"ts": "2026-10-28 07:30:19", "slug": "gptscribe-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-28 07:30:19", "slug": "holaos-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-28 07:30:19", "slug": "imagvio-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 06:01:16", "slug": "airposture", "step": "enrich", "result": "done", "detail": "+3,091자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:01:25", "slug": "airposture", "step": "thumb", "result": "done", "detail": "✅ airposture 19KB", "dry_run": false}
+{"ts": "2026-10-29 06:01:36", "slug": "lfm3-by-liquid-ai", "step": "enrich", "result": "done", "detail": "+2,736자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:01:40", "slug": "lfm3-by-liquid-ai", "step": "thumb", "result": "done", "detail": "✅ lfm3-by-liquid-ai 11KB", "dry_run": false}
+{"ts": "2026-10-29 06:01:48", "slug": "trigger-dev-webhooks-for-your-ai-agents", "step": "enrich", "result": "done", "detail": "+2,720자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:01:52", "slug": "trigger-dev-webhooks-for-your-ai-agents", "step": "thumb", "result": "done", "detail": "✅ trigger-dev-webhooks-for-your-ai-agents 12KB", "dry_run": false}
+{"ts": "2026-10-29 06:02:03", "slug": "openllm", "step": "enrich", "result": "done", "detail": "+3,000자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:02:06", "slug": "openllm", "step": "thumb", "result": "done", "detail": "✅ openllm 17KB", "dry_run": false}
+{"ts": "2026-10-29 06:02:15", "slug": "bytemail", "step": "enrich", "result": "done", "detail": "+2,670자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:02:20", "slug": "bytemail", "step": "thumb", "result": "done", "detail": "✅ bytemail 20KB", "dry_run": false}
+{"ts": "2026-10-29 06:02:32", "slug": "webai-by-opera", "step": "enrich", "result": "done", "detail": "+2,945자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:02:35", "slug": "webai-by-opera", "step": "thumb", "result": "done", "detail": "✅ webai-by-opera 19KB", "dry_run": false}
+{"ts": "2026-10-29 06:02:45", "slug": "multiscale-policy-optimization-for-long-horizon-ll", "step": "enrich", "result": "done", "detail": "+2,866자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:02:48", "slug": "multiscale-policy-optimization-for-long-horizon-ll", "step": "thumb", "result": "done", "detail": "✅ multiscale-policy-optimization-for-long-horizon-ll 34KB", "dry_run": false}
+{"ts": "2026-10-29 06:02:58", "slug": "theysaid-4-0", "step": "enrich", "result": "done", "detail": "+2,968자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 06:03:03", "slug": "theysaid-4-0", "step": "thumb", "result": "done", "detail": "✅ theysaid-4-0 17KB", "dry_run": false}
