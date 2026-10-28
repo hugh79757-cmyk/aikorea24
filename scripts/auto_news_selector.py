@@ -7,10 +7,17 @@ v2 는 "한국인 초보자가 오늘 무료로 쓸 수 있는가?"를 LLM 도�
 
 브리핑은 뉴스 3건이다 (2026-10-16 개편):
 
-  1. 무료 기회 1건 : v2_tag='free-opportunity' 최신 1건. 없으면 빈 슬롯 (강제 충전 금지).
+  1. 무료 기회 1건 : v2_tag='free-opportunity' 최신 1건. 없으면 빈 슬롯
+                   (남은 슬롯은 4. 폴백이 채운다 — 기회 큐를 강제 소진하지 않는다).
   2. Zen 변경   : source='OpenCode Zen' 무료 목록 **추가** 감지분 최신 **1건**까지.
                   LLM 점수 무관 우선. 제공 중단 알림(`[제외] ...`)은 대상에서 뺀다.
   3. 일반 뉴스  : 나머지 슬롯을 LLM 도움 점수 상위로. 프로바이더 행은 제외.
+  4. 폴백 (AIK24-PIPE-12): 위 풀로 3건이 안 채워지면 **무료 태그 없는 일반 뉴스**로
+                  남은 슬롯을 채운다 — 빈 슬롯을 남기지 않는다 (매일 브리핑은 항상 3건).
+                  이 폴백 단계에서 2026-10-16 물타기 금지·2026-10-18 강제 충전 없음
+                  규칙은 브리핑 슬롯 채우기에 한해 폐기됐다. 단, 제외 조건(이미 브리핑된
+                  기사, [제외] 알림, 4개 CLI 프로바이더 행, 지원사업 공고 소스,
+                  출처당 1건)은 폴백에서도 그대로 유지한다.
 
 점수는 DB에 저장하지 않는다(선정 시점 한정).
 """
@@ -19,6 +26,7 @@ import re
 import sys
 import time
 from datetime import datetime, timedelta, timezone
+from email.utils import parsedate_to_datetime
 from itertools import zip_longest
 from pathlib import Path
 
@@ -54,7 +62,8 @@ NEWS_CANDIDATES = 4  # 뉴스 슬롯 최대 4건 (태그별 상위 3건 중 라�
 REFILL_POOL_LIMIT = 30
 # AIK24-PIPE-08: 재충원 전용 후보 범위 확장 (선정 경로 상한은 그대로).
 # 원칙: **후보 범위만** 넓힌다 — 점수 관문(SCORE_MIN)과 dedup 기준은 바꾸지 않는다.
-# 강제 충전이 아니다: 범위 안에 후보가 없으면 빈 슬롯을 유지하고 알림한다.
+# 범위 안의 후보만 쓴다 — 그래도 부족하면 4단계 폴백(일반 뉴스)이 이어받는다
+# (AIK24-PIPE-12).
 REFILL_WINDOW_HOURS = 72          # 선정 창 36h → 재충원 72h
 REFILL_PER_TAG_CANDIDATES = 9     # 태그별 상위 (선정 3)
 REFILL_NEWS_CANDIDATES = 12       # 일반 뉴스 상위 (선정 4)
@@ -79,6 +88,21 @@ EXCLUDED_TITLE_PREFIXES = ("[제외]",)
 # 조회해 pool 좌석(CANDIDATE_LIMIT=8)을 3석 차지했고, 그중 2석은 쓸 수 없어 실제 뉴스
 # 후보가 그만큼 잘렸다(후보 로그: 기회=3, zen=3, free-llm=2). 슬롯 상한과 맞춘다.
 ZEN_POOL_LIMIT = ZEN_SLOT_LIMIT + 1
+# AIK24-PIPE-12: 브리핑은 항상 3건 — 무료 태그 풀(기회·Zen·무료 뉴스)로 3건이 안
+# 채워지면 **무료 태그 없는 일반 뉴스**로 남은 슬롯을 채운다. 2026-10-28 실측:
+# 무료 풀 7건 중 신선 1건 → 브리핑 1건 발행(빈 슬롯 2개 공개). "빈 슬롯 유지(강제
+# 충전 없음)" 규칙은 브리핑 슬롯 채우기에 한해 폐기된다 (지시서 §규칙 2순위).
+FALLBACK_WINDOW_HOURS = 72  # 폴백 풀 조회 창 (재충원 창과 동일 — 오늘분 우선, 부족 시 72h)
+FALLBACK_POOL_LIMIT = 40    # 폴백 풀 상한 (최신순). 15 → 40 (2026-10-28 실측):
+#                             최신 15건이 공고·집계(네이버뉴스) 덩어리여서 출처당 1건
+#                             규칙상 1건만 나오는 문제를 해결 — 상위 40건에
+#                             인공지능신문·IT조선·전자신문 등 기사 소스가 올라온다.
+FALLBACK_SCORE_LIMIT = 10   # 폴백 (a)단계 LLM 점수 평가 대상 상한
+# 지원사업 공고 소스 — 브리핑 본문 슬롯 대상이 아니다 (지시서 §2순위 제외 조건).
+# SQL(get_general_fallback_news)의 이 명시 목록이 1차 방어선이고, 부처·자치단체
+# 별도 표기는 _is_announcement_source() 의 접미 방어선(2차)이 담당한다 (3중 방어 원칙).
+ANNOUNCEMENT_SOURCES = ("기업마당", "창업진흥원", "정보화진흥원", "지식재산처")
+ANNOUNCEMENT_SUFFIXES = ("부", "처", "청", "시", "도")
 KST = timezone(timedelta(hours=9))
 SCORE_RE = re.compile(r"실용성\s*[:=]\s*(\d)|이해도\s*[:=]\s*(\d)|유용성\s*[:=]\s*(\d)")
 
@@ -269,11 +293,17 @@ def _take(ranked, limit):
     return out
 
 
-def select_top_articles(clusters, max_count=MAX_COUNT):
-    """클러스터 dict → ① 무료 기회 1 ② Zen 변경(최신순) ③ LLM 점수 상위 일반 뉴스.
+def select_top_articles(clusters, max_count=MAX_COUNT, allow_fallback=False,
+                        d1_query_func=None, scorer=None):
+    """클러스터 dict → ① 무료 기회 1 ② Zen 변경(최신순) ③ LLM 점수 상위 일반 뉴스
+    ④ (allow_fallback=True) 일반 뉴스 폴백 (AIK24-PIPE-12).
 
-    ②까지는 LLM 점수와 무관하게 우선하고, ③만 점수순이다. 가치 있는 후보가 3건
-    미만이면 있는 만큼만 선정한다 (물타기 금지 — 2026-10-16 개편).
+    ②③까지는 LLM 점수와 무관하게 우선하고, ③만 점수순이다. ④는 위 풀만으로
+    max_count 미만이 되었을 때 **무료 태그 없는 일반 뉴스**로 남은 슬롯을 채운다 —
+    빈 슬롯을 남기지 않는다(매일 브리핑은 항상 3건). 기본값(False)은 기존 경로
+    (아카이브 v1·재충원 선행 선정)이 그대로 동작하게 유지하며, 운영 흐름은
+    지시서 순서(선정→dedup→재충원→폴백)대로 refill_after_dedup 의 4단계 폴백이
+    담당한다. ④를 켤 때는 d1_query_func·scorer 를 명시한다(테스트 오프라인 보장).
     """
     articles = [a for group in (clusters or {}).values() for a in group]
     ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
@@ -287,7 +317,7 @@ def select_top_articles(clusters, max_count=MAX_COUNT):
         picked.append(opp[0])
         used.add(opp[0]["id"])
     else:
-        log("  ⓘ 무료 기회 후보 없음 — 슬롯 1 비움 (강제 충전 없음)")
+        log("  ⓘ 무료 기회 후보 없음 — 슬롯 1 비움")
 
     # 슬롯 2: Zen 변경 최신순. LLM 점수와 무관하게 우선하되 **최대 ZEN_SLOT_LIMIT(=1)건**만.
     # 2026-10-18 이전에는 max_count 까지 채워 목록 변경 3건이 슬롯을 독식했고, 실제
@@ -311,6 +341,18 @@ def select_top_articles(clusters, max_count=MAX_COUNT):
             and a.get("source") not in PROVIDER_SOURCES
             and a.get("v2_tag") != "free-opportunity"]
     picked += _take(rest, max_count - len(picked))
+
+    # 슬롯 4 (AIK24-PIPE-12): 일반 뉴스 폴백 — 위 풀만으로 max_count 미만이면
+    # 무료 태그 없는 일반 뉴스로 남은 슬롯을 채운다 (빈 슬롯을 남기지 않는다).
+    if allow_fallback and len(picked) < max_count:
+        fb_needed = max_count - len(picked)
+        log(f"  [폴백] 무료 풀 부족 — 일반 뉴스 {fb_needed}건 충원 시도")
+        picked += fallback_fill_general(
+            fb_needed,
+            {_article_key(a) for a in picked},
+            {a.get("source") for a in picked if a.get("source")},
+            {_model_key(a) for a in picked if _model_key(a)},
+            d1_query_func, scorer, batch_history=picked)
     return picked
 
 
@@ -374,6 +416,205 @@ def _is_excluded_notice(article):
     """
     title = article.get("title") or ""
     return any(title.startswith(p) for p in EXCLUDED_TITLE_PREFIXES)
+
+
+# ---------------------------------------------------------------------------
+# AIK24-PIPE-12 — 일반 뉴스 폴백 (브리핑은 항상 3건)
+#
+# 실측(2026-10-28 07:00): 무료 풀 7건 중 신선 1건 → 재충원 풀 8건도 전부 이력
+# 중복 → 빈 슬롯 2개가 그대로 발행됐다. 무료 태그 뉴스는 매일 3건씩 나오지 않으므로
+# "빈 슬롯 유지" 원칙이 "매일 브리핑은 항상 3건" 원칙과 충돌한다. 지시서 AIK24-PIPE-12:
+# 위 풀로 3건이 안 채워지면 무료 태그 없는 일반 뉴스로 채운다. 제외 조건(이미
+# 브리핑된 기사, [제외] 알림, 프로바이더 4종, 지원사업 공고, 출처당 1건)은 그대로.
+# ---------------------------------------------------------------------------
+
+
+def _is_announcement_source(source):
+    """지원사업 공고 소스 판정 — SQL(명시 목록) 다음의 2차 방어선 (3중 방어 원칙).
+
+    정부 부처(~~부/~~처/~~청)·자치단체(~~시/~~도)·공고 전용 포털은 브리핑 독자가
+    오늘 할 행동이 아니므로 제외한다 (지시서 §2순위 제외 조건).
+    """
+    s = (source or "").strip()
+    if not s:
+        return False
+    return s in ANNOUNCEMENT_SOURCES or s.endswith(ANNOUNCEMENT_SUFFIXES)
+
+
+def _pub_ts(article):
+    """pub_date → epoch 초 (폴백 정렬용). 파싱 실패면 0 (최후순위).
+
+    news 테이블은 영문 매체(RSS)가 RFC-2822("Tue, 27 Oct 2026 ..."), 국문 매체가
+    "YYYY-MM-DD HH:MM:SS" 로 저장한다 — 두 형식이 섞인 상태에서 SQL ORDER BY 는
+    비교가 불가하므로 폴백의 최신순 정렬은 파싱 후 비교한다.
+    """
+    raw = (article.get("pub_date") or "").strip()
+    if not raw:
+        return 0.0
+    try:
+        dt = parsedate_to_datetime(raw)
+        if dt is not None:
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=KST)
+            return dt.timestamp()
+    except (TypeError, ValueError):
+        pass
+    for head, fmt in ((19, "%Y-%m-%d %H:%M:%S"), (10, "%Y-%m-%d")):
+        try:
+            return datetime.strptime(raw[:head], fmt).replace(tzinfo=KST).timestamp()
+        except ValueError:
+            continue
+    return 0.0
+
+
+def get_general_fallback_news(d1_query_func, exclude_ids=()):
+    """폴백 풀 — 무료 태그 없는 일반 뉴스 (지시서 §2순위).
+
+    - v2_tag 가 없는 행 (무료 기회·Zen·무료 뉴스가 아니다 — v2_pass 관문은 적용 안 함)
+    - SQL 1차 방어선: 프로바이더 4종·공고 소스(명시 목록)·[제외] 알림 제외,
+      이미 브리핑된 행(briefing_items 전체 이력) 영구 제외
+    - 72h 창, 최신순(id DESC — 수집 순서). 동일 기사·유사 기사 차단(2차)과
+      출처당 1건(3차)은 fallback_fill_general 이 진행한다.
+    """
+    cutoff = (datetime.now(timezone.utc)
+              - timedelta(hours=FALLBACK_WINDOW_HOURS)).strftime("%Y-%m-%d %H:%M:%S")
+    excluded_sql = ""
+    if exclude_ids:
+        excluded_sql = " AND id NOT IN (%s)" % ", ".join(str(int(i)) for i in exclude_ids)
+    return d1_query_func("""
+        SELECT %s FROM news
+        WHERE created_at >= '%s'
+          AND (v2_tag IS NULL OR v2_tag = '')
+          AND source NOT IN (%s)
+          AND id NOT IN (
+              SELECT bi.news_id FROM briefing_items bi
+              JOIN briefings b ON b.id = bi.briefing_id
+              WHERE b.status IN ('published', 'superseded')
+          )
+          AND %s%s
+        ORDER BY id DESC
+        LIMIT %d
+    """ % (_COLS, cutoff, _sql_in(PROVIDER_SOURCES + ANNOUNCEMENT_SOURCES),
+            _excluded_titles_sql(), excluded_sql, FALLBACK_POOL_LIMIT))
+
+
+def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
+                          d1_query_func, scorer, batch_history=()):
+    """남은 슬롯을 일반 뉴스(무료 태그 없음)로 채운다 — AIK24-PIPE-12 (a)→(b) 순서.
+
+    (a) LLM 도움 점수 ≥ SCORE_MIN 인 후보를 점수순으로, (b) 그래도 모자라면 점수
+    무관 최신순(pub_date DESC)으로 채운다. 제외 조건은 무료 풀과 동일하다:
+
+      - SQL 1차: 프로바이더·공고 소스·[제외]·briefing_items 전체 이력
+        (get_general_fallback_news)
+      - 2차: filter_duplicates — D1 3일 히스토리 + local 30일 이력. 같은 사건을
+        다른 매체가 쓴 기사도 semantic 중복으로 걸린다 (어제 Reddit r/opensource 사건).
+      - 3차: 배치 내부 — 이번 브리핑에 이미 고른 항목(kept·폴백분)과
+        is_duplicate_article_strict 로 대조 (batch_history)
+      - 출처당 1건(used_sources)·모델 통합(merged_models)·선정/탈락분 제외(exclude_keys)
+
+    used_sources·merged_models 는 채택분을 반영해 **제자리에서 갱신**된다.
+    반환: 채택한 기사 리스트 (부족하면 있는 만큼만 — 발행 전 실패 알림은 호출자 몫).
+    """
+    if needed <= 0:
+        return []
+    if d1_query_func is None:
+        d1_query_func = d1_query
+    scorer = scorer or score_helpfulness
+    # briefing_dedup 은 auto_news_selector 를 import 하므로 순환 → 지연 import.
+    from briefing_dedup import filter_duplicates, is_duplicate_article_strict
+
+    pool = get_general_fallback_news(d1_query_func)
+    if not pool:
+        log("  [폴백] 일반 뉴스 풀 없음")
+        return []
+    pool = [dict(a) for a in pool]
+    fresh, blocked = filter_duplicates(pool, d1_query_func)
+    if blocked:
+        log(f"  [폴백] 중복 제외 {len(blocked)}건: "
+            + ", ".join(reason for _, reason in blocked))
+
+    batch_all = [dict(a) for a in (batch_history or []) if isinstance(a, dict)]
+    exclude_keys = set(exclude_keys or ())
+    used_sources = set(used_sources or ())
+    merged_models = set(merged_models or ())
+
+    def _usable(art):
+        """SQL 1차 방어선 다음의 2차 방어 — 출처·제목·모델 키 재검증."""
+        src = art.get("source")
+        if _is_announcement_source(src) or src in PROVIDER_SOURCES:
+            return False
+        if _is_excluded_notice(art):
+            return False
+        mkey = _model_key(art)
+        if mkey and mkey in merged_models:
+            return False
+        return True
+
+    candidates = [a for a in fresh
+                  if _usable(a) and _article_key(a) not in exclude_keys]
+
+    # 채점 전 출처 제외 — kept(published 슬롯)·폴백 앞 단계에서 이미 쓴 출처는
+    # 출처당 1건 때문에 선정될 수 없다. LLM 채점 낭비를 막고 (a) 단계 상한
+    # FALLBACK_SCORE_LIMIT 이 살아있는 후보를 넓게 보게 하기 위해 여기서 걷어낸다.
+    # (a)/(b) 루프의 used_sources 재검사는 방어선으로 그대로 둔다.
+    blocked_by_source = [a for a in candidates if a.get("source") in used_sources]
+    if blocked_by_source:
+        log(f"  [폴백] 출처 이미 사용 ({len(blocked_by_source)}건 채점 제외): "
+            + ", ".join(sorted({a.get("source") for a in blocked_by_source})))
+    candidates = [a for a in candidates if a.get("source") not in used_sources]
+
+    # (a) 점수 평가 — 최신 FALLBACK_SCORE_LIMIT 건만. 실제 score_helpfulness 는
+    # art['_score'] 를 직접 기록한다 (호출 규약 유지 — 반환값으로 덮어쓰지 않는다).
+    to_score = [a for a in candidates if a.get("_score") is None][:FALLBACK_SCORE_LIMIT]
+    for i, art in enumerate(to_score, 1):
+        s = scorer(art)
+        log(f"  [폴백 후보 {i}/{len(to_score)}] {s}점 {(art.get('title') or '')[:50]}")
+        if i < len(to_score):
+            time.sleep(2)
+
+    picked, taken_keys = [], set()
+
+    def _try_take(art, tier):
+        """3차 방어선(배치 내부 중복) 통과 시 채택 — 제약 상태를 갱신한다."""
+        dup, reason = is_duplicate_article_strict(art, batch_all + picked)
+        if dup:
+            log(f"  [폴백] 배치 중복 제외 [{reason}] {(art.get('title') or '')[:50]}")
+            return False
+        picked.append(art)
+        taken_keys.add(_article_key(art))
+        src = art.get("source")
+        if src:
+            used_sources.add(src)
+        mkey = _model_key(art)
+        if mkey:
+            merged_models.add(mkey)
+        log(f"  [폴백 {tier}] [{art.get('_score', 0)}점] {(art.get('title') or '')[:55]} "
+            f"({art.get('source')} · {art.get('pub_date')})")
+        return True
+
+    # (a) LLM 도움 점수 ≥ SCORE_MIN — 점수순 (동점은 최신순)
+    for art in sorted([a for a in candidates if (a.get("_score") or 0) >= SCORE_MIN],
+                      key=lambda a: (-(a.get("_score") or 0), -_pub_ts(a))):
+        if len(picked) >= needed:
+            break
+        if art.get("source") in used_sources:
+            continue
+        _try_take(art, "a 점수순")
+
+    # (b) 점수 무관 최신순 (pub_date DESC) — (a)로 부족한 만큼만
+    if len(picked) < needed:
+        for art in sorted([a for a in candidates if _article_key(a) not in taken_keys],
+                          key=lambda a: -_pub_ts(a)):
+            if len(picked) >= needed:
+                break
+            if art.get("source") in used_sources:
+                continue
+            _try_take(art, "b 최신순")
+
+    if picked:
+        log(f"  [폴백] 일반 뉴스 {len(picked)}건으로 슬롯 충원")
+    return picked
 
 
 # ---------------------------------------------------------------------------
@@ -455,10 +696,12 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
       1) 남은 free-opportunity 후보 최신순
       2) 남은 source='OpenCode Zen' AND v2_tag='free-llm' 후보 최신순
       3) 남은 일반 뉴스 LLM 평가 점수 상위순 (동점은 최신순)
+      4) 일반 뉴스 폴백 (AIK24-PIPE-12) — 무료 태그 없는 일반 뉴스로 남은 슬롯을 채운다
 
     - 이미 선정된 항목(kept)과 중복 제거로 탈락한 항목(dropped)은 후보에서 제외한다.
     - 재충원 후보도 중복 검사(2차 방어)를 다시 통과한 것만 쓴다.
-    - 후보가 부족하면 있는 만큼만 채우고, 없으면 빈 슬롯으로 둔다 (강제 충전 금지).
+    - 그래도 부족하면 남은 슬롯은 발행 전 실패 알림으로 처리된다 (호출자
+      auto_briefing.main 의 <3 가드) — 빈 브리핑을 저장하지 않는다.
     - 모델 행은 merge_same_models 와 같은 키(original_title)로 중복 통합을 방어한다.
     - AIK24-PIPE-08: 슬롯을 **풀별로 분리**한다(기회 상한·Zen 상한). 한 풀이 슬롯을
       독식해 다른 풀을 막지 않게 한다. 남는 슬롯은 일반 뉴스가 채운다.
@@ -544,10 +787,20 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
         rest.sort(key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
         picked += take(rest, needed - len(picked), "3 뉴스")
 
+    # 4) 일반 뉴스 폴백 (AIK24-PIPE-12) — 무료 태그 없는 일반 뉴스로 남은 슬롯을 채운다.
+    #    폴백 풀은 선정·재충원 풀(v2_pass=1)과 다른 조회라 여기서 처음 나온다.
+    #    배치 내부 중복은 kept + 지금까지 picked 를 batch_history 로 넘겨 막는다.
+    if len(picked) < needed:
+        picked += fallback_fill_general(
+            needed - len(picked), excluded,
+            {a.get("source") for a in kept + picked if a.get("source")},
+            merged_models, d1_query_func, scorer, batch_history=kept + picked)
+
     if picked:
         log(f"  재충원 {len(picked)}건 완료 (빈 슬롯 {needed}개 중 {len(picked)}개 충원)")
-    else:
-        log(f"  ⓘ 재충원 후보 없음 — 빈 슬롯 {needed}개 유지 (강제 충전 없음)")
+    if len(picked) < needed:
+        log(f"  ⚠️ 폴백 후에도 후보 부족 — 슬롯 {needed - len(picked)}개 미충원 "
+            "(발행 전 실패 알림으로 처리)")
     return kept + picked
 
 
@@ -630,7 +883,8 @@ def main(dedup=True):
     selected = select_top_articles({"v2": passed}, MAX_COUNT)
 
     log(f"선정 {len(selected)}건" + ("" if len(selected) == MAX_COUNT
-                                    else f" (요청 {MAX_COUNT}건, 데이터 부족 — 강제 선정 없음)"))
+                                    else f" (요청 {MAX_COUNT}건, 무료 풀 부족 — "
+                                         "재충원·폴백에서 충원)"))
     for art in selected:
         log(f"  [{art.get('_score', 0)}점 {art.get('_detail')}] [{art.get('v2_tag')}] "
             f"{(art.get('title') or '')[:60]} ({art.get('source')} · {art.get('pub_date')})")

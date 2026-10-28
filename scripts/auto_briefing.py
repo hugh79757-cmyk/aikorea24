@@ -425,6 +425,22 @@ def save_briefing(data, force=None):
     return briefing_id
 
 
+def _alert_briefing_incomplete(count):
+    """브리핑 슬롯 미충원 실패 알림 (AIK24-PIPE-12).
+
+    폴백(일반 뉴스)·재충원 후에도 3건이 안 되면 빈 브리핑을 저장하지 않고 중단하며,
+    그 사실을 텔레그램으로 알린다. 발송 실패는 종료 흐름을 막지 않는다 (fail-soft).
+    """
+    msg = (f"🚨 [aikorea24] 브리핑 발행 중단 — 선정 {count}/{MAX_COUNT}건 부족 "
+           "(무료 풀 + 일반 뉴스 폴백 후보 없음). 빈 브리핑은 저장하지 않았습니다.")
+    try:
+        from pipeline.infra.telegram import send_telegram
+        ok = send_telegram(msg)
+        log(f"  실패 알림 발송: {'성공' if ok else '실패(설정 없음/전송 오류)'}")
+    except Exception as e:  # noqa: BLE001 — 알림 실패가 저장 흐름을 막지 않게
+        log(f"  실패 알림 발송 오류(무시): {type(e).__name__}: {e}")
+
+
 def main(selected_articles=None):
     log("=== aikorea24 브리핑 자동 생성 ===")
     print()
@@ -480,16 +496,21 @@ def main(selected_articles=None):
     # AIK24-PIPE-04: 중복 제거·모델 통합으로 빈 슬롯이 생기면 계단식 재충원.
     # selector 의 3.5단계 dedup 은 D1 이력만 보므로 local history(briefing_dedup.json)
     # 중복은 여기서 처음 드러난다 — 2026-10-17 실측: 3건 선정 → 2건 탈락 → 1건 발행.
-    # 재충원 후보가 없으면 빈 슬롯으로 남긴다 (물타기 금지 — PIPE-03 원칙 유지).
+    # AIK24-PIPE-12: 재충원 4단계 = 일반 뉴스 폴백 — 무료 태그 풀로 3건이 안 되면
+    # 무료 태그 없는 일반 뉴스로 채운다 (매일 브리핑은 항상 3건; 폴백 순서는
+    # (a) 점수 ≥6 순 → (b) 점수 무관 최신순).
     if len(selected) < MAX_COUNT:
         log(f"  빈 슬롯 {MAX_COUNT - len(selected)}개 — 재충원 시도")
         selected = refill_after_dedup(selected, removed, max_count=MAX_COUNT,
                                       d1_query_func=d1_query)
 
-    if not selected:
-        log("  ⚠️ 선정된 기사 없음")
+    # AIK24-PIPE-12: 최종 3건 미만이면 발행하지 않는다 — 2026-10-28 실측: 1건짜리
+    # 브리핑이 그대로 공개됐다. 실패 알림을 보내고 저장을 중단한다.
+    if len(selected) < MAX_COUNT:
+        _alert_briefing_incomplete(len(selected))
+        log(f"  ⚠️ 선정 {len(selected)}건 < {MAX_COUNT}건 — 발행 중단 (빈 브리핑 저장 없음)")
         print()
-        return
+        return None
 
     # AIK24-PIPE-07: 무료 모델 항목의 "원문 보기"는 제공사 모델 페이지
     # (news.origin_link)로 연결된다. blog_link 는 더 이상 원문 링크가 아니다.

@@ -121,6 +121,9 @@ def briefing_cause_of(briefing_log, selected_count):
     log_text = briefing_log or ""
     if "이미 오늘 브리핑 발행됨" in log_text or "이미 오늘 브리핑이 published 입니다" in log_text:
         return "오늘 브리핑이 이미 발행됨(하루 1회 정책) — 신규 0건"
+    if "빈 브리핑 저장 없음" in log_text:
+        # AIK24-PIPE-12: 폴백(일반 뉴스) 후에도 3건 미만이면 저장하지 않고 중단한다.
+        return "선정 부족(폴백·재충원 후보 없음) — 빈 브리핑 미저장"
     if "선정된 기사 없음" in log_text or "수집된 뉴스 없음" in log_text:
         return "선정된 기사 0건"
     if "브리핑 생성 실패" in log_text or "D1 실행 오류" in log_text:
