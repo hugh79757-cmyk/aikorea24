@@ -1,3 +1,56 @@
+## 2026-10-28 AIK24-BEAM-REEVAL-01 — Beam Free 결정적 채점 재측정 + 후속글 발행
+
+### 한 일
+
+1. 사전 확인: docs/state.md 확인, opencode models로 `opencode/beam-free` ID 확인, 무료 CLI 경로 1회 호출 성공, 기존 캐시 확인 (구 9/12, qv=2, schema=4).
+2. 12문항 재측정: `scripts/model_eval.py`의 `eval_model_cli` 경유, `opencode run -m opencode/beam-free --format json`. 12문항 전부 응답, 0 실패.
+3. 채점 검증: 0점 3문항(Q1, Q4, Q11) 답안 원문 직접 확인.
+   - Q1: 한국어 설명 + `---끝---` 포함. 채점기 영문 3글자 이상 금지 규칙으로 0점. 치환 재채점 시 1점 → **채점기 오탐**.
+   - Q4: pytest 코드 대신 엉뚱한 작업 로그 출력 → **실제 실패**.
+   - Q11: JSON은 출력했으나 최상위가 4단계 배열이 아니라 title+steps 구조 → **실제 실패**.
+4. 니들 컨텍스트 프로브: 8,192부터 1,048,576 토큰까지 모든 단계 통과. 실측 하한 1,048,576 토큰.
+5. 결과 반영: `cache_put` 경로로 캐시·리더보드 갱신. measured_context=1,048,576.
+6. free-models 페이지 표시: `scripts/logs/free_models_cli.json`이 비어 있어(verify 0건 PASS) Beam은 평가 완료지만 페이지 표시 차단 상태. 임의 추가하지 않고 보고.
+7. 후속글 신규 발행: EmDash. 라이브 URL 확인 완료.
+
+### 결과 (검증 근거)
+
+- 점수: 9/12 (지시이행 1/2, 코딩실무 3/4, 맥락유지 2/2, 에이전트 3/4)
+- 니들 하한: 1,048,576 토큰 (8,192~1,048,576 전 단계 통과)
+- 토큰 사용량: CLI 경유로 측정되지 않음 (미측정)
+- 라이브 URL: https://emdash.aikorea24.kr/posts/beam-free-재측정-결정적-채점-기준에서도-긴-글-요약은-만점-복잡한-코딩-지시는-여전히-약합니다
+- og:image: https://emdash.aikorea24.kr/_emdash/api/media/file/01M607V1PZ22BWHK5TFGRJV0ZT.01M607V23V6J4HCP5QMTP4TFCH.webp (HTTP 200, image/webp)
+- 구 결론(긴 글 요약 만점 / 복잡한 코딩 지시 탈락)은 새 기준에서도 유지됨
+
+### 잔존 위험
+
+- free-models 페이지에 Beam이 표시되지 않음(평가 완료·표시 차단). 원인은 free_models_cli.json 비어 있음. 검증 목록 추가는 보고 후 결정.
+- Q1 채점기 오탐은 보고했으나 점수는 채점기 출력(9/12) 그대로 기록. 치환 재채점 시 10/12.
+- 캐시·리더보드는 파이프라인 코드 경로(cache_put)로만 갱신함.
+
+### 다음 행동
+
+- 시니어 2 라이브 대조 후 대표님께 전달.
+- free-models 페이지 검증 목록 추가 여부 결정.
+
+완료 — 시니어 2 verify 요청
+PY
+
+## 2026-10-28 SAFE-DIV-TEST-02: safe_div pytest 테스트 보강
+
+- 한 일: `tests/test_safe_div.py` 및 루트 `test_safe_div.py`에 None/TypeError·소수 입력 경계 케이스 추가. `scripts/safe_div.py` 구현(변경 없음) 대상.
+- 결과: `pytest tests/test_safe_div.py test_safe_div.py` → 93 passed. 기존 87 케이스 회귀 없음.
+- 잔존 위험: 없음 (safe_div 구현 자체는 변경하지 않음).
+
+## 2026-10-28 AIK24-FREE-PIPE-01 일일 실행 — 수집 36건 / 실패 프로바이더 0 / added 0 · removed 2 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
+## 2026-10-28 00:00 — SAFE-DIV-TEST-01: safe_div pytest 테스트 작성
+
+- 한 일: `tests/test_safe_div.py` 및 루트 `test_safe_div.py` 에 safe_div pytest 테스트 작성/보강. 정상 입력, 0으로 나누기(0/0.0/-0.0/False), 음수 조합, 경계값(inf/nan/subnormal/overflow) 커버.
+- 결과: `pytest tests/test_safe_div.py test_safe_div.py` → 87 passed.
+- 잔존 위험: 없음 (safe_div 구현 자체는 변경하지 않음).
+- 다음 행동: 없음.
+
 ## 2026-10-27 AIK24-FREE-PIPE-01 일일 실행 — 수집 38건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-10-27 09:58 — AIK24-DEDUP-10: 같은 사건이 이틀 연속 브리핑된 문제 수정 + 오늘 브리핑 재발행

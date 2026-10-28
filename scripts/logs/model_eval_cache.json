@@ -1156,7 +1156,7 @@
     "axis": "지시이행",
     "score": 0,
     "source": "cli",
-    "answer": "`def add(a, b): return a + b`는 두 개의 매개변수 `a`와 `b`를 받아서 그 둘을 더한 값을 반환하는 함수 `add`를 정의합니다.\n\n---끝---",
+    "answer": "이 코드는 두 개의 인자 `a`와 `b`를 받아서 그 합(`a + b`)을 반환하는 `add`라는 이름의 함수를 정의합니다.\n\n---끝---",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1176,7 +1176,7 @@
     "axis": "코딩실무",
     "score": 1,
     "source": "cli",
-    "answer": "## 버그 분석\n\n함수 이름이 `get_expired_tokens`(만료된 토큰)인데, 조건이 `expires_at < now - timedelta(days=30)` 로 **30일 전** 시점과 비교하고 있습니다. 이 때문에 최근 30일 내 만료된 토큰은 결과에서 누락됩니다. 만료 여부는 만료 시각이 `now`보다 이전인지로 판단해야 합니다.\n\n## 수정 코드\n\n```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n## 한 줄 설명\n\n만료된 토큰은 만료 시각이 `now`보다 이전인 토큰인데, `now - timedelta(days=30)`로 비교해 최근 30일 내 만료된 토큰을 누락합니다.\n\n---\n\n**참고 (환경에 따라 추가 점검 필요):** `datetime.fromisoformat`은 타임존 정보가 없는 문자열이면 naive datetime을 반환합니다. `now`가 aware datetime이라면 비교 시 `TypeError`가 발생하므로, `now`와 `expires_at`의 타임존 일관성도 확인해 주세요. (예: `datetime.fromisoformat(t['expires_at'].replace('Z', '+00:00'))`)",
+    "answer": "```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n버그: `now - timedelta(days=30)`로 30일 이상 전에 만료된 토큰만 걸러내어 최근 만료된 토큰을 누락합니다(만료 판정은 `expires_at < now`여야 함).",
     "sandbox": "pass",
     "sandbox_reason": "실행 검증 통과",
     "measurement_defect": false
@@ -1186,7 +1186,7 @@
     "axis": "코딩실무",
     "score": 0,
     "source": "cli",
-    "answer": "## 결과\n\n`tests/test_safe_div.py` 에 이미 포괄적인 테스트가 존재하며, 정상 입력 / 0으로 나누기 / 음수 / 경계값(무한대, 오버플로우, 음수 0 부호 보존, NaN, TypeError)을 모두 다룹니다. 검증 결과:\n\n- **29 passed, 0 failed, 0 skipped** (Python 3.14, pytest 9.1.1)\n\n### 커버리지 요약 (3분법)\n\n| 카테고리 | 검증 항목 | 근거 |\n|---|---|---|\n| [검증됨] 정상 입력 | `10/2=5.0`, `9/3=3.0`, `7/2=3.5`, `6.0/2=3.0`, `1/2=0.5`, `0/5=0.0`, `10/1=10.0` | `test_정상_입력에서_올바른_값을_반환한다` 7케이스 통과 |\n| [검증됨] 0으로 나누기 | `b=0/0.0/-0.0` 모두 `None` 반환, `0/0`도 `None` | `test_0으로_나누면_None을_반환한다`, `test_0계열_분모는_None을_반환한다`, `test_0_0으로_나누는_경우에도_None을_반환한다` 통과 |\n| [검증됨] 음수 | `(-10,2)`, `(10,-2)`, `(-10,-2)`, `(10,-1)`, `(-6,3)` 부호 검증 | `test_음수_입력에서_부호가_올바르다` 5케이스 통과 |\n| [검증됨] 경계값 | `1e308`, `-1e308`, `inf`, `-inf`, `10/inf=0.0`, `inf/inf=NaN`, `1/5e-324=inf`, `10**400/7→OverflowError`, `-0.0` 부호 보존, `None` 입력 → `TypeError` | 해당 테스트 함수들 모두 통과 |\n\n### 실행 방법\n\n```bash\n.venv/bin/python -m pytest tests/test_safe_div.py -v\n```\n\n> 참고: `pytest.ini`의 `testpaths = tests` 설정 때문에 루트의 `test_safe_div.py`는 기본 수집 대상이 아니며",
+    "answer": "작성/보강 완료.\n\n- `scripts/safe_div.py` 구현(변경 없음) 대상으로 `tests/test_safe_div.py` 및 루트 `test_safe_div.py` 테스트 보강.\n- 정상 입력, 0으로 나누기(`0`/`0.0`/`-0.0`/`False`), 음수 조합, 경계값(inf/nan/subnormal/overflow/None 입력) 커버.\n- 검증: `pytest tests/test_safe_div.py test_safe_div.py` → **93 passed**. 기존 케이스 회귀 없음.\n- `docs/state.md` 스테이트먼트 기록 완료 (state_prepend.py 사용).",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1196,7 +1196,7 @@
     "axis": "코딩실무",
     "score": 1,
     "source": "cli",
-    "answer": "```python\ndef _to_user_dict(u):\n    return {'id': u['id'], 'name': u['name'], 'email': u['email']}\n\n\ndef get_active_user(users):\n    return [_to_user_dict(u) for u in users if u['status'] == 'active']\n\n\ndef get_admin_user(users):\n    return [_to_user_dict(u) for u in users if u['role'] == 'admin']\n```\n\n**중복 제거 포인트**\n\n- 동일한 프로젝션(`{'id', 'name', 'email'}`)을 `_to_user_dict` 헬퍼로 추출 → 한 곳에서만 유지.\n- 반복문 + `append` 패턴을 리스트 컴프리헨션으로 통일 → 루프/누적 로직 중복 제거.\n- 입력 순서, 빈 입력(`[]`), 예외 동작(KeyError 등)은 원본과 동일하게 보존됩니다.",
+    "answer": "검증 완료. 동작 보존을 확인했으니 리팩토링 결과를 정리합니다.\n\n## 리팩토링 결과\n\n공통 로직(사용자 dict 투영 + 필터링 반복)을 추출해 중복을 제거했습니다. 동작(반환 타입, 순서, 키 구성, 필터 조건)은 변경되지 않았습니다.\n\n```python\n_USER_KEYS = ('id', 'name', 'email')\n\n\ndef _user_summary(u):\n    \"\"\"사용자 dict에서 공통 필드만 투영한다.\"\"\"\n    return {k: u[k] for k in _USER_KEYS}\n\n\ndef _select_users(users, predicate):\n    \"\"\"predicate를 만족하는 사용자만 골라 공통 형태로 반환한다.\"\"\"\n    return [_user_summary(u) for u in users if predicate(u)]\n\n\ndef get_active_user(users):\n    return _select_users(users, lambda u: u['status'] == 'active')\n\n\ndef get_admin_user(users):\n    return _select_users(users, lambda u: u['role'] == 'admin')\n```\n\n### 변경 포인트\n\n- **[PRODUCTION CODE]**: 두 함수의 중복된 `for` 루프 + dict 생성 + 조건 분기 로직을 `_user_summary` (투영)와 `_select_users` (필터+투영) 헬퍼로 통합.\n- 투영 키 목록을 `_USER_KEYS` 튜플로 단일화하여, 필드 추가/변경 시 한 곳만 수정하면 됩니다.\n- 시그니처(`get_active_user(users)`, `get_admin_user(users)`)와 반환값(리스트, 순서 보존)은 그대로 유지.\n\n### 검증 근거\n\n- 200개 랜덤 사용자로 원본 vs 리팩토링 결과 비교 → `active equal: True`, `admin equal: True`.\n- 빈 리스트 입력 ",
     "sandbox": "pass",
     "sandbox_reason": "실행 검증 통과",
     "measurement_defect": false
@@ -1206,7 +1206,7 @@
     "axis": "코딩실무",
     "score": 1,
     "source": "cli",
-    "answer": "```python\nfrom datetime import datetime\n\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError(\"s must be str\")\n    if s.strip() == \"\":\n        raise ValueError(\"empty line\")\n    parts = s.split(None, 2)\n    if len(parts) != 3:\n        raise ValueError(\"expected 'TIMESTAMP LEVEL MSG'\")\n    ts, level, msg = parts\n    if msg == \"\" or msg.strip() == \"\":\n        raise ValueError(\"msg must not be empty\")\n    try:\n        dt = ts[:-1] + \"+00:00\" if ts.endswith(\"Z\") else ts\n        datetime.fromisoformat(dt)\n    except (ValueError, TypeError):\n        raise ValueError(\"invalid ISO8601 timestamp\")\n    if level not in (\"INFO\", \"WARN\", \"ERROR\"):\n        raise ValueError(\"invalid level\")\n    return (ts, level, msg)\n```",
+    "answer": "```python\nfrom datetime import datetime\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError(\"s must be a str\")\n\n    parts = s.split(None, 2)\n    if len(parts) != 3:\n        raise ValueError(\"log line must contain TIMESTAMP, LEVEL, and MSG\")\n\n    timestamp, level, msg = parts\n    if not msg.strip():\n        raise ValueError(\"MSG must not be empty\")\n\n    if level not in {\"INFO\", \"WARN\", \"ERROR\"}:\n        raise ValueError(\"LEVEL must be INFO, WARN, or ERROR\")\n\n    candidate = timestamp[:-1] + \"+00:00\" if timestamp.endswith(\"Z\") else timestamp\n    try:\n        datetime.fromisoformat(candidate)\n    except ValueError:\n        raise ValueError(\"TIMESTAMP must be ISO8601\")\n\n    return (timestamp, level, msg)\n```",
     "sandbox": "pass",
     "sandbox_reason": "실행 검증 통과",
     "measurement_defect": false
@@ -1226,7 +1226,7 @@
     "axis": "맥락유지",
     "score": 1,
     "source": "cli",
-    "answer": "1. 파이썬을 처음 시작할 때 무엇부터 해야 하는지 알려달라고 요청했습니다.\n2. 변수 이름을 지을 때의 규칙 3가지를 알려달라고 요청했습니다.\n3. 프로그램이 안 돌아갈 때 처음에 해야 할 일을 알려달라고 요청했습니다.",
+    "answer": "위 대화에서 요청한 작업 3가지:\n\n1. 파이썬을 처음 시작하기 위해 해야 할 일 (설치부터 확인)\n2. 변수 이름을 지을 때의 규칙 3가지\n3. 프로그램이 안 돌아갈 때 처음에 할 일",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1236,7 +1236,7 @@
     "axis": "에이전트",
     "score": 1,
     "source": "cli",
-    "answer": "[\"Undefined total variable\",\"Removed tax calculation\",\"Shared mutable global state\",\"DB write per payment\",\"API return value contract changed\"]",
+    "answer": "[\"total 변수 미정의(NameError)\", \"db.insert 부작용 및 race condition\", \"user 파라미터 미사용\", \"에러 처리/트랜잭션 atomicity 부재\", \"입력 검증/SQL injection 위험\"]",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1246,7 +1246,7 @@
     "axis": "에이전트",
     "score": 1,
     "source": "cli",
-    "answer": "root cause: `/api/users` 요청이 5초 내에 완료되지 않아 `requests.exceptions.Timeout`이 발생했고, 이를 처리하는 로직이 없어 그대로 전파되었습니다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -6,4 +6,8 @@ import requests\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    try:\n+        return requests.get(url, timeout=5).json()\n+    except requests.exceptions.Timeout:\n+        return None\n```",
+    "answer": "root cause: 서버 응답이 5초 내에 오지 않아 `requests.get`이 `Timeout`을 발생시킨다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -1,5 +1,9 @@\n import requests\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    try:\n+        return requests.get(url, timeout=10).json()\n+    except requests.exceptions.Timeout:\n+        return requests.get(url, timeout=10).json()\n```",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1256,7 +1256,7 @@
     "axis": "에이전트",
     "score": 0,
     "source": "cli",
-    "answer": "{\n  \"steps\": [\n    {\n      \"step\": 1,\n      \"title\": \"HTML 뼈대와 기본 UI 스켈레톤\",\n      \"domScreens\": [\n        \"<!DOCTYPE html> + <head>(meta viewport, title, inline <style>)\",\n        \"게임 컨테이너 #app > #header(제목/스탯바) + #main(씬 영역) + #choices(선택지 버튼 그룹) + #footer(저장/불러오기/리셋 버튼)\",\n        \"초기 화면 #screen-intro: 타이틀, 짧은 프롤로그 텍스트, '시작' 버튼\",\n        \"CSS 변수(--bg, --fg, --accent)와 기본 타이포/레이아웃, 모바일 대응 미디어쿼리\"\n      ],\n      \"coreStateModel\": {\n        \"schema\": \"{ currentSceneId: string, flags: Record<string, boolean>, stats: { health: number, hunger: number, warmth: number }, inventory: string[], visited: string[], seed: number, version: number }\",\n        \"initial\": \"{ currentSceneId: 'intro', flags: {}, stats: { health: 100, hunger: 50, warmth: 50 }, inventory: [], visited: [], seed: Date.now(), version: 1 }\",\n        \"storage\": \"localStorage key 'neanderthal_game_state_v1', JSON.stringify(state)\",\n        \"notes\": \"상태는 단일 객체로 유지하고 render()가 state를 읽어 DOM을 갱신하는 단방향 흐름\"\n      },\n      \"verificatio",
+    "answer": "{\n  \"title\": \"네안데르탈인 시점 텍스트 게임 — 단일 HTML 빌드 4단계\",\n  \"steps\": [\n    {\n      \"step\": 1,\n      \"name\": \"기반 골격과 상태 초기화\",\n      \"dom_screen\": \"<!DOCTYPE html> 뼈대, <main id='app'> 루트, 제목 화면(#title-screen)과 게임 화면(#game-screen) 두 섹션, 기본 CSS 변수(석기/동굴 톤) 정의. 스크린 전환은 display 토글로 처리.\",\n      \"core_state_model\": \"const gameState = { sceneId: 'intro', flags: {}, stats: { health: 100, hunger: 100, stamina: 100 }, inventory: [], day: 1, log: [] }; localStorage 키 'neanderthal_save_v1' 정의.\",\n      \"verification\": \"브라우저에서 파일 열기 → 콘솔 에러 0건, 제목 화면 렌더 확인. gameState를 console에 출력해 초기값 일치 여부 확인.\"\n    },\n    {\n      \"step\": 2,\n      \"name\": \"씬 렌더러와 선택지 시스템\",\n      \"dom_screen\": \"#scene-text, #choices 컨테이너, #log-panel. 씬 데이터는 SCENES 객체(텍스트 + choices 배열)로 정의. 선택 버튼 동적 생성 및 이벤트 위임.\",\n      \"core_state_model\": \"SCENES = { id: { text, choices: [{ label, next, effects }] } }. applyChoice(choice)로 gameState.sceneId 갱신, effects(hp/hunger/inventory/flags) 반영, log push.\",\n      \"verification\": \"선택지 클릭 → 다음 씬 텍스트 교체 + 상태 ",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1266,7 +1266,7 @@
     "axis": "에이전트",
     "score": 1,
     "source": "cli",
-    "answer": "# 우선순위 분류\n\n## 🔴 지금 바로 처리해야 하는 것\n\n### 1. 장애 후속 조치로 고객 메일 발송 대기 중\n- **이유**: 고객 커뮤니케이션은 SLA/신뢰와 직결됩니다. 장애 후속 메일은 \"고객이 기다리는 정보\"이며, 지연될수록 문의 폭주·불만·재발 문의가 늘어납니다. 내부 작업(버튼/쿼리)과 달리 **외부 영향**이 있고, \"대기 중\"이라는 표현 자체가 이미 지연 신호입니다.\n- **근거**: 외부 영향 > 내부 영향. 고객 대상 약속은 다른 내부 작업보다 항상 우선.\n\n## 🟡 오늘은 미뤄도 되는 것\n\n### 2. 운영 DB 느린 쿼리 (3초 소요)\n- **이유**: 3초는 성능 저하이지 장애( outage )는 아닙니다. 서비스가 동작 중이며, 원인 분석·인덱스 추가·쿼리 재작성은 충분한 조사 시간이 필요합니다. 급하게 고치면 더 큰 회귀를 만들 수 있습니다. 다만 **오늘 중 모니터링 강화 + 원인 파악 시작**은 권장 (내일까지 미루면 안 됨).\n- **근거**: 영향도가 \"성능\" 수준이며, 긴급도가 낮음. 조사 비용 대비 즉시 수정 리스크가 큼.\n\n### 3. 내부 도구 버튼 색상/문구 수정\n- **이유**: 순수 코스메틱 변경, 내부 도구 한정, 사용자-facing 서비스에 영향 없음. 릴리스 사이클에 묶어서 처리해도 무방.\n- **근거**: 영향 범위가 가장 작고, 비즈니스 임팩트 0. 가장 낮은 우선순위.\n\n---\n\n## 정리\n\n| 항목 | 지금? | 오늘? | 근거 요약 |\n|---|---|---|---|\n| 고객 메일 발송 | ✅ 즉시 | — | 외부 영향·SLA·고객 대기 |\n| DB 느린 쿼리 | ❌ | 🔍 조사 시작 | 성능 저하, 장애 아님, 신중한 수정 필요 |\n| 버튼 색상/문구 | ❌ | ❌ (다음 릴리스) | 코스메틱, 내부 도구, 임팩트 0 |\n\n**추천 실행 순서**: 고객 메일 → DB 쿼리 원인 파악(오늘 중) → 버튼 수정(다음 릴리스).",
+    "answer": "## 지금 바로 처리해야 하는 것\n\n### 1. 장애 후속 조치 고객 메일 발송 대기 중\n- **근거**: 외부 고객 커뮤니케이션은 시간 민감도가 가장 높은 작업이다. 장애 후속 조치가 \"대기 중\" 상태라는 것은 고객이 아직 안내를 받지 못했다는 뜻이고, 이는 신뢰 손실·CS 문의 폭주·SLA 위반으로 이어질 수 있다. 내부 작업(코드 수정 등)과 달리 고객에게 보내는 커뮤니케이션은 \"지금 보내지 않으면 비용이 커지는\" 성격이다. 메일 내용이 확정되어 있다면 즉시 발송해야 한다.\n\n### 2. 운영 DB 느린 쿼리(3초 소요) 조사\n- **근거**: 운영 환경에서 관측된 성능 이상은 사용자 체감 지연과 직결된다. 3초 쿼리는 단일 요청이 아니라 동시 트래픽 하에서 커넥션 풀 고갈·타임아웃·연쇄 지연으로 확대될 수 있는 \"잠재 장애\"다. 지금 즉시 원인(인덱스 누락, 락, 풀스캔, N+1 등)을 식별하고, 최소한 EXPLAIN/실행계획 확인과 임시 완화(캐시, 쿼리 제한, 인덱스 추가)를 해야 한다. \"관측만 하고 나중에\"는 장애로 번질 수 있다.\n\n## 오늘 미뤄도 되는 것\n\n### 3. 내부 도구 버튼 색상/문구 수정 요청\n- **근거**: 순수 내부 UX 개선으로, 외부 사용자·수익·SLA에 영향이 없다. 기능/데이터 흐름에 변경이 없으므로 리스크가 낮고, 디자인·카피 검토를 거쳐 배치해도 된다. \"미뤄도 되는 것\"의 전형적 예시.\n\n## 정리\n\n| 항목 | 지금 | 오늘 미뤄도 | 핵심 근거 |\n|---|---|---|---|\n| 장애 후속 고객 메일 | ✅ | | 외부 커뮤니케이션 시간 민감, 신뢰 비용 |\n| DB 느린 쿼리(3초) | ✅ | | 운영 성능, 잠재 장애 확대 위험 |\n| 내부 버튼 색상/문구 | | ✅ | 내부 전용, 영향 없음, 저위험 |\n\n**우선순위 원칙**: \"외부 영향 + 시간 민감\" → \"운영 영향 + 확대 위험\" → \"내부 저위험 개선\" 순.",
     "sandbox": null,
     "sandbox_reason": "",
     "measurement_defect": false
@@ -1317,8 +1317,9 @@
   "agent_level": "에이전트 실무 가능",
   "korean_level": "한글 부분 가능",
   "label": "12문항 중 9문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유). 판단 근거 부족 — 손발 작업으로 한정.",
-  "ts": 1792386820.481355,
-  "schema": 4
+  "ts": 1793156778.069464,
+  "schema": 4,
+  "measured_context": 1048576
  },
  "big-pickle": {
   "model_id": "big-pickle",
