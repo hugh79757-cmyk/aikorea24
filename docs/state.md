@@ -1,3 +1,41 @@
+## 2026-10-28 16:47 — AIK24-PIPE-12: 브리핑 항상 3건 일반뉴스 폴백 + 소급 채우기(id=367)
+
+
+### 한 일
+
+1. **브리핑 항상 3건 폴백 구현 (지시서 AIK24-PIPE-12)**
+   - `scripts/auto_news_selector.py`: 무료 태그 없는 일반 뉴스 폴백 신설 — `get_general_fallback_news()`(SQL 1차 방어선: v2_tag 빈 값·프로바이더 4종·공고 소스 명시 목록·`[제외]`·briefing_items 전체 이력 제외·72h 창) + `fallback_fill_general()`((a) LLM 점수 ≥6 순 → (b) 점수 무관 pub_date DESC). `refill_after_dedup` 4단계 폴백 연결, `select_top_articles` 옵트인 파라미터(기본 False — 기존 경로 회귀 없음), "강제 충전 없음/빈 슬롯 유지" 문구·분기 삭제.
+   - `scripts/auto_briefing.py`: 최종 3건 미만이면 발행 중단 + 텔레그램 실패 알림(`_alert_briefing_incomplete`, fail-soft — 빈 브리핑은 저장하지 않음).
+   - `scripts/run_pipeline.py`: `briefing_cause_of`에 "빈 브리핑 저장 없음" 원인 분기 추가.
+2. **폴백 풀 LIMIT 15 → 40 (실측 기반)** — 진단 실측: 72h 창 필터링 풀 349건 중 상위 15건(id DESC)이 공고 6 + 네이버뉴스 5 + 디지털투데이 4 덩어리라 출처당 1건 규칙상 1건만 나옴. 상위 40건이면 인공지능신문·IT조선·전자신문 등 기사 소스가 올라옴. 추가로 채점 전 출처 제외(kept 출처와 같은 풀 행은 LLM 채점도 하지 않음) — LLM 호출 낭비 제거.
+3. **소급 채우기 (대표님 12:21 승인분)** — `scripts/retrofill_briefing_367.py` 실행: 브리핑 id=367(2026-10-28-1) 1건 → 3건. 기존 sort=1(57426 인공지능신문) 내용·순서·코멘트 그대로, sort=2/3 폴백 규칙으로 추가, 코멘트는 기존 `generate_comment`+`cli_free_block` 경로 사용. **이메일 재발송 없음**(스크립트에 이메일 경로 자체가 없음 — D1 INSERT + intro UPDATE + local record만 수행).
+
+### 결과 (검증 근거)
+
+### [검증됨]
+- 대상 테스트 54통과: `pytest tests/test_pipe12_general_fallback.py tests/test_pipe08_dedup_unification.py tests/test_auto_news_selector_zen_slot_limit.py tests/test_auto_news_selector_dedup_before_slots.py tests/test_briefing_once_per_day.py -q` → "54 passed in 1.04s". 신규 11건(2026-10-28 케이스 재현 포함) + 기존 43건.
+- 전체 스위트: `pytest tests -q` → "3 failed, 1071 passed, 10 skipped". 1071 = 기존 1070 + 신규 1건. 3 failed는 **기존 실패** — 근거: 내 변경 파일만 `git stash push -u` 후 동일 3건 실패 재현(0.34s) → stash pop 원복. 원인: `scripts/logs/free_models_cli.json` 빈 파일(test_auto_briefing_verdict / test_model_eval_agent_v2 / test_zen_pending). 신규 실패 0.
+- D1 브리핑 id=367: 3 items 확인 — sort=1 57426(인공지능신문, 코멘트 원본 유지), sort=2 57420(IT조선 «AI 키우는 MS, 6만명 희망퇴직»), sort=3 57444(네이버뉴스 «AI 버블 붕괴? …SK證»). intro = "오늘의 AI 브리핑 (2026-10-28)\n\nAI 소식 3건을 정리했습니다." 근거: d1_query SELECT 결과 출력.
+- 라이브 페이지: `curl https://aikorea24.kr/briefing/2026-10-28-1/` → HTTP 200, "AI 소식 3건을 정리했습니다" 존재, 신규 2건 제목 존재. 근거: curl + grep 실측.
+- local 이력: `scripts/briefing_dedup.json` b367 entry 2개(아침 [57426] + 소급 [57420, 57444]), flat articles 214. 근거: json 파싱 출력.
+- 폴백 (a) 규칙 실측: 프리뷰/실행 모두 (a) 점수순으로 10점(IT조선) → 9점(네이버뉴스) 선택, 중복 19건 차단(local_exact_link/exact_link — 어제 재보도 등), 공고·프로바이더·[제외] 0건 반입. 근거: 실행 로그.
+- [PRODUCTION CODE] 수정: auto_news_selector.py, auto_briefing.py, run_pipeline.py. [TEST CODE] 수정: test_pipe12_general_fallback.py(신규), test_pipe08_dedup_unification.py(테스트명·docstring 갱신 — `test_refill_returns_short_when_all_pools_empty`, 동작 단언 `out == []` 불변). [CONFIG] 없음.
+
+### [부분검증]
+- 소급 코멘트 품질(평서형·금지어 준수): 저장된 3건 코멘트 모두 비어있지 않음을 확인했으나(근거: D1 comment 출력), LLM 출력 품질 자체는 프롬프트 의존 — 사람 눈 최종 확인 권장.
+- 폴백 SQL의 실 D1 동작: 프리뷰·소급 실행 2회 실측했으나 단일 시점·단일 케이스 — LIMIT 40이 내일(추가 수집 후)에도 충분한지는 내일 실행으로만 확인 가능.
+
+### [검증불가]
+- 2026-10-29 07:00 실제 파이프라인이 폴백을 거쳐 3건을 채우는 라이브 동작 — 내일 실행 전까지 검증 수단 부재. 복구 계획: 내일 브리핑 3건 확인, 미달 시 launchd 로그(pipeline-runner) + 텔레그램 실패 알림 수신 확인 후 원인 파싱("선정 부족(폴백·재충원 후보 없음)")으로 추적.
+
+### 잔존 위험
+- 내일 07:00 라이브 폴백 동작 미검증 (위 [검증불가]).
+- 기존 실패 3건(free_models_cli.json 빈 파일) 미해결 — 본 작업 범위 아님, 별도 처리 필요.
+- 네이버뉴스 집계행(source='네이버뉴스')이 브리핑에 실림 — 출처 표기가 원문 매체가 아닌 집계명. 향후 원문 소스 분리 개선 여지.
+- briefing_dedup.json에 b367 entry가 2개(아침 1건 + 소급 2건) — 기능상 무해(이력 판정은 flat articles 사용)하나 감사 시 혼동 가능.
+
+완료, 시니어 2 verify 요청
+
 ## 2026-10-28 AIK24-BEAM-REEVAL-01 — Beam Free 결정적 채점 재측정 + 후속글 발행
 
 ### 한 일
