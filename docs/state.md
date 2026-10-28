@@ -1,3 +1,40 @@
+## 2026-10-28 18:30 — AIK24-GLYPH-EVAL-01: 킬로 스텔스 글리프 클러스터 12문항 평가 + 블로그 발행
+
+### 한 일
+
+1. **작업 0 사전 확인** — docs/state.md에 Glyph 관련 진행 중 항목 없음(충돌 없음). `opencode models`로 실제 CLI ID 확인: `kilo/stealth/glyph-cluster` (Kilo 경로). model_eval_cache.json(9종) 및 docs/state.md에 glyph/stealth 언급 없음 → 미테스트 확정. scripts/logs/free_models_cli.json은 `[]` 빈 배열.
+2. **작업 1 12문항 실측** — OpenCode CLI 단일 경로(`opencode run -m kilo/stealth/glyph-cluster --format json`)로 결정적 채점 함수(규칙 기반, 판관 미사용 JUDGE-04 준수) 12문항 실행. 결과 9 / 12: 지시이행 1/2, 코딩실무 4/4, 맥락유지 1/2(Q7 미응답), 에이전트 3/4. 니들 프로브: 8,192 통과, 16,384 미통과 → 지시서 기준 통과한 마지막 단계 **실측 하한 8,192 토큰**. 256K 외부 공지 주장은 미확인으로 표기.
+3. **작업 2 채점 검증(0점 문항 성격 구분)** — Q1(지시이행) 답은 한국어 + "---끝---" 정확하나 채점기가 인라인 코드 식별자(`add`, `def`)를 영어 단어로 오판 → **채점기 오탐**(인라인 코드 표시 제거 후 재채점 1점 재현). Q7(맥락유지) "The stealth model could not complete the request" 빈 답 → **실제 미응답**. Q11(에이전트) 4단계 계획 JSON은 유효하나 채점기 요구 키(screen/state_model/verify)와 질문 키(단계/제목/(1)(2)(3)) 차이로 0점 → **질문-채점기 불일치**(점수 그대로, 불만 명시).
+4. **작업 3 결과 반영** — 파이프라인 캐시(path model_eval_cache.json)·리더보드(model_leaderboard.json)·실행 로그(model_eval_runs.jsonl)를 `cache_put`/`append_run_log`/`record_leaderboard` 파이프라인 경로로 기록. 캐시·리더보드 JSON 직접 편집 안 함.
+5. **작업 4 free-models 페이지 표시 확인** — `https://emdash.aikorea24.kr/posts/free-models` 라이브 HTTP 200. 내 블로그 글이 최근게시물 카드로 노출되나, **평가 점수·티어 모델 항목은 미노출**(표시 조건 free_models_cli.json이 `[]` 비어있음). → **평가 완료·표시 차단**, 원인 free_models_cli.json 비어, 임의 추가 안 함(지시서 준수).
+6. **작업 5 글 작성·발행(EmDash)** — 신규 글 `src/content/blog/kilo-스텔스-글리프-클러스터-12문항-실측.md` 작성(시리즈 포맷 준수: 결론 첫 줄, ~입니다체, 본문에 # H1 미사용, 제목 대괄호 수식어 없음, 크루 내부 용어 미사용, excerpt 평문·링크·URL 없음, 표는 마크다운 파이프 → md_to_pt가 Portable Text table 블록으로 변환). 썸네일 WebP 1200px·품질 80 생성(공개/공용). `scripts/emdash_precheck.py` 게이트 통과(4204자, 외부 링크 3개, 표 1개, `## 마무리` 포함). EmDash 발행 완료: 라이브 URL `https://emdash.aikorea24.kr/posts/킬로-스텔스-글리프-클러스터-평가-12문항-실측-결과`. 라이브 확인: HTTP 200, `<title>`에 제목 노출, og:image 태그에 썸네일 URL 참조, 표(9/12 등) 렌더링 확인.
+
+### 결과 (검증 근거)
+
+### [검증됨]
+- CLI ID 실측: `opencode models` 출력에서 `kilo/stealth/glyph-cluster` 확인(근거: opencode models stdout). 시험 호출 1회 성공("2+2 equals 4.") → 무료 여부·호출 가능 확인.
+- 12문항 실측 결과 캐시 저장: scripts/logs/model_eval_cache.json에 `kilo/stealth/glyph-cluster` entry(score 9/12, by_axis, role, usage_levels) 기록됨(근거: JSON 파싱 출력).
+- 니들 실측 하한 8,192 토큰(근거: probe 로그 8,192 OK / 16,384 실패; 지시서 "통과한 마지막 단계" 규칙 적용).
+- 블로그 발행 및 라이브: 발행 URL 반환, curl HTTP 200, title·og:image·표 렌더링 확인(근거: curl + grep 출력).
+- emdash_precheck 게이트 통과: "✅ 게이트 통과 — 4204자"(근거: precheck stdout).
+- 대상 테스트 회귀 없음: `scripts/validate_blog_posts.py` → "✅ 모든 블로그 포스트 정상".
+
+### [부분검증]
+- 썸네일(WebP 1200x80 q80) 생성 완료(공개/공용) 및 og:image 태그 정상 참조, **그러나 실제 이미지 파일은 aikorea24.kr에 미배포(404)**. 원인: 사이트 재배포(wrangler deploy)는 이 세션의 Cloudflare 인증(계정 7eb1b8cd, 주입 토큰 무권한, `wrangler pages project list` 빈 결과)으로 실행 불가. 이는 인프라 작업으로, 시니어 2가 사이트 재배포/썸네일 배포를 처리하면 og:image가 실노출됨.
+- free-models 페이지에 평가 점수·티어 미노출: 원인 free_models_cli.json 비어(표시 조건 미충족), 임의 추가 안 함. 내일 수집/검증 잡이 free_models_cli.json을 갱신하면 자동 노출될지 여부는 미확인.
+
+### [검증불가]
+- 썸네일 실노출(og:image 파일 200): 사이트 재배포가 인증으로 막혀 검증 수단 부재. 복구 계획: 시니어 2가 wrangler deploy(프로젝트 스크립트 `npm run deploy` / twinssn 또는 해당 계정 프로필) 실행 후 `https://aikorea24.kr/images/thumbnails/kilo-스텔스-글리프-클러스터-12문항-실측.webp` HTTP 200 확인.
+- 니들 실측 하한의 정확한 상한(8K~16K 사이 실제 한계): 16,384 실패만 확인, 8192·16384 사이 중간 단계 미측정(추가 프로브는 쿼터·시간 고려 미실행). 현재 보고값은 지시서 기준 "통과한 마지막 단계" 8,192.
+
+### 잔존 위험
+- free_models_cli.json 빈 파일로 기존 테스트 3건(test_auto_briefing_verdict / test_model_eval_agent_v2 / test_zen_pending) 실패는 기존 이슈(본 작업 범위 아님).
+- 썸네일 이미지 미배포로 대표님이 보는 라이브 화면에서 썸네일이 깨져 보일 수 있음(사이트 재배포 필요).
+- probe_context_length 이진탐색 아티팩트로 캐시 measured_context=128(실제 하한 8,192와 불일치). 보고서·블로그는 8,192 기준.
+- 글 작성 시 "기준으로" 등 한자어 잔여 가능성(수정 완료, 최종 파일 재확인 완료).
+
+완료, 시니어 2 verify 요청
+
 ## 2026-10-28 16:47 — AIK24-PIPE-12: 브리핑 항상 3건 일반뉴스 폴백 + 소급 채우기(id=367)
 
 
