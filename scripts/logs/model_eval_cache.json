@@ -1504,5 +1504,189 @@
   "measured_context": 262144,
   "ts": 1792495104.9027321,
   "schema": 4
+ },
+ "kilo/stealth/glyph-cluster": {
+  "model_id": "kilo/stealth/glyph-cluster",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "kilo/stealth/glyph-cluster",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 9,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "cli",
+    "answer": "이 코드는 두 개의 매개변수 `a`와 `b`를 받아, 그 합인 `a + b`를 반환하는 함수 `add`를 정의합니다. \r\n\r\n- `def add(a, b)`: `add`라는 이름의 함수를 선언하고, 두 개의 매개변수 `a`와 `b`를 받습니다.\r\n- `return a + b`: `a`와 `b`를 더한 결과를 반환합니다. \r\n\r\n예를 들어, `add(2, 3)`을 호출하면 `5`가 반환됩니다. \r\n\r\n---끝---",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 3,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "**수정 코드:**\n```python\nfrom datetime import datetime\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n**설명:** `now - timedelta(days=30)`은 기준 시점을 30일 전으로 만들어, 방금 만료된 토큰이 아니라 **만료된 지 30일 이상 지난** 토큰만 반환하기 때문에 버그입니다.",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "아래는 `safe_div` 함수를 검증하기 위한 pytest 테스트 코드입니다. 정상 입력, 0으로 나누기, 음수, 경계값, 부동소수점 입력까지 모두 다룹니다.\n\n`safe_div` 가 정의된 모듈명에 맞게 `from <module> import safe_div` 부분을 수정해서 사용하세요.\n\n```python\nimport pytest\n\nfrom <module> import safe_div  # 실제 모듈 경로로 변경하세요\n\n\n@pytest.mark.parametrize(\n    \"a, b, expected\",\n    [\n        (10, 2, 5.0),\n        (6, 3, 2.0),\n        (5, 2, 2.5),\n        (1, 3, 1 / 3),\n        (0, 5, 0.0),\n        (0, -5, 0.0),\n    ],\n)\ndef test_safe_div_normal_inputs(a, b, expected):\n    \"\"\"정상적인 양수/0 입력에 대한 나눗셈 결과를 검증합니다.\"\"\"\n    result = safe_div(a, b)\n    assert result == pytest.approx(expected)\n\n\n@pytest.mark.parametrize(\n    \"a, b, expected\",\n    [\n        (-10, 2, -5.0),\n        (10, -2, -5.0),\n        (-10, -2, 5.0),\n        (-5, -2, 2.5),\n        (-1, 3, -1 / 3),\n    ],\n)\ndef test_safe_div_negative_numbers(a, b, expected):\n    \"\"\"음수가 포함된 입력에 대한 부호가 올바른지 검증합니다.\"\"\"\n    result = safe_div(a, b)\n    assert result == pytest.approx(expected)\n\n\n@pytest.mark.parametrize(\"a, b\", [(10, 0), (0, 0)",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\ndef _project_user(u):\n    return {'id': u['id'], 'name': u['name'], 'email': u['email']}\n\n\ndef _filter_users(users, predicate):\n    out = []\n    for u in users:\n        if predicate(u):\n            out.append(_project_user(u))\n    return out\n\n\ndef get_active_user(users):\n    return _filter_users(users, lambda u: u['status'] == 'active')\n\n\ndef get_admin_user(users):\n    return _filter_users(users, lambda u: u['role'] == 'admin')\n```",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nimport re\nfrom datetime import datetime\nfrom typing import Tuple\n\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError\n    if s.strip() == \"\":\n        raise ValueError\n    parts = s.strip().split(' ', 2)\n    if len(parts) != 3:\n        raise ValueError\n    timestamp, level, msg = parts[0], parts[1], parts[2]\n    # Check ISO8601 format\n    iso8601_pattern = r'^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?(?:Z|[+-]\\d{2}:?\\d{2})$'\n    if not re.match(iso8601_pattern, timestamp):\n        raise ValueError\n    try:\n        # Additional validation\n        datetime.fromisoformat(timestamp.replace('Z', '+00:00'))\n    except Exception:\n        raise ValueError\n    if level not in ('INFO', 'WARN', 'ERROR'):\n        raise ValueError\n    if msg.strip() == \"\":\n        raise ValueError\n    return (timestamp, level, msg)\n```",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 0,
+    "source": "exception"
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "위 대화에서 요청한 작업 3가지는 다음과 같습니다: \r\n\r\n1. **파이썬 시작 방법 문의** – \"파이썬을 처음 시작하려면 뭘부터 해야 해?\"\r\n2. **변수 명명 규칙 요청** – \"변수 이름 지을 때 규칙 3개만 알려줘.\"\r\n3. **디버깅 방법 문의** – \"프로그램이 안 돌아갈 때 처음에 할 일은?\"",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 9,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[\"uninitialized_variable_total\",\"unused_user_parameter\",\"tax_logic_removed_without_approval\",\"db_side_effect_without_transaction\",\"mutable_global_state_risk\"]",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 10,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "**root cause:** `timeout=5`만 설정되어 있고 예외 처리가 없어, 외부 요청 지연 시 `requests.exceptions.Timeout`이 그대로 전파됩니다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -1,4 +1,7 @@\n import requests\n+from requests.exceptions import RequestException\n+\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    try:\n+        return requests.get(url, timeout=(3, 10)).json()\n+    except RequestException:\n+        raise\n```",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 11,
+    "axis": "에이전트",
+    "score": 0,
+    "source": "cli",
+    "answer": "{\n  \"steps\": [\n    {\n      \"step\": 1,\n      \"title\": \"기본 구조 및 레이아웃 설정\",\n      \"dom_screens\": [\n        {\n          \"id\": \"container\",\n          \"type\": \"div\",\n          \"purpose\": \"전체 게임 컨테이너\"\n        },\n        {\n          \"id\": \"title_screen\",\n          \"type\": \"section\",\n          \"purpose\": \"시작 화면 (제목, 시작 버튼)\"\n        },\n        {\n          \"id\": \"game_screen\",\n          \"type\": \"section\",\n          \"purpose\": \"메인 게임 화면 (텍스트 출력, 선택지)\"\n        },\n        {\n          \"id\": \"ending_screen\",\n          \"type\": \"section\",\n          \"purpose\": \"엔딩 화면 (결과, 재시작 버튼)\"\n        }\n      ],\n      \"core_state_model\": {\n        \"gameState\": {\n          \"currentScreen\": \"title|game|ending\",\n          \"currentSceneId\": \"string|null\",\n          \"inventory\": \"string[]\",\n          \"flags\": \"Record<string, boolean>\",\n          \"stats\": {\n            \"health\": \"number\",\n            \"food\": \"number\",\n            \"warmth\": \"number\"\n          },\n          \"history\": \"string[]\"\n        }\n      },\n      \"valid",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 12,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 구분\n\n### 지금 바로 처리해야 하는 것\n| 순서 | 항목 | 이유(판단 근거) |\n|---|---|---|\n| 1 | **장애 후속 조치로 고객 메일 발송 대기 중** | 가장 우선. 장애 후 커뮤니케이션은 신뢰/법적 리스크와 직결됩니다. 이미 \"대기 중\" 상태라면 타이밍이 중요하고 지연 시 고객 불안/문의 폭주가 예상됩니다. 가능하면 내용 확정/승인 상태부터 확인 후 즉시 발송합니다. |\n| 2 | **운영 DB에서 느린 쿼리 하나가 관측됨 (3초 소요)** | 프로덕션 성능/가용성에 직결됩니다. 3초는 사용자 체감에 큰 영향이며, 부하가 겹치면 타임아웃/장애로 확산될 수 있습니다. 단, 이미 \"관측됨\" 상태라면 영향 범위(특정 엔드포인트/피크 시간) 파악과 완화(인덱스/캐시/쿼리 플랜 제한 등)부터 우선 조치합니다. | \n\n### 오늘은 미뤄도 되는 것\n| 항목 | 이유(판단 근거) |\n|---|---|\n| **내부 도구의 버튼 색상 문구 수정 요청이 옴** | 사용자 경험에 영향은 있으나, 운영/장애/고객 커뮤니케이션과 비교하면 긴급도는 낮습니다. 배포 영향도 제한적이고 롤백도 쉬우므로, 위 두 가지가 안정화된 뒤 처리해도 충분합니다. | \n\n## 권장 실행 순서\n1. **고객 메일**: 발송 대상/내용/승인 여부 확인 → 즉시 발송 (또는 승인 대기 중이면 승인자에게 확인)\n2. **느린 쿼리**: 영향 범위 확인 (어떤 API/유저에 영향?) → EXPLAIN/실행계획 확인 → 안전한 완화(인덱스 추가, 쿼리 최적화, 타임아웃 설정) 검토/적용\n3. **버튼 수정**: 위 조치가 완료된 뒤에 처리\n\n**핵심:** 고객 커뮤니케이션(장애 후속)은 \"신뢰\" 측면에서 가장 시간에 민감하고, DB 쿼리는 \"시스템 안정성\" 측면에서 가장 우선입니다. UI 문구/색상은 기능적 손실이 없으므로 오늘 미루는 것이 가장 합리적입니다.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   }
+  ],
+  "errors": [
+   "Q7 The stealth model could not complete the request."
+  ],
+  "failures": [
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "reason": "The stealth model could not complete the request."
+   }
+  ],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "by_axis": {
+   "지시이행": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 4,
+    "max_score": 4,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 1
+   },
+   "에이전트": {
+    "score": 3,
+    "max_score": 4,
+    "failed": 0
+   }
+  },
+  "sandbox_pass": 3,
+  "failed": 1,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "graded_n": 12,
+  "score_display": "9/12 (미응답 1 제외)",
+  "role": "판단 근거 부족 — 손발 작업으로 한정",
+  "usage_levels": {
+   "코딩실무": "코딩 우수",
+   "에이전트": "에이전트 실무 가능",
+   "한글": "한글 부분 가능"
+  },
+  "coding_level": "코딩 우수",
+  "agent_level": "에이전트 실무 가능",
+  "korean_level": "한글 부분 가능",
+  "label": "11문항 중 9문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 1문항 응답 실패 제외. 판단 근거 부족 — 손발 작업으로 한정.",
+  "ts": 1793175857.973255,
+  "schema": 4,
+  "measured_context": 128
  }
 }

@@ -146,5 +146,18 @@
   "no_response_n": 0,
   "score_display": "9/12",
   "ts": 1793156778.071429
+ },
+ {
+  "model_id": "kilo/stealth/glyph-cluster",
+  "cli_model": "kilo/stealth/glyph-cluster",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 9,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "score_display": "9/12 (미응답 1 제외)",
+  "ts": 1793175645.4720352
  }
 ]
