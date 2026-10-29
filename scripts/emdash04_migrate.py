@@ -39,6 +39,53 @@ ORDERED = re.compile(r"^(\s*)\d+\.\s+(.+)$")
 IMAGE = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)$")
 OPAQUE = re.compile(r"^<!--ec:block (.+) -->$")
 
+# bare URL 자동링크 (2026-10-29 SK 글 실측: _spans가 마크다운 링크만 처리해
+# 본문 bare URL이 평문 span으로 남아 클릭이 안 되고 URL이 그대로 노출됐다)
+BARE_URL = re.compile(r"https?://[A-Za-z0-9\-._~:/?#@!$&'()*+,;=%]+")
+REF_LINE = re.compile(r"^(?P<title>.+?)\s+[–—-]\s*(?P<url>https?://\S+)\s*$")
+_URL_STRIP = ".,;:!?\"'“”‘’「」『』"
+
+
+def _ref_title(t):
+    """참고 자료형 제목 정리: 끝의 [태그]·(원문) 제거 (순서 무관하게 반복)."""
+    prev = None
+    while prev != t:
+        prev = t
+        t = re.sub(r"\s*\[[^\]]*\]\s*$", "", t)
+        t = re.sub(r"\s*\(원문\)\s*$", "", t)
+    return t.strip()
+
+
+def _plain_spans(chunk, defs):
+    """평문 구간 내 bare URL을 링크 span으로 쪼갠다.
+
+    마크다운 링크는 INLINE이 이미 소비했으므로 여긴 순수 평문만 온다.
+    URL 끝 문장부호(.,;:!?·따옴표)는 링크 밖으로 빼고, 닫는 괄호는
+    균형이 맞을 때만(위키식 URL) 링크 안에 둔다.
+    """
+    out, pos = [], 0
+    for um in BARE_URL.finditer(chunk):
+        url = um.group(0)
+        tail = ""
+        while url and url[-1] in _URL_STRIP:
+            tail = url[-1] + tail
+            url = url[:-1]
+        if url.endswith(")") and url.count("(") < url.count(")"):
+            tail = ")" + tail
+            url = url[:-1]
+        if um.start() > pos:
+            out.append({"_type": "span", "_key": k(), "text": chunk[pos:um.start()], "marks": []})
+        if url:
+            kk = k()
+            defs.append({"_key": kk, "_type": "link", "href": url})
+            out.append({"_type": "span", "_key": k(), "text": url, "marks": [kk]})
+        if tail:
+            out.append({"_type": "span", "_key": k(), "text": tail, "marks": []})
+        pos = um.end()
+    if pos < len(chunk):
+        out.append({"_type": "span", "_key": k(), "text": chunk[pos:], "marks": []})
+    return out or [{"_type": "span", "_key": k(), "text": "", "marks": []}]
+
 _ctr = 0
 
 
@@ -50,10 +97,19 @@ def k():
 
 
 def _spans(text):
+    # 참고 자료형 한 줄: "제목 – URL" → 제목만 링크로 (URL 원문 노출 제거).
+    # 제목 안에 마크다운 링크가 있으면 REF 규칙을 건너뛰고 아래 INLINE 경로로 간다.
+    rm = REF_LINE.match(text.strip())
+    if rm and not re.search(r"\[[^\]]*\]\(", rm.group("title")):
+        title = _ref_title(rm.group("title"))
+        url = rm.group("url").rstrip(".,;:!?\"'")
+        kk = k()
+        return ([{"_type": "span", "_key": k(), "text": title, "marks": [kk]}],
+                [{"_key": kk, "_type": "link", "href": url}])
     spans, defs, pos = [], [], 0
     for m in INLINE.finditer(text):
         if m.start() > pos:
-            spans.append({"_type": "span", "_key": k(), "text": text[pos:m.start()], "marks": []})
+            spans.extend(_plain_spans(text[pos:m.start()], defs))
         if m.group(2) is not None:
             spans.append({"_type": "span", "_key": k(), "text": m.group(2), "marks": ["strong"]})
         elif m.group(4) is not None:
@@ -68,7 +124,7 @@ def _spans(text):
             spans.append({"_type": "span", "_key": k(), "text": m.group(11), "marks": ["strike-through"]})
         pos = m.end()
     if pos < len(text):
-        spans.append({"_type": "span", "_key": k(), "text": text[pos:], "marks": []})
+        spans.extend(_plain_spans(text[pos:], defs))
     return (spans or [{"_type": "span", "_key": k(), "text": "", "marks": []}]), defs
 
 

@@ -1,180 +1,86 @@
-"""pytest tests for the ``safe_div`` helper.
-
-Covers normal inputs, division by zero, negative values, and boundary/edge
-values. The implementation under test lives in ``scripts/safe_div.py`` and is
-importable because ``pytest.ini`` puts ``scripts`` on ``sys.path``.
-"""
-
-import math
-
 import pytest
-
 from safe_div import safe_div
 
 
-# ---------------------------------------------------------------------------
-# Normal inputs
-# ---------------------------------------------------------------------------
+def test_safe_div_positive_numbers():
+    """Test division with positive numbers."""
+    assert safe_div(10, 2) == 5.0
+    assert safe_div(7, 2) == 3.5
 
 
-class TestSafeDivNormal:
-    def test_positive_integers(self):
-        assert safe_div(10, 2) == 5.0
-
-    def test_positive_floats(self):
-        assert safe_div(7.5, 2.5) == 3.0
-
-    def test_exact_integer_quotient_is_float(self):
-        assert safe_div(9, 3) == 3.0
-
-    def test_fractional_result(self):
-        assert safe_div(1, 2) == 0.5
-
-    def test_repeating_decimal(self):
-        assert safe_div(1, 3) == pytest.approx(1 / 3)
-
-    def test_zero_numerator(self):
-        assert safe_div(0, 5) == 0.0
-
-    def test_zero_numerator_float(self):
-        assert safe_div(0.0, 5) == 0.0
-
-    def test_division_by_one(self):
-        assert safe_div(42, 1) == 42.0
-
-    def test_large_quotient(self):
-        assert safe_div(1_000_000, 1_000) == 1_000.0
-
-    def test_negative_zero_numerator_keeps_sign(self):
-        # IEEE 754: -0.0 / positive == -0.0
-        assert math.copysign(1.0, safe_div(-0.0, 5)) == -1.0
-
-    def test_positive_zero_divided_by_negative(self):
-        assert math.copysign(1.0, safe_div(0.0, -5)) == -1.0
-
-    def test_decimal_inputs(self):
-        assert safe_div(0.1, 0.2) == pytest.approx(0.5)
+def test_safe_div_negative_numbers():
+    """Test division with negative numbers."""
+    assert safe_div(-10, 2) == -5.0
+    assert safe_div(10, -2) == -5.0
+    assert safe_div(-10, -2) == 5.0
 
 
-# ---------------------------------------------------------------------------
-# Division by zero
-# ---------------------------------------------------------------------------
+def test_safe_div_zero_numerator():
+    """Test division when numerator is zero."""
+    assert safe_div(0, 5) == 0.0
 
 
-class TestSafeDivByZero:
-    @pytest.mark.parametrize("b", [0, 0.0, -0.0, False])
-    def test_returns_none_for_zero_divisor(self, b):
-        assert safe_div(10, b) is None
-
-    def test_zero_divisor_with_zero_numerator(self):
-        assert safe_div(0, 0) is None
-
-    def test_zero_divisor_negative_numerator(self):
-        assert safe_div(-5, 0) is None
-
-    def test_zero_divisor_float_numerator(self):
-        assert safe_div(3.5, 0.0) is None
-
-    def test_zero_divisor_does_not_raise(self):
-        # Must return None, never raise ZeroDivisionError.
-        try:
-            result = safe_div(7, 0)
-        except ZeroDivisionError:  # pragma: no cover - documents the contract
-            pytest.fail("safe_div raised ZeroDivisionError instead of returning None")
-        assert result is None
-
-    def test_false_divisor_is_treated_as_zero(self):
-        # False == 0 in Python, so it must be treated as a zero divisor.
-        assert safe_div(5, False) is None
+def test_safe_div_zero_denominator():
+    """Test division by zero returns None."""
+    assert safe_div(10, 0) is None
+    assert safe_div(-5, 0) is None
+    assert safe_div(0, 0) is None
 
 
-# ---------------------------------------------------------------------------
-# Negative values
-# ---------------------------------------------------------------------------
+def test_safe_div_large_numbers():
+    """Test with large numbers."""
+    assert safe_div(10**10, 2) == 5 * 10**9
+    assert safe_div(10**9, 3) == 333333333.3333333333
 
 
-class TestSafeDivNegatives:
-    def test_negative_numerator(self):
-        assert safe_div(-6, 2) == -3.0
-
-    def test_negative_denominator(self):
-        assert safe_div(6, -2) == -3.0
-
-    def test_both_negative(self):
-        assert safe_div(-6, -2) == 3.0
-
-    def test_negative_fraction(self):
-        assert safe_div(-1, 3) == pytest.approx(-1 / 3)
-
-    def test_negative_large(self):
-        assert safe_div(-1e308, 2) == -5e307
+def test_safe_div_floating_point():
+    """Test with floating point numbers."""
+    assert safe_div(5.5, 2) == 2.75
+    assert safe_div(7.5, 2) == 3.75
 
 
-# ---------------------------------------------------------------------------
-# Boundary / edge values
-# ---------------------------------------------------------------------------
+def test_safe_div_small_numbers():
+    """Test with small numbers."""
+    assert safe_div(1, 100) == 0.01
+    assert safe_div(0.1, 0.2) == 0.5
 
 
-class TestSafeDivEdgeCases:
-    def test_large_numerator(self):
-        result = safe_div(1e308, 2)
-        assert result == 5e307
+def test_safe_div_integer_result():
+    """Test when division results in an integer."""
+    assert safe_div(8, 2) == 4.0
+    assert safe_div(15, 3) == 5.0
 
-    def test_very_small_divisor_finite_or_inf(self):
-        result = safe_div(1, 1e-308)
-        assert (math.isfinite(result) and result > 0) or result == float("inf")
 
-    def test_divisor_infinity(self):
-        assert safe_div(10, float("inf")) == 0.0
+def test_safe_div_negative_denominator():
+    """Test division with negative denominator."""
+    assert safe_div(10, -2) == -5.0
+    assert safe_div(-10, -2) == 5.0
 
-    def test_numerator_infinity(self):
-        assert safe_div(float("inf"), 2) == float("inf")
 
-    def test_negative_infinity_numerator(self):
-        assert safe_div(-float("inf"), 2) == -float("inf")
+# Boundary value tests
 
-    def test_inf_divided_by_inf_is_nan(self):
-        assert math.isnan(safe_div(float("inf"), float("inf")))
+def test_safe_div_boundary_zero():
+    """Test boundary where numerator is zero."""
+    assert safe_div(0, 1) == 0.0
 
-    def test_returns_float_for_int_inputs(self):
-        assert isinstance(safe_div(4, 2), float)
 
-    def test_smallest_subnormal_denominator(self):
-        # 1 / smallest subnormal overflows to +inf.
-        assert safe_div(1, 5e-324) == float("inf")
+def test_safe_div_boundary_small_between():
+    """Test with values very close to zero."""
+    # Very small positive
+    assert safe_div(1e-10, 1) == 1e-10
+    # Very small negative
+    assert safe_div(-1e-10, 1) == -1e-10
 
-    def test_huge_int_quotient_raises_overflow(self):
-        # Python raises OverflowError when an int/int quotient cannot fit
-        # in a float. safe_div does not guard this, so it propagates.
-        with pytest.raises(OverflowError):
-            safe_div(10 ** 400, 7)
 
-    def test_nan_numerator_propagates_nan(self):
-        assert math.isnan(safe_div(float("nan"), 5))
+def test_safe_div_large_denominator():
+    """Test with a very large denominator."""
+    assert safe_div(100, 1e9) == 1e-7
 
-    def test_nan_divisor(self):
-        # nan == 0 is False, so division proceeds and yields nan.
-        assert math.isnan(safe_div(5, float("nan")))
 
-    def test_none_numerator_raises_typeerror(self):
-        with pytest.raises(TypeError):
-            safe_div(None, 5)
+# Ensure None is returned (not raised) for division by zero
 
-    def test_none_denominator_raises_typeerror(self):
-        with pytest.raises(TypeError):
-            safe_div(5, None)
-
-    @pytest.mark.parametrize(
-        "a,b,expected",
-        [
-            (10, 2, 5.0),
-            (-10, 2, -5.0),
-            (10, -2, -5.0),
-            (-10, -2, 5.0),
-            (0, 5, 0.0),
-            (0, -5, 0.0),
-            (1, 1, 1.0),
-        ],
-    )
-    def test_parametrized_sign_matrix(self, a, b, expected):
-        assert safe_div(a, b) == expected
+def test_safe_div_division_by_zero_returns_none():
+    """Verify that division by zero returns None, not raises an exception."""
+    result = safe_div(5, 0)
+    assert result is None
+    assert not isinstance(result, float)

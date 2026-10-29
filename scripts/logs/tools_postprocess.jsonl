@@ -263,3 +263,32 @@
 {"ts": "2026-10-29 07:31:11", "slug": "mathbuddy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-29 07:31:11", "slug": "meetily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-29 07:31:13", "slug": "meev-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:00:43", "slug": "polylane-for-chatgpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:00:48", "slug": "polylane-for-chatgpt", "step": "enrich", "result": "done", "detail": "+2,899자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:00:55", "slug": "polylane-for-chatgpt", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-30 06:00:55", "slug": "ifttt-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:01:11", "slug": "ifttt-ai", "step": "enrich", "result": "done", "detail": "+2,688자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:01:12", "slug": "ifttt-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-30 06:01:12", "slug": "floot-in-chatgpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:01:17", "slug": "floot-in-chatgpt", "step": "enrich", "result": "done", "detail": "+2,449자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:01:18", "slug": "floot-in-chatgpt", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-30 06:01:35", "slug": "gemini-4-carbon", "step": "url", "result": "done", "detail": "빈값 → https://gemini4carbon.app (title='Gemini 4 Carbon — Motion, Images, Video &amp')", "dry_run": false}
+{"ts": "2026-10-30 06:01:42", "slug": "gemini-4-carbon", "step": "enrich", "result": "done", "detail": "+2,713자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:01:45", "slug": "gemini-4-carbon", "step": "thumb", "result": "done", "detail": "✅ gemini-4-carbon 23KB", "dry_run": false}
+{"ts": "2026-10-30 06:01:48", "slug": "assemblyai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:02:01", "slug": "assemblyai", "step": "enrich", "result": "done", "detail": "+2,968자 (시도 2)", "dry_run": false}
+{"ts": "2026-10-30 06:02:01", "slug": "assemblyai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-30 06:02:03", "slug": "audio-editing", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:02:17", "slug": "audio-editing", "step": "enrich", "result": "done", "detail": "+2,846자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:02:22", "slug": "audio-editing", "step": "thumb", "result": "done", "detail": "✅ audio-editing og 14KB", "dry_run": false}
+{"ts": "2026-10-30 06:02:23", "slug": "text-to-speech", "step": "url", "result": "done", "detail": "https://www.futurepedia.io/tool/unreal-speech → https://texttospeech.ai (title='texttospeech.ai&nbsp;-&nbsp;This website is ')", "dry_run": false}
+{"ts": "2026-10-30 06:02:29", "slug": "text-to-speech", "step": "enrich", "result": "done", "detail": "+2,731자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:02:34", "slug": "text-to-speech", "step": "thumb", "result": "fail", "detail": "❌ text-to-speech BLANK(SMALL_722B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ text-to-speech NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-30 06:02:37", "slug": "prompt-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:02:45", "slug": "prompt-generators", "step": "enrich", "result": "done", "detail": "+3,177자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:02:51", "slug": "prompt-generators", "step": "thumb", "result": "done", "detail": "✅ prompt-generators og 30KB", "dry_run": false}
+{"ts": "2026-10-30 06:02:52", "slug": "writing-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 06:03:04", "slug": "writing-generators", "step": "enrich", "result": "done", "detail": "+2,735자 (시도 2)", "dry_run": false}
+{"ts": "2026-10-30 06:03:08", "slug": "writing-generators", "step": "thumb", "result": "done", "detail": "✅ writing-generators og 12KB", "dry_run": false}
+{"ts": "2026-10-30 06:03:14", "slug": "tao-tool-aware-joint-scheduling-for-llm-based-age", "step": "enrich", "result": "done", "detail": "+2,759자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-30 06:03:17", "slug": "tao-tool-aware-joint-scheduling-for-llm-based-age", "step": "thumb", "result": "done", "detail": "✅ tao-tool-aware-joint-scheduling-for-llm-based-age 32KB", "dry_run": false}

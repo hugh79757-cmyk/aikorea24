@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-28 09:01",
+  "updated_at": "2026-10-29 09:01",
   "count": 142,
   "models": [
     {
@@ -1530,6 +1530,8 @@
         "nvidia/nemotron-3-super-120b-a12b:free"
       ],
       "news_ids": [
+        57455,
+        57454,
         55322,
         54955
       ],
