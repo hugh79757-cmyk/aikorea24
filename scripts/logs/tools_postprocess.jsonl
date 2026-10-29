@@ -246,3 +246,20 @@
 {"ts": "2026-10-29 06:02:48", "slug": "multiscale-policy-optimization-for-long-horizon-ll", "step": "thumb", "result": "done", "detail": "✅ multiscale-policy-optimization-for-long-horizon-ll 34KB", "dry_run": false}
 {"ts": "2026-10-29 06:02:58", "slug": "theysaid-4-0", "step": "enrich", "result": "done", "detail": "+2,968자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-29 06:03:03", "slug": "theysaid-4-0", "step": "thumb", "result": "done", "detail": "✅ theysaid-4-0 17KB", "dry_run": false}
+{"ts": "2026-10-29 07:30:13", "slug": "video-text-remover-ai", "step": "enrich", "result": "done", "detail": "+2,792자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 07:30:18", "slug": "video-text-remover-ai", "step": "thumb", "result": "done", "detail": "✅ video-text-remover-ai 32KB", "dry_run": false}
+{"ts": "2026-10-29 07:30:26", "slug": "morphiqo-2", "step": "enrich", "result": "done", "detail": "+2,581자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 07:30:35", "slug": "totext", "step": "enrich", "result": "done", "detail": "+2,583자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 07:30:44", "slug": "viddub", "step": "enrich", "result": "done", "detail": "+2,835자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 07:30:50", "slug": "videraser", "step": "enrich", "result": "done", "detail": "+2,585자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-29 07:30:50", "slug": "supercmo-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:30:51", "slug": "supercmo-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-29 07:30:51", "slug": "interviewcue-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:30:52", "slug": "knovari-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:30:53", "slug": "lemonade-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:30:55", "slug": "lexidesk-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:31:06", "slug": "lium-ai", "step": "thumb", "result": "fail", "detail": "❌ lium-ai BLANK(SMALL_818B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ lium-ai NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-29 07:31:07", "slug": "manyface-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:31:11", "slug": "mathbuddy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:31:11", "slug": "meetily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-29 07:31:13", "slug": "meev-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
