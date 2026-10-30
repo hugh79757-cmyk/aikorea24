@@ -292,3 +292,18 @@
 {"ts": "2026-10-30 06:03:08", "slug": "writing-generators", "step": "thumb", "result": "done", "detail": "✅ writing-generators og 12KB", "dry_run": false}
 {"ts": "2026-10-30 06:03:14", "slug": "tao-tool-aware-joint-scheduling-for-llm-based-age", "step": "enrich", "result": "done", "detail": "+2,759자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-30 06:03:17", "slug": "tao-tool-aware-joint-scheduling-for-llm-based-age", "step": "thumb", "result": "done", "detail": "✅ tao-tool-aware-joint-scheduling-for-llm-based-age 32KB", "dry_run": false}
+{"ts": "2026-10-30 07:30:07", "slug": "mnki-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:07", "slug": "motiofy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:16", "slug": "mozaik", "step": "thumb", "result": "fail", "detail": "❌ mozaik BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ mozaik NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-10-30 07:30:51", "slug": "muse-video-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:51", "slug": "musicaura-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:51", "slug": "omlx-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:51", "slug": "patternful-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:52", "slug": "pdftoword-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:30:53", "slug": "personwise-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:31:09", "slug": "photogenerator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:31:10", "slug": "photoupscaler-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:31:10", "slug": "piccreator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:31:10", "slug": "producerai-art", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:31:13", "slug": "religion", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-30 07:31:14", "slug": "saymo-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
