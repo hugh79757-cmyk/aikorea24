@@ -328,13 +328,6 @@
   },
   {
     "provider": "zen",
-    "model_id": "jev-1.13-free",
-    "name": "jev-1.13-free",
-    "pricing": null,
-    "context_length": null
-  },
-  {
-    "provider": "zen",
     "model_id": "mimo-v2.6-flash-free",
     "name": "mimo-v2.6-flash-free",
     "pricing": null,

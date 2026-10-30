@@ -240,14 +240,24 @@ def dead_links(md: str, limit: int = 8, timeout: float = 8.0) -> list:
     return [u for u in urls if not res.get(u)]
 
 
-def screen_extended(text: str, verify_links: bool = True) -> list:
+def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False) -> list:
     """게이트 + 링크 생존 검증(자동 파이프라인 전용).
 
     `emdash_precheck.check()` 는 순수 문자열 검사로 남겨두고(수동 글쓰기 경로와 공유),
     네트워크·구조 검사는 여기서만 한다.
+
+    is_eval: 모델 평가글 경로(generate_model_eval_draft — 실제 12문항 평가 데이터
+    주입)에서 만든 초안이면 True. 뉴스(deep·trend)·사용법 경로 글에 '실측' 소제목이
+    있으면 정의상 날조이므로 발행 금지한다 (AIK24-FABRICATE-01, 2026-10-30;
+    'ai.kr.24' 접두사 없는 변형도 차단).
     """
     md = body_of(text)
     issues = check(md)
+    if not is_eval and re.search(r"^##\s*(\d+\.?\s*)?.*실측", md, re.M):
+        issues.append("'실측 결과' 섹션 있음 (뉴스·사용법 경로 글) → 실제로 실행한 테스트가 "
+                      "없으므로 날조 의심. 해당 섹션을 통째로 삭제하라. 발행 금지.")
+        # AIK24-FABRICATE-01 확대 (2026-10-30): 'ai.kr.24' 접두사 없는 'N. 실측 결과' 변형도 차단
+
     cit = citation_links(md)
     # 게이트의 링크 검사는 코드블록 안 URL 도 세므로, 인용이 부족한 글은 여기서 한 번 더 막는다.
     if not any("외부 링크" in i for i in issues) and len(cit) < MIN_LINKS:
@@ -281,6 +291,9 @@ _FIX_HINTS = (
                  "독자용 표현으로 바꿔라."),
     ("본문 ", "- 분량이 부족하다. 추측으로 늘리지 말고, 기사에 있는 사실·수치·인용을 더 세밀하게 풀어써라. "
               "부족하면 기사에서 확인 가능한 배경과 구체적 사용 절차를 단계로 쪼개 적어라."),
+    ("실측 결과", "- 'ai.kr.24 실측 결과' 섹션을 통째로 삭제해라. 이 글은 뉴스 경로라 실제 테스트가 "
+                 "없으며, 측정값(소요 시간·인식률·정확도·검증일)을 지어내는 것은 금지다. "
+                 "기사 원문에 있는 수치만 쓴다."),
 )
 
 

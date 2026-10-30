@@ -73,6 +73,14 @@ def _load_blog_rules():
         return ""
 
 
+# AIK24-FABRICATE-01 (2026-10-30): 날조 실측 섹션 재발 방지.
+# generate_draft 가 어떤 경로로 초안을 만들었는지 기록한다 — 모델 평가글 경로
+# (generate_model_eval_draft, 실제 12문항 평가 데이터 주입)일 때만 True.
+# save_draft 가 이 값을 _EMDASH_PENDING[filepath]["is_eval"] 로 넘겨, 발행 게이트가
+# 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션(정의상 날조)을 차단한다.
+_LAST_GEN_IS_EVAL = False
+
+
 _BLOG_RULES = _load_blog_rules()
 
 # AIK24-BLOG-02 (2026-10-19): 프롬프트의 분량 요구가 게이트 하한과 달라 통과율이 20%였다.
@@ -301,7 +309,9 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
         return fixes
 
     _repair(filepath)
-    issues = _quality_gate.screen_extended(_body(filepath))
+    # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
+    issues = _quality_gate.screen_extended(
+        _body(filepath), is_eval=_EMDASH_PENDING.get(filepath, {}).get("is_eval", False))
 
     # AIK24-PIPE-10 규칙 1·2·3: 주제 귀속(모델 ID) 검사.
     #   기존 게이트와 **같은 지점**에 통합했다(게이트를 두 개로 늘리지 않는다).
@@ -357,7 +367,8 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
             continue
         created.append(fp2)
         _repair(fp2)
-        issues2 = _quality_gate.screen_extended(_body(fp2))
+        issues2 = _quality_gate.screen_extended(
+            _body(fp2), is_eval=_EMDASH_PENDING.get(fp2, {}).get("is_eval", False))
         if not issues2:
             _drop_except(fp2)
             log("    ✅ 교정 %d회차에서 게이트 통과 — 채택 (본문 %d자 / 인용 링크 %d개)"
@@ -376,6 +387,8 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
 # ============================================
 def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
                    corrective=False, model_order=None):
+    global _LAST_GEN_IS_EVAL
+    _LAST_GEN_IS_EVAL = False  # 뉴스 경로가 기본 — 모델 평가글 경로에서만 True 로 뒤집는다
     is_deep = len(articles) == 1
 
     # AIK24-BLOG-02 (2026-10-19): 게이트를 '실제로' 통과하려면 근거 링크가 있어야 한다.
@@ -409,6 +422,7 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
                                            fix_note=fix_note, links_str=links_str,
                                            corrective=corrective, model_order=model_order)
             if out:
+                _LAST_GEN_IS_EVAL = True  # AIK24-FABRICATE-01: 실제 평가 데이터 주입 경로
                 return out
             log("  ⚠️ 모델 심층 분석 생성 실패 → 뉴스 블로그 경로로 대체")
         else:
@@ -462,6 +476,7 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
             f"그 아래에 오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓴다.\n"
             f"- [필수] 본문 맨 앞에 `# 제목` 을 반복하지 않는다 (제목은 TITLE: 줄에만 1회)\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
+            f"- [필수] **'실측 결과'·'ai.kr.24 실측' 섹션을 만들지 마세요.** 이 글은 뉴스 분석 글이며 실제로 실행한 테스트가 없습니다. 측정값(소요 시간·인식률·정확도·검증일 등 수치)을 지어내지 마세요. 기사 원문에 없는 수치는 쓰지 마세요.\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
             f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
@@ -496,6 +511,7 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
             f"그 아래에 오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓴다.\n"
             f"- [필수] 본문 맨 앞에 `# 제목` 을 반복하지 않는다 (제목은 TITLE: 줄에만 1회)\n"
             f"- 순한국어, 전문적이면서도 친근한 ~습니다/~입니다 정중 비즈니스 톤\n"
+            f"- [필수] **'실측 결과'·'ai.kr.24 실측' 섹션을 만들지 마세요.** 이 글은 뉴스 분석 글이며 실제로 실행한 테스트가 없습니다. 측정값(소요 시간·인식률·정확도·검증일 등 수치)을 지어내지 마세요. 기사 원문에 없는 수치는 쓰지 마세요.\n"
             f"- [중요] 모든 문장은 '~합니다/~입니다/~했습니다' 체로 통일. 반말('~다/~했다/~임') 절대 금지\n"
             f"- [중요] 중국어(한자) 사용 금지. 반드시 순수 한국어로만 작성할 것\n"
             f"- [중요] **본문 첫 단락(도입단락)에서 '본 포스트에서는...', '이번 글에서는...', '이번 글에서는...', "
@@ -1048,6 +1064,9 @@ def save_draft(gpt_output, keyword, file_num, today_str, articles=None):
         _EMDASH_PENDING[filepath]["model_id"] = (
             _attribution.source_model_id((articles or [{}])[0]) if articles else None
         )
+        # AIK24-FABRICATE-01: 생성 경로 표시 — 발행 게이트가 뉴스 경로 글의
+        # 'ai.kr.24 실측 결과' 섹션(정의상 날조)을 차단한다.
+        _EMDASH_PENDING[filepath]["is_eval"] = _LAST_GEN_IS_EVAL
         for art in articles or []:
             news_id = art.get("id")
             if news_id:
@@ -1359,7 +1378,9 @@ def _publish_generated_to_emdash(generated):
         body, _fixes2 = _quality_gate.repair_markdown(body)
         if _fixes2:
             log("  🛠 자동 수리(2차): " + ", ".join(_fixes2))
-        gate_issues = _quality_gate.screen_extended(body)
+        # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
+        gate_issues = _quality_gate.screen_extended(
+            body, is_eval=draft.get("is_eval", False))
         if gate_issues:
             _quality_gate.hold(draft["md"], meta.get("title") or title, gate_issues,
                                reason="2차 게이트(발행 직전) 미달")

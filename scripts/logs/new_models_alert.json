@@ -1,22 +1,19 @@
 {
- "day": "2026-10-30",
- "checked_at": 1793307607.772584,
+ "day": "2026-10-31",
+ "checked_at": 1793394007.976044,
  "total_rows": 36,
  "failed_providers": {},
  "new_by_provider": {
-  "nvidia": [
-   "mistralai/mistral-large-4-1t-a52b"
+  "kilo": [
+   "inclusionai/ling-3.1-flash-1019-free"
   ]
  },
  "removed_by_provider": {
-  "openrouter": [
-   "upstage/solar-pro-3"
-  ],
-  "kilo": [
-   "upstage/solar-pro-3"
-  ],
   "zen": [
-   "claude-opus-5-5-backup"
+   "gemini-3-flash",
+   "gemini-3.1-pro",
+   "jev-1.13",
+   "jev-1.13-free"
   ]
  }
 }

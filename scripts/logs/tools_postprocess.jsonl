@@ -307,3 +307,11 @@
 {"ts": "2026-10-30 07:31:10", "slug": "producerai-art", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-30 07:31:13", "slug": "religion", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-10-30 07:31:14", "slug": "saymo-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 06:00:32", "slug": "knocket-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 06:00:43", "slug": "knocket-ai", "step": "enrich", "result": "done", "detail": "+2,743자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-31 06:00:44", "slug": "knocket-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-31 06:00:44", "slug": "sparkbots-ai-powered-by-jev", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 06:00:50", "slug": "sparkbots-ai-powered-by-jev", "step": "enrich", "result": "done", "detail": "+2,840자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-31 06:00:51", "slug": "sparkbots-ai-powered-by-jev", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-10-31 06:00:57", "slug": "look-only-when-needed-certificate-guided-visual-r", "step": "enrich", "result": "done", "detail": "+2,996자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-31 06:01:01", "slug": "look-only-when-needed-certificate-guided-visual-r", "step": "thumb", "result": "done", "detail": "✅ look-only-when-needed-certificate-guided-visual-r 15KB", "dry_run": false}

@@ -1,0 +1,15 @@
+{
+  "added": [],
+  "removed": [
+    {
+      "provider": "zen",
+      "model_id": "jev-1.13-free",
+      "name": "jev-1.13-free",
+      "pricing": null,
+      "context_length": null,
+      "reason": "단종/제거"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}
