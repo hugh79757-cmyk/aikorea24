@@ -1,3 +1,33 @@
+## 2026-10-30 15:30 — AIK24-TOOLS-LINKFIX-01: AI Rap Video Generator URL 교체 (블로그→홈페이지)
+
+### 한 일
+
+1. **데이터 저장소 특정** — tools 항목 URL은 `tool_submissions` 테이블(D1, status='published')에 저장됨. `tools` 테이블은 폴백. 정적 MD는 sync_submissions_to_md.mjs가 빌드타임에 D1에서 생성(캐시). URL 필드 직접 확인: id=45, slug=`ai-rap-video-generator`, url=`https://airapgen.org/blog/ai-rap-video-prompts`(블로그 글 URL — 잘못됨).
+2. **URL 교체** — `UPDATE tool_submissions SET url = 'https://airapgen.org/' WHERE slug = 'ai-rap-video-generator'` 실행 성공. updated_at=2026-10-30 07:30:04. 잔존 블로그 URL 검색: 0건(다른 필드에도 잔존 없음).
+3. **라이브 반영 확인** — SSR 상세 페이지(https://aikorea24.kr/tools/ai-rap-video-generator/) HTTP 200, 외부 링크 `https://airapgen.org/` (1건), 블로그 URL 잔존 0건. 다른 항목 영향 없음(단일 slug 조건 UPDATE).
+4. **정적 MD 동기화** — sync_submissions_to_md.mjs 실행으로 `src/content/tools/ai-rap-video-generator.md` 생성(url: https://airapgen.org/). (sync가 다른 2건의 신규 MD도 생성했으나 본 지시서 범위 외라 제거, 빌드 시 재생성됨.)
+
+### 결과 (검증 근거)
+
+### [검증됨]
+- D1 UPDATE 성공: execute ok True, after url=https://airapgen.org/ (근거: d1_execute/d1_query 출력).
+- 잔존 블로그 URL 0건 (근거: LIKE '%airapgen.org/blog%' / '%ai-rap-video-prompts%' 쿼리 결과 0).
+- 라이브 상세 페이지 HTTP 200, airapgen.org/ 링크 1건, 블로그 URL 0건 (근거: curl + grep 출력).
+- 페이지 제목: "AI Rap Video Generator 사용법과 가격, 한국어 지원 여부 총정리 | AI코리아24" (근거: curl title).
+
+### [부분검증]
+- 정적 MD 동기화: sync 스크립트가 빌드타임에 MD를 생성하므로, 다음 빌드/배포 시 반영됨. 이번 세션에서는 MD 파일만 생성(배포는 하지 않음) — 라이브는 SSR로 이미 정상.
+
+### [검증불가]
+- 없음.
+
+### 잔존 위험
+- 없음. 다른 항목 영향 없음(단일 slug 조건). 배포는 다음 정기 빌드에서 자동 반영.
+
+완료, 시니어 2 verify 요청
+
+## 2026-10-30 AIK24-FREE-PIPE-01 일일 실행 — 수집 35건 / 실패 프로바이더 0 / added 0 · removed 1 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-29 13:30 — AIK24-LFM25-REEVAL-01: OpenRouter Liquid LFM2.5-2.6B 12문항 재측정 (쿼터 차단, 부분 측정)
 
 ### 한 일
