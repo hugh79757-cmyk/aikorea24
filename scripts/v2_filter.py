@@ -12,6 +12,15 @@ from __future__ import annotations
 import json
 import os
 
+# AIK24-PIPE-13: 파라미터 규모 추출·실행 가능성 판정은 briefing_scorer 와 동일 로직.
+# (구현을 한 곳에 두고 v2_filter 는 그대로 가져온다 — 중복 방지)
+from briefing_scorer import (  # noqa: E402
+    _OPEN_WEIGHT_KEYWORDS,
+    extract_param_scale_b,
+    is_open_weight,
+    is_runnable_scale,
+)
+
 _WEIGHTS_PATH = os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
     "config",
@@ -32,21 +41,42 @@ def _weights() -> dict:
 
 
 def _free_score(text: str, cfg: dict) -> tuple[int, list[str]]:
-    """briefing_scorer._score_free_usability 와 동일 로직."""
+    """briefing_scorer._score_free_usability 와 동일 로직 (AIK24-PIPE-13 조건부)."""
     kw = cfg.get("keywords", {})
     t = (text or "").lower()
     matched = [k for k in kw if k in t]
+    runnable_max_b = cfg.get("runnable_max_b", 32)
+    scale_b = extract_param_scale_b(text)
+    runnable = is_runnable_scale(scale_b, runnable_max_b)
+    open_weight = is_open_weight(text)
+    if open_weight and not runnable:
+        matched = [k for k in matched if k not in _OPEN_WEIGHT_KEYWORDS]
     return min(cfg.get("cap", 25), sum(kw[k] for k in matched)), matched
 
 
 def _excluded(text: str, cfg: dict, free_hits: list[str]) -> tuple[int, list[str]]:
-    """briefing_scorer._penalty_excluded_topic 와 동일 로직."""
+    """briefing_scorer._penalty_excluded_topic 와 동일 로직 (AIK24-PIPE-13 조건부)."""
     t = (text or "").lower()
     hard = [k for k in cfg.get("hard_exclude", []) if k in t]
     if hard:
         return cfg.get("penalty", -100), hard
     soft = [k for k in cfg.get("launch_soft", []) if k in t]
-    if soft and not free_hits:
+    # AIK24-PIPE-13: 실행 불가 오픈 웨이트는 free_hits가 있어도 launch_soft 면제하지 않는다.
+    runnable_max_b = 32
+    # weights 에서 runnable_max_b 를 가져오려면 cfg 가 excluded_topic cfg 이므로 weights 전체가 필요.
+    # v2_filter.classify 는 weights 전체를 w 로 들고 있으므로 _excluded 호출 시 전달받지 않는다.
+    # 여기서는 config 를 직접 읽어 일관성을 유지한다.
+    try:
+        import json, os
+        wpath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config", "impact_weights.json")
+        w = json.load(open(wpath, encoding="utf-8"))
+        runnable_max_b = w.get("free_usability", {}).get("runnable_max_b", 32)
+    except Exception:
+        runnable_max_b = 32
+    scale_b = extract_param_scale_b(text)
+    runnable = is_runnable_scale(scale_b, runnable_max_b)
+    nonrunnable_openweight = is_open_weight(text) and not runnable
+    if soft and (not free_hits or nonrunnable_openweight):
         return cfg.get("penalty", -100), soft
     return 0, []
 

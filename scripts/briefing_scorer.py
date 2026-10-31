@@ -39,6 +39,68 @@ _AMOUNT_PATTERNS = [
 
 _ENG_ENTITY_RE = re.compile(r'\b[A-Z][a-zA-Z0-9.&+#\-]{2,}\b')
 
+# AIK24-PIPE-13: 오픈 웨이트 실행 가능성 판정.
+# "open weights" / "huggingface" 키워드가 있어도 모델이 구독자 환경에서 돌릴 수
+# 있는 규모(양자화 후 32B 이하)가 아니면 무료 사용 신호로 인정하지 않는다.
+_OPEN_WEIGHT_KEYWORDS = {
+    "open weights", "open source", "open-source", "opensource",
+    "huggingface", "hugging face", "ollama",
+}
+_RUNNABLE_MAX_B_DEFAULT = 32
+
+
+def extract_param_scale_b(text):
+    """본문·제목에서 모델 파라미터 규모를 B(십억) 단위로 추출한다.
+
+    지원 패턴: "1T parameters", "1 trillion", "671B", "70B", "1조 파라미터",
+    "1조", "6710억", "70 billion", "7B" 등. 여러 개가 있으면 최댓값을 반환한다.
+    규모를 찾지 못하면 None (실행 가능성 판단 불가 → 기존 동작 유지).
+    """
+    if not text:
+        return None
+    t = text
+    candidates = []
+    # (pattern, multiplier to B)
+    patterns = [
+        # English: T / trillion / trn
+        (r'(\d[\d,]*(?:\.\d+)?)\s*(?:T|trillion|trn)\b', 1000.0),
+        # English: B / billion / bn
+        (r'(\d[\d,]*(?:\.\d+)?)\s*(?:B|billion|bn)\b', 1.0),
+        # English: M / million
+        (r'(\d[\d,]*(?:\.\d+)?)\s*(?:M|million)\b', 0.001),
+        # Korean: 조
+        (r'(\d[\d,]*(?:\.\d+)?)\s*조(?:\s*파라미터|\s*개|\s*개의)?', 1000.0),
+        # Korean: 억
+        (r'(\d[\d,]*(?:\.\d+)?)\s*억(?:\s*파라미터|\s*개|\s*개의)?', 0.1),
+    ]
+    for pat, mult in patterns:
+        for m in re.finditer(pat, t, re.IGNORECASE):
+            num_str = m.group(1).replace(',', '')
+            try:
+                val = float(num_str) * mult
+            except ValueError:
+                continue
+            if val > 0:
+                candidates.append(val)
+    if not candidates:
+        return None
+    return max(candidates)
+
+
+def is_open_weight(text):
+    """텍스트에 오픈 웨이트 관련 키워드가 있는지."""
+    if not text:
+        return False
+    t = text.lower()
+    return any(k in t for k in _OPEN_WEIGHT_KEYWORDS)
+
+
+def is_runnable_scale(scale_b, runnable_max_b=_RUNNABLE_MAX_B_DEFAULT):
+    """파라미터 규모가 구독자 환경에서 실행 가능한지."""
+    if scale_b is None:
+        return True  # 규모 미상 → 기존 동작 유지 (false positive 방지)
+    return scale_b <= runnable_max_b
+
 
 def load_weights():
     with open(WEIGHTS_PATH) as f:
@@ -152,11 +214,24 @@ def _parse_amounts(text):
 
 
 def _score_free_usability(text, weights):
-    """v2: '한국인 초보자가 오늘 무료로 쓸 수 있는 것인가?' 기준 점수 (2026-10-10, AIK24-PIPE-02)"""
+    """v2: '한국인 초보자가 오늘 무료로 쓸 수 있는 것인가?' 기준 점수 (2026-10-10, AIK24-PIPE-02)
+
+    AIK24-PIPE-13: 파라미터 규모가 실행 불가(>runnable_max_b)이고 오픈 웨이트
+    키워드가 있으면 해당 키워드 점수를 0으로 처리한다. 모델 크기를 보지 않고
+    "open weights" 히트만으로 무료 사용 가능으로 점수를 주는 구멍을 막는다.
+    """
     cfg = weights.get("free_usability", {})
     kw = cfg.get("keywords", {})
-    t = text.lower()
+    t = (text or "").lower()
+    runnable_max_b = cfg.get("runnable_max_b", _RUNNABLE_MAX_B_DEFAULT)
+    scale_b = extract_param_scale_b(text)
+    runnable = is_runnable_scale(scale_b, runnable_max_b)
+    open_weight = is_open_weight(text)
+
     matched = [k for k in kw if k in t]
+    # 실행 불가 오픈 웨이트: open-weight 관련 키워드 점수 0 처리
+    if open_weight and not runnable:
+        matched = [k for k in matched if k not in _OPEN_WEIGHT_KEYWORDS]
     score = sum(kw[k] for k in matched)
     return min(cfg.get("cap", 25), score), matched
 
@@ -176,7 +251,13 @@ def _penalty_excluded_topic(text, weights, free_hits):
     if hard:
         return cfg.get("penalty", -100), hard
     soft = [k for k in cfg.get("launch_soft", []) if k in t]
-    if soft and not free_hits:
+    # AIK24-PIPE-13: 실행 불가 오픈 웨이트는 free_hits가 있어도 launch_soft 면제하지 않는다.
+    # "출시했대"로 끝나는 소식이 2순위 일반 뉴스로도 뽑히지 않게 한다.
+    runnable_max_b = weights.get("free_usability", {}).get("runnable_max_b", _RUNNABLE_MAX_B_DEFAULT)
+    scale_b = extract_param_scale_b(text)
+    runnable = is_runnable_scale(scale_b, runnable_max_b)
+    nonrunnable_openweight = is_open_weight(text) and not runnable
+    if soft and (not free_hits or nonrunnable_openweight):
         return cfg.get("penalty", -100), soft
     return 0, []
 
@@ -408,6 +489,11 @@ def score_article(article, weights, entity_tiers, recent_briefings=None, mode="l
         "excluded_topic_hits": ex_matched,
         "hours_since_publish": round(hours_since, 2) if hours_since >= 0 else -1,
         "crawl_failed": crawl_failed,
+        "param_scale_b": extract_param_scale_b(text_full if body else text_light),
+        "open_weight_runnable": is_runnable_scale(
+            extract_param_scale_b(text_full if body else text_light),
+            weights.get("free_usability", {}).get("runnable_max_b", _RUNNABLE_MAX_B_DEFAULT),
+        ),
     }
 
     # entity_tier 점수 (light/full 공통)

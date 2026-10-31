@@ -21,6 +21,16 @@ from auto_news_selector import (CANDIDATE_LIMIT, MAX_COUNT, PROVIDER_SOURCES,
                                  interleave_candidates, refill_after_dedup,
                                  select_top_articles)
 import model_eval
+# AIK24-PIPE-13: 오픈 웨이트 실행 가능성 판정 (briefing_scorer 와 동일 로직)
+try:
+    from briefing_scorer import extract_param_scale_b, is_open_weight, is_runnable_scale
+except Exception:  # pragma: no cover
+    def extract_param_scale_b(text):
+        return None
+    def is_open_weight(text):
+        return False
+    def is_runnable_scale(scale_b, runnable_max_b=32):
+        return True
 
 # PIPE-03 §4-4: news.source → OpenCode 설정 접두어
 CLI_PROVIDER_PREFIX = {
@@ -51,6 +61,22 @@ def cli_free_block(article):
     if not mid:
         return ""
     if article.get("source") in OPEN_WEIGHT_SOURCES:
+        # AIK24-PIPE-13: 실행 가능 규모일 때만 "Ollama 경유 무료 실행" 안내.
+        # 1T급 등 구독자 환경에서 실행 불가한 오픈 웨이트는 안내를 생략하고
+        # "참고용"으로 표기한다.
+        try:
+            import json as _j, os as _o
+            _w = _j.load(open(os.path.join(PROJECT_DIR, "config", "impact_weights.json"), encoding="utf-8"))
+            _max_b = _w.get("free_usability", {}).get("runnable_max_b", 32)
+        except Exception:
+            _max_b = 32
+        _text = f"{article.get('title', '')} {article.get('body', '')} {article.get('description', '')}"
+        _scale = extract_param_scale_b(_text)
+        _runnable = is_runnable_scale(_scale, _max_b)
+        if not _runnable:
+            return ("구독자 환경에서 실행 불가 (참고용)\n"
+                    f"모델 규모: {_scale}B (컷오프 {_max_b}B 초과)\n"
+                    f"모델: {article.get('link') or 'https://huggingface.co/' + mid}")
         return ("OpenCode에서 무료로 사용 가능 (오픈 웨이트·로컬 실행)\n"
                 "로컬 브리지(Ollama 등) 필요\n"
                 f"모델: {article.get('link') or 'https://huggingface.co/' + mid}\n"
