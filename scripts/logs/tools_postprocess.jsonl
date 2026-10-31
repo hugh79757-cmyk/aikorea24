@@ -315,3 +315,19 @@
 {"ts": "2026-10-31 06:00:51", "slug": "sparkbots-ai-powered-by-jev", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
 {"ts": "2026-10-31 06:00:57", "slug": "look-only-when-needed-certificate-guided-visual-r", "step": "enrich", "result": "done", "detail": "+2,996자 (시도 1)", "dry_run": false}
 {"ts": "2026-10-31 06:01:01", "slug": "look-only-when-needed-certificate-guided-visual-r", "step": "thumb", "result": "done", "detail": "✅ look-only-when-needed-certificate-guided-visual-r 15KB", "dry_run": false}
+{"ts": "2026-10-31 07:30:26", "slug": "ai-rap-video-generator", "step": "enrich", "result": "done", "detail": "+2,873자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-31 07:30:31", "slug": "ai-rap-video-generator", "step": "thumb", "result": "done", "detail": "✅ ai-rap-video-generator 29KB", "dry_run": false}
+{"ts": "2026-10-31 07:30:40", "slug": "fireply-ai", "step": "enrich", "result": "done", "detail": "+3,113자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-31 07:30:45", "slug": "fireply-ai", "step": "thumb", "result": "done", "detail": "✅ fireply-ai 11KB", "dry_run": false}
+{"ts": "2026-10-31 07:30:54", "slug": "seamlessify", "step": "enrich", "result": "done", "detail": "+2,999자 (시도 1)", "dry_run": false}
+{"ts": "2026-10-31 07:30:54", "slug": "seedance25ai-im", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:30:54", "slug": "sjolt-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:30:54", "slug": "sparkvid-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:30:56", "slug": "spira-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:05", "slug": "tastegpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:05", "slug": "tempmail-bot", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:06", "slug": "ugcfy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:06", "slug": "unfox-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:06", "slug": "videotranscription-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:07", "slug": "ziptie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-10-31 07:31:07", "slug": "zooop-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
