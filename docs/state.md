@@ -1,3 +1,50 @@
+## 2026-10-31 16:00 — AIK24-PIPE-13: 오픈 웨이트 실행 가능성 검증 (32B 컷오프)
+
+### 한 일
+
+1. **파라미터 규모 추출** — `extract_param_scale_b(text)` 신설 (briefing_scorer.py). 본문·제목에서 파라미터 규모를 B(십억) 단위로 추출. 패턴: "1T parameters", "1 trillion", "671B", "70B", "7B", "1조 파라미터", "1조", "6710억", "70 billion". 여러 개 있으면 최댓값. 없으면 None (기존 동작 유지).
+
+2. **실행 가능 기준** — 컷오프 32B. `config/impact_weights.json` → `free_usability.runnable_max_b = 32`. 양자화 후 32B 이하 = 구독자 환경 실행 가능, 초과 = 실행 불가.
+
+3. **free_usability 점수 조건부 부여** — `_score_free_usability()`: 실행 불가 오픈 웨이트는 open-weight 키워드("open weights", "open source", "open-source", "opensource", "huggingface", "hugging face", "ollama") 점수 0. 다른 무료 키워드는 유지.
+
+4. **launch_soft 제외 규칙 정상 적용** — `_penalty_excluded_topic()`: 실행 불가 오픈 웨이트는 free_hits가 있어도 launch_soft(-100) 적용. "출시했대"로 끝나는 소식은 2순위 일반 뉴스로도 뽑히지 않음.
+
+5. **cli_free_block 조건부화** — `auto_briefing.py`: HuggingFace Trending 출처라도 실행 가능 규모일 때만 "Ollama 경유 무료 실행" 안내. 실행 불가면 "구독자 환경에서 실행 불가 (참고용)" + 모델 규모/컷오프 표기.
+
+6. **v2_filter.py 동기화** — `_free_score`, `_excluded` 로직 미러링. `classify()` 호출 시 비실행 오픈 웨이트 launch announcement → (False, None).
+
+### 결과 (검증 근거)
+
+### [검증됨]
+- Le Chonk(1T) 케이스: `score_article` (mode=full) → total=0, free_usability=0, penalty_excluded_topic=-100, param_scale_b=1000.0, open_weight_runnable=False (근거: 실측 출력).
+- Le Chonk `v2_filter.classify` → (False, None) — 제외 확인 (근거: 실측 출력).
+- 7B 케이스: v2_filter.classify → (True, 'opensource'), score_article total>0, free_usability>0, penalty=0 (근거: 실측 출력).
+- 32B 경계값: v2_filter.classify → (True, 'opensource') — 경계값 통과 (근거: 실측 출력).
+- cli_free_block: 1T → "구독자 환경에서 실행 불가 (참고용)", 7B → "Ollama 경유 무료 실행" (근거: 실측 출력).
+
+### [부분검증]
+- v2_filter `_excluded`에서 runnable_max_b를 config에서 직접 읽음 (weights 전체가 전달되지 않아). briefing_scorer와 동일 값(32) 사용. 일관성 유지.
+
+### [검증불가]
+- 없음.
+
+### 잔존 위험
+- 없음. 기존 무료 오픈 웨이트(7B~32B) 회귀 없음. 테스트 34건 + 기존 64건 = 98건 통과.
+
+### 테스트 결과
+
+- `tests/test_pipe13_openweight_runnable.py`: 34 passed
+- `tests/test_briefing_scorer.py`: 64 passed (기존 회귀 없음)
+- `tests/v2_filter.py` 자체 점검: 6/6 passed
+- 전체 스위트: 3 failed (기존 실패 — free_models_cli.json 빈 파일), 1072 passed, 10 skipped. 신규 실패 0.
+
+커밋·푸시 완료 (`266994ba`). 완료 보고서: `SSOT/프로젝트/aikorea24/지시서/2026-10-31-1055-AIK24-PIPE-13-완료보고.md`.
+
+완료, 시니어 2 verify 요청
+
+## 2026-10-31 AIK24-FREE-PIPE-01 일일 실행 — 수집 36건 / 실패 프로바이더 0 / added 1 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-10-30 15:30 — AIK24-TOOLS-LINKFIX-01: AI Rap Video Generator URL 교체 (블로그→홈페이지)
 
 ### 한 일
