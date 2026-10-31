@@ -1,19 +1,21 @@
 {
- "day": "2026-10-31",
- "checked_at": 1793394007.976044,
- "total_rows": 36,
+ "day": "2026-11-01",
+ "checked_at": 1793480407.692461,
+ "total_rows": 32,
  "failed_providers": {},
- "new_by_provider": {
-  "kilo": [
-   "inclusionai/ling-3.1-flash-1019-free"
-  ]
- },
+ "new_by_provider": {},
  "removed_by_provider": {
-  "zen": [
-   "gemini-3-flash",
-   "gemini-3.1-pro",
-   "jev-1.13",
-   "jev-1.13-free"
+  "openrouter": [
+   "poolside/laguna-s-2.1",
+   "poolside/laguna-s-2.1:free",
+   "poolside/laguna-xs-2.1",
+   "poolside/laguna-xs-2.1:free"
+  ],
+  "kilo": [
+   "poolside/laguna-s-2.1",
+   "poolside/laguna-s-2.1:free",
+   "poolside/laguna-xs-2.1",
+   "poolside/laguna-xs-2.1:free"
   ]
  }
 }

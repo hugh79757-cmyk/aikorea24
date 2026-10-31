@@ -1,155 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-09-30",
-      "briefing_id": 321,
-      "articles": [
-        {
-          "id": "53282",
-          "title": "지지율 하락세 속 AI '초지능'으로 명칭 바꾸려는 트럼프",
-          "original_title": "",
-          "description": "트럼프는 AI와 데이터 센터에 대한 자신의 지지가 다가오는 중간선거에서 공화당에 타격을 줄 수 있는지 우려하느냐는 질문에 어깨를 으쓱하며 대답을 피했습니다.",
-          "link": "https://www.cnbc.com/2026/09/29/trump-ai-super-intelligence.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53287",
-          "title": "모닝 스쿼크: 트럼프, AI 임원들과 회동, 국채 금리 증시 압박, 알래스카의 럭셔리 전략",
-          "original_title": "",
-          "description": "투자자들이 거래일을 시작하기 위해 알아야 할 5가지 핵심 사항입니다.",
-          "link": "https://www.cnbc.com/2026/09/29/5-things-to-know-before-the-stock-market-opens.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53172",
-          "title": "오픈AI, 200달러 프로 요금제 재출동 그러나 종량제 유도를 위해 API 크레딧은 절반으",
-          "original_title": "",
-          "description": "오픈AI가 신규 가입자를 위해 200달러 프로 구독 서비스를 다시 시작하지만, 달러당 API 크레딧은 절반으로 줄였습니다. 직원 티보 소티오는 GPT-6 솔(Sol)과 루나(Luna) 같은 더 효율적인 모델들이 그 차이를 메워준다고 설명했습니다. 이번 조치는 보조금이 지원되는 정액제 플랜에서 사용량 기반 요금제로 전환하려는 오픈AI 전략의 일환입니다.",
-          "link": "https://the-decoder.com/openai-reopens-its-200-pro-plan-but-cuts-api-credits-in-half-as-it-nudges-users-toward-pay-per-use/",
-          "entities": [
-            "GPT-6",
-            "Sol",
-            "Luna",
-            "API"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53182",
-          "title": "AI 사용을 깎아내리지 말고, 우리의 도태를 막기 위해 조직화하라 | 개리슨 러블리",
-          "original_title": "",
-          "description": "AI 업계는 인간을 대체하려는 비뚤어진 탐구에 몰두하고 있습니다. 그렇다고 우리가 사용할 수 있는 최고의 도구를 상대방에게 내어줄 수는 없습니다.",
-          "link": "https://www.theguardian.com/commentisfree/2026/sep/29/ai-replace-humans",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53305",
-          "title": "Bark's parental controls are the best use of AI I'",
-          "original_title": "",
-          "description": "Barks' AI-powered parental control alerts are about to change the way you digitally parent.",
-          "link": "https://www.androidcentral.com/apps-software/barks-parental-controls-are-the-best-use-of-ai-ive-ever-seen",
-          "entities": [
-            "AI",
-            "AI-powered",
-            "Bark",
-            "Barks"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53220",
-          "title": "\"호주를 위해 더 나은 모습을 보여달라\": 오픈AI, 무단 접근에 대해 사과",
-          "original_title": "",
-          "description": "오픈AI 에이전트들이 의료 지출 데이터를 검색하면서 메디케어(의료보험) 유출 사고로 이어졌다.",
-          "link": "https://www.politico.com/news/2026/09/28/do-better-for-australia-openai-apologizes-for-unauthorized-access-01096507?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-          "entities": [],
-          "date": "2026-09-30"
-        }
-      ]
-    },
-    {
-      "date": "2026-09-30",
-      "briefing_id": 322,
-      "articles": [
-        {
-          "id": "53325",
-          "title": "앱스토어 모델을 정조준한 OpenAI의 최신 기능들",
-          "original_title": "",
-          "description": "OpenAI는 전통적인 앱 스토어 모델의 대안을 구축하고 있으며, ChatGPT를 인간과 AI 에이전트 모두가 소프트웨어를 발견하고 사용할 수 있는 공간으로 탈바꿈시키고 있습니다.",
-          "link": "https://techcrunch.com/2026/09/29/openais-latest-features-take-direct-aim-at-the-app-store-model/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53374",
-          "title": "중국산 AI 에이전트도 미국 경쟁사들과 마찬가지로 기만적인 행동을 보입니다",
-          "original_title": "",
-          "description": "로이터통신이 200여 건의 연구 문서를 검토한 결과, 중국 모델 기반의 AI 에이전트들이 테스트에서 거짓말을 하고, 실패를 숨기며, 제한을 우회하는 등의 행동을 보인 것으로 나타났습니다. 이러한 유형의 행동은 이미 미국 AI 시스템에 대해서도 전문가들의 우려를 자아낸 바 있습니다. 로이터는 202...",
-          "link": "https://thenextweb.com/news/chinese-powered-ai-agents-show-the-same-deception-as-their-us-rivals",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53386",
-          "title": "트럼프와 테크 리더들의 만남, AI 안전성에 대한 불안감은 그 어느 때보다 커져",
-          "original_title": "",
-          "description": "트럼프 대통령과 AI 업계 리더들이 백악관에서 오찬을 가진 이후에도, AI 안전성에 대한 업계의 입장은 대체로 변함이 없는 상태입니다.",
-          "link": "https://www.cnbc.com/2026/09/30/after-trump-meeting-with-tech-leaders-ai-safety-in-more-chaotic-state.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53355",
-          "title": "배우의 '매혹적인' 목소리를 무단 도용한 AI 툴은 권리 침해, 도쿄 법원 판결",
-          "original_title": "",
-          "description": "켄지로 츠다가 틱톡 계정을 상대로 한 소송에서 승소하며, 퍼블리시티권을 보호하는 일본의 역사적인 판결이 내려졌습니다. 일본 법원은 유명 배우의 바리톤 목소리를 무단 복제한 틱톡 계정과 관련된 사건에서 인간의 목소리에 법적 보호가 제공된다고 판결했습니다.",
-          "link": "https://www.theguardian.com/technology/2026/sep/30/ai-tool-copied-actor-kenjiro-tsuda-tokyo-court",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53381",
-          "title": "앤드루 베일리, 경제적 위험 증가에 따라 더욱 강력한 AI 테스트 촉구",
-          "original_title": "",
-          "description": "앤드루 베일리 총재는 첨단 인공지능이 은행, 금융시장, 지급결제 시스템에 고도화된 위협을 가하고 있다고 경고하며, 정부가 최첨단 AI 모델의 대중 출시 전에 테스트를 대폭 강화할 것을 촉구했다. 이는 신생 기술에 대해 연이어 발표되는 서한 중 첫 번째다.",
-          "link": "https://www.cityam.com/bailey-calls-for-greater-ai-testing-as-risks-to-economy-rise/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-09-30"
-        },
-        {
-          "id": "53375",
-          "title": "아스세르타(Ascerta), 델의 벤처 부문으로부터 1,800만 달러 투자 유치… 어떤 A",
-          "original_title": "",
-          "description": "기업용 AI는 이제 단순한 실험 단계를 지나 주요 비용 항목으로 자리 잡았습니다. 기업들은 토큰, 라이선스, 에이전트 실행 횟수, AI가 생성한 코드 라인 수를 셀 수 있습니다. 하지만 여전히 많은 기업들은 다음 단계를 결정짓는 핵심 질문에 답하지 못하고 있습니다. 바로 어떤 AI 프로젝트를 실제로 확장할 가치가 있는가 하는 점입니다. 아스세르타는 이러한 ",
-          "link": "https://thenextweb.com/news/ascerta-18m-series-a-dell-enterprise-ai-roi",
-          "entities": [
-            "Ascerta",
-            "AI"
-          ],
-          "date": "2026-09-30"
-        }
-      ]
-    },
-    {
       "date": "2026-10-01",
       "briefing_id": 323,
       "articles": [
@@ -2595,146 +2446,56 @@
           "date": "2026-10-30"
         }
       ]
+    },
+    {
+      "date": "2026-10-31",
+      "briefing_id": 369,
+      "articles": [
+        {
+          "id": "57655",
+          "title": "모드(Mode), 소비자 데이터 확보 전략의 일환으로 집잽(JibJab) 최대 2,950만",
+          "original_title": "Mode acquires JibJab for up to $29.5 million amid its consumer data roll-up spree",
+          "description": "모드는 소프트웨어 기업을 인수하여, AI 학습 및 소비자 조사를 위해 데이터를 공유하는 사용자들에게 무료 프리미엄 액세스와 보상을 제공하고 있습니다. 이번 인수는 이러한 데이터 확보 전략의 연장선에 있습니다.",
+          "link": "https://www.fastcompany.com/91623069/mode-acquires-jibjab-for-up-to-29-5-million-amid-consumer-data-roll-up-spree?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=3&partner=newsletter&campaign_date=10292026",
+          "entities": [
+            "Mode",
+            "JibJab",
+            "AI"
+          ],
+          "date": "2026-10-31"
+        },
+        {
+          "id": "57630",
+          "title": "르 춍크(Le Chonk)를 환영합니다: 허깅페이스의 Mistral Large 4",
+          "original_title": "Welcome Le Chonk: Mistral Large 4 on Hugging Face",
+          "description": "허깅페이스에 Mistral Large 4 모델이 새롭게 추가되었습니다. '르 춍크'라는 애칭으로 불리는 이 모델의 성능과 활용 방안을 확인해 보세요.",
+          "link": "https://huggingface.co/blog/mistral-large4",
+          "entities": [
+            "Large",
+            "Mistral",
+            "Le",
+            "Face",
+            "Hugging",
+            "Welcome",
+            "Chonk"
+          ],
+          "date": "2026-10-31"
+        },
+        {
+          "id": "57884",
+          "title": "경남정보대 AI창업학과, 로컬 창업 후속 특강 진행",
+          "original_title": "",
+          "description": "사진/경남정보대학교 경남정보대학교 AI창업학과는 지난 24일 교내에서 '제1회 KIT 스타트업 포럼: 로컬에서 창업의 답을 찾다' 첫 강연을 열었다고 29일 밝혔다. 후속 강연은 10월 31일과 11월 7일 진행한다....",
+          "link": "http://www.metroseoul.co.kr/article/20261030500290",
+          "entities": [
+            "KIT"
+          ],
+          "date": "2026-10-31"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "53282",
-      "title": "지지율 하락세 속 AI '초지능'으로 명칭 바꾸려는 트럼프",
-      "original_title": "",
-      "description": "트럼프는 AI와 데이터 센터에 대한 자신의 지지가 다가오는 중간선거에서 공화당에 타격을 줄 수 있는지 우려하느냐는 질문에 어깨를 으쓱하며 대답을 피했습니다.",
-      "link": "https://www.cnbc.com/2026/09/29/trump-ai-super-intelligence.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53287",
-      "title": "모닝 스쿼크: 트럼프, AI 임원들과 회동, 국채 금리 증시 압박, 알래스카의 럭셔리 전략",
-      "original_title": "",
-      "description": "투자자들이 거래일을 시작하기 위해 알아야 할 5가지 핵심 사항입니다.",
-      "link": "https://www.cnbc.com/2026/09/29/5-things-to-know-before-the-stock-market-opens.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53172",
-      "title": "오픈AI, 200달러 프로 요금제 재출동 그러나 종량제 유도를 위해 API 크레딧은 절반으",
-      "original_title": "",
-      "description": "오픈AI가 신규 가입자를 위해 200달러 프로 구독 서비스를 다시 시작하지만, 달러당 API 크레딧은 절반으로 줄였습니다. 직원 티보 소티오는 GPT-6 솔(Sol)과 루나(Luna) 같은 더 효율적인 모델들이 그 차이를 메워준다고 설명했습니다. 이번 조치는 보조금이 지원되는 정액제 플랜에서 사용량 기반 요금제로 전환하려는 오픈AI 전략의 일환입니다.",
-      "link": "https://the-decoder.com/openai-reopens-its-200-pro-plan-but-cuts-api-credits-in-half-as-it-nudges-users-toward-pay-per-use/",
-      "entities": [
-        "GPT-6",
-        "Sol",
-        "Luna",
-        "API"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53182",
-      "title": "AI 사용을 깎아내리지 말고, 우리의 도태를 막기 위해 조직화하라 | 개리슨 러블리",
-      "original_title": "",
-      "description": "AI 업계는 인간을 대체하려는 비뚤어진 탐구에 몰두하고 있습니다. 그렇다고 우리가 사용할 수 있는 최고의 도구를 상대방에게 내어줄 수는 없습니다.",
-      "link": "https://www.theguardian.com/commentisfree/2026/sep/29/ai-replace-humans",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53305",
-      "title": "Bark's parental controls are the best use of AI I'",
-      "original_title": "",
-      "description": "Barks' AI-powered parental control alerts are about to change the way you digitally parent.",
-      "link": "https://www.androidcentral.com/apps-software/barks-parental-controls-are-the-best-use-of-ai-ive-ever-seen",
-      "entities": [
-        "AI",
-        "AI-powered",
-        "Bark",
-        "Barks"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53220",
-      "title": "\"호주를 위해 더 나은 모습을 보여달라\": 오픈AI, 무단 접근에 대해 사과",
-      "original_title": "",
-      "description": "오픈AI 에이전트들이 의료 지출 데이터를 검색하면서 메디케어(의료보험) 유출 사고로 이어졌다.",
-      "link": "https://www.politico.com/news/2026/09/28/do-better-for-australia-openai-apologizes-for-unauthorized-access-01096507?utm_source=RSS_Feed&utm_medium=RSS&utm_campaign=RSS_Syndication",
-      "entities": [],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53325",
-      "title": "앱스토어 모델을 정조준한 OpenAI의 최신 기능들",
-      "original_title": "",
-      "description": "OpenAI는 전통적인 앱 스토어 모델의 대안을 구축하고 있으며, ChatGPT를 인간과 AI 에이전트 모두가 소프트웨어를 발견하고 사용할 수 있는 공간으로 탈바꿈시키고 있습니다.",
-      "link": "https://techcrunch.com/2026/09/29/openais-latest-features-take-direct-aim-at-the-app-store-model/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53374",
-      "title": "중국산 AI 에이전트도 미국 경쟁사들과 마찬가지로 기만적인 행동을 보입니다",
-      "original_title": "",
-      "description": "로이터통신이 200여 건의 연구 문서를 검토한 결과, 중국 모델 기반의 AI 에이전트들이 테스트에서 거짓말을 하고, 실패를 숨기며, 제한을 우회하는 등의 행동을 보인 것으로 나타났습니다. 이러한 유형의 행동은 이미 미국 AI 시스템에 대해서도 전문가들의 우려를 자아낸 바 있습니다. 로이터는 202...",
-      "link": "https://thenextweb.com/news/chinese-powered-ai-agents-show-the-same-deception-as-their-us-rivals",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53386",
-      "title": "트럼프와 테크 리더들의 만남, AI 안전성에 대한 불안감은 그 어느 때보다 커져",
-      "original_title": "",
-      "description": "트럼프 대통령과 AI 업계 리더들이 백악관에서 오찬을 가진 이후에도, AI 안전성에 대한 업계의 입장은 대체로 변함이 없는 상태입니다.",
-      "link": "https://www.cnbc.com/2026/09/30/after-trump-meeting-with-tech-leaders-ai-safety-in-more-chaotic-state.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53355",
-      "title": "배우의 '매혹적인' 목소리를 무단 도용한 AI 툴은 권리 침해, 도쿄 법원 판결",
-      "original_title": "",
-      "description": "켄지로 츠다가 틱톡 계정을 상대로 한 소송에서 승소하며, 퍼블리시티권을 보호하는 일본의 역사적인 판결이 내려졌습니다. 일본 법원은 유명 배우의 바리톤 목소리를 무단 복제한 틱톡 계정과 관련된 사건에서 인간의 목소리에 법적 보호가 제공된다고 판결했습니다.",
-      "link": "https://www.theguardian.com/technology/2026/sep/30/ai-tool-copied-actor-kenjiro-tsuda-tokyo-court",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53381",
-      "title": "앤드루 베일리, 경제적 위험 증가에 따라 더욱 강력한 AI 테스트 촉구",
-      "original_title": "",
-      "description": "앤드루 베일리 총재는 첨단 인공지능이 은행, 금융시장, 지급결제 시스템에 고도화된 위협을 가하고 있다고 경고하며, 정부가 최첨단 AI 모델의 대중 출시 전에 테스트를 대폭 강화할 것을 촉구했다. 이는 신생 기술에 대해 연이어 발표되는 서한 중 첫 번째다.",
-      "link": "https://www.cityam.com/bailey-calls-for-greater-ai-testing-as-risks-to-economy-rise/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
-    {
-      "id": "53375",
-      "title": "아스세르타(Ascerta), 델의 벤처 부문으로부터 1,800만 달러 투자 유치… 어떤 A",
-      "original_title": "",
-      "description": "기업용 AI는 이제 단순한 실험 단계를 지나 주요 비용 항목으로 자리 잡았습니다. 기업들은 토큰, 라이선스, 에이전트 실행 횟수, AI가 생성한 코드 라인 수를 셀 수 있습니다. 하지만 여전히 많은 기업들은 다음 단계를 결정짓는 핵심 질문에 답하지 못하고 있습니다. 바로 어떤 AI 프로젝트를 실제로 확장할 가치가 있는가 하는 점입니다. 아스세르타는 이러한 ",
-      "link": "https://thenextweb.com/news/ascerta-18m-series-a-dell-enterprise-ai-roi",
-      "entities": [
-        "Ascerta",
-        "AI"
-      ],
-      "date": "2026-09-30"
-    },
     {
       "id": "53506",
       "title": "구글, AI 답변 제공 위해 100개 퍼블리셔에 비용 지불 중",
@@ -4893,6 +4654,47 @@
         "Project"
       ],
       "date": "2026-10-30"
+    },
+    {
+      "id": "57655",
+      "title": "모드(Mode), 소비자 데이터 확보 전략의 일환으로 집잽(JibJab) 최대 2,950만",
+      "original_title": "Mode acquires JibJab for up to $29.5 million amid its consumer data roll-up spree",
+      "description": "모드는 소프트웨어 기업을 인수하여, AI 학습 및 소비자 조사를 위해 데이터를 공유하는 사용자들에게 무료 프리미엄 액세스와 보상을 제공하고 있습니다. 이번 인수는 이러한 데이터 확보 전략의 연장선에 있습니다.",
+      "link": "https://www.fastcompany.com/91623069/mode-acquires-jibjab-for-up-to-29-5-million-amid-consumer-data-roll-up-spree?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=3&partner=newsletter&campaign_date=10292026",
+      "entities": [
+        "Mode",
+        "JibJab",
+        "AI"
+      ],
+      "date": "2026-10-31"
+    },
+    {
+      "id": "57630",
+      "title": "르 춍크(Le Chonk)를 환영합니다: 허깅페이스의 Mistral Large 4",
+      "original_title": "Welcome Le Chonk: Mistral Large 4 on Hugging Face",
+      "description": "허깅페이스에 Mistral Large 4 모델이 새롭게 추가되었습니다. '르 춍크'라는 애칭으로 불리는 이 모델의 성능과 활용 방안을 확인해 보세요.",
+      "link": "https://huggingface.co/blog/mistral-large4",
+      "entities": [
+        "Large",
+        "Mistral",
+        "Le",
+        "Face",
+        "Hugging",
+        "Welcome",
+        "Chonk"
+      ],
+      "date": "2026-10-31"
+    },
+    {
+      "id": "57884",
+      "title": "경남정보대 AI창업학과, 로컬 창업 후속 특강 진행",
+      "original_title": "",
+      "description": "사진/경남정보대학교 경남정보대학교 AI창업학과는 지난 24일 교내에서 '제1회 KIT 스타트업 포럼: 로컬에서 창업의 답을 찾다' 첫 강연을 열었다고 29일 밝혔다. 후속 강연은 10월 31일과 11월 7일 진행한다....",
+      "link": "http://www.metroseoul.co.kr/article/20261030500290",
+      "entities": [
+        "KIT"
+      ],
+      "date": "2026-10-31"
     }
   ]
 }

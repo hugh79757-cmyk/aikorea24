@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-10-30 09:00",
-  "count": 142,
+  "updated_at": "2026-10-31 09:01",
+  "count": 144,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -601,6 +601,38 @@
       ],
       "cli_ids": [
         "opencode/hy3-preview-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "inclusionai/ling-3.1-flash-1019",
+      "original_titles": [
+        "inclusionai/ling-3.1-flash-1019-free"
+      ],
+      "news_ids": [
+        57897
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/inclusionai/ling-3.1-flash-1019-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "jev-1.13",
+      "original_titles": [
+        "jev-1.13-free"
+      ],
+      "news_ids": [
+        57761
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/jev-1.13-free"
       ],
       "in_briefing": false
     },

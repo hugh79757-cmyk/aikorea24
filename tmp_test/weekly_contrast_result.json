@@ -1,26 +1,18 @@
 {
-  "timestamp": "2026-10-24T09:00:05.238777",
+  "timestamp": "2026-10-31T09:00:02.707167",
   "dry_run": false,
   "days": 7,
-  "s0_articles": 17,
-  "s1_candidates": 4,
+  "s0_articles": 20,
+  "s1_candidates": 3,
   "s2_dives": 2,
   "s3_posts": [
-    "/Users/twinssn/Projects/aikorea24/src/content/blog/weekly-contrast-20261024-001-ai-수익화와-무료-배포의-양극화.md",
-    "/Users/twinssn/Projects/aikorea24/src/content/blog/_drafts/weekly-contrast-20261024-001-ai-기술-주권과-보안의-충돌.md"
+    "/Users/twinssn/Projects/aikorea24/src/content/blog/_drafts/weekly-contrast-20261031-001-ai-버블-우려와-실제-컴퓨팅-수요.md",
+    "/Users/twinssn/Projects/aikorea24/src/content/blog/weekly-contrast-20261031-001-오픈소스-커뮤니티의-ai-수용-갈등.md"
   ],
   "errors": [],
   "s2_quality": [
     {
-      "title": "AI 수익화와 무료 배포의 양극화",
-      "verdict": "추천",
-      "issues": [],
-      "verified_quotes": 2,
-      "unverified_quotes": 0,
-      "source_links_count": 2
-    },
-    {
-      "title": "AI 기술 주권과 보안의 충돌",
+      "title": "AI 버블 우려와 실제 컴퓨팅 수요",
       "verdict": "보류",
       "issues": [
         "직접 인용 없음 (추론으로만 구성)"
@@ -28,7 +20,15 @@
       "verified_quotes": 0,
       "unverified_quotes": 0,
       "source_links_count": 2
+    },
+    {
+      "title": "오픈소스 커뮤니티의 AI 수용 갈등",
+      "verdict": "추천",
+      "issues": [],
+      "verified_quotes": 1,
+      "unverified_quotes": 0,
+      "source_links_count": 2
     }
   ],
-  "elapsed_seconds": 229.8
+  "elapsed_seconds": 31.6
 }
