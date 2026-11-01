@@ -18,6 +18,9 @@ v2 는 "한국인 초보자가 오늘 무료로 쓸 수 있는가?"를 LLM 도�
                   규칙은 브리핑 슬롯 채우기에 한해 폐기됐다. 단, 제외 조건(이미 브리핑된
                   기사, [제외] 알림, 4개 CLI 프로바이더 행, 지원사업 공고 소스,
                   출처당 1건)은 폴백에서도 그대로 유지한다.
+                  AIK24-PIPE-14(2026-11-01): main() 이 이 폴백을 **항상** 켠다 —
+                  v2 풀이 전멸(점수 미달·이력 중복)해도 브리핑이 0건으로 끝나지
+                  않는다. 예전에는 main() 의 조기 리턴이 폴백을 우회했다.
 
 점수는 DB에 저장하지 않는다(선정 시점 한정).
 """
@@ -301,9 +304,11 @@ def select_top_articles(clusters, max_count=MAX_COUNT, allow_fallback=False,
     ②③까지는 LLM 점수와 무관하게 우선하고, ③만 점수순이다. ④는 위 풀만으로
     max_count 미만이 되었을 때 **무료 태그 없는 일반 뉴스**로 남은 슬롯을 채운다 —
     빈 슬롯을 남기지 않는다(매일 브리핑은 항상 3건). 기본값(False)은 기존 경로
-    (아카이브 v1·재충원 선행 선정)이 그대로 동작하게 유지하며, 운영 흐름은
-    지시서 순서(선정→dedup→재충원→폴백)대로 refill_after_dedup 의 4단계 폴백이
-    담당한다. ④를 켤 때는 d1_query_func·scorer 를 명시한다(테스트 오프라인 보장).
+    (아카이브 v1·재충원 선행 선정)가 그대로 동작하게 유지한다. **운영 경로인
+    main() 은 AIK24-PIPE-14(2026-11-01)부터 ④를 항상 켠다** — v2 풀이 점수 미달·
+    이력 중복으로 비어도 폴백이 브리핑 0건을 막는다. Phase 2 dedup 이후의 잔여
+    슬롯은 재충원(refill_after_dedup)의 4단계 폴백이 계속 담당한다.
+    ④를 켜는 테스트는 d1_query_func·scorer 를 주입해 오프라인을 보장한다.
     """
     articles = [a for group in (clusters or {}).values() for a in group]
     ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
@@ -824,13 +829,24 @@ def count_fresh_candidates(d1_query_func, pool=None):
     return len(kept)
 
 
-def main(dedup=True):
+def main(dedup=True, d1_query_func=None):
+    """선정 진입점 — 항상 **최대 MAX_COUNT(3)건**을 반환하려 시도한다 (AIK24-PIPE-12/14).
+
+    d1_query_func 는 테스트·재사용용 주입점이다 (기본값 None → 모듈 d1_query).
+    AIK24-PIPE-14: 4단계 폴백(일반 뉴스)이 이 함수 안에서 실제로 **도달 가능**해야
+    하므로, 폴백이 쓰는 D1 조회를 여기서 명시적으로 넘긴다.
+    """
     _ = dedup  # v1의 브리핑 중복 제거는 briefing_dedup.filter_duplicates가 담당
+    d1q = d1_query_func or d1_query
     pool, tag_counts = interleave_candidates(CANDIDATE_LIMIT)
     log(f"v2_pass=1 후보: {len(pool)}건 (기회={tag_counts['opportunity']}, zen={tag_counts['zen']}, " +
         ", ".join(f"{t}={tag_counts[t]}" for t in TAG_ORDER) + ") — LLM 도움 점수 평가 시작")
     if not pool:
-        log("선정 대상 없음 — 브리핑 건너뜀")
+        # AIK24-PIPE-14 판단: **수집 자체가 0건**인 경우는 폴백으로 덮지 않는다.
+        # 폴백 풀(72h 일반 뉴스)까지 비어 있을 가능성이 높고, 수집기 장애를 72시간 지난
+        # 일반 뉴스로 가리는 쪽이 더 위험하다 (AIK24-PIPE-08 B-2 조기 경보가 이 상황을
+        # 이미 알린다). 폴백은 "무료 풀은 있는데 dedup 으로 전부 빠진" 경우를 담당한다.
+        log("선정 대상 없음(수집 0건) — 브리핑 건너뜀 (B-2 조기 경보 확인)")
         return []
 
     # 2. 평가 (429 보호 위해 직렬 + 간격). 기회·Zen 행은 평가 없이 통과시킨다.
@@ -853,9 +869,11 @@ def main(dedup=True):
     log(f"탈락 {dropped}건 (점수 < {SCORE_MIN}) → 통과 {len(passed)}건")
     # AIK24-PIPE-04: 같은 프로세스의 브리핑 생성기가 중복 제거 후 재충원할 때 쓰는 풀.
     remember_scored_pool(passed)
+    # AIK24-PIPE-14 (2026-11-01 사고): 여기서 리턴하지 않는다. 점수 미달로 통과 0건이어도
+    # 슬롯 4(일반 뉴스 폴백)로 흘려보낸다 — 예전에는 이 조기 리턴이 폴백을 우회해
+    # 브리핑이 0건으로 끝났다 (수집 105건 → v2 4건 전멸 → "브리핑 건너뜀").
     if not passed:
-        log("통과 후보 없음 — 브리핑 건너뜀")
-        return []
+        log("통과 후보 없음 — 슬롯 4(일반 뉴스 폴백)로 이어간다")
 
     # 3.5 이미 브리핑된 기사 제거 — 슬롯 배정 전에 해야 한다 (AIK24-PIPE-DEDUP-01).
     # v1은 슬롯을 채운 뒤 auto_briefing 이 dedup 해서 슬롯이 빈 채로 끝났다
@@ -870,21 +888,38 @@ def main(dedup=True):
     #   선정에서 통과한 기사는 Phase 2 에서 추가 탈락하지 않는다.
     # briefing_dedup 은 auto_news_selector 를 import 하므로 순환 → 지연 import.
     from briefing_dedup import filter_duplicates
-    passed, removed = filter_duplicates(passed, d1_query)
+    passed, removed = filter_duplicates(passed, d1q)
     if removed:
         log(f"이미 브리핑됨 {len(removed)}건 제외 → 신선 후보 {len(passed)}건")
         for art, reason in removed:
             log(f"    [{reason}] {(art.get('title') or '')[:50]}")
+    # AIK24-PIPE-14: dedup 전멸(2026-11-01 실측 — v2 4건이 전부 "이미 브리핑됨")도
+    # 조기 리턴하지 않는다. 폴백(일반 뉴스: v2_tag 없음 · 72h · 미브리핑)이 남은
+    # 슬롯을 채운다 — 폴백에서도 0건일 때만 브리핑을 건너뛴다.
     if not passed:
-        log("신선 후보 없음 — 브리핑 건너뜀")
+        log("신선 후보 없음 — 슬롯 4(일반 뉴스 폴백)로 이어간다")
+
+    # 4. 기회 1 + Zen 변경 + 점수순 일반 뉴스 + (슬롯 4) 일반 뉴스 폴백
+    #    AIK24-PIPE-14: allow_fallback=True — v2 풀이 일부만 있어도 남은 슬롯을 일반
+    #    뉴스로 채운다. 폴백분 점수는 fallback_fill_general 내부 규칙((a) 점수 ≥
+    #    SCORE_MIN 점수순 → (b) 점수 무관 최신순)을 그대로 따르며 재평가는 하지 않는다.
+    #    d1_query_func·scorer 를 **명시적으로 주입**한다 — 폴백이 쓰는 D1 조회를
+    #    호출자(main 파라미터)가 통제할 수 있어야 테스트가 오프라인으로 돈다
+    #    (select_top_articles docstring 의 "④를 켜는 테스트는 주입한다" 계약).
+    selected = select_top_articles(
+        {"v2": passed}, MAX_COUNT,
+        allow_fallback=True,
+        d1_query_func=d1q,
+        scorer=score_helpfulness,
+    )
+
+    if not selected:
+        log("폴백(일반 뉴스) 포함 신선 후보 없음 — 브리핑 건너뜀")
         return []
 
-    # 4. 기회 1 + Zen 변경 + 점수순 일반 뉴스
-    selected = select_top_articles({"v2": passed}, MAX_COUNT)
-
     log(f"선정 {len(selected)}건" + ("" if len(selected) == MAX_COUNT
-                                    else f" (요청 {MAX_COUNT}건, 무료 풀 부족 — "
-                                         "재충원·폴백에서 충원)"))
+                                    else f" (요청 {MAX_COUNT}건, 무료 풀·폴백 부족 — "
+                                         "재충원에서 추가 충원 시도)"))
     for art in selected:
         log(f"  [{art.get('_score', 0)}점 {art.get('_detail')}] [{art.get('v2_tag')}] "
             f"{(art.get('title') or '')[:60]} ({art.get('source')} · {art.get('pub_date')})")

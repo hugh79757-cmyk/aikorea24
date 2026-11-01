@@ -45,9 +45,14 @@ def _removed(nid):
 
 @pytest.fixture(autouse=True)
 def _no_llm(monkeypatch):
-    """LLM 호출과 sleep 을 막는다."""
+    """LLM 호출과 sleep 을 막는다.
+
+    AIK24-PIPE-14: main() 이 일반 뉴스 폴백을 항상 켜므로 폴백 풀 조회가 실제 D1 로
+    나가지 않도록 빈 풀로 고정한다 (이 파일의 기대값은 무료 풀 슬롯 배정만 본다).
+    """
     monkeypatch.setattr(sel.time, 'sleep', lambda *_: None)
     monkeypatch.setattr(sel, 'score_helpfulness', lambda art: art.get('_score', 0))
+    monkeypatch.setattr(sel, 'd1_query', lambda sql: [])
 
 
 def _pool(monkeypatch, pool):

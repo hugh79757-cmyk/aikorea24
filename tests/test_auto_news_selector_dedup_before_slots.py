@@ -34,9 +34,15 @@ def _art(nid, score, source, v2_tag=None):
 
 @pytest.fixture(autouse=True)
 def _no_llm(monkeypatch):
-    """LLM 호출과 sleep, D1 조회를 전부 막는다."""
+    """LLM 호출과 sleep, D1 조회를 전부 막는다.
+
+    AIK24-PIPE-14: main() 이 일반 뉴스 폴백(select_top_articles allow_fallback=True)을
+    항상 켜므로, 폴백 풀 조회가 실제 D1 로 나가지 않도록 빈 풀로 고정한다. 폴백이
+    채울 후보가 없으면 이 파일의 기대값(슬롯 순서·중복 제외)은 그대로다.
+    """
     monkeypatch.setattr(sel.time, 'sleep', lambda *_: None)
     monkeypatch.setattr(sel, 'score_helpfulness', lambda art: art.get('_score', 0))
+    monkeypatch.setattr(sel, 'd1_query', lambda sql: [])
 
 
 def _pool(monkeypatch, pool):
@@ -68,7 +74,12 @@ def test_dupes_do_not_consume_slots(monkeypatch):
 
 
 def test_all_duplicates_yields_empty(monkeypatch):
-    """전부 중복이면 조용히 빈 리스트(브리핑 0건) — 예외를 던지지 않는다."""
+    """전부 중복이고 폴백 풀도 비면 조용히 빈 리스트 — 예외를 던지지 않는다.
+
+    AIK24-PIPE-14: 이제 빈 리스트는 폴백(일반 뉴스)까지 시도한 뒤의 결과다
+    (수정 전에는 dedup 조기 리턴이 폴백을 우회했다). 폴백 풀이 빈 경우의 종료
+    경로를 고정한다 — 폴백이 채우는 경우는 test_pipe14_* 가 검증한다.
+    """
     pool = [_art(f'd{i}', s, ZEN_SRC) for i, s in zip((1, 2, 3, 4), (14, 12, 11, 11))]
     _pool(monkeypatch, pool)
     _stub_dedup(monkeypatch, {'d1', 'd2', 'd3', 'd4'})
@@ -111,7 +122,11 @@ def test_zen_change_beats_higher_scored_news(monkeypatch):
 
 
 def test_third_slot_is_score_order_and_no_padding(monkeypatch):
-    """일반 슬롯은 점수순, 후보가 모자라면 있는 만큼만 (물타기 금지)."""
+    """일반 슬롯은 점수순, v2 후보가 모자라면 있는 만큼만 (물타기 금지).
+
+    AIK24-PIPE-14: main() 은 폴백을 항상 켜지만, 이 fixture 는 폴백 풀(D1)이 비어
+    있으므로 v2 풀 2건이 그대로 유지되는지 = 슬롯 3 이 점수순인지 본다.
+    """
     pool = [_art('g1', 9, NEWS_SRC), _art('g2', 12, NEWS_SRC2)]
     _pool(monkeypatch, pool)
     _stub_dedup(monkeypatch, set())
