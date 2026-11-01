@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-31 09:01",
+  "updated_at": "2026-11-01 09:00",
   "count": 144,
   "models": [
     {
@@ -610,6 +610,7 @@
         "inclusionai/ling-3.1-flash-1019-free"
       ],
       "news_ids": [
+        57898,
         57897
       ],
       "sources": [

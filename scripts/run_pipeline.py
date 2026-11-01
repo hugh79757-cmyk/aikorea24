@@ -87,17 +87,35 @@ def step_news_selection():
 
 
 def step_briefing(articles):
-    """Step 2: 브리핑 생성 (articles 전달 시 해당 기사로 생성). briefing_id 반환."""
+    """Step 2: 브리핑 생성 (articles 전달 시 해당 기사로 생성). briefing_id 반환.
+
+    AIK24-PIPE-14 (2026-11-01) ★ — **선정 0건(`[]`)이어도 브리핑 생성기에 위임한다.**
+
+    이전 구현은 `if articles:` 가 빈 리스트를 falsy 로 받아 else 분기로 떨어져
+    `return None` 했다. 그러면 auto_briefing 의
+      · refill_after_dedup 3단계(72h 넓은 재충원)
+      · 4단계(일반 뉴스 폴백, AIK24-PIPE-12)
+    에 **도달하지 못한다** — selector.main() 안에서 고친 것과 똑같은 "폴백 도달 불가"
+    구조가 파이프라인 계층에 하나 더 있던 셈이다.
+
+    선정기가 0건을 돌려주는 경우는 두 가지다:
+      (a) 무료 풀·기본 폴백까지 모두 소진 → selector 가 이미 4단계를 돌렸다.
+          여기서 한 번 더 도는 것은 72h 넓은 풀(REFILL_WINDOW_HOURS)에 대한 2차 기회다.
+      (b) 수집 자체가 0건 → selector 가 조기 종료했다. 이때도 72h 일반 뉴스가 남아
+          있으면 브리핑을 만들 수 있다.
+    어느 쪽이든 **마지막에 3건 미만이면 auto_briefing 이 발행을 중단하고
+    `_alert_briefing_incomplete` 로 실패 알림을 보낸다**(AIK24-PIPE-12 가드).
+    즉 빈 브리핑이 저장될 위험은 없다 — 위임이 안전한 이유다.
+    """
     import auto_briefing
 
     log("═══ Step 2: 브리핑 생성 ═══")
-    if articles:
-        return auto_briefing.main(articles)
-    elif articles is None:
+    if articles is None:
         return auto_briefing.main()
-    else:
-        log("  선정된 기사가 없어 브리핑을 건너뜁니다.")
-        return None
+    if not articles:
+        log("  선정 0건 — 재충원(72h)·일반 뉴스 폴백을 위해 브리핑 생성기에 위임 (PIPE-14)")
+        return auto_briefing.main([])
+    return auto_briefing.main(articles)
 
 
 def step_briefing_with_log(articles):

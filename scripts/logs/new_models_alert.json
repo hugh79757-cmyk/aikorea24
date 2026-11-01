@@ -1,21 +1,8 @@
 {
- "day": "2026-11-01",
- "checked_at": 1793480407.692461,
+ "day": "2026-11-02",
+ "checked_at": 1793566807.572356,
  "total_rows": 32,
  "failed_providers": {},
  "new_by_provider": {},
- "removed_by_provider": {
-  "openrouter": [
-   "poolside/laguna-s-2.1",
-   "poolside/laguna-s-2.1:free",
-   "poolside/laguna-xs-2.1",
-   "poolside/laguna-xs-2.1:free"
-  ],
-  "kilo": [
-   "poolside/laguna-s-2.1",
-   "poolside/laguna-s-2.1:free",
-   "poolside/laguna-xs-2.1",
-   "poolside/laguna-xs-2.1:free"
-  ]
- }
+ "removed_by_provider": {}
 }
