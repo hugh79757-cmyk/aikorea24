@@ -14,8 +14,11 @@
 set -o pipefail
 cd "$(git rev-parse --show-toplevel)" || exit 1
 
+PYTHON="$(git rev-parse --show-toplevel)/.venv/bin/python3"
+[ -x "$PYTHON" ] || PYTHON="python3"
+
 # ── 1) 블로그 YAML 검증 ────────────────────────────────────────────────
-python3 -c "
+$PYTHON -c "
 import yaml, re, glob
 
 files = glob.glob('src/content/blog/*.md')
@@ -46,12 +49,12 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     case "$local_sha" in 0000000000000000000000000000000000000000) continue ;; esac  # 브랜치 삭제
     case "$remote_sha" in 0000*) continue ;; esac                                   # 신규 브랜치: 기준선 없음
     guard_ran=1
-    python3 scripts/state_guard.py --quiet --old "$remote_sha" --new "$local_sha" || exit 1
+    $PYTHON scripts/state_guard.py --quiet --old "$remote_sha" --new "$local_sha" || exit 1
 done
 
 # refs 가 stdin 으로 오지 않는 환경(수동 실행 등)에서는 origin/main 기준으로 확인
 if [ "$guard_ran" -eq 0 ]; then
-    python3 scripts/state_guard.py --quiet --old origin/main --new HEAD || exit 1
+    $PYTHON scripts/state_guard.py --quiet --old origin/main --new HEAD || exit 1
 fi
 
 exit 0

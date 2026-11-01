@@ -1,3 +1,28 @@
+## 2026-11-01 13:05 — AIK24-OR-WEEKLY-01: OpenRouter 주간 토큰 랭킹 자동화
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 신규 파일: `scripts/openrouter_weekly_ranking.py`, `launchd/kr.aikorea24.openrouter-weekly.plist`
+* 산출물: `scripts/logs/openrouter_weekly_2026-10-25.json`, EmDash draft `01M6AVC1VNHD5X9KZGN78NNEKN` (status=draft, slug `주간-openrouter-토큰-랭킹-10월-25일31일`)
+* launchd: `kr.aikorea24.openrouter-weekly` 등록 (Weekday 0, 09:00 ICT), `launchctl list` 노출 확인
+
+### 한 일
+- OpenRouter Data API `/api/v1/datasets/rankings-daily` 로 직전 완성 주(일~토) 7일 집계 → 모델 변형별 토큰 합산 → Top 10 추출 → JSON 저장.
+- `emdash_publish.create_draft_post` 로 EmDash 초안 생성(발행 안 함). 포맷은 2026-10-23 첫 글을 따름(격자 표 10행 + "읽을 때 주의점" 4항 + "무료 모델 관점" + "독자가 직접 해볼 것" + 참고 자료).
+- launchd plist 등록 (ICT 일요일 09:00). 비밀값은 스크립트가 `~/.env.common` 에서 직접 로드 → plist 에 하드코딩 없음.
+
+### 결과 (검증)
+- 테스트 구간 2026-10-25~31: 조회 357행, 집계 대상 59개 변형, Top 10 정상 추출. Top1 `deepseek/deepseek-v4.1-flash-20261017` 약 47.8조 토큰.
+- EmDash draft API 응답 201, status=draft 확인. 본문에 table 블록 1개(헤더+10행) 존재.
+- `--dry-run` / `--start-date` / `--end-date` / `--no-draft` 옵션 동작 확인.
+- `plutil -lint` 통과, `launchctl load -w` 성공.
+
+### 잔존 위험
+1. 발행은 수동: 대표님/시니어 2 검수 후 EmDash 에서 publish.
+2. 첫 몇 주는 숫자 눈으로 확인 (지시서 §3-3).
+3. launchd 첫 자동 실행은 다음 일요일 09:00 ICT — 로그 `logs/openrouter_weekly.log` 확인 필요.
+4. PyYAML 이 `.venv` 에만 있어 스크립트에 `.venv` 로 재실행하는 가드를 넣었다 (시스템 python 호출 시 자동 전환).
+5. Top 10에 무료 모델이 0개인 주가 있을 수 있음 — 본문 문구는 자동으로 "이번 주 상위 10개 중 무료 모델은 없습니다." 로 전환된다.
+
 ## 2026-11-01 13:10 — AIK24-PIPE-14: 선정기 조기 리턴이 PIPE-12 폴백을 우회하는 버그 수정
 
 ### 한 일
