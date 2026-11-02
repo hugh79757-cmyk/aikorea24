@@ -1,8 +1,24 @@
 {
- "day": "2026-11-02",
- "checked_at": 1793566807.572356,
+ "day": "2026-11-03",
+ "checked_at": 1793653202.872688,
  "total_rows": 32,
  "failed_providers": {},
- "new_by_provider": {},
- "removed_by_provider": {}
+ "new_by_provider": {
+  "openrouter": [
+   "z-ai/glm-5.3-flashx-legal"
+  ],
+  "kilo": [
+   "z-ai/glm-5.3-flashx-legal"
+  ]
+ },
+ "removed_by_provider": {
+  "openrouter": [
+   "nousresearch/hermes-3-llama-3.1-405b",
+   "nousresearch/hermes-3-llama-3.1-70b"
+  ],
+  "kilo": [
+   "nousresearch/hermes-3-llama-3.1-405b",
+   "nousresearch/hermes-3-llama-3.1-70b"
+  ]
+ }
 }
