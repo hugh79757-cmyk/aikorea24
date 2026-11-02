@@ -617,6 +617,17 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
                 continue
             _try_take(art, "b 최신순")
 
+    # (c) 출처 제약 완화 — (a)(b)로도 부족하면 이미 쓴 출처에서 추가 선정.
+    # 2026-11-02 실측: 9개 후보 중 7개가 이미 쓴 2개 출처라 전부 제외돼 2건에서
+    # 멈춤. 빈 브리핑(0건)보다는 같은 출처 2건이 낫다.
+    if len(picked) < needed and blocked_by_source:
+        for art in sorted([a for a in blocked_by_source
+                           if _article_key(a) not in taken_keys],
+                          key=lambda a: (-(a.get("_score") or 0), -_pub_ts(a))):
+            if len(picked) >= needed:
+                break
+            _try_take(art, "c 출처완화")
+
     if picked:
         log(f"  [폴백] 일반 뉴스 {len(picked)}건으로 슬롯 충원")
     return picked
