@@ -1,3 +1,34 @@
+## 2026-11-02 20:10 — AIK24-PIPE-15: 폴백 출처 제약 완화 (c) 단계 추가
+
+### 한 일
+
+1. `scripts/auto_news_selector.py` `fallback_fill_general` — **(c) 단계 추가**(코드는 시니어가 작성, 본 세션은 검증·회귀 테스트 담당). (a) 점수순 → (b) 최신순으로 `needed` 미충원일 때 `blocked_by_source`(이미 사용한 출처의 후보)에서 **점수순(동점 최신순)** 으로 남은 슬롯을 채운다. 채택은 `_try_take` 경유라 3차 방어선(배치 내부 중복)이 그대로 유지된다.
+2. `tests/test_pipe15_fallback_source_relax.py` **신규 3건** — ① 11-02 재현(9후보·2출처 사용·(a)(b) 2건 → (c) 3번째 점수순) ② `_score` 없는 실제 운영 조건(0점 동점 → 최신순) ③ (c)의 배치 중복 차단.
+
+### 결과 (검증 근거)
+
+### [검증됨]
+- 기존 폴백 테스트 **10 passed** (근거: `pytest tests/test_pipe12_general_fallback.py -v`).
+- 신규 **3 passed** (근거: `pytest tests/test_pipe15_fallback_source_relax.py -v`). 11-02 재현 결과 `['misc-a','misc-b','nv-1']` — (c)가 8점(nv-1)을 7점(nv-2)보다 먼저 골랐고, 출처는 이미 사용된 네이버뉴스.
+- selector 테스트 **17 passed** (근거: `pytest tests/test_auto_news_selector*.py -v`).
+- 전체 스위트 **3 failed / 1079 passed / 10 skipped** (45.71s). 1079 = PIPE-14 기준선 1076 + 신규 3. 실패 3건은 기존 실패(free_models_cli.json 계열)와 동일 목록.
+
+### [부분검증]
+- (c)의 실제 운영 효과는 11-02 로그 재구성 기반이다. 실 LLM 점수·실 D1 풀 조합에서 3건이 충원되는지는 다음 실행 관측이 필요.
+
+### [검증불가]
+- end-to-end 발행 관측 — 2026-11-03 07:00 실행 로그에서 `[폴백 c 출처완화]` 라인 + `선정 3건` 확인 필요.
+
+### 잔존 위험
+- (c)는 출처당 1건 상한을 완화하므로 같은 출처에서 최대 `needed`건까지 뽑을 수 있다(상한 없음). 같은 사건이 아닌 이상 품질 영향은 제한적이나 한 출처 독식 가능성은 남는다.
+- (c) 대상 행은 (a) 채점 대상에서 제외된 행이라 `_score=None` 이면 0점 동점 → pubDate 최신순으로만 갈린다(11-02 재충원 경로의 실제 동작).
+- 기존 실패 3건(free_models_cli.json 계열) 미해결.
+
+### 다음 행동
+- 2026-11-03 07:00 실행 로그 확인. 커밋 `c5ce99b6`.
+
+## 2026-11-02 AIK24-FREE-PIPE-01 일일 실행 — 수집 32건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-01 13:05 — AIK24-OR-WEEKLY-01: OpenRouter 주간 토큰 랭킹 자동화
 
 * 프로젝트: /Users/twinssn/Projects/aikorea24
