@@ -379,3 +379,20 @@
 {"ts": "2026-11-03 07:31:13", "slug": "abnormal-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-03 07:31:13", "slug": "nuclr-commander", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-03 07:31:15", "slug": "snapthumb", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-04 06:00:45", "slug": "teamily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-04 06:03:40", "slug": "teamily-ai", "step": "enrich", "result": "done", "detail": "+2,795자 (시도 2)", "dry_run": false}
+{"ts": "2026-11-04 06:03:46", "slug": "teamily-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-04 06:03:50", "slug": "magicalcore", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-04 06:03:55", "slug": "magicalcore", "step": "enrich", "result": "done", "detail": "+2,750자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-04 06:03:56", "slug": "magicalcore", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-04 06:03:57", "slug": "infino-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-04 06:04:03", "slug": "infino-ai", "step": "enrich", "result": "done", "detail": "+2,822자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-04 06:04:03", "slug": "infino-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-04 06:04:04", "slug": "portrait-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-04 06:04:10", "slug": "portrait-generators", "step": "enrich", "result": "done", "detail": "+3,177자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-04 06:04:16", "slug": "portrait-generators", "step": "thumb", "result": "done", "detail": "✅ portrait-generators og 28KB", "dry_run": false}
+{"ts": "2026-11-04 06:04:16", "slug": "cartoon-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-04 06:04:23", "slug": "cartoon-generators", "step": "enrich", "result": "done", "detail": "+2,939자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-04 06:04:27", "slug": "cartoon-generators", "step": "thumb", "result": "done", "detail": "✅ cartoon-generators og 23KB", "dry_run": false}
+{"ts": "2026-11-04 06:04:35", "slug": "advances-in-agentic-computer-graphics", "step": "enrich", "result": "done", "detail": "+3,116자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-04 06:04:42", "slug": "advances-in-agentic-computer-graphics", "step": "thumb", "result": "done", "detail": "✅ advances-in-agentic-computer-graphics 31KB", "dry_run": false}

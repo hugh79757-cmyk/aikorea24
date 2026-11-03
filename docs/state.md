@@ -1,3 +1,5 @@
+## 2026-11-03 AIK24-FREE-PIPE-01 일일 실행 — 수집 35건 / 실패 프로바이더 0 / added 3 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-02 20:26 — 브리핑 370 블로그 심층 리뷰 생성·발행 (blog_draft_generator)
 
 ### 한 일

@@ -1,24 +1,29 @@
 {
- "day": "2026-11-03",
- "checked_at": 1793653202.872688,
- "total_rows": 32,
+ "day": "2026-11-04",
+ "checked_at": 1793739615.4372962,
+ "total_rows": 28,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "z-ai/glm-5.3-flashx-legal"
+   "x-ai/grok-4.7:batch",
+   "x-ai/grok-4.6:batch",
+   "stealth/crouton-alpha"
   ],
   "kilo": [
-   "z-ai/glm-5.3-flashx-legal"
+   "stealth/crouton-alpha"
+  ],
+  "zen": [
+   "pulse-alpha-free",
+   "crouton-alpha-free"
   ]
  },
  "removed_by_provider": {
-  "openrouter": [
-   "nousresearch/hermes-3-llama-3.1-405b",
-   "nousresearch/hermes-3-llama-3.1-70b"
-  ],
   "kilo": [
-   "nousresearch/hermes-3-llama-3.1-405b",
-   "nousresearch/hermes-3-llama-3.1-70b"
+   "inclusionai/ling-3.1-flash-1019-free",
+   "liquid/lfm-2.5-2.6b:free",
+   "nvidia/nemotron-3.5-content-safety:free",
+   "recursive/flint-v1.0:free",
+   "xingchen-agi/xing4.0-29b-a4b:free"
   ]
  }
 }

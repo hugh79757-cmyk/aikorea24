@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-02 22:14",
-  "count": 144,
+  "updated_at": "2026-11-03 09:01",
+  "count": 145,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -1950,6 +1950,22 @@
         "openrouter/poolside/laguna-xs-2.1:free"
       ],
       "in_briefing": false
+    },
+    {
+      "key": "pulse-alpha",
+      "original_titles": [
+        "pulse-alpha-free"
+      ],
+      "news_ids": [
+        58279
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/pulse-alpha-free"
+      ],
+      "in_briefing": true
     },
     {
       "key": "qwen/qwen-image",
