@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-03 09:01",
-  "count": 145,
+  "updated_at": "2026-11-04 09:01",
+  "count": 146,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -209,6 +209,22 @@
         "nvidia/nvidia/cosmos-transfer2_5-2b"
       ],
       "in_briefing": false
+    },
+    {
+      "key": "crouton-alpha",
+      "original_titles": [
+        "crouton-alpha-free"
+      ],
+      "news_ids": [
+        58469
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/crouton-alpha-free"
+      ],
+      "in_briefing": true
     },
     {
       "key": "deepseek-ai/deepseek-v4-flash",
@@ -489,14 +505,17 @@
         "google/gemma-4-31b-it:free"
       ],
       "news_ids": [
+        58282,
         55352,
         54952
       ],
       "sources": [
+        "Kilo Free Models",
         "NVIDIA NIM Free",
         "OpenRouter Free Models"
       ],
       "cli_ids": [
+        "kilo/google/gemma-4-31b-it:free",
         "nvidia/google/gemma-4-31b-it",
         "openrouter/google/gemma-4-31b-it:free"
       ],
@@ -1952,22 +1971,6 @@
       "in_briefing": false
     },
     {
-      "key": "pulse-alpha",
-      "original_titles": [
-        "pulse-alpha-free"
-      ],
-      "news_ids": [
-        58279
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/pulse-alpha-free"
-      ],
-      "in_briefing": true
-    },
-    {
       "key": "qwen/qwen-image",
       "original_titles": [
         "qwen/qwen-image"
@@ -2160,6 +2163,25 @@
       "in_briefing": false
     },
     {
+      "key": "stealth/crouton-alpha",
+      "original_titles": [
+        "stealth/crouton-alpha"
+      ],
+      "news_ids": [
+        58470,
+        58454
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/stealth/crouton-alpha",
+        "openrouter/stealth/crouton-alpha"
+      ],
+      "in_briefing": false
+    },
+    {
       "key": "stealth/glyph-cluster",
       "original_titles": [
         "stealth/glyph-cluster"
@@ -2280,14 +2302,17 @@
         "thinkingmachines/inkling:free"
       ],
       "news_ids": [
+        58281,
         55332,
         54945
       ],
       "sources": [
+        "Kilo Free Models",
         "NVIDIA NIM Free",
         "OpenRouter Free Models"
       ],
       "cli_ids": [
+        "kilo/thinkingmachines/inkling:free",
         "nvidia/thinkingmachines/inkling",
         "openrouter/thinkingmachines/inkling:free"
       ],

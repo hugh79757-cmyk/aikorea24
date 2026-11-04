@@ -1,0 +1,106 @@
+{
+  "added": [
+    {
+      "provider": "kilo",
+      "model_id": "stealth/crouton-alpha",
+      "name": "Crouton Alpha",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576
+    }
+  ],
+  "removed": [
+    {
+      "provider": "kilo",
+      "model_id": "google/gemma-4-31b-it:free",
+      "name": "Google: Gemma 4 31B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "inclusionai/ling-3.1-flash-1019-free",
+      "name": "inclusionAI: Ling 3.1 Flash 1019 (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1000000,
+      "reason": "단종/제거"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "liquid/lfm-2.5-2.6b:free",
+      "name": "LiquidAI: LFM2.5-2.6B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 65536,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "nvidia/nemotron-3.5-content-safety:free",
+      "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 128000,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "recursive/flint-v1.0:free",
+      "name": "Recursive: Flint (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144,
+      "reason": "단종/제거"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "thinkingmachines/inkling-small:free",
+      "name": "Thinking Machines: Inkling Small (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "thinkingmachines/inkling:free",
+      "name": "Thinking Machines: Inkling (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "kilo",
+      "model_id": "xingchen-agi/xing4.0-29b-a4b:free",
+      "name": "XingChen: Xing4.0 29B A4B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144,
+      "reason": "단종/제거"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}
