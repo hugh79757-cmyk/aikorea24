@@ -422,3 +422,18 @@
 {"ts": "2026-11-05 06:01:06", "slug": "livereacting-for-chatgpt", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
 {"ts": "2026-11-05 06:01:22", "slug": "route-anything-a-study-of-model-and-policy-routin", "step": "enrich", "result": "done", "detail": "+3,412자 (시도 2)", "dry_run": false}
 {"ts": "2026-11-05 06:01:26", "slug": "route-anything-a-study-of-model-and-policy-routin", "step": "thumb", "result": "done", "detail": "✅ route-anything-a-study-of-model-and-policy-routin 30KB", "dry_run": false}
+{"ts": "2026-11-05 07:30:05", "slug": "command-code-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:07", "slug": "dateguard-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:08", "slug": "deepseek-harness-explained", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:13", "slug": "dots-by-openai", "step": "thumb", "result": "fail", "detail": "❌ dots-by-openai BLANK(SMALL_1762B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ dots-by-openai NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-11-05 07:30:14", "slug": "flatkey-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:16", "slug": "floatboat-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:17", "slug": "forthwrite-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:18", "slug": "fotello-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:18", "slug": "freebeat-ai-app", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:18", "slug": "freeflux-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:18", "slug": "froging-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:20", "slug": "getimg-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:20", "slug": "gptscribe-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:21", "slug": "holaos-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-05 07:30:21", "slug": "imagvio-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
