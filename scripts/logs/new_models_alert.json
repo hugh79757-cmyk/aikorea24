@@ -1,22 +1,37 @@
 {
- "day": "2026-11-05",
- "checked_at": 1793826008.114131,
+ "day": "2026-11-06",
+ "checked_at": 1793912405.441561,
  "total_rows": 26,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "tencent/hy4",
-   "ricursiveai/ripple-65b-preview"
+   "google/gemini-omni-1.1-flash",
+   "openrouter/auto-code",
+   "google/gemini-omni-1.2-flash",
+   "inclusionai/ling-3.0-tiny"
   ],
   "kilo": [
-   "tencent/hy4",
-   "ricursiveai/ripple-65b-preview"
+   "google/gemini-omni-1.1-flash",
+   "openrouter/auto-code",
+   "google/gemini-omni-1.2-flash",
+   "inclusionai/ling-3.0-tiny"
   ]
  },
  "removed_by_provider": {
   "openrouter": [
-   "thinkingmachines/inkling-small:free",
-   "thinkingmachines/inkling:free"
+   "minimax/minimax-01",
+   "minimax/minimax-m2",
+   "minimax/minimax-m2-her",
+   "minimax/minimax-m2.1"
+  ],
+  "kilo": [
+   "minimax/minimax-01",
+   "minimax/minimax-m2",
+   "minimax/minimax-m2-her",
+   "minimax/minimax-m2.1"
+  ],
+  "nvidia": [
+   "meta/llama-3.2-11b-vision-instruct"
   ]
  }
 }

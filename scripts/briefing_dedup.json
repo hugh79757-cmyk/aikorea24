@@ -1,82 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-05",
-      "briefing_id": 331,
-      "articles": [
-        {
-          "id": "54042",
-          "title": "샘 올트먼, 미국 정계에 투입되는 AI 자금은 명백히 효과가 없다고 밝혀",
-          "original_title": "",
-          "description": "폴리티코의 팟캐스트 '디코디드(Decoded)' 첫 회에서 오픈에이아이 최고경영자 샘 올트먼은 AI 기업들이 미국의 정계에 쏟아붓는 자금이 사람들의 기술 인식을 개선하는 데 실패했다고 말했습니다. 그는 \"무언가 분명히 잘못 돌아가고 있다\"고 팟캐스트에서 밝혔습니다.",
-          "link": "https://thenextweb.com/news/sam-altman-ai-money-politics-not-working",
-          "entities": [
-            "Decoded",
-            "AI"
-          ],
-          "date": "2026-10-05"
-        },
-        {
-          "id": "54012",
-          "title": "세이프월드는 생성형 AI 로봇이 인간을 해치지 않을 것이라고 사람들을 설득할 수 있을까요?",
-          "original_title": "",
-          "description": "세이프월드는 로봇이 실제 인간을 다치게 하지 않도록 보장하기 위해 디지털 휴먼을 구축하고 있습니다.",
-          "link": "https://techcrunch.com/2026/10/05/can-safeworld-convince-people-that-gen-ai-robots-wont-hurt-them/",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-10-05"
-        },
-        {
-          "id": "54024",
-          "title": "인터넷감시재단(IWF), AI 아동 성적 학대물 급증 보고",
-          "original_title": "",
-          "description": "학대물 모니터링 기관에 따르면, 올해 평가된 AI 이미지의 수는 이미 작년 전체 수치보다 40% 이상 높다고 합니다. AI가 생성한 아동 성적 학대물이 온라인상에서 확산되고 있으며, 올해 조사된 불법 자료의 양은 이미 작년 전체 총합을 넘어섰습니다. 인터넷감시재단 분석가들은 이러한 현상의 심각성을 경고하고 있습니다.",
-          "link": "https://www.theguardian.com/technology/2026/oct/05/internet-watch-foundation-huge-rise-ai-child-sexual-abuse-material",
-          "entities": [
-            "IWF",
-            "AI"
-          ],
-          "date": "2026-10-05"
-        },
-        {
-          "id": "54050",
-          "title": "사티아 나델라는 한 차례 마이크로소프트를 혁신했다. AI 시대에 다시 한번 해낼 수 있을까",
-          "original_title": "",
-          "description": "2014년 스티브 발머의 뒤를 이어 취임한 사티아 나델라는 마이크로소프트를 클라우드 거물로 탈바꿈시켰다. 이제 그는 회사를 AI 분야의 강력한 주어로 만들어야 하는 임무를 맡고 있다.",
-          "link": "https://www.cnbc.com/2026/10/05/satya-nadella-reinvented-microsoft-once-can-he-do-it-in-the-ai-era.html",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-10-05"
-        },
-        {
-          "id": "54017",
-          "title": "트럼프, 실제 초지능과는 전혀 무관한 \"슈퍼 인텔리전스 포스\" 출범",
-          "original_title": "",
-          "description": "도널드 트럼프가 \"슈퍼 인텔리전스 포스\"를 창설했습니다. 여기서 \"슈퍼인텔리전스\"는 그가 인공지능을 지칭하는 용어이며, 이 부대는 제이 클레이튼 국가정보국(DNI) 국장과 기타 정부 관료들이 이끌며 AI 기업, 핵심 인프라 운영자, 이익 단체들과 협력합니다.",
-          "link": "https://the-decoder.com/trump-launches-super-intelligence-force-that-has-nothing-to-do-with-actual-superintelligence/",
-          "entities": [
-            "DNI",
-            "AI"
-          ],
-          "date": "2026-10-05"
-        },
-        {
-          "id": "54025",
-          "title": "샘 올트먼, AI의 혜택을 위해 '나쁜 일들'도 감수해야 한다고 발언",
-          "original_title": "",
-          "description": "OpenAI 최고경영자(CEO)가 기술이 가져다줄 '좋은 점들'을 위해 규제의 손길을 가볍게 유지할 것을 촉구했습니다. 샘 올트먼은 세계가 AI로 인한 해킹, 사기 및 \"기타 나쁜 일들\"을 기술의 혜택을 얻는 대가로 받아들여야 한다고 믿는다고 밝혔습니다.",
-          "link": "https://www.theguardian.com/technology/2026/oct/05/sam-altman-open-ai-chatgpt-benefits-risks",
-          "entities": [
-            "CEO",
-            "OpenAI"
-          ],
-          "date": "2026-10-05"
-        }
-      ]
-    },
-    {
       "date": "2026-10-06",
       "briefing_id": 332,
       "articles": [
@@ -2057,79 +1981,49 @@
           "date": "2026-11-04"
         }
       ]
+    },
+    {
+      "date": "2026-11-05",
+      "briefing_id": 373,
+      "articles": [
+        {
+          "id": "58585",
+          "title": "네이버, 통합 에이전트 구축 앞당긴다…카카오·배민도 자연어 AI 검색 확대",
+          "original_title": "",
+          "description": "네이버가 검색·쇼핑·지도 등 개별 서비스를 하나로 연결하는 '통합 에이전트' 구축을 앞당긴다. 이용자가 서비스 경계를 넘나들지 않아도 검색부터 추천·예약·결제까지 이어지도록 하는 것이 목표다. 카카오와 배달의민족도 대화형 AI와 에이전트 기능을 확대하면서 국내 플랫폼 경쟁이 '검색'에서 '실행'으로 옮겨가고 있다. 4일 업계에 따르면 네이버는 내년으로 제시",
+          "link": "https://www.etnews.com/20261104000273",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-05"
+        },
+        {
+          "id": "58615",
+          "title": "[네이버클라우드 국방 AI] 김유원 네이버클라우드 대표 \"미래 강군은 AI...",
+          "original_title": "",
+          "description": "김유원 네이버클라우드 대표는 3일 행사 기조연설을 통해 국방 인공지능(AI)의 안전한 운용과 민간 기술의... 만큼만 최신 자원을 활용하는 구독형 방식으로 전환할 것을 제안했다. 아울러 군이 통제권을 유지한 채 검증된...",
+          "link": "https://www.cbci.co.kr/news/articleView.html?idxno=623088",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-05"
+        },
+        {
+          "id": "58617",
+          "title": "[뉴욕증시] 정치적 불확실성 해소…다우 3%↑·S&P 1.58%↑",
+          "original_title": "",
+          "description": "메타는 복수의 AI 코딩 에이전트를 동시에 지휘·분업화할 수 있는 스타트업 '컨덕터'를 인수해 소프트웨어 개발 경쟁력을 강화했다. 구글은 데이터센터 개발사 테라울프가 앤트로픽과 추진하는 데이터센터...",
+          "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=284796",
+          "entities": [
+            "S&P",
+            "AI"
+          ],
+          "date": "2026-11-05"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "54042",
-      "title": "샘 올트먼, 미국 정계에 투입되는 AI 자금은 명백히 효과가 없다고 밝혀",
-      "original_title": "",
-      "description": "폴리티코의 팟캐스트 '디코디드(Decoded)' 첫 회에서 오픈에이아이 최고경영자 샘 올트먼은 AI 기업들이 미국의 정계에 쏟아붓는 자금이 사람들의 기술 인식을 개선하는 데 실패했다고 말했습니다. 그는 \"무언가 분명히 잘못 돌아가고 있다\"고 팟캐스트에서 밝혔습니다.",
-      "link": "https://thenextweb.com/news/sam-altman-ai-money-politics-not-working",
-      "entities": [
-        "Decoded",
-        "AI"
-      ],
-      "date": "2026-10-05"
-    },
-    {
-      "id": "54012",
-      "title": "세이프월드는 생성형 AI 로봇이 인간을 해치지 않을 것이라고 사람들을 설득할 수 있을까요?",
-      "original_title": "",
-      "description": "세이프월드는 로봇이 실제 인간을 다치게 하지 않도록 보장하기 위해 디지털 휴먼을 구축하고 있습니다.",
-      "link": "https://techcrunch.com/2026/10/05/can-safeworld-convince-people-that-gen-ai-robots-wont-hurt-them/",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-10-05"
-    },
-    {
-      "id": "54024",
-      "title": "인터넷감시재단(IWF), AI 아동 성적 학대물 급증 보고",
-      "original_title": "",
-      "description": "학대물 모니터링 기관에 따르면, 올해 평가된 AI 이미지의 수는 이미 작년 전체 수치보다 40% 이상 높다고 합니다. AI가 생성한 아동 성적 학대물이 온라인상에서 확산되고 있으며, 올해 조사된 불법 자료의 양은 이미 작년 전체 총합을 넘어섰습니다. 인터넷감시재단 분석가들은 이러한 현상의 심각성을 경고하고 있습니다.",
-      "link": "https://www.theguardian.com/technology/2026/oct/05/internet-watch-foundation-huge-rise-ai-child-sexual-abuse-material",
-      "entities": [
-        "IWF",
-        "AI"
-      ],
-      "date": "2026-10-05"
-    },
-    {
-      "id": "54050",
-      "title": "사티아 나델라는 한 차례 마이크로소프트를 혁신했다. AI 시대에 다시 한번 해낼 수 있을까",
-      "original_title": "",
-      "description": "2014년 스티브 발머의 뒤를 이어 취임한 사티아 나델라는 마이크로소프트를 클라우드 거물로 탈바꿈시켰다. 이제 그는 회사를 AI 분야의 강력한 주어로 만들어야 하는 임무를 맡고 있다.",
-      "link": "https://www.cnbc.com/2026/10/05/satya-nadella-reinvented-microsoft-once-can-he-do-it-in-the-ai-era.html",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-10-05"
-    },
-    {
-      "id": "54017",
-      "title": "트럼프, 실제 초지능과는 전혀 무관한 \"슈퍼 인텔리전스 포스\" 출범",
-      "original_title": "",
-      "description": "도널드 트럼프가 \"슈퍼 인텔리전스 포스\"를 창설했습니다. 여기서 \"슈퍼인텔리전스\"는 그가 인공지능을 지칭하는 용어이며, 이 부대는 제이 클레이튼 국가정보국(DNI) 국장과 기타 정부 관료들이 이끌며 AI 기업, 핵심 인프라 운영자, 이익 단체들과 협력합니다.",
-      "link": "https://the-decoder.com/trump-launches-super-intelligence-force-that-has-nothing-to-do-with-actual-superintelligence/",
-      "entities": [
-        "DNI",
-        "AI"
-      ],
-      "date": "2026-10-05"
-    },
-    {
-      "id": "54025",
-      "title": "샘 올트먼, AI의 혜택을 위해 '나쁜 일들'도 감수해야 한다고 발언",
-      "original_title": "",
-      "description": "OpenAI 최고경영자(CEO)가 기술이 가져다줄 '좋은 점들'을 위해 규제의 손길을 가볍게 유지할 것을 촉구했습니다. 샘 올트먼은 세계가 AI로 인한 해킹, 사기 및 \"기타 나쁜 일들\"을 기술의 혜택을 얻는 대가로 받아들여야 한다고 믿는다고 밝혔습니다.",
-      "link": "https://www.theguardian.com/technology/2026/oct/05/sam-altman-open-ai-chatgpt-benefits-risks",
-      "entities": [
-        "CEO",
-        "OpenAI"
-      ],
-      "date": "2026-10-05"
-    },
     {
       "id": "54121",
       "title": "릴플렉션, 더 적은 연산 비용으로 중국 모델과 경쟁할 오픈웨이트 AI 모델 ‘빔’ 선보여",
@@ -3853,6 +3747,40 @@
         "AI"
       ],
       "date": "2026-11-04"
+    },
+    {
+      "id": "58585",
+      "title": "네이버, 통합 에이전트 구축 앞당긴다…카카오·배민도 자연어 AI 검색 확대",
+      "original_title": "",
+      "description": "네이버가 검색·쇼핑·지도 등 개별 서비스를 하나로 연결하는 '통합 에이전트' 구축을 앞당긴다. 이용자가 서비스 경계를 넘나들지 않아도 검색부터 추천·예약·결제까지 이어지도록 하는 것이 목표다. 카카오와 배달의민족도 대화형 AI와 에이전트 기능을 확대하면서 국내 플랫폼 경쟁이 '검색'에서 '실행'으로 옮겨가고 있다. 4일 업계에 따르면 네이버는 내년으로 제시",
+      "link": "https://www.etnews.com/20261104000273",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-05"
+    },
+    {
+      "id": "58615",
+      "title": "[네이버클라우드 국방 AI] 김유원 네이버클라우드 대표 \"미래 강군은 AI...",
+      "original_title": "",
+      "description": "김유원 네이버클라우드 대표는 3일 행사 기조연설을 통해 국방 인공지능(AI)의 안전한 운용과 민간 기술의... 만큼만 최신 자원을 활용하는 구독형 방식으로 전환할 것을 제안했다. 아울러 군이 통제권을 유지한 채 검증된...",
+      "link": "https://www.cbci.co.kr/news/articleView.html?idxno=623088",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-05"
+    },
+    {
+      "id": "58617",
+      "title": "[뉴욕증시] 정치적 불확실성 해소…다우 3%↑·S&P 1.58%↑",
+      "original_title": "",
+      "description": "메타는 복수의 AI 코딩 에이전트를 동시에 지휘·분업화할 수 있는 스타트업 '컨덕터'를 인수해 소프트웨어 개발 경쟁력을 강화했다. 구글은 데이터센터 개발사 테라울프가 앤트로픽과 추진하는 데이터센터...",
+      "link": "https://www.financialpost.co.kr/news/articleView.html?idxno=284796",
+      "entities": [
+        "S&P",
+        "AI"
+      ],
+      "date": "2026-11-05"
     }
   ]
 }

@@ -1,0 +1,29 @@
+{
+  "added": [],
+  "removed": [
+    {
+      "provider": "openrouter",
+      "model_id": "thinkingmachines/inkling-small:free",
+      "name": "Thinking Machines: Inkling Small (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576,
+      "reason": "무료→유료 전환"
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "thinkingmachines/inkling:free",
+      "name": "Thinking Machines: Inkling (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576,
+      "reason": "무료→유료 전환"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}

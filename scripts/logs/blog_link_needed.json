@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-04 09:01",
-  "count": 146,
+  "updated_at": "2026-11-05 09:01",
+  "count": 144,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -209,22 +209,6 @@
         "nvidia/nvidia/cosmos-transfer2_5-2b"
       ],
       "in_briefing": false
-    },
-    {
-      "key": "crouton-alpha",
-      "original_titles": [
-        "crouton-alpha-free"
-      ],
-      "news_ids": [
-        58469
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/crouton-alpha-free"
-      ],
-      "in_briefing": true
     },
     {
       "key": "deepseek-ai/deepseek-v4-flash",
@@ -1604,6 +1588,7 @@
         "nvidia/nemotron-3.5-content-safety:free"
       ],
       "news_ids": [
+        58475,
         55409,
         55319,
         54948
@@ -2159,25 +2144,6 @@
       ],
       "cli_ids": [
         "nvidia/sarvamai/sarvam-m"
-      ],
-      "in_briefing": false
-    },
-    {
-      "key": "stealth/crouton-alpha",
-      "original_titles": [
-        "stealth/crouton-alpha"
-      ],
-      "news_ids": [
-        58470,
-        58454
-      ],
-      "sources": [
-        "Kilo Free Models",
-        "OpenRouter Free Models"
-      ],
-      "cli_ids": [
-        "kilo/stealth/crouton-alpha",
-        "openrouter/stealth/crouton-alpha"
       ],
       "in_briefing": false
     },
