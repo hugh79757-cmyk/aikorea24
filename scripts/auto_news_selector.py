@@ -95,11 +95,16 @@ ZEN_POOL_LIMIT = ZEN_SLOT_LIMIT + 1
 # 채워지면 **무료 태그 없는 일반 뉴스**로 남은 슬롯을 채운다. 2026-10-28 실측:
 # 무료 풀 7건 중 신선 1건 → 브리핑 1건 발행(빈 슬롯 2개 공개). "빈 슬롯 유지(강제
 # 충전 없음)" 규칙은 브리핑 슬롯 채우기에 한해 폐기된다 (지시서 §규칙 2순위).
-FALLBACK_WINDOW_HOURS = 72  # 폴백 풀 조회 창 (재충원 창과 동일 — 오늘분 우선, 부족 시 72h)
-FALLBACK_POOL_LIMIT = 40    # 폴백 풀 상한 (최신순). 15 → 40 (2026-10-28 실측):
+# 2026-11-06 실측: 72h 창 + 상한 40 이면 '수집은 272건인데 실제 후보 2건'까지 줄어
+# 브리핑 발행이 중단됐다(35건 중 31건이 링크 중복). 창을 120h 로 넓히고 상한을 키운다.
+FALLBACK_WINDOW_HOURS = 120  # 폴백 풀 조회 창 (구 72h — 2026-11-06 확대)
+FALLBACK_POOL_LIMIT = 40    # 폴백 풀 1차 상한 (최신순). 15 → 40 (2026-10-28 실측):
 #                             최신 15건이 공고·집계(네이버뉴스) 덩어리여서 출처당 1건
 #                             규칙상 1건만 나오는 문제를 해결 — 상위 40건에
 #                             인공지능신문·IT조선·전자신문 등 기사 소스가 올라온다.
+# 2026-11-06: 1차 상한(40)이 **중복 제거 전에** 걸려 실후보가 2건으로 줄었다.
+# 부족하면 상한을 키워 한 번 더 조회한다(아래 fallback_fill_general).
+FALLBACK_POOL_LIMIT_WIDE = 160
 FALLBACK_SCORE_LIMIT = 10   # 폴백 (a)단계 LLM 점수 평가 대상 상한
 # 지원사업 공고 소스 — 브리핑 본문 슬롯 대상이 아니다 (지시서 §2순위 제외 조건).
 # SQL(get_general_fallback_news)의 이 명시 목록이 1차 방어선이고, 부처·자치단체
@@ -472,7 +477,7 @@ def _pub_ts(article):
     return 0.0
 
 
-def get_general_fallback_news(d1_query_func, exclude_ids=()):
+def get_general_fallback_news(d1_query_func, exclude_ids=(), limit=None):
     """폴백 풀 — 무료 태그 없는 일반 뉴스 (지시서 §2순위).
 
     - v2_tag 가 없는 행 (무료 기회·Zen·무료 뉴스가 아니다 — v2_pass 관문은 적용 안 함)
@@ -500,7 +505,8 @@ def get_general_fallback_news(d1_query_func, exclude_ids=()):
         ORDER BY id DESC
         LIMIT %d
     """ % (_COLS, cutoff, _sql_in(PROVIDER_SOURCES + ANNOUNCEMENT_SOURCES),
-            _excluded_titles_sql(), excluded_sql, FALLBACK_POOL_LIMIT))
+            _excluded_titles_sql(), excluded_sql,
+            int(limit or FALLBACK_POOL_LIMIT)))
 
 
 def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
@@ -535,6 +541,18 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
         return []
     pool = [dict(a) for a in pool]
     fresh, blocked = filter_duplicates(pool, d1_query_func)
+    # 2026-11-06: 1차 상한(40)에서 잘린 뒤 중복 제거로 실후보가 급감한 사례
+    # (실측: 40건 → 중복 31건 → 후보 2건 → 브리핑 3건 미달 → 발행 중단).
+    # 부족하면 상한을 키워 한 번 더 조회한다(이미 본 행은 id 로 제외).
+    if len(fresh) < needed:
+        seen_ids = {str(a.get("id")) for a in pool if a.get("id") is not None}
+        wide = get_general_fallback_news(d1_query_func, limit=FALLBACK_POOL_LIMIT_WIDE)
+        extra = [dict(a) for a in wide if str(a.get("id")) not in seen_ids]
+        if extra:
+            fresh2, blocked2 = filter_duplicates(extra, d1_query_func)
+            log(f"  [폴백] 1차 상한 부족 → 넓게 재조회 {len(extra)}건 중 신선 {len(fresh2)}건")
+            fresh += fresh2
+            blocked += blocked2
     if blocked:
         log(f"  [폴백] 중복 제외 {len(blocked)}건: "
             + ", ".join(reason for _, reason in blocked))

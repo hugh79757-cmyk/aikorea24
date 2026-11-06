@@ -82,6 +82,32 @@ def _offline(monkeypatch, tmp_path):
     monkeypatch.setattr(briefing_dedup, 'HISTORY_PATH', hist)
 
 
+def test_wide_refetch_when_first_pool_is_all_duplicates(monkeypatch):
+    """1차 상한에서 잘린 풀이 전부 중복이면 넓게 재조회해 신선 후보를 찾는다 (2026-11-06 사고).
+
+    실측: 폴백 40건 중 31건이 링크 중복 → 실후보 2건 → 브리핑 3건 미달로 발행 중단.
+    """
+    first = [_row('d1', NAVER, f'{DAY} 06:00:00'), _row('d2', NAVER, f'{DAY} 05:00:00')]
+    wide = first + [_row('f1', MISC1, f'{DAY} 04:00:00', 9), _row('f2', MISC2, f'{DAY} 03:00:00', 8)]
+    calls = []
+
+    def fake_fetch(d1q, exclude_ids=(), limit=None):
+        calls.append(limit)
+        return [dict(a) for a in (first if len(calls) == 1 else wide)]
+
+    monkeypatch.setattr(sel, 'get_general_fallback_news', fake_fetch)
+    monkeypatch.setattr(briefing_dedup, 'get_history_articles', lambda q: [])
+    stub = lambda art, hist: (True, 'exact_id') if art['id'].startswith('d') else (False, None)
+    monkeypatch.setattr(briefing_dedup, 'is_duplicate_article', stub)
+    monkeypatch.setattr(briefing_dedup, 'is_duplicate_article_strict', stub)
+
+    picked = sel.fallback_fill_general(2, set(), set(), set(), lambda sql: [], lambda a: 0)
+
+    assert [a['id'] for a in picked] == ['f1', 'f2'], [a['id'] for a in picked]
+    assert len(calls) == 2, calls                    # 1차 → 넓게 재조회
+    assert calls[1] == sel.FALLBACK_POOL_LIMIT_WIDE, calls
+
+
 # --------------------------------------------------------------- 11-02 재현 (검증 b)
 
 
