@@ -279,6 +279,23 @@ def _attribution_issues(title, art, filepath):
         return []
 
 
+def _source_text_of(articles) -> str:
+    """날짜 근거 검사용 원문 텍스트 — 기사 제목·원제목·설명을 합친다.
+
+    원문에 없는 연도를 쓴 글(2026-11-05 실측: "2024년 5월 3일 개최된 … 포럼")을
+    발행 전에 잡기 위한 대조군이다. 본문 전체가 없어도 제목·설명만으로 대부분 걸린다.
+    """
+    parts = []
+    for a in (articles or []):
+        if not isinstance(a, dict):
+            continue
+        for k in ("title", "original_title", "description"):
+            v = a.get(k)
+            if isinstance(v, str) and v.strip():
+                parts.append(v)
+    return "\n".join(parts)
+
+
 def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generator=None,
                   max_rounds=None):
     """1차 방어 — 게이트 검사 후 미달이면 '초안 수정' 교정을 최대 2회 수행한다.
@@ -309,9 +326,20 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
         return fixes
 
     _repair(filepath)
+
+    def _src_text():
+        """날짜 근거 검사용 원문 텍스트 — 초안에 저장된 원문 우선, 없으면 art 에서."""
+        pending = _EMDASH_PENDING.get(filepath) or {}
+        if pending.get("source_text"):
+            return pending["source_text"]
+        a = art or {}
+        return "\n".join(x for x in (a.get("title"), a.get("original_title"),
+                                     a.get("description")) if x)
+
     # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
     issues = _quality_gate.screen_extended(
-        _body(filepath), is_eval=_EMDASH_PENDING.get(filepath, {}).get("is_eval", False))
+        _body(filepath), is_eval=_EMDASH_PENDING.get(filepath, {}).get("is_eval", False),
+        source_text=_src_text())
 
     # AIK24-PIPE-10 규칙 1·2·3: 주제 귀속(모델 ID) 검사.
     #   기존 게이트와 **같은 지점**에 통합했다(게이트를 두 개로 늘리지 않는다).
@@ -368,7 +396,8 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
         created.append(fp2)
         _repair(fp2)
         issues2 = _quality_gate.screen_extended(
-            _body(fp2), is_eval=_EMDASH_PENDING.get(fp2, {}).get("is_eval", False))
+            _body(fp2), is_eval=_EMDASH_PENDING.get(fp2, {}).get("is_eval", False),
+            source_text=_src_text())
         if not issues2:
             _drop_except(fp2)
             log("    ✅ 교정 %d회차에서 게이트 통과 — 채택 (본문 %d자 / 인용 링크 %d개)"
@@ -463,6 +492,10 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
             f"아래 '{keyword}' 관련 기사를 분석한 블로그 초안을 작성해주세요.\n\n"
             f"## 요구사항\n"
             f"{model_hint}"
+            f"- [필수] **날짜·연도는 원문에 적힌 것만 쓴다.** 원문에 없는 연도·날짜·행사명을 "
+            f"만들지 마라(예: 원문이 '3일 행사'라고만 하면 '2024년 5월 3일 개최된 … 포럼'처럼 "
+            f"연도·행사명을 지어내지 말고 '지난 3일 행사'로 쓴다). 원문에 없는 연도가 나오면 "
+            f"발행 전 검사에서 걸려 글 전체가 보류된다.\n"
             f"- 제목: '{keyword}' 키워드가 자연스럽게 포함된 SEO 최적화 제목\n"
             f"- 제목에 마크다운 백틱(`) 사용 금지\n"
             f"- 본문: {MIN_BODY_CHARS}자 이상(권장 3,200자), 소제목(##) 5개 이상 포함\n"
@@ -1293,7 +1326,8 @@ draft: false
 
 {content}
 """
-    _EMDASH_PENDING[filepath] = {"md": md, "links": []}
+    _EMDASH_PENDING[filepath] = {"md": md, "links": [],
+                                 "source_text": _source_text_of(articles)}
     log(f"  EmDash 발행 대기: {filename}")
     return filepath, seo_title
 
@@ -1380,7 +1414,8 @@ def _publish_generated_to_emdash(generated):
             log("  🛠 자동 수리(2차): " + ", ".join(_fixes2))
         # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
         gate_issues = _quality_gate.screen_extended(
-            body, is_eval=draft.get("is_eval", False))
+            body, is_eval=draft.get("is_eval", False),
+            source_text=draft.get("source_text"))
         if gate_issues:
             _quality_gate.hold(draft["md"], meta.get("title") or title, gate_issues,
                                reason="2차 게이트(발행 직전) 미달")

@@ -31,6 +31,7 @@ import json
 import os
 import re
 import subprocess
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -72,6 +73,10 @@ _BLOCKED = (
     "apps.apple.com", "play.google.com", "itunes.apple.com", "google.com/preferences", "accounts.google",
     # 자사 계열 (외부 링크로 세지 않는다)
     "rotcha.kr", "informationhot.kr", "techpawz.com",
+    # 2026-11-06: 원문 페이지 템플릿에서 긁힌 광고·제휴·브라우저 업그레이드 링크.
+    # 실측: link.coupang.com/a/... (제휴), windows.microsoft.com/ko-kr/internet-explorer/download-ie
+    # 가 '인용 링크'로 글에 들어가 MIN_LINKS 를 채우고 있었다.
+    "coupang", "internet-explorer", "download-ie", "ad.doubleclick", "/banner", "/ads/",
 )
 
 # 경로에 이 문자열이 있으면 인용 가치가 없다 (약관·개인정보·채용·구독 안내)
@@ -240,7 +245,69 @@ def dead_links(md: str, limit: int = 8, timeout: float = 8.0) -> list:
     return [u for u in urls if not res.get(u)]
 
 
-def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False) -> list:
+# --------------------------------------------- 2026-11-06 사실 근거 검사 (날짜 · 링크)
+# 배경(실측): 2026-11-05 네이버클라우드 국방 AI 글에 원문에 없는 "2024년 5월 3일"이 6회
+# 등장했다(원문은 "3일 행사"). 같은 시기 글들에는 "2023년 4분기 실적"·"2024년 10월 30일
+# 뉴욕증시" 같은 동일 문장이 서로 다른 주제 글에 반복됐다. 또 원문 페이지 템플릿에서 긁힌
+# 쿠팡 제휴 링크(link.coupang.com)·IE 다운로드 링크가 '인용'으로 들어가 MIN_LINKS 를 채웠다.
+# 둘 다 분량·링크 수 검사로는 잡히지 않는다 → 발행 전 게이트에서 막는다.
+
+_JUNK_LINK_PAT = re.compile(
+    r"(link\.coupang|coupang\.com|coupa\.ng|internet-explorer|download-ie|/banner|/ads?/|"
+    r"doubleclick|adservice|taboola|outbrain|utm_source=|utm_medium=|/affiliate)", re.I)
+
+_DATE_PAT = re.compile(
+    r"(?P<y1>20\d{2})\s*년(?:\s*(?P<m1>\d{1,2})\s*월)?(?:\s*(?P<d1>\d{1,2})\s*일)?"
+    r"|(?P<y2>20\d{2})-(?P<m2>\d{1,2})-(?P<d2>\d{1,2})")
+
+
+def _norm_date_text(text: str) -> str:
+    """NBSP·얇은 공백·전각 공백을 일반 공백으로. 실측 데이터가 '2024년\\u00a05월\\u00a03일' 이었다."""
+    return (text or "").replace("\u00a0", " ").replace("\u2009", " ").replace("\u3000", " ")
+
+
+def years_in(text: str) -> set:
+    """텍스트에 등장하는 4자리 연도 집합."""
+    return {m.group("y1") or m.group("y2") for m in _DATE_PAT.finditer(_norm_date_text(text))}
+
+
+def date_grounding_issues(md: str, source_text: str, current_year=None) -> list:
+    """본문 연도가 원문 또는 올해에 근거하는지 검사한다.
+
+    원문에 없는 연도를 쓰면 2년 전 사건을 오늘 일로 쓴 글(2026-11-05 실측)이 그대로
+    발행된다. source_text 가 비면 판정 근거가 없으므로 검사를 건너뛴다(오탐 방지).
+    current_year 를 주지 않으면 시스템 연도를 쓴다.
+    """
+    src = _norm_date_text(source_text if isinstance(source_text, str) else "")
+    if not src.strip():
+        return []
+    md_n = _norm_date_text(md)
+    allowed = years_in(src)
+    allowed.add(str(current_year or time.strftime("%Y")))
+    bad = sorted(years_in(md_n) - allowed)
+    if not bad:
+        return []
+    samples = []
+    for y in bad:
+        m = re.search(r"[^.\n]{0,60}%s\s*년[^.\n]{0,40}" % y, md_n)
+        samples.append(m.group(0).strip() if m else "%s년" % y)
+    return ["원문에 없는 연도 %s — 원문 밖 날짜·행사명을 만들었다(날조 의심). "
+            "해당 문장을 원문 표현으로 고치거나 삭제하라: %s"
+            % (", ".join(bad), " / ".join(s[:70] for s in samples[:2]))]
+
+
+def junk_link_issues(md: str) -> list:
+    """광고·제휴·브라우저 업그레이드 등 기사와 무관한 링크가 본문에 있는지 검사한다."""
+    hits = sorted({m.group(0) for m in re.finditer(r"https?://[^\s)\]\"'>]+", md or "")
+                   if _JUNK_LINK_PAT.search(m.group(0))})
+    if not hits:
+        return []
+    return ["광고·제휴·무관 링크 %d개 (%s) → 원문·공식 출처 링크로 교체하거나 삭제하라"
+            % (len(hits), ", ".join(u[:60] for u in hits[:3]))]
+
+
+def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
+                    source_text: str = None) -> list:
     """게이트 + 링크 생존 검증(자동 파이프라인 전용).
 
     `emdash_precheck.check()` 는 순수 문자열 검사로 남겨두고(수동 글쓰기 경로와 공유),
@@ -268,6 +335,10 @@ def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False)
         if dead:
             issues.append("끊긴 링크 %d개 (%s) → 살아있는 URL 로 교체"
                           % (len(dead), ", ".join(u[:60] for u in dead[:3])))
+    # 2026-11-06: 날짜 근거(원문 대조) + 광고/제휴 링크 차단
+    if source_text:
+        issues.extend(date_grounding_issues(md, source_text))
+    issues.extend(junk_link_issues(md))
     return issues
 
 
@@ -283,6 +354,10 @@ _FIX_HINTS = (
                  "이 프롬프트의 '인용 가능한 실제 링크' 목록에서 골라라."),
     ("인용 링크", "- 코드블록(curl 예시) 안의 URL 은 출처로 세지 않는다. 본문 문장이나 "
                  "`## 참고 자료` 섹션에 클릭 가능한 링크를 최소 3개 넣어라."),
+    ("원문에 없는 연도", "- 본문의 연도·날짜는 **원문에 적힌 것만** 쓴다. 원문에 없는 연도·날짜·행사명을 "
+                      "만들지 말고, 지목된 문장은 원문 표현으로 다시 쓰거나 삭제하라."),
+    ("광고·제휴·무관 링크", "- 쿠팡 등 제휴/광고 링크, 브라우저 업그레이드 안내, 사이트 내비게이션 링크를 "
+                        "모두 지워라. '인용 가능한 실제 링크' 목록의 URL 만 남긴다."),
     ("표 ", "- 수치·한도·요금·비교는 문장이 아니라 마크다운 표로 넣어라. 형식은 정확히 이렇게:\n"
             "  `| 항목 | 값 |` 다음 줄에 `| --- | --- |` 구분선, 그 다음 데이터 행. "
             "**구분선이 없으면 표로 렌더링되지 않아 검사에서 0개로 센다.**"),
