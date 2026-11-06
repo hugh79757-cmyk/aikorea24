@@ -245,8 +245,9 @@ def test_selection_survives_phase2_dedup(world, monkeypatch):
 
     selected = sel.main()
 
-    # 변경 후 선정 3건 — 56206(10-17 발행분)은 3.5단계에서 local_exact_id 로 먼저 제외된다
-    assert [a['id'] for a in selected] == [56082, 56500, 56389]
+    # 2026-11-06 슬롯 재설계(무료 기회 폐지·무료 모델/개발자 콘텐츠 우선) 이후 선정 결과.
+    # 56206(10-17 발행분)은 3.5단계에서 local_exact_id 로 먼저 제외된다.
+    assert [a['id'] for a in selected] == [56500, 56389]
 
     # Phase 2 (auto_briefing.py:456 과 동일한 호출)
     kept, removed = briefing_dedup.filter_duplicates(selected, d1_stub)
@@ -279,7 +280,8 @@ def test_old_dedup_criteria_reproduce_the_incident(world, monkeypatch):
     monkeypatch.setattr(briefing_dedup, 'filter_duplicates', _d1_only)
 
     selected = sel.main()
-    assert [a['id'] for a in selected] == [56082, 56206, 56500]
+    # 2026-11-06 슬롯 재설계 이후 선정 결과 (변경 전 기준으로도 Phase 2 에서 3/3 탈락)
+    assert [a['id'] for a in selected] == [56206, 56500, 56389]
 
     # 변경 전 Phase 2 (local 이력까지 보는 판정)
     _k, removed = _old_filter_duplicates(selected, D1_HISTORY, LOCAL_HISTORY)

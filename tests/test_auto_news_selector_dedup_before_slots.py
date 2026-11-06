@@ -100,14 +100,19 @@ def test_history_query_failure_fails_open(monkeypatch):
 # ---------------------------------------------------------------- v3 (PIPE-03)
 
 
-def test_opportunity_gets_first_slot(monkeypatch):
-    """슬롯 1 은 무료 기회 — 점수와 무관하게 맨 앞."""
+def test_opportunity_is_no_longer_selected(monkeypatch):
+    """2026-11-06 대표님 지시: 무료 기회(free-opportunity) 슬롯 폐지 — 정보 품질이 낮다.
+
+    후보에 기회 행이 있어도 선정되지 않는다.
+    """
     pool = [_art('g1', 14, NEWS_SRC), _art('g2', 12, NEWS_SRC2),
             _art('o1', 0, '무료 기회', v2_tag='free-opportunity')]
     _pool(monkeypatch, pool)
     _stub_dedup(monkeypatch, set())
 
-    assert [a['id'] for a in sel.main()][0] == 'o1'
+    picked = [a['id'] for a in sel.main()]
+    assert 'o1' not in picked, picked
+    assert picked[:2] == ['g1', 'g2'], picked      # 슬롯 2·3 = 점수순
 
 
 def test_zen_change_beats_higher_scored_news(monkeypatch):
@@ -191,19 +196,16 @@ def test_opportunity_window_is_21_days_but_zen_stays_7():
     assert abs(delta.total_seconds() - 14 * 86400) < 2, delta
 
 
-def test_opportunity_slot_drains_queue_one_per_day(monkeypatch):
-    """제외가 SQL 로 끝나므로 슬롯은 매일 '아직 안 실린 가장 최신 1건'을 뽑는다.
+def test_opportunity_queue_is_ignored_every_day(monkeypatch):
+    """기회 큐가 남아 있어도 선정에 쓰이지 않는다 (슬롯 폐지, 2026-11-06).
 
-    day1 → o1, day2(o1 이 SQL 로 제외돼 pool 에 없음) → o2, day3 → o3.
+    이전에는 큐에서 하루 1건씩 소진됐다. 지금은 기회 행만 있는 풀이면 선정 0건이다.
     """
     def _run(pool_ids):
         pool = [_art(i, 0, '무료 기회', v2_tag='free-opportunity') for i in pool_ids]
         _pool(monkeypatch, pool)
         _stub_dedup(monkeypatch, set())
-        picked = sel.main()
-        return picked[0]['id'] if picked else None
+        return sel.main()
 
-    assert _run(['o1', 'o2', 'o3']) == 'o1'
-    assert _run(['o2', 'o3']) == 'o2'
-    assert _run(['o3']) == 'o3'
-    assert _run([]) is None  # 큐 소진 → 슬롯 비움 (강제 충전 금지)
+    assert _run(['o1', 'o2', 'o3']) == []
+    assert _run(['o2', 'o3']) == []

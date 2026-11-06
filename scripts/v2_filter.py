@@ -34,6 +34,20 @@ _FREE_SOURCES = {"openrouter free models", "openrouter",
                  "opencode zen", "kilo free models", "nvidia nim free"}
 _OSS_SOURCES = {"huggingface trending", "huggingface blog"}
 
+# 2026-11-06 대표님 지시: "무료 LLM으로 개발하는 개발자를 위한 사이트" — 큐레이션 통과율이
+# 1~3%(하루 1~5건)로 너무 낮아 브리핑이 일반 뉴스로 메워지고 있었다. 개발자 신호가
+# 2개 이상이면 통과시키고, 무료 신호 최소 점수도 4점으로 낮춘다(기존: 0점 초과).
+_DEV_STRONG = (
+    "github", "오픈소스", "open source", "open-source", "opensource", "오픈 웨이트",
+    "open weight", "가중치 공개", "weights released", "ollama", "llama.cpp", "gguf",
+    "양자화", "quantization", "파인튜닝", "fine-tuning", "huggingface", "hugging face",
+    "vllm", "lm studio", "self-host", "self host", "로컬 실행", "sdk", "cli", "쿡북", "cookbook",
+)
+_DEV_WEAK = ("api", "가이드", "guide", "개발자", "developer", "튜토리얼", "tutorial",
+             "library", "라이브러리", "예제", "로컬", "local", "코드")
+MIN_FREE_SCORE = 4        # 무료 신호 최소 점수 (완화: 기존 >0)
+MIN_WEAK_SIGNALS = 2      # 약한 개발 신호 2개면 통과
+
 
 def _weights() -> dict:
     with open(_WEIGHTS_PATH, encoding="utf-8") as f:
@@ -94,7 +108,13 @@ def classify(title: str, description: str = "", source: str = "") -> tuple[bool,
     text = f"{title or ''}\n{description or ''}"
 
     free_score, hits = _free_score(text, w.get("free_usability", {}))
-    penalty, _ = _excluded(text, w.get("excluded_topic", {}), hits)
+    low = text.lower()
+    strong = [k for k in _DEV_STRONG if k in low]
+    weak = [k for k in _DEV_WEAK if k in low]
+    dev_ok = bool(strong) or len(weak) >= MIN_WEAK_SIGNALS
+    # 2026-11-06 완화: 출시성 기사(launch_soft)라도 개발자 신호가 있으면 통과 후보로 남긴다.
+    # (기존엔 '공개했습니다'·'발표했습니다' 한 마디로 전부 -100 → 통과율 1~3%.)
+    penalty, _ = _excluded(text, w.get("excluded_topic", {}), hits + strong + weak)
     if penalty < 0:
         return False, None
 
@@ -102,14 +122,20 @@ def classify(title: str, description: str = "", source: str = "") -> tuple[bool,
     is_oss_src = s in _OSS_SOURCES
     is_free_src = s in _FREE_SOURCES
 
-    # 통과 조건: 무료 사용 신호가 있거나 오픈소스 소스다.
-    # (지시서 Step 2 — "무료 benefits 노출 / 기업·펀딩류 미노출". 점수 0 은 통과 아님.)
-    if free_score <= 0 and not is_oss_src:
+    # 통과 조건 (2026-11-06 완화):
+    #  ① 무료 신호 점수 ≥ MIN_FREE_SCORE, 또는 ② 무료 모델 소스, 또는
+    #  ③ 개발자 신호(강 1개 / 약 2개 이상) — 개발자용 사이트 목적에 맞는 기사.
+    # 기존에는 free_score > 0 만 봐서 통과율이 1~3%였다.
+    if (free_score < MIN_FREE_SCORE and not is_free_src and not is_oss_src and not dev_ok):
         return False, None
 
     if is_free_src or any("무료" in k or "free" in k for k in hits):
         return True, "free-llm"
-    if is_oss_src or any(k in hits for k in ("open source", "open-source", "opensource", "open weights")):
+    if (is_oss_src
+            or any(k in hits for k in ("open source", "open-source", "opensource", "open weights"))
+            or any(k in strong for k in ("오픈소스", "open source", "open-source", "opensource",
+                                         "오픈 웨이트", "open weight", "huggingface", "hugging face",
+                                         "가중치 공개", "ollama", "llama.cpp"))):
         return True, "opensource"
     return True, "tool"
 

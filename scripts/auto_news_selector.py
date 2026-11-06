@@ -303,53 +303,52 @@ def _take(ranked, limit):
 
 def select_top_articles(clusters, max_count=MAX_COUNT, allow_fallback=False,
                         d1_query_func=None, scorer=None):
-    """클러스터 dict → ① 무료 기회 1 ② Zen 변경(최신순) ③ LLM 점수 상위 일반 뉴스
+    """클러스터 dict → ① 무료 모델 변동 1 ② 무료 LLM·오픈소스·툴 1 ③ 점수순 일반 뉴스
     ④ (allow_fallback=True) 일반 뉴스 폴백 (AIK24-PIPE-12).
 
-    ②③까지는 LLM 점수와 무관하게 우선하고, ③만 점수순이다. ④는 위 풀만으로
-    max_count 미만이 되었을 때 **무료 태그 없는 일반 뉴스**로 남은 슬롯을 채운다 —
-    빈 슬롯을 남기지 않는다(매일 브리핑은 항상 3건). 기본값(False)은 기존 경로
-    (아카이브 v1·재충원 선행 선정)가 그대로 동작하게 유지한다. **운영 경로인
-    main() 은 AIK24-PIPE-14(2026-11-01)부터 ④를 항상 켠다** — v2 풀이 점수 미달·
-    이력 중복으로 비어도 폴백이 브리핑 0건을 막는다. Phase 2 dedup 이후의 잔여
-    슬롯은 재충원(refill_after_dedup)의 4단계 폴백이 계속 담당한다.
-    ④를 켜는 테스트는 d1_query_func·scorer 를 주입해 오프라인을 보장한다.
+    2026-11-06 대표님 지시로 슬롯을 재설계했다:
+      · 무료 기회(free-opportunity) 슬롯 **폐지** — 정보 품질이 낮다는 판단.
+      · 슬롯 1 = 무료 모델 변동(OpenCode Zen · Kilo · OpenRouter 최신 1건)
+      · 슬롯 2 = 무료 LLM/오픈소스/툴 태그 1건 (개발자용 콘텐츠 우선)
+      · 슬롯 3 = 나머지 점수순 일반 뉴스
+    "무료 LLM으로 개발하는 사람"을 위한 사이트이므로 1·2 슬롯이 먼저 채워진다.
+
+    ④는 위 풀만으로 max_count 미만일 때 **무료 태그 없는 일반 뉴스**로 남은 슬롯을
+    채운다(빈 슬롯을 남기지 않는다). 기본값(False)은 기존 경로(아카이브 v1·재충원
+    선행 선정)가 그대로 동작하게 유지하고, 운영 경로인 main() 은 AIK24-PIPE-14
+    (2026-11-01)부터 ④를 항상 켠다. ④를 켜는 테스트는 d1_query_func·scorer 를
+    주입해 오프라인을 보장한다.
     """
-    articles = [a for group in (clusters or {}).values() for a in group]
+    articles = [a for a in (a for group in (clusters or {}).values() for a in group)
+                if a.get("v2_tag") != "free-opportunity"]      # 2026-11-06 폐지
     ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
     used, picked = set(), []
 
-    # 슬롯 1: 무료 기회 1건 (최신). 없으면 빈 슬롯.
-    opp = [a for a in articles if a.get("v2_tag") == "free-opportunity"
-           and a.get("source") not in PROVIDER_SOURCES]
-    opp.sort(key=_date_key)
-    if opp:
-        picked.append(opp[0])
-        used.add(opp[0]["id"])
+    # 슬롯 1: 무료 모델 변동 — OpenCode Zen · Kilo · OpenRouter 등 PROVIDER_SOURCES 최신 1건.
+    changes = [a for a in articles
+               if a.get("source") in PROVIDER_SOURCES and not _is_excluded_notice(a)]
+    changes.sort(key=_date_key)
+    if changes:
+        picked.append(changes[0])
+        used.add(changes[0]["id"])
+        log(f"  ⓘ 무료 모델 변동 {len(changes)}건 중 1건 배정 (슬롯 1)")
     else:
-        log("  ⓘ 무료 기회 후보 없음 — 슬롯 1 비움")
+        log("  ⓘ 무료 모델 변동 없음 — 슬롯 2·3 으로 채움")
 
-    # 슬롯 2: Zen 변경 최신순. LLM 점수와 무관하게 우선하되 **최대 ZEN_SLOT_LIMIT(=1)건**만.
-    # 2026-10-18 이전에는 max_count 까지 채워 목록 변경 3건이 슬롯을 독식했고, 실제
-    # 뉴스가 밀려났다 (실측 로그: "[selector] ⓘ Zen 변경 3건 우선 배정" → 브리핑 3건 중
-    # 2건이 제공 중단 알림). 남은 슬롯은 아래 일반 뉴스가 점수순으로 채운다.
-    zen = [a for a in articles if a.get("source") == "OpenCode Zen" and a["id"] not in used
-           and not _is_excluded_notice(a)]
-    zen.sort(key=_date_key)
-    zen_taken = 0
-    for a in zen:
-        if len(picked) >= max_count or zen_taken >= ZEN_SLOT_LIMIT:
-            break
-        picked.append(a)
-        used.add(a["id"])
-        zen_taken += 1
-    if zen:
-        log(f"  ⓘ Zen 변경 {len(zen)}건 중 {zen_taken}건 배정 (슬롯 상한 {ZEN_SLOT_LIMIT})")
+    # 슬롯 2: 무료 LLM/오픈소스/툴 태그 1건 — 개발자용 콘텐츠 우선.
+    free_news = [a for a in ranked if a["id"] not in used
+                 and a.get("source") not in PROVIDER_SOURCES
+                 and a.get("v2_tag") in ("free-llm", "opensource", "tool")]
+    if free_news and len(picked) < max_count:
+        picked.append(free_news[0])
+        used.add(free_news[0]["id"])
+        log(f"  ⓘ 무료 LLM·개발자 콘텐츠 {len(free_news)}건 중 1건 배정 (슬롯 2)")
+    elif len(picked) < max_count:
+        log("  ⓘ 무료 LLM·개발자 콘텐츠 없음 — 일반 뉴스로 채움")
 
     # 슬롯 3: 나머지 = LLM 점수 상위 일반 뉴스 (프로바이더 행 제외, 출처 1건씩).
     rest = [a for a in ranked if a["id"] not in used
-            and a.get("source") not in PROVIDER_SOURCES
-            and a.get("v2_tag") != "free-opportunity"]
+            and a.get("source") not in PROVIDER_SOURCES]
     picked += _take(rest, max_count - len(picked))
 
     # 슬롯 4 (AIK24-PIPE-12): 일반 뉴스 폴백 — 위 풀만으로 max_count 미만이면
