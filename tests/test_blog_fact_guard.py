@@ -110,3 +110,38 @@ def test_source_text_of_collects_article_fields():
                                 'description': '설명', 'source': '무시'}])
     assert '제목' in txt and 'Orig' in txt and '설명' in txt
     assert '무시' not in txt
+
+
+# ------------------------------------------------ 참고 자료 링크 (2026-11-06)
+
+
+def test_unlinked_reference_item_is_flagged():
+    """'Cbci 뉴스 원문 보기'가 링크 없이 있으면 게이트 미달 (실측 사고)."""
+    md = "## 참고 자료\n- Cbci 뉴스 원문 보기\n"
+    issues = gate.reference_link_issues(md)
+    assert len(issues) == 1, issues
+    assert '링크 없는 항목' in issues[0]
+
+
+def test_linked_reference_item_passes():
+    md = "## 참고 자료\n- [Cbci 뉴스 원문 보기](https://www.cbci.co.kr/news/articleView.html?idxno=623088)\n"
+    assert gate.reference_link_issues(md) == []
+
+
+def test_reference_section_stops_at_next_heading():
+    """본문 목록은 검사 대상이 아니다 — '## 참고 자료' 섹션만 본다."""
+    md = ("## 참고 자료\n- [원문](https://a.example.com/x)\n"
+          "## 마무리\n- 링크 없는 실행 항목\n")
+    assert gate.reference_link_issues(md) == []
+
+
+def test_restore_dangling_links_repairs_span_marks():
+    """markDefs 에만 있고 span 이 참조하지 않는 링크를 복원한다(실측: 화면에 링크 미표시)."""
+    import repair_emdash_fact_errors as R
+    data = {"content": [{
+        "_type": "block", "_key": "b1", "style": "normal", "listItem": "bullet",
+        "markDefs": [{"_key": "l1", "_type": "link", "href": "https://www.cbci.co.kr/x"}],
+        "children": [{"_type": "span", "_key": "s1", "text": "Cbci 뉴스 원문 보기", "marks": []}],
+    }]}
+    assert R.restore_dangling_links(data) == 1
+    assert data["content"][0]["children"][0]["marks"] == ["l1"]

@@ -82,14 +82,19 @@ def pt_text(block):
 
 
 def pt_to_md(data):
-    """게이트 검사용 마크다운 복원 (본문 텍스트 + 링크 URL)."""
+    """게이트 검사용 마크다운 복원 — span 의 링크 mark 를 `[텍스트](URL)` 로 되살린다."""
     out = []
     for b in data.get("content") or []:
-        out.append(pt_text(b))
-    for b in data.get("content") or []:
-        for m in b.get("markDefs") or []:
-            if isinstance(m, dict) and m.get("href"):
-                out.append(m["href"])
+        defs = {m.get("_key"): m.get("href") for m in (b.get("markDefs") or [])
+                if isinstance(m, dict) and m.get("href")}
+        parts = []
+        for c in (b.get("children") or []):
+            if not isinstance(c, dict):
+                continue
+            t = c.get("text", "")
+            href = next((defs[k] for k in (c.get("marks") or []) if k in defs), None)
+            parts.append("[%s](%s)" % (t, href) if href else t)
+        out.append("".join(parts))
     return "\n\n".join(x for x in out if x)
 
 
@@ -119,6 +124,45 @@ def strip_junk_links(data):
 _JUNK_TEXT_PAT = re.compile(r"(쿠팡|coupang|인터넷\s*익스플로러|internet\s*explorer)", re.I)
 
 
+def _collapse_block(b, new_text):
+    """블록 텍스트를 새 값으로 교체한다. 링크 mark 는 **살릴 수 있으면 살린다**.
+
+    2026-11-06 사고: 공백만 정리해도 children 을 marks=[] 로 재작성해 'Cbci 뉴스 원문 보기'
+    링크가 사라졌다(마크다운에는 있었는데 화면에는 링크 없음). 텍스트가 같고 공백만
+    다르면 아예 건드리지 않고, 실제로 바뀐 경우에만 단일 span 으로 합친다.
+    """
+    old = pt_text(b)
+    if new_text == old:
+        return False
+    kids = b.get("children") or []
+    key = (kids[0].get("_key") if kids else None) or "k0"
+    b["children"] = [{"_type": "span", "_key": key, "text": new_text, "marks": []}]
+    b["markDefs"] = []          # 텍스트를 새로 썼으므로 이전 markDefs 는 쓰이지 않는다
+    return True
+
+
+def restore_dangling_links(data):
+    """markDefs 에 링크가 있는데 span 이 참조하지 않는(화면에 링크가 안 뜨는) 블록을 복원한다.
+
+    반환: 복원한 블록 수.
+    """
+    fixed = 0
+    for b in data.get("content") or []:
+        defs = [m for m in (b.get("markDefs") or []) if isinstance(m, dict) and m.get("href")]
+        if len(defs) != 1:
+            continue
+        keyk = defs[0].get("_key")
+        spans = [c for c in (b.get("children") or []) if isinstance(c, dict)]
+        if any(keyk in (c.get("marks") or []) for c in spans):
+            continue                      # 이미 적용됨
+        if not spans or not pt_text(b).strip():
+            continue
+        for c in spans:
+            c["marks"] = list(c.get("marks") or []) + [keyk]
+        fixed += 1
+    return fixed
+
+
 def strip_junk_text(data, extra_patterns=()):
     """정크 텍스트 블록/문장을 제거한다. 블록이 비면 통째로 뺀다."""
     removed, keep_blocks = [], []
@@ -140,10 +184,9 @@ def strip_junk_text(data, extra_patterns=()):
         new = re.sub(r"[ \u00a0]{2,}", " ", new).strip()
         if t.strip() and not new:
             continue
-        if new != t:
-            kids = b.get("children") or []
-            key = (kids[0].get("_key") if kids else None) or "k0"
-            b["children"] = [{"_type": "span", "_key": key, "text": new, "marks": []}]
+        # 공백만 다른 경우(실측: 후행 공백)에는 링크 mark 를 보존한다.
+        if new.replace(" ", "") != t.replace(" ", ""):
+            _collapse_block(b, new)
         keep_blocks.append(b)
     data["content"] = keep_blocks
     return removed
@@ -244,6 +287,40 @@ def all_links(data):
     return out
 
 
+def fix_reference_section(data):
+    """'참고 자료' 섹션에서 **링크가 실제로 걸리지 않은** 항목을 삭제한다.
+
+    사용자 규칙(2026-11-06): "링크를 못 넣을 경우 참고자료를 언급하지 말아줘."
+    """
+    blocks = data.get("content") or []
+    start = None
+    for i, b in enumerate(blocks):
+        if re.match(r"^참고\s*자료$", pt_text(b).strip()) and (b.get("style") or "").startswith("h"):
+            start = i
+            break
+    if start is None:
+        return 0
+    removed, keep, rest = 0, blocks[:start + 1], blocks[start + 1:]
+    idx = 0
+    while idx < len(rest):
+        b = rest[idx]
+        if (b.get("style") or "normal").startswith("h"):
+            keep.extend(rest[idx:])          # 섹션 종료 — 이후 블록은 그대로
+            break
+        text = pt_text(b).strip()
+        if text:
+            defs = {m.get("_key") for m in (b.get("markDefs") or []) if m.get("href")}
+            linked = any(defs & set(c.get("marks") or []) for c in (b.get("children") or []))
+            if not linked:
+                removed += 1
+                idx += 1
+                continue
+        keep.append(b)
+        idx += 1
+    data["content"] = keep
+    return removed
+
+
 def repair_one(slug, source_text, rules=(), drop_text=(), dry_run=False, verbose=True):
     """글 1건 교정. 반환: (변경여부, 사유/로그 문자열)."""
     it = ep.get_post(slug)
@@ -255,17 +332,20 @@ def repair_one(slug, source_text, rules=(), drop_text=(), dry_run=False, verbose
     links = strip_junk_links(data)
     txt = strip_junk_text(data, drop_text)
     years = generic_ungrounded_repair(data, source_text) if source_text.strip() else []
+    restored = restore_dangling_links(data)
+    refs = fix_reference_section(data)
     changed_blocks = apply_text_replaces(data, rules) if rules else []
     ex = fix_excerpt(data, rules) if rules else False
     after = pt_to_md(data)
-    if verbose and (links or txt or years or changed_blocks or ex):
-        print("   제거링크=%d 제거텍스트=%d 연도문장=%d 치환=%d excerpt=%s"
-              % (len(links), len(txt), len(years), len(changed_blocks), ex))
+    if verbose and (links or txt or years or changed_blocks or ex or restored or refs):
+        print("   제거링크=%d 제거텍스트=%d 연도문장=%d 링크복원=%d 참고자료정리=%d 치환=%d excerpt=%s"
+              % (len(links), len(txt), len(years), restored, refs, len(changed_blocks), ex))
         for y in years[:3]:
             print("     - %s" % y[:80])
-    if after == before and not (links or txt or years or changed_blocks or ex):
+    if after == before and not (links or txt or years or changed_blocks or ex or restored or refs):
         return False, "변경 없음"
-    remaining = gate.date_grounding_issues(after, source_text) + gate.junk_link_issues(after)
+    remaining = (gate.date_grounding_issues(after, source_text) + gate.junk_link_issues(after)
+                 + gate.reference_link_issues(after))
     if remaining:
         return False, "교정 후에도 미달 %d건: %s" % (len(remaining), remaining[0][:80])
     if dry_run:
@@ -307,7 +387,8 @@ def sweep(limit=40, dry_run=False):
         md = pt_to_md(data)
         years = gate.years_in(md) - {time.strftime("%Y")}
         junk = gate.junk_link_issues(md)
-        if years or junk:
+        refs = gate.reference_link_issues(md)
+        if years or junk or refs:
             suspicious.append((s, sorted(years), bool(junk)))
     print("의심 글 %d건: %s" % (len(suspicious), ", ".join(x[0][:24] for x in suspicious[:6])))
 

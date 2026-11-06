@@ -306,6 +306,39 @@ def junk_link_issues(md: str) -> list:
             % (len(hits), ", ".join(u[:60] for u in hits[:3]))]
 
 
+_REF_HEADING = re.compile(r"^##\s*참고\s*자료.*$", re.M)
+_REF_ITEM = re.compile(r"^\s*[-*+]\s+(.+)$")
+_MD_LINK = re.compile(r"\[[^\]]{1,120}\]\(\s*https?://[^)\s]+\s*\)")
+
+
+def reference_link_issues(md: str) -> list:
+    """`## 참고 자료` 항목 중 **링크가 없는** 항목을 잡는다.
+
+    2026-11-06 실측: "- Cbci 뉴스 원문 보기" 가 링크 없이 게시돼 독자가 클릭할 수 없었다.
+    링크를 넣을 수 없으면 그 항목을 쓰지 않는 것이 규칙이다.
+    """
+    m = _REF_HEADING.search(md or "")
+    if not m:
+        return []
+    tail = md[m.end():]
+    nxt = re.search(r"^##\s", tail, re.M)
+    section = tail[:nxt.start()] if nxt else tail
+    bad = []
+    for line in section.splitlines():
+        im = _REF_ITEM.match(line)
+        if not im:
+            continue
+        item = im.group(1).strip()
+        if not item or _MD_LINK.search(item):
+            continue
+        bad.append(item[:50])
+    if not bad:
+        return []
+    return ["'참고 자료'에 링크 없는 항목 %d개 (%s) → `[제목](URL)` 형식으로 링크를 넣거나 "
+            "항목을 삭제하라(링크를 못 넣으면 참고 자료에 쓰지 마라)"
+            % (len(bad), ", ".join(bad[:3]))]
+
+
 def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
                     source_text: str = None) -> list:
     """게이트 + 링크 생존 검증(자동 파이프라인 전용).
@@ -335,10 +368,11 @@ def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
         if dead:
             issues.append("끊긴 링크 %d개 (%s) → 살아있는 URL 로 교체"
                           % (len(dead), ", ".join(u[:60] for u in dead[:3])))
-    # 2026-11-06: 날짜 근거(원문 대조) + 광고/제휴 링크 차단
+    # 2026-11-06: 날짜 근거(원문 대조) + 광고/제휴 링크 + 링크 없는 참고자료 차단
     if source_text:
         issues.extend(date_grounding_issues(md, source_text))
     issues.extend(junk_link_issues(md))
+    issues.extend(reference_link_issues(md))
     return issues
 
 
@@ -358,6 +392,9 @@ _FIX_HINTS = (
                       "만들지 말고, 지목된 문장은 원문 표현으로 다시 쓰거나 삭제하라."),
     ("광고·제휴·무관 링크", "- 쿠팡 등 제휴/광고 링크, 브라우저 업그레이드 안내, 사이트 내비게이션 링크를 "
                         "모두 지워라. '인용 가능한 실제 링크' 목록의 URL 만 남긴다."),
+    ("'참고 자료'에 링크 없는 항목", "- `## 참고 자료` 의 모든 항목은 `[제목](URL)` 형식이어야 한다. "
+                                "링크를 넣을 수 없는 항목은 **아예 쓰지 말고 삭제**하라. "
+                                "'원문 보기'처럼 링크를 암시하는 말만 남기면 검사에서 걸린다."),
     ("표 ", "- 수치·한도·요금·비교는 문장이 아니라 마크다운 표로 넣어라. 형식은 정확히 이렇게:\n"
             "  `| 항목 | 값 |` 다음 줄에 `| --- | --- |` 구분선, 그 다음 데이터 행. "
             "**구분선이 없으면 표로 렌더링되지 않아 검사에서 0개로 센다.**"),
@@ -634,6 +671,8 @@ def link_block(links: list) -> str:
         "③ 아래 목록 밖의 URL 을 쓰려면 **공식 문서·공식 발표 페이지**여야 한다. 실제로 열리지 않는 "
         "URL 은 발행 전 검사에서 걸려 글이 발행되지 않는다 — 확실하지 않으면 쓰지 마라.",
         "④ 본문 전체에 외부 링크가 최소 3개 있어야 한다(원문 1 + 참고 자료 2 이상).",
+        "⑤ `## 참고 자료`의 **모든 항목은 `[제목](URL)` 형식**으로 쓴다. 링크를 넣을 수 없는 항목은 "
+        "아예 쓰지 마라 — '원문 보기'처럼 링크를 암시하는 텍스트만 남기면 발행 전 검사에서 걸린다.",
     ]
     for l in links:
         lines.append(f"- {l['url']}  ({l['kind']}·{l['domain']})")
