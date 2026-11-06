@@ -448,3 +448,23 @@
 {"ts": "2026-11-06 06:01:15", "slug": "rainbrand", "step": "thumb", "result": "done", "detail": "✅ rainbrand 11KB", "dry_run": false}
 {"ts": "2026-11-06 06:01:23", "slug": "frontierphysics-evaluating-agents-for-end-to-end", "step": "enrich", "result": "done", "detail": "+2,907자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-06 06:01:26", "slug": "frontierphysics-evaluating-agents-for-end-to-end", "step": "thumb", "result": "done", "detail": "✅ frontierphysics-evaluating-agents-for-end-to-end 29KB", "dry_run": false}
+{"ts": "2026-11-06 07:30:05", "slug": "assemblyai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:06", "slug": "assemblyai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-06 07:30:06", "slug": "floot-in-chatgpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:07", "slug": "floot-in-chatgpt", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-06 07:30:07", "slug": "ifttt-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:08", "slug": "ifttt-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-06 07:30:08", "slug": "polylane-for-chatgpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:09", "slug": "polylane-for-chatgpt", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-06 07:30:09", "slug": "supercmo-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:10", "slug": "supercmo-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-06 07:30:12", "slug": "audio-editing", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:12", "slug": "interviewcue-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:12", "slug": "knovari-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:13", "slug": "lemonade-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:14", "slug": "lexidesk-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:24", "slug": "lium-ai", "step": "thumb", "result": "fail", "detail": "❌ lium-ai BLANK(SMALL_728B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ lium-ai NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-11-06 07:30:24", "slug": "manyface-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:27", "slug": "mathbuddy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:27", "slug": "meetily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-06 07:30:29", "slug": "meev-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
