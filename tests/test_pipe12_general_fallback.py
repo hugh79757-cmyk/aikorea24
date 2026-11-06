@@ -187,7 +187,7 @@ def test_get_general_fallback_news_sql_filters(monkeypatch):
     assert 'FROM briefing_items bi' in sql
     assert "b.status IN ('published', 'superseded')" in sql           # 브리핑 전체 이력
     assert 'id NOT IN (57426)' in sql                                  # 호출자 지정 제외
-    assert 'ORDER BY id DESC' in sql and 'LIMIT 40' in sql             # 최신순 풀 상한
+    assert 'ORDER BY id DESC' in sql and ('LIMIT %d' % sel.FALLBACK_POOL_LIMIT) in sql  # 최신순 풀 상한
 
 
 def test_is_announcement_source_suffix_guard():

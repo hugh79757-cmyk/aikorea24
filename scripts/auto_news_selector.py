@@ -98,13 +98,13 @@ ZEN_POOL_LIMIT = ZEN_SLOT_LIMIT + 1
 # 2026-11-06 실측: 72h 창 + 상한 40 이면 '수집은 272건인데 실제 후보 2건'까지 줄어
 # 브리핑 발행이 중단됐다(35건 중 31건이 링크 중복). 창을 120h 로 넓히고 상한을 키운다.
 FALLBACK_WINDOW_HOURS = 120  # 폴백 풀 조회 창 (구 72h — 2026-11-06 확대)
-FALLBACK_POOL_LIMIT = 40    # 폴백 풀 1차 상한 (최신순). 15 → 40 (2026-10-28 실측):
+FALLBACK_POOL_LIMIT = 120   # 폴백 풀 1차 상한. 15 → 40 (2026-10-28) → 120 (2026-11-06):
 #                             최신 15건이 공고·집계(네이버뉴스) 덩어리여서 출처당 1건
 #                             규칙상 1건만 나오는 문제를 해결 — 상위 40건에
 #                             인공지능신문·IT조선·전자신문 등 기사 소스가 올라온다.
 # 2026-11-06: 1차 상한(40)이 **중복 제거 전에** 걸려 실후보가 2건으로 줄었다.
 # 부족하면 상한을 키워 한 번 더 조회한다(아래 fallback_fill_general).
-FALLBACK_POOL_LIMIT_WIDE = 160
+FALLBACK_POOL_LIMIT_WIDE = 300
 FALLBACK_SCORE_LIMIT = 10   # 폴백 (a)단계 LLM 점수 평가 대상 상한
 # 지원사업 공고 소스 — 브리핑 본문 슬롯 대상이 아니다 (지시서 §2순위 제외 조건).
 # SQL(get_general_fallback_news)의 이 명시 목록이 1차 방어선이고, 부처·자치단체
@@ -491,7 +491,7 @@ def get_general_fallback_news(d1_query_func, exclude_ids=(), limit=None):
     excluded_sql = ""
     if exclude_ids:
         excluded_sql = " AND id NOT IN (%s)" % ", ".join(str(int(i)) for i in exclude_ids)
-    return d1_query_func("""
+    rows = d1_query_func("""
         SELECT %s FROM news
         WHERE created_at >= '%s'
           AND (v2_tag IS NULL OR v2_tag = '')
@@ -507,6 +507,23 @@ def get_general_fallback_news(d1_query_func, exclude_ids=(), limit=None):
     """ % (_COLS, cutoff, _sql_in(PROVIDER_SOURCES + ANNOUNCEMENT_SOURCES),
             _excluded_titles_sql(), excluded_sql,
             int(limit or FALLBACK_POOL_LIMIT)))
+
+    # 2026-11-06: 같은 기사가 재수집되면 링크에 쿼리 파라미터만 달라져 SQL GROUP BY 로는
+    # 안 묶인다(실측: 상위 40행의 정규화 고유 링크가 7개). 정규화 링크 기준으로 중복을
+    # 걷어내 최신 1건만 남긴다 — 이걸 안 하면 상한이 재수집 복사본으로 소진된다.
+    try:
+        from briefing_dedup import normalize_url
+    except Exception:
+        return rows
+    out, seen = [], set()
+    for r in rows:
+        key = normalize_url(r.get("link") or "")
+        if key:
+            if key in seen:
+                continue
+            seen.add(key)
+        out.append(r)
+    return out
 
 
 def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
@@ -541,18 +558,6 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
         return []
     pool = [dict(a) for a in pool]
     fresh, blocked = filter_duplicates(pool, d1_query_func)
-    # 2026-11-06: 1차 상한(40)에서 잘린 뒤 중복 제거로 실후보가 급감한 사례
-    # (실측: 40건 → 중복 31건 → 후보 2건 → 브리핑 3건 미달 → 발행 중단).
-    # 부족하면 상한을 키워 한 번 더 조회한다(이미 본 행은 id 로 제외).
-    if len(fresh) < needed:
-        seen_ids = {str(a.get("id")) for a in pool if a.get("id") is not None}
-        wide = get_general_fallback_news(d1_query_func, limit=FALLBACK_POOL_LIMIT_WIDE)
-        extra = [dict(a) for a in wide if str(a.get("id")) not in seen_ids]
-        if extra:
-            fresh2, blocked2 = filter_duplicates(extra, d1_query_func)
-            log(f"  [폴백] 1차 상한 부족 → 넓게 재조회 {len(extra)}건 중 신선 {len(fresh2)}건")
-            fresh += fresh2
-            blocked += blocked2
     if blocked:
         log(f"  [폴백] 중복 제외 {len(blocked)}건: "
             + ", ".join(reason for _, reason in blocked))
@@ -586,6 +591,24 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
         log(f"  [폴백] 출처 이미 사용 ({len(blocked_by_source)}건 채점 제외): "
             + ", ".join(sorted({a.get("source") for a in blocked_by_source})))
     candidates = [a for a in candidates if a.get("source") not in used_sources]
+
+    # 2026-11-06: 1차 상한(40)에서 잘린 뒤 dedup·_usable·출처 필터로 실후보가 급감한 사례
+    # (실측: 40건 → 중복 31건 → 사용가능 2건 → 브리핑 3건 미달로 발행 중단).
+    # 부족하면 상한을 키워 한 번 더 조회한다(이미 본 id 는 제외, 재조회분도 2차 dedup 통과).
+    if len(candidates) < needed:
+        seen_ids = {str(a.get("id")) for a in pool if a.get("id") is not None}
+        wide = get_general_fallback_news(d1_query_func, limit=FALLBACK_POOL_LIMIT_WIDE)
+        extra = [dict(a) for a in wide if str(a.get("id")) not in seen_ids]
+        if extra:
+            fresh2, blocked2 = filter_duplicates(extra, d1_query_func)
+            blocked += blocked2
+            usable2 = [a for a in fresh2
+                       if _usable(a) and _article_key(a) not in exclude_keys]
+            blocked_by_source += [a for a in usable2 if a.get("source") in used_sources]
+            more = [a for a in usable2 if a.get("source") not in used_sources]
+            log(f"  [폴백] 실후보 부족({len(candidates)}<{needed}) → 넓게 재조회 "
+                f"{len(extra)}건 중 사용가능 {len(more)}건")
+            candidates = candidates + more
 
     # (a) 점수 평가 — 최신 FALLBACK_SCORE_LIMIT 건만. 실제 score_helpfulness 는
     # art['_score'] 를 직접 기록한다 (호출 규약 유지 — 반환값으로 덮어쓰지 않는다).
