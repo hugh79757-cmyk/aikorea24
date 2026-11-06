@@ -1,37 +1,20 @@
 {
- "day": "2026-11-06",
- "checked_at": 1793912405.441561,
- "total_rows": 26,
+ "day": "2026-11-07",
+ "checked_at": 1793998806.809469,
+ "total_rows": 25,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "google/gemini-omni-1.1-flash",
-   "openrouter/auto-code",
-   "google/gemini-omni-1.2-flash",
-   "inclusionai/ling-3.0-tiny"
-  ],
-  "kilo": [
-   "google/gemini-omni-1.1-flash",
-   "openrouter/auto-code",
-   "google/gemini-omni-1.2-flash",
-   "inclusionai/ling-3.0-tiny"
+   "qwen/qwen3.8-27b:batch",
+   "meta/muse-glimmer-30b:batch",
+   "thinkingmachines/inkling-small:batch",
+   "minimax/minimax-m3:batch",
+   "deepseek/deepseek-v4-flash-0731:batch"
   ]
  },
  "removed_by_provider": {
   "openrouter": [
-   "minimax/minimax-01",
-   "minimax/minimax-m2",
-   "minimax/minimax-m2-her",
-   "minimax/minimax-m2.1"
-  ],
-  "kilo": [
-   "minimax/minimax-01",
-   "minimax/minimax-m2",
-   "minimax/minimax-m2-her",
-   "minimax/minimax-m2.1"
-  ],
-  "nvidia": [
-   "meta/llama-3.2-11b-vision-instruct"
+   "nvidia/nemotron-3.5-content-safety:free"
   ]
  }
 }

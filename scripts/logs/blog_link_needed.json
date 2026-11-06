@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-05 09:01",
+  "updated_at": "2026-11-06 09:00",
   "count": 144,
   "models": [
     {
@@ -2268,6 +2268,7 @@
         "thinkingmachines/inkling:free"
       ],
       "news_ids": [
+        58665,
         58281,
         55332,
         54945

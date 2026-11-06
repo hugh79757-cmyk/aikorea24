@@ -468,3 +468,20 @@
 {"ts": "2026-11-06 07:30:27", "slug": "mathbuddy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-06 07:30:27", "slug": "meetily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-06 07:30:29", "slug": "meev-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 06:00:40", "slug": "translucent-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 06:00:45", "slug": "translucent-ai", "step": "enrich", "result": "done", "detail": "+2,704자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 06:00:47", "slug": "translucent-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-07 06:00:47", "slug": "make0-brain-oss", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 06:00:53", "slug": "make0-brain-oss", "step": "enrich", "result": "done", "detail": "+2,733자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 06:00:54", "slug": "make0-brain-oss", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-07 06:01:07", "slug": "plainmail", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 06:01:34", "slug": "plainmail", "step": "enrich", "result": "done", "detail": "+2,589자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 06:01:35", "slug": "plainmail", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-07 06:01:38", "slug": "orgsync", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 06:01:48", "slug": "orgsync", "step": "enrich", "result": "done", "detail": "+2,677자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 06:01:49", "slug": "orgsync", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-07 06:01:50", "slug": "cloptima", "step": "url", "result": "done", "detail": "빈값 → https://cloptima.com (title='Cloptima — AI Gateway, Guardrails &amp; LLM ')", "dry_run": false}
+{"ts": "2026-11-07 06:01:58", "slug": "cloptima", "step": "enrich", "result": "done", "detail": "+2,673자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 06:02:02", "slug": "cloptima", "step": "thumb", "result": "done", "detail": "✅ cloptima 30KB", "dry_run": false}
+{"ts": "2026-11-07 06:02:11", "slug": "harness-s-learning-from-sibling-harnesses-for-gen", "step": "enrich", "result": "done", "detail": "+2,827자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 06:02:14", "slug": "harness-s-learning-from-sibling-harnesses-for-gen", "step": "thumb", "result": "done", "detail": "✅ harness-s-learning-from-sibling-harnesses-for-gen 33KB", "dry_run": false}
