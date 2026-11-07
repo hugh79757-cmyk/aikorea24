@@ -1,3 +1,35 @@
+## 2026-11-07 16:40 — AIK24-PIPE-16: 브리핑 선정 한글 오픈 웨이트 사각지대 수정
+
+### 한 일
+1. 원인 재확인 — 수집기가 제목·설명을 **한글로 번역 저장**하는데 `briefing_scorer._OPEN_WEIGHT_KEYWORDS` 가 영문만 알아서, 65B 실행 불가 오픈 웨이트(리플-65B)에 PIPE-13 가드가 닿지 않았다(규모 추출은 한글도 됨 → 규모 65B는 잡히는데 판정만 False).
+2. `scripts/briefing_scorer.py` — 키워드에 `오픈 웨이트·오픈웨이트·오픈소스·오픈 소스·가중치 공개·가중치를 공개` 추가(v2_filter 는 import 하므로 한 곳 수정으로 양쪽 해결).
+3. `config/impact_weights.json` — `free_usability.keywords` 에 같은 한글 6점 추가(영문과 동일).
+4. `scripts/auto_news_selector.py` — `_is_nonrunnable_open_weight()` 신설, `fallback_fill_general._usable` 에 적용(PIPE-13 판정 재사용, 새 로직 없음). (a) 점수순·(b) 최신순 모두 적용.
+5. 테스트 9건 추가(`tests/test_pipe13_openweight_runnable.py` 34 → 43).
+6. **11-06 완화 유지** — 실행 불가 오픈 웨이트에만 가드가 닿게 하고, 개발자 신호 통과 로직은 그대로.
+
+### 결과 (검증 근거)
+### [검증됨]
+- A2안(D1 n=58955 실데이터): `is_open_weight=True`, `scale=65.0`, `classify=(False, None)`, `score_article.breakdown.penalty_excluded_topic=-100`·`free_usability=0`, 폴백 판정 `True`(제외) — 근거: 실측 출력.
+- C안 7B 한글 `classify=(True,'opensource')`·폴백 미제외 · 32B 경계 통과 · 르숑크(1T) 기존 테스트 통과 — 근거: 실측 + 기존 34건.
+- 폴백 시뮬레이션: 65B 한글 + 7B 한글 풀에서 `fallback_fill_general(2)` → 채택 `[7B]`(65B 제외 로그) — 근거: 신규 테스트.
+- 전체 스위트 **1108 passed / 0 failed / 10 skipped** — 근거: pytest 출력.
+  (직전 1096 passed + 3 failed → 실패 3건은 `free_models_cli.json` 고갈 문제였고 같은 세션에서 17건으로 복구돼 전부 해소.)
+
+### [부분검증]
+- 규모 미표기("규모 미공개")는 `is_runnable_scale(None)=True` 로 제외하지 않는다(오탐 방지·기존 동작). 규모를 안 밝힌 65B 기사는 여전히 통과 가능.
+- LLM 도움 점수는 32B 규칙을 모른다(지시서 범위 밖) — 리플-65B에 9점을 준 주체.
+
+### [검증불가]
+- 11-08 07:00 실행에서 65B 계열이 실제 후보로 재등장하는지 — 그런 기사가 수집돼야 관측된다.
+
+### 잔존 위험
+- 규모 미표기 오픈 웨이트는 가드 통과(위 [부분검증]).
+- `config/impact_weights.json` 키워드 추가는 briefing_scorer·v2_filter 양쪽 점수에 동시 영향(의도된 일관성).
+
+### 다음 행동
+- 11-08 07:00 브리핑 로그에서 `[opensource]` 항목의 규모(≤32B) 확인. 완료보고: `SSOT/.../2026-11-07-1605-AIK24-PIPE-16-완료보고.md`. 커밋 `27fd5f7d`.
+
 ## 2026-11-07 10:52 — 무료 모델 페이지 15일 미갱신 사고 수정 (free_models_cli 고갈)
 
 ### 한 일
