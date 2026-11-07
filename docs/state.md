@@ -1,3 +1,40 @@
+## 2026-11-07 10:52 — 무료 모델 페이지 15일 미갱신 사고 수정 (free_models_cli 고갈)
+
+### 한 일
+1. **원인 규명** — `https://emdash.aikorea24.kr/posts/free-models` 의 `updatedAt` 이 **2026-10-23** 이었다.
+   - 10:00 일일 잡은 정상 실행 중이었고, 로그는 10-24부터 매일 `리스트 페이지 실패`였다.
+   - 실제 에러: `[free_models] CLI 검증 모델 없음: scripts/logs/free_models_cli.json — free_models_cli.py 를 먼저 실행하세요`
+   - 파일 상태: `scripts/logs/free_models_cli.json` = `[]` (2바이트), mtime **2026-10-24 09:33**.
+   - 결정적 원인: 이 파일을 만드는 `scripts/free_models_cli.py` 가 **어떤 launchd/스크립트에도 연결돼 있지 않았다**.
+     (09:30 verify-models · 10:00 free-model-pipe 는 이 파일을 **소비**만 한다.)
+2. **조치**
+   - `scripts/free_models_cli.py` 재실행 → **확정 17건** 생성(기존 `[]`).
+   - `scripts/free-models-cli.plist.template` 신설 + `~/Library/LaunchAgents/kr.aikorea24.free-models-cli.plist` 등록(매일 09:10, verify·page 보다 먼저). `launchctl list` 노출 확인.
+   - `free_models_page.ensure_cli_models()` — 파일이 비었거나 3일 이상 오래되면 **자가 재생성**(스케줄이 죽어도 페이지 갱신이 스스로 복구).
+   - `free_models_page.py daily` 수동 실행 → 리스트 페이지 갱신.
+
+### 결과 (검증 근거)
+- [검증됨] EmDash `updatedAt` 2026-10-23 → **2026-11-07T03:50:39Z**, excerpt `2026-11-07 기준 현재 무료 모델 27개 · 검증 완료 17개` (근거: EmDash API 조회).
+- [검증됨] 라이브 `https://emdash.aikorea24.kr/posts/free-models` **HTTP 200**, 페이지 HTML 에 새 기준일 5회 노출 (근거: curl + grep).
+- [검증됨] launchd `kr.aikorea24.free-models-cli` 등록(`launchctl list` = `- 0 kr.aikorea24.free-models-cli`).
+- [검증됨] 커밋 `7f376fe5` (스크립트+plist 템플릿+cli.json).
+
+### [부분검증]
+- 09:10 자동 실행은 내일 도래 — 오늘은 수동 실행으로만 확인.
+
+### 잔존 위험
+- OpenRouter 무료 모델 12건이 `No cookie auth credentials found` 로 CLI 검증에서 전부 제외됐다(확정 17건 중 openrouter 0건). OpenRouter 로그인/키가 없으면 OPENROUTER 계열은 '검증 완료'에 못 들어간다 — 별도 과제.
+- NVIDIA NIM: 카탈로그 0건 + 404 → 사실상 죽은 소스(대표님 지시로 사용 안 함).
+- `free_models_cli.py` 는 모델 43개를 `opencode run` 으로 한 번씩 호출한다(오늘 약 40분 소요).
+
+### 다음 행동
+- 내일 09:10 `kr.aikorea24.free-models-cli` 자동 실행 → 10:00 free-model-pipe 가 `리스트 페이지 갱신 완료`로 찍히는지 확인.
+- OpenRouter CLI 인증(키/쿠키) 확보 여부 결정 필요.
+
+## 2026-11-07 AIK24-FREE-PIPE-01 일일 실행 — 수집 27건 / 실패 프로바이더 0 / added 2 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
+## 2026-11-07 AIK24-FREE-PIPE-01 일일 실행 — 수집 27건 / 실패 프로바이더 0 / added 2 · removed 1 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-06 11:40 — 블로그 날짜 날조 · 광고/제휴 링크 사고 수정 (게이트 + 기존 글 10건)
 
 ### 한 일
