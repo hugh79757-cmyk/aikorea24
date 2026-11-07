@@ -485,3 +485,23 @@
 {"ts": "2026-11-07 06:02:02", "slug": "cloptima", "step": "thumb", "result": "done", "detail": "✅ cloptima 30KB", "dry_run": false}
 {"ts": "2026-11-07 06:02:11", "slug": "harness-s-learning-from-sibling-harnesses-for-gen", "step": "enrich", "result": "done", "detail": "+2,827자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-07 06:02:14", "slug": "harness-s-learning-from-sibling-harnesses-for-gen", "step": "thumb", "result": "done", "detail": "✅ harness-s-learning-from-sibling-harnesses-for-gen 33KB", "dry_run": false}
+{"ts": "2026-11-07 07:30:13", "slug": "babyvideo-ai", "step": "enrich", "result": "done", "detail": "+3,047자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 07:30:18", "slug": "babyvideo-ai", "step": "thumb", "result": "done", "detail": "✅ babyvideo-ai 17KB", "dry_run": false}
+{"ts": "2026-11-07 07:30:27", "slug": "describe-image", "step": "enrich", "result": "done", "detail": "+2,690자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 07:30:32", "slug": "describe-image", "step": "thumb", "result": "done", "detail": "✅ describe-image 17KB", "dry_run": false}
+{"ts": "2026-11-07 07:30:46", "slug": "fomrix", "step": "enrich", "result": "done", "detail": "+3,102자 (시도 2)", "dry_run": false}
+{"ts": "2026-11-07 07:30:50", "slug": "fomrix", "step": "thumb", "result": "done", "detail": "✅ fomrix 15KB", "dry_run": false}
+{"ts": "2026-11-07 07:30:56", "slug": "phrase", "step": "enrich", "result": "done", "detail": "+2,655자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-07 07:30:56", "slug": "knocket-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:30:57", "slug": "knocket-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-07 07:30:57", "slug": "sparkbots-ai-powered-by-jev", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:30:58", "slug": "sparkbots-ai-powered-by-jev", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-07 07:30:58", "slug": "mnki-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:30:59", "slug": "motiofy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:31:02", "slug": "mozaik", "step": "thumb", "result": "fail", "detail": "❌ mozaik BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ mozaik NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-11-07 07:31:36", "slug": "muse-video-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:31:37", "slug": "musicaura-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:31:37", "slug": "omlx-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:31:38", "slug": "patternful-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:31:40", "slug": "pdftoword-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-07 07:31:41", "slug": "personwise-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
