@@ -327,12 +327,31 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
             fixed = fixed.replace(_quality_gate.body_of(fixed), mdl, 1)
             fixes = list(fixes) + ["죽은 링크 %d개 제거" % len(dead)]
             log("    🛠 자동 수리 — 죽은 링크 제거: " + ", ".join(u[:50] for u in dead[:3]))
+        # 2026-11-07: 제공 목록 밖 URL(모델 창작)은 무조건 제거 — 창작 URL 차단의 근본 조치.
+        al = (_EMDASH_PENDING.get(fp) or {}).get("allowed_links") or []
+        if al:
+            mdl2, unlisted = _quality_gate.strip_unlisted_links(
+                _quality_gate.body_of(fixed), al)
+            if unlisted:
+                fixed = fixed.replace(_quality_gate.body_of(fixed), mdl2, 1)
+                fixes = list(fixes) + ["목록 밖 URL %d개 제거" % len(unlisted)]
+                log("    🛠 자동 수리 — 목록 밖 URL 제거: "
+                    + ", ".join(u[:45] for u in unlisted[:3]))
         if fixes:
             _EMDASH_PENDING[fp]["md"] = fixed
             log("    🛠 자동 수리 — " + ", ".join(fixes))
         return fixes
 
     _repair(filepath)
+
+    # 2026-11-07: 모델이 목록 밖 URL 을 창작하는 문제 — 생성 시 제공한 링크만 허용한다.
+    try:
+        _allowed = [l["url"] for l in _quality_gate.collect_real_links(art or {}, limit=5)]
+    except Exception:
+        _allowed = []
+    if (art or {}).get("link"):
+        _allowed.append(art["link"])
+    _EMDASH_PENDING.setdefault(filepath, {})["allowed_links"] = _allowed
 
     def _src_text():
         """날짜 근거 검사용 원문 텍스트 — 초안에 저장된 원문 우선, 없으면 art 에서."""
@@ -346,7 +365,7 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
     # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
     issues = _quality_gate.screen_extended(
         _body(filepath), is_eval=_EMDASH_PENDING.get(filepath, {}).get("is_eval", False),
-        source_text=_src_text())
+        source_text=_src_text(), allowed_urls=_allowed)
 
     # AIK24-PIPE-10 규칙 1·2·3: 주제 귀속(모델 ID) 검사.
     #   기존 게이트와 **같은 지점**에 통합했다(게이트를 두 개로 늘리지 않는다).
@@ -404,7 +423,8 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
         _repair(fp2)
         issues2 = _quality_gate.screen_extended(
             _body(fp2), is_eval=_EMDASH_PENDING.get(fp2, {}).get("is_eval", False),
-            source_text=_src_text())
+            source_text=_src_text(),
+            allowed_urls=_EMDASH_PENDING.get(fp2, {}).get("allowed_links"))
         if not issues2:
             _drop_except(fp2)
             log("    ✅ 교정 %d회차에서 게이트 통과 — 채택 (본문 %d자 / 인용 링크 %d개)"
@@ -1429,7 +1449,8 @@ def _publish_generated_to_emdash(generated):
         # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
         gate_issues = _quality_gate.screen_extended(
             body, is_eval=draft.get("is_eval", False),
-            source_text=draft.get("source_text"))
+            source_text=draft.get("source_text"),
+            allowed_urls=draft.get("allowed_links"))
         if gate_issues:
             _quality_gate.hold(draft["md"], meta.get("title") or title, gate_issues,
                                reason="2차 게이트(발행 직전) 미달")

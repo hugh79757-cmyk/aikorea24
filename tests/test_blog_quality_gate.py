@@ -64,10 +64,11 @@ class TestRepairMarkdown:
 
 class TestScreen:
     def test_short_body_without_links_is_flagged(self, monkeypatch):
+        """2026-11-07: 링크 개수 요구는 폐지됐다. 분량·표 등 다른 기준만 본다."""
         monkeypatch.setattr(g, "dead_links", lambda links, **kw: [])
         issues = g.screen_extended("## 도입\n\n짧은 본문이다.\n")
         assert any("본문" in i for i in issues)
-        assert any("링크" in i for i in issues)
+        assert not any("링크" in i for i in issues), issues
 
     def test_complete_body_passes(self, monkeypatch):
         monkeypatch.setattr(g, "dead_links", lambda links, **kw: [])

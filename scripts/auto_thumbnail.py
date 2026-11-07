@@ -131,15 +131,39 @@ def _save_used_id(photo_id):
     )
 
 
-def _pick_keyword():
-    """썸네일 키워드 — LLM 제거(2026-10-13).
+_KEYWORD_HINTS = (
+    (("보안", "해킹", "security", "hacking", "취약", "malware", "랜섬"), "cyber security"),
+    (("로봇", "robot", "휴머노이드"), "robot arm"),
+    (("데이터센터", "데이터 센터", "data center", "서버", "server"), "data center"),
+    (("반도체", "semiconductor", "칩", "chip", "gpu", "npu"), "ai chip"),
+    (("클라우드", "cloud", "aws", "azure"), "cloud computing"),
+    (("코딩", "coding", "코드", "code", "개발자", "developer", "에이전트", "agent"), "software code"),
+    (("모델", "model", "학습", "training", "파인튜닝"), "machine learning"),
+    (("챗봇", "chatbot", "대화", "assistant"), "chatbot"),
+    (("자동화", "automation", "공장", "제조"), "factory automation"),
+    (("스타트업", "startup", "투자"), "startup"),
+    (("시장", "증시", "주가", "market"), "stock market"),
+    (("정부", "규제", "정책", "policy"), "digital transformation"),
+)
 
-    썸네일은 Pexels/Unsplash 스톡 사진이라 LLM 이 필요 없다. LLM 키워드 추출은
-    호출당 60~85초(단일 tier 실측)를 쓰면서 체인 실패를 반복했고, 4건=665초로
-    파이프라인 Step 4 를 지배했다. 고정 풀에서 랜덤 선택으로 대체한다.
+
+def _pick_keyword(text=""):
+    """썸네일 키워드 — 기사 내용 기반(2026-11-07).
+
+    기존에는 고정 풀에서 **랜덤** 선택해 기사와 무관한 사진이 잡혔다(품질·연관성 저하).
+    LLM 호출 없이, 제목·설명의 토픽 단어로 풀 키워드를 고른다. 매칭이 없으면 랜덤.
     """
+    t = (text or "").lower()
+    best, best_hits = None, 0
+    for words, kw in _KEYWORD_HINTS:
+        hits = sum(1 for w in words if w in t)
+        if hits > best_hits:
+            best, best_hits = kw, hits
+    if best:
+        log(f"  키워드: '{best}' (기사 내용 기반, 매칭 {best_hits})")
+        return best
     keyword = random.choice(DEEPSEEK_POOL)
-    log(f"  키워드: '{keyword}' (고정 풀 선택 — LLM 제거)")
+    log(f"  키워드: '{keyword}' (내용 매칭 없음 — 고정 풀)")
     return keyword
 
 
@@ -157,7 +181,8 @@ def search_pexels(query, per_page=15, max_pages=3):
             resp = _get_with_retry(
                 url,
                 headers={"Authorization": api_key},
-                params={"query": query, "per_page": per_page, "page": page},
+                params={"query": query, "per_page": per_page, "page": page,
+                        "orientation": "landscape", "size": "large"},
             )
             data = resp.json()
             photos = data.get("photos", [])
@@ -237,7 +262,7 @@ def create_thumbnail(image_data, output_path):
     return output_path
 
 
-def validate_thumbnail_quality(filepath, min_size_kb=15):
+def validate_thumbnail_quality(filepath, min_size_kb=8):
     """Validate thumbnail quality: file size, dimensions, format, integrity.
     
     Args:
@@ -252,7 +277,9 @@ def validate_thumbnail_quality(filepath, min_size_kb=15):
         if not os.path.exists(filepath):
             return False, "파일 없음"
         
-        # Check file size
+        # Check file size — 2026-11-07: 15KB 는 정상 사진(1200x630 webp 10KB)까지
+        # 걸러 placeholder 로 떨어뜨렸다. 하한을 8KB 로 낮추고 **단색/빈 이미지**를
+        # 별도로 검사한다(빈 이미지는 1~2KB 로 압축되지만, 안전하게 색 다양성도 본다).
         file_size = os.path.getsize(filepath)
         if file_size < min_size_kb * 1024:
             return False, f"파일 크기 미달: {file_size//1024}KB < {min_size_kb}KB"
@@ -372,7 +399,7 @@ def process_thumbnail(url, slug, title="", description=""):
         log("  설명/제목 없음, 썸네일 생성 불가")
         return None
 
-    keyword = _pick_keyword()
+    keyword = _pick_keyword(text)
 
     used_ids = _load_used_ids()
     pexels_limited = False
@@ -424,9 +451,8 @@ def process_thumbnail(url, slug, title="", description=""):
     pid = chosen.get("id")
     log(f"  선택: ID={pid} | {chosen.get('alt', '')[:60]} | fallback={fallback_reason or 'none'}")
 
-    img_url = chosen.get("src", {}).get("large")
-    if not img_url:
-        img_url = chosen.get("src", {}).get("medium")
+    srcs = chosen.get("src", {}) or {}
+    img_url = srcs.get("large2x") or srcs.get("large") or srcs.get("medium")
     if not img_url:
         log("  이미지 URL 없음, 기본 placeholder 사용")
         return _use_default_thumbnail(slug)

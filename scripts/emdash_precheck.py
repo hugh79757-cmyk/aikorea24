@@ -12,7 +12,7 @@ import re
 import sys
 
 MIN_CHARS = 3000      # 사실 밀도 하한 (groq 재작성본 3,447자 / 이전 얇은 판 3,054자 → 표·수치 없으면 못 넘긴다)
-MIN_LINKS = 3         # 외부 링크
+MIN_LINKS = 0         # 2026-11-07 대표님 지시: 링크 개수 요구 폐지(문맥에 필요한 만큼만)
 MIN_TABLES = 1        # 비교·한도·요금은 표로
 INTERNAL_TERMS = ["firecrawl", "dev.vars", ".env.common", "launchd"]  # 독자에게 노출 금지 (실제 누출 사례)
 
@@ -54,7 +54,7 @@ def check(md: str) -> list:
     # 마크다운 링크와 생 URL 둘 다 센다 (렌더러가 생 URL 도 자동 링크한다)
     links = set(re.findall(r"\]\((https?://[^)\s]+)\)", md)) | set(re.findall(r"(?<!\()(https?://[^\s)\]]+)", md))
     ext = sorted(l for l in links if "aikorea24.kr" not in l)
-    if len(ext) < MIN_LINKS:
+    if MIN_LINKS and len(ext) < MIN_LINKS:      # MIN_LINKS=0 이면 검사하지 않는다
         issues.append(f"외부 링크 {len(ext)}개 (최소 {MIN_LINKS}) → 출처·발급·설치 페이지를 링크로")
 
     tables = len(re.findall(r"^\|\s*-{2,}", md, re.M))

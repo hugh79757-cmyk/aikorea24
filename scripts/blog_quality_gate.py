@@ -77,6 +77,8 @@ _BLOCKED = (
     # 실측: link.coupang.com/a/... (제휴), windows.microsoft.com/ko-kr/internet-explorer/download-ie
     # 가 '인용 링크'로 글에 들어가 MIN_LINKS 를 채우고 있었다.
     "coupang", "internet-explorer", "download-ie", "ad.doubleclick", "/banner", "/ads/",
+    # 2026-11-07: 워드프레스 XFN 네임스페이스 링크가 '인용 링크'로 수집됐다.
+    "gmpg.org", "/xfn/",
 )
 
 # 경로에 이 문자열이 있으면 인용 가치가 없다 (약관·개인정보·채용·구독 안내)
@@ -340,7 +342,7 @@ def reference_link_issues(md: str) -> list:
 
 
 def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
-                    source_text: str = None) -> list:
+                    source_text: str = None, allowed_urls=None) -> list:
     """게이트 + 링크 생존 검증(자동 파이프라인 전용).
 
     `emdash_precheck.check()` 는 순수 문자열 검사로 남겨두고(수동 글쓰기 경로와 공유),
@@ -360,9 +362,8 @@ def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
 
     cit = citation_links(md)
     # 게이트의 링크 검사는 코드블록 안 URL 도 세므로, 인용이 부족한 글은 여기서 한 번 더 막는다.
-    if not any("외부 링크" in i for i in issues) and len(cit) < MIN_LINKS:
-        issues.append("실제 인용 링크(코드블록 밖) %d개 (최소 %d) → 원문·공식 문서를 본문/`## 참고 자료`에 넣어라"
-                      % (len(cit), MIN_LINKS))
+    # 2026-11-07 대표님 지시: 링크는 개수 목표가 아니라 문맥에 필요할 때 들어가는 것이다.
+    # (MIN_LINKS=0 이면 아래 검사는 동작하지 않는다.)
     if verify_links:
         dead = dead_links(md)
         if dead:
@@ -373,6 +374,8 @@ def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
         issues.extend(date_grounding_issues(md, source_text))
     issues.extend(junk_link_issues(md))
     issues.extend(reference_link_issues(md))
+    if allowed_urls:
+        issues.extend(unlisted_link_issues(md, allowed_urls))
     return issues
 
 
@@ -408,22 +411,92 @@ def strip_dead_links(md: str, timeout: float = 8.0) -> tuple:
     return out, dead
 
 
+def strip_unlisted_links(md: str, allowed_urls) -> tuple:
+    """제공된 링크 목록 밖 URL 을 본문에서 제거한다. 반환 (md, 제거 목록).
+
+    2026-11-07 실측: 모델이 원문에 없는 URL 3개를 창작했다(그중 하나가 404 → 글이 보류).
+    사후에 죽은 링크만 지우면 '살아있는 창작 URL'은 남는다. 제공 목록 밖은 **무조건**
+    제거해, 글은 목록 안의 실제 출처만 인용하도록 만든다(보류 없이 진행).
+    """
+    allowed = {_norm_url(u) for u in (allowed_urls or []) if u}
+    if not allowed:
+        return md, []
+    out_urls = [u for u in links_in(md) if u.startswith("http")]
+    bad = []
+    for u in out_urls:
+        nu = _norm_url(u)
+        if nu in allowed:
+            continue
+        if any(nu.startswith(a.rstrip("/") + "/") or a.startswith(nu.rstrip("/") + "/") for a in allowed):
+            continue
+        bad.append(u)
+    if not bad:
+        return md, []
+    out = md
+    for u in bad:
+        out = re.sub(r"\[([^\]]{1,160})\]\(\s*" + re.escape(u) + r"\s*\)", r"\1", out)
+        out = re.sub(r"[ \t]*" + re.escape(u) + r"[ \t]*", " ", out)
+    out = re.sub(r"(?m)^\s*[-*+]\s*$", "", out)
+    out = re.sub(r"[ \t]{2,}", " ", out)
+    return out, bad
+
+
+def unlisted_link_issues(md: str, allowed_urls) -> list:
+    """본문 링크가 **제공된 링크 목록 밖**이면 미달 (URL 창작 차단).
+
+    2026-11-07 실측: 모델이 원문에 없는 `github.com/TerminalBench/TerminalBench` 를
+    만들어 넣었고(원문 링크 목록에 없음), 그 URL 이 404 라 글이 보류됐다.
+    죽은 링크를 사후에 지우는 것보다, **목록 밖 URL 자체를 쓰지 못하게** 하는 것이 근본 대책이다.
+    """
+    allowed = {_norm_url(u) for u in (allowed_urls or []) if u}
+    if not allowed:
+        return []
+    urls = [u for u in links_in(md) if u.startswith("http")]
+    bad = []
+    for u in urls:
+        if _norm_url(u) in allowed:
+            continue
+        # 같은 도메인의 다른 경로(예: 목록의 기사 URL 뒤 슬래시 변형)는 허용
+        if any(_norm_url(u).startswith(a.rstrip("/") + "/") or a.startswith(_norm_url(u).rstrip("/") + "/")
+               for a in allowed):
+            continue
+        bad.append(u)
+    if not bad:
+        return []
+    return ["제공된 링크 목록에 없는 URL %d개 (%s) → 목록 밖 URL 을 만들지 말고 "
+            "'인용 가능한 실제 링크'의 URL 만 써라"
+            % (len(bad), ", ".join(u[:60] for u in bad[:3]))]
+
+
+def _norm_url(u: str) -> str:
+    """비교용 정규화 — 호스트 소문자, 끝 슬래시/추적 파라미터 제거."""
+    s = (u or "").strip()
+    if not s:
+        return ""
+    s = re.sub(r"[?#].*$", "", s).rstrip("/")
+    m = re.match(r"(?i)^(https?)://([^/]+)(/.*)?$", s)
+    if m:
+        return "%s://%s%s" % (m.group(1).lower(), m.group(2).lower(), m.group(3) or "")
+    return s.lower()
+
+
 # ---------------------------------------------------------------- 교정 지시
 _FIX_HINTS = (
     ("PT JSON", "- 이전 출력이 JSON 이었다. 마크다운 본문 텍스트로 다시 써라."),
     ("본문에 H1", "- 본문 맨 앞에 `# 제목` 을 넣지 마라. 제목은 TITLE: 줄에만 한 번 쓴다."),
     ("`## 마무리", "- 마지막 소제목을 **문자 그대로** `## 마무리 — (내용을 요약한 짧은 말)` 로 달아라. "
                    "그 아래에 오늘 바로 할 수 있는 실행 3단계를 번호 목록으로 쓴다."),
-    ("외부 링크", "- 본문에 실제 URL 을 인라인 링크로 최소 3개 넣어라. 이 프롬프트의 '인용 가능한 실제 링크' "
-                 "목록에 있는 URL 을 그대로 쓰고, 목록에 없는 URL 은 지어내지 마라."),
+    ("외부 링크", "- 링크는 개수 목표가 없다. 출처가 필요한 문장에만 '인용 가능한 실제 링크' 목록의 URL 을 넣어라. "
+                 "목록에 없는 URL 은 지어내지 마라."),
     ("끊긴 링크", "- 아래 링크는 실제로 열리지 않는다(404 등). 다른 URL 로 교체하거나 지워라. "
                  "이 프롬프트의 '인용 가능한 실제 링크' 목록에서 골라라."),
-    ("인용 링크", "- 코드블록(curl 예시) 안의 URL 은 출처로 세지 않는다. 본문 문장이나 "
-                 "`## 참고 자료` 섹션에 클릭 가능한 링크를 최소 3개 넣어라."),
+    ("인용 링크", "- 코드블록(curl 예시) 안의 URL 은 출처가 아니다. 문맥상 출처가 필요한 문장에만 링크를 넣어라."),
     ("원문에 없는 연도", "- 본문의 연도·날짜는 **원문에 적힌 것만** 쓴다. 원문에 없는 연도·날짜·행사명을 "
                       "만들지 말고, 지목된 문장은 원문 표현으로 다시 쓰거나 삭제하라."),
     ("광고·제휴·무관 링크", "- 쿠팡 등 제휴/광고 링크, 브라우저 업그레이드 안내, 사이트 내비게이션 링크를 "
                         "모두 지워라. '인용 가능한 실제 링크' 목록의 URL 만 남긴다."),
+    ("제공된 링크 목록에 없는 URL", "- 목록에 없는 URL 을 지어냈다. 프롬프트의 '인용 가능한 실제 링크' "
+                              "목록에 있는 URL 로 바꾸거나 그 링크를 지워라."),
     ("'참고 자료'에 링크 없는 항목", "- `## 참고 자료` 의 모든 항목은 `[제목](URL)` 형식이어야 한다. "
                                 "링크를 넣을 수 없는 항목은 **아예 쓰지 말고 삭제**하라. "
                                 "'원문 보기'처럼 링크를 암시하는 말만 남기면 검사에서 걸린다."),
@@ -454,7 +527,7 @@ def fix_note(issues: list) -> str:
         if any(key in it for it in issues) and hint not in seen:
             lines.append(hint)
             seen.add(hint)
-    lines.append(f"- 분량 하한은 {MIN_CHARS}자(공백 포함), 외부 링크 {MIN_LINKS}개 이상, 표 {MIN_TABLES}개 이상이다.")
+    lines.append(f"- 분량 하한은 {MIN_CHARS}자(공백 포함), 마크다운 표 {MIN_TABLES}개 이상이다. 링크는 개수 목표 없이 문맥에 필요할 때 실제 출처로 넣는다.")
     lines.append("- 위 수치를 채우려고 문장을 늘리거나 반복하지 마라. 사실 밀도로 채운다.")
     return "\n".join(lines)
 
@@ -477,7 +550,7 @@ def revision_note(draft_body: str, issues: list) -> str:
     lines += [
         f"- 분량 하한은 {MIN_CHARS}자(공백 포함, 현재 {len(draft_body)}자). "
         f"늘릴 때는 문장을 반복하거나 추측을 넣지 말고, 기사에 있는 사실·수치·인용을 더 세밀하게 풀어 쓴다.",
-        f"- 외부 링크 {MIN_LINKS}개 이상, 마크다운 표 {MIN_TABLES}개 이상.",
+        f"- 마크다운 표 {MIN_TABLES}개 이상. 링크는 개수 목표 없이 문맥에 필요한 곳에 실제 출처로.",
         "",
         "[이미 잘 쓴 부분은 그대로 유지한다. 좋은 문장을 지우고 새로 쓰면 분량과 밀도가 떨어진다.]",
         "",
@@ -702,7 +775,7 @@ def link_block(links: list) -> str:
         "② `## 참고 자료` 섹션을 **`## 마무리` 앞에** 두고, 사용한 링크를 목록으로 정리한다(제목 + 링크).",
         "③ 아래 목록 밖의 URL 을 쓰려면 **공식 문서·공식 발표 페이지**여야 한다. 실제로 열리지 않는 "
         "URL 은 발행 전 검사에서 걸려 글이 발행되지 않는다 — 확실하지 않으면 쓰지 마라.",
-        "④ 본문 전체에 외부 링크가 최소 3개 있어야 한다(원문 1 + 참고 자료 2 이상).",
+        "④ 링크는 개수 목표가 없다. 문맥상 출처가 필요한 문장에만 실제 URL 을 넣는다.",
         "⑤ `## 참고 자료`의 **모든 항목은 `[제목](URL)` 형식**으로 쓴다. 링크를 넣을 수 없는 항목은 "
         "아예 쓰지 마라 — '원문 보기'처럼 링크를 암시하는 텍스트만 남기면 발행 전 검사에서 걸린다.",
     ]
