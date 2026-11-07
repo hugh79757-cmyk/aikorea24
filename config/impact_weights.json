@@ -48,7 +48,13 @@
       "cookbook": 5,
       "쿡북": 5,
       "비용 없이": 8,
-      "credit card": 3
+      "credit card": 3,
+      "오픈 웨이트": 6,
+      "오픈웨이트": 6,
+      "오픈소스": 6,
+      "오픈 소스": 6,
+      "가중치 공개": 6,
+      "가중치를 공개": 6
     },
     "runnable_max_b": 32,
     "_comment_runnable": "AIK24-PIPE-13: 오픈 웨이트 실행 가능 컷오프 (양자화 후 B). 이 규모 초과는 '구독자 환경에서 실행 불가'로 판정해 open weights/huggingface 키워드 점수를 0으로 하고 launch_soft 제외 규칙을 면제하지 않는다."

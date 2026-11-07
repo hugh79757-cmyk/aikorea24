@@ -45,6 +45,10 @@ _ENG_ENTITY_RE = re.compile(r'\b[A-Z][a-zA-Z0-9.&+#\-]{2,}\b')
 _OPEN_WEIGHT_KEYWORDS = {
     "open weights", "open source", "open-source", "opensource",
     "huggingface", "hugging face", "ollama",
+    # 2026-11-07 AIK24-PIPE-16: 수집기가 제목·설명을 **한글로 번역**해 저장하므로
+    # 영문 키워드만으로는 오픈 웨이트 판정이 전혀 닿지 않았다(리플-65B 사각지대).
+    # v2_filter 는 이 집합을 import 하므로 한 곳 수정으로 양쪽이 해결된다.
+    "오픈 웨이트", "오픈웨이트", "오픈소스", "오픈 소스", "가중치 공개", "가중치를 공개",
 }
 _RUNNABLE_MAX_B_DEFAULT = 32
 

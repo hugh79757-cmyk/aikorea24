@@ -219,3 +219,96 @@ class TestCliFreeBlockConditional:
         }
         block = ab.cli_free_block(art)
         assert "Ollama" in block or "로컬 브리지" in block
+
+# ---------------------------------------------------------------------------
+# AIK24-PIPE-16 (2026-11-07) — 한글 오픈 웨이트 사각지대
+#
+# 사고: 수집기가 제목·설명을 한글로 번역 저장하는데 _OPEN_WEIGHT_KEYWORDS 가 영문만
+# 알아서, 65B 실행 불가 오픈 웨이트(리플-65B)가 v2 필터를 통과해 11-07 브리핑에 실렸다.
+# (규모 추출은 한글도 되는데 오픈 웨이트 판정만 영문이었다.)
+# ---------------------------------------------------------------------------
+
+RIPPLE_TITLE = "리플-65B(Ripple-65B) 프리뷰, 아파치 2.0 기반의 강력한 코딩 에이전트 성능 입증"
+RIPPLE_DESC = ("미국 스타트업이 650억 파라미터 규모의 오픈 웨이트 모델 리플-65B를 공개했습니다. "
+               "아파치 2.0 라이선스로 배포됩니다.")
+
+
+class TestKoreanOpenWeightPipe16:
+    def test_korean_65b_classify_blocked(self):
+        """A2안(한글 저장본) — 실행 불가 오픈 웨이트는 제외된다."""
+        assert v2_filter.classify(RIPPLE_TITLE, RIPPLE_DESC, "The Decoder") == (False, None)
+
+    def test_korean_65b_score_penalty(self, real_weights):
+        """한글 65B — score_article 도 launch_soft 페널티로 제외한다."""
+        article = {"title": RIPPLE_TITLE, "description": RIPPLE_DESC,
+                   "body": RIPPLE_TITLE + "\n" + RIPPLE_DESC,
+                   "source": "The Decoder", "pub_date": "2026-11-07 10:00:00"}
+        result = bs.score_article(article, real_weights, {}, mode="full")
+        assert result["breakdown"]["penalty_excluded_topic"] == -100
+        assert result["breakdown"]["free_usability"] == 0
+
+    def test_korean_7b_passes(self):
+        """C안 — 실행 가능 규모(7B)는 기존대로 통과(회귀 기준)."""
+        # '무료' 신호가 있으면 태그가 free-llm 으로 승격된다(그게 정상). 여기서는
+        # 오픈 웨이트 판정만 보기 위해 설명에 무료 키워드를 넣지 않는다.
+        assert v2_filter.classify("70억 파라미터 규모의 오픈 웨이트 모델 공개",
+                                  "아파치 2.0 라이선스로 배포됩니다", "The Decoder") == (True, "opensource")
+
+    def test_korean_32b_boundary_passes(self):
+        """32B 경계값은 통과(컷오프 이내)."""
+        assert v2_filter.classify("320억 파라미터 오픈 웨이트 모델 공개",
+                                  "아파치 2.0 라이선스", "The Decoder") == (True, "opensource")
+
+    def test_korean_openweight_keywords_detected(self):
+        """한글 키워드도 is_open_weight 가 인식한다."""
+        for t in ("오픈 웨이트", "오픈웨이트", "오픈소스", "오픈 소스", "가중치 공개"):
+            assert bs.is_open_weight(t) is True, t
+
+    def test_fallback_usable_excludes_korean_65b(self):
+        """폴백 진입로(v2_filter 미경유)도 실행 불가 오픈 웨이트를 제외한다."""
+        import auto_news_selector as sel
+        assert sel._is_nonrunnable_open_weight(
+            {"title": RIPPLE_TITLE, "description": RIPPLE_DESC}) is True
+
+    def test_fallback_usable_keeps_korean_7b(self):
+        """7B 한글은 폴백에서 제외되지 않는다(오탐 방지)."""
+        import auto_news_selector as sel
+        assert sel._is_nonrunnable_open_weight(
+            {"title": "70억 파라미터 오픈 웨이트 모델 공개",
+             "description": "무료 배포"}) is False
+
+    def test_fallback_usable_keeps_unknown_scale(self):
+        """규모 미상이면 기존 동작 유지(제외하지 않음)."""
+        import auto_news_selector as sel
+        assert sel._is_nonrunnable_open_weight(
+            {"title": "오픈소스 모델 공개", "description": "규모 미공개"}) is False
+
+
+def test_fallback_fill_excludes_korean_65b(monkeypatch):
+    """지시서 §4 폴백 시뮬레이션 — 65B 한글 기사를 폴백 풀에 넣으면 채택되지 않는다.
+
+    폴백 풀(v2_tag IS NULL)은 v2_filter 를 거치지 않는 두 번째 진입로다.
+    """
+    import briefing_dedup
+    import auto_news_selector as sel
+
+    pool = [
+        {"id": "1", "title": RIPPLE_TITLE, "original_title": "", "description": RIPPLE_DESC,
+         "link": "https://x/1", "source": "The Decoder", "pub_date": "2026-11-07 10:00:00",
+         "v2_tag": None, "v2_pass": None, "_score": 9},
+        {"id": "2", "title": "70억 파라미터 오픈 웨이트 모델 공개", "original_title": "",
+         "description": "아파치 2.0 라이선스로 배포됩니다", "link": "https://x/2",
+         "source": "AI타임스", "pub_date": "2026-11-07 09:00:00",
+         "v2_tag": None, "v2_pass": None, "_score": 8},
+    ]
+    monkeypatch.setattr(sel, "get_general_fallback_news",
+                        lambda *a, **k: [dict(x) for x in pool])
+    monkeypatch.setattr(sel.time, "sleep", lambda *_: None)
+    monkeypatch.setattr(briefing_dedup, "get_history_articles", lambda q: [])
+    monkeypatch.setattr(briefing_dedup, "is_duplicate_article", lambda a, h: (False, None))
+    monkeypatch.setattr(briefing_dedup, "is_duplicate_article_strict", lambda a, h: (False, None))
+
+    picked = sel.fallback_fill_general(2, set(), set(), set(), lambda sql: [], lambda a: 0)
+    ids = [a["id"] for a in picked]
+    assert "1" not in ids, ids          # 65B 한글 = 실행 불가 → 폴백에서도 제외
+    assert "2" in ids, ids              # 7B 한글 = 통과 (회귀)

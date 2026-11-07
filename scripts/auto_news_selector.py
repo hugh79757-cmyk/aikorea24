@@ -525,6 +525,30 @@ def get_general_fallback_news(d1_query_func, exclude_ids=(), limit=None):
     return out
 
 
+def _is_nonrunnable_open_weight(art, runnable_max_b=None):
+    """실행 불가 오픈 웨이트 판정 — AIK24-PIPE-16 (PIPE-13 로직 그대로 재사용).
+
+    폴백 풀(`v2_tag IS NULL`)은 v2_filter 를 거치지 않으므로, 65B 같은 실행 불가
+    오픈 웨이트가 폴백으로 들어올 수 있었다(2026-11-07 리플-65B 사고의 두 번째 진입로).
+    판정은 briefing_scorer 의 is_open_weight + extract_param_scale_b + is_runnable_scale 만 쓴다.
+    """
+    try:
+        from briefing_scorer import (extract_param_scale_b, is_open_weight,
+                                     is_runnable_scale, load_weights)
+    except Exception:  # noqa: BLE001 — 판정 불가면 기존 동작 유지(false positive 방지)
+        return False
+    text = "%s\n%s" % (art.get("title") or "", art.get("description") or "")
+    if not is_open_weight(text):
+        return False
+    if runnable_max_b is None:
+        try:
+            runnable_max_b = (load_weights().get("free_usability") or {}).get(
+                "runnable_max_b", 32)
+        except Exception:  # noqa: BLE001
+            runnable_max_b = 32
+    return not is_runnable_scale(extract_param_scale_b(text), runnable_max_b)
+
+
 def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
                           d1_query_func, scorer, batch_history=()):
     """남은 슬롯을 일반 뉴스(무료 태그 없음)로 채운다 — AIK24-PIPE-12 (a)→(b) 순서.
@@ -575,6 +599,10 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
             return False
         mkey = _model_key(art)
         if mkey and mkey in merged_models:
+            return False
+        # AIK24-PIPE-16: 실행 불가 오픈 웨이트(>32B)는 폴백에서도 제외.
+        if _is_nonrunnable_open_weight(art):
+            log(f"  [폴백] 실행 불가 오픈 웨이트 제외: {(art.get('title') or '')[:50]}")
             return False
         return True
 
