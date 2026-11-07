@@ -133,6 +133,31 @@ def log(msg):
 # --------------------------------------------------------------- 데이터 읽기 (EVAL-06 신규)
 
 
+def ensure_cli_models(max_age_days=3, timeout=1800):
+    """CLI 검증 목록이 비었거나 오래됐으면 **스스로 재생성**한다 (2026-11-07).
+
+    사고: free_models_cli.json 이 2026-10-24 에 [] 로 비었고, 이걸 만드는 잡이 스케줄에
+    없어서 10:00 페이지 갱신이 매일 "CLI 검증 모델 없음"으로 중단됐다(15일 미갱신).
+    생성 잡(kr.aikorea24.free-models-cli)을 추가했고, 여기서도 한 번 더 자가 복구한다.
+    """
+    data = _read_json(CLI_MODELS_PATH, []) or []
+    try:
+        stale = (time.time() - CLI_MODELS_PATH.stat().st_mtime) > max_age_days * 86400
+    except Exception:
+        stale = True
+    if data and not stale:
+        return data
+    log(f"CLI 검증 목록 비었거나 {max_age_days}일 이상 오래됨 → free_models_cli.py 재생성 시도")
+    try:
+        import subprocess
+        r = subprocess.run([sys.executable, str(Path(__file__).parent / "free_models_cli.py")],
+                           cwd=str(Path(__file__).parent.parent), timeout=timeout)
+        log(f"  재생성 종료(code={r.returncode})")
+    except Exception as e:
+        log(f"  재생성 실패: {type(e).__name__}: {e}")
+    return _read_json(CLI_MODELS_PATH, []) or []
+
+
 def load_cli_models():
     """EVAL-02 검증 모델 18개 로드 (free_models_cli.json)."""
     return _read_json(CLI_MODELS_PATH, [])
@@ -670,9 +695,9 @@ def cmd_page(day=None, dry_run=False):
     day = day or time.strftime("%Y-%m-%d")
     
     # EVAL-06: 새로운 데이터 소스 사용
-    cli_models = load_cli_models()
+    cli_models = ensure_cli_models()      # 2026-11-07: 비었으면 자가 재생성
     if not cli_models:
-        log(f"CLI 검증 모델 없음: {CLI_MODELS_PATH} — free_models_cli.py 를 먼저 실행하세요")
+        log(f"CLI 검증 모델 없음: {CLI_MODELS_PATH} — free_models_cli.py 재생성도 실패")
         return 1
     
     external_evals = load_external_evals()

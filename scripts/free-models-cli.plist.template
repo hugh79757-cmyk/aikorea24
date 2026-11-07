@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AIK24-FREE-CLI-01: OpenCode CLI 로 실제 호출 가능한 무료 모델 목록 재생성.
+     2026-11-07 사고: 이 잡이 없어 scripts/logs/free_models_cli.json 이 10-24 에 [] 로 비었고,
+     이후 09:30 verify / 10:00 free-models 페이지 갱신이 매일 실패했다.
+     설치: cp scripts/free-models-cli.plist.template ~/Library/LaunchAgents/kr.aikorea24.free-models-cli.plist
+           launchctl unload/load -w ~/Library/LaunchAgents/kr.aikorea24.free-models-cli.plist -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>kr.aikorea24.free-models-cli</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/twinssn/Projects/aikorea24/.venv/bin/python3</string>
+		<string>/Users/twinssn/Projects/aikorea24/scripts/free_models_cli.py</string>
+	</array>
+	<key>StartCalendarInterval</key>
+	<!-- verify-models(09:30)·free-model-pipe(10:00) 보다 먼저 — 09:10 -->
+	<dict>
+		<key>Hour</key>
+		<integer>9</integer>
+		<key>Minute</key>
+		<integer>10</integer>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>/Users/twinssn/Projects/aikorea24</string>
+	<key>StandardOutPath</key>
+	<string>/Users/twinssn/Projects/aikorea24/scripts/logs/free-models-cli.log</string>
+	<key>StandardErrorPath</key>
+	<string>/Users/twinssn/Projects/aikorea24/scripts/logs/free-models-cli.err.log</string>
+	<key>RunAtLoad</key>
+	<false/>
+</dict>
+</plist>
