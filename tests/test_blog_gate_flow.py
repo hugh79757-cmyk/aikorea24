@@ -42,6 +42,14 @@ def _md(body: str) -> str:
             + body)
 
 
+
+@pytest.fixture(autouse=True)
+def _no_link_network(monkeypatch):
+    """죽은 링크 생존 검사는 네트워크 호출 — 테스트에서는 전부 살아있다고 고정한다."""
+    import blog_quality_gate as _g
+    monkeypatch.setattr(_g, "_verify_many",
+                        lambda urls, timeout=6.0, workers=6: {u: True for u in urls})
+
 class StubGen:
     """`generate_draft` 대체 — 큐에 넣은 응답을 차례로 돌려준다."""
 

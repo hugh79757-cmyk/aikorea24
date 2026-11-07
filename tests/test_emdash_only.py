@@ -29,6 +29,14 @@ GPT_OUT = "TITLE: 테스트 제목\n---\n\n" + BODY
 
 
 @pytest.fixture(autouse=True)
+def _no_link_network(monkeypatch):
+    """죽은 링크 생존 검사는 네트워크 호출 — 테스트에서는 전부 살아있다고 고정한다."""
+    import blog_quality_gate as _g
+    monkeypatch.setattr(_g, "_verify_many",
+                        lambda urls, timeout=6.0, workers=6: {u: True for u in urls})
+
+
+@pytest.fixture(autouse=True)
 def _isolated(monkeypatch, tmp_path):
     import blog_quality_gate as g
 

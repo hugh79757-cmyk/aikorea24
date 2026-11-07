@@ -69,16 +69,16 @@ def hold_spy(monkeypatch):
 
 # ----------------------------------------------------------------------
 class TestClassifyThumbnails:
-    def test_missing_thumbnail_is_failure(self, no_thumbnails):
+    def test_missing_thumbnail_warns_but_publishes(self, no_thumbnails):
+        """2026-11-07 지시: 썸네일이 없어도 발행을 막지 않는다(경고만)."""
         fp = _pending("/tmp/t1.md")
         passed, issues, failed = gen.classify_thumbnails([(fp, "제목 1", 1, 1)])
-        assert passed == 0
-        assert len(issues) == 1 and len(failed) == 1
-        assert failed[0][0] == fp
-        assert "없음" in failed[0][4]
+        assert passed == 1                    # 발행 대상 유지
+        assert len(issues) == 1 and "없음" in issues[0][1]
+        assert failed == []                   # 차단 목록 없음
 
-    def test_placeholder_copy_is_failure(self, monkeypatch):
-        """placeholder 사본은 품질 OK지만 image 필드가 빠진다 → 발행하면 이미지 없는 글이 된다."""
+    def test_placeholder_copy_warns_but_publishes(self, monkeypatch):
+        """2026-11-07 지시: placeholder 사본이어도 발행을 막지 않는다(이미지 없이 발행)."""
         monkeypatch.setattr(gen, "PROJECT_DIR", "/tmp/aik24-thumb-fake")
         monkeypatch.setattr(gen, "validate_thumbnail_quality", lambda p: (True, "ok"))
         monkeypatch.setattr(gen.os.path, "exists", lambda p: str(p).endswith("thumbnail.webp"))
@@ -86,8 +86,9 @@ class TestClassifyThumbnails:
         monkeypatch.setattr(gen, "is_placeholder_copy", lambda p: True)
         fp = _pending("/tmp/t2.md")
         passed, issues, failed = gen.classify_thumbnails([(fp, "제목 2", 1, 1)])
-        assert passed == 0
-        assert "placeholder" in failed[0][4]
+        assert passed == 1
+        assert "placeholder" in issues[0][1]
+        assert failed == []
 
     def test_valid_thumbnail_passes(self, monkeypatch):
         import os as _os
@@ -102,23 +103,18 @@ class TestClassifyThumbnails:
 
 # ----------------------------------------------------------------------
 class TestNoDraftLoss:
-    def test_all_thumbnails_fail_preserves_draft(self, no_thumbnails, hold_spy):
-        """전부 실패해도 초안은 hold 로 보존된다 (유실 없음)."""
+    def test_all_thumbnails_fail_still_publishes(self, no_thumbnails, hold_spy):
+        """2026-11-07 지시: 전부 썸네일 실패여도 발행 대상은 그대로다(보류 없음)."""
         fp = _pending("/tmp/t4.md")
         generated = [(fp, "제목 4", 1, 1)]
         passed, issues, failed = gen.classify_thumbnails(generated)
         held = gen.hold_thumbnail_failures(failed, "2026-10-20")
 
-        assert passed == 0 and failed
-        assert len(held) == 1
-        # 보류 호출에 초안 본문이 들어갔는지 — 이것이 "유실 없음"의 증거
-        assert len(hold_spy) == 1
-        assert hold_spy[0]["md_len"] > 200, "초안 본문이 보류 기록으로 넘어가야 한다"
-        assert "썸네일" in hold_spy[0]["reason"]
-        assert hold_spy[0]["issues"], "보류 사유가 이슈 목록에 남아야 한다"
+        assert passed == 1 and failed == []
+        assert held == [] and hold_spy == []   # 보류 없음 = 발행 계속
 
-    def test_failed_posts_removed_from_publish_list(self, no_thumbnails, hold_spy):
-        """실패 글은 발행 대상에서 빠지고, 통과 글은 남는다."""
+    def test_failed_posts_stay_in_publish_list(self, no_thumbnails, hold_spy):
+        """2026-11-07 지시: 썸네일 실패 글도 발행 대상에 남는다(차단 없음)."""
         ok_fp = _pending("/tmp/ok.md")
         bad_fp = _pending("/tmp/bad.md")
         # 통과 글만 썸네일 OK 로 강제하기 위해 경로 존재 분기
@@ -135,12 +131,13 @@ class TestNoDraftLoss:
         try:
             generated = [(ok_fp, "통과", 1, 1), (bad_fp, "실패", 2, 1)]
             passed, issues, failed = gen.classify_thumbnails(generated)
-            assert passed == 1
-            assert [f[0] for f in failed] == [bad_fp]
+            # 2026-11-07: 썸네일 문제는 발행을 막지 않는다 — 두 글 모두 대상 유지
+            assert passed == 2
+            assert failed == []
             held = gen.hold_thumbnail_failures(failed, "2026-10-20")
             bad_fps = {h[0] for h in held}
             remaining = [x for x in generated if x[0] not in bad_fps]
-            assert [x[0] for x in remaining] == [ok_fp], "통과 글만 발행 대상에 남는다"
+            assert [x[0] for x in remaining] == [ok_fp, bad_fp], "썸네일 실패도 발행 대상에 남는다"
         finally:
             monkey.undo()
 

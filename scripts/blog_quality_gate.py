@@ -387,7 +387,12 @@ def strip_dead_links(md: str, timeout: float = 8.0) -> tuple:
     urls = citation_links(md)[:8] or links_in(md)[:8]
     if not urls:
         return md, []
-    ok = _verify_many(urls, timeout=min(timeout, 6.0))
+    try:
+        ok = _verify_many(urls, timeout=min(timeout, 6.0))
+    except Exception:
+        # 생존 확인 자체가 실패하면 아무것도 지우지 않는다(fail-open).
+        # 네트워크 장애로 링크를 전부 날려 '외부 링크 부족'으로 보류되는 것을 막는다.
+        return md, []
     dead = [u for u in urls if not ok.get(u)]
     if not dead:
         return md, []
