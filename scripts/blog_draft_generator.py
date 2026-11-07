@@ -317,9 +317,16 @@ def _gate_and_fix(title, art, filepath, seo_title, file_num, today_str, generato
         return _quality_gate.body_of((_EMDASH_PENDING.get(fp) or {}).get("md", ""))
 
     def _repair(fp):
-        """결정적 수리(표 구분선·앞머리 H1). 내용은 바꾸지 않는다."""
+        """결정적 수리(표 구분선·앞머리 H1·죽은 링크 제거). 내용은 바꾸지 않는다."""
         cur = (_EMDASH_PENDING.get(fp) or {}).get("md", "")
         fixed, fixes = _quality_gate.repair_pending(cur)
+        # 2026-11-07: 죽은 인용 링크 1개 때문에 글 전체가 보류되던 문제.
+        # 링크만 지우고 계속 진행한다(본문 텍스트는 남긴다).
+        mdl, dead = _quality_gate.strip_dead_links(_quality_gate.body_of(fixed))
+        if dead:
+            fixed = fixed.replace(_quality_gate.body_of(fixed), mdl, 1)
+            fixes = list(fixes) + ["죽은 링크 %d개 제거" % len(dead)]
+            log("    🛠 자동 수리 — 죽은 링크 제거: " + ", ".join(u[:50] for u in dead[:3]))
         if fixes:
             _EMDASH_PENDING[fp]["md"] = fixed
             log("    🛠 자동 수리 — " + ", ".join(fixes))
@@ -1414,6 +1421,11 @@ def _publish_generated_to_emdash(generated):
         body, _fixes2 = _quality_gate.repair_markdown(body)
         if _fixes2:
             log("  🛠 자동 수리(2차): " + ", ".join(_fixes2))
+        # 2026-11-07: 발행 직전에도 죽은 링크를 자동 제거한다(링크 하나로 글 전체 보류 금지).
+        body, _dead2 = _quality_gate.strip_dead_links(body)
+        if _dead2:
+            log("  🛠 죽은 링크 %d개 제거(2차): %s"
+                % (len(_dead2), ", ".join(u[:50] for u in _dead2[:3])))
         # AIK24-FABRICATE-01: 뉴스 경로 글의 'ai.kr.24 실측 결과' 섹션은 정의상 날조 → 차단
         gate_issues = _quality_gate.screen_extended(
             body, is_eval=draft.get("is_eval", False),
@@ -1456,30 +1468,33 @@ def _publish_generated_to_emdash(generated):
 def classify_thumbnails(generated):
     """생성된 글별 썸네일 품질 판정.
 
-    Returns: (통과건수, 이슈목록[(slug, 사유)], 실패목록[(fp, title, sort_order, slug, 사유)])
+    2026-11-07 대표님 지시: **썸네일 때문에 발행을 막지 않는다.**
+    (실측: Pexels 결과가 placeholder 사본으로 나와 '에이전트 엔지니어링 가이드' 글이
+     통째로 보류됐다. 썸네일은 본문 품질과 무관하다.)
+    → 문제가 있으면 warnings 에만 남기고 발행 대상에는 포함한다. image 필드가 비면
+      이미지 없는 글로 나가고, 다음 실행에서 후처리(tools_postprocess 등)가 보완한다.
+
+    Returns: (통과건수, 이슈목록[(slug, 사유)], 실패목록)  — failed 는 항상 빈 목록.
     """
     quality_passed = 0
     issues = []
-    failed = []
     for fp, title, sort_order, _ in generated:
         slug = os.path.basename(fp).replace('.md', '').lower()
         thumb_path = os.path.join(PROJECT_DIR, "public", "images", slug, "thumbnail.webp")
+        note = None
         if not os.path.exists(thumb_path):
-            issues.append((slug, "썸네일 파일 없음"))
-            failed.append((fp, title, sort_order, slug, "썸네일 파일 없음"))
-            continue
-        is_valid, reason = validate_thumbnail_quality(thumb_path)
-        if not is_valid:
-            issues.append((slug, reason))
-            failed.append((fp, title, sort_order, slug, reason))
-            continue
-        # placeholder 사본: 품질은 OK지만 image 필드에서 제외되므로 발행하면 이미지 없는 글이 된다
-        if is_placeholder_copy(thumb_path):
-            issues.append((slug, "placeholder 사본 (image 필드 생략)"))
-            failed.append((fp, title, sort_order, slug, "placeholder 사본 (image 필드 생략)"))
-            continue
+            note = "썸네일 파일 없음"
+        else:
+            is_valid, reason = validate_thumbnail_quality(thumb_path)
+            if not is_valid:
+                note = reason
+            elif is_placeholder_copy(thumb_path):
+                note = "placeholder 사본 (image 필드 생략)"
+        if note:
+            issues.append((slug, note))
+            log(f"  ⚠️ 썸네일 경고(발행은 계속): {slug[:40]} — {note}")
         quality_passed += 1
-    return quality_passed, issues, failed
+    return quality_passed, issues, []
 
 
 def hold_thumbnail_failures(failed, today_str):
@@ -1714,7 +1729,8 @@ def main():
     if quality_issues:
         log(f"  ⚠️ 품질 이슈: {quality_issues}")
 
-    # 썸네일 실패 글만 발행 보류 + 초안 보존. 통과 글은 그대로 5c 로 넘어간다.
+    # 2026-11-07: 썸네일 문제는 이제 **차단하지 않는다**(classify_thumbnails 가 항상 failed=[]).
+    # 아래 블록은 호환용으로 남겨 둔다(향후 차단 정책을 되살릴 때 사용).
     if thumb_failed:
         held = hold_thumbnail_failures(thumb_failed, today_str)
         bad_fps = {fp for fp, _t, _i in held}

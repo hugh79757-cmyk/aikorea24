@@ -104,6 +104,28 @@ def test_collect_real_links_drops_junk(monkeypatch):
     assert 'https://www.reuters.com/markets/us/ai-chips' in urls, urls
 
 
+def test_strip_dead_links_removes_only_dead_ones(monkeypatch):
+    """죽은 링크 1개 때문에 글 전체가 보류되던 문제 — 그 링크만 지우고 계속 간다."""
+    md = ("## 본문\n[살아있는 링크](https://alive.example.com/a) 와 "
+          "[죽은 링크](https://dead.example.com/b) 입니다.\n"
+          "- https://dead.example.com/b\n")
+    monkeypatch.setattr(gate, '_verify_many',
+                        lambda urls, timeout=6.0, workers=6: {u: 'alive' in u for u in urls})
+    out, dead = gate.strip_dead_links(md)
+    assert dead == ['https://dead.example.com/b'], dead
+    assert 'https://dead.example.com/b' not in out, out
+    assert '살아있는 링크' in out and 'alive.example.com/a' in out, out
+
+
+def test_classify_thumbnails_never_blocks(monkeypatch, tmp_path):
+    """2026-11-07 지시: 썸네일 문제로 발행을 막지 않는다 (경고만)."""
+    fp = str(tmp_path / 'draft.md')
+    got = bdg.classify_thumbnails([(fp, '제목', 1, None)])
+    passed, issues, failed = got
+    assert failed == [], failed          # 차단 목록 없음
+    assert passed == 1, got
+
+
 def test_source_text_of_collects_article_fields():
     """생성기 원문 텍스트 헬퍼 — 제목·원제목·설명을 합친다."""
     txt = bdg._source_text_of([{'title': '제목', 'original_title': 'Orig',

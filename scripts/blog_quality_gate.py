@@ -376,6 +376,33 @@ def screen_extended(text: str, verify_links: bool = True, is_eval: bool = False,
     return issues
 
 
+def strip_dead_links(md: str, timeout: float = 8.0) -> tuple:
+    """죽은 인용 링크를 본문에서 제거한다. 반환: (수정된 md, 제거한 URL 목록).
+
+    2026-11-07 실측: 원문에서 긁은 GitHub 링크가 404 가 되자 교정 2회 후 글이 통째로
+    보류됐다. 링크 하나 때문에 글을 버리지 않고 **그 링크만 지우고 계속 진행**한다.
+    (삭제 후 링크 수가 모자라면 게이트가 '외부 링크 부족'으로 다시 잡는다 — 그건
+    교정으로 채울 수 있는 문제다.)
+    """
+    urls = citation_links(md)[:8] or links_in(md)[:8]
+    if not urls:
+        return md, []
+    ok = _verify_many(urls, timeout=min(timeout, 6.0))
+    dead = [u for u in urls if not ok.get(u)]
+    if not dead:
+        return md, []
+    out = md
+    for u in dead:
+        # [텍스트](죽은링크) → 텍스트
+        out = re.sub(r"\[([^\]]{1,160})\]\(\s*" + re.escape(u) + r"\s*\)", r"\1", out)
+        # 목록·본문의 생 URL → 제거
+        out = re.sub(r"[ \t]*" + re.escape(u) + r"[ \t]*", " ", out)
+    # 제거로 생긴 빈 목록 항목/이중 공백 정리
+    out = re.sub(r"(?m)^\s*[-*+]\s*$", "", out)
+    out = re.sub(r"[ \t]{2,}", " ", out)
+    return out, dead
+
+
 # ---------------------------------------------------------------- 교정 지시
 _FIX_HINTS = (
     ("PT JSON", "- 이전 출력이 JSON 이었다. 마크다운 본문 텍스트로 다시 써라."),
