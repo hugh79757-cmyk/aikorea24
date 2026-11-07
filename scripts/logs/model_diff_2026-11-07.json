@@ -1,0 +1,39 @@
+{
+  "added": [
+    {
+      "provider": "openrouter",
+      "model_id": "liquid/lfm-3-1.7b:free",
+      "name": "LiquidAI: LFM3-1.7B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    },
+    {
+      "provider": "kilo",
+      "model_id": "liquid/lfm-3-1.7b:free",
+      "name": "LiquidAI: LFM3-1.7B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    }
+  ],
+  "removed": [
+    {
+      "provider": "openrouter",
+      "model_id": "nvidia/nemotron-3.5-content-safety:free",
+      "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 128000,
+      "reason": "무료→유료 전환"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}

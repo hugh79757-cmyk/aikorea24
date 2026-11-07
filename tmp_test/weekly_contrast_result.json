@@ -1,34 +1,33 @@
 {
-  "timestamp": "2026-10-31T09:00:02.707167",
+  "timestamp": "2026-11-07T09:00:05.993177",
   "dry_run": false,
   "days": 7,
-  "s0_articles": 20,
-  "s1_candidates": 3,
+  "s0_articles": 18,
+  "s1_candidates": 5,
   "s2_dives": 2,
-  "s3_posts": [
-    "/Users/twinssn/Projects/aikorea24/src/content/blog/_drafts/weekly-contrast-20261031-001-ai-버블-우려와-실제-컴퓨팅-수요.md",
-    "/Users/twinssn/Projects/aikorea24/src/content/blog/weekly-contrast-20261031-001-오픈소스-커뮤니티의-ai-수용-갈등.md"
-  ],
+  "s3_posts": [],
   "errors": [],
   "s2_quality": [
     {
-      "title": "AI 버블 우려와 실제 컴퓨팅 수요",
-      "verdict": "보류",
+      "title": "AI 해킹 무기화와 사이버 안보의 갈림길",
+      "verdict": "폐기",
       "issues": [
-        "직접 인용 없음 (추론으로만 구성)"
+        "환각 인용 2건 (원문에 존재하지 않는 인용)"
       ],
-      "verified_quotes": 0,
-      "unverified_quotes": 0,
+      "verified_quotes": 1,
+      "unverified_quotes": 2,
       "source_links_count": 2
     },
     {
-      "title": "오픈소스 커뮤니티의 AI 수용 갈등",
-      "verdict": "추천",
-      "issues": [],
-      "verified_quotes": 1,
-      "unverified_quotes": 0,
+      "title": "AI 에이전트, 일상 서비스와 전문 생산성의 갈림길",
+      "verdict": "폐기",
+      "issues": [
+        "환각 인용 1건 (원문에 존재하지 않는 인용)"
+      ],
+      "verified_quotes": 2,
+      "unverified_quotes": 1,
       "source_links_count": 2
     }
   ],
-  "elapsed_seconds": 31.6
+  "elapsed_seconds": 40.2
 }

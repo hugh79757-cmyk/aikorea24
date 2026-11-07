@@ -1,80 +1,132 @@
 [
   {
-    "topic": "AI 인프라 투자 확대와 대규모 자금 조달",
-    "contrast_frame": "AI 투자 버블 우려 vs 실제 하드웨어 및 컴퓨팅 자원 수요 증가",
+    "topic": "AI 기반 사이버 공격 역량 vs 방어 및 대응 기술",
+    "contrast_frame": "북한 및 중국의 공격적 AI 해킹 능력 강화 vs 드론 방어 및 사이버 보안 체계 구축",
     "type": "A",
     "source_articles": [
       {
-        "id": 57201,
-        "title": "메타, AI 확장 자금 마련 위해 950억 달러 규모 주식 발행 계획",
-        "source": "Financial Times AI",
-        "pub_date": "Mon, 26 Oct 2026 20:49:27",
-        "link": "https://www.ft.com/content/94e5a0ae-874d-447a-bbfc-cd465a1a7555?syn-25a6b1a6=1"
+        "id": 58079,
+        "title": "北 사이버 인해전술, AI 만나 공격력 증폭",
+        "source": "전자신문",
+        "pub_date": "Sun, 1 Nov 2026 11:55:16 +0900",
+        "link": "https://www.etnews.com/20261101000070"
       },
       {
-        "id": 57444,
-        "title": "“AI 버블 붕괴? 수요 안 꺾였다”…SK證 “코스피 사모을 때”[줍줍리...",
-        "source": "네이버뉴스",
-        "pub_date": "2026-10-28",
-        "link": "https://n.news.naver.com/mnews/article/011/0004675856?sid=101"
+        "id": 58960,
+        "title": "무서운 속도로 발전하는 중국의 무료 AI 모델, 해킹 능력도 수준급",
+        "source": "Wired AI",
+        "pub_date": "Fri, 06 Nov 2026 18:43:43",
+        "link": "https://www.wired.com/story/free-chinese-ai-models-are-getting-scary-good-at-hacking/"
       }
     ],
-    "quote_1": "이번 자금 조달에는 엔비디아, AMD, 브로드컴 등 주요 칩 제조사들이 핵심 투자자로 참여할 예정입니다.",
-    "quote_2": "인공지능(AI) 투자 지속 가능성을 둘러싼 우려로 증시 변동성이 커졌지만 정작 AI 컴퓨팅 수요는 꺾이지...",
-    "gap_summary": "시장 일각에서는 AI 투자 지속 가능성에 대한 우려가 존재하지만, 실제로는 메타의 대규모 자금 조달과 엔비디아 B200 렌탈 가격 상승에서 볼 수 있듯 강력한 하드웨어 및 컴퓨팅 자원 수요가 지속되고 있을 가능성이 있다.",
-    "reading_angle": "AI 버블 우려와 실제 산업 현장의 실수요 간의 괴리를 파악하는 관점",
-    "category": "투자"
+    "quote_1": "수천 명의 사이버 인력을 운용하는 것으로 추정되는 북한이 인공지능(AI)까지 공격에 활용하면서 위협이 커지고 있어서다.",
+    "quote_2": "AI 모델에게 가상 네트워크 침투를 시도하게 한 실험 결과, 딥시크(DeepSeek)와 GLM의 해킹 실력이 오픈AI의 최첨단 사이버 모델(비공개)에 뒤지지 않는 수준인 것으로 나타났습니다.",
+    "gap_summary": "북한의 인해전술식 사이버 공격과 중국의 고도화된 AI 모델 성능이 결합되어, 국가 주도의 사이버 위협이 전례 없는 수준으로 증폭될 가능성이 있다.",
+    "reading_angle": "적대적 국가들의 AI 기반 공격 역량 고도화에 따른 사이버 안보 위협의 실체 분석",
+    "category": "보안"
   },
   {
-    "topic": "오픈소스 커뮤니티의 AI 수용 여부 갈등",
-    "contrast_frame": "AI 기술의 오픈소스 생태계 확산 vs 전통적 오픈소스 커뮤니티의 AI 프로젝트 금지 정책",
+    "topic": "범용 서비스 통합 에이전트 vs 특정 업무 특화 코딩 에이전트",
+    "contrast_frame": "네이버·카카오의 일상 서비스 통합형 에이전트 vs GitHub·리플-65B의 개발 생산성 중심 전문 에이전트",
     "type": "A",
     "source_articles": [
       {
-        "id": 57166,
-        "title": "레딧의 'r/opensource', 모든 AI 관련 프로젝트 금지… 반발과 함께 대체 커뮤니티 등장",
-        "source": "The Decoder",
-        "pub_date": "Mon, 26 Oct 2026 17:19:40",
-        "link": "https://the-decoder.com/reddits-r-opensource-bans-all-ai-related-projects-sparking-backlash-and-a-rival-subreddit/"
+        "id": 58585,
+        "title": "네이버, 통합 에이전트 구축 앞당긴다…카카오·배민도 자연어 AI 검색 확대",
+        "source": "전자신문",
+        "pub_date": "Wed, 4 Nov 2026 17:00:00 +0900",
+        "link": "https://www.etnews.com/20261104000273"
       },
       {
-        "id": 57241,
-        "title": "레딧(Reddit) r/opensource 커뮤니티, AI 생성 및 AI 중심 프로젝트와 비영어권 사용자 금지",
-        "source": "Hacker News",
-        "pub_date": "2026-10-26",
-        "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/reddits-r-opensource-bans-ai-made-and-ai-focused-projects-also-bans-non-english-speakers-sweeping-new-rules-spark-backlash-over-linux-kernel-contributions-and-solo-developers"
+        "id": 58967,
+        "title": "코드 생성을 넘어: 개발자를 위한 에이전트 엔지니어링 가이드",
+        "source": "GitHub Blog",
+        "pub_date": "Fri, 06 Nov 2026 22:15:59",
+        "link": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/"
       }
     ],
-    "quote_1": "레딧의 오픈소스 포럼인 'r/opensource'가 AI로 제작되었거나 AI 기반인 모든 프로젝트 게시물을 금지했습니다.",
-    "quote_2": "오픈소스 커뮤니티인 r/opensource가 AI로 생성된 프로젝트와 AI 관련 도구들을 금지하는 새로운 정책을 도입했습니다.",
-    "gap_summary": "전통적인 오픈소스 커뮤니티가 AI 기반 프로젝트를 전면 차단하면서, 오픈소스 생태계 내에서 AI 기술 수용을 둘러싼 갈등이 심화될 수 있음을 보여준다.",
-    "reading_angle": "AI 기술의 급격한 확산과 기존 개발자 커뮤니티의 배타적 정책 사이의 충돌 양상을 분석하는 관점",
+    "quote_1": "이용자가 서비스 경계를 넘나들지 않아도 검색부터 추천·예약·결제까지 이어지도록 하는 것이 목표다.",
+    "quote_2": "코드 작성은 빨라졌지만, 그 주변 업무는 여전히 복잡합니다. GitHub Copilot을 활용해 계획 수립, 코드 작성, 변경 사항 검토, 운영 문제 조사 등을 수행하는 방법과 여전히 인간의 판단이 필요한 영역이 무엇인지 알아봅니다.",
+    "gap_summary": "일상 서비스의 편의성을 극대화하려는 플랫폼 에이전트와 복잡한 기술적 문제를 해결하려는 개발 도구형 에이전트가 서로 다른 영역에서 AI의 실용성을 증명하고 있다고 볼 수 있다.",
+    "reading_angle": "범용적 사용자 경험(UX) 혁신과 전문적 생산성 도구라는 AI 에이전트의 두 가지 발전 경로 비교",
+    "category": "기술"
+  },
+  {
+    "topic": "데이터 확보를 위한 기업 인수 vs 오픈 웨이트 모델의 생태계 공유",
+    "contrast_frame": "소비자 데이터 독점을 위한 기업 인수 전략 vs 아파치 2.0 기반의 오픈 소스 모델 배포 전략",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 57655,
+        "title": "모드(Mode), 소비자 데이터 확보 전략의 일환으로 집잽(JibJab) 최대 2,950만 달러에 인수",
+        "source": "Fast Company AI",
+        "pub_date": "Thu, 29 Oct 2026 13:00:00",
+        "link": "https://www.fastcompany.com/91623069/mode-acquires-jibjab-for-up-to-29-5-million-amid-consumer-data-roll-up-spree?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=3&partner=newsletter&campaign_date=10292026"
+      },
+      {
+        "id": 58955,
+        "title": "리플-65B(Ripple-65B) 프리뷰, 아파치 2.0 기반의 강력한 코딩 에이전트 성능 입증",
+        "source": "The Decoder",
+        "pub_date": "Fri, 06 Nov 2026 19:47:04",
+        "link": "https://the-decoder.com/ripple-65b-preview-delivers-strong-agentic-coding-results-as-a-fully-apache-2-0-open-us-model/"
+      }
+    ],
+    "quote_1": "모드는 소프트웨어 기업을 인수하여, AI 학습 및 소비자 조사를 위해 데이터를 공유하는 사용자들에게 무료 프리미엄 액세스와 보상을 제공하고 있습니다.",
+    "quote_2": "리커시브 인텔리전스(Recursive Intelligence)가 3,200만 달러의 R&D 비용을 투입해 개발한 650억 파라미터 규모의 오픈 웨이트 모델 '리플-65B'를 공개했습니다.",
+    "gap_summary": "기업이 데이터를 독점하여 폐쇄적 생태계를 구축하려는 전략과, 막대한 비용을 투입해 개발한 모델을 오픈 웨이트로 공개하여 기술 생태계를 확장하려는 전략이 상충할 수 있음을 시사한다.",
+    "reading_angle": "데이터 자산화 중심의 비즈니스 모델과 오픈 소스 기반의 기술 생태계 확산 전략 간의 대립",
+    "category": "시장"
+  },
+  {
+    "topic": "국가 주도 국방 AI 도입 vs 민간 주도 로컬 창업 및 실용 AI",
+    "contrast_frame": "국방력 강화를 위한 대규모 구독형 AI 인프라 vs 지역 기반 소규모 창업 및 실생활 문제 해결형 AI",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 58615,
+        "title": "[네이버클라우드 국방 AI] 김유원 네이버클라우드 대표 \"미래 강군은 AI...",
+        "source": "네이버뉴스",
+        "pub_date": "2026-11-05",
+        "link": "https://www.cbci.co.kr/news/articleView.html?idxno=623088"
+      },
+      {
+        "id": 57884,
+        "title": "경남정보대 AI창업학과, 로컬 창업 후속 특강 진행",
+        "source": "네이버뉴스",
+        "pub_date": "2026-10-31",
+        "link": "http://www.metroseoul.co.kr/article/20261030500290"
+      }
+    ],
+    "quote_1": "국방 인공지능(AI)의 안전한 운용과 민간 기술의... 만큼만 최신 자원을 활용하는 구독형 방식으로 전환할 것을 제안했다.",
+    "quote_2": "경남정보대학교 AI창업학과는 지난 24일 교내에서 '제1회 KIT 스타트업 포럼: 로컬에서 창업의 답을 찾다' 첫 강연을 열었다고 29일 밝혔다.",
+    "gap_summary": "국가 안보를 위한 대규모 인프라 중심의 AI 전략과 지역 사회의 실생활 문제를 해결하려는 소규모 창업 중심의 AI 활용이 공존하고 있음을 시사할 수 있다.",
+    "reading_angle": "국가 전략적 차원의 AI 도입과 지역 밀착형 실용 AI 교육이라는 두 가지 서로 다른 AI 생태계의 발전 양상을 비교함.",
     "category": "정책"
   },
   {
-    "topic": "AI 고도화에 따른 기업 구조조정과 인력 재편",
-    "contrast_frame": "AI 에이전트의 보안 및 자율성 테스트 확장 vs 빅테크 기업의 대규모 희망퇴직 및 인력 감축",
+    "topic": "AI의 자동화된 정보 제공 vs 인간의 최종 검증 및 판단",
+    "contrast_frame": "AI가 생성한 정보의 신속성 및 효율성 vs 여행 일정이나 생활 정보 확인 시 인간의 최종 판단 필요성",
     "type": "A",
     "source_articles": [
       {
-        "id": 57615,
-        "title": "AI 에이전트의 행동을 실시간으로 모니터링해야 할 긴급한 필요성",
-        "source": "MIT Tech Review",
-        "pub_date": "Thu, 29 Oct 2026 10:11:12",
-        "link": "https://www.technologyreview.com/2026/10/29/1147824/monitor-ai-agents-actions-real-time/"
+        "id": 58252,
+        "title": "[김미란의 여행 칼럼] AI가 짠 여행 일정의 마지막 확인자는 누구인가",
+        "source": "네이버뉴스",
+        "pub_date": "2026-11-03",
+        "link": "https://www.dailyt.co.kr/newsView/dlt202611020026"
       },
       {
-        "id": 57420,
-        "title": "AI 키우는 MS, 6만명 희망퇴직",
-        "source": "IT조선",
-        "pub_date": "2026-10-27 16:04:01",
-        "link": "https://it.chosun.com/news/articleView.html?idxno=2023092172885"
+        "id": 58112,
+        "title": "AI챗봇 생활정보 검색, 질문법이 답이다",
+        "source": "네이버뉴스",
+        "pub_date": "2026-11-02",
+        "link": "https://www.gokorea.kr/news/articleView.html?idxno=882909"
       }
     ],
-    "quote_1": "지난 여름, 수백 개의 오픈AI 에이전트가 사이버 보안 테스트에서 부정행위를 시도했습니다.",
-    "quote_2": "마이크로소프트가 전체 직원의 27%에 해당하는 약 6만명을 대상으로 자발적 퇴직 프로그램을 시행할 것으로 알려졌다.",
-    "gap_summary": "인공지능 기술의 발전으로 에이전트의 자율성과 보안 위협이 증가하는 동시에, 빅테크 기업은 대규모 구조조정을 단행할 가능성이 있음을 시사한다.",
-    "reading_angle": "AI 고도화에 따른 기술적 통제 필요성과 기업 내부의 고용 구조 재편이라는 두 가지 변화를 동시에 보여주는 관점",
-    "category": "노동"
+    "quote_1": "여행 준비에 인공지능을 활용하면 짧은 시간 안에 설명문과 일정 초안을 만들 수 있다.",
+    "quote_2": "생활 정보를 찾을 때는 최신성도 확인해야 한다. AI 챗봇은 학습된 시점의 정보를 기반으로 답하는 경우가 많아...",
+    "gap_summary": "AI가 제공하는 정보의 효율성은 높지만, 정보의 최신성이나 정확성 측면에서 오류가 발생할 수 있으므로 인간의 비판적 검증이 필수적일 수 있다.",
+    "reading_angle": "AI의 기술적 편의성과 정보 신뢰성 사이의 간극을 조명함",
+    "category": "윤리"
   }
 ]
