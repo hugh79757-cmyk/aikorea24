@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- AIK24-EVAL-AUTO (2026-11-08): 신규 무료 모델 자동 평가 → 캐시 반영 → 블로그 초안.
-     트리거는 detect-new-models(04:00)가 남기는 new_models_alert.json 이다.
+<!-- AIK24-EVAL-AUTO (2026-11-08 대표님 확정 시퀀스):
+       브리핑 발행 → 모델 테스트 → 블로그에 유익한 글(발행 + 브리핑 양방향 연결)
+     트리거는 **오늘 발행된 브리핑의 무료 모델 항목**이다(오늘 브리핑은 00:01 발행).
+     브리핑에 실리지 않은 신규는 awaiting_briefing 으로 기록만 하고 테스트하지 않는다.
      평가는 CLI 실제 호출이라 opencode 가 PATH 에 있어야 한다 — 아래 PATH 를 지우면
      verify-models(09:30)·free-models-cli(09:10)와 같은 "CLI 없음" 실패가 난다.
-     발행(publish)은 하지 않는다. EmDash draft 까지만 만든다(검수 후 사람이 발행).
+     글은 게이트(gate_draft)를 통과할 때만 발행된다. 미달이면 초안 보존 + 발행 안 함.
 
      슬롯: 08:30 — 점유 슬롯(04:00 detect / 05:30 news / 07:00 pipeline / 07:30 blog-draft /
      09:10 free-models-cli / 09:30 verify-models / 10:00 free-model-pipe)과 겹치지 않고,
-     10:00 페이지 갱신 전에 90분을 확보한다.
+     00:01 브리핑 발행 + 07:30 blog-draft 이후, 10:00 페이지 갱신 전 90분을 쓴다.
 
      설치:
        cp scripts/free-model-eval-auto.plist.template ~/Library/LaunchAgents/kr.aikorea24.free-model-eval-auto.plist

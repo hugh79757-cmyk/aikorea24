@@ -163,6 +163,33 @@ def publish_post(title, body_md, excerpt=None, featured_image=None, published_at
     return "%s/posts/%s" % (BASE, item.get("slug") or item.get("id"))
 
 
+def publish_by_slug(slug_or_url):
+    """이미 만든 글(draft)을 공개 상태로 전환한다. 성공하면 공개 URL, 실패하면 None.
+
+    AIK24-EVAL-AUTO (2026-11-08 대표님 지시): 브리핑 → 테스트 → 블로그 글 시퀀스를
+    끝까지 자동으로 돌리기 위해 필요하다. 생성(create_draft_post)과 분리해 두면
+    "초안까지만" 정책으로 되돌릴 때 이 함수 호출만 빼면 된다.
+    """
+    pat = get_pat()
+    if not pat:
+        print("  ! EmDash PAT 없음 (%s)" % "/".join(PAT_KEYS))
+        return None
+    os.environ["EMDASH_PAT"] = pat
+    from emdash04_migrate import api
+
+    ident = str(slug_or_url).rstrip("/").rsplit("/", 1)[-1]
+    item = get_post(ident)
+    if not item:
+        print("  ! 게시물 조회 실패 — publish 대상 없음: %s" % ident)
+        return None
+    pid = item.get("id") or ident
+    st, d = api("/_emdash/api/content/posts/%s/publish" % pid, "POST", {})
+    if st not in (200, 201):
+        print("  ! EmDash publish 실패 http=%s %s" % (st, json.dumps(d, ensure_ascii=False)[:200]))
+        return None
+    return "%s/posts/%s" % (BASE, item.get("slug") or ident)
+
+
 def create_draft_post(title, body_md, excerpt=None, featured_image=None):
     """글 1건을 **draft 상태로** 만든다. publish 하지 않는다.
 

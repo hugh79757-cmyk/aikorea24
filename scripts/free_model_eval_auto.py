@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 """AIK24-EVAL-AUTO — 신규 무료 모델 자동 평가 → 캐시 반영 → 블로그 **초안** 생성.
 
-트리거 (2026-11-08 확정)
-------------------------
-`scripts/detect_new_models.py` (매일 04:00) 가 쓰는 `scripts/logs/new_models_alert.json`
-하나만 트리거로 쓴다. 이 파일은 이미 added/removed 를 프로바이더별로 나눠 갖고 있고,
-수집 시점이 04:00 이라 더 빠르다. `free_models_cli.json`(09:10 CLI 검증 목록)은
-**교차 확인용**이다 — 평가는 CLI 실제 호출이 전제라, 실제 CLI 노출 여부는
-`opencode models` 를 직접 조회해 확인한다(파일이 비어 있어도 평가가 죽지 않는다).
+시퀀스 (2026-11-08 대표님 확정)
+------------------------------
+**브리핑 발행 → 모델 테스트 → 블로그에 유익한 글(발행 + 브리핑 연결)**
 
-트리거 조건
------------
-`new_by_provider` 중 **무료 목록에 새로 들어온 것**만 대상이다.
-프로바이더별 무료 접미사(openrouter/kilo `:free`, zen `-free`)로 거르므로
-이름만 바뀐 것·유료 전환·제거 건은 자동으로 빠진다.
+즉 트리거는 카탈로그가 아니라 **오늘 발행된 브리핑**이다. `briefing_items` 를 `news` 와
+조인해 무료 모델 소스(OpenCode Zen / OpenRouter Free Models / Kilo Free Models / NVIDIA NIM Free)
+항목을 찾고, 그 항목의 `original_title` 을 모델 ID 로 쓴다. 브리핑이 아직 안 실었으면
+아무것도 하지 않는다 — 목록에 있다는 이유만으로 먼저 글을 쓰지 않는다.
+
+카탈로그 alert(`new_models_alert.json`, 04:00)는 **보조 기록**으로만 쓴다.
+거기서만 잡힌 신규는 `awaiting_briefing` 으로 큐에 적어두고, 브리핑에 실리는 날 평가한다.
+
+교차 확인은 파일이 아니라 `opencode models` 라이브 조회로 한다(평가는 CLI 호출이 전제).
 
 파이프라인 단계
 ---------------
@@ -21,9 +21,10 @@
 2. 평가 — `model_eval.eval_model_cli` 12문항(타임아웃 60초 → 180초 재시도 내장)
           + `model_eval.probe_context_length` 니들 컨텍스트 프로브
 3. 반영 — `model_eval.cache_put` 만 쓴다. 캐시·리더보드 JSON 직접 편집 금지(EVAL-03 교훈).
-4. 블로그 **draft** — 측정값만으로 결정적 템플릿을 채운다. LLM 서술 없음(날조 차단).
-   게이트 미달이면 `scripts/logs/rejected/` 에 보존하고 사유를 보고한다.
-   **발행(publish)은 이 스크립트에 없다** — 검수 후 사람이 한다(지시서 작업 5).
+4. 블로그 글 — 측정값만으로 결정적 템플릿을 채운다. LLM 서술 없음(날조 차단).
+   게이트(`gate_draft`) 통과 시 **발행까지** 하고, 브리핑 항목에 글 URL 을 기록한 뒤
+   글 도입부에 브리핑 역링크를 넣는다(양방향). 게이트 미달이면 `scripts/logs/rejected/`
+   에 보존하고 발행하지 않는다. `AUTO_PUBLISH = False` 로 두면 초안까지만 만든다.
 
 실패 처리
 ---------
@@ -83,6 +84,11 @@ CLI_PREFIX = {"openrouter": "openrouter", "kilo": "kilo", "zen": "opencode"}
 # 그래서 1건으로 둔다(측정 근거: scripts/logs/model_eval_runs.jsonl 의 elapsed_sec).
 DAILY_LIMIT = 1
 MAX_ATTEMPTS = 3  # 3회 시도해도 안 되면 자동 재시도 중단 → status=manual (사람 확인)
+
+# 발행 여부. 2026-11-08 대표님 지시: "브리핑 발행 → 모델 테스트 → 블로그에 유익한 글" 시퀀스를
+# 끝까지 자동으로 돌린다. 단 **게이트를 통과한 초안만** 발행한다(gate_draft 실패 시 초안 보존).
+# 초안까지만 원하면 이 값을 False 로 두면 된다 — 생성은 그대로 돌고 publish 만 빠진다.
+AUTO_PUBLISH = True
 
 MODELS_TIMEOUT = 180
 BLOCKED_RETRY_WAIT = 60  # 첫 실패 후 재시도까지 대기(초)
@@ -170,6 +176,72 @@ def candidates_from_alert(alert):
             seen.add(mid)
             out.append({"provider": prov, "model_id": mid})
     return out
+
+
+# 무료 모델 소스 → 프로바이더. 브리핑에서 이 소스로 실린 항목이 곧 "무료 모델 등장"이다.
+FREE_SOURCE_PROVIDER = {
+    "OpenCode Zen": "zen",
+    "OpenRouter Free Models": "openrouter",
+    "Kilo Free Models": "kilo",
+    "NVIDIA NIM Free": "nvidia-nim",
+}
+
+
+def _candidates_from_briefing_rows(rows):
+    """브리핑 항목 행 → 평가 후보. (순수 함수 — 테스트 대상)
+
+    2026-11-08 대표님 지시: 시퀀스를 **브리핑 발행 → 모델 테스트 → 블로그 글**로 고정한다.
+    트리거를 카탈로그 alert 가 아니라 '오늘 발행된 브리핑에 무료 모델 항목이 있는가'로 잡는다.
+    무료 접미사 규칙은 여기서 쓰지 않는다 — 브리핑이 이미 무료 모델 소스로 실었기 때문이다.
+    대신 CLI 실제 노출(`opencode models`)로 한 번 더 확인한다.
+    """
+    out, seen = [], set()
+    for r in rows or []:
+        prov = FREE_SOURCE_PROVIDER.get((r.get("source") or "").strip())
+        mid = (r.get("original_title") or "").strip()
+        if not prov or not mid or mid in seen:
+            continue
+        seen.add(mid)
+        out.append({
+            "provider": prov,
+            "model_id": mid,
+            "briefing_date": r.get("date"),
+            "sort_order": r.get("sort_order"),
+            "news_id": r.get("news_id"),
+        })
+    return out
+
+
+def briefing_candidates(day):
+    """오늘 발행된 브리핑의 무료 모델 항목. 브리핑이 없으면 빈 리스트(→ 아무것도 하지 않는다)."""
+    try:
+        import cfnew
+    except Exception as e:  # noqa: BLE001
+        log(f"D1 모듈 로드 실패({type(e).__name__}) — 브리핑 트리거 확인 불가")
+        return None
+    sources = "','".join(FREE_SOURCE_PROVIDER)
+    q = (
+        "SELECT b.date, bi.sort_order, bi.news_id, n.source, n.original_title "
+        "FROM briefing_items bi JOIN briefings b ON b.id = bi.briefing_id "
+        "JOIN news n ON n.id = bi.news_id "
+        "WHERE b.status = 'published' AND b.date LIKE '{day}%' "
+        "AND n.source IN ('{sources}') ORDER BY b.date, bi.sort_order"
+    ).format(day=day, sources=sources)
+    rows = None
+    for attempt in (1, 2, 3):
+        try:
+            rows = cfnew.sql(q, database_id=cfnew.A24_DB)
+            break
+        except Exception as e:  # noqa: BLE001
+            log(f"브리핑 조회 실패({type(e).__name__}: {e}) — 재시도 {attempt}/3")
+            if attempt == 3:
+                log("브리핑 조회 3회 실패 — 이번 실행은 아무것도 갱신하지 않는다")
+                return None
+            time.sleep(5 * attempt)
+    if isinstance(rows, dict):
+        log(f"브리핑 조회 오류: {str(rows)[:160]}")
+        return None
+    return _candidates_from_briefing_rows(rows)
 
 
 def cli_catalog():
@@ -728,7 +800,7 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     excerpt = excerpt[:150]
     return title, body, excerpt
 
-def gate_draft(title, body, model_id):
+def gate_draft(title, body, model_id, verify_links=True):
     """게이트 통과 여부. (ok, issues, body_after_repair)
 
     2026-11-08 강화: 대표님이 첫 글을 '실험 노트'로 지적한 뒤, 형식이 아니라 **읽는 사람**
@@ -737,7 +809,7 @@ def gate_draft(title, body, model_id):
     import blog_quality_gate as qg
 
     repaired, _notes = qg.repair_markdown(body)
-    issues = qg.screen_extended(repaired, verify_links=True, is_eval=True)
+    issues = qg.screen_extended(repaired, verify_links=verify_links, is_eval=True)
     if model_id not in title or model_id not in repaired:
         issues.append(f"모델 귀속 실패(PIPE-10): 제목·본문에 '{model_id}' 표기 필요")
 
@@ -777,7 +849,9 @@ def gate_draft(title, body, model_id):
 
 # ── 실행 ────────────────────────────────────────────────────────────────
 
-def _merge_candidates(q, cands, day):
+def _merge_candidates(q, cands, day, briefed=False):
+    """후보를 큐에 반영. briefed=True 면 브리핑에 실린 항목(즉시 평가 대상),
+    False 면 카탈로그에서만 새로 감지된 항목(브리핑 등장 대기)."""
     added = []
     for c in cands:
         mid = c["model_id"]
@@ -785,13 +859,26 @@ def _merge_candidates(q, cands, day):
         if cur is None:
             q["models"][mid] = {
                 "model_id": mid, "provider": c["provider"], "first_seen": day,
-                "status": "pending", "attempts": 0, "reason": "", "day": day,
+                "status": "pending" if briefed else "awaiting_briefing",
+                "attempts": 0,
+                "reason": "" if briefed else "브리핑 미등장 — 브리핑에 실리면 평가한다",
+                "day": day,
             }
+            cur = q["models"][mid]
             added.append(mid)
+        elif cur.get("status") == "awaiting_briefing" and briefed:
+            cur["status"] = "pending"
+            cur["reason"] = ""
         elif cur.get("status") in ("done", "manual"):
             continue
         else:
             cur["provider"] = c["provider"]
+        if briefed and c.get("briefing_date"):
+            cur["briefing"] = {
+                "date": c.get("briefing_date"),
+                "sort_order": c.get("sort_order"),
+                "news_id": c.get("news_id"),
+            }
     return added
 
 
@@ -831,25 +918,50 @@ def cmd_run(day=None, limit=None, dry_run=False):
 
 
 def _cmd_run_locked(day, limit, dry_run):
-    alert = read_json(ALERT_PATH, {})
-    if not alert:
-        log("new_models_alert.json 없음 — 감지 잡(04:00)이 아직 안 돌았다. 종료.")
-        return 0
-    if alert.get("day") != day:
-        log(f"alert 은 {alert.get('day')} 자다 — 오늘({day}) 감지분이 아니다. 그래도 기록된 신규만 쓴다.")
-    if alert.get("failed_providers"):
-        log(f"감지 실패 프로바이더 {alert['failed_providers']} — 해당 프로바이더는 교차 확인 불가")
+    """시퀀스: 브리핑 발행 → (브리핑에 실린 무료 모델) 테스트 → 블로그 글.
 
-    cands = candidates_from_alert(alert)
-    log(f"무료 신규 후보 {len(cands)}건: {', '.join(c['model_id'] for c in cands) or '없음'}")
+    2026-11-08 대표님 지시로 트리거를 브리핑으로 옮겼다. 카탈로그 alert 는
+    "브리핑에 아직 안 실린 신규"를 기록해 두는 보조 용도로만 쓴다.
+    """
+    briefed = briefing_candidates(day)
+    if briefed is None:
+        log("브리핑 확인 실패 — 이번 실행은 아무것도 갱신하지 않는다")
+        return 1
+    if not briefed:
+        log(f"오늘({day}) 발행된 브리핑에 무료 모델 항목이 없다 — 테스트할 대상 없음")
+    else:
+        log("브리핑 무료 모델 %d건: %s" % (
+            len(briefed), ", ".join(f"{c['model_id']}({c['provider']})" for c in briefed)))
+
+    alert = read_json(ALERT_PATH, {}) or {}
+    alert_cands = candidates_from_alert(alert) if alert else []
+    if alert and alert.get("day") != day:
+        log(f"alert 은 {alert.get('day')} 자다 — 오늘({day}) 감지분이 아니다(보조 기록으로만 쓴다)")
+    if alert_cands:
+        log("카탈로그 신규 %d건 — 브리핑 등장 전에는 테스트하지 않는다: %s" % (
+            len(alert_cands), ", ".join(c["model_id"] for c in alert_cands)))
 
     q = load_queue()
-    added = _merge_candidates(q, cands, day)
-    if added:
-        log(f"큐 신규 등록 {len(added)}건: {', '.join(added)}")
+    added_b = _merge_candidates(q, briefed, day, briefed=True)
+    added_a = _merge_candidates(q, alert_cands, day, briefed=False)
+    if added_b:
+        log(f"큐 등록(브리핑) {len(added_b)}건: {', '.join(added_b)}")
+    if added_a:
+        log(f"큐 등록(브리핑 대기) {len(added_a)}건: {', '.join(added_a)}")
     save_queue(q)
 
-    pending = [e for e in q["models"].values() if e.get("status") in ("pending", "retry")]
+    # 브리핑에 실린 적이 없는 항목은 대기로 되돌린다(카탈로그에만 있던 것).
+    demoted = 0
+    for e in q["models"].values():
+        if e.get("status") in ("pending", "retry") and not e.get("briefing"):
+            e["status"] = "awaiting_briefing"
+            e["reason"] = "브리핑 미등장 — 브리핑에 실리면 평가한다"
+            demoted += 1
+    if demoted:
+        log(f"브리핑 미등장 {demoted}건 → 대기로 되돌림")
+        save_queue(q)
+    pending = [e for e in q["models"].values()
+               if e.get("status") in ("pending", "retry") and e.get("briefing")]
     pending.sort(key=lambda e: (e.get("first_seen") or "", e["model_id"]))
     if not pending:
         log("평가 대기 0건 — 종료")
@@ -882,7 +994,7 @@ def _cmd_run_locked(day, limit, dry_run):
                 continue
             save_queue(q)
             log(f"{mid}: 캐시 적중 → 평가 생략, 초안 생성으로 진행 ({e['score']})")
-            _make_draft(e, mid, hit, e.get("cli_id") or resolve_cli_id(mid, e.get("provider"), catalog),
+            _make_post(e, mid, hit, e.get("cli_id") or resolve_cli_id(mid, e.get("provider"), catalog),
                         hit.get("measured_context"), day, q)
             continue
 
@@ -921,14 +1033,17 @@ def _cmd_run_locked(day, limit, dry_run):
             f"0점 {len(e['zeros_review_needed'])}문항(검토 필요)")
 
         # 블로그 초안 (발행 없음)
-        _make_draft(e, mid, res, cli_id, out.get("measured_context"), day, q)
+        _make_post(e, mid, res, cli_id, out.get("measured_context"), day, q)
         save_queue(q)
 
     return rc
 
 
-def _make_draft(e, mid, res, cli_id, measured_context, day, q):
-    """초안 생성 + 게이트 + EmDash draft. 실패는 큐에 사유로 남긴다(발행은 하지 않는다)."""
+def _make_post(e, mid, res, cli_id, measured_context, day, q):
+    """초안 생성 → 게이트 → (통과 시) 발행 → 브리핑 연결. 발행은 게이트 통과가 전제다.
+
+    실패는 큐에 사유로 남기고 예외를 밖으로 던지지 않는다(다음 모델로 계속 간다).
+    """
     try:
         title, body, excerpt = build_draft(mid, res, cli_id, measured_context, day=day)
         ok, issues, body2 = gate_draft(title, body, mid)
@@ -941,17 +1056,65 @@ def _make_draft(e, mid, res, cli_id, measured_context, day, q):
             rej = REJECTED_DIR / md_path.name
             md_path.replace(rej)
             e["draft"] = {"ok": False, "path": str(rej), "issues": issues}
-            log(f"{mid}: 게이트 미달 {len(issues)}건 → 보존 {rej}")
+            log(f"{mid}: 게이트 미달 {len(issues)}건 → 보존 {rej} (발행 안 함)")
             for it in issues:
                 log(f"  - {it}")
             return
+
         import emdash_publish
         url = emdash_publish.create_draft_post(title, body2, excerpt=excerpt)
         e["draft"] = {"ok": bool(url), "path": str(md_path), "url": url, "title": title}
-        log(f"{mid}: EmDash draft 생성 {url or '실패'}")
+        log(f"{mid}: EmDash 초안 생성 {url or '실패'}")
+        if not url:
+            return
+
+        if AUTO_PUBLISH:
+            pub = emdash_publish.publish_by_slug(url)
+            if not pub:
+                log(f"{mid}: 발행 실패 — 초안으로 남긴다")
+                return
+            e["published_url"] = pub
+            e["published_at"] = day
+            log(f"{mid}: 발행 완료 {pub}")
+            # 브리핑 → 글 연결(역링크). 브리핑에 실린 모델일 때만 대상이 있다.
+            e["briefing_linked"] = bool(_link_briefing(e, pub))
     except Exception as ex:  # noqa: BLE001
         e["draft"] = {"ok": False, "error": f"{type(ex).__name__}: {ex}"}
-        log(f"{mid}: 초안 생성 예외 {type(ex).__name__}: {ex}")
+        log(f"{mid}: 초안/발행 예외 {type(ex).__name__}: {ex}")
+
+
+def _link_briefing(e, post_url):
+    """브리핑 항목에 글 URL 을 기록하고, 글 도입부에 브리핑 역링크를 넣는다.
+
+    브리핑 item → 글, 글 도입부 → 브리핑 item. 양방향이 다 있어야 독자가 두 화면을 오간다.
+    """
+    b = e.get("briefing") or {}
+    if not b.get("date") or not b.get("sort_order"):
+        log(f"{e.get('model_id')}: 브리핑 정보 없음 — 연결 생략")
+        return False
+    try:
+        import cfnew
+        q = ("UPDATE briefing_items SET deep_dive_url = '{u}' WHERE sort_order = {n} "
+             "AND briefing_id = (SELECT id FROM briefings WHERE date = '{d}' LIMIT 1)").format(
+            u=post_url, n=int(b["sort_order"]), d=b["date"])
+        cfnew.sql(q, database_id=cfnew.A24_DB)
+        log(f"{e.get('model_id')}: 브리핑 {b['date']} item-{b['sort_order']} ← 글 URL 기록")
+    except Exception as ex:  # noqa: BLE001
+        log(f"{e.get('model_id')}: deep_dive_url 기록 실패 {type(ex).__name__}: {ex}")
+    try:
+        import emdash_add_briefing_backlink as bl
+        os.environ.setdefault("EMDASH_PAT", os.environ.get("EMDASH_AIKOREA24_API_TOKEN", ""))
+        target = {
+            "slug": str(post_url).rstrip("/").rsplit("/", 1)[-1],
+            "title": e.get("model_id"),
+            "url": f"https://aikorea24.kr/briefing/{b['date']}/#item-{b['sort_order']}",
+        }
+        ok, msg = bl.apply_one(target)
+        log(f"{e.get('model_id')}: 브리핑 역링크 {'완료' if ok else '실패'} — {msg}")
+        return ok
+    except Exception as ex:  # noqa: BLE001
+        log(f"{e.get('model_id')}: 역링크 실패 {type(ex).__name__}: {ex}")
+        return False
 
 
 def cmd_status():

@@ -132,7 +132,7 @@ def test_build_draft_passes_quality_gate():
     res = _fake_result(score=9)
     title, body, _ = fea.build_draft(
         "iceman-free", res, "opencode/iceman-free", measured_context=262144, day="2026-11-08")
-    ok, issues, repaired = fea.gate_draft(title, body, "iceman-free")
+    ok, issues, repaired = fea.gate_draft(title, body, "iceman-free", verify_links=False)
     assert ok, issues
     assert len(repaired) >= 3000
 
@@ -154,7 +154,7 @@ def test_build_draft_has_no_internal_terms():
 def test_gate_draft_fails_when_model_not_attributed():
     res = _fake_result(score=9)
     _t, body, _ = fea.build_draft("iceman-free", res, "opencode/iceman-free", day="2026-11-08")
-    ok, issues, _ = fea.gate_draft("무제", body, "iceman-free")
+    ok, issues, _ = fea.gate_draft("무제", body, "iceman-free", verify_links=False)
     assert not ok
     assert any("PIPE-10" in i for i in issues)
 
@@ -168,35 +168,35 @@ def _body(score=9):
 
 def test_gate_rejects_report_label_lead():
     body = "한 줄 요약: 이 모델은 좋습니다.\n" + _body()
-    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free", verify_links=False)
     assert not ok
     assert any("한 줄 요약" in i for i in issues)
 
 
 def test_gate_rejects_question_dump():
     body = _body() + "\n" + "\n".join(f"- Q{i} [축] 정답 — 답변: ..." for i in range(1, 13)) + "\n"
-    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free", verify_links=False)
     assert not ok
     assert any("문항 나열" in i for i in issues)
 
 
 def test_gate_rejects_too_many_tables():
     body = _body() + "\n| a |\n| --- |\n| b |\n\n| c |\n| --- |\n| d |\n"
-    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free", verify_links=False)
     assert not ok
     assert any("표 " in i for i in issues)
 
 
 def test_gate_rejects_repo_path_leak():
     body = _body() + "\n이 저장소에는 `tests/test_safe_div.py` 가 있습니다.\n"
-    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free", verify_links=False)
     assert not ok
     assert any("저장소 경로" in i for i in issues)
 
 
 def test_gate_rejects_japanese_katakana():
     body = _body() + "\n타임아ウト이 발생했습니다.\n"
-    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free", verify_links=False)
     assert not ok
     assert any("가타카나" in i for i in issues)
 
@@ -249,3 +249,94 @@ def test_evaluate_runs_cli_outside_repo(monkeypatch):
     out = fea.evaluate("iceman-free", "opencode/iceman-free")
     assert out["ok"] is True
     assert os.path.realpath(seen["cwd"]) != os.path.realpath(repo)
+
+
+# ── 6. 시퀀스 고정: 브리핑 발행 → 모델 테스트 → 블로그 글 ────────────────
+
+def _row(source, mid, date="2026-11-08-1", order=1, news_id=1):
+    return {"source": source, "original_title": mid, "date": date,
+            "sort_order": order, "news_id": news_id}
+
+
+def test_briefing_rows_map_only_free_model_sources():
+    rows = [
+        _row("OpenCode Zen", "iceman-free", order=1),
+        _row("OpenRouter Free Models", "liquid/lfm-3-1.7b:free", order=2),
+        _row("The Decoder", "사이버 보안 기사", order=3),      # 무료 모델 소스 아님
+        _row("Kilo Free Models", "", order=4),                # 제목 없음
+    ]
+    got = fea._candidates_from_briefing_rows(rows)
+    assert [c["model_id"] for c in got] == ["iceman-free", "liquid/lfm-3-1.7b:free"]
+    assert got[0]["provider"] == "zen"
+    assert got[0]["briefing_date"] == "2026-11-08-1" and got[0]["sort_order"] == 1
+
+
+def test_briefing_rows_dedupe_same_model():
+    rows = [_row("OpenCode Zen", "iceman-free", order=1),
+            _row("OpenCode Zen", "iceman-free", order=2)]
+    assert len(fea._candidates_from_briefing_rows(rows)) == 1
+
+
+def test_alert_only_candidate_waits_for_briefing():
+    """브리핑에 아직 안 실린 신규는 테스트하지 않고 대기 상태로만 기록한다."""
+    q = {"models": {}}
+    fea._merge_candidates(q, [{"provider": "zen", "model_id": "inkling-2-small-free"}],
+                          "2026-11-08", briefed=False)
+    e = q["models"]["inkling-2-small-free"]
+    assert e["status"] == "awaiting_briefing"
+    assert "브리핑" in e["reason"]
+
+
+def test_briefed_candidate_promotes_from_awaiting():
+    q = {"models": {}}
+    fea._merge_candidates(q, [{"provider": "zen", "model_id": "iceman-free"}],
+                          "2026-11-08", briefed=False)
+    fea._merge_candidates(q, [{"provider": "zen", "model_id": "iceman-free",
+                               "briefing_date": "2026-11-08-1", "sort_order": 1, "news_id": 5}],
+                          "2026-11-08", briefed=True)
+    e = q["models"]["iceman-free"]
+    assert e["status"] == "pending"
+    assert e["briefing"]["sort_order"] == 1
+
+
+def test_make_post_publishes_and_links_when_gate_passes(monkeypatch, tmp_path):
+    calls = {}
+    monkeypatch.setattr(fea, "DRAFT_DIR", tmp_path)
+    monkeypatch.setattr(fea, "AUTO_PUBLISH", True)
+
+    import emdash_publish as ep
+    monkeypatch.setattr(ep, "create_draft_post", lambda *a, **k: calls.setdefault("draft", "u"))
+    monkeypatch.setattr(ep, "publish_by_slug", lambda u: "https://x/posts/published")
+    monkeypatch.setattr(fea, "_link_briefing", lambda e, u: calls.setdefault("link", u))
+
+    e = {"model_id": "iceman-free", "briefing": {"date": "2026-11-08-1", "sort_order": 1}}
+    fea._make_post(e, "iceman-free", _fake_result(9), "opencode/iceman-free", 8192,
+                   "2026-11-08", {"models": {}})
+    assert calls.get("draft") == "u"
+    assert e["published_url"] == "https://x/posts/published"
+    assert e["briefing_linked"] is True
+
+
+def test_make_post_never_publishes_when_gate_fails(monkeypatch, tmp_path):
+    """게이트 미달이면 초안 보존까지만 — 발행 함수는 아예 호출되지 않아야 한다."""
+    monkeypatch.setattr(fea, "DRAFT_DIR", tmp_path)
+    monkeypatch.setattr(fea, "REJECTED_DIR", tmp_path)
+    monkeypatch.setattr(fea, "AUTO_PUBLISH", True)
+    # 마무리 H2 가 없는 얇은 본문 → 게이트 실패
+    monkeypatch.setattr(fea, "build_draft", lambda *a, **k: ("iceman-free 실측", "짧은 본문", "짧은 본문"))
+    published = {"n": 0}
+
+    import emdash_publish as ep
+    monkeypatch.setattr(ep, "create_draft_post", lambda *a, **k: published.update(n=100) or "x")
+    monkeypatch.setattr(ep, "publish_by_slug", lambda u: published.update(n=1) or "x")
+
+    e = {"model_id": "iceman-free"}
+    fea._make_post(e, "iceman-free", _fake_result(9), "opencode/iceman-free", 8192,
+                   "2026-11-08", {"models": {}})
+    assert published["n"] == 0
+    assert e["draft"]["ok"] is False and e["draft"]["issues"]
+
+
+def test_publish_flag_is_explicit():
+    """발행 자동화는 상수 하나로 끌 수 있어야 한다."""
+    assert isinstance(fea.AUTO_PUBLISH, bool)

@@ -4,18 +4,18 @@
    "model_id": "liquid/lfm-3-1.7b:free",
    "provider": "openrouter",
    "first_seen": "2026-11-08",
-   "status": "pending",
+   "status": "awaiting_briefing",
    "attempts": 0,
-   "reason": "",
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
    "day": "2026-11-08"
   },
   "inkling-2-small-free": {
    "model_id": "inkling-2-small-free",
    "provider": "zen",
    "first_seen": "2026-11-08",
-   "status": "retry",
+   "status": "awaiting_briefing",
    "attempts": 1,
-   "reason": "Free usage limit reached. Connect a provider or subscribe to OpenCode Go to keep going, or switch models.",
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
    "day": "2026-11-09",
    "cli_id": "opencode/inkling-2-small-free"
   },
@@ -45,5 +45,5 @@
    }
   }
  },
- "updated_at": 1794110254.024649
+ "updated_at": 1794116443.563964
 }
