@@ -1,25 +1,27 @@
 {
- "day": "2026-11-08",
- "checked_at": 1794085207.5241,
- "total_rows": 27,
+ "day": "2026-11-09",
+ "checked_at": 1794171604.81311,
+ "total_rows": 26,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "liquid/lfm-3-1.7b:free",
-   "liquid/lfm-3-1.7b"
-  ],
-  "kilo": [
-   "liquid/lfm-3-1.7b:free",
-   "liquid/lfm-3-1.7b"
-  ],
-  "zen": [
-   "inkling-2-small-free",
-   "iceman-free"
+   "deepseek/deepseek-v4.1-flash-1017:batch",
+   "morph/morph-v3-fast:batch",
+   "z-ai/glm-5.2:batch",
+   "morph/morph-v3-large:batch"
   ]
  },
  "removed_by_provider": {
-  "zen": [
-   "pulse-alpha-free"
+  "openrouter": [
+   "inception/mercury-2",
+   "inception/mercury-2.5",
+   "inception/mercury-3"
+  ],
+  "kilo": [
+   "inception/mercury-2",
+   "inception/mercury-2.5",
+   "inception/mercury-3",
+   "reflection/beam-free"
   ]
  }
 }

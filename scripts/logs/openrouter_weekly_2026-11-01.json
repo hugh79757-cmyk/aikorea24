@@ -1,0 +1,79 @@
+{
+  "week_start": "2026-11-01",
+  "week_end": "2026-11-07",
+  "as_of": "2026-11-08T02:00:07.590Z",
+  "n_models": 60,
+  "n_rows": 357,
+  "top10": [
+    {
+      "rank": 1,
+      "model_permaslug": "deepseek/deepseek-v4.1-flash-20261017",
+      "total_tokens": 56041639123171,
+      "tokens_human": "약 56.0조 개",
+      "is_free": false
+    },
+    {
+      "rank": 2,
+      "model_permaslug": "deepseek/deepseek-v4.1-flash-20260910",
+      "total_tokens": 17689418485758,
+      "tokens_human": "약 17.7조 개",
+      "is_free": false
+    },
+    {
+      "rank": 3,
+      "model_permaslug": "z-ai/glm-5.3-flash-20260826",
+      "total_tokens": 13505859628074,
+      "tokens_human": "약 13.5조 개",
+      "is_free": false
+    },
+    {
+      "rank": 4,
+      "model_permaslug": "tencent/hy4-20261104",
+      "total_tokens": 10060100268535,
+      "tokens_human": "약 10.1조 개",
+      "is_free": false
+    },
+    {
+      "rank": 5,
+      "model_permaslug": "openai/gpt-6-luna-20260922",
+      "total_tokens": 7259334214947,
+      "tokens_human": "약 7.3조 개",
+      "is_free": false
+    },
+    {
+      "rank": 6,
+      "model_permaslug": "stepfun/step-5-preview-20261008",
+      "total_tokens": 6989526861170,
+      "tokens_human": "약 7.0조 개",
+      "is_free": false
+    },
+    {
+      "rank": 7,
+      "model_permaslug": "anthropic/claude-opus-5.5-20260921",
+      "total_tokens": 6737864789451,
+      "tokens_human": "약 6.7조 개",
+      "is_free": false
+    },
+    {
+      "rank": 8,
+      "model_permaslug": "minimax/minimax-m3.1-flash-20261019",
+      "total_tokens": 5369329410707,
+      "tokens_human": "약 5.4조 개",
+      "is_free": false
+    },
+    {
+      "rank": 9,
+      "model_permaslug": "tencent/hy4-preview-20260827",
+      "total_tokens": 4177637614670,
+      "tokens_human": "약 4.2조 개",
+      "is_free": false
+    },
+    {
+      "rank": 10,
+      "model_permaslug": "moonshotai/kimi-k3.1-pro-20261023",
+      "total_tokens": 4115975604625,
+      "tokens_human": "약 4.1조 개",
+      "is_free": false
+    }
+  ]
+}

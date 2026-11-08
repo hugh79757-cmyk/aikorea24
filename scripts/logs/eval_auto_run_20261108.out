@@ -1,0 +1,29 @@
+[2026-11-08 10:42:14] [eval-auto] 무료 신규 후보 3건: liquid/lfm-3-1.7b:free, inkling-2-small-free, iceman-free
+[2026-11-08 10:42:14] [eval-auto] opencode models 1571줄
+[2026-11-08 10:42:14] [eval-auto] iceman-free: 평가 시작 (cli=opencode/iceman-free)
+[model_eval]   [1/12] 지시이행 0점 (via cli) ← '이 코드는 `add`라는 함수를 정의합니다.\n\n- 함수는 두 개의 매개변수 `a`와 `b`를 받습니다.\n- '
+[model_eval]   [2/12] 지시이행 1점 (via cli) ← '{"이름":"김민수","나이":31,"취미":["등산","독서"]}'
+[model_eval]   [3/12] 코딩실무 1점 (via cli sandbox=pass) ← '**수정 코드:**\n\n```python\nfrom datetime import datetime, timedel'
+[model_eval]   [4/12] CLI 타임아웃 60초 → 180초로 재시도
+[model_eval]   [4/12] 코딩실무 1점 (via cli) ← '## `tests/test_safe_div.py` (pytest)\n\n아래는 `safe_div(a, b)`를 '
+[model_eval]   [5/12] 코딩실무 1점 (via cli sandbox=pass) ← "```python\ndef _select_user_fields(user):\n    return {'id': u"
+[model_eval]   [6/12] 코딩실무 1점 (via cli sandbox=pass) ← 'import re\nfrom datetime import datetime\n\n\ndef parse_log_line'
+[model_eval]   [7/12] 맥락유지 1점 (via cli) ← 'normalize_ledger_entries'
+[model_eval]   [8/12] 맥락유지 1점 (via cli) ← '대화에서 요청하신 작업 3가지는 다음과 같습니다.\n\n1. **파이썬 시작 방법 안내**: “파이썬을 처음 시'
+[model_eval]   [9/12] 에이전트 1점 (via cli) ← '["undefined `total` variable/scope causing runtime error","b'
+[model_eval]   [10/12] 에이전트 1점 (via cli) ← 'Root cause: `fetch` 함수에 상대 경로(`/api/users`)가 그대로 전달되어 `reque'
+[model_eval]   [11/12] 에이전트 0점 (via cli) ← '[\n  {\n    "step": 1,\n    "title": "HTML 골격 및 정적 화면 구조 작성",\n '
+[model_eval]   [12/12] 에이전트 1점 (via cli) ← '## 지금 바로 처리해야 하는 것\n\n| 항목 | 이유 (판단 근거) |\n|---|---|\n| **장애 후속 '
+[model_eval] iceman-free: 8,192 토큰 → OK
+[model_eval] iceman-free: 16,384 토큰 → OK
+[model_eval] iceman-free: 32,768 토큰 → OK
+[model_eval] iceman-free: 65,536 토큰 → OK
+[model_eval] iceman-free: 131,072 토큰 → OK
+[model_eval] iceman-free: 262,144 토큰 → OK
+[model_eval] iceman-free: 524,288 토큰 → 실패
+[model_eval] iceman-free: 실효 컨텍스트 ≈ 133,120 토큰
+[2026-11-08 10:50:18] [eval-auto] iceman-free: 니들 컨텍스트 실측 하한 133,120 토큰
+[model_eval] 리더보드 기록: iceman-free 10/12 (qv=2, 17건)
+[2026-11-08 10:50:18] [eval-auto] iceman-free: 평가 완료 10/12 · 소요 484.3초 · 0점 2문항(검토 필요)
+  📝 EmDash draft 생성(미발행): id=01M6WMEJX22R9YCX1MNA0Z3NTQ slug=iceman-freeopencodeiceman-free-12문항-실측-1012-무료-티어에서-쓸-만한가
+[2026-11-08 10:50:20] [eval-auto] iceman-free: EmDash draft 생성 https://emdash.aikorea24.kr/posts/iceman-freeopencodeiceman-free-12문항-실측-1012-무료-티어에서-쓸-만한가

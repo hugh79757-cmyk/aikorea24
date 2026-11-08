@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-07 09:00",
-  "count": 144,
+  "updated_at": "2026-11-08 09:01",
+  "count": 147,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -608,6 +608,22 @@
       "in_briefing": false
     },
     {
+      "key": "iceman",
+      "original_titles": [
+        "iceman-free"
+      ],
+      "news_ids": [
+        59313
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/iceman-free"
+      ],
+      "in_briefing": true
+    },
+    {
       "key": "inclusionai/ling-3.1-flash-1019",
       "original_titles": [
         "inclusionai/ling-3.1-flash-1019-free"
@@ -621,6 +637,22 @@
       ],
       "cli_ids": [
         "kilo/inclusionai/ling-3.1-flash-1019-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "inkling-2-small",
+      "original_titles": [
+        "inkling-2-small-free"
+      ],
+      "news_ids": [
+        59301
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/inkling-2-small-free"
       ],
       "in_briefing": false
     },
@@ -749,6 +781,27 @@
       ],
       "cli_ids": [
         "opencode/ling-3.0-tiny-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "liquid/lfm-3-1.7b",
+      "original_titles": [
+        "liquid/lfm-3-1.7b:free"
+      ],
+      "news_ids": [
+        59330,
+        59275,
+        59183,
+        59182
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/liquid/lfm-3-1.7b:free",
+        "openrouter/liquid/lfm-3-1.7b:free"
       ],
       "in_briefing": false
     },
@@ -1588,6 +1641,7 @@
         "nvidia/nemotron-3.5-content-safety:free"
       ],
       "news_ids": [
+        59184,
         58475,
         55409,
         55319,

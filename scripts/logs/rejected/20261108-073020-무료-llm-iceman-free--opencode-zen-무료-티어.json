@@ -1,0 +1,10 @@
+{
+ "title": "[무료 LLM] iceman-free — OpenCode Zen 무료 티어",
+ "reason": "1차 게이트 미달(교정 2회 후에도 미달)",
+ "issues": [
+  "본문 2838자 (최소 3000) → 사실을 더 모아라, 말로 늘리지 말고",
+  "모델 귀속 누락: 원본 항목의 모델 `iceman-free` 가 제목·본문에 없음 → 생성 입력에 모델 ID 를 명시하고 본문에도 반드시 `iceman-free` 를 쓸 것"
+ ],
+ "retry_issues": [],
+ "saved_at": "2026-11-08T07:30:20"
+}
