@@ -1,3 +1,57 @@
+## 2026-11-08 12:45 — AIK24-EVAL-AUTO 시퀀스 고정: 브리핑 발행 → 모델 테스트 → 블로그 글 (발행 포함)
+
+### 한 일
+1. 대표님 지시(2026-11-08): "앞으로도 브리핑에 무료 모델이 등장하면 동일한 시퀀스로 작동해야 한다.
+   브리핑발행 → 모델 테스트 → 블로그에 유익한 글 작성."
+2. **[PRODUCTION CODE] `scripts/free_model_eval_auto.py`** — 트리거를 카탈로그 alert 에서
+   **오늘 발행된 브리핑의 무료 모델 항목**으로 교체. `briefing_items × briefings × news` 조인,
+   `news.source ∈ {OpenCode Zen, OpenRouter Free Models, Kilo Free Models, NVIDIA NIM Free}`,
+   `news.original_title` 을 모델 ID 로 사용. `briefing_candidates()` + 순수 함수
+   `_candidates_from_briefing_rows()`.
+3. **브리핑 밖 신규는 테스트하지 않는다** — 카탈로그 alert 에서만 잡힌 모델은 `awaiting_briefing`
+   으로 큐에 기록하고, 브리핑에 실리는 날 `pending` 으로 승격. 브리핑에서 빠진 `retry` 항목은
+   대기로 되돌린다(오늘 `inkling-2-small-free`·`liquid/lfm-3-1.7b:free` 2건 실측 전환).
+4. **글 발행까지 수행** — `AUTO_PUBLISH = True`(상수 하나로 끌 수 있다). 게이트 미달이면
+   초안만 보존하고 발행하지 않는다.
+5. **브리핑 양방향 연결 자동화** — 발행 후 `briefing_items.deep_dive_url` 기록 +
+   글 도입부에 브리핑 역링크 삽입(`_link_briefing()`).
+6. **[PRODUCTION CODE] `scripts/emdash_publish.py`** — `publish_by_slug()` 신설(생성과 분리).
+7. 브리핑 조회는 일시 네트워크 오류에 3회 재시도(하루 1회 실행이 통째로 날아가지 않게).
+8. **[CONFIG] plist 주석 갱신** — 시퀀스·발행 정책·슬롯 근거(브리핑 00:01 발행 후 08:30).
+9. **[TEST CODE] `tests/test_eval_auto.py` 21 → 28건** — 브리핑 행 매핑·중복 제거·승격·
+   발행·게이트 차단·`AUTO_PUBLISH` 상수.
+
+### 결과 (검증 근거)
+### [검증됨]
+- 브리핑 트리거 실측: `run --dry-run` → `브리핑 무료 모델 1건: iceman-free(zen)`,
+  카탈로그 신규 3건은 "브리핑 등장 전에는 테스트하지 않는다"로 분리. 근거: 실행 로그.
+- 큐 상태 전환: `inkling-2-small-free`·`liquid/lfm-3-1.7b:free` 모두 `awaiting_briefing` 으로
+  전환(브리핑 미등장 2건), `status` 명령 출력 확인.
+- `publish_by_slug()` 실 API 동작: 이미 발행된 글 URL 로 호출 → 같은 URL 반환,
+  이후 라이브 **200**, D1 `status='published'` 유지, 역링크 1회 유지. 근거: 실측.
+- 테스트 **54 passed**(eval_auto 28 + eval_cli + zen_pending).
+- plist `plutil -lint` OK, `launchctl list` 에 `- 0 kr.aikorea24.free-model-eval-auto`.
+- 커밋 `6d92311e` 푸시 완료.
+
+### [부분검증]
+- "브리핑 → 테스트 → 글 발행"이 **한 번의 실행으로 완주**하는 것은 오늘 실측 불가.
+  iceman-free 는 이미 done(캐시+발행) 상태이고, 오늘 브리핑에 실린 무료 모델이 그 1건뿐이다.
+  다음 브리핑에 새 무료 모델이 실릴 때 전체 경로가 자동으로 돈다.
+- 자동 발행 품질: 게이트(6종 강화 + 기본 게이트)를 통과해야만 발행되지만,
+  실제 독자 반응(체류시간)은 GA4 데이터가 쌓여야 확인된다.
+
+### 잔존 위험
+1. **브리핑 선정이 먼저다** — 브리핑 파이프라인이 무료 모델을 안 실으면 테스트도 글도 없다.
+   오늘 `inkling-2-small-free` 가 그 상태(브리핑 미등장).
+2. 발행이 자동이므로, 게이트가 못 잡는 품질 문제는 그대로 공개될 수 있다.
+   문제가 보이면 `AUTO_PUBLISH = False` 로 즉시 되돌린다.
+3. Zen 무료 한도 소진 시 테스트가 이월된다(오늘 `Free usage limit reached` 실측).
+4. 08:30 이후에 발행되는 브리핑(`-2` 회차 등)의 무료 모델은 다음 날 처리된다.
+
+### 다음 행동
+1. 내일 08:30 실행에서 브리핑 무료 모델이 있으면 테스트→발행→역링크까지 자동인지 확인.
+2. 브리핑 파이프라인이 신규 무료 모델을 실제로 싣는지 로그 확인(`inkling-2-small-free`).
+
 ## 2026-11-08 12:00 — AIK24-EVAL-AUTO 후속: 발행본 재작성 (대표님 지적 → 내리고 재발행)
 
 ### 한 일
