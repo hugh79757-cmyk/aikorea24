@@ -111,10 +111,13 @@ def test_build_draft_meets_series_format():
 
     # PIPE-10 모델 귀속
     assert "iceman-free" in title and "iceman-free" in body
-    # 시리즈 포맷
-    assert "## 2. OpenCode에서 사용하는 방법" in body
-    assert "## 4. 이런 분께 추천합니다" in body
-    assert "## 5. 솔직한 한계" in body
+    # 2026-11-08 재작성된 독자용 구조
+    assert body.startswith("OpenCode 무료 목록에")          # 라벨 없이 독자 문장으로 시작
+    assert "## iceman-free가 뭔가" in body
+    assert "## 5분 안에 써보기" in body
+    assert "## 어떤 작업에 강한가" in body
+    assert "## 어디서 걸리는가" in body
+    assert "## 다른 무료 모델과 비교" in body
     assert "## AIK24 실측 결과 (2026-11-08)" in body
     assert body.count("\n## 마무리") == 1
     # 측정값 그대로
@@ -122,7 +125,7 @@ def test_build_draft_meets_series_format():
     assert "262,144 토큰" in body
     # 토큰 사용량은 미측정으로 명시
     assert "CLI 경유로 측정되지 않음 (미측정)" in body
-    assert excerpt and "**" not in excerpt
+    assert excerpt and "**" not in excerpt and "`" not in excerpt
 
 
 def test_build_draft_passes_quality_gate():
@@ -154,6 +157,53 @@ def test_gate_draft_fails_when_model_not_attributed():
     ok, issues, _ = fea.gate_draft("무제", body, "iceman-free")
     assert not ok
     assert any("PIPE-10" in i for i in issues)
+
+
+# ── 3-b. 2026-11-08 강화된 '읽는 사람' 게이트 ────────────────────────────
+
+def _body(score=9):
+    return fea.build_draft("iceman-free", _fake_result(score), "opencode/iceman-free",
+                           day="2026-11-08")[1]
+
+
+def test_gate_rejects_report_label_lead():
+    body = "한 줄 요약: 이 모델은 좋습니다.\n" + _body()
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    assert not ok
+    assert any("한 줄 요약" in i for i in issues)
+
+
+def test_gate_rejects_question_dump():
+    body = _body() + "\n" + "\n".join(f"- Q{i} [축] 정답 — 답변: ..." for i in range(1, 13)) + "\n"
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    assert not ok
+    assert any("문항 나열" in i for i in issues)
+
+
+def test_gate_rejects_too_many_tables():
+    body = _body() + "\n| a |\n| --- |\n| b |\n\n| c |\n| --- |\n| d |\n"
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    assert not ok
+    assert any("표 " in i for i in issues)
+
+
+def test_gate_rejects_repo_path_leak():
+    body = _body() + "\n이 저장소에는 `tests/test_safe_div.py` 가 있습니다.\n"
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    assert not ok
+    assert any("저장소 경로" in i for i in issues)
+
+
+def test_gate_rejects_japanese_katakana():
+    body = _body() + "\n타임아ウト이 발생했습니다.\n"
+    ok, issues, _ = fea.gate_draft("iceman-free 실측", body, "iceman-free")
+    assert not ok
+    assert any("가타카나" in i for i in issues)
+
+
+def test_scrub_answer_removes_repo_paths():
+    got = fea._scrub_answer("구현 `scripts/safe_div.py` 와 테스트 tests/test_x.py 를 참고했습니다")
+    assert "scripts/" not in got and "tests/" not in got
 
 
 # ── 4. 0점 문항 = 검토 필요 ───────────────────────────────────────────

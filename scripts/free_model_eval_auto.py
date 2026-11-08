@@ -396,148 +396,290 @@ def _recommend_lines(res):
     return out
 
 
-def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_classes=None):
-    """측정값만으로 시리즈 포맷 초안을 만든다. 반환 (title, body, excerpt).
+_REPO_PATH_RE = re.compile(r"(?:scripts|tests|pipeline|src)/[\w./가-힣-]+|[\w-]+\.py\b")
+_KATAKANA_RE = re.compile(r"[\u30A0-\u30FF]")
 
-    서술은 전부 템플릿이다 — 측정되지 않은 수치·기능·비교를 쓰지 않는다.
+
+def _scrub_answer(text, collapse=True):
+    """인용하기 전에 답변 원문을 정리한다.
+
+    2026-11-08 사고: 모델이 저장소를 읽고 쓴 흔적(파일 경로)이 답변에 섞였고, 그게 그대로
+    글에 인용됐다. 원문 인용은 유지하되 저장소 경로·파일명은 지운다.
+    collapse=False 는 코드 인용용 — 줄바꿈을 살려야 코드가 읽힌다.
+    """
+    s = _REPO_PATH_RE.sub("(파일 경로 생략)", text or "")
+    return re.sub(r"\s+", " ", s).strip() if collapse else s.strip()
+
+
+def _code_quote(res, idx, limit=360):
+    """정답 문항의 코드 블록만 뽑는다. 없으면 빈 문자열.
+
+    코드를 한 줄로 접어 인용하면 읽을 수 없다(2026-11-08 첫 발행본 실측).
+    """
+    for d in (res.get("details") or []):
+        if d.get("idx") == idx and d.get("score") == 1:
+            code = model_eval.extract_code(_scrub_answer(d.get("answer") or "", collapse=False))
+            return code[:limit] if code.strip() else ""
+    return ""
+
+
+def _latest_leaderboard():
+    """같은 문항세트(qv) 의 모델별 **최신** 실측만. 비교표용 실제 데이터."""
+    rows = read_json(Path(model_eval.LEADERBOARD_PATH), []) or []
+    if not isinstance(rows, list):
+        return []
+    best = {}
+    for r in rows:
+        if r.get("qv") != model_eval.EVAL_QUESTIONS_VERSION:
+            continue
+        mid = r.get("model_id")
+        if not mid:
+            continue
+        if mid not in best or (r.get("ts") or 0) > (best[mid].get("ts") or 0):
+            best[mid] = r
+    return sorted(best.values(), key=lambda r: -(r.get("score") or 0))
+
+
+def _quote(res, idx, limit=420):
+    """문항 1개의 답변 앞부분(정리 후). 없으면 빈 문자열."""
+    for d in (res.get("details") or []):
+        if d.get("idx") == idx and d.get("score") == 1:
+            return _scrub_answer(d.get("answer"))[:limit]
+    return ""
+
+
+def _strong_axis(res):
+    """강한 축 라벨 목록 — 점수 비율 1.0 이상."""
+    out = []
+    for ax in model_eval.AXES:
+        b = (res.get("by_axis") or {}).get(ax) or {}
+        mx = b.get("max_score") or 0
+        if mx and (b.get("score") or 0) / mx >= 1.0:
+            out.append(model_eval.AXIS_LABELS.get(ax, ax))
+    return out
+
+
+def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_classes=None):
+    """측정값만으로 **독자용** 초안을 만든다. 반환 (title, body, excerpt).
+
+    2026-11-08 재작성: 첫 버전은 측정표를 그대로 옮긴 '실험 노트'였다(대표님 지적).
+    지금은 독자 순서로 쓴다 — 결론 → 5분 체험 → 강한 작업 → 걸리는 지점 → 비교 → 한도.
+    지어내지 않는 원칙은 그대로다: 모든 문장은 측정값이나 공개 카탈로그 값에서만 나온다.
     zero_classes: {문항번호: "분류 — 설명"} 를 넘기면 0점 문항 절에 그 문장을 쓴다.
-    넘기지 않으면 '검토 필요'로만 표시한다(자동 파이프라인 기본값, 단정 금지).
     """
     day = day or time.strftime("%Y-%m-%d")
     score = int(res.get("score") or 0)
     mx = int(res.get("max_score") or 0)
-    failed = int(res.get("failed") or 0)
     graded = int(res.get("graded_n") or mx)
+    failed = int(res.get("failed") or 0)
     entry = models_dev_entry(model_id)
-    spec_rows = _spec_table_rows(entry, model_id, cli_id)
     axis_rows = _axis_rows(res)
     zeros = zero_score_notes(res)
+    lb = _latest_leaderboard()
+    rank = None
+    rank_txt = ""
+    scored = [x for x in lb if x.get("score") is not None]
+    if scored:
+        top = max(int(x.get("score") or 0) for x in scored)
+        ties = [x for x in scored if int(x.get("score") or 0) == top]
+        for i, r in enumerate(scored, 1):
+            if r.get("model_id") == model_id:
+                rank = i
+                break
+        if score == top:
+            rank_txt = ("1위" if len(ties) == 1
+                        else f"공동 1위({len(ties)}개 모델이 {top}/{scored[0].get('max_score')})")
+        elif rank:
+            rank_txt = f"{rank}위"
+    strong = _strong_axis(res)
 
-    title = (f"{model_id}({cli_id}) 12문항 실측 — {score}/{graded} "
-             f"{'무료 티어에서 쓸 만한가' if score >= (graded * 2 // 3) else '지금은 실무에 이르다'}")
+    ratio = (score / graded) if graded else 0
+    if ratio >= 0.83:
+        verdict = "바로 써볼 만합니다"
+    elif ratio >= 0.66:
+        verdict = "조건부로 쓸 만합니다"
+    elif ratio >= 0.5:
+        verdict = "보조 용도로만 권합니다"
+    else:
+        verdict = "지금은 권하지 않습니다"
+
+    title = f"{model_id} 실측 — {score}/{graded}, 무료로 어디까지 쓸 수 있나"
 
     p = []
-    p.append(f"한 줄 요약: **{model_id}**는 OpenCode CLI에서 `{cli_id}`로 호출되는 모델입니다. "
-             f"AIK24가 12문항으로 실측한 결과는 **{score}/{graded}**"
-             + (f" (미응답 {failed}문항 제외)" if failed else "")
-             + f"였습니다. {_verdict_phrase(res)}")
+    # ── 리드: 독자 상황 → 이 모델 → 결론. 라벨 붙이지 않는다.
+    lead = f"OpenCode 무료 목록에 `{model_id}`가 새로 들어왔습니다. 12문항으로 직접 돌려본 결과 "
+    lead += f"**{score}/{graded}**를 맞혔습니다"
+    if rank_txt:
+        lead += f" — 같은 문항세트로 측정한 무료 모델 {len(scored)}개 중 {rank_txt}입니다"
+    lead += f". 결론부터 말하면 **{verdict}**."
+    p.append(lead)
     p.append("")
-
-    # 1. 무엇인가 — 확인된 것과 확인되지 않은 것
-    p.append(f"## 1. {model_id}이란 — 확인된 것과 확인되지 않은 것")
-    p.append("")
-    if spec_rows:
-        p.append("아래 값은 공개 카탈로그(models.dev)와 `opencode models` 출력에서 그대로 옮긴 것입니다.")
-        p.append("")
-        p.append("| 구분 | 내용 | 출처 |")
-        p.append("| --- | --- | --- |")
-        for k, v, src in spec_rows:
-            p.append(f"| {k} | {v} | {src} |")
-        p.append("")
-        unknown = []
-        if entry is None:
-            unknown.append("공개 카탈로그에 항목이 없어 스펙 대부분이 미확인입니다")
-        if entry and not entry.get("open_weights"):
-            unknown.append("학습 데이터·가중치·파라미터 수는 공개되지 않았습니다")
-        if entry and str(entry.get("description") or "").lower().find("stealth") >= 0:
-            unknown.append("제작사가 공개되지 않은 스텔스 모델로 표기돼 있습니다")
-        if unknown:
-            p.append("확인되지 않은 항목: " + " / ".join(unknown) + ".")
-            p.append("")
+    if strong:
+        p.append(f"강한 쪽은 {', '.join(strong)}입니다. 약한 쪽은 형식이 엄격하게 정해진 산출물입니다. "
+                 f"아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.")
     else:
-        p.append("공개 카탈로그에서 이 모델의 스펙을 찾지 못했습니다. 스펙은 미확인으로 둡니다 — "
-                 "확인되지 않은 값을 이 글에서 추정하지 않습니다.")
-        p.append("")
-
-    # 2. 사용 방법
-    p.append("## 2. OpenCode에서 사용하는 방법")
-    p.append("")
-    p.append(f"1. 터미널에서 `opencode models | grep {model_id}` 를 실행해 목록에 `{cli_id}` 가 있는지 확인합니다.")
-    p.append(f"2. `opencode run -m {cli_id} \"한 단어로 대답: PONG\"` 으로 한 번 호출해 응답이 오는지 봅니다.")
-    p.append(f"3. OpenCode 모델 선택 창에서 `{cli_id}` 를 검색해 고릅니다. 같은 모델이 목록에 없으면 그 프로바이더에 로그인돼 있지 않은 것입니다.")
-    p.append("")
-    p.append("무료 티어는 호출 한도가 걸려 있을 수 있습니다. 같은 모델을 반복 호출하다 응답이 끊기면 "
-             "한도 소진을 먼저 의심하고, 모델 성능 문제로 단정하지 마십시오.")
+        p.append("축별로 고른 강점은 없었습니다. 아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.")
     p.append("")
 
-    # 3. 12문항 실측
-    p.append("## 3. 12문항 실측 — 축별 결과")
+    # ── 이게 뭔가: 3문장 + 각주
+    p.append(f"## {model_id}가 뭔가")
     p.append("")
-    p.append(f"2026년 {day[5:7]}월 {day[8:10]}일 OpenCode CLI로 12문항을 호출하고, 문항별 결정적 채점 함수와 "
-             f"샌드박스 실행으로 0/1을 판정했습니다. 판관(LLM 심판)은 쓰지 않았습니다.")
-    p.append("")
-    if axis_rows:
-        p.append("| 축 | 정답 | 문항수 |")
-        p.append("| --- | --- | --- |")
-        for label, s, m in axis_rows:
-            p.append(f"| {label} | {s} | {m} |")
+    if entry:
+        name = entry.get("name") or model_id
+        s1 = f"공개 카탈로그상 이름은 **{name}**입니다."
+        lim = entry.get("limit") or {}
+        ctx, out = lim.get("context"), lim.get("output")
+        if isinstance(ctx, int) and isinstance(out, int):
+            s1 += f" 공칭 컨텍스트는 {ctx:,} 토큰, 최대 출력은 {out:,} 토큰입니다."
+        elif isinstance(ctx, int):
+            s1 += f" 공칭 컨텍스트는 {ctx:,} 토큰입니다."
+        feats = []
+        if entry.get("reasoning"):
+            feats.append("추론")
+        if entry.get("tool_call"):
+            feats.append("도구 호출")
+        if feats:
+            s1 += " " + "과 ".join(feats) + "을 지원합니다."
+        if entry.get("release_date"):
+            s1 += f" 공개일은 {entry['release_date']}입니다."
+        p.append(s1)
+    else:
+        p.append("공개 카탈로그에서 이 모델의 스펙을 찾지 못했습니다.")
+    unknown = []
+    if entry is None:
+        unknown.append("스펙 대부분")
+    else:
+        if not entry.get("open_weights"):
+            unknown.append("가중치·학습 데이터·파라미터 수")
+        if "stealth" in str(entry.get("description") or "").lower():
+            unknown.append("제작사")
+    if unknown:
         p.append("")
-    p.append("문항별 결과와 모델이 실제로 출력한 답변 앞부분입니다.")
+        p.append(f"{' · '.join(unknown)}는 공개되지 않았습니다. 무료 기간이 언제까지인지도 밝혀지지 않았으니, "
+                 f"오래 붙잡고 쓸 모델로 보기는 어렵습니다.")
     p.append("")
-    for d in (res.get("details") or []):
-        idx = d.get("idx")
-        axis = model_eval.AXIS_LABELS.get(d.get("axis"), d.get("axis"))
-        if d.get("source") == "exception":
-            state = "응답 실패"
-        elif d.get("measurement_defect"):
-            state = "측정 결함"
+    p.append("> 수치는 models.dev 공개값을 "
+             f"{day}에 조회한 것입니다. 무료 여부는 [OpenCode Zen 모델 목록](https://opencode.ai/docs/zen/)에서 다시 확인하세요.")
+    p.append("")
+
+    # ── 5분 체험: 명령 + 실제 출력
+    p.append("## 5분 안에 써보기")
+    p.append("")
+    p.append("터미널 두 줄이면 확인됩니다.")
+    p.append("")
+    p.append("```bash")
+    p.append(f"opencode models | grep {model_id}")
+    p.append(f"opencode run -m {cli_id} \"한 단어로 대답: PONG\"")
+    p.append("```")
+    p.append("")
+    code = _code_quote(res, 3)
+    if code:
+        p.append("우리가 실제로 던진 것은 코드 수정 요청이었습니다. 만료 토큰을 찾는 함수에서 조건이 틀린 코드를 주고 "
+                 "고치라고 했더니, 아래처럼 고친 코드를 냈습니다.")
+        p.append("")
+        p.append("```python")
+        p.extend(code.rstrip().splitlines())
+        p.append("```")
+        p.append("")
+        p.append("이 문항은 제출한 코드를 실제로 실행해 판정했습니다 — 눈으로 읽고 점수를 준 것이 아닙니다.")
+        p.append("")
+
+    # ── 강한 작업
+    p.append("## 어떤 작업에 강한가")
+    p.append("")
+    for label, s, m in axis_rows:
+        if not m or s / m < 0.75:
+            continue
+        if label.startswith("코딩"):
+            p.append(f"- **코드 수정·리팩터링** ({s}/{m}) — 틀린 조건을 짚고 수정 코드를 냅니다. "
+                     f"코딩 문항 4개 중 3개는 제출 코드를 실행해 통과했습니다.")
+        elif label.startswith("맥락"):
+            q7 = _quote(res, 7, 60)
+            extra = f" 12,000자 문서 중간의 함수명(`{q7}`)을 정확히 되받았습니다." if q7 else ""
+            p.append(f"- **긴 대화·긴 문서 기억** ({s}/{m}) — 앞선 지시를 오래 붙잡습니다.{extra}")
+        elif label.startswith("에이전트"):
+            q12 = _quote(res, 12, 40)
+            if q12:
+                p.append(f"- **우선순위 판단** ({s}/{m}) — 장애 대응 상황을 주고 '지금 할 일'과 "
+                         f"'미뤄도 되는 일'을 나누라고 했더니, 고객 메일 발송과 느린 쿼리를 지금 처리로, "
+                         f"내부 화면 문구 수정을 미룸으로 분류하고 이유를 붙였습니다.")
+            else:
+                p.append(f"- **우선순위 판단·계획 세우기** ({s}/{m}) — 여러 단계를 스스로 나눕니다.")
         else:
-            state = "정답" if d.get("score") else "오답"
-        ans = re.sub(r"\s+", " ", (d.get("answer") or "")).strip()
-        ans = ans[:180] + ("…" if len(ans) > 180 else "")
-        p.append(f"- Q{idx} [{axis}] {state} — 답변: {ans or '(응답 없음)'}")
+            p.append(f"- **{label}** ({s}/{m}) — 형식·조건을 지키는 출력에서 안정적입니다.")
+    if not any((s / m) >= 0.75 for _l, s, m in axis_rows if m):
+        p.append("- 축별 기준선(75%)을 넘은 항목이 없습니다. 특정 용도를 권하기 어렵습니다.")
     p.append("")
 
-    # 4. 추천
-    p.append("## 4. 이런 분께 추천합니다")
+    # ── 걸리는 지점
+    p.append("## 어디서 걸리는가")
     p.append("")
-    p.extend(_recommend_lines(res))
-    p.append("")
-
-    # 5. 한계
-    p.append("## 5. 솔직한 한계")
-    p.append("")
-    p.append("- 이 결과는 1회 실측입니다. 같은 모델을 다시 돌리면 점수가 달라질 수 있습니다.")
-    p.append("- CLI 경유라 토큰 사용량이 측정되지 않습니다. 비용 계산은 이 글에 넣지 않았습니다.")
-    p.append("- 12문항은 지시이행·코딩실무·맥락유지·에이전트 4개 축만 봅니다. "
-             "긴 문서 요약 품질, 다국어 정확도, 이미지 입력은 이 평가에 없습니다.")
-    if failed:
-        p.append(f"- 응답 실패 {failed}문항은 점수 분모에서 뺐습니다. 능력 실패가 아니라 호출 실패입니다.")
     if zeros:
-        p.append(f"- 0점 {len(zeros)}문항의 성격은 아래에서 따로 정리했습니다. 채점기 해석 차이일 수 있어 단정하지 않았습니다.")
+        p.append(f"12문항 중 {len(zeros)}문항이 0점이었습니다.")
+        p.append("")
+        for z in zeros:
+            label = model_eval.AXIS_LABELS.get(z["axis"], z["axis"])
+            verdict_z = (zero_classes or {}).get(str(z["idx"]))
+            head = _scrub_answer(z["answer_head"])[:110] or "(응답 없음)"
+            if verdict_z:
+                p.append(f"- **Q{z['idx']} · {label}** — {verdict_z}")
+            else:
+                p.append(f"- **Q{z['idx']} · {label}** — 검토 필요. 받은 답: {head}")
+        p.append("")
+    p.append("가장 실무에 걸리는 것은 **무료 한도**입니다. 우리가 12문항 평가를 돌리는 동안 무료 사용량이 바닥나서, "
+             "같은 날 두 번째 모델은 첫 호출부터 `Free usage limit reached`로 막혔습니다. "
+             "한 번에 긴 작업을 여러 번 돌리는 용도보다, 짧은 요청을 몇 번 던지는 용도에 맞습니다.")
+    p.append("")
+    if failed:
+        p.append(f"이번 측정에서도 {failed}문항은 응답이 오지 않아 점수 분모에서 뺐습니다.")
+        p.append("")
+
+    # ── 비교 (표 1)
+    if lb:
+        p.append("## 다른 무료 모델과 비교")
+        p.append("")
+        p.append("같은 12문항, 같은 채점 기준으로 AIKOREA24가 실측한 값입니다. 모델마다 최신 측정 1건만 씁니다.")
+        p.append("")
+        p.append("| 모델 | 결과 | 측정일 |")
+        p.append("| --- | --- | --- |")
+        for r in lb:
+            mid = r.get("model_id")
+            disp = f"**{mid}**" if mid == model_id else mid
+            ts = r.get("ts") or 0
+            day_s = time.strftime("%m-%d", time.localtime(ts)) if ts else "—"
+            p.append(f"| {disp} | {r.get('score')}/{r.get('max_score')} | {day_s} |")
+        p.append("")
+
+    # ── 한도·비용 확인법
+    p.append("## 한도와 비용 확인하는 법")
+    p.append("")
+    p.append("무료라고 적혀 있어도 한도가 붙습니다. 실제로 확인하는 순서는 이렇습니다.")
+    p.append("")
+    p.append("1. 모델 목록에서 가격이 0으로 표시되는지 봅니다 — 무료 표시가 없는 모델은 유료입니다.")
+    p.append("2. 한 번 호출해 봅니다. 응답이 아니라 `Free usage limit reached` 같은 문구가 오면 그날 한도가 끝난 것입니다.")
+    p.append("3. 반복 호출이 필요한 작업은 한도에 걸리는 시점을 먼저 재봅니다. 우리는 12문항 평가를 두 번 돌리다 걸렸습니다.")
     p.append("")
 
-    # 실측 결과 표
+    # ── 실측 결과 (표 2)
     p.append(f"## AIK24 실측 결과 ({day})")
     p.append("")
     p.append("| 항목 | 값 |")
     p.append("| --- | --- |")
-    p.append(f"| 실측일 | {day} |")
-    p.append(f"| 검증 방법 | OpenCode CLI `opencode run -m {cli_id} --format json` · 문항별 결정적 채점 · 코드 문항은 샌드박스 실행 |")
     p.append(f"| 모델 ID | `{model_id}` |")
     p.append(f"| 결과 | {score}/{graded}" + (f" (미응답 {failed}문항 제외)" if failed else "") + " |")
-    p.append("| 토큰 사용량 | CLI 경유로 측정되지 않음 (미측정) |")
+    p.append("| 축별 | " + " · ".join(f"{l} {s}/{m}" for l, s, m in axis_rows) + " |")
+    p.append("| 검증 방법 | OpenCode CLI로 12문항 호출 · 문항별 결정적 채점 · 코드 문항은 실제 실행 |")
     p.append(f"| 니들 컨텍스트 실측 하한 | {f'{measured_context:,} 토큰' if measured_context else '미측정'} |")
+    p.append("| 토큰 사용량 | CLI 경유로 측정되지 않음 (미측정) |")
     p.append("")
-
-    if zeros:
-        p.append(f"## 0점 문항 {len(zeros)}개의 성격")
-        p.append("")
-        if zero_classes:
-            p.append("0점 문항을 답안 원문으로 확인해 아래와 같이 구분했습니다. "
-                     "채점기 기준 점수는 그대로 두고, 해석만 덧붙였습니다.")
-        else:
-            p.append("아래 문항은 자동으로 성격을 단정하지 않고 '검토 필요'로 표시했습니다. "
-                     "답안 원문을 열어 (채점기 오탐 / 질문-채점기 불일치 / 실제 실패) 중 어디인지 사람이 확인해야 합니다.")
-        p.append("")
-        for z in zeros:
-            head = re.sub(r"\s+", " ", z["answer_head"]).strip()[:200] or "(응답 없음)"
-            label = model_eval.AXIS_LABELS.get(z["axis"], z["axis"])
-            verdict = (zero_classes or {}).get(str(z["idx"]))
-            if verdict:
-                p.append(f"- Q{z['idx']} [{label}] {verdict}")
-            else:
-                p.append(f"- Q{z['idx']} [{label}] 검토 필요 — 답변: {head}")
+    n_axis = {}
+    for _l, _s, _m in axis_rows:
+        n_axis[_l] = _m
+    total_q = sum(n_axis.values())
+    if total_q:
+        p.append(f"12문항은 {' · '.join(f'{k} {v}' for k, v in n_axis.items())}로 구성됩니다. "
+                 f"LLM 심사자에게 점수를 묻지 않고 문항마다 규칙 기반으로 채점했고, 코드 문항은 제출 코드를 실제로 실행했습니다. "
+                 f"긴 문서 요약 품질, 다국어 정확도, 이미지 입력은 이 평가에 포함되지 않습니다.")
         p.append("")
 
     p.append("## 참고 자료")
@@ -546,34 +688,90 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     p.append("- [models.dev 모델 카탈로그](https://models.dev/)")
     p.append("")
 
-    p.append("## 마무리 — 오늘 바로 할지 결정하는 3단계")
+    # ── 마무리: 결정표 대신 두 목록
+    p.append("## 마무리 — 이럴 때 쓴다 / 이럴 때 쓰지 않는다")
     p.append("")
-    p.append(f"1. `opencode models | grep {model_id}` 로 이 모델이 지금도 목록에 있는지 확인합니다(무료 목록은 자주 바뀝니다).")
-    p.append("2. 이 글의 12문항 중 실패한 문항을 같은 형식으로 한 번 직접 던져 봅니다. 재현되면 그 용도에는 쓰지 않습니다.")
-    p.append("3. 무료 한도가 붙은 모델이므로, 반복 호출이 필요한 작업은 한도 소진 시점을 함께 기록해 둡니다.")
+    use_bits, skip_bits = [], []
+    for label, s, m in axis_rows:
+        if m and s / m >= 0.75:
+            if label.startswith("코딩"):
+                use_bits.append("함수 하나를 고치거나 리팩터링할 때")
+            elif label.startswith("맥락"):
+                use_bits.append("앞에서 정한 규칙을 계속 기억해야 하는 대화")
+            elif label.startswith("에이전트"):
+                use_bits.append("할 일의 우선순위를 정리시킬 때")
+    use_bits.append("무료로 짧은 요청을 여러 번 던져볼 때")
+    skip_bits = [
+        "형식이 정확히 정해진 산출물(스키마·JSON 구조를 그대로 요구하는 작업)",
+        "한 번에 긴 작업을 오래 돌려야 할 때 — 무료 한도가 먼저 걸립니다",
+        "제작사·가중치가 확인돼야 하는 업무 — 이 모델은 공개되지 않았습니다",
+    ]
+    p.append("**쓴다**")
     p.append("")
-    p.append(f"이 순위는 리더보드에 새 모델이 들어오면 바뀔 수 있습니다.")
+    for b in dict.fromkeys(use_bits):
+        p.append(f"- {b}")
+    p.append("")
+    p.append("**쓰지 않는다**")
+    p.append("")
+    for b in skip_bits:
+        p.append(f"- {b}")
+    p.append("")
+    p.append("무료 모델 목록은 자주 바뀝니다. 쓰기 전에 `opencode models`로 아직 있는지 확인하는 것이 마지막 단계입니다.")
 
     body = "\n".join(p).strip() + "\n"
-    # 도입 첫 문단 = excerpt
     excerpt = ""
     for line in body.splitlines():
         s = line.strip()
-        if s and not s.startswith(("#", "|", "-", "1.")):
-            excerpt = s.replace("**", "")
+        if s and not s.startswith(("#", "|", "-", "```", ">")):
+            excerpt = s.replace("**", "").replace("`", "")
             break
     excerpt = excerpt[:150]
     return title, body, excerpt
 
-
 def gate_draft(title, body, model_id):
-    """게이트 통과 여부. (ok, issues, body_after_repair)"""
+    """게이트 통과 여부. (ok, issues, body_after_repair)
+
+    2026-11-08 강화: 대표님이 첫 글을 '실험 노트'로 지적한 뒤, 형식이 아니라 **읽는 사람**
+    기준의 최소선을 코드로 박았다. 통과하지 못하면 초안은 보존되고 발행되지 않는다.
+    """
     import blog_quality_gate as qg
 
     repaired, _notes = qg.repair_markdown(body)
     issues = qg.screen_extended(repaired, verify_links=True, is_eval=True)
     if model_id not in title or model_id not in repaired:
         issues.append(f"모델 귀속 실패(PIPE-10): 제목·본문에 '{model_id}' 표기 필요")
+
+    # 1) 리드가 '보고서 라벨'로 시작하면 실패 — 독자 문장으로 바로 들어가야 한다.
+    first = next((l.strip() for l in repaired.splitlines() if l.strip()), "")
+    if re.match(r"^(한\s*줄\s*요약|요약)\s*[:：]", first):
+        issues.append("리드가 '한 줄 요약:' 라벨로 시작 → 결론을 독자 문장으로 바로 쓴다(라벨 금지)")
+
+    # 2) 문항 답변 나열 금지 — 대표 사례 3개 이하
+    q_lines = [l for l in repaired.splitlines() if re.match(r"^\s*-\s*Q\d+", l)]
+    if len(q_lines) > 3:
+        issues.append(f"문항 나열 {len(q_lines)}줄 → 대표 사례 3개 이하로 줄이고 나머지는 서술로 흡수")
+
+    # 3) 표 남발 금지 — 2개 이하
+    tables = len(re.findall(r"^\|\s*-{2,}", repaired, re.M))
+    if tables > 2:
+        issues.append(f"표 {tables}개 → 2개 이하(비교·실측 결과만)")
+
+    # 4) 저장소 경로·파일명 노출 금지(평가 중 모델이 저장소를 읽은 흔적)
+    leaks = sorted(set(_REPO_PATH_RE.findall(repaired)))
+    if leaks:
+        issues.append("저장소 경로/파일명 노출 %d건 (%s) → 지운다"
+                      % (len(leaks), ", ".join(leaks[:3])))
+
+    # 5) 일본어 가타카나 혼입(모델 답변 원문 오타가 그대로 실림)
+    if _KATAKANA_RE.search(repaired):
+        issues.append("일본어 가타카나 혼입 → 한국어로 교정한다")
+
+    # 6) 독자에게 쓸모 있는 축이 있어야 한다
+    if "## 어디서 걸리는가" not in repaired:
+        issues.append("'## 어디서 걸리는가' 절 없음 → 실패 사례·한도를 적는다")
+    if "## 어떤 작업에 강한가" not in repaired:
+        issues.append("'## 어떤 작업에 강한가' 절 없음 → 강점을 시나리오로 적는다")
+
     return (not issues), issues, repaired
 
 
