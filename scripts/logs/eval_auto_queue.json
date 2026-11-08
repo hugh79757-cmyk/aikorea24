@@ -1,0 +1,49 @@
+{
+ "models": {
+  "liquid/lfm-3-1.7b:free": {
+   "model_id": "liquid/lfm-3-1.7b:free",
+   "provider": "openrouter",
+   "first_seen": "2026-11-08",
+   "status": "pending",
+   "attempts": 0,
+   "reason": "",
+   "day": "2026-11-08"
+  },
+  "inkling-2-small-free": {
+   "model_id": "inkling-2-small-free",
+   "provider": "zen",
+   "first_seen": "2026-11-08",
+   "status": "retry",
+   "attempts": 1,
+   "reason": "Free usage limit reached. Connect a provider or subscribe to OpenCode Go to keep going, or switch models.",
+   "day": "2026-11-09",
+   "cli_id": "opencode/inkling-2-small-free"
+  },
+  "iceman-free": {
+   "model_id": "iceman-free",
+   "provider": "zen",
+   "first_seen": "2026-11-08",
+   "status": "done",
+   "attempts": 1,
+   "reason": "",
+   "day": "2026-11-08",
+   "cli_id": "opencode/iceman-free",
+   "score": "10/12",
+   "measured_context": 133120,
+   "elapsed_sec": 484.3,
+   "zeros_review_needed": [
+    1,
+    11
+   ],
+   "draft": {
+    "ok": true,
+    "path": "/Users/twinssn/Projects/aikorea24/scripts/logs/eval_auto_drafts/2026-11-08-iceman-free-opencode-iceman-free-12문항-실측-10-12-무료-티어에서-쓸-만한가.md",
+    "url": "https://emdash.aikorea24.kr/posts/iceman-freeopencodeiceman-free-12문항-실측-1012-무료-티어에서-쓸-만한가",
+    "title": "iceman-free(opencode/iceman-free) 12문항 실측 — 10/12 무료 티어에서 쓸 만한가",
+    "published_url": "https://emdash.aikorea24.kr/posts/iceman-freeopencodeiceman-free-12문항-실측-1012-무료-티어에서-쓸-만한가",
+    "published_at": "2026-11-08"
+   }
+  }
+ },
+ "updated_at": 1794110254.024649
+}

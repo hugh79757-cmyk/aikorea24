@@ -1,3 +1,78 @@
+## 2026-11-08 11:10 — AIK24-EVAL-AUTO 완료: 신규 무료모델 자동 평가 → 캐시 → 블로그 초안 (iceman-free 10/12 실증) → SSOT/프로젝트/aikorea24/지시서/2026-11-08-1025-AIK24-EVAL-AUTO-완료보고.md
+
+### 한 일
+1. **[PRODUCTION CODE 신규] `scripts/free_model_eval_auto.py`** — AIK24-EVAL-AUTO 파이프라인.
+   트리거 `new_models_alert.json`(04:00) → 무료 접미사 필터 → `opencode models` 라이브 확인 →
+   `eval_model_cli` 12문항 + 니들 프로브 → `cache_put` → **결정적 템플릿 초안**(LLM 없음) →
+   게이트 → `create_draft_post`(draft만, publish 없음). 큐 파일로 실패·이월 관리.
+2. **[PRODUCTION CODE] `scripts/model_eval.py`** 2곳 추가 —
+   `probe_context_length(cli_model=)` 파라미터(신규 모델은 free_models_cli.json 에 없어 resolve 실패),
+   프로브 첫 단계 실패 사유를 로그에 남김(무료 한도 소진을 '컨텍스트 부족'으로 오독 방지).
+3. **[PRODUCTION CODE] `scripts/free_models_cli.py`** — `opencode models` 실패를 빈 리스트가 아니라
+   `None` 으로 구분, 실패 시 기존 `free_models_cli.json` 을 **덮어쓰지 않고** 종료.
+   (오늘 09:10 사고: launchd PATH 에 opencode 가 없어 FileNotFoundError → "확정 0건"으로 저장 → 목록 소실.)
+4. **[CONFIG] `scripts/free-models-cli.plist.template`** — `EnvironmentVariables.PATH` 추가
+   (verify-models plist 와 동일 값). 오늘 사고의 직접 원인.
+5. **[CONFIG 신규] `scripts/free-model-eval-auto.plist.template`** + `~/Library/LaunchAgents/kr.aikorea24.free-model-eval-auto.plist`
+   — 매일 **08:30**, PATH 명시. 기존 슬롯(04:00/05:30/07:00/07:30/09:10/09:30/10:00) 회피.
+6. **[TEST CODE] `tests/test_eval_auto.py` 신규 15건** — 트리거 필터·CLI 실패 구분·초안 시리즈 포맷·
+   게이트 통과·PIPE-10 귀속·0점 '검토 필요'·평가가 저장소 밖(tempdir)에서 도는지.
+7. **iceman-free 실측·발행** — 12문항 10/12, 니들 하한 133,120토큰, 글 발행 + 썸네일 + 브리핑 역링크.
+8. **`tests/test_safe_div.py` 원복** — 평가 중 모델이 저장소 파일을 덮어쓴 사고(§결과 참조).
+
+### 결과 (검증 근거)
+### [검증됨]
+- iceman-free 라이브 200 — `https://emdash.aikorea24.kr/posts/iceman-freeopencodeiceman-free-12문항-실측-1012-무료-티어에서-쓸-만한가`,
+  `<title>` 정상, 본문 `10/12` 7회. 근거: `curl -sL` + `grep -c`.
+- 브리핑 역링크 — 글 HTML 에 `https://aikorea24.kr/briefing/2026-11-08-1/#item-1` 1회, `기사원문보기` 1회.
+  삽입은 `emdash_add_briefing_backlink.apply_one()` → 블록 49→50. 근거: 라이브 HTML grep.
+- 브리핑 → 글 — `briefing_items.id=1979` `deep_dive_url` UPDATE(NULL → 글 URL), `aikorea24.kr/briefing/2026-11-08-1/` HTML 에 글 슬러그 존재.
+- 썸네일 — `https://aikorea24.kr/images/iceman-free-12문항-실측/thumbnail.webp` **200 image/webp 123,472B**
+  (WebP 1200×800 q80). 배포 Version `3ac00448-43ba-4fb7-a3d3-2dceb1773f3`. featured_image 설정 확인(D1).
+- 캐시·리더보드 반영 — `cache_put` 경유만 사용(직접 편집 0건). 리더보드 총 17건,
+  `iceman-free 10/12`(마지막) + `8/12 (미응답 1 제외)`(1차, 한도 소진분). 근거: `model_leaderboard.json` 실측.
+- 실패 경로 — 10:51:21 `inkling-2-small-free` 가 `Free usage limit reached` → 60초 후 1회 재시도 → 실패 →
+  `status=retry`, `day=2026-11-09` 로 이월, **점수 미기록**. 근거: `eval_auto_queue.json` + `free_model_eval_auto.log`.
+- PATH 사고 재현·수정 — `env -i PATH=/usr/bin:/bin …` → `FileNotFoundError` 재현,
+  `PATH=~/.opencode/bin:…` → `opencode models` 1571줄. 근거: 실측 출력.
+- launchd — `plutil -lint` 2개 OK, `launchctl list` 에 `kr.aikorea24.free-model-eval-auto`(- 0) · `free-models-cli`(- 0).
+- 테스트 — `pytest tests/test_eval_auto.py tests/test_eval_cli.py tests/test_zen_pending.py tests/test_free_models_page.py`
+  → **50 passed**. 2건(zen_pending·agent_v2)은 오늘 09:10 사고로 비워진 `free_models_cli.json` 때문에 실패했고,
+  백업본으로 되돌린 상태에서 통과함을 확인(데이터 문제이지 코드 문제 아님).
+
+### [부분검증]
+- 수용기준 1(감지→평가→캐시→초안 무인 1회 완주) — 전 구간은 돌았으나 **두 호출로 나뉘었다.**
+  평가 `evaluate iceman-free`(10:45:53~10:49:26, 213.3초) + 초안 `run`(10:51:21).
+  사유: 같은 날 백그라운드 launchd 프로세스가 먼저 평가를 끝내 캐시가 차 있었고, 그 뒤 Zen 무료 한도가 소진돼 재평가 불가.
+  두 호출은 같은 `evaluate()` 함수를 지난다.
+- 게이트 미달 보존 경로 — 코드·테스트로만 고정. 오늘 실제 미달 초안이 나오지 않아 실행 로그 미확인.
+
+### [검증불가]
+- 내일 08:30 자동 기동, 내일 09:10 PATH 수정본의 목록 재생성 — 다음 실행 로그로만 확인된다.
+
+### [위반 감지 / 사고]
+- **모델이 저장소 파일을 덮어썼다.** 10:43 백그라운드 실행 Q4에서 `opencode run` 이 저장소 폴더를
+  프로젝트로 삼아 모델이 `tests/test_safe_div.py` 를 자기 답안으로 교체(git diff·mtime 10:43 으로 확인).
+  `git checkout --` 로 원복. 재발방지: `_sandbox_cwd()` 로 평가 전체를 `tempfile.mkdtemp()` 안에서 실행(테스트 2건 고정).
+- 동시 실행 — launchd 실행과 수동 실행이 겹쳐 같은 모델을 두 번 평가(8/12 → 10/12 로 캐시 덮임).
+  `free_model_eval_auto.lock`(2시간) 추가. 단 이 잠금은 이 스크립트끼리만 유효하다.
+
+### 잔존 위험
+1. **free-models 리스트 페이지는 오늘 깨진 상태** — `free_models_cli.json` 을 사고 이전 정상본(`.bak-20261024`)으로
+   임시 복구(빈 사본은 `.bak-20261108-empty` 보존). 페이지 재발행은 하지 않았다(오래된 목록으로 기준일을 잘못 찍는 것 회피).
+2. `model_catalog.ZEN_OFFICIAL_FREE` 화이트리스트(하드코딩 11종)에 `iceman-free`·`inkling-2-small-free` 가 없어
+   **평가 완료 · 표시 차단** 상태. 화이트리스트 갱신은 별도 지시 필요.
+3. 하루 1건 상한은 Zen 무료 쿼터 실측(11회 호출로 소진)에 근거 — 쿼터가 바뀌면 재측정 필요.
+4. 니들 프로브는 한도 임박 시 `미측정` 이 된다(1회차 실행이 그랬고 2회차는 133,120 토큰 성공).
+5. `opencode run` 이 모델에 파일 쓰기 도구를 준다 — cwd 격리로 저장소 피해만 막았다.
+
+### 다음 행동
+1. 내일 09:10 `kr.aikorea24.free-models-cli` 로그에서 `opencode models 1571줄` + 확정 N건 확인(PATH 수정 검증).
+2. 내일 08:30 `kr.aikorea24.free-model-eval-auto` 기동 → `inkling-2-small-free` 가 감옵→평가→초안까지 가는지 확인.
+3. 대표님: `ZEN_OFFICIAL_FREE` 화이트리스트 갱신 여부 결정.
+
+## 2026-11-08 AIK24-FREE-PIPE-01 일일 실행 — 수집 27건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-07 16:40 — AIK24-PIPE-16: 브리핑 선정 한글 오픈 웨이트 사각지대 수정
 
 ### 한 일

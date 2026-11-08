@@ -9,6 +9,15 @@
 <dict>
 	<key>Label</key>
 	<string>kr.aikorea24.free-models-cli</string>
+	<!-- launchd 기본 PATH(/usr/bin:/bin:/usr/sbin:/sbin)에는 opencode 가 없다.
+	     2026-11-08 실측: 이 plist 에 PATH 가 없어 opencode models 가 FileNotFoundError 였고,
+	     그 결과가 "확정 0건"으로 저장돼 free_models_cli.json 이 [] 로 덮어써졌다(09:10 실행).
+	     verify-models plist 와 같은 PATH 를 명시한다. -->
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/Users/twinssn/.opencode/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
 	<key>ProgramArguments</key>
 	<array>
 		<string>/Users/twinssn/Projects/aikorea24/.venv/bin/python3</string>

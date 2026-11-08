@@ -1613,27 +1613,36 @@ def _probe_hit(model_id, cli_model, target_tokens):
     return (ans or ""), ("" if ans else "빈 응답")
 
 
-def probe_context_length(model_id, cache=None):
+def probe_context_length(model_id, cache=None, cli_model=None):
     """실효 컨텍스트 길이(토큰) 탐색. 모델당 1회만 — 캐시에 있으면 돌리지 않는다.
 
     두 배씩 올려서 첫 실패 지점을 찾고, 앞 구간을 이분 탐색으로 좁힌다.
+
+    cli_model: 호출측이 CLI ID 를 이미 알고 있을 때 넘긴다(AIK24-EVAL-AUTO 2026-11-08).
+    새로 감지된 모델은 free_models_cli.json 에 아직 없어 resolve_cli_model() 이 None 을
+    돌려주므로, 위임 없이 넘길 수 있어야 프로브가 돈다. 생략하면 기존 동작 그대로다.
     """
     cache = cache if cache is not None else cache_load()
     if model_id in cache and cache[model_id].get("measured_context"):
         log(f"{model_id}: 실측 컨텍스트 이미 있음 ({cache[model_id]['measured_context']:,}) — 재측정 안 함")
         return cache[model_id]["measured_context"]
-    cli_model = resolve_cli_model(model_id)
+    cli_model = cli_model or resolve_cli_model(model_id)
     ok_sizes = []
+    first_err = ""
     for n in PROBE_STEPS:
         time.sleep(PROBE_GAP_SEC)
         ans, err = _probe_hit(model_id, cli_model, n)
         hit = PROBE_SECRET in (ans or "")
         log(f"{model_id}: {n:,} 토큰 → {'OK' if hit else '실패'}")
         if not hit:
+            # 2026-11-08: 첫 단계 실패는 "컨텍스트 부족"과 "호출 자체 실패"가 섞인다.
+            # 사유를 남겨야 무료 한도 소진(Free usage limit)을 모델 한계로 오독하지 않는다.
+            if not ok_sizes:
+                first_err = err or "빈 응답"
             break
         ok_sizes.append(n)
     if not ok_sizes:
-        log(f"{model_id}: {PROBE_STEPS[0]:,} 토큰도 못 받음 — 실측 실패")
+        log(f"{model_id}: {PROBE_STEPS[0]:,} 토큰도 못 받음 — 실측 실패 (사유: {first_err})")
         return None
     best = ok_sizes[-1]
     if best == PROBE_STEPS[-1]:

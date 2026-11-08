@@ -159,5 +159,31 @@
   "no_response_n": 1,
   "score_display": "9/12 (미응답 1 제외)",
   "ts": 1793175645.4720352
+ },
+ {
+  "model_id": "iceman-free",
+  "cli_model": "opencode/iceman-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 8,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "score_display": "8/12 (미응답 1 제외)",
+  "ts": 1794109766.352538
+ },
+ {
+  "model_id": "iceman-free",
+  "cli_model": "opencode/iceman-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 10,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "score_display": "10/12",
+  "ts": 1794109818.632216
  }
 ]

@@ -57,7 +57,13 @@ def log(msg):
 
 
 def opencode_models():
-    """`opencode models` 1줄에 provider/model 1개. 실패하면 빈 리스트."""
+    """`opencode models` 1줄에 provider/model 1개. 실패하면 None.
+
+    2026-11-08: 실패를 빈 리스트로 돌려주면 호출측이 "무료 후보 0건"으로 오인해
+    `free_models_cli.json` 을 `[]` 로 덮어썼다(실제 사고: launchd PATH 에 opencode 가 없어
+    FileNotFoundError → 확정 0건 → 페이지 15일 미갱신과 같은 형태의 고장).
+    실패는 None 으로 구분한다.
+    """
     import subprocess
 
     try:
@@ -66,7 +72,11 @@ def opencode_models():
         )
     except Exception as e:
         log(f"opencode models 실패 — {type(e).__name__}")
-        return []
+        return None
+    if p.returncode != 0:
+        log(f"opencode models 실패 — returncode={p.returncode} "
+            f"{(p.stderr or '').strip()[:120]}")
+        return None
     return [ln.strip() for ln in p.stdout.splitlines() if "/" in ln]
 
 
@@ -119,6 +129,11 @@ def probe(provider, model_id, cli_id):
 
 def main():
     lines = opencode_models()
+    if lines is None:
+        # 목록 조회 자체가 실패했다. 이때 기존 free_models_cli.json 을 덮어쓰면
+        # 검증 목록이 통째로 사라진다(2026-11-08 사고). 아무것도 쓰지 않고 실패로 끝낸다.
+        log("opencode models 조회 실패 — 기존 목록을 보존하고 종료한다(쓰기 없음)")
+        return 1
     log(f"opencode models {len(lines)}줄")
     cands = candidates(lines)
     per = {}
