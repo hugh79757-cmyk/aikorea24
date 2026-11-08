@@ -5,7 +5,7 @@ category: "영상·음성"
 price: "무료/월 29.99달러"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://topai.tools/t/saymo-ai"
+url: "https://saymoai.app"
 useCases: ["SNS 광고 영상 제작", "제품 홍보 문구 생성", "인플루언서 스타일 광고"]
 tags: ["영상제작", "광고마케팅", "UGC", "제품홍보", "AI영상"]
 featured: false

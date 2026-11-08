@@ -516,3 +516,22 @@
 {"ts": "2026-11-08 06:01:06", "slug": "gpt-6-cyber", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
 {"ts": "2026-11-08 06:01:14", "slug": "sla-scaling-spatial-language-action-model-via-con", "step": "enrich", "result": "done", "detail": "+3,094자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-08 06:01:18", "slug": "sla-scaling-spatial-language-action-model-via-con", "step": "thumb", "result": "done", "detail": "✅ sla-scaling-spatial-language-action-model-via-con 30KB", "dry_run": false}
+{"ts": "2026-11-08 07:30:14", "slug": "basetab-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:16", "slug": "basetab-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-08 07:30:16", "slug": "chainpoints", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:17", "slug": "chainpoints", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-08 07:30:17", "slug": "github-copilot-fusion", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:18", "slug": "github-copilot-fusion", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-08 07:30:20", "slug": "telemetry-dev", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:20", "slug": "telemetry-dev", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-08 07:30:37", "slug": "photogenerator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:37", "slug": "photoupscaler-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:38", "slug": "piccreator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:38", "slug": "producerai-art", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:40", "slug": "prompt-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:44", "slug": "religion", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:45", "slug": "saymo-ai", "step": "url", "result": "done", "detail": "https://topai.tools/t/saymo-ai → https://saymoai.app (title='Saymoai — 让英语，自然地说出来。')", "dry_run": false}
+{"ts": "2026-11-08 07:30:45", "slug": "seedance25ai-im", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:45", "slug": "sjolt-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:46", "slug": "sparkvid-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-08 07:30:47", "slug": "spira-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
