@@ -537,3 +537,14 @@
 {"ts": "2026-11-08 07:30:47", "slug": "spira-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-09 06:00:52", "slug": "from-autonomous-agents-to-cognitive-symbionts-tow", "step": "enrich", "result": "done", "detail": "+3,074자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-09 06:00:57", "slug": "from-autonomous-agents-to-cognitive-symbionts-tow", "step": "thumb", "result": "done", "detail": "✅ from-autonomous-agents-to-cognitive-symbionts-tow 29KB", "dry_run": false}
+{"ts": "2026-11-09 07:30:05", "slug": "usage-for-claude-chatgpt-4-0", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:07", "slug": "usage-for-claude-chatgpt-4-0", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-09 07:30:16", "slug": "tastegpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:16", "slug": "tempmail-bot", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:23", "slug": "text-to-speech", "step": "thumb", "result": "fail", "detail": "❌ text-to-speech BLANK(SMALL_722B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ text-to-speech NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-11-09 07:30:23", "slug": "ugcfy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:25", "slug": "unfox-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:25", "slug": "videotranscription-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:25", "slug": "writing-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:26", "slug": "ziptie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-09 07:30:26", "slug": "zooop-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
