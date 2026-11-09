@@ -1868,5 +1868,185 @@
   "measured_context": 133120,
   "ts": 1794109818.629496,
   "schema": 4
+ },
+ "inkling-2-small-free": {
+  "model_id": "inkling-2-small-free",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/inkling-2-small-free",
+  "turn_timeout_sec": 60,
+  "qv": 2,
+  "score": 9,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "cli",
+    "answer": "이 코드는 `add`라는 이름의 함수를 정의합니다.\n\n- `def add(a, b):` — `a`와 `b` 두 개의 인자를 받는 함수를 선언합니다.\n- `return a + b` — 두 값을 `+` 연산자로 더한 결과를 반환합니다.\n\n즉, 숫자를 넣으면 합계를 돌려주고(예: `add(2, 3)` → `5`), 문자열이나 리스트처럼 `+`가 정의된 타입이면 이어 붙인 결과를 돌려줍니다(예: `add('a', 'b')` → `'ab'`). 단, `+`를 지원하지 않는 타입끼리 더하면 `TypeError`가 발생하고, 타입이 서로 다르면(예: 숫자 + 문자열) 마찬가지로 오류가 납니다. 타입을 강제하지 않는 파이썬의 동적 타이핑 특성상 인자의 타입과 반환값의 타입은 호출 시점에 결정됩니다.\n\n---끝---",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 3,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 버그\n\n`now - timedelta(days=30)`와 비교하고 있어서, **현재 기준 30일 전에 만료된 토큰만** 반환하고 최근 30일 이내에 만료된 토큰은 누락됩니다. 함수 이름(`get_expired_tokens`)이 의미하는 \"만료된 토큰 전체\"와 다릅니다.\n\n## 수정 코드\n\n```python\nfrom datetime import datetime\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n(`timedelta`는 더 이상 쓰지 않으므로 import에서도 제거했습니다.)\n\n## 왜 버그인지 (한 줄)\n\n만료 판정의 기준이 `now`가 아니라 `now - 30일`이라, 만료된 지 30일이 안 된 토큰은 절대 반환되지 않습니다.\n\n참고로, 만약 의도가 \"만료 후 30일 지난 토큰만 정리 대상으로 삼는\" 로직이었다면 코드가 아니라 함수 이름/스펙이 잘못된 것입니다. 그 경우 `get_tokens_expired_over_30_days` 같은 이름으로 바꾸는 게 맞습니다.\n\n---\n\n부가적으로 함께 검토할 만한 점:\n\n- **timezone 불일치**: `expires_at`이 `...+00:00` 같은 aware datetime인데 `now`가 naive면 `TypeError: can't compare offset-naive and offset-aware datetimes`가 납니다. 양쪽을 모두 aware(또는 모두 naive)로 통일해야 합니다.\n- **`Z` 접미사**: Python 3.11 미만에서는 `datetime.fromisoformat`이 `Z`를 못 읽으므로, 그런 입력이 있다면 `t['expires_at'].replace('Z', '+00:00')` 처리가 필요합니다.",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "cli",
+    "answer": "테스트 작성 및 실행 완료했습니다.\n\n**파일**\n- `safe_div.py` — 대상 함수 (그대로 복사)\n- `test_safe_div.py` — pytest 테스트 33건\n\n**검증 결과 — [검증됨]**\n- `/opt/homebrew/bin/pytest test_safe_div.py -v` → `33 passed in 0.02s`\n- 커버한 범위:\n  - 정상 입력: 양수/음수/부호 조합, 0 분자, float 입력, 소수 결과 (`pytest.approx`)\n  - 0으로 나누기: `1/0`, `-1/0`, `0/0`, `1/0.0`, `1/-0.0` → 모두 `None` 반환\n  - 경계값: `1e308/1e-308` (inf), `1e-308/1e308` (0.0), `inf`/`nan` 분자, `inf` 분모\n  - parametrize 로 정상/0나누기 케이스 추가 커버\n\n참고: 기본 `python3`(3.15)에는 pytest가 없고, `/opt/homebrew/bin/pytest`(python@3.14, pytest 9.2.0)로 실행했습니다.\n\n**잔존 위험**\n- 타입 오류(예: 문자열 인자)나 `b`가 `False`/`Decimal('0')` 같은 케이스는 테스트하지 않았습니다. 필요하면 추가 가능합니다.\n- 보고서 형식 규칙(섹션 2)을 준수하려 했으나, `docs/state.md`는 이 작업 디렉터리가 특정 프로젝트가 아닌 임시 폴터(`aik24-eval-...`)이므로 생략했습니다 — 원하시면 어느 프로젝트에 state.md가 있는지 알려 주세요.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "작업 디렉터리에는 `safe_div.py`만 있고 두 함수가 정의된 파일은 없으므로, 코드만 제시합니다.\n\n```python\ndef _select_users(users, predicate):\n    return [\n        {'id': u['id'], 'name': u['name'], 'email': u['email']}\n        for u in users\n        if predicate(u)\n    ]\n\ndef get_active_user(users):\n    return _select_users(users, lambda u: u['status'] == 'active')\n\ndef get_admin_user(users):\n    return _select_users(users, lambda u: u['role'] == 'admin')\n```\n\n핵심만 정리하면:\n\n- **공통 부분 추출**: 필터링 + `{'id', 'name', 'email'}` 투영 로직을 `_select_users(users, predicate)` 하나로 합쳤습니다.\n- **차이점은 술어(predicate)로 주입**: `status == 'active'` vs `role == 'admin'` 만 람다로 넘깁니다.\n- **동작 불변**: 반환되는 dict의 키·순서, 입력 순서 유지, 리스트를 새로 만들어 반환하는 점 모두 원본과 동일합니다. 함수 시그니처도 그대로라 호출부 변경이 필요 없습니다.\n\n대안으로 predicate 대신 키/값 쌍을 넘기는 방식(`_select_users(users, 'status', 'active')`)도 가능하지만, `==` 비교가 아닌 조건이 나중에 추가될 수 있으므로 술어 주입 쪽이 확장성이 좋습니다.",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nfrom datetime import datetime\n\n_LEVELS = frozenset({\"INFO\", \"WARN\", \"ERROR\"})\n\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError(\"s must be a str\")\n    if s.strip() == \"\":\n        raise ValueError(\"빈 줄(공백만)은 파싱할 수 없습니다\")\n\n    parts = s.split(None, 2)\n    if len(parts) != 3:\n        raise ValueError(\"'TIMESTAMP LEVEL MSG' 형식이어야 합니다\")\n    ts, level, msg = parts\n\n    iso = ts[:-1] + \"+00:00\" if ts.upper().endswith(\"Z\") else ts\n    try:\n        datetime.fromisoformat(iso)\n    except ValueError:\n        raise ValueError(f\"timestamp가 ISO8601 형식이 아닙니다: {ts!r}\") from None\n\n    if level not in _LEVELS:\n        raise ValueError(f\"level은 INFO/WARN/ERROR 중 하나여야 합니다: {level!r}\")\n\n    if msg.strip() == \"\":\n        raise ValueError(\"msg가 비어 있습니다\")\n\n    return (ts, level, msg)\n```",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "normalize_ledger_entries",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "대화에서 요청하신 작업 3가지는 다음과 같습니다.\n\n1. **파이썬을 처음 시작할 때 무엇부터 해야 하는지 알려달라** — \"파이썬을 처음 시작하려면 뭘부터 해야 해?\"\n2. **변수 이름 지을 때의 규칙 3개를 알려달라** — \"변수 이름 지을 때 규칙 3개만 알려줘.\"\n3. **프로그램이 안 돌아갈 때 처음에 할 일을 알려달라** — \"프로그램이 안 돌아갈 때 처음에 할 일은?\"\n\n참고로, 두 번째 답변의 \"밑줄이 아니라 카멜케이스를 쓴다\"는 내용은 파이썬 관례(PEP 8)와 다릅니다. 파이썬 변수명은 보통 `snake_case`(밑줄 구분)를 씁니다. 필요하시면 그 부분도 정정해 드릴게요.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 9,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[\"total 미정의 변수/전역 상태 의존 — 첫 호출 시 UnboundLocalError 및 프로세스 간 값 오염\", \"TAX_RATE 세금 계산 삭제로 반환값 계약 변경 — 의도된 breaking change인지, 호출부·테스트 영향 확인\", \"amount 입력 검증 없음 — 음수·0·비숫자·한도 초과 금액에 대한 방어 누락\", \"db.insert 원자성·예외 처리 없음 — 트랜잭션/롤백/중복 처리 여부와 실패 시 total 불일치\", \"user 파라미터 미사용 및 total 동시성 경쟁 조건 — 권한 확인·인보이스 귀속 누락, 동시 요청 시 합계 덮어쓰기\"]",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 10,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "루트 원인: 원격 HTTPS 엔드포인트가 5초 타임아웃 안에 응답하지 못해 발생한 `requests.exceptions.Timeout`을 애플리케이션이 처리하지 않고 있다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -1,4 +1,7 @@\n import requests\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    try:\n+        return requests.get(url, timeout=5).json()\n+    except requests.exceptions.Timeout:\n+        return None\n```",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 11,
+    "axis": "에이전트",
+    "score": 0,
+    "source": "cli",
+    "answer": "{\n  \"작업\": \"네안데르탈인 시점 텍스트 게임 - 단일 HTML 파일 제작 순서\",\n  \"산출물\": \"단일 HTML 파일 1개 (HTML + CSS + JS 인라인)\",\n  \"단계\": [\n    {\n      \"단계\": 1,\n      \"이름\": \"HTML 스켈레톤 + 정적 스크린 + CSS 뼈대\",\n      \"순서이유\": \"단일 파일에서 모든 후속 로직이 붙을 컨테이너를 먼저 확정해야 이후 단계가 자리를 찾아 들어간다. 스크린 전환 구조가 없으면 상태 모델도 검증할 수 없다.\",\n      \"1_생성할_DOM_스크린\": [\n        \"<title> 및 메타 태그 (viewport 포함, 모바일 대응)\",\n        \"#screen-title : 게임 타이틀, 시작 버튼, '이어하기' 버튼(비활성 초기 상태), 간단한 컨셉 문구(네안데르탈인 시점, 빙하기 배경)\",\n        \"#screen-game : 게임 본체 컨테이너 — 본문 텍스트 영역(#story-text), 선택지 영역(#choices), 상태 HUD(#hud: 체력/허기/추위/스태미나 표시), 턴/날 카운터\",\n        \"#screen-ending : 엔딩 화면 — 엔딩 제목, 엔딩 설명, 재시작 버튼\",\n        \"인라인 <style> : 빙하기 톤 다크 테마, 텍스트 가독성 우선, 스크린은 .screen { display:none } .screen.active { display:block } 방식\",\n        \"인라인 <script> 스텁만 배치 (함수 정의는 다음 단계)\"\n      ],\n      \"2_코어_상태_모델\": {\n        \"state\": {\n          \"screen\": \"title | game | ending\",\n          \"turn\": 0,\n          \"day\": 1\n        },\n        \"전역_상수\": \"SCREENS = { TITLE, GAME, ENDING }, showScreen(name) 전환 ",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   },
+   {
+    "idx": 12,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "세 가지를 **외부 영향 → 장애 전이 가능성 → 가역성** 기준으로 나누면 다음과 같습니다.\n\n## 지금 바로 처리해야 하는 것\n\n### 1. 장애 후속 조치 — 고객 메일 발송 대기 중\n- **이유**: 유일하게 **대고객(외부) 계약**이 걸린 항목입니다. 장애 후 사과/안내 메일이 늦어지면 고객 불안이 커지고, 지원 문의가 폭증하며, 신뢰 손상이 누적됩니다.\n- **판단 근거**:\n  - 지연 비용이 시간에 비례해 증가 (보내지 않을수록 손해)\n  - 내부 작업(코드/쿼리)과 달리 발송 타이밍 자체가 품질의 일부\n  - 단, **발송 버튼 누르기 전 내용·수신 대상·승인 여부 확인은 필수**입니다. \"대기 중\"의 사유가 내용 검토 대기인지, 승인 대기인지 먼저 확인하고, 그게 풀렸으면 오늘 보내는 게 맞습니다. 승인이 아직이면 승인권자에게 재촉하는 것까지가 오늘 할 일입니다.\n\n### 2. 운영 DB 느린 쿼리(3초) — 단, \"전면 수정\"이 아니라 \"영향도 확인\"까지\n- **이유**: 운영 DB 이슈는 **방치 시 장애로 전이될 수 있는 유일한 내부 항목**입니다. 다만 3초라는 수치만으로는 심각도를 알 수 없으므로, 오늘 해야 할 것은 수정이 아니라 **분류(triage)** 입니다.\n- **판단 근거**:\n  - 확인해야 할 것: 호출 빈도(초당/분당), 영향 경로(고객 화면인지 배치인지), 락/커넥션 풀 고갈 여부, 최근 배포 이후 회귀인지(EXPLAIN, slow log, APM)\n  - 영향이 국소적이고 타임아웃이 없다면 → 인덱스 추가/쿼리 재작성은 **점검 창구 잡아서** 진행해도 됩니다 (오늘 당장 배포 불필요)\n  - 반대로 빈도가 높거나 커넥션 점유가 심하면 → 오늘 대응 등급으로 승격. 즉 이 항목은 \"지금 판단\"이 필요하고, \"지금 수정\"은 판단 결과에 따릅니다.\n\n## 오늘은 미뤄도 되는 것\n\n### 3. 내부 도구 버튼 색상/문구 수정 요청\n- **이유**: **내부 도구 + 외관(cosmetic) + 기능 영향 없음**의 전",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false
+   }
+  ],
+  "errors": [],
+  "failures": [],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "by_axis": {
+   "지시이행": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 3,
+    "max_score": 4,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "에이전트": {
+    "score": 3,
+    "max_score": 4,
+    "failed": 0
+   }
+  },
+  "sandbox_pass": 3,
+  "failed": 0,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "graded_n": 12,
+  "score_display": "9/12",
+  "role": "판단 근거 부족 — 손발 작업으로 한정",
+  "usage_levels": {
+   "코딩실무": "코딩 실무 가능",
+   "에이전트": "에이전트 실무 가능",
+   "한글": "한글 부분 가능"
+  },
+  "coding_level": "코딩 실무 가능",
+  "agent_level": "에이전트 실무 가능",
+  "korean_level": "한글 부분 가능",
+  "label": "12문항 중 9문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유). 판단 근거 부족 — 손발 작업으로 한정.",
+  "measured_context": 1048576,
+  "ts": 1794188144.849959,
+  "schema": 4
  }
 }

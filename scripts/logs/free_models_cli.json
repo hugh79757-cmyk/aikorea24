@@ -12,27 +12,10 @@
     "context_length": 512000
   },
   {
-    "model_id": "nvidia/nemotron-3.5-lightning:free",
+    "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "provider": "kilo",
-    "cli_id": "kilo/nvidia/nemotron-3.5-lightning:free",
-    "context_length": 1000000
-  },
-  {
-    "model_id": "poolside/laguna-s-2.1:free",
-    "provider": "kilo",
-    "cli_id": "kilo/poolside/laguna-s-2.1:free",
-    "context_length": 262144
-  },
-  {
-    "model_id": "mimo-v2.6-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/mimo-v2.6-flash-free"
-  },
-  {
-    "model_id": "glm-5.3-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/glm-5.3-flash-free",
-    "context_length": 200000
+    "cli_id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "context_length": 256000
   },
   {
     "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -41,13 +24,56 @@
     "context_length": 1000000
   },
   {
-    "model_id": "nemotron-3-ultra-free",
-    "provider": "zen",
-    "cli_id": "opencode/nemotron-3-ultra-free"
+    "model_id": "nvidia/nemotron-3.5-lightning:free",
+    "provider": "kilo",
+    "cli_id": "kilo/nvidia/nemotron-3.5-lightning:free",
+    "context_length": 1000000
+  },
+  {
+    "model_id": "nvidia/nemotron-3.5-super-vl:free",
+    "provider": "kilo",
+    "cli_id": "kilo/nvidia/nemotron-3.5-super-vl:free",
+    "context_length": 1000000
   },
   {
     "model_id": "beam-free",
+    "provider": "zen",
     "cli_id": "opencode/beam-free"
+  },
+  {
+    "model_id": "crouton-alpha-free",
+    "provider": "zen",
+    "cli_id": "opencode/crouton-alpha-free"
+  },
+  {
+    "model_id": "deepseek-v4.1-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/deepseek-v4.1-flash-free"
+  },
+  {
+    "model_id": "flint-40b-free",
+    "provider": "zen",
+    "cli_id": "opencode/flint-40b-free"
+  },
+  {
+    "model_id": "glm-5.3-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/glm-5.3-flash-free"
+  },
+  {
+    "model_id": "iceman-free",
+    "provider": "zen",
+    "cli_id": "opencode/iceman-free"
+  },
+  {
+    "model_id": "inkling-2-small-free",
+    "provider": "zen",
+    "cli_id": "opencode/inkling-2-small-free"
+  },
+  {
+    "model_id": "mimo-v2.6-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/mimo-v2.6-flash-free"
   },
   {
     "model_id": "nemotron-3.5-lightning-free",
@@ -55,9 +81,8 @@
     "cli_id": "opencode/nemotron-3.5-lightning-free"
   },
   {
-    "model_id": "poolside/laguna-xs-2.1:free",
-    "provider": "kilo",
-    "cli_id": "kilo/poolside/laguna-xs-2.1:free",
-    "context_length": 262144
+    "model_id": "nemotron-3.5-super-vl-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3.5-super-vl-free"
   }
 ]

@@ -1691,6 +1691,52 @@
           "date": "2026-11-08"
         }
       ]
+    },
+    {
+      "date": "2026-11-09",
+      "briefing_id": 376,
+      "articles": [
+        {
+          "id": "59301",
+          "title": "[무료 LLM] inkling-2-small-free — OpenCode Zen 무료 티어",
+          "original_title": "inkling-2-small-free",
+          "description": "Inkling 2 Small Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/inkling-2-small-free\"} 프로바이더 갱신일 2026-11-05.",
+          "link": "https://models.dev/opencode/inkling-2-small-free",
+          "entities": [
+            "LLM",
+            "Zen",
+            "Small",
+            "Free",
+            "Inkling",
+            "OpenCode"
+          ],
+          "date": "2026-11-09"
+        },
+        {
+          "id": "59432",
+          "title": "AI 에이전트가 전문가의 판단에 미치는 영향 - 앤스로픽",
+          "original_title": "How AI agents shape experts’ judgment calls - Anthropic",
+          "description": "AI 에이전트가 실제 전문가들의 의사결정과 판단 과정에 어떤 변화를 주는지 분석합니다. 인간과 AI의 협업이 가져오는 영향력을 탐구합니다.",
+          "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1IaTRIX2lBc1kwcDRXenZsRXRxcy1vZWVQVlBGdlJsS1p1bkpOQzBpblRRU0l6elhUa0Z3a0RmOVlaV1NmUlgxU3pQWjE2UTVNcEdMdDBBQ0VobFBMS2k5MS1yQ3dQMzQ?oc=5",
+          "entities": [
+            "AI",
+            "Anthropic",
+            "How"
+          ],
+          "date": "2026-11-09"
+        },
+        {
+          "id": "59425",
+          "title": "채용 가속화하는 AI — 에이전시 수수료 압박받아",
+          "original_title": "AI is speeding up recruitment — and putting agency fees under pressure",
+          "description": "채용 담당자들에 따르면 AI가 서류 심사를 가속화하고 에이전시의 업무 방식을 재편하면서, 비율 기반의 채용 수수료가 유지될 수 있을지에 대한 의문이 커지고 있습니다.",
+          "link": "https://www.cnbc.com/2026/11/08/ai-recruitment-agency-fees.html",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-09"
+        }
+      ]
     }
   ],
   "articles": [
@@ -3145,6 +3191,46 @@
         "AI"
       ],
       "date": "2026-11-08"
+    },
+    {
+      "id": "59301",
+      "title": "[무료 LLM] inkling-2-small-free — OpenCode Zen 무료 티어",
+      "original_title": "inkling-2-small-free",
+      "description": "Inkling 2 Small Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/inkling-2-small-free\"} 프로바이더 갱신일 2026-11-05.",
+      "link": "https://models.dev/opencode/inkling-2-small-free",
+      "entities": [
+        "LLM",
+        "Zen",
+        "Small",
+        "Free",
+        "Inkling",
+        "OpenCode"
+      ],
+      "date": "2026-11-09"
+    },
+    {
+      "id": "59432",
+      "title": "AI 에이전트가 전문가의 판단에 미치는 영향 - 앤스로픽",
+      "original_title": "How AI agents shape experts’ judgment calls - Anthropic",
+      "description": "AI 에이전트가 실제 전문가들의 의사결정과 판단 과정에 어떤 변화를 주는지 분석합니다. 인간과 AI의 협업이 가져오는 영향력을 탐구합니다.",
+      "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1IaTRIX2lBc1kwcDRXenZsRXRxcy1vZWVQVlBGdlJsS1p1bkpOQzBpblRRU0l6elhUa0Z3a0RmOVlaV1NmUlgxU3pQWjE2UTVNcEdMdDBBQ0VobFBMS2k5MS1yQ3dQMzQ?oc=5",
+      "entities": [
+        "AI",
+        "Anthropic",
+        "How"
+      ],
+      "date": "2026-11-09"
+    },
+    {
+      "id": "59425",
+      "title": "채용 가속화하는 AI — 에이전시 수수료 압박받아",
+      "original_title": "AI is speeding up recruitment — and putting agency fees under pressure",
+      "description": "채용 담당자들에 따르면 AI가 서류 심사를 가속화하고 에이전시의 업무 방식을 재편하면서, 비율 기반의 채용 수수료가 유지될 수 있을지에 대한 의문이 커지고 있습니다.",
+      "link": "https://www.cnbc.com/2026/11/08/ai-recruitment-agency-fees.html",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-09"
     }
   ]
 }

@@ -548,3 +548,26 @@
 {"ts": "2026-11-09 07:30:25", "slug": "writing-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-09 07:30:26", "slug": "ziptie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-09 07:30:26", "slug": "zooop-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:00:42", "slug": "dageno-ai-2-0", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:00:48", "slug": "dageno-ai-2-0", "step": "enrich", "result": "done", "detail": "+2,984자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:00:50", "slug": "dageno-ai-2-0", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-10 06:00:50", "slug": "egoist-ai-passport", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:00:58", "slug": "egoist-ai-passport", "step": "enrich", "result": "done", "detail": "+2,834자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:00:59", "slug": "egoist-ai-passport", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-10 06:01:07", "slug": "cardboard-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:01:14", "slug": "cardboard-ai", "step": "enrich", "result": "done", "detail": "+2,776자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:01:14", "slug": "cardboard-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-10 06:01:15", "slug": "arcjet-ai-security-models", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:01:21", "slug": "arcjet-ai-security-models", "step": "enrich", "result": "done", "detail": "+2,770자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:01:21", "slug": "arcjet-ai-security-models", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-10 06:01:22", "slug": "pawse-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:01:28", "slug": "pawse-ai", "step": "enrich", "result": "done", "detail": "+2,956자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:01:29", "slug": "pawse-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-10 06:01:35", "slug": "health", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:01:43", "slug": "health", "step": "enrich", "result": "done", "detail": "+3,076자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:01:49", "slug": "health", "step": "thumb", "result": "done", "detail": "✅ health og 23KB", "dry_run": false}
+{"ts": "2026-11-10 06:01:57", "slug": "pcbrouteagent-how-close-are-llm-agents-to-becomin", "step": "enrich", "result": "done", "detail": "+3,176자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:02:00", "slug": "pcbrouteagent-how-close-are-llm-agents-to-becomin", "step": "thumb", "result": "done", "detail": "✅ pcbrouteagent-how-close-are-llm-agents-to-becomin 30KB", "dry_run": false}
+{"ts": "2026-11-10 06:02:19", "slug": "ai-chatbots", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-10 06:02:27", "slug": "ai-chatbots", "step": "enrich", "result": "done", "detail": "+3,055자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-10 06:02:30", "slug": "ai-chatbots", "step": "thumb", "result": "done", "detail": "✅ ai-chatbots og 11KB", "dry_run": false}

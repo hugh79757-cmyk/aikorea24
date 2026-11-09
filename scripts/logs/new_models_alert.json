@@ -1,27 +1,31 @@
 {
- "day": "2026-11-09",
- "checked_at": 1794171604.81311,
+ "day": "2026-11-10",
+ "checked_at": 1794258007.9929118,
  "total_rows": 26,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "deepseek/deepseek-v4.1-flash-1017:batch",
-   "morph/morph-v3-fast:batch",
-   "z-ai/glm-5.2:batch",
-   "morph/morph-v3-large:batch"
+   "anthropic/claude-fable-5.2:batch",
+   "meta/muse-ember",
+   "qwen/qwen3.8-max-0902:batch",
+   "anthropic/claude-fable-5.2"
+  ],
+  "kilo": [
+   "meta/muse-ember",
+   "anthropic/claude-fable-5.2"
+  ],
+  "zen": [
+   "muse-ember-1.0",
+   "longcat-2.5-free",
+   "claude-fable-5-2"
   ]
  },
  "removed_by_provider": {
   "openrouter": [
-   "inception/mercury-2",
-   "inception/mercury-2.5",
-   "inception/mercury-3"
+   "minimax/minimax-m1"
   ],
   "kilo": [
-   "inception/mercury-2",
-   "inception/mercury-2.5",
-   "inception/mercury-3",
-   "reflection/beam-free"
+   "minimax/minimax-m1"
   ]
  }
 }

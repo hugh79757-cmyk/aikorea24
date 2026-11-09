@@ -13,11 +13,33 @@
    "model_id": "inkling-2-small-free",
    "provider": "zen",
    "first_seen": "2026-11-08",
-   "status": "awaiting_briefing",
-   "attempts": 1,
-   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "status": "done",
+   "attempts": 2,
+   "reason": "",
    "day": "2026-11-09",
-   "cli_id": "opencode/inkling-2-small-free"
+   "cli_id": "opencode/inkling-2-small-free",
+   "briefing": {
+    "date": "2026-11-09-1",
+    "sort_order": 1,
+    "news_id": 59301
+   },
+   "score": "9/12",
+   "measured_context": 1048576,
+   "elapsed_sec": 338.8,
+   "zeros_review_needed": [
+    1,
+    4,
+    11
+   ],
+   "draft": {
+    "ok": true,
+    "path": "/Users/twinssn/Projects/aikorea24/scripts/logs/eval_auto_drafts/2026-11-09-inkling-2-small-free-실측-9-12-무료로-어디까지-쓸-수-있나.md",
+    "url": "https://emdash.aikorea24.kr/posts/inkling-2-small-free-실측-912-무료로-어디까지-쓸-수-있나",
+    "title": "inkling-2-small-free 실측 — 9/12, 무료로 어디까지 쓸 수 있나"
+   },
+   "published_url": "https://emdash.aikorea24.kr/posts/inkling-2-small-free-실측-912-무료로-어디까지-쓸-수-있나",
+   "published_at": "2026-11-09",
+   "briefing_linked": true
   },
   "iceman-free": {
    "model_id": "iceman-free",
@@ -45,5 +67,5 @@
    }
   }
  },
- "updated_at": 1794116443.563964
+ "updated_at": 1794188190.596986
 }
