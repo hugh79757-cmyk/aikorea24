@@ -1,3 +1,5 @@
+## 2026-11-10 AIK24-FREE-PIPE-01 일일 실행 — 수집 27건 / 실패 프로바이더 0 / added 27 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-09 AIK24-FREE-PIPE-01 일일 실행 — 수집 0건 / 실패 프로바이더 4 / added 0 · removed 27 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-08 12:45 — AIK24-EVAL-AUTO 시퀀스 고정: 브리핑 발행 → 모델 테스트 → 블로그 글 (발행 포함)

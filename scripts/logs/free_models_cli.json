@@ -12,6 +12,12 @@
     "context_length": 512000
   },
   {
+    "model_id": "liquid/lfm-3-1.7b:free",
+    "provider": "kilo",
+    "cli_id": "kilo/liquid/lfm-3-1.7b:free",
+    "context_length": 262144
+  },
+  {
     "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
@@ -41,11 +47,6 @@
     "cli_id": "opencode/beam-free"
   },
   {
-    "model_id": "crouton-alpha-free",
-    "provider": "zen",
-    "cli_id": "opencode/crouton-alpha-free"
-  },
-  {
     "model_id": "deepseek-v4.1-flash-free",
     "provider": "zen",
     "cli_id": "opencode/deepseek-v4.1-flash-free"
@@ -69,6 +70,11 @@
     "model_id": "inkling-2-small-free",
     "provider": "zen",
     "cli_id": "opencode/inkling-2-small-free"
+  },
+  {
+    "model_id": "longcat-2.5-free",
+    "provider": "zen",
+    "cli_id": "opencode/longcat-2.5-free"
   },
   {
     "model_id": "mimo-v2.6-flash-free",

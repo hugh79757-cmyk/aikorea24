@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-09 09:03",
+  "updated_at": "2026-11-10 09:00",
   "count": 146,
   "models": [
     {
@@ -625,22 +625,6 @@
       "in_briefing": false
     },
     {
-      "key": "inkling-2-small",
-      "original_titles": [
-        "inkling-2-small-free"
-      ],
-      "news_ids": [
-        59301
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/inkling-2-small-free"
-      ],
-      "in_briefing": true
-    },
-    {
       "key": "jev-1.13",
       "original_titles": [
         "jev-1.13-free"
@@ -962,6 +946,22 @@
       ],
       "cli_ids": [
         "opencode/longcat-2.0-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "longcat-2.5",
+      "original_titles": [
+        "longcat-2.5-free"
+      ],
+      "news_ids": [
+        59742
+      ],
+      "sources": [
+        "OpenCode Zen"
+      ],
+      "cli_ids": [
+        "opencode/longcat-2.5-free"
       ],
       "in_briefing": false
     },

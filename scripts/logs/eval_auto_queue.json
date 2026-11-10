@@ -65,7 +65,16 @@
     "published_url": "https://emdash.aikorea24.kr/posts/iceman-freeopencodeiceman-free-12문항-실측-1012-무료-티어에서-쓸-만한가",
     "published_at": "2026-11-08"
    }
+  },
+  "longcat-2.5-free": {
+   "model_id": "longcat-2.5-free",
+   "provider": "zen",
+   "first_seen": "2026-11-10",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-10"
   }
  },
- "updated_at": 1794188190.596986
+ "updated_at": 1794274206.124922
 }

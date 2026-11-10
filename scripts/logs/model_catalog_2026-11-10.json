@@ -91,16 +91,6 @@
   },
   {
     "provider": "kilo",
-    "model_id": "stealth/crouton-alpha",
-    "name": "Crouton Alpha",
-    "pricing": {
-      "prompt": 0.0,
-      "completion": 0.0
-    },
-    "context_length": 1048576
-  },
-  {
-    "provider": "kilo",
     "model_id": "stealth/glyph-cluster",
     "name": "Stealth: Glyph Cluster (free)",
     "pricing": {
@@ -108,6 +98,16 @@
       "completion": 0.0
     },
     "context_length": 256000
+  },
+  {
+    "provider": "kilo",
+    "model_id": "thinkingmachines/inkling-2-small:free",
+    "name": "Thinking Machines: Inkling 2 Small (free)",
+    "pricing": {
+      "prompt": 0.0,
+      "completion": 0.0
+    },
+    "context_length": 1048576
   },
   {
     "provider": "openrouter",
@@ -218,6 +218,16 @@
       "completion": 0.0
     },
     "context_length": 262144
+  },
+  {
+    "provider": "openrouter",
+    "model_id": "thinkingmachines/inkling-2-small:free",
+    "name": "Thinking Machines: Inkling 2 Small (free)",
+    "pricing": {
+      "prompt": 0.0,
+      "completion": 0.0
+    },
+    "context_length": 1048576
   },
   {
     "provider": "openrouter",

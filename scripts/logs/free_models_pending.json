@@ -1,11 +1,5 @@
 [
   {
-    "model_id": "liquid/lfm-3-1.7b:free",
-    "provider": "kilo",
-    "cli_id": "kilo/liquid/lfm-3-1.7b:free",
-    "context_length": 262144
-  },
-  {
     "model_id": "poolside/laguna-s-2.1:free",
     "provider": "kilo",
     "cli_id": "kilo/poolside/laguna-s-2.1:free",

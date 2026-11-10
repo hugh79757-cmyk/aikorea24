@@ -575,3 +575,14 @@
 {"ts": "2026-11-10 07:30:06", "slug": "cedric-ai-for-meetings", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
 {"ts": "2026-11-10 07:30:07", "slug": "linkly-ai-clipper", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-10 07:30:08", "slug": "linkly-ai-clipper", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-11 06:00:45", "slug": "appubot", "step": "url", "result": "done", "detail": "빈값 → https://appubot.com (title='AI teammates that finish the work on your Ma')", "dry_run": false}
+{"ts": "2026-11-11 06:01:06", "slug": "appubot", "step": "enrich", "result": "done", "detail": "+2,840자 (시도 2)", "dry_run": false}
+{"ts": "2026-11-11 06:01:11", "slug": "appubot", "step": "thumb", "result": "done", "detail": "✅ appubot 14KB", "dry_run": false}
+{"ts": "2026-11-11 06:01:20", "slug": "lottie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-11 06:01:29", "slug": "lottie-ai", "step": "enrich", "result": "done", "detail": "+2,883자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-11 06:01:30", "slug": "lottie-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-11 06:01:34", "slug": "latch-ai", "step": "url", "result": "done", "detail": "빈값 → https://latchai.app (title='LatchAI — the local-first AI workbench')", "dry_run": false}
+{"ts": "2026-11-11 06:01:43", "slug": "latch-ai", "step": "enrich", "result": "done", "detail": "+3,121자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-11 06:01:47", "slug": "latch-ai", "step": "thumb", "result": "done", "detail": "✅ latch-ai 18KB", "dry_run": false}
+{"ts": "2026-11-11 06:01:59", "slug": "reframe-observation-aligned-multi-teacher-on-poli", "step": "enrich", "result": "done", "detail": "+2,839자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-11 06:02:05", "slug": "reframe-observation-aligned-multi-teacher-on-poli", "step": "thumb", "result": "done", "detail": "✅ reframe-observation-aligned-multi-teacher-on-poli 29KB", "dry_run": false}
