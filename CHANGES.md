@@ -2,6 +2,41 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-11 11:51 — test: safe_div 재검증 (11:01 실행과 별개 프로세스로 재현, 신규 파일 없음)
+
+- 오늘 11:01에 같은 범위를 재검증한 이력이 있어 신규 테스트를 만들지 않고 재실행만 수행(중복 생성 회피).
+- [검증됨] `.venv/bin/python -m pytest tests/test_safe_div.py test_safe_div.py -v --tb=short`
+  → 59 passed / 0 failed / 0 skipped / 0 error, 종료코드 0 (Python 3.14.6, pytest 9.1.1).
+  - 분해(이번 실행 실측): `tests/test_safe_div.py` 13케이스 + 루트 `test_safe_div.py` 46케이스 = 59.
+  - 루트 파일은 클래스 기반 + `b ∈ {0, 0.0, -0.0, False}` 파라미터화 포함.
+- [검증됨] `scripts/safe_div.py` 본문이 제시 스니펫과 동일 분기(`b == 0` → `None`, 그 외 `a / b`); docstring 유무만 차이.
+- 잔존 위험: 루트 파일 자체정의 사본은 `scripts/safe_div.py` 변경을 자동 추적 안 함(현재 로직 동일); 정확 비교 라인(예: `10**9/3` 십진 리터럴)은 이 환경 한정 검증; `testpaths = tests` 밖이라 루트 파일은 명시 경로 실행 필요.
+- 다음 행동: 없음(루트 사본 정리는 지시 시 별도 작업).
+
+## 2026-11-11 11:58 KST — test: safe_div 요청 범주 독립 재검증 (변경 0건, 59 passed 재현)
+
+- 요청 범주(정상 입력 / 0으로 나누기 / 음수 / 경계값) 대비 기존 자산 독립 재확인 — 신규 파일 생성 없음(오늘 11:01 기록과 동일 결정: 기존 2파일로 커버).
+- [검증됨] `.venv/bin/python3 -m pytest test_safe_div.py -q` → `46 passed in 0.01s`; `tests/test_safe_div.py` → `13 passed in 0.03s`; 동시 실행 → `59 passed in 0.03s`(59 = 46 + 13). 환경: Python 3.14.6 / pytest 9.1.1 / pytest.ini(testpaths=tests, pythonpath=scripts), tests/conftest.py scripts 경로 주입. `scripts/safe_div.py` 임포트 스모크 확인(로직 = 스니펫).
+- [검증됨] 4범주 매핑(파일 내용 확인): 정상 연산·0 분자·분모 1 등 / 0 나누기(b=0·0.0·-0.0·False→None) / 음수 부호 조합 / 경계(±0.0 부호, inf/-inf, nan, 서브노멀, 1e308 스케일, `10**400` OverflowError, None TypeError 등).
+- [테스트 코드]·[PRODUCTION CODE] 무수정 — 검증·기기만.
+- [부분검증] .venv 단일 인터프리터 — 시스템 python3(3.15.0) pytest 미설치, 외부 CI·타 버전 미확인. 전체 스위트 미실행(타 파일 외부 의존 가능성).
+- 잔존(기존 기록): 루트 사본 ↔ scripts 이중 정의(드리프트), 루트 파일이 testpaths 밖, `10**9/3` 정확비교 현 환경 통과, 오버플로 가드 부재(설계 사안).
+- 다음 행동: 케이스 추가 / 정본 통합 / 정리는 지시 시.
+
+## 2026-11-11 11:01 KST — test: safe_div pytest 커버리지 재검증 (신규 파일 없음, 59 passed)
+
+- 요청 범위(정상 입력 / 0으로 나누기 / 음수 / 경계값)는 기존 2개 파일이 이미 전부 커버 → 중복 생성 대신 재검증.
+- [검증됨] `.venv/bin/python3 -m pytest test_safe_div.py tests/test_safe_div.py -v`
+  → 59 passed / 0 failed / 0 skipped (0.06s; Python 3.14.6, pytest 9.1.1, rootdir=aikorea24, pytest.ini 적용)
+  - 분해: `test_safe_div.py` 46 = 정상 11 + 0 나눗셈 9(파라메터 4: 0 / 0.0 / -0.0 / False) + 음수 5 + 경계 21(파라메터 부호 매트릭스 7 포함)
+  - `tests/test_safe_div.py` 13. 경계 범위: ±0.0 부호 보존, inf/nan 전파, 서브노멀 5e-324→inf, 10**400→OverflowError, None→TypeError
+  - `scripts/safe_div.py` 실제 정의와 제시 스니펫 일치(문서화 문자열 제외). `tests/conftest.py`가 scripts/를 sys.path에 추가 → `from safe_div import safe_div` 임포트 정상
+- [테스트 코드] 두 파일 모두 무변경(수정 0건). [PRODUCTION CODE] 무변경.
+- [부분검증] 두 파일 단일 실행 1회 — 전체 스위트는 미실행(타 파일 외부 의존 가능성).
+- [검증불가] 시스템 python3(3.15.0)에 pytest 미설치 → .venv(3.14.6) 외 인터프리터 실행 검증 불가.
+- 잔존 위험: (1) 루트 파일은 safe_div 사본 내장(self-contained) — scripts/safe_div.py와 이중 정의, 드리프트 시 어긋남(현 시점 동일 동작). (2) 루트 파일은 pytest.ini testpaths=tests 로 기본 수집 밖 → 명시 경로 실행 필요. (3) tests의 `10**9/3 == 333333333.3333333333` 부동소수 리터럴 정확 비교(현재 통과). (4) safe_div 오버플로 가드 부재 — `10**400/7` 은 OverflowError, 가드 추가는 별도 지시 필요.
+- 다음 행동: 케이스 추가·드리프트 해소·가드 논의 원하면 지시 요청.
+
 ## 2026-10-27 09:58 KST — fix(AIK24-DEDUP-10): 같은 사건이 이틀 연속 브리핑되는 문제 수정 + 오늘 브리핑 재발행
 
 - 증상: `briefing/2026-10-27-1` 2건이 모두 r/opensource AI 금지 사건이었고, 그 사건은 10-26 브리핑에도 나온 동일 사건

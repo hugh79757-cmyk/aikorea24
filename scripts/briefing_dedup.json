@@ -1,287 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-11",
-      "briefing_id": 342,
-      "articles": [
-        {
-          "id": "54984",
-          "title": "Multimodal open d1 decision models for the edge",
-          "original_title": "",
-          "description": "",
-          "link": "https://huggingface.co/blog/LiquidAI/open-d1",
-          "entities": [
-            "Multimodal"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "55002",
-          "title": "마이크로소프트의 'Decision-1' 모델, 급성장하는 AI 의사결정 모델 경쟁에 가세",
-          "original_title": "",
-          "description": "마이크로소프트가 'Decision-1'을 통해 성장하는 의사결정 모델 시장에 진입했다. 회사의 자체 테스트에 따르면, Qwen3.5-9B를 기반으로 구축되고 빠른 분류 및 라우팅에 최적화된 이 모델은 36개의 벤치마크에서 85ms의 지연 시간과 83.5%의 정확도를 기록했다.",
-          "link": "https://the-decoder.com/microsofts-decision-1-model-enters-the-fast-growing-ai-decision-model-race/",
-          "entities": [
-            "Qwen3.5-",
-            "Decision-1",
-            "AI"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "55009",
-          "title": "트럼프의 AI 책임론 공세, 독단적 행동 시 책임 소재는 모호하다고 블룸버그 보도",
-          "original_title": "",
-          "description": "트럼프 행정부는 소송의 위협이 AI 기업들을 정직하게 만들 것이라 베팅하고 있습니다. 하지만 매기 이스트랜드가 블룸버그에 보도한 바에 따르면, AI 에이전트가 통제를 벗어날 경우 누가 비용을 지불해야 할지는 여전히 불분명합니다.",
-          "link": "https://thenextweb.com/news/trump-ai-liability-rogue-agents-blame",
-          "entities": [
-            "AI"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54999",
-          "title": "애플, 맞춤형 팟캐스트 스타트업 '휴크(Huxe)'의 팀 영입 및 기술 라이선스 계약 체결",
-          "original_title": "",
-          "description": "애플이 AI 생성 팟캐스트 사업에 진출하려는 것일까요?",
-          "link": "https://techcrunch.com/2026/10/10/apple-discloses-deal-to-hire-team-and-license-tech-from-personalized-podcast-startup-huxe/",
-          "entities": [
-            "Huxe",
-            "AI"
-          ],
-          "date": "2026-10-11"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-11",
-      "briefing_id": 343,
-      "articles": [
-        {
-          "id": "54938",
-          "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
-          "original_title": "",
-          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
-          "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
-          "entities": [
-            "LLM",
-            "OpenRouter"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54982",
-          "title": "Impactful scheduling for GPU clusters",
-          "original_title": "",
-          "description": "",
-          "link": "https://huggingface.co/blog/allenai/impactful-scheduling",
-          "entities": [
-            "Impactful",
-            "GPU"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54992",
-          "title": "Secret protection must scale with software",
-          "original_title": "",
-          "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
-          "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
-          "entities": [
-            "Secret",
-            "The",
-            "Blog",
-            "GitHub",
-            "Developers"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54957",
-          "title": "[무료 모델] google/embeddinggemma-2 — HuggingFace tren",
-          "original_title": "",
-          "description": "트렌딩 상위 오픈소스 모델. task=feature-extraction, 좋아요 1,434, 다운로드 45,605. 라이선스 확인 후 무료로 로컬 실행 가능.",
-          "link": "https://huggingface.co/google/embeddinggemma-2",
-          "entities": [
-            "HuggingFace"
-          ],
-          "date": "2026-10-11"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-11",
-      "briefing_id": 344,
-      "articles": [
-        {
-          "id": "54941",
-          "title": "[무료 LLM] liquid/lfm-2.5-2.6b:free — OpenRouter 무료 ",
-          "original_title": "",
-          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 65,536 토큰. 지금 바로 무료로 써볼 수 있다.",
-          "link": "https://openrouter.ai/liquid/lfm-2.5-2.6b",
-          "entities": [
-            "LLM",
-            "OpenRouter"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54983",
-          "title": "존재하지 않아서 직접 만든 모델",
-          "original_title": "",
-          "description": "",
-          "link": "https://huggingface.co/blog/building-with-ml-intern",
-          "entities": [],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54996",
-          "title": "코드 기반 마케팅 운영: 깃허브에서 기획부터 사후 관리까지 행사 자동화",
-          "original_title": "",
-          "description": "<p>If you can write down how you do your work, you can automate it. Here's what I did to support GitHub's APAC marketing team.</p>\n<p>The post <a href=\"https://github.blog/ai-and-ml/github-copilot/mar",
-          "link": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github/",
-          "entities": [
-            "Automating",
-            "APAC",
-            "GitHub",
-            "The",
-            "Here",
-            "Marketing",
-            "If"
-          ],
-          "date": "2026-10-11"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-11",
-      "briefing_id": 345,
-      "articles": [
-        {
-          "id": "54940",
-          "title": "[무료 LLM] dots-studio/dots-3-note-preview:free — Op",
-          "original_title": "",
-          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 512,000 토큰. 지금 바로 무료로 써볼 수 있다.",
-          "link": "https://openrouter.ai/dots-studio/dots-3-note-preview",
-          "entities": [
-            "LLM",
-            "Op"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54984",
-          "title": "엣지 디바이스를 위한 멀티모달 오픈 d1 결정 모델",
-          "original_title": "",
-          "description": "",
-          "link": "https://huggingface.co/blog/LiquidAI/open-d1",
-          "entities": [],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54996",
-          "title": "코드 기반 마케팅 운영: 깃허브에서 기획부터 사후 관리까지 행사 자동화",
-          "original_title": "",
-          "description": "<p>If you can write down how you do your work, you can automate it. Here's what I did to support GitHub's APAC marketing team.</p>\n<p>The post <a href=\"https://github.blog/ai-and-ml/github-copilot/mar",
-          "link": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github/",
-          "entities": [
-            "The",
-            "Marketing",
-            "Automating",
-            "APAC",
-            "GitHub",
-            "Here",
-            "If"
-          ],
-          "date": "2026-10-11"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-11",
-      "briefing_id": 346,
-      "articles": [
-        {
-          "id": "54938",
-          "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
-          "original_title": "",
-          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
-          "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
-          "entities": [
-            "OpenRouter",
-            "LLM"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54983",
-          "title": "존재하지 않아서 직접 만든 모델",
-          "original_title": "",
-          "description": "",
-          "link": "https://huggingface.co/blog/building-with-ml-intern",
-          "entities": [],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54992",
-          "title": "보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다",
-          "original_title": "",
-          "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
-          "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
-          "entities": [
-            "Blog",
-            "Secret",
-            "GitHub",
-            "The",
-            "Developers"
-          ],
-          "date": "2026-10-11"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-11",
-      "briefing_id": 347,
-      "articles": [
-        {
-          "id": "54938",
-          "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
-          "original_title": "",
-          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
-          "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
-          "entities": [
-            "OpenRouter",
-            "LLM"
-          ],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54983",
-          "title": "존재하지 않아서 직접 만든 모델",
-          "original_title": "",
-          "description": "",
-          "link": "https://huggingface.co/blog/building-with-ml-intern",
-          "entities": [],
-          "date": "2026-10-11"
-        },
-        {
-          "id": "54992",
-          "title": "보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다",
-          "original_title": "",
-          "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
-          "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
-          "entities": [
-            "Blog",
-            "Secret",
-            "GitHub",
-            "The",
-            "Developers"
-          ],
-          "date": "2026-10-11"
-        }
-      ]
-    },
-    {
       "date": "2026-10-12",
       "briefing_id": 348,
       "articles": [
@@ -1518,254 +1237,56 @@
           "date": "2026-11-10"
         }
       ]
+    },
+    {
+      "date": "2026-11-11",
+      "briefing_id": 378,
+      "articles": [
+        {
+          "id": "59855",
+          "title": "[신규 무료] mimo-v2.6-flash-free — OpenCode Zen 무료 목록에",
+          "original_title": "mimo-v2.6-flash-free",
+          "description": "OpenCode Zen 무료 목록에 추가 · 직전 12문항 평가 9/12 (문항 v1)",
+          "link": "https://opencode.ai/v2/docs/console/models/#mimo-v2.6-flash-free",
+          "entities": [
+            "Zen",
+            "OpenCode"
+          ],
+          "date": "2026-11-11"
+        },
+        {
+          "id": "59876",
+          "title": "간병인들의 일상 속 AI 활용 지원",
+          "original_title": "Helping caregivers use AI in everyday life",
+          "description": "OpenAI 아카데미는 미국 내 5개 도시의 간병인들을 대상으로 무료 실습형 ChatGPT 워크숍을 개최하여, 일상생활에 유용한 실용적인 AI 기술을 익힐 수 있도록 돕습니다.",
+          "link": "https://openai.com/index/helping-caregivers-use-ai-in-everyday-life",
+          "entities": [
+            "ChatGPT",
+            "AI",
+            "OpenAI",
+            "Helping"
+          ],
+          "date": "2026-11-11"
+        },
+        {
+          "id": "59902",
+          "title": "알바니지의 음악 사랑, AI 문제로 위기에 처하다. 다른 노선을 택할 수 있을까? | 피터",
+          "original_title": "Albanese’s love affair with music is on the rocks over AI. Can he write a different tune? | Peter Lewis",
+          "description": "총리가 저작권의 얽힌 매듭을 풀려고 노력하고 있습니다. 하지만 이것은 단순한 지식재산권 그 이상의 문제입니다. 속보 이메일, 무료 앱, 또는 일일 뉴스 팟캐스트를 통해 만나보세요. 앤서니 알바니지의 정신적 고향이 있다면, 그것은 아마도 앤모어 극장과 옛 산도 사이의 어느 지역일 것입니다.",
+          "link": "https://www.theguardian.com/commentisfree/2026/nov/11/albaneses-love-affair-with-music-is-on-the-rocks-over-ai-can-he-write-a-different-tune",
+          "entities": [
+            "AI",
+            "Lewis",
+            "Peter",
+            "Can",
+            "Albanese"
+          ],
+          "date": "2026-11-11"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "54984",
-      "title": "Multimodal open d1 decision models for the edge",
-      "original_title": "",
-      "description": "",
-      "link": "https://huggingface.co/blog/LiquidAI/open-d1",
-      "entities": [
-        "Multimodal"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "55002",
-      "title": "마이크로소프트의 'Decision-1' 모델, 급성장하는 AI 의사결정 모델 경쟁에 가세",
-      "original_title": "",
-      "description": "마이크로소프트가 'Decision-1'을 통해 성장하는 의사결정 모델 시장에 진입했다. 회사의 자체 테스트에 따르면, Qwen3.5-9B를 기반으로 구축되고 빠른 분류 및 라우팅에 최적화된 이 모델은 36개의 벤치마크에서 85ms의 지연 시간과 83.5%의 정확도를 기록했다.",
-      "link": "https://the-decoder.com/microsofts-decision-1-model-enters-the-fast-growing-ai-decision-model-race/",
-      "entities": [
-        "Qwen3.5-",
-        "Decision-1",
-        "AI"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "55009",
-      "title": "트럼프의 AI 책임론 공세, 독단적 행동 시 책임 소재는 모호하다고 블룸버그 보도",
-      "original_title": "",
-      "description": "트럼프 행정부는 소송의 위협이 AI 기업들을 정직하게 만들 것이라 베팅하고 있습니다. 하지만 매기 이스트랜드가 블룸버그에 보도한 바에 따르면, AI 에이전트가 통제를 벗어날 경우 누가 비용을 지불해야 할지는 여전히 불분명합니다.",
-      "link": "https://thenextweb.com/news/trump-ai-liability-rogue-agents-blame",
-      "entities": [
-        "AI"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54999",
-      "title": "애플, 맞춤형 팟캐스트 스타트업 '휴크(Huxe)'의 팀 영입 및 기술 라이선스 계약 체결",
-      "original_title": "",
-      "description": "애플이 AI 생성 팟캐스트 사업에 진출하려는 것일까요?",
-      "link": "https://techcrunch.com/2026/10/10/apple-discloses-deal-to-hire-team-and-license-tech-from-personalized-podcast-startup-huxe/",
-      "entities": [
-        "Huxe",
-        "AI"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54938",
-      "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
-      "original_title": "",
-      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
-      "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
-      "entities": [
-        "LLM",
-        "OpenRouter"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54982",
-      "title": "Impactful scheduling for GPU clusters",
-      "original_title": "",
-      "description": "",
-      "link": "https://huggingface.co/blog/allenai/impactful-scheduling",
-      "entities": [
-        "Impactful",
-        "GPU"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54992",
-      "title": "Secret protection must scale with software",
-      "original_title": "",
-      "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
-      "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
-      "entities": [
-        "Secret",
-        "The",
-        "Blog",
-        "GitHub",
-        "Developers"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54957",
-      "title": "[무료 모델] google/embeddinggemma-2 — HuggingFace tren",
-      "original_title": "",
-      "description": "트렌딩 상위 오픈소스 모델. task=feature-extraction, 좋아요 1,434, 다운로드 45,605. 라이선스 확인 후 무료로 로컬 실행 가능.",
-      "link": "https://huggingface.co/google/embeddinggemma-2",
-      "entities": [
-        "HuggingFace"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54941",
-      "title": "[무료 LLM] liquid/lfm-2.5-2.6b:free — OpenRouter 무료 ",
-      "original_title": "",
-      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 65,536 토큰. 지금 바로 무료로 써볼 수 있다.",
-      "link": "https://openrouter.ai/liquid/lfm-2.5-2.6b",
-      "entities": [
-        "LLM",
-        "OpenRouter"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54983",
-      "title": "존재하지 않아서 직접 만든 모델",
-      "original_title": "",
-      "description": "",
-      "link": "https://huggingface.co/blog/building-with-ml-intern",
-      "entities": [],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54996",
-      "title": "코드 기반 마케팅 운영: 깃허브에서 기획부터 사후 관리까지 행사 자동화",
-      "original_title": "",
-      "description": "<p>If you can write down how you do your work, you can automate it. Here's what I did to support GitHub's APAC marketing team.</p>\n<p>The post <a href=\"https://github.blog/ai-and-ml/github-copilot/mar",
-      "link": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github/",
-      "entities": [
-        "Automating",
-        "APAC",
-        "GitHub",
-        "The",
-        "Here",
-        "Marketing",
-        "If"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54940",
-      "title": "[무료 LLM] dots-studio/dots-3-note-preview:free — Op",
-      "original_title": "",
-      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 512,000 토큰. 지금 바로 무료로 써볼 수 있다.",
-      "link": "https://openrouter.ai/dots-studio/dots-3-note-preview",
-      "entities": [
-        "LLM",
-        "Op"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54984",
-      "title": "엣지 디바이스를 위한 멀티모달 오픈 d1 결정 모델",
-      "original_title": "",
-      "description": "",
-      "link": "https://huggingface.co/blog/LiquidAI/open-d1",
-      "entities": [],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54996",
-      "title": "코드 기반 마케팅 운영: 깃허브에서 기획부터 사후 관리까지 행사 자동화",
-      "original_title": "",
-      "description": "<p>If you can write down how you do your work, you can automate it. Here's what I did to support GitHub's APAC marketing team.</p>\n<p>The post <a href=\"https://github.blog/ai-and-ml/github-copilot/mar",
-      "link": "https://github.blog/ai-and-ml/github-copilot/marketing-ops-as-code-automating-events-from-planning-to-follow-up-on-github/",
-      "entities": [
-        "The",
-        "Marketing",
-        "Automating",
-        "APAC",
-        "GitHub",
-        "Here",
-        "If"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54938",
-      "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
-      "original_title": "",
-      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
-      "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
-      "entities": [
-        "OpenRouter",
-        "LLM"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54983",
-      "title": "존재하지 않아서 직접 만든 모델",
-      "original_title": "",
-      "description": "",
-      "link": "https://huggingface.co/blog/building-with-ml-intern",
-      "entities": [],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54992",
-      "title": "보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다",
-      "original_title": "",
-      "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
-      "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
-      "entities": [
-        "Blog",
-        "Secret",
-        "GitHub",
-        "The",
-        "Developers"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54938",
-      "title": "[무료 LLM] inclusionai/ling-3.1-flash — OpenRouter 무",
-      "original_title": "",
-      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 262,144 토큰. 지금 바로 무료로 써볼 수 있다.",
-      "link": "https://openrouter.ai/inclusionai/ling-3.1-flash",
-      "entities": [
-        "OpenRouter",
-        "LLM"
-      ],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54983",
-      "title": "존재하지 않아서 직접 만든 모델",
-      "original_title": "",
-      "description": "",
-      "link": "https://huggingface.co/blog/building-with-ml-intern",
-      "entities": [],
-      "date": "2026-10-11"
-    },
-    {
-      "id": "54992",
-      "title": "보안 비밀 보호는 소프트웨어와 함께 확장되어야 합니다",
-      "original_title": "",
-      "description": "<p>Developers aren’t becoming more careless; they’re being outpaced. The tools that let developers create more software should also take on more of the work of protecting it.</p>\n<p>The post <a href=\"",
-      "link": "https://github.blog/ai-and-ml/github-copilot/secret-protection-must-scale-with-software/",
-      "entities": [
-        "Blog",
-        "Secret",
-        "GitHub",
-        "The",
-        "Developers"
-      ],
-      "date": "2026-10-11"
-    },
     {
       "id": "55104",
       "title": "어도비 복제한 개발자, 이번엔 클로드로 엑셀·워드·파워포인트 대체 앱 공개",
@@ -2811,6 +2332,47 @@
         "Premium"
       ],
       "date": "2026-11-10"
+    },
+    {
+      "id": "59855",
+      "title": "[신규 무료] mimo-v2.6-flash-free — OpenCode Zen 무료 목록에",
+      "original_title": "mimo-v2.6-flash-free",
+      "description": "OpenCode Zen 무료 목록에 추가 · 직전 12문항 평가 9/12 (문항 v1)",
+      "link": "https://opencode.ai/v2/docs/console/models/#mimo-v2.6-flash-free",
+      "entities": [
+        "Zen",
+        "OpenCode"
+      ],
+      "date": "2026-11-11"
+    },
+    {
+      "id": "59876",
+      "title": "간병인들의 일상 속 AI 활용 지원",
+      "original_title": "Helping caregivers use AI in everyday life",
+      "description": "OpenAI 아카데미는 미국 내 5개 도시의 간병인들을 대상으로 무료 실습형 ChatGPT 워크숍을 개최하여, 일상생활에 유용한 실용적인 AI 기술을 익힐 수 있도록 돕습니다.",
+      "link": "https://openai.com/index/helping-caregivers-use-ai-in-everyday-life",
+      "entities": [
+        "ChatGPT",
+        "AI",
+        "OpenAI",
+        "Helping"
+      ],
+      "date": "2026-11-11"
+    },
+    {
+      "id": "59902",
+      "title": "알바니지의 음악 사랑, AI 문제로 위기에 처하다. 다른 노선을 택할 수 있을까? | 피터",
+      "original_title": "Albanese’s love affair with music is on the rocks over AI. Can he write a different tune? | Peter Lewis",
+      "description": "총리가 저작권의 얽힌 매듭을 풀려고 노력하고 있습니다. 하지만 이것은 단순한 지식재산권 그 이상의 문제입니다. 속보 이메일, 무료 앱, 또는 일일 뉴스 팟캐스트를 통해 만나보세요. 앤서니 알바니지의 정신적 고향이 있다면, 그것은 아마도 앤모어 극장과 옛 산도 사이의 어느 지역일 것입니다.",
+      "link": "https://www.theguardian.com/commentisfree/2026/nov/11/albaneses-love-affair-with-music-is-on-the-rocks-over-ai-can-he-write-a-different-tune",
+      "entities": [
+        "AI",
+        "Lewis",
+        "Peter",
+        "Can",
+        "Albanese"
+      ],
+      "date": "2026-11-11"
     }
   ]
 }

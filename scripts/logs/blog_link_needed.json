@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-10 09:00",
+  "updated_at": "2026-11-11 09:00",
   "count": 146,
   "models": [
     {
@@ -472,6 +472,7 @@
         "google/gemma-4-26b-a4b-it:free"
       ],
       "news_ids": [
+        59842,
         54951
       ],
       "sources": [
@@ -489,6 +490,7 @@
         "google/gemma-4-31b-it:free"
       ],
       "news_ids": [
+        59843,
         58282,
         55352,
         54952
@@ -646,6 +648,7 @@
         "kilo-auto/free"
       ],
       "news_ids": [
+        59844,
         55318
       ],
       "sources": [
@@ -1565,6 +1568,8 @@
         "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free"
       ],
       "news_ids": [
+        59853,
+        59841,
         55397,
         55320,
         54950
@@ -2191,6 +2196,7 @@
         "stealth/glyph-cluster"
       ],
       "news_ids": [
+        59846,
         55305
       ],
       "sources": [

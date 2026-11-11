@@ -1,38 +1,35 @@
 {
- "day": "2026-11-11",
- "checked_at": 1794344408.5056682,
- "total_rows": 27,
+ "day": "2026-11-12",
+ "checked_at": 1794430807.2288241,
+ "total_rows": 28,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "nex-agi/nex-n2.6",
-   "baidu/ernie-5.5-flash-preview",
-   "google/gemini-4-carbon:batch",
-   "google/gemini-4-carbon",
-   "baidu/ernie-light-dt-1.0-intl",
-   "thinkingmachines/inkling-2-small:free"
+   "baidu/ernie-5.5-flash-preview:free",
+   "motif-technologies/motif-3",
+   "kt/midm-k-3.0-pro"
   ],
   "kilo": [
-   "nex-agi/nex-n2.6",
-   "baidu/ernie-5.5-flash-preview",
-   "google/gemini-4-carbon",
-   "baidu/ernie-light-dt-1.0-intl",
-   "thinkingmachines/inkling-2-small:free"
-  ],
-  "zen": [
-   "gemini-4-carbon",
-   "minimax-m3.1-flash-free"
+   "baidu/ernie-5.5-flash-preview:free",
+   "motif-technologies/motif-3",
+   "kt/midm-k-3.0-pro"
   ]
  },
  "removed_by_provider": {
   "openrouter": [
-   "stealth/crouton-alpha"
+   "baidu/ernie-5.5-flash-preview",
+   "bytedance-seed/seed-1.6",
+   "bytedance-seed/seed-1.6-flash",
+   "bytedance-seed/seed-2.0-code",
+   "qwen/qwen-2.5-7b-instruct",
+   "xingchen-agi/xing4.0-29b-a4b:free"
   ],
   "kilo": [
-   "stealth/crouton-alpha"
-  ],
-  "zen": [
-   "crouton-alpha-free"
+   "baidu/ernie-5.5-flash-preview",
+   "bytedance-seed/seed-1.6",
+   "bytedance-seed/seed-1.6-flash",
+   "bytedance-seed/seed-2.0-code",
+   "qwen/qwen-2.5-7b-instruct"
   ]
  }
 }

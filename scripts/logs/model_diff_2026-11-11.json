@@ -1,0 +1,18 @@
+{
+  "added": [],
+  "removed": [
+    {
+      "provider": "openrouter",
+      "model_id": "xingchen-agi/xing4.0-29b-a4b:free",
+      "name": "XingChen: Xing4.0 29B A4B (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144,
+      "reason": "단종/제거"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}

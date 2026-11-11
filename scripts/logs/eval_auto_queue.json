@@ -74,7 +74,58 @@
    "attempts": 0,
    "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
    "day": "2026-11-10"
+  },
+  "mimo-v2.6-flash-free": {
+   "model_id": "mimo-v2.6-flash-free",
+   "provider": "zen",
+   "first_seen": "2026-11-11",
+   "status": "done",
+   "attempts": 1,
+   "reason": "",
+   "day": "2026-11-11",
+   "briefing": {
+    "date": "2026-11-11-1",
+    "sort_order": 1,
+    "news_id": 59855
+   },
+   "cli_id": "opencode/mimo-v2.6-flash-free",
+   "score": "8/12",
+   "measured_context": 1048576,
+   "elapsed_sec": 584.2,
+   "zeros_review_needed": [
+    1,
+    4,
+    9,
+    11
+   ],
+   "draft": {
+    "ok": true,
+    "path": "/Users/twinssn/Projects/aikorea24/scripts/logs/eval_auto_drafts/2026-11-11-mimo-v2.6-flash-free-실측-8-12-무료로-어디까지-쓸-수-있나.md",
+    "url": "https://emdash.aikorea24.kr/posts/mimo-v26-flash-free-실측-812-무료로-어디까지-쓸-수-있나",
+    "title": "mimo-v2.6-flash-free 실측 — 8/12, 무료로 어디까지 쓸 수 있나"
+   },
+   "published_url": "https://emdash.aikorea24.kr/posts/mimo-v26-flash-free-실측-812-무료로-어디까지-쓸-수-있나",
+   "published_at": "2026-11-11",
+   "briefing_linked": true
+  },
+  "thinkingmachines/inkling-2-small:free": {
+   "model_id": "thinkingmachines/inkling-2-small:free",
+   "provider": "openrouter",
+   "first_seen": "2026-11-11",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-11"
+  },
+  "minimax-m3.1-flash-free": {
+   "model_id": "minimax-m3.1-flash-free",
+   "provider": "zen",
+   "first_seen": "2026-11-11",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-11"
   }
  },
- "updated_at": 1794274206.124922
+ "updated_at": 1794361237.854679
 }
