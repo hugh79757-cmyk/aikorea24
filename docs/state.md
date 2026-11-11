@@ -1,3 +1,139 @@
+## 2026-11-11 12:05 — K-EXAONE 2.5 실측·발행 (대표님 지정 모델, API 키 등록 포함)
+
+### 한 일
+1. **API 키 등록** — 대표님이 준 LG AI Research EXAONE 무료 키를 `~/.env.common` 에
+   `EXAONE_API_KEY` 로 저장(값은 기록하지 않음).
+2. **원인 규명** — 프로바이더 `exaone` 은 `~/.config/opencode/opencode.json` 에 등록돼 있었으나
+   `apiKey: "{env:EXAONE_API_KEY}"` 참조였고, `opencode serve --service` 가 **월요일부터 떠 있어**
+   그 프로세스 env 에 키가 없었다 → 401 `invalid api key format`.
+   `Authorization: Bearer` 로는 200(키 자체는 정상), `x-api-key` 헤더는 401.
+   → 설정에 키를 **인라인**으로 넣어 해결(같은 파일의 upstage/xiaomi 도 인라인 방식).
+   백업: `~/.config/opencode/opencode.json.bak-20261111`, `...bak-20261111-1115`.
+3. **모델 ID 정정** — 설정이 그 사이 갱신돼 `exaone/k-exaone_v2.5` → **`exaone/k-exaone-2.5`**
+   (API 모델명은 `k-exaone_v2.5`). 첫 호출이 `Model unavailable` 이었던 원인.
+4. **1차 측정 폐기** — cwd 가 저장소여서 모델이 `AGENTS.md` 를 읽고 답변에 `[검증됨]`/`[잔존 위험]`
+   같은 내부 보고 형식을 그대로 출력(실측: Q1 답변). `_sandbox_cwd()` 로 **빈 임시 디렉터리에서 재측정**.
+5. **[PRODUCTION CODE] `scripts/model_eval.py`** — `eval_model_cli(provider=)` 추가(기본 "zen" 유지).
+6. **[PRODUCTION CODE] `scripts/free_model_eval_auto.py`** — `build_draft(meta=)` 추가.
+   intro/specs/spec_note/strengths/quota_note/compare_note/check_steps/refs/use_when/skip_when/closing/no_rank/lead_note.
+   공개 카탈로그에 없는 모델(사내 등록 프로바이더)을 같은 템플릿으로 쓸 수 있게 하기 위함. 기본 동작 무변경.
+7. **글 발행** — 새 템플릿 + meta 로 작성, 게이트 통과, EmDash 발행, 썸네일 WebP 1200×801 q80 배포.
+
+### 결과 (검증 근거)
+### [검증됨]
+- `exaone/k-exaone-2.5` 호출 성공(PONG). 키는 `Authorization: Bearer` 로만 동작.
+- **12문항 재측정(격리): 5/12, 응답 실패 3문항** — 소요 **1,409초(23.5분)**.
+  축별: 지시이행 1/2 · 코딩실무 1/4 · 맥락유지 1/2 · 에이전트 2/4.
+  근거: `scripts/logs/exaone_eval_result2.json`, `exaone_eval2_20261111.log`.
+- **니들 컨텍스트 실측 하한 524,288 토큰** (8,192부터 524,288까지 7단계 연속 통과, 상한 도달로 중단).
+- 캐시·리더보드 기록: `cache_put` 경유, 리더보드 총 21건.
+- 라이브 발행: `https://emdash.aikorea24.kr/posts/k-exaone-25-실측-512-12문항에-23분-한국어는-되지만-느립니다`
+  **HTTP 200**, `<title>` 정상, 본문 `5/12` 8회·`23분` 6회·`524,288` 2회.
+- 썸네일 `https://aikorea24.kr/images/k-exaone-2.5-실측/thumbnail.webp` **200 image/webp 49,526B**.
+- 게이트 통과(issues 0), 테스트 **40 passed**, 커밋 `ab41cfe8`.
+
+### [부분검증]
+- 1차(저장소 컨텍스트) 측정은 7/12, 2차(격리)는 5/12 — 조건이 달라 공식 점수는 2차로 채택.
+  두 값이 갈린 이유는 속도 편차(둘 다 3문항 시간 초과)로 보이나, 원인을 분리 측정하지는 않았다.
+- "느리다"는 판단은 12문항 1회 실행(1,409초) 근거다. 시간대·부하에 따라 달라질 수 있다.
+
+### 잔존 위험
+1. **`opencode serve --service` 는 env 변경을 반영하지 않는다** — 설정에 키를 인라인으로 넣어 우회했다.
+   서비스를 재시작하면 env 참조로 되돌려도 되지만, 그때까지는 설정 파일에 키가 평문으로 남는다.
+2. 프로바이더 설정이 세션 중 외부에서 두 번 바뀌었다(모델 ID·스키마). 자동 스크립트가 이 파일을
+   전제로 동작하지는 않으므로 영향 없음.
+3. K-EXAONE 은 브리핑에 실린 모델이 아니라 **브리핑 역링크가 없다**(대표님 직접 지정 건).
+4. 응답 시간 초과 3문항은 "능력 실패"가 아니라 측정 실패로 집계했다 — 점수 비교 시 분모가 다르다.
+
+### 다음 행동
+- 대표님: 이 모델을 무료 모델 목록(free-models 페이지)에 올릴지 결정 필요
+  (`model_catalog.ZEN_OFFICIAL_FREE` 화이트리스트와 무관, exaone 프로바이더는 별도 경로).
+- 서비스 재시작 시점에 키를 env 참조로 되돌릴지 결정(현재는 인라인).
+
+## 2026-11-11 11:58 — safe_div pytest 요청 범주 재검증 (신규 파일 없음, 재현 확인)
+
+### 한 일
+- 사용자 요청("정상 입력 / 0으로 나누기 / 음수 / 경계값 pytest 검증")에 대해 저장소에 이미 있는 자산으로 충분한지 독립 재확인.
+- 읽기(내용 확인): 루트 `test_safe_div.py` — `safe_div` 자체 정의 포함 self-contained 176줄, 46 항목. `tests/test_safe_div.py` — 실제 `scripts/safe_div.py` 임포트 86줄, 13 항목. `tests/conftest.py` — scripts 경로 주입(라인 8). `pytest.ini` — testpaths=tests, pythonpath=scripts.
+- 실행: `.venv/bin/python3 -m pytest <파일> -q` 파일별 + 2파일 동시. 참고: `scripts/safe_div.py` 임포트 스모크 확인.
+
+### 결과
+- [검증됨] 루트 `test_safe_div.py` → "46 passed in 0.01s"; `tests/test_safe_div.py` → "13 passed in 0.03s"; 동시 실행 → "59 passed in 0.03s". 59 = 46 + 13.
+- [검증됨] 환경: .venv Python 3.14.6, pytest 9.1.1, pytest.ini 적용(오늘 11:20 기록과 동일 구성). `scripts/safe_div.py` 로직이 스니펫(if b == 0: return None; return a / b)과 동일함을 임포트 실행으로 확인.
+- [검증됨] 요청 4범주 커버(파일 내용 기준): 정상 연산/0 분자/분모 1 등; 0 나누기(b = 0 / 0.0 / -0.0 / False → None); 음수 부호 조합; 경계(±0.0 부호 보존, inf/-inf, nan, 서브노멀 5e-324, 1e308 스케일, `10**400` OverflowError, None → TypeError 등).
+- [검증됨] 테스트·소스 무수정 — 이번 작업은 읽기·실행·기록만 수행. git status 에 해당 파일 변경 없음(다른 파일의 미커밋 변경은 선대 존재).
+- [부분검증] .venv 단일 인터프리터 실행만 — 시스템 python3(3.15.0) pytest 미설치로 다른 인터프리터·외부 CI 미확인. 전체 스위트는 이 작업에서 실행하지 않음(타 파일 외부 의존 가능성, 오늘 선대 기록과 동일 판정).
+- 불일치 없음: 46·13·59 모두 오늘 11:01·11:20 기록과 정합(재현됨).
+
+### 잔존 위험(신규 아님 — 기존 기록 재확인)
+- 루트 self-contained 사본 ↔ `scripts/safe_div.py` 이중 정의 — 사본은 원본 변경을 자동으로 따라가지 않음(현 시점 로직 동일 확인).
+- pytest.ini `testpaths = tests` → 루트 46항목은 기본 `pytest` 수집 밖(명시 경로 실행 시에만).
+- `tests/test_safe_div.py` 의 `10**9/3` 정확 `==` 비교 — 현 환경 통과, 타 플랫폼/버전 일반화 미검증.
+- safe_div 에 오버플로 가드 없음(`10**400/7` → OverflowError) — 스니펫 계약(b == 0 → None) 기준 동작, 가드 추가는 설계 결정 사항.
+
+### 다음 행동(제안)
+- 신규 중복 테스트 파일 불필요(기존 2벌로 요청 범위 커버 확인). 케이스 추가 / 정본 통합 / 정리 / 가드 도입은 지시 시.
+
+## safe_div pytest 검증 보고 — 2026-11-11 11:51
+
+- 한 일: 인라인 제시 함수 `safe_div(a, b)`(= `scripts/safe_div.py` 구현과 로직 동일, docstring 유무만 차이) 검증 요청. 저장소에 이미 존재하는 pytest 자산 2종을 찾아 명시 경로로 실행했고, 신규 테스트 파일은 만들지 않았다(중복 회피 — 기존 이력도 같은 판단).
+- 결과 [검증됨]:
+  - `.venv/bin/python -m pytest tests/test_safe_div.py test_safe_div.py -v --tb=short` → **59 passed, 0 failed, 0 skipped, 0 error**, 종료코드 0.
+    - 근거: Python 3.14.6 / pytest 9.1.1, 실행 로그 `/private/var/folders/6r/kjl8wkw53t1bnr1dypqtccj80000gn/T/opencode/safe_div_verify_20261111.txt`.
+    - 케이스 분해: `tests/test_safe_div.py` 13함수(양수·부동소수·정수 몫·1로 나누기·큰 값·작은 값·큰 분모 / 음수 분자·음수 분모·쌍방 음수·음수 분수 / 분자 0 / 분모 0→None 3종 / ±1e-10 미소값 / 0 경계 / None 미예외) + 루트 `test_safe_div.py` 46케이스(클래스 기반 + `b ∈ {0, 0.0, -0.0, False}` 파라미터화 + inf/nan 전파·서브노멀·오버플로·TypeError·`-0.0` 부호 보존 등).
+  - 대상 로직 일치 확인: `cat scripts/safe_div.py` → `if b == 0: return None; return a / b` (제시 스니펫과 동일 분기).
+  - 수집 경로 근거: `pytest.ini` 읽음 — `pythonpath = scripts`(tests/ 임포트 정상화), `testpaths = tests`(기본 수집은 tests/만; 루트 파일은 명시 경로 실행 시 수집).
+  - 테스트/소스 파일 편집 없음(실행만).
+- 잔존 위험:
+  - 루트 `test_safe_div.py` 176줄은 자체 정의 사본이라 `scripts/safe_div.py` 변경을 자동 추적하지 않음(현재 로직 동일).
+  - 정확 비교 라인(예: `10**9/3` 십진 리터럴, `0.1/0.2 == 0.5`)은 이 환경(3.14.6)에서 통과 — 다른 Python/플랫폼 일반화는 미검증.
+  - 기본 `pytest` 실행(testpaths=tests) 범위는 이번 실행에 포함하지 않음 — 안전 나눗셈 케이스는 명시 경로 실행 기준 검증임.
+- 다음 행동: 실제 `safe_div` 모듈 위치가 `scripts/safe_div.py`가 아니면 임포트 경로 갱신 필요. 루트 자체정의 사본 정리(중복 해소)가 필요하면 별도 지시 시 진행.
+
+## 2026-11-11 11:20 — safe_div pytest 검증 (기존 테스트 자산 확인)
+
+### 한 일
+- `safe_div` (메시지 인라인 정의와 동일 로직의 `scripts/safe_div.py` 존재 확인) 에 대해 저장소에 이미 있는 pytest 파일 2종을 찾아 실행.
+  - 루트 `test_safe_div.py` (176줄, 함수 자체 포함 self-contained)
+  - `tests/test_safe_div.py` (86줄, `from safe_div import safe_div` → scripts/safe_div.py)
+- 실행 환경: 프로젝트 `.venv` — Python 3.14.6 / pytest 9.1.1, rootdir=/Users/twinssn/Projects/aikorea24, configfile=pytest.ini
+- 명령: `.venv/bin/python -m pytest <파일경로> -v` (파일별 명시 경로)
+
+### 결과 (검증 근거)
+- 루트 `test_safe_div.py`: `46 passed in 0.03s` — 정상값, 0 나누기(b=0/0.0/-0.0/False parametrize), 음수, 경계(inf/-inf/nan/5e-324/1e308/huge int→OverflowError/None→TypeError/0.1↔0.2 근사치 등)
+- `tests/test_safe_div.py`: `13 passed in 0.03s` — 양수/음수/0 분자/0 분모→None 반환/대수/부동소수/0 경계/작은 값/큰 분모
+- 두 테스트가 대상하는 `safe_div` 로직 동일: `if b == 0: return None; return a / b`
+- 코드·테스트 파일은 수정하지 않음. 본 항목만 도구(`scripts/state_prepend.py`)로 docs/state.md에 추가
+
+### 잔존 위험
+- 동일 함수 테스트 파일 2벌 존재(정본 불명확). 루트 파일은 자체 정의 사본이라 `scripts/safe_div.py` 변경을 자동으로 따라가지 않음(현재 시점 로직 동일)
+- `pytest.ini`의 `testpaths = tests` 때문에 루트 `test_safe_div.py`의 46건은 기본 `pytest` 실행에서 수집되지 않음(명시 경로 실행 시에만)
+- `tests/test_safe_div.py`의 `10**9/3` 정확 `==` 비교 등 부동소수 정확비교 라인은 이 환경(Python 3.14.6)에서 통과 — 다른 플랫폼/버전 일반화는 미검증
+- 시스템 `python3`에는 pytest 부재(import 실패) — `.venv` 또는 별도 환경 필요
+
+### 다음 행동(제안)
+- 두 파일 중 정본 결정 후 정리(하나로 통합하거나, 루트 파일을 `tests/`로 이동해 기본 수집에 편입하거나 그대로 유지 — maintainer 판단 사항)
+- 신규 파일 추가 대신 위 두 파일을 근거로 사용 가능
+
+## 2026-11-11 11:01 — test: safe_div pytest 커버리지 재검증 (신규 파일 없음, 59 passed)
+
+한 일: safe_div(정상 입력 / 0으로 나누기 / 음수 / 경계값) 요청 범위 대비 기존 pytest 커버리지 재검증. 신규 파일 생성 대신 기존 2개 파일 실행.
+
+결과:
+- [검증됨] 근거: `.venv/bin/python3 -m pytest test_safe_div.py tests/test_safe_div.py -v` → 59 passed / 0 failed / 0 skipped (0.06s, Python 3.14.6, pytest 9.1.1, pytest.ini 적용, rootdir=aikorea24)
+  - 분해: test_safe_div.py 46 = 정상 11 + 0 나눗셈 9(파라메터 4: 0 / 0.0 / -0.0 / False) + 음수 5 + 경계 21(파라메터 부호 매트릭스 7 포함)
+  - tests/test_safe_div.py 13. 경계: ±0.0 부호 보존, inf/nan 전파, 서브노멀 5e-324→inf, 10**400→OverflowError, None→TypeError
+  - scripts/safe_div.py 실제 정의 = 제시 스니펫(문서화 문자열 제외). tests/conftest.py가 scripts/ sys.path 삽입 → 임포트 정상
+- [테스트 코드] 두 파일 무변경(수정 0건). [PRODUCTION CODE] 무변경. git status: 두 경로 clean.
+- [부분검증] 두 파일 단일 실행 1회. 전체 스위트 미실행(타 파일 외부 의존 가능성).
+- [검증불가] 시스템 python3(3.15.0)에 pytest 미설치 → .venv(3.14.6) 외 인터프리터 검증 불가.
+
+잔존 위험: (1) 루트 파일 self-contained 사본 — scripts/safe_div.py와 이중 정의, 드리프트 가능(현 동일). (2) 루트 파일은 testpaths=tests 밖. (3) `10**9/3` 십진 리터럴 정확 비교(통과 중). (4) safe_div 오버플로 가드 부재(10**400/7 → OverflowError) — 가드 추가는 별도 지시 필요.
+
+다음 행동: 케이스 추가 / 드리프트 해소 / 가드 논의 필요 시 지시 요청. 기록: CHANGES.md 맨 위 + 메모 Hugh logs/20261111.md.
+
+## 2026-11-11 AIK24-FREE-PIPE-01 일일 실행 — 수집 26건 / 실패 프로바이더 0 / added 0 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-10 AIK24-FREE-PIPE-01 일일 실행 — 수집 27건 / 실패 프로바이더 0 / added 27 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-09 AIK24-FREE-PIPE-01 일일 실행 — 수집 0건 / 실패 프로바이더 4 / added 0 · removed 27 · changed 0 / 리스트 페이지 실패 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
