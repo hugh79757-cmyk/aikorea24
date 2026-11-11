@@ -1170,8 +1170,11 @@ def cli_call(cli_model, prompt, timeout=QUESTION_TIMEOUT):
     return (out, "") if out else ("", "CLI 빈 응답")
 
 
-def eval_model_cli(model_id, cli_model=None):
+def eval_model_cli(model_id, cli_model=None, provider="zen"):
     """OpenCode CLI 경유 12문항 평가. 반환 (result, blocked).
+
+    provider: 결과에 기록할 프로바이더 이름. 기본 "zen" 은 기존 호출부와 동일하고,
+    zen 이 아닌 프로바이더(예: exaone)를 평가할 때만 넘긴다 — 기록 정확성만을 위한 인자다.
 
     blocked 가 문자열이면 모델에 아예 도달하지 못한 상태다. 이때 점수 0을 기록하면
     측정 실패가 모델 실패로 남으므로, 호출자가 zen_pending 사유 갱신에 쓴다.
@@ -1182,7 +1185,7 @@ def eval_model_cli(model_id, cli_model=None):
     result = {
         "model_id": model_id,
         "source": "cli",            # API 경로와 구분 (EVAL-CLI-01 §작업5)
-        "provider": "zen",
+        "provider": provider,
         "cli_model": cli_model,
         "turn_timeout_sec": turn_timeout,
         "qv": EVAL_QUESTIONS_VERSION,

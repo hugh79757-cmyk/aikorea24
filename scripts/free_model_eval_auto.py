@@ -531,14 +531,21 @@ def _strong_axis(res):
     return out
 
 
-def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_classes=None):
+def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_classes=None,
+                meta=None):
     """측정값만으로 **독자용** 초안을 만든다. 반환 (title, body, excerpt).
 
     2026-11-08 재작성: 첫 버전은 측정표를 그대로 옮긴 '실험 노트'였다(대표님 지적).
     지금은 독자 순서로 쓴다 — 결론 → 5분 체험 → 강한 작업 → 걸리는 지점 → 비교 → 한도.
     지어내지 않는 원칙은 그대로다: 모든 문장은 측정값이나 공개 카탈로그 값에서만 나온다.
     zero_classes: {문항번호: "분류 — 설명"} 를 넘기면 0점 문항 절에 그 문장을 쓴다.
+    meta: 공개 카탈로그에 없는 모델(예: 사내 등록 프로바이더)을 쓸 때 넘긴다.
+          {"intro": 첫 문장, "specs": [(항목, 값, 출처)], "spec_note": 각주,
+           "quota_note": 한도 문단, "compare_note": 비교표 아래 한 줄,
+           "title_suffix": 제목 뒷부분, "provider_label": 프로바이더 표기}
+          넘기지 않으면 기존 동작(무료 목록 신규 모델) 그대로다.
     """
+    meta = meta or {}
     day = day or time.strftime("%Y-%m-%d")
     score = int(res.get("score") or 0)
     mx = int(res.get("max_score") or 0)
@@ -575,64 +582,82 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     else:
         verdict = "지금은 권하지 않습니다"
 
-    title = f"{model_id} 실측 — {score}/{graded}, 무료로 어디까지 쓸 수 있나"
+    title = f"{model_id} 실측 — {score}/{graded}, " + meta.get(
+        "title_suffix", "무료로 어디까지 쓸 수 있나")
 
     p = []
     # ── 리드: 독자 상황 → 이 모델 → 결론. 라벨 붙이지 않는다.
-    lead = f"OpenCode 무료 목록에 `{model_id}`가 새로 들어왔습니다. 12문항으로 직접 돌려본 결과 "
+    intro = meta.get("intro") or f"OpenCode 무료 목록에 `{model_id}`가 새로 들어왔습니다."
+    lead = f"{intro} 12문항으로 직접 돌려본 결과 "
     lead += f"**{score}/{graded}**를 맞혔습니다"
-    if rank_txt:
-        lead += f" — 같은 문항세트로 측정한 무료 모델 {len(scored)}개 중 {rank_txt}입니다"
+    if rank_txt and not meta.get("no_rank"):
+        lead += f" — 같은 문항세트로 측정한 모델 {len(scored)}개 중 {rank_txt}입니다"
     lead += f". 결론부터 말하면 **{verdict}**."
     p.append(lead)
     p.append("")
-    if strong:
+    if meta.get("lead_note"):
+        p.append(meta["lead_note"])
+    elif strong:
         p.append(f"강한 쪽은 {', '.join(strong)}입니다. 약한 쪽은 형식이 엄격하게 정해진 산출물입니다. "
                  f"아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.")
     else:
         p.append("축별로 고른 강점은 없었습니다. 아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.")
     p.append("")
 
-    # ── 이게 뭔가: 3문장 + 각주
+    # ── 이게 뭔가: 3문장 + 각주 (meta.specs 가 있으면 그 값을 쓴다)
     p.append(f"## {model_id}가 뭔가")
     p.append("")
-    if entry:
-        name = entry.get("name") or model_id
-        s1 = f"공개 카탈로그상 이름은 **{name}**입니다."
-        lim = entry.get("limit") or {}
-        ctx, out = lim.get("context"), lim.get("output")
-        if isinstance(ctx, int) and isinstance(out, int):
-            s1 += f" 공칭 컨텍스트는 {ctx:,} 토큰, 최대 출력은 {out:,} 토큰입니다."
-        elif isinstance(ctx, int):
-            s1 += f" 공칭 컨텍스트는 {ctx:,} 토큰입니다."
-        feats = []
-        if entry.get("reasoning"):
-            feats.append("추론")
-        if entry.get("tool_call"):
-            feats.append("도구 호출")
-        if feats:
-            s1 += " " + "과 ".join(feats) + "을 지원합니다."
-        if entry.get("release_date"):
-            s1 += f" 공개일은 {entry['release_date']}입니다."
-        p.append(s1)
-    else:
-        p.append("공개 카탈로그에서 이 모델의 스펙을 찾지 못했습니다.")
-    unknown = []
-    if entry is None:
-        unknown.append("스펙 대부분")
-    else:
-        if not entry.get("open_weights"):
-            unknown.append("가중치·학습 데이터·파라미터 수")
-        if "stealth" in str(entry.get("description") or "").lower():
-            unknown.append("제작사")
-    if unknown:
+    specs = meta.get("specs")
+    if specs:
+        for label, value, _src in specs:
+            p.append(f"- **{label}** — {value}")
         p.append("")
-        p.append(f"{' · '.join(unknown)}는 공개되지 않았습니다. 무료 기간이 언제까지인지도 밝혀지지 않았으니, "
-                 f"오래 붙잡고 쓸 모델로 보기는 어렵습니다.")
-    p.append("")
-    p.append("> 수치는 models.dev 공개값을 "
-             f"{day}에 조회한 것입니다. 무료 여부는 [OpenCode Zen 모델 목록](https://opencode.ai/docs/zen/)에서 다시 확인하세요.")
-    p.append("")
+        unknown = meta.get("unknown")
+        if unknown:
+            p.append(unknown)
+            p.append("")
+        note = meta.get("spec_note")
+        if note:
+            p.append(f"> {note}")
+            p.append("")
+    else:
+        if entry:
+            name = entry.get("name") or model_id
+            s1 = f"공개 카탈로그상 이름은 **{name}**입니다."
+            lim = entry.get("limit") or {}
+            ctx, out = lim.get("context"), lim.get("output")
+            if isinstance(ctx, int) and isinstance(out, int):
+                s1 += f" 공칭 컨텍스트는 {ctx:,} 토큰, 최대 출력은 {out:,} 토큰입니다."
+            elif isinstance(ctx, int):
+                s1 += f" 공칭 컨텍스트는 {ctx:,} 토큰입니다."
+            feats = []
+            if entry.get("reasoning"):
+                feats.append("추론")
+            if entry.get("tool_call"):
+                feats.append("도구 호출")
+            if feats:
+                s1 += " " + "과 ".join(feats) + "을 지원합니다."
+            if entry.get("release_date"):
+                s1 += f" 공개일은 {entry['release_date']}입니다."
+            p.append(s1)
+        else:
+            p.append("공개 카탈로그에서 이 모델의 스펙을 찾지 못했습니다.")
+        unknown = []
+        if entry is None:
+            unknown.append("스펙 대부분")
+        else:
+            if not entry.get("open_weights"):
+                unknown.append("가중치·학습 데이터·파라미터 수")
+            if "stealth" in str(entry.get("description") or "").lower():
+                unknown.append("제작사")
+        if unknown:
+            p.append("")
+            p.append(f"{' · '.join(unknown)}는 공개되지 않았습니다. 무료 기간이 언제까지인지도 밝혀지지 않았으니, "
+                     f"오래 붙잡고 쓸 모델로 보기는 어렵습니다.")
+        p.append("")
+        p.append("> 수치는 models.dev 공개값을 "
+                 f"{day}에 조회한 것입니다. 무료 여부는 [OpenCode Zen 모델 목록](https://opencode.ai/docs/zen/)에서 다시 확인하세요.")
+        p.append("")
 
     # ── 5분 체험: 명령 + 실제 출력
     p.append("## 5분 안에 써보기")
@@ -659,7 +684,14 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     # ── 강한 작업
     p.append("## 어떤 작업에 강한가")
     p.append("")
-    for label, s, m in axis_rows:
+    if meta.get("strengths"):
+        for line in meta["strengths"]:
+            p.append(f"- {line}")
+        p.append("")
+        axis_rows_strength = None
+    else:
+        axis_rows_strength = axis_rows
+    for label, s, m in (axis_rows_strength or []):
         if not m or s / m < 0.75:
             continue
         if label.startswith("코딩"):
@@ -679,7 +711,7 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
                 p.append(f"- **우선순위 판단·계획 세우기** ({s}/{m}) — 여러 단계를 스스로 나눕니다.")
         else:
             p.append(f"- **{label}** ({s}/{m}) — 형식·조건을 지키는 출력에서 안정적입니다.")
-    if not any((s / m) >= 0.75 for _l, s, m in axis_rows if m):
+    if not meta.get("strengths") and not any((s / m) >= 0.75 for _l, s, m in axis_rows if m):
         p.append("- 축별 기준선(75%)을 넘은 항목이 없습니다. 특정 용도를 권하기 어렵습니다.")
     p.append("")
 
@@ -687,7 +719,8 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     p.append("## 어디서 걸리는가")
     p.append("")
     if zeros:
-        p.append(f"12문항 중 {len(zeros)}문항이 0점이었습니다.")
+        p.append(f"12문항 중 {len(zeros)}문항은 점수를 받지 못했습니다"
+                 + (f" (그중 {failed}문항은 응답 시간 초과)" if failed else "") + ".")
         p.append("")
         for z in zeros:
             label = model_eval.AXIS_LABELS.get(z["axis"], z["axis"])
@@ -698,11 +731,15 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
             else:
                 p.append(f"- **Q{z['idx']} · {label}** — 검토 필요. 받은 답: {head}")
         p.append("")
-    p.append("가장 실무에 걸리는 것은 **무료 한도**입니다. 우리가 12문항 평가를 돌리는 동안 무료 사용량이 바닥나서, "
-             "같은 날 두 번째 모델은 첫 호출부터 `Free usage limit reached`로 막혔습니다. "
-             "한 번에 긴 작업을 여러 번 돌리는 용도보다, 짧은 요청을 몇 번 던지는 용도에 맞습니다.")
+    quota_note = meta.get("quota_note")
+    if quota_note is None:
+        quota_note = ("가장 실무에 걸리는 것은 **무료 한도**입니다. 우리가 12문항 평가를 돌리는 동안 무료 사용량이 바닥나서, "
+                      "같은 날 두 번째 모델은 첫 호출부터 `Free usage limit reached`로 막혔습니다. "
+                      "한 번에 긴 작업을 여러 번 돌리는 용도보다, 짧은 요청을 몇 번 던지는 용도에 맞습니다.")
+    if quota_note:
+        p.append(quota_note)
     p.append("")
-    if failed:
+    if failed and not quota_note:
         p.append(f"이번 측정에서도 {failed}문항은 응답이 오지 않아 점수 분모에서 뺐습니다.")
         p.append("")
 
@@ -721,15 +758,22 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
             day_s = time.strftime("%m-%d", time.localtime(ts)) if ts else "—"
             p.append(f"| {disp} | {r.get('score')}/{r.get('max_score')} | {day_s} |")
         p.append("")
+        if meta.get("compare_note"):
+            p.append(meta["compare_note"])
+            p.append("")
 
     # ── 한도·비용 확인법
     p.append("## 한도와 비용 확인하는 법")
     p.append("")
     p.append("무료라고 적혀 있어도 한도가 붙습니다. 실제로 확인하는 순서는 이렇습니다.")
     p.append("")
-    p.append("1. 모델 목록에서 가격이 0으로 표시되는지 봅니다 — 무료 표시가 없는 모델은 유료입니다.")
-    p.append("2. 한 번 호출해 봅니다. 응답이 아니라 `Free usage limit reached` 같은 문구가 오면 그날 한도가 끝난 것입니다.")
-    p.append("3. 반복 호출이 필요한 작업은 한도에 걸리는 시점을 먼저 재봅니다. 우리는 12문항 평가를 두 번 돌리다 걸렸습니다.")
+    steps3 = meta.get("check_steps") or [
+        "모델 목록에서 가격이 0으로 표시되는지 봅니다 — 무료 표시가 없는 모델은 유료입니다.",
+        "한 번 호출해 봅니다. 응답이 아니라 `Free usage limit reached` 같은 문구가 오면 그날 한도가 끝난 것입니다.",
+        "반복 호출이 필요한 작업은 한도에 걸리는 시점을 먼저 재봅니다. 우리는 12문항 평가를 두 번 돌리다 걸렸습니다.",
+    ]
+    for i, line in enumerate(steps3, 1):
+        p.append(f"{i}. {line}")
     p.append("")
 
     # ── 실측 결과 (표 2)
@@ -756,8 +800,10 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
 
     p.append("## 참고 자료")
     p.append("")
-    p.append("- [OpenCode Zen 모델 목록](https://opencode.ai/docs/zen/)")
-    p.append("- [models.dev 모델 카탈로그](https://models.dev/)")
+    for title_, url_ in (meta.get("refs") or [
+            ("OpenCode Zen 모델 목록", "https://opencode.ai/docs/zen/"),
+            ("models.dev 모델 카탈로그", "https://models.dev/")]):
+        p.append(f"- [{title_}]({url_})")
     p.append("")
 
     # ── 마무리: 결정표 대신 두 목록
@@ -772,8 +818,11 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
                 use_bits.append("앞에서 정한 규칙을 계속 기억해야 하는 대화")
             elif label.startswith("에이전트"):
                 use_bits.append("할 일의 우선순위를 정리시킬 때")
-    use_bits.append("무료로 짧은 요청을 여러 번 던져볼 때")
-    skip_bits = [
+    if not meta.get("use_when"):
+        use_bits.append("무료로 짧은 요청을 여러 번 던져볼 때")
+    if meta.get("use_when"):
+        use_bits = list(meta["use_when"])
+    skip_bits = meta.get("skip_when") or [
         "형식이 정확히 정해진 산출물(스키마·JSON 구조를 그대로 요구하는 작업)",
         "한 번에 긴 작업을 오래 돌려야 할 때 — 무료 한도가 먼저 걸립니다",
         "제작사·가중치가 확인돼야 하는 업무 — 이 모델은 공개되지 않았습니다",
@@ -788,7 +837,8 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     for b in skip_bits:
         p.append(f"- {b}")
     p.append("")
-    p.append("무료 모델 목록은 자주 바뀝니다. 쓰기 전에 `opencode models`로 아직 있는지 확인하는 것이 마지막 단계입니다.")
+    p.append(meta.get("closing") or
+             "무료 모델 목록은 자주 바뀝니다. 쓰기 전에 `opencode models`로 아직 있는지 확인하는 것이 마지막 단계입니다.")
 
     body = "\n".join(p).strip() + "\n"
     excerpt = ""
