@@ -237,5 +237,18 @@
   "no_response_n": 3,
   "score_display": "5/12 (미응답 3 제외)",
   "ts": 1794373074.6030421
+ },
+ {
+  "model_id": "k-exaone-2.5",
+  "cli_model": "exaone/k-exaone-2.5",
+  "turn_timeout_sec": 300,
+  "qv": 2,
+  "score": 7,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "score_display": "7/12",
+  "ts": 1794375949.773298
  }
 ]

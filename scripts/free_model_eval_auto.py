@@ -595,6 +595,9 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     lead += f". 결론부터 말하면 **{verdict}**."
     p.append(lead)
     p.append("")
+    if meta.get("prev_note"):
+        p.append(meta["prev_note"])
+        p.append("")
     if meta.get("lead_note"):
         p.append(meta["lead_note"])
     elif strong:
@@ -722,7 +725,10 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
         p.append(f"12문항 중 {len(zeros)}문항은 점수를 받지 못했습니다"
                  + (f" (그중 {failed}문항은 응답 시간 초과)" if failed else "") + ".")
         p.append("")
-        for z in zeros:
+        show = meta.get("zero_bullets")
+        bullets = [z for z in zeros if not show or z["idx"] in show]
+        others = [z for z in zeros if show and z["idx"] not in show]
+        for z in bullets:
             label = model_eval.AXIS_LABELS.get(z["axis"], z["axis"])
             verdict_z = (zero_classes or {}).get(str(z["idx"]))
             head = _scrub_answer(z["answer_head"])[:110] or "(응답 없음)"
@@ -730,6 +736,12 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
                 p.append(f"- **Q{z['idx']} · {label}** — {verdict_z}")
             else:
                 p.append(f"- **Q{z['idx']} · {label}** — 검토 필요. 받은 답: {head}")
+        if others:
+            bits = []
+            for z in others:
+                v = (zero_classes or {}).get(str(z["idx"])) or "검토 필요"
+                bits.append(f"Q{z['idx']}는 {v.split('.')[0]}")
+            p.append("- " + " · ".join(bits) + ".")
         p.append("")
     quota_note = meta.get("quota_note")
     if quota_note is None:

@@ -1037,7 +1037,10 @@ CLI_RETRY_TIMEOUT = 180  # EVAL-LLALPHA-01: 추론 모델은 60초를 넘긴다 
 # 모델별 턴 타임아웃 override (2026-10-16 hangover fix):
 # ll-alpha-free 실측 출력 속도 ~24 tok/s → 60s 컷은 ≈1,400토큰. 60초를 "제 능력을 못 내는 모델"로
 # 오판하지 않도록 턴당 240s 를 허용(재시도는 180s 이므로 effectively first-attempt only).
-CLI_TIMEOUT_OVERRIDE = {"ll-alpha-free": 240}
+CLI_TIMEOUT_OVERRIDE = {"ll-alpha-free": 240, "k-exaone-2.5": 300}
+# k-exaone-2.5 (2026-11-11 실측): reasoning_effort=low 에서도 문항에 따라 180초를 넘겨
+# 12문항 중 3문항이 응답 실패로 처리됐다. 능력이 아니라 시간 문제인지 확인하려면
+# 한 문항에 더 긴 예산이 필요해 300초로 올린다(재시도도 같은 값).
 
 CLI_MODELS_CATALOG = Path(os.environ.get(
     "FREE_MODELS_CLI_JSON",
@@ -1208,6 +1211,7 @@ def eval_model_cli(model_id, cli_model=None, provider="zen"):
         axis, question, expected = spec["axis"], spec["q"], spec["expected"]
         if idx > 1:
             time.sleep(RATE_GAP_SEC)
+        t_q = time.time()
         actual, reason = cli_call(cli_model, cli_prompt(spec), timeout=turn_timeout)
         if not actual and "타임아웃" in reason:
             # 타임아웃은 429 와 같은 성격의 일시 실패다(모델 부재가 아니다).
@@ -1221,7 +1225,8 @@ def eval_model_cli(model_id, cli_model=None, provider="zen"):
                 log(f"  CLI 호출 실패({reason}) — 모델 도달 불가, 중단")
                 return result, reason
             result["errors"].append(f"Q{idx} {reason}")
-            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception"})
+            result["details"].append({"idx": idx, "axis": axis, "score": 0, "source": "exception",
+                                      "elapsed_sec": round(time.time() - t_q, 1)})
             result["failures"].append({"idx": idx, "axis": axis, "reason": reason})
             log(f"  [{idx}/{total}] {axis} {reason} → 0점")
             continue
@@ -1261,6 +1266,7 @@ def eval_model_cli(model_id, cli_model=None, provider="zen"):
             "answer": actual[:ANSWER_STORE_CHARS],
             "sandbox": sandbox_verdict, "sandbox_reason": sandbox_reason,
             "measurement_defect": measurement_defect,
+            "elapsed_sec": round(time.time() - t_q, 1),
         })
         tag = f" sandbox={sandbox_verdict}" if sandbox_verdict else ""
         log(f"  [{idx}/{total}] {axis} {pts}점 (via cli{tag}) ← {actual[:60]!r}")
