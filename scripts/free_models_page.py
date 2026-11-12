@@ -31,6 +31,8 @@ import model_eval  # noqa: E402
 
 PAGE_SLUG = "free-models"
 PAGE_URL = f"https://emdash.aikorea24.kr/posts/{PAGE_SLUG}"
+# 첫 방문자용 안내 글 (2026-10-16 발행, 설치·키 발급·첫 호출까지 7개 절)
+GUIDE_URL = "https://emdash.aikorea24.kr/posts/openrouter-free-models-opencode"
 CARD_LIMIT = 4
 REVIEWS_PATH = mc.CATALOG_DIR / "model_reviews.json"
 FAILED_PATH = mc.CATALOG_DIR / "model_eval_failed.json"
@@ -331,6 +333,45 @@ def mark_zen_pending(mid, reason="OpenCode Zen — OpenRouter 경로 없음 · �
     mc._write_json(ZEN_PENDING_PATH, d)
 
 
+_REVIEW_LINK_CACHE = {}
+
+
+def review_links():
+    """모델 ID → 12문항 실측 글 URL. (2026-11-12 대표님 지시)
+
+    목록에서 모델을 보고 바로 근거 글로 갈 수 있어야 한다. 기존 model_reviews.json 은
+    2건뿐이라, 발행된 '실측' 글 제목에서 모델 이름을 찾아 보강한다(제목에 모델명이 들어가는
+    것이 이 시리즈의 규칙이다). 실패해도 링크 없이 목록을 낸다.
+    """
+    global _REVIEW_LINK_CACHE
+    if _REVIEW_LINK_CACHE:
+        return _REVIEW_LINK_CACHE
+    out = {}
+    try:
+        out.update({k: v for k, v in (reviews() or {}).items() if v})
+    except Exception:  # noqa: BLE001
+        pass
+    try:
+        import cfnew
+        rows = cfnew.sql(
+            "SELECT slug, title FROM ec_posts WHERE status='published' AND deleted_at IS NULL "
+            "AND title LIKE '%실측%'", database_id=cfnew.EMDASH_DB) or []
+        for r in rows:
+            title = r.get("title") or ""
+            slug = r.get("slug") or ""
+            if not slug:
+                continue
+            for m in load_cli_models() or []:
+                mid = m.get("model_id") or ""
+                base = mid.replace(":free", "").replace("-free", "").split("/")[-1]
+                if base and base in title:
+                    out.setdefault(mid, "https://emdash.aikorea24.kr/posts/" + slug)
+    except Exception as e:  # noqa: BLE001
+        log(f"실측 글 링크 조회 실패(무시): {type(e).__name__}")
+    _REVIEW_LINK_CACHE = out
+    return out
+
+
 def reviews():
     """{model_id: 발행된 심층 리뷰 URL}. 작업 4 가 발행 직후 기록한다."""
     v = _read_json(REVIEWS_PATH, {})
@@ -427,7 +468,13 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
 
     # AIK24-BLOG-02(2026-10-17): 독자는 명령줄이 아니라 화면에서 모델을 고른다.
     # 목록 글 첫 화면에서 선택 창 경로를 안내한다(이후 발행분에도 그대로 유지된다).
+    #
+    # 2026-11-12 대표님 지시: 이 페이지는 고정 링크로 계속 갱신되므로, OpenCode 를 아직
+    # 설치하지 않은 첫 방문자를 위한 안내 글 링크를 맨 위에 둔다(설치·키 발급·첫 호출).
     out += [
+        f"**처음이신가요?** OpenCode 설치와 무료 모델 연결은 "
+        f"[무료 모델 연결 가이드]({GUIDE_URL})에서 5분 단계로 확인할 수 있습니다.",
+        "",
         "OpenCode 를 실행한 뒤 `/models` 를 입력(또는 `ctrl+x` 를 누른 다음 `m`)해 모델 선택 창을 엽니다. "
         "Search 칸에 `Free` 를 입력하면 무료 모델만 남고, 오른쪽 열에 `Free` 가 붙은 줄이 무료 경로입니다.",
         "",
@@ -517,6 +564,7 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
     has_metric = any(m.get("retention_percent") is not None for m in cli_models) \
         or any(m.get("kilobench_completion") is not None for m in cli_models)
 
+    R_LINKS = review_links()
     headers = ["모델명", "프로바이더"]
     if has_context:
         headers.append("컨텍스트 길이")
@@ -543,6 +591,8 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
         
         # 모델명 단축: org prefix는 유지(동명 모델 구분용), :free/-free 접미사만 제거
         short = mid.replace(":free", "").replace("-free", "")
+        # 표 셀 안의 링크 마크는 렌더러가 무시한다(2026-11-12 실측: PT 셀 markDefs 는 저장되지만
+        # 화면에 <a> 가 안 생김). 그래서 링크는 표 아래 '실측 리뷰' 절에서 준다.
         row = [f"`{short}`", PROVIDER_LABEL.get(provider, provider)]
         if has_context:
             row.append(f"{ctx:,}" if ctx else "")
@@ -568,6 +618,28 @@ def render_eval06(day, cli_models, wk, failed, verify=None, free_total=None, bas
     
     out.append("")
     
+    # 3-b. 12문항 실측 리뷰 링크 (2026-11-12 대표님 지시)
+    # 표 셀 링크가 렌더되지 않으므로 별도 절로 제공한다.
+    if R_LINKS:
+        scores = leaderboard_scores(model_eval.EVAL_QUESTIONS_VERSION)
+        out += [f"### 12문항 실측 리뷰 ({len(R_LINKS)}개)", ""]
+        out += ["목록의 모델을 실제로 돌려본 기록입니다. 점수와 실패 지점을 함께 적었습니다.", ""]
+        done = set()
+        for m in cli_models:
+            mid = m.get("model_id", "")
+            url = R_LINKS.get(mid)
+            if not url or mid in done:
+                continue
+            done.add(mid)
+            sc = scores.get(mid) or {}
+            bits = []
+            if sc.get("score") is not None:
+                bits.append(f"{sc.get('score')}/{sc.get('graded_n') or sc.get('max_score')}")
+            short = mid.replace(":free", "").replace("-free", "")
+            tail = (f" — {bits[0]}" if bits else "")
+            out.append(f"- [{short}]({url}){tail}")
+        out += [""]
+
     # 3-b. 유료 대비 (B안: 공식 자료 인용 · 비용 0). 데이터 파일이 없으면 섹션 자체를 넣지 않는다.
     bl = baseline if baseline is not None else load_paid_baseline()
     if bl:
