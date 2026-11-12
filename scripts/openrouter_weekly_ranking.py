@@ -133,6 +133,48 @@ def aggregate(rows):
     return out, len(totals)
 
 
+THUMB_QUERIES = (
+    "weekly chart data",
+    "analytics dashboard screen",
+    "server metrics monitoring",
+    "business report charts",
+)
+
+
+def make_thumbnail(week_start):
+    """썸네일 생성(가로 1200 WebP q80) → EmDash 미디어 업로드 → 공개 URL.
+
+    실패해도 글 생성은 계속한다(썸네일은 부가물). 주차에 따라 검색어를 돌려 같은 사진이
+    매주 반복되지 않게 한다.
+    """
+    try:
+        import io
+        import tempfile
+
+        import auto_thumbnail as at
+        from PIL import Image
+
+        import emdash_media_upload as mu
+
+        query = THUMB_QUERIES[week_start.toordinal() % len(THUMB_QUERIES)]
+        photos = at.search_pexels(query, per_page=5)
+        if not photos:
+            print("  ! 썸네일: 검색 결과 없음 — 생략")
+            return None
+        im = Image.open(io.BytesIO(at.download_image(photos[0]["src"]["original"]))).convert("RGB")
+        w, h = im.size
+        im = im.resize((1200, int(h * 1200 / w)), Image.LANCZOS)
+        tmp = os.path.join(tempfile.gettempdir(), "or_weekly_thumb.webp")
+        im.save(tmp, "WEBP", quality=80, method=6)
+        url = mu.upload_image(tmp)
+        if url:
+            print("  썸네일: %s (검색어 '%s')" % (url, query))
+        return url
+    except Exception as e:  # noqa: BLE001 — 썸네일 실패가 발행을 막지 않는다
+        print("  ! 썸네일 생략: %s: %s" % (type(e).__name__, e))
+        return None
+
+
 def _load_prev_week(week_start):
     """직전 주 집계 JSON. 없으면 None (전주 비교 절을 쓰지 않는다)."""
     log_dir = os.path.join(PROJECT_ROOT, "scripts", "logs")
@@ -429,8 +471,9 @@ def main():
     print("\n게이트: %s%s" % ("통과" if not issues else "미달 %d건" % len(issues),
                               "" if not issues else " → " + " / ".join(issues[:3])))
 
+    thumb = make_thumbnail(week_start)
     from emdash_publish import create_draft_post, publish_by_slug
-    url = create_draft_post(title, repaired, excerpt=excerpt)
+    url = create_draft_post(title, repaired, excerpt=excerpt, featured_image=thumb)
     if not url:
         print("\n❌ EmDash draft 생성 실패")
         sys.exit(2)
