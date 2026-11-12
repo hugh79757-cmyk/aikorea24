@@ -1,0 +1,27 @@
+{
+  "added": [
+    {
+      "provider": "openrouter",
+      "model_id": "baidu/ernie-5.5-flash-preview:free",
+      "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1024000
+    },
+    {
+      "provider": "kilo",
+      "model_id": "baidu/ernie-5.5-flash-preview:free",
+      "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1024000
+    }
+  ],
+  "removed": [],
+  "changed": [],
+  "failed_providers": {}
+}

@@ -1,35 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-12",
-      "briefing_id": 348,
-      "articles": [
-        {
-          "id": "55104",
-          "title": "어도비 복제한 개발자, 이번엔 클로드로 엑셀·워드·파워포인트 대체 앱 공개",
-          "original_title": "",
-          "description": "[디지털투데이 황치규 기자]어도비 앱을 무료로 쓸 수 있도록 한 오픈소스 도구 모음 '아트크래프트(ArtCraft)' 개발자가 이번에는 마이크로소프트 오피스를 대체하는 앱들을 공개했다고 톰스하드웨어가 11일(현지시간) 보도했다.보도에 따르면 개발자 브랜든 토마스는 엑셀, 파워포인트, 워드를 대체하는 '그리드크래프트', '덱크래프트', '워드크래프트'를 내놨",
-          "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706239",
-          "entities": [
-            "ArtCraft"
-          ],
-          "date": "2026-10-12"
-        },
-        {
-          "id": "55109",
-          "title": "[무료 모델] AtomicChat/Qwen-Image-2.1-Turbo-Uncensored",
-          "original_title": "",
-          "description": "트렌딩 상위 오픈소스 모델. task=text-to-image, 좋아요 328, 다운로드 100,530. 라이선스 확인 후 무료로 로컬 실행 가능.",
-          "link": "https://huggingface.co/AtomicChat/Qwen-Image-2.1-Turbo-Uncensored-GGUF",
-          "entities": [
-            "Qwen-Image-2.1-Turbo-Uncensored",
-            "AtomicChat"
-          ],
-          "date": "2026-10-12"
-        }
-      ]
-    },
-    {
       "date": "2026-10-13",
       "briefing_id": 349,
       "articles": [
@@ -1284,32 +1255,52 @@
           "date": "2026-11-11"
         }
       ]
+    },
+    {
+      "date": "2026-11-12",
+      "briefing_id": 379,
+      "articles": [
+        {
+          "id": "59856",
+          "title": "[신규 무료] nemotron-3.5-lightning-free — OpenCode Zen",
+          "original_title": "nemotron-3.5-lightning-free",
+          "description": "OpenCode Zen 무료 목록에 추가 · 12문항 평가 전 — 판단 보류",
+          "link": "https://opencode.ai/v2/docs/console/models/#nemotron-3.5-lightning-free",
+          "entities": [
+            "OpenCode",
+            "Zen"
+          ],
+          "date": "2026-11-12"
+        },
+        {
+          "id": "60198",
+          "title": "AWS, 다양한 프레임워크에서 AI 에이전트를 테스트하는 도구 'UAEF' 오픈소스 공개",
+          "original_title": "AWS open-sources UAEF, a tool to test AI agents across frameworks",
+          "description": "AWS가 도구 사용부터 안전성에 이르기까지 36가지 지표로 AI 에이전트를 테스트하는 무료 오픈소스 도구 'UAEF'를 출시했습니다. 이 도구는 여러 에이전트 프레임워크 전반에서 작동하며 새로운 프롬프트나 모델이 에이전트의 성능을 저하시킬 때 이를 감지해 줍니다.",
+          "link": "https://thenextweb.com/news/aws-uaef-open-source-ai-agent-evaluation",
+          "entities": [
+            "UAEF",
+            "AI",
+            "AWS"
+          ],
+          "date": "2026-11-12"
+        },
+        {
+          "id": "60154",
+          "title": "참전 용사와 현역 군인을 위한 챗GPT 플러스",
+          "original_title": "ChatGPT Plus for veterans and servicemembers",
+          "description": "2만 명 이상의 참전 용사와 전역 예정 장병들이 1년 무료 챗GPT 플러스를 혜택을 받았습니다. 이들이 민간 커리어 준비를 위해 AI를 어떻게 활용하는지 확인해 보세요.",
+          "link": "https://openai.com/index/chatgpt-plus-for-veterans",
+          "entities": [
+            "ChatGPT",
+            "Plus"
+          ],
+          "date": "2026-11-12"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "55104",
-      "title": "어도비 복제한 개발자, 이번엔 클로드로 엑셀·워드·파워포인트 대체 앱 공개",
-      "original_title": "",
-      "description": "[디지털투데이 황치규 기자]어도비 앱을 무료로 쓸 수 있도록 한 오픈소스 도구 모음 '아트크래프트(ArtCraft)' 개발자가 이번에는 마이크로소프트 오피스를 대체하는 앱들을 공개했다고 톰스하드웨어가 11일(현지시간) 보도했다.보도에 따르면 개발자 브랜든 토마스는 엑셀, 파워포인트, 워드를 대체하는 '그리드크래프트', '덱크래프트', '워드크래프트'를 내놨",
-      "link": "https://www.digitaltoday.co.kr/news/articleView.html?idxno=706239",
-      "entities": [
-        "ArtCraft"
-      ],
-      "date": "2026-10-12"
-    },
-    {
-      "id": "55109",
-      "title": "[무료 모델] AtomicChat/Qwen-Image-2.1-Turbo-Uncensored",
-      "original_title": "",
-      "description": "트렌딩 상위 오픈소스 모델. task=text-to-image, 좋아요 328, 다운로드 100,530. 라이선스 확인 후 무료로 로컬 실행 가능.",
-      "link": "https://huggingface.co/AtomicChat/Qwen-Image-2.1-Turbo-Uncensored-GGUF",
-      "entities": [
-        "Qwen-Image-2.1-Turbo-Uncensored",
-        "AtomicChat"
-      ],
-      "date": "2026-10-12"
-    },
     {
       "id": "55266",
       "title": "[무료 모델] unsloth/embeddinggemma-2-GGUF — HuggingFac",
@@ -2373,6 +2364,43 @@
         "Albanese"
       ],
       "date": "2026-11-11"
+    },
+    {
+      "id": "59856",
+      "title": "[신규 무료] nemotron-3.5-lightning-free — OpenCode Zen",
+      "original_title": "nemotron-3.5-lightning-free",
+      "description": "OpenCode Zen 무료 목록에 추가 · 12문항 평가 전 — 판단 보류",
+      "link": "https://opencode.ai/v2/docs/console/models/#nemotron-3.5-lightning-free",
+      "entities": [
+        "OpenCode",
+        "Zen"
+      ],
+      "date": "2026-11-12"
+    },
+    {
+      "id": "60198",
+      "title": "AWS, 다양한 프레임워크에서 AI 에이전트를 테스트하는 도구 'UAEF' 오픈소스 공개",
+      "original_title": "AWS open-sources UAEF, a tool to test AI agents across frameworks",
+      "description": "AWS가 도구 사용부터 안전성에 이르기까지 36가지 지표로 AI 에이전트를 테스트하는 무료 오픈소스 도구 'UAEF'를 출시했습니다. 이 도구는 여러 에이전트 프레임워크 전반에서 작동하며 새로운 프롬프트나 모델이 에이전트의 성능을 저하시킬 때 이를 감지해 줍니다.",
+      "link": "https://thenextweb.com/news/aws-uaef-open-source-ai-agent-evaluation",
+      "entities": [
+        "UAEF",
+        "AI",
+        "AWS"
+      ],
+      "date": "2026-11-12"
+    },
+    {
+      "id": "60154",
+      "title": "참전 용사와 현역 군인을 위한 챗GPT 플러스",
+      "original_title": "ChatGPT Plus for veterans and servicemembers",
+      "description": "2만 명 이상의 참전 용사와 전역 예정 장병들이 1년 무료 챗GPT 플러스를 혜택을 받았습니다. 이들이 민간 커리어 준비를 위해 AI를 어떻게 활용하는지 확인해 보세요.",
+      "link": "https://openai.com/index/chatgpt-plus-for-veterans",
+      "entities": [
+        "ChatGPT",
+        "Plus"
+      ],
+      "date": "2026-11-12"
     }
   ]
 }

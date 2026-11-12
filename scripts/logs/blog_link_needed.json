@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-11 09:00",
-  "count": 146,
+  "updated_at": "2026-11-12 09:01",
+  "count": 147,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -63,6 +63,25 @@
       ],
       "cli_ids": [
         "nvidia/baai/bge-m3"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "baidu/ernie-5.5-flash-preview",
+      "original_titles": [
+        "baidu/ernie-5.5-flash-preview:free"
+      ],
+      "news_ids": [
+        60366,
+        60298
+      ],
+      "sources": [
+        "Kilo Free Models",
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "kilo/baidu/ernie-5.5-flash-preview:free",
+        "openrouter/baidu/ernie-5.5-flash-preview:free"
       ],
       "in_briefing": false
     },
