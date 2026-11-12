@@ -1,3 +1,40 @@
+## 2026-11-12 13:05 — 주간 OpenRouter 랭킹 시리즈 썸네일 추가 + 자동 첨부
+
+### 한 일
+1. **업로드 경로 확립** — 썸네일을 `public/images` 에 넣고 사이트를 재배포하던 방식을 버리고
+   **EmDash 미디어 API(R2)** 로 올리는 경로를 만들었다. URL 형식 `/_emdash/api/media/file/<storageKey>`.
+   사이트 재배포가 필요 없어 주간 자동화에 적합하다.
+   - 실측 함정: 기본 User-Agent 로 요청하면 Cloudflare 가 **1010** 으로 막는다. 브라우저 UA 를 넣어야 201.
+2. **[PRODUCTION CODE] `scripts/emdash_media_upload.py` 신설** — multipart 업로드 헬퍼.
+   PAT 는 `~/.env.common` 의 `EMDASH_AIKOREA24_API_TOKEN`(값 미출력).
+3. **[PRODUCTION CODE] `scripts/openrouter_weekly_ranking.py`** — `make_thumbnail(week_start)` 추가.
+   Pexels 검색 + PIL(가로 1200px·WebP q80) → 업로드 → `create_draft_post(featured_image=...)`.
+   검색어를 주차별로 순환(`THUMB_QUERIES`)해 매주 같은 사진이 반복되지 않게 했다. 실패해도 발행은 계속.
+4. **발행 글 2건에 적용** — 11/01~11/07, 10/25~10/31.
+
+### 결과 (검증 근거)
+### [검증됨]
+- 썸네일 2건 라이브 **200 image/webp**:
+  11/01 주차 `01M76YJKD3VZ885HPDRS9YZRHK.webp`(104,694B, 사진 RDNE Stock project),
+  10/25 주차 `01M76YNCYNGW7KC8VDWE76JBCX.webp`(22,432B, 사진 weCare Media) — 서로 다른 이미지.
+- 두 글의 `og:image` 가 각각의 업로드 URL 로 바뀐 것 확인(라이브 HTML grep).
+- 업로드 함수 단독 실측: `make_thumbnail(2026-11-08)` → URL 반환(검색어 'weekly chart data').
+- 테스트 41 passed, 커밋 `1f0619d3`.
+
+### [부분검증]
+- 주간 잡이 **자동으로 생성·업로드·발행**하는 전체 경로는 다음 일요일(11-15) 실행에서 처음 돈다.
+  오늘은 함수 단독 호출과 기존 글 소급 적용으로만 확인했다.
+- 사진 선택은 Pexels 1번째 결과를 쓴다. 내용 적합성은 사람이 보장하지 않는다(주차별 검색어 순환만 적용).
+
+### 잔존 위험
+1. Pexels 키·쿼터에 의존한다. 키가 없거나 쿼터가 차면 썸네일 없이 글만 발행된다.
+2. 업로드 이미지가 R2 에 계속 쌓인다(주 1건). 정리 정책은 없다.
+3. 같은 사진이 다른 글에 재사용될 수 있다(검색 결과가 같을 때). 주차 순환으로 완화했을 뿐 보장은 아니다.
+
+### 다음 행동
+- 11-15 실행 후 새 글에 `featured_image` 가 붙고 목록 카드에 이미지가 보이는지 확인.
+- 대표님: 주간 랭킹 글 썸네일의 성격(차트/대시보드 계열)이 적절한지 확인 — 필요하면 검색어 고정.
+
 ## 2026-11-12 10:30 — 주간 OpenRouter 랭킹: 11/01~11/07 글 발행 + 자동 발행 전환
 
 ### 한 일
