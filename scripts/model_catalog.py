@@ -331,6 +331,23 @@ def record_diff_to_news(day, d):
         database_id=cfnew.A24_DB,
     )
     seen = {r.get("title") for r in (existing or [])}
+
+    # 2026-11-12: 과거에 이미 등록된 모델을 다시 '신규'로 알리지 않는다.
+    # 11-09 수집 실패 → 11-10 diff 가 27건을 신규로 오판 → 23건이 `[신규 무료]` 로 생성됐고,
+    # 그중 10월부터 있던 모델이 브리핑에 다시 올라갔다. 제목이 아니라 모델 ID 로 중복을 본다.
+    added_ids = sorted({(r.get("model_id") or "") for kind, r in rows
+                        if kind == "added" and (r.get("model_id") or "")})
+    prior_ids = set()
+    if added_ids:
+        prior_rows = cfnew.sql(
+            "SELECT DISTINCT original_title FROM news "
+            "WHERE original_title IN (%s) AND created_at < %s AND created_at >= date(%s, '-180 day');"
+            % (", ".join(_news_lit(m) for m in added_ids), _news_lit(day), _news_lit(day)),
+            database_id=cfnew.A24_DB,
+        )
+        prior_ids = {r.get("original_title") for r in (prior_rows or [])}
+        if prior_ids:
+            log(f"news 기록: 과거 등록 모델 {len(prior_ids)}건 — '신규' 알림에서 제외")
     now = time.strftime("%Y-%m-%d %H:%M:%S")
     stmts = []
     for kind, r in rows:
@@ -355,6 +372,9 @@ def record_diff_to_news(day, d):
                      else "12문항 평가 전 — 판단 보류")
         if kind != "added":
             desc_tail += " · " + REMOVAL_REASON
+        if kind == "added" and mid in prior_ids:
+            log(f"  [skip] {mid} — 이미 등록된 모델(과거 news 존재). '신규'로 알리지 않는다")
+            continue
         if title in seen:
             continue
         seen.add(title)
@@ -381,6 +401,31 @@ def record_diff_to_news(day, d):
     return len(stmts)
 
 
+def _guard_added(d, prev_rows, failed):
+    """직전 스냅샷을 신뢰할 수 없으면 added 를 '신규'로 기록하지 않는다.
+
+    2026-11-09 실측: 프로바이더 4개가 모두 실패해 스냅샷이 0행으로 저장됐고,
+    다음 날(11-10) diff 가 27건을 전부 '신규'로 판정했다. 그 결과 10월부터 무료 목록에
+    있던 모델이 `[신규 무료]` 로 브리핑에 다시 올라왔다(11-12 nemotron-3.5-lightning-free).
+    감지기(detect_new_models)에는 실패 프로바이더 가드가 있었지만 이 경로에는 없었다.
+    """
+    if not prev_rows:
+        dropped = len(d.get("added") or [])
+        d["added"] = []
+        d["added_skipped_reason"] = "직전 스냅샷 0행(수집 실패) — 신규 판정 불가"
+        if dropped:
+            log(f"[가드] {d['added_skipped_reason']} · added {dropped}건 기록 취소")
+        return d
+    if failed:
+        keep = [r for r in (d.get("added") or []) if r.get("provider") not in failed]
+        dropped = len(d.get("added") or []) - len(keep)
+        if dropped:
+            d["added_skipped_reason"] = f"수집 실패 프로바이더 {sorted(failed)} — 해당 added 취소"
+            log(f"[가드] {d['added_skipped_reason']} ({dropped}건)")
+        d["added"] = keep
+    return d
+
+
 def run(day=None):
     load_env()  # 프로젝트 .env / ~/.env.common 적재
     day = day or time.strftime("%Y-%m-%d")
@@ -392,6 +437,7 @@ def run(day=None):
     prev_rows = json.loads(prev.read_text(encoding="utf-8")) if prev else []
     d = diff(prev_rows, rows, all_ids)
     d["failed_providers"] = failed  # stdout 로만 남으면 다음 날 어떤 프로바이더가 죽었는지 알 수 없다
+    d = _guard_added(d, prev_rows, failed)
     _write_json(diff_path(day), d)
 
     # PIPE-03 작업 2: 변경 감지를 브리핑으로 잇는다 (실패해도 수집은 계속)

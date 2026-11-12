@@ -1,0 +1,140 @@
+[
+ {
+  "id": 59831,
+  "original_title": "thinkingmachines/inkling-2-small:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59835,
+  "original_title": "nvidia/nemotron-3.5-super-vl:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59836,
+  "original_title": "dots-studio/dots-3-note-preview:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59837,
+  "original_title": "liquid/lfm-2.5-2.6b:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59838,
+  "original_title": "nvidia/nemotron-3.5-lightning:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59839,
+  "original_title": "cohere/north-mini-code:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59840,
+  "original_title": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59841,
+  "original_title": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59842,
+  "original_title": "google/gemma-4-26b-a4b-it:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59843,
+  "original_title": "google/gemma-4-31b-it:free",
+  "source": "OpenRouter Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59844,
+  "original_title": "kilo-auto/free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59845,
+  "original_title": "nvidia/nemotron-3.5-super-vl:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59846,
+  "original_title": "stealth/glyph-cluster",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59847,
+  "original_title": "thinkingmachines/inkling-2-small:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59849,
+  "original_title": "dots-studio/dots-3-note-preview:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59850,
+  "original_title": "nvidia/nemotron-3.5-lightning:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59851,
+  "original_title": "cohere/north-mini-code:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59852,
+  "original_title": "nvidia/nemotron-3-ultra-550b-a55b:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59853,
+  "original_title": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59854,
+  "original_title": "openrouter/free",
+  "source": "Kilo Free Models",
+  "v2_pass": 1
+ },
+ {
+  "id": 59855,
+  "original_title": "mimo-v2.6-flash-free",
+  "source": "OpenCode Zen",
+  "v2_pass": 1
+ },
+ {
+  "id": 59856,
+  "original_title": "nemotron-3.5-lightning-free",
+  "source": "OpenCode Zen",
+  "v2_pass": 1
+ },
+ {
+  "id": 59857,
+  "original_title": "big-pickle",
+  "source": "OpenCode Zen",
+  "v2_pass": 1
+ }
+]

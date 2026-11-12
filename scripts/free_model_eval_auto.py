@@ -469,6 +469,7 @@ def _recommend_lines(res):
 
 
 _REPO_PATH_RE = re.compile(r"(?:scripts|tests|pipeline|src)/[\w./가-힣-]+|[\w-]+\.py\b")
+_CODE_FENCE = re.compile(r"```(?:[a-zA-Z0-9_+-]*)\s*\n(.*?)```", re.S)
 _KATAKANA_RE = re.compile(r"[\u30A0-\u30FF]")
 
 
@@ -490,7 +491,10 @@ def _code_quote(res, idx, limit=360):
     """
     for d in (res.get("details") or []):
         if d.get("idx") == idx and d.get("score") == 1:
-            code = model_eval.extract_code(_scrub_answer(d.get("answer") or "", collapse=False))
+            raw = _scrub_answer(d.get("answer") or "", collapse=False)
+            # 답변에 '수정 전/후' 코드가 둘 다 들어오는 경우가 있다. 마지막 블록이 결과물이다.
+            blocks = [b.strip() for b in _CODE_FENCE.findall(raw) if b.strip()]
+            code = blocks[-1] if blocks else model_eval.extract_code(raw)
             return code[:limit] if code.strip() else ""
     return ""
 

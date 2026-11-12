@@ -62,3 +62,33 @@ def test_identical_snapshots_are_empty():
 @pytest.mark.parametrize("prev,cur", [(None, None), ([], [])])
 def test_empty_inputs(prev, cur):
     assert diff(prev, cur, {}) == {"added": [], "removed": [], "changed": []}
+
+# ── 2026-11-12: 과거 등록 모델 재알림 방지 가드 ──────────────────────────
+
+def test_guard_drops_added_when_prev_snapshot_empty():
+    """11-09 수집 전멸 → 11-10 전량 '신규' 오판(실측 사고)을 막는다."""
+    import model_catalog as mc
+
+    d = {"added": [{"provider": "zen", "model_id": "x-free"}], "removed": [{"provider": "zen", "model_id": "y-free"}]}
+    out = mc._guard_added(dict(d, added=list(d["added"]), removed=list(d["removed"])), [], {})
+    assert out["added"] == []
+    assert out["removed"] == d["removed"]          # 제외 기록은 유지
+    assert "0행" in out["added_skipped_reason"]
+
+
+def test_guard_keeps_added_when_prev_snapshot_ok():
+    import model_catalog as mc
+
+    d = {"added": [{"provider": "zen", "model_id": "x-free"}], "removed": []}
+    out = mc._guard_added(d, [{"provider": "zen", "model_id": "z-free"}], {})
+    assert out["added"] == d["added"]
+    assert "added_skipped_reason" not in out
+
+
+def test_guard_drops_only_failed_provider_added():
+    import model_catalog as mc
+
+    d = {"added": [{"provider": "zen", "model_id": "x-free"},
+                   {"provider": "kilo", "model_id": "y:free"}], "removed": []}
+    out = mc._guard_added(d, [{"provider": "zen", "model_id": "z-free"}], {"zen": "timeout"})
+    assert [r["model_id"] for r in out["added"]] == ["y:free"]
