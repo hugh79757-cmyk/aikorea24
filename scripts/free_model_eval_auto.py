@@ -295,6 +295,24 @@ def _sandbox_cwd():
         os.chdir(old)
 
 
+def already_measured(model_id):
+    """이미 측정한 모델인지. 측정 이력이 있으면 **재측정하지 않는다**(2026-11-12 대표님 지시).
+
+    반환: (근거, 캐시엔트리|None). 근거가 None 이면 미측정.
+    - 캐시에 details 가 있으면 TTL·스키마와 무관하게 '측정 완료'로 본다(만료돼도 다시 안 잰다).
+    - 캐시가 지워졌어도 리더보드에 같은 문항세트 기록이 있으면 재측정하지 않는다.
+    """
+    entry = model_eval.cache_load().get(model_id) or {}
+    if entry.get("details"):
+        return "캐시", entry
+    rows = read_json(Path(model_eval.LEADERBOARD_PATH), []) or []
+    for r in rows if isinstance(rows, list) else []:
+        if (r.get("model_id") == model_id
+                and r.get("qv") == model_eval.EVAL_QUESTIONS_VERSION):
+            return "리더보드", None
+    return None, None
+
+
 def evaluate(model_id, cli_id):
     """12문항 + 니들 프로브. 반환 dict — {ok, blocked, result, measured_context, elapsed}."""
     t0 = time.time()
@@ -813,6 +831,12 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
                  f"LLM 심사자에게 점수를 묻지 않고 문항마다 규칙 기반으로 채점했고, 코드 문항은 제출 코드를 실제로 실행했습니다. "
                  f"긴 문서 요약 품질, 다국어 정확도, 이미지 입력은 이 평가에 포함되지 않습니다.")
         p.append("")
+        # 2026-11-12 실측: cwd 를 임시 폴더로 옮겨도 모델이 도구로 저장소 파일을 읽었다(Q4).
+        # 하네스는 그대로 유지하기로 했으므로(대표님 결정) 측정 조건을 독자에게 밝힌다.
+        p.append("한 가지 조건을 밝혀둡니다. 코드 문항은 모델이 도구로 주변 파일을 읽을 수 있는 "
+                 "환경에서 측정했습니다. 그래서 이미 있는 테스트 파일을 찾아 답하는 경우가 있고, "
+                 "그때 코드 점수는 실제보다 낮게 나옵니다.")
+        p.append("")
 
     p.append("## 참고 자료")
     p.append("")
@@ -1047,19 +1071,25 @@ def _cmd_run_locked(day, limit, dry_run):
     rc = 0
     for e in pending[:limit]:
         mid = e["model_id"]
-        # 이미 유효한 캐시가 있으면 평가를 건너뛴다(무료 쿼터 보호).
-        # 단 초안이 아직 없으면 초안 단계는 수행한다 — 중간에 끊긴 실행을 이어붙이기 위함.
-        hit = model_eval.cache_get(mid)
-        if hit and hit.get("details"):
+        # 2026-11-12 대표님 지시: 신규 모델만 측정한다. 한 번 측정한 모델은 캐시 TTL 이
+        # 만료돼도 다시 재지 않는다(무료 쿼터 보호 + 점수 비교 기준 고정).
+        why, hit = already_measured(mid)
+        if why:
             e["status"] = "done"
-            e["reason"] = "이미 평가됨(캐시 적중)"
-            e["score"] = f"{hit.get('score')}/{hit.get('graded_n') or hit.get('max_score')}"
+            e["reason"] = f"이미 측정됨({why}) — 재측정 안 함"
+            if hit:
+                e["score"] = f"{hit.get('score')}/{hit.get('graded_n') or hit.get('max_score')}"
+                e.setdefault("measured_at", time.strftime("%Y-%m-%d", time.localtime(hit.get("ts") or 0)))
             if e.get("draft", {}).get("ok"):
                 save_queue(q)
-                log(f"{mid}: 캐시 적중 + 초안 있음 → 생략 ({e['score']})")
+                log(f"{mid}: 이미 측정됨({why}) + 글 있음 → 생략")
+                continue
+            if not hit:
+                save_queue(q)
+                log(f"{mid}: 이미 측정됨({why}) — 결과 본문이 없어 글은 만들지 않는다")
                 continue
             save_queue(q)
-            log(f"{mid}: 캐시 적중 → 평가 생략, 초안 생성으로 진행 ({e['score']})")
+            log(f"{mid}: 이미 측정됨({why}) → 재측정 없이 글만 작성")
             _make_post(e, mid, hit, e.get("cli_id") or resolve_cli_id(mid, e.get("provider"), catalog),
                         hit.get("measured_context"), day, q)
             continue

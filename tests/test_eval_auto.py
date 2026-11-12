@@ -340,3 +340,31 @@ def test_make_post_never_publishes_when_gate_fails(monkeypatch, tmp_path):
 def test_publish_flag_is_explicit():
     """발행 자동화는 상수 하나로 끌 수 있어야 한다."""
     assert isinstance(fea.AUTO_PUBLISH, bool)
+
+
+# ── 7. 신규 모델만 측정 (2026-11-12 대표님 지시) ────────────────────────
+
+def test_already_measured_from_cache_even_if_ttl_expired(monkeypatch):
+    """캐시가 만료돼도 이미 측정한 모델은 재측정하지 않는다."""
+    old = {"score": 8, "max_score": 12, "details": [{"idx": 1}], "ts": 0}
+    monkeypatch.setattr(fea.model_eval, "cache_load", lambda: {"m-free": old})
+    why, hit = fea.already_measured("m-free")
+    assert why == "캐시" and hit is old
+
+
+def test_already_measured_from_leaderboard_without_cache(monkeypatch, tmp_path):
+    monkeypatch.setattr(fea.model_eval, "cache_load", lambda: {})
+    lb = tmp_path / "lb.json"
+    lb.write_text(json.dumps([{"model_id": "m-free", "qv": fea.model_eval.EVAL_QUESTIONS_VERSION, "score": 9}]),
+                  encoding="utf-8")
+    monkeypatch.setattr(fea.model_eval, "LEADERBOARD_PATH", str(lb))
+    why, hit = fea.already_measured("m-free")
+    assert why == "리더보드" and hit is None
+
+
+def test_already_measured_false_for_new_model(monkeypatch, tmp_path):
+    monkeypatch.setattr(fea.model_eval, "cache_load", lambda: {})
+    lb = tmp_path / "lb.json"
+    lb.write_text("[]", encoding="utf-8")
+    monkeypatch.setattr(fea.model_eval, "LEADERBOARD_PATH", str(lb))
+    assert fea.already_measured("brand-new-free") == (None, None)
