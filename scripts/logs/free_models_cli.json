@@ -1,11 +1,5 @@
 [
   {
-    "model_id": "baidu/ernie-5.5-flash-preview:free",
-    "provider": "kilo",
-    "cli_id": "kilo/baidu/ernie-5.5-flash-preview:free",
-    "context_length": 1024000
-  },
-  {
     "model_id": "cohere/north-mini-code:free",
     "provider": "kilo",
     "cli_id": "kilo/cohere/north-mini-code:free",
@@ -46,6 +40,11 @@
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3.5-super-vl:free",
     "context_length": 1000000
+  },
+  {
+    "model_id": "particle-ai/particle-1:free",
+    "provider": "kilo",
+    "cli_id": "kilo/particle-ai/particle-1:free"
   },
   {
     "model_id": "baidu/ernie-5.5-flash-preview:free",
@@ -94,6 +93,11 @@
     "provider": "openrouter",
     "cli_id": "openrouter/nvidia/nemotron-3.5-super-vl:free",
     "context_length": 1000000
+  },
+  {
+    "model_id": "particle-ai/particle-1:free",
+    "provider": "openrouter",
+    "cli_id": "openrouter/particle-ai/particle-1:free"
   },
   {
     "model_id": "thinkingmachines/inkling-2-small:free",

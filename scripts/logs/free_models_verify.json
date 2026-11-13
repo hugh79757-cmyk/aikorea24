@@ -1,7 +1,6 @@
 {
-  "verified_at": "2026-11-12 09:30",
+  "verified_at": "2026-11-13 09:31",
   "pass": [
-    "kilo/baidu/ernie-5.5-flash-preview:free",
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
     "kilo/liquid/lfm-3-1.7b:free",
@@ -9,6 +8,7 @@
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
     "kilo/nvidia/nemotron-3.5-lightning:free",
     "kilo/nvidia/nemotron-3.5-super-vl:free",
+    "kilo/particle-ai/particle-1:free",
     "openrouter/baidu/ernie-5.5-flash-preview:free",
     "openrouter/cohere/north-mini-code:free",
     "openrouter/liquid/lfm-2.5-2.6b:free",
@@ -17,6 +17,7 @@
     "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
     "openrouter/nvidia/nemotron-3.5-lightning:free",
     "openrouter/nvidia/nemotron-3.5-super-vl:free",
+    "openrouter/particle-ai/particle-1:free",
     "openrouter/thinkingmachines/inkling-2-small:free",
     "opencode/beam-free",
     "opencode/deepseek-v4.1-flash-free",
@@ -31,6 +32,12 @@
     "opencode/nemotron-3.5-super-vl-free"
   ],
   "fail": [
+    {
+      "cli_id": "kilo/baidu/ernie-5.5-flash-preview:free",
+      "model_id": "baidu/ernie-5.5-flash-preview:free",
+      "reason": "CLI 타임아웃 60초",
+      "kind": "transient"
+    },
     {
       "cli_id": "kilo/poolside/laguna-s-2.1:free",
       "model_id": "poolside/laguna-s-2.1:free",

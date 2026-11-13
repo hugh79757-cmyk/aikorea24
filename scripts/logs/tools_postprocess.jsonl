@@ -680,3 +680,20 @@
 {"ts": "2026-11-13 07:30:54", "slug": "floatboat-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-13 07:31:02", "slug": "forthwrite-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-13 07:31:03", "slug": "fotello-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-14 06:00:50", "slug": "kairos", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-14 06:01:01", "slug": "kairos", "step": "enrich", "result": "done", "detail": "+2,797자 (시도 2)", "dry_run": false}
+{"ts": "2026-11-14 06:01:03", "slug": "kairos", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-14 06:01:03", "slug": "trainn-mcp", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-14 06:01:17", "slug": "trainn-mcp", "step": "enrich", "result": "done", "detail": "+2,776자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-14 06:01:18", "slug": "trainn-mcp", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-14 06:01:20", "slug": "templify-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-14 06:01:27", "slug": "templify-ai", "step": "enrich", "result": "done", "detail": "+2,718자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-14 06:01:27", "slug": "templify-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-14 06:01:39", "slug": "claude-meetings", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-14 06:02:03", "slug": "claude-meetings", "step": "enrich", "result": "done", "detail": "+2,719자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-14 06:02:04", "slug": "claude-meetings", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-14 06:02:11", "slug": "aven-app-agent", "step": "url", "result": "done", "detail": "빈값 → https://avenappagent.com (title='Aven App Agent — AI In-App Assistant for Pro')", "dry_run": false}
+{"ts": "2026-11-14 06:02:19", "slug": "aven-app-agent", "step": "enrich", "result": "done", "detail": "+2,803자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-14 06:02:26", "slug": "aven-app-agent", "step": "thumb", "result": "done", "detail": "✅ aven-app-agent 18KB", "dry_run": false}
+{"ts": "2026-11-14 06:02:44", "slug": "so-arena-benchmarking-the-capability-spectrum-and", "step": "enrich", "result": "done", "detail": "+3,108자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-14 06:02:50", "slug": "so-arena-benchmarking-the-capability-spectrum-and", "step": "thumb", "result": "done", "detail": "✅ so-arena-benchmarking-the-capability-spectrum-and 32KB", "dry_run": false}

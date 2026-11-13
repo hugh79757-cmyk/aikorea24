@@ -1,5 +1,11 @@
 [
   {
+    "model_id": "baidu/ernie-5.5-flash-preview:free",
+    "provider": "kilo",
+    "cli_id": "kilo/baidu/ernie-5.5-flash-preview:free",
+    "context_length": 1024000
+  },
+  {
     "model_id": "poolside/laguna-s-2.1:free",
     "provider": "kilo",
     "cli_id": "kilo/poolside/laguna-s-2.1:free",

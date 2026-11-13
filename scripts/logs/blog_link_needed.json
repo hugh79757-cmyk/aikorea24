@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-12 09:01",
-  "count": 147,
+  "updated_at": "2026-11-13 09:01",
+  "count": 149,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -593,6 +593,22 @@
       ],
       "cli_ids": [
         "opencode/grok-code"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "humansand/ampersand-v0.1",
+      "original_titles": [
+        "humansand/ampersand-v0.1"
+      ],
+      "news_ids": [
+        60641
+      ],
+      "sources": [
+        "Kilo Free Models"
+      ],
+      "cli_ids": [
+        "kilo/humansand/ampersand-v0.1"
       ],
       "in_briefing": false
     },
@@ -1968,6 +1984,22 @@
       ],
       "cli_ids": [
         "kilo/openrouter/pareto-code"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "particle-ai/particle-1",
+      "original_titles": [
+        "particle-ai/particle-1:free"
+      ],
+      "news_ids": [
+        60576
+      ],
+      "sources": [
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "openrouter/particle-ai/particle-1:free"
       ],
       "in_briefing": false
     },
