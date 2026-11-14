@@ -1,3 +1,19 @@
+## 2026-11-14 14:24 — AIK24-BLOG-PEARL-02: Pearl Arcana 글 수치 정정 (25/20편 → 78/78편)
+
+- 배경: 발행 직후 taro 쪽에서 카드 해설 78편을 전량 발행했다. 발행 글의 "한국어 25편·영어 20편", "78장 전체 해설은 아직 아님" 서술이 라이브 사실과 달라져 같은 날 정정했다.
+- 수정 대상: `https://emdash.aikorea24.kr/posts/pearl-arcana-ai-case-study` 본문 6개 문장 + 표 1행. 링크 `https://taro.aikorea24.kr/ko/blog/major-01-magician/` 와 앵커는 그대로 유지했다.
+- 재계산 근거: taro `public/data/blog/ko.json` 78편을 직접 읽어 계산 → 섹션 5개 고정, 본문 1,485~2,081자, 문단 14~19개. 표의 문단 기준도 생성 게이트(10~20)로 바로잡았다. 기존 표기는 감사 경고 기준(10~16)을 게이트로 오인한 것이었다.
+- 검증 근거:
+  - [검증됨] 라이브 HTML `25편` 0건, `영어 20편` 0건, `78편`·`78장 전량` 포함, `1,485자에서 2,081자`·`14개에서 19개` 포함
+  - [검증됨] `curl` HTTP 200 (49,884 bytes), taro 링크 1회, `<h1>` 1개, `## 마무리` H2 1개
+  - [검증됨] `scripts/emdash_precheck.py` exit 0 — 4,901자
+  - [검증됨] `https://taro.aikorea24.kr/data/blog/index.json` → ko 78 / en 78, 허브 "78장 가운데 78편 공개", `sitemap-blog.xml` 174 URL, `/ko/blog/feed.xml` 78 item
+- [부분검증] 수치는 2026-11-14 라이브 스냅샷이다. 콘텐츠가 추가되면 변한다.
+- [검증불가] 나머지 15개 언어의 블로그 해설 부재는 해당 로케일 허브·데이터 404 응답을 근거로 한 판정이며, 앱 내부 카드 의미 데이터는 17개 언어 모두 존재한다(글에서도 구분해 서술).
+- 변경 파일: `scripts/logs/pearl-arcana-ai-case-study_draft.md` (정정 본문 사본), `docs/state.md` (본 항목)
+- 잔존 위험: 없음. 향후 편수 변동 시 재정정 필요.
+- 다음 행동: 없음.
+
 ## 2026-11-14 14:20 — Pearl Arcana AI 사례 글 1편 발행 (EmDash)
 
 - 작업: aikorea24 블로그에 "AI로 만든 타로 앱은 어디까지 왔나 — Pearl Arcana 78장 제작과 해설 검수" 1편 발행. 기존 글·헤더·푸터·템플릿은 수정하지 않았다. 본문 중간에 taro 맥락 링크 1개(`https://taro.aikorea24.kr/ko/blog/major-01-magician/`, 앵커 `자개로 그린 78장 타로 — Pearl Arcana`)를 넣었다.
