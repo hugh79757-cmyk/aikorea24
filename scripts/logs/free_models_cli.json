@@ -1,5 +1,11 @@
 [
   {
+    "model_id": "baidu/ernie-5.5-flash-preview:free",
+    "provider": "kilo",
+    "cli_id": "kilo/baidu/ernie-5.5-flash-preview:free",
+    "context_length": 1024000
+  },
+  {
     "model_id": "cohere/north-mini-code:free",
     "provider": "kilo",
     "cli_id": "kilo/cohere/north-mini-code:free",
@@ -18,21 +24,9 @@
     "context_length": 262144
   },
   {
-    "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "provider": "kilo",
-    "cli_id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "context_length": 256000
-  },
-  {
     "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
-    "context_length": 1000000
-  },
-  {
-    "model_id": "nvidia/nemotron-3.5-lightning:free",
-    "provider": "kilo",
-    "cli_id": "kilo/nvidia/nemotron-3.5-lightning:free",
     "context_length": 1000000
   },
   {
@@ -44,25 +38,14 @@
   {
     "model_id": "particle-ai/particle-1:free",
     "provider": "kilo",
-    "cli_id": "kilo/particle-ai/particle-1:free"
-  },
-  {
-    "model_id": "baidu/ernie-5.5-flash-preview:free",
-    "provider": "openrouter",
-    "cli_id": "openrouter/baidu/ernie-5.5-flash-preview:free",
-    "context_length": 1024000
+    "cli_id": "kilo/particle-ai/particle-1:free",
+    "context_length": 1048576
   },
   {
     "model_id": "cohere/north-mini-code:free",
     "provider": "openrouter",
     "cli_id": "openrouter/cohere/north-mini-code:free",
     "context_length": 256000
-  },
-  {
-    "model_id": "liquid/lfm-2.5-2.6b:free",
-    "provider": "openrouter",
-    "cli_id": "openrouter/liquid/lfm-2.5-2.6b:free",
-    "context_length": 65536
   },
   {
     "model_id": "liquid/lfm-3-1.7b:free",
@@ -83,12 +66,6 @@
     "context_length": 1000000
   },
   {
-    "model_id": "nvidia/nemotron-3.5-lightning:free",
-    "provider": "openrouter",
-    "cli_id": "openrouter/nvidia/nemotron-3.5-lightning:free",
-    "context_length": 1000000
-  },
-  {
     "model_id": "nvidia/nemotron-3.5-super-vl:free",
     "provider": "openrouter",
     "cli_id": "openrouter/nvidia/nemotron-3.5-super-vl:free",
@@ -97,7 +74,14 @@
   {
     "model_id": "particle-ai/particle-1:free",
     "provider": "openrouter",
-    "cli_id": "openrouter/particle-ai/particle-1:free"
+    "cli_id": "openrouter/particle-ai/particle-1:free",
+    "context_length": 1048576
+  },
+  {
+    "model_id": "recursive/flint-v1.0:free",
+    "provider": "openrouter",
+    "cli_id": "openrouter/recursive/flint-v1.0:free",
+    "context_length": 262144
   },
   {
     "model_id": "thinkingmachines/inkling-2-small:free",
@@ -111,19 +95,9 @@
     "cli_id": "opencode/beam-free"
   },
   {
-    "model_id": "deepseek-v4.1-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/deepseek-v4.1-flash-free"
-  },
-  {
     "model_id": "flint-40b-free",
     "provider": "zen",
     "cli_id": "opencode/flint-40b-free"
-  },
-  {
-    "model_id": "glm-5.3-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/glm-5.3-flash-free"
   },
   {
     "model_id": "iceman-free",
@@ -139,25 +113,5 @@
     "model_id": "longcat-2.5-free",
     "provider": "zen",
     "cli_id": "opencode/longcat-2.5-free"
-  },
-  {
-    "model_id": "mimo-v2.6-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/mimo-v2.6-flash-free"
-  },
-  {
-    "model_id": "minimax-m3.1-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/minimax-m3.1-flash-free"
-  },
-  {
-    "model_id": "nemotron-3.5-lightning-free",
-    "provider": "zen",
-    "cli_id": "opencode/nemotron-3.5-lightning-free"
-  },
-  {
-    "model_id": "nemotron-3.5-super-vl-free",
-    "provider": "zen",
-    "cli_id": "opencode/nemotron-3.5-super-vl-free"
   }
 ]

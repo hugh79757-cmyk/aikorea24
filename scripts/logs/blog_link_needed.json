@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-13 09:01",
-  "count": 149,
+  "updated_at": "2026-11-14 09:02",
+  "count": 150,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -658,6 +658,22 @@
       ],
       "cli_ids": [
         "kilo/inclusionai/ling-3.1-flash-1019-free"
+      ],
+      "in_briefing": false
+    },
+    {
+      "key": "inclusionai/ling-3.2-flash",
+      "original_titles": [
+        "inclusionai/ling-3.2-flash:free"
+      ],
+      "news_ids": [
+        60822
+      ],
+      "sources": [
+        "OpenRouter Free Models"
+      ],
+      "cli_ids": [
+        "openrouter/inclusionai/ling-3.2-flash:free"
       ],
       "in_briefing": false
     },
@@ -1993,12 +2009,15 @@
         "particle-ai/particle-1:free"
       ],
       "news_ids": [
+        60889,
         60576
       ],
       "sources": [
+        "Kilo Free Models",
         "OpenRouter Free Models"
       ],
       "cli_ids": [
+        "kilo/particle-ai/particle-1:free",
         "openrouter/particle-ai/particle-1:free"
       ],
       "in_briefing": false

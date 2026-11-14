@@ -1,8 +1,8 @@
 [
   {
     "model_id": "baidu/ernie-5.5-flash-preview:free",
-    "provider": "kilo",
-    "cli_id": "kilo/baidu/ernie-5.5-flash-preview:free",
+    "provider": "openrouter",
+    "cli_id": "openrouter/baidu/ernie-5.5-flash-preview:free",
     "context_length": 1024000
   },
   {

@@ -1,33 +1,33 @@
 {
-  "timestamp": "2026-11-07T09:00:05.993177",
+  "timestamp": "2026-11-14T09:00:04.903661",
   "dry_run": false,
   "days": 7,
-  "s0_articles": 18,
-  "s1_candidates": 5,
+  "s0_articles": 24,
+  "s1_candidates": 4,
   "s2_dives": 2,
   "s3_posts": [],
   "errors": [],
   "s2_quality": [
     {
-      "title": "AI 해킹 무기화와 사이버 안보의 갈림길",
-      "verdict": "폐기",
-      "issues": [
-        "환각 인용 2건 (원문에 존재하지 않는 인용)"
-      ],
-      "verified_quotes": 1,
-      "unverified_quotes": 2,
-      "source_links_count": 2
-    },
-    {
-      "title": "AI 에이전트, 일상 서비스와 전문 생산성의 갈림길",
+      "title": "오픈소스 AI의 급부상과 프런티어 모델의 방어 전략",
       "verdict": "폐기",
       "issues": [
         "환각 인용 1건 (원문에 존재하지 않는 인용)"
       ],
-      "verified_quotes": 2,
+      "verified_quotes": 3,
       "unverified_quotes": 1,
+      "source_links_count": 2
+    },
+    {
+      "title": "AI 수익화와 무료 개방의 갈림길",
+      "verdict": "폐기",
+      "issues": [
+        "환각 인용 2건 (원문에 존재하지 않는 인용)"
+      ],
+      "verified_quotes": 0,
+      "unverified_quotes": 2,
       "source_links_count": 2
     }
   ],
-  "elapsed_seconds": 40.2
+  "elapsed_seconds": 43.1
 }

@@ -1,38 +1,8 @@
 {
- "day": "2026-11-14",
- "checked_at": 1794603607.2885802,
+ "day": "2026-11-15",
+ "checked_at": 1794690003.7684631,
  "total_rows": 31,
  "failed_providers": {},
- "new_by_provider": {
-  "openrouter": [
-   "thinkingmachines/inkling-2-small",
-   "particle-ai/particle-1:free",
-   "inclusionai/ling-3.2-flash:free"
-  ],
-  "kilo": [
-   "thinkingmachines/inkling-2-small",
-   "particle-ai/particle-1:free",
-   "inclusionai/ling-3.2-flash:free",
-   "paperinstruments/ultramarine-1-flash"
-  ]
- },
- "removed_by_provider": {
-  "openrouter": [
-   "apodex/apodex-1.1-mini:free",
-   "inclusionai/ling-3.0-flash-fin",
-   "inclusionai/ling-3.0-flash-sante",
-   "liquid/lfm-2.5-2.6b",
-   "liquid/lfm-2.5-2.6b:free"
-  ],
-  "kilo": [
-   "amazon/nova-2-lite",
-   "apodex/apodex-1.1-mini:free",
-   "deepseek/deepseek-v3.1",
-   "liquid/lfm-2.5-2.6b",
-   "liquid/lfm2.5-24b-a2b",
-   "meta/muse-wonder-1.0",
-   "poolside/laguna-s-2.1",
-   "qwen/qwen3-vl-instruct"
-  ]
- }
+ "new_by_provider": {},
+ "removed_by_provider": {}
 }

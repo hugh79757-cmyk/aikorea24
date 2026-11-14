@@ -1,26 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-14",
-      "briefing_id": 351,
-      "articles": [
-        {
-          "id": "55484",
-          "title": "구글, 누구나 플레이 스토어에 앱을 무료로 게시할 수 있도록 허용",
-          "original_title": "Google will let anyone publish an app to the Play Store, for free",
-          "description": "구글은 유료 개발자 계정 없이도, 구글 계정을 가진 18세 이상의 성인이라면 누구나 AI 스튜디오로 제작한 비공개 안드로이드 앱을 게시할 수 있도록 허용할 예정입니다. 애플은 올해 유사한 유형의 소프트웨어로부터 자체 앱스토어를 단속하는 데 주력해 왔습니다.",
-          "link": "https://thenextweb.com/news/google-play-vibe-coded-apps",
-          "entities": [
-            "Store",
-            "Play",
-            "AI",
-            "Google"
-          ],
-          "date": "2026-10-14"
-        }
-      ]
-    },
-    {
       "date": "2026-10-15",
       "briefing_id": 352,
       "articles": [
@@ -1219,23 +1199,53 @@
           "date": "2026-11-13"
         }
       ]
+    },
+    {
+      "date": "2026-11-14",
+      "briefing_id": 381,
+      "articles": [
+        {
+          "id": "60715",
+          "title": "llama.cpp v1.0.0: 로컬 AI 생태계를 위한 더 강력한 기반",
+          "original_title": "llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+          "description": "",
+          "link": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-14"
+        },
+        {
+          "id": "60421",
+          "title": "허깅 페이스 CEO, 젠슨 황의 퇴진 이후에도 오픈소스 AI를 위해 계속 싸울 것을 다짐",
+          "original_title": "Hugging Face CEO vows to keep fighting for open source AI after Jensen Huang’s exit",
+          "description": "허깅 페이스 CEO는 젠슨 황의 퇴진 이후에도 오픈소스 AI를 지키기 위해 계속 싸우겠다고 다짐했으며, 이는 엔비디아의 129억 달러 규모 인수에 대한 의문을 제기하게 만든다.",
+          "link": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+          "entities": [
+            "Face",
+            "Jensen",
+            "Hugging",
+            "AI",
+            "Huang",
+            "CEO"
+          ],
+          "date": "2026-11-14"
+        },
+        {
+          "id": "60813",
+          "title": "덕질 함께하는 K팝 AI…크래프톤 '키프' [잇:써봐]",
+          "original_title": "",
+          "description": "“직캠이라면 내가 또 한가닥 하지.” 걸그룹 피프티피프티의 무대 이야기를 꺼내자 인공지능(AI) 캐릭터 ‘웨니’가 친근하게 말을 건넸다. 대화가 잠시 끊겨도 다음 질문이 이어졌다. 피프티피프티의 어떤 노래를...",
+          "link": "https://n.news.naver.com/mnews/article/018/0006409730?sid=105",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-14"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "55484",
-      "title": "구글, 누구나 플레이 스토어에 앱을 무료로 게시할 수 있도록 허용",
-      "original_title": "Google will let anyone publish an app to the Play Store, for free",
-      "description": "구글은 유료 개발자 계정 없이도, 구글 계정을 가진 18세 이상의 성인이라면 누구나 AI 스튜디오로 제작한 비공개 안드로이드 앱을 게시할 수 있도록 허용할 예정입니다. 애플은 올해 유사한 유형의 소프트웨어로부터 자체 앱스토어를 단속하는 데 주력해 왔습니다.",
-      "link": "https://thenextweb.com/news/google-play-vibe-coded-apps",
-      "entities": [
-        "Store",
-        "Play",
-        "AI",
-        "Google"
-      ],
-      "date": "2026-10-14"
-    },
     {
       "id": "55909",
       "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl-120b-a12b — ",
@@ -2255,6 +2265,44 @@
         "AI"
       ],
       "date": "2026-11-13"
+    },
+    {
+      "id": "60715",
+      "title": "llama.cpp v1.0.0: 로컬 AI 생태계를 위한 더 강력한 기반",
+      "original_title": "llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+      "description": "",
+      "link": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-14"
+    },
+    {
+      "id": "60421",
+      "title": "허깅 페이스 CEO, 젠슨 황의 퇴진 이후에도 오픈소스 AI를 위해 계속 싸울 것을 다짐",
+      "original_title": "Hugging Face CEO vows to keep fighting for open source AI after Jensen Huang’s exit",
+      "description": "허깅 페이스 CEO는 젠슨 황의 퇴진 이후에도 오픈소스 AI를 지키기 위해 계속 싸우겠다고 다짐했으며, 이는 엔비디아의 129억 달러 규모 인수에 대한 의문을 제기하게 만든다.",
+      "link": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/",
+      "entities": [
+        "Face",
+        "Jensen",
+        "Hugging",
+        "AI",
+        "Huang",
+        "CEO"
+      ],
+      "date": "2026-11-14"
+    },
+    {
+      "id": "60813",
+      "title": "덕질 함께하는 K팝 AI…크래프톤 '키프' [잇:써봐]",
+      "original_title": "",
+      "description": "“직캠이라면 내가 또 한가닥 하지.” 걸그룹 피프티피프티의 무대 이야기를 꺼내자 인공지능(AI) 캐릭터 ‘웨니’가 친근하게 말을 건넸다. 대화가 잠시 끊겨도 다음 질문이 이어졌다. 피프티피프티의 어떤 노래를...",
+      "link": "https://n.news.naver.com/mnews/article/018/0006409730?sid=105",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-14"
     }
   ]
 }

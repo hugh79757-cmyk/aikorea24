@@ -125,7 +125,25 @@
    "attempts": 0,
    "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
    "day": "2026-11-11"
+  },
+  "particle-ai/particle-1:free": {
+   "model_id": "particle-ai/particle-1:free",
+   "provider": "openrouter",
+   "first_seen": "2026-11-14",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-14"
+  },
+  "inclusionai/ling-3.2-flash:free": {
+   "model_id": "inclusionai/ling-3.2-flash:free",
+   "provider": "openrouter",
+   "first_seen": "2026-11-14",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-14"
   }
  },
- "updated_at": 1794361237.854679
+ "updated_at": 1794619805.736767
 }

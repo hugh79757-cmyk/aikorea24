@@ -1,132 +1,106 @@
 [
   {
-    "topic": "AI 기반 사이버 공격 역량 vs 방어 및 대응 기술",
-    "contrast_frame": "북한 및 중국의 공격적 AI 해킹 능력 강화 vs 드론 방어 및 사이버 보안 체계 구축",
-    "type": "A",
+    "topic": "오픈소스 AI 모델의 추격 vs 폐쇄형 프런티어 AI의 방어",
+    "contrast_frame": "오픈소스 AI의 기술적 격차 축소 vs 폐쇄형 모델의 시장 지배력 유지 전략",
+    "type": "C",
     "source_articles": [
       {
-        "id": 58079,
-        "title": "北 사이버 인해전술, AI 만나 공격력 증폭",
-        "source": "전자신문",
-        "pub_date": "Sun, 1 Nov 2026 11:55:16 +0900",
-        "link": "https://www.etnews.com/20261101000070"
+        "id": 59189,
+        "title": "사이버 보안 역량에서 오픈소스와 폐쇄형 AI 모델 간의 격차 계속 좁혀져",
+        "source": "The Decoder",
+        "pub_date": "Sat, 07 Nov 2026 15:35:50",
+        "link": "https://the-decoder.com/the-gap-between-open-and-closed-ai-models-in-cyber-capabilities-keeps-shrinking/"
       },
       {
-        "id": 58960,
-        "title": "무서운 속도로 발전하는 중국의 무료 AI 모델, 해킹 능력도 수준급",
-        "source": "Wired AI",
-        "pub_date": "Fri, 06 Nov 2026 18:43:43",
-        "link": "https://www.wired.com/story/free-chinese-ai-models-are-getting-scary-good-at-hacking/"
-      }
-    ],
-    "quote_1": "수천 명의 사이버 인력을 운용하는 것으로 추정되는 북한이 인공지능(AI)까지 공격에 활용하면서 위협이 커지고 있어서다.",
-    "quote_2": "AI 모델에게 가상 네트워크 침투를 시도하게 한 실험 결과, 딥시크(DeepSeek)와 GLM의 해킹 실력이 오픈AI의 최첨단 사이버 모델(비공개)에 뒤지지 않는 수준인 것으로 나타났습니다.",
-    "gap_summary": "북한의 인해전술식 사이버 공격과 중국의 고도화된 AI 모델 성능이 결합되어, 국가 주도의 사이버 위협이 전례 없는 수준으로 증폭될 가능성이 있다.",
-    "reading_angle": "적대적 국가들의 AI 기반 공격 역량 고도화에 따른 사이버 안보 위협의 실체 분석",
-    "category": "보안"
-  },
-  {
-    "topic": "범용 서비스 통합 에이전트 vs 특정 업무 특화 코딩 에이전트",
-    "contrast_frame": "네이버·카카오의 일상 서비스 통합형 에이전트 vs GitHub·리플-65B의 개발 생산성 중심 전문 에이전트",
-    "type": "A",
-    "source_articles": [
-      {
-        "id": 58585,
-        "title": "네이버, 통합 에이전트 구축 앞당긴다…카카오·배민도 자연어 AI 검색 확대",
+        "id": 59679,
+        "title": "세계 900만 개발자 선택…올라마 CEO “오픈소스-프런티어 AI 격차 4개월”",
         "source": "전자신문",
-        "pub_date": "Wed, 4 Nov 2026 17:00:00 +0900",
-        "link": "https://www.etnews.com/20261104000273"
-      },
-      {
-        "id": 58967,
-        "title": "코드 생성을 넘어: 개발자를 위한 에이전트 엔지니어링 가이드",
-        "source": "GitHub Blog",
-        "pub_date": "Fri, 06 Nov 2026 22:15:59",
-        "link": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/"
+        "pub_date": "Mon, 9 Nov 2026 14:25:18 +0900",
+        "link": "https://www.etnews.com/20261109000287"
       }
     ],
-    "quote_1": "이용자가 서비스 경계를 넘나들지 않아도 검색부터 추천·예약·결제까지 이어지도록 하는 것이 목표다.",
-    "quote_2": "코드 작성은 빨라졌지만, 그 주변 업무는 여전히 복잡합니다. GitHub Copilot을 활용해 계획 수립, 코드 작성, 변경 사항 검토, 운영 문제 조사 등을 수행하는 방법과 여전히 인간의 판단이 필요한 영역이 무엇인지 알아봅니다.",
-    "gap_summary": "일상 서비스의 편의성을 극대화하려는 플랫폼 에이전트와 복잡한 기술적 문제를 해결하려는 개발 도구형 에이전트가 서로 다른 영역에서 AI의 실용성을 증명하고 있다고 볼 수 있다.",
-    "reading_angle": "범용적 사용자 경험(UX) 혁신과 전문적 생산성 도구라는 AI 에이전트의 두 가지 발전 경로 비교",
+    "quote_1": "오픈웨이트 모델인 딥시크 V4.1 플래시(DeepSeek V4.1 Flash)는 10분의 1도 안 되는 비용으로 72.8%를 기록했습니다.",
+    "quote_2": "오픈소스 인공지능(AI) 모델과 빅테크 프런티어 AI 모델 기술 격차는 1년 전 14개월에서 현재 약 4개월 정도로 좁혀졌습니다.",
+    "gap_summary": "오픈소스 모델의 비용 효율성과 성능 향상이 가속화됨에 따라, 폐쇄형 프런티어 모델이 누리던 기술적 우위가 단기간 내에 무력화될 가능성이 있다.",
+    "reading_angle": "기술적 성능 격차의 급격한 축소와 그에 따른 시장 경쟁 구조의 변화",
     "category": "기술"
   },
   {
-    "topic": "데이터 확보를 위한 기업 인수 vs 오픈 웨이트 모델의 생태계 공유",
-    "contrast_frame": "소비자 데이터 독점을 위한 기업 인수 전략 vs 아파치 2.0 기반의 오픈 소스 모델 배포 전략",
+    "topic": "AI 서비스의 유료화 모델 vs 무료 접근성 확대",
+    "contrast_frame": "기업의 수익성 확보를 위한 유료 구독 모델 vs 사용자 저변 확대를 위한 무료 티어 제공",
     "type": "A",
     "source_articles": [
       {
-        "id": 57655,
-        "title": "모드(Mode), 소비자 데이터 확보 전략의 일환으로 집잽(JibJab) 최대 2,950만 달러에 인수",
-        "source": "Fast Company AI",
-        "pub_date": "Thu, 29 Oct 2026 13:00:00",
-        "link": "https://www.fastcompany.com/91623069/mode-acquires-jibjab-for-up-to-29-5-million-amid-consumer-data-roll-up-spree?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=3&partner=newsletter&campaign_date=10292026"
+        "id": 59657,
+        "title": "[단독] 삼성 갤럭시 AI 프리미엄 플랜에 포함되는 기능과 무료로 유지되는 기능 공개",
+        "source": "SamMobile",
+        "pub_date": "Mon, 09 Nov 2026 11:27:17",
+        "link": "https://www.sammobile.com/news/galaxy-ai-premium-plan-features-list-what-remains-free/"
       },
       {
-        "id": 58955,
-        "title": "리플-65B(Ripple-65B) 프리뷰, 아파치 2.0 기반의 강력한 코딩 에이전트 성능 입증",
-        "source": "The Decoder",
-        "pub_date": "Fri, 06 Nov 2026 19:47:04",
-        "link": "https://the-decoder.com/ripple-65b-preview-delivers-strong-agentic-coding-results-as-a-fully-apache-2-0-open-us-model/"
+        "id": 59313,
+        "title": "[무료 LLM] iceman-free — OpenCode Zen 무료 티어",
+        "source": "OpenCode Zen",
+        "pub_date": "2026-11-06 00:00:00",
+        "link": "https://models.dev/opencode/iceman-free"
       }
     ],
-    "quote_1": "모드는 소프트웨어 기업을 인수하여, AI 학습 및 소비자 조사를 위해 데이터를 공유하는 사용자들에게 무료 프리미엄 액세스와 보상을 제공하고 있습니다.",
-    "quote_2": "리커시브 인텔리전스(Recursive Intelligence)가 3,200만 달러의 R&D 비용을 투입해 개발한 650억 파라미터 규모의 오픈 웨이트 모델 '리플-65B'를 공개했습니다.",
-    "gap_summary": "기업이 데이터를 독점하여 폐쇄적 생태계를 구축하려는 전략과, 막대한 비용을 투입해 개발한 모델을 오픈 웨이트로 공개하여 기술 생태계를 확장하려는 전략이 상충할 수 있음을 시사한다.",
-    "reading_angle": "데이터 자산화 중심의 비즈니스 모델과 오픈 소스 기반의 기술 생태계 확산 전략 간의 대립",
+    "quote_1": "지난 1년 넘게 일부 AI 기능이 유료화될 것이라는 소문이 돌았으며, 오늘 삼성의 프리미엄 등급에 포함될 구체적인 기능들을 단독으로 공개합니다.",
+    "quote_2": "Iceman Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰.",
+    "gap_summary": "삼성전자는 수익 모델을 위해 프리미엄 유료화 전략을 취하는 반면, 오픈 소스 진영은 대규모 컨텍스트를 제공하며 무료 접근성을 강화하고 있어 AI 시장의 비즈니스 모델이 양극화될 수 있음을 시사한다.",
+    "reading_angle": "기업형 폐쇄 모델과 오픈형 무료 모델 간의 시장 점유율 경쟁 관점",
     "category": "시장"
   },
   {
-    "topic": "국가 주도 국방 AI 도입 vs 민간 주도 로컬 창업 및 실용 AI",
-    "contrast_frame": "국방력 강화를 위한 대규모 구독형 AI 인프라 vs 지역 기반 소규모 창업 및 실생활 문제 해결형 AI",
+    "topic": "AI 도입에 따른 노동 시장의 변화 vs 전문가의 의사결정 보조",
+    "contrast_frame": "AI를 통한 업무 자동화 및 수수료 구조 파괴 vs 인간 전문가의 판단력 보조 및 협업 강화",
     "type": "A",
     "source_articles": [
       {
-        "id": 58615,
-        "title": "[네이버클라우드 국방 AI] 김유원 네이버클라우드 대표 \"미래 강군은 AI...",
-        "source": "네이버뉴스",
-        "pub_date": "2026-11-05",
-        "link": "https://www.cbci.co.kr/news/articleView.html?idxno=623088"
+        "id": 59425,
+        "title": "채용 가속화하는 AI — 에이전시 수수료 압박받아",
+        "source": "CNBC Tech",
+        "pub_date": "Sun, 08 Nov 2026 06:00:01",
+        "link": "https://www.cnbc.com/2026/11/08/ai-recruitment-agency-fees.html"
       },
       {
-        "id": 57884,
-        "title": "경남정보대 AI창업학과, 로컬 창업 후속 특강 진행",
-        "source": "네이버뉴스",
-        "pub_date": "2026-10-31",
-        "link": "http://www.metroseoul.co.kr/article/20261030500290"
+        "id": 59432,
+        "title": "AI 에이전트가 전문가의 판단에 미치는 영향 - 앤스로픽",
+        "source": "Anthropic News (via Google News)",
+        "pub_date": "Tue, 27 Oct 2026 07:00:00",
+        "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1IaTRIX2lBc1kwcDRXenZsRXRxcy1vZWVQVlBGdlJsS1p1bkpOQzBpblRRU0l6elhUa0Z3a0RmOVlaV1NmUlgxU3pQWjE2UTVNcEdMdDBBQ0VobFBMS2k5MS1yQ3dQMzQ?oc=5"
       }
     ],
-    "quote_1": "국방 인공지능(AI)의 안전한 운용과 민간 기술의... 만큼만 최신 자원을 활용하는 구독형 방식으로 전환할 것을 제안했다.",
-    "quote_2": "경남정보대학교 AI창업학과는 지난 24일 교내에서 '제1회 KIT 스타트업 포럼: 로컬에서 창업의 답을 찾다' 첫 강연을 열었다고 29일 밝혔다.",
-    "gap_summary": "국가 안보를 위한 대규모 인프라 중심의 AI 전략과 지역 사회의 실생활 문제를 해결하려는 소규모 창업 중심의 AI 활용이 공존하고 있음을 시사할 수 있다.",
-    "reading_angle": "국가 전략적 차원의 AI 도입과 지역 밀착형 실용 AI 교육이라는 두 가지 서로 다른 AI 생태계의 발전 양상을 비교함.",
-    "category": "정책"
+    "quote_1": "AI가 서류 심사를 가속화하고 에이전시의 업무 방식을 재편하면서, 비율 기반의 채용 수수료가 유지될 수 있을지에 대한 의문이 커지고 있습니다.",
+    "quote_2": "AI 에이전트가 실제 전문가들의 의사결정과 판단 과정에 어떤 변화를 주는지 분석합니다. 인간과 AI의 협업이 가져오는 영향력을 탐구합니다.",
+    "gap_summary": "AI가 채용 시장의 경제적 구조를 파괴하는 효율화 도구로 작용하는 반면, 전문가의 영역에서는 의사결정을 보완하는 협업 파트너로 기능할 수 있음을 시사한다.",
+    "reading_angle": "AI 도입이 노동 시장의 비용 구조를 해체하는 파괴적 혁신인지, 아니면 인간의 전문성을 보완하는 증강 도구인지에 대한 이중적 관점",
+    "category": "노동"
   },
   {
-    "topic": "AI의 자동화된 정보 제공 vs 인간의 최종 검증 및 판단",
-    "contrast_frame": "AI가 생성한 정보의 신속성 및 효율성 vs 여행 일정이나 생활 정보 확인 시 인간의 최종 판단 필요성",
+    "topic": "국가적 AI 정책 및 저작권 갈등 vs 사회적 약자를 위한 AI 지원",
+    "contrast_frame": "정부 차원의 지식재산권 규제 및 갈등 vs 공공 목적의 AI 교육 및 복지 지원",
     "type": "A",
     "source_articles": [
       {
-        "id": 58252,
-        "title": "[김미란의 여행 칼럼] AI가 짠 여행 일정의 마지막 확인자는 누구인가",
-        "source": "네이버뉴스",
-        "pub_date": "2026-11-03",
-        "link": "https://www.dailyt.co.kr/newsView/dlt202611020026"
+        "id": 59902,
+        "title": "알바니지의 음악 사랑, AI 문제로 위기에 처하다. 다른 노선을 택할 수 있을까? | 피터 루이스",
+        "source": "The Guardian AI",
+        "pub_date": "Tue, 10 Nov 2026 22:00:20",
+        "link": "https://www.theguardian.com/commentisfree/2026/nov/11/albaneses-love-affair-with-music-is-on-the-rocks-over-ai-can-he-write-a-different-tune"
       },
       {
-        "id": 58112,
-        "title": "AI챗봇 생활정보 검색, 질문법이 답이다",
-        "source": "네이버뉴스",
-        "pub_date": "2026-11-02",
-        "link": "https://www.gokorea.kr/news/articleView.html?idxno=882909"
+        "id": 60154,
+        "title": "참전 용사와 현역 군인을 위한 챗GPT 플러스",
+        "source": "OpenAI Blog",
+        "pub_date": "Wed, 11 Nov 2026 08:00:00",
+        "link": "https://openai.com/index/chatgpt-plus-for-veterans"
       }
     ],
-    "quote_1": "여행 준비에 인공지능을 활용하면 짧은 시간 안에 설명문과 일정 초안을 만들 수 있다.",
-    "quote_2": "생활 정보를 찾을 때는 최신성도 확인해야 한다. AI 챗봇은 학습된 시점의 정보를 기반으로 답하는 경우가 많아...",
-    "gap_summary": "AI가 제공하는 정보의 효율성은 높지만, 정보의 최신성이나 정확성 측면에서 오류가 발생할 수 있으므로 인간의 비판적 검증이 필수적일 수 있다.",
-    "reading_angle": "AI의 기술적 편의성과 정보 신뢰성 사이의 간극을 조명함",
-    "category": "윤리"
+    "quote_1": "총리가 저작권의 얽힌 매듭을 풀려고 노력하고 있습니다. 하지만 이것은 단순한 지식재산권 그 이상의 문제입니다.",
+    "quote_2": "2만 명 이상의 참전 용사와 전역 예정 장병들이 1년 무료 챗GPT 플러스를 혜택을 받았습니다.",
+    "gap_summary": "정부 차원의 규제 중심 정책과 기업 차원의 복지 중심 지원이 공존하고 있어, 향후 AI 정책이 권리 보호와 사회적 혜택 사이에서 균형을 찾아갈 가능성이 있다.",
+    "reading_angle": "국가적 규제 프레임과 기업의 사회적 책임 프레임 간의 충돌 및 보완 관계",
+    "category": "정책"
   }
 ]
