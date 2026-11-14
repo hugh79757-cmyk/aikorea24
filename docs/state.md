@@ -1,3 +1,23 @@
+## 2026-11-14 14:20 — Pearl Arcana AI 사례 글 1편 발행 (EmDash)
+
+- 작업: aikorea24 블로그에 "AI로 만든 타로 앱은 어디까지 왔나 — Pearl Arcana 78장 제작과 해설 검수" 1편 발행. 기존 글·헤더·푸터·템플릿은 수정하지 않았다. 본문 중간에 taro 맥락 링크 1개(`https://taro.aikorea24.kr/ko/blog/major-01-magician/`, 앵커 `자개로 그린 78장 타로 — Pearl Arcana`)를 넣었다.
+- 발행 URL: https://emdash.aikorea24.kr/posts/pearl-arcana-ai-case-study (이 저장소의 블로그 표준 경로. `/blog/*` 는 EmDash 로 301)
+- 검증 근거:
+  - [검증됨] 발행 전 게이트 `python3 scripts/emdash_precheck.py /tmp/pearl-arcana-ai-case-study.md` → exit 0, `✅ 게이트 통과 — 4814자`
+  - [검증됨] `curl -s -o /dev/null -w '%{http_code}'` → 200 (49,660 bytes)
+  - [검증됨] `grep -c 'taro.aikorea24.kr/ko/blog/major-01-magician'` → 1. 앵커 문구 일치, `rel="nofollow"` 없음(`<a href="...">` 만)
+  - [검증됨] 발행 HTML `<h1>` 1개, 본문 H2 7개(`## 마무리` 포함), 표 3개
+  - [검증됨] D1 `SELECT id, slug, status, title FROM ec_posts WHERE slug='pearl-arcana-ai-case-study'` → 1행, `status=published` (중복 0)
+  - [검증됨] `npm run build` → exit 0, `[build] Complete!`
+  - [검증됨] 본문 사실 근거: taro 공개 페이지(about·pearl-deck), 공개 데이터(`/data/<locale>.json` 78장, `/data/blog/ko.json` 25편·en 20편), `/api/plans`. 카드 아트 78장 전부 `/img/*.jpg` 200.
+- [부분검증] "한국어 해설 25편, 본문 1,545~2,079자"는 2026-11-14 공개 데이터 스냅샷이다. 글이 추가되면 수치가 변한다.
+- [검증불가] 유료 요금 금액은 라이브 결제 화면에서 확인하지 않아 본문에서 금액을 쓰지 않았다. 17개 언어 중 블로그 해설은 한국어·영어만 존재하며, 이 사실은 본문에 그대로 적었다.
+- 변경 파일: `scripts/logs/pearl-arcana-ai-case-study_draft.md` (발행 본문 사본), `docs/state.md` (본 항목)
+- 잔존 위험: EmDash 글은 저장소 밖에 있어 diff 추적이 안 되므로 위 draft 사본이 유일한 이력이다. `aikorea24.kr/blog/<slug>` 301 매핑에는 넣지 않았다(현행 신규 글 운영 방식과 동일 — EmDash 목록에서 노출).
+- 다음 행동: 없음.
+
+## 2026-11-14 AIK24-FREE-PIPE-01 일일 실행 — 수집 31건 / 실패 프로바이더 0 / added 2 · removed 3 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-13 AIK24-FREE-PIPE-01 일일 실행 — 수집 32건 / 실패 프로바이더 0 / added 5 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-12 11:20 — 무료 모델 허브에 첫 방문자 안내 링크 + 실측 리뷰 목록
