@@ -345,11 +345,23 @@ def test_publish_flag_is_explicit():
 # ── 7. 신규 모델만 측정 (2026-11-12 대표님 지시) ────────────────────────
 
 def test_already_measured_from_cache_even_if_ttl_expired(monkeypatch):
-    """캐시가 만료돼도 이미 측정한 모델은 재측정하지 않는다."""
-    old = {"score": 8, "max_score": 12, "details": [{"idx": 1}], "ts": 0}
+    """캐시가 만료돼도 이미 측정한 모델은 재측정하지 않는다(같은 문항 세트라면)."""
+    old = {"score": 8, "max_score": 12, "details": [{"idx": 1}], "ts": 0,
+           "qv": fea.model_eval.EVAL_QUESTIONS_VERSION}
     monkeypatch.setattr(fea.model_eval, "cache_load", lambda: {"m-free": old})
     why, hit = fea.already_measured("m-free")
     assert why == "캐시" and hit is old
+
+
+def test_already_measured_ignores_other_questions_version(monkeypatch, tmp_path):
+    """문항 세트가 바뀐 캐시는 '측정 완료'가 아니다 — 자동 재측정이 막히면 안 된다."""
+    stale = {"score": 8, "max_score": 12, "details": [{"idx": 1}], "ts": 0,
+             "qv": fea.model_eval.EVAL_QUESTIONS_VERSION - 1}
+    monkeypatch.setattr(fea.model_eval, "cache_load", lambda: {"m-free": stale})
+    lb = tmp_path / "lb.json"
+    lb.write_text("[]", encoding="utf-8")
+    monkeypatch.setattr(fea.model_eval, "LEADERBOARD_PATH", str(lb))
+    assert fea.already_measured("m-free") == (None, None)
 
 
 def test_already_measured_from_leaderboard_without_cache(monkeypatch, tmp_path):

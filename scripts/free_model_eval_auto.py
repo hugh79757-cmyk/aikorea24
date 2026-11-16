@@ -300,10 +300,11 @@ def already_measured(model_id):
 
     반환: (근거, 캐시엔트리|None). 근거가 None 이면 미측정.
     - 캐시에 details 가 있으면 TTL·스키마와 무관하게 '측정 완료'로 본다(만료돼도 다시 안 잰다).
+      단 **문항 세트(qv)가 같을 때만** 그렇다. 문항이 바뀐 옛 기록은 '측정 완료'가 아니다.
     - 캐시가 지워졌어도 리더보드에 같은 문항세트 기록이 있으면 재측정하지 않는다.
     """
     entry = model_eval.cache_load().get(model_id) or {}
-    if entry.get("details"):
+    if entry.get("details") and entry.get("qv") == model_eval.EVAL_QUESTIONS_VERSION:
         return "캐시", entry
     rows = read_json(Path(model_eval.LEADERBOARD_PATH), []) or []
     for r in rows if isinstance(rows, list) else []:

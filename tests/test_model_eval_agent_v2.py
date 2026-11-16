@@ -372,3 +372,27 @@ def test_cache_put_new_measured_context_wins(tmp_path, monkeypatch):
                        "measured_context": 262144, "details": [{"idx": 1}]})
     saved = _j.loads(cache.read_text(encoding="utf-8"))["m"]
     assert saved["measured_context"] == 262144
+
+
+# ── AIK24-EVAL-DEFECT-01 후속 (2026-11-16): 옛 문항 세트 캐시 재사용 차단 ────────
+
+def test_cache_get_rejects_other_questions_version(monkeypatch):
+    """문항 세트가 바뀐 캐시는 '최신 점수'가 아니다 — TTL 안이어도 재평가해야 한다.
+
+    이 가드가 없으면 하네스를 고쳐 qv 를 올려도 20시간 동안 옛 점수(qv2)가
+    브리핑·블로그·무료모델 페이지에 최신인 척 실린다.
+    """
+    fresh = {"qv": me.EVAL_QUESTIONS_VERSION, "schema": me.CACHE_SCHEMA,
+             "ts": me.time.time(), "details": [{"idx": 1}]}
+    stale = dict(fresh, qv=me.EVAL_QUESTIONS_VERSION - 1)
+    monkeypatch.setattr(me, "cache_load", lambda: {"m": stale})
+    assert me.cache_get("m") is None
+    monkeypatch.setattr(me, "cache_load", lambda: {"m": fresh})
+    assert me.cache_get("m") == fresh
+
+
+def test_cache_get_rejects_entry_without_qv(monkeypatch):
+    """qv 키가 아예 없는 옛 엔트리도 재평가 대상이다(None != 현재 버전)."""
+    old = {"schema": me.CACHE_SCHEMA, "ts": me.time.time(), "details": [{"idx": 1}]}
+    monkeypatch.setattr(me, "cache_load", lambda: {"m": old})
+    assert me.cache_get("m") is None

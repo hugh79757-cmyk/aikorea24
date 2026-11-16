@@ -114,3 +114,26 @@ def test_highest_score_wins_when_multiple_runs(monkeypatch, tmp_path):
     _no_cache(monkeypatch)
 
     assert ab.verdict_block("cat-jam-free").startswith("12문항 평가: 10/12")
+
+
+def test_leaderboard_best_prefers_current_questions_version(monkeypatch, tmp_path):
+    """현재 문항 세트(qv) 기록이 있으면 옛 qv 의 더 높은 점수보다 그것을 먼저 본다.
+
+    2026-11-16 (AIK24-EVAL-DEFECT-01 후속): 하네스 수정으로 qv 가 올라간 뒤
+    옛 qv 점수를 '최고 점수'로 계속 인용하면 브리핑이 무료모델 페이지와 다른 숫자를 말한다.
+    """
+    monkeypatch.setattr(ab, "LEADERBOARD_PATH", _leaderboard(tmp_path, [
+        {"model_id": "opencode/m-free", "score": 10, "max_score": 12, "qv": QV - 1, "ts": 1.0},
+        {"model_id": "opencode/m-free", "score": 9, "max_score": 12, "qv": QV, "ts": 2.0},
+    ]))
+    best = ab._leaderboard_best("opencode/m-free")
+    assert best["qv"] == QV and best["score"] == 9
+
+
+def test_leaderboard_best_falls_back_to_old_qv_when_no_current(monkeypatch, tmp_path):
+    """현재 qv 기록이 없으면 옛 점수를 쓰되, 호출부가 버전을 밝힌다(계약 2)."""
+    monkeypatch.setattr(ab, "LEADERBOARD_PATH", _leaderboard(tmp_path, [
+        {"model_id": "opencode/m-free", "score": 10, "max_score": 12, "qv": QV - 1, "ts": 1.0},
+    ]))
+    best = ab._leaderboard_best("opencode/m-free")
+    assert best["qv"] == QV - 1

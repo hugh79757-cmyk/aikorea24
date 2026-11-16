@@ -267,6 +267,9 @@ def eval_labels():
     for mid, e in items:
         if not isinstance(e, dict) or not e.get("label"):
             continue
+        # 2026-11-16: 문항 세트가 바뀐 옛 라벨은 현재 축 구조와 무관하다 — 카드에 싣지 않는다.
+        if e.get("qv") != model_eval.EVAL_QUESTIONS_VERSION:
+            continue
         out[e.get("model_id") or mid] = e["label"]
     return {k: v for k, v in out.items() if k}
 

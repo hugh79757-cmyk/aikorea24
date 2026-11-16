@@ -450,6 +450,12 @@ def cache_get(model_id):
     if entry.get("schema") != CACHE_SCHEMA:
         log(f"캐시 스키마 불일치(v{entry.get('schema')}) → 재평가")
         return None
+    # 2026-11-16 (AIK24-EVAL-DEFECT-01): 문항 세트가 바뀌면 같은 스키마라도 점수를 재사용할 수 없다.
+    # qv 를 보지 않으면 하네스를 고친 뒤에도 옛 점수(qv2)가 최대 20시간 '최신'으로 둔갑해
+    # 브리핑·블로그·무료모델 페이지에 그대로 실린다.
+    if entry.get("qv") != EVAL_QUESTIONS_VERSION:
+        log(f"문항 세트 불일치(qv{entry.get('qv')} → qv{EVAL_QUESTIONS_VERSION}) → 재평가")
+        return None
     age_h = (time.time() - entry.get("ts", 0)) / 3600
     if age_h > CACHE_TTL_HOURS:
         return None

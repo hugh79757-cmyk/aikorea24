@@ -145,10 +145,12 @@ def _leaderboard_best(model_id):
         return None
     core = _core_name(model_id)
     best = None
-    for r in (rows if isinstance(rows, list) else []):
+    # 2026-11-16: 현재 문항 세트(qv) 기록이 있으면 그것을 먼저 본다. 옛 qv 점수를
+    # '최고 점수'로 올리면 문항이 달라 비교가 성립하지 않는다(없을 때만 폴백 + 버전 표기).
+    all_rows = [r for r in (rows if isinstance(rows, list) else []) if r.get("score")]
+    cur_rows = [r for r in all_rows if r.get("qv") == model_eval.EVAL_QUESTIONS_VERSION]
+    for r in (cur_rows or all_rows):
         if _core_name(r.get("model_id") or "") != core:
-            continue
-        if not r.get("score"):
             continue
         if best is None or (r.get("score") or 0) > (best.get("score") or 0):
             best = r
