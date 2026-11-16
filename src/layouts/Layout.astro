@@ -13,6 +13,8 @@ interface Props {
   tags?: string[];
   category?: string;
   noindex?: boolean;
+  /** 광고(AdSense 로더·2개 슬롯)를 끈다. 404 같은 오류 페이지용 — 2026-11-16 AIK24-ADSENSE-404FIX */
+  noAds?: boolean;
 }
 
 const {
@@ -25,6 +27,7 @@ const {
   tags = [],
   category = '',
   noindex = false,
+  noAds = false,
 } = Astro.props;
 
 let currentUser = null;
@@ -63,7 +66,9 @@ const currentPath = Astro.url.pathname;
     category={category}
     noindex={noindex}
   />
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
+  {!noAds && (
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5938862195544185" crossorigin="anonymous"></script>
+  )}
   <meta name="p:domain_verify" content="a2f1f9d5f2c18d423c1d99f6c2d0247b"/>
   <meta name="facebook-domain-verification" content="78ii97o27tz0jckp14cjh76vh4om2e" />
   <style is:global>
@@ -193,16 +198,20 @@ const currentPath = Astro.url.pathname;
 
   <main class="flex-1">
     <!-- 콘텐츠 상단 광고 -->
-    <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
-      <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+    {!noAds && (
+      <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
+        <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    )}
     <slot />
     <!-- 콘텐츠 하단 광고 -->
-    <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
-      <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
-      <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    </div>
+    {!noAds && (
+      <div style="text-align:center;margin:16px auto;max-width:728px;width:100%;overflow:hidden;">
+        <ins class="adsbygoogle" style="display:block;width:100%;" data-ad-client="ca-pub-5938862195544185" data-ad-slot="3350911709" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    )}
   </main>
 
   <footer class="bg-white text-[#555555] mt-auto transition-colors border-t-2 border-[#E63B2E]">
