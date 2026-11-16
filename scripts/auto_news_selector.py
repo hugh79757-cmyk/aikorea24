@@ -22,6 +22,13 @@ v2 는 "한국인 초보자가 오늘 무료로 쓸 수 있는가?"를 LLM 도�
                   v2 풀이 전멸(점수 미달·이력 중복)해도 브리핑이 0건으로 끝나지
                   않는다. 예전에는 main() 의 조기 리턴이 폴백을 우회했다.
 
+AIK24-BRIEF-17(2026-11-16 대표님 지시) — 선정 기준 3종 보강:
+  · 인사·주가/실적·거시경제 단신은 슬롯에서 제외한다 (_is_briefing_misfit).
+  · AI 직접 관련성(0/1/2)을 점수에 반영하고, 폴백 (b) 는 무관 기사보다 관련 기사를
+    먼저 본다 (_ai_relevance · _rank_score · _relevance_first_key).
+  · 24h 이내 +3 · 48h +2 · 72h +1 최신성 가점 (_recency_bonus) — 며칠 지난 기사보다
+    오늘·어제 나온 기사가 먼저 온다.
+
 점수는 DB에 저장하지 않는다(선정 시점 한정).
 """
 
@@ -256,6 +263,12 @@ def score_helpfulness(article):
         "실용성: 독자가 직접 해볼 수 있는가? (무료 도구 체험·따라하기·활용법)\n"
         "이해도: 비전문가도 읽고 이해할 수 있는가? (전문 용어 과다·인프라 기술은 감점)\n"
         "유용성: 일이나 학습에 도움이 되는가? (시사점·인사이트)\n\n"
+        # AIK24-BRIEF-17: 브리핑 독자는 AI 뉴스를 읽으러 온다 — AI와 직접 무관한
+        # 기사(인사·선임·부고, 단순 주가·실적·거시경제, 일반 설비 투자)는 3항목 모두
+        # 1~2점으로 눌러 SCORE_MIN(6점)을 넘지 못하게 한다.
+        "주의: AI(인공지능) 모델·도구·서비스·활용과 직접 관련 없는 기사"
+        "(기업 인사·선임·부고, 단순 주가·실적·거시경제, 일반 설비 투자)는 "
+        "실용성·이해도·유용성 모두 1~2점으로 평가하세요.\n\n"
         "'실용성:X,이해도:Y,유용성:Z' 형식으로만 출력하세요."
     )
     try:
@@ -321,7 +334,11 @@ def select_top_articles(clusters, max_count=MAX_COUNT, allow_fallback=False,
     """
     articles = [a for a in (a for group in (clusters or {}).values() for a in group)
                 if a.get("v2_tag") != "free-opportunity"]      # 2026-11-06 폐지
-    ranked = sorted(articles, key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
+    # AIK24-BRIEF-17: 인사·비AI 단신은 뉴스 슬롯 대상이 아니다 (기계 감지 행은 예외).
+    # 정렬은 종합 점수(_rank_score = LLM 점수 + AI 관련성 + 최신성) 내림차순, 동점은 최신순.
+    ranked = sorted([a for a in articles
+                     if _is_mechanical(a) or not _is_briefing_misfit(a)],
+                    key=_rank_key)
     used, picked = set(), []
 
     # 슬롯 1: 무료 모델 변동 — OpenCode Zen · Kilo · OpenRouter 등 PROVIDER_SOURCES 최신 1건.
@@ -476,6 +493,183 @@ def _pub_ts(article):
     return 0.0
 
 
+# ---------------------------------------------------------------------------
+# AIK24-BRIEF-17 (2026-11-16 대표님 지시) — 브리핑 선정 기준 3종 보강
+#
+# 사고: 2026-11-16 07:00 브리핑 슬롯 1·2 가 비어 4순위 폴백이 **최신순으로만** 3건을
+# 채웠고, `[단독] 한국형 인큐텔 초대 대표에 윤효환 한국벤처투자 본부장 '유력'`(인사),
+# `SK하이닉스 HBM4 증설`(설비 투자), `젠슨 황 악재`(인물 단신) 가 그대로 나갔다.
+# 폴백 (b) 단계가 점수도, AI 관련성도 보지 않았기 때문이다. 세 가지 방어선을 둔다:
+#
+#   1) _is_briefing_misfit() — 인사(선임·취임·내정·부고…)와 주가·실적·거시경제 단신은
+#      슬롯에서 제외한다. 제품 출시·오픈소스·도구 기사가 인사 표현을 곁들인 경우는
+#      _PRODUCT_SIGNAL_RE 로 걸리지 않게 해 오탐을 막는다.
+#   2) _ai_relevance() — AI 직접 관련성 0(무관)/1(반도체·GPU·데이터센터 등 인접)/2(AI 직접).
+#      폴백 (b) 는 무관 기사보다 관련 기사를 먼저 보고, 점수 정렬(_rank_score)에도 더한다.
+#   3) _recency_bonus() — 24h 이내 +3 · 48h +2 · 72h +1. 며칠 지난 기사보다 오늘·어제
+#      나온 기사가 먼저 오게 한다 (대표님 요청 2번째 항목).
+#
+# 범위: 점수 관문(SCORE_MIN)·dedup 기준·슬롯 구조는 그대로다. 바뀌는 것은 **제외와 정렬**
+# 뿐이다. AI 후보가 모자라면 폴백 (b) 의 맨 뒤 순서로 무관 기사도 쓸 수 있다 —
+# "브리핑은 항상 3건"(AIK24-PIPE-12/14) 규칙을 깨지 않는다.
+# ---------------------------------------------------------------------------
+
+RECENCY_BONUS_TIERS = ((24, 3), (48, 2), (72, 1))  # (시간 상한, 가점) — 좁은 것부터
+AI_RELEVANCE_BONUS = {2: 4, 1: 1, 0: 0}            # AI 직접 관련성별 점수 가점
+
+# AI 직접 관련 신호 — 모델·도구·서비스·활용. 영문 약어는 단어 경계로 본다
+# ("train"·"email" 안의 ai 를 잡지 않게 lookbehind/lookahead 사용).
+_AI_DIRECT_RE = re.compile("|".join((
+    r"(?<![a-z0-9])ai(?![a-z0-9])",
+    r"인공지능", r"에이아이", r"생성형", r"(?:거대|대규모)?\s*언어\s*모델",
+    r"멀티모달", r"파운데이션\s*모델", r"파인튜닝", r"프롬프트", r"머신러닝", r"딥러닝",
+    r"신경망", r"챗봇", r"에이전트", r"코파일럿", r"환각", r"할루시네이션",
+    r"오픈\s*ai",
+    r"(?<![a-z0-9])(?:llm|sllm|vlm|slm|gpt|claude|gemini|grok|openai|anthropic|mistral"
+    r"|deepseek|qwen|gemma|llama|huggingface|hugging\s*face|opencode|openrouter|ollama"
+    r"|nvidia|cuda|pytorch|tensorflow|langchain|mcp)(?![a-z0-9])",
+)))
+
+# AI 인접 신호 — AI 기사는 아니지만 AI 산업·활용과 맞닿은 소재 (가점 1단계).
+_AI_ADJACENT_RE = re.compile("|".join((
+    r"반도체", r"gpu", r"hbm", r"npu", r"데이터\s*센터", r"클라우드", r"빅테크",
+    r"로봇", r"자율주행", r"온디바이스", r"추론\s*칩", r"수퍼컴", r"양자컴",
+    r"딥테크", r"테크\s*기업", r"엔비디아", r"하이닉스", r"마이크로소프트", r"구글",
+)))
+
+# 인사 단신 — 대표 선임·인사 발령·내정·취임·부고.
+_PERSONNEL_STRONG_RE = re.compile(
+    r"취임|선임|내정|임명|인사\s*발령|인사이동|인사\s*개편|인사\s*발표|신임|전보|승진"
+    r"|부고|별세|타계|사임|퇴임|해임|영입|초대\s*(?:대표|사장|회장|원장|본부장)"
+)
+# "… '유력'" 처럼 직함과 함께 쓰인 경우만 인사로 본다 ("수주 유력" 오탐 방지).
+_PERSONNEL_WEAK_RE = re.compile(
+    r"(?:대표|사장|회장|원장|본부장|CEO|CTO|CFO|수장|인사|차기|후임)[^\n]{0,40}유력"
+    r"|유력[^\n]{0,10}(?:대표|사장|회장|본부장|인사)"
+)
+# 제품·기술 신호가 있으면 인사 단신 판정을 접는다 — AI 기업/제품 기사를 오탐으로
+# 걸러내지 않기 위해서다 (지시서의 "오탐 주의" 조건).
+_PRODUCT_SIGNAL_RE = re.compile(
+    r"출시|공개|배포|릴리스|업데이트|오픈소스|오픈\s*소스|무료|가격|요금|벤치마크|성능"
+    r"|다운로드|플러그인|기능\s*추가|api|깃허브|github|데모|미리보기|정식\s*버전"
+    r"|양산|수율|공정|모델\s*공개|서비스\s*개시"
+)
+# 주가·실적·거시경제·연예/스포츠 단신 (AI 관련성이 없을 때만 제외).
+_OFFTOPIC_RE = re.compile(
+    r"주가|시가총액|코스피|코스닥|공매도|배당|환율|기준금리|금리\s*(?:인상|인하|동결)"
+    r"|소비자물가|물가\s*상승|무역수지|영업이익|분기\s*실적|실적\s*(?:발표|개선|악화)"
+    r"|어닝|적자\s*전환|흑자\s*전환|부동산|아파트|전세|청약|프로야구|축구|배구"
+    r"|연예|열애|이혼|음주운전|선거|대통령"
+)
+
+
+def _relevance_text(article):
+    """제목·설명을 소문자로 합치고 **출처명을 걷어낸** 판정용 텍스트.
+
+    출처명을 지우는 이유: `인공지능신문`·`AI타임스` 처럼 매체명 자체가 AI 키워드를
+    담은 경우, 제목·설명에 섞인 매체명만으로 관련성이 부풀려진다 (2026-11-16).
+    """
+    text = "%s\n%s" % (article.get("title") or "", article.get("description") or "")
+    src = (article.get("source") or "").strip()
+    if src:
+        text = text.replace(src, " ")
+    return text.lower()
+
+
+def _title_text(article):
+    """제목만 (소문자·출처명 제거) — 인사·단신 판정은 제목으로 본다.
+
+    설명에는 "공개"·"요금" 같은 단어가 흔해 제목 기준보다 판정이 느슨해진다. 인사·
+    단신 판정은 오탐·미탐을 줄이려고 제목만 본다 (2026-11-16).
+    """
+    title = article.get("title") or ""
+    src = (article.get("source") or "").strip()
+    if src:
+        title = title.replace(src, " ")
+    return title.lower()
+
+
+def _ai_relevance(article):
+    """AI 직접 관련성 — 2(직접) / 1(인접) / 0(무관)."""
+    text = _relevance_text(article)
+    if _AI_DIRECT_RE.search(text):
+        return 2
+    if _AI_ADJACENT_RE.search(text):
+        return 1
+    return 0
+
+
+def _recency_bonus(article, now_ts=None):
+    """발행 시각 최신성 가점 — 24h 이내 +3 · 48h +2 · 72h +1 · 그 밖 0.
+
+    pub_date 파싱 실패(0)면 가점 없음. 미래 시각(수집원 시계 오차)은 최신으로 본다.
+    now_ts 는 테스트용 주입점이다.
+    """
+    ts = _pub_ts(article)
+    if ts <= 0:
+        return 0
+    now = datetime.now(timezone.utc).timestamp() if now_ts is None else now_ts
+    age_h = max(0.0, (now - ts) / 3600.0)
+    for limit, bonus in RECENCY_BONUS_TIERS:
+        if age_h <= limit:
+            return bonus
+    return 0
+
+
+def _rank_score(article):
+    """정렬용 종합 점수 = LLM 도움 점수 + AI 관련성 가점 + 최신성 가점.
+
+    SCORE_MIN 관문은 **원래 LLM 점수(_score)** 로 판정한다 — 이 값은 순위에만 쓴다.
+    """
+    return ((article.get("_score") or 0)
+            + AI_RELEVANCE_BONUS.get(_ai_relevance(article), 0)
+            + _recency_bonus(article))
+
+
+def _rank_key(article):
+    """점수 기반 정렬 키 — 종합 점수 내림차순, 동점은 최신순."""
+    return (-_rank_score(article), _date_key(article))
+
+
+def _relevance_first_key(article):
+    """폴백 (b) 정렬 키 — AI 관련성 → 최신성 → 발행 시각.
+
+    점수를 보지 않는 단계이므로 "최신"만 보면 오늘 사고처럼 인사·설비 단신이 먼저
+    온다. 관련성을 1차 키로 두어 AI 뉴스가 먼저 채워지고, 무관 기사는 같은 단계의
+    맨 뒤(마지막 수단)로 밀린다.
+    """
+    return (-_ai_relevance(article), -_recency_bonus(article), -_pub_ts(article))
+
+
+def _is_personnel_news(article):
+    """인사 단신 판정 — 선임·취임·내정·부고.
+
+    제목에 인사 신호가 있고, 같은 제목에 제품·기술 신호(_PRODUCT_SIGNAL_RE)가 없으면
+    인사 단신으로 본다. 제품 출시·오픈소스·도구 기사가 인사 표현을 곁들인 경우는
+    막지 않는다 (AI 기업/제품 기사 오탐 방지).
+    """
+    title = _title_text(article)
+    if not (_PERSONNEL_STRONG_RE.search(title) or _PERSONNEL_WEAK_RE.search(title)):
+        return False
+    return not _PRODUCT_SIGNAL_RE.search(title)
+
+
+def _is_offtopic_news(article):
+    """주가·실적·거시경제 등 비AI 단신 — AI 직접 관련 기사는 예외로 둔다."""
+    if _ai_relevance(article) >= 2:
+        return False
+    return bool(_OFFTOPIC_RE.search(_title_text(article)))
+
+
+def _is_briefing_misfit(article):
+    """브리핑 슬롯에 부적합한 단신 — 인사 또는 비AI 주가/실적·거시경제 기사.
+
+    이 판정은 **슬롯 진입 방어선**이다. 무료 태그 풀·폴백 풀·재충원 풀이 모두 같은
+    함수를 쓰므로, 어느 경로로 들어와도 브리핑 카드가 되지 않는다 (3중 방어 원칙).
+    """
+    return _is_personnel_news(article) or _is_offtopic_news(article)
+
+
 def get_general_fallback_news(d1_query_func, exclude_ids=(), limit=None):
     """폴백 풀 — 무료 태그 없는 일반 뉴스 (지시서 §2순위).
 
@@ -597,6 +791,10 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
             return False
         if _is_excluded_notice(art):
             return False
+        # AIK24-BRIEF-17: 인사·주가/실적·거시경제 단신은 일반 뉴스 폴백에도 들이지 않는다.
+        if _is_briefing_misfit(art):
+            log(f"  [폴백] 부적합 단신(인사·비AI) 제외: {(art.get('title') or '')[:50]}")
+            return False
         mkey = _model_key(art)
         if mkey and mkey in merged_models:
             return False
@@ -666,24 +864,26 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
             f"({art.get('source')} · {art.get('pub_date')})")
         return True
 
-    # (a) LLM 도움 점수 ≥ SCORE_MIN — 점수순 (동점은 최신순)
+    # (a) LLM 도움 점수 ≥ SCORE_MIN — 종합 점수순 (AI 관련성·최신성 가점 포함, 동점은 최신순)
     for art in sorted([a for a in candidates if (a.get("_score") or 0) >= SCORE_MIN],
-                      key=lambda a: (-(a.get("_score") or 0), -_pub_ts(a))):
+                      key=lambda a: (-_rank_score(a), -_pub_ts(a))):
         if len(picked) >= needed:
             break
         if art.get("source") in used_sources:
             continue
         _try_take(art, "a 점수순")
 
-    # (b) 점수 무관 최신순 (pub_date DESC) — (a)로 부족한 만큼만
+    # (b) 점수 무관 — AI 관련성 우선, 같은 관련성 안에서는 최신순 (pub_date DESC).
+    #     AIK24-BRIEF-17: 예전에는 최신순만 보아 인사·설비 단신이 앞자리를 차지했다.
+    #     무관 기사도 후보에 남아 있으므로 AI 후보가 모자라면 맨 뒤에서 채운다.
     if len(picked) < needed:
         for art in sorted([a for a in candidates if _article_key(a) not in taken_keys],
-                          key=lambda a: -_pub_ts(a)):
+                          key=_relevance_first_key):
             if len(picked) >= needed:
                 break
             if art.get("source") in used_sources:
                 continue
-            _try_take(art, "b 최신순")
+            _try_take(art, "b 관련성·최신순")
 
     # (c) 출처 제약 완화 — (a)(b)로도 부족하면 이미 쓴 출처에서 추가 선정.
     # 2026-11-02 실측: 9개 후보 중 7개가 이미 쓴 2개 출처라 전부 제외돼 2건에서
@@ -691,7 +891,8 @@ def fallback_fill_general(needed, exclude_keys, used_sources, merged_models,
     if len(picked) < needed and blocked_by_source:
         for art in sorted([a for a in blocked_by_source
                            if _article_key(a) not in taken_keys],
-                          key=lambda a: (-(a.get("_score") or 0), -_pub_ts(a))):
+                          key=lambda a: (-(a.get("_score") or 0), -_ai_relevance(a),
+                                         -_pub_ts(a))):
             if len(picked) >= needed:
                 break
             _try_take(art, "c 출처완화")
@@ -863,12 +1064,13 @@ def refill_after_dedup(kept, dropped=(), max_count=MAX_COUNT,
         rest = [a for a in fresh
                 if a.get("source") not in PROVIDER_SOURCES
                 and a.get("v2_tag") != "free-opportunity"
+                and not _is_briefing_misfit(a)          # AIK24-BRIEF-17: 인사·비AI 단신 제외
                 and _article_key(a) not in excluded
                 and not (_model_key(a) and _model_key(a) in merged_models)]
         _score_candidates([a for a in rest if a.get("_score") is None],
                           scorer or score_helpfulness)
         rest = [a for a in rest if (a.get("_score") or 0) >= SCORE_MIN]
-        rest.sort(key=lambda a: (-(a.get("_score") or 0), _date_key(a)))
+        rest.sort(key=_rank_key)
         picked += take(rest, needed - len(picked), "3 뉴스")
 
     # 4) 일반 뉴스 폴백 (AIK24-PIPE-12) — 무료 태그 없는 일반 뉴스로 남은 슬롯을 채운다.
