@@ -1,0 +1,1643 @@
+[
+ {
+  "name": "etf-hugo",
+  "repo": "/Users/twinssn/Projects/STAP/etf-hugo",
+  "domains": [
+   "etf-hugo.pages.dev",
+   "etf.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "32f09579.etf-hugo.pages.dev",
+  "ts": 1794830959.541047,
+  "live": {
+   "domain": "etf.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "adventure-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/adventure-hugo",
+  "domains": [
+   "adventure-hugo.pages.dev",
+   "adventure.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/adventure-hugo/content/posts/-adventure-thailand/index.md\" failed: \"/Users/twinssn/",
+  "ts": 1794831004.422592
+ },
+ {
+  "name": "airlines-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/airlines-hugo",
+  "domains": [
+   "airlines-hugo.pages.dev",
+   "airlines.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/airlines-hugo/content/posts/aerolineas-argentinas-airline-review/index.md\" failed: ",
+  "ts": 1794831004.698428
+ },
+ {
+  "name": "airports-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/airports-hugo",
+  "domains": [
+   "airports-hugo.pages.dev",
+   "airports.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/airports-hugo/content/posts/antalya-airport-ayt-guide/index.md\" failed: \"/Users/twi",
+  "ts": 1794831004.93545
+ },
+ {
+  "name": "bus-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/bus-hugo",
+  "domains": [
+   "bus-hugo.pages.dev",
+   "bus.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/bus-hugo/content/posts/a-coruña-to-braga-bus/index.md\" failed: \"/Users/twinssn/Proj",
+  "ts": 1794831005.373188
+ },
+ {
+  "name": "citytours-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/citytours-hugo",
+  "domains": [
+   "citytours-hugo.pages.dev",
+   "citytours.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/citytours-hugo/content/posts/abdeen-city-tours/index.md\" failed: \"/Users/twinssn/Pr",
+  "ts": 1794831005.865058
+ },
+ {
+  "name": "compare-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/compare-hugo",
+  "domains": [
+   "compare-hugo.pages.dev",
+   "compare.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "b52f0e1a.compare-hugo.pages.dev",
+  "ts": 1794831061.2673979,
+  "live": {
+   "domain": "compare.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "cruise-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/cruise-hugo",
+  "domains": [
+   "cruise-hugo.pages.dev",
+   "cruise.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/cruise-hugo/content/posts/-cruise-thailand/index.md\" failed: \"/Users/twinssn/Projec",
+  "ts": 1794831062.823874
+ },
+ {
+  "name": "culture-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/culture-hugo",
+  "domains": [
+   "culture-hugo.pages.dev",
+   "culture.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/culture-hugo/content/posts/acapulco-culture/index.md\" failed: \"/Users/twinssn/Proje",
+  "ts": 1794831063.286468
+ },
+ {
+  "name": "daytrips-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/daytrips-hugo",
+  "domains": [
+   "daytrips-hugo.pages.dev",
+   "daytrips.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패"
+  },
+  "error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/daytrips-hugo/content/posts/acapulco-day-trips/index.md\" failed: \"/Users/twinssn/Pr",
+  "ts": 1794831063.8323572
+ },
+ {
+  "name": "deal-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/deal-hugo",
+  "domains": [
+   "deal-hugo.pages.dev",
+   "deal.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "3c8319db.deal-hugo.pages.dev",
+  "ts": 1794831080.480405,
+  "live": {
+   "domain": "deal.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "adventure-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/adventure-hugo",
+  "domains": [
+   "adventure-hugo.pages.dev",
+   "adventure.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/adventure-hugo/content/posts/abdeen-adventu",
+  "deploy_url": "88e23e67.adventure-hugo.pages.dev",
+  "ts": 1794831187.399488,
+  "live": {
+   "domain": "adventure.techpawz.com",
+   "status": 404,
+   "ads": 4,
+   "bytes": 17104
+  }
+ },
+ {
+  "name": "airlines-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/airlines-hugo",
+  "domains": [
+   "airlines-hugo.pages.dev",
+   "airlines.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/airlines-hugo/content/posts/air-china-airli",
+  "deploy_url": "60329ced.airlines-hugo.pages.dev",
+  "ts": 1794831202.6465018,
+  "live": {
+   "domain": "airlines.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "adventure-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/adventure-hugo",
+  "domains": [
+   "adventure-hugo.pages.dev",
+   "adventure.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/adventure-hugo/content/posts/agadir-ida-ou-",
+  "deploy_url": "60ee0c14.adventure-hugo.pages.dev",
+  "ts": 1794831287.536896,
+  "live": {
+   "domain": "adventure.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "airports-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/airports-hugo",
+  "domains": [
+   "airports-hugo.pages.dev",
+   "airports.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/airports-hugo/content/posts/amalfi-coast-it",
+  "deploy_url": "b5286501.airports-hugo.pages.dev",
+  "ts": 1794831304.646375,
+  "live": {
+   "domain": "airports.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "bus-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/bus-hugo",
+  "domains": [
+   "bus-hugo.pages.dev",
+   "bus.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/bus-hugo/content/posts/a-coruña-to-lisbon-b",
+  "deploy_url": "1e47f09b.bus-hugo.pages.dev",
+  "ts": 1794831323.6032891,
+  "live": {
+   "domain": "bus.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "citytours-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/citytours-hugo",
+  "domains": [
+   "citytours-hugo.pages.dev",
+   "citytours.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/citytours-hugo/content/posts/abdeen-city-to",
+  "deploy_url": "8a634fb5.citytours-hugo.pages.dev",
+  "ts": 1794831346.724282,
+  "live": {
+   "domain": "citytours.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "cruise-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/cruise-hugo",
+  "domains": [
+   "cruise-hugo.pages.dev",
+   "cruise.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/cruise-hugo/content/_quarantine/amphoe-ko-s",
+  "deploy_url": "c4ff6d45.cruise-hugo.pages.dev",
+  "ts": 1794831364.3978748,
+  "live": {
+   "domain": "cruise.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "culture-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/culture-hugo",
+  "domains": [
+   "culture-hugo.pages.dev",
+   "culture.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/culture-hugo/content/posts/acapulco-culture",
+  "deploy_url": "c732cb88.culture-hugo.pages.dev",
+  "ts": 1794831385.843088,
+  "live": {
+   "domain": "culture.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "daytrips-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/daytrips-hugo",
+  "domains": [
+   "daytrips-hugo.pages.dev",
+   "daytrips.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/daytrips-hugo/content/posts/acapulco-day-tr",
+  "deploy_url": "3193c3fa.daytrips-hugo.pages.dev",
+  "ts": 1794831403.679949,
+  "live": {
+   "domain": "daytrips.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "deals-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/deals-hugo",
+  "domains": [
+   "deals-hugo.pages.dev",
+   "deals.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/deals-hugo/content/posts/cheapest-flights-a",
+  "deploy_url": "d550585e.deals-hugo.pages.dev",
+  "ts": 1794831421.9700859,
+  "live": {
+   "domain": "deals.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "dining-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/dining-hugo",
+  "domains": [
+   "dining-hugo.pages.dev",
+   "dining.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/dining-hugo/content/posts/bo-dining/index.m",
+  "deploy_url": "1fe733a7.dining-hugo.pages.dev",
+  "ts": 1794831441.2657459,
+  "live": {
+   "domain": "dining.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "dividend-hugo",
+  "repo": "/Users/twinssn/Projects/STAP/dividend-hugo",
+  "domains": [
+   "dividend-hugo.pages.dev",
+   "dividend.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "78db9ab6.dividend-hugo.pages.dev",
+  "ts": 1794831550.2763362,
+  "live": {
+   "domain": "dividend.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "escape-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/escape-hugo",
+  "domains": [
+   "escape-hugo.pages.dev",
+   "escape.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/escape-hugo/content/posts/aalborg-team-esca",
+  "deploy_url": "876c83bf.escape-hugo.pages.dev",
+  "ts": 1794831568.299476,
+  "live": {
+   "domain": "escape.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "esim-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/esim-hugo",
+  "domains": [
+   "esim-hugo.pages.dev",
+   "esim.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/esim-hugo/content/posts/bangkok-thailand/in",
+  "deploy_url": "f8295494.esim-hugo.pages.dev",
+  "ts": 1794831587.41398,
+  "live": {
+   "domain": "esim.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "eurail-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/eurail-hugo",
+  "domains": [
+   "eurail-hugo.pages.dev",
+   "eurail.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/eurail-hugo/content/posts/albacete-to-alica",
+  "deploy_url": "c0ccd03a.eurail-hugo.pages.dev",
+  "ts": 1794831652.769614,
+  "live": {
+   "domain": "eurail.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "ev-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/ev-hugo",
+  "domains": [
+   "ev-hugo.pages.dev",
+   "ev.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "57690002.ev-hugo.pages.dev",
+  "ts": 1794831684.351247,
+  "live": {
+   "domain": "ev.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "extreme-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/extreme-hugo",
+  "domains": [
+   "extreme-hugo.pages.dev",
+   "extreme.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/extreme-hugo/content/posts/agadir-extreme-t",
+  "deploy_url": "62106b98.extreme-hugo.pages.dev",
+  "ts": 1794831708.3515,
+  "live": {
+   "domain": "extreme.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "ferry-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/ferry-hugo",
+  "domains": [
+   "ferry-hugo.pages.dev",
+   "ferry.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/ferry-hugo/content/posts/aalborg-to-gothenb",
+  "deploy_url": "7f91e4c7.ferry-hugo.pages.dev",
+  "ts": 1794831733.85967,
+  "live": {
+   "domain": "ferry.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "finance-hugo",
+  "repo": "/Users/twinssn/Projects/STAP/finance-hugo",
+  "domains": [
+   "finance-hugo.pages.dev",
+   "finance.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "176d61fa.finance-hugo.pages.dev",
+  "ts": 1794831816.259861,
+  "live": {
+   "domain": "finance.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "flights-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/flights-hugo",
+  "domains": [
+   "flights-hugo.pages.dev",
+   "flights.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/flights-hugo/content/posts/amsterdam-nether",
+  "deploy_url": "869f29a7.flights-hugo.pages.dev",
+  "ts": 1794831834.004385,
+  "live": {
+   "domain": "flights.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "foodtour-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/foodtour-hugo",
+  "domains": [
+   "foodtour-hugo.pages.dev",
+   "foodtour.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/foodtour-hugo/content/posts/acapulco-food-t",
+  "deploy_url": "c1e25d45.foodtour-hugo.pages.dev",
+  "ts": 1794831854.1376882,
+  "live": {
+   "domain": "foodtour.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "ghost-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/ghost-hugo",
+  "domains": [
+   "ghost-hugo.pages.dev",
+   "ghost.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/ghost-hugo/content/posts/agadir-underground",
+  "deploy_url": "28f3ecfa.ghost-hugo.pages.dev",
+  "ts": 1794831871.5320342,
+  "live": {
+   "domain": "ghost.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "guide-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/guide-hugo",
+  "domains": [
+   "guide-hugo.pages.dev",
+   "guide.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "e54ce46e.guide-hugo.pages.dev",
+  "ts": 1794831924.3797061,
+  "live": {
+   "domain": "guide.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "hiking-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/hiking-hugo",
+  "domains": [
+   "hiking-hugo.pages.dev",
+   "hiking.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/hiking-hugo/content/posts/agadir-hiking-tou",
+  "deploy_url": "508f743e.hiking-hugo.pages.dev",
+  "ts": 1794831952.862538,
+  "live": {
+   "domain": "hiking.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "hotissue-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/hotissue-hugo",
+  "domains": [
+   "hotissue-hugo.pages.dev",
+   "hotissue.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "52e79287.hotissue-hugo.pages.dev",
+  "ts": 1794831999.6035788,
+  "live": {
+   "domain": "hotissue.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "informationhot-hugo",
+  "repo": "/Users/twinssn/Projects/informationhot-hugo",
+  "domains": [
+   "informationhot-hugo-6ac.pages.dev",
+   "informationhot.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "ts": 1794832021.40959,
+  "live": {
+   "domain": "informationhot.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "ipo-hugo",
+  "repo": "/Users/twinssn/Projects/STAP/ipo-hugo",
+  "domains": [
+   "ipo-hugo.pages.dev",
+   "ipo.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "db5a3d61.ipo-hugo.pages.dev",
+  "ts": 1794832054.9758239,
+  "live": {
+   "domain": "ipo.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "issue-techpawz-hugo",
+  "repo": "/Users/twinssn/Projects/issue-techpawz-hugo",
+  "domains": [
+   "issue-techpawz-hugo.pages.dev",
+   "issue.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "c8961907.issue-techpawz-hugo.pages.dev",
+  "ts": 1794832080.707787,
+  "live": {
+   "domain": "issue.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "kuta-hugo",
+  "repo": "/Users/twinssn/Projects/kuta-hugo",
+  "domains": [
+   "kuta-hugo.pages.dev",
+   "kuta.informationhot.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "6e7fff26.kuta-hugo.pages.dev",
+  "ts": 1794832112.836728,
+  "live": {
+   "domain": "kuta.informationhot.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "layover-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/layover-hugo",
+  "domains": [
+   "layover-hugo.pages.dev",
+   "layover.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/layover-hugo/content/posts/abdeen-layover-t",
+  "deploy_url": "7c97cd53.layover-hugo.pages.dev",
+  "ts": 1794832163.677898,
+  "live": {
+   "domain": "layover.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "luxury-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/luxury-hugo",
+  "domains": [
+   "luxury-hugo.pages.dev",
+   "luxury.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/luxury-hugo/content/posts/-2-luxury-tours/i",
+  "deploy_url": "3f1b5bfe.luxury-hugo.pages.dev",
+  "ts": 1794832185.312521,
+  "live": {
+   "domain": "luxury.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "michelin-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/michelin-hugo",
+  "domains": [
+   "michelin-hugo.pages.dev",
+   "michelin.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "df1736f1.michelin-hugo.pages.dev",
+  "ts": 1794832201.691402,
+  "live": {
+   "domain": "michelin.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "multiday-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/multiday-hugo",
+  "domains": [
+   "multiday-hugo.pages.dev",
+   "multiday.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/multiday-hugo/content/posts/abashiri-multid",
+  "deploy_url": "c629d2d4.multiday-hugo.pages.dev",
+  "ts": 1794832225.934287,
+  "live": {
+   "domain": "multiday.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "nature-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/nature-hugo",
+  "domains": [
+   "nature-hugo.pages.dev",
+   "nature.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/nature-hugo/content/posts/addis-ababa-natur",
+  "deploy_url": "abd07763.nature-hugo.pages.dev",
+  "ts": 1794832241.819752,
+  "live": {
+   "domain": "nature.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "nightlife-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/nightlife-hugo",
+  "domains": [
+   "nightlife-hugo.pages.dev",
+   "nightlife.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/nightlife-hugo/content/posts/amphoe-ko-samu",
+  "deploy_url": "26fe95ce.nightlife-hugo.pages.dev",
+  "ts": 1794832281.985654,
+  "live": {
+   "domain": "nightlife.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "nomad-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/nomad-hugo",
+  "domains": [
+   "nomad-hugo.pages.dev",
+   "nomad.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "0be4d445.nomad-hugo.pages.dev",
+  "ts": 1794832296.489161,
+  "live": {
+   "domain": "nomad.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "phototour-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/phototour-hugo",
+  "domains": [
+   "phototour-hugo.pages.dev",
+   "phototour.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/phototour-hugo/content/posts/agadir-photo-t",
+  "deploy_url": "9d1b4bad.phototour-hugo.pages.dev",
+  "ts": 1794832337.620019,
+  "live": {
+   "domain": "phototour.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "pick-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/pick-hugo",
+  "domains": [
+   "pick-hugo.pages.dev",
+   "pick.informationhot.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "a3d05698.pick-hugo.pages.dev",
+  "ts": 1794832359.341706,
+  "live": {
+   "domain": "pick.informationhot.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "rank-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/rank-hugo",
+  "domains": [
+   "rank-hugo.pages.dev",
+   "rank.informationhot.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "68edbff8.rank-hugo.pages.dev",
+  "ts": 1794832381.5610728,
+  "live": {
+   "domain": "rank.informationhot.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "rotcha-blog",
+  "repo": "/Users/twinssn/Projects/rotcha-blog",
+  "domains": [
+   "rotcha-blog.pages.dev",
+   "rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "  18 | featureimage: \"https://images.unsplash.com/photo-1718752773283-de1f92513671?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w5MTE1OTF8MHwxfHNlYXJjaHwyfHxn",
+  "deploy_url": "0dae9ab8.rotcha-blog.pages.dev",
+  "ts": 1794832428.0333812,
+  "live": {
+   "domain": "rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "sector-hugo",
+  "repo": "/Users/twinssn/Projects/STAP/sector-hugo",
+  "domains": [
+   "sector-hugo.pages.dev",
+   "sector.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "aeb5128e.sector-hugo.pages.dev",
+  "ts": 1794832513.4306939,
+  "live": {
+   "domain": "sector.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "senior-hugo",
+  "repo": "/Users/twinssn/Projects/SEAP/senior-hugo",
+  "domains": [
+   "senior-hugo.pages.dev",
+   "senior.informationhot.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: assemble: failed to create page from pageMetaSource /posts/60세-이상-고령자-고용지원금-분기당-30만원-지원조건은: \"/Users/twinssn/Projects/SEAP/senior-hugo",
+  "deploy_url": "120e60ea.senior-hugo.pages.dev",
+  "ts": 1794832532.970016,
+  "live": {
+   "domain": "senior.informationhot.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "tco-hugo",
+  "repo": "/Users/twinssn/Projects/CAP/tco-hugo",
+  "domains": [
+   "tco-hugo.pages.dev",
+   "tco.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "b4d8c476.tco-hugo.pages.dev",
+  "ts": 1794832548.884195,
+  "live": {
+   "domain": "tco.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "techpawz-hugo",
+  "repo": "/Users/twinssn/Projects/techpawz-hugo",
+  "domains": [
+   "techpawz-hugo.pages.dev",
+   "techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "6f4c9a93.techpawz-hugo.pages.dev",
+  "ts": 1794832596.644931,
+  "live": {
+   "domain": "techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "tour-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/tour-hugo",
+  "domains": [
+   "tour-hugo.pages.dev",
+   "tour.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/tour-hugo/content/posts/agadir-morocco-guid",
+  "deploy_url": "b03b68d9.tour-hugo.pages.dev",
+  "ts": 1794832625.514943,
+  "live": {
+   "domain": "tour.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "tours-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/tours-hugo",
+  "domains": [
+   "tours-hugo.pages.dev",
+   "tours.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/tours-hugo/content/posts/athens-greece/inde",
+  "deploy_url": "8a87899a.tours-hugo.pages.dev",
+  "ts": 1794832680.133697,
+  "live": {
+   "domain": "tours.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "trains-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/trains-hugo",
+  "domains": [
+   "trains-hugo.pages.dev",
+   "trains.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/trains-hugo/content/posts/amsterdam-netherl",
+  "deploy_url": "a0eeb527.trains-hugo.pages.dev",
+  "ts": 1794832702.403945,
+  "live": {
+   "domain": "trains.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "transfers-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/transfers-hugo",
+  "domains": [
+   "transfers-hugo.pages.dev",
+   "transfers.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/transfers-hugo/content/posts/alajuela-trans",
+  "deploy_url": "a29d94fe.transfers-hugo.pages.dev",
+  "ts": 1794832719.592124,
+  "live": {
+   "domain": "transfers.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "travel-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel-hugo",
+  "domains": [
+   "travel-hugo.pages.dev",
+   "tour1.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "ac7cb0c6.travel-hugo.pages.dev",
+  "ts": 1794832737.150145,
+  "live": {
+   "domain": "tour1.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "travel1-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel1-hugo",
+  "domains": [
+   "travel1-hugo.pages.dev",
+   "travel1.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "build_error": "ERROR error building site: assemble: failed to create page from pageMetaSource /posts/순창장류축제-2023-전북-순창군에서-열리는-장류축제-맛과: \"/Users/twinssn/Projects/TAP/travel1-hug",
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-38-58_497.log\"",
+  "ts": 1794832740.835169
+ },
+ {
+  "name": "travel2-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel2-hugo",
+  "domains": [
+   "travel2-hugo.pages.dev",
+   "travel2.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-02_615.log\"",
+  "ts": 1794832744.932794
+ },
+ {
+  "name": "travel3-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel3-hugo",
+  "domains": [
+   "travel3-hugo.pages.dev",
+   "tour2.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-06_980.log\"",
+  "ts": 1794832748.327921
+ },
+ {
+  "name": "travel4-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel4-hugo",
+  "domains": [
+   "travel4-hugo.pages.dev",
+   "tour3.rotcha.kr"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-10_072.log\"",
+  "ts": 1794832750.62173
+ },
+ {
+  "name": "visa-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/visa-hugo",
+  "domains": [
+   "visa-hugo.pages.dev",
+   "visa.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/visa-hugo/content/posts/amalfi-coast-italy/",
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-11_454.log\"",
+  "ts": 1794832752.021344
+ },
+ {
+  "name": "visafree-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/visafree-hugo",
+  "domains": [
+   "visafree-hugo.pages.dev",
+   "visafree.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/visafree-hugo/content/posts/angola-visa-fre",
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-12_663.log\"",
+  "ts": 1794832753.251266
+ },
+ {
+  "name": "walking-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/walking-hugo",
+  "domains": [
+   "walking-hugo.pages.dev",
+   "walking.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/walking-hugo/content/posts/adams-county-wal",
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-13_962.log\"",
+  "ts": 1794832754.522402
+ },
+ {
+  "name": "watersports-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/watersports-hugo",
+  "domains": [
+   "watersports-hugo.pages.dev",
+   "watersports.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/watersports-hugo/content/posts/agadir-ida-o",
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-15_303.log\"",
+  "ts": 1794832756.633815
+ },
+ {
+  "name": "watertours-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/watertours-hugo",
+  "domains": [
+   "watertours-hugo.pages.dev",
+   "watertours.techpawz.com"
+  ],
+  "steps": {
+   "template": "새로 생성",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "실패"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/watertours-hugo/content/posts/-19-watertour",
+  "error": "🪵  Logs were written to \"/Users/twinssn/.wrangler/logs/wrangler-2026-11-16_12-39-17_403.log\"",
+  "ts": 1794832757.96351
+ },
+ {
+  "name": "travel1-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel1-hugo",
+  "domains": [
+   "travel1-hugo.pages.dev",
+   "travel1.rotcha.kr"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: assemble: failed to create page from pageMetaSource /posts/순창장류축제-2023-전북-순창군에서-열리는-장류축제-맛과: \"/Users/twinssn/Projects/TAP/travel1-hug",
+  "deploy_url": "ae3c511b.travel1-hugo.pages.dev",
+  "ts": 1794832923.782629,
+  "live": {
+   "domain": "travel1.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "travel2-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel2-hugo",
+  "domains": [
+   "travel2-hugo.pages.dev",
+   "travel2.rotcha.kr"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "5a6819dc.travel2-hugo.pages.dev",
+  "ts": 1794832972.2433438,
+  "live": {
+   "domain": "travel2.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "travel3-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel3-hugo",
+  "domains": [
+   "travel3-hugo.pages.dev",
+   "tour2.rotcha.kr"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "05081df6.travel3-hugo.pages.dev",
+  "ts": 1794832992.513375,
+  "live": {
+   "domain": "tour2.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "travel4-hugo",
+  "repo": "/Users/twinssn/Projects/TAP/travel4-hugo",
+  "domains": [
+   "travel4-hugo.pages.dev",
+   "tour3.rotcha.kr"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "성공",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "deploy_url": "78cf7f25.travel4-hugo.pages.dev",
+  "ts": 1794833019.466923,
+  "live": {
+   "domain": "tour3.rotcha.kr",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2196
+  }
+ },
+ {
+  "name": "visa-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/visa-hugo",
+  "domains": [
+   "visa-hugo.pages.dev",
+   "visa.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/visa-hugo/content/posts/barcelona-spain/ind",
+  "deploy_url": "a0438e35.visa-hugo.pages.dev",
+  "ts": 1794833033.192269,
+  "live": {
+   "domain": "visa.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "visafree-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/visafree-hugo",
+  "domains": [
+   "visafree-hugo.pages.dev",
+   "visafree.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/visafree-hugo/content/posts/algeria-visa-fr",
+  "deploy_url": "80ce695d.visafree-hugo.pages.dev",
+  "ts": 1794833050.213566,
+  "live": {
+   "domain": "visafree.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "walking-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/walking-hugo",
+  "domains": [
+   "walking-hugo.pages.dev",
+   "walking.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/walking-hugo/content/posts/acapulco-walking",
+  "deploy_url": "86987789.walking-hugo.pages.dev",
+  "ts": 1794833065.809011,
+  "live": {
+   "domain": "walking.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "watersports-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/watersports-hugo",
+  "domains": [
+   "watersports-hugo.pages.dev",
+   "watersports.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/watersports-hugo/content/posts/agadir-ida-o",
+  "deploy_url": "a4f67125.watersports-hugo.pages.dev",
+  "ts": 1794833094.4668002,
+  "live": {
+   "domain": "watersports.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ },
+ {
+  "name": "watertours-hugo",
+  "repo": "/Users/twinssn/Projects/ETAP/watertours-hugo",
+  "domains": [
+   "watertours-hugo.pages.dev",
+   "watertours.techpawz.com"
+  ],
+  "steps": {
+   "template": "이미 광고 없는 템플릿(유지)",
+   "build": "실패(기존 결함) → public/404.html 직접 교체",
+   "built_404_ads": 0,
+   "deploy": "성공"
+  },
+  "build_error": "ERROR error building site: render: [en v1.0.0 guest] failed to render pages: render of \"/Users/twinssn/Projects/ETAP/watertours-hugo/content/posts/alanya-water-",
+  "deploy_url": "4000b835.watertours-hugo.pages.dev",
+  "ts": 1794833115.823781,
+  "live": {
+   "domain": "watertours.techpawz.com",
+   "status": 404,
+   "ads": 0,
+   "bytes": 2267
+  }
+ }
+]
