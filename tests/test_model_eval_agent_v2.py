@@ -210,6 +210,52 @@ def test_extract_code_strips_fences():
     assert me.extract_code("설명.\n```python\nprint(1)\n```\n끝").strip() == "print(1)"
 
 
+# ── AIK24-EVAL-DEFECT-01 (2026-11-16): 0점 4문항의 하네스 결함 회귀 방지 ──────
+
+def test_q1_inline_code_is_not_english_prose():
+    """백틱 인라인 코드 식별자를 '영문'으로 세면 정상 답안이 0점이 된다 (실측 9건 오판)."""
+    a = ("이 코드는 `add` 라는 이름의 함수를 정의합니다.\n"
+         "`def add(a, b)` 는 매개변수 두 개를 받고, `return a + b` 는 합계를 반환합니다.\n"
+         "---끝---")
+    assert me.grade_q1_korean_sentinel(a) == 1
+
+
+def test_q1_english_prose_still_fails():
+    """인라인 코드 예외가 '영어 산문'까지 통과시키면 안 된다."""
+    a = "This function returns the sum of two values.\n---끝---"
+    assert me.grade_q1_korean_sentinel(a) == 0
+
+
+def test_sandbox_uses_block_that_defines_required_function():
+    """답안이 인용한 원본 버그 블록이 먼저 실행돼 NameError 로 0점이 되던 문제."""
+    spec = _specs()["get_expired_tokens"]
+    quoted = "```python\ndatetime.fromisoformat(t['expires_at']) < now - timedelta(days=30)\n```\n"
+    fix = "```python\n" + spec["sandbox_reference"] + "```\n"
+    pts, reason = me.sandbox_grade(spec, quoted + fix)
+    assert pts == 1, reason
+
+
+def test_cli_call_runs_in_empty_tempdir(monkeypatch):
+    """평가 호출은 저장소가 보이지 않는 빈 디렉터리에서 돌아야 한다 (Q4 오염 방지)."""
+    import os
+
+    seen = {}
+
+    class _P:
+        stdout = '{"type":"text","part":{"text":"ok"}}\n'
+        returncode = 0
+
+    def fake_run(cmd, **kw):
+        seen["cwd"] = kw.get("cwd")
+        return _P()
+
+    monkeypatch.setattr(me.subprocess, "run", fake_run)
+    txt, err = me.cli_call("some/model", "hi")
+    assert (txt, err) == ("ok", "")
+    assert seen["cwd"], "cwd 를 임시 디렉터리로 지정해야 한다"
+    assert not os.path.exists(seen["cwd"]), "호출 후 임시 디렉터리는 정리되어야 한다"
+
+
 def test_sandbox_reference_failure_is_measurement_defect():
     """reference 정답이 통과 못 하면 그 문항은 측정 결함 — 0점으로 몰지 않는다."""
     spec = dict(_specs()["parse_log_line"])

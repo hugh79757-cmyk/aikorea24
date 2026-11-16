@@ -29,6 +29,7 @@ os.environ 만 읽는다 (지시서가 참조한 ~/workspace/skills/llm-eval/ �
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -69,7 +70,7 @@ CACHE_SCHEMA = 4  # AGENT-EVAL-01: 12문항 재설계(에이전트 축 신설). 
 
 # BLOG-03: 문항 세트 버전. 문항·채점 기준이 바뀌면 이 값을 올린다.
 # 리더보드는 qv가 같은 결과끼리만 순위를 매긴다(문항이 다르면 점수를 비교하는 것 자체가 거짓말).
-EVAL_QUESTIONS_VERSION = 2
+EVAL_QUESTIONS_VERSION = 3  # 2026-11-16: Q1 인라인코드·Q4 파일금지·Q11 스키마 명시 (qv2 캐시 무효)
 
 # BLOG-03: 모델 평가 리더보드. append-only — 실행할 때마다 1건씩 쌓인다.
 LEADERBOARD_PATH = os.path.join(PROJECT_DIR, "scripts", "logs", "model_leaderboard.json")
@@ -169,8 +170,11 @@ TEST_QUESTIONS = [
     # ── 축 1. 지시 이행 (형식·경계 — tool/CLI에서 필요한 contract compliance) ─
     {
         "axis": "지시이행",
-        "q": "한국어로만 답해 주세요. 아래 코드가 하는 일을 설명하고, 답의 마지막 줄에 반드시 '---끝---' 를 출력하세요.\n```python\ndef add(a, b): return a + b\n```",
-        "expected": "두 값을 받아 더한 값을 돌려주는 파이썬 함수에 대한 한국어 설명. 그리고 마지막 줄에 '---끝---' 가 나와야 함. 영어로 쓴 사고 과정이 섞이면 불합격",
+        # 2026-11-16 (AIK24-EVAL-DEFECT-01): '한국어로만' 만 적어 두면 코드 식별자(add/return)를
+        # 백틱으로 인용한 답안도 위반인지 해석이 갈린다. 채점기가 가장 엄격하게 해석해
+        # 정상 답안이 0점이 됐다(실측 14/16). 계약을 문항에 명시한다.
+        "q": "본문은 한국어 산문으로만 답해 주세요. 코드 식별자나 함수명은 백틱(`)으로 감싸 그대로 써도 됩니다. 아래 코드가 하는 일을 설명하고, 답의 마지막 줄에 반드시 '---끝---' 를 출력하세요.\n```python\ndef add(a, b): return a + b\n```",
+        "expected": "두 값을 받아 더한 값을 돌려주는 파이썬 함수에 대한 한국어 설명. 그리고 마지막 줄에 '---끝---' 가 나와야 함. 영어로 쓴 사고 과정(산문)이 섞이면 불합격. 백틱 인라인 코드 식별자는 위반이 아니다",
         "grade": "grade_q1_korean_sentinel",
     },
     {
@@ -187,6 +191,7 @@ TEST_QUESTIONS = [
         # 실행 검증: "말로 설명했나"가 아니라 "고친 코드가 실제로 맞는가"를 본다.
         "sandbox": True,
         "sandbox_kind": "get_expired_tokens",
+        "sandbox_symbol": "get_expired_tokens",
         "sandbox_reference": (
             "from datetime import datetime\n\n"
             "def get_expired_tokens(tokens, now):\n"
@@ -209,7 +214,9 @@ TEST_QUESTIONS = [
     },
     {
         "axis": "코딩실무",
-        "q": "아래 함수를 pytest로 검증하는 테스트를 작성해 주세요. 정상 입력, 0으로 나누기, 음수 등 경계값을 모두 다루세요.\n```python\ndef safe_div(a, b):\n    if b == 0:\n        return None\n    return a / b\n```",
+        # 2026-11-16: 파일을 만들라고 하면 CLI 모델이 저장소에 실제 파일을 쓰거나(2026-11-08 사고),
+        # 이미 있는 테스트를 찾아 '추가하지 않겠다'고 거부한다(Q4 오염). 답안으로만 받는다.
+        "q": "아래 함수를 pytest로 검증하는 테스트를 작성해 주세요. 정상 입력, 0으로 나누기, 음수 등 경계값을 모두 다루세요. 파일을 만들지 말고, 답안에 코드로만 제시하세요.\n```python\ndef safe_div(a, b):\n    if b == 0:\n        return None\n    return a / b\n```",
         "expected": "pytest 테스트 코드. b=0 이면 None 을 돌려주는지, 정상 나눗셈 결과가 맞는지, 0 나누기 예외가 나지 않는지, 음수 입력 등을 검증해야 하며 테스트 함수 이름과 assert 가 들어간 실행 가능한 코드",
         "grade": "grade_q4_pytest_written",
     },
@@ -221,6 +228,7 @@ TEST_QUESTIONS = [
         # "중복을 실제로 줄였는가"(리팩토링 품질)는 판관이 담당한다 — 기계 판정하면 오탐이 된다.
         "sandbox": True,
         "sandbox_kind": "user_filter_refactor",
+        "sandbox_symbol": "get_active_user",
         "sandbox_reference": (
             "def _project(u):\n"
             "    return {'id': u['id'], 'name': u['name'], 'email': u['email']}\n\n"
@@ -248,6 +256,7 @@ TEST_QUESTIONS = [
         "expected": "syntactically correct Python implementing parse_log_line with the 5 listed rules, using a function named parse_log_line, raising the right exception classes",
         "sandbox": True,
         "sandbox_kind": "parse_log_line",
+        "sandbox_symbol": "parse_log_line",
         "sandbox_reference": (
             "from datetime import datetime\n\n"
             "def parse_log_line(s):\n"
@@ -327,8 +336,10 @@ TEST_QUESTIONS = [
     },
     {
         "axis": "에이전트",
-        "q": "다음 작업은 '네안데르탈인 시점 텍스트 게임' 의 새 기능입니다. 단일 HTML 파일 한 개로 만들려면 어떤 순서로 파일을 채워야 하는지, 각 단계별로 (1) 생성할 DOM/스크린 (2) 코어 상태 모델 (3) 검증 방법을 4단계로 JSON으로만 출력하세요. JSON 외에는 출력하지 마세요.",
-        "expected": "4단계 JSON. 각 단계에 screen, state_model, verify 명시. 순서 논리적(구조·데이터·연출·배포). JSON only.",
+        # 2026-11-16 (AIK24-EVAL-DEFECT-01): 채점기는 screen/state_model/verify 키를 요구했지만
+        # 문항에는 키 이름이 없었다. 계약이 없으면 '지시 이행'을 잴 수 없다 — 스키마를 문항에 적는다.
+        "q": "다음 작업은 '네안데르탈인 시점 텍스트 게임' 의 새 기능입니다. 단일 HTML 파일 한 개로 만들려면 어떤 순서로 파일을 채워야 하는지, 4단계로 JSON 배열만 출력하세요.\n형식(정확히 이 키 이름을 씁니다. 키를 바꾸거나 감싸는 객체를 두르지 마세요):\n[{\"screen\": \"이 단계에서 만들 DOM/스크린\", \"state_model\": \"이 단계의 코어 상태 모델\", \"verify\": \"이 단계 검증 방법\"}, ... 총 4개]\nJSON 외에는 출력하지 마세요.",
+        "expected": "원소 4개짜리 JSON 배열. 각 원소에 screen, state_model, verify 세 키. 순서 논리적(구조·데이터·연출·배포). JSON only.",
         "grade": "grade_q11_four_step_plan",
     },
     {
@@ -618,13 +629,29 @@ def _strip_code_blocks(text):
     return re.sub(r"```.*?```", "", text or "", flags=re.S)
 
 
+def _strip_inline_code(text):
+    """백틱 인라인 코드(`...`)를 지운다 — 코드 식별자는 '영어 산문'이 아니다."""
+    return re.sub(r"`[^`\n]*`", "", text or "")
+
+
+# 산문에 그대로 써도 되는 라틴 표기. 문항이 제시한 언어명이다.
+_ALLOWED_LATIN_WORDS = ("Python",)
+
+
 def _code_of(text):
     """답안에서 실행 후보 코드를 뽑는다(펜스 우선, 없으면 원문)."""
     return extract_code(text)
 
 
 def grade_q1_korean_sentinel(actual):
-    """지시이행 ① : 한국어 + 마지막 줄 '---끝---' + 영어어휘 3자 이상 없음."""
+    """지시이행 ① : 한국어 산문 + 마지막 줄 '---끝---' + 영어 산문 없음.
+
+    2026-11-16 (AIK24-EVAL-DEFECT-01): 펜스만 지우면 인라인 코드의 식별자
+    (`add`, `return`)가 '영문'으로 잡혀 정상 답안이 0점이 됐다.
+    실측: 캐시 16개 중 Q1 0점 14개 → 인라인 코드를 빼면 9개가 1점.
+    이 문항이 재는 것은 '영어로 사고 과정을 늘어놓았는가'이지
+    '라틴 문자를 한 자도 쓰지 않았는가'가 아니다.
+    """
     if not actual or not actual.strip():
         return 0
     lines = [ln for ln in actual.strip().splitlines() if ln.strip()]
@@ -632,7 +659,10 @@ def grade_q1_korean_sentinel(actual):
         return 0
     if not re.search(r"[가-힣]", actual):
         return 0
-    if re.search(r"[A-Za-z]{3,}", _strip_code_blocks(actual)):
+    body = _strip_inline_code(_strip_code_blocks(actual))
+    for w in _ALLOWED_LATIN_WORDS:
+        body = re.sub(re.escape(w), "", body, flags=re.I)
+    if re.search(r"[A-Za-z]{3,}", body):
         return 0
     return 1
 
@@ -1030,6 +1060,10 @@ CLI_MODEL_MAP = {
     # 2026-10-16 hangover fix: #low 는 게임 세션(#max)보다 ~6x 짧은 지연을 보여 조인 조건이었다(4/12).
     # 출력 속도가 ~24 tok/s 라 60초 컷(≈1,400토큰)이 abilities 를 잘랐다. #max 로 측정한다.
     "ll-alpha-free": "opencode/ll-alpha-free#max",
+    # AIK24-OG-ECO-01 (2026-11-15): OpenGateway 유료 eco tier. 무료 접미사 필터
+    # (:free/-free)를 통과하지 못해 무료 캐탈로그에 없으므로 명시 등록으로 진입한다.
+    # opencode provider "opengateway" 등록(2026-11-15) + reasoning_effort=none body 고정.
+    "opengateway/deepseek/deepseek-v4.1-flash-eco": "opengateway/deepseek/deepseek-v4.1-flash-eco",
 }
 
 
@@ -1110,12 +1144,29 @@ def sandbox_exec(code, harness):
         return None, "검증 마커 없음(하네스 미도작)"
 
 
+def extract_code_for(spec, answer):
+    """샌드박스용 코드 추출 — 문항이 요구한 함수를 정의한 펜스만 쓴다.
+
+    2026-11-16 (AIK24-EVAL-DEFECT-01): extract_code 는 모든 펜스를 이어붙였다.
+    답안이 **인용한 원본 버그 코드**가 첫 블록이면 그것이 먼저 실행돼
+    NameError 로 0점이 됐다. 재현: 참조 정답만 → 통과,
+    '인용 버그 한 줄 + 참조 정답' → NameError. 요구 함수를 정의한 블록을 우선한다.
+    """
+    blocks = [b.strip() for b in _CODE_FENCE_RE.findall(answer or "") if b.strip()]
+    sym = spec.get("sandbox_symbol")
+    if sym:
+        hit = [b for b in blocks if ("def %s" % sym) in b]
+        if hit:
+            return "\n\n".join(hit)
+    return extract_code(answer)
+
+
 def sandbox_grade(spec, answer):
     """문항 spec 의 샌드박스로 모델 답변을 채점. (points|None, reason)."""
     harness = spec.get("sandbox_harness")
     if not harness:
         return None, "샌드박스 미지정"
-    code = extract_code(answer)
+    code = extract_code_for(spec, answer)
     if not code.strip():
         return 0, "응답에 코드 없음"
     ref = spec.get("sandbox_reference")
@@ -1141,11 +1192,19 @@ def cli_prompt(spec):
 
 
 def cli_call(cli_model, prompt, timeout=QUESTION_TIMEOUT):
-    """`opencode run` 1회 호출. (텍스트, "") 또는 ("", 사유)."""
+    """`opencode run` 1회 호출. (텍스트, "") 또는 ("", 사유).
+
+    2026-11-16 (AIK24-EVAL-DEFECT-01): `opencode run` 은 **현재 폴더를 프로젝트로** 삼아
+    모델에 파일 도구를 준다. 저장소 루트에서 돌리면 모델이 저장소를 읽어(예: 이미 있는
+    테스트를 근거로 답변 거부 — Q4 0점) 파일을 쓰기까지 한다(2026-11-08 실측 사고).
+    호출 경로가 여러 개라(free_models_page.py, model_eval.py __main__) 호출부마다
+    감싸는 대신 이 단일 초크포인트에서 빈 임시 디렉터리로 격리한다.
+    """
+    d = tempfile.mkdtemp(prefix="aik24-eval-cli-")
     try:
         p = subprocess.run(
             ["opencode", "run", "-m", cli_model, "--format", "json"],
-            input=prompt, capture_output=True, text=True, timeout=timeout,
+            input=prompt, capture_output=True, text=True, timeout=timeout, cwd=d,
         )
     except subprocess.TimeoutExpired:
         return "", f"CLI 타임아웃 {timeout}초"
@@ -1153,6 +1212,8 @@ def cli_call(cli_model, prompt, timeout=QUESTION_TIMEOUT):
         return "", "opencode CLI 없음"
     except Exception as e:
         return "", f"CLI 예외 {type(e).__name__}"
+    finally:
+        shutil.rmtree(d, ignore_errors=True)
     texts, err = [], ""
     for line in p.stdout.splitlines():
         line = line.strip()
