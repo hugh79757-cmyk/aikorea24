@@ -752,3 +752,22 @@
 {"ts": "2026-11-15 07:30:57", "slug": "lexidesk-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-15 07:31:09", "slug": "lium-ai", "step": "thumb", "result": "fail", "detail": "❌ lium-ai BLANK(SMALL_818B) | NO_OG_IMAGE | NO_OG_IMAGE | ❌ lium-ai NO_OG_IMAGE", "dry_run": false}
 {"ts": "2026-11-15 07:31:10", "slug": "manyface-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:06", "slug": "basetab-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:08", "slug": "basetab-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-16 07:30:09", "slug": "chainpoints", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:09", "slug": "chainpoints", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-16 07:30:09", "slug": "github-copilot-fusion", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:10", "slug": "github-copilot-fusion", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-16 07:30:12", "slug": "telemetry-dev", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:12", "slug": "telemetry-dev", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-16 07:30:15", "slug": "mathbuddy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:15", "slug": "meetily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:16", "slug": "meev-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:17", "slug": "mnki-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:17", "slug": "motiofy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:30:23", "slug": "mozaik", "step": "thumb", "result": "fail", "detail": "❌ mozaik BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ mozaik NO_OG_IMAGE", "dry_run": false}
+{"ts": "2026-11-16 07:31:02", "slug": "muse-video-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:31:02", "slug": "musicaura-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:31:02", "slug": "nuclr-commander", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:31:02", "slug": "omlx-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-16 07:31:03", "slug": "patternful-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
