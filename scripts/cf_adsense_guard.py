@@ -56,9 +56,10 @@ def load_env():
         os.environ[k] = v.strip().strip('"').strip("'")
 
 
-def token():
+def token(preferred=""):
     load_env()
-    for name in TOKEN_VARS:
+    names = ((preferred,) if preferred else ()) + TOKEN_VARS
+    for name in names:
         v = os.environ.get(name, "").strip()
         if v:
             return v, name
@@ -250,12 +251,14 @@ def main():
     ap.add_argument("--only", default="all",
                     choices=["all", "settings", "bot", "waf", "ratelimit"])
     ap.add_argument("--zone", default="", help="기본: 접근 가능한 전 존(적용은 --all-zones 필요)")
+    ap.add_argument("--token-env", default="",
+                    help="사용할 토큰 환경변수 이름 (예: CF_DNS_TOKEN). 기본은 내장 우선순위")
     ap.add_argument("--all-zones", action="store_true",
                     help="apply 시 접근 가능한 모든 존에 적용(기본은 --zone 1개만 허용)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
-    tok, name = token()
+    tok, name = token(a.token_env)
     print("토큰: %s (값 비출력)" % name)
     cf = CF(tok)
     all_zones = zones(cf)

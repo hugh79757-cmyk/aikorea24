@@ -1,3 +1,1138 @@
+## 2026-11-17 00:10 — 광고 재삽입(가드) 완료 · 404 15/15 유지 · 테마 교체는 1개만
+
+지시: "광고코드 재삽입해. 메타테그는 없어도 된다. 테마는 모두 교체된거야?"
+
+### 답: 테마 교체는 **2.techpawz 1개만**
+
+나머지 14개는 **원래 테마 유지**(Zing/Faster/VTrick/Renzzy/Essential/커스텀). 404 차단은 `b:if` 가드로 달성.
+
+### 광고 재삽입 (가드 포함) — 저장·검증 완료
+
+| 호스트 | 방법 | 404 | 홈 |
+|---|---|---|---|
+| kbo.rotcha.kr | `</body>` 앞에 가드된 광고 유닛 삽입 (pub 8772 / slot 8078498938) | 테마0/슬롯0 | 테마1/슬롯1 |
+| sports.rotcha.kr | 〃 (slot 5511772270) | 테마0/슬롯0 | 테마1/슬롯1 |
+| issuetwinkle-tv.info | 〃 (pub 6677 / slot 4174739911) | 테마0/슬롯0 (플랫폼만) | 테마1/슬롯1 |
+
+- 삽입 블록은 `AIK24-ADS-RESTORE` 마커 + `<b:if cond='data:blog.pageType != "error_page"'>` 로 감쌈.
+- 404 에서 **복원 슬롯이 HTML에 아예 없음**을 확인(가드 정상 동작).
+
+### 최종 상태 — 15/15 404 광고 0
+
+| 404 (테마/플랫폼/슬롯) 기준 전부 `0/*/0` | 확인 |
+|---|---|
+| 1.rotcha · cheap-food · travel · weather · k-league · quiz · kbo · sports · itv.rotcha | 0/0/0 |
+| 65 · simprotection | 0/0/0 (홈 6/5 유지) |
+| tv-show · ud · itv.info · 2.techpawz | 0/**1**(플랫폼)/0 |
+
+### 남은 것
+
+1. **2.techpawz 광고 재삽입 불가** — 테마 HTML 저장이 프로그램적으로 차단(저장 버튼 disabled 유지). Contempo 상태라 광고 0.
+   → 사람이 테마 편집기에서 아래를 `</body>` 앞에 붙여넣으면 저장된다(사람 입력은 dirty 인식됨).
+2. **2.techpawz 네이버 메타**: 지시대로 복구하지 않음.
+3. 플랫폼 스크립트(`host=ca-host-pub`)는 테마로 제거 불가 → AdSense 앵커 광고 OFF 권장.
+
+### 붙여넣을 코드 (2.techpawz)
+
+```xml
+<b:if cond='data:blog.pageType != &quot;error_page&quot;'>
+<script async='async' crossorigin='anonymous' src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8772455780561463'/>
+<ins class='adsbygoogle' style='display:block;margin:16px auto;max-width:728px;width:100%' data-ad-client='ca-pub-8772455780561463' data-ad-slot='1993755205' data-ad-format='auto' data-full-width-responsive='true'></ins>
+<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</b:if>
+```
+
+## 2026-11-16 23:00 — Blogger 404 광고 제거 15/15 완료 (2.techpawz는 기본 테마로 교체)
+
+지시: "메타 태그들 기본 테마로 옮기고 다시 시도해봐."
+
+### 최종 실측 — 15/15 전부 404 테마로더 0 · 슬롯 0
+
+| 호스트 | 404 테마로더 | 플랫폼 | 슬롯 | 홈 로더 |
+|---|---|---|---|---|
+| 1.rotcha.kr | 0 | 0 | 0 | 0 |
+| 2.techpawz.com | 0 | 1 | 0 | **0 (테마 교체로 광고 없음)** |
+| 65.informationhot.kr | 0 | 0 | 0 | 6 |
+| cheap-food.informationhot.kr | 0 | 0 | 0 | 1 |
+| issuetwinkle-tv.informationhot.kr | 0 | 1 | 0 | 0 |
+| issuetwinkle-tv.rotcha.kr | 0 | 0 | 0 | 1 |
+| k-league.rotcha.kr | 0 | 0 | 0 | 1 |
+| kbo.rotcha.kr | 0 | 0 | 0 | 0 |
+| quiz.informationhot.kr | 0 | 0 | 0 | 1 |
+| simprotection.informationhot.kr | 0 | 0 | 0 | 5 |
+| sports.rotcha.kr | 0 | 0 | 0 | 0 |
+| travel.rotcha.kr | 0 | 0 | 0 | 1 |
+| tv-show.informationhot.kr | 0 | 1 | 0 | 2 |
+| ud.informationhot.kr | 0 | 1 | 0 | 2 |
+| weather.informationhot.kr | 0 | 0 | 0 | 1 |
+
+### 2.techpawz 처리 경로
+
+- 테마 HTML **저장이 원천 차단**된 것을 규명: 편집기에서 `setValue`/`replaceRange` 후에도
+  저장 버튼이 **disabled 클래스(`M9Bg4d`) 유지** → 프로그램 변경을 에디터가 감지하지 못함.
+  강제로 클래스 제거 후 클릭해도 반영 안 됨(3회). 복원(업로드) 경로도 동작 안 함.
+- 그래서 **테마 자체를 Contempo(기본)로 교체** → 저장 경로가 달라 정상 적용됨.
+  근거: 라이브 HTML 에 `Contempo` 마커 등장, 404 로더 4 → **1**(플랫폼만).
+- 교체 전 원본 테마는 `/tmp/theme_5484205249958557854_noads.xml`(939,039자)로 보관.
+
+### 부작용 — 네이버 인증 메타 소실
+
+- 기존 테마에 있던 `<meta content='643d1291136a304e8924c48c14ae5305bf102aa2' name='naver-site-verification'/>`
+  가 새 테마에 **이식되지 못했다**(같은 저장 차단).
+- 라이브 확인: `2.techpawz.com` 에서 `naver-site-verification` **0건**.
+- 복구 방법: ①사람이 테마 편집기에서 한 줄 붙여넣고 저장 ②네이버 서치어드바이저에서 DNS(TXT) 방식으로 재인증.
+
+### 수익 영향 (광고 0이 된 블로그)
+
+kbo · sports · issuetwinkle-tv.informationhot.kr · **2.techpawz** — 홈페이지 포함 광고 없음.
+(나머지 11개 존은 홈 광고 유지)
+
+### 다음 행동
+
+1. 2.techpawz 네이버 인증 복구(위 ①·②)
+2. 광고를 되살릴지 결정: kbo·sports·itv.info·2.techpawz — 되살리려면 테마에 광고 코드 재삽입 + 404 가드 동시 적용
+3. 3~7일 후 404·봇 비중 재측정
+
+## 2026-11-16 22:20 — Blogger 404 광고 제거 완료: 14/15 존 (2.techpawz만 잔여)
+
+지시: "안되면 테마 자체를 바꾸든지, 펍코드를 삭제해라."
+
+### 최종 실측 (404 페이지)
+
+| 호스트 | 테마로더 | 플랫폼 | 슬롯 | 상태 |
+|---|---|---|---|---|
+| 1.rotcha · k-league · quiz | 0 | 0 | 0 | ✅ (원래 없음) |
+| 65.informationhot.kr | 0 | 0 | 0 | ✅ |
+| cheap-food.informationhot.kr | 0 | 0 | 0 | ✅ |
+| kbo.rotcha.kr | 0 | 0 | 0 | ✅ |
+| sports.rotcha.kr | 0 | 0 | 0 | ✅ |
+| travel.rotcha.kr | 0 | 0 | 0 | ✅ |
+| weather.informationhot.kr | 0 | 0 | 0 | ✅ |
+| simprotection.informationhot.kr | 0 | 0 | 0 | ✅ |
+| issuetwinkle-tv.rotcha.kr | 0 | 0 | 0 | ✅ |
+| issuetwinkle-tv.informationhot.kr | 0 | 1 | 0 | ✅(플랫폼만) |
+| tv-show.informationhot.kr | 0 | 1 | 0 | ✅(플랫폼만) |
+| ud.informationhot.kr | 0 | 1 | 0 | ✅(플랫폼만) |
+| **2.techpawz.com** | **3** | 1 | 0 | ❌ |
+
+→ 시작 3/15 → **14/15 (93%)**.
+
+### 이번 라운드에 실제로 한 조치
+
+1. **저장 실패 원인 2개 규명**
+   - 저장 버튼 좌표: UI 언어별로 다름 (영어 824,94 / 한국어 800,70). 이전 실패는 빈 곳 클릭.
+   - 저장 반영 대기: 테마가 크면(900KB) 15~20초 필요. 5초 대기 후 재조회해 "저장 안 됨"으로 오판했던 것.
+2. **`<ins>` 래핑 정규식 버그 수정**: 여는 태그만 감싸 XML이 깨져 저장 거부 → 전체 요소(여닫는 쌍) 감쌈으로 교체.
+3. **광고 코드 전면 삭제(펍코드 삭제)**: kbo·sports·issuetwinkle-tv.info·issuetwinkle-tv.rotcha
+   - `adsbygoogle.js` 스크립트, `<ins class=adsbygoogle>`, push 스크립트 전부 제거 → 저장 확인.
+   - 부작용: **kbo·sports 홈페이지도 광고 0**이 됨(수익 손실). 나머지는 홈 광고 유지.
+
+### 홈페이지(정상 글) 광고 상태 — 수익 영향
+
+| 구분 | 호스트 |
+|---|---|
+| 광고 유지 | 65(6), simprotection(5), tv-show(3), ud(3), travel(1), cheap-food(1), itv.info(1), itv.rotcha(1) |
+| **광고 0 (수익 중단)** | **kbo, sports** ← 펍코드 삭제 지시에 따른 조치 |
+
+### 2.techpawz만 남은 이유
+
+- 편집기에서 수정은 되지만 저장이 **조용히 거부**됨(3회, 20~25초 대기 포함).
+- 테마 복원(업로드) 경로도 자동화 실패(파일 선택 후 UPLOAD 미동작).
+- 테마가 Zing(Templateify)이고 광고가 **HTML 위젯 CDATA 7곳**에도 박혀 있어 구조가 복잡.
+
+### 다음 행동
+
+1. 2.techpawz: 사람이 편집기에서 붙여넣고 저장(현재 수정본 `/tmp/theme_5484205249958557854_noads.xml`, 939,706B)
+   또는 테마 교체(Contempo 등) 또는 Layout에서 광고 위젯 삭제.
+2. kbo·sports 광고 복원 여부 결정(현재 0).
+
+## 2026-11-16 21:00 — ego로 Blogger 테마 편집: 9/15 존 광고 0 달성
+
+지시: "니가 해라" + hugh7973@gmail.com 계정으로 전환.
+
+### 결정적 원인 2개 (이번에 해결)
+
+1. **저장 버튼 좌표**: 계정/UI 언어에 따라 위치가 달라짐. 영어 UI = (824, 94), 한국어 = (800, 70).
+   이전 라운드에서 (800,70)을 눌러 **빈 곳을 클릭** → 저장 실패로 오판했던 것.
+2. **계정 권한**: `Jin Y`(작성자) 계정에서는 테마 저장이 조용히 실패. **Hugh 계정**에서는 저장 성공.
+   Hugh 계정에서는 `/u/3/blog/themes/edit/{id}` 가 **모든 블로그 ID로 직접 열린다**(리다이렉트 없음).
+
+### 최종 실측 (404 페이지, 테마 로더/플랫폼/슬롯)
+
+| 호스트 | 테마로더 | 플랫폼 | 슬롯 | 상태 |
+|---|---|---|---|---|
+| 1.rotcha.kr | 0 | 0 | 0 | ✅ |
+| 65.informationhot.kr | 0 | 0 | 0 | ✅ |
+| cheap-food.informationhot.kr | 0 | 0 | 0 | ✅ |
+| k-league.rotcha.kr | 0 | 0 | 0 | ✅ |
+| quiz.informationhot.kr | 0 | 0 | 0 | ✅ |
+| simprotection.informationhot.kr | 0 | 0 | 0 | ✅ |
+| weather.informationhot.kr | 0 | 0 | 0 | ✅ |
+| tv-show.informationhot.kr | 0 | 1 | 0 | ✅(플랫폼만) |
+| ud.informationhot.kr | 0 | 1 | 0 | ✅(플랫폼만) |
+| 2.techpawz.com | 3 | 1 | 0 | ❌ 저장 거부 |
+| issuetwinkle-tv.informationhot.kr | 1 | 1 | 1 | ❌ |
+| issuetwinkle-tv.rotcha.kr | 1 | 0 | 0 | ❌ 편집기 미로드 |
+| kbo.rotcha.kr | 1 | 0 | 1 | ❌ 슬롯 잔존 |
+| sports.rotcha.kr | 1 | 0 | 1 | ❌ 저장 거부 |
+| travel.rotcha.kr | 1 | 0 | 0 | ❌ 저장 거부 |
+
+→ 시작 시 3/15 → **현재 9/15 (60%)** 광고 0.
+
+### 이번에 저장 성공한 편집
+
+- weather: 로더 1건 감쌈 (22,808 → 22,873, 재오픈 확인)
+- simprotection: 로더 4 + 슬롯 2 (→ 229,174, guards 6)
+- kbo: 로더 2 + 슬롯 6 (→ 863,093, guards 4)
+- cheap-food: 로더 1 (11,958 → 12,023)
+- 65: 로더 5 + 슬롯 5 (이전 라운드)
+- ud / tv-show: AdSense 위젯 조건 (이전 라운드)
+- issuetwinkle-tv.info(u/4): 로더 1 (288,916 → 288,981, guards 3)
+
+### 실패 원인 (남은 6개)
+
+- **저장 거부(조용한 실패)**: 2.techpawz·travel·sports — 치환은 되지만 재오픈 시 원복.
+  테마가 복잡(Zing/Templateify)하고 광고가 **HTML 위젯 `<b:widget-settings>` CDATA 안**에도 박혀 있어
+  b:if 로 감싸면 XML 검증에서 거부되는 것으로 보인다(CDATA 내부는 감싸지 않도록 이미 제외했음에도 실패).
+- **편집기 미로드**: issuetwinkle-tv.rotcha (CM 0자) — 재시도 필요.
+- **슬롯 잔존**: kbo·sports·issuetwinkle-tv.info — `<ins>` 치환이 저장에서 빠졌거나 페이지에 위젯으로 재주입.
+
+### 다음 행동
+
+1. 남은 6개: **위젯 CDATA 내용 자체를 수정**(광고 위젯 내용을 error_page 조건 JS로 바꾸거나 제거)하는 방향으로 전환.
+2. issuetwinkle-tv.rotcha 재시도.
+3. ud·tv-show 의 플랫폼 스크립트는 AdSense 앵커 광고 OFF 로 대응(테마 불가).
+
+## 2026-11-16 20:10 — ego 편집 시도 2: 2.techpawz 저장 실패(권한), 완료 4개 존 확정
+
+### 이번 라운드 사실
+
+- `/u/4/` 계정의 활성 블로그 = **2.techpawz.com** (blogId 5484205249958557854), 테마 = **Zing Blog (Templateify)**
+- `/u/0`·`/u/1`·`/u/3` → ud.informationhot.kr, `/u/5` → u/0 으로 폴백(사실상 같은 사용자)
+- 2.techpawz 테마 편집: 편집기에서 수정 → **저장을 눌러도 반영 안 됨**
+  - 검증 3회: (a) 위젯 조건 1건 치환 후 저장 → 재오픈 시 원본(942,749자, guard 0)
+    (b) 실제 마우스 클릭으로 저장(x=800,y=70) → 동일
+    (c) 무의미 주석 `<!-- probe -->` 추가 후 저장 → 재오픈 시 사라짐
+  - 오류 토스트/다이얼로그 없음(조용한 실패)
+- 권한 화면: `Blog 관리자 및 작성자 — 도스에소님 외 4명` → 현재 계정 **Jin Y** 가 **작성자(author)** 로 보임.
+  Blogger 는 관리자만 테마 저장 허용 → **조용한 저장 실패의 원인으로 판단**(대조: ud/tv-show/65 는 twinssn 계정에서 저장 성공)
+
+### 확정된 완료 (라이브 404 실측)
+
+| 호스트 | 로더 | 슬롯 | 비고 |
+|---|---|---|---|
+| 65.informationhot.kr | 0 | 0 | 완전 |
+| ud.informationhot.kr | 1 | 0 | Blogger 플랫폼만 |
+| tv-show.informationhot.kr | 1 | 0 | Blogger 플랫폼만 |
+| sports.rotcha.kr | 1 | 1 | 테마 1개 + 슬롯 1개 남음 |
+| 1.rotcha.kr · k-league.rotcha.kr · quiz.informationhot.kr | 0 | 0 | 원래 없음 |
+
+### 미완 (테마 저장 가능한 관리자 계정 필요)
+
+2.techpawz(4) · issuetwinkle-tv.info(3+1) · kbo(2+1) · simprotection(2) ·
+travel(1) · weather(1) · cheap-food(1) · issuetwinkle-tv.rotcha(1) · sports(1+1)
+
+### 다음 행동
+
+1. 각 Blogger 블로그의 **관리자(owner/admin) 계정**으로 ego 로그인 필요 — 5명 접근자 중 관리자 확인.
+2. 관리자 계정으로 활성화되면 이번에 성공한 절차(편집기 → 3패턴 치환 → 저장 → 재오픈 검증 → 라이브 curl)로 일괄 처리.
+3. 관리자 계정 확보 전에는 tv-show/ud 처럼 "Blogger 플랫폼 스크립트"만 남은 존은 더 줄일 수 없음.
+
+## 2026-11-16 19:30 — ego 브라우저로 Blogger 테마 광고 차단 (4개 존 완전, 2개 플랫폼만 잔여)
+
+지시: "니가 해라" → ego lite로 Blogger 테마를 직접 편집.
+
+### 완료 (실측 404 로더/슬롯)
+
+| 호스트 | 편집 전 | 편집 후 | 남은 것 |
+|---|---|---|---|
+| **65.informationhot.kr** | 로더 5 · 슬롯 5 | **0 · 0** | 없음 ✅ |
+| **tv-show.informationhot.kr** | 로더 2 | **1** | Blogger 플랫폼 스크립트(테마 불가) |
+| **ud.informationhot.kr** | 로더 2 | **1** | 〃 |
+| **sports.rotcha.kr** | 3 · 1 | 1 · 1 | 테마 수동 1 + 슬롯 1 |
+
+- 정상 페이지 회귀 없음: ud 홈 로더 3, tv-show 홈 3, 65 홈 로더 6 유지.
+- 404 광고가 원래 없던 3개(1.rotcha, k-league, quiz) 포함 **4개 존이 0/0**.
+
+### 적용한 편집 패턴 (재사용 가능)
+
+1. Blogger AdSense 위젯 조건:
+   `<b:if cond='data:widgets.AdSense.first or data:blog.adsenseClientId'>`
+   → `… and data:blog.pageType != &quot;error_page&quot;`
+2. 테마에 직접 박힌 로더 감싸기: `<script …adsbygoogle.js…/>` → `<b:if cond='data:blog.pageType != &quot;error_page&quot;'>…</b:if>`
+3. 테마 인아티클 슬롯 감싸기: `<ins class='adsbygoogle' …/>` (+ push 스크립트) → 같은 b:if
+   (65는 1·2로 로더를 0으로 만들었지만 슬롯 5개가 남아, 3까지 적용해 0/0 달성)
+
+### 차단 — 대량 처리 불가
+
+- 편집기 URL(`/u/3/blog/themes/edit/{id}`)은 **마지막 활성 블로그로 리다이렉트**된다(실측: u/0·u/1·u/4·u/5 모두 `5741192928273492754`=ud 로 이동). 즉 임의 블로그 지정 불가.
+- 블로그 전환 스위처는 열릴 때마다 스크롤 위치·항목 순서가 달라져, 좌표 기반 클릭이 옆 항목(View blog)으로 떨어짐(실측 3회).
+  - JS dispatch, 키보드, 뷰포트 확대 모두 실패. `[role=listbox]`는 화면 밖(x=-280)에 렌더링.
+
+### 남은 호스트 (테마 수동 로더/슬롯 잔존)
+
+| 호스트 | 로더 | 슬롯 |
+|---|---|---|
+| 2.techpawz.com | 4 | 0 |
+| issuetwinkle-tv.informationhot.kr | 3 | 1 |
+| kbo.rotcha.kr | 2 | 1 |
+| simprotection.informationhot.kr | 2 | 0 |
+| travel.rotcha.kr | 1 | 0 |
+| weather.informationhot.kr | 1 | 0 |
+| cheap-food.informationhot.kr | 1 | 0 |
+| issuetwinkle-tv.rotcha.kr | 1 | 0 |
+| sports.rotcha.kr | 1 | 1 |
+
+### 다음 행동
+
+- **블로그를 스위처에서 1회 클릭해 활성화**해 주면, 그 블로그는 제가 URL로 즉시 편집·저장·검증할 수 있다(이번에 65·tv-show·ud·sports 가 그 방식으로 성공).
+- 가장 효과 큰 순서: 2.techpawz(4) → issuetwinkle-tv.info(3+1) → kbo(2+1) → simprotection(2) → 나머지 1개씩.
+- ud·tv-show 의 잔여 1개는 Blogger 플랫폼 스크립트라 AdSense 앵커 광고 OFF 로만 대응 가능.
+
+## 2026-11-16 18:40 — ego 브라우저로 Blogger 테마 편집 시도 (ud 1건 완료, 전환 차단)
+
+지시: "니가 해라" (ego lite 로그인 상태).
+
+### 완료 — ud.informationhot.kr (blogId 5741192928273492754)
+
+- ego 브라우저로 `draft.blogger.com/blog/themes/edit/5741192928273492754` 접근 → CodeMirror 에서 테마 XML(794,418자) 추출
+- 백업: `/tmp/blogger_theme_ud.xml`
+- 편집: AdSense 위젯 조건에 오류 페이지 제외 추가
+  - before: `<b:if cond='data:widgets.AdSense.first or data:blog.adsenseClientId'>`
+  - after: `<b:if cond='(data:widgets.AdSense.first or data:blog.adsenseClientId) and data:blog.pageType != &quot;error_page&quot;'>`
+  - 치환 1회 확인 후 `CodeMirror.setValue()` → 저장 버튼 클릭
+- **[검증됨] 라이브**: `https://ud.informationhot.kr/zz-final-ud2` → **404 · 로더 1개**(이전 2개), 홈 **200 · 로더 3개 유지**
+- 남은 1개는 `…&host=ca-host-pub-1556223355139109` = **Blogger 플랫폼 스크립트**(테마에 문자열 없음, 서버가 주입) → 테마로 제거 불가
+
+### 차단 — 다른 블로그로 전환 불가
+
+- 이 Google 계정(twinssn@gmail.com) 스위처에 블로그 5개(세상의 모든 레시피=ud, 여행 할 때는…, 시니어 복지 혜택 정보, 디지털 노마드?…, 우리 몸에…건강정보)만 노출
+- 블로그 전환 listbox 가 **화면 밖(x=-152~-280)에 렌더링**되어 좌표 클릭 불가.
+  - 시도: 마우스 클릭(좌표), JS dispatch(click/mousedown/mouseup), 키보드(Enter/ArrowDown/Enter),
+    `Emulation.setDeviceMetricsOverride`(1440px) — 전부 실패(URL 변화 없음)
+  - 원인 추정: Material listbox 선택이 신뢰 이벤트/CDP 히트테스트를 요구하는데 요소가 뷰포트 밖
+- URL 로 블로그 지정 시도(`/blog/themes/edit/{id}`, `?blogID=`, `/blog/posts/{id}`) → 세션이 마지막 블로그(ud)로 **강제 리다이렉트**
+
+### 미완 (이 계정/다른 계정 여부 미확인)
+
+2.techpawz, 65, cheap-food, issuetwinkle-tv.info, issuetwinkle-tv.rotcha, kbo, sports,
+travel, tv-show, weather — 각각 남은 로더/슬롯은 앞선 문서(`docs/adsense-blogger-404-recheck.md`) 참조.
+
+### 다음 행동
+
+1. 대표님이 스위처에서 대상 블로그를 **1회 클릭**해 주면, 그 뒤 테마 편집·저장·검증은 내가 자동으로 이어서 한다
+   (편집 패턴은 ud 와 동일: `data:widgets.AdSense…` 조건에 `and data:blog.pageType != "error_page"`).
+2. 다른 Google 계정 소유 블로그는 그 계정 로그인이 필요.
+3. ud 의 잔여 Blogger 플랫폼 스크립트는 AdSense 앵커 광고 OFF 로 대응.
+
+## 2026-11-16 17:55 — Blogger 404 재점검 (ud·tv-show·65·issuetwinkle 편집 후)
+
+질문: "몇개는 고쳤고 어떤걸 안고쳤는지 모르겠다."
+
+### 실측 결과 (404 페이지 로더·슬롯 개수, 편집 전 → 후)
+
+| 호스트 | 편집 | 로더 | 슬롯 | 상태 |
+|---|---|---|---|---|
+| tv-show.informationhot.kr | O | 3 → **2** | 0 | 🔶 부분(1개 제거) |
+| ud.informationhot.kr | O | 3 → **2** | 0 | 🔶 부분(1개 제거) |
+| 65.informationhot.kr | O | 6 → **5** | 5 | 🔶 부분(1개 제거) |
+| issuetwinkle-tv.informationhot.kr | O | 3 → **3** | 1 | ❌ **편집했으나 변화 없음** |
+| kbo.rotcha.kr | - | 3 → 2 | 1 | 🔶 (편집 안 했다고 하셨지만 1개 줄어 있음) |
+| sports.rotcha.kr | - | 3 → 2 | 1 | 🔶 동일 |
+| 2.techpawz.com | - | 4 | 0 | ❌ 미적용 |
+| cheap-food·simprotection·weather·travel·issuetwinkle-tv.rotcha | - | 1~2 | 0 | ❌ 미적용 |
+| 1.rotcha·k-league·quiz | - | 0 | 0 | ✅ 조치 불필요 |
+
+**[검증됨] 정상 페이지 회귀 없음** — 편집한 4개 모두 홈 200 + 광고 로더 유지(tv-show 3, ud 3). 404 에서만 1개씩 빠졌다. 즉 의도대로 동작.
+
+### 남은 주입 지점 4유형 (실측 URL 기준)
+
+1. **`//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js`** (프로토콜 상대, `<!-- Google AdSense -->` 주석 바로 뒤)
+   → **테마 코드**. 같은 `b:if`로 감싸면 사라진다. 대상: tv-show, ud, kbo, sports, 2.techpawz.
+2. **`<ins class='adsbygoogle' data-ad-slot=…>` + 로더** (테마 섹션/위젯)
+   → 블록째 감싸야 한다. 대상: 65(5개), issuetwinkle-tv.info(1), kbo(1), sports(1).
+3. **`&host=ca-host-pub-1556223355139109`** (Blogger 수익창출 자동 삽입)
+   → **테마로 제거 불가**(재주입). 대상: tv-show, ud, 2.techpawz, issuetwinkle-tv.info.
+4. **manual 로더 1개만** → 한 줄 감싸면 끝. 대상: cheap-food, simprotection, weather, travel, issuetwinkle-tv.rotcha.
+
+### issuetwinkle-tv.informationhot.kr 이 안 바뀐 이유
+
+그 블로그의 로더 위치가 3곳: ①`naver-site-verification` 바로 다음 head ②Blogger 연동 ③`widget-content` 안 `top-ad-container`.
+편집이 ①에 안 닿았거나 저장이 안 됐다(라이브 값 3 → 3). 재확인 필요.
+
+### 산출물
+
+- `docs/adsense-blogger-404-recheck.md`
+- 원자료 `/tmp/blogger404_after.json`
+
+### 잔존 위험
+
+- Blogger 연동(4개 호스트)은 테마로 못 없앤다 → AdSense 앵커 OFF 또는 Blogger 수익창출 설정 영역.
+- 65·issuetwinkle 은 슬롯이 테마 섹션에 있어 블록 단위 편집 필요(난이도 높음).
+- 실제 광고 "요청"이 발생하는지는 헤드리스 브라우저 없이는 확정 불가([검증불가]) — HTML 상의 로더/슬롯 개수로만 판정.
+
+### 다음 행동
+
+1. tv-show/ud/kbo/sports/2.techpawz: `//pagead2…` 로더까지 추가로 감싸기 → 로더 0 (Blogger 연동만 남음).
+2. cheap-food/simprotection/weather/travel/issuetwinkle-tv.rotcha: head 로더 1개 감싸면 완료.
+3. 65·issuetwinkle-tv.info: 섹션 블록 단위 편집.
+4. issuetwinkle-tv.info: 편집 위치 재확인.
+
+## 2026-11-16 17:20 — Blogger 15개 블로그 404 광고 전수 실측 (ud 포함)
+
+질문: "ud.informationhot.kr에서는 이런 문제가 없어?" → **있다.** 같은 Blogger 테마. 조사를 15개 호스트로 확장.
+
+### 1. 전수 측정 (각 호스트 `/zz-probe-f3k` Chrome UA, 전부 HTTP 404 확인)
+
+| 판정 | 수 | 호스트 |
+|---|---|---|
+| 수동 광고 슬롯 있음 | **4** | 65.informationhot.kr(5슬롯) · issuetwinkle-tv.informationhot.kr(1) · kbo.rotcha.kr(1) · sports.rotcha.kr(1) |
+| Auto ads 만 | **5** | 2.techpawz.com · issuetwinkle-tv.rotcha.kr · travel.rotcha.kr · tv-show.informationhot.kr · ud.informationhot.kr |
+| 로더만 있음(자동광고 설정 시 게재) | **3** | cheap-food · simprotection · weather (모두 informationhot) |
+| 광고 없음(CSS 문자열만) | **3** | 1.rotcha.kr · k-league.rotcha.kr · quiz.informationhot.kr |
+
+→ **최소 9개, 최대 12개** 블로그가 404 에서 광고를 내보낸다. 1.rotcha/k-league/quiz 는 `.adsbygoogle{}` CSS 만 있어 실제 광고 없음(오탐 제거).
+
+### 2. 테마 동일성 — 3군
+
+| 군 | 마커 | 호스트 수 | 호스트 |
+|---|---|---|---|
+| A | `errorWrap` `--button-bg` `slide-menu` `no-posts` | 8 | 2.techpawz, issuetwinkle-tv.rotcha, kbo, quiz, sports, travel, tv-show, ud |
+| B | `no-posts` 만(errorWrap 없음) | 3 | 1.rotcha, k-league, simprotection |
+| C | 마커 없음(개별 테마) | 4 | 65, cheap-food, weather, issuetwinkle-tv.informationhot |
+
+같은 군이면 같은 스니펫이 그대로 먹는다 → 편집은 3가지 패턴만 확인하면 된다.
+
+### 3. 호스트별 수정 지점
+
+| 호스트 | 고칠 지점 |
+|---|---|
+| 65.informationhot.kr | head 로더 6 + 슬롯 5(본문/섹션 렌더) |
+| issuetwinkle-tv.informationhot.kr | head 로더 3 + 슬롯 1 + **Blogger 연동 1** |
+| kbo.rotcha.kr / sports.rotcha.kr | head 로더 3 + 슬롯 1 + Auto ads |
+| 2.techpawz.com / tv-show / ud | head 로더 3~4 + Auto ads + **Blogger 연동 1** |
+| travel.rotcha.kr / issuetwinkle-tv.rotcha.kr | head 로더 1 + Auto ads |
+| cheap-food / simprotection / weather | head 로더 1개만 (b:if 로 감싸면 끝) |
+| 1.rotcha / k-league / quiz | 조치 불필요 |
+
+### 산출물
+
+- `docs/adsense-blogger-404-audit.md` — 15행 전체 표 + 스니펫 + 원칙
+- 원자료: `/tmp/blogger404.json`
+
+### 잔존 위험
+
+1. Auto ads 게재 여부는 AdSense 계정 설정에 달려 있어 Cloudflare·HTML 로는 확정 불가([검증불가]).
+2. Blogger 연동 광고(4개 호스트)는 테마 편집으로 못 없앤다.
+3. 테마 편집은 대표님 계정 로그인이 필요해 내가 직접 못 한다(금지 규칙).
+
+### 다음 행동
+
+1. A군 1개(예: ud)에서 먼저 스니펫 적용 → 내가 라이브 검증 → 나머지 7개 동일 적용.
+2. C군(65 등)은 개별 확인 필요.
+3. AdSense 앵커 광고 OFF 검토.
+
+## 2026-11-16 16:05 — ① 96 repo push ② /blog soft-404 ③ tv-show Blogger(블로커)
+
+지시: "순서대로해줘" (① push → ② /blog soft-404 → ③ tv-show Blogger 404)
+
+### ① repo push — 부분 완료
+
+- 대상: 광고 404 커밋 60 repo ∪ ETAP partial 커밋 36 repo = **60 repo**(ETAP 36개가 60에 포함)
+- **[검증됨] 29개 push 완료.** 근거: `git fetch` 후 `origin/main...HEAD` ahead=0 behind=0 확인.
+  - 방식: `git -c credential.helper='!f(){...$GITHUB_TOKEN...}'` — 토큰을 URL/설정에 남기지 않았다.
+  - osxkeychain 자격증명이 낡아 일반 `git push` 는 `Repository not found` 로 실패했다.
+- **[검증됨] 4개 미완.** 근거: 로컬 미커밋 변경이 있어 rebase 불가(`error: Please commit or stash them`),
+  이미 원격보다 앞선 커밋도 함께 있어(5~10개) 강제로 올리지 않았다:
+  `CAP/rank-hugo`(behind 41·ahead 5) `TAP/travel-hugo`(1·9) `TAP/travel4-hugo`(146·8) `techpawz-hugo`(3·10)
+- **[검증됨] 27개는 origin 원격 자체가 없다.** 근거: `git remote -v` 결과 없음(대부분 ETAP).
+  배포는 wrangler 로 이뤄지므로 사이트 운영에는 지장이 없다.
+- 오류로 rebase 되돌린 repo: 없음(충돌 시 `--abort` 후 원복 확인).
+
+### ② /blog soft-404 — 해결
+
+- 원인: `src/pages/blog/[...page].astro` 가 매핑 없는 슬러그를 EmDash 목록으로 301 → **200 + 광고 3**.
+- 수정: 매핑 없으면 **404 + noindex + 광고 없는 HTML** 반환. 매핑된 슬러그의 301 은 그대로.
+- **[검증됨] 라이브**: `/blog/zz-no-such-7k3/` → **404 · 광고 0**, `/blog/` → 200(목록, 정상),
+  매핑 슬러그 3건 → **301 → EmDash 글**(동작 불변). 배포 Version `b59ef57d`, 커밋 `5abe86a6`.
+
+### ③ tv-show.informationhot.kr (Blogger) — 블로커
+
+- 진단: `https://tv-show.informationhot.kr/<없는경로>` → 684KB Blogger **error_page**,
+  `ca-pub-6677996696534146` 4회, `adsbygoogle.js` 2회, **`adsbygoogle-noablate[data-anchor-shown]` = Auto ads 앵커**.
+  즉 광고는 ①테마 위젯 + ②AdSense Auto ads 두 경로에서 나온다.
+- **[검증불가] API 로 테마 수정 불가.**
+  - Blogger API v3 에 **테마 리소스가 없다**(blogs/posts/pages/comments 만).
+  - `blogger_token.pickle` 의 refresh token 이 **401 만료** → 재인증 필요(실측).
+  - 복구 계획: Blogger UI 에서 테마 편집 또는 브라우저 자동화, AdSense 콘솔에서 Auto ads URL 제외.
+- 미착수 사유: 로그인 자동화는 금지 규칙(네이버/구글 계정)에 해당하고, API 표면이 없다.
+
+### 잔존 위험
+
+1. push 미완 31개(로컬 변경 4 + 원격 없음 27).
+2. tv-show 404 광고는 그대로 — 노출량은 informationhot 존 404 40,017 중 일부.
+3. `/blog` 외 soft-404(200+광고) 패턴이 다른 라우트에 더 있을 수 있다(`/tools`, `/news` 등 미점검).
+
+### 다음 행동
+
+1. 4개 repo: 다른 세션 작업 커밋 정리 후 rebase·push.
+2. tv-show: Blogger UI/자동화로 `error_page` 조건에서 광고 위젯 제외 + AdSense Auto ads URL 제외.
+3. `/tools`·`/news` 등 나머지 라우트의 soft-404 점검.
+
+## 2026-11-16 15:10 — 60개 repo 일괄 커밋 + Astro 404 + ETAP 빌드 복구
+
+지시: "일괄 커밋 먼저해주고 아스트로 추가로 처리해줘" / "마지막에 etap 문제 해결하자".
+
+### 1) 60개 repo 일괄 커밋
+
+- 각 repo 의 `public/` 는 gitignore 라 추적 대상이 아니었다 → 커밋 대상은 **`layouts/404.html` 1개 파일**뿐.
+- 60/60 커밋 성공, 커밋당 변경 1파일 확인(예: etf-hugo `1 file changed, 24 insertions`,
+  informationhot-hugo 는 기존 추적 파일 교체라 `17 insertions / 87 deletions`).
+- 잡음(public/ churn, content 변경)은 포함되지 않았다. **push 는 하지 않았다.**
+
+### 2) Astro 404 (aikorea24)
+
+- `src/layouts/Layout.astro`: 선택 prop `noAds`(기본 false) 추가 — 기존 페이지 동작 불변(추가형 변경).
+  AdSense 로더 1곳 + 인아티클 슬롯 2곳을 `{!noAds && (...)}` 로 감쌌다.
+- `src/pages/404.astro`: `noindex` + `noAds` 전달.
+- `npm run build`: 성공. `dist/client/404.html` 광고코드 **0**, 프리렌더 html 135개는 광고 유지.
+- `scripts/deploy.sh` 배포 완료(Version d2b9d28b).
+- **[검증됨] 라이브**: `https://aikorea24.kr/zz-no-such-7k3/` → **404 · 광고 0**, `/` → 200 · 광고 3(정상).
+- **[부분검증] 남은 구멍**: `/blog/<없는슬러그>/` → **200 · 광고 3**. `/blog` 가 클라이언트 라우팅 페이지라
+  미존재 경로에도 200 + 광고를 낸다(soft 404). 이번 수정 범위 밖.
+
+### 3) ETAP 빌드 복구 (마지막 항목)
+
+원인: `layouts/_default/single.html` 이 `partial "disclaimer.html"` 을 호출하는데 파일이 없어 빌드 실패.
+추가로 `affiliate-disclosure.html` 도 동일하게 누락.
+
+- `disclaimer.html`: michelin-hugo 의 **no-op**(주석에 "파이프라인이 본문에 이미 고지 박스를 넣는다"고 명시) 이식 — 34개
+- `affiliate-disclosure.html`: culture-hugo 에서 이식 — 25개
+- **[검증됨] 빌드**: ETAP 36개 전부 `hugo --gc --minify` 성공(수정 전 34개 실패).
+- **[검증됨] 배포**: 36/36 `wrangler pages deploy --profile hugh79757` 성공, 빌드 산출물 `public/404.html` 광고 0.
+- **[검증됨] 라이브**:
+  - 글 페이지 `airlines.techpawz.com/posts/aerolineas-argentinas-airline-review/` **200 · 36,795바이트 · 광고 2 · h2 1**
+  - `tour.techpawz.com/` 200 · 34,103바이트, `adventure.techpawz.com/posts/agadir-adventure/` 200 · 32,770바이트
+  - 404 `airlines.techpawz.com/zz-final-8k1/` **404 · 광고 0**, `visa.techpawz.com/...` 동일
+- **[검증됨] 커밋**: 36/36 repo 에 `layouts/partials/disclaimer.html`·`affiliate-disclosure.html` 커밋 완료.
+
+### 잔존 위험
+
+1. 60개 repo 커밋은 **로컬에만** 있다(원격 push 안 함).
+2. `/blog/*` soft-404(200 + 광고)는 남아 있다 — 다음 후보.
+3. `tv-show.informationhot.kr`(Blogger) 404 는 여전히 광고 포함.
+4. ETAP 은 이제 빌드가 살아났으므로, 다음 자동 발행부터는 콘텐츠가 정상 반영된다.
+   다만 오늘 배포로 **그동안 쌓여 있던 콘텐츠 변경분이 한꺼번에 반영**됐다.
+5. 무료 플랜 커스텀 룰 5개 상한은 그대로 — 추가 룰이 필요하면 기존 룰 통합 필요.
+
+### 다음 행동
+
+1. 60 + 36 repo push 여부 결정.
+2. `/blog/*` soft-404 처리(200 대신 404 + 광고 제외).
+3. tv-show(Blogger) 404 광고 제거.
+4. 3~7일 후 Cloudflare 404·봇 비중 + AdSense 무효 트래픽 추이 재측정.
+
+## 2026-11-16 14:40 — AIK24-ADSENSE-404FIX 60개 사이트 404 광고 제거·배포 완료
+
+지시: "1번부터 해줘" (= 광고 실린 404 를 blowfish 일괄 수정 → 빌드·배포).
+
+### 한 일
+
+1. `scripts/adsense_404_fix.py` 작성 — repo 에 **standalone `layouts/404.html`**(define 없음, noindex, 광고 없음)을
+   쓰고, `hugo --gc --minify` 빌드 후 `wrangler pages deploy --profile hugh79757` 로 배포, 라이브 404 재확인까지.
+   `--dry-run/--apply/--only/--limit/--skip-done/--no-deploy`, 결과 로그 `scripts/logs/adsense_404_fix.json`.
+2. hugh79757 계정(fac9808c)의 Pages 프로젝트 **100개** 를 페이지네이션으로 전수 조회 → 광고 실린 404 repo 64개 중 **60개 매칭**.
+3. 60개 전부 배포 + 라이브 검증.
+
+### 결과 — 3분법
+
+- [검증됨] **60/60 배포 성공, 라이브 404 광고 0건.** 근거: 배포 후 각 사이트 커스텀 도메인
+  `/zz-final-check-8k1` 을 Chrome UA 로 60건 병렬 조회 → **전부 HTTP 404 + `adsbygoogle`/`ca-pub-` 0회**.
+  예: `etf.techpawz.com` 404·광고0, `compare.rotcha.kr` 404·광고0, `informationhot.kr` 404·광고0,
+  `kuta.informationhot.kr` 404·광고0, `tour1.rotcha.kr` 404·광고0.
+- [검증됨] **빌드 산출물 단계에서도 광고 0.** 근거: 각 repo `public/404.html` 의 `adsbygoogle`+`ca-pub-` 카운트 0
+  (`built_404_ads: 0`).
+- [검증됨] **수정 전 상태 대비.** 근거: 스캔 시점 `public/404.html` 광고 보유 64개(그중 60개가 hugh Pages 프로젝트와 매칭).
+- [부분검증] **ETAP 34개 사이트는 빌드가 원래 깨져 있어 폴백 사용.** 제한 사유: `layouts/_default/single.html`
+  이 `partial "disclaimer.html"` 을 호출하는데 그 partial 이 없어 hugo 빌드가 실패한다
+  (`partial "disclaimer.html" not found`). michelin-hugo·nomad-hugo 에만 존재.
+  그래서 이미 배포된 `public/` 은 그대로 두고 `public/404.html` 만 교체해 배포했다 → 404 는 고쳐졌지만
+  **사이트 빌드 파이프라인은 여전히 깨진 상태**.
+- [검증불가] AdSense 게재 제한 해제 여부. 구글 판정은 볼 수 없다. 복구 계획: 3~7일 후 Cloudflare 404/봇
+  비중과 AdSense 무효 트래픽 추이를 재측정.
+
+### 잔존 위험
+
+1. **ETAP 34개 빌드 결함 미해결** — `disclaimer.html` partial 부재. 새 콘텐츠가 있어도 빌드·배포가 안 된다.
+2. **60개 repo 변경이 커밋되지 않았다** — 각 repo 에 `layouts/404.html`(신규) + `public/404.html`(수정) 이 남아 있다.
+   다음 빌드/배포 때는 자연히 포함되지만, git 이력에는 아직 없다.
+3. **tv-show.informationhot.kr 은 이 배치에 없음** — DNS 가 `ghs.google.com`(Blogger) 이라 Pages 프로젝트가 아니다.
+   404 광고는 Blogger 테마에서 나온다 → 별도 수정 필요.
+4. 매칭 안 된 4개(`aikorea24` Astro 1 + 테마/baseURL 미검출 3)는 남아 있다.
+
+### 다음 행동
+
+1. ETAP `disclaimer.html` partial 복구(32개 repo 복사) 후 전체 재빌드·배포 → 실패했던 사이트들의 콘텐츠도 최신화.
+2. aikorea24 `src/pages/404.astro` 에서 Layout 광고 제외(2번 항목).
+3. tv-show(Blogger) 404 테마 수정.
+4. 60개 repo 커밋(파일 단위) — 원하시면 일괄로.
+5. 3~7일 후 404·봇 비중 재측정.
+
+## 2026-11-16 14:05 — AIK24-ADSENSE-BOTBLOCK-03 3개 존 빈 자리 채움 (기존 룰 보존)
+
+대표님: "다시 해봐." (hugh79757 계정에 WAF 스코프 추가 후)
+
+### 재확인 — 스코프는 `CF_DNS_TOKEN` 에 붙었다 (토큰 값은 동일)
+
+같은 토큰 문자열(hash `ced3026d`)로 `informationhot.kr /rulesets` 가 **403 → 200(6개)** 으로 바뀜.
+즉 대시보드에서 권한만 추가된 케이스. 여전히 없는 것: Zone Settings(403), Bot Management(403), Analytics(403), Firewall Access Rules(403).
+
+### 발견 — 이 존들엔 이미 룰이 있었다 (중복 작업 위험)
+
+`ADSENSE-BOTBLOCK-01/02` (2026-10-22~23, techpawz-hugo/.botblock) 이 이미 배포돼 있었다:
+- informationhot.kr: 커스텀 3개 (AS132203 차단 / 비KR Windows 챌린지 / AS13335 보정)
+- rotcha.kr: 커스텀 **5/5** (AS211590 차단 / bot-UA 차단 / bare-UA 챌린지 / 비KR Windows / AS13335)
+- techpawz.com: 커스텀 **5/5**
+- 세 존 모두 **관리 규칙셋 없음 · 레이트 리밋 없음**
+
+무료 플랜 커스텀 룰 상한이 5개라 새 룰을 넣으면 기존 룰을 지워야 한다 → 삭제 대신 **append 만** 하는
+`scripts/cf_botblock_fill.py` 를 만들어 적용했다(멱등, 기존 룰 보존).
+
+### 적용 결과
+
+| 존 | 커스텀 룰 | 관리 규칙셋 | 레이트 리밋 |
+|---|---|---|---|
+| informationhot.kr | 3 → **5** (BOTBLOCK-03 bot-UA block / bare-UA challenge 이식) | **배포** | **1개** |
+| rotcha.kr | 5 (보존) | **배포** | **1개** |
+| techpawz.com | 5 (보존) | **배포** | **1개** |
+| aikorea24.kr (앞서) | 5 | 1 | 1 |
+
+레이트 리밋: 정적 자산 디렉터리(_astro/assets/static/images/fonts/cdn-cgi) 제외, `ip.src + cf.colo.id`,
+**100회/10초**, block. 무료 플랜은 `matches`(정규식) 연산자 불가(실측 오류: Advanced Rate Limiting 필요) → `starts_with` 로 대체.
+
+### 결과 — 3분법
+
+- [검증됨] 4개 존 상태. 근거: entrypoint 재조회 — custom 5 / managed 1 / ratelimit 1 (전 존 동일).
+- [검증됨] 정보hot·techpawz 라이브 응답. 근거(실측): Chrome **200**, Googlebot **200**, **Mediapartners-Google 200**,
+  curl **403**, MJ12bot **403**, bare-AppleWebKit **403**.
+- [검증됨] rotcha 프록시 호스트. 근거: `hotissue.rotcha.kr`·`guide.rotcha.kr` curl UA **403** (룰 작동).
+- [부분검증] rotcha 의 `ro.`·`kay.` 서브도메인은 curl UA **200**. 제한 사유: 이 둘은 **DNS전용(proxied=false)
+  CNAME → host.tistory.io** 라 Cloudflare 를 거치지 않는다(존 DNS 68개 중 22개가 DNS전용). WAF 적용 대상이 아니다.
+- [검증불가] 유입 분석·봇 관리 상태. 토큰에 Analytics/Bot Management 권한이 없어 403. 복구 계획: 해당 스코프 추가 시 재측정.
+
+### 잔존 위험
+
+1. **DNS전용 호스트 22개**(rotcha.ro/kay 등 Tistory)는 Cloudflare 보호 밖 — 무효 트래픽이 여기로 오면 CF 로 못 막는다.
+2. 레이트 리밋 임계값 100회/10초는 근거 데이터 없이 정한 보수적 값. 실사용자 이탈 여부는 2~3일 후 봐야 한다.
+3. 관리 규칙셋은 무료 시그니처(Log4j/셸쇼크/플러그인 취약점) 위주 — 클릭 사기 자체를 막지는 않는다.
+4. BFM(Bot Fight Mode) 상태 미확인(권한 403). 2026-10-23 기록상 rotcha/techpawz 는 ON 이었으나 현재값 확인 불가.
+
+### 다음 행동
+
+1. `CF_DNS_TOKEN` 에 Zone Analytics:Read 추가 → 7일 유입 재측정(무효 클릭 감소 판정).
+2. Bot Management:Read 추가 → 세 존 BFM 상태 확인·유지.
+3. 2~3일 후 레이트 리밋 오탐(정상 사용자 차단) 여부 확인.
+4. Tistory 호스트(ro/kay)는 별도 대응 필요(CF 밖).
+
+## 2026-11-16 13:40 — AIK24-ADSENSE-GUARD-02 hugh 계정 토큰 전수 확인 + 2개 존 HTTPS/TLS 적용
+
+대표님: "hugh79757 계정에는 이미 스코프들이 있다. 확인해봐."
+
+### 확인 결과 — 디스크에는 WAF 스코프 토큰이 없다
+
+전수 검사: `~/.env.common` + `Projects/*/.env` + `projects2/*/.env` 의 고유 CF API 토큰 **11개**, wrangler OAuth 프로필 **6개**.
+
+| 토큰 | 커버 존 | settings | WAF | 봇 | 방화벽 | 분석 |
+|---|---|---|---|---|---|---|
+| `CLOUDFLARE_API_TOKEN` (mde2/.env 등, hugh 계정) | informationhot·rotcha·techpawz | **200 (읽기+쓰기 200)** | 403 | 403 | 403 | 403 |
+| `CF_DNS_TOKEN` 계열 (3개) | 〃 | 403 | 403 | 403 | 403 | 403 |
+| `CF_STYLEFACTORY9AI_API_TOKEN` | aikorea24.kr | 200 | **200** | 200 | 200 | 200 |
+| OAuth 6개 프로필 | — | — | 없음(`zone:read` 만) | | | |
+
+→ hugh 계정 존을 볼 수 있는 토큰 중 가장 강한 것이 **Zone Settings 읽기/쓰기까지**이고,
+  **Zone WAF:Edit / Zone Analytics:Read 는 어느 토큰에도 없다**(403 실측). 값이 디스크에 없는 토큰이 대시보드에만 있는 상태.
+
+### 한 일 (가능한 범위 먼저 적용)
+
+`CF_ADSENSE_TOKEN=<hugh CLOUDFLARE_API_TOKEN>` 로 `cf_adsense_guard.py apply --only settings --zone …`:
+
+- informationhot.kr: always_use_https off→**on**, min_tls_version 1.0→**1.2**
+- rotcha.kr: 동일 적용
+
+### 결과 — 3분법
+
+- [검증됨] 두 존 설정 반영. 근거: 스크립트 audit 재조회 on / 1.2.
+- [검증됨] `http://informationhot.kr` 301→https, `http://tv-show.informationhot.kr` 301→https, `http://ro.rotcha.kr` 302→https.
+- [검증됨] 정상 페이지 200 유지: `https://tv-show.informationhot.kr` 200, `https://informationhot.kr` 200, `https://ro.rotcha.kr` 200.
+- [검증불가] WAF·봇·레이트리밋 적용 — 토큰 권한 없음(403). 복구 계획: Zone WAF:Edit + Zone Analytics:Read 토큰을 `CF_WAF_TOKEN` 으로 받으면 즉시 적용.
+
+### 잔존 위험
+
+1. WAF 계층 미적용 — 스크래퍼/헤드리스 차단은 아직 informationhot·rotcha 에 없다(aikorea24 만 적용됨).
+2. `rotcha.kr` apex 가 **http/https 모두 403**(본문에 blocked). DNS 는 CNAME→rotcha-blog.pages.dev (proxied). 우리 설정 변경과 무관해 보이나 원인 확인에 WAF/방화벽 읽기 권한이 필요하다.
+3. techpawz.com 은 hugh 계정에 있지만 이번에 손대지 않았다(지시 범위 밖).
+
+### 다음 행동
+
+1. `CF_WAF_TOKEN`(Zone WAF:Edit + Zone Analytics:Read + Bot Management:Edit, 존: informationhot·rotcha·techpawz) 값 확보 → 5룰+관리규칙셋+레이트리밋 적용.
+2. rotcha.kr apex 403 원인 조사(같은 토큰으로 방화벽 이벤트 조회).
+3. techpawz.com 적용 여부 결정.
+
+## 2026-11-16 13:20 — AIK24-ADSENSE-GUARD-01 Cloudflare 하드닝 적용 (aikorea24.kr)
+
+배경: AdSense 무효클릭 제재. 유입 정화 단계로 Cloudflare 존 보안 설정을 적용했다.
+토큰: `CF_STYLEFACTORY9AI_API_TOKEN` (aikorea24.kr 전권: settings/WAF/bot/analytics). 값 비출력.
+
+### 왜 필요한지 — 7일 트래픽 실측 (analytics, 2026-11-09~16)
+
+- UA 상위: 빈 UA **39,391** · SERankingBacklinksBot **20,900** · MJ12bot **17,063** ·
+  UA `node` **16,387** · Bytespider **10,887** · HeadlessChrome **6,776**
+- 국가: US 113,614 > TH 33,492 > FR 29,770 > FI 26,229 > SG 19,499 > **KR 15,612(6위)**
+  → 한국어 사이트인데 한국이 6위 = 데이터센터/자동화 트래픽 비중이 큰 구조
+- 경로: `/` 17,171 · `/search.json` 15,690 · `/benefits` 15,514 · `/community/write` 14,011
+- 상태코드: 200 180,571 · **404 27,654** · **504 18,537** · 301/308 33,957
+
+### 적용한 설정 ([PRODUCTION CONFIG] aikorea24.kr)
+
+| 항목 | 이전 | 이후 |
+|---|---|---|
+| always_use_https | off | **on** |
+| min_tls_version | 1.0 | **1.2** |
+| WAF 커스텀 룰 | 없음 | **5개** (스크래퍼 UA 차단 / 빈 UA 챌린지 / 헤드리스·node 챌린지 / search.json 비브라우저 차단 / wp·.env·xmlrpc 차단) |
+| Managed Ruleset | 미배포 | **Cloudflare Managed Free Ruleset 배포(38룰)** |
+| Rate limiting | 없음 | **1개** (광고 경로 IP 40회/10초, block) |
+| Bot Fight Mode | off | **off — API 405(10405), 대시보드 수동 필요** |
+
+도구: `scripts/cf_adsense_guard.py` (audit / apply --only settings|bot|waf|ratelimit, `--dry-run` 지원).
+
+### 결과 — 3분법
+
+- [검증됨] **설정 반영**. 근거: `cf_adsense_guard.py audit` → always_use_https on, min_tls 1.2,
+  커스텀 룰 5개 enabled=True, managed 1개, ratelimit 1개(IP 40회/10초).
+- [검증됨] **정상 트래픽 무영향**. 근거: 실측 — 일반 브라우저 UA 200, **Googlebot 200**, `http://` → 301 `https://`.
+- [검증됨] **자동화 트래픽 차단/챌린지**. 근거: MJ12bot UA 403, 빈 UA 403(cf-mitigated 흔적), HeadlessChrome 403, `/wp-login.php` 403.
+- [검증됨] **무료 플랜 제약 확인**. 근거: rate limit PUT 오류 20155(ip.src 단독 불가 → cf.colo.id 필수),
+  period 는 10초만 허용, mitigation_timeout 도 10 만 허용 — 스크립트에 주석으로 박아 둠.
+- [검증불가] **무효클릭 지표 개선 여부**. AdSense 쪽 판정은 우리가 볼 수 없고, Cloudflare 는
+  유입만 줄인다. 복구 계획: 3~7일 뒤 UA/국가 분포와 무효 클릭 추이를 재측정해 비교.
+
+### 잔존 위험
+
+1. **Bot Fight Mode 미적용** — API 로 안 되고 대시보드에서 1회 눌러야 한다(Security → Bots).
+2. **무료 플랜 커스텀 룰 5개 상한** — 이미 5개 사용. 국가별 챌린지(예: 비-KR 챌린지)를 넣으려면
+   기존 룰을 합쳐야 한다. 광고 경로에 비-KR 트래픽이 계속 붙으면 우선순위 재조정 필요.
+3. **504 18,537건** — 원본(오리진) 타임아웃. `/` 2,361 · `/posts` 728. Cloudflare 문제가 아니라
+   사이트 측 문제이고, 에러 페이지가 광고와 함께 노출되면 무효 노출 위험이 커진다. 별도 조사 필요.
+4. **정당한 크롤러 손실** — AhrefsBot/SemrushBot 차단으로 SEO 툴 리포트가 줄 수 있다(의도된 트레이드오프, 룰 삭제로 즉시 복구).
+5. **나머지 존 미적용** — 토큰이 aikorea24.kr 만 커버. informationhot.kr(49개 사이트)·rotcha.kr 은
+   DNS 전용 토큰뿐이라 같은 설정을 못 넣었다. 제재가 그쪽 게시자면 토큰을 추가로 받아야 한다.
+
+### 다음 행동
+
+1. 대시보드에서 **Bot Fight Mode ON** (aikorea24.kr).
+2. AdSense 정책 센터 문구 확인 — "무효 클릭" vs "트래픽 품질"에 따라 다음 조치가 다르다.
+3. 제재 대상이 informationhot/rotcha 계열이면 해당 존 토큰 발급 → `--zone` 으로 동일 적용.
+4. 3~7일 후 재측정: UA·국가 분포, 404/504 추이.
+5. 504 원인 조사(오리진/Worker 타임아웃) — 에러 페이지 광고 노출 방지.
+
+## 2026-11-16 12:05 — AIK24-EVAL-QVGUARD-01 최신 하네스 강제 (qv 가드 4곳)
+
+질문: "앞으로 모델 측정이 모두 최신 하네스에서 이뤄지는거지?"
+
+### 확인 결과 — 아니었다 (2곳이 실제로 새고 있었다)
+
+| 경로 | 옛 동작 | 상태 |
+|---|---|---|
+| `model_eval.cache_get()` | `schema` 만 확인, **`qv` 미확인** | 옛 qv 캐시가 TTL 20시간 동안 '최신 점수'로 반환 |
+| `free_model_eval_auto.already_measured()` | `details` 만 있으면 무조건 '측정 완료' | 하네스를 고쳐도 옛 모델은 자동 재측정 대상에서 **영구 제외** |
+| `free_models_page.eval_labels()` | 캐시 라벨 무필터 | 옛 축 구조 기준 라벨이 카드에 표시 |
+| `auto_briefing._leaderboard_best()` | qv 무관 '최고 점수' | 옛 qv 점수를 현재 점수처럼 인용(버전 표기는 하고 있었음) |
+
+### 수정 ([PRODUCTION CODE])
+
+1. `cache_get()`: `entry["qv"] != EVAL_QUESTIONS_VERSION` → 재평가. qv 키 없는 옛 엔트리도 재평가.
+2. `already_measured()`: `details and qv == 현재` 일 때만 '측정 완료'. 리더보드 폴백은 이미 qv 필터가 있었다.
+3. `eval_labels()`: qv 다른 라벨 제외.
+4. `_leaderboard_best()`: 현재 qv 행 우선, 없을 때만 옛 qv 폴백(호출부가 버전을 밝히는 기존 계약 유지).
+
+### 결과 — 3분법
+
+- [검증됨] **옛 qv 캐시가 실제로 차단된다.** 근거: 캐시 전수 조회 — qv2 엔트리 6개(cat-jam·ll-alpha·longcat·mimo·nemotron 등)는 `cache_get` → None(`문항 세트 불일치`), qv3 엔트리 9개는 HIT.
+- [검증됨] **회귀 테스트 5개 추가**: qv 불일치 거부 2건(`test_cache_get_rejects_other_questions_version`, `..._without_qv`), `already_measured` 옛 qv 미측정 처리 1건, 브리핑 qv 우선/폴백 2건.
+- [검증됨] **테스트 통과**: `pytest tests/ -k "model_eval or eval_auto or free_models or auto_briefing or attribution"` → **133 passed**.
+- [검증됨] **같은 세션 기존 테스트 무회귀**: `test_model_eval_agent_v2.py` 51 passed(신규 2 포함).
+- [부분검증] **"앞으로 모든 측정 = 최신 하네스"**. 근거: 점수를 만들거나 재사용하는 경로 전수 확인 —
+  `model_eval_cli`(캐시 미사용 직접 호출), `eval_model_cached`→`cache_get`, `blog_draft_generator`, `fetch_external_evals`,
+  `free_model_eval_auto`, `free_models_page`(leaderboard_scores 는 기존부터 qv 필터), `auto_briefing`, `model_attribution`(점수 미사용).
+  제한 사유: 이 목록은 **코드 정적 확인**이고, 앞으로 새 스크립트가 캐시/리더보드를 직접 읽으면 같은 구멍이 다시 생긴다(구조적 강제는 아님).
+
+### 잔존 위험
+
+1. **새 소비자가 생기면 재발 가능.** 지금은 각 호출부가 `qv` 를 기억해야 한다. 다음 단계로
+   `cache_get()`/`leaderboard_scores()` 같은 단일 접근자만 쓰도록 강제(직접 `json.load(CACHE_PATH)` 금지)하는 편이 안전하다.
+2. **응답 절반 실패한 측정이 캐시·리더보드에 남는다.** 오늘 실측: inkling 6/12(6문항 무응답)이
+   `cache_put` 의 `failed*2 > max_score` 조건(초과)을 통과해 저장됐다. 6/12(미응답 6 제외)로 라벨은 되지만
+   무료모델 카드에 점수처럼 보인다. `>=` 로 조이거나 '측정 불가' 상태를 별도로 두는 판단이 필요하다.
+3. 리더보드에는 옛 qv 행이 그대로 남는다(누적 기록). 표시 단계에서 qv 필터로 걸러야 한다 — 지금은 전부 필터한다.
+
+### 다음 행동
+
+1. 캐시/리더보드 접근을 단일 함수로 통일(직접 파일 읽기 금지) — 새 소비자 재발 차단.
+2. `failed*2 >= max_score` 및 '측정 불가' 라벨 정책 결정 후 반영.
+3. 무료 한도 회복 후 mimo·nemotron-lightning·longcat·inkling qv3 로 채우기(앞선 항목의 다음 행동과 동일).
+
+## 2026-11-16 11:40 — AIK24-EVAL-DEFECT-01 재측정 + 에코 실측 글 정정
+
+대표님 지시: "문제가 있는거 파악됐는데, 왜 재측정을 안해. 재측정하고 글을 다시 수정해줘."
+
+### 한 일
+
+1. **하네스 결함 4건 수정** (`scripts/model_eval.py`, [PRODUCTION CODE])
+   - Q1: 채점기가 백틱 인라인 코드(`add`, `return`)를 "영문 산문"으로 세어 정상 답안에 0점.
+     `_strip_inline_code()` + 허용 라틴어(`Python`) 추가, 문항 본문에 "코드 식별자는 백틱으로 감싸면 허용" 명시.
+   - Q3·Q5·Q6(샌드박스): `extract_code()` 가 **답안이 인용한 원본 버그 블록**까지 이어붙여
+     인용문이 먼저 실행되고 `NameError` → 0점. `extract_code_for()` 로 요구 함수(`def <symbol>`)를
+     정의한 펜스만 실행. 문항 spec 에 `sandbox_symbol` 추가.
+   - Q4: `opencode run` 이 **저장소 폴더**에서 실행돼 모델이 이미 있는 테스트를 읽고
+     "새로 만들면 저장소가 더러워진다"며 답변 거부 → 측정 환경 오염.
+     `cli_call()` **단일 초크포인트**에서 빈 임시 디렉터리(`cwd=`)로 격리(호출부 3곳 개별 수정 대신),
+     문항에 "파일을 만들지 말고 답안 코드로만 제시" 명시.
+   - Q11: 채점기는 `screen`·`state_model`·`verify` 키를 요구했으나 **문항 본문에 키 이름이 없었음**.
+     문항에 JSON 스키마를 그대로 적었다.
+   - `EVAL_QUESTIONS_VERSION` 2 → 3 (qv2 캐시 무효화).
+2. **회귀 테스트 4개 추가** (`tests/test_model_eval_agent_v2.py`, [TEST CODE])
+   - 인라인 코드 통과 / 영어 산문 불합격 / 인용 버그 블록 무시 / `cli_call` 임시 cwd+정리.
+3. **전 모델 qv3 재측정** — eco 먼저, 이어 15개 모델 순차.
+4. **에코 실측 글 정정** (EmDash `01M7FQVMHJVC8WPZQ1Y5R8SZ5C`, PUT+publish 200)
+   - 제목·발췌·본문 14개 블록·표 2개를 qv3 값으로 교체, "import 누락"/"Q1 인라인코드 0점"/"Q4 거부" 오류 서술 삭제.
+   - bare URL 6건을 링크 span 으로 변환(라벨만 노출, URL 원문 제거).
+
+### 결과 — 3분법
+
+- [검증됨] **eco 8/12 → 11/12** (qv3, 2026-11-16 재측정).
+  근거: `model_eval_cache.json` eco `qv=3`, `score_display=11/12`, 축별 지시이행 1/2·코딩실무 4/4·맥락유지 2/2·에이전트 4/4.
+  남은 0점은 Q1 하나이며 원인은 모델이 쓴 영어 단어 `concatenation`(인라인 코드 아님) — 계약 위반으로 정당.
+- [검증됨] **Q1 오판 10건 정정**. 근거: 수정 채점기로 qv2 캐시 16개 오프라인 재채점 → 판정 변경 10건(0→1), 답안 절단 없음(최대 566자).
+  실측 재측정에서도 beam·big-pickle·kilo·iceman 등이 Q1 1점.
+- [검증됨] **Q3 샌드박스 인용 버그 재현 → 수정 확인**. 근거: 참조 정답만 넣으면 통과, "인용 버그 한 줄 + 참조 정답"은 수정 전 `NameError`,
+  수정 후 통과(신규 테스트 `test_sandbox_uses_block_that_defines_required_function`). qv3 실측에서 eco Q3·Q5·Q6 모두 실행 검증 통과.
+- [검증됨] **Q4 환경 격리**. 근거: `test_cli_call_runs_in_empty_tempdir` — `cwd` 가 임시 디렉터리이고 호출 후 삭제됨을 단정.
+  실측에서 eco Q4 1점(수정 전 0점·거부).
+- [검증됨] **테스트 49 passed** (기존 45 + 신규 4). 함께 돌린 관련 스위트 94 passed.
+- [검증됨] **글 반영**. 근거: 공개 페이지 HTTP 200, `<title>` = "… 11/12, 12문항을 2분 46초에 끝낸 유료 모델",
+  표 2개(비교 8행·문항 13행) 렌더, 외부 링크 6개가 `<a href>` 앵커, bare URL 잔존 0건.
+- [부분검증] **비교표 8행**. 근거: qv3 로 9개 모델 측정했으나 그중 inkling(6문항 무응답)·longcat(10문항 무응답)은 무료 한도로
+  점수가 능력의 함수가 아니어서 표에서 제외 → 표 7개 모델 + 에코.
+  제한 사유: cat-jam·ll-alpha·muse-spark·nvidia-nemotron-vl·space-bunny 5개는 CLI 모델 목록에서 내려가 측정 불가,
+  mimo·nemotron-lightning 2개는 무료 한도로 첫 문항부터 차단. 즉 **무료 모델 절반은 오늘 재측정이 불가능**했다.
+- [검증불가] **무료 모델 비교의 시점 안정성**. 근거: 무료 티어 일일 한도는 연속 측정으로 소진되며(오늘 실측), 모델 목록도 수시로 내려간다.
+  복구 계획: 모델당 하루 1회로 쪼개 재측정하고, 표에는 `no_response_n=0` 인 행만 올리는 현 규칙을 유지한다.
+
+### 잔존 위험
+
+- 비교표가 qv2 시절 13행 → qv3 7행으로 줄었다. 무료 티어 한도 때문이며, 독자에게는 각주로 이유를 밝혔다.
+  다만 "무료 상위권" 서사가 약해진 것은 사실 — 한도가 풀린 뒤 나머지 모델을 하루 1개씩 채워야 완성된다.
+- Q1 채점은 여전히 "영어 단어 1개"에 0점을 준다. 문항에 계약을 적어 정당성은 확보했으나,
+  산문 중 외래어 표기(`concatenation`)를 쓰는 모델이 구조적으로 불리하다. 허용어 목록 확장 여부는 별도 판단 필요.
+- 글 슬러그가 옛 제목(`…812-12문항을-2분-12초에…`)을 그대로 유지한다(퍼머링크 보존 목적). 제목만 새 값이다.
+- `scripts/safe_div.py`, `test_safe_div.py`, `tests/test_safe_div.py` 는 과거 평가 사고로 커밋된 산출물이다.
+  이제 `cli_call` 격리로 측정에는 영향이 없어 **삭제하지 않았다**(다른 세션 참조 가능성).
+
+### 다음 행동
+
+1. 무료 한도 회복 후 mimo·nemotron-lightning·longcat·inkling 을 하루 1개씩 qv3 로 채워 비교표 복원.
+2. `free_models_page.py:860` 의 `eval_model_cli` 호출부도 같은 격리를 쓰는지 확인(현재는 `cli_call` 내부 초크포인트로 자동 적용됨).
+3. Q1 허용어 정책 검토(외래어 표기 허용 범위).
+
+# Fireworks API 키 생성 + opencode 연동 완료
+
+## 한 일
+1. Fireworks API 키 생성 (계정 정지 해제 확인 포함)
+2. opencode `fireworks` 프로바이더에 키 반영 + 실제 모델 호출 테스트
+
+## 결과
+
+### [검증됨] 계정 정지 해제 (카드 등록 효과)
+- 근거: 이전 실패 오류(`account is suspended due to CREDIT_DEPLETED`) 상태에서 API 키 생성 재시도 → 성공. 키 ID `key_i4QdDSUCS`, 이름 `opencode`, 만료 2027-11-16
+
+### [검증됨] Fireworks API 직접 호출
+- 근거: `curl .../inference/v1/chat/completions` (model: glm-5p3-flash) → **HTTP 200**, `chatcmpl-7dab68f3...` 수신. 사용량 prompt 17 / completion 10 토큰
+
+### [검증됨] opencode 통합 호출
+- 근거: `opencode run -m "fireworks/accounts/fireworks/models/glm-5p3-flash" "Reply with exactly: PONG"` → 응답 `PONG`, exit 0
+
+### [CONFIG] 설정 변경
+- 파일: `~/.config/opencode/opencode.json`
+- 변경: `providers.fireworks.settings.apiKey` 추가 (기존 `xiaomi-token-plan-sgp`와 동일 패턴 — settings.apiKey 직접 기입)
+- 키 위치: 해당 파일 내 (600 권한 유지). state.md에는 키 값 기록 안 함
+- 백업: `opencode.json.bak-fireworks-20261116-101829` (키 주입 전 + provider 추가 전 원본)
+- 임시 키 파일(`.fw_key`)은 shred으로 삭제 완료
+
+### [검증됨] 기존 설정 보존
+- 근거: 수정 후 JSON 파싱 OK, provider 총 26개 (기존 25 + fireworks) 유지 확인
+
+## 잔존 위험
+1. **크레딧 잔액 미확인** — 카드 등록으로 정지는 풀렸으나 $50 AMD 크레딧은 아직 미발금(금요일 11/20 배포 예상). 현재 소액 잔액으로 테스트가 성공한 것이므로, 잔액 소진 시 동일 오류 재발 가능
+2. **API 키는 평문 저장** — opencode.json 내 보관. 파일 권한 600 유지 중이나, 해당 파일을 커밋·동기화하는 경로가 있으면 노출 위험
+3. **크레딧 충전 여부 미결정** — 사용자가 "충전 안 됨" 언급. AMD 코드 도착 전 소비분은 실제 과금 대상일 수 있음 (Fireworks 선불제, 잔액 0이면 사용 일시정지)
+
+## 다음 행동
+1. 11/20(금) AMD 이메일 확인 → 프로모 코드 Fireworks Billing에서 등록 (90일 이내)
+2. 등록 후 잔액 $50 반영 확인 + `opencode models`에서 fireworks 모델 8개 사용 가능 상태 재확인
+3. 잔액 상태는 `app.fireworks.ai/account/billing`에서 수시 확인
+
+## 2026-11-16 HH:MM — AIK24-EVAL-DEFECT-01: 12문항 0점 4문항의 채점기 결함 진단 (수정 전)
+
+* 프로젝트: /Users/twinssn/Projects/aikorea24
+* 대상: `opengateway/deepseek/deepseek-v4.1-flash-eco` (8/12, qv2, ts 1794749831) — EmDash 글 `01M7FQVMHJVC8WPZQ1Y5R8SZ5C`의 "0점 4문항" 절
+* 성격: 진단만. 코드 수정·재측정·글 정정은 **아직 안 함** (대표님 결정 대기)
+
+### 한 일
+- 게시 글의 0점 4문항(Q1·Q3·Q4·Q11) 주장을 `model_eval.py` 채점기 + `model_eval_cache.json` 답안 + 재현 실행으로 대조.
+
+### 결과 (검증 근거)
+
+| 문항 | 글의 진술 | 실측 | 판정 |
+|---|---|---|---|
+| Q1 | 모델의 형식 위반 | `model_eval.py:635` `[A-Za-z]{3,}` 가 **인라인 코드 식별자(add/return)** 도 영문으로 계산. `_strip_code_blocks`(:617)는 펜스만 제거 | [검증됨] 채점기 결함 |
+| Q3 | import 누락으로 실행 실패 | `extract_code`(:1088)가 **모든 펜스를 이어붙임** → 답안이 인용한 원본 버그 라인이 먼저 실행되어 NameError. 재현: 참조 정답만 심으면 통과, 인용 한 줄 + 참조 정답은 NameError | [검증됨] 사유 기록 오류 (모델의 원인 진단 자체는 실제로 틀림) |
+| Q4 | 모델이 테스트 작성을 거부 | 저장소에 정답 3벌 커밋됨(`scripts/safe_div.py`, 루트 `test_safe_div.py` 46케이스, `tests/test_safe_div.py` 14케이스 — Oct 15/17/29 "AI 툴 추가" 커밋에 섞임). `free_models_page.py:860` 경로는 `_sandbox_cwd()` 없이 `eval_model_cli` 호출 → 모델이 저장소를 읽음 | [검증됨] 격리 누락 |
+| Q11 | JSON 스키마 불일치 | 문항 본문에 `screen`/`state_model`/`verify` 키 이름이 **없음**. 채점기(:713)는 그 세 키를 요구하고, dict 는 최상위 4키만 단계로 인정(stages 중첩 불가) | [검증됨] 계약 미명시 |
+
+- Q1 영향 규모: 캐시 16개 모델 재채점(오프라인, 답안 절단 0건 — 최장 566자). 현재 0점 14/16 → 인라인 코드 제거 시 9개가 1로 뒤집힘(eco 포함). 즉 게시된 점수 최소 9건이 하향 편향 상태.
+- Q3 보완 한계: 보관 답안이 `ANSWER_STORE_CHARS=1000`(:61, :1270)에서 절단돼 모델의 수정 코드 전문을 확인할 수 없음.
+
+### 잔존 위험
+1. 보관 답안 1,000자 절단 때문에 Q3·Q4·Q11은 오프라인 재채점이 불가 — 재측정 없이는 정정 점수를 낼 수 없다.
+2. `already_measured()`(free_model_eval_auto.py:328, 2026-11-12 대표님 지시)가 재측정 금지라, qv 상향은 정책 충돌 — 대표님 승인 필요.
+3. 게시 글 `01M7FQVMHJVC8WPZQ1Y5R8SZ5C`의 결론 3줄(“Q3 import 누락”, “Q1·Q11 형식 위반”, “Q4 거부”)이 위 표와 불일치 → 정정 대상.
+
+### 다음 행동
+- 채점기 4곳 수정안(Q1 인라인 코드 예외 + 문항 문구 명확화, Q3 함수 정의 포함 블록 선택, Q4 `_sandbox_cwd()` 강제, Q11 스키마 명시) 승인 → 수정 시 qv3 + 해당 모델 재측정 + 글 정정.
+
+# AMD Fireworks 크레딧 신청 + opencode Fireworks 프로바이더 설정
+
+## 한 일
+1. AMD AI Developer Program → Cloud Credit 신청서(account.amd.com) 제출 (제품: Fireworks AI)
+2. opencode 전역 설정(~/.config/opencode/opencode.json)에 fireworks 프로바이더 + 모델 8개 추가
+
+## 결과
+
+### [검증됨] AMD 크레딧 신청 제출
+- 근거: 제출 후 URL 이동 확인 `account.amd.com/en/member/ai-dev-program/cloud-credits/thank-you.html` (title: Thank You)
+- 입력값: Product Needed = Fireworks AI, Affiliation = Company, Profile 1 = https://aikorea24.kr, 사용계획 문구 기입
+- AMD 응답: "3 business days 내 활성화 안내 이메일 발송" / 수요 과다 시 지연, 5영업일 초과 시 devcloudrequests@amd.com 문의
+
+### [검증됨] opencode fireworks 프로바이더 등록
+- 근거: `opencode models` 출력에 `fireworks/...` 8건 전부 표시 (exit 0)
+- 수정 파일: `~/.config/opencode/opencode.json` — 기존 provider 25개 보존, fireworks 추가로 총 26개
+- 백업: `opencode.json.bak-fireworks-<timestamp>` 생성 후 편집
+- 구조: package `@opencode-ai/ai/providers/openai-compatible`, baseURL `https://api.fireworks.ai/inference/v1` (Fireworks 공식 OpenAI 호환 엔드포인트), credential은 `env: FIREWORKS_API_KEY`
+- 모델 8개: kimi-k3p1-pro / deepseek-v4p1-flash-1017 / glm-5p3(-flash) / minimax-m3 / qwen3-coder-480b / kimi-k2p7-code / gpt-oss-120b
+
+### [검증불가] 실제 API 호출
+- 원인: Fireworks 계정이 `CREDIT_DEPLETED` 상태로 정지 → API 키 생성 차단 (대시보드에서 "Failed to create API Key: account is suspended due to CREDIT_DEPLETED" 실측)
+- 복구 계획: Fireworks Billing(app.fireworks.ai/account/billing)에 결제 수단 등록 → 계정 활성화 → API 키 생성 → `FIREWORKS_API_KEY` 환경변수 설정 후 실제 호출 1회 테스트
+
+## 잔존 위험
+1. **Fireworks 계정 정지(CREDIT_DEPLETED)** — 결제 수단 등록 전에는 API 키 생성·사용 불가. AMD 크레딧 프로모 코드도 결제 수단 등록이 선행 조건으로 보임
+2. **AMD 이메일 미수신** — 3영업일 대기, 미수신 시 devcloudrequests@amd.com 문의 필요
+3. **환경변수 미설정** — `FIREWORKS_API_KEY`가 아직 없어 opencode에서 fireworks 모델 선택 시 인증 실패 예정 ([검증불가] 항목 1과 동일 원인)
+4. **모델 컨텍스트 상한**은 Fireworks 모델 카탈로그 공개값 기준으로 기입 — 일부 모델(예: deepseek-v4-pro)은 미포함(공개값 부재)
+
+## 다음 행동
+1. 사용자: Fireworks Billing에 결제 수단 등록 (agent가 대신 진행 불가 — 결제 정보 직접 입력 필요)
+2. AMD 이메일 도착 확인 → 프로모 코드 Fireworks에서 리디emption (90일 이내)
+3. API 키 생성 후 `export FIREWORKS_API_KEY=...` → opencode에서 fireworks 모델 1개 선택 테스트
+
+## 2026-11-16 AIK24-FREE-PIPE-01 일일 실행 — 수집 31건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
+## 2026-11-15 20:55 — AIK24-OG-ECO-02: 에코 12문항 실측 8/12 + 실측 글 발행
+
+**한 일**
+대표님 지시("돌리고 블로그에 관련내용으로 글을 작성해줘")에 따라,
+`deepseek/deepseek-v4.1-flash-eco` 를 프로젝트 표준 하네스(`scripts/model_eval.py` 12문항)로
+측정하고, 그 결과를 실측 시리즈 글로 발행했다.
+
+1. **[PRODUCTION CODE] `~/.config/opencode/opencode.json`** — `opengateway` 프로바이더 신규 등록
+   (`@opencode-ai/ai/providers/openai-compatible`, baseURL `https://apis.opengateway.ai/v1`,
+   모델 `deepseek/deepseek-v4.1-flash-eco`, `body.reasoning_effort: "none"` 고정,
+   limit 1,000,000/65,536, cost 공식 단가). 프로바이더 24 → **25개**.
+2. **[PRODUCTION CODE] `scripts/model_eval.py`** — `CLI_MODEL_MAP`에 에코 1건 명시 등록 (추가 4줄).
+3. **측정** — 12문항(qv2) + 컨텍스트 프로브 실행.
+4. **[CONFIG] `scripts/logs/model_eval_cache.json` / `model_leaderboard.json`** — `cache_put()` 경유로 기록.
+5. **신규 발행 글** — `publish_eco_12q_post.py` 작성 후 발행 (드라이런 2회 → `--publish`).
+6. **[CONFIG] `og_eco_specs.json`** — OpenGateway `/v1/models` 공식 스펙 스냅샷 (네트워크 장애 폴백용).
+
+### 결과 (검증 근거)
+
+#### [검증됨] 측정 결과
+- **8/12 (qv2)**, 채점 12/12, **미응답 0 · 호출 실패 0 · 429 0건**.
+  근거: `model_eval_cache.json` 엔트리 `opengateway/deepseek/deepseek-v4.1-flash-eco`
+  (`score_display: "8/12"`, `graded_n: 12`, `no_response_n: 0`, `failed: 0`, `errors: []`).
+- 축별 — 지시이행 1/2 · 코딩실무 2/4 · 맥락유지 2/2 · 에이전트 3/4 (합 8/12, `by_axis` 필드).
+- 지연 — 중간값 **6.0초**, 최대 41.0초(Q11), 합계 **132.3초** (`details[].elapsed_sec` 12건 합).
+  같은 필드 보유 모델 4개 중 최소: nemotron-3.5-lightning-free 307.1s · longcat-2.5-free 714.1s ·
+  k-exaone-2.5 987.9s (동일 스크립트로 산출).
+- 컨텍스트 프로브 — `PROBE_STEPS` 8단계(8,192→1,048,576) **전부 OK, 상한 도달**.
+  `measured_context: 1048576` 기록. (프로브 문서 길이는 근사치 — 글에 그렇게 명시)
+- 실행 로그: `/tmp/og-eco-eval.log` (EXIT=0), `/tmp/og-eco-probe.log` (EXIT=0).
+
+#### [검증됨] 발행 글
+- 신규 글 ID `01M7FQVMHJVC8WPZQ1Y5R8SZ5C`, slug
+  `딥시크-v41-플래시-에코-실측-812-12문항을-2분-12초에-끝낸-유료-모델`, **status published**.
+- 공개 URL **HTTP 200** (라이브 curl). 제목 태그 정상 확인.
+- 라이브 HTML 키워드 **17/17 존재**: `8/12`·`132.3`·`1,048,576`·`1,000,000`·`$0.03`·`JWMTB6NK`·
+  `opengateway.ai/?ref=JWMTB6NK`·`reasoning_effort`·`NameError`·`측정 오염`·
+  `nemotron-3.5-lightning-free`·`프로브 상한`·`Claim as OG Credit`·`90% 할인`·`sionic-ai`·`Q11`·`2분 12초`.
+- 표 **2개** 렌더(비교표 13행 / 문항별 12행), 코드블록 6개, 리뷰 글 하이퍼링크 **3건**
+  (`href ...deepseek-v41-flash-eco-review`).
+- 노출: 홈페이지 1건 · `sitemap.xml` 1건 · `rss.xml` 2건 · 리뷰 글 페이지의 관련카드 1건.
+- **무료모델 허브 오염 0건** — `/free-models` 에 `2분-12초` 0건.
+  근거: `free_models_page.py:339 review_links()` 가 무료 캐탈로그(`load_cli_models()`)에 없는
+  모델은 매칭하지 않도록 되어 있어 유료 글이 실측 리뷰 절에 들어가지 않는다(코드 확인).
+
+#### [검증됨] 프로바이더 등록
+- `opencode models` 2,181 → **2,182행**, `opengateway/deepseek/deepseek-v4.1-flash-eco` 노출.
+- 실호출 4회 성공. `{env:}` 치환은 **실패**("Invalid or missing API key") → 기존 프로바이더
+  3곳(upstage·exaone·xiaomi)과 동일한 직접 기재 방식으로 교체 후 성공.
+- 환경변수 미설정 셸에서도 `opencode run --format json`(`model_eval.cli_call`과 동일 경로) 성공.
+- 백업: `opencode.json.backup-opengateway-202611152018`.
+
+#### [검증됨] 비파괴 수정
+- `diff /tmp/model_eval.py.bak-og scripts/model_eval.py` = **추가 4줄(주석 3 + 매핑 1)만**.
+  기존 매핑 보존: `cat-jam-free` → `opencode/cat-jam-free`, 미등록 → `None` 유지.
+
+#### [부분검증]
+- `body.reasoning_effort: "none"` 이 request body에 실제로 실리는지는 opencode 내부 로그로
+  직접 확인 못 함. 근거는 "빈 본문 없이 응답이 온다"는 출력 관측 + L2T 프로덕션 실측
+  (`free-models.ts:112` content 0자) 뿐.
+- 프로바이더 등록 검증은 짧은 호출 중심. 12문항 전용 긴 세션은 이번 1회로 확인.
+
+#### [검증불가]
+- **외부 공개 지표 0출처** — `external_signals()` 가 "공개된 외부 평가 없음"을 반환.
+  에코는 OpenRouter·Hugging Face·KiloBench에 행이 없다. → 복구 계획: 외부 지표가 필요하면
+  OpenGateway/DeepSeek 발표값을 직접 인용하거나 지표를 만들지 말고 부재로 남긴다.
+- **토큰 사용량 미측정** — CLI 경유라 `token_usage: {prompt:0, completion:0}`.
+  → 호출 비용은 글에 쓰지 않았다(근거 부족).
+
+### 잔존 위험
+1. **`opencode.json`에 API 키 평문** (기존 3곳도 동일 — 파일 내 기존 관행). 원하면 `{env:}`+호출부
+   환경 주입으로 바꿀 수 있으나, 현 방식이 이 머신에서만 검증됐다.
+2. **`scripts/model_eval.py` 미커밋** (백업 `/tmp/model_eval.py.bak-og`만 존재).
+   `publish_eco_12q_post.py`·`og_eco_specs.json`도 미커밋.
+3. **Q4 측정 오염이 그대로 재현됐다** — 모델이 저장소의 기존 테스트를 읽고 신규 작성을 거부 → 0점.
+   채점기는 새 코드 유무만 본다. 채점기 개선은 **미수행**(nemotron 글에서 같은 지적이 있었던 미해결 항목).
+4. **프로브 상한(1,048,576)은 근사치** — 공식 1,000,000과 별개로, 문서 길이 기준값이다.
+   글에 근사치라고 명시했으나 정밀 토큰 실측은 아니다.
+5. 사전 존재 조건(무관): `k-exaone-2.5` 가 `resolve_cli_model()`에서 `None` — 무료 캐탈로그에서 빠진 상태.
+6. `/tmp` 백업 3건(`bench-post-backup.json`, `review-section-backup.json`, `model_eval.py.bak-og`)은
+   재부팅 시 소실.
+
+### 다음 행동
+1. 리뷰 글(`01M7EPHFH6B2W4K2AT4EP2QPAP`)의 빈 측정 절에 이 글 링크를 넣을지 — 대표님 결정 대기.
+2. draft 회수된 벤치마크 글(`01M7EZPM3213964HM6DVVPN7MQ`) 영구삭제 여부 — 결정 대기.
+3. 커밋 여부(`model_eval.py` 4줄 + 신규 스크립트 2개) — 결정 대기.
+
+## 2026-11-15 15:25 — AIK24-UNPUBLISH-01: 공정성 문제 글 회수 + 리뷰 글의 동일 수치 제거
+
+**한 일**
+대표님 지시("블로그는 여전히 남아있잖아. 3언어 실측이라는 제목을 달고. 이거 내리기로 한거 아니야?")
+에 따라, 공정성 결함이 확인된 벤치마크 글을 **draft로 회수**하고, 같은 테스트 수치를
+요약해 실은 리뷰 글의 해당 절(8블록)을 제거했다.
+
+- 대상 글 A: `deepseek-eco-card-benchmark`
+  "딥시크 에코 카드 생성 22회 실측 — 세 언어 모두 최소 길이를 못 넘었다"
+  (ID `01M7EZPM3213964HM6DVVPN7MQ`, 64블록)
+- 대상 글 B: `deepseek-v41-flash-eco-review` (ID `01M7EPHFH6B2W4K2AT4EP2QPAP`, 58 → 50블록)
+
+**회수 사유 (공정성 결함 — 2026-11-15 자기 점검)**
+소재 646자 × 카드 5장 × 하한 300자 = 카드당 원본 129자로는 물리적으로 못 채우는 조건,
+대조군 0, N=3, 646자 지연을 실서비스 지연과 병기 — 상대평가 없는 절대숫자.
+
+**결과 (검증 근거)**
+- [검증됨] 글 A 상태: `GET /_emdash/api/content/posts/01M7EZPM…` → **`status: draft`**, 블록 64 유지(재발행 가능).
+- [검증됨] 글 A 공개 URL `https://emdash.aikorea24.kr/posts/deepseek-eco-card-benchmark` → **HTTP 302** (직전 200).
+- [검증됨] 글 A 노출 0건: 홈페이지 `grep -c deepseek-eco-card-benchmark` = **0**,
+  `sitemap.xml` = **0**, `rss.xml` = **0**, 검색 `/search?q=22회` = **0**.
+- [검증됨] 글 B 제거 8블록 (index 26~33): h2 "L2T 실서비스 프롬프트로 다시 쟀습니다" ~
+  링크 문장("…별도 글에 정리했습니다")까지. PUT 200 → PUBLISH 200 → **58 → 50블록**.
+- [검증됨] 글 B 라이브 텍스트 10개 키워드 전부 제거 확인(live HTML 파싱):
+  `L2T 실서비스`·`22회`·`45장 중 37장`·`248자에서`·`31.1초`·`8,413자`·`4장·3장`·
+  `한국어: 8.0초`·`번체: 14.1초`·`AIK24 실측 결과` = **10/10 제거됨**.
+- [검증됨] 글 B의 죽은 링크 제거: `href …deepseek-eco-card-benchmark` = **0건** (직전 1건).
+- [검증됨] 문맥 연결 확인: 삭제부위 앞 문단("속도는 어떨까요…") → 뒤 문단("따라 하기: 에코 호출하는 법")
+  자연 연결, 삭제로 인한 절 단절 없음 (라이브 텍스트 230자 출력 확인).
+- [검증됨] **기존 지시 미훼손**: 글 B에 원래 삭제 요청됐던 `한국어: 8.0초`/`번체: 14.1초`는
+  이미 사라져 있었고, 이번에도 재등장하지 않음.
+
+**백업 (되돌리기 가능)**
+- `/tmp/bench-post-backup.json` — 글 A 발행 상태 + 64블록 원문
+- `/tmp/review-section-backup.json` — 글 B 삭제 8블록 원문 (start=26, end=33)
+- ⚠ `/tmp` 재부팅 시 소실. 영구 보관이 필요하면 프로젝트 폴더로 옮길 것.
+
+**잔존 위험**
+1. [부분검증] 글 A는 **삭제가 아니라 draft 회수**다. 콘솔에서 즉시 재발행 가능하며,
+   백업·본문 64블록이 그대로 남아 있다. 완전 삭제(휴지통→영구삭제)는 **미수행**.
+2. 리뷰 글에서 **측정 절이 통째로 비어 있다**(광고/스펙/레퍼럴은 유지). 공정한 재측정 전까지는
+   "속도·성능 수치 없음" 상태다. `reasoning_effort: "none"` 필수라는 사실은
+   **link2threads `docs/state.md` OG-ECO-01 프로브에 독립 근거**가 있어 재첨부 가능(현재 미첨부).
+3. 새 게이트(AIK24-PREFLIGHT-01)는 이번 회수에 **적용되지 않았다** — 회수는 기존 지시
+   이행이지 신규 측정이 아니므로. 게이트의 실측 검증은 여전히 **미수행 [부분검증]**.
+4. `link2threads/src/clients/llm.ts`의 `export` 2건은 **미커밋** 상태 유지.
+5. 공정한 재측정은 **미착수** (결정만 됨: 실서비스 분포 소재 3건+ × 대조군 × N≥10).
+
+**다음 행동**
+1. 공정한 재측정 설계 → `aik24-model-testing` 스킬 §3 규칙 적용.
+2. 측정 절 재첨부(리뷰 글) — 재측정 통과 후.
+3. (선택) 글 A 영구삭제 여부, `/tmp` 백업의 영구 보관 위치.
+
+## 2026-11-15 15:10 — AIK24-PREFLIGHT-01: 모델 테스트 게이트 3건 설치 (AGENTS.md 2곳 + 신규 스킬)
+
+**한 일**
+대표님 지시("넣어라. 2개 3개 넣어라. 다시는 토큰 낭비 없도록 만든다")에 따라,
+이미 존재하는 12문항 평가(`scripts/model_eval.py`)를 못 보고 새 하네스를 만든
+실수(2026-11-15)를 재발 방지하는 장치 3건을 설치했다.
+
+1. `AGENTS.md`(aikorea24) 신설 절 — `## ⛔ 신규 측정·하네스·테스트 생성 전 게이트 (AIK24-PREFLIGHT-01)`
+   (3단 규칙: ① 만들기 전 cwd grep ② 0건=[검증불가]+사용자 질문 선행 ③ 기존 하네스 답습)
+2. 신규 스킬 `.claude/skills/aik24-model-testing/SKILL.md` (153행)
+   — 12문항 축 배분·결정적 채점·429/미응답/0점 분리·산출물 경로·launchd 경로·
+   일회성 측정 시 공정성 규칙(소재 길이/대조군/N≥10/지연 병기) 수록
+3. 전역 `~/.config/opencode/AGENTS.md` 신설 — `# 섹션 8: 신규 측정·테스트·하네스 생성 전 게이트`
+   (전 프로젝트 세션에 자동 적용)
+
+**결과 (검증 근거)**
+- [검증됨] aikorea24 `AGENTS.md` 219행 → **263행** (+44). `grep -n "AIK24-PREFLIGHT-01" AGENTS.md` → 77행 1건,
+  `aik24-model-testing` 참조 → 111행 1건. 기존 절 생존: `grep -c "^## 서브에이전트 위임 규칙|^## 세션 시작 시|^## state.md 기록 규칙"` = **3/3**.
+- [검증됨] 전역 `AGENTS.md` 576행 → **623행** (+47). `grep -n "^# 섹션"` → 섹션 0·1·2·3·4·5·6·7 전부 생존 + **섹션 8 신설**(580행).
+  기존 섹션 헤딩 카운트 = **7/7** (삭제 0).
+- [검증됨] 스킬 frontmatter 파싱 성공 — `name: aik24-model-testing`, description 271자, `^## ` 절 **6개**.
+  opencode 스킬 등록 확인: system-update 알림으로 `aik24-model-testing` 신규 스킬 수신.
+- [검증됨] 설치 위치 3곳 모두 디스크에 실재 (`wc -l` 3회 측정).
+
+**검증 방법 분류**: 전부 [검증됨] — 파일 존재·행 수 증가·기존 섹션 생존·grep 매치·frontmatter 파싱은
+외부 도구 측정(파일시스템/grep/파서)으로 확인. 게이트 위반 시뮬레이션은 **미수행**.
+
+**잔존 위험**
+1. [부분검증] 게이트는 **문서 규칙**이라 에이전트가 읽지 않으면 무력하다. 이번 실수의 근본 원인(세션 시작 절차 미이행)이
+   그대로 남아 있어, 다음 세션에서 AGENTS.md를 안 읽으면 재발 가능. → 복구 계획: 세션 시작 시 AGENTS.md Read를 강제하는
+   자동 장치(hook/커맨드)는 **미설치**. 필요 시 추가 논의.
+2. [검증불가] 다른 프로젝트(link2threads 등)에는 이 게이트가 없다(전역 섹션 8은 적용되나 프로젝트별 grep 경로가
+   하드코딩돼 있지 않음). → 프로젝트별 검증은 미수행.
+3. 에코 벤치마크 글 `https://emdash.aikorea24.kr/posts/deepseek-eco-card-benchmark` (ID `01M7EZPM3213964HM6DVVPN7MQ`)
+  는 **아직 공개 발행 상태**. 대표님 결정은 "일단 내리고 공정한 테스트 재설계"인데 **draft 회수는 아직 수행하지 않음**.
+   리뷰 글(`01M7EPHFH6B2W4K2AT4EP2QPAP`)의 본문 링크도 그대로 노출 중.
+4. `link2threads/src/clients/llm.ts`의 `export` 추가 2건(`finalizeCards`/`tryParseCards`)은 **미커밋 워킹트리** 상태.
+5. 새 스킬의 "일회성 측정 공정성 규칙"(§3)은 아직 어떤 실행으로도 검증되지 않은 **문서상 규칙**이다.
+
+**다음 행동**
+1. 에코 벤치마크 글을 draft로 내리기 (PUT status=draft + 리뷰 글의 해당 링크 정리) — 대표님 승인 대기 중이나 방향은 확정.
+2. 공정한 재측정 설계: 실서비스 분포 소재 3건 이상 × 대조군(운영 Gemma/Gemini 동일 게이트) × N≥10, `model_eval.py` 규율 답습.
+3. (선택) 세션 시작 자동 게이트 — 잔존위험 1번 대응.
+
+## 2026-11-15 AIK24-FREE-PIPE-01 일일 실행 — 수집 31건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-14 14:24 — AIK24-BLOG-PEARL-02: Pearl Arcana 글 수치 정정 (25/20편 → 78/78편)
 
 - 배경: 발행 직후 taro 쪽에서 카드 해설 78편을 전량 발행했다. 발행 글의 "한국어 25편·영어 20편", "78장 전체 해설은 아직 아님" 서술이 라이브 사실과 달라져 같은 날 정정했다.

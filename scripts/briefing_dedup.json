@@ -1,125 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-15",
-      "briefing_id": 352,
-      "articles": [
-        {
-          "id": "55909",
-          "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl-120b-a12b — ",
-          "original_title": "nvidia/nemotron-3.5-super-vl-120b-a12b",
-          "description": "Nemotron 3.5 Super VL 120B A12B — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b\"} 프로바이더 갱신일 2026-10-15.",
-          "link": "https://models.dev/nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
-          "entities": [
-            "Nemotron",
-            "LLM",
-            "A12B",
-            "VL",
-            "Super",
-            "OpenCode"
-          ],
-          "date": "2026-10-15"
-        },
-        {
-          "id": "55914",
-          "title": "LFM2.5-24B-A2B로 기기 내에서 빠르고 비공개적인 에이전트 실행하기",
-          "original_title": "Run fast, private agents on-device with LFM2.5-24B-A2B",
-          "description": "",
-          "link": "https://huggingface.co/blog/LiquidAI/lfm25-24b-a2b",
-          "entities": [
-            "LFM2.5-24B-A2B",
-            "Run",
-            "LFM2.5-24B-"
-          ],
-          "date": "2026-10-15"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-15",
-      "briefing_id": 353,
-      "articles": [
-        {
-          "id": "55913",
-          "title": "HiRO-ACEv2: 적은 비용으로 3km 해상도 극한 날씨 시뮬레이션",
-          "original_title": "HiRO-ACEv2: Simulating extreme weather at 3 km resolution for a fraction of the cost",
-          "description": "",
-          "link": "https://huggingface.co/blog/allenai/hiro-acev2",
-          "entities": [
-            "Simulating",
-            "HiRO-ACEv2"
-          ],
-          "date": "2026-10-15"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-16",
-      "briefing_id": 354,
-      "articles": [
-        {
-          "id": "56065",
-          "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl:free — OpenR",
-          "original_title": "nvidia/nemotron-3.5-super-vl:free",
-          "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 1,000,000 토큰. 지금 바로 무료로 써볼 수 있다.",
-          "link": "https://openrouter.ai/nvidia/nemotron-3.5-super-vl",
-          "entities": [
-            "OpenR",
-            "LLM"
-          ],
-          "date": "2026-10-16"
-        },
-        {
-          "id": "56066",
-          "title": "[무료 LLM] nemotron-3.5-super-vl-free — OpenCode Zen",
-          "original_title": "nemotron-3.5-super-vl-free",
-          "description": "Nemotron 3.5 Super VL Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/nemotron-3.5-super-vl-free\"} 프로바이더 갱신일 2026-10-15.",
-          "link": "https://models.dev/opencode/nemotron-3.5-super-vl-free",
-          "entities": [
-            "VL",
-            "LLM",
-            "Zen",
-            "Free",
-            "Super",
-            "Nemotron",
-            "OpenCode"
-          ],
-          "date": "2026-10-16"
-        },
-        {
-          "id": "55964",
-          "title": "세일즈포스, 대졸 취업 시장 침체 속 영국 학생들에게 무료 AI 도구 제공",
-          "original_title": "Salesforce offers free AI tools to UK students as graduate job market lags",
-          "description": "영국의 대졸 구인 건수가 2020년 이후 최저치를 기록한 가운데, 세일즈포스는 600만 명의 학생들에게 인공지능 기술에 대한 고용주들의 증가하는 수요를 충족할 수 있도록 무료 AI 도구를 제공하고 있습니다. 이 미국 기술 거대 기업은 대학들이 자사의 플랫폼에 접근할 수 있도록 하는 이 프로그램을 목요일에 발표했습니다.",
-          "link": "https://www.cityam.com/salesforce-offers-free-ai-tools-to-uk-students-as-graduate-job-market-lags/",
-          "entities": [
-            "Salesforce",
-            "UK",
-            "AI"
-          ],
-          "date": "2026-10-16"
-        }
-      ]
-    },
-    {
-      "date": "2026-10-16",
-      "briefing_id": 355,
-      "articles": [
-        {
-          "id": "56072",
-          "title": "[제외] step-5-preview-free — OpenCode Zen 무료 목록에서 제외",
-          "original_title": "step-5-preview-free",
-          "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
-          "link": "https://opencode.ai/v2/docs/console/models/",
-          "entities": [
-            "Zen",
-            "OpenCode"
-          ],
-          "date": "2026-10-16"
-        }
-      ]
-    },
-    {
       "date": "2026-10-17",
       "briefing_id": 356,
       "articles": [
@@ -1243,104 +1124,98 @@
           "date": "2026-11-14"
         }
       ]
+    },
+    {
+      "date": "2026-11-15",
+      "briefing_id": 382,
+      "articles": [
+        {
+          "id": "59742",
+          "title": "[무료 LLM] longcat-2.5-free — OpenCode Zen 무료 티어",
+          "original_title": "longcat-2.5-free",
+          "description": "LongCat 2.5 Free — CLI에서 입출력 모두 무료. 컨텍스트 1,000,000 토큰. OpenCode 설정: {\"model\": \"opencode/longcat-2.5-free\"} 프로바이더 갱신일 2026-11-02.",
+          "link": "https://models.dev/opencode/longcat-2.5-free",
+          "entities": [
+            "LongCat",
+            "Free",
+            "OpenCode",
+            "LLM",
+            "Zen"
+          ],
+          "date": "2026-11-15"
+        },
+        {
+          "id": "60956",
+          "title": "런웨이, 비디오 AI를 로봇 제어기로 변환하는 오픈소스 '프락시스-1' 공개",
+          "original_title": "Runway's open-source Praxis-1 turns video AI into a robot controller",
+          "description": "런웨이가 아파치 2.0 라이선스로 가중치와 소스 코드를 공개한 로봇 모델 '프락시스-1'을 출시했습니다. 이 모델은 비디오 학습을 통해 얻은 지식을 로봇 제어에 활용하며, 엔비디아의 RoboLab-120 벤치마크에서 월드 액션 모델 부문 1위를 차지했습니다. 다만 아직 복잡한 동작 순서를 스스로 계획하는 능력은 부족합니다.",
+          "link": "https://the-decoder.com/runways-open-source-praxis-1-turns-video-ai-into-a-robot-controller/",
+          "entities": [
+            "RoboLab-120",
+            "AI",
+            "Runway",
+            "Praxis-1"
+          ],
+          "date": "2026-11-15"
+        },
+        {
+          "id": "61037",
+          "title": "[AI프리즘] AI로 일자리 170만개 늘지만…5명 중 1명 직무 바뀐다",
+          "original_title": "",
+          "description": "국내 AI 스타트업 한 대표는 \"AI로 많은 업무가 자동화되면서 필요 인력이 점점 줄어들고 있는 것은 사실\"이라면서도 \"무작정 사람을 뽑지 않으면 좋은 인재들이 경험을 쌓고 선순환하는 사다리를 걷어차게 돼 결국...",
+          "link": "https://n.news.naver.com/mnews/article/001/0016442078?sid=105",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-16",
+      "briefing_id": 383,
+      "articles": [
+        {
+          "id": "61243",
+          "title": "[단독] 한국형 인큐텔 초대 대표에 윤효환 한국벤처투자 본부장 '유력'",
+          "original_title": "",
+          "description": "투자 대상은 AI와 반도체, 우주·항공, 방산 등 국가안보와 연관된 첨단기술 기업이다. 미국 인큐텔은 1999년... 보유한 스타트업에 투자한다. 재무적인 수익보다 안보 기술 확보를 우선시 하며 펀드를 청산하지 않은 채...",
+          "link": "https://n.news.naver.com/mnews/article/293/0000093277?sid=101",
+          "entities": [],
+          "date": "2026-11-16"
+        },
+        {
+          "id": "61217",
+          "title": "“AI 불확실 우려에도 수요 견고”…SK하이닉스, HBM4 생산능력 더 키운다",
+          "original_title": "",
+          "description": "SK하이닉스가 고대역폭메모리(HBM4) 생산 능력을 추가 확대한다. 엔비디아 최고경영자(CEO) 교체 등 인공지능(AI) 산업 불확실성이 커졌지만 핵심 인프라인 HBM 수요는 견고하다고 판단한 것으로 풀이된다. 회사는 HBM 패키징·테스트 중심으로 설비 투자를 단행, 내년 상반기 본격 가동할 계획이다. 15일 복수의 반도체 장비 업체 관계자에 따르면 SK하",
+          "link": "https://www.etnews.com/20261113000212",
+          "entities": [
+            "AI",
+            "HBM4",
+            "CEO",
+            "HBM"
+          ],
+          "date": "2026-11-16"
+        },
+        {
+          "id": "61163",
+          "title": "젠슨 황에게 닥친 악재는 곧 AI 산업의 악재인가?",
+          "original_title": "Is bad news for Jensen Huang also bad news for the AI industry?",
+          "description": "\"젠슨 황이 곧 엔비디아 아닌가요? 현재 경제의 상당 부분이 엔비디아에 의존하고 있습니다.\"",
+          "link": "https://techcrunch.com/2026/11/15/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry/",
+          "entities": [
+            "AI",
+            "Huang",
+            "Jensen",
+            "Is"
+          ],
+          "date": "2026-11-16"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "55909",
-      "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl-120b-a12b — ",
-      "original_title": "nvidia/nemotron-3.5-super-vl-120b-a12b",
-      "description": "Nemotron 3.5 Super VL 120B A12B — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b\"} 프로바이더 갱신일 2026-10-15.",
-      "link": "https://models.dev/nvidia/nvidia/nemotron-3.5-super-vl-120b-a12b",
-      "entities": [
-        "Nemotron",
-        "LLM",
-        "A12B",
-        "VL",
-        "Super",
-        "OpenCode"
-      ],
-      "date": "2026-10-15"
-    },
-    {
-      "id": "55914",
-      "title": "LFM2.5-24B-A2B로 기기 내에서 빠르고 비공개적인 에이전트 실행하기",
-      "original_title": "Run fast, private agents on-device with LFM2.5-24B-A2B",
-      "description": "",
-      "link": "https://huggingface.co/blog/LiquidAI/lfm25-24b-a2b",
-      "entities": [
-        "LFM2.5-24B-A2B",
-        "Run",
-        "LFM2.5-24B-"
-      ],
-      "date": "2026-10-15"
-    },
-    {
-      "id": "55913",
-      "title": "HiRO-ACEv2: 적은 비용으로 3km 해상도 극한 날씨 시뮬레이션",
-      "original_title": "HiRO-ACEv2: Simulating extreme weather at 3 km resolution for a fraction of the cost",
-      "description": "",
-      "link": "https://huggingface.co/blog/allenai/hiro-acev2",
-      "entities": [
-        "Simulating",
-        "HiRO-ACEv2"
-      ],
-      "date": "2026-10-15"
-    },
-    {
-      "id": "56065",
-      "title": "[무료 LLM] nvidia/nemotron-3.5-super-vl:free — OpenR",
-      "original_title": "nvidia/nemotron-3.5-super-vl:free",
-      "description": "OpenRouter에서 입출력 모두 무료인 모델. 컨텍스트 1,000,000 토큰. 지금 바로 무료로 써볼 수 있다.",
-      "link": "https://openrouter.ai/nvidia/nemotron-3.5-super-vl",
-      "entities": [
-        "OpenR",
-        "LLM"
-      ],
-      "date": "2026-10-16"
-    },
-    {
-      "id": "56066",
-      "title": "[무료 LLM] nemotron-3.5-super-vl-free — OpenCode Zen",
-      "original_title": "nemotron-3.5-super-vl-free",
-      "description": "Nemotron 3.5 Super VL Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/nemotron-3.5-super-vl-free\"} 프로바이더 갱신일 2026-10-15.",
-      "link": "https://models.dev/opencode/nemotron-3.5-super-vl-free",
-      "entities": [
-        "VL",
-        "LLM",
-        "Zen",
-        "Free",
-        "Super",
-        "Nemotron",
-        "OpenCode"
-      ],
-      "date": "2026-10-16"
-    },
-    {
-      "id": "55964",
-      "title": "세일즈포스, 대졸 취업 시장 침체 속 영국 학생들에게 무료 AI 도구 제공",
-      "original_title": "Salesforce offers free AI tools to UK students as graduate job market lags",
-      "description": "영국의 대졸 구인 건수가 2020년 이후 최저치를 기록한 가운데, 세일즈포스는 600만 명의 학생들에게 인공지능 기술에 대한 고용주들의 증가하는 수요를 충족할 수 있도록 무료 AI 도구를 제공하고 있습니다. 이 미국 기술 거대 기업은 대학들이 자사의 플랫폼에 접근할 수 있도록 하는 이 프로그램을 목요일에 발표했습니다.",
-      "link": "https://www.cityam.com/salesforce-offers-free-ai-tools-to-uk-students-as-graduate-job-market-lags/",
-      "entities": [
-        "Salesforce",
-        "UK",
-        "AI"
-      ],
-      "date": "2026-10-16"
-    },
-    {
-      "id": "56072",
-      "title": "[제외] step-5-preview-free — OpenCode Zen 무료 목록에서 제외",
-      "original_title": "step-5-preview-free",
-      "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
-      "link": "https://opencode.ai/v2/docs/console/models/",
-      "entities": [
-        "Zen",
-        "OpenCode"
-      ],
-      "date": "2026-10-16"
-    },
     {
       "id": "56206",
       "title": "[무료 LLM] beam-free — OpenCode Zen 무료 티어",
@@ -2303,6 +2178,83 @@
         "AI"
       ],
       "date": "2026-11-14"
+    },
+    {
+      "id": "59742",
+      "title": "[무료 LLM] longcat-2.5-free — OpenCode Zen 무료 티어",
+      "original_title": "longcat-2.5-free",
+      "description": "LongCat 2.5 Free — CLI에서 입출력 모두 무료. 컨텍스트 1,000,000 토큰. OpenCode 설정: {\"model\": \"opencode/longcat-2.5-free\"} 프로바이더 갱신일 2026-11-02.",
+      "link": "https://models.dev/opencode/longcat-2.5-free",
+      "entities": [
+        "LongCat",
+        "Free",
+        "OpenCode",
+        "LLM",
+        "Zen"
+      ],
+      "date": "2026-11-15"
+    },
+    {
+      "id": "60956",
+      "title": "런웨이, 비디오 AI를 로봇 제어기로 변환하는 오픈소스 '프락시스-1' 공개",
+      "original_title": "Runway's open-source Praxis-1 turns video AI into a robot controller",
+      "description": "런웨이가 아파치 2.0 라이선스로 가중치와 소스 코드를 공개한 로봇 모델 '프락시스-1'을 출시했습니다. 이 모델은 비디오 학습을 통해 얻은 지식을 로봇 제어에 활용하며, 엔비디아의 RoboLab-120 벤치마크에서 월드 액션 모델 부문 1위를 차지했습니다. 다만 아직 복잡한 동작 순서를 스스로 계획하는 능력은 부족합니다.",
+      "link": "https://the-decoder.com/runways-open-source-praxis-1-turns-video-ai-into-a-robot-controller/",
+      "entities": [
+        "RoboLab-120",
+        "AI",
+        "Runway",
+        "Praxis-1"
+      ],
+      "date": "2026-11-15"
+    },
+    {
+      "id": "61037",
+      "title": "[AI프리즘] AI로 일자리 170만개 늘지만…5명 중 1명 직무 바뀐다",
+      "original_title": "",
+      "description": "국내 AI 스타트업 한 대표는 \"AI로 많은 업무가 자동화되면서 필요 인력이 점점 줄어들고 있는 것은 사실\"이라면서도 \"무작정 사람을 뽑지 않으면 좋은 인재들이 경험을 쌓고 선순환하는 사다리를 걷어차게 돼 결국...",
+      "link": "https://n.news.naver.com/mnews/article/001/0016442078?sid=105",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-15"
+    },
+    {
+      "id": "61243",
+      "title": "[단독] 한국형 인큐텔 초대 대표에 윤효환 한국벤처투자 본부장 '유력'",
+      "original_title": "",
+      "description": "투자 대상은 AI와 반도체, 우주·항공, 방산 등 국가안보와 연관된 첨단기술 기업이다. 미국 인큐텔은 1999년... 보유한 스타트업에 투자한다. 재무적인 수익보다 안보 기술 확보를 우선시 하며 펀드를 청산하지 않은 채...",
+      "link": "https://n.news.naver.com/mnews/article/293/0000093277?sid=101",
+      "entities": [],
+      "date": "2026-11-16"
+    },
+    {
+      "id": "61217",
+      "title": "“AI 불확실 우려에도 수요 견고”…SK하이닉스, HBM4 생산능력 더 키운다",
+      "original_title": "",
+      "description": "SK하이닉스가 고대역폭메모리(HBM4) 생산 능력을 추가 확대한다. 엔비디아 최고경영자(CEO) 교체 등 인공지능(AI) 산업 불확실성이 커졌지만 핵심 인프라인 HBM 수요는 견고하다고 판단한 것으로 풀이된다. 회사는 HBM 패키징·테스트 중심으로 설비 투자를 단행, 내년 상반기 본격 가동할 계획이다. 15일 복수의 반도체 장비 업체 관계자에 따르면 SK하",
+      "link": "https://www.etnews.com/20261113000212",
+      "entities": [
+        "AI",
+        "HBM4",
+        "CEO",
+        "HBM"
+      ],
+      "date": "2026-11-16"
+    },
+    {
+      "id": "61163",
+      "title": "젠슨 황에게 닥친 악재는 곧 AI 산업의 악재인가?",
+      "original_title": "Is bad news for Jensen Huang also bad news for the AI industry?",
+      "description": "\"젠슨 황이 곧 엔비디아 아닌가요? 현재 경제의 상당 부분이 엔비디아에 의존하고 있습니다.\"",
+      "link": "https://techcrunch.com/2026/11/15/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry/",
+      "entities": [
+        "AI",
+        "Huang",
+        "Jensen",
+        "Is"
+      ],
+      "date": "2026-11-16"
     }
   ]
 }

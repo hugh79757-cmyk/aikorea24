@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-14 09:02",
-  "count": 150,
+  "updated_at": "2026-11-16 09:01",
+  "count": 149,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -40,12 +40,16 @@
         "apodex/apodex-1.1-mini:free"
       ],
       "news_ids": [
+        60946,
+        60945,
         54939
       ],
       "sources": [
+        "Kilo Free Models",
         "OpenRouter Free Models"
       ],
       "cli_ids": [
+        "kilo/apodex/apodex-1.1-mini:free",
         "openrouter/apodex/apodex-1.1-mini:free"
       ],
       "in_briefing": false
@@ -667,12 +671,15 @@
         "inclusionai/ling-3.2-flash:free"
       ],
       "news_ids": [
+        61107,
         60822
       ],
       "sources": [
+        "Kilo Free Models",
         "OpenRouter Free Models"
       ],
       "cli_ids": [
+        "kilo/inclusionai/ling-3.2-flash:free",
         "openrouter/inclusionai/ling-3.2-flash:free"
       ],
       "in_briefing": false
@@ -1000,22 +1007,6 @@
       ],
       "cli_ids": [
         "opencode/longcat-2.0-free"
-      ],
-      "in_briefing": false
-    },
-    {
-      "key": "longcat-2.5",
-      "original_titles": [
-        "longcat-2.5-free"
-      ],
-      "news_ids": [
-        59742
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/longcat-2.5-free"
       ],
       "in_briefing": false
     },

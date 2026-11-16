@@ -1,31 +1,50 @@
 {
-  "verified_at": "2026-11-14 09:31",
+  "verified_at": "2026-11-16 09:33",
   "pass": [
     "kilo/baidu/ernie-5.5-flash-preview:free",
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
-    "kilo/liquid/lfm-3-1.7b:free",
+    "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "kilo/nvidia/nemotron-3.5-lightning:free",
     "kilo/nvidia/nemotron-3.5-super-vl:free",
-    "kilo/particle-ai/particle-1:free",
+    "openrouter/baidu/ernie-5.5-flash-preview:free",
     "openrouter/cohere/north-mini-code:free",
     "openrouter/liquid/lfm-3-1.7b:free",
     "openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "openrouter/nvidia/nemotron-3.5-lightning:free",
     "openrouter/nvidia/nemotron-3.5-super-vl:free",
     "openrouter/particle-ai/particle-1:free",
     "openrouter/recursive/flint-v1.0:free",
     "openrouter/thinkingmachines/inkling-2-small:free",
     "opencode/beam-free",
-    "opencode/flint-40b-free",
+    "opencode/deepseek-v4.1-flash-free",
+    "opencode/glm-5.3-flash-free",
     "opencode/iceman-free",
     "opencode/inkling-2-small-free",
-    "opencode/longcat-2.5-free"
+    "opencode/longcat-2.5-free",
+    "opencode/mimo-v2.6-flash-free",
+    "opencode/minimax-m3.1-flash-free",
+    "opencode/nemotron-3.5-lightning-free",
+    "opencode/nemotron-3.5-super-vl-free"
   ],
   "fail": [
     {
-      "cli_id": "openrouter/baidu/ernie-5.5-flash-preview:free",
-      "model_id": "baidu/ernie-5.5-flash-preview:free",
+      "cli_id": "kilo/liquid/lfm-3-1.7b:free",
+      "model_id": "liquid/lfm-3-1.7b:free",
+      "reason": "CLI 타임아웃 60초",
+      "kind": "transient"
+    },
+    {
+      "cli_id": "kilo/particle-ai/particle-1:free",
+      "model_id": "particle-ai/particle-1:free",
+      "reason": "CLI 타임아웃 60초",
+      "kind": "transient"
+    },
+    {
+      "cli_id": "opencode/flint-40b-free",
+      "model_id": "flint-40b-free",
       "reason": "CLI 타임아웃 60초",
       "kind": "transient"
     },

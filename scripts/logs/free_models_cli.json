@@ -18,15 +18,21 @@
     "context_length": 512000
   },
   {
-    "model_id": "liquid/lfm-3-1.7b:free",
+    "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "provider": "kilo",
-    "cli_id": "kilo/liquid/lfm-3-1.7b:free",
-    "context_length": 262144
+    "cli_id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+    "context_length": 256000
   },
   {
     "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "context_length": 1000000
+  },
+  {
+    "model_id": "nvidia/nemotron-3.5-lightning:free",
+    "provider": "kilo",
+    "cli_id": "kilo/nvidia/nemotron-3.5-lightning:free",
     "context_length": 1000000
   },
   {
@@ -36,10 +42,10 @@
     "context_length": 1000000
   },
   {
-    "model_id": "particle-ai/particle-1:free",
-    "provider": "kilo",
-    "cli_id": "kilo/particle-ai/particle-1:free",
-    "context_length": 1048576
+    "model_id": "baidu/ernie-5.5-flash-preview:free",
+    "provider": "openrouter",
+    "cli_id": "openrouter/baidu/ernie-5.5-flash-preview:free",
+    "context_length": 1024000
   },
   {
     "model_id": "cohere/north-mini-code:free",
@@ -63,6 +69,12 @@
     "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
     "provider": "openrouter",
     "cli_id": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
+    "context_length": 1000000
+  },
+  {
+    "model_id": "nvidia/nemotron-3.5-lightning:free",
+    "provider": "openrouter",
+    "cli_id": "openrouter/nvidia/nemotron-3.5-lightning:free",
     "context_length": 1000000
   },
   {
@@ -95,9 +107,14 @@
     "cli_id": "opencode/beam-free"
   },
   {
-    "model_id": "flint-40b-free",
+    "model_id": "deepseek-v4.1-flash-free",
     "provider": "zen",
-    "cli_id": "opencode/flint-40b-free"
+    "cli_id": "opencode/deepseek-v4.1-flash-free"
+  },
+  {
+    "model_id": "glm-5.3-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/glm-5.3-flash-free"
   },
   {
     "model_id": "iceman-free",
@@ -113,5 +130,25 @@
     "model_id": "longcat-2.5-free",
     "provider": "zen",
     "cli_id": "opencode/longcat-2.5-free"
+  },
+  {
+    "model_id": "mimo-v2.6-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/mimo-v2.6-flash-free"
+  },
+  {
+    "model_id": "minimax-m3.1-flash-free",
+    "provider": "zen",
+    "cli_id": "opencode/minimax-m3.1-flash-free"
+  },
+  {
+    "model_id": "nemotron-3.5-lightning-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3.5-lightning-free"
+  },
+  {
+    "model_id": "nemotron-3.5-super-vl-free",
+    "provider": "zen",
+    "cli_id": "opencode/nemotron-3.5-super-vl-free"
   }
 ]
