@@ -17,7 +17,7 @@
   python3 scripts/cf_adsense_guard.py apply --only all
   (--dry-run 을 붙이면 쓰지 않고 계획만 출력)
 
-토큰: 환경변수 CF_STYLEFACTORY9AI_API_TOKEN → CF_ADSENSE_TOKEN → CF_MIGRATE_TOKEN 순으로 찾는다.
+토큰: 환경변수 CF_ADSENSE_TOKEN → CF_WAF_TOKEN → CF_STYLEFACTORY9AI_API_TOKEN → CF_MIGRATE_TOKEN 순으로 찾는다.
        값은 절대 출력하지 않는다.
 """
 import argparse
@@ -29,7 +29,7 @@ import httpx
 
 API = "https://api.cloudflare.com/client/v4"
 ENV_FILE = os.path.expanduser("~/.env.common")
-TOKEN_VARS = ("CF_ADSENSE_TOKEN", "CF_STYLEFACTORY9AI_API_TOKEN", "CF_MIGRATE_TOKEN")
+TOKEN_VARS = ("CF_ADSENSE_TOKEN", "CF_WAF_TOKEN", "CF_STYLEFACTORY9AI_API_TOKEN", "CF_MIGRATE_TOKEN")
 
 # 관리 규칙셋(무료) — 이름으로 찾는다(하드코딩 id 는 존마다 다를 수 있다).
 MANAGED_FREE_NAME = "Cloudflare Managed Free Ruleset"
