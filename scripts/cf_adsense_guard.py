@@ -249,7 +249,9 @@ def main():
     ap.add_argument("cmd", choices=["audit", "apply"])
     ap.add_argument("--only", default="all",
                     choices=["all", "settings", "bot", "waf", "ratelimit"])
-    ap.add_argument("--zone", default="", help="기본: 접근 가능한 전 존")
+    ap.add_argument("--zone", default="", help="기본: 접근 가능한 전 존(적용은 --all-zones 필요)")
+    ap.add_argument("--all-zones", action="store_true",
+                    help="apply 시 접근 가능한 모든 존에 적용(기본은 --zone 1개만 허용)")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -259,7 +261,14 @@ def main():
     all_zones = zones(cf)
     if not all_zones:
         sys.exit("접근 가능한 존 없음 — 토큰 권한 확인")
+    # 여러 존을 한 번에 건드리는 사고를 막는다(토큰이 3개 존을 커버하면 실수 반경이 커진다).
+    if a.cmd == "apply" and not a.zone and len(all_zones) > 1 and not a.all_zones:
+        sys.exit("존이 %d개입니다. --zone <이름> 으로 하나를 지정하거나, 정말 전부 적용하려면 "
+                 "--all-zones 를 붙이세요: %s" % (len(all_zones), ", ".join(sorted(all_zones))))
     target = {a.zone: all_zones[a.zone]} if a.zone else all_zones
+    if a.zone and a.zone not in all_zones:
+        sys.exit("'%s' 접근 불가. 토큰이 볼 수 있는 존: %s"
+                 % (a.zone, ", ".join(sorted(all_zones))))
     for zname, zid in target.items():
         print("\n══ %s" % zname)
         if a.cmd == "audit":
