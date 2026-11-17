@@ -1,0 +1,18 @@
+{
+  "added": [],
+  "removed": [
+    {
+      "provider": "kilo",
+      "model_id": "inclusionai/ling-3.2-flash:free",
+      "name": "inclusionAI: Ling 3.2 Flash (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576,
+      "reason": "단종/제거"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}

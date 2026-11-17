@@ -2936,5 +2936,197 @@
   "measured_context": 1048576,
   "ts": 1794801424.17693,
   "schema": 4
+ },
+ "hy4-flash-free": {
+  "model_id": "hy4-flash-free",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/hy4-flash-free",
+  "turn_timeout_sec": 60,
+  "qv": 3,
+  "score": 11,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 0,
+    "source": "cli",
+    "answer": "이 코드는 `add`라는 이름의 함수를 정의합니다. 이 함수는 `a`와 `b`라는 두 개의 값을 전달받으면, 두 값을 더한 결과를 즉시 반환합니다. 함수 본문이 한 줄로 Written 되어 있어, 입력받은 두 수의 합을 계산해 돌려주는 가장 단순한 형태의 덧셈 함수라고 할 수 있습니다.\n\n---끝---",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 8.8
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 6.8
+   },
+   {
+    "idx": 3,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 버그\n\n`now - timedelta(days=30)` 비교 때문에 **최근 30일 안에 만료된 토큰이 누락**됩니다. 함수 이름은 `get_expired_tokens`인데, 실제로는 \"30일 이상 전에 만료된 토큰\"만 반환하고 있습니다.\n\n## 수정 코드\n\n```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n만약 원래 의도가 \"30일 내에 만료될 예정인 토큰\"을 찾는 것이었다면 부호를 `+`로 바꾸고 함수명도 `get_expiring_soon_tokens` 등으로 고쳐야 합니다:\n\n```python\nif datetime.fromisoformat(t['expires_at']) < now + timedelta(days=30)\n```\n\n## 한 줄 설명\n\n`- timedelta(days=30)` 때문에 30일 전에 만료된 토큰만 걸러져, 어제 만료된 토큰도 분명 \"만료됨\"인데 반환되지 않는다.\n\n## 참고 (부가 위험)\n\n`expires_at` 문자열이 `+00:00` 같은 타임존 정보를 담고 있는데 `now`가 `datetime.utcnow()` 같은 naive datetime이면, `<` 비교에서 `TypeError: can't compare offset-naive and offset-aware datetimes`가 납니다. 이 경우 `now`에 `timezone.utc`를 붙여 맞춰 주세요. (질문의 코드만 보면 위의 `timedelta` 부호가 1차 버그입니다.)",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 19.8
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nimport pytest\n\nfrom my_module import safe_div\n\n\nclass TestSafeDiv:\n    \"\"\"safe_div(a, b)에 대한 경계값 포함 pytest 검증.\"\"\"\n\n    # ---------- 정상 입력 ----------\n    @pytest.mark.parametrize(\n        \"a, b, expected\",\n        [\n            (10, 2, 5.0),          # 정수 나눗셈 → float\n            (7, 2, 3.5),           # 소수 결과\n            (1, 3, 1 / 3),         # 무한소수 (float 근사)\n            (0, 5, 0.0),           # 분자 0\n            (2.5, 0.5, 5.0),       # float 입력\n            (1e308, 1e308, 1.0),   # 큰 수\n            (1e-308, 1.0, 1e-308), # 아주 작은 수\n        ],\n    )\n    def test_normal_inputs(self, a, b, expected):\n        assert safe_div(a, b) == pytest.approx(expected)\n\n    # ---------- 0으로 나누기 ----------\n    @pytest.mark.parametrize(\n        \"a, b\",\n        [\n            (10, 0),       # 양수 / 0\n            (-10, 0),      # 음수 / 0\n            (0, 0),        # 0 / 0\n            (3.14, 0.0),   # float 0.0 도 b == 0 에 해당\n            (1, -0.0),     # -0.0 도 0 으로 취급\n        ],\n    )\n    def test_di",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 13.7
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "두 함수의 공통 구조는 **조건 필터 → id/name/email 투영**입니다. 이 두 단계를 헬퍼로 추출하면 됩니다.\n\n```python\ndef _select_users(users, predicate):\n    \"\"\"predicate를 만족하는 유저를 id/name/email 딕셔너리로 투영한다.\"\"\"\n    return [\n        {'id': u['id'], 'name': u['name'], 'email': u['email']}\n        for u in users\n        if predicate(u)\n    ]\n\n\ndef get_active_user(users):\n    return _select_users(users, lambda u: u['status'] == 'active')\n\n\ndef get_admin_user(users):\n    return _select_users(users, lambda u: u['role'] == 'admin')\n```\n\n**동작 보존 근거**\n\n- 반환 순서: 리스트 컴프리헨션도 원본과 동일하게 `users` 순서를 유지합니다.\n- 키 누락 시 예외: 원본은 조건을 먼저 평가하고 투영은 조건 통과 시에만 수행합니다. 위 코드도 `if predicate(u)`가 먼저이고 `_select_users`의 투영은 그 다음이라, `status`/`role` 누락은 `KeyError`, 조건 통과 후 `id`/`name`/`email` 누락도 동일하게 `KeyError`가 납니다(접근 시점 동일).\n- 반환 형태: `dict` 3개 키를 담은 리스트로 동일합니다.\n\n**대안 (조건이 모두 필드 동등 비교라면 람다 대신 파라미터화)**\n\n```python\ndef _select_users(users, key, value):\n    return [\n        {'id': u['id'], 'name': u['name'], 'email': u['email']}\n        for u in users\n        if",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 15.0
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nfrom datetime import datetime\n\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError(\"s must be a str\")\n\n    stripped = s.strip()\n    if not stripped:\n        raise ValueError(\"empty line\")\n\n    parts = stripped.split(maxsplit=2)\n    if len(parts) != 3:\n        raise ValueError(\"expected 'TIMESTAMP LEVEL MSG'\")\n\n    timestamp, level, msg = parts\n\n    ts = timestamp[:-1] + \"+00:00\" if timestamp.endswith(\"Z\") else timestamp\n    try:\n        datetime.fromisoformat(ts)\n    except ValueError:\n        raise ValueError(\"timestamp is not ISO8601\")\n\n    if level not in (\"INFO\", \"WARN\", \"ERROR\"):\n        raise ValueError(\"invalid level\")\n\n    if not msg.strip():\n        raise ValueError(\"empty msg\")\n\n    return (timestamp, level, msg)\n```",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 14.6
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "normalize_ledger_entries",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 8.9
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "위 대화에서 요청하신 작업 3가지는 다음과 같습니다.\n\n1. **파이썬 시작 방법** — \"파이썬을 처음 시작하려면 뭘부터 해야 해?\"\n2. **변수 이름 짓기 규칙 3개** — \"변수 이름 지을 때 규칙 3개만 알려줘.\"\n3. **프로그램 오류 발생 시 첫 조치** — \"프로그램이 안 돌아갈 때 처음에 할 일은?\"\n\n각 요청은 순서대로 설치·버전 확인, 변수 명명 규칙, 에러 메시지 확인·최소 재현·값 출력이라는 답변으로 이어졌습니다.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 12.3
+   },
+   {
+    "idx": 9,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[\"TAX_RATE 기반 세금 계산 제거로 인한 금액 산출 로직 회귀\",\"전역 변수 total 직접 변경(+=)으로 인한 공유 가변 상태 및 동시성 위험\",\"pay() 내 db.insert('tx', total) 부작용 추가 — 트랜잭션 중복 기록과 원자성·실패 처리 부재\",\"amount 입력 검증 부재(음수·0·비정상값)\",\"미사용 user 파라미터 및 세미콜론 한 줄 작성으로 인한 가독성 저하\"]",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 11.2
+   },
+   {
+    "idx": 10,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "Root cause: 재시도 없이 단일 5초 타임아웃만 걸어둔 탓에 일시적 네트워크 지연이 곧바로 `Timeout`으로 실패한다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -1,3 +1,11 @@\n import requests\n+from requests.adapters import HTTPAdapter\n+from urllib3.util.retry import Retry\n+\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    session = requests.Session()\n+    retries = Retry(total=3, backoff_factor=0.5,\n+                    status_forcelist=[429, 500, 502, 503, 504])\n+    session.mount(\"https://\", HTTPAdapter(max_retries=retries))\n+    return session.get(url, timeout=30).json()\n```",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 13.2
+   },
+   {
+    "idx": 11,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[{\"screen\":\" 기본 골격 — 단일 <html> 안에 <head>(메타·<style> 변수/리셋/레이아웃)와 <body>의 최상위 컨테이너(#app), 그리고 화면 전환용 섹션 #screen-title(제목·시작 버튼)만 먼저 만든다\",\"state_model\":\" 전역 단일 객체 const S = { scene:'title', turn:0, player:{name,age,hp,hunger,energy}, world:{day,season,region,flags:{}}, log:[] } — DOM은 S.scene 하나만 보고 렌더링하는 단방향 구조로 시작\",\"verify\":\" 파일을 브라우저로 열어 콘솔에 S 출력, #screen-title만 보이고 시작 버튼 클릭 시 scene 값이 바뀌는지 확인(아직 화면 전환 함수 스텁)\"},{\"screen\":\" 게임 루프 화면 — #screen-play 추가: 상태바(HP/배고픔/기력/계절), 현재 장면 서술 영역(#narrative), 턴 진행 버튼/이벤트 카드 컨테이너, 로그 패널\",\"state_model\":\" S.scene='play' 확장 + 엔진 함수 advance(S,event) 추가 — 턴 증가, 자원 증감(clamp), world.flags 갱신, log push, 다음 이벤트 선택(가중치 테이블)을 순수하게 S만 변경하도록 구현\",\"verify\":\" 시작 후 5~10턴 반복 실행해 HP/배고픔이 0~100 범위를 안 벗어나고, log 길이가 턴 수와 비례하며, flag 설정 이벤트가 다음 서술에 반영되는지 콘솔로 확인\"},{\"screen\":\" 선택·상호작용 레이어 — #screen-play 안에 #choices(선택지 버튼 동적 생성), 네안데르탈인 특화 패널(사냥/채집/불/도구/무덤 의식 등), 조건부 잠금 표시, 짧은 모달 #screen-event\",\"state_model\":\" S에 pending event와 choices:[{id,label,requires(flags/자원),effects}] 추",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 14.9
+   },
+   {
+    "idx": 12,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 판단 기준\n\n우선순위는 다음 4가지로 갈랐습니다: **① 영향 범위**(고객·신뢰·매출), **② 시간 민감도**(미룰수록 비용이 커지는가), **③ 되돌리기 어려움**, **④ 지금 확인하는 비용**(진단이 싸면 일단 본다).\n\n---\n\n## 지금 바로 처리\n\n**1. 장애 후속 고객 메일 발송 — 최우선**\n- **근거 ①** 장애 커뮤니케이션은 \"무엇을 쓰느냐\"보다 \"언제 보내느냐\"가 더 중요합니다. 지연될수록 고객이 다른 경로로 먼저 알게 되거나 불안이 커져 → 문의 폭주, 신뢰 훼손, 해지로 이어집니다. 시간이 지날수록 손해만 커지고 이득이 없습니다.\n- **근거 ②** 이미 \"발송 대기 중\" = 내용 준비가 끝났다는 뜻입니다. 즉시 실행 비용이 매우 낮은데 반해 미루는 비용이 큽니다.\n- **근거 ③** 장애 후속 안내는 SLA/약속(예: N시간 내 통지)이 걸려 있는 경우가 많습니다.\n\n**2. 운영 DB 느린 쿼리(3초) — 최소한 1차 진단은 지금**\n- **근거 ①** \"운영\" 환경이라는 점 자체가 우선순위 신호입니다. 3초는 온라인 응답 기준으로 체감이 큰 수치입니다.\n- **근거 ②** 느린 쿼리는 단일 관측이라도 방치하면 커넥션 풀 고갈·락 경합·전체 지연으로 증폭될 수 있습니다.\n- **근거 ③** 지금 확인하는 비용이 낮습니다 — 발생 빈도/추세/사용자 노출 여부/실행계획만 봐도 판단이 됩니다.\n- **정확한 범위**: \"지금 **진단**, 본격 **수정**은 원인 확인 후 일정 조정\"이 맞습니다. 1회성 배치·캐시 미스면 당일 수정이 불필요할 수도 있습니다. 다만 진단 자체는 미루지 않는 게 맞습니다.\n- **보너스 판단**: 이 쿼리가 **이번 장애와 관련 있다면**, 메일 내용의 정확성 때문에라도 1번보다 먼저(또는 동시에) 확인해야 합니다.\n\n---\n\n## 오늘 미뤄도 되는 것\n\n**3. 내부 도구 버튼 색상·문구 수정**\n- **근거 ①** 내부 도구 + 외형(색상/문구) 변경 = 고객·매출·보안·가용성에 영향이 전혀 ",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 29.8
+   }
+  ],
+  "errors": [],
+  "failures": [],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "by_axis": {
+   "지시이행": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 4,
+    "max_score": 4,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "에이전트": {
+    "score": 4,
+    "max_score": 4,
+    "failed": 0
+   }
+  },
+  "sandbox_pass": 3,
+  "failed": 0,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "graded_n": 12,
+  "score_display": "11/12",
+  "role": "판단 근거 부족 — 손발 작업으로 한정",
+  "usage_levels": {
+   "코딩실무": "코딩 우수",
+   "에이전트": "에이전트 우수",
+   "한글": "한글 부분 가능"
+  },
+  "coding_level": "코딩 우수",
+  "agent_level": "에이전트 우수",
+  "korean_level": "한글 부분 가능",
+  "label": "12문항 중 11문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유). 판단 근거 부족 — 손발 작업으로 한정.",
+  "measured_context": 1048576,
+  "ts": 1794879397.73805,
+  "schema": 4
  }
 }

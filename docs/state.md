@@ -1,3 +1,48 @@
+## 2026-11-17 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 0 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
+## 2026-11-17 01:00 — 2.techpawz.com Blogger → Hugo 마이그레이션 (백업+변환+빌드 완료, 배포 대기)
+
+지시: "전체 실행해줘. seo 자산을 잃어버리면 안된다. 시작해줘."
+
+### 한 일
+
+1. **백업**: Blogger 공개 Atom 피드 `www.blogger.com/feeds/5484205249958557854/posts/default?alt=json` 로 **872개 게시글** 전부 수집(9.6MB, `/tmp/blog_backup_2techpawz.json`). drafts 2개는 피드에 미포함.
+2. **변환**: `/tmp/convert_blogger.py` — Atom entry → Hugo `content/posts/{slug}.md`
+   - front matter: title, date, lastmod, `url` (Blogger 원본 경로 그대로), tags(라벨), description
+   - 본문 HTML 보존(goldmark unsafe=true), `{{` → HTML 엔티티로 치환해 숏코드 파싱 오류 방지
+   - **872개 전부 고유 URL** (중복 0), 빌드 파일 누락 0
+3. **SEO 보존 검증**
+   - URL 보존: 샘플 6개 모두 `public/<old-path>.html` 존재, 고유 872/872
+   - 이미지: 839/872 글에 blogger.googleusercontent.com 이미지 (864개 참조, 안정 호스트)
+   - baseURL = https://2.techpawz.com/
+4. **빌드**: `HUGO_THEMESDIR=shared-themes hugo --gc --minify` → **872 포스트 + 404(광고 0, noindex)**
+   - 404: 715 bytes, ads 0
+   - 샘플 포스트 h1 정상 렌더 (854개 2026 경로)
+5. **standalone 404** 추가 (blowfish 테마 baseof 상속 차단) → 광고 0
+
+### 결과 — 3분법
+
+- [검증됨] **백업 872개 확보.** 근거: 피드 `openSearch$totalResults = 872`, 수집 누적 872.
+- [검증됨] **URL 100% 보존.** 근거: 872 고유 url, 0 누락, 샘플 6개 빌드 파일 존재.
+- [검증됨] **빌드 성공.** 근거: `hugo` exit 0, public/*.html 1060개, 404 광고 0.
+- [부분검증] **배포·DNS 전환 미실행.** 제한 사유: hugh79757 계정이 **Pages 프로젝트 100개 한도**(오류 8000027).
+  복구 계획: 미사용 프로젝트 1개 삭제 후 `2-techpawz-hugo` 생성 → wrangler pages deploy → DNS CNAME 교체(ghs.google.com → *.pages.dev) → 라이브 검증 → Blogger 유지(롤백용).
+- [검증불가] **SEO 자산 보존의 최종 확인.** 라이브 URL 매칭은 DNS 전환 후에만 가능.
+  복구 계획: pages.dev 미리보기에서 샘플 URL 5개 + 404 검증 후 컷오버.
+
+### 잔존 위험
+
+1. **Pages 프로젝트 한도** — 100/100 사용 중. 삭제 후보: `proto`, `protoking`, `protostats`, `golden-keyword-finder`, `md-editor`, `lecture`, `stat-keyword-pro`, `naver-news`, `mil`, `barnmate-web`, `funstaurant-hugo`, `appliance-hugo` 등 (명백한 개발/실험용). 대표님 결정 필요.
+2. **이미지 호스트**: blogger.googleusercontent.com 유지(무료·무기한). R2 이전은 선택.
+3. **URL에 공백이 있는 1개 글** (`Long-Term Care Grade2.html`) — Hugo 가 그대로 빌드함, SEO 영향 없음.
+4. **Blogger → Hugo 전환 후** `robots.txt`/sitemap 재등록 필요 (Search Console).
+
+### 다음 행동
+
+1. 삭제할 미사용 Pages 프로젝트 1개 지정 → 제가 `2-techpawz-hugo` 생성·배포·검증까지 실행.
+2. 검증 통과 시 DNS CNAME 교체(롤백 가능) → 라이브 확인.
+3. Blogger 블로그는 삭제하지 않고 유지(롤백용, SEO 전환 기간).
+
 ## 2026-11-17 00:10 — 광고 재삽입(가드) 완료 · 404 15/15 유지 · 테마 교체는 1개만
 
 지시: "광고코드 재삽입해. 메타테그는 없어도 된다. 테마는 모두 교체된거야?"

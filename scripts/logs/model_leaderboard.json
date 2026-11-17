@@ -406,5 +406,18 @@
   "no_response_n": 0,
   "score_display": "11/12",
   "ts": 1794804118.1750028
+ },
+ {
+  "model_id": "hy4-flash-free",
+  "cli_model": "opencode/hy4-flash-free",
+  "turn_timeout_sec": 60,
+  "qv": 3,
+  "score": 11,
+  "max_score": 12,
+  "graded_n": 12,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "score_display": "11/12",
+  "ts": 1794879397.753506
  }
 ]

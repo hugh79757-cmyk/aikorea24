@@ -166,7 +166,37 @@
    "attempts": 0,
    "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
    "day": "2026-11-14"
+  },
+  "hy4-flash-free": {
+   "model_id": "hy4-flash-free",
+   "provider": "zen",
+   "first_seen": "2026-11-17",
+   "status": "done",
+   "attempts": 1,
+   "reason": "",
+   "day": "2026-11-17",
+   "briefing": {
+    "date": "2026-11-17-1",
+    "sort_order": 1,
+    "news_id": 61540
+   },
+   "cli_id": "opencode/hy4-flash-free",
+   "score": "11/12",
+   "measured_context": 1048576,
+   "elapsed_sec": 390.6,
+   "zeros_review_needed": [
+    1
+   ],
+   "draft": {
+    "ok": true,
+    "path": "/Users/twinssn/Projects/aikorea24/scripts/logs/eval_auto_drafts/2026-11-17-hy4-flash-free-실측-11-12-무료로-어디까지-쓸-수-있나.md",
+    "url": "https://emdash.aikorea24.kr/posts/hy4-flash-free-실측-1112-무료로-어디까지-쓸-수-있나",
+    "title": "hy4-flash-free 실측 — 11/12, 무료로 어디까지 쓸 수 있나"
+   },
+   "published_url": "https://emdash.aikorea24.kr/posts/hy4-flash-free-실측-1112-무료로-어디까지-쓸-수-있나",
+   "published_at": "2026-11-17",
+   "briefing_linked": true
   }
  },
- "updated_at": 1794792604.6172538
+ "updated_at": 1794879443.223062
 }

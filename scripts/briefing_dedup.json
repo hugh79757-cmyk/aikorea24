@@ -1,27 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-17",
-      "briefing_id": 356,
-      "articles": [
-        {
-          "id": "56206",
-          "title": "[무료 LLM] beam-free — OpenCode Zen 무료 티어",
-          "original_title": "beam-free",
-          "description": "Beam Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/beam-free\"} 프로바이더 갱신일 2026-10-16.",
-          "link": "https://models.dev/opencode/beam-free",
-          "entities": [
-            "LLM",
-            "Zen",
-            "OpenCode",
-            "Beam",
-            "Free"
-          ],
-          "date": "2026-10-17"
-        }
-      ]
-    },
-    {
       "date": "2026-10-18",
       "briefing_id": 357,
       "articles": [
@@ -1213,24 +1192,59 @@
           "date": "2026-11-16"
         }
       ]
+    },
+    {
+      "date": "2026-11-17",
+      "briefing_id": 384,
+      "articles": [
+        {
+          "id": "61540",
+          "title": "[무료 LLM] hy4-flash-free — OpenCode Zen 무료 티어",
+          "original_title": "hy4-flash-free",
+          "description": "Hy4 flash Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/hy4-flash-free\"} 프로바이더 갱신일 2026-11-16.",
+          "link": "https://models.dev/opencode/hy4-flash-free",
+          "entities": [
+            "Zen",
+            "Free",
+            "LLM",
+            "Hy4",
+            "OpenCode"
+          ],
+          "date": "2026-11-17"
+        },
+        {
+          "id": "61389",
+          "title": "과학자들을 위한 AI 접근성 확대",
+          "original_title": "Broadening access to AI for scientists",
+          "description": "전 세계 20만 명의 연구자들에게 최첨단 AI 모델을 무료로 제공하기 위해 '학술 연구자를 위한 챗GPT' 프로그램을 확대하고 있습니다.",
+          "link": "https://openai.com/index/expanding-chatgpt-for-academic-researchers",
+          "entities": [
+            "AI",
+            "Broadening"
+          ],
+          "date": "2026-11-17"
+        },
+        {
+          "id": "61426",
+          "title": "사티아 나델라 \"클로드 코드(Claude Code)에 허를 찔려 IDE가 쇠퇴했다\"",
+          "original_title": "Satya Nadella says Claude Code caught Microsoft off guard and the IDE faded",
+          "description": "사티아 나델라 마이크로소프트 CEO는 앤스로픽의 '클로드 코드'가 코딩 환경을 에디터에서 명령줄(CLI)로 옮겨놓으며 자사의 허를 찔렀다고 언급했습니다. 그는 팟캐스트 인터뷰에서 약 6개월 만에 기존의 통합 개발 환경(IDE)이 사실상 힘을 잃었다고 평가했습니다.",
+          "link": "https://thenextweb.com/news/satya-nadella-claude-code-ide-pragmatic-engineer",
+          "entities": [
+            "Claude",
+            "IDE",
+            "Microsoft",
+            "Code",
+            "Nadella",
+            "Satya",
+            "CLI"
+          ],
+          "date": "2026-11-17"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "56206",
-      "title": "[무료 LLM] beam-free — OpenCode Zen 무료 티어",
-      "original_title": "beam-free",
-      "description": "Beam Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/beam-free\"} 프로바이더 갱신일 2026-10-16.",
-      "link": "https://models.dev/opencode/beam-free",
-      "entities": [
-        "LLM",
-        "Zen",
-        "OpenCode",
-        "Beam",
-        "Free"
-      ],
-      "date": "2026-10-17"
-    },
     {
       "id": "56212",
       "title": "[제외] cat-jam-free — OpenCode Zen 무료 목록에서 제외",
@@ -2255,6 +2269,50 @@
         "Is"
       ],
       "date": "2026-11-16"
+    },
+    {
+      "id": "61540",
+      "title": "[무료 LLM] hy4-flash-free — OpenCode Zen 무료 티어",
+      "original_title": "hy4-flash-free",
+      "description": "Hy4 flash Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/hy4-flash-free\"} 프로바이더 갱신일 2026-11-16.",
+      "link": "https://models.dev/opencode/hy4-flash-free",
+      "entities": [
+        "Zen",
+        "Free",
+        "LLM",
+        "Hy4",
+        "OpenCode"
+      ],
+      "date": "2026-11-17"
+    },
+    {
+      "id": "61389",
+      "title": "과학자들을 위한 AI 접근성 확대",
+      "original_title": "Broadening access to AI for scientists",
+      "description": "전 세계 20만 명의 연구자들에게 최첨단 AI 모델을 무료로 제공하기 위해 '학술 연구자를 위한 챗GPT' 프로그램을 확대하고 있습니다.",
+      "link": "https://openai.com/index/expanding-chatgpt-for-academic-researchers",
+      "entities": [
+        "AI",
+        "Broadening"
+      ],
+      "date": "2026-11-17"
+    },
+    {
+      "id": "61426",
+      "title": "사티아 나델라 \"클로드 코드(Claude Code)에 허를 찔려 IDE가 쇠퇴했다\"",
+      "original_title": "Satya Nadella says Claude Code caught Microsoft off guard and the IDE faded",
+      "description": "사티아 나델라 마이크로소프트 CEO는 앤스로픽의 '클로드 코드'가 코딩 환경을 에디터에서 명령줄(CLI)로 옮겨놓으며 자사의 허를 찔렀다고 언급했습니다. 그는 팟캐스트 인터뷰에서 약 6개월 만에 기존의 통합 개발 환경(IDE)이 사실상 힘을 잃었다고 평가했습니다.",
+      "link": "https://thenextweb.com/news/satya-nadella-claude-code-ide-pragmatic-engineer",
+      "entities": [
+        "Claude",
+        "IDE",
+        "Microsoft",
+        "Code",
+        "Nadella",
+        "Satya",
+        "CLI"
+      ],
+      "date": "2026-11-17"
     }
   ]
 }

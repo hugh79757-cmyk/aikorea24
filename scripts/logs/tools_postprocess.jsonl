@@ -801,3 +801,17 @@
 {"ts": "2026-11-17 07:31:29", "slug": "photoupscaler-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-17 07:31:29", "slug": "piccreator-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-17 07:31:29", "slug": "portrait-generators", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-18 06:00:34", "slug": "infaiw", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-18 06:00:40", "slug": "infaiw", "step": "enrich", "result": "done", "detail": "+2,901자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-18 06:00:42", "slug": "infaiw", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-18 06:00:42", "slug": "agents-api-by-recall-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-18 06:00:50", "slug": "agents-api-by-recall-ai", "step": "enrich", "result": "done", "detail": "+2,717자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-18 06:00:50", "slug": "agents-api-by-recall-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-18 06:00:50", "slug": "ai-visibility-by-trulata", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-18 06:01:10", "slug": "ai-visibility-by-trulata", "step": "enrich", "result": "done", "detail": "+3,124자 (시도 2)", "dry_run": false}
+{"ts": "2026-11-18 06:01:11", "slug": "ai-visibility-by-trulata", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-18 06:01:14", "slug": "appxiom", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-18 06:01:21", "slug": "appxiom", "step": "enrich", "result": "done", "detail": "+2,921자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-18 06:01:22", "slug": "appxiom", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-18 06:01:29", "slug": "k2-horizon-a-frontier-fleet-of-open-source-langua", "step": "enrich", "result": "done", "detail": "+2,931자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-18 06:01:36", "slug": "k2-horizon-a-frontier-fleet-of-open-source-langua", "step": "thumb", "result": "done", "detail": "✅ k2-horizon-a-frontier-fleet-of-open-source-langua 30KB", "dry_run": false}
