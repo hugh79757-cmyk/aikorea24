@@ -1,49 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-18",
-      "briefing_id": 357,
-      "articles": [
-        {
-          "id": "56212",
-          "title": "[제외] cat-jam-free — OpenCode Zen 무료 목록에서 제외",
-          "original_title": "cat-jam-free",
-          "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
-          "link": "https://opencode.ai/v2/docs/console/models/#cat-jam-free",
-          "entities": [
-            "OpenCode",
-            "Zen"
-          ],
-          "date": "2026-10-18"
-        },
-        {
-          "id": "56213",
-          "title": "[제외] muse-spark-1.3-contributor-free — OpenCode Ze",
-          "original_title": "muse-spark-1.3-contributor-free",
-          "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
-          "link": "https://opencode.ai/v2/docs/console/models/#muse-spark-1.3-contributor-free",
-          "entities": [
-            "Ze",
-            "OpenCode",
-            "Zen"
-          ],
-          "date": "2026-10-18"
-        },
-        {
-          "id": "56075",
-          "title": "Azure 무료 계정 $200 크레딧 (30일)",
-          "original_title": "Azure 무료 계정 $200 크레딧 (30일)",
-          "description": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스. Azure OpenAI 엔드포인트를 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
-          "link": "https://azure.microsoft.com/en-us/free/",
-          "entities": [
-            "OpenAI",
-            "Azure"
-          ],
-          "date": "2026-10-18"
-        }
-      ]
-    },
-    {
       "date": "2026-10-19",
       "briefing_id": 358,
       "articles": [
@@ -1242,46 +1199,57 @@
           "date": "2026-11-17"
         }
       ]
+    },
+    {
+      "date": "2026-11-18",
+      "briefing_id": 385,
+      "articles": [
+        {
+          "id": "61738",
+          "title": "개국에서 제미나이 '태스크' 기능 무료 사용 가능",
+          "original_title": "You can now assign Gemini ‘tasks’ for free in six countries",
+          "description": "기존에는 AI 프로 사용자만 이용할 수 있었던 제미나이 앱의 '태스크(구 스파크)' 기능이 오늘부터 무료 사용자에게도 개방되었습니다. 이제 6개국 사용자는 누구나 해당 기능을 자유롭게 활용할 수 있습니다.",
+          "link": "https://9to5google.com/2026/11/17/gemini-tasks-free/",
+          "entities": [
+            "You",
+            "AI",
+            "Gemini"
+          ],
+          "date": "2026-11-18"
+        },
+        {
+          "id": "61737",
+          "title": "유료 갤럭시 AI 세부 정보 공개, '나우 브리프(Now Brief)' 제한부터 시작",
+          "original_title": "More paid Galaxy AI details emerge, starting with Now Brief limitations",
+          "description": "갤럭시 AI의 유료 구독 모델 도입이 임박한 가운데, 관련 세부 사항들이 속속 드러나고 있습니다. 새로운 유출 정보에 따르면, 기존에는 무료로 제공되던 '나우 브리프'의 맞춤형 카드 기능이 유료 구독 대상에 포함될 것으로 보입니다.",
+          "link": "https://9to5google.com/2026/11/17/galaxy-ai-paywall-details-emerge-starting-with-now-brief/",
+          "entities": [
+            "More",
+            "Now",
+            "Galaxy",
+            "Brief",
+            "AI"
+          ],
+          "date": "2026-11-18"
+        },
+        {
+          "id": "61699",
+          "title": "앤스로픽(Anthropic), 앱이 클로드(Claude) 사용료를 고객에게 직접 청구할 수",
+          "original_title": "Anthropic lets apps bill Claude costs to their customers",
+          "description": "앤스로픽은 앱 개발자가 클로드 API 사용료를 고객의 클로드 조직 계정으로 직접 청구할 수 있는 '링크드 빌링(Linked billing)' 베타 서비스를 출시했습니다. 고객은 지출 한도를 설정하거나 앱 연결을 해제할 수 있지만, 앤스로픽에 직접 비용을 지불하는 조직만 이 기능을 사용할 수 있으며 데이터 보호 정책은 그대로 승계되지 않습니다.",
+          "link": "https://thenextweb.com/news/anthropic-linked-billing-claude-api-customers-pay",
+          "entities": [
+            "Linked",
+            "Claude",
+            "API",
+            "Anthropic"
+          ],
+          "date": "2026-11-18"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "56212",
-      "title": "[제외] cat-jam-free — OpenCode Zen 무료 목록에서 제외",
-      "original_title": "cat-jam-free",
-      "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
-      "link": "https://opencode.ai/v2/docs/console/models/#cat-jam-free",
-      "entities": [
-        "OpenCode",
-        "Zen"
-      ],
-      "date": "2026-10-18"
-    },
-    {
-      "id": "56213",
-      "title": "[제외] muse-spark-1.3-contributor-free — OpenCode Ze",
-      "original_title": "muse-spark-1.3-contributor-free",
-      "description": "OpenCode Zen 무료 목록에 제외 · 12문항 평가 전 — 판단 보류",
-      "link": "https://opencode.ai/v2/docs/console/models/#muse-spark-1.3-contributor-free",
-      "entities": [
-        "Ze",
-        "OpenCode",
-        "Zen"
-      ],
-      "date": "2026-10-18"
-    },
-    {
-      "id": "56075",
-      "title": "Azure 무료 계정 $200 크레딧 (30일)",
-      "original_title": "Azure 무료 계정 $200 크레딧 (30일)",
-      "description": "가입 후 30일간 쓸 수 있는 $200 크레딧 + 상시 무료 서비스. Azure OpenAI 엔드포인트를 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
-      "link": "https://azure.microsoft.com/en-us/free/",
-      "entities": [
-        "OpenAI",
-        "Azure"
-      ],
-      "date": "2026-10-18"
-    },
     {
       "id": "56204",
       "title": "[무료 LLM] ll-alpha-free — OpenCode Zen 무료 티어",
@@ -2313,6 +2281,48 @@
         "CLI"
       ],
       "date": "2026-11-17"
+    },
+    {
+      "id": "61738",
+      "title": "개국에서 제미나이 '태스크' 기능 무료 사용 가능",
+      "original_title": "You can now assign Gemini ‘tasks’ for free in six countries",
+      "description": "기존에는 AI 프로 사용자만 이용할 수 있었던 제미나이 앱의 '태스크(구 스파크)' 기능이 오늘부터 무료 사용자에게도 개방되었습니다. 이제 6개국 사용자는 누구나 해당 기능을 자유롭게 활용할 수 있습니다.",
+      "link": "https://9to5google.com/2026/11/17/gemini-tasks-free/",
+      "entities": [
+        "You",
+        "AI",
+        "Gemini"
+      ],
+      "date": "2026-11-18"
+    },
+    {
+      "id": "61737",
+      "title": "유료 갤럭시 AI 세부 정보 공개, '나우 브리프(Now Brief)' 제한부터 시작",
+      "original_title": "More paid Galaxy AI details emerge, starting with Now Brief limitations",
+      "description": "갤럭시 AI의 유료 구독 모델 도입이 임박한 가운데, 관련 세부 사항들이 속속 드러나고 있습니다. 새로운 유출 정보에 따르면, 기존에는 무료로 제공되던 '나우 브리프'의 맞춤형 카드 기능이 유료 구독 대상에 포함될 것으로 보입니다.",
+      "link": "https://9to5google.com/2026/11/17/galaxy-ai-paywall-details-emerge-starting-with-now-brief/",
+      "entities": [
+        "More",
+        "Now",
+        "Galaxy",
+        "Brief",
+        "AI"
+      ],
+      "date": "2026-11-18"
+    },
+    {
+      "id": "61699",
+      "title": "앤스로픽(Anthropic), 앱이 클로드(Claude) 사용료를 고객에게 직접 청구할 수",
+      "original_title": "Anthropic lets apps bill Claude costs to their customers",
+      "description": "앤스로픽은 앱 개발자가 클로드 API 사용료를 고객의 클로드 조직 계정으로 직접 청구할 수 있는 '링크드 빌링(Linked billing)' 베타 서비스를 출시했습니다. 고객은 지출 한도를 설정하거나 앱 연결을 해제할 수 있지만, 앤스로픽에 직접 비용을 지불하는 조직만 이 기능을 사용할 수 있으며 데이터 보호 정책은 그대로 승계되지 않습니다.",
+      "link": "https://thenextweb.com/news/anthropic-linked-billing-claude-api-customers-pay",
+      "entities": [
+        "Linked",
+        "Claude",
+        "API",
+        "Anthropic"
+      ],
+      "date": "2026-11-18"
     }
   ]
 }

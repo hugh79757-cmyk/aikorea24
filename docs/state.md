@@ -1,3 +1,5 @@
+## 2026-11-18 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-18 08:52 — AIK24-COLLECTOR-TITLE-FIX 수집기 제목 숫자 소실 수정 + D1 교정 + 재배포
 
 지시서: `SSOT/프로젝트/aikorea24/지시서/2026-11-18-0830-AIK24-COLLECTOR-TITLE-FIX-제목숫자소실-및-D1교정.md`

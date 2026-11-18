@@ -1,36 +1,36 @@
 {
- "day": "2026-11-18",
- "checked_at": 1794949207.4039261,
- "total_rows": 30,
+ "day": "2026-11-19",
+ "checked_at": 1795035606.868316,
+ "total_rows": 32,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "openai/gpt-6.2-astra",
-   "openai/gpt-6.2-sol",
-   "z-ai/glm-5.2:batch",
-   "openai/gpt-6.2-sol-pro",
-   "openai/gpt-6.2-astra-pro"
+   "openai/gpt-6.2-sol-pro:batch",
+   "openai/gpt-6.2-astra-pro:batch",
+   "openai/gpt-6.2-astra:batch",
+   "openai/gpt-6.2-sol:batch"
   ],
   "kilo": [
-   "openai/gpt-6.2-astra",
-   "openai/gpt-6.2-sol",
-   "openai/gpt-6.2-sol-fast",
-   "openai/gpt-6.2-astra-fast",
-   "openai/gpt-6.2-sol-pro",
-   "recursive/flint-v1.0",
-   "openai/gpt-6.2-astra-pro"
+   "recursive/flint-v1.0:free",
+   "inclusionai/ling-3.2-flash:free"
   ],
-  "zen": [
-   "gpt-6.2-astra",
-   "gpt-6.2-sol"
+  "nvidia": [
+   "moonshotai/kimi-k3.1-pro"
   ]
  },
  "removed_by_provider": {
+  "kilo": [
+   "minimax/minimax-m2",
+   "minimax/minimax-m2.1-lightning",
+   "minimax/minimax-m2.5-highspeed",
+   "minimax/minimax-m2.7-highspeed",
+   "qwen/qwen3-next-80b-a3b-thinking"
+  ],
   "nvidia": [
-   "deepseek-ai/deepseek-v4.1-flash"
+   "openai/gpt-oss-20b"
   ],
   "zen": [
-   "minimax-m3.1-flash-free"
+   "glm-5.3-flash-free"
   ]
  }
 }

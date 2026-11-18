@@ -832,3 +832,20 @@
 {"ts": "2026-11-18 07:31:04", "slug": "spira-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-18 07:31:13", "slug": "tastegpt", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-18 07:31:14", "slug": "tempmail-bot", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-19 06:01:13", "slug": "mermaid-flow", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-19 06:01:20", "slug": "mermaid-flow", "step": "enrich", "result": "done", "detail": "+2,612자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-19 06:01:21", "slug": "mermaid-flow", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-19 06:01:22", "slug": "ody-ai-business-phone", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-19 06:01:31", "slug": "ody-ai-business-phone", "step": "enrich", "result": "done", "detail": "+2,880자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-19 06:01:31", "slug": "ody-ai-business-phone", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-19 06:01:45", "slug": "ai-canvas", "step": "url", "result": "done", "detail": "빈값 → https://aicanvas.app (title='AiCanvas - A free tool to create video and i')", "dry_run": false}
+{"ts": "2026-11-19 06:01:55", "slug": "ai-canvas", "step": "enrich", "result": "done", "detail": "+2,997자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-19 06:02:36", "slug": "ai-canvas", "step": "thumb", "result": "done", "detail": "✅ ai-canvas TimeoutError: Page.screenshot: Timeout 30000ms exceeded.→og 48KB", "dry_run": false}
+{"ts": "2026-11-19 06:02:36", "slug": "gpt-6-2-astra-and-sol", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-19 06:02:43", "slug": "gpt-6-2-astra-and-sol", "step": "enrich", "result": "done", "detail": "+2,755자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-19 06:02:44", "slug": "gpt-6-2-astra-and-sol", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-19 06:02:44", "slug": "kadeep-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-19 06:02:51", "slug": "kadeep-ai", "step": "enrich", "result": "done", "detail": "+2,593자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-19 06:02:52", "slug": "kadeep-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-19 06:03:02", "slug": "telechat-to-xing4-advancing-frontier-agentic-mode", "step": "enrich", "result": "done", "detail": "+2,985자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-19 06:03:08", "slug": "telechat-to-xing4-advancing-frontier-agentic-mode", "step": "thumb", "result": "done", "detail": "✅ telechat-to-xing4-advancing-frontier-agentic-mode 32KB", "dry_run": false}
