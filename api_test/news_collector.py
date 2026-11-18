@@ -491,7 +491,10 @@ def batch_translate(articles):
                         continue
                     if "TITLE:" in line:
                         cleaned = line.split("TITLE:", 1)[1].strip()
-                        cleaned = cleaned.lstrip("0123456789").lstrip(".").lstrip(")").strip()
+                        # AIK24-COLLECTOR-TITLE-FIX: 앞자리 숫자를 무조건 지우면
+                        # "6개국에서…", "2026년…", "3분기…" 처럼 제목 본문이 숫자로
+                        # 시작하는 경우가 소실된다. 번호 잔재(숫자 + '.'/')')만 제거한다.
+                        cleaned = re.sub(r'^\d+[.\)]\s*', '', cleaned).strip()
                         kr_titles.append(cleaned)
                     elif "DESC:" in line:
                         cleaned = line.split("DESC:", 1)[1].strip()

@@ -2,6 +2,14 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-18 08:52 — fix(AIK24-COLLECTOR-TITLE-FIX): 수집기 제목 앞자리 숫자 소실 수정 + D1 교정 + 재배포
+
+- `api_test/news_collector.py:497` — `lstrip("0123456789")` → `re.sub(r'^\d+[.\)]\s*', '', cleaned)`. "6개국에서…"/"2026년…"/"3분기…" 처럼 제목 본문이 숫자로 시작해도 보존, 번호 잔재만 제거.
+- 회귀 테스트 `tests/test_news_collector_title_number.py` 신규(4 케이스, LLM 응답 스텁 주입).
+- D1(`aikorea24-db`, `--remote`): news 61738 `6` 복원, news 61737 `공개`→`유출`, briefing_items(385,61738) `deep_dive_url`·`comment` 링크를 신 슬러그로 교체(각 changes 1).
+- 재배포: `bash scripts/deploy.sh` → Version ID `737a6f18-4065-48cf-a5d6-25eef06787a6`. 라이브 4항목(홈 제목/링크 3건 200/잔존 0건/갤럭시 유출) 확인.
+- 상세: `SSOT/프로젝트/aikorea24/보고서/2026-11-18-0850-AIK24-COLLECTOR-TITLE-FIX-완료보고.md`, `docs/state.md` 최상단.
+
 ## 2026-11-11 11:51 — test: safe_div 재검증 (11:01 실행과 별개 프로세스로 재현, 신규 파일 없음)
 
 - 오늘 11:01에 같은 범위를 재검증한 이력이 있어 신규 테스트를 만들지 않고 재실행만 수행(중복 생성 회피).

@@ -1,3 +1,44 @@
+## 2026-11-18 08:52 — AIK24-COLLECTOR-TITLE-FIX 수집기 제목 숫자 소실 수정 + D1 교정 + 재배포
+
+지시서: `SSOT/프로젝트/aikorea24/지시서/2026-11-18-0830-AIK24-COLLECTOR-TITLE-FIX-제목숫자소실-및-D1교정.md`
+완료보고: `SSOT/프로젝트/aikorea24/보고서/2026-11-18-0850-AIK24-COLLECTOR-TITLE-FIX-완료보고.md`
+
+### 한 일
+
+1. **[PRODUCTION CODE]** `api_test/news_collector.py:497` — `cleaned.lstrip("0123456789").lstrip(".").lstrip(")")` → `re.sub(r'^\d+[.\)]\s*', '', cleaned).strip()`. 제목 본문이 숫자로 시작하면("6개국에서…", "2026년…", "3분기…") 보존하고 번호 잔재(`1.` `2)`)만 제거.
+2. **[TEST CODE]** `tests/test_news_collector_title_number.py` 신규(4 케이스) — LLM 응답을 스텁으로 주입해 `batch_translate()` 실제 파서 경로를 검증.
+3. **D1 교정** (`aikorea24-db`, `--remote`, `.env` 자격을 그 명령에만 주입, 값 미출력):
+   - news 61738 `개국에서…` → `6개국에서…` (changes 1)
+   - news 61737 `세부 정보 공개` → `세부 정보 유출` (changes 1)
+   - briefing_items(385,61738) `deep_dive_url` 신 슬러그로 교체 (changes 1)
+   - briefing_items(385,61738) `comment` 내 분석 링크 구 슬러그 → 신 슬러그 (changes 1)
+   - 2-3(갤럭시 comment)은 대상 문구 0건이라 미실행
+4. **재배포** `bash scripts/deploy.sh` → Version ID `737a6f18-4065-48cf-a5d6-25eef06787a6`, sitemap ping google/naver 정상.
+
+### 결과 (3분법)
+
+- [검증됨] 497행 수정 — 근거: 해당 줄 실측 + `git diff` 로 1줄+주석만 변경.
+- [검증됨] 회귀·기존 테스트 — `.venv/bin/python -m pytest tests/test_news_collector_title_number.py tests/test_collector_guard_policy.py tests/test_news_collector_origin_link.py -q` → **28 passed**(4 신규 + 24 기존).
+- [검증됨] 문법 — `py_compile api_test/news_collector.py` exit 0.
+- [검증됨] D1 수정 전/후 재조회 — 수정 전 `개국에서…`/`공개…` + 구 슬러그, 수정 후 `6개국에서…`/`유출…` + 신 슬러그.
+- [검증됨] 라이브 4종 — 홈에 `6개국에서 제미나이 '태스크' 기능 무료 사용 가능`(200), 브리핑 `/briefing/2026-11-18-1/`(200) 심층 분석 링크 3건 **전부 200**(신 슬러그 200·구 슬러그 301 별도 확인), 홈·브리핑·브리핑 목록에서 6 없는 `개국에서` **0건**, 갤럭시 제목 `세부 정보 유출` 표시.
+- [검증됨] 전체 단위 스위트 기준선 — `pytest -q -m "not integration"` → 6 failed / 1136 passed / 10 skipped. 실패 6건은 수집기를 **HEAD 원본으로 되돌린 상태에서도 동일 6 failed**(stash→재실행→pop 복원), 실패 파일들은 news_collector/api_test 미참조.
+- [부분검증] 19:30 실 수집 회차 제목 산출 — 제한 사유: 실 수집은 D1 에 행을 삽입하므로 파서 단위(스텁)까지만 검증. 복구: 회차 후 `pub_date >= '2026-11-18'` 표본 조회.
+
+### 잔존 위험
+
+1. `lstrip("0123456789")` 패턴은 저장소 전역에서 이 1건뿐이었고 수정 후 0건(grep). `scripts/news_collector_v2.py` 등 다른 제목 경로에 동일 로직은 없음.
+2. 정규식 `^\d+[.\)]\s*` 는 `"10.9% 성장"` 같은 제목에서 `10.` 을 번호로 오인할 수 있음(지시서 지정 정규식 그대로). 현 데이터 발생 사례 없음.
+3. 갤럭시 EmDash 글 슬러그는 여전히 `…-공개-…` (지시서 88행 기준 URL 유지) → 제목(`유출`)과 슬러그 키워드 불일치 상태.
+4. 이미 발송된 이메일 본문에는 깨진 제목이 남아 있음(지시대로 미접촉).
+5. 기존 실패 테스트 6건(state_tools 3 / zen_pending 계열 2 / model_eval_agent_v2 1 / auto_briefing_verdict 1)은 이번 변경과 무관한 선행 실패 — 별도 정비 필요.
+
+### 다음 행동
+
+1. 19:30 수집 회차 후 신규 제목의 숫자 시작 항목 무손실 확인.
+2. 갤럭시 글 슬러그 `유출` 정합 여부 결정(대표님 판단).
+3. 선행 실패 6건은 별도 지시서로 분리.
+
 ## 2026-11-17 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 0 · removed 1 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-17 01:00 — 2.techpawz.com Blogger → Hugo 마이그레이션 (백업+변환+빌드 완료, 배포 대기)
