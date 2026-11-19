@@ -2,6 +2,15 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-19 17:22 — feat(AIK24-TOOLDUP-NOTICE-01): admin/tools 중복 노티스 + 판정기
+
+- 신규 `src/lib/tool-duplicates.ts` — 판정 규칙 6개: 슬러그 동일 / 정규화 이름 동일 / 접미(AI·App)만 다른 이름 / 도메인 동일(수집원·플랫폼 제외) / 포함관계+변형어(OSS·Plus 등) / 토큰 Jaccard ≥ 0.8. 숫자만 다른 버전(Sonnet 5·5.5)과 브랜드 단순 포함은 침묵.
+- `src/pages/admin/tools.astro` — pending 카드에 **"이미 중복입니다"**(exact, 빨강) / **"중복 의심"**(likely, 주황) 배지 + 매칭 항목·근거·링크(최대 3건), 중복 없으면 `✓ 기존 목록과 중복 없음`, 헤더 `⚠️ 중복 의심 N` pill, 승인 시 확인 대화상자. 공개 카드에도 동일 배지. 인덱스 실패는 fail-soft.
+- 신규 `tests/js/tool_duplicates.test.ts` 12케이스(실제 중복 5쌍 재현 + 별개 제품 5종 침묵) + `package.json` `test:js`.
+- 검증: `npm run test:js` 12 passed / 실제 데이터(md 564 × 공개 38) 오탐 0 / 빌드·배포 `b74d7042` / `/`·`/tools/` 200, admin 401(기존 동일).
+- [부분검증] 관리자 세션 필요로 화면 렌더는 미확인 → 대표님 1회 확인 필요.
+- 정정: 17:05 항목의 "564 = md 563 + D1 전용 1" 은 오기. 실제는 **md 564(배포 sync가 makeasong.md·youtranscripts.md 생성) + D1 전용 0**. SSOT 보고서도 정정.
+
 ## 2026-11-19 17:05 — chore(AIK24-TOOLDEDUP-01): /tools 중복 5건 삭제 + ChatPDFGPT 게재 해제
 
 - 목록 소스(md 567 + D1 published 39) 전수 대조 → 같은 제품 2중 등록 5쌍 확정, 대표님 선택("내용 정확한 쪽 유지")으로 각 1건 삭제.
