@@ -217,6 +217,39 @@ export function findDuplicates(
   return hits;
 }
 
+export type ApproveWarning = {
+  level: DupLevel | 'clean';
+  title: string;
+  hint: string;
+};
+
+/**
+ * 승인 확인 창에 띄울 문구. 화면(경고 창)과 테스트가 같은 문구를 쓰도록 분리했다.
+ * 중복이 없어도 승인은 항상 확인 창을 거치며, 그때는 '중복 없음' 안내가 뜬다.
+ */
+export function describeApproveWarning(dups: DupHit[]): ApproveWarning {
+  const top = dups[0];
+  if (!top) {
+    return {
+      level: 'clean',
+      title: '✓ 기존 목록과 중복 없음',
+      hint: '승인하면 /tools/ 목록 · 상세 페이지 · sitemap 에 바로 노출됩니다.',
+    };
+  }
+  if (top.level === 'exact') {
+    return {
+      level: 'exact',
+      title: '⚠️ 이미 중복입니다',
+      hint: '승인하면 같은 제품이 목록에 두 번 노출됩니다. 기존 항목을 갱신하려면 이 제출은 반려하세요.',
+    };
+  }
+  return {
+    level: 'likely',
+    title: '⚠️ 중복 의심',
+    hint: '같은 제품인지 확인한 뒤 승인하세요. 다른 제품이면 그대로 승인해도 됩니다.',
+  };
+}
+
 /** 같은 슬러그가 md 와 submission 양쪽에 있으면 md 쪽만 남긴다(같은 레코드의 캐시) */
 export function dedupeIndex(entries: IndexEntry[]): IndexEntry[] {
   const bySlug = new Map<string, IndexEntry>();

@@ -159,6 +159,28 @@ h1{font-size:1.3rem;margin-bottom:4px}
 .dupbox .hit{margin-top:3px}
 .dupbox .hint{color:#94a3b8;margin-top:5px;font-size:.75rem}
 .dupnone{font-size:.75rem;color:#475569;margin-top:9px}
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal[hidden]{display:none}
+.modal-backdrop{position:absolute;inset:0;background:rgba(2,6,23,.78)}
+.modal-box{position:relative;background:#1e293b;border:1px solid #475569;border-radius:12px;padding:18px;max-width:540px;width:100%;max-height:86vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+.modal-box h3{font-size:1.02rem;margin-bottom:10px}
+.modal-row{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
+.btn.ghost{background:#334155;color:#cbd5e1}
+.modal-ack{display:flex;gap:8px;align-items:flex-start;margin-top:12px;font-size:.8rem;color:#fecaca;background:#450a0a;border:1px solid #ef4444;border-radius:8px;padding:9px 11px;cursor:pointer;line-height:1.45}
+.modal-ack[hidden]{display:none}
+.modal-ack input{margin-top:2px;flex:none}
+.mk-tool{font-size:.85rem;line-height:1.65;margin-bottom:10px;color:#cbd5e1}
+.mk-tool code{background:#0f172a;padding:1px 5px;border-radius:4px;color:#93c5fd;font-size:.78rem}
+.mk-url{font-size:.72rem;color:#64748b;word-break:break-all}
+.mk-box{border-radius:8px;padding:10px 12px;font-size:.82rem;line-height:1.55}
+.mk-box.exact{background:#450a0a;border:1px solid #ef4444;color:#fecaca}
+.mk-box.likely{background:#422006;border:1px solid #d97706;color:#fde68a}
+.mk-box.clean{background:#052e16;border:1px solid #16a34a;color:#bbf7d0}
+.mk-box b{color:#fff;display:block;margin-bottom:5px;font-size:.88rem}
+.mk-hit{margin-top:4px}
+.mk-hit code{background:#0f172a;padding:1px 5px;border-radius:4px;color:#93c5fd}
+.mk-hit a{color:#93c5fd}
+.mk-hint{color:#94a3b8;margin-top:7px;font-size:.76rem}
 </style>
 </head>
 <body>
@@ -176,7 +198,7 @@ h1{font-size:1.3rem;margin-bottom:4px}
 ) : null}
 <div id="list">
 {pendingView.map((t) => (
-  <div class="card" data-slug={t.slug} data-dup={t.dups.length ? t.dups[0].level : ''}>
+  <div class="card" data-slug={t.slug} data-dup={t.dups.length ? t.dups[0].level : ''} data-name={t.name} data-url={t.url} data-dups={JSON.stringify(t.dups.slice(0, 3))}>
     <h3>{t.name}</h3>
     <div class="meta">/{t.slug}/ · {t.category}{t.category_custom ? ` (${t.category_custom})` : ''} · {t.price_detail?.trim() || t.price_model || '—'} · {t.owner_email || `user#${t.user_id}`} · {t.created_at}</div>
     <p class="desc">{t.description}</p>
@@ -250,84 +272,197 @@ h1{font-size:1.3rem;margin-bottom:4px}
     <p class="meta">사유: {(t as any).rejection_reason || '—'}</p>
   </div>
 ))}
+<div id="approve-modal" class="modal" hidden>
+  <div class="modal-backdrop" data-modal-close="1"></div>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="approve-modal-title">
+    <h3 id="approve-modal-title">⚠️ 승인 확인 — 공개로 전환</h3>
+    <div id="approve-modal-body"></div>
+    <label class="modal-ack" id="approve-modal-ack-wrap" hidden>
+      <input type="checkbox" id="approve-modal-ack" />
+      <span>이미 목록에 있는 도구임을 확인했습니다. 그래도 승인합니다.</span>
+    </label>
+    <div class="modal-row">
+      <button type="button" class="btn ghost" data-modal-close="1">취소</button>
+      <button type="button" class="btn approve" id="approve-modal-ok">승인 → 공개</button>
+    </div>
+  </div>
+</div>
 <script>
+import { describeApproveWarning } from '../../lib/tool-duplicates';
+
+// AIK24-TOOLDUP-NOTICE-02 (2026-11-19): 승인 버튼은 항상 경고 창을 거친다.
+// 이전 구현은 중복 배지가 있을 때만 window.confirm 을 띄웠고, 창을 닫거나 ESC 로
+// 넘기면 확인 없이 공개됐다. 지금은 승인 요청 자체가 창의 '승인 → 공개' 버튼에서만 나간다.
+const modal = document.getElementById('approve-modal');
+const modalBody = document.getElementById('approve-modal-body');
+const modalOk = document.getElementById('approve-modal-ok');
+const modalAckWrap = document.getElementById('approve-modal-ack-wrap');
+const modalAck = document.getElementById('approve-modal-ack');
+let pendingApprove = null;
+
+function parseDups(card) {
+  try {
+    const raw = card.getAttribute('data-dups') || '[]';
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr : [];
+  } catch {
+    return [];
+  }
+}
+
+function closeApproveModal() {
+  modal.hidden = true;
+  modalBody.replaceChildren();
+  pendingApprove = null;
+}
+
+function setModalOkEnabled(on) {
+  modalOk.disabled = !on;
+}
+
+function openApproveModal(card, btn, slug, msg, reason) {
+  const dups = parseDups(card);
+  const w = describeApproveWarning(dups);
+
+  modalBody.replaceChildren();
+
+  const head = document.createElement('div');
+  head.className = 'mk-tool';
+  const nm = document.createElement('strong');
+  nm.textContent = card.getAttribute('data-name') || '(이름 없음)';
+  head.appendChild(nm);
+  head.appendChild(document.createTextNode(' '));
+  const sl = document.createElement('code');
+  sl.textContent = '/' + slug + '/';
+  head.appendChild(sl);
+  const url = card.getAttribute('data-url') || '';
+  if (url) {
+    const u = document.createElement('div');
+    u.className = 'mk-url';
+    u.textContent = url;
+    head.appendChild(u);
+  }
+  modalBody.appendChild(head);
+
+  const box = document.createElement('div');
+  box.className = 'mk-box ' + w.level;
+  const title = document.createElement('b');
+  title.textContent = w.title;
+  box.appendChild(title);
+
+  if (dups.length) {
+    const reasonLine = document.createElement('div');
+    reasonLine.textContent = '근거: ' + (dups[0].reason || '—');
+    box.appendChild(reasonLine);
+  }
+
+  for (const h of dups.slice(0, 3)) {
+    const line = document.createElement('div');
+    line.className = 'mk-hit';
+    line.appendChild(document.createTextNode('→ '));
+    const sn = document.createElement('strong');
+    sn.textContent = h.name || h.slug;
+    line.appendChild(sn);
+    line.appendChild(document.createTextNode(' '));
+    const sc = document.createElement('code');
+    sc.textContent = '/' + h.slug + '/';
+    line.appendChild(sc);
+    line.appendChild(document.createTextNode(' (' + (h.source === 'md' ? '목록' : '승인됨') + ') '));
+    const a = document.createElement('a');
+    a.href = '/tools/' + h.slug + '/';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.textContent = '보기 →';
+    line.appendChild(a);
+    box.appendChild(line);
+  }
+
+  const hint = document.createElement('div');
+  hint.className = 'mk-hint';
+  hint.textContent = w.hint;
+  box.appendChild(hint);
+  modalBody.appendChild(box);
+
+  // exact 등급은 체크박스로 한 번 더 확인해야 승인 버튼이 열린다.
+  const needAck = w.level === 'exact';
+  modalAckWrap.hidden = !needAck;
+  modalAck.checked = false;
+  setModalOkEnabled(!needAck);
+
+  pendingApprove = { card, btn, slug, msg, reason };
+  modal.hidden = false;
+  (needAck ? modalAck : modalOk).focus();
+}
+
+modal.querySelectorAll('[data-modal-close]').forEach((el) => {
+  el.addEventListener('click', closeApproveModal);
+});
+modalAck.addEventListener('change', () => setModalOkEnabled(modalAck.checked));
+modalOk.addEventListener('click', () => {
+  const p = pendingApprove;
+  closeApproveModal();
+  if (p) runReview(p.card, p.btn, p.slug, p.msg, 'approve', p.reason);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !modal.hidden) closeApproveModal();
+});
+
+async function runReview(card, btn, slug, msg, action, reason) {
+  if (action === 'reject' && !reason) {
+    if (msg) { msg.textContent = '❌ 반려 사유를 입력해주세요.'; msg.className = 'msg err'; }
+    return;
+  }
+  btn.disabled = true;
+  try {
+    const res = await fetch('/api/admin/tools/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug, action, reason: reason || undefined }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      if (msg) { msg.textContent = '❌ ' + (data.error || '실패'); msg.className = 'msg err'; }
+      return;
+    }
+    if (msg) {
+      msg.textContent = action === 'approve' ? '✅ 공개됨 (published)' : '✅ 반려됨 (retired)';
+      msg.className = 'msg ok';
+    }
+    card.querySelectorAll('.btn').forEach((b) => (b.disabled = true));
+  } catch {
+    if (msg) { msg.textContent = '❌ 네트워크 오류'; msg.className = 'msg err'; }
+  } finally {
+    if (!msg || !msg.classList.contains('ok')) btn.disabled = false;
+  }
+}
+
 document.querySelectorAll('.card').forEach((card) => {
   const slug = card.getAttribute('data-slug');
   const msg = card.querySelector('.msg');
   const reasonInput = card.querySelector('.reason');
   card.querySelectorAll('.btn').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      const rawAct = btn.getAttribute('data-act');
-      if (rawAct === 'unpublish') {
-        const action = 'reject';
-        let reason = ((reasonInput && reasonInput.value) || '').trim();
-        if (!reason) {
-          reason = (window.prompt('공개 취소 사유를 입력해주세요.') || '').trim();
-          if (!reason) {
-            if (msg) { msg.textContent = '❌ 반려 사유를 입력해주세요.'; msg.className = 'msg err'; }
-            return;
-          }
-        }
-        btn.disabled = true;
-        try {
-          const res = await fetch('/api/admin/tools/review', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug, action, reason: reason || undefined }),
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) {
-            msg.textContent = '❌ ' + (data.error || '실패');
-            msg.className = 'msg err';
-            return;
-          }
-          msg.textContent = '✅ 반려됨 (retired)';
-          msg.className = 'msg ok';
-          card.querySelectorAll('.btn').forEach((b) => (b.disabled = true));
-        } catch {
-          msg.textContent = '❌ 네트워크 오류';
-          msg.className = 'msg err';
-        } finally {
-          if (!msg.classList.contains('ok')) btn.disabled = false;
-        }
-      } else if (rawAct === 'approve' || rawAct === 'reject') {
-        // 승인/반려 (24f9f1c9에서 분기 누락으로 버튼 무반응 회귀 → 복구)
-        const action = rawAct;
-        // AIK24-TOOLDUP-NOTICE-01: 중복 노티스가 붙은 카드는 승인 전에 한 번 더 확인한다.
-        const dupLevel = card.getAttribute('data-dup');
-        if (action === 'approve' && dupLevel) {
-          const ask = dupLevel === 'exact'
-            ? '이미 목록에 있는 도구와 중복입니다.\n그래도 승인할까요?'
-            : '중복 의심 항목이 있습니다.\n같은 도구인지 확인했나요?';
-          if (!window.confirm(ask)) return;
-        }
-        const reason = ((reasonInput && reasonInput.value) || '').trim();
-        if (action === 'reject' && !reason) {
+    btn.addEventListener('click', () => {
+      const act = btn.getAttribute('data-act');
+      const reason = ((reasonInput && reasonInput.value) || '').trim();
+
+      if (act === 'unpublish') {
+        let r = reason;
+        if (!r) r = (window.prompt('공개 취소 사유를 입력해주세요.') || '').trim();
+        if (!r) {
           if (msg) { msg.textContent = '❌ 반려 사유를 입력해주세요.'; msg.className = 'msg err'; }
           return;
         }
-        btn.disabled = true;
-        try {
-          const res = await fetch('/api/admin/tools/review', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug, action, reason: reason || undefined }),
-          });
-          const data = await res.json().catch(() => ({}));
-          if (!res.ok) {
-            msg.textContent = '❌ ' + (data.error || '실패');
-            msg.className = 'msg err';
-            return;
-          }
-          msg.textContent = action === 'approve' ? '✅ 공개됨 (published)' : '✅ 반려됨 (retired)';
-          msg.className = 'msg ok';
-          card.querySelectorAll('.btn').forEach((b) => (b.disabled = true));
-        } catch {
-          msg.textContent = '❌ 네트워크 오류';
-          msg.className = 'msg err';
-        } finally {
-          if (!msg.classList.contains('ok')) btn.disabled = false;
-        }
+        runReview(card, btn, slug, msg, 'reject', r);
+        return;
+      }
+
+      if (act === 'reject') {
+        runReview(card, btn, slug, msg, 'reject', reason);
+        return;
+      }
+
+      if (act === 'approve') {
+        openApproveModal(card, btn, slug, msg, reason);
       }
     });
   });

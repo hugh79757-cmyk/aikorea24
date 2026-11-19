@@ -8,7 +8,7 @@
  */
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { findDuplicates, dedupeIndex, normalizeToolName, stripNameSuffix, toolDomain } from '../../src/lib/tool-duplicates.ts';
+import { findDuplicates, dedupeIndex, normalizeToolName, stripNameSuffix, toolDomain, describeApproveWarning } from '../../src/lib/tool-duplicates.ts';
 import type { IndexEntry } from '../../src/lib/tool-duplicates.ts';
 
 const md = (slug: string, name: string, url = ''): IndexEntry => ({ slug, name, url, source: 'md' });
@@ -118,6 +118,34 @@ test('중복 히트는 exact → likely 순으로 정렬된다', () => {
   assert.equal(hits[0].level, 'exact');
   assert.equal(hits[0].slug, 'a-exact');
   assert.ok(hits.some((h) => h.level === 'likely' && h.slug === 'z-likely'));
+});
+
+test('승인 확인창 문구: 중복 없음 → 공개 안내', () => {
+  const w = describeApproveWarning([]);
+  assert.equal(w.level, 'clean');
+  assert.equal(w.title, '✓ 기존 목록과 중복 없음');
+  assert.ok(w.hint.includes('sitemap'));
+});
+
+test('승인 확인창 문구: exact → "이미 중복입니다" + 반려 권고', () => {
+  const hits = findDuplicates({ slug: 'omlx-ai', name: 'Omlx AI', url: 'https://topai.tools/t/omlx-ai' }, [
+    md('omlx', 'oMLX', 'https://omlx.ai'),
+  ]);
+  const w = describeApproveWarning(hits);
+  assert.equal(w.level, 'exact');
+  assert.equal(w.title, '⚠️ 이미 중복입니다');
+  assert.ok(w.hint.includes('두 번 노출'), w.hint);
+  assert.ok(w.hint.includes('반려'), w.hint);
+});
+
+test('승인 확인창 문구: likely → "중복 의심" + 확인 요청', () => {
+  const hits = findDuplicates({ slug: 'make0-brain-oss', name: 'Make0 Brain OSS', url: '' }, [
+    md('make0-brain', 'Make0 Brain', 'https://make0.ai/'),
+  ]);
+  const w = describeApproveWarning(hits);
+  assert.equal(w.level, 'likely');
+  assert.equal(w.title, '⚠️ 중복 의심');
+  assert.ok(w.hint.includes('확인'), w.hint);
 });
 
 test('dedupeIndex: 같은 슬러그는 md 를 남긴다', () => {
