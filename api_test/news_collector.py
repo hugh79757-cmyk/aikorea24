@@ -447,6 +447,96 @@ def translate_to_korean(title, description=""):
         print(f"    번역 실패: {e}")
         return title, description
 
+# AIK24-TRANSLATE-ALIGN-01 (2026-11-19): 배치 번역 응답을 **항목 번호**로 묶는다.
+#
+# 사고: 2026-11-19 수집분 news 61933~61940 의 제목이 한 칸씩 밀렸다
+#   (61939 "The AI Hype Index" ← "냄새 스타트업" 제목, 61940 "This smell startup" ←
+#    "오픈소스 진영, 젠슨 황의 복귀를 원해" 제목). 브리핑·뉴스레터·심층글이 이 제목을
+#   그대로 물려받아 "제목과 내용이 완전히 다른" 글이 발행됐다.
+# 원인: 종전 파서는 TITLE 줄과 DESC 줄을 **각각 순서대로** 모아 인덱스로 짝지었다.
+#   응답에서 한 줄이 빠지거나 하나가 더 생기는 순간 이후 모든 기사에 다른 기사의
+#   제목이 붙고, 설명은 별도 배열이라 정상으로 남아 불일치가 조용히 숨는다.
+# 수정: 번호 블록 단위로 TITLE/DESC 를 함께 파싱하고 **번호로만** 매핑한다.
+#   번호가 없거나 범위를 벗어난 응답은 버려서 원문 제목이 유지되게 한다(밀림 0).
+_BLOCK_START = re.compile(r'(?m)^\s*(\d{1,3})\s*[.)]\s*')
+_TITLE_LINE = re.compile(r'(?:TITLE|제목)\s*:\s*(.*)')
+_DESC_LINE = re.compile(r'(?:DESC|설명)\s*:\s*(.*)', re.S)
+
+
+def parse_batch_translation(text, n_items):
+    """LLM 배치 번역 응답 → {항목번호(1-based): {"title": str, "desc": str}}.
+
+    번호를 기준으로 묶으므로 응답의 일부 항목이 빠지거나 순서가 바뀌어도
+    **다른 기사의 제목이 붙지 않는다**. 매핑되지 않은 항목은 결과에 없고,
+    호출부는 그 항목의 원문 제목을 그대로 둔다.
+    """
+    out = {}
+    if not text or n_items <= 0:
+        return out
+    marks = list(_BLOCK_START.finditer(text))
+    if not marks:
+        # 번호가 아예 없는 응답 — 개수가 **정확히** 일치할 때만 순서대로 매핑한다.
+        # 하나라도 어긋나면 버린다(추측으로 붙이면 밀림 사고가 그대로 재현된다).
+        titles, descs = [], []
+        for line in text.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            if _TITLE_LINE.match(line):
+                titles.append(_TITLE_LINE.match(line).group(1).strip())
+            elif _DESC_LINE.match(line):
+                descs.append(_DESC_LINE.match(line).group(1).strip())
+        if len(titles) == n_items and len(descs) == n_items:
+            return {
+                i + 1: {"title": titles[i], "desc": descs[i]}
+                for i in range(n_items)
+            }
+        return out
+    for pos, m in enumerate(marks):
+        num = int(m.group(1))
+        if num < 1 or num > n_items or num in out:
+            continue
+        end = marks[pos + 1].start() if pos + 1 < len(marks) else len(text)
+        block = text[m.end():end]
+        title_m = _TITLE_LINE.search(block)
+        # TITLE 이 빠진 블록도 DESC 는 자기 항목 것이므로 살린다(제목만 원문 유지).
+        if not title_m and not _DESC_LINE.search(block):
+            continue
+        title = title_m.group(1).strip() if title_m else ""
+        # "1. TITLE: 제목 DESC: 설명" 처럼 한 줄에 붙은 응답도 분리한다.
+        title = re.split(r'\s+(?:DESC|설명)\s*:', title, maxsplit=1)[0].strip()
+        desc = ""
+        desc_m = _DESC_LINE.search(block)
+        if desc_m:
+            raw = re.split(r'(?m)^\s*\d{1,3}\s*[.)]\s*', desc_m.group(1))[0]
+            desc = " ".join(ln.strip() for ln in raw.splitlines() if ln.strip())
+        out[num] = {"title": title, "desc": desc}
+    return out
+
+
+def revert_duplicate_titles(articles, batch_idx):
+    """한 배치 안에서 제목이 중복되면 뒤 항목을 원문 제목으로 되돌린다.
+
+    중복 제목은 파서·모델 이상(같은 블록 반복, 번호 밀림)의 대표 신호다.
+    영문 원제목 노출이 남의 기사 제목 노출보다 낫다.
+    """
+    seen = set()
+    reverted = 0
+    for idx in batch_idx:
+        title = (articles[idx].get("title") or "").strip()
+        if not title:
+            continue
+        if title in seen:
+            original = articles[idx].get("original_title")
+            if original and original != title:
+                articles[idx]["title"] = original
+                reverted += 1
+                print(f"    경고: 배치 내 제목 중복 '{title[:30]}' → 원문 제목 유지")
+            continue
+        seen.add(title)
+    return reverted
+
+
 def batch_translate(articles):
     """해외 기사 배치 번역 (10건/배치, 무료 LLM 폴백 체인, 순차 처리)"""
     if chat_completion is None:
@@ -483,30 +573,29 @@ def batch_translate(articles):
                 model_override=None,  # 무료 LLM 폴백 체인 사용
             )
             if text:
-                kr_titles = []
-                kr_descs = []
-                for line in text.split(chr(10)):
-                    line = line.strip()
-                    if not line:
-                        continue
-                    if "TITLE:" in line:
-                        cleaned = line.split("TITLE:", 1)[1].strip()
-                        # AIK24-COLLECTOR-TITLE-FIX: 앞자리 숫자를 무조건 지우면
-                        # "6개국에서…", "2026년…", "3분기…" 처럼 제목 본문이 숫자로
-                        # 시작하는 경우가 소실된다. 번호 잔재(숫자 + '.'/')')만 제거한다.
-                        cleaned = re.sub(r'^\d+[.\)]\s*', '', cleaned).strip()
-                        kr_titles.append(cleaned)
-                    elif "DESC:" in line:
-                        cleaned = line.split("DESC:", 1)[1].strip()
-                        kr_descs.append(cleaned)
+                parsed = parse_batch_translation(text, len(batch_idx))
+                assigned = 0
                 for k, idx in enumerate(batch_idx):
                     articles[idx]["original_title"] = articles[idx]["title"]
-                    if k < len(kr_titles):
-                        articles[idx]["title"] = kr_titles[k]
-                    if k < len(kr_descs) and kr_descs[k]:
-                        articles[idx]["description"] = kr_descs[k]
-                    translated += 1
-                print(f"    배치 {batch_num}: {len(batch_idx)}건 완료")
+                    entry = parsed.get(k + 1)
+                    if not entry:
+                        continue
+                    # AIK24-COLLECTOR-TITLE-FIX: 앞자리 숫자를 무조건 지우면
+                    # "6개국에서…", "2026년…", "3분기…" 처럼 제목 본문이 숫자로
+                    # 시작하는 경우가 소실된다. 번호 잔재(숫자 + '.'/')')만 제거한다.
+                    cleaned = re.sub(r'^\d+[.\)]\s*', '', entry.get("title", "")).strip()
+                    if cleaned:
+                        articles[idx]["title"] = cleaned
+                        assigned += 1
+                    if entry.get("desc"):
+                        articles[idx]["description"] = entry["desc"]
+                revert_duplicate_titles(articles, batch_idx)
+                if len(parsed) < len(batch_idx):
+                    missing = [n for n in range(1, len(batch_idx) + 1) if n not in parsed]
+                    print(f"    배치 {batch_num}: 경고 — {len(parsed)}/{len(batch_idx)}건만 파싱 "
+                          f"(누락 번호 {missing[:5]}). 누락분은 원문 제목 유지")
+                translated += assigned
+                print(f"    배치 {batch_num}: {assigned}건 번역 적용")
             else:
                 print(f"    배치 {batch_num}: 응답 없음 (스킵)")
         except Exception as e:

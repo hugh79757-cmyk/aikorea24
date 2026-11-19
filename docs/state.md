@@ -1,3 +1,88 @@
+## 2026-11-19 10:54 — AIK24-TRANSLATE-ALIGN-01 배치 번역 제목 밀림(교차 오염) 수정 + D1·EmDash 복구
+
+### 사고 증상
+2026-11-19 발행 브리핑 3번 항목과 심층글이 **제목과 내용이 완전히 다른** 상태로 라이브에 나갔다.
+브리핑 3번 = "AI 코가 인간만큼 뛰어나다고 주장하는 냄새 스타트업"(MIT 테크 리뷰 오스모 기사)인데
+연결된 심층글 본문 2·4절이 젠슨 황/엔비디아 개방 생태계 이야기였다.
+
+### 원인 (확정)
+[PRODUCTION CODE] `api_test/news_collector.py::batch_translate()`
+TITLE 줄과 DESC 줄을 **각각 별도 배열에 순서대로** 담고 같은 인덱스 `k` 로 짝지었다.
+LLM 응답에서 TITLE 줄 하나가 빠지면 그 뒤 모든 기사에 **다른 기사의 제목**이 붙고,
+DESC 는 별도 배열이라 정상으로 남아 불일치가 조용히 숨는다.
+
+실측 근거 (D1 `aikorea24-db`, created_at `2026-11-18 22:33:00` UTC):
+- news 61933~61940 **8행**의 (한국어 제목 ↔ 다음 행 원제목) 짝이 전부 일치 → 한 칸 밀림.
+- 61932·61941 은 정상 → 밀림 구간은 61933에서 시작해 61940에서 끝.
+- 61940 원제목 "This smell startup says its AI nose is as good as a human's" ← 제목 "오픈소스 진영, 젠슨 황의 복귀를 원해".
+- 그 제목의 출처는 hallucination 이 아니라 **다른 기사**다: news 61378 "The open-source movement wants Jensen Huang back" 의 번역문.
+- 발생 회차: launchd `kr.aikorea24.news-unified` 05:30 수집. `api_test/cron_unified.log` 에서 188건/19배치,
+  16배치 Gemini 429 → 17~19배치 `gemini-3.1-flash-lite` 폴백 확인.
+
+### 한 일
+1. **[PRODUCTION CODE]** `api_test/news_collector.py` — `parse_batch_translation(text, n_items)` 신설.
+   번호 블록 단위로 TITLE/DESC 를 **함께** 파싱하고 **번호로만** 매핑한다. 번호 결손·중복·범위 밖은 버린다.
+   번호가 아예 없는 응답은 TITLE/DESC 개수가 **정확히** 일치할 때만 순서 매핑한다(하나라도 어긋나면 폐기).
+2. **[PRODUCTION CODE]** `revert_duplicate_titles()` 신설 — 배치 내 제목 중복은 뒤 항목을 원문 제목으로 되돌린다.
+3. **[PRODUCTION CODE]** `batch_translate()` 배정 루프를 번호 기반으로 교체. 파싱 건수가 배치 크기보다 적으면
+   누락 번호를 로그로 남기고 **해당 항목만 원문 제목을 유지**한다(추측 배정 금지). 기존 제목 앞자리 숫자 보존
+   로직(AIK24-COLLECTOR-TITLE-FIX)은 그대로 유지.
+4. **[TEST CODE]** `tests/test_batch_translate_alignment.py` 신설 — 8 케이스(정상·1번 제목 결손·블록 순서 역전·
+   중복/범위 밖 번호·배치 내 제목 중복·한 줄 응답·숫자로 시작하는 제목·번호 없는 응답의 개수 일치 조건).
+5. **[DATA]** `scripts/repair_news_titles_20261119.py` 로 D1 news 61933~61940 제목 8행 교정.
+   61934~61940 은 앞 행 제목을 한 칸 당겨 복원(=밀림의 역방향, 8행 전부 실측 일치). 61933 은 번역문이 유실돼
+   원제목을 **단건 번역 경로**(`translate_to_korean`, 밀림 위험 없음)로 재번역해 채웠다.
+6. **[CONTENT]** `scripts/repair_emdash_osmo_20261119.py` 로 심층글 본문 교정(API PUT+publish, D1 직접 UPDATE 금지).
+   원문(MIT 테크 리뷰)에서 확인된 사실만으로 2·4절·도입·마무리를 다시 쓰고, 3절 표를 '확인된 적용 / 회사 전망'으로
+   분리하고, 403 응답인 패스트컴퍼니 링크 1건을 참고 자료에서 제거했다. 에이버리 길버트는 '상호 운용성 지지자'가
+   아니라 **오스모 마케팅 주장 비판자**로 정정.
+7. **[일회성 점검]** 2026-10-20 이후 발행 브리핑의 해외 항목 51건을 (영어 원제목 ↔ 한국어 제목) 쌍으로 교차 판정.
+
+### 결과 (3분법)
+- **[검증됨] 신규 회귀 테스트 8건 통과.** 근거: `pytest tests/test_batch_translate_alignment.py -q` → 8 passed.
+  사고 재현 케이스(1번 TITLE 결손)에서 수정 전 코드는 2번 제목을 1번 기사에 붙였고, 수정 후에는 1번만 원문 제목이 남고 2·3번은 제자리 제목을 받는다.
+- **[검증됨] 관련 기존 테스트 회귀 없음.** 근거: 같은 파일군 4개(`test_batch_translate_alignment` + `test_news_collector_title_number`
+  + `test_collector_guard_policy` + `test_news_collector_origin_link`) → 36 passed = 8(신규) + 28(기존).
+- **[검증됨] D1 news 61933~61940 제목 교정 완료.** 근거: `--apply` 실행 로그 `변경 8행 · 사후검증 불일치 0행`,
+  백업 `scripts/logs/backup_news_titles_20261119_104228.json`. 재조회로 8행 제목-원제목 대응 확인.
+- **[검증됨] 브리핑 라이브 페이지 정상화.** 근거: `https://aikorea24.kr/briefing/2026-11-19-1/` 재조회 시
+  3번 제목 "AI 코가 인간만큼 뛰어나다고 주장하는 냄새 스타트업", 페이지 내 "오픈소스 진영" 문자열 0건.
+  이 페이지는 `prerender=false` 로 D1을 런타임 조회하므로 배포 없이 반영됐다.
+- **[검증됨] 심층글 본문 오염 제거.** 근거: `repair_emdash_osmo_20261119.py --apply` → PUT 200 / publish 200,
+  본문 가시 글자 2,335 → 3,050자, "젠슨" 0회, slug 보존 True, publishedAt 보존 True.
+  라이브 재조회 H2 = 1.냄새를 데이터로 바꾸는 방법 / 2.'인간 수준'이라는 주장과 그 근거 / 3.실제로 쓰이는 곳과 아직 먼 곳 /
+  4.한계 — 냄새에서 맥락은 절반이다 / 5.참고 자료 / 마무리 — 냄새 AI 기사를 읽을 때 확인할 3가지.
+  썸네일 URL HTTP 200. 백업 `scripts/logs/backup_emdash_osmo_20261119_105033.json`.
+- **[부분검증] 과거 발행분 오염 범위 = 0건.** 근거: 51건 교차 판정 결과 불일치 0건. 제한 사유: 판정자가 LLM
+  (`gemini-3.1-flash-lite`) 이므로 결정적 검증이 아니고, 의역을 허용하는 프롬프트라 미세한 주제 이탈은 놓칠 수 있다.
+  표본도 2026-10-20 이후로 한정했다.
+- **[검증됨] 전체 테스트 스위트에서 이번 변경으로 인한 신규 실패 0건.** 근거: `pytest -q -m "not integration"` →
+  1147 passed, 3 failed, 10 skipped. 3건은 `tests/test_state_tools.py` 의 회전 테스트로, 이번에 건드리지 않은 파일이며
+  픽스처 기준일(2026-10-17)이 오늘(2026-11-19) 기준 회전 컷오프(2026-10-20)보다 과거가 된 **날짜 경화(date-rot)** 다.
+  `git log` 로 `tests/test_state_tools.py`(2026-10-17) · `scripts/state_rotate.py`(2026-10-17) 무변경 확인.
+
+### 잔존 위험
+1. **번호 없는 응답 경로**: LLM이 번호를 전혀 붙이지 않고 TITLE/DESC 개수까지 어긋나면 해당 배치는 번역이 적용되지 않아
+   **영문 제목이 그대로 노출**된다. 밀림보다는 안전한 실패지만 사이트 언어 일관성은 깨진다. 다음 회차 로그에서
+   "누락 번호" 경고 빈도를 관찰할 것.
+2. **썸네일 파일 경로에 옛 슬러그 문자열이 남아 있다**: `.../93012-오픈소스-진영-젠슨-황의-복귀를-원해-.../thumbnail.webp`
+   (HTTP 200). 화면에 보이는 텍스트가 아니라 이미지 URL/alt 쪽이며, 바꾸려면 이미지 재업로드 + 본문 PUT 이 필요해
+   이번엔 손대지 않았다. 링크 안정성을 위해 글 slug 는 그대로 유지했다.
+3. **`tests/test_state_tools.py` 3건 실패(날짜 경화)** 는 이번 작업 이전부터 존재하던 것으로, 수정하지 않았다.
+   테스트를 통과시키려고 테스트를 고치는 것은 금지 규칙에 해당하므로 별도 판단이 필요하다.
+4. **`batch_translate` 는 `scripts/tools_collector.py`(도구 수집기)도 재사용**한다. 같은 함수를 쓰므로 이번 수정이
+   도구 번역에도 적용되지만, 도구 번역 경로는 별도 회귀 테스트가 없다([검증불가] — 이번에 실행하지 않음).
+5. 이번 사고는 **번역 단계**의 구조적 결함이었다. 번역이 아닌 다른 단계(브리핑 선정·심층글 생성)에는
+   "제목과 본문 주제 불일치"를 잡는 결정적 게이트가 아직 없다.
+
+### 다음 행동
+1. 다음 수집 회차(익일 05:30) `cron_unified.log` 에서 "누락 번호"·"제목 중복" 경고가 0건인지 확인.
+2. `tests/test_state_tools.py` 날짜 경화 3건은 픽스처를 상대 날짜로 바꾸는 별도 작업으로 분리 처리(대표님 승인 후).
+3. `scripts/tools_collector.py` 번역 경로에 동일 회귀 테스트를 추가할지 검토.
+4. 심층글 생성 단계에 "원제목 대비 본문 주제" 결정적 검증 게이트를 넣을 수 있는지 설계 검토(현재 없음 — 잔존 위험 5).
+
+## 2026-11-19 AIK24-FREE-PIPE-01 일일 실행 — 수집 32건 / 실패 프로바이더 0 / added 2 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-18 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-18 08:52 — AIK24-COLLECTOR-TITLE-FIX 수집기 제목 숫자 소실 수정 + D1 교정 + 재배포

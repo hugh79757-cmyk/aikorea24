@@ -1,0 +1,750 @@
+{
+ "id": "01M7RKQA4PQY2KKCXF2SPBZS98",
+ "type": "posts",
+ "slug": "오픈소스-진영-젠슨-황의-복귀를-원해-기술-생태계의-변화와-전략",
+ "status": "published",
+ "data": {
+  "title": "인간 코만큼 냄새를 맡는 AI, 오스모(Osmo)의 디지털 후각 기술",
+  "excerpt": "뉴저지주 뉴어크 공항 인근의 실험실에서는 30명의 인간 후각 전문가들이 매일 수많은 냄새를 맡으며 데이터를 기록합니다",
+  "content": [
+   {
+    "_type": "block",
+    "_key": "k1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0",
+      "text": "뉴저지주 뉴어크 공항 인근의 실험실에서는 30명의 인간 후각 전문가들이 매일 수많은 냄새를 맡으며 데이터를 기록합니다. 이들은 고소한 향부터 복숭아 향, 바다 향에 이르기까지 인간이 느끼는 미세한 차이를 언어로 정의하고 이를 화학적 분석 결과와 연결합니다. 이러한 과정은 단순한 감각의 데이터화를 넘어, AI가 인간의 후각을 모방하고 이해하기 위한 필수적인 학습 단계입니다. 현재 이 방대한 데이터를 활용하는 AI 스타트업 오스모(Osmo)는 기술적 성과와 함께 오픈소스 진영의 강력한 지지를 얻고 있습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k3",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k2",
+      "text": "1. 인간의 후각을 데이터로 바꾸는 기술적 접근",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kb",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "k5",
+      "_type": "link",
+      "href": "https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/"
+     },
+     {
+      "_key": "k8",
+      "_type": "link",
+      "href": "https://github.com/biomachinelearning/openpom"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k4",
+      "text": "오스모는 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k6",
+      "text": "MIT 테크 리뷰 기사",
+      "marks": [
+       "k5"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k7",
+      "text": "에서 언급된 것처럼, 디지털 후각 기술의 선두에 서 있습니다. AI 모델이 냄새를 구분하기 위해서는 수백만 개의 분자 구조를 이해해야 하며, 이를 위해 인간 전문가의 주관적 평가가 반드시 필요합니다. 인공지능이 화학식만으로는 설명할 수 없는 '향의 맥락'을 배우는 방식은 현재 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k9",
+      "text": "오픈폼(OpenPOM)",
+      "marks": [
+       "k8"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "ka",
+      "text": "과 같은 오픈소스 프로젝트가 추구하는 방향과 맞닿아 있습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k10",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "kd",
+      "_type": "link",
+      "href": "https://www.prnewswire.com/news-releases/osmo-receives-8-5-million-in-funding-to-support-advancement-in-ai-enabled-insect-control-301981300.html"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kc",
+      "text": "이러한 기술적 진보는 단순히 향수를 만드는 것을 넘어, 해충 방제나 위조품 판별과 같은 산업 현장에서도 활용됩니다. ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "ke",
+      "text": "오스모의 펀딩 성과",
+      "marks": [
+       "kd"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "kf",
+      "text": "를 보면 AI가 곤충의 행동을 제어하거나 특정 물질을 감지하는 분야에서 얼마나 높은 가치를 인정받고 있는지 알 수 있습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k12",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k11",
+      "text": "2. 오픈소스 진영이 주목하는 젠슨 황의 역할",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k17",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "k14",
+      "_type": "link",
+      "href": "https://averygilbert.substack.com/p/the-great-and-powerful-osmo"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k13",
+      "text": "오픈소스 생태계의 개발자들은 젠슨 황이 이끄는 엔비디아의 인프라가 폐쇄적인 방향으로 흐르는 것에 대해 우려를 표해 왔습니다. 그들은 하드웨어의 성능을 결정짓는 소프트웨어 생태계가 특정 기업의 독점적인 환경에 갇히는 것을 경계합니다. ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k15",
+      "text": "에이버리 길버트의 분석",
+      "marks": [
+       "k14"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k16",
+      "text": "에 따르면, AI 모델의 학습 효율성을 극대화하기 위해서는 하드웨어와 소프트웨어 간의 자유로운 상호 운용성이 필수적입니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k19",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k18",
+      "text": "많은 개발자는 젠슨 황이 과거의 개방형 표준을 옹호하던 철학으로 돌아오기를 바랍니다. 현재의 AI 모델은 컴퓨팅 자원 의존도가 매우 높기 때문에, 엔비디아가 오픈소스 커뮤니티와 협력하여 더 넓은 기술적 지평을 열어주기를 기대하는 목소리가 큽니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k1b",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k1a",
+      "text": "3. 산업별 AI 활용 분야의 비교와 전망",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k1d",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k1c",
+      "text": "AI 기술이 적용되는 분야는 점점 더 구체화되고 있습니다. 다음 표는 현재 오스모를 비롯한 AI 스타트업들이 집중하고 있는 주요 분야와 그에 따른 기술적 요구 사항을 요약한 것입니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "table",
+    "_key": "k3a",
+    "rows": [
+     {
+      "_type": "tableRow",
+      "_key": "k1e",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k20",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k1f",
+          "text": "분야",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k22",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k21",
+          "text": "핵심 기술 요구 사항",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k24",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k23",
+          "text": "주요 활용 사례",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k25",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k27",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k26",
+          "text": "후각 데이터 분석",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k29",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k28",
+          "text": "분자 구조 학습 및 인간 피드백",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k2b",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k2a",
+          "text": "향수 성분 최적화, 식품 품질 관리",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k2c",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k2e",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k2d",
+          "text": "위조품 판별",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k30",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k2f",
+          "text": "미세 물질 감지 및 패턴 매칭",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k32",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k31",
+          "text": "신발 및 명품 위조 여부 판별",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k33",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k35",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k34",
+          "text": "해충 방제",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k37",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k36",
+          "text": "생물학적 행동 데이터 모델링",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k39",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k38",
+          "text": "친환경 농업 효율 향상",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     }
+    ],
+    "hasHeaderRow": true
+   },
+   {
+    "_type": "block",
+    "_key": "k3f",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "k3c",
+      "_type": "link",
+      "href": "https://www.fastcompany.com/91226556/osmo-smell-ai-counterfeit-sneakers"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k3b",
+      "text": "위 표에서 볼 수 있듯이, 데이터의 정확도가 곧 산업의 경쟁력입니다. ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k3d",
+      "text": "패스트 컴퍼니 보도",
+      "marks": [
+       "k3c"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k3e",
+      "text": "를 참고하면, AI가 위조 운동화를 판별하는 과정에서 냄새를 분석하는 방법은 기존의 시각적 검사 방식을 보완하는 매우 효과적인 대안이 되고 있습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k41",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k40",
+      "text": "4. 기술 생태계의 폐쇄성과 개방성 사이의 갈등",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k43",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k42",
+      "text": "기술 기업들의 성장은 종종 독점적인 생태계 구축을 동반합니다. 하지만 AI 시대의 오픈소스 진영은 '협력'을 통해 더 큰 혁신이 가능함을 입증하고 있습니다. 데이터의 투명성과 모델의 공개는 후발 주자들이 더 빠르게 발전할 수 있는 토대가 됩니다. 젠슨 황의 전략이 하드웨어 점유율을 넘어 오픈소스 커뮤니티의 신뢰를 회복하는 방향으로 향한다면, AI 산업 전체의 생산성은 비약적으로 상승할 것입니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k45",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k44",
+      "text": "독자 여러분이 주목해야 할 점은 이러한 기술적 흐름이 단순히 대기업의 결정에만 달려 있는 것이 아니라는 사실입니다. 오픈소스 프로젝트에 기여하고, 표준화된 데이터셋을 공유하는 작은 움직임이 모여 거대한 변화를 만듭니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k47",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k46",
+      "text": "5. 참고 자료",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k4a",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "k48",
+      "_type": "link",
+      "href": "https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k49",
+      "text": "오스모의 인간 수준 후각 AI 기술 분석",
+      "marks": [
+       "k48"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k4d",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "k4b",
+      "_type": "link",
+      "href": "https://github.com/biomachinelearning/openpom"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k4c",
+      "text": "오픈폼 프로젝트 저장소",
+      "marks": [
+       "k4b"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k50",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "k4e",
+      "_type": "link",
+      "href": "https://averygilbert.substack.com/p/the-great-and-powerful-osmo"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k4f",
+      "text": "오스모와 디지털 후각 기술의 영향력 분석",
+      "marks": [
+       "k4e"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k53",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "k51",
+      "_type": "link",
+      "href": "https://www.fastcompany.com/91226556/osmo-smell-ai-counterfeit-sneakers"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k52",
+      "text": "AI를 활용한 위조품 판별 기술 사례",
+      "marks": [
+       "k51"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k56",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "k54",
+      "_type": "link",
+      "href": "https://www.prnewswire.com/news-releases/osmo-receives-8-5-million-in-funding-to-support-advancement-in-ai-enabled-insect-control-301981300.html"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k55",
+      "text": "오스모의 투자 유치 및 사업 확장 소식",
+      "marks": [
+       "k54"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k58",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k57",
+      "text": "마무리 — 오픈소스 생태계 참여를 위한 3단계",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k5a",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k59",
+      "text": "AI 기술의 개방성을 지지하고 직접 참여하고 싶다면 오늘 아래의 절차를 따라 시작해 보시기 바랍니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k5f",
+    "style": "normal",
+    "listItem": "number",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "k5c",
+      "_type": "link",
+      "href": "https://github.com/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k5b",
+      "text": "오픈소스 AI 저장소 탐색: ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k5d",
+      "text": "GitHub",
+      "marks": [
+       "k5c"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k5e",
+      "text": "에서 'Open Source AI' 또는 'Open Data' 키워드로 검색하여 현재 관심 있는 분야의 프로젝트 저장소를 즐겨찾기에 추가합니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k63",
+    "style": "normal",
+    "listItem": "number",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k60",
+      "text": "기여 가이드라인 확인: 선택한 프로젝트의 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k61",
+      "text": "CONTRIBUTING.md",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k62",
+      "text": " 파일을 읽고, 코드 기여 외에 데이터 라벨링이나 문서화 작업 등 초보자가 바로 할 수 있는 업무가 있는지 확인합니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k65",
+    "style": "normal",
+    "listItem": "number",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k64",
+      "text": "커뮤니티 활동 시작: 해당 프로젝트의 토론 섹션이나 공식 슬랙/디스코드 채널에 가입하여 현재 어떤 이슈가 논의되고 있는지 파악하고 작은 질문부터 남겨봅니다.",
+      "marks": []
+     }
+    ]
+   }
+  ],
+  "featured_image": {
+   "provider": "external",
+   "id": "",
+   "src": "https://aikorea24.kr/images/2026-11-19-93012-오픈소스-진영-젠슨-황의-복귀를-원해-기술-생태계의-변화와-전략/thumbnail.webp"
+  }
+ },
+ "authorId": "01M4HKV7ZCNZZ11DN43Q5J4WCT",
+ "primaryBylineId": null,
+ "createdAt": "2026-11-19T00:36:21.270Z",
+ "updatedAt": "2026-11-19T02:35:00.437Z",
+ "publishedAt": "2026-11-19T00:35:51.000Z",
+ "scheduledAt": null,
+ "liveRevisionId": "01M7RTG1T65B2H2MJ5P78K7GK8",
+ "draftRevisionId": null,
+ "version": 4,
+ "locale": "en",
+ "translationGroup": "01M7RKQA4PQY2KKCXF2SPBZS98",
+ "seo": {
+  "title": null,
+  "description": null,
+  "image": null,
+  "canonical": null,
+  "noIndex": false
+ },
+ "bylines": [],
+ "byline": null,
+ "references": {}
+}
