@@ -2,6 +2,17 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-19 17:05 — chore(AIK24-TOOLDEDUP-01): /tools 중복 5건 삭제 + ChatPDFGPT 게재 해제
+
+- 목록 소스(md 567 + D1 published 39) 전수 대조 → 같은 제품 2중 등록 5쌍 확정, 대표님 선택("내용 정확한 쪽 유지")으로 각 1건 삭제.
+  삭제: `omlx-ai`·`freebeat-ai`·`edgee-claude-code-compressor-v2`·`ifttt-ai`·`make0-brain-oss` / 유지: `omlx`·`freebeat-ai-app`·`edgee-mod-for-claude-code`·`new-ai-tools-by-ifttt`·`make0-brain`.
+- 신규 `scripts/delete_tool_entry.py` — dry-run 기본, 백업 선작성, 거부조건(published/pending submission·`/tools/<slug>` 참조·형식·파일 부재), apply 후 재조회 검증, `--restore` 지원.
+- ChatPDFGPT(`tool_submissions` id 75) → `status='retired'` + `rejection_reason`. 하드 삭제하지 않은 이유: 배포마다 `sync_submissions_to_md.mjs` 가 published submission 의 md 를 재생성한다.
+- 검증: md 567→562, `tools` 661→656, submissions published 39→38 / retired 33 / pending 0(도구 자체 verify `OK`). 백업 `scripts/logs/backup_tool_delete_20261119_170157.json`.
+- 라이브: `/tools/` 카드 570→564(이후 564 = md 563 + D1 전용 1), 삭제 5개 이름 0회·유지 5개 이름 각 1회, 유지 URL 200 / 삭제 URL 404. 배포 `2ea8d567`.
+- 회귀: `pytest tests/test_pipe09_tools_collector_guard.py -q` 28 passed.
+- 잔존: 수집기 중복 검사가 정확 일치만 봐서 재발 가능 / 삭제 URL 301 미구현 / `tools`↔md 동기화 주체 코드 없음.
+
 ## 2026-11-19 14:56 — feat(AIK24-EVAL-REFRESH-01): hy4-flash-free 재측정 12/12 → 실측 글·허브 갱신
 
 - 재측정(수동 1회): `scripts/model_eval.py hy4-flash-free` → **12/12**(지시이행 2/2·코딩 4/4·맥락 2/2·에이전트 4/4), 호출 실패 0/12, 컨텍스트 하한 1,048,576. 1차(2026-11-17)는 11/12(Q1 실패).
