@@ -7,7 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy": "bash scripts/deploy.sh"
+    "deploy": "bash scripts/deploy.sh",
+    "test:js": "node --test tests/js/*.test.ts"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.3.4",

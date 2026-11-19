@@ -3,6 +3,9 @@ export const prerender = false;
 
 import { env } from 'cloudflare:workers';
 import { verifySession } from '../../lib/auth';
+import { getCollection } from 'astro:content';
+import { findDuplicates, dedupeIndex } from '../../lib/tool-duplicates';
+import type { IndexEntry, DupHit } from '../../lib/tool-duplicates';
 
 // Phase 3-C Wave B: 관리자 검토 큐 (pending 목록 + 승인/반려)
 // Auth gate: admin/index.astro와 동일 패턴 (비관리자 → 401)
@@ -82,6 +85,42 @@ try {
 } catch (e: any) {
   dbError = e?.message || '조회 실패';
 }
+
+// AIK24-TOOLDUP-NOTICE-01: 검토 화면 중복 노티스
+// 인덱스 = 현재 목록에 실제로 노출되는 것(md 컬렉션) + 승인된 submission. 같은 슬러그는 md 를 남긴다.
+// 조회가 실패해도 큐 자체는 떠야 하므로 fail-soft (이 경우 dupIndex 가 비어 노티스만 사라진다).
+let dupIndex: IndexEntry[] = [];
+try {
+  const mdEntries: IndexEntry[] = (await getCollection('tools')).map((t: any) => ({
+    slug: String(t.id ?? t.slug ?? ''),
+    name: String(t.data?.name ?? ''),
+    url: String(t.data?.url ?? ''),
+    source: 'md' as const,
+  }));
+  const subEntries: IndexEntry[] = published.map((r) => ({
+    slug: r.slug,
+    name: r.name,
+    url: r.url,
+    source: 'submission' as const,
+  }));
+  dupIndex = dedupeIndex([...mdEntries, ...subEntries]);
+} catch (e) {
+  console.error('[admin/tools] 중복 인덱스 구성 실패 (fail-soft):', e);
+  dupIndex = [];
+}
+
+const dups = (row: QueueRow, excludeSameSlug: boolean): DupHit[] =>
+  dupIndex.length
+    ? findDuplicates({ slug: row.slug, name: row.name, url: row.url }, dupIndex, { excludeSameSlug })
+    : [];
+
+const pendingDups = new Map<string, DupHit[]>();
+for (const r of pending) pendingDups.set(r.slug, dups(r, false));
+const publishedDups = new Map<string, DupHit[]>();
+for (const r of published) publishedDups.set(r.slug, dups(r, true));
+const pendingView = pending.map((r) => ({ ...r, dups: pendingDups.get(r.slug) ?? [] }));
+const publishedView = published.map((r) => ({ ...r, dups: publishedDups.get(r.slug) ?? [] }));
+const pendingDupCount = pendingView.filter((r) => r.dups.length > 0).length;
 ---
 <html lang="ko">
 <head>
@@ -112,6 +151,14 @@ h1{font-size:1.3rem;margin-bottom:4px}
 .msg.err{color:#f87171}
 .empty{text-align:center;padding:40px;color:#64748b}
 .dberr{background:#7f1d1d;border:1px solid #ef4444;border-radius:8px;padding:12px;margin-bottom:14px;font-size:.85rem}
+.dupbox{border-radius:8px;padding:9px 11px;margin-top:10px;font-size:.8rem;line-height:1.5}
+.dupbox.exact{background:#450a0a;border:1px solid #ef4444;color:#fecaca}
+.dupbox.likely{background:#422006;border:1px solid #d97706;color:#fde68a}
+.dupbox b{color:#fff;font-size:.84rem}
+.dupbox code{background:#0f172a;padding:1px 5px;border-radius:4px;color:#93c5fd}
+.dupbox .hit{margin-top:3px}
+.dupbox .hint{color:#94a3b8;margin-top:5px;font-size:.75rem}
+.dupnone{font-size:.75rem;color:#475569;margin-top:9px}
 </style>
 </head>
 <body>
@@ -121,18 +168,38 @@ h1{font-size:1.3rem;margin-bottom:4px}
   <span class="pill">🟡 검토중 <b>{counts.pending}</b></span>
   <span class="pill">🟢 공개 <b>{counts.published}</b></span>
   <span class="pill">🔴 반려 <b>{counts.retired}</b></span>
+  <span class="pill">⚠️ 중복 의심 <b>{pendingDupCount}</b></span>
 </div>
 {dbError ? <div class="dberr">DB 오류: {dbError}</div> : null}
 {pending.length === 0 && !dbError ? (
   <div class="empty">검토 대기 중인 도구가 없습니다 🎉</div>
 ) : null}
 <div id="list">
-{pending.map((t) => (
-  <div class="card" data-slug={t.slug}>
+{pendingView.map((t) => (
+  <div class="card" data-slug={t.slug} data-dup={t.dups.length ? t.dups[0].level : ''}>
     <h3>{t.name}</h3>
     <div class="meta">/{t.slug}/ · {t.category}{t.category_custom ? ` (${t.category_custom})` : ''} · {t.price_detail?.trim() || t.price_model || '—'} · {t.owner_email || `user#${t.user_id}`} · {t.created_at}</div>
     <p class="desc">{t.description}</p>
     <a href={t.url} target="_blank" rel="noopener">{t.url}</a>
+    {t.dups.length ? (
+      <div class={`dupbox ${t.dups[0].level}`}>
+        <b>{t.dups[0].level === 'exact' ? '이미 중복입니다' : '중복 의심'}</b>
+        <span> · {t.dups[0].reason}</span>
+        {t.dups.slice(0, 3).map((h) => (
+          <div class="hit">
+            → <strong>{h.name}</strong> <code>/{h.slug}/</code> ({h.source === 'md' ? '목록' : '승인됨'}){' '}
+            <a href={`/tools/${h.slug}/`} target="_blank" rel="noopener">보기 →</a>
+          </div>
+        ))}
+        <div class="hint">
+          {t.dups[0].level === 'exact'
+            ? '승인하면 같은 제품이 목록에 두 번 노출됩니다. 기존 항목을 갱신하려면 이 제출은 반려하세요.'
+            : '같은 제품인지 확인한 뒤 승인하세요. 다른 제품이면 그대로 승인해도 됩니다.'}
+        </div>
+      </div>
+    ) : (
+      <p class="dupnone">✓ 기존 목록과 중복 없음</p>
+    )}
     <div class="row">
       <button type="button" class="btn approve" data-act="approve">승인 → 공개</button>
       <input class="reason" type="text" placeholder="반려 사유 (반려 시 필수)" maxlength="200" />
@@ -146,12 +213,25 @@ h1{font-size:1.3rem;margin-bottom:4px}
 {published.length === 0 && !dbError ? (
   <div class="empty" style="padding:20px">공개된 도구가 없습니다.</div>
 ) : null}
-{published.map((t) => (
+{publishedView.map((t) => (
   <div class="card" data-slug={t.slug}>
     <h3>{t.name}</h3>
     <div class="meta">/{t.slug}/ · {t.category}{t.category_custom ? ` (${t.category_custom})` : ''} · {t.price_detail?.trim() || t.price_model || '—'} · {t.owner_email || `user#${t.user_id}`} · {t.created_at}</div>
     <p class="desc">{t.description}</p>
     <a href={`/tools/${t.slug}/`} target="_blank" rel="noopener">상세 페이지 보기 →</a>
+    {t.dups.length ? (
+      <div class={`dupbox ${t.dups[0].level}`}>
+        <b>{t.dups[0].level === 'exact' ? '이미 중복입니다' : '중복 의심'}</b>
+        <span> · {t.dups[0].reason}</span>
+        {t.dups.slice(0, 3).map((h) => (
+          <div class="hit">
+            → <strong>{h.name}</strong> <code>/{h.slug}/</code> ({h.source === 'md' ? '목록' : '승인됨'}){' '}
+            <a href={`/tools/${h.slug}/`} target="_blank" rel="noopener">보기 →</a>
+          </div>
+        ))}
+        <div class="hint">이미 공개된 항목입니다. 정리하려면 공개 취소 후 목록에서 제거하세요.</div>
+      </div>
+    ) : null}
     <div class="row">
       <button type="button" class="btn reject" data-act="unpublish">공개 취소</button>
     </div>
@@ -213,6 +293,14 @@ document.querySelectorAll('.card').forEach((card) => {
       } else if (rawAct === 'approve' || rawAct === 'reject') {
         // 승인/반려 (24f9f1c9에서 분기 누락으로 버튼 무반응 회귀 → 복구)
         const action = rawAct;
+        // AIK24-TOOLDUP-NOTICE-01: 중복 노티스가 붙은 카드는 승인 전에 한 번 더 확인한다.
+        const dupLevel = card.getAttribute('data-dup');
+        if (action === 'approve' && dupLevel) {
+          const ask = dupLevel === 'exact'
+            ? '이미 목록에 있는 도구와 중복입니다.\n그래도 승인할까요?'
+            : '중복 의심 항목이 있습니다.\n같은 도구인지 확인했나요?';
+          if (!window.confirm(ask)) return;
+        }
         const reason = ((reasonInput && reasonInput.value) || '').trim();
         if (action === 'reject' && !reason) {
           if (msg) { msg.textContent = '❌ 반려 사유를 입력해주세요.'; msg.className = 'msg err'; }
