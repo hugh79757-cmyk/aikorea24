@@ -2,6 +2,15 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-19 17:26 — feat(AIK24-TOOLDUP-NOTICE-02): 승인 버튼에 경고 창(모달)
+
+- `src/pages/admin/tools.astro` — 승인 버튼은 **항상** 모달을 거친다. 카드 버튼은 `openApproveModal()` 만 호출하고 `POST /api/admin/tools/review` 는 모달의 `승인 → 공개` 에서만 나간다(구현: `runReview()` 단일화).
+- 모달 내용: 이름·슬러그·URL / 등급 박스(exact 빨강 "이미 중복입니다", likely 주황 "중복 의심", clean 초록 "중복 없음") / 근거 / 매칭 항목 링크 최대 3건 / 안내문. exact 는 체크박스 확인 후에만 승인 버튼 활성화. `취소`·배경 클릭·`Esc` 로 닫힘.
+- 기존 `window.confirm`(중복 배지 있을 때만) 제거 — 배지 없으면 확인 없이 승인되던 구멍을 막았다.
+- `src/lib/tool-duplicates.ts` — `describeApproveWarning()` (등급→문구) 추가, 화면·테스트 공용. `tests/js/...` 3케이스 추가(총 15).
+- 검증: `npm run test:js` 15 passed / 빌드·배포 `b4b596eb` / 라이브 번들에 문구 포함 / `/`·`/tools/` 200, admin 401(기존과 동일).
+- [부분검증] 관리자 세션 필요로 실제 클릭 흐름은 미확인.
+
 ## 2026-11-19 17:22 — feat(AIK24-TOOLDUP-NOTICE-01): admin/tools 중복 노티스 + 판정기
 
 - 신규 `src/lib/tool-duplicates.ts` — 판정 규칙 6개: 슬러그 동일 / 정규화 이름 동일 / 접미(AI·App)만 다른 이름 / 도메인 동일(수집원·플랫폼 제외) / 포함관계+변형어(OSS·Plus 등) / 토큰 Jaccard ≥ 0.8. 숫자만 다른 버전(Sonnet 5·5.5)과 브랜드 단순 포함은 침묵.
