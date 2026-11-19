@@ -12,6 +12,7 @@ featured: false
 order: 108
 tasks: ["이미지-생성", "썸네일-제작"]
 updated: "2026-09-02"
+image: "/images/tools/lucer.webp"
 ---
 
 ## 한줄 요약

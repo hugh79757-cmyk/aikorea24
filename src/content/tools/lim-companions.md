@@ -12,6 +12,7 @@ featured: false
 order: 105
 tasks: ["챗봇-구축", "고객-상담"]
 updated: "2026-10-16"
+image: "/images/tools/lim-companions.webp"
 ---
 
 ## 한줄 요약
