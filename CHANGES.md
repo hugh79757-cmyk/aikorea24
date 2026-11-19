@@ -2,6 +2,23 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-19 14:56 — feat(AIK24-EVAL-REFRESH-01): hy4-flash-free 재측정 12/12 → 실측 글·허브 갱신
+
+- 재측정(수동 1회): `scripts/model_eval.py hy4-flash-free` → **12/12**(지시이행 2/2·코딩 4/4·맥락 2/2·에이전트 4/4), 호출 실패 0/12, 컨텍스트 하한 1,048,576. 1차(2026-11-17)는 11/12(Q1 실패).
+- **생성기 문구 수정** `scripts/free_model_eval_auto.py`: 리드의 "약한 쪽은 형식이 엄격한 산출물"과 마무리 '쓰지 않는다'의 형식/미공개 2줄을 **측정값 기반 조건부**로. 12/12 모델에 측정값과 반대되는 약점을 단정하던 문제.
+- **신규 도구** `scripts/refresh_eval_post.py`: 캐시 최신값 → `build_draft` → `gate_draft` → `upsert_post`(고정 slug). 기본 dry-run, `--apply` 시 기존 글 백업.
+- 발행 글 갱신(제목 12/12·실측 결과 절 `(2026-11-19)`·1차 이력 blockquote). slug·publishedAt 보존. 백업 `scripts/logs/backup_eval_post_hy4-flash-free_20261119_145052.json`.
+- 허브 재렌더: `free_models_page.py page` → `hy4-flash — 12/12`, 카드 `CLI 평가 12/12문항`.
+- 검증: `pytest -k "eval or free_model"` 123 passed / 라이브 200 + 제목·H2·측정이력 확인 / 허브 반영 확인.
+
+## 2026-11-19 10:54 — fix(AIK24-TRANSLATE-ALIGN-01): 배치 번역 제목 밀림 제거 + news 61933~61940·심층글 복구
+
+- 원인: `batch_translate()` 가 TITLE/DESC 줄을 각각 순서대로 모아 인덱스로 짝지음 → 응답에서 한 줄이 빠지면 이후 전 기사의 제목이 한 칸씩 밀림(DESC 는 정상이라 은폐). news 61933~61940 8행에서 실측.
+- 수정: `parse_batch_translation()`(번호 블록 단위 파싱·번호로만 매핑, 결손·중복·범위 밖 폐기) + `revert_duplicate_titles()` + 누락 번호 로깅.
+- 회귀 테스트 `tests/test_batch_translate_alignment.py` 신규 8 케이스. 관련 4파일 36 passed = 8(신규)+28(기존). 전체 1147 passed / 3 failed(무관한 `test_state_tools.py` 날짜 경화).
+- 복구: D1 news 8행 제목 교정(사후검증 불일치 0, 백업 `scripts/logs/backup_news_titles_20261119_104228.json`), EmDash 심층글 본문 교정(PUT/publish 200, 젠슨 0회, slug·publishedAt 보존).
+- 상세: `SSOT/프로젝트/aikorea24/보고서/2026-11-19-1058-AIK24-TRANSLATE-ALIGN-01-완료보고.md`, `docs/state.md`.
+
 ## 2026-11-18 08:52 — fix(AIK24-COLLECTOR-TITLE-FIX): 수집기 제목 앞자리 숫자 소실 수정 + D1 교정 + 재배포
 
 - `api_test/news_collector.py:497` — `lstrip("0123456789")` → `re.sub(r'^\d+[.\)]\s*', '', cleaned)`. "6개국에서…"/"2026년…"/"3분기…" 처럼 제목 본문이 숫자로 시작해도 보존, 번호 잔재만 제거.

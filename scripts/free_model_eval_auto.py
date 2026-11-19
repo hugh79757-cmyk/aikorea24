@@ -624,8 +624,18 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
     if meta.get("lead_note"):
         p.append(meta["lead_note"])
     elif strong:
-        p.append(f"강한 쪽은 {', '.join(strong)}입니다. 약한 쪽은 형식이 엄격하게 정해진 산출물입니다. "
-                 f"아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.")
+        # 2026-11-19: '약한 쪽은 형식이 엄격한 산출물' 문장은 고정 문구였다. 12문항 만점인
+        # 모델(hy4-flash-free 재측정 12/12)에도 그대로 붙어 **측정값에 없는 약점을 단정**했다.
+        # 점수를 잃은 축이 있을 때만 그 축 이름을 쓰고, 없으면 없다고 적는다.
+        weak_axes = [a for a, b in (res.get("by_axis") or {}).items()
+                     if int(b.get("max_score") or 0) > 0
+                     and int(b.get("score") or 0) < int(b.get("max_score") or 0)]
+        head = f"강한 쪽은 {', '.join(strong)}입니다."
+        head += (f" 약한 쪽은 {', '.join(weak_axes)}입니다." if weak_axes
+                 else " 12문항에서 점수를 잃은 축은 없었습니다.")
+        tail = (f" 아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다." if failed
+                else " 아래에 실제로 받은 답과 무료 한도에서 걸리는 지점을 적었습니다.")
+        p.append(head + tail)
     else:
         p.append("축별로 고른 강점은 없었습니다. 아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.")
     p.append("")
@@ -863,11 +873,21 @@ def build_draft(model_id, res, cli_id, measured_context=None, day=None, zero_cla
         use_bits.append("무료로 짧은 요청을 여러 번 던져볼 때")
     if meta.get("use_when"):
         use_bits = list(meta["use_when"])
-    skip_bits = meta.get("skip_when") or [
-        "형식이 정확히 정해진 산출물(스키마·JSON 구조를 그대로 요구하는 작업)",
-        "한 번에 긴 작업을 오래 돌려야 할 때 — 무료 한도가 먼저 걸립니다",
-        "제작사·가중치가 확인돼야 하는 업무 — 이 모델은 공개되지 않았습니다",
-    ]
+    if meta.get("skip_when"):
+        skip_bits = list(meta["skip_when"])
+    else:
+        # 2026-11-19: '형식이 엄격한 산출물'·'제작사·가중치 미공개' 두 줄은 고정 문구였다.
+        # 12문항 만점 모델에게도 그대로 붙어 **측정값과 모순**됐다(hy4 재측정 12/12).
+        # 실제로 잃은 축이 있을 때만 그 줄을 쓴다.
+        weak = {label for label, s, m in axis_rows if m and s < m}
+        skip_bits = []
+        if any(label.startswith("지시") for label in weak) or any(
+                d.get("idx") in (1, 2, 11) and not d.get("score")
+                for d in (res.get("details") or [])):
+            skip_bits.append("형식이 정확히 정해진 산출물(스키마·JSON 구조를 그대로 요구하는 작업)")
+        skip_bits.append("한 번에 긴 작업을 오래 돌려야 할 때 — 무료 한도가 먼저 걸립니다")
+        if entry is None or not entry.get("open_weights"):
+            skip_bits.append("제작사·가중치가 확인돼야 하는 업무 — 이 모델은 공개되지 않았습니다")
     p.append("**쓴다**")
     p.append("")
     for b in dict.fromkeys(use_bits):

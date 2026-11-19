@@ -1,0 +1,1625 @@
+{
+ "id": "01M7KJCAHZDFFCC1YKTCRT6HN6",
+ "type": "posts",
+ "slug": "hy4-flash-free-실측-1112-무료로-어디까지-쓸-수-있나",
+ "status": "published",
+ "data": {
+  "title": "hy4-flash-free 실측 — 11/12, 무료로 어디까지 쓸 수 있나",
+  "excerpt": "OpenCode 무료 목록에 hy4-flash-free가 새로 들어왔습니다. 12문항으로 직접 돌려본 결과 11/12를 맞혔습니다 — 같은 문항세트로 측정한 모델 9개 중 7위입니다. 결론부터 말하면 바로 써볼 만합니다.",
+  "content": [
+   {
+    "_type": "block",
+    "_key": "k7",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k0",
+      "text": "OpenCode 무료 목록에 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k1",
+      "text": "hy4-flash-free",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k2",
+      "text": "가 새로 들어왔습니다. 12문항으로 직접 돌려본 결과 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k3",
+      "text": "11/12",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k4",
+      "text": "를 맞혔습니다 — 같은 문항세트로 측정한 모델 9개 중 7위입니다. 결론부터 말하면 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k5",
+      "text": "바로 써볼 만합니다",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k6",
+      "text": ".",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kb00",
+    "style": "normal",
+    "markDefs": [
+     {
+      "_key": "kb01",
+      "_type": "link",
+      "href": "https://aikorea24.kr/briefing/2026-11-17-1/#item-1"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kb02",
+      "text": "원문기사는 아래의 링크를 통해 확인할 수 있습니다. ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "kb03",
+      "text": "기사원문보기",
+      "marks": [
+       "kb01"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k9",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k8",
+      "text": "강한 쪽은 코딩 실무, 맥락 유지, 에이전트(계획·도구·복구·판단)입니다. 약한 쪽은 형식이 엄격하게 정해진 산출물입니다. 아래에 실제로 받은 답과 실패한 지점을 그대로 적었습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kb",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "ka",
+      "text": "hy4-flash-free가 뭔가",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kf",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kc",
+      "text": "공개 카탈로그상 이름은 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "kd",
+      "text": "Hy4 flash Free",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "ke",
+      "text": "입니다. 공칭 컨텍스트는 1,048,576 토큰, 최대 출력은 65,536 토큰입니다. 추론과 도구 호출을 지원합니다. 공개일은 2026-11-16입니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k11",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k10",
+      "text": "가중치·학습 데이터·파라미터 수는 공개되지 않았습니다. 무료 기간이 언제까지인지도 밝혀지지 않았으니, 오래 붙잡고 쓸 모델로 보기는 어렵습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k16",
+    "style": "blockquote",
+    "markDefs": [
+     {
+      "_key": "k13",
+      "_type": "link",
+      "href": "https://opencode.ai/docs/zen/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k12",
+      "text": "수치는 models.dev 공개값을 2026-11-17에 조회한 것입니다. 무료 여부는 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k14",
+      "text": "OpenCode Zen 모델 목록",
+      "marks": [
+       "k13"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k15",
+      "text": "에서 다시 확인하세요.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k18",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k17",
+      "text": "5분 안에 써보기",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k1a",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k19",
+      "text": "터미널 두 줄이면 확인됩니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "code",
+    "_key": "k1b",
+    "code": "opencode models | grep hy4-flash-free\nopencode run -m opencode/hy4-flash-free \"한 단어로 대답: PONG\"",
+    "language": "bash"
+   },
+   {
+    "_type": "block",
+    "_key": "k1d",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k1c",
+      "text": "우리가 실제로 던진 것은 코드 수정 요청이었습니다. 만료 토큰을 찾는 함수에서 조건이 틀린 코드를 주고 고치라고 했더니, 아래처럼 고친 코드를 냈습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "code",
+    "_key": "k1e",
+    "code": "if datetime.fromisoformat(t['expires_at']) < now + timedelta(days=30)",
+    "language": "python"
+   },
+   {
+    "_type": "block",
+    "_key": "k20",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k1f",
+      "text": "이 문항은 제출한 코드를 실제로 실행해 판정했습니다 — 눈으로 읽고 점수를 준 것이 아닙니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k22",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k21",
+      "text": "어떤 작업에 강한가",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k25",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k23",
+      "text": "코드 수정·리팩터링",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k24",
+      "text": " (4/4) — 틀린 조건을 짚고 수정 코드를 냅니다. 코딩 문항 4개 중 3개는 제출 코드를 실행해 통과했습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k2a",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k26",
+      "text": "긴 대화·긴 문서 기억",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k27",
+      "text": " (2/2) — 앞선 지시를 오래 붙잡습니다. 12,000자 문서 중간의 함수명(",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k28",
+      "text": "normalize_ledger_entries",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k29",
+      "text": ")을 정확히 되받았습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k2d",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k2b",
+      "text": "우선순위 판단",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k2c",
+      "text": " (4/4) — 장애 대응 상황을 주고 '지금 할 일'과 '미뤄도 되는 일'을 나누라고 했더니, 고객 메일 발송과 느린 쿼리를 지금 처리로, 내부 화면 문구 수정을 미룸으로 분류하고 이유를 붙였습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k2f",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k2e",
+      "text": "어디서 걸리는가",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k31",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k30",
+      "text": "12문항 중 1문항은 점수를 받지 못했습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k3a",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k32",
+      "text": "Q1 · 지시 이행",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k33",
+      "text": " — 검토 필요. 받은 답: 이 코드는 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k34",
+      "text": "add",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k35",
+      "text": "라는 이름의 함수를 정의합니다. 이 함수는 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k36",
+      "text": "a",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k37",
+      "text": "와 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k38",
+      "text": "b",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k39",
+      "text": "라는 두 개의 값을 전달받으면, 두 값을 더한 결과를 즉시 반환합니다. 함수 본문이 한 줄로 Written 되어 있어, ",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k40",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k3b",
+      "text": "가장 실무에 걸리는 것은 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k3c",
+      "text": "무료 한도",
+      "marks": [
+       "strong"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k3d",
+      "text": "입니다. 우리가 12문항 평가를 돌리는 동안 무료 사용량이 바닥나서, 같은 날 두 번째 모델은 첫 호출부터 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k3e",
+      "text": "Free usage limit reached",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k3f",
+      "text": "로 막혔습니다. 한 번에 긴 작업을 여러 번 돌리는 용도보다, 짧은 요청을 몇 번 던지는 용도에 맞습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k42",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k41",
+      "text": "다른 무료 모델과 비교",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k44",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k43",
+      "text": "같은 12문항, 같은 채점 기준으로 AIKOREA24가 실측한 값입니다. 모델마다 최신 측정 1건만 씁니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "table",
+    "_key": "k8b",
+    "rows": [
+     {
+      "_type": "tableRow",
+      "_key": "k45",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k47",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k46",
+          "text": "모델",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k49",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k48",
+          "text": "결과",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k4b",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k4a",
+          "text": "측정일",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k4c",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k4e",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k4d",
+          "text": "beam-free",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k50",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k4f",
+          "text": "12/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k52",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k51",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k53",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k55",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k54",
+          "text": "big-pickle",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k57",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k56",
+          "text": "12/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k59",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k58",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k5a",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k5c",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k5b",
+          "text": "opengateway/deepseek/deepseek-v4.1-flash-eco",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k5e",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k5d",
+          "text": "11/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k60",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k5f",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k61",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k63",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k62",
+          "text": "glm-5.3-flash-free",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k65",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k64",
+          "text": "11/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k67",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k66",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k68",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k6a",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k69",
+          "text": "iceman-free",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k6c",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k6b",
+          "text": "11/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k6e",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k6d",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k6f",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k71",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k70",
+          "text": "kilo/stealth/glyph-cluster",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k73",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k72",
+          "text": "11/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k75",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k74",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k76",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k78",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k77",
+          "text": "hy4-flash-free",
+          "marks": [
+           "strong"
+          ]
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k7a",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k79",
+          "text": "11/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k7c",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k7b",
+          "text": "11-17",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k7d",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k7f",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k7e",
+          "text": "k-exaone-2.5",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k81",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k80",
+          "text": "9/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k83",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k82",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k84",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k86",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k85",
+          "text": "inkling-2-small-free",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k88",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k87",
+          "text": "6/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k8a",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k89",
+          "text": "11-16",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     }
+    ],
+    "hasHeaderRow": true
+   },
+   {
+    "_type": "block",
+    "_key": "k8d",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k8c",
+      "text": "한도와 비용 확인하는 법",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k8f",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k8e",
+      "text": "무료라고 적혀 있어도 한도가 붙습니다. 실제로 확인하는 순서는 이렇습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k91",
+    "style": "normal",
+    "listItem": "number",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k90",
+      "text": "모델 목록에서 가격이 0으로 표시되는지 봅니다 — 무료 표시가 없는 모델은 유료입니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k95",
+    "style": "normal",
+    "listItem": "number",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k92",
+      "text": "한 번 호출해 봅니다. 응답이 아니라 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "k93",
+      "text": "Free usage limit reached",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "k94",
+      "text": " 같은 문구가 오면 그날 한도가 끝난 것입니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k97",
+    "style": "normal",
+    "listItem": "number",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k96",
+      "text": "반복 호출이 필요한 작업은 한도에 걸리는 시점을 먼저 재봅니다. 우리는 12문항 평가를 두 번 돌리다 걸렸습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "k99",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "k98",
+      "text": "AIK24 실측 결과 (2026-11-17)",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "table",
+    "_key": "kbd",
+    "rows": [
+     {
+      "_type": "tableRow",
+      "_key": "k9a",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "k9c",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k9b",
+          "text": "항목",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       },
+       {
+        "_type": "tableCell",
+        "_key": "k9e",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "k9d",
+          "text": "값",
+          "marks": []
+         }
+        ],
+        "isHeader": true
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "k9f",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "ka1",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "ka0",
+          "text": "모델 ID",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "ka3",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "ka2",
+          "text": "hy4-flash-free",
+          "marks": [
+           "code"
+          ]
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "ka4",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "ka6",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "ka5",
+          "text": "결과",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "ka8",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "ka7",
+          "text": "11/12",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "ka9",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "kab",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kaa",
+          "text": "축별",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "kad",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kac",
+          "text": "지시 이행 1/2 · 코딩 실무 4/4 · 맥락 유지 2/2 · 에이전트(계획·도구·복구·판단) 4/4",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "kae",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "kb0",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kaf",
+          "text": "검증 방법",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "kb2",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kb1",
+          "text": "OpenCode CLI로 12문항 호출 · 문항별 결정적 채점 · 코드 문항은 실제 실행",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "kb3",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "kb5",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kb4",
+          "text": "니들 컨텍스트 실측 하한",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "kb7",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kb6",
+          "text": "1,048,576 토큰",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     },
+     {
+      "_type": "tableRow",
+      "_key": "kb8",
+      "cells": [
+       {
+        "_type": "tableCell",
+        "_key": "kba",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kb9",
+          "text": "토큰 사용량",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       },
+       {
+        "_type": "tableCell",
+        "_key": "kbc",
+        "content": [
+         {
+          "_type": "span",
+          "_key": "kbb",
+          "text": "CLI 경유로 측정되지 않음 (미측정)",
+          "marks": []
+         }
+        ],
+        "isHeader": false
+       }
+      ]
+     }
+    ],
+    "hasHeaderRow": true
+   },
+   {
+    "_type": "block",
+    "_key": "kbf",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kbe",
+      "text": "12문항은 지시 이행 2 · 코딩 실무 4 · 맥락 유지 2 · 에이전트(계획·도구·복구·판단) 4로 구성됩니다. LLM 심사자에게 점수를 묻지 않고 문항마다 규칙 기반으로 채점했고, 코드 문항은 제출 코드를 실제로 실행했습니다. 긴 문서 요약 품질, 다국어 정확도, 이미지 입력은 이 평가에 포함되지 않습니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kc1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kc0",
+      "text": "한 가지 조건을 밝혀둡니다. 코드 문항은 모델이 도구로 주변 파일을 읽을 수 있는 환경에서 측정했습니다. 그래서 이미 있는 테스트 파일을 찾아 답하는 경우가 있고, 그때 코드 점수는 실제보다 낮게 나옵니다.",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kc3",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kc2",
+      "text": "참고 자료",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kc6",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "kc4",
+      "_type": "link",
+      "href": "https://opencode.ai/docs/zen/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kc5",
+      "text": "OpenCode Zen 모델 목록",
+      "marks": [
+       "kc4"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kc9",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [
+     {
+      "_key": "kc7",
+      "_type": "link",
+      "href": "https://models.dev/"
+     }
+    ],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kc8",
+      "text": "models.dev 모델 카탈로그",
+      "marks": [
+       "kc7"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kcb",
+    "style": "h2",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kca",
+      "text": "마무리 — 이럴 때 쓴다 / 이럴 때 쓰지 않는다",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kcd",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kcc",
+      "text": "쓴다",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kcf",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kce",
+      "text": "함수 하나를 고치거나 리팩터링할 때",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kd1",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kd0",
+      "text": "앞에서 정한 규칙을 계속 기억해야 하는 대화",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kd3",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kd2",
+      "text": "할 일의 우선순위를 정리시킬 때",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kd5",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kd4",
+      "text": "무료로 짧은 요청을 여러 번 던져볼 때",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kd7",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kd6",
+      "text": "쓰지 않는다",
+      "marks": [
+       "strong"
+      ]
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kd9",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kd8",
+      "text": "형식이 정확히 정해진 산출물(스키마·JSON 구조를 그대로 요구하는 작업)",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kdb",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kda",
+      "text": "한 번에 긴 작업을 오래 돌려야 할 때 — 무료 한도가 먼저 걸립니다",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "kdd",
+    "style": "normal",
+    "listItem": "bullet",
+    "level": 1,
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kdc",
+      "text": "제작사·가중치가 확인돼야 하는 업무 — 이 모델은 공개되지 않았습니다",
+      "marks": []
+     }
+    ]
+   },
+   {
+    "_type": "block",
+    "_key": "ke1",
+    "style": "normal",
+    "markDefs": [],
+    "children": [
+     {
+      "_type": "span",
+      "_key": "kde",
+      "text": "무료 모델 목록은 자주 바뀝니다. 쓰기 전에 ",
+      "marks": []
+     },
+     {
+      "_type": "span",
+      "_key": "kdf",
+      "text": "opencode models",
+      "marks": [
+       "code"
+      ]
+     },
+     {
+      "_type": "span",
+      "_key": "ke0",
+      "text": "로 아직 있는지 확인하는 것이 마지막 단계입니다.",
+      "marks": []
+     }
+    ]
+   }
+  ]
+ },
+ "authorId": "01M4HKV7ZCNZZ11DN43Q5J4WCT",
+ "primaryBylineId": null,
+ "createdAt": "2026-11-17T01:36:40.511Z",
+ "updatedAt": "2026-11-17T01:37:20.668Z",
+ "publishedAt": "2026-11-17T01:37:14.700Z",
+ "scheduledAt": null,
+ "liveRevisionId": "01M7KJDFK885VRH6YAGSDNYCFV",
+ "draftRevisionId": null,
+ "version": 4,
+ "locale": "en",
+ "translationGroup": "01M7KJCAHZDFFCC1YKTCRT6HN6",
+ "seo": {
+  "title": null,
+  "description": null,
+  "image": null,
+  "canonical": null,
+  "noIndex": false
+ },
+ "bylines": [],
+ "byline": null,
+ "references": {}
+}
