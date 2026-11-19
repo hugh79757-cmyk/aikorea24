@@ -878,3 +878,17 @@
 {"ts": "2026-11-19 07:32:04", "slug": "teamily-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-19 07:32:05", "slug": "teamily-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
 {"ts": "2026-11-19 07:32:08", "slug": "abliteration-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-20 06:00:44", "slug": "gemini-4-neon", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-20 06:00:51", "slug": "gemini-4-neon", "step": "enrich", "result": "done", "detail": "+2,513자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-20 06:00:57", "slug": "gemini-4-neon", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-20 06:00:57", "slug": "ableten-hybrid-ai-travel-planner", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-20 06:01:04", "slug": "ableten-hybrid-ai-travel-planner", "step": "enrich", "result": "done", "detail": "+2,905자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-20 06:01:05", "slug": "ableten-hybrid-ai-travel-planner", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-20 06:01:05", "slug": "stripo-email-widgets", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-20 06:01:12", "slug": "stripo-email-widgets", "step": "enrich", "result": "done", "detail": "+2,663자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-20 06:01:13", "slug": "stripo-email-widgets", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-20 06:01:13", "slug": "room-ai", "step": "url", "result": "done", "detail": "빈값 → https://roomai.com (title='AI Interior Design: Redesign Any Room From a')", "dry_run": false}
+{"ts": "2026-11-20 06:01:20", "slug": "room-ai", "step": "enrich", "result": "done", "detail": "+2,776자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-20 06:01:24", "slug": "room-ai", "step": "thumb", "result": "done", "detail": "✅ room-ai 24KB", "dry_run": false}
+{"ts": "2026-11-20 06:01:32", "slug": "jeveration-system-one-models-now-generate", "step": "enrich", "result": "done", "detail": "+2,991자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-20 06:01:36", "slug": "jeveration-system-one-models-now-generate", "step": "thumb", "result": "done", "detail": "✅ jeveration-system-one-models-now-generate 29KB", "dry_run": false}

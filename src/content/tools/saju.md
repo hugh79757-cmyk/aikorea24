@@ -1,6 +1,6 @@
 ---
 name: "Saju"
-description: "AI-powered Four Pillars (Bazi) chart service — enter your birth data and get a full chart reading, compatibility analysis, and weekly guidance in 17 languages."
+description: "Most saju apps guess. This one calculates — a real Four Pillars chart from your birth data, with the working shown, plus a full reading, compatibility analysis, and weekly guidance."
 category: "Lifestyle"
 price: "Free basic chart; Full reading $9.99"
 koreanSupport: true
@@ -11,7 +11,7 @@ tags: ["saju", "bazi", "four pillars", "fortune", "astrology"]
 tasks: []
 order: -1
 featured: false
-updated: "2026-11-17"
+updated: "2026-11-19"
 priceModel: "Freemium"
 image: "/images/tools/saju.webp"
 ---
@@ -20,7 +20,7 @@ image: "/images/tools/saju.webp"
 
 
 
-Saju is an AI-powered Four Pillars (Bazi) chart service. Enter your birth date, time, and place, and it computes a real Four Pillars chart using exact solar terms, then explains what the chart says about work, money, and relationships — and what to do with it this week. The basic chart is free and shows the full calculation; the full reading adds seven in-depth sections, and a compatibility report compares two charts. It works in 17 languages on the web, with Google sign-in and no app install.
+Most saju apps guess. This one calculates. Saju is an AI-powered Four Pillars (Bazi) chart service. Enter your birth date, time, and place, and it computes a real Four Pillars chart using exact solar terms, then explains what the chart says about work, money, and relationships — and what to do with it this week. The basic chart is free and shows the full calculation; the full reading adds seven in-depth sections, and a compatibility report compares two charts. It runs on the web with Google sign-in and no app install.
 
 ## 사용법
 
@@ -62,7 +62,7 @@ Saju is an AI-powered Four Pillars (Bazi) chart service. Enter your birth date, 
 
 **금전운 분석 요청**
 
-- 프롬프트: 입력된 사주 차트를 바탕으로 금전 관리와 재물운를 조언해 주세요.
+- 프롬프트: 입력된 사주 차트를 바탕으로 금전 관리와 재물운을 조언해 주세요.
 - 결과 예시: 사주 내에서 에너지가 시작되는 힘이 강해 주도적으로 일을 추진하는 성향이 뚜렷합니다. 재물과 관련된 채널을 점검하고 이번 주에는 무리한 확장보다는 현재 진행 중인 재정 상태를 차분히 정리하는 방향을 추천합니다.
 - 관찰: 문맥에 맞는 자연스러운 한국어 표현을 사용하여 실생활에 적용하기 좋습니다.
 
@@ -83,7 +83,7 @@ Saju is an AI-powered Four Pillars (Bazi) chart service. Enter your birth date, 
 - 복잡한 회원가입 절차 없이 생년월일과 출생 도시만 입력하면 실시간으로 정확한 사주 차트 계산 결과를 무료로 확인할 수 있습니다.
 - 로그인을 해두면 계산된 차트가 자동으로 저장되어 언제든지 다시 접속해서 이전 사주 내용을 꺼내 볼 수 있습니다.
 - 단순한 운세 나열을 넘어 일과 돈, 인간관계 등 현실적인 주제를 이번 주에 실천할 수 있는 3가지 행동 지침을 제시합니다.
-- 한국어를 포함해 17개 언어를 지원하므로 외국인 친구나 다양한 언어 환경을 가진 사용자도 편리하게 이용할 수 있습니다.
+- 계산 과정을 그대로 보여줘서 차트가 어떻게 나왔는지 직접 확인할 수 있습니다.
 
 **단점**
 
@@ -144,7 +144,7 @@ We verified the $9.99 full-reading checkout end to end in test mode: payment wen
 - A real Four Pillars calculation with the working shown, not just a generic horoscope.
 - The reading names the pattern and gives concrete next steps instead of vague predictions.
 - The free chart alone is genuinely useful — you can see your full chart before paying anything.
-- 17 languages and no app install; guest charts work without signing in.
+- No app install; guest charts work without signing in.
 
 **Cons**
 

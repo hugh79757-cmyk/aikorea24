@@ -1,0 +1,27 @@
+{
+  "added": [
+    {
+      "provider": "kilo",
+      "model_id": "inclusionai/ling-3.2-flash:free",
+      "name": "inclusionAI: Ling 3.2 Flash (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 1048576
+    },
+    {
+      "provider": "kilo",
+      "model_id": "recursive/flint-v1.0:free",
+      "name": "Recursive: Flint (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 262144
+    }
+  ],
+  "removed": [],
+  "changed": [],
+  "failed_providers": {}
+}

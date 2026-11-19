@@ -1,6 +1,6 @@
 ---
 name: "Pearl Arcana"
-description: "AI tarot reading with a 78-card deck drawn in mother-of-pearl tones — pick your own cards and get deep readings in 17 languages. Free daily reading included."
+description: "Most tarot apps hand you a generic reading. Pearl Arcana doesn't — you pick the cards yourself from a mother-of-pearl deck, and the AI reads them in depth around your question. Free daily reading included."
 category: "Lifestyle"
 price: "Free daily reading; Premium $7.99/mo or $40.99/yr"
 koreanSupport: true
@@ -11,7 +11,7 @@ tags: ["AI tarot", "tarot reading", "fortune", "lifestyle", "free"]
 tasks: []
 order: -1
 featured: false
-updated: "2026-11-17"
+updated: "2026-11-19"
 priceModel: "Freemium"
 image: "/images/tools/pearl-arcana.webp"
 ---
@@ -20,13 +20,13 @@ image: "/images/tools/pearl-arcana.webp"
 
 
 
-Pearl Arcana is an AI tarot reading service built around a 78-card deck drawn in mother-of-pearl (nacre) tones. You pick cards yourself from a face-down deck, and the AI interprets each card's meaning, its position in the spread, upright and reversed orientations, and how the cards relate to each other. Seven spreads are available: Mind (3 cards), Past–Present–Future (3), Love (3), Career (3), Yes/No (1), Horseshoe (7), and a one-card Daily reading. It works in 17 languages on the web with no app install, and you can sign in with an email magic link or Google.
+Pearl Arcana is an AI tarot reading service built around a deck painted in mother-of-pearl (nacre) tones. Most tarot apps hand you a generic reading — this one doesn't. You pick cards yourself from a face-down deck, and the AI interprets each card's meaning, its position in the spread, upright and reversed orientations, and how the cards relate to each other. Seven spreads are available: Mind (3 cards), Past–Present–Future (3), Love (3), Career (3), Yes/No (1), Horseshoe (7), and a one-card Daily reading. It runs entirely in the browser with no app install, and you can sign in with an email magic link or Google.
 
 ## 사용법
 
 **1. 웹사이트 접속 및 로그인**
 
-별도의 앱 설치 없이 브라우저로 공식 웹사이트에 접속합니다. 이메일 매직 링크나 구글 계정로 간편하게 로그인할 수 있습니다.
+별도의 앱 설치 없이 브라우저로 공식 웹사이트에 접속합니다. 이메일 매직 링크나 구글 계정으로 간편하게 로그인할 수 있습니다.
 
 **2. 질문 입력 및 스프레드 선택**
 
@@ -34,7 +34,7 @@ Pearl Arcana is an AI tarot reading service built around a 78-card deck drawn in
 
 **3. 직접 카드 선택하기**
 
-화면에 나타난 뒷면의 78장 카드 중 마음에 끌리는 카드를 직관적으로 직접 골라 터치합니다. 카드를 터치할 때마다 카드가 뒤집히며 그 의미가 드러납니다.
+화면에 나타난 뒷면의 카드 중 마음에 끌리는 카드를 직관적으로 직접 골라 터치합니다. 카드를 터치할 때마다 카드가 뒤집히며 그 의미가 드러납니다.
 
 **4. AI 해석 결과 확인**
 
@@ -42,9 +42,9 @@ Pearl Arcana is an AI tarot reading service built around a 78-card deck drawn in
 
 ## 요금제 자세히
 
-- **무료로 쓸 수 있는 범위**: 매일 무료 리딩이 포함되어 있어 비용 부담 없이 이용할 수 있습니다. 수집된 정보에 따르면 오늘의 펄신(Pearlsheen) 등 무료 리딩 기능이 제공됩니다.
+- **무료로 쓸 수 있는 범위**: 매일 무료 리딩이 포함되어 있어 비용 부담 없이 이용할 수 있습니다.
 
-- **월간 구독 플랜 (Premium Monthly)** ($7.99/mo (약 1만 원대, 환율에 따라 변동)): 프리미엄 기능과 리딩 크레딧을 무제한 또는 넉넉하게 활용하는 월 단위 구독 상품입니다.
+- **월간 구독 플랜 (Premium Monthly)** ($7.99/mo (약 1만 원대, 환율에 따라 변동)): 심층 리딩을 크레딧 소모 없이 이용할 수 있는 월 단위 구독 상품입니다.
 
 - **연간 구독 플랜 (Premium Annual)** ($40.99/yr (월간 대비 할인된 가격)): 1년 동안 꾸준히 AI 타로 서비스를 이용하고자 하는 사용자를 위한 경제적인 연간 결제 플랜입니다.
 
@@ -64,7 +64,7 @@ Pearl Arcana is an AI tarot reading service built around a 78-card deck drawn in
 - 결과 예시: 현재 테이블의 카드는 내면의 솔직한 대화가 필요함을 시사합니다. 상대방의 입장을 배려하며 진심을 전한다면 관계가 회복될 수 있습니다.
 - 관찰: 일상적인 고민 상담에 적합한 부드럽고 공감 가는 한국어 문장력을 보여줍니다.
 
-17개 언어를 지원하는 글로벌 서비스답게 한국어 번역 품질이 매끄럽고 어색하지 않습니다. 타로 리딩 특유의 철학적이고 차분한 분위기를 한국어 표현으로 잘 살려냅니다.
+한국어 번역 품질이 매끄럽고 어색하지 않습니다. 타로 리딩 특유의 철학적이고 차분한 분위기를 한국어 표현으로 잘 살려냅니다.
 
 ## 대안 도구 비교
 
@@ -78,10 +78,10 @@ Pearl Arcana is an AI tarot reading service built around a 78-card deck drawn in
 
 **장점**
 
-- 한국의 나전칠기(자개)와 단청의 아름다운 미감을 살린 독창적인 78장 디지털 카드가 시각적 몰입감을 높여줍니다.
+- 한국의 나전칠기(자개)와 단청의 아름다운 미감을 살린 독창적인 디지털 카드가 시각적 몰입감을 높여줍니다.
 - 앱을 따로 설치할 필요 없이 웹 브라우저에서 바로 접속하여 간편하게 타로 리딩을 시작할 수 있습니다.
 - 연애, 커리어, 과거-현재-미래 등 다양한 스프레드 방식을 제공하여 고민의 성격에 맞게 선택할 수 있습니다.
-- 17개 언어를 지원하므로 한국어 사용자도 언어 장벽 없이 깊이 있는 타로 해석을 편안하게 읽을 수 있습니다.
+- 한국어 인터페이스와 해석이 매끄러워 깊이 있는 타로 해석을 편안하게 읽을 수 있습니다.
 
 **단점**
 
@@ -146,7 +146,7 @@ We ran the full paid flow on 2026-11-14 and all four checks passed with no error
 - You pick the cards yourself instead of having them assigned, which makes each reading feel personal.
 - Deep readings interpret positions, reversals, and card combinations together rather than listing generic meanings.
 - Follow-up questions with clarifier cards and a full-table re-read let you dig into one question instead of starting over.
-- 17 languages, free daily reading, and no app install — it runs entirely in the browser.
+- Free daily reading and no app install — it runs entirely in the browser.
 
 **Cons**
 

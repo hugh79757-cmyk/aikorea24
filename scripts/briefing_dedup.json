@@ -1,40 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-19",
-      "briefing_id": 358,
-      "articles": [
-        {
-          "id": "56204",
-          "title": "[무료 LLM] ll-alpha-free — OpenCode Zen 무료 티어",
-          "original_title": "ll-alpha-free",
-          "description": "LL Alpha Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/ll-alpha-free\"} 프로바이더 갱신일 2026-10-15.",
-          "link": "https://models.dev/opencode/ll-alpha-free",
-          "entities": [
-            "LL",
-            "LLM",
-            "Alpha",
-            "Free",
-            "Zen",
-            "OpenCode"
-          ],
-          "date": "2026-10-19"
-        },
-        {
-          "id": "56262",
-          "title": "AI 로봇 훈련을 위해 무료 배관 및 냉난방 수리 제공하는 AI 연구소",
-          "original_title": "AI lab offers free plumbing and HVAC repairs to train AI robots",
-          "description": "한 AI 연구소가 로봇의 실무 학습을 돕기 위해 실제 가정집의 배관 및 냉난방 수리 서비스를 무료로 제공하고 있습니다. 로봇이 복잡한 물리적 환경에서 인간의 작업을 관찰하고 학습하여 기술을 습득하도록 하려는 시도입니다.",
-          "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-lab-offers-free-plumbing-and-hvac-repairs-across-three-cities-to-train-ai-robots-wearable-sensors-record-video-of-repair-work-for-robotics-training-free-services-also-include-electrical-work-air-duct-cleaning-and-carpet-cleaning",
-          "entities": [
-            "AI",
-            "HVAC"
-          ],
-          "date": "2026-10-19"
-        }
-      ]
-    },
-    {
       "date": "2026-10-20",
       "briefing_id": 359,
       "articles": [
@@ -1247,37 +1213,52 @@
           "date": "2026-11-18"
         }
       ]
+    },
+    {
+      "date": "2026-11-19",
+      "briefing_id": 386,
+      "articles": [
+        {
+          "id": "62034",
+          "title": "구글, 최고의 제미나이 에이전트 무료화… 이용 방법은?",
+          "original_title": "Google just made its best Gemini agent free — here's where you can get it",
+          "description": "'제미나이 태스크(Gemini Tasks)'가 유료 장벽을 허물고 6개국에서 무료로 자동화된 업무 처리 기능을 제공하기 시작했습니다.",
+          "link": "https://www.androidcentral.com/apps-software/ai/google-just-made-its-best-gemini-agent-free-heres-where-you-can-get-it",
+          "entities": [
+            "Google",
+            "Gemini",
+            "Tasks"
+          ],
+          "date": "2026-11-19"
+        },
+        {
+          "id": "62015",
+          "title": "끔찍하게 증가하는 AI 해킹 도구",
+          "original_title": "The terrifying rise of AI hacking tools",
+          "description": "널리 보급된 새로운 유형의 AI 도구들이 해커들의 24시간 사이버 공격을 돕고 있으며, 불과 몇 시간 만에 기업 네트워크를 침해해 방어자들을 압도하고 있습니다. 이것이 중요한 이유는 AI 기반 해킹이 아직 초기 단계에 불과하지만, 무료로 다운로드할 수 있는 오픈소스 도구들이 근본적인 변화를...",
+          "link": "https://www.axios.com/2026/11/18/ai-hacking-tools-artex-cairn",
+          "entities": [
+            "AI",
+            "The"
+          ],
+          "date": "2026-11-19"
+        },
+        {
+          "id": "61940",
+          "title": "오픈소스 진영, 젠슨 황의 복귀를 원해",
+          "original_title": "This smell startup says its AI nose is as good as a human’s",
+          "description": "뉴저지주 뉴어크 공항 근처의 한 실험실에서 약 30명의 숙련된 인간 후각 전문가들로 구성된 팀이 지구상의 모든 냄새를 천천히 분석하고 있습니다. “고소함”, “복숭아 향”, “바다 향” 같은 이들의 세심한 메모는 화학적 분석과 교차 대조되어, 한 AI 스타트업을 위한 풍부한 학습 데이터를 만듭니다.",
+          "link": "https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/",
+          "entities": [
+            "AI",
+            "This"
+          ],
+          "date": "2026-11-19"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "56204",
-      "title": "[무료 LLM] ll-alpha-free — OpenCode Zen 무료 티어",
-      "original_title": "ll-alpha-free",
-      "description": "LL Alpha Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/ll-alpha-free\"} 프로바이더 갱신일 2026-10-15.",
-      "link": "https://models.dev/opencode/ll-alpha-free",
-      "entities": [
-        "LL",
-        "LLM",
-        "Alpha",
-        "Free",
-        "Zen",
-        "OpenCode"
-      ],
-      "date": "2026-10-19"
-    },
-    {
-      "id": "56262",
-      "title": "AI 로봇 훈련을 위해 무료 배관 및 냉난방 수리 제공하는 AI 연구소",
-      "original_title": "AI lab offers free plumbing and HVAC repairs to train AI robots",
-      "description": "한 AI 연구소가 로봇의 실무 학습을 돕기 위해 실제 가정집의 배관 및 냉난방 수리 서비스를 무료로 제공하고 있습니다. 로봇이 복잡한 물리적 환경에서 인간의 작업을 관찰하고 학습하여 기술을 습득하도록 하려는 시도입니다.",
-      "link": "https://www.tomshardware.com/tech-industry/artificial-intelligence/ai-lab-offers-free-plumbing-and-hvac-repairs-across-three-cities-to-train-ai-robots-wearable-sensors-record-video-of-repair-work-for-robotics-training-free-services-also-include-electrical-work-air-duct-cleaning-and-carpet-cleaning",
-      "entities": [
-        "AI",
-        "HVAC"
-      ],
-      "date": "2026-10-19"
-    },
     {
       "id": "56525",
       "title": "[무료 LLM] minimax-m3.1-flash-free — OpenCode Zen 무료",
@@ -2323,6 +2304,43 @@
         "Anthropic"
       ],
       "date": "2026-11-18"
+    },
+    {
+      "id": "62034",
+      "title": "구글, 최고의 제미나이 에이전트 무료화… 이용 방법은?",
+      "original_title": "Google just made its best Gemini agent free — here's where you can get it",
+      "description": "'제미나이 태스크(Gemini Tasks)'가 유료 장벽을 허물고 6개국에서 무료로 자동화된 업무 처리 기능을 제공하기 시작했습니다.",
+      "link": "https://www.androidcentral.com/apps-software/ai/google-just-made-its-best-gemini-agent-free-heres-where-you-can-get-it",
+      "entities": [
+        "Google",
+        "Gemini",
+        "Tasks"
+      ],
+      "date": "2026-11-19"
+    },
+    {
+      "id": "62015",
+      "title": "끔찍하게 증가하는 AI 해킹 도구",
+      "original_title": "The terrifying rise of AI hacking tools",
+      "description": "널리 보급된 새로운 유형의 AI 도구들이 해커들의 24시간 사이버 공격을 돕고 있으며, 불과 몇 시간 만에 기업 네트워크를 침해해 방어자들을 압도하고 있습니다. 이것이 중요한 이유는 AI 기반 해킹이 아직 초기 단계에 불과하지만, 무료로 다운로드할 수 있는 오픈소스 도구들이 근본적인 변화를...",
+      "link": "https://www.axios.com/2026/11/18/ai-hacking-tools-artex-cairn",
+      "entities": [
+        "AI",
+        "The"
+      ],
+      "date": "2026-11-19"
+    },
+    {
+      "id": "61940",
+      "title": "오픈소스 진영, 젠슨 황의 복귀를 원해",
+      "original_title": "This smell startup says its AI nose is as good as a human’s",
+      "description": "뉴저지주 뉴어크 공항 근처의 한 실험실에서 약 30명의 숙련된 인간 후각 전문가들로 구성된 팀이 지구상의 모든 냄새를 천천히 분석하고 있습니다. “고소함”, “복숭아 향”, “바다 향” 같은 이들의 세심한 메모는 화학적 분석과 교차 대조되어, 한 AI 스타트업을 위한 풍부한 학습 데이터를 만듭니다.",
+      "link": "https://www.technologyreview.com/2026/11/18/1148816/smell-startup-osmo-ai-nose-good-as-humans/",
+      "entities": [
+        "AI",
+        "This"
+      ],
+      "date": "2026-11-19"
     }
   ]
 }

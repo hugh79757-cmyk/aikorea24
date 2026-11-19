@@ -18,6 +18,12 @@
     "context_length": 512000
   },
   {
+    "model_id": "inclusionai/ling-3.2-flash:free",
+    "provider": "kilo",
+    "cli_id": "kilo/inclusionai/ling-3.2-flash:free",
+    "context_length": 1048576
+  },
+  {
     "model_id": "liquid/lfm-3-1.7b:free",
     "provider": "kilo",
     "cli_id": "kilo/liquid/lfm-3-1.7b:free",
@@ -54,6 +60,12 @@
     "context_length": 1048576
   },
   {
+    "model_id": "recursive/flint-v1.0:free",
+    "provider": "kilo",
+    "cli_id": "kilo/recursive/flint-v1.0:free",
+    "context_length": 262144
+  },
+  {
     "model_id": "beam-free",
     "provider": "zen",
     "cli_id": "opencode/beam-free"
@@ -67,11 +79,6 @@
     "model_id": "flint-40b-free",
     "provider": "zen",
     "cli_id": "opencode/flint-40b-free"
-  },
-  {
-    "model_id": "glm-5.3-flash-free",
-    "provider": "zen",
-    "cli_id": "opencode/glm-5.3-flash-free"
   },
   {
     "model_id": "hy4-flash-free",
@@ -107,5 +114,10 @@
     "model_id": "nemotron-3.5-super-vl-free",
     "provider": "zen",
     "cli_id": "opencode/nemotron-3.5-super-vl-free"
+  },
+  {
+    "model_id": "tidepool-alpha-free",
+    "provider": "zen",
+    "cli_id": "opencode/tidepool-alpha-free"
   }
 ]

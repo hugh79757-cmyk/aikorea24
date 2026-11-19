@@ -160,7 +160,7 @@
   },
   "inclusionai/ling-3.2-flash:free": {
    "model_id": "inclusionai/ling-3.2-flash:free",
-   "provider": "openrouter",
+   "provider": "kilo",
    "first_seen": "2026-11-14",
    "status": "awaiting_briefing",
    "attempts": 0,
@@ -196,7 +196,16 @@
    "published_url": "https://emdash.aikorea24.kr/posts/hy4-flash-free-실측-1112-무료로-어디까지-쓸-수-있나",
    "published_at": "2026-11-17",
    "briefing_linked": true
+  },
+  "recursive/flint-v1.0:free": {
+   "model_id": "recursive/flint-v1.0:free",
+   "provider": "kilo",
+   "first_seen": "2026-11-19",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-19"
   }
  },
- "updated_at": 1794965406.792279
+ "updated_at": 1795051806.2022002
 }

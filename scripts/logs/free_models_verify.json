@@ -1,82 +1,30 @@
 {
-  "verified_at": "2026-11-18 09:31",
+  "verified_at": "2026-11-19 09:31",
   "pass": [
     "kilo/baidu/ernie-5.5-flash-preview:free",
     "kilo/cohere/north-mini-code:free",
     "kilo/dots-studio/dots-3-note-preview:free",
+    "kilo/inclusionai/ling-3.2-flash:free",
     "kilo/liquid/lfm-3-1.7b:free",
     "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
     "kilo/nvidia/nemotron-3.5-lightning:free",
     "kilo/nvidia/nemotron-3.5-super-vl:free",
     "kilo/particle-ai/particle-1:free",
+    "kilo/recursive/flint-v1.0:free",
     "opencode/beam-free",
     "opencode/deepseek-v4.1-flash-free",
     "opencode/flint-40b-free",
-    "opencode/glm-5.3-flash-free",
     "opencode/hy4-flash-free",
     "opencode/iceman-free",
     "opencode/inkling-2-small-free",
     "opencode/longcat-2.5-free",
     "opencode/mimo-v2.6-flash-free",
     "opencode/nemotron-3.5-lightning-free",
-    "opencode/nemotron-3.5-super-vl-free"
+    "opencode/nemotron-3.5-super-vl-free",
+    "opencode/tidepool-alpha-free"
   ],
   "fail": [
-    {
-      "cli_id": "openrouter/baidu/ernie-5.5-flash-preview:free",
-      "model_id": "baidu/ernie-5.5-flash-preview:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/cohere/north-mini-code:free",
-      "model_id": "cohere/north-mini-code:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-      "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
-      "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/nvidia/nemotron-3.5-lightning:free",
-      "model_id": "nvidia/nemotron-3.5-lightning:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/nvidia/nemotron-3.5-super-vl:free",
-      "model_id": "nvidia/nemotron-3.5-super-vl:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/particle-ai/particle-1:free",
-      "model_id": "particle-ai/particle-1:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/recursive/flint-v1.0:free",
-      "model_id": "recursive/flint-v1.0:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
-    {
-      "cli_id": "openrouter/thinkingmachines/inkling-2-small:free",
-      "model_id": "thinkingmachines/inkling-2-small:free",
-      "reason": "No cookie auth credentials found",
-      "kind": "dead"
-    },
     {
       "cli_id": "kilo/poolside/laguna-s-2.1:free",
       "model_id": "poolside/laguna-s-2.1:free",
@@ -92,7 +40,7 @@
     {
       "cli_id": "kilo/liquid/lfm-2.5-2.6b:free",
       "model_id": "liquid/lfm-2.5-2.6b:free",
-      "reason": "The requested model is currently unavailable. Please choose a different model.",
+      "reason": "The requested model 'liquid/lfm-2.5-2.6b:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly released model, please try again in a few minutes.",
       "kind": "transient"
     }
   ]
