@@ -10,6 +10,8 @@
 - 발행 글 갱신(제목 12/12·실측 결과 절 `(2026-11-19)`·1차 이력 blockquote). slug·publishedAt 보존. 백업 `scripts/logs/backup_eval_post_hy4-flash-free_20261119_145052.json`.
 - 허브 재렌더: `free_models_page.py page` → `hy4-flash — 12/12`, 카드 `CLI 평가 12/12문항`.
 - 검증: `pytest -k "eval or free_model"` 123 passed / 라이브 200 + 제목·H2·측정이력 확인 / 허브 반영 확인.
+- 후속(AIK24-DRAFT-DELETE-01): 미발행 초안 「무료 코딩 모델 Hy4 flash Free 사용법 및 설정 가이드」 soft-delete.
+  신규 `scripts/delete_draft_post.py`(발행글 거부·참조 검사·백업·soft-delete). 초안 총계 180→179, CMS `get_post` None, 공개 URL 302→/404, 발행글·허브 무영향. 백업 `scripts/logs/backup_draft_delete_20261119_145649.json`.
 
 ## 2026-11-19 10:54 — fix(AIK24-TRANSLATE-ALIGN-01): 배치 번역 제목 밀림 제거 + news 61933~61940·심층글 복구
 

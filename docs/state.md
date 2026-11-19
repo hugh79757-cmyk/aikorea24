@@ -1,3 +1,46 @@
+## 2026-11-19 15:00 — AIK24-DRAFT-DELETE-01 미발행 초안 1건 soft-delete (Hy4 flash Free 사용법 가이드)
+
+### 요청
+"미발행 초안은 삭제해줘." — `무료 코딩 모델 Hy4 flash Free 사용법 및 설정 가이드` (draft).
+
+### 삭제한 이유
+- 발행 이력 없음(`published_at` NULL, status='draft', 생성·수정 2026-11-17T00:32:49Z).
+- 내용에 **근거 없는 서술**이 있었다: 모델 ID `:free` 접미사 규칙(실제 ID는 `hy4-flash-free`),
+  "이미지를 입력받아 처리" 등 공개 카탈로그에 없는 스펙. 그대로 발행되면 사실 오류 글이 된다.
+- 같은 모델은 이미 실측 글(12/12)로 정리돼 있어 초안이 추가로 필요하지 않다.
+
+### 한 일
+1. **[TOOL]** `scripts/delete_draft_post.py` 신설 — 초안 1건 soft-delete 전용.
+   - `status='published'` 또는 `published_at` 이 있으면 **거부**.
+   - 쓰기 전 행 전체를 `scripts/logs/backup_draft_delete_<ts>.json` 에 백업.
+   - `briefing_items.deep_dive_url`·발행글 본문이 이 초안을 참조하면 **중단**.
+   - D1 `ec_posts.deleted_at` 만 채우는 soft-delete(되돌리기 가능). 기본 dry-run.
+   - `cfnew.sql` 은 실패 시 `{'http_error':…}` dict 를 돌려주므로 이를 오류로 처리하도록 가드.
+     긴 한글 slug 는 SQLite `LIKE` 에서 `pattern too complex` 로 실패 → `instr()` 로 검사.
+2. **실행**: `--apply` → 백업 `scripts/logs/backup_draft_delete_20261119_145649.json`,
+   `deleted_at=2026-11-19T07:56:49Z`.
+
+### 결과 (3분법)
+- **[검증됨] 대상이 초안 1건뿐이며 참조가 0건.** 근거: dry-run 출력 `status=draft published_at=None`,
+  참조 검사 `briefing_items`·발행글 본문 모두 0건.
+- **[검증됨] soft-delete 적용.** 근거: 사후검증 `deleted_at=2026-11-19T07:56:49.000Z`,
+  초안 총계 **180 → 179**(기대 179), 스크립트 결과 `정상`.
+- **[검증됨] CMS 에서 사라짐.** 근거: `emdash_publish.get_post(초안 slug)` → `None`.
+- **[검증됨] 공개 URL 차단.** 근거: 해당 slug HTTP **302 → /404**(최종 404).
+- **[검증됨] 발행글·허브 영향 없음.** 근거: 실측 글 HTTP 200(제목 `hy4-flash-free 실측 — 12/12 …`,
+  slug·publishedAt 2026-11-17T01:37:14.700Z 보존), `free-models` HTTP 200.
+- **[검증됨] 되돌리기 경로 확보.** 근거: 백업 JSON 에 행 전체(본문 포함) 저장, 복원은 `deleted_at` 을 NULL 로 되돌리면 된다.
+
+### 잔존 위험
+1. **soft-delete 이므로 행은 남아 있다**(초안 총계 179건 중 1건이 deleted_at 세팅 상태). 물리 삭제가 필요하면 별도 판단.
+2. 이 초안이 **AI 생성 초안 파이프라인의 산출물**이라면 같은 유형(근거 없는 스펙) 초안이 또 생길 수 있다.
+   생성 프롬프트에 "카탈로그에 없는 스펙 단정 금지" 규칙이 있는지는 이번에 확인하지 않았다([검증불가]).
+3. `delete_draft_post.py` 는 이번이 첫 사용 — 회귀 테스트 없음([검증불가]).
+
+### 다음 행동
+1. 필요하면 `deleted_at=NULL` 로 복원 가능(백업 기준 id `01M7KEQDK42QB4D7YEV4AZT5GV`).
+2. 초안 자동 생성 경로가 이 초안을 만들었다면, 스펙 단정 금지 규칙을 생성 프롬프트·게이트에 추가 검토.
+
 ## 2026-11-19 14:56 — AIK24-EVAL-REFRESH-01 hy4-flash-free 재측정(12/12) + 실측 글·허브 갱신
 
 ### 요청
