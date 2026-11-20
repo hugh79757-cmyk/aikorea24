@@ -4,7 +4,7 @@ import Layout from '../../../layouts/Layout.astro';
 import { TASKS, TASK_SLUGS } from '../../../config/tasks';
 import { getCollection } from 'astro:content';
 
-const allTools = await getCollection('tools');
+const allTools = (await getCollection('tools')).filter((t) => !t.data.draft);
 
 // 각 태스크별 툴 개수 계산
 const taskCounts: Record<string, number> = {};

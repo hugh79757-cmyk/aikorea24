@@ -205,7 +205,46 @@
    "attempts": 0,
    "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
    "day": "2026-11-19"
+  },
+  "tidepool-alpha-free": {
+   "model_id": "tidepool-alpha-free",
+   "provider": "zen",
+   "first_seen": "2026-11-20",
+   "status": "done",
+   "attempts": 1,
+   "reason": "",
+   "day": "2026-11-20",
+   "briefing": {
+    "date": "2026-11-20-1",
+    "sort_order": 1,
+    "news_id": 62394
+   },
+   "cli_id": "opencode/tidepool-alpha-free",
+   "score": "11/12 (미응답 1 제외)",
+   "measured_context": 18433,
+   "elapsed_sec": 1559.0,
+   "zeros_review_needed": [
+    5
+   ],
+   "draft": {
+    "ok": true,
+    "path": "/Users/twinssn/Projects/aikorea24/scripts/logs/eval_auto_drafts/2026-11-20-tidepool-alpha-free-실측-11-12-무료로-어디까지-쓸-수-있나.md",
+    "url": "https://emdash.aikorea24.kr/posts/tidepool-alpha-free-실측-1112-무료로-어디까지-쓸-수-있나",
+    "title": "tidepool-alpha-free 실측 — 11/12, 무료로 어디까지 쓸 수 있나"
+   },
+   "published_url": "https://emdash.aikorea24.kr/posts/tidepool-alpha-free-실측-1112-무료로-어디까지-쓸-수-있나",
+   "published_at": "2026-11-20",
+   "briefing_linked": true
+  },
+  "jev-1.13-free": {
+   "model_id": "jev-1.13-free",
+   "provider": "zen",
+   "first_seen": "2026-11-20",
+   "status": "awaiting_briefing",
+   "attempts": 0,
+   "reason": "브리핑 미등장 — 브리핑에 실리면 평가한다",
+   "day": "2026-11-20"
   }
  },
- "updated_at": 1795051806.2022002
+ "updated_at": 1795139810.075413
 }

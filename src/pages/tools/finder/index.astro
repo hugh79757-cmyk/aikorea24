@@ -3,7 +3,7 @@ export const prerender = true;
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const allTools = await getCollection('tools');
+const allTools = (await getCollection('tools')).filter((t) => !t.data.draft);
 const toolsJson = JSON.stringify(allTools.map(t => ({
   id: t.id,
   name: t.data.name,

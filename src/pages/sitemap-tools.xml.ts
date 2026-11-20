@@ -7,7 +7,7 @@ export const prerender = true;
 
 export const GET: APIRoute = async () => {
   const base = 'https://aikorea24.kr';
-  const tools = await getCollection('tools');
+  const tools = (await getCollection('tools')).filter((t) => !t.data.draft);
 
   // 기존 툴 상세 페이지
   const toolEntries = tools.map(tool => ({

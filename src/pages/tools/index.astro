@@ -10,6 +10,7 @@ import { getCollection } from 'astro:content';
 //   신규가 대역 맨 앞으로 온다. updated 까지 같은 건은 여전히 파일명 순(안정 정렬)이라
 //   새로고침마다 순서가 흔들리지 않는다.
 const mdTools: any[] = (await getCollection('tools'))
+  .filter((t) => !t.data.draft)
   .sort((a, b) =>
     (a.data.order ?? 99) - (b.data.order ?? 99)
     || String(b.data.updated ?? '').localeCompare(String(a.data.updated ?? '')));
@@ -51,6 +52,7 @@ const d1Tools: any[] = d1Rows.map((r) => ({
     tags: parseJsonArray(r.tags),
     useCases: r.use_cases ? String(r.use_cases).split(',').map((s: string) => s.trim()).filter(Boolean) : [],
     order: -1,
+    verified: true, // D1 status='published' = 관리자 검토 통과
     updated: String(r.created_at ?? '').slice(0, 10),
     screenshotUrl: (r.screenshot_url && String(r.screenshot_url).trim()) || null,
   },
@@ -294,6 +296,9 @@ import { TASK_COUNT } from '../../config/tasks';
               <div class="flex gap-1 flex-shrink-0">
                 {(tool as any).isD1 && (
                   <span class="text-xs font-bold px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">MAKER</span>
+                )}
+                {tool.data.verified && (
+                  <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-[#e5e5e5] font-medium dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20" title={tool.data.verifiedAt ? `검증됨 (${tool.data.verifiedAt})` : '관리자 검증됨'}>✓ 검증됨</span>
                 )}
                 {isNewTool(tool) && (
                   <span class="text-[10px] px-1.5 py-0.5 bg-[#E63B2E] text-white rounded font-bold" title="최근 7일 내 등록·갱신">NEW</span>

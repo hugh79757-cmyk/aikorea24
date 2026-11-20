@@ -1,41 +1,5 @@
 [
   {
-    "model_id": "baidu/ernie-5.5-flash-preview:free",
-    "provider": "kilo",
-    "cli_id": "kilo/baidu/ernie-5.5-flash-preview:free",
-    "context_length": 1024000
-  },
-  {
-    "model_id": "cohere/north-mini-code:free",
-    "provider": "kilo",
-    "cli_id": "kilo/cohere/north-mini-code:free",
-    "context_length": 256000
-  },
-  {
-    "model_id": "dots-studio/dots-3-note-preview:free",
-    "provider": "kilo",
-    "cli_id": "kilo/dots-studio/dots-3-note-preview:free",
-    "context_length": 512000
-  },
-  {
-    "model_id": "inclusionai/ling-3.2-flash:free",
-    "provider": "kilo",
-    "cli_id": "kilo/inclusionai/ling-3.2-flash:free",
-    "context_length": 1048576
-  },
-  {
-    "model_id": "liquid/lfm-3-1.7b:free",
-    "provider": "kilo",
-    "cli_id": "kilo/liquid/lfm-3-1.7b:free",
-    "context_length": 262144
-  },
-  {
-    "model_id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "provider": "kilo",
-    "cli_id": "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "context_length": 256000
-  },
-  {
     "model_id": "nvidia/nemotron-3-ultra-550b-a55b:free",
     "provider": "kilo",
     "cli_id": "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
@@ -89,11 +53,6 @@
     "model_id": "iceman-free",
     "provider": "zen",
     "cli_id": "opencode/iceman-free"
-  },
-  {
-    "model_id": "inkling-2-small-free",
-    "provider": "zen",
-    "cli_id": "opencode/inkling-2-small-free"
   },
   {
     "model_id": "longcat-2.5-free",

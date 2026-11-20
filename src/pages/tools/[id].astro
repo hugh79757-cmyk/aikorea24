@@ -6,7 +6,7 @@ import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
 
 export async function getStaticPaths() {
-  const allTools = await getCollection('tools');
+  const allTools = (await getCollection('tools')).filter((t) => !t.data.draft);
   return allTools.map(tool => ({
     params: { id: tool.id },
     props: { tool },
@@ -17,7 +17,7 @@ const id = Astro.params.id;
 let tool: any = (Astro.props as any).tool ?? null;
 if (!tool) {
   const allMd = await getCollection('tools');
-  tool = allMd.find((t: any) => t.id === id) ?? null;
+  tool = allMd.find((t: any) => t.id === id && !t.data.draft) ?? null;
 }
 
 // md 카드가 D1 행을 대체하면서 screenshot_url 이 함께 사라져, 이미지가 있는 도구도
@@ -110,6 +110,7 @@ if (!tool) {
       tasks: parseArr(row.tasks),
       updated: String(row.created_at ?? '').slice(0, 10),
       status: String(row.status ?? 'published').trim(),
+      verified: String(row.status ?? '').trim() === 'published',
       linkType: String(row.link_type || 'nofollow').trim(),
     },
     body: String(row.detail_markdown || row.description || ''),
@@ -144,7 +145,7 @@ const toolIndex = tool.data.index || 0;
 const allToolsList = await getCollection('tools');
 const toolTags = new Set(tool.data.tags ?? []);
 const similarTools = allToolsList
-  .filter(t => t.id !== tool.id && t.data.category === tool.data.category)
+  .filter(t => t.id !== tool.id && !t.data.draft && t.data.category === tool.data.category)
   .map(t => ({
     tool: t,
     score: (t.data.tags ?? []).filter((tag: string) => toolTags.has(tag)).length
@@ -208,6 +209,9 @@ const faqSchema: string | null = faqEntities.length > 0
         <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{tool.data.category}</span>
         {isD1 && (
           <span class="text-xs font-bold px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">MAKER</span>
+        )}
+        {tool.data.verified && (
+          <span class="text-xs px-2.5 py-1 bg-gray-100 text-[#111111] rounded-full font-medium border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/25" title={tool.data.verifiedAt ? `검증일: ${tool.data.verifiedAt}` : '관리자 검증됨'}>✓ 검증됨</span>
         )}
         {tool.data.koreanSupport && (
           <span class="text-xs px-2.5 py-1 bg-gray-100 text-[#111111] rounded-full font-medium border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/25">🇰🇷 한국어 지원</span>

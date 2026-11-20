@@ -34,6 +34,10 @@ const tools = defineCollection({
     updated: z.string().optional(),
     priceModel: z.enum(['무료', 'Freemium', '유료', '구독', '일회성']).optional(),
     launchDate: z.string().optional(),
+    draft: z.boolean().default(false),
+    verified: z.boolean().default(false),
+    verifiedAt: z.string().optional(),
+    source: z.enum(['submission', 'seed']).default('seed'),
   }),
 });
 

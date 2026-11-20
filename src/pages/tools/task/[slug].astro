@@ -17,7 +17,7 @@ if (!taskInfo) {
   return Astro.redirect('/tools/task/');
 }
 
-const allTools = await getCollection('tools');
+const allTools = (await getCollection('tools')).filter((t) => !t.data.draft);
 const taskTools = allTools
   .filter(t => (t.data.tasks ?? []).includes(slug))
   .sort((a, b) => (a.data.order ?? 99) - (b.data.order ?? 99));

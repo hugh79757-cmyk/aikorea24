@@ -1,43 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-20",
-      "briefing_id": 359,
-      "articles": [
-        {
-          "id": "56525",
-          "title": "[무료 LLM] minimax-m3.1-flash-free — OpenCode Zen 무료",
-          "original_title": "minimax-m3.1-flash-free",
-          "description": "MiniMax M3.1 Flash Free — CLI에서 입출력 모두 무료. 컨텍스트 1,000,000 토큰. OpenCode 설정: {\"model\": \"opencode/minimax-m3.1-flash-free\"} 프로바이더 갱신일 2026-10-19.",
-          "link": "https://models.dev/opencode/minimax-m3.1-flash-free",
-          "entities": [
-            "LLM",
-            "Zen",
-            "OpenCode",
-            "Free",
-            "M3.1",
-            "MiniMax",
-            "Flash"
-          ],
-          "date": "2026-10-20"
-        },
-        {
-          "id": "56391",
-          "title": "레플리카(Replika) 창업자, 12년 전 디스럽트에서 발표했던 AI 비서 현실화",
-          "original_title": "Replika’s founder built the AI assistant she pitched at Disrupt 12 years ago",
-          "description": "유제니아 쿠이다의 새로운 스타트업 '와비(Wabi)'는 그녀가 10여 년 전 구상했던 아이디어를 바탕으로 탄생했습니다. 와비는 누구나 무료로 다운로드하여 사용할 수 있는 독특한 방식의 개인용 AI 비서 서비스를 제공합니다.",
-          "link": "https://techcrunch.com/2026/10/19/replikas-founder-built-the-ai-assistant-she-pitched-at-disrupt-12-years-ago/",
-          "entities": [
-            "Wabi",
-            "Disrupt",
-            "Replika",
-            "AI"
-          ],
-          "date": "2026-10-20"
-        }
-      ]
-    },
-    {
       "date": "2026-10-22",
       "briefing_id": 360,
       "articles": [
@@ -1256,40 +1219,58 @@
           "date": "2026-11-19"
         }
       ]
+    },
+    {
+      "date": "2026-11-20",
+      "briefing_id": 387,
+      "articles": [
+        {
+          "id": "62394",
+          "title": "[무료 LLM] tidepool-alpha-free — OpenCode Zen 무료 티어",
+          "original_title": "tidepool-alpha-free",
+          "description": "Tidepool Alpha Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/tidepool-alpha-free\"} 프로바이더 갱신일 2026-11-18.",
+          "link": "https://models.dev/opencode/tidepool-alpha-free",
+          "entities": [
+            "LLM",
+            "Free",
+            "Zen",
+            "Alpha",
+            "Tidepool",
+            "OpenCode"
+          ],
+          "date": "2026-11-20"
+        },
+        {
+          "id": "62280",
+          "title": "팔로알토 네트웍스, 실적 호조와 오픈 웨이트 모델 보안에 대한 대규모 투자로 주가 급등",
+          "original_title": "Palo Alto stock jumps on earnings beat and company's big bet on securing open-weight models",
+          "description": "팔로알토 네트웍스는 시장 예상치를 상회하는 1분기 실적을 발표했으며, AI 스타트업인 어플라이드 컴퓨트(Applied Compute)를 45억 달러에 인수하는 계약을 체결했습니다.",
+          "link": "https://www.cnbc.com/2026/11/19/palo-alto-networks-earnings-applied-compute.html",
+          "entities": [
+            "Alto",
+            "Applied",
+            "Compute",
+            "Palo",
+            "AI"
+          ],
+          "date": "2026-11-20"
+        },
+        {
+          "id": "62333",
+          "title": "앤트로픽, 공모가 83달러 확정…813억달러 역대 최대 IPO",
+          "original_title": "",
+          "description": "인공지능(AI) 모델 '클로드' 개발사 앤트로픽이 스페이스X를 제치고 역대 최대 기업공개(IPO) 기록을 경신한다. AI 산업 수익성을 둘러싼 논란에도 성장 기대감은 여전한 것으로 나타났다. 앤트로픽은 18일(현지시간) 공모가를 희망가격 범위(70~78달러) 상단보다 6.4% 높은 주당 83달러로 확정했다고 밝혔다. 공모 주식 수도 당초 8억2500만주에서",
+          "link": "https://www.etnews.com/20261119000288",
+          "entities": [
+            "AI",
+            "IPO"
+          ],
+          "date": "2026-11-20"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "56525",
-      "title": "[무료 LLM] minimax-m3.1-flash-free — OpenCode Zen 무료",
-      "original_title": "minimax-m3.1-flash-free",
-      "description": "MiniMax M3.1 Flash Free — CLI에서 입출력 모두 무료. 컨텍스트 1,000,000 토큰. OpenCode 설정: {\"model\": \"opencode/minimax-m3.1-flash-free\"} 프로바이더 갱신일 2026-10-19.",
-      "link": "https://models.dev/opencode/minimax-m3.1-flash-free",
-      "entities": [
-        "LLM",
-        "Zen",
-        "OpenCode",
-        "Free",
-        "M3.1",
-        "MiniMax",
-        "Flash"
-      ],
-      "date": "2026-10-20"
-    },
-    {
-      "id": "56391",
-      "title": "레플리카(Replika) 창업자, 12년 전 디스럽트에서 발표했던 AI 비서 현실화",
-      "original_title": "Replika’s founder built the AI assistant she pitched at Disrupt 12 years ago",
-      "description": "유제니아 쿠이다의 새로운 스타트업 '와비(Wabi)'는 그녀가 10여 년 전 구상했던 아이디어를 바탕으로 탄생했습니다. 와비는 누구나 무료로 다운로드하여 사용할 수 있는 독특한 방식의 개인용 AI 비서 서비스를 제공합니다.",
-      "link": "https://techcrunch.com/2026/10/19/replikas-founder-built-the-ai-assistant-she-pitched-at-disrupt-12-years-ago/",
-      "entities": [
-        "Wabi",
-        "Disrupt",
-        "Replika",
-        "AI"
-      ],
-      "date": "2026-10-20"
-    },
     {
       "id": "56082",
       "title": "OpenRouter 무료 모델 (:free 태그)",
@@ -2341,6 +2322,49 @@
         "This"
       ],
       "date": "2026-11-19"
+    },
+    {
+      "id": "62394",
+      "title": "[무료 LLM] tidepool-alpha-free — OpenCode Zen 무료 티어",
+      "original_title": "tidepool-alpha-free",
+      "description": "Tidepool Alpha Free — CLI에서 입출력 모두 무료. 컨텍스트 1,048,576 토큰. OpenCode 설정: {\"model\": \"opencode/tidepool-alpha-free\"} 프로바이더 갱신일 2026-11-18.",
+      "link": "https://models.dev/opencode/tidepool-alpha-free",
+      "entities": [
+        "LLM",
+        "Free",
+        "Zen",
+        "Alpha",
+        "Tidepool",
+        "OpenCode"
+      ],
+      "date": "2026-11-20"
+    },
+    {
+      "id": "62280",
+      "title": "팔로알토 네트웍스, 실적 호조와 오픈 웨이트 모델 보안에 대한 대규모 투자로 주가 급등",
+      "original_title": "Palo Alto stock jumps on earnings beat and company's big bet on securing open-weight models",
+      "description": "팔로알토 네트웍스는 시장 예상치를 상회하는 1분기 실적을 발표했으며, AI 스타트업인 어플라이드 컴퓨트(Applied Compute)를 45억 달러에 인수하는 계약을 체결했습니다.",
+      "link": "https://www.cnbc.com/2026/11/19/palo-alto-networks-earnings-applied-compute.html",
+      "entities": [
+        "Alto",
+        "Applied",
+        "Compute",
+        "Palo",
+        "AI"
+      ],
+      "date": "2026-11-20"
+    },
+    {
+      "id": "62333",
+      "title": "앤트로픽, 공모가 83달러 확정…813억달러 역대 최대 IPO",
+      "original_title": "",
+      "description": "인공지능(AI) 모델 '클로드' 개발사 앤트로픽이 스페이스X를 제치고 역대 최대 기업공개(IPO) 기록을 경신한다. AI 산업 수익성을 둘러싼 논란에도 성장 기대감은 여전한 것으로 나타났다. 앤트로픽은 18일(현지시간) 공모가를 희망가격 범위(70~78달러) 상단보다 6.4% 높은 주당 83달러로 확정했다고 밝혔다. 공모 주식 수도 당초 8억2500만주에서",
+      "link": "https://www.etnews.com/20261119000288",
+      "entities": [
+        "AI",
+        "IPO"
+      ],
+      "date": "2026-11-20"
     }
   ]
 }

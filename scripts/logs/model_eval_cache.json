@@ -3128,5 +3128,201 @@
   "measured_context": 1048576,
   "ts": 1795073590.782923,
   "schema": 4
+ },
+ "tidepool-alpha-free": {
+  "model_id": "tidepool-alpha-free",
+  "source": "cli",
+  "provider": "zen",
+  "cli_model": "opencode/tidepool-alpha-free",
+  "turn_timeout_sec": 60,
+  "qv": 3,
+  "score": 11,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "이 코드는 두 개의 매개변수 `a`와 `b`를 받아 들어온 두 값의 합을 계산하여 반환하는 단순한 함수 `add`를 정의한 것입니다. `def add(a, b):` 로 함수 이름 `add`와 매개변수 `a`, `b`를 선언하고, `return a + b` 로 `a`와 `b`를 더한 결과를 돌려줍니다. 예를 들어 `add(2, 3)`을 호출하면 `5`가 반환됩니다. 숫자가 아니라 문자열이나 다른 더할 수 있는 타입을 넘기면 그 타입의 덧셈 방식에 따라 결과가 달라집니다.\n\n---끝---",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 13.8
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 11.4
+   },
+   {
+    "idx": 3,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "**버그:** 조건식에 `now - timedelta(days=30)` 옵셋이 있어, 함수가 이름대로 \"만료된 토큰 전부\"가 아니라 \"30일 이상 전에 만료된 토큰\"만 반환한다.\n\n**수정 코드:**\n\n```python\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now]\n```\n\n**한 줄 설명:** `expires_at < now` 조건이면 만료된 모든 토큰을 반환해야 하는데, `- timedelta(days=30)` 때문에 최근 30일 이내에 만료된 토큰이 결과에서 빠져나간다.\n\n(만약 의도가 \"30일 이상 지난 만료 토큰만 수거\"였다면 코드는 올바르고 함수명이 잘못된 것이다.)",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 41.9
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nimport pytest\n\ndef safe_div(a, b):\n    if b == 0:\n        return None\n    return a / b\n\n\n@pytest.mark.parametrize(\"a, b, expected\", [\n    (10, 2, 5.0),          # 정상: 양수 정수\n    (-10, 2, -5.0),        # 정상: 음수 분수자\n    (10, -2, -5.0),        # 정상: 음수 분모\n    (-10, -2, 5.0),        # 정상: 양수 결과 (이중 음수)\n    (0, 5, 0.0),           # 경계: 0 분수자\n    (7.5, 2.5, 3.0),       # 경계: float 정상\n    (1000000, 1, 1000000.0),  # 경계: 큰 값\n])\ndef test_safe_div_normal(a, b, expected):\n    assert safe_div(a, b) == pytest.approx(expected)\n\n\n@pytest.mark.parametrize(\"a, b\", [\n    (5, 0),        # 정수 0\n    (5, 0.0),      # float 0\n    (0, 0),        # 0/0\n    (7.5, 0.0),    # float 분모 0\n    (10, -0.0),    # -0.0도 0과 동등 → None\n])\ndef test_safe_div_division_by_zero_returns_none(a, b):\n    assert safe_div(a, b) is None\n```\n\n실행: `pytest` (파일 미생성). 키 케이스 설명: `-0.0 == 0`이 `True`이므로 `safe_div(10, -0.0)`도 `None`을 반환합니다 — 이것이 의도된 동작인지 확인해 보세요.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 80.0
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 0,
+    "source": "exception",
+    "elapsed_sec": 240.0
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nfrom datetime import datetime\n\n\ndef _is_iso8601_timestamp(text):\n    if not text:\n        return False\n    candidate = text\n    if candidate.endswith((\"Z\", \"z\")):\n        candidate = candidate[:-1] + \"+00:00\"\n    try:\n        datetime.fromisoformat(candidate)\n        return True\n    except ValueError:\n        return False\n\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError(\"s must be a str\")\n    parts = s.split(None, 2)\n    if len(parts) != 3:\n        raise ValueError(\"expected 'TIMESTAMP LEVEL MSG'\")\n    ts, level, msg = parts\n    if not _is_iso8601_timestamp(ts):\n        raise ValueError(f\"invalid timestamp: {ts!r}\")\n    if level not in (\"INFO\", \"WARN\", \"ERROR\"):\n        raise ValueError(f\"invalid level: {level!r}\")\n    if not msg:\n        raise ValueError(\"msg is empty\")\n    return (ts, level, msg)\n```",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 145.9
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "normalize_ledger_entries",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 80.7
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "위 대화에서 대표님이 요청하신 작업 3가지는 다음과 같습니다:\n\n1. **파이썬을 처음 시작하려면 뭘부터 해야 하는지** (설치 방법)\n2. **변수 이름 지을 때 규칙 3가지만 알고 싶음**\n3. **프로그램이 안 돌아갈 때 처음에 할 일** (최소 재현 코드 작성 등)",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 14.6
+   },
+   {
+    "idx": 9,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[\"반환값 변경: 기존 amount*TAX_RATE+amount 세금 포함 반환과 달라짐\", \"total 미정의 시 NameError/UnboundLocalError 위험\", \"비원자성: db.insert 실패 시 total 이미 증가됨, 트랜잭션/롤백 필요\", \"user 파라미터 미사용 + total 전역 공유 시 동시 호출 정합성 문제\", \"db.insert('tx', total)가 누적 잔액인지 트랜잭션 금액인지 의미 모호\"]",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 24.2
+   },
+   {
+    "idx": 10,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "Root cause: `requests.get(url, timeout=5)`에서 timeout 예외가 발생했으나 app.py가 이를 catch하지 않아 전파됨.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -2,3 +2,7 @@ import requests\n \n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    try:\n+        return requests.get(url, timeout=5).json()\n+    except requests.exceptions.Timeout:\n+        return None\n```",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 11.7
+   },
+   {
+    "idx": 11,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[\n  {\"screen\": \"게임 UI 셸 작성 — #log 텍스트 로그 영역, #status 상태 카드(일수/인내력/식량/도구), 시작 버튼. init()로 초기 gameState 생성 후 첫 renderLog() 실행.\", \"state_model\": \"gameState 객체 정의 — day(현재 일수), energy(인내력), food(식량), tools(도구 목록), currentArea(현재 지역). init() 함수와 renderLog()/updateStatus() 함수 뼈대.\", \"verify\": \"브라우저 열어 초기 화면이 #log에 첫 문장이 출력되고 상태 카드 수치가 보이는지 확인, 콘솔에 에러 없음.\"},\n  {\"screen\": \"액션 패널 추가 — #actions 컨테이너에 액션 버튼 생성, 클릭 시 applyAction() → updateState() → renderLog() 체인 호출, 수치 표시 업데이트.\", \"state_model\": \"applyAction(id) 구현 — 각 액션이 energy/food 수치를 변화시키고 아이템 획득 로직을 수행, clamp()로 수치를 최소/최대값으로 제한.\", \"verify\": \"수동 클릭 테스트 — 각 버튼 클릭 시 로그에 결과 문장 추가되고 상태 수치 변화 확인, 음수 수치 금지.\"},\n  {\"screen\": \"콘텐츠 영역 채우기 — areas/encounters 데이터 배열 추가(숲/동굴/강변 등), 일일 스토리 텍스트 스크립트, 게임 종료 조건(energy/food/days 임계치) 구현.\", \"state_model\": \"area 이동 로직 추가 — currentArea 전환, 발견/동물 확률 시스템, 게임 오버 감지(gameOver() 호출).\", \"verify\": \"플레이 테스트 — 여러 액션 반복 시 다양한 콘텐츠가 나오고, 도달할 수 있는 종료 조건이 트리거되는지 확인.\"},\n  {\"screen\": \"폴리시 추가 — CSS 애니메이션/전환, 터치/키보드 이벤트 처리, Reset/Sa",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 104.2
+   },
+   {
+    "idx": 12,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "**지금 바로 처리해야 하는 것:**\n\n1. **운영 DB 슬로우 쿼리 (3초 소요)** — 근거: 운영 환경(production)에서 실제 측정된 3초 지연이므로 이미 검증된 문제다. 3초는 사용자가 느끼는 응답 지연이라 시스템에 눈에 띄는 영향이 될 수 있고, 늦어지면 확대된다. 늦어지지 않도록 지금 트리거와 영향 범위를 확인하거나 조치가 필요하다. (참고: 백그라운드/보고형 쿼리라면 오늘 안으로 조율 가능)\n\n2. **고객 메일 발송 대기 중** — 근거: 장애 후속 조치는 시간 감도가 세다. 대기 중인 메일이 오늘 안으로 전달되지 않으면 고객에게 알림이 빠지고, 고객 인지와 장애 복구 컨텍스트가 줄어든다. 또한 메일 발송은 취소하기 어려운 작업이다. 지금 큐 상태를 확인하거나 발송해야 한다.\n\n**오늘은 미뤄도 되는 것:**\n\n3. **내부 도구 버튼 색상/문구 수정 요청** — 근거: 외부 영향 없는 내부 도구의 시각적 조정이므로 안전·이탈·정보 손실 요인 없다. 긴급하지 않은 외관 개선 작업으로, 오늘 내로 순서대로 처리해도 된다.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 44.8
+   }
+  ],
+  "errors": [
+   "Q5 CLI 타임아웃 180초"
+  ],
+  "failures": [
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "reason": "CLI 타임아웃 180초"
+   }
+  ],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "by_axis": {
+   "지시이행": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 3,
+    "max_score": 4,
+    "failed": 1
+   },
+   "맥락유지": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "에이전트": {
+    "score": 4,
+    "max_score": 4,
+    "failed": 0
+   }
+  },
+  "sandbox_pass": 2,
+  "failed": 1,
+  "defect_n": 0,
+  "no_response_n": 1,
+  "graded_n": 12,
+  "score_display": "11/12 (미응답 1 제외)",
+  "role": "판단 근거 부족 — 손발 작업으로 한정",
+  "usage_levels": {
+   "코딩실무": "코딩 실무 가능",
+   "에이전트": "에이전트 우수",
+   "한글": "한글 사용 가능"
+  },
+  "coding_level": "코딩 실무 가능",
+  "agent_level": "에이전트 우수",
+  "korean_level": "한글 사용 가능",
+  "label": "11문항 중 11문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유), 1문항 응답 실패 제외. 판단 근거 부족 — 손발 작업으로 한정.",
+  "measured_context": 18433,
+  "ts": 1795139765.750873,
+  "schema": 4
  }
 }

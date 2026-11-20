@@ -5,13 +5,13 @@ category: "이미지 생성"
 price: "유료"
 koreanSupport: false
 difficulty: "초보자 OK"
-url: "https://theresanaiforthat.com/ai/lucer/"
+url: "https://lucer.art"
 useCases: ["SNS 프로필 사진 변경", "유튜브 썸네일 제작", "인테리어 아이디어 구상"]
 tags: ["이미지생성", "사진변환", "AI사진"]
 featured: false
 order: 108
 tasks: ["이미지-생성", "썸네일-제작"]
-updated: "2026-09-02"
+updated: "2026-11-20"
 image: "/images/tools/lucer.webp"
 ---
 
