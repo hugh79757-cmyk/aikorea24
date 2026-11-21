@@ -105,7 +105,7 @@ function approvedHtml(params: ToolNotifyParams): { subject: string; html: string
   // 배지 안내용 임베드 코드는 <a>/<img> 태그를 그대로 메일 HTML에 넣으면 메일 클라이언트가
   // 태그로 렌더링해 받는 사람이 코드를 볼 수 없으므로 escapeHtml 로 문자화한다.
   const embedCode = escapeHtml(
-    `<a href="${toolUrl}">\n  <img src="${BASE_URL}/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" width="240" style="max-width:240px;height:auto;border:0;" loading="lazy" />\n</a>`
+    `<a href="${toolUrl}">\n  <img src="${BASE_URL}/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" width="240" height="80" style="width:240px;max-width:100%;height:auto;border:0;" loading="lazy" />\n</a>`
   );
 
   return {
@@ -128,12 +128,15 @@ function approvedHtml(params: ToolNotifyParams): { subject: string; html: string
   </div>
 
   <!-- 배지 게재 안내 -->
-<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center;">
-  <img src="${BASE_URL}/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" style="max-width:240px;height:auto;margin:0 auto 16px;display:block;" />
+<div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:12px;padding:20px;margin:0 0 24px;text-align:center;">
+  <a href="${toolUrl}" style="text-decoration:none;border:0;"><img src="${BASE_URL}/badges/listed-on-aikorea24.webp" alt="LISTED ON AI KOREA 24" width="240" height="80" style="width:240px;max-width:100%;height:auto;border:0;border-radius:10px;margin:0 auto 16px;display:block;" /></a>
   <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#0F172A;">사이트에 이 배지를 달아보세요</p>
-  <p style="margin:0 0 16px;font-size:13px;color:#64748B;line-height:1.6;">
+  <p style="margin:0 0 12px;font-size:13px;color:#64748B;line-height:1.6;">
     아래 코드를 복사해서 사이트에 붙여넣으면 됩니다.<br />
     배지를 클릭하면 AIKorea24 등록 페이지로 연결됩니다.
+  </p>
+  <p style="margin:0 0 16px;font-size:12px;color:#94A3B8;">
+    이미지 파일: <a href="${BASE_URL}/badges/listed-on-aikorea24.webp" style="color:#3B82F6;text-decoration:none;">listed-on-aikorea24.webp</a>
   </p>
   <div style="background:#1e293b;color:#e2e8f0;border-radius:8px;padding:12px;text-align:left;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.6;overflow-x:auto;white-space:pre-wrap;word-break:break-all;">${embedCode}</div>
 </div>
