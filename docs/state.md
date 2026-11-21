@@ -1,3 +1,35 @@
+## 2026-11-21 12:50 — 도구 승인 메일 배지를 정본 클린본으로 정렬 (흰 카드 · 240×80 명시)
+
+**한 일**
+
+대표님 지시: "tools 등록되면 배찌 이미지를 보내주고 달아도 된다고 이야기해주는데, 거기에 지금 바꾼 이미지를 사용해줘. 훨씽 깔끔하고 이쁘다."
+
+1. **사용 이미지 확인** — 승인 메일(`src/lib/email-notify.ts:approvedHtml`)이 이미 `${BASE_URL}/badges/listed-on-aikorea24.webp` = 정본을 참조 중이었다. 이 정본이 11-21 배지 교체의 그 파일(621×207, 20,078B, md5 `f5351dce…`)과 **바이트 동일**이라 이미지 파일 자체는 교체가 필요 없었다. 근거: `git log -- public/badges/listed-on-aikorea24.webp` 3개 버전 전부 흰 배경(회색 프레임 버전 없음), 라이브 md5 대조.
+2. **메일에서 배지가 '흰 사각 박스'처럼 보이던 문제 제거** — 배지 카드 배경 `#f8fafc`(옅은 회색) 위에 흰 배경 이미지라 사각 박스 경계가 보였다. 카드 배경을 **`#ffffff`** 로 바꿔 다크/화이트 스티커가 카드와 한 덩어리로 보이게 했다(푸터와 동일한 인상).
+3. **마크업 정리** — `<img>` 에 `width="240" height="80"` 명시(3.0014:1 원본 비율) + `width:240px;max-width:100%;height:auto;border:0;border-radius:10px`. CSS `max-width` 를 무시하는 메일 클라이언트에서도 원본 621px 로 튀지 않는다. 이미지 자체를 클릭하면 등록 페이지로 이동하도록 `<a>` 로 감쌌다.
+4. **"이미지 보내줘" 요구 대응** — 카드 하단에 이미지 파일 직접 링크(`listed-on-aikorea24.webp`) 한 줄 추가. 외부 이미지 차단 클라이언트에서도 파일을 받으러 갈 수 있다.
+5. **붙여넣기용 임베드 코드 갱신** — `width="240" height="80"` + `width:240px;max-width:100%;height:auto;border:0;` 로 동일 규격화(회신받은 메일의 스니펫과 메일 미리보기가 같은 모양이 되도록).
+
+**결과**
+
+- [검증됨] 로컬 렌더: 승인 메일 HTML 재현(`file://` → headless CDP 캡처)에서 배지가 흰 카드 위 **깔끔한 다이컷 스티커**로 보이고 사각 박스 경계 없음. 캡처 `/tmp/email_new.png`, 이전본 `/tmp/email_current.png`.
+- [검증됨] 빌드: `bash scripts/deploy.sh` 통과 — 블로그 포스트 검증 → 승인건 md 동기화 → `astro build`(102 모듈) → data-layer 청크 검사 → 20MB 초과 파일 0 → Workers 업로드.
+- [검증됨] 배포: Version **`8976c1e1-2be8-4278-8577-3c270f2e7965`**, 커스텀 도메인 `aikorea24.kr` / `www.aikorea24.kr`, sitemap ping 200(google·naver).
+- [검증됨] 빌드 산출물에 신규 템플릿 포함: `dist/server/chunks/email-notify_BfKApwVQ.mjs` 에 `width="240" height="80"` **2건** · `listed-on-aikorea24.webp` **3건** · `background:#ffffff;border:1px solid #e2e8f0` 마커 확인.
+- [검증됨] 라이브: `GET /tools/` 200 · `GET /badges/listed-on-aikorea24.webp` 200 · 20,078B.
+- [검증불가] 실제 승인 메일 발송 확인은 못 했다(테스트 메일을 보내지 않음 — 발송 시 실제 제출자에게 감). 메일 클라이언트별 `border-radius`·`max-width` 렌더 차이는 발송 환경에 좌우된다.
+
+**잔존 위험**
+
+- 이미지 **파일은 그대로**다. `badges/listed-on-aikorea24.webp` 는 이전과 같은 URL·같은 바이트라, 예전 승인 메일을 받은 사람은 이미 그 이미지를 받고 있었다. 이번에 바뀐 것은 카드 배경·크기 속성·다운로드 링크 등 **표시**다.
+- 메일 미리보기 렌더는 헤드리스 Chrome + 로컬 이미지 치환으로 확인했다. 실제 Brevo 발송본은 각 메일 클라이언트가 다르게 렌더할 수 있다.
+- 배포 시 다른 파이프라인이 만든 신규 썸네일 2건(`/images/thumbnails/weekly-contrast-…`)이 함께 업로드됐다(빌드 산출물 포함, 소스 변경 아님).
+
+**다음 행동**
+
+- 실제 승인 1건이 나면 그 메일을 확인해 배지 표시를 최종 검증(또는 Brevo 로그의 `smtp/email` 201 응답 확인).
+- 대표님이 요청하면 배지를 **첨부 파일**로도 보낼 수 있다(Brevo `attachment` 필드, 현재 미적용 — 스팸 점수·WebP 호환성 때문에 판단 유보).
+
 ## 2026-11-21 12:40 — 'Listed on AI Korea 24' 배지 전체 교체 (정본 자산 고정)
 
 **한 일**
