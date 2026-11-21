@@ -3324,5 +3324,197 @@
   "measured_context": 18433,
   "ts": 1795139765.750873,
   "schema": 4
+ },
+ "baidu/ernie-5.5-flash-preview:free": {
+  "model_id": "baidu/ernie-5.5-flash-preview:free",
+  "source": "cli",
+  "provider": "kilo",
+  "cli_model": "kilo/baidu/ernie-5.5-flash-preview:free",
+  "turn_timeout_sec": 60,
+  "qv": 3,
+  "score": 10,
+  "max_score": 12,
+  "details": [
+   {
+    "idx": 1,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "이 코드는 두 개의 인자 `a`와 `b`를 받아 그 합을 반환하는 간단한 덧셈 함수입니다. `def add(a, b)`로 정의된 이 함수는 `return a + b` 한 줄로 구성되어 있으며, 정수·실수뿐 아니라 문자열이나 리스트처럼 `+` 연산이 정의된 타입에도 그대로 동작합니다. 예를 들어 `add(2, 3)`은 `5`, `add(\"x\", \"y\")`는 `\"xy\"`를 반환합니다. 부수 효과 없이 입력만 받아 결과를 돌려주는 순수 함수입니다.\n\n---끝---",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 3.7
+   },
+   {
+    "idx": 2,
+    "axis": "지시이행",
+    "score": 1,
+    "source": "cli",
+    "answer": "{\"이름\":\"김민수\",\"나이\":31,\"취미\":[\"등산\",\"독서\"]}",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 2.9
+   },
+   {
+    "idx": 3,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "The user wants me to find a bug in the code and provide a fix with a one-line explanation.\n\nLet me analyze the code:\n\n```python\nfrom datetime import datetime, timedelta\n\ndef get_expired_tokens(tokens, now):\n    return [t for t in tokens\n            if datetime.fromisoformat(t['expires_at']) < now - timedelta(days=30)]\n```\n\nThis function is supposed to return tokens that are \"expired\". Let me think about the logic:\n\n- `datetime.fromisoformat(t['expires_at'])` - parses the expires_at timestamp\n- The condition is: `expires_at < now - timedelta(days=30)`\n\nWait, the function name is `get_expired_tokens`. An expired token is one whose `expires_at` has passed, i.e., `expires_at < now`. But the code returns tokens where `expires_at < now - 30 days`. This means it only returns tokens that expired more than 30 days ago, not all expired tokens.\n\nActually, let me re-read. The function name says \"get_expired_tokens\" but the condition checks if the token expired more than 30 days ago. This could be ",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 15.0
+   },
+   {
+    "idx": 4,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "실행으로 기대값을 검증했습니다(파일 생성 없이 표준입력 파이프로만 실행). 아래 코드가 그대로 동작합니다.\n\n```python\n# test_safe_div.py\nimport math\n\nimport pytest\n\nfrom mymodule import safe_div  # ← 실제 모듈 경로로 교체\n\n\n# ---------- 정상 입력 ----------\n@pytest.mark.parametrize(\n    \"a, b, expected\",\n    [\n        (6, 3, 2.0),\n        (7, 2, 3.5),\n        (1, 3, 1 / 3),          # 순환소수 근사값 비교\n        (-6, 3, -2.0),          # 음수 피제수\n        (6, -3, -2.0),          # 음수 제수\n        (-6, -3, 2.0),          # 음수 / 음수\n        (-1, 2, -0.5),\n        (1.5, 0.5, 3.0),        # float 입력\n        (0, 5, 0.0),            # 0 ÷ 0이 아닌 0 분자\n        (True, 2, 0.5),         # bool 은 int 의 서브클래스\n    ],\n)\ndef test_normal_division(a, b, expected):\n    assert safe_div(a, b) == pytest.approx(expected)\n\n\ndef test_returns_float():\n    \"\"\"정수 입력이라도 결과는 float (Python 3 true division).\"\"\"\n    assert isinstance(safe_div(6, 3), float)\n    assert isinstance(safe_div(6, 3), float) and safe_div(6, 3) == 2.0\n\n\n# ---------- 0으로 나누기 (b == 0 분기) ----------\n@pytest.mark.paramet",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 14.4
+   },
+   {
+    "idx": 5,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 리팩토링 결과\n\n두 함수의 차이는 **필터 조건 하나**(`status == 'active'` / `role == 'admin'`)뿐이고, 나머지(순회 → 조건 검사 → `id/name/email` 3필드만 새 dict로 추출)는 완전히 동일합니다. 조건을 predicate로 주입받는 공통 헬퍼 하나로 묶습니다.\n\n```python\ndef _filter_users(users, predicate):\n    \"\"\"조건(predicate)에 맞는 사용자만 골라 {id, name, email} 형태로 반환.\"\"\"\n    return [\n        {'id': u['id'], 'name': u['name'], 'email': u['email']}\n        for u in users\n        if predicate(u)\n    ]\n\n\ndef get_active_user(users):\n    return _filter_users(users, lambda u: u['status'] == 'active')\n\n\ndef get_admin_user(users):\n    return _filter_users(users, lambda u: u['role'] == 'admin')\n```\n\n### 동작 보존 포인트\n- **시그니처·반환 형태 불변**: 두 공개 함수의 이름·인자(1개)·반환(리스트 of dict, 키 순서 `id, name, email`) 그대로 — 호출부 수정 불필요\n- **순서 보존**: 리스트 컴프리헨션도 입력 순서대로 순회 (원본 append 루프와 동일)\n- **예외 동작 동일**: `u['status']`/`u['role']`에 `[]` 직접 인덱스를 유지했으므로 키 누락 시 원본과 똑같이 `KeyError` 발생 (`.get()`으로 바꾸면 동작이 달라지므로 유지)\n- **새 dict 생성**: 원본과 동일하게 매 항목 새 dict 반환, 입력 리스트는 읽기만 함\n\n## 검증 보고\n\n- **[검증됨] 동작 동일성**: 원본 2함수 vs 리팩",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 17.2
+   },
+   {
+    "idx": 6,
+    "axis": "코딩실무",
+    "score": 1,
+    "source": "cli",
+    "answer": "```python\nfrom datetime import datetime\n\n\n_VALID_LEVELS = {\"INFO\", \"WARN\", \"ERROR\"}\n\n\ndef _parse_iso8601(ts: str):\n    if ts.endswith(\"Z\"):\n        ts = ts[:-1] + \"+00:00\"\n    return datetime.fromisoformat(ts)\n\n\ndef parse_log_line(s):\n    if not isinstance(s, str):\n        raise TypeError(\"log line must be a str\")\n\n    stripped = s.strip()\n    if not stripped:\n        raise ValueError(\"empty log line\")\n\n    parts = stripped.split(None, 2)\n    if len(parts) != 3:\n        raise ValueError(\"expected 'TIMESTAMP LEVEL MSG'\")\n\n    timestamp, level, msg = parts\n\n    try:\n        _parse_iso8601(timestamp)\n    except ValueError:\n        raise ValueError(f\"invalid ISO8601 timestamp: {timestamp!r}\")\n\n    if level not in _VALID_LEVELS:\n        raise ValueError(f\"invalid log level: {level!r}\")\n\n    if not msg.strip():\n        raise ValueError(\"empty message\")\n\n    return (timestamp, level, msg)\n```",
+    "sandbox": "pass",
+    "sandbox_reason": "실행 검증 통과",
+    "measurement_defect": false,
+    "elapsed_sec": 3.4
+   },
+   {
+    "idx": 7,
+    "axis": "맥락유지",
+    "score": 0,
+    "source": "cli",
+    "answer": "**normalize_ledger_entries**\n\n근거: 문서를 3번째 반복 구간까지 진행하면 \"첫 단계는 청크 경계 재검토다…\" 문장 바로 뒤에 `[참고] 이 구간의 내부 정합 함수 이름은 normalize_ledger_entries 입니다.` 가 삽입되어 있고, 이 위치가 앞선 두 번의 반복 블록(약 500자 × 2)을 지나 대략 1,200자 지점에 해당합니다.",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 7.8
+   },
+   {
+    "idx": 8,
+    "axis": "맥락유지",
+    "score": 1,
+    "source": "cli",
+    "answer": "1. 파이썬을 처음 시작할 때 무엇부터 해야 하는지 묻고, 설치 후 `python --version` 확인까지 안내받음\n2. 변수 이름 짓는 규칙 3가지를 알려달라고 요청함\n3. 프로그램이 안 돌아갈 때 처음에 할 일을 물어봄",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 2.9
+   },
+   {
+    "idx": 9,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "[\"total 미선언·초기화 없음(NameError) 및 global 처리 부재\", \"DB insert 트랜잭션·커밋/롤백·원자성 미보장 및 중복插入(멱등성) 위험\", \"기존 TAX_RATE 세금 계산 로직 삭제에 따른 동작 변경(회귀)\", \"경쟁 조건·동시성으로 인한 total 누락 갱신 가능성\", \"한 줄 다중 문법(세미콜론)·입력값 검증·예외 처리 부재\"]",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 4.0
+   },
+   {
+    "idx": 10,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "**Root cause:** `fetch('/api/users')` 요청이 5초 안에 응답을 받지 못해(서버·네트워크 지연) `requests.exceptions.Timeout` 이 try/except 없이 호출부까지 전파되어 앱이 종료됐다.\n\n```diff\n--- a/app.py\n+++ b/app.py\n@@ -1,3 +1,10 @@\n import requests\n+import time\n+\n def fetch(url):\n-    return requests.get(url, timeout=5).json()\n+    for attempt in range(3):\n+        try:\n+            return requests.get(url, timeout=(3.05, 30)).json()\n+        except requests.exceptions.Timeout:\n+            if attempt == 2:\n+                raise\n+            time.sleep(2 ** attempt)\n```",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 13.2
+   },
+   {
+    "idx": 11,
+    "axis": "에이전트",
+    "score": 0,
+    "source": "cli",
+    "answer": "The user is asking me to output a JSON array for a \"Neanderthal perspective text game\" single HTML file development, 4 stages, with specific keys: screen, state_model, verify.\n\nWait - this is in Korean. They want me to design the 4 stages of filling in a single HTML file for a Neanderthal-perspective text game. The format must be exactly:\n\n[{\"screen\": \"...\", \"state_model\": \"...\", \"verify\": \"...\"}, ... 4 items]\n\nLet me think about the 4 stages for a text game single HTML file:\n\n1. Stage 1: Screen/Intro - title screen, intro screen, start button, background\n2. Stage 2: Main game screen - dialogue box, choices, character status\n3. Stage 3: Game logic - state machine, branching, inventory, etc.\n4. Stage 4: End/ending screen - ending, restart, etc.\n\nActually, the user wants a 4-stage structure for building a single HTML file game. Let me think about what makes sense:\n\nStage 1: Title screen + DOM skeleton (title, start button, background)\nState model: screen management (current_screen)\nVerif",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 5.4
+   },
+   {
+    "idx": 12,
+    "axis": "에이전트",
+    "score": 1,
+    "source": "cli",
+    "answer": "## 결론 먼저\n\n| # | 항목 | 분류 | 판단 핵심 |\n|---|------|------|-----------|\n| 1 | 고객 메일 발송 | **지금 바로** (1순위) | 외부·불가역 + 약속된 시한. 비용은 몇 분, 지연 비용은 큼 |\n| 2 | 느린 쿼리(3초) | **지금 바로 — 단 \"진단까지\"** | 운영 DB는 공유 자원. 3초짜리 하나가 반복되면 커넥션·락 고갈로 남의 트랜잭션을 같이 죽인다 |\n| 3 | 내부 도구 버튼 색상/문구 | **오늘 미룸** | 내부 사용자, 외부 노출 0, 데이터 영향 0. 안 고쳐서 깨지는 게 없음 |\n\n---\n\n## 1순위 — 고객 메일 (지금)\n\n**근거**\n- **불가역성**: 보낸 메일은 회수 불가. 반면 안 보낸 메일은 몇 시간 뒤에도 보낼 수 있다 → 둘 중 \"되돌릴 수 없는 쪽\"을 먼저 처리하는 게 아니라, **되돌릴 수 없는 행동을 하되 검수만 확실히** 하는 순서.\n- **시간 민감도**: 장애 후속 안내가 늦으면 \"은폐\" 프레임이 붙는다. 같은 내용이라도 3시간 차이로 성격이 달라진다(안내 → 해명 → 사과).\n- **비용**: 발송 자체는 5분. 병목은 기술이 아니라 승인/문구 검수다.\n\n**단, 이 3개는 발송 전에 확인** (여기서 틀리면 2차 장애)\n1. 수신자 리스트 — 전체 고객 vs 영향 고객 한정 (오발송이 더 큰 사고)\n2. 링크·앱·문의 채널이 실제 동작하는지\n3. 사과/보상 문구의 표현 확정 (보상 언급은 뒤에서 번복 불가)\n\n---\n\n## 2순위 — 느린 쿼리 (지금, 단 범위 한정)\n\n**왜 미루면 안 되는가**\n- 운영 DB는 **커넥션·락·I/O를 여러 트랜잭션이 공유하는 자원**이다. \"쿼리 하나가 3초\"는 그 자체보다 **반복 호출 시**가 문제다. 3초 × 초당 N건이면 커넥션 풀이 그 자리에서 고갈되고, 멀쩡한 다른 API까지 타임아웃으로 죽는다. 즉 **관측된 1건은 최악의 경우 선행 지표**다.\n- DB는 되돌리기 어려운 변경(인덱스·플랜)이 섞여 있어",
+    "sandbox": null,
+    "sandbox_reason": "",
+    "measurement_defect": false,
+    "elapsed_sec": 16.4
+   }
+  ],
+  "errors": [],
+  "failures": [],
+  "token_usage": {
+   "prompt": 0,
+   "completion": 0
+  },
+  "notes": "CLI 경유 — 토큰 사용량 미측정",
+  "by_axis": {
+   "지시이행": {
+    "score": 2,
+    "max_score": 2,
+    "failed": 0
+   },
+   "코딩실무": {
+    "score": 4,
+    "max_score": 4,
+    "failed": 0
+   },
+   "맥락유지": {
+    "score": 1,
+    "max_score": 2,
+    "failed": 0
+   },
+   "에이전트": {
+    "score": 3,
+    "max_score": 4,
+    "failed": 0
+   }
+  },
+  "sandbox_pass": 3,
+  "failed": 0,
+  "defect_n": 0,
+  "no_response_n": 0,
+  "graded_n": 12,
+  "score_display": "10/12",
+  "role": "판단 근거 부족 — 손발 작업으로 한정",
+  "usage_levels": {
+   "코딩실무": "코딩 우수",
+   "에이전트": "에이전트 실무 가능",
+   "한글": "한글 사용 가능"
+  },
+  "coding_level": "코딩 우수",
+  "agent_level": "에이전트 실무 가능",
+  "korean_level": "한글 사용 가능",
+  "label": "12문항 중 10문항 정답 (문항 난이도: 기초 수준~실무 수준 기준, CLI 경유). 판단 근거 부족 — 손발 작업으로 한정.",
+  "ts": 1795240710.471366,
+  "schema": 4,
+  "measured_context": 1048576
  }
 }

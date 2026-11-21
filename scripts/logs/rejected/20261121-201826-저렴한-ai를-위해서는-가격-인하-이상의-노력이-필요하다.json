@@ -1,0 +1,10 @@
+{
+ "title": "저렴한 AI를 위해서는 가격 인하 이상의 노력이 필요하다",
+ "reason": "1차 게이트 미달(교정 2회 후에도 미달)",
+ "issues": [
+  "광고·제휴·무관 링크 1개 (https://www.fastcompany.com/91645911/affordable-ai-takes-mor) → 원문·공식 출처 링크로 교체하거나 삭제하라",
+  "'참고 자료'에 링크 없는 항목 1개 (Microsoft Azure AI for Small Business) → `[제목](URL)` 형식으로 링크를 넣거나 항목을 삭제하라(링크를 못 넣으면 참고 자료에 쓰지 마라)"
+ ],
+ "retry_issues": [],
+ "saved_at": "2026-11-21T20:18:26"
+}

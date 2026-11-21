@@ -1268,6 +1268,47 @@
           "date": "2026-11-20"
         }
       ]
+    },
+    {
+      "date": "2026-11-21",
+      "briefing_id": 388,
+      "articles": [
+        {
+          "id": "62553",
+          "title": "저렴한 AI를 위해서는 가격 인하 이상의 노력이 필요하다",
+          "original_title": "Affordable AI takes more than a lower price",
+          "description": "소규모 기업을 위한 AI는 단순히 가격을 낮추는 것을 넘어, 초기 설정 비용과 기술적 전문성 요구치, 그리고 관리 부담을 모두 줄여야 합니다.",
+          "link": "https://www.fastcompany.com/91645911/affordable-ai-takes-more-than-a-lower-price?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=6&partner=newsletter&campaign_date=11202026",
+          "entities": [
+            "AI",
+            "Affordable"
+          ],
+          "date": "2026-11-21"
+        },
+        {
+          "id": "62604",
+          "title": "정신아 카카오 대표 “김범수 무죄 계기, 미래 성장·AI 혁신에 집중”",
+          "original_title": "",
+          "description": "정신아 카카오 대표가 SM엔터테인먼트 인수 과정에서 시세조종 혐의로 기소된 김범수 창업자가 2심에서도 무죄를 선고받은데 대해, 향후 미래 성장과 인공지능(AI) 서비스 혁신에 다시 집중해야 한다고 강조했다. 김범수 창업자 역할에 대해 기대감도 드러냈다. 20일 카카오에 따르면 정 대표는 이날 사내 메시지로 “오랜 시간 조사와 재판을 감당한 크루들에게 이번 ",
+          "link": "https://www.etnews.com/20261120000162",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-21"
+        },
+        {
+          "id": "62646",
+          "title": "내시경 시장 '日 50년 독점' 깬다… 338억원 뭉칫돈 몰린 K-의료로봇",
+          "original_title": "",
+          "description": "이 문제를 모터와 정밀제어 알고리즘으로 풀어낸 국내 스타트업이 있다. AI(인공지능) 로봇내시경을 개발하는 '메디인테크'다. 단순히 내시경 영상을 AI로 분석하는 데 그치지 않고, AI가 인식한 정보를 실제 내시경의...",
+          "link": "https://n.news.naver.com/mnews/article/008/0005444360?sid=101",
+          "entities": [
+            "K-",
+            "AI"
+          ],
+          "date": "2026-11-21"
+        }
+      ]
     }
   ],
   "articles": [
@@ -2365,6 +2406,41 @@
         "IPO"
       ],
       "date": "2026-11-20"
+    },
+    {
+      "id": "62553",
+      "title": "저렴한 AI를 위해서는 가격 인하 이상의 노력이 필요하다",
+      "original_title": "Affordable AI takes more than a lower price",
+      "description": "소규모 기업을 위한 AI는 단순히 가격을 낮추는 것을 넘어, 초기 설정 비용과 기술적 전문성 요구치, 그리고 관리 부담을 모두 줄여야 합니다.",
+      "link": "https://www.fastcompany.com/91645911/affordable-ai-takes-more-than-a-lower-price?utm_source=postup&utm_medium=email&utm_campaign=artificial-intelligence&position=6&partner=newsletter&campaign_date=11202026",
+      "entities": [
+        "AI",
+        "Affordable"
+      ],
+      "date": "2026-11-21"
+    },
+    {
+      "id": "62604",
+      "title": "정신아 카카오 대표 “김범수 무죄 계기, 미래 성장·AI 혁신에 집중”",
+      "original_title": "",
+      "description": "정신아 카카오 대표가 SM엔터테인먼트 인수 과정에서 시세조종 혐의로 기소된 김범수 창업자가 2심에서도 무죄를 선고받은데 대해, 향후 미래 성장과 인공지능(AI) 서비스 혁신에 다시 집중해야 한다고 강조했다. 김범수 창업자 역할에 대해 기대감도 드러냈다. 20일 카카오에 따르면 정 대표는 이날 사내 메시지로 “오랜 시간 조사와 재판을 감당한 크루들에게 이번 ",
+      "link": "https://www.etnews.com/20261120000162",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-21"
+    },
+    {
+      "id": "62646",
+      "title": "내시경 시장 '日 50년 독점' 깬다… 338억원 뭉칫돈 몰린 K-의료로봇",
+      "original_title": "",
+      "description": "이 문제를 모터와 정밀제어 알고리즘으로 풀어낸 국내 스타트업이 있다. AI(인공지능) 로봇내시경을 개발하는 '메디인테크'다. 단순히 내시경 영상을 AI로 분석하는 데 그치지 않고, AI가 인식한 정보를 실제 내시경의...",
+      "link": "https://n.news.naver.com/mnews/article/008/0005444360?sid=101",
+      "entities": [
+        "K-",
+        "AI"
+      ],
+      "date": "2026-11-21"
     }
   ]
 }

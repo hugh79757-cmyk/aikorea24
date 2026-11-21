@@ -1,33 +1,36 @@
 {
-  "timestamp": "2026-11-14T09:00:04.903661",
+  "timestamp": "2026-11-21T09:00:05.687937",
   "dry_run": false,
   "days": 7,
   "s0_articles": 24,
-  "s1_candidates": 4,
+  "s1_candidates": 5,
   "s2_dives": 2,
-  "s3_posts": [],
+  "s3_posts": [
+    "/Users/twinssn/Projects/aikorea24/src/content/blog/_drafts/weekly-contrast-20261121-001-ai-생태계의-두-갈래-길.md",
+    "/Users/twinssn/Projects/aikorea24/src/content/blog/_drafts/weekly-contrast-20261121-002-ai-해킹-도구와-보안-인프라-투자.md"
+  ],
   "errors": [],
   "s2_quality": [
     {
-      "title": "오픈소스 AI의 급부상과 프런티어 모델의 방어 전략",
-      "verdict": "폐기",
+      "title": "AI 생태계의 두 갈래 길",
+      "verdict": "보류",
       "issues": [
-        "환각 인용 1건 (원문에 존재하지 않는 인용)"
+        "직접 인용 없음 (추론으로만 구성)"
       ],
-      "verified_quotes": 3,
-      "unverified_quotes": 1,
+      "verified_quotes": 0,
+      "unverified_quotes": 0,
       "source_links_count": 2
     },
     {
-      "title": "AI 수익화와 무료 개방의 갈림길",
-      "verdict": "폐기",
+      "title": "AI 해킹 도구와 보안 인프라 투자",
+      "verdict": "보류",
       "issues": [
-        "환각 인용 2건 (원문에 존재하지 않는 인용)"
+        "직접 인용 없음 (추론으로만 구성)"
       ],
       "verified_quotes": 0,
-      "unverified_quotes": 2,
+      "unverified_quotes": 0,
       "source_links_count": 2
     }
   ],
-  "elapsed_seconds": 43.1
+  "elapsed_seconds": 39.8
 }

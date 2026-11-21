@@ -1,106 +1,132 @@
 [
   {
-    "topic": "오픈소스 AI 모델의 추격 vs 폐쇄형 프런티어 AI의 방어",
-    "contrast_frame": "오픈소스 AI의 기술적 격차 축소 vs 폐쇄형 모델의 시장 지배력 유지 전략",
-    "type": "C",
+    "topic": "오픈소스 AI 생태계 수호 vs 상용 클라우드 API 유료화 및 과금 체계",
+    "contrast_frame": "오픈소스 AI 가중치 및 로컬 생태계 보호 vs 클라우드 기반 API 유료 과금 모델 구축",
+    "type": "A",
     "source_articles": [
       {
-        "id": 59189,
-        "title": "사이버 보안 역량에서 오픈소스와 폐쇄형 AI 모델 간의 격차 계속 좁혀져",
-        "source": "The Decoder",
-        "pub_date": "Sat, 07 Nov 2026 15:35:50",
-        "link": "https://the-decoder.com/the-gap-between-open-and-closed-ai-models-in-cyber-capabilities-keeps-shrinking/"
+        "id": 60421,
+        "title": "허깅 페이스 CEO, 젠슨 황의 퇴진 이후에도 오픈소스 AI를 위해 계속 싸울 것을 다짐",
+        "source": "TechCrunch AI",
+        "pub_date": "Thu, 12 Nov 2026 17:36:40",
+        "link": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit/"
       },
       {
-        "id": 59679,
-        "title": "세계 900만 개발자 선택…올라마 CEO “오픈소스-프런티어 AI 격차 4개월”",
-        "source": "전자신문",
-        "pub_date": "Mon, 9 Nov 2026 14:25:18 +0900",
-        "link": "https://www.etnews.com/20261109000287"
+        "id": 61699,
+        "title": "앤스로픽(Anthropic), 앱이 클로드(Claude) 사용료를 고객에게 직접 청구할 수 있도록 지원",
+        "source": "The Next Web",
+        "pub_date": "Tue, 17 Nov 2026 19:02:53",
+        "link": "https://thenextweb.com/news/anthropic-linked-billing-claude-api-customers-pay"
       }
     ],
-    "quote_1": "오픈웨이트 모델인 딥시크 V4.1 플래시(DeepSeek V4.1 Flash)는 10분의 1도 안 되는 비용으로 72.8%를 기록했습니다.",
-    "quote_2": "오픈소스 인공지능(AI) 모델과 빅테크 프런티어 AI 모델 기술 격차는 1년 전 14개월에서 현재 약 4개월 정도로 좁혀졌습니다.",
-    "gap_summary": "오픈소스 모델의 비용 효율성과 성능 향상이 가속화됨에 따라, 폐쇄형 프런티어 모델이 누리던 기술적 우위가 단기간 내에 무력화될 가능성이 있다.",
-    "reading_angle": "기술적 성능 격차의 급격한 축소와 그에 따른 시장 경쟁 구조의 변화",
+    "quote_1": "허깅 페이스 CEO는 젠슨 황의 퇴진 이후에도 오픈소스 AI를 지키기 위해 계속 싸우겠다고 다짐했으며, 이는 엔비디아의 129억 달러 규모 인수에 대한 의문을 제기하게 만든다.",
+    "quote_2": "앤스로픽은 앱 개발자가 클로드 API 사용료를 고객의 클로드 조직 계정으로 직접 청구할 수 있는 '링크드 빌링(Linked billing)' 베타 서비스를 출시했습니다.",
+    "gap_summary": "오픈소스 AI 생태계를 수호하려는 움직임과 상용 클라우드 API의 유료 과금 체계를 구축하려는 시도가 공존함에 따라, 향후 AI 시장의 주도권 경쟁이 더욱 심화될 수 있음을 시사한다.",
+    "reading_angle": "오픈소스 가중치 중심의 로컬 생태계 보호와 상용 클라우드 기반의 API 유료 과금 모델 구축이라는 AI 업계의 서로 다른 전략적 방향성을 보여준다.",
     "category": "기술"
   },
   {
-    "topic": "AI 서비스의 유료화 모델 vs 무료 접근성 확대",
-    "contrast_frame": "기업의 수익성 확보를 위한 유료 구독 모델 vs 사용자 저변 확대를 위한 무료 티어 제공",
+    "topic": "AI 기반 사이버 공격 도구의 고도화 vs 오픈 웨이트 모델 보안 및 인프라 투자",
+    "contrast_frame": "악성 AI 해킹 도구 확산에 따른 방어 역량 압도 vs 오픈 웨이트 모델 보안 중심의 대규모 투자 확대",
     "type": "A",
     "source_articles": [
       {
-        "id": 59657,
-        "title": "[단독] 삼성 갤럭시 AI 프리미엄 플랜에 포함되는 기능과 무료로 유지되는 기능 공개",
-        "source": "SamMobile",
-        "pub_date": "Mon, 09 Nov 2026 11:27:17",
-        "link": "https://www.sammobile.com/news/galaxy-ai-premium-plan-features-list-what-remains-free/"
+        "id": 62015,
+        "title": "끔찍하게 증가하는 AI 해킹 도구",
+        "source": "Axios",
+        "pub_date": "Wed, 18 Nov 2026 10:20:06",
+        "link": "https://www.axios.com/2026/11/18/ai-hacking-tools-artex-cairn"
       },
       {
-        "id": 59313,
-        "title": "[무료 LLM] iceman-free — OpenCode Zen 무료 티어",
-        "source": "OpenCode Zen",
-        "pub_date": "2026-11-06 00:00:00",
-        "link": "https://models.dev/opencode/iceman-free"
+        "id": 62280,
+        "title": "팔로알토 네트웍스, 실적 호조와 오픈 웨이트 모델 보안에 대한 대규모 투자로 주가 급등",
+        "source": "CNBC Tech",
+        "pub_date": "Thu, 19 Nov 2026 21:00:57",
+        "link": "https://www.cnbc.com/2026/11/19/palo-alto-networks-earnings-applied-compute.html"
       }
     ],
-    "quote_1": "지난 1년 넘게 일부 AI 기능이 유료화될 것이라는 소문이 돌았으며, 오늘 삼성의 프리미엄 등급에 포함될 구체적인 기능들을 단독으로 공개합니다.",
-    "quote_2": "Iceman Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰.",
-    "gap_summary": "삼성전자는 수익 모델을 위해 프리미엄 유료화 전략을 취하는 반면, 오픈 소스 진영은 대규모 컨텍스트를 제공하며 무료 접근성을 강화하고 있어 AI 시장의 비즈니스 모델이 양극화될 수 있음을 시사한다.",
-    "reading_angle": "기업형 폐쇄 모델과 오픈형 무료 모델 간의 시장 점유율 경쟁 관점",
+    "quote_1": "널리 보급된 새로운 유형의 AI 도구들이 해커들의 24시간 사이버 공격을 돕고 있으며, 불과 몇 시간 만에 기업 네트워크를 침해해 방어자들을 압도하고 있습니다.",
+    "quote_2": "팔로알토 네트웍스는 시장 예상치를 상회하는 1분기 실적을 발표했으며, AI 스타트업인 어플라이드 컴퓨트(Applied Compute)를 45억 달러에 인수하는 계약을 체결했습니다.",
+    "gap_summary": "AI 해킹 도구의 확산으로 기업 방어가 위협받는 상황에서, 주요 보안 기업들은 대규모 투자를 통해 오픈 웨이트 모델 보안 강화를 모색할 가능성이 있음을 보여준다.",
+    "reading_angle": "사이버 공격 기술의 고도화 속도가 빨라짐에 따라, 이에 대응하기 위한 보안 산업 전반의 투자와 인프라 확대가 가속화될 수 있음을 시사한다.",
+    "category": "보안"
+  },
+  {
+    "topic": "AI 서비스 유료 구독 모델 전환 vs 핵심 AI 기능의 무료화 및 접근성 확대",
+    "contrast_frame": "갤럭시 AI 등 맞춤형 기능의 유료 구독 전환 vs 제미나이 태스크 및 에이전트 기능의 무료 개방",
+    "type": "A",
+    "source_articles": [
+      {
+        "id": 61737,
+        "title": "유료 갤럭시 AI 세부 정보 유출, '나우 브리프(Now Brief)' 제한부터 시작",
+        "source": "9to5Google",
+        "pub_date": "Tue, 17 Nov 2026 17:44:21",
+        "link": "https://9to5google.com/2026/11/17/galaxy-ai-paywall-details-emerge-starting-with-now-brief/"
+      },
+      {
+        "id": 61738,
+        "title": "6개국에서 제미나이 '태스크' 기능 무료 사용 가능",
+        "source": "9to5Google",
+        "pub_date": "Tue, 17 Nov 2026 17:20:23",
+        "link": "https://9to5google.com/2026/11/17/gemini-tasks-free/"
+      }
+    ],
+    "quote_1": "갤럭시 AI의 유료 구독 모델 도입이 임박한 가운데, 관련 세부 사항들이 속속 드러나고 있습니다.",
+    "quote_2": "기존에는 AI 프로 사용자만 이용할 수 있었던 제미나이 앱의 '태스크(구 스파크)' 기능이 오늘부터 무료 사용자에게도 개방되었습니다.",
+    "gap_summary": "일부 AI 서비스는 수익화를 위해 유료 구독 모델을 도입하고 제한을 두는 반면, 다른 AI 서비스는 핵심 기능을 무료로 개방하여 접근성을 확대할 수 있음을 보여준다.",
+    "reading_angle": "빅테크 기업들의 AI 서비스 수익화 전략과 사용자 저변 확대 전략이 플랫폼별로 다르게 전개될 수 있음을 해석하는 관점",
     "category": "시장"
   },
   {
-    "topic": "AI 도입에 따른 노동 시장의 변화 vs 전문가의 의사결정 보조",
-    "contrast_frame": "AI를 통한 업무 자동화 및 수수료 구조 파괴 vs 인간 전문가의 판단력 보조 및 협업 강화",
+    "topic": "AI 반도체 인프라 수요 견고세 지속 vs 엔비디아 및 시장 리더십의 불확실성 대두",
+    "contrast_frame": "엔비디아 CEO 변동 및 산업 불확실성 대두 vs SK하이닉스의 HBM4 등 핵심 인프라 수요 견고에 따른 생산능력 확대",
     "type": "A",
     "source_articles": [
       {
-        "id": 59425,
-        "title": "채용 가속화하는 AI — 에이전시 수수료 압박받아",
-        "source": "CNBC Tech",
-        "pub_date": "Sun, 08 Nov 2026 06:00:01",
-        "link": "https://www.cnbc.com/2026/11/08/ai-recruitment-agency-fees.html"
+        "id": 61163,
+        "title": "젠슨 황에게 닥친 악재는 곧 AI 산업의 악재인가?",
+        "source": "TechCrunch AI",
+        "pub_date": "Sun, 15 Nov 2026 21:56:35",
+        "link": "https://techcrunch.com/2026/11/15/is-bad-news-for-jensen-huang-also-bad-news-for-the-ai-industry/"
       },
       {
-        "id": 59432,
-        "title": "AI 에이전트가 전문가의 판단에 미치는 영향 - 앤스로픽",
-        "source": "Anthropic News (via Google News)",
-        "pub_date": "Tue, 27 Oct 2026 07:00:00",
-        "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1IaTRIX2lBc1kwcDRXenZsRXRxcy1vZWVQVlBGdlJsS1p1bkpOQzBpblRRU0l6elhUa0Z3a0RmOVlaV1NmUlgxU3pQWjE2UTVNcEdMdDBBQ0VobFBMS2k5MS1yQ3dQMzQ?oc=5"
+        "id": 61217,
+        "title": "“AI 불확실 우려에도 수요 견고”…SK하이닉스, HBM4 생산능력 더 키운다",
+        "source": "전자신문",
+        "pub_date": "Sun, 15 Nov 2026 16:30:00 +0900",
+        "link": "https://www.etnews.com/20261113000212"
       }
     ],
-    "quote_1": "AI가 서류 심사를 가속화하고 에이전시의 업무 방식을 재편하면서, 비율 기반의 채용 수수료가 유지될 수 있을지에 대한 의문이 커지고 있습니다.",
-    "quote_2": "AI 에이전트가 실제 전문가들의 의사결정과 판단 과정에 어떤 변화를 주는지 분석합니다. 인간과 AI의 협업이 가져오는 영향력을 탐구합니다.",
-    "gap_summary": "AI가 채용 시장의 경제적 구조를 파괴하는 효율화 도구로 작용하는 반면, 전문가의 영역에서는 의사결정을 보완하는 협업 파트너로 기능할 수 있음을 시사한다.",
-    "reading_angle": "AI 도입이 노동 시장의 비용 구조를 해체하는 파괴적 혁신인지, 아니면 인간의 전문성을 보완하는 증강 도구인지에 대한 이중적 관점",
-    "category": "노동"
+    "quote_1": "젠슨 황이 곧 엔비디아 아닌가요? 현재 경제의 상당 부분이 엔비디아에 의존하고 있습니다.",
+    "quote_2": "SK하이닉스가 고대역폭메모리(HBM4) 생산 능력을 추가 확대한다.",
+    "gap_summary": "엔비디아와 관련된 인물 및 시장 리더십의 불확실성이 대두됨에도 불구하고, 반도체 핵심 인프라인 HBM에 대한 수요는 여전히 견고할 수 있음을 시사한다.",
+    "reading_angle": "특정 기업의 리더십 변화나 대외적 악재 우려가 전체 AI 반도체 생태계의 실질적 수요 위축으로 직결되지 않을 가능성을 보여준다.",
+    "category": "투자"
   },
   {
-    "topic": "국가적 AI 정책 및 저작권 갈등 vs 사회적 약자를 위한 AI 지원",
-    "contrast_frame": "정부 차원의 지식재산권 규제 및 갈등 vs 공공 목적의 AI 교육 및 복지 지원",
+    "topic": "AI 도입에 따른 업무 자동화 및 일자리 감소 우려 vs 로봇 제어 및 의료 산업의 새로운 혁신 창출",
+    "contrast_frame": "사무직 업무 자동화로 인한 일자리 변화 및 인력 감축 우려 vs AI 로봇과 의료 내시경 등 물리적 현장 혁신",
     "type": "A",
     "source_articles": [
       {
-        "id": 59902,
-        "title": "알바니지의 음악 사랑, AI 문제로 위기에 처하다. 다른 노선을 택할 수 있을까? | 피터 루이스",
-        "source": "The Guardian AI",
-        "pub_date": "Tue, 10 Nov 2026 22:00:20",
-        "link": "https://www.theguardian.com/commentisfree/2026/nov/11/albaneses-love-affair-with-music-is-on-the-rocks-over-ai-can-he-write-a-different-tune"
+        "id": 61037,
+        "title": "[AI프리즘] AI로 일자리 170만개 늘지만…5명 중 1명 직무 바뀐다",
+        "source": "네이버뉴스",
+        "pub_date": "2026-11-15",
+        "link": "https://n.news.naver.com/mnews/article/001/0016442078?sid=105"
       },
       {
-        "id": 60154,
-        "title": "참전 용사와 현역 군인을 위한 챗GPT 플러스",
-        "source": "OpenAI Blog",
-        "pub_date": "Wed, 11 Nov 2026 08:00:00",
-        "link": "https://openai.com/index/chatgpt-plus-for-veterans"
+        "id": 62646,
+        "title": "내시경 시장 '日 50년 독점' 깬다… 338억원 뭉칫돈 몰린 K-의료로봇",
+        "source": "네이버뉴스",
+        "pub_date": "2026-11-21",
+        "link": "https://n.news.naver.com/mnews/article/008/0005444360?sid=101"
       }
     ],
-    "quote_1": "총리가 저작권의 얽힌 매듭을 풀려고 노력하고 있습니다. 하지만 이것은 단순한 지식재산권 그 이상의 문제입니다.",
-    "quote_2": "2만 명 이상의 참전 용사와 전역 예정 장병들이 1년 무료 챗GPT 플러스를 혜택을 받았습니다.",
-    "gap_summary": "정부 차원의 규제 중심 정책과 기업 차원의 복지 중심 지원이 공존하고 있어, 향후 AI 정책이 권리 보호와 사회적 혜택 사이에서 균형을 찾아갈 가능성이 있다.",
-    "reading_angle": "국가적 규제 프레임과 기업의 사회적 책임 프레임 간의 충돌 및 보완 관계",
-    "category": "정책"
+    "quote_1": "AI로 많은 업무가 자동화되면서 필요 인력이 점점 줄어들고 있는 것은 사실",
+    "quote_2": "단순히 내시경 영상을 AI로 분석하는 데 그치지 않고, AI가 인식한 정보를 실제 내시경의...",
+    "gap_summary": "AI 도입이 사무직 중심의 인력 감축과 일자리 변화를 유발하는 동시에, 의료 등 물리적 현장에서는 새로운 로봇 기술 혁신을 창출할 수 있음을 보여준다.",
+    "reading_angle": "AI 확산에 따른 고용 시장의 위기감과 산업 현장의 기술 혁신 가능성을 동시에 조망하는 관점",
+    "category": "노동"
   }
 ]

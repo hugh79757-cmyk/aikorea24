@@ -1,45 +1,29 @@
 {
- "day": "2026-11-21",
- "checked_at": 1795208407.447613,
- "total_rows": 30,
+ "day": "2026-11-22",
+ "checked_at": 1795294807.752138,
+ "total_rows": 28,
  "failed_providers": {},
  "new_by_provider": {
   "openrouter": [
-   "mistralai/pixtral-large-2502"
+   "radixark/daisyrose-27b",
+   "thinkingmachines/inkling-2-mini"
   ],
   "kilo": [
-   "mistralai/pixtral-large-2502"
-  ],
-  "nvidia": [
-   "fastino/gliner2-pii"
+   "radixark/daisyrose-27b",
+   "thinkingmachines/inkling-2-mini"
   ],
   "zen": [
-   "voyage-code-4",
-   "mistral-embed",
-   "cohere-embed-v5-pro",
-   "bge-m3",
-   "qwen3-embedding-8b",
-   "text-embedding-3-small",
-   "text-embedding-3-large",
-   "gemini-embedding-2",
-   "voyage-4",
-   "gemini-embedding-001",
-   "codestral-embed",
-   "cohere-embed-v5-fast"
+   "gemini-omni-1.2-flash"
   ]
  },
  "removed_by_provider": {
   "openrouter": [
-   "cohere/north-mini-code:free",
-   "meta-llama/llama-3.2-1b-instruct",
-   "tencent/hy3-preview",
-   "x-ai/grok-build-0.1"
+   "dots-studio/dots-3-note-preview:free",
+   "meituan/longcat-2.0"
   ],
   "kilo": [
-   "cohere/north-mini-code:free",
-   "meta-llama/llama-3.2-1b-instruct",
-   "tencent/hy3-preview",
-   "x-ai/grok-build-0.1"
+   "dots-studio/dots-3-note-preview:free",
+   "meituan/longcat-2.0"
   ]
  }
 }

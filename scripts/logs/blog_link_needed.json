@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-20 09:02",
-  "count": 150,
+  "updated_at": "2026-11-21 09:01",
+  "count": 149,
   "models": [
     {
       "key": "abacusai/dracarys-llama-3.1-70b-instruct",
@@ -2391,22 +2391,6 @@
         "openrouter/thinkingmachines/inkling:free"
       ],
       "in_briefing": false
-    },
-    {
-      "key": "tidepool-alpha",
-      "original_titles": [
-        "tidepool-alpha-free"
-      ],
-      "news_ids": [
-        62394
-      ],
-      "sources": [
-        "OpenCode Zen"
-      ],
-      "cli_ids": [
-        "opencode/tidepool-alpha-free"
-      ],
-      "in_briefing": true
     },
     {
       "key": "trinity-large-preview",
