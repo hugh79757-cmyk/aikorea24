@@ -1,3 +1,36 @@
+## 2026-11-21 12:40 — 'Listed on AI Korea 24' 배지 전체 교체 (정본 자산 고정)
+
+**한 일**
+
+대표님 지시: "aikorea24.kr 에 리스트 됐다는 저 배지. 위아래에 회색 테두리가 생긴다. 없는버전이 [첨부] 이거야. 이걸로 배찌를 전체 교체한다."
+
+1. **정본 확인** — 이 저장소 `public/badges/listed-on-aikorea24.webp`(621×207, 20,078B, md5 `f5351dce0bc9ef0421fc2ab697725d96`)가 대표님이 첨부한 클린본과 **바이트 동일**임을 확인(로컬·라이브 `aikorea24.kr/badges/…` 둘 다). 즉 aikorea24 쪽은 수정 불필요.
+2. **소비처 전수 조사** — 배지 참조는 4곳: ① 이 저장소 `src/lib/email-notify.ts`(승인 메일, 정본 URL) ② taro 푸터 `public/aik24-badge-sm.webp` ③ saju 푸터 `public/listed-on-aikorea24.webp` ④ link2threads 푸터(정본 URL 직접 참조). money-aikorea24 등 그 외 저장소 참조 0건.
+3. **taro/saju 자산을 정본 바이트로 교체** — 두 사이트의 로컬 사본이 원본 2480×992 의 `#333` 프레임을 남긴 파생본이어서 다크 푸터에서 상하 회색 띠로 보였다. 재크롭 없이 정본을 그대로 복사. saju 는 종횡비 속성도 240×73 → 240×80 으로 정정, 미사용 346KB 원본 삭제. 상세 기록은 각 저장소 `STATEMENT.md`(taro) / `docs/state.md`(saju).
+4. **문서화** — `docs/badge-asset.md` 신설: 정본·소비처·종횡비·"재크롭 금지" 규칙·검증 명령.
+
+**결과**
+
+- [검증됨] 정본 라이브: `GET https://aikorea24.kr/badges/listed-on-aikorea24.webp` → 200 · image/webp · 20,078B · md5 `f5351dce…`.
+- [검증됨] taro 라이브: `GET /aik24-badge-sm.webp` → 200 · 20,078B · md5 `f5351dce…`, 라이브 HTML `/ko/` 에 `footer-badge` 마크업 존재, Deploy Version `2d4dd55f-bd66-4443-bd23-b64f331a520f`.
+- [검증됨] saju 라이브: `GET /listed-on-aikorea24.webp` → 200 · 20,078B · md5 `f5351dce…`, 라이브 HTML `width="240" height="80"`, Deploy Version `86a1c015-bac4-4a78-b6cb-168d739030c9`, 구 `/aik24-badge.webp` → 404.
+- [검증됨] link2threads: 정본 URL 참조이므로 변경 불필요(코드 수정 0건).
+- [검증됨] 렌더 육안: taro 다크 푸터·saju 크림 푸터 모두 상하 회색 띠 0 (로컬 http + CDP 캡처).
+- [부분검증] 라이브 브라우저 캡처는 Cloudflare 봇 챌린지("확인 중입니다")로 차단 → 라이브 바이트·마크업 일치로 대체. **실기기 육안은 대표님 1회 열람 필요.**
+
+**잔존 위험**
+
+- saju 는 정본이 불투명 흰 배경이라 크림색 푸터에서 흰 사각형이 옅게 비친다(명도차 ~2%). 11-20 에 만든 투명 알파본은 이번 지시("이 파일로 교체")에 따라 폐기했다.
+- taro 자산 파일명이 `aik24-badge-sm.webp` 로 남아 '축소본'이라는 이름과 실제 크기(원본)가 불일치. 참조는 정상.
+- 배지 문구("LISTED ON AI KOREA 24")는 이미지 텍스트라 다국어 독자에게는 `alt` 로만 전달된다(종전과 동일).
+
+**다음 행동**
+
+- 대표님 라이브 1회 열람으로 흰 스티커 여백·크기 최종 확인.
+- 이후 배지 관련 작업은 `docs/badge-asset.md` 규칙(정본 바이트 복사, 재크롭 금지)을 따른다.
+
+## 2026-11-21 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-20 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 1 · removed 3 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-19 17:26 — AIK24-TOOLDUP-NOTICE-02 완료 — 승인 버튼에 경고 창(모달) 추가
