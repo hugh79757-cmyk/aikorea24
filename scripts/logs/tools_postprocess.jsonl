@@ -935,3 +935,23 @@
 {"ts": "2026-11-21 06:01:41", "slug": "website-builders", "step": "thumb", "result": "done", "detail": "✅ website-builders og 14KB", "dry_run": false}
 {"ts": "2026-11-21 06:01:48", "slug": "wevisforensics-self-evolving-agent-for-omni-ai-ge", "step": "enrich", "result": "done", "detail": "+3,069자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-21 06:01:52", "slug": "wevisforensics-self-evolving-agent-for-omni-ai-ge", "step": "thumb", "result": "done", "detail": "✅ wevisforensics-self-evolving-agent-for-omni-ai-ge 37KB", "dry_run": false}
+{"ts": "2026-11-21 07:30:05", "slug": "ai-employees-by-easy-peasy-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:07", "slug": "ai-employees-by-easy-peasy-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-21 07:30:09", "slug": "claude-meetings", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:10", "slug": "claude-meetings", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-21 07:30:15", "slug": "kairos", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:16", "slug": "kairos", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-21 07:30:18", "slug": "templify-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:19", "slug": "templify-ai", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-21 07:30:19", "slug": "trainn-mcp", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:20", "slug": "trainn-mcp", "step": "thumb", "result": "fail", "detail": "완료: 성공 0 / 실패 0 / 총 0 | 완료: 성공 0 / 실패 0 / 총 0", "dry_run": false}
+{"ts": "2026-11-21 07:30:21", "slug": "aisha-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:22", "slug": "alphio-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:22", "slug": "archdiagramai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:23", "slug": "arena42-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:24", "slug": "astorie-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:24", "slug": "bizmuse-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:32", "slug": "cantina-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:41", "slug": "chatgpt-work", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:42", "slug": "clipdance-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-21 07:30:42", "slug": "cloudways-managed-ai-agents", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
