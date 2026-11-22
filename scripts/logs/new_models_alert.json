@@ -1,29 +1,17 @@
 {
- "day": "2026-11-22",
- "checked_at": 1795294807.752138,
+ "day": "2026-11-23",
+ "checked_at": 1795381208.273472,
  "total_rows": 28,
  "failed_providers": {},
  "new_by_provider": {
-  "openrouter": [
-   "radixark/daisyrose-27b",
-   "thinkingmachines/inkling-2-mini"
-  ],
-  "kilo": [
-   "radixark/daisyrose-27b",
-   "thinkingmachines/inkling-2-mini"
-  ],
   "zen": [
-   "gemini-omni-1.2-flash"
+   "gpt-live-1.1",
+   "jev-1.14"
   ]
  },
  "removed_by_provider": {
-  "openrouter": [
-   "dots-studio/dots-3-note-preview:free",
-   "meituan/longcat-2.0"
-  ],
-  "kilo": [
-   "dots-studio/dots-3-note-preview:free",
-   "meituan/longcat-2.0"
+  "zen": [
+   "longcat-2.5-free"
   ]
  }
 }

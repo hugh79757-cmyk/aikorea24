@@ -1,0 +1,29 @@
+{
+  "added": [],
+  "removed": [
+    {
+      "provider": "kilo",
+      "model_id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 512000,
+      "reason": "단종/제거"
+    },
+    {
+      "provider": "openrouter",
+      "model_id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "pricing": {
+        "prompt": 0.0,
+        "completion": 0.0
+      },
+      "context_length": 512000,
+      "reason": "단종/제거"
+    }
+  ],
+  "changed": [],
+  "failed_providers": {}
+}

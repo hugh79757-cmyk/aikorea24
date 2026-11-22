@@ -1,3 +1,5 @@
+## 2026-11-22 AIK24-FREE-PIPE-01 일일 실행 — 수집 28건 / 실패 프로바이더 0 / added 0 · removed 2 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-21 13:05 — ERNIE-5.5 블로그 발행 완료 (EmDash + 슬러그 매핑 + 재배포)
 
 - 한 일: EmDash에 글 발행 (https://emdash.aikorea24.kr/posts/바이두-ernie-55-flash-preview-실측-1012-무료로-어디까지-쓸-수-있나). src/data/emdash_slug_map.json에 Astro 슬러그 매핑 추가. Cloudflare Workers 재배포. /blog/... → EmDash 301 확인.

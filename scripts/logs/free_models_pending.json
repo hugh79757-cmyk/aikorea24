@@ -1,5 +1,23 @@
 [
   {
+    "model_id": "inclusionai/ling-3.2-flash:free",
+    "provider": "kilo",
+    "cli_id": "kilo/inclusionai/ling-3.2-flash:free",
+    "context_length": 1048576
+  },
+  {
+    "model_id": "particle-ai/particle-1:free",
+    "provider": "kilo",
+    "cli_id": "kilo/particle-ai/particle-1:free",
+    "context_length": 1048576
+  },
+  {
+    "model_id": "inclusionai/ling-3.2-flash:free",
+    "provider": "openrouter",
+    "cli_id": "openrouter/inclusionai/ling-3.2-flash:free",
+    "context_length": 1048576
+  },
+  {
     "model_id": "poolside/laguna-s-2.1:free",
     "provider": "kilo",
     "cli_id": "kilo/poolside/laguna-s-2.1:free",

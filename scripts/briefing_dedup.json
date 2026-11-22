@@ -1,52 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-22",
-      "briefing_id": 360,
-      "articles": [
-        {
-          "id": "56082",
-          "title": "OpenRouter 무료 모델 (:free 태그)",
-          "original_title": "OpenRouter 무료 모델 (:free 태그)",
-          "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다. · (b) 커스텀 프로바이더 설정 후 연결 가능",
-          "link": "https://openrouter.ai/models?max_price=0&order=newest",
-          "entities": [
-            "OpenRouter",
-            "API"
-          ],
-          "date": "2026-10-22"
-        },
-        {
-          "id": "56721",
-          "title": "[무료 LLM] flint-40b-free — OpenCode Zen 무료 티어",
-          "original_title": "flint-40b-free",
-          "description": "Flint 40B Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/flint-40b-free\"} 프로바이더 갱신일 2026-10-21.",
-          "link": "https://models.dev/opencode/flint-40b-free",
-          "entities": [
-            "Zen",
-            "OpenCode",
-            "LLM",
-            "Flint",
-            "Free"
-          ],
-          "date": "2026-10-22"
-        },
-        {
-          "id": "56532",
-          "title": "Recursive, 자사가 대부분 AI로 구축한 노트북 코딩 모델 'Flint' 출시",
-          "original_title": "Recursive launches Flint, a laptop coding model it says was largely built by AI",
-          "description": "스타트업 Recursive가 자체 AI 연구 시스템을 통해 대부분 구축한 무료 노트북 크기의 코딩 모델 'Flint'를 출시했습니다. 이는 스스로 발전하는 AI를 테스트하기 위한 초기 단계의 시도입니다.",
-          "link": "https://techcrunch.com/2026/10/21/recursive-launches-flint-a-laptop-coding-model-it-says-was-largely-built-by-ai/",
-          "entities": [
-            "AI",
-            "Flint",
-            "Recursive"
-          ],
-          "date": "2026-10-22"
-        }
-      ]
-    },
-    {
       "date": "2026-10-23",
       "briefing_id": 361,
       "articles": [
@@ -1309,49 +1263,52 @@
           "date": "2026-11-21"
         }
       ]
+    },
+    {
+      "date": "2026-11-22",
+      "briefing_id": 389,
+      "articles": [
+        {
+          "id": "62521",
+          "title": "엔비디아, 오픈소스 네모트론 라인업 강화를 위해 인셉션의 확산 모델에 최소 5억 달러 투자",
+          "original_title": "Nvidia bets at least $500 million on Inception's diffusion models to strengthen its open-source Nemotron lineup",
+          "description": "디인포메이션에 따르면 엔비디아가 AI 스타트업 인셉션을 최소 5억 달러에 인수할 예정입니다. 설립 2년 차인 인셉션은 챗GPT와 같은 토큰 단위 생성 방식이 아닌, 확산 과정을 기반으로 한 언어 모델을 구축합니다. 이번 인수를 통해 엔비디아는 자사의 네모트론 라인업을 강화할 것으로 보입니다.",
+          "link": "https://the-decoder.com/nvidia-bets-at-least-500-million-on-inceptions-diffusion-models-to-strengthen-its-open-source-nemotron-lineup/",
+          "entities": [
+            "Nemotron",
+            "Inception",
+            "Nvidia",
+            "AI"
+          ],
+          "date": "2026-11-22"
+        },
+        {
+          "id": "62876",
+          "title": "\"AI 안 쓰면 F 주겠다\"는 교수…이번엔 \"시험 무용지물\" 경고 [인터뷰]",
+          "original_title": "",
+          "description": "생성형 AI 음악 스타트업 Muzig AI의 정승익 대표다. 앞서 정 대표는 2023년 서울사이버대 겸임교수 시절 \"시험에 AI를 활용하지 않으면 F학점을 부여하겠다\"고 공지해 주목받았다. 대학가에서 AI를 활용한 과제 제출을...",
+          "link": "https://n.news.naver.com/mnews/article/015/0005356638?sid=102",
+          "entities": [
+            "Muzig",
+            "AI"
+          ],
+          "date": "2026-11-22"
+        },
+        {
+          "id": "62854",
+          "title": "앤트로픽 연구원 “AI 클로드, 수학 최대 난제 리만가설 증명” 주장",
+          "original_title": "",
+          "description": "인공지능(AI) 기업 앤트로픽의 한 연구원이 이 회사의 챗봇 클로드로 수학계의 최대 난제 중 하나로 꼽히는 리만 가설을 증명했다고 주장했다는 보도가 나왔다. 20일(현지시간) AFP통신과 파이낸셜타임스 등 보도에 따르면 수학자이기도 한 앤트로픽 연구원 레벤트 알포게는 이날 자신의 웹사이트에 올린 글과 4쪽짜리 문서를 통해 “클로드와 협업해 리만 가설의 증명",
+          "link": "https://www.etnews.com/20261121000021",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-22"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "56082",
-      "title": "OpenRouter 무료 모델 (:free 태그)",
-      "original_title": "OpenRouter 무료 모델 (:free 태그)",
-      "description": ":free 태그가 붙은 모델을 무료로 호출 — 별도 크레딧 없이 API 키만으로 사용. 같은 모델이 유료 프로바이더보다 한도가 낮다. · (b) 커스텀 프로바이더 설정 후 연결 가능",
-      "link": "https://openrouter.ai/models?max_price=0&order=newest",
-      "entities": [
-        "OpenRouter",
-        "API"
-      ],
-      "date": "2026-10-22"
-    },
-    {
-      "id": "56721",
-      "title": "[무료 LLM] flint-40b-free — OpenCode Zen 무료 티어",
-      "original_title": "flint-40b-free",
-      "description": "Flint 40B Free — CLI에서 입출력 모두 무료. 컨텍스트 262,144 토큰. OpenCode 설정: {\"model\": \"opencode/flint-40b-free\"} 프로바이더 갱신일 2026-10-21.",
-      "link": "https://models.dev/opencode/flint-40b-free",
-      "entities": [
-        "Zen",
-        "OpenCode",
-        "LLM",
-        "Flint",
-        "Free"
-      ],
-      "date": "2026-10-22"
-    },
-    {
-      "id": "56532",
-      "title": "Recursive, 자사가 대부분 AI로 구축한 노트북 코딩 모델 'Flint' 출시",
-      "original_title": "Recursive launches Flint, a laptop coding model it says was largely built by AI",
-      "description": "스타트업 Recursive가 자체 AI 연구 시스템을 통해 대부분 구축한 무료 노트북 크기의 코딩 모델 'Flint'를 출시했습니다. 이는 스스로 발전하는 AI를 테스트하기 위한 초기 단계의 시도입니다.",
-      "link": "https://techcrunch.com/2026/10/21/recursive-launches-flint-a-laptop-coding-model-it-says-was-largely-built-by-ai/",
-      "entities": [
-        "AI",
-        "Flint",
-        "Recursive"
-      ],
-      "date": "2026-10-22"
-    },
     {
       "id": "56074",
       "title": "Google Cloud 신규 가입 $300 크레딧",
@@ -2441,6 +2398,43 @@
         "AI"
       ],
       "date": "2026-11-21"
+    },
+    {
+      "id": "62521",
+      "title": "엔비디아, 오픈소스 네모트론 라인업 강화를 위해 인셉션의 확산 모델에 최소 5억 달러 투자",
+      "original_title": "Nvidia bets at least $500 million on Inception's diffusion models to strengthen its open-source Nemotron lineup",
+      "description": "디인포메이션에 따르면 엔비디아가 AI 스타트업 인셉션을 최소 5억 달러에 인수할 예정입니다. 설립 2년 차인 인셉션은 챗GPT와 같은 토큰 단위 생성 방식이 아닌, 확산 과정을 기반으로 한 언어 모델을 구축합니다. 이번 인수를 통해 엔비디아는 자사의 네모트론 라인업을 강화할 것으로 보입니다.",
+      "link": "https://the-decoder.com/nvidia-bets-at-least-500-million-on-inceptions-diffusion-models-to-strengthen-its-open-source-nemotron-lineup/",
+      "entities": [
+        "Nemotron",
+        "Inception",
+        "Nvidia",
+        "AI"
+      ],
+      "date": "2026-11-22"
+    },
+    {
+      "id": "62876",
+      "title": "\"AI 안 쓰면 F 주겠다\"는 교수…이번엔 \"시험 무용지물\" 경고 [인터뷰]",
+      "original_title": "",
+      "description": "생성형 AI 음악 스타트업 Muzig AI의 정승익 대표다. 앞서 정 대표는 2023년 서울사이버대 겸임교수 시절 \"시험에 AI를 활용하지 않으면 F학점을 부여하겠다\"고 공지해 주목받았다. 대학가에서 AI를 활용한 과제 제출을...",
+      "link": "https://n.news.naver.com/mnews/article/015/0005356638?sid=102",
+      "entities": [
+        "Muzig",
+        "AI"
+      ],
+      "date": "2026-11-22"
+    },
+    {
+      "id": "62854",
+      "title": "앤트로픽 연구원 “AI 클로드, 수학 최대 난제 리만가설 증명” 주장",
+      "original_title": "",
+      "description": "인공지능(AI) 기업 앤트로픽의 한 연구원이 이 회사의 챗봇 클로드로 수학계의 최대 난제 중 하나로 꼽히는 리만 가설을 증명했다고 주장했다는 보도가 나왔다. 20일(현지시간) AFP통신과 파이낸셜타임스 등 보도에 따르면 수학자이기도 한 앤트로픽 연구원 레벤트 알포게는 이날 자신의 웹사이트에 올린 글과 4쪽짜리 문서를 통해 “클로드와 협업해 리만 가설의 증명",
+      "link": "https://www.etnews.com/20261121000021",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-22"
     }
   ]
 }
