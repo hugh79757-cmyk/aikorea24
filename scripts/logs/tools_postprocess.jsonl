@@ -1027,3 +1027,11 @@
 {"ts": "2026-11-23 07:30:46", "slug": "fotello-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-23 07:30:46", "slug": "freebeat-ai-app", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
 {"ts": "2026-11-23 07:30:46", "slug": "freeflux-ai", "step": "url", "result": "fail", "detail": "실제 도메인 미확인 (후보 전부 실패)", "dry_run": false}
+{"ts": "2026-11-24 06:06:40", "slug": "mai-image-2-7", "step": "url", "result": "done", "detail": "빈값 → https://maiimage27.com (title='MAI-Image-2.7 Photo Editor: Change Any Photo')", "dry_run": false}
+{"ts": "2026-11-24 06:07:01", "slug": "mai-image-2-7", "step": "enrich", "result": "done", "detail": "+3,148자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-24 06:07:10", "slug": "mai-image-2-7", "step": "thumb", "result": "done", "detail": "✅ mai-image-2-7 32KB", "dry_run": false}
+{"ts": "2026-11-24 06:08:17", "slug": "non-penetrating-world-models", "step": "enrich", "result": "done", "detail": "+2,961자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-24 06:08:22", "slug": "non-penetrating-world-models", "step": "thumb", "result": "done", "detail": "✅ non-penetrating-world-models 25KB", "dry_run": false}
+{"ts": "2026-11-24 06:08:24", "slug": "othor-ai", "step": "url", "result": "done", "detail": "빈값 → https://othorai.com (title='othorai.com is for sale — name.ai')", "dry_run": false}
+{"ts": "2026-11-24 06:08:45", "slug": "othor-ai", "step": "enrich", "result": "done", "detail": "+2,983자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-24 06:08:50", "slug": "othor-ai", "step": "thumb", "result": "done", "detail": "✅ othor-ai 21KB", "dry_run": false}

@@ -1,65 +1,6 @@
 {
   "briefings": [
     {
-      "date": "2026-10-23",
-      "briefing_id": 361,
-      "articles": [
-        {
-          "id": "56074",
-          "title": "Google Cloud 신규 가입 $300 크레딧",
-          "original_title": "Google Cloud 신규 가입 $300 크레딧",
-          "description": "AI 스튜디오·Vertex AI·GPU VM에 쓸 수 있는 신규 고객 크레딧(90일). API 키를 발급해 OpenCode 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
-          "link": "https://cloud.google.com/free",
-          "entities": [
-            "AI",
-            "API",
-            "GPU",
-            "Vertex",
-            "Google",
-            "OpenCode",
-            "Cloud"
-          ],
-          "date": "2026-10-23"
-        },
-        {
-          "id": "56567",
-          "title": "명의 자바 챔피언이 생산성 향상을 위해 GitHub Copilot을 사용하는 방법",
-          "original_title": "How 3 Java Champions are using GitHub Copilot for increased productivity",
-          "description": "세 명의 자바 챔피언이 문제 해결, 개발 가속화, 그리고 결과물에 대한 인간의 책임 유지하기 위해 GitHub Copilot을 어떻게 활용하는지 공유합니다. 이 게시물은 GitHub 블로그에 처음 게재되었습니다.",
-          "link": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
-          "entities": [
-            "Java",
-            "GitHub",
-            "Copilot",
-            "How",
-            "Champions"
-          ],
-          "date": "2026-10-23"
-        },
-        {
-          "id": "56568",
-          "title": "엔비디아 쿠모렐레이셔널(NVIDIA Kumo Relational), 별도의 학습 없이 관계",
-          "original_title": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
-          "description": "",
-          "link": "https://huggingface.co/blog/nvidia/kumo-relational",
-          "entities": [
-            "Kumo",
-            "Machine",
-            "Supervised",
-            "NVIDIA",
-            "No",
-            "Required",
-            "Learning",
-            "Relational",
-            "Outperforms",
-            "Training",
-            "Data"
-          ],
-          "date": "2026-10-23"
-        }
-      ]
-    },
-    {
       "date": "2026-10-24",
       "briefing_id": 362,
       "articles": [
@@ -1306,62 +1247,54 @@
           "date": "2026-11-22"
         }
       ]
+    },
+    {
+      "date": "2026-11-23",
+      "briefing_id": 390,
+      "articles": [
+        {
+          "id": "63080",
+          "title": "[인공지능 줌인] 아시아에 파고든 중국 AI '의존'으로까지 굳어질까",
+          "original_title": "",
+          "description": "또한 싱가포르의 국가 AI 연구 및 인재 양성 프로그램인 AI 싱가포르는 2025년, 동남아시아 언어를 위한 오픈소스 언어 모델인 SEA-LION의 최신 버전을 출시했는데, 메타의 라마(Llama)가 아닌 알리바바의 큐원(Qwen)을...",
+          "link": "https://www.wikileaks-kr.org/news/articleView.html?idxno=194794",
+          "entities": [
+            "Qwen",
+            "Llama",
+            "AI",
+            "SEA-"
+          ],
+          "date": "2026-11-23"
+        },
+        {
+          "id": "63057",
+          "title": "사고 나면 늦다…농협은행, 에이전틱 AI로 '여신사고 제로' 굳히기",
+          "original_title": "",
+          "description": "NH농협은행이 인공지능(AI) 에이전트로 대출 서류와 내부 규정을 자동 대조하는 여신 점검 체계를 시험 가동한다. 대출이 나간 뒤 문제를 찾아내던 '사후 적발' 감사를 '사전 예방' 체계로 바꿔, 20개월째 이어온 대형 금융사고 '0건' 기록을 굳히겠다는 구상이다. 22일 금융권에 따르면 농협은행은 에이전틱 AI 기반 여신 점검 시스템 '바른여신 가디언즈'",
+          "link": "https://www.etnews.com/20261120000077",
+          "entities": [
+            "AI"
+          ],
+          "date": "2026-11-23"
+        },
+        {
+          "id": "63038",
+          "title": "AI 시대에 대비해 청년층을 위한 '녹색 일자리 보장' 도입 촉구",
+          "original_title": "Call for ‘green jobs guarantee’ for young Scots, with net zero work mostly AI-proof",
+          "description": "태비스 포츠는 17~21세의 스코틀랜드 청년들이 교육 및 훈련과 스코틀랜드의 녹색 경제 일자리를 직접 연결하는 녹색 일자리 보장을 받아야 한다고 주장합니다. 이 분야는 대부분 AI의 영향으로부터 안전한 일자리입니다.",
+          "link": "https://www.heraldscotland.com/news/26747397.expert-calls-green-jobs-guarantee-young-scots/?ref=rss",
+          "entities": [
+            "Call",
+            "Scots",
+            "AI",
+            "AI-proof"
+          ],
+          "date": "2026-11-23"
+        }
+      ]
     }
   ],
   "articles": [
-    {
-      "id": "56074",
-      "title": "Google Cloud 신규 가입 $300 크레딧",
-      "original_title": "Google Cloud 신규 가입 $300 크레딧",
-      "description": "AI 스튜디오·Vertex AI·GPU VM에 쓸 수 있는 신규 고객 크레딧(90일). API 키를 발급해 OpenCode 커스텀 프로바이더로 연결. · (b) 커스텀 프로바이더 설정 후 연결 가능",
-      "link": "https://cloud.google.com/free",
-      "entities": [
-        "AI",
-        "API",
-        "GPU",
-        "Vertex",
-        "Google",
-        "OpenCode",
-        "Cloud"
-      ],
-      "date": "2026-10-23"
-    },
-    {
-      "id": "56567",
-      "title": "명의 자바 챔피언이 생산성 향상을 위해 GitHub Copilot을 사용하는 방법",
-      "original_title": "How 3 Java Champions are using GitHub Copilot for increased productivity",
-      "description": "세 명의 자바 챔피언이 문제 해결, 개발 가속화, 그리고 결과물에 대한 인간의 책임 유지하기 위해 GitHub Copilot을 어떻게 활용하는지 공유합니다. 이 게시물은 GitHub 블로그에 처음 게재되었습니다.",
-      "link": "https://github.blog/ai-and-ml/github-copilot/how-3-java-champions-are-using-github-copilot-for-increased-productivity/",
-      "entities": [
-        "Java",
-        "GitHub",
-        "Copilot",
-        "How",
-        "Champions"
-      ],
-      "date": "2026-10-23"
-    },
-    {
-      "id": "56568",
-      "title": "엔비디아 쿠모렐레이셔널(NVIDIA Kumo Relational), 별도의 학습 없이 관계",
-      "original_title": "NVIDIA Kumo Relational Outperforms Supervised Machine Learning on Relational Data, No Training Required",
-      "description": "",
-      "link": "https://huggingface.co/blog/nvidia/kumo-relational",
-      "entities": [
-        "Kumo",
-        "Machine",
-        "Supervised",
-        "NVIDIA",
-        "No",
-        "Required",
-        "Learning",
-        "Relational",
-        "Outperforms",
-        "Training",
-        "Data"
-      ],
-      "date": "2026-10-23"
-    },
     {
       "id": "56078",
       "title": "GitHub Copilot Free (개인 무료 플랜)",
@@ -2435,6 +2368,45 @@
         "AI"
       ],
       "date": "2026-11-22"
+    },
+    {
+      "id": "63080",
+      "title": "[인공지능 줌인] 아시아에 파고든 중국 AI '의존'으로까지 굳어질까",
+      "original_title": "",
+      "description": "또한 싱가포르의 국가 AI 연구 및 인재 양성 프로그램인 AI 싱가포르는 2025년, 동남아시아 언어를 위한 오픈소스 언어 모델인 SEA-LION의 최신 버전을 출시했는데, 메타의 라마(Llama)가 아닌 알리바바의 큐원(Qwen)을...",
+      "link": "https://www.wikileaks-kr.org/news/articleView.html?idxno=194794",
+      "entities": [
+        "Qwen",
+        "Llama",
+        "AI",
+        "SEA-"
+      ],
+      "date": "2026-11-23"
+    },
+    {
+      "id": "63057",
+      "title": "사고 나면 늦다…농협은행, 에이전틱 AI로 '여신사고 제로' 굳히기",
+      "original_title": "",
+      "description": "NH농협은행이 인공지능(AI) 에이전트로 대출 서류와 내부 규정을 자동 대조하는 여신 점검 체계를 시험 가동한다. 대출이 나간 뒤 문제를 찾아내던 '사후 적발' 감사를 '사전 예방' 체계로 바꿔, 20개월째 이어온 대형 금융사고 '0건' 기록을 굳히겠다는 구상이다. 22일 금융권에 따르면 농협은행은 에이전틱 AI 기반 여신 점검 시스템 '바른여신 가디언즈'",
+      "link": "https://www.etnews.com/20261120000077",
+      "entities": [
+        "AI"
+      ],
+      "date": "2026-11-23"
+    },
+    {
+      "id": "63038",
+      "title": "AI 시대에 대비해 청년층을 위한 '녹색 일자리 보장' 도입 촉구",
+      "original_title": "Call for ‘green jobs guarantee’ for young Scots, with net zero work mostly AI-proof",
+      "description": "태비스 포츠는 17~21세의 스코틀랜드 청년들이 교육 및 훈련과 스코틀랜드의 녹색 경제 일자리를 직접 연결하는 녹색 일자리 보장을 받아야 한다고 주장합니다. 이 분야는 대부분 AI의 영향으로부터 안전한 일자리입니다.",
+      "link": "https://www.heraldscotland.com/news/26747397.expert-calls-green-jobs-guarantee-young-scots/?ref=rss",
+      "entities": [
+        "Call",
+        "Scots",
+        "AI",
+        "AI-proof"
+      ],
+      "date": "2026-11-23"
     }
   ]
 }

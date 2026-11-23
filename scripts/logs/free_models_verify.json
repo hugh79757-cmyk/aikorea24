@@ -1,27 +1,20 @@
 {
-  "verified_at": "2026-11-22 09:32",
+  "verified_at": "2026-11-23 09:30",
   "pass": [
     "kilo/baidu/ernie-5.5-flash-preview:free",
+    "kilo/inclusionai/ling-3.2-flash:free",
     "kilo/liquid/lfm-3-1.7b:free",
     "kilo/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
     "kilo/nvidia/nemotron-3-ultra-550b-a55b:free",
     "kilo/nvidia/nemotron-3.5-lightning:free",
     "kilo/nvidia/nemotron-3.5-super-vl:free",
+    "kilo/particle-ai/particle-1:free",
     "kilo/recursive/flint-v1.0:free",
-    "openrouter/baidu/ernie-5.5-flash-preview:free",
-    "openrouter/liquid/lfm-3-1.7b:free",
-    "openrouter/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
-    "openrouter/nvidia/nemotron-3-ultra-550b-a55b:free",
-    "openrouter/nvidia/nemotron-3.5-lightning:free",
-    "openrouter/nvidia/nemotron-3.5-super-vl:free",
-    "openrouter/particle-ai/particle-1:free",
-    "openrouter/recursive/flint-v1.0:free",
     "opencode/beam-free",
     "opencode/deepseek-v4.1-flash-free",
     "opencode/flint-40b-free",
     "opencode/hy4-flash-free",
     "opencode/iceman-free",
-    "opencode/longcat-2.5-free",
     "opencode/mimo-v2.6-flash-free",
     "opencode/nemotron-3.5-lightning-free",
     "opencode/nemotron-3.5-super-vl-free",
@@ -29,39 +22,27 @@
   ],
   "fail": [
     {
-      "cli_id": "kilo/inclusionai/ling-3.2-flash:free",
-      "model_id": "inclusionai/ling-3.2-flash:free",
-      "reason": "CLI 타임아웃 60초",
-      "kind": "transient"
-    },
-    {
-      "cli_id": "kilo/particle-ai/particle-1:free",
-      "model_id": "particle-ai/particle-1:free",
-      "reason": "CLI 타임아웃 60초",
-      "kind": "transient"
-    },
-    {
       "cli_id": "openrouter/inclusionai/ling-3.2-flash:free",
       "model_id": "inclusionai/ling-3.2-flash:free",
-      "reason": "CLI 타임아웃 60초",
-      "kind": "transient"
+      "reason": "No cookie auth credentials found",
+      "kind": "dead"
     },
     {
       "cli_id": "kilo/poolside/laguna-s-2.1:free",
       "model_id": "poolside/laguna-s-2.1:free",
-      "reason": "CLI 타임아웃 60초",
+      "reason": "The requested model 'poolside/laguna-s-2.1:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly released model, please try again in a few minutes.",
       "kind": "transient"
     },
     {
       "cli_id": "kilo/poolside/laguna-xs-2.1:free",
       "model_id": "poolside/laguna-xs-2.1:free",
-      "reason": "CLI 타임아웃 60초",
+      "reason": "The requested model 'poolside/laguna-xs-2.1:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly released model, please try again in a few minutes.",
       "kind": "transient"
     },
     {
       "cli_id": "kilo/liquid/lfm-2.5-2.6b:free",
       "model_id": "liquid/lfm-2.5-2.6b:free",
-      "reason": "CLI 타임아웃 60초",
+      "reason": "The requested model 'liquid/lfm-2.5-2.6b:free' does not exist. Please use an exact model id as listed on /api/gateway/models. If this is a newly released model, please try again in a few minutes.",
       "kind": "transient"
     }
   ]

@@ -1,17 +1,25 @@
 {
- "day": "2026-11-23",
- "checked_at": 1795381208.273472,
- "total_rows": 28,
+ "day": "2026-11-24",
+ "checked_at": 1795467606.46609,
+ "total_rows": 30,
  "failed_providers": {},
  "new_by_provider": {
-  "zen": [
-   "gpt-live-1.1",
-   "jev-1.14"
+  "openrouter": [
+   "dots-studio/dots-3-note-preview:free"
+  ],
+  "kilo": [
+   "dots-studio/dots-3-note-preview:free"
   ]
  },
  "removed_by_provider": {
-  "zen": [
-   "longcat-2.5-free"
+  "openrouter": [
+   "xiaomi/mimo-v2.5-pro"
+  ],
+  "kilo": [
+   "xiaomi/mimo-v2.5-pro"
+  ],
+  "nvidia": [
+   "nvidia/nemotron-3-embed-1b"
   ]
  }
 }
