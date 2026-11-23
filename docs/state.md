@@ -1,3 +1,13 @@
+## 2026-11-23 15:48 — PHONE-REMOVE-01 전화번호 삭제 배포 (L2T + AIK24)
+
+- 한 일: 대표님 전화번호(010-7416-5705) 전 페이지 삭제 배포. 말랑이 수정 4파일(Layout/privacy/terms/contact) + L2T _layout.ts 확인. **지시서 수정목록에 없던 잔존 2곳 추가 수정** — L2T `src/index.ts` 인라인 푸터 2개(990·2168행), AIK24 `src/pages/refund.astro` 2곳(28·79행). 두 레포 grep 7416 0건 확인 후 배포.
+- 결과: [검증됨] L2T 커밋 1635131, `/api/version` commit=1635131 (3자 대조 일치), Version ID 4df8ad4c-4099-4568-a95f-2a7720f43f2c. AIK24 커밋 a0a38cc4, Version ID 7e311073-a2f6-4bfa-bebf-ed75fdd96295. 라이브 전화번호 0건 — L2T `/` 0, AIK24 `/`·`/privacy/`·`/terms/`·`/contact/`·`/refund/` 전부 0. 사업자 정보(주소·사업자등록번호·이메일) 보존 확인.
+- [위반 감지] 지시서는 "말랑이 수정 완료 7416 0건"이라 했으나 실제로는 L2T index.ts·AIK24 refund.astro에 잔존했음. 대표님 지시("모든 전화번호 삭제")에 따라 2곳 추가 수정 후 배포.
+- 잔존 위험: 없음 (양 레포 src 7416 0건, 라이브 0건 확인).
+- 다음 행동: 없음.
+
+## 2026-11-23 AIK24-FREE-PIPE-01 일일 실행 — 수집 28건 / 실패 프로바이더 0 / added 0 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-22 AIK24-FREE-PIPE-01 일일 실행 — 수집 28건 / 실패 프로바이더 0 / added 0 · removed 2 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
 
 ## 2026-11-21 13:05 — ERNIE-5.5 블로그 발행 완료 (EmDash + 슬러그 매핑 + 재배포)
