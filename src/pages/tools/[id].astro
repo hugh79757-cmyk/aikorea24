@@ -2,6 +2,7 @@
 export const prerender = false;
 import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
+import ToolIcon from '../../components/tools/ToolIcon.astro';
 import { getCollection, render } from 'astro:content';
 import { TASKS as ALL_TASKS } from '../../config/tasks';
 
@@ -23,13 +24,18 @@ if (!tool) {
 // md 카드가 D1 행을 대체하면서 screenshot_url 이 함께 사라져, 이미지가 있는 도구도
 // 상세 페이지에서 썸네일이 안 보였다(2026-10-13). 목록(index.astro)과 같은 규칙으로
 // md 에 image 가 없을 때만 D1 스크린샷을 물려받는다 — md 우선 원칙은 유지.
-if (tool && !(tool as any).data.image) {
+if (tool) {
   try {
-    const shot: any = await env.DB?.prepare(
-      'SELECT screenshot_url FROM tool_submissions WHERE slug = ? AND screenshot_url IS NOT NULL AND TRIM(screenshot_url) <> ""'
+    // AIK24-TOOLS-LOGO-01: 로고는 스크린샷과 달리 NULL 필터를 걸면 안 된다
+    // (로고만 있고 스크린샷 없는 제출건이 조회되지 않음). 두 컬럼을 한 번에 가져온다.
+    const extra: any = await env.DB?.prepare(
+      'SELECT screenshot_url, logo_url FROM tool_submissions WHERE slug = ?'
     ).bind(id).first();
-    if (shot) {
-      tool = { ...tool, data: { ...(tool as any).data, screenshotUrl: String(shot.screenshot_url) } } as any;
+    if (extra) {
+      const next: any = { ...(tool as any).data };
+      if (!next.image && extra.screenshot_url) next.screenshotUrl = String(extra.screenshot_url);
+      if (!next.logo && !next.logoUrl && extra.logo_url) next.logoUrl = String(extra.logo_url);
+      tool = { ...(tool as any), data: next } as any;
     }
   } catch {}
 }
@@ -59,7 +65,7 @@ if (!tool) {
 
       // 상태 필터 없이 slug로 조회 — owner는 pending/hidden도 열람 가능
       row = await db.prepare(
-        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at, link_type FROM tool_submissions WHERE slug = ?'
+        'SELECT slug, name, url, category, description, price_model, price_detail, category_custom, screenshot_url, logo_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status, user_id, created_at, link_type FROM tool_submissions WHERE slug = ?'
       ).bind(id).first();
 
       // tool_submissions 미발견 → tools 테이블 폴백
@@ -102,6 +108,7 @@ if (!tool) {
       category: String(row.category ?? '기타'),
       price: (row.price_detail && String(row.price_detail).trim()) || row.price_model || '—',
       screenshotUrl: (row.screenshot_url && String(row.screenshot_url).trim()) || null,
+      logoUrl: (row.logo_url && String(row.logo_url).trim()) || null,
       koreanSupport: Number(row.korean_support) === 1,
       difficulty: (row.difficulty && String(row.difficulty).trim()) || '보통',
       url: String(row.url ?? '#'),
@@ -218,10 +225,13 @@ const faqSchema: string | null = faqEntities.length > 0
         )}
       </div>
 
-      <!-- 제목 -->
-      <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mb-2 leading-tight">
-        {tool.data.name}
-      </h1>
+      <!-- 제목 (AIK24-TOOLS-LOGO-01: 로고 → 파비콘 → 모노그램, 목록과 동일 우선순위) -->
+      <div class="flex items-center gap-3 mb-2">
+        <ToolIcon name={tool.data.name} logoUrl={tool.data.logoUrl ?? tool.data.logo} url={tool.data.url} sizeClass="w-16 h-16" textClass="text-2xl" />
+        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white leading-tight">
+          {tool.data.name}
+        </h1>
+      </div>
       <p class="text-base text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">{tool.data.description}</p>
 
       <!-- 메타 정보 뱃지 -->

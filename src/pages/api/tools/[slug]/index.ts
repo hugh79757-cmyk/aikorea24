@@ -62,7 +62,7 @@ export const PUT: APIRoute = async ({ params, request, locals, cookies }) => {
 
   try {
     const body = await request.json();
-    const { name, url, category, category_custom, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown } = body;
+    const { name, url, category, category_custom, description, price_model, price_detail, screenshot_url, logo_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown } = body;
 
     // 필수 4종 검증 (submit.ts parity)
     if (!name?.trim() || !url?.trim() || !category?.trim() || !description?.trim()) {
@@ -113,6 +113,25 @@ export const PUT: APIRoute = async ({ params, request, locals, cookies }) => {
       }
     }
 
+    // AIK24-TOOLS-LOGO-01: logo_url 선택 — submit.ts와 동일 규칙 (validation parity)
+    let logoUrl: string | null = null;
+    if (logo_url !== undefined && logo_url !== null && String(logo_url).trim() !== '') {
+      const lg = String(logo_url).trim();
+      if (lg.startsWith('/api/files/')) {
+        logoUrl = lg;
+      } else {
+        try {
+          const parsedLogo = new URL(lg);
+          if (parsedLogo.protocol !== 'http:' && parsedLogo.protocol !== 'https:') {
+            return new Response(JSON.stringify({ error: '올바른 로고 URL을 입력해주세요. (http:// 또는 https://)' }), { status: 400 });
+          }
+          logoUrl = lg;
+        } catch {
+          return new Response(JSON.stringify({ error: '올바른 로고 URL을 입력해주세요. (http:// 또는 https://)' }), { status: 400 });
+        }
+      }
+    }
+
     // tasks: 최대 5개 + TASKS 키 존재 검증
     let taskList: string[] = [];
     if (tasks !== undefined && tasks !== null) {
@@ -136,7 +155,7 @@ export const PUT: APIRoute = async ({ params, request, locals, cookies }) => {
     await db.prepare(
       `UPDATE tool_submissions SET
         name = ?, url = ?, category = ?, category_custom = ?, description = ?,
-        price_model = ?, price_detail = ?, screenshot_url = ?, korean_support = ?,
+        price_model = ?, price_detail = ?, screenshot_url = ?, logo_url = ?, korean_support = ?,
         difficulty = ?, use_cases = ?, tags = ?, tasks = ?, detail_markdown = ?,
         updated_at = datetime('now')
        WHERE slug = ?`
@@ -149,6 +168,7 @@ export const PUT: APIRoute = async ({ params, request, locals, cookies }) => {
       price_model.trim(),
       price_detail?.trim() || null,
       screenshotUrl,
+      logoUrl,
       korean_support ? 1 : 0,
       difficulty?.trim() || null,
       use_cases?.trim() || null,

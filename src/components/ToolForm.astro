@@ -10,6 +10,7 @@ export interface ToolInitialData {
   price_model?: string;
   price_detail?: string;
   screenshot_url?: string;
+  logo_url?: string;
   korean_support?: boolean | number;
   difficulty?: string;
   use_cases?: string;
@@ -49,6 +50,7 @@ const d = {
   price_model: initialData.price_model ?? '무료',
   price_detail: initialData.price_detail ?? '',
   screenshot_url: initialData.screenshot_url ?? '',
+  logo_url: initialData.logo_url ?? '',
   korean_support: initialData.korean_support === true || initialData.korean_support === 1,
   difficulty: initialData.difficulty ?? '',
   use_cases: initialData.use_cases ?? '',
@@ -165,6 +167,29 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">태그 (쉼표 구분)</label>
         <input type="text" id="f-tags" value={tagsStr} class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 outline-none" placeholder="예: AI, 글쓰기, 무료" />
       </div>
+      <!-- AIK24-TOOLS-LOGO-01: 정사각형 로고 (PH 스타일 — 목록/상세 아이콘에 사용) -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">로고 (선택) — 정사각형 권장 (512×512 PNG, 투명 또는 흰 배경)</label>
+        <input type="hidden" id="f-logo-url" value={d.logo_url} />
+        <div id="logo-drop" class="border-2 border-dashed border-gray-600 rounded-xl p-6 text-center cursor-pointer hover:border-[#e5e5e5] transition-colors">
+          <input type="file" id="f-logo-file" accept="image/png,image/jpeg,image/webp" class="hidden" />
+          <div id="logo-prompt">
+            <p class="text-2xl mb-2">🖼️</p>
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300">클릭하여 로고 업로드</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">또는 파일을 여기로 드래그</p>
+            <p class="text-xs text-gray-500 dark:text-gray-500 mt-2">정사각형 이미지 · JPG, PNG, WebP · 최대 2MB</p>
+          </div>
+          <div id="logo-uploading" class="hidden">
+            <p class="text-sm text-gray-500 dark:text-gray-400">업로드 중...</p>
+          </div>
+          <div id="logo-preview" class="hidden">
+            <img id="logo-thumb" src="" alt="로고 미리보기" class="w-20 h-20 object-contain bg-white mx-auto rounded-lg border border-gray-200 mb-2" />
+            <p id="logo-meta" class="text-xs text-gray-500 dark:text-gray-400 mb-2"></p>
+            <button type="button" id="logo-remove" class="text-xs px-3 py-1.5 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-white font-bold rounded-lg transition-colors">✕ 삭제</button>
+          </div>
+        </div>
+        <p id="logo-error" class="hidden text-sm text-red-600 dark:text-red-400 mt-2"></p>
+      </div>
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">스크린샷 (선택)</label>
         <input type="hidden" id="f-screenshot-url" value={d.screenshot_url} />
@@ -268,7 +293,8 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
   const mode = form?.dataset.mode || 'create';
   const editSlug = form?.dataset.slug || '';
   const isEditMode = mode === 'edit';
-  const SUBMIT_URL = isEditMode ? `/api/tools/${editSlug}` : '/api/tools/submit';
+  // trailingSlash: 'always' — 끝 슬래시 없는 URL은 dev에서 404가 나므로 항상 '/' 붙인다.
+  const SUBMIT_URL = isEditMode ? `/api/tools/${editSlug}/` : '/api/tools/submit/';
   const SUBMIT_METHOD = isEditMode ? 'PUT' : 'POST';
   const SUBMIT_LABEL = isEditMode ? '수정 완료' : '등록 제출하기';
   const BUSY_LABEL = isEditMode ? '수정 중...' : '제출 중...';
@@ -389,7 +415,7 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch('/api/upload', { method: 'POST', body: fd });
+      const res = await fetch('/api/upload/', { method: 'POST', body: fd });
       const data = await res.json().catch(() => ({}));
       if (res.status === 401) {
         shotUploading.classList.add('hidden');
@@ -445,6 +471,112 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
     e.stopPropagation();
     hideShotError();
     clearShotPreview();
+  });
+
+  // AIK24-TOOLS-LOGO-01: 로고 업로드 — 스크린샷과 동일 패턴(/api/upload), 미리보기·삭제 제공.
+  const logoDrop = document.getElementById('logo-drop');
+  const logoFile = document.getElementById('f-logo-file');
+  const logoUrl = document.getElementById('f-logo-url');
+  const logoPrompt = document.getElementById('logo-prompt');
+  const logoUploading = document.getElementById('logo-uploading');
+  const logoPreview = document.getElementById('logo-preview');
+  const logoThumb = document.getElementById('logo-thumb');
+  const logoMeta = document.getElementById('logo-meta');
+  const logoError = document.getElementById('logo-error');
+
+  function showLogoError(msg) {
+    logoError.textContent = msg;
+    logoError.classList.remove('hidden');
+    logoDrop.classList.add('border-red-500');
+  }
+  function hideLogoError() {
+    logoError.classList.add('hidden');
+    logoDrop.classList.remove('border-red-500');
+  }
+  function showLogoPreview(url, name, size) {
+    logoThumb.src = url;
+    logoMeta.textContent = name + (size != null ? ' · ' + formatSize(size) : '');
+    logoPrompt.classList.add('hidden');
+    logoUploading.classList.add('hidden');
+    logoPreview.classList.remove('hidden');
+  }
+  function clearLogoPreview() {
+    logoUrl.value = '';
+    logoFile.value = '';
+    logoThumb.removeAttribute('src');
+    logoMeta.textContent = '';
+    logoPreview.classList.add('hidden');
+    logoUploading.classList.add('hidden');
+    logoPrompt.classList.remove('hidden');
+  }
+  async function uploadLogoFile(file) {
+    hideLogoError();
+    const err = validateShotFile(file); // MIME·2MB 제한은 스크린샷과 동일
+    if (err) {
+      showLogoError(err);
+      return;
+    }
+    logoPrompt.classList.add('hidden');
+    logoPreview.classList.add('hidden');
+    logoUploading.classList.remove('hidden');
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/upload/', { method: 'POST', body: fd });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 401) {
+        logoUploading.classList.add('hidden');
+        logoPrompt.classList.remove('hidden');
+        showLogoError('세션이 만료되었습니다. 새로고침 후 다시 시도해주세요.');
+        return;
+      }
+      if (!res.ok || !data.url) {
+        logoUploading.classList.add('hidden');
+        logoPrompt.classList.remove('hidden');
+        showLogoError(data.error || '업로드 중 오류가 발생했습니다.');
+        return;
+      }
+      logoUrl.value = data.url;
+      showLogoPreview(data.url, file.name, file.size);
+    } catch {
+      logoUploading.classList.add('hidden');
+      logoPrompt.classList.remove('hidden');
+      showLogoError('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    }
+  }
+
+  // 수정 모드: 기존 logo_url 프리필
+  if (logoUrl.value) {
+    const parts = logoUrl.value.split('/');
+    showLogoPreview(logoUrl.value, parts[parts.length - 1] || 'logo', null);
+  }
+  logoDrop.addEventListener('click', (e) => {
+    if (e.target.closest('#logo-remove')) return;
+    logoFile.click();
+  });
+  logoFile.addEventListener('change', () => {
+    if (logoFile.files && logoFile.files[0]) uploadLogoFile(logoFile.files[0]);
+  });
+  ['dragenter', 'dragover'].forEach((ev) => {
+    logoDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      logoDrop.classList.add('border-[#e5e5e5]', 'bg-[#333333]/10');
+    });
+  });
+  ['dragleave', 'drop'].forEach((ev) => {
+    logoDrop.addEventListener(ev, (e) => {
+      e.preventDefault();
+      logoDrop.classList.remove('border-[#e5e5e5]', 'bg-[#333333]/10');
+    });
+  });
+  logoDrop.addEventListener('drop', (e) => {
+    const f = e.dataTransfer?.files?.[0];
+    if (f) uploadLogoFile(f);
+  });
+  document.getElementById('logo-remove').addEventListener('click', (e) => {
+    e.stopPropagation();
+    hideLogoError();
+    clearLogoPreview();
   });
 
   function validateStep1() {
@@ -513,6 +645,7 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
     const catVal = document.getElementById('f-category').value;
     const catCustom = document.getElementById('f-category-custom').value.trim();
     const shotRaw = document.getElementById('f-screenshot-url').value.trim();
+    const logoRaw = document.getElementById('f-logo-url').value.trim();
     const payload = {
       name: document.getElementById('f-name').value.trim(),
       url: document.getElementById('f-url').value.trim(),
@@ -522,6 +655,7 @@ const submitLabel = isEdit ? '수정 완료' : '등록 제출하기';
       price_model: priceModel,
       price_detail: priceDetail || null,
       screenshot_url: shotRaw || null,
+      logo_url: logoRaw || null,
       korean_support: document.getElementById('f-korean').checked,
       difficulty: document.getElementById('f-difficulty').value || null,
       use_cases: document.getElementById('f-usecases').value.trim() || null,

@@ -60,7 +60,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
   try {
     const body = await request.json();
-    const { name, url, category, category_custom, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown } = body;
+    const { name, url, category, category_custom, description, price_model, price_detail, screenshot_url, logo_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown } = body;
 
     // 필수 4종 검증
     if (!name?.trim() || !url?.trim() || !category?.trim() || !description?.trim()) {
@@ -112,6 +112,25 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       }
     }
 
+    // AIK24-TOOLS-LOGO-01: logo_url 선택 — /api/files/ 상대경로 또는 http(s)만 허용 (screenshot과 동일 규칙)
+    let logoUrl: string | null = null;
+    if (logo_url !== undefined && logo_url !== null && String(logo_url).trim() !== '') {
+      const lg = String(logo_url).trim();
+      if (lg.startsWith('/api/files/')) {
+        logoUrl = lg;
+      } else {
+        try {
+          const parsedLogo = new URL(lg);
+          if (parsedLogo.protocol !== 'http:' && parsedLogo.protocol !== 'https:') {
+            return new Response(JSON.stringify({ error: '올바른 로고 URL을 입력해주세요. (http:// 또는 https://)' }), { status: 400 });
+          }
+          logoUrl = lg;
+        } catch {
+          return new Response(JSON.stringify({ error: '올바른 로고 URL을 입력해주세요. (http:// 또는 https://)' }), { status: 400 });
+        }
+      }
+    }
+
     // tasks: 최대 5개 + TASKS 키 존재 검증
     let taskList: string[] = [];
     if (tasks !== undefined && tasks !== null) {
@@ -153,8 +172,8 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
 
     await db.prepare(
       `INSERT INTO tool_submissions
-        (user_id, slug, name, url, category, category_custom, description, price_model, price_detail, screenshot_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`
+        (user_id, slug, name, url, category, category_custom, description, price_model, price_detail, screenshot_url, logo_url, korean_support, difficulty, use_cases, tags, tasks, detail_markdown, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')`
     ).bind(
       userId,
       slug,
@@ -166,6 +185,7 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       price_model.trim(),
       price_detail?.trim() || null,
       screenshotUrl,
+      logoUrl,
       korean_support ? 1 : 0,
       difficulty?.trim() || null,
       use_cases?.trim() || null,

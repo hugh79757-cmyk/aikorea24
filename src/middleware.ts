@@ -27,8 +27,13 @@ const SHORT_SLUGS = new Set([
 //   · frame-src += tpc.googlesyndication.com(구글 문서 기준 광고 iframe 호스트) +
 //     www.google.com(sodar2 가 프레이밍 시도 — 'Framing https://www.google.com/
 //     violates frame-src' 실측). 동의 팝업은 허용 변형 2/2 로드에서 0건이었다.
+//
+// AIK24-TOOLS-LOGO-01 (2026-11-24 실측): img-src += www.google.com + *.gstatic.com.
+//   s2 favicon 엔드포인트는 301로 gstatic faviconV2 로 리다이렉트된다. img-src 에
+//   두 호스트가 없으면 브라우저가 요청 자체를 CSP로 차단(requestfailed: csp)해
+//   s2 에 파비콘이 있는 도구도 전부 모노그램으로 보였다(지연 로딩 원인 아님).
 const SECURITY_HEADERS: Record<string, string> = {
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://ep2.adtrafficquality.google https://www.googletagmanager.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' https://*.aikorea24.kr https://lh3.googleusercontent.com https://img.shields.io https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://ep1.adtrafficquality.google data:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://fundingchoicesmessages.google.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://ep2.adtrafficquality.google https://www.google.com",
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://ep2.adtrafficquality.google https://www.googletagmanager.com https://cdn.jsdelivr.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; img-src 'self' https://*.aikorea24.kr https://www.google.com https://*.gstatic.com https://lh3.googleusercontent.com https://img.shields.io https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://ep1.adtrafficquality.google data:; connect-src 'self' https://www.google-analytics.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://fundingchoicesmessages.google.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; frame-src 'self' https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://ep2.adtrafficquality.google https://www.google.com",
   'X-Frame-Options': 'DENY',
   'X-Content-Type-Options': 'nosniff',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',

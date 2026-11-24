@@ -24,7 +24,8 @@ const tools = defineCollection({
     koreanSupport: z.boolean(),
     difficulty: z.string(),
     url: z.string(),
-    image: z.string().optional(),
+    image: z.string().optional(), // 스크린샷
+    logo: z.string().optional(), // AIK24-TOOLS-LOGO-01: 업로드 로고 (이미지와 별개)
     relatedPost: z.string().optional(),
     useCases: z.array(z.string()).default([]),
     tags: z.array(z.string()).default([]),

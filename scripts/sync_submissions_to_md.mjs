@@ -24,7 +24,7 @@ const wrangler = existsSync(WRANGLER) ? WRANGLER : 'wrangler';
 
 function querySubmissions() {
   const sql = `SELECT slug, name, url, category, description, price_model, price_detail,
-    korean_support, difficulty, use_cases, tags, tasks, detail_markdown, screenshot_url, created_at, updated_at
+    korean_support, difficulty, use_cases, tags, tasks, detail_markdown, screenshot_url, logo_url, created_at, updated_at
     FROM tool_submissions WHERE status='published' ORDER BY created_at DESC;`;
   // 2026-10-09 CF-MIGRATE-02: OAuth 프로필은 출발 계정 → env 토큰 사용
   const env = { ...process.env };
@@ -67,7 +67,7 @@ function priceModelEnum(pm) {
   return null; // 미묘한 값은 생략 (schema enum 충돌 방지)
 }
 
-function buildMd(row, preservedImage = null) {
+function buildMd(row, preservedImage = null, preservedLogo = null) {
   const price = String(row.price_detail ?? '').trim() || String(row.price_model ?? '').trim() || '—';
   const useCases = parseArr(row.use_cases);
   const tags = parseArr(row.tags);
@@ -95,6 +95,10 @@ function buildMd(row, preservedImage = null) {
     ...(row.screenshot_url
       ? [`image: ${yamlStr(row.screenshot_url)}`]
       : preservedImage ? [`image: ${preservedImage}`] : []),
+    // AIK24-TOOLS-LOGO-01: D1 logo_url 우선, 없으면 기존 md 의 수동 logo 보존
+    ...(row.logo_url
+      ? [`logo: ${yamlStr(row.logo_url)}`]
+      : preservedLogo ? [`logo: ${preservedLogo}`] : []),
     '---',
     '',
     String(row.detail_markdown ?? row.description ?? '').trim(),
@@ -134,9 +138,10 @@ function main() {
       // 재생성으로 날아가면 안 되는 수동 편집 필드(image 등)는 기존 md 에서 물려받는다.
       const prev = readFileSync(path, 'utf8');
       const preserved = readField(prev, 'image');
-      const md = buildMd(row, preserved);
+      const preservedLogo = readField(prev, 'logo');
+      const md = buildMd(row, preserved, preservedLogo);
       writeFileSync(path, md, 'utf8');
-      console.log(`  [update] ${slug}.md (D1 updated_at > md mtime${preserved ? `, image 보존: ${preserved}` : ''})`);
+      console.log(`  [update] ${slug}.md (D1 updated_at > md mtime${preserved ? `, image 보존: ${preserved}` : ''}${preservedLogo ? `, logo 보존: ${preservedLogo}` : ''})`);
       created++;
       continue;
     }

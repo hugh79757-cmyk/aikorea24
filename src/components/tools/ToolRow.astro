@@ -1,9 +1,9 @@
 ---
 // AIK24-TOOLS-UX-01 — /tools/ 목록(1차)과 홈 '오늘의 도구'(2차)가 공유하는 한 줄 행.
 // 마크업·클래스·data-* 속성은 1차(index.astro)의 것을 그대로 옮겼다.
+import ToolIcon from './ToolIcon.astro';
 import {
   deriveTagline,
-  faviconDomain,
   shortPrice,
   difficultyColor,
   difficultyLabel,
@@ -17,10 +17,10 @@ interface Props {
 
 const { tool, index } = Astro.props;
 const data = tool?.data ?? tool ?? {};
-const domain = faviconDomain(data.url || tool?.url || '');
 const tagline = deriveTagline(data.description ?? data.tagline);
 const name = String(data.name ?? '').trim();
-const initial = name.charAt(0) || '?';
+const logoUrl = data.logoUrl ?? data.logo ?? '';
+const iconUrl = data.url || tool?.url || '';
 const price = shortPrice(tool);
 const difficulty = String(data.difficulty ?? '중급');
 const verifiedAt = data.verifiedAt;
@@ -40,14 +40,7 @@ const verifiedAt = data.verifiedAt;
   data-updated={data.updated ?? ''}
   class="tool-card group flex items-center gap-3 px-3 sm:px-4 py-3 bg-white rounded-xl border border-gray-200 hover:border-[#E63B2E] hover:shadow-md transition-all dark:bg-[#111827]/60"
 >
-  {domain ? (
-    <span class="relative flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
-      <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`} alt="" loading="lazy" decoding="async" class="w-full h-full object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-      <span class="absolute inset-0 hidden items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold">{initial}</span>
-    </span>
-  ) : (
-    <span class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold rounded-lg">{initial}</span>
-  )}
+  <ToolIcon name={name} logoUrl={logoUrl} url={iconUrl} />
   <div class="min-w-0 flex-1">
     <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
       <h3 class="text-sm sm:text-base font-bold text-[#111111] dark:text-white break-words">{name}</h3>
