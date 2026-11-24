@@ -1538,6 +1538,16 @@ def resolve_model_id(article):
     if not bare:
         return None, "unknown", display
 
+    # 0) Zen 중단 모델은 OpenRouter에 같은 이름의 유료 모델이 있어도 막는다.
+    #    (qwen4-max-free: OpenRouter의 qwen/qwen4-max 는 유료지만 무료 프로모는 끝났다)
+    zen = _fetch_modelsdev_opencode()
+    if zen:
+        for cand in dict.fromkeys([display, display.removeprefix("opencode/"), bare]):
+            entry = zen.get(cand) or zen.get(f"opencode/{cand}")
+            if isinstance(entry, dict) and str(entry.get("status") or "").lower() == "deprecated":
+                log(f"모델 중단됨(deprecated) — 소개글 작성 안 함: {display}")
+                return None, "deprecated", display
+
     # 1) OpenRouter 조회 — 기존 동작 보존 (:free 우선 → base)
     models = _fetch_openrouter_models()
     if models:
@@ -1548,7 +1558,6 @@ def resolve_model_id(article):
                 return base, "ok", display
 
     # 2) models.dev OpenCode(Zen) 조회 — '-free' 접미사를 유지한 채 조회한다
-    zen = _fetch_modelsdev_opencode()
     if zen:
         for cand in dict.fromkeys([display, bare, display.removeprefix("opencode/"),
                                    bare.removeprefix("opencode/")]):
