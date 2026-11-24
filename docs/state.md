@@ -1,3 +1,45 @@
+## 2026-11-24 21:23 — AIK24-TOOLS-UX-01 2차: 홈 '오늘의 도구 5' 행 리스트 + 행 컴포넌트 공유 (로컬 빌드·확인까지만)
+
+한 일: 지시서 작업5 이행. `ToolsSection.astro`의 가로 캐러셀을 제거하고 1차와 같은 한 줄 행 5건 리스트로 교체. 1차의 인라인 행 마크업·파생값을 `src/components/tools/ToolRow.astro` + `src/lib/tool-row.ts`로 추출해 목록·홈이 공유하도록 함. **배포·git push 없음** (지시서 §4·§6 준수). 커밋 `d2cfde00`(로컬만).
+
+결과(수용기준별):
+- [검증됨] `npm run build` 통과 — `Server built in 13.04s` / `[build] Complete!`, error·warn 0줄. 변경 전 기준선(21:18)도 Complete.
+- [검증됨] `npm run test:js` 15/15 pass, fail 0. [PRODUCTION CODE]만 수정, [TEST CODE] 무변경.
+- [검증됨] 홈: heading '오늘의 도구', 5행(MAI Image 2.7 / Non-penetrating World Models / Othor AI / Cartoon Generators / Design Generators), `#tools-roll` 0건, '전체 툴 보기 →' 링크 유지. 히어로·브리핑 미수정.
+- [검증됨] 1차 회귀 없음 — `/tools/` 총 512행(SSR)/화면 24행, 빈 이름 0, 태그라인 최대 60자, 말줄임 0건, `#tools-grid`가 `#policy` 앞. 컴포넌트 추출 전(`/tmp/aik_rows_desktop.png`)·후(`/tmp/aik2_tools_grid_after.png`) 캡처 육안 동일.
+- [검증됨] 필터 전수: 카테고리 '글쓰기·챗봇' 38건, 검색 'mbti' 1건, 더 보기 24→48, 이름순 첫 행 '4초 mbti'. 필터 스크립트 단일 소유권 유지.
+- [검증됨] 모바일 390px: `/tools/` 24행·가로 오버플로 0·카드 우단 374px < 390px, 홈 5행·오버플로 0. 배지 겹침 없음.
+- [검증됨] 이름 없는 항목: 2차 신규 0건, 홈 정규화에 `name !== ''` 방어 추가(원본 md·D1 미변경).
+- [검증됨] 스크린샷: `/tmp/aik2_tools_grid_after.png` · `/tmp/aik2_rows_mobile.png` · `/tmp/aik2_home_tools_desktop.png` · `/tmp/aik2_home_tools_mobile.png`.
+- [부분검증] 파비콘 로드 — 로컬 Chrome에서 Google s2가 301 반환 → 모노그램 폴백(지시서상 허용). 제한 사유: 로컬 네트워크. 라이브 확인 필요.
+- [검증불가] 라이브 반영 — 지시서 §6에 따라 미배포. 복구 계획: 대표님 확인 후 `npm run deploy` 지시 시 배포 → `/`·`/tools/` 200 + 섹션 확인.
+
+잔존 위험: ① 로컬 커밋 상태라 대표님 확인 후 별도 배포 지시 필요. ② s2 favicon 301 지속 시 전 행 모노그램(기능 문제 아님). ③ 작업 중(21:22) 외부 파이프라인이 `src/content/tools/*.md` 다수를 수정 — 이번 커밋에 미포함, 배포 전 변경 의도 확인 필요.
+
+다음 행동: 대표님이 스크린샷 경로로 화면 확인 → 배포 지시 시에만 `npm run deploy` → 라이브에서 파비콘 1회 확인. 상세 SSOT: `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2123-AIK24-TOOLS-UX-01-2차-완료보고.md`.
+
+---
+
+## 2026-11-24 21:05 — AIK24-TOOLS-UX-01 1차: /tools/ 목록 Product Hunt 스타일 행 리스트 (로컬 빌드·확인까지만)
+
+한 일: 대표님 지시서(2026-11-24-2055) 1차(작업1~4) 이행. `src/pages/tools/index.astro` 직접 수정. **배포·git push 없음** (지시서 §4·§6 준수).
+
+결과(수용기준별):
+- [검증됨] `npm run build` 성공(约15초). 경고 3건은 **기존 것** — markdown remarkPlugins/gfm deprecation 2건 + `/tools/[id].astro`의 `getStaticPaths()` ignored 1건(이번 변경과 무관).
+- [검증됨] 작업1: 4열 카드 그리드 → **1열 세로 행 리스트**(파비콘 48px + 실패 시 모노그램 / 이름+한줄 태그라인 / NEW·KR·✓검증됨·MAKER / 난이도 / 가격 한 단어). 16:9 스크린샷은 목록에서 제거. 태그라인은 description 첫 문장(`[.!?]\s` 기준 — '2.0' 소수점 보존) 우선, 없으면 60자 단어경계 컷 + 조사 dangling 정리, **말줄임(…) 0건**.
+- [검증됨] 작업2: `#policy` 섹션을 목록(더보기·총개수) 아래, 뉴스레터 CTA 앞으로 이동. `id="policy"` 앵커 유지, 내용 무변경.
+- [검증됨] 작업3: 이름 없는 항목 **md 512건 + D1 published 42건 전수 확인 결과 0건**. 원본은 건드리지 않고 목록 필터에 `name.trim() !== ''` 방어 추가.
+- [검증됨] 작업4: `.tool-card`·`data-*` 전체 속성 유지로 필터 스크립트 단일 소유권 보존. 로컬 실측 — 카테고리 필터(글쓰기·챗봇 38건), 검색('mbti' 1건), 더보기(24→48), 이름순 정렬, 모바일 390px 24행 모두 정상.
+- [검증됨] 화면DSC: 데스크톱·모바일 `/tools/` 행 리스트 캡처 확인(`/tmp/aik_rows_desktop.png`, `/tmp/aik_rows_mobile.png`). 이름 없는 행 0, 태그라인 최대 60자, 배지 겹침 없음.
+- [미확인] 실제 파비콘 로드 — Google s2 엔드포인트가 301을 반환해 로컬 브라우저에서는 **모노그램 폴백**이 보임(지시서상 허용된 동작). 라이브 환경 where这也如此则 needs 별도 favicon 소스 검토.
+- [미진행] 작업5(2차 홈페이지 ToolsSection) — 지시서에 따라 **1차 확인 후 별도 진행**.
+
+잔존 위험 / 다음 행동: 대표님이 로컬 화면(스크린샷 경로 위) 보고 수정 방향 확정 → 배포는 별도 지시. 2차(홈 '오늘의 도구 5' 리스트)는 1차 확인 후 착수. 커밋 `16cefbd4`(커밋만, push 없음).
+
+---
+
+## 2026-11-24 AIK24-FREE-PIPE-01 일일 실행 — 수집 30건 / 실패 프로바이더 0 / added 2 · removed 0 · changed 0 / 리스트 페이지 갱신 https://emdash.aikorea24.kr/posts/free-models / 평가·발행 SKIP (AIK24-PIPE-01 자동 평가 비활성 — 수동 평가로 전환) / 심층 리뷰 2건 (리스트 카드 링크 2건)
+
 ## 2026-11-23 15:48 — PHONE-REMOVE-01 전화번호 삭제 배포 (L2T + AIK24)
 
 - 한 일: 대표님 전화번호(010-7416-5705) 전 페이지 삭제 배포. 말랑이 수정 4파일(Layout/privacy/terms/contact) + L2T _layout.ts 확인. **지시서 수정목록에 없던 잔존 2곳 추가 수정** — L2T `src/index.ts` 인라인 푸터 2개(990·2168행), AIK24 `src/pages/refund.astro` 2곳(28·79행). 두 레포 grep 7416 0건 확인 후 배포.

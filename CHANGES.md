@@ -2,6 +2,14 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-24 21:23 — feat(AIK24-TOOLS-UX-01): /tools/ PH식 행 리스트(1차) + 홈 '오늘의 도구 5'(2차)
+
+- 1차 `16cefbd4`: `/tools/` 4열 카드 → 1열 행(파비콘+모노그램 폴백·이름+한 줄 태그라인·NEW/KR/✓검증됨/MAKER·난이도·가격 한 단어). `#policy`를 목록 아래로 이동, 이름 빈 항목 노출 제외, 필터/검색/정렬/더 보기 단일 소유권 유지.
+- 2차 `d2cfde00`: 행 마크업·파생값을 `src/components/tools/ToolRow.astro` + `src/lib/tool-row.ts`로 추출해 목록·홈 공유. 홈 캐러셀(`#tools-roll`) 제거 → 같은 행 5건 세로 리스트 + '전체 툴 보기 →' 유지. 히어로·브리핑 미수정.
+- 검증: `npm run build` Complete(warn 0) / `npm run test:js` 15 pass / Playwright 실측 — `/tools/` 512행(화면 24), 빈 이름 0, 태그라인 ≤60자, 말줄임 0, 필터 38건·검색 1건·더 보기 48, 홈 5행, 모바일 390px 오버플로 0.
+- [부분검증] Google s2 favicon 301 → 모노그램 폴백(허용 동작), 라이브 미확인. [검증불가] 배포는 지시서 §6에 따라 보류 — 대표님 확인 후 별도 지시 필요.
+- 상세: `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2123-AIK24-TOOLS-UX-01-2차-완료보고.md`, `docs/state.md`.
+
 ## 2026-11-19 17:26 — feat(AIK24-TOOLDUP-NOTICE-02): 승인 버튼에 경고 창(모달)
 
 - `src/pages/admin/tools.astro` — 승인 버튼은 **항상** 모달을 거친다. 카드 버튼은 `openApproveModal()` 만 호출하고 `POST /api/admin/tools/review` 는 모달의 `승인 → 공개` 에서만 나간다(구현: `runReview()` 단일화).
