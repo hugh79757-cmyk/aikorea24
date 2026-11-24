@@ -1,3 +1,20 @@
+## 2026-11-24 21:54 — AIK24-TOOLS-UX-01 배포 (대표님 지시 21:47)
+
+한 일: 대표님 "배포해줘" 지시로 `npm run deploy`(`scripts/deploy.sh`) 실행. Exit 0. **git push는 하지 않음** (지시 범위는 배포까지).
+
+결과:
+- [검증됨] 배포 성공 — 블로그 포스트 검증 ✅ → submission→md 동기화(published=41, created=0) → `astro build` 성공 → 자산 137개 업로드 → Version ID **`9ff06fdd-0e03-4354-b19c-d5b58c18c0ca`**. 도메인 `aikorea24.kr` · `www.aikorea24.kr`. sitemap ping Google/Naver 모두 200.
+- [검증됨] 라이브 HTML(curl): `/` 200(46,936B) — `오늘의 도구` 1 · `tool-card` 5 · `tools-roll` 0 · `전체 툴 보기` 1. `/tools/` 200(990,362B) — `tool-card` 515(SSR 512행 + 참조 3) · `id="policy"` 1 · `tools-roll` 0. 로컬 확인 구조와 동일.
+- [부분검증] 라이브 브라우저 육안 — 헤드리스 Chrome이 Cloudflare 봇 챌린지("보안 확인 수행 중")로 차단. 봇 우회 금지 규칙 준수. 대체: curl HTML 대조 + 로컬 캡처. 실기기 1회 열람 필요.
+- [검증불가] 라이브 파비콘 로드 — 브라우저 진입 차단으로 미확인. 복구 계획: 대표님 실기기에서 파비콘/모노그램 표시 확인.
+- 빌드 경고 2건(markdown deprecation) + `[id].astro getStaticPaths() ignored` 1건은 기존 것, 이번 변경과 무관.
+
+잔존 위험: 로컬 커밋 3개(`16cefbd4`·`d2cfde00`·`7de0032d`)가 origin/main보다 3개 앞선 채 미push. 라이브 파비콘 미확인. 외부 파이프라인이 수정한 `src/content/tools/*.md` 변경분이 이번 빌드에 포함됐는지는 개별 확인 안 함(배포 전 변경 의도 확인 필요).
+
+다음 행동: 대표님 실기기에서 `/`·`/tools/` 1회 열람 → 파비콘 표시 확인. 필요 시 git push 별도 지시 대기. 상세 SSOT 보고서 §5 참조.
+
+---
+
 ## 2026-11-24 21:23 — AIK24-TOOLS-UX-01 2차: 홈 '오늘의 도구 5' 행 리스트 + 행 컴포넌트 공유 (로컬 빌드·확인까지만)
 
 한 일: 지시서 작업5 이행. `ToolsSection.astro`의 가로 캐러셀을 제거하고 1차와 같은 한 줄 행 5건 리스트로 교체. 1차의 인라인 행 마크업·파생값을 `src/components/tools/ToolRow.astro` + `src/lib/tool-row.ts`로 추출해 목록·홈이 공유하도록 함. **배포·git push 없음** (지시서 §4·§6 준수). 커밋 `d2cfde00`(로컬만).

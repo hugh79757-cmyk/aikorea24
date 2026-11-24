@@ -9,6 +9,7 @@
 - 검증: `npm run build` Complete(warn 0) / `npm run test:js` 15 pass / Playwright 실측 — `/tools/` 512행(화면 24), 빈 이름 0, 태그라인 ≤60자, 말줄임 0, 필터 38건·검색 1건·더 보기 48, 홈 5행, 모바일 390px 오버플로 0.
 - [부분검증] Google s2 favicon 301 → 모노그램 폴백(허용 동작), 라이브 미확인. [검증불가] 배포는 지시서 §6에 따라 보류 — 대표님 확인 후 별도 지시 필요.
 - 상세: `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2123-AIK24-TOOLS-UX-01-2차-완료보고.md`, `docs/state.md`.
+- 배포(대표님 지시 21:47): 21:52 `npm run deploy` Exit 0 — Version `9ff06fdd-0e03-4354-b19c-d5b58c18c0ca`, `aikorea24.kr`/`www`. 라이브 curl `/` 200(`오늘의 도구` 1·행 5·캐러셀 0), `/tools/` 200(SSR 512행·정책 1·캐러셀 0). 헤드리스 브라우저는 Cloudflare 봇 챌린지로 차단 → 실기기 열람 필요. git push 없음(미지시). SSOT 보고서 §5 참조.
 
 ## 2026-11-19 17:26 — feat(AIK24-TOOLDUP-NOTICE-02): 승인 버튼에 경고 창(모달)
 
