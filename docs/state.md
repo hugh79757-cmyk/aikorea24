@@ -1,3 +1,11 @@
+## 2026-11-24 22:25 — AIK24-TOOLS-COLLECT-PAUSE-01 영구 정지 추가 (대표님 승인)
+
+- 한 일: 대표님 승인으로 `launchctl disable gui/501/kr.aikorea24.tools-collector` 실행(exit 0). 기존 `launchctl unload` 는 세션 해제라 재부팅 시 되살아날 수 있었으나, launchd 에 영구 disabled 플래그를 기록해 재부팅·재로그인 후에도 자동 로드되지 않게 했다. plist(`~/Library/LaunchAgents/kr.aikorea24.tools-collector.plist`, 1170B)는 삭제하지 않고 보존.
+- 결과: [검증됨] `launchctl print-disabled gui/501` → `"kr.aikorea24.tools-collector" => disabled`, `launchctl list` → 잡 부재, plist 파일 존재. [검증됨] 다른 스케줄(브리핑·블로그·평가·tools-postprocess) 변경 없음.
+- 산출물: 완료보고 `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2208-AIK24-TOOLS-COLLECT-PAUSE-01-완료보고.md` 갱신(영구 disable 출력·재개 절차 반영). git push 없음.
+- 잔존 위험: 재개 시 `launchctl enable gui/501/kr.aikorea24.tools-collector` 후 `launchctl load …` 순서 필수(플래그 미해제 시 load 무시). 수동 등록(D1 published) 경로는 그대로 유지. 재개 전 ENTITY-01 실체 검증 필터 상태 확인 필요.
+- 다음 행동: ENTITY-01 보류 133건 결정·배포 승인 별도 진행. 재개 결정 시 위 enable→load 절차 사용.
+
 ## 2026-11-24 22:08 — AIK24-TOOLS-COLLECT-PAUSE-01 자동 수집 중지 (launchd 비활성화)
 
 - 한 일: 대표님 결정으로 도구 자동 수집을 중지. `kr.aikorea24.tools-collector` 잡을 `launchctl unload` 로 비활성화(exit 0). plist(`~/Library/LaunchAgents/kr.aikorea24.tools-collector.plist`, 06:00 실행)는 보존. 다른 트리거(cron·run_pipeline.py·기타 plist·Cloudflare) 확인 결과 도구 수집 호출 0건. 브리핑·블로그·모델 평가·tools-postprocess 등 다른 스케줄은 건드리지 않음.
