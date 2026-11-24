@@ -46,7 +46,7 @@ Submitted by DIRI AI for independent, no-fee editorial consideration. No paid pl
 
 **환불과 해지**: 무료 플랜은 신용카드 정보를 요구하지 않으며, 유료 플랜의 결제 및 환불 정책은 공식 홈페이지의 요금 안내 페이지에서 확인해야 합니다.
 
-## 한국어 품질 실측
+## 한국어 품질 정리
 
 **가격 저항 극복 연습**
 

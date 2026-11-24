@@ -48,7 +48,7 @@ Check whether a song was made with AI. Upload a file, record your computer's aud
 
 **환불과 해지**: 환불 및 구체적인 구독 해지 조건에 대해서는 결제 시점의 공식 요금 페이지에서 별도로 확인이 필요합니다.
 
-## 한국어 품질 실측
+## 한국어 품질 정리
 
 **유튜브 노래 링크 검사**
 

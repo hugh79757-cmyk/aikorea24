@@ -52,7 +52,7 @@ Most saju apps guess. This one calculates. Saju is an AI-powered Four Pillars (B
 
 **환불과 해지**: 구매한 크레딧은 만료되지 않으며 현금과 동일하지 않습니다. 정확한 환불 및 결제 취소 규정은 공식 요금 페이지에서 확인이 필요합니다.
 
-## 한국어 품질 실측
+## 한국어 품질 정리
 
 **올해 직장운 확인**
 

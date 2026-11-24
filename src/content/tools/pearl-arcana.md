@@ -50,7 +50,7 @@ Pearl Arcana is an AI tarot reading service built around a deck painted in mothe
 
 **환불과 해지**: 구독 및 결제는 Dodo 고객 포털로 관리할 수 있으며, 구독 해지 시 남은 기간과 크레딧은 소멸될 수 있으므로 공식 페이지의 환불 약관을 확인해야 합니다.
 
-## 한국어 품질 실측
+## 한국어 품질 정리
 
 **이직 고민**
 

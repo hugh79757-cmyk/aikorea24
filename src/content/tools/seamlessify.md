@@ -48,7 +48,7 @@ Seamlessify makes seamless, tileable patterns and textures for design and AI wor
 
 **환불과 해지**: 구독 플랜의 해지 및 환불 정책에 대한 구체적인 내용은 공식 홈페이지의 요금 및 결제 페이지에서 직접 확인해야 합니다.
 
-## 한국어 품질 실측
+## 한국어 품질 정리
 
 **패턴 디자인 생성**
 

@@ -46,7 +46,7 @@ Fireply is an AI reply agent for X (Twitter). It learns your voice from your pos
 
 **환불과 해지**: 환불 및 구독 해지 조건에 대한 상세한 규정은 공식 웹사이트의 요금 정책 페이지로 직접 확인해야 합니다.
 
-## 한국어 품질 실측
+## 한국어 품질 정리
 
 **IT 트렌드 댓글**
 
