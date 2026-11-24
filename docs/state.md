@@ -1,3 +1,11 @@
+## 2026-11-24 22:45 — AIK24-MODEL-EVAL-FIX-01 모델 평가 라우팅 버그 수정
+
+- 한 일: Zen 모델이 OpenRouter 목록에 없어 전부 평가 생략 → 소개글만 발행되던 버그 수정. `model_eval.py` 에 models.dev OpenCode 조회 캐시 + `resolve_model_id()`(status: ok/deprecated/unknown/not_model) 신설, `extract_model_id()` 는 하위 호환 래퍼로 유지. `blog_draft_generator.py` 에서 deprecated·미확인 모델은 소개글도 쓰지 않고 명시 로그 후 항목 생략, 모델 평가글 실패 시 뉴스 대체 금지. `_eval_block()` 은 캐시 우선 + alias 조회, 캐시 미스 시 인라인 12문항 대신 '평가 대기' 보류(EVAL-AUTO 위임). 추가로 기존 `_eval_block` 이 OpenRouter 직접 API(`eval_model`)를 쓰던 정책 위반 경로도 제거.
+- 결과: [검증됨] 신규 회귀 테스트 10건 전부 통과(지시서 6건 포함, 네트워크 0회). [검증됨] 전체 테스트 1195 passed / 9 failed — 9건은 stash 대조로 수정 전 실패 확인(신규 회귀 0). [검증됨] `bash scripts/deploy.sh` 완료, Version ID `6ae53caa-ba81-4911-bfbc-4ba4cc27f6ce`, https://aikorea24.kr. 커밋 d8670c37·c3b90ba7(push 없음).
+- 산출물: 완료보고 `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2245-AIK24-MODEL-EVAL-FIX-01-완료보고.md`.
+- 잔존 위험: 캐시 없는 신규 모델은 EVAL-AUTO 평가까지 블로그 생성 보류(의도된 동작) / 이미 발행된 qwen4-max-free 글 처분은 별도 결정 / 수정 전 실패 9건 미해결 / 다음 07:30 브리핑 실전 확인 필요.
+- 다음 행동: 다음 브리핑 로그에서 Zen 모델이 모델 평가글 경로로 가는지 확인 → 필요 시 qwen4-max-free 기발행 글 처분 결정.
+
 ## 2026-11-24 22:37 — AIK24-TOOLS-LOGO-01: 로고 업로드·저장·표시 + 파비콘 CSP 차단 해소 (로컬 구현·검증까지, 배포 없음)
 
 한 일: 지시서 작업1~5 이행. D1 `tool_submissions`에 `logo_url` 추가(원격 적용, 백업 83행), md 스키마 `logo` 추가, 등록/수정 폼에 정사각형 로고 업로드 란 추가, 목록·상세·홈이 공유 `ToolIcon`(로고→파비콘→모노그램)으로 표시. 커밋 `9f65d858`. **배포 없음**(지시서 §8), git push 없음(§9).
