@@ -58,7 +58,7 @@ TOOLISH = re.compile(r"\b(ai|gpt|llm|tool|app|platform|api|software|assistant|ch
                      r"generat\w+|automat\w+|design|video|image|seo|analytic\w*|agent|model|"
                      r"studio|workspace|dashboard|saas|editor|writer|summar\w+|transcri\w+)\b", re.I)
 SECTIONS_MARK = "## 사용법"
-NEW_SECTION_LIST = ("## 사용법", "## 요금제 자세히", "## 한국어 품질 실측", "## 장단점",
+NEW_SECTION_LIST = ("## 사용법", "## 요금제 자세히", "## 한국어 품질 정리", "## 장단점",
                     "## 주의사항", "## 대안 도구 비교")
 
 

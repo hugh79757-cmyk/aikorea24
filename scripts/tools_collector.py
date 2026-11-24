@@ -34,6 +34,16 @@ from pipeline.infra import project_root; PROJECT_DIR = project_root()
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'scripts', 'threads', 'v3'))
 from model_router import chat_completion
 
+# AIK24-TOOLS-ENTITY-01: 수집기·전수조사 공용 실체 검증 모듈 (판정 기준은 그 파일 하나에만 있다)
+try:
+    from entity_verify import verify_entity
+except Exception as _entity_import_err:  # noqa: BLE001 — 필터 부재가 수집 자체를 죽이지 않게 한다
+    verify_entity = None
+    print(f"[실체검증] 모듈 로드 실패 — 필터 비활성: {_entity_import_err}")
+
+# 보류(hold) 기록 — md 를 만들지 않고 사람이 직접 확인할 목록
+ENTITY_HOLD_PATH = os.path.join(PROJECT_DIR, 'scripts', 'logs', 'entity_hold.jsonl')
+
 # 신규 도구 후처리(URL 승격·심화 v2·썸네일) 시간 예산 — 초과 시 남은 항목은 다음 실행이 처리
 POSTPROCESS_BUDGET = 1200
 
@@ -1146,6 +1156,11 @@ SYSTEM_PROMPT = """당신은 한국어 AI 툴 큐레이터입니다.
 - "~다/~ㄴ다/~는다" 체(반말/평서체)는 절대 사용 금지.
 
 JSON 외 다른 텍스트는 절대 출력하지 마세요.
+검증·표현 규칙 (AIK24-TOOLS-ENTITY-01):
+- 이 글은 공식 홈페이지와 공개 자료만 보고 씁니다. '실측'·'테스트 결과'·'직접 써봤다'처럼
+  실제로 검증한 듯한 표현을 쓰지 않습니다.
+- 사용 예시(real_examples)는 '예시'임을 분명히 하고, 측정값(정확도·속도·인식률·만족도)을 지어내지 않습니다.
+- 확인할 수 없는 수치·후기·비교 우위는 쓰지 않습니다.
 {HUMANIZE_RULES}"""
 
 USER_PROMPT_TEMPLATE = """다음 AI 툴 정보를 분석해 JSON으로 응답하세요.
@@ -1186,9 +1201,9 @@ __CRAWLED_PRICING__
     "korean_detail": "한국어 지원 수준 상세 설명 1~2문장.",
     "recommend_for": "이런 분에게 추천합니다. 구체적인 페르소나 2~3개, 각 1문장.",
     "real_examples": [
-      {"persona": "직장인", "example": "구체적 상황 + 어떻게 사용하는지 2문장"},
-      {"persona": "학생", "example": "구체적 상황 + 어떻게 사용하는지 2문장"},
-      {"persona": "소상공인", "example": "구체적 상황 + 어떻게 사용하는지 2문장"}
+      {"persona": "직장인", "example": "사용 '예시' — 구체적 상황 + 어떻게 쓸 수 있는지 2문장 (직접 써서 검증한 결과가 아님)"},
+      {"persona": "학생", "example": "사용 '예시' — 구체적 상황 + 어떻게 쓸 수 있는지 2문장 (직접 써서 검증한 결과가 아님)"},
+      {"persona": "소상공인", "example": "사용 '예시' — 구체적 상황 + 어떻게 쓸 수 있는지 2문장 (직접 써서 검증한 결과가 아님)"}
     ],
     "vs_similar": {
       "pros": ["장점1 (구체적)", "장점2"],
@@ -1404,6 +1419,29 @@ updated: "{today}"
 """
 
 
+def strip_unverified_claims(text: str) -> str:
+    """'실측·테스트 결과' 처럼 실제 검증한 듯한 표현을 중립 표현으로 바꾼다.
+
+    AIK24-TOOLS-ENTITY-01 작업3 — Morphiqo 가짜 '실측' 섹션 재발 방지.
+    문장을 지우지 않고 표현만 바꾼다(정보 손실 최소화).
+    """
+    if not text:
+        return text
+    replacements = (
+        ('한국어 품질 실측', '한국어 품질 정리'),
+        ('실측 결과', '참고 정보'),
+        ('실측', '참고'),
+        ('테스트 결과', '예시'),
+        ('직접 사용해 본 결과', '일반적으로 알려진 사용 흐름'),
+        ('직접 써본 결과', '일반적으로 알려진 사용 흐름'),
+        ('써보니', '살펴보면'),
+        ('사용 후기', '사용 예시'),
+    )
+    for old, new in replacements:
+        text = text.replace(old, new)
+    return text
+
+
 def build_body(meta: dict) -> str:
     """MD 본문 생성 (tool_detail 구조) — 새 JSON 구조 지원"""
     td = meta.get('tool_detail', {})
@@ -1467,10 +1505,10 @@ def build_body(meta: dict) -> str:
         lines.append(recommend)
         lines.append('')
 
-    # 실제 활용 예시 (객체 배열 또는 문자열 배열 지원)
+    # 활용 예시 (객체 배열 또는 문자열 배열 지원) — '실측'이 아니라 '예시'임을 제목에서 명시
     examples = td.get('real_examples', [])
     if examples:
-        lines.append('## 실제 활용 예시')
+        lines.append('## 활용 예시')
         lines.append('')
         for ex in examples:
             if isinstance(ex, dict):
@@ -1530,7 +1568,9 @@ def build_body(meta: dict) -> str:
             lines.append('')
 
     # 일부 LLM 출력이 list를 섞어 넣어 TypeError로 전체 실행이 크래시 → sync_tools_to_d1 도달 불가 방어
-    return '\n'.join(x if isinstance(x, str) else '\n'.join(str(i) for i in x) for x in lines)
+    body = '\n'.join(x if isinstance(x, str) else '\n'.join(str(i) for i in x) for x in lines)
+    # AIK24-TOOLS-ENTITY-01 작업3: 실제로 검증하지 않은 '실측' 표현 제거
+    return strip_unverified_claims(body)
 
 
 def save_tool_md(name: str, meta: dict, order: int, tool_url: str = '') -> str:
@@ -1547,6 +1587,8 @@ def save_tool_md(name: str, meta: dict, order: int, tool_url: str = '') -> str:
     body = humanize_md(body_raw)
 
     content = frontmatter + '\n' + body + '\n'
+    # 최종 방어 — humanize 를 거친 뒤에도 '실측' 표현이 남지 않게 한다
+    content = strip_unverified_claims(content)
 
     with open(filepath, 'w', encoding='utf-8') as f:
         f.write(content)
@@ -1670,6 +1712,70 @@ def translate_tools(tools: list) -> list:
     return tools
 
 
+def filter_entities(tools: list, write_hold: bool = True, max_workers: int = 4) -> tuple:
+    """AIK24-TOOLS-ENTITY-01 — LLM 비용을 쓰기 전에 운영 주체 실체를 검증한다.
+
+    · 통과(pass)  : 그대로 진행
+    · 불통과(fail): md 저장 없이 스킵 (사유·단계를 로그에 남긴다)
+    · 보류(hold)  : md 를 만들지 않고 ENTITY_HOLD_PATH(jsonl)에 남긴다 — 사람이 직접 판정
+
+    반환: (통과 목록, 스킵 목록[{tool, verdict, stage, reason}])
+    """
+    kept, skipped = [], []
+    if not tools:
+        return kept, skipped
+    if verify_entity is None:
+        print("[실체검증] 모듈 없음 — 필터를 건너뛴다")
+        return list(tools), skipped
+
+    def _one(tool):
+        url = (tool.get('url') or '').strip()
+        try:
+            return tool, verify_entity(url)
+        except Exception as e:  # noqa: BLE001 — 검증 실패가 수집을 죽이지 않는다
+            return tool, {'url': url, 'verdict': 'hold', 'stage': 'error',
+                          'reason': f'검증 예외: {type(e).__name__}: {e}', 'evidence': {}}
+
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        results = list(pool.map(_one, tools))
+
+    holds = []
+    for tool, res in results:
+        verdict = (res or {}).get('verdict', 'hold')
+        stage = (res or {}).get('stage', '')
+        reason = (res or {}).get('reason', '')
+        name = tool.get('name', '')
+        print(f"  [실체검증] {name[:30]:32} {verdict:4} ({stage}) {reason}")
+        if verdict == 'pass':
+            kept.append(tool)
+            continue
+        skipped.append({'tool': tool, 'name': name, 'verdict': verdict,
+                        'stage': stage, 'reason': reason})
+        if verdict == 'hold':
+            holds.append({
+                'ts': datetime.now().isoformat(timespec='seconds'),
+                'name': name,
+                'url': (res or {}).get('url', tool.get('url', '')),
+                'source': tool.get('source', ''),
+                'verdict': verdict,
+                'stage': stage,
+                'reason': reason,
+                'evidence': (res or {}).get('evidence', {}),
+            })
+
+    if write_hold and holds:
+        try:
+            os.makedirs(os.path.dirname(ENTITY_HOLD_PATH), exist_ok=True)
+            with open(ENTITY_HOLD_PATH, 'a', encoding='utf-8') as f:
+                for rec in holds:
+                    f.write(json.dumps(rec, ensure_ascii=False) + '\n')
+            print(f"  [실체검증] 보류 {len(holds)}건 → {os.path.relpath(ENTITY_HOLD_PATH, PROJECT_DIR)}")
+        except OSError as e:
+            print(f"  [실체검증] 보류 기록 실패: {e}")
+
+    return kept, skipped
+
+
 def process_batch(tools: list, batch_size=5, max_workers=3, translate=False) -> list:
     """툴 목록을 배치로 처리 → 생성된 slug 목록 반환"""
     existing_slugs, existing_names = get_existing_tool_names()
@@ -1698,7 +1804,19 @@ def process_batch(tools: list, batch_size=5, max_workers=3, translate=False) -> 
     if not new_tools:
         print("새로운 툴 없음")
         return []
-    
+
+    # AIK24-TOOLS-ENTITY-01: 운영 주체 실체 검증 — LLM(비용) 호출 전에 거른다.
+    #   불통과는 저장하지 않고, 보류는 md 없이 scripts/logs/entity_hold.jsonl 로 간다.
+    verified, skipped = filter_entities(new_tools)
+    if skipped:
+        print(f"[실체검증] 스킵 {len(skipped)}건 (불통과 {sum(1 for s in skipped if s['verdict'] == 'fail')} · "
+              f"보류 {sum(1 for s in skipped if s['verdict'] == 'hold')})")
+    new_tools = verified
+
+    if not new_tools:
+        print("실체검증 통과 툴 없음")
+        return []
+
     print(f"신규 툴: {len(new_tools)}개 (배치={batch_size}, 스레드={max_workers})")
     
     created = []
