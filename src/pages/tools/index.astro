@@ -47,6 +47,7 @@ const d1Tools: any[] = d1Rows.map((r) => ({
     description: String(r.description ?? ''),
     category: String(r.category ?? '기타'),
     price: (r.price_detail && String(r.price_detail).trim()) || r.price_model || '—',
+    priceModel: r.price_model ? String(r.price_model).trim() : null,
     koreanSupport: Number(r.korean_support) === 1,
     difficulty: (r.difficulty && String(r.difficulty).trim()) || '중급',
     tags: parseJsonArray(r.tags),
@@ -74,7 +75,39 @@ const mdWithShot: any[] = mdTools.map((t) => {
     ? { ...t, data: { ...t.data, screenshotUrl: shot } }
     : t;
 });
-const allTools: any[] = [...d1Only, ...mdWithShot];
+// AIK24-TOOLS-UX-01 작업3: 이름 없는 항목은 원본(md·D1)을 바꾸지 않고 **목록 노출에서만** 제외한다.
+const allTools: any[] = [...d1Only, ...mdWithShot].filter((t: any) => String(t?.data?.name ?? '').trim() !== '');
+
+// AIK24-TOOLS-UX-01 작업1: Product Hunt식 한 줄 행에 쓸 파생값.
+const TAGLINE_MAX = 60;
+/** 조사· Connection 어미가 끝에 남으면 절단 자국처럼 보인다 — 단어 경계 컷 후 정리. */
+const TRAILING_PARTICLE = /(?:은|는|이|가|을|를|와|과|의|에서|으로|로|도|만)$/;
+
+function deriveTagline(description?: string | null): string {
+  let text = String(description ?? '').replace(/\s+/g, ' ').trim();
+  if (!text) return '';
+  // '[.!?] + 공백'만 문장 경계 → '2.0' 같은 소수점은 자르지 않는다.
+  const firstSentence = text.match(/^[\s\S]*?[.!?](?=\s|$)/);
+  if (firstSentence) text = firstSentence[0].trim();
+  if (text.length > TAGLINE_MAX) {
+    const head = text.slice(0, TAGLINE_MAX);
+    const space = head.lastIndexOf(' ');
+    text = (space > 20 ? head.slice(0, space) : head).trimEnd().replace(TRAILING_PARTICLE, '').trimEnd();
+  }
+  return text; // 말줄임(…) 붙이지 않음
+}
+
+function faviconDomain(url?: string | null): string {
+  const m = String(url ?? '').match(/^https?:\/\/([^/?#]+)/i);
+  return m ? m[1].toLowerCase() : '';
+}
+
+/** 목록에서는 가격 한 단어 — priceModel 우선, 없으면 price 첫 토큰(필터용 data-price는 전문 유지). */
+function shortPrice(tool: any): string {
+  const pm = String(tool?.data?.priceModel ?? tool?.priceModel ?? '').trim();
+  const src = pm || String(tool?.data?.price ?? '').trim();
+  return src.split(/\s+/)[0] || '—';
+}
 
 // AIK24-TOOLSYNC-06 (2026-10-18 대표님 결정) — '최신 등록'·'인기 도구' 섹션 폐지.
 //   · 최신 등록: md `updated` 상위 6칸 회전 창. 수집기가 매일 06:00 에 2~11개를 자동 등록해
@@ -186,32 +219,6 @@ import { TASK_COUNT } from '../../config/tasks';
       ))}
     </div>
 
-    <!-- ========== 등록 정책 ========== -->
-    <section id="policy" class="mb-8 scroll-mt-24">
-      <div class="border border-gray-200 rounded-2xl p-8 bg-white">
-        <div class="flex items-start gap-4">
-          <div class="w-1 self-stretch bg-red-600 rounded-full flex-shrink-0"></div>
-          <div>
-            <h2 class="text-xl font-bold text-gray-900 mb-2">AI 툴 등록 정책</h2>
-            <p class="text-sm text-gray-600 mb-6">AI코리아24 도구 디렉토리는 정확하고 정직한 AI 도구 정보를 전합니다. 무료·유료 무관하게 등록할 수 있습니다.</p>
-            <h3 class="font-bold text-gray-900 mb-2">등록 가능한 도구</h3>
-            <ul class="text-sm text-gray-700 space-y-1.5 mb-6 list-disc pl-5">
-              <li>AI 기능을 핵심으로 포함하는 공식 서비스 또는 검증된 오픈소스</li>
-              <li>무료·유료 무관 (요금제는 명시합니다)</li>
-              <li>한국어 지원 시 우선 검토</li>
-            </ul>
-            <h3 class="font-bold text-gray-900 mb-2">등록되지 않는 도구</h3>
-            <ul class="text-sm text-gray-700 space-y-1.5 mb-6 list-disc pl-5">
-              <li>모델명을 도메인·서비스명으로 쓰는 서드파티 래퍼 (원본 개발사의 공식 서비스가 아닌 경우)</li>
-              <li>공식 서비스를 사칭하거나 오인하게 만드는 사이트</li>
-              <li>AI와 무관한 서비스, 피싱·사기 목적의 사이트</li>
-            </ul>
-            <p class="text-xs text-gray-500">모든 제출은 관리자 검토 후 공개됩니다 (보통 24시간 이내).</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ========== 구분선 ========== -->
     <div class="flex items-center gap-4 mb-8">
       <div class="flex-1 h-px bg-gray-200 bg-[#111111] dark:from-transparent dark:via-white/[0.08] dark:to-transparent"></div>
@@ -262,11 +269,14 @@ import { TASK_COUNT } from '../../config/tasks';
       </select>
     </div>
 
-    <!-- ========== 도구 카드 그리드 ========== -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="tools-grid">
+    <!-- ========== AIK24-TOOLS-UX-01: PH식 한 줄 행 리스트 ========== -->
+    <div class="flex flex-col gap-2" id="tools-grid">
       {allTools.map((tool, i) => {
-        const accent = catAccent[tool.data.category] || defaultAccent;
-        const firstUc = tool.data.useCases?.slice(0, 2) || [];
+        const domain = faviconDomain(tool.data.url || tool.url || '');
+        const tagline = deriveTagline(tool.data.description);
+        const name = String(tool.data.name || '').trim();
+        const initial = name.charAt(0) || '?';
+        const price = shortPrice(tool);
         return (
         <a
           href={`/tools/${tool.id}/`}
@@ -280,54 +290,38 @@ import { TASK_COUNT } from '../../config/tasks';
           data-difficulty={tool.data.difficulty}
           data-order={tool.data.order}
           data-updated={tool.data.updated || ''}
-          class="tool-card group relative flex flex-col bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#e5e5e5] transition-all duration-300 hover:shadow-xl hover:shadow-[#e5e5e5]/5 hover:-translate-y-0.5 dark:bg-[#111827]/60  dark:hover:border-[#e5e5e5]"
+          class="tool-card group flex items-center gap-3 px-3 sm:px-4 py-3 bg-white rounded-xl border border-gray-200 hover:border-[#E63B2E] hover:shadow-md transition-all dark:bg-[#111827]/60"
         >
-          <div class={`h-0.5 w-full bg-[#111111] ${accent}`}></div>
-          {(tool.data.image || tool.data.screenshotUrl) && (
-            <div class="w-full aspect-[16/9] overflow-hidden bg-gray-100 dark:bg-[#111827]/40 border-b border-gray-100 dark:border-[#e5e5e5]/10">
-              <img src={tool.data.image || tool.data.screenshotUrl} alt={`${tool.data.name} 미리보기`} loading="lazy" decoding="async" class="w-full h-full object-cover" />
-            </div>
+          {domain ? (
+            <span class="relative flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
+              <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`} alt="" loading="lazy" decoding="async" class="w-full h-full object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+              <span class="absolute inset-0 hidden items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold">{initial}</span>
+            </span>
+          ) : (
+            <span class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold rounded-lg">{initial}</span>
           )}
-          <div class="p-4 sm:p-5 flex-1 flex flex-col">
-            <div class="flex items-start justify-between mb-2">
-              <h3 class="text-sm sm:text-base font-bold text-gray-900 dark:text-white group-hover:text-[#111111] dark:group-hover:text-[#555555] transition-colors leading-snug pr-2">
-                {tool.data.name}
-              </h3>
-              <div class="flex gap-1 flex-shrink-0">
-                {(tool as any).isD1 && (
-                  <span class="text-xs font-bold px-2 py-0.5 bg-gray-100 text-[#111111] rounded-full border border-[#e5e5e5] dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20">MAKER</span>
-                )}
-                {tool.data.verified && (
-                  <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-[#e5e5e5] font-medium dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20" title={tool.data.verifiedAt ? `검증됨 (${tool.data.verifiedAt})` : '관리자 검증됨'}>✓ 검증됨</span>
-                )}
-                {isNewTool(tool) && (
-                  <span class="text-[10px] px-1.5 py-0.5 bg-[#E63B2E] text-white rounded font-bold" title="최근 7일 내 등록·갱신">NEW</span>
-                )}
-                {tool.data.koreanSupport && (
-                  <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-[#e5e5e5] font-medium dark:bg-[#333333]/15 dark:text-[#555555] dark:border-[#e5e5e5]/20" title="한국어 지원">
-                    KR
-                  </span>
-                )}
-              </div>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+              <h3 class="text-sm sm:text-base font-bold text-[#111111] dark:text-white break-words">{name}</h3>
+              {(tool as any).isD1 && (
+                <span class="text-[10px] font-bold px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200">MAKER</span>
+              )}
+              {tool.data.verified && (
+                <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200 font-medium" title={tool.data.verifiedAt ? `검증됨 (${tool.data.verifiedAt})` : '관리자 검증됨'}>✓ 검증됨</span>
+              )}
+              {isNewTool(tool) && (
+                <span class="text-[10px] px-1.5 py-0.5 bg-[#E63B2E] text-white rounded font-bold" title="최근 7일 내 등록·갱신">NEW</span>
+              )}
+              {tool.data.koreanSupport && (
+                <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200 font-medium" title="한국어 지원">KR</span>
+              )}
             </div>
-            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3 flex-1 leading-relaxed">
-              {tool.data.description}
-            </p>
-            <div class="flex items-center justify-between gap-2 pt-3 border-t border-gray-100 ">
-              <div class="flex items-center gap-1.5 min-w-0">
-                <span class:list={[
-                  "text-[10px] px-2 py-0.5 rounded-full border font-medium",
-                  difficultyColor(tool.data.difficulty)
-                ]}>
-                  {difficultyLabel(tool.data.difficulty)}
-                </span>
-                {firstUc.length > 0 && (
-                  <span class="text-[10px] text-gray-500 truncate">{firstUc[0]}</span>
-                )}
-              </div>
-              <span class="text-[11px] font-medium text-gray-600 dark:text-gray-500 flex-shrink-0">{tool.data.price || '—'}</span>
-            </div>
+            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug break-words">{tagline}</p>
           </div>
+          <span class:list={["hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full border font-medium flex-shrink-0", difficultyColor(tool.data.difficulty)]}>
+            {difficultyLabel(tool.data.difficulty)}
+          </span>
+          <span class="text-[11px] sm:text-xs font-medium text-gray-600 dark:text-gray-400 flex-shrink-0 whitespace-nowrap">{price}</span>
         </a>
         );
       })}
@@ -344,6 +338,32 @@ import { TASK_COUNT } from '../../config/tasks';
     <div class="text-center mt-4 text-sm text-gray-500">
       총 <strong id="tool-count" class="text-gray-700 dark:text-gray-400">{allTools.length}</strong>개 도구
     </div>
+
+    <!-- ========== 등록 정책 ========== -->
+    <section id="policy" class="mb-8 scroll-mt-24">
+      <div class="border border-gray-200 rounded-2xl p-8 bg-white">
+        <div class="flex items-start gap-4">
+          <div class="w-1 self-stretch bg-red-600 rounded-full flex-shrink-0"></div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 mb-2">AI 툴 등록 정책</h2>
+            <p class="text-sm text-gray-600 mb-6">AI코리아24 도구 디렉토리는 정확하고 정직한 AI 도구 정보를 전합니다. 무료·유료 무관하게 등록할 수 있습니다.</p>
+            <h3 class="font-bold text-gray-900 mb-2">등록 가능한 도구</h3>
+            <ul class="text-sm text-gray-700 space-y-1.5 mb-6 list-disc pl-5">
+              <li>AI 기능을 핵심으로 포함하는 공식 서비스 또는 검증된 오픈소스</li>
+              <li>무료·유료 무관 (요금제는 명시합니다)</li>
+              <li>한국어 지원 시 우선 검토</li>
+            </ul>
+            <h3 class="font-bold text-gray-900 mb-2">등록되지 않는 도구</h3>
+            <ul class="text-sm text-gray-700 space-y-1.5 mb-6 list-disc pl-5">
+              <li>모델명을 도메인·서비스명으로 쓰는 서드파티 래퍼 (원본 개발사의 공식 서비스가 아닌 경우)</li>
+              <li>공식 서비스를 사칭하거나 오인하게 만드는 사이트</li>
+              <li>AI와 무관한 서비스, 피싱·사기 목적의 사이트</li>
+            </ul>
+            <p class="text-xs text-gray-500">모든 제출은 관리자 검토 후 공개됩니다 (보통 24시간 이내).</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ========== 뉴스레터 CTA (UI-01: 흰 배경 + 검은 텍스트 — 다크 텍스트를 흰 배경 위에 두면 안 보임) ========== -->
     <div class="mt-16 relative overflow-hidden rounded-2xl  border border-gray-200 p-8 sm:p-10">
