@@ -1,3 +1,11 @@
+## 2026-11-24 22:08 — AIK24-TOOLS-COLLECT-PAUSE-01 자동 수집 중지 (launchd 비활성화)
+
+- 한 일: 대표님 결정으로 도구 자동 수집을 중지. `kr.aikorea24.tools-collector` 잡을 `launchctl unload` 로 비활성화(exit 0). plist(`~/Library/LaunchAgents/kr.aikorea24.tools-collector.plist`, 06:00 실행)는 보존. 다른 트리거(cron·run_pipeline.py·기타 plist·Cloudflare) 확인 결과 도구 수집 호출 0건. 브리핑·블로그·모델 평가·tools-postprocess 등 다른 스케줄은 건드리지 않음.
+- 결과: [검증됨] `launchctl list | grep kr.aikorea24.tools-collector` → 부재, `launchctl print gui/501/kr.aikorea24.tools-collector` → "Could not find service", plist 파일 존재 확인. [미확인] 재부팅 후 재로드 가능성 — `launchctl print-disabled` 에 disable 항목 없음(세션 unload만 수행). 코드·plist 삭제 없음.
+- 산출물: 완료보고 `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2208-AIK24-TOOLS-COLLECT-PAUSE-01-완료보고.md` (재개 명령·확인 출력·다른 트리거 결과 기록). git push 없음.
+- 잔존 위험: 영구 중지 원하면 대표님 승인 후 `launchctl disable gui/501/kr.aikorea24.tools-collector` 추가 필요. 수동 등록(D1 published) 경로는 그대로 유지. 재개 전 ENTITY-01 필터 상태 확인 필수.
+- 다음 행동: 재부팅 대비 영구 disable 여부 결정 → ENTITY-01 보류 133건·배포 승인 별도 진행.
+
 ## 2026-11-24 22:10 — AIK24-TOOLS-ENTITY-01 수집기 실체 검증 필터 + 전수조사·게재 정리
 
 - 한 일: ① `scripts/entity_verify.py` 신설(0단계 하드 실패/1단계 실체 확인/대체 경로 3분류) — 수집기와 전수조사가 같은 함수를 쓴다. ② `process_batch()` 에 LLM 호출 전 `filter_entities()` 삽입, 불통과 스킵·보류는 `scripts/logs/entity_hold.jsonl`. ③ '실측' 표현 제거(`## 활용 예시`, `strip_unverified_claims()`, 프롬프트 규칙, enrich/postprocess 섹션명 `한국어 품질 정리`). ④ `scripts/audit_tool_entities.py` 로 512건 전수 판정. ⑤ 불통과 147건 게재 해제(md 147 + tools 미러행 147 + Morphiqo D1 retired).
