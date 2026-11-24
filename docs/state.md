@@ -1,3 +1,24 @@
+## 2026-11-24 22:37 — AIK24-TOOLS-LOGO-01: 로고 업로드·저장·표시 + 파비콘 CSP 차단 해소 (로컬 구현·검증까지, 배포 없음)
+
+한 일: 지시서 작업1~5 이행. D1 `tool_submissions`에 `logo_url` 추가(원격 적용, 백업 83행), md 스키마 `logo` 추가, 등록/수정 폼에 정사각형 로고 업로드 란 추가, 목록·상세·홈이 공유 `ToolIcon`(로고→파비콘→모노그램)으로 표시. 커밋 `9f65d858`. **배포 없음**(지시서 §8), git push 없음(§9).
+
+결과:
+- [검증됨] `npm run build` Exit 0 / `[build] Complete!` — 경고 3건 모두 기존(remarkPlugins·gfm deprecation 2 + getStaticPaths 1). `npm run test:js` 15/15 pass. `sync_submissions_to_md.mjs --dry` published=40·skipped=40.
+- [검증됨] D1 마이그레이션 — 백업 `scripts/logs/backup_d1_tool_submissions_20261124_2206.json`(83행) 후 원격 ALTER 적용, `PRAGMA table_info` 23컬럼·`logo_url` 존재 확인.
+- [검증됨] E2E 전수 — 폼 업로드(hidden URL + 미리보기 naturalWidth=128) → 제출 201 → 관리자 승인 200 → 상세 로고(<img> 업로드 URL, 파비콘 아님) → 목록 로고 → 홈 5건 중 로고 → 수정 폼 프리필. 캡처 `/tmp/aik_logo_form.png`·`aik_logo_detail.png`·`aik_logo_list.png`·`aik_logo_edit.png`·`aik_logo_tools_{desktop,mobile}.png`.
+- [검증됨] 테스트 데이터 정리 — D1 테스트 행 0, R2 테스트 객체 5개 0.
+- [검증됨] 파비콘 실태(작업5) — 원인은 지연 로딩이 아니라 **CSP img-src 차단**(requestfailed: csp). `middleware.ts`에 `www.google.com`·`*.gstatic.com` 추가 → YouTranscripts `naturalWidth=48`·모노그램 fallback none. www. 제거도 적용.
+- [검증됨] 회귀 — 로고 없는 항목도 파비콘 표시, 데스크톱·390px 모바일 24행·오버플로 0.
+- [부분검증] s2 미등록 도메인(Suno Checker)은 404+726B 기본 이미지라 onerror 미발동 → 모노그램 대신 기본 아이콘. 제한 사유: 브라우저가 404 본문을 유효 이미지로 수신.
+- [검증불가] 라이브 반영 — 지시서 §8에 따라 미배포. 복구 계획: 승인 후 `npm run deploy` → `/tools/`·상세·홈 + CSP 헤더 확인.
+- 추가 수정: `ToolForm.astro` fetch 3곳에 끝 슬래시(`/api/upload/`, `/api/tools/submit/`, `/api/tools/${slug}/`) — trailingSlash:always 환경에서 404였음. 스크린샷 업로드도 함께 정상화.
+
+잔존 위험: 미배포(origin/main 5개 앞섬) · D1 컬럼 롤백은 DROP COLUMN 별도 작업(미실시) · E2E 중 테스트 확인/승인 메일 1회씩 발송 가능(회수 불가) · 관리자 페이지 승인 fetch는 슬래시 없는 기존 경로(범위 외, 라이브 미확인) · 외부 파이프라인 md 수정분 미포함 · UX-02 태그라인 이슈는 범위 외.
+
+다음 행동: 대표님 스크린샷 확인 → 승인 시 `npm run deploy` → 라이브 1회 열람. push는 별도 결정. 상세 SSOT: `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2237-AIK24-TOOLS-LOGO-01-완료보고.md`.
+
+---
+
 ## 2026-11-24 22:25 — AIK24-TOOLS-COLLECT-PAUSE-01 영구 정지 추가 (대표님 승인)
 
 - 한 일: 대표님 승인으로 `launchctl disable gui/501/kr.aikorea24.tools-collector` 실행(exit 0). 기존 `launchctl unload` 는 세션 해제라 재부팅 시 되살아날 수 있었으나, launchd 에 영구 disabled 플래그를 기록해 재부팅·재로그인 후에도 자동 로드되지 않게 했다. plist(`~/Library/LaunchAgents/kr.aikorea24.tools-collector.plist`, 1170B)는 삭제하지 않고 보존.

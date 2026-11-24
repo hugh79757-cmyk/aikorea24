@@ -2,6 +2,17 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-24 22:37 — feat(AIK24-TOOLS-LOGO-01): 로고 업로드·저장·표시 + 파비콘 CSP 차단 해소
+
+- D1 `tool_submissions.logo_url` 추가(원격 마이그레이션 `sql/010_…`, 백업 83행) → md `logo` 동기화(`sync_submissions_to_md.mjs`) → `content.config.ts` optional 스키마.
+- `ToolForm.astro` Step 2에 정사각형 로고 업로드(512×512 권장·미리보기·삭제) 추가, create/edit 공용. submit/PUT API가 `logo_url` 검증·저장. 수정 폼 프리필 확인.
+- 신규 `ToolIcon.astro`(로고 → 파비콘 → 모노그램, www. 제거)를 목록·상세·홈이 공유. `index.astro` D1 매핑에 UX-02에서 빠졌던 `url`도 보완.
+- 작업5 진단: 전 행 모노그램의 원인은 지연 로딩이 아니라 **CSP img-src 차단**(requestfailed: csp). `middleware.ts`에 `www.google.com`·`*.gstatic.com` 추가 → YouTranscripts 파비콘 `naturalWidth=48` 복구.
+- `ToolForm` fetch 3곳에 끝 슬래시 추가(`trailingSlash: 'always'` — 슬래시 없는 `/api/upload`·`/api/tools/submit`이 dev에서 404). 스크린샷 업로드도 함께 정상화.
+- 검증: build Complete(기존 경고 3) / test:js 15 pass / sync dry published=40 / E2E(업로드→제출 201→승인 200→상세·목록·홈 로고→수정 프리필) / 테스트 D1 행·R2 5객체 정리 / 데스크톱·390px 회귀 24행·오버플로 0.
+- [부분검증] s2 404 도메인은 기본 이미지라 onerror 미발동(모노그램 대신 기본 아이콘). [검증불가] 라이브 반영 — 지시서 §8에 따라 배포 보류.
+- 커밋 `9f65d858`(로컬만, push 없음). 상세: `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2237-AIK24-TOOLS-LOGO-01-완료보고.md`, `docs/state.md`.
+
 ## 2026-11-24 21:23 — feat(AIK24-TOOLS-UX-01): /tools/ PH식 행 리스트(1차) + 홈 '오늘의 도구 5'(2차)
 
 - 1차 `16cefbd4`: `/tools/` 4열 카드 → 1열 행(파비콘+모노그램 폴백·이름+한 줄 태그라인·NEW/KR/✓검증됨/MAKER·난이도·가격 한 단어). `#policy`를 목록 아래로 이동, 이름 빈 항목 노출 제외, 필터/검색/정렬/더 보기 단일 소유권 유지.
