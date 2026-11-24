@@ -464,15 +464,26 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
 
     # 무료 LLM 항목은 전용 "모델 심층 분석" 구조로 생성한다 (AIK24-MODELEVAL-01).
     # 호출부를 바꾸지 않고 여기서 판별한다 — 모든 호출이 generate_draft를 거친다.
-    # AIK24-BLOG-01 (2026-10-13 대표님 지시): 평가할 OpenRouter 모델이 없는 free-llm
-    # 항목(HF Trending GGUF, free-llm로 분류된 일반 뉴스 등)은 뉴스 블로그로 생성한다.
-    # routing 규칙 1가지: free-llm + OpenRouter 모델 확인됨 → 모델 평가글, 그 외 → 뉴스글.
-    model_id = None
+    # AIK24-MODEL-EVAL-FIX-01 (대표님 지시 2026-11-24): 조용한 뉴스 폴백 제거.
+    #   free-llm + 모델 확인됨(OpenRouter **또는 models.dev opencode**) → 모델 평가글
+    #   free-llm + 모델 ID 없음 → 일반 뉴스로 본다(기존 경로)
+    #   모델 ID가 있는데 중단/미확인 → 소개글도 쓰지 않고 항목을 생략한다
+    #   (AIK24-BLOG-01 의 "평가할 모델 없으면 뉴스글" 규칙은 모델 ID가 없을 때만 적용)
+    model_id, model_status, model_display = None, "not_model", None
     if is_deep and articles[0].get("v2_tag") == "free-llm":
         try:
-            model_id = model_eval.extract_model_id(articles[0])
+            model_id, model_status, model_display = model_eval.resolve_model_id(articles[0])
         except Exception as e:
             log(f"  ⚠️ 모델 ID 판별 예외: {type(e).__name__}: {e}")
+            model_status, model_display = "unknown", (articles[0].get("model_id") or keyword[:40])
+
+        if model_status == "deprecated":
+            log(f"  ⛔ 모델 중단됨(deprecated) — 소개글 작성 안 함: {model_display}")
+            return ""
+        if model_status == "unknown":
+            log(f"  ⛔ 모델 미확인 — 소개글 작성 안 함: {model_display}")
+            return ""
+
         if model_id:
             out = generate_model_eval_draft(keyword, articles[0], model_id,
                                            fix_note=fix_note, links_str=links_str,
@@ -480,9 +491,10 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
             if out:
                 _LAST_GEN_IS_EVAL = True  # AIK24-FABRICATE-01: 실제 평가 데이터 주입 경로
                 return out
-            log("  ⚠️ 모델 심층 분석 생성 실패 → 뉴스 블로그 경로로 대체")
-        else:
-            log(f"  ℹ️ OpenRouter 모델 ID 미확인 → 뉴스 블로그 경로: '{keyword[:40]}'")
+            # 모델 항목은 뉴스 경로로 대체하지 않는다 — 검증 안 된 소개글을 만들지 않는다.
+            log(f"  ⛔ 모델 심층 분석 생성 실패(평가 대기/실패) → 모델 항목 생략: {model_display}")
+            return ""
+        log(f"  ℹ️ 모델 ID 없음 → 일반 뉴스 블로그 경로: '{keyword[:40]}'")
 
     # AIK24-PIPE-10 규칙 1: 원본 항목이 특정 모델이면 그 ID 를 생성 입력에 명시한다.
     #   extract_model_id 는 OpenRouter 목록 대조까지 하므로 "목록에 없는 모델" 에서는 None 이 되고
@@ -615,33 +627,43 @@ def generate_draft(keyword, articles, grade, fix_note=None, link_hint=True,
 # 모델 심층 분석 생성기 (AIK24-MODELEVAL-01)
 # ============================================
 def _eval_block(model_id):
-    """캐시 우선 모델 평가. 캐시 없으면 지금 평가한다(최대 ~1분).
+    """캐시 우선 모델 평가 — AIK24-MODEL-EVAL-FIX-01 Part 3.
 
-    AIK24-MODELEVAL-02 1-4: 모든 단계에 명시적 로그를 남긴다.
-    - 캐시 히트 / 미스
-    - 평가 시작 / 완료 / 실패(실패 이유 포함)
-    평가가 조용히 실패하면 "왜 글에 평가 데이터가 없는지" 추적이 불가능하다.
+    캐시가 있으면 그대로 쓴다. **캐시가 없으면 인라인 12문항 평가를 실행하지 않는다.**
+    12문항 CLI 평가는 모델에 따라 2분 46초(deepseek eco 실측)까지 걸려 블로그
+    파이프라인 전체를 지연시킨다. 대신 "평가 대기" 상태로 반환해 해당 모델 글을
+    보류하고, 평가는 EVAL-AUTO 스케줄(`free_model_eval_auto.py`)이 캐시에 채운다.
+
+    이전 구현은 `eval_model_cached()` → `eval_model()` (OpenRouter 직접 API)를
+    호출했는데, 이는 2026-10-14 "모든 평가는 OpenCode CLI" 정책에도 어긋났다.
     """
-    r = model_eval.cache_get(model_id)
-    if r:
-        log(f"  📊 모델 평가 캐시 사용: {r.get('label')} "
-            f"(score={r.get('score')}/{r.get('max_score')}, failed={r.get('failed')})")
-        return r
-    log(f"  📊 모델 평가 실행 시작 (캐시 없음): {model_id}")
+    # 캐시 키 호환: opencode/<id> · bare id 양쪽을 모두 확인한다(EVAL-AUTO가
+    # 어떤 형태로 저장했는지에 따라 달라진다).
+    bare = model_id.split("/", 1)[1] if model_id.startswith("opencode/") else model_id
+    candidates = list(dict.fromkeys([model_id, bare, f"opencode/{bare}"]))
+    for cache_id in candidates:
+        r = model_eval.cache_get(cache_id)
+        if r:
+            log(f"  📊 모델 평가 캐시 사용: {r.get('label')} "
+                f"(score={r.get('score')}/{r.get('max_score')}, failed={r.get('failed')})"
+                + (f" [캐시 키: {cache_id}]" if cache_id != model_id else ""))
+            return r
+
     try:
-        result = model_eval.eval_model_cached(model_id)
-        failed = result.get("failed", 0)
-        max_score = result.get("max_score", 9)
-        if failed >= max_score and max_score > 0:
-            log(f"  ❌ 모델 평가 전 문항 실패 → 블로그 생성 생략: {model_id} "
-                f"(failed={failed}/{max_score}) — 모델 미존재·접근제한·레이트리밋 가능")
-        else:
-            log(f"  ✅ 모델 평가 완료: {result.get('label')} "
-                f"(failed={failed}/{max_score})")
-        return result
-    except Exception as e:
-        log(f"  ❌ 모델 평가 예외 발생: {model_id} — {type(e).__name__}: {e}")
-        return {"failed": 9, "max_score": 9, "label": "평가 실패", "details": []}
+        cli_id = model_id if model_id.startswith("opencode/") else model_eval.resolve_cli_model(model_id)
+    except Exception:
+        cli_id = None
+    reason = "CLI 대상 등록됨" if cli_id else "CLI 미등록"
+    log(f"  ⏸ 평가 대기 — 캐시 없음({model_id}, {reason}). "
+        f"인라인 12문항 실행 생략(파이프라인 지연 방지) → EVAL-AUTO 평가 후 재시도")
+    return {
+        "model_id": model_id,
+        "failed": 9,
+        "max_score": 9,
+        "label": "평가 대기",
+        "details": [],
+        "pending_reason": f"cache-miss ({reason})",
+    }
 
 
 # BLOG-03: 응답 실패로 0점 처리된 문항의 source 값들 (호출 자체가 실패한 것)
@@ -899,9 +921,10 @@ def generate_model_eval_draft(keyword, article, model_id, fix_note=None, links_s
     ② 실제 링크(원문·공식 문서). 재생성 시에는 fix_note 로 교정 지시가 들어온다.
     """
     ev = _eval_block(model_id)
-    # 전 문항 실패 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
+    # 전 문항 실패(또는 평가 대기) 시 블로그 생성 생략 (삭제된 [2a] 경로의 가드 이식)
     if ev.get("failed", 0) >= ev.get("max_score", 9):
-        log(f"  전 문항 실패 → 모델 심층 분석 생략: {model_id}")
+        why = ev.get("pending_reason") or f"failed={ev.get('failed')}/{ev.get('max_score')}"
+        log(f"  전 문항 실패·평가 대기 → 모델 심층 분석 생략: {model_id} ({why})")
         return ""
     guide = model_eval.get_access_guide(model_id)
     leaderboard_block = _leaderboard_block(model_id)

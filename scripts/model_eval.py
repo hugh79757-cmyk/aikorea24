@@ -1374,6 +1374,40 @@ def eval_model_cli(model_id, cli_model=None, provider="zen"):
     return result, None
 
 
+MODELS_DEV_API = "https://models.dev/api.json"
+_modelsdev_cache = {}
+
+
+def _fetch_modelsdev_opencode():
+    """models.dev API의 `providers.opencode.models` 를 캐시 조회한다.
+
+    AIK24-MODEL-EVAL-FIX-01: OpenCode Zen 모델은 OpenRouter 목록에 없어서
+    `extract_model_id()` 가 전부 None 을 돌려줬다(평가 생략 → 소개글만 발행).
+    응답이 ~7MB 이므로 `_fetch_openrouter_models()` 와 같은 방식으로 프로세스 내
+    캐시를 쓴다. 실패 시 None(조회 불가)과 빈 dict(성공했으나 0건)를 구분한다.
+    """
+    if "data" in _modelsdev_cache:
+        return _modelsdev_cache["data"]
+    data = None
+    try:
+        r = httpx.get(MODELS_DEV_API, timeout=30)
+        if r.status_code == 200:
+            doc = r.json()
+            provider = ((doc.get("providers") or {}).get("opencode") or {})
+            models = provider.get("models") or {}
+            if isinstance(models, dict):
+                data = models
+            else:
+                data = {m.get("id"): m for m in models if isinstance(m, dict) and m.get("id")}
+            log(f"models.dev OpenCode 모델 {len(data)}건 캐시")
+        else:
+            log(f"models.dev API HTTP {r.status_code}")
+    except Exception as e:
+        log(f"models.dev 조회 실패: {type(e).__name__}")
+    _modelsdev_cache["data"] = data
+    return data
+
+
 def _fetch_openrouter_models():
     """OpenRouter 모델 목록 캐시 조회.
 
@@ -1465,42 +1499,82 @@ def get_access_guide(model_id):
     )
 
 
-def extract_model_id(article):
-    """브리핑 기사 dict → OpenRouter 모델 ID. 판별 불가하면 None.
+def resolve_model_id(article):
+    """브리핑 항목 → `(model_id, status, display_id)`.
 
-    표기 변형 ((free), -free, :free 등)을 정규화한 뒤 OpenRouter 실제 목록에서
-    존재 여부를 확인한다. 존재하지 않으면 None (평가 생략).
+    AIK24-MODEL-EVAL-FIX-01: 기존 `extract_model_id()` 는 OpenRouter 목록만 봐서
+    OpenCode Zen(`opencode/<id>-free`) 모델을 전부 미존재로 오판했다. 이 함수는
+    OpenRouter + models.dev `providers.opencode.models` 를 모두 확인하고,
+    **중단(deprecated) 모델은 호출부가 구분할 수 있도록 별도 상태로 돌려준다.**
+
+    status:
+      ok          — 평가 가능. model_id 는 호출 가능한 ID(OpenRouter ID 또는
+                    `opencode/<id>`)
+      deprecated  — models.dev가 중단 표시. 소개글도 쓰지 않는다(model_id=None)
+      unknown     — 두 목록 어디에도 없음. 소개글도 쓰지 않는다(model_id=None)
+      not_model   — 모델 ID 자체가 없는 일반 뉴스(기존 뉴스 블로그 경로)
     """
-    # 1. link 또는 제목에서 base ID 추출
-    base_id = None
-    link = article.get("link") or ""
-    m = re.search(r"openrouter\.ai/([^?#\s]+)", link)
-    if m:
-        base_id = m.group(1).rstrip("/")
-    if not base_id:
-        # 제목 변형: [무료 LLM] id:free / [무료 모델] id (free) / id-free 등
-        title = article.get("title") or ""
-        m = re.search(r"\[무료 (?:LLM|모델)\]\s*([\w\-./]+)", title)
+    raw = None
+    structured = str(article.get("model_id") or "").strip()
+    if structured and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._/\-:()]*", structured):
+        raw = structured
+    if not raw:
+        link = article.get("link") or ""
+        m = re.search(r"openrouter\.ai/([^?#\s]+)", link)
         if m:
-            base_id = m.group(1)
-    if not base_id:
-        return None
-    # 2. free 표기 변형 정규화 (:free, (free), -free, [free] 제거)
-    base_id = re.sub(r"[:\-\s]*[\(\[]?free[\)\]]?\s*$", "", base_id, flags=re.IGNORECASE).strip()
-    if not base_id:
-        return None
-    # 3. OpenRouter 실제 목록에서 존재 확인 (:free 우선, 없으면 base)
+            raw = m.group(1).rstrip("/")
+    if not raw:
+        title = article.get("title") or ""
+        # 모델 ID 는 ASCII 영문·숫자·구두점만 허용 — "[무료 LLM] 오픈소스 진영의
+        # 새로운 소식" 같은 일반 뉴스 제목을 모델 ID 로 오인하지 않는다.
+        m = re.search(r"\[무료 (?:LLM|모델)\]\s*([A-Za-z0-9][A-Za-z0-9._/\-:]*)", title)
+        if m:
+            raw = m.group(1)
+    if not raw:
+        return None, "not_model", None
+
+    display = raw.strip()
+    bare = re.sub(r"[:\-\s]*[\(\[]?free[\)\]]?\s*$", "", display, flags=re.IGNORECASE).strip()
+    if not bare:
+        return None, "unknown", display
+
+    # 1) OpenRouter 조회 — 기존 동작 보존 (:free 우선 → base)
     models = _fetch_openrouter_models()
-    if models is None:
-        # 목록 조회 실패 시 기존 동작 유지 (호출 시 404로 자연스럽게 실패)
-        return base_id + ":free"
-    if base_id + ":free" in models:
-        return base_id + ":free"
-    if base_id in models:
-        return base_id
-    # 4. 둘 다 없으면 None (평가 생략)
-    log(f"모델 미존재 → 평가 생략: {base_id}")
-    return None
+    if models:
+        for base in dict.fromkeys([bare, bare.split("/")[-1]]):
+            if base + ":free" in models:
+                return base + ":free", "ok", display
+            if base in models:
+                return base, "ok", display
+
+    # 2) models.dev OpenCode(Zen) 조회 — '-free' 접미사를 유지한 채 조회한다
+    zen = _fetch_modelsdev_opencode()
+    if zen:
+        for cand in dict.fromkeys([display, bare, display.removeprefix("opencode/"),
+                                   bare.removeprefix("opencode/")]):
+            if not cand:
+                continue
+            entry = zen.get(cand) or zen.get(f"opencode/{cand}")
+            if not isinstance(entry, dict):
+                continue
+            status = str(entry.get("status") or "active").strip().lower()
+            if status == "deprecated":
+                log(f"모델 중단됨(deprecated) — 소개글 작성 안 함: {display}")
+                return None, "deprecated", display
+            if status == "active":
+                zen_id = cand if cand.startswith("opencode/") else f"opencode/{cand}"
+                return zen_id, "ok", display
+            log(f"models.dev 상태 미확인(status={status}) → 평가 보류: {display}")
+            return None, "unknown", display
+
+    log(f"모델 미존재 → 평가 생략: {display}")
+    return None, "unknown", display
+
+
+def extract_model_id(article):
+    """하위 호환 래퍼 — 평가 가능한 ID만 돌려준다 (기존 시그니처 유지)."""
+    model_id, _status, _display = resolve_model_id(article)
+    return model_id
 
 
 HF_API = "https://huggingface.co/api/models"
