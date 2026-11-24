@@ -1,0 +1,73 @@
+---
+// AIK24-TOOLS-UX-01 — /tools/ 목록(1차)과 홈 '오늘의 도구'(2차)가 공유하는 한 줄 행.
+// 마크업·클래스·data-* 속성은 1차(index.astro)의 것을 그대로 옮겼다.
+import {
+  deriveTagline,
+  faviconDomain,
+  shortPrice,
+  difficultyColor,
+  difficultyLabel,
+  isNewTool,
+} from '../../lib/tool-row';
+
+interface Props {
+  tool: any;
+  index?: number;
+}
+
+const { tool, index } = Astro.props;
+const data = tool?.data ?? tool ?? {};
+const domain = faviconDomain(data.url || tool?.url || '');
+const tagline = deriveTagline(data.description ?? data.tagline);
+const name = String(data.name ?? '').trim();
+const initial = name.charAt(0) || '?';
+const price = shortPrice(tool);
+const difficulty = String(data.difficulty ?? '중급');
+const verifiedAt = data.verifiedAt;
+---
+
+<a
+  href={`/tools/${tool.id}/`}
+  data-cat={data.category}
+  data-index={index}
+  data-name={data.name}
+  data-tags={(data.tags ?? []).join(' ')}
+  data-desc={data.description ?? data.tagline ?? ''}
+  data-price={data.price}
+  data-korean={data.koreanSupport}
+  data-difficulty={data.difficulty}
+  data-order={data.order}
+  data-updated={data.updated ?? ''}
+  class="tool-card group flex items-center gap-3 px-3 sm:px-4 py-3 bg-white rounded-xl border border-gray-200 hover:border-[#E63B2E] hover:shadow-md transition-all dark:bg-[#111827]/60"
+>
+  {domain ? (
+    <span class="relative flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
+      <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`} alt="" loading="lazy" decoding="async" class="w-full h-full object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
+      <span class="absolute inset-0 hidden items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold">{initial}</span>
+    </span>
+  ) : (
+    <span class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold rounded-lg">{initial}</span>
+  )}
+  <div class="min-w-0 flex-1">
+    <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+      <h3 class="text-sm sm:text-base font-bold text-[#111111] dark:text-white break-words">{name}</h3>
+      {tool.isD1 && (
+        <span class="text-[10px] font-bold px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200">MAKER</span>
+      )}
+      {data.verified && (
+        <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200 font-medium" title={verifiedAt ? `검증됨 (${verifiedAt})` : '관리자 검증됨'}>✓ 검증됨</span>
+      )}
+      {isNewTool(tool) && (
+        <span class="text-[10px] px-1.5 py-0.5 bg-[#E63B2E] text-white rounded font-bold" title="최근 7일 내 등록·갱신">NEW</span>
+      )}
+      {data.koreanSupport && (
+        <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200 font-medium" title="한국어 지원">KR</span>
+      )}
+    </div>
+    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug break-words">{tagline}</p>
+  </div>
+  <span class:list={["hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full border font-medium flex-shrink-0", difficultyColor(difficulty)]}>
+    {difficultyLabel(difficulty)}
+  </span>
+  <span class="text-[11px] sm:text-xs font-medium text-gray-600 dark:text-gray-400 flex-shrink-0 whitespace-nowrap">{price}</span>
+</a>

@@ -3,6 +3,7 @@ export const prerender = false;
 import { env } from 'cloudflare:workers';
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import ToolRow from '../../components/tools/ToolRow.astro';
 
 // AIK24-TOOLSORT-01 (2026-10-18 대표님 결정): order 동점일 때는 컬렉션 기본 순서(파일명
 //   알파벳순)가 그대로 유지돼, 제출 승인 건이 상단 고정 대역(order=-1, 14장) 중간에 박혔다
@@ -78,51 +79,14 @@ const mdWithShot: any[] = mdTools.map((t) => {
 // AIK24-TOOLS-UX-01 작업3: 이름 없는 항목은 원본(md·D1)을 바꾸지 않고 **목록 노출에서만** 제외한다.
 const allTools: any[] = [...d1Only, ...mdWithShot].filter((t: any) => String(t?.data?.name ?? '').trim() !== '');
 
-// AIK24-TOOLS-UX-01 작업1: Product Hunt식 한 줄 행에 쓸 파생값.
-const TAGLINE_MAX = 60;
-/** 조사· Connection 어미가 끝에 남으면 절단 자국처럼 보인다 — 단어 경계 컷 후 정리. */
-const TRAILING_PARTICLE = /(?:은|는|이|가|을|를|와|과|의|에서|으로|로|도|만)$/;
-
-function deriveTagline(description?: string | null): string {
-  let text = String(description ?? '').replace(/\s+/g, ' ').trim();
-  if (!text) return '';
-  // '[.!?] + 공백'만 문장 경계 → '2.0' 같은 소수점은 자르지 않는다.
-  const firstSentence = text.match(/^[\s\S]*?[.!?](?=\s|$)/);
-  if (firstSentence) text = firstSentence[0].trim();
-  if (text.length > TAGLINE_MAX) {
-    const head = text.slice(0, TAGLINE_MAX);
-    const space = head.lastIndexOf(' ');
-    text = (space > 20 ? head.slice(0, space) : head).trimEnd().replace(TRAILING_PARTICLE, '').trimEnd();
-  }
-  return text; // 말줄임(…) 붙이지 않음
-}
-
-function faviconDomain(url?: string | null): string {
-  const m = String(url ?? '').match(/^https?:\/\/([^/?#]+)/i);
-  return m ? m[1].toLowerCase() : '';
-}
-
-/** 목록에서는 가격 한 단어 — priceModel 우선, 없으면 price 첫 토큰(필터용 data-price는 전문 유지). */
-function shortPrice(tool: any): string {
-  const pm = String(tool?.data?.priceModel ?? tool?.priceModel ?? '').trim();
-  const src = pm || String(tool?.data?.price ?? '').trim();
-  return src.split(/\s+/)[0] || '—';
-}
-
+// AIK24-TOOLS-UX-01 (1차 → 2차): 파생값·행 마크업은 공유 컴포넌트로 이전했다.
+//   src/components/tools/ToolRow.astro · src/lib/tool-row.ts — HTML·data-* 속성은 1차와 동일.
 // AIK24-TOOLSYNC-06 (2026-10-18 대표님 결정) — '최신 등록'·'인기 도구' 섹션 폐지.
 //   · 최신 등록: md `updated` 상위 6칸 회전 창. 수집기가 매일 06:00 에 2~11개를 자동 등록해
 //     이틀이면 밀려나고, D1 전용(제출 승인) 툴은 updated=created_at 이라 승인해도 상단에 못 올라온다.
 //   · 인기 도구: 투표·조회 데이터가 아니라 koreanSupport + order 정렬이라 인기도가 아니었다.
 //   · 두 섹션 모두 아래 전체 도구 그리드(필터·검색·정렬 보유)의 부분집합이라 중복이었다.
 // 신규 노출은 그리드 카드의 '최근 7일 NEW' 배지가 맡는다.
-const KST_OFFSET_MS = 9 * 60 * 60 * 1000;
-const DAY_MS = 24 * 60 * 60 * 1000;
-const todayKst = new Date(Date.now() + KST_OFFSET_MS).toISOString().slice(0, 10);
-const newCutoffKst = new Date(Date.now() + KST_OFFSET_MS - 7 * DAY_MS).toISOString().slice(0, 10);
-const isNewTool = (t: any): boolean => {
-  const u = String(t?.data?.updated ?? '').slice(0, 10);
-  return u !== '' && u >= newCutoffKst && u <= todayKst;
-};
 
 const categories = [
   { id: 'all', label: '전체', emoji: '🔥' },
@@ -271,60 +235,7 @@ import { TASK_COUNT } from '../../config/tasks';
 
     <!-- ========== AIK24-TOOLS-UX-01: PH식 한 줄 행 리스트 ========== -->
     <div class="flex flex-col gap-2" id="tools-grid">
-      {allTools.map((tool, i) => {
-        const domain = faviconDomain(tool.data.url || tool.url || '');
-        const tagline = deriveTagline(tool.data.description);
-        const name = String(tool.data.name || '').trim();
-        const initial = name.charAt(0) || '?';
-        const price = shortPrice(tool);
-        return (
-        <a
-          href={`/tools/${tool.id}/`}
-          data-cat={tool.data.category}
-          data-index={i}
-          data-name={tool.data.name}
-          data-tags={tool.data.tags.join(' ')}
-          data-desc={tool.data.description}
-          data-price={tool.data.price}
-          data-korean={tool.data.koreanSupport}
-          data-difficulty={tool.data.difficulty}
-          data-order={tool.data.order}
-          data-updated={tool.data.updated || ''}
-          class="tool-card group flex items-center gap-3 px-3 sm:px-4 py-3 bg-white rounded-xl border border-gray-200 hover:border-[#E63B2E] hover:shadow-md transition-all dark:bg-[#111827]/60"
-        >
-          {domain ? (
-            <span class="relative flex-shrink-0 w-12 h-12 bg-gray-100 rounded-lg overflow-hidden">
-              <img src={`https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`} alt="" loading="lazy" decoding="async" class="w-full h-full object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-              <span class="absolute inset-0 hidden items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold">{initial}</span>
-            </span>
-          ) : (
-            <span class="flex-shrink-0 w-12 h-12 flex items-center justify-center bg-gray-100 text-gray-500 text-lg font-bold rounded-lg">{initial}</span>
-          )}
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
-              <h3 class="text-sm sm:text-base font-bold text-[#111111] dark:text-white break-words">{name}</h3>
-              {(tool as any).isD1 && (
-                <span class="text-[10px] font-bold px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200">MAKER</span>
-              )}
-              {tool.data.verified && (
-                <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200 font-medium" title={tool.data.verifiedAt ? `검증됨 (${tool.data.verifiedAt})` : '관리자 검증됨'}>✓ 검증됨</span>
-              )}
-              {isNewTool(tool) && (
-                <span class="text-[10px] px-1.5 py-0.5 bg-[#E63B2E] text-white rounded font-bold" title="최근 7일 내 등록·갱신">NEW</span>
-              )}
-              {tool.data.koreanSupport && (
-                <span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-[#111111] rounded border border-gray-200 font-medium" title="한국어 지원">KR</span>
-              )}
-            </div>
-            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-snug break-words">{tagline}</p>
-          </div>
-          <span class:list={["hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-full border font-medium flex-shrink-0", difficultyColor(tool.data.difficulty)]}>
-            {difficultyLabel(tool.data.difficulty)}
-          </span>
-          <span class="text-[11px] sm:text-xs font-medium text-gray-600 dark:text-gray-400 flex-shrink-0 whitespace-nowrap">{price}</span>
-        </a>
-        );
-      })}
+      {allTools.map((tool, i) => <ToolRow tool={tool} index={i} />)}
     </div>
 
     <!-- ========== 더 보기 ========== -->
