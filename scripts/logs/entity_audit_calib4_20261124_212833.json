@@ -1,0 +1,434 @@
+{
+  "generated_at": "2026-11-24T21:28:33",
+  "counts": {
+    "pass": 5,
+    "fail": 9,
+    "hold": 6
+  },
+  "total": 20,
+  "with_d1": true,
+  "rows": [
+    {
+      "slug": "ableten-hybrid-ai-travel-planner",
+      "name": "Ableten Hybrid AI Travel Planner",
+      "url": "",
+      "order": "100",
+      "updated": "2026-11-20",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "URL 없음",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "abnormal-ai",
+      "name": "Abnormal AI",
+      "url": "https://topai.tools/t/abnormal-ai",
+      "order": "100",
+      "updated": "2026-07-10",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "수집원(디렉토리·논문) 도메인 링크",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "assemblyai",
+      "name": "AssemblyAI",
+      "url": "",
+      "order": "104",
+      "updated": "2026-10-30",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "URL 없음",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "businesses-in-chatgpt",
+      "name": "Businesses in ChatGPT",
+      "url": "",
+      "order": "101",
+      "updated": "2026-11-15",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "URL 없음",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "fotello-ai",
+      "name": "Fotello AI",
+      "url": "https://topai.tools/t/fotello-co",
+      "order": "104",
+      "updated": "2026-07-05",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "수집원(디렉토리·논문) 도메인 링크",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "kairos",
+      "name": "Kairos",
+      "url": "",
+      "order": "101",
+      "updated": "2026-11-14",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "URL 없음",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "kippy-ai",
+      "name": "Kippy AI",
+      "url": "",
+      "order": "100",
+      "updated": "2026-11-12",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "URL 없음",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "tempmail-bot",
+      "name": "Tempmail.bot",
+      "url": "https://topai.tools/t/tempmail-bot",
+      "order": "102",
+      "updated": "2026-07-03",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "reachability",
+      "reason": "수집원(디렉토리·논문) 도메인 링크",
+      "evidence": {},
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "upsolve-ai",
+      "name": "Upsolve AI",
+      "url": "https://upsolve.ai/",
+      "order": "103",
+      "updated": "2026-06-28",
+      "draft": false,
+      "verdict": "fail",
+      "stage": "entity",
+      "reason": "운영 주체 신호 없음(법인명·개인명+연락처 모두 없음)",
+      "evidence": {
+        "final_url": "https://upsolve.ai/",
+        "pages_checked": [
+          "home"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": null,
+        "copyright_holder": null
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "aiboxplot",
+      "name": "aiboxplot",
+      "url": "https://aiboxplot.com",
+      "order": "102",
+      "updated": "2026-08-18",
+      "draft": false,
+      "verdict": "hold",
+      "stage": "entity",
+      "reason": "저작권자 표기만 있고 연락처가 없어 사람 확인 필요",
+      "evidence": {
+        "final_url": "https://aiboxplot.com",
+        "pages_checked": [
+          "home",
+          "/privacy",
+          "/terms",
+          "/contact"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": null,
+        "copyright_holder": "© 2026 aiboxplot. All rights reserved. This"
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "dailyhelm",
+      "name": "DailyHelm",
+      "url": "https://dailyhelm.com/",
+      "order": "101",
+      "updated": "2026-10-06",
+      "draft": false,
+      "verdict": "hold",
+      "stage": "entity",
+      "reason": "홈페이지 텍스트가 너무 적어(JS 렌더 추정) 판정 불가 — 사람 확인 필요",
+      "evidence": {
+        "final_url": "https://dailyhelm.com/",
+        "pages_checked": [
+          "home"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": null,
+        "copyright_holder": null
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "fireply-ai",
+      "name": "Fireply AI",
+      "url": "https://fireply.ai",
+      "order": "-1",
+      "updated": "2026-10-30",
+      "draft": false,
+      "verdict": "hold",
+      "stage": "entity",
+      "reason": "저작권자 표기만 있고 연락처가 없어 사람 확인 필요",
+      "evidence": {
+        "final_url": "https://fireply.ai",
+        "pages_checked": [
+          "home",
+          "/privacy",
+          "/terms"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": null,
+        "copyright_holder": "© 2026 Fireply. All rights reserved. Automated"
+      },
+      "d1_published": true,
+      "d1_id": 48
+    },
+    {
+      "slug": "pair2fa",
+      "name": "Pair2FA",
+      "url": "https://pair2fa.com",
+      "order": "101",
+      "updated": "2026-09-28",
+      "draft": false,
+      "verdict": "hold",
+      "stage": "entity",
+      "reason": "연락처·저작권자 표기는 있으나 법인격 표기(Inc/Ltd 등)가 없어 사람 확인 필요",
+      "evidence": {
+        "final_url": "https://www.pair2fa.com/",
+        "pages_checked": [
+          "home",
+          "/privacy-policy",
+          "/contact"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": {
+          "email": "teammate@company.com"
+        },
+        "copyright_holder": "© 2026 Pair2FA. All rights reserved. Privacy"
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "suno-checker",
+      "name": "Suno Checker",
+      "url": "https://sunochecker.com/",
+      "order": "-1",
+      "updated": "2026-11-22",
+      "draft": false,
+      "verdict": "hold",
+      "stage": "entity",
+      "reason": "연락처만 있고 운영 주체 이름이 없어 사람 확인 필요",
+      "evidence": {
+        "final_url": "https://sunochecker.com/en/",
+        "pages_checked": [
+          "home"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": {
+          "email": "hi@from.band"
+        },
+        "copyright_holder": null
+      },
+      "d1_published": true,
+      "d1_id": 84
+    },
+    {
+      "slug": "train-with-pasta",
+      "name": "Train with Pasta",
+      "url": "https://pppasta.com/",
+      "order": "101",
+      "updated": "2026-10-18",
+      "draft": false,
+      "verdict": "hold",
+      "stage": "entity",
+      "reason": "연락처·저작권자 표기는 있으나 법인격 표기(Inc/Ltd 등)가 없어 사람 확인 필요",
+      "evidence": {
+        "final_url": "https://pppasta.com/",
+        "pages_checked": [
+          "home",
+          "/privacy",
+          "/terms"
+        ],
+        "legal_entity": null,
+        "person_with_contact": null,
+        "contact": {
+          "email": "hello@pppasta.com"
+        },
+        "copyright_holder": "© 2026 Train with Pasta Privacy Terms"
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "allmodels",
+      "name": "AllModels",
+      "url": "https://allmodels.io/llm/abliterated",
+      "order": "102",
+      "updated": "2026-10-27",
+      "draft": false,
+      "verdict": "pass",
+      "stage": "entity",
+      "reason": "법인명 확인: Visibl Holdings Limited",
+      "evidence": {
+        "final_url": "https://allmodels.io/llm/abliterated",
+        "pages_checked": [
+          "home",
+          "/privacy"
+        ],
+        "legal_entity": "Visibl Holdings Limited",
+        "person_with_contact": "Visibl Holdings Limited",
+        "contact": {
+          "email": "privacy@allmodels.io"
+        },
+        "copyright_holder": "© allmodels.io X Terms Privacy SLA"
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "brain-by-clickup",
+      "name": "Brain² by ClickUp",
+      "url": "https://clickup.com/brain",
+      "order": "102",
+      "updated": "2026-06-28",
+      "draft": false,
+      "verdict": "pass",
+      "stage": "entity",
+      "reason": "법인명 확인: Mango Technologies, Inc.",
+      "evidence": {
+        "final_url": "https://clickup.com/brain",
+        "pages_checked": [
+          "home",
+          "/privacy"
+        ],
+        "legal_entity": "Mango Technologies, Inc.",
+        "person_with_contact": null,
+        "contact": {
+          "email": "support@clickup.com",
+          "phone": "+44 (0)303 123 1113",
+          "address": "350 Tenth Ave"
+        },
+        "copyright_holder": "© 2026 ClickUp Status Security Privacy Terms"
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "deepl",
+      "name": "DeepL",
+      "url": "https://www.deepl.com",
+      "order": "60",
+      "updated": "2026-06-28",
+      "draft": false,
+      "verdict": "pass",
+      "stage": "entity",
+      "reason": "법인명 확인: DeepL AI GmbH",
+      "evidence": {
+        "final_url": "https://www.deepl.com/en",
+        "pages_checked": [
+          "home",
+          "/privacy"
+        ],
+        "legal_entity": "DeepL AI GmbH",
+        "person_with_contact": "Stats Description Remembers",
+        "contact": {
+          "email": "privacy@deepl.com",
+          "address": "30 Kalisher St"
+        },
+        "copyright_holder": null
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "meetgeek",
+      "name": "MeetGeek",
+      "url": "https://www.meetgeek.ai",
+      "order": "104",
+      "updated": "2026-06-28",
+      "draft": false,
+      "verdict": "pass",
+      "stage": "entity",
+      "reason": "법인명 확인: MeetGeek US Infra, Inc.",
+      "evidence": {
+        "final_url": "https://meetgeek.ai/",
+        "pages_checked": [
+          "home",
+          "/privacy",
+          "/privacy-policy"
+        ],
+        "legal_entity": "MeetGeek US Infra, Inc.",
+        "person_with_contact": null,
+        "contact": {
+          "email": "privacy@meetgeek.ai"
+        },
+        "copyright_holder": "© 2026 MeetGeek"
+      },
+      "d1_published": false,
+      "d1_id": null
+    },
+    {
+      "slug": "wordtune",
+      "name": "wordtune",
+      "url": "https://www.wordtune.com/",
+      "order": "108",
+      "updated": "2026-06-28",
+      "draft": false,
+      "verdict": "pass",
+      "stage": "entity",
+      "reason": "법인명 확인: AI21 Labs Ltd.",
+      "evidence": {
+        "final_url": "https://www.wordtune.com/",
+        "pages_checked": [
+          "home",
+          "/privacy-policy"
+        ],
+        "legal_entity": "AI21 Labs Ltd.",
+        "person_with_contact": "Us This",
+        "contact": {
+          "email": "privacy@wordtune.com"
+        },
+        "copyright_holder": "© AI21 Labs"
+      },
+      "d1_published": false,
+      "d1_id": null
+    }
+  ]
+}
