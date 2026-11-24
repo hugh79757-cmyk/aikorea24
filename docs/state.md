@@ -1,3 +1,12 @@
+## 2026-11-24 22:10 — AIK24-TOOLS-ENTITY-01 수집기 실체 검증 필터 + 전수조사·게재 정리
+
+- 한 일: ① `scripts/entity_verify.py` 신설(0단계 하드 실패/1단계 실체 확인/대체 경로 3분류) — 수집기와 전수조사가 같은 함수를 쓴다. ② `process_batch()` 에 LLM 호출 전 `filter_entities()` 삽입, 불통과 스킵·보류는 `scripts/logs/entity_hold.jsonl`. ③ '실측' 표현 제거(`## 활용 예시`, `strip_unverified_claims()`, 프롬프트 규칙, enrich/postprocess 섹션명 `한국어 품질 정리`). ④ `scripts/audit_tool_entities.py` 로 512건 전수 판정. ⑤ 불통과 147건 게재 해제(md 147 + tools 미러행 147 + Morphiqo D1 retired).
+- 결과: [검증됨] pytest `tests/test_tools_entity_verify.py` 30 passed · `tests/test_pipe09_tools_collector_guard.py` 28 passed(회귀 0) · `npm run build` Complete. 전수 판정 **통과 233 / 불통과 146 / 보류 133 = 512**(합계 assert 일치). 삭제 후 md 512→365, tools 682→535, submissions published 41→40·retired 36→37, `delete_tool_entry.py` 자체 검증 OK, md name 중복 0. 캘리브레이션 20건 사람 대조 20/20(보정 3회 — 고객사/호스팅 오인, 403 봇차단, SPA 경로 추측). [부분검증] 표본이 빈 URL·수집원 링크에 치우쳐 난이도 낮음. [미확인] 라이브 카드 수·삭제 slug 404·홈 '오늘의 도구' 노출은 배포 전이라 미확인.
+- 산출물: `scripts/logs/entity_audit_final_20261124_215754.json/.csv`, `entity_audit_calib4_20261124_212833.json/.csv`, `entity_01_prestate.json`, `backup_tool_delete_20261124_2158/2159.json`. 커밋 3건(46e749be·8066735c·61335bbd) — **push·배포 없음**.
+- 잔존 위험: 보류 133건 그대로 노출(대표님 결정 대기) / URL 없음 65건은 실서비스여도 공식 URL 부재로 불통과(백업으로 복구 가능) / legacy `tools` 고아 170행이 홈 섹션에서 404 링크를 만들 수 있음(기존 상태) / 다음 06:00 수집기 첫 실전 관찰 전 / `src/content/tools-backup-2026-11-20`(6.6MB) 잔존.
+- 다음 행동: 보류 133건 결정 → 배포 승인 → 삭제 URL 301 정책 결정(권장: `/tools/` 301).
+- 완료보고: `SSOT/프로젝트/aikorea24/보고서/2026-11-24-2210-AIK24-TOOLS-ENTITY-01-완료보고.md`
+
 ## 2026-11-24 21:54 — AIK24-TOOLS-UX-01 배포 (대표님 지시 21:47)
 
 한 일: 대표님 "배포해줘" 지시로 `npm run deploy`(`scripts/deploy.sh`) 실행. Exit 0. **git push는 하지 않음** (지시 범위는 배포까지).

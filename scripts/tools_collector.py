@@ -1712,7 +1712,7 @@ def translate_tools(tools: list) -> list:
     return tools
 
 
-def filter_entities(tools: list, write_hold: bool = True, max_workers: int = 4) -> tuple:
+def filter_entities(tools: list, write_hold: bool = True, max_workers: int = 6) -> tuple:
     """AIK24-TOOLS-ENTITY-01 — LLM 비용을 쓰기 전에 운영 주체 실체를 검증한다.
 
     · 통과(pass)  : 그대로 진행
