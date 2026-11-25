@@ -1,3 +1,11 @@
+## 2026-11-25 08:55 — AIK24-TOOLS-NOTIFY-DEDUP-01 등록/승인 이메일 중복 발송 점검·수정
+
+- 한 일: 2026-11-24 15:31Z·15:33Z 동일 슬러그(aik24-logo-e2e-test) 확인/승인 메일 2통씩 원인 점검. submit.ts는 중복 슬러그에 -2를 붙이므로 같은 슬러그 2통은 Row 삭제 후 재실행된 **E2E 2회**로 판단(단일 요청 이중 발송 코드 경로 없음). 다만 코드에 중복 위험이 있어 review.ts(동일 상태 재승인 시 메일 재발송)·submit.ts(재시도 시 새 행+메일)·visibility.ts(동일 상태 반복 UPDATE)에 idempotency 가드 추가, 관리자/내도구 fetch 경로에 끝 슬래시 보정.
+- 결과: [검증됨] `npm run test:js` 20/20 pass(신규 5건 포함) · `npm run build` Complete · 라이브 308 리다이렉트 확인 · D1 `tool_submissions` E2E/로고 테스트 행 0건(`SELECT COUNT(*) ... LIKE '%e2e%' OR '%logo%'` → 0). 커밋 dcee60d7(로컬만, push·배포 없음).
+- 산출물: `SSOT/프로젝트/aikorea24/보고서/2026-11-25-0855-AIK24-TOOLS-NOTIFY-DEDUP-01-중복알림-점검보고.md`, `tests/js/tools_notify_dedup.test.ts`.
+- 잔존 위험: 미배포(라이브 중복 방지 미확인) / 과거 Brevo 원문 로그 미확인 / submit 5분 dedup 창은 스키마 변경 없는 대안이라 의도적 재등록 시 기존 행 재사용 / E2E는 여전히 실제 메일 발송.
+- 다음 행동: 대표님 확인 후 git push → 배포 → 관리자 페이지에서 같은 도구 2회 승인 시 메일 1통만 오는지 실측.
+
 ## 2026-11-25 08:52 — KLING-UPDATE-01: src/content/tools/kling.md 공식 자료 대조 최신화 (로컬만, 배포·push 없음)
 
 한 일: `src/content/tools/kling.md`를 공식 자료와 대조해 갱신. 페이지 구조·톤 유지. **배포(`bash scripts/deploy.sh`)·git push 없음**(사용자 확인 후 진행).
