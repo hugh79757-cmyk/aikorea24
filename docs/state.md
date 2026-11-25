@@ -1,3 +1,19 @@
+## 2026-11-25 08:56 — KLING-UPDATE-01 배포 (사용자 승인)
+
+한 일: 사용자 "배포해줘" 지시로 `npm run deploy`(`scripts/deploy.sh`) 실행. Exit 0. git push는 하지 않음(사용자가 push는 별도 확인 후 진행이라고 명시).
+
+결과:
+- [검증됨] Version ID `827bf3c2-bc75-445f-8a1a-b2911f98a248`, `aikorea24.kr` / `www`. sitemap ping Google·Naver 모두 200·reachable. Worker 업로드 15.37초.
+- [검증됨] 라이브 `GET https://aikorea24.kr/tools/kling/` → 200 (50,549B). HTML에 `8K`·`최대 10장`·`개발자 및 창작 도구 연동`·`kling.ai/app/mcp/guide`·`@klingai/cli-global`·`$6.99` 존재. 기존 `$9.9` 0건.
+- [검증됨] 라이브에 남은 `13,000원` 1건은 Kling 본문이 아니라 관련 도구 카드 'AI Art Create'의 가격 표기(컨텍스트 확인). Kling 본문에는 없음.
+- [부분검증] 헤드리스 브라우저 육안은 Cloudflare 봇 챌린지로 차단 가능 — 대체 수단은 curl HTML 대조. 실기기 1회 열람 권장.
+
+잔존 위험: git push 미실시(승인 대기). 라이브 요금은 공식 페이지 시점 기준이며 프로모션·지역에 따라 변동 가능(본문 명시).
+
+다음 행동: 사용자 확인 후 git push. 필요 시 실기기에서 `/tools/kling/` 1회 열람.
+
+---
+
 ## 2026-11-25 08:55 — AIK24-TOOLS-NOTIFY-DEDUP-01 등록/승인 이메일 중복 발송 점검·수정
 
 - 한 일: 2026-11-24 15:31Z·15:33Z 동일 슬러그(aik24-logo-e2e-test) 확인/승인 메일 2통씩 원인 점검. submit.ts는 중복 슬러그에 -2를 붙이므로 같은 슬러그 2통은 Row 삭제 후 재실행된 **E2E 2회**로 판단(단일 요청 이중 발송 코드 경로 없음). 다만 코드에 중복 위험이 있어 review.ts(동일 상태 재승인 시 메일 재발송)·submit.ts(재시도 시 새 행+메일)·visibility.ts(동일 상태 반복 UPDATE)에 idempotency 가드 추가, 관리자/내도구 fetch 경로에 끝 슬래시 보정.
