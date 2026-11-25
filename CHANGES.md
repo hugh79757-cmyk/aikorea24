@@ -2,6 +2,13 @@
 
 > 기술 문서는 `docs/TECH.md` 참조.
 
+## 2026-11-25 08:52 — docs(tools): Kling AI 페이지 공식 자료 대조 최신화
+
+- `src/content/tools/kling.md`: `updated` 2026-11-25. Image 4.0 네이티브 8K·한 프롬프트 최대 10장(Series Mode), Video 4.0 4K는 모델·계정 조건 따름을 반영.
+- 신규 섹션 '개발자 및 창작 도구 연동(MCP · 플러그인 · CLI)'에 공식 링크 8개(MCP 가이드·Global/China MCP·Claude/Cursor/OpenClaw 플러그인·Global/China CLI) 포함.
+- 요금은 공식 Global 멤버십 기준으로 교체(Basic $0, Standard 첫 달 $6.99/갱신 $8.80·660 크레딧, Pro $25.99/$32.56·3,000, Premier $64.99/$80.96·8,000, Ultra $127.99/$159.99·26,000, Team $79/좌석). 지역(Global kling.ai vs China klingai.com)·프로모션 변동 명시. 기존 $9.9·월 13,000원 표기 제거.
+- 검증: `npm run build` Exit 0. 최초 빌드는 다른 세션 미커밋 WIP(`visibility.ts` 중복 `currentStatus`) PARSE_ERROR → 중복 1줄 제거 후 성공(해당 파일 미커밋). 배포·push 없음(사용자 확인 후).
+
 ## 2026-11-24 22:37 — feat(AIK24-TOOLS-LOGO-01): 로고 업로드·저장·표시 + 파비콘 CSP 차단 해소
 
 - D1 `tool_submissions.logo_url` 추가(원격 마이그레이션 `sql/010_…`, 백업 83행) → md `logo` 동기화(`sync_submissions_to_md.mjs`) → `content.config.ts` optional 스키마.

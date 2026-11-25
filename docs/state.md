@@ -1,3 +1,18 @@
+## 2026-11-25 08:52 — KLING-UPDATE-01: src/content/tools/kling.md 공식 자료 대조 최신화 (로컬만, 배포·push 없음)
+
+한 일: `src/content/tools/kling.md`를 공식 자료와 대조해 갱신. 페이지 구조·톤 유지. **배포(`bash scripts/deploy.sh`)·git push 없음**(사용자 확인 후 진행).
+
+- [검증됨] 공식 대조 근거: Kling Image 4.0 User Guide(kling.ai, 2026-11-18) — 네이티브 8K, 한 프롬프트 최대 10장 시리즈(Series Mode) / Kling 4.0 User Guide(2026-11-04) — 최대 30초, 4K/1080p는 모델·계정 조건 따름, 720p 기본 / 공식 membership llms.txt — Global USD 요금(Standard 첫 달 $6.99·갱신 $8.80·660 크레딧, Pro $25.99/$32.56·3,000, Premier $64.99/$80.96·8,000, Ultra $127.99/$159.99·26,000, Team $79/좌석, Basic $0) / 공식 플러그인 README 3종(Global/중국 계정·크레딧·작업 비공유) / npm registry(@klingai/cli-global·cli-cn 최신 0.2.4). 링크 8개 응답 확인(가이드 200, GitHub 200, MCP·npm 페이지는 로그인/봇 차단 코드이나 공식 문서에서 상호 링크 확인).
+- [검증됨] 변경: frontmatter `updated` 2026-06-28 → 2026-11-25, `price` "월 13,000원" → "무료 / 월 $6.99~(첫 달)". 핵심 기능·사용법 3단계에 8K·최대 10장·4K 조건 반영. 신규 섹션 '개발자 및 창작 도구 연동(MCP · 플러그인 · CLI)'에 지정된 공식 링크 8개 모두 포함. 가격 정책·요금제 자세히를 공식 Global 요금으로 교체하고 지역(Global/China)·프로모션 변동 명시. 장단점·FAQ의 무조건적 4K 표현을 조건부로 수정하고 MCP FAQ 1개 추가.
+- [검증됨] `npm run build` Exit 0 / `[build] Complete!` (경고 3건은 기존 것). 최초 빌드는 **다른 세션의 미커밋 WIP** `src/pages/api/tools/[slug]/visibility.ts`에서 `currentStatus` 중복 선언 PARSE_ERROR로 실패 → 해당 중복 선언 1줄 제거 후 재빌드 성공. 이 파일은 이번 작업 산출물이 아니며 커밋하지 않음.
+- [검증불가] 실시간 요금·프로모션 변동은 공식 페이지 표기 시점 기준이며, 실제 결제 금액은 계정·지역·이벤트에 따라 다름(본문에 명시).
+
+잔존 위험: 미배포·미push(사용자 확인 대기). `visibility.ts` WIP는 다른 세션 소유 — 충돌 가능성 있음. kling.md의 달러 요금은 환율 변동에 따라 원화 체감가가 달라질 수 있음(본문은 USD 기준으로 명시).
+
+다음 행동: 사용자 확인 후 `bash scripts/deploy.sh` 및 git push. 로컬 커밋만 수행.
+
+---
+
 ## 2026-11-24 22:45 — AIK24-MODEL-EVAL-FIX-01 모델 평가 라우팅 버그 수정
 
 - 한 일: Zen 모델이 OpenRouter 목록에 없어 전부 평가 생략 → 소개글만 발행되던 버그 수정. `model_eval.py` 에 models.dev OpenCode 조회 캐시 + `resolve_model_id()`(status: ok/deprecated/unknown/not_model) 신설, `extract_model_id()` 는 하위 호환 래퍼로 유지. `blog_draft_generator.py` 에서 deprecated·미확인 모델은 소개글도 쓰지 않고 명시 로그 후 항목 생략, 모델 평가글 실패 시 뉴스 대체 금지. `_eval_block()` 은 캐시 우선 + alias 조회, 캐시 미스 시 인라인 12문항 대신 '평가 대기' 보류(EVAL-AUTO 위임). 추가로 기존 `_eval_block` 이 OpenRouter 직접 API(`eval_model`)를 쓰던 정책 위반 경로도 제거.
