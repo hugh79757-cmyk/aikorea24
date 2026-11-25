@@ -1,3 +1,11 @@
+## 2026-11-25 08:56 — AIK24-TOOLS-NOTIFY-DEDUP-01 push·배포 완료 (대표님 승인)
+
+- 한 일: 중복 알림 방지 수정(dcee60d7) + 기록(fef9716f)을 `git push origin main`(`a4568f35..fef9716f`) 후 `npm run deploy` 배포. Version ID `1b3da290-f04c-4254-81b1-62b5e24df277`.
+- 결과: [검증됨] 라이브 POST `/api/admin/tools/review` → 308 → `/api/admin/tools/review/` → 403 unauthorized(가드 정상), `/api/tools/submit` → 308 → `/submit/` → 401, visibility → 308 → 끝 슬래시. D1 E2E/로고 잔여 행 0건. `npm run test:js` 재실행 20/20 pass. 빌드 산출물에 신규 가드 문자열 확인(already 3 / status<>? 2 / 5분 창 1).
+- 산출물: SSOT 보고서 `2026-11-25-0855-AIK24-TOOLS-NOTIFY-DEDUP-01-중복알림-점검보고.md`에 배포·라이브 검증 결과 반영.
+- 잔존 위험: 실제 관리자 세션으로 2회 승인 시 메일 1통만 오는지는 미실측(실메일 발송 회피) / E2E는 여전히 실제 메일 발송 / submit 5분 창 대안은 스키마 변경 시 개선 가능.
+- 다음 행동: 필요 시 테스트 계정으로 2회 승인 실측. 추가 조치 없음.
+
 ## 2026-11-25 08:56 — KLING-UPDATE-01 배포 (사용자 승인)
 
 한 일: 사용자 "배포해줘" 지시로 `npm run deploy`(`scripts/deploy.sh`) 실행. Exit 0. git push는 하지 않음(사용자가 push는 별도 확인 후 진행이라고 명시).
