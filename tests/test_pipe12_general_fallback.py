@@ -127,25 +127,28 @@ def test_fallback_reproduces_20261028_case():
 
 
 def test_fallback_fills_latest_when_scores_insufficient():
-    """(b) 최신순 — 점수 후보가 부족하면 점수 무관 pub_date DESC 로 채운다.
+    """(b) 점수 무관 단계 — AI 관련 기사를 먼저, 같은 관련성 안에서 최신순.
 
-    808(5점, 어제)보다 809(1점, 오늘)가 최신이므로 809 가 간다.
+    808(`AI 반도체 수주 증가 보도`)은 5점이라 (a) 문턱을 넘지 못했지만 AI 직접 관련
+    기사이므로, 무관 기사 809(1점)보다 먼저 슬롯을 받는다. AIK24-BRIEF-17(2026-11-16)
+    이전에는 최신순만 보아 809 가 먼저였고, 그 규칙이 오늘 사고(인사·설비 단신 노출)의
+    원인이었다.
     """
     history = [_his(57426, '엔타이어, AI 데이터 정리 도구 무료 공개')]
     pool = [
         _pool(805, '조선업 AI 도입 확산 — 표준 계약서 배포',
               NEWS1, '2026-10-26 09:00:00'),   # 9점 → (a)에서 선정
         _pool(808, 'AI 반도체 수주 증가 보도',
-              'TechCrunch', '2026-10-27 07:00:00'),  # 5점
+              'TechCrunch', '2026-10-27 07:00:00'),  # 5점 · AI 직접 관련
         _pool(809, '로봇 청소년 시범 사업 시작 보도',
-              NEWS2, '2026-10-28 07:00:00'),   # 1점
+              NEWS2, '2026-10-28 07:00:00'),   # 1점 · 최신이지만 무관
     ]
     score, _ = _scorer({'805': 9, '808': 5, '809': 1})
     picked = sel.fallback_fill_general(
         2, set(), set(), set(), _fake_d1(history, pool), score)
 
     ids = [a['id'] for a in picked]
-    assert ids == ['805', '809'], ids   # (a) 9점 → (b) 최신순(809 > 808)
+    assert ids == ['805', '808'], ids   # (a) 9점 → (b) AI 관련 우선(808 > 809)
 
 
 def test_fallback_dedups_same_event_within_batch():
