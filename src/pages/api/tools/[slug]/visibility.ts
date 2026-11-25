@@ -66,9 +66,18 @@ export const PATCH: APIRoute = async ({ params, request, locals, cookies }) => {
     );
   }
 
+  // AIK24-TOOLS-NOTIFY-DEDUP-01: 같은 상태로의 재요청은 no-op (재시도가 상태 이력을
+  //   흔들지 않게 한다). 이 라우트는 메일을 보내지 않지만 review 라우트와 같은 규칙을 쓴다.
+  if (currentStatus === status) {
+    return new Response(JSON.stringify({ success: true, status, already: true }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
   await db.prepare(
-    `UPDATE tool_submissions SET status = ?, updated_at = datetime('now') WHERE slug = ?`
-  ).bind(status, slug).run();
+    `UPDATE tool_submissions SET status = ?, updated_at = datetime('now')
+     WHERE slug = ? AND status <> ?`
+  ).bind(status, slug, status).run();
 
   return new Response(JSON.stringify({ success: true, status }), {
     headers: { 'Content-Type': 'application/json' },

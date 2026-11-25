@@ -114,7 +114,7 @@ try {
       const next = cur === 'published' ? 'hidden' : 'published';
       btn.disabled = true;
       try {
-        const res = await fetch(`/api/tools/${slug}/visibility`, {
+        const res = await fetch(`/api/tools/${slug}/visibility/`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ status: next }),

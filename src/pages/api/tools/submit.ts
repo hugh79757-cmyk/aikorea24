@@ -148,6 +148,30 @@ export const POST: APIRoute = async ({ request, locals, cookies }) => {
       taskList = tasks;
     }
 
+    // AIK24-TOOLS-NOTIFY-DEDUP-01: 짧은 시간 창(5분) 내 같은 사람이 같은 내용을
+    //   다시 제출하면 새 행/확인 메일을 만들지 않고 기존 접수를 돌려준다.
+    //   더블클릭·타임아웃 후 재시도로 등록 완료 메일이 2통 가던 경로를 막는다.
+    const recent = await db
+      .prepare(
+        `SELECT id, slug FROM tool_submissions
+         WHERE user_id = ? AND name = ? AND url = ? AND description = ?
+           AND created_at >= datetime('now', '-5 minutes')
+         ORDER BY id DESC LIMIT 1`
+      )
+      .bind(userId, name.trim(), url.trim(), description.trim())
+      .first();
+    if (recent) {
+      return new Response(JSON.stringify({
+        ok: true,
+        slug: (recent as any).slug,
+        duplicate: true,
+        message: '이미 접수된 제출입니다. 등록 확인 메일은 한 번만 발송됩니다.',
+      }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // slug 생성 + 중복 회피 (md + D1 양쪽, 숫자 접미사)
     const mdTools = await getCollection('tools');
     const mdSlugs = new Set(mdTools.map((t) => t.id));

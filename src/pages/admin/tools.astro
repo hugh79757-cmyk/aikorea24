@@ -414,7 +414,7 @@ async function runReview(card, btn, slug, msg, action, reason) {
   }
   btn.disabled = true;
   try {
-    const res = await fetch('/api/admin/tools/review', {
+    const res = await fetch('/api/admin/tools/review/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ slug, action, reason: reason || undefined }),

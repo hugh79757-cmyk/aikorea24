@@ -83,12 +83,31 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
   }
 
   const nextStatus = action === 'approve' ? 'published' : 'retired';
-  await db
+
+  // AIK24-TOOLS-NOTIFY-DEDUP-01: 같은 상태로의 재승인/재반려는 알림을 다시 보내지 않는다.
+  //   관리자 페이지 더블클릭·네트워크 재시도·두 탭 동시 승인이 이메일 2통이 되던 경로.
+  const currentStatus = String((row as any).status ?? '');
+  if (currentStatus === nextStatus) {
+    console.log(`[review] notify skipped for ${slug.trim()}: 이미 ${nextStatus} — 중복 알림 방지`);
+    return new Response(JSON.stringify({ ok: true, slug: slug.trim(), status: nextStatus, already: true }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  // 상태가 바뀐 경우에만 UPDATE (동시 요청에서 한쪽만 반영되도록 WHERE로 한정).
+  const updated = await db
     .prepare(
-      `UPDATE tool_submissions SET status = ?, rejection_reason = ?, updated_at = datetime('now') WHERE slug = ?`
+      `UPDATE tool_submissions SET status = ?, rejection_reason = ?, updated_at = datetime('now')
+       WHERE slug = ? AND status <> ?`
     )
-    .bind(nextStatus, action === 'reject' ? reason!.trim() : null, slug.trim())
+    .bind(nextStatus, action === 'reject' ? reason!.trim() : null, slug.trim(), nextStatus)
     .run();
+  if (((updated as any)?.meta?.changes ?? 1) === 0) {
+    console.log(`[review] notify skipped for ${slug.trim()}: 다른 요청이 이미 ${nextStatus}로 변경 — 중복 알림 방지`);
+    return new Response(JSON.stringify({ ok: true, slug: slug.trim(), status: nextStatus, already: true }), {
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
 
   // 승인/반려 알림 이메일 발송 — 실패해도 승인/반려 자체는 롤백하지 않음
   try {
