@@ -14,6 +14,7 @@ featured: false
 updated: "2026-11-19"
 priceModel: "Freemium"
 image: "/images/tools/saju.webp"
+logo: "/images/tools/saju-logo.png"
 ---
 
 
