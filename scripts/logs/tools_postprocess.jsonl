@@ -1069,3 +1069,4 @@
 {"ts": "2026-11-27 07:31:31", "slug": "headshape-ai", "step": "enrich", "result": "done", "detail": "+2,719자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-27 07:31:39", "slug": "kliv", "step": "enrich", "result": "done", "detail": "+2,895자 (시도 1)", "dry_run": false}
 {"ts": "2026-11-27 07:31:47", "slug": "novastart-the-infinite-canvas-os", "step": "enrich", "result": "done", "detail": "+3,067자 (시도 1)", "dry_run": false}
+{"ts": "2026-11-28 07:30:10", "slug": "airbrush-studio", "step": "thumb", "result": "fail", "detail": "❌ airbrush-studio BOT_CHALLENGE | NO_OG_IMAGE | NO_OG_IMAGE | ❌ airbrush-studio NO_OG_IMAGE", "dry_run": false}
